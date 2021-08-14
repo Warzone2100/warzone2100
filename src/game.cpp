@@ -706,13 +706,13 @@ struct SAVE_GAME_V7
 
 static void serializeSaveGameV7Data_json(nlohmann::json &o, const SAVE_GAME_V7 *serializeGame)
 {
-	o["v7:gameTime"] = serializeGame->gameTime;
-	o["v7:GameType"] = serializeGame->GameType;
-	o["v7:ScrollMinX"] = serializeGame->ScrollMinX;
-	o["v7:ScrollMinY"] = serializeGame->ScrollMinY;
-	o["v7:ScrollMaxX"] = serializeGame->ScrollMaxX;
-	o["v7:ScrollMaxY"] = serializeGame->ScrollMaxY;
-	o["v7:levelName"] = serializeGame->levelName;
+	o["gameTime"] = serializeGame->gameTime;
+	o["GameType"] = serializeGame->GameType;
+	o["ScrollMinX"] = serializeGame->ScrollMinX;
+	o["ScrollMinY"] = serializeGame->ScrollMinY;
+	o["ScrollMaxX"] = serializeGame->ScrollMaxX;
+	o["ScrollMaxY"] = serializeGame->ScrollMaxY;
+	o["levelName"] = serializeGame->levelName;
 }
 
 static bool serializeSaveGameV7Data(PHYSFS_file *fileHandle, const SAVE_GAME_V7 *serializeGame)
@@ -727,13 +727,13 @@ static bool serializeSaveGameV7Data(PHYSFS_file *fileHandle, const SAVE_GAME_V7 
 }
 static void deserializeSaveGameV7Data_json(const nlohmann::json &o, SAVE_GAME_V7 *serializeGame)
 {
-	serializeGame->gameTime = o.at("v7:gameTime").get<uint32_t>();
-	serializeGame->GameType = o.at("v7:GameType").get<uint32_t>();
-	serializeGame->ScrollMinX = o.at("v7:ScrollMinX").get<int32_t>();
-	serializeGame->ScrollMinY = o.at("v7:ScrollMinY").get<int32_t>();
-	serializeGame->ScrollMaxX = o.at("v7:ScrollMaxX").get<uint32_t>();
-	serializeGame->ScrollMaxY = o.at("v7:ScrollMaxY").get<uint32_t>();
-	memcpy(serializeGame->levelName,o.at("v7:levelName").get<std::string>().c_str(),MAX_LEVEL_SIZE);
+	serializeGame->gameTime = o.at("gameTime").get<uint32_t>();
+	serializeGame->GameType = o.at("GameType").get<uint32_t>();
+	serializeGame->ScrollMinX = o.at("ScrollMinX").get<int32_t>();
+	serializeGame->ScrollMinY = o.at("ScrollMinY").get<int32_t>();
+	serializeGame->ScrollMaxX = o.at("ScrollMaxX").get<uint32_t>();
+	serializeGame->ScrollMaxY = o.at("ScrollMaxY").get<uint32_t>();
+	memcpy(serializeGame->levelName,o.at("levelName").get<std::string>().c_str(),MAX_LEVEL_SIZE);
 	serializeGame->levelName[MAX_LEVEL_SIZE - 1] = '\0';
 }
 
@@ -763,7 +763,7 @@ static void serializeSaveGameV10Data_json(nlohmann::json &o, const SAVE_GAME_V10
 		serializeSavePowerData_json(tmp, &serializeGame->power[i]);
 		arr.insert(arr.end(), tmp);
 	}
-	o["v10:power"] = arr;
+	o["power"] = arr;
 }
 static bool serializeSaveGameV10Data(PHYSFS_file *fileHandle, const SAVE_GAME_V10 *serializeGame)
 {
@@ -787,7 +787,7 @@ static bool serializeSaveGameV10Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static void deserializeSaveGameV10Data_json(const nlohmann::json &o, SAVE_GAME_V10 *serializeGame)
 {
 	deserializeSaveGameV7Data_json(o,  (SAVE_GAME_V7 *) serializeGame);
-	nlohmann::json power= o.at("v10:power");
+	nlohmann::json power= o.at("power");
 	ASSERT(power.is_array(), "unexpected type");
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -850,8 +850,8 @@ struct SAVE_GAME_V12 : public SAVE_GAME_V11
 static void serializeSaveGameV12Data_json(nlohmann::json &o, const SAVE_GAME_V12 *serializeGame)
 {
 	serializeSaveGameV11Data_json(o,  (const SAVE_GAME_V11 *) serializeGame);
-	o["v12:missionTime"] = serializeGame->missionTime;
-	o["v12:saveKey"] = serializeGame->saveKey;
+	o["missionTime"] = serializeGame->missionTime;
+	o["saveKey"] = serializeGame->saveKey;
 }
 static bool serializeSaveGameV12Data(PHYSFS_file *fileHandle, const SAVE_GAME_V12 *serializeGame)
 {
@@ -863,8 +863,8 @@ static bool serializeSaveGameV12Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static void deserializeSaveGameV12Data_json(const nlohmann::json &o, SAVE_GAME_V12 *serializeGame)
 {
 	deserializeSaveGameV11Data_json(o, (SAVE_GAME_V11 *) serializeGame);
-	serializeGame->missionTime = o.at("v12:missionTime").get<uint32_t>();
-	serializeGame->saveKey = o.at("v12:saveKey").get<uint32_t>();
+	serializeGame->missionTime = o.at("missionTime").get<uint32_t>();
+	serializeGame->saveKey = o.at("saveKey").get<uint32_t>();
 }
 
 static bool deserializeSaveGameV12Data(PHYSFS_file *fileHandle, SAVE_GAME_V12 *serializeGame)
@@ -893,12 +893,12 @@ struct SAVE_GAME_V14 : public SAVE_GAME_V12
 static void serializeSaveGameV14Data_json(nlohmann::json &o, const SAVE_GAME_V14 *serializeGame)
 {
 	serializeSaveGameV12Data_json(o, (const SAVE_GAME_V12 *) serializeGame);
-	o["v14:missionOffTime"] = serializeGame->missionOffTime;
-	o["v14:missionETA"] = serializeGame->missionETA;
-	o["v14:missionHomeLZ_X"] = serializeGame->missionHomeLZ_X;
-	o["v14:missionHomeLZ_Y"] = serializeGame->missionHomeLZ_Y;
-	o["v14:missionPlayerX"] = serializeGame->missionPlayerX;
-	o["v14:missionPlayerY"] = serializeGame->missionPlayerY;
+	o["missionOffTime"] = serializeGame->missionOffTime;
+	o["missionETA"] = serializeGame->missionETA;
+	o["missionHomeLZ_X"] = serializeGame->missionHomeLZ_X;
+	o["missionHomeLZ_Y"] = serializeGame->missionHomeLZ_Y;
+	o["missionPlayerX"] = serializeGame->missionPlayerX;
+	o["missionPlayerY"] = serializeGame->missionPlayerY;
 	auto arr = nlohmann::json::array();
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -912,7 +912,7 @@ static void serializeSaveGameV14Data_json(nlohmann::json &o, const SAVE_GAME_V14
 		tmp["aDefaultRepair"] = serializeGame->aDefaultRepair[i];
 		arr.insert(arr.end(), tmp);
 	}
-	o["v14:data"] = arr;
+	o["data"] = arr;
 }
 static bool serializeSaveGameV14Data(PHYSFS_file *fileHandle, const SAVE_GAME_V14 *serializeGame)
 {
@@ -990,23 +990,23 @@ static bool serializeSaveGameV14Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static void deserializeSaveGameV14Data_json(const nlohmann::json &o, SAVE_GAME_V14 *serializeGame)
 {
 	deserializeSaveGameV12Data_json(o, (SAVE_GAME_V12 *) serializeGame);
-	 serializeGame->missionOffTime = o.at("v14:missionOffTime").get<int32_t>();
-	 serializeGame->missionETA = o.at("v14:missionETA").get<int32_t>();
-	 serializeGame->missionHomeLZ_X = o.at("v14:missionHomeLZ_X").get<uint32_t>();
-	 serializeGame->missionHomeLZ_Y = o.at("v14:missionHomeLZ_Y").get<uint32_t>();
-	 serializeGame->missionPlayerX = o.at("v14:missionPlayerX").get<int32_t>();
-	 serializeGame->missionPlayerY = o.at("v14:missionPlayerY").get<int32_t>();
-	nlohmann::json arr = o.at("v14:data");
+	 serializeGame->missionOffTime = o.at("missionOffTime").get<int32_t>();
+	 serializeGame->missionETA = o.at("missionETA").get<int32_t>();
+	 serializeGame->missionHomeLZ_X = o.at("missionHomeLZ_X").get<uint32_t>();
+	 serializeGame->missionHomeLZ_Y = o.at("missionHomeLZ_Y").get<uint32_t>();
+	 serializeGame->missionPlayerX = o.at("missionPlayerX").get<int32_t>();
+	 serializeGame->missionPlayerY = o.at("missionPlayerY").get<int32_t>();
+	nlohmann::json arr = o.at("data");
 	ASSERT_OR_RETURN(, arr.is_array(), "unexpected type, wanted array");
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
-		serializeGame->iTranspEntryTileX[i] = o.at("v14:data").at(i).at("iTranspEntryTileX").get<uint16_t>();
-		serializeGame->iTranspEntryTileY[i] = o.at("v14:data").at(i).at("iTranspEntryTileY").get<uint16_t>();
-		serializeGame->iTranspExitTileX[i] = o.at("v14:data").at(i).at("iTranspExitTileX").get<uint16_t>();
-		serializeGame->iTranspExitTileY[i] = o.at("v14:data").at(i).at("iTranspExitTileY").get<uint16_t>();
-		serializeGame->aDefaultSensor[i] = o.at("v14:data").at(i).at("aDefaultSensor").get<uint32_t>();
-		serializeGame->aDefaultECM[i] = o.at("v14:data").at(i).at("aDefaultECM").get<uint32_t>();
-		serializeGame->aDefaultRepair[i] = o.at("v14:data").at(i).at("aDefaultRepair").get<uint32_t>();
+		serializeGame->iTranspEntryTileX[i] = o.at("data").at(i).at("iTranspEntryTileX").get<uint16_t>();
+		serializeGame->iTranspEntryTileY[i] = o.at("data").at(i).at("iTranspEntryTileY").get<uint16_t>();
+		serializeGame->iTranspExitTileX[i] = o.at("data").at(i).at("iTranspExitTileX").get<uint16_t>();
+		serializeGame->iTranspExitTileY[i] = o.at("data").at(i).at("iTranspExitTileY").get<uint16_t>();
+		serializeGame->aDefaultSensor[i] = o.at("data").at(i).at("aDefaultSensor").get<uint32_t>();
+		serializeGame->aDefaultECM[i] = o.at("data").at(i).at("aDefaultECM").get<uint32_t>();
+		serializeGame->aDefaultRepair[i] = o.at("data").at(i).at("aDefaultRepair").get<uint32_t>();
 	}
 }
 static bool deserializeSaveGameV14Data(PHYSFS_file *fileHandle, SAVE_GAME_V14 *serializeGame)
@@ -1096,9 +1096,9 @@ struct SAVE_GAME_V15 : public SAVE_GAME_V14
 static void serializeSaveGameV15Data_json(nlohmann::json &o, const SAVE_GAME_V15 *serializeGame)
 {
 	serializeSaveGameV14Data_json(o, (const SAVE_GAME_V14 *) serializeGame);
-	o["v15:offWorldKeepLists"] = serializeGame->offWorldKeepLists;
-	o["v15:RubbleTile"] = serializeGame->RubbleTile;
-	o["v15:WaterTile"] = serializeGame->WaterTile;
+	o["offWorldKeepLists"] = serializeGame->offWorldKeepLists;
+	o["RubbleTile"] = serializeGame->RubbleTile;
+	o["WaterTile"] = serializeGame->WaterTile;
 
 }
 static bool serializeSaveGameV15Data(PHYSFS_file *fileHandle, const SAVE_GAME_V15 *serializeGame)
@@ -1130,9 +1130,9 @@ static bool serializeSaveGameV15Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static void deserializeSaveGameV15Data_json(const nlohmann::json &o, SAVE_GAME_V15 *serializeGame)
 {
 	deserializeSaveGameV14Data_json(o, (SAVE_GAME_V14 *) serializeGame);
-	serializeGame->offWorldKeepLists = o.at("v15:offWorldKeepLists").get<int32_t>();
-	serializeGame->RubbleTile = o.at("v15:RubbleTile").get<uint32_t>();
-	serializeGame->WaterTile = o.at("v15:WaterTile").get<uint32_t>();
+	serializeGame->offWorldKeepLists = o.at("offWorldKeepLists").get<int32_t>();
+	serializeGame->RubbleTile = o.at("RubbleTile").get<uint32_t>();
+	serializeGame->WaterTile = o.at("WaterTile").get<uint32_t>();
 	serializeGame->fogColour = 0;
 	serializeGame->fogState = 0;
 }
@@ -1186,7 +1186,7 @@ static void serializeSaveGameV16Data_json(nlohmann::json &o, const SAVE_GAME_V16
 		serializeLandingZoneData_json(tmp, &serializeGame->sLandingZone[i]);
 		arr.insert(arr.end(), tmp);
 	}
-	o["v16:landingZones"] = arr;
+	o["landingZones"] = arr;
 }
 
 static bool serializeSaveGameV16Data(PHYSFS_file *fileHandle, const SAVE_GAME_V16 *serializeGame)
@@ -1214,7 +1214,7 @@ static void deserializeSaveGameV16Data_json(const nlohmann::json &o, SAVE_GAME_V
 	deserializeSaveGameV15Data_json(o, (SAVE_GAME_V15 *) serializeGame);
 	for (unsigned i = 0; i < MAX_NOGO_AREAS; ++i)
 	{		
-		deserializeLandingZoneData_json(o.at("v16:landingZones").at(i), &serializeGame->sLandingZone[i]);
+		deserializeLandingZoneData_json(o.at("landingZones").at(i), &serializeGame->sLandingZone[i]);
 	}
 }
 
@@ -1246,7 +1246,7 @@ struct SAVE_GAME_V17 : public SAVE_GAME_V16
 static void serializeSaveGameV17Data_json(nlohmann::json &o, const SAVE_GAME_V17 *serializeGame)
 {
 	serializeSaveGameV16Data_json(o, (const SAVE_GAME_V16 *) serializeGame);
-	o["v17:objId"] = serializeGame->objId;
+	o["objId"] = serializeGame->objId;
 }
 
 static bool serializeSaveGameV17Data(PHYSFS_file *fileHandle, const SAVE_GAME_V17 *serializeGame)
@@ -1258,7 +1258,7 @@ static bool serializeSaveGameV17Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static void deserializeSaveGameV17Data_json(const nlohmann::json &o, SAVE_GAME_V17 *serializeGame)
 {
 	deserializeSaveGameV16Data_json(o, (SAVE_GAME_V16 *) serializeGame);
-	serializeGame->objId = o.at("v17:objId").get<uint32_t>();
+	serializeGame->objId = o.at("objId").get<uint32_t>();
 }
 
 static bool deserializeSaveGameV17Data(PHYSFS_file *fileHandle, SAVE_GAME_V17 *serializeGame)
@@ -1276,9 +1276,9 @@ struct SAVE_GAME_V18 : public SAVE_GAME_V17
 static void serializeSaveGameV18Data_json(nlohmann::json &o, const SAVE_GAME_V18 *serializeGame)
 {
 	serializeSaveGameV17Data_json(o, (const SAVE_GAME_V17 *) serializeGame);
-	o["v18:buildDate"] = serializeGame->buildDate;
-	o["v18:oldestVersion"] = serializeGame->oldestVersion;
-	o["v18:validityKey"] = serializeGame->validityKey;
+	o["buildDate"] = serializeGame->buildDate;
+	o["oldestVersion"] = serializeGame->oldestVersion;
+	o["validityKey"] = serializeGame->validityKey;
 }
 static bool serializeSaveGameV18Data(PHYSFS_file *fileHandle, const SAVE_GAME_V18 *serializeGame)
 {
@@ -1291,10 +1291,10 @@ static bool serializeSaveGameV18Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static void deserializeSaveGameV18Data_json(const nlohmann::json &o, SAVE_GAME_V18 *serializeGame)
 {
 	deserializeSaveGameV17Data_json(o, (SAVE_GAME_V17 *) serializeGame);
-	memcpy(serializeGame->buildDate, o.at("v18:buildDate").get<std::string>().c_str(), MAX_STR_LENGTH);
+	memcpy(serializeGame->buildDate, o.at("buildDate").get<std::string>().c_str(), MAX_STR_LENGTH);
 	serializeGame->buildDate[MAX_STR_LENGTH - 1] = '\0';
-	serializeGame->oldestVersion = o.at("v18:oldestVersion").get<uint32_t>();
-	serializeGame->validityKey = o.at("v18:validityKey").get<uint32_t>();
+	serializeGame->oldestVersion = o.at("oldestVersion").get<uint32_t>();
+	serializeGame->validityKey = o.at("validityKey").get<uint32_t>();
 }
 
 static bool deserializeSaveGameV18Data(PHYSFS_file *fileHandle, SAVE_GAME_V18 *serializeGame)
@@ -1323,15 +1323,15 @@ static void serializeSaveGameV19Data_json(nlohmann::json &o, const SAVE_GAME_V19
 			alliancesArray.insert(alliancesArray.end(), serializeGame->alliances[i][j]);
 		}
 	}
-	o["v19:alliances"] = alliancesArray;
+	o["alliances"] = alliancesArray;
 
 	auto colours = nlohmann::json::array();
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		colours.insert(colours.end(), serializeGame->playerColour[i]);
 	}
-	o["v19:colours"] = colours;
-	o["v19:radarZoom"] = serializeGame->radarZoom;
+	o["colours"] = colours;
+	o["radarZoom"] = serializeGame->radarZoom;
 }
 
 static bool serializeSaveGameV19Data(PHYSFS_file *fileHandle, const SAVE_GAME_V19 *serializeGame)
@@ -1372,11 +1372,11 @@ static void deserializeSaveGameV19Data_json(const nlohmann::json &o, SAVE_GAME_V
 	{
 		for (unsigned j = 0; j < MAX_PLAYERS; ++j)
 		{
-			serializeGame->alliances[i][j] = o.at("v19:alliances").at(i * MAX_PLAYERS + j).get<uint8_t>();
+			serializeGame->alliances[i][j] = o.at("alliances").at(i * MAX_PLAYERS + j).get<uint8_t>();
 		}
-		serializeGame->playerColour[i] = o.at("v19:colours").at(i).get<uint8_t>();
+		serializeGame->playerColour[i] = o.at("colours").at(i).get<uint8_t>();
 	}
-	serializeGame->radarZoom = o.at("v19:radarZoom").get<uint8_t>();
+	serializeGame->radarZoom = o.at("radarZoom").get<uint8_t>();
 }
 
 static bool deserializeSaveGameV19Data(PHYSFS_file *fileHandle, SAVE_GAME_V19 *serializeGame)
@@ -1418,7 +1418,7 @@ struct SAVE_GAME_V20 : public SAVE_GAME_V19
 static void serializeSaveGameV20Data_json(nlohmann::json &o, const SAVE_GAME_V20 *serializeGame)
 {
 	serializeSaveGameV19Data_json(o, (const SAVE_GAME_V19 *) serializeGame);
-	o["v20:bDroidsToSafetyFlag"] = serializeGame->bDroidsToSafetyFlag;
+	o["bDroidsToSafetyFlag"] = serializeGame->bDroidsToSafetyFlag;
 	auto arr = nlohmann::json::array();
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -1426,7 +1426,7 @@ static void serializeSaveGameV20Data_json(nlohmann::json &o, const SAVE_GAME_V20
 		serializeVector2i_json(tmp, &serializeGame->asVTOLReturnPos[i]);
 		arr.insert(arr.end(), tmp);
 	}
-	o["v20:VTOLReturnPos"] = arr;
+	o["VTOLReturnPos"] = arr;
 }
 static bool serializeSaveGameV20Data(PHYSFS_file *fileHandle, const SAVE_GAME_V20 *serializeGame)
 {
@@ -1452,11 +1452,11 @@ static bool serializeSaveGameV20Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 static void deserializeSaveGameV20Data_json(const nlohmann::json &o, SAVE_GAME_V20 *serializeGame)
 {
 	deserializeSaveGameV19Data_json(o, (SAVE_GAME_V19 *) serializeGame);
-	serializeGame->bDroidsToSafetyFlag = o.at("v20:bDroidsToSafetyFlag").get<uint8_t>();
+	serializeGame->bDroidsToSafetyFlag = o.at("bDroidsToSafetyFlag").get<uint8_t>();
 
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
-		deserializeVector2i_json(o.at("v20:VTOLReturnPos").at(i), &serializeGame->asVTOLReturnPos[i]);
+		deserializeVector2i_json(o.at("VTOLReturnPos").at(i), &serializeGame->asVTOLReturnPos[i]);
 	}
 }
 
@@ -1495,7 +1495,7 @@ static void serializeSaveGameV22Data_json(nlohmann::json &o, const SAVE_GAME_V22
 		serializeRunData_json(tmp, &serializeGame->asRunData[i]);
 		arr.insert(arr.end(), tmp);
 	}
-	o["v22:runData"] = arr;
+	o["runData"] = arr;
 }
 static bool serializeSaveGameV22Data(PHYSFS_file *fileHandle, const SAVE_GAME_V22 *serializeGame)
 {
@@ -1520,10 +1520,10 @@ static bool serializeSaveGameV22Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 static void deserializeSaveGameV22Data_json(const nlohmann::json &o, SAVE_GAME_V22 *serializeGame)
 {
 	deserializeSaveGameV20Data_json(o, (SAVE_GAME_V20 *) serializeGame);
-	ASSERT_OR_RETURN(, o.at("v22:runData").is_array(), "unexpected type, wanted array");
+	ASSERT_OR_RETURN(, o.at("runData").is_array(), "unexpected type, wanted array");
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
-		const nlohmann::json runData = o.at("v22:runData");
+		const nlohmann::json runData = o.at("runData");
 		ASSERT_OR_RETURN(, runData.is_array(), "unexpected type, wanted array");
 		deserializeRunData_json(runData.at(i), &serializeGame->asRunData[i]);
 		
@@ -1562,10 +1562,10 @@ struct SAVE_GAME_V24 : public SAVE_GAME_V22
 static void serializeSaveGameV24Data_json(nlohmann::json &o, const SAVE_GAME_V24 *serializeGame)
 {
 	serializeSaveGameV22Data_json(o, (const SAVE_GAME_V22 *) serializeGame);
-	o["v24:reinforceTime"] = serializeGame->reinforceTime;
-	o["v24:bPlayCountDown"] = serializeGame->bPlayCountDown;
-	o["v24:bPlayerHasWon"] = serializeGame->bPlayerHasWon;
-	o["v24:bPlayerHasLost"] = serializeGame->bPlayerHasLost;
+	o["reinforceTime"] = serializeGame->reinforceTime;
+	o["bPlayCountDown"] = serializeGame->bPlayCountDown;
+	o["bPlayerHasWon"] = serializeGame->bPlayerHasWon;
+	o["bPlayerHasLost"] = serializeGame->bPlayerHasLost;
 }
 static bool serializeSaveGameV24Data(PHYSFS_file *fileHandle, const SAVE_GAME_V24 *serializeGame)
 {
@@ -1579,10 +1579,10 @@ static bool serializeSaveGameV24Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 static void deserializeSaveGameV24Data_json(const nlohmann::json &o, SAVE_GAME_V24 *serializeGame)
 {
 	deserializeSaveGameV22Data_json(o, (SAVE_GAME_V22 *) serializeGame);
-	serializeGame->reinforceTime = o.at("v24:reinforceTime").get<uint32_t>();
-	serializeGame->bPlayCountDown = o.at("v24:bPlayCountDown").get<uint8_t>();
-	serializeGame->bPlayerHasWon = o.at("v24:bPlayerHasWon").get<uint8_t>();
-	serializeGame->bPlayerHasLost = o.at("v24:bPlayerHasLost").get<uint8_t>();
+	serializeGame->reinforceTime = o.at("reinforceTime").get<uint32_t>();
+	serializeGame->bPlayCountDown = o.at("bPlayCountDown").get<uint8_t>();
+	serializeGame->bPlayerHasWon = o.at("bPlayerHasWon").get<uint8_t>();
+	serializeGame->bPlayerHasLost = o.at("bPlayerHasLost").get<uint8_t>();
 }
 static bool deserializeSaveGameV24Data(PHYSFS_file *fileHandle, SAVE_GAME_V24 *serializeGame)
 {
@@ -1667,10 +1667,10 @@ struct SAVE_GAME_V29 : public SAVE_GAME_V27
 static void serializeSaveGameV29Data_json(nlohmann::json &o, const SAVE_GAME_V29 *serializeGame)
 {
 	serializeSaveGameV27Data_json(o, (const SAVE_GAME_V27 *) serializeGame);
-	o["v27:missionScrollMinX"] = serializeGame->missionScrollMinX;
-	o["v27:missionScrollMinY"] = serializeGame->missionScrollMinY;
-	o["v27:missionScrollMaxX"] = serializeGame->missionScrollMaxX;
-	o["v27:missionScrollMaxY"] = serializeGame->missionScrollMaxY;
+	o["missionScrollMinX"] = serializeGame->missionScrollMinX;
+	o["missionScrollMinY"] = serializeGame->missionScrollMinY;
+	o["missionScrollMaxX"] = serializeGame->missionScrollMaxX;
+	o["missionScrollMaxY"] = serializeGame->missionScrollMaxY;
 }
 static bool serializeSaveGameV29Data(PHYSFS_file *fileHandle, const SAVE_GAME_V29 *serializeGame)
 {
@@ -1684,10 +1684,10 @@ static bool serializeSaveGameV29Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 static void deserializeSaveGameV29Data_json(const nlohmann::json &o, SAVE_GAME_V29 *serializeGame)
 {
 	deserializeSaveGameV27Data_json(o, (SAVE_GAME_V27 *) serializeGame);
-	serializeGame->missionScrollMinX = o.at("v27:missionScrollMinX").get<uint16_t>();
-	serializeGame->missionScrollMinY = o.at("v27:missionScrollMinY").get<uint16_t>();
-	serializeGame->missionScrollMaxX = o.at("v27:missionScrollMaxX").get<uint16_t>();
-	serializeGame->missionScrollMaxY = o.at("v27:missionScrollMaxY").get<uint16_t>();
+	serializeGame->missionScrollMinX = o.at("missionScrollMinX").get<uint16_t>();
+	serializeGame->missionScrollMinY = o.at("missionScrollMinY").get<uint16_t>();
+	serializeGame->missionScrollMaxX = o.at("missionScrollMaxX").get<uint16_t>();
+	serializeGame->missionScrollMaxY = o.at("missionScrollMaxY").get<uint16_t>();
 }
 
 static bool deserializeSaveGameV29Data(PHYSFS_file *fileHandle, SAVE_GAME_V29 *serializeGame)
@@ -1709,10 +1709,10 @@ struct SAVE_GAME_V30 : public SAVE_GAME_V29
 static void serializeSaveGameV30Data_json(nlohmann::json &o, const SAVE_GAME_V30 *serializeGame)
 {
 	serializeSaveGameV29Data_json(o, (const SAVE_GAME_V29 *) serializeGame);
-	o["v30:scrGameLevel"] = serializeGame->scrGameLevel;
-	o["v30:bExtraVictoryFlag"] = serializeGame->bExtraVictoryFlag;
-	o["v30:bExtraFailFlag"] = serializeGame->bExtraFailFlag;
-	o["v30:bTrackTransporter"] = serializeGame->bTrackTransporter;
+	o["scrGameLevel"] = serializeGame->scrGameLevel;
+	o["bExtraVictoryFlag"] = serializeGame->bExtraVictoryFlag;
+	o["bExtraFailFlag"] = serializeGame->bExtraFailFlag;
+	o["bTrackTransporter"] = serializeGame->bTrackTransporter;
 }
 static bool serializeSaveGameV30Data(PHYSFS_file *fileHandle, const SAVE_GAME_V30 *serializeGame)
 {
@@ -1725,10 +1725,10 @@ static bool serializeSaveGameV30Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 static void deserializeSaveGameV30Data_json(const nlohmann::json &o, SAVE_GAME_V30 *serializeGame)
 {
 	deserializeSaveGameV29Data_json(o, (SAVE_GAME_V29 *) serializeGame);
-	serializeGame->scrGameLevel = o.at("v30:scrGameLevel").get<int32_t>();
-	serializeGame->bExtraVictoryFlag = o.at("v30:bExtraVictoryFlag").get<uint8_t>();
-	serializeGame->bExtraFailFlag = o.at("v30:bExtraFailFlag").get<uint8_t>();
-	serializeGame->bTrackTransporter = o.at("v30:bTrackTransporter").get<uint8_t>();
+	serializeGame->scrGameLevel = o.at("scrGameLevel").get<int32_t>();
+	serializeGame->bExtraVictoryFlag = o.at("bExtraVictoryFlag").get<uint8_t>();
+	serializeGame->bExtraFailFlag = o.at("bExtraFailFlag").get<uint8_t>();
+	serializeGame->bTrackTransporter = o.at("bTrackTransporter").get<uint8_t>();
 }
 static bool deserializeSaveGameV30Data(PHYSFS_file *fileHandle, SAVE_GAME_V30 *serializeGame)
 {
@@ -1748,7 +1748,7 @@ struct SAVE_GAME_V31 : public SAVE_GAME_V30
 static void serializeSaveGameV31Data_json(nlohmann::json &o, const SAVE_GAME_V31 *serializeGame)
 {
 	serializeSaveGameV30Data_json(o, (const SAVE_GAME_V30 *) serializeGame);
-	o["v31:missionCheatTime"] = serializeGame->missionCheatTime;
+	o["missionCheatTime"] = serializeGame->missionCheatTime;
 }
 static bool serializeSaveGameV31Data(PHYSFS_file *fileHandle, const SAVE_GAME_V31 *serializeGame)
 {
@@ -1758,7 +1758,7 @@ static bool serializeSaveGameV31Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 static void deserializeSaveGameV31Data_json(const nlohmann::json &o, SAVE_GAME_V31 *serializeGame)
 {
 	deserializeSaveGameV30Data_json(o, (SAVE_GAME_V30 *) serializeGame);
-	serializeGame->missionCheatTime = o.at("v31:missionCheatTime").get<int32_t>();
+	serializeGame->missionCheatTime = o.at("missionCheatTime").get<int32_t>();
 }
 static bool deserializeSaveGameV31Data(PHYSFS_file *fileHandle, SAVE_GAME_V31 *serializeGame)
 {
@@ -1781,15 +1781,15 @@ static void serializeSaveGameV33Data_json(nlohmann::json &o, const SAVE_GAME_V33
 	serializeSaveGameV31Data_json(o, (const SAVE_GAME_V31 *) serializeGame);
 	serializeMultiplayerGame_json(o, &serializeGame->sGame);
 	serializeNetPlay_json(o, &serializeGame->sNetPlay);
-	o["v33:sPname"] = serializeGame->sPName;
-	o["v33:multiPlayer"] = serializeGame->multiPlayer;
-	o["v33:savePlayer"] = serializeGame->savePlayer;
+	o["sPname"] = serializeGame->sPName;
+	o["multiPlayer"] = serializeGame->multiPlayer;
+	o["savePlayer"] = serializeGame->savePlayer;
 	auto arr = nlohmann::json::array();
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		arr.insert(arr.end(), serializeGame->sPlayerIndex[i]);
 	}
-	o["v33:sPlayerIndices"] = arr;
+	o["sPlayerIndices"] = arr;
 }
 static bool serializeSaveGameV33Data(PHYSFS_file *fileHandle, const SAVE_GAME_V33 *serializeGame)
 {
@@ -1818,12 +1818,12 @@ static void deserializeSaveGameV33Data_json(const nlohmann::json &o, SAVE_GAME_V
 {
 	deserializeSaveGameV31Data_json(o, (SAVE_GAME_V31 *) serializeGame);
 	deserializeMultiplayerGame_json(o, &serializeGame->sGame);
-	serializeGame->savePlayer = o.at("v33:savePlayer").get<uint32_t>();
+	serializeGame->savePlayer = o.at("savePlayer").get<uint32_t>();
 	deserializeNetPlay_json(o, &serializeGame->sNetPlay);
-	memcpy(serializeGame->sPName, o.at("v33:sPname").get<std::string>().c_str(), 32);
+	memcpy(serializeGame->sPName, o.at("sPname").get<std::string>().c_str(), 32);
 	serializeGame->sPName[31] = '\0';
-	serializeGame->multiPlayer = o.at("v33:multiPlayer").get<int32_t>();
-	const auto playerIndices = o.at("v33:sPlayerIndices");
+	serializeGame->multiPlayer = o.at("multiPlayer").get<int32_t>();
+	const auto playerIndices = o.at("sPlayerIndices");
 	ASSERT_OR_RETURN(, playerIndices.is_array(), "unexpected type, wanted array");
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -1873,7 +1873,7 @@ static void serializeSaveGameV34Data_json(nlohmann::json &o, const SAVE_GAME_V34
 	{
 		arr.insert(arr.end(), std::string(serializeGame->sPlayerName[i]));
 	}
-	o["v34:playerNames"] = arr;
+	o["playerNames"] = arr;
 }
 static bool serializeSaveGameV34Data(PHYSFS_file *fileHandle, const SAVE_GAME_V34 *serializeGame)
 {
@@ -1899,7 +1899,7 @@ static void deserializeSaveGameV34Data_json(const nlohmann::json &o, SAVE_GAME_V
 	deserializeSaveGameV33Data_json(o, (SAVE_GAME_V33 *) serializeGame);
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
-		memcpy(serializeGame->sPlayerName[i], o.at("v34:playerNames").at(i).get<std::string>().c_str(), StringSize);
+		memcpy(serializeGame->sPlayerName[i], o.at("playerNames").at(i).get<std::string>().c_str(), StringSize);
 		serializeGame->sPlayerName[i][StringSize - 1] = '\0';
 	}
 }
@@ -1953,7 +1953,7 @@ struct SAVE_GAME_V38 : public SAVE_GAME_V35
 static void serializeSaveGameV38Data_json(nlohmann::json &o, const SAVE_GAME_V38 *serializeGame)
 {
 	serializeSaveGameV35Data_json(o, (const SAVE_GAME_V35 *) serializeGame);
-	o["v38:modList"] = std::string(serializeGame->modList);
+	o["modList"] = std::string(serializeGame->modList);
 }
 
 static bool serializeSaveGameV38Data(PHYSFS_file *fileHandle, const SAVE_GAME_V38 *serializeGame)
@@ -1974,7 +1974,7 @@ static bool serializeSaveGameV38Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 static void deserializeSaveGameV38Data_json(const nlohmann::json &o, SAVE_GAME_V38 *serializeGame)
 {
 	deserializeSaveGameV35Data_json(o, (SAVE_GAME_V35 *) serializeGame);
-	memcpy(serializeGame->modList, o.at("v38:modList").get<std::string>().c_str(), modlist_string_size);
+	memcpy(serializeGame->modList, o.at("modList").get<std::string>().c_str(), modlist_string_size);
 	serializeGame->modList[modlist_string_size - 1] = '\0';
 }
 
@@ -3933,8 +3933,7 @@ bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json> &gamJs
 	SAVE_GAME_V7 saveGame;
 	if (gamJson.has_value())
 	{
-		// not sure there are still any games THAT old around!
-		// maybe just stop pretending we care about them anymore
+		// this seems to be still used by maps/mission loading routines
 		deserializeSaveGameV7Data_json(gamJson.value(), &saveGame);
 	}
 	else
