@@ -26,6 +26,7 @@
  */
 
 #include <physfs.h>
+#include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include <ctime>
 
@@ -46,7 +47,6 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "frontend.h"
-#include "main.h"
 #include "display.h"
 #include "lib/netplay/netplay.h"
 #include "loop.h"
@@ -58,7 +58,8 @@
 #include "qtscript.h"
 #include "clparse.h"
 #include "ingameop.h"
-
+#include "game.h"
+#include "version.h"
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 64		// guessing 64 max chars for filename.
@@ -87,8 +88,6 @@
 #define LOADENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
-#define AUTOSAVE_CAM_DIR "savegames/campaign/auto"
-#define AUTOSAVE_SKI_DIR "savegames/skirmish/auto"
 
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -118,6 +117,7 @@ static const char *sSaveReplayExtension = ".wzrp";
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the specified filename looks like a saved game file, i.e. ends with .gam
+// Note: this is left for backward compatibiiliy. Remove it later.
 static bool isASavedGamefile(const char *filename, const char *extension)
 {
 	if (nullptr == filename)
@@ -376,17 +376,57 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	struct SaveGameNamesAndTimes
 	{
 		std::string name;
-		time_t savetime;
+		int64_t epoch;
 
-		SaveGameNamesAndTimes(std::string name, time_t savetime)
+		SaveGameNamesAndTimes(std::string name, int64_t epoch)
 		: name(std::move(name))
-		, savetime(savetime)
+		, epoch(epoch)
 		{ }
 	};
 
 	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
+	const TagVer buildTagVer = version_extractVersionNumberFromTag(version_getLatestTag()).value();
+	try
+	{		
+		WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [NewSaveGamePath, &buildTagVer, &saveGameNamesAndTimes](const char* dirName){
+			if (strcmp(dirName, "auto") == 0)
+			{
+				return true; // continue
+			}
+			const auto saveInfoFilename = std::string(NewSaveGamePath) + dirName + "/save-info.json";
+
+			// avoid spamming stdout if doesn't exist
+			if (!PHYSFS_exists(saveInfoFilename.c_str())) return true;
+
+			const auto saveInfoDataOpt = parseJsonFile(saveInfoFilename.c_str());
+			if (saveInfoDataOpt.has_value())
+			{
+				const auto saveInfoData = saveInfoDataOpt.value();
+				// decide what savegames are viewable/loadable
+				// assume that we can safely load games older than current version
+				const auto saveLatestTagArray = saveInfoData.at("latestTagArray").get<std::vector<uint16_t>>();
+				TagVer saveTagVer(saveLatestTagArray, "");
+				if (saveTagVer <= buildTagVer)
+				{
+					// looks like loadable
+					saveGameNamesAndTimes.emplace_back(std::string(dirName), saveInfoData.at("epoch").get<int64_t>());
+				}
+				else
+				{
+					debug(LOG_SAVEGAME, "not showing savegame '%s', because version is higher than this game", saveInfoFilename.c_str());
+				}
+			}
+			return true;
+		});
+	} catch( nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "can't load game: %s", e.what());
+		// continue, because still may find old .gam to load
+	}
 
 	char const *extension = bReplay? sSaveReplayExtension : sSaveGameExtension;
+	// Note: this is left for backward compatibility reasons.
+	// we want to be able to load .gam but only when no save-info was found
 	WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension](char *i) -> bool {
 		char savefile[256];
 		time_t savetime;
@@ -403,8 +443,16 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath.c_str(), i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 
-		(i)[strlen(i) - strlen(extension)] = '\0'; // remove .gam extension
-
+		(i)[strlen(i) - 4] = '\0'; // remove .gam extension
+		for(auto &el: saveGameNamesAndTimes)
+		{
+			// only add if doesn't exist yet
+			// also don't compare std::string, to avoid building std::string from char*
+			if (strcmp(i, el.name.c_str()) == 0)
+			{
+				return true; // move to next
+			}
+		}
 		saveGameNamesAndTimes.emplace_back(i, savetime);
 		return true;
 	});
@@ -412,7 +460,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	// Sort the save games so that the most recent one appears first
 	std::sort(saveGameNamesAndTimes.begin(),
 			  saveGameNamesAndTimes.end(),
-			  [](SaveGameNamesAndTimes& a, SaveGameNamesAndTimes& b) { return a.savetime > b.savetime; });
+			  [](SaveGameNamesAndTimes& a, SaveGameNamesAndTimes& b) { return a.epoch > b.epoch; });
 
 	// Now store the sorted save game names to the buttons
 	slotCount = 1;
@@ -420,7 +468,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		{
 			/* Set the button-text and tip text (the save time) into static storage */
 			sstrcpy(sSlotCaps[slotCount], saveGameNameAndTime.name.c_str());
-			auto newtime = getLocalTime(saveGameNameAndTime.savetime);
+			auto newtime = getLocalTime(saveGameNameAndTime.epoch);
 			strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", &newtime);
 
 			/* Add a button that references the static strings */
@@ -492,6 +540,7 @@ void deleteSaveGame(char *fileName)
 	strcat(fileName, ".es");					// remove script data if it exists.
 	PHYSFS_delete(fileName);
 	fileName[strlen(fileName) - 3] = '\0'; // strip extension
+	const std::string fileNameStr(fileName);
 
 	// check for a directory and remove that too.
 	WZ_PHYSFS_enumerateFiles(fileName, [fileName](const char *i) -> bool {
@@ -517,15 +566,56 @@ void deleteSaveGame(char *fileName)
 	}
 }
 
-char lastSavePath[PATH_MAX];
+SaveGamePath_t lastSavePath;
 bool lastSaveMP;
-static time_t lastSaveTime;
+static int64_t lastSaveTime;
 
-static bool findLastSaveFrom(const char *path)
+static bool findLastSaveFrom(SAVEGAME_LOC loc)
 {
 	bool found = false;
+	const char *path = SaveGameLocToPath[loc];
+	debug(LOG_SAVEGAME, "looking for last save in %s", path);
+	const std::string pathToCommonSaveDir = std::string(path);
+	try
+	{
+		WZ_PHYSFS_enumerateFolders(pathToCommonSaveDir, [&found, &pathToCommonSaveDir, loc] (const char * dirName) {
+			if (strcmp(dirName, "auto") == 0)
+			{
+				// skip "auto" folder, it will be iterated on its own
+				return true;
+			}
+			const std::string pathToSaveInfo = pathToCommonSaveDir + + "/" + std::string(dirName) + "/save-info.json";
+			if (PHYSFS_exists(pathToSaveInfo.c_str()))
+			{
+				const auto saveInfoDataOpt = parseJsonFile(pathToSaveInfo.c_str());
+				if (!saveInfoDataOpt.has_value())
+				{
+					debug(LOG_SAVEGAME, "wierd directory without save-info.json: %s", dirName);
+					return true;
+				}
+				const auto saveInfo = saveInfoDataOpt.value();
+				const auto epoch = saveInfo.at("epoch").get<int64_t>();
+				if (epoch > lastSaveTime)
+				{
+					lastSaveTime = epoch;
+					found = true;
+					lastSavePath.loc = loc;
+					lastSavePath.gameName = std::string(dirName);
+					debug(LOG_SAVEGAME, "found last saved game: %s%s", pathToCommonSaveDir.c_str(), lastSavePath.gameName.c_str());
+				}
+			}
+			return true;
+		});
+	} catch (nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "find last save failed:%s", e.what());
+		return false;
+	}
 
-	WZ_PHYSFS_enumerateFiles(path, [&path, &found](const char *i) -> bool {
+
+	// Note: this is left for backward compatibility with old .gam files
+	// Remove it later
+	WZ_PHYSFS_enumerateFiles(path, [&path, &found, loc](const char *i) -> bool {
 		char savefile[PATH_MAX];
 		time_t savetime;
 
@@ -534,13 +624,18 @@ static bool findLastSaveFrom(const char *path)
 			// If it doesn't, move on to the next filename
 			return true;
 		}
+		char tmp[PATH_MAX] = {0};
+		strncpy(tmp, i, PATH_MAX - 1);
+		// strip .gam extension
+		tmp[strlen(i) - 4] = '\0';
 		/* Figure save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", path, i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 		if (difftime(savetime, lastSaveTime) > 0.0)
 		{
 			lastSaveTime = savetime;
-			strcpy(lastSavePath, savefile);
+			lastSavePath.loc = loc;
+			lastSavePath.gameName = std::string(tmp);
 			found = true;
 		}
 		return true;
@@ -550,24 +645,13 @@ static bool findLastSaveFrom(const char *path)
 
 bool findLastSave()
 {
-	char tmpSaveGamePath[PATH_MAX] = {'\0'};
 	bool foundMP, foundCAM;
-
 	lastSaveTime = 0;
-	lastSaveMP = false;
-	lastSavePath[0] = '\0';
-	ssprintf(tmpSaveGamePath, "%scampaign/", SaveGamePath);
-	foundCAM = findLastSaveFrom(tmpSaveGamePath);
-	ssprintf(tmpSaveGamePath, "%scampaign/auto/", SaveGamePath);
-	foundCAM |= findLastSaveFrom(tmpSaveGamePath);
-	ssprintf(tmpSaveGamePath, "%sskirmish/", SaveGamePath);
-	foundMP = findLastSaveFrom(tmpSaveGamePath);
-	ssprintf(tmpSaveGamePath, "%sskirmish/auto/", SaveGamePath);
-	foundMP |= findLastSaveFrom(tmpSaveGamePath);
-	if (foundMP)
-	{
-		lastSaveMP = true;
-	}
+	foundCAM = findLastSaveFrom(SAVEGAME_LOC_CAM);
+	foundCAM |= findLastSaveFrom(SAVEGAME_LOC_CAM_AUTO);
+	foundMP = findLastSaveFrom(SAVEGAME_LOC_SKI);
+	foundMP |= findLastSaveFrom(SAVEGAME_LOC_SKI_AUTO);
+	lastSaveMP = foundMP;
 	return foundMP | foundCAM;
 }
 
@@ -605,26 +689,23 @@ static WzString suggestSaveName(const char *saveGamePath)
 				humanPlayers++;
 			}
 		}
-
 		ssprintf(saveNamePartial, "%s %dp %s", levelName.toStdString().c_str(), humanPlayers, cheatedSuffix.c_str());
 	}
 
 	WzString saveName = WzString(saveNamePartial).trimmed();
 	int similarSaveGames = 0;
-	WZ_PHYSFS_enumerateFiles(saveGamePath, [&similarSaveGames, &saveName](const char *fileName) -> bool {
-		if (isASavedGamefile(fileName, sSaveGameExtension) && WzString(fileName).startsWith(saveName))
+	WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [&saveName, &similarSaveGames](const char *dirName){
+		if (WzString(dirName).startsWith(saveName))
 		{
 			similarSaveGames++;
 		}
 		return true;
 	});
 
-
 	if (similarSaveGames > 0)
 	{
 		saveName += " " + WzString::number(similarSaveGames + 1);
 	}
-
 	return saveName;
 }
 
@@ -918,11 +999,14 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 	drawBlueBoxInset(x - 1, y - 1, w + 2, h + 2);
 }
 
-static void freeAutoSaveSlot(const char *path)
+
+// Note: remove later at some point
+// returns true if something was deleted
+static bool freeAutoSaveSlot_old(const char *path)
 {
 	char **i, **files;
 	files = PHYSFS_enumerateFiles(path);
-	ASSERT_OR_RETURN(, files, "PHYSFS_enumerateFiles(\"%s\") failed: %s", path, WZ_PHYSFS_getLastError());
+	ASSERT_OR_RETURN(false, files, "PHYSFS_enumerateFiles(\"%s\") failed: %s", path, WZ_PHYSFS_getLastError());
 	int nfiles = 0;
 	for (i = files; *i != nullptr; ++i)
 	{
@@ -936,7 +1020,7 @@ static void freeAutoSaveSlot(const char *path)
 	if (nfiles < totalslots)
 	{
 		PHYSFS_freeList(files);
-		return;
+		return false;
 	}
 
 	// too many autosaves, let's delete the oldest
@@ -962,6 +1046,54 @@ static void freeAutoSaveSlot(const char *path)
 	}
 	PHYSFS_freeList(files);
 	deleteSaveGame(oldestSavePath);
+	return true;
+}
+
+static void freeAutoSaveSlot(SAVEGAME_LOC loc)
+{
+	const char *path = SaveGameLocToPath[loc];
+	int64_t oldestEpoch = INT64_MAX;
+	std::string oldestKey;
+	unsigned count = 0;
+	try
+	{
+		WZ_PHYSFS_enumerateFolders(path, [path, &oldestKey, &oldestEpoch, &count](const char* dirName){
+			if (strcmp(dirName, "auto") == 0)
+			{
+				return true; // continue
+			}
+			count++;
+			const auto saveInfoFilename = std::string(path) + "/" + dirName + "/save-info.json";
+			auto saveInfoDataOpt = parseJsonFile(saveInfoFilename.c_str());
+			if (!saveInfoDataOpt.has_value() && !PHYSFS_exists(saveInfoFilename.c_str()))
+			{
+				// nothing to do, this has been handled by old routine
+				return true; 
+			}
+			const auto saveInfoData = saveInfoDataOpt.value();
+			const auto epoch = saveInfoData.at("epoch").get<int64_t>();
+			if (epoch < oldestEpoch)
+			{
+				oldestEpoch = epoch;
+				oldestKey = std::string(dirName);
+			}
+			return true;
+		});
+	} catch (nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "failed to remove an autosave game: %s", e.what());
+		return;
+	}
+
+	if (count < totalslots)
+	{
+		return;
+	}
+	ASSERT(oldestKey.size() > 0, "Bug: oldestKey can't be empty here");
+	char savefile[PATH_MAX];
+	snprintf(savefile, sizeof(savefile), "%s/%s.gam", path, oldestKey.c_str());
+	debug(LOG_SAVEGAME, "deleting the oldest autosave file %s", savefile);
+	deleteSaveGame(savefile);
 }
 
 bool autoSave()
@@ -972,9 +1104,15 @@ bool autoSave()
 	{
 		return false;
 	}
-	const char *dir = bMultiPlayer? AUTOSAVE_SKI_DIR : AUTOSAVE_CAM_DIR;
-	freeAutoSaveSlot(dir);
+	const char *dir = bMultiPlayer? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
+	// Backward compatibility: remove later
+	if (!freeAutoSaveSlot_old(dir))
+	{
+		// no old .gam found: check for new saves
+		freeAutoSaveSlot(bMultiPlayer? SAVEGAME_LOC_SKI_AUTO: SAVEGAME_LOC_CAM_AUTO);
 
+	}
+	
 	time_t now = time(nullptr);
 	struct tm timeinfo = getLocalTime(now);
 	char savedate[PATH_MAX];

@@ -148,6 +148,33 @@ char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules ap
 char rulesettag[40] = "";
 
 //flag to indicate when initialisation is complete
+const char* SAVEGAME_CAM = "savegames/campaign";
+const char* SAVEGAME_CAM_AUTO = "savegames/campaign/auto";
+const char* SAVEGAME_SKI = "savegames/skirmish";
+const char* SAVEGAME_SKI_AUTO = "savegames/skirmish/auto";
+
+const char *SaveGameLocToPath[] = {
+	SAVEGAME_CAM,
+	SAVEGAME_CAM_AUTO,
+	SAVEGAME_SKI,
+	SAVEGAME_SKI_AUTO,
+};
+
+std::string SaveGamePath_t::toPath(SaveGamePath_t::Extension ext)
+{
+	std::string out;
+	switch (ext)
+	{
+	case SaveGamePath_t::Extension::GAM:
+		out = std::string(SaveGameLocToPath[loc]) + "/" + gameName + ".gam";
+		break;
+	case SaveGamePath_t::Extension::JSON:
+		out = std::string(SaveGameLocToPath[loc]) + "/" + gameName + ".json";
+		break;
+	};
+	return out;
+}
+
 bool	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
 char    ReplayPath[PATH_MAX];
@@ -1626,10 +1653,10 @@ int realmain(int argc, char *argv[])
 	PHYSFS_mkdir("music");	// custom music overriding default music and music mods
 
 	make_dir(SaveGamePath, "savegames", nullptr); 	// save games
-	PHYSFS_mkdir("savegames/campaign");		// campaign save games
-	PHYSFS_mkdir("savegames/campaign/auto");	// campaign autosave games
-	PHYSFS_mkdir("savegames/skirmish");		// skirmish save games
-	PHYSFS_mkdir("savegames/skirmish/auto");	// skirmish autosave games
+	PHYSFS_mkdir(SAVEGAME_CAM);		// campaign save games
+	PHYSFS_mkdir(SAVEGAME_CAM_AUTO);	// campaign autosave games
+	PHYSFS_mkdir(SAVEGAME_SKI);		// skirmish save games
+	PHYSFS_mkdir(SAVEGAME_SKI_AUTO);	// skirmish autosave games
 
 	make_dir(ReplayPath, "replay", nullptr);  // replays
 	PHYSFS_mkdir("replay/skirmish");

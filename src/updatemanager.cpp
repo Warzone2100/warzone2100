@@ -20,8 +20,8 @@
 #include <3rdparty/json/json.hpp> // Must come before WZ includes
 using json = nlohmann::json;
 
-#include "updatemanager.h"
 #include "version.h"
+#include "updatemanager.h"
 #include <string>
 #include <unordered_map>
 #include <unordered_set>

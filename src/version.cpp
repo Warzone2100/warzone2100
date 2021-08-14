@@ -29,7 +29,8 @@
 #include <vector>
 #include <regex>
 #include <utility>
-#include <optional-lite/optional.hpp>
+#include <sstream>
+
 using nonstd::optional;
 using nonstd::nullopt;
 
@@ -38,64 +39,43 @@ using nonstd::nullopt;
 static const char vcs_branch_cstr[] = VCS_BRANCH;
 static const char vcs_tag[] = VCS_TAG;
 
-struct TagVer
+optional<TagVer> version_extractVersionNumberFromTag(const std::string& tag)
 {
-	std::string major;
-	std::string minor;
-	std::string revision;
-	std::string qualifier; // -beta1, -rc1, (etc)
-};
-
-static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
-{
-	std::string tagStr = tag;
-
+    std::istringstream parser(tag);
 	// Remove "v/" or "v" prefix (as in "v3.2.2"), if present
-	const std::vector<std::string> prefixesToRemove = {"v/", "v"};
-	for (const auto& prefix : prefixesToRemove)
-	{
-		if (tagStr.rfind(prefix, 0) == 0) {
-			tagStr = tagStr.substr(prefix.size());
-		}
-	}
-
-	std::smatch base_match;
-	const std::regex semver_regex("^([0-9]+)(.[0-9]+)?(.[0-9]+)?(.*)?");
-	if (!std::regex_match(tagStr, base_match, semver_regex))
-	{
-		// regex failure
-		return nullopt;
-	}
-
+    if (parser.peek() == 'v')  parser.get(); // skip
+    if (parser.peek() == '/')  parser.get(); // skip
 	TagVer result;
-	// base_match[0] is the whole string
-	const size_t matchCount = base_match.size();
-	switch (matchCount)
-	{
-		case 5:
-			result.qualifier = base_match[4].str();
-			// fallthrough
-		case 4:
-			result.revision = base_match[3].str();
-			if (!result.revision.empty())
+	parser >> result.version[0];
+    if (parser.fail())
+    {
+        return nullopt;
+    }
+	for (int i = 1; i < 3; i++)
+    {
+        parser.get(); // skip any separator
+        parser >> result.version[i];
+        if (parser.fail())
+        {
+            return nullopt;
+        }
+    }
+	if (!parser.eof())
+		{
+			// it has "-rc/beta1.." suffix 
+			if (parser.peek() == '-') parser.get(); // skip
+			parser.read(result.qualifier, TAGVER_MAX_QUALIF_LEN - 1);
+			result.qualifier[TAGVER_MAX_QUALIF_LEN - 1] = 0;
+			if (parser.fail() && !parser.eof())
 			{
-				result.revision = result.revision.substr(1); // remove the "." prefix
+				return nullopt;
 			}
-			// fallthrough
-		case 3:
-			result.minor = base_match[2].str();
-			if (!result.minor.empty())
+			// must terminate now
+			if (!parser.eof())
 			{
-				result.minor = result.minor.substr(1); // remove the "." prefix
+				return nullopt;
 			}
-			result.major = base_match[1].str();
-			break;
-		default:
-			// failure
-			return nullopt;
-			break;
-	}
-
+		}
 	return result;
 }
 
@@ -116,12 +96,12 @@ std::string version_getVersionedAppDirFolderName()
 
 	if (strlen(vcs_tag))
 	{
-		optional<TagVer> tagVersion = extractVersionNumberFromTag(vcs_tag);
+		optional<TagVer> tagVersion = version_extractVersionNumberFromTag(vcs_tag);
 		if (tagVersion.has_value())
 		{
 			// If tag is actually a version number (which it should be!)
 			// Use only MAJOR.MINOR (ignoring revision) for the appdir folder name
-			if (tagVersion.value().major == "3" && tagVersion.value().minor == "4")
+			if (tagVersion.value().get_major() == 3 && tagVersion.value().get_minor() == 4)
 			{
 				// EXCEPTION: Use "3.4.0" for any 3.4.x release, for compatibility with 3.4.0 (which did not have this code)
 				versionedWriteDirFolderName += "3.4.0";
@@ -129,7 +109,7 @@ std::string version_getVersionedAppDirFolderName()
 			else
 			{
 				// Normal case - use only "MAJOR.MINOR"
-				versionedWriteDirFolderName += tagVersion.value().major + "." + tagVersion.value().minor;
+				versionedWriteDirFolderName += tagVersion.value().major_minor();
 			}
 		}
 		else
@@ -160,6 +140,7 @@ std::string version_getVersionedAppDirFolderName()
 	return versionedWriteDirFolderName;
 }
 
+
 /** Composes a nicely formatted version string.
 * Determine if we are on a tag (which will NOT show the hash)
 * or a branch (which WILL show the hash)
@@ -187,6 +168,16 @@ const char *version_getVersionString()
 	}
 
 	return version_string;
+}
+
+const char *version_getLatestTag()
+{
+	if(strlen(VCS_TAG))
+	{
+		return VCS_TAG;
+	}
+	// this is non empty for sure!
+	return VCS_MOST_RECENT_TAGGED_VERSION;
 }
 
 // Should follow the form:
@@ -218,8 +209,8 @@ std::string version_getBuildIdentifierReleaseEnvironment()
 	std::string buildReleaseEnvironmentStr;
 	if (strlen(vcs_tag))
 	{
-		optional<TagVer> tagVersion = extractVersionNumberFromTag(vcs_tag);
-		if (tagVersion.has_value() && !tagVersion.value().qualifier.empty())
+		optional<TagVer> tagVersion = version_extractVersionNumberFromTag(vcs_tag);
+		if (tagVersion.has_value() && strlen(tagVersion.value().qualifier) != 0)
 		{
 			buildReleaseEnvironmentStr = "preview";
 		}

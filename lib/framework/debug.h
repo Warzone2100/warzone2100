@@ -196,6 +196,7 @@ enum code_part
 	LOG_CONSOLE,	// send console messages to file
 	LOG_ACTIVITY,
 	LOG_RESEARCH,
+	LOG_SAVEGAME,
 	LOG_LAST /**< _must_ be last! */
 };
 

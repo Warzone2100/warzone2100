@@ -20,7 +20,7 @@
 
 #ifndef __INCLUDED_SRC_LOADSAVE_H__
 #define __INCLUDED_SRC_LOADSAVE_H__
-
+#include "main.h"
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -55,7 +55,7 @@ enum LOADSAVE_MODE
 extern bool bLoadSaveUp;							// true when interface is up and should be run.
 //the name of the save game to load from the front end
 extern char saveGameName[256];
-extern char lastSavePath[PATH_MAX];
+extern SaveGamePath_t lastSavePath;
 extern bool lastSaveMP;
 extern char sRequestResult[PATH_MAX];
 extern bool bRequestLoad;
