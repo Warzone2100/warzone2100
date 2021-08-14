@@ -59,6 +59,7 @@
 #include "version.h"
 #include "game.h"
 #include "warzoneconfig.h"
+#include "challenge.h"
 
 #include <set>
 #include <memory>
@@ -593,6 +594,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["scavengerPlayer"] = scavengerSlot();
 	//== * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
 	globalVars["isMultiplayer"] = NetPlay.bComms;
+	//== * ```challenge``` If the current game is a challenge. (4.1.4+ only)
+	globalVars["challenge"] = challengeActive;
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
