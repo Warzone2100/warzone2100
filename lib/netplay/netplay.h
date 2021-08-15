@@ -153,7 +153,7 @@ struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
-	int32_t dwUserFlags[4];
+	int32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, unused, unused)
 };
 
 /**
@@ -252,7 +252,7 @@ struct PLAYER
 	bool                heartbeat;          ///< If we are still alive or not
 	bool                kick;               ///< If we should kick them
 	int32_t             connection;         ///< Index into connection list
-	int32_t             team;               ///< Which team we are on
+	int32_t             team;               ///< Which team we are on (int32_t::max for spectator team)
 	bool                ready;              ///< player ready to start?
 	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
 	AIDifficulty        difficulty;         ///< difficulty level of AI
@@ -260,6 +260,7 @@ struct PLAYER
 	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
 	char                IPtextAddress[40];  ///< IP of this player
 	FactionID			faction;			///< which faction the player has
+	bool				isSpectator;		///< whether this slot is a spectator slot
 
 	void resetAll()
 	{
@@ -278,6 +279,7 @@ struct PLAYER
 		autoGame = false;
 		IPtextAddress[0] = '\0';
 		faction = FACTION_NORMAL;
+		isSpectator = false;
 	}
 };
 
@@ -368,7 +370,7 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 bool NETjoinGame(const char *host, uint32_t port, const char *playername); // join game given with playername
 bool NEThostGame(const char *SessionName, const char *PlayerName,// host a game
-                 SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
+                 SDWORD gameType, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
 

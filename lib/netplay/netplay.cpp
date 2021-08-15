@@ -431,6 +431,7 @@ static void initPlayerNetworkProps(int playerIndex)
 	NetPlay.players[playerIndex].heartbeat = true;  // we always start with a heartbeat
 	NetPlay.players[playerIndex].kick = false;
 	NetPlay.players[playerIndex].ready = false;
+	NetPlay.players[playerIndex].isSpectator = false;
 
 	NetPlay.players[playerIndex].wzFiles.clear();
 	ingame.JoiningInProgress[playerIndex] = false;
@@ -524,6 +525,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint8_t(&NetPlay.players[index[n]].ai);
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 		NETuint8_t(reinterpret_cast<uint8_t *>(&NetPlay.players[index[n]].faction));
+		NETbool(&NetPlay.players[index[n]].isSpectator);
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -1796,6 +1798,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETint8_t(&ai);
 				NETint8_t(&difficulty);
 				NETuint8_t(&faction);
+				NETbool(&NetPlay.players[index].isSpectator);
 
 				auto newFactionId = uintToFactionID(faction);
 				if (!newFactionId.has_value())
@@ -2834,9 +2837,14 @@ void NETfixPlayerCount()
 {
 	int maxPlayers = game.maxPlayers;
 	unsigned playercount = 0;
+	int openSpectatorSlots = 0;
 	for (int index = 0; index < game.maxPlayers; ++index)
 	{
 		if (NetPlay.players[index].ai == AI_CLOSED)
+		{
+			--maxPlayers;
+		}
+		else if (NetPlay.players[index].isSpectator)
 		{
 			--maxPlayers;
 		}
@@ -2846,11 +2854,20 @@ void NETfixPlayerCount()
 		}
 	}
 
-	if (allow_joining && NetPlay.isHost && (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers))
+	for (const auto& slot : NetPlay.players)
+	{
+		if (slot.isSpectator && !slot.allocated)
+		{
+			++openSpectatorSlots;
+		}
+	}
+
+	if (allow_joining && NetPlay.isHost && (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers || gamestruct.desc.dwUserFlags[1] != openSpectatorSlots))
 	{
 		debug(LOG_NET, "Updating player count from %d/%d to %d/%d", (int)NetPlay.playercount, gamestruct.desc.dwMaxPlayers, playercount, maxPlayers);
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount = playercount;
 		gamestruct.desc.dwMaxPlayers = maxPlayers;
+		gamestruct.desc.dwUserFlags[1] = openSpectatorSlots;
 		NETregisterServer(WZ_SERVER_UPDATE);
 	}
 
@@ -3252,11 +3269,11 @@ void NETloadBanList() {
 }
 
 bool NEThostGame(const char *SessionName, const char *PlayerName,
-                 SDWORD one, SDWORD two, SDWORD three, SDWORD four,
+                 SDWORD gameType, SDWORD two, SDWORD three, SDWORD four,
                  UDWORD plyrs)	// # of players.
 {
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
-	      one, two, three, four, plyrs);
+		  gameType, two, three, four, plyrs);
 
 	netPlayersUpdated = true;
 
@@ -3325,7 +3342,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	gamestruct.desc.dwCurrentPlayers = 1;
 	gamestruct.desc.dwMaxPlayers = plyrs;
 	gamestruct.desc.dwFlags = 0;
-	gamestruct.desc.dwUserFlags[0] = one;
+	gamestruct.desc.dwUserFlags[0] = gameType;
 	gamestruct.desc.dwUserFlags[1] = two;
 	gamestruct.desc.dwUserFlags[2] = three;
 	gamestruct.desc.dwUserFlags[3] = four;
@@ -3361,6 +3378,11 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	NetPlay.HaveUpgrade = false;
 	NetPlay.hostPlayer	= NET_HOST_ONLY;
 	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
+
+	if (getHostLaunch() == HostLaunch::Autohost)
+	{
+		NetPlay.players[selectedPlayer].isSpectator = true;
+	}
 
 	MultiPlayerJoin(selectedPlayer);
 

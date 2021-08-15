@@ -174,7 +174,7 @@ static std::string getWantedDebugMappingStatuses(const DebugInputManager& dbgInp
 	char* p = ret;
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
-		if (NetPlay.players[n].allocated && (dbgInputManager.getPlayerWantsDebugMappings(n) == bStatus))
+		if (NetPlay.players[n].allocated && !NetPlay.players[n].isSpectator && (dbgInputManager.getPlayerWantsDebugMappings(n) == bStatus))
 		{
 			*p++ = '0' + NetPlay.players[n].position;
 		}

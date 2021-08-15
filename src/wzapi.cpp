@@ -2356,7 +2356,18 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 		}
 	}
 //	jsDebugMessageUpdate();
-	displayGameOver(gameWon, showBackDrop);
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator)
+	{
+		// Display a custom game over screen for spectators (win or loss conditions don't apply, obviously)
+		clearMissionWidgets();
+		intAddMultiMenu();
+		addConsoleMessage(_("GAME OVER"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		addConsoleMessage(_("The battle is over - you can leave the room."), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+	}
+	else
+	{
+		displayGameOver(gameWon, showBackDrop);
+	}
 	if (challengeActive)
 	{
 		updateChallenge(gameWon);
@@ -3240,6 +3251,17 @@ wzapi::no_return_value wzapi::fireWeaponAtObj(WZAPI_PARAMS(std::string weaponNam
 
 	proj_SendProjectile(&sWeapon, nullptr, player, target, psObj, true, 0);
 	return {};
+}
+
+//-- ## transformPlayerToSpectator(player)
+//--
+//-- Transform a player to a spectator. (4.2+ only)
+//-- This is a one-time transformation, destroys the player's HQ and all of their remaining units, and must occur deterministically on all clients.
+//--
+bool wzapi::transformPlayerToSpectator(WZAPI_PARAMS(int player))
+{
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	return makePlayerSpectator(static_cast<uint32_t>(player), false, false);
 }
 
 // flag all droids as requiring update on next frame
@@ -4450,6 +4472,7 @@ nlohmann::json wzapi::constructStaticPlayerData()
 		vector["team"] = NetPlay.players[i].team;
 		vector["isAI"] = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
 		vector["isHuman"] = NetPlay.players[i].allocated;
+		vector["isSpectator"] = NetPlay.players[i].isSpectator;
 		vector["type"] = SCRIPT_PLAYER;
 		playerData.push_back(std::move(vector));
 	}

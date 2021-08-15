@@ -195,5 +195,7 @@ void kf_QuickLoad();
 
 void kf_ToggleFullscreen();
 
+void enableGodMode();
+
 void keybindShutdown();
 #endif // __INCLUDED_SRC_KEYBIND_H__

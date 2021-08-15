@@ -208,7 +208,7 @@ void gameTimeUpdate(bool mayUpdate)
 	{
 		// Update the game time.
 		deltaGameTime = GAME_TICKS_PER_UPDATE;
-		gameTime += deltaGameTime;
+		gameTime += deltaGameTime; // TODO: Potentially, if this is a spectator, we could / should use the most recent processed gameTime from the host?
 
 		updateLatency();
 		if (crcError)
@@ -330,7 +330,8 @@ static void updateLatency()
 	// Find out what latency has been agreed on, next.
 	for (player = 0; player < game.maxPlayers; ++player)
 	{
-		if (NetPlay.players[player].allocated)  // Don't wait for dropped/kicked players.
+		if (NetPlay.players[player].allocated  // Don't wait for dropped/kicked players.
+			&& (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer)) // Don't wait for spectators (that are not the host)
 		{
 			//minWantedLatency = MIN(minWantedLatency, wantedLatencies[player]);  // Minimum, so the clients don't increase the latency to try to make one slow computer run faster.
 			maxWantedLatency = MAX(maxWantedLatency, wantedLatencies[player]);  // Maximum, since the host experiences lower latency than everyone else.
@@ -422,7 +423,9 @@ bool checkPlayerGameTime(unsigned player)
 
 	for (player = begin; player < end; ++player)
 	{
-		if (gameTime > gameQueueTime[player] && NetPlay.players[player].allocated)  // Don't wait for players that have been kicked/dropped.
+		if (gameTime > gameQueueTime[player]
+			&& NetPlay.players[player].allocated  // Don't wait for players that have been kicked/dropped.
+			&& (!NetPlay.players[player].isSpectator || bDisplayMultiJoiningStatus || player == NetPlay.hostPlayer)) // Don't wait for spectators (that are not the host) once the game has started
 		{
 			return false;  // Still waiting for this player.
 		}
