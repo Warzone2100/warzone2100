@@ -2236,6 +2236,11 @@ void gl_context::shutdown()
 		glDeleteBuffers(1, &scratchbuffer);
 		scratchbuffer = 0;
 	}
+
+	if (backend_impl)
+	{
+		backend_impl->destroyGLContext();
+	}
 }
 
 const size_t& gl_context::current_FrameNum() const
