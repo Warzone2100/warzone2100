@@ -182,7 +182,7 @@ class Team
 
 	canPlay() // TODO skip check if no new events.
 	{
-		if (!this.activeGame())
+		if (!this.activeGame() && challenge != true)
 		{
 			return false;
 		}
@@ -327,7 +327,10 @@ function activityAlert()
 function conditions_eventGameInit()
 {
 	createTeams();
-	setTimer("activityAlert", 10*1000);
+	if  (challenge != true)
+	{
+		setTimer("activityAlert", 10*1000);
+	}
 	if (alliancesType === ALLIANCES)
 	{
 		setTimer("createTeams", 10*1000); //rebild teams with ALLIANCES mode
@@ -341,28 +344,28 @@ function conditions_eventGameLoaded()
 
 function conditions_eventDroidBuilt(droid)
 {
-	if (droid.player != scavengerPlayer)
+	if (droid.player != scavengerPlayer && challenge != true)
 	{
 		playersTeam[droid.player].lastActivity = gameTime;
 	}
 }
 function conditions_eventStructureBuilt(structure)
 {
-	if (structure.player != scavengerPlayer && BASESTRUCTS.includes(structure.stattype) === true)
+	if (structure.player != scavengerPlayer && challenge != true && BASESTRUCTS.includes(structure.stattype) === true)
 	{
 		playersTeam[structure.player].lastActivity = gameTime;
 	}
 }
 function conditions_eventResearched(research, structure, player)
 {
-	if (player != scavengerPlayer)
+	if (player != scavengerPlayer && challenge != true)
 	{
 		playersTeam[player].lastActivity = gameTime;
 	}
 }
 function conditions_eventAttacked(victim, attacker)
 {
-	if (attacker.player != scavengerPlayer)
+	if (attacker.player != scavengerPlayer && challenge != true)
 	{
 		playersTeam[attacker.player].lastActivity = gameTime;
 	}
