@@ -433,6 +433,14 @@ static bool gameInit()
 		}
 	}
 
+	for (auto i = 0; i < NetPlay.players.size(); i++)
+	{
+		if (NetPlay.players[i].isSpectator)
+		{
+			makePlayerSpectator(i, true, true);
+		}
+	}
+
 	unsigned playerCount = 0;
 	for (int index = 0; index < game.maxPlayers; ++index)
 	{

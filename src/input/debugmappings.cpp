@@ -49,7 +49,8 @@ void DebugInputManager::setPlayerWantsDebugMappings(const unsigned int playerInd
 		ASSERT_OR_RETURN(, n < MAX_PLAYERS, "playerWantsDebugMappings has more entries than MAX_PLAYERS");
 
 		const bool bIsEmptySlot = !NetPlay.players[n].allocated;
-		const bool bPlayerNWantsDebugMappings = bIsEmptySlot || playerWantsDebugMappings[n];
+		const bool bIsSpectatorSlot = NetPlay.players[n].isSpectator;
+		const bool bPlayerNWantsDebugMappings = bIsEmptySlot || bIsSpectatorSlot || playerWantsDebugMappings[n];
 		bDoingDebugMappings &= bPlayerNWantsDebugMappings;
 	}
 }

@@ -202,6 +202,15 @@ Vector3i cameraToHome(UDWORD player, bool scroll);
 
 bool multiPlayerLoop();							// for loop.c
 
+
+enum class HandleMessageAction
+{
+	Process_Message,
+	Silently_Ignore,
+	Disallow_And_Kick_Sender
+};
+HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type);
+bool shouldProcessMessage(NETQUEUE& queue, uint8_t type);
 bool recvMessage();
 bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 void printInGameTextMessage(NetworkTextMessage const &message);
@@ -282,5 +291,7 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *ps
 bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
+
+bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool quietly = false);
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

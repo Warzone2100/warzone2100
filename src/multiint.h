@@ -59,12 +59,13 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type);
 void updateStructureDisabledFlags();
 
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayFeBox_Spectator(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
+std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS, uint8_t alpha = 255);
 /**
  * @deprecated use `addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS)` instead
  **/
-std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
+std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS, uint8_t alpha = 255);
 
 Image mpwidgetGetFrontHighlightImage(Image image);
 bool changeColour(unsigned player, int col, bool isHost);
@@ -151,10 +152,11 @@ void displayRoomNotifyMessage(char const *text);
 #define MULTIOP_TEAMSWIDTH		29
 #define	MULTIOP_TEAMSHEIGHT		38
 
-#define MULTIOP_TEAMCHOOSER_FORM	102800
-#define MULTIOP_TEAMCHOOSER			102810
-#define MULTIOP_TEAMCHOOSER_END     102841
-#define MULTIOP_TEAMCHOOSER_KICK	10289
+#define MULTIOP_TEAMCHOOSER_FORM		102800
+#define MULTIOP_TEAMCHOOSER				102810
+#define MULTIOP_TEAMCHOOSER_END     	102841
+#define MULTIOP_TEAMCHOOSER_KICK		10289
+#define MULTIOP_TEAMCHOOSER_SPECTATOR	10288
 
 #define MULTIOP_INLINE_OVERLAY_ROOT_FRM	10287
 
@@ -262,14 +264,17 @@ void displayRoomNotifyMessage(char const *text);
 #define MULTIOP_AI_END			(MULTIOP_AI_START * MAX_PLAYERS)
 #define MULTIOP_AI_OPEN			(MULTIOP_AI_END + 1)
 #define MULTIOP_AI_CLOSED		(MULTIOP_AI_END + 2)
+#define MULTIOP_AI_SPECTATOR	(MULTIOP_AI_END + 3)
 
-#define MULTIOP_DIFFICULTY_INIT_START	(MULTIOP_AI_END + 3)
+#define MULTIOP_DIFFICULTY_INIT_START	(MULTIOP_AI_END + 4)
 #define	MULTIOP_DIFFICULTY_INIT_END	(MULTIOP_DIFFICULTY_INIT_START + MAX_PLAYERS)
 
 #define MULTIOP_DIFFICULTY_CHOOSE_START	(MULTIOP_DIFFICULTY_INIT_END + 1)
 #define MULTIOP_DIFFICULTY_CHOOSE_END	(MULTIOP_DIFFICULTY_CHOOSE_START + MAX_PLAYERS)
 
-#define MULTIOP_FACTION_START		(MULTIOP_DIFFICULTY_CHOOSE_END + 100000)
+#define MULTIOP_ADD_SPECTATOR_SLOTS	(MULTIOP_DIFFICULTY_CHOOSE_END + 1)
+
+#define MULTIOP_FACTION_START		(MULTIOP_ADD_SPECTATOR_SLOTS + 100000)
 #define MULTIOP_FACTION_END		(MULTIOP_FACTION_START + MAX_PLAYERS)
 #define MULTIOP_FACTION_WIDTH		31
 #define MULTIOP_FACCHOOSER		(MULTIOP_FACTION_END + 1)

@@ -175,8 +175,12 @@ static bool bInActualHostedLobby = false;
 
 // widget functions
 static W_EDITBOX* addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
-static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
-static void drawReadyButton(UDWORD player);
+static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD w, UDWORD h, WIDGET_DISPLAY displayFunc = intDisplayFeBox);
+static void drawReadyButton(UDWORD player, int slotOverride = -1);
+static int numSlotsToBeDisplayed();
+static inline bool spectatorSlotsSupported();
+static inline bool isSpectatorOnlySlot(UDWORD playerIdx);
+//static inline bool isSpectatorOnlyPosition(UDWORD playerPosition);
 
 // Drawing Functions
 static void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -185,9 +189,14 @@ static void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayFaction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displaySpectatorAddButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void drawBlueBox_Spectator(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
+static void drawBlueBox_SpectatorOnly(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
+void intDisplayFeBox_SpectatorOnly(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static inline void drawBoxForPlayerInfoSegment(UDWORD playerIdx, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 
 // pUserData structures used by drawing functions
 struct DisplayPlayerCache {
@@ -243,6 +252,7 @@ static struct
 	bool ai;
 	bool position;
 	bool bases;
+	bool spectators;
 } locked;
 
 struct AIDATA
@@ -266,6 +276,7 @@ struct WzMultiButton : public W_BUTTON
 	Image imDown;
 	unsigned doHighlight;
 	unsigned tc;
+	uint8_t alpha = 255;
 };
 
 class ChatBoxWidget : public IntFormAnimated
@@ -1089,8 +1100,9 @@ static void addInlineChooserBlueForm(const std::shared_ptr<W_SCREEN> &psScreen, 
 	widgAddForm(psScreen, &sFormInit);
 }
 
-static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD w, UDWORD h)
+static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD w, UDWORD h, WIDGET_DISPLAY displayFunc /* = intDisplayFeBox*/)
 {
+	ASSERT(displayFunc != nullptr, "Must have a display func!");
 	W_FORMINIT sFormInit;                  // draw options box.
 	sFormInit.formID = parent;
 	sFormInit.id	= id;
@@ -1099,7 +1111,7 @@ static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.width = (UWORD)w;//190;
 	sFormInit.height = (UWORD)h; //27;
-	sFormInit.pDisplay =  intDisplayFeBox;
+	sFormInit.pDisplay =  displayFunc;
 	return widgAddForm(psWScreen, &sFormInit);
 }
 
@@ -1532,7 +1544,7 @@ static int allPlayersOnSameTeam(int except)
 	int minTeam = MAX_PLAYERS, maxTeam = 0, numPlayers = 0;
 	for (unsigned i = 0; i < game.maxPlayers; ++i)
 	{
-		if (i != except && (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0))
+		if (i != except && (!NetPlay.players[i].isSpectator) && (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0))
 		{
 			int team = getPlayerTeam(i);
 			minTeam = std::min(minTeam, team);
@@ -1549,8 +1561,8 @@ static int allPlayersOnSameTeam(int except)
 
 static int playerBoxHeight(int player)
 {
-	int gap = MULTIOP_PLAYERSH - MULTIOP_TEAMSHEIGHT * game.maxPlayers;
-	int gapDiv = game.maxPlayers - 1;
+	int gap = MULTIOP_PLAYERSH - MULTIOP_TEAMSHEIGHT * numSlotsToBeDisplayed();
+	int gapDiv = numSlotsToBeDisplayed() - 1;
 	gap = std::min(gap, 5 * gapDiv);
 	STATIC_ASSERT(MULTIOP_TEAMSHEIGHT == MULTIOP_PLAYERHEIGHT);  // Why are these different defines?
 	return (MULTIOP_TEAMSHEIGHT * gapDiv + gap) * NetPlay.players[player].position / gapDiv;
@@ -1715,6 +1727,10 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 		return;
 	}
 
+	bool spectatorSlotSupported = spectatorSlotsSupported();
+	bool openSlotSupported = (NetPlay.bComms) && !isSpectatorOnlySlot(player);
+	bool aiSlotSupported = !isSpectatorOnlySlot(player);
+
 	auto psWeakTitleUI = std::weak_ptr<WzMultiplayerOptionsTitleUI>(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
 
 	W_BUTINIT sButInit;
@@ -1738,9 +1754,17 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 		{
 		case MULTIOP_AI_CLOSED:
 			NetPlay.players[player].ai = AI_CLOSED;
+			NetPlay.players[player].isSpectator = false;
 			break;
 		case MULTIOP_AI_OPEN:
 			NetPlay.players[player].ai = AI_OPEN;
+			NetPlay.players[player].isSpectator = false;
+			break;
+		case MULTIOP_AI_SPECTATOR:
+			// set slot to open
+			NetPlay.players[player].ai = AI_OPEN;
+			// but also a spectator
+			NetPlay.players[player].isSpectator = true;
 			break;
 		default:
 			debug(LOG_ERROR, "Unexpected button id");
@@ -1757,13 +1781,15 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	};
 
+	const int topMostYPos = 3;
+
 	// Open button
-	if (NetPlay.bComms)
+	if (openSlotSupported)
 	{
 		sButInit.id = MULTIOP_AI_OPEN;
 		sButInit.pTip = _("Allow human players to join in this slot");
 		sButInit.UserData = (UDWORD)AI_OPEN;
-		sButInit.y = 3;	//Top most position
+		sButInit.y = topMostYPos;	//Top most position
 		auto psButton = widgAddButton(psInlineChooserOverlayScreen, &sButInit);
 		if (psButton)
 		{
@@ -1781,7 +1807,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	}
 	else
 	{
-		sButInit.y = 3; //since we don't have the lone mpbutton, we can start at position 0
+		sButInit.y = topMostYPos; //since we don't have the lone mpbutton, we can start at position 0
 	}
 	auto psCloseButton = widgAddButton(psInlineChooserOverlayScreen, &sButInit);
 	if (psCloseButton)
@@ -1789,46 +1815,64 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 		psCloseButton->addOnClickHandler(openCloseOnClickHandler);
 	}
 
-	auto pAIScrollableList = ScrollableListWidget::make();
-	aiForm->attach(pAIScrollableList);
-	pAIScrollableList->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
-	int aiListStartXPos = sButInit.x;
-	int aiListStartYPos = (sButInit.height + sButInit.y) + 10;
-	int aiListEntryHeight = sButInit.height;
-	int aiListEntryWidth = sButInit.width;
-	int aiListHeight = aiListEntryHeight * (NetPlay.bComms ? 7 : 8);
-	pAIScrollableList->setCalcLayout([aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight](WIDGET *psWidget) {
-		psWidget->setGeometry(aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight);
-	});
-
-	W_BUTINIT emptyInit;
-	for (size_t aiIdx = 0; aiIdx < aidata.size(); aiIdx++)
+	// Spectator button
+	if (spectatorSlotSupported)
 	{
-		auto pAIRow = std::make_shared<W_BUTTON>(&emptyInit);
-		pAIRow->setTip(aidata[aiIdx].tip);
-		pAIRow->id = MULTIOP_AI_START + aiIdx;
-		pAIRow->UserData = aiIdx;
-		pAIRow->setGeometry(0, 0, sButInit.width, sButInit.height);
-		pAIRow->displayFunction = displayAi;
-		pAIRow->pUserData = new DisplayAICache();
-		pAIRow->setOnDelete([](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayAICache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
+		sButInit.pTip = _("Allow spectators to join in this slot");
+		sButInit.id = MULTIOP_AI_SPECTATOR;
+		sButInit.UserData = (UDWORD)AI_OPEN;
+		sButInit.y = sButInit.y + sButInit.height;
+		auto psSpectatorButton = widgAddButton(psInlineChooserOverlayScreen, &sButInit);
+		if (psSpectatorButton)
+		{
+			psSpectatorButton->addOnClickHandler(openCloseOnClickHandler);
+		}
+	}
+
+	if (aiSlotSupported)
+	{
+		auto pAIScrollableList = ScrollableListWidget::make();
+		aiForm->attach(pAIScrollableList);
+		pAIScrollableList->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
+		int aiListStartXPos = sButInit.x;
+		int aiListStartYPos = (sButInit.height + sButInit.y) + 10;
+		int aiListEntryHeight = sButInit.height;
+		int aiListEntryWidth = sButInit.width;
+		int aiListHeight = aiListEntryHeight * (NetPlay.bComms ? 7 : 8);
+		pAIScrollableList->setCalcLayout([aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight](WIDGET *psWidget) {
+			psWidget->setGeometry(aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight);
 		});
-		pAIRow->addOnClickHandler([psWeakTitleUI, aiIdx, player](W_BUTTON& clickedButton) {
-			auto pStrongPtr = psWeakTitleUI.lock();
-			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
-			NetPlay.players[player].ai = aiIdx;
-			sstrcpy(NetPlay.players[player].name, getAIName(player));
-			NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
-			NETBroadcastPlayerInfo(player);
-			pStrongPtr->closeAiChooser();
-			pStrongPtr->addPlayerBox(true);
-			resetReadyStatus(false);
-			ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
-		});
-		pAIScrollableList->addItem(pAIRow);
+
+		W_BUTINIT emptyInit;
+		for (size_t aiIdx = 0; aiIdx < aidata.size(); aiIdx++)
+		{
+			auto pAIRow = std::make_shared<W_BUTTON>(&emptyInit);
+			pAIRow->setTip(aidata[aiIdx].tip);
+			pAIRow->id = MULTIOP_AI_START + aiIdx;
+			pAIRow->UserData = aiIdx;
+			pAIRow->setGeometry(0, 0, sButInit.width, sButInit.height);
+			pAIRow->displayFunction = displayAi;
+			pAIRow->pUserData = new DisplayAICache();
+			pAIRow->setOnDelete([](WIDGET *psWidget) {
+				assert(psWidget->pUserData != nullptr);
+				delete static_cast<DisplayAICache *>(psWidget->pUserData);
+				psWidget->pUserData = nullptr;
+			});
+			pAIRow->addOnClickHandler([psWeakTitleUI, aiIdx, player](W_BUTTON& clickedButton) {
+				auto pStrongPtr = psWeakTitleUI.lock();
+				ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+				NetPlay.players[player].isSpectator = false;
+				NetPlay.players[player].ai = aiIdx;
+				sstrcpy(NetPlay.players[player].name, getAIName(player));
+				NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
+				NETBroadcastPlayerInfo(player);
+				pStrongPtr->closeAiChooser();
+				pStrongPtr->addPlayerBox(true);
+				resetReadyStatus(false);
+				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+			});
+			pAIScrollableList->addItem(pAIRow);
+		}
 	}
 
 	aiChooserUp = player;
@@ -1849,10 +1893,15 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 	UDWORD i;
 	int disallow = allPlayersOnSameTeam(player);
 
-	bool canChangeTeams = !locked.teams;
+	bool isSpectator = NetPlay.players[player].isSpectator;
+	bool isLockedSpectator = isSpectator; //&& (locked.spectators || isSpectatorOnlySlot(player));
+	bool canChangeTeams = !isLockedSpectator && !locked.teams && (!isSpectator || NetPlay.isHost);
 	bool canKickPlayer = player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated;
+//	bool canChangeSpectatorStatus = !isLockedSpectator && (NetPlay.bComms && NetPlay.isHost && !locked.spectators);
+
 	if (!canChangeTeams && !canKickPlayer)
 	{
+		// can't change teams / spectator status because player is a spectator and spectators are locked
 		return;
 	}
 
@@ -1861,6 +1910,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 	initInlineChooser(player);
 
 	// add form.
+//	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 8, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
 	auto psParentForm = (W_FORM *)widgGetFromID(psWScreen, MULTIOP_PLAYERS);
 	addInlineChooserBlueForm(psInlineChooserOverlayScreen, psParentForm, MULTIOP_TEAMCHOOSER_FORM, "", 8, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
 
@@ -1909,6 +1959,13 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			// may want to add some kind of 'can't do' icon instead of being blank?
 		}
 	}
+	else if (isSpectator)
+	{
+  		const int imgwidth = iV_GetImageWidth(FrontImages, IMAGE_SPECTATOR);
+  		const int imgheight = iV_GetImageHeight(FrontImages, IMAGE_SPECTATOR);
+  		addMultiBut(psInlineChooserOverlayScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_SPECTATOR, 3, 6, imgwidth, imgheight,
+  		_("Spectator"), IMAGE_SPECTATOR, IMAGE_SPECTATOR_HI, IMAGE_SPECTATOR_HI);
+  	}
 
 	// add a kick button
 	if (canKickPlayer)
@@ -2438,20 +2495,37 @@ bool recvPositionRequest(NETQUEUE queue)
 }
 
 
-static void drawReadyButton(UDWORD player)
+static void drawReadyButton(UDWORD player, int slotOverride)
 {
 	int disallow = allPlayersOnSameTeam(-1);
 
 	// delete 'ready' botton form
 	WIDGET *parent = widgGetFromID(psWScreen, MULTIOP_READY_FORM_ID + player);
 
+	int playerSlot = (slotOverride >= 0) ? slotOverride : static_cast<int>(player);
 	if (!parent)
 	{
 		// add form to hold 'ready' botton
+		WIDGET_DISPLAY displayFunc = intDisplayFeBox;
+		if (NetPlay.players[player].isSpectator)
+		{
+			if (!isSpectatorOnlySlot(player))
+			{
+				displayFunc = intDisplayFeBox_Spectator;
+			}
+			else
+			{
+				displayFunc = intDisplayFeBox_SpectatorOnly;
+			}
+		}
 		parent = addBlueForm(MULTIOP_PLAYERS, MULTIOP_READY_FORM_ID + player,
 					7 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
-					playerBoxHeight(player),
-					MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT);
+					playerBoxHeight(playerSlot),
+					MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT, displayFunc);
+	}
+	else
+	{
+		parent->move(parent->x(), playerBoxHeight(playerSlot));
 	}
 
 
@@ -2480,6 +2554,14 @@ static void drawReadyButton(UDWORD player)
 		            (NetPlay.isHost && !locked.difficulty) ? _("Click to change difficulty") : tooltip, icon, icon, icon);
 		return;
 	}
+//	else if (player != NetPlay.hostPlayer && NetPlay.players[player].isSpectator)
+//	{
+//		// display spectator icon
+//		int icon = difficultyIcon(static_cast<int8_t>(AIDifficulty::DISABLED));
+//		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
+//					(NetPlay.isHost && !locked.spectators) ? _("Click to change difficulty") : "", icon, icon, icon);
+//		return;
+//	}
 	else if (!NetPlay.players[player].allocated)
 	{
 		// closed or open - remove ready / difficulty button
@@ -2502,8 +2584,9 @@ static void drawReadyButton(UDWORD player)
 	unsigned images[2][3] = {{IMAGE_CHECK_OFF, IMAGE_CHECK_ON, IMAGE_CHECK_DOWNLOAD}, {IMAGE_CHECK_OFF_HI, IMAGE_CHECK_ON_HI, IMAGE_CHECK_DOWNLOAD_HI}};
 
 	// draw 'ready' button
+	bool greyedOutReady = NetPlay.players[player].isSpectator && NetPlay.players[player].ready;
 	auto pReadyBut = addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
+	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady], MAX_PLAYERS, (!greyedOutReady) ? 255 : 125);
 	ASSERT_OR_RETURN(, pReadyBut != nullptr, "Failed to create ready button");
 	pReadyBut->minClickInterval = GAME_TICKS_PER_SEC;
 	pReadyBut->unlock();
@@ -2529,6 +2612,34 @@ static void drawReadyButton(UDWORD player)
 static bool canChooseTeamFor(int i)
 {
 	return (i == selectedPlayer || NetPlay.isHost);
+}
+
+static bool addNewSpectatorSlot()
+{
+	ASSERT_HOST_ONLY(return false);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (!isSpectatorOnlySlot(i))
+		{
+			continue;
+		}
+		if (NetPlay.players[i].allocated || NetPlay.players[i].isSpectator)
+		{
+			continue;
+		}
+		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
+		{
+			continue; // skip it
+		}
+		NetPlay.players[i].ai = AI_OPEN;
+		NetPlay.players[i].isSpectator = true;
+		// common code
+		NetPlay.players[i].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
+		NETBroadcastPlayerInfo(i);
+		return true;
+	}
+
+	return false;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2589,10 +2700,17 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 			}
 		}
 
-		for (int i = 0; i < game.maxPlayers; i++)
+		ASSERT(static_cast<size_t>(MAX_PLAYERS) <= NetPlay.players.size(), "Insufficient array size: %zu versus %zu", NetPlay.players.size(), (size_t)MAX_PLAYERS);
+		int numSlotsDisplayed = 0;
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			if (positionChooserUp >= 0 && positionChooserUp != i && (NetPlay.isHost || !isHumanPlayer(i)))
 			{
+				if (isSpectatorOnlySlot(i))
+				{
+					// only show slots that are valid game slots
+					continue;
+				}
 				W_BUTINIT sButInit;
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START + i;
@@ -2610,11 +2728,18 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 					psWidget->pUserData = nullptr;
 				};
 				widgAddButton(psWScreen, &sButInit);
+				numSlotsDisplayed++;
 				continue;
 			}
 			else if (i == inlineChooserUp)
 			{
 				// skip adding player info box, since inline chooser is up for this player
+				continue;
+			}
+			else if (isSpectatorOnlySlot(i)
+					 && ((i >= NetPlay.players.size()) || !(NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN)))
+			{
+				// the only slots displayable beyond game.maxPlayers are spectator slots
 				continue;
 			}
 			else if (ingame.localOptionsReceived)
@@ -2624,10 +2749,14 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_TEAMS_START + i;
 				sButInit.x = 7;
-				sButInit.y = playerBoxHeight(i);
+				sButInit.y = playerBoxHeight(numSlotsDisplayed);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
-				if (canChooseTeamFor(i) && !locked.teams)
+				if (NetPlay.players[i].isSpectator)
+				{
+					sButInit.pTip = _("Spectator");
+				}
+				else if (canChooseTeamFor(i) && !locked.teams)
 				{
 					sButInit.pTip = _("Choose Team");
 				}
@@ -2650,10 +2779,10 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 			sColInit.formID = MULTIOP_PLAYERS;
 			sColInit.id = MULTIOP_COLOUR_START + i;
 			sColInit.x = 7 + MULTIOP_TEAMSWIDTH;
-			sColInit.y = playerBoxHeight(i);
+			sColInit.y = playerBoxHeight(numSlotsDisplayed);
 			sColInit.width = MULTIOP_COLOUR_WIDTH;
 			sColInit.height = MULTIOP_PLAYERHEIGHT;
-			if (selectedPlayer == i || NetPlay.isHost)
+			if ((selectedPlayer == i || NetPlay.isHost) && (!NetPlay.players[i].isSpectator))
 			{
 				sColInit.pTip = _("Click to change player colour");
 			}
@@ -2666,10 +2795,10 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 			sFacInit.formID = MULTIOP_PLAYERS;
 			sFacInit.id = MULTIOP_FACTION_START+i;
 			sFacInit.x = 7 + MULTIOP_TEAMSWIDTH+MULTIOP_COLOUR_WIDTH;
-			sFacInit.y = playerBoxHeight(i);
+			sFacInit.y = playerBoxHeight(numSlotsDisplayed);
 			sFacInit.width = MULTIOP_FACTION_WIDTH;
 			sFacInit.height = MULTIOP_PLAYERHEIGHT;
-			if (selectedPlayer == i || NetPlay.isHost)
+			if ((selectedPlayer == i || NetPlay.isHost) && (!NetPlay.players[i].isSpectator))
 			{
 				sFacInit.pTip = _("Click to change player faction");
 			}
@@ -2683,7 +2812,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 				// but always draw the difficulty buttons for AI players
 				if (!allOnSameTeam || (!NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0))
 				{
-					drawReadyButton(i);
+					drawReadyButton(i, numSlotsDisplayed);
 				}
 
 				// draw player info box
@@ -2691,10 +2820,10 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START + i;
 				sButInit.x = 7 + MULTIOP_TEAMSWIDTH + MULTIOP_COLOUR_WIDTH + MULTIOP_FACTION_WIDTH;
-				sButInit.y = playerBoxHeight(i);
+				sButInit.y = playerBoxHeight(numSlotsDisplayed);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH - MULTIOP_FACTION_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
-				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && !locked.position)
+				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && !locked.position && !isSpectatorOnlySlot(i))
 				{
 					sButInit.pTip = _("Click to change player position");
 				}
@@ -2730,6 +2859,43 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 					psWidget->pUserData = nullptr;
 				};
 				widgAddButton(psWScreen, &sButInit);
+			}
+
+			numSlotsDisplayed++;
+		}
+
+		if ((numSlotsDisplayed < (MAX_PLAYERS_IN_GUI - 1)) && spectatorSlotsSupported() && NetPlay.isHost) // TODO: Currently fixed to MAX_PLAYERS_IN_GUI - 1 pending a refactor of this UI into modern widgets setup (and possibly an actual list)
+		{
+			// Add a "+ Spectator Slots" button
+			const int imgheight = iV_GetImageHeight(FrontImages, IMAGE_SPECTATOR) + 2;
+			W_BUTINIT sAddSpecSlotInit;
+			sAddSpecSlotInit.formID = MULTIOP_PLAYERS;
+			sAddSpecSlotInit.id = MULTIOP_ADD_SPECTATOR_SLOTS;
+			sAddSpecSlotInit.x = 7;
+			sAddSpecSlotInit.y = MULTIOP_PLAYERSH - (imgheight + 4);
+			sAddSpecSlotInit.width = MULTIOP_TEAMSWIDTH;
+			sAddSpecSlotInit.height = imgheight;
+			sAddSpecSlotInit.pTip = _("Add spectator slot");
+			sAddSpecSlotInit.pDisplay = displaySpectatorAddButton;
+			sAddSpecSlotInit.UserData = 0;
+			W_BUTTON *pButton = widgAddButton(psWScreen, &sAddSpecSlotInit);
+			if (pButton)
+			{
+				auto psWeakTitleUI = std::weak_ptr<WzMultiplayerOptionsTitleUI>(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
+				auto onClickHandler = [psWeakTitleUI](W_BUTTON& clickedButton) {
+					auto pStrongPtr = psWeakTitleUI.lock();
+					ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+					widgScheduleTask([psWeakTitleUI]{
+						auto pStrongPtr = psWeakTitleUI.lock();
+						ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+						if (addNewSpectatorSlot())
+						{
+							pStrongPtr->addPlayerBox(true);
+							resetReadyStatus(false);
+						}
+					});
+				};
+				pButton->addOnClickHandler(onClickHandler);
 			}
 		}
 	}
@@ -3274,6 +3440,10 @@ static void loadMapPlayerSettings(WzConfig& ini)
 					NetPlay.players[i].faction = static_cast<FactionID>(f_id);
 				}
 			}
+		}
+		if (ini.contains("spectator"))
+		{
+			NetPlay.players[i].isSpectator = ini.value("isSpectator", false).toBool();
 		}
 		ini.endGroup();
 	}
@@ -3875,14 +4045,14 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	}
 
 	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
-	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && !locked.teams)  // Clicked on a team chooser
+	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && (!locked.teams || !locked.spectators))  // Clicked on a team chooser
 	{
-		int clickedMenuID = id - MULTIOP_TEAMS_START;
+		int player = id - MULTIOP_TEAMS_START;
 
 		//make sure team chooser is not up before adding new one for another player
-		if (canChooseTeamFor(clickedMenuID) && positionChooserUp < 0)
+		if (canChooseTeamFor(player) && positionChooserUp < 0)
 		{
-			openTeamChooser(clickedMenuID);
+			openTeamChooser(player);
 		}
 	}
 
@@ -3891,7 +4061,8 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	{
 		UBYTE player = (UBYTE)(id - MULTIOP_READY_START);
 
-		if (player == selectedPlayer && positionChooserUp < 0)
+		if (player == selectedPlayer && positionChooserUp < 0
+			&& (!NetPlay.players[player].isSpectator || !NetPlay.players[player].ready)) // spectators can never toggle off "ready"
 		{
 			// Lock the "ready" button (until the request is processed)
 			widgSetButtonState(psWScreen, id, WBUT_LOCK);
@@ -3921,9 +4092,11 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 
 	if (id >= MULTIOP_COLOUR_START && id <= MULTIOP_COLOUR_END && (id - MULTIOP_COLOUR_START == selectedPlayer || NetPlay.isHost))
 	{
-		if (positionChooserUp < 0)		// not choosing something else already
+		int player = id - MULTIOP_COLOUR_START;
+		if ((positionChooserUp < 0)		// not choosing something else already
+			&& !NetPlay.players[player].isSpectator) // not a spectator
 		{
-			openColourChooser(id - MULTIOP_COLOUR_START);
+			openColourChooser(player);
 		}
 	}
 
@@ -3936,7 +4109,8 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		int player = id - MULTIOP_PLAYER_START;
 		if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
 			&& !locked.position
-		    && positionChooserUp < 0)
+		    && positionChooserUp < 0
+			&& !isSpectatorOnlySlot(player))
 		{
 			openPositionChooser(player);
 		}
@@ -3961,10 +4135,11 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 				// Right clicking distributes selected AI's type and difficulty to all other AIs
 				for (int i = 0; i < MAX_PLAYERS; ++i)
 				{
-					// Don't change open/closed slots or humans
-					if (NetPlay.players[i].ai >= 0 && i != player && !isHumanPlayer(i))
+					// Don't change open/closed slots or humans or spectator-only slots
+					if (NetPlay.players[i].ai >= 0 && i != player && !isHumanPlayer(i) && !isSpectatorOnlySlot(i))
 					{
 						NetPlay.players[i].ai = NetPlay.players[player].ai;
+						NetPlay.players[i].isSpectator = NetPlay.players[player].isSpectator;
 						NetPlay.players[i].difficulty = NetPlay.players[player].difficulty;
 						sstrcpy(NetPlay.players[i].name, getAIName(player));
 						NETBroadcastPlayerInfo(i);
@@ -3990,9 +4165,11 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	// clicked on faction chooser button
 	if (id >= MULTIOP_FACTION_START && id <= MULTIOP_FACTION_END && (id - MULTIOP_FACTION_START == selectedPlayer || NetPlay.isHost))
 	{
-		if (positionChooserUp < 0)		// not choosing something else already
+		int player = id - MULTIOP_FACTION_START;
+		if ((positionChooserUp < 0)		// not choosing something else already
+			&& !NetPlay.players[player].isSpectator) // not a spectator
 		{
-			openFactionChooser(id - MULTIOP_FACTION_START);
+			openFactionChooser(player);
 		}
 	}
 }
@@ -4056,6 +4233,11 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 	while (NETrecvNet(&queue, &type))
 	{
+		if (!shouldProcessMessage(queue, type))
+		{
+			continue;
+		}
+
 		// Copy the message to the global one used by the new NET API
 		switch (type)
 		{
@@ -4069,6 +4251,12 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				if (running)
 				{
 					((MultibuttonWidget *)widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW))->enable(done);  // turn preview button on or off
+				}
+				if (!NetPlay.isHost && NetPlay.players[selectedPlayer].isSpectator && (NetPlay.players[selectedPlayer].ready != done))
+				{
+					// spectators should automatically become ready as soon as necessary files are downloaded
+					// and not-ready when files remain to be downloaded
+					SendReadyRequest(selectedPlayer, done);
 				}
 				break;
 			}
@@ -4091,9 +4279,17 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			break;
 
 		case NET_OPTIONS:					// incoming options file.
+		{
 			recvOptions(queue);
 			bInActualHostedLobby = true;
 			ingame.localOptionsReceived = true;
+
+			bool haveData = NetPlay.wzFiles.empty();
+			if (!NetPlay.isHost && haveData && NetPlay.players[selectedPlayer].isSpectator && !NetPlay.players[selectedPlayer].ready)
+			{
+				// Automatically set self to "ready" if we're a spectator and there are no files to fetch
+				SendReadyRequest(selectedPlayer, true);
+			}
 
 			if (std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent))
 			{
@@ -4102,6 +4298,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				addChatBox();
 			}
 			break;
+		}
 
 		case GAME_ALLIANCE:
 			recvAlliance(queue, false);
@@ -4776,12 +4973,25 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	ASSERT_OR_RETURN(, i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBoxForPlayerInfoSegment(i, x, y, psWidget->width(), psWidget->height());
 
-	if (NetPlay.players[i].difficulty != AIDifficulty::DISABLED)
+	if (!NetPlay.players[i].isSpectator)
 	{
 		iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
 	}
+	else
+	{
+		iV_DrawImage(FrontImages, IMAGE_SPECTATOR, x + 2, y + 8);
+	}
+}
+
+void displaySpectatorAddButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+
+	drawBlueBox_SpectatorOnly(x, y, psWidget->width(), psWidget->height());
+	iV_DrawImage(FrontImages, IMAGE_SPECTATOR, x + 2, y + 1);
 }
 
 void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -4810,11 +5020,36 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int x = xOffset + psWidget->x();
 	const int y = yOffset + psWidget->y();
 	const int j = psWidget->UserData;
-	const char *commsText[] = { N_("Open"), N_("Closed") };
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	cache.wzText.setText((j >= 0) ? aidata[j].name : gettext(commsText[j + 2]), font_regular);
-	cache.wzText.render(x + 10, y + 22, WZCOL_FORM_TEXT);
+	std::string displayText;
+	PIELIGHT textColor = WZCOL_FORM_TEXT;
+	if (j >= 0)
+	{
+		ASSERT(j < aidata.size(), "Invalid aidata index: %d", j);
+		displayText = aidata[j].name;
+	}
+	else
+	{
+		const int id = psWidget->id;
+		switch (id)
+		{
+		case MULTIOP_AI_CLOSED:
+			displayText = _("Closed");
+			break;
+		case MULTIOP_AI_OPEN:
+			displayText = _("Open");
+			break;
+		case MULTIOP_AI_SPECTATOR:
+			displayText = _("Spectator");
+			break;
+		default:
+			debug(LOG_ERROR, "Unexpected button id: %d", id);
+			break;
+		}
+	}
+	cache.wzText.setText(displayText, font_regular);
+	cache.wzText.render(x + 10, y + 22, textColor);
 }
 
 static int difficultyIcon(int difficulty)
@@ -4882,7 +5117,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	unsigned downloadProgress = NETgetDownloadProgress(j);
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
 	if (downloadProgress != 100)
 	{
 		char progressString[MAX_STR_LENGTH];
@@ -4894,8 +5129,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
 		std::string name = NetPlay.players[j].name;
-
-		drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
 
@@ -5029,7 +5262,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 	else	// AI
 	{
-		char aitext[80];
+		char aitext[100];
 
 		if (NetPlay.players[j].ai >= 0)
 		{
@@ -5042,14 +5275,25 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		    ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
 		}
 
+		PIELIGHT textColor = WZCOL_FORM_TEXT;
 		switch (NetPlay.players[j].ai)
 		{
-		case AI_OPEN: sstrcpy(aitext, _("Open")); break;
+		case AI_OPEN:
+			if (!NetPlay.players[j].isSpectator)
+			{
+				sstrcpy(aitext, _("Open"));
+			}
+			else
+			{
+				sstrcpy(aitext, _("Spectator"));
+				textColor.byte.a = 220;
+			}
+			break;
 		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
 		default: sstrcpy(aitext, NetPlay.players[j].name ); break;
 		}
 		cache.wzMainText.setText(aitext, font_regular);
-		cache.wzMainText.render(x + nameX, y + 22, WZCOL_FORM_TEXT);
+		cache.wzMainText.render(x + nameX, y + 22, textColor);
 	}
 }
 
@@ -5059,8 +5303,8 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int y = yOffset + psWidget->y();
 	const int j = psWidget->UserData;
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED)
+	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
+	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
 	{
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
@@ -5074,8 +5318,8 @@ void displayFaction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int y = yOffset + psWidget->y();
 	const int j = psWidget->UserData;
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED)
+	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
+	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
 	{
 		FactionID faction = NetPlay.players[j].faction;
 		iV_DrawImage(FrontImages, factionIcon(faction), x + 5, y + 8);
@@ -5092,6 +5336,75 @@ void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int h = psWidget->height();
 
 	drawBlueBox(x, y, w, h);
+}
+
+static void drawBlueBox_Spectator(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
+{
+	// Match drawBlueBox behavior
+	x -= 1;
+	y -= 1;
+	w += 2;
+	h += 2;
+	PIELIGHT backgroundClr = WZCOL_FORM_DARK;
+	backgroundClr.byte.a = 200;
+	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_BORDER);
+	pie_UniTransBoxFill(x + 1, y + 1, x + w - 1, y + h - 1, backgroundClr);
+}
+
+static void drawBlueBox_SpectatorOnly(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
+{
+	// Match drawBlueBox behavior
+	x -= 1;
+	y -= 1;
+	w += 2;
+	h += 2;
+	PIELIGHT backgroundClr = WZCOL_FORM_DARK;
+	backgroundClr.byte.a = 175;
+//	PIELIGHT borderClr = pal_RGBA(30, 30, 30, 120);
+//	pie_UniTransBoxFill(x, y, x + w, y + h, borderClr);
+//	pie_UniTransBoxFill(x + 1, y + 1, x + w - 1, y + h - 1, backgroundClr);
+	pie_UniTransBoxFill(x, y, x + w, y + h, backgroundClr);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+// Display (not-blue) box for spectators
+void intDisplayFeBox_Spectator(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
+
+	drawBlueBox_Spectator(x, y, w, h);
+}
+void intDisplayFeBox_SpectatorOnly(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
+
+	drawBlueBox_SpectatorOnly(x, y, w, h);
+}
+
+static inline void drawBoxForPlayerInfoSegment(UDWORD playerIdx, UDWORD x, UDWORD y, UDWORD w, UDWORD h)
+{
+	ASSERT(playerIdx < NetPlay.players.size(), "Invalid playerIdx: %zu", static_cast<size_t>(playerIdx));
+	if (playerIdx >= NetPlay.players.size() || !NetPlay.players[playerIdx].isSpectator)
+	{
+		drawBlueBox(x, y, w, h);
+	}
+	else
+	{
+		if (!isSpectatorOnlySlot(playerIdx))
+		{
+			drawBlueBox_Spectator(x, y, w, h);
+		}
+		else
+		{
+			drawBlueBox_SpectatorOnly(x, y, w, h);
+		}
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -5182,7 +5495,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 		Image tcImage(toDraw[n].images, toDraw[n].id + 1);
 		if (tc == MAX_PLAYERS)
 		{
-			iV_DrawImage(toDraw[n], x0, y0);
+			iV_DrawImageImage(toDraw[n], x0, y0, alpha);
 		}
 		else if (tc == MAX_PLAYERS + 1)
 		{
@@ -5234,7 +5547,7 @@ static W_EDITBOX* addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha)
 {
 	std::shared_ptr<WzMultiButton> button;
 	auto existingWidget = widgFormGetFromID(parent.shared_from_this(), id);
@@ -5254,12 +5567,13 @@ std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWOR
 	button->imDown = Image(FrontImages, down);
 	button->doHighlight = hi;
 	button->tc = tc;
+	button->alpha = alpha;
 	return button;
 }
 
-std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha)
 {
-	return addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc);
+	return addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc, alpha);
 }
 
 /* Returns true if the multiplayer game can start (i.e. all players are ready) */
@@ -5309,3 +5623,38 @@ static void sendRoomChatMessage(char const *text)
 	displayRoomMessage(RoomMessage::player(selectedPlayer, text));
 	message.enqueue(NETbroadcastQueue());
 }
+
+static int numSlotsToBeDisplayed()
+{
+	ASSERT(static_cast<size_t>(MAX_PLAYERS) <= NetPlay.players.size(), "Insufficient array size: %zu versus %zu", NetPlay.players.size(), (size_t)MAX_PLAYERS);
+	int numSlotsToBeDisplayed = 0;
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (isSpectatorOnlySlot(i)
+				 && ((i >= NetPlay.players.size()) || !(NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN)))
+		{
+			// the only slots displayable beyond maxPlayers are spectator-only slots that are enabled
+			continue;
+		}
+		numSlotsToBeDisplayed++;
+	}
+	return numSlotsToBeDisplayed;
+}
+
+static inline bool spectatorSlotsSupported()
+{
+	return NetPlay.bComms;
+}
+
+// NOTE: Pass in the index in the NetPlay.players array
+static inline bool isSpectatorOnlySlot(UDWORD playerIdx)
+{
+	ASSERT_OR_RETURN(false, playerIdx < NetPlay.players.size(), "Invalid playerIdx: %" PRIu32 "", playerIdx);
+	return NetPlay.players[playerIdx].position >= game.maxPlayers;
+}
+
+//// NOTE: Pass in NetPlay.players[i].position
+//static inline bool isSpectatorOnlyPosition(UDWORD playerPosition)
+//{
+//	return playerPosition >= game.maxPlayers;
+//}

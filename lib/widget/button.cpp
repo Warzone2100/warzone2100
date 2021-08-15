@@ -206,18 +206,18 @@ void W_BUTTON::display(int xOffset, int yOffset)
 	// Display the button.
 	if (!images.normal.isNull())
 	{
-		iV_DrawImage(images.normal, x0, y0);
+		iV_DrawImageImage(images.normal, x0, y0);
 		if (isDown && !images.down.isNull())
 		{
-			iV_DrawImage(images.down, x0, y0);
+			iV_DrawImageImage(images.down, x0, y0);
 		}
 		if (isDisabled && !images.disabled.isNull())
 		{
-			iV_DrawImage(images.disabled, x0, y0);
+			iV_DrawImageImage(images.disabled, x0, y0);
 		}
 		if (isHighlight && !images.highlighted.isNull())
 		{
-			iV_DrawImage(images.highlighted, x0, y0);
+			iV_DrawImageImage(images.highlighted, x0, y0);
 		}
 	}
 	else

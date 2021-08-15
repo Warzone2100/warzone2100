@@ -1204,7 +1204,7 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 
 		if (!image.isNull())
 		{
-			iV_DrawImage(image, ButXPos + ox, ButYPos + oy);
+			iV_DrawImageImage(image, ButXPos + ox, ButYPos + oy);
 		}
 
 		/* all non droid buttons */
@@ -1245,7 +1245,7 @@ void IntFancyButton::displayImage(Image image, int xOffset, int yOffset)
 	}
 
 	displayClear(xOffset, yOffset);
-	iV_DrawImage(image, xOffset + x(), yOffset + y());
+	iV_DrawImageImage(image, xOffset + x(), yOffset + y());
 }
 
 // Create a blank button.

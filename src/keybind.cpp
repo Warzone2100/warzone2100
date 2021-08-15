@@ -1145,6 +1145,28 @@ void kf_ToggleLevelEditor()
 }
 // --------------------------------------------------------------------------
 
+void enableGodMode()
+{
+	if (godMode)
+	{
+		return;
+	}
+
+	// Bail out if we're running a _true_ multiplayer game and we aren't a spectator (to prevent MP cheating)
+	if (runningMultiplayer() && !NetPlay.players[selectedPlayer].isSpectator)
+	{
+		noMPCheatMsg();
+		return;
+	}
+
+	godMode = true; // view all structures and droids
+	revealAll(selectedPlayer);
+	setRevealStatus(true); // view the entire map
+	radarPermitted = true; //add minimap without CC building
+
+	preProcessVisibility();
+}
+
 void	kf_ToggleGodMode()
 {
 	static bool pastReveal = true;
@@ -1191,11 +1213,8 @@ void	kf_ToggleGodMode()
 	}
 	else
 	{
-		godMode = true; // view all structures and droids
-		revealAll(selectedPlayer);
 		pastReveal = getRevealStatus();
-		setRevealStatus(true); // view the entire map
-		radarPermitted = true; //add minimap without CC building
+		enableGodMode();
 	}
 
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),

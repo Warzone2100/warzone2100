@@ -645,6 +645,103 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *ps
 	NETend();
 }
 
+HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
+{
+	if (queue.index == NetPlay.hostPlayer)
+	{
+		// host gets access to all messages
+		return HandleMessageAction::Process_Message;
+	}
+
+	bool senderIsSpectator = NetPlay.players[queue.index].isSpectator;
+
+	if (type > NET_MIN_TYPE && type < NET_MAX_TYPE)
+	{
+		switch (type)
+		{
+			case NET_KICK:
+			case NET_AITEXTMSG:
+			case NET_BEACONMSG:
+			case NET_TEAMREQUEST: // spectators should not be allowed to request a team / non-spectator slot status
+			case NET_POSITIONREQUEST:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
+			default:
+				// certain messages are always allowed, no matter who it is
+				return HandleMessageAction::Process_Message;
+		}
+	}
+
+	if (type > GAME_MIN_TYPE && type < GAME_MAX_TYPE)
+	{
+		switch (type)
+		{
+			case GAME_GAME_TIME:
+			case GAME_PLAYER_LEFT:
+				// always allowed
+				return HandleMessageAction::Process_Message;
+			case GAME_SYNC_REQUEST:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
+			case GAME_DEBUG_MODE:
+			case GAME_DEBUG_ADD_DROID:
+			case GAME_DEBUG_ADD_STRUCTURE:
+			case GAME_DEBUG_ADD_FEATURE:
+			case GAME_DEBUG_REMOVE_DROID:
+			case GAME_DEBUG_REMOVE_STRUCTURE:
+			case GAME_DEBUG_REMOVE_FEATURE:
+			case GAME_DEBUG_FINISH_RESEARCH:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
+			default:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
+		}
+	}
+
+	return HandleMessageAction::Process_Message;
+}
+
+bool shouldProcessMessage(NETQUEUE& queue, uint8_t type)
+{
+	auto action = getMessageHandlingAction(queue, type);
+	switch (action)
+	{
+		case HandleMessageAction::Process_Message:
+			return true;
+		case HandleMessageAction::Silently_Ignore:
+			NETpop(queue); // remove message from queue
+			return false;
+		case HandleMessageAction::Disallow_And_Kick_Sender:
+		{
+			NETpop(queue); // remove message from queue
+			if (NetPlay.isHost)
+			{
+				// kick sender for sending unauthorized message
+				char buf[255];
+				auto senderPlayerIdx = queue.index;
+				ssprintf(buf, _("Auto kicking player %s, invalid command received: %u"), NetPlay.players[senderPlayerIdx].name, type);
+				sendInGameSystemMessage(buf);
+				kickPlayer(queue.index, _("Unauthorized network command"), ERROR_INVALID);
+			}
+			return false;
+		}
+	}
+	return false; // silence warnings
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Recv Messages. Get a message and dispatch to relevant function.
@@ -661,6 +758,11 @@ bool recvMessage()
 		if (queue.queueType == QUEUE_GAME)
 		{
 			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
+		}
+
+		if (!shouldProcessMessage(queue, type))
+		{
+			continue;
 		}
 
 		// messages only in game.
@@ -1719,4 +1821,87 @@ int32_t findPlayerIndexByPosition(uint32_t position)
 	}
 
 	return -1;
+}
+
+bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quietly)
+{
+	// Remove objects quietly if the player is starting off as a spectator
+	quietly = quietly || NetPlay.players[playerIndex].isSpectator;
+
+	turnOffMultiMsg(true);
+	if (playerIndex < game.maxPlayers)
+	{
+		setPower(playerIndex, 0);
+
+		// Destroy HQ
+		std::vector<STRUCTURE *> hqStructs;
+		for (STRUCTURE *psStruct = apsStructLists[playerIndex]; psStruct; psStruct = psStruct->psNext)
+		{
+			if (REF_HQ == psStruct->pStructureType->type)
+			{
+				hqStructs.push_back(psStruct);
+			}
+		}
+		for (auto psStruct : hqStructs)
+		{
+			if (quietly)
+			{
+				removeStruct(psStruct, true);
+			}
+			else			// show effects
+			{
+				destroyStruct(psStruct, gameTime);
+			}
+		}
+
+		// Destroy all droids
+		debug(LOG_DEATH, "killing off all droids for player %d", playerIndex);
+		while (apsDroidLists[playerIndex])				// delete all droids
+		{
+			if (quietly)			// don't show effects
+			{
+				killDroid(apsDroidLists[playerIndex]);
+			}
+			else				// show effects
+			{
+				destroyDroid(apsDroidLists[playerIndex], gameTime);
+			}
+		}
+
+		// Destroy all structs
+		if (removeAllStructs)
+		{
+			debug(LOG_DEATH, "killing off all structures for player %d", playerIndex);
+			STRUCTURE *psStruct = apsStructLists[playerIndex];
+			while (psStruct)				// delete all structs
+			{
+				STRUCTURE * psNext = psStruct->psNext;
+
+				// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
+				if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+				{
+					removeStruct(psStruct, true);
+				}
+				else			// show effects
+				{
+					destroyStruct(psStruct, gameTime);
+				}
+
+				psStruct = psNext;
+			}
+		}
+	}
+
+	NetPlay.players[playerIndex].isSpectator = true; // must come before enableGodMode
+
+	if (playerIndex == selectedPlayer)
+	{
+		enableGodMode();
+		addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, 30);
+	}
+
+	turnOffMultiMsg(false);
+
+	return true;
 }

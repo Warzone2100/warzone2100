@@ -319,6 +319,7 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 {
+	ASSERT_OR_RETURN(false, imageFile != nullptr, "Null imageFile (id: %u)", id);
 	ASSERT_OR_RETURN(false, id < imageFile->imageDefs.size(), "Out of range 1: %u/%d", id, (int)imageFile->imageDefs.size());
 	ASSERT_OR_RETURN(false, imageFile->imageDefs[id].TPageID < imageFile->pages.size(), "Out of range 2: %zu", imageFile->imageDefs[id].TPageID);
 	return true;
@@ -473,7 +474,7 @@ void iV_DrawImage2(const ImageDef *image, float x, float y, float width, float h
 		WZCOL_WHITE, mvp);
 }
 
-void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests, uint8_t alpha)
 {
 	if (!assertValidImage(ImageFile, ID))
 	{
@@ -486,11 +487,11 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 	if (pBatchedRequests == nullptr)
 	{
 		gfx_api::DrawImagePSO::get().bind();
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 	}
 	else
 	{
-		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, WZCOL_WHITE, modelViewProjection);
+		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 		pBatchedRequests->draw(); // draw only if not deferred
 	}
 }

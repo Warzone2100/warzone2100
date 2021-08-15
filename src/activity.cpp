@@ -47,7 +47,12 @@ std::string ActivitySink::getTeamDescription(const ActivitySink::SkirmishGameInf
 		}
 		else if (p.ai == AI_OPEN)
 		{
-			if (!p.allocated)
+			if (p.isSpectator)
+			{
+				// spectator slot - skip
+				continue;
+			}
+			else if (!p.allocated)
 			{
 				// available slot - count team association
 				// (since available slots can have assigned teams)
@@ -667,11 +672,17 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 	uint8_t numAIBotPlayers = 0;
 	uint8_t numHumanPlayers = 0;
 	uint8_t numAvailableSlots = 0;
+	uint8_t numSpectators = 0;
+	uint8_t numOpenSpectatorSlots = 0;
 
 	for (size_t index = 0; index < std::min<size_t>(MAX_PLAYERS, (size_t)multiGame.maxPlayers); ++index)
 	{
 		PLAYER const &p = NetPlay.players[index];
 		if (p.ai == AI_CLOSED)
+		{
+			--maxPlayers;
+		}
+		else if (p.isSpectator)
 		{
 			--maxPlayers;
 		}
@@ -699,6 +710,21 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 		}
 	}
 
+	for (const auto& slot : NetPlay.players)
+	{
+		if (slot.isSpectator)
+		{
+			if (!slot.allocated)
+			{
+				++numOpenSpectatorSlots;
+			}
+			else
+			{
+				++numSpectators;
+			}
+		}
+	}
+
 	ActivitySink::MultiplayerGameInfo::AllianceOption alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::NO_ALLIANCES;
 	if (multiGame.alliance == ::AllianceType::ALLIANCES)
 	{
@@ -717,6 +743,8 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 	currentMultiplayGameInfo.maxPlayers = maxPlayers; // accounts for closed slots
 	currentMultiplayGameInfo.numHumanPlayers = numHumanPlayers;
 	currentMultiplayGameInfo.numAvailableSlots = numAvailableSlots;
+	currentMultiplayGameInfo.numSpectators = numSpectators;
+	currentMultiplayGameInfo.numOpenSpectatorSlots = numOpenSpectatorSlots;
 	// NOTE: privateGame will currently only be up-to-date for the host
 	// for a joined client, it will reflect the passworded state at the time of join
 	if (privateGame.has_value())

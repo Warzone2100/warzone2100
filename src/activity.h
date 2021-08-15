@@ -122,6 +122,8 @@ public:
 		uint8_t maxPlayers = 0;
 		uint8_t numHumanPlayers = 0;
 		uint8_t numAvailableSlots = 0;
+		uint8_t numSpectators = 0;
+		uint8_t numOpenSpectatorSlots = 0;
 	};
 	virtual void hostingMultiplayerGame(const MultiplayerGameInfo& info) { }
 	virtual void joinedMultiplayerGame(const MultiplayerGameInfo& info) { }
