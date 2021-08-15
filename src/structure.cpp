@@ -4228,7 +4228,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			}
 			return false;
 		case REF_RESOURCE_EXTRACTOR:
-			if (TileHasFeature(worldTile(pos)))
+			if (TileHasFeature(worldTile(pos)) && tileIsExplored(worldTile(pos)))
 			{
 				FEATURE const *psFeat = getTileFeature(map_coord(pos.x), map_coord(pos.y));
 				if (psFeat && psFeat->psStats->subType == FEAT_OIL_RESOURCE)
