@@ -1,0 +1,9 @@
+{
+	"AI": {
+		"js": "doNothing.js",
+		"name": "Do Nothing",
+		"tip": "This AI doesn't do anything",
+		"easy_tip": "It's already as easy as it can get!",
+		"insane_tip": "Still won't do anything."
+	}
+}
