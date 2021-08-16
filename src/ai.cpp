@@ -1143,7 +1143,9 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	// don't allow units to start attacking if they will switch to guarding the commander
-	if (hasCommander(psDroid))
+	// except for sensors: they still look for targets themselves, because
+	// they have wider view
+	if (hasCommander(psDroid) && psDroid->droidType != DROID_SENSOR)
 	{
 		lookForTarget = false;
 		updateTarget = false;

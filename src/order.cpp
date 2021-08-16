@@ -1147,7 +1147,16 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 			syncDebug("command %d", psCurr->id);
 			if (!orderState(psCurr, DORDER_RTR))		// if you change this, youll need to change sendcmdgroup()
 			{
-				orderDroidBase(psCurr, psData);
+				if ((psData->type == DORDER_ATTACKTARGET || psData->type == DORDER_ATTACK) && psCurr->droidType == DROID_SENSOR && psData->psObj)
+				{
+					// sensors must observe, not attack
+					auto observeOrder = DroidOrder(DORDER_OBSERVE, psData->psObj);
+					orderDroidBase(psCurr, &observeOrder);
+				}
+				else
+				{
+					orderDroidBase(psCurr, psData);
+				}
 			}
 		}
 	}
