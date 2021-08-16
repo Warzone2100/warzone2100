@@ -84,6 +84,13 @@ bool recvGift(NETQUEUE queue)
 		return false;
 	}
 
+	if (to >= MAX_PLAYERS)
+	{
+		debug(LOG_WARNING, "Gift (%d) from %d, to %d (invalid recipient player), queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
+		syncDebug("Invalid recipient player.");
+		return false;
+	}
+
 	// Handle the gift depending on what it is
 	switch (type)
 	{
@@ -568,6 +575,12 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 
 	if (!canGiveOrdersFor(queue.index, from))
 	{
+		return false;
+	}
+
+	if (to >= MAX_PLAYERS)
+	{
+		debug(LOG_WARNING, "Invalid recipient player (%d), queue.index %d", (int)to, (int)queue.index);
 		return false;
 	}
 
