@@ -7299,8 +7299,8 @@
 			"R-Wpn-MG-Damage04",
 			"R-Wpn-MG-ROF01"
 		],
-		"researchPoints": 9200,
-		"researchPower": 287,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7321,8 +7321,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage05"
 		],
-		"researchPoints": 11200,
-		"researchPower": 350,
+		"researchPoints": 9000,
+		"researchPower": 281,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7343,8 +7343,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage06"
 		],
-		"researchPoints": 13200,
-		"researchPower": 412,
+		"researchPoints": 10000,
+		"researchPower": 312,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7366,8 +7366,8 @@
 			"R-Wpn-MG-Damage07",
 			"R-Struc-Research-Upgrade07"
 		],
-		"researchPoints": 15200,
-		"researchPower": 450,
+		"researchPoints": 11000,
+		"researchPower": 343,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7564,8 +7564,8 @@
 			"R-Struc-Research-Upgrade06",
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 9000,
+		"researchPower": 281,
 		"resultComponents": [
 			"MG5TWINROTARY"
 		],
