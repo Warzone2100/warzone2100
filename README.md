@@ -245,6 +245,9 @@ There are many cheat commands. Some examples:
 * "showfps" - Show average FPS
 * "reload me" - Reloads selected weapon instantly
 * "damage me" - Selected object takes 20% damage
+* "showunits" - Displays unit count information
+* "showorders" - Displays unit order/action state
+* "droidinfo" - Show unit stats
 
 All available commands can be found in the file: https://github.com/Warzone2100/warzone2100/blob/master/src/cheat.cpp
 
@@ -378,7 +381,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
 See [macosx/README.md](macosx/README.md)
 
 ### Videos
-You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3). You will
+You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will
 need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
 Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
