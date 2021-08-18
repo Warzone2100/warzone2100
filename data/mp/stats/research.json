@@ -5131,8 +5131,8 @@
 			"R-Wpn-MG4",
 			"R-Wpn-AAGun-Damage02"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 9700,
+		"researchPower": 303,
 		"resultComponents": [
 			"QuadRotAAGun"
 		],
@@ -7299,8 +7299,8 @@
 			"R-Wpn-MG-Damage04",
 			"R-Wpn-MG-ROF01"
 		],
-		"researchPoints": 9200,
-		"researchPower": 287,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7321,8 +7321,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage05"
 		],
-		"researchPoints": 11200,
-		"researchPower": 350,
+		"researchPoints": 9000,
+		"researchPower": 281,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7343,8 +7343,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage06"
 		],
-		"researchPoints": 13200,
-		"researchPower": 412,
+		"researchPoints": 10000,
+		"researchPower": 312,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7366,8 +7366,8 @@
 			"R-Wpn-MG-Damage07",
 			"R-Struc-Research-Upgrade07"
 		],
-		"researchPoints": 15200,
-		"researchPower": 450,
+		"researchPoints": 11000,
+		"researchPower": 343,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7398,14 +7398,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -30
+				"value": -20
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -30
+				"value": -20
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7427,14 +7427,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -20
+				"value": -18
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -20
+				"value": -18
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7449,22 +7449,22 @@
 		"requiredResearch": [
 			"R-Wpn-MG-ROF02"
 		],
-		"researchPoints": 6800,
-		"researchPower": 212,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"results": [
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -10
+				"value": -8
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -10
+				"value": -8
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7540,10 +7540,10 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG3Mk1",
-			"R-Wpn-MG-ROF02"
+			"R-Wpn-MG-ROF03"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 4800,
+		"researchPower": 150,
 		"resultComponents": [
 			"CyborgRotMG",
 			"MG4ROTARY-VTOL",
@@ -7564,8 +7564,8 @@
 			"R-Struc-Research-Upgrade06",
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 9000,
+		"researchPower": 281,
 		"resultComponents": [
 			"MG5TWINROTARY"
 		],
