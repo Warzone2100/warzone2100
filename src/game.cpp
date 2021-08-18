@@ -495,11 +495,9 @@ static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERG
 static void deserializeMultiplayerGame_json(const nlohmann::json &o, MULTIPLAYERGAME *serializeMulti)
 {
 	serializeMulti->type = static_cast<LEVEL_TYPE>(o.at("multiType").get<uint8_t>());
-	memcpy(serializeMulti->map, o.at("multiMapName").get<std::string>().c_str(), 128);
-	serializeMulti->map[127] = '\0';
+	sstrcpy(serializeMulti->map,  o.at("multiMapName").get<std::string>().c_str());
 	serializeMulti->maxPlayers = o.at("multiMaxPlayers").get<uint8_t>();
-	memcpy(serializeMulti->name, o.at("multiGameName").get<std::string>().c_str(), 128);
-	serializeMulti->name[127] = '\0';
+	sstrcpy(serializeMulti->name, o.at("multiGameName").get<std::string>().c_str());
 	serializeMulti->power = o.at("multiPower").get<uint32_t>();
 	serializeMulti->base = o.at("multiBase").get<uint8_t>();
 	serializeMulti->alliance = o.at("multiAlliance").get<uint8_t>();
@@ -572,10 +570,8 @@ static void deserializePlayer_json(const nlohmann::json &o, PLAYER *serializePla
 {
 	char aiName[MAX_LEN_AI_NAME] = { "THEREISNOAI" };
 	ASSERT(o.is_object(), "unexpected type, wanted object");
-	memcpy(serializePlayer->name, o.at("name").get<std::string>().c_str(), StringSize);
-	memcpy(aiName, o.at("aiName").get<std::string>().c_str(), MAX_LEN_AI_NAME);
-	aiName[MAX_LEN_AI_NAME - 1] = '\0';
-	serializePlayer->name[StringSize - 1] = '\0';
+	sstrcpy(serializePlayer->name, o.at("name").get<std::string>().c_str());
+	sstrcpy(aiName, o.at("aiName").get<std::string>().c_str());
 	serializePlayer->difficulty = static_cast<AIDifficulty>(o.at("difficulty").get<int8_t>());
 	serializePlayer->allocated = o.at("allocated").get<uint8_t>();
 	if (player < game.maxPlayers)
@@ -733,8 +729,7 @@ static void deserializeSaveGameV7Data_json(const nlohmann::json &o, SAVE_GAME_V7
 	serializeGame->ScrollMinY = o.at("ScrollMinY").get<int32_t>();
 	serializeGame->ScrollMaxX = o.at("ScrollMaxX").get<uint32_t>();
 	serializeGame->ScrollMaxY = o.at("ScrollMaxY").get<uint32_t>();
-	memcpy(serializeGame->levelName,o.at("levelName").get<std::string>().c_str(),MAX_LEVEL_SIZE);
-	serializeGame->levelName[MAX_LEVEL_SIZE - 1] = '\0';
+	sstrcpy(serializeGame->levelName, o.at("levelName").get<std::string>().c_str());
 }
 
 static bool deserializeSaveGameV7Data(PHYSFS_file *fileHandle, SAVE_GAME_V7 *serializeGame)
@@ -1291,8 +1286,7 @@ static bool serializeSaveGameV18Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static void deserializeSaveGameV18Data_json(const nlohmann::json &o, SAVE_GAME_V18 *serializeGame)
 {
 	deserializeSaveGameV17Data_json(o, (SAVE_GAME_V17 *) serializeGame);
-	memcpy(serializeGame->buildDate, o.at("buildDate").get<std::string>().c_str(), MAX_STR_LENGTH);
-	serializeGame->buildDate[MAX_STR_LENGTH - 1] = '\0';
+	sstrcpy(serializeGame->buildDate, o.at("buildDate").get<std::string>().c_str());
 	serializeGame->oldestVersion = o.at("oldestVersion").get<uint32_t>();
 	serializeGame->validityKey = o.at("validityKey").get<uint32_t>();
 }
@@ -1820,8 +1814,7 @@ static void deserializeSaveGameV33Data_json(const nlohmann::json &o, SAVE_GAME_V
 	deserializeMultiplayerGame_json(o, &serializeGame->sGame);
 	serializeGame->savePlayer = o.at("savePlayer").get<uint32_t>();
 	deserializeNetPlay_json(o, &serializeGame->sNetPlay);
-	memcpy(serializeGame->sPName, o.at("sPname").get<std::string>().c_str(), 32);
-	serializeGame->sPName[31] = '\0';
+	sstrcpy(serializeGame->sPName, o.at("sPname").get<std::string>().c_str());
 	serializeGame->multiPlayer = o.at("multiPlayer").get<int32_t>();
 	const auto playerIndices = o.at("sPlayerIndices");
 	ASSERT_OR_RETURN(, playerIndices.is_array(), "unexpected type, wanted array");
@@ -1899,8 +1892,7 @@ static void deserializeSaveGameV34Data_json(const nlohmann::json &o, SAVE_GAME_V
 	deserializeSaveGameV33Data_json(o, (SAVE_GAME_V33 *) serializeGame);
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
-		memcpy(serializeGame->sPlayerName[i], o.at("playerNames").at(i).get<std::string>().c_str(), StringSize);
-		serializeGame->sPlayerName[i][StringSize - 1] = '\0';
+		sstrcpy(serializeGame->sPlayerName[i], o.at("playerNames").at(i).get<std::string>().c_str());
 	}
 }
 
@@ -1974,8 +1966,7 @@ static bool serializeSaveGameV38Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 static void deserializeSaveGameV38Data_json(const nlohmann::json &o, SAVE_GAME_V38 *serializeGame)
 {
 	deserializeSaveGameV35Data_json(o, (SAVE_GAME_V35 *) serializeGame);
-	memcpy(serializeGame->modList, o.at("modList").get<std::string>().c_str(), modlist_string_size);
-	serializeGame->modList[modlist_string_size - 1] = '\0';
+	sstrcpy(serializeGame->modList, o.at("modList").get<std::string>().c_str());
 }
 
 static bool deserializeSaveGameV38Data(PHYSFS_file *fileHandle, SAVE_GAME_V38 *serializeGame)
