@@ -848,7 +848,7 @@ LOBBY_ERROR_TYPES getLobbyError()
 void setLobbyError(LOBBY_ERROR_TYPES error_type)
 {
 	LobbyError = error_type;
-	if (LobbyError <= ERROR_FULL)
+	if (LobbyError != ERROR_INVALID)
 	{
 		multiintDisableLobbyRefresh = false;
 	}
