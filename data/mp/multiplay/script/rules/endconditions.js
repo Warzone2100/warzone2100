@@ -315,7 +315,7 @@ function checkPlayerVictoryStatus()
 
 function co_eventGameInit()
 {
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	for (var playnum = 0; playnum < playerData.length; playnum++)
 	{
 		playerData[playnum].lastActivity = gameTime;
 			//we consider observers to players who cannot play from the beginning of the game

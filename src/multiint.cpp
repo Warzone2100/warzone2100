@@ -948,10 +948,10 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 	return {JoinConnectionDescription(host, lobbyGame.hostPort)};
 }
 
-static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI);
-static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI);
+static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator = false);
+static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator = false);
 
-JoinGameResult joinGame(const char *connectionString)
+JoinGameResult joinGame(const char *connectionString, bool asSpectator /*= false*/)
 {
 	if (strchr(connectionString, '[') == NULL || strchr(connectionString, ']') == NULL) // it is not IPv6. For more see rfc3986 section-3.2.2
 	{
@@ -965,20 +965,20 @@ JoinGameResult joinGame(const char *connectionString)
 			return joinGame(serverIP.c_str(), serverPort);
 		}
 	}
-	return joinGame(connectionString, 0);
+	return joinGame(connectionString, 0, asSpectator);
 }
 
-JoinGameResult joinGame(const char *host, uint32_t port)
+JoinGameResult joinGame(const char *host, uint32_t port, bool asSpectator /*= false*/)
 {
 	std::string hostStr = (host != nullptr) ? std::string(host) : std::string();
-	return joinGame(std::vector<JoinConnectionDescription>({JoinConnectionDescription(hostStr, port)}));
+	return joinGame(std::vector<JoinConnectionDescription>({JoinConnectionDescription(hostStr, port)}), asSpectator);
 }
 
-JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list) {
-	return joinGameInternal(connection_list, wzTitleUICurrent);
+JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator /*= false*/) {
+	return joinGameInternal(connection_list, wzTitleUICurrent, asSpectator);
 }
 
-static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI){
+static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator /*= false*/){
 
 	if (connection_list.size() > 1)
 	{
@@ -994,7 +994,7 @@ static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> co
 
 	for (const auto& connDesc : connection_list)
 	{
-		JoinGameResult result = joinGameInternalConnect(connDesc.host.c_str(), connDesc.port, oldUI);
+		JoinGameResult result = joinGameInternalConnect(connDesc.host.c_str(), connDesc.port, oldUI, asSpectator);
 		switch (result)
 		{
 			case JoinGameResult::FAILED:
@@ -1020,7 +1020,7 @@ static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> co
  *  doesn't turn into the parent of the next connection attempt.
  * Any other barriers/auth methods/whatever would presumably benefit in the same way.
  */
-static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI)
+static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator /*= false*/)
 {
 	// oldUI may get captured for use in the password dialog, among other things.
 	PLAYERSTATS	playerStats;
@@ -1030,7 +1030,7 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 		return JoinGameResult::FAILED;
 	}
 
-	if (!NETjoinGame(host, port, (char *)sPlayer))	// join
+	if (!NETjoinGame(host, port, (char *)sPlayer, asSpectator))	// join
 	{
 		switch (getLobbyError())
 		{
@@ -1046,7 +1046,7 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 					} else {
 						NETsetGamePassword(pass);
 						JoinConnectionDescription conn(capturedHost, port);
-						joinGameInternal({conn}, oldUI);
+						joinGameInternal({conn}, oldUI, asSpectator);
 					}
 				}));
 				return JoinGameResult::PENDING_PASSWORD;

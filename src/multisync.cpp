@@ -63,7 +63,7 @@ bool sendScoreCheck()
 	{
 		uint8_t			i;
 
-		for (i = 0; i < game.maxPlayers; i++)
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
 			// Host controls AI's scores + his own...
 			if (myResponsibility(i))

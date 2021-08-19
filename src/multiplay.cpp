@@ -1795,7 +1795,7 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 	//Really reset ready status
 	if (NetPlay.isHost && !ignoreReadyReset)
 	{
-		for (unsigned int i = 0; i < game.maxPlayers; ++i)
+		for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			//Ignore for autohost launch option.
 			if (selectedPlayer == i && getHostLaunch() == HostLaunch::Autohost)
@@ -1829,7 +1829,8 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 	quietly = quietly || NetPlay.players[playerIndex].isSpectator;
 
 	turnOffMultiMsg(true);
-	if (playerIndex < game.maxPlayers)
+
+	if (playerIndex < MAX_PLAYERS)
 	{
 		setPower(playerIndex, 0);
 
@@ -1899,6 +1900,11 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 		enableGodMode();
 		addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 		addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, 30);
+//		if (powerBarUp)
+//		{
+//			powerBarUp = false;
+//			intHidePowerBar();
+//		}
 	}
 
 	turnOffMultiMsg(false);
