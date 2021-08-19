@@ -4461,7 +4461,7 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	//==   * ```name``` the name of the player (3.2+ only)
 	//==   * ```team``` the number of the team the player is part of
 	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
-	for (int i = 0; i < game.maxPlayers; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		nlohmann::json vector = nlohmann::json::object();
 		vector["name"] = NetPlay.players[i].name;

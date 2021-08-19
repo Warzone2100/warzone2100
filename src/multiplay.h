@@ -264,9 +264,9 @@ enum class JoinGameResult {
 	JOINED,
 	PENDING_PASSWORD
 };
-JoinGameResult joinGame(const char *connectionString);
-JoinGameResult joinGame(const char *host, uint32_t port);
-JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list);
+JoinGameResult joinGame(const char *connectionString, bool asSpectator = false);
+JoinGameResult joinGame(const char *host, uint32_t port, bool asSpectator = false);
+JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator = false);
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();

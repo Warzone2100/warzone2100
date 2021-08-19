@@ -115,11 +115,17 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 										y + (h / 2) - 8, WZCOL_TEXT_BRIGHT);
 
 	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
-	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	unsigned numUsedPlayerSlots = 0;
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (isHumanPlayer(player))
 		{
 			++playerCount;
+			++numUsedPlayerSlots;
+		}
+		else if (NetPlay.players[player].ai >= 0)
+		{
+			++numUsedPlayerSlots;
 		}
 	}
 	if (!playerCount)
@@ -131,11 +137,11 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	textCache.wzPlayerCountText.render(x + (w / 2) - 10, y + (h / 2) + 10, WZCOL_TEXT_BRIGHT);
 
 	int yStep = iV_GetTextLineSize(font_small);
-	int yPos = RET_Y - yStep * game.maxPlayers;
+	int yPos = RET_Y - yStep * numUsedPlayerSlots;
 
 	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
 
-	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
 		int status = -1;
 		if (isHumanPlayer(player))

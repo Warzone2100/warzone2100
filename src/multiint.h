@@ -123,15 +123,17 @@ void displayRoomNotifyMessage(char const *text);
 
 #define GAMES_GAMEHEADER	10200
 #define GAMES_GAMESTART		10201
-#define GAMES_GAMEEND		GAMES_GAMESTART+20
-#define GAMES_GAMEWIDTH		540
+#define GAMES_GAMEEND		(GAMES_GAMESTART+20)
+#define GAMES_SPECSTART		(GAMES_GAMEEND+1)
+#define GAMES_SPECEND		(GAMES_SPECSTART+20)
+#define GAMES_GAMEWIDTH		537
 #define GAMES_GAMEHEIGHT	28
 // We can have a max of 4 icons for status, current icon size if 36x25.
-#define GAMES_STATUS_START 393
+#define GAMES_STATUS_START 390
 #define GAMES_GAMENAME_START 2
-#define GAMES_MAPNAME_START 173
-#define GAMES_MODNAME_START 173 + 6		// indent a bit
-#define GAMES_PLAYERS_START 360
+#define GAMES_MAPNAME_START 171
+#define GAMES_MODNAME_START 171 + 6		// indent a bit
+#define GAMES_PLAYERS_START 357
 
 // ////////////////////////////////////////////////////////////////
 // GAME OPTIONS SCREEN

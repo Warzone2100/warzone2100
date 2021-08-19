@@ -108,6 +108,7 @@ void gameTimeInit(void)
 	wantedLatency = GAME_TICKS_PER_UPDATE * 2;
 	for (player = 0; player != MAX_PLAYERS; ++player)
 	{
+		gameQueueCheckCrc[player] = 0;
 		wantedLatencies[player] = 0;
 	}
 
@@ -191,9 +192,9 @@ void gameTimeUpdate(bool mayUpdate)
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
 
-		debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
+		debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + MAX_PLAYERS).c_str());
 
-		for (unsigned player = 0; player < game.maxPlayers; ++player)
+		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 		{
 			if (!checkPlayerGameTime(player))
 			{
@@ -213,8 +214,8 @@ void gameTimeUpdate(bool mayUpdate)
 		updateLatency();
 		if (crcError)
 		{
-			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
-			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
+			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + MAX_PLAYERS).c_str());
+			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + MAX_PLAYERS).c_str());
 			crcError = false;
 		}
 	}
@@ -328,9 +329,10 @@ static void updateLatency()
 	uint16_t prevDiscreteChosenLatency = discreteChosenLatency;
 
 	// Find out what latency has been agreed on, next.
-	for (player = 0; player < game.maxPlayers; ++player)
+	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (NetPlay.players[player].allocated  // Don't wait for dropped/kicked players.
+			&& (NetPlay.players[player].position < game.maxPlayers) // should always be a valid map / player position
 			&& (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer)) // Don't wait for spectators (that are not the host)
 		{
 			//minWantedLatency = MIN(minWantedLatency, wantedLatencies[player]);  // Minimum, so the clients don't increase the latency to try to make one slow computer run faster.
@@ -362,7 +364,7 @@ void sendPlayerGameTime()
 	uint32_t checkTime = gameTime;
 	GameCrcType checkCrc = nextDebugSync();
 
-	for (player = 0; player < game.maxPlayers; ++player)
+	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (!myResponsibility(player))
 		{
@@ -418,7 +420,7 @@ bool checkPlayerGameTime(unsigned player)
 	if (player == NET_ALL_PLAYERS)
 	{
 		begin = 0;
-		end = game.maxPlayers;
+		end = MAX_PLAYERS;
 	}
 
 	for (player = begin; player < end; ++player)
@@ -438,7 +440,7 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < game.maxPlayers; ++player)
+		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
 			gameQueueTime[player] = time;
 		}

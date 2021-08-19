@@ -107,6 +107,12 @@ bool netGameserverPortOverride = false;
 #define UPNP_ERROR_DEVICE_NOT_FOUND -1
 #define UPNP_ERROR_CONTROL_NOT_AVAILABLE -2
 
+// For NET_JOIN messages
+enum NET_JOIN_PLAYERTYPE : uint8_t {
+	NET_JOIN_PLAYER = 0,
+	NET_JOIN_SPECTATOR = 1,
+};
+
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
@@ -564,15 +570,24 @@ void NETBroadcastPlayerInfo(uint32_t index)
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
-static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false)
+static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false, bool asSpectator = false)
 {
 	int index = -1;
 	int position = INT_MAX;
-	// Only look for spots up to the max players allowed on the map.
-	for (int i = 0; i < game.maxPlayers; ++i)
+	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
+		if (!asSpectator && i >= game.maxPlayers)
+		{
+			// Only look for spots up to the max players allowed on the map.
+			break;
+		}
+		if (i == scavengerSlot())
+		{
+			// do not offer up the scavenger slot (this really needs to be refactored later - why is this a variable slot index?!?)
+			continue;
+		}
 		PLAYER const &p = NetPlay.players[i];
-		if (!p.allocated && p.ai == AI_OPEN && p.position < position)
+		if (!p.allocated && p.ai == AI_OPEN && p.position < position && asSpectator == p.isSpectator)
 		{
 			index = i;
 			position = p.position;
@@ -597,8 +612,12 @@ static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlaye
 	NETlogEntry(buf, SYNC_FLAG, index);
 	NET_InitPlayer(index, false);  // re-init everything
 	NetPlay.players[index].allocated = true;
+	NetPlay.players[index].isSpectator = asSpectator;
 	sstrcpy(NetPlay.players[index].name, name);
-	++NetPlay.playercount;
+	if (!asSpectator)
+	{
+		++NetPlay.playercount;
+	}
 	++sync_counter.joins;
 	return index;
 }
@@ -611,7 +630,10 @@ static void NET_DestroyPlayer(unsigned int index, bool suppressActivityUpdates =
 	if (NetPlay.players[index].allocated)
 	{
 		NetPlay.players[index].allocated = false;
-		NetPlay.playercount--;
+		if (!NetPlay.players[index].isSpectator)
+		{
+			NetPlay.playercount--;
+		}
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
 		if (allow_joining && NetPlay.isHost)
 		{
@@ -3103,14 +3125,16 @@ static void NETallowJoining()
 					char name[64];
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
+					uint8_t playerType = 0;
 
 					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
 					NETstring(name, sizeof(name));
 					NETstring(ModList, sizeof(ModList));
 					NETstring(GamePassword, sizeof(GamePassword));
+					NETuint8_t(&playerType);
 					NETend();
 
-					tmp = NET_CreatePlayer(name);
+					tmp = NET_CreatePlayer(name, false, (playerType == NET_JOIN_SPECTATOR));
 
 					if (tmp == -1)
 					{
@@ -3637,7 +3661,7 @@ bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Functions used to setup and join games.
-bool NETjoinGame(const char *host, uint32_t port, const char *playername)
+bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool asSpectator /*= false*/)
 {
 	SocketAddress *hosts = nullptr;
 	unsigned int i;
@@ -3729,11 +3753,14 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 	tcp_socket = nullptr;
 	socketBeginCompression(bsocket);
 
+	uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
+
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
 	NETstring(playername, 64);
 	NETstring(getModList().c_str(), modlist_string_size);
 	NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
+	NETuint8_t(&playerType);
 	NETend();
 	if (bsocket == nullptr)
 	{

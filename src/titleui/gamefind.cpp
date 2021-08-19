@@ -25,6 +25,7 @@
  */
 
 #include "titleui.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -53,6 +54,7 @@ struct DisplayRemoteGameCache
 
 // find games
 static void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displaySpectateGameButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static std::vector<GAMESTRUCT> gamesList;
 
 WzGameFindTitleUI::WzGameFindTitleUI() {
@@ -165,10 +167,20 @@ TITLECODE WzGameFindTitleUI::run()
 
 	// below is when they hit a game box to connect to--ideally this would be where
 	// we would want a modal password entry box.
-	if (id >= GAMES_GAMESTART && id <= GAMES_GAMEEND)
+	if ((id >= GAMES_GAMESTART && id <= GAMES_GAMEEND) || (id >= GAMES_SPECSTART && id <= GAMES_SPECEND))
 	{
-		UDWORD gameNumber = id - GAMES_GAMESTART;
+		UDWORD gameNumber = 0;
+		if (id >= GAMES_GAMESTART && id <= GAMES_GAMEEND)
+		{
+			gameNumber = id - GAMES_GAMESTART;
+		}
+		else if (id >= GAMES_SPECSTART && id <= GAMES_SPECEND)
+		{
+			gameNumber = id - GAMES_SPECSTART;
+		}
 
+		bool asSpectator = (id >= GAMES_SPECSTART && id <= GAMES_SPECEND);
+		ASSERT(gameNumber < gamesList.size(), "Invalid gameNumber");
 		std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, gamesList[gameNumber].hostPort)};
 		ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
 
@@ -177,7 +189,7 @@ TITLECODE WzGameFindTitleUI::run()
 		// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 		ingame.localOptionsReceived = false;					// note, we are awaiting options
 		sstrcpy(game.name, gamesList[gameNumber].name);		// store name
-		joinGame(connectionDesc);
+		joinGame(connectionDesc, asSpectator);
 		return TITLECODE_CONTINUE;
 	}
 
@@ -320,11 +332,19 @@ void WzGameFindTitleUI::addGames()
 		psWidget->pUserData = nullptr;
 	};
 
+	W_BUTINIT sButSpectateInit;
+	sButSpectateInit.formID = FRONTEND_BOTFORM;
+	sButSpectateInit.width = iV_GetImageWidth(FrontImages, IMAGE_SPECTATE_SM);
+	sButSpectateInit.height = GAMES_GAMEHEIGHT;
+	sButSpectateInit.pDisplay = displaySpectateGameButton;
+	sButSpectateInit.pTip = _("Join as spectator");
+
 	// we want the old games deleted, and only list games when we should
 	widgDelete(psWScreen, GAMES_GAMEHEADER);
 	for (size_t i = 0; i < MaxGames; i++)
 	{
 		widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old widget
+		widgDelete(psWScreen, GAMES_SPECSTART + i);
 	}
 	if (getLobbyError() || !gcount)
 	{
@@ -392,6 +412,15 @@ void WzGameFindTitleUI::addGames()
 					}
 					// this is an std::string
 					sButInit.pTip = tooltipbuffer;
+
+					if (gamesList[i].desc.dwUserFlags[1] > 0)
+					{
+						// has spectator slots - add button
+						sButSpectateInit.id = GAMES_SPECSTART + i;
+						sButSpectateInit.x = sButInit.x + sButInit.width + 2;
+						sButSpectateInit.y = (UWORD)(45 + ((5 + GAMES_GAMEHEIGHT) * i));
+						widgAddButton(psWScreen, &sButSpectateInit);
+					}
 				}
 				sButInit.UserData = i;
 
@@ -629,3 +658,11 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	cache.wzText_VersionString.render(x + GAMES_GAMENAME_START + 6, y + 24, textColor);
 }
 
+void displaySpectateGameButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	ASSERT_OR_RETURN(, psWidget != nullptr, "Null widget");
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+
+	iV_DrawImage(FrontImages, IMAGE_SPECTATE_SM, x, y + 5);
+}
