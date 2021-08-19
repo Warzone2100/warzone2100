@@ -2199,7 +2199,10 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 	NetPlay.players[player].ready = bReady;
 	NETBroadcastPlayerInfo(player);
 	netPlayersUpdated = true;
-
+	// Player is fast! Clicked the "Ready" button before we had a chance to ping him/her
+	// change PingTime to some value less than PING_LIMIT, so that multiplayPlayersReady 
+	// doesnt block 
+	ingame.PingTimes[player] = ingame.PingTimes[player] == PING_LIMIT ? 1 : ingame.PingTimes[player];
 	return true;
 }
 
