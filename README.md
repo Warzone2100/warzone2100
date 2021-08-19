@@ -234,6 +234,22 @@ There are many cheat commands. Some examples:
 * "research all" - Everything is researched instantly
 * "let me win" - You win the current campaign mission
 * "superpower" - Gives you maximum power
+* "teach us" - Gives experience to selected units
+* "makemehero" - Makes selected units Heros
+* "clone wars" - Clone selected units (x10)
+* "clone wars!" - Clone selected units (x40)
+* "clone wars!!" - Clone selected units (x135)
+* "kill" - Kills selected object
+* "john kettley" - Toggles weather conditions
+* "get off my land" - Kills all enemy units and structures
+* "showfps" - Show average FPS
+* "reload me" - Reloads selected weapon instantly
+* "damage me" - Selected object takes 20% damage
+* "showunits" - Displays unit count information
+* "showorders" - Displays unit order/action state
+* "droidinfo" - Show unit stats
+
+All available commands can be found in the file: https://github.com/Warzone2100/warzone2100/blob/master/src/cheat.cpp
 
 Modding information
 -------------------
@@ -363,6 +379,11 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
 
 ### macOS
 See [macosx/README.md](macosx/README.md)
+
+### Videos
+You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will
+need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
+Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
 Licensing
 -------------------
