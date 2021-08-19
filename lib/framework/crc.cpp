@@ -325,7 +325,6 @@ bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
 	int verifyResult = crypto_sign_ed25519_verify_detached(&sig[0], (const unsigned char *)data, static_cast<unsigned long long>(dataLen), &(EC_KEY_CAST(vKey)->publicKey[0]));
 	if (verifyResult != 0)
 	{
-		debug(LOG_ERROR, "Invalid signature");
 		return false;
 	}
 
