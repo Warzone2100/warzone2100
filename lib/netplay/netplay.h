@@ -140,7 +140,6 @@ enum MESSAGE_TYPES
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
-#define MaxGames		11			// max number of concurrently playable games to allow.
 #define extra_string_size	157		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40

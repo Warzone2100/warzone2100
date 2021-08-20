@@ -31,6 +31,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/widget/scrollablelist.h"
 #include "../intdisplay.h"
 #include "../hci.h"
 #include "../mission.h"
@@ -98,7 +99,7 @@ void WzGameFindTitleUI::start()
 	}
 
 	addConsoleBox();
-	if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))
+	if (!NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))
 	{
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
@@ -125,7 +126,7 @@ TITLECODE WzGameFindTitleUI::run()
 		addConsoleBox();
 		if (safeSearch || handleUserRefreshRequest)
 		{
-			if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))	// find games synchronously
+			if (!NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))	// find games synchronously
 			{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			}
@@ -341,11 +342,7 @@ void WzGameFindTitleUI::addGames()
 
 	// we want the old games deleted, and only list games when we should
 	widgDelete(psWScreen, GAMES_GAMEHEADER);
-	for (size_t i = 0; i < MaxGames; i++)
-	{
-		widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old widget
-		widgDelete(psWScreen, GAMES_SPECSTART + i);
-	}
+	widgDelete(psWScreen, GAMES_GAMELIST);
 	if (getLobbyError() || !gcount)
 	{
 		gcount = 0;
@@ -368,14 +365,16 @@ void WzGameFindTitleUI::addGames()
 			parent->attach(headerWidget);
 		}
 
+		auto scrollableGamesList = ScrollableListWidget::make();
+		scrollableGamesList->id = GAMES_GAMELIST;
+		scrollableGamesList->setGeometry(20, 45, GAMES_GAMEWIDTH, GAMES_GAMEHEIGHT * 11);
+		parent->attach(scrollableGamesList);
 		for (size_t i = 0; i < gamesList.size(); i++)				// draw games
 		{
 			if (gamesList[i].desc.dwSize != 0)
 			{
 				added++;
 				sButInit.id = GAMES_GAMESTART + i;
-				sButInit.x = 20;
-				sButInit.y = (UWORD)(45 + ((5 + GAMES_GAMEHEIGHT) * i));
 
 				// display the correct tooltip message.
 				if (!NETisCorrectVersion(gamesList[i].game_version_major, gamesList[i].game_version_minor))
@@ -424,8 +423,8 @@ void WzGameFindTitleUI::addGames()
 					}
 				}
 				sButInit.UserData = i;
-
-				widgAddButton(psWScreen, &sButInit);
+				auto psButton = std::make_shared<W_BUTTON>(&sButInit);
+				scrollableGamesList->addItem(psButton);
 			}
 		}
 		if (!added)
