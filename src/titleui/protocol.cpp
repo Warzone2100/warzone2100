@@ -37,6 +37,7 @@
 #include "../multiint.h"
 #include "../warzoneconfig.h"
 #include "../frend.h"
+#include "lib/widget/checkbox.h"
 
 WzProtocolTitleUI::WzProtocolTitleUI()
 {
@@ -115,15 +116,23 @@ TITLECODE WzProtocolTitleUI::run()
 		openIPDialog();
 		break;
 	case CON_OK:
+	{
 		sstrcpy(serverName, widgGetString(curScreen, CON_IP));
 		if (serverName[0] == '\0')
 		{
 			sstrcpy(serverName, "127.0.0.1");  // Default to localhost.
 		}
+		bool asSpectator = false;
+		auto pSpectatorCheckbox = dynamic_cast<WzCheckboxButton*>(widgGetFromID(psSettingsScreen, CON_SPECTATOR_BOX));
+		if (pSpectatorCheckbox && pSpectatorCheckbox->getIsChecked())
+		{
+			asSpectator = true;
+		}
 		hasWaitingIP = true;
 		closeIPDialog();
-		joinGame(serverName);
+		joinGame(serverName, asSpectator);
 		break;
+	}
 	case CON_IP_CANCEL:
 		closeIPDialog();
 		break;
@@ -163,12 +172,22 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 		psWidget->setGeometry(CON_SETTINGSX, CON_SETTINGSY, CON_SETTINGSWIDTH, CON_SETTINGSHEIGHT);
 	});
 	sFormInit.pDisplay = intDisplayFeBox;
-	widgAddForm(psSettingsScreen, &sFormInit);
+	W_FORM *psConnectionForm = widgAddForm(psSettingsScreen, &sFormInit);
 
+	// Buttons
 	addMultiBut(psSettingsScreen, CON_SETTINGS, CON_OK, CON_OKX, CON_OKY, MULTIOP_OKW, MULTIOP_OKH,
 	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
 	addMultiBut(psSettingsScreen, CON_SETTINGS, CON_IP_CANCEL, CON_OKX + MULTIOP_OKW + 10, CON_OKY, MULTIOP_OKW, MULTIOP_OKH,
 	            _("Cancel"), IMAGE_NO, IMAGE_NO, true);
+
+	// Checkbox for spectator join
+	auto pSpectatorCheckbox = std::make_shared<WzCheckboxButton>();
+	psConnectionForm->attach(pSpectatorCheckbox);
+	pSpectatorCheckbox->id = CON_SPECTATOR_BOX;
+	pSpectatorCheckbox->pText = _("Spectator");
+	pSpectatorCheckbox->FontID = font_small;
+	Vector2i minimumDimensions = pSpectatorCheckbox->calculateDesiredDimensions();
+	pSpectatorCheckbox->setGeometry(8, CON_OKY, minimumDimensions.x, std::max(minimumDimensions.y, MULTIOP_OKH));
 
 	//label.
 	W_LABINIT sLabInit;

@@ -112,6 +112,8 @@ void displayRoomNotifyMessage(char const *text);
 
 #define CON_IP_CANCEL		10134
 
+#define CON_SPECTATOR_BOX	10135
+
 //for clients
 #define CON_PASSWORD		10139
 #define CON_PASSWORDYES		10141
