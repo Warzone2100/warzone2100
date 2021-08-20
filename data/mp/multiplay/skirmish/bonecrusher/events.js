@@ -314,8 +314,13 @@ function bc_eventAttacked(victim, attacker) {
 			if(fixDroid(victim)) return;
 		}
 		
-		var myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter(function(o){if(o.player == me && o.type == DROID)return true; return false;});
-		myDroids = myDroids.filter(function(o){if(o.droidType == DROID_CONSTRUCT && builderBusy(o))return false; return true;});
+		var myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter(function(o){
+			return (o.player == me && o.type == DROID);
+		});
+		myDroids = myDroids.filter(function(o){
+			return (!(o.droidType == DROID_CONSTRUCT && builderBusy(o)));
+		});
+		
 		var enemyObjects = enumRange(attacker.x, attacker.y, 7, ENEMIES, me);
 		
 		debugMsg('myDroids: '+myDroids.length+', enemyObjects: '+enemyObjects.length, 'temp');
@@ -379,7 +384,9 @@ function bc_eventAttacked(victim, attacker) {
 	if(victim.type == DROID && victim.droidType == DROID_WEAPON && !isFixVTOL(victim)){
 		lastImpact = {x:victim.x,y:victim.y};
 
-		var myDroids = enumRange(victim.x, victim.y, 10, ALLIES).filter(function(o){if(o.player == me && o.type == DROID && o.droidType == DROID_WEAPON)return true; return false;});
+		var myDroids = enumRange(victim.x, victim.y, 10, ALLIES).filter(function(o){
+			return (o.player == me && o.type == DROID && o.droidType == DROID_WEAPON);
+		});
 		var enemyObjects = enumRange(attacker.x, attacker.y, 5, ENEMIES, me);
 		var myHP = 0
 		var enemyHP = 0;
@@ -407,7 +414,9 @@ function bc_eventAttacked(victim, attacker) {
 		
 		//Если атакуют огнемётные войска, атакуем ими ближайшего врага
 		if(getWeaponInfo(victim.weapons[0].name).impactClass == "HEAT"){
-			var enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){if(e.type == DROID)return true; return false;});
+			var enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){
+				return (e.type == DROID);
+			});
 			if(enemies.length != 0){
 				enemies = sortByDistance(enemies, victim, 1);
 				orderDroidObj_p(victim, DORDER_ATTACK, enemies[0]);
