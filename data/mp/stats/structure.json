@@ -1211,7 +1211,7 @@
 		"armour": 10,
 		"breadth": 1,
 		"buildPoints": 400,
-		"buildPower": 125,
+		"buildPower": 100,
 		"height": 1,
 		"hitpoints": 300,
 		"id": "Emplacement-MortarPit01",
