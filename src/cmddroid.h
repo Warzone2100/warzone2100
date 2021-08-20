@@ -41,7 +41,7 @@ void cmdDroidShutDown();
 void cmdDroidUpdate();
 
 /** \brief Adds a droid to a command group.*/
-void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid);
+bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid);
 
 /** \brief Returns the current target designator for a player.*/
 DROID *cmdDroidGetDesignator(UDWORD player);
