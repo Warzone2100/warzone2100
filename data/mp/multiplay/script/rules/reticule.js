@@ -109,7 +109,7 @@ function reticuleCommandCheck()
 function setMainReticule()
 {
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	if (playerData[selectedPlayer].usertype != USERTYPE.player.fighter)
+	if (isSpectator(-1) || playerData[selectedPlayer].usertype != USERTYPE.player.fighter)
 	{
 		return;
 	}

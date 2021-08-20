@@ -3161,6 +3161,7 @@ IMPL_JS_FUNC(replaceTexture, wzapi::replaceTexture)
 IMPL_JS_FUNC(fireWeaponAtLoc, wzapi::fireWeaponAtLoc)
 IMPL_JS_FUNC(fireWeaponAtObj, wzapi::fireWeaponAtObj)
 IMPL_JS_FUNC(transformPlayerToSpectator, wzapi::transformPlayerToSpectator)
+IMPL_JS_FUNC(isSpectator, wzapi::isSpectator)
 IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
 IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
 IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
@@ -3461,6 +3462,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC2(fireWeaponAtLoc, 3, 4); // WZAPI
 	JS_REGISTER_FUNC2(fireWeaponAtObj, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(transformPlayerToSpectator, 1); // WZAPI
+	JS_REGISTER_FUNC(isSpectator, 1); // WZAPI
 
 	return true;
 }
