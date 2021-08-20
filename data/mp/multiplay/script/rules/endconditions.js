@@ -4,9 +4,7 @@ namespace("conditions_");
 const STATE_contender = "contender";
 const STATE_winner = "winner";
 const STATE_loser = "loser";
-const ENABLE_activity = (challenge != true && isMultiplayer === true); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
 const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which you can continue to play
-// TODO remove HQ. The destruction of the HQ will hide the minimap.
 
 
 // The time that the player's inactivity is allowed. Actions are considered
@@ -16,6 +14,7 @@ const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which 
 // - dealing damage
 const IDLETIME = 5 * 60 * 1000;
 const BASESTRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR, POWER_GEN, RESEARCH_LAB];
+const ENABLE_activity = (challenge != true && isMultiplayer === true); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
 
 const SPOTTER = {
 	x: mapWidth / 2,
@@ -182,7 +181,7 @@ class Team
 
 	canPlay() // TODO skip check if no new events.
 	{
-		if (!this.activeGame() && challenge != true)
+		if (!this.activeGame() && ENABLE_activity)
 		{
 			return false;
 		}
