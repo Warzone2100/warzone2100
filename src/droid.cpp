@@ -415,8 +415,13 @@ void recycleDroid(DROID *psDroid)
 	vanishDroid(psDroid);
 
 	Vector3i position = psDroid->pos.xzy();
-	addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
-
+	const auto mapCoord = map_coord({psDroid->pos.x, psDroid->pos.y});
+	const auto psTile = mapTile(mapCoord);
+	if (tileIsClearlyVisible(psTile))
+	{
+		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
+	}
+	
 	CHECK_DROID(psDroid);
 }
 

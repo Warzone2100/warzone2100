@@ -272,6 +272,17 @@ static inline bool tileIsExplored(const MAPTILE *psTile)
 	return psTile->tileExploredBits & (1 << selectedPlayer);
 }
 
+/** Is the tile ACTUALLY, 100% visible? 
+ * This is not the same as for ex. psStructure->visible[selectedPlayer],
+ * because that would only mean the psStructure is in *explored Tile*
+ * psDroid->visible on the other hand, works correctly,
+ * because its visibility fades away in fog of war
+*/
+static inline bool tileIsClearlyVisible(const MAPTILE *psTile)
+{
+	return psTile->sensorBits & (1 << selectedPlayer);
+}
+
 /** Check if tile contains a small structure. Function is NOT thread-safe. */
 static inline bool TileHasSmallStructure(const MAPTILE *tile)
 {
