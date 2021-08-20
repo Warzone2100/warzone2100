@@ -4328,7 +4328,7 @@ GameCrcType nextDebugSync()
 	return (GameCrcType)ret;
 }
 
-static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned player)
+static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned player, bool syncError = true)
 {
 	char fname[100];
 	PHYSFS_file *fp;
@@ -4339,7 +4339,10 @@ static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned p
 	WZ_PHYSFS_writeBytes(fp, buf, static_cast<PHYSFS_uint32>(bufLen));
 	PHYSFS_close(fp);
 
-	debug(LOG_ERROR, "Dumped player %u's sync error at gameTime %u to file: %s%s", player, time, WZ_PHYSFS_getRealDir_String(fname).c_str(), fname);
+	bool isSpectator = player < NetPlay.players.size() && NetPlay.players[player].isSpectator;
+	std::string typeDescription = (syncError) ? "sync error" : "sync log";
+	std::string playerDescription = (isSpectator) ? "spectator" : "player";
+	debug(LOG_ERROR, "Dumped %s %u's %s at gameTime %u to file: %s%s", playerDescription.c_str(), player, typeDescription.c_str(), time, WZ_PHYSFS_getRealDir_String(fname).c_str(), fname);
 }
 
 static void sendDebugSync(uint8_t *buf, uint32_t bufLen, uint32_t time)
@@ -4409,7 +4412,7 @@ static void recvDebugSync(NETQUEUE queue)
 	bufLen = dumpLocalDebugSyncLogByTime(time);
 	if (bufLen > 0)
 	{
-		dumpDebugSync(debugSyncTmpBuf, bufLen, time, selectedPlayer);
+		dumpDebugSync(debugSyncTmpBuf, bufLen, time, selectedPlayer, false);
 	}
 }
 

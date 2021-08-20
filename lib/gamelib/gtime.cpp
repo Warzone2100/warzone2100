@@ -386,6 +386,11 @@ static inline bool shouldWaitForPlayerSlot(unsigned player)
 	&& (!NetPlay.players[player].isSpectator || !ingame.TimeEveryoneIsInGame.has_value() || player == NetPlay.hostPlayer); // Don't wait for spectators (that are not the host) once the game has started
 }
 
+static inline bool shouldCheckDebugSyncForPlayerSlot(unsigned player)
+{
+	return NetPlay.players[player].allocated && (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer);
+}
+
 void recvPlayerGameTime(NETQUEUE queue)
 {
 	uint32_t latencyTicks = 0;
@@ -399,18 +404,22 @@ void recvPlayerGameTime(NETQUEUE queue)
 	NETuint16_t(&wantedLatencies[queue.index]);
 	NETend();
 
-	syncDebug("GAME_GAME_TIME p%d;lat%u,ct%u,crc%04X,wlat%u", queue.index, latencyTicks, checkTime, checkCrc, wantedLatencies[queue.index]);
-
 	gameQueueTime[queue.index] = checkTime + latencyTicks * GAME_TICKS_PER_UPDATE;  // gameTime when future messages shall be processed.
 
 	gameQueueCheckTime[queue.index] = checkTime;
 	gameQueueCheckCrc[queue.index] = checkCrc;
-	if (!checkDebugSync(checkTime, checkCrc))
+
+	if (shouldCheckDebugSyncForPlayerSlot(queue.index))
 	{
-		crcError = true;
-		if (NetPlay.players[queue.index].allocated)
+		syncDebug("GAME_GAME_TIME p%d;lat%u,ct%u,crc%04X,wlat%u", queue.index, latencyTicks, checkTime, checkCrc, wantedLatencies[queue.index]);
+		if (!checkDebugSync(checkTime, checkCrc))
 		{
-			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, queue.index);
+			debug(LOG_ERROR, "Found CRC error when receiving GAME_GAME_TIME for player: %" PRIu8 " (checkTime: %" PRIu32 ", checkCrc: %" PRIu16 ")", queue.index, checkTime, checkCrc);
+			crcError = true;
+			if (NetPlay.players[queue.index].allocated)
+			{
+				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, queue.index);
+			}
 		}
 	}
 
