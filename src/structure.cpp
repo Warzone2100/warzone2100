@@ -2294,8 +2294,9 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		}
 
 		setFactorySecondaryState(psNewDroid, psStructure);
-
-		if (psStructure->visible[selectedPlayer])
+		const auto mapCoord = map_coord({x, y});
+		const auto psTile = mapTile(mapCoord);
+		if (tileIsClearlyVisible(psTile))
 		{
 			/* add smoke effect to cover the droid's emergence from the factory */
 			iVecEffect.x = psNewDroid->pos.x;
@@ -3780,9 +3781,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 				realY = static_cast<SDWORD>(structHeightScale(psBuilding) * point->y);
 				position.y = psBuilding->pos.z + realY;
 				position.z = static_cast<int>(psBuilding->pos.y - point->z);
-
-				effectSetSize(30);
-				addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand() % deltaGameTime);
+				const auto psTile = mapTile(map_coord({position.x, position.y}));
+				if (tileIsClearlyVisible(psTile))
+				{
+					effectSetSize(30);
+					addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand() % deltaGameTime);
+				}
 			}
 
 			if (iPointsToAdd)
