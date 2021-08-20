@@ -234,10 +234,10 @@ bool multiPlayerLoop()
 			clearDisplayMultiJoiningStatusCache();
 			setWidgetsStatus(true);
 		}
-		if (!ingame.TimeEveryoneIsInGame)
+		if (!ingame.TimeEveryoneIsInGame.has_value())
 		{
 			ingame.TimeEveryoneIsInGame = gameTime;
-			debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame);
+			debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame.value());
 			if (!NetPlay.isHost)
 			{
 				debug(LOG_NET, "=== Sending hash to host ===");
@@ -251,7 +251,7 @@ bool multiPlayerLoop()
 		// Only have to do this on a true MP game
 		if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
 		{
-			if (gameTime - ingame.TimeEveryoneIsInGame > GAME_TICKS_PER_SEC * 60)
+			if (gameTime - ingame.TimeEveryoneIsInGame.value() > GAME_TICKS_PER_SEC * 60)
 			{
 				// we waited 60 secs to make sure people didn't bypass the data integrity checks
 				int index;

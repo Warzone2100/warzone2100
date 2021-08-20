@@ -516,7 +516,7 @@ bool multiGameShutdown()
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
 	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
-	ingame.TimeEveryoneIsInGame = 0;
+	ingame.TimeEveryoneIsInGame = nullopt;
 	ingame.startTime = 0;
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
