@@ -4207,7 +4207,7 @@ void startMultiplayerGame()
 		debug(LOG_NET, "sending our options to all clients");
 		sendOptions();
 		NEThaltJoining();							// stop new players entering.
-		ingame.TimeEveryoneIsInGame = 0;
+		ingame.TimeEveryoneIsInGame = nullopt;
 		ingame.isAllPlayersDataOK = false;
 		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));	//clear all player's array
 		SendFireUp();								//bcast a fireup message
@@ -4429,7 +4429,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				gameSRand(randomSeed);  // Set the seed for the synchronised random number generator, using the seed given by the host.
 
 				debug(LOG_NET, "& local Options Received (MP game)");
-				ingame.TimeEveryoneIsInGame = 0;			// reset time
+				ingame.TimeEveryoneIsInGame = nullopt;			// reset time
 				resetDataHash();
 				decideWRF();
 

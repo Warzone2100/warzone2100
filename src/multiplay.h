@@ -38,6 +38,10 @@
 #include <vector>
 #include <string>
 
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 class DROID_GROUP;
 struct BASE_OBJECT;
 struct DROID;
@@ -90,7 +94,7 @@ struct MULTIPLAYERINGAME
 	bool				JoiningInProgress[MAX_PLAYERS];
 	bool				DataIntegrity[MAX_PLAYERS];
 	InGameSide			side;
-	int32_t				TimeEveryoneIsInGame;
+	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
 	UDWORD				startTime;
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
