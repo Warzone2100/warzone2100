@@ -380,6 +380,12 @@ void sendPlayerGameTime()
 	}
 }
 
+static inline bool shouldWaitForPlayerSlot(unsigned player)
+{
+	return NetPlay.players[player].allocated  // Don't wait for players that have been kicked/dropped.
+	&& (!NetPlay.players[player].isSpectator || !ingame.TimeEveryoneIsInGame.has_value() || player == NetPlay.hostPlayer); // Don't wait for spectators (that are not the host) once the game has started
+}
+
 void recvPlayerGameTime(NETQUEUE queue)
 {
 	uint32_t latencyTicks = 0;
@@ -426,8 +432,7 @@ bool checkPlayerGameTime(unsigned player)
 	for (player = begin; player < end; ++player)
 	{
 		if (gameTime > gameQueueTime[player]
-			&& NetPlay.players[player].allocated  // Don't wait for players that have been kicked/dropped.
-			&& (!NetPlay.players[player].isSpectator || bDisplayMultiJoiningStatus || player == NetPlay.hostPlayer)) // Don't wait for spectators (that are not the host) once the game has started
+			&& shouldWaitForPlayerSlot(player))
 		{
 			return false;  // Still waiting for this player.
 		}
