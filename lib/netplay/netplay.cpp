@@ -4355,6 +4355,42 @@ static void sendDebugSync(uint8_t *buf, uint32_t bufLen, uint32_t time)
 }
 
 static uint8_t debugSyncTmpBuf[2000000];
+
+static size_t dumpLocalDebugSyncLog(unsigned logIndex)
+{
+	size_t bufIndex = 0;
+	// Dump our version, and also erase it, so we only dump it at most once.
+	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== BEGIN gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	bufIndex += syncDebugLog[logIndex].snprint((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex);
+	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== END gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+
+	return bufIndex;
+}
+
+static size_t dumpLocalDebugSyncLogByTime(uint32_t time)
+{
+	unsigned logIndex;
+	for (logIndex = 0; logIndex < MAX_SYNC_HISTORY; ++logIndex)
+	{
+		if (syncDebugLog[logIndex].getGameTime() == time)
+		{
+			break; // found the log index for this time
+		}
+	}
+
+	if (logIndex >= MAX_SYNC_HISTORY)
+	{
+		// did not find it
+		debug(LOG_WARNING, "Couldn't find gameTime: %" PRIu32 " in history", time);
+		return 0;
+	}
+
+	return dumpLocalDebugSyncLog(logIndex);
+}
+
 static void recvDebugSync(NETQUEUE queue)
 {
 	uint32_t time = 0;
@@ -4368,6 +4404,13 @@ static void recvDebugSync(NETQUEUE queue)
 	NETend();
 
 	dumpDebugSync(debugSyncTmpBuf, bufLen, time, queue.index);
+
+	// Also dump the debug sync log for this local client (if possible)
+	bufLen = dumpLocalDebugSyncLogByTime(time);
+	if (bufLen > 0)
+	{
+		dumpDebugSync(debugSyncTmpBuf, bufLen, time, selectedPlayer);
+	}
 }
 
 bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
@@ -4405,15 +4448,7 @@ bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
 		return false;                                   // Couldn't check. May have dumped already, or MAX_SYNC_HISTORY isn't big enough compared to the maximum latency.
 	}
 
-	size_t bufIndex = 0;
-	// Dump our version, and also erase it, so we only dump it at most once.
-	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version has %zu entries, CRC = 0x%08X.", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
-	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== BEGIN gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
-	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-	bufIndex += syncDebugLog[logIndex].snprint((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex);
-	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== END gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
-	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	size_t bufIndex = dumpLocalDebugSyncLog(logIndex);
 	if (syncDebugNumDumps < 2)
 	{
 		++syncDebugNumDumps;
