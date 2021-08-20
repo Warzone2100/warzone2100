@@ -1777,6 +1777,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			int8_t ai = 0;
 			int8_t difficulty = 0;
 			uint8_t faction = FACTION_NORMAL;
+			bool isSpectator = false;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
@@ -1820,7 +1821,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETint8_t(&ai);
 				NETint8_t(&difficulty);
 				NETuint8_t(&faction);
-				NETbool(&NetPlay.players[index].isSpectator);
+				NETbool(&isSpectator);
 
 				auto newFactionId = uintToFactionID(faction);
 				if (!newFactionId.has_value())
@@ -1839,6 +1840,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NetPlay.players[index].ai = ai;
 					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 					NetPlay.players[index].faction = newFactionId.value();
+					NetPlay.players[index].isSpectator = isSpectator;
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
