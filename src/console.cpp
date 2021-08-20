@@ -346,6 +346,10 @@ static PIELIGHT getConsoleTextColor(int player)
 	{
 		return WZCOL_CONS_TEXT_INFO;
 	}
+	else if (player == SPECTATOR_MESSAGE)
+	{
+		return WZCOL_TEXT_MEDIUM;
+	}
 	else
 	{
 		// Don't use friend-foe colors in the lobby
