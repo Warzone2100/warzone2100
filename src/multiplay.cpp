@@ -669,6 +669,28 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 					return HandleMessageAction::Disallow_And_Kick_Sender;
 				}
 				break;
+			case NET_TEXTMSG:
+				// Normal chat messages are available to spectators in the game room / lobby chat, but *not* in-game
+				if (senderIsSpectator && GetGameMode() == GS_NORMAL)
+				{
+					if (gameInitialised && !bDisplayMultiJoiningStatus)
+					{
+						// If the game is actually initialized and everyone has joined the game, treat this as a kickable offense
+						return HandleMessageAction::Disallow_And_Kick_Sender;
+					}
+					else
+					{
+						// Otherwise just silently ignore it
+						return HandleMessageAction::Silently_Ignore;
+					}
+				}
+				break;
+			case NET_SPECTEXTMSG:
+				if (!senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
 			default:
 				// certain messages are always allowed, no matter who it is
 				return HandleMessageAction::Process_Message;
@@ -782,6 +804,9 @@ bool recvMessage()
 				break;
 			case NET_AITEXTMSG:					//multiplayer AI text message
 				recvTextMessageAI(queue);
+				break;
+			case NET_SPECTEXTMSG:
+				recvSpecInGameTextMessage(queue); // multiplayer spectator text message
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
@@ -1371,6 +1396,47 @@ bool recvTextMessageAI(NETQUEUE queue)
 
 	sstrcpy(msg, newmsg);
 	triggerEventChat(sender, receiver, newmsg);
+
+	return true;
+}
+
+bool recvSpecInGameTextMessage(NETQUEUE queue)
+{
+	UDWORD	sender;
+	char	newmsg[MAX_CONSOLE_STRING_LENGTH] = {};
+
+	NETbeginDecode(queue, NET_SPECTEXTMSG);
+	NETuint32_t(&sender);			//in-game player index ('normal' one)
+	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
+	NETend();
+
+	if (whosResponsible(sender) != queue.index)
+	{
+		sender = queue.index;  // Fix corrupted sender.
+	}
+
+	if (sender >= MAX_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
+	{
+		return false;
+	}
+
+	if (!NetPlay.players[selectedPlayer].isSpectator)
+	{
+		return false; // ignore
+	}
+
+	auto message = NetworkTextMessage(SPECTATOR_MESSAGE, newmsg);
+	printInGameTextMessage(message);
+
+	// make some noise!
+	if (GetGameMode() != GS_NORMAL)
+	{
+		audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+	}
+	else if (!ingame.localJoiningInProgress)
+	{
+		audio_PlayTrack(ID_SOUND_MESSAGEEND);
+	}
 
 	return true;
 }

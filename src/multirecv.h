@@ -52,4 +52,6 @@ bool recvTextMessageAI(NETQUEUE queue);         //AI multiplayer message
 bool recvTeamRequest(NETQUEUE queue);
 bool recvReadyRequest(NETQUEUE queue);
 
+bool recvSpecInGameTextMessage(NETQUEUE queue);
+
 #endif // __INCLUDED_SRC_MULTIRECV_H__
