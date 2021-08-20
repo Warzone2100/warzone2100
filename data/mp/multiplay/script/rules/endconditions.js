@@ -4,7 +4,7 @@ namespace("conditions_");
 const STATE_contender = "contender";
 const STATE_winner = "winner";
 const STATE_loser = "loser";
-
+const ENABLE_activity = (challenge != true && isMultiplayer === true); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
 const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which you can continue to play
 // TODO remove HQ. The destruction of the HQ will hide the minimap.
 
@@ -106,7 +106,7 @@ class Player
 		hackNetOn();
 	}
 
-	hud(state)
+	setState(state)
 	{
 		if (this.playNum != selectedPlayer)
 		{
@@ -215,7 +215,7 @@ class Team
 		this.players.forEach(
 			(player) =>
 			{
-				player.hud(this.state);
+				player.setState(this.state);
 				player.openMap();
 			}
 		);
@@ -326,7 +326,7 @@ function activityAlert()
 function conditions_eventGameInit()
 {
 	createTeams();
-	if  (challenge != true)
+	if  (ENABLE_activity)
 	{
 		setTimer("activityAlert", 10*1000);
 	}
@@ -339,29 +339,62 @@ function conditions_eventGameLoaded()
 
 function conditions_eventDroidBuilt(droid)
 {
-	if (droid.player != scavengerPlayer && challenge != true)
+	if (droid.player === scavengerPlayer || !ENABLE_activity)
+	{
+		return;
+	}
+	if (playersTeam[droid.player])
 	{
 		playersTeam[droid.player].lastActivity = gameTime;
 	}
+	else
+	{
+		debug ("Player", droid.player, "has no team");
+	}
+
 }
 function conditions_eventStructureBuilt(structure)
 {
-	if (structure.player != scavengerPlayer && challenge != true && BASESTRUCTS.includes(structure.stattype) === true)
+	if (structure.player === scavengerPlayer || !ENABLE_activity)
+	{
+		return;
+	}
+	if (BASESTRUCTS.includes(structure.stattype) === true && playersTeam[structure.player])
 	{
 		playersTeam[structure.player].lastActivity = gameTime;
+	}
+	else
+	{
+		debug ("Player", structure.player, "has no team");
 	}
 }
 function conditions_eventResearched(research, structure, player)
 {
-	if (player != scavengerPlayer && challenge != true)
+	if (player === scavengerPlayer || !ENABLE_activity)
+	{
+		return;
+	}
+	if (playersTeam[player])
 	{
 		playersTeam[player].lastActivity = gameTime;
+	}
+	else
+	{
+		debug ("Player", player, "has no team");
 	}
 }
 function conditions_eventAttacked(victim, attacker)
 {
-	if (attacker.player != scavengerPlayer && challenge != true)
+	if (attacker.player === scavengerPlayer || !ENABLE_activity)
+	{
+		return;
+	}
+	if (playersTeam[attacker.player])
 	{
 		playersTeam[attacker.player].lastActivity = gameTime;
+	}
+	else
+	{
+		debug ("Player", attacker.player, "has no team");
 	}
 }
