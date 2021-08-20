@@ -246,31 +246,30 @@ function checkEndConditions()
 	}
 }
 
-//	FIXME allianceExistsBetween dont correct if leave player in ALLIANCES_UNSHARED, ALLIANCES_TEAMS mode
+//	FIXME allianceExistsBetween() dont correct if leave player in ALLIANCES_UNSHARED, ALLIANCES_TEAMS mode
 //	and  team is garbage in NO_ALLIANCES, ALLIANCES mode
 function inOneTeam(playnum, splaynum)
 {
 
 	if (
 		(alliancesType === ALLIANCES_UNSHARED || alliancesType === ALLIANCES_TEAMS) &&
-    playerData[playnum].team != playerData[splaynum].team
+    playerData[playnum].team === playerData[splaynum].team
 	)
 	{
-		return false;
+		return true;
 	}
-	else if (alliancesType === NO_ALLIANCES && playnum != splaynum)
+	else if (alliancesType === NO_ALLIANCES && playnum === splaynum)
 	{
-		return false;
+		return true;
 	}
-	else if (
-		alliancesType === ALLIANCES &&
-    !allianceExistsBetween(playnum, splaynum)
-	)
+	//Victory in alliance mode is also personal.
+	//Alliances do not affect victory.
+	//allianceExistsBetween() is not used.
+	else if (alliancesType === ALLIANCES && playnum === splaynum)
 	{
-		return false;
+		return true;
 	}
-
-	return true;
+	return false;
 }
 
 function createTeams()
@@ -330,10 +329,6 @@ function conditions_eventGameInit()
 	if  (challenge != true)
 	{
 		setTimer("activityAlert", 10*1000);
-	}
-	if (alliancesType === ALLIANCES)
-	{
-		setTimer("createTeams", 10*1000); //rebild teams with ALLIANCES mode
 	}
 }
 
