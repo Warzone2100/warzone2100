@@ -80,9 +80,10 @@ void cmdDroidUpdate()
  * It creates a group if it doesn't exist.
  * If the group is not full, it adds the droid to it and sets all the droid's states and orders to the group's.
  */
-void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
+bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 {
 	DROID_GROUP	*psGroup;
+	bool addedToGroup = false;
 
 	if (psCommander->psGroup == nullptr)
 	{
@@ -93,6 +94,8 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 	if (psCommander->psGroup->getNumMembers() < cmdDroidMaxGroup(psCommander))
 	{
+		addedToGroup = true;
+
 		psCommander->psGroup->add(psDroid);
 		psDroid->group = UBYTE_MAX;
 
@@ -106,7 +109,6 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	}
 	else if (psCommander->player == selectedPlayer)
 	{
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		//Do not potentially spam the console with this message
 		if (lastMaxCmdLimitMsgTime + MAX_COMMAND_LIMIT_MESSAGE_PAUSE < gameTime)
 		{
@@ -114,6 +116,8 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 			lastMaxCmdLimitMsgTime = gameTime;
 		}
 	}
+
+	return addedToGroup;
 }
 
 DROID *cmdDroidGetDesignator(UDWORD player)

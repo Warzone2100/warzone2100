@@ -1482,11 +1482,14 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Can't command a NULL");
-		if (psDroid->player == selectedPlayer)
+		if (cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid) && psDroid->player == selectedPlayer)
 		{
 			orderPlayFireSupportAudio(psOrder->psObj);
 		}
-		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
+		else if (psDroid->player == selectedPlayer)
+		{
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		}
 		break;
 	case DORDER_RTB:
 		for (psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
@@ -3258,7 +3261,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					moveToRearm(psDroid);
 				}
 			}
-			else if (droidAttacking(psDroid))	 
+			else if (droidAttacking(psDroid))
 			{
 				// send the unit back to the guard position
 				actionDroid(psDroid, DACTION_NONE);
