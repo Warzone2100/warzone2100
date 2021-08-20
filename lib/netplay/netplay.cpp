@@ -4431,6 +4431,7 @@ bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
 				return true;                    // Check passed. (So far... There might still be more players to compare CRCs with.)
 			}
 
+			debug(LOG_NET, "Non-matching crc for gameTime: %" PRIu32 "", checkGameTime);
 			break;                                  // Check failed!
 		}
 	}
@@ -4445,6 +4446,7 @@ bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
 
 	if (logIndex >= MAX_SYNC_HISTORY)
 	{
+		debug(LOG_NET, "Couldn't check gameTime: %" PRIu32 "", checkGameTime);
 		return false;                                   // Couldn't check. May have dumped already, or MAX_SYNC_HISTORY isn't big enough compared to the maximum latency.
 	}
 
