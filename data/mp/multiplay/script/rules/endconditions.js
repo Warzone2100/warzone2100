@@ -297,7 +297,7 @@ function checkPlayerVictoryStatus()
 			}
 		}
 
-		if (playerData[selectedPlayer].usertype ===  USERTYPE.player.winner)
+		if (!isSpectator(-1) && playerData[selectedPlayer].usertype === USERTYPE.player.winner)
 		{
 			gameOverMessage(true);
 		}
@@ -315,11 +315,11 @@ function checkPlayerVictoryStatus()
 
 function co_eventGameInit()
 {
-	for (var playnum = 0; playnum < playerData.length; playnum++)
+	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		playerData[playnum].lastActivity = gameTime;
 			//we consider observers to players who cannot play from the beginning of the game
-		if (playerData[playnum].isSpectator || !canPlay(playnum))
+		if (isSpectator(playnum) || !canPlay(playnum))
 		{
 			playerData[playnum].usertype = USERTYPE.spectator;
 			toSpectator(playnum, true);

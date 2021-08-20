@@ -2243,6 +2243,27 @@ std::vector<const DROID *> wzapi::enumCargo(WZAPI_PARAMS(const DROID *psDroid))
 	return result;
 }
 
+//-- ## isSpectator(player)
+//--
+//-- Returns whether a particular player is a spectator. (4.2+ only)
+//-- Can pass -1 as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
+//--
+bool wzapi::isSpectator(WZAPI_PARAMS(int player))
+{
+	SCRIPT_ASSERT(false, _context, player == -1 || (player >= 0 && (player < NetPlay.players.size() || player == selectedPlayer)), "Invalid player index %d", player);
+	if (player == -1 || player == selectedPlayer)
+	{
+		// TODO: Offers the ability to store this outside of NetPlayer.players later
+		// For now, it's stored in NetPlay.players[selectedPlayer]
+		return NetPlay.players[selectedPlayer].isSpectator;
+	}
+	else if (player >= 0 && player < NetPlay.players.size())
+	{
+		return NetPlay.players[player].isSpectator;
+	}
+	return true;
+}
+
 //-- ## getWeaponInfo(weapon id)
 //--
 //-- Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
@@ -4461,7 +4482,7 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	//==   * ```name``` the name of the player (3.2+ only)
 	//==   * ```team``` the number of the team the player is part of
 	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		nlohmann::json vector = nlohmann::json::object();
 		vector["name"] = NetPlay.players[i].name;
@@ -4472,7 +4493,6 @@ nlohmann::json wzapi::constructStaticPlayerData()
 		vector["team"] = NetPlay.players[i].team;
 		vector["isAI"] = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
 		vector["isHuman"] = NetPlay.players[i].allocated;
-		vector["isSpectator"] = NetPlay.players[i].isSpectator;
 		vector["type"] = SCRIPT_PLAYER;
 		playerData.push_back(std::move(vector));
 	}

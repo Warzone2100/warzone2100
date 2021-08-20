@@ -1042,6 +1042,7 @@ namespace wzapi
 	bool setConstructorLimit(WZAPI_PARAMS(int player, int value));
 	bool setExperienceModifier(WZAPI_PARAMS(int player, int percent));
 	std::vector<const DROID *> enumCargo(WZAPI_PARAMS(const DROID *psDroid));
+	bool isSpectator(WZAPI_PARAMS(int player));
 
 	nlohmann::json getWeaponInfo(WZAPI_PARAMS(std::string weaponID)) WZAPI_DEPRECATED;
 
