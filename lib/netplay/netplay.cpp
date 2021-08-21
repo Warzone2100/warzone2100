@@ -1860,6 +1860,10 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 			else if (!error)
 			{
+				if (index == selectedPlayer)
+				{
+					handleAutoReadyRequest();
+				}
 				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 			}
 			netPlayersUpdated = true;
