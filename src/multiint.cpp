@@ -277,6 +277,8 @@ struct WzMultiButton : public W_BUTTON
 	unsigned doHighlight;
 	unsigned tc;
 	uint8_t alpha = 255;
+	unsigned downStateMask = WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK;
+	unsigned greyStateMask = WBUT_DISABLE;
 };
 
 class ChatBoxWidget : public IntFormAnimated
@@ -2584,12 +2586,22 @@ static void drawReadyButton(UDWORD player, int slotOverride)
 	unsigned images[2][3] = {{IMAGE_CHECK_OFF, IMAGE_CHECK_ON, IMAGE_CHECK_DOWNLOAD}, {IMAGE_CHECK_OFF_HI, IMAGE_CHECK_ON_HI, IMAGE_CHECK_DOWNLOAD_HI}};
 
 	// draw 'ready' button
-	bool greyedOutReady = NetPlay.players[player].isSpectator && NetPlay.players[player].ready;
+	bool greyedOutReady = (NetPlay.players[player].isSpectator && NetPlay.players[player].ready) || (player != selectedPlayer);
 	auto pReadyBut = addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady], MAX_PLAYERS, (!greyedOutReady) ? 255 : 125);
 	ASSERT_OR_RETURN(, pReadyBut != nullptr, "Failed to create ready button");
 	pReadyBut->minClickInterval = GAME_TICKS_PER_SEC;
 	pReadyBut->unlock();
+	if (greyedOutReady && !NetPlay.isHost)
+	{
+		std::shared_ptr<WzMultiButton> pReadyBut_MultiButton = std::dynamic_pointer_cast<WzMultiButton>(pReadyBut);
+		if (pReadyBut_MultiButton)
+		{
+			pReadyBut_MultiButton->downStateMask = WBUT_DOWN | WBUT_CLICKLOCK;
+		}
+		auto currentState = pReadyBut->getState();
+		pReadyBut->setState(currentState | WBUT_LOCK);
+	}
 
 	std::shared_ptr<W_LABEL> label;
 	auto existingLabel = widgFormGetFromID(parent->shared_from_this(), MULTIOP_READY_START + MAX_PLAYERS + player);
@@ -5492,8 +5504,8 @@ void WzMultiButton::display(int xOffset, int yOffset)
 		hiToUse = mpwidgetGetFrontHighlightImage(imNormal);
 	}
 
-	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool grey = (getState() & WBUT_DISABLE) != 0;
+	bool down = (getState() & downStateMask) != 0;
+	bool grey = (getState() & greyStateMask) != 0;
 
 	Image toDraw[3];
 	int numToDraw = 0;
