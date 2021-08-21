@@ -812,8 +812,12 @@ private:
 
 		auto alliancesGrid = std::make_shared<GridLayout>();
 
+		bool selectedPlayerIsSpectator = NetPlay.players[selectedPlayer].isSpectator;
+
 		// add channel opener.
-		if (player != selectedPlayer)
+		// - not configurable for self (obviously)
+		// - players shouldn't configure channel to spectators
+		if ((player != selectedPlayer) && (selectedPlayerIsSpectator || !NetPlay.players[player].isSpectator))
 		{
 			W_BUTINIT sButInit;
 			sButInit.width	= 35;
@@ -825,7 +829,7 @@ private:
 			alliancesGrid->place({0}, {0}, Margin(0, 1, 0, 0).wrap(std::make_shared<W_BUTTON>(&sButInit)));
 		}
 
-		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer)
+		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer && !NetPlay.players[player].isSpectator)
 		{
 			W_BUTINIT sButInit;
 			//alliance
