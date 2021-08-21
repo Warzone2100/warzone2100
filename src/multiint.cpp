@@ -4225,6 +4225,35 @@ void startMultiplayerGame()
 // ////////////////////////////////////////////////////////////////////////////
 // Net message handling
 
+void handleAutoReadyRequest()
+{
+	if (NetPlay.isHost)
+	{
+		return; // no-op for host (currently)
+	}
+
+	if (multiplayIsStartingGame() || (GetGameMode() == GS_NORMAL))
+	{
+		return; // don't bother sending anything - the game is starting / started...
+	}
+
+	bool desiredReadyState = NetPlay.players[selectedPlayer].ready;
+
+	// Spectators should automatically become ready as soon as necessary files are downloaded
+	// and not-ready when files remain to be downloaded
+	if (NetPlay.players[selectedPlayer].isSpectator)
+	{
+		bool haveData = NetPlay.wzFiles.empty();
+		desiredReadyState = haveData;
+	}
+
+	if (desiredReadyState != NetPlay.players[selectedPlayer].ready)
+	{
+		// Automatically set ready status
+		SendReadyRequest(selectedPlayer, desiredReadyState);
+	}
+}
+
 void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 {
 	NETQUEUE queue;
@@ -4252,12 +4281,9 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				{
 					((MultibuttonWidget *)widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW))->enable(done);  // turn preview button on or off
 				}
-				if (!NetPlay.isHost && NetPlay.players[selectedPlayer].isSpectator && (NetPlay.players[selectedPlayer].ready != done))
-				{
-					// spectators should automatically become ready as soon as necessary files are downloaded
-					// and not-ready when files remain to be downloaded
-					SendReadyRequest(selectedPlayer, done);
-				}
+				// spectators should automatically become ready as soon as necessary files are downloaded
+				// and not-ready when files remain to be downloaded
+				handleAutoReadyRequest();
 				break;
 			}
 
@@ -4284,12 +4310,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			bInActualHostedLobby = true;
 			ingame.localOptionsReceived = true;
 
-			bool haveData = NetPlay.wzFiles.empty();
-			if (!NetPlay.isHost && haveData && NetPlay.players[selectedPlayer].isSpectator && !NetPlay.players[selectedPlayer].ready)
-			{
-				// Automatically set self to "ready" if we're a spectator and there are no files to fetch
-				SendReadyRequest(selectedPlayer, true);
-			}
+			handleAutoReadyRequest();
 
 			if (std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent))
 			{
@@ -5582,7 +5603,7 @@ static bool multiplayPlayersReady()
 	bool bReady = true;
 	size_t numReadyPlayers = 0;
 
-	for (unsigned int player = 0; player < game.maxPlayers; player++)
+	for (size_t player = 0; player < NetPlay.players.size(); player++)
 	{
 		// check if this human player is ready, ignore AIs
 		if (NetPlay.players[player].allocated)

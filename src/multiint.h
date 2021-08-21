@@ -84,6 +84,8 @@ void sendRoomSystemMessage(char const *text);
 void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 
+void handleAutoReadyRequest();
+
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
 
