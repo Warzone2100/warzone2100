@@ -1304,7 +1304,12 @@ void sendInGameSystemMessage(const char *text)
 {
 	NetworkTextMessage message(SYSTEM_MESSAGE, text);
 	printInGameTextMessage(message);
-	message.enqueue(NETbroadcastQueue());
+	if (NetPlay.isHost || !NetPlay.players[selectedPlayer].isSpectator || GetGameMode() != GS_NORMAL)
+	{
+		// host + players can broadcast these at any time
+		// spectators can only broadcast in-game system messages before the game has started (i.e. in lobby)
+		message.enqueue(NETbroadcastQueue());
+	}
 }
 
 void printConsoleNameChange(const char *oldName, const char *newName)
