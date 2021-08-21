@@ -47,10 +47,10 @@ typedef std::unordered_map<wzapi::scripting_instance *, nlohmann::json> MODELMAP
 class WZScriptDebugger : public W_FORM
 {
 public:
-	WZScriptDebugger(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface);
+	WZScriptDebugger(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, bool readOnly);
 	~WZScriptDebugger();
 
-	static std::shared_ptr<WZScriptDebugger> make(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface);
+	static std::shared_ptr<WZScriptDebugger> make(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, bool readOnly);
 
 	virtual void display(int xOffset, int yOffset) override;
 
@@ -126,12 +126,14 @@ private:
 	ScriptDebuggerPanel currentPanel = ScriptDebuggerPanel::Main;
 	std::shared_ptr<WIDGET> currentPanelWidget = nullptr;
 
+	bool readOnly = false;
+
 private:
 	std::shared_ptr<W_BUTTON> createButton(int row, const std::string &text, const std::function<void ()>& onClickFunc, const std::shared_ptr<WIDGET>& parent, const std::shared_ptr<W_BUTTON>& previousButton = nullptr);
 };
 
 typedef std::function<void ()> jsDebugShutdownHandlerFunction;
-void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, const jsDebugShutdownHandlerFunction& shutdownFunc);
+void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, const jsDebugShutdownHandlerFunction& shutdownFunc, bool readOnly = false);
 bool jsDebugShutdown();
 void jsDebugUpdateLabels();
 

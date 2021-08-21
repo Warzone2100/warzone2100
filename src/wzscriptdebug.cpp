@@ -305,6 +305,7 @@ static nlohmann::ordered_json fillPlayerModel(int i)
 	result["NetPlay.players.difficulty"] = static_cast<int8_t>(NetPlay.players[i].difficulty);
 	result["NetPlay.players.autoGame"] = NetPlay.players[i].autoGame;
 	result["NetPlay.players.IPtextAddress"] = NetPlay.players[i].IPtextAddress;
+	result["NetPlay.players.isSpectator"] = NetPlay.players[i].isSpectator;
 	result["Current power"] = getPower(i);
 	result["Extracted power"] = getExtractedPower(i);
 	result["Wasted power"] = getWastedPower(i);
@@ -542,7 +543,10 @@ static std::shared_ptr<W_BUTTON> makeDebugButton(const char* text)
 class WzMainPanel : public W_FORM
 {
 public:
-	WzMainPanel(): W_FORM() {}
+	WzMainPanel(bool readOnly)
+	: W_FORM()
+	, readOnly(readOnly)
+	{}
 	~WzMainPanel() {}
 public:
 	virtual void display(int xOffset, int yOffset) override
@@ -560,24 +564,24 @@ public:
 		table->callCalcLayout();
 	}
 public:
-	static std::shared_ptr<WzMainPanel> make()
+	static std::shared_ptr<WzMainPanel> make(bool readOnly)
 	{
-		auto panel = std::make_shared<WzMainPanel>();
+		auto panel = std::make_shared<WzMainPanel>(readOnly);
 
 		std::shared_ptr<W_BUTTON> previousRowButton;
-		previousRowButton = panel->createButton(0, "Add droids", [](){ intOpenDebugMenu(OBJ_DROID); });
-		previousRowButton = panel->createButton(0, "Add structures", [](){ intOpenDebugMenu(OBJ_STRUCTURE); }, previousRowButton);
-		previousRowButton = panel->createButton(0, "Add features", [](){ intOpenDebugMenu(OBJ_FEATURE); }, previousRowButton);
+		previousRowButton = panel->createButton(0, "Add droids", [](){ intOpenDebugMenu(OBJ_DROID); }, nullptr, true);
+		previousRowButton = panel->createButton(0, "Add structures", [](){ intOpenDebugMenu(OBJ_STRUCTURE); }, previousRowButton, true);
+		previousRowButton = panel->createButton(0, "Add features", [](){ intOpenDebugMenu(OBJ_FEATURE); }, previousRowButton, true);
 
-		previousRowButton = panel->createButton(1, "Research all", kf_FinishAllResearch);
-		previousRowButton = panel->createButton(1, "Show sensors", kf_ToggleSensorDisplay, previousRowButton);
-		previousRowButton = panel->createButton(1, "Shadows", [](){ setDrawShadows(!getDrawShadows()); }, previousRowButton);
-		previousRowButton = panel->createButton(1, "Fog", kf_ToggleFog, previousRowButton);
+		previousRowButton = panel->createButton(1, "Research all", kf_FinishAllResearch, nullptr, true);
+		previousRowButton = panel->createButton(1, "Show sensors", kf_ToggleSensorDisplay, previousRowButton, false);
+		previousRowButton = panel->createButton(1, "Shadows", [](){ setDrawShadows(!getDrawShadows()); }, previousRowButton, false);
+		previousRowButton = panel->createButton(1, "Fog", kf_ToggleFog, previousRowButton, false);
 
-		previousRowButton = panel->createButton(2, "Show gateways", kf_ToggleShowGateways);
-		previousRowButton = panel->createButton(2, "Reveal all", kf_ToggleGodMode, previousRowButton);
-		previousRowButton = panel->createButton(2, "Weather", kf_ToggleWeather, previousRowButton);
-		previousRowButton = panel->createButton(2, "Reveal mode", kf_ToggleVisibility, previousRowButton);
+		previousRowButton = panel->createButton(2, "Show gateways", kf_ToggleShowGateways, nullptr, false);
+		previousRowButton = panel->createButton(2, "Reveal all", kf_ToggleGodMode, previousRowButton, true);
+		previousRowButton = panel->createButton(2, "Weather", kf_ToggleWeather, previousRowButton, false);
+		previousRowButton = panel->createButton(2, "Reveal mode", kf_ToggleVisibility, previousRowButton, true);
 
 		int bottomOfButtonRows = previousRowButton->y() + previousRowButton->height() + ACTION_BUTTON_ROW_SPACING;
 
@@ -659,6 +663,10 @@ public:
 			int bottomOfSelectedPlayerRow = psParent->playersDropdown->y() + psParent->playersDropdown->height() + ACTION_BUTTON_ROW_SPACING;
 			psWidget->setGeometry(x0, bottomOfSelectedPlayerRow, psWidget->width(), psWidget->height());
 		}));
+		if (readOnly)
+		{
+			panel->powerUpdateButton->setState(WBUT_DISABLE);
+		}
 
 		// Power input edit box
 		panel->powerEditField = std::make_shared<W_EDITBOX>();
@@ -676,6 +684,10 @@ public:
 		panel->powerEditField->setString(WzString::number(getPower(selectedPlayer)));
 		panel->powerEditField->setMaxStringSize(9); // shorten maximum length
 		panel->powerEditField->setBoxColours(WZCOL_DEBUG_FILL_COLOR_DARK, WZCOL_DEBUG_BORDER_LIGHT, WZCOL_DEBUG_FILL_COLOR);
+		if (readOnly)
+		{
+			panel->powerEditField->setState(WEDBS_DISABLE);
+		}
 
 		int bottomOfPowerRow = panel->powerEditField->y() + panel->powerEditField->height() + ACTION_BUTTON_ROW_SPACING;
 
@@ -708,6 +720,10 @@ public:
 			jsAutogameSpecific(WzString::fromUtf8("multiplay/skirmish/") + script, player);
 			debug(LOG_INFO, "Script attached - close and reopen debug window to see its context");
 		});
+		if (readOnly)
+		{
+			panel->aiAttachButton->setState(WBUT_DISABLE);
+		}
 
 		// AI players drop-down
 		panel->aiPlayerDropdown = std::make_shared<DropdownWidget>();
@@ -779,7 +795,7 @@ public:
 		return panel;
 	}
 private:
-	std::shared_ptr<W_BUTTON> createButton(int row, const std::string &text, const std::function<void ()>& onClickFunc, const std::shared_ptr<W_BUTTON>& previousButton = nullptr)
+	std::shared_ptr<W_BUTTON> createButton(int row, const std::string &text, const std::function<void ()>& onClickFunc, const std::shared_ptr<W_BUTTON>& previousButton = nullptr, bool requiresWriteAccess = true)
 	{
 		auto button = makeDebugButton(text.c_str());
 		button->setGeometry(button->x(), button->y(), button->width() + 10, button->height());
@@ -789,6 +805,10 @@ private:
 				onClickFunc();
 			});
 		});
+		if (requiresWriteAccess && readOnly)
+		{
+			button->setState(WBUT_DISABLE);
+		}
 
 		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
 		button->move((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, (row * (button->height() + ACTION_BUTTON_ROW_SPACING)));
@@ -797,6 +817,12 @@ private:
 	}
 	void playerButtonClicked(int value)
 	{
+		if (readOnly)
+		{
+			debug(LOG_ERROR, "Unable to change selectedPlayer - readOnly mode");
+			playersDropdown->setSelectedIndex(selectedPlayer);
+			return;
+		}
 		// Do not change realSelectedPlayer here, so game doesn't pause.
 		const int oldSelectedPlayer = selectedPlayer;
 		selectedPlayer = value;
@@ -813,6 +839,7 @@ public:
 	std::shared_ptr<DropdownWidget> aiPlayerDropdown;
 	std::shared_ptr<W_BUTTON> aiAttachButton;
 	std::shared_ptr<JSONTableWidget> table;
+	bool readOnly = false;
 };
 
 // MARK: - WzScriptContextsPanel
@@ -1834,8 +1861,9 @@ void WZScriptDebugger::switchPanel(WZScriptDebugger::ScriptDebuggerPanel newPane
 	currentPanel = newPanel;
 }
 
-WZScriptDebugger::WZScriptDebugger(const std::shared_ptr<scripting_engine::DebugInterface>& _debugInterface)
+WZScriptDebugger::WZScriptDebugger(const std::shared_ptr<scripting_engine::DebugInterface>& _debugInterface, bool readOnly)
 : debugInterface(_debugInterface)
+, readOnly(readOnly)
 {
 	modelMap = debugInterface->debug_GetGlobalsSnapshot();
 	trigger_snapshot = debugInterface->debug_GetTimersSnapshot();
@@ -1875,7 +1903,7 @@ void WZScriptDebugger::display(int xOffset, int yOffset)
 
 std::shared_ptr<W_FORM> WZScriptDebugger::createMainPanel()
 {
-	return WzMainPanel::make();
+	return WzMainPanel::make(readOnly);
 }
 
 std::shared_ptr<WIDGET> WZScriptDebugger::createSelectedPanel()
@@ -1990,9 +2018,9 @@ static std::shared_ptr<W_BUTTON> makeCornerButton(const char* text)
 	return button;
 }
 
-std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface)
+std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, bool readOnly)
 {
-	auto result = std::make_shared<WZScriptDebugger>(debugInterface);
+	auto result = std::make_shared<WZScriptDebugger>(debugInterface, readOnly);
 
 	// make minimizable
 	result->enableMinimizing("Script Debugger", WZCOL_FORM_TEXT);
@@ -2302,7 +2330,7 @@ bool jsDebugShutdown()
 	return true;
 }
 
-void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, const jsDebugShutdownHandlerFunction& shutdownFunc)
+void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, const jsDebugShutdownHandlerFunction& shutdownFunc, bool readOnly /*= false*/)
 {
 	jsDebugShutdown();
 	globalDialogShutdownHandler = shutdownFunc;
@@ -2310,6 +2338,6 @@ void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debu
 	debugScreen = W_SCREEN::make();
 	debugScreen->psForm->hide(); // hiding the root form does not stop display of children, but *does* prevent it from accepting mouse over itself - i.e. basically makes it transparent
 	widgRegisterOverlayScreen(debugScreen, std::numeric_limits<uint16_t>::max() - 2);
-	globalDialog = WZScriptDebugger::make(debugInterface);
+	globalDialog = WZScriptDebugger::make(debugInterface, readOnly);
 	debugScreen->psForm->attach(globalDialog);
 }
