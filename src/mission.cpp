@@ -2211,6 +2211,13 @@ static void missionResetInGameState()
 	intRemoveMissionTimer();
 }
 
+static void intDestroyMissionResultWidgets()
+{
+	widgDelete(psWScreen, IDMISSIONRES_TITLE);
+	widgDelete(psWScreen, IDMISSIONRES_FORM);
+	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
+}
+
 static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
 	missionResetInGameState();
@@ -2229,6 +2236,9 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		screen_RestartBackDrop();
 	}
 
+	// ensure these widgets are deleted before attempting to create
+	intDestroyMissionResultWidgets();
+
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
 	sFormInit.style			= WFORM_PLAIN;
@@ -2240,6 +2250,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		psWidget->pUserData = nullptr;
 	};
 	W_FORM *missionResBackForm = widgAddForm(psWScreen, &sFormInit);
+	ASSERT_OR_RETURN(false, missionResBackForm != nullptr, "Failed to create IDMISSIONRES_BACKFORM");
 	missionResBackForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(0 + D_W, 0 + D_H, 640, 480);
 	}));
@@ -2381,9 +2392,7 @@ bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 
 void intRemoveMissionResultNoAnim()
 {
-	widgDelete(psWScreen, IDMISSIONRES_TITLE);
-	widgDelete(psWScreen, IDMISSIONRES_FORM);
-	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
+	intDestroyMissionResultWidgets();
 
 	cdAudio_Stop();
 
