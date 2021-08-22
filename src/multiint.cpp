@@ -247,7 +247,7 @@ static struct
 
 struct AIDATA
 {
-	AIDATA() : assigned(0) {}
+	AIDATA() : name{0}, js{0}, tip{0}, difficultyTips{0}, assigned(0) {}
 	char name[MAX_LEN_AI_NAME];
 	char js[MAX_LEN_AI_NAME];
 	char tip[255 + 128];            ///< may contain optional AI tournament data
