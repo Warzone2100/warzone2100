@@ -109,8 +109,14 @@ function reticuleCommandCheck()
 function setMainReticule()
 {
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	if (isSpectator(-1) || playerData[selectedPlayer].usertype != USERTYPE.player.fighter)
+	if (isSpectator(-1))
 	{
+		setReticuleButton(1, _("Manufacture - build factory first"), "", "");
+		setReticuleButton(2, _("Research - build research facility first"), "", "");
+		setReticuleButton(3, _("Build - manufacture constructor droids first"), "", "");
+		setReticuleButton(4, _("Design - construct HQ first"), "", "");
+		setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
+		setReticuleButton(6, _("Commanders - manufacture commanders first"), "", "");
 		return;
 	}
 	reticuleManufactureCheck();
