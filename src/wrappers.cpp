@@ -318,6 +318,7 @@ void closeLoadingScreen()
 
 bool displayGameOver(bool bDidit, bool showBackDrop)
 {
+	bool isFirstCallForThisGame = !testPlayerHasLost() && !testPlayerHasWon();
 	if (bDidit)
 	{
 		setPlayerHasWon(true);
@@ -330,12 +331,12 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 	else
 	{
 		setPlayerHasLost(true);
-		if (bMultiPlayer)
+		if (bMultiPlayer && isFirstCallForThisGame) // make sure we only accumulate one loss (even if this is called more than once, for example when losing initially, and then when the game fully ends)
 		{
 			updateMultiStatsLoses();
 		}
 	}
-	if (bMultiPlayer)
+	if (bMultiPlayer && isFirstCallForThisGame)
 	{
 		updateMultiStatsGames(); // update games played.
 
@@ -345,7 +346,18 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
-	intAddMissionResult(bDidit, true, showBackDrop);
+
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator)
+	{
+		// Special message for spectators to inform them that the game is fully over
+		addConsoleMessage(_("GAME OVER"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		addConsoleMessage(_("The battle is over - you can leave the room."), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		// TODO: Display this in a form with a "Quit to Main Menu" button?, or adapt intAddMissionResult to have a separate display for spectators?
+	}
+	else
+	{
+		intAddMissionResult(bDidit, true, showBackDrop);
+	}
 
 	return true;
 }

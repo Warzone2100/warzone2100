@@ -2377,18 +2377,7 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 		}
 	}
 //	jsDebugMessageUpdate();
-	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator)
-	{
-		// Display a custom game over screen for spectators (win or loss conditions don't apply, obviously)
-		clearMissionWidgets();
-		intAddMultiMenu();
-		addConsoleMessage(_("GAME OVER"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
-		addConsoleMessage(_("The battle is over - you can leave the room."), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
-	}
-	else
-	{
-		displayGameOver(gameWon, showBackDrop);
-	}
+	displayGameOver(gameWon, showBackDrop);
 	if (challengeActive)
 	{
 		updateChallenge(gameWon);

@@ -437,7 +437,12 @@ static bool gameInit()
 	{
 		if (NetPlay.players[i].isSpectator)
 		{
+			// player is starting as a spectator
 			makePlayerSpectator(i, true, true);
+			if (i == selectedPlayer)
+			{
+				setPlayerHasLost(true); // set this flag to true so we don't accumulate loss statistics
+			}
 		}
 	}
 
