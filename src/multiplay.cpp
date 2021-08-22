@@ -1940,15 +1940,19 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 			}
 		}
 
-		// Destroy all structs
-		if (removeAllStructs)
+		// Destroy structs
+		debug(LOG_DEATH, "killing off structures for player %d", playerIndex);
+		STRUCTURE *psStruct = apsStructLists[playerIndex];
+		while (psStruct)				// delete structs
 		{
-			debug(LOG_DEATH, "killing off all structures for player %d", playerIndex);
-			STRUCTURE *psStruct = apsStructLists[playerIndex];
-			while (psStruct)				// delete all structs
-			{
-				STRUCTURE * psNext = psStruct->psNext;
+			STRUCTURE * psNext = psStruct->psNext;
 
+			if (removeAllStructs
+				|| psStruct->pStructureType->type == REF_POWER_GEN
+				|| psStruct->pStructureType->type == REF_RESEARCH
+				|| psStruct->pStructureType->type == REF_COMMAND_CONTROL
+				|| StructIsFactory(psStruct))
+			{
 				// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 				if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 				{
@@ -1958,9 +1962,9 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 				{
 					destroyStruct(psStruct, gameTime);
 				}
-
-				psStruct = psNext;
 			}
+
+			psStruct = psNext;
 		}
 	}
 
