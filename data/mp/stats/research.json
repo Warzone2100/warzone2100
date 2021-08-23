@@ -1030,8 +1030,8 @@
 			"R-Defense-MortarPit",
 			"R-Wpn-Mortar02Hvy"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultStructures": [
 			"Emplacement-MortarPit02"
 		],
@@ -1127,7 +1127,7 @@
 		"name": "Incendiary Mortar Pit",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Incendiary",
-			"R-Defense-HvyMor"
+			"R-Defense-MortarPit"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -1345,8 +1345,8 @@
 			"R-Defense-MortarPit",
 			"R-Wpn-Mortar3"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultStructures": [
 			"Emplacement-RotMor"
 		],
@@ -8199,11 +8199,11 @@
 		"msgName": "RES_IMORT",
 		"name": "Incendiary Mortar",
 		"requiredResearch": [
-			"R-Wpn-Mortar-Damage02",
+			"R-Wpn-Mortar-Damage03",
 			"R-Wpn-Flame2"
 		],
-		"researchPoints": 4200,
-		"researchPower": 131,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"resultComponents": [
 			"Mortar-Incendiary"
 		],
