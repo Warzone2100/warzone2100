@@ -82,6 +82,7 @@ static std::string wz_saveandquit;
 static std::string wz_test;
 static std::string wz_autoratingUrl;
 static bool wz_cli_headless = false;
+static bool wz_streamer_spectator_mode = false;
 
 #if defined(WZ_OS_WIN)
 
@@ -332,6 +333,7 @@ typedef enum
 #endif
 	CLI_GAMEPORT,
 	CLI_WZ_CRASH_RPT,
+	CLI_STREAMER_SPECTATOR,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -392,6 +394,7 @@ static const struct poptOption *getOptionsTable()
 #endif
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
 		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
+		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -859,6 +862,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			netGameserverPortOverride = true;
 			debug(LOG_INFO, "Games will be hosted on port [%d]", NETgetGameserverPort());
 			break;
+
+		case CLI_STREAMER_SPECTATOR:
+			wz_streamer_spectator_mode = true;
+			break;
 		};
 	}
 
@@ -896,4 +903,9 @@ void setAutoratingUrl(std::string url) {
 
 std::string getAutoratingUrl() {
 	return wz_autoratingUrl;
+}
+
+bool streamer_spectator_mode()
+{
+	return wz_streamer_spectator_mode;
 }
