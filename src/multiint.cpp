@@ -4552,7 +4552,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			break;
 
 		case NET_VOTE_REQUEST:
-			if (!NetPlay.isHost)
+			if (!NetPlay.isHost && !NetPlay.players[selectedPlayer].isSpectator)
 			{
 				setupVoteChoice();
 			}

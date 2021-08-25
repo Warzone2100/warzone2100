@@ -691,6 +691,12 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 					return HandleMessageAction::Silently_Ignore;
 				}
 				break;
+			case NET_VOTE:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
 			default:
 				// certain messages are always allowed, no matter who it is
 				return HandleMessageAction::Process_Message;
