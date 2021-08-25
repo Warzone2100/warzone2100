@@ -2753,6 +2753,10 @@ wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int buttonID, std::
 	{
 		func = WzString::fromUtf8(callbackFuncName.value());
 	}
+	if (MissionResUp)
+	{
+		return {}; // no-op
+	}
 	setReticuleStats(button, tooltip, filename, filenameDown, (!func.isEmpty()) ? context.getNamedScriptCallback(func) : nullptr);
 	return {};
 }

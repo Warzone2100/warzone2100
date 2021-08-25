@@ -324,11 +324,6 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 
 void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc)
 {
-	if (MissionResUp)
-	{
-		return;
-	}
-
 	ASSERT_OR_RETURN(, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
 
 	retbutstats[ButId].tip = tip;
@@ -711,7 +706,7 @@ void intHidePowerBar()
 }
 
 /* Reset the widget screen to just the reticule */
-void intResetScreen(bool NoAnim)
+void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 {
 	if (getWidgetsStatus() == false)
 	{
@@ -762,7 +757,7 @@ void intResetScreen(bool NoAnim)
 		intRemoveIntelMap();
 		intRemoveTrans(true);
 	}
-	if (intMode == INT_MISSIONRES)
+	if ((intMode == INT_MISSIONRES) && !skipMissionResultScreen)
 	{
 		intRemoveMissionResultNoAnim();
 	}
@@ -2043,6 +2038,12 @@ void intShowWidget(int buttonID)
 //displays the Power Bar
 void intShowPowerBar()
 {
+	if (bMultiPlayer && selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator)
+	{
+		// skip showing power bar if selectedPlayer is spectator
+		return;
+	}
+
 	//if its not already on display
 	if (widgGetFromID(psWScreen, IDPOW_POWERBAR_T))
 	{
@@ -2051,8 +2052,13 @@ void intShowPowerBar()
 }
 
 //hides the power bar from the display - regardless of what player requested!
-void forceHidePowerBar()
+void forceHidePowerBar(bool forceSetPowerBarUpState)
 {
+	if (forceSetPowerBarUpState)
+	{
+		powerBarUp = false;
+	}
+
 	if (widgGetFromID(psWScreen, IDPOW_POWERBAR_T))
 	{
 		widgHide(psWScreen, IDPOW_POWERBAR_T);

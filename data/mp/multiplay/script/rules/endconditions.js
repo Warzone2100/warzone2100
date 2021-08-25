@@ -109,15 +109,6 @@ class Player
 		{
 			// should come *after* the gameOverMessage call to ensure the proper gameOverMessage is displayed
 			transformPlayerToSpectator(this.playNum);
-
-			if (this.playNum == selectedPlayer)
-			{
-				// Update the reticule button states
-				// From script/rules/reticule.js
-				// (Wait a tick for the counts to update)
-				const TICK_TIME = 100;
-				queue("setMainReticule", TICK_TIME);
-			}
 		}
 	}
 }
