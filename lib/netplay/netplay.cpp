@@ -475,7 +475,7 @@ uint8_t NET_numHumanPlayers(void)
 	uint8_t RetVal = 0;
 	for (uint8_t Inc = 0; Inc < MAX_PLAYERS; ++Inc)
 	{
-		if (NetPlay.players[Inc].allocated) ++RetVal;
+		if (NetPlay.players[Inc].allocated && !NetPlay.players[Inc].isSpectator) ++RetVal;
 	}
 
 	return RetVal;
@@ -488,7 +488,7 @@ std::vector<uint8_t> NET_getHumanPlayers(void)
 
 	for (uint8_t Inc = 0; Inc < MAX_PLAYERS; ++Inc)
 	{
-		if (NetPlay.players[Inc].allocated) RetVal.push_back(Inc);
+		if (NetPlay.players[Inc].allocated && !NetPlay.players[Inc].isSpectator) RetVal.push_back(Inc);
 	}
 
 	return RetVal;
