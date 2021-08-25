@@ -34,5 +34,6 @@ const std::string &wz_skirmish_test();
 std::string autoratingUrl(std::string const &hash);
 void setAutoratingUrl(std::string url);
 std::string getAutoratingUrl();
+bool streamer_spectator_mode();
 
 #endif // __INCLUDED_SRC_CLPARSE_H__
