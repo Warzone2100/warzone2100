@@ -2844,7 +2844,14 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 					if (NetPlay.isHost && !locked.ai)
 					{
 						sButInit.style |= WBUT_SECONDARY;
-						sButInit.pTip = _("Click to change AI, right click to distribute choice");
+						if (!isSpectatorOnlySlot(i))
+						{
+							sButInit.pTip = _("Click to change AI, right click to distribute choice");
+						}
+						else
+						{
+							sButInit.pTip = _("Click to close spectator slot");
+						}
 					}
 					else if (NetPlay.players[i].ai >= 0)
 					{
