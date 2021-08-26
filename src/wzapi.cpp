@@ -2353,7 +2353,10 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 	else
 	{
 		psViewData = getViewData("END");	// FIXME: rename to FAILED|LOST ?
-		addConsoleMessage(_("YOU WERE DEFEATED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		if (!testPlayerHasLost()) // check for whether the player started as a spectator or already lost (in either case the player is already marked as having lost)
+		{
+			addConsoleMessage(_("YOU WERE DEFEATED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 	}
 	ASSERT(psViewData, "Viewdata not found");
 	MESSAGE *psMessage = addMessage(msgType, false, player);
