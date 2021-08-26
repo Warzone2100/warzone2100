@@ -573,22 +573,24 @@ void NETBroadcastPlayerInfo(uint32_t index)
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
-static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false, optional<bool> asSpectator = false)
+static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false, optional<bool> asSpectator = false)
 {
 	int index = -1;
 	int position = INT_MAX;
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!asSpectator.value_or(false) && i >= game.maxPlayers)
+		if (!forceTakeLowestAvailablePlayerNumber && !asSpectator.value_or(false) && (i >= game.maxPlayers || NetPlay.players[i].position >= game.maxPlayers))
 		{
-			// Only look for spots up to the max players allowed on the map.
-			break;
+			// Player slots are only supported where the player index and the player position is <= game.maxPlayers
+			// Skip otherwise
+			continue;
 		}
 		if (i == scavengerSlot())
 		{
 			// do not offer up the scavenger slot (this really needs to be refactored later - why is this a variable slot index?!?)
 			continue;
 		}
+		// find the lowest "position" slot that is available (unless forceTakeLowestAvailablePlayerNumber is set, in which case just take the first available)
 		PLAYER const &p = NetPlay.players[i];
 		if (!p.allocated && p.ai == AI_OPEN && p.position < position && (!asSpectator.has_value() || asSpectator.value() == p.isSpectator))
 		{
@@ -605,7 +607,7 @@ static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlaye
 	{
 		debug(LOG_ERROR, "Could not find place for player %s", name);
 		NETlogEntry("Could not find a place for player!", SYNC_FLAG, index);
-		return -1;
+		return nullopt;
 	}
 
 	char buf[250] = {'\0'};
@@ -621,7 +623,7 @@ static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlaye
 		++NetPlay.playercount;
 	}
 	++sync_counter.joins;
-	return index;
+	return static_cast<uint32_t>(index);
 }
 
 static void NET_DestroyPlayer(unsigned int index, bool suppressActivityUpdates = false)
@@ -3132,7 +3134,7 @@ static void NETallowJoining()
 					uint8_t j;
 					uint8_t index;
 					uint8_t rejected = 0;
-					int tmp;
+					optional<uint32_t> tmp;
 
 					char name[64];
 					char ModList[modlist_string_size] = { '\0' };
@@ -3148,8 +3150,9 @@ static void NETallowJoining()
 
 					tmp = NET_CreatePlayer(name, false, (playerType == NET_JOIN_SPECTATOR));
 
-					if (tmp == -1)
+					if (!tmp.has_value() || tmp.value() > static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()))
 					{
+						ASSERT(tmp.value_or(0) <= static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()), "Currently limited to uint8_t");
 						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
 
 						// Tell the player that we are full.
@@ -3168,7 +3171,7 @@ static void NETallowJoining()
 					}
 
 					NETpop(NETnetTmpQueue(i));
-					index = tmp;
+					index = static_cast<uint8_t>(tmp.value());
 
 					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", static_cast<void *>(tmp_socket[i]), __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
@@ -3406,8 +3409,9 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 #endif
 	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
 
-	selectedPlayer = NET_CreatePlayer(PlayerName, (getHostLaunch() == HostLaunch::Autohost), nullopt);
-	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Failed to create player");
+	optional<uint32_t> newHostPlayerIdx = NET_CreatePlayer(PlayerName, (getHostLaunch() == HostLaunch::Autohost), nullopt);
+	ASSERT_OR_RETURN(false, newHostPlayerIdx.has_value() && newHostPlayerIdx.value() < MAX_PLAYERS, "Failed to create player");
+	selectedPlayer = newHostPlayerIdx.value();
 	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;
 	NetPlay.isHostAlive = true;
