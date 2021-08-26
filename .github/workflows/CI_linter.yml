@@ -15,15 +15,18 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v2
+      with:
+        # Full git history is needed to get a proper list of changed files within `super-linter`
+        fetch-depth: 0
     - name: Lint Code Base
-      uses: docker://ghcr.io/github/super-linter:v3.14.5
+      uses: github/super-linter@v4
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: master
-        FILTER_REGEX_EXCLUDE: '.eslintrc.json|3rdparty/.*' # .eslintrc.json allows non-standard comments
-        LINTER_RULES_PATH: '.'
+        # .eslintrc.json allows non-standard comments
+        FILTER_REGEX_EXCLUDE: .*(\.eslintrc\.json|3rdparty/).*
+        LINTER_RULES_PATH: /
         VALIDATE_YAML: true
         VALIDATE_JSON: true
         VALIDATE_JAVASCRIPT_ES: true
         JAVASCRIPT_ES_CONFIG_FILE: '.eslintrc.json'
-        VALIDATE_DOCKER: false # .dockerfilelintrc parsing is broken in super-linter
