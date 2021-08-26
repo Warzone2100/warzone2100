@@ -5647,7 +5647,7 @@ static bool multiplayPlayersReady()
 		}
 	}
 
-	return bReady && numReadyPlayers > 0;
+	return bReady && (numReadyPlayers > 1) && (allPlayersOnSameTeam(-1) == -1);
 }
 
 static bool multiplayIsStartingGame()
