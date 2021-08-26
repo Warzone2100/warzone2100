@@ -75,6 +75,7 @@
 #include "order.h"
 #include "chat.h"
 #include "scores.h"
+#include "data.h"
 
 #include <list>
 
@@ -176,6 +177,7 @@ bool wzapi::scripting_instance::loadFileForInclude(const std::string& filePath, 
 		*pFileSize = 0;
 		return false;
 	}
+	calcDataHash(reinterpret_cast<const uint8_t *>(*ppFileData), *pFileSize, DATA_SCRIPT);
 
 	loadedFilePath = path;
 	return true;
