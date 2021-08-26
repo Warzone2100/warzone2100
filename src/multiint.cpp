@@ -3453,9 +3453,14 @@ static void loadMapPlayerSettings(WzConfig& ini)
 				}
 			}
 		}
-		if (ini.contains("spectator"))
+		if (ini.contains("spectator") && !challengeActive)
 		{
-			NetPlay.players[i].isSpectator = ini.value("isSpectator", false).toBool();
+			NetPlay.players[i].isSpectator = ini.value("spectator", false).toBool();
+			if (NetPlay.players[i].isSpectator)
+			{
+				ASSERT(!ini.contains("ai"), "Player %d is set to be a spectator, but also has the \"ai\" key specified - this is unsupported", i);
+				NetPlay.players[i].ai = AI_OPEN;
+			}
 		}
 		ini.endGroup();
 	}
