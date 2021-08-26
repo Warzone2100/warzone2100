@@ -154,7 +154,7 @@ struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
-	int32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, unused, unused)
+	uint32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, unused, unused)
 };
 
 /**
@@ -361,9 +361,47 @@ size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false); 
 
 void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
+struct SpectatorInfo
+{
+	uint16_t spectatorsJoined = 0;
+	uint16_t totalSpectatorSlots = 0;
+
+	inline uint16_t availableSpectatorSlots() const
+	{
+		if (spectatorsJoined > totalSpectatorSlots)
+		{
+			return 0;
+		}
+		return totalSpectatorSlots - spectatorsJoined;
+	}
+
+	static inline SpectatorInfo fromUint32(uint32_t data)
+	{
+		SpectatorInfo info;
+		info.spectatorsJoined = static_cast<uint16_t>(data >> 16);
+		info.totalSpectatorSlots = static_cast<uint16_t>(data & 0xFFFF);
+		return info;
+	}
+
+	inline uint32_t toUint32() const
+	{
+		return static_cast<uint32_t>(spectatorsJoined << 16) | static_cast<uint32_t>(totalSpectatorSlots);
+	}
+
+	inline bool operator==(const SpectatorInfo& other)
+	{
+		return totalSpectatorSlots == other.totalSpectatorSlots
+		&& spectatorsJoined == other.spectatorsJoined;
+	}
+	inline bool operator!=(const SpectatorInfo& other)
+	{
+		return !(*this == other);
+	}
+};
+
 // from netjoin.c
 SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
-int32_t NETgetGameFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
+uint32_t NETgetGameUserFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 bool NEThaltJoining();				// stop new players joining this game
 bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
@@ -371,7 +409,7 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool asSpectator = false); // join game given with playername
 bool NEThostGame(const char *SessionName, const char *PlayerName,// host a game
-                 SDWORD gameType, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
+                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
 

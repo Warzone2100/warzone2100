@@ -413,7 +413,8 @@ void WzGameFindTitleUI::addGames()
 					// this is an std::string
 					sButInit.pTip = tooltipbuffer;
 
-					if (gamesList[i].desc.dwUserFlags[1] > 0)
+					auto spectatorInfo = SpectatorInfo::fromUint32(gamesList[i].desc.dwUserFlags[1]);
+					if (spectatorInfo.availableSpectatorSlots() > 0)
 					{
 						// has spectator slots - add button
 						sButSpectateInit.id = GAMES_SPECSTART + i;

@@ -2865,7 +2865,7 @@ void NETfixPlayerCount()
 {
 	int maxPlayers = game.maxPlayers;
 	unsigned playercount = 0;
-	int openSpectatorSlots = 0;
+	SpectatorInfo latestSpecInfo;
 	for (int index = 0; index < game.maxPlayers; ++index)
 	{
 		if (NetPlay.players[index].ai == AI_CLOSED)
@@ -2884,18 +2884,22 @@ void NETfixPlayerCount()
 
 	for (const auto& slot : NetPlay.players)
 	{
-		if (slot.isSpectator && !slot.allocated)
+		if (slot.isSpectator)
 		{
-			++openSpectatorSlots;
+			latestSpecInfo.totalSpectatorSlots++;
+			if (slot.allocated)
+			{
+				latestSpecInfo.spectatorsJoined++;
+			}
 		}
 	}
 
-	if (allow_joining && NetPlay.isHost && (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers || gamestruct.desc.dwUserFlags[1] != openSpectatorSlots))
+	if (allow_joining && NetPlay.isHost && (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers || SpectatorInfo::fromUint32(gamestruct.desc.dwUserFlags[1]) != latestSpecInfo))
 	{
 		debug(LOG_NET, "Updating player count from %d/%d to %d/%d", (int)NetPlay.playercount, gamestruct.desc.dwMaxPlayers, playercount, maxPlayers);
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount = playercount;
 		gamestruct.desc.dwMaxPlayers = maxPlayers;
-		gamestruct.desc.dwUserFlags[1] = openSpectatorSlots;
+		gamestruct.desc.dwUserFlags[1] = latestSpecInfo.toUint32();
 		NETregisterServer(WZ_SERVER_UPDATE);
 	}
 
@@ -3299,10 +3303,10 @@ void NETloadBanList() {
 }
 
 bool NEThostGame(const char *SessionName, const char *PlayerName,
-                 SDWORD gameType, SDWORD two, SDWORD three, SDWORD four,
+                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four,
                  UDWORD plyrs)	// # of players.
 {
-	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
+	debug(LOG_NET, "NEThostGame(%s, %s, %" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %u)", SessionName, PlayerName,
 		  gameType, two, three, four, plyrs);
 
 	netPlayersUpdated = true;
