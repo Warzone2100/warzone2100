@@ -51,6 +51,7 @@
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
+#include "clparse.h" // for autoratingUrl
 
 #include <type_traits>
 
@@ -349,6 +350,7 @@ bool loadConfig()
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
+	setAutoratingUrl(iniGetString("autoratingUrl", "").value());
 	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
 	mpSetServerName(iniGetString("server_name", "").value().c_str());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
@@ -572,6 +574,7 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
+	iniSetString("autoratingUrl", getAutoratingUrl());
 	iniSetString("masterserver_name", NETgetMasterserverName());
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
 	iniSetString("server_name", mpGetServerName());
