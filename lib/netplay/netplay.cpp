@@ -437,13 +437,12 @@ static void initPlayerNetworkProps(int playerIndex)
 	NetPlay.players[playerIndex].heartbeat = true;  // we always start with a heartbeat
 	NetPlay.players[playerIndex].kick = false;
 	NetPlay.players[playerIndex].ready = false;
-	NetPlay.players[playerIndex].isSpectator = false;
 
 	NetPlay.players[playerIndex].wzFiles.clear();
 	ingame.JoiningInProgress[playerIndex] = false;
 }
 
-void NET_InitPlayer(int i, bool initPosition, bool initTeams)
+void NET_InitPlayer(int i, bool initPosition, bool initTeams, bool initSpectator)
 {
 	initPlayerNetworkProps(i);
 
@@ -468,6 +467,10 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 		NetPlay.players[i].ai = 0;
 	}
 	NetPlay.players[i].faction = FACTION_NORMAL;
+	if (initSpectator)
+	{
+		NetPlay.players[i].isSpectator = false;
+	}
 }
 
 uint8_t NET_numHumanPlayers(void)
@@ -494,11 +497,11 @@ std::vector<uint8_t> NET_getHumanPlayers(void)
 	return RetVal;
 }
 
-void NET_InitPlayers(bool initTeams)
+void NET_InitPlayers(bool initTeams, bool initSpectator)
 {
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		NET_InitPlayer(i, true, initTeams);
+		NET_InitPlayer(i, true, initTeams, initSpectator);
 		NetPlay.players[i].name[0] = '\0';
 		NETinitQueue(NETnetQueue(i));
 	}
@@ -570,13 +573,13 @@ void NETBroadcastPlayerInfo(uint32_t index)
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
-static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false, bool asSpectator = false)
+static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false, optional<bool> asSpectator = false)
 {
 	int index = -1;
 	int position = INT_MAX;
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!asSpectator && i >= game.maxPlayers)
+		if (!asSpectator.value_or(false) && i >= game.maxPlayers)
 		{
 			// Only look for spots up to the max players allowed on the map.
 			break;
@@ -587,7 +590,7 @@ static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlaye
 			continue;
 		}
 		PLAYER const &p = NetPlay.players[i];
-		if (!p.allocated && p.ai == AI_OPEN && p.position < position && asSpectator == p.isSpectator)
+		if (!p.allocated && p.ai == AI_OPEN && p.position < position && (!asSpectator.has_value() || asSpectator.value() == p.isSpectator))
 		{
 			index = i;
 			position = p.position;
@@ -612,9 +615,8 @@ static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlaye
 	NETlogEntry(buf, SYNC_FLAG, index);
 	NET_InitPlayer(index, false);  // re-init everything
 	NetPlay.players[index].allocated = true;
-	NetPlay.players[index].isSpectator = asSpectator;
 	sstrcpy(NetPlay.players[index].name, name);
-	if (!asSpectator)
+	if (!NetPlay.players[index].isSpectator)
 	{
 		++NetPlay.playercount;
 	}
@@ -1306,7 +1308,7 @@ int NETinit(bool bFirstCall)
 	debug(LOG_NET, "NETinit");
 	upnp_status = 0;
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
-	NET_InitPlayers(true);
+	NET_InitPlayers(true, true);
 
 	SOCKETinit();
 
@@ -3404,7 +3406,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 #endif
 	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
 
-	selectedPlayer = NET_CreatePlayer(PlayerName, (getHostLaunch() == HostLaunch::Autohost));
+	selectedPlayer = NET_CreatePlayer(PlayerName, (getHostLaunch() == HostLaunch::Autohost), nullopt);
 	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Failed to create player");
 	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;
@@ -3412,11 +3414,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	NetPlay.HaveUpgrade = false;
 	NetPlay.hostPlayer	= NET_HOST_ONLY;
 	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
-
-	if (getHostLaunch() == HostLaunch::Autohost)
-	{
-		NetPlay.players[selectedPlayer].isSpectator = true;
-	}
 
 	MultiPlayerJoin(selectedPlayer);
 
