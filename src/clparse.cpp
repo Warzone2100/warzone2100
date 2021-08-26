@@ -889,3 +889,11 @@ std::string autoratingUrl(std::string const &hash) {
 	}
 	return url;
 }
+
+void setAutoratingUrl(std::string url) {
+	wz_autoratingUrl = url;
+}
+
+std::string getAutoratingUrl() {
+	return wz_autoratingUrl;
+}
