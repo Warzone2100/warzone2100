@@ -92,7 +92,7 @@ static UDWORD	hashBuffer(const uint8_t *pData, uint32_t size)
 
 // create the hash for that data block.
 // Data should be converted to Network byte order
-static void calcDataHash(const uint8_t *pBuffer, uint32_t size, uint32_t index)
+void calcDataHash(const uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
 	const uint32_t oldHash = DataHash[index];
 

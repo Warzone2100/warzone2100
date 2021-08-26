@@ -73,6 +73,7 @@
 #include "wzapi.h"
 #include "qtscript.h"
 #include "featuredef.h"
+#include "data.h"
 
 
 #include <unordered_set>
@@ -2646,6 +2647,7 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
 		return false;
 	}
+	calcDataHash(reinterpret_cast<const uint8_t *>(bytes), size, DATA_SCRIPT);
 	m_path = path.toUtf8();
 	compiledScriptObj = JS_Eval(ctx, bytes, size, path.toUtf8().c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
 	free(bytes);
