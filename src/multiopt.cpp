@@ -353,7 +353,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetA
 
 	freeMessages();
 
-	if (!NEThostGame(SessionName, hostPlayerName, static_cast<SDWORD>(game.type), 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(SessionName, hostPlayerName, static_cast<uint32_t>(game.type), 0, 0, 0, game.maxPlayers))
 	{
 		return false;
 	}
