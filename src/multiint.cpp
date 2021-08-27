@@ -964,7 +964,7 @@ JoinGameResult joinGame(const char *connectionString, bool asSpectator /*= false
 			std::string serverIP = "";
 			serverIP.assign(connectionString, ddch - connectionString);
 			debug(LOG_INFO, "Connecting to ip [%s] port %d", serverIP.c_str(), serverPort);
-			return joinGame(serverIP.c_str(), serverPort);
+			return joinGame(serverIP.c_str(), serverPort, asSpectator);
 		}
 	}
 	return joinGame(connectionString, 0, asSpectator);
