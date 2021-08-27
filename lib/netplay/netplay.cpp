@@ -573,6 +573,25 @@ void NETBroadcastPlayerInfo(uint32_t index)
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
+// Checks if there are *any* open slots (player *OR* spectator) for an incoming connection
+static bool NET_HasAnyOpenSlots()
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (i == scavengerSlot())
+		{
+			// do not offer up the scavenger slot (this really needs to be refactored later - why is this a variable slot index?!?)
+			continue;
+		}
+		PLAYER const &p = NetPlay.players[i];
+		if (!p.allocated && p.ai == AI_OPEN)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false, optional<bool> asSpectator = false)
 {
 	int index = -1;
@@ -3069,10 +3088,10 @@ static void NETallowJoining()
 					addToBanList(rIP.c_str(), "BAD_USER");
 					connectFailed = true;
 				}
-				if ((!connectFailed) && ((int)NetPlay.playercount == gamestruct.desc.dwMaxPlayers))
+				if ((!connectFailed) && (!NET_HasAnyOpenSlots()))
 				{
 					// early player count test, in case they happen to get in before updates.
-					// Tell the player that we are full.
+					// Tell the player that we are completely full.
 					uint8_t rejected = ERROR_FULL;
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
@@ -3134,7 +3153,7 @@ static void NETallowJoining()
 					uint8_t j;
 					uint8_t index;
 					uint8_t rejected = 0;
-					optional<uint32_t> tmp;
+					optional<uint32_t> tmp = nullopt;
 
 					char name[64];
 					char ModList[modlist_string_size] = { '\0' };
@@ -3148,7 +3167,10 @@ static void NETallowJoining()
 					NETuint8_t(&playerType);
 					NETend();
 
-					tmp = NET_CreatePlayer(name, false, (playerType == NET_JOIN_SPECTATOR));
+					if ((playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
+					{
+						tmp = NET_CreatePlayer(name, false, (playerType == NET_JOIN_SPECTATOR));
+					}
 
 					if (!tmp.has_value() || tmp.value() > static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()))
 					{
