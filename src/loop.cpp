@@ -609,6 +609,7 @@ GAMECODE gameLoop()
 {
 	static uint32_t lastFlushTime = 0;
 
+	static size_t numForcedUpdatesLastCall = 0;
 	static int renderBudget = 0;  // Scaled time spent rendering minus scaled time spent updating.
 	static bool previousUpdateWasRender = false;
 	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
@@ -617,14 +618,39 @@ GAMECODE gameLoop()
 	// Shouldn't this be when initialising the game, rather than randomly called between ticks?
 	countUpdate(false); // kick off with correct counts
 
+	size_t numRegularUpdatesTicks = 0;
+	size_t numFastForwardTicks = 0;
+	const size_t maxFastForwardTicks = 3;
+	gameTimeUpdateBegin();
 	while (true)
 	{
 		// Receive NET_BLAH messages.
 		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
 		recvMessage();
 
+		bool selectedPlayerIsSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
+		bool multiplayerHostDisconnected = bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost; // do not fast-forward after the host has disconnected
+		bool canFastForwardGameTime =
+			selectedPlayerIsSpectator 			// current player must be a spectator
+			&& !NetPlay.isHost					// AND NOT THE HOST (!)
+			&& !multiplayerHostDisconnected		// and the multiplayer host must not be disconnected ("host quit")
+			&& numFastForwardTicks < maxFastForwardTicks // and the number of forced updates this call of gameLoop must not exceed the max allowed
+			&& checkPlayerGameTime(NET_ALL_PLAYERS);	// and there must be a new game tick available to process from all players
+
+		bool forceTryGameTickUpdate = canFastForwardGameTime && (numForcedUpdatesLastCall > 0 || numRegularUpdatesTicks > 0);
+
 		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
-		gameTimeUpdate(renderBudget > 0 || previousUpdateWasRender);
+		auto timeUpdateResult = gameTimeUpdate(renderBudget > 0 || previousUpdateWasRender, forceTryGameTickUpdate);
+
+		if (timeUpdateResult == GameTimeUpdateResult::GAME_TIME_UPDATED_FORCED)
+		{
+			numFastForwardTicks++;
+			// FUTURE TODO: Could trigger the display of a UI icon here (if (numFastForwardTicks == maxFastForwardTicks)?) to indicate that the game is fast-forwarding substantially
+		}
+		else if (timeUpdateResult == GameTimeUpdateResult::GAME_TIME_UPDATED)
+		{
+			numRegularUpdatesTicks++;
+		}
 
 		if (deltaGameTime == 0)
 		{
@@ -645,6 +671,7 @@ GAMECODE gameLoop()
 
 		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
 	}
+	numForcedUpdatesLastCall = numFastForwardTicks;
 
 	if (realTime - lastFlushTime >= 400u)
 	{
