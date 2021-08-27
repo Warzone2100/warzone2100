@@ -34,7 +34,9 @@ static std::shared_ptr<W_LABEL> makeProductionRunSizeLabel()
 	init.y = OBJ_T1TEXTY;
 	init.width = 16;
 	init.height = 16;
-	return std::make_shared<W_LABEL>(&init);
+	auto label = std::make_shared<W_LABEL>(&init);
+	label->setTransparentToMouse(true);
+	return label;
 }
 
 void ManufactureController::updateData()
