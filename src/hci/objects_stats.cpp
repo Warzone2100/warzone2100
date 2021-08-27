@@ -170,6 +170,7 @@ void StatsFormButton::addCostBar()
 	sBarInit.iRange = GAME_TICKS_PER_SEC;
 	attach(costBar = std::make_shared<W_BARGRAPH>(&sBarInit));
 	costBar->setBackgroundColour(WZCOL_BLACK);
+	costBar->setTransparentToMouse(true);
 }
 
 void DynamicIntFancyButton::updateHighlight()
