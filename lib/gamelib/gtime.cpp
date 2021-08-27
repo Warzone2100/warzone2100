@@ -39,6 +39,8 @@
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
+UDWORD extraGameTicksProcessed = 0;
+
 /** The current clock modifier. Set to speed up the game. */
 static Rational modifier;
 
@@ -146,11 +148,17 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 	return realTime % MAX(1, timePeriod) * requiredRange / MAX(1, timePeriod);
 }
 
-/* Call this each loop to update the game timer */
-void gameTimeUpdate(bool mayUpdate)
+void gameTimeUpdateBegin()
 {
 	deltaGameTime = 0;
 	deltaGraphicsTime = 0;
+	extraGameTicksProcessed = 0;
+}
+
+/* Call this each loop to update the game timer */
+GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
+{
+	GameTimeUpdateResult result = GameTimeUpdateResult::NO_UPDATE;
 
 	uint32_t currTime = wzGetTicks();
 
@@ -166,7 +174,7 @@ void gameTimeUpdate(bool mayUpdate)
 	// Do not update the game time if gameTimeStop has been called
 	if (stopCount != 0)
 	{
-		return;
+		return GameTimeUpdateResult::NO_UPDATE;
 	}
 
 	// Calculate the new game time
@@ -186,30 +194,44 @@ void gameTimeUpdate(bool mayUpdate)
 		updateWantedTime = currTime;  // This is the time that we wanted to tick.
 	}
 
-	if (newGraphicsTime > gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
+	bool timeForGameTickUpdate = newGraphicsTime > gameTime;
+
+	if ((timeForGameTickUpdate || forceTryGameTickUpdate) && !checkPlayerGameTime(NET_ALL_PLAYERS))
 	{
 		// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		timeForGameTickUpdate = false;
+		forceTryGameTickUpdate = false;
 
-		debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + MAX_PLAYERS).c_str());
-
-		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+		if (timeForGameTickUpdate)
 		{
-			if (!checkPlayerGameTime(player))
+			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + MAX_PLAYERS).c_str());
+
+			for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 			{
-				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_WAITING_FOR_PLAYER, player);
-				break;  // GAME_GAME_TIME is processed serially, so don't know if waiting for more players.
+				if (!checkPlayerGameTime(player))
+				{
+					NETsetPlayerConnectionStatus(CONNECTIONSTATUS_WAITING_FOR_PLAYER, player);
+					break;  // GAME_GAME_TIME is processed serially, so don't know if waiting for more players.
+				}
 			}
 		}
 	}
 
 	// Adjust deltas.
-	if (newGraphicsTime > gameTime)
+	if (timeForGameTickUpdate || forceTryGameTickUpdate)
 	{
 		// Update the game time.
 		deltaGameTime = GAME_TICKS_PER_UPDATE;
-		gameTime += deltaGameTime; // TODO: Potentially, if this is a spectator, we could / should use the most recent processed gameTime from the host?
+		gameTime += deltaGameTime;
+
+		result = (timeForGameTickUpdate) ? GameTimeUpdateResult::GAME_TIME_UPDATED : GameTimeUpdateResult::GAME_TIME_UPDATED_FORCED;
+
+		if (!timeForGameTickUpdate && forceTryGameTickUpdate)
+		{
+			extraGameTicksProcessed++;
+		}
 
 		updateLatency();
 		if (crcError)
@@ -221,6 +243,13 @@ void gameTimeUpdate(bool mayUpdate)
 	}
 	else
 	{
+		if (extraGameTicksProcessed > 0)
+		{
+			// If extra game ticks have been processed, newGraphicsTime/newDeltaGraphicsTime must be "fast-forwarded" to appropriate values based on gameTime
+			newGraphicsTime = gameTime;
+			newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		}
+
 		// Update the graphics time.
 		graphicsTime      = newGraphicsTime;
 		deltaGraphicsTime = newDeltaGraphicsTime;
@@ -233,6 +262,7 @@ void gameTimeUpdate(bool mayUpdate)
 	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
 
 	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
+	return result;
 }
 
 void gameTimeUpdateEnd()
