@@ -3342,10 +3342,10 @@
 		"msgName": "RES_SY_RC",
 		"name": "Nexus Resistance Circuits",
 		"requiredResearch": [
-			"R-Sys-Engineering03",
-			"R-Sys-Sensor-WS"
+			"R-Sys-Sensor-Upgrade03",
+			"R-Struc-Research-Upgrade09"
 		],
-		"researchPoints": 14400,
+		"researchPoints": 28800,
 		"researchPower": 450,
 		"results": [
 			{
@@ -3353,14 +3353,14 @@
 				"filterParameter": "Type",
 				"filterValue": "Structure",
 				"parameter": "Resistance",
-				"value": 180
+				"value": 90
 			},
 			{
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Resistance",
-				"value": 180
+				"value": 90
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
