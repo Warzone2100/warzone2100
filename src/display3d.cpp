@@ -588,6 +588,11 @@ static void showDroidPaths()
 		return;
 	}
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op for now
+	}
+
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
@@ -899,7 +904,7 @@ void draw3DScene()
 		height = txtShowOrders.height();
 		txtShowOrders.render(0, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
 	}
-	if (showDROIDcounts)
+	if (showDROIDcounts && selectedPlayer < MAX_PLAYERS)
 	{
 		int visibleDroids = 0;
 		int undrawnDroids = 0;
@@ -1911,6 +1916,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 /// Draw Factory Delivery Points
 static void displayDelivPoints(const glm::mat4& viewMatrix)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 	for (FLAG_POSITION *psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint != nullptr; psDelivPoint = psDelivPoint->psNext)
 	{
 		if (clipXY(psDelivPoint->coords.x, psDelivPoint->coords.y))
@@ -1945,6 +1951,8 @@ static void displayFeatures(const glm::mat4 &viewMatrix)
 /// Draw the Proximity messages for the *SELECTED PLAYER ONLY*
 static void displayProximityMsgs(const glm::mat4& viewMatrix)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
+
 	/* Go through all the proximity Displays*/
 	for (PROXIMITY_DISPLAY *psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
 	{
@@ -2917,6 +2925,8 @@ static void	drawStructureSelections()
 	}
 	pie_SetFogStatus(false);
 
+	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
+
 	/* Go thru' all the buildings */
 	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
@@ -3116,6 +3126,8 @@ static void	drawDroidSelections()
 			bMouseOverOwnDroid = true;
 		}
 	}
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
 	pie_SetFogStatus(false);
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
@@ -3799,6 +3811,8 @@ static void	showDroidSensorRanges()
 {
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
 	if (rangeOnScreen)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
 	{
