@@ -103,6 +103,9 @@ static bool bOrderEffectDisplayed = false;
 extern char DROIDDOING[512];
 //////////////////////////////////////////////////////////////////
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 //////////////////////////////////////////////////////////////////
 
 /** This function checks if the droid is off range. If yes, it uses actionDroid() to make the droid to move to its target if its target is on range, or to move to its order position if not.
@@ -2374,6 +2377,8 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		return;
 	}
 
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
@@ -2674,6 +2679,8 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
  */
 static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	/* loop over selected droids */
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -2705,6 +2712,8 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
  */
 void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
@@ -2753,6 +2762,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 /** This function just calls orderSelectedObjAdd with add = false.*/
 void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
 	orderSelectedObjAdd(player, psObj, false);
 }
 
@@ -2763,6 +2773,8 @@ void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
  */
 void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected && isConstructionDroid(psCurr))
@@ -2785,6 +2797,8 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
  */
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected)
@@ -2834,7 +2848,7 @@ DROID *FindATransporter(DROID const *embarkee)
 /** Given a factory type, this function runs though all player's structures to check if any is of factory type. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
-	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
@@ -2851,6 +2865,8 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 /** This function runs though all player's structures to check if any of then is a repair facility. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindARepairFacility(unsigned player)
 {
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
+
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
@@ -3570,6 +3586,8 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
  */
 static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->group == group &&
@@ -3587,6 +3605,8 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
  */
 static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group, UDWORD mask)
 {
+	ASSERT_PLAYER_OR_RETURN(DSS_NONE, player);
+
 #define MAX_STATES		5
 	struct
 	{
@@ -3639,6 +3659,8 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
  */
 void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	// lookup table for orders and masks
 #define MAX_ORDERS	4
 	struct
@@ -3775,6 +3797,8 @@ bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
  */
 void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	STRUCTURE   *psStruct;
 
 	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)

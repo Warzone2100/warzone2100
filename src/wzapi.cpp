@@ -1150,6 +1150,10 @@ std::vector<scr_position> wzapi::enumBlips(WZAPI_PARAMS(int player))
 std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT)
 {
 	std::vector<const BASE_OBJECT *> matches;
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return matches;
+	}
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
