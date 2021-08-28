@@ -109,7 +109,7 @@ void	preProcessVisibility()
 			MAPTILE *psTile = mapTile(i, j);
 			psTile->level = bRevealActive ? MIN(MIN_ILLUM, psTile->illumination / 4.0f) : 0;
 
-			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
+			if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 			{
 				psTile->level = psTile->illumination;
 			}
