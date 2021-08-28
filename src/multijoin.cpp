@@ -243,6 +243,8 @@ static void resetMultiVisibility(UDWORD player)
 	DROID		*pDroid;
 	STRUCTURE	*pStruct;
 
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player %" PRIu32 " exceeds MAX_PLAYERS", player);
+
 	for (owned = 0 ; owned < MAX_PLAYERS ; owned++)		// for each player
 	{
 		if (owned != player)								// done reset own stuff..

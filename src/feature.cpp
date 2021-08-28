@@ -429,7 +429,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 	ASSERT(gameTime - deltaGameTime < impactTime, "Expected %u < %u, gameTime = %u, bad impactTime", gameTime - deltaGameTime, impactTime, gameTime);
 
 	/* Only add if visible and damageable*/
-	if (psDel->visible[selectedPlayer] && psDel->psStats->damageable)
+	if (psDel->visibleForLocalDisplay() && psDel->psStats->damageable)
 	{
 		/* Set off a destruction effect */
 		/* First Explosions */

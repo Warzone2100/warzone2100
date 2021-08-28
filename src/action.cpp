@@ -412,6 +412,7 @@ bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psTarget != nullptr, "Target is NULL");
+	ASSERT_OR_RETURN(false, psDroid->player < MAX_PLAYERS, "psDroid->player (%" PRIu8 ") must be < MAX_PLAYERS", psDroid->player);
 	if (!psTarget->visible[psDroid->player])
 	{
 		return false;

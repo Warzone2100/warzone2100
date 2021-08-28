@@ -512,7 +512,7 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 	CHECK_DROID(psDel);
 
 	// only display anything if the droid is visible
-	if (!psDel->visible[selectedPlayer])
+	if (!psDel->visibleForLocalDisplay())
 	{
 		return;
 	}
@@ -723,7 +723,7 @@ void droidUpdate(DROID *psDroid)
 	moveUpdateDroid(psDroid);
 
 	/* Only add smoke if they're visible */
-	if ((psDroid->visible[selectedPlayer]) && psDroid->droidType != DROID_PERSON)
+	if (psDroid->visibleForLocalDisplay() && psDroid->droidType != DROID_PERSON)
 	{
 		// need to clip this value to prevent overflow condition
 		percentDamage = 100 - clip<UDWORD>(PERCENT(psDroid->body, psDroid->originalBody), 0, 100);
@@ -864,7 +864,7 @@ static bool droidBuildStartAudioCallback(void *psObj)
 {
 	auto psDroid = (DROID *)psObj;
 
-	if (psDroid != nullptr && psDroid->visible[selectedPlayer])
+	if (psDroid != nullptr && psDroid->visibleForLocalDisplay())
 	{
 		audio_PlayObjDynamicTrack(psDroid, ID_SOUND_CONSTRUCTION_LOOP, droidCheckBuildStillInProgress);
 	}
@@ -948,7 +948,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 			objTrace(psDroid->id, "DroidStartBuild: set target");
 		}
 
-		if (psStruct->visible[selectedPlayer])
+		if (psStruct->visibleForLocalDisplay())
 		{
 			audio_PlayObjStaticTrackCallback(psDroid, ID_SOUND_CONSTRUCTION_START, droidBuildStartAudioCallback);
 		}
@@ -968,7 +968,7 @@ static void droidAddWeldSound(Vector3i iVecEffect)
 
 static void addConstructorEffect(STRUCTURE *psStruct)
 {
-	if ((ONEINTEN) && (psStruct->visible[selectedPlayer]))
+	if ((ONEINTEN) && (psStruct->visibleForLocalDisplay()))
 	{
 		/* This needs fixing - it's an arse effect! */
 		const Vector2i size = psStruct->size() * TILE_UNITS / 4;
@@ -1177,7 +1177,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 	psDroidToRepair->body = clip<UDWORD>(psDroidToRepair->body + iPointsToAdd, 0, psDroidToRepair->originalBody);
 
 	/* add plasma repair effect whilst being repaired */
-	if ((ONEINFIVE) && (psDroidToRepair->visible[selectedPlayer]))
+	if ((ONEINFIVE) && (psDroidToRepair->visibleForLocalDisplay()))
 	{
 		Vector3i iVecEffect = (psDroidToRepair->pos + Vector3i(DROID_REPAIR_SPREAD, DROID_REPAIR_SPREAD, rand() % 8)).xzy();
 		effectGiveAuxVar(90 + rand() % 20);

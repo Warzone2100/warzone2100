@@ -1297,6 +1297,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	STRUCTURE *psBuilding = nullptr;
 	const Vector2i size = pStructureType->size(direction);
 
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Cannot build structure for player %" PRIu32 " (>= MAX_PLAYERS)", player);
 	ASSERT_OR_RETURN(nullptr, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
 
 	if (IsStatExpansionModule(pStructureType) == false)
@@ -1785,7 +1786,14 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 	blueprint = new STRUCTURE(0, selectedPlayer);
 	// construct the fake structure
 	blueprint->pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
-	blueprint->visible[selectedPlayer] = UBYTE_MAX;
+	if (selectedPlayer < MAX_PLAYERS)
+	{
+		blueprint->visible[selectedPlayer] = UBYTE_MAX;
+	}
+	else
+	{
+		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer (%" PRIu32 ") >= MAX_PLAYERS", selectedPlayer);
+	}
 	blueprint->sDisplay.imd = (*pIMD)[std::min<int>(moduleNumber, pIMD->size() - 1)];
 	blueprint->pos = pos;
 	blueprint->rot = rot;
@@ -2296,7 +2304,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		setFactorySecondaryState(psNewDroid, psStructure);
 		const auto mapCoord = map_coord({x, y});
 		const auto psTile = mapTile(mapCoord);
-		if (tileIsClearlyVisible(psTile))
+		if (tileIsClearlyVisible(psTile)) // display only - does not affect game state
 		{
 			/* add smoke effect to cover the droid's emergence from the factory */
 			iVecEffect.x = psNewDroid->pos.x;
@@ -3333,7 +3341,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					}
 				}
 
-				if (psStructure->visible[selectedPlayer] && psDroid->visible[selectedPlayer])
+				if (psStructure->visibleForLocalDisplay() && psDroid->visibleForLocalDisplay()) // display only - does not impact simulation state
 				{
 					/* add plasma repair effect whilst being repaired */
 					iVecEffect.x = psDroid->pos.x + (10 - rand() % 20);
@@ -3630,7 +3638,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 
 		if (psBuilding->player == selectedPlayer)
 		{
-			if (psBuilding->visible[selectedPlayer]
+			if (psBuilding->visibleForLocalDisplay() // check for display(audio)-only - does not impact simulation / game state
 				&& psBuilding->pFunctionality->resourceExtractor.psPowerGen
 				&& psBuilding->animationEvent == ANIM_EVENT_ACTIVE)
 			{
@@ -3687,7 +3695,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 	}
 
 	/* Only add smoke if they're visible and they can 'burn' */
-	if (!bMission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
+	if (!bMission && psBuilding->visibleForLocalDisplay() && canSmoke(psBuilding))
 	{
 		const int32_t damage = getStructureDamage(psBuilding);
 
@@ -4014,6 +4022,8 @@ bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t 
 
 bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue)
 {
+	ASSERT(player < MAX_PLAYERS, "player (%u) >= MAX_PLAYERS", player);
+
 	StructureBounds b = getStructureBounds(psStats, pos, direction);
 
 	//make sure we are not too near map edge and not going to go over it
@@ -4418,7 +4428,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	}
 
 	/* Only add if visible */
-	if (psDel->visible[selectedPlayer])
+	if (psDel->visibleForLocalDisplay())
 	{
 		Vector3i pos;
 		int      i;
@@ -4515,7 +4525,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	psDel->died = impactTime;
 
 	// Leave burn marks in the ground where building once stood
-	if (psDel->visible[selectedPlayer] && !resourceFound && !bMinor)
+	if (psDel->visibleForLocalDisplay() && !resourceFound && !bMinor)
 	{
 		StructureBounds b = getStructureBounds(psDel);
 		for (int breadth = 0; breadth < b.size.y; ++breadth)
@@ -5503,7 +5513,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 
 				//give the droid to the attacking player
 
-				if (psDroid->visible[selectedPlayer])
+				if (psDroid->visibleForLocalDisplay()) // display-only check for adding effect
 				{
 					for (int i = 0; i < 5; i++)
 					{
@@ -5754,6 +5764,8 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 /*makes the losing players tiles/structures/features visible to the reward player*/
 void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 {
+	ASSERT_OR_RETURN(, losingPlayer < MAX_PLAYERS && rewardPlayer < MAX_PLAYERS, "losingPlayer (%" PRIu8 "), rewardPlayer (%" PRIu8 ") must both be < MAXPLAYERS", losingPlayer, rewardPlayer);
+
 	// share exploration info - pretty useless but perhaps a nice touch?
 	for (int y = 0; y < mapHeight; ++y)
 	{
@@ -6598,6 +6610,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	bool                bPowerOn;
 	UWORD               direction;
 
+	ASSERT_OR_RETURN(nullptr, attackPlayer < MAX_PLAYERS, "attackPlayer (%" PRIu32 ") must be < MAX_PLAYERS", attackPlayer);
 	CHECK_STRUCTURE(psStructure);
 	visRemoveVisibility(psStructure);
 
@@ -6734,6 +6747,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			if (originalPlayer == selectedPlayer)
 			{
 				//make sure this structure is visible to selectedPlayer if the structure used to be selectedPlayers'
+				ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer (%" PRIu32 ") must be < MAX_PLAYERS", selectedPlayer);
 				psNewStruct->visible[selectedPlayer] = UBYTE_MAX;
 			}
 			if (!electronic_warfare || !reward)

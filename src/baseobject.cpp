@@ -122,6 +122,22 @@ BASE_OBJECT::~BASE_OBJECT()
 #endif //DEBUG
 }
 
+// Query visibility for display purposes (i.e. for `selectedPlayer`)
+// *DO NOT USE TO QUERY VISIBILITY FOR CALCULATIONS INVOLVING GAME / SIMULATION STATE*
+UBYTE BASE_OBJECT::visibleForLocalDisplay() const
+{
+	if (godMode)
+	{
+		// is visible to selectedPlayer
+		return UBYTE_MAX;
+	}
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return 0;
+	}
+	return visible[selectedPlayer];
+}
+
 void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_description, const char *function, const int recurse)
 {
 	if (recurse < 0)

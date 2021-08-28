@@ -2165,7 +2165,7 @@ static void effectStructureUpdates()
 				continue;
 			}
 
-			if (psStructure->status != SS_BUILT || !psStructure->visible[selectedPlayer])
+			if (psStructure->status != SS_BUILT || !psStructure->visibleForLocalDisplay())
 			{
 				continue;
 			}

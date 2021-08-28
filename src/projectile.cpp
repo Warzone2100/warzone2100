@@ -154,7 +154,7 @@ bool gfxVisible(PROJECTILE *psObj)
 	    && psObj->psSource->player != selectedPlayer
 	    && (psObj->psDest == nullptr
 	        || psObj->psDest->died
-	        || !psObj->psDest->visible[selectedPlayer]))
+	        || !psObj->psDest->visibleForLocalDisplay()))
 	{
 		return false;
 	}
@@ -165,7 +165,7 @@ bool gfxVisible(PROJECTILE *psObj)
 	    && psObj->psDest->type == OBJ_STRUCTURE
 	    && psObj->psDest->player != selectedPlayer
 	    && (psObj->psSource == nullptr
-	        || !psObj->psSource->visible[selectedPlayer]))
+	        || !psObj->psSource->visibleForLocalDisplay()))
 	{
 		return false;
 	}
@@ -173,7 +173,7 @@ bool gfxVisible(PROJECTILE *psObj)
 	// You can see the source
 	if (psObj->psSource != nullptr
 	    && !psObj->psSource->died
-	    && psObj->psSource->visible[selectedPlayer])
+	    && psObj->psSource->visibleForLocalDisplay())
 	{
 		return true;
 	}
@@ -181,7 +181,7 @@ bool gfxVisible(PROJECTILE *psObj)
 	// You can see the destination
 	if (psObj->psDest != nullptr
 	    && !psObj->psDest->died
-	    && psObj->psDest->visible[selectedPlayer])
+	    && psObj->psDest->visibleForLocalDisplay())
 	{
 		return true;
 	}
