@@ -53,6 +53,8 @@ static std::vector<std::vector<uint32_t> > combinations;
 template <typename T>
 static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen)
 {
+	if (player >= MAX_PLAYERS) { return 0; }
+
 	unsigned count = 0;
 
 	selDroidDeselect(player);
@@ -130,6 +132,7 @@ static bool selDamaged(DROID *droid)
 unsigned int selDroidDeselect(unsigned int player)
 {
 	unsigned int count = 0;
+	if (player >= MAX_PLAYERS) { return 0; }
 
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -148,6 +151,7 @@ unsigned int selDroidDeselect(unsigned int player)
 unsigned int selNumSelected(unsigned int player)
 {
 	unsigned int count = 0;
+	if (player >= MAX_PLAYERS) { return 0; }
 
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -217,6 +221,8 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	std::vector<unsigned int> excluded;
 
 	combinations.clear();
+
+	if (player >= MAX_PLAYERS) { return 0; }
 
 	// find out which units will need to be compared to which component combinations
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
@@ -557,6 +563,8 @@ void selCommander(int n)
    */
 unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen)
 {
+	if (player >= MAX_PLAYERS) { return 0; }
+
 	/* So far, we haven't selected any */
 	unsigned int retVal = 0;
 
