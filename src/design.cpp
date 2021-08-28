@@ -467,41 +467,49 @@ static ComponentIterator componentIterator(COMPONENT_STATS *psStats, unsigned si
 
 static ComponentIterator bodyIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asBodyStats, sizeof(*asBodyStats), apCompLists[selectedPlayer][COMP_BODY], numBodyStats);
 }
 
 static ComponentIterator weaponIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asWeaponStats, sizeof(*asWeaponStats), apCompLists[selectedPlayer][COMP_WEAPON], numWeaponStats);
 }
 
 static ComponentIterator propulsionIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asPropulsionStats, sizeof(*asPropulsionStats), apCompLists[selectedPlayer][COMP_PROPULSION], numPropulsionStats);
 }
 
 static ComponentIterator sensorIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asSensorStats, sizeof(SENSOR_STATS), apCompLists[selectedPlayer][COMP_SENSOR], numSensorStats);
 }
 
 static ComponentIterator ecmIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asECMStats, sizeof(ECM_STATS), apCompLists[selectedPlayer][COMP_ECM], numECMStats);
 }
 
 static ComponentIterator constructorIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asConstructStats, sizeof(CONSTRUCT_STATS), apCompLists[selectedPlayer][COMP_CONSTRUCT], numConstructStats);
 }
 
 static ComponentIterator repairIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asRepairStats, sizeof(REPAIR_STATS), apCompLists[selectedPlayer][COMP_REPAIRUNIT], numRepairStats);
 }
 
 static ComponentIterator brainIterator()
 {
+	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 	return componentIterator(asBrainStats, sizeof(BRAIN_STATS), apCompLists[selectedPlayer][COMP_BRAIN], numBrainStats);
 }
 
@@ -620,6 +628,9 @@ bool intAddDesign(bool bShowCentreScreen)
 	W_EDBINIT		sEdInit;
 	W_BUTINIT		sButInit;
 	W_BARINIT		sBarInit;
+
+	ASSERT_OR_RETURN(false, !(bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator), "Spectators can't open design mode");
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	desSetupDesignTemplates();
 
@@ -2771,10 +2782,14 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 	}
 }
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
 /* Check whether a droid template is valid */
 bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(false, player);
+
 	code_part level = complain ? LOG_ERROR : LOG_NEVER;
 	int bodysize = asBodyStats[psTempl->asParts[COMP_BODY]].size;
 

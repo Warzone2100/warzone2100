@@ -1457,21 +1457,27 @@ bool proj_Direct(const WEAPON_STATS *psStats)
 
 /***************************************************************************/
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 // return the maximum range for a weapon
 int proj_GetLongRange(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].maxRange;
 }
 
 // return the minimum range for a weapon
 int proj_GetMinRange(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].minRange;
 }
 
 // return the short range for a weapon
 int proj_GetShortRange(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].shortRange;
 }
 

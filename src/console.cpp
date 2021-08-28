@@ -352,20 +352,24 @@ static PIELIGHT getConsoleTextColor(int player)
 	}
 	else
 	{
-		// Don't use friend-foe colors in the lobby
-		if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
+		// Only use friend-foe colors if we are (potentially) a player
+		if (selectedPlayer < MAX_PLAYERS)
 		{
-			if (aiCheckAlliances(player, selectedPlayer))
+			// Don't use friend-foe colors in the lobby
+			if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
 			{
-				if (selectedPlayer == player)
+				if (aiCheckAlliances(player, selectedPlayer))
 				{
-					return WZCOL_TEXT_BRIGHT;
+					if (selectedPlayer == player)
+					{
+						return WZCOL_TEXT_BRIGHT;
+					}
+					return WZCOL_CONS_TEXT_USER_ALLY;
 				}
-				return WZCOL_CONS_TEXT_USER_ALLY;
-			}
-			else
-			{
-				return WZCOL_CONS_TEXT_USER_ENEMY;
+				else
+				{
+					return WZCOL_CONS_TEXT_USER_ENEMY;
+				}
 			}
 		}
 

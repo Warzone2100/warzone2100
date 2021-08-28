@@ -43,6 +43,9 @@
 std::map<UDWORD, std::unique_ptr<DROID_TEMPLATE>> droidTemplates[MAX_PLAYERS];
 std::vector<std::unique_ptr<DROID_TEMPLATE>> replacedDroidTemplates[MAX_PLAYERS];
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 bool allowDesign = true;
 bool includeRedundantDesigns = false;
 bool playerBuiltHQ = false;
@@ -50,6 +53,7 @@ bool playerBuiltHQ = false;
 
 static bool researchedItem(const DROID_TEMPLATE* /*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
+	ASSERT_PLAYER_OR_RETURN(false, player);
 	if (allowZero && part <= 0)
 	{
 		return true;
@@ -65,6 +69,7 @@ static bool researchedPart(const DROID_TEMPLATE *psCurr, int player, COMPONENT_T
 
 static bool researchedWeap(const DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
 {
+	ASSERT_PLAYER_OR_RETURN(false, player);
 	int availability = apCompLists[player][COMP_WEAPON][psCurr->asWeaps[weapIndex]];
 	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
 }
@@ -72,6 +77,7 @@ static bool researchedWeap(const DROID_TEMPLATE *psCurr, int player, int weapInd
 bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedundant, bool verbose)
 {
 	ASSERT_OR_RETURN(false, psCurr, "Given a null template");
+	ASSERT_PLAYER_OR_RETURN(false, player);
 	bool resBody = researchedPart(psCurr, player, COMP_BODY, false, allowRedundant);
 	bool resBrain = researchedPart(psCurr, player, COMP_BRAIN, true, allowRedundant);
 	bool resProp = researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant);
@@ -488,6 +494,7 @@ DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate)
 
 DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate)
 {
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 	UDWORD multiPlayerID = psTemplate->multiPlayerID;
 	auto it = droidTemplates[player].find(multiPlayerID);
 	if (it != droidTemplates[player].end())
@@ -507,6 +514,7 @@ DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTempla
 
 void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
 	for (auto &keyvaluepair : droidTemplates[player])
 	{
 		if (!func(keyvaluepair.second.get()))
@@ -518,6 +526,7 @@ void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* ps
 
 DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId)
 {
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 	auto it = droidTemplates[player].find(templateId);
 	if (it != droidTemplates[player].end())
 	{
@@ -528,11 +537,13 @@ DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId)
 
 size_t templateCount(int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return droidTemplates[player].size();
 }
 
 void clearTemplates(int player)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
 	droidTemplates[player].clear();
 	replacedDroidTemplates[player].clear();
 }
@@ -587,6 +598,8 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 {
 	STRUCTURE   *psStruct;
 	STRUCTURE	*psList;
+
+	ASSERT(player < MAX_PLAYERS, "player: %u", player);
 
 	//see if any factory is currently using the template
 	for (unsigned i = 0; i < 2; ++i)
@@ -663,6 +676,7 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 
 void listTemplates()
 {
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer (%" PRIu32 ") >= MAX_PLAYERS", selectedPlayer);
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
 		DROID_TEMPLATE *t = keyvaluepair.second.get();

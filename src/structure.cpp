@@ -3854,6 +3854,8 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 	STRUCTURE		*psCurr;
 	STRUCTURE_STATS	*psBuilding;
 
+	ASSERT_OR_RETURN(structureList, _selectedPlayer < MAX_PLAYERS, "_selectedPlayer = %" PRIu32 "", _selectedPlayer);
+
 	//check to see if able to build research/factory modules
 	researchModule = factoryModule = powerModule = false;
 
