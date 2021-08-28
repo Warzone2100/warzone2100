@@ -104,6 +104,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		return false;
 	}
 
+	ASSERT(psAttacker->player < MAX_PLAYERS, "psAttacker->player = %" PRIu8 "", psAttacker->player);
 	if (psTarget->visible[psAttacker->player] != UBYTE_MAX)
 	{
 		// Can't see it - can't hit it

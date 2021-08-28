@@ -690,8 +690,8 @@ public:
 	void display(int xOffset, int yOffset) override
 	{
 		// a droid of theirs.
-		DROID *displayDroid = apsDroidLists[player];
-		while (displayDroid != nullptr && !displayDroid->visible[selectedPlayer])
+		DROID *displayDroid = (player < MAX_PLAYERS) ? apsDroidLists[player] : nullptr;
+		while (displayDroid != nullptr && !displayDroid->visibleForLocalDisplay())
 		{
 			displayDroid = displayDroid->psNext;
 		}
@@ -714,7 +714,7 @@ public:
 
 			displayComponentButtonObject(displayDroid, &rotation, &position, 100);
 		}
-		else if (apsDroidLists[player])
+		else if ((player < MAX_PLAYERS) && apsDroidLists[player])
 		{
 			// Show that they have droids, but not which droids, since we can't see them.
 			iV_DrawImageTc(

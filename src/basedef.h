@@ -134,6 +134,11 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 
 	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
 	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list
+
+public:
+	// Query visibility for display purposes (i.e. for `selectedPlayer`)
+	// *DO NOT USE TO QUERY VISIBILITY FOR CALCULATIONS INVOLVING GAME / SIMULATION STATE*
+	UBYTE visibleForLocalDisplay() const;
 };
 
 /// Space-time coordinate, including orientation.

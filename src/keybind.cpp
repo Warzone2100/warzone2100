@@ -1208,6 +1208,8 @@ void	kf_ToggleGodMode()
 
 	if (godMode)
 	{
+		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Cannot disable godMode for spectator-only slots");
+
 		FEATURE	*psFeat = apsFeatureLists[0];
 
 		godMode = false;

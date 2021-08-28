@@ -455,7 +455,7 @@ static void DrawRadarObjects()
 			{
 				continue;
 			}
-			if (psDroid->visible[selectedPlayer]
+			if (psDroid->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
 			        && aiCheckAlliances(selectedPlayer, psDroid->player)))
 			{
@@ -512,7 +512,7 @@ static void DrawRadarObjects()
 			}
 			flashCol = flashColours[getPlayerColour(clan)];
 
-			if (psStruct->visible[selectedPlayer]
+			if (psStruct->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
 			        && aiCheckAlliances(selectedPlayer, psStruct->player)))
 			{

@@ -1834,7 +1834,7 @@ bool moveCheckDroidMovingAndVisible(void *psObj)
 	/* check for dead, not moving or invisible to player */
 	if (psDroid->died || moveDroidStopped(psDroid, 0) ||
 	    (isTransporter(psDroid) && psDroid->order.type == DORDER_NONE) ||
-	    !(psDroid->visible[selectedPlayer]))
+	    !(psDroid->visibleForLocalDisplay()))
 	{
 		psDroid->iAudioID = NO_SOUND;
 		return false;
@@ -1853,7 +1853,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	ASSERT_OR_RETURN(, psDroid != nullptr, "Unit pointer invalid");
 
 	if ((psDroid != nullptr) &&
-	    (psDroid->visible[selectedPlayer]))
+	    (psDroid->visibleForLocalDisplay()))
 	{
 		PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
@@ -1964,7 +1964,7 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 	}
 
 	if ((iAudioID != NO_SOUND) &&
-	    (psDroid->visible[selectedPlayer]))
+	    (psDroid->visibleForLocalDisplay()))
 	{
 		if (audio_PlayObjDynamicTrack(psDroid, iAudioID,
 		                              pAudioCallback))
@@ -2306,7 +2306,7 @@ void moveUpdateDroid(DROID *psDroid)
 		objTrace(psDroid->id, "MOVETURNTOTARGET complete");
 	}
 
-	if (psDroid->periodicalDamageStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visible[selectedPlayer])
+	if (psDroid->periodicalDamageStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visibleForLocalDisplay()) // display-only check for adding effect
 	{
 		pos.x = psDroid->pos.x + (18 - rand() % 36);
 		pos.z = psDroid->pos.y + (18 - rand() % 36);

@@ -1993,7 +1993,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 			}
 
 			/* No point in adding it if you can't see it? */
-			if (psDroid->visible[selectedPlayer])
+			if (psDroid->visibleForLocalDisplay())
 			{
 				displayComponentObject(psDroid, viewMatrix);
 			}
@@ -2056,7 +2056,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 	bool bForceDraw = (getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int pieFlags = 0;
 
-	if (!psFeature->visible[selectedPlayer] && !bForceDraw)
+	if (!psFeature->visibleForLocalDisplay() && !bForceDraw)
 	{
 		return;
 	}
@@ -2323,7 +2323,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			matrix *= glm::translate(glm::vec3(0, 0, recoilValue));
 
 			pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, pieFlag, pieFlagData, modelViewMatrix * matrix);
-			if (psStructure->status == SS_BUILT && psStructure->visible[selectedPlayer] > (UBYTE_MAX / 2))
+			if (psStructure->status == SS_BUILT && psStructure->visibleForLocalDisplay() > (UBYTE_MAX / 2))
 			{
 				if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 				{
@@ -2381,7 +2381,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 					}
 					matrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 					// draw the muzzle flash?
-					if (psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
+					if (psStructure->visibleForLocalDisplay() > UBYTE_MAX / 2)
 					{
 						// animate for the duration of the flash only
 						// assume no clan colours for muzzle effects
@@ -2440,14 +2440,15 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		return;
 	}
 	// If the structure is not truly visible, but we know there is something there, we will instead draw a blip
-	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0)
+	UBYTE visibilityAmount = psStructure->visibleForLocalDisplay();
+	if (visibilityAmount < UBYTE_MAX && visibilityAmount > 0)
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
-		pie_Draw3DShape(getFactionIMD(faction, getImdFromIndex(MI_BLIP)), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2,
+		pie_Draw3DShape(getFactionIMD(faction, getImdFromIndex(MI_BLIP)), frame, 0, WZCOL_WHITE, pie_ADDITIVE, visibilityAmount / 2,
 			viewMatrix * glm::translate(glm::vec3(dv)));
 		return;
 	}
-	else if (!psStructure->visible[selectedPlayer])
+	else if (!visibilityAmount)
 	{
 		return;
 	}
@@ -2613,7 +2614,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 	const FACTION *faction = getPlayerFaction(psStructure->player);
 
-	if (!psStructure->visible[selectedPlayer])
+	if (!psStructure->visibleForLocalDisplay())
 	{
 		return false;
 	}
@@ -3227,7 +3228,7 @@ static void	drawDroidSelections()
 			if (!psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
 				/* If it's selected */
-				if (psDroid->flags.test(OBJECT_FLAG_TARGETED) && psDroid->visible[selectedPlayer] == UBYTE_MAX)
+				if (psDroid->flags.test(OBJECT_FLAG_TARGETED) && psDroid->visibleForLocalDisplay() == UBYTE_MAX)
 				{
 					index = IMAGE_BLUE1 + getModularScaledRealTime(1020, 5);
 					iV_DrawImage(IntImages, index, psDroid->sDisplay.screenX, psDroid->sDisplay.screenY);
@@ -3699,7 +3700,7 @@ static void structureEffectsPlayer(UDWORD player)
 		{
 			continue;
 		}
-		if (psStructure->pStructureType->type == REF_POWER_GEN && psStructure->visible[selectedPlayer])
+		if (psStructure->pStructureType->type == REF_POWER_GEN && psStructure->visibleForLocalDisplay())
 		{
 			POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
 			unsigned numConnected = 0;
@@ -3751,11 +3752,11 @@ static void structureEffectsPlayer(UDWORD player)
 		}
 		/* Might be a re-arm pad! */
 		else if (psStructure->pStructureType->type == REF_REARM_PAD
-		         && psStructure->visible[selectedPlayer])
+		         && psStructure->visibleForLocalDisplay())
 		{
 			REARM_PAD *psReArmPad = &psStructure->pFunctionality->rearmPad;
 			BASE_OBJECT *psChosenObj = psReArmPad->psObj;
-			if (psChosenObj != nullptr && (((DROID *)psChosenObj)->visible[selectedPlayer]))
+			if (psChosenObj != nullptr && (((DROID *)psChosenObj)->visibleForLocalDisplay()))
 			{
 				unsigned bFXSize = 0;
 				DROID *psDroid = (DROID *) psChosenObj;
@@ -3979,7 +3980,7 @@ static void doConstructionLines(const glm::mat4 &viewMatrix)
 		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			if (clipXY(psDroid->pos.x, psDroid->pos.y)
-			    && psDroid->visible[selectedPlayer] == UBYTE_MAX
+			    && psDroid->visibleForLocalDisplay() == UBYTE_MAX
 			    && psDroid->sMove.Status != MOVESHUFFLE)
 			{
 				if (psDroid->action == DACTION_BUILD)
