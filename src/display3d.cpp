@@ -3432,15 +3432,10 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	psDroid->sDisplay.screenR = static_cast<UDWORD>(radius);
 }
 
-/**
- * Find the tile the mouse is currently over
- * \todo This is slow - speed it up
- */
-static void locateMouse()
+void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tileX, SDWORD &tileY)
 {
-	const Vector2i pt(mouseX(), mouseY());
 	int nearestZ = INT_MAX;
-
+	Vector2i outMousePos(0, 0);
 	// Intentionally not the same range as in drawTiles()
 	for (int i = -visibleTiles.y / 2, idx = 0; i < visibleTiles.y / 2; i++, ++idx)
 	{
@@ -3465,38 +3460,46 @@ static void locateMouse()
 				quad.coords[3].y = tileScreenInfo[idx + 1][jdx + 0].y;
 
 				/* We've got a match for our mouse coords */
-				if (inQuad(&pt, &quad))
+				if (inQuad(&screenCoord, &quad))
 				{
-					mousePos.x = playerPos.p.x + world_coord(j);
-					mousePos.y = playerPos.p.z + world_coord(i);
-					mousePos += positionInQuad(pt, quad);
-
-					if (mousePos.x < 0)
+					outMousePos.x = playerPos.p.x + world_coord(j);
+					outMousePos.y = playerPos.p.z + world_coord(i);
+					outMousePos += positionInQuad(screenCoord, quad);
+					if (outMousePos.x < 0)
 					{
-						mousePos.x = 0;
+						outMousePos.x = 0;
 					}
-					else if (mousePos.x > world_coord(mapWidth - 1))
+					else if (outMousePos.x > world_coord(mapWidth - 1))
 					{
-						mousePos.x = world_coord(mapWidth - 1);
+						outMousePos.x = world_coord(mapWidth - 1);
 					}
-					if (mousePos.y < 0)
+					if (outMousePos.y < 0)
 					{
-						mousePos.y = 0;
+						outMousePos.y = 0;
 					}
-					else if (mousePos.y > world_coord(mapHeight - 1))
+					else if (outMousePos.y > world_coord(mapHeight - 1))
 					{
-						mousePos.y = world_coord(mapHeight - 1);
+						outMousePos.y = world_coord(mapHeight - 1);
 					}
-
-					mouseTileX = map_coord(mousePos.x);
-					mouseTileY = map_coord(mousePos.y);
-
+					tileX = map_coord(outMousePos.x);
+					tileY = map_coord(outMousePos.y);
 					/* Store away z value */
 					nearestZ = tileZ;
 				}
 			}
 		}
 	}
+	worldCoord = outMousePos;
+}
+
+/**
+ * Find the tile the mouse is currently over
+ * \todo This is slow - speed it up
+ */
+static void locateMouse()
+{
+	const Vector2i pt(mouseX(), mouseY());
+	screenCoordToWorld(pt, mousePos, mouseTileX, mouseTileY);
 }
 
 /// Render the sky and surroundings

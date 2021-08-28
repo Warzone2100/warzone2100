@@ -78,6 +78,7 @@
 #include "animation.h"
 #include "input/manager.h"
 #include "input/keyconfig.h"
+#include "mapgrid.h"
 
 InputManager gInputManager;
 KeyFunctionConfiguration gKeyFuncConfig;
@@ -163,6 +164,7 @@ static UDWORD screenShakeLength;
 static const UDWORD FADE_START_OF_GAME_TIME = 1000;
 static UDWORD fadeEndTime = 0;
 static void fadeStartOfGame();
+static void handleAreaDemolition();
 
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
 static bool bSensorAssigned;
@@ -487,7 +489,7 @@ static bool OverRadarAndNotDragging()
 	return mouseOverRadar && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING;
 }
 
-static void CheckFinishedDrag()
+static void CheckFinishedDrag(SELECTION_TYPE selection)
 {
 	if (mouseReleased(MOUSE_LMB) || mouseDown(MOUSE_RMB))
 	{
@@ -516,11 +518,47 @@ static void CheckFinishedDrag()
 			dragBox3D.status = DRAG_RELEASED;
 			dragBox3D.x2 = mouseX();
 			dragBox3D.y2 = mouseY();
+			if (selection == SC_DROID_DEMOLISH && ctrlShiftDown())
+			{
+				handleAreaDemolition();
+			}
 		}
 		else
 		{
 			dragBox3D.status = DRAG_INACTIVE;
 			wallDrag.status = DRAG_INACTIVE;
+		}
+	}
+}
+/**
+ * Demolish all structures in given area
+ * Note: Does not attempt to optimize movement paths,
+ * so demolishing can be a little out of order
+*/
+static void handleAreaDemolition()
+{
+	const Vector2i pt1(dragBox3D.x1, dragBox3D.y1);
+	const Vector2i pt2(dragBox3D.x2, dragBox3D.y2);
+	Vector2i worldCoord1(0, 0), worldCoord2(0, 0), tmp;
+	SDWORD notused1 = 0, notused2 = 0;
+	screenCoordToWorld(pt1, worldCoord1, notused1, notused2);
+	screenCoordToWorld(pt2, worldCoord2, notused1, notused2);
+	// swap coordinates to be in increasing order.. otherwise gridIterate doesn't work
+	tmp = worldCoord1;
+	worldCoord1.x = worldCoord1.x < worldCoord2.x ? worldCoord1.x : worldCoord2.x;
+	worldCoord1.y = worldCoord1.y < worldCoord2.y ? worldCoord1.y : worldCoord2.y;
+	worldCoord2.x = worldCoord2.x > tmp.x ? worldCoord2.x : tmp.x;
+	worldCoord2.y = worldCoord2.y > tmp.y ? worldCoord2.y : tmp.y;
+
+	debug(LOG_INFO, "demolish everything in the area (%i %i) -> (%i %i)", worldCoord1.x, worldCoord1.y, worldCoord2.x, worldCoord2.y);
+	std::vector<BASE_OBJECT *> gridList = gridStartIterateArea(worldCoord1.x, worldCoord1.y, worldCoord2.x, worldCoord2.y);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		BASE_OBJECT *psObj = *gi;
+		if (psObj->type == OBJ_STRUCTURE && psObj->player == selectedPlayer)
+		{
+			// add demolish order to queue for every selected unit
+			orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psObj, true);
 		}
 	}
 }
@@ -615,6 +653,8 @@ void processMouseClickInput()
 	SELECTION_TYPE	selection;
 	MOUSE_TARGET	item = MT_NOTARGET;
 	bool OverRadar = OverRadarAndNotDragging();
+	selection = establishSelection(selectedPlayer);
+	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
 	ignoreOrder = CheckFinishedFindPosition();
 
@@ -622,7 +662,7 @@ void processMouseClickInput()
 
 	HandleDrag();
 
-	CheckFinishedDrag();
+	CheckFinishedDrag(selection);
 
 	if (isMouseOverScreenOverlayChild(mouseX(), mouseY()))
 	{
@@ -706,8 +746,6 @@ void processMouseClickInput()
 		panActive = true;
 	}
 
-	selection = establishSelection(selectedPlayer);
-	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
 	if (gamePaused())
 	{
@@ -1945,6 +1983,7 @@ void	dealWithLMB()
 	if (psClickedOn)
 	{
 		dealWithLMBObject(psClickedOn);
+
 		return;
 	}
 

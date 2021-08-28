@@ -75,7 +75,7 @@ void setPlayerPos(SDWORD x, SDWORD y);
 void disp3d_setView(iView *newView);
 void disp3d_oldView(); // for save games <= 10
 void disp3d_getView(iView *newView);
-
+void screenCoordToWorld(const Vector2i, Vector2i&, SDWORD&, SDWORD&);
 void draw3DScene();
 void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
 void renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix);
