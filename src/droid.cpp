@@ -248,7 +248,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 			                            psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
 		}
 		// only counts as a kill if it's not our ally
-		else if (!aiCheckAlliances(psDroid->player, selectedPlayer))
+		else if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psDroid->player, selectedPlayer))
 		{
 			scoreUpdateVar(WD_UNITS_KILLED);
 		}
@@ -1509,6 +1509,8 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
 
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 	DROID *psDroid = new DROID(generateSynchronisedObjectId(), player);
 	droidSetName(psDroid, getStatsName(pTemplate));
 
@@ -1710,6 +1712,8 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	bool	bAtLeastOne = false;
 	FLAG_POSITION	*psFlagPos;
 
+	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
+
 	if (groupNumber < UBYTE_MAX)
 	{
 		/* Run through all the droids */
@@ -1733,6 +1737,7 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	if (bAtLeastOne)
 	{
 		//clear the Deliv Point if one
+		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 		     psFlagPos = psFlagPos->psNext)
 		{
@@ -1749,6 +1754,8 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 	DROID	*psDroid, *psCentreDroid = nullptr;
 	bool selected = false;
 	FLAG_POSITION	*psFlagPos;
+
+	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
 	if (groupNumber < UBYTE_MAX)
 	{
@@ -1771,10 +1778,14 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 		if (psCentreDroid)
 		{
 			//clear the Deliv Point if one
-			for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-			     psFlagPos = psFlagPos->psNext)
+			ASSERT(selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
+			if (selectedPlayer < MAX_PLAYERS)
 			{
-				psFlagPos->selected = false;
+				for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
+					 psFlagPos = psFlagPos->psNext)
+				{
+					psFlagPos->selected = false;
+				}
 			}
 
 			selected = true;
@@ -1807,6 +1818,9 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 	SELECTIONTYPE dselectionType = selectionType;
 	SELECTION_CLASS dselectionClass = selectionClass;
 	bool dbOnScreen = bOnScreen;
+
+	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
+
 	selDroidSelection(selectedPlayer, dselectionClass, dselectionType, dbOnScreen);
 	for (psDroid = apsDroidLists[playerNumber]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -1819,6 +1833,7 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 	if (selected)
 	{
 		//clear the Deliv Point if one
+		ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 		     psFlagPos = psFlagPos->psNext)
 		{
@@ -1833,6 +1848,8 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 	DROID	*psDroid;
 	bool selected = false;
 	FLAG_POSITION	*psFlagPos;
+
+	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
 	if (groupNumber < UBYTE_MAX)
 	{
@@ -1855,6 +1872,7 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 	if (selected)
 	{
 		//clear the Deliv Point if one
+		ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 		     psFlagPos = psFlagPos->psNext)
 		{
@@ -2957,6 +2975,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic)
 	CHECK_DROID(psD);
 	ASSERT_OR_RETURN(nullptr, !isDead(psD), "Cannot gift dead unit");
 	ASSERT_OR_RETURN(psD, psD->player != to, "Cannot gift to self");
+	ASSERT_OR_RETURN(nullptr, to < MAX_PLAYERS, "Cannot gift to = %" PRIu32 "", to);
 
 	// Check unit limits (multiplayer only)
 	syncDebug("Limits: %u/%d %u/%d %u/%d", getNumDroids(to), getMaxDroids(to), getNumConstructorDroids(to), getMaxConstructors(to), getNumCommandDroids(to), getMaxCommanders(to));

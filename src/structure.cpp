@@ -2472,33 +2472,39 @@ bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission
 // doesn't mean that these numbers can't be exceeded if units are
 // put down in the editor or by the scripts.
 
-void setMaxDroids(int player, int value)
+void setMaxDroids(UDWORD player, int value)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
 	droidLimit[player] = value;
 }
 
-void setMaxCommanders(int player, int value)
+void setMaxCommanders(UDWORD player, int value)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
 	commanderLimit[player] = value;
 }
 
-void setMaxConstructors(int player, int value)
+void setMaxConstructors(UDWORD player, int value)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
 	constructorLimit[player] = value;
 }
 
-int getMaxDroids(int player)
+int getMaxDroids(UDWORD player)
 {
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
 	return droidLimit[player];
 }
 
-int getMaxCommanders(int player)
+int getMaxCommanders(UDWORD player)
 {
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
 	return commanderLimit[player];
 }
 
-int getMaxConstructors(int player)
+int getMaxConstructors(UDWORD player)
 {
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
 	return constructorLimit[player];
 }
 

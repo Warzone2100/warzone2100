@@ -536,7 +536,9 @@ bool fireOnLocation(unsigned int x, unsigned int y);
  */
 WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
-	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
+	return ((player == selectedPlayer && godMode) ||
+			((player < MAX_PLAYER_SLOTS) && (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)))
+			);
 }
 
 void mapInit();

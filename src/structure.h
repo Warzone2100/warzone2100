@@ -71,12 +71,12 @@ extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRU
 
 void handleAbandonedStructures();
 
-int getMaxDroids(int player);
-int getMaxCommanders(int player);
-int getMaxConstructors(int player);
-void setMaxDroids(int player, int value);
-void setMaxCommanders(int player, int value);
-void setMaxConstructors(int player, int value);
+int getMaxDroids(UDWORD player);
+int getMaxCommanders(UDWORD player);
+int getMaxConstructors(UDWORD player);
+void setMaxDroids(UDWORD player, int value);
+void setMaxCommanders(UDWORD player, int value);
+void setMaxConstructors(UDWORD player, int value);
 
 bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission);
 
