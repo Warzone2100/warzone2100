@@ -24,6 +24,8 @@ void BuildController::updateBuildersList()
 {
 	builders.clear();
 
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
+
 	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
 	{
 		if (isConstructionDroid(droid) && droid->died == 0)

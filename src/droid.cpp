@@ -1292,9 +1292,13 @@ static unsigned calcSum(const uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, c
 	return sum;
 }
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 template <typename F, typename G>
 static unsigned calcUpgradeSum(const uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, const uint32_t (&asWeaps)[MAX_WEAPONS], int player, F func, G propulsionFunc)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	unsigned sum =
 		func(asBrainStats    [asParts[COMP_BRAIN]].upgrade[player]) +
 		func(asSensorStats   [asParts[COMP_SENSOR]].upgrade[player]) +
