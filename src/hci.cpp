@@ -960,12 +960,14 @@ INT_RETVAL intRunWidgets()
 			return INT_NONE;
 		}
 
+		bool selectedPlayerIsSpectator = (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) || (selectedPlayer >= MAX_PLAYERS);
+
 		switch (retID)
 		{
 		/*****************  Reticule buttons  *****************/
 
 		case IDRET_COMMAND:
-			if (isKeyMapEditorUp)
+			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -976,7 +978,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_BUILD:
-			if (isKeyMapEditorUp)
+			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -987,7 +989,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_MANUFACTURE:
-			if (isKeyMapEditorUp)
+			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -998,7 +1000,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_RESEARCH:
-			if (isKeyMapEditorUp)
+			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1029,7 +1031,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_DESIGN:
-			if (isKeyMapEditorUp)
+			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1894,24 +1896,28 @@ bool setController(std::shared_ptr<BaseObjectsController> controller, INTMODE ne
 /* Add the build widgets to the widget screen */
 static bool intAddBuild()
 {
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
 	return setController(std::make_shared<BuildController>(), INT_STAT, IOBJ_BUILD);
 }
 
 /* Add the manufacture widgets to the widget screen */
 static bool intAddManufacture()
 {
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
 	return setController(std::make_shared<ManufactureController>(), INT_STAT, IOBJ_MANUFACTURE);
 }
 
 /* Add the research widgets to the widget screen */
 static bool intAddResearch()
 {
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
 	return setController(std::make_shared<ResearchController>(), INT_STAT, IOBJ_RESEARCH);
 }
 
 /* Add the command droid widgets to the widget screen */
 static bool intAddCommand()
 {
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
 	return setController(std::make_shared<CommanderController>(), INT_CMDORDER, IOBJ_COMMAND);
 }
 
