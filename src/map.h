@@ -303,6 +303,19 @@ static inline bool TileHasSmallStructure(const MAPTILE *tile)
 /* Can player number p has explored tile t? */
 #define TEST_TILE_VISIBLE(p,t)	((t)->tileExploredBits & (1<<(p)))
 
+/* Can selectedPlayer see tile t? */
+/* To be used for *DISPLAY* purposes only (*not* game-state/calculation related) */
+static inline bool TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(MAPTILE *pTile)
+{
+	if (godMode)
+	{
+		// always visible
+		return true;
+	}
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Players should always have a selectedPlayer / player index < MAX_PLAYERS; non-players are always expected to have godMode enabled; selectedPlayer: %" PRIu32 "", selectedPlayer);
+	return TEST_TILE_VISIBLE(selectedPlayer, pTile);
+}
+
 /* Set a tile to be visible for a player */
 #define SET_TILE_VISIBLE(p,t) ((t)->tileExploredBits |= alliancebits[p])
 

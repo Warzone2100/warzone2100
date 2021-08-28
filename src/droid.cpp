@@ -562,7 +562,7 @@ bool destroyDroid(DROID *psDel, unsigned impactTime)
 			for (breadth = mapY - 1; breadth <= mapY + 1; breadth++)
 			{
 				psTile = mapTile(width, breadth);
-				if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
+				if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 				{
 					psTile->illumination /= 2;
 				}

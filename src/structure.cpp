@@ -4022,7 +4022,7 @@ bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t 
 
 bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue)
 {
-	ASSERT(player < MAX_PLAYERS, "player (%u) >= MAX_PLAYERS", player);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "player (%u) >= MAX_PLAYERS", player);
 
 	StructureBounds b = getStructureBounds(psStats, pos, direction);
 
@@ -4533,7 +4533,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 			for (int width = 0; width < b.size.x; ++width)
 			{
 				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
-				if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
+				if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 				{
 					psTile->illumination /= 2;
 				}

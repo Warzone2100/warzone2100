@@ -306,7 +306,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
 	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
 	// draw radar on/off feature
-	if (!getRevealStatus() && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
+	if (!getRevealStatus() && !TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(WTile))
 	{
 		return WZCOL_TRANSPARENT_BOX;
 	}
@@ -333,7 +333,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
 				col.byte.g = col.byte.g * 2 / 3;
 				col.byte.b = col.byte.b * 2 / 3;
 			}
-			if (!TEST_TILE_VISIBLE(selectedPlayer, WTile))
+			if (!TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(WTile))
 			{
 				col.byte.r /= 2;
 				col.byte.g /= 2;
@@ -362,7 +362,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
 				col.byte.g = col.byte.g * 2 / 3;
 				col.byte.b = col.byte.b * 2 / 3;
 			}
-			if (!TEST_TILE_VISIBLE(selectedPlayer, WTile))
+			if (!TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(WTile))
 			{
 				col.byte.r /= 2;
 				col.byte.g /= 2;
