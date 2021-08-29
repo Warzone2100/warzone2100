@@ -2456,6 +2456,12 @@ bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission
 {
 	bool found = false;
 
+	ASSERT_OR_RETURN(false, player >= 0, "invalid player: %d", player);
+	if (player >= MAX_PLAYERS)
+	{
+		return false;
+	}
+
 	for (STRUCTURE *psCurr = isMission ? mission.apsStructLists[player] : apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type == type && (!built || (built && psCurr->status == SS_BUILT)))
@@ -6216,6 +6222,8 @@ UWORD countAssignableFactories(UBYTE player, UWORD factoryType)
 	UBYTE           quantity = 0;
 
 	ASSERT_OR_RETURN(0, player == selectedPlayer, "%s should only be called for selectedPlayer", __FUNCTION__);
+
+	if (player >= MAX_PLAYERS) { return 0; }
 
 	for (unsigned factoryInc = 0; factoryInc < factoryNumFlag[player][factoryType].size(); ++factoryInc)
 	{

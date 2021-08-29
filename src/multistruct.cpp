@@ -61,7 +61,7 @@
 bool SendBuildFinished(STRUCTURE *psStruct)
 {
 	uint8_t player = psStruct->player;
-	ASSERT(player < MAX_PLAYERS, "invalid player %u", player);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
 	NETuint32_t(&psStruct->id);		// ID of building

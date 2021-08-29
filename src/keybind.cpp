@@ -95,7 +95,7 @@ static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what us
 #define QUICKSAVE_CAM_FILENAME "savegames/campaign/QuickSave.gam"
 #define QUICKSAVE_SKI_FILENAME "savegames/skirmish/QuickSave.gam"
 
-#define SPECTATOR_NO_OP() do { if (NetPlay.players[selectedPlayer].isSpectator) { return; } } while (0)
+#define SPECTATOR_NO_OP() do { if (selectedPlayer >= MAX_PLAYERS || NetPlay.players[selectedPlayer].isSpectator) { return; } } while (0)
 
 /* Support functions to minimise code size */
 static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE State);
@@ -199,6 +199,10 @@ void kf_DamageMe()
 		return;
 	}
 #endif
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -237,6 +241,11 @@ void	kf_TraceObject()
 {
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 
 	for (psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
 	{
@@ -344,6 +353,11 @@ void	kf_DebugDroidInfo()
 {
 	DROID	*psDroid;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
+
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -364,6 +378,11 @@ void kf_CloneSelected(int limit)
 		return;
 	}
 #endif
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -419,6 +438,11 @@ void kf_MakeMeHero()
 		return;
 	}
 #endif
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
+
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected && psDroid->droidType == DROID_COMMAND)
@@ -443,6 +467,11 @@ void kf_TeachSelected()
 	}
 #endif
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
+
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -462,6 +491,11 @@ void kf_Unselectable()
 		return;
 	}
 #endif
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -712,6 +746,9 @@ void	kf_TogglePower()
 	}
 #endif
 
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	powerCalculated = !powerCalculated;
 	if (powerCalculated)
 	{
@@ -821,6 +858,8 @@ void kf_RevealMapAtPos()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
+
 	addSpotter(mouseTileX, mouseTileY, selectedPlayer, 1024, false, gameTime + 2000);
 }
 
@@ -828,9 +867,20 @@ void kf_RevealMapAtPos()
 
 void kf_MapCheck()
 {
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent desyncs)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
 	FLAG_POSITION	*psCurrFlag;
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -1817,6 +1867,8 @@ void	kf_KillEnemy()
 		return;
 	}
 #endif
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
 	debug(LOG_DEATH, "Destroying enemy droids and structures");
 	CONPRINTF("%s", _("Warning! This can have drastic consequences if used incorrectly in missions."));

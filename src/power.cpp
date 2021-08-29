@@ -351,7 +351,10 @@ int64_t getWastedPower(unsigned player)
 
 int32_t getPowerMinusQueued(unsigned player)
 {
-	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player (%u)", player);
+	if (player >= MAX_PLAYERS)
+	{
+		return 0;
+	}
 
 	return (asPower[player].currentPower - getPreciseQueuedPower(player)) / FP_ONE;
 }

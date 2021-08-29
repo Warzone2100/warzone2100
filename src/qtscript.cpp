@@ -510,7 +510,7 @@ static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path
 
 wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
 {
-	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
+	ASSERT_OR_RETURN(nullptr, player >= 0 && player < MAX_PLAYERS, "Player index %d out of bounds", player);
 
 	debug(LOG_SCRIPT, "loadPlayerScript[%d]: %s", player, path.toUtf8().c_str());
 
