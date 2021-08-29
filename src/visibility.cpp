@@ -134,6 +134,7 @@ static inline void updateTileVis(MAPTILE *psTile)
 
 uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry)
 {
+	ASSERT_OR_RETURN(0, player >= 0 && player < MAX_PLAYERS, "invalid player: %d", player);
 	SPOTTER *psSpot = new SPOTTER(x, y, player, radius, (int)radar, expiry);
 	size_t size;
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
@@ -453,6 +454,11 @@ void revealAll(UBYTE player)
 {
 	SDWORD   i, j;
 	MAPTILE	*psTile;
+
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
 
 	//reveal all tiles
 	for (i = 0; i < mapWidth; i++)

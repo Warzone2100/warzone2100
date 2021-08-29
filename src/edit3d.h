@@ -74,6 +74,7 @@ extern BUILDDETAILS	sBuildDetails;
 // May only call if sBuildDetails.psStats points to a STRUCTURE_STATS.
 static inline bool canLineBuild()
 {
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "selectedPlayer definitely can't line-build: %" PRIu32 "", selectedPlayer);
 	return ((STRUCTURE_STATS *)sBuildDetails.psStats)->upgrade[selectedPlayer].limit > 1;
 }
 

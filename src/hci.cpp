@@ -574,6 +574,8 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 {
 	FLAG_POSITION *psFlagPos;
 
+	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 	     psFlagPos = psFlagPos->psNext)
 	{
@@ -1250,7 +1252,8 @@ INT_RETVAL intRunWidgets()
 				{
 					pos = lb[i];
 					/* See what type of thing is being put down */
-					if (auto psBuilding = castStructureStats(psPositionStats))
+					auto psBuilding = castStructureStats(psPositionStats);
+					if (psBuilding && selectedPlayer < MAX_PLAYERS)
 					{
 						STRUCTURE tmp(0, selectedPlayer);
 
@@ -1953,6 +1956,11 @@ void addTransporterInterface(DROID *psSelected, bool onMission)
 /*sets which list of structures to use for the interface*/
 STRUCTURE *interfaceStructList()
 {
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return nullptr;
+	}
+
 	if (offWorldKeepLists)
 	{
 		return mission.apsStructLists[selectedPlayer];
@@ -2168,6 +2176,11 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 	DROID	*psDroid;
 	SDWORD	num;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return 0;
+	}
+
 	num = 0;
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -2184,6 +2197,11 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 only if research facility is free*/
 int intGetResearchState()
 {
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return 0;
+	}
+
 	bool resFree = false;
 	for (STRUCTURE *psStruct = interfaceStructList(); psStruct != nullptr; psStruct = psStruct->psNext)
 	{
@@ -2336,6 +2354,11 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 {
 	DROID *psDroid;
 	bool Found = false;
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return nullptr;
+	}
 
 	if (CurrDroid != nullptr)
 	{

@@ -2606,6 +2606,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			//The droids lists are "reversed" as they are loaded in loadSaveDroid().
 			//Which later causes issues in saveCampaignData() which tries to extract
 			//the first transporter group sent off at Beta-end by reversing this very list.
+			ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
 			reverseObjectList(&mission.apsDroidLists[selectedPlayer]);
 		}
 	}
@@ -2630,6 +2631,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		 * been another flag to indicate this state has changed but its late in
 		 * the day excuses...excuses...excuses
 		 */
+		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
 		if (mission.apsDroidLists[selectedPlayer] == nullptr)
 		{
 			//set the mission type
@@ -2883,6 +2885,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 	//clear the list
 	if (saveGameVersion < VERSION_25)
 	{
+		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
 		for (psDroid = apsLimboDroids[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
 		{
 			psNext = psDroid->psNext;

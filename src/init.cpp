@@ -1333,7 +1333,7 @@ bool stageThreeInitialise()
 				/* Structures */
 				for (psStr = apsStructLists[i]; psStr; psStr = psStr->psNext)
 				{
-					if (aiCheckAlliances(psStr->player, selectedPlayer))
+					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psStr->player, selectedPlayer))
 					{
 						visTilesUpdate((BASE_OBJECT *)psStr);
 					}
@@ -1342,7 +1342,7 @@ bool stageThreeInitialise()
 				/* Droids */
 				for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 				{
-					if (aiCheckAlliances(psDroid->player, selectedPlayer))
+					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psDroid->player, selectedPlayer))
 					{
 						visTilesUpdate((BASE_OBJECT *)psDroid);
 					}

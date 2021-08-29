@@ -133,7 +133,7 @@ void CancelAllResearch(UDWORD pl);
 
 bool researchInitVars();
 
-bool researchAvailable(int inc, int playerID, QUEUE_MODE mode);
+bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode);
 
 struct AllyResearch
 {

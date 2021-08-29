@@ -422,8 +422,13 @@ bool loadResearch(WzConfig &ini)
 	return true;
 }
 
-bool researchAvailable(int inc, int playerID, QUEUE_MODE mode)
+bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode)
 {
+	if (playerID >= MAX_PLAYERS)
+	{
+		return false;
+	}
+
 	// Decide whether to use IsResearchCancelledPending/IsResearchStartedPending or IsResearchCancelled/IsResearchStarted.
 	bool (*IsResearchCancelledFunc)(PLAYER_RESEARCH const *) = IsResearchCancelledPending;
 	bool (*IsResearchStartedFunc)(PLAYER_RESEARCH const *) = IsResearchStartedPending;

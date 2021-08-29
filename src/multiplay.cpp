@@ -452,15 +452,15 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 // return a players name.
 const char *getPlayerName(int player)
 {
-	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS , "Wrong player index: %u", player);
+	ASSERT_OR_RETURN(nullptr, player >= 0, "Wrong player index: %u", player);
 
 	// playerName is created through setPlayerName()
-	if (strcmp(playerName[player], "") != 0)
+	if (player < MAX_PLAYERS && strcmp(playerName[player], "") != 0)
 	{
 		return (char *)&playerName[player];
 	}
 
-	if (strlen(NetPlay.players[player].name) == 0)
+	if (static_cast<size_t>(player) >= NetPlay.players.size() || strlen(NetPlay.players[player].name) == 0)
 	{
 		// for campaign and tutorials
 		return _("Commander");
@@ -1165,7 +1165,7 @@ bool recvResearchStatus(NETQUEUE queue)
 	}
 
 	int prevResearchState = 0;
-	if (aiCheckAlliances(selectedPlayer, player))
+	if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, player))
 	{
 		prevResearchState = intGetResearchState();
 	}
@@ -1243,7 +1243,7 @@ bool recvResearchStatus(NETQUEUE queue)
 		}
 	}
 
-	if (aiCheckAlliances(selectedPlayer, player))
+	if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, player))
 	{
 		intAlliedResearchChanged();
 		intNotifyResearchButton(prevResearchState);
