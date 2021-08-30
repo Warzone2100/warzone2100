@@ -769,6 +769,7 @@ static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRU
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
 	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
 
 	RESEARCH                    *pResearch = &asResearch[researchIndex];
 	MESSAGE						*pMessage;
@@ -960,6 +961,7 @@ void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 void CancelAllResearch(UDWORD pl)
 {
 	STRUCTURE	*psCurr;
+	if (pl >= MAX_PLAYERS) { return; }
 
 	for (psCurr = apsStructLists[pl]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
@@ -1233,6 +1235,8 @@ RESEARCH *getResearch(const char *pName)
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
                              UBYTE player)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
+
 	COMPONENT_TYPE oldType = pOldComponent->compType;
 	int oldCompInc = pOldComponent->index;
 	COMPONENT_TYPE newType = pNewComponent->compType;
@@ -1305,6 +1309,7 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 	UDWORD				inc;
 
 	ASSERT_OR_RETURN(false, psResearch, "No such research topic");
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu32 "", player);
 
 	inc = psResearch->index;
 	if (inc > asResearch.size())
@@ -1373,12 +1378,14 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 /*flag self repair so droids can start when idle*/
 void enableSelfRepair(UBYTE player)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
 	bSelfRepair[player] = true;
 }
 
 /*check to see if any research has been completed that enables self repair*/
 bool selfRepairEnabled(UBYTE player)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
 	if (bSelfRepair[player])
 	{
 		return true;
@@ -1525,6 +1532,11 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 	static uint32_t lastGameTime = ~0;
 	static std::map<unsigned, std::vector<AllyResearch>> researches;
 	static const std::vector<AllyResearch> noAllyResearch;
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return noAllyResearch;
+	}
 
 	if (gameTime != lastGameTime)
 	{

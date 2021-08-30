@@ -227,6 +227,8 @@ bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 
 bool initTemplates()
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return false; }
+
 	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
 	if (!ini.status())
 	{

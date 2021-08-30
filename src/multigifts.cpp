@@ -146,6 +146,8 @@ bool sendGift(uint8_t type, uint8_t to)
 {
 	int audioTrack;
 
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Must be a player to send a gift (selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	switch (type)
 	{
 	case RADAR_GIFT:

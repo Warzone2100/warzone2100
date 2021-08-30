@@ -269,6 +269,7 @@ static inline bool TileIsBurning(const MAPTILE *tile)
 /** Check if tile has been explored. */
 static inline bool tileIsExplored(const MAPTILE *psTile)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return true; }
 	return psTile->tileExploredBits & (1 << selectedPlayer);
 }
 

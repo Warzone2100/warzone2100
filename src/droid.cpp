@@ -1613,6 +1613,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 
 DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders, Rotation rot)
 {
+	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "invalid player?: %" PRIu32 "", selectedPlayer);
 	// ajl. droid will be created, so inform others
 	if (bMultiMessages)
 	{

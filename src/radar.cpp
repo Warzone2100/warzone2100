@@ -434,7 +434,7 @@ static void DrawRadarObjects()
 			}
 			else
 			{
-				playerCol = (aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
+				playerCol = (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
 			}
 		}
 		else
@@ -457,7 +457,7 @@ static void DrawRadarObjects()
 			}
 			if (psDroid->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
-			        && aiCheckAlliances(selectedPlayer, psDroid->player)))
+					&& selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, psDroid->player)))
 			{
 				int	x = psDroid->pos.x / TILE_UNITS;
 				int	y = psDroid->pos.y / TILE_UNITS;
@@ -502,7 +502,7 @@ static void DrawRadarObjects()
 				}
 				else
 				{
-					playerCol = (aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
+					playerCol = (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
 				}
 			}
 			else
@@ -514,7 +514,7 @@ static void DrawRadarObjects()
 
 			if (psStruct->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
-			        && aiCheckAlliances(selectedPlayer, psStruct->player)))
+			        && selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, psStruct->player)))
 			{
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psStruct->timeLastHit < HIT_NOTIFICATION)
 				{

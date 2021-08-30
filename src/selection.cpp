@@ -274,6 +274,8 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
 	{
 		//exceptions - as always...
@@ -378,6 +380,8 @@ void selNextUnassignedUnit()
 	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
 	{
 		/* Only look at unselected ones */
@@ -444,6 +448,8 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 {
 	STRUCTURE *psResult = nullptr, *psOldStruct = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
+
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u", structType);
@@ -522,6 +528,8 @@ static bool droidIsCommanderNum(DROID *psDroid, SDWORD n)
 // select the n'th command droid
 void selCommander(int n)
 {
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (droidIsCommanderNum(psCurr, n))

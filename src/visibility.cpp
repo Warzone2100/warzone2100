@@ -896,6 +896,11 @@ void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player)
 	FEATURE_STATS const *psStats;
 	MAPTILE		*psTile;
 
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
 	if (psObj->type == OBJ_FEATURE)
 	{
 		psFeature = (FEATURE *)psObj;
