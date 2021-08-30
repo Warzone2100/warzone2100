@@ -122,6 +122,8 @@ bool multiplayerWinSequence(bool firstCall)
 	float		rotAmount;
 	STRUCTURE	*psStruct;
 
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "selectedPlayer is %" PRIu32 " - how did it win?!?", selectedPlayer);
+
 	if (firstCall)
 	{
 		pos  = cameraToHome(selectedPlayer, true);			// pan the camera to home if not already doing so
@@ -549,21 +551,24 @@ int scavengerPlayer()
 Vector3i cameraToHome(UDWORD player, bool scroll)
 {
 	UDWORD x, y;
-	STRUCTURE	*psBuilding;
+	STRUCTURE	*psBuilding = nullptr;
 
-	for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding = psBuilding->psNext) {}
+	if (player < MAX_PLAYERS)
+	{
+		for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding = psBuilding->psNext) {}
+	}
 
 	if (psBuilding)
 	{
 		x = map_coord(psBuilding->pos.x);
 		y = map_coord(psBuilding->pos.y);
 	}
-	else if (apsDroidLists[player])				// or first droid
+	else if ((player < MAX_PLAYERS) && apsDroidLists[player])				// or first droid
 	{
 		x = map_coord(apsDroidLists[player]->pos.x);
 		y =	map_coord(apsDroidLists[player]->pos.y);
 	}
-	else if (apsStructLists[player])							// center on first struct
+	else if ((player < MAX_PLAYERS) && apsStructLists[player])				// center on first struct
 	{
 		x = map_coord(apsStructLists[player]->pos.x);
 		y = map_coord(apsStructLists[player]->pos.y);
@@ -698,6 +703,9 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 					return HandleMessageAction::Silently_Ignore;
 				}
 				break;
+			case NET_COLOURREQUEST:
+				// for now, *must* be allowed
+				return HandleMessageAction::Process_Message;
 			default:
 				// certain messages are always allowed, no matter who it is
 				return HandleMessageAction::Process_Message;

@@ -139,7 +139,7 @@ static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
 static PIELIGHT GetPlayerTextColor(int mode, UDWORD player)
 {
 	// override color if they are dead...
-	if (!apsDroidLists[player] && !apsStructLists[player])
+	if (player >= MAX_PLAYERS || (!apsDroidLists[player] && !apsStructLists[player]))
 	{
 		return WZCOL_GREY;			// dead text color
 	}
@@ -629,6 +629,8 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 
 static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
+
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch (alliances[selectedPlayer][player])
 	{
@@ -908,9 +910,9 @@ private:
 	{
 		for (auto &playerWidget: playersWidgets)
 		{
-			const auto color = GetPlayerTextColor(alliances[selectedPlayer][playerWidget.player], playerWidget.player);
+			const auto color = GetPlayerTextColor((selectedPlayer < MAX_PLAYERS) ? alliances[selectedPlayer][playerWidget.player] : 0, playerWidget.player);
 			const bool isHuman = isHumanPlayer(playerWidget.player);
-			const bool isAlly = aiCheckAlliances(selectedPlayer, playerWidget.player);
+			const bool isAlly = (selectedPlayer < MAX_PLAYERS) && aiCheckAlliances(selectedPlayer, playerWidget.player);
 			const bool isSelectedPlayer = playerWidget.player == selectedPlayer;
 
 			playerWidget.name->setFontColour(color);
@@ -1232,7 +1234,7 @@ void intProcessMultiMenu(UDWORD id)
 	}
 
 	//alliance button
-	if (id >= MULTIMENU_ALLIANCE_BASE  &&  id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS)
+	if (id >= MULTIMENU_ALLIANCE_BASE  &&  id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS  &&  selectedPlayer < MAX_PLAYERS)
 	{
 		i = (UBYTE)(id - MULTIMENU_ALLIANCE_BASE);
 

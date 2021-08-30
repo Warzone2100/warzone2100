@@ -3015,6 +3015,7 @@ bool getPlayCountDown()
 //checks to see if the player has any droids (except Transporters left)
 bool missionDroidsRemaining(UDWORD player)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu32 "", player);
 	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
 		if (!isTransporter(psDroid))
@@ -3176,7 +3177,7 @@ void emptyTransporters(bool bOffWorld)
 {
 	DROID       *psTransporter, *psDroid, *psNext, *psNextTrans;
 
-	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " >= MAX_PLAYERS", selectedPlayer);
 
 	//see if there are any Transporters in the world
 	for (psTransporter = apsDroidLists[selectedPlayer]; psTransporter != nullptr; psTransporter = psNextTrans)

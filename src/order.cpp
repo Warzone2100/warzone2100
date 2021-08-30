@@ -3095,7 +3095,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 	if (psDroid->body * 100 <= repairLevel * psDroid->originalBody)
 	{
 		// Only deselect the droid if there is another droid selected.
-		if (psDroid->selected)
+		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
 		{
 			DROID *psTempDroid;
 			for (psTempDroid = apsDroidLists[selectedPlayer]; psTempDroid; psTempDroid = psTempDroid->psNext)
