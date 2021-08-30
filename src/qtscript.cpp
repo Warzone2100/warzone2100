@@ -892,9 +892,9 @@ std::vector<scripting_engine::timerNodeSnapshot> scripting_engine::debug_GetTime
 	return debug_timer_snapshot;
 }
 
-void jsAutogameSpecific(const WzString &name, int player)
+void jsAutogameSpecific(const WzString &name, int player, AIDifficulty difficulty)
 {
-	wzapi::scripting_instance* instance = loadPlayerScript(name, player, AIDifficulty::MEDIUM);
+	wzapi::scripting_instance* instance = loadPlayerScript(name, player, difficulty);
 	if (!instance)
 	{
 		console(_("Failed to load selected AI! Check your logs to see why."));

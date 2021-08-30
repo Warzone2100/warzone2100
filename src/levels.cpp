@@ -1236,7 +1236,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		{
 			if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
 			{
-				jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+				jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer, AIDifficulty::DEFAULT);
 			}
 			else
 			{

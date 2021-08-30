@@ -561,6 +561,7 @@ public:
 		powerEditField->callCalcLayout();
 		aiAttachButton->callCalcLayout();
 		aiPlayerDropdown->callCalcLayout();
+		aiDifficultyDropdown->callCalcLayout();
 		aiDropdown->callCalcLayout();
 		table->callCalcLayout();
 	}
@@ -722,11 +723,14 @@ public:
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			auto selectedAiButton = psParent->aiDropdown->getSelectedItem();
 			ASSERT_OR_RETURN(, selectedAiButton != nullptr, "No selected AI?");
+			auto selectedAiDifficultyButton = psParent->aiDifficultyDropdown->getSelectedItem();
+			ASSERT_OR_RETURN(, selectedAiDifficultyButton != nullptr, "No selected AI difficulty?");
+			const AIDifficulty difficulty = static_cast<AIDifficulty>(selectedAiDifficultyButton->UserData);
 			auto selectedAiPlayerButton = psParent->aiPlayerDropdown->getSelectedItem();
 			ASSERT_OR_RETURN(, selectedAiPlayerButton != nullptr, "No selected AI player?");
 			const WzString script = selectedAiButton->getString();
 			const int player = static_cast<int>(selectedAiPlayerButton->UserData);
-			jsAutogameSpecific(WzString::fromUtf8("multiplay/skirmish/") + script, player);
+			jsAutogameSpecific(WzString::fromUtf8("multiplay/skirmish/") + script, player, difficulty);
 			debug(LOG_INFO, "Script attached - close and reopen debug window to see its context");
 		});
 		if (readOnly)
@@ -759,6 +763,40 @@ public:
 			pAiPlayerDropdown->setGeometry(x0, bottomOfPowerRow, width, TAB_BUTTONS_HEIGHT);
 		});
 
+		// AI Difficulty dropdown
+		// Easy through INSANE
+		std::vector<std::pair<AIDifficulty, std::string>> difficulties{
+				std::pair<AIDifficulty, std::string>{AIDifficulty::DEFAULT, "DEFAULT"},
+				std::pair<AIDifficulty, std::string>{AIDifficulty::EASY, "EASY"},
+				std::pair<AIDifficulty, std::string>{AIDifficulty::MEDIUM, "MEDIUM"},
+				std::pair<AIDifficulty, std::string>{AIDifficulty::HARD, "HARD"},
+				std::pair<AIDifficulty, std::string>{AIDifficulty::INSANE, "INSANE"}
+		};
+		panel->aiDifficultyDropdown = std::make_shared<DropdownWidget>();
+		panel->attach(panel->aiDifficultyDropdown);
+		panel->aiDifficultyDropdown->setListHeight(TAB_BUTTONS_HEIGHT * difficulties.size());
+
+		maxButtonTextWidth = 0;
+		for (const auto& difficulty : difficulties)
+		{
+			WzString buttonLabel = WzString::fromUtf8(difficulty.second);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			button->UserData = static_cast<UDWORD>(difficulty.first);
+			maxButtonTextWidth = std::max<int>(button->width(), maxButtonTextWidth);
+			panel->aiDifficultyDropdown->addItem(button);
+		}
+		panel->aiDifficultyDropdown->setSelectedIndex(0);
+		panel->aiDifficultyDropdown->setCalcLayout([maxButtonTextWidth](WIDGET *psWidget) {
+			auto pAiDifficultyDropdown = static_cast<DropdownWidget *>(psWidget);
+			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(psWidget->parent());
+			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+			int width = maxButtonTextWidth + pAiDifficultyDropdown->getScrollbarWidth();
+			int x0 = psParent->aiPlayerDropdown->x() - ACTION_BUTTON_SPACING - width;
+			int bottomOfPowerRow =
+					psParent->powerEditField->y() + psParent->powerEditField->height() + ACTION_BUTTON_ROW_SPACING;
+			pAiDifficultyDropdown->setGeometry(x0, bottomOfPowerRow, width, TAB_BUTTONS_HEIGHT);
+		});
+
 		// AI names dropdown
 		const std::vector<WzString> AIs = getAINames();
 		panel->aiDropdown = std::make_shared<DropdownWidget>();
@@ -776,9 +814,11 @@ public:
 			auto pAiDropdown = static_cast<DropdownWidget *>(psWidget);
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-			int x0 = psParent->attachAItoPlayerLabel->x() + psParent->attachAItoPlayerLabel->width() + ACTION_BUTTON_SPACING;
-			int bottomOfPowerRow = psParent->powerEditField->y() + psParent->powerEditField->height() + ACTION_BUTTON_ROW_SPACING;
-			int fillWidth = psParent->aiPlayerDropdown->x() - ACTION_BUTTON_SPACING - x0;
+			int x0 = psParent->attachAItoPlayerLabel->x() + psParent->attachAItoPlayerLabel->width() +
+					 ACTION_BUTTON_SPACING;
+			int bottomOfPowerRow =
+					psParent->powerEditField->y() + psParent->powerEditField->height() + ACTION_BUTTON_ROW_SPACING;
+			int fillWidth = psParent->aiDifficultyDropdown->x() - ACTION_BUTTON_SPACING - x0;
 			pAiDropdown->setGeometry(x0, bottomOfPowerRow, fillWidth, TAB_BUTTONS_HEIGHT);
 		});
 
@@ -849,6 +889,7 @@ public:
 	std::shared_ptr<W_BUTTON> powerUpdateButton;
 	std::shared_ptr<W_LABEL> attachAItoPlayerLabel;
 	std::shared_ptr<DropdownWidget> aiDropdown;
+	std::shared_ptr<DropdownWidget> aiDifficultyDropdown;
 	std::shared_ptr<DropdownWidget> aiPlayerDropdown;
 	std::shared_ptr<W_BUTTON> aiAttachButton;
 	std::shared_ptr<JSONTableWidget> table;
