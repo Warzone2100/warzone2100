@@ -2000,7 +2000,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "ENERGY",
 		"weaponWav": "hevlsr.ogg",
-		"weight": 20000
+		"weight": 5000
 	},
 	"HeavyLaser-VTOL": {
 		"buildPoints": 1000,
