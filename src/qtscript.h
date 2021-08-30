@@ -118,7 +118,7 @@ void scriptRemoveObject(const BASE_OBJECT *psObj);
 void jsShowDebug();
 
 /// Choose a specific autogame AI
-void jsAutogameSpecific(const WzString &name, int player);
+void jsAutogameSpecific(const WzString &name, int player, AIDifficulty difficulty);
 
 // ----------------------------------------------
 // Event functions
