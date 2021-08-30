@@ -653,6 +653,7 @@ void actionUpdateDroid(DROID *psDroid)
 	bool (*actionUpdateFunc)(DROID * psDroid) = nullptr;
 	bool nonNullWeapon[MAX_WEAPONS] = { false };
 	BASE_OBJECT *psTargets[MAX_WEAPONS] = { nullptr };
+	bool hasValidWeapon = false;
 	bool hasVisibleTarget = false;
 	bool targetVisibile[MAX_WEAPONS] = { false };
 	bool bHasTarget = false;
@@ -727,7 +728,7 @@ void actionUpdateDroid(DROID *psDroid)
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
 							psDroid->action = DACTION_ATTACK;
-							setDroidActionTarget(psDroid, psTemp, 0);
+							setDroidActionTarget(psDroid, psTemp, i);
 						}
 					}
 				}
@@ -953,6 +954,10 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_ATTACK:
 	case DACTION_ROTATETOATTACK:
+		if (psDroid->psActionTarget[0] == nullptr &&  psDroid->psActionTarget[1] != nullptr)
+		{
+			break;
+		}
 		ASSERT_OR_RETURN(, psDroid->psActionTarget[0] != nullptr, "target is NULL while attacking");
 
 		if (psDroid->action == DACTION_ROTATETOATTACK)
@@ -1244,10 +1249,12 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		ASSERT_OR_RETURN(, psDroid->psActionTarget[0] != nullptr, "action update move to attack target is NULL");
-
+		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
+		{
+			hasValidWeapon |= validTarget(psDroid, psDroid->psActionTarget[0], i);
+		}
 		//check the target hasn't become one the same player ID - Electronic Warfare, and that the target is still valid.
-		if ((electronicDroid(psDroid) && psDroid->player == psDroid->psActionTarget[0]->player) ||
-		    !validTarget(psDroid, psDroid->psActionTarget[0], 0))
+		if ((electronicDroid(psDroid) && psDroid->player == psDroid->psActionTarget[0]->player) || !hasValidWeapon)
 		{
 			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 			{
@@ -2140,7 +2147,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	objTrace(psDroid->id, "base set action to %s (was %s)", getDroidActionName(psAction->action), getDroidActionName(psDroid->action));
 
 	DROID_ORDER_DATA *order = &psDroid->order;
-
+	bool hasValidWeapon = false;
+	for (int i = 0; i < MAX_WEAPONS; i++)
+	{
+		hasValidWeapon |= validTarget(psDroid, psAction->psObj, i);
+	}
 	switch (psAction->action)
 	{
 	case DACTION_NONE:
@@ -2175,7 +2186,12 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			break;
 		}
-
+		if (!hasValidWeapon)
+		{
+			// continuing is pointless, we were given an invalid target
+			// for ex. AA gun can't atack ground unit
+			break;
+		}
 		if (electronicDroid(psDroid))
 		{
 			//check for low or zero resistance - just zero resistance!
