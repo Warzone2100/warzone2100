@@ -2189,7 +2189,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (!hasValidWeapon)
 		{
 			// continuing is pointless, we were given an invalid target
-			// for ex. AA gun can't atack ground unit
+			// for ex. AA gun can't attack ground unit
 			break;
 		}
 		if (electronicDroid(psDroid))
