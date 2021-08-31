@@ -79,6 +79,7 @@
 #include "qtscript.h"
 #include "activity.h"
 #include "lib/framework/wztime.h"
+#include "keybind.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -330,7 +331,7 @@ bool missionShutDown()
 		}
 		std::swap(mission.psGateways, gwGetGateways());
 	}
-
+	keybindShutdown();
 	// sorry if this breaks something - but it looks like it's what should happen - John
 	mission.type = LEVEL_TYPE::LDS_NONE;
 

@@ -2424,3 +2424,8 @@ void kf_ToggleFullscreen()
 {
 	war_setWindowMode(wzAltEnterToggleFullscreen());
 }
+
+void keybindShutdown()
+{
+	psOldRE = nullptr;
+}
