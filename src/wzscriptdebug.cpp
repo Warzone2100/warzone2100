@@ -607,7 +607,10 @@ public:
 			maxButtonTextWidth = std::max<int>(minButtonTextWidth, maxButtonTextWidth);
 			panel->playersDropdown->addItem(button);
 		}
-		panel->playersDropdown->setSelectedIndex(selectedPlayer);
+		if (selectedPlayer < MAX_PLAYERS)
+		{
+			panel->playersDropdown->setSelectedIndex(selectedPlayer);
+		}
 		panel->playersDropdown->setOnChange([](DropdownWidget& dropdown) {
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(dropdown.parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
@@ -681,7 +684,12 @@ public:
 			int width = psParent->powerUpdateButton->x() - ACTION_BUTTON_SPACING - x0;
 			psWidget->setGeometry(x0, y0, width, psWidget->height());
 		}));
-		panel->powerEditField->setString(WzString::number(getPower(selectedPlayer)));
+		WzString currPower = "0";
+		if (selectedPlayer < MAX_PLAYERS)
+		{
+			currPower = WzString::number(getPower(selectedPlayer));
+		}
+		panel->powerEditField->setString(currPower);
 		panel->powerEditField->setMaxStringSize(9); // shorten maximum length
 		panel->powerEditField->setBoxColours(WZCOL_DEBUG_FILL_COLOR_DARK, WZCOL_DEBUG_BORDER_LIGHT, WZCOL_DEBUG_FILL_COLOR);
 		if (readOnly)
@@ -820,9 +828,13 @@ private:
 		if (readOnly)
 		{
 			debug(LOG_ERROR, "Unable to change selectedPlayer - readOnly mode");
-			playersDropdown->setSelectedIndex(selectedPlayer);
+			if (selectedPlayer < MAX_PLAYERS)
+			{
+				playersDropdown->setSelectedIndex(selectedPlayer);
+			}
 			return;
 		}
+		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 		// Do not change realSelectedPlayer here, so game doesn't pause.
 		const int oldSelectedPlayer = selectedPlayer;
 		selectedPlayer = value;

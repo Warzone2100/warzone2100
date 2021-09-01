@@ -175,6 +175,12 @@ static void processLeaderSelection()
 	bSuccess = false;
 	bestSoFar = UDWORD_MAX;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return;
+	}
+
 	switch (leaderClass)
 	{
 	case	LEADER_LEFT:
@@ -375,6 +381,12 @@ DROID *camFindDroidTarget()
 {
 	DROID	*psDroid;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return nullptr;
+	}
+
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -438,6 +450,12 @@ static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 	DROID *psDroid;
 	int32_t xTotal = 0, yTotal = 0;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return 0;
+	}
+
 	/* Got thru' all droids */
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -462,6 +480,12 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 	SDWORD xTotals = 0, yTotals = 0, zTotals = 0;
 	DROID *psDroid;
 	UDWORD count;
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return;
+	}
 
 	for (count = 0, psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
