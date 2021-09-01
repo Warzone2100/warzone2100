@@ -1750,12 +1750,13 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer)
 {
-	STRUCTURE *blueprint;
+	STRUCTURE *blueprint = nullptr;
 
 	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "No blueprint stats");
 	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getStatsName(psStats));
+	ASSERT_OR_RETURN(nullptr, ownerPlayer < MAX_PLAYERS, "invalid ownerPlayer: %" PRIu8 "", ownerPlayer);
 
 	Rotation rot(direction, 0, 0);
 
@@ -1783,16 +1784,12 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 		}
 	}
 
-	blueprint = new STRUCTURE(0, selectedPlayer);
+	blueprint = new STRUCTURE(0, ownerPlayer);
 	// construct the fake structure
 	blueprint->pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	if (selectedPlayer < MAX_PLAYERS)
 	{
 		blueprint->visible[selectedPlayer] = UBYTE_MAX;
-	}
-	else
-	{
-		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer (%" PRIu32 ") >= MAX_PLAYERS", selectedPlayer);
 	}
 	blueprint->sDisplay.imd = (*pIMD)[std::min<int>(moduleNumber, pIMD->size() - 1)];
 	blueprint->pos = pos;
