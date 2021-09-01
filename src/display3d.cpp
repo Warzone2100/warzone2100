@@ -294,13 +294,15 @@ struct Blueprint
 		, dir(0)
 		, index(0)
 		, state(SS_BLUEPRINT_INVALID)
+		, player(selectedPlayer)
 	{}
-	Blueprint(STRUCTURE_STATS const *stats, Vector3i pos, uint16_t dir, uint32_t index, STRUCT_STATES state)
+	Blueprint(STRUCTURE_STATS const *stats, Vector3i pos, uint16_t dir, uint32_t index, STRUCT_STATES state, uint8_t player)
 		: stats(stats)
 		, pos(pos)
 		, dir(dir)
 		, index(index)
 		, state(state)
+		, player(player)
 	{}
 	int compare(Blueprint const &b) const
 	{
@@ -344,13 +346,14 @@ struct Blueprint
 	}
 	STRUCTURE *buildBlueprint() const  ///< Must delete after use.
 	{
-		return ::buildBlueprint(stats, pos, dir, index, state);
+		return ::buildBlueprint(stats, pos, dir, index, state, player);
 	}
 	void renderBlueprint(const glm::mat4 &viewMatrix) const
 	{
 		if (clipXY(pos.x, pos.y))
 		{
 			STRUCTURE *psStruct = buildBlueprint();
+			ASSERT_OR_RETURN(, psStruct != nullptr, "buildBlueprint returned nullptr");
 			renderStructure(psStruct, viewMatrix);
 			delete psStruct;
 		}
@@ -361,6 +364,7 @@ struct Blueprint
 	uint16_t dir;
 	uint32_t index;
 	STRUCT_STATES state;
+	uint8_t player;
 };
 
 static std::vector<Blueprint> blueprints;
@@ -489,7 +493,7 @@ static Blueprint getTileBlueprint(int mapX, int mapY)
 		}
 	}
 
-	return Blueprint(nullptr, Vector3i(), 0, 0, SS_BEING_BUILT);
+	return Blueprint(nullptr, Vector3i(), 0, 0, SS_BEING_BUILT, selectedPlayer);
 }
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
@@ -1720,7 +1724,7 @@ static bool tileHasIncompatibleStructure(MAPTILE const *tile, STRUCTURE_STATS co
 	return true;
 }
 
-static void drawLineBuild(STRUCTURE_STATS const *psStats, Vector2i pos, Vector2i pos2, uint16_t direction, STRUCT_STATES state)
+static void drawLineBuild(uint8_t player, STRUCTURE_STATS const *psStats, Vector2i pos, Vector2i pos2, uint16_t direction, STRUCT_STATES state)
 {
 	auto lb = calcLineBuild(psStats, direction, pos, pos2);
 
@@ -1739,12 +1743,12 @@ static void drawLineBuild(STRUCTURE_STATS const *psStats, Vector2i pos, Vector2i
 			{
 				z = std::max(z, map_TileHeight(b.map.x + k, b.map.y + j));
 			}
-		Blueprint blueprint(psStats, Vector3i(cur, z), snapDirection(direction), 0, state); // snapDirection may be unnecessary here
+		Blueprint blueprint(psStats, Vector3i(cur, z), snapDirection(direction), 0, state, player); // snapDirection may be unnecessary here
 		blueprints.push_back(blueprint);
 	}
 }
 
-static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
+static void renderBuildOrder(uint8_t droidPlayer, DroidOrder const &order, STRUCT_STATES state)
 {
 	STRUCTURE_STATS const *stats;
 	Vector2i pos = order.pos;
@@ -1771,7 +1775,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 	//draw the current build site if its a line of structures
 	if (order.type == DORDER_LINEBUILD)
 	{
-		drawLineBuild(stats, pos, order.pos2, order.direction, state);
+		drawLineBuild(droidPlayer, stats, pos, order.pos2, order.direction, state);
 	}
 	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(pos)), stats, order.index))
 	{
@@ -1782,7 +1786,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 			{
 				z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
 			}
-		Blueprint blueprint(stats, Vector3i(pos, z), snapDirection(order.direction), order.index, state);
+		Blueprint blueprint(stats, Vector3i(pos, z), snapDirection(order.direction), order.index, state, droidPlayer);
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1817,7 +1821,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 			uint16_t direction = getBuildingDirection();
 			if (wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
 			{
-				drawLineBuild(stats, wallDrag.pos, wallDrag.pos2, direction, state);
+				drawLineBuild(selectedPlayer, stats, wallDrag.pos, wallDrag.pos2, direction, state);
 			}
 			else
 			{
@@ -1867,6 +1871,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 				playerBlueprint->dir = playerBlueprintDirection->getCurrent();
 				playerBlueprint->index = 0;
 				playerBlueprint->state = state;
+				playerBlueprint->player = selectedPlayer;
 
 				blueprints.push_back(*playerBlueprint);
 			}
@@ -1890,11 +1895,11 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
-				renderBuildOrder(psDroid->order, state);
+				renderBuildOrder(psDroid->player, psDroid->order, state);
 				//now look thru' the list of orders to see if more building sites
 				for (int order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
 				{
-					renderBuildOrder(psDroid->asOrderList[order], state);
+					renderBuildOrder(psDroid->player, psDroid->asOrderList[order], state);
 				}
 			}
 		}
