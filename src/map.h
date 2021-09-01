@@ -118,6 +118,7 @@ extern std::unique_ptr<uint8_t[]> psAuxMap[MAX_PLAYERS + AUX_MAX];	// yes, we wa
 /// Find aux bitfield for a given tile
 WZ_DECL_ALWAYS_INLINE static inline uint8_t auxTile(int x, int y, int player)
 {
+	ASSERT_OR_RETURN(AUXBITS_ALL, player >= 0 && player < MAX_PLAYERS + AUX_MAX, "invalid player: %d", player);
 	return psAuxMap[player][x + y * mapWidth];
 }
 

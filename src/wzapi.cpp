@@ -481,6 +481,7 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _targetDroid))
 	{
 		DROID *targetDroid = _targetDroid.value();
 		SCRIPT_ASSERT(false, context, targetDroid, "No valid droid provided");
+		SCRIPT_ASSERT(false, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
 		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
 			psDroid->selected = (psDroid == targetDroid); // select only the target droid
@@ -2476,6 +2477,7 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _value))
 	int value = _value * GAME_TICKS_PER_SEC;
 	SCRIPT_ASSERT({}, context, value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
 	              "The transport timer cannot be set to more than 1 hour!");
+	SCRIPT_ASSERT({}, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
 	mission.ETA = value;
 	if (missionCanReEnforce())
 	{

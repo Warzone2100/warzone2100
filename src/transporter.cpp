@@ -529,6 +529,8 @@ bool intAddDroidsAvailForm()
 		Animate = false;
 	}
 
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	auto const &parent = psWScreen->psForm;
 
 	/* Add the droids available form */
@@ -1081,6 +1083,7 @@ int transporterSpaceRequired(const DROID *psDroid)
 /*sets which list of droids to use for the transporter interface*/
 DROID *transInterfaceDroidList()
 {
+	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
 	if (onMission)
 	{
 		return mission.apsDroidLists[selectedPlayer];

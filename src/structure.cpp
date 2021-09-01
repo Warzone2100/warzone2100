@@ -1069,7 +1069,7 @@ static void structFindWalls(unsigned player, Vector2i map, bool aWallPresent[5][
 		for (int x = -2; x <= 2; ++x)
 		{
 			STRUCTURE *psStruct = castStructure(mapTile(map.x + x, map.y + y)->psObject);
-			if (psStruct != nullptr && isWallCombiningStructureType(psStruct->pStructureType) && aiCheckAlliances(player, psStruct->player))
+			if (psStruct != nullptr && isWallCombiningStructureType(psStruct->pStructureType) && player < MAX_PLAYERS && aiCheckAlliances(player, psStruct->player))
 			{
 				aWallPresent[x + 2][y + 2] = true;
 				apsStructs[x + 2][y + 2] = psStruct;
@@ -2079,6 +2079,8 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 void clearCommandDroidFactory(DROID *psDroid)
 {
 	STRUCTURE	*psCurr;
+
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
@@ -4568,7 +4570,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 			scoreUpdateVar(WD_STR_LOST);
 		}
 		// only counts as a kill if structure doesn't belong to our ally
-		else if (!aiCheckAlliances(psDel->player, selectedPlayer))
+		else if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psDel->player, selectedPlayer))
 		{
 			scoreUpdateVar(WD_STR_KILLED);
 		}
@@ -4966,6 +4968,8 @@ uint16_t countPlayerUnusedDerricks()
 {
 	uint16_t total = 0;
 
+	if (selectedPlayer >= MAX_PLAYERS) { return 0; }
+
 	for (STRUCTURE *psStruct = apsExtractorLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->status == SS_BUILT && psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
@@ -5224,6 +5228,11 @@ static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 		return 0;
 	}
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return 0;
+	}
+
 	num = 0;
 	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
@@ -5306,7 +5315,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		break;
 	case REF_RESOURCE_EXTRACTOR:
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
-		if (dbgInputManager.debugMappingsAllowed())
+		if (dbgInputManager.debugMappingsAllowed() && selectedPlayer < MAX_PLAYERS)
 		{
 			console("ID %d - %s", psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe");
 		}
@@ -5628,6 +5637,8 @@ bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
 		return false; //campaign should not give rewards (especially to the player)
 	}
 
+	ASSERT_OR_RETURN(false, attackPlayer < MAX_PLAYERS, "Invalid player id %d", (int)attackPlayer);
+
 	bool    bRewarded = false;
 
 	switch (psStructure->pStructureType->type)
@@ -5667,6 +5678,9 @@ bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
 void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 {
 	unsigned comp = 0;
+
+	ASSERT_OR_RETURN(, losingPlayer < MAX_PLAYERS, "Invalid losingPlayer id %d", (int)losingPlayer);
+	ASSERT_OR_RETURN(, rewardPlayer < MAX_PLAYERS, "Invalid rewardPlayer id %d", (int)rewardPlayer);
 
 	//search through the propulsions first
 	for (unsigned inc = 0; inc < numPropulsionStats; inc++)
@@ -5746,6 +5760,9 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 {
 	unsigned comp = 0;
+
+	ASSERT_OR_RETURN(, losingPlayer < MAX_PLAYERS, "Invalid losingPlayer id %d", (int)losingPlayer);
+	ASSERT_OR_RETURN(, rewardPlayer < MAX_PLAYERS, "Invalid rewardPlayer id %d", (int)rewardPlayer);
 
 	//search through the repair stats
 	for (unsigned inc = 0; inc < numRepairStats; inc++)

@@ -382,6 +382,8 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 
 bool storeTemplates()
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return false; }
+
 	// Write stored templates (back) to file
 	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadAndWrite);
 	if (!ini.status() || !ini.isWritable())
