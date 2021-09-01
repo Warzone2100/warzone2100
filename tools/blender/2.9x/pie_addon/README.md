@@ -34,17 +34,14 @@ The scripts in this addon currently support importing and exporting the followin
     * PIE Points
     * PIE Polygons*
         * PIE Textured Polygons
-        * PIE Animated Polygons*
+        * PIE Animated Polygons
     * PIE Connectors
     * PIE Anim Objects*
     * PIE Shadow Points
     * PIE Shadow Polygons
 
 *1: N-gons should not be used in exported meshes due to UV corruption. Quads will be triangulated correctly and are acceptable for export from Blender to PIE.
-
-*2: Mesh objects with active modifiers will not export this feature to new faces in the case of mirrored/arrayed geometry.
-
-*3: There may be some cases Blender will not interpret rotation keys in the same manner as the game.
+*2: There may be some cases Blender will not interpret rotation keys in the same manner as the game.
 
 ## Usage
 
@@ -66,7 +63,7 @@ The following panel can be found in the Object tab of the properties editor:
         1. `None`:
             * Objects with this type will be ignored when exporting, but they may still be used in the Blender scene to manipulate objects which are eligable for PIE exporting.
         2. `Root`:
-            * This type is used to define the generic values of a PIE model, such as its rendering flags, textures, and events.
+            * This type is used to define the generic values of a PIE model, such as its version, rendering flags, textures, and events.
         3. `Level`:
             * This type is used to define the mesh and animation properties which are specific to each level such as animation rate/cycles and texture animation data for particular sets of faces. These should always be mesh objects, and also should always be within the heirarchy of a `Root` PIE object.
         4. `Shadow`:
