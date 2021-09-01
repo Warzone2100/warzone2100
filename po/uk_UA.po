@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 06:21\n"
+"PO-Revision-Date: 2021-09-01 02:51\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4640,15 +4640,15 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
-msgstr ""
+msgstr "Ви маєте захистити та втримати за будь-яку ціну."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "ОБ'ЄДНАННЯ"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
-msgstr ""
+msgstr "Командире, виявлено новий запуск."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
@@ -4816,7 +4816,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
-msgstr ""
+msgstr "Знайти та знищити!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
@@ -4832,7 +4832,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "Ви повинні їх спинити!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
@@ -4840,7 +4840,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "КАМПАНІЯ 3"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
@@ -4872,11 +4872,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
-msgstr ""
+msgstr "Час вийшов, командире!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr ""
+msgstr "Командире, ми виявили сили НЕКСУСу у цих координат..."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
@@ -4908,7 +4908,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "Прошу підтримки."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
@@ -4924,7 +4924,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
-msgstr ""
+msgstr "Командире, ласкаво просимо до НЕКСУСУ!"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
