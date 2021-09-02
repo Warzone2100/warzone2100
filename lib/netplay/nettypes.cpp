@@ -45,14 +45,14 @@
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
 /// messages at the same game time. The game queues should be used, even in single-player. Players should write to their own queue, not to other player's
 /// queues, and should read messages from all queues including their own.
-static NetQueue *gameQueues[MAX_PLAYERS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+static NetQueue *gameQueues[MAX_CONNECTED_PLAYERS] = {nullptr};
 
 /// There is a bidirectional net queue for communicating with each client or host. Each queue corresponds either to a real socket, or a virtual socket
 /// which routes via the host.
-static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {nullptr};
 
 /// These queues are for clients which just connected, but haven't yet been assigned a player number.
-static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {nullptr};
 
 /// Sending a message to the broadcast queue is equivalent to sending the message to the net queues of all other players.
 static NetQueue *broadcastQueue = nullptr;
@@ -67,9 +67,6 @@ static PACKETDIR NetDir;      ///< Indicates whether a message is being serialis
 static void NETsetPacketDir(PACKETDIR dir)
 {
 	NetDir = dir;
-
-	// Can't put STATIC_ASSERT in global scope, arbitrarily putting it here.
-	STATIC_ASSERT(MAX_PLAYERS == MAX_CONNECTED_PLAYERS);  // Things might break if each connected player doesn't correspond to a player of the same index.
 }
 
 PACKETDIR NETgetPacketDir()
@@ -342,7 +339,7 @@ NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer)
 NETQUEUE NETgameQueue(unsigned player)
 {
 	NETQUEUE ret;
-	ASSERT(player < MAX_PLAYERS, "Huh?");
+	ASSERT(player < MAX_CONNECTED_PLAYERS, "Huh?");
 	NetQueue *queue = gameQueues[player];
 	ret.queue = queue;
 	ret.isPair = false;
@@ -355,7 +352,7 @@ NETQUEUE NETgameQueue(unsigned player)
 NETQUEUE NETgameQueueForced(unsigned player)
 {
 	NETQUEUE ret;
-	ASSERT(player < MAX_PLAYERS, "Huh?");
+	ASSERT(player < MAX_CONNECTED_PLAYERS, "Huh?");
 	NetQueue *queue = gameQueues[player];
 	ret.queue = queue;
 	ret.isPair = false;
@@ -425,7 +422,7 @@ void NETinitQueue(NETQUEUE queue)
 
 void NETdeleteQueue(void)
 {
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		delete pairQueue(NETnetQueue(i));
 		pairQueue(NETnetQueue(i)) = nullptr;
@@ -556,7 +553,7 @@ bool NETend()
 
 void NETflushGameQueues()
 {
-	for (uint8_t player = 0; player < MAX_PLAYERS; ++player)
+	for (uint8_t player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		NetQueue *queue = gameQueues[player];
 

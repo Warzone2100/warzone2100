@@ -1706,7 +1706,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	}
 
 	/* Go through all the proximity Displays */
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
+	for (psProxDisp = (selectedPlayer < MAX_PLAYERS) ? apsProxDisp[selectedPlayer] : nullptr; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
 	{
 		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
 		const uint16_t *images;

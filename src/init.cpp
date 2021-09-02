@@ -1171,7 +1171,7 @@ bool stageTwoInitialise()
 	// Don't ask why this doesn't go in stage three. In fact, don't even ask me what stage one/two/three is supposed to mean, it seems about as descriptive as stage doStuff, stage doMoreStuff and stage doEvenMoreStuff...
 	debug(LOG_MAIN, "Init game queues, I am %d.", selectedPlayer);
 	sendQueuedDroidInfo();  // Discard any pending orders which could later get flushed into the game queue.
-	for (i = 0; i < MAX_PLAYERS; ++i)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NETinitQueue(NETgameQueue(i));
 

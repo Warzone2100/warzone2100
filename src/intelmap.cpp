@@ -251,6 +251,8 @@ bool intAddIntelMap()
 /* Add the Message sub form */
 static bool intAddMessageForm(bool _playCurrent)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return true; }
+
 	WIDGET *msgForm = widgGetFromID(psWScreen, IDINTMAP_FORM);
 
 	/* Add the Message form */
@@ -671,15 +673,18 @@ static void intCleanUpIntelMap()
 	MESSAGE		*psMessage, *psNext;
 	bool removedAMessage = false;
 
-	//remove any research messages that have been read
-	for (psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage =
-	         psNext)
+	if (selectedPlayer < MAX_PLAYERS)
 	{
-		psNext = psMessage->psNext;
-		if (psMessage->type == MSG_RESEARCH && psMessage->read)
+		//remove any research messages that have been read
+		for (psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage =
+				 psNext)
 		{
-			removeMessage(psMessage, selectedPlayer);
-			removedAMessage = true;
+			psNext = psMessage->psNext;
+			if (psMessage->type == MSG_RESEARCH && psMessage->read)
+			{
+				removeMessage(psMessage, selectedPlayer);
+				removedAMessage = true;
+			}
 		}
 	}
 	if (removedAMessage)
@@ -977,6 +982,8 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 void setCurrentMsg()
 {
 	MESSAGE *psMsg, *psLastMsg;
+
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	psLastMsg = nullptr;
 	for (psMsg = apsMessages[selectedPlayer]; psMsg != nullptr; psMsg =

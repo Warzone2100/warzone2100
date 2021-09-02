@@ -665,6 +665,7 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD player = psWidget->UserData;
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "invalid player: %" PRIu32 "", player);
 
 	if (openchannels[player])
 	{
@@ -779,7 +780,7 @@ private:
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(pingLabel)));
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(structsLabel)));
 
-		for (auto player = 0; player < MAX_PLAYERS; player++)
+		for (auto player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 		{
 			if (isHumanPlayer(player) || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers && NetPlay.players[player].difficulty != AIDifficulty::DISABLED))
 			{
@@ -831,7 +832,7 @@ private:
 			alliancesGrid->place({0}, {0}, Margin(0, 1, 0, 0).wrap(std::make_shared<W_BUTTON>(&sButInit)));
 		}
 
-		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer && !NetPlay.players[player].isSpectator)
+		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer && player < MAX_PLAYERS && !NetPlay.players[player].isSpectator)
 		{
 			W_BUTINIT sButInit;
 			//alliance
@@ -1260,7 +1261,7 @@ void intProcessMultiMenu(UDWORD id)
 
 
 	//channel opens.
-	if (id >= MULTIMENU_CHANNEL &&  id < MULTIMENU_CHANNEL + MAX_PLAYERS)
+	if (id >= MULTIMENU_CHANNEL &&  id < MULTIMENU_CHANNEL + MAX_CONNECTED_PLAYERS)
 	{
 		i = id - MULTIMENU_CHANNEL;
 		openchannels[i] = !openchannels[i];

@@ -47,7 +47,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
 // ////////////////////////////////////////////////////////////////////////////
-static PLAYERSTATS playerStats[MAX_PLAYERS];
+static PLAYERSTATS playerStats[MAX_CONNECTED_PLAYERS];
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -158,7 +158,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 // send stats to all players when bLocal is false
 bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 {
-	if (playerIndex >= MAX_PLAYERS)
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
 		return true;
 	}
@@ -205,7 +205,7 @@ void recvMultiStats(NETQUEUE queue)
 	// update the stats
 	NETuint32_t(&playerIndex);
 
-	if (playerIndex >= MAX_PLAYERS)
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
 		NETend();
 		return;
@@ -378,6 +378,9 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 // update players damage stats.
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
+	ASSERT_OR_RETURN(, attacker < MAX_PLAYERS, "invalid attacker: %" PRIu32 "", attacker);
+	ASSERT_OR_RETURN(, defender < MAX_PLAYERS, "invalid defender: %" PRIu32 "", defender);
+
 	// damaging features like skyscrapers does not count
 	if (defender != PLAYER_FEATURE)
 	{

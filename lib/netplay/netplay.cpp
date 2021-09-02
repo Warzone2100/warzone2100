@@ -240,7 +240,7 @@ static NETSTATS nStatsSecondLastSec = {{0, 0}, {0, 0}, {0, 0}};
 static const NETSTATS nZeroStats    = {{0, 0}, {0, 0}, {0, 0}};
 static int nStatsLastUpdateTime = 0;
 
-unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
+unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_CONNECTED_PLAYERS];
 
 static LobbyServerConnectionHandler lobbyConnectionHandler;
 
@@ -256,9 +256,9 @@ static char const *versionString = version_getVersionString();
 
 NETPLAY::NETPLAY()
 {
-	players.resize(MAX_PLAYERS);
-	playerReferences.resize(MAX_PLAYERS);
-	for (auto i = 0; i < MAX_PLAYERS; i++)
+	players.resize(MAX_CONNECTED_PLAYERS);
+	playerReferences.resize(MAX_CONNECTED_PLAYERS);
+	for (auto i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		playerReferences[i] = std::make_shared<PlayerReference>(i);
 	}
@@ -552,8 +552,8 @@ static void NETsendPlayerInfo(uint32_t index)
 
 static void NETSendAllPlayerInfoTo(unsigned to)
 {
-	static uint32_t indices[MAX_PLAYERS];
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	static uint32_t indices[MAX_CONNECTED_PLAYERS];
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		indices[i] = i;
 	}
@@ -576,11 +576,16 @@ void NETBroadcastPlayerInfo(uint32_t index)
 // Checks if there are *any* open slots (player *OR* spectator) for an incoming connection
 static bool NET_HasAnyOpenSlots()
 {
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		if (i == scavengerSlot())
 		{
 			// do not offer up the scavenger slot (this really needs to be refactored later - why is this a variable slot index?!?)
+			continue;
+		}
+		if (i == PLAYER_FEATURE)
+		{
+			// do not offer up this "player feature" slot - TODO: maybe remove the need for this slot?
 			continue;
 		}
 		PLAYER const &p = NetPlay.players[i];
@@ -596,9 +601,9 @@ static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowes
 {
 	int index = -1;
 	int position = INT_MAX;
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		if (!forceTakeLowestAvailablePlayerNumber && !asSpectator.value_or(false) && (i >= game.maxPlayers || NetPlay.players[i].position >= game.maxPlayers))
+		if (!forceTakeLowestAvailablePlayerNumber && !asSpectator.value_or(false) && (i >= game.maxPlayers || i >= MAX_PLAYERS || NetPlay.players[i].position >= game.maxPlayers))
 		{
 			// Player slots are only supported where the player index and the player position is <= game.maxPlayers
 			// Skip otherwise
@@ -607,6 +612,11 @@ static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowes
 		if (i == scavengerSlot())
 		{
 			// do not offer up the scavenger slot (this really needs to be refactored later - why is this a variable slot index?!?)
+			continue;
+		}
+		if (i == PLAYER_FEATURE)
+		{
+			// do not offer up this "player feature" slot - TODO: maybe remove the need for this slot?
 			continue;
 		}
 		// find the lowest "position" slot that is available (unless forceTakeLowestAvailablePlayerNumber is set, in which case just take the first available)
@@ -773,7 +783,7 @@ static void NETplayerDropped(UDWORD index)
  */
 void NETplayerKicked(UDWORD index)
 {
-	ASSERT_OR_RETURN(, index < MAX_PLAYERS, "NETplayerKicked invalid player_id: (%" PRIu32")", index);
+	ASSERT_OR_RETURN(, index < MAX_CONNECTED_PLAYERS, "NETplayerKicked invalid player_id: (%" PRIu32")", index);
 
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
@@ -799,6 +809,7 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 	}
 	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", index, newName);
 	NETlogEntry("Player wants a name change.", SYNC_FLAG, index);
+	ASSERT_OR_RETURN(false, index < MAX_CONNECTED_PLAYERS, "invalid index: %" PRIu32 "", index);
 
 	sstrcpy(NetPlay.players[index].name, newName);
 	if (NetPlay.isHost)
@@ -817,7 +828,7 @@ void NETfixDuplicatePlayerNames()
 {
 	char name[StringSize];
 	unsigned i, j, pass;
-	for (i = 1; i != MAX_PLAYERS; ++i)
+	for (i = 1; i != MAX_CONNECTED_PLAYERS; ++i)
 	{
 		sstrcpy(name, NetPlay.players[i].name);
 		if (name[0] == '\0' || !NetPlay.players[i].allocated)
@@ -1683,7 +1694,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
 				break;
 			}
-			if (sender >= MAX_PLAYERS || (receiver >= MAX_PLAYERS && receiver != NET_ALL_PLAYERS))
+			if (sender >= MAX_CONNECTED_PLAYERS || (receiver >= MAX_CONNECTED_PLAYERS && receiver != NET_ALL_PLAYERS))
 			{
 				debug(LOG_ERROR, "Bad NET_SEND_TO_PLAYER.");
 				break;
@@ -1763,7 +1774,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETuint32_t(&num);
 			bool isSentByCorrectClient = responsibleFor(playerQueue.index, player);
 			isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
-			if (!isSentByCorrectClient || player >= MAX_PLAYERS)
+			if (!isSentByCorrectClient || player >= MAX_CONNECTED_PLAYERS)
 			{
 				break;
 			}
@@ -1793,7 +1804,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 	case NET_PLAYER_INFO:
 		{
 			uint32_t indexLen = 0, n;
-			uint32_t index = MAX_PLAYERS;
+			uint32_t index = MAX_CONNECTED_PLAYERS;
 			int32_t colour = 0;
 			int32_t position = 0;
 			int32_t team = 0;
@@ -1805,7 +1816,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 			NETuint32_t(&indexLen);
-			if (indexLen > MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
+			if (indexLen > MAX_CONNECTED_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
 			{
 				debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated: %u", indexLen);
 				NETend();
@@ -2006,7 +2017,7 @@ static void NETcheckPlayers()
 		return;
 	}
 
-	for (int i = 0; i < MAX_PLAYERS ; i++)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS ; i++)
 	{
 		if (NetPlay.players[i].allocated == 0)
 		{
@@ -2151,9 +2162,13 @@ checkMessages:
 
 bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 {
-	for (unsigned current = 0; current < MAX_PLAYERS; ++current)
+	for (unsigned current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
 	{
 		*queue = NETgameQueue(current);
+		if (queue->queue == nullptr)
+		{
+			continue;
+		}
 		while (!checkPlayerGameTime(current))  // Check for any messages that are scheduled to be read now.
 		{
 			if (!NETisMessageReady(*queue))
@@ -3257,11 +3272,12 @@ static void NETallowJoining()
 					NETBroadcastPlayerInfo(index);
 
 					char buf[250] = {'\0'};
-					snprintf(buf, sizeof(buf), "Player %s has joined, IP is: %s", name, NetPlay.players[index].IPtextAddress);
+					const char* pPlayerType = (NetPlay.players[index].isSpectator) ? "Spectator" : "Player";
+					snprintf(buf, sizeof(buf), "%s %s has joined, IP is: %s", pPlayerType, name, NetPlay.players[index].IPtextAddress);
 					debug(LOG_INFO, "%s", buf);
 					NETlogEntry(buf, SYNC_FLAG, index);
 
-					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
+					debug(LOG_NET, "%s, %s, with index of %u has joined using socket %p", pPlayerType, name, (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
 
 					// Increment player count
 					gamestruct.desc.dwCurrentPlayers++;
@@ -3338,7 +3354,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 
 	netPlayersUpdated = true;
 
-	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; ++playerIndex)
+	for (unsigned playerIndex = 0; playerIndex < MAX_CONNECTED_PLAYERS; ++playerIndex)
 	{
 		initPlayerNetworkProps(playerIndex);
 	}
@@ -3960,7 +3976,7 @@ void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (n = 0; n < MAX_PLAYERS; ++n)
+		for (n = 0; n < MAX_CONNECTED_PLAYERS; ++n)
 		{
 			NETsetPlayerConnectionStatus(status, n);
 		}
@@ -3984,7 +4000,7 @@ bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (n = 0; n < MAX_PLAYERS; ++n)
+		for (n = 0; n < MAX_CONNECTED_PLAYERS; ++n)
 		{
 			if (NETcheckPlayerConnectionStatus(status, n))
 			{

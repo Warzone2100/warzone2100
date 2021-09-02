@@ -53,9 +53,9 @@ static uint32_t prevRealTime;
   **/
 static UDWORD	stopCount;
 
-static uint32_t gameQueueTime[MAX_PLAYERS];
-static uint32_t gameQueueCheckTime[MAX_PLAYERS];
-static uint32_t gameQueueCheckCrc[MAX_PLAYERS];
+static uint32_t gameQueueTime[MAX_CONNECTED_PLAYERS];
+static uint32_t gameQueueCheckTime[MAX_CONNECTED_PLAYERS];
+static uint32_t gameQueueCheckCrc[MAX_CONNECTED_PLAYERS];
 static bool     crcError = false;
 
 static uint32_t updateReadyTime = 0;
@@ -63,7 +63,7 @@ static uint32_t updateWantedTime = 0;
 static uint16_t chosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t discreteChosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatency = GAME_TICKS_PER_UPDATE;
-static uint16_t wantedLatencies[MAX_PLAYERS];
+static uint16_t wantedLatencies[MAX_CONNECTED_PLAYERS];
 
 static optional<uint32_t> waitingOnPlayersStartTime;
 #define MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS GAME_TICKS_PER_SEC
@@ -111,7 +111,7 @@ void gameTimeInit(void)
 	chosenLatency = GAME_TICKS_PER_UPDATE * 2;
 	discreteChosenLatency = GAME_TICKS_PER_UPDATE * 2;
 	wantedLatency = GAME_TICKS_PER_UPDATE * 2;
-	for (player = 0; player != MAX_PLAYERS; ++player)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		gameQueueCheckCrc[player] = 0;
 		wantedLatencies[player] = 0;
@@ -216,9 +216,9 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		}
 		if (timeForGameTickUpdate && shouldDisplayWaitingStatus)
 		{
-			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + MAX_PLAYERS).c_str());
+			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + MAX_CONNECTED_PLAYERS).c_str());
 
-			for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+			for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 			{
 				if (!checkPlayerGameTime(player))
 				{
@@ -251,8 +251,8 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		updateLatency();
 		if (crcError)
 		{
-			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + MAX_PLAYERS).c_str());
-			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + MAX_PLAYERS).c_str());
+			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + MAX_CONNECTED_PLAYERS).c_str());
+			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + MAX_CONNECTED_PLAYERS).c_str());
 			crcError = false;
 		}
 	}
@@ -374,7 +374,7 @@ static void updateLatency()
 	uint16_t prevDiscreteChosenLatency = discreteChosenLatency;
 
 	// Find out what latency has been agreed on, next.
-	for (player = 0; player < MAX_PLAYERS; ++player)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		if (NetPlay.players[player].allocated  // Don't wait for dropped/kicked players.
 			&& (NetPlay.players[player].position < game.maxPlayers) // should always be a valid map / player position
@@ -409,7 +409,7 @@ void sendPlayerGameTime()
 	uint32_t checkTime = gameTime;
 	GameCrcType checkCrc = nextDebugSync();
 
-	for (player = 0; player < MAX_PLAYERS; ++player)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		if (!myResponsibility(player))
 		{
@@ -480,7 +480,7 @@ bool checkPlayerGameTime(unsigned player)
 	if (player == NET_ALL_PLAYERS)
 	{
 		begin = 0;
-		end = MAX_PLAYERS;
+		end = MAX_CONNECTED_PLAYERS;
 	}
 
 	for (player = begin; player < end; ++player)
@@ -499,7 +499,7 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < MAX_PLAYERS; ++player)
+		for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 		{
 			gameQueueTime[player] = time;
 		}

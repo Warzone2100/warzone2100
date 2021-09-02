@@ -1613,7 +1613,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 
 DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders, Rotation rot)
 {
-	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "invalid player?: %" PRIu32 "", selectedPlayer);
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "invalid player?: %" PRIu32 "", player);
 	// ajl. droid will be created, so inform others
 	if (bMultiMessages)
 	{
@@ -2091,7 +2091,7 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 	DROID	*psDroid;
 	UDWORD	count;
 
-	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "invalid player idx: %" PRIu32 "", player);
+	if (player >= MAX_PLAYERS) { return 0; }
 
 	for (psDroid = apsDroidLists[player], count = 0;
 	     psDroid; psDroid = psDroid->psNext)

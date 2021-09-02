@@ -6686,6 +6686,7 @@ static bool writeMessageFile(const char *pFileName)
 	// save each type of research
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
+		ASSERT(player < MAX_PLAYERS, "player out of bounds: %d", player);
 		for (MESSAGE *psMessage = apsMessages[player]; psMessage != nullptr; psMessage = psMessage->psNext)
 		{
 			ini.beginGroup("message_" + WzString::number(numMessages++));

@@ -116,7 +116,7 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 
 	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
 	unsigned numUsedPlayerSlots = 0;
-	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		if (isHumanPlayer(player))
 		{
@@ -141,7 +141,7 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 
 	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
 
-	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		int status = -1;
 		if (isHumanPlayer(player))
@@ -185,6 +185,11 @@ void clearPlayer(UDWORD player, bool quietly)
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
+
+	if (player >= MAX_PLAYERS)
+	{
+		return; // no more to do
+	}
 
 	(void)setPlayerName(player, "");				//clear custom player name (will use default instead)
 
@@ -243,7 +248,10 @@ static void resetMultiVisibility(UDWORD player)
 	DROID		*pDroid;
 	STRUCTURE	*pStruct;
 
-	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player %" PRIu32 " exceeds MAX_PLAYERS", player);
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
 
 	for (owned = 0 ; owned < MAX_PLAYERS ; owned++)		// for each player
 	{
@@ -317,7 +325,7 @@ void recvPlayerLeft(NETQUEUE queue)
 // A remote player has left the game
 bool MultiPlayerLeave(UDWORD playerIndex)
 {
-	if (playerIndex >= MAX_PLAYERS)
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
 		ASSERT(false, "Bad player number");
 		return false;
@@ -401,7 +409,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 		{
 			int i;
 
-			for (i = 0; i < MAX_PLAYERS; i++)
+			for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 			{
 				if (NetPlay.players[i].allocated)
 				{
@@ -446,7 +454,7 @@ bool recvDataCheck(NETQUEUE queue)
 	}
 	NETend();
 
-	if (player >= MAX_PLAYERS) // invalid player number.
+	if (player >= MAX_CONNECTED_PLAYERS) // invalid player number.
 	{
 		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
 		return false;

@@ -2230,7 +2230,7 @@ bool recvReadyRequest(NETQUEUE queue)
 	NETbool(&bReady);
 	NETend();
 
-	if (player >= MAX_PLAYERS)
+	if (player >= MAX_CONNECTED_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_READY_REQUEST from player %d: player id = %d",
 		      queue.index, (int)player);
@@ -2533,9 +2533,10 @@ static void drawReadyButton(UDWORD player, int slotOverride)
 
 	auto deleteExistingReadyButton = [player]() {
 		widgDelete(widgGetFromID(psWScreen, MULTIOP_READY_START + player));
-		widgDelete(widgGetFromID(psWScreen, MULTIOP_READY_START + MAX_PLAYERS + player)); // "Ready?" text label
+		widgDelete(widgGetFromID(psWScreen, MULTIOP_READY_START + MAX_CONNECTED_PLAYERS + player)); // "Ready?" text label
 	};
 	auto deleteExistingDifficultyButton = [player]() {
+		if (player >= MAX_PLAYERS) { return; }
 		widgDelete(widgGetFromID(psWScreen, MULTIOP_DIFFICULTY_INIT_START + player));
 	};
 
@@ -2604,7 +2605,7 @@ static void drawReadyButton(UDWORD player, int slotOverride)
 	}
 
 	std::shared_ptr<W_LABEL> label;
-	auto existingLabel = widgFormGetFromID(parent->shared_from_this(), MULTIOP_READY_START + MAX_PLAYERS + player);
+	auto existingLabel = widgFormGetFromID(parent->shared_from_this(), MULTIOP_READY_START + MAX_CONNECTED_PLAYERS + player);
 	if (existingLabel)
 	{
 		label = std::dynamic_pointer_cast<W_LABEL>(existingLabel);
@@ -2613,7 +2614,7 @@ static void drawReadyButton(UDWORD player, int slotOverride)
 	{
 		label = std::make_shared<W_LABEL>();
 		parent->attach(label);
-		label->id = MULTIOP_READY_START + MAX_PLAYERS + player;
+		label->id = MULTIOP_READY_START + MAX_CONNECTED_PLAYERS + player;
 	}
 	label->setGeometry(0, 0, MULTIOP_READY_WIDTH, 17);
 	label->setTextAlignment(WLAB_ALIGNBOTTOM);
@@ -2629,7 +2630,7 @@ static bool canChooseTeamFor(int i)
 static bool addNewSpectatorSlot()
 {
 	ASSERT_HOST_ONLY(return false);
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	for (int i = MAX_PLAYER_SLOTS; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (!isSpectatorOnlySlot(i))
 		{
@@ -2640,6 +2641,10 @@ static bool addNewSpectatorSlot()
 			continue;
 		}
 		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
+		{
+			continue; // skip it
+		}
+		if (i == PLAYER_FEATURE)
 		{
 			continue; // skip it
 		}
@@ -2712,9 +2717,9 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 			}
 		}
 
-		ASSERT(static_cast<size_t>(MAX_PLAYERS) <= NetPlay.players.size(), "Insufficient array size: %zu versus %zu", NetPlay.players.size(), (size_t)MAX_PLAYERS);
+		ASSERT(static_cast<size_t>(MAX_CONNECTED_PLAYERS) <= NetPlay.players.size(), "Insufficient array size: %zu versus %zu", NetPlay.players.size(), (size_t)MAX_CONNECTED_PLAYERS);
 		int numSlotsDisplayed = 0;
-		for (int i = 0; i < MAX_PLAYERS; i++)
+		for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 		{
 			if (positionChooserUp >= 0 && positionChooserUp != i && (NetPlay.isHost || !isHumanPlayer(i)))
 			{
@@ -2972,7 +2977,7 @@ RoomMessage buildMessage(int32_t sender, const char *text)
 	case NOTIFY_MESSAGE:
 		return RoomMessage::notify(text);
 	default:
-		if (sender >= 0 && sender < MAX_PLAYERS_IN_GUI)
+		if (sender >= 0 && sender < MAX_CONNECTED_PLAYERS)
 		{
 			return RoomMessage::player(sender, text);
 		}
@@ -3033,7 +3038,13 @@ public:
 		auto marginLeft = left + leftMargin;
 		auto textX = marginLeft + horizontalPadding;
 		auto textY = top - cachedText->aboveBase();
-		pie_UniTransBoxFill(marginLeft, top, left + width(), top + height(), pal_GetTeamColour((*player)->colour));
+		bool isSpectator = (*player)->isSpectator;
+		PIELIGHT bckColor = pal_RGBA(0, 0, 0, 70);
+		if (!isSpectator)
+		{
+			bckColor = pal_GetTeamColour((*player)->colour);
+		}
+		pie_UniTransBoxFill(marginLeft, top, left + width(), top + height(), bckColor);
 		cachedText->renderOutlined(textX, textY, WZCOL_WHITE, {0, 0, 0, 128});
 	}
 
@@ -3101,6 +3112,8 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		break;
 
 	case RoomMessagePlayer:
+	{
+		ASSERT(message.sender.get() != nullptr, "Null message sender?");
 		paragraph->setFont(font_small);
 		paragraph->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
 		paragraph->addText(formatLocalDateTime("%H:%M", message.time));
@@ -3109,10 +3122,12 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 
 		paragraph->setFont(font_regular);
 		paragraph->setShadeColour({0, 0, 0, 0});
-		paragraph->setFontColour(WZCOL_WHITE);
+		bool specSender = (*message.sender)->isSpectator && !message.sender->isHost();
+		paragraph->setFontColour((!specSender) ? WZCOL_WHITE : WZCOL_TEXT_MEDIUM);
 		paragraph->addText(astringf(" %s", message.text.c_str()));
 
 		break;
+	}
 
 	case RoomMessageNotify:
 	default:
@@ -3247,7 +3262,7 @@ static void resetPlayerPositions()
 {
 	// Reset players' positions or bad things could happen to scavenger slot
 
-	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = i;
@@ -3545,6 +3560,10 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 			NetPlay.players[playerIndex].difficulty =  AIDifficulty::DISABLED;
 			NetPlay.players[playerIndex].ai = AI_OPEN;
 			NetPlay.players[playerIndex].name[0] = '\0';
+			if (playerIndex == PLAYER_FEATURE)
+			{
+				NetPlay.players[playerIndex].ai = AI_CLOSED;
+			}
 		}
 		else
 		{
@@ -4068,7 +4087,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		break;
 	}
 
-	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
+	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_CONNECTED_PLAYERS - 1 <= MULTIOP_TEAMS_END);
 	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && (!locked.teams || !locked.spectators))  // Clicked on a team chooser
 	{
 		int player = id - MULTIOP_TEAMS_START;
@@ -4125,8 +4144,8 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	}
 
 	// clicked on a player
-	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_PLAYERS - 1 <= MULTIOP_PLAYER_END);
-	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1
+	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_CONNECTED_PLAYERS - 1 <= MULTIOP_PLAYER_END);
+	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_CONNECTED_PLAYERS - 1
 	    && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost
 	        || (positionChooserUp >= 0 && !isHumanPlayer(id - MULTIOP_PLAYER_START))))
 	{
@@ -4134,6 +4153,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
 			&& !locked.position
 		    && positionChooserUp < 0
+			&& player < MAX_PLAYERS
 			&& !isSpectatorOnlySlot(player))
 		{
 			openPositionChooser(player);
@@ -4152,6 +4172,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			addPlayerBox(true);
 		}
 		else if (!NetPlay.players[player].allocated && !locked.ai && NetPlay.isHost
+				 && player < MAX_PLAYERS
 		         && positionChooserUp < 0)
 		{
 			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
@@ -4406,7 +4427,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case NET_PLAYER_DROPPED:		// remote player got disconnected
 			{
-				uint32_t player_id = MAX_PLAYERS;
+				uint32_t player_id = MAX_CONNECTED_PLAYERS;
 
 				resetReadyStatus(false);
 
@@ -4416,7 +4437,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				}
 				NETend();
 
-				if (player_id >= MAX_PLAYERS)
+				if (player_id >= MAX_CONNECTED_PLAYERS)
 				{
 					debug(LOG_INFO, "** player %u has dropped - huh?", player_id);
 					break;
@@ -4433,7 +4454,10 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				MultiPlayerLeave(player_id);		// get rid of their stuff
 				NET_InitPlayer(player_id, false);           // sets index player's array to false
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
-				playerVotes[player_id] = 0;
+				if (player_id < MAX_PLAYERS)
+				{
+					playerVotes[player_id] = 0;
+				}
 				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 				if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 				{
@@ -4491,7 +4515,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case NET_KICK:						// player is forcing someone to leave
 			{
-				uint32_t player_id;
+				uint32_t player_id = MAX_CONNECTED_PLAYERS;
 				char reason[MAX_KICK_REASON];
 				LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
 
@@ -4501,13 +4525,16 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				NETenum(&KICK_TYPE);
 				NETend();
 
-				if (player_id >= MAX_PLAYERS)
+				if (player_id >= MAX_CONNECTED_PLAYERS)
 				{
 					debug(LOG_ERROR, "NET_KICK message with invalid player_id: (%" PRIu32")", player_id);
 					break;
 				}
 
-				playerVotes[player_id] = 0;
+				if (player_id < MAX_PLAYERS)
+				{
+					playerVotes[player_id] = 0;
+				}
 
 				if (player_id == NET_HOST_ONLY)
 				{
@@ -5016,12 +5043,13 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int y = yOffset + psWidget->y();
 	UDWORD		i = psWidget->UserData;
 
-	ASSERT_OR_RETURN(, i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
+	ASSERT_OR_RETURN(, i < MAX_CONNECTED_PLAYERS, "Index (%" PRIu32 ") out of bounds", i);
 
 	drawBoxForPlayerInfoSegment(i, x, y, psWidget->width(), psWidget->height());
 
 	if (!NetPlay.players[i].isSpectator)
 	{
+		ASSERT_OR_RETURN(, NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
 		iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
 	}
 	else
@@ -5671,9 +5699,9 @@ static void sendRoomChatMessage(char const *text)
 
 static int numSlotsToBeDisplayed()
 {
-	ASSERT(static_cast<size_t>(MAX_PLAYERS) <= NetPlay.players.size(), "Insufficient array size: %zu versus %zu", NetPlay.players.size(), (size_t)MAX_PLAYERS);
+	ASSERT(static_cast<size_t>(MAX_CONNECTED_PLAYERS) <= NetPlay.players.size(), "Insufficient array size: %zu versus %zu", NetPlay.players.size(), (size_t)MAX_CONNECTED_PLAYERS);
 	int numSlotsToBeDisplayed = 0;
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (isSpectatorOnlySlot(i)
 				 && ((i >= NetPlay.players.size()) || !(NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN)))
@@ -5695,7 +5723,7 @@ static inline bool spectatorSlotsSupported()
 static inline bool isSpectatorOnlySlot(UDWORD playerIdx)
 {
 	ASSERT_OR_RETURN(false, playerIdx < NetPlay.players.size(), "Invalid playerIdx: %" PRIu32 "", playerIdx);
-	return NetPlay.players[playerIdx].position >= game.maxPlayers;
+	return playerIdx >= MAX_PLAYERS || NetPlay.players[playerIdx].position >= game.maxPlayers;
 }
 
 //// NOTE: Pass in NetPlay.players[i].position

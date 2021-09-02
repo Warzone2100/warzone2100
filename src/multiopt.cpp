@@ -98,7 +98,7 @@ void sendOptions()
 	}
 
 	// Send the list of who is still joining
-	for (unsigned i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
 	}
@@ -169,7 +169,7 @@ void recvOptions(NETQUEUE queue)
 	}
 
 	// Send the list of who is still joining
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
 	}
@@ -361,7 +361,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetA
 	/* Skip resetting AIs if we are doing autohost */
 	if (NetPlay.bComms && !skipResetAIs)
 	{
-		for (unsigned i = 0; i < MAX_PLAYERS; i++)
+		for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 		{
 			NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
 		}
@@ -423,7 +423,7 @@ static bool gameInit()
 {
 	UDWORD			player;
 
-	for (player = 1; player < MAX_PLAYERS; player++)
+	for (player = 1; player < MAX_CONNECTED_PLAYERS; player++)
 	{
 		// we want to remove disabled AI & all the other players that don't belong
 		if ((NetPlay.players[player].difficulty == AIDifficulty::DISABLED || player >= game.maxPlayers) && player != scavengerPlayer() && !(NetPlay.players[player].isSpectator && NetPlay.players[player].allocated))
@@ -480,7 +480,7 @@ bool multiGameInit()
 {
 	UDWORD player;
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 	{
 		openchannels[player] = true;								//open comms to this player.
 	}

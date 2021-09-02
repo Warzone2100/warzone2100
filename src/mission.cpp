@@ -1225,7 +1225,7 @@ static bool startMissionBetween()
 //check no units left with any settings that are invalid
 static void clearCampaignUnits()
 {
-	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
