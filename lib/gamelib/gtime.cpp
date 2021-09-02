@@ -65,6 +65,9 @@ static uint16_t discreteChosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatencies[MAX_PLAYERS];
 
+static optional<uint32_t> waitingOnPlayersStartTime;
+#define MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS GAME_TICKS_PER_SEC
+
 static void updateLatency(void);
 
 static std::string listToString(char const *format, char const *separator, uint32_t const *begin, uint32_t const *end)
@@ -201,10 +204,17 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
-		timeForGameTickUpdate = false;
-		forceTryGameTickUpdate = false;
+		if (!waitingOnPlayersStartTime.has_value())
+		{
+			waitingOnPlayersStartTime = realTime;
+		}
 
-		if (timeForGameTickUpdate)
+		bool shouldDisplayWaitingStatus = true;
+		if (NetPlay.players[selectedPlayer].isSpectator && !NetPlay.isHost)
+		{
+			shouldDisplayWaitingStatus = (realTime - waitingOnPlayersStartTime.value_or(0)) > MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS;
+		}
+		if (timeForGameTickUpdate && shouldDisplayWaitingStatus)
 		{
 			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + MAX_PLAYERS).c_str());
 
@@ -217,6 +227,9 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 				}
 			}
 		}
+
+		timeForGameTickUpdate = false;
+		forceTryGameTickUpdate = false;
 	}
 
 	// Adjust deltas.
@@ -225,6 +238,8 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		// Update the game time.
 		deltaGameTime = GAME_TICKS_PER_UPDATE;
 		gameTime += deltaGameTime;
+
+		waitingOnPlayersStartTime = nullopt;
 
 		result = (timeForGameTickUpdate) ? GameTimeUpdateResult::GAME_TIME_UPDATED : GameTimeUpdateResult::GAME_TIME_UPDATED_FORCED;
 
