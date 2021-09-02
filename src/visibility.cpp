@@ -648,13 +648,16 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 
 bool hasSharedVision(unsigned viewer, unsigned ally)
 {
-	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
+	if (viewer >= MAX_PLAYERS) { return false; }
+	ASSERT_OR_RETURN(false, ally < MAX_PLAYERS, "Bad ally %u (viewer: %u)", ally, viewer);
 
 	return viewer == ally || (bMultiPlayer && alliancesSharedVision(game.alliance) && aiCheckAlliances(viewer, ally));
 }
 
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
+	if (viewer >= MAX_PLAYERS) { return; }
+
 	//forward out vision to our allies
 	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
@@ -667,6 +670,8 @@ static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX
 
 static void setSeenByInstantly(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
+	if (viewer >= MAX_PLAYERS) { return; }
+
 	//forward out vision to our allies
 	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{

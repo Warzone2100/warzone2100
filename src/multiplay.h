@@ -88,11 +88,11 @@ enum class InGameSide : bool {
 // info used inside games.
 struct MULTIPLAYERINGAME
 {
-	UDWORD				PingTimes[MAX_PLAYERS];				// store for pings.
-	bool				localOptionsReceived;				// used to show if we have game options yet..
-	bool				localJoiningInProgress;				// used before we know our player number.
-	bool				JoiningInProgress[MAX_PLAYERS];
-	bool				DataIntegrity[MAX_PLAYERS];
+	UDWORD				PingTimes[MAX_CONNECTED_PLAYERS];				// store for pings.
+	bool				localOptionsReceived;							// used to show if we have game options yet..
+	bool				localJoiningInProgress;							// used before we know our player number.
+	bool				JoiningInProgress[MAX_CONNECTED_PLAYERS];
+	bool				DataIntegrity[MAX_CONNECTED_PLAYERS];
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
@@ -141,7 +141,7 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern bool bMultiPlayer;				// true when more than 1 player.
 extern bool bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
-extern bool openchannels[MAX_PLAYERS];
+extern bool openchannels[MAX_CONNECTED_PLAYERS];
 extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define RUN_ONLY_ON_SIDE(_side) \

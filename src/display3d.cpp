@@ -1886,7 +1886,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 	// now we draw the blueprints for all ordered buildings
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		if (!hasSharedVision(selectedPlayer, player))
+		if (!hasSharedVision(selectedPlayer, player) && !NetPlay.players[selectedPlayer].isSpectator)
 		{
 			continue;
 		}

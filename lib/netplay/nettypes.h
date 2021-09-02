@@ -58,6 +58,10 @@ struct NETQUEUE
 
 #define NET_NO_EXCLUDE 255
 
+#define MAX_SPECTATOR_SLOTS		10
+#define MAX_CONNECTED_PLAYERS   (MAX_PLAYER_SLOTS + MAX_SPECTATOR_SLOTS)
+#define MAX_TMP_SOCKETS         16
+
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
 NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer = NET_NO_EXCLUDE);  ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
 NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See comments on gameQueues in nettypes.cpp.)

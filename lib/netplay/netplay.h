@@ -142,9 +142,6 @@ enum MESSAGE_TYPES
 #define modlist_string_size	255		// For a concatenated list of mods
 #define password_string_size 64		// longer passwords slow down the join code
 
-#define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
-#define MAX_TMP_SOCKETS         16
-
 #define MAX_NET_TRANSFERRABLE_FILE_SIZE	0x8000000
 
 struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
@@ -487,6 +484,11 @@ struct PlayerReference
 	PLAYER const *operator ->() const
 	{
 		return detached? detached.get(): &NetPlay.players[index];
+	}
+
+	bool isHost() const
+	{
+		return index == NetPlay.hostPlayer;
 	}
 
 private:

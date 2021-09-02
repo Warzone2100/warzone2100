@@ -47,7 +47,7 @@ static UDWORD averagePing();
 #define AV_PING_FREQUENCY       20000                           // how often to update average pingtimes. in approx millisecs.
 #define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
 
-static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
+static UDWORD				PingSend[MAX_CONNECTED_PLAYERS];	//stores the time the ping was called.
 static uint8_t pingChallenge[8];                                // Random data sent with the last ping.
 
 
@@ -63,7 +63,7 @@ bool sendScoreCheck()
 	{
 		uint8_t			i;
 
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 		{
 			// Host controls AI's scores + his own...
 			if (myResponsibility(i))
@@ -85,7 +85,7 @@ static UDWORD averagePing()
 {
 	UDWORD i, count = 0, total = 0;
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (isHumanPlayer(i))
 		{
@@ -137,7 +137,7 @@ bool sendPing()
 	 * we should re-enumerate the players.
 	 */
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (isHumanPlayer(i)
 		    && PingSend[i]
@@ -165,7 +165,7 @@ bool sendPing()
 	NETend();
 
 	// Note when we sent the ping
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		PingSend[i] = realTime;
 	}
@@ -194,7 +194,7 @@ bool recvPing(NETQUEUE queue)
 	}
 	NETend();
 
-	if (sender >= MAX_PLAYERS)
+	if (sender >= MAX_CONNECTED_PLAYERS)
 	{
 		debug(LOG_ERROR, "Bad NET_PING packet, sender is %d", (int)sender);
 		return false;

@@ -2366,7 +2366,11 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 		}
 	}
 	ASSERT(psViewData, "Viewdata not found");
-	MESSAGE *psMessage = addMessage(msgType, false, player);
+	MESSAGE *psMessage = nullptr;
+	if (player < MAX_PLAYERS)
+	{
+		psMessage = addMessage(msgType, false, player);
+	}
 	if (!bMultiPlayer && psMessage)
 	{
 		//we need to set this here so the VIDEO_QUIT callback is not called
@@ -2649,6 +2653,7 @@ wzapi::no_return_value wzapi::setTutorialMode(WZAPI_PARAMS(bool tutorialMode))
 wzapi::no_return_value wzapi::setDesign(WZAPI_PARAMS(bool allowDesignValue))
 {
 	DROID_TEMPLATE *psCurr;
+	if (selectedPlayer >= MAX_PLAYERS) { return {}; }
 	// Switch on or off future templates
 	// FIXME: This dual data structure for templates is just plain insane.
 	enumerateTemplates(selectedPlayer, [allowDesignValue](DROID_TEMPLATE * psTempl) {

@@ -82,7 +82,7 @@
 // globals.
 bool						bMultiPlayer				= false;	// true when more than 1 player.
 bool						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
-bool						openchannels[MAX_PLAYERS] = {true};
+bool						openchannels[MAX_CONNECTED_PLAYERS] = {true};
 UBYTE						bDisplayMultiJoiningStatus;
 
 MULTIPLAYERGAME				game;									//info to describe game.
@@ -206,7 +206,7 @@ bool multiPlayerLoop()
 	UBYTE		joinCount;
 
 	joinCount = 0;
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (isHumanPlayer(i) && ingame.JoiningInProgress[i])
 		{
@@ -258,7 +258,7 @@ bool multiPlayerLoop()
 			{
 				// we waited 60 secs to make sure people didn't bypass the data integrity checks
 				int index;
-				for (index = 0; index < MAX_PLAYERS; index++)
+				for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 				{
 					if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NET_HOST_ONLY)
 					{
@@ -469,6 +469,7 @@ const char *getPlayerName(int player)
 	}
 	else if (NetPlay.players[player].ai >= 0 && !NetPlay.players[player].allocated)
 	{
+		ASSERT_OR_RETURN("", player < MAX_PLAYERS, "invalid player: %d", player);
 		static char names[MAX_PLAYERS][StringSize];  // Must be static, since the getPlayerName() return value is used in tool tips... Long live the widget system.
 		// Add colour to player name.
 		sstrcpy(names[player], getPlayerColourName(player));
@@ -491,7 +492,7 @@ bool setPlayerName(int player, const char *sName)
 // to determine human/computer players and responsibilities of each..
 bool isHumanPlayer(int player)
 {
-	if (player >= MAX_PLAYERS || player < 0)
+	if (player >= MAX_CONNECTED_PLAYERS || player < 0)
 	{
 		return false;	// obvious, really
 	}
@@ -915,7 +916,7 @@ bool recvMessage()
 				// the player that has just responded
 				NETuint32_t(&player_id);
 				NETend();
-				if (player_id >= MAX_PLAYERS)
+				if (player_id >= MAX_CONNECTED_PLAYERS)
 				{
 					debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
 					break;
@@ -1290,7 +1291,7 @@ bool NetworkTextMessage::receive(NETQUEUE queue)
 		sender = queue.index;  // Fix corrupted sender.
 	}
 
-	if (sender >= MAX_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
+	if (sender >= MAX_CONNECTED_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
 	{
 		return false;
 	}
@@ -1435,7 +1436,7 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 		sender = queue.index;  // Fix corrupted sender.
 	}
 
-	if (sender >= MAX_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
+	if (sender >= MAX_CONNECTED_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
 	{
 		return false;
 	}
@@ -1584,7 +1585,7 @@ void sendMap()
 
 	// calculate the time budget per file
 	uint64_t totalFilesToSend = 0;
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		totalFilesToSend += NetPlay.players[i].wzFiles.size();
 	}
@@ -1594,7 +1595,7 @@ void sendMap()
 	auto file_startTime = std::chrono::high_resolution_clock::now();
 	microDuration file_currentDuration;
 
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		auto &files = NetPlay.players[i].wzFiles;
 		for (auto &file : files)
@@ -1722,6 +1723,8 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 /* Looks through the players list of messages to find VIEW_BEACON (one per player!) pointer */
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 {
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Unsupported player: %" PRIu32 "", player);
+
 	for (MESSAGE *psCurr = apsMessages[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		//look for VIEW_BEACON, should only be 1 per player
@@ -1881,7 +1884,7 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 	//Really reset ready status
 	if (NetPlay.isHost && !ignoreReadyReset)
 	{
-		for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+		for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
 			//Ignore for autohost launch option.
 			if (selectedPlayer == i && getHostLaunch() == HostLaunch::Autohost)

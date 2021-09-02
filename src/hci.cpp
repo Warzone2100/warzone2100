@@ -2086,6 +2086,11 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	PROXIMITY_DISPLAY	*psProxDisp2;
 	UDWORD				cnt;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+
 	W_FORMINIT sBFormInit;
 	sBFormInit.formID = 0;
 	sBFormInit.id = IDPROX_START + inc;
@@ -2144,6 +2149,8 @@ void processProximityButtons(UDWORD id)
 	{
 		return;
 	}
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
 	//find which proximity display this relates to
 	psProxDisp = nullptr;
