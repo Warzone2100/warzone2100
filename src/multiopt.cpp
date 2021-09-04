@@ -494,19 +494,19 @@ bool multiGameInit()
 // at the end of every game.
 bool multiGameShutdown()
 {
-	PLAYERSTATS	st;
-	uint32_t        time;
-
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
 
 	sendLeavingMsg();							// say goodbye
 
-	st = getMultiStats(selectedPlayer);	// save stats
+	if (selectedPlayer < MAX_CONNECTED_PLAYERS)
+	{
+		PLAYERSTATS st = getMultiStats(selectedPlayer);	// save stats
 
-	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+		saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+	}
 
 	// if we terminate the socket too quickly, then, it is possible not to get the leave message
-	time = wzGetTicks();
+	uint32_t time = wzGetTicks();
 	while (wzGetTicks() - time < 1000)
 	{
 		wzYieldCurrentThread();  // TODO Make a wzDelay() function?

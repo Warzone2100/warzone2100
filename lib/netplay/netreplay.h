@@ -25,11 +25,11 @@
 #include "netplay.h"
 
 
-bool NETreplaySaveStart();
+bool NETreplaySaveStart(ReplayOptionsHandler const &optionsHandler);
 bool NETreplaySaveStop();
 void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player);
 
-bool NETreplayLoadStart(std::string const &filename);
+bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler);
 bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &player);
 bool NETreplayLoadStop();
 

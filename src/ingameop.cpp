@@ -228,10 +228,6 @@ static bool _intAddInGameOptions()
 	auto ingameOp = std::make_shared<IntFormAnimated>();
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		int lines = ((bMultiPlayer && NetPlay.bComms) || bInTutorial) ? 3 : 5;
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(lines), INTINGAMEOP_W, INTINGAMEOPAUTO_H(lines));
-	}));
 
 	int row = 1;
 	// add 'resume'
@@ -242,7 +238,7 @@ static bool _intAddInGameOptions()
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Options"), OPALIGN);
 	row++;
 
-	if (!((bMultiPlayer && NetPlay.bComms) || bInTutorial))
+	if (!((bMultiPlayer && NetPlay.bComms) || bInTutorial || NETisReplay()))
 	{
 		if (bMultiPlayer)
 		{
@@ -273,6 +269,12 @@ static bool _intAddInGameOptions()
 	{
 		addIGTextButton(INTINGAMEOP_CONFIRM_QUIT, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
+
+	// calculate layout
+	int lines = row;
+	ingameOp->setCalcLayout([lines](WIDGET *psWidget){
+		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(lines), INTINGAMEOP_W, INTINGAMEOPAUTO_H(lines));
+	});
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.

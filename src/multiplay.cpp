@@ -2012,8 +2012,9 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 		enableGodMode();
 
 		// add spectator mode message
-		addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!streamer_spectator_mode()) ? MAX_CONSOLE_MESSAGE_DURATION : 15);
-		addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!streamer_spectator_mode()) ? 30 : 15);
+		bool lowUISpectatorMode = streamer_spectator_mode() || NETisReplay();
+		addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? MAX_CONSOLE_MESSAGE_DURATION : 15);
+		addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? 30 : 15);
 	}
 
 	turnOffMultiMsg(false);

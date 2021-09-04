@@ -46,7 +46,8 @@
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
 /// messages at the same game time. The game queues should be used, even in single-player. Players should write to their own queue, not to other player's
 /// queues, and should read messages from all queues including their own.
-static NetQueue *gameQueues[MAX_CONNECTED_PLAYERS] = {nullptr};
+/// (Note: Extra +1 for the added replay spectator)
+static NetQueue *gameQueues[MAX_GAMEQUEUE_SLOTS] = {nullptr};
 
 /// There is a bidirectional net queue for communicating with each client or host. Each queue corresponds either to a real socket, or a virtual socket
 /// which routes via the host.
@@ -64,6 +65,8 @@ static MessageReader reader;  ///< Used when deserialising a message.
 static NetMessage message;    ///< A message which is being serialised or deserialised.
 static NETQUEUE queueInfo;    ///< Indicates which queue is currently being (de)serialised.
 static PACKETDIR NetDir;      ///< Indicates whether a message is being serialised (PACKET_ENCODE) or deserialised (PACKET_DECODE), or not doing anything (PACKET_INVALID).
+
+static bool bIsReplay = false;
 
 static void NETsetPacketDir(PACKETDIR dir)
 {
@@ -340,7 +343,12 @@ NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer)
 NETQUEUE NETgameQueue(unsigned player)
 {
 	NETQUEUE ret;
-	ASSERT(player < MAX_CONNECTED_PLAYERS, "Huh?");
+	if (player >= MAX_GAMEQUEUE_SLOTS)
+	{
+		// found one
+		debug(LOG_ERROR, "Found the call");
+	}
+	ASSERT(player < MAX_GAMEQUEUE_SLOTS, "Huh?");
 	NetQueue *queue = gameQueues[player];
 	ret.queue = queue;
 	ret.isPair = false;
@@ -431,8 +439,14 @@ void NETdeleteQueue(void)
 		gameQueues[i] = nullptr;
 	}
 
+	// extra replay spectator gamequeue
+	delete gameQueues[MAX_CONNECTED_PLAYERS];
+	gameQueues[MAX_CONNECTED_PLAYERS] = nullptr;
+
 	delete broadcastQueue;
 	broadcastQueue = nullptr;
+
+	bIsReplay = false;
 }
 
 void NETsetNoSendOverNetwork(NETQUEUE queue)
@@ -474,6 +488,13 @@ bool NETend()
 	// If we are encoding just return true
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
+		if (bIsReplay && queueInfo.index != realSelectedPlayer)
+		{
+			// don't bother adding to the send queue if we're playing a replay
+			NETsetPacketDir(PACKET_INVALID);
+			return true;
+		}
+
 		// Push the message onto the list.
 		NetQueue *queue = sendQueue(queueInfo);
 		if (queue == nullptr) {
@@ -554,7 +575,7 @@ bool NETend()
 
 void NETflushGameQueues()
 {
-	for (uint8_t player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
+	for (uint8_t player = 0; player < MAX_GAMEQUEUE_SLOTS; ++player)
 	{
 		NetQueue *queue = gameQueues[player];
 
@@ -569,6 +590,8 @@ void NETflushGameQueues()
 		{
 			continue;  // Nothing to send for this player.
 		}
+
+		ASSERT(!bIsReplay, "Where are we sending this if it's a replay?");
 
 		// Decoded in NETprocessSystemMessage in netplay.cpp.
 		NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
@@ -793,10 +816,12 @@ void NETnetMessage(NetMessage const **msg)
 	}
 }
 
+ReplayOptionsHandler::~ReplayOptionsHandler() { }
+
 // TODO Call this function somewhere.
-bool NETloadReplay(std::string const &filename)
+bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler)
 {
-	if (!NETreplayLoadStart(filename))
+	if (!NETreplayLoadStart(filename, optionsHandler))
 	{
 		return false;
 	}
@@ -812,5 +837,16 @@ bool NETloadReplay(std::string const &filename)
 		gameQueues[player]->pushMessage(*newMessage);
 	}
 	NETreplayLoadStop();
+	bIsReplay = true;
 	return true;
+}
+
+bool NETisReplay()
+{
+	return bIsReplay;
+}
+
+void NETshutdownReplay()
+{
+	bIsReplay = false;
 }

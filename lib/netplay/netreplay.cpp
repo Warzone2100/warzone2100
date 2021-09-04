@@ -33,9 +33,17 @@ static PHYSFS_file *replaySaveHandle = nullptr;
 static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
+static const uint32_t currentReplayFormatVer = 1;
 
-bool NETreplaySaveStart()
+bool NETreplaySaveStart(ReplayOptionsHandler const &optionsHandler)
 {
+	if (NETisReplay())
+	{
+		// Have already loaded and will be running a replay - don't bother saving another
+		debug(LOG_INFO, "Replay loaded - skip recording of new replay");
+		return false;
+	}
+
 	time_t aclock;
 	time(&aclock);                     // Get time in seconds
 	tm *newtime = localtime(&aclock);  // Convert time to struct
@@ -43,7 +51,7 @@ bool NETreplaySaveStart()
 	bool isSkirmish = true;
 
 	char filename[256];
-	snprintf(filename, sizeof(filename), "replay/%s/%04d%02d%02d_%02d%02d%02d.wzrp", isSkirmish? "skirmish" : "campaign", newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec);
+	snprintf(filename, sizeof(filename), "replay/%s/%04d%02d%02d_%02d%02d%02d_p%u.wzrp", isSkirmish? "skirmish" : "campaign", newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec, selectedPlayer);
 	replaySaveHandle = PHYSFS_openWrite(filename);  // open the file
 	if (replaySaveHandle == nullptr)
 	{
@@ -51,13 +59,24 @@ bool NETreplaySaveStart()
 		return false;
 	}
 
+	WZ_PHYSFS_SETBUFFER(replaySaveHandle, 4096)//;
+
 	PHYSFS_writeSBE32(replaySaveHandle, magicReplayNumber);
 
-	// TODO Save map name or map data and game settings and list of players in game and stuff.
+	// Save map name or map data and game settings and list of players in game and stuff.
 	nlohmann::json settings = nlohmann::json::object();
 
+	// Save "replay file format version"
+	settings["replayFormatVer"] = currentReplayFormatVer;
+
+	// Save Netcode version
 	settings["major"] = NETGetMajorVersion();
 	settings["minor"] = NETGetMinorVersion();
+
+	// Save desired info from optionsHandler
+	nlohmann::json gameOptions = nlohmann::json::object();
+	optionsHandler.saveOptions(gameOptions);
+	settings["gameOptions"] = gameOptions;
 
 	auto data = settings.dump();
 	PHYSFS_writeSBE32(replaySaveHandle, data.size());
@@ -100,7 +119,7 @@ void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player)
 	}
 }
 
-bool NETreplayLoadStart(std::string const &filename)
+bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler)
 {
 	auto onFail = [&](char const *reason) {
 		debug(LOG_ERROR, "Could not load replay file %s: %s", filename.c_str(), reason);
@@ -135,14 +154,26 @@ bool NETreplayLoadStart(std::string const &filename)
 		return onFail("truncated header");
 	}
 
-	// TODO Load map name or map data and game settings and list of players in game and stuff.
+	// Restore map name or map data and game settings and list of players in game and stuff.
 	nlohmann::json settings = nlohmann::json::parse(data);
 
-	uint32_t major = settings["major"].get<uint32_t>();
-	uint32_t minor = settings["minor"].get<uint32_t>();
+	uint32_t replayFormatVer = settings.at("replayFormatVer").get<uint32_t>();
+	if (replayFormatVer > currentReplayFormatVer)
+	{
+		return onFail("Replay format is newer than this version of Warzone 2100 can support");
+	}
+
+	uint32_t major = settings.at("major").get<uint32_t>();
+	uint32_t minor = settings.at("minor").get<uint32_t>();
 	if (!NETisCorrectVersion(major, minor))
 	{
-		return onFail("wrong game version");
+		return onFail("wrong netcode version");
+	}
+
+	// Load game options using optionsHandler
+	if (!optionsHandler.restoreOptions(settings.at("gameOptions")))
+	{
+		return onFail("invalid options");
 	}
 
 	debug(LOG_INFO, "Started reading replay file \"%s\".", filename.c_str());

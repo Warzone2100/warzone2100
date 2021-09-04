@@ -663,3 +663,83 @@ uint32_t getSelectedPlayerUnitsKilled()
 		return missionData.unitsKilled;
 	}
 }
+
+// MARK: -
+
+inline void to_json(nlohmann::json& j, const EcKey& k) {
+	if (k.empty())
+	{
+		j = "";
+		return;
+	}
+	auto publicKeyBytes = k.toBytes(EcKey::Public);
+	std::string publicKeyB64Str = base64Encode(publicKeyBytes);
+	j = publicKeyB64Str;
+}
+
+inline void from_json(const nlohmann::json& j, EcKey& k) {
+	std::string publicKeyB64Str = j.get<std::string>();
+	if (publicKeyB64Str.empty())
+	{
+		k.clear();
+		return;
+	}
+	EcKey::Key publicKeyBytes = base64Decode(publicKeyB64Str);
+	k.fromBytes(publicKeyBytes, EcKey::Public);
+}
+
+inline void to_json(nlohmann::json& j, const PLAYERSTATS& p) {
+	j = nlohmann::json::object();
+	j["played"] = p.played;
+	j["wins"] = p.wins;
+	j["losses"] = p.losses;
+	j["totalKills"] = p.totalKills;
+	j["totalScore"] = p.totalScore;
+	j["recentKills"] = p.recentKills;
+	j["recentScore"] = p.recentScore;
+	j["identity"] = p.identity;
+}
+
+inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
+	k.played = j.at("played").get<uint32_t>();
+	k.wins = j.at("wins").get<uint32_t>();
+	k.losses = j.at("losses").get<uint32_t>();
+	k.totalKills = j.at("totalKills").get<uint32_t>();
+	k.totalScore = j.at("totalScore").get<uint32_t>();
+	k.recentKills = j.at("recentKills").get<uint32_t>();
+	k.recentScore = j.at("recentScore").get<uint32_t>();
+	k.identity = j.at("identity").get<EcKey>();
+}
+
+bool saveMultiStatsToJSON(nlohmann::json& json)
+{
+	json = nlohmann::json::array();
+
+	for (size_t idx = 0; idx < MAX_CONNECTED_PLAYERS; idx++)
+	{
+		json.push_back(playerStats[idx]);
+	}
+
+	return true;
+}
+
+bool loadMultiStatsFromJSON(const nlohmann::json& json)
+{
+	if (!json.is_array())
+	{
+		debug(LOG_ERROR, "Expecting an array");
+		return false;
+	}
+	if (json.size() > MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Array size is too large: %zu", json.size());
+		return false;
+	}
+
+	for (size_t idx = 0; idx < json.size(); idx++)
+	{
+		playerStats[idx] = json.at(idx).get<PLAYERSTATS>();
+	}
+
+	return true;
+}

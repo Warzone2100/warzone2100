@@ -41,6 +41,9 @@ private:
 /// Seeds the random number generator. The seed is sent over the network, such that all clients generate the same number sequence, without the number sequence being the same each game.
 void gameSRand(uint32_t seed);
 
+/// Get the seed used to seed the game's random number generator
+uint32_t gameRand_GetSeed();
+
 /// Generates a random number in the interval [0...UINT32_MAX].
 /// Must not be called from graphics routines, only for making game decisions.
 uint32_t gameRandU32();

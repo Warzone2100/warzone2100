@@ -78,4 +78,7 @@ void addKnownPlayer(std::string const &name, EcKey const &key, bool override = f
 uint32_t getMultiPlayUnitsKilled(uint32_t player);
 uint32_t getSelectedPlayerUnitsKilled();
 
+bool saveMultiStatsToJSON(nlohmann::json& json);
+bool loadMultiStatsFromJSON(const nlohmann::json& json);
+
 #endif // __INCLUDED_SRC_MULTISTATS_H__

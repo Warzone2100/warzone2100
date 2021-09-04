@@ -3256,6 +3256,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	{
 		player.resetAll();
 	}
+	NetPlay.players.resize(MAX_CONNECTED_PLAYERS);
 }
 
 static void resetPlayerPositions()
@@ -5731,3 +5732,383 @@ static inline bool isSpectatorOnlySlot(UDWORD playerIdx)
 //{
 //	return playerPosition >= game.maxPlayers;
 //}
+
+// MARK: -
+
+#include "version.h"
+#include "lib/framework/file.h"
+
+inline void to_json(nlohmann::json& j, const Sha256& p) {
+	j = p.toString();
+}
+
+inline void from_json(const nlohmann::json& j, Sha256& p) {
+	std::string str = j.get<std::string>();
+	p.fromString(str);
+}
+
+inline void to_json(nlohmann::json& j, const MULTIPLAYERGAME& p) {
+	j = nlohmann::json::object();
+	j["type"] = p.type;
+	j["scavengers"] = p.scavengers;
+	j["map"] = p.map;
+	j["maxPlayers"] = p.maxPlayers;
+	j["name"] = p.name;
+	j["hash"] = p.hash;
+	j["modHashes"] = p.modHashes;
+	j["power"] = p.power;
+	j["base"] = p.base;
+	j["alliance"] = p.alliance;
+	j["mapHasScavengers"] = p.mapHasScavengers;
+	j["isMapMod"] = p.isMapMod;
+	j["isRandom"] = p.isRandom;
+	j["techLevel"] = p.techLevel;
+}
+
+inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
+	p.type = j.at("type").get<LEVEL_TYPE>();
+	p.scavengers = j.at("scavengers").get<uint8_t>();
+	std::string str = j.at("map").get<std::string>();
+	sstrcpy(p.map, str.c_str());
+	p.maxPlayers = j.at("maxPlayers").get<uint8_t>();
+	str = j.at("name").get<std::string>();
+	sstrcpy(p.name, str.c_str());
+	p.hash = j.at("hash").get<Sha256>();
+	p.modHashes = j.at("modHashes").get<std::vector<Sha256>>();
+	p.power = j.at("power").get<uint32_t>();
+	p.base = j.at("base").get<uint8_t>();
+	p.alliance = j.at("alliance").get<uint8_t>();
+	p.mapHasScavengers = j.at("mapHasScavengers").get<bool>();
+	p.isMapMod = j.at("isMapMod").get<bool>();
+	p.isRandom = j.at("isRandom").get<bool>();
+	p.techLevel = j.at("techLevel").get<uint32_t>();
+}
+
+inline void to_json(nlohmann::json& j, const MULTISTRUCTLIMITS& p) {
+	j = nlohmann::json::object();
+	j["id"] = p.id;
+	j["limit"] = p.limit;
+}
+
+inline void from_json(const nlohmann::json& j, MULTISTRUCTLIMITS& p) {
+	p.id = j.at("id").get<uint32_t>();
+	p.limit = j.at("limit").get<uint32_t>();
+}
+
+inline void to_json(nlohmann::json& j, const InGameSide& p) {
+	j = static_cast<bool>(p);
+}
+
+inline void from_json(const nlohmann::json& j, InGameSide& p) {
+	auto val = j.get<bool>();
+	p = static_cast<InGameSide>(val);
+}
+
+
+inline void to_json(nlohmann::json& j, const MULTIPLAYERINGAME& p) {
+	j = nlohmann::json::object();
+
+//	auto joiningInProgress = nlohmann::json::array();
+//	for (size_t idx = 0; idx < MAX_CONNECTED_PLAYERS; idx++)
+//	{
+//		joiningInProgress.push_back(p.JoiningInProgress[idx]);
+//	}
+//	j["JoiningInProgress"] = joiningInProgress;
+	j["side"] = p.side;
+	j["structureLimits"] = p.structureLimits;
+	j["flags"] = p.flags;
+}
+
+inline void from_json(const nlohmann::json& j, MULTIPLAYERINGAME& p) {
+//	auto joiningInProgress = j["JoiningInProgress"];
+//	ASSERT(joiningInProgress.is_array(), "joiningInProgress should be an array");
+//	for (size_t idx = 0; idx < joiningInProgress.size(); idx++)
+//	{
+//		if (idx >= MAX_CONNECTED_PLAYERS)
+//		{
+//			debug(LOG_ERROR, "Unexpected size: %zu", joiningInProgress.size());
+//			break;
+//		}
+//		p.JoiningInProgress[idx] = joiningInProgress[idx].get<bool>();
+//	}
+	p.side = j.at("side").get<InGameSide>();
+	p.structureLimits = j.at("structureLimits").get<std::vector<MULTISTRUCTLIMITS>>();
+	p.flags = j.at("flags").get<uint8_t>();
+}
+
+inline void to_json(nlohmann::json& j, const PLAYER& p) {
+
+	j = nlohmann::json::object();
+	j["name"] = p.name;
+	j["position"] = p.position;
+	j["colour"] = p.colour;
+	j["allocated"] = p.allocated;
+	j["heartattacktime"] = p.heartattacktime;
+	j["heartbeat"] = p.heartbeat;
+	j["kick"] = p.kick;
+	j["connection"] = p.connection; // MAYBE NOT?
+	j["team"] = p.team;
+	j["ready"] = p.ready;
+	j["ai"] = p.ai;
+	j["difficulty"] = static_cast<int8_t>(p.difficulty);
+	//j["autoGame"] = p.autoGame; // MAYBE NOT?
+	// Do not persist wzFiles
+	// Do not persist IPtextAddress
+	j["faction"] = static_cast<uint8_t>(p.faction);
+	j["isSpectator"] = p.isSpectator;
+}
+
+inline void from_json(const nlohmann::json& j, PLAYER& p) {
+	std::string str = j.at("name").get<std::string>();
+	sstrcpy(p.name, str.c_str());
+	p.position = j.at("position").get<int32_t>();
+	p.colour = j.at("colour").get<int32_t>();
+	p.allocated = j.at("allocated").get<bool>();
+	p.heartattacktime = j.at("heartattacktime").get<uint32_t>();
+	p.heartbeat = j.at("heartbeat").get<bool>();
+	p.kick = j.at("kick").get<bool>();
+	p.connection = j.at("connection").get<int32_t>();
+	p.team = j.at("team").get<int32_t>();
+	p.ready = j.at("ready").get<bool>();
+	p.ai = j.at("ai").get<int8_t>();
+	auto difficultyInt = j.at("difficulty").get<int8_t>();
+	p.difficulty = static_cast<AIDifficulty>(difficultyInt); // TODO CHECK
+	// autoGame // MAYBE NOT?
+	// Do not persist wzFiles
+	p.wzFiles.clear();
+	// Do not persist IPtextAddress
+	auto factionUint = j.at("faction").get<uint8_t>();
+	p.faction = static_cast<FactionID>(factionUint); // TODO CHECK
+	p.isSpectator = j.at("isSpectator").get<bool>();
+}
+
+static nlohmann::json DataHashToJSON()
+{
+	auto jsonArray = nlohmann::json::array();
+	for (size_t i = 0; i < DATA_MAXDATA; ++i)
+	{
+		jsonArray.push_back(DataHash[i]);
+	}
+	return jsonArray;
+}
+
+//static std::vector<uint32_t> DataHashFromJSON(const nlohmann::json& j)
+//{
+//	std::vector<uint32_t> result(DATA_MAXDATA, 0);
+//
+//	if (!j.is_array())
+//	{
+//		debug(LOG_ERROR, "Expecting an array");
+//		return result;
+//	}
+//
+//	size_t readSize = std::min<size_t>(j.size(), DATA_MAXDATA);
+//	for (size_t idx = 0; idx < readSize; ++idx)
+//	{
+//		result[idx] = j.at(idx).get<uint32_t>();
+//	}
+//
+//	return result;
+//}
+
+bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
+{
+	// random seed
+	object["randSeed"] = gameRand_GetSeed();
+
+	// Save versionString
+	object["versionString"] = version_getVersionString();
+
+	// Save DataHash here, so we can provide a warning on load (after all data / the game is loaded) in the future
+	object["dataHash"] = DataHashToJSON();
+
+	// Save `game`
+	object["game"] = game;
+
+	// Save `ingame` (? all of it? some of it?)
+	object["ingame"] = ingame;
+
+	// Save `selectedPlayer` (even though we don't actually use it on restore - for now)
+	object["selectedPlayer"] = selectedPlayer;
+
+	// ? Do not need to save alliances (?)
+
+	// Save `NetPlay.players` -- possibly recreate NetPlay.playerReferences on load?
+	object["netplay.players"] = NetPlay.players;
+
+	// Save `NetPlay.hostPlayer`
+	object["netplay.hostPlayer"] = NetPlay.hostPlayer;
+
+	// Save `NetPlay.bComms`
+	object["netplay.bComms"] = NetPlay.bComms;
+
+//	// Save `NetPlay.isHost` (but don't load it)
+//	object["netplay.isHost"] = NetPlay.isHost;
+
+	// multistats
+	auto multiStatsJson = nlohmann::json::array();
+	if (!saveMultiStatsToJSON(multiStatsJson))
+	{
+		debug(LOG_ERROR, "Failed to save multistats info to JSON");
+		return false;
+	}
+	object["multistats"] = multiStatsJson;
+
+	return true;
+}
+
+bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object)
+{
+	// random seed
+	uint32_t rand_seed = object.at("randSeed").get<uint32_t>();
+	gameSRand(rand_seed);
+
+	// compare version_string and throw a pop-up warning if not equal
+	auto replayVersionStr = object.at("versionString").get<std::string>();
+	auto expectedVersionStr = version_getVersionString();
+	if (replayVersionStr != expectedVersionStr)
+	{
+		std::string mismatchVersionDescription = _("The version of Warzone 2100 used to save this replay file does not match the currently-running version.");
+		mismatchVersionDescription += "\n\n";
+		mismatchVersionDescription += astringf(_("Replay File Saved With: \"%s\""), replayVersionStr.c_str());
+		mismatchVersionDescription += "\n";
+		mismatchVersionDescription += astringf(_("Current Warzone 2100 Version: \"%s\""), expectedVersionStr);
+		mismatchVersionDescription += "\n\n";
+		mismatchVersionDescription += _("Replays should usually be played back with the same version used to save the replay.");
+		mismatchVersionDescription += "\n";
+		mismatchVersionDescription += _("The replay may not playback successfully, or there may be differences in the simulation.");
+		wzDisplayDialog(Dialog_Warning, _("Replay Version Mismatch"), mismatchVersionDescription.c_str());
+	}
+
+	// restore `game`
+	game = object.at("game").get<MULTIPLAYERGAME>();
+
+	// restore `ingame`
+	ingame = object.at("ingame").get<MULTIPLAYERINGAME>();
+
+	// ? Do not need to restore alliances (?)
+
+	// restore NetPlay.players
+	auto netPlayers = object.at("netplay.players");
+	if (!netPlayers.is_array())
+	{
+		debug(LOG_ERROR, "Invalid netplay.players (not an array)");
+		return false;
+	}
+	if (netPlayers.size() > NetPlay.players.size())
+	{
+		debug(LOG_ERROR, "Unsupported netplay.players size (%zu)", netPlayers.size());
+		return false;
+	}
+	for (size_t i = 0; i < netPlayers.size(); ++i)
+	{
+		from_json(netPlayers.at(i), NetPlay.players[i]);
+	}
+
+	// restore NetPlay.hostPlayer
+	NetPlay.hostPlayer = object.at("netplay.hostPlayer").get<uint32_t>();
+
+	// restore `NetPlay.bComms` (?)
+	NetPlay.bComms = object.at("netplay.bComms").get<bool>();
+
+	// restore multistats
+	if (!loadMultiStatsFromJSON(object.at("multistats")))
+	{
+		debug(LOG_ERROR, "Failed to load multistats info from JSON");
+		return false;
+	}
+
+	// Now verify the info - especially that we can load the level!
+
+	// clear out the old level list.
+	levShutDown();
+	levInitialise();
+	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
+	pal_Init(); //Update palettes.
+	if (!buildMapList())
+	{
+		debug(LOG_ERROR, "Failed to build map list");
+		return false;
+	}
+
+	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
+	// See if we have the map or not
+	if (mapData == nullptr)
+	{
+		// Failed to load map
+		debug(LOG_POPUP, "Missing map used for replay: \"%s\" (hash: %s)", game.map, game.hash.toString().c_str());
+		return false;
+	}
+
+	for (Sha256 &hash : game.modHashes)
+	{
+		// TODO: Actually check the loaded mods??
+
+		char filename[256];
+		ssprintf(filename, "mods/downloads/%s", hash.toString().c_str());
+
+		if (!PHYSFS_exists(filename))
+		{
+			debug(LOG_ERROR, "Downloaded mod does not exist: %s", filename);
+			return false;
+		}
+		else if (findHashOfFile(filename) != hash)
+		{
+			debug(LOG_ERROR, "Downloaded mod is incomplete or corrupt: %s", filename);
+			return false;
+		}
+		else
+		{
+			// Have the file!
+			debug(LOG_INFO, "Downloaded mod found: %s", filename);
+		}
+	}
+
+	if (mapData && CheckForMod(mapData->realFileName))
+	{
+		game.isMapMod = true;
+	}
+	game.isRandom = mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
+
+	// Set various other initialization things (see NET_FIREUP)
+	ingame.TimeEveryoneIsInGame = nullopt;			// reset time
+	resetDataHash();
+	decideWRF();
+
+	// set selectedPlayer to a *new* spectator slot
+	if (NetPlay.players.size() != MAX_CONNECTED_PLAYERS)
+	{
+		// NetPlay.players.size() should always start at MAX_CONNECTED_PLAYERS before this is called
+		debug(LOG_ERROR, "Unexpected NetPlay.players.size(): %zu", NetPlay.players.size());
+		return false;
+	}
+	NetPlay.players.push_back(PLAYER());
+	size_t replaySpectatorIndex = NetPlay.players.size() - 1;
+	NET_InitPlayer(replaySpectatorIndex, false);  // re-init everything
+	NetPlay.players[replaySpectatorIndex].allocated = true;
+	sstrcpy(NetPlay.players[replaySpectatorIndex].name, "Replay Viewer");
+	NetPlay.players[replaySpectatorIndex].isSpectator = true;
+
+	selectedPlayer = replaySpectatorIndex;
+	realSelectedPlayer = selectedPlayer;
+
+	// Need to initialize net/game queues here before we try to add messages to them
+	for (unsigned i = 0; i < MAX_GAMEQUEUE_SLOTS; ++i)
+	{
+		NETinitQueue(NETgameQueue(i));
+		NETsetNoSendOverNetwork(NETgameQueue(i));
+	}
+
+	// simulate "NET_PLAYERRESPONDING" sent by all clients
+	// ensure that all humans players are set to "joined"
+	for (size_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	{
+		if (isHumanPlayer(i) && ingame.JoiningInProgress[i])
+		{
+			ingame.JoiningInProgress[i] = false;
+		}
+	}
+	NetPlay.isHostAlive = true; // lie and say the host is alive for multiplayer games
+
+	return true;
+}

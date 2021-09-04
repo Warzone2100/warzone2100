@@ -563,6 +563,10 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 	{
 		return;
 	}
+	if (NETisReplay())
+	{
+		return;
+	}
 
 	QueuedDroidInfo info;
 

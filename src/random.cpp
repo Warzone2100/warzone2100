@@ -21,6 +21,7 @@
 #include "lib/netplay/netplay.h"
 
 static MersenneTwister gamePseudorandomNumberGenerator;
+static uint32_t lastSeed = 0;
 
 MersenneTwister::MersenneTwister(uint32_t seed)
 	: offset(624)
@@ -79,7 +80,13 @@ void MersenneTwister::generate()
 
 void gameSRand(uint32_t seed)
 {
+	lastSeed = seed;
 	gamePseudorandomNumberGenerator = MersenneTwister(seed);
+}
+
+uint32_t gameRand_GetSeed()
+{
+	return lastSeed;
 }
 
 uint32_t gameRandU32()

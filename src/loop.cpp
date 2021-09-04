@@ -117,6 +117,8 @@ struct PAUSE_STATE
 	bool consolePause;
 };
 static PAUSE_STATE pauseState;
+static size_t maxFastForwardTicks = WZ_DEFAULT_MAX_FASTFORWARD_TICKS;
+static bool fastForwardTicksFixedToNormalTickRate = false; // default for spectators to "catch-up" as quickly as possible
 
 static unsigned numDroids[MAX_PLAYERS];
 static unsigned numMissionDroids[MAX_PLAYERS];
@@ -604,6 +606,17 @@ static void gameStateUpdate()
 	countUpdate(true);
 }
 
+size_t getMaxFastForwardTicks()
+{
+	return maxFastForwardTicks;
+}
+
+void setMaxFastForwardTicks(optional<size_t> value, bool fixedToNormalTickRate)
+{
+	maxFastForwardTicks = value.value_or(WZ_DEFAULT_MAX_FASTFORWARD_TICKS);
+	fastForwardTicksFixedToNormalTickRate = fixedToNormalTickRate;
+}
+
 /* The main game loop */
 GAMECODE gameLoop()
 {
@@ -620,7 +633,6 @@ GAMECODE gameLoop()
 
 	size_t numRegularUpdatesTicks = 0;
 	size_t numFastForwardTicks = 0;
-	const size_t maxFastForwardTicks = 3;
 	gameTimeUpdateBegin();
 	while (true)
 	{
@@ -637,7 +649,7 @@ GAMECODE gameLoop()
 			&& numFastForwardTicks < maxFastForwardTicks // and the number of forced updates this call of gameLoop must not exceed the max allowed
 			&& checkPlayerGameTime(NET_ALL_PLAYERS);	// and there must be a new game tick available to process from all players
 
-		bool forceTryGameTickUpdate = canFastForwardGameTime && (numForcedUpdatesLastCall > 0 || numRegularUpdatesTicks > 0);
+		bool forceTryGameTickUpdate = canFastForwardGameTime && ((!fastForwardTicksFixedToNormalTickRate && numForcedUpdatesLastCall > 0) || numRegularUpdatesTicks > 0);
 
 		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
 		auto timeUpdateResult = gameTimeUpdate(renderBudget > 0 || previousUpdateWasRender, forceTryGameTickUpdate);
