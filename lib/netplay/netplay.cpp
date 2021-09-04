@@ -2163,7 +2163,7 @@ checkMessages:
 
 bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 {
-	for (unsigned current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
+	for (unsigned current = 0; current < MAX_GAMEQUEUE_SLOTS; ++current)
 	{
 		*queue = NETgameQueue(current);
 		if (queue->queue == nullptr)

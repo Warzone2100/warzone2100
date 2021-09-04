@@ -53,9 +53,9 @@ static uint32_t prevRealTime;
   **/
 static UDWORD	stopCount;
 
-static uint32_t gameQueueTime[MAX_CONNECTED_PLAYERS];
-static uint32_t gameQueueCheckTime[MAX_CONNECTED_PLAYERS];
-static uint32_t gameQueueCheckCrc[MAX_CONNECTED_PLAYERS];
+static uint32_t gameQueueTime[MAX_GAMEQUEUE_SLOTS];
+static uint32_t gameQueueCheckTime[MAX_GAMEQUEUE_SLOTS];
+static uint32_t gameQueueCheckCrc[MAX_GAMEQUEUE_SLOTS];
 static bool     crcError = false;
 
 static uint32_t updateReadyTime = 0;
@@ -63,7 +63,7 @@ static uint32_t updateWantedTime = 0;
 static uint16_t chosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t discreteChosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatency = GAME_TICKS_PER_UPDATE;
-static uint16_t wantedLatencies[MAX_CONNECTED_PLAYERS];
+static uint16_t wantedLatencies[MAX_GAMEQUEUE_SLOTS];
 
 static optional<uint32_t> waitingOnPlayersStartTime;
 #define MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS GAME_TICKS_PER_SEC
@@ -111,7 +111,7 @@ void gameTimeInit(void)
 	chosenLatency = GAME_TICKS_PER_UPDATE * 2;
 	discreteChosenLatency = GAME_TICKS_PER_UPDATE * 2;
 	wantedLatency = GAME_TICKS_PER_UPDATE * 2;
-	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
+	for (player = 0; player < MAX_GAMEQUEUE_SLOTS; ++player)
 	{
 		gameQueueCheckCrc[player] = 0;
 		wantedLatencies[player] = 0;
@@ -251,8 +251,8 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		updateLatency();
 		if (crcError)
 		{
-			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + MAX_CONNECTED_PLAYERS).c_str());
-			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + MAX_CONNECTED_PLAYERS).c_str());
+			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + MAX_GAMEQUEUE_SLOTS).c_str());
+			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + MAX_GAMEQUEUE_SLOTS).c_str());
 			crcError = false;
 		}
 	}
@@ -438,6 +438,8 @@ static inline bool shouldCheckDebugSyncForPlayerSlot(unsigned player)
 
 void recvPlayerGameTime(NETQUEUE queue)
 {
+	ASSERT(queue.index < MAX_GAMEQUEUE_SLOTS, "Unexpected queue.index: %" PRIu8 "", queue.index);
+
 	uint32_t latencyTicks = 0;
 	uint32_t checkTime = 0;
 	GameCrcType checkCrc = 0;
@@ -499,13 +501,14 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
+		for (player = 0; player < MAX_GAMEQUEUE_SLOTS; ++player)
 		{
 			gameQueueTime[player] = time;
 		}
 	}
 	else
 	{
+		ASSERT(player < MAX_GAMEQUEUE_SLOTS, "Unexpected player: %u", player);
 		gameQueueTime[player] = time;
 	}
 }

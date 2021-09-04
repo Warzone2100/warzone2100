@@ -973,7 +973,34 @@ static void startGameLoop()
 	triggerEvent(TRIGGER_START_LEVEL);
 	screen_disableMapPreview();
 
-	NETreplaySaveStart();
+	auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
+	switch (currentGameMode)
+	{
+		case ActivitySink::GameMode::MENUS:
+			// should not happen
+			break;
+		case ActivitySink::GameMode::CAMPAIGN:
+		case ActivitySink::GameMode::CHALLENGE:
+			// replays not currently supported
+			break;
+		case ActivitySink::GameMode::SKIRMISH:
+		case ActivitySink::GameMode::MULTIPLAYER:
+		{
+			// start saving a replay
+			WZGameReplayOptionsHandler replayOptions;
+			NETreplaySaveStart(replayOptions);
+			break;
+		}
+		default:
+			debug(LOG_INFO, "Unhandled case: %u", (unsigned int)currentGameMode);
+	}
+
+	setMaxFastForwardTicks(); // default value / spectator "catch-up" behavior
+	if (NETisReplay())
+	{
+		// for replays, ensure we don't start off fast-forwarding
+		setMaxFastForwardTicks(0, true);
+	}
 }
 
 
@@ -986,6 +1013,7 @@ static void stopGameLoop()
 	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
 
 	NETreplaySaveStop();
+	NETshutdownReplay();
 
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
@@ -1001,6 +1029,7 @@ static void stopGameLoop()
 			{
 				player.resetAll();
 			}
+			NetPlay.players.resize(MAX_CONNECTED_PLAYERS);
 		}
 		closeLoadingScreen();
 		reloadMPConfig();

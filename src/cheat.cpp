@@ -163,6 +163,10 @@ bool attemptCheatCode(const char *cheat_name)
 
 void sendProcessDebugMappings(bool val)
 {
+	if (NETisReplay())
+	{
+		return;
+	}
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
 	NETbool(&val);
 	NETend();

@@ -60,6 +60,7 @@ struct NETQUEUE
 
 #define MAX_SPECTATOR_SLOTS		10
 #define MAX_CONNECTED_PLAYERS   (MAX_PLAYER_SLOTS + MAX_SPECTATOR_SLOTS)
+#define MAX_GAMEQUEUE_SLOTS		(MAX_CONNECTED_PLAYERS + 1) /// < +1 for the replay spectator slot
 #define MAX_TMP_SOCKETS         16
 
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
@@ -199,6 +200,19 @@ static inline void NETauto(T (&ar)[N])
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
-bool NETloadReplay(std::string const &filename);
+#include <3rdparty/json/json_fwd.hpp>
+
+class ReplayOptionsHandler
+{
+public:
+	virtual ~ReplayOptionsHandler();
+public:
+	virtual bool saveOptions(nlohmann::json& object) const = 0;
+	virtual bool restoreOptions(const nlohmann::json& object) = 0;
+};
+
+bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler);
+bool NETisReplay();
+void NETshutdownReplay();
 
 #endif

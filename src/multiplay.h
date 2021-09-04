@@ -42,6 +42,8 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+#include <3rdparty/json/json_fwd.hpp>
+
 class DROID_GROUP;
 struct BASE_OBJECT;
 struct DROID;
@@ -69,6 +71,9 @@ struct MULTIPLAYERGAME
 	bool		isMapMod;					// if a map has mods
 	bool        isRandom;                   // If a map is non-static.
 	uint32_t	techLevel;					// what technology level is being used
+
+	// NOTE: If adding to this struct, a lot of things probably require changing
+	// (send/recvOptions? to/from_json in multiint.h.cpp?)
 };
 
 struct MULTISTRUCTLIMITS
@@ -297,5 +302,11 @@ MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
 bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool quietly = false);
+
+class WZGameReplayOptionsHandler : public ReplayOptionsHandler
+{
+	virtual bool saveOptions(nlohmann::json& object) const override;
+	virtual bool restoreOptions(const nlohmann::json& object) override;
+};
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

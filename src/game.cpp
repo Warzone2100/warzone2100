@@ -1680,7 +1680,24 @@ so can be called in levLoadData when starting a game from a load save game*/
 // -----------------------------------------------------------------------------------------
 bool loadGameInit(const char *fileName)
 {
-	if (!gameLoad(fileName))
+	ASSERT_OR_RETURN(false, fileName != nullptr, "fileName is null??");
+
+	if (strEndsWith(fileName, ".wzrp"))
+	{
+		SetGameMode(GS_TITLE_SCREEN); // hack - the caller sets this to GS_NORMAL but we actually want to proceed with normal startGameLoop
+
+		// if it ends in .wzrp, try to load the replay!
+		WZGameReplayOptionsHandler optionsHandler;
+		if (!NETloadReplay(fileName, optionsHandler))
+		{
+			return false;
+		}
+
+		bMultiPlayer = true;
+		bMultiMessages = true;
+		changeTitleMode(STARTGAME);
+	}
+	else if (!gameLoad(fileName))
 	{
 		debug(LOG_ERROR, "Corrupted / unsupported savegame file %s, Unable to load!", fileName);
 		// NOTE: why do we start the game clock on a *failed* load?
@@ -3017,10 +3034,7 @@ static bool gameLoad(const char *fileName)
 	}
 
 	// Check the header to see if we've been given a file of the right type
-	if (fileHeader.aFileType[0] != 'g'
-	    || fileHeader.aFileType[1] != 'a'
-	    || fileHeader.aFileType[2] != 'm'
-	    || fileHeader.aFileType[3] != 'e')
+	if (!(fileHeader.aFileType[0] == 'g' && fileHeader.aFileType[1] == 'a' && fileHeader.aFileType[2] == 'm' && fileHeader.aFileType[3] == 'e'))
 	{
 		debug(LOG_ERROR, "gameLoad: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'g' 'a' 'm' 'e')",
 		      fileHeader.aFileType[0],
