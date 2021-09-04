@@ -355,7 +355,7 @@ void ProcessRadarInput()
 
 				/* If we're tracking a droid, then cancel that */
 				CalcRadarPosition(x, y, &PosX, &PosY);
-				if (mouseOverRadar)
+				if (mouseOverRadar && selectedPlayer < MAX_PLAYERS)
 				{
 					// MARKER
 					// Send all droids to that location
