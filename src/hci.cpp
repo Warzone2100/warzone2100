@@ -78,6 +78,7 @@
 #include "hci/research.h"
 #include "hci/manufacture.h"
 #include "hci/commander.h"
+#include "notifications.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -462,6 +463,372 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	retbutstats[psWidget->UserData].downTime = DownTime;
 }
 
+#define REPLAY_ACTION_BUTTONS_PADDING 5
+#define REPLAY_ACTION_BUTTONS_SPACING 5
+#define REPLAY_ACTION_BUTTONS_IMAGE_SIZE 16
+#define REPLAY_ACTION_BUTTONS_WIDTH (REPLAY_ACTION_BUTTONS_IMAGE_SIZE + (REPLAY_ACTION_BUTTONS_PADDING * 2))
+#define REPLAY_ACTION_BUTTONS_HEIGHT REPLAY_ACTION_BUTTONS_WIDTH
+
+class ReplayControllerWidget : public W_FORM
+{
+public:
+	ReplayControllerWidget() : W_FORM() {}
+	~ReplayControllerWidget() { }
+
+public:
+	static std::shared_ptr<ReplayControllerWidget> make();
+
+public:
+	virtual void display(int xOffset, int yOffset) override;
+	virtual void geometryChanged() override;
+	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
+	virtual void run(W_CONTEXT *psContext) override;
+
+private:
+	class W_REPLAY_CONTROL_BUTTON : public W_BUTTON
+	{
+	public:
+		W_REPLAY_CONTROL_BUTTON(W_BUTINIT const *init)
+		: W_BUTTON(init)
+		{ }
+		W_REPLAY_CONTROL_BUTTON()
+		: W_BUTTON()
+		{ }
+
+		~W_REPLAY_CONTROL_BUTTON()
+		{
+			if (pButtonImage)
+			{
+				delete pButtonImage;
+			}
+		}
+
+	public:
+		void display(int xOffset, int yOffset) override
+		{
+			W_BUTTON *psButton = this;
+
+			int x0 = psButton->x() + xOffset;
+			int y0 = psButton->y() + yOffset;
+			int x1 = x0 + psButton->width();
+			int y1 = y0 + psButton->height();
+
+			bool isDown = (psButton->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+			bool isDisabled = (psButton->getState() & WBUT_DISABLE) != 0;
+			bool isHighlight = !isDisabled && ((psButton->getState() & WBUT_HIGHLIGHT) != 0);
+
+			// Display the button.
+			auto light_border = pal_RGBA(255, 255, 255, 100);
+			auto fill_color = isDown || isDisabled ? pal_RGBA(10, 0, 70, 200) : pal_RGBA(25, 0, 110, 175);
+			iV_ShadowBox(x0, y0, x1, y1, 0, isDown ? pal_RGBA(0,0,0,0) : light_border, isDisabled ? light_border : WZCOL_FORM_DARK, fill_color);
+
+			// Highlight
+			if (isHighlight)
+			{
+				iV_Box(x0 + 2, y0 + 2, x1 - 2, y1 - 2, WZCOL_FORM_HILITE);
+			}
+
+			// Outline
+			switch (outline)
+			{
+				case OutlineState::None:
+					break;
+				case OutlineState::Double:
+					iV_Box(x0 + 3, y0 + 3, x1 - 3, y1 - 3, pal_RGBA(218, 207, 255, 200));
+					// fall-through
+				case OutlineState::Single:
+					iV_Box(x0 + 1, y0 + 1, x1 - 1, y1 - 1, pal_RGBA(218, 207, 255, 200));
+					break;
+			}
+
+			// Display the image, if present
+			int imageLeft = x1 - REPLAY_ACTION_BUTTONS_PADDING - REPLAY_ACTION_BUTTONS_IMAGE_SIZE;
+			int imageTop = (psButton->y() + yOffset) + REPLAY_ACTION_BUTTONS_PADDING;
+
+			if (pButtonImage)
+			{
+				iV_DrawImageAnisotropic(*(pButtonImage), Vector2i(imageLeft, imageTop), Vector2f(0,0), Vector2f(REPLAY_ACTION_BUTTONS_IMAGE_SIZE, REPLAY_ACTION_BUTTONS_IMAGE_SIZE), 0.f, WZCOL_WHITE);
+			}
+		}
+	public:
+		gfx_api::texture* pButtonImage = nullptr;
+		enum class OutlineState {
+			None,
+			Single,
+			Double
+		};
+		OutlineState outline = OutlineState::None;
+	};
+
+	enum class ReplayGameStatus
+	{
+		PLAY,
+		PAUSE,
+	};
+	ReplayGameStatus getReplayGameStatus() const
+	{
+		ReplayGameStatus status = (!gameTimeIsStopped()) ? ReplayGameStatus::PLAY : ReplayGameStatus::PAUSE;
+		// sanity check
+		return status;
+	}
+
+	void setReplayGameStatus(ReplayGameStatus newStatus)
+	{
+		switch (newStatus)
+		{
+			case ReplayGameStatus::PLAY:
+				setAudioPause(false);
+				setConsolePause(false);
+				if (gameTimeIsStopped())
+				{
+					gameTimeStart();
+				}
+				break;
+			case ReplayGameStatus::PAUSE:
+				if (!gameTimeIsStopped())
+				{
+					gameTimeStop();
+				}
+				setAudioPause(true);
+				setConsolePause(true);
+				break;
+		}
+
+		auto sharedThis = std::dynamic_pointer_cast<ReplayControllerWidget>(shared_from_this());
+		widgScheduleTask([sharedThis](){
+			sharedThis->refreshButtonStates();
+		});
+	}
+
+	void toggleFastForward(bool reverseDirection = false)
+	{
+		auto currFastForward = getMaxFastForwardTicks();
+		size_t newFastForward = 0;
+		if (currFastForward == 0)
+		{
+			newFastForward = (!reverseDirection) ? 1 : WZ_DEFAULT_MAX_FASTFORWARD_TICKS;
+		}
+		else if (currFastForward == 1)
+		{
+			newFastForward = (!reverseDirection) ? WZ_DEFAULT_MAX_FASTFORWARD_TICKS : 0;
+		}
+		else if (reverseDirection && currFastForward == WZ_DEFAULT_MAX_FASTFORWARD_TICKS)
+		{
+			newFastForward = 1;
+		}
+		setMaxFastForwardTicks(newFastForward, true);
+
+		auto sharedThis = std::dynamic_pointer_cast<ReplayControllerWidget>(shared_from_this());
+		widgScheduleTask([sharedThis](){
+			sharedThis->refreshButtonStates();
+		});
+	}
+
+	void refreshButtonStates()
+	{
+		auto status = getReplayGameStatus();
+		switch (status)
+		{
+			case ReplayGameStatus::PLAY:
+				// play button shoud be disabled
+				playButton->setState(WBUT_DISABLE);
+				// pause + fast-forward buttons should be enabled
+				pauseButton->setState(0);
+				break;
+			case ReplayGameStatus::PAUSE:
+				// play button should be enabled
+				playButton->setState(0);
+				// pause + fast-forward buttons should be disabled
+				pauseButton->setState(WBUT_DISABLE);
+				break;
+		}
+
+		// fast-forward state is based on getMaxFastForwardTicks
+		auto maxFastForwardTicks = getMaxFastForwardTicks();
+		if (maxFastForwardTicks > 0)
+		{
+			// fast-forward is enabled
+			fastForwardButton->outline = (maxFastForwardTicks >= WZ_DEFAULT_MAX_FASTFORWARD_TICKS) ? W_REPLAY_CONTROL_BUTTON::OutlineState::Double : W_REPLAY_CONTROL_BUTTON::OutlineState::Single;
+		}
+		else
+		{
+			// normal speed
+			fastForwardButton->outline = W_REPLAY_CONTROL_BUTTON::OutlineState::None;
+		}
+		lastUpdateTime = realTime;
+	}
+
+private:
+	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> makeReplayActionButton(const char* imagePath)
+	{
+		auto button = std::make_shared<W_REPLAY_CONTROL_BUTTON>();
+		button->style |= WBUT_SECONDARY;
+		button->FontID = font_regular;
+		button->pButtonImage = WZ_Notification_Image(imagePath).loadImageToTexture();
+		button->setGeometry(0, 0, REPLAY_ACTION_BUTTONS_WIDTH, REPLAY_ACTION_BUTTONS_HEIGHT);
+		return button;
+	}
+
+private:
+	std::shared_ptr<W_LABEL>					titleLabel;
+	std::shared_ptr<W_REPLAY_CONTROL_BUTTON>	pauseButton;
+	std::shared_ptr<W_REPLAY_CONTROL_BUTTON>	playButton;
+	std::shared_ptr<W_REPLAY_CONTROL_BUTTON>	fastForwardButton;
+	UDWORD										lastUpdateTime = 0;
+	UDWORD										autoStateRefreshInterval = GAME_TICKS_PER_SEC * 3;
+};
+
+std::shared_ptr<ReplayControllerWidget> ReplayControllerWidget::make()
+{
+	auto result = std::make_shared<ReplayControllerWidget>();
+
+	// Add title text
+	result->titleLabel = std::make_shared<W_LABEL>();
+	result->titleLabel->setFont(font_regular_bold, WZCOL_FORM_TEXT);
+	result->titleLabel->setString(WzString::fromUtf8(_("Replay")));
+	result->titleLabel->setGeometry(REPLAY_ACTION_BUTTONS_SPACING, REPLAY_ACTION_BUTTONS_SPACING, result->titleLabel->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
+	result->titleLabel->setCacheNeverExpires(true);
+	result->attach(result->titleLabel);
+	result->titleLabel->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(psWidget->parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int x0 = psParent->width() - (psWidget->width() + REPLAY_ACTION_BUTTONS_SPACING);
+		psWidget->setGeometry(x0, REPLAY_ACTION_BUTTONS_SPACING, psWidget->width(), psWidget->height());
+	}));
+
+	int buttonsY0 = result->titleLabel->y() + result->titleLabel->height() + REPLAY_ACTION_BUTTONS_SPACING;
+
+	// Add pauseButton button
+	result->pauseButton = result->makeReplayActionButton("images/replay/pause.png");
+	result->pauseButton->setTip(_("Pause"));
+	result->attach(result->pauseButton);
+	result->pauseButton->addOnClickHandler([](W_BUTTON& button) {
+		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(button.parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		psParent->setReplayGameStatus(ReplayGameStatus::PAUSE);
+	});
+	result->pauseButton->move(0, buttonsY0);
+	result->pauseButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		int x0 = REPLAY_ACTION_BUTTONS_SPACING;
+		psWidget->setGeometry(x0, psWidget->y(), psWidget->width(), psWidget->height());
+	}));
+
+	// Add "play" button
+	result->playButton = result->makeReplayActionButton("images/replay/play.png");
+	result->playButton->setTip(_("Resume"));
+	result->attach(result->playButton);
+	result->playButton->addOnClickHandler([](W_BUTTON& button) {
+		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(button.parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		psParent->setReplayGameStatus(ReplayGameStatus::PLAY);
+	});
+	result->playButton->move(0, buttonsY0);
+	result->playButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(psWidget->parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int x0 = psParent->pauseButton->x() + psParent->pauseButton->width() + REPLAY_ACTION_BUTTONS_SPACING;
+		psWidget->setGeometry(x0, psWidget->y(), psWidget->width(), psWidget->height());
+	}));
+
+	// Add "fast-forwards" button
+	result->fastForwardButton = result->makeReplayActionButton("images/replay/fast_forward.png");
+	result->fastForwardButton->setTip(_("Fast-Forward"));
+	result->attach(result->fastForwardButton);
+	result->fastForwardButton->addOnClickHandler([](W_BUTTON& button) {
+		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(button.parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		psParent->toggleFastForward(button.getOnClickButtonPressed() == WKEY_SECONDARY);
+	});
+	result->fastForwardButton->move(0, buttonsY0);
+	result->fastForwardButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(psWidget->parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int x0 = psParent->playButton->x() + psParent->playButton->width() + REPLAY_ACTION_BUTTONS_SPACING;
+		psWidget->setGeometry(x0, psWidget->y(), psWidget->width(), psWidget->height());
+	}));
+
+	// set overall width
+	int neededWidth = (REPLAY_ACTION_BUTTONS_SPACING * 4) + result->pauseButton->width() + result->playButton->width() + result->fastForwardButton->width();
+	neededWidth = std::max<int>(neededWidth, REPLAY_ACTION_BUTTONS_SPACING + result->titleLabel->width() + REPLAY_ACTION_BUTTONS_SPACING);
+	int neededHeight = result->pauseButton->y() + result->pauseButton->height() + REPLAY_ACTION_BUTTONS_SPACING;
+	result->setGeometry(result->x(), result->y(), neededWidth, neededHeight);
+
+	result->refreshButtonStates();
+
+	return result;
+}
+
+void ReplayControllerWidget::display(int xOffset, int yOffset)
+{
+	// currently, no-op
+}
+
+void ReplayControllerWidget::geometryChanged()
+{
+	if (titleLabel)
+	{
+		titleLabel->callCalcLayout();
+	}
+	if (pauseButton)
+	{
+		pauseButton->callCalcLayout();
+	}
+	if (playButton)
+	{
+		playButton->callCalcLayout();
+	}
+	if (fastForwardButton)
+	{
+		fastForwardButton->callCalcLayout();
+	}
+}
+
+void ReplayControllerWidget::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	// call default implementation (which ultimately propagates to all children
+	W_FORM::screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+}
+
+void ReplayControllerWidget::run(W_CONTEXT *psContext)
+{
+	if (realTime - lastUpdateTime >= autoStateRefreshInterval)
+	{
+		// trigger update call
+		auto replayController = std::dynamic_pointer_cast<ReplayControllerWidget>(shared_from_this());
+		widgScheduleTask([replayController](){
+			replayController->refreshButtonStates();
+		});
+		lastUpdateTime = realTime;
+	}
+}
+
+static std::shared_ptr<W_SCREEN> replayOverlayScreen;
+
+bool createReplayControllerOverlay()
+{
+	ASSERT(psWScreen != nullptr, "psWScreen is not initialized yet?");
+	ASSERT_OR_RETURN(false, replayOverlayScreen == nullptr, "Already initialized");
+
+	// Initialize the replay overlay screen
+	replayOverlayScreen = W_SCREEN::make();
+	replayOverlayScreen->psForm->hide();
+
+	// Create the Replay Controller form
+	auto replayControllerForm = ReplayControllerWidget::make();
+	replayOverlayScreen->psForm->attach(replayControllerForm);
+
+	// Position the Replay Controller form
+	replayControllerForm->setCalcLayout([](WIDGET *psWidget) {
+		int x0 = screenWidth - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
+		int y0 = 0;
+		psWidget->move(x0, y0);
+	});
+
+	widgRegisterOverlayScreenOnTopOfScreen(replayOverlayScreen, psWScreen);
+
+	return true;
+}
+
 /* Initialise the in game interface */
 bool intInitialise()
 {
@@ -523,6 +890,11 @@ bool intInitialise()
 
 	BuildController::resetShowFavorites();
 
+	if (NETisReplay() && GetGameMode() == GS_NORMAL)
+	{
+		createReplayControllerOverlay();
+	}
+
 	return true;
 }
 
@@ -530,6 +902,12 @@ bool intInitialise()
 /* Shut down the in game interface */
 void interfaceShutDown()
 {
+	if (replayOverlayScreen)
+	{
+		widgRemoveOverlayScreen(replayOverlayScreen);
+		replayOverlayScreen = nullptr;
+	}
+
 	psWScreen = nullptr;
 
 	free(apsStructStatsList);

@@ -183,6 +183,9 @@ Files: data/base/images/notifications/connect_wait.png
        data/base/images/notifications/shield_questionmark.png
        data/base/images/notifications/skull_crossbones.png
        data/base/images/notifications/user_questionmark.png
+       data/base/images/replay/fast_forward.png
+       data/base/images/replay/pause.png
+       data/base/images/replay/play.png
 Copyright: Font Awesome Free by @fontawesome
 License: CC-BY-4.0
 

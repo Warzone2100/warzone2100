@@ -53,6 +53,9 @@ data/base/images/notifications/exclamation_triangle.png
 data/base/images/notifications/shield_questionmark.png
 data/base/images/notifications/skull_crossbones.png
 data/base/images/notifications/user_questionmark.png
+data/base/images/replay/fast_forward.png
+data/base/images/replay/pause.png
+data/base/images/replay/play.png
 	- CC BY 4.0 - Font Awesome Free by @fontawesome (https://fontawesome.com/license/free)
 lib/exceptionhandler/3rdparty/StackWalker.*
 	- BSD 3-Clause License - Copyright (c) 2005 - 2017, Jochen Kalmbach (https://github.com/JochenKalmbach/StackWalker)
