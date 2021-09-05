@@ -3788,6 +3788,10 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 {
 	resetReadyStatus(false);
 	removeWildcards((char*)sPlayer);
+	for (size_t i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		ingame.PingTimes[i] = 0;
+	}
 
 	const bool bIsAutoHostOrAutoGame = getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost;
 	if (!hostCampaign((char*)game.name, (char*)sPlayer, bIsAutoHostOrAutoGame))
