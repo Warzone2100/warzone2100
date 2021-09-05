@@ -381,8 +381,8 @@
 			"R-Cyborg-Metals04",
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
-		"researchPoints": 4500,
-		"researchPower": 141,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultComponents": [
 			"Cyb-Hvywpn-TK"
 		],
@@ -957,8 +957,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultStructures": [
 			"Emplacement-HvyATrocket"
 		],
@@ -1612,8 +1612,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
-		"researchPoints": 5000,
-		"researchPower": 156,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultStructures": [
 			"WallTower-HvATrocket"
 		],
@@ -9209,8 +9209,8 @@
 			"R-Wpn-RocketSlow-Accuracy01",
 			"R-Wpn-Rocket-Damage06"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"resultComponents": [
 			"Rocket-HvyA-T",
 			"Rocket-VTOL-HvyA-T"
