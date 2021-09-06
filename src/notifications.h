@@ -28,6 +28,12 @@
 #include <functional>
 #include <vector>
 
+// forward-declare
+namespace gfx_api
+{
+	struct texture;
+}
+
 class WZ_Notification_Display_Options
 {
 public:
@@ -119,6 +125,7 @@ public:
 	const std::string& imagePath() const { return _imagePath; }
 	const std::vector<unsigned char>& memoryBuffer() const { return _memoryBuffer; }
 	ImageType imageType() const { return _type; }
+	gfx_api::texture* loadImageToTexture() const;
 private:
 	std::string _imagePath;
 	std::vector<unsigned char> _memoryBuffer;
