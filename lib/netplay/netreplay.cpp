@@ -35,27 +35,34 @@ static PHYSFS_file *replayLoadHandle = nullptr;
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
 static const uint32_t currentReplayFormatVer = 1;
 
-bool NETreplaySaveStart(ReplayOptionsHandler const &optionsHandler)
+bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, bool appendPlayerToFilename)
 {
 	if (NETisReplay())
 	{
 		// Have already loaded and will be running a replay - don't bother saving another
-		debug(LOG_INFO, "Replay loaded - skip recording of new replay");
+		debug(LOG_WZ, "Replay loaded - skip recording of new replay");
 		return false;
 	}
+
+	ASSERT_OR_RETURN(false, !subdir.empty(), "Must provide a valid subdir");
 
 	time_t aclock;
 	time(&aclock);                     // Get time in seconds
 	tm *newtime = localtime(&aclock);  // Convert time to struct
 
-	bool isSkirmish = true;
-
-	char filename[256];
-	snprintf(filename, sizeof(filename), "replay/%s/%04d%02d%02d_%02d%02d%02d_p%u.wzrp", isSkirmish? "skirmish" : "campaign", newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec, selectedPlayer);
-	replaySaveHandle = PHYSFS_openWrite(filename);  // open the file
+	std::string filename;
+	if (appendPlayerToFilename)
+	{
+		filename = astringf("replay/%s/%04d%02d%02d_%02d%02d%02d_%s_p%u.wzrp", subdir.c_str(), newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec, subdir.c_str(), selectedPlayer);
+	}
+	else
+	{
+		filename = astringf("replay/%s/%04d%02d%02d_%02d%02d%02d_%s.wzrp", subdir.c_str(), newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec, subdir.c_str());
+	}
+	replaySaveHandle = PHYSFS_openWrite(filename.c_str());  // open the file
 	if (replaySaveHandle == nullptr)
 	{
-		debug(LOG_ERROR, "Could not create replay file %s: %s", filename, WZ_PHYSFS_getLastError());
+		debug(LOG_ERROR, "Could not create replay file %s: %s", filename.c_str(), WZ_PHYSFS_getLastError());
 		return false;
 	}
 
@@ -82,7 +89,7 @@ bool NETreplaySaveStart(ReplayOptionsHandler const &optionsHandler)
 	PHYSFS_writeSBE32(replaySaveHandle, data.size());
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
 
-	debug(LOG_INFO, "Started writing replay file \"%s\".", filename);
+	debug(LOG_INFO, "Started writing replay file \"%s\".", filename.c_str());
 	return true;
 }
 

@@ -988,7 +988,7 @@ static void startGameLoop()
 		{
 			// start saving a replay
 			WZGameReplayOptionsHandler replayOptions;
-			NETreplaySaveStart(replayOptions);
+			NETreplaySaveStart((currentGameMode == ActivitySink::GameMode::MULTIPLAYER) ? "multiplay" : "skirmish", replayOptions, (currentGameMode == ActivitySink::GameMode::MULTIPLAYER));
 			break;
 		}
 		default:
@@ -1633,6 +1633,7 @@ int realmain(int argc, char *argv[])
 
 	make_dir(ReplayPath, "replay", nullptr);  // replays
 	PHYSFS_mkdir("replay/skirmish");
+	PHYSFS_mkdir("replay/multiplay");
 
 	make_dir(ScreenDumpPath, "screenshots", nullptr);	// for screenshots
 
