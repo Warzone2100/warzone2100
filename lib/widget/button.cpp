@@ -143,6 +143,8 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
+			lastClickButton = key;
+
 			/* Call all onClick event handlers */
 			for (auto it = onClickHandlers.begin(); it != onClickHandlers.end(); it++)
 			{
@@ -153,6 +155,8 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 				}
 			}
 
+			lastClickButton = WKEY_NONE;
+
 			if (auto lockedScreen = screenPointer.lock())
 			{
 				lockedScreen->setReturn(shared_from_this());
@@ -161,6 +165,11 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 			dirty = true;
 		}
 	}
+}
+
+WIDGET_KEY W_BUTTON::getOnClickButtonPressed() const
+{
+	return lastClickButton;
 }
 
 bool W_BUTTON::isHighlighted() const
