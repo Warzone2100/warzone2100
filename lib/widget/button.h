@@ -128,6 +128,9 @@ public:
 	// To disable a ProgressBorder, use `setProgressBorder(nullopt)`
 	void setProgressBorder(optional<ProgressBorder> progressBorder, optional<PIELIGHT> borderColour = nullopt);
 
+	// May be called from within W_BUTTON_ONCLICK_FUNC (onclick handler) to retrieve the button pressed
+	WIDGET_KEY getOnClickButtonPressed() const;
+
 public:
 	bool isHighlighted() const;
 
@@ -149,6 +152,7 @@ private:
 	std::vector<W_BUTTON_ONCLICK_FUNC> onClickHandlers;
 	optional<ProgressBorder> progressBorder;
 	PIELIGHT				 progressBorderColour;
+	WIDGET_KEY				 lastClickButton = WKEY_NONE;
 };
 
 class MultipleChoiceButton : public W_BUTTON
