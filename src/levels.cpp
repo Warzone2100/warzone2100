@@ -513,6 +513,7 @@ bool levReleaseMissionData()
 			}
 		}
 	}
+	releaseObjectives = true; // allow releasing mission objectives after quitting / saveload
 	return true;
 }
 

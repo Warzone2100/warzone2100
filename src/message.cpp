@@ -56,6 +56,8 @@ PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 /* The IMD to use for the proximity messages */
 iIMDShape	*pProximityMsgIMD;
 
+bool releaseObjectives = true;
+
 
 /* Creating a new message
  * new is a pointer to a pointer to the new message
@@ -803,6 +805,25 @@ static void checkMessages(VIEWDATA *psViewData)
 	}
 }
 
+void releaseAllFlicMessages(MESSAGE *list[])
+{
+	MESSAGE	*psCurr, *psNext;
+
+	// Iterate through all players' message lists
+	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+	{
+		// Iterate through all messages in list
+		for (psCurr = list[i]; psCurr != nullptr; psCurr = psNext)
+		{
+			psNext = psCurr->psNext;
+			if (psCurr->type == MSG_MISSION || psCurr->type == MSG_CAMPAIGN)
+			{
+				removeMessage(psCurr, i);
+			}
+		}
+	}
+}
+
 /* Release the viewdata memory */
 void viewDataShutDown(const char *fileName)
 {
@@ -816,6 +837,11 @@ void viewDataShutDown(const char *fileName)
 		{
 			++iter;
 			continue; // do not delete this now
+		}
+		if (!releaseObjectives && (psViewData->type == VIEW_RPL || psViewData->type == VIEW_RPLX))
+		{
+			++iter;
+			continue;
 		}
 
 		// check for any messages using this viewdata

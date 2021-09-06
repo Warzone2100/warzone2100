@@ -1326,7 +1326,6 @@ void swapMissionPointers()
 	}
 	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
 	{
-		
 		std::swap(psAuxMap[i],   mission.psAuxMap[i]);
 	}
 	//swap gateway zones
@@ -1349,6 +1348,16 @@ void swapMissionPointers()
 
 void endMission()
 {
+	if (mission.type != LEVEL_TYPE::LDS_BETWEEN)
+	{
+		releaseAllFlicMessages(apsMessages); //Needed to remove mission objectives from offworld missions
+		releaseObjectives = true;
+	}
+	else
+	{
+		releaseObjectives = false;
+	}
+
 	if (mission.type == LEVEL_TYPE::LDS_NONE)
 	{
 		//can't go back any further!!
