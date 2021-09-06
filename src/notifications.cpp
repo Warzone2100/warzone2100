@@ -765,6 +765,13 @@ gfx_api::texture* makeTexture(unsigned int width, unsigned int height, const gfx
 
 gfx_api::texture* W_NOTIFICATION::loadImage(const WZ_Notification_Image& image)
 {
+	return image.loadImageToTexture();
+}
+
+gfx_api::texture* WZ_Notification_Image::loadImageToTexture() const
+{
+	const WZ_Notification_Image& image = *this;
+
 	gfx_api::texture* pTexture = nullptr;
 	iV_Image ivImage;
 	if (!image.imagePath().empty())
