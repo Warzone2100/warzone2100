@@ -1127,6 +1127,11 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 		int mindist = SDWORD_MAX;
 		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
+			if (psCurr->order.type == DORDER_RTR || psCurr->order.type == DORDER_RTB || psCurr->order.type == DORDER_RTR_SPECIFIED)
+			{
+				// don't touch units returning for repairs
+				continue;
+			}
 			int currdist = objPosDiffSq(psCurr->pos, psData->psObj->pos);
 			if (currdist < mindist)
 			{
@@ -1142,12 +1147,18 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	}
 	else
 	{
+		const bool isAttackOrder = psData->type == DORDER_ATTACKTARGET || psData->type == DORDER_ATTACK;
 		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			syncDebug("command %d", psCurr->id);
 			if (!orderState(psCurr, DORDER_RTR))		// if you change this, youll need to change sendcmdgroup()
 			{
-				if ((psData->type == DORDER_ATTACKTARGET || psData->type == DORDER_ATTACK) && psCurr->droidType == DROID_SENSOR && psData->psObj)
+				if (!isAttackOrder)
+				{
+					orderDroidBase(psCurr, psData);
+					continue;
+				}
+				if (psCurr->droidType == DROID_SENSOR && psData->psObj)
 				{
 					// sensors must observe, not attack
 					auto observeOrder = DroidOrder(DORDER_OBSERVE, psData->psObj);
@@ -1155,7 +1166,17 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 				}
 				else
 				{
-					orderDroidBase(psCurr, psData);
+					// for non-sensors, check that the designated target is actually valid
+					// there is no point in ordering AA gun to attack ground units
+					for (int i = 0; i < MAX_WEAPONS; i++)
+					{
+						
+						if (validTarget(psCurr, psData->psObj, i))
+						{
+							orderDroidBase(psCurr, psData);
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -1224,7 +1245,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	const Vector3i rPos(psOrder->pos, 0);
-
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->type));
 	objTrace(psDroid->id, "base set order to %s (was %s)", getDroidOrderName(psOrder->type), getDroidOrderName(psDroid->order.type));
@@ -2483,9 +2503,12 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         && !aiCheckAlliances(psObj->player, psDroid->player))
 	{
 		// check valid weapon/prop combination
-		if (validTarget(psDroid, psObj, 0))
+		for (int i = 0; i < MAX_WEAPONS; ++i)
 		{
-			order = DroidOrder(DORDER_ATTACK, psObj);
+			if (validTarget(psDroid, psObj, i))
+			{
+				order = DroidOrder(DORDER_ATTACK, psObj);
+			}
 		}
 	}
 	else if (psDroid->droidType == DROID_SENSOR
