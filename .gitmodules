@@ -37,3 +37,6 @@
 [submodule "3rdparty/SQLiteCpp"]
 	path = 3rdparty/SQLiteCpp
 	url = https://github.com/SRombauts/SQLiteCpp.git
+[submodule "3rdparty/readerwriterqueue"]
+	path = 3rdparty/readerwriterqueue
+	url = https://github.com/cameron314/readerwriterqueue.git

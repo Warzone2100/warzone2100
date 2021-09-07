@@ -46,6 +46,7 @@ class NetMessage
 public:
 	NetMessage(uint8_t type_ = 0xFF) : type(type_) {}
 	uint8_t *rawDataDup() const;  ///< Returns data compatible with NetQueue::writeRawData(). Must be delete[]d.
+	void rawDataAppendToVector(std::vector<uint8_t> &output) const;  ///< Appends data compatible with NetQueue::writeRawData() to the input vector.
 	size_t rawLen() const;        ///< Returns the length of the return value of rawDataDup().
 	uint8_t type;
 	std::vector<uint8_t> data;
