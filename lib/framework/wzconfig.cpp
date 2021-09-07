@@ -417,6 +417,10 @@ void WzConfig::beginArray(const WzString &name)
 		}
 		ASSERT(it.value().is_array(), "%s: beginArray() on non-array key \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 		mArray = it.value();
+		if (mArray.size() == 0)
+		{
+			return;
+		}
 		ASSERT(mArray.front().is_object(), "%s: beginArray() on non-object array \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 		pCurrentObj = &mArray.front();
 	}
