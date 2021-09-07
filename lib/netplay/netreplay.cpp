@@ -20,10 +20,13 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wzapp.h"
 
 #include <3rdparty/json/json.hpp>
+#include <3rdparty/readerwriterqueue/readerwriterqueue.h>
 
 #include <ctime>
+#include <memory>
 
 #include "netreplay.h"
 #include "netplay.h"
@@ -34,6 +37,32 @@ static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
 static const uint32_t currentReplayFormatVer = 1;
+
+typedef std::vector<uint8_t> SerializedNetMessagesBuffer;
+static moodycamel::BlockingReaderWriterQueue<SerializedNetMessagesBuffer> serializedBufferWriteQueue(256);
+static SerializedNetMessagesBuffer latestWriteBuffer;
+static size_t minBufferSizeToQueue = 4096;
+static std::unique_ptr<wz::thread> saveThread;
+
+// This function is run in its own thread! Do not call any non-threadsafe functions!
+static void replaySaveThreadFunc(PHYSFS_file *pSaveHandle)
+{
+	if (pSaveHandle == nullptr)
+	{
+		return;
+	}
+	SerializedNetMessagesBuffer item;
+	while (true)
+	{
+		serializedBufferWriteQueue.wait_dequeue(item);
+		if (item.empty())
+		{
+			// end chunk - we're done
+			break;
+		}
+		WZ_PHYSFS_writeBytes(pSaveHandle, item.data(), item.size());
+	}
+}
 
 bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, bool appendPlayerToFilename)
 {
@@ -90,6 +119,12 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
 
 	debug(LOG_INFO, "Started writing replay file \"%s\".", filename.c_str());
+
+	// Create a background thread and hand off all responsibility for writing to the file handle to it
+	ASSERT(saveThread.get() == nullptr, "Failed to release prior thread");
+	latestWriteBuffer.reserve(minBufferSizeToQueue);
+	saveThread = std::unique_ptr<wz::thread>(new wz::thread(replaySaveThreadFunc, replaySaveHandle));
+
 	return true;
 }
 
@@ -98,6 +133,24 @@ bool NETreplaySaveStop()
 	if (!replaySaveHandle)
 	{
 		return false;
+	}
+
+	// Queue the last chunk for writing
+	if (!latestWriteBuffer.empty())
+	{
+		serializedBufferWriteQueue.enqueue(std::move(latestWriteBuffer));
+	}
+
+	// Then push one empty chunk to signify "we're done!"
+	latestWriteBuffer.resize(0);
+	serializedBufferWriteQueue.enqueue(std::move(latestWriteBuffer));
+
+	// Wait for writing thread to finish
+	ASSERT(saveThread.get() != nullptr, "No save thread??");
+	if (saveThread)
+	{
+		saveThread->join();
+		saveThread.reset();
 	}
 
 	if (!PHYSFS_close(replaySaveHandle))
@@ -119,10 +172,15 @@ void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player)
 
 	if (message->type > GAME_MIN_TYPE && message->type < GAME_MAX_TYPE)
 	{
-		uint8_t *data = message->rawDataDup();
-		WZ_PHYSFS_writeBytes(replaySaveHandle, &player, 1);
-		WZ_PHYSFS_writeBytes(replaySaveHandle, data, message->rawLen());
-		delete[] data;
+		latestWriteBuffer.push_back(player);
+		message->rawDataAppendToVector(latestWriteBuffer);
+
+		if (latestWriteBuffer.size() >= minBufferSizeToQueue)
+		{
+			serializedBufferWriteQueue.enqueue(std::move(latestWriteBuffer));
+			latestWriteBuffer = std::vector<uint8_t>();
+			latestWriteBuffer.reserve(minBufferSizeToQueue);
+		}
 	}
 }
 

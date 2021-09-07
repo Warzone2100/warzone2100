@@ -124,6 +124,27 @@ uint8_t *NetMessage::rawDataDup() const
 	return ret;
 }
 
+void NetMessage::rawDataAppendToVector(std::vector<uint8_t> &output) const
+{
+#if SIZE_MAX > UINT32_MAX
+	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Trying to duplicate a very large packet (%zu bytes).", data.size());
+#endif
+	uint32_t dataSizeU32 = static_cast<uint32_t>(data.size());
+
+	unsigned encodedLengthOfSize = encodedlength_uint32_t(dataSizeU32);
+
+	output.push_back(type);
+	uint32_t len = dataSizeU32;
+	for (unsigned n = 0; n < encodedLengthOfSize; ++n)
+	{
+		uint8_t b;
+		encode_uint32_t(b, len, n);
+		output.push_back(b);
+	}
+
+	output.insert(output.end(), data.begin(), data.end());
+}
+
 size_t NetMessage::rawLen() const
 {
 	return 1 + static_cast<size_t>(encodedlength_uint32_t(static_cast<uint32_t>(data.size()))) + data.size();
