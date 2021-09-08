@@ -220,25 +220,34 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 	}
 
 	// Restore map name or map data and game settings and list of players in game and stuff.
-	nlohmann::json settings = nlohmann::json::parse(data);
-
-	uint32_t replayFormatVer = settings.at("replayFormatVer").get<uint32_t>();
-	if (replayFormatVer > currentReplayFormatVer)
+	try
 	{
-		return onFail("Replay format is newer than this version of Warzone 2100 can support");
+		nlohmann::json settings = nlohmann::json::parse(data);
+
+		uint32_t replayFormatVer = settings.at("replayFormatVer").get<uint32_t>();
+		if (replayFormatVer > currentReplayFormatVer)
+		{
+			return onFail("Replay format is newer than this version of Warzone 2100 can support");
+		}
+
+		uint32_t major = settings.at("major").get<uint32_t>();
+		uint32_t minor = settings.at("minor").get<uint32_t>();
+		if (!NETisCorrectVersion(major, minor))
+		{
+			return onFail("wrong netcode version");
+		}
+
+		// Load game options using optionsHandler
+		if (!optionsHandler.restoreOptions(settings.at("gameOptions")))
+		{
+			return onFail("invalid options");
+		}
 	}
-
-	uint32_t major = settings.at("major").get<uint32_t>();
-	uint32_t minor = settings.at("minor").get<uint32_t>();
-	if (!NETisCorrectVersion(major, minor))
+	catch (const std::exception& e)
 	{
-		return onFail("wrong netcode version");
-	}
-
-	// Load game options using optionsHandler
-	if (!optionsHandler.restoreOptions(settings.at("gameOptions")))
-	{
-		return onFail("invalid options");
+		// Failed to parse or find a key in the json
+		std::string parseError = std::string("Error parsing info JSON (\"") + e.what() + "\")";
+		return onFail(parseError.c_str());
 	}
 
 	debug(LOG_INFO, "Started reading replay file \"%s\".", filename.c_str());
