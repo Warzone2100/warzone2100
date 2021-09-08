@@ -18,11 +18,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include <3rdparty/json/json.hpp> // Must come before WZ includes
+
 #include "lib/framework/frame.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp.h"
 
-#include <3rdparty/json/json.hpp>
 #include <3rdparty/readerwriterqueue/readerwriterqueue.h>
 
 #include <ctime>
