@@ -306,7 +306,7 @@ static bool startInGameConfirmQuit()
 	auto label = std::make_shared<W_LABEL>();
 	ingameOp->attach(label);
 	label->setGeometry(INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, 0);
-	if (bMultiPlayer && NetPlay.bComms)
+	if (bMultiPlayer && (NetPlay.bComms || NETisReplay()))
 	{
 		label->setString(_("Warning: Are you sure?")); //Do not mention saving in real multiplayer matches
 	}
