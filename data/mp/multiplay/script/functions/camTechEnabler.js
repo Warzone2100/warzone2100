@@ -410,7 +410,7 @@ var allRes = {
 	"R-Defense-Super-Missile": 3612,
 	"R-Defense-SamSite2": 3703,
 	"R-Defense-WallTower-SamHvy": 3757,
-	"R-Vehicle-Body14": 3846
+	"R-Vehicle-Body14": 3846,
 	"R-Wpn-Howitzer-ROF04": 3860,
 	"R-Wpn-RailGun03": 3906,
 	"R-Defense-Rail3": 4058,
