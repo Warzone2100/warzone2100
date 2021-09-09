@@ -415,5 +415,5 @@ var allRes = {
 	"R-Wpn-RailGun03": 3906,
 	"R-Defense-Rail3": 4058,
 	"R-Defense-WallTower-Rail3": 4124,
-	"R-Defense-MassDriver": 4664,
+	"R-Defense-MassDriver": 4664
 };
