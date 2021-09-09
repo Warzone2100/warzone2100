@@ -18,6 +18,7 @@
 */
 
 #include "physfs_ext.h"
+#include "string_ext.h"
 #include "frame.h"
 
 #include <optional-lite/optional.hpp>
@@ -34,6 +35,37 @@ bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* f
 	}
 	for (char **i = files; *i != nullptr; ++i)
 	{
+		if (!enumFunc(*i))
+		{
+			break;
+		}
+	}
+	PHYSFS_freeList(files);
+	return true;
+}
+
+bool WZ_PHYSFS_enumerateFolders(const std::string &dir, const std::function<bool (char* folder)>& enumFunc)
+{
+	char **files = PHYSFS_enumerateFiles(dir.c_str());
+	if (!files)
+	{
+		debug(LOG_ERROR, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir.c_str(), WZ_PHYSFS_getLastError());
+		return false;
+	}
+	std::string baseDir = dir;
+	if (!strEndsWith(baseDir, "/"))
+	{
+		baseDir += "/";
+	}
+	std::string isDir;
+	for (char **i = files; *i != nullptr; ++i)
+	{
+		isDir = baseDir;
+		isDir.append(*i);
+		if (!WZ_PHYSFS_isDirectory(isDir.c_str()))
+		{
+			continue;
+		}
 		if (!enumFunc(*i))
 		{
 			break;
