@@ -676,12 +676,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		runLoadSaveCleanup(bResetMissionWidgets, true);
 		return true;
 	}
-	{
-		char const *skcamtype = bMultiPlayer? "skirmish" : "campaign";
-		char const *autotype = bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO? "/auto" : "";
-		char const *savetype = modeReplay? ReplayPath : SaveGamePath;
-		NewSaveGamePath = astringf("%s%s%s/", savetype, skcamtype, autotype);
-	}
+	NewSaveGamePath = getNewSaveGamePathFromMode(bLoadSaveMode);
 	if (id == LOADENTRY_START && modeLoad) // [auto] or [..], ignore click for saves
 	{
 		int iLoadSaveMode = (int)bLoadSaveMode; // for evil integer arithmetics
