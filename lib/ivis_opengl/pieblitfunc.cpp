@@ -369,7 +369,8 @@ void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, 
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(tu, tv), Vector2f(su, sv), colour, mvp, SHADER_TEXT);
 }
 
-static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
+template<typename PSO>
+static inline void pie_DrawImageTemplate(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
 	size_t texPage = imageFile->pages[image2.TPageID].id;
@@ -381,7 +382,12 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 
 	glm::mat4 mvp = modelViewProjection * glm::translate(glm::vec3((float)dest->x, (float)dest->y, 0.f));
 
-	iv_DrawImageImpl<gfx_api::DrawImagePSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
+	iv_DrawImageImpl<PSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
+}
+
+static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
+{
+	pie_DrawImageTemplate<gfx_api::DrawImagePSO>(imageFile, id, size, dest, colour, modelViewProjection, textureInset);
 }
 
 static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& requests)
@@ -494,6 +500,22 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 		pBatchedRequests->draw(); // draw only if not deferred
 	}
+}
+
+void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection, uint8_t alpha)
+{
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
+
+	PIERECT dest;
+	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	dest.w = size.x;
+	dest.h = size.y;
+
+	gfx_api::DrawImageAnisotropicPSO::get().bind();
+	pie_DrawImageTemplate<gfx_api::DrawImageAnisotropicPSO>(ImageFile, ID, pieImage, &dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 }
 
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection)
