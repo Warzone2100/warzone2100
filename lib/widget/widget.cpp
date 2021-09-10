@@ -146,6 +146,7 @@ void widgShutDown(void)
 	overlaySet.clear();
 	overlaysToDelete.clear();
 	deleteOldWidgets();
+	widgetScheduledTasks.clear();
 #ifdef DEBUG
 	if (!debugLiveWidgets.empty())
 	{
@@ -1272,6 +1273,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 
 	runScheduledTasks();
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
+	cleanupDeletedOverlays();
 
 	/* Return the ID of a pressed button or finished edit box if any */
 	return psScreen->retWidgets;
