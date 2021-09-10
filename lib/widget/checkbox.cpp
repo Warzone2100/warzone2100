@@ -73,12 +73,6 @@ void WzCheckboxButton::display(int xOffset, int yOffset)
 		pie_UniTransBoxFill(checkboxPos.x + CB_INNER_INSET, checkboxPos.y + CB_INNER_INSET, checkboxPos.x + cbSize - (CB_INNER_INSET), checkboxPos.y + cbSize - (CB_INNER_INSET), checkBoxInsideColor);
 	}
 
-	if (grey)
-	{
-		// disabled, render something over it!
-		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
-	}
-
 	// Display text to the right of the checkbox image
 	int textLeftPos = checkboxPos.x + cbSize + 7;
 	int fx = textLeftPos;
@@ -90,5 +84,11 @@ void WzCheckboxButton::display(int xOffset, int yOffset)
 		fx = textLeftPos + ((width() - fw) / 2);
 	}
 
-	wzText.render(fx, fy, WZCOL_TEXT_MEDIUM);
+	wzText.render(fx, fy, textColor);
+
+	if (grey)
+	{
+		// disabled, render something over it!
+		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
+	}
 }

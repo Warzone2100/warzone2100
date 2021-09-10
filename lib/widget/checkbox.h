@@ -38,6 +38,9 @@ public:
 	Vector2i calculateDesiredDimensions();
 
 	bool getIsChecked() const { return isChecked; }
+	void setIsChecked(bool val) { isChecked = val; }
+
+	inline void setTextColor(PIELIGHT color) { textColor = color; }
 private:
 	int checkboxSize()
 	{
@@ -47,6 +50,7 @@ private:
 private:
 	WzText wzText;
 	bool isChecked = false;
+	PIELIGHT textColor = WZCOL_TEXT_MEDIUM;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_CHECKBOX_H__
