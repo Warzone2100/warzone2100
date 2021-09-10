@@ -59,6 +59,10 @@ public:
 	void closeAllChoosers();
 
 	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
+
+	void updatePlayers();
+
+	int playerRowY0(uint32_t row) const;
 private:
 	/**
 	 * Initializes a chooser, preparing to add it on a single line on player list. This involves removing
@@ -70,7 +74,7 @@ private:
 	 * Initializes a chooser, preparing to replace the "right side". This involves removing
 	 * the player list.
 	 */
-	IntFormAnimated* initRightSideChooser(const char* sideText);
+	std::shared_ptr<IntFormAnimated> initRightSideChooser(const char* sideText);
 
 	/**
 	 * Initializes the right side box which usually contains the list of players. Handles opening difficulty
@@ -88,12 +92,12 @@ private:
 
 	std::shared_ptr<W_SCREEN> psInlineChooserOverlayScreen = nullptr;
 	std::shared_ptr<WzTitleUI> parent;
+	std::vector<std::shared_ptr<WIDGET>> playerRows;
 	bool performedFirstStart = false;
 
 	int8_t inlineChooserUp;
 	int8_t aiChooserUp;
 	int8_t difficultyChooserUp;
-	int8_t positionChooserUp;
 };
 
 #endif
