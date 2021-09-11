@@ -741,5 +741,12 @@ bool loadMultiStatsFromJSON(const nlohmann::json& json)
 		playerStats[idx] = json.at(idx).get<PLAYERSTATS>();
 	}
 
+	// clear any skirmish stats.
+	for (size_t size = 0; size < MAX_PLAYERS; size++)
+	{
+		ingame.skScores[size][0] = 0;
+		ingame.skScores[size][1] = 0;
+	}
+
 	return true;
 }
