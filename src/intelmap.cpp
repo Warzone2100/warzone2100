@@ -1084,7 +1084,7 @@ static const char* getMessageTitle(const MESSAGE& message)
 		research = getResearchForMsg(message.pViewData);
 		return research ? _(research->name.toUtf8().c_str()) : _("Research Update");
 	case MSG_CAMPAIGN:
-		return _("Project Goals");
+		return _("Project Goals and Updates");
 	case MSG_MISSION:
 		return _("Current Objective");
 	default:
