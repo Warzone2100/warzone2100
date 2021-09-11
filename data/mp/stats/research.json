@@ -3878,8 +3878,8 @@
 			"R-Vehicle-Metals07",
 			"R-Vehicle-Engine05"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultComponents": [
 			"Body3MBT"
 		],
@@ -3943,7 +3943,7 @@
 			"R-Vehicle-Engine06",
 			"R-Vehicle-Metals08"
 		],
-		"researchPoints": 28800,
+		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
 			"Body7ABT"
@@ -3994,7 +3994,7 @@
 			"R-Vehicle-Metals09",
 			"R-Vehicle-Engine07"
 		],
-		"researchPoints": 43200,
+		"researchPoints": 28800,
 		"researchPower": 450,
 		"resultComponents": [
 			"Body10MBT"
@@ -4044,7 +4044,7 @@
 			"R-Vehicle-Engine09",
 			"R-Vehicle-Armor-Heat06"
 		],
-		"researchPoints": 50000,
+		"researchPoints": 28800,
 		"researchPower": 450,
 		"resultComponents": [
 			"Body13SUP"
@@ -4060,7 +4060,7 @@
 		"requiredResearch": [
 			"R-Vehicle-Body13"
 		],
-		"researchPoints": 55000,
+		"researchPoints": 43200,
 		"researchPower": 450,
 		"resultComponents": [
 			"Body14SUP"
