@@ -1123,6 +1123,16 @@ MappableFunction kf_AddGrouping_N(const unsigned int n)
 	};
 }
 
+MappableFunction kf_RemoveFromGrouping()
+{
+	return []() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
+		removeDroidsFromGroup(selectedPlayer);
+	};
+}
+
 MappableFunction kf_SelectCommander_N(const unsigned int n)
 {
 	return [n]() {

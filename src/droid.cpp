@@ -89,7 +89,7 @@ DROID	*psLastDroidHit;
 static void groupConsoleInformOfSelection(UDWORD groupNumber);
 static void groupConsoleInformOfCreation(UDWORD groupNumber);
 static void groupConsoleInformOfCentering(UDWORD groupNumber);
-
+static void groupConsoleInformOfRemoval();
 static void droidUpdateDroidSelfRepair(DROID *psRepairDroid);
 static UDWORD calcDroidBaseBody(DROID *psDroid);
 
@@ -1810,6 +1810,27 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 }
 
 
+void removeDroidsFromGroup(UDWORD playerNumber)
+{
+	DROID	*psDroid;
+	unsigned removedCount = 0;
+
+	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
+
+	for (psDroid = apsDroidLists[playerNumber]; psDroid != nullptr; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			psDroid->group = UBYTE_MAX;
+			removedCount++;
+		}
+	}
+	if (removedCount)
+	{
+		groupConsoleInformOfRemoval();
+	}
+}
+
 bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 {
 	DROID	*psDroid, *psCentreDroid = nullptr;
@@ -1960,6 +1981,16 @@ void	groupConsoleInformOfCreation(UDWORD groupNumber)
 		CONPRINTF(ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber);
 	}
 
+}
+
+void 	groupConsoleInformOfRemoval()
+{
+	if (!getWarCamStatus())
+	{
+		unsigned int num_selected = selNumSelected(selectedPlayer);
+
+		CONPRINTF(ngettext("%u units removed from their Group", "%u units removed from their Group", num_selected), num_selected);
+	}
 }
 
 void	groupConsoleInformOfCentering(UDWORD groupNumber)
