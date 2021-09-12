@@ -71,6 +71,7 @@ void kf_SelectGrouping(UDWORD groupNumber);
 MappableFunction kf_SelectGrouping_N(const unsigned int n);
 MappableFunction kf_AssignGrouping_N(const unsigned int n);
 MappableFunction kf_AddGrouping_N(const unsigned int n);
+MappableFunction kf_RemoveFromGrouping();
 void kf_ToggleDroidInfo();
 void kf_addInGameOptions();
 void kf_addMultiMenu();
