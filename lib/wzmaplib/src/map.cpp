@@ -1967,6 +1967,7 @@ std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType
 			result->m_mapMaxPlayers = mapMaxPlayers;
 			result->m_mapIO = std::move(mapIO);
 			result->m_logger = std::move(logger);
+			result->m_terrainTypes.reset(); // clear this so the ttypes.ttp file is loaded on-demand
 			result->m_wasScriptGenerated = true;
 		}
 		return result;
