@@ -3367,7 +3367,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 		selectedPlayer			= 0;
 		NetPlay.isHost			= true;
 		NetPlay.players[0].allocated	= true;
-		NetPlay.players[0].connection	= -1;
 		NetPlay.playercount		= 1;
 		debug(LOG_NET, "Hosting but no comms");
 		// Now switch player color of the host to what they normally use for MP games
