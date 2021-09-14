@@ -46,7 +46,8 @@
 
 // FIXME: When we switch over to full JS, use class version of this file
 
-#define	DEFAULT_MESSAGE_DURATION	GAME_TICKS_PER_SEC * 4
+#define	DEFAULT_MESSAGE_DURATION			GAME_TICKS_PER_SEC * 4
+#define	DEFAULT_MESSAGE_DURATION_CAMPAIGN	GAME_TICKS_PER_SEC * 12
 // Chat/history "window"
 #define CON_BORDER_WIDTH			4
 #define CON_BORDER_HEIGHT			4
@@ -137,9 +138,10 @@ void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc)
 /** Sets the system up */
 void	initConsoleMessages()
 {
+	unsigned int duration = (game.type == LEVEL_TYPE::SKIRMISH) ? DEFAULT_MESSAGE_DURATION : DEFAULT_MESSAGE_DURATION_CAMPAIGN;
 	linePitch = iV_GetTextLineSize(font_regular);
 	bConsoleDropped = false;
-	setConsoleMessageDuration(DEFAULT_MESSAGE_DURATION);	// Setup how long messages are displayed for
+	setConsoleMessageDuration(duration);					// Setup how long messages are displayed for
 	setConsoleBackdropStatus(true);							// No box under the text
 	enableConsoleDisplay(true);								// Turn on the console display
 
@@ -475,7 +477,7 @@ void	displayConsoleMessages()
 		tmp -= i->display.width();
 		console_drawtext(i->display, getConsoleTextColor(i->player), tmp - 6, linePitch - 2, i->JustifyType, i->display.width());
 	}
-	
+
 	if (!ActiveMessages.empty())
 	{
 		int TextYpos = mainConsole.topY;
