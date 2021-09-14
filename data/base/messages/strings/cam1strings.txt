@@ -46,8 +46,8 @@ SUB1_8_MSG3			_("Eradicate the base and secure the area.")
 
 /* Campaign Mission briefing additional */
 CAM1CA_MSG1			_("ALPHA BASE MISSION: Establish a Forward Base")
-CAM1CA_MSG2			_("Establish a forward base on the plateau.")
-CAM1CA_MSG3			_("Build defensive structures.")
+CAM1CA_MSG2			_("Establish a forward base on the plateau and fend off the New Paradigm.")
+CAM1CA_MSG3			_("Build defensive structures until the green objective blip disappears.")
 
 CAM1A-C_MSG1			_("ALPHA BASE MISSION: Counter Attack")
 CAM1A-C_MSG2			_("Enemy forces are approaching from the east and north.")
