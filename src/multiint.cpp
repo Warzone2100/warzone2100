@@ -6809,7 +6809,6 @@ inline void to_json(nlohmann::json& j, const PLAYER& p) {
 	j["heartattacktime"] = p.heartattacktime;
 	j["heartbeat"] = p.heartbeat;
 	j["kick"] = p.kick;
-	j["connection"] = p.connection; // MAYBE NOT?
 	j["team"] = p.team;
 	j["ready"] = p.ready;
 	j["ai"] = p.ai;
@@ -6830,7 +6829,6 @@ inline void from_json(const nlohmann::json& j, PLAYER& p) {
 	p.heartattacktime = j.at("heartattacktime").get<uint32_t>();
 	p.heartbeat = j.at("heartbeat").get<bool>();
 	p.kick = j.at("kick").get<bool>();
-	p.connection = j.at("connection").get<int32_t>();
 	p.team = j.at("team").get<int32_t>();
 	p.ready = j.at("ready").get<bool>();
 	p.ai = j.at("ai").get<int8_t>();

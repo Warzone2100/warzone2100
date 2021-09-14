@@ -249,7 +249,6 @@ struct PLAYER
 	uint32_t            heartattacktime;    ///< Time cardiac arrest started
 	bool                heartbeat;          ///< If we are still alive or not
 	bool                kick;               ///< If we should kick them
-	int32_t             connection;         ///< Index into connection list
 	int32_t             team;               ///< Which team we are on (int32_t::max for spectator team)
 	bool                ready;              ///< player ready to start?
 	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
@@ -269,7 +268,6 @@ struct PLAYER
 		heartattacktime = 0;
 		heartbeat = false;
 		kick = false;
-		connection = -1;
 		team = -1;
 		ready = false;
 		ai = 0;
