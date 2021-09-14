@@ -134,6 +134,8 @@ void sendOptions()
 // options for a game. (usually recvd in frontend)
 void recvOptions(NETQUEUE queue)
 {
+	ASSERT_OR_RETURN(, queue.index == NetPlay.hostPlayer, "NET_OPTIONS received from unexpected player: %" PRIu8 " - ignoring", queue.index);
+
 	unsigned int i;
 
 	// store prior map / mod info

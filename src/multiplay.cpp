@@ -666,6 +666,17 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 	{
 		switch (type)
 		{
+			case NET_OPTIONS:
+			case NET_PLAYER_INFO:
+			case NET_PLAYER_JOINED:
+			case NET_FILE_PAYLOAD:
+			case NET_VOTE_REQUEST:
+				// only the host is allowed to send these messages
+				if (queue.index != NetPlay.hostPlayer)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
 			case NET_KICK:
 			case NET_AITEXTMSG:
 			case NET_BEACONMSG:
