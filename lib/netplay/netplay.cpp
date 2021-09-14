@@ -882,6 +882,7 @@ SDWORD NETgetGameFlags(UDWORD flag)
 
 static void NETsendGameFlags()
 {
+	ASSERT_HOST_ONLY(return);
 	debug(LOG_NET, "sending game flags");
 	NETbeginEncode(NETbroadcastQueue(), NET_GAME_FLAGS);
 	{
@@ -1719,6 +1720,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				      || message->type == NET_PLAYER_LEAVING
 				      || message->type == NET_PLAYER_DROPPED
 				      || message->type == NET_REJECTED
+					  || message->type == NET_GAME_FLAGS
 				      || message->type == NET_PLAYER_JOINED
 					  || message->type == NET_PLAYER_INFO) && sender != NET_HOST_ONLY)
 				    ||
@@ -2014,6 +2016,14 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			debug(LOG_NET, "Receiving game flags");
 
 			NETbeginDecode(playerQueue, NET_GAME_FLAGS);
+
+			if (playerQueue.index != NET_HOST_ONLY)
+			{
+				debug(LOG_ERROR, "NET_GAME_FLAGS sent by wrong player: %" PRIu32 "", playerQueue.index);
+				NETend();
+				break;
+			}
+
 			{
 				static unsigned int max_flags = ARRAY_SIZE(NetGameFlags);
 				// Retrieve the amount of game flags that we should receive
