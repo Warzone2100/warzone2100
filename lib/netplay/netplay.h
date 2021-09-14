@@ -96,6 +96,7 @@ enum MESSAGE_TYPES
 	NET_VOTE,                       ///< player vote
 	NET_VOTE_REQUEST,               ///< Setup a vote popup
 	NET_SPECTEXTMSG,                ///< chat between spectators
+	NET_PLAYERNAME_CHANGEREQUEST,	///< non-host human player is changing their name.
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.
