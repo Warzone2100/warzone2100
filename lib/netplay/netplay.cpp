@@ -1715,17 +1715,18 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 			else if (NetPlay.isHost && sender == playerQueue.index)
 			{
-				if (((message->type == NET_FIREUP
+				if (((message->type == NET_OPTIONS
+					  || message->type == NET_FIREUP
 				      || message->type == NET_KICK
 				      || message->type == NET_PLAYER_LEAVING
 				      || message->type == NET_PLAYER_DROPPED
 				      || message->type == NET_REJECTED
 					  || message->type == NET_GAME_FLAGS
 				      || message->type == NET_PLAYER_JOINED
-					  || message->type == NET_PLAYER_INFO) && sender != NET_HOST_ONLY)
+					  || message->type == NET_PLAYER_INFO
+					  || message->type == NET_FILE_PAYLOAD) && sender != NET_HOST_ONLY)
 				    ||
 				    ((message->type == NET_HOST_DROPPED
-				      || message->type == NET_OPTIONS
 				      || message->type == NET_FILE_REQUESTED
 				      || message->type == NET_READY_REQUEST
 				      || message->type == NET_TEAMREQUEST

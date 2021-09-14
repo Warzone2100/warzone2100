@@ -5292,6 +5292,13 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case NET_FILE_PAYLOAD:
 			{
+				if (NET_HOST_ONLY != queue.index)
+				{
+					HandleBadParam("NET_FILE_PAYLOAD given incorrect params.", 255, queue.index);
+					ignoredMessage = true;
+					break;
+				}
+
 				bool done = recvMapFileData(queue);
 				if (running)
 				{
