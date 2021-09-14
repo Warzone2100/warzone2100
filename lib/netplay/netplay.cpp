@@ -1725,7 +1725,9 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				      || message->type == NET_TEAMREQUEST
 				      || message->type == NET_COLOURREQUEST
 				      || message->type == NET_POSITIONREQUEST
+					  || message->type == NET_FACTIONREQUEST
 				      || message->type == NET_FILE_CANCELLED
+					  || message->type == NET_DATA_CHECK
 				      || message->type == NET_JOIN
 				      || message->type == NET_PLAYER_INFO) && receiver != NET_HOST_ONLY))
 				{
