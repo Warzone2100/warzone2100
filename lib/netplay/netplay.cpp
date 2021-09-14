@@ -516,6 +516,7 @@ void NET_InitPlayers(bool initTeams, bool initSpectator)
 
 static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to)
 {
+	ASSERT_HOST_ONLY(return);
 	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
 	NETuint32_t(&indexLen);
 	for (unsigned n = 0; n < indexLen; ++n)
@@ -544,11 +545,6 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 {
 	NETSendNPlayerInfoTo(&index, 1, to);
-}
-
-static void NETsendPlayerInfo(uint32_t index)
-{
-	NETSendPlayerInfoTo(index, NET_HOST_ONLY);
 }
 
 static void NETSendAllPlayerInfoTo(unsigned to)
@@ -819,7 +815,14 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 	}
 	else
 	{
-		NETsendPlayerInfo(index);
+		ASSERT_OR_RETURN(false, index <= static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()), "index (%" PRIu32 ") exceeds supported bounds", index);
+		ASSERT_OR_RETURN(false, index == selectedPlayer, "Clients can only change their own name!");
+		uint8_t player = static_cast<uint8_t>(index);
+		WzString newNameStr = NetPlay.players[index].name;
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYERNAME_CHANGEREQUEST);
+		NETuint8_t(&player);
+		NETwzstring(newNameStr);
+		NETend();
 	}
 
 	return true;
@@ -1716,7 +1719,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				      || message->type == NET_PLAYER_LEAVING
 				      || message->type == NET_PLAYER_DROPPED
 				      || message->type == NET_REJECTED
-				      || message->type == NET_PLAYER_JOINED) && sender != NET_HOST_ONLY)
+				      || message->type == NET_PLAYER_JOINED
+					  || message->type == NET_PLAYER_INFO) && sender != NET_HOST_ONLY)
 				    ||
 				    ((message->type == NET_HOST_DROPPED
 				      || message->type == NET_OPTIONS
@@ -1729,7 +1733,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				      || message->type == NET_FILE_CANCELLED
 					  || message->type == NET_DATA_CHECK
 				      || message->type == NET_JOIN
-				      || message->type == NET_PLAYER_INFO) && receiver != NET_HOST_ONLY))
+				      || message->type == NET_PLAYERNAME_CHANGEREQUEST) && receiver != NET_HOST_ONLY))
 				{
 					char msg[256] = {'\0'};
 
@@ -1796,6 +1800,52 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
 				break;
 			}
+			break;
+		}
+	case NET_PLAYERNAME_CHANGEREQUEST:
+		{
+			if (!ingame.localJoiningInProgress)
+			{
+				// player name change only permitted in the lobby
+				debug(LOG_ERROR, "Ignoring NET_PLAYERNAME_CHANGEREQUEST message (only permitted in the lobby).");
+				break;
+			}
+			if (!NetPlay.isHost)
+			{
+				// Only the host should receive and process these messages
+				debug(LOG_ERROR, "Ignoring NET_PLAYERNAME_CHANGEREQUEST message (should only be sent to the host).");
+				break;
+			}
+
+			uint8_t player = 0;
+			WzString oldName;
+			WzString newName;
+
+			// Encoded in NETchangePlayerName() in netplay.cpp.
+			NETbeginDecode(playerQueue, NET_PLAYERNAME_CHANGEREQUEST);
+			NETuint8_t(&player);
+			NETwzstring(newName);
+			NETend();
+
+			// Bail out if the given ID number is out of range
+			if (player >= MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer && (playerQueue.index != player || !NetPlay.players[player].allocated)))
+			{
+				debug(LOG_ERROR, "NET_PLAYERNAME_CHANGEREQUEST from %u: Player ID (%u) out of range (max %u)", playerQueue.index, player, (unsigned int)MAX_CONNECTED_PLAYERS);
+				break;
+			}
+
+			oldName = NetPlay.players[player].name;
+			sstrcpy(NetPlay.players[player].name, newName.toUtf8().c_str());
+
+			if (NetPlay.players[player].allocated && strncmp(oldName.toUtf8().c_str(), NetPlay.players[player].name, sizeof(NetPlay.players[player].name)) != 0)
+			{
+				printConsoleNameChange(oldName.toUtf8().c_str(), NetPlay.players[player].name);
+				// Send the updated data to all other clients as well.
+				NETBroadcastPlayerInfo(player); // ultimately triggers updateMultiplayGameData inside NETSendNPlayerInfoTo
+				NETfixDuplicatePlayerNames();
+				netPlayersUpdated = true;
+			}
+
 			break;
 		}
 	case NET_PLAYER_STATS:
@@ -4541,7 +4591,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_KICK:                      return "NET_KICK";
 	case NET_FIREUP:                    return "NET_FIREUP";
 	case NET_COLOURREQUEST:             return "NET_COLOURREQUEST";
-	case NET_FACTIONREQUEST:             return "NET_FACTIONREQUEST";
+	case NET_FACTIONREQUEST:            return "NET_FACTIONREQUEST";
 	case NET_AITEXTMSG:                 return "NET_AITEXTMSG";
 	case NET_BEACONMSG:                 return "NET_BEACONMSG";
 	case NET_TEAMREQUEST:               return "NET_TEAMREQUEST";
@@ -4566,6 +4616,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_VOTE:                      return "NET_VOTE";
 	case NET_VOTE_REQUEST:              return "NET_VOTE_REQUEST";
 	case NET_SPECTEXTMSG:				return "NET_SPECTEXTMSG";
+	case NET_PLAYERNAME_CHANGEREQUEST:  return "NET_PLAYERNAME_CHANGEREQUEST";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.
