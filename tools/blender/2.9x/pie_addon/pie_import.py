@@ -373,9 +373,9 @@ class Importer():
     def pie_import_quick(self, scene, pieDir, pieMesh):
         self.scene = scene
 
-        pieParse = self.pie_parse(pieDir + '\\\\' + pieMesh, pieMesh)
+        pieParse = self.pie_parse(pieDir + '\\\\' + pieMesh)
 
-        self.pie_generateBlenderObjects(pieParse)
+        self.pie_generateBlenderObjects(pieParse, pieMesh)
 
     def pie_import(self, scene, pieDir):
         self.scene = scene
