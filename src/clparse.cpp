@@ -313,6 +313,7 @@ typedef enum
 	CLI_SOUND,
 	CLI_NOSOUND,
 	CLI_CONNECTTOIP,
+	CLI_CONNECTTOIP_SPECTATE,
 	CLI_HOSTLAUNCH,
 	CLI_NOASSERT,
 	CLI_CRASH,
@@ -363,6 +364,7 @@ static const struct poptOption *getOptionsTable()
 		{ "sound", POPT_ARG_NONE, CLI_SOUND,      N_("Enable sound"),                      nullptr },
 		{ "nosound", POPT_ARG_NONE, CLI_NOSOUND,    N_("Disable sound"),                     nullptr },
 		{ "join", POPT_ARG_STRING, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),  N_("host") },
+		{ "spectate", POPT_ARG_STRING, CLI_CONNECTTOIP_SPECTATE, N_("Connect directly to IP/hostname as a spectator"),  N_("host") },
 		{ "host", POPT_ARG_NONE, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr },
 		{ "texturecompression", POPT_ARG_NONE, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr },
 		{ "notexturecompression", POPT_ARG_NONE, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
@@ -591,6 +593,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			war_setWindowMode(WINDOW_MODE::fullscreen);
 			break;
 		case CLI_CONNECTTOIP:
+		case CLI_CONNECTTOIP_SPECTATE:
 			//get the ip we want to connect with, and go directly to join screen.
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
@@ -598,6 +601,8 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("No IP/hostname given");
 			}
 			sstrcpy(iptoconnect, token);
+			// also set spectate flag
+			cliConnectToIpAsSpectator = (option == CLI_CONNECTTOIP_SPECTATE);
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.

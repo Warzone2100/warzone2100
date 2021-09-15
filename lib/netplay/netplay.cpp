@@ -234,6 +234,7 @@ static Socket *tmp_socket[MAX_TMP_SOCKETS] = { nullptr };  ///< Sockets used to 
 static SocketSet *tmp_socket_set = nullptr;
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
+bool cliConnectToIpAsSpectator = false; // for cli option
 
 static NETSTATS nStats              = {{0, 0}, {0, 0}, {0, 0}};
 static NETSTATS nStatsLastSec       = {{0, 0}, {0, 0}, {0, 0}};

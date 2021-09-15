@@ -192,7 +192,7 @@ TITLECODE titleLoop()
 			NETinit(true);
 			// Ensure the joinGame has a place to return to
 			changeTitleMode(TITLE);
-			joinGame(iptoconnect);
+			joinGame(iptoconnect, cliConnectToIpAsSpectator);
 		}
 		else
 		{
