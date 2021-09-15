@@ -3786,7 +3786,7 @@ public:
 					ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
 
 					if (player == selectedPlayer
-						&& (!NetPlay.players[player].isSpectator || !NetPlay.players[player].ready)) // spectators can never toggle off "ready"
+						&& (!NetPlay.players[player].isSpectator || !NetPlay.players[player].ready || NetPlay.isHost)) // spectators can never toggle off "ready"
 					{
 						// Lock the "ready" button (until the request is processed)
 						pButton->setState(WBUT_LOCK);
