@@ -19,41 +19,35 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
-
 import bpy
+import bmesh
+from .shared import getTexAnimGrp
 
-
-def getNumbers(string):
-    numbers = []
-    for word in string.split():
-        if word.isdigit():
-            numbers.append(int(word))
-
-    return numbers
 
 def convertStrListToNumList(ls):
-    val = []
+    return [float(word) for word in ls]
 
-    for word in ls:
-        val.append(float(word))
 
-    return val
+def newTexAnimGroup(ob, poly):
+    ob.pie_tex_anim_grps.add()
+    ob.pie_tex_anim_grp_index = len(ob.pie_tex_anim_grps) - 1
+    grpII = ob.pie_tex_anim_grp_index
+    grpName = 'Texture Animation Group {n}'.format(n=grpII + 1)
 
-def newTexAnimGroup(ob, polygon, index):
-    ob.pie_texture_animation_groups.add()
-    ob.pie_texture_animation_group_index = len(ob.pie_texture_animation_groups) - 1
-    texAnimGroupindex = ob.pie_texture_animation_group_index
-
-    ob.pie_texture_animation_groups[texAnimGroupindex].name = 'Texture Animation Group {num}'.format(num=texAnimGroupindex + 1)
-    ob.pie_texture_animation_groups[texAnimGroupindex].texAnimImages = int(polygon[5])
-    ob.pie_texture_animation_groups[texAnimGroupindex].texAnimRate = int(polygon[6])
-    ob.pie_texture_animation_groups[texAnimGroupindex].texAnimWidth = int(polygon[7])
-    ob.pie_texture_animation_groups[texAnimGroupindex].texAnimHeight = int(polygon[8])
-
-    ob.pie_texture_animation_groups[texAnimGroupindex].texAnimFaces += ' {str} '.format(str=str(index))
+    ob.pie_tex_anim_grps[grpII].name = grpName
+    ob.pie_tex_anim_grps[grpII].texAnimImages = int(poly[5])
+    ob.pie_tex_anim_grps[grpII].texAnimRate = int(poly[6])
+    ob.pie_tex_anim_grps[grpII].texAnimWidth = int(poly[7])
+    ob.pie_tex_anim_grps[grpII].texAnimHeight = int(poly[8])
 
 
 class Importer():
+
+    headers = [
+        'PIE', 'TYPE', 'TEXTURE', 'NORMALMAP', 'SPECULARMAP', 'EVENT', 
+        'LEVELS', 'LEVEL', 'POINTS', 'NORMALS', 'POLYGONS', 'CONNECTORS', 
+        'ANIMOBJECT', 'SHADOWPOINTS', 'SHADOWPOLYGONS',
+    ]
 
     def pie_parse(self, pieFile):
         pie = open(pieFile, 'r')
@@ -68,159 +62,83 @@ class Importer():
             'LEVELS': [],
         }
 
-        currentLevel = -1
-        currentlyReading = ''
+        lvl = -1
+        reading = ''
 
         for line in pie:
 
-            ls = line.split()
-
             if len(line) <= 1:
-                    continue
-
-            if 'PIE' in line:
-                currentlyReading = 'PIE'
-                pie_info['PIE'] = getNumbers(line)[0]
                 continue
 
-            elif 'TYPE' in line:
-                currentlyReading = 'TYPE'
-                pie_info['TYPE'] = getNumbers(line)[0]
-                continue
+            ls = line.split()
+            fl = ls[0]
 
-            elif 'TEXTURE' in line:
-                currentlyReading = 'TEXTURE'
-                pie_info['TEXTURE'] = line.split()[2]
-                continue
+            if fl in self.headers:
+                reading = fl
 
-            elif 'NORMALMAP' in line:
-                currentlyReading = 'NORMALMAP'
-                pie_info['NORMALMAP'] = line.split()[2]
-                continue
+                if fl in ['PIE', 'TYPE']:
+                    pie_info[fl] = ls[1]
 
-            elif 'SPECULARMAP' in line:
-                currentlyReading = 'SPECULARMAP'
-                pie_info['SPECULARMAP'] = line.split()[2]
-                continue
+                elif fl in ['TEXTURE', 'NORMALMAP', 'SPECULARMAP']:
+                    pie_info[fl] = ls[2]
 
-            elif 'EVENT' in line:
-                currentlyReading = 'EVENT'
-                ls = line.split()
-                pie_info['EVENT'].append([ls[1], ls[2]])
-                continue
+                elif fl == 'EVENT':
+                    pie_info[fl].append([ls[1], ls[2]])
 
-            elif 'LEVELS' in line:
-                currentlyReading = 'LEVELS'
-                continue
+                elif fl == 'LEVEL':
+                    pie_info['LEVELS'].append({
+                      'POINTS': [],
+                      'NORMALS': [],
+                      'POLYGONS': [],
+                      'CONNECTORS': [],
+                      'ANIMOBJECT': [],
+                      'SHADOWPOINTS': [],
+                      'SHADOWPOLYGONS': [],
+                    })
+                    lvl += 1
 
-            elif 'LEVEL' in line:
-                currentlyReading = 'LEVEL'
-                pie_info['LEVELS'].append({
-                'POINTS': [],
-                'NORMALS': [],
-                'POLYGONS': [],
-                'CONNECTORS': [],
-                'ANIMOBJECT': [],
-                'SHADOWPOINTS': [],
-                'SHADOWPOLYGONS': [],
-                })
-                currentLevel += 1
-                continue
-
-            elif ls[0] == 'POINTS':
-                currentlyReading = 'POINTS'
-                continue
-
-            elif ls[0] == 'NORMALS':
-                currentlyReading = 'NORMALS'
-                continue
-
-            elif ls[0] == 'POLYGONS':
-                currentlyReading = 'POLYGONS'
-                continue
-
-            elif ls[0] == 'CONNECTORS':
-                currentlyReading = 'CONNECTORS'
-                continue
-
-            elif ls[0] == 'ANIMOBJECT':
-                currentlyReading = 'ANIMOBJECT'
-                pie_info['LEVELS'][currentLevel]['ANIMOBJECT'].append(tuple([float(ls[1]), float(ls[2])]))
-                continue
-
-            elif ls[0] == 'SHADOWPOINTS':
-                print('currently reading = SHADOWPOINTS')
-                currentlyReading = 'SHADOWPOINTS'
-                continue
-
-            elif ls[0] == 'SHADOWPOLYGONS':
-                print('currently reading = SHADOWPOLYGONS')
-                currentlyReading = 'SHADOWPOLYGONS'
-                continue
+                elif fl == 'ANIMOBJECT':
+                    pie_info['LEVELS'][lvl][fl].append(
+                        ([float(ls[1]), float(ls[2])])
+                    )
 
             else:
 
-                if currentlyReading is 'POINTS':
-                    l = convertStrListToNumList(ls)
-                    v = (l[0] * 0.01, l[2] * 0.01, l[1] * 0.01)
+                if reading in ['POINTS', 'SHADOWPOINTS', 'CONNECTORS']:
+                    li = convertStrListToNumList(ls)
+                    
+                    if reading == 'CONNECTORS':
+                        result = (li[0] * 0.01, li[1] * 0.01, li[2] * 0.01)
+                    else:
+                        result = (li[0] * 0.01, li[2] * 0.01, li[1] * 0.01)
 
-                    pie_info['LEVELS'][currentLevel]['POINTS'].append(v)
-                    continue
+                elif reading in [
+                    'POLYGONS', 'NORMALS', 'ANIMOBJECT', 'SHADOWPOLYGONS'
+                ]:
+                    result = tuple(convertStrListToNumList(ls))
 
-                elif currentlyReading is 'NORMALS':
-                    pie_info['LEVELS'][currentLevel]['NORMALS'].append(tuple(convertStrListToNumList(ls)))
-                    continue
-
-                elif currentlyReading is 'POLYGONS':
-                    pie_info['LEVELS'][currentLevel]['POLYGONS'].append(tuple(convertStrListToNumList(ls)))
-                    continue
-
-                elif currentlyReading is 'CONNECTORS':
-                    l = convertStrListToNumList(ls)
-                    v = (l[0] * 0.01, l[1] * 0.01, l[2] * 0.01)
-
-                    pie_info['LEVELS'][currentLevel]['CONNECTORS'].append(v)
-                    continue
-
-                elif currentlyReading is 'ANIMOBJECT':
-                    pie_info['LEVELS'][currentLevel]['ANIMOBJECT'].append(tuple(convertStrListToNumList(ls)))
-                    continue
-
-                elif currentlyReading is 'SHADOWPOINTS':
-                    l = convertStrListToNumList(ls)
-                    v = (l[0] * 0.01, l[2] * 0.01, l[1] * 0.01)
-
-                    pie_info['LEVELS'][currentLevel]['SHADOWPOINTS'].append(v)
-                    continue
-
-                elif currentlyReading is 'SHADOWPOLYGONS':
-                    pie_info['LEVELS'][currentLevel]['SHADOWPOLYGONS'].append(tuple(convertStrListToNumList(ls)))
-                    continue
+                pie_info['LEVELS'][lvl][reading].append(result)
 
         return pie_info
 
-    def pie_generateBlenderObjects(self, pieParse):
-
-        pieFile = self.scene.pie_import_prop.pieFile
-
-        armature = bpy.data.armatures.new(pieFile)
-        armatureObject = bpy.data.objects.new(pieFile, armature)
+    def pie_generateBlenderObjects(self, pieParse, pieName):
+        armature = bpy.data.armatures.new(pieName)
+        armatureObject = bpy.data.objects.new(pieName, armature)
         bpy.context.collection.objects.link(armatureObject)
 
         armatureObject.pie_object_prop.pieType = 'ROOT'
-
         armatureObject.show_in_front = True
 
-        currentLevel = 0
+        currentLvl = 0
 
         for action in bpy.data.actions:
-            if action.name == pieFile + ' Anim':
+            if action.name == pieName + ' Anim':
                 bpy.data.actions.remove(action)
 
         for level in pieParse['LEVELS']:
-            currentLevel += 1
+            currentLvl += 1
 
-            nameStr = '{name} Level{num}'.format(name=pieFile, num=currentLevel)
+            nameStr = '{n} Level{ii}'.format(n=pieName, ii=currentLvl)
 
             bpy.context.view_layer.objects.active = armatureObject
             bpy.ops.object.mode_set(mode='EDIT', toggle=False)
@@ -238,144 +156,129 @@ class Importer():
             mesh = bpy.data.meshes.new(nameStr)
             mesh.uv_layers.new()
 
-            meshObject = bpy.data.objects.new(nameStr , mesh)
-            meshObject.parent = armatureObject
-            meshObject.parent_type = 'BONE'
-            meshObject.parent_bone = nameStr
-            bpy.context.collection.objects.link(meshObject)
+            meshOb = bpy.data.objects.new(nameStr, mesh)
+            meshOb.parent = armatureObject
+            meshOb.parent_type = 'BONE'
+            meshOb.parent_bone = nameStr
+            bpy.context.collection.objects.link(meshOb)
 
-            meshObject.pie_object_prop.pieType = 'LEVEL'
+            meshOb.pie_object_prop.pieType = 'LEVEL'
 
-            bpy.context.view_layer.objects.active = meshObject
+            bpy.context.view_layer.objects.active = meshOb
 
-            #* POINTS/POLYGONS *#
+            # * POINTS/POLYGONS * #
 
             pie_points = level['POINTS']
             pie_polygons = []
             
-            for poly in level['POLYGONS']:
-                pie_polygons.append((poly[2], poly[3], poly[4]))
-
+            for p in level['POLYGONS']:
+                pie_polygons.append((p[2], p[3], p[4]))
 
             mesh.from_pydata(pie_points, [], pie_polygons)
 
-            ii = 0
-            for poly in level['POLYGONS']:
-                loop = ii * 3
+            animatedPolygons = []
+            for ii, p in enumerate(level['POLYGONS']):
+                L = ii * 3
 
-                if int(poly[0]) == 200:
+                uvData = meshOb.data.uv_layers.active.data
 
-                    if pieParse['PIE'] is 3:
-                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[5], -poly[6] + 1))
-                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[7], -poly[8] + 1))
-                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[9], -poly[10] + 1))
-                    elif pieParse['PIE'] is 2:
-                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[5] / 256, (-poly[6] / 256) + 1))
-                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[7] / 256, (-poly[8] / 256) + 1))
-                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[9] / 256, (-poly[10] / 256) + 1))
+                n = 256
+                # m is for modifying the index taken as UV data
+                # depending on if the PIE polygon is animated.
+                m = 0
+                if int(p[0] == 4200):
+                    animatedPolygons.append(ii)
+                    m = 4
 
-                elif int(poly[0]) == 4200:
-
-                    if meshObject.pie_texture_animation_groups is None:
-                        newTexAnimGroup(meshObject, poly, ii)
-                    else:
-                        success = False
-                        for texAnimGroup in meshObject.pie_texture_animation_groups:
+                if pieParse['PIE'] == '3':
+                    uvData[L + 0].uv = ((p[5 + m], -p[6 + m] + 1))
+                    uvData[L + 1].uv = ((p[7 + m], -p[8 + m] + 1))
+                    uvData[L + 2].uv = ((p[9 + m], -p[10 + m] + 1))
+                elif pieParse['PIE'] == '2':
+                    uvData[L + 0].uv = ((p[5 + m] / n, (-p[6 + m] / n) + 1))
+                    uvData[L + 1].uv = ((p[7 + m] / n, (-p[8 + m] / n) + 1))
+                    uvData[L + 2].uv = ((p[9 + m] / n, (-p[10 + m] / n) + 1))
                     
-                            if (int(poly[5]) == texAnimGroup.texAnimImages and int(poly[6]) == texAnimGroup.texAnimRate and int(poly[7]) == texAnimGroup.texAnimWidth and int(poly[8]) == texAnimGroup.texAnimHeight):
-                                texAnimGroup.texAnimFaces += ' {str} '.format(str=str(ii))
-                                success = True
-                                break
-                    
-                        if success is False:
-                            newTexAnimGroup(meshObject, poly, ii)
-                            
+            bpy.ops.object.mode_set(mode='EDIT', toggle=False)
+            bm = bmesh.from_edit_mesh(mesh)
+            faces = bm.faces
 
-                    if pieParse['PIE'] is 3:
-                        meshObject.data.uv_layers.active[loop + 0].uv = ((poly[9], -poly[10] + 1))
-                        meshObject.data.uv_layers.active[loop + 1].uv = ((poly[11], -poly[12] + 1))
-                        meshObject.data.uv_layers.active[loop + 2].uv = ((poly[13], -poly[14] + 1))
-                    elif pieParse['PIE'] is 2:
-                        meshObject.data.uv_layers.active[loop + 0].uv = ((poly[9] / 256, (-poly[10] / 256) + 1))
-                        meshObject.data.uv_layers.active[loop + 1].uv = ((poly[11] / 256, (-poly[12] / 256) + 1))
-                        meshObject.data.uv_layers.active[loop + 2].uv = ((poly[13] / 256, (-poly[14] / 256) + 1))
-                    
-                ii += 1
+            for ii in animatedPolygons:
+                p = level['POLYGONS'][ii]
 
-            #* SHADOW POINTS/POLYGONS *#
+                if meshOb.pie_tex_anim_grps is None:
+                    newTexAnimGroup(meshOb, p)
+                    layer = getTexAnimGrp(
+                        bm, str(len(meshOb.pie_tex_anim_grps) - 1)
+                    )
+                    faces.ensure_lookup_table()
+                    faces[ii][layer] = 1
+                else:
+                    success = False
+                    for jj, tAnimGp in enumerate(meshOb.pie_tex_anim_grps):
+                
+                        if (int(p[5]) == tAnimGp.texAnimImages and 
+                                int(p[6]) == tAnimGp.texAnimRate and 
+                                int(p[7]) == tAnimGp.texAnimWidth and 
+                                int(p[8]) == tAnimGp.texAnimHeight):
 
-            print(level['SHADOWPOINTS'])
-            print(level['SHADOWPOLYGONS'])
-            print(len(level['POLYGONS']))
+                            layer = getTexAnimGrp(bm, str(jj))
+                            # faces.ensure_lookup_table()
+                            faces[ii][layer] = 1
+                            success = True
+                            break
+                
+                    if success is False:
+                        newTexAnimGroup(meshOb, p)
+                        layer = getTexAnimGrp(
+                            bm, str(len(meshOb.pie_tex_anim_grps) - 1)
+                        )
+                        faces.ensure_lookup_table()
+                        faces[ii][layer] = 1
+
+            bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+
+            # * SHADOW POINTS/POLYGONS * #
 
             if level['SHADOWPOINTS'] and level['SHADOWPOLYGONS']:
 
-                meshObject.pie_object_prop.shadowType = 'CUSTOM'
+                meshOb.pie_object_prop.shadowType = 'CUSTOM'
             
-                shadowMesh = bpy.data.meshes.new(nameStr + ' Shadow')
-                shadowMeshObject = bpy.data.objects.new(nameStr + ' Shadow' , shadowMesh)
-                shadowMeshObject.parent = meshObject
+                shMesh = bpy.data.meshes.new(nameStr + ' Shadow')
+                shMeshOb = bpy.data.objects.new(nameStr + ' Shadow', shMesh)
+                shMeshOb.parent = meshOb
 
-                shadowMeshObject.pie_object_prop.pieType = 'SHADOW'
+                shMeshOb.pie_object_prop.pieType = 'SHADOW'
 
-                bpy.context.collection.objects.link(shadowMeshObject)
+                bpy.context.collection.objects.link(shMeshOb)
 
-                shadow_points = level['SHADOWPOINTS']
-                shadow_polygons = []
+                sh_points = level['SHADOWPOINTS']
+                sh_polygons = []
                 
-                for poly in level['SHADOWPOLYGONS']:
-                    shadow_polygons.append((poly[2], poly[3], poly[4]))
+                for p in level['SHADOWPOLYGONS']:
+                    sh_polygons.append((p[2], p[3], p[4]))
 
-                shadowMesh.from_pydata(shadow_points, [], shadow_polygons)
+                shMesh.from_pydata(sh_points, [], sh_polygons)
 
-            #* NORMALS *#
-
-            #if level['NORMALS']:
-                #meshObject.pie_object_prop.exportNormals = True
-
-                #normals = []
-                #verts = []
-                #ii = 0
-                #for poly in mesh.polygons:
-                #    jj = 0
-                #    poly.use_smooth = True
-                #    print(poly.normal)
-                #    for vertex in poly.vertices:
-                #        if vertex not in verts:
-                #            verts.append(vertex)
-                #            meshObject.data.vertices[vertex].normal = (level['NORMALS'][ii][jj], level['NORMALS'][ii][jj + 1], level['NORMALS'][ii][jj + 2])
-                #            #print(*(level['NORMALS'][ii][jj], level['NORMALS'][ii][jj + 1], level['NORMALS'][ii][jj + 2]))
-                #            #print(meshObject.data.vertices[vertex].normal)
-                #            normals.append(meshObject.data.vertices[vertex].normal)
-                #        jj += 3
-                #    ii += 1
-
-                #mesh.create_normals_split()
-
-                #mesh.calc_normals_split()
-
-                #mesh.show_normal_vertex = mesh.show_normal_loop = True
-
-                #mesh.normals_split_custom_set([(0,0,0) for l in mesh.loops])
-                #mesh.normals_split_custom_set_from_vertices(normals)
-
-            #* CONNECTORS *#
+            # * CONNECTORS * #
 
             ii = 1
             for connector in level['CONNECTORS']:
-                connectorObject = bpy.data.objects.new('{name} Connector{num}'.format(name=nameStr, num=ii), None)
-                connectorObject.empty_display_size = 0.125
-                connectorObject.empty_display_type = 'ARROWS'
-                connectorObject.location = connector
-                connectorObject.parent = meshObject
+                connectorOb = bpy.data.objects.new(
+                    '{name} Connector{num}'.format(name=nameStr, num=ii), None
+                )
+                connectorOb.empty_display_size = 0.125
+                connectorOb.empty_display_type = 'ARROWS'
+                connectorOb.location = connector
+                connectorOb.parent = meshOb
 
-                connectorObject.pie_object_prop.pieType = 'CONNECTOR'
+                connectorOb.pie_object_prop.pieType = 'CONNECTOR'
 
-                bpy.context.collection.objects.link(connectorObject)
+                bpy.context.collection.objects.link(connectorOb)
 
                 ii += 1
 
-            #* ANIMOBJECT *#
+            # * ANIMOBJECT * #
 
             bpy.context.view_layer.objects.active = armatureObject
             bpy.ops.object.mode_set(mode='POSE', toggle=False)
@@ -386,23 +289,23 @@ class Importer():
 
                 if armatureObject.animation_data is None:
                     armatureObject.animation_data_create()
-                    action = bpy.data.actions.new(pieFile + ' Anim')
+                    action = bpy.data.actions.new(pieName + ' Anim')
 
                 armatureObject.animation_data.action = action
 
-                locAnimPath = 'pose.bones["{name}"].location'.format(name=nameStr)
-                rotAnimPath = 'pose.bones["{name}"].rotation_euler'.format(name=nameStr)
-                sclAnimPath = 'pose.bones["{name}"].scale'.format(name=nameStr)
+                lAP = 'pose.bones["{n}"].location'.format(n=nameStr)
+                rAP = 'pose.bones["{n}"].rotation_euler'.format(n=nameStr)
+                sAP = 'pose.bones["{n}"].scale'.format(n=nameStr)
 
-                locXCurve = action.fcurves.new(locAnimPath, index=0, action_group=nameStr)
-                locYCurve = action.fcurves.new(locAnimPath, index=1, action_group=nameStr)
-                locZCurve = action.fcurves.new(locAnimPath, index=2, action_group=nameStr)
-                rotXCurve = action.fcurves.new(rotAnimPath, index=0, action_group=nameStr)
-                rotYCurve = action.fcurves.new(rotAnimPath, index=1, action_group=nameStr)
-                rotZCurve = action.fcurves.new(rotAnimPath, index=2, action_group=nameStr)
-                sclXCurve = action.fcurves.new(sclAnimPath, index=0, action_group=nameStr)
-                sclYCurve = action.fcurves.new(sclAnimPath, index=1, action_group=nameStr)
-                sclZCurve = action.fcurves.new(sclAnimPath, index=2, action_group=nameStr)
+                lXCrv = action.fcurves.new(lAP, index=0, action_group=nameStr)
+                lYCrv = action.fcurves.new(lAP, index=1, action_group=nameStr)
+                lZCrv = action.fcurves.new(lAP, index=2, action_group=nameStr)
+                rXCrv = action.fcurves.new(rAP, index=0, action_group=nameStr)
+                rYCrv = action.fcurves.new(rAP, index=1, action_group=nameStr)
+                rZCrv = action.fcurves.new(rAP, index=2, action_group=nameStr)
+                sXCrv = action.fcurves.new(sAP, index=0, action_group=nameStr)
+                sYCrv = action.fcurves.new(sAP, index=1, action_group=nameStr)
+                sZCrv = action.fcurves.new(sAP, index=2, action_group=nameStr)
 
                 if len(level['ANIMOBJECT']) > 1:
                     self.scene.frame_start = level['ANIMOBJECT'][1][0]
@@ -410,23 +313,22 @@ class Importer():
                 for key in level['ANIMOBJECT']:
                     
                     if len(key) < 10:
-                        meshObject.pie_object_prop.animTime = key[0]
-                        meshObject.pie_object_prop.animCycle = key[1]
+                        meshOb.pie_object_prop.animTime = key[0]
+                        meshOb.pie_object_prop.animCycle = key[1]
                         continue
 
-                    locXCurve.keyframe_points.insert(key[0], key[1] * 0.00001)
-                    locYCurve.keyframe_points.insert(key[0], key[2] * 0.00001)
-                    locZCurve.keyframe_points.insert(key[0], key[3] * 0.00001)
-                    rotXCurve.keyframe_points.insert(key[0], key[4] * 0.0000174533)
-                    rotYCurve.keyframe_points.insert(key[0], key[5] * 0.0000174533)
-                    rotZCurve.keyframe_points.insert(key[0], key[6] * 0.0000174533)
-                    sclXCurve.keyframe_points.insert(key[0], key[7])
-                    sclYCurve.keyframe_points.insert(key[0], key[8])
-                    sclZCurve.keyframe_points.insert(key[0], key[9])
+                    lXCrv.keyframe_points.insert(key[0], key[1] * 0.00001)
+                    lYCrv.keyframe_points.insert(key[0], key[2] * 0.00001)
+                    lZCrv.keyframe_points.insert(key[0], key[3] * 0.00001)
+                    rXCrv.keyframe_points.insert(key[0], key[4] * 0.0000174533)
+                    rYCrv.keyframe_points.insert(key[0], key[5] * 0.0000174533)
+                    rZCrv.keyframe_points.insert(key[0], key[6] * 0.0000174533)
+                    sXCrv.keyframe_points.insert(key[0], key[7])
+                    sYCrv.keyframe_points.insert(key[0], key[8])
+                    sZCrv.keyframe_points.insert(key[0], key[9])
 
                     if self.scene.frame_end < key[0]:
                         self.scene.frame_end = key[0]
-
 
             armatureObject.select_set(True)
             bpy.context.view_layer.objects.active = armatureObject
@@ -435,111 +337,51 @@ class Importer():
 
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
 
-            self.pie_loadProperties(pieParse, armatureObject, pieFile)
+            self.pie_loadProperties(pieParse, armatureObject)
 
-    
-    def pie_loadProperties(self, pieParse, pieObject, pieName):
-
+    def pie_loadProperties(self, pieParse, pieObject):
         objProp = pieObject.pie_object_prop
 
-        objProp.pieName = pieName.rsplit('.pie', 1)[0]
-
-        def getTypeFlags(num):
-            flags = []
-            while num != 0:
-                flags.append(num % 10)
-                num = num // 10
-            return flags
-
+        objProp.pieVersion = pieParse['PIE']
         objProp.texture = pieParse['TEXTURE']
         objProp.normal = pieParse['NORMALMAP']
         objProp.specular = pieParse['SPECULARMAP']
 
         for event in pieParse['EVENT']:
-            if event[0] is '1':
+            if event[0] == '1':
                 objProp.event1 = event[1]
-            elif event[0] is '2':
+            elif event[0] == '2':
                 objProp.event2 = event[1]
-            elif event[0] is '3':
+            elif event[0] == '3':
                 objProp.event3 = event[1]
 
-        flags = getTypeFlags(pieParse['TYPE'])
+        def getMaskArray(pieType, len):
+            flagsStr = str(bin(int(pieType, 16)))[2:][::-1].ljust(len, '0')
+            return [int(ii) for ii in flagsStr]
 
-        if flags[0] is 1:
-            objProp.adrOff = True
-            objProp.adrOn = False
-            objProp.pmr = False
-        elif flags[0] is 2:
-            objProp.adrOff = False
-            objProp.adrOn = True
-            objProp.pmr = False
-        elif flags[0] is 3:
-            objProp.adrOff = True
-            objProp.adrOn = True
-            objProp.pmr = False
-        elif flags[0] is 4:
-            objProp.adrOff = False
-            objProp.adrOn = False
-            objProp.pmr = True
-        elif flags[0] is 5:
-            objProp.adrOff = True
-            objProp.adrOn = False
-            objProp.pmr = True
-        elif flags[0] is 6:
-            objProp.adrOff = False
-            objProp.adrOn = True
-            objProp.pmr = True
-        elif flags[0] is 7:
-            objProp.adrOff = True
-            objProp.adrOn = True
-            objProp.pmr = True
-        else:
-            objProp.adrOff = False
-            objProp.adrOn = False
-            objProp.pmr = False
-        
-        if len(flags) > 1:
-            if flags[1] is 1:
-                objProp.roll = True
-                objProp.pitch = False
-            elif flags[1] is 2:
-                objProp.roll = False
-                objProp.pitch = True
-            elif flags[1] is 3:
-                objProp.roll = True
-                objProp.pitch = True
-            else:
-                objProp.roll = False
-                objProp.pitch = False
-        
-        if len(flags) > 2:
-            if flags[2] is 2:
-                objProp.reserved = True
-            else:
-                objProp.reserved = False
-        
-        if len(flags) > 3:
-            if flags[3] is 1:
-                objProp.stretch = True
-            else:
-                objProp.stretch = False
-        
-        if len(flags) > 4:
-            if flags[4] is 1:
-                objProp.tcMask = True
-            else:
-                objProp.tcMask = False
+        flags = getMaskArray(pieParse['TYPE'], 17)
+
+        objProp.adrOff = flags[0]
+        objProp.adrOn = flags[1]
+        objProp.pmr = flags[2]
+        objProp.pitch = flags[4]
+        objProp.roll = flags[5]
+        objProp.reserved = flags[9]
+        objProp.stretch = flags[12]
+        objProp.tcMask = flags[16]
 
     def pie_import_quick(self, scene, pieDir, pieMesh):
         self.scene = scene
 
         pieParse = self.pie_parse(pieDir + '\\\\' + pieMesh)
 
-        self.pie_generateBlenderObjects(pieParse)
+        self.pie_generateBlenderObjects(pieParse, pieMesh)
 
     def pie_import(self, scene, pieDir):
         self.scene = scene
 
         pieParse = self.pie_parse(pieDir)
 
-        self.pie_generateBlenderObjects(pieParse)
+        self.pie_generateBlenderObjects(
+            pieParse, pieDir.rsplit('.', 1)[0].rsplit('\\', 1)[1]
+        )
