@@ -1904,26 +1904,33 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	aiChooserUp = player;
 }
 
-class WzPlayerSelectPositionRow : public W_BUTTON
+class WzPlayerSelectPositionRowFactory
+{
+public:
+	virtual ~WzPlayerSelectPositionRowFactory() { }
+	virtual std::shared_ptr<W_BUTTON> make(uint32_t switcherPlayerIdx, uint32_t targetPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& parent) const = 0;
+};
+
+class WzPlayerSelectionChangePositionRow : public W_BUTTON
 {
 protected:
-	WzPlayerSelectPositionRow(uint32_t targetPlayerIdx)
+	WzPlayerSelectionChangePositionRow(uint32_t targetPlayerIdx)
 	: W_BUTTON()
 	, targetPlayerIdx(targetPlayerIdx)
 	{ }
 public:
-	static std::shared_ptr<WzPlayerSelectPositionRow> make(uint32_t switcherPlayerIdx, uint32_t targetPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& parent)
+	static std::shared_ptr<WzPlayerSelectionChangePositionRow> make(uint32_t switcherPlayerIdx, uint32_t targetPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& parent)
 	{
-		class make_shared_enabler: public WzPlayerSelectPositionRow {
+		class make_shared_enabler: public WzPlayerSelectionChangePositionRow {
 		public:
-			make_shared_enabler(uint32_t targetPlayerIdx) : WzPlayerSelectPositionRow(targetPlayerIdx) { }
+			make_shared_enabler(uint32_t targetPlayerIdx) : WzPlayerSelectionChangePositionRow(targetPlayerIdx) { }
 		};
 		auto widget = std::make_shared<make_shared_enabler>(targetPlayerIdx);
 		widget->setTip(_("Click to change to this slot"));
 
 		std::weak_ptr<WzMultiplayerOptionsTitleUI> titleUI(parent);
 		widget->addOnClickHandler([switcherPlayerIdx, titleUI](W_BUTTON& button){
-			auto selectPositionRow = std::dynamic_pointer_cast<WzPlayerSelectPositionRow>(button.shared_from_this());
+			auto selectPositionRow = std::dynamic_pointer_cast<WzPlayerSelectionChangePositionRow>(button.shared_from_this());
 			ASSERT_OR_RETURN(, selectPositionRow != nullptr, "Wrong widget type");
 			auto strongTitleUI = titleUI.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
@@ -1953,6 +1960,16 @@ public:
 	DisplayPositionCache cache;
 };
 
+class WzPlayerSelectionChangePositionRowFactory : public WzPlayerSelectPositionRowFactory
+{
+public:
+	~WzPlayerSelectionChangePositionRowFactory() { }
+	virtual std::shared_ptr<W_BUTTON> make(uint32_t switcherPlayerIdx, uint32_t targetPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& parent) const override
+	{
+		return WzPlayerSelectionChangePositionRow::make(switcherPlayerIdx, targetPlayerIdx, parent);
+	}
+};
+
 #include <set>
 
 static std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t player)
@@ -1979,7 +1996,7 @@ protected:
 	, psWeakTitleUI(parentTitleUI)
 	{ }
 public:
-	static std::shared_ptr<WzPositionChooser> make(uint32_t switcherPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI> &parent)
+	static std::shared_ptr<WzPositionChooser> make(uint32_t switcherPlayerIdx, const WzPlayerSelectPositionRowFactory& rowFactory, const std::shared_ptr<WzMultiplayerOptionsTitleUI> &parent)
 	{
 		class make_shared_enabler: public WzPositionChooser {
 		public:
@@ -1990,9 +2007,9 @@ public:
 		// Create WzPlayerSelectPositionRow all player positions
 		for (uint32_t i = 0; i < game.maxPlayers; i++)
 		{
-			auto playerPositionRow = WzPlayerSelectPositionRow::make(switcherPlayerIdx, i, parent);
+			auto playerPositionRow = rowFactory.make(switcherPlayerIdx, i, parent);
 			widget->attach(playerPositionRow);
-			widget->positionSelectionRows.push_back(playerPositionRow);
+			widget->positionSelectionRows.push_back(PlayerButtonRow(playerPositionRow, i));
 		}
 		widget->positionRows();
 
@@ -2028,20 +2045,29 @@ public:
 		auto validPlayerIdxRowsToDisplay = validPlayerIdxTargetsForPlayerPositionMove(switcherPlayerIdx);
 		for (auto& row : positionSelectionRows)
 		{
-			if (validPlayerIdxRowsToDisplay.count(row->targetPlayerIdx) == 0)
+			if (validPlayerIdxRowsToDisplay.count(row.targetPlayerIdx) == 0)
 			{
-				row->hide();
+				row.widget->hide();
 				continue;
 			}
 			int newWidth = width();
-			row->setGeometry(0, std::max(strongTitleUI->playerRowY0(row->targetPlayerIdx), 0), newWidth, MULTIOP_PLAYERHEIGHT);
-			row->show();
+			row.widget->setGeometry(0, std::max(strongTitleUI->playerRowY0(row.targetPlayerIdx), 0), newWidth, MULTIOP_PLAYERHEIGHT);
+			row.widget->show();
 		}
 	}
 private:
 	uint32_t switcherPlayerIdx;
 	std::weak_ptr<WzMultiplayerOptionsTitleUI> psWeakTitleUI;
-	std::vector<std::shared_ptr<WzPlayerSelectPositionRow>> positionSelectionRows;
+	struct PlayerButtonRow
+	{
+		PlayerButtonRow(const std::shared_ptr<W_BUTTON>& widget, uint32_t targetPlayerIdx)
+		: widget(widget)
+		, targetPlayerIdx(targetPlayerIdx)
+		{ }
+		std::shared_ptr<W_BUTTON> widget;
+		uint32_t targetPlayerIdx = 0;
+	};
+	std::vector<PlayerButtonRow> positionSelectionRows;
 };
 
 void WzMultiplayerOptionsTitleUI::openPositionChooser(uint32_t player)
@@ -2057,7 +2083,8 @@ void WzMultiplayerOptionsTitleUI::openPositionChooser(uint32_t player)
 
 	WIDGET *chooserParent = widgGetFromID(psInlineChooserOverlayScreen, MULTIOP_INLINE_OVERLAY_ROOT_FRM);
 
-	auto positionChooser = WzPositionChooser::make(player, std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
+	WzPlayerSelectionChangePositionRowFactory rowFactory;
+	auto positionChooser = WzPositionChooser::make(player, rowFactory, std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
 	chooserParent->attach(positionChooser);
 	positionChooser->id = MULTIOP_AI_FORM;
 	positionChooser->setCalcLayout([psWeakParent](WIDGET *psWidget) {
