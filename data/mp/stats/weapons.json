@@ -2071,7 +2071,7 @@
 		"muzzleGfx": "FxCan75m.PIE",
 		"name": "Incendiary Howitzer",
 		"numExplosions": 12,
-		"periodicalDamage": 100,
+		"periodicalDamage": 90,
 		"periodicalDamageRadius": 192,
 		"periodicalDamageTime": 60,
 		"periodicalDamageWeaponClass": "HEAT",
@@ -2173,7 +2173,7 @@
 		"weight": 10000
 	},
 	"Howitzer150Mk1": {
-		"buildPoints": 1600,
+		"buildPoints": 1800,
 		"buildPower": 450,
 		"damage": 350,
 		"designable": 1,

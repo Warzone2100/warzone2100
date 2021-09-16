@@ -1306,6 +1306,7 @@
 			"Emplacement-Howitzer105"
 		],
 		"requiredResearch": [
+			"R-Defense-Howitzer",
 			"R-Wpn-Howitzer03-Rot"
 		],
 		"researchPoints": 5000,
@@ -7073,7 +7074,6 @@
 		"name": "Howitzer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage04",
-			"R-Wpn-Cannon-Accuracy02",
 			"R-Wpn-Cannon-Damage05",
 			"R-Sys-Sensor-Upgrade01"
 		],
