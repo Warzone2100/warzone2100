@@ -33,6 +33,8 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 
+#include <array>
+
 #define WZ_FORM_MINIMIZED_LEFT_PADDING 5
 #define WZ_FORM_MINIMIZED_MAXBUTTON_RIGHT_PADDING WZ_FORM_MINIMIZED_LEFT_PADDING
 
@@ -478,9 +480,41 @@ void W_FULLSCREENOVERLAY_CLICKFORM::display(int xOffset, int yOffset)
 	{
 		return;
 	}
+
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
-	pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+
+	auto strongCutoutWidget = cutoutWidget.lock();
+	WzRect screenRect = screenGeometry();
+	WzRect cutoutRect = (strongCutoutWidget) ? screenRect.intersectionWith(strongCutoutWidget->screenGeometry()) : WzRect();
+
+	if (cutoutRect.width() <= 0 || cutoutRect.height() <= 0)
+	{
+		// simple path - draw background over everything
+		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+	}
+	else
+	{
+		std::array<WzRect, 4> surroundingRects = {
+			// left column until left edge of cutout rect
+			WzRect({screenRect.left(), screenRect.top()}, {cutoutRect.left(), screenRect.bottom()}),
+			// top band above cutout rect
+			WzRect({cutoutRect.left(), screenRect.top()}, {cutoutRect.right(), cutoutRect.top()}),
+			// right column after cutout rect
+			WzRect({cutoutRect.right(), screenRect.top()}, {screenRect.right(), screenRect.bottom()}),
+			// bottom band below cutout rect
+			WzRect({cutoutRect.left(), cutoutRect.bottom()}, {cutoutRect.right(), screenRect.bottom()})
+		};
+
+		for (const auto& rect : surroundingRects)
+		{
+			if (rect.width() <= 0 || rect.height() <= 0)
+			{
+				continue;
+			}
+			pie_UniTransBoxFill(rect.left(), rect.top(), rect.right(), rect.bottom(), backgroundColor);
+		}
+	}
 }
 
 void W_FULLSCREENOVERLAY_CLICKFORM::run(W_CONTEXT *psContext)

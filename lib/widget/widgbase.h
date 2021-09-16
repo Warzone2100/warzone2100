@@ -213,6 +213,10 @@ public:
 		}
 		childWidgets = {};
 	}
+	WzRect screenGeometry() const
+	{
+		return WzRect(screenPosX(), screenPosY(), width(), height());
+	}
 	WzRect const &geometry() const
 	{
 		return dim;
