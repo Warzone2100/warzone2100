@@ -129,10 +129,17 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void run(W_CONTEXT *psContext) override;
 
+	void setCutoutWidget(std::shared_ptr<WIDGET> widget)
+	{
+		cutoutWidget = widget;
+	}
+
 public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 125);
 	std::function<void ()> onClickedFunc;
 	std::function<void ()> onCancelPressed;
+private:
+	std::weak_ptr<WIDGET> cutoutWidget;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__
