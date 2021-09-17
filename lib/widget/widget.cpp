@@ -174,6 +174,14 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 	if (it != overlays.end())
 	{
 		// screen already exists in overlay stack
+
+		// check if it's queued for removal, and if so clear that status
+		if (overlaysToDelete.count(psScreen))
+		{
+			debug(LOG_WZ, "Overlay was queued for deletion, but is being re-added - clear the queued deletion");
+			overlaysToDelete.erase(psScreen);
+		}
+
 		if (zOrder == it->zOrder)
 		{
 			// no need to update - duplicate call (same zOrder)
