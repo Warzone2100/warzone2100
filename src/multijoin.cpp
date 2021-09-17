@@ -331,6 +331,11 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		return false;
 	}
 
+	if (NetPlay.isHost)
+	{
+		multiClearHostRequestMoveToPlayer(playerIndex);
+	}
+
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_NET, "** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
 

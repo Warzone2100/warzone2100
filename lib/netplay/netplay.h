@@ -97,6 +97,9 @@ enum MESSAGE_TYPES
 	NET_VOTE_REQUEST,               ///< Setup a vote popup
 	NET_SPECTEXTMSG,                ///< chat between spectators
 	NET_PLAYERNAME_CHANGEREQUEST,	///< non-host human player is changing their name.
+	NET_PLAYER_SLOTTYPE_REQUEST,	///< non-host human player is requesting a slot type change, or a host is asking a spectator if they want to play
+	NET_PLAYER_SWAP_INDEX,			///< a host-only message to move a player to another index
+	NET_PLAYER_SWAP_INDEX_ACK,		///< an acknowledgement message from a player whose index is being swapped
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.
@@ -255,10 +258,12 @@ struct PLAYER
 	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
 	AIDifficulty        difficulty;         ///< difficulty level of AI
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
-	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
-	char                IPtextAddress[40];  ///< IP of this player
 	FactionID			faction;			///< which faction the player has
 	bool				isSpectator;		///< whether this slot is a spectator slot
+
+	// used on host-ONLY (not transmitted to other clients):
+	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
+	char                IPtextAddress[40];  ///< IP of this player
 
 	void resetAll()
 	{
@@ -358,6 +363,17 @@ size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false); 
 
 void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
+bool NETcanOpenNewSpectatorSlot();
+bool NETopenNewSpectatorSlot();
+bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride = false);
+enum class SpectatorToPlayerMoveResult
+{
+	SUCCESS,
+	NEEDS_SLOT_SELECTION,
+	FAILED
+};
+SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, optional<uint32_t> newPlayerIdx, bool hostOverride = false);
+
 struct SpectatorInfo
 {
 	uint16_t spectatorsJoined = 0;
@@ -380,6 +396,8 @@ struct SpectatorInfo
 		return info;
 	}
 
+	static SpectatorInfo currentNetPlayState();
+
 	inline uint32_t toUint32() const
 	{
 		return static_cast<uint32_t>(spectatorsJoined << 16) | static_cast<uint32_t>(totalSpectatorSlots);
@@ -395,6 +413,8 @@ struct SpectatorInfo
 		return !(*this == other);
 	}
 };
+
+SpectatorInfo NETGameGetSpectatorInfo();
 
 // from netjoin.c
 SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.

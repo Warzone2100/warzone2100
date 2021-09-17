@@ -118,6 +118,9 @@
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 #define VOTE_TAG                 "voting"
 #define KICK_REASON_TAG          "kickReason"
+#define SLOTTYPE_TAG_PREFIX      "slotType"
+#define SLOTTYPE_REQUEST_TAG     SLOTTYPE_TAG_PREFIX "::request"
+#define SLOTTYPE_NOTIFICATION_ID_PREFIX SLOTTYPE_REQUEST_TAG "::"
 
 #define PLAYERBOX_X0 7
 
@@ -172,6 +175,8 @@ static UDWORD hideTime = 0;
 static uint8_t playerVotes[MAX_PLAYERS];
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static bool bInActualHostedLobby = false;
+static bool bRequestedSelfMoveToPlayers = false;
+static std::vector<bool> bHostRequestedMoveToPlayers = std::vector<bool>(MAX_CONNECTED_PLAYERS, false);
 
 enum class PlayerDisplayView
 {
@@ -238,10 +243,12 @@ static	void	decideWRF();
 static bool		SendColourRequest(UBYTE player, UBYTE col);
 static bool		SendFactionRequest(UBYTE player, UBYTE faction);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
+static bool		SendPlayerSlotTypeRequest(uint32_t player, bool isSpectator);
 bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
 
+static void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
 static void sendRoomChatMessage(char const *text);
 
 static int factionIcon(FactionID faction);
@@ -290,6 +297,7 @@ struct WzMultiButton : public W_BUTTON
 	uint8_t alpha = 255;
 	unsigned downStateMask = WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK;
 	unsigned greyStateMask = WBUT_DISABLE;
+	optional<bool> drawBlueBorder;
 };
 
 class ChatBoxWidget : public IntFormAnimated
@@ -1615,10 +1623,11 @@ void WzMultiplayerOptionsTitleUI::closeAllChoosers()
 	closeFactionChooser();
 
 	// AiChooser, DifficultyChooser, and PositionChooser currently use the same form id, so to avoid a double-delete-later, do it once explicitly here
-	widgDeleteLater(psInlineChooserOverlayScreen, MULTIOP_AI_FORM);
-	widgDeleteLater(psInlineChooserOverlayScreen, FRONTEND_SIDETEXT2);
+	widgDelete(psInlineChooserOverlayScreen, MULTIOP_AI_FORM);
+	widgDelete(psInlineChooserOverlayScreen, FRONTEND_SIDETEXT2);
 	aiChooserUp = -1;
 	difficultyChooserUp = -1;
+	playerSlotSwapChooserUp = nullopt;
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 }
 
@@ -1675,16 +1684,16 @@ std::shared_ptr<IntFormAnimated> WzMultiplayerOptionsTitleUI::initRightSideChoos
 	return aiForm;
 }
 
-static bool addMultiButWithClickHandler(const std::shared_ptr<WIDGET> &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, const W_BUTTON::W_BUTTON_ONCLICK_FUNC& clickHandler, unsigned tc = MAX_PLAYERS)
+static std::shared_ptr<WzMultiButton> addMultiButWithClickHandler(const std::shared_ptr<WIDGET> &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, const W_BUTTON::W_BUTTON_ONCLICK_FUNC& clickHandler, unsigned tc = MAX_PLAYERS)
 {
-	ASSERT_OR_RETURN(false, parent != nullptr, "Null parent");
+	ASSERT_OR_RETURN(nullptr, parent != nullptr, "Null parent");
 	auto psButton = std::dynamic_pointer_cast<WzMultiButton>(addMultiBut(*(parent.get()), id, x, y, width, height, tipres, norm, down, hi, tc));
 	if (!psButton)
 	{
-		return false;
+		return nullptr;
 	}
 	psButton->addOnClickHandler(clickHandler);
-	return true;
+	return psButton;
 }
 
 void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
@@ -1705,9 +1714,11 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 			NetPlay.players[player].difficulty = difficultyValue[difficultyIdx];
 			NETBroadcastPlayerInfo(player);
-			pStrongPtr->closeDifficultyChooser();
-			pStrongPtr->addPlayerBox(true);
 			resetReadyStatus(false);
+			widgScheduleTask([pStrongPtr] {
+				pStrongPtr->closeDifficultyChooser();
+				pStrongPtr->addPlayerBox(true);
+			});
 		};
 
 		W_BUTINIT sButInit;
@@ -1801,9 +1812,11 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 		// common code
 		NetPlay.players[player].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
 		NETBroadcastPlayerInfo(player);
-		pStrongPtr->closeAiChooser();
-		pStrongPtr->addPlayerBox(true);
 		resetReadyStatus(false);
+		widgScheduleTask([pStrongPtr] {
+			pStrongPtr->closeAiChooser();
+			pStrongPtr->addPlayerBox(true);
+		});
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	};
 
@@ -1892,9 +1905,11 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 				sstrcpy(NetPlay.players[player].name, getAIName(player));
 				NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
 				NETBroadcastPlayerInfo(player);
-				pStrongPtr->closeAiChooser();
-				pStrongPtr->addPlayerBox(true);
 				resetReadyStatus(false);
+				widgScheduleTask([pStrongPtr] {
+					pStrongPtr->closeAiChooser();
+					pStrongPtr->addPlayerBox(true);
+				});
 				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 			});
 			pAIScrollableList->addItem(pAIRow);
@@ -1937,8 +1952,10 @@ public:
 			// Switch player
 			resetReadyStatus(false);		// will reset only locally if not a host
 			SendPositionRequest(switcherPlayerIdx, NetPlay.players[selectPositionRow->targetPlayerIdx].position);
-			strongTitleUI->closePositionChooser();
-			strongTitleUI->updatePlayers();
+			widgScheduleTask([strongTitleUI] {
+				strongTitleUI->closePositionChooser();
+				strongTitleUI->updatePlayers();
+			});
 		});
 
 		return widget;
@@ -1967,6 +1984,83 @@ public:
 	virtual std::shared_ptr<W_BUTTON> make(uint32_t switcherPlayerIdx, uint32_t targetPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& parent) const override
 	{
 		return WzPlayerSelectionChangePositionRow::make(switcherPlayerIdx, targetPlayerIdx, parent);
+	}
+};
+
+class WzPlayerIndexSwapPositionRow : public W_BUTTON
+{
+protected:
+	WzPlayerIndexSwapPositionRow(uint32_t targetPlayerIdx)
+	: W_BUTTON()
+	, targetPlayerIdx(targetPlayerIdx)
+	{ }
+public:
+	static std::shared_ptr<WzPlayerIndexSwapPositionRow> make(uint32_t switcherPlayerIdx, uint32_t targetPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& parent)
+	{
+		class make_shared_enabler: public WzPlayerIndexSwapPositionRow {
+		public:
+			make_shared_enabler(uint32_t targetPlayerIdx) : WzPlayerIndexSwapPositionRow(targetPlayerIdx) { }
+		};
+
+		auto widget = std::make_shared<make_shared_enabler>(targetPlayerIdx);
+		if (targetPlayerIdx != NetPlay.hostPlayer)
+		{
+			widget->setTip(_("Click to swap player to this slot"));
+
+			std::weak_ptr<WzMultiplayerOptionsTitleUI> titleUI(parent);
+			widget->addOnClickHandler([switcherPlayerIdx, titleUI](W_BUTTON& button){
+				auto selectPositionRow = std::dynamic_pointer_cast<WzPlayerIndexSwapPositionRow>(button.shared_from_this());
+				ASSERT_OR_RETURN(, selectPositionRow != nullptr, "Wrong widget type");
+				auto strongTitleUI = titleUI.lock();
+				ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
+
+				std::string playerName = getPlayerName(switcherPlayerIdx);
+
+				NETmoveSpectatorToPlayerSlot(switcherPlayerIdx, selectPositionRow->targetPlayerIdx, true);
+				resetReadyStatus(true);		//reset and send notification to all clients
+				widgScheduleTask([strongTitleUI] {
+					strongTitleUI->closePlayerSlotSwapChooser();
+					strongTitleUI->updatePlayers();
+				});
+				std::string msg = astringf(_("Spectator %s has moved to Players"), playerName.c_str());
+				sendRoomSystemMessage(msg.c_str());
+			});
+		}
+		else
+		{
+			widget->setTip(_("Cannot swap with host"));
+			widget->setState(WBUT_DISABLE);
+		}
+
+		return widget;
+	}
+
+	void display(int xOffset, int yOffset) override
+	{
+		const int x0 = xOffset + x();
+		const int y0 = yOffset + y();
+
+		bool isDisabled = (getState() & WBUT_DISABLE) != 0;
+
+		if (isDisabled)
+		{
+			pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), pal_RGBA(0, 0, 0, 125));
+			return;
+		}
+
+		iV_Box(x0, y0, x0 + width(), y0 + height(), WZCOL_MENU_BORDER);
+	}
+public:
+	uint32_t targetPlayerIdx;
+};
+
+class WzPlayerIndexSwapPositionRowRactory : public WzPlayerSelectPositionRowFactory
+{
+public:
+	~WzPlayerIndexSwapPositionRowRactory() { }
+	virtual std::shared_ptr<W_BUTTON> make(uint32_t switcherPlayerIdx, uint32_t targetPlayerIdx, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& parent) const override
+	{
+		return WzPlayerIndexSwapPositionRow::make(switcherPlayerIdx, targetPlayerIdx, parent);
 	}
 };
 
@@ -2104,16 +2198,17 @@ static bool SendTeamRequest(UBYTE player, UBYTE chosenTeam); // forward-declare
 
 void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 {
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 	UDWORD i;
 	int disallow = allPlayersOnSameTeam(player);
 
 	bool isSpectator = NetPlay.players[player].isSpectator;
-	bool isLockedSpectator = isSpectator; //&& (locked.spectators || isSpectatorOnlySlot(player));
-	bool canChangeTeams = !isLockedSpectator && !locked.teams && (!isSpectator || NetPlay.isHost);
+	bool canChangeTeams = !locked.teams && !isSpectator;
 	bool canKickPlayer = player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated;
-//	bool canChangeSpectatorStatus = !isLockedSpectator && (NetPlay.bComms && NetPlay.isHost && !locked.spectators);
+	bool canChangeSpectatorStatus = !locked.spectators && NetPlay.bComms && isHumanPlayer(player) && (player != NetPlay.hostPlayer) && (NetPlay.isHost || player == selectedPlayer);
 
-	if (!canChangeTeams && !canKickPlayer)
+	if (!canChangeTeams && !canKickPlayer && !canChangeSpectatorStatus)
 	{
 		// can't change teams / spectator status because player is a spectator and spectators are locked
 		return;
@@ -2135,7 +2230,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 	{
 		int teamW = iV_GetImageWidth(FrontImages, IMAGE_TEAM0);
 		int teamH = iV_GetImageHeight(FrontImages, IMAGE_TEAM0);
-		int space = MULTIOP_ROW_WIDTH - 4 - teamW * (game.maxPlayers + 1);
+		int space = (MULTIOP_ROW_WIDTH - 52) - 4 - teamW * (game.maxPlayers + 1);
 		int spaceDiv = game.maxPlayers;
 		space = std::min(space, 3 * spaceDiv);
 
@@ -2157,10 +2252,11 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 
 				debug(LOG_WZ, "Changed team for player %d to %d", player, NetPlay.players[player].team);
 
-				pStrongPtr->closeTeamChooser();
-
-				// restore player list
-				pStrongPtr->addPlayerBox(true);
+				widgScheduleTask([pStrongPtr] {
+					pStrongPtr->closeTeamChooser();
+					// restore player list
+					pStrongPtr->addPlayerBox(true);
+				});
 			}
 		};
 
@@ -2183,6 +2279,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
   	}
 
 	// add a kick button
+	int kickImageX = MULTIOP_ROW_WIDTH;
 	if (canKickPlayer)
 	{
 		auto onClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
@@ -2193,13 +2290,112 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED);
 			sendRoomSystemMessage(msg.c_str());
 			resetReadyStatus(true);		//reset and send notification to all clients
-			pStrongPtr->closeTeamChooser();
+			widgScheduleTask([pStrongPtr] {
+				pStrongPtr->closeTeamChooser();
+			});
 		};
 
 		const int imgwidth = iV_GetImageWidth(FrontImages, IMAGE_NOJOIN);
 		const int imgheight = iV_GetImageHeight(FrontImages, IMAGE_NOJOIN);
-		addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_KICK, MULTIOP_ROW_WIDTH - imgwidth - 4, 8, imgwidth, imgheight,
+		kickImageX = MULTIOP_ROW_WIDTH - imgwidth - 4;
+		addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_KICK, kickImageX, 8, imgwidth, imgheight,
 			("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN, onClickHandler);
+	}
+
+	if (canChangeSpectatorStatus)
+	{
+		// Add a "make spectator" button (if there are available spectator slots, and this is a player)
+		SpectatorInfo currSpectatorInfo = NETGameGetSpectatorInfo();
+		if (!isSpectator && (currSpectatorInfo.availableSpectatorSlots() > 0 || (NetPlay.isHost && NETcanOpenNewSpectatorSlot())))
+		{
+			const int imgwidth_spec = iV_GetImageWidth(FrontImages, IMAGE_SPECTATOR);
+			const int imgheight_spec = iV_GetImageHeight(FrontImages, IMAGE_SPECTATOR);
+
+			W_BUTTON::W_BUTTON_ONCLICK_FUNC onSpecClickHandler;
+
+			if (NetPlay.isHost)
+			{
+				onSpecClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+					auto pStrongPtr = psWeakTitleUI.lock();
+					ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+					std::string playerName = getPlayerName(player);
+
+					if (!NETmovePlayerToSpectatorOnlySlot(player, true))
+					{
+						std::string msg = astringf(_("Failed to move %s to Spectators"), playerName.c_str());
+						sendRoomSystemMessageToSingleReceiver(msg.c_str(), selectedPlayer);
+						return;
+					}
+
+					std::string msg = astringf(_("The host has moved %s to Spectators!"), playerName.c_str());
+					sendRoomSystemMessage(msg.c_str());
+					resetReadyStatus(true);		//reset and send notification to all clients
+					widgScheduleTask([pStrongPtr] {
+						pStrongPtr->closeTeamChooser();
+					});
+				};
+			}
+			else
+			{
+				onSpecClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+					auto pStrongPtr = psWeakTitleUI.lock();
+					ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+					// Send net message to host asking to be a spectator, as host is responsible for these changes
+					SendPlayerSlotTypeRequest(player, true);
+					widgScheduleTask([pStrongPtr] {
+						pStrongPtr->closeTeamChooser();
+					});
+				};
+			}
+
+			addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_SPECTATOR, kickImageX - imgwidth_spec - 4, 6, imgwidth_spec, imgheight_spec,
+			_("Move to Spectators"), IMAGE_SPECTATOR, IMAGE_SPECTATOR_HI, IMAGE_SPECTATOR_HI, onSpecClickHandler);
+		}
+		else if (isSpectator)
+		{
+			const int imgwidth_spec = iV_GetImageWidth(FrontImages, IMAGE_EDIT_PLAYER);
+			const int imgheight_spec = iV_GetImageHeight(FrontImages, IMAGE_EDIT_PLAYER);
+
+			W_BUTTON::W_BUTTON_ONCLICK_FUNC onSpecClickHandler;
+			std::string toolTip;
+			if (NetPlay.isHost)
+			{
+				onSpecClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+					auto pStrongPtr = psWeakTitleUI.lock();
+					ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+					// Ask the spectator if they are okay with a move from spectator -> player?
+					SendPlayerSlotTypeRequest(player, false);
+					widgScheduleTask([pStrongPtr] {
+						pStrongPtr->closeTeamChooser();
+					});
+				};
+				toolTip = _("Ask Spectator to Play");
+			}
+			else
+			{
+				// Ask the host for a move from spectator -> player
+				onSpecClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+					auto pStrongPtr = psWeakTitleUI.lock();
+					ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+					// Send net message to host asking to be a player, as host is responsible for these changes
+					SendPlayerSlotTypeRequest(player, false);
+
+					widgScheduleTask([pStrongPtr] {
+						pStrongPtr->closeTeamChooser();
+					});
+				};
+				toolTip = _("Ask to Play");
+			}
+
+			auto psButton = addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_SPECTATOR, kickImageX - imgwidth_spec - 4, 5, imgwidth_spec, imgheight_spec,
+				toolTip.c_str(), IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, IMAGE_EDIT_PLAYER_HI, onSpecClickHandler);
+			ASSERT(psButton != nullptr, "Null button??");
+			psButton->drawBlueBorder = false; // HACK: to disable the other hack in WzMultiButton::display() for IMAGE_EDIT_PLAYER (sigh...)
+		}
 	}
 
 	inlineChooserUp = player;
@@ -2239,8 +2435,10 @@ void WzMultiplayerOptionsTitleUI::openColourChooser(uint32_t player)
 			{
 				resetReadyStatus(false, true);		// will reset only locally if not a host
 				SendColourRequest(player, id - MULTIOP_COLCHOOSER);
-				pStrongPtr->closeColourChooser();
-				pStrongPtr->addPlayerBox(true);
+				widgScheduleTask([pStrongPtr] {
+					pStrongPtr->closeColourChooser();
+					pStrongPtr->addPlayerBox(true);
+				});
 			}
 		};
 
@@ -2262,21 +2460,21 @@ void WzMultiplayerOptionsTitleUI::openColourChooser(uint32_t player)
 void WzMultiplayerOptionsTitleUI::closeColourChooser()
 {
 	inlineChooserUp = -1;
-	widgDeleteLater(psInlineChooserOverlayScreen, MULTIOP_COLCHOOSER_FORM);
+	widgDelete(psInlineChooserOverlayScreen, MULTIOP_COLCHOOSER_FORM);
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 }
 
 void WzMultiplayerOptionsTitleUI::closeTeamChooser()
 {
 	inlineChooserUp = -1;
-	widgDeleteLater(psInlineChooserOverlayScreen, MULTIOP_TEAMCHOOSER_FORM);
+	widgDelete(psInlineChooserOverlayScreen, MULTIOP_TEAMCHOOSER_FORM);
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 }
 
 void WzMultiplayerOptionsTitleUI::closeFactionChooser()
 {
 	inlineChooserUp = -1;
-	widgDeleteLater(psInlineChooserOverlayScreen, MULTIOP_FACCHOOSER_FORM);
+	widgDelete(psInlineChooserOverlayScreen, MULTIOP_FACCHOOSER_FORM);
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 }
 
@@ -2336,8 +2534,10 @@ void WzMultiplayerOptionsTitleUI::openFactionChooser(uint32_t player)
 				resetReadyStatus(false, true);
 				uint8_t idx = id - MULTIOP_FACCHOOSER;
 				SendFactionRequest(player, idx);
-				pStrongPtr->closeFactionChooser();
-				pStrongPtr->addPlayerBox(true);
+				widgScheduleTask([pStrongPtr] {
+					pStrongPtr->closeFactionChooser();
+					pStrongPtr->addPlayerBox(true);
+				});
 			}
 		};
 
@@ -2713,42 +2913,409 @@ bool recvPositionRequest(NETQUEUE queue)
 	return changePosition(player, position);
 }
 
-static bool canChooseTeamFor(int i)
+static bool SendPlayerSlotTypeRequest(uint32_t player, bool isSpectator)
 {
-	return (i == selectedPlayer || NetPlay.isHost);
+	const char* originalPlayerSlotType = (NetPlay.players[player].isSpectator) ? "Spectator" : "Player";
+	const char* desiredPlayerSlotType = (isSpectator) ? "Spectator" : "Player";
+
+	// If I'm a spectator, and I ask to be a player, record locally that I gave permission for such a change
+	if (!NetPlay.isHost && NetPlay.players[player].isSpectator && !isSpectator)
+	{
+		bRequestedSelfMoveToPlayers = true;
+	}
+	if (NetPlay.isHost && NetPlay.players[player].isSpectator && !isSpectator)
+	{
+		// If the host asks the spectator if they want to be a player, record this so we can appropriately flag that later move as "host initiated"
+		bHostRequestedMoveToPlayers[player] = true;
+	}
+
+	debug(LOG_NET, "Requesting the host to change our slot type. From %s to %s", originalPlayerSlotType, desiredPlayerSlotType);
+	// clients tell the host which player slot type they want (but the host may not allow)
+	NETbeginEncode(NETnetQueue((!NetPlay.isHost) ? NET_HOST_ONLY : player), NET_PLAYER_SLOTTYPE_REQUEST);
+	NETuint32_t(&player);
+	NETbool(&isSpectator);
+	NETend();
+	return true;
 }
 
-static bool addNewSpectatorSlot()
+static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI, NETQUEUE queue)
 {
-	ASSERT_HOST_ONLY(return false);
-	for (int i = MAX_PLAYER_SLOTS; i < MAX_CONNECTED_PLAYERS; i++)
+	// A player is requesting a slot type change
+	// ex. player -> spectator
+
+	uint32_t playerIndex;
+	bool desiredIsSpectator = false;
+	NETbeginDecode(queue, NET_PLAYER_SLOTTYPE_REQUEST);
+	NETuint32_t(&playerIndex);
+	NETbool(&desiredIsSpectator);
+	NETend();
+
+	NETpop(queue); // this function *must* handle popping the message itself since, if a player index switch occurs, the queue may be invalidated
+
+	// Basic parameter validation
+
+	if (!ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
-		if (!isSpectatorOnlySlot(i))
+		debug(LOG_WARNING, "Player indexes cannot be swapped after game has started");
+		return false;
+	}
+
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid NET_PLAYER_SLOTTYPE_REQUEST from player %" PRIu32 ": Tried to change player %" PRIu32 "",
+			  queue.index, playerIndex);
+		return false;
+	}
+
+	if (whosResponsible(playerIndex) != queue.index && !(queue.index == NetPlay.hostPlayer && whosResponsible(playerIndex) == selectedPlayer && selectedPlayer != NetPlay.hostPlayer))
+	{
+		HandleBadParam("NET_PLAYER_SLOTTYPE_REQUEST given incorrect params.", playerIndex, queue.index);
+		return false;
+	}
+
+	if (desiredIsSpectator == NetPlay.players[playerIndex].isSpectator)
+	{
+		// no-op change - this may be a response to a request
+		std::string playerName = getPlayerName(playerIndex);
+		std::string text;
+		if (NetPlay.isHost)
 		{
-			continue;
+			// client sending response
+			if (desiredIsSpectator)
+			{
+				text = astringf(_("Spectator %s wants to remain a Spectator"), playerName.c_str());
+			}
+			else
+			{
+				text = astringf(_("Player %s wants to remain a Player"), playerName.c_str());
+			}
 		}
-		if (NetPlay.players[i].allocated || NetPlay.players[i].isSpectator)
+		else
 		{
-			continue;
+			// host sending a denial
+			if (desiredIsSpectator)
+			{
+				text = astringf(_("Host has declined to switch you to a Player"), playerName.c_str());
+			}
+			else
+			{
+				text = astringf(_("Unable to switch to Spectator"), playerName.c_str());
+			}
 		}
-		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
+		displayRoomSystemMessage(text.c_str());
+		return false;
+	}
+
+	if (!NetPlay.isHost)
+	{
+		// Client-only message handling
+		// The host can ask a client (us) if we want to switch player slot type
+		if (queue.index != NetPlay.hostPlayer)
 		{
-			continue; // skip it
+			// Only the host can ask!
+			debug(LOG_ERROR, "Invalid NET_PLAYER_SLOTTYPE_REQUEST from player %" PRIu32 "", queue.index);
+			return false;
 		}
-		if (i == PLAYER_FEATURE)
+
+		if (!hasNotificationsWithTag(SLOTTYPE_REQUEST_TAG))
 		{
-			continue; // skip it
+			WZ_Notification notification;
+			notification.duration = 0;
+			std::string contentTitle;
+			std::string contentText;
+			std::string proceedButtonText;
+			std::string notificationId;
+			if (desiredIsSpectator)
+			{
+				contentTitle = _("Do you want to spectate?");
+				contentText = _("The host of this game wants to know if you're willing to spectate?");
+				contentText += "\n";
+				contentText += _("You are currently a Player.");
+				proceedButtonText = _("Yes, I will spectate!");
+				notificationId = "spectate";
+			}
+			else
+			{
+				contentTitle = _("Do you want to play?");
+				contentText = _("The host of this game wants to know if you'd like to play?");
+				contentText += "\n";
+				contentText += _("You are currently a Spectator.");
+				proceedButtonText = _("Yes, I want to play!");
+				notificationId = "play";
+			}
+			notification.contentTitle = contentTitle;
+			notification.contentText = contentText;
+			notification.action = WZ_Notification_Action(proceedButtonText, [desiredIsSpectator](const WZ_Notification&) {
+				SendPlayerSlotTypeRequest(selectedPlayer, desiredIsSpectator);
+			});
+			notification.onDismissed = [](const WZ_Notification&, WZ_Notification_Dismissal_Reason reason) {
+				if (reason != WZ_Notification_Dismissal_Reason::USER_DISMISSED) { return; }
+				// Notify the host that the answer is "no" by sending a no-op PlayerSlotTypeRequest
+				SendPlayerSlotTypeRequest(selectedPlayer, NetPlay.players[selectedPlayer].isSpectator);
+			};
+			const std::string notificationIdentifierPrefix = SLOTTYPE_NOTIFICATION_ID_PREFIX;
+			const std::string notificationIdentifier = notificationIdentifierPrefix + notificationId;
+			notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable(notificationIdentifier, 2);
+			notification.onIgnored = [](const WZ_Notification&) {
+				// Notify the host that the answer is "no" by sending a no-op PlayerSlotTypeRequest
+				SendPlayerSlotTypeRequest(selectedPlayer, NetPlay.players[selectedPlayer].isSpectator);
+			};
+			notification.tag = SLOTTYPE_REQUEST_TAG;
+
+			addNotification(notification, WZ_Notification_Trigger::Immediate());
 		}
-		NetPlay.players[i].ai = AI_OPEN;
-		NetPlay.players[i].isSpectator = true;
-		// common code
-		NetPlay.players[i].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
-		NETBroadcastPlayerInfo(i);
-		netPlayersUpdated = true;
+
 		return true;
 	}
 
-	return false;
+	// Host-only message handling
+
+	ASSERT_HOST_ONLY(return false);
+
+	std::string playerName = getPlayerName(playerIndex);
+
+	if (desiredIsSpectator)
+	{
+		if (!NETmovePlayerToSpectatorOnlySlot(playerIndex, false))
+		{
+			// Notify the player that the answer is "no" / the move failed by sending a no-op PlayerSlotTypeRequest
+			SendPlayerSlotTypeRequest(playerIndex, NetPlay.players[playerIndex].isSpectator);
+			return false;
+		}
+
+		std::string msg = astringf(_("Player %s has moved to Spectators"), playerName.c_str());
+		sendRoomSystemMessage(msg.c_str());
+		resetReadyStatus(true);		//reset and send notification to all clients
+	}
+	else
+	{
+		// Spectator wants to switch to a player slot
+
+		// Try a move to any open player slot
+		auto result = NETmoveSpectatorToPlayerSlot(playerIndex, nullopt, bHostRequestedMoveToPlayers.at(playerIndex));
+		bHostRequestedMoveToPlayers[playerIndex] = false;
+		switch (result)
+		{
+			case SpectatorToPlayerMoveResult::SUCCESS:
+			{
+				// Was able to move spectator to an open player slot automatically
+				std::string msg = astringf(_("Spectator %s has moved to Players"), playerName.c_str());
+				sendRoomSystemMessage(msg.c_str());
+				resetReadyStatus(true);		//reset and send notification to all clients
+				break;
+			}
+			case SpectatorToPlayerMoveResult::NEEDS_SLOT_SELECTION:
+			{
+				// Display a notification that a spectator would like to switch to a player
+				std::string notificationTag = SLOTTYPE_REQUEST_TAG;
+				notificationTag += "::" + std::to_string(playerIndex);
+				if (hasNotificationsWithTag(notificationTag))
+				{
+					// no nagging permitted - there's already a notification queued for this player index
+					break;
+				}
+				auto playerSlotSwapChooserUp = titleUI.playerSlotSwapChooserOpenForPlayer();
+				if (playerSlotSwapChooserUp.has_value() && playerSlotSwapChooserUp.value() == playerIndex)
+				{
+					// no nagging permitted - the host already has the player slot swap chooser up for this player!
+					break;
+				}
+				WZ_Notification notification;
+				notification.duration = 0;
+				std::string contentTitle = _("Spectator would like to become a Player");
+				std::string contentText = astringf(_("Spectator \"%s\" would like to become a player."), playerName.c_str());
+				contentText += "\n";
+				contentText += _("However, there are currently no open Player slots.");
+				contentText += "\n\n";
+				contentText += _("Would you like to swap this Spectator with a Player?");
+				std::string proceedButtonText = _("Yes, select Player slot");
+				notification.contentTitle = contentTitle;
+				notification.contentText = contentText;
+				std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUI(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(titleUI.shared_from_this()));
+				notification.action = WZ_Notification_Action(proceedButtonText, [playerIndex, weakTitleUI](const WZ_Notification&) {
+					auto strongTitleUI = weakTitleUI.lock();
+					ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Expected Title UI is gone");
+					widgScheduleTask([weakTitleUI, playerIndex] {
+						auto strongTitleUI = weakTitleUI.lock();
+						ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Expected Title UI is gone");
+						strongTitleUI->openPlayerSlotSwapChooser(playerIndex);
+					});
+				});
+				notification.onDismissed = [playerIndex](const WZ_Notification&, WZ_Notification_Dismissal_Reason reason) {
+					if (reason != WZ_Notification_Dismissal_Reason::USER_DISMISSED) { return; }
+					// Notify the player that the answer is "no" by sending a no-op PlayerSlotTypeRequest
+					SendPlayerSlotTypeRequest(playerIndex, NetPlay.players[playerIndex].isSpectator);
+				};
+				notification.tag = notificationTag;
+
+				addNotification(notification, WZ_Notification_Trigger::Immediate());
+				// "handled" - now up to the host to decide what happens, so return true below
+				break;
+			}
+			case SpectatorToPlayerMoveResult::FAILED:
+			{
+				// Notify the player that the answer is "no" by sending a no-op PlayerSlotTypeRequest
+				SendPlayerSlotTypeRequest(playerIndex, NetPlay.players[playerIndex].isSpectator);
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+enum class SwapPlayerIndexesResult
+{
+	SUCCESS,
+	FAILURE,
+	ERROR_HOST_MADE_US_PLAYER_WITHOUT_PERMISSION,
+};
+
+static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::shared_ptr<WzTitleUI>& parent)
+{
+	// A special message that can be triggered by the host to queue-up a player index swap (for example, converting a player to a spectator-only slot - really should only be used for converting between player and spectator slots in the lobby)
+	// For the player being moved, this simulates a lot of the effects of a join, followed by a (quiet / virtual) "leave" of the old slot
+	// For other players, this provides a message and a (quiet / virtual) "leave" of the old slot
+	// Everyone then waits for the host to provide updated NET_PLAYER_INFO
+
+	ASSERT_OR_RETURN(SwapPlayerIndexesResult::FAILURE, queue.index == NetPlay.hostPlayer, "Message received from non-host user");
+
+	uint32_t playerIndexA;
+	uint32_t playerIndexB;
+
+	NETbeginDecode(queue, NET_PLAYER_SWAP_INDEX);
+	NETuint32_t(&playerIndexA);
+	NETuint32_t(&playerIndexB);
+	NETend();
+
+	if (!ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		debug(LOG_ERROR, "Player indexes cannot be swapped after game has started");
+		return SwapPlayerIndexesResult::FAILURE;
+	}
+	if (NetPlay.isHost)
+	{
+		debug(LOG_ERROR, "Should never be called for the host");
+		return SwapPlayerIndexesResult::FAILURE;
+	}
+
+	if (playerIndexA >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Bad player number (%" PRIu32 ") received from host!", playerIndexA);
+		return SwapPlayerIndexesResult::FAILURE;
+	}
+
+	if (playerIndexB >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Bad player number (%" PRIu32 ") received from host!", playerIndexB);
+		return SwapPlayerIndexesResult::FAILURE;
+	}
+
+	// Make sure neither is the host index, as this is *not* supported for the host
+	if (playerIndexA == NET_HOST_ONLY || playerIndexB == NET_HOST_ONLY
+		|| playerIndexA == NetPlay.hostPlayer || playerIndexB == NetPlay.hostPlayer)
+	{
+		debug(LOG_ERROR, "Cannot swap host slot! (players: %" PRIu32 ", %" PRIu32 ")!", playerIndexA, playerIndexB);
+		return SwapPlayerIndexesResult::FAILURE;
+	}
+
+	// Backup some data
+	std::array<bool, 2> wasSpectator = {NetPlay.players[playerIndexA].isSpectator, NetPlay.players[playerIndexB].isSpectator};
+
+	// 1.) Simulate the old slots "leaving" (quietly)
+	// From handling of NET_PLAYER_DROPPED (to cleanup old player indexes - wait for new player info from host)
+	std::array<uint32_t, 2> playerIndexes = {playerIndexA, playerIndexB};
+	for (auto playerIndex : playerIndexes)
+	{
+		// From MultiPlayerLeave()
+		//  From clearPlayer() - this is needed to disconnect PlayerReferences so, for example, old chat messages are still associated with the proper player
+		NetPlay.playerReferences[playerIndex]->disconnect();
+		NetPlay.playerReferences[playerIndex] = std::make_shared<PlayerReference>(playerIndex);
+
+		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+//		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
+		//
+		NET_InitPlayer(playerIndex, false);
+		NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex); // needed??
+		if (playerIndex < MAX_PLAYERS)
+		{
+			playerVotes[playerIndex] = 0;
+		}
+	}
+
+	if (playerIndexA == selectedPlayer || playerIndexB == selectedPlayer)
+	{
+		uint32_t oldPlayerIndex = selectedPlayer;
+		uint32_t newPlayerIndex = (playerIndexA == selectedPlayer) ? playerIndexB : playerIndexA;
+		bool selectedPlayerWasSpectator = wasSpectator[(playerIndexA == selectedPlayer) ? 0 : 1];
+
+		// Send an acknowledgement that we received and are processing the player index swap for us
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_SWAP_INDEX_ACK);
+		NETuint32_t(&oldPlayerIndex);
+		NETuint32_t(&newPlayerIndex);
+		NETend();
+
+		// 1.) Basically what happens in NETjoinGame after receiving NET_ACCEPTED
+
+		selectedPlayer = newPlayerIndex;
+		realSelectedPlayer = selectedPlayer;
+		debug(LOG_NET, "NET_PLAYER_SWAP_INDEX received for me. Switching from player %" PRIu32 " to player %" PRIu32 "", oldPlayerIndex,newPlayerIndex);
+
+		NetPlay.players[selectedPlayer].allocated = true;
+		sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
+		NetPlay.players[selectedPlayer].heartbeat = true;
+
+		// Ensure name is set properly (and re-send to host)
+		NETchangePlayerName(selectedPlayer, (char *)sPlayer);			// update since we're simulating re-joining
+
+		// 2.) Basically what happens in joinGameInternalConnect after successful NETjoinGame
+
+		// Move my stats to the new player slot, and then broadcast
+		PLAYERSTATS	playerStats;
+		loadMultiStats(sPlayer, &playerStats);
+		setMultiStats(selectedPlayer, playerStats, false);
+		setMultiStats(selectedPlayer, playerStats, true);
+
+		if (war_getMPcolour() >= 0)
+		{
+			SendColourRequest(selectedPlayer, war_getMPcolour());
+		}
+
+		if (selectedPlayerWasSpectator != NetPlay.players[selectedPlayer].isSpectator)
+		{
+			// Spectator status of player slot changed
+			debug(LOG_NET, "Spectator status changed! From %s to %s", (selectedPlayerWasSpectator) ? "true" : "false", (NetPlay.players[selectedPlayer].isSpectator) ? "true" : "false");
+			if (!NetPlay.players[selectedPlayer].isSpectator)
+			{
+				if (!bRequestedSelfMoveToPlayers)
+				{
+					// Host moved us from spectators to players, but we never asked for the move
+					debug(LOG_NET, "The host tried to move us to Players, but we never gave permission.");
+					return SwapPlayerIndexesResult::ERROR_HOST_MADE_US_PLAYER_WITHOUT_PERMISSION;
+				}
+				else
+				{
+					// We did indeed give permission for the move, so reset the flag
+					bRequestedSelfMoveToPlayers = false;
+				}
+			}
+		}
+	}
+	else
+	{
+		// TODO: display a textual description of the move
+		// just wait for the new player info to be broadcast by the host
+	}
+
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+	netPlayersUpdated = true;	// update the player box.
+
+	return SwapPlayerIndexesResult::SUCCESS;
+}
+
+static bool canChooseTeamFor(int i)
+{
+	return (i == selectedPlayer || NetPlay.isHost);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3291,7 +3858,7 @@ static void enableSpectatorJoin(bool enabled)
 		// add max spectator slots
 		bool success = false;
 		do {
-			success = addNewSpectatorSlot();
+			success = NETopenNewSpectatorSlot();
 		} while (success);
 	}
 	else
@@ -3778,6 +4345,8 @@ public:
 			return;
 		}
 
+		deleteExistingDifficultyButton();
+
 		bool isMe = playerIdx == selectedPlayer;
 		int isReady = NETgetDownloadProgress(playerIdx) != 100 ? 2 : NetPlay.players[playerIdx].ready ? 1 : 0;
 		char const *const toolTips[2][3] = {{_("Waiting for player"), _("Player is ready"), _("Player is downloading")}, {_("Click when ready"), _("Waiting for other players"), _("Waiting for download")}};
@@ -3867,6 +4436,128 @@ private:
 	std::shared_ptr<W_BUTTON> readyButton;
 	std::shared_ptr<W_LABEL> readyTextLabel;
 };
+
+// ////////////////////////////////////////////////////////////////////////////
+
+void WzMultiplayerOptionsTitleUI::openPlayerSlotSwapChooser(uint32_t playerIndex)
+{
+	// remove any choosers already up
+	closeAllChoosers();
+
+	// make sure "players" view is visible
+	playerDisplayView = PlayerDisplayView::Players;
+	updatePlayers();
+
+	widgRegisterOverlayScreen(psInlineChooserOverlayScreen, 1);
+
+	WIDGET* psParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	ASSERT_OR_RETURN(, psParent != nullptr, "Could not find root form");
+	std::weak_ptr<WIDGET> psWeakParent(psParent->shared_from_this());
+
+	WIDGET *psInlineChooserOverlayRootForm = widgGetFromID(psInlineChooserOverlayScreen, MULTIOP_INLINE_OVERLAY_ROOT_FRM);
+	ASSERT_OR_RETURN(, psInlineChooserOverlayRootForm != nullptr, "Could not find overlay root form");
+	std::shared_ptr<W_FULLSCREENOVERLAY_CLICKFORM> chooserParent = std::dynamic_pointer_cast<W_FULLSCREENOVERLAY_CLICKFORM>(psInlineChooserOverlayRootForm->shared_from_this());
+	auto psParentPlayersForm = (W_FORM *)widgGetFromID(psWScreen, MULTIOP_PLAYERS);
+	ASSERT_OR_RETURN(, psParentPlayersForm != nullptr, "Could not find players form?");
+	chooserParent->setCutoutWidget(psParentPlayersForm->shared_from_this()); // should be cleared on close
+	auto titleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
+
+	int textHeight = iV_GetTextLineSize(font_regular);
+	int swapContextFormMargin = 1;
+	int swapContextFormPadding = 4;
+	int swapContextFormHeight = swapContextFormPadding + textHeight + 4 + MULTIOP_PLAYERHEIGHT + (swapContextFormPadding * 2);
+	int additionalHeightForSwappingRow = swapContextFormMargin + swapContextFormHeight;
+
+	auto aiForm = std::make_shared<WIDGET>();
+	chooserParent->attach(aiForm);
+	aiForm->id = MULTIOP_AI_FORM;
+	aiForm->setCalcLayout([psWeakParent, additionalHeightForSwappingRow](WIDGET *psWidget) {
+		if (auto psParent = psWeakParent.lock())
+		{
+			psWidget->setGeometry(psParent->screenPosX() + MULTIOP_PLAYERSX, psParent->screenPosY() + MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH + additionalHeightForSwappingRow);
+		}
+	});
+	aiForm->setTransparentToClicks(true);
+
+	WzPlayerIndexSwapPositionRowRactory rowFactory;
+	auto positionChooser = WzPositionChooser::make(playerIndex, rowFactory, titleUI);
+	aiForm->attach(positionChooser);
+	positionChooser->setCalcLayout([](WIDGET *psWidget) {
+		psWidget->setGeometry(0, 0, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+	});
+
+	// Create parent form for row being swapped
+	std::weak_ptr<WzPositionChooser> psWeakPositionChooser(positionChooser);
+	auto swapContextForm = std::make_shared<IntFormAnimated>(false);
+	positionChooser->attach(swapContextForm);
+	swapContextForm->setCalcLayout([psWeakPositionChooser, swapContextFormHeight, swapContextFormMargin](WIDGET *psWidget) {
+		if (auto psStrongPositionChooser = psWeakPositionChooser.lock())
+		{
+			psWidget->setGeometry(0, psStrongPositionChooser->y() + psStrongPositionChooser->height() + swapContextFormMargin, psStrongPositionChooser->width(), swapContextFormHeight);
+		}
+	});
+
+	// Now create a dummy row for the row being swapped, and display beneath
+	auto playerRow = WzPlayerRow::make(playerIndex, titleUI);
+	playerRow->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; }); // ensure clicks on this display-only row have no effect
+	swapContextForm->attach(playerRow);
+	playerRow->setCalcLayout([swapContextFormPadding, textHeight](WIDGET *psWidget) {
+		psWidget->setGeometry(PLAYERBOX_X0, swapContextFormPadding + textHeight + 4, MULTIOP_PLAYERWIDTH, MULTIOP_PLAYERHEIGHT);
+	});
+	auto playerRowLabel = std::make_shared<W_LABEL>();
+	playerRowLabel->setFont(font_regular, WZCOL_TEXT_BRIGHT);
+	const char* playerDescription = (NetPlay.players[playerIndex].isSpectator) ? _("For Spectator:") : _("For Player:");
+	playerRowLabel->setString(playerDescription);
+	swapContextForm->attach(playerRowLabel);
+	playerRowLabel->setCalcLayout([swapContextFormPadding, textHeight](WIDGET *psWidget) {
+		psWidget->setGeometry(PLAYERBOX_X0, swapContextFormPadding, MULTIOP_PLAYERWIDTH, textHeight);
+	});
+	auto playerRowSwitchArrow = std::make_shared<W_LABEL>();
+	playerRowSwitchArrow->setFont(font_regular, WZCOL_TEXT_MEDIUM);
+	playerRowSwitchArrow->setString("\u21C5"); // ⇅
+	playerRowSwitchArrow->setGeometry(0, 0, playerRowSwitchArrow->idealWidth(), playerRowSwitchArrow->idealHeight());
+	swapContextForm->attach(playerRowSwitchArrow);
+	playerRowSwitchArrow->setCalcLayout([swapContextFormPadding, textHeight](WIDGET *psWidget) {
+		auto psParent = psWidget->parent();
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent?");
+		psWidget->setGeometry(psParent->width() - PLAYERBOX_X0 - psWidget->width(), swapContextFormPadding, psWidget->width(), textHeight);
+	});
+
+	// Add side text
+	W_LABEL *psSideTextLabel = addSideText(psInlineChooserOverlayScreen, MULTIOP_INLINE_OVERLAY_ROOT_FRM, FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY - 15, _("Choose Player Slot"));
+	if (psSideTextLabel)
+	{
+		psSideTextLabel->setCalcLayout([psWeakParent](WIDGET *psWidget) {
+			if (auto psParent = psWeakParent.lock())
+			{
+				psWidget->setGeometry(psParent->screenPosX() + MULTIOP_PLAYERSX - 3, psParent->screenPosY() + MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+			}
+		});
+	}
+
+	playerSlotSwapChooserUp = playerIndex;
+}
+
+void WzMultiplayerOptionsTitleUI::closePlayerSlotSwapChooser()
+{
+	WIDGET *psInlineChooserOverlayRootForm = widgGetFromID(psInlineChooserOverlayScreen, MULTIOP_INLINE_OVERLAY_ROOT_FRM);
+	std::shared_ptr<W_FULLSCREENOVERLAY_CLICKFORM> chooserParent = std::dynamic_pointer_cast<W_FULLSCREENOVERLAY_CLICKFORM>(psInlineChooserOverlayRootForm->shared_from_this());
+	if (chooserParent)
+	{
+		chooserParent->setCutoutWidget(nullptr);
+	}
+
+	// AiChooser / DifficultyChooser / PositionChooser / PlayerSlotSwapChooser currently use the same formID
+	// Just call closeAllChoosers() for now
+	closeAllChoosers();
+
+	playerSlotSwapChooserUp = nullopt;
+}
+
+optional<uint32_t> WzMultiplayerOptionsTitleUI::playerSlotSwapChooserOpenForPlayer() const
+{
+	return playerSlotSwapChooserUp;
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // box for players.
@@ -4021,7 +4712,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 					widgScheduleTask([psWeakTitleUI]{
 						auto pStrongPtr = psWeakTitleUI.lock();
 						ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
-						if (addNewSpectatorSlot())
+						if (NETopenNewSpectatorSlot())
 						{
 							pStrongPtr->addPlayerBox(true);
 //							resetReadyStatus(false);
@@ -4319,6 +5010,9 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 
 	reloadMPConfig(); // reload own settings
 	cancelOrDismissNotificationsWithTag(VOTE_TAG);
+	cancelOrDismissNotificationIfTag([](const std::string& tag) {
+		return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
+	});
 
 	debug(LOG_NET, "player %u (Host is %s) stopping.", selectedPlayer, NetPlay.isHost ? "true" : "false");
 
@@ -4362,7 +5056,14 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		}
 
 		ActivityManager::instance().joinedLobbyQuit();
-		changeTitleMode(MULTI);
+		if (parent)
+		{
+			changeTitleUI(parent);
+		}
+		else
+		{
+			changeTitleMode(MULTI);
+		}
 
 		selectedPlayer = 0;
 		realSelectedPlayer = 0;
@@ -5222,6 +5923,10 @@ void startMultiplayerGame()
 {
 	ASSERT_HOST_ONLY(return);
 
+	cancelOrDismissNotificationIfTag([](const std::string& tag) {
+		return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
+	});
+
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
@@ -5295,6 +6000,13 @@ void handleAutoReadyRequest()
 		// Automatically set ready status
 		SendReadyRequest(selectedPlayer, desiredReadyState);
 	}
+}
+
+void multiClearHostRequestMoveToPlayer(uint32_t playerIdx)
+{
+	ASSERT_OR_RETURN(, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid playerIdx: %" PRIu32 "", playerIdx);
+	if (!NetPlay.isHost) { return; }
+	bHostRequestedMoveToPlayers[playerIdx] = false;
 }
 
 void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
@@ -5487,6 +6199,9 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
 			cancelOrDismissNotificationsWithTag(VOTE_TAG); // don't need vote notifications anymore
+			cancelOrDismissNotificationIfTag([](const std::string& tag) {
+				return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
+			});
 			if (NET_HOST_ONLY != queue.index)
 			{
 				HandleBadParam("NET_FIREUP given incorrect params.", 255, queue.index);
@@ -5601,6 +6316,35 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				setupVoteChoice();
 			}
 			break;
+
+		case NET_PLAYER_SLOTTYPE_REQUEST:
+			{
+				// Note: Because this may trigger a player index + queue swap,
+				// it handles NETpop(queue) itself and we must immediately continue to the next loop iteration
+				// i.e. Don't use `queue` after recvPlayerSlotTypeRequestAndPop is called
+				recvPlayerSlotTypeRequestAndPop(*this, queue);
+				continue; // loop for next queue that has a message
+			}
+		case NET_PLAYER_SWAP_INDEX:
+			{
+				auto result = recvSwapPlayerIndexes(queue, parent);
+				if (result != SwapPlayerIndexesResult::SUCCESS)
+				{
+					ignoredMessage = true;
+					if (result == SwapPlayerIndexesResult::ERROR_HOST_MADE_US_PLAYER_WITHOUT_PERMISSION)
+					{
+						// Leave the badly behaved (likely modified) host!
+						sendRoomChatMessage(_("The host moved me to Players, but I never gave permission for this change. Bye!"));
+						debug(LOG_INFO, "Leaving game because host moved us to Players, but we never gave permission.");
+						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("The host tried to move us to Players, but we never gave permission.")), parent));
+						setLobbyError(ERROR_HOSTDROPPED);
+						return;
+					}
+				}
+				break;
+			}
+
+		// Note: NET_PLAYER_SWAP_INDEX_ACK is handled in netplay
 
 		default:
 			ignoredMessage = true;
@@ -5843,6 +6587,9 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	if (!NetPlay.isHostAlive && ingame.side == InGameSide::MULTIPLAYER_CLIENT)
 	{
 		cancelOrDismissNotificationsWithTag(VOTE_TAG);
+		cancelOrDismissNotificationIfTag([](const std::string& tag) {
+			return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
+		});
 		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("The host has quit.")), parent));
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
@@ -5944,6 +6691,8 @@ void WzMultiplayerOptionsTitleUI::start()
 	if (!bReenter)
 	{
 		playerDisplayView = PlayerDisplayView::Players;
+		bRequestedSelfMoveToPlayers = false;
+		bHostRequestedMoveToPlayers.resize(MAX_CONNECTED_PLAYERS, false);
 		playerRows.clear();
 		initKnownPlayers();
 		resetPlayerConfiguration(true);
@@ -5956,6 +6705,13 @@ void WzMultiplayerOptionsTitleUI::start()
 		inlineChooserUp = -1;
 		aiChooserUp = -1;
 		difficultyChooserUp = -1;
+		playerSlotSwapChooserUp = nullopt;
+
+		const std::string notificationIdentifierPrefix = SLOTTYPE_NOTIFICATION_ID_PREFIX;
+		removeNotificationPreferencesIf([&notificationIdentifierPrefix](const std::string &uniqueNotificationIdentifier) -> bool {
+			bool hasPrefix = (strncmp(uniqueNotificationIdentifier.c_str(), notificationIdentifierPrefix.c_str(), notificationIdentifierPrefix.size()) == 0);
+			return hasPrefix;
+		});
 
 		// Initialize the inline chooser overlay screen
 		psInlineChooserOverlayScreen = W_SCREEN::make();
@@ -6528,9 +7284,12 @@ void WzMultiButton::display(int xOffset, int yOffset)
 	// transparent icon with these edit boxes.
 	// hack for multieditbox
 	if (imNormal.id == IMAGE_EDIT_MAP || imNormal.id == IMAGE_EDIT_GAME || imNormal.id == IMAGE_EDIT_PLAYER
-	    || imNormal.id == IMAGE_LOCK_BLUE || imNormal.id == IMAGE_UNLOCK_BLUE)
+	    || imNormal.id == IMAGE_LOCK_BLUE || imNormal.id == IMAGE_UNLOCK_BLUE || drawBlueBorder.value_or(false))
 	{
-		drawBlueBox(x0 - 2, y0 - 2, height(), height());  // box on end.
+		if (drawBlueBorder.value_or(true)) // if drawBlueBox is explicitly set to false, don't draw the box
+		{
+			::drawBlueBox(x0 - 2, y0 - 2, height(), height());  // box on end.
+		}
 	}
 
 	// evaluate auto-frame
@@ -6686,6 +7445,14 @@ void sendRoomSystemMessage(char const *text)
 	NetworkTextMessage message(SYSTEM_MESSAGE, text);
 	displayRoomSystemMessage(text);
 	message.enqueue(NETbroadcastQueue());
+}
+
+static void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver)
+{
+	ASSERT_OR_RETURN(, isHumanPlayer(receiver), "Invalid receiver: %" PRIu32 "", receiver);
+	NetworkTextMessage message(SYSTEM_MESSAGE, text);
+	displayRoomSystemMessage(text);
+	message.enqueue(NETnetQueue(receiver));
 }
 
 static void sendRoomChatMessage(char const *text)
