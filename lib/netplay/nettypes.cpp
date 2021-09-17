@@ -463,6 +463,13 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst)
 	std::swap(pairQueue(src), pairQueue(dst));
 }
 
+void NETswapQueues(NETQUEUE src, NETQUEUE dst)
+{
+	ASSERT(src.isPair, "Huh?");
+	ASSERT(dst.isPair, "Huh?");
+	std::swap(pairQueue(src), pairQueue(dst));
+}
+
 void NETbeginEncode(NETQUEUE queue, uint8_t type)
 {
 	NETsetPacketDir(PACKET_ENCODE);
