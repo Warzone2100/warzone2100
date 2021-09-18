@@ -773,14 +773,63 @@ void droidUpdate(DROID *psDroid)
 			psBeingTargetted->flags.set(OBJECT_FLAG_TARGETED, true);
 		}
 	}
-	// -----------------
+	// ------------------------
+	// if we are a repair turret, then manage incoming damaged droids, (just like repair facility)
+	// unlike a repair facility
+	// 	- we don't really need to move droids to us, we can come ourselves
+	//	- we don't steal work from other repair turrets/ repair facilities
+	DROID *psOther;
+	if (psDroid->player == selectedPlayer && (psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR))
+	{
+		for (psOther = apsDroidLists[psDroid->player]; psOther; psOther = psOther->psNext)
+		{
+			// unlike repair facility, no droid  can have DORDER_RTR_SPECIFIED with another droid as target, so skip that check
+			if (psOther->order.type == DORDER_RTR && 
+					psOther->order.rtrType == RTR_TYPE_DROID &&
+					psOther->action != DACTION_WAITFORREPAIR &&
+					psOther->action != DACTION_MOVETOREPAIRPOINT &&
+					psOther->action != DACTION_WAITDURINGREPAIR)
+			{
+				if (psOther->body >= psOther->originalBody)
+				{
+					// set droid points to max
+					psOther->body = psOther->originalBody;
+					// if completely repaired reset order
+					secondarySetState(psOther, DSO_RETURN_TO_LOC, DSS_NONE);
 
+					if (hasCommander(psOther))
+					{
+						// return a droid to it's command group
+						DROID	*psCommander = psOther->psGroup->psCommander;
+						orderDroidObj(psOther, DORDER_GUARD, psCommander, ModeImmediate);
+					}
+					continue;
+				}
+			}
+
+			else if (psOther->order.rtrType == RTR_TYPE_DROID 
+					//is being, or waiting for repairs..
+					&& (psOther->action == DACTION_WAITFORREPAIR || psOther->action == DACTION_WAITDURINGREPAIR)
+					// don't steal work from others
+					&& psOther->order.psObj == psDroid)
+			{
+				if (!actionReachedDroid(psDroid, psOther))
+				{
+					objTrace(psOther->id, "Moving closer to repair droid");
+					actionDroid(psOther, DACTION_MOVE, psDroid, psDroid->pos.x, psDroid->pos.y);
+				}
+				
+			}
+		}
+	}
+	// ------------------------
 	// See if we can and need to self repair.
 	if (!isVtolDroid(psDroid) && psDroid->body < psDroid->originalBody && psDroid->asBits[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(psDroid->player))
 	{
 		droidUpdateDroidSelfRepair(psDroid);
 	}
 
+	
 	/* Update the fire damage data */
 	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
 	{
@@ -1186,7 +1235,6 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 	}
 
 	CHECK_DROID(psRepairDroid);
-
 	/* if not finished repair return true else complete repair and return false */
 	return psDroidToRepair->body < psDroidToRepair->originalBody;
 }
@@ -1198,8 +1246,20 @@ bool droidUpdateDroidRepair(DROID *psRepairDroid)
 
 	DROID *psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
 	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "Target is not a unit");
-
-	return droidUpdateDroidRepairBase(psRepairDroid, psDroidToRepair);
+	bool needMoreRepair = droidUpdateDroidRepairBase(psRepairDroid, psDroidToRepair);
+	if (needMoreRepair && psDroidToRepair->order.type == DORDER_RTR && psDroidToRepair->order.rtrType == RTR_TYPE_DROID && psDroidToRepair->action == DACTION_NONE)
+	{
+		psDroidToRepair->action = DACTION_WAITDURINGREPAIR;
+	}
+	if (!needMoreRepair && psDroidToRepair->order.type == DORDER_RTR && psDroidToRepair->order.rtrType == RTR_TYPE_DROID)
+	{
+		// if psDroidToRepair has a commander, commander will call him back anyway
+		// if no commanders, just DORDER_GUARD the repair turret
+		orderDroidObj(psDroidToRepair, DORDER_GUARD, psRepairDroid, ModeImmediate);
+		secondarySetState(psDroidToRepair, DSO_RETURN_TO_LOC, DSS_NONE);
+		psDroidToRepair->order.psObj = nullptr;
+	}
+	return needMoreRepair;
 }
 
 static void droidUpdateDroidSelfRepair(DROID *psRepairDroid)
