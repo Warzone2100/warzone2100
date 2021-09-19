@@ -2676,7 +2676,7 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 	}
 
 	STRUCTURE *psTarget = castStructure(psDroid->psActionTarget[0]);
-	if (psTarget && psTarget->pFunctionality->rearmPad.psObj == psDroid)
+	if (psTarget && psTarget->pFunctionality && psTarget->pFunctionality->rearmPad.psObj == psDroid)
 	{
 		// vtol is rearming at a different base, leave it alone
 		objTrace(psDroid->id, "rearm pad at %d,%d won't snatch us - we already are snatched by %d,%d", psStruct->pos.x / TILE_UNITS, psStruct->pos.y / TILE_UNITS, psTarget->pos.x / TILE_UNITS, psTarget->pos.y / TILE_UNITS);
