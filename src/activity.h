@@ -91,6 +91,9 @@ public:
 		};
 		AllianceOption alliances;
 
+		// is this a loaded replay?
+		bool isReplay = false;
+
 	public:
 		virtual ~SkirmishGameInfo() { }
 		// some convenience functions to get data
