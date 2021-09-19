@@ -4112,7 +4112,7 @@ public:
 				}
 				else if (!NetPlay.players[player].allocated && !locked.ai && NetPlay.isHost)
 				{
-					if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY && player < MAX_PLAYERS)
+					if (button.getOnClickButtonPressed() == WKEY_SECONDARY && player < MAX_PLAYERS)
 					{
 						// Right clicking distributes selected AI's type and difficulty to all other AIs
 						for (int i = 0; i < MAX_PLAYERS; ++i)
