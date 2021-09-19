@@ -150,7 +150,9 @@ public:
 	: scripting_instance(player, scriptName, scriptPath)
 	{
 		rt = JS_NewRuntime();
+		ASSERT(rt != nullptr, "JS_NewRuntime failed?");
 		ctx = JS_NewContext(rt);
+		ASSERT(ctx != nullptr, "JS_NewContext failed?");
 		global_obj = JS_GetGlobalObject(ctx);
 
 		engineToInstanceMap.insert(std::pair<JSContext*, quickjs_scripting_instance*>(ctx, this));
@@ -166,10 +168,18 @@ public:
 		}
 
 		JS_FreeValue(ctx, global_obj);
-		JS_FreeContext(ctx);
-		ctx = nullptr;
-		JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Error);
-		rt = nullptr;
+		ASSERT(ctx != nullptr, "context is null??");
+		if (ctx)
+		{
+			JS_FreeContext(ctx);
+			ctx = nullptr;
+		}
+		ASSERT(rt != nullptr, "runtime is null??");
+		if (rt)
+		{
+			JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Error);
+			rt = nullptr;
+		}
 	}
 	bool loadScript(const WzString& path, int player, int difficulty);
 	bool readyInstanceForExecution() override;

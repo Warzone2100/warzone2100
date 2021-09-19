@@ -416,6 +416,11 @@ std::unique_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	data.pCustomLogger = pCustomLogger;
 
 	JSRuntime *rt = JS_NewRuntime();
+	if (rt == nullptr)
+	{
+		debug(pCustomLogger, LOG_ERROR, "JS_NewRuntime failed");
+		return nullptr;
+	}
 	auto free_runtime_ref = gsl::finally([rt, pCustomLogger] {
 		pRuntimeFree_CustomLogger = pCustomLogger;
 		JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Warning);
@@ -433,6 +438,11 @@ std::unique_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	ctxOptions.typedArrays = false;
 	ctxOptions.promise = false;
 	JSContext *ctx = JS_NewLimitedContext(rt, &ctxOptions);
+	if (ctx == nullptr)
+	{
+		debug(pCustomLogger, LOG_ERROR, "JS_NewLimitedContext failed");
+		return nullptr;
+	}
 	auto free_context_ref = gsl::finally([ctx] { JS_FreeContext(ctx); });
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_globalobj_ref = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });
