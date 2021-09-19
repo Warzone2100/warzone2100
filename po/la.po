@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 06:22\n"
+"PO-Revision-Date: 2021-09-19 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Latin\n"
 "Language: la_LA\n"
@@ -20,25 +20,25 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "SCOPVS: Technologiam neuronicae synapseos locare ac recolligere"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "Basin instituere, dein structuram pro ruinā quaerere."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "Haec structura technologiam continet ad Consilium prosepere procedendum necassariam."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "MISSIO BASEOS ALPHA: Praedatores Cloacarii"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Praedatores cloacarii ad basin nostram accedunt."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
@@ -47,7 +47,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "MISSIO BASEOS ALPHA: Potentiae Fluctus Deprehensus"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
@@ -55,11 +55,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Aream scrutari ac tutam facere."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "MISSIO BASEOS ALPHA: Paradigma Novum"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -92,7 +92,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Subsisium ad manum est."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "MISSIO BASEOS ALPHA: Impetus Adversarius"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -192,7 +192,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Gratulationes, Centurio."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
@@ -212,7 +212,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "GREGIS BETA RENOVATIO"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -224,7 +224,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "GREGIS GAMMA RENOVATIO"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -244,7 +244,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "SCOPVS PRIMVS"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
@@ -296,7 +296,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "Centurio."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
@@ -418,7 +418,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Enodatur..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
@@ -14822,7 +14822,7 @@ msgstr ""
 
 #: src/clparse.cpp:344
 msgid "file"
-msgstr ""
+msgstr "tabularium"
 
 #: src/clparse.cpp:345
 msgid "Flush all debug output written to stderr"
@@ -18088,7 +18088,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1425
 msgid "FILE SENT!"
-msgstr ""
+msgstr "TABVLARIVM MISSVM!"
 
 #: src/multiplay.cpp:1496
 #, c-format
@@ -18464,7 +18464,7 @@ msgstr "Status rerum"
 
 #: src/titleui/gamefind.cpp:306
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Versio tua Warzone huic ludo non congruit."
 
 #: src/titleui/gamefind.cpp:370
 msgid "[Password required]"
@@ -18569,7 +18569,7 @@ msgstr "BENE"
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:171
 msgid "Cancel"
-msgstr "Expungere"
+msgstr "Abrogare"
 
 #: src/titleui/protocol.cpp:78
 msgid "CONNECTION"
@@ -18590,7 +18590,7 @@ msgstr "IP Index vel Nomen Computatri"
 #: src/transporter.cpp:300
 #: src/transporter.cpp:348
 msgid "Launch Transport"
-msgstr "Commovere Vehiculum"
+msgstr "Vehiculum Emittere"
 
 #: src/transporter.cpp:999
 msgid "There is not enough room in the Transport!"
@@ -18636,7 +18636,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Plus Informationis"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:249
@@ -18658,11 +18658,11 @@ msgstr "Versio: %s,%s Constructum: %s%s"
 
 #: src/wzapi.cpp:2330
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "VICISTI!"
 
 #: src/wzapi.cpp:2335
 msgid "YOU WERE DEFEATED!"
-msgstr ""
+msgstr "VICTVS ES!"
 
 #: src/wzscriptdebug.cpp:1863
 msgid "Script Debugger"
