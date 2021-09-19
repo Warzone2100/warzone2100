@@ -767,6 +767,8 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 
 	currentMultiplayGameInfo.structureLimits = multiInGame.structureLimits;
 
+	currentMultiplayGameInfo.isReplay = NETisReplay();
+
 	if (currentMode == ActivitySink::GameMode::JOINING_IN_PROGRESS || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
 		currentMultiplayGameInfo.hostName = currentMultiplayGameInfo.players[0].name; // host is always player index 0?
