@@ -90,7 +90,7 @@ jobs:
         EOENV
     - name: Build .SNAP
       id: snapcraft
-      uses: snapcore/action-build@v1
+      uses: snapcore/action-build@v1.0.9
     - name: Gather .SNAP
       run: |
         OUTPUT_DIR="${HOME}/output"

@@ -148,7 +148,7 @@ jobs:
         id: build-stable
         if: success() && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
         continue-on-error: true
-        uses: snapcore/action-build@v1
+        uses: snapcore/action-build@v1.0.9
         with:
           path: ${{ github.workspace }}/snap-stable-build
       - name: Fail-check
