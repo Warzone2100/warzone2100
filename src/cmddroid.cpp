@@ -85,6 +85,9 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	DROID_GROUP	*psGroup;
 	bool addedToGroup = false;
 
+	ASSERT_OR_RETURN(false, psCommander != nullptr, "psCommander is null?");
+	ASSERT_OR_RETURN(false, psDroid != nullptr, "psDroid is null?");
+
 	if (psCommander->psGroup == nullptr)
 	{
 		psGroup = grpCreate();
