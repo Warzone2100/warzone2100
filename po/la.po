@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-09-19 11:20\n"
+"PO-Revision-Date: 2021-09-19 23:25\n"
 "Last-Translator: \n"
 "Language-Team: Latin\n"
 "Language: la_LA\n"
@@ -42,7 +42,7 @@ msgstr "Praedatores cloacarii ad basin nostram accedunt."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Basin defendere, et deinde Cloacariorum castra delere."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
@@ -200,7 +200,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISSIO BASEOS ALPHA: Locare atque recolligere artificiata"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
@@ -268,7 +268,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "Scopus novus."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
@@ -288,11 +288,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "TRANSMISSIO ADVENIENS"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "Enodatio in fieri....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
@@ -4836,7 +4836,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr ""
+msgstr "Transmissionis enodatio..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
