@@ -666,7 +666,18 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 
 		// Extract the digital signature, and verify it
 		std::string updateJsonStr;
-		bool validSignature = EmbeddedJSONSignature::verifySignedJson(data->memory, data->size, WZ_UPDATES_VERIFY_KEY, updateJsonStr);
+		bool validSignature = false;
+		try {
+			validSignature = EmbeddedJSONSignature::verifySignedJson(data->memory, data->size, WZ_UPDATES_VERIFY_KEY, updateJsonStr);
+		}
+		catch (const std::exception& e) {
+			std::string errorStr = e.what();
+			wzAsyncExecOnMainThread([url, errorStr]{
+				debug(LOG_NET, "%s; %s", errorStr.c_str(), url.c_str());
+			});
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
+			return;
+		}
 
 		// Parse the remaining json (minus the digital signature)
 		json updateData;
