@@ -273,6 +273,7 @@ static struct
 	bool spectators;
 } locked;
 static bool spectatorHost = false;
+static uint16_t defaultOpenSpectatorSlots = 0;
 
 struct AIDATA
 {
@@ -5195,6 +5196,10 @@ static void loadMapChallengeSettings(WzConfig& ini)
 			// Allow making the host a spectator (for MP games)
 			spectatorHost = ini.value("spectatorHost", false).toBool();
 
+			// Allow configuring of open spectator slots (for MP games)
+			unsigned int openSpectatorSlots_uint = ini.value("openSpectatorSlots", 0).toUInt();
+			defaultOpenSpectatorSlots = static_cast<uint16_t>(std::min<unsigned int>(openSpectatorSlots_uint, MAX_SPECTATOR_SLOTS));
+
 			// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
 			//             Keeping it around in case mods use it.
 			locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
@@ -5635,6 +5640,22 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	widgDelete(psWScreen, MULTIOP_FILTER_TOGGLE);
 
 	ingame.localOptionsReceived = true;
+
+	if (NetPlay.bComms)
+	{
+		auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
+		auto desiredDefaultOpenSpectatorSlots = std::min<uint16_t>(defaultOpenSpectatorSlots, MAX_SPECTATOR_SLOTS);
+		if (currentSpectatorSlotInfo.availableSpectatorSlots() < desiredDefaultOpenSpectatorSlots)
+		{
+			for (uint16_t addedSpecSlots = currentSpectatorSlotInfo.availableSpectatorSlots(); addedSpecSlots < desiredDefaultOpenSpectatorSlots; ++addedSpecSlots)
+			{
+				if (!NETopenNewSpectatorSlot())
+				{
+					break;
+				}
+			}
+		}
+	}
 
 	addGameOptions(); // update game options box.
 	addChatBox();
@@ -6701,6 +6722,7 @@ void WzMultiplayerOptionsTitleUI::start()
 		resetPlayerConfiguration(true);
 		memset(&locked, 0, sizeof(locked));
 		spectatorHost = false;
+		defaultOpenSpectatorSlots = 0;
 		loadMapChallengeAndPlayerSettings(true);
 		game.isMapMod = false;
 		game.isRandom = false;
