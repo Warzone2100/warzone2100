@@ -171,6 +171,8 @@ data/mp/multiplay/script/rules/setup/techlevel.js
 data/mp/multiplay/script/rules/setupgame.js
 data/mp/multiplay/script/rules/variables.js
 data/mp/multiplay/script/scavengers/init.js
+data/mp/multiplay/script/scavengers/originalScavengers.js
+data/mp/multiplay/script/scavengers/ultimateScavengers.js
 data/mp/multiplay/skirmish/Cobra.js
 data/mp/multiplay/skirmish/bonecrusher/bonecrusher.js
 data/mp/multiplay/skirmish/bonecrusher/build-normal.js
@@ -298,6 +300,7 @@ lib/netplay/netjoin_stub.cpp
 lib/netplay/netlog.cpp
 lib/netplay/netplay.cpp
 lib/netplay/netqueue.cpp
+lib/netplay/netreplay.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
 lib/sdl/cursors_sdl.cpp
@@ -320,6 +323,7 @@ lib/sound/track.cpp
 lib/widget/alignment.cpp
 lib/widget/bar.cpp
 lib/widget/button.cpp
+lib/widget/checkbox.cpp
 lib/widget/cliprect.cpp
 lib/widget/dropdown.cpp
 lib/widget/editbox.cpp
