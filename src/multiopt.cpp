@@ -258,7 +258,7 @@ void recvOptions(NETQUEUE queue)
 		NetPlay.wzFiles.emplace_back(pFileHandle, filename, hash);
 
 		// Request the map/mod from the host
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_FILE_REQUESTED);
 		NETbin(hash.bytes, hash.Bytes);
 		NETend();
 
@@ -349,13 +349,13 @@ void recvOptions(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Host Campaign.
-bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetAIs)
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs)
 {
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", SessionName, hostPlayerName);
 
 	freeMessages();
 
-	if (!NEThostGame(SessionName, hostPlayerName, static_cast<uint32_t>(game.type), 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, 0, 0, game.maxPlayers))
 	{
 		return false;
 	}
@@ -393,7 +393,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetA
 bool sendLeavingMsg()
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
+	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_PLAYER_LEAVING);
 	{
 		bool host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;

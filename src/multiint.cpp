@@ -272,6 +272,7 @@ static struct
 	bool bases;
 	bool spectators;
 } locked;
+static bool spectatorHost = false;
 
 struct AIDATA
 {
@@ -2568,7 +2569,7 @@ static bool SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	}
 	else
 	{
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_TEAMREQUEST);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_TEAMREQUEST);
 
 		NETuint8_t(&player);
 		NETuint8_t(&chosenTeam);
@@ -2627,7 +2628,7 @@ static bool SendReadyRequest(UBYTE player, bool bReady)
 	}
 	else
 	{
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_READY_REQUEST);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_READY_REQUEST);
 		NETuint8_t(&player);
 		NETbool(&bReady);
 		NETend();
@@ -2764,7 +2765,7 @@ static bool SendColourRequest(UBYTE player, UBYTE col)
 	else
 	{
 		// clients tell the host which color they want
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_COLOURREQUEST);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_COLOURREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&col);
 		NETend();
@@ -2785,7 +2786,7 @@ static bool SendFactionRequest(UBYTE player, UBYTE faction)
 	else
 	{
 		// clients tell the host which color they want
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FACTIONREQUEST);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_FACTIONREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&faction);
 		NETend();
@@ -2803,7 +2804,7 @@ static bool SendPositionRequest(UBYTE player, UBYTE position)
 	{
 		debug(LOG_NET, "Requesting the host to change our position. From %d to %d", player, position);
 		// clients tell the host which position they want
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_POSITIONREQUEST);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_POSITIONREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&position);
 		NETend();
@@ -2931,7 +2932,7 @@ static bool SendPlayerSlotTypeRequest(uint32_t player, bool isSpectator)
 
 	debug(LOG_NET, "Requesting the host to change our slot type. From %s to %s", originalPlayerSlotType, desiredPlayerSlotType);
 	// clients tell the host which player slot type they want (but the host may not allow)
-	NETbeginEncode(NETnetQueue((!NetPlay.isHost) ? NET_HOST_ONLY : player), NET_PLAYER_SLOTTYPE_REQUEST);
+	NETbeginEncode(NETnetQueue((!NetPlay.isHost) ? NetPlay.hostPlayer : player), NET_PLAYER_SLOTTYPE_REQUEST);
 	NETuint32_t(&player);
 	NETbool(&isSpectator);
 	NETend();
@@ -3212,8 +3213,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 	}
 
 	// Make sure neither is the host index, as this is *not* supported for the host
-	if (playerIndexA == NET_HOST_ONLY || playerIndexB == NET_HOST_ONLY
-		|| playerIndexA == NetPlay.hostPlayer || playerIndexB == NetPlay.hostPlayer)
+	if (playerIndexA == NetPlay.hostPlayer || playerIndexB == NetPlay.hostPlayer)
 	{
 		debug(LOG_ERROR, "Cannot swap host slot! (players: %" PRIu32 ", %" PRIu32 ")!", playerIndexA, playerIndexB);
 		return SwapPlayerIndexesResult::FAILURE;
@@ -3250,7 +3250,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		bool selectedPlayerWasSpectator = wasSpectator[(playerIndexA == selectedPlayer) ? 0 : 1];
 
 		// Send an acknowledgement that we received and are processing the player index swap for us
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_SWAP_INDEX_ACK);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_PLAYER_SWAP_INDEX_ACK);
 		NETuint32_t(&oldPlayerIndex);
 		NETuint32_t(&newPlayerIndex);
 		NETend();
@@ -5619,7 +5619,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	}
 
 	const bool bIsAutoHostOrAutoGame = getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost;
-	if (!hostCampaign((char*)game.name, (char*)sPlayer, bIsAutoHostOrAutoGame))
+	if (!hostCampaign((char*)game.name, (char*)sPlayer, spectatorHost, bIsAutoHostOrAutoGame))
 	{
 		displayRoomSystemMessage(_("Sorry! Failed to host the game."));
 		return false;
@@ -6031,7 +6031,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case NET_FILE_PAYLOAD:
 			{
-				if (NET_HOST_ONLY != queue.index)
+				if (NetPlay.hostPlayer != queue.index)
 				{
 					HandleBadParam("NET_FILE_PAYLOAD given incorrect params.", 255, queue.index);
 					ignoredMessage = true;
@@ -6160,7 +6160,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 					break;
 				}
 
-				if (whosResponsible(player_id) != queue.index && queue.index != NET_HOST_ONLY)
+				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
 				{
 					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
 					break;
@@ -6202,7 +6202,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			cancelOrDismissNotificationIfTag([](const std::string& tag) {
 				return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
 			});
-			if (NET_HOST_ONLY != queue.index)
+			if (NetPlay.hostPlayer != queue.index)
 			{
 				HandleBadParam("NET_FIREUP given incorrect params.", 255, queue.index);
 				break;
@@ -6256,7 +6256,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 					playerVotes[player_id] = 0;
 				}
 
-				if (player_id == NET_HOST_ONLY)
+				if (player_id == NetPlay.hostPlayer)
 				{
 					char buf[250] = {'\0'};
 
@@ -6697,6 +6697,7 @@ void WzMultiplayerOptionsTitleUI::start()
 		initKnownPlayers();
 		resetPlayerConfiguration(true);
 		memset(&locked, 0, sizeof(locked));
+		spectatorHost = false;
 		loadMapChallengeAndPlayerSettings(true);
 		game.isMapMod = false;
 		game.isRandom = false;
@@ -6982,7 +6983,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			cache.fullMainText = name;
 		}
 		std::string subText;
-		if (j == NET_HOST_ONLY && NetPlay.bComms)
+		if (j == NetPlay.hostPlayer && NetPlay.bComms)
 		{
 			subText += _("HOST");
 		}

@@ -212,7 +212,7 @@ void recvMultiStats(NETQUEUE queue)
 	}
 
 
-	if (playerIndex != queue.index && queue.index != NET_HOST_ONLY)
+	if (playerIndex != queue.index && queue.index != NetPlay.hostPlayer)
 	{
 		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
 		NETend();

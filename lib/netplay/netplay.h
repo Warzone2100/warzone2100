@@ -425,7 +425,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool asSpectator = false); // join game given with playername
-bool NEThostGame(const char *SessionName, const char *PlayerName,// host a game
+bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost, // host a game
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.

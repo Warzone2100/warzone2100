@@ -897,7 +897,7 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 		ASSERT_OR_RETURN(false, index == selectedPlayer, "Clients can only change their own name!");
 		uint8_t player = static_cast<uint8_t>(index);
 		WzString newNameStr = NetPlay.players[index].name;
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYERNAME_CHANGEREQUEST);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_PLAYERNAME_CHANGEREQUEST);
 		NETuint8_t(&player);
 		NETwzstring(newNameStr);
 		NETend();
@@ -1707,7 +1707,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 	{
 		// We are a client and can't send the data directly, ask the host to send the data to the player.
 		uint8_t sender = selectedPlayer;
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_SEND_TO_PLAYER);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_SEND_TO_PLAYER);
 		NETuint8_t(&sender);
 		NETuint8_t(&player);
 		NETnetMessage(&message);
@@ -1767,7 +1767,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress, "Only supported in lobby, before game starts");
 	ASSERT_OR_RETURN(false, playerIndexA < MAX_CONNECTED_PLAYERS, "playerIndexA out of bound: %" PRIu32 "", playerIndexA);
 	ASSERT_OR_RETURN(false, playerIndexB < MAX_CONNECTED_PLAYERS, "playerIndexB out of bound: %" PRIu32 "", playerIndexB);
-	ASSERT_OR_RETURN(false, playerIndexA != NET_HOST_ONLY && playerIndexA != NetPlay.hostPlayer && playerIndexB != NET_HOST_ONLY && playerIndexB != NetPlay.hostPlayer, "Can't swap host player index: (index A: %" PRIu32 ", index B: %" PRIu32 ")", playerIndexA, playerIndexB);
+	ASSERT_OR_RETURN(false, playerIndexA != NetPlay.hostPlayer && playerIndexA != NetPlay.hostPlayer && playerIndexB != NetPlay.hostPlayer && playerIndexB != NetPlay.hostPlayer, "Can't swap host player index: (index A: %" PRIu32 ", index B: %" PRIu32 ")", playerIndexA, playerIndexB);
 
 	// Send the NET_SWAPPING_PLAYER_INDEX message *first*
 	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_SWAP_INDEX);
@@ -2179,7 +2179,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				      || message->type == NET_PLAYER_JOINED
 					  || message->type == NET_PLAYER_INFO
 					  || message->type == NET_FILE_PAYLOAD
-					  || message->type == NET_PLAYER_SWAP_INDEX) && sender != NET_HOST_ONLY)
+					  || message->type == NET_PLAYER_SWAP_INDEX) && sender != NetPlay.hostPlayer)
 				    ||
 				    ((message->type == NET_HOST_DROPPED
 				      || message->type == NET_FILE_REQUESTED
@@ -2192,9 +2192,9 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					  || message->type == NET_DATA_CHECK
 				      || message->type == NET_JOIN
 				      || message->type == NET_PLAYERNAME_CHANGEREQUEST
-					  || message->type == NET_PLAYER_SWAP_INDEX_ACK) && receiver != NET_HOST_ONLY)
+					  || message->type == NET_PLAYER_SWAP_INDEX_ACK) && receiver != NetPlay.hostPlayer)
 					||
-					(message->type == NET_PLAYER_SLOTTYPE_REQUEST && (sender != NET_HOST_ONLY && receiver != NET_HOST_ONLY)))
+					(message->type == NET_PLAYER_SLOTTYPE_REQUEST && (sender != NetPlay.hostPlayer && receiver != NetPlay.hostPlayer)))
 				{
 					char msg[256] = {'\0'};
 
@@ -2253,7 +2253,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETuint8_t(&player);
 			NETuint32_t(&num);
 			bool isSentByCorrectClient = responsibleFor(playerQueue.index, player);
-			isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
+			isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NetPlay.hostPlayer && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
 			if (!isSentByCorrectClient || player >= MAX_CONNECTED_PLAYERS)
 			{
 				break;
@@ -2342,7 +2342,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 			NETuint32_t(&indexLen);
-			if (indexLen > MAX_CONNECTED_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
+			if (indexLen > MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer))
 			{
 				debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated: %u", indexLen);
 				NETend();
@@ -2488,7 +2488,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			NETbeginDecode(playerQueue, NET_GAME_FLAGS);
 
-			if (playerQueue.index != NET_HOST_ONLY)
+			if (playerQueue.index != NetPlay.hostPlayer)
 			{
 				debug(LOG_ERROR, "NET_GAME_FLAGS sent by wrong player: %" PRIu32 "", playerQueue.index);
 				NETend();
@@ -2670,7 +2670,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 		uint8_t buffer[NET_BUFFER_SIZE];
 		size_t dataLen;
 
-		if (!NetPlay.isHost && current != NET_HOST_ONLY)
+		if (!NetPlay.isHost && current != NetPlay.hostPlayer)
 		{
 			continue;  // Don't have a socket open to this player.
 		}
@@ -2953,7 +2953,7 @@ int NETrecvFile(NETQUEUE queue)
 	auto file = std::find_if(NetPlay.wzFiles.begin(), NetPlay.wzFiles.end(), [&](WZFile const &file) { return file.hash == hash; });
 
 	auto sendCancelFileDownload = [](Sha256 &hash) {
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_CANCELLED);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_FILE_CANCELLED);
 		NETbin(hash.bytes, hash.Bytes);
 		NETend();
 	};
@@ -3829,6 +3829,7 @@ static void NETallowJoining()
 
 					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 					NETuint8_t(&index);
+					NETuint32_t(&NetPlay.hostPlayer);
 					NETend();
 
 					// First send info about players to newcomer.
@@ -3910,7 +3911,7 @@ void NETloadBanList() {
 	return;
 }
 
-bool NEThostGame(const char *SessionName, const char *PlayerName,
+bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost,
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four,
                  UDWORD plyrs)	// # of players.
 {
@@ -3925,15 +3926,17 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	}
 	if (!NetPlay.bComms)
 	{
+		ASSERT(!spectatorHost, "spectatorHost flag will be ignored");
 		selectedPlayer			= 0;
 		NetPlay.isHost			= true;
+		NetPlay.hostPlayer 		= selectedPlayer;
 		NetPlay.players[0].allocated	= true;
 		NetPlay.playercount		= 1;
 		debug(LOG_NET, "Hosting but no comms");
 		// Now switch player color of the host to what they normally use for MP games
 		if (war_getMPcolour() >= 0)
 		{
-			changeColour(NET_HOST_ONLY, war_getMPcolour(), true);
+			changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
 		}
 		return true;
 	}
@@ -3981,7 +3984,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
 	//gamestruct.desc.guidApplication = GAME_GUID;
 	memset(gamestruct.desc.host, 0, sizeof(gamestruct.desc.host));
-	gamestruct.desc.dwCurrentPlayers = 1;
+	gamestruct.desc.dwCurrentPlayers = (!spectatorHost) ? 1 : 0;
 	gamestruct.desc.dwMaxPlayers = plyrs;
 	gamestruct.desc.dwFlags = 0;
 	gamestruct.desc.dwUserFlags[0] = gameType;
@@ -4012,22 +4015,26 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 #endif
 	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
 
-	optional<uint32_t> newHostPlayerIdx = NET_CreatePlayer(PlayerName, (getHostLaunch() == HostLaunch::Autohost), nullopt);
-	ASSERT_OR_RETURN(false, newHostPlayerIdx.has_value() && newHostPlayerIdx.value() < MAX_PLAYERS, "Failed to create player");
+	if (spectatorHost)
+	{
+		// open one spectator slot for the host
+		ASSERT(_NET_openNewSpectatorSlot_internal(false).has_value(), "Unable to open spectator slot for host??");
+	}
+	optional<uint32_t> newHostPlayerIdx = NET_CreatePlayer(PlayerName, (getHostLaunch() == HostLaunch::Autohost), spectatorHost);
+	ASSERT_OR_RETURN(false, newHostPlayerIdx.has_value() && (newHostPlayerIdx.value() < MAX_PLAYERS || (spectatorHost && newHostPlayerIdx.value() < MAX_CONNECTED_PLAYERS)), "Failed to create player");
 	selectedPlayer = newHostPlayerIdx.value();
 	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;
 	NetPlay.isHostAlive = true;
 	NetPlay.HaveUpgrade = false;
-	NetPlay.hostPlayer	= NET_HOST_ONLY;
-	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
+	NetPlay.hostPlayer	= selectedPlayer;
 
 	MultiPlayerJoin(selectedPlayer);
 
 	// Now switch player color of the host to what they normally use for SP games
 	if (war_getMPcolour() >= 0)
 	{
-		changeColour(NET_HOST_ONLY, war_getMPcolour(), true);
+		changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
 	}
 
 	allow_joining = true;
@@ -4411,11 +4418,25 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool a
 			// :)
 			uint8_t index;
 
+			NetPlay.hostPlayer = MAX_CONNECTED_PLAYERS + 1; // invalid host index
+
 			NETbeginDecode(queue, NET_ACCEPTED);
 			// Retrieve the player ID the game host arranged for us
 			NETuint8_t(&index);
+			NETuint32_t(&NetPlay.hostPlayer); // and the host player idx
 			NETend();
 			NETpop(queue);
+
+			if (NetPlay.hostPlayer >= MAX_CONNECTED_PLAYERS)
+			{
+				debug(LOG_ERROR, "Bad host player number (%" PRIu32 ") received from host!", NetPlay.hostPlayer);
+				return false;
+			}
+
+			if (NetPlay.hostPlayer != NET_HOST_ONLY)
+			{
+				NETswapQueues(NETnetQueue(NET_HOST_ONLY), NETnetQueue(NetPlay.hostPlayer));
+			}
 
 			selectedPlayer = index;
 			realSelectedPlayer = selectedPlayer;
