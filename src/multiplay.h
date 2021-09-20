@@ -254,7 +254,7 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 bool multiShutdown();
 bool sendLeavingMsg();
 
-bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetAIs);
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs);
 struct JoinConnectionDescription
 {
 public:

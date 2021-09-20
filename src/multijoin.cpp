@@ -430,7 +430,7 @@ bool sendDataCheck()
 {
 	int i = 0;
 
-	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_DATA_CHECK);		// only need to send to HOST
+	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK);		// only need to send to HOST
 	for (i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&DataHash[i]);

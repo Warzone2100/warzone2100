@@ -260,7 +260,7 @@ bool multiPlayerLoop()
 				int index;
 				for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 				{
-					if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NET_HOST_ONLY)
+					if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NetPlay.hostPlayer)
 					{
 						char msg[256] = {'\0'};
 
@@ -512,7 +512,7 @@ int whosResponsible(int player)
 	}
 	else
 	{
-		return NET_HOST_ONLY;	// host responsible for all AIs
+		return NetPlay.hostPlayer;	// host responsible for all AIs
 	}
 }
 
@@ -900,7 +900,7 @@ bool recvMessage()
 				}
 				NETend();
 
-				if (whosResponsible(player_id) != queue.index && queue.index != NET_HOST_ONLY)
+				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
 				{
 					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
 					break;
@@ -955,7 +955,7 @@ bool recvMessage()
 				NETenum(&KICK_TYPE);
 				NETend();
 
-				if (player_id == NET_HOST_ONLY)
+				if (player_id == NetPlay.hostPlayer)
 				{
 					char buf[250] = {'\0'};
 
