@@ -5192,6 +5192,9 @@ static void loadMapChallengeSettings(WzConfig& ini)
 			sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 			game.techLevel = ini.value("techLevel", game.techLevel).toInt();
 
+			// Allow making the host a spectator (for MP games)
+			spectatorHost = ini.value("spectatorHost", false).toBool();
+
 			// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
 			//             Keeping it around in case mods use it.
 			locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
