@@ -36,7 +36,6 @@
 		],
 		"thermal": 5,
 		"type": "REARM PAD",
-		"userLimits": [0, 50, 99],
 		"width": 1
 	},
 	"bbaatow": {
@@ -79,7 +78,6 @@
 		],
 		"thermal": 5,
 		"type": "VTOL FACTORY",
-		"userLimits": [0, 30, 30],
 		"width": 2
 	},
 	"ScavRepairCentre": {
@@ -102,7 +100,6 @@
 		],
 		"thermal": 5,
 		"type": "REPAIR FACILITY",
-		"userLimits": [0, 10, 20],
 		"width": 1
 	},
 	"A0BaBaBunker": {
