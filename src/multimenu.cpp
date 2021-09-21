@@ -911,9 +911,9 @@ private:
 	{
 		for (auto &playerWidget: playersWidgets)
 		{
-			const auto color = GetPlayerTextColor((selectedPlayer < MAX_PLAYERS) ? alliances[selectedPlayer][playerWidget.player] : 0, playerWidget.player);
+			const auto color = GetPlayerTextColor((selectedPlayer < MAX_PLAYERS && playerWidget.player < MAX_PLAYERS) ? alliances[selectedPlayer][playerWidget.player] : 0, playerWidget.player);
 			const bool isHuman = isHumanPlayer(playerWidget.player);
-			const bool isAlly = (selectedPlayer < MAX_PLAYERS) && aiCheckAlliances(selectedPlayer, playerWidget.player);
+			const bool isAlly = (selectedPlayer < MAX_PLAYERS && playerWidget.player < MAX_PLAYERS) && aiCheckAlliances(selectedPlayer, playerWidget.player);
 			const bool isSelectedPlayer = playerWidget.player == selectedPlayer;
 
 			playerWidget.name->setFontColour(color);
@@ -921,6 +921,11 @@ private:
 			playerWidget.kills->setFontColour(color);
 			playerWidget.units->setFontColour(color);
 			playerWidget.lastColumn->setFontColour(color);
+
+			if (playerWidget.player >= MAX_PLAYERS)
+			{
+				continue;
+			}
 
 			char scoreString[128];
 			char killsString[20];

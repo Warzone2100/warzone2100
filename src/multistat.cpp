@@ -378,29 +378,31 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 // update players damage stats.
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
+	if (defender == PLAYER_FEATURE)
+	{
+		// damaging features like skyscrapers does not count
+		return;
+	}
+
 	ASSERT_OR_RETURN(, attacker < MAX_PLAYERS, "invalid attacker: %" PRIu32 "", attacker);
 	ASSERT_OR_RETURN(, defender < MAX_PLAYERS, "invalid defender: %" PRIu32 "", defender);
 
-	// damaging features like skyscrapers does not count
-	if (defender != PLAYER_FEATURE)
+	if (NetPlay.bComms)
 	{
-		if (NetPlay.bComms)
+		// killing and getting killed by scavengers does not influence scores in MP games
+		if (attacker != scavengerSlot() && defender != scavengerSlot())
 		{
-			// killing and getting killed by scavengers does not influence scores in MP games
-			if (attacker != scavengerSlot() && defender != scavengerSlot())
-			{
-				// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-				playerStats[attacker].totalScore  += 2 * inflicted;
-				playerStats[attacker].recentScore += 2 * inflicted;
-				playerStats[defender].totalScore  -= inflicted;
-				playerStats[defender].recentScore -= inflicted;
-			}
+			// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+			playerStats[attacker].totalScore  += 2 * inflicted;
+			playerStats[attacker].recentScore += 2 * inflicted;
+			playerStats[defender].totalScore  -= inflicted;
+			playerStats[defender].recentScore -= inflicted;
 		}
-		else
-		{
-			ingame.skScores[attacker][0] += 2 * inflicted;  // increment skirmish players rough score.
-			ingame.skScores[defender][0] -= inflicted;  // increment skirmish players rough score.
-		}
+	}
+	else
+	{
+		ingame.skScores[attacker][0] += 2 * inflicted;  // increment skirmish players rough score.
+		ingame.skScores[defender][0] -= inflicted;  // increment skirmish players rough score.
 	}
 }
 

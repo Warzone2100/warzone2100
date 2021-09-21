@@ -5331,7 +5331,7 @@ static void loadMapPlayerSettings(WzConfig& ini)
 			havePosition |= PlayerMask(1) << NetPlay.players[i].position;
 			if (havePosition == old)
 			{
-				ASSERT(false, "Duplicate position %d", NetPlay.players[i].position);
+				ASSERT(false, "Duplicate position %d at index: %d", NetPlay.players[i].position, i);
 				NetPlay.players[i].position = MAX_PLAYERS;
 			}
 		}
