@@ -3004,7 +3004,9 @@
 		"msgName": "RES_ST_VF",
 		"name": "VTOL Factory",
 		"requiredResearch": [
-			"R-Vehicle-Prop-VTOL"
+			"R-Struc-Factory-Upgrade01",
+			"R-Vehicle-Prop-Hover",
+			"R-Vehicle-Engine03"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -3019,7 +3021,7 @@
 		"msgName": "RES_ST_VP",
 		"name": "VTOL Rearming Pad",
 		"requiredResearch": [
-			"R-Struc-VTOLFactory"
+			"R-Vehicle-Prop-VTOL"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -4598,9 +4600,7 @@
 		"msgName": "RES_V_P_V1",
 		"name": "VTOL Propulsion",
 		"requiredResearch": [
-			"R-Struc-Factory-Upgrade01",
-			"R-Vehicle-Prop-Hover",
-			"R-Vehicle-Engine03"
+			"R-Struc-VTOLFactory"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
