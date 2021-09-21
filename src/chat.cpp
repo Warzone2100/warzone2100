@@ -35,19 +35,18 @@ bool InGameChatMessage::isGlobal() const
 
 bool InGameChatMessage::shouldReceive(uint32_t playerIndex) const
 {
-	ASSERT_OR_RETURN(false, playerIndex < MAX_PLAYERS, "Invalid player index: %" PRIu32 "", playerIndex);
 	if ((playerIndex >= game.maxPlayers) && ((playerIndex >= NetPlay.players.size()) || (!NetPlay.players[playerIndex].allocated)))
 	{
 		return false;
 	}
-	return isGlobal() || toPlayers.find(playerIndex) != toPlayers.end() || (toAllies && aiCheckAlliances(sender, playerIndex));
+	return isGlobal() || toPlayers.find(playerIndex) != toPlayers.end() || (toAllies && sender < MAX_PLAYERS && playerIndex < MAX_PLAYERS && aiCheckAlliances(sender, playerIndex));
 }
 
 std::vector<uint32_t> InGameChatMessage::getReceivers() const
 {
 	std::vector<uint32_t> receivers;
 
-	for (auto playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+	for (auto playerIndex = 0; playerIndex < MAX_CONNECTED_PLAYERS; playerIndex++)
 	{
 		if (shouldReceive(playerIndex) && openchannels[playerIndex])
 		{
@@ -122,7 +121,7 @@ void InGameChatMessage::sendToAiPlayer(uint32_t receiver)
 
 	uint32_t responsiblePlayer = whosResponsible(receiver);
 
-	if (responsiblePlayer >= MAX_PLAYERS)
+	if (responsiblePlayer >= MAX_PLAYERS && responsiblePlayer != NetPlay.hostPlayer)
 	{
 		debug(LOG_ERROR, "sendToAiPlayer() - responsiblePlayer >= MAX_PLAYERS");
 		return;
@@ -211,6 +210,12 @@ void InGameChatMessage::send()
 	else
 	{
 		sendToHumanPlayers();
+		if (NetPlay.isHost && NetPlay.players[selectedPlayer].isSpectator)
+		{
+			// spectator hosts do get to send messages visible to all players,
+			// but not AI / scripts
+			return;
+		}
 		sendToAiPlayers();
 		triggerEventChat(sender, sender, text);
 	}
