@@ -3021,7 +3021,7 @@
 		"msgName": "RES_ST_VP",
 		"name": "VTOL Rearming Pad",
 		"requiredResearch": [
-			"R-Struc-VTOLFactory"
+			"R-Vehicle-Prop-VTOL"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
