@@ -1154,17 +1154,18 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_VTOLATTACK:
 		{
 			WEAPON_STATS *psWeapStats = nullptr;
-
+			const bool targetIsValid = validTarget(psDroid, psDroid->psActionTarget[0], 0);
 			//uses vtResult
 			if (psDroid->psActionTarget[0] != nullptr &&
-			    validTarget(psDroid, psDroid->psActionTarget[0], 0))
+			    targetIsValid)
 			{
 				//check if vtol that its armed
 				if ((vtolEmpty(psDroid)) ||
 				    (psDroid->psActionTarget[0] == nullptr) ||
 				    //check the target hasn't become one the same player ID - Electronic Warfare
 				    (electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
-				    !validTarget(psDroid, psDroid->psActionTarget[0], 0))
+					// Huh? !targetIsValid can't be true, we just checked for it
+				    !targetIsValid)
 				{
 					moveToRearm(psDroid);
 					break;
@@ -1209,7 +1210,8 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				actionAddVtolAttackRun(psDroid);
 			}
-			else
+			else if(psDroid->psActionTarget[0] != nullptr &&
+			    targetIsValid)
 			{
 				// if the vtol is close to the target, go around again
 				Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy();
