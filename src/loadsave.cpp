@@ -694,7 +694,7 @@ static WzString suggestSaveName(const char *saveGamePath)
 
 	WzString saveName = WzString(saveNamePartial).trimmed();
 	int similarSaveGames = 0;
-	WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [&saveName, &similarSaveGames](const char *dirName){
+	WZ_PHYSFS_enumerateFolders(saveGamePath, [&saveName, &similarSaveGames](const char *dirName){
 		if (WzString(dirName).startsWith(saveName))
 		{
 			similarSaveGames++;
