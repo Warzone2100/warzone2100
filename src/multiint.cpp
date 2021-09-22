@@ -1088,7 +1088,7 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 
 	changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(oldUI));
 
-	if (war_getMPcolour() >= 0)
+	if (selectedPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)
 	{
 		SendColourRequest(selectedPlayer, war_getMPcolour());
 	}
@@ -2721,6 +2721,11 @@ bool changeColour(unsigned player, int col, bool isHost)
 		return true;
 	}
 
+	if (player >= MAX_PLAYERS)
+	{
+		return true;
+	}
+
 	if (getPlayerColour(player) == col)
 	{
 		return true;  // Nothing to do.
@@ -3277,7 +3282,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		setMultiStats(selectedPlayer, playerStats, false);
 		setMultiStats(selectedPlayer, playerStats, true);
 
-		if (war_getMPcolour() >= 0)
+		if (selectedPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)
 		{
 			SendColourRequest(selectedPlayer, war_getMPcolour());
 		}
@@ -5365,6 +5370,7 @@ static int playersPerTeam()
 
 static void swapPlayerColours(uint32_t player1, uint32_t player2)
 {
+	ASSERT_OR_RETURN(, player1 < MAX_PLAYERS && player2 < MAX_PLAYERS, "player1 (%" PRIu32 ") & player2 (%" PRIu32 ") must be < MAX_PLAYERS", player1, player2);
 	auto player1Colour = getPlayerColour(player1);
 	setPlayerColour(player1, getPlayerColour(player2));
 	setPlayerColour(player2, player1Colour);
@@ -5415,12 +5421,15 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 
 	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
 
-	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+	if (selectedPlayer < MAX_PLAYERS)
 	{
-		if (getPlayerColour(playerIndex) == war_getMPcolour())
+		for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
 		{
-			swapPlayerColours(selectedPlayer, playerIndex);
-			break;
+			if (getPlayerColour(playerIndex) == war_getMPcolour())
+			{
+				swapPlayerColours(selectedPlayer, playerIndex);
+				break;
+			}
 		}
 	}
 }
