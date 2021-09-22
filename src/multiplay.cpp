@@ -122,7 +122,10 @@ bool multiplayerWinSequence(bool firstCall)
 	float		rotAmount;
 	STRUCTURE	*psStruct;
 
-	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "selectedPlayer is %" PRIu32 " - how did it win?!?", selectedPlayer);
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
 
 	if (firstCall)
 	{
