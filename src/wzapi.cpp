@@ -2405,6 +2405,11 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 		}
 		exit(0);
 	}
+	else if (headlessGameMode())
+	{
+		debug(LOG_WARNING, "Headless game completed successfully!");
+		exit(0); // FUTURE TODO: We could be nicer about this and trigger a *graceful* shutdown
+	}
 	return true;
 }
 
