@@ -217,7 +217,12 @@ bool recvPing(NETQUEUE queue)
 	// They are responding to one of our pings
 	else
 	{
-		if (!getMultiStats(sender).identity.empty() && !getMultiStats(sender).identity.verify(challengeResponse, pingChallenge, sizeof(pingChallenge)))
+		bool verifiedResponse = false;
+		if (!getMultiStats(sender).identity.empty())
+		{
+			verifiedResponse = getMultiStats(sender).identity.verify(challengeResponse, pingChallenge, sizeof(pingChallenge));
+		}
+		if (!verifiedResponse)
 		{
 			// Either bad signature, or we sent more than one ping packet and this response is to an older one than the latest.
 			debug(LOG_NEVER, "Bad and/or old NET_PING packet, alleged sender is %d", (int)sender);
@@ -226,6 +231,9 @@ bool recvPing(NETQUEUE queue)
 
 		// Work out how long it took them to respond
 		ingame.PingTimes[sender] = (realTime - PingSend[sender]) / 2;
+
+		// Record that they've verified the identity
+		ingame.VerifiedIdentity[sender] = true;
 
 		// Note that we have received it
 		PingSend[sender] = 0;

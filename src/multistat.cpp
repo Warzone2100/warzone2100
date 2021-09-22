@@ -248,6 +248,7 @@ void recvMultiStats(NETQUEUE queue)
 		if (identity != prevIdentity)
 		{
 			ingame.PingTimes[playerIndex] = PING_LIMIT;
+			ingame.VerifiedIdentity[playerIndex] = false;
 		}
 	}
 	NETend();
