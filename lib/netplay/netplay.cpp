@@ -4032,7 +4032,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	MultiPlayerJoin(selectedPlayer);
 
 	// Now switch player color of the host to what they normally use for SP games
-	if (war_getMPcolour() >= 0)
+	if (NetPlay.hostPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)
 	{
 		changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
 	}
