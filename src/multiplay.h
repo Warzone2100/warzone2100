@@ -94,6 +94,7 @@ enum class InGameSide : bool {
 struct MULTIPLAYERINGAME
 {
 	UDWORD				PingTimes[MAX_CONNECTED_PLAYERS];				// store for pings.
+	bool				VerifiedIdentity[MAX_CONNECTED_PLAYERS];		// if the multistats identity has been verified.
 	bool				localOptionsReceived;							// used to show if we have game options yet..
 	bool				localJoiningInProgress;							// used before we know our player number.
 	bool				JoiningInProgress[MAX_CONNECTED_PLAYERS];

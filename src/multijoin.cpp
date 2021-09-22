@@ -506,6 +506,7 @@ bool recvDataCheck(NETQUEUE queue)
 void setupNewPlayer(UDWORD player)
 {
 	ingame.PingTimes[player] = 0;					// Reset ping time
+	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
 
