@@ -283,6 +283,9 @@ bool multiGameShutdown();
 
 // syncing.
 bool sendScoreCheck();							//score check only(frontend)
+void multiSyncResetAllChallenges();
+void multiSyncResetPlayerChallenge(uint32_t playerIdx);
+void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB);
 bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin

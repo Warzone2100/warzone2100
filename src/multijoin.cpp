@@ -334,6 +334,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	if (NetPlay.isHost)
 	{
 		multiClearHostRequestMoveToPlayer(playerIndex);
+		multiSyncResetPlayerChallenge(playerIndex);
 	}
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
@@ -509,6 +510,7 @@ void setupNewPlayer(UDWORD player)
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
+	multiSyncResetPlayerChallenge(player);
 
 	resetMultiVisibility(player);						// set visibility flags.
 
