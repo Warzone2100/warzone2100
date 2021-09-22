@@ -3248,6 +3248,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 			playerVotes[playerIndex] = 0;
 		}
 	}
+	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 
 	if (playerIndexA == selectedPlayer || playerIndexB == selectedPlayer)
 	{
@@ -5635,6 +5636,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 		ingame.PingTimes[i] = 0;
 		ingame.VerifiedIdentity[i] = false;
 	}
+	multiSyncResetAllChallenges();
 
 	const bool bIsAutoHostOrAutoGame = getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost;
 	if (!hostCampaign((char*)game.name, (char*)sPlayer, spectatorHost, bIsAutoHostOrAutoGame))

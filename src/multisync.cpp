@@ -38,6 +38,11 @@
 #include "multistat.h"
 #include "multirecv.h"
 
+#include <array>
+
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
@@ -48,7 +53,9 @@ static UDWORD averagePing();
 #define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
 
 static UDWORD				PingSend[MAX_CONNECTED_PLAYERS];	//stores the time the ping was called.
-static uint8_t pingChallenge[8];                                // Random data sent with the last ping.
+#define PING_CHALLENGE_BYTES 8
+typedef std::array<uint8_t, PING_CHALLENGE_BYTES> PingChallengeBytes;
+static std::array<optional<PingChallengeBytes>, MAX_CONNECTED_PLAYERS> pingChallenges;  // Random data sent with the last ping.
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -96,11 +103,38 @@ static UDWORD averagePing()
 	return total / MAX(count, 1);
 }
 
+void multiSyncResetAllChallenges()
+{
+	for (auto& challenge : pingChallenges)
+	{
+		challenge.reset();
+	}
+}
+
+void multiSyncResetPlayerChallenge(uint32_t playerIdx)
+{
+	if (!NetPlay.isHost) { return; }
+	pingChallenges[playerIdx].reset();
+}
+
+void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB)
+{
+	if (!NetPlay.isHost) { return; }
+	std::swap(pingChallenges[playerIndexA], pingChallenges[playerIndexB]);
+}
+
+static inline PingChallengeBytes generatePingChallenge(uint8_t playerIdx)
+{
+	uint64_t pingChallengei = (uint64_t)rand() << 32 | rand();
+	PingChallengeBytes bytes;
+	memcpy(bytes.data(), &pingChallengei, PING_CHALLENGE_BYTES);
+	return bytes;
+}
+
 bool sendPing()
 {
 	bool			isNew = true;
 	uint8_t			player = selectedPlayer;
-	int				i;
 	static UDWORD	lastPing = 0;	// Last time we sent a ping
 	static UDWORD	lastav = 0;		// Last time we updated average
 
@@ -137,7 +171,7 @@ bool sendPing()
 	 * we should re-enumerate the players.
 	 */
 
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		if (isHumanPlayer(i)
 		    && PingSend[i]
@@ -155,22 +189,51 @@ bool sendPing()
 		}
 	}
 
-	uint64_t pingChallengei = (uint64_t)rand() << 32 | rand();
-	memcpy(pingChallenge, &pingChallengei, sizeof(pingChallenge));
-
-	NETbeginEncode(NETbroadcastQueue(), NET_PING);
-	NETuint8_t(&player);
-	NETbool(&isNew);
-	NETbin(pingChallenge, sizeof(pingChallenge));
-	NETend();
-
-	// Note when we sent the ping
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	if (NetPlay.isHost)
 	{
-		PingSend[i] = realTime;
+		// Generate a unique ping challenge for each player, and send them individually
+		for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+		{
+			if (isHumanPlayer(i)
+				&& i != selectedPlayer)
+			{
+				pingChallenges[i] = generatePingChallenge(i);
+
+				NETbeginEncode(NETnetQueue(i), NET_PING);
+				NETuint8_t(&player);
+				NETbool(&isNew);
+				NETbin(pingChallenges[i].value().data(), PING_CHALLENGE_BYTES);
+				NETend();
+
+				// Note when we sent the ping
+				PingSend[i] = realTime;
+			}
+		}
+	}
+	else
+	{
+		// Just generate and broadcast the same ping challenge to all other players
+		pingChallenges[0] = generatePingChallenge(0);
+
+		NETbeginEncode(NETbroadcastQueue(), NET_PING);
+		NETuint8_t(&player);
+		NETbool(&isNew);
+		NETbin(pingChallenges[0].value().data(), PING_CHALLENGE_BYTES);
+		NETend();
+
+		// Note when we sent the ping
+		for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+		{
+			PingSend[i] = realTime;
+		}
 	}
 
 	return true;
+}
+
+inline optional<PingChallengeBytes>& expectedPingChallengeBytes(uint8_t playerIdx)
+{
+	return pingChallenges[(NetPlay.isHost) ? playerIdx : 0];
 }
 
 // accept and process incoming ping messages.
@@ -178,7 +241,7 @@ bool recvPing(NETQUEUE queue)
 {
 	bool	isNew = false;
 	uint8_t	sender, us = selectedPlayer;
-	uint8_t challenge[sizeof(pingChallenge)];
+	uint8_t challenge[PING_CHALLENGE_BYTES];
 	EcKey::Sig challengeResponse;
 
 	NETbeginDecode(queue, NET_PING);
@@ -186,7 +249,7 @@ bool recvPing(NETQUEUE queue)
 	NETbool(&isNew);
 	if (isNew)
 	{
-		NETbin(challenge, sizeof(pingChallenge));
+		NETbin(challenge, PING_CHALLENGE_BYTES);
 	}
 	else
 	{
@@ -203,7 +266,7 @@ bool recvPing(NETQUEUE queue)
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
-		challengeResponse = getMultiStats(us).identity.sign(&challenge, sizeof(pingChallenge));
+		challengeResponse = getMultiStats(us).identity.sign(&challenge, PING_CHALLENGE_BYTES);
 
 		NETbeginEncode(NETnetQueue(sender), NET_PING);
 		// We are responding to a new ping
@@ -217,10 +280,17 @@ bool recvPing(NETQUEUE queue)
 	// They are responding to one of our pings
 	else
 	{
+		auto& expectedPingChallenge = expectedPingChallengeBytes(sender);
+		if (!expectedPingChallenge.has_value())
+		{
+			// Someone is sending a NET_PING but we do not have a valid challenge for them... ignore
+			return false;
+		}
+
 		bool verifiedResponse = false;
 		if (!getMultiStats(sender).identity.empty())
 		{
-			verifiedResponse = getMultiStats(sender).identity.verify(challengeResponse, pingChallenge, sizeof(pingChallenge));
+			verifiedResponse = getMultiStats(sender).identity.verify(challengeResponse, expectedPingChallenge.value().data(), PING_CHALLENGE_BYTES);
 		}
 		if (!verifiedResponse)
 		{
@@ -237,6 +307,7 @@ bool recvPing(NETQUEUE queue)
 
 		// Note that we have received it
 		PingSend[sender] = 0;
+		multiSyncResetPlayerChallenge(sender);
 	}
 
 	return true;
