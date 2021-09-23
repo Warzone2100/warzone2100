@@ -4352,7 +4352,7 @@
 		"movement": "HOMING-DIRECT",
 		"muzzleGfx": "FXATMiss.PIE",
 		"name": "VTOL Sunburst AA",
-		"numAttackRuns": 2,
+		"numAttackRuns": 3,
 		"numExplosions": 1,
 		"numRounds": 6,
 		"radiusLife": 10,
