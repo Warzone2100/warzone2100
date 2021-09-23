@@ -7127,10 +7127,6 @@
 		"keyTopic": 1,
 		"msgName": "RES_W_HLAS",
 		"name": "Heavy Laser",
-		"redComponents": [
-			"Laser2PULSE-VTOL",
-			"Laser2PULSEMk1"
-		],
 		"requiredResearch": [
 			"R-Wpn-Energy-Damage01"
 		],
