@@ -229,12 +229,20 @@ public:
 	{
 		return dim.y();
 	}
+	virtual int parentRelativeXOffset(int coord) const
+	{
+		return x() + coord;
+	}
+	virtual int parentRelativeYOffset(int coord) const
+	{
+		return y() + coord;
+	}
 	int screenPosX() const
 	{
 		int screenX = x();
 		for (auto psParent = parent(); psParent != nullptr; psParent = psParent->parent())
 		{
-			screenX += psParent->x();
+			screenX = psParent->parentRelativeXOffset(screenX);
 		}
 		return screenX;
 	}
@@ -243,7 +251,7 @@ public:
 		int screenY = y();
 		for (auto psParent = parent(); psParent != nullptr; psParent = psParent->parent())
 		{
-			screenY += psParent->y();
+			screenY = psParent->parentRelativeYOffset(screenY);
 		}
 		return screenY;
 	}
