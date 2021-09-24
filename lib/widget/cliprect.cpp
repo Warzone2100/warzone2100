@@ -76,3 +76,13 @@ void ClipRectWidget::setLeftOffset(uint16_t value)
 {
 	offset.x = value;
 }
+
+int ClipRectWidget::parentRelativeXOffset(int coord) const
+{
+	return x() - offset.x + coord;
+}
+
+int ClipRectWidget::parentRelativeYOffset(int coord) const
+{
+	return y() - offset.y + coord;
+}
