@@ -52,7 +52,7 @@
 		"firePause": 81,
 		"flags": "AirOnly",
 		"flightGfx": "FXAALSHT.PIE",
-		"flightSpeed": 2850,
+		"flightSpeed": 2250,
 		"hitGfx": "FXAIREXP.PIE",
 		"hitpoints": 280,
 		"id": "AAGun2Mk1Quad",
@@ -81,7 +81,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "lrgcan.ogg",
-		"weight": 6000
+		"weight": 5000
 	},
 	"AAGunLaser": {
 		"buildPoints": 1000,
@@ -99,7 +99,7 @@
 		"hitpoints": 200,
 		"id": "AAGunLaser",
 		"lightWorld": 1,
-		"longRange": 2048,
+		"longRange": 2304,
 		"longHit": 80,
 		"maxElevation": 90,
 		"minElevation": -45,
@@ -117,13 +117,13 @@
 		"reloadTime": 10,
 		"rotate": 180,
 		"shortHit": 80,
-		"shortRange": 2048,
+		"shortRange": 2304,
 		"waterGfx": "FXMExp.PIE",
 		"weaponClass": "HEAT",
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "ENERGY",
 		"weaponWav": "plslsr.ogg",
-		"weight": 6000
+		"weight": 4000
 	},
 	"BJeepMG": {
 		"buildPoints": 16,
@@ -3066,7 +3066,7 @@
 		"flightGfx": "FXMflare.PIE",
 		"flightSpeed": 2250,
 		"hitGfx": "FXMExp.PIE",
-		"hitpoints": 10,
+		"hitpoints": 50,
 		"id": "Missile-HvySAM",
 		"lightWorld": 1,
 		"longRange": 2562,
@@ -3096,7 +3096,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "MISSILE",
 		"weaponWav": "rocket.ogg",
-		"weight": 4000
+		"weight": 800
 	},
 	"Missile-LtSAM": {
 		"buildPoints": 800,
@@ -3613,7 +3613,7 @@
 		"weight": 2000
 	},
 	"QuadRotAAGun": {
-		"buildPoints": 1200,
+		"buildPoints": 800,
 		"buildPower": 150,
 		"damage": 90,
 		"designable": 1,
@@ -3652,7 +3652,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "A-A GUN",
 		"weaponWav": "asltmg.ogg",
-		"weight": 6000
+		"weight": 4000
 	},
 	"RailGun1-VTOL": {
 		"buildPoints": 1000,
@@ -4325,7 +4325,7 @@
 	},
 	"Rocket-VTOL-Sunburst": {
 		"buildPoints": 500,
-		"buildPower": 150,
+		"buildPower": 200,
 		"damage": 120,
 		"designable": 1,
 		"effectSize": 100,
@@ -4352,7 +4352,7 @@
 		"movement": "HOMING-DIRECT",
 		"muzzleGfx": "FXATMiss.PIE",
 		"name": "VTOL Sunburst AA",
-		"numAttackRuns": 6,
+		"numAttackRuns": 3,
 		"numExplosions": 1,
 		"numRounds": 6,
 		"radiusLife": 10,
