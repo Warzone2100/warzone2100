@@ -183,6 +183,7 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+		NETuint64_t(&playerStats[playerIndex].recentPowerLost);
 
 		EcKey::Key identity;
 		if (!playerStats[playerIndex].identity.empty())
@@ -232,6 +233,7 @@ void recvMultiStats(NETQUEUE queue)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+		NETuint64_t(&playerStats[playerIndex].recentPowerLost);
 
 		EcKey::Key identity;
 		NETbytes(&identity);
@@ -342,6 +344,7 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	// reset recent scores
 	st->recentKills = 0;
 	st->recentScore = 0;
+	st->recentPowerLost = 0;
 
 	// clear any skirmish stats.
 	for (size_t size = 0; size < MAX_PLAYERS; size++)
@@ -437,6 +440,27 @@ void updateMultiStatsLoses()
 	++playerStats[selectedPlayer].losses;
 }
 
+static inline uint32_t calcObjectCost(const BASE_OBJECT *psObj)
+{
+	switch (psObj->type)
+	{
+		case OBJ_DROID:
+			return calcDroidPower((const DROID *)psObj);
+		case OBJ_STRUCTURE:
+		{
+			auto psStruct = static_cast<const STRUCTURE *>(psObj);
+			ASSERT_OR_RETURN(0, psStruct->pStructureType != nullptr, "pStructureType is null?");
+			return psStruct->pStructureType->powerToBuild;
+		}
+		case OBJ_FEATURE:
+			return 0;
+		default:
+			ASSERT(false, "No such supported object type: %d", static_cast<int>(psObj->type));
+			break;
+	}
+	return 0;
+}
+
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 {
@@ -450,6 +474,10 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 				// FIXME: Why in the world are we using two different structs for stats when we can use only one?
 				++playerStats[player].totalKills;
 				++playerStats[player].recentKills;
+				if (psKilled->player < MAX_PLAYERS)
+				{
+					playerStats[psKilled->player].recentPowerLost += static_cast<uint64_t>(calcObjectCost(psKilled));
+				}
 			}
 		}
 		else
@@ -700,6 +728,7 @@ inline void to_json(nlohmann::json& j, const PLAYERSTATS& p) {
 	j["totalScore"] = p.totalScore;
 	j["recentKills"] = p.recentKills;
 	j["recentScore"] = p.recentScore;
+	j["recentPowerLost"] = p.recentPowerLost;
 	j["identity"] = p.identity;
 }
 
@@ -711,6 +740,7 @@ inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
 	k.totalScore = j.at("totalScore").get<uint32_t>();
 	k.recentKills = j.at("recentKills").get<uint32_t>();
 	k.recentScore = j.at("recentScore").get<uint32_t>();
+	k.recentPowerLost = j.at("recentPowerLost").get<uint64_t>();
 	k.identity = j.at("identity").get<EcKey>();
 }
 
