@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-09-20 00:27+0000\n"
-"PO-Revision-Date: 2021-09-20 11:38\n"
+"PO-Revision-Date: 2021-09-26 14:22\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -676,7 +676,7 @@ msgstr "Una volta che il rifugio è stato stabilito, ritorni alla Zona di Atterr
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "MISSIONE BASE BETA: sopravvivi ed evacua! Porta un camion"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -5515,7 +5515,7 @@ msgstr "Centro di Comando del Collective"
 #: data/mp/messages/strings/names.txt:726
 #: po/custom/fromJson.txt:3891
 msgid "Missile Silo"
-msgstr "Silo Missilistico"
+msgstr "Silo missilistico"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-Mcannon.name
@@ -5608,11 +5608,11 @@ msgstr ""
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Giocare passivamente porterà alla sconfitta. Azioni che vengono considerate:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- costruzione di unità - completamento della ricerca - costruzione di strutture (fabbriche, centrali elettriche, laboratori, moduli e derrick petroliferi) - infliggere danni"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1451
@@ -6077,14 +6077,14 @@ msgstr "IA adattiva con personalità multiple"
 #. data/mp/stats/research.json: $.R-Struc-Materials08.name
 #: po/custom/fromJson.txt:173
 msgid "Advanced Base Structure Materials Mk2"
-msgstr "Materiali da Costruzione Avanzati Mk2"
+msgstr "Materiali da costruzione avanzati Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials09.name
 #. data/mp/stats/research.json: $.R-Struc-Materials09.name
 #: po/custom/fromJson.txt:177
 msgid "Advanced Base Structure Materials Mk3"
-msgstr "Materiali da Costruzione Avanzati Mk3"
+msgstr "Materiali da costruzione avanzati Mk3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT7.text[1]
@@ -8170,7 +8170,7 @@ msgstr "Copertura difensiva: Bassa"
 #. data/mp/stats/structure.json: $.A0ADemolishStructure.name
 #: po/custom/fromJson.txt:1793
 msgid "Demolish Structure"
-msgstr "Demolisci Struttura"
+msgstr "Demolisci struttura"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Metals05.name
@@ -16003,15 +16003,15 @@ msgstr ""
 
 #: src/hci.cpp:703
 msgid "Pause"
-msgstr ""
+msgstr "Metti in pausa"
 
 #: src/hci.cpp:718
 msgid "Resume"
-msgstr ""
+msgstr "Riprendi"
 
 #: src/hci.cpp:735
 msgid "Fast-Forward"
-msgstr ""
+msgstr "Avanti Veloce"
 
 #: src/hci.cpp:1264
 #: src/loop.cpp:252
@@ -17151,7 +17151,7 @@ msgstr "Aggiornamento della Ricerca"
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "Obiettivi e aggiornamenti del Progetto"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
