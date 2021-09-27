@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-09-20 00:27+0000\n"
-"PO-Revision-Date: 2021-09-27 02:25\n"
+"PO-Revision-Date: 2021-09-27 14:42\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -164,7 +164,7 @@ msgstr "Stabilisci una base avanzata sull'altopiano e difendi il Nuovo Paradigma
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Costruisci strutture difensive fino a quando il Blip Obiettivo verde scompare."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -5604,7 +5604,7 @@ msgstr "Giocatore"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Sconfitto a causa della modalità di gioco inattiva o passiva."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -5785,7 +5785,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2048
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Invio del messaggio non riuscito - riprova"
 
 #: lib/netplay/netplay.cpp:2632
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
@@ -8211,7 +8211,7 @@ msgstr "Proiettili della mitragliatrice a uranio impoverito"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1819
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Progettato con un'attenzione alla ricerca"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -11851,7 +11851,7 @@ msgstr "Campagna originale"
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4377
 msgid "Original Skirmish"
-msgstr "Battaglia Originale"
+msgstr "Schermaglia originale"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -12413,7 +12413,7 @@ msgstr "Materiali da costruzione rinforzati"
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4733
 msgid "Repair Center Turret"
-msgstr "Torre Centro di Riparazione"
+msgstr "Torre Centro di riparazione"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12922,7 +12922,7 @@ msgstr "Generatore di corrente degli sciacalli"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5069
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Centro di riparazione degli Sciacalli"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -14985,7 +14985,7 @@ msgstr "Causa un crash per testare l'handler dei crash"
 
 #: src/clparse.cpp:357
 msgid "Load a saved skirmish game"
-msgstr "Carica una battaglia salvata"
+msgstr "Carica una schermaglia salvata"
 
 #: src/clparse.cpp:357
 #: src/clparse.cpp:358
@@ -15035,11 +15035,11 @@ msgstr "Collegati direttamente a IP/hostname"
 #: src/clparse.cpp:366
 #: src/clparse.cpp:367
 msgid "host"
-msgstr "ospita"
+msgstr "host"
 
 #: src/clparse.cpp:367
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "Connettiti direttamente a IP/hostname come spettatore"
 
 #: src/clparse.cpp:368
 msgid "Go directly to host screen"
@@ -15083,7 +15083,7 @@ msgstr "nome salvataggio"
 
 #: src/clparse.cpp:390
 msgid "Start skirmish game with given settings file"
-msgstr "Inizia battaglia con il file di impostazioni dato"
+msgstr "Inizia schermaglia con il file delle impostazioni dato"
 
 #: src/clparse.cpp:390
 msgid "test"
@@ -15489,7 +15489,7 @@ msgstr "Carica schermaglia"
 
 #: src/frontend.cpp:346
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Vedi replay della schermaglia"
 
 #: src/frontend.cpp:348
 msgid "SINGLE PLAYER"
@@ -15516,7 +15516,7 @@ msgstr "Carica una schermaglia salvata"
 
 #: src/frontend.cpp:519
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Carica replay della schermaglia"
 
 #: src/frontend.cpp:580
 msgid "MULTI PLAYER"
@@ -15532,7 +15532,7 @@ msgstr "Unisciti a una partita"
 
 #: src/frontend.cpp:584
 msgid "View Replay"
-msgstr ""
+msgstr "Vedi replay"
 
 #: src/frontend.cpp:589
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15540,7 +15540,7 @@ msgstr "La porta TCP 2100 deve essere aperta nel firewall o nel router per ospit
 
 #: src/frontend.cpp:634
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Carica replay multigiocatore"
 
 #: src/frontend.cpp:673
 #: src/multiint.cpp:1370
@@ -15999,7 +15999,7 @@ msgstr "Suggerimento: regolazione della scala del display"
 
 #: src/hci.cpp:688
 msgid "Replay"
-msgstr ""
+msgstr "Replay"
 
 #: src/hci.cpp:703
 msgid "Pause"
@@ -16130,7 +16130,7 @@ msgstr "ATTENZIONE: sei l'ospitante. Se abbandoni, la partita termina per tutti!
 #: src/ingameop.cpp:131
 #: src/ingameop.cpp:266
 msgid "Host Quit"
-msgstr "Ospitante uscito"
+msgstr "Host Uscito"
 
 #: src/ingameop.cpp:176
 #: src/ingameop.cpp:1051
@@ -16185,11 +16185,11 @@ msgstr "Indietro"
 
 #: src/ingameop.cpp:404
 msgid "Host has quit the game!"
-msgstr "L'ospitante ha abbandonato la partita!"
+msgstr "L'host ha abbandonato la partita!"
 
 #: src/ingameop.cpp:410
 msgid "The game can't continue without the host."
-msgstr "Il gioco non può continuare senza l'ospitante."
+msgstr "Il gioco non può continuare senza l'host."
 
 #: src/ingameop.cpp:416
 msgid "-->  QUIT  <--"
@@ -17000,7 +17000,7 @@ msgstr "Impossibile trovare il gioco nel server della lobby: "
 
 #: src/integrations/wzdiscordrpc.cpp:263
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr "Il gioco potrebbe già essere stato avviato, oppure l'ospitante potrebbe aver sciolto la lobby del gioco."
+msgstr "Il gioco potrebbe già essere stato avviato, oppure l'host potrebbe aver sciolto la lobby del gioco."
 
 #: src/integrations/wzdiscordrpc.cpp:266
 msgid "Failed to Find Game"
@@ -17722,7 +17722,7 @@ msgstr "Vota"
 
 #: src/multiint.cpp:1308
 msgid "Allow host to change map or randomize?"
-msgstr "Consenti all'ospitante di cambiare mappa o di renderla casuale?"
+msgstr "Consenti all'host di cambiare mappa o di renderla casuale?"
 
 #: src/multiint.cpp:1339
 msgid "Not enough votes to randomize or change the map."
@@ -17861,7 +17861,7 @@ msgstr "Lascia questo slot inutilizzato"
 
 #: src/multiint.cpp:1860
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Permetti agli spettatori di entrare in questo slot"
 
 #: src/multiint.cpp:1944
 msgid "Click to change to this slot"
@@ -17870,7 +17870,7 @@ msgstr "Fai clic per passare a questo slot"
 #: src/multiint.cpp:1971
 #, c-format
 msgid "Click to take player slot %<PRIu32>"
-msgstr ""
+msgstr "Fai clic per prendere lo slot del giocatore %d<PRIu32>"
 
 #: src/multiint.cpp:2008
 msgid "Click to swap player to this slot"
@@ -17884,7 +17884,7 @@ msgstr "Lo spettatore %s è passato tra i giocatori"
 
 #: src/multiint.cpp:2031
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "Impossibile scambiare con l'host"
 
 #: src/multiint.cpp:2268
 msgid "Team"
@@ -17903,13 +17903,13 @@ msgstr "Spettatore"
 #: src/multimenu.cpp:1277
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "L'ospitante ha espulso %s dalla partita!"
+msgstr "L'host ha espulso %s dalla partita!"
 
 #: src/multiint.cpp:2290
 #: src/multiint.cpp:4407
 #: src/multimenu.cpp:1281
 msgid "The host has kicked you from the game."
-msgstr "L'ospitante ti ha cacciato dal gioco."
+msgstr "L'host ti ha cacciato dal gioco."
 
 #: src/multiint.cpp:2326
 #, c-format
@@ -17919,7 +17919,7 @@ msgstr "Impossibile spostare %s tra gli spettatori"
 #: src/multiint.cpp:2331
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "L'host ha spostato %s tra gli spettatori!"
 
 #: src/multiint.cpp:2354
 msgid "Move to Spectators"
@@ -17945,7 +17945,7 @@ msgstr "Il giocatore %s vuole rimanere un giocatore"
 
 #: src/multiint.cpp:2998
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "L'host ha rifiutato di spostarti a giocatore"
 
 #: src/multiint.cpp:3002
 msgid "Unable to switch to Spectator"
@@ -17957,7 +17957,7 @@ msgstr "Vuoi essere uno spettatore?"
 
 #: src/multiint.cpp:3031
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "L'host di questo gioco vuole sapere se siete disposti a guardare?"
 
 #: src/multiint.cpp:3033
 msgid "You are currently a Player."
@@ -17973,7 +17973,7 @@ msgstr "Vuoi giocare?"
 
 #: src/multiint.cpp:3040
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "L'host di questo gioco vuole sapere se vorresti giocare?"
 
 #: src/multiint.cpp:3042
 msgid "You are currently a Spectator."
@@ -17999,7 +17999,7 @@ msgstr "Lo spettatore \"%s\" vorrebbe diventare un giocatore."
 
 #: src/multiint.cpp:3128
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "Tuttavia, attualmente non ci sono slot per giocatori aperti."
 
 #: src/multiint.cpp:3130
 msgid "Would you like to swap this Spectator with a Player?"
@@ -18007,7 +18007,7 @@ msgstr "Vorresti scambiare questo spettatore con un giocatore?"
 
 #: src/multiint.cpp:3131
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Sì, seleziona lo slot del giocatore"
 
 #: src/multiint.cpp:3414
 msgid "Joined:"
@@ -18024,7 +18024,7 @@ msgstr "Giocatori"
 
 #: src/multiint.cpp:3625
 msgid "Host Options"
-msgstr ""
+msgstr "Opzioni host"
 
 #: src/multiint.cpp:3906
 msgid "Enable Spectator Join"
@@ -18060,7 +18060,7 @@ msgstr "Fai clic per cambiare IA, e con il tasto destro per distribuire la scelt
 
 #: src/multiint.cpp:4230
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Fai clic per chiudere lo slot dello spettatore"
 
 #: src/multiint.cpp:4246
 msgid "Player ID: "
@@ -18108,7 +18108,7 @@ msgstr "Per i giocatori:"
 
 #: src/multiint.cpp:4527
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Scegli slot giocatore"
 
 #: src/multiint.cpp:4598
 msgid "PLAYERS"
@@ -18116,7 +18116,7 @@ msgstr "GIOCATORI"
 
 #: src/multiint.cpp:4702
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Aggiungi slot spettatore"
 
 #: src/multiint.cpp:4776
 msgid "Kicked from game"
@@ -18153,7 +18153,7 @@ msgstr "Questa è una mappa casuale, può variare la tua esperienza di gioco!"
 
 #: src/multiint.cpp:5969
 msgid "Host is Starting Game"
-msgstr "L'ospitante sta avviando la partita"
+msgstr "L'host sta avviando la partita"
 
 #: src/multiint.cpp:6276
 msgid "You have been kicked: "
@@ -18161,15 +18161,15 @@ msgstr "Sei stato cacciato: "
 
 #: src/multiint.cpp:6290
 msgid "No connection to host."
-msgstr "Nessuna connessione con l'ospitante."
+msgstr "Nessuna connessione con l'host."
 
 #: src/multiint.cpp:6337
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "L'host mi ha spostato tra i giocatori, ma non ho mai dato il permesso a questo cambiamento. Ciao!"
 
 #: src/multiint.cpp:6339
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "L'host ha cercato di spostarci tra i giocatori, ma non abbiamo mai dato il permesso."
 
 #: src/multiint.cpp:6488
 msgid "Cannot change to a map with too few slots for all players."
@@ -18181,7 +18181,7 @@ msgstr "Impossibile passare a una mappa con meno slot."
 
 #: src/multiint.cpp:6593
 msgid "The host has quit."
-msgstr "L'ospitante ha lasciato la partita."
+msgstr "L'host ha lasciato la partita."
 
 #: src/multiint.cpp:6631
 msgid "UPnP has been enabled."
@@ -18238,12 +18238,12 @@ msgstr "Latenza"
 
 #: src/multiint.cpp:7733
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "La versione di Warzone 2100 usata per salvare questo file di replay non corrisponde a quella in uso."
 
 #: src/multiint.cpp:7735
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "File di replay salvato con: \"%s\""
 
 #: src/multiint.cpp:7737
 #, c-format
@@ -18252,15 +18252,15 @@ msgstr "Versione attuale di Warzone 2100: \"%s\""
 
 #: src/multiint.cpp:7739
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "I replay di solito dovrebbero essere riprodotti con la stessa versione usata per salvarli."
 
 #: src/multiint.cpp:7741
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "Il replay potrebbe non essere riprodotto correttamente, oppure potrebbero esserci differenze nella simulazione."
 
 #: src/multiint.cpp:7742
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "Versione del replay non corrispondente"
 
 #: src/multijoin.cpp:113
 msgid "Players Still Joining"
@@ -18287,7 +18287,7 @@ msgstr "%s (%u) ha un mod incompatibile, ed è stato espulso."
 
 #: src/multijoin.cpp:490
 msgid "Your data doesn't match the host's!"
-msgstr "I tuoi dati non corrispondono a quelli dell'ospitante!"
+msgstr "I tuoi dati non corrispondono con quelli dell'host!"
 
 #: src/multijoin.cpp:519
 #, c-format
@@ -18419,7 +18419,7 @@ msgstr "Attenzione, questa è una Map-Mod, può alterare il normale gameplay."
 #: src/multiopt.cpp:335
 #: src/multiplay.cpp:1664
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr "Attenzione, l'ospitante ha alterato il codice di gioco e non può essere ritenuto affidabile!"
+msgstr "Attenzione, l'host ha alterato il codice di gioco e non può essere ritenuto affidabile!"
 
 #: src/multiplay.cpp:267
 #, c-format
@@ -18896,7 +18896,7 @@ msgstr "Hai un mod incompatibile."
 
 #: src/titleui/gamefind.cpp:488
 msgid "Host couldn't send file?"
-msgstr "L'ospite non ha potuto inviare il file?"
+msgstr "L'host non ha potuto inviare il file?"
 
 #: src/titleui/gamefind.cpp:492
 msgid "Incorrect Password!"
@@ -18904,7 +18904,7 @@ msgstr "Password non corretta!"
 
 #: src/titleui/gamefind.cpp:495
 msgid "Host has dropped connection!"
-msgstr "L'ospite ha terminato la connessione!"
+msgstr "L'host ha terminato la connessione!"
 
 #: src/titleui/gamefind.cpp:499
 msgid "Connection Error"
