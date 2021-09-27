@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-09-20 00:27+0000\n"
-"PO-Revision-Date: 2021-09-26 14:22\n"
+"PO-Revision-Date: 2021-09-27 02:25\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -160,7 +160,7 @@ msgstr "MISSIONE BASE ALFA: stabilisci una base avanzata"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Stabilisci una base avanzata sull'altopiano e difendi il Nuovo Paradigma."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
@@ -14879,7 +14879,7 @@ msgstr " e "
 #: src/chat.cpp:170
 #: src/multiint.cpp:3609
 msgid "Spectators"
-msgstr ""
+msgstr "Spettatori"
 
 #: src/cheat.cpp:207
 #, c-format
@@ -17880,7 +17880,7 @@ msgstr ""
 #: src/multiint.cpp:3102
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr ""
+msgstr "Lo spettatore %s è passato tra i giocatori"
 
 #: src/multiint.cpp:2031
 msgid "Cannot swap with host"
@@ -17896,7 +17896,7 @@ msgstr "Squadra"
 #: src/multiint.cpp:7105
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Spettatore"
 
 #: src/multiint.cpp:2289
 #: src/multiint.cpp:4405
@@ -17914,7 +17914,7 @@ msgstr "L'ospitante ti ha cacciato dal gioco."
 #: src/multiint.cpp:2326
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "Impossibile spostare %s tra gli spettatori"
 
 #: src/multiint.cpp:2331
 #, c-format
@@ -17923,25 +17923,25 @@ msgstr ""
 
 #: src/multiint.cpp:2354
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Sposta tra gli spettatori"
 
 #: src/multiint.cpp:2375
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Chiedi allo spettatore di giocare"
 
 #: src/multiint.cpp:2391
 msgid "Ask to Play"
-msgstr ""
+msgstr "Chiedi di giocare"
 
 #: src/multiint.cpp:2986
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "Lo spettatore %s vuole rimanere uno spettatore"
 
 #: src/multiint.cpp:2990
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "Il giocatore %s vuole rimanere un giocatore"
 
 #: src/multiint.cpp:2998
 msgid "Host has declined to switch you to a Player"
@@ -17953,7 +17953,7 @@ msgstr ""
 
 #: src/multiint.cpp:3030
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "Vuoi essere uno spettatore?"
 
 #: src/multiint.cpp:3031
 msgid "The host of this game wants to know if you're willing to spectate?"
@@ -17961,15 +17961,15 @@ msgstr ""
 
 #: src/multiint.cpp:3033
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Attualmente sei un giocatore."
 
 #: src/multiint.cpp:3034
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Sì, sarò uno spettatore!"
 
 #: src/multiint.cpp:3039
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Vuoi giocare?"
 
 #: src/multiint.cpp:3040
 msgid "The host of this game wants to know if you'd like to play?"
@@ -17977,25 +17977,25 @@ msgstr ""
 
 #: src/multiint.cpp:3042
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Attualmente sei uno spettatore."
 
 #: src/multiint.cpp:3043
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Sì, voglio giocare!"
 
 #: src/multiint.cpp:3086
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "Il giocatore %s si è spostato tra gli spettatori"
 
 #: src/multiint.cpp:3125
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Lo spettatore vorrebbe diventare un giocatore"
 
 #: src/multiint.cpp:3126
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Lo spettatore \"%s\" vorrebbe diventare un giocatore."
 
 #: src/multiint.cpp:3128
 msgid "However, there are currently no open Player slots."
@@ -18003,7 +18003,7 @@ msgstr ""
 
 #: src/multiint.cpp:3130
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Vorresti scambiare questo spettatore con un giocatore?"
 
 #: src/multiint.cpp:3131
 msgid "Yes, select Player slot"
@@ -18011,11 +18011,11 @@ msgstr ""
 
 #: src/multiint.cpp:3414
 msgid "Joined:"
-msgstr ""
+msgstr "Si è unito:"
 
 #: src/multiint.cpp:3417
 msgid "Ready:"
-msgstr ""
+msgstr "Pronto:"
 
 #: src/multiint.cpp:3595
 #: src/titleui/gamefind.cpp:297
@@ -18028,11 +18028,11 @@ msgstr ""
 
 #: src/multiint.cpp:3906
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Abilita l'accesso degli spettatori"
 
 #: src/multiint.cpp:3916
 msgid "Lock Teams"
-msgstr ""
+msgstr "Blocca squadre"
 
 #: src/multiint.cpp:4172
 msgid "Choose Team"
@@ -18100,11 +18100,11 @@ msgstr "PRONTO?"
 
 #: src/multiint.cpp:4509
 msgid "For Spectator:"
-msgstr ""
+msgstr "Per gli spettatori:"
 
 #: src/multiint.cpp:4509
 msgid "For Player:"
-msgstr ""
+msgstr "Per i giocatori:"
 
 #: src/multiint.cpp:4527
 msgid "Choose Player Slot"
@@ -18248,7 +18248,7 @@ msgstr ""
 #: src/multiint.cpp:7737
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "Versione attuale di Warzone 2100: \"%s\""
 
 #: src/multiint.cpp:7739
 msgid "Replays should usually be played back with the same version used to save the replay."
@@ -18528,11 +18528,11 @@ msgstr "Marrone"
 
 #: src/multiplay.cpp:2027
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Modalità spettatore"
 
 #: src/multiplay.cpp:2028
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Sei uno spettatore. Divertiti a guardare la partita!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18838,7 +18838,7 @@ msgstr "La tua versione di Warzone non è compatibile con questa partita."
 
 #: src/titleui/gamefind.cpp:340
 msgid "Join as spectator"
-msgstr ""
+msgstr "Unisciti come spettatore"
 
 #: src/titleui/gamefind.cpp:390
 msgid "[Password required]"
@@ -19032,11 +19032,11 @@ msgstr "Versione: %s,%s Compilata: %s%s"
 
 #: src/wrappers.cpp:353
 msgid "GAME OVER"
-msgstr ""
+msgstr "PARTITA TERMINATA"
 
 #: src/wrappers.cpp:354
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "La battaglia è terminata, puoi lasciare la stanza."
 
 #: src/wzapi.cpp:2358
 msgid "YOU ARE VICTORIOUS!"
