@@ -9,6 +9,9 @@ set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
 add_subdirectory(launchinfo)
 set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
 
+add_subdirectory(fmt)
+set_property(TARGET fmt PROPERTY FOLDER "3rdparty")
+
 SET(RE2_BUILD_TESTING OFF CACHE BOOL "enable testing for RE2" FORCE)
 add_subdirectory(re2 EXCLUDE_FROM_ALL)
 target_include_directories(re2 PUBLIC
