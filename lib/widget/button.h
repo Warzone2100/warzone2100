@@ -177,4 +177,6 @@ private:
 	std::map<int, Images> imageSets;
 };
 
+std::shared_ptr<W_BUTTON> makeFormTransparentCornerButton(const char* text, int buttonPadding /* = TAB_BUTTONS_PADDING */, PIELIGHT buttonBackgroundFill /* = WZCOL_DEBUG_FILL_COLOR */);
+
 #endif // __INCLUDED_LIB_WIDGET_BUTTON_H__
