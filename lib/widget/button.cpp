@@ -528,3 +528,82 @@ void W_BUTTON::setProgressBorder(optional<ProgressBorder> _progressBorder, optio
 	progressBorder = _progressBorder;
 	progressBorderColour = (_borderColour.has_value()) ? _borderColour.value() : WZCOL_FORM_HILITE;
 }
+
+// MARK: - Corner Button
+
+struct CornerButtonDisplayCache
+{
+	CornerButtonDisplayCache(PIELIGHT buttonBackgroundFill)
+	: buttonBackgroundFill(buttonBackgroundFill)
+	{ }
+
+	PIELIGHT buttonBackgroundFill;
+	WzText text;
+};
+
+static void CornerButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	// Any widget using CornerButtonDisplayFunc must have its pUserData initialized to a (CornerButtonDisplayCache*)
+	assert(psWidget->pUserData != nullptr);
+	CornerButtonDisplayCache& cache = *static_cast<CornerButtonDisplayCache*>(psWidget->pUserData);
+
+	W_BUTTON *psButton = dynamic_cast<W_BUTTON*>(psWidget);
+	ASSERT_OR_RETURN(, psButton, "psWidget is null");
+
+	int x0 = psButton->x() + xOffset;
+	int y0 = psButton->y() + yOffset;
+	int x1 = x0 + psButton->width();
+	int y1 = y0 + psButton->height();
+
+	bool haveText = !psButton->pText.isEmpty();
+
+//	bool isDown = (psButton->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (psButton->getState() & WBUT_DISABLE) != 0;
+	bool isHighlight = (psButton->getState() & WBUT_HIGHLIGHT) != 0;
+
+	// Display the button.
+	if (isHighlight)
+	{
+		pie_UniTransBoxFill(static_cast<float>(x0 + 1), static_cast<float>(y0 + 1), static_cast<float>(x1 - 1), static_cast<float>(y1 - 1), cache.buttonBackgroundFill);
+		iV_Box(x0 + 1, y0 + 1, x1 - 1, y1 - 1, pal_RGBA(255, 255, 255, 150));
+	}
+
+	if (haveText)
+	{
+		cache.text.setText(psButton->pText.toUtf8(), psButton->FontID);
+		int fw = cache.text.width();
+		int fx = x0 + (psButton->width() - fw) / 2;
+		int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();
+		PIELIGHT textColor = WZCOL_FORM_TEXT;
+		if (isDisabled)
+		{
+			cache.text.render(fx + 1, fy + 1, WZCOL_FORM_LIGHT);
+			textColor = WZCOL_FORM_DISABLE;
+		}
+		cache.text.render(fx, fy, textColor);
+	}
+
+	if (isDisabled)
+	{
+		// disabled, render something over it!
+		iV_TransBoxFill(x0, y0, x0 + psButton->width(), y0 + psButton->height());
+	}
+}
+
+std::shared_ptr<W_BUTTON> makeFormTransparentCornerButton(const char* text, int buttonPadding /* = TAB_BUTTONS_PADDING */, PIELIGHT buttonBackgroundFill /* = WZCOL_DEBUG_FILL_COLOR */)
+{
+	auto button = std::make_shared<W_BUTTON>();
+	button->setString(text);
+	button->FontID = font_regular_bold;
+	button->displayFunction = CornerButtonDisplayFunc;
+	button->pUserData = new CornerButtonDisplayCache(buttonBackgroundFill);
+	button->setOnDelete([](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<CornerButtonDisplayCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	});
+	int minButtonWidthForText = iV_GetTextWidth(text, button->FontID);
+	int buttonSize = std::max({minButtonWidthForText + buttonPadding, 18, iV_GetTextLineSize(button->FontID)});
+	button->setGeometry(0, 0, buttonSize, buttonSize);
+	return button;
+}
