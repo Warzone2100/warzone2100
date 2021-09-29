@@ -300,25 +300,8 @@ public:
 	void setTransparentToClicks(bool hasClickTransparency);
 	bool transparentToClicks() const;
 
-	virtual int32_t idealWidth()
-	{
-		if (!defaultIdealWidth.has_value())
-		{
-			defaultIdealWidth = width();
-		}
-
-		return defaultIdealWidth.value();
-	}
-
-	virtual int32_t idealHeight()
-	{
-		if (!defaultIdealHeight.has_value())
-		{
-			defaultIdealHeight = height();
-		}
-
-		return defaultIdealHeight.value();
-	}
+	virtual int32_t idealWidth();
+	virtual int32_t idealHeight();
 
 	virtual nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets()
 	{

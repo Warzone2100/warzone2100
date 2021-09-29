@@ -45,6 +45,9 @@ public:
 
 	// Set whether the row background highlights on mouse-over
 	void setHighlightsOnMouseOver(bool value);
+
+	// Get the total idealWidth() returned by all column widgets in this row (does not include padding)
+	int32_t getColumnTotalContentIdealWidth();
 protected:
 	virtual void display(int, int) override;
 public:
@@ -53,6 +56,7 @@ protected:
 	friend class ScrollableTableWidget;
 	virtual void resizeColumns(const std::vector<size_t>& columnWidths, int columnPadding);
 	inline size_t numColumns() const { return columnWidgets.size(); }
+	std::shared_ptr<WIDGET> getWidgetAtColumn(size_t col) const;
 private:
 	bool isMouseOverRowOrChildren() const;
 private:
@@ -96,6 +100,9 @@ public:
 	// Get the maximum width that can be used by the column widths passed to changeColumnWidths, based on the current widget size (minus padding)
 	size_t getMaxColumnTotalWidth(size_t numColumns) const;
 
+	// Get the table width needed to display columns with the specified total minimum column width
+	size_t getTableWidthNeededForTotalColumnWidth(size_t numColumns, size_t totalMinimumColumnWidth) const;
+
 	// Get the current column widths
 	const std::vector<size_t>& getColumnWidths() const { return columnWidths; }
 
@@ -124,6 +131,11 @@ public:
 	// setMinimumColumnWidths(const std::vector<size_t>& newMinColumnWidths)
 	void setMinimumColumnWidth(size_t col, size_t newMinColumnWidth);
 
+	// Get the maximum idealWidth() returned by any of the row widgets in the specified column
+	int32_t getColumnMaxContentIdealWidth(size_t col);
+
+	inline size_t getNumColumns() const { return tableColumns.size(); }
+
 	// Change the table background color
 	void setBackgroundColor(PIELIGHT const &color);
 
@@ -131,6 +143,8 @@ public:
 	void setScrollPosition(uint16_t newPosition);
 
 	bool isUserDraggingColumnHeader() const;
+
+	virtual int32_t idealHeight() override;
 
 protected:
 	friend class TableHeader;
@@ -140,6 +154,7 @@ protected:
 	virtual void geometryChanged() override;
 
 private:
+	size_t totalPaddingWidthFor(size_t numColumns) const;
 	bool relayoutColumns(std::vector<size_t> proposedColumnWidths, const std::unordered_set<size_t>& priorityIndexes = {});
 	void updateColumnWidths();
 	std::vector<size_t> getShrinkableColumnIndexes(const std::vector<size_t>& currentColumnWidths);

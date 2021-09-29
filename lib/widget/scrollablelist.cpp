@@ -213,7 +213,7 @@ void ScrollableListWidget::setScrollPosition(uint16_t newPosition)
 	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
 }
 
-int ScrollableListWidget::idealWidth()
+int32_t ScrollableListWidget::idealWidth()
 {
 	auto maxItemIdealWidth = 0;
 	for (auto &item: listView->children())
@@ -222,4 +222,10 @@ int ScrollableListWidget::idealWidth()
 	}
 
 	return maxItemIdealWidth + padding.left + padding.right + SCROLLBAR_WIDTH;
+}
+
+int32_t ScrollableListWidget::idealHeight()
+{
+	updateLayout();
+	return scrollableHeight + padding.top + padding.bottom;
 }

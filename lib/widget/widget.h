@@ -239,6 +239,7 @@ void widgShutDown();
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder);
 void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psScreen, const std::shared_ptr<W_SCREEN> &priorScreen);
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
+void widgForEachOverlayScreen(const std::function<bool (const std::shared_ptr<W_SCREEN>& psScreen, uint16_t zOrder)>& func);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
 bool isMouseClickDownOnScreenOverlayChild();
 bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen);
