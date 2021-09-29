@@ -85,12 +85,12 @@ public:
 
 	int requiredHeight();
 
-	int32_t idealWidth() override
+	virtual int32_t idealWidth() override
 	{
 		return getMaxLineWidth();
 	}
 
-	int32_t idealHeight() override
+	virtual int32_t idealHeight() override
 	{
 		return requiredHeight();
 	}

@@ -158,6 +158,9 @@ static bool Refreshing = false;
 #define RET_BUTWIDTH		25
 #define RET_BUTHEIGHT		28
 
+#define WIDG_SPEC_SCREEN_ORDER_START		65530
+#define WIDG_SPEC_SCREEN_ORDER_END			65532
+
 /* The widget screen */
 std::shared_ptr<W_SCREEN> psWScreen = nullptr;
 
@@ -203,6 +206,38 @@ COMPONENT_STATS	**apsExtraSysList;
 
 /* Flags to check whether the power bars are currently on the screen */
 static bool				powerBarUp = false;
+
+/* Update functions to be called at an interval */
+struct IntUpdateFunc
+{
+public:
+	typedef std::function<void ()> UpdateFunc;
+public:
+	IntUpdateFunc(const UpdateFunc& func, uint32_t intervalTicks = GAME_TICKS_PER_SEC)
+	: func(func)
+	, intervalTicks(intervalTicks)
+	, realTimeLastCalled(0)
+	{ }
+	~IntUpdateFunc() = default;
+	IntUpdateFunc(IntUpdateFunc&&) = default;
+	IntUpdateFunc(const IntUpdateFunc&) = delete;
+	void operator=(const IntUpdateFunc&) = delete;
+public:
+	void callIfNeeded()
+	{
+		if (realTime - realTimeLastCalled >= intervalTicks)
+		{
+			if (func) { func(); }
+			realTimeLastCalled = realTime;
+		}
+	}
+public:
+	std::function<void ()> func;
+	uint32_t intervalTicks = GAME_TICKS_PER_SEC;
+private:
+	uint32_t realTimeLastCalled = 0;
+};
+static std::vector<IntUpdateFunc> intUpdateFuncs;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
@@ -895,6 +930,21 @@ bool intInitialise()
 		createReplayControllerOverlay();
 	}
 
+	intUpdateFuncs.emplace_back([]() {
+		widgForEachOverlayScreen([](const std::shared_ptr<W_SCREEN> &pScreen, uint16_t order) -> bool {
+			if (pScreen != nullptr && order >= WIDG_SPEC_SCREEN_ORDER_START && order <= WIDG_SPEC_SCREEN_ORDER_END)
+			{
+				if (!((realSelectedPlayer <= MAX_CONNECTED_PLAYERS && NetPlay.players[realSelectedPlayer].isSpectator)
+					&& (selectedPlayer <= MAX_CONNECTED_PLAYERS && NetPlay.players[selectedPlayer].isSpectator)))
+				{
+					widgRemoveOverlayScreen(pScreen);
+					return false;
+				}
+			}
+			return true;
+		});
+	}, GAME_TICKS_PER_SEC + GAME_TICKS_PER_SEC);
+
 	return true;
 }
 
@@ -1292,6 +1342,12 @@ INT_RETVAL intRunWidgets()
 		{
 			retIDs.push_back(trigger.widget->id);
 		}
+	}
+
+	/* Run any periodic update functions */
+	for (auto& update : intUpdateFuncs)
+	{
+		update.callIfNeeded();
 	}
 
 	/* We may need to trigger widgets with a key press */

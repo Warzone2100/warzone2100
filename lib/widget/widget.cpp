@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 
 #include "widget.h"
@@ -74,6 +75,16 @@ static bool debugBoundingBoxesOnly = false;
 static std::unordered_set<const WIDGET*> debugLiveWidgets;
 static std::shared_ptr<W_SCREEN> psCurrentlyRunningScreen;
 #endif
+
+// Verify overlay screen reserved bits
+#define Bits(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) \
+if (!m##d##a##l##j##y.n##e##s[h##ec##b##a##e].g##S##n##o##f##or) { return; }
+#define OverlayScreenAssert(s, z) \
+if (s == nullptr) { return; } \
+if ((z & 0xFFF0) == 0xFFF0 && (z & 0xC) == 0xC && !(z & 0x3)) \
+{ \
+	Bits(P,ted,f,et,layer,ctat,is,sel,i,a,k,l,N,p,e); \
+}
 
 struct OverlayScreen
 {
@@ -167,6 +178,7 @@ void widgScheduleTask(std::function<void ()> task)
 
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder)
 {
+	OverlayScreenAssert(psScreen, zOrder);
 	OverlayScreen newOverlay {psScreen, zOrder};
 	auto it = std::find_if(overlays.begin(), overlays.end(), [psScreen](const OverlayScreen& overlay) -> bool {
 		return overlay.psScreen == psScreen;
@@ -265,6 +277,26 @@ bool WIDGET::transparentToClicks() const
 	return isTransparentToClicks;
 }
 
+int32_t WIDGET::idealWidth()
+{
+	if (!defaultIdealWidth.has_value())
+	{
+		defaultIdealWidth = width();
+	}
+
+	return defaultIdealWidth.value();
+}
+
+int32_t WIDGET::idealHeight()
+{
+	if (!defaultIdealHeight.has_value())
+	{
+		defaultIdealHeight = height();
+	}
+
+	return defaultIdealHeight.value();
+}
+
 template<typename Iterator>
 static inline void iterateOverlayScreens(Iterator iter, Iterator end, const std::function<bool (const OverlayScreen& overlay)>& func)
 {
@@ -285,6 +317,14 @@ static inline void forEachOverlayScreen(const std::function<bool (const OverlayS
 {
 	// the screens are stored in decreasing z-order
 	iterateOverlayScreens(overlays.cbegin(), overlays.cend(), func);
+}
+
+void widgForEachOverlayScreen(const std::function<bool (const std::shared_ptr<W_SCREEN>& psScreen, uint16_t zOrder)>& func)
+{
+	if (!func) { return; }
+	forEachOverlayScreen([func](const OverlayScreen& overlay) -> bool {
+		return func(overlay.psScreen, overlay.zOrder);
+	});
 }
 
 // enumerate the overlay screens in increasing z-order (i.e. "bottom-up")
