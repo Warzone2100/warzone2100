@@ -1814,6 +1814,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 
 	// Swap certain ingame player-associated entries
 	std::swap(ingame.PingTimes[playerIndexA], ingame.PingTimes[playerIndexB]);
+	std::swap(ingame.LagCounter[playerIndexA], ingame.LagCounter[playerIndexB]);
 	std::swap(ingame.VerifiedIdentity[playerIndexA], ingame.VerifiedIdentity[playerIndexB]);
 	std::swap(ingame.JoiningInProgress[playerIndexA], ingame.JoiningInProgress[playerIndexB]);
 	std::swap(ingame.DataIntegrity[playerIndexA], ingame.DataIntegrity[playerIndexB]);

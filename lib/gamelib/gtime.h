@@ -203,4 +203,6 @@ void recvPlayerGameTime(NETQUEUE queue);                  ///< Processes a GAME_
 bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
 void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
 
+bool gtimeShouldWaitForPlayer(unsigned player);
+
 #endif
