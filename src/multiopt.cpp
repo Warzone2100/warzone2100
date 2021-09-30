@@ -526,6 +526,7 @@ bool multiGameShutdown()
 	ingame.TimeEveryoneIsInGame = nullopt;
 	ingame.startTime = std::chrono::steady_clock::time_point();
 	ingame.lastLagCheck = std::chrono::steady_clock::time_point();
+	ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::time_point();
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
 	bMultiMessages					= false;

@@ -106,6 +106,8 @@ struct MULTIPLAYERINGAME
 	bool				isAllPlayersDataOK;
 	std::chrono::steady_clock::time_point startTime;
 	std::chrono::steady_clock::time_point lastLagCheck;
+	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
+	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
