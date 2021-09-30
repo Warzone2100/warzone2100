@@ -479,6 +479,7 @@ bool loadConfig()
 		pie_SetFogStatus(false);
 		pie_EnableFog(false);
 	}
+	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -617,6 +618,7 @@ bool saveConfig()
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
 	iniSetBool("autosaveEnabled", autosaveEnabled);
 	iniSetBool("fog", pie_GetFogEnabled());
+	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);

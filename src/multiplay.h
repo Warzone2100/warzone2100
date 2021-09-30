@@ -37,6 +37,7 @@
 #include "multirecv.h"
 #include <vector>
 #include <string>
+#include <chrono>
 
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
@@ -94,6 +95,7 @@ enum class InGameSide : bool {
 struct MULTIPLAYERINGAME
 {
 	UDWORD				PingTimes[MAX_CONNECTED_PLAYERS];				// store for pings.
+	int 				LagCounter[MAX_CONNECTED_PLAYERS];
 	bool				VerifiedIdentity[MAX_CONNECTED_PLAYERS];		// if the multistats identity has been verified.
 	bool				localOptionsReceived;							// used to show if we have game options yet..
 	bool				localJoiningInProgress;							// used before we know our player number.
@@ -102,7 +104,8 @@ struct MULTIPLAYERINGAME
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
-	UDWORD				startTime;
+	std::chrono::steady_clock::time_point startTime;
+	std::chrono::steady_clock::time_point lastLagCheck;
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled

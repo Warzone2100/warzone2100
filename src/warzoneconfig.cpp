@@ -64,6 +64,7 @@ struct WARZONE_GLOBALS
 	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
+	int autoLagKickSeconds = 60;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -400,4 +401,19 @@ bool war_getAutoAdjustDisplayScale()
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale)
 {
 	warGlobs.autoAdjustDisplayScale = autoAdjustDisplayScale;
+}
+
+int war_getAutoLagKickSeconds()
+{
+	return warGlobs.autoLagKickSeconds;
+}
+
+void war_setAutoLagKickSeconds(int seconds)
+{
+	seconds = std::min(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 60);
+	}
+	warGlobs.autoLagKickSeconds = seconds;
 }

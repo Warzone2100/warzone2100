@@ -431,6 +431,12 @@ static inline bool shouldWaitForPlayerSlot(unsigned player)
 	&& (!NetPlay.players[player].isSpectator || !ingame.TimeEveryoneIsInGame.has_value() || player == NetPlay.hostPlayer); // Don't wait for spectators (that are not the host) once the game has started
 }
 
+// publicly-exposed function
+bool gtimeShouldWaitForPlayer(unsigned player)
+{
+	return shouldWaitForPlayerSlot(player);
+}
+
 static inline bool shouldCheckDebugSyncForPlayerSlot(unsigned player)
 {
 	return NetPlay.players[player].allocated && (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer);

@@ -463,7 +463,7 @@ static bool gameInit()
 // say hi to everyone else....
 void playerResponding()
 {
-	ingame.startTime = gameTime;
+	ingame.startTime = std::chrono::steady_clock::now();
 	ingame.localJoiningInProgress = false; // No longer joining.
 	ingame.JoiningInProgress[selectedPlayer] = false;
 
@@ -524,7 +524,8 @@ bool multiGameShutdown()
 	ingame.localOptionsReceived = false;
 	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 	ingame.TimeEveryoneIsInGame = nullopt;
-	ingame.startTime = 0;
+	ingame.startTime = std::chrono::steady_clock::time_point();
+	ingame.lastLagCheck = std::chrono::steady_clock::time_point();
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
 	bMultiMessages					= false;

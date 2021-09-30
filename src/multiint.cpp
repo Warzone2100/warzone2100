@@ -4761,6 +4761,8 @@ static void SendFireUp()
 // host kicks a player from a game.
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 {
+	ASSERT_HOST_ONLY(return);
+
 	// send a kick msg
 	NETbeginEncode(NETbroadcastQueue(), NET_KICK);
 	NETuint32_t(&player_id);
@@ -5635,6 +5637,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	{
 		ingame.PingTimes[i] = 0;
 		ingame.VerifiedIdentity[i] = false;
+		ingame.LagCounter[i] = 0;
 	}
 	multiSyncResetAllChallenges();
 

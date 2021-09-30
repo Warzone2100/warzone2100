@@ -76,6 +76,8 @@
 #include "multiint.h"
 #include "activity.h"
 #include "lib/framework/wztime.h"
+#include "chat.h" // for InGameChatMessage
+#include "warzoneconfig.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -98,6 +100,87 @@ static bool recvBeacon(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
 
 void startMultiplayerGame();
+
+// ////////////////////////////////////////////////////////////////////////////
+// Auto Lag Kick Handling
+
+#define LAG_INITIAL_LOAD_GRACEPERIOD 60
+#define LAG_CHECK_INTERVAL 1000
+const std::chrono::milliseconds LagCheckInterval(LAG_CHECK_INTERVAL);
+
+static void sendTextMessage(const char* msg)
+{
+	auto message = InGameChatMessage(selectedPlayer, msg);
+	message.send();
+}
+
+static void autoLagKickRoutine()
+{
+	if (!NetPlay.isHost)
+	{
+		return;
+	}
+
+	int LagAutoKickSeconds = war_getAutoLagKickSeconds();
+	if (LagAutoKickSeconds <= 0)
+	{
+		return;
+	}
+
+	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastLagCheck) < LagCheckInterval)
+	{
+		return;
+	}
+
+	ingame.lastLagCheck = now;
+	uint32_t playerCheckLimit = (!ingame.TimeEveryoneIsInGame.has_value()) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
+	for (uint32_t i = 0; i < playerCheckLimit; ++i)
+	{
+		if (!isHumanPlayer(i))
+		{
+			continue;
+		}
+		if (i > MAX_PLAYERS && !gtimeShouldWaitForPlayer(i))
+		{
+			continue;
+		}
+		bool isLagging = (ingame.PingTimes[i] >= PING_LIMIT);
+		bool isWaitingForInitialLoad = !ingame.TimeEveryoneIsInGame.has_value() && ingame.JoiningInProgress[i];
+		if (isWaitingForInitialLoad && (std::chrono::duration_cast<std::chrono::seconds>(now - ingame.startTime) < std::chrono::seconds(LAG_INITIAL_LOAD_GRACEPERIOD)))
+		{
+			isLagging = false;
+			isWaitingForInitialLoad = false;
+		}
+		if (!isLagging && !isWaitingForInitialLoad)
+		{
+			if(ingame.LagCounter[i] > 0)
+			{
+				ingame.LagCounter[i]--;
+			}
+			continue;
+		}
+
+		ingame.LagCounter[i]++;
+		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION);
+			ingame.LagCounter[i] = 0;
+		}
+		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+		}
+		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+		}
+	}
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
@@ -281,6 +364,11 @@ bool multiPlayerLoop()
 				ingame.isAllPlayersDataOK = true;
 			}
 		}
+	}
+
+	if (NetPlay.isHost)
+	{
+		autoLagKickRoutine();
 	}
 
 	// if player has won then process the win effects...

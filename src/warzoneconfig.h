@@ -114,6 +114,8 @@ JS_BACKEND war_getJSBackend();
 void war_setJSBackend(JS_BACKEND backend);
 bool war_getAutoAdjustDisplayScale();
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
+int war_getAutoLagKickSeconds();
+void war_setAutoLagKickSeconds(int seconds);
 
 /**
  * Enable or disable sound initialization
