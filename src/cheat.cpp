@@ -109,6 +109,11 @@ bool _attemptCheatCode(const char *cheat_name)
 		kf_ToggleUnitCount();
 		return true;
 	}
+	if (!strcasecmp("specstats", cheat_name))
+	{
+		kf_ToggleSpecOverlays();
+		return true;
+	}
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)

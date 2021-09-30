@@ -93,6 +93,7 @@
 #include "qtscript.h"
 #include "template.h"
 #include "activity.h"
+#include "spectatorwidgets.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -1394,6 +1395,8 @@ bool stageThreeShutDown()
 	{
 		return false;
 	}
+
+	specStatsViewShutdown();
 
 	challengesUp = false;
 	challengeActive = false;
