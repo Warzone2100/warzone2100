@@ -73,6 +73,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "droid.h"
+#include "spectatorwidgets.h"
 
 #include "activity.h"
 
@@ -2591,6 +2592,15 @@ void kf_QuickLoad()
 void kf_ToggleFullscreen()
 {
 	war_setWindowMode(wzAltEnterToggleFullscreen());
+}
+
+void kf_ToggleSpecOverlays()
+{
+	if (realSelectedPlayer >= NetPlay.players.size() || !NetPlay.players[realSelectedPlayer].isSpectator)
+	{
+		return;
+	}
+	specToggleOverlays();
 }
 
 void keybindShutdown()
