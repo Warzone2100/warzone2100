@@ -1818,6 +1818,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	std::swap(ingame.VerifiedIdentity[playerIndexA], ingame.VerifiedIdentity[playerIndexB]);
 	std::swap(ingame.JoiningInProgress[playerIndexA], ingame.JoiningInProgress[playerIndexB]);
 	std::swap(ingame.DataIntegrity[playerIndexA], ingame.DataIntegrity[playerIndexB]);
+	std::swap(ingame.lastSentPlayerDataCheck2[playerIndexA], ingame.lastSentPlayerDataCheck2[playerIndexB]);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 
 	// Ensure we filter messages appropriately waiting for the client ack *at each new index*
@@ -2070,6 +2071,7 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	case NET_READY_REQUEST:              ///< player ready to start an mp game
 	case NET_POSITIONREQUEST:            ///< position in GUI player list
 	case NET_DATA_CHECK:                 ///< Data integrity check
+	case NET_DATA_CHECK2:
 		return true; // filter / ignore
 
 	// one slot / index change at a time...
@@ -2197,7 +2199,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				      || message->type == NET_PLAYERNAME_CHANGEREQUEST
 					  || message->type == NET_PLAYER_SWAP_INDEX_ACK) && receiver != NetPlay.hostPlayer)
 					||
-					(message->type == NET_PLAYER_SLOTTYPE_REQUEST && (sender != NetPlay.hostPlayer && receiver != NetPlay.hostPlayer)))
+					((message->type == NET_PLAYER_SLOTTYPE_REQUEST
+					  || message->type == NET_DATA_CHECK2) && (sender != NetPlay.hostPlayer && receiver != NetPlay.hostPlayer)))
 				{
 					char msg[256] = {'\0'};
 
@@ -5156,6 +5159,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_PLAYER_SLOTTYPE_REQUEST:   return "NET_PLAYER_SLOTTYPE_REQUEST";
 	case NET_PLAYER_SWAP_INDEX:         return "NET_PLAYER_SWAP_INDEX";
 	case NET_PLAYER_SWAP_INDEX_ACK:     return "NET_PLAYER_SWAP_INDEX_ACK";
+	case NET_DATA_CHECK2:               return "NET_DATA_CHECK2";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

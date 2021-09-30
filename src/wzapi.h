@@ -573,6 +573,7 @@ namespace wzapi
 		const std::string& scriptName() const { return m_scriptName; }
 		const std::string& scriptPath() const { return m_scriptPath; }
 		int player() const { return m_player; }
+		bool isHostAI() const;
 
 	public:
 		inline void setReceiveAllEvents(bool value) { m_isReceivingAllEvents = value; }

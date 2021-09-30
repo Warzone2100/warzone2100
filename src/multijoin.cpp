@@ -178,6 +178,9 @@ void clearPlayer(UDWORD player, bool quietly)
 	UDWORD			i;
 	STRUCTURE		*psStruct, *psNext;
 
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
+	ASSERT(player < NetPlay.playerReferences.size(), "Invalid player: %" PRIu32 "", player);
 	NetPlay.playerReferences[player]->disconnect();
 	NetPlay.playerReferences[player] = std::make_shared<PlayerReference>(player);
 
@@ -186,6 +189,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	ingame.LagCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
+	ingame.lastSentPlayerDataCheck2[player].reset();
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -507,11 +511,14 @@ bool recvDataCheck(NETQUEUE queue)
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
 {
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.LagCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
+	ingame.lastSentPlayerDataCheck2[player].reset();
 	multiSyncResetPlayerChallenge(player);
 
 	resetMultiVisibility(player);						// set visibility flags.

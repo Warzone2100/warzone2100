@@ -449,10 +449,6 @@ void loadMultiScripts()
 		loadGlobalScript("multiplay/script/rules/init.js");
 	}
 
-	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
-	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
-	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
-
 	// Load AI players for skirmish games
 	resForceBaseDir("multiplay/skirmish/");
 	if (bMultiPlayer && game.type == LEVEL_TYPE::SKIRMISH)
@@ -493,10 +489,6 @@ void loadMultiScripts()
 		debug(LOG_SAVE, "Loading scavenger AI for player %d", scavengerPlayer());
 		loadPlayerScript("multiplay/script/scavengers/init.js", scavengerPlayer(), AIDifficulty::EASY);
 	}
-
-	// Restore data hashes, since AI and scavenger scripts aren't run on all clients.
-	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
-	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Reset resource path, otherwise things break down the line
 	resForceBaseDir("");
@@ -5638,6 +5630,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 		ingame.PingTimes[i] = 0;
 		ingame.VerifiedIdentity[i] = false;
 		ingame.LagCounter[i] = 0;
+		ingame.lastSentPlayerDataCheck2[i].reset();
 	}
 	multiSyncResetAllChallenges();
 

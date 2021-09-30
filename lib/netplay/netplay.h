@@ -100,6 +100,7 @@ enum MESSAGE_TYPES
 	NET_PLAYER_SLOTTYPE_REQUEST,	///< non-host human player is requesting a slot type change, or a host is asking a spectator if they want to play
 	NET_PLAYER_SWAP_INDEX,			///< a host-only message to move a player to another index
 	NET_PLAYER_SWAP_INDEX_ACK,		///< an acknowledgement message from a player whose index is being swapped
+	NET_DATA_CHECK2,				///< Data2 integrity check
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

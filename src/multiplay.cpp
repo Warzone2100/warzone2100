@@ -43,6 +43,7 @@
 #include "display3d.h"								// for changing the viewpoint
 #include "console.h"								// for screen messages
 #include "clparse.h"
+#include "data.h"
 #include "power.h"
 #include "cmddroid.h"								//  for commanddroidupdatekills
 #include "wrappers.h"								// for game over
@@ -61,6 +62,7 @@
 #include "keybind.h"
 #include "qtscript.h"
 #include "design.h"
+#include "advvis.h"
 
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
@@ -93,11 +95,14 @@ MULTIPLAYERINGAME			ingame;
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
+#define DATACHECK2_INTERVAL_MS 10000
+
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
 static bool recvBeacon(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
+static bool sendDataCheck2();
 
 void startMultiplayerGame();
 
@@ -332,10 +337,15 @@ bool multiPlayerLoop()
 				debug(LOG_NET, "=== Sending hash to host ===");
 				sendDataCheck();
 			}
+			ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::now();
 		}
 		if (NetPlay.bComms)
 		{
 			sendPing();
+		}
+		if (NetPlay.isHost && NetPlay.bComms)
+		{
+			sendDataCheck2();
 		}
 		// Only have to do this on a true MP game
 		if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
@@ -743,6 +753,230 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *ps
 	NETend();
 }
 
+static inline std::chrono::seconds maxDataCheck2WaitSeconds()
+{
+	return std::chrono::seconds(std::max(war_getAutoLagKickSeconds() + 3, 60));
+}
+
+static bool sendDataCheck2()
+{
+	if (NetPlay.isHost)
+	{
+		const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastPlayerDataCheck2) < std::chrono::milliseconds(DATACHECK2_INTERVAL_MS))
+		{
+			return true;
+		}
+		// Send a request to all active players
+		const auto maxWaitSeconds = maxDataCheck2WaitSeconds();
+		for (uint32_t player = 0; player < std::min<uint32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
+		{
+			if (player == NetPlay.hostPlayer || !isHumanPlayer(player) || NetPlay.players[player].isSpectator)
+			{
+				continue;
+			}
+
+			// Check when the last unanswered request was sent
+			if (ingame.lastSentPlayerDataCheck2[player].has_value()
+				&& (std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastSentPlayerDataCheck2[player].value()) >= maxWaitSeconds))
+			{
+				// If it's after the allowed time, kick the player
+				std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+				sendInGameSystemMessage(msg.c_str());
+				addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+				kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
+				debug(LOG_INFO, "%s (%u) did not respond with a NET_DATA_CHECK2 within the required timeframe (%s seconds), and has been kicked", getPlayerName(player), player, std::to_string(maxWaitSeconds.count()).c_str());
+				ingame.lastSentPlayerDataCheck2[player].reset();
+				continue;
+			}
+
+			NETbeginEncode(NETnetQueue(player), NET_DATA_CHECK2);
+			NETuint32_t(&NetPlay.hostPlayer);
+			NETend();
+			if (!ingame.lastSentPlayerDataCheck2[player].has_value())
+			{
+				ingame.lastSentPlayerDataCheck2[player] = now;
+			}
+		}
+		ingame.lastPlayerDataCheck2 = now;
+		return true;
+	}
+
+	// For a player, respond to the host
+	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK2);		// only need to send to HOST
+	NETuint32_t(&selectedPlayer);
+	NETuint32_t(&realSelectedPlayer);
+	std::unordered_map<uint16_t, uint32_t> layers;
+	widgForEachOverlayScreen([&layers](const std::shared_ptr<W_SCREEN> &pScreen, uint16_t zOrder) -> bool {
+		layers[zOrder]++;
+		return true;
+	});
+	uint32_t layersSize = static_cast<uint32_t>(layers.size());
+	NETuint32_t(&layersSize);
+	for (auto& layer : layers)
+	{
+		uint16_t zOrder = layer.first;
+		NETuint16_t(&zOrder);
+		NETuint32_t(&layer.second);
+	}
+	for (size_t i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&DataHash[i]);
+	}
+	int8_t aiIndex = NetPlay.players[realSelectedPlayer].ai;
+	NETint8_t(&aiIndex);
+	bool bValue = godMode;
+	NETbool(&bValue);
+	NETend();
+	return true;
+}
+
+static bool recvDataCheck2(NETQUEUE queue)
+{
+	uint32_t player = queue.index;
+	uint32_t recvSelectedPlayer = 0;
+	uint32_t recvRealSelectedPlayer = 0;
+	std::unordered_map<uint16_t, uint32_t> layers;
+	uint32_t tempBuffer[DATA_MAXDATA] = {0};
+	int8_t aiIndex = 0;
+	bool recvGM;
+
+	if (!NetPlay.isHost) // the host can send NET_DATA_CHECK2 messages to clients to request a check
+	{
+		ASSERT_OR_RETURN(false, NetPlay.hostPlayer == queue.index, "Non-host player (%u) is sending NET_DATA_CHECK2 to us??", queue.index);
+		NETbeginDecode(queue, NET_DATA_CHECK2);
+		NETuint32_t(&recvSelectedPlayer);
+		NETend();
+		ASSERT_OR_RETURN(false, NetPlay.hostPlayer == recvSelectedPlayer, "Non-host player (selectedPlayer: %u) is sending NET_DATA_CHECK2 to us??", recvSelectedPlayer);
+		sendDataCheck2();
+		return true;
+	}
+
+	NETbeginDecode(queue, NET_DATA_CHECK2);
+	NETuint32_t(&recvSelectedPlayer);
+	NETuint32_t(&recvRealSelectedPlayer);
+	uint32_t layersSize = 0;
+	uint16_t zOrder = 0;
+	uint32_t layerCount = 0;
+	NETuint32_t(&layersSize);
+	for (uint32_t i = 0; i < layersSize; ++i)
+	{
+		NETuint16_t(&zOrder);
+		NETuint32_t(&layerCount);
+		layers[zOrder] = layerCount;
+	}
+	for (size_t i = 0; i < DATA_MAXDATA; ++i)
+	{
+		NETuint32_t(&tempBuffer[i]);
+	}
+	NETint8_t(&aiIndex);
+	NETbool(&recvGM);
+	NETend();
+
+	if (player >= MAX_CONNECTED_PLAYERS) // invalid player number.
+	{
+		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_DATA_CHECK2 given incorrect params.", player, queue.index);
+		return false;
+	}
+
+	if (recvRealSelectedPlayer >= NetPlay.players.size())
+	{
+		HandleBadParam("NET_DATA_CHECK2 given invalid param.", recvRealSelectedPlayer, queue.index);
+		return false;
+	}
+
+	if (!isHumanPlayer(player) || NetPlay.players[player].kick)
+	{
+		// Ignoring
+		return false;
+	}
+
+	debug(LOG_NET, "** Received NET_DATA_CHECK2 from player %u", player);
+	ingame.lastSentPlayerDataCheck2[player].reset();
+
+	bool hasWrongData = false;
+
+	if (!NetPlay.players[player].isSpectator && (recvSelectedPlayer != player || recvRealSelectedPlayer != player))
+	{
+		debug(LOG_INFO, "%s (%u) has a corrupted player index. (selectedPlayer: %" PRIu32 ", realSelectedPlayer: %" PRIu32 ")", getPlayerName(player), player, recvSelectedPlayer, recvRealSelectedPlayer);
+		hasWrongData = true;
+	}
+
+	if (layersSize > 1024)
+	{
+		debug(LOG_INFO, "%s (%u) has a very high layersSize - something is probably wrong. (layersSize: %" PRIu32 ")", getPlayerName(player), player, layersSize);
+		hasWrongData = true;
+	}
+
+	if (!NetPlay.players[player].isSpectator)
+	{
+		for (uint16_t zCheck = 65530; zOrder < std::numeric_limits<uint16_t>::max() - 2; ++zOrder)
+		{
+			auto it = layers.find(zCheck);
+			if (it != layers.end())
+			{
+				debug(LOG_INFO, "%s (%u) has an unexpected display layer. (layer: %" PRIu16 ", count: %" PRIu32 ")", getPlayerName(player), player, zCheck, it->second);
+			}
+		}
+		uint16_t zCheck = std::numeric_limits<uint16_t>::max() - 2;
+		if (layers.count(zCheck) > 0 && !gInputManager.debugManager().debugMappingsAllowed())
+		{
+			debug(LOG_INFO, "%s (%u) has an unexpected display layer (script debugger).", getPlayerName(player), player);
+			hasWrongData = true;
+		}
+		zCheck = std::numeric_limits<uint16_t>::max();
+		auto it = layers.find(zCheck);
+		if (it != layers.end() && it->second > 1)
+		{
+			debug(LOG_INFO, "%s (%u) has an unexpected number of notification layers. (count: %" PRIu32 ")", getPlayerName(player), player, it->second);
+		}
+	}
+
+	if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
+	{
+		int i = 0;
+		for (; DataHash[i] == tempBuffer[i]; ++i)
+		{
+		}
+
+		debug(LOG_INFO, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+		hasWrongData = true;
+	}
+
+	if (aiIndex != NetPlay.players[player].ai)
+	{
+		debug(LOG_INFO, "%s (%u) has a corrupted player state value. (ai: %" PRIi8 "; should be: %" PRIi8 ")", getPlayerName(player), player, aiIndex, NetPlay.players[player].ai);
+		hasWrongData = true;
+	}
+
+	if (!NetPlay.players[player].isSpectator && recvGM)
+	{
+		debug(LOG_INFO, "%s (%u) has a corrupted global state value. (godMode: %s)", getPlayerName(player), player, (recvGM) ? "true" : "false");
+		hasWrongData = true;
+	}
+
+	if (hasWrongData)
+	{
+		ASSERT_HOST_ONLY(return false);
+		std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+		sendInGameSystemMessage(msg.c_str());
+		addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+		kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
+		return false;
+	}
+
+	return true;
+}
+
+
 HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 {
 	if (queue.index == NetPlay.hostPlayer)
@@ -809,6 +1043,12 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 			case NET_COLOURREQUEST:
 				// for now, *must* be allowed
 				return HandleMessageAction::Process_Message;
+			case NET_DATA_CHECK2:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
 			default:
 				// certain messages are always allowed, no matter who it is
 				return HandleMessageAction::Process_Message;
@@ -919,6 +1159,9 @@ bool recvMessage()
 				break;
 			case NET_DATA_CHECK:
 				recvDataCheck(queue);
+				break;
+			case NET_DATA_CHECK2:
+				recvDataCheck2(queue);
 				break;
 			case NET_AITEXTMSG:					//multiplayer AI text message
 				recvTextMessageAI(queue);

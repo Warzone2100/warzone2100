@@ -119,6 +119,12 @@ wzapi::scripting_instance::scripting_instance(int player, const std::string& scr
 wzapi::scripting_instance::~scripting_instance()
 { }
 
+bool wzapi::scripting_instance::isHostAI() const
+{
+	ASSERT_OR_RETURN(false, m_player >= 0 && m_player < NetPlay.players.size(), "Invalid player: %d", m_player);
+	return NetPlay.isHost && myResponsibility(m_player) && !isHumanPlayer(m_player) && (NetPlay.players[m_player].ai >= 0 || m_player == scavengerPlayer());
+}
+
 // Loads a file.
 // (Intended for use from implementations of things like "include" functions.)
 //
@@ -177,7 +183,10 @@ bool wzapi::scripting_instance::loadFileForInclude(const std::string& filePath, 
 		*pFileSize = 0;
 		return false;
 	}
-	calcDataHash(reinterpret_cast<const uint8_t *>(*ppFileData), *pFileSize, DATA_SCRIPT);
+	if (!isHostAI())
+	{
+		calcDataHash(reinterpret_cast<const uint8_t *>(*ppFileData), *pFileSize, DATA_SCRIPT);
+	}
 
 	loadedFilePath = path;
 	return true;
