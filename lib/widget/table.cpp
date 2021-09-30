@@ -57,13 +57,21 @@ std::shared_ptr<TableRow> TableRow::make(const std::vector<std::shared_ptr<WIDGE
 		{
 			rowHeight = std::max(rowHeight, widget->height());
 		}
+		// vertically center any column widgets that are less than the rowHeight
+		for (auto& widget : result->columnWidgets)
+		{
+			if (widget->height() < rowHeight)
+			{
+				widget->setGeometry(widget->x(), (rowHeight - widget->height()) / 2, widget->width(), widget->height());
+			}
+		}
 	}
 	else
 	{
 		// use fixed row height
 		for (auto& widget : result->columnWidgets)
 		{
-			widget->setGeometry(widget->x(), widget->y(), widget->width(), rowHeight);
+			widget->setGeometry(widget->x(), 0, widget->width(), rowHeight);
 		}
 	}
 	result->setGeometry(result->x(), result->y(), result->width(), rowHeight);
