@@ -384,6 +384,7 @@ void loadMultiScripts()
 	char aPathName[256];
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	ASSERT_OR_RETURN(, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	sstrcpy(aPathName, aFileName);
@@ -623,6 +624,12 @@ void loadMapPreview(bool hideInterface)
 	if (psLevel == nullptr)
 	{
 		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), !NetPlay.wzFiles.empty() ? "are" : "aren't");
+		loadEmptyMapPreview();
+		return;
+	}
+	if (psLevel->game < 0 || psLevel->game >= LEVEL_MAXFILES)
+	{
+		debug(LOG_ERROR, "apDataFiles index (%" PRIi16 ") is out of bounds for: \"%s\" %s.", psLevel->game, game.map, game.hash.toString().c_str());
 		loadEmptyMapPreview();
 		return;
 	}
@@ -5438,6 +5445,7 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 	LEVEL_DATASET* psLevel = levFindDataSet(game.map, &game.hash);
 
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	ASSERT_OR_RETURN(, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
 	sstrcat(aFileName, ".json");
