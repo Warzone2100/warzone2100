@@ -1178,7 +1178,7 @@ static void runTitleLoop()
 	case TITLECODE_QUITGAME:
 		debug(LOG_MAIN, "TITLECODE_QUITGAME");
 		stopTitleLoop();
-		wzQuit();
+		wzQuit(0);
 		break;
 	case TITLECODE_SAVEGAMELOAD:
 		{
@@ -1968,9 +1968,10 @@ int realmain(int argc, char *argv[])
 	free(utfargv);
 #endif
 	ActivityManager::instance().shutdown();
+	int exitCode = wzGetQuitExitCode();
 	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
-	return EXIT_SUCCESS;
+	return exitCode;
 }
 
 /*!
