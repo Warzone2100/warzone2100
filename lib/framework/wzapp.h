@@ -75,7 +75,8 @@ video_backend wzGetDefaultGfxBackendForCurrentSystem();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzMainEventLoop();
 void wzPumpEventsWhileLoading();
-void wzQuit();              ///< Quit game
+void wzQuit(int exitCode);              ///< Quit game
+int wzGetQuitExitCode();
 void wzShutdown();
 std::vector<WINDOW_MODE> wzSupportedWindowModes();
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);

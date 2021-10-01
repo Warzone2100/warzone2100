@@ -56,6 +56,10 @@
 #include "cocoa_wz_menus.h"
 #endif
 
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 void mainLoop();
 // used in crash reports & version info
 const char *BACKEND = "SDL";
@@ -183,6 +187,8 @@ static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 void* GetTextEventsOwner = nullptr;
+
+static optional<int> wzQuitExitCode;
 
 /**************************/
 /***     Misc support   ***/
@@ -607,12 +613,21 @@ bool wzIsMaximized()
 	return false;
 }
 
-void wzQuit()
+void wzQuit(int exitCode)
 {
+	if (!wzQuitExitCode.has_value())
+	{
+		wzQuitExitCode = exitCode;
+	}
 	// Create a quit event to halt game loop.
 	SDL_Event quitEvent;
 	quitEvent.type = SDL_QUIT;
 	SDL_PushEvent(&quitEvent);
+}
+
+int wzGetQuitExitCode()
+{
+	return wzQuitExitCode.value_or(0);
 }
 
 void wzGrabMouse()
