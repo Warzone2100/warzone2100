@@ -2250,6 +2250,13 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 		}
 	case NET_SHARE_GAME_QUEUE:
 		{
+			if (ingame.localJoiningInProgress)
+			{
+				// NET_SHARE_GAME_QUEUE should only be processed after the game has started - the game queues probably aren't yet created!
+				debug(LOG_ERROR, "Ignoring NET_SHARE_GAME_QUEUE message from %" PRIu8 " (only permitted in-game).", playerQueue.index);
+				break;
+			}
+
 			uint8_t player = 0;
 			uint32_t num = 0, n;
 			NetMessage const *message = nullptr;
@@ -2262,6 +2269,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NetPlay.hostPlayer && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
 			if (!isSentByCorrectClient || player >= MAX_CONNECTED_PLAYERS)
 			{
+				NETend();
 				break;
 			}
 			for (n = 0; n < num; ++n)
