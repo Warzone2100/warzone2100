@@ -298,6 +298,7 @@ public:
 	bool isMouseOverWidget() const;
 
 	void setTransparentToClicks(bool hasClickTransparency);
+	void setTransparentToMouse(bool hasMouseTransparency);
 	bool transparentToClicks() const;
 
 	virtual int32_t idealWidth();
@@ -343,6 +344,7 @@ private:
 
 	WzRect                  dim;
 	bool					isTransparentToClicks = false;
+	bool					isTransparentToMouse = false;
 
 	WIDGET(WIDGET const &) = delete;
 	WIDGET &operator =(WIDGET const &) = delete;
