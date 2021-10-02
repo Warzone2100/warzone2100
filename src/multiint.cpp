@@ -328,6 +328,11 @@ private:
 	std::shared_ptr<ScrollableListWidget> messages;
 	std::shared_ptr<W_EDITBOX> editBox;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
+	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
+
+	void displayParagraphContextualMenu(const std::string& textToCopy);
+	std::shared_ptr<WIDGET> createParagraphContextualMenuPopoverForm(std::string textToCopy);
+
 	void displayMessage(RoomMessage const &message);
 
 	static std::vector<RoomMessage> persistentMessageLocalStorage;
@@ -4849,6 +4854,7 @@ public:
 		cachedText("", font)
 	{
 		updateLayout();
+		setTransparentToMouse(true);
 	}
 
 	void display(int xOffset, int yOffset) override
@@ -4956,7 +4962,119 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		break;
 	}
 
+	std::string msgText = message.text;
+	paragraph->addOnClickHandler([msgText](Paragraph& paragraph, WIDGET_KEY key) {
+		// take advantage of the fact that this widget is the great-grand-child of the ChatBoxWidget
+		auto psParent = paragraph.parent();
+		ASSERT_OR_RETURN(, psParent != nullptr, "Expected parent?");
+		auto psMessages = std::dynamic_pointer_cast<ScrollableListWidget>(psParent->parent());
+		ASSERT_OR_RETURN(, psMessages != nullptr, "Expected grand-parent missing?");
+		auto psChatBoxWidget = std::dynamic_pointer_cast<ChatBoxWidget>(psMessages->parent());
+		ASSERT_OR_RETURN(, psChatBoxWidget != nullptr, "Expected great-grand-parent missing?");
+		// display contextual menu
+		psChatBoxWidget->displayParagraphContextualMenu(msgText);
+	});
+
 	messages->addItem(paragraph);
+}
+
+#define MENU_BUTTONS_PADDING 20
+
+std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(std::string textToCopy)
+{
+	// create all the buttons / option rows
+	std::weak_ptr<ChatBoxWidget> weakChatBoxWidget = std::dynamic_pointer_cast<ChatBoxWidget>(shared_from_this());
+	auto createOptionsButton = [weakChatBoxWidget](const WzString& text, const std::function<void (W_BUTTON& button)>& onClickFunc) -> std::shared_ptr<W_BUTTON> {
+		auto button = std::make_shared<W_BUTTON>();
+		button->setString(text);
+		button->FontID = font_regular;
+		button->displayFunction = PopoverMenuButtonDisplayFunc;
+		button->pUserData = new PopoverMenuButtonDisplayCache();
+		button->setOnDelete([](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<PopoverMenuButtonDisplayCache *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		});
+		int minButtonWidthForText = iV_GetTextWidth(text.toUtf8().c_str(), button->FontID);
+		button->setGeometry(0, 0, minButtonWidthForText + MENU_BUTTONS_PADDING, iV_GetTextLineSize(button->FontID) + 4);
+
+		// On click, perform the designated onClickHandler and close the popover form / overlay
+		button->addOnClickHandler([weakChatBoxWidget, onClickFunc](W_BUTTON& button) {
+			if (auto chatBoxWidget = weakChatBoxWidget.lock())
+			{
+				widgRemoveOverlayScreen(chatBoxWidget->optionsOverlayScreen);
+				onClickFunc(button);
+				chatBoxWidget->optionsOverlayScreen.reset();
+			}
+		});
+		return button;
+	};
+
+	std::vector<std::shared_ptr<WIDGET>> buttons;
+	buttons.push_back(createOptionsButton(_("Copy Text to Clipboard"), [weakChatBoxWidget, textToCopy](W_BUTTON& button){
+		if (auto chatBoxWidget = weakChatBoxWidget.lock())
+		{
+			wzSetClipboardText(textToCopy.c_str());
+		}
+	}));
+
+	// determine required height for all buttons
+	int totalButtonHeight = std::accumulate(buttons.begin(), buttons.end(), 0, [](int a, const std::shared_ptr<WIDGET>& b) {
+		return a + b->height();
+	});
+	int maxButtonWidth = (*(std::max_element(buttons.begin(), buttons.end(), [](const std::shared_ptr<WIDGET>& a, const std::shared_ptr<WIDGET>& b){
+		return a->width() < b->width();
+	})))->width();
+
+	auto itemsList = ScrollableListWidget::make();
+	itemsList->setBackgroundColor(WZCOL_MENU_BACKGROUND);
+	itemsList->setPadding({3, 4, 3, 4});
+	const int itemSpacing = 4;
+	itemsList->setItemSpacing(itemSpacing);
+	itemsList->setGeometry(itemsList->x(), itemsList->y(), maxButtonWidth + 8, totalButtonHeight + (static_cast<int>(buttons.size()) * itemSpacing) + 6);
+	for (auto& button : buttons)
+	{
+		itemsList->addItem(button);
+	}
+
+	return itemsList;
+}
+
+void ChatBoxWidget::displayParagraphContextualMenu(const std::string& textToCopy)
+{
+	auto lockedScreen = screenPointer.lock();
+	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
+
+	// Initialize the options overlay screen
+	optionsOverlayScreen = W_SCREEN::make();
+	auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+	newRootFrm->displayFunction = displayChildDropShadows;
+	std::weak_ptr<W_SCREEN> psWeakOptionsOverlayScreen(optionsOverlayScreen);
+	std::weak_ptr<ChatBoxWidget> psWeakChatBoxWidget = std::dynamic_pointer_cast<ChatBoxWidget>(shared_from_this());
+	newRootFrm->onClickedFunc = [psWeakOptionsOverlayScreen, psWeakChatBoxWidget]() {
+		if (auto psOverlayScreen = psWeakOptionsOverlayScreen.lock())
+		{
+			widgRemoveOverlayScreen(psOverlayScreen);
+		}
+		// Destroy Options overlay / overlay screen
+		if (auto strongChatBoxWidget = psWeakChatBoxWidget.lock())
+		{
+			strongChatBoxWidget->optionsOverlayScreen.reset();
+		}
+	};
+	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+	optionsOverlayScreen->psForm->attach(newRootFrm);
+
+	// Create the pop-over form
+	auto optionsPopOver = createParagraphContextualMenuPopoverForm(textToCopy);
+	newRootFrm->attach(optionsPopOver);
+
+	// Position the pop-over form - use current mouse position
+	int popOverX0 = std::min<int>(mouseX(), screenWidth - optionsPopOver->width());
+	int popOverY0 = std::min<int>(mouseY(), screenHeight - optionsPopOver->height());
+	optionsPopOver->move(popOverX0, popOverY0);
+
+	widgRegisterOverlayScreenOnTopOfScreen(optionsOverlayScreen, lockedScreen);
 }
 
 static void addChatBox(bool preserveOldChat)
