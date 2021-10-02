@@ -81,6 +81,8 @@ bool changeReadyStatus(UBYTE player, bool bReady);
 WzString formatGameName(WzString name);
 void resetVoteData();
 void sendRoomSystemMessage(char const *text);
+void sendRoomNotifyMessage(char const *text);
+void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
 void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 

@@ -35,5 +35,6 @@ std::string autoratingUrl(std::string const &hash);
 void setAutoratingUrl(std::string url);
 std::string getAutoratingUrl();
 bool streamer_spectator_mode();
+bool lobby_slashcommands_enabled();
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

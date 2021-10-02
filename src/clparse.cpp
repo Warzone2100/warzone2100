@@ -41,6 +41,7 @@
 #include "version.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
+#include "multilobbycommands.h"
 
 #include <cwchar>
 
@@ -83,6 +84,7 @@ static std::string wz_test;
 static std::string wz_autoratingUrl;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
+static bool wz_lobby_slashcommands = false;
 
 #if defined(WZ_OS_WIN)
 
@@ -335,6 +337,9 @@ typedef enum
 	CLI_GAMEPORT,
 	CLI_WZ_CRASH_RPT,
 	CLI_STREAMER_SPECTATOR,
+	CLI_LOBBY_SLASHCOMMANDS,
+	CLI_ADD_LOBBY_ADMINHASH,
+	CLI_ADD_LOBBY_ADMINPUBLICKEY,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -397,6 +402,9 @@ static const struct poptOption *getOptionsTable()
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
 		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
+		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
+		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
+		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -871,6 +879,29 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_STREAMER_SPECTATOR:
 			wz_streamer_spectator_mode = true;
 			break;
+
+		case CLI_LOBBY_SLASHCOMMANDS:
+			wz_lobby_slashcommands = true;
+			break;
+
+		case CLI_ADD_LOBBY_ADMINHASH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Bad admin hash");
+			}
+			addLobbyAdminIdentityHash(token);
+			break;
+
+		case CLI_ADD_LOBBY_ADMINPUBLICKEY:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Bad admin public key");
+			}
+			addLobbyAdminPublicKey(token);
+			break;
+
 		};
 	}
 
@@ -913,4 +944,9 @@ std::string getAutoratingUrl() {
 bool streamer_spectator_mode()
 {
 	return wz_streamer_spectator_mode;
+}
+
+bool lobby_slashcommands_enabled()
+{
+	return wz_lobby_slashcommands;
 }
