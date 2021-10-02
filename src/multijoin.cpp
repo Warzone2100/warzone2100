@@ -69,6 +69,8 @@
 #include "multistat.h"
 #include "multigifts.h"
 #include "qtscript.h"
+#include "clparse.h"
+#include "multilobbycommands.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
@@ -427,6 +429,11 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 					setMultiStats(i, getMultiStats(i), false);
 				}
 			}
+		}
+		if (lobby_slashcommands_enabled())
+		{
+			// Inform the new player that this lobby has slash commands enabled.
+			sendRoomSystemMessageToSingleReceiver("Lobby slash commands enabled. Type " LOBBY_COMMAND_PREFIX "help to see details.", playerIndex);
 		}
 	}
 	return true;

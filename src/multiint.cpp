@@ -111,6 +111,7 @@
 #include "levels.h"
 #include "wrappers.h"
 #include "faction.h"
+#include "multilobbycommands.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -185,6 +186,8 @@ enum class PlayerDisplayView
 };
 static PlayerDisplayView playerDisplayView = PlayerDisplayView::Players;
 
+static std::weak_ptr<WzMultiplayerOptionsTitleUI> currentMultiOptionsTitleUI;
+
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -248,7 +251,7 @@ bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
 
-static void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
+void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
 static void sendRoomChatMessage(char const *text);
 
 static int factionIcon(FactionID faction);
@@ -2690,6 +2693,7 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 
 static bool changePosition(UBYTE player, UBYTE position)
 {
+	ASSERT(player < MAX_PLAYERS, "Invalid player idx: %" PRIu8, player);
 	int i;
 
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -6167,6 +6171,129 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx)
 	bHostRequestedMoveToPlayers[playerIdx] = false;
 }
 
+class WzHostLobbyOperationsInterface : public HostLobbyOperationsInterface
+{
+public:
+	virtual ~WzHostLobbyOperationsInterface() { }
+
+public:
+	virtual bool changeTeam(uint32_t player, uint8_t team) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+		ASSERT_OR_RETURN(false, team < MAX_PLAYERS, "Invalid team: %" PRIu8, team);
+		if (locked.teams)
+		{
+			debug(LOG_INFO, "Unable to change team - teams are locked");
+			return false;
+		}
+		if (NetPlay.players[player].team == team)
+		{
+			// no-op - nothing to do
+			return true;
+		}
+		::changeTeam(player, team);
+		resetReadyStatus(false);
+		return true;
+	}
+	virtual bool changePosition(uint32_t player, uint8_t position) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+		ASSERT_OR_RETURN(false, position < game.maxPlayers, "Invalid position: %" PRIu8, position);
+		if (locked.position)
+		{
+			debug(LOG_INFO, "Unable to change position - positions are locked");
+			return false;
+		}
+		if (NetPlay.players[player].position == position)
+		{
+			// no-op request - nothing to do
+			return true;
+		}
+		if (!::changePosition(player, position))
+		{
+			return false;
+		}
+		resetReadyStatus(false);
+		return true;
+	}
+	virtual bool changeBase(uint8_t baseValue) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, baseValue == CAMP_CLEAN || baseValue == CAMP_BASE || baseValue == CAMP_WALLS, "Invalid baseValue: %" PRIu8, baseValue);
+		if (locked.bases)
+		{
+			debug(LOG_INFO, "Unable to change bases to %" PRIu8 " - bases are locked", baseValue);
+			return false;
+		}
+		game.base = baseValue;
+		resetReadyStatus(false);
+		sendOptions();
+		addGameOptions(); //refresh to see the proper tech level in the map name
+		return true;
+	}
+	virtual bool changeAlliances(uint8_t allianceValue) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, allianceValue == NO_ALLIANCES || allianceValue == ALLIANCES || allianceValue == ALLIANCES_UNSHARED || allianceValue == ALLIANCES_TEAMS, "Invalid allianceValue: %" PRIu8, allianceValue);
+		if (locked.alliances)
+		{
+			debug(LOG_INFO, "Unable to change alliances to %" PRIu8 " - alliances are locked", allianceValue);
+			return false;
+		}
+		game.alliance = static_cast<AllianceType>(allianceValue);
+		resetReadyStatus(false);
+		netPlayersUpdated = true;
+		sendOptions();
+		addGameOptions(); //refresh to see the proper tech level in the map name
+		return true;
+	}
+	virtual bool changeScavengers(uint8_t scavsValue) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, scavsValue == NO_SCAVENGERS || scavsValue == SCAVENGERS || scavsValue == ULTIMATE_SCAVENGERS, "Invalid scavsValue: %" PRIu8, scavsValue);
+		if (locked.scavengers)
+		{
+			debug(LOG_INFO, "Unable to change scavengers to %" PRIu8 " - scavengers are locked", scavsValue);
+			return false;
+		}
+		game.scavengers = scavsValue;
+		resetReadyStatus(false);
+		netPlayersUpdated = true;
+		sendOptions();
+		addGameOptions(); //refresh to see the proper tech level in the map name
+		return true;
+	}
+	virtual bool kickPlayer(uint32_t player, const char *reason) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to kich the host");
+		ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player id: %" PRIu32, player);
+		if (!NetPlay.players[player].allocated)
+		{
+			debug(LOG_INFO, "Unable to kick player: %" PRIu32 " - not a connected human player", player);
+			return false;
+		}
+		sendRoomSystemMessage((std::string("Kicking player ")+std::string(NetPlay.players[player].name)).c_str());
+		::kickPlayer(player, reason, ERROR_KICKED);
+		resetReadyStatus(false);
+		return true;
+	}
+	virtual void quitGame(int exitCode) override
+	{
+		ASSERT_HOST_ONLY(return);
+		auto psStrongMultiOptionsTitleUI = currentMultiOptionsTitleUI.lock();
+		if (psStrongMultiOptionsTitleUI)
+		{
+			stopJoining(psStrongMultiOptionsTitleUI->getParentTitleUI());
+		}
+		wzQuit(exitCode);
+	}
+};
+
+static WzHostLobbyOperationsInterface cmdInterface;
+
 void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 {
 	NETQUEUE queue;
@@ -6457,6 +6584,11 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				if (message.receive(queue)) {
 					displayRoomMessage(buildMessage(message.sender, message.text));
 					audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+
+					if (lobby_slashcommands_enabled())
+					{
+						processChatLobbySlashCommands(message, cmdInterface);
+					}
 				}
 			}
 			break;
@@ -6848,6 +6980,7 @@ void WzMultiplayerOptionsTitleUI::start()
 	/* Entering the first time */
 	if (!bReenter)
 	{
+		currentMultiOptionsTitleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
 		playerDisplayView = PlayerDisplayView::Players;
 		bRequestedSelfMoveToPlayers = false;
 		bHostRequestedMoveToPlayers.resize(MAX_CONNECTED_PLAYERS, false);
@@ -6939,6 +7072,11 @@ void WzMultiplayerOptionsTitleUI::start()
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
 		}
 	}
+}
+
+std::shared_ptr<WzTitleUI> WzMultiplayerOptionsTitleUI::getParentTitleUI()
+{
+	return parent;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -7607,7 +7745,14 @@ void sendRoomSystemMessage(char const *text)
 	message.enqueue(NETbroadcastQueue());
 }
 
-static void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver)
+void sendRoomNotifyMessage(char const *text)
+{
+	NetworkTextMessage message(NOTIFY_MESSAGE, text);
+	displayRoomSystemMessage(text);
+	message.enqueue(NETbroadcastQueue());
+}
+
+void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver)
 {
 	ASSERT_OR_RETURN(, isHumanPlayer(receiver), "Invalid receiver: %" PRIu32 "", receiver);
 	NetworkTextMessage message(SYSTEM_MESSAGE, text);
@@ -7619,6 +7764,15 @@ static void sendRoomChatMessage(char const *text)
 {
 	NetworkTextMessage message(selectedPlayer, text);
 	displayRoomMessage(RoomMessage::player(selectedPlayer, text));
+	if (NetPlay.isHost)
+	{
+		// Always allow the host to execute lobby slash commands
+		if (processChatLobbySlashCommands(message, cmdInterface))
+		{
+			// consume the message
+			return;
+		}
+	}
 	message.enqueue(NETbroadcastQueue());
 }
 

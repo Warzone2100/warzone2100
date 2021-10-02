@@ -71,6 +71,9 @@ public:
 	void updatePlayers();
 
 	int playerRowY0(uint32_t row) const;
+
+	std::shared_ptr<WzTitleUI> getParentTitleUI();
+
 private:
 	/**
 	 * Initializes a chooser, preparing to add it on a single line on player list. This involves removing
