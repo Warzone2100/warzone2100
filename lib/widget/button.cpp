@@ -607,3 +607,59 @@ std::shared_ptr<W_BUTTON> makeFormTransparentCornerButton(const char* text, int 
 	button->setGeometry(0, 0, buttonSize, buttonSize);
 	return button;
 }
+
+void PopoverMenuButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	// Any widget using PopoverMenuButtonDisplayFunc must have its pUserData initialized to a (PopoverMenuButtonDisplayCache*)
+	assert(psWidget->pUserData != nullptr);
+	PopoverMenuButtonDisplayCache& cache = *static_cast<PopoverMenuButtonDisplayCache*>(psWidget->pUserData);
+
+	W_BUTTON *psButton = dynamic_cast<W_BUTTON*>(psWidget);
+	ASSERT_OR_RETURN(, psButton, "psWidget is null");
+
+	int x0 = psButton->x() + xOffset;
+	int y0 = psButton->y() + yOffset;
+
+	bool haveText = !psButton->pText.isEmpty();
+
+	bool isDown = (psButton->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (psButton->getState() & WBUT_DISABLE) != 0;
+	bool isHighlight = (psButton->getState() & WBUT_HIGHLIGHT) != 0;
+
+	// Display the button background
+	PIELIGHT backgroundColor;
+	backgroundColor.rgba = 0;
+	if (isDown)
+	{
+		backgroundColor = pal_RGBA(10, 0, 70, 250); //WZCOL_FORM_DARK;
+	}
+	else if (isHighlight)
+	{
+		backgroundColor = pal_RGBA(25, 0, 110, 220); //WZCOL_TEXT_MEDIUM;
+	}
+	if (backgroundColor.rgba != 0)
+	{
+		// Draw the background
+		pie_UniTransBoxFill(x0, y0, x0 + psButton->width(), y0 + psButton->height(), backgroundColor);
+	}
+
+	if (haveText)
+	{
+		cache.text.setText(psButton->pText.toUtf8(), psButton->FontID);
+		int fx = x0 + (psButton->width() - cache.text.width()) / 2;
+		int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();
+		PIELIGHT textColor = WZCOL_FORM_TEXT;
+		if (isDisabled)
+		{
+			cache.text.render(fx + 1, fy + 1, WZCOL_FORM_LIGHT);
+			textColor = WZCOL_FORM_DISABLE;
+		}
+		cache.text.render(fx, fy, textColor);
+	}
+
+	if (isDisabled)
+	{
+		// disabled, render something over it!
+		iV_TransBoxFill(x0, y0, x0 + psButton->width(), y0 + psButton->height());
+	}
+}

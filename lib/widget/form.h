@@ -142,4 +142,6 @@ private:
 	std::weak_ptr<WIDGET> cutoutWidget;
 };
 
+void displayChildDropShadows(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__
