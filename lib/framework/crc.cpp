@@ -541,3 +541,9 @@ std::vector<uint8_t> genSecRandomBytes(size_t numBytes)
 	randombytes_buf(&result[0], result.size());
 	return result;
 }
+
+void genSecRandomBytes(void * const buf, const size_t size)
+{
+	ASSERT_OR_RETURN(, buf != nullptr, "Null buffer!!");
+	randombytes_buf(buf, size);
+}

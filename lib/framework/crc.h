@@ -104,5 +104,6 @@ std::string b64Tob64UrlSafe(const std::string& inputb64);
 std::string b64UrlSafeTob64(const std::string& inputb64urlsafe);
 
 std::vector<uint8_t> genSecRandomBytes(size_t numBytes);
+void genSecRandomBytes(void * const buf, const size_t size);
 
 #endif //_CRC_H_

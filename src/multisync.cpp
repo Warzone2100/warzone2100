@@ -53,7 +53,8 @@ static UDWORD averagePing();
 #define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
 
 static UDWORD				PingSend[MAX_CONNECTED_PLAYERS];	//stores the time the ping was called.
-#define PING_CHALLENGE_BYTES 8
+#define PING_CHALLENGE_BYTES 32
+static_assert(PING_CHALLENGE_BYTES % 8 == 0, "Must be a multiple of 8 bytes");
 typedef std::array<uint8_t, PING_CHALLENGE_BYTES> PingChallengeBytes;
 static std::array<optional<PingChallengeBytes>, MAX_CONNECTED_PLAYERS> pingChallenges;  // Random data sent with the last ping.
 
@@ -125,9 +126,23 @@ void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB)
 
 static inline PingChallengeBytes generatePingChallenge(uint8_t playerIdx)
 {
-	uint64_t pingChallengei = (uint64_t)rand() << 32 | rand();
 	PingChallengeBytes bytes;
-	memcpy(bytes.data(), &pingChallengei, PING_CHALLENGE_BYTES);
+	if (NetPlay.isHost && !ingame.VerifiedIdentity[playerIdx])
+	{
+		// generate secure random challenges until the player verifies their identity
+		genSecRandomBytes(bytes.data(), bytes.size());
+	}
+	else
+	{
+		uint8_t *pBytesDst = bytes.data();
+		uint8_t *pBytesEnd = bytes.data() + bytes.size();
+		for (; pBytesDst <= (pBytesEnd - sizeof(uint64_t)); )
+		{
+			uint64_t pingChallengei = (uint64_t)rand() << 32 | rand();
+			memcpy(pBytesDst, &pingChallengei, sizeof(uint64_t));
+			pBytesDst += sizeof(uint64_t);
+		}
+	}
 	return bytes;
 }
 
