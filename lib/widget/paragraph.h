@@ -132,6 +132,15 @@ public:
 
 	void geometryChanged() override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
+	void display(int xOffset, int yOffset) override;
+
+	/* The optional "onClick" callback function */
+	typedef std::function<void (Paragraph& paragraph, WIDGET_KEY key)> W_PARAGRAPH_ONCLICK_FUNC;
+	void addOnClickHandler(const W_PARAGRAPH_ONCLICK_FUNC& onClickFunc);
+
+	void clicked(W_CONTEXT *, WIDGET_KEY key) override;
+	void released(W_CONTEXT *, WIDGET_KEY key) override;
+	void highlightLost() override;
 
 private:
 	std::vector<std::unique_ptr<ParagraphElement>> elements;
@@ -143,6 +152,9 @@ private:
 	bool hasElementWithLayoutDirty() const;
 	void updateLayout();
 	std::vector<std::vector<FlowLayoutFragment>> calculateLinesLayout();
+
+	bool isMouseDown = false;
+	std::vector<W_PARAGRAPH_ONCLICK_FUNC> onClickHandlers;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_PARAGRAPH_H__

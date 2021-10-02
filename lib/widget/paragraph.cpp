@@ -309,6 +309,7 @@ struct ParagraphTextElement: public ParagraphElement
 	std::shared_ptr<WIDGET> createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
 	{
 		auto widget = std::make_shared<ParagraphTextWidget>(text.substr(fragment.begin, fragment.length).toUtf8(), style);
+		widget->setTransparentToMouse(true);
 		paragraph.attach(widget);
 		fragments.push_back(widget);
 		return widget;
@@ -499,4 +500,57 @@ void Paragraph::displayRecursive(WidgetGraphicsContext const& context)
 {
 	updateLayout();
 	WIDGET::displayRecursive(context);
+}
+
+void Paragraph::display(int xOffset, int yOffset)
+{
+	if (!isMouseDown || onClickHandlers.empty()) { return; }
+
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	iV_Box(x0, y0, x0 + width(), y0 + height(), WZCOL_RED);
+}
+
+void Paragraph::addOnClickHandler(const W_PARAGRAPH_ONCLICK_FUNC& onClickFunc)
+{
+	if (!onClickFunc)
+	{
+		return;
+	}
+	onClickHandlers.push_back(onClickFunc);
+}
+
+void Paragraph::clicked(W_CONTEXT *, WIDGET_KEY key)
+{
+	dirty = true;
+	isMouseDown = true;
+}
+
+/* Respond to a mouse button up */
+void Paragraph::released(W_CONTEXT *, WIDGET_KEY key)
+{
+	if (!isMouseDown)
+	{
+		return;
+	}
+
+	isMouseDown = false;
+
+	/* Call all onClick event handlers */
+	for (auto it = onClickHandlers.begin(); it != onClickHandlers.end(); it++)
+	{
+		auto onClickHandler = *it;
+		if (onClickHandler)
+		{
+			onClickHandler(*this, key);
+		}
+	}
+	dirty = true;
+}
+
+/* Respond to the mouse moving off the widget */
+void Paragraph::highlightLost()
+{
+	isMouseDown = false;
+	dirty = true;
 }
