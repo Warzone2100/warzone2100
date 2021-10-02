@@ -272,6 +272,11 @@ void WIDGET::setTransparentToClicks(bool hasClickTransparency)
 	isTransparentToClicks = hasClickTransparency;
 }
 
+void WIDGET::setTransparentToMouse(bool hasMouseTransparency)
+{
+	isTransparentToMouse = hasMouseTransparency;
+}
+
 bool WIDGET::transparentToClicks() const
 {
 	return isTransparentToClicks;
@@ -1152,7 +1157,7 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		return didProcessClick;
 	}
 
-	if (psMouseOverWidget.expired())
+	if (!isTransparentToMouse && psMouseOverWidget.expired())
 	{
 		psMouseOverWidget = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
 	}
