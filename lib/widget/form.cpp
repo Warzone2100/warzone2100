@@ -528,3 +528,26 @@ void W_FULLSCREENOVERLAY_CLICKFORM::run(W_CONTEXT *psContext)
 	}
 	inputLoseFocus();	// clear the input buffer.
 }
+
+void displayChildDropShadows(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	PIELIGHT dropShadowColor = pal_RGBA(0, 0, 0, 40);
+	const int widerPadding = 4;
+	const int closerPadding = 2;
+	int childXOffset = psWidget->x() + xOffset;
+	int childYOffset = psWidget->y() + yOffset;
+	for (auto& child : psWidget->children())
+	{
+		if (!child->visible()) { continue; }
+		int childX0 = child->x() + childXOffset;
+		int childY0 = child->y() + childYOffset;
+		int childDropshadowWiderX0 = std::max(childX0 - widerPadding, 0);
+		int childDropshadowWiderX1 = std::min(childX0 + child->width() + widerPadding, pie_GetVideoBufferWidth());
+		int childDropshadowWiderY1 = std::min(childY0 + child->height() + widerPadding, pie_GetVideoBufferHeight());
+		int childDropshadowCloserX0 = std::max(childX0 - closerPadding, 0);
+		int childDropshadowCloserX1 = std::min(childX0 + child->width() + closerPadding, pie_GetVideoBufferWidth());
+		int childDropshadowCloserY1 = std::min(childY0 + child->height() + closerPadding, pie_GetVideoBufferHeight());
+		pie_UniTransBoxFill(childDropshadowWiderX0, childY0, childDropshadowWiderX1, childDropshadowWiderY1, dropShadowColor);
+		pie_UniTransBoxFill(childDropshadowCloserX0, childY0, childDropshadowCloserX1, childDropshadowCloserY1, dropShadowColor);
+	}
+}

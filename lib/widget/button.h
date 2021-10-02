@@ -179,4 +179,10 @@ private:
 
 std::shared_ptr<W_BUTTON> makeFormTransparentCornerButton(const char* text, int buttonPadding /* = TAB_BUTTONS_PADDING */, PIELIGHT buttonBackgroundFill /* = WZCOL_DEBUG_FILL_COLOR */);
 
+struct PopoverMenuButtonDisplayCache
+{
+	WzText text;
+};
+void PopoverMenuButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
 #endif // __INCLUDED_LIB_WIDGET_BUTTON_H__
