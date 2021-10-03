@@ -86,6 +86,7 @@ static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
 static WZ_Command_Interface wz_cmd_interface = WZ_Command_Interface::None;
+static int wz_min_autostart_players = -1;
 
 #if defined(WZ_OS_WIN)
 
@@ -345,6 +346,7 @@ typedef enum
 	CLI_ADD_LOBBY_ADMINHASH,
 	CLI_ADD_LOBBY_ADMINPUBLICKEY,
 	CLI_COMMAND_INTERFACE,
+	CLI_STARTPLAYERS,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -411,6 +413,7 @@ static const struct poptOption *getOptionsTable()
 		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
 		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
 		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin)")},
+		{ "startplayers", POPT_ARG_STRING, CLI_STARTPLAYERS, N_("Minimum required players to auto-start game"), N_("startplayers")},
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -925,6 +928,19 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Unsupported / invalid enablecmdinterface value");
 			}
 			break;
+		case CLI_STARTPLAYERS:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad start players count");
+			}
+			wz_min_autostart_players = atoi(token);
+			if (wz_min_autostart_players < 0)
+			{
+				qFatal("Invalid start players count");
+			}
+			debug(LOG_INFO, "Games will automatically start with [%d] players (when ready)", wz_min_autostart_players);
+			break;
 
 		};
 	}
@@ -978,4 +994,9 @@ bool lobby_slashcommands_enabled()
 WZ_Command_Interface wz_command_interface()
 {
 	return wz_cmd_interface;
+}
+
+int min_autostart_player_count()
+{
+	return wz_min_autostart_players;
 }

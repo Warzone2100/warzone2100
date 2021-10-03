@@ -44,4 +44,6 @@ enum class WZ_Command_Interface
 };
 WZ_Command_Interface wz_command_interface();
 
+int min_autostart_player_count();
+
 #endif // __INCLUDED_SRC_CLPARSE_H__
