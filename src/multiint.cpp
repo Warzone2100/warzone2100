@@ -6294,6 +6294,36 @@ public:
 
 static WzHostLobbyOperationsInterface cmdInterface;
 
+static int getBoundedMinAutostartPlayerCount()
+{
+	int minAutoStartPlayerCount = min_autostart_player_count();
+	if (minAutoStartPlayerCount <= 0)
+	{
+		// there is no minimum configured
+		return -1;
+	}
+	int numAIPlayers = 0;
+	int maxPlayerSlots = 0;
+	for (int j = 0; j < MAX_PLAYERS; j++)
+	{
+		if ((NetPlay.players[j].allocated || NetPlay.players[j].ai == AI_OPEN) && NetPlay.players[j].position < game.maxPlayers)
+		{
+			maxPlayerSlots++;
+		}
+		else if (!NetPlay.players[j].allocated && NetPlay.players[j].ai >= 0)
+		{
+			numAIPlayers++;
+		}
+	}
+	if (minAutoStartPlayerCount > maxPlayerSlots)
+	{
+		debug(LOG_WARNING, "startplayers (%d) exceeds maxPlayerSlots (%d) - using the latter; (game.maxPlayers: %" PRIu8 ", # ai players: %d)", minAutoStartPlayerCount, maxPlayerSlots, game.maxPlayers, numAIPlayers);
+		minAutoStartPlayerCount = maxPlayerSlots;
+	}
+
+	return minAutoStartPlayerCount;
+}
+
 void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 {
 	NETQUEUE queue;
@@ -6419,7 +6449,33 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			// If hosting and game not yet started, try to start the game if everyone is ready.
 			if (NetPlay.isHost && multiplayPlayersReady())
 			{
-				startMultiplayerGame();
+				bool allowStart = true;
+				int minAutoStartPlayerCount = getBoundedMinAutostartPlayerCount();
+				if (minAutoStartPlayerCount > 0)
+				{
+					int playersPresent = 0;
+					for (int j = 0; j < MAX_PLAYERS; j++)
+					{
+						if (!NetPlay.players[j].allocated)
+						{
+							continue;
+						}
+						playersPresent++;
+					}
+					if (playersPresent < minAutoStartPlayerCount)
+					{
+						allowStart = false;
+					}
+				}
+				if (allowStart)
+				{
+					startMultiplayerGame();
+				}
+				else
+				{
+					std::string msg = astringf("Game will not start until there are %d players.", minAutoStartPlayerCount);
+					sendRoomSystemMessage(msg.c_str());
+				}
 			}
 			break;
 
