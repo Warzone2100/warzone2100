@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-09-20 00:27+0000\n"
-"PO-Revision-Date: 2021-09-20 11:36\n"
+"PO-Revision-Date: 2021-10-03 07:50\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -15785,15 +15785,15 @@ msgstr "视窗模式"
 
 #: src/frontend.cpp:1252
 msgid "Graphics Mode"
-msgstr ""
+msgstr "图形模式"
 
 #: src/frontend.cpp:1257
 msgid "Resolution"
-msgstr ""
+msgstr "分辨率"
 
 #: src/frontend.cpp:1262
 msgid "Display Scale"
-msgstr ""
+msgstr "缩放比例"
 
 #: src/frontend.cpp:1290
 msgid "Adaptive"
