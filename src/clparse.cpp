@@ -85,6 +85,7 @@ static std::string wz_autoratingUrl;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
+static WZ_Command_Interface wz_cmd_interface = WZ_Command_Interface::None;
 
 #if defined(WZ_OS_WIN)
 
@@ -340,6 +341,7 @@ typedef enum
 	CLI_LOBBY_SLASHCOMMANDS,
 	CLI_ADD_LOBBY_ADMINHASH,
 	CLI_ADD_LOBBY_ADMINPUBLICKEY,
+	CLI_COMMAND_INTERFACE,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -405,6 +407,7 @@ static const struct poptOption *getOptionsTable()
 		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
 		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
 		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
+		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin)")},
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -902,6 +905,24 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			addLobbyAdminPublicKey(token);
 			break;
 
+		case CLI_COMMAND_INTERFACE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				// use default, which is currently "stdin"
+				token = "stdin";
+			}
+			if (strcmp(token, "stdin") == 0)
+			{
+				// enable stdin
+				wz_cmd_interface = WZ_Command_Interface::StdIn_Interface;
+			}
+			else
+			{
+				qFatal("Unsupported / invalid enablecmdinterface value");
+			}
+			break;
+
 		};
 	}
 
@@ -949,4 +970,9 @@ bool streamer_spectator_mode()
 bool lobby_slashcommands_enabled()
 {
 	return wz_lobby_slashcommands;
+}
+
+WZ_Command_Interface wz_command_interface()
+{
+	return wz_cmd_interface;
 }

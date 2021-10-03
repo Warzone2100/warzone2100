@@ -106,6 +106,7 @@
 #include <sodium.h>
 #include "updatemanager.h"
 #include "activity.h"
+#include "stdinreader.h"
 #if defined(ENABLE_DISCORD)
 #include "integrations/wzdiscordrpc.h"
 #endif
@@ -1560,6 +1561,23 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 	return true;
 }
 
+static void wzCmdInterfaceInit()
+{
+	switch (wz_command_interface())
+	{
+		case WZ_Command_Interface::None:
+			return;
+		case WZ_Command_Interface::StdIn_Interface:
+			stdInThreadInit();
+			break;
+	}
+}
+
+static void wzCmdInterfaceShutdown()
+{
+	stdInThreadShutdown();
+}
+
 // for backend detection
 extern const char *BACKEND;
 
@@ -1824,6 +1842,8 @@ int realmain(int argc, char *argv[])
 
 	initializeCrashHandlingContext(gfxbackend);
 
+	wzCmdInterfaceInit();
+
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString(false));
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 	debug(LOG_WZ, "Backend: %s", BACKEND);
@@ -1957,6 +1977,7 @@ int realmain(int argc, char *argv[])
 #if defined(ENABLE_DISCORD)
 	discordRPCShutdown();
 #endif
+	wzCmdInterfaceShutdown();
 	urlRequestShutdown();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion

@@ -37,4 +37,11 @@ std::string getAutoratingUrl();
 bool streamer_spectator_mode();
 bool lobby_slashcommands_enabled();
 
+enum class WZ_Command_Interface
+{
+	None,
+	StdIn_Interface,
+};
+WZ_Command_Interface wz_command_interface();
+
 #endif // __INCLUDED_SRC_CLPARSE_H__
