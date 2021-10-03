@@ -167,7 +167,10 @@ static void poptPrintHelp(poptContext ctx, FILE *output)
 		if (ctx->table[i].argument)
 		{
 			sstrcat(txt, "=");
-			sstrcat(txt, ctx->table[i].argDescrip);
+			if (ctx->table[i].argDescrip)
+			{
+				sstrcat(txt, ctx->table[i].argDescrip);
+			}
 		}
 
 		// calculate number of terminal columns required to print
