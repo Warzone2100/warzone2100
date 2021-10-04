@@ -278,4 +278,9 @@ static inline char *PHYSFS_fgets(char *s, int size, PHYSFS_file *stream)
 
 bool WZ_PHYSFS_createPlatformPrefDir(const WzString& basePath, const WzString& appendPath);
 
+// Cleanup files (from oldest to newest) in a folder, matching a file extension
+// fileLimit: >= 0, the maximum number of matching files that should be in the folder - excess are passed from oldest to newest to deleteFileFunction
+// fileLimit: < 0, pass the single oldest matching file to deleteFileFunction
+int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, int fileLimit, const std::function<bool (const char *fileName)>& deleteFileFunction);
+
 #endif // _physfs_ext_h
