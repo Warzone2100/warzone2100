@@ -4466,6 +4466,30 @@ static bool loadMainFile(const std::string &fileName)
 {
 	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
 
+	if (save.contains("gameType"))
+	{
+		game.type = static_cast<LEVEL_TYPE>(save.value("gameType").toInt());
+	}
+	if (save.contains("scavengers"))
+	{
+		auto saveScavValue = save.value("scavengers").toUInt();
+		if (saveScavValue <= ULTIMATE_SCAVENGERS)
+		{
+			game.scavengers = static_cast<uint8_t>(saveScavValue);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Invalid scavengers value: %u", saveScavValue);
+		}
+	}
+	if (save.contains("maxPlayers"))
+	{
+		game.maxPlayers = save.value("maxPlayers").toUInt();
+	}
+	if (save.contains("mapHasScavengers"))
+	{
+		game.mapHasScavengers = save.value("mapHasScavengers").toBool();
+	}
 	if (save.contains("playerBuiltHQ"))
 	{
 		playerBuiltHQ = save.value("playerBuiltHQ").toBool();
@@ -4473,6 +4497,10 @@ static bool loadMainFile(const std::string &fileName)
 	if (save.contains("challengeFileName"))
 	{
 		challengeFileName = save.string("challengeFileName");
+	}
+	if (save.contains("challengeActive"))
+	{
+		challengeActive = save.value("challengeActive").toBool();
 	}
 	if (save.contains("builtInMap"))
 	{
