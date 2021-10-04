@@ -4938,7 +4938,7 @@ nonstd::optional<nlohmann::json> parseJsonFile(const char *filename)
 	UDWORD pFileSize;
 	char *ppFileData = nullptr;
 	debug(LOG_SAVEGAME, "starting deserialize %s", filename);
-	if (!loadFile(filename, &ppFileData, &pFileSize))
+	if (!loadFile(filename, &ppFileData, &pFileSize, false))
 	{
 		debug(LOG_SAVE, "No %s found, sad", filename);
 		return nullopt;
