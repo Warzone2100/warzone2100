@@ -530,25 +530,26 @@ bool closeLoadSaveOnShutdown()
 	filename reference.  We delete this file, any .es file with the same
 	name, and any files in the directory with the same name.
 ***************************************************************************/
-void deleteSaveGame(char *fileName)
+void deleteSaveGame(const char *fileName)
 {
 	ASSERT(strlen(fileName) < MAX_STR_LENGTH, "deleteSaveGame; save game name too long");
-
 	PHYSFS_delete(fileName);
-	fileName[strlen(fileName) - 4] = '\0'; // strip extension
 
-	strcat(fileName, ".es");					// remove script data if it exists.
-	PHYSFS_delete(fileName);
-	fileName[strlen(fileName) - 3] = '\0'; // strip extension
-	const std::string fileNameStr(fileName);
+	char tmp[PATH_MAX] = {0};
+	strncpy(tmp, fileName, PATH_MAX - 1);
+	tmp[strlen(tmp) - 4] = '\0'; // strip extension
+
+	strcat(tmp, ".es");					// remove script data if it exists.
+	PHYSFS_delete(tmp);
+	tmp[strlen(tmp) - 3] = '\0'; // strip extension
 
 	// check for a directory and remove that too.
-	WZ_PHYSFS_enumerateFiles(fileName, [fileName](const char *i) -> bool {
+	WZ_PHYSFS_enumerateFiles(tmp, [tmp](const char *i) -> bool {
 		char del_file[PATH_MAX];
 
 		// Construct the full path to the file by appending the
 		// filename to the directory it is in.
-		snprintf(del_file, sizeof(del_file), "%s/%s", fileName, i);
+		snprintf(del_file, sizeof(del_file), "%s/%s", tmp, i);
 
 		debug(LOG_SAVE, "Deleting [%s].", del_file);
 
@@ -560,7 +561,7 @@ void deleteSaveGame(char *fileName)
 		return true; // continue
 	});
 
-	if (!PHYSFS_delete(fileName))		// now (should be)empty directory
+	if (!PHYSFS_delete(tmp))		// now (should be)empty directory
 	{
 		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", fileName, WZ_PHYSFS_getLastError());
 	}
@@ -999,54 +1000,11 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 	drawBlueBoxInset(x - 1, y - 1, w + 2, h + 2);
 }
 
-
 // Note: remove later at some point
 // returns true if something was deleted
 static bool freeAutoSaveSlot_old(const char *path)
 {
-	char **i, **files;
-	files = PHYSFS_enumerateFiles(path);
-	ASSERT_OR_RETURN(false, files, "PHYSFS_enumerateFiles(\"%s\") failed: %s", path, WZ_PHYSFS_getLastError());
-	int nfiles = 0;
-	for (i = files; *i != nullptr; ++i)
-	{
-		if (!isASavedGamefile(*i, sSaveGameExtension))
-		{
-			// If it doesn't, move on to the next filename
-			continue;
-		}
-		nfiles++;
-	}
-	if (nfiles < totalslots)
-	{
-		PHYSFS_freeList(files);
-		return false;
-	}
-
-	// too many autosaves, let's delete the oldest
-	char oldestSavePath[PATH_MAX];
-	time_t oldestSaveTime = time(nullptr);
-	for (i = files; *i != nullptr; ++i)
-	{
-		char savefile[PATH_MAX];
-
-		if (!isASavedGamefile(*i, sSaveGameExtension))
-		{
-			// If it doesn't, move on to the next filename
-			continue;
-		}
-		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", path, *i);
-		time_t savetime = WZ_PHYSFS_getLastModTime(savefile);
-		if (difftime(savetime, oldestSaveTime) < 0.0)
-		{
-			oldestSaveTime = savetime;
-			strcpy(oldestSavePath, savefile);
-		}
-	}
-	PHYSFS_freeList(files);
-	deleteSaveGame(oldestSavePath);
-	return true;
+	return WZ_PHYSFS_cleanupOldFilesInFolder(path, sSaveGameExtension, -1, [](const char *fileName){ deleteSaveGame(fileName); return true; }) > 0;
 }
 
 static void freeAutoSaveSlot(SAVEGAME_LOC loc)
