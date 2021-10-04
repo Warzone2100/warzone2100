@@ -357,9 +357,9 @@ bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	return true;
 }
 
-bool loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
+bool loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize, bool hard_fail /*= true*/)
 {
-	return loadFile2(pFileName, ppFileData, pFileSize, true, true);
+	return loadFile2(pFileName, ppFileData, pFileSize, true, hard_fail);
 }
 
 // load a file from disk into a fixed memory buffer
