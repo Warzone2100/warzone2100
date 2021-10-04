@@ -2410,6 +2410,7 @@ static void allocatePlayers()
 	DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
+		NetPlay.players[i].team = saveGameData.sNetPlay.players[i].team;
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
 //		NetPlay.players[i].faction; // read and initialized by loadMainFile
