@@ -32,6 +32,7 @@
 #include "netreplay.h"
 #include "netplay.h"
 
+#define MAX_REPLAY_FILES 36
 
 static PHYSFS_file *replaySaveHandle = nullptr;
 static PHYSFS_file *replayLoadHandle = nullptr;
@@ -75,6 +76,17 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	}
 
 	ASSERT_OR_RETURN(false, !subdir.empty(), "Must provide a valid subdir");
+
+	// clean up old replay files
+	std::string replayFullDir = "replay/" + subdir;
+	WZ_PHYSFS_cleanupOldFilesInFolder(replayFullDir.c_str(), ".wzrp", MAX_REPLAY_FILES - 1, [](const char *fileName){
+		if (PHYSFS_delete(fileName) == 0)
+		{
+			debug(LOG_ERROR, "Failed to delete old replay file: %s", fileName);
+			return false;
+		}
+		return true;
+	});
 
 	time_t aclock;
 	time(&aclock);                     // Get time in seconds
