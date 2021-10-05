@@ -381,8 +381,8 @@
 			"R-Cyborg-Metals04",
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 4000,
+		"researchPower": 125,
 		"resultComponents": [
 			"Cyb-Hvywpn-TK"
 		],
@@ -9203,7 +9203,7 @@
 		"name": "Tank Killer Rocket",
 		"requiredResearch": [
 			"R-Wpn-RocketSlow-Accuracy01",
-			"R-Wpn-Rocket-Damage06"
+			"R-Wpn-Rocket-Damage05"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
