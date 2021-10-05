@@ -112,6 +112,7 @@
 #include "wrappers.h"
 #include "faction.h"
 #include "multilobbycommands.h"
+#include "stdinreader.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -6084,6 +6085,8 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 void startMultiplayerGame()
 {
 	ASSERT_HOST_ONLY(return);
+
+	wz_command_interface_output("WZEVENT: startMultiplayerGame\n");
 
 	cancelOrDismissNotificationIfTag([](const std::string& tag) {
 		return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);

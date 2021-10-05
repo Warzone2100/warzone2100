@@ -24,6 +24,7 @@
 #include "lib/netplay/netplay.h"
 #include "multiint.h"
 #include "multilobbycommands.h"
+#include "clparse.h"
 
 #include <string>
 #include <atomic>
@@ -418,3 +419,19 @@ void stdInThreadShutdown()
 }
 
 #endif
+
+void wz_command_interface_output(const char *str, ...)
+{
+	if (wz_command_interface() == WZ_Command_Interface::None)
+	{
+		return;
+	}
+	va_list ap;
+	static char outputBuffer[2048];
+	va_start(ap, str);
+	vssprintf(outputBuffer, str, ap);
+	va_end(ap);
+	fwrite(outputBuffer, sizeof(char), strlen(outputBuffer), stderr);
+	fflush(stderr);
+}
+
