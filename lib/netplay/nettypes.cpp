@@ -836,7 +836,7 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 	uint8_t player;
 	while (NETreplayLoadNetMessage(newMessage, player))
 	{
-		if (player >= MAX_PLAYERS || gameQueues[player] == nullptr)
+		if ((player >= MAX_PLAYERS && player != NetPlay.hostPlayer) || gameQueues[player] == nullptr)
 		{
 			debug(LOG_ERROR, "Skipping message to player %d in replay.", player);
 			continue;
