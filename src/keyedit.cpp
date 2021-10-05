@@ -55,6 +55,8 @@
 #include "multiplay.h"
 #include "ingameop.h"
 
+#include "uiscreens/common.h"
+
 static unsigned int getMaxKeyMapNameWidth(InputManager& inputManager);
 
 // ////////////////////////////////////////////////////////////////////////////

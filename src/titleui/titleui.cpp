@@ -27,6 +27,8 @@
 #include "../intdisplay.h"
 #include "../hci.h"
 
+#include "../uiscreens/common.h"
+
 std::shared_ptr<WzTitleUI> wzTitleUICurrent;
 char serverName[128];
 

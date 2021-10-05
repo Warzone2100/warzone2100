@@ -50,6 +50,8 @@
 #include "../frend.h"
 #include "../init.h"
 
+#include "../uiscreens/common.h"
+
 WzPassBoxTitleUI::WzPassBoxTitleUI(std::function<void(const char *)> next) : next(next)
 {
 }

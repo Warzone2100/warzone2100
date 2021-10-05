@@ -82,6 +82,8 @@
 #include <algorithm>
 #include <limits>
 
+#include "uiscreens/common.h"
+
 static std::shared_ptr<W_SCREEN> debugScreen = nullptr;
 static std::shared_ptr<WZScriptDebugger> globalDialog = nullptr;
 static jsDebugShutdownHandlerFunction globalDialogShutdownHandler;

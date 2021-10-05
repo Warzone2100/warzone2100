@@ -54,6 +54,8 @@
 #include "objmem.h"
 #include "titleui/titleui.h"
 
+#include "uiscreens/common.h"
+
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 #define	IDLIMITS				22000

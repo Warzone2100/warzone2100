@@ -40,6 +40,8 @@
 #include "../warzoneconfig.h"
 #include "../frend.h"
 
+#include "../uiscreens/common.h"
+
 WzMsgBoxTitleUI::WzMsgBoxTitleUI(WzString text, std::shared_ptr<WzTitleUI> next) : text(text), next(next)
 {
 }

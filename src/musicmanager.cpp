@@ -42,6 +42,8 @@
 #include <chrono>
 #include <memory>
 
+#include "uiscreens/common.h"
+
 
 #define W_TRACK_ROW_PADDING 5
 #define W_TRACK_COL_PADDING 10

@@ -81,6 +81,8 @@
 #include "lib/framework/wztime.h"
 #include "keybind.h"
 
+#include "uiscreens/common.h"
+
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
 #define		IDMISSIONRES_CONTINUE		11008

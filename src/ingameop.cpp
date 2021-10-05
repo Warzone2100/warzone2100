@@ -50,6 +50,8 @@
 #include "radar.h"
 #include "seqdisp.h"
 
+#include "uiscreens/common.h"
+
 bool hostQuitConfirmation = true;
 
 bool	InGameOpUp		= false;

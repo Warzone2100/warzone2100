@@ -43,6 +43,8 @@
 #include "../loadsave.h"			// for blueboxes.
 #include "../activity.h"
 
+#include "../uiscreens/common.h"
+
 struct DisplayRemoteGameCache
 {
 	WzText wzText_CurrentVsMaxNumPlayers;

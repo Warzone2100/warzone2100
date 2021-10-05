@@ -39,6 +39,8 @@
 #include "../frend.h"
 #include "lib/widget/checkbox.h"
 
+#include "../uiscreens/common.h"
+
 WzProtocolTitleUI::WzProtocolTitleUI()
 {
 

@@ -115,6 +115,8 @@
 #include "activity.h"
 #include <algorithm>
 
+#include "uiscreens/common.h"
+
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 #define VOTE_TAG                 "voting"
 #define KICK_REASON_TAG          "kickReason"
