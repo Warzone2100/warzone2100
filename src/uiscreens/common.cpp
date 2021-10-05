@@ -260,3 +260,188 @@ void displayTextOption(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	return;
 }
+
+// ////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
+// common widgets.
+
+W_FORM* addBackdrop()
+{
+	return addBackdrop(psWScreen);
+}
+
+W_FORM* addBackdrop(const std::shared_ptr<W_SCREEN>& screen)
+{
+	ASSERT_OR_RETURN(nullptr, screen != nullptr, "Invalid screen pointer");
+	W_FORMINIT sFormInit;                              // Backdrop
+	sFormInit.formID = 0;
+	sFormInit.id = FRONTEND_BACKDROP;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry((SWORD)((pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2),
+							  (SWORD)((pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT) / 2),
+							  HIDDEN_FRONTEND_WIDTH - 1,
+							  HIDDEN_FRONTEND_HEIGHT - 1);
+		});
+	sFormInit.pDisplay = displayTitleBitmap;
+	sFormInit.pUserData = new TitleBitmapCache();
+	sFormInit.onDelete = [](WIDGET* psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete ((TitleBitmapCache*)psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
+
+	return widgAddForm(screen, &sFormInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addTopForm(bool wide)
+{
+	WIDGET* parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	auto topForm = std::make_shared<IntFormTransparent>();
+	parent->attach(topForm);
+	topForm->id = FRONTEND_TOPFORM;
+	if (wide)
+	{
+		topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
+			}));
+	}
+	else
+	{
+		topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
+			}));
+	}
+
+	W_FORMINIT sFormInit;
+	sFormInit.formID = FRONTEND_TOPFORM;
+	sFormInit.id = FRONTEND_LOGO;
+	int imgW = iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO);
+	int imgH = iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO);
+	int dstW = topForm->width();
+	int dstH = topForm->height();
+	if (imgW * dstH < imgH * dstW) // Want to set aspect ratio dstW/dstH = imgW/imgH.
+	{
+		dstW = imgW * dstH / imgH; // Too wide.
+	}
+	else if (imgW * dstH > imgH * dstW)
+	{
+		dstH = imgH * dstW / imgW; // Too high.
+	}
+	sFormInit.x = (topForm->width() - dstW) / 2;
+	sFormInit.y = (topForm->height() - dstH) / 2;
+	sFormInit.width = dstW;
+	sFormInit.height = dstH;
+	sFormInit.pDisplay = displayLogo;
+	widgAddForm(psWScreen, &sFormInit);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addBottomForm()
+{
+	WIDGET* parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	auto botForm = std::make_shared<IntFormAnimated>();
+	parent->attach(botForm);
+	botForm->id = FRONTEND_BOTFORM;
+	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
+		}));
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char* txt, UDWORD formID)
+{
+	WIDGET* parent = widgGetFromID(psWScreen, formID);
+
+	auto label = std::make_shared<W_LABEL>();
+	parent->attach(label);
+	label->id = id;
+	label->setGeometry(PosX, PosY, MULTIOP_READY_WIDTH, FRONTEND_BUTHEIGHT);
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_small, WZCOL_TEXT_BRIGHT);
+	label->setString(txt);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+W_LABEL* addSideText(const std::shared_ptr<W_SCREEN>& psScreen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char* txt)
+{
+	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
+
+	W_LABINIT sLabInit;
+
+	sLabInit.formID = formId;
+	sLabInit.id = id;
+	sLabInit.x = (short)PosX;
+	sLabInit.y = (short)PosY;
+	sLabInit.width = 30;
+	sLabInit.height = FRONTEND_BOTFORMH;
+
+	sLabInit.FontID = font_large;
+
+	sLabInit.pDisplay = displayTextAt270;
+	sLabInit.pText = WzString::fromUtf8(txt);
+	sLabInit.pUserData = new DisplayTextOptionCache();
+	sLabInit.onDelete = [](WIDGET* psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
+
+	return widgAddLabel(psScreen, &sLabInit);
+}
+
+W_LABEL* addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char* txt)
+{
+	return addSideText(psWScreen, FRONTEND_BACKDROP, id, PosX, PosY, txt);
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string& txt, unsigned int style)
+{
+	W_BUTINIT sButInit;
+
+	sButInit.formID = FRONTEND_BOTFORM;
+	sButInit.id = id;
+
+	// Align
+	if (!(style & WBUT_TXTCENTRE))
+	{
+		sButInit.width = (short)iV_GetTextWidth(txt.c_str(), font_large);
+	}
+	else
+	{
+		sButInit.style |= WBUT_TXTCENTRE;
+	}
+
+	// Enable right clicks
+	if (style & WBUT_SECONDARY)
+	{
+		sButInit.style |= WBUT_SECONDARY;
+	}
+
+	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
+	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.onDelete = [](WIDGET* psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
+
+	sButInit.height = FRONTEND_BUTHEIGHT;
+	sButInit.pDisplay = displayTextOption;
+	sButInit.FontID = font_large;
+	sButInit.pText = txt.c_str();
+
+	auto button = std::make_shared<W_BUTTON>(&sButInit);
+	// Disable button
+	if (style & WBUT_DISABLE)
+	{
+		button->setState(WBUT_DISABLE);
+	}
+
+	return button;
+}

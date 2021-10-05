@@ -59,6 +59,8 @@
 #include "clparse.h"
 #include "ingameop.h"
 
+#include "uiscreens/common.h"
+
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 64		// guessing 64 max chars for filename.

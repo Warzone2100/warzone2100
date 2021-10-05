@@ -1,7 +1,5 @@
+#include "titlemenu.h"
 
-#include <limits>
-
-//#include "../multiint.h"
 #include "physfs.h"
 #include "../frontend.h"
 #include "../game.h"
@@ -10,9 +8,6 @@
 #include "../frend.h"
 #include "../mission.h"
 #include "../multiint.h"
-
-#include "titlemenu.h"
-
 
 
 // ////////////////////////////////////////////////////////////////////////////

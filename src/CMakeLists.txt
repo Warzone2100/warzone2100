@@ -68,8 +68,8 @@ if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
 
-file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h" "hci/*.h" "input/*.h" "uiscreens/*.h")
-file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp" "hci/*.cpp" "input/*.cpp" "uiscreens/*.cpp")
+file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h" "hci/*.h" "input/*.h" "uiscreens/*.h" "uiscreens/options/*.h")
+file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp" "hci/*.cpp" "input/*.cpp" "uiscreens/*.cpp" "uiscreens/options/*.cpp")
 
 set(_additionalSourceFiles)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

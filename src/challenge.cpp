@@ -47,6 +47,8 @@
 #include "titleui/titleui.h"
 #include "titleui/multiplayer.h"
 
+#include "uiscreens/common.h"
+
 #define totalslots 36			// challenge slots
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 256		// max chars for slot strings.

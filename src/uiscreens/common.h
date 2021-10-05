@@ -2,7 +2,6 @@
 
 #include <memory>
 
-//#include "lib/widget/widgbase.h"
 #include "lib/widget/button.h"
 #include "lib/widget/slider.h"
 #include "lib/widget/margin.h"
@@ -20,6 +19,10 @@
 #include "../intimage.h"
 #include "../intdisplay.h"
 #include "../version.h"
+#include "../init.h"
+#include "../display.h" // HIDDEN_FRONTEND_WIDTH/HEIGHT
+#include "../frend.h" // IMAGE_FE_LOGO
+#include "../multiint.h" // MULTIOP_READY_WIDTH
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
@@ -83,6 +86,8 @@
 
 #define FRONTEND_SIDEX			24
 #define FRONTEND_SIDEY			FRONTEND_BOTFORMY
+
+#define TRANSLATION_URL "https://translate.wz2100.net"
 
 enum
 {
@@ -238,6 +243,19 @@ void displayTextAt270(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset);
 void displayBigSlider(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset);
 void displayLogo(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset);
 void displayTitleBitmap(WZ_DECL_UNUSED WIDGET* psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset);
+
+void addTopForm(bool wide);
+void addBottomForm();
+W_FORM* addBackdrop();
+W_FORM* addBackdrop(const std::shared_ptr<W_SCREEN>& screen);
+void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string& txt, unsigned int style);
+W_LABEL* addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char* txt);
+W_LABEL* addSideText(const std::shared_ptr<W_SCREEN>& screen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char* txt);
+void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
+
+void displayTextOption(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset);
+
+bool CancelPressed();
 
 // Cycle through options as in program seq(1) from coreutils
 // The T cast is to cycle through enums.

@@ -56,74 +56,22 @@ extern bool	bLimiterLoaded;
 
 
 void changeTitleMode(tMode mode);
-//bool runTitleMenu();
 bool runSinglePlayerMenu();
 bool runCampaignSelector();
 bool runMultiPlayerMenu();
-bool runGameOptionsMenu();
-bool runOptionsMenu();
-bool runGraphicsOptionsMenu();
-bool runAudioAndZoomOptionsMenu();
-bool runVideoOptionsMenu();
-bool runMouseOptionsMenu();
+
+
 bool runTutorialMenu();
 void runContinue();
-//void startTitleMenu();
 void startTutorialMenu();
 void startSinglePlayerMenu();
 void startCampaignSelector();
 void startMultiPlayerMenu();
-void startOptionsMenu();
-void startGraphicsOptionsMenu();
-void startAudioAndZoomOptionsMenu();
-void startVideoOptionsMenu();
-void startMouseOptionsMenu();
-void startGameOptionsMenu();
-void refreshCurrentVideoOptionsValues();
 
-void addTopForm(bool wide);
-void addBottomForm();
-W_FORM *addBackdrop();
-W_FORM *addBackdrop(const std::shared_ptr<W_SCREEN> &screen);
-void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
-W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
-W_LABEL *addSideText(const std::shared_ptr<W_SCREEN> &screen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
-void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
-bool CancelPressed();
 
 /* Tell the frontend when the screen has been resized */
 void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
-
-// Graphics options, shared for in-game options menu use
-char const *graphicsOptionsFmvmodeString();
-char const *graphicsOptionsScanlinesString();
-char const *graphicsOptionsSubtitlesString();
-char const *graphicsOptionsShadowsString();
-char const *graphicsOptionsRadarString();
-char const *graphicsOptionsRadarJumpString();
-char const *graphicsOptionsScreenShakeString();
-void seqFMVmode();
-void seqScanlineMode();
-
-// Video options, shared for in-game options menu use
-char const *videoOptionsDisplayScaleLabel();
-char const *videoOptionsVsyncString();
-std::string videoOptionsDisplayScaleString();
-std::vector<unsigned int> availableDisplayScalesSorted();
-void seqDisplayScale();
-void seqVsyncMode();
-
-// Mouse options, shared for in-game options menu use
-char const *mouseOptionsMflipString();
-char const *mouseOptionsTrapString();
-char const *mouseOptionsMbuttonsString();
-char const *mouseOptionsMmrotateString();
-char const *mouseOptionsCursorModeString();
-char const *mouseOptionsScrollEventString();
-void seqScrollEvent();
 
 
 void SPinit(LEVEL_TYPE gameType);
