@@ -21,3 +21,12 @@
 
 void stdInThreadInit();
 void stdInThreadShutdown();
+
+#include "lib/framework/wzglobal.h"
+
+#if defined(WZ_CC_MINGW)
+#include <cstdio> // For __MINGW_PRINTF_FORMAT define
+void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 1, 2);
+#else
+void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(printf, 1, 2);
+#endif

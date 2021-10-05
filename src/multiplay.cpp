@@ -80,6 +80,7 @@
 #include "lib/framework/wztime.h"
 #include "chat.h" // for InGameChatMessage
 #include "warzoneconfig.h"
+#include "stdinreader.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -171,6 +172,7 @@ static void autoLagKickRoutine()
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendTextMessage(msg.c_str());
+			wz_command_interface_output("WZEVENT: lag-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
 			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION);
 			ingame.LagCounter[i] = 0;
 		}

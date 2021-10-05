@@ -74,6 +74,7 @@
 #include "src/version.h"
 #include "src/loadsave.h"
 #include "src/activity.h"
+#include "src/stdinreader.h"
 
 #if defined (WZ_OS_MAC)
 # include "lib/framework/cocoa_wrapper.h"
@@ -3126,6 +3127,7 @@ static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
 		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
 		// ensure if the lobby returns an error, we are prepared to display it (once)
 		NetPlay.ShowedMOTD = false;
+		wz_command_interface_output("WZEVENT: lobbyerror (%u): %s\n", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
 		break;
 	}
 
@@ -3164,6 +3166,8 @@ error:
 			debug(LOG_ERROR, "%s", NetPlay.MOTD);
 		}
 	}
+
+	wz_command_interface_output("WZEVENT: lobbysocketerror: %s\n", (NetPlay.MOTD) ? NetPlay.MOTD : "");
 
 	return SOCKET_ERROR;
 }
@@ -3251,12 +3255,14 @@ bool LobbyServerConnectionHandler::connect()
 
 	if (hosts == nullptr)
 	{
-		debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(getSockErr()));
+		int sockErrInt = getSockErr();
+		debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(sockErrInt));
 		free(NetPlay.MOTD);
 		if (asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name) == -1)
 		{
 			NetPlay.MOTD = nullptr;
 		}
+		wz_command_interface_output("WZEVENT: lobbyerror (%u): Cannot resolve lobby server: %s\n", 0, strSockError(sockErrInt));
 		server_not_there = true;
 		return bProcessingConnectOrDisconnectThisCall;
 	}
@@ -3307,6 +3313,8 @@ bool LobbyServerConnectionHandler::connect()
 
 	gamestruct.gameId = ntohl(gameId);
 	debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
+
+	wz_command_interface_output("WZEVENT: lobbyid: %" PRIu32 "\n", gamestruct.gameId);
 
 	// Register our game with the server
 	if (writeAll(rs_socket, "addg", sizeof("addg")) == SOCKET_ERROR
@@ -5241,6 +5249,7 @@ static bool onBanList(const char *ip)
 			return true;
 		}
 	}
+	wz_command_interface_output("WZEVENT: bancheck: %s\n", ip);
 	return false;
 }
 
