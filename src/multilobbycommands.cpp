@@ -117,6 +117,7 @@ static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx)
 		{
 			debug(LOG_INFO, "Received an admin check for player %" PRIu32 " that passed (public identity: %s), but they have not yet verified their identity", playerIdx, senderIdentityHash.c_str());
 		}
+		return false;
 	}
 	return true;
 }
