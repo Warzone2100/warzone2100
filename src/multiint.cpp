@@ -8171,6 +8171,8 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object)
 		debug(LOG_POPUP, "Missing map used for replay: \"%s\" (hash: %s)", game.map, game.hash.toString().c_str());
 		return false;
 	}
+	// Must restore `builtInMap` (this matters for re-loading the map!) - see loadMapPreview() in multiint.cpp
+	builtInMap = (mapData->realFileName == nullptr);
 
 	for (Sha256 &hash : game.modHashes)
 	{
