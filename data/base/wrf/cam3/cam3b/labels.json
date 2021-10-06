@@ -83,6 +83,14 @@
 		"label": "gammaCyborgFactoryAssembly",
 		"pos": [2112, 2112]
 	},
+	"position_21": {
+		"label": "buildPos1",
+		"pos": [3200, 896]
+	},
+	"position_22": {
+		"label": "buildPos2",
+		"pos": [4864, 640]
+	},
 
 	"area_0": {
 		"label": "landingZone",

@@ -22,7 +22,12 @@ var totalTransportLoads;
 function baseEstablished()
 {
 	//Now we check if there is stuff built here already from cam1-C.
-	if (camCountStructuresInArea("buildArea") >= 7)
+	var total = camCountStructuresInArea("buildArea") +
+				camCountStructuresInArea("buildArea2") +
+				camCountStructuresInArea("buildArea3") +
+				camCountStructuresInArea("buildArea4") +
+				camCountStructuresInArea("buildArea5");
+	if (total >= 7)
 	{
 		if (blipActive)
 		{
@@ -157,7 +162,7 @@ function eventStartLevel()
 	}
 
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
-	camPlayVideos("MB1CA_MSG");
+	camPlayVideos({video: "MB1CA_MSG", type: CAMP_MSG});
 
 	// first transport after 10 seconds
 	queue("startTransporterAttack", camSecondsToMilliseconds(10));

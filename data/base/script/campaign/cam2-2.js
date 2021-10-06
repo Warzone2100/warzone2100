@@ -226,8 +226,8 @@ function eventStartLevel()
 	truckDefense();
 	camEnableFactory("COFactoryWest");
 
-	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("vtolAttack", camSecondsToMilliseconds(1));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

@@ -158,7 +158,7 @@ function eventStartLevel()
 	}
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camPlayVideos(["MB1A-C_MSG", "MB1A-C_MSG2"]);
+	camPlayVideos([{video: "MB1A-C_MSG", type: CAMP_MSG}, {video: "MB1A-C_MSG2", type: MISS_MSG}]);
 
 	index = 0;
 	switchLZ = 0;

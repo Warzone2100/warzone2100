@@ -6,6 +6,6 @@ function eventStartLevel()
 	centreView(13, 52);
 	setNoGoArea(10, 51, 12, 53, CAM_HUMAN_PLAYER);
 	setMissionTime(camMinutesToSeconds(15));
-	camPlayVideos(["CAM1_OUT", "CAM1_OUT2", "CAM2_BRIEF"]);
+	camPlayVideos([{video: "CAM1_OUT", type: CAMP_MSG}, {video: "CAM1_OUT2", type: CAMP_MSG}, {video: "CAM2_BRIEF", type: CAMP_MSG}]);
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "CAM_2A");
 }

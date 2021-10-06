@@ -71,7 +71,7 @@ camAreaEvent("NPTransportTrigger", function(droid)
 //Only called once when the New Paradigm takes the artifact for the first time.
 function artifactVideoSetup()
 {
-	camPlayVideos("SB1_7_MSG3");
+	camPlayVideos({video: "SB1_7_MSG3", type: MISS_MSG});
 	camCallOnce("removeCanyonBlip");
 	artiMovePos = "NPWayPoint";
 }
@@ -163,7 +163,7 @@ function getArtifact()
 		if (camDist(artiMembers[idx], artiLoc) < GRAB_RADIUS)
 		{
 			camCallOnce("artifactVideoSetup");
-			hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
+			hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, false); //NPLZ blip
 			droidWithArtiID = artiMembers[idx].id;
 			enemyHasArtifact = true;
 			camSafeRemoveObject(realCrate, false);
@@ -279,7 +279,7 @@ function eventStartLevel()
 	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, SCAV_7);
 	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, SCAV_7);
 	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, SCAV_7);
-	
+
 	// New MRA Mantis Tracks units on the hill
 	addDroid(NEW_PARADIGM, 29, 16, "MRA Mantis Tracks", "Body12SUP", "tracked01", "", "", "Rocket-MRL");
 	addDroid(NEW_PARADIGM, 29, 17, "MRA Mantis Tracks", "Body12SUP", "tracked01", "", "", "Rocket-MRL");
@@ -347,6 +347,6 @@ function eventStartLevel()
 	camManageTrucks(NEW_PARADIGM);
 	buildLancers();
 
-	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
+	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); //Canyon
 	queue("startArtifactCollection", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 }

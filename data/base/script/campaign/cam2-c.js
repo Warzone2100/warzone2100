@@ -31,8 +31,8 @@ function videoTrigger()
 	setTimer("captureCivilians", camChangeOnDiff(camSecondsToMilliseconds(10)));
 
 	hackRemoveMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	camPlayVideos("MB2_C_MSG2");
-	hackAddMessage("C2C_OBJ2", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos({video: "MB2_C_MSG2", type: MISS_MSG});
+	hackAddMessage("C2C_OBJ2", PROX_MSG, CAM_HUMAN_PLAYER, false);
 }
 
 //Enable heavy factories and make groups do what they need to.
@@ -404,9 +404,9 @@ function eventStartLevel()
 	shepardGroup = camMakeGroup("heavyGroup2");
 	enableFactories();
 
-	camPlayVideos("MB2_C_MSG");
-	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos({video: "MB2_C_MSG", type: MISS_MSG});
+	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

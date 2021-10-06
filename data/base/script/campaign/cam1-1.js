@@ -133,13 +133,13 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
-			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 40 : 30)),
+			templates: [ ((difficulty === EASY || difficulty === MEDIUM) ? cTempl.triketwin : cTempl.trikeheavy), cTempl.blokeheavy, ((difficulty === EASY || difficulty === MEDIUM) ? cTempl.buggytwin : cTempl.buggyheavy), cTempl.bjeepheavy ]
 		},
 	});
 
-	camPlayVideos("FLIGHT");
-	hackAddMessage("C1-1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos({video: "FLIGHT", type: CAMP_MSG});
+	hackAddMessage("C1-1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("checkFrontBunkers", camSecondsToMilliseconds(5));
 }

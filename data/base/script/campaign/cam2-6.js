@@ -23,14 +23,6 @@ function camEnemyBaseDetected_COMainBase()
 		regroup: false,
 	});
 
-	camManageGroup(camMakeGroup("southEastGroup"), CAM_ORDER_COMPROMISE, {
-		pos: [
-			camMakePos("playerLZ"),
-		],
-		repair: 40,
-		regroup: false,
-	});
-
 	camEnableFactory("COCyborgFactory-b1");
 	camEnableFactory("COCyborgFactory-b2");
 	camEnableFactory("COHeavyFactory-b2R");
@@ -39,13 +31,11 @@ function camEnemyBaseDetected_COMainBase()
 camAreaEvent("factoryTriggerWest", function(droid)
 {
 	enableTimeBasedFactories();
-
 });
 
 camAreaEvent("factoryTriggerEast", function(droid)
 {
 	enableTimeBasedFactories();
-
 });
 
 function camEnemyBaseEliminated_COUplinkBase()
@@ -76,6 +66,17 @@ function truckDefense()
 	var list = ["Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-CB-Tower01", "Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-SensoTower02"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
+}
+
+function southEastAttack()
+{
+	camManageGroup(camMakeGroup("southEastGroup"), CAM_ORDER_COMPROMISE, {
+		pos: [
+			camMakePos("playerLZ"),
+		],
+		repair: 40,
+		regroup: false,
+	});
 }
 
 function northWestAttack()
@@ -233,20 +234,18 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	if (difficulty >= HARD)
 	{
 		addDroid(THE_COLLECTIVE, 26, 27, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
 		addDroid(THE_COLLECTIVE, 42, 4, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
-
 		camManageTrucks(THE_COLLECTIVE);
-		queue("truckDefense", camSecondsToMilliseconds(10));
-
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(6)));
 	}
 
-	queue("northWestAttack", camMinutesToMilliseconds(2));
-	queue("mainBaseAttackGroup", camMinutesToMilliseconds(3));
-	queue("enableTimeBasedFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
+	queue("northWestAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	queue("mainBaseAttackGroup", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
+	queue("southEastAttack", camChangeOnDiff(camMinutesToMilliseconds(5)));
+	queue("enableTimeBasedFactories", camChangeOnDiff(camMinutesToMilliseconds(6)));
 }

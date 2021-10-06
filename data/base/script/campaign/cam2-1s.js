@@ -18,5 +18,5 @@ function eventStartLevel()
 	//Set Mission Time
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 	//Give player briefings
-	camPlayVideos(["MB2_1_MSG", "MB2_1_MSG2"]);
+	camPlayVideos([{video: "MB2_1_MSG", type: CAMP_MSG}, {video: "MB2_1_MSG2", type: MISS_MSG}]);
 }

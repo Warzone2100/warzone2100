@@ -54,14 +54,14 @@ camAreaEvent("rescueTrigger", function(droid)
 	queue("getAlphaUnitIDs", camSecondsToMilliseconds(2));
 	setTimer("phantomFactorySE", camChangeOnDiff(camMinutesToMilliseconds(4)));
 
-	camPlayVideos("MB3_2_MSG4");
+	camPlayVideos({video: "MB3_2_MSG4", type: MISS_MSG});
 });
 
 //Play videos, donate alpha to the player and setup reinforcements.
 camAreaEvent("phantomFacTrigger", function(droid)
 {
 	vtolAttack();
-	camPlayVideos(["pcv456.ogg", "MB3_2_MSG3"]); //Warn about VTOLs.
+	camPlayVideos(["pcv456.ogg", {video: "MB3_2_MSG3", type: CAMP_MSG}]); //Warn about VTOLs.
 	queue("enableReinforcements", camSecondsToMilliseconds(5));
 });
 
@@ -294,7 +294,7 @@ function eventStartLevel()
 
 	hackAddMessage("C3-2_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	queue("setAlphaExp", camSecondsToMilliseconds(2));
-	queue("setupPatrolGroups", camMinutesToMilliseconds(1.5));
+	queue("setupPatrolGroups", camChangeOnDiff(camMinutesToMilliseconds(2)));
 
 	setTimer("phantomFactoryNE", camChangeOnDiff(camMinutesToMilliseconds(3.5)));
 	setTimer("phantomFactorySW", camChangeOnDiff(camMinutesToMilliseconds(5.5)));

@@ -48,7 +48,7 @@ camAreaEvent("removeRedObjectiveBlip", function()
 
 camAreaEvent("LandingZoneTrigger", function()
 {
-	camPlayVideos(["pcv456.ogg", "SB1_4_B"]);
+	camPlayVideos(["pcv456.ogg", {video: "SB1_4_B", type: MISS_MSG}]);
 	hackRemoveMessage("C1-4_LZ", PROX_MSG, CAM_HUMAN_PLAYER); //Remove LZ 2 blip.
 
 	var lz = getObject("LandingZone2"); // will override later

@@ -28,7 +28,7 @@ function eventDestroyed(obj)
 		if (enumDroid(CAM_HUMAN_PLAYER).length === 0)
 		{
 			//Play an addition special video when losing on the last Gamma mission.
-			hackAddMessage("MB3_4_MSG5", MISS_MSG, CAM_HUMAN_PLAYER, true);
+			camPlayVideos({video: "MB3_4_MSG5", type: CAMP_MSG});
 		}
 	}
 }
@@ -86,7 +86,7 @@ function activateNexus()
 
 function camEnemyBaseDetected_NX_SWBase()
 {
-	hackAddMessage("MB3_4_MSG4", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos({video: "MB3_4_MSG4", type: MISS_MSG});
 	firstAbsorbAttack(); //before Nexus state activation to prevent sound spam.
 	queue("activateNexus", camSecondsToMilliseconds(1));
 }
@@ -386,7 +386,7 @@ function eventStartLevel()
 	});
 
 	//Show Project transport flying video.
-	hackAddMessage("MB3_4_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos({video: "MB3_4_MSG3", type: CAMP_MSG});
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
