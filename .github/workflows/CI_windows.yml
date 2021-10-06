@@ -248,8 +248,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.2.182.0/windows/VulkanSDK-1.2.182.0-Installer.exe?Human=true"
-        $VULKAN_DL_SHA256 = "7089d48011f06c4a02a593913c6a9385d1652ab7765c25d2666d5d6ef4e24af8"
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.2.189.2/windows/VulkanSDK-1.2.189.2-Installer.exe?Human=true"
+        $VULKAN_DL_SHA256 = "43ef1f8362f827c6db0d5aceb70652835180ceded9183a3a1103e5e2c8e58b50"
 
         $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
         $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
@@ -258,7 +258,7 @@ jobs:
         $req = Req -Params @{ 'Method'='GET';'Uri'="$VULKAN_DL_URL";'OutFile'="${VK_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${VULKAN_DL_SHA256}" -Algorithm SHA256
 
         Write-Host "Running Vulkan SDK installer..."
-        Start-Process "${VK_DL_PATH}" -ArgumentList "/S" -Wait
+        Start-Process "${VK_DL_PATH}" -ArgumentList "--accept-licenses","--default-answer","--confirm-command","install" -Wait
         Write-Host "Vulkan SDK installer completed"
 
         $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
