@@ -24,8 +24,8 @@
 #ifndef __INCLUDED_SRC_TITLEUI_MULTIPLAYER_H__
 #define __INCLUDED_SRC_TITLEUI_MULTIPLAYER_H__
 
-#include "../wrappers.h"
 #include "titleui.h"
+//#include "../wrappers.h"
 
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
@@ -33,6 +33,7 @@ using nonstd::nullopt;
 
 class IntFormAnimated; // forward-declare
 
+//#include "titleui.h"
 class WzMultiplayerOptionsTitleUI : public WzTitleUI
 {
 public:

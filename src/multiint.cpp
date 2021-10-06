@@ -116,6 +116,7 @@
 #include <algorithm>
 
 #include "uiscreens/common.h"
+#include "uiscreens/gamemodes/gmcommon.h"
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 #define VOTE_TAG                 "voting"

@@ -92,6 +92,9 @@
 #include "console.h"
 #include "wzscriptdebug.h"
 
+#include "uiscreens/common.h"
+#include "uiscreens/gamemodes/gmcommon.h"
+
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
 #elif defined(__GNUC__)

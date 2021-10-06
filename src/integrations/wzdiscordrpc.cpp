@@ -40,6 +40,9 @@
 #include <sodium.h>
 #include <EmbeddedJSONSignature.h>
 #include <optional-lite/optional.hpp>
+
+#include "../uiscreens/common.h"
+
 using nonstd::optional;
 using nonstd::nullopt;
 

@@ -445,3 +445,10 @@ std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string& txt, unsi
 
 	return button;
 }
+
+// ////////////////////////////////////////////////////////////////////////////
+// Change Mode
+void changeTitleMode(tMode mode)
+{
+	changeTitleUI(std::make_shared<WzOldTitleUI>(mode));
+}

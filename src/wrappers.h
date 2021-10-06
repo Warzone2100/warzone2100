@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_WRAPPERS_H__
 #define __INCLUDED_SRC_WRAPPERS_H__
 
+#include "lib/framework/types.h"
+
 enum TITLECODE
 {
 	TITLECODE_CONTINUE,

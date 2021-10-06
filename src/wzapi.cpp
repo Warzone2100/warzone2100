@@ -77,6 +77,8 @@
 #include "scores.h"
 #include "data.h"
 
+#include "uiscreens/gamemodes/gmcommon.h"
+
 #include <list>
 
 /// Assert for scripts that give useful backtraces and other info.

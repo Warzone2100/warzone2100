@@ -24,13 +24,19 @@
 #ifndef __INCLUDED_SRC_TITLEUI_TITLEUI_H__
 #define __INCLUDED_SRC_TITLEUI_TITLEUI_H__
 
+#include "lib/widget/widgbase.h"
+
 // tMode
-#include "../frontend.h"
+#include "../uiscreens/titleModes.h"
 // TITLECODE
 #include "../wrappers.h"
 
+
 #include <memory>
 #include <functional>
+
+//#include "../uiscreens/common.h"
+//#include "../uiscreens/gamemodes/gmcommon.h"
 
 // Regarding construction vs. start():
 // This allows a reference to the parent to be held for a stack-like effect.

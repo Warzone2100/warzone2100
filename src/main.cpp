@@ -113,6 +113,9 @@
 #include "wzpropertyproviders.h"
 #include "3rdparty/gsl_finally.h"
 
+#include "uiscreens/common.h"
+#include "uiscreens/gamemodes/gmcommon.h"
+
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
 # include <time.h>

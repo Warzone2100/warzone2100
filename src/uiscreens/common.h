@@ -24,6 +24,8 @@
 #include "../frend.h" // IMAGE_FE_LOGO
 #include "../multiint.h" // MULTIOP_READY_WIDTH
 
+#include "titlemenu.h"
+
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
 
@@ -252,10 +254,7 @@ void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string& txt, 
 W_LABEL* addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char* txt);
 W_LABEL* addSideText(const std::shared_ptr<W_SCREEN>& screen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char* txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
-
 void displayTextOption(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset);
-
-bool CancelPressed();
 
 // Cycle through options as in program seq(1) from coreutils
 // The T cast is to cycle through enums.
@@ -284,3 +283,5 @@ struct TitleBitmapCache {
 	WzText modListText;
 	WzText gfxBackend;
 };
+
+void changeTitleMode(tMode mode);

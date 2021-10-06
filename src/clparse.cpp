@@ -42,6 +42,8 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 
+#include "uiscreens/gamemodes/gmcommon.h"
+
 #include <cwchar>
 
 //////

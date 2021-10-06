@@ -50,6 +50,11 @@
 #include "../uiscreens/options/videooptions.h"
 #include "../uiscreens/options/autiozoomoptions.h"
 #include "../uiscreens/options/gameoptions.h"
+#include "../uiscreens/gamemodes/gmcommon.h"
+#include "../uiscreens/gamemodes/tutorialmenu.h"
+#include "../uiscreens/gamemodes/campaignselector.h"
+#include "../uiscreens/gamemodes/singleplayermenu.h"
+#include "../uiscreens/gamemodes/multiplayermenu.h"
 
 WzOldTitleUI::WzOldTitleUI(tMode mode) : mode(mode)
 {

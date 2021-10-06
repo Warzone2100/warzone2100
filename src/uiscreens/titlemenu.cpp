@@ -1,7 +1,6 @@
 #include "titlemenu.h"
 
 #include "physfs.h"
-#include "../frontend.h"
 #include "../game.h"
 #include "../urlhelpers.h"
 #include "../loadsave.h"
@@ -9,6 +8,7 @@
 #include "../mission.h"
 #include "../multiint.h"
 
+#include "gamemodes/gmcommon.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen

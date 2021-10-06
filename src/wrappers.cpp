@@ -45,6 +45,9 @@
 #include "wrappers.h"
 #include "titleui/titleui.h"
 
+#include "uiscreens/common.h"
+#include "uiscreens/gamemodes/gmcommon.h"
+
 struct STAR
 {
 	int      xPos;
