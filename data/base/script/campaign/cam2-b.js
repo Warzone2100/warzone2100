@@ -125,7 +125,7 @@ function eventStartLevel()
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
-	camPlayVideos(["MB2_B_MSG", "MB2_B_MSG2"]);
+	camPlayVideos([{video: "MB2_B_MSG", type: CAMP_MSG}, {video: "MB2_B_MSG2", type: MISS_MSG}]);
 
 	camSetArtifacts({
 		"COResearchLab": { tech: "R-Wpn-Flame2" },
@@ -241,7 +241,7 @@ function eventStartLevel()
 
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
-	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	camEnableFactory("COHeavyFac-b4");
 	camEnableFactory("COCybFac-b4");
@@ -251,5 +251,5 @@ function eventStartLevel()
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	queue("activateBase1Defenders2", camChangeOnDiff(camMinutesToMilliseconds(20)));
 	queue("activateBase1Defenders", camChangeOnDiff(camMinutesToMilliseconds(30)));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

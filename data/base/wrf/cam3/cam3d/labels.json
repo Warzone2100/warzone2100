@@ -51,6 +51,14 @@
 		"label": "NXcyborgFac2Assembly",
 		"pos": [5568, 31040]
 	},
+	"position_13": {
+		"label": "buildPos1",
+		"pos": [960, 28864]
+	},
+	"position_14": {
+		"label": "buildPos2",
+		"pos": [2752, 29888]
+	},
 
 	"area_0": {
 		"label": "landingZone",

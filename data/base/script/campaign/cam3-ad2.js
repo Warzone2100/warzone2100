@@ -231,7 +231,7 @@ function eventResearched(research, structure, player)
 		if (research.name === videoInfo[i].res && !videoInfo[i].played)
 		{
 			videoInfo[i].played = true;
-			camPlayVideos(videoInfo[i].video);
+			camPlayVideos({video: videoInfo[i].video, type: videoInfo[i].type});
 			if (videoInfo[i].res === "R-Sys-Resistance")
 			{
 				enableResearch("R-Comp-MissileCodes01", CAM_HUMAN_PLAYER);
@@ -249,7 +249,7 @@ function checkTime()
 {
 	if (getMissionTime() <= 2)
 	{
-		camPlayVideos("MB3_AD2_MSG2");
+		camPlayVideos({video: "MB3_AD2_MSG2", type: CAMP_MSG});
 		setMissionTime(camHoursToSeconds(1));
 
 		phantomFactorySpawn();
@@ -284,10 +284,10 @@ function eventStartLevel()
 	mapLimit = 137.0;
 	winFlag = false;
 	videoInfo = [
-		{played: false, video: "MB3_AD2_MSG3", res: "R-Sys-Resistance"},
-		{played: false, video: "MB3_AD2_MSG4", res: "R-Comp-MissileCodes01"},
-		{played: false, video: "MB3_AD2_MSG5", res: "R-Comp-MissileCodes02"},
-		{played: false, video: "MB3_AD2_MSG6", res: "R-Comp-MissileCodes03"},
+		{played: false, video: "MB3_AD2_MSG3", type: MISS_MSG, res: "R-Sys-Resistance"},
+		{played: false, video: "MB3_AD2_MSG4", type: CAMP_MSG, res: "R-Comp-MissileCodes01"},
+		{played: false, video: "MB3_AD2_MSG5", type: CAMP_MSG, res: "R-Comp-MissileCodes02"},
+		{played: false, video: "MB3_AD2_MSG6", type: CAMP_MSG, res: "R-Comp-MissileCodes03"},
 	];
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_3_4S", {
@@ -312,7 +312,7 @@ function eventStartLevel()
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
-	camPlayVideos("MB3_AD2_MSG");
+	camPlayVideos({video: "MB3_AD2_MSG", type: MISS_MSG});
 
 	setTimer("checkTime", camSecondsToMilliseconds(0.2));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));

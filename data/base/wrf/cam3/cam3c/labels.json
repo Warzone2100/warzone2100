@@ -33,7 +33,7 @@
 	},
 	"position_8": {
 		"label": "NXHeavyAssembly",
-		"pos": [6592, 22464]
+		"pos": [6848, 21952]
 	},
 	"position_9": {
 		"label": "NXcybFacArtiAssembly",
@@ -46,6 +46,14 @@
 	"position_11": {
 		"label": "NXvtolAssembly",
 		"pos": [4288, 21314]
+	},
+	"position_12": {
+		"label": "buildPos1",
+		"pos": [3456, 23424]
+	},
+	"position_13": {
+		"label": "buildPos2",
+		"pos": [5120, 22912]
 	},
 
 	"area_0": {

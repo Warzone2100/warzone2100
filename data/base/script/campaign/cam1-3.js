@@ -79,7 +79,7 @@ function enableNP(args)
 		repair: 66,
 	});
 
-	camPlayVideos(["pcv455.ogg", "SB1_3_MSG4"]);
+	camPlayVideos(["pcv455.ogg", {video: "SB1_3_MSG4", type: MISS_MSG}]);
 }
 
 function NPReinforce()
@@ -176,7 +176,7 @@ function camEnemyBaseEliminated_ScavBaseGroup()
 
 function playNPWarningMessage()
 {
-	camPlayVideos(["pcv455.ogg", "SB1_3_MSG3"]);
+	camPlayVideos(["pcv455.ogg", {video: "SB1_3_MSG3", type: CAMP_MSG}]);
 }
 
 function eventDroidBuilt(droid, structure)
@@ -226,7 +226,7 @@ function eventStartLevel()
 	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, 7);
 	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, 7);
 	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, 7);
-	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, 7);	
+	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, 7);
 
 	camSetEnemyBases({
 		"ScavBaseGroup": {

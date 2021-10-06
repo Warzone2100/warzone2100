@@ -97,8 +97,8 @@
 	},
 	"area_11": {
 		"label": "factoryTrigger",
-		"pos1": [1856, 4672],
-		"pos2": [2496, 4928],
+		"pos1": [64, 4672],
+		"pos2": [5440, 4928],
 		"subscriber": 0
 	},
 

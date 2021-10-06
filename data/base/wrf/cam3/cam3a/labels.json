@@ -91,6 +91,14 @@
 		"label": "NXcybFac-b4Assembly",
 		"pos": [2112, 8896]
 	},
+  	"position_23": {
+		"label": "buildPos1",
+		"pos": [1024, 13696]
+	},
+  	"position_24": {
+		"label": "buildPos2",
+		"pos": [2176, 9384]
+	},
 
 	"area_0": {
 		"label": "landingZone",

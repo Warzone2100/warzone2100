@@ -145,11 +145,11 @@ function eventStartLevel()
 
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
-	hackAddMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	camEnableFactory("COHeavyFactory");
 	camEnableFactory("COSouthCyborgFactory");
 
-	queue("vtolAttack", camMinutesToMilliseconds(2));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4)));
 }

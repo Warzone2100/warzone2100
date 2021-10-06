@@ -171,7 +171,7 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("setupDamHovers", camSecondsToMilliseconds(3));
 	queue("setupCyborgsEast", camChangeOnDiff(camMinutesToMilliseconds(3)));

@@ -164,7 +164,7 @@ function setupNextMission()
 	{
 		camSetExtraObjectiveMessage(_("Move all units into the valley"));
 
-		camPlayVideos(["labort.ogg", "MB3_1B_MSG", "MB3_1B_MSG2"]);
+		camPlayVideos(["labort.ogg", {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
 		setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));

@@ -16,7 +16,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Attack and destroy all those who resist the Machine! -The Collective
 function secondVideo()
 {
-	camPlayVideos("MB2A_MSG2");
+	camPlayVideos({video: "MB2A_MSG2", type: CAMP_MSG});
 }
 
 //Damage the base and droids for the player
@@ -336,7 +336,7 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	setUnitRank(); //All pre-placed player droids are ranked.
-	camPlayVideos("MB2A_MSG");
+	camPlayVideos({video: "MB2A_MSG", type: MISS_MSG});
 	startedFromMenu = false;
 
 	//Only if starting Beta directly rather than going through Alpha
@@ -354,7 +354,7 @@ function eventStartLevel()
 	queue("secondVideo", camSecondsToMilliseconds(12));
 	queue("groupPatrol", camChangeOnDiff(camMinutesToMilliseconds(1)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
 }

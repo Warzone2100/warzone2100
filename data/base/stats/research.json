@@ -3586,7 +3586,7 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-AAGun04",
-			"R-Defense-AASite-QuadMg1"
+			"R-Defense-AASite-QuadBof"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -3599,7 +3599,10 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Emplacement-HPVcannon",
 		"msgName": "RES_EMP_HPV",
-		"name": "HVC Emplacement",
+		"name": "Hyper Velocity Cannon Emplacement",
+		"redStructures": [
+			"PillBox4"
+		],
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
 		],
@@ -3630,8 +3633,12 @@
 		"id": "R-Defense-HvyFlamer",
 		"msgName": "RES_EMP_HVFL",
 		"name": "Inferno Emplacement",
+		"redStructures": [
+			"PillBox5"
+		],
 		"requiredResearch": [
-			"R-Wpn-Flame2"
+			"R-Wpn-Flame2",
+			"R-Defense-Pillbox05"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -3748,7 +3755,8 @@
 			"Emplacement-MRL-pit"
 		],
 		"requiredResearch": [
-			"R-Wpn-Mortar3"
+			"R-Wpn-Mortar3",
+			"R-Defense-HvyMor"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -3767,7 +3775,8 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG4",
-			"R-Defense-RotMG"
+			"R-Defense-RotMG",
+			"R-Defense-WallTower01"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -3782,7 +3791,8 @@
 		"msgName": "RES_WT8_RC",
 		"name": "Assault Cannon Hardpoint",
 		"requiredResearch": [
-			"R-Wpn-Cannon5"
+			"R-Wpn-Cannon5",
+			"R-Defense-WallTower-HPVcannon"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -3795,12 +3805,13 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-HPVcannon",
 		"msgName": "RES_WT13_HPV",
-		"name": "HVC Hardpoint",
+		"name": "Hyper Velocity Cannon Hardpoint",
 		"redStructures": [
 			"WallTower04"
 		],
 		"requiredResearch": [
-			"R-Wpn-Cannon4AMk1"
+			"R-Wpn-Cannon4AMk1",
+			"R-Defense-WallTower04"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -4824,7 +4835,7 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG4",
-			"R-Wpn-AAGun03"
+			"R-Wpn-AAGun02"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -6411,7 +6422,8 @@
 			"GuardTower6"
 		],
 		"requiredResearch": [
-			"R-Wpn-Missile2A-T"
+			"R-Wpn-Missile2A-T",
+			"R-Defense-Tower06"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -6440,6 +6452,9 @@
 		"id": "R-Defense-HvyA-Trocket",
 		"msgName": "RES_EMP_HVATR",
 		"name": "Tank Killer Emplacement",
+		"redStructures": [
+			"PillBox6"
+		],
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
@@ -6459,7 +6474,8 @@
 			"Emplacement-MdART-pit"
 		],
 		"requiredResearch": [
-			"R-Wpn-HvArtMissile"
+			"R-Wpn-HvArtMissile",
+			"R-Defense-MdArtMissile"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -6507,7 +6523,8 @@
 			"Emplacement-PrisLas"
 		],
 		"requiredResearch": [
-			"R-Wpn-Laser02"
+			"R-Wpn-Laser02",
+			"R-Defense-PrisLas"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -6544,7 +6561,8 @@
 			"Emplacement-Rail2"
 		],
 		"requiredResearch": [
-			"R-Wpn-RailGun03"
+			"R-Wpn-RailGun03",
+			"R-Defense-Rail2"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -6559,7 +6577,8 @@
 		"msgName": "RES_EMP_RotHOW",
 		"name": "Hellstorm Emplacement",
 		"requiredResearch": [
-			"R-Wpn-Howitzer03-Rot"
+			"R-Wpn-Howitzer03-Rot",
+			"R-Defense-HvyHowitzer"
 		],
 		"researchPoints": 5000,
 		"researchPower": 156,
@@ -6592,7 +6611,8 @@
 			"P0-AASite-SAM1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Missile-HvSAM"
+			"R-Wpn-Missile-HvSAM",
+			"R-Defense-SamSite1"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -6610,7 +6630,8 @@
 			"WallTower-HvATrocket"
 		],
 		"requiredResearch": [
-			"R-Wpn-Missile2A-T"
+			"R-Wpn-Missile2A-T",
+			"R-Defense-WallTower-HvyA-Trocket"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -6629,7 +6650,8 @@
 			"GuardTower6"
 		],
 		"requiredResearch": [
-			"R-Wpn-Rocket07-Tank-Killer"
+			"R-Wpn-Rocket07-Tank-Killer",
+			"R-Defense-WallTower06"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -6681,7 +6703,8 @@
 			"WallTower-Rail2"
 		],
 		"requiredResearch": [
-			"R-Wpn-RailGun03"
+			"R-Wpn-RailGun03",
+			"R-Defense-WallTower-Rail2"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
