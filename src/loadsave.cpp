@@ -425,9 +425,10 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	}
 
 	char const *extension = bReplay? sSaveReplayExtension : sSaveGameExtension;
+	size_t extensionLen = strlen(extension);
 	// Note: this is left for backward compatibility reasons.
 	// we want to be able to load .gam but only when no save-info was found
-	WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension](char *i) -> bool {
+	WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension, extensionLen](char *i) -> bool {
 		char savefile[256];
 		time_t savetime;
 
@@ -443,7 +444,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath.c_str(), i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 
-		(i)[strlen(i) - 4] = '\0'; // remove .gam extension
+		(i)[strlen(i) - extensionLen] = '\0'; // remove .gam/.wzrp extension
 		for(auto &el: saveGameNamesAndTimes)
 		{
 			// only add if doesn't exist yet
