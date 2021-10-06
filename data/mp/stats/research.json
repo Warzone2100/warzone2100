@@ -8197,8 +8197,8 @@
 			"R-Wpn-Mortar-Damage03",
 			"R-Wpn-Flame2"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultComponents": [
 			"Mortar-Incendiary"
 		],
