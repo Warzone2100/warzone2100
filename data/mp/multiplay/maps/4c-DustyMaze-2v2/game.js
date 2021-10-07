@@ -212,14 +212,14 @@ class Maze {
             let dir = wallId.direction;
 
             let cell1 = this.cell[wallId.x][wallId.y];
-            let cell2 = () => {
+            let cell2 = (() => {
                 switch (dir) {
                     case Side.RIGHT:
                         return this.cell[wallId.x + 1][wallId.y];
                     case Side.BOTTOM:
                         return this.cell[wallId.x][wallId.y + 1];
                 }
-            }();
+            })();
 
             let group1 = cell1.group;
             let group2 = cell2.group;
@@ -396,9 +396,9 @@ function iterSymmetricTiles(x, y, callback) {
 
 function setTexture(tex, origX, origY, rot, xflip) {
     iterSymmetricTiles(origX, origY, (x, y, _, tileRotFlip) => {
-        tileRot = (tileRotFlip & (3 * TILE_ROT)) / TILE_ROT;
-        tileXflip = tileRotFlip & TILE_XFLIP;
-        tileYflip = tileRotFlip & TILE_YFLIP;
+        let tileRot = (tileRotFlip & (3 * TILE_ROT)) / TILE_ROT;
+        let tileXflip = tileRotFlip & TILE_XFLIP;
+        let tileYflip = tileRotFlip & TILE_YFLIP;
 
         tileRot = (tileRot + rot) % 4;
         tileXflip = tileXflip ^ (xflip * TILE_XFLIP);
@@ -484,15 +484,15 @@ function randomizeTile(x, y) {
         case (variant == 195):
             setTexture(Tile.FEATURE3, x, y, /*rot=*/gameRand(3));
             break;
-        case (variant == 195):
-            setTexture(Tile.FEATURE2, x, y, /*rot=*/gameRand(3));
-            break;
-        case (variant == 195):
-            setTexture(Tile.FEATURE1, x, y, /*rot=*/gameRand(3));
-            break;
-        case (variant == 195):
-            setTexture(Tile.CRATER, x, y, /*rot=*/gameRand(3));
-            break;
+        // case (variant == 195):
+        //     setTexture(Tile.FEATURE2, x, y, /*rot=*/gameRand(3));
+        //     break;
+        // case (variant == 195):
+        //     setTexture(Tile.FEATURE1, x, y, /*rot=*/gameRand(3));
+        //     break;
+        // case (variant == 195):
+        //     setTexture(Tile.CRATER, x, y, /*rot=*/gameRand(3));
+        //     break;
         case (variant == 196):
         case (variant == 197):
             addFeature("Tree3", x, y);
