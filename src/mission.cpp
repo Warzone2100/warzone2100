@@ -1706,6 +1706,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	//unload all the droids from within the current Transporter
 	if (isTransporter(psTransporter))
 	{
+		ASSERT(psTransporter->psGroup != nullptr, "psTransporter->psGroup is null??");
 		for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr && psDroid != psTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
