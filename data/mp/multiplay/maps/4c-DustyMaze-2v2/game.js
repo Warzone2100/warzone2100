@@ -138,7 +138,7 @@ class Cell {
     isDeadEnd() {
         return !!this.getDeadEndDirection();
     }
-};
+}
 
 class Maze {
     constructor(width, height, baseWidth, baseHeight, numExits, symmetry,
@@ -350,7 +350,7 @@ class Maze {
             this.cell[x][y].hasScavengers = true;
         }
     }
-};
+}
 
 
 /****************************
