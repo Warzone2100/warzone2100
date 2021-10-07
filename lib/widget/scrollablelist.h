@@ -59,6 +59,7 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void displayRecursive(WidgetGraphicsContext const& context) override;
 	int getScrollbarWidth() const;
+	void setScrollbarWidth(int newWidth);
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
 	virtual int32_t idealWidth() override;
@@ -76,6 +77,7 @@ private:
 	Padding padding = {0, 0, 0, 0};
 	PIELIGHT backgroundColor;
 	uint32_t itemSpacing = 0;
+	int scrollbarWidth = 0;
 
 	uint32_t snappedOffset();
 	void updateLayout();
