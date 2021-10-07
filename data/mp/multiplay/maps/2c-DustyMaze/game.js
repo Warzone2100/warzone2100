@@ -471,34 +471,34 @@ function randomizeTile(x, y) {
     if (x <= baseRight + 1 && y <= baseBottom + 1)
         return;
 
-    let variant = gameRand(200);
+    let variant = gameRand(500);
     switch (true) {
-        case (variant < 30):
+        case (variant < 75):
             setTexture(Tile.ROCK, x, y);
             setTileHeight(8, x, y);
             break;
-        case (variant < 50):
+        case (variant < 125):
             setTexture(Tile.BLUE, x, y);
             setTileHeight(24, x, y);
             break;
-        case (variant == 195):
+        case (variant == 492):
             setTexture(Tile.FEATURE3, x, y, /*rot=*/gameRand(3));
             break;
-        // case (variant == 195):
-        //     setTexture(Tile.FEATURE2, x, y, /*rot=*/gameRand(3));
-        //     break;
-        // case (variant == 195):
-        //     setTexture(Tile.FEATURE1, x, y, /*rot=*/gameRand(3));
-        //     break;
-        // case (variant == 195):
-        //     setTexture(Tile.CRATER, x, y, /*rot=*/gameRand(3));
-        //     break;
-        case (variant == 196):
-        case (variant == 197):
+        case (variant == 493):
+            setTexture(Tile.FEATURE2, x, y, /*rot=*/gameRand(3));
+            break;
+        case (variant == 494):
+            setTexture(Tile.FEATURE1, x, y, /*rot=*/gameRand(3));
+            break;
+        case (variant == 495):
+            setTexture(Tile.CRATER, x, y, /*rot=*/gameRand(3));
+            break;
+        case (variant == 496):
+        case (variant == 497):
             addFeature("Tree3", x, y);
             break;
-        case (variant == 198):
-        case (variant == 199):
+        case (variant == 498):
+        case (variant == 499):
             addFeature("TreeSnow3", x, y);
             break;
         default:
