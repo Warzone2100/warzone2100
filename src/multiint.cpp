@@ -6052,7 +6052,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		break;
 
 	case CON_CANCEL:
-		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+		
 		setHostLaunch(HostLaunch::Normal); // Dont load the autohost file on subsequent hosts
 		performedFirstStart = false; // Reset everything
 		if (!challengeActive)
@@ -6070,6 +6070,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			NETclose();
 			ingame.localJoiningInProgress = false;
 			changeTitleMode(SINGLE);
+			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			addChallenges();
 		}
 		break;
