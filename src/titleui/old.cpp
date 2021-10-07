@@ -48,7 +48,7 @@
 #include "../uiscreens/options/videooptions.h"
 #include "../uiscreens/options/mouseoptions.h"
 #include "../uiscreens/options/videooptions.h"
-#include "../uiscreens/options/autiozoomoptions.h"
+#include "../uiscreens/options/audiozoomoptions.h"
 #include "../uiscreens/options/gameoptions.h"
 #include "../uiscreens/gamemodes/gmcommon.h"
 #include "../uiscreens/gamemodes/tutorialmenu.h"

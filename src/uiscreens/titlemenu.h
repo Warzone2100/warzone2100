@@ -5,3 +5,4 @@
 void startTitleMenu();
 bool runTitleMenu();
 void runHyperlink();
+void runContinue();

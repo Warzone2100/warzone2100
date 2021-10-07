@@ -43,6 +43,7 @@
 #include "wrappers.h"
 
 #include "uiscreens/gamemodes/gmcommon.h"
+#include "uiscreens/titlemenu.h"
 
 #include <cwchar>
 

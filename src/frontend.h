@@ -21,8 +21,6 @@
 #ifndef __INCLUDED_SRC_FRONTEND_H__
 #define __INCLUDED_SRC_FRONTEND_H__
 
-void runContinue();
-
 
 /* Tell the frontend when the screen has been resized */
 void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);

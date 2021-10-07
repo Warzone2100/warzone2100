@@ -1,5 +1,5 @@
 
-#include "autiozoomoptions.h"
+#include "audiozoomoptions.h"
 
 #include "lib/sound/sounddefs.h"
 #include "lib/sound/audio.h"
