@@ -136,14 +136,14 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define GAMES_GAMEEND		(GAMES_GAMESTART+GAMES_MAX)
 #define GAMES_SPECSTART		(GAMES_GAMEEND+1)
 #define GAMES_SPECEND		(GAMES_SPECSTART+GAMES_MAX)
-#define GAMES_GAMEWIDTH		537
+#define GAMES_GAMEWIDTH		525
 #define GAMES_GAMEHEIGHT	28
 // We can have a max of 4 icons for status, current icon size if 36x25.
-#define GAMES_STATUS_START 390
+#define GAMES_STATUS_START 378
 #define GAMES_GAMENAME_START 2
-#define GAMES_MAPNAME_START 171
-#define GAMES_MODNAME_START 171 + 6		// indent a bit
-#define GAMES_PLAYERS_START 357
+#define GAMES_MAPNAME_START 168
+#define GAMES_MODNAME_START 168 + 6		// indent a bit
+#define GAMES_PLAYERS_START 342
 
 // ////////////////////////////////////////////////////////////////
 // GAME OPTIONS SCREEN
