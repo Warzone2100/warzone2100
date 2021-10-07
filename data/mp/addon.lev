@@ -371,3 +371,9 @@ players 4
 type    14
 dataset MULTI_CAM_2
 game    "multiplay/maps/4c-DustyMaze-2v2.gam"
+
+level   DustyMaze-FFA
+players 4
+type    14
+dataset MULTI_CAM_2
+game    "multiplay/maps/4c-DustyMaze-FFA.gam"
