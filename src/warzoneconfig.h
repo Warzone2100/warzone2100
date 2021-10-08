@@ -116,6 +116,8 @@ bool war_getAutoAdjustDisplayScale();
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
 int war_getAutoLagKickSeconds();
 void war_setAutoLagKickSeconds(int seconds);
+bool war_getDisableReplayRecording();
+void war_setDisableReplayRecording(bool disable);
 
 /**
  * Enable or disable sound initialization

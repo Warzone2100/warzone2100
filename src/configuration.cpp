@@ -480,6 +480,7 @@ bool loadConfig()
 		pie_EnableFog(false);
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
+	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -619,6 +620,7 @@ bool saveConfig()
 	iniSetBool("autosaveEnabled", autosaveEnabled);
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
+	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);
