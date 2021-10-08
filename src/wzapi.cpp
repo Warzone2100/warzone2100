@@ -499,7 +499,7 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 //-- ## addSpotter(x, y, player, range, radar, expiry)
 //--
 //-- Add an invisible viewer at a given position for given player that shows map in given range. ```radar```
-//-- is false for vision reveal, or false for radar reveal. The difference is that a radar reveal can be obstructed
+//-- is false for vision reveal, or true for radar reveal. The difference is that a radar reveal can be obstructed
 //-- by ECM jammers. ```expiry```, if non-zero, is the game time at which the spotter shall automatically be
 //-- removed. The function returns a unique ID that can be used to remove the spotter with ```removeSpotter```. (3.2+ only)
 //--
