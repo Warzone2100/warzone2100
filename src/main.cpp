@@ -1662,12 +1662,12 @@ int realmain(int argc, char *argv[])
 
 	make_dir(MultiCustomMapsPath, "maps", nullptr); // needed to prevent crashes when getting map
 
-	PHYSFS_mkdir("mods/autoload");	// mods that are automatically loaded
-	PHYSFS_mkdir("mods/campaign");	// campaign only mods activated with --mod_ca=example.wz
-	PHYSFS_mkdir("mods/downloads");	// mod download directory
-	PHYSFS_mkdir("mods/global");	// global mods activated with --mod=example.wz
-	PHYSFS_mkdir("mods/multiplay");	// multiplay only mods activated with --mod_mp=example.wz
-	PHYSFS_mkdir("mods/music");	// music mods that are automatically loaded
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("autoload").c_str());	// mods that are automatically loaded
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("campaign").c_str());	// campaign only mods activated with --mod_ca=example.wz
+	PHYSFS_mkdir("mods/downloads");	// mod download directory - NOT currently versioned
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("global").c_str());	// global mods activated with --mod=example.wz
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("multiplay").c_str());	// multiplay only mods activated with --mod_mp=example.wz
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("music").c_str());	// music mods that are automatically loaded
 
 	make_dir(MultiPlayersPath, "multiplay", "players"); // player profiles
 
@@ -1762,19 +1762,20 @@ int realmain(int argc, char *argv[])
 	// Now we check the mods to see if they exist or not (specified on the command line)
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
-		char modtocheck[256];
+		std::string modtocheck;
 #if defined WZ_PHYSFS_2_1_OR_GREATER
 		PHYSFS_Stat metaData;
 #endif
 
 		// check whether given global mods are regular files
+		auto globalModsPath = version_getVersionedModsFolderPath("global");
 		for (auto iterator = global_mods.begin(); iterator != global_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/global/%s", iterator->c_str());
+			modtocheck = globalModsPath + "/" + *iterator;
 #if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
 #elif defined WZ_PHYSFS_2_1_OR_GREATER
-			PHYSFS_stat(modtocheck, &metaData);
+			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
 #endif
 			{
@@ -1789,13 +1790,14 @@ int realmain(int argc, char *argv[])
 			}
 		}
 		// check whether given campaign mods are regular files
+		auto campaignModsPath = version_getVersionedModsFolderPath("campaign");
 		for (auto iterator = campaign_mods.begin(); iterator != campaign_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/campaign/%s", iterator->c_str());
+			modtocheck = campaignModsPath + "/" + *iterator;
 #if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
 #elif defined WZ_PHYSFS_2_1_OR_GREATER
-			PHYSFS_stat(modtocheck, &metaData);
+			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
 #endif
 			{
@@ -1810,13 +1812,14 @@ int realmain(int argc, char *argv[])
 			}
 		}
 		// check whether given multiplay mods are regular files
+		auto multiplayModsPath = version_getVersionedModsFolderPath("multiplay");
 		for (auto iterator = multiplay_mods.begin(); iterator != multiplay_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/multiplay/%s", iterator->c_str());
+			modtocheck = multiplayModsPath + "/" + *iterator;
 #if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
 #elif defined WZ_PHYSFS_2_1_OR_GREATER
-			PHYSFS_stat(modtocheck, &metaData);
+			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
 #endif
 			{
