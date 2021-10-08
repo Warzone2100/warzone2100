@@ -1093,6 +1093,11 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 		}
 	}
 
+	if (type == REPLAY_ENDED)
+	{
+		return HandleMessageAction::Silently_Ignore;
+	}
+
 	return HandleMessageAction::Process_Message;
 }
 
@@ -1209,6 +1214,15 @@ bool recvMessage()
 				break;
 			case GAME_DEBUG_FINISH_RESEARCH:
 				recvResearch(queue);
+				break;
+			case REPLAY_ENDED:
+				if (!NETisReplay())
+				{
+					// ignore
+					break;
+				}
+				addConsoleMessage(_("REPLAY HAS ENDED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+				addConsoleMessage(_("(Press ESC to quit.)"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				break;
 			default:
 				processedMessage1 = false;
