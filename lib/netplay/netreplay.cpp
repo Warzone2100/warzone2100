@@ -24,7 +24,21 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp.h"
 
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wcast-align"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+
 #include <3rdparty/readerwriterqueue/readerwriterqueue.h>
+
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic pop
+#endif
 
 #include <ctime>
 #include <memory>
