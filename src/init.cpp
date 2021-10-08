@@ -94,9 +94,11 @@
 #include "template.h"
 #include "activity.h"
 #include "spectatorwidgets.h"
+#include "version.h"
 
 #include <algorithm>
 #include <unordered_map>
+#include <array>
 
 static void initMiscVars();
 
@@ -108,6 +110,52 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 IMAGEFILE *FrontImages;
 
 static wzSearchPath *searchPathRegistry = nullptr;
+
+enum MODS_PATHS: size_t
+{
+	MODS_MUSIC,
+	MODS_GLOBAL,
+	MODS_AUTOLOAD,
+	MODS_CAMPAIGN,
+	MODS_MULTIPLAY,
+	MODS_PATHS_MAX
+};
+
+static std::string getFullModPath(MODS_PATHS type)
+{
+	switch (type)
+	{
+		case MODS_MUSIC:
+			return version_getVersionedModsFolderPath("music");
+		case MODS_GLOBAL:
+			return version_getVersionedModsFolderPath("global");
+		case MODS_AUTOLOAD:
+			return version_getVersionedModsFolderPath("autoload");
+		case MODS_CAMPAIGN:
+			return version_getVersionedModsFolderPath("campaign");
+		case MODS_MULTIPLAY:
+			return version_getVersionedModsFolderPath("multiplay");
+		case MODS_PATHS_MAX:
+			break;
+	}
+	return version_getVersionedModsFolderPath();
+}
+
+static std::array<std::string, MODS_PATHS_MAX> buildFullModsPaths()
+{
+	std::array<std::string, MODS_PATHS_MAX> result;
+	for (size_t i = 0; i < MODS_PATHS_MAX; ++i)
+	{
+		result[i] = getFullModPath(static_cast<MODS_PATHS>(i));
+	}
+	return result;
+}
+
+static const char* versionedModsPath(MODS_PATHS type)
+{
+	static std::array<std::string, MODS_PATHS_MAX> cachedFullModsPaths = buildFullModsPaths();
+	return cachedFullModsPaths[type].c_str();
+}
 
 // Each module in the game should have a call from here to initialise
 // any globals and statics to there default values each time the game
@@ -284,13 +332,12 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 #endif // DEBUG
 				// Remove maps and mods
 				removeSubdirs(curSearchPath->path, "maps");
-				removeSubdirs(curSearchPath->path, "mods/music");
-				removeSubdirs(curSearchPath->path, "mods/global");
-				removeSubdirs(curSearchPath->path, "mods");
-				removeSubdirs(curSearchPath->path, "mods/autoload");
-				removeSubdirs(curSearchPath->path, "mods/campaign");
-				removeSubdirs(curSearchPath->path, "mods/multiplay");
-				removeSubdirs(curSearchPath->path, "mods/downloads");
+				removeSubdirs(curSearchPath->path, versionedModsPath(MODS_MUSIC));
+				removeSubdirs(curSearchPath->path, versionedModsPath(MODS_GLOBAL));
+				removeSubdirs(curSearchPath->path, versionedModsPath(MODS_AUTOLOAD));
+				removeSubdirs(curSearchPath->path, versionedModsPath(MODS_CAMPAIGN));
+				removeSubdirs(curSearchPath->path, versionedModsPath(MODS_MULTIPLAY));
+				removeSubdirs(curSearchPath->path, "mods/downloads"); // not versioned
 
 				// Remove multiplay patches
 				sstrcpy(tmpstr, curSearchPath->path);
@@ -343,11 +390,10 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add global and campaign mods
 				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 
-				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
-				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-				addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-				addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
-				addSubdirs(curSearchPath->path, "mods/campaign", PHYSFS_APPEND, use_override_mods ? &override_mods : &campaign_mods, true);
+				addSubdirs(curSearchPath->path, versionedModsPath(MODS_MUSIC), PHYSFS_APPEND, nullptr, false);
+				addSubdirs(curSearchPath->path, versionedModsPath(MODS_GLOBAL), PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+				addSubdirs(curSearchPath->path, versionedModsPath(MODS_AUTOLOAD), PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
+				addSubdirs(curSearchPath->path, versionedModsPath(MODS_CAMPAIGN), PHYSFS_APPEND, use_override_mods ? &override_mods : &campaign_mods, true);
 				if (!WZ_PHYSFS_unmount(curSearchPath->path))
 				{
 					debug(LOG_WZ, "* Failed to remove path %s again", curSearchPath->path);
@@ -398,15 +444,14 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 #endif // DEBUG
 				// Add global and multiplay mods
 				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
-				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
+				addSubdirs(curSearchPath->path, versionedModsPath(MODS_MUSIC), PHYSFS_APPEND, nullptr, false);
 
 				// Only load if we are host or singleplayer (Initial mod load relies on this, too)
 				if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER || !NetPlay.bComms)
 				{
-					addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-					addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-					addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
-					addSubdirs(curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods ? &override_mods : &multiplay_mods, true);
+					addSubdirs(curSearchPath->path, versionedModsPath(MODS_GLOBAL), PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+					addSubdirs(curSearchPath->path, versionedModsPath(MODS_AUTOLOAD), PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
+					addSubdirs(curSearchPath->path, versionedModsPath(MODS_MULTIPLAY), PHYSFS_APPEND, use_override_mods ? &override_mods : &multiplay_mods, true);
 				}
 				else
 				{
@@ -414,7 +459,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 					for (Sha256 &hash : game.modHashes)
 					{
 						hashList = {hash.toString()};
-						addSubdirs(curSearchPath->path, "mods/downloads", PHYSFS_APPEND, &hashList, true);
+						addSubdirs(curSearchPath->path, "mods/downloads", PHYSFS_APPEND, &hashList, true); // not versioned
 					}
 				}
 				WZ_PHYSFS_unmount(curSearchPath->path);

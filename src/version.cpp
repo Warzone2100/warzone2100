@@ -140,6 +140,29 @@ std::string version_getVersionedAppDirFolderName()
 	return versionedWriteDirFolderName;
 }
 
+/** Obtain the versioned application-data / config "mods" folder path
+ *  If on a tag, this is "mods/<tag version>/"
+ *  If not on a tag, this is "mods/" (as non-tagged builds have versioned parent config folders)
+ */
+std::string version_getVersionedModsFolderPath(std::string subFolders /*= ""*/)
+{
+	std::string versionedModsFolderPath;
+	if (strlen(VCS_TAG))
+	{
+		versionedModsFolderPath = "mods/" VCS_TAG;
+	}
+	else
+	{
+		versionedModsFolderPath = "mods";
+	}
+	if (!subFolders.empty())
+	{
+		versionedModsFolderPath += "/";
+		versionedModsFolderPath += subFolders;
+	}
+	return versionedModsFolderPath;
+}
+
 
 /** Composes a nicely formatted version string.
 * Determine if we are on a tag (which will NOT show the hash)
