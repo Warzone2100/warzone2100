@@ -80,43 +80,25 @@ optional<TagVer> version_extractVersionNumberFromTag(const std::string& tag)
 }
 
 /** Obtain the versioned application-data / config writedir folder name
- *  If on a tag, this is "Warzone 2100 <tag>" / "warzone2100-<tag>"
+ *  If on a tag, this is "Warzone 2100" / "warzone2100"
  *  If not on a tag, this is "Warzone 2100 <branch>" / "warzone2100-<branch>"
  *  If no branch is defined, this is "Warzone 2100 <VCS_EXTRA>" / "warzone2100-<VCS_EXTRA>"
  */
 std::string version_getVersionedAppDirFolderName()
 {
 	std::string versionedWriteDirFolderName;
+	std::string versionedWriteDirFolderNameSuffix;
 
 #if defined(WZ_OS_WIN) || defined(WZ_OS_MAC)
-	versionedWriteDirFolderName = "Warzone 2100 ";
+	versionedWriteDirFolderName = "Warzone 2100";
 #else
-	versionedWriteDirFolderName = "warzone2100-";
+	versionedWriteDirFolderName = "warzone2100";
 #endif
 
 	if (strlen(vcs_tag))
 	{
-		optional<TagVer> tagVersion = version_extractVersionNumberFromTag(vcs_tag);
-		if (tagVersion.has_value())
-		{
-			// If tag is actually a version number (which it should be!)
-			// Use only MAJOR.MINOR (ignoring revision) for the appdir folder name
-			if (tagVersion.value().get_major() == 3 && tagVersion.value().get_minor() == 4)
-			{
-				// EXCEPTION: Use "3.4.0" for any 3.4.x release, for compatibility with 3.4.0 (which did not have this code)
-				versionedWriteDirFolderName += "3.4.0";
-			}
-			else
-			{
-				// Normal case - use only "MAJOR.MINOR"
-				versionedWriteDirFolderName += tagVersion.value().major_minor();
-			}
-		}
-		else
-		{
-			// vcs_tag does not resemble a version number - just use it directly
-			versionedWriteDirFolderName += vcs_tag;
-		}
+		// release builds now use a stable config directory name, with no suffix
+		versionedWriteDirFolderNameSuffix.clear();
 	}
 	else if (strlen(vcs_branch_cstr))
 	{
@@ -124,9 +106,9 @@ std::string version_getVersionedAppDirFolderName()
 		// To ease testing new branches with existing files
 		// default to using "master" as the branch name
 		// if WZ_USE_MASTER_BRANCH_APP_DIR is defined
-		versionedWriteDirFolderName += "master";
+		versionedWriteDirFolderNameSuffix = "master";
 #else
-		versionedWriteDirFolderName += vcs_branch_cstr;
+		versionedWriteDirFolderNameSuffix = vcs_branch_cstr;
 #endif
 	}
 	else
@@ -135,7 +117,17 @@ std::string version_getVersionedAppDirFolderName()
 		std::string vcs_extra_str = VCS_EXTRA;
 		// remove any spaces from VCS_EXTRA
 		vcs_extra_str.erase(std::remove(vcs_extra_str.begin(), vcs_extra_str.end(), ' '), vcs_extra_str.end());
-		versionedWriteDirFolderName += vcs_extra_str;
+		versionedWriteDirFolderNameSuffix = vcs_extra_str;
+	}
+
+	if (!versionedWriteDirFolderNameSuffix.empty())
+	{
+#if defined(WZ_OS_WIN) || defined(WZ_OS_MAC)
+		versionedWriteDirFolderName += " ";
+#else
+		versionedWriteDirFolderName += "-";
+#endif
+		versionedWriteDirFolderName += versionedWriteDirFolderNameSuffix;
 	}
 	return versionedWriteDirFolderName;
 }
