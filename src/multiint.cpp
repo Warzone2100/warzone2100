@@ -5363,7 +5363,7 @@ static void resolveAIForPlayer(int player, WzString& aiValue)
 	// look up AI value in vector of known skirmish AIs
 	for (unsigned ai = 0; ai < aidata.size(); ++ai)
 	{
-		if (filename == aidata[ai].js)
+		if (filename == aidata[ai].js || aiValue == aidata[ai].js)
 		{
 			NetPlay.players[player].ai = ai;
 			return;
