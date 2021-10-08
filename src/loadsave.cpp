@@ -1063,6 +1063,11 @@ bool autoSave()
 	{
 		return false;
 	}
+	// Bail out if we're running a replay
+	if (NETisReplay())
+	{
+		return false;
+	}
 	const char *dir = bMultiPlayer? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
 	// Backward compatibility: remove later
 	if (!freeAutoSaveSlot_old(dir))
