@@ -65,6 +65,7 @@ struct WARZONE_GLOBALS
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
+	bool disableReplayRecording = false;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -416,4 +417,14 @@ void war_setAutoLagKickSeconds(int seconds)
 		seconds = std::max(seconds, 60);
 	}
 	warGlobs.autoLagKickSeconds = seconds;
+}
+
+bool war_getDisableReplayRecording()
+{
+	return warGlobs.disableReplayRecording;
+}
+
+void war_setDisableReplayRecording(bool disable)
+{
+	warGlobs.disableReplayRecording = disable;
 }
