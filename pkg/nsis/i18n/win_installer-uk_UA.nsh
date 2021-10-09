@@ -8,12 +8,12 @@ ${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
 
-${LangFileString} WZ_GPL_NEXT "Next"
+${LangFileString} WZ_GPL_NEXT "Далі"
 
 ${LangFileString} TEXT_SecBase "Core files"
 ${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
 
-${LangFileString} TEXT_SecFMVs "Videos"
+${LangFileString} TEXT_SecFMVs "Відео"
 ${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
@@ -28,7 +28,7 @@ ${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version
 ${LangFileString} TEXT_SecFMVs_Ger "German"
 ${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
 
-${LangFileString} TEXT_SecNLS "Language files"
+${LangFileString} TEXT_SecNLS "Мовні Файли"
 ${LangFileString} DESC_SecNLS "Support for languages other than English."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
@@ -38,7 +38,7 @@ ${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
 ${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
 
 ${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
+${LangFileString} DLTEXT_SysLibDLFailed "Збій завантаження системної бібліотеки"
 ${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
 
 ${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
