@@ -20,6 +20,11 @@ steps:
   - cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
   - cmake --build build
 
+trigger:
+  branch:
+    exclude:
+    - l10n_**
+
 ---
 kind: pipeline
 type: docker
@@ -43,6 +48,11 @@ steps:
   - cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
   - cmake --build build
 
+trigger:
+  branch:
+    exclude:
+    - l10n_**
+
 ---
 kind: pipeline
 type: docker
@@ -65,3 +75,8 @@ steps:
   - git submodule update --init --recursive
   - CC=/usr/bin/clang CXX=/usr/bin/clang++ cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
   - CC=/usr/bin/clang CXX=/usr/bin/clang++ cmake --build build
+
+trigger:
+  branch:
+    exclude:
+    - l10n_**
