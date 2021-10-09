@@ -2468,6 +2468,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	DROID           *psCurr;
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
 	                missionScrollMaxX = 0, missionScrollMaxY = 0;
+	uint32_t        mapSeed = 0;
 
 	/* Stop the game clock */
 	gameTimeStop();
@@ -2838,7 +2839,14 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	// construct the WzMap object for loading map data
 	aFileName[fileExten] = '\0';
-	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, gameRandU32(), false, std::unique_ptr<WzMap::LoggingProtocol>(new WzMapDebugLogger()), std::unique_ptr<WzMapPhysFSIO>(new WzMapPhysFSIO()));
+	mapSeed = gameRandU32();
+	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, false, std::unique_ptr<WzMap::LoggingProtocol>(new WzMapDebugLogger()), std::unique_ptr<WzMapPhysFSIO>(new WzMapPhysFSIO()));
+
+	if (data->wasScriptGenerated())
+	{
+		// Log the random seed used to generate this instance of the map
+		debug(LOG_INFO, "Loaded script-generated map \"%s\" with random seed: %" PRIu32, aFileName, mapSeed);
+	}
 
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
