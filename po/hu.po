@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:13\n"
+"PO-Revision-Date: 2021-10-09 16:48\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -5606,7 +5606,7 @@ msgstr "Játékos"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Inaktív / passzív játék miatt elveszett."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -5825,7 +5825,7 @@ msgstr "Új küldetés"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Kihìvàs"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
@@ -9920,7 +9920,7 @@ msgstr "HVAPFSDS ágyúlőszer"
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2955
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "HVC Python Sàvok"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -13889,7 +13889,7 @@ msgstr "Turbófeltöltős motor Mk3"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.name
 #: po/custom/fromJson.txt:5701
 msgid "Turtle AI"
-msgstr ""
+msgstr "Teknős MI"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG2MK1.text[1]
@@ -13953,7 +13953,7 @@ msgstr "Iker gépfegyveres őrtorony"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5742
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Iker gépfegyveres torony"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -14859,11 +14859,11 @@ msgstr ""
 #: src/chat.cpp:67
 #: src/chat.cpp:73
 msgid "Allies"
-msgstr ""
+msgstr "Szövetség"
 
 #: src/chat.cpp:75
 msgid "private to "
-msgstr ""
+msgstr "magán a "
 
 #: src/chat.cpp:82
 msgid " and "
@@ -14872,7 +14872,7 @@ msgstr " és "
 #: src/chat.cpp:169
 #: src/multiint.cpp:3625
 msgid "Spectators"
-msgstr ""
+msgstr "Nézők"
 
 #: src/cheat.cpp:212
 #, c-format
@@ -15048,15 +15048,15 @@ msgstr "Szöveg tömörítés kikapcsolása"
 
 #: src/clparse.cpp:383
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Állítsa be a gfx hátteret"
 
 #: src/clparse.cpp:393
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Állítsa be a gfx háttér hibamentesìtőt"
 
 #: src/clparse.cpp:394
 msgid "Set JS backend"
-msgstr ""
+msgstr "Állítsa be a JS hátteret"
 
 #: src/clparse.cpp:399
 msgid "Run games automatically for testing"
@@ -15400,7 +15400,7 @@ msgstr "Normális"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:201
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
@@ -15751,11 +15751,11 @@ msgstr "GRAFIKA BEÁLLÍTÁS"
 
 #: src/frontend.cpp:965
 msgid "Disabled"
-msgstr ""
+msgstr "Kikapcsolva"
 
 #: src/frontend.cpp:968
 msgid "Enabled"
-msgstr ""
+msgstr "Bekapcsolva"
 
 #: src/frontend.cpp:972
 #: src/frontend.cpp:978
@@ -15818,11 +15818,11 @@ msgstr ""
 
 #: src/frontend.cpp:1199
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Az ablak normál átméretezésével megváltoztathatja a felbontást. (Húzza el a sarkot / peremet.)"
 
 #: src/frontend.cpp:1229
 msgid "Desktop Full"
-msgstr ""
+msgstr "Teljes Asztal"
 
 #: src/frontend.cpp:1231
 msgid "Windowed"
@@ -15842,7 +15842,7 @@ msgstr ""
 
 #: src/frontend.cpp:1290
 msgid "Adaptive"
-msgstr ""
+msgstr "AdaptÍv"
 
 #: src/frontend.cpp:1501
 msgid "* Takes effect on game restart"
@@ -15859,7 +15859,7 @@ msgstr "Vízszintes szinkronizáció"
 
 #: src/frontend.cpp:1544
 msgid "Antialiasing*"
-msgstr ""
+msgstr "Élsimítás"
 
 #: src/frontend.cpp:1552
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
