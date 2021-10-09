@@ -250,7 +250,7 @@ int stdinThreadFunc(void *)
 						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
 						sendRoomSystemMessage(roomAdminMessage.c_str());
 					}
-					else if (removeLobbyAdminIdentityHash(newAdminStrCopy))
+					else if (addLobbyAdminPublicKey(newAdminStrCopy))
 					{
 						errlog("WZCMD info: Room admin hash removed: %s\n", newAdminStrCopy.c_str());
 						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
@@ -307,7 +307,7 @@ int stdinThreadFunc(void *)
 					if (!NetPlay.isHostAlive)
 					{
 						// can't send this message when the host isn't alive
-						errlog("WZCMD info: Failed to send bcast message because host isn't yet hosting!\n");
+						errlog("WZCMD error: Failed to send bcast message because host isn't yet hosting!\n");
 					}
 					sendRoomSystemMessage(chatmsgstr.c_str());
 				});
