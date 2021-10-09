@@ -3127,7 +3127,9 @@ static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
 		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
 		// ensure if the lobby returns an error, we are prepared to display it (once)
 		NetPlay.ShowedMOTD = false;
-		wz_command_interface_output("WZEVENT: lobbyerror (%u): %s\n", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		// this is horrible but MOTD can have 0x0a and other junk in it
+		std::string strmotd = std::string(NetPlay.MOTD);
+		wz_command_interface_output("WZEVENT: lobbyerror (%u): %s\n", (unsigned int)lobbyStatusCode, base64Encode(std::vector<unsigned char>(strmotd.begin(), strmotd.end())).c_str());
 		break;
 	}
 
@@ -3167,7 +3169,8 @@ error:
 		}
 	}
 
-	wz_command_interface_output("WZEVENT: lobbysocketerror: %s\n", (NetPlay.MOTD) ? NetPlay.MOTD : "");
+	std::string strmotd = std::string(NetPlay.MOTD);
+	wz_command_interface_output("WZEVENT: lobbysocketerror: %s\n", (NetPlay.MOTD) ? base64Encode(std::vector<unsigned char>(strmotd.begin(), strmotd.end())).c_str() : "");
 
 	return SOCKET_ERROR;
 }
