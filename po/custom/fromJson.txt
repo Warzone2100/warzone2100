@@ -1106,14 +1106,14 @@ _("Best Targets: Base Structures, infantry, wheeled vehicles")
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-_("Best Targets: Bunkers and Hardpoints")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 // ... + 2 refs
 _("Best Targets: Bunkers and hardpoints")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+_("Best Targets: Bunkers and Hardpoints")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 _("Best Targets: Bunkers, defenses, base structures")  
@@ -2326,7 +2326,7 @@ _("Hardened case machinegun bullets")
 _("Hardened Flamer Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.GuardTower3H.name
-_("Hardened Heavy Machinegun Tower")  
+_("Hardened Heavy Machinegun Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -2620,6 +2620,7 @@ _("Heavy Machinegun Cobra Tracks")
 _("Heavy Machinegun Cobra Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower03.name
+// data/base/stats/structure.json: $.GuardTower3.name
 // data/mp/stats/research.json: $.R-Defense-Tower01.name
 // data/mp/stats/structure.json: $.GuardTower1.name
 _("Heavy Machinegun Guard Tower")  
@@ -2636,7 +2637,6 @@ _("Heavy Machinegun Scorpion Half Tracks")
 // data/mp/stats/templates.json: $.ScorpTrkHMG.name
 _("Heavy Machinegun Scorpion Tracks")  
 // TRANSLATORS: 
-// data/base/stats/structure.json: $.GuardTower3.name
 // data/base/stats/weapons.json: $.MG3-Tower.name
 // data/mp/stats/structure.json: $.GuardTower3.name
 _("Heavy Machinegun Tower")  
@@ -2951,14 +2951,6 @@ _("HVAPFSDS Cannon Rounds Mk3")
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 _("HVAPFSDS Cannon Rounds")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
-// data/base/stats/structure.json: $.Emplacement-HPVcannon.name
-_("HVC Emplacement")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
-// data/base/stats/structure.json: $.WallTower-HPVcannon.name
-_("HVC Hardpoint")  
-// TRANSLATORS: 
 // data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 _("HVC Python Tracks")  
 // TRANSLATORS: 
@@ -2966,10 +2958,14 @@ _("HVC Python Tracks")
 // data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
 _("Hyper Fire Chaingun Upgrade")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
+// data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 // data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 // data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 _("Hyper Velocity Cannon Emplacement")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
+// data/base/stats/structure.json: $.WallTower-HPVcannon.name
 // data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 // data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 _("Hyper Velocity Cannon Hardpoint")  
@@ -3109,12 +3105,12 @@ _("Improves vehicle speed")
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 _("Incendiary Howitzer Emplacement 2")  
 // TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+_("Incendiary howitzer emplacement")  
+// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 _("Incendiary Howitzer Emplacement")  
-// TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-_("Incendiary howitzer emplacement")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 _("Incendiary Howitzer may be assigned to a sensor")  
@@ -3838,6 +3834,7 @@ _("Mini-Rocket Cobra Half-Tracks")
 _("Mini-Rocket Cobra Tracks")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower06.name
+// data/base/stats/structure.json: $.GuardTower6.name
 _("Mini-Rocket Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -3846,7 +3843,6 @@ _("Mini-Rocket Guard Tower")
 // data/mp/stats/weapons.json: $.Rocket-Pod.name
 _("Mini-Rocket Pod")  
 // TRANSLATORS: 
-// data/base/stats/structure.json: $.GuardTower6.name
 // data/mp/stats/research.json: $.R-Defense-Tower06.name
 // data/mp/stats/structure.json: $.GuardTower6.name
 _("Mini-Rocket Tower")  
@@ -4229,15 +4225,15 @@ _("New Systems Structure Available")
 // ... + 6 refs
 _("New Systems Tower Available")  
 // TRANSLATORS: 
+// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+_("New Systems Turret Available For Design")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 // data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 _("New Systems Turret Available for Design")  
-// TRANSLATORS: 
-// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-_("New Systems Turret Available For Design")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[0]
@@ -4302,11 +4298,11 @@ _("NEXUS Resistance Circuits Mk2")
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
 _("NEXUS Resistance Circuits Mk3")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
-_("Nexus Resistance Circuits")  
-// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
 _("NEXUS Resistance Circuits")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
+_("Nexus Resistance Circuits")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSWall.name
 _("NEXUS Wall")  
@@ -5453,13 +5449,13 @@ _("Synaptic Link Data Analysis Mk2")
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 _("Synaptic Link Data Analysis Mk3")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-_("Synaptic Link Data Analysis")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 _("Synaptic link data analysis")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+_("Synaptic Link Data Analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -5554,14 +5550,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
