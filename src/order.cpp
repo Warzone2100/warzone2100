@@ -3131,6 +3131,12 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeImmediate);
 					return;
 				}
+				else if (result.type == RTR_TYPE_HQ)
+				{
+					ASSERT(result.psObj != nullptr, "RTR_TYPE_HQ but target is null");
+					orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+					return;
+				}
 				else if (result.type == RTR_TYPE_DROID)
 				{
 					ASSERT(result.psObj != nullptr, "RTR_DROID but target is null");
