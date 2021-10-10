@@ -310,7 +310,10 @@ public:
 		additionalData["players"] = info.maxPlayers - info.numAvailableSlots;
 		additionalData["maxplayers"] = info.maxPlayers;
 		additionalData["currentPlayerIdx"] = info.currentPlayerIdx;
-		additionalData["isSpectator"] = info.players[info.currentPlayerIdx].isSpectator;
+		if (info.currentPlayerIdx < info.players.size())
+		{
+			additionalData["isSpectator"] = info.players[info.currentPlayerIdx].isSpectator;
+		}
 		additionalData["isReplay"] = info.isReplay;
 		gameStateChange("/multiplayer", additionalData);
 	}
