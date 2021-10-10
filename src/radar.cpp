@@ -116,6 +116,9 @@ static uint8_t RadarZoom;
 static float RadarZoomMultiplier = 1.0f;
 static size_t radarBufferSize = 0;
 static int frameSkip = 0;
+static UDWORD lastBlink = 0;
+static const UDWORD BLINK_INTERVAL = GAME_TICKS_PER_SEC / 1;
+static const UDWORD BLINK_HALF_INTERVAL = BLINK_INTERVAL / 2;
 
 static void DrawRadarTiles();
 static void DrawRadarObjects();
@@ -419,6 +422,7 @@ static void DrawRadarObjects()
 	UBYTE				clan;
 	PIELIGHT			playerCol;
 	PIELIGHT			flashCol;
+	bool blinkState = (gameTime - lastBlink) / BLINK_HALF_INTERVAL;
 
 	/* Show droids on map - go through all players */
 	for (clan = 0; clan < MAX_PLAYERS; clan++)
@@ -455,6 +459,8 @@ static void DrawRadarObjects()
 			{
 				continue;
 			}
+			if (psDroid->selected && !blinkState)
+				continue;
 			if (psDroid->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
 					&& selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, psDroid->player)))
@@ -511,6 +517,8 @@ static void DrawRadarObjects()
 				playerCol = clanColours[getPlayerColour(clan)];
 			}
 			flashCol = flashColours[getPlayerColour(clan)];
+			if (psStruct->player == selectedPlayer && psStruct->selected && !blinkState)
+				continue;
 
 			if (psStruct->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
@@ -527,6 +535,8 @@ static void DrawRadarObjects()
 			}
 		}
 	}
+	if (gameTime - lastBlink >= BLINK_INTERVAL)
+		lastBlink = gameTime;
 }
 
 /** Rotate an array of 2d vectors about a given angle, also translates them after rotating. */
