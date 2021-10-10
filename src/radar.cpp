@@ -57,6 +57,8 @@
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC * 2)
 #define RADAR_FRAME_SKIP	10
 
+static void applyMinimapOverlay();
+
 bool bEnemyAllyRadarColor = false;     			/**< Enemy/ally radar color. */
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;	/**< Current mini-map mode. */
 bool rotateRadar = true; ///< Rotate the radar?
@@ -65,6 +67,7 @@ bool radarRotationArrow = true; ///< display arrow when radar rotation enabled?
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
 static UDWORD		*radarBuffer = nullptr;
+static UDWORD		*radarOverlayBuffer = nullptr;
 static Vector3i		playerpos = {0, 0, 0};
 
 PIELIGHT clanColours[] =
@@ -119,6 +122,51 @@ static int frameSkip = 0;
 static UDWORD lastBlink = 0;
 static const UDWORD BLINK_INTERVAL = GAME_TICKS_PER_SEC / 1;
 static const UDWORD BLINK_HALF_INTERVAL = BLINK_INTERVAL / 2;
+static const float OVERLAY_OPACITY = 0.5f;
+
+// taken from https://en.wikipedia.org/wiki/Alpha_compositing
+PIELIGHT mix(PIELIGHT left, PIELIGHT right)
+{
+	float leftAlpha = left.byte.a / 255.0f;
+	float leftRed = left.byte.r / 255.0f;
+	float leftGreen = left.byte.g / 255.0f;
+	float leftBlue = left.byte.b / 255.0f;
+
+	float rightAlpha = right.byte.a / 255.0f;
+	float rightRed = right.byte.r / 255.0f;
+	float rightGreen = right.byte.g / 255.0f;
+	float rightBlue = right.byte.b / 255.0f;
+
+	float newAlpha = leftAlpha + rightAlpha * (1 - leftAlpha);
+	float newRed = (leftRed * leftAlpha + rightRed * rightAlpha * (1 - leftAlpha)) / newAlpha;
+	float newGreen = (leftGreen * leftAlpha + rightGreen * rightAlpha * (1 - leftAlpha)) / newAlpha;
+	float newBlue = (leftBlue * leftAlpha + rightBlue * rightAlpha * (1 - leftAlpha)) / newAlpha;
+
+	UBYTE returnAlpha = newAlpha * 255;
+	UBYTE returnRed = newRed * 255;
+	UBYTE returnGreen = newGreen * 255;
+	UBYTE returnBlue = newBlue * 255;
+
+	return { {returnRed, returnGreen, returnBlue, returnAlpha} };
+}
+
+PIELIGHT PLfromUDWORD(UDWORD value)
+{
+	PIELIGHT retColor = { {
+		static_cast<UBYTE>((value & 0x000000FF) >> 0),
+		static_cast<UBYTE>((value & 0x0000FF00) >> 8),
+		static_cast<UBYTE>((value & 0x00FF0000) >> 16),
+		static_cast<UBYTE>((value & 0xFF000000) >> 24),
+	} };
+	return retColor;
+}
+
+PIELIGHT applyAlpha(PIELIGHT color, float alpha)
+{
+	PIELIGHT ret = color;
+	ret.byte.a *= alpha;
+	return ret;
+}
 
 static void DrawRadarTiles();
 static void DrawRadarObjects();
@@ -170,11 +218,17 @@ bool resizeRadar()
 	{
 		free(radarBuffer);
 	}
+	if (radarOverlayBuffer)
+	{
+		free(radarOverlayBuffer);
+	}
 	radarTexWidth = scrollMaxX - scrollMinX;
 	radarTexHeight = scrollMaxY - scrollMinY;
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
 	radarBuffer = (uint32_t *)malloc(radarBufferSize);
+	radarOverlayBuffer = (uint32_t*)malloc(radarBufferSize);
 	memset(radarBuffer, 0, radarBufferSize);
+	memset(radarOverlayBuffer, 0, radarBufferSize);
 	frameSkip = 0;
 	if (rotateRadar)
 	{
@@ -195,6 +249,8 @@ bool ShutdownRadar()
 {
 	free(radarBuffer);
 	radarBuffer = nullptr;
+	free(radarOverlayBuffer);
+	radarOverlayBuffer = nullptr;
 	frameSkip = 0;
 	return true;
 }
@@ -270,6 +326,7 @@ void drawRadar()
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
 
 	ASSERT_OR_RETURN(, radarBuffer, "No radar buffer allocated");
+	ASSERT_OR_RETURN(, radarOverlayBuffer, "No radar buffer allocated");
 
 	setViewingWindow();
 	playerpos = playerPos.p; // cache position
@@ -278,6 +335,7 @@ void drawRadar()
 	{
 		DrawRadarTiles();
 		DrawRadarObjects();
+		applyMinimapOverlay();
 		pie_DownLoadRadar(radarBuffer);
 		frameSkip = RADAR_FRAME_SKIP;
 	}
@@ -422,6 +480,7 @@ static void DrawRadarObjects()
 	UBYTE				clan;
 	PIELIGHT			playerCol;
 	PIELIGHT			flashCol;
+	memset(radarOverlayBuffer, 0, radarBufferSize);
 	bool blinkState = (gameTime - lastBlink) / BLINK_HALF_INTERVAL;
 
 	/* Show droids on map - go through all players */
@@ -459,8 +518,6 @@ static void DrawRadarObjects()
 			{
 				continue;
 			}
-			if (psDroid->selected && !blinkState)
-				continue;
 			if (psDroid->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
 					&& selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, psDroid->player)))
@@ -469,14 +526,20 @@ static void DrawRadarObjects()
 				int	y = psDroid->pos.y / TILE_UNITS;
 				size_t	pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
-				ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
+				ASSERT(pos * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psDroid->timeLastHit < HIT_NOTIFICATION)
 				{
-					radarBuffer[pos] = flashCol.rgba;
+					if (psDroid->selected && !blinkState)
+						radarOverlayBuffer[pos] = applyAlpha(flashCol, OVERLAY_OPACITY).rgba;
+					else
+						radarOverlayBuffer[pos] = flashCol.rgba;
 				}
 				else
 				{
-					radarBuffer[pos] = playerCol.rgba;
+					if (psDroid->selected && !blinkState)
+						radarOverlayBuffer[pos] = applyAlpha(playerCol, OVERLAY_OPACITY).rgba;
+					else
+						radarOverlayBuffer[pos] = playerCol.rgba;
 				}
 			}
 		}
@@ -491,7 +554,7 @@ static void DrawRadarObjects()
 			STRUCTURE	*psStruct;
 			size_t		pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
-			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
+			ASSERT(pos * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
 			if (!TileHasStructure(psTile))
 			{
 				continue;
@@ -517,8 +580,6 @@ static void DrawRadarObjects()
 				playerCol = clanColours[getPlayerColour(clan)];
 			}
 			flashCol = flashColours[getPlayerColour(clan)];
-			if (psStruct->player == selectedPlayer && psStruct->selected && !blinkState)
-				continue;
 
 			if (psStruct->visibleForLocalDisplay()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
@@ -526,17 +587,38 @@ static void DrawRadarObjects()
 			{
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psStruct->timeLastHit < HIT_NOTIFICATION)
 				{
-					radarBuffer[pos] = flashCol.rgba;
+					if (psStruct->player == selectedPlayer && psStruct->selected && !blinkState)
+						radarOverlayBuffer[pos] = applyAlpha(flashCol, OVERLAY_OPACITY).rgba;
+					else
+						radarOverlayBuffer[pos] = flashCol.rgba;
 				}
 				else
 				{
-					radarBuffer[pos] = playerCol.rgba;
+					if (psStruct->player == selectedPlayer && psStruct->selected && !blinkState)
+						radarOverlayBuffer[pos] = applyAlpha(playerCol, OVERLAY_OPACITY).rgba;
+					else
+						radarOverlayBuffer[pos] = playerCol.rgba;
 				}
 			}
 		}
 	}
 	if (gameTime - lastBlink >= BLINK_INTERVAL)
 		lastBlink = gameTime;
+}
+
+static void applyMinimapOverlay()
+{
+	for (int i = 0; i < radarTexWidth * radarTexHeight; i++)
+	{
+		ASSERT(i * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
+		ASSERT(i * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
+		PIELIGHT baseColor = PLfromUDWORD(radarBuffer[i]);
+		PIELIGHT overColor = PLfromUDWORD(radarOverlayBuffer[i]);
+		PIELIGHT mixedColor = mix(overColor, baseColor);
+		if (overColor.rgba == 0)
+			continue;
+		radarBuffer[i] = mixedColor.rgba;
+	}
 }
 
 /** Rotate an array of 2d vectors about a given angle, also translates them after rotating. */
