@@ -94,6 +94,7 @@
 #include "template.h"
 #include "activity.h"
 #include "spectatorwidgets.h"
+#include "seqdisp.h"
 #include "version.h"
 
 #include <algorithm>
@@ -841,6 +842,8 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 //
 void systemShutdown()
 {
+	seqReleaseAll();
+
 	pie_ShutdownRadar();
 	clearLoadedMods();
 	flushConsoleMessages();
