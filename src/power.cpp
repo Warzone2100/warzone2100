@@ -289,9 +289,10 @@ void updatePlayerPower(int player, int ticks)
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 {
-	POWER_GEN *psPowerGen = (POWER_GEN *)psStruct->pFunctionality;
-
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player %u", player);
+
+	POWER_GEN *psPowerGen = (POWER_GEN *)psStruct->pFunctionality;
+	ASSERT_OR_RETURN(, psPowerGen != nullptr, "Null pFunctionality?");
 
 	//each power gen can cope with its associated resource extractors
 	int64_t extractedPower = 0;
