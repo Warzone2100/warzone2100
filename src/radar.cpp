@@ -125,22 +125,22 @@ static const UDWORD BLINK_HALF_INTERVAL = BLINK_INTERVAL / 2;
 static const float OVERLAY_OPACITY = 0.5f;
 
 // taken from https://en.wikipedia.org/wiki/Alpha_compositing
-PIELIGHT mix(PIELIGHT left, PIELIGHT right)
+PIELIGHT mix(PIELIGHT over, PIELIGHT base)
 {
-	float leftAlpha = left.byte.a / 255.0f;
-	float leftRed = left.byte.r / 255.0f;
-	float leftGreen = left.byte.g / 255.0f;
-	float leftBlue = left.byte.b / 255.0f;
+	float overAlpha = over.byte.a / 255.0f;
+	float overRed = over.byte.r / 255.0f;
+	float overGreen = over.byte.g / 255.0f;
+	float overBlue = over.byte.b / 255.0f;
 
-	float rightAlpha = right.byte.a / 255.0f;
-	float rightRed = right.byte.r / 255.0f;
-	float rightGreen = right.byte.g / 255.0f;
-	float rightBlue = right.byte.b / 255.0f;
+	float baseAlpha = base.byte.a / 255.0f;
+	float baseRed = base.byte.r / 255.0f;
+	float baseGreen = base.byte.g / 255.0f;
+	float baseBlue = base.byte.b / 255.0f;
 
-	float newAlpha = leftAlpha + rightAlpha * (1 - leftAlpha);
-	float newRed = (leftRed * leftAlpha + rightRed * rightAlpha * (1 - leftAlpha)) / newAlpha;
-	float newGreen = (leftGreen * leftAlpha + rightGreen * rightAlpha * (1 - leftAlpha)) / newAlpha;
-	float newBlue = (leftBlue * leftAlpha + rightBlue * rightAlpha * (1 - leftAlpha)) / newAlpha;
+	float newAlpha = overAlpha + baseAlpha * (1 - overAlpha);
+	float newRed = (overRed * overAlpha + baseRed * baseAlpha * (1 - overAlpha)) / newAlpha;
+	float newGreen = (overGreen * overAlpha + baseGreen * baseAlpha * (1 - overAlpha)) / newAlpha;
+	float newBlue = (overBlue * overAlpha + baseBlue * baseAlpha * (1 - overAlpha)) / newAlpha;
 
 	UBYTE returnAlpha = newAlpha * 255;
 	UBYTE returnRed = newRed * 255;
