@@ -8093,7 +8093,7 @@ bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
 	return true;
 }
 
-bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object)
+bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor)
 {
 	// random seed
 	uint32_t rand_seed = object.at("randSeed").get<uint32_t>();
@@ -8102,18 +8102,34 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object)
 	// compare version_string and throw a pop-up warning if not equal
 	auto replayVersionStr = object.at("versionString").get<std::string>();
 	auto expectedVersionStr = version_getVersionString();
-	if (replayVersionStr != expectedVersionStr)
+	bool nonMatchingVersionString = replayVersionStr != expectedVersionStr;
+	bool nonMatchingNetcodeVersion = !NETisCorrectVersion(replay_netcodeMajor, replay_netcodeMinor);
+	if (nonMatchingVersionString || nonMatchingNetcodeVersion)
 	{
+		if (nonMatchingVersionString)
+		{
+			debug(LOG_INFO, "Version string mismatch: (replay: %s) - (current: %s)", replayVersionStr.c_str(), expectedVersionStr);
+		}
 		std::string mismatchVersionDescription = _("The version of Warzone 2100 used to save this replay file does not match the currently-running version.");
 		mismatchVersionDescription += "\n\n";
 		mismatchVersionDescription += astringf(_("Replay File Saved With: \"%s\""), replayVersionStr.c_str());
 		mismatchVersionDescription += "\n";
-		mismatchVersionDescription += astringf(_("Current Warzone 2100 Version: \"%s\""), expectedVersionStr);
+		if (nonMatchingVersionString)
+		{
+			mismatchVersionDescription += astringf(_("Current Warzone 2100 Version: \"%s\""), expectedVersionStr);
+		}
+		else
+		{
+			// only a netcode mismatch - weird, but display the netcode version info
+			mismatchVersionDescription += astringf("Replay File NetcodeVer: (0x%" PRIx32 ", 0x%" PRIx32 ")", replay_netcodeMajor, replay_netcodeMinor);
+			mismatchVersionDescription += "\n";
+			mismatchVersionDescription += astringf("Current Warzone 2100 NetcodeVer: (0x%" PRIx32 ", 0x%" PRIx32 ")", NETGetMajorVersion(), NETGetMinorVersion());
+		}
 		mismatchVersionDescription += "\n\n";
 		mismatchVersionDescription += _("Replays should usually be played back with the same version used to save the replay.");
 		mismatchVersionDescription += "\n";
 		mismatchVersionDescription += _("The replay may not playback successfully, or there may be differences in the simulation.");
-		wzDisplayDialog(Dialog_Warning, _("Replay Version Mismatch"), mismatchVersionDescription.c_str());
+		wzDisplayDialog((nonMatchingVersionString) ? Dialog_Warning : Dialog_Error, _("Replay Version Mismatch"), mismatchVersionDescription.c_str());
 	}
 
 	// restore `game`
