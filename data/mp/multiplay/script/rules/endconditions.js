@@ -13,7 +13,7 @@ const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which 
 // - completion of the research
 // - construction of base structures (factories, power plants, laboratories, modules and oil rigs)
 // - dealing damage
-const IDLETIME = 5 * 60 * 1000;
+const IDLETIME = 4 * 60 * 1000;
 const BASESTRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR, POWER_GEN, RESEARCH_LAB];
 const ENABLE_activity = (challenge != true && isMultiplayer === true); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
 //const ENABLE_activity = true; //debug
@@ -436,7 +436,7 @@ function conditions_eventAttacked(victim, attacker)
 	{
 		return;
 	}
-	if (playersTeam[attacker.player])
+	if (playersTeam[attacker.player] && playersTeam[attacker.player] != playersTeam[victim.player])
 	{
 		playersTeam[attacker.player].lastActivity = gameTime;
 	}
