@@ -450,8 +450,8 @@ void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
-int NETGetMajorVersion();
-int NETGetMinorVersion();
+uint32_t NETGetMajorVersion();
+uint32_t NETGetMinorVersion();
 void NET_InitPlayer(int i, bool initPosition, bool initTeams = false, bool initSpectator = false);
 void NET_InitPlayers(bool initTeams = false, bool initSpectator = false);
 

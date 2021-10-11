@@ -312,12 +312,12 @@ bool NETisGreaterVersion(uint32_t game_version_major, uint32_t game_version_mino
 	return (game_version_major > NETCODE_VERSION_MAJOR) || ((game_version_major == NETCODE_VERSION_MAJOR) && (game_version_minor > NETCODE_VERSION_MINOR));
 }
 
-int NETGetMajorVersion()
+uint32_t NETGetMajorVersion()
 {
 	return NETCODE_VERSION_MAJOR;
 }
 
-int NETGetMinorVersion()
+uint32_t NETGetMinorVersion()
 {
 	return NETCODE_VERSION_MINOR;
 }
@@ -4275,7 +4275,7 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 			// stop processing games
 			return false;
 		}
-		if ((onlyMatchingLocalVersion) && ((lobbyGame.game_version_major != (unsigned)NETGetMajorVersion()) || (lobbyGame.game_version_minor != (unsigned)NETGetMinorVersion())))
+		if (onlyMatchingLocalVersion && !NETisCorrectVersion(lobbyGame.game_version_major, lobbyGame.game_version_minor))
 		{
 			// skip this non-matching version, continue
 			return true;
