@@ -254,7 +254,13 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 		uint32_t replayFormatVer = settings.at("replayFormatVer").get<uint32_t>();
 		if (replayFormatVer > currentReplayFormatVer)
 		{
-			return onFail("Replay format is newer than this version of Warzone 2100 can support");
+			std::string mismatchVersionDescription = _("The replay file format is newer than this version of Warzone 2100 can support.");
+			mismatchVersionDescription += "\n\n";
+			mismatchVersionDescription += astringf(_("Replay Format Version: %u"), static_cast<unsigned>(replayFormatVer));
+			wzDisplayDialog(Dialog_Error, _("Replay File Format Unsupported"), mismatchVersionDescription.c_str());
+
+			std::string failLogStr = "Replay file format is newer than this version of Warzone 2100 can support: " + std::to_string(replayFormatVer);
+			return onFail(failLogStr.c_str());
 		}
 
 		uint32_t replay_netcodeMajor = settings.at("major").get<uint32_t>();
