@@ -1580,7 +1580,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			else
 			{
 				rtrData = RtrBestResult(psOrder);
-			}	
+			}
 					
 			/* give repair order if repair facility found */
 			if (rtrData.type == RTR_TYPE_REPAIR_FACILITY)
