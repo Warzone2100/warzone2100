@@ -778,50 +778,54 @@ void droidUpdate(DROID *psDroid)
 	// unlike a repair facility
 	// 	- we don't really need to move droids to us, we can come ourselves
 	//	- we don't steal work from other repair turrets/ repair facilities
-	DROID *psOther;
-	if (psDroid->player == selectedPlayer && (psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR))
+	for (size_t player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (psOther = apsDroidLists[psDroid->player]; psOther; psOther = psOther->psNext)
+		DROID *psOther;
+		if (psDroid->player == player && (psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR))
 		{
-			// unlike repair facility, no droid  can have DORDER_RTR_SPECIFIED with another droid as target, so skip that check
-			if (psOther->order.type == DORDER_RTR && 
-					psOther->order.rtrType == RTR_TYPE_DROID &&
-					psOther->action != DACTION_WAITFORREPAIR &&
-					psOther->action != DACTION_MOVETOREPAIRPOINT &&
-					psOther->action != DACTION_WAITDURINGREPAIR)
+			for (psOther = apsDroidLists[psDroid->player]; psOther; psOther = psOther->psNext)
 			{
-				if (psOther->body >= psOther->originalBody)
+				// unlike repair facility, no droid  can have DORDER_RTR_SPECIFIED with another droid as target, so skip that check
+				if (psOther->order.type == DORDER_RTR && 
+						psOther->order.rtrType == RTR_TYPE_DROID &&
+						psOther->action != DACTION_WAITFORREPAIR &&
+						psOther->action != DACTION_MOVETOREPAIRPOINT &&
+						psOther->action != DACTION_WAITDURINGREPAIR)
 				{
-					// set droid points to max
-					psOther->body = psOther->originalBody;
-					// if completely repaired reset order
-					secondarySetState(psOther, DSO_RETURN_TO_LOC, DSS_NONE);
-
-					if (hasCommander(psOther))
+					if (psOther->body >= psOther->originalBody)
 					{
-						// return a droid to it's command group
-						DROID	*psCommander = psOther->psGroup->psCommander;
-						orderDroidObj(psOther, DORDER_GUARD, psCommander, ModeImmediate);
-					}
-					continue;
-				}
-			}
+						// set droid points to max
+						psOther->body = psOther->originalBody;
+						// if completely repaired reset order
+						secondarySetState(psOther, DSO_RETURN_TO_LOC, DSS_NONE);
 
-			else if (psOther->order.rtrType == RTR_TYPE_DROID 
-					//is being, or waiting for repairs..
-					&& (psOther->action == DACTION_WAITFORREPAIR || psOther->action == DACTION_WAITDURINGREPAIR)
-					// don't steal work from others
-					&& psOther->order.psObj == psDroid)
-			{
-				if (!actionReachedDroid(psDroid, psOther))
-				{
-					objTrace(psOther->id, "Moving closer to repair droid");
-					actionDroid(psOther, DACTION_MOVE, psDroid, psDroid->pos.x, psDroid->pos.y);
+						if (hasCommander(psOther))
+						{
+							// return a droid to it's command group
+							DROID	*psCommander = psOther->psGroup->psCommander;
+							orderDroidObj(psOther, DORDER_GUARD, psCommander, ModeImmediate);
+						}
+						continue;
+					}
 				}
-				
+
+				else if (psOther->order.rtrType == RTR_TYPE_DROID 
+						//is being, or waiting for repairs..
+						&& (psOther->action == DACTION_WAITFORREPAIR || psOther->action == DACTION_WAITDURINGREPAIR)
+						// don't steal work from others
+						&& psOther->order.psObj == psDroid)
+				{
+					if (!actionReachedDroid(psDroid, psOther))
+					{
+						debug(LOG_INFO, "Moving %i closer to myself for repairs, time %i", psOther->id, gameTime);
+						actionDroid(psOther, DACTION_MOVE, psDroid, psDroid->pos.x, psDroid->pos.y);
+					}
+					
+				}
 			}
 		}
 	}
+
 	// ------------------------
 	// See if we can and need to self repair.
 	if (!isVtolDroid(psDroid) && psDroid->body < psDroid->originalBody && psDroid->asBits[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(psDroid->player))
