@@ -244,13 +244,13 @@ int stdinThreadFunc(void *)
 			{
 				std::string newAdminStrCopy(newadmin);
 				wzAsyncExecOnMainThread([newAdminStrCopy]{
-					if (removeLobbyAdminIdentityHash(newAdminStrCopy))
+					if (removeLobbyAdminPublicKey(newAdminStrCopy))
 					{
 						errlog("WZCMD info: Room admin public key removed: %s\n", newAdminStrCopy.c_str());
 						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
 						sendRoomSystemMessage(roomAdminMessage.c_str());
 					}
-					else if (addLobbyAdminPublicKey(newAdminStrCopy))
+					else if (removeLobbyAdminIdentityHash(newAdminStrCopy))
 					{
 						errlog("WZCMD info: Room admin hash removed: %s\n", newAdminStrCopy.c_str());
 						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
