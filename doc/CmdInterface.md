@@ -1,30 +1,32 @@
-# Warzone 2100 pipe text interface
+# Warzone 2100 command interface
 
-In version 4.2.0-beta1 flag `enablecmdinterface` was introduced that enabled
-partial administrative control of Warzone 2100 instance via pipes/stdout.
+In version 4.2.0, an `--enablecmdinterface` CLI option was introduced that enables
+partial administrative control of Warzone 2100 instance via `stdin` / `stderr`.
 
-All messages is sent in plain-text UTF-8 compatability mode and end with 0x0a.
+> `stdout` is already used by numerous other aspects of WZ's logging and other subsystems, so (for now) `stderr` is used for Command Interface output
 
-## `stdout` messages
-`WZCMD: ` is for stdin command interface\
+All messages are sent in plain-text UTF-8 and end with 0x0a (`\n`).
+
+## `stderr` state / response messages
+
+`WZCMD: ` is for stdin command interface (and responses to commands)\
 `WZCHATCMD: ` is for in-lobby chat commands and messages\
 `WZEVENT: ` is for instance-related events like player join or game start
 
 * `WZCMD: stdinReadReady`\
 	`stdinReadReady` message signals support for stdin pipe commands
-	(see section `stdin`)
+	(see section [`stdin`](#stdin-commands))
 
 * `WZCMD error: <error message>`\
-	`error` messages describe errors relevant to the pipe interface
-	(example: fail to read command from `stdin` will
-	produce `WZCMD error: getline failed!`)
+	`error` messages describe errors relevant to the command interface\
+	(example: fail to read command from `stdin` will produce `WZCMD error: getline failed!`)
 
 * `WZCMD info: <info message>`\
-	`info` messages carry non-critical data but can help check that
+	`info` messages carry non-critical data, but can help check that
 	`stdin` commands are executed correctly.
 
-* `WZCHATCMD: <index> <ip> <hash> <pkey> <b64name> <b64msg>`\
-	Chat passby message. Used to store chat messages in machine readable format.
+* `WZCHATCMD: <index> <ip> <hash> <b64pubkey> <b64name> <b64msg>`\
+	Passes a lobby slash command message - to log use of slash commands or implement additional operations.\
 	Fields after `WZCHATCMD: `:
 	- `%i` **index** of player
 	- `%s` IP address of player in plain text (v4/v6)
@@ -40,7 +42,7 @@ All messages is sent in plain-text UTF-8 compatability mode and end with 0x0a.
 	Game id, announced as assigned from lobby.
 
 * `WZEVENT: startMultiplayerGame`\
-	Marks start of loading of multiplayer game.
+	Marks the start of loading of a multiplayer game.
 
 * `WZEVENT: lag-kick: <index?position> <ip>`\
 	Notifies about player being kicked from the game due to connection issues.
@@ -48,18 +50,18 @@ All messages is sent in plain-text UTF-8 compatability mode and end with 0x0a.
 * `WZEVENT: lobbyerror (<code>): <b64 motd>`\
   `WZEVENT: lobbysocketerror: [b64 motd]`\
   `WZEVENT: lobbyerror (<code>): Cannot resolve lobby server: <socket error>`\
-	Signals about lobby error. (motd is not base64encoded on tag 4.2.0-beta1)
+	Signals about lobby error. (motd is base64-encoded)
 
 # `stdin` commands
-`stdin` interface is super basic but at the same time powerful tool for
-automation.
 
-All messages **must end with 0x0a in order to be processed!**
-If state of interface buffer is unknown and/or corrupted, interface can send few
-0x0a in order to clean reader buffer.
+`stdin` interface is super basic but at the same time a powerful tool for automation.
+
+All messages **must end with 0x0a (`\n`) in order to be processed!**
+
+If state of interface buffer is unknown and/or corrupted, interface can send a few 0x0a in order to clean reader buffer.
 
 * `exit`\
-	Shutdowns **reader interface**
+	Shuts down **stdin reader interface**
 
 * `admin add-hash <hash>`\
 	Adds hash to the list of room admins
@@ -69,7 +71,6 @@ If state of interface buffer is unknown and/or corrupted, interface can send few
 
 * `admin remove <pkey|hash>`\
 	Removes admin from room admins list by public key or hash
-	(on tag 4.2.0-beta1 removal by hash does not work)
 
 * `ban ip <ip>`\
 	Find and kick (with adding to ip banlist) player with specified ip
