@@ -119,6 +119,23 @@ function isCopterPropulsion(droidProp)
     return false;
 }
 
+function helicoptersAreAllowed()
+{
+    if (getMultiTechLevel() === 1)
+    {
+        if ((baseType === CAMP_CLEAN && gameTime > (5.5 * 60000)) ||
+            (baseType === CAMP_BASE && gameTime > (2.5 * 60000)) ||
+            (baseType === CAMP_WALLS))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
 // Make sure a unit does not try to go off map
 function mapLimits(x, y, num1, num2, xOffset, yOffset)
 {
@@ -349,7 +366,7 @@ function buildThingsWithDroid(droid)
             }
         break;
         case 2:
-            if ((4*countStruct(vtolfac)) < countStruct(factory) && (gameTime > 150000))
+            if (helicoptersAreAllowed() && (4 * countStruct(vtolfac)) < countStruct(factory))
             {
                 buildStructure(droid, vtolfac);
             }
