@@ -3169,8 +3169,8 @@ error:
 		}
 	}
 
-	std::string strmotd = std::string(NetPlay.MOTD);
-	wz_command_interface_output("WZEVENT: lobbysocketerror: %s\n", (NetPlay.MOTD) ? base64Encode(std::vector<unsigned char>(strmotd.begin(), strmotd.end())).c_str() : "");
+	std::string strmotd = (NetPlay.MOTD) ? std::string(NetPlay.MOTD) : std::string();
+	wz_command_interface_output("WZEVENT: lobbysocketerror: %s\n", (!strmotd.empty()) ? base64Encode(std::vector<unsigned char>(strmotd.begin(), strmotd.end())).c_str() : "");
 
 	return SOCKET_ERROR;
 }
