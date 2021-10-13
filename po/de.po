@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-12 15:36\n"
+"PO-Revision-Date: 2021-10-13 03:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15116,19 +15116,19 @@ msgstr "Port"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Lobby-Schrägstrich Befehle aktivieren (um Clients zu verbinden)"
 
 #: src/clparse.cpp:413
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Füge einen Lobby-Administrator-Identitäts-Hash hinzu (für Schrägstrich Befehle)"
 
 #: src/clparse.cpp:413
 msgid "hash string"
-msgstr ""
+msgstr "Hash-String"
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Füge einen öffentlichen Lobby-Administrator-Schlüssel hinzu (für Schrägstrich Befehle)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
@@ -15144,7 +15144,7 @@ msgstr ""
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Minimal benötigte Spieler zum automatischen Start des Spiels"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
@@ -15370,8 +15370,8 @@ msgstr[1] "%u Einheiten der Gruppe %u zugewiesen"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u Einheiten aus ihrer Gruppe entfernt"
+msgstr[1] "%u Einheiten aus ihrer Gruppe entfernt"
 
 #: src/droid.cpp:2002
 #, c-format
@@ -16425,7 +16425,7 @@ msgstr "Zu Gruppe 9 hinzufügen"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Aus der aktuellen Gruppe entfernen"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -18165,7 +18165,7 @@ msgstr "Aus dem Spiel geworfen"
 
 #: src/multiint.cpp:5019
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Text in die Zwischenablage kopieren"
 
 #: src/multiint.cpp:5108
 msgid "CHAT"
@@ -18383,7 +18383,7 @@ msgstr "Beschränkungen auf Standardwerte zurücksetzen"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "Der Administrator hat dich aus dem Spiel geworfen."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18494,11 +18494,11 @@ msgstr "Unautorisierter Netzwerkbefehl"
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "AUFZEICHNUNG IST BEENDET"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Zum Beenden ESC drücken.)"
 
 #: src/multiplay.cpp:1376
 #, c-format
@@ -18784,11 +18784,11 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
-msgstr ""
+msgstr "Energie/Rate"
 
 #: src/spectatorwidgets.cpp:735
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Aktuelle Energie / Energie pro Sekunde"
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
@@ -18796,12 +18796,12 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Kinetische Panzerung"
 
 #: src/spectatorwidgets.cpp:738
 #: src/spectatorwidgets.cpp:740
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Panzer / Cyborgs)"
 
 #: src/structure.cpp:2538
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
