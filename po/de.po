@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-13 03:32\n"
+"PO-Revision-Date: 2021-10-13 15:28\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15132,7 +15132,7 @@ msgstr "Füge einen öffentlichen Lobby-Administrator-Schlüssel hinzu (für Sch
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
-msgstr ""
+msgstr "b64-öff.-Schlüssel"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
@@ -15525,7 +15525,7 @@ msgstr "Scharmützel laden"
 
 #: src/frontend.cpp:346
 msgid "View Skirmish Replay"
-msgstr "Scharmützel Wiederholung ansehen"
+msgstr "Scharmützel Aufzeichnung ansehen"
 
 #: src/frontend.cpp:348
 msgid "SINGLE PLAYER"
@@ -15552,7 +15552,7 @@ msgstr "Scharmützelspielstand laden"
 
 #: src/frontend.cpp:519
 msgid "Load Skirmish Replay"
-msgstr "Scharmützel Wiederholung laden"
+msgstr "Scharmützel Aufzeichnung laden"
 
 #: src/frontend.cpp:580
 msgid "MULTI PLAYER"
@@ -15568,7 +15568,7 @@ msgstr "Spiel beitreten"
 
 #: src/frontend.cpp:584
 msgid "View Replay"
-msgstr "Wiederholung ansehen"
+msgstr "Aufzeichnung ansehen"
 
 #: src/frontend.cpp:589
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15576,7 +15576,7 @@ msgstr "TCP-Port 2100 muss auf Ihrer Firewall oder Ihrem Router geöffnet sein, 
 
 #: src/frontend.cpp:634
 msgid "Load Multiplayer Replay"
-msgstr "Mehrspieler Wiederholung laden"
+msgstr "Mehrspieler Aufzeichnung laden"
 
 #: src/frontend.cpp:673
 #: src/multiint.cpp:1380
@@ -16036,7 +16036,7 @@ msgstr "Tipp: Anzeigemaßstab anpassen"
 
 #: src/hci.cpp:723
 msgid "Replay"
-msgstr "Wiederholung"
+msgstr "Aufzeichnung"
 
 #: src/hci.cpp:738
 msgid "Pause"
@@ -18283,12 +18283,12 @@ msgstr "Ping"
 
 #: src/multiint.cpp:8107
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr "Die Version von Warzone 2100, die benutzt wurde, um diese Wiederholungs-Datei zu speichern, entspricht nicht der aktuellen Version."
+msgstr "Die Version von Warzone 2100, die benutzt wurde, um diese Aufzeichnungs-Datei zu speichern, entspricht nicht der aktuellen Version."
 
 #: src/multiint.cpp:8109
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr "Wiederhole die gespeicherte Datei mit: \"%s\""
+msgstr "Spiele die Datei ab, gespeichert mit: \"%s\""
 
 #: src/multiint.cpp:8111
 #, c-format
@@ -18297,15 +18297,15 @@ msgstr "Aktuelle Warzone 2100 Version: \"%s\""
 
 #: src/multiint.cpp:8113
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr "Wiederholungen sollten üblicherweise mit derselben Version abgespielt werden mit der die Wiederholung gespeichert wurde."
+msgstr "Aufzeichnungen sollten üblicherweise mit derselben Version abgespielt werden mit der die Aufzeichnung gespeichert wurde."
 
 #: src/multiint.cpp:8115
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr "Die Wiederholung könnte nicht erfolgreich abgespielt werden oder es könnte Unterschiede in der Simulation geben."
+msgstr "Die Aufzeichnung könnte nicht erfolgreich abgespielt werden oder es könnte Unterschiede in der Simulation geben."
 
 #: src/multiint.cpp:8116
 msgid "Replay Version Mismatch"
-msgstr "Wiederholungsversion passt nicht"
+msgstr "Aufzeichnungsversion passt nicht"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18383,7 +18383,7 @@ msgstr "Beschränkungen auf Standardwerte zurücksetzen"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr "Der Administrator hat dich aus dem Spiel geworfen."
+msgstr "Der Administrator hat Dich aus dem Spiel geworfen."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
