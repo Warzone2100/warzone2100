@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:14\n"
+"PO-Revision-Date: 2021-10-13 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -160,11 +160,11 @@ msgstr "ALFA ÜSSÜ GÖREVİ: Bir Yönlendirme Üssü Kur"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Platoya ileri üs kur ve New Paradigm kuvvetlerini savuştur."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Yeşil sinyal kaybolana kadar savunma yapıları inşa et."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "Korunaklı bölgeyi kurunca, emirler için İniş Alanına geri dön."
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BETA ÜSSÜ GÖREVİ: Hayatta kal ve Tahliye ol! İnşa birimi getir"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -4008,7 +4008,7 @@ msgstr "Tüm Yeni Paradigma takviyelerini yok et"
 
 #: data/base/script/campaign/cam1ca.js:142
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Belirlenen platoya en az 7 duvar olmayan yapı inşa et ve gelen New Paradigm takviye birliklerini imha et"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
