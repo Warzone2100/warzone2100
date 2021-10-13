@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:14\n"
+"PO-Revision-Date: 2021-10-13 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -160,11 +160,11 @@ msgstr "Миссия на базе Альфа: Постройте передов
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Постройте передовую базу на плато и отразите атаку Новой Парадигмы."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Постройте защитные сооружения до тех пор, пока зелёная цель не исчезнет."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "Как только зона безопасности будет уст�
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BETA BASE MISSION: Выжить, и эвакуировать! Не забудь строительный грузовик"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -5606,20 +5606,20 @@ msgstr "Игрок"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Поражение из-за пассивной игры / отсутствия активности."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Пассивная игра будет считаться поражением. Учитываются следующие действия:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- постройка юнитов - завершение исследования - строительство структур (заводы, генераторы, лаборатории, модули и нефтяные вышки) - нанесение урона"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1461
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Угнетатели"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1458
@@ -5783,11 +5783,11 @@ msgstr "Игровой порт настроен правильно (%s) на (%
 
 #: lib/netplay/netplay.cpp:2042
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "Клиент не подтвердил смену индекса игрока"
 
 #: lib/netplay/netplay.cpp:2053
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Ошибка доставки сообщения - попробуйте еще раз"
 
 #: lib/netplay/netplay.cpp:2647
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
@@ -7927,13 +7927,13 @@ msgstr "Контрбатарея обнаруживает вражеские о�
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1594
 msgid "Crane1"
-msgstr ""
+msgstr "Кран 1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1597
 msgid "Crane2"
-msgstr ""
+msgstr "Кран 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8986,7 +8986,7 @@ msgstr "Укреплённая башня с огнемётом"
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2329
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Укреплённая башня с тяжёлым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -12855,7 +12855,7 @@ msgstr "Бункер Мусорщиков"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5032
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Завод вертушек Мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12896,13 +12896,13 @@ msgstr "Продольная стена Мусорщиков"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5055
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "Пулемётная башня Мусорщиков"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
 #: po/custom/fromJson.txt:5058
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "Пулемёт Мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
@@ -12915,7 +12915,7 @@ msgstr "Генератор энергии Мусорщиков"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5065
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Ремцех Мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12935,7 +12935,7 @@ msgstr "Мусорщик"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5076
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "Турель НЕКСУС Мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -14248,7 +14248,7 @@ msgstr "Авиационное штурмовое орудие"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5936
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "Посадочная площадка ВВС"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14452,7 +14452,7 @@ msgstr "ВВС Лансер"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6057
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "Авиационный пулемёт Мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14465,7 +14465,7 @@ msgstr "Авиационный пулемёт"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6064
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "Авиационные миниракеты Мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -14873,7 +14873,7 @@ msgstr " и "
 #: src/chat.cpp:169
 #: src/multiint.cpp:3625
 msgid "Spectators"
-msgstr ""
+msgstr "Наблюдатели"
 
 #: src/cheat.cpp:212
 #, c-format
@@ -15033,7 +15033,7 @@ msgstr "хост"
 
 #: src/clparse.cpp:379
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "Подключиться непосредственно к IP/имени хоста в качестве наблюдателя"
 
 #: src/clparse.cpp:380
 msgid "Go directly to host screen"
@@ -15117,39 +15117,39 @@ msgstr "порт"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Включить лобби-слэш команды (для подключения клиентов)"
 
 #: src/clparse.cpp:413
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Добавить идентификационный хэш администратора лобби (для команд слэш)"
 
 #: src/clparse.cpp:413
 msgid "hash string"
-msgstr ""
+msgstr "хэш-строка"
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Добавить публичный ключ администратора лобби (для команд слэш)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
-msgstr ""
+msgstr "base64-кодированый публичный ключ"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
-msgstr ""
+msgstr "Включить командный интерфейс"
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
-msgstr ""
+msgstr "(стандартный ввод)"
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Минимальное количество игроков для автоматического запуска игры"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
-msgstr ""
+msgstr "Количество игроков на старте"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -15375,7 +15375,7 @@ msgstr[3] "%u юнитов назначено группе %u"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
+msgstr[0] "%u юнитов удалено из группы"
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
@@ -15536,7 +15536,7 @@ msgstr "Загрузить Сражение"
 
 #: src/frontend.cpp:346
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Просмотреть повтор Стычки"
 
 #: src/frontend.cpp:348
 msgid "SINGLE PLAYER"
@@ -15563,7 +15563,7 @@ msgstr "Загрузить сохранённую Схватку"
 
 #: src/frontend.cpp:519
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Загрузить повтор Стычки"
 
 #: src/frontend.cpp:580
 msgid "MULTI PLAYER"
@@ -15579,7 +15579,7 @@ msgstr "Присоединиться"
 
 #: src/frontend.cpp:584
 msgid "View Replay"
-msgstr ""
+msgstr "Просмотр повтора"
 
 #: src/frontend.cpp:589
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15587,7 +15587,7 @@ msgstr "TCP-порт 2100 должен быть открыт в брандмау
 
 #: src/frontend.cpp:634
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Загрузить многопользовательский повтор"
 
 #: src/frontend.cpp:673
 #: src/multiint.cpp:1380
@@ -16046,19 +16046,19 @@ msgstr "Совет: Настройте масштаб экрана"
 
 #: src/hci.cpp:723
 msgid "Replay"
-msgstr ""
+msgstr "Повтор"
 
 #: src/hci.cpp:738
 msgid "Pause"
-msgstr ""
+msgstr "Пауза"
 
 #: src/hci.cpp:753
 msgid "Resume"
-msgstr ""
+msgstr "Продолжить"
 
 #: src/hci.cpp:770
 msgid "Fast-Forward"
-msgstr ""
+msgstr "Перемотка вперед"
 
 #: src/hci.cpp:1314
 #: src/loop.cpp:252
@@ -16435,7 +16435,7 @@ msgstr "Добавить в группу 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Убрать из группы"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -17202,7 +17202,7 @@ msgstr "Обновить исследование"
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "Цели и обновления проекта"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
@@ -17912,7 +17912,7 @@ msgstr "Оставить этот слот неиспользуемым"
 
 #: src/multiint.cpp:1870
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Разрешить зрителям присоединиться к этому слоту"
 
 #: src/multiint.cpp:1954
 msgid "Click to change to this slot"
@@ -17921,21 +17921,21 @@ msgstr "Нажмите, чтобы выбрать этот слот"
 #: src/multiint.cpp:1981
 #, c-format
 msgid "Click to take player slot %<PRIu32>"
-msgstr ""
+msgstr "Нажмите, чтобы занять слот игрока %<PRIu32>"
 
 #: src/multiint.cpp:2018
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "Нажмите, чтобы поменять игрока на этот слот"
 
 #: src/multiint.cpp:2035
 #: src/multiint.cpp:3118
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr ""
+msgstr "Наблюдатель %s переехал в Игроки"
 
 #: src/multiint.cpp:2041
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "Нельзя поменяться с хостом"
 
 #: src/multiint.cpp:2278
 msgid "Team"
@@ -17947,7 +17947,7 @@ msgstr "Команда"
 #: src/multiint.cpp:7463
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Наблюдатель"
 
 #: src/multiint.cpp:2299
 #: src/multiint.cpp:4421
@@ -17965,12 +17965,12 @@ msgstr "Хост выгнал вас из игры."
 #: src/multiint.cpp:2336
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "Не удалось переместить %s в Наблюдатели"
 
 #: src/multiint.cpp:2341
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "Хост переместил %s в Наблюдатели!"
 
 #: src/multiint.cpp:2364
 msgid "Move to Spectators"
@@ -18806,16 +18806,16 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
-msgstr ""
+msgstr "Потеряная энергия"
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Кинетическая Броня"
 
 #: src/spectatorwidgets.cpp:738
 #: src/spectatorwidgets.cpp:740
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Танки / Киборги)"
 
 #: src/structure.cpp:2538
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -18956,7 +18956,7 @@ msgstr "Версия %s"
 
 #: src/titleui/gamefind.cpp:458
 msgid "Join as spectator"
-msgstr ""
+msgstr "Присоединиться как наблюдатель"
 
 #: src/titleui/gamefind.cpp:481
 msgid "Your version of Warzone is incompatible with this game."
@@ -19136,11 +19136,11 @@ msgstr "Version: %s,%s Built: %s%s"
 
 #: src/wrappers.cpp:353
 msgid "GAME OVER"
-msgstr ""
+msgstr "ИГРА ОКОНЧЕНА"
 
 #: src/wrappers.cpp:354
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "Битва окончена. Вы можете покинуть комнату."
 
 #: src/wzapi.cpp:2337
 msgid "YOU ARE VICTORIOUS!"
