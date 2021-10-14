@@ -168,6 +168,8 @@ const GAMMA_RESEARCH_NEW = [
 	"R-Wpn-RocketSlow-ROF06",
 
 	// 5
+	"R-Sys-Resistance-Upgrade01", "R-Sys-Resistance-Upgrade02", "R-Sys-Resistance-Upgrade03",
+	"R-Sys-Resistance-Upgrade04",
 
 	// 6
 	"R-Vehicle-Body07", "R-Wpn-RailGun01", "R-Struc-VTOLPad-Upgrade04", "R-Wpn-Missile-LtSAM",
@@ -187,6 +189,7 @@ const GAMMA_RESEARCH_NEW = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02",
 
 	// 8
+	"R-Sys-Resistance", "R-Comp-MissileCodes01", "R-Comp-MissileCodes02", "R-Comp-MissileCodes03",
 
 	// 9
 	"R-Wpn-RailGun03", "R-Vehicle-Body10", "R-Wpn-HvArtMissile",
