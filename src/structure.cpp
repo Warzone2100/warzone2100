@@ -246,6 +246,8 @@ void initStructLimits()
 
 void structureInitVars()
 {
+	ASSERT(asStructureStats == nullptr, "Failed to cleanup prior asStructureStats?");
+
 	asStructureStats = nullptr;
 	lookupStructStatPtr.clear();
 	numStructureStats = 0;
