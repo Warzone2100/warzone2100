@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-13 15:28\n"
+"PO-Revision-Date: 2021-10-14 03:34\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -17974,99 +17974,99 @@ msgstr "Хост переместил %s в Наблюдатели!"
 
 #: src/multiint.cpp:2364
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Переместить в Наблюдатели"
 
 #: src/multiint.cpp:2385
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Попросить Наблюдателя сыграть"
 
 #: src/multiint.cpp:2401
 msgid "Ask to Play"
-msgstr ""
+msgstr "Попросить сыграть"
 
 #: src/multiint.cpp:3002
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "Наблюдатель %s хочет остаться Наблюдателем"
 
 #: src/multiint.cpp:3006
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "Игрок %s хочет остаться игроком"
 
 #: src/multiint.cpp:3014
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "Хост отказался переключить Вас на Игрока"
 
 #: src/multiint.cpp:3018
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Не удалось переключиться на Наблюдателя"
 
 #: src/multiint.cpp:3046
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "Хотите быть Наблюдателем?"
 
 #: src/multiint.cpp:3047
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "Хост этой игры хочет узнать хотели бы Вы стать Наблюдателем?"
 
 #: src/multiint.cpp:3049
 msgid "You are currently a Player."
-msgstr ""
+msgstr "В настоящее время Вы - Игрок."
 
 #: src/multiint.cpp:3050
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Да, я буду Наблюдателем!"
 
 #: src/multiint.cpp:3055
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Вы хотите играть?"
 
 #: src/multiint.cpp:3056
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "Хост этой игры хочет узнать хотели бы Вы стать Игроком?"
 
 #: src/multiint.cpp:3058
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "В настоящее время Вы - Наблюдатель."
 
 #: src/multiint.cpp:3059
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Да, я хочу играть!"
 
 #: src/multiint.cpp:3102
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "Игрок %s переехал в Наблюдатели"
 
 #: src/multiint.cpp:3141
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Наблюдатель хотел бы стать игроком"
 
 #: src/multiint.cpp:3142
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Наблюдатель \"%s\" хотел бы стать игроком."
 
 #: src/multiint.cpp:3144
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "Но в данный момент нет свободных игровых слотов."
 
 #: src/multiint.cpp:3146
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Вы хотели бы поменять этого Наблюдателя на Игрока?"
 
 #: src/multiint.cpp:3147
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Да, выбрать слот игрока"
 
 #: src/multiint.cpp:3430
 msgid "Joined:"
-msgstr ""
+msgstr "Присоединился:"
 
 #: src/multiint.cpp:3433
 msgid "Ready:"
-msgstr ""
+msgstr "Готов:"
 
 #: src/multiint.cpp:3611
 #: src/titleui/gamefind.cpp:269
@@ -18075,15 +18075,15 @@ msgstr "Игроки"
 
 #: src/multiint.cpp:3641
 msgid "Host Options"
-msgstr ""
+msgstr "Параметры хоста"
 
 #: src/multiint.cpp:3922
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Разрешить Наблюдателей"
 
 #: src/multiint.cpp:3932
 msgid "Lock Teams"
-msgstr ""
+msgstr "Блокировать команды"
 
 #: src/multiint.cpp:4188
 msgid "Choose Team"
@@ -18111,7 +18111,7 @@ msgstr "Нажмите, чтобы добавить ИИ, ПКМ для расп
 
 #: src/multiint.cpp:4246
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Нажмите, чтобы закрыть слот Наблюдателя"
 
 #: src/multiint.cpp:4262
 msgid "Player ID: "
@@ -18151,15 +18151,15 @@ msgstr "ГОТОВ?"
 
 #: src/multiint.cpp:4525
 msgid "For Spectator:"
-msgstr ""
+msgstr "Для наблюдателя:"
 
 #: src/multiint.cpp:4525
 msgid "For Player:"
-msgstr ""
+msgstr "Для игрока:"
 
 #: src/multiint.cpp:4543
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Выберете слот игрока"
 
 #: src/multiint.cpp:4614
 msgid "PLAYERS"
@@ -18167,7 +18167,7 @@ msgstr "ИГРОКИ"
 
 #: src/multiint.cpp:4718
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Добавить слот наблюдателя"
 
 #: src/multiint.cpp:4794
 msgid "Kicked from game"
@@ -18175,7 +18175,7 @@ msgstr "Кикнут из игры"
 
 #: src/multiint.cpp:5019
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Копировать текст в буфер обмена"
 
 #: src/multiint.cpp:5108
 msgid "CHAT"
@@ -18220,11 +18220,11 @@ msgstr "Нет соединения с хостом."
 
 #: src/multiint.cpp:6687
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "Хост переместил меня в Игроки, но я не давал разрешения на это изменение. До следуещего!"
 
 #: src/multiint.cpp:6689
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "Хост пытался переместить нас в Игроки, но мы не давали такого разрешения."
 
 #: src/multiint.cpp:6838
 msgid "Cannot change to a map with too few slots for all players."
@@ -18293,29 +18293,29 @@ msgstr "Пинг"
 
 #: src/multiint.cpp:8107
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "Версия этого файла не совпадает с текущей версией Warzone 2100."
 
 #: src/multiint.cpp:8109
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "Файл повтора сохранен: \"%s\""
 
 #: src/multiint.cpp:8111
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "Текущая версия Warzone 2100: \"%s\""
 
 #: src/multiint.cpp:8113
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "Повторы обычно должны воспроизводиться с той же версией, которая используется для сохранения повтора."
 
 #: src/multiint.cpp:8115
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "Повтор может не воспроизводиться, или могут возникнуть различия в симуляции."
 
 #: src/multiint.cpp:8116
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "Версии повтора не совпадают"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18393,7 +18393,7 @@ msgstr "Ограничения сброшены к настройкам по у�
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "Администратор выгнал вас из игры."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18498,19 +18498,19 @@ msgstr "Неверные данные!"
 #: src/multiplay.cpp:1122
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "Игрок %s выгнан автоматически, получена недопустимая команда: %u"
 
 #: src/multiplay.cpp:1124
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Неавторизованная сетевая команда"
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "ПОВТОР ЗАВЕРШЁН"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Нажмите ESC для выхода.)"
 
 #: src/multiplay.cpp:1376
 #, c-format
@@ -18601,11 +18601,11 @@ msgstr "Коричневый"
 
 #: src/multiplay.cpp:2377
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Режим наблюдателя"
 
 #: src/multiplay.cpp:2378
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Вы Наблюдатель. Наслаждайтесь просмотром игры!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18794,15 +18794,15 @@ msgstr[3] "выбрано %u юнитов"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Подкласс оружия"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
-msgstr ""
+msgstr "Энергия/Прирост"
 
 #: src/spectatorwidgets.cpp:735
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Текущая Энергия / Прирост в секунду"
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
