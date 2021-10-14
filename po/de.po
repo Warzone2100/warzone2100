@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-13 15:28\n"
+"PO-Revision-Date: 2021-10-14 03:34\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -5783,7 +5783,7 @@ msgstr "Das Spiel hat den Port (%s) korrekt konfiguriert auf (%s)\n"
 
 #: lib/netplay/netplay.cpp:2042
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "Client bestätigte nicht den Wechsel des Spieler-Indexes"
 
 #: lib/netplay/netplay.cpp:2053
 msgid "Message delivery failure - try again"
@@ -15136,11 +15136,11 @@ msgstr "b64-öff.-Schlüssel"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
-msgstr ""
+msgstr "Command Interface aktivieren"
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
@@ -15148,7 +15148,7 @@ msgstr "Minimal benötigte Spieler zum automatischen Start des Spiels"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
-msgstr ""
+msgstr "Startspieler"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -18780,7 +18780,7 @@ msgstr[1] "%u Einheiten ausgewählt"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Waffenart"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
@@ -18792,7 +18792,7 @@ msgstr "Aktuelle Energie / Energie pro Sekunde"
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
-msgstr ""
+msgstr "Verlorene Energie"
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
