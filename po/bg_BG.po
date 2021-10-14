@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-13 15:28\n"
+"PO-Revision-Date: 2021-10-14 15:39\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -520,7 +520,7 @@ msgstr "Ваша задача е да прихванете конвоя и да 
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Възможно е да има ескорт от вражески СВИК."
+msgstr "Възможно е да има ескорт от вражески СВиК."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -545,7 +545,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "Анализ на полетните траектории показва, че СВиК на Колектива се изпращат от тук."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
@@ -1302,7 +1302,7 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
-msgstr ""
+msgstr "Скачач Щурмови картечар"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
@@ -2604,7 +2604,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:202
 #: po/custom/fromJson.txt:4907
 msgid "Robotic VTOL Production"
-msgstr ""
+msgstr "Роботизирано производство на СВиК"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[2]
@@ -2615,7 +2615,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:203
 #: po/custom/fromJson.txt:3331
 msgid "Increases VTOL factory output"
-msgstr ""
+msgstr "Увеличава производителността на фабриките за СВиК"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[3]
@@ -2626,7 +2626,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:204
 #: po/custom/fromJson.txt:458
 msgid "All VTOL factories upgraded automatically"
-msgstr "Всички фабрики за СВИК се надграждат автоматично"
+msgstr "Всички фабрики за СВиК се надграждат автоматично"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[0]
@@ -2637,7 +2637,7 @@ msgstr "Всички фабрики за СВИК се надграждат ав
 #: data/mp/messages/strings/resstrings.txt:206
 #: po/custom/fromJson.txt:6115
 msgid "VTOL Rearming Times Reduced"
-msgstr ""
+msgstr "Намаля се времето за превъоръжаване на СВиК"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
@@ -2648,7 +2648,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:981
 msgid "Automated VTOL Rearming"
-msgstr "Автоматично превъоражаване на СВИК"
+msgstr "Автоматично превъоражаване на СВиК"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -5473,7 +5473,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:511
 #: po/custom/fromJson.txt:6082
 msgid "VTOL Propulsion II"
-msgstr ""
+msgstr "Задвижване СВиК II"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Wheels02.name
@@ -6199,7 +6199,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_ST_VFU4.text[1]
 #: po/custom/fromJson.txt:253
 msgid "Advanced VTOL Production"
-msgstr ""
+msgstr "Подобрено производство на СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Advmaterialslab.name
@@ -6306,7 +6306,7 @@ msgstr "Всички камиони се надграждат автоматич
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[3]
 #: po/custom/fromJson.txt:470
 msgid "All VTOLs upgraded automatically"
-msgstr ""
+msgstr "Всички СВиК се надграждат автоматично"
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_1.name
@@ -6915,26 +6915,26 @@ msgstr "Укрепена точка с щурмова картечница"
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
 #: po/custom/fromJson.txt:884
 msgid "Assault Gun Python Half Track"
-msgstr ""
+msgstr "Щурмова картечница Питон Полувериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHoverAssGun.name
 #: po/custom/fromJson.txt:887
 msgid "Assault Gun Python Hover"
-msgstr ""
+msgstr "Щурмова картечница Питон Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 #. data/mp/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 #: po/custom/fromJson.txt:891
 msgid "Assault Gun Python Tracks"
-msgstr ""
+msgstr "Щурмова картечница Питон Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:894
 msgid "Assault Gun Tower"
-msgstr ""
+msgstr "Кула с щурмова картечница"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG4.name
@@ -6952,7 +6952,7 @@ msgstr "Щурмова картечница"
 #. data/mp/stats/templates.json: $.CyborgRotMgGround.name
 #: po/custom/fromJson.txt:906
 msgid "Assault Gunner Cyborg"
-msgstr ""
+msgstr "Киборг Щурмови картечар"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VP.text[2]
@@ -7059,14 +7059,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
 #: po/custom/fromJson.txt:971
 msgid "Automated VTOL Rearming Mk2"
-msgstr ""
+msgstr "Автоматично превъоръжаване за СВиК Мк. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #: po/custom/fromJson.txt:975
 msgid "Automated VTOL Rearming Mk3"
-msgstr ""
+msgstr "Автоматично превъоръжаване за СВиК Мк. 3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[1]
@@ -9036,7 +9036,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
 #: po/custom/fromJson.txt:2363
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr ""
+msgstr "Налична е Укрепена точка с двойна щурмова картечница"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text[0]
@@ -12366,7 +12366,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VP.text[1]
 #: po/custom/fromJson.txt:4704
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr ""
+msgstr "Презарежда, превъоръжава и поправя СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials02.name
@@ -12652,14 +12652,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
 #: po/custom/fromJson.txt:4911
 msgid "Robotic VTOL Rearming Mk2"
-msgstr ""
+msgstr "Роботизирано превъоръжаване за СВиК Мк. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 #: po/custom/fromJson.txt:4915
 msgid "Robotic VTOL Rearming Mk3"
-msgstr ""
+msgstr "Роботизирано превъоръжаване за СВиК Мк. 3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_VPU4.text[1]
@@ -12668,7 +12668,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade04.name
 #: po/custom/fromJson.txt:4921
 msgid "Robotic VTOL Rearming"
-msgstr ""
+msgstr "Роботизирано превъоръжаване за СВиК"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_AC1.text[2]
@@ -13203,7 +13203,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_P_V1.text[2]
 #: po/custom/fromJson.txt:5258
 msgid "Speed: VTOL"
-msgstr ""
+msgstr "Скорост: СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
@@ -13638,7 +13638,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VP.text[3]
 #: po/custom/fromJson.txt:5547
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr ""
+msgstr "СВиК се връща към избраната площадка за превъоръжаване"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_CY_AH4.text[2]
@@ -13913,7 +13913,7 @@ msgstr "Двойно щурмово оръдие"
 #. data/mp/stats/structure.json: $.WallTower-TwinAssaultGun.name
 #: po/custom/fromJson.txt:5724
 msgid "Twin Assault Gun Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с двойна щурмова картечница"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MG5.name
@@ -14224,14 +14224,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
 #: po/custom/fromJson.txt:5929
 msgid "VTOL Assault Cannon"
-msgstr ""
+msgstr "СВиК с Щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG4ROTARY-VTOL.name
 #. data/mp/stats/weapons.json: $.MG4ROTARY-VTOL.name
 #: po/custom/fromJson.txt:5933
 msgid "VTOL Assault Gun"
-msgstr ""
+msgstr "СВиК с Щурмова картечница"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
@@ -14263,7 +14263,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon1-VTOL.name
 #: po/custom/fromJson.txt:5950
 msgid "VTOL Cannon"
-msgstr ""
+msgstr "СВиК с Оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-VTOLCBTower01.name
@@ -14337,7 +14337,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[1]
 #: po/custom/fromJson.txt:6001
 msgid "VTOL factory enables VTOL production"
-msgstr ""
+msgstr "Фабриката за СВиК позволява производството на СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory.name
@@ -14346,7 +14346,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0VTolFactory1.name
 #: po/custom/fromJson.txt:6007
 msgid "VTOL Factory"
-msgstr ""
+msgstr "Фабрика за СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAM-VTOL.name
@@ -14373,7 +14373,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG3-VTOL.name
 #: po/custom/fromJson.txt:6022
 msgid "VTOL Heavy Machinegun"
-msgstr ""
+msgstr "СВиК с Тежка картечница"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-HPV.name
@@ -14404,13 +14404,13 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.V-Tol02.name
 #: po/custom/fromJson.txt:6038
 msgid "VTOL II"
-msgstr ""
+msgstr "СВиК II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:6041
 msgid "VTOL III"
-msgstr ""
+msgstr "СВиК III"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14448,7 +14448,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG1-VTOL.name
 #: po/custom/fromJson.txt:6061
 msgid "VTOL Machinegun"
-msgstr ""
+msgstr "СВиК с Картечница"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
@@ -14488,7 +14488,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-VTOL.name
 #: po/custom/fromJson.txt:6086
 msgid "VTOL Propulsion"
-msgstr ""
+msgstr "Задвижване за СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser2PULSE-VTOL.name
@@ -14519,14 +14519,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0VtolPad.name
 #: po/custom/fromJson.txt:6105
 msgid "VTOL Rearming Pad"
-msgstr ""
+msgstr "Площадка за превъоръжаване на СВиК"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[2]
 #: po/custom/fromJson.txt:6109
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr ""
+msgstr "Изискват се площадки за превъоръжаване, за да се поддържат СВиК в полет"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Missile-VTOL-AT.name
@@ -14577,7 +14577,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
 #: po/custom/fromJson.txt:6151
 msgid "VTOL Tank Killer"
-msgstr ""
+msgstr "СВиК с Танкоубиец"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
@@ -14591,14 +14591,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG2-VTOL.name
 #: po/custom/fromJson.txt:6159
 msgid "VTOL Twin Machinegun"
-msgstr ""
+msgstr "СВиК с Двойна картечница"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol.name
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6163
 msgid "VTOL"
-msgstr ""
+msgstr "СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -14996,7 +14996,7 @@ msgstr ""
 
 #: src/clparse.cpp:374
 msgid "Enable shadows"
-msgstr ""
+msgstr "Разреши сенки"
 
 #: src/clparse.cpp:375
 msgid "Disable shadows"
@@ -15004,7 +15004,7 @@ msgstr ""
 
 #: src/clparse.cpp:376
 msgid "Enable sound"
-msgstr ""
+msgstr "Разреши звук"
 
 #: src/clparse.cpp:377
 msgid "Disable sound"
@@ -15744,7 +15744,7 @@ msgstr "Забранено"
 
 #: src/frontend.cpp:968
 msgid "Enabled"
-msgstr "Позволено"
+msgstr "Разрешено"
 
 #: src/frontend.cpp:972
 #: src/frontend.cpp:978
@@ -17132,7 +17132,7 @@ msgstr ""
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:881
 msgid "No:"
-msgstr ""
+msgstr "Без:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:897
@@ -17325,7 +17325,7 @@ msgstr "Безкрайна енергия забранена"
 
 #: src/keybind.cpp:762
 msgid "Infinite power enabled"
-msgstr "Безкрайна енергия позволена"
+msgstr "Безкрайна енергия разрешена"
 
 #: src/keybind.cpp:802
 msgid "All items made available"
@@ -17722,7 +17722,7 @@ msgstr ""
 
 #: src/multiint.cpp:1172
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "СВиК забранени."
 
 #: src/multiint.cpp:1173
 msgid "Satellite Uplink disabled."
@@ -18940,7 +18940,7 @@ msgstr "[Без киборги]"
 
 #: src/titleui/gamefind.cpp:522
 msgid "[No VTOLs]"
-msgstr "[Без СВИК]"
+msgstr "[Без СВиК]"
 
 #: src/titleui/gamefind.cpp:526
 #, c-format
