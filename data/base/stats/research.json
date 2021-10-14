@@ -7217,6 +7217,7 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Resistance-Upgrade02",
 		"imdName": "ICCCCONS.PIE",
+		"msgName": "RES_SY_RESU3",
 		"name": "NEXUS Resistance Circuits Mk2",
 		"requiredResearch": [
 			"R-Sys-Resistance-Upgrade01"
@@ -7239,13 +7240,13 @@
 				"value": 60
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-Resistance-Upgrade03": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Resistance-Upgrade03",
 		"imdName": "ICCCCONS.PIE",
+		"msgName": "RES_SY_RESU4",
 		"name": "NEXUS Resistance Circuits Mk3",
 		"requiredResearch": [
 			"R-Sys-Resistance-Upgrade02"
@@ -7268,8 +7269,36 @@
 				"value": 60
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
+	},
+	"R-Sys-Resistance-Upgrade04": {
+		"iconID": "IMAGE_RES_SYSTEMTECH",
+		"id": "R-Sys-Resistance-Upgrade04",
+		"imdName": "ICCCCONS.PIE",
+		"msgName": "RES_SY_RESU5",
+		"name": "NEXUS Resistance Circuits Mk4",
+		"requiredResearch": [
+			"R-Sys-Resistance-Upgrade03"
+		],
+		"researchPoints": 35000,
+		"researchPower": 450,
+		"results": [
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Structure",
+				"parameter": "Resistance",
+				"value": 5
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Droids",
+				"parameter": "Resistance",
+				"value": 5
+			}
+		],
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-SpyTurret": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",

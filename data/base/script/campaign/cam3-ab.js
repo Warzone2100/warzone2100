@@ -199,7 +199,12 @@ function eventResearched(research, structure, player)
 	}
 	else if (research.name === "R-Sys-Resistance-Upgrade03")
 	{
+		hackFailChance = 97;
+	}
+	else if (research.name === "R-Sys-Resistance-Upgrade04")
+	{
 		winFlag = true;
+		hackFailChance = 100;
 		camSetNexusState(false);
 	}
 }

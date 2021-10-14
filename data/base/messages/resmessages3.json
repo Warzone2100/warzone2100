@@ -490,8 +490,41 @@
 		"text": [
 			"Computer Technology Breakthrough",
 			"Improved NEXUS resistance circuitry",
-			"Computer systems can now be 'ring-fenced' from NEXUS",
-			"Reduced chance of NEXUS take-over"
+			"Reduced chance of NEXUS take-over",
+			"Hero and Special rank units are protected"
+		]
+	},
+	"RES_SY_RESU3": {
+		"id": "RES_SY_RESU3",
+		"imdName": "MICAPSUL.PIE",
+		"sequenceName": "res_systech.ogg",
+		"text": [
+			"Computer Technology Breakthrough",
+			"Improved NEXUS resistance circuitry",
+			"Reduced chance of NEXUS take-over",
+			"Elite and Veteran rank units and Factories are protected"
+		]
+	},
+	"RES_SY_RESU4": {
+		"id": "RES_SY_RESU4",
+		"imdName": "MICAPSUL.PIE",
+		"sequenceName": "res_systech.ogg",
+		"text": [
+			"Computer Technology Breakthrough",
+			"Improved NEXUS resistance circuitry",
+			"Reduced chance of NEXUS take-over",
+			"Professional and Regular rank units are protected"
+		]
+	},
+	"RES_SY_RESU5": {
+		"id": "RES_SY_RESU5",
+		"imdName": "MICAPSUL.PIE",
+		"sequenceName": "res_systech.ogg",
+		"text": [
+			"Computer Technology Breakthrough",
+			"Improved NEXUS resistance circuitry",
+			"Computer systems are now 'ring-fenced' from NEXUS",
+			"Stops NEXUS take-over"
 		]
 	},
 	"RES_SY_ST1": {

@@ -181,6 +181,10 @@ function __camChooseNexusTarget(player)
 			{
 				return true; //Final mission has a static fail chance to hack everything.
 			}
+			else if (getResearch("R-Sys-Resistance-Upgrade04").done)
+			{
+				return false; //Everything is safe
+			}
 			else if (getResearch("R-Sys-Resistance-Upgrade03").done)
 			{
 				if (d.droidType === DROID_CONSTRUCT && camRand(100) < 66)
