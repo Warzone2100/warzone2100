@@ -107,6 +107,7 @@ bool statsAllocConstruct(UDWORD numEntries);
 *******************************************************************************/
 // Used from structure.cpp
 void loadStructureStats_BaseStats(WzConfig &json, STRUCTURE_STATS *psStats, size_t index);
+void unloadStructureStats_BaseStats(const STRUCTURE_STATS &psStats);
 
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(WzConfig &ini);

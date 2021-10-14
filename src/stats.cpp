@@ -78,7 +78,6 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static std::unordered_map<WzString, BASE_STATS *> lookupStatPtr;
-static std::unordered_map<WzString, STRUCTURE_STATS *> lookupStructStatPtr;
 static std::unordered_map<WzString, COMPONENT_STATS *> lookupCompStatPtr;
 
 static bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model);
@@ -135,7 +134,6 @@ void statsInitVars()
 bool statsShutDown()
 {
 	lookupStatPtr.clear();
-	lookupStructStatPtr.clear();
 	lookupCompStatPtr.clear();
 
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
@@ -239,7 +237,11 @@ static void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
 void loadStructureStats_BaseStats(WzConfig &json, STRUCTURE_STATS *psStats, size_t index)
 {
 	loadStats(json, psStats, index);
-	lookupStructStatPtr.insert(std::make_pair(psStats->id, psStats));
+}
+
+void unloadStructureStats_BaseStats(const STRUCTURE_STATS &psStats)
+{
+	lookupStatPtr.erase(psStats.id);
 }
 
 static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index)
@@ -1253,17 +1255,6 @@ COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 		}
 	}*/
 	return psComp;
-}
-
-STRUCTURE_STATS *getStructStatsFromName(const WzString &name)
-{
-	STRUCTURE_STATS *psStat = nullptr;
-	auto it = lookupStructStatPtr.find(name);
-	if (it != lookupStructStatPtr.end())
-	{
-		psStat = it->second;
-	}
-	return psStat;
 }
 
 BASE_STATS *getBaseStatsFromName(const WzString &name)

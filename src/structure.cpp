@@ -80,6 +80,7 @@
 
 #include "random.h"
 #include <functional>
+#include <unordered_map>
 
 //Maximium slope of the terrain for building a structure
 #define MAX_INCLINE		50//80//40
@@ -97,8 +98,9 @@ UDWORD			powerModuleStat;
 UDWORD			researchModuleStat;
 
 //holder for all StructureStats
-STRUCTURE_STATS		*asStructureStats;
+STRUCTURE_STATS		*asStructureStats = nullptr;
 UDWORD				numStructureStats;
+static std::unordered_map<WzString, STRUCTURE_STATS *> lookupStructStatPtr;
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
@@ -245,6 +247,7 @@ void initStructLimits()
 void structureInitVars()
 {
 	asStructureStats = nullptr;
+	lookupStructStatPtr.clear();
 	numStructureStats = 0;
 	factoryModuleStat = 0;
 	powerModuleStat = 0;
@@ -441,6 +444,7 @@ bool loadStructureStats(WzConfig &ini)
 		ini.beginGroup(list[inc]);
 		STRUCTURE_STATS *psStats = &asStructureStats[inc];
 		loadStructureStats_BaseStats(ini, psStats, inc);
+		lookupStructStatPtr.insert(std::make_pair(psStats->id, psStats));
 
 		psStats->ref = STAT_STRUCTURE + inc;
 
@@ -670,6 +674,14 @@ bool loadStructureStrengthModifiers(WzConfig &ini)
 bool structureStatsShutDown()
 {
 	packFavoriteStructs();
+	if (asStructureStats)
+	{
+		for (unsigned i = 0; i < numStructureStats; ++i)
+		{
+			unloadStructureStats_BaseStats(asStructureStats[i]);
+		}
+	}
+	lookupStructStatPtr.clear();
 	delete[] asStructureStats;
 	asStructureStats = nullptr;
 	numStructureStats = 0;
@@ -4589,6 +4601,16 @@ int32_t getStructStatFromName(const WzString &name)
 	return -1;
 }
 
+STRUCTURE_STATS *getStructStatsFromName(const WzString &name)
+{
+	STRUCTURE_STATS *psStat = nullptr;
+	auto it = lookupStructStatPtr.find(name);
+	if (it != lookupStructStatPtr.end())
+	{
+		psStat = it->second;
+	}
+	return psStat;
+}
 
 /*check to see if the structure is 'doing' anything  - return true if idle*/
 bool  structureIdle(const STRUCTURE *psBuilding)
