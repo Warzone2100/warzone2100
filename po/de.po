@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-14 03:34\n"
+"PO-Revision-Date: 2021-10-15 03:43\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -18780,7 +18780,7 @@ msgstr[1] "%u Einheiten ausgewählt"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr "Waffenart"
+msgstr "Waffentyp"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
