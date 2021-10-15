@@ -603,7 +603,8 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 	STRUCTURE   *psStruct;
 	STRUCTURE	*psList;
 
-	ASSERT(player < MAX_PLAYERS, "player: %u", player);
+	ASSERT_OR_RETURN(, psTemplate != nullptr, "Null psTemplate");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", player);
 
 	//see if any factory is currently using the template
 	for (unsigned i = 0; i < 2; ++i)
@@ -622,14 +623,19 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 		{
 			if (StructIsFactory(psStruct))
 			{
-				FACTORY             *psFactory = &psStruct->pFunctionality->factory;
+				if (psStruct->pFunctionality == nullptr)
+				{
+					continue;
+				}
+				FACTORY *psFactory = &psStruct->pFunctionality->factory;
 
-				if (psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+				if (psFactory->psAssemblyPoint && psFactory->psAssemblyPoint->factoryType < NUM_FACTORY_TYPES
+					&& psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
 				{
 					ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 					for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 					{
-						if (productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
+						if (productionRun[inc].psTemplate && productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
 						{
 							//just need to erase this production run entry
 							productionRun.erase(productionRun.begin() + inc);
