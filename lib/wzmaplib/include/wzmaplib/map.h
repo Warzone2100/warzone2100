@@ -55,12 +55,12 @@ using nonstd::nullopt;
 #define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
 #define TILE_NUMMASK	0x01ff
 
-static inline unsigned short TileNumber_tile(unsigned short tilenumber)
+static WZMAPLIB_FORCE_INLINE unsigned short TileNumber_tile(unsigned short tilenumber)
 {
 	return tilenumber & TILE_NUMMASK;
 }
 
-static inline unsigned short TileNumber_texture(unsigned short tilenumber)
+static WZMAPLIB_FORCE_INLINE unsigned short TileNumber_texture(unsigned short tilenumber)
 {
 	return tilenumber & ~TILE_NUMMASK;
 }
@@ -80,23 +80,23 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 /* The number of units accross a tile */
 #define TILE_UNITS (1<<TILE_SHIFT)
 
-static inline int32_t world_coord(int32_t mapCoord)
+static WZMAPLIB_FORCE_INLINE int32_t world_coord(int32_t mapCoord)
 {
 	return (uint32_t)mapCoord << TILE_SHIFT;  // Cast because -1 << 7 is undefined, but (unsigned)-1 << 7 gives -128 as desired.
 }
 
-static inline int32_t map_coord(int32_t worldCoord)
+static WZMAPLIB_FORCE_INLINE int32_t map_coord(int32_t worldCoord)
 {
 	return worldCoord >> TILE_SHIFT;
 }
 
 /// Only for graphics!
-static inline float map_coordf(int32_t worldCoord)
+static WZMAPLIB_FORCE_INLINE float map_coordf(int32_t worldCoord)
 {
 	return (float)worldCoord / TILE_UNITS;
 }
 
-static inline int32_t round_to_nearest_tile(int32_t worldCoord)
+static WZMAPLIB_FORCE_INLINE int32_t round_to_nearest_tile(int32_t worldCoord)
 {
 	return (worldCoord + TILE_UNITS/2) & ~TILE_MASK;
 }
