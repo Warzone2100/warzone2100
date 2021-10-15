@@ -875,12 +875,6 @@ void orderUpdateDroid(DROID *psDroid)
 				/* action droid to wait */
 				actionDroid(psDroid, DACTION_WAITFORREPAIR);
 			}
-			else
-			{
-				// move the droid closer to the repair facility
-				actionDroid(psDroid, DACTION_MOVE, psDroid->order.psObj->pos.x, psDroid->order.psObj->pos.y);
-				
-			}
 		}
 		break;
 	case DORDER_LINEBUILD:
@@ -1616,7 +1610,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				psDroid->order = DroidOrder(psOrder->type, Vector2i(rtrData.psObj->pos.x, rtrData.psObj->pos.y), RTR_TYPE_DROID);
 				psDroid->order.pos = rtrData.psObj->pos.xy();
 				psDroid->order.psObj = rtrData.psObj;
-				objTrace(psDroid->id, "Go to repair droid at (%d, %d) using (%d, %d)!", rtrData.psObj->pos.x, rtrData.psObj->pos.y, psDroid->order.pos.x, psDroid->order.pos.y);
+				objTrace(psDroid->id, "Go to repair at (%d, %d) using (%d, %d), time %i!", rtrData.psObj->pos.x, rtrData.psObj->pos.y, psDroid->order.pos.x, psDroid->order.pos.y, gameTime);
 				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x, psDroid->order.pos.y);
 			}
 			else
