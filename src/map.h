@@ -227,7 +227,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxClearBlocking(int x, int y, int stat
  * Check if tile contains a structure or feature. Function is thread-safe,
  * but do not rely on the result if you mean to alter the object pointer.
  */
-static inline bool TileIsOccupied(const MAPTILE *tile)
+WZ_DECL_ALWAYS_INLINE static inline bool TileIsOccupied(const MAPTILE *tile)
 {
 	return tile->psObject != nullptr;
 }
