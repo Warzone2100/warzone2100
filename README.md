@@ -67,6 +67,10 @@ How to get the latest Ubuntu development builds:
 cd ~/Desktop
 sudo apt install ./warzone2100_ubuntu<version>_amd64.deb
 ```
+6. Download the video for crucial information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use this command (update `warzone2100-<version>`):
+```
+wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100-<version>/sequences.wz
+```
 
 ### Linux (from source)
 
@@ -76,6 +80,11 @@ Clone this Git repo and build, following the instructions under:
 > Development builds are a snapshot of the current state of development, from the 
 > latest (successfully-built) commit. Help testing these builds is always welcomed,
 > but they should be considered a work-in-progress.
+
+### Videos
+You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will
+need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
+Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
 Reporting bugs
 --------------
@@ -379,11 +388,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
 
 ### macOS
 See [macosx/README.md](macosx/README.md)
-
-### Videos
-You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will
-need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
-Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
 Licensing
 -------------------
