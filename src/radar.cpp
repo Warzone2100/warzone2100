@@ -125,7 +125,7 @@ static const UDWORD BLINK_HALF_INTERVAL = BLINK_INTERVAL / 2;
 static const float OVERLAY_OPACITY = 0.5f;
 
 // taken from https://en.wikipedia.org/wiki/Alpha_compositing
-PIELIGHT mix(PIELIGHT over, PIELIGHT base)
+PIELIGHT inline mix(PIELIGHT over, PIELIGHT base)
 {
 	float overAlpha = over.byte.a / 255.0f;
 	float overRed = over.byte.r / 255.0f;
@@ -142,15 +142,15 @@ PIELIGHT mix(PIELIGHT over, PIELIGHT base)
 	float newGreen = (overGreen * overAlpha + baseGreen * baseAlpha * (1 - overAlpha)) / newAlpha;
 	float newBlue = (overBlue * overAlpha + baseBlue * baseAlpha * (1 - overAlpha)) / newAlpha;
 
-	UBYTE returnAlpha = newAlpha * 255;
-	UBYTE returnRed = newRed * 255;
-	UBYTE returnGreen = newGreen * 255;
-	UBYTE returnBlue = newBlue * 255;
+	UBYTE returnAlpha = static_cast<UBYTE>(clip<int>(static_cast<int>(newAlpha * 255.0f), 0, 255));
+	UBYTE returnRed = static_cast<UBYTE>(clip<int>(static_cast<int>(newRed * 255.0f), 0, 255));
+	UBYTE returnGreen = static_cast<UBYTE>(clip<int>(static_cast<int>(newGreen * 255.0f), 0, 255));
+	UBYTE returnBlue = static_cast<UBYTE>(clip<int>(static_cast<int>(newBlue * 255.0f), 0, 255));
 
 	return { {returnRed, returnGreen, returnBlue, returnAlpha} };
 }
 
-PIELIGHT PLfromUDWORD(UDWORD value)
+PIELIGHT inline PLfromUDWORD(UDWORD value)
 {
 	PIELIGHT retColor = { {
 		static_cast<UBYTE>((value & 0x000000FF) >> 0),
@@ -161,10 +161,10 @@ PIELIGHT PLfromUDWORD(UDWORD value)
 	return retColor;
 }
 
-PIELIGHT applyAlpha(PIELIGHT color, float alpha)
+PIELIGHT inline applyAlpha(PIELIGHT color, float alpha)
 {
 	PIELIGHT ret = color;
-	ret.byte.a *= alpha;
+	ret.byte.a = static_cast<uint8_t>(ret.byte.a * alpha);
 	return ret;
 }
 
@@ -362,7 +362,7 @@ static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix)
 	iV_DrawImage(IntImages, RADAR_NORTH, static_cast<int>(-((radarWidth / 2.f) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1)), static_cast<int>(-(radarHeight / 2.f)), modelViewProjectionMatrix);
 }
 
-static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
+static PIELIGHT inline appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
 {
 	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
@@ -608,15 +608,16 @@ static void DrawRadarObjects()
 
 static void applyMinimapOverlay()
 {
-	for (int i = 0; i < radarTexWidth * radarTexHeight; i++)
+	size_t radarTexCount = radarTexWidth * radarTexHeight;
+	ASSERT(radarTexCount * sizeof(*radarBuffer) <= radarBufferSize, "Buffer overrun");
+	ASSERT(radarTexCount * sizeof(*radarOverlayBuffer) <= radarBufferSize, "Buffer overrun");
+	for (size_t i = 0; i < radarTexCount; i++)
 	{
-		ASSERT(i * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-		ASSERT(i * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
+		if (radarOverlayBuffer[i] == 0)
+			continue;
 		PIELIGHT baseColor = PLfromUDWORD(radarBuffer[i]);
 		PIELIGHT overColor = PLfromUDWORD(radarOverlayBuffer[i]);
 		PIELIGHT mixedColor = mix(overColor, baseColor);
-		if (overColor.rgba == 0)
-			continue;
 		radarBuffer[i] = mixedColor.rgba;
 	}
 }
