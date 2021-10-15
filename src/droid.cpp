@@ -817,7 +817,6 @@ void droidUpdate(DROID *psDroid)
 				{
 					if (!actionReachedDroid(psDroid, psOther))
 					{
-						debug(LOG_INFO, "Moving %i closer to myself for repairs, time %i", psOther->id, gameTime);
 						actionDroid(psOther, DACTION_MOVE, psDroid, psDroid->pos.x, psDroid->pos.y);
 					}
 					
