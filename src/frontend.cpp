@@ -160,7 +160,7 @@ void startTitleMenu()
 	else
 	{
 		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE | WBUT_DISABLE);
-		widgSetTip(psWScreen, FRONTEND_PLAYINTRO, _("Videos are missing, download them from http://wz2100.net"));
+		widgSetTip(psWScreen, FRONTEND_PLAYINTRO, _("Videos are missing, download them from https/://wz2100.net"));
 	}
 
 	if (findLastSave())
@@ -175,7 +175,7 @@ void startTitleMenu()
 	addTextButton(FRONTEND_QUIT, FRONTEND_POS8X, FRONTEND_POS8Y, _("Quit Game"), WBUT_TXTCENTRE);
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: https/://wz2100.net/"), 0);
 	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
 	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS9X + 360, FRONTEND_POS9Y, _("Donate: http://donations.wz2100.net/"), 0);
 	moveToParentRightEdge(pRightAlignedButton, 1);
@@ -350,7 +350,7 @@ void startSinglePlayerMenu()
 	// show this only when the video sequences are not installed
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
-		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from https/://wz2100.net"), 0);
 	}
 }
 
@@ -371,7 +371,7 @@ void startCampaignSelector()
 	// show this only when the video sequences are not installed
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
-		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from https/://wz2100.net"), 0);
 	}
 }
 

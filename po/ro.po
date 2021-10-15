@@ -15435,8 +15435,8 @@ msgid "View Intro"
 msgstr "Vizualizare film de început"
 
 #: src/frontend.cpp:163
-msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "Lipsesc secvențele, descarcă-le de la http://wz2100.net"
+msgid "Videos are missing, download them from https/://wz2100.net"
+msgstr "Lipsesc secvențele, descarcă-le de la https/://wz2100.net"
 
 #: src/frontend.cpp:168
 #: src/frontend.cpp:172
@@ -15456,7 +15456,7 @@ msgid "MAIN MENU"
 msgstr "MENIU PRINCIPAL"
 
 #: src/frontend.cpp:178
-msgid "Official site: http://wz2100.net/"
+msgid "Official site: https/://wz2100.net/"
 msgstr ""
 
 #: src/frontend.cpp:179
@@ -15537,7 +15537,7 @@ msgstr "JOC INDIVIDUAL"
 
 #: src/frontend.cpp:353
 #: src/frontend.cpp:374
-msgid "Campaign videos are missing! Get them from http://wz2100.net"
+msgid "Campaign videos are missing! Get them from https/://wz2100.net"
 msgstr ""
 
 #: src/frontend.cpp:369
@@ -18345,7 +18345,7 @@ msgstr "Mesaj server:"
 
 #: src/multijoin.cpp:563
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr "Există o actualizare a jocului, te rugăm să vizitezi http://wz2100.net pentru a descărca versiunea nouă."
+msgstr "Există o actualizare a jocului, te rugăm să vizitezi https/://wz2100.net pentru a descărca versiunea nouă."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139

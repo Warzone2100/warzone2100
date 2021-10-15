@@ -381,14 +381,14 @@ The Command Relay Center is required to make <a href="../commanders">Commanders<
 
 <p class="backforward"><a href="story">Larger size &raquo;</a></p>
 <ul class="nav">
-<li><a href="http://wz2100.net/download">Download game</a></li>
+<li><a href="https/://wz2100.net/download">Download game</a></li>
 </ul>
 </div>
 <div style="margin-right:340px;">
 <h3 id="intro">Introduction</h3>
 <p>
 
-Warzone 2100 is a <a href="http://en.wikipedia.org/wiki/Real-time_strategy" target="_blank">real-time strategy</a> game, originally developed by Pumpkin Studios and published by Eidos Interactive, now developed by the <a href="http://wz2100.net">Warzone 2100 Project</a>. Compared to other real-time strategy games, it has a greater focus on artillery, radar, and counter-battery technologies, more frequent in-game cinematic updates as game play progresses, a <a href="r/tech-tree">massive research tree</a>, as well as a vehicle design system.
+Warzone 2100 is a <a href="http://en.wikipedia.org/wiki/Real-time_strategy" target="_blank">real-time strategy</a> game, originally developed by Pumpkin Studios and published by Eidos Interactive, now developed by the <a href="https/://wz2100.net">Warzone 2100 Project</a>. Compared to other real-time strategy games, it has a greater focus on artillery, radar, and counter-battery technologies, more frequent in-game cinematic updates as game play progresses, a <a href="r/tech-tree">massive research tree</a>, as well as a vehicle design system.
 
 </p>
 <p class="backforward"><a href="intro">Read more &raquo;</a></p>
@@ -434,7 +434,7 @@ Warzone 2100 is a <a href="http://en.wikipedia.org/wiki/Real-time_strategy" targ
 		'text' => '<h3 id="intro">Introduction</h3>
 
 <p>
-Warzone 2100 is a <a href="http://en.wikipedia.org/wiki/Real-time_strategy">real-time strategy</a> game, originally developed by Pumpkin Studios and published by Eidos Interactive, now developed by the <a href="http://wz2100.net">Warzone 2100 Project</a>. Compared to other real-time strategy games, it has a greater focus on artillery, radar, and counter-battery technologies, more frequent in-game cinematic updates as game play progresses, a <a href="new/r/tech-tree">massive research tree</a>, as well as a vehicle design system.
+Warzone 2100 is a <a href="http://en.wikipedia.org/wiki/Real-time_strategy">real-time strategy</a> game, originally developed by Pumpkin Studios and published by Eidos Interactive, now developed by the <a href="https/://wz2100.net">Warzone 2100 Project</a>. Compared to other real-time strategy games, it has a greater focus on artillery, radar, and counter-battery technologies, more frequent in-game cinematic updates as game play progresses, a <a href="new/r/tech-tree">massive research tree</a>, as well as a vehicle design system.
 </p>
 
 <h3 id="story">Story</h3>
@@ -464,7 +464,7 @@ Compared to other RTS\'s, Warzone 2100 has:
 <p>
 Warzone can be downloaded from:
 </p>
-<ul class="nav"><li><p><a href="http://wz2100.net/download"><em>Download</em> Warzone 2100</a></p></li></ul>
+<ul class="nav"><li><p><a href="https/://wz2100.net/download"><em>Download</em> Warzone 2100</a></p></li></ul>
 <p>
 On most distributions of Linux, Warzone should be available in your repositories. However, these are often outdated, and you are encouraged to compile Warzone yourself, which is the usual:
 </p>
@@ -476,7 +476,7 @@ For compiling tips on other platforms, or if the above fails, see the <a href="h
 <h3 id="playing">Playing Warzone</h3>
 
 <p>
-<em>See also:</em> <a href="http://wz2100.net/faq">FAQ</a>
+<em>See also:</em> <a href="https/://wz2100.net/faq">FAQ</a>
 </p>
 <p>
 The easiest way to learn how to play is to play the <strong>Tutorial</strong> in the game.
@@ -1389,7 +1389,7 @@ Rebalance Mod for 2.1:
 <s><code>C:/Program Files/Warzone 2100/mods/multiplay/<span class="grey">rebalance_0.5.1.wz</span></code></s>
 </p>
 <p>
-Refer to the <a href="http://wz2100.net/faq">FAQ</a> for installation information.
+Refer to the <a href="https/://wz2100.net/faq">FAQ</a> for installation information.
 
 </p>
 <p>
@@ -1972,7 +1972,7 @@ There are three types of dedicated AA. In order of powerfulness, they are: Flak 
 If you do not already have a copy of Warzone, download it now:
 </p>
 <ul class="nav">
-<li><p><a href="http://wz2100.net/download" target="_blank"><em>Download</em> Warzone 2100</a></p></li>
+<li><p><a href="https/://wz2100.net/download" target="_blank"><em>Download</em> Warzone 2100</a></p></li>
 </ul>
 <h4 id="req">System requirements</h4>
 <p>

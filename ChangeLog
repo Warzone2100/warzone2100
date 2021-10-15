@@ -3134,7 +3134,7 @@ master_20110320qt and before:
    * New: Units and structures will constantly look for a better target taking into consideration
           targets of the friendly units nearby - won't lock on one target forever anymore.
  * Skirmish/Multiplayer AI:
-   * New: Enabled basic level of Human-AI cooperation, for more information visit: http://wz2100.net/wiki/gameplay:cooperative_ai
+   * New: Enabled basic level of Human-AI cooperation, for more information visit: https/://wz2100.net/wiki/gameplay:cooperative_ai
    * New: AI units now return to defend its own base when it's in trouble.
    * Improved: AI is faster at producing units, upgrading structures and oil capturing.
    * Several other improvements.

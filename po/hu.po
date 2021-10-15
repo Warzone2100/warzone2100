@@ -15431,8 +15431,8 @@ msgid "View Intro"
 msgstr "Intro nézet"
 
 #: src/frontend.cpp:163
-msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "Küldetés videók hiányoznak és töltsd le a a http://wz2100.net oldalról"
+msgid "Videos are missing, download them from https/://wz2100.net"
+msgstr "Küldetés videók hiányoznak és töltsd le a a https/://wz2100.net oldalról"
 
 #: src/frontend.cpp:168
 #: src/frontend.cpp:172
@@ -15452,8 +15452,8 @@ msgid "MAIN MENU"
 msgstr "FŐ MENÜ"
 
 #: src/frontend.cpp:178
-msgid "Official site: http://wz2100.net/"
-msgstr "Látogass el a hivatalos oldalra: http://wz2100.net/"
+msgid "Official site: https/://wz2100.net/"
+msgstr "Látogass el a hivatalos oldalra: https/://wz2100.net/"
 
 #: src/frontend.cpp:179
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -15461,7 +15461,7 @@ msgstr "Látogasd meg a fórumokat és a Warzone 2100 híreket. Kattints erre a 
 
 #: src/frontend.cpp:180
 msgid "Donate: http://donations.wz2100.net/"
-msgstr "Látogass el a hivatalos oldalra: http://wz2100.net/"
+msgstr "Látogass el a hivatalos oldalra: https/://wz2100.net/"
 
 #: src/frontend.cpp:182
 msgid "Help support the project with our server costs, Click this link."
@@ -15533,8 +15533,8 @@ msgstr "EGYJÁTÉKOS"
 
 #: src/frontend.cpp:353
 #: src/frontend.cpp:374
-msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr "Küldetés video hiányzik! Látogasd meg a http://wz2100.net oldalt"
+msgid "Campaign videos are missing! Get them from https/://wz2100.net"
+msgstr "Küldetés video hiányzik! Látogasd meg a https/://wz2100.net oldalt"
 
 #: src/frontend.cpp:369
 msgid "CAMPAIGNS"
