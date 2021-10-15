@@ -75,8 +75,8 @@
 	},
 	"area_1": {
 		"label": "RTLZ",
-		"pos1": [1344, 6592],
-		"pos2": [3904, 8128]
+		"pos1": [1344, 6848],
+		"pos2": [3456, 8128]
 	},
 	"area_2": {
 		"label": "uplinkBaseCleanup",
