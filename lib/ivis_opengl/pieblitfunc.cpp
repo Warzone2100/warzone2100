@@ -52,7 +52,9 @@
  */
 /***************************************************************************/
 
-static GFX *radarGfx = nullptr;
+#define NUM_RADAR_TEXTURES 2
+static GFX *radarGfx[NUM_RADAR_TEXTURES] = {nullptr};
+static size_t currRadarGfx = 0;
 
 /***************************************************************************/
 /*
@@ -623,31 +625,47 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 
 bool pie_InitRadar()
 {
-	radarGfx = new GFX(GFX_TEXTURE, 2);
+	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
+	{
+		radarGfx[i] = new GFX(GFX_TEXTURE, 2);
+	}
+	currRadarGfx = 0;
 	return true;
 }
 
 bool pie_ShutdownRadar()
 {
-	delete radarGfx;
-	radarGfx = nullptr;
+	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
+	{
+		delete radarGfx[i];
+		radarGfx[i] = nullptr;
+	}
+	currRadarGfx = 0;
 	pie_ViewingWindow_Shutdown();
 	return true;
 }
 
 void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, size_t twidth, size_t theight)
 {
-	radarGfx->makeTexture(twidth, theight);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter. // TODO: Add a gfx_api::sampler_type to handle this case? bilinear, but nearest for mag?
-	gfx_api::gfxFloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
-	gfx_api::gfxFloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
-	radarGfx->buffers(4, vertices, texcoords);
+	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
+	{
+		radarGfx[i]->makeTexture(twidth, theight);
+		//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter. // TODO: Add a gfx_api::sampler_type to handle this case? bilinear, but nearest for mag?
+		gfx_api::gfxFloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
+		gfx_api::gfxFloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
+		radarGfx[i]->buffers(4, vertices, texcoords);
+	}
 }
 
 /** Store radar texture with given width and height. */
 void pie_DownLoadRadar(UDWORD *buffer)
 {
-	radarGfx->updateTexture(buffer);
+	currRadarGfx++;
+	if (currRadarGfx >= NUM_RADAR_TEXTURES)
+	{
+		currRadarGfx = 0;
+	}
+	radarGfx[currRadarGfx]->updateTexture(buffer);
 }
 
 /** Display radar texture using the given height and width, depending on zoom level. */
@@ -655,7 +673,7 @@ void pie_RenderRadar(const glm::mat4 &modelViewProjectionMatrix)
 {
 	gfx_api::RadarPSO::get().bind();
 	gfx_api::RadarPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec2(0), glm::vec2(0), glm::vec4(1), 0 });
-	radarGfx->draw<gfx_api::RadarPSO>(modelViewProjectionMatrix);
+	radarGfx[currRadarGfx]->draw<gfx_api::RadarPSO>(modelViewProjectionMatrix);
 }
 
 /// Load and display a random backdrop picture.
