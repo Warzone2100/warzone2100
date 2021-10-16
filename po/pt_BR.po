@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:14\n"
+"PO-Revision-Date: 2021-10-16 13:02\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -15969,7 +15969,7 @@ msgstr "Cor das Unidades:"
 #: src/frontend.cpp:2010
 #: src/frontend.cpp:2045
 msgid "Skirmish/Multiplayer"
-msgstr "Jogo Multiplayer/Versus IA"
+msgstr "Multiplayer/Versus IA"
 
 #: src/frontend.cpp:2016
 #, c-format
