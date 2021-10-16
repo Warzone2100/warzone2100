@@ -5863,10 +5863,6 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 			break;
-
-		case MULTIOP_MAP_PREVIEW:
-			loadMapPreview(true);
-			break;
 		}
 	}
 
