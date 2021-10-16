@@ -1,3 +1,27 @@
+2021-10-16: Version 4.2.0-beta2:
+ * General:
+   * Add: Make selected structures and units blink on radar (too many commits, #2260)
+   * Add: Power per second to power bar tooltip (commit:dbaf846580c5300ad994eeb2b913bb6699b72d39, #2283)
+   * Fix: Command interface fixes, documentation added (too many commits, #2255, #2266)
+   * Fix: Crash caused by crash-handling provider (commit:9eba84b42b2d9b5491a641cb42ccb81ef8387a13, #2257)
+   * Fix: Always release sequence resources at shutdown (commit:c8db2e117f9116e2b5412edc42281a0cd7f37db7, #2258)
+   * Fix: Additional null checks (commit:c9822b47c630b71d4e8308b2f4c5365985f296c8, commit:5c84be3edf87fdd4daa37b8e2cdb3e8338a9e1cd, #2259, #2280)
+   * Fix: Repair: Return to HQ as fallback (commit:c2c8a1b455c931eef8a892d71136b4022d407ef1, #2261)
+   * Fix: Improve replay warning / error messages (too many commits, #2263)
+   * Fix: NETSendNPlayerInfoTo: Only assert when multiplay game in lobby (commit:a554be6214cf75b0c958a96ea7bd6de4f730b5fd, #2274)
+   * Fix: Struct stats lookup maps tweaks / refactoring (commit:259a0af9cebe5d3260fd3d965e147724c99fecbe, commit:b1947b59d491623588f1e28e3250f2037fe32fd3, #2275)
+   * Fix: Add a missing break for attack orders (commit:899e32a7aaaa2b11d07bc58ceb843098543e315e, #2277)
+ * Campaign:
+   * Change: Decrease the player return LZ in Beta 08 (commit:aca3f4590f08753e81edec46995c4dd1f9f43af5, #2271)
+   * Change: Add additional research messages for Nexus Resistance Circuits (commit:4f62603de92be6e9857de86ed73961db8f21da93, #2276)
+ * Multiplayer:
+   * Change: Ignore allies' attack to determine activity (commit:145c7667baa776cbfbb0764db6f177fe3b7151b7, #2262)
+   * Change: Limit Ultimate Scavengers' Helicopter usage times on T1 technology (commit:ae2031af9e109d71fe3326c7c60f76c43a100af1, #2268)
+   * Fix: Desync when moving to repair (commit:49f3a398d6746fa66d377cd218e4511572b5f06e, #2267)
+   * Fix: Don't load map preview twice for the host (commit:20f2ac22f03f779e2c183067377a1c973657c4b9, #2282)
+ * Other:
+   * Change: Add video install information for Ubuntu in README (commit:980a222986fd6876891051b2d51fb68a4815503c, #2279)
+
 2021-10-09: Version 4.2.0-beta1:
  * General:
    * Add: Add Ultimate Scavengers to the game (commit:21f7935791a9816815dc69c95bebe91b6daf3328, commit:9c7fc3569d11fbdb1e840f3b4901a6863090aaad, commit:71f1b17794ca5559eefbbc172539eecbb728da97, #2211, #2131, #1995)
