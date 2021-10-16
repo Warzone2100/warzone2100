@@ -169,7 +169,7 @@ void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 std::string PowerBar::getTip()
 {
 	auto income = getApproxPowerGeneratedPerSecForDisplay(selectedPlayer);
-	return astringf("%s\n%s: %s", _("Power"), _("Income/second"), income.c_str());
+	return astringf("%s\n%s: %s", _("Power"), _("Power Per Second"), income.c_str());
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!

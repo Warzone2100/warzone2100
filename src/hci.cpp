@@ -2080,7 +2080,9 @@ bool intAddPower()
 	sBarInit.iRange = POWERBAR_SCALE;
 
 	auto psBarGraph = std::make_shared<PowerBar>(&sBarInit);
-	psBarGraph->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+	psBarGraph->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+	}));
 
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen);
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen->psForm);
