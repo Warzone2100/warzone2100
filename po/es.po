@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:13\n"
+"PO-Revision-Date: 2021-10-10 04:51\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -8985,7 +8985,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2329
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Torre de Guardia Ametralladora Pesada"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -15128,15 +15128,15 @@ msgstr ""
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Agrega una clave pública de administrador en el lobby (para comandos de barras)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
-msgstr ""
+msgstr "tecla b64-pub"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
-msgstr ""
+msgstr "Activa la interfaz de comandos"
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
@@ -15144,11 +15144,11 @@ msgstr ""
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Mínimo de jugadores requeridos para iniciar la partida automáticamente"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
-msgstr ""
+msgstr "jugadores de inicio"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -15371,7 +15371,7 @@ msgstr[1] "%u unidades asignadas al Grupo %u"
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "%u unidades eliminadas de su grupo"
 
 #: src/droid.cpp:2002
 #, c-format
@@ -16421,7 +16421,7 @@ msgstr "Añadir a Grupo 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Eliminar del grupo actual"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -18161,7 +18161,7 @@ msgstr ""
 
 #: src/multiint.cpp:5019
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Copiar texto al portapapeles"
 
 #: src/multiint.cpp:5108
 msgid "CHAT"
@@ -18379,7 +18379,7 @@ msgstr ""
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "El administrador te ha expulsado del juego."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18490,11 +18490,11 @@ msgstr ""
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "REPRODUJO HA TERMINADO"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "Oprime ESC para salir."
 
 #: src/multiplay.cpp:1376
 #, c-format

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:13\n"
+"PO-Revision-Date: 2021-10-15 03:43\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -8315,7 +8315,7 @@ msgstr "Mortir EMP"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:1888
 msgid "Enables command turret research"
-msgstr "Memampukan riset turet komando"
+msgstr "Menyediakan riset turet komando"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
@@ -8985,7 +8985,7 @@ msgstr "Menara Penyembur Api yang Diperkeras"
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2329
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Menara Senapan Mesin Berat yang Diperkeras"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -15116,11 +15116,11 @@ msgstr "port"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Nyalakan perintah garis miring lobi (untuk menyambungkan klien)"
 
 #: src/clparse.cpp:413
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Tambahkan hash identitas admin lobi (untuk perintah garis miring)"
 
 #: src/clparse.cpp:413
 msgid "hash string"
@@ -15128,7 +15128,7 @@ msgstr ""
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Tambahkan kunci publik admin lobi (untuk perintah garis miring)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
@@ -15368,7 +15368,7 @@ msgstr[0] "%u unit ditugaskan ke Grup %u"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
+msgstr[0] "%u unit dikeluarkan dari Grup mereka"
 
 #: src/droid.cpp:2002
 #, c-format
@@ -16419,7 +16419,7 @@ msgstr "Tambahkan ke Grup 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Keluarkan dari Grup terkini"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -18000,41 +18000,41 @@ msgstr "Kamu saat ini adalah pemain."
 
 #: src/multiint.cpp:3050
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Ya, saya akan menonton!"
 
 #: src/multiint.cpp:3055
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Apa Anda ingin bermain?"
 
 #: src/multiint.cpp:3056
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "Penyelenggara permainan ini ingin tahu, apakah Anda ingin bermain?"
 
 #: src/multiint.cpp:3058
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Anda saat ini adalah Penonton."
 
 #: src/multiint.cpp:3059
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Ya, saya ingin bermain!"
 
 #: src/multiint.cpp:3102
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "Pemain %s telah berpindah ke Penonton"
 
 #: src/multiint.cpp:3141
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Penonton ingin menjadi Pemain"
 
 #: src/multiint.cpp:3142
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Penonton \"%s\" ingin menjadi pemain."
 
 #: src/multiint.cpp:3144
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "Namun, tidak ada slot pemain yang tersedia saat ini."
 
 #: src/multiint.cpp:3146
 msgid "Would you like to swap this Spectator with a Player?"
@@ -18042,15 +18042,15 @@ msgstr ""
 
 #: src/multiint.cpp:3147
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Ya, pilih slot Pemain"
 
 #: src/multiint.cpp:3430
 msgid "Joined:"
-msgstr ""
+msgstr "Tergabung:"
 
 #: src/multiint.cpp:3433
 msgid "Ready:"
-msgstr ""
+msgstr "Siap:"
 
 #: src/multiint.cpp:3611
 #: src/titleui/gamefind.cpp:269
@@ -18095,7 +18095,7 @@ msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan
 
 #: src/multiint.cpp:4246
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Klik untuk menutup slot penonton"
 
 #: src/multiint.cpp:4262
 msgid "Player ID: "
@@ -18377,7 +18377,7 @@ msgstr "Batas-Batas Diatur Ulang ke Nilai Default"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "Administrator telah mengeluarkan Anda dari permainan."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18479,7 +18479,7 @@ msgstr "Data tidak valid!"
 #: src/multiplay.cpp:1122
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "Mengeluarkan pemain %s secara otomatis, perintah tidak valid diterima: %u"
 
 #: src/multiplay.cpp:1124
 msgid "Unauthorized network command"
@@ -18487,11 +18487,11 @@ msgstr ""
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "PEMUTARAN ULANG TELAH BERAKHIR"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Tekan ESC untuk keluar.)"
 
 #: src/multiplay.cpp:1376
 #, c-format
@@ -18582,11 +18582,11 @@ msgstr "Coklat"
 
 #: src/multiplay.cpp:2377
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Modus Penonton"
 
 #: src/multiplay.cpp:2378
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Anda adalah seorang penonton. Nikmatilah permainannya!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18788,12 +18788,12 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Armor Kinetik"
 
 #: src/spectatorwidgets.cpp:738
 #: src/spectatorwidgets.cpp:740
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tank / Cyborg)"
 
 #: src/structure.cpp:2538
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -18928,7 +18928,7 @@ msgstr "Versi: %s"
 
 #: src/titleui/gamefind.cpp:458
 msgid "Join as spectator"
-msgstr ""
+msgstr "Bergabung sebagai penonton"
 
 #: src/titleui/gamefind.cpp:481
 msgid "Your version of Warzone is incompatible with this game."
@@ -19108,11 +19108,11 @@ msgstr "Versi: %s,%s Built: %s%s"
 
 #: src/wrappers.cpp:353
 msgid "GAME OVER"
-msgstr ""
+msgstr "PERMAINAN BERAKHIR"
 
 #: src/wrappers.cpp:354
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "Pertempuran telah berakhir - Anda dapat meninggalkan ruangan."
 
 #: src/wzapi.cpp:2337
 msgid "YOU ARE VICTORIOUS!"

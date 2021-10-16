@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:13\n"
+"PO-Revision-Date: 2021-10-15 03:43\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -5783,7 +5783,7 @@ msgstr "Das Spiel hat den Port (%s) korrekt konfiguriert auf (%s)\n"
 
 #: lib/netplay/netplay.cpp:2042
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "Client bestätigte nicht den Wechsel des Spieler-Indexes"
 
 #: lib/netplay/netplay.cpp:2053
 msgid "Message delivery failure - try again"
@@ -8985,7 +8985,7 @@ msgstr "Verstärkter Flammenwerferwachturm"
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2329
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Verstärkter Wachturm mit Schwerem Maschinengewehr"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -15116,39 +15116,39 @@ msgstr "Port"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Lobby-Schrägstrich Befehle aktivieren (um Clients zu verbinden)"
 
 #: src/clparse.cpp:413
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Füge einen Lobby-Administrator-Identitäts-Hash hinzu (für Schrägstrich Befehle)"
 
 #: src/clparse.cpp:413
 msgid "hash string"
-msgstr ""
+msgstr "Hash-String"
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Füge einen öffentlichen Lobby-Administrator-Schlüssel hinzu (für Schrägstrich Befehle)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
-msgstr ""
+msgstr "b64-öff.-Schlüssel"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
-msgstr ""
+msgstr "Command Interface aktivieren"
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Minimal benötigte Spieler zum automatischen Start des Spiels"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
-msgstr ""
+msgstr "Startspieler"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -15370,8 +15370,8 @@ msgstr[1] "%u Einheiten der Gruppe %u zugewiesen"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u Einheiten aus ihrer Gruppe entfernt"
+msgstr[1] "%u Einheiten aus ihrer Gruppe entfernt"
 
 #: src/droid.cpp:2002
 #, c-format
@@ -15525,7 +15525,7 @@ msgstr "Scharmützel laden"
 
 #: src/frontend.cpp:346
 msgid "View Skirmish Replay"
-msgstr "Scharmützel Wiederholung ansehen"
+msgstr "Scharmützel Aufzeichnung ansehen"
 
 #: src/frontend.cpp:348
 msgid "SINGLE PLAYER"
@@ -15552,7 +15552,7 @@ msgstr "Scharmützelspielstand laden"
 
 #: src/frontend.cpp:519
 msgid "Load Skirmish Replay"
-msgstr "Scharmützel Wiederholung laden"
+msgstr "Scharmützel Aufzeichnung laden"
 
 #: src/frontend.cpp:580
 msgid "MULTI PLAYER"
@@ -15568,7 +15568,7 @@ msgstr "Spiel beitreten"
 
 #: src/frontend.cpp:584
 msgid "View Replay"
-msgstr "Wiederholung ansehen"
+msgstr "Aufzeichnung ansehen"
 
 #: src/frontend.cpp:589
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15576,7 +15576,7 @@ msgstr "TCP-Port 2100 muss auf Ihrer Firewall oder Ihrem Router geöffnet sein, 
 
 #: src/frontend.cpp:634
 msgid "Load Multiplayer Replay"
-msgstr "Mehrspieler Wiederholung laden"
+msgstr "Mehrspieler Aufzeichnung laden"
 
 #: src/frontend.cpp:673
 #: src/multiint.cpp:1380
@@ -16036,7 +16036,7 @@ msgstr "Tipp: Anzeigemaßstab anpassen"
 
 #: src/hci.cpp:723
 msgid "Replay"
-msgstr "Wiederholung"
+msgstr "Aufzeichnung"
 
 #: src/hci.cpp:738
 msgid "Pause"
@@ -16425,7 +16425,7 @@ msgstr "Zu Gruppe 9 hinzufügen"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Aus der aktuellen Gruppe entfernen"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -18165,7 +18165,7 @@ msgstr "Aus dem Spiel geworfen"
 
 #: src/multiint.cpp:5019
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Text in die Zwischenablage kopieren"
 
 #: src/multiint.cpp:5108
 msgid "CHAT"
@@ -18283,12 +18283,12 @@ msgstr "Ping"
 
 #: src/multiint.cpp:8107
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr "Die Version von Warzone 2100, die benutzt wurde, um diese Wiederholungs-Datei zu speichern, entspricht nicht der aktuellen Version."
+msgstr "Die Version von Warzone 2100, die benutzt wurde, um diese Aufzeichnungs-Datei zu speichern, entspricht nicht der aktuellen Version."
 
 #: src/multiint.cpp:8109
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr "Wiederhole die gespeicherte Datei mit: \"%s\""
+msgstr "Spiele die Datei ab, gespeichert mit: \"%s\""
 
 #: src/multiint.cpp:8111
 #, c-format
@@ -18297,15 +18297,15 @@ msgstr "Aktuelle Warzone 2100 Version: \"%s\""
 
 #: src/multiint.cpp:8113
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr "Wiederholungen sollten üblicherweise mit derselben Version abgespielt werden mit der die Wiederholung gespeichert wurde."
+msgstr "Aufzeichnungen sollten üblicherweise mit derselben Version abgespielt werden mit der die Aufzeichnung gespeichert wurde."
 
 #: src/multiint.cpp:8115
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr "Die Wiederholung könnte nicht erfolgreich abgespielt werden oder es könnte Unterschiede in der Simulation geben."
+msgstr "Die Aufzeichnung könnte nicht erfolgreich abgespielt werden oder es könnte Unterschiede in der Simulation geben."
 
 #: src/multiint.cpp:8116
 msgid "Replay Version Mismatch"
-msgstr "Wiederholungsversion passt nicht"
+msgstr "Aufzeichnungsversion passt nicht"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18383,7 +18383,7 @@ msgstr "Beschränkungen auf Standardwerte zurücksetzen"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "Der Administrator hat Dich aus dem Spiel geworfen."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18494,11 +18494,11 @@ msgstr "Unautorisierter Netzwerkbefehl"
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "AUFZEICHNUNG IST BEENDET"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Zum Beenden ESC drücken.)"
 
 #: src/multiplay.cpp:1376
 #, c-format
@@ -18780,28 +18780,28 @@ msgstr[1] "%u Einheiten ausgewählt"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Waffentyp"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
-msgstr ""
+msgstr "Energie/Rate"
 
 #: src/spectatorwidgets.cpp:735
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Aktuelle Energie / Energie pro Sekunde"
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
-msgstr ""
+msgstr "Verlorene Energie"
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Kinetische Panzerung"
 
 #: src/spectatorwidgets.cpp:738
 #: src/spectatorwidgets.cpp:740
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Panzer / Cyborgs)"
 
 #: src/structure.cpp:2538
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:48\n"
+"PO-Revision-Date: 2021-10-10 04:51\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -4016,7 +4016,7 @@ msgstr "Keresse meg és mentse meg egységeit a lelőtt szállítótól"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Mentse meg a civileket a kollektívából, mielőtt túl sok embert elfognak"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
@@ -4068,7 +4068,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Összegyűjtött műtárgyak"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
@@ -4088,7 +4088,7 @@ msgstr "Visszatérés a LZ-hez"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Pusztìsd el minden ellenséges egységet és bàzist"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
@@ -5829,7 +5829,7 @@ msgstr "Kihìvàs"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Csatározás"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
@@ -5845,7 +5845,7 @@ msgstr "névtelen"
 
 #: lib/widget/jsontable.cpp:487
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Másolás a Vágólapra"
 
 #: lib/widget/jsontable.cpp:494
 msgid "Copy JSON to Clipboard"
@@ -6886,7 +6886,7 @@ msgstr "Ostromágyú"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:865
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Ostromlöveg bunker"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -7124,7 +7124,7 @@ msgstr "BaBALeges"
 #. data/mp/stats/propulsion.json: $.BaBaProp.name
 #: po/custom/fromJson.txt:1046
 msgid "BaBaProp"
-msgstr ""
+msgstr "BaBaProp"
 
 #. TRANSLATORS:
 #. data/mp/challenges/b2basics.json: $.challenge.name
@@ -7314,7 +7314,7 @@ msgstr "Karosszéria fejlettsége: nagyon alacsony"
 #: po/custom/fromJson.txt:1222
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Bomba sebzés +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7774,7 +7774,7 @@ msgstr "Scorpion parancsnoki lánctalpas"
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1505
 msgid "Command Turret Upgrade"
-msgstr ""
+msgstr "Parancsnoki torony fejlesztés"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -8281,7 +8281,7 @@ msgstr "Elektronikus úton támad és rombolja az ellenséges épületeket"
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1869
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Nagysebességű ágyú talapzat"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8465,7 +8465,7 @@ msgstr "Gyár"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
 #: po/custom/fromJson.txt:1987
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Távolabbi tartomány a többi érzékelőhöz képest"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
@@ -8891,7 +8891,7 @@ msgstr "Jó felderítő jármű"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2262
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Grànàtos Cyborg"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -8979,13 +8979,13 @@ msgstr "Edzett fémmagvas gépfegyver lőszer"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2326
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Megerősìtett làngvető torony"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2329
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Nehéz gépfegyveres őrtorony"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9040,7 +9040,7 @@ msgstr "Elérhetőt Cyclone légvédelmi löveg"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2360
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Elérhető ikercsöves ostromlöveg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -10146,7 +10146,7 @@ msgstr "Lézeroptika javulása csökkenti a fényszóródást"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3106
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Gyújtó tarackállás 2"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
@@ -11843,7 +11843,7 @@ msgstr "Eredeti hadjárat"
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4373
 msgid "Original Skirmish"
-msgstr ""
+msgstr "Kezdeti dögevők"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -12854,7 +12854,7 @@ msgstr "Dögevő bunker"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5032
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Dögevő Chopper gyàr"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12895,7 +12895,7 @@ msgstr "Dögevő vízszintes fal"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5055
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "Dögevő gépfegyver torony"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
@@ -12914,7 +12914,7 @@ msgstr "Dögevő erőmű"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5065
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Dögevő helyreàllìtò központ"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -13343,7 +13343,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5342
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Szuper Sinàgyùs Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13441,19 +13441,19 @@ msgstr "Szuperforró lángszóró gél"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5415
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Szuper-forró plazma gél Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5418
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Szuper-forró plazma gél Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5421
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Szuper-forró plazma gél"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13821,7 +13821,7 @@ msgstr "Szállító"
 #. data/mp/stats/templates.json: $.BarbarianTrike.name
 #: po/custom/fromJson.txt:5653
 msgid "Trike"
-msgstr ""
+msgstr "Trike"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
@@ -14247,7 +14247,7 @@ msgstr "VTOL ostromfegyver"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5936
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "VTOL újratöltő platform"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14451,7 +14451,7 @@ msgstr "VTOL tankelhárító"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6057
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "VTOL gépfegyver Scav"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14464,7 +14464,7 @@ msgstr "VTOL gépfegyver"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6064
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "VTOL kisrakéta Scav"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -14854,7 +14854,7 @@ msgstr "Stratégiai játék"
 
 #: src/chat.cpp:63
 msgid "Global"
-msgstr ""
+msgstr "Globális"
 
 #: src/chat.cpp:67
 #: src/chat.cpp:73
@@ -15112,7 +15112,7 @@ msgstr ""
 
 #: src/clparse.cpp:409
 msgid "port"
-msgstr ""
+msgstr "port"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
@@ -15132,7 +15132,7 @@ msgstr ""
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
-msgstr ""
+msgstr "b64-pub-key"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
@@ -15140,7 +15140,7 @@ msgstr ""
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
@@ -15148,7 +15148,7 @@ msgstr ""
 
 #: src/clparse.cpp:416
 msgid "startplayers"
-msgstr ""
+msgstr "indulòjàtèkosok"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -15405,7 +15405,7 @@ msgstr "NEXUS"
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
 msgid "Collective"
-msgstr ""
+msgstr "Gyűjtemény"
 
 #: src/frontend.cpp:150
 msgid "Single Player"
@@ -15614,11 +15614,11 @@ msgstr "Billentyűzet beállítása"
 #: src/frontend.cpp:680
 #: src/ingameop.cpp:581
 msgid "Music Manager"
-msgstr ""
+msgstr "Zenei menedzser"
 
 #: src/frontend.cpp:682
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Konfiguràciòs könyvtàr nyitàsa"
 
 #: src/frontend.cpp:720
 msgid "Failed to open configuration directory in system default file browser."
@@ -15739,11 +15739,11 @@ msgstr "Radar"
 #: src/frontend.cpp:840
 #: src/ingameop.cpp:629
 msgid "Radar Jump"
-msgstr ""
+msgstr "Radar Ugràs"
 
 #: src/frontend.cpp:845
 msgid "Screen Shake"
-msgstr ""
+msgstr "Képernyő Rázás"
 
 #: src/frontend.cpp:857
 msgid "GRAPHICS OPTIONS"
@@ -15838,7 +15838,7 @@ msgstr "Felbontás"
 
 #: src/frontend.cpp:1262
 msgid "Display Scale"
-msgstr ""
+msgstr "Skála megjelenítése"
 
 #: src/frontend.cpp:1290
 msgid "Adaptive"
@@ -15863,7 +15863,7 @@ msgstr "Élsimítás"
 
 #: src/frontend.cpp:1552
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Figyelmeztetés: Az antialiasing összeomlásokat okozhat, különösen> 16 értékek esetén"
 
 #: src/frontend.cpp:1565
 msgid "Graphics Backend*"
@@ -15956,7 +15956,7 @@ msgstr "Küldetés nehézsége"
 #: src/frontend.cpp:1976
 #: src/frontend.cpp:2047
 msgid "Camera Speed"
-msgstr ""
+msgstr "Kamera sebesség"
 
 #: src/frontend.cpp:1980
 #: src/frontend.cpp:2043
@@ -15975,7 +15975,7 @@ msgstr "Segìtsd nekünk fejleszeni a Warzone 2100 játèkot: %s"
 
 #: src/frontend.cpp:2018
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Kattints a weboldal nyitàsàhoz."
 
 #: src/frontend.cpp:2021
 #: src/frontend.cpp:2040
@@ -15997,7 +15997,7 @@ msgstr "Mód:"
 
 #: src/frontend.cpp:2629
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Növeli a játék megjelenítési skáláját?"
 
 #: src/frontend.cpp:2631
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
@@ -16014,7 +16014,7 @@ msgstr ""
 
 #: src/frontend.cpp:2637
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Növeli a játék megjelenítési skáláját"
 
 #: src/frontend.cpp:2654
 #, c-format
@@ -16236,7 +16236,7 @@ msgstr ""
 
 #: src/ingameop.cpp:634
 msgid "Shake"
-msgstr ""
+msgstr "Rázás"
 
 #: src/ingameop.cpp:1019
 msgid "Save Campaign Game"
@@ -16255,11 +16255,11 @@ msgstr "A mod nem tölthető be: %s\n\n"
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Globális gyorsbillentyű"
 
 #: src/input/context.cpp:55
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Màsik gyorsbillentyű"
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
@@ -16379,47 +16379,47 @@ msgstr "Kijelölt Csoport 9"
 
 #: src/input/keyconfig.cpp:66
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 0"
 
 #: src/input/keyconfig.cpp:67
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 1"
 
 #: src/input/keyconfig.cpp:68
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 2"
 
 #: src/input/keyconfig.cpp:69
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 3"
 
 #: src/input/keyconfig.cpp:70
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 4"
 
 #: src/input/keyconfig.cpp:71
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 5"
 
 #: src/input/keyconfig.cpp:72
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 6"
 
 #: src/input/keyconfig.cpp:73
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 7"
 
 #: src/input/keyconfig.cpp:74
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 8"
 
 #: src/input/keyconfig.cpp:75
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Eltávolítás a jelenlegi csoportból"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -16507,19 +16507,19 @@ msgstr "Többjátékos beállítások / Szövetséges párbeszéd"
 
 #: src/input/keyconfig.cpp:104
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Kamera felmozgatása"
 
 #: src/input/keyconfig.cpp:105
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Kamera Forgatása Le"
 
 #: src/input/keyconfig.cpp:106
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Kamera Forgatása Balra"
 
 #: src/input/keyconfig.cpp:107
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Kamera Forgatása Balra"
 
 #: src/input/keyconfig.cpp:108
 msgid "Snap View to North"
@@ -16894,27 +16894,27 @@ msgstr "Következő Cyborg gyár kiválasztása"
 
 #: src/input/keyconfig.cpp:202
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Következő VTOL gyár kiválasztása"
 
 #: src/input/keyconfig.cpp:203
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Következő gyár kiválasztása"
 
 #: src/input/keyconfig.cpp:204
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Következő Kutató központ kiválasztása"
 
 #: src/input/keyconfig.cpp:205
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Következő erőmű kiválasztása"
 
 #: src/input/keyconfig.cpp:206
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Következő Cyborg gyár kiválasztása"
 
 #: src/input/keyconfig.cpp:207
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Következő VTOL gyár kiválasztása"
 
 #: src/input/keyconfig.cpp:209
 msgid "Toggle Debug Mappings"
@@ -17039,7 +17039,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:251
 msgid "Failed to Find Game"
-msgstr ""
+msgstr "Nem sikerült játékot megkeresni"
 
 #: src/integrations/wzdiscordrpc.cpp:279
 msgid "Failed to join the game from the specified invite link, with error:"
@@ -17047,7 +17047,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:283
 msgid "Failed to Join Game"
-msgstr ""
+msgstr "Nem sikerült csatlakozni játéhoz"
 
 #: src/integrations/wzdiscordrpc.cpp:350
 msgid "The invite link you have followed specifies a non-default lobby server:"
@@ -17064,7 +17064,7 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:359
 #: src/integrations/wzdiscordrpc.cpp:433
 msgid "Trust & Connect"
-msgstr ""
+msgstr "Hitelesìtés & Csatlakozàs"
 
 #: src/integrations/wzdiscordrpc.cpp:424
 msgid "The invite link you have followed specifies a direct connection."
@@ -17703,11 +17703,11 @@ msgstr "Közepes"
 #: src/multiint.cpp:385
 #: src/multiplay.cpp:571
 msgid "Commander"
-msgstr ""
+msgstr "Parancsnok"
 
 #: src/multiint.cpp:811
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "Hiányzik MI Név"
 
 #: src/multiint.cpp:836
 msgid "MISSING AI DESCRIPTION"
@@ -17753,7 +17753,7 @@ msgstr ""
 
 #: src/multiint.cpp:1317
 msgid "Vote"
-msgstr ""
+msgstr "Szavazàs"
 
 #: src/multiint.cpp:1318
 msgid "Allow host to change map or randomize?"
@@ -17787,7 +17787,7 @@ msgstr "Térkép-Mód"
 
 #: src/multiint.cpp:1415
 msgid "Random map!"
-msgstr ""
+msgstr "Véletlen térkép!"
 
 #: src/multiint.cpp:1432
 msgid "Click to set Password"
@@ -18014,7 +18014,7 @@ msgstr ""
 
 #: src/multiint.cpp:3059
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Igen, Én akarokjàtszani!"
 
 #: src/multiint.cpp:3102
 #, c-format
@@ -18044,11 +18044,11 @@ msgstr ""
 
 #: src/multiint.cpp:3430
 msgid "Joined:"
-msgstr ""
+msgstr "Csatlakoztatva:"
 
 #: src/multiint.cpp:3433
 msgid "Ready:"
-msgstr ""
+msgstr "Kész:"
 
 #: src/multiint.cpp:3611
 #: src/titleui/gamefind.cpp:269
@@ -18057,7 +18057,7 @@ msgstr "Játékosok"
 
 #: src/multiint.cpp:3641
 msgid "Host Options"
-msgstr ""
+msgstr "Host beàllìtàs"
 
 #: src/multiint.cpp:3922
 msgid "Enable Spectator Join"
