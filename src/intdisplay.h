@@ -23,6 +23,7 @@
 
 #include "lib/widget/widget.h"
 #include "lib/widget/form.h"
+#include "lib/widget/bar.h"
 #include "intimage.h"
 #include "droid.h"
 #include "template.h"
@@ -100,13 +101,21 @@ void SetFormAudioIDs(int OpenID, int CloseID);
 // Initialise interface graphics.
 void intInitialiseGraphics();
 
-/* Holds the cached rendered text for the power bar */
-struct DisplayPowerBarCache
+class PowerBar: public W_BARGRAPH
 {
-	WzText wzText;
-	WzText wzNeedText;
+	public:
+		PowerBar(W_BARINIT* init): W_BARGRAPH(init) {}
+
+		std::string getTip() override;
+		void display(int xOffset, int yOffset) override;
+
+	private:
+		struct DisplayPowerBarCache
+		{
+			WzText wzText;
+			WzText wzNeedText;
+		} cache;
 };
-void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 class IntFancyButton : public W_CLICKFORM
 {

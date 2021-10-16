@@ -2076,25 +2076,17 @@ bool intAddPower()
 	sBarInit.id = IDPOW_POWERBAR_T;
 	//start the power bar off in view (default)
 	sBarInit.style = WBAR_TROUGH;
-	sBarInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
-	});
 	sBarInit.sCol = WZCOL_POWER_BAR;
-	sBarInit.pDisplay = intDisplayPowerBar;
-	sBarInit.pUserData = new DisplayPowerBarCache();
-	sBarInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayPowerBarCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
 	sBarInit.iRange = POWERBAR_SCALE;
 
-	sBarInit.pTip = _("Power");
+	auto psBarGraph = std::make_shared<PowerBar>(&sBarInit);
+	psBarGraph->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+	}));
 
-	if (!widgAddBarGraph(psWScreen, &sBarInit))
-	{
-		return false;
-	}
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen);
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen->psForm);
+	psWScreen->psForm->attach(psBarGraph);
 
 	powerBarUp = true;
 	return true;

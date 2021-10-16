@@ -166,11 +166,15 @@ void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 	setBarGraphValue(barGraph, WZCOL_GREEN, powerToBuild - neededPower, powerToBuild);
 }
 
-// Widget callback to update and display the power bar.
-// !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
-void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+std::string PowerBar::getTip()
 {
-	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
+	auto income = getApproxPowerGeneratedPerSecForDisplay(selectedPlayer);
+	return astringf("%s\n%s: %s", _("Power"), _("Power Per Second"), income.c_str());
+}
+
+// !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
+void PowerBar::display(int xOffset, int yOffset)
+{
 	SDWORD		Avail, ManPow, realPower;
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
@@ -188,12 +192,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	realPower = static_cast<SDWORD>((displayPower + 1e-8) - ManuPower);
 	ManuPower = 0;
 
-	BarWidth = BarGraph->width();
+	BarWidth = this->width();
 	sprintf(szVal, "%d", realPower);
-
-	// Any widget using intDisplayPowerBar must have its pUserData initialized to a (DisplayPowerBarCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayPowerBarCache& cache = *static_cast<DisplayPowerBarCache*>(psWidget->pUserData);
 
 	cache.wzText.setText(szVal, font_regular);
 
@@ -223,8 +223,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		Empty = 0;
 	}
 
-	int x0 = xOffset + BarGraph->x();
-	int y0 = yOffset + BarGraph->y();
+	int x0 = xOffset + this->x();
+	int y0 = yOffset + this->y();
 
 	pie_SetFogStatus(false);
 
@@ -300,8 +300,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	if (showNeedMessage)
 	{
 		auto needTextWidth = cache.wzNeedText.width();
-		auto textX = iX + (BarGraph->width() - needTextWidth) / 2;
-		pie_UniTransBoxFill(textX - 3, y0 + 1, textX + needTextWidth + 3, y0 + BarGraph->height() - 1, WZCOL_TRANSPARENT_BOX);
+		auto textX = iX + (this->width() - needTextWidth) / 2;
+		pie_UniTransBoxFill(textX - 3, y0 + 1, textX + needTextWidth + 3, y0 + this->height() - 1, WZCOL_TRANSPARENT_BOX);
 		cache.wzNeedText.render(textX, iY - 1, (realTime / 1250) % 5 ? WZCOL_WHITE: WZCOL_RED);
 	}
 
