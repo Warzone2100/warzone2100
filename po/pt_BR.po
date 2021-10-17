@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-16 13:02\n"
+"PO-Revision-Date: 2021-10-17 08:32\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -160,7 +160,7 @@ msgstr "MISSÃO DA BASE ALFA: Estabeleça uma Base Avançada"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Estabeleça uma base avançada no platô e se defenda do Novo Paradigma."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
