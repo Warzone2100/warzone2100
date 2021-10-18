@@ -15425,7 +15425,7 @@ msgid "View Intro"
 msgstr "Prikaži Uvod"
 
 #: src/frontend.cpp:163
-msgid "Videos are missing, download them from https/://wz2100.net"
+msgid "Videos are missing, download them from http://wz2100.net"
 msgstr ""
 
 #: src/frontend.cpp:168
@@ -15446,7 +15446,7 @@ msgid "MAIN MENU"
 msgstr "GLAVNI MENI"
 
 #: src/frontend.cpp:178
-msgid "Official site: https/://wz2100.net/"
+msgid "Official site: http://wz2100.net/"
 msgstr ""
 
 #: src/frontend.cpp:179
@@ -15527,7 +15527,7 @@ msgstr "JEDAN IGRAČ"
 
 #: src/frontend.cpp:353
 #: src/frontend.cpp:374
-msgid "Campaign videos are missing! Get them from https/://wz2100.net"
+msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
 #: src/frontend.cpp:369

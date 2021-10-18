@@ -15432,8 +15432,8 @@ msgid "View Intro"
 msgstr "Oyun Videosunu İzle"
 
 #: src/frontend.cpp:163
-msgid "Videos are missing, download them from https/://wz2100.net"
-msgstr "Videolar eksik! Videoları https/://wz2100.net'den indirin"
+msgid "Videos are missing, download them from http://wz2100.net"
+msgstr "Videolar eksik! Videoları http://wz2100.net'den indirin"
 
 #: src/frontend.cpp:168
 #: src/frontend.cpp:172
@@ -15453,8 +15453,8 @@ msgid "MAIN MENU"
 msgstr "ANA MENÜ"
 
 #: src/frontend.cpp:178
-msgid "Official site: https/://wz2100.net/"
-msgstr "Resmi site: https/://wz2100.net/"
+msgid "Official site: http://wz2100.net/"
+msgstr "Resmi site: http://wz2100.net/"
 
 #: src/frontend.cpp:179
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -15534,8 +15534,8 @@ msgstr "TEK OYUNCU"
 
 #: src/frontend.cpp:353
 #: src/frontend.cpp:374
-msgid "Campaign videos are missing! Get them from https/://wz2100.net"
-msgstr "Seferberlik videolarını kaçırıyorsun! Videoları https/://wz2100.net'den indir"
+msgid "Campaign videos are missing! Get them from http://wz2100.net"
+msgstr "Seferberlik videolarını kaçırıyorsun! Videoları http://wz2100.net'den indir"
 
 #: src/frontend.cpp:369
 msgid "CAMPAIGNS"
