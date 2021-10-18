@@ -6,7 +6,7 @@ Summary:        Innovative 3D real-time strategy
 
 Group:          Amusements/Games
 License:        GPLv2+ and CC-BY-SA
-URL:            http://wz2100.net/
+URL:            https://wz2100.net/
 Source0:        http://download.gna.org/warzone/releases/2.2/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 

@@ -276,7 +276,7 @@ warzone2100 (2.1.0~beta1-0) unstable; urgency=low
            on one target forever anymore.
   * Skirmish/Multiplayer AI:
     * New: Enabled basic level of Human-AI cooperation, for more information
-           visit: http://wz2100.net/wiki/gameplay:cooperative_ai
+           visit: https://wz2100.net/wiki/gameplay:cooperative_ai
     * New: AI units now return to defend its own base when it's in trouble.
     * Improved: AI is faster at producing units, upgrading structures and oil
                 capturing.

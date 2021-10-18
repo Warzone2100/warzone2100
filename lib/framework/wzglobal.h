@@ -39,7 +39,7 @@
 #  include "config.h"
 #elif !defined(HAVE_CONFIG_H)
 #  define PACKAGE "warzone2100"
-#  define PACKAGE_BUGREPORT "http://wz2100.net/"
+#  define PACKAGE_BUGREPORT "https://wz2100.net/"
 #  define PACKAGE_NAME "Warzone 2100"
 #  define PACKAGE_TARNAME "warzone2100"
 #endif

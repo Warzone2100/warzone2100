@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Warzone 2100 Project <warzone2100-project@lists.sourceforge.net>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.8.4
-Homepage: http://wz2100.net/
+Homepage: https://wz2100.net/
 
 Package: warzone2100-video
 Architecture: all

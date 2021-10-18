@@ -8,7 +8,7 @@ setup(
     author_email="me@mortis.eu",
     description="This plugin adds the capability to Pygments to lex Warzone Resource Files (WRF).",
     license="GPL",
-    url="http://wz2100.net/",
+    url="https://wz2100.net/",
     entry_points = """
         [pygments.lexers]
         wrflexer = warzone:WRFLexer

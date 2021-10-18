@@ -11,7 +11,7 @@ Introduction
 This guide will help you get started playing Warzone 2100.
 
 The Warzone 2100 Project has its website at image:images/www.png[URL]
-http://wz2100.net.
+https://wz2100.net.
 
 If you want to talk to other Warzone 2100 players, visit the forum at
 image:images/www.png[URL] https://forums.wz2100.net 
