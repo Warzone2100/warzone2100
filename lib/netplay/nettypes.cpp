@@ -858,5 +858,12 @@ bool NETisReplay()
 
 void NETshutdownReplay()
 {
+	if (bIsReplay)
+	{
+		// extra replay spectator gamequeue
+		delete gameQueues[MAX_CONNECTED_PLAYERS];
+		gameQueues[MAX_CONNECTED_PLAYERS] = nullptr;
+	}
+	
 	bIsReplay = false;
 }
