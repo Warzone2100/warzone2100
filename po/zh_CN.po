@@ -15421,8 +15421,8 @@ msgid "View Intro"
 msgstr "观影介绍"
 
 #: src/frontend.cpp:163
-msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "战役视频丢失！从 http://wz2100.net 获取"
+msgid "Videos are missing, download them from https/://wz2100.net"
+msgstr "战役视频丢失！从 https/://wz2100.net 获取"
 
 #: src/frontend.cpp:168
 #: src/frontend.cpp:172
@@ -15442,8 +15442,8 @@ msgid "MAIN MENU"
 msgstr "主菜单"
 
 #: src/frontend.cpp:178
-msgid "Official site: http://wz2100.net/"
-msgstr "官方网址：http://wz2100.net/"
+msgid "Official site: https/://wz2100.net/"
+msgstr "官方网址：https/://wz2100.net/"
 
 #: src/frontend.cpp:179
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -15523,8 +15523,8 @@ msgstr "单人模式"
 
 #: src/frontend.cpp:353
 #: src/frontend.cpp:374
-msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr "战役视频丢失！请从 http://wz2100.net 获取"
+msgid "Campaign videos are missing! Get them from https/://wz2100.net"
+msgstr "战役视频丢失！请从 https/://wz2100.net 获取"
 
 #: src/frontend.cpp:369
 msgid "CAMPAIGNS"

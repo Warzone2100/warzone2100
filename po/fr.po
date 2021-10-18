@@ -15428,8 +15428,8 @@ msgid "View Intro"
 msgstr "Voir l'intro"
 
 #: src/frontend.cpp:163
-msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "Les vidéos sont manquantes, téléchargez-les sur http://wz2100.net"
+msgid "Videos are missing, download them from https/://wz2100.net"
+msgstr "Les vidéos sont manquantes, téléchargez-les sur https/://wz2100.net"
 
 #: src/frontend.cpp:168
 #: src/frontend.cpp:172
@@ -15449,8 +15449,8 @@ msgid "MAIN MENU"
 msgstr "MENU PRINCIPAL"
 
 #: src/frontend.cpp:178
-msgid "Official site: http://wz2100.net/"
-msgstr "Site officiel : http://wz2100.net/"
+msgid "Official site: https/://wz2100.net/"
+msgstr "Site officiel : https/://wz2100.net/"
 
 #: src/frontend.cpp:179
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -15530,8 +15530,8 @@ msgstr "UN JOUEUR"
 
 #: src/frontend.cpp:353
 #: src/frontend.cpp:374
-msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr "Les vidéos pour la campagne sont manquantes ! Téléchargez-les sur http://wz2100.net"
+msgid "Campaign videos are missing! Get them from https/://wz2100.net"
+msgstr "Les vidéos pour la campagne sont manquantes ! Téléchargez-les sur https/://wz2100.net"
 
 #: src/frontend.cpp:369
 msgid "CAMPAIGNS"
@@ -18345,7 +18345,7 @@ msgstr "Message du serveur :"
 
 #: src/multijoin.cpp:563
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr "Une mise à jour du jeu est disponible, veuillez visiter http://wz2100.net pour la télécharger."
+msgstr "Une mise à jour du jeu est disponible, veuillez visiter https/://wz2100.net pour la télécharger."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
