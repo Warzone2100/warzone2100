@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:14\n"
+"PO-Revision-Date: 2021-10-18 12:22\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -160,11 +160,11 @@ msgstr "MISSÂO BASE ALFA: Estabelecer uma Base Avançada"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Estabeleça uma base avançada no planalto e rechace o Novo Paradigma."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Construa estruturas defensivas até que o sinal de objectivo verde desapareça."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "Assim que um abrigo seguro seja estabelecido, volte para a ZA para orden
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "MISSÃO BASE BETA: Sobreviva e evacue! Traga um camião"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -4008,7 +4008,7 @@ msgstr "Destrua todos os reforços do Novo Paradigma"
 
 #: data/base/script/campaign/cam1ca.js:142
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Construa pelo menos 7 estruturas que não sejam paredes e destrua todos os reforços do Novo Paradigma"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4040,7 +4040,7 @@ msgstr "Resgate a equipa Alfa"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "Destrua o QG Nexus para desativar o Programa de Intrusão Nexus"
 
 #: data/base/script/campaign/cam3-ab.js:240
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -5430,7 +5430,7 @@ msgstr "Torreão de Reparação Pesado"
 
 #: data/mp/messages/strings/names.txt:490
 msgid "Nexus Intruder Program"
-msgstr "Programa de Intrusão NEXUS"
+msgstr "Programa de Intrusão Nexus"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
@@ -5606,20 +5606,20 @@ msgstr "Jogador"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Perdeu por estar inactivo / jogando passivamente."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Jogar passivamente levará à derrota. Ações que são consideradas:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- construção de unidades - conclusão da pesquisa - construção de estruturas base (fábricas, geradores de eenrgia, laboratórios, módulos e extractores de petróleo) - causando danos"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1461
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Saqueadores Supremos"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1458
@@ -5787,7 +5787,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2053
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Falha ao enviar mensagem - tente novamente"
 
 #: lib/netplay/netplay.cpp:2647
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
@@ -5946,27 +5946,27 @@ msgstr "Alimentador em Cadeia de Munição AA"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "Bateria de AA Flak Cyclone"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Fortificação de AA Flak Cyclone"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "AA Flak Cyclone Python Semi-Lagarta"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "AA Flak Cyclone"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6052,21 +6052,21 @@ msgstr "Sensor AA Inagem Térmica"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "Bateria de AA Flak Tornado"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Fortificação de AA Flak Tornado"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "AA Flak Tornado"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6535,7 +6535,7 @@ msgstr "Armado com míssil Anti-Tanque Lancer"
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Armado com rocket Anti-Tanque Lancer"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -7149,7 +7149,7 @@ msgstr "Unidade de reparação de combate"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Alvos Preferenciais: Veículos e Cyborgs"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
