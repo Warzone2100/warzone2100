@@ -113,11 +113,13 @@ void gameTimeInit(void)
 	wantedLatency = GAME_TICKS_PER_UPDATE * 2;
 	for (player = 0; player < MAX_GAMEQUEUE_SLOTS; ++player)
 	{
+		gameQueueCheckTime[player] = 0;
 		gameQueueCheckCrc[player] = 0;
 		wantedLatencies[player] = 0;
 	}
 
 	// Don't let syncDebug from previous games cause a desynch dump at gameTime 102.
+	crcError = false;
 	resetSyncDebug();
 }
 
