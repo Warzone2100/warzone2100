@@ -7949,7 +7949,7 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERINGAME& p) {
 //	}
 //	j["JoiningInProgress"] = joiningInProgress;
 	j["side"] = p.side;
-	j["structureLimits"] = p.structureLimits;
+	j["structureLimits"] = p.lastAppliedStructureLimits; // See applyLimitSet() for why we save `lastAppliedStructureLimits` as `structureLimits`
 	j["flags"] = p.flags;
 }
 
