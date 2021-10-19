@@ -218,11 +218,20 @@ std::shared_ptr<W_BUTTON> PathBarWidget::createPathComponentButton(const std::st
 	return button;
 }
 
+int32_t PathBarWidget::idealWidth()
+{
+	return widthRequiredToDisplayAllButtonsInFull;
+}
+
 void PathBarWidget::relayoutComponentButtons()
 {
 	ellipsis->hide();
 
-	if (componentButtons.empty()) { return; }
+	if (componentButtons.empty())
+	{
+		widthRequiredToDisplayAllButtonsInFull = 0;
+		return;
+	}
 
 	const int requiredWidthForEllipsis = ellipsis->width();
 	// start from the end / right-side, and display as many path component buttons as possible
@@ -230,7 +239,7 @@ void PathBarWidget::relayoutComponentButtons()
 	int remainingWidth = width();
 	const int spaceBetweenButtons = pathSeparator->width();
 
-	int widthRequiredToDisplayAllButtonsInFull = componentButtons[0]->width();
+	widthRequiredToDisplayAllButtonsInFull = componentButtons[0]->width();
 	for (size_t idx = pathComponents.size() - 1; idx > 0; idx--)
 	{
 		widthRequiredToDisplayAllButtonsInFull += spaceBetweenButtons + componentButtons[idx]->width();
