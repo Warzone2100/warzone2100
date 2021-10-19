@@ -65,6 +65,7 @@ public:
 
 	void display(int xOffset, int yOffset) override;
 	void geometryChanged() override { relayoutComponentButtons(); }
+	int32_t idealWidth() override;
 public:
 	void pushPathComponent(const std::string& pathComponent);
 	void popPathComponents(size_t numComponents = 1);
@@ -86,6 +87,7 @@ private:
 	std::unordered_map<size_t, std::shared_ptr<W_BUTTON>> componentButtons;
 	std::shared_ptr<W_LABEL> ellipsis;
 	ONCLICK_PATH_HANDLER onClickPath;
+	int32_t widthRequiredToDisplayAllButtonsInFull = 0;
 };
 
 class JSONTableWidget : public W_FORM
