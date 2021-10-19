@@ -569,7 +569,7 @@ public:
 	//__
 	virtual bool handle_eventBeaconRemoved(int from, int to) override;
 
-	//__ ## eventGroupLoss(object, group id, new size)
+	//__ ## eventGroupLoss(object, groupId, newSize)
 	//__
 	//__ An event that is run whenever a group becomes empty. Input parameter
 	//__ is the about to be killed object, the group's id, and the new group size.
@@ -581,7 +581,7 @@ public:
 	//__
 	//__ An event that is run whenever a droid enters an area label. The area is then
 	//__ deactived. Call resetArea() to reactivate it. The name of the event is
-	//__ eventArea + the name of the label.
+	//__ `eventArea${label}`.
 	//__
 	virtual bool handle_eventArea(const std::string& label, const DROID *psDroid) override;
 
