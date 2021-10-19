@@ -155,6 +155,10 @@ This does not trigger again if the structure is partially demolished.
 An event that is run every time a structure is ready to perform some special ability.
 It will only fire once, so if the time is not right, register your own timer to keep checking.
 
+## eventStructureUpgradeStarted(structure)
+
+An event that is run every time a structure starts to be upgraded.
+
 ## eventAttacked(victim, attacker)
 
 An event that is run when an object belonging to the script's controlling player is attacked.
