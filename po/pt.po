@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-18 12:22\n"
+"PO-Revision-Date: 2021-10-19 00:22\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -7187,7 +7187,7 @@ msgstr "Alvos Preferenciais: Estruturas da Base"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Alvos Preferenciais: Estruturas da Base, Baterias e Cyborgs"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7208,7 +7208,7 @@ msgstr "Alvos Preferenciais: Bunkers e Fortificações"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Alvos Preferenciais: Bunkers, Defesas, Estruturas da Base"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7241,7 +7241,7 @@ msgstr "Alvos Preferenciais: Infantaria, Estruturas da base, Veículos com rodas
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Alvos Preferenciais: Infantaria, veículos com rodas e flutuantes"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7250,13 +7250,13 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Alvos Preferenciais: Nenhum. Danos normais a todos os alvos"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1158
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "Alvos Preferenciais: Veículos e Cyborgs"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -7926,13 +7926,13 @@ msgstr "Torreões Contra-Bateria detectam baterias de fogo indirecto inimigas"
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1594
 msgid "Crane1"
-msgstr ""
+msgstr "Grua1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1597
 msgid "Crane2"
-msgstr ""
+msgstr "Grua2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8979,13 +8979,13 @@ msgstr "Balas de metralhadora de revestimento rijo"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2326
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Torre de Lança-Chamas Reforçada"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2329
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Torre de Guarda Reforçada de Metralhadora Pesada"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9040,7 +9040,7 @@ msgstr "Fortificação AA Cyclone Disponível"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2360
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Fortificação AA Tornado Disponível"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9524,21 +9524,21 @@ msgstr "Morteiro Pesado - Bombarda"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2669
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Bateria de Lançador de Plasma Pesado"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2673
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Lançador de Plasma Pesado"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2677
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Lançador de Plasma Pesado"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9764,13 +9764,13 @@ msgstr "Compósito de Betão-Plástico de Alta Resistência Tênsil"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2846
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Recipiente de Gás a Alta Pressão"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2849
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Gás a alta pressão lança a mistura do lança-chamas mais longe"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
@@ -9920,7 +9920,7 @@ msgstr "Projécteis de Canhão HVAPFSDS"
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2955
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "Canhão de Alta Velocidade Pitão Lagartas"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -10241,7 +10241,7 @@ msgstr "Aumentada Velocidade de construção"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3207
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Aumenta o alcançe de Lança-Chamas"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10836,7 +10836,7 @@ msgstr "Dano das metralhadoras +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3636
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Torre de Guarda de Metralhadora"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11330,7 +11330,7 @@ msgstr "Morteiro"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3974
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Metralhadora Montada"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
@@ -12193,7 +12193,7 @@ msgstr "Pitão"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4587
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Canhão AA Quádruplo de 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12352,7 +12352,7 @@ msgstr "Dardos de agulha para Canhão Cinético-Magnéticos"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4681
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "Carregador rápido aumenta velocidade de recarregamento"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -12760,19 +12760,19 @@ msgstr "Designador Laser para Foguetes"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4970
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Carregador Rápido de Rocket Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4973
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Carregador Rápido de Rocket Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4976
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "Carregador Rápido de Rocket"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -12854,7 +12854,7 @@ msgstr "Bunker de Saqueadores"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5032
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Fábrica de Helicópteros dos Saqueadores"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12895,13 +12895,13 @@ msgstr "Parede Horizontal dos Saqueadores"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5055
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "Torre de Metralhadora dos Saqueadores"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
 #: po/custom/fromJson.txt:5058
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "Metralhadora Montada dos Saqueadores"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
@@ -12914,7 +12914,7 @@ msgstr "Gerador de Energia de Saqueadores"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5065
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Centro de Reparos dos Saqueadores"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12934,7 +12934,7 @@ msgstr "Saqueadores"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5076
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "Torreão de Ligação NEXUS dos Saqueadores"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -13250,13 +13250,13 @@ msgstr "Rouba tecnologia de estruturas e assume controlo de armas"
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5277
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Torre de aço com Lança-Chamas"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5280
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Torre de Aço com Metralhadora Pesada"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13269,7 +13269,7 @@ msgstr "Torre de Aço com Metralhadora"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5287
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Torre de Aço com Metralhadora Dupla"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13337,7 +13337,7 @@ msgstr "Super Artilheiro Pesado"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5334
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Super Cyborg com Canhão de Alta Velocidade"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13902,7 +13902,7 @@ msgstr "Metralhadoras duplas de 7.62mm"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5708
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Canhão AA Duplo de 80mm"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -13953,7 +13953,7 @@ msgstr "Torre de guarda de Metralhadoras Duplas"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5742
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Torre de Metralhadoras Duplas"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -14247,7 +14247,7 @@ msgstr "Metralhadora de Assalto VTOL"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5936
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "Ponto de Rearmamento de VTOL dos Saqueadores"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14451,7 +14451,7 @@ msgstr "Lancer VTOL"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6057
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "Metralhadora VTOL Saqueadores"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14464,7 +14464,7 @@ msgstr "Metralhadora VTOL"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6064
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "Mini-Foguetes VTOL Saqueadores"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -14872,7 +14872,7 @@ msgstr " e "
 #: src/chat.cpp:169
 #: src/multiint.cpp:3625
 msgid "Spectators"
-msgstr ""
+msgstr "Espectadores"
 
 #: src/cheat.cpp:212
 #, c-format
@@ -15032,7 +15032,7 @@ msgstr "Anfitrião"
 
 #: src/clparse.cpp:379
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "Conectar-se diretamente ao IP/hostname como espectador"
 
 #: src/clparse.cpp:380
 msgid "Go directly to host screen"
@@ -15116,39 +15116,39 @@ msgstr "porta"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Ativar comandos de barra de lobby (para conectar clientes)"
 
 #: src/clparse.cpp:413
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Adicione um hash de identidade do administrador do lobby (para comandos com barra)"
 
 #: src/clparse.cpp:413
 msgid "hash string"
-msgstr ""
+msgstr "string hash"
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Adicione uma chave pública do administrador do lobby (para comandos com barra)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
-msgstr ""
+msgstr "b64-pub-key"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
-msgstr ""
+msgstr "Ativar interface de comandos"
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Mínimo de jogadores necessários para iniciar o jogo automaticamente"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
-msgstr ""
+msgstr "Jogadores Mínimos"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -15370,8 +15370,8 @@ msgstr[1] "%u unidades designadas ao Grupo %u"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u unidades removidas do grupo"
+msgstr[1] "%u unidades removidas do grupo"
 
 #: src/droid.cpp:2002
 #, c-format
@@ -15525,7 +15525,7 @@ msgstr "Carregar Jogo de Escaramuça"
 
 #: src/frontend.cpp:346
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Ver Repetição de Escaramuça"
 
 #: src/frontend.cpp:348
 msgid "SINGLE PLAYER"
@@ -15552,7 +15552,7 @@ msgstr "Carregar Jogo de Escaramuça Gravado"
 
 #: src/frontend.cpp:519
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Carregar Repetição de Escaramuça"
 
 #: src/frontend.cpp:580
 msgid "MULTI PLAYER"
@@ -15568,7 +15568,7 @@ msgstr "Juntar-se a Jogo"
 
 #: src/frontend.cpp:584
 msgid "View Replay"
-msgstr ""
+msgstr "Ver Repetição"
 
 #: src/frontend.cpp:589
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15576,7 +15576,7 @@ msgstr "A porta TCP 2100 deve estar aberta na sua firewall ou no router para cri
 
 #: src/frontend.cpp:634
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Carregar Repetição de Multijogador"
 
 #: src/frontend.cpp:673
 #: src/multiint.cpp:1380
@@ -15728,7 +15728,7 @@ msgstr "Sombras"
 
 #: src/frontend.cpp:830
 msgid "Fog"
-msgstr ""
+msgstr "Nevoeiro"
 
 #: src/frontend.cpp:835
 #: src/ingameop.cpp:624
@@ -15974,7 +15974,7 @@ msgstr "Multijogador"
 #: src/frontend.cpp:2016
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Ajude-nos a melhorar as traduções do Warzone 2100: %s"
 
 #: src/frontend.cpp:2018
 msgid "Click to open webpage."
@@ -15987,11 +15987,11 @@ msgstr "OPÇÕES DE JOGO"
 
 #: src/frontend.cpp:2066
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Dificuldade Insana"
 
 #: src/frontend.cpp:2067
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Esta dificuldade é para jogadores muito experientes!"
 
 #: src/frontend.cpp:2169
 #: src/multiint.cpp:5112
@@ -16035,19 +16035,19 @@ msgstr "Dica: Ajustar Escala do Interface"
 
 #: src/hci.cpp:723
 msgid "Replay"
-msgstr ""
+msgstr "Repetição"
 
 #: src/hci.cpp:738
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: src/hci.cpp:753
 msgid "Resume"
-msgstr ""
+msgstr "Retomar"
 
 #: src/hci.cpp:770
 msgid "Fast-Forward"
-msgstr ""
+msgstr "Avanço rápido"
 
 #: src/hci.cpp:1314
 #: src/loop.cpp:252
@@ -16205,19 +16205,19 @@ msgstr "Sair"
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Aviso: Você tem a certeza?"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Aviso: Você tem a certeza? Qualquer progresso não gravado será perdido."
 
 #: src/ingameop.cpp:323
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: src/ingameop.cpp:325
 msgid "Back"
-msgstr ""
+msgstr "Anterior"
 
 #: src/ingameop.cpp:404
 msgid "Host has quit the game!"
@@ -16260,27 +16260,27 @@ msgstr "A mod necessária não pode ser carregada: %s\n\n"
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Atalhos Globais"
 
 #: src/input/context.cpp:55
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Outros Atalhos"
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
-msgstr ""
+msgstr "Jogabilidade"
 
 #: src/input/context.cpp:58
 msgid "Debug"
-msgstr ""
+msgstr "Depurar"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Depurar (editor de nível)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Depurar (seleção)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16424,7 +16424,7 @@ msgstr "Adicionar ao Grupo 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Remover do grupo atual"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -16786,7 +16786,7 @@ msgstr "Selecionar todos os veículos movidos por Semi-Lagartas"
 
 #: src/input/keyconfig.cpp:172
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "Selecionar todas as Meias-Lagartas sem grupo"
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Hovers"
@@ -16807,7 +16807,7 @@ msgstr "Selecionar todos os veículos movidos por Lagartas"
 
 #: src/input/keyconfig.cpp:177
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "Selecionar todas as Lagartas sem grupo"
 
 #: src/input/keyconfig.cpp:178
 msgid "Select EVERY unit"
@@ -16823,7 +16823,7 @@ msgstr "Selecionar todos os VTOL reabastecidos"
 
 #: src/input/keyconfig.cpp:181
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "Selecionar todos os VTOLs totalmente armados sem grupo"
 
 #: src/input/keyconfig.cpp:182
 msgid "Select all Wheels"
@@ -16843,7 +16843,7 @@ msgstr "Selecionar todas os Cyborgs de Combate"
 
 #: src/input/keyconfig.cpp:187
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "Selecionar todos os Cyborgs de Combate sem grupo"
 
 #: src/input/keyconfig.cpp:188
 msgid "Select all Engineers"
@@ -16855,7 +16855,7 @@ msgstr "Selecionar todas as unidades de combate terrestre"
 
 #: src/input/keyconfig.cpp:190
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "Selecionar todas as Unidades de Combate Terrestres sem grupo"
 
 #: src/input/keyconfig.cpp:191
 msgid "Select all Mechanics"
@@ -16875,7 +16875,7 @@ msgstr "Selecionar todas as unidades de Sensor"
 
 #: src/input/keyconfig.cpp:195
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "Selecionar todas as Unidades de Sensor sem grupo"
 
 #: src/input/keyconfig.cpp:196
 msgid "Select all Trucks"
@@ -16927,11 +16927,11 @@ msgstr "Activar/Desactivar mapeamento debug"
 
 #: src/input/keyconfig.cpp:210
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Priorizar mapeamento de depuração"
 
 #: src/input/keyconfig.cpp:211
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Alternar Editor de Nível"
 
 #: src/input/keyconfig.cpp:212
 msgid "Toggle display of droid path"
@@ -16999,7 +16999,7 @@ msgstr "Seguir um objecto do jogo"
 
 #: src/input/keyconfig.cpp:231
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Ativar/Desativar ecrã inteiro"
 
 #: src/intdisplay.cpp:164
 msgid "Waiting for Power"
@@ -17191,7 +17191,7 @@ msgstr "Notícias de Investigação"
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "Metas e Actualizações do Projecto"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
@@ -17361,15 +17361,15 @@ msgstr "Zoom do radar a %u"
 
 #: src/keybind.cpp:1213
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Alternar prioridade de mapeamento de depuração: "
 
 #: src/keybind.cpp:1223
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Desabilitando editor de nível"
 
 #: src/keybind.cpp:1228
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Ativando editor de níveis"
 
 #: src/keybind.cpp:1312
 msgid "God Mode ON"
@@ -17566,7 +17566,7 @@ msgstr "Radar a mostrar altura"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "<not bound>"
 
 #: src/keyedit.cpp:544
 msgid "KEY MAPPING"
@@ -17754,7 +17754,7 @@ msgstr "Impostos Limites de Estrutura."
 #: src/multiint.cpp:1296
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr ""
+msgstr "%s (%d) alterações no mapa permitidas. Total: %d/%d"
 
 #: src/multiint.cpp:1317
 msgid "Vote"
@@ -17901,7 +17901,7 @@ msgstr "Não usar esta posição"
 
 #: src/multiint.cpp:1870
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Permitir a espectadores entrar no jogo nesta posição"
 
 #: src/multiint.cpp:1954
 msgid "Click to change to this slot"
@@ -17910,21 +17910,21 @@ msgstr "Clique para mudar para esta posição"
 #: src/multiint.cpp:1981
 #, c-format
 msgid "Click to take player slot %<PRIu32>"
-msgstr ""
+msgstr "Clique para ficar com a posição do jogador %<PRIu32>"
 
 #: src/multiint.cpp:2018
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "Clique para mudar o jogador para esta posição"
 
 #: src/multiint.cpp:2035
 #: src/multiint.cpp:3118
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr ""
+msgstr "Espectador %s mudou-se para Jogadores"
 
 #: src/multiint.cpp:2041
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "Não é possível trocar com o anfitrião"
 
 #: src/multiint.cpp:2278
 msgid "Team"
@@ -17936,7 +17936,7 @@ msgstr "Equipa"
 #: src/multiint.cpp:7463
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Espectador"
 
 #: src/multiint.cpp:2299
 #: src/multiint.cpp:4421
@@ -17954,108 +17954,108 @@ msgstr "O anfitrião te expulsou do jogo."
 #: src/multiint.cpp:2336
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "Não foi possível mover %s para Espectadores"
 
 #: src/multiint.cpp:2341
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "O anfitrião moveu %s para Espectadores!"
 
 #: src/multiint.cpp:2364
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Mover para Espectadores"
 
 #: src/multiint.cpp:2385
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Pedir ao Espectador para jogar"
 
 #: src/multiint.cpp:2401
 msgid "Ask to Play"
-msgstr ""
+msgstr "Pedir para jogar"
 
 #: src/multiint.cpp:3002
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "Espectador %s quer permanecer um Espectador"
 
 #: src/multiint.cpp:3006
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "Jogador %s quer continuar jogador"
 
 #: src/multiint.cpp:3014
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "Anfitrião recusou mudar você para um jogador"
 
 #: src/multiint.cpp:3018
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Não foi possível mudar para Espectador"
 
 #: src/multiint.cpp:3046
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "Você quer assistir?"
 
 #: src/multiint.cpp:3047
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "O anfitrião desse jogo quer saber se está disposto a assistir?"
 
 #: src/multiint.cpp:3049
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Você está atualmente como Jogador."
 
 #: src/multiint.cpp:3050
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Sim, posso passar a Espectador!"
 
 #: src/multiint.cpp:3055
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Pretende jogar?"
 
 #: src/multiint.cpp:3056
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "O anfitrião desse jogo quer saber se gostaria de jogar?"
 
 #: src/multiint.cpp:3058
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Você está atualmente como Espectador."
 
 #: src/multiint.cpp:3059
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Sim, quero jogar!"
 
 #: src/multiint.cpp:3102
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "O jogador %s foi movido para Espectadores"
 
 #: src/multiint.cpp:3141
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Espectador gostaria de se tornar um Jogador"
 
 #: src/multiint.cpp:3142
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Espectador \"%s\" gostaria de se tornar um Jogador."
 
 #: src/multiint.cpp:3144
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "No entanto, atualmente não há posições para Jogador abertas."
 
 #: src/multiint.cpp:3146
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Gostaria de trocar este Espectador por um Jogador?"
 
 #: src/multiint.cpp:3147
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Sim, selecione a posição do jogador"
 
 #: src/multiint.cpp:3430
 msgid "Joined:"
-msgstr ""
+msgstr "Entrou:"
 
 #: src/multiint.cpp:3433
 msgid "Ready:"
-msgstr ""
+msgstr "Preparado:"
 
 #: src/multiint.cpp:3611
 #: src/titleui/gamefind.cpp:269
@@ -18064,15 +18064,15 @@ msgstr "Jogadores"
 
 #: src/multiint.cpp:3641
 msgid "Host Options"
-msgstr ""
+msgstr "Opções do Anfitrião"
 
 #: src/multiint.cpp:3922
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Permitir Entrada de Espectador"
 
 #: src/multiint.cpp:3932
 msgid "Lock Teams"
-msgstr ""
+msgstr "Fixar Equipas"
 
 #: src/multiint.cpp:4188
 msgid "Choose Team"
@@ -18100,7 +18100,7 @@ msgstr "Clique para mudar a IA, clique com o botão direito para distribuir a es
 
 #: src/multiint.cpp:4246
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Clique para fechar a posição do espectador"
 
 #: src/multiint.cpp:4262
 msgid "Player ID: "
@@ -18140,15 +18140,15 @@ msgstr "PRONTO?"
 
 #: src/multiint.cpp:4525
 msgid "For Spectator:"
-msgstr ""
+msgstr "Para Espectador:"
 
 #: src/multiint.cpp:4525
 msgid "For Player:"
-msgstr ""
+msgstr "Para Jogador:"
 
 #: src/multiint.cpp:4543
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Escolher posição de Jogador"
 
 #: src/multiint.cpp:4614
 msgid "PLAYERS"
@@ -18156,7 +18156,7 @@ msgstr "JOGADORES"
 
 #: src/multiint.cpp:4718
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Adicionar posição de Espectador"
 
 #: src/multiint.cpp:4794
 msgid "Kicked from game"
@@ -18164,7 +18164,7 @@ msgstr "Expulso do jogo"
 
 #: src/multiint.cpp:5019
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Copiar Texto para Área de Transferência"
 
 #: src/multiint.cpp:5108
 msgid "CHAT"
@@ -18209,19 +18209,19 @@ msgstr "Sem connecção ao anfitrião."
 
 #: src/multiint.cpp:6687
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "O anfitrião me moveu para Jogadores, mas eu não dei permissão para essa mudança. Adeus!"
 
 #: src/multiint.cpp:6689
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "O host tentou mover-nos para Jogadores, mas nós não demos permissão."
 
 #: src/multiint.cpp:6838
 msgid "Cannot change to a map with too few slots for all players."
-msgstr "Não é possível mudar para um mapa sem slots suficientes para todos os jogadores."
+msgstr "Não é possível mudar para um mapa sem posições suficientes para todos os jogadores."
 
 #: src/multiint.cpp:6843
 msgid "Cannot change to a map with fewer slots."
-msgstr "Não é possível mudar para um mapa com menos slots."
+msgstr "Não é possível mudar para um mapa com menos posições."
 
 #: src/multiint.cpp:6943
 msgid "The host has quit."
@@ -18283,29 +18283,29 @@ msgstr "Ping"
 
 #: src/multiint.cpp:8107
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "A versão de Warzone 2100 usada para salvar este arquivo de replay não corresponde à versão em execução atual."
 
 #: src/multiint.cpp:8109
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "Arquivo de replay salvo com: \"%s\""
 
 #: src/multiint.cpp:8111
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "Versão atual do Warzone 2100: \"%s\""
 
 #: src/multiint.cpp:8113
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "Replays geralmente devem ser reproduzidos com a mesma versão usada para salvar o replay."
 
 #: src/multiint.cpp:8115
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "O replay poderá não ser reproduzido com êxito, ou pode haver diferenças na simulação."
 
 #: src/multiint.cpp:8116
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "Versão do Replay Incompatível"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18383,7 +18383,7 @@ msgstr "Limites repostos para os valores iniciais"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "O administrador expulsou-te do jogo."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18447,17 +18447,17 @@ msgstr "Total Enviado/Recebido —"
 #: src/multimenu.cpp:1090
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "Tráfego: %lu/%lu"
 
 #: src/multimenu.cpp:1094
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Descompactado: %lu/%lu"
 
 #: src/multimenu.cpp:1098
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Compactado: %lu/%lu"
 
 #: src/multimenu.cpp:1284
 #, c-format
@@ -18486,19 +18486,19 @@ msgstr "Dados Inválidos!"
 #: src/multiplay.cpp:1122
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "Expulsando automaticamente o jogador %s, comando inválido recebido: %u"
 
 #: src/multiplay.cpp:1124
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Comando de rede não autorizado"
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "REPLAY TERMINOU"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Pressione ESC para sair.)"
 
 #: src/multiplay.cpp:1376
 #, c-format
@@ -18589,11 +18589,11 @@ msgstr "Castanho"
 
 #: src/multiplay.cpp:2377
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Modo Espectador"
 
 #: src/multiplay.cpp:2378
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Você é um espectador. Divirta-se assistindo ao jogo!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18780,28 +18780,28 @@ msgstr[1] "%u unidades seleccionadas"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Tipo de Arma"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
-msgstr ""
+msgstr "Energia/Taxa"
 
 #: src/spectatorwidgets.cpp:735
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Energia atual / Energia por segundo"
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
-msgstr ""
+msgstr "Energia Perdida"
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Armadura Cinética"
 
 #: src/spectatorwidgets.cpp:738
 #: src/spectatorwidgets.cpp:740
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tanques / Cyborgs)"
 
 #: src/structure.cpp:2538
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -18938,7 +18938,7 @@ msgstr "Versão %s"
 
 #: src/titleui/gamefind.cpp:458
 msgid "Join as spectator"
-msgstr ""
+msgstr "Junte-se como espectador"
 
 #: src/titleui/gamefind.cpp:481
 msgid "Your version of Warzone is incompatible with this game."
@@ -19079,24 +19079,24 @@ msgstr "Actualizar Agora"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Aviso de Compatibilidade"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Foi detectado um problema que pode afetar a operação / desempenho da Warzone 2100."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Por favor clique no botão abaixo para mais informações sobre como consertá-lo."
 
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(ID de Aviso: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Mais Informação"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
@@ -19118,11 +19118,11 @@ msgstr "Versão: %s,%s Compilada: %s%s"
 
 #: src/wrappers.cpp:353
 msgid "GAME OVER"
-msgstr ""
+msgstr "FIM DO JOGO"
 
 #: src/wrappers.cpp:354
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "A batalha terminou, você pode sair da sala."
 
 #: src/wzapi.cpp:2337
 msgid "YOU ARE VICTORIOUS!"
