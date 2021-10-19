@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-14 15:39\n"
+"PO-Revision-Date: 2021-10-19 13:16\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -1416,15 +1416,15 @@ msgstr ""
 #: data/base/messages/strings/names.txt:334
 #: po/custom/fromJson.txt:201
 msgid "Advanced Factory Production"
-msgstr ""
+msgstr "Подобрено заводско производство"
 
 #: data/base/messages/strings/names.txt:335
 msgid "Advanced Factory Production Mk2"
-msgstr ""
+msgstr "Подобрено заводско производство Мк. 2"
 
 #: data/base/messages/strings/names.txt:336
 msgid "Advanced Factory Production Mk3"
-msgstr ""
+msgstr "Подобрено заводско производство Мк. 3"
 
 #: data/base/messages/strings/names.txt:342
 msgid "Advanced Repair Facility Upgrade"
@@ -2399,7 +2399,7 @@ msgstr "Повишава скоростта на поправка"
 #: data/mp/messages/strings/resstrings.txt:169
 #: po/custom/fromJson.txt:405
 msgid "All repair facilities upgraded automatically"
-msgstr ""
+msgstr "Всички ремонтни станции се надграждат автоматично"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[0]
@@ -2507,7 +2507,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:188
 #: po/custom/fromJson.txt:3197
 msgid "Increases factory output"
-msgstr ""
+msgstr "Увеличава производителността на заводите"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[0]
@@ -2615,7 +2615,7 @@ msgstr "Роботизирано производство на СВиК"
 #: data/mp/messages/strings/resstrings.txt:203
 #: po/custom/fromJson.txt:3331
 msgid "Increases VTOL factory output"
-msgstr "Увеличава производителността на фабриките за СВиК"
+msgstr "Увеличава производителността на заводите за СВиК"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[3]
@@ -4106,7 +4106,7 @@ msgstr "Производство (F1)"
 #: data/mp/multiplay/script/rules/reticule.js:25
 #: data/mp/multiplay/script/rules/reticule.js:114
 msgid "Manufacture - build factory first"
-msgstr "Производство - първо постройте фабрика"
+msgstr "Производство - първо постройте завод"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
@@ -4313,7 +4313,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:64
 msgid "A factory is now required to manufacture your new vehicle"
-msgstr "Нужна е фабрика, за да произведете новото си МПС"
+msgstr "Нужен е завод, за да произведете новото си МПС"
 
 #: data/base/script/tutorial.js:66
 msgid "Now left click the factory icon and position it at your base"
@@ -4321,7 +4321,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:67
 msgid "Select a location for your factory"
-msgstr ""
+msgstr "Изберете място за завода си"
 
 #: data/base/script/tutorial.js:68
 msgid "The delivery point is indicated by the number 1"
@@ -4341,7 +4341,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:72
 msgid "The factory can now be ordered to build a new unit"
-msgstr "Сега фабриката може да произведе нова бойна единица"
+msgstr "Заводът вече може да произведе нова бойна единица"
 
 #: data/base/script/tutorial.js:73
 msgid "Left click the flashing MANUFACTURE icon"
@@ -4353,7 +4353,7 @@ msgstr "Сега кликнете върху единиците от менют�
 
 #: data/base/script/tutorial.js:76
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Моля изчакайте докато фабриката произвежда новата бойна единица"
+msgstr "Моля изчакайте докато заводът произвежда новата бойна единица"
 
 #: data/base/script/tutorial.js:78
 msgid "Congratulations commander - you are ready for your first mission"
@@ -6172,7 +6172,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:235
 msgid "Advanced Repair Facility"
-msgstr ""
+msgstr "Подобрена ремонтна станция"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RFU7.text[1]
@@ -7005,13 +7005,13 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade02.name
 #: po/custom/fromJson.txt:941
 msgid "Automated Factory Production Mk2"
-msgstr ""
+msgstr "Автоматизирано заводско производство Мк. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade03.name
 #: po/custom/fromJson.txt:944
 msgid "Automated Factory Production Mk3"
-msgstr ""
+msgstr "Автоматизирано заводско производство Мк. 3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[1]
@@ -7020,7 +7020,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FU1.text[1]
 #: po/custom/fromJson.txt:950
 msgid "Automated Factory Production"
-msgstr ""
+msgstr "Автоматизирано заводско производство"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade01.name
@@ -7052,7 +7052,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade01.name
 #: po/custom/fromJson.txt:967
 msgid "Automated Repair Facility"
-msgstr ""
+msgstr "Автоматизирана ремонтна станция"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
@@ -7978,7 +7978,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1627
 msgid "Cyborg Factory"
-msgstr "Фабрика за киборги"
+msgstr "Завод за киборги"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgFlamer01.name
@@ -8425,7 +8425,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0FacMod1.name
 #: po/custom/fromJson.txt:1967
 msgid "Factory Module"
-msgstr "Фабричен модул"
+msgstr "Заводска пристройка"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
@@ -8454,7 +8454,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0LightFactory.name
 #: po/custom/fromJson.txt:1984
 msgid "Factory"
-msgstr "Фабрика"
+msgstr "Завод"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
@@ -10908,7 +10908,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[3]
 #: po/custom/fromJson.txt:3718
 msgid "May be upgraded using factory modules"
-msgstr ""
+msgstr "Може да бъде надграден с пристройки"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
@@ -12410,7 +12410,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0RepairCentre3.name
 #: po/custom/fromJson.txt:4744
 msgid "Repair Facility"
-msgstr ""
+msgstr "Ремонтна станция"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
@@ -12594,19 +12594,19 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade05.name
 #: po/custom/fromJson.txt:4876
 msgid "Robotic Factory Production Mk2"
-msgstr ""
+msgstr "Роботизирано заводско производство Мк. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade06.name
 #: po/custom/fromJson.txt:4879
 msgid "Robotic Factory Production Mk3"
-msgstr ""
+msgstr "Роботизирано заводско производство Мк. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 #: po/custom/fromJson.txt:4882
 msgid "Robotic Factory Production"
-msgstr ""
+msgstr "Роботизирано заводско производство"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[1]
@@ -12645,7 +12645,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 #: po/custom/fromJson.txt:4903
 msgid "Robotic Repair Facility"
-msgstr ""
+msgstr "Роботизирана ремонтна станция"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
@@ -12810,7 +12810,7 @@ msgstr ""
 #. data/base/stats/features.json: $.BarbTechRuin.name
 #: po/custom/fromJson.txt:5009
 msgid "Ruined Factory"
-msgstr "Срутена фабрика"
+msgstr "Срутен завод"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_SAM1.text[1]
@@ -12844,7 +12844,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5032
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Вехтошарска фабрика за хеликоптери"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -14020,7 +14020,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[3]
 #: po/custom/fromJson.txt:5786
 msgid "Use a truck to add modules to a factory"
-msgstr "Използвайте камиони, за да добавите модули към фабриките"
+msgstr "Използвайте камиони, за да добавите пристройки към заводите"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[3]
@@ -14337,7 +14337,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[1]
 #: po/custom/fromJson.txt:6001
 msgid "VTOL factory enables VTOL production"
-msgstr "Фабриката за СВиК позволява производството на СВиК"
+msgstr "Заводът за СВиК позволява производството на СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory.name
@@ -14346,7 +14346,7 @@ msgstr "Фабриката за СВиК позволява производст
 #. data/mp/stats/structure.json: $.A0VTolFactory1.name
 #: po/custom/fromJson.txt:6007
 msgid "VTOL Factory"
-msgstr "Фабрика за СВиК"
+msgstr "Завод за СВиК"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAM-VTOL.name
@@ -15000,7 +15000,7 @@ msgstr "Разреши сенки"
 
 #: src/clparse.cpp:375
 msgid "Disable shadows"
-msgstr ""
+msgstr "Забрани сенки"
 
 #: src/clparse.cpp:376
 msgid "Enable sound"
@@ -15008,7 +15008,7 @@ msgstr "Разреши звук"
 
 #: src/clparse.cpp:377
 msgid "Disable sound"
-msgstr ""
+msgstr "Забрани звук"
 
 #: src/clparse.cpp:378
 msgid "Connect directly to IP/hostname"
@@ -15029,11 +15029,11 @@ msgstr ""
 
 #: src/clparse.cpp:381
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Разреши компресиране на текстури"
 
 #: src/clparse.cpp:382
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Забрани компресиране на текстури"
 
 #: src/clparse.cpp:383
 msgid "Set gfx backend"
@@ -16115,7 +16115,7 @@ msgstr "Напредък по строежа"
 
 #: src/hci/manufacture.cpp:631
 msgid "Factory Delivery Point"
-msgstr "Сборна точка на фабриката"
+msgstr "Сборна точка на завода"
 
 #: src/hci/manufacture.cpp:682
 msgid "Loop Production"
@@ -16868,7 +16868,7 @@ msgstr "Изберете всички камиони"
 
 #: src/input/keyconfig.cpp:198
 msgid "Select next Factory"
-msgstr "Избиране на следващата фабрика"
+msgstr "Избиране на следващия завод"
 
 #: src/input/keyconfig.cpp:199
 msgid "Select next Research Facility"
@@ -16880,15 +16880,15 @@ msgstr "Избиране на следващия електрогенарато�
 
 #: src/input/keyconfig.cpp:201
 msgid "Select next Cyborg Factory"
-msgstr "Избиране на следващата фабрика за киборги"
+msgstr "Избиране на следващия завод за киборги"
 
 #: src/input/keyconfig.cpp:202
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Избиране на следващия завод за СВиК"
 
 #: src/input/keyconfig.cpp:203
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Скок до следващия завод"
 
 #: src/input/keyconfig.cpp:204
 msgid "Jump to next Research Facility"
@@ -16900,11 +16900,11 @@ msgstr "Скок до следващия електрогенаратор"
 
 #: src/input/keyconfig.cpp:206
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Скок до следващия завод за киборги"
 
 #: src/input/keyconfig.cpp:207
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Скок до следващия завод за СВиК"
 
 #: src/input/keyconfig.cpp:209
 msgid "Toggle Debug Mappings"
@@ -17196,11 +17196,11 @@ msgstr ""
 
 #: src/intorder.cpp:184
 msgid "Assign Factory Production"
-msgstr ""
+msgstr "Зачисли произведеното от завода"
 
 #: src/intorder.cpp:185
 msgid "Assign Cyborg Factory Production"
-msgstr ""
+msgstr "Зачисли киборгите, произведени от завода"
 
 #: src/intorder.cpp:186
 msgid "Assign Fire Support"
@@ -17208,7 +17208,7 @@ msgstr ""
 
 #: src/intorder.cpp:187
 msgid "Assign VTOL Factory Production"
-msgstr ""
+msgstr "Зачисли СВиК, произведени от завода"
 
 #: src/intorder.cpp:188
 msgid "Circle"
@@ -17714,11 +17714,11 @@ msgstr ""
 
 #: src/multiint.cpp:1170
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "Танкове забранени!!"
 
 #: src/multiint.cpp:1171
 msgid "Cyborgs disabled."
-msgstr ""
+msgstr "Киборги забранени."
 
 #: src/multiint.cpp:1172
 msgid "VTOLs disabled."
