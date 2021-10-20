@@ -453,6 +453,7 @@ static bool gameInit()
 	{
 		playerCount += NetPlay.players[index].ai >= 0 || NetPlay.players[index].allocated;
 	}
+	debug(LOG_NET, "Player count: %u", playerCount);
 
 	playerResponding();			// say howdy!
 
