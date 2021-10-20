@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-20 01:16\n"
+"PO-Revision-Date: 2021-10-20 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -34,7 +34,7 @@ msgstr "Това съоръжение съдържа технология, жи�
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "МИСИЯ КЪМ БАЗА АЛФА: Вехтошари нашественици"
+msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Вехтошари нашественици"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
@@ -47,7 +47,7 @@ msgstr "Отбранявайте базата, след което унищож�
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "МИСИЯ КЪМ БАЗА АЛФА: Засечен енергиен скок"
+msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Засечен енергиен скок"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
@@ -59,7 +59,7 @@ msgstr "Проучете и подсигурете местността."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "МИСИЯ КЪМ БАЗА АЛФА: Новата Парадигма"
+msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Новата Парадигма"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -144,7 +144,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr ""
+msgstr "ЗАДАЧА С ПРЕВОЗ: Вражеска база в строеж"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
@@ -156,7 +156,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "МИСИЯ КЪМ БАЗА АЛФА: Установете база на предна позиция"
+msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Установете база на предна позиция"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
@@ -168,7 +168,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "МИСИЯ НА БАЗА АЛФА: Контраатака"
+msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Контраатака"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -180,7 +180,7 @@ msgstr "Задръжте базата и отблъснете всякакви �
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "МИСИЯ КЪМ БАЗА АЛФА: Входящо съобщение"
+msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Входящо съобщение"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
@@ -200,7 +200,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Намерете и приберете артефакти"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
