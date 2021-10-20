@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-19 13:16\n"
+"PO-Revision-Date: 2021-10-20 01:16\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -14861,7 +14861,7 @@ msgstr ""
 #: src/chat.cpp:169
 #: src/multiint.cpp:3625
 msgid "Spectators"
-msgstr ""
+msgstr "Зрители"
 
 #: src/cheat.cpp:212
 #, c-format
@@ -15320,7 +15320,7 @@ msgstr ""
 #: src/display3d.cpp:758
 #: src/multiint.cpp:4368
 msgid "Waiting for other players"
-msgstr ""
+msgstr "В очакване на други играчи"
 
 #: src/display3d.cpp:763
 msgid "Out of sync"
@@ -17688,7 +17688,7 @@ msgstr ""
 
 #: src/multiint.cpp:265
 msgid "Medium"
-msgstr ""
+msgstr "Средно"
 
 #: src/multiint.cpp:385
 #: src/multiplay.cpp:571
