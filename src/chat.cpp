@@ -79,6 +79,10 @@ std::string InGameChatMessage::formatReceivers() const
 	while (directs != toPlayers.end())
 	{
 		auto nextName = getPlayerName(*directs++);
+		if (!nextName)
+		{
+			continue;
+		}
 		ss << (directs == toPlayers.end() ? _(" and ") : ", ");
 		ss << nextName;
 	}
@@ -193,7 +197,11 @@ void InGameChatMessage::enqueueSpectatorMessage(NETQUEUE queue, char const* form
 
 void InGameChatMessage::addReceiverByPosition(uint32_t playerPosition)
 {
-	toPlayers.insert(findPlayerIndexByPosition(playerPosition));
+	int32_t playerIndex = findPlayerIndexByPosition(playerPosition);
+	if (playerIndex >= 0)
+	{
+		toPlayers.insert(playerIndex);
+	}
 }
 
 void InGameChatMessage::addReceiverByIndex(uint32_t playerIndex)

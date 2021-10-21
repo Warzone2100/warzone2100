@@ -557,7 +557,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 // return a players name.
 const char *getPlayerName(int player)
 {
-	ASSERT_OR_RETURN(nullptr, player >= 0, "Wrong player index: %u", player);
+	ASSERT_OR_RETURN(nullptr, player >= 0, "Wrong player index: %d", player);
 
 	// playerName is created through setPlayerName()
 	if (player < MAX_PLAYERS && strcmp(playerName[player], "") != 0)
