@@ -226,6 +226,7 @@ public:
 	virtual void display(int xOffset, int yOffset);
 
 	void closeAnimateDelete();              ///< Animates the form closing, and deletes itself when done.
+	bool isClosing() const;
 
 private:
 	unsigned        startTime;              ///< Animation start time
