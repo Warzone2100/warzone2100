@@ -771,16 +771,29 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	result->table->setMinimumColumnWidths(minimumColumnWidths);
 
 	// Add rows for all players
+	std::vector<uint32_t> playerIndexes;
 	for (uint32_t player = 0; player < std::min<uint32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
 		if (isHumanPlayer(player) || NetPlay.players[player].ai >= 0)
 		{
-			result->table->addRow(result->newPlayerStatsRow(player));
+			playerIndexes.push_back(player);
 		}
 		if (player == selectedPlayer && !NetPlay.players[player].isSpectator)
 		{
 			return nullptr;
 		}
+	}
+	// sort by player position
+	std::sort(playerIndexes.begin(), playerIndexes.end(), [](uint32_t playerA, uint32_t playerB) -> bool {
+		return NetPlay.players[playerA].position < NetPlay.players[playerB].position;
+	});
+	for (auto player : playerIndexes)
+	{
+		if (player == selectedPlayer && !NetPlay.players[player].isSpectator)
+		{
+			return nullptr;
+		}
+		result->table->addRow(result->newPlayerStatsRow(player));
 	}
 
 	result->table->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
