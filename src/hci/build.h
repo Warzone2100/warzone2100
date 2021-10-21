@@ -61,6 +61,7 @@ public:
 	void startBuildPosition(STRUCTURE_STATS *buildOption);
 	bool showInterface() override;
 	void refresh() override;
+	void clearData() override;
 	void toggleBuilderSelection(DROID *droid);
 	std::shared_ptr<StatsForm> makeStatsForm() override;
 

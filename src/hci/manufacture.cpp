@@ -155,6 +155,13 @@ void ManufactureController::refresh()
 	}
 }
 
+void ManufactureController::clearData()
+{
+	factories.clear();
+	setHighlightedObject(nullptr);
+	stats.clear();
+}
+
 void ManufactureController::setHighlightedObject(BASE_OBJECT *object)
 {
 	if (object == nullptr)

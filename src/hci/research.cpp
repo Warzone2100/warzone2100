@@ -108,6 +108,13 @@ void ResearchController::refresh()
 	}
 }
 
+void ResearchController::clearData()
+{
+	facilities.clear();
+	setHighlightedObject(nullptr);
+	stats.clear();
+}
+
 void ResearchController::startResearch(RESEARCH &research)
 {
 	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);

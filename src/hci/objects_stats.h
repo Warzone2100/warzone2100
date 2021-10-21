@@ -21,6 +21,8 @@ public:
 	virtual bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const = 0;
 	virtual void refresh() = 0;
 	virtual bool showInterface() = 0;
+	virtual void prepareToClose();
+	virtual void clearData() = 0;
 	void jumpToObject(BASE_OBJECT *object);
 	void updateHighlighted();
 	void clearSelection();

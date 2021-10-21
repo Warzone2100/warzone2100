@@ -1194,6 +1194,10 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 	intRemoveDesign();
 	intHidePowerBar();
 
+	if (interfaceController)
+	{
+		interfaceController->prepareToClose();
+	}
 	interfaceController = nullptr;
 	setSecondaryWindowUp(false);
 	intMode = INT_NORMAL;

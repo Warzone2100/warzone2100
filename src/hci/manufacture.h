@@ -53,6 +53,7 @@ public:
 	void startDeliveryPointPosition();
 	bool showInterface() override;
 	void refresh() override;
+	void clearData() override;
 	std::shared_ptr<StatsForm> makeStatsForm() override;
 
 	STRUCTURE *getHighlightedObject() const override
