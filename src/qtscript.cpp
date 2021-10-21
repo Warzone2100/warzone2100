@@ -2152,7 +2152,7 @@ wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string lab
 	SCRIPT_ASSERT({}, context, labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
 	LABEL &label = labels[labelName];
 	label.triggered = 0; // make active again
-	label.subscriber = (playerFilter.has_value()) ? playerFilter.value() : ALL_PLAYERS;
+	label.subscriber = playerFilter.value_or(ALL_PLAYERS);
 	return {};
 }
 
@@ -2511,8 +2511,8 @@ std::vector<const BASE_OBJECT *> scripting_engine::enumArea(WZAPI_PARAMS(scr_are
 std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> _playerFilter, optional<bool> _seen))
 {
 	int player = context.player();
-	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
-	bool seen = (_seen.has_value()) ? _seen.value() : true;
+	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
+	bool seen = _seen.value_or(true);
 
 	static GridList gridList;  // static to avoid allocations. // not thread-safe
 	gridList = gridStartIterateArea(x1, y1, x2, y2);
