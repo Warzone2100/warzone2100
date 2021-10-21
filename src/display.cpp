@@ -200,7 +200,7 @@ void incrementViewDistance(float amount)
 	auto target = (viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance()) + amount;
 	if (!dbgInputManager.debugMappingsAllowed())
 	{
-		CLIP(target, MINDISTANCE, MAXDISTANCE);
+		CLIP(target, MINDISTANCE, (!NETisReplay()) ? MAXDISTANCE : MAXDISTANCE_REPLAY);
 	}
 
 	animateToViewDistance(target);
