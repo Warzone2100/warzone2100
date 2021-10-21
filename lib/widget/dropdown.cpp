@@ -138,9 +138,15 @@ void DropdownWidget::close()
 	widgScheduleTask([pWeakThis]() {
 		if (auto dropdownWidget = pWeakThis.lock())
 		{
-			widgRemoveOverlayScreen(dropdownWidget->overlayScreen);
-			dropdownWidget->overlayScreen->psForm->detach(dropdownWidget->itemsList);
-			dropdownWidget->overlayScreen = nullptr;
+			if (dropdownWidget->overlayScreen != nullptr)
+			{
+				widgRemoveOverlayScreen(dropdownWidget->overlayScreen);
+				if (dropdownWidget->overlayScreen->psForm)
+				{
+					dropdownWidget->overlayScreen->psForm->detach(dropdownWidget->itemsList);
+				}
+				dropdownWidget->overlayScreen = nullptr;
+			}
 		}
 	});
 }
