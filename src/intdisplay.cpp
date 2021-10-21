@@ -671,6 +671,11 @@ void IntFormAnimated::closeAnimateDelete()
 	disableChildren = true;
 }
 
+bool IntFormAnimated::isClosing() const
+{
+	return currentAction >= 3;
+}
+
 void IntFormAnimated::display(int xOffset, int yOffset)
 {
 	WzRect aOpen(xOffset + x(), yOffset + y(), width(), height());
