@@ -1210,6 +1210,12 @@ bool stageTwoInitialise()
 	// reinitialise key mappings
 	gInputManager.resetMappings(false, gKeyFuncConfig);
 
+	if (NETisReplay())
+	{
+		// Debug keybinds start enabled for replays
+		gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::ACTIVE);
+	}
+
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.
 	wzSetCursor(CURSOR_DEFAULT);

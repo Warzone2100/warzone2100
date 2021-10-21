@@ -236,7 +236,10 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	else if (oldDebugMode && !newDebugMode)
 	{
 		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
-		gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::INACTIVE);
+		if (!NETisReplay())
+		{
+			gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::INACTIVE);
+		}
 		triggerEventCheatMode(false);
 	}
 }
