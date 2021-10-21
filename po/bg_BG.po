@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-20 13:13\n"
+"PO-Revision-Date: 2021-10-21 01:14\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -34,7 +34,7 @@ msgstr "Това съоръжение съдържа технология, жи�
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Вехтошари нашественици"
+msgstr "МИСИЯ ЗА БАЗА АЛФА: Вехтошари нашественици"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
@@ -47,7 +47,7 @@ msgstr "Отбранявайте базата, след което унищож�
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Засечен енергиен скок"
+msgstr "МИСИЯ ЗА БАЗА АЛФА: Засечен енергиен скок"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
@@ -59,7 +59,7 @@ msgstr "Проучете и подсигурете местността."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Новата Парадигма"
+msgstr "МИСИЯ ЗА БАЗА АЛФА: Новата Парадигма"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -71,7 +71,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Намерете и приберете артефакти"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -96,7 +96,7 @@ msgstr "Налични са подкрепления."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "ТРАНСПОРТНА МИСИЯ: Засечени кодирани сигнали"
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Засечени кодирани сигнали"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
@@ -108,7 +108,7 @@ msgstr "Използвайте камионите си, за да построи
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Засечени вражески сигнали"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
@@ -132,7 +132,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Нови цели"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -140,27 +140,27 @@ msgstr "Новата Парадигма търсят артефакти в та�
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "Пресрещнете ги. Не допускайте никой да напусне местността."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "ЗАДАЧА С ПРЕВОЗ: Вражеска база в строеж"
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Вражеска база в строеж"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "Вражески сили издигат база на това място."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "Заличете базата и подсигурете местността."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Установете база на предна позиция"
+msgstr "МИСИЯ ЗА БАЗА АЛФА: Установете база на предна позиция"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Установете база на предна позиция върху платото и отблъснете Новата Парадигма."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
@@ -168,7 +168,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Контраатака"
+msgstr "МИСИЯ ЗА БАЗА АЛФА: Контраатака"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -180,7 +180,7 @@ msgstr "Задръжте базата и отблъснете всякакви �
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Входящо съобщение"
+msgstr "МИСИЯ ЗА БАЗА АЛФА: Входящо съобщение"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
@@ -188,7 +188,7 @@ msgstr "Засичаме вражески сили на тези местона�
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "Това е шансът ни да победим Новата Парадигма и да унищожим базата им."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -196,11 +196,11 @@ msgstr "Поздравления, Командире."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Имаме следваща задача за вас."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "ЗАДАЧА КЪМ БАЗА АЛФА: Намерете и приберете артефакти"
+msgstr "МИСИЯ ЗА БАЗА АЛФА: Намерете и приберете артефакти"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
@@ -288,7 +288,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "ВХОДЯЩО СЪОБЩЕНИЕ"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
@@ -332,7 +332,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "Това съобщение бе прихванато преди няколко минути."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
@@ -383,7 +383,7 @@ msgstr ""
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr "МИСИЯ ПРИ БАЗА БЕТА: Източен Сектор"
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Източен Сектор"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
@@ -397,7 +397,7 @@ msgstr "Наложително е да я отбранявате и задърж
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr "МИСИЯ ПРИ БАЗА БЕТА: Отбранете и Укрепете"
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Отбранете и укрепете"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
@@ -455,7 +455,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Удръжте на всяка цена"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
@@ -463,7 +463,7 @@ msgstr "Засичаме кодиран сигнален поток от Кол�
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Удръжте на всяка цена"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
@@ -541,7 +541,7 @@ msgstr "После разрушете лагера."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Унищожете вражеска въздушна база и приберете СВиК."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
@@ -549,7 +549,7 @@ msgstr "Анализ на полетните траектории показва
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Унищожете вражеска въздушна база и приберете СВиК"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -603,7 +603,7 @@ msgstr "Не позволявайте на Колектива да задейс�
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr ""
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Превземете централата на NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
@@ -676,7 +676,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "МИСИЯ ЗА БАЗА БЕТА: Оцелейте и се евакуирайте! Вземете камион"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -735,7 +735,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Установете база на предна позиция"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
@@ -804,7 +804,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
+msgstr "Последното им съобщение показва, че са се насочили обратно към базата."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
@@ -836,7 +836,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr "ТРАНСПОРТНА МИСИЯ: Засечен екип Алфа"
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Засечен екип Алфа"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -1227,7 +1227,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:251
 #: po/custom/fromJson.txt:2905
 msgid "Howitzer Emplacement"
-msgstr ""
+msgstr "Установка с Гаубица"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyHowitzer.name
@@ -1238,7 +1238,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:252
 #: po/custom/fromJson.txt:2268
 msgid "Ground Shaker Emplacement"
-msgstr ""
+msgstr "Установка със Земетръс"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotHow.name
@@ -2562,7 +2562,7 @@ msgstr "Всички изследователски лаборатории се 
 #: data/mp/messages/strings/resstrings.txt:196
 #: po/custom/fromJson.txt:3193
 msgid "Increases Damage Resistance"
-msgstr ""
+msgstr "Увеличава устойчивостта на поражения"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
@@ -2699,7 +2699,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:996
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "Автоматично поправя повредените единици"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
@@ -3598,7 +3598,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:368
 #: po/custom/fromJson.txt:3204
 msgid "Increases Flamer damage"
-msgstr ""
+msgstr "Увеличава пораженията от огнехвъргачките"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[3]
@@ -3710,7 +3710,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:388
 #: po/custom/fromJson.txt:3214
 msgid "Increases Howitzer accuracy"
-msgstr ""
+msgstr "Увеличава точността на гаубиците"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[3]
@@ -3765,7 +3765,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:398
 #: po/custom/fromJson.txt:3222
 msgid "Increases Howitzer ROF"
-msgstr ""
+msgstr "Увеличава скорострелността на гаубиците"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[0]
@@ -4425,7 +4425,7 @@ msgstr "Входящо съобщение"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
-msgstr ""
+msgstr "Съобщение от База Бета"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
@@ -5602,7 +5602,7 @@ msgstr "Команден купол IV"
 #: src/multistat.cpp:310
 #: src/spectatorwidgets.cpp:733
 msgid "Player"
-msgstr ""
+msgstr "Играч"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
@@ -5684,19 +5684,19 @@ msgstr "Започнете с развити бази"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "ЛЕСНО"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "СРЕДНО"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "ТРУДНО"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "БЕЗУМНО"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
@@ -8108,7 +8108,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Transporter.name
 #: po/custom/fromJson.txt:1730
 msgid "Cyborg Transport"
-msgstr ""
+msgstr "Пехотен транспортьор"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text[2]
@@ -8235,7 +8235,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WreckedTransporter.name
 #: po/custom/fromJson.txt:1838
 msgid "Downed Transport"
-msgstr ""
+msgstr "Свален транспортьор"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.Body14SUP.name
@@ -8888,7 +8888,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Howitzer150Mk1.name
 #: po/custom/fromJson.txt:2272
 msgid "Ground Shaker"
-msgstr ""
+msgstr "Земетръс"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
@@ -9394,7 +9394,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-HvyHowitzer.name
 #: po/custom/fromJson.txt:2584
 msgid "Heavy Howitzer - Ground Shaker"
-msgstr ""
+msgstr "Тежка Гаубица - Земетръс"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HeavyLas.name
@@ -9859,7 +9859,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 #: po/custom/fromJson.txt:2925
 msgid "Howitzer"
-msgstr ""
+msgstr "Гаубица"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadMg1.name
@@ -10136,20 +10136,20 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3106
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Установка с Фугасна Гаубица 2"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
 #: po/custom/fromJson.txt:3109
 msgid "Incendiary howitzer emplacement"
-msgstr ""
+msgstr "Установка с фугасна гаубица"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3113
 msgid "Incendiary Howitzer Emplacement"
-msgstr ""
+msgstr "Установка с Фугасна Гаубица"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -10162,7 +10162,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3120
 msgid "Incendiary Howitzer"
-msgstr ""
+msgstr "Фугасна Гаубица"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
@@ -11326,7 +11326,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
 #: po/custom/fromJson.txt:3977
 msgid "Multi Turret Body - Dragon"
-msgstr ""
+msgstr "Многокуполен корпус - Дракон"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[1]
@@ -13345,7 +13345,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:5362
 msgid "Super Transport Body"
-msgstr ""
+msgstr "Корпус за Супертранспортьор"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
@@ -13797,7 +13797,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.TransporterBody.name
 #: po/custom/fromJson.txt:5646
 msgid "Transport Body"
-msgstr ""
+msgstr "Корпус за Транспортьор"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Transporter.name
@@ -15514,7 +15514,7 @@ msgstr "Зареждане на сражение"
 
 #: src/frontend.cpp:346
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Покажи запис от сражение"
 
 #: src/frontend.cpp:348
 msgid "SINGLE PLAYER"
@@ -15541,7 +15541,7 @@ msgstr "Зареждане на съхранено сражение"
 
 #: src/frontend.cpp:519
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Зареждане на запис от сражение"
 
 #: src/frontend.cpp:580
 msgid "MULTI PLAYER"
@@ -15557,7 +15557,7 @@ msgstr "Присъединяване към игра"
 
 #: src/frontend.cpp:584
 msgid "View Replay"
-msgstr ""
+msgstr "Вижте записите"
 
 #: src/frontend.cpp:589
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15565,7 +15565,7 @@ msgstr "TCP порт 2100 трябва да бъде отворен в защи�
 
 #: src/frontend.cpp:634
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Зареди запис от групова игра"
 
 #: src/frontend.cpp:673
 #: src/multiint.cpp:1380
@@ -15717,7 +15717,7 @@ msgstr "Сенки"
 
 #: src/frontend.cpp:830
 msgid "Fog"
-msgstr ""
+msgstr "Мъгла"
 
 #: src/frontend.cpp:835
 #: src/ingameop.cpp:624
@@ -15790,7 +15790,7 @@ msgstr ""
 
 #: src/frontend.cpp:1066
 msgid "Radar Zoom"
-msgstr ""
+msgstr "Мащаб на радара"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15963,7 +15963,7 @@ msgstr "Схватка/Групова игра"
 #: src/frontend.cpp:2016
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Помогнете ни да подобрим превода на Warzone 2100: %s"
 
 #: src/frontend.cpp:2018
 msgid "Click to open webpage."
@@ -15976,11 +15976,11 @@ msgstr "ОПЦИИ ЗА ИГРАТА"
 
 #: src/frontend.cpp:2066
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Безумна трудност"
 
 #: src/frontend.cpp:2067
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Тази трудност е за много обиграни играчи!"
 
 #: src/frontend.cpp:2169
 #: src/multiint.cpp:5112
@@ -16191,11 +16191,11 @@ msgstr ""
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Внимание: Сигурни ли сте?"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Внимание: Сигурни ли сте? Всякакъв незапазен напредък ще бъде изгубен."
 
 #: src/ingameop.cpp:323
 msgid "Confirm"
@@ -17117,11 +17117,11 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:612
 #: src/integrations/wzdiscordrpc.cpp:802
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "В Лоби"
 
 #: src/integrations/wzdiscordrpc.cpp:638
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "В Групова игра"
 
 #: src/integrations/wzdiscordrpc.cpp:834
 #, c-format
@@ -17638,13 +17638,13 @@ msgstr ""
 #: src/multigifts.cpp:239
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr ""
+msgstr "%s ви предоставя отчет за видимостта"
 
 #: src/multigifts.cpp:255
 #: src/multigifts.cpp:281
 #, c-format
 msgid "%s Gives you a %s"
-msgstr ""
+msgstr "%s ви предоставя %s"
 
 #: src/multigifts.cpp:331
 #, c-format
@@ -17654,32 +17654,32 @@ msgstr ""
 #: src/multigifts.cpp:372
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr ""
+msgstr "%s ви предоставя технически документи"
 
 #: src/multigifts.cpp:431
 #, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s Ви предоставя %d единици енергия"
+msgstr "%s ви предоставя %d единици енергия"
 
 #: src/multigifts.cpp:457
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr ""
+msgstr "%s иска съюз с вас"
 
 #: src/multigifts.cpp:466
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr ""
+msgstr "Поканихте %s за сключване на съюз"
 
 #: src/multigifts.cpp:487
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr ""
+msgstr "%s скъсва съюза си с %s"
 
 #: src/multigifts.cpp:518
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr ""
+msgstr "%s сформира съюз с %s"
 
 #: src/multigifts.cpp:758
 #, c-format
@@ -17734,7 +17734,7 @@ msgstr ""
 
 #: src/multiint.cpp:1175
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Наложени ограничения върху постройките."
 
 #: src/multiint.cpp:1296
 #, c-format
@@ -17743,7 +17743,7 @@ msgstr ""
 
 #: src/multiint.cpp:1317
 msgid "Vote"
-msgstr ""
+msgstr "Гласувайте"
 
 #: src/multiint.cpp:1318
 msgid "Allow host to change map or randomize?"
@@ -17802,11 +17802,11 @@ msgstr "База"
 
 #: src/multiint.cpp:1502
 msgid "Map Preview"
-msgstr ""
+msgstr "Покажи картата"
 
 #: src/multiint.cpp:1503
 msgid "Click to see Map"
-msgstr ""
+msgstr "Кликнете, за да видите картата"
 
 #: src/multiint.cpp:1509
 msgid "Show Structure Limits"
@@ -17818,7 +17818,7 @@ msgstr "Ограничения на съоръженията"
 
 #: src/multiint.cpp:1523
 msgid "Random Game Options"
-msgstr ""
+msgstr "Случайни настройки на играта"
 
 #: src/multiint.cpp:1524
 msgid "Random Game Options\n"
@@ -17831,28 +17831,28 @@ msgstr ""
 
 #: src/multiint.cpp:1536
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Технологично ниво 1"
 
 #: src/multiint.cpp:1537
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Технологично ниво 2"
 
 #: src/multiint.cpp:1538
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Технологично ниво 3"
 
 #: src/multiint.cpp:1539
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Технологично ниво 4"
 
 #: src/multiint.cpp:1548
 #: src/multiint.cpp:1549
 msgid "Start Hosting Game"
-msgstr ""
+msgstr "Започнете хостване"
 
 #: src/multiint.cpp:1711
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "ТРУДНОСТ"
 
 #: src/multiint.cpp:1741
 msgid "Starts disadvantaged"
@@ -17884,7 +17884,7 @@ msgstr ""
 
 #: src/multiint.cpp:1870
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Позволи на зрители да се присъединяват в този слот"
 
 #: src/multiint.cpp:1954
 msgid "Click to change to this slot"
@@ -17911,7 +17911,7 @@ msgstr ""
 
 #: src/multiint.cpp:2278
 msgid "Team"
-msgstr ""
+msgstr "Отбор"
 
 #: src/multiint.cpp:2288
 #: src/multiint.cpp:4184
@@ -18055,15 +18055,15 @@ msgstr ""
 
 #: src/multiint.cpp:3932
 msgid "Lock Teams"
-msgstr ""
+msgstr "Заключи отборите"
 
 #: src/multiint.cpp:4188
 msgid "Choose Team"
-msgstr ""
+msgstr "Изберете отбор"
 
 #: src/multiint.cpp:4192
 msgid "Teams locked"
-msgstr ""
+msgstr "Отбори заключени"
 
 #: src/multiint.cpp:4212
 msgid "Click to change player colour"
@@ -18476,7 +18476,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "ЗАПИСЪТ СВЪРШИ"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
@@ -18507,75 +18507,75 @@ msgstr "Маяк %d"
 #: src/multiplay.cpp:2155
 #, c-format
 msgid "Beacon received from %s!"
-msgstr ""
+msgstr "Получен маяк от %s!"
 
 #: src/multiplay.cpp:2206
 msgid "Green"
-msgstr ""
+msgstr "Зелен"
 
 #: src/multiplay.cpp:2207
 msgid "Orange"
-msgstr ""
+msgstr "Оранжев"
 
 #: src/multiplay.cpp:2208
 msgid "Grey"
-msgstr ""
+msgstr "Сив"
 
 #: src/multiplay.cpp:2210
 msgid "Red"
-msgstr ""
+msgstr "Червен"
 
 #: src/multiplay.cpp:2211
 msgid "Blue"
-msgstr ""
+msgstr "Син"
 
 #: src/multiplay.cpp:2212
 msgid "Pink"
-msgstr ""
+msgstr "Розов"
 
 #: src/multiplay.cpp:2213
 msgid "Cyan"
-msgstr ""
+msgstr "Циан"
 
 #: src/multiplay.cpp:2214
 msgid "Yellow"
-msgstr ""
+msgstr "Жълт"
 
 #: src/multiplay.cpp:2215
 msgid "Purple"
-msgstr ""
+msgstr "Лилав"
 
 #: src/multiplay.cpp:2216
 msgid "White"
-msgstr ""
+msgstr "Бял"
 
 #: src/multiplay.cpp:2217
 msgid "Bright blue"
-msgstr ""
+msgstr "Яркосин"
 
 #: src/multiplay.cpp:2218
 msgid "Neon green"
-msgstr ""
+msgstr "Неоновозелен"
 
 #: src/multiplay.cpp:2219
 msgid "Infrared"
-msgstr ""
+msgstr "Инфрачервен"
 
 #: src/multiplay.cpp:2220
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ултравиолетов"
 
 #: src/multiplay.cpp:2221
 msgid "Brown"
-msgstr ""
+msgstr "Кафяв"
 
 #: src/multiplay.cpp:2377
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Режим на зрител"
 
 #: src/multiplay.cpp:2378
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Вие сте зрител. Насладете се на играта!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -19032,11 +19032,11 @@ msgstr "IP адрес или име на машината"
 #: src/transporter.cpp:300
 #: src/transporter.cpp:348
 msgid "Launch Transport"
-msgstr ""
+msgstr "Изпратете Транспортьора"
 
 #: src/transporter.cpp:1001
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "Няма достатъчно място в транспортьора!"
 
 #: src/transporter.cpp:1181
 msgid "Reinforcements landing"
