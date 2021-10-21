@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-21 01:14\n"
+"PO-Revision-Date: 2021-10-21 14:49\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -160,11 +160,11 @@ msgstr "OPÉRATION BASE ALPHA : Établir un poste avancé"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Établir un avant-poste sur le plateau et repousser le Nouveau Paradigme."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Construisez des structures défensives jusqu'à la disparition du clignotant."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "Une fois qu'un refuge est établi, retournez à la ZA pour les ordres à
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "OPÉRATION BASE BETA : Survivez et évacuez ! Apportez un camion"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -5606,11 +5606,11 @@ msgstr "Joueur"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Défaite en raison de l'inactivité / jeu passif."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Jouer passivement mènera à la défaite. Actions considérées:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
