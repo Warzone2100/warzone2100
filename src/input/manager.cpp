@@ -253,7 +253,7 @@ static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseW
 	}
 
 	const DebugInputManager& dbgInputManager = inputManager.debugManager();;
-	if (mapping.info.bIsDebugOnly && !dbgInputManager.debugMappingsAllowed())
+	if (mapping.info.bIsDebugOnly && !dbgInputManager.debugMappingsAllowed() && !NETisReplay())
 	{
 		return true;
 	}
