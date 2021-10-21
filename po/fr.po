@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-09 16:13\n"
+"PO-Revision-Date: 2021-10-21 01:14\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4317,11 +4317,11 @@ msgstr "Vous devez maintenant construire une usine pour produire votre nouveau v
 
 #: data/base/script/tutorial.js:66
 msgid "Now left click the factory icon and position it at your base"
-msgstr "Cliquez sur l'icône usine dans le menu CONSTRUCTION pour en construire une dans votre base."
+msgstr "Maintenant, cliquez avec le bouton gauche de la souris sur l'icône usine dans le menu Construction pour en construire une dans votre base"
 
 #: data/base/script/tutorial.js:67
 msgid "Select a location for your factory"
-msgstr "Choisissez un emplacement pour votre usine et construisez-la."
+msgstr "Choisissez un emplacement pour votre usine et construisez-la"
 
 #: data/base/script/tutorial.js:68
 msgid "The delivery point is indicated by the number 1"
@@ -4329,7 +4329,7 @@ msgstr "Le point de livraison des nouvelles unités produites est indiqué par l
 
 #: data/base/script/tutorial.js:69
 msgid "All new units will drive to this location once built"
-msgstr "Toutes les nouvelles unités se dirigeront vers cet endroit quand elles seront produites."
+msgstr "Toutes les nouvelles unités se dirigeront vers cet endroit quand elles seront produites"
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
@@ -4337,27 +4337,27 @@ msgstr "Vous pouvez déplacer le point de livraison n'importe où et n'importe q
 
 #: data/base/script/tutorial.js:71
 msgid "Now click where you want to position the delivery point"
-msgstr "puis là où vous voulez le placer."
+msgstr "Maintenant cliquez là où vous voulez placer le point de livraison"
 
 #: data/base/script/tutorial.js:72
 msgid "The factory can now be ordered to build a new unit"
-msgstr "Vous pouvez maintenant ordonner la construction d'une nouvelle unité."
+msgstr "Vous pouvez maintenant ordonner la construction d'une nouvelle unité"
 
 #: data/base/script/tutorial.js:73
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr "Cliquez sur l'icône ASSEMBLAGE clignotante."
+msgstr "Cliquez sur l'icône ASSEMBLAGE clignotante"
 
 #: data/base/script/tutorial.js:75
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "Maintenant cliquez sur les unités que vous voulez construire dans le menu de gauche."
+msgstr "Maintenant cliquez sur les unités que vous voulez construire dans le menu de gauche"
 
 #: data/base/script/tutorial.js:76
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Patientez le temps que l'usine produise la(les) nouvelle(s) unité(s)."
+msgstr "Patientez le temps que l'usine produise la(les) nouvelle(s) unité(s)"
 
 #: data/base/script/tutorial.js:78
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr "Félicitations commandant - vous êtes prêt pour votre première mission !"
+msgstr "Félicitations commandant - vous êtes prêt pour votre première mission"
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
@@ -15367,8 +15367,8 @@ msgstr[1] "%u unités assignées au groupe %u"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u unités retirées du groupe"
+msgstr[1] "%u unités retirées du groupe"
 
 #: src/droid.cpp:2002
 #, c-format
@@ -15522,7 +15522,7 @@ msgstr "Charger une sauvegarde d'escarmouche"
 
 #: src/frontend.cpp:346
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Voir le replay d'escarmouche"
 
 #: src/frontend.cpp:348
 msgid "SINGLE PLAYER"
@@ -15549,7 +15549,7 @@ msgstr "Charger une sauvegarde d'escarmouche"
 
 #: src/frontend.cpp:519
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Charger le replay d'escarmouche"
 
 #: src/frontend.cpp:580
 msgid "MULTI PLAYER"
@@ -15565,7 +15565,7 @@ msgstr "Joindre une partie"
 
 #: src/frontend.cpp:584
 msgid "View Replay"
-msgstr ""
+msgstr "Voir le replay"
 
 #: src/frontend.cpp:589
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15573,7 +15573,7 @@ msgstr "Le port TCP 2100 doit être ouvert dans votre pare-feu/routeur pour pouv
 
 #: src/frontend.cpp:634
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Charger le replay multijoueur"
 
 #: src/frontend.cpp:673
 #: src/multiint.cpp:1380
@@ -16032,19 +16032,19 @@ msgstr "Astuce : Ajuster l'échelle d'affichage"
 
 #: src/hci.cpp:723
 msgid "Replay"
-msgstr ""
+msgstr "Replay"
 
 #: src/hci.cpp:738
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: src/hci.cpp:753
 msgid "Resume"
-msgstr ""
+msgstr "Reprendre"
 
 #: src/hci.cpp:770
 msgid "Fast-Forward"
-msgstr ""
+msgstr "Avancer"
 
 #: src/hci.cpp:1314
 #: src/loop.cpp:252
@@ -16421,7 +16421,7 @@ msgstr "Ajouter au groupe 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Supprimer du groupe"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -17188,7 +17188,7 @@ msgstr "Amélioration de la recherche"
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "Objectifs du Projet et mises à jour"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
@@ -17898,7 +17898,7 @@ msgstr "Laisser cette position inoccupée"
 
 #: src/multiint.cpp:1870
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Autoriser les spectateurs à rejoindre cette position"
 
 #: src/multiint.cpp:1954
 msgid "Click to change to this slot"
@@ -17907,21 +17907,21 @@ msgstr "Cliquez pour prendre cette position"
 #: src/multiint.cpp:1981
 #, c-format
 msgid "Click to take player slot %<PRIu32>"
-msgstr ""
+msgstr "Cliquez pour prendre la position du joueur<PRIu32>"
 
 #: src/multiint.cpp:2018
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "Cliquez pour deplacer le joueur à cette position"
 
 #: src/multiint.cpp:2035
 #: src/multiint.cpp:3118
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr ""
+msgstr "Le spectateur %s s'est déplacé vers les joueurs"
 
 #: src/multiint.cpp:2041
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "Impossible d'échanger avec l'hôte"
 
 #: src/multiint.cpp:2278
 msgid "Team"
@@ -17933,7 +17933,7 @@ msgstr "Équipe"
 #: src/multiint.cpp:7463
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Spectateur"
 
 #: src/multiint.cpp:2299
 #: src/multiint.cpp:4421
@@ -17951,12 +17951,12 @@ msgstr "L'hôte vous a exclu de la partie."
 #: src/multiint.cpp:2336
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "Impossible de déplacer %s vers les spectateurs"
 
 #: src/multiint.cpp:2341
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "L'hôte a déplacé %s vers les spectateurs !"
 
 #: src/multiint.cpp:2364
 msgid "Move to Spectators"
@@ -18040,19 +18040,19 @@ msgstr ""
 
 #: src/multiint.cpp:3146
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Voulez-vous échanger ce spectateur avec un joueur ?"
 
 #: src/multiint.cpp:3147
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Oui, sélectionner un emplacement de joueur"
 
 #: src/multiint.cpp:3430
 msgid "Joined:"
-msgstr ""
+msgstr "Rejoint:"
 
 #: src/multiint.cpp:3433
 msgid "Ready:"
-msgstr ""
+msgstr "Prêt:"
 
 #: src/multiint.cpp:3611
 #: src/titleui/gamefind.cpp:269
@@ -18061,15 +18061,15 @@ msgstr "Joueurs"
 
 #: src/multiint.cpp:3641
 msgid "Host Options"
-msgstr ""
+msgstr "Options de l'hôte"
 
 #: src/multiint.cpp:3922
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Activer la participation des spectateurs"
 
 #: src/multiint.cpp:3932
 msgid "Lock Teams"
-msgstr ""
+msgstr "Verrouiller les équipes"
 
 #: src/multiint.cpp:4188
 msgid "Choose Team"
@@ -18097,7 +18097,7 @@ msgstr "Cliquez pour modifier l'IA, faites un clic droit pour distribuer le choi
 
 #: src/multiint.cpp:4246
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Cliquez pour fermer l'emplacement du spectateur"
 
 #: src/multiint.cpp:4262
 msgid "Player ID: "
@@ -18137,15 +18137,15 @@ msgstr "PRÊT?"
 
 #: src/multiint.cpp:4525
 msgid "For Spectator:"
-msgstr ""
+msgstr "Pour le spectateur:"
 
 #: src/multiint.cpp:4525
 msgid "For Player:"
-msgstr ""
+msgstr "Pour le joueur :"
 
 #: src/multiint.cpp:4543
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Choisir un emplacement de joueur"
 
 #: src/multiint.cpp:4614
 msgid "PLAYERS"
@@ -18153,7 +18153,7 @@ msgstr "JOUEURS"
 
 #: src/multiint.cpp:4718
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Ajouter un emplacement de spectateur"
 
 #: src/multiint.cpp:4794
 msgid "Kicked from game"
@@ -18161,7 +18161,7 @@ msgstr "Exclu de la partie"
 
 #: src/multiint.cpp:5019
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Copier le texte dans le presse-papiers"
 
 #: src/multiint.cpp:5108
 msgid "CHAT"
@@ -18206,11 +18206,11 @@ msgstr "Pas de connexion à l'hôte."
 
 #: src/multiint.cpp:6687
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "L'hôte m'a déplacé vers les joueurs, mais je n'ai jamais donné la permission pour ce changement. Au revoir !"
 
 #: src/multiint.cpp:6689
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "L'hôte a essayé de nous déplacer vers les joueurs, mais nous n'avons jamais donné l'autorisation."
 
 #: src/multiint.cpp:6838
 msgid "Cannot change to a map with too few slots for all players."
@@ -18279,29 +18279,29 @@ msgstr "Ping"
 
 #: src/multiint.cpp:8107
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "La version de Warzone 2100 utilisée pour enregistrer ce fichier de replay ne correspond pas à la version en cours d'exécution."
 
 #: src/multiint.cpp:8109
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "Replay enregistré avec : \"%s\""
 
 #: src/multiint.cpp:8111
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "Version actuelle de Warzone 2100: \"%s\""
 
 #: src/multiint.cpp:8113
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "Les replays devraient généralement être joués avec la même version que celle utilisée pour l'enregistrer."
 
 #: src/multiint.cpp:8115
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "Il est possible que le replay ne soit pas lu correctement, ou qu'il puisse y avoir des différences dans la simulation."
 
 #: src/multiint.cpp:8116
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "La version de replay ne correspond pas"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18379,7 +18379,7 @@ msgstr "Limites réinitialisées aux valeurs par défaut"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "L'administrateur vous a expulsé de la partie."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18482,19 +18482,19 @@ msgstr "Données invalides !"
 #: src/multiplay.cpp:1122
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "Expulsion automatique du joueur %s, commande non valide reçue : %u"
 
 #: src/multiplay.cpp:1124
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Commande réseau non autorisée"
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "REPLAY TERMINÉ"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Appuyez sur ESC pour quitter.)"
 
 #: src/multiplay.cpp:1376
 #, c-format
@@ -18585,11 +18585,11 @@ msgstr "Marron"
 
 #: src/multiplay.cpp:2377
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Mode spectateur"
 
 #: src/multiplay.cpp:2378
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Vous êtes spectateur. Bon visionnage!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18776,28 +18776,28 @@ msgstr[1] "%u unités sélectionnées"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Sous-classe d'arme"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
-msgstr ""
+msgstr "Energie/Taux"
 
 #: src/spectatorwidgets.cpp:735
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Energie actuelle / Energie par seconde"
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
-msgstr ""
+msgstr "Energie perdue"
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Protection cinétique"
 
 #: src/spectatorwidgets.cpp:738
 #: src/spectatorwidgets.cpp:740
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tanks / Cyborgs)"
 
 #: src/structure.cpp:2538
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -18934,7 +18934,7 @@ msgstr "Version : %s"
 
 #: src/titleui/gamefind.cpp:458
 msgid "Join as spectator"
-msgstr ""
+msgstr "Rejoindre en tant que spectateur"
 
 #: src/titleui/gamefind.cpp:481
 msgid "Your version of Warzone is incompatible with this game."
@@ -19114,11 +19114,11 @@ msgstr "Version: %s,%s Construit: %s%s"
 
 #: src/wrappers.cpp:353
 msgid "GAME OVER"
-msgstr ""
+msgstr "FIN DE PARTIE"
 
 #: src/wrappers.cpp:354
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "La bataille est terminée - vous pouvez quitter la partie."
 
 #: src/wzapi.cpp:2337
 msgid "YOU ARE VICTORIOUS!"
