@@ -122,6 +122,13 @@ void BuildController::refresh()
 	}
 }
 
+void BuildController::clearData()
+{
+	builders.clear();
+	setHighlightedObject(nullptr);
+	stats.clear();
+}
+
 void BuildController::toggleBuilderSelection(DROID *droid)
 {
 	if (droid->selected)

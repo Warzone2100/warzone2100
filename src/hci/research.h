@@ -38,6 +38,7 @@ public:
 	void updateData();
 	bool showInterface() override;
 	void refresh() override;
+	void clearData() override;
 	std::shared_ptr<StatsForm> makeStatsForm() override;
 	void startResearch(RESEARCH &research);
 	void cancelResearch(STRUCTURE *facility);

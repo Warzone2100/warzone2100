@@ -29,6 +29,7 @@ public:
 	void updateData();
 	bool showInterface() override;
 	void refresh() override;
+	void clearData() override;
 	void displayOrderForm();
 
 	DROID *getHighlightedObject() const override

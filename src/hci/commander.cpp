@@ -57,6 +57,12 @@ void CommanderController::refresh()
 	}
 }
 
+void CommanderController::clearData()
+{
+	commanders.clear();
+	setHighlightedObject(nullptr);
+}
+
 void CommanderController::setHighlightedObject(BASE_OBJECT *object)
 {
 	if (object == nullptr)
