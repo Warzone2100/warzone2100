@@ -2475,7 +2475,7 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 	return generic_script_object::Null();
 }
 
-//-- ## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
+//-- ## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
 //--
 //-- Returns an array of game objects seen within the given area that passes the optional filter
 //-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
@@ -2484,7 +2484,7 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 //-- positions or a label to an AREA. Calling this function is much faster than iterating over all
 //-- game objects using other enum functions. (3.2+ only)
 //--
-std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> _filter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> _playerFilter, optional<bool> _seen))
 {
 	SCRIPT_ASSERT({}, context, instance().labels.count(label) > 0, "Label %s not found", label.c_str());
 	const LABEL &p = instance().labels[label];
@@ -2493,25 +2493,25 @@ std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(
 	int y1 = p.p1.y;
 	int x2 = p.p2.x;
 	int y2 = p.p2.y;
-	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _filter, _seen);
+	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _playerFilter, _seen);
 }
 
 typedef std::vector<BASE_OBJECT *> GridList;
 #include "mapgrid.h"
 
-std::vector<const BASE_OBJECT *> scripting_engine::enumArea(WZAPI_PARAMS(scr_area area, optional<int> _filter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> scripting_engine::enumArea(WZAPI_PARAMS(scr_area area, optional<int> _playerFilter, optional<bool> _seen))
 {
 	int x1 = world_coord(area.x1);
 	int y1 = world_coord(area.y1);
 	int x2 = world_coord(area.x2);
 	int y2 = world_coord(area.y2);
-	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _filter, _seen);
+	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _playerFilter, _seen);
 }
 
-std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> _filter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> _playerFilter, optional<bool> _seen))
 {
 	int player = context.player();
-	int filter = (_filter.has_value()) ? _filter.value() : ALL_PLAYERS;
+	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
 	bool seen = (_seen.has_value()) ? _seen.value() : true;
 
 	static GridList gridList;  // static to avoid allocations. // not thread-safe
@@ -2522,9 +2522,9 @@ std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PA
 		BASE_OBJECT *psObj = *gi;
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
-			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
-			    || (filter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
-			    || (filter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
+			if ((playerFilter >= 0 && psObj->player == playerFilter) || playerFilter == ALL_PLAYERS
+			    || (playerFilter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
+			    || (playerFilter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
 			{
 				list.push_back(psObj);
 			}
@@ -2533,19 +2533,19 @@ std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PA
 	return list;
 }
 
-std::vector<const BASE_OBJECT *> scripting_engine::enumAreaJS(WZAPI_PARAMS(scripting_engine::area_by_values_or_area_label_lookup area_lookup, optional<int> filter, optional<bool> seen))
+std::vector<const BASE_OBJECT *> scripting_engine::enumAreaJS(WZAPI_PARAMS(scripting_engine::area_by_values_or_area_label_lookup area_lookup, optional<int> playerFilter, optional<bool> seen))
 {
 	if (area_lookup.isLabel())
 	{
 		auto optLabel = area_lookup.label();
 		ASSERT(optLabel.has_value(), "optional label is null");
-		return enumAreaByLabel(context, optLabel.value(), filter, seen);
+		return enumAreaByLabel(context, optLabel.value(), playerFilter, seen);
 	}
 	else
 	{
 		auto optArea = area_lookup.area();
 		ASSERT(optArea.has_value(), "optional area is null");
-		return enumArea(context, optArea.value(), filter, seen);
+		return enumArea(context, optArea.value(), playerFilter, seen);
 	}
 }
 

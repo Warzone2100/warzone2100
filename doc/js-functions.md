@@ -143,7 +143,7 @@ manner, since they do not have a unique placement on map tiles. Finally, you can
 its ID, in which case you need to pass its type, owner and unique object ID. This is an
 operation of O(n) algorithmic complexity. (3.2+ only)
 
-## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
+## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
 
 Returns an array of game objects seen within the given area that passes the optional filter
 which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
