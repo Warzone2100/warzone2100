@@ -8,14 +8,14 @@ const STATE_spectator = "spectator";
 const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which you can continue to play
 
 
+// Uses global var: ```idleTime```
 // The time that the player's inactivity is allowed. Actions are considered
 // - unit building
 // - completion of the research
 // - construction of base structures (factories, power plants, laboratories, modules and oil rigs)
 // - dealing damage
-const IDLETIME = 4 * 60 * 1000;
 const BASESTRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR, POWER_GEN, RESEARCH_LAB];
-const ENABLE_activity = (challenge != true && isMultiplayer === true); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
+const ENABLE_activity = (challenge != true && isMultiplayer === true && idleTime > 0); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
 //const ENABLE_activity = true; //debug
 
 var teams; // array class instance Team
@@ -136,7 +136,7 @@ class Team
 
 	activeGame()
 	{
-		if (this.lastActivity + IDLETIME >= gameTime)
+		if (this.lastActivity + idleTime >= gameTime)
 		{
 			return true;
 		}
@@ -378,7 +378,7 @@ function activityAlert()
 		removeTimer("activityAlert");
 		return;
 	}
-	if (playersTeam[selectedPlayer].lastActivity + IDLETIME / 2 < gameTime)
+	if (playersTeam[selectedPlayer].lastActivity + idleTime / 2 < gameTime)
 	{
 		console(
 			_("Playing passively will lead to defeat. Actions that are considered:")
@@ -386,13 +386,13 @@ function activityAlert()
 		console(
 			_("- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage")
 		);
-		if (getMissionTime() > IDLETIME)
+		if (getMissionTime() > idleTime)
 		{
 			setMissionTime(
-				(playersTeam[selectedPlayer].lastActivity + IDLETIME - gameTime) / 1000);
+				(playersTeam[selectedPlayer].lastActivity + idleTime - gameTime) / 1000);
 		}
 	}
-	if (playersTeam[selectedPlayer].lastActivity + IDLETIME / 2 > gameTime)
+	if (playersTeam[selectedPlayer].lastActivity + idleTime / 2 > gameTime)
 	{
 		setMissionTime(-1); // remove timer widget
 	}

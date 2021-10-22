@@ -7913,6 +7913,7 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERGAME& p) {
 	j["isMapMod"] = p.isMapMod;
 	j["isRandom"] = p.isRandom;
 	j["techLevel"] = p.techLevel;
+	j["inactivityMinutes"] = p.inactivityMinutes;
 }
 
 inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
@@ -7932,6 +7933,15 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
 	p.isMapMod = j.at("isMapMod").get<bool>();
 	p.isRandom = j.at("isRandom").get<bool>();
 	p.techLevel = j.at("techLevel").get<uint32_t>();
+	if (j.contains("inactivityMinutes"))
+	{
+		p.inactivityMinutes = j.at("inactivityMinutes").get<uint32_t>();
+	}
+	else
+	{
+		// default to the old (4.2.0 beta-era) value of 4 minutes
+		p.inactivityMinutes = 4;
+	}
 }
 
 inline void to_json(nlohmann::json& j, const MULTISTRUCTLIMITS& p) {

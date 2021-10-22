@@ -384,6 +384,8 @@ bool loadConfig()
 	game.base = iniGetInteger("base", CAMP_BASE).value();
 	game.alliance = iniGetInteger("alliance", NO_ALLIANCES).value();
 	game.scavengers = iniGetInteger("newScavengers", SCAVENGERS).value();
+	game.inactivityMinutes = iniSectionGetInteger(iniGeneral, "inactivityMinutesMP", war_getMPInactivityMinutes()).value();
+	war_setMPInactivityMinutes(game.inactivityMinutes);
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -600,6 +602,7 @@ bool saveConfig()
 			if (bMultiPlayer && NetPlay.bComms)
 			{
 				iniSetString("gameName", game.name);			//  last hosted game
+				iniSetInteger("inactivityMinutesMP", game.inactivityMinutes);
 			}
 			iniSetString("mapName", game.map);				//  map name
 			iniSetString("mapHash", game.hash.toString());          //  map hash
@@ -717,6 +720,7 @@ bool reloadMPConfig()
 	game.power = iniSectionGetInteger(iniGeneral, "powerLevel", LEV_MED).value();
 	game.base = iniSectionGetInteger(iniGeneral, "base", CAMP_BASE).value();
 	game.alliance = iniSectionGetInteger(iniGeneral, "alliance", NO_ALLIANCES).value();
+	game.inactivityMinutes = iniSectionGetInteger(iniGeneral, "inactivityMinutesMP", war_getMPInactivityMinutes()).value();
 
 	return true;
 }
