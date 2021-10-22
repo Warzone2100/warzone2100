@@ -596,6 +596,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["isMultiplayer"] = NetPlay.bComms;
 	//== * ```challenge``` If the current game is a challenge. (4.1.4+ only)
 	globalVars["challenge"] = challengeActive;
+	//== * ```idleTime``` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
+	globalVars["idleTime"] = game.inactivityMinutes * 60 * 1000;
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 

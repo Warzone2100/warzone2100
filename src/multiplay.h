@@ -72,6 +72,7 @@ struct MULTIPLAYERGAME
 	bool		isMapMod;					// if a map has mods
 	bool        isRandom;                   // If a map is non-static.
 	uint32_t	techLevel;					// what technology level is being used
+	uint32_t	inactivityMinutes;			// The number of minutes without active play before a player should be considered "inactive". (0 = disable activity alerts)
 
 	// NOTE: If adding to this struct, a lot of things probably require changing
 	// (send/recvOptions? to/from_json in multiint.h.cpp?)

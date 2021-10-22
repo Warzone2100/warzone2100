@@ -66,6 +66,7 @@ struct WARZONE_GLOBALS
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
 	bool disableReplayRecording = false;
+	uint32_t MPinactivityMinutes = 4;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -427,4 +428,14 @@ bool war_getDisableReplayRecording()
 void war_setDisableReplayRecording(bool disable)
 {
 	warGlobs.disableReplayRecording = disable;
+}
+
+uint32_t war_getMPInactivityMinutes()
+{
+	return warGlobs.MPinactivityMinutes;
+}
+
+void war_setMPInactivityMinutes(uint32_t minutes)
+{
+	warGlobs.MPinactivityMinutes = minutes;
 }

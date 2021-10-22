@@ -4514,6 +4514,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		builtInMap = save.value("builtInMap").toBool();
 	}
+	if (save.contains("inactivityMinutes"))
+	{
+		game.inactivityMinutes = save.value("inactivityMinutes").toUInt();
+	}
 
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
@@ -4696,6 +4700,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("challengeFileName", challengeFileName.toUtf8().c_str());
 	save.setValue("challengeActive", challengeActive);
 	save.setValue("builtInMap", builtInMap);
+	save.setValue("inactivityMinutes", game.inactivityMinutes);
 
 	return true;
 }

@@ -91,6 +91,7 @@ void sendOptions()
 	NETuint8_t(&game.scavengers);
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
+	NETuint32_t(&game.inactivityMinutes);
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -164,6 +165,7 @@ void recvOptions(NETQUEUE queue)
 	NETuint8_t(&game.scavengers);
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
+	NETuint32_t(&game.inactivityMinutes);
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
