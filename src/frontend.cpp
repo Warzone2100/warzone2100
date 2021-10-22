@@ -139,53 +139,6 @@ static void moveToParentRightEdge(WIDGET *widget, int32_t right)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-void startTitleMenu()
-{
-	intRemoveReticule();
-
-	addBackdrop();
-	addTopForm(false);
-	addBottomForm();
-
-	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
-
-	// check whether video sequences are installed
-	if (PHYSFS_exists("sequences/devastation.ogg"))
-	{
-		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
-	}
-	else
-	{
-		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE | WBUT_DISABLE);
-		widgSetTip(psWScreen, FRONTEND_PLAYINTRO, _("Videos are missing, download them from http://wz2100.net"));
-	}
-
-	if (findLastSave())
-	{
-		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE);
-	}
-	else
-	{
-		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE | WBUT_DISABLE);
-		widgSetTip(psWScreen, FRONTEND_CONTINUE, _("No last save available"));
-	}
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS8X, FRONTEND_POS8Y, _("Quit Game"), WBUT_TXTCENTRE);
-	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
-
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
-	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
-	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS9X + 360, FRONTEND_POS9Y, _("Donate: http://donations.wz2100.net/"), 0);
-	moveToParentRightEdge(pRightAlignedButton, 1);
-	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
-	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on Discord or IRC"), 0);
-	moveToParentRightEdge(pRightAlignedButton, 6);
-	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Discord or Freenode through webchat by clicking this link."));
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
-}
-
 static void runUpgrdHyperlink()
 {
 	std::string link = "https://wz2100.net/versioncheck/?ver=";
@@ -212,6 +165,75 @@ static void rundonatelink()
 static void runchatlink()
 {
 	openURLInBrowser("https://wz2100.net/webchat/");
+}
+
+static void notifyAboutMissingVideos()
+{
+	const std::string VIDEO_TAG = "videoMissing";
+	if (!hasNotificationsWithTag(VIDEO_TAG))
+	{
+		WZ_Notification notification;
+		notification.duration = 0;
+		notification.contentTitle = _("Campaign videos are missing");
+		notification.contentText = _("See our FAQ on how to install videos");
+		notification.tag = VIDEO_TAG;
+		notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
+		notification.action = WZ_Notification_Action("Open wz2100.net", [](const WZ_Notification&) {
+			runHyperlink();
+		});
+		notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable("campaignVideoNotification", 2);
+
+		addNotification(notification, WZ_Notification_Trigger(GAME_TICKS_PER_SEC));
+	}
+}
+
+void startTitleMenu()
+{
+	intRemoveReticule();
+
+	addBackdrop();
+	addTopForm(false);
+	addBottomForm();
+
+	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
+
+	// check whether video sequences are installed
+	if (PHYSFS_exists("sequences/devastation.ogg"))
+	{
+		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
+	}
+	else
+	{
+		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE | WBUT_DISABLE);
+		widgSetTip(psWScreen, FRONTEND_PLAYINTRO, _("Videos are missing, download them from http://wz2100.net"));
+
+		notifyAboutMissingVideos();
+	}
+
+	if (findLastSave())
+	{
+		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE);
+	}
+	else
+	{
+		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE | WBUT_DISABLE);
+		widgSetTip(psWScreen, FRONTEND_CONTINUE, _("No last save available"));
+	}
+	addTextButton(FRONTEND_QUIT, FRONTEND_POS8X, FRONTEND_POS8Y, _("Quit Game"), WBUT_TXTCENTRE);
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
+
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
+	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
+	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS9X + 360, FRONTEND_POS9Y, _("Donate: http://donations.wz2100.net/"), 0);
+	moveToParentRightEdge(pRightAlignedButton, 1);
+	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
+	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on Discord or IRC"), 0);
+	moveToParentRightEdge(pRightAlignedButton, 6);
+	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Discord or Freenode through webchat by clicking this link."));
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 }
 
 void runContinue()
@@ -351,6 +373,7 @@ void startSinglePlayerMenu()
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		notifyAboutMissingVideos();
 	}
 }
 
@@ -372,6 +395,7 @@ void startCampaignSelector()
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		notifyAboutMissingVideos();
 	}
 }
 
