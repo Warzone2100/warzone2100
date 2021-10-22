@@ -2212,11 +2212,15 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 
 	UDWORD i;
 	int disallow = allPlayersOnSameTeam(player);
+	SpectatorInfo currSpectatorInfo = NETGameGetSpectatorInfo();
 
 	bool isSpectator = NetPlay.players[player].isSpectator;
-	bool canChangeTeams = !locked.teams && !isSpectator;
+	bool canChangeTeams = !locked.teams && !isSpectator && alliancesSetTeamsBeforeGame(game.alliance);
 	bool canKickPlayer = player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated;
 	bool canChangeSpectatorStatus = !locked.spectators && NetPlay.bComms && isHumanPlayer(player) && (player != NetPlay.hostPlayer) && (NetPlay.isHost || player == selectedPlayer);
+	bool displayMoveToSpectatorsButton = canChangeSpectatorStatus && !isSpectator && (currSpectatorInfo.availableSpectatorSlots() > 0 || (NetPlay.isHost && NETcanOpenNewSpectatorSlot()));
+	bool displayMoveToPlayersButton = canChangeSpectatorStatus && isSpectator;
+	canChangeSpectatorStatus = canChangeSpectatorStatus && (displayMoveToSpectatorsButton || displayMoveToPlayersButton);
 
 	if (!canChangeTeams && !canKickPlayer && !canChangeSpectatorStatus)
 	{
@@ -2315,8 +2319,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 	if (canChangeSpectatorStatus)
 	{
 		// Add a "make spectator" button (if there are available spectator slots, and this is a player)
-		SpectatorInfo currSpectatorInfo = NETGameGetSpectatorInfo();
-		if (!isSpectator && (currSpectatorInfo.availableSpectatorSlots() > 0 || (NetPlay.isHost && NETcanOpenNewSpectatorSlot())))
+		if (displayMoveToSpectatorsButton)
 		{
 			const int imgwidth_spec = iV_GetImageWidth(FrontImages, IMAGE_SPECTATOR);
 			const int imgheight_spec = iV_GetImageHeight(FrontImages, IMAGE_SPECTATOR);
@@ -2363,7 +2366,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_SPECTATOR, kickImageX - imgwidth_spec - 4, 6, imgwidth_spec, imgheight_spec,
 			_("Move to Spectators"), IMAGE_SPECTATOR, IMAGE_SPECTATOR_HI, IMAGE_SPECTATOR_HI, onSpecClickHandler);
 		}
-		else if (isSpectator)
+		else if (displayMoveToPlayersButton)
 		{
 			const int imgwidth_spec = iV_GetImageWidth(FrontImages, IMAGE_EDIT_PLAYER);
 			const int imgheight_spec = iV_GetImageHeight(FrontImages, IMAGE_EDIT_PLAYER);
@@ -2615,6 +2618,11 @@ bool recvTeamRequest(NETQUEUE queue)
 	}
 
 	if (locked.teams)
+	{
+		return false;
+	}
+
+	if (!alliancesSetTeamsBeforeGame(game.alliance))
 	{
 		return false;
 	}
@@ -4197,7 +4205,8 @@ public:
 		}
 
 		// hide team button if needed
-		if (!alliancesSetTeamsBeforeGame(game.alliance) && !NetPlay.players[playerIdx].isSpectator)
+		bool trueMultiplayerMode = (bMultiPlayer && NetPlay.bComms) || (!NetPlay.isHost && ingame.localJoiningInProgress);
+		if (!alliancesSetTeamsBeforeGame(game.alliance) && !NetPlay.players[playerIdx].isSpectator && !trueMultiplayerMode)
 		{
 			teamButton->hide();
 		}
@@ -7163,8 +7172,15 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (!NetPlay.players[i].isSpectator)
 	{
-		ASSERT_OR_RETURN(, NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
-		iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
+		if (alliancesSetTeamsBeforeGame(game.alliance))
+		{
+			ASSERT_OR_RETURN(, NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
+			iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
+		}
+		else
+		{
+			// TODO: Maybe display something else here to signify "no team, FFA"
+		}
 	}
 	else
 	{
