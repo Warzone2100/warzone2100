@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-09 04:03+0000\n"
-"PO-Revision-Date: 2021-10-21 14:49\n"
+"PO-Revision-Date: 2021-10-22 02:52\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4305,7 +4305,7 @@ msgstr "puis sur l'icône ROUES,"
 
 #: data/base/script/tutorial.js:59
 msgid "Then left click the machinegun to complete your design"
-msgstr "et enfin sur la mitrailleuse pour finir votre modèle."
+msgstr "Et enfin sur la mitrailleuse pour finir votre modèle"
 
 #: data/base/script/tutorial.js:62
 msgid "To finalize your design, left click the CLOSE icon"
@@ -5614,12 +5614,12 @@ msgstr "Jouer passivement mènera à la défaite. Actions considérées:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- construction d'unités - achèvement d'une recherche - construction de structures de base (usines, centrales électriques, laboratoires, modules et derricks) - infliger des dégâts"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1461
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Pillards Ultimes"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1458
@@ -5783,11 +5783,11 @@ msgstr "Port %s correctement configuré sur %s\n"
 
 #: lib/netplay/netplay.cpp:2042
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "Le client n'a pas confirmé le changement d'emplacement du joueur"
 
 #: lib/netplay/netplay.cpp:2053
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Échec d'envoi du message - essayez à nouveau"
 
 #: lib/netplay/netplay.cpp:2647
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
@@ -7923,13 +7923,13 @@ msgstr "Tourelle de contre-batterie calculant la position de l'artillerie enemie
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1594
 msgid "Crane1"
-msgstr ""
+msgstr "Grue1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1597
 msgid "Crane2"
-msgstr ""
+msgstr "Grue2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8982,7 +8982,7 @@ msgstr "Tour de garde de lance-flammes renforcée"
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2329
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Tour à mitrailleuse lourde renforcée"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -12851,7 +12851,7 @@ msgstr "Bunker des Pillards"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5032
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Usine d'hélicos des Pillards"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12892,13 +12892,13 @@ msgstr "Mur des Pillards"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5055
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "Tour à mitrailleuse des Pillards"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
 #: po/custom/fromJson.txt:5058
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "Mitrailleuse montée des pillards"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
@@ -12911,7 +12911,7 @@ msgstr "Générateur d'énergie des Pillards"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5065
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Atelier de réparation des pillards"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12931,7 +12931,7 @@ msgstr "Pillard"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5076
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "tourelle Nexus des pillards"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -14244,7 +14244,7 @@ msgstr "Fusil d'assaut VTOL"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5936
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "Plateforme de réarmement VTOL des pillards"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14448,7 +14448,7 @@ msgstr "Lance-roquettes VTOL"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6057
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "Mitrailleuse VTOL des pillards"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14461,7 +14461,7 @@ msgstr "Mitrailleuse VTOL"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6064
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "Mini-roquettes VTOL des pillards"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -14869,7 +14869,7 @@ msgstr " et "
 #: src/chat.cpp:169
 #: src/multiint.cpp:3625
 msgid "Spectators"
-msgstr ""
+msgstr "Spectateurs"
 
 #: src/cheat.cpp:212
 #, c-format
@@ -15029,7 +15029,7 @@ msgstr "Hôte"
 
 #: src/clparse.cpp:379
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "Se connecter directement à IP/nom d'hôte en tant que spectateur"
 
 #: src/clparse.cpp:380
 msgid "Go directly to host screen"
@@ -15113,39 +15113,39 @@ msgstr "port"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Activer les commandes slash du lobby (pour connecter les clients)"
 
 #: src/clparse.cpp:413
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Ajouter un hash d'identité admin du lobby (pour les commandes slash)"
 
 #: src/clparse.cpp:413
 msgid "hash string"
-msgstr ""
+msgstr "chaîne de hachage"
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Ajouter une clé publique d'admin du lobby (pour les commandes slash)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
-msgstr ""
+msgstr "clé publique encodée base64"
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
-msgstr ""
+msgstr "Activer l'interface des commandes"
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
-msgstr ""
+msgstr "(sortie standard)"
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Joueurs minimum requis pour démarrer automatiquement la partie"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
-msgstr ""
+msgstr "joueurs au début"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -17960,83 +17960,83 @@ msgstr "L'hôte a déplacé %s vers les spectateurs !"
 
 #: src/multiint.cpp:2364
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Déplacer vers les spectateurs"
 
 #: src/multiint.cpp:2385
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Demander au spectateur de jouer"
 
 #: src/multiint.cpp:2401
 msgid "Ask to Play"
-msgstr ""
+msgstr "Demander à jouer"
 
 #: src/multiint.cpp:3002
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "Le spectateur %s veut rester spectateur"
 
 #: src/multiint.cpp:3006
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "Le joueur %s veut rester joueur"
 
 #: src/multiint.cpp:3014
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "L'hôte a refusé de vous basculer vers Joueur"
 
 #: src/multiint.cpp:3018
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Impossible de basculer vers Spectateurs"
 
 #: src/multiint.cpp:3046
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "Voulez-vous être Spectateur?"
 
 #: src/multiint.cpp:3047
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "L'hôte souhaite savoir si vous voulez être Spectateur?"
 
 #: src/multiint.cpp:3049
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Vous êtes actuellement Joueur."
 
 #: src/multiint.cpp:3050
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Oui, je vais être spectateur !"
 
 #: src/multiint.cpp:3055
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Voulez-vous jouer ?"
 
 #: src/multiint.cpp:3056
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "L'hôte souhaite savoir si vous voulez jouer?"
 
 #: src/multiint.cpp:3058
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Vous êtes actuellement un spectateur."
 
 #: src/multiint.cpp:3059
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Oui, je veux jouer !"
 
 #: src/multiint.cpp:3102
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "Le joueur %s s'est déplacé vers les spectateurs"
 
 #: src/multiint.cpp:3141
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Le spectateur aimerait devenir un Joueur"
 
 #: src/multiint.cpp:3142
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Le spectateur \"%s\" aimerait devenir un Joueur."
 
 #: src/multiint.cpp:3144
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "Cependant, il n'y a actuellement pas d'emplacement libre pour un joueur."
 
 #: src/multiint.cpp:3146
 msgid "Would you like to swap this Spectator with a Player?"
