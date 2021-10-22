@@ -7510,8 +7510,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage03"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultComponents": [
 			"MG3-VTOL",
 			"MG3Mk1"
