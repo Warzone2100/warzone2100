@@ -526,9 +526,21 @@ static void updateSectorGeometry(int x, int y)
 	setSectorDecals(x, y, decaldata, &decalSize);
 	ASSERT(decalSize == sectors[x * ySectors + y].decalSize   , "the amount of decals has changed");
 
-	decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
-	                 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata,
-					 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
+	if (decalSize > 0)
+	{
+		if (decalVBO)
+		{
+			decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
+							 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata,
+							 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
+		}
+		else
+		{
+			// didn't have decals, but now we do??
+			// code needs a refactoring if this is the case
+			ASSERT(false, "Didn't have decals, but now we do. Unsupported.");
+		}
+	}
 
 	free(decaldata);
 }
@@ -927,8 +939,15 @@ bool initTerrain()
 	debug(LOG_TERRAIN, "%i decals found", decalSize / 12);
 	if (decalVBO)
 		delete decalVBO;
-	decalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
-	decalVBO->upload(sizeof(DecalVertex)*decalSize, decaldata);
+	if (decalSize > 0)
+	{
+		decalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
+		decalVBO->upload(sizeof(DecalVertex)*decalSize, decaldata);
+	}
+	else
+	{
+		decalVBO = nullptr;
+	}
 	free(decaldata);
 
 	lightmap_tex_num = 0;
@@ -1190,6 +1209,11 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 
 static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
 {
+	if (!decalVBO)
+	{
+		return; // no decals
+	}
+
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
 		renderState.fogColour.vector[0] / 255.f,
