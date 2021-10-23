@@ -143,7 +143,7 @@ manner, since they do not have a unique placement on map tiles. Finally, you can
 its ID, in which case you need to pass its type, owner and unique object ID. This is an
 operation of O(n) algorithmic complexity. (3.2+ only)
 
-## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
+## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
 
 Returns an array of game objects seen within the given area that passes the optional filter
 which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
@@ -606,6 +606,11 @@ Set the percentage of experience this player droids are going to gain. (3.2+ onl
 
 Returns an array of droid objects inside given transport. (3.2+ only)
 
+## isSpectator(player)
+
+Returns whether a particular player is a spectator. (4.2+ only)
+Can pass -1 as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
+
 ## getWeaponInfo(weaponName)
 
 Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
@@ -826,3 +831,8 @@ may have different friendly fire logic for a few weapons (like the lassat).
 ## fireWeaponAtObj(weapon, gameObject[, player])
 
 Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
+
+## transformPlayerToSpectator(player)
+
+Transform a player to a spectator. (4.2+ only)
+This is a one-time transformation, destroys the player's HQ and all of their remaining units, and must occur deterministically on all clients.

@@ -485,7 +485,7 @@ namespace wzapi
 		//__
 		//__ An event that is run whenever a droid enters an area label. The area is then
 		//__ deactived. Call resetArea() to reactivate it. The name of the event is
-		//__ eventArea + the name of the label.
+		//__ `eventArea${label}`.
 		//__
 		virtual bool handle_eventArea(const std::string& label, const DROID *psDroid) = 0;
 

@@ -147,7 +147,7 @@ bool triggerEventGroupLoss(const BASE_OBJECT *psObj, int group, int size, wzapi:
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
 bool triggerEventArea(const std::string& label, DROID *psDroid);
 bool triggerEventSelected();
-bool triggerEventPlayerLeft(int id);
+bool triggerEventPlayerLeft(int player);
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate);
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
 bool triggerEventKeyPressed(int meta, int key);
@@ -381,7 +381,7 @@ public:
 	nlohmann::json constructStartPositions();
 public:
 	// Label functions
-	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string label, optional<int> playerFilter));
+	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter));
 	static std::vector<std::string> enumLabels(WZAPI_PARAMS(optional<int> filterLabelType));
 
 	static wzapi::no_return_value addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered));
@@ -397,10 +397,10 @@ private:
 public:
 
 	static generic_script_object getObject(WZAPI_PARAMS(wzapi::object_request request));
-	static std::vector<const BASE_OBJECT *> enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> filter, optional<bool> seen));
-	static std::vector<const BASE_OBJECT *> enumArea(WZAPI_PARAMS(scr_area area, optional<int> filter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> playerFilter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> enumArea(WZAPI_PARAMS(scr_area area, optional<int> playerFilter, optional<bool> seen));
 private:
-	static std::vector<const BASE_OBJECT *> _enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> filter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> _enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> playerFilter, optional<bool> seen));
 public:
 
 	// A special function for Javascript backends that accept either a label or a series of integers describing an area
@@ -422,7 +422,7 @@ public:
 		int x2 = -1;
 		int y2 = -1;
 	};
-	static std::vector<const BASE_OBJECT *> enumAreaJS(WZAPI_PARAMS(area_by_values_or_area_label_lookup area_lookup, optional<int> filter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> enumAreaJS(WZAPI_PARAMS(area_by_values_or_area_label_lookup area_lookup, optional<int> playerFilter, optional<bool> seen));
 
 	// Group functions
 	static std::vector<const BASE_OBJECT *> enumGroup(WZAPI_PARAMS(int groupId));

@@ -1,9 +1,8 @@
 # Events
 
-This section describes event callbacks (or 'events' for short) that are
-called from the game when something specific happens. Which scripts
-receive them is usually filtered by player. Call ```receiveAllEvents(true)```
-to start receiving all events unfiltered.
+This section describes event callbacks (or 'events' for short) that are called from the
+game when something specific happens. Which scripts receive them is usually filtered
+by player. Call ```receiveAllEvents(true)``` to start receiving all events unfiltered.
 
 ## eventGameInit()
 
@@ -104,6 +103,7 @@ An event that is run when current user opens the build menu.
 An event that is run when current user opens the research menu.
 
 ## eventMenuManufacture()
+
 An event that is run when current user opens the manufacture menu.
 
 ## eventSelectionChanged(objects)
@@ -147,26 +147,28 @@ if the structure was built by a droid. It is not triggered for building theft
 
 ## eventStructureDemolish(structure[, droid])
 
-An event that is run every time a structure begins to be demolished. This does
-not trigger again if the structure is partially demolished.
+An event that is run every time a structure begins to be demolished.
+This does not trigger again if the structure is partially demolished.
 
 ## eventStructureReady(structure)
 
-An event that is run every time a structure is ready to perform some
-special ability. It will only fire once, so if the time is not right,
-register your own timer to keep checking.
+An event that is run every time a structure is ready to perform some special ability.
+It will only fire once, so if the time is not right, register your own timer to keep checking.
+
+## eventStructureUpgradeStarted(structure)
+
+An event that is run every time a structure starts to be upgraded.
 
 ## eventAttacked(victim, attacker)
 
-An event that is run when an object belonging to the script's controlling player is
-attacked. The attacker parameter may be either a structure or a droid.
+An event that is run when an object belonging to the script's controlling player is attacked.
+The attacker parameter may be either a structure or a droid.
 
 ## eventResearched(research, structure, player)
 
-An event that is run whenever a new research is available. The structure
-parameter is set if the research comes from a research lab owned by the
-current player. If an ally does the research, the structure parameter will
-be set to null. The player parameter gives the player it is called for.
+An event that is run whenever a new research is available. The structure parameter is set if
+the research comes from a research lab owned by the current player. If an ally does the research,
+the structure parameter will be set to null. The player parameter gives the player it is called for.
 
 ## eventDestroyed(object)
 
@@ -175,8 +177,7 @@ the parameter object around, since it is about to vanish!
 
 ## eventPickup(feature, droid)
 
-An event that is run whenever a feature is picked up. It is called for
-all players / scripts.
+An event that is run whenever a feature is picked up. It is called for all players / scripts.
 Careful passing the parameter object around, since it is about to vanish! (3.2+ only)
 
 ## eventObjectSeen(viewer, seen)
@@ -184,22 +185,19 @@ Careful passing the parameter object around, since it is about to vanish! (3.2+ 
 An event that is run sometimes when an object, which was marked by an object label,
 which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
 An event that is run sometimes when an objectm  goes from not seen to seen.
-First parameter is **game object** doing the seeing, the next the game
-object being seen.
+First parameter is **game object** doing the seeing, the next the game object being seen.
 
 ## eventGroupSeen(viewer, group)
 
 An event that is run sometimes when a member of a group, which was marked by a group label,
 which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
-First parameter is **game object** doing the seeing, the next the id of the group
-being seen.
+First parameter is **game object** doing the seeing, the next the id of the group being seen.
 
 ## eventObjectTransfer(object, from)
 
-An event that is run whenever an object is transferred between players,
-for example due to a Nexus Link weapon. The event is called after the
-object has been transferred, so the target player is in object.player.
-The event is called for both players.
+An event that is run whenever an object is transferred between players, for example due
+to a Nexus Link weapon. The event is called after the object has been transferred,
+so the target player is in object.player. The event is called for both players.
 
 ## eventChat(from, to, message)
 
@@ -218,21 +216,20 @@ Message may be undefined.
 An event that is run whenever a beacon message is removed. The ```from``` parameter is the
 player sending the beacon. For the moment, the ```to``` parameter is always the script player.
 
-## eventGroupLoss(object, group id, new size)
+## eventGroupLoss(object, groupId, newSize)
 
 An event that is run whenever a group becomes empty. Input parameter
 is the about to be killed object, the group's id, and the new group size.
 
 ## eventArea<label>(droid)
 
-An event that is run whenever a droid enters an area label. The area is then
-deactived. Call resetArea() to reactivate it. The name of the event is
-eventArea + the name of the label.
+An event that is run whenever a droid enters an area label. The area is then deactived.
+Call resetArea() to reactivate it. The name of the event is `eventArea${label}`.
 
 ## eventDesignCreated(template)
 
-An event that is run whenever a new droid template is created. It is only
-run on the client of the player designing the template.
+An event that is run whenever a new droid template is created.
+It is only run on the client of the player designing the template.
 
 ## eventAllianceOffer(from, to)
 
