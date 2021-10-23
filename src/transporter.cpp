@@ -644,6 +644,12 @@ int calcRemainingCapacity(const DROID *psTransporter)
 		return 0;
 	}
 
+	// If for some reason it doesn't have an associated psGroup (is it being recycled?), just return 0.
+	if (!psTransporter->psGroup)
+	{
+		return 0;
+	}
+
 	for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr && psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
