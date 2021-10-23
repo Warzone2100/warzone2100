@@ -195,7 +195,7 @@ function eventStartLevel()
 		}
 	});
 
-	camPlayVideos("MBDEMO_MSG");
+	camPlayVideos({video: "MBDEMO_MSG", type: MISS_MSG});
 	hackAddMessage("FAST_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("sendAttackGroup1", camSecondsToMilliseconds(10));
