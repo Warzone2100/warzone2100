@@ -97,7 +97,7 @@ struct DecalVertex
 };
 
 /// The lightmap texture
-static gfx_api::texture* lightmap_tex_num = nullptr;
+static gfx_api::texture* lightmap_texture = nullptr;
 /// When are we going to update the lightmap next?
 static unsigned int lightmapLastUpdate;
 /// How big is the lightmap?
@@ -950,7 +950,6 @@ bool initTerrain()
 	}
 	free(decaldata);
 
-	lightmap_tex_num = 0;
 	lightmapLastUpdate = 0;
 	lightmapWidth = 1;
 	lightmapHeight = 1;
@@ -968,11 +967,11 @@ bool initTerrain()
 		abort();
 		return false;
 	}
-	if (lightmap_tex_num)
-		delete lightmap_tex_num;
-	lightmap_tex_num = gfx_api::context::get().create_texture(1, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8);
+	if (lightmap_texture)
+		delete lightmap_texture;
+	lightmap_texture = gfx_api::context::get().create_texture(1, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8);
 
-	lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
+	lightmap_texture->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
 	terrainInitialised = true;
 
 	return true;
@@ -1013,8 +1012,8 @@ void shutdownTerrain()
 		}
 	}
 	sectors = nullptr;
-	delete lightmap_tex_num;
-	lightmap_tex_num = nullptr;
+	delete lightmap_texture;
+	lightmap_texture = nullptr;
 	lightmapPixmap = nullptr;
 
 	terrainInitialised = false;
@@ -1122,7 +1121,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	
 	// bind the vertex buffer
 	gfx_api::TerrainDepth::get().bind();
-	gfx_api::TerrainDepth::get().bind_textures(lightmap_tex_num);
+	gfx_api::TerrainDepth::get().bind_textures(lightmap_texture);
 	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
 	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), 
 	glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 0 });
@@ -1182,7 +1181,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 		// load the texture
 		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", psGroundTypes[layer].textureName);
-		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_tex_num);
+		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_texture);
 
 		// load the color buffer
 		gfx_api::context::get().bind_vertex_buffers(1, { std::make_tuple(textureVBO, static_cast<size_t>(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer)) });
@@ -1222,7 +1221,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 		renderState.fogColour.vector[3] / 255.f
 	);
 	gfx_api::TerrainDecals::get().bind();
-	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num);
+	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_texture);
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
 	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, textureMatrix, paramsXLight, paramsYLight,
 		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
@@ -1275,7 +1274,7 @@ void drawTerrain(const glm::mat4 &mvp)
 		lightmapLastUpdate = realTime;
 		updateLightMap();
 
-		lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
+		lightmap_texture->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
 	}
 
 	///////////////////////////////////
