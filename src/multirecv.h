@@ -39,7 +39,7 @@ bool recvDroidDisEmbark(NETQUEUE queue);
 bool recvColourRequest(NETQUEUE queue);
 bool recvFactionRequest(NETQUEUE queue);
 bool recvPositionRequest(NETQUEUE queue);
-void recvOptions(NETQUEUE queue);
+bool recvOptions(NETQUEUE queue);
 void sendOptions();
 
 bool recvResearchStatus(NETQUEUE queue);
