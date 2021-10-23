@@ -6392,7 +6392,19 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case NET_OPTIONS:					// incoming options file.
 		{
-			recvOptions(queue);
+			if (NetPlay.hostPlayer != queue.index)
+			{
+				HandleBadParam("NET_OPTIONS should be sent by host", 255, queue.index);
+				ignoredMessage = true;
+				break;
+			}
+			if (!recvOptions(queue))
+			{
+				// supplied NET_OPTIONS are not valid
+				setLobbyError(ERROR_INVALID);
+				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Host supplied invalid options")), parent));
+				break;
+			}
 			bInActualHostedLobby = true;
 			ingame.localOptionsReceived = true;
 

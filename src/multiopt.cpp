@@ -133,9 +133,10 @@ void sendOptions()
 
 // ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
-void recvOptions(NETQUEUE queue)
+// returns: false if the options should be considered invalid and the client should disconnect
+bool recvOptions(NETQUEUE queue)
 {
-	ASSERT_OR_RETURN(, queue.index == NetPlay.hostPlayer, "NET_OPTIONS received from unexpected player: %" PRIu8 " - ignoring", queue.index);
+	ASSERT_OR_RETURN(true, queue.index == NetPlay.hostPlayer, "NET_OPTIONS received from unexpected player: %" PRIu8 " - ignoring", queue.index);
 
 	unsigned int i;
 
@@ -151,7 +152,7 @@ void recvOptions(NETQUEUE queue)
 	NETbin(game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize;
 	NETuint32_t(&modHashesSize);
-	ASSERT_OR_RETURN(, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
+	ASSERT_OR_RETURN(false, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
 	game.modHashes.resize(modHashesSize);
 	for (auto &hash : game.modHashes)
 	{
@@ -294,13 +295,11 @@ void recvOptions(NETQUEUE queue)
 				break;
 			case FileRequestResult::FileExists:
 				debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
-				abort();
-				break;
+				return false;
 			case FileRequestResult::FailedToOpenFileForWriting:
 				// TODO: How best to handle? Ideally, message + back out of lobby?
 				debug(LOG_FATAL, "Failed to open file for writing - unable to download file: %s", filename);
-				abort();
-				break;
+				return false;
 		}
 	}
 
@@ -325,8 +324,7 @@ void recvOptions(NETQUEUE queue)
 			case FileRequestResult::FailedToOpenFileForWriting:
 				// TODO: How best to handle? Ideally, message + back out of lobby?
 				debug(LOG_FATAL, "Failed to open file for writing - unable to download file: %s", filename);
-				abort();
-				break;
+				return false;
 		}
 	}
 
@@ -346,6 +344,8 @@ void recvOptions(NETQUEUE queue)
 	}
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+
+	return true;
 }
 
 
