@@ -1977,11 +1977,26 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 
 static bool pickupOilDrum(int toPlayer, int fromPlayer)
 {
-	addPower(toPlayer, OILDRUM_POWER);  // give power
+	unsigned int power = OILDRUM_POWER;
+
+	if (!bMultiPlayer && !bInTutorial)
+	{
+		// Let Beta and Gamma campaign oil drums give a little more power
+		if (getCampaignNumber() == 2)
+		{
+			power = OILDRUM_POWER + (OILDRUM_POWER / 2);
+		}
+		else if (getCampaignNumber() == 3)
+		{
+			power = OILDRUM_POWER * 2;
+		}
+	}
+
+	addPower(toPlayer, power);  // give power
 
 	if (toPlayer == selectedPlayer)
 	{
-		CONPRINTF(_("You found %u power in an oil drum."), OILDRUM_POWER);
+		CONPRINTF(_("You found %u power in an oil drum."), power);
 	}
 
 	return true;
