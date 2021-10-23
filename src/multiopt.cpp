@@ -63,6 +63,7 @@
 #include "multirecv.h"
 #include "template.h"
 #include "activity.h"
+#include "warzoneconfig.h"
 
 // send complete game info set!
 void sendOptions()
@@ -91,6 +92,11 @@ void sendOptions()
 	NETuint8_t(&game.scavengers);
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
+	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
+	{
+		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32 "; resetting to: %" PRIu32, game.inactivityMinutes, static_cast<uint32_t>(MIN_MPINACTIVITY_MINUTES));
+		game.inactivityMinutes = MIN_MPINACTIVITY_MINUTES;
+	}
 	NETuint32_t(&game.inactivityMinutes);
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
@@ -167,6 +173,11 @@ bool recvOptions(NETQUEUE queue)
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
 	NETuint32_t(&game.inactivityMinutes);
+	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
+	{
+		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32, game.inactivityMinutes);
+		return false;
+	}
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{

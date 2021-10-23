@@ -34,6 +34,8 @@
 #define	CAMERASPEED_DEFAULT	(2500)
 #define	CAMERASPEED_STEP	(100)
 
+#define MIN_MPINACTIVITY_MINUTES 4
+
 /***************************************************************************/
 /*
  *	Global Definitions
