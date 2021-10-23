@@ -437,5 +437,9 @@ uint32_t war_getMPInactivityMinutes()
 
 void war_setMPInactivityMinutes(uint32_t minutes)
 {
+	if (minutes > 0 && minutes < MIN_MPINACTIVITY_MINUTES)
+	{
+		minutes = MIN_MPINACTIVITY_MINUTES;
+	}
 	warGlobs.MPinactivityMinutes = minutes;
 }
