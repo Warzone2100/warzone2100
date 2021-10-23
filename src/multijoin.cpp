@@ -409,6 +409,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 			return true;
 		}
 		ASSERT(NetPlay.playercount <= MAX_PLAYERS, "Too many players!");
+		ASSERT(GetGameMode() != GS_NORMAL, "A player joined after the game started??");
 
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.

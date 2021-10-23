@@ -1237,9 +1237,6 @@ bool recvMessage()
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
 			break;
-		case NET_OPTIONS:
-			recvOptions(queue);
-			break;
 		case NET_PLAYER_DROPPED:				// remote player got disconnected
 			{
 				uint32_t player_id;

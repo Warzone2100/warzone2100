@@ -69,6 +69,7 @@
 void sendOptions()
 {
 	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, GetGameMode() != GS_NORMAL, "sendOptions shouldn't be called after the game has started");
 
 	game.modHashes = getModHashList();
 
@@ -142,7 +143,8 @@ void sendOptions()
 // returns: false if the options should be considered invalid and the client should disconnect
 bool recvOptions(NETQUEUE queue)
 {
-	ASSERT_OR_RETURN(true, queue.index == NetPlay.hostPlayer, "NET_OPTIONS received from unexpected player: %" PRIu8 " - ignoring", queue.index);
+	ASSERT_OR_RETURN(true /* silently ignore */, queue.index == NetPlay.hostPlayer, "NET_OPTIONS received from unexpected player: %" PRIu8 " - ignoring", queue.index);
+	ASSERT_OR_RETURN(false, GetGameMode() != GS_NORMAL, "NET_OPTIONS received after the game has started??");
 
 	unsigned int i;
 
