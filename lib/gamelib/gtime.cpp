@@ -441,7 +441,9 @@ bool gtimeShouldWaitForPlayer(unsigned player)
 
 static inline bool shouldCheckDebugSyncForPlayerSlot(unsigned player)
 {
-	return NetPlay.players[player].allocated && (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer);
+	return NetPlay.players[player].allocated	// human player
+		&& !ingame.endTime.has_value()			// and game hasn't ended
+		&& (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer);
 }
 
 void recvPlayerGameTime(NETQUEUE queue)
