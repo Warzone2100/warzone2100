@@ -2294,8 +2294,7 @@ const unsigned nb_available_speeds = ARRAY_SIZE(available_speed);
 static void tryChangeSpeed(Rational newMod, Rational oldMod)
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if ((runningMultiplayer() && !dbgInputManager.debugMappingsAllowed()) || bInTutorial)
+	if (runningMultiplayer() || bInTutorial)
 	{
 		if (!bInTutorial)
 		{
@@ -2305,6 +2304,7 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 	}
 
 	// only in debug/cheat mode do we enable all time compression speeds.
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!dbgInputManager.debugMappingsAllowed() && (newMod >= 2 || newMod <= 0))  // 2 = max officially allowed time compression
 	{
 		return;
