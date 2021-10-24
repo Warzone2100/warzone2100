@@ -1549,14 +1549,16 @@ _("Computer predicts and compensates for target's movement")
 // data/base/messages/messages.json: $.MSG3.text[0]
 _("Computer Research Completed")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
+_("Computer systems are now 'ring-fenced' from NEXUS")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
 _("Computer systems can now be 'ring-fenced' from NEXUS")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_SL1.text[0]
 // data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[0]
 // data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[0]
-// ... + 3 refs
+// ... + 6 refs
 _("Computer Technology Breakthrough")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_ENGIN1.text[2]
@@ -1863,6 +1865,9 @@ _("Drops incendiary bombs")
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text[2]
 _("Electronically attacks and disrupts enemy structures")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
+_("Elite and Veteran rank units and Factories are protected")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-EMPCannon.name
 // data/mp/stats/structure.json: $.WallTower-EMP.name
@@ -2719,6 +2724,9 @@ _("Hellstorm Emplacement")
 // data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 _("Hellstorm")  
 // TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
+_("Hero and Special rank units are protected")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage08.name
 _("HESH Rocket Warhead Mk2")  
@@ -3046,7 +3054,9 @@ _("Improved high explosive shells")
 _("Improved Laser Focusing")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[1]
-// data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[1]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[1]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[1]
+// ... + 2 refs
 _("Improved NEXUS resistance circuitry")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_POWMD1.text[1]
@@ -4298,6 +4308,9 @@ _("NEXUS Resistance Circuits Mk2")
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
 _("NEXUS Resistance Circuits Mk3")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
+_("NEXUS Resistance Circuits Mk4")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
 _("NEXUS Resistance Circuits")  
 // TRANSLATORS: 
@@ -4507,6 +4520,9 @@ _("Produces Cyborgs")
 // ... + 5 refs
 _("Production Improved")  
 // TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
+_("Professional and Regular rank units are protected")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
 // data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 _("Project Heavy Body")  
@@ -4690,9 +4706,9 @@ _("Rearming speed +30%")
 _("Recoil loaded AA ammunition hopper")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
-// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
-// data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
-// data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[2]
+// ... + 3 refs
 _("Reduced chance of NEXUS take-over")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -5285,6 +5301,9 @@ _("Steel tower with machinegun")
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 _("Steel tower with twin machinegun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
+_("Stops NEXUS take-over")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-AALaser.name
 // data/mp/stats/weapons.json: $.AAGunLaser.name
