@@ -319,6 +319,18 @@ void closeLoadingScreen()
 bool displayGameOver(bool bDidit, bool showBackDrop)
 {
 	bool isFirstCallForThisGame = !testPlayerHasLost() && !testPlayerHasWon();
+	if (bMultiPlayer)
+	{
+		// This is a bit of a hack and partially relies upon the logic in endconditions.js
+		bool isGameFullyOver =
+			NetPlay.players[selectedPlayer].isSpectator	// gameOverMessage is only called for spectators when the game fully ends
+			|| bDidit; // can only win when the game actually ends :)
+		if (isGameFullyOver && !ingame.endTime.has_value())
+		{
+			ingame.endTime = std::chrono::steady_clock::now();
+			debug(LOG_INFO, "Game ended (duration: %lld)", (long long)std::chrono::duration_cast<std::chrono::seconds>(ingame.endTime.value() - ingame.startTime).count());
+		}
+	}
 	if (bDidit)
 	{
 		setPlayerHasWon(true);

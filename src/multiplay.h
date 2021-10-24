@@ -105,6 +105,7 @@ struct MULTIPLAYERINGAME
 	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
 	std::chrono::steady_clock::time_point startTime;
+	optional<std::chrono::steady_clock::time_point> endTime;
 	std::chrono::steady_clock::time_point lastLagCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
