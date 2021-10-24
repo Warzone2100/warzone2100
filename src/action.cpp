@@ -778,7 +778,8 @@ void actionUpdateDroid(DROID *psDroid)
 		//if we're moving droids to safety and currently waiting to fly back in, see if time is up
 		if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag())
 		{
-			if ((SDWORD)(mission.ETA - (gameTime - missionGetReinforcementTime())) <= 0)
+			bool enoughTimeRemaining = (mission.time - (gameTime - mission.startTime)) >= (60 * GAME_TICKS_PER_SEC);
+			if (((SDWORD)(mission.ETA - (gameTime - missionGetReinforcementTime())) <= 0) && enoughTimeRemaining)
 			{
 				UDWORD droidX, droidY;
 
