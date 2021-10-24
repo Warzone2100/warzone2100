@@ -875,6 +875,12 @@ void orderUpdateDroid(DROID *psDroid)
 				/* action droid to wait */
 				actionDroid(psDroid, DACTION_WAITFORREPAIR);
 			}
+			else
+			{
+				// move the droid closer to the repair point
+				// setting target to null will trigger search for nearest repair point: we might have a better option after all
+				psDroid->order.psObj = nullptr;
+			}
 		}
 		break;
 	case DORDER_LINEBUILD:
