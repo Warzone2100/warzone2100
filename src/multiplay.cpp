@@ -2347,6 +2347,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 		}
 	}
 
+	syncDebug("player%u", (unsigned)playerIndex);
 	NetPlay.players[playerIndex].isSpectator = true; // must come before enableGodMode
 
 	if (playerIndex == selectedPlayer)
