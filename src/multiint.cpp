@@ -6127,6 +6127,7 @@ void startMultiplayerGame()
 		sendOptions();
 		NEThaltJoining();							// stop new players entering.
 		ingame.TimeEveryoneIsInGame = nullopt;
+		ingame.endTime = nullopt;
 		ingame.isAllPlayersDataOK = false;
 		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));	//clear all player's array
 		SendFireUp();								//bcast a fireup message
@@ -6581,6 +6582,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 				debug(LOG_NET, "& local Options Received (MP game)");
 				ingame.TimeEveryoneIsInGame = nullopt;			// reset time
+				ingame.endTime = nullopt;
 				resetDataHash();
 				decideWRF();
 
@@ -8260,6 +8262,7 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, ui
 
 	// Set various other initialization things (see NET_FIREUP)
 	ingame.TimeEveryoneIsInGame = nullopt;			// reset time
+	ingame.endTime = nullopt;
 	resetDataHash();
 	decideWRF();
 
