@@ -1978,7 +1978,7 @@ public:
 		char text[80];
 
 		drawBlueBox(x0, y0, width(), height());
-		ssprintf(text, _("Click to take player slot %" PRIu32 ""), NetPlay.players[targetPlayerIdx].position);
+		ssprintf(text, _("Click to take player slot %u"), static_cast<unsigned>(NetPlay.players[targetPlayerIdx].position));
 		cache.wzPositionText.setText(text, font_regular);
 		cache.wzPositionText.render(x0 + 10, y0 + 22, WZCOL_FORM_TEXT);
 	}
