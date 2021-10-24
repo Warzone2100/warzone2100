@@ -33,14 +33,14 @@ enum DROID_ACTION
 	DACTION_NONE,					///< 0 not doing anything
 	DACTION_MOVE,					///< 1 moving to a location
 	DACTION_BUILD,					///< 2 building a structure
-	DACTION_UNUSED3,				///< 3 used to be building a foundation for a structure
+	DACTION_BUILD_FOUNDATION,			///< 3 used to be building a foundation for a structure
 	DACTION_DEMOLISH,				///< 4 demolishing a structure
 	DACTION_REPAIR,					///< 5 repairing a structure
 	DACTION_ATTACK,					///< 6 attacking something
 	DACTION_OBSERVE,				///< 7 observing something
 	DACTION_FIRESUPPORT,				///< 8 attacking something visible by a sensor droid
 	DACTION_SULK,					///< 9 refuse to do anything aggressive for a fixed time
-	DACTION_UNUSED_2,
+	DACTION_DESTRUCT,				///< 10 self destruct
 	DACTION_TRANSPORTOUT,				///< 11 move transporter offworld
 	DACTION_TRANSPORTWAITTOFLYIN,			///< 12 wait for timer to move reinforcements in
 	DACTION_TRANSPORTIN,				///< 13 move transporter onworld
@@ -55,7 +55,7 @@ enum DROID_ACTION
 	DACTION_MOVETODEMOLISH,				///< 19 moving to a new demolition location
 	DACTION_MOVETOREPAIR,				///< 20 moving to a new repair location
 	DACTION_BUILDWANDER,				///< 21 moving around while building
-	DACTION_UNUSED4,				///< 22 used to be moving around while building the foundation
+	DACTION_FOUNDATION_WANDER,			///< 22 used to be moving around while building the foundation
 	DACTION_MOVETOATTACK,				///< 23 moving to a target to attack
 	DACTION_ROTATETOATTACK,				///< 24 rotating to a target to attack
 	DACTION_MOVETOOBSERVE,				///< 25 moving to be able to see a target
@@ -73,6 +73,7 @@ enum DROID_ACTION
 	DACTION_CLEARREARMPAD,				///< 37 a VTOL droid being told to get off a rearm pad
 	DACTION_RETURNTOPOS,				///< 38 used by scout/patrol order when returning to route
 	DACTION_FIRESUPPORT_RETREAT,			///< 39 used by firesupport order when sensor retreats
+	// ACTION UNKNOWN
 	DACTION_CIRCLE = 41,				///< 41 circling while engaging
 };
 

@@ -104,42 +104,42 @@ const char *getDroidActionName(DROID_ACTION action)
 {
 	static const char *name[] =
 	{
-		"DACTION_NONE",					// not doing anything
-		"DACTION_MOVE",					// 1 moving to a location
-		"DACTION_BUILD",					// building a structure
-		"DACTION_BUILD_FOUNDATION",		// 3 building a foundation for a structure
-		"DACTION_DEMOLISH",				// demolishing a structure
-		"DACTION_REPAIR",					// 5 repairing a structure
-		"DACTION_ATTACK",					// attacking something
-		"DACTION_OBSERVE",				// 7 observing something
-		"DACTION_FIRESUPPORT",			// attacking something visible by a sensor droid
-		"DACTION_SULK",					// 9 refuse to do anything aggressive for a fixed time
-		"DACTION_DESTRUCT",				// self destruct
-		"DACTION_TRANSPORTOUT",			// 11 move transporter offworld
-		"DACTION_TRANSPORTWAITTOFLYIN",	// wait for timer to move reinforcements in
-		"DACTION_TRANSPORTIN",			// 13 move transporter onworld
-		"DACTION_DROIDREPAIR",			// repairing a droid
-		"DACTION_RESTORE",				// 15 restore resistance points of a structure
+		"DACTION_NONE",					// (0) not doing anything
+		"DACTION_MOVE",					// (1) moving to a location
+		"DACTION_BUILD",					// (2) building a structure
+		"DACTION_BUILD_FOUNDATION",		// (3) building a foundation for a structure
+		"DACTION_DEMOLISH",				// (4)demolishing a structure
+		"DACTION_REPAIR",					// (5) repairing a structure
+		"DACTION_ATTACK",					// (6) attacking something
+		"DACTION_OBSERVE",				// (7) observing something
+		"DACTION_FIRESUPPORT",			// (8) attacking something visible by a sensor droid
+		"DACTION_SULK",					// (9) refuse to do anything aggressive for a fixed time
+		"DACTION_DESTRUCT",				// (10) self destruct
+		"DACTION_TRANSPORTOUT",			// (11) move transporter offworld
+		"DACTION_TRANSPORTWAITTOFLYIN",	// (12) wait for timer to move reinforcements in
+		"DACTION_TRANSPORTIN",			// (13) move transporter onworld
+		"DACTION_DROIDREPAIR",			// (14) repairing a droid
+		"DACTION_RESTORE",				// (15) restore resistance points of a structure
 		"DACTION_UNUSED",
-		"DACTION_MOVEFIRE",				// 17
-		"DACTION_MOVETOBUILD",			// moving to a new building location
-		"DACTION_MOVETODEMOLISH",			// 19 moving to a new demolition location
-		"DACTION_MOVETOREPAIR",			// moving to a new repair location
-		"DACTION_BUILDWANDER",			// 21 moving around while building
-		"DACTION_FOUNDATION_WANDER",		// moving around while building the foundation
-		"DACTION_MOVETOATTACK",			// 23 moving to a target to attack
-		"DACTION_ROTATETOATTACK",			// rotating to a target to attack
-		"DACTION_MOVETOOBSERVE",			// 25 moving to be able to see a target
-		"DACTION_WAITFORREPAIR",			// waiting to be repaired by a facility
-		"DACTION_MOVETOREPAIRPOINT",		// 27 move to repair facility repair point
-		"DACTION_WAITDURINGREPAIR",		// waiting to be repaired by a facility
-		"DACTION_MOVETODROIDREPAIR",		// 29 moving to a new location next to droid to be repaired
-		"DACTION_MOVETORESTORE",			// moving to a low resistance structure
+		"DACTION_MOVEFIRE",				// (17)
+		"DACTION_MOVETOBUILD",			// (18) moving to a new building location
+		"DACTION_MOVETODEMOLISH",			// (19) moving to a new demolition location
+		"DACTION_MOVETOREPAIR",			// (20) moving to a new repair location
+		"DACTION_BUILDWANDER",			// (21) moving around while building
+		"DACTION_FOUNDATION_WANDER",		// (22) moving around while building the foundation
+		"DACTION_MOVETOATTACK",			// (23) moving to a target to attack
+		"DACTION_ROTATETOATTACK",			// (24) rotating to a target to attack
+		"DACTION_MOVETOOBSERVE",			// (25) moving to be able to see a target
+		"DACTION_WAITFORREPAIR",			// (26) waiting to be repaired by a facility
+		"DACTION_MOVETOREPAIRPOINT",		// (27) move to repair facility repair point
+		"DACTION_WAITDURINGREPAIR",		// (28) waiting to be repaired by a facility
+		"DACTION_MOVETODROIDREPAIR",		// (29) moving to a new location next to droid to be repaired
+		"DACTION_MOVETORESTORE",			// (30) moving to a low resistance structure
 		"DACTION_UNUSED2",
-		"DACTION_MOVETOREARM",			// (32)moving to a rearming pad - VTOLS
-		"DACTION_WAITFORREARM",			// (33)waiting for rearm - VTOLS
-		"DACTION_MOVETOREARMPOINT",		// (34)move to rearm point - VTOLS - this actually moves them onto the pad
-		"DACTION_WAITDURINGREARM",		// (35)waiting during rearm process- VTOLS
+		"DACTION_MOVETOREARM",			// (32) moving to a rearming pad - VTOLS
+		"DACTION_WAITFORREARM",			// (33) waiting for rearm - VTOLS
+		"DACTION_MOVETOREARMPOINT",		// (34) move to rearm point - VTOLS - this actually moves them onto the pad
+		"DACTION_WAITDURINGREARM",		// (35) waiting during rearm process- VTOLS
 		"DACTION_VTOLATTACK",				// (36) a VTOL droid doing attack runs
 		"DACTION_CLEARREARMPAD",			// (37) a VTOL droid being told to get off a rearm pad
 		"DACTION_RETURNTOPOS",			// (38) used by scout/patrol order when returning to route
