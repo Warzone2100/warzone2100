@@ -4396,6 +4396,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool a
 	}
 
 	// Allocate memory for a new socket
+	NetPlay.hostPlayer = NET_HOST_ONLY;
 	NETinitQueue(NETnetQueue(NET_HOST_ONLY));
 	// NOTE: tcp_socket = bsocket now!
 	bsocket = tcp_socket;
