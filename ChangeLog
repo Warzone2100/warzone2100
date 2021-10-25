@@ -1,3 +1,27 @@
+2021-10-25: Version 4.2.0:
+ * General:
+   * Fix: Handle repair point choice better so it doesn't pick less than ideal ones (commit:4a3d528b6c70fd5763ad1ebabf181e2e6fc7f321, #2313)
+ * Graphics:
+   * Add: Update Ultimate Scavengers button image (commit:51c535432c1777e4a002e5d41f9865928734dd17, #2305)
+ * Campaign:
+   * Add: Increase oil drum power in Beta (150) and Gamma (200) (commit:211e0a72a0e886e79651e776384f7fe64c5c2a28, #2310)
+   * Fix: Fix fastplay video not working since 4.2.0-beta2 (commit:55b656f1a9c660a5a521a35f2e5de28b41e85824, #2311)
+   * Fix: Prevent old transporter issue on Beta-end where it can come back and fail the player due to little time left to send it away again (commit:2dab78359b0ca05157c73b52d13aa160108c8ce3, #2317)
+ * Scripting:
+   * Change: Update JS documents (commit:1b50d7040c70e4b5c4bab6a1e21f27c58dd4d1f6, #2290)
+ * Multiplayer:
+   * Change: Display team chooser column at all times (commit:8a6b20424d55e5acac0271ef56d82a7cc157c25f, #2302)
+   * Change: Make inactivityMinutes / idleTime configurable (too many commits, #2307)
+   * Fix: Fix a desync in replays due to structure limits not being the same in the replay (commit:79f1580e36b96584616a94d680b7eb09325d9e94, commit:d8f3f8cdcf1550e9680658fc3ff070e640c66b08 commit:c317fc92036952e3bffa90cc7819ce8b1be7e99c, #2288)
+   * Fix: Fix a crash/assert when players were transitioned to spectators (commit:0720478249555a965a1c117d9148816aa6ce4ccf, commit:844afd747987c525c5bfc7e12ad5fd394f426c00, #2293)
+   * Fix: Fix order of players in specstats window (commit:d7ce7f65234011c17f791cad03bca2681d7c5136, #2299)
+ * MP-Balance:
+   * Change: Reduced effectiveness of all-rounder weapons against cyborgs to 60% from 65% and make HMG come earlier (commit:37fba9ff657d29ad9e044b447cd1c2063cbb0c35, #2306)
+ * Other:
+   * Fix: Mingw / Clang compile warning fixes (commit:4a4106d59d1ca54938fdc64fb24934b75e38fc86, commit:495ec740a314894aae325c69e9923a11c617edb3, #2291)
+   * Fix: Fix a potential chat related crash (commit:86ea2a27214fb47cbb55fd40af07ec9dd388bf98, #2294)
+   * Fix: Fix potential crash due to 0-sized decals VBO on maps without decals (commit:641b57f61eebb1b860e63eb382b96811ebb72ed2, #2303)
+
 2021-10-16: Version 4.2.0-beta2:
  * General:
    * Add: Make selected structures and units blink on radar (too many commits, #2260)
