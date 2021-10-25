@@ -1057,7 +1057,14 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		gameTimeSetMod(Rational(500));
 		if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
 		{
-			jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+			if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
+			{
+				jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+			}
+			else
+			{
+				debug(LOG_INFO, "Skipping autogame auto-AI for selectedPlayer %" PRIu32 "", selectedPlayer);
+			}
 		}
 	}
 
