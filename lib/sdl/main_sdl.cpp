@@ -455,6 +455,22 @@ int wzGetTicks()
 
 void wzDisplayDialog(DialogType type, const char *title, const char *message)
 {
+	if (!WZbackend.has_value())
+	{
+		// while this could be thread_local, thread_local may not yet be supported on all platforms properly
+		// and wzDisplayDialog should probably be called **only** on the main thread anyway
+		static bool processingDialog = false;
+		if (!processingDialog)
+		{
+			// in headless mode, do not display a messagebox (which might block the main thread)
+			// but just log the details
+			processingDialog = true;
+			debug(LOG_INFO, "Suppressed dialog (headless):\n\tTitle: %s\n\tMessage: %s", title, message);
+			processingDialog = false;
+		}
+		return;
+	}
+
 	Uint32 sdl_messagebox_flags = 0;
 	switch (type)
 	{
