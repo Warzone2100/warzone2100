@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:05\n"
+"PO-Revision-Date: 2021-10-25 15:13\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -5815,16 +5815,16 @@ msgstr "Falha ao obter uma resposta do lobby!"
 
 #: lib/netplay/netreplay.cpp:257
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "O formato do arquivo de replay é mais recente que esta versão do Warzone 2100 pode suportar."
 
 #: lib/netplay/netreplay.cpp:259
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Versão do formato de replay: %u"
 
 #: lib/netplay/netreplay.cpp:260
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Formato de arquivo de replay não suportado"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -7871,7 +7871,7 @@ msgstr "Pesquisa de Computador Concluída"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "Sistemas de computador podem agora ser isolados de NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
