@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:05\n"
+"PO-Revision-Date: 2021-10-25 15:13\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -5812,16 +5812,16 @@ msgstr "L'antichambre le répond pas !"
 
 #: lib/netplay/netreplay.cpp:257
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Le format de fichier de relecture est plus récent que ce que cette version de Warzone 2100 peut supporter."
 
 #: lib/netplay/netreplay.cpp:259
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Version du format de relecture: %u"
 
 #: lib/netplay/netreplay.cpp:260
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Format de fichier de relecture non pris en charge"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -7868,7 +7868,7 @@ msgstr "Recherche informatique terminée"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "Les systèmes informatiques peuvent désormais faire barrière à Nexus"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -8295,7 +8295,7 @@ msgstr "Attaque électroniquement les structures ennemies et empêche leur bon f
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Les unités et usines de rang élite et vétéran sont protégées"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
@@ -9619,7 +9619,7 @@ msgstr "Hellstorm"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2728
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Les unités de rang héros et spécial sont protégées"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -11767,7 +11767,7 @@ msgstr "Circuits résistants au NEXUS Mk3"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4312
 msgid "NEXUS Resistance Circuits Mk4"
-msgstr ""
+msgstr "Circuits résistants au NEXUS Mk4"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
@@ -12108,7 +12108,7 @@ msgstr "Produit des Cyborgs"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4524
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Les unités de rang professionnel et régulier sont protégées"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -13316,7 +13316,7 @@ msgstr "Tour en acier avec mitrailleuse jumelée"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5306
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Stoppe le contrôle du NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -15456,11 +15456,11 @@ msgstr "Collectif"
 
 #: src/frontend.cpp:177
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Les vidéos de la campagnes sont manquantes"
 
 #: src/frontend.cpp:178
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Consultez notre FAQ pour savoir comment installer des vidéos"
 
 #: src/frontend.cpp:198
 msgid "Single Player"
@@ -17062,7 +17062,7 @@ msgstr "Énergie"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Énergie par seconde"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17969,7 +17969,7 @@ msgstr "Cliquez pour prendre cette position"
 #: src/multiint.cpp:1981
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "Cliquez pour prendre la position %u"
 
 #: src/multiint.cpp:2018
 msgid "Click to swap player to this slot"
@@ -18260,7 +18260,7 @@ msgstr "L'hôte démarre la partie"
 
 #: src/multiint.cpp:6406
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "Options invalides fournies par l'hôte"
 
 #: src/multiint.cpp:6640
 msgid "You have been kicked: "
