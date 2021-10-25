@@ -166,7 +166,7 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 	// First copy over the data into our local array
 	playerStats[playerIndex] = std::move(plStats);
 
-	if (!bLocal)
+	if (!bLocal && (NetPlay.isHost || playerIndex == realSelectedPlayer))
 	{
 		// Now send it to all other players
 		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
