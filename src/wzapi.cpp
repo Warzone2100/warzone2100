@@ -1196,6 +1196,7 @@ wzapi::researchResults wzapi::enumResearch(WZAPI_NO_PARAMS)
 {
 	researchResults result;
 	int player = context.player();
+	SCRIPT_ASSERT_PLAYER({}, context, player);
 	for (int i = 0; i < asResearch.size(); i++)
 	{
 		RESEARCH *psResearch = &asResearch[i];
@@ -1963,6 +1964,7 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 bool wzapi::componentAvailable(WZAPI_PARAMS(std::string componentType, optional<std::string> _componentName))
 {
 	int player = context.player();
+	SCRIPT_ASSERT_PLAYER(false, context, player);
 	std::string &componentName = _componentName.has_value() ? _componentName.value() : componentType;
 	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(componentName.c_str()));
 	SCRIPT_ASSERT(false, context, psComp, "No such component: %s", componentName.c_str());
