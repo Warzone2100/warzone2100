@@ -2384,12 +2384,12 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 		{
 			stdOutGameSummary(0);
 		}
-		exit(0);
+		wzQuit(0); // Trigger a *graceful* shutdown
 	}
 	else if (headlessGameMode())
 	{
 		debug(LOG_WARNING, "Headless game completed successfully!");
-		exit(0); // FUTURE TODO: We could be nicer about this and trigger a *graceful* shutdown
+		wzQuit(0); // Trigger a *graceful* shutdown
 	}
 	return true;
 }
