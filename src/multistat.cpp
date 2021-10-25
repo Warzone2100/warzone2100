@@ -255,7 +255,7 @@ void recvMultiStats(NETQUEUE queue)
 	}
 	NETend();
 
-	if (realSelectedPlayer == 0 && !playerStats[playerIndex].autorating.valid)
+	if (NetPlay.isHost && !playerStats[playerIndex].autorating.valid)
 	{
 		lookupRatingAsync(playerIndex);
 	}
