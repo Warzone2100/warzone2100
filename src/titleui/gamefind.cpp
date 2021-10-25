@@ -125,6 +125,7 @@ TITLECODE WzGameFindTitleUI::run()
 		addConsoleBox();
 		if (safeSearch || handleUserRefreshRequest)
 		{
+			setLobbyError(ERROR_NOERROR); // clear lobby error first
 			if (!NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))	// find games synchronously
 			{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
