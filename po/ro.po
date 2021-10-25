@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:05\n"
+"PO-Revision-Date: 2021-10-25 15:13\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -160,11 +160,11 @@ msgstr "MISIUNEA BAZEI ALFA: Întemeiază o bază înaintată"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Înființați o bază înaintată pe platou și alungați Noua Paradigmă."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Construiește structuri de apărare până când semnalul verde de obiectiv dispare."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "Odată zona sigură creată, întoarce-te la ZA pentru noi ordine."
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "MISIUNEA BAZEI BETA: Supraviețuiește și evacuează! Aduceți un camion"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -4072,27 +4072,27 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Baze distruse"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Unități inamice rămase"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Clădiri inamice rămase"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Întoarcere la LZ necesară"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Distruge toate unitățile și bazele inamice"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Supraviețuiți până când cronometrul ajunge la zero"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -5414,11 +5414,11 @@ msgstr "Stație de Reparații Robotizată Mk3"
 
 #: data/mp/messages/strings/names.txt:438
 msgid "Advanced Repair Facility Mk2"
-msgstr ""
+msgstr "Stație de reparații avansată Mk2"
 
 #: data/mp/messages/strings/names.txt:439
 msgid "Advanced Repair Facility Mk3"
-msgstr ""
+msgstr "Stație de reparații avansată Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.HeavyRepair.name
@@ -5426,26 +5426,26 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:470
 #: po/custom/fromJson.txt:2696
 msgid "Heavy Repair Turret"
-msgstr ""
+msgstr "Turelă grea de reparații"
 
 #: data/mp/messages/strings/names.txt:490
 msgid "Nexus Intruder Program"
-msgstr ""
+msgstr "Program intrus Nexus"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 #: data/mp/messages/strings/names.txt:491
 #: po/custom/fromJson.txt:4318
 msgid "Nexus Resistance Circuits"
-msgstr ""
+msgstr "Circuite de rezistență Nexus"
 
 #: data/mp/messages/strings/names.txt:492
 msgid "Nexus Resistance Circuits Mk2"
-msgstr ""
+msgstr "Circuite de rezistență Nexus Mk2"
 
 #: data/mp/messages/strings/names.txt:493
 msgid "Nexus Resistance Circuits Mk3"
-msgstr ""
+msgstr "Circuite de rezistență Nexus Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
@@ -5524,7 +5524,7 @@ msgstr "Siloz de rachete nucleare"
 #: data/mp/messages/strings/names.txt:777
 #: po/custom/fromJson.txt:5348
 msgid "Super Heavy-Gunner"
-msgstr ""
+msgstr "Tunar super-greu"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-Acannon.name
@@ -5537,7 +5537,7 @@ msgstr "Cyborg cu Super Autotun"
 
 #: data/mp/messages/strings/names.txt:781
 msgid "Super HPV Cyborg"
-msgstr ""
+msgstr "Super-cyborg HPV"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-TK.name
@@ -5728,23 +5728,23 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Îmi pare rău, nu am camioane."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "Îl poți folosi pe acesta."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "Ne pare rău, transferul robotului a eșuat."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "Energie transferată."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "Te rog pune o baliză!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
@@ -5786,7 +5786,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2056
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Trimiterea mesajului a eșuat - încercați din nou"
 
 #: lib/netplay/netplay.cpp:2650
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
@@ -5814,30 +5814,30 @@ msgstr ""
 
 #: lib/netplay/netreplay.cpp:257
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Formatul fișierului de reluare este mai nou decât poate susține această versiune de Warzone 2100."
 
 #: lib/netplay/netreplay.cpp:259
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Versiunea Formatului de Reluare: %u"
 
 #: lib/netplay/netreplay.cpp:260
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Formatul fișierului de reluare nu este acceptat"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Meniu"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:2024
 #: src/frontend.cpp:2068
 msgid "Campaign"
-msgstr ""
+msgstr "Campanie"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Provocare"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
@@ -5853,15 +5853,15 @@ msgstr "Meniu Muzică"
 
 #: lib/widget/form.cpp:343
 msgid "(untitled)"
-msgstr ""
+msgstr "(fără titlu)"
 
 #: lib/widget/jsontable.cpp:496
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Copiază calea în Clipboard"
 
 #: lib/widget/jsontable.cpp:503
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Copiază JSON în Clipboard"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
@@ -5958,7 +5958,7 @@ msgstr "Încărcător AA pe lanț"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "Amplasament cu tun AA cu șrapnel Ciclon"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
@@ -6332,7 +6332,7 @@ msgstr "Toate DAV-urile îmbunătățite automat"
 #. data/mp/tests/miza.json: $.player_2.name
 #: po/custom/fromJson.txt:482
 msgid "Ally"
-msgstr ""
+msgstr "Aliat"
 
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
@@ -6456,7 +6456,7 @@ msgstr "Rachetă Arhanghel"
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #: po/custom/fromJson.txt:560
 msgid "Armed with Cyborg assault gun"
-msgstr ""
+msgstr "Înarmat cu Mitralieră de Asalt pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -7870,7 +7870,7 @@ msgstr "Cercetare de calculatoare completă"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "Sistemele de calcul sunt acum „îngrădite” față de NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -8297,7 +8297,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Unitățile de rang veteran sau de elită și fabricile sunt protejate"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
@@ -9621,7 +9621,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2728
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Unitățile de rang erou sau special sunt protejate"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -11769,7 +11769,7 @@ msgstr "Circuite de rezistență NEXUS Mk3"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4312
 msgid "NEXUS Resistance Circuits Mk4"
-msgstr ""
+msgstr "Circuite de rezistență NEXUS Mk4"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
@@ -12110,7 +12110,7 @@ msgstr "Produce Cyborgi"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4524
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Unitățile de rang prefesionist și regulat sunt protejate"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -13318,7 +13318,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5306
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Previne preluarea NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -15463,11 +15463,11 @@ msgstr ""
 
 #: src/frontend.cpp:177
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Videoclipurile campaniei lipsesc"
 
 #: src/frontend.cpp:178
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Vezi FAQ despre cum să instalezi videoclipuri"
 
 #: src/frontend.cpp:198
 msgid "Single Player"
@@ -17063,7 +17063,7 @@ msgstr "Energie"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Energie pe secundă"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17969,7 +17969,7 @@ msgstr "Fă clic pentru a te muta la acest loc"
 #: src/multiint.cpp:1981
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "Click pentru a lua slotul jucătorului %u"
 
 #: src/multiint.cpp:2018
 msgid "Click to swap player to this slot"
@@ -18260,7 +18260,7 @@ msgstr "Gazda Începe Jocul"
 
 #: src/multiint.cpp:6406
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "Gazda a furnizat opțiuni invalide"
 
 #: src/multiint.cpp:6640
 msgid "You have been kicked: "
