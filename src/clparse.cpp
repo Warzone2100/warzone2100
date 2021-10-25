@@ -25,6 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -312,6 +313,7 @@ typedef enum
 	CLI_MOD_MP,
 	CLI_LOADSKIRMISH,
 	CLI_LOADCAMPAIGN,
+	CLI_LOADREPLAY,
 	CLI_WINDOW,
 	CLI_VERSION,
 	CLI_RESOLUTION,
@@ -368,6 +370,7 @@ static const struct poptOption *getOptionsTable()
 		{ "crash", POPT_ARG_NONE, CLI_CRASH,      N_("Causes a crash to test the crash handler"), nullptr },
 		{ "loadskirmish", POPT_ARG_STRING, CLI_LOADSKIRMISH, N_("Load a saved skirmish game"),     N_("savegame") },
 		{ "loadcampaign", POPT_ARG_STRING, CLI_LOADCAMPAIGN, N_("Load a saved campaign game"),     N_("savegame") },
+		{ "loadreplay", POPT_ARG_STRING, CLI_LOADREPLAY, N_("Load a replay"),     N_("replay file") },
 		{ "window", POPT_ARG_NONE, CLI_WINDOW,     N_("Play in windowed mode"),             nullptr },
 		{ "version", POPT_ARG_NONE, CLI_VERSION,    N_("Show version information and exit"), nullptr },
 		{ "resolution", POPT_ARG_STRING, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
@@ -744,6 +747,47 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			SPinit(LEVEL_TYPE::CAMPAIGN);
 			SetGameMode(GS_SAVEGAMELOAD);
 			break;
+		case CLI_LOADREPLAY:
+		{
+			// retrieve the replay name
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Unrecognised replay name");
+			}
+			std::string extension;
+			if (!strEndsWith(token, ".wzrp"))
+			{
+				extension = ".wzrp";
+			}
+			// check if we have a full path (relative to the replay dir)
+			snprintf(saveGameName, sizeof(saveGameName), "%s/%s%s", ReplayPath, token, extension.c_str());
+			bool foundReplayFile = PHYSFS_exists(saveGameName) != 0;
+			if (!foundReplayFile)
+			{
+				// look in all possible replay subdirs (maybe we just have a filename)
+				std::vector<std::string> replaySubdirs = {"skirmish", "multiplay"};
+				for (auto& replaySubdir : replaySubdirs)
+				{
+					snprintf(saveGameName, sizeof(saveGameName), "%s/%s/%s%s", ReplayPath, replaySubdir.c_str(), token, extension.c_str());
+					if (PHYSFS_exists(saveGameName))
+					{
+						foundReplayFile = true;
+						break;
+					}
+				}
+			}
+			if (!foundReplayFile)
+			{
+				qFatal("Unable to find specified replay");
+			}
+			sstrcpy(sRequestResult, saveGameName); // hack to avoid crashes
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			bMultiPlayer = true;
+			game.maxPlayers = 4; //DEFAULTSKIRMISHMAPMAXPLAYERS;
+			SetGameMode(GS_SAVEGAMELOAD);
+			break;
+		}
 		case CLI_CONTINUE:
 			if (findLastSave())
 			{
