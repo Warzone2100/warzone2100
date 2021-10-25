@@ -1229,7 +1229,7 @@
 	"Cyb-Hvywpn-Acannon": {
 		"buildPoints": 400,
 		"buildPower": 125,
-		"damage": 35,
+		"damage": 40,
 		"effectSize": 25,
 		"explosionWav": "smlexpl.ogg",
 		"facePlayer": 1,
@@ -1253,7 +1253,7 @@
 		"name": "Super Auto-Cannon Cyborg",
 		"numExplosions": 1,
 		"radius": 96,
-		"radiusDamage": 25,
+		"radiusDamage": 30,
 		"recoilValue": 25,
 		"rotate": 180,
 		"shortHit": 60,
