@@ -126,6 +126,14 @@ static bool selDamaged(DROID *droid)
 {
 	return PERCENT(droid->body, droid->originalBody) < REPAIRLEV_LOW && !selTransporter(droid);
 }
+static bool selNoGroup(DROID *psDroid)
+{
+	return psDroid->group != UBYTE_MAX;
+}
+static bool selCombatLandMildlyOrNotDamaged(DROID *psDroid)
+{
+	return PERCENT(psDroid->body, psDroid->originalBody) > REPAIRLEV_LOW && selCombatLand(psDroid) && ! selNoGroup(psDroid);
+}
 
 // ---------------------------------------------------------------------
 // Deselects all units for the player
@@ -638,6 +646,9 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 			break;
 		case DST_ALL_SAME:
 			retVal = selSelectAllSame(player, bOnScreen);
+			break;
+		case DST_ALL_LAND_MILDLY_OR_NOT_DAMAGED:
+			retVal = selSelectUnitsIf(player, selCombatLandMildlyOrNotDamaged, bOnScreen);
 			break;
 		default:
 			ASSERT(false, "Invalid selection type");
