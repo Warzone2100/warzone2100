@@ -152,8 +152,8 @@ jobs:
         }
 
         # Set default platform downloads for SourceForge
-        set_sf_default_if_present "warzone2100_win_x86_portable.exe" "default=windows"
-        set_sf_default_if_present "warzone2100_macOS.zip" "default=mac"
+        set_sf_default_if_present "warzone2100_win_x64_installer.exe" "default=windows"
+        set_sf_default_if_present "warzone2100_macOS_universal.zip" "default=mac"
         set_sf_default_if_present "warzone2100_src.tar.xz" "default=linux&default=bsd&default=solaris&default=others"
 
         echo "Done."
