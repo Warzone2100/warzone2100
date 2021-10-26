@@ -1271,7 +1271,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		const unsigned oldState = psDroid->secondaryOrder;
 		psDroid->secondaryOrder &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
 		psDroid->secondaryOrderPending &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
-		objTrace(psDroid->id, "secondary order reset due to primary order set");
+		objTrace(psDroid->id, "secondary order reset due to primary order set. Was %x, now %x", oldState, psDroid->secondaryOrder);
 		if (oldState != psDroid->secondaryOrder && psDroid->player == selectedPlayer)
 		{
 			intRefreshScreen();
@@ -2920,7 +2920,7 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 			}
 		}
 		// fall-through
-
+	case DSO_ATTACK_PREF:
 	case DSO_ATTACK_LEVEL:
 		if (psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
 		{
@@ -2958,7 +2958,7 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 			supported = false;
 		}
 		break;
-
+		
 	default:
 		supported = false;
 		break;
@@ -2969,7 +2969,7 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 
 
 /** This function returns the droid order's secondary state of the secondary order.*/
-SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode)
+SECONDARY_STATE secondaryGetState(const DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode)
 {
 	uint32_t state = psDroid->secondaryOrder;
 
@@ -3019,6 +3019,13 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MOD
 			return DSS_FIREDES_SET;
 		}
 		break;
+	case DSO_ATTACK_PREF:
+		{
+		const auto ret = (state & DSS_ATTACK_PREF_MASK);
+		//debug(LOG_INFO, "attack pref is currently 0x%08X, %i, pend 0x%08X, curr 0x%08X", ret, DSS_ATTACK_PREF_MASK, psDroid->secondaryOrderPending, psDroid->secondaryOrder);
+		return (SECONDARY_STATE) ret;
+		break;
+		}
 	default:
 		break;
 	}
@@ -3378,13 +3385,18 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			secondarySet |= DSS_HALT_GUARD;
 		}
 		break;
+	case DSO_ATTACK_PREF:
+		secondaryMask = DSS_ATTACK_PREF_MASK;
+		secondarySet = State;
+		//debug(LOG_INFO, "setting DSO_PREF: 0x%08X(%i)", State, State);
+		break;
 	case DSO_UNUSED:
 	case DSO_FIRE_DESIGNATOR:
 		// Do nothing.
 		break;
 	}
 	uint32_t newSecondaryState = (CurrState & ~secondaryMask) | secondarySet;
-
+	debug(LOG_INFO, "old DSO 0x%08X(%i), new DSO 0x%08X(%i), queue? %i, mm %i", CurrState, CurrState, newSecondaryState, newSecondaryState, mode == ModeQueue, bMultiMessages);
 	if (bMultiMessages && mode == ModeQueue)
 	{
 		if (sec == DSO_REPAIR_LEVEL)
@@ -3686,7 +3698,9 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			cmdDroidClearDesignator(psDroid->player);
 		}
 		break;
-
+	case DSO_ATTACK_PREF:
+		CurrState &= ~DSS_ATTACK_PREF_MASK;
+		CurrState |= State;
 	default:
 		break;
 	}
@@ -3696,6 +3710,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		debug(LOG_WARNING, "Guessed the new secondary state incorrectly, expected 0x%08X, got 0x%08X, was 0x%08X, sec = %d, state = 0x%08X.", newSecondaryState, CurrState, psDroid->secondaryOrder, sec, State);
 	}
 	psDroid->secondaryOrder = CurrState;
+	debug(LOG_INFO, "secondary set to %x", CurrState);
 	psDroid->secondaryOrderPendingCount = std::max(psDroid->secondaryOrderPendingCount - 1, 0);
 	if (psDroid->secondaryOrderPendingCount == 0)
 	{

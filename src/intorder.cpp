@@ -40,9 +40,9 @@
 #define ORDER_BUTGAP	4
 #define ORDER_BOTTOMY	318	+ E_H
 
-#define MAX_DISPLAYABLE_ORDERS 11	// Max number of displayable orders.
+#define MAX_DISPLAYABLE_ORDERS 15	// Max number of displayable orders.
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
-#define NUM_ORDERS 12			// Number of orders in OrderButtons list.
+#define NUM_ORDERS 13			// Number of orders in OrderButtons list.
 
 #define IDORDER_ATTACK_RANGE				8010
 #define IDORDER_REPAIR_LEVEL				8020
@@ -56,6 +56,7 @@
 #define IDORDER_FIRE_DESIGNATOR				8100
 #define IDORDER_ASSIGN_VTOL_PRODUCTION		8110
 #define IDORDER_CIRCLE						8120
+#define IDORDER_ATTACK_PREF					8130
 
 enum ORDBUTTONTYPE
 {
@@ -156,6 +157,9 @@ enum
 	STR_DORD_FIREDES,
 	STR_DORD_VTOL_FACTORY,
 	STR_DORD_CIRCLE,
+	STR_DORD_PREF_VEHICLES,
+	STR_DORD_PREF_CYBORGS,
+	STR_DORD_PREF_STRUCTURES,
 };
 
 // return translated text
@@ -186,6 +190,9 @@ static const char *getDORDDescription(int id)
 	case STR_DORD_FIREDES        : return _("Assign Fire Support");
 	case STR_DORD_VTOL_FACTORY   : return _("Assign VTOL Factory Production");
 	case STR_DORD_CIRCLE         : return _("Circle");
+	case STR_DORD_PREF_VEHICLES  : return _("Attack only Vehicles");
+	case STR_DORD_PREF_CYBORGS   : return _("Attack only Cyborgs");
+	case STR_DORD_PREF_STRUCTURES: return _("Attack only Structures");
 
 	default : return "";  // make compiler shut up
 	}
@@ -207,6 +214,22 @@ static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
 		{STR_DORD_RANGE3,	STR_DORD_RANGE1,	STR_DORD_RANGE2},
 		{DSS_ARANGE_OPTIMUM,	DSS_ARANGE_SHORT,	DSS_ARANGE_LONG}
+	},
+	{
+		ORDBUTCLASS_NORMAL,
+		DSO_ATTACK_PREF,
+		DSS_ATTACK_PREF_MASK,
+		ORD_BTYPE_RADIO, // only one state allowed
+		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
+		IDORDER_ATTACK_PREF, // DENIS
+		3,0,
+		{WZ_ORDER_CYBORG_UP,	WZ_ORDER_BUILDING_UP,	WZ_ORDER_TANK_UP},
+		{WZ_ORDER_CYBORG_GREY,	WZ_ORDER_BUILDING_DOWN,	WZ_ORDER_TANK_DOWN},
+		//{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
+		//{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
+		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
+		{STR_DORD_PREF_CYBORGS,	STR_DORD_PREF_STRUCTURES,	STR_DORD_PREF_VEHICLES},
+		{DSS_PREF_CYBORG,	DSS_PREF_STRUCTURES,	DSS_PREF_VEHICLE}
 	},
 	{
 		ORDBUTCLASS_NORMAL,
@@ -904,7 +927,7 @@ void intProcessOrder(UDWORD id)
 	UDWORD BaseID;
 	UDWORD StateIndex;
 	UDWORD CombineState;
-
+	debug(LOG_INFO, "processing %i", id);
 	if (id == IDORDER_CLOSE)
 	{
 		intRemoveOrder();
@@ -928,6 +951,7 @@ void intProcessOrder(UDWORD id)
 		case ORD_BTYPE_RADIO:
 			if ((id >= BaseID) && (id < BaseID + OrderButtons[OrdIndex].AcNumButs))
 			{
+				debug(LOG_INFO, "radio button %i, nb sub-buttons %o", BaseID, OrderButtons[OrdIndex].AcNumButs);
 				StateIndex = id - BaseID;
 
 				for (i = 0; i < OrderButtons[OrdIndex].AcNumButs; i++)
@@ -937,6 +961,7 @@ void intProcessOrder(UDWORD id)
 				if (SetSecondaryState(OrderButtons[OrdIndex].Order,
 				                      OrderButtons[OrdIndex].States[StateIndex] & OrderButtons[OrdIndex].StateMask))
 				{
+					debug(LOG_INFO, "setting %i to WBUT_CLICKLOCK", id);
 					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
 				}
 			}

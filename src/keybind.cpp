@@ -2617,3 +2617,52 @@ void keybindShutdown()
 {
 	psOldRE = nullptr;
 }
+
+void kf_setAttackPreference(const char what)
+{
+	SPECTATOR_NO_OP();
+	const SECONDARY_ORDER secOrder = DSO_ATTACK_PREF;
+	SECONDARY_STATE state = DSS_NONE;
+	if (what == 'c')
+	{
+		state = DSS_PREF_CYBORG;
+	}
+	else if (what == 'b')
+	{
+		state = DSS_PREF_STRUCTURES;
+	}
+	else if (what == 't')
+	{
+		state = DSS_PREF_VEHICLE;
+	}
+	else
+	{
+		state = DSS_PREF_ANY;
+	}
+	int count = 0;
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected && isTransporter(psDroid))
+		{
+			secondarySetState(psDroid, secOrder, state);
+			count++;
+		}
+	}
+	debug(LOG_INFO, "set sec order to '%c' for %i units", what, count);
+}
+void kf_prefTanks()
+{
+	kf_setAttackPreference('t');
+}
+void kf_prefCyborgs()
+{
+	kf_setAttackPreference('c');
+}
+void kf_prefBuildigs()
+{
+	kf_setAttackPreference('b');
+}
+void kf_prefAny()
+{
+	kf_setAttackPreference('a');
+}

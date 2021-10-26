@@ -102,6 +102,7 @@ enum SECONDARY_ORDER
 	DSO_FIRE_DESIGNATOR,            /**< Assigns a droid to be a target designator. */
 	DSO_ASSIGN_VTOL_PRODUCTION,     /**< Assigns a vtol factory to a command droid - the state is given by the factory number. */
 	DSO_CIRCLE,                     /**< circling target position and engage. */
+	DSO_ATTACK_PREF,				/**< Preferences for targets */
 };
 
 /** All associated secondary states of the secondary orders. */
@@ -121,12 +122,13 @@ enum SECONDARY_STATE
 	DSS_HALT_GUARD      = 0x000080,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid moves on a given region by its free will. */
 	DSS_HALT_PURSUE     = 0x0000c0,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid pursues the target by its free will. */
 	DSS_RECYCLE_SET     = 0x000100,	/**< state referred to secondary order DSO_RECYCLE. If set, the droid can be recycled. */
-	DSS_ASSPROD_START   = 0x000200,	/**< @todo this state is not called on the code. Consider removing it. */
-	DSS_ASSPROD_MID     = 0x002000,	/**< @todo this state is not called on the code. Consider removing it. */
-	DSS_ASSPROD_END     = 0x040000,	/**< @todo this state is not called on the code. Consider removing it. */
+	DSS_PREF_ANY        = 0x000200,	/**< state referred to secondary order DSO_ATTACK_PREF. Droid will attack anything. */
+	DSS_PREF_VEHICLE    = 0x000400,	/**< state referred to secondary order DSO_ATTACK_PREF. Droid will only attack tanks and VTOLS, but not cyborgs nor buildings */
+	DSS_PREF_STRUCTURES = 0x000600,	/**< state referred to secondary order DSO_ATTACK_PREF. Droid will only attack buildings, but not tanks nor cyborgs */
+	DSS_PREF_CYBORG     = 0x000800, /**< state referred to secondary order DSO_ATTACK_PREF. Droid will only attack cyborgs, but not tanks nor buildings */
 	DSS_RTL_REPAIR      = 0x080000,	/**< state set to send order DORDER_RTR to droid. */
 	DSS_RTL_BASE        = 0x100000,	/**< state set to send order DORDER_RTB to droid. */
-	DSS_RTL_TRANSPORT   = 0x200000,	/**< state set to send order DORDER_EMBARK to droid. */
+	DSS_RTL_TRANSPORT   = 0x200000,	/**< state set to send order DORDER_E	MBARK to droid. */
 	DSS_PATROL_SET      = 0x400000,	/**< state referred to secondary order DSO_PATROL. If set, the droid is set to patrol. */
 	DSS_CIRCLE_SET      = 0x400100,	/**< state referred to secondary order DSO_CIRCLE. If set, the droid is set to circle. */
 	DSS_FIREDES_SET     = 0x800000,	/**< state referred to secondary order DSO_FIRE_DESIGNATOR. If set, the droid is set as a fire designator. */
@@ -149,6 +151,7 @@ enum SECONDARY_STATE
 #define DSS_PATROL_MASK             0x400000
 #define DSS_FIREDES_MASK            0x800000
 #define DSS_CIRCLE_MASK             0x400100
+#define DSS_ATTACK_PREF_MASK        0x000e00
 
 struct STRUCTURE_STATS;
 

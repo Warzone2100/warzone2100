@@ -832,13 +832,17 @@ void actionUpdateDroid(DROID *psDroid)
 					    && psDroid->asWeaps[i].nStat > 0
 					    && psWeapStats->rotate
 					    && psWeapStats->fireOnMove
-					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+						&& (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
+					    )
 					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
+						const int w = aiBestNearestTarget(psDroid, &psTemp, i);
+						if (w >=0)
 						{
 							psDroid->action = DACTION_MOVEFIRE;
+							//debug(LOG_INFO, "firing on move! %i, w %i", psDroid->id, w);
 							setDroidActionTarget(psDroid, psTemp, i);
 						}
+
 					}
 				}
 			}

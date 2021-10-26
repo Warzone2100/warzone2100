@@ -80,6 +80,43 @@ PlayerMask alliancebits[MAX_PLAYER_SLOTS];
 /// A bitfield for the satellite uplink
 PlayerMask satuplinkbits;
 
+bool targetDoesMatchPreference(const DROID *psDroid, const BASE_OBJECT *psObject)
+{
+	// check target type
+	const auto secState = secondaryGetState(psDroid, DSO_ATTACK_PREF);
+	bool ret = false;
+	if (secState == DSS_PREF_ANY)
+	{
+		ret = true;
+	}
+	else if (secState == DSS_PREF_STRUCTURES && psObject->type == OBJ_STRUCTURE)
+	{
+		ret = true;
+	}
+	else if (secState == DSS_PREF_CYBORG && psObject->type == OBJ_DROID) {
+		const DROID *targetDroid = (const DROID *) psObject;
+		ret = (targetDroid->droidType == DROID_CYBORG) || 
+				(targetDroid->droidType == DROID_CYBORG_CONSTRUCT) ||
+				(targetDroid->droidType == DROID_CYBORG_REPAIR) ||
+				(targetDroid->droidType == DROID_CYBORG_SUPER) || 
+				(targetDroid->droidType == DROID_PERSON);
+	}
+	else if (secState == DSS_PREF_VEHICLE && psObject->type == OBJ_DROID){
+		const DROID *targetDroid = (const DROID *) psObject;
+		ret =  (targetDroid->droidType == DROID_WEAPON) || 
+				(targetDroid->droidType == DROID_SENSOR) ||
+				(targetDroid->droidType == DROID_ECM) ||
+				(targetDroid->droidType == DROID_TRANSPORTER) ||
+				(targetDroid->droidType == DROID_REPAIR) ||
+				(targetDroid->droidType == DROID_CONSTRUCT) ||
+				(targetDroid->droidType == DROID_COMMAND) || 
+				(targetDroid->droidType == DROID_SUPERTRANSPORTER);
+
+	}
+	//debug(LOG_INFO, "target match? %i, ss %x, target %i", ret, secState, psObject->type);
+	return ret;
+}
+
 static int aiDroidRange(DROID *psDroid, int weapon_slot)
 {
 	int32_t longRange;
@@ -572,6 +609,13 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
 		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
+		debug(LOG_INFO, "found target for %i from aiSearchSensorTargets %i", psDroid->id, bestTarget->id);
+		if (!targetDoesMatchPreference(psDroid, bestTarget))
+		{
+			debug(LOG_INFO, "resetting target, because doesn't match preferences");
+			bestTarget = nullptr;
+			bestMod = 0;
+		}
 	}
 
 	weaponEffect = (asWeaponStats + psDroid->asWeaps[weapon_slot].nStat)->weaponEffect;
@@ -633,7 +677,8 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		    && targetInQuestion->visible[psDroid->player] == UBYTE_MAX
 		    && !aiCheckAlliances(targetInQuestion->player, psDroid->player)
 		    && validTarget(psDroid, targetInQuestion, weapon_slot)
-		    && objPosDiffSq(psDroid, targetInQuestion) < droidRange * droidRange)
+		    && objPosDiffSq(psDroid, targetInQuestion) < droidRange * droidRange
+			&& targetDoesMatchPreference(psDroid, targetInQuestion))
 		{
 			if (targetInQuestion->type == OBJ_DROID)
 			{
@@ -657,7 +702,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 			else if (targetInQuestion->type == OBJ_STRUCTURE)
 			{
 				STRUCTURE *psStruct = (STRUCTURE *)targetInQuestion;
-
+				//debug(LOG_INFO, "droid %i consedring shooting at building %i", psDroid->id, psStruct->id);
 				if (electronic)
 				{
 					/* don't want to target structures with resistance of zero if using electronic warfare */
@@ -703,7 +748,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		}
 	}
 
-	if (bestTarget)
+	if (bestTarget && targetDoesMatchPreference(psDroid, bestTarget))
 	{
 		ASSERT(!bestTarget->died, "AI gave us a target that is already dead.");
 		targetStructure = visGetBlockingWall(psDroid, bestTarget);
@@ -720,7 +765,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 				bestTarget = (BASE_OBJECT *)targetStructure; //attack wall
 			}
 		}
-
+		//debug(LOG_INFO, "best target for %i is %i, w %i", psDroid->id, bestTarget->id, bestMod);
 		*ppsObj = bestTarget;
 		return bestMod;
 	}
@@ -856,6 +901,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		    && aiDroidHasRange((DROID *)psObj, psTarget, weapon_slot))
 		{
 			ASSERT(!isDead(psTarget), "Droid found a dead target!");
+			//debug(LOG_INFO, "got a new target! %i, weight %i", psTarget->id, newTargetWeight);
 			*ppsTarget = psTarget;
 			return true;
 		}

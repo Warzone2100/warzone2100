@@ -201,4 +201,8 @@ void kf_ToggleSpecOverlays();
 void enableGodMode();
 
 void keybindShutdown();
+void kf_prefTanks();
+void kf_prefCyborgs();
+void kf_prefBuildigs();
+void kf_prefAny();
 #endif // __INCLUDED_SRC_KEYBIND_H__

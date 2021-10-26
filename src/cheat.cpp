@@ -90,6 +90,9 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"autogame on", kf_AutoGame},
 	{"autogame off", kf_AutoGame},
 	{"shakey", kf_ToggleShakeStatus}, //shakey
+	{"pref t", kf_prefTanks},
+	{"pref c", kf_prefCyborgs},
+	{"pref b", kf_prefBuildigs}
 
 };
 
@@ -152,7 +155,7 @@ bool _attemptCheatCode(const char *cheat_name)
 			return true;
 		}
 	}
-
+	debug(LOG_INFO, "didn't fint such cheat: '%s'", cheat_name);
 	return false;
 }
 
