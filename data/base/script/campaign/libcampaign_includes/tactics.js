@@ -181,9 +181,9 @@ function __camPickTarget(group)
 		case CAM_ORDER_ATTACK:
 			if (camDef(gi.target))
 			{
-				targets = enumRange(gi.target.x, gi.target.y,
-				                    __CAM_TARGET_TRACKING_RADIUS,
-				                    CAM_HUMAN_PLAYER, false);
+				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+					return (obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
+				});
 			}
 			// fall-through! we just don't track targets on COMPROMISE
 		case CAM_ORDER_COMPROMISE:
@@ -201,10 +201,7 @@ function __camPickTarget(group)
 					{
 						radius = __CAM_PLAYER_BASE_RADIUS;
 					}
-					targets = enumRange(compromisePos.x,
-					                    compromisePos.y,
-					                    radius,
-					                    CAM_HUMAN_PLAYER, false);
+					targets = enumRange(compromisePos.x, compromisePos.y, radius,CAM_HUMAN_PLAYER, false);
 				}
 			}
 			if (gi.order === CAM_ORDER_COMPROMISE && targets.length === 0)
@@ -231,8 +228,15 @@ function __camPickTarget(group)
 				if (targets.length === 0)
 				{
 					targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
-						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
+						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
+							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
 					});
+					if (targets.length === 0)
+					{
+						targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
+							return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
+						});
+					}
 				}
 			}
 			break;
@@ -597,6 +601,11 @@ function __camTacticsTickForGroup(group)
 				{
 					closeByObj = undefined;
 				}
+			}
+
+			if (closeByObj && ((closeByObj.type === DROID) && isVTOL(closeByObj) && !droid.canHitAir))
+			{
+				closeByObj = undefined;
 			}
 
 			if (!defending && closeByObj)
