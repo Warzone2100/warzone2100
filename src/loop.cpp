@@ -118,7 +118,7 @@ struct PAUSE_STATE
 };
 static PAUSE_STATE pauseState;
 static size_t maxFastForwardTicks = WZ_DEFAULT_MAX_FASTFORWARD_TICKS;
-static bool fastForwardTicksFixedToNormalTickRate = false; // default for spectators to "catch-up" as quickly as possible
+static bool fastForwardTicksFixedToNormalTickRate = true; // can be set to false to "catch-up" as quickly as possible (but this may result in more jerky behavior)
 
 static unsigned numDroids[MAX_PLAYERS];
 static unsigned numMissionDroids[MAX_PLAYERS];

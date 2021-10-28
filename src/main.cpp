@@ -1026,7 +1026,7 @@ static void startGameLoop()
 			debug(LOG_INFO, "Unhandled case: %u", (unsigned int)currentGameMode);
 	}
 
-	setMaxFastForwardTicks(); // default value / spectator "catch-up" behavior
+	setMaxFastForwardTicks(WZ_DEFAULT_MAX_FASTFORWARD_TICKS, true); // default value / spectator "catch-up" behavior
 	if (NETisReplay())
 	{
 		// for replays, ensure we don't start off fast-forwarding
