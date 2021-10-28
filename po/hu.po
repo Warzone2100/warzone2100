@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-28 09:42\n"
+"PO-Revision-Date: 2021-10-28 21:45\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -487,11 +487,11 @@ msgstr "Mielőtt a NEXUS lekapcsolta magát a hálózatról, hozzáfértünk a k
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "Ezen a helyen, egy ellenséges parancsnok, összegyűjti a szállítmányt a NEXUS-ból. "
+msgstr "Ezen a helyen, egy ellenséges parancsnok, összegyűjti a szállítmányt a NEXUS-ból."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Az LZ-nél, pusztítsa el az ellenséges parancsnokot és szerezze vissza a szállítmányt."
+msgstr "Ha ott van az LZ-n, pusztítsa el az ellenséges parancsnokot, és szerezze vissza a szállítmányt."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -499,7 +499,7 @@ msgstr "Azután térjen vissza az LZ-hez."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr "Zavaró hírek a NASDA-ról."
+msgstr "Nyugtalanító hírek a NASDA-ról."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -520,7 +520,7 @@ msgstr "Fogja el a konvojt és szerezze meg a rakományt."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Valószínűleg ellenséges VTOL-ok kisérik a rakományt."
+msgstr "Valószínűleg ellenséges VTOL-ok kísérik."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -529,7 +529,7 @@ msgstr "SZÁLLÍTÁSI FELADAT: Civilek megmentése az elszigetelt táborból"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "A Kollektíva feldolgozta és kiírtotta a civileket ezen a bázison."
+msgstr "A Kollektíva feldolgozza és likvidálja a civileket ezen a bázison."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
@@ -541,15 +541,15 @@ msgstr "Azután pusztítsa el a tábort."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légi bázist és szerezze vissza a VTOL-eket."
+msgstr "BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légibázist, és szerezze vissza a VTOL-okat."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "A repülési útvonalak elemzése jelzi, hogy a Kollektíva VTOL-ei innen származnak."
+msgstr "A repülési útvonalak elemzése azt jelzi, hogy a Kollektíva VTOL-jai innen származnak."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légi bázist és szerezze vissza a VTOL-eket."
+msgstr "BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légibázist, és szerezze vissza a VTOL-okat"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -557,7 +557,7 @@ msgstr "Az ellenséges légibázis helyzete itt van; ez az elsődleges célpont.
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Kiírtani Kollektívát és visszaszerezni az összes tárgyi leletet."
+msgstr "Pusztítsa el a Kollektíva erőit, és szerezze vissza az összes leletet."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
@@ -607,7 +607,7 @@ msgstr "BÉTA BÁZIS KÜLDETÉS: Foglalja el a NASDA központot"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr "Foglalja el a NASDA központot, mielött a NEXUS és a Kollektíva megtenné."
+msgstr "Foglalja el a NASDA központot, mielőtt a NEXUS és a Kollektíva használhatná."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
@@ -649,7 +649,7 @@ msgstr "Stratégiai visszavonuláskor, számolja fel a bázis körüli föld-lev
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Repüljön a LZ-re, szárazföldi egységekkel semmisítse meg a SAM rakétaállásokat."
+msgstr "Repüljön az LZ-re, majd szárazföldi egységekkel semmisítse meg a SAM rakétaállásokat."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
@@ -670,13 +670,13 @@ msgstr "Irtsa ki az ellenséget és biztosítsa a területet."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Menedék létesítése után, térjen vissza a LZ-hoz a többiekért."
+msgstr "A menedék létesítése után térjen vissza az LZ-re további parancsokért."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BÉTA BÁZIS KÜLDETÉS: Élje túl, és evakuáljon! Hozzon egy teherautót."
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -692,7 +692,7 @@ msgstr "A Kollektíva nincs tisztában a nukleáris támadással és légi egys�
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr "Ezt az üzenetet, néhány perccel ezelőtt fogták el ..."
+msgstr "Ezt az üzenetet, néhány perccel ezelőtt fogták el…"
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
@@ -753,7 +753,7 @@ msgstr "SZÁLLÍTÁSI FELADAT: Rakétakilövő koordináták"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr "Meghatároztuk a rakétakilövők helyzetét"
+msgstr "Meghatároztuk a rakétakilövések helyét."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
@@ -771,7 +771,7 @@ msgstr "Koordináták letöltése befejeződött."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "Biztosítsa a LZ-t, majd szárazföldi egységekkel semmisítse meg a rakétasilót."
+msgstr "Biztosítsa az LZ-t, majd szárazföldi egységekkel semmisítse meg a rakétasilót."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -780,7 +780,7 @@ msgstr "ÉSZAKI SZEKTOR KÜLDETÉS: Nukleáris robbantás"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr "Minden egységet ki kell menekíteni, a robbanófej detonációja elött."
+msgstr "Minden egységnek el kell menekülnie a robbanófej detonációja előtt."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
@@ -800,7 +800,7 @@ msgstr "ELSZAKADT CSAPAT, FRISS INFORMÁCIÓK"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Az elszakadt csapattal minden kommunikáció megszünt a nukleáris robbanás után."
+msgstr "Az elszakadt csapattal minden kommunikáció megszűnt a nukleáris robbanások után."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
@@ -812,7 +812,7 @@ msgstr "ÉSZAKI SZEKTOR KÜLDETÉS: Gamma csapat támogatása"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr "Támogassa a Gamma csapatot"
+msgstr "Támogassa a Gamma csapatot."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
@@ -824,7 +824,7 @@ msgstr "NEXUS LEGYŐZVE"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr "Parancsnok, legyőzte a NEXUS-t"
+msgstr "Parancsnok, legyőztük a NEXUS-t."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
@@ -844,11 +844,11 @@ msgstr "Küldjön felderítő egységet erre a koordinátára és értékelje a 
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr "Állapítsa meg, vajon az Alfa csapat-e az. Amennyiben igen, menekítse ki őket a LZ-hoz."
+msgstr "Állapítsa meg, hogy valóban az Alfa csapat-e az. Ha igen, menekítse ki őket az LZ-hez."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "Ez az csoport az Alfa csapat része, kisérje őket az LZ-hoz."
+msgstr "Ez az csoport az Alfa csapat része, mentse ki őket, és kísérje őket az LZ-hez."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -876,7 +876,7 @@ msgstr "Védje meg a bázist és  ........ a ....... "
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr "Keresse és pusztítsa .... "
+msgstr "Keresse meg és semmisítse ...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
@@ -896,7 +896,7 @@ msgstr "Egy NEXUS különítmény ezen koordináták felé tart."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr "Lehetősége van elpusztítani NEXUS-t, mielött odaérne."
+msgstr "Lehetősége van elpusztítani a NEXUS-t, mielőtt odaérnének."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
@@ -948,7 +948,7 @@ msgstr "Gamma csapat elemei, kapcsolatba léptek velünk."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr "Állítja, hogy mentes a NEXUS-tól és felajánlja a bázist, műveleti állomásnak."
+msgstr "Azt állítják, hogy NEXUS-mentesek, és hadműveleti állomásként felajánlják a bázist."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
@@ -1097,7 +1097,7 @@ msgstr "Biztosak vagyunk benne, hogy a NEXUS alaprendszerei itt találhatóak."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr "Biztosítson egy LZ-t."
+msgstr "Létesítsen egy LZ-t."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
@@ -1166,7 +1166,7 @@ msgstr "Bejövő adás"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
-msgstr "Bejövő hírszerző jelentés"
+msgstr "Bejövő hírszerző jelentés."
 
 #: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
@@ -1187,7 +1187,7 @@ msgstr "Cyborg ágyú"
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:218
 msgid "Demolish"
-msgstr "lebont"
+msgstr "Lebontás"
 
 #. TRANSLATORS:
 #. data/mp/stats/propulsion.json: $.Naval.name
@@ -1314,7 +1314,7 @@ msgstr "Ugró Scourge rakéta"
 
 #: data/base/messages/strings/names.txt:295
 msgid "Jump Flashlight Gunner"
-msgstr "Ugró könnyűlézerrel"
+msgstr "Ugró könnyűlézerágyús"
 
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
@@ -1362,7 +1362,7 @@ msgstr "Nehéz gépfegyver bunker"
 #: data/mp/messages/strings/names.txt:398
 #: po/custom/fromJson.txt:2128
 msgid "Flashlight Emplacement"
-msgstr "Könnyűlézer állás"
+msgstr "Könnyűlézerállás"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower03.name
@@ -1612,17 +1612,17 @@ msgstr "Továbbfejlesztett rakéta töltő rendszer"
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
 msgid "Rapid Fire Mini-Rockets"
-msgstr "Sebes tüzelésű kisrakéták"
+msgstr "Gyorstüzelő kisrakéták"
 
 #: data/base/messages/strings/names.txt:441
 #: data/mp/messages/strings/names.txt:554
 msgid "Rapid Fire Mini-Rockets Mk2"
-msgstr "Sebes tüzelésű kisrakéták Mk2"
+msgstr "Gyorstüzelő kisrakéták Mk2"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:555
 msgid "Rapid Fire Mini-Rockets Mk3"
-msgstr "Sebes tüzelésű kisrakéták Mk3"
+msgstr "Gyorstüzelő kisrakéták Mk3"
 
 #: data/base/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:579
@@ -1682,7 +1682,7 @@ msgstr "Elektronikai laboratórium"
 #: data/mp/messages/strings/names.txt:621
 #: data/mp/messages/strings/names.txt:630
 msgid "Chemical Laboratory"
-msgstr "Vegyi kaboratórium"
+msgstr "Vegyi laboratórium"
 
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:629
@@ -1740,7 +1740,7 @@ msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:317
 msgid "All Cyborgs upgraded automatically"
-msgstr "Cyborgok automatikusan fejlesztve"
+msgstr "Minden kiborg automatikusan fejlesztve"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -7944,13 +7944,13 @@ msgstr "Válaszüteg ellenséges ütegtüzet észlelt"
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1596
 msgid "Crane1"
-msgstr "Crane1"
+msgstr "1. daru"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1599
 msgid "Crane2"
-msgstr "Crane2"
+msgstr "2. daru"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8298,7 +8298,7 @@ msgstr "Elektronikus úton támad és rombolja az ellenséges épületeket"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Az elit és veterán rangú egységek és gyárak védettek"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
@@ -9622,7 +9622,7 @@ msgstr "Pokolivihar"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2728
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "A hős és különleges rangú egységek védettek"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -11770,7 +11770,7 @@ msgstr "NEXUS ellenálló áramkörök Mk3"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4312
 msgid "NEXUS Resistance Circuits Mk4"
-msgstr ""
+msgstr "NEXUS ellenálló áramkörök Mk4"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
@@ -12111,7 +12111,7 @@ msgstr "Cyborgokat gyárt"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4524
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "A profi és hivatásos rangú egységek védettek"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -12898,7 +12898,7 @@ msgstr "Dögevő bunker"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5048
 msgid "Scavenger Chopper Factory"
-msgstr "Dögevő Chopper gyàr"
+msgstr "Fosztogató motorgyár"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12939,13 +12939,13 @@ msgstr "Dögevő vízszintes fal"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5071
 msgid "Scavenger MG tower"
-msgstr "Dögevő gépfegyver torony"
+msgstr "Fosztogató géppuskatorony"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
 #: po/custom/fromJson.txt:5074
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "Fosztogató felszerelt géppuska"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
@@ -12958,7 +12958,7 @@ msgstr "Dögevő erőmű"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5081
 msgid "Scavenger Repair Center"
-msgstr "Dögevő helyreàllìtò központ"
+msgstr "Fosztogató javítóközpont"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12978,7 +12978,7 @@ msgstr "Dögevő"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5092
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "Fosztogató NEXUS összekötő torony"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -13319,7 +13319,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5306
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Megállítja, hogy a NEXUS átvegye az irányítást"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -14501,7 +14501,7 @@ msgstr "VTOL tankelhárító"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6076
 msgid "VTOL Machinegun Scav"
-msgstr "VTOL gépfegyver Scav"
+msgstr "VTOL géppuska Foszt."
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14514,7 +14514,7 @@ msgstr "VTOL gépfegyver"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6083
 msgid "VTOL Mini-Rocket Scav"
-msgstr "VTOL kisrakéta Scav"
+msgstr "VTOL kisrakéta Foszt."
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -15459,11 +15459,11 @@ msgstr "Gyűjtemény"
 
 #: src/frontend.cpp:177
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "A hadjárat videói hiányoznak"
 
 #: src/frontend.cpp:178
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "A videók telepítésével kapcsolatban lásd a GYIK-ot"
 
 #: src/frontend.cpp:198
 msgid "Single Player"
@@ -17060,7 +17060,7 @@ msgstr "Energia"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Energia/másodperc"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17248,7 +17248,7 @@ msgstr "Fejlesztés frissítve"
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "A Terv céljai és hírei"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
@@ -17965,7 +17965,7 @@ msgstr "Kattintson a játékosok betöltésének változtatásához"
 #: src/multiint.cpp:1981
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "Kattintson a(z) %u. játékoshely elfoglalásához"
 
 #: src/multiint.cpp:2018
 msgid "Click to swap player to this slot"
@@ -18231,7 +18231,7 @@ msgstr "Nem sikerült a játékot létrehoznia."
 
 #: src/multiint.cpp:5841
 msgid "Game Name Updated."
-msgstr ""
+msgstr "Játéknév frissítve."
 
 #: src/multiint.cpp:5965
 #, c-format
@@ -18256,7 +18256,7 @@ msgstr "A játékmester elindította a játékot"
 
 #: src/multiint.cpp:6406
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "A gazda érvénytelen beállításokat adott meg"
 
 #: src/multiint.cpp:6640
 msgid "You have been kicked: "
@@ -18407,7 +18407,7 @@ msgstr "Rendszer üzenet:"
 
 #: src/multijoin.cpp:564
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "Frissítés érhető el a játékhoz, az új verzió letöltéséhez keresse fel a https://wz2100.net weboldalt."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
@@ -19120,12 +19120,12 @@ msgstr "Utánpótlás leszállt"
 
 #: src/updatemanager.cpp:273
 msgid "Update Available"
-msgstr ""
+msgstr "Frissítés érhető el"
 
 #: src/updatemanager.cpp:276
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "A Warzone 2100 új összeállítása (%s) érhető el!"
 
 #: src/updatemanager.cpp:280
 msgid "A new build of Warzone 2100 is available!"
@@ -19137,24 +19137,24 @@ msgstr "Frissítés beszerzése most"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Kompatibilitás figyelmeztetés"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Probléma észlelve, mely hatással lehet a Warzone 2100 működésére vagy teljesítményére."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Kattintson a lenti gombra, hogy további információkat kapjon a javításával kapcsolatban."
 
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(Megjegyzésazonosító: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "További információk"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
