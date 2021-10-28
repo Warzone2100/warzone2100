@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:06\n"
+"PO-Revision-Date: 2021-10-28 09:42\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -5815,16 +5815,16 @@ msgstr "Képtelenség, hogy kapjon egy támogatói választ!"
 
 #: lib/netplay/netreplay.cpp:257
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "A visszajátszási fájl formátuma újabb, mint amit a Warzone 2100 ezen verziója támogatni tud."
 
 #: lib/netplay/netreplay.cpp:259
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Visszajátszási formátum verziója: %u"
 
 #: lib/netplay/netreplay.cpp:260
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "A visszajátszási fájl formátuma nem támogatott"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -7871,7 +7871,7 @@ msgstr "Számítógép fejlesztés elkészült"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "A számítógépes rendszerek most már el vannak szigetelve a NEXUS-tól"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
