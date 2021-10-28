@@ -8129,6 +8129,29 @@ bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
 	return true;
 }
 
+size_t WZGameReplayOptionsHandler::desiredBufferSize() const
+{
+	auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
+	switch (currentGameMode)
+	{
+		case ActivitySink::GameMode::MENUS:
+			// should not happen
+			break;
+		case ActivitySink::GameMode::CAMPAIGN:
+		case ActivitySink::GameMode::CHALLENGE:
+			// replays not currently supported
+			break;
+		case ActivitySink::GameMode::SKIRMISH:
+			return 0; // use default
+		case ActivitySink::GameMode::MULTIPLAYER:
+			// big games need a big buffer
+			return std::numeric_limits<size_t>::max();
+		default:
+			debug(LOG_INFO, "Unhandled case: %u", (unsigned int)currentGameMode);
+	}
+	return 0;
+}
+
 bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor)
 {
 	// random seed

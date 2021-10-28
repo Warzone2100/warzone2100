@@ -53,11 +53,13 @@ static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
 static const uint32_t currentReplayFormatVer = 1;
+static const size_t DefaultReplayBufferSize = 32768;
+static const size_t MaxReplayBufferSize = 2 * 1024 * 1024;
 
 typedef std::vector<uint8_t> SerializedNetMessagesBuffer;
 static moodycamel::BlockingReaderWriterQueue<SerializedNetMessagesBuffer> serializedBufferWriteQueue(256);
 static SerializedNetMessagesBuffer latestWriteBuffer;
-static size_t minBufferSizeToQueue = 4096;
+static size_t minBufferSizeToQueue = DefaultReplayBufferSize;
 static std::unique_ptr<wz::thread> saveThread;
 
 // This function is run in its own thread! Do not call any non-threadsafe functions!
@@ -122,7 +124,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 		return false;
 	}
 
-	WZ_PHYSFS_SETBUFFER(replaySaveHandle, 4096)//;
+	WZ_PHYSFS_SETBUFFER(replaySaveHandle, 1024 * 32)//;
 
 	PHYSFS_writeSBE32(replaySaveHandle, magicReplayNumber);
 
@@ -145,12 +147,36 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	PHYSFS_writeSBE32(replaySaveHandle, data.size());
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
 
+	// determine best buffer size
+	size_t desiredBufferSize = optionsHandler.desiredBufferSize();
+	if (desiredBufferSize == 0)
+	{
+		// use default
+		minBufferSizeToQueue = DefaultReplayBufferSize;
+	}
+	else if (desiredBufferSize >= MaxReplayBufferSize)
+	{
+		minBufferSizeToQueue = MaxReplayBufferSize;
+	}
+	else
+	{
+		minBufferSizeToQueue = desiredBufferSize;
+	}
+
 	debug(LOG_INFO, "Started writing replay file \"%s\".", filename.c_str());
 
 	// Create a background thread and hand off all responsibility for writing to the file handle to it
 	ASSERT(saveThread.get() == nullptr, "Failed to release prior thread");
 	latestWriteBuffer.reserve(minBufferSizeToQueue);
-	saveThread = std::unique_ptr<wz::thread>(new wz::thread(replaySaveThreadFunc, replaySaveHandle));
+	if (desiredBufferSize != std::numeric_limits<size_t>::max())
+	{
+		saveThread = std::unique_ptr<wz::thread>(new wz::thread(replaySaveThreadFunc, replaySaveHandle));
+	}
+	else
+	{
+		// don't use a background thread
+		saveThread = nullptr;
+	}
 
 	return true;
 }
@@ -173,11 +199,15 @@ bool NETreplaySaveStop()
 	serializedBufferWriteQueue.enqueue(std::move(latestWriteBuffer));
 
 	// Wait for writing thread to finish
-	ASSERT(saveThread.get() != nullptr, "No save thread??");
 	if (saveThread)
 	{
 		saveThread->join();
 		saveThread.reset();
+	}
+	else
+	{
+		// do the writing now on the main thread
+		replaySaveThreadFunc(replaySaveHandle);
 	}
 
 	if (!PHYSFS_close(replaySaveHandle))
