@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:05\n"
+"PO-Revision-Date: 2021-10-28 21:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -5635,22 +5635,22 @@ msgstr "没有山贼"
 #: data/mp/multiplay/script/rules/printsettings.js:15
 #: src/multiint.cpp:1472
 msgid "No Alliances"
-msgstr "无结盟"
+msgstr "禁止同盟"
 
 #: data/mp/multiplay/script/rules/printsettings.js:16
 #: src/multiint.cpp:1473
 msgid "Allow Alliances"
-msgstr "允许结盟"
+msgstr "允许同盟"
 
 #: data/mp/multiplay/script/rules/printsettings.js:17
 #: src/multiint.cpp:1475
 msgid "Locked Teams"
-msgstr "锁定团队"
+msgstr "锁定盟友，共享科研"
 
 #: data/mp/multiplay/script/rules/printsettings.js:18
 #: src/multiint.cpp:1474
 msgid "Locked Teams, No Shared Research"
-msgstr "锁定团队，不共享科研"
+msgstr "锁定盟友，不共享科研"
 
 #: data/mp/multiplay/script/rules/printsettings.js:24
 #: src/multiint.cpp:1483
@@ -5680,7 +5680,7 @@ msgstr "开始时有基地"
 #: data/mp/multiplay/script/rules/printsettings.js:34
 #: src/multiint.cpp:1495
 msgid "Start with Advanced Bases"
-msgstr "开始时有先进基地"
+msgstr "先进基地"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5838,7 +5838,7 @@ msgstr "战役"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr "七擒七纵"
+msgstr "王者之战"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
@@ -15032,7 +15032,7 @@ msgstr "储存游戏"
 
 #: src/clparse.cpp:370
 msgid "Load a saved campaign game"
-msgstr "载入战役"
+msgstr "加载已存档的剧情战役"
 
 #: src/clparse.cpp:371
 msgid "Play in windowed mode"
@@ -15553,11 +15553,11 @@ msgstr "返回"
 
 #: src/frontend.cpp:363
 msgid "New Campaign"
-msgstr "新战役"
+msgstr "剧情战役"
 
 #: src/frontend.cpp:364
 msgid "Start Skirmish Game"
-msgstr "短兵相接"
+msgstr "八方战役"
 
 #: src/frontend.cpp:365
 msgid "Challenges"
@@ -15565,19 +15565,19 @@ msgstr "挑战"
 
 #: src/frontend.cpp:366
 msgid "Load Campaign Game"
-msgstr "载入战役"
+msgstr "剧情存档"
 
 #: src/frontend.cpp:367
 msgid "Load Skirmish Game"
-msgstr "载入短兵相接"
+msgstr "八方存档"
 
 #: src/frontend.cpp:368
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "八方回放"
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
-msgstr "单人模式"
+msgstr "单机模式"
 
 #: src/frontend.cpp:375
 #: src/frontend.cpp:397
@@ -15600,7 +15600,7 @@ msgstr "载入已储存的练习游戏"
 
 #: src/frontend.cpp:543
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "八方回放"
 
 #: src/frontend.cpp:604
 msgid "MULTI PLAYER"
@@ -15616,7 +15616,7 @@ msgstr "加入游戏"
 
 #: src/frontend.cpp:608
 msgid "View Replay"
-msgstr ""
+msgstr "查看回放"
 
 #: src/frontend.cpp:613
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -17198,7 +17198,7 @@ msgstr ""
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:897
 msgid "Alliances:"
-msgstr "结盟："
+msgstr "同盟:"
 
 #: src/integrations/wzdiscordrpc.cpp:913
 msgid "In Menu"
@@ -17440,7 +17440,7 @@ msgstr ""
 
 #: src/keybind.cpp:1388
 msgid "CHALLENGE"
-msgstr "七擒七纵"
+msgstr "挑战"
 
 #: src/keybind.cpp:1391
 msgid "SKIRMISH"
@@ -17856,7 +17856,7 @@ msgstr "选择玩家名称"
 #: src/multiint.cpp:1471
 #: src/multimenu.cpp:775
 msgid "Alliances"
-msgstr "结盟"
+msgstr "同盟"
 
 #: src/multiint.cpp:1492
 msgid "Base"
@@ -17868,7 +17868,7 @@ msgstr "预览地图"
 
 #: src/multiint.cpp:1503
 msgid "Click to see Map"
-msgstr "点击查看"
+msgstr "查看"
 
 #: src/multiint.cpp:1509
 msgid "Show Structure Limits"
@@ -17876,17 +17876,17 @@ msgstr "显示建筑物数量限制"
 
 #: src/multiint.cpp:1509
 msgid "Set Structure Limits"
-msgstr "建筑数量限制"
+msgstr "建筑数量"
 
 #: src/multiint.cpp:1523
 msgid "Random Game Options"
-msgstr "随机游戏选项"
+msgstr "随机选项"
 
 #: src/multiint.cpp:1524
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr "随机游戏选项\n"
-"玩家可以投票决定"
+msgstr "随机选项\n"
+"投票决定"
 
 #: src/multiint.cpp:1535
 msgid "Tech"
@@ -18122,7 +18122,7 @@ msgstr ""
 
 #: src/multiint.cpp:4196
 msgid "Choose Team"
-msgstr "选择团队"
+msgstr "选择盟友"
 
 #: src/multiint.cpp:4200
 msgid "Teams locked"
@@ -18407,7 +18407,7 @@ msgstr "限制"
 
 #: src/multilimit.cpp:153
 msgid "Map Can Exceed Limits"
-msgstr "建筑数量可以超出地图限制"
+msgstr "建筑数量可以超出限制"
 
 #: src/multilimit.cpp:159
 msgid "Force Limits at Start"
