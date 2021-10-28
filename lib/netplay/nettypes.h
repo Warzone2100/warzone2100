@@ -210,6 +210,7 @@ public:
 public:
 	virtual bool saveOptions(nlohmann::json& object) const = 0;
 	virtual bool restoreOptions(const nlohmann::json& object, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor) = 0;
+	virtual size_t desiredBufferSize() const = 0;
 };
 
 bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler);

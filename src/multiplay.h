@@ -319,6 +319,7 @@ class WZGameReplayOptionsHandler : public ReplayOptionsHandler
 {
 	virtual bool saveOptions(nlohmann::json& object) const override;
 	virtual bool restoreOptions(const nlohmann::json& object, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor) override;
+	virtual size_t desiredBufferSize() const override;
 };
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__
