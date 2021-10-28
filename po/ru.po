@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:05\n"
+"PO-Revision-Date: 2021-10-28 21:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -17993,7 +17993,7 @@ msgstr "Нажмите, чтобы поменять игрока на этот �
 #: src/multiint.cpp:3126
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr "Наблюдатель %s переехал в Игроки"
+msgstr "Наблюдатель %s перемещен в Игроки"
 
 #: src/multiint.cpp:2041
 msgid "Cannot swap with host"
@@ -18099,7 +18099,7 @@ msgstr "Да, я хочу играть!"
 #: src/multiint.cpp:3110
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr "Игрок %s переехал в Наблюдатели"
+msgstr "Игрок %s перемещен в Наблюдатели"
 
 #: src/multiint.cpp:3149
 msgid "Spectator would like to become a Player"
