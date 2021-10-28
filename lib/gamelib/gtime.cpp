@@ -66,7 +66,7 @@ static uint16_t wantedLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatencies[MAX_GAMEQUEUE_SLOTS];
 
 static optional<uint32_t> waitingOnPlayersStartTime;
-#define MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS GAME_TICKS_PER_SEC
+#define MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS GAME_TICKS_PER_UPDATE
 
 static void updateLatency(void);
 
