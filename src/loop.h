@@ -75,9 +75,9 @@ bool scriptPaused();
 bool scrollPaused();
 bool consolePaused();
 
-constexpr size_t WZ_DEFAULT_MAX_FASTFORWARD_TICKS = 3;
+constexpr size_t WZ_DEFAULT_MAX_FASTFORWARD_TICKS = 1;
 size_t getMaxFastForwardTicks();
-void setMaxFastForwardTicks(optional<size_t> value = nullopt, bool fixedToNormalTickRate = false);
+void setMaxFastForwardTicks(optional<size_t> value = nullopt, bool fixedToNormalTickRate = true);
 
 void setGameUpdatePause(bool state);
 void setAudioPause(bool state);

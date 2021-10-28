@@ -504,6 +504,8 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 #define REPLAY_ACTION_BUTTONS_WIDTH (REPLAY_ACTION_BUTTONS_IMAGE_SIZE + (REPLAY_ACTION_BUTTONS_PADDING * 2))
 #define REPLAY_ACTION_BUTTONS_HEIGHT REPLAY_ACTION_BUTTONS_WIDTH
 
+constexpr size_t WZ_MAX_REPLAY_FASTFORWARD_TICKS = 3;
+
 class ReplayControllerWidget : public W_FORM
 {
 public:
@@ -641,13 +643,13 @@ private:
 		size_t newFastForward = 0;
 		if (currFastForward == 0)
 		{
-			newFastForward = (!reverseDirection) ? 1 : WZ_DEFAULT_MAX_FASTFORWARD_TICKS;
+			newFastForward = (!reverseDirection) ? 1 : WZ_MAX_REPLAY_FASTFORWARD_TICKS;
 		}
 		else if (currFastForward == 1)
 		{
-			newFastForward = (!reverseDirection) ? WZ_DEFAULT_MAX_FASTFORWARD_TICKS : 0;
+			newFastForward = (!reverseDirection) ? WZ_MAX_REPLAY_FASTFORWARD_TICKS : 0;
 		}
-		else if (reverseDirection && currFastForward == WZ_DEFAULT_MAX_FASTFORWARD_TICKS)
+		else if (reverseDirection && currFastForward == WZ_MAX_REPLAY_FASTFORWARD_TICKS)
 		{
 			newFastForward = 1;
 		}
@@ -683,7 +685,7 @@ private:
 		if (maxFastForwardTicks > 0)
 		{
 			// fast-forward is enabled
-			fastForwardButton->outline = (maxFastForwardTicks >= WZ_DEFAULT_MAX_FASTFORWARD_TICKS) ? W_REPLAY_CONTROL_BUTTON::OutlineState::Double : W_REPLAY_CONTROL_BUTTON::OutlineState::Single;
+			fastForwardButton->outline = (maxFastForwardTicks >= WZ_MAX_REPLAY_FASTFORWARD_TICKS) ? W_REPLAY_CONTROL_BUTTON::OutlineState::Double : W_REPLAY_CONTROL_BUTTON::OutlineState::Single;
 		}
 		else
 		{
