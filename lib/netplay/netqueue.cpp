@@ -23,6 +23,7 @@
  */
 #include "lib/framework/frame.h"
 #include "netqueue.h"
+#include "netplay.h"
 
 #include <limits>
 #include <cstdint>
@@ -153,6 +154,7 @@ size_t NetMessage::rawLen() const
 NetQueue::NetQueue()
 	: canGetMessagesForNet(true)
 	, canGetMessages(true)
+	, pendingGameTimeUpdateMessages(0)
 {
 	dataPos = messages.end();
 	messagePos = messages.end();
@@ -188,6 +190,10 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 
 		messages.push_front(NetMessage(type));
 		messages.front().data.assign(buffer.begin() + used + headerLen, buffer.begin() + used + headerLen + len);
+		if (type == GAME_GAME_TIME)
+		{
+			++pendingGameTimeUpdateMessages;
+		}
 		used += headerLen + len;
 	}
 
@@ -220,15 +226,21 @@ const NetMessage &NetQueue::getMessageForNet() const
 	ASSERT(dataPos != messages.begin(), "No message to get!");
 
 	// Return the message.
-	List::iterator i = dataPos;
-	--i;
-	return *i;
+	return internal_getMessageForNet();
 }
 
 void NetQueue::popMessageForNet()
 {
 	ASSERT(canGetMessagesForNet, "Wrong NetQueue type for popMessageForNet.");
 	ASSERT(dataPos != messages.begin(), "No message to pop!");
+
+	if (messagePos != messages.begin() && internal_getMessageForNet().type == GAME_GAME_TIME)
+	{
+		if (pendingGameTimeUpdateMessages > 0)
+		{
+			--pendingGameTimeUpdateMessages;
+		}
+	}
 
 	// Pop the message.
 	--dataPos;
@@ -239,6 +251,10 @@ void NetQueue::popMessageForNet()
 
 void NetQueue::pushMessage(const NetMessage &message)
 {
+	if (message.type == GAME_GAME_TIME)
+	{
+		++pendingGameTimeUpdateMessages;
+	}
 	messages.push_front(message);
 }
 
@@ -259,15 +275,21 @@ const NetMessage &NetQueue::getMessage() const
 	ASSERT(messagePos != messages.begin(), "No message to get!");
 
 	// Return the message.
-	List::iterator i = messagePos;
-	--i;
-	return *i;
+	return internal_getMessage();
 }
 
 void NetQueue::popMessage()
 {
 	ASSERT(canGetMessages, "Wrong NetQueue type for popMessage.");
 	ASSERT(messagePos != messages.begin(), "No message to pop!");
+
+	if (messagePos != messages.begin() && internal_getMessage().type == GAME_GAME_TIME)
+	{
+		if (pendingGameTimeUpdateMessages > 0)
+		{
+			--pendingGameTimeUpdateMessages;
+		}
+	}
 
 	// Pop the message.
 	--messagePos;

@@ -28,6 +28,7 @@
 #include <vector>
 #include <list>
 #include <deque>
+#include <unordered_map>
 
 // At game level:
 // There should be a NetQueue representing each client.
@@ -118,17 +119,39 @@ public:
 	const NetMessage &getMessage() const;                              ///< Returns a message.
 	void popMessage();                                                 ///< Pops the last returned message.
 
+	inline size_t numPendingGameTimeUpdateMessages() const
+	{
+		return pendingGameTimeUpdateMessages;
+	}
+
 private:
 	void popOldMessages();                                             ///< Pops any messages that are no longer needed.
 
 	bool canGetMessagesForNet;                                         ///< True if we will send the messages over the network, false if we don't.
 	bool canGetMessages;                                               ///< True if we will get the messages, false if we don't use them ourselves.
 
+	inline const NetMessage &internal_getMessageForNet() const
+	{
+		// Return the message.
+		List::iterator i = dataPos;
+		--i;
+		return *i;
+	};
+
+	inline const NetMessage &internal_getMessage() const
+	{
+		// Return the message.
+		List::iterator i = messagePos;
+		--i;
+		return *i;
+	};
+
 	using List = std::list<NetMessage>;
 	List::iterator                dataPos;                             ///< Last message which was sent over the network.
 	List::iterator                messagePos;                          ///< Last message which was popped.
 	List                          messages;                            ///< List of messages. Messages are added to the front and read from the back.
 	std::vector<uint8_t>          incompleteReceivedMessageData;       ///< Data from network which has not yet formed an entire message.
+	size_t                        pendingGameTimeUpdateMessages;       ///< Pending GAME_GAME_TIME messages added to this queue
 };
 
 /// A NetQueuePair is used for talking to a socket. We insert NetMessages in the send NetQueue, which converts the messages into a stream of bytes for the

@@ -217,4 +217,6 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 bool NETisReplay();
 void NETshutdownReplay();
 
+bool NETgameIsBehindPlayersByAtLeast(size_t numGameTimeUpdates = 2);
+
 #endif

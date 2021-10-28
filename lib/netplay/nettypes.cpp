@@ -25,6 +25,7 @@
 
 #include "lib/framework/wzglobal.h"
 #include "lib/framework/string_ext.h"
+#include "lib/gamelib/gtime.h"
 #include <string.h>
 
 #ifndef WZ_OS_WIN
@@ -356,6 +357,33 @@ NETQUEUE NETgameQueue(unsigned player)
 	ret.queueType = QUEUE_GAME;
 	ret.exclude = NET_NO_EXCLUDE;
 	return ret;
+}
+
+bool NETgameIsBehindPlayersByAtLeast(size_t numGameTimeUpdates /*= 2*/)
+{
+	// if we should be waited on, then there's no reason we should be behind other players
+	if (gtimeShouldWaitForPlayer(realSelectedPlayer))
+	{
+		return false;
+	}
+
+	unsigned begin = 0, end = MAX_CONNECTED_PLAYERS;
+
+	for (unsigned player = begin; player < end; ++player)
+	{
+		auto pPlayerGameQueue = gameQueues[player];
+		if (!pPlayerGameQueue)
+		{
+			continue;
+		}
+
+		if (gtimeShouldWaitForPlayer(player) && pPlayerGameQueue->numPendingGameTimeUpdateMessages() < numGameTimeUpdates)
+		{
+			return false;  // Do not have enough pending game time updates for this player
+		}
+	}
+
+	return true;  // Have enough pending game time updates from all players that should be waited on
 }
 
 NETQUEUE NETgameQueueForced(unsigned player)
