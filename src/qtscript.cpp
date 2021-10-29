@@ -890,10 +890,10 @@ void jsAutogameSpecific(const WzString &name, int player)
 	wzapi::scripting_instance* instance = loadPlayerScript(name, player, AIDifficulty::MEDIUM);
 	if (!instance)
 	{
-		console("Failed to load selected AI! Check your logs to see why.");
+		console(_("Failed to load selected AI! Check your logs to see why."));
 		return;
 	}
-	console("Loaded the %s AI script for current player!", name.toUtf8().c_str());
+	console(_("Loaded the %s AI script for current player!"), name.toUtf8().c_str());
 	instance->handle_eventGameInit();
 	instance->handle_eventStartLevel();
 }

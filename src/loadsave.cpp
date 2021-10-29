@@ -1087,12 +1087,12 @@ bool autoSave()
 	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, withoutTechlevel.c_str(), savedate);
 	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
 	{
-		console("AutoSave %s", savefile);
+		console(_("AutoSave %s"), savefile);
 		return true;
 	}
 	else
 	{
-		console("AutoSave %s failed", savefile);
+		console(_("AutoSave %s failed"), savefile);
 		return false;
 	}
 }
