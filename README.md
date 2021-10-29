@@ -53,23 +53,19 @@ How to get the latest macOS development builds:
 
 ### Ubuntu
 
-How to get the latest Ubuntu development builds:
-1. View the **[latest successful Ubuntu builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush+is%3Asuccess)**.
-2. Select the latest workflow run in the table / list.
-   This should display a list of **Artifacts** from the run.
-3. Download the appropriate `warzone2100_ubuntu<version>_amd64_deb` artifact.
-   - If you are running Ubuntu 18.04: `warzone2100_ubuntu18.04_amd64_deb`
-   - If you are running Ubuntu 20.04: `warzone2100_ubuntu20.04_amd64_deb`
-> Note: A free GitHub account is currently required to download the artifacts.
-4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu<version>_amd64.deb`) to your Desktop.
-5. Execute the following commands in Terminal:
+How to install the Latest Ubuntu release:
+1. Open the [Releases](https://github.com/Warzone2100/warzone2100/releases) page and find the appropriate `.deb` file:
+- warzone2100_ubuntu18.04_amd64.deb -- For Ubuntu 18.04
+- warzone2100_ubuntu20.04_amd64.deb -- For Ubuntu 20.04
+2. Download and install. Version 4.2.0 and Ubuntu 20.04 used as example, update for later releases:
 ```
-cd ~/Desktop
-sudo apt install ./warzone2100_ubuntu<version>_amd64.deb
+wget https://github.com/Warzone2100/warzone2100/releases/download/4.2.0/warzone2100_ubuntu20.04_amd64.deb
+sudo apt install ./warzone2100_ubuntu20.04_amd64.deb
 ```
-6. Download the video for crucial information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use this command (update `warzone2100-<version>`):
+3. Download the videos for important information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use this command:
 ```
-wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100-<version>/sequences.wz
+mkdir ~/.local/share/warzone2100
+wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
 ```
 
 ### Linux (from source)
@@ -82,8 +78,7 @@ Clone this Git repo and build, following the instructions under:
 > but they should be considered a work-in-progress.
 
 ### Videos
-You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will
-need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
+You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
 Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
 Reporting bugs
