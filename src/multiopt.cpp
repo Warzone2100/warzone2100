@@ -301,7 +301,7 @@ bool recvOptions(NETQUEUE queue)
 		{
 			case FileRequestResult::StartingDownload:
 				debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
-				addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				addConsoleMessage(_("MAP REQUESTED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 				break;
 			case FileRequestResult::DownloadInProgress:
 				// do nothing - just wait
@@ -326,7 +326,7 @@ bool recvOptions(NETQUEUE queue)
 		{
 			case FileRequestResult::StartingDownload:
 				debug(LOG_INFO, "Mod was not found, requesting mod %s from host", hash.toString().c_str());
-				addConsoleMessage("MOD REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				addConsoleMessage(_("MOD REQUESTED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 				break;
 			case FileRequestResult::DownloadInProgress:
 				// do nothing - just wait

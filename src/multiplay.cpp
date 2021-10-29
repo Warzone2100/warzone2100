@@ -1991,7 +1991,7 @@ bool recvMapFileData(NETQUEUE queue)
 	if (NetPlay.wzFiles.empty())
 	{
 		netPlayersUpdated = true;  // Remove download icon from ourselves.
-		addConsoleMessage("MAP DOWNLOADED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("MAP DOWNLOADED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		sendInGameSystemMessage("MAP DOWNLOADED");
 		debug(LOG_INFO, "=== File has been received. ===");
 

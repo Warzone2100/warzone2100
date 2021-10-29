@@ -500,7 +500,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 	else
 	{
 		// Can't find required building
-		addConsoleMessage("Cannot find required building!", LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("Cannot find required building!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
