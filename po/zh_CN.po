@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-28 21:45\n"
+"PO-Revision-Date: 2021-10-29 09:49\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -7143,7 +7143,7 @@ msgstr "野蛮人推进动力"
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1049
 msgid "Back to Basics"
-msgstr "打道回府"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -8734,7 +8734,7 @@ msgstr "Gamma 战役"
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2165
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -9665,7 +9665,7 @@ msgstr "高能激光发射极一型"
 #. data/mp/challenges/hidebehind.json: $.challenge.name
 #: po/custom/fromJson.txt:2755
 msgid "Hide Behind Me"
-msgstr "露影藏形"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
@@ -11789,7 +11789,7 @@ msgstr "小试牛刀"
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4327
 msgid "No Place To Hide"
-msgstr "猛龙过江"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
@@ -14047,7 +14047,7 @@ msgstr "双管多膛快速击发的机枪"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5789
 msgid "Two-faced"
-msgstr "两面三刀"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
