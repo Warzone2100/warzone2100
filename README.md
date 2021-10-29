@@ -62,7 +62,7 @@ How to install the Latest Ubuntu release:
 wget https://github.com/Warzone2100/warzone2100/releases/download/4.2.0/warzone2100_ubuntu20.04_amd64.deb
 sudo apt install ./warzone2100_ubuntu20.04_amd64.deb
 ```
-3. Download the videos for important information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use this command:
+3. Download the videos for important information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use these commands:
 ```
 mkdir ~/.local/share/warzone2100
 wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
