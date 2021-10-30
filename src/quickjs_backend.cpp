@@ -923,7 +923,7 @@ JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 //;; * ```propulsion``` The propulsion component of the droid. (3.2+ only)
 //;; * ```weapons``` The weapon components of the droid, as an array. Contains 'name', 'id', 'armed' percentage and 'lastFired' properties. (3.2+ only)
 //;; * ```cargoCapacity``` Defined for transporters only: Total cargo capacity (number of items that will fit may depend on their size). (3.2+ only)
-//;; * ```cargoSpace``` Defined for transporters only: Cargo capacity left. (3.2+ only)
+//;; * ```cargoLeft``` Defined for transporters only: Cargo capacity left. (3.2+ only)
 //;; * ```cargoCount``` Defined for transporters only: Number of individual \emph{items} in the cargo hold. (3.2+ only)
 //;; * ```cargoSize``` The amount of cargo space the droid will take inside a transport. (3.2+ only)
 //;;
