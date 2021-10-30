@@ -47,7 +47,7 @@ where LABEL is the artifact label:
 Returns true if all artifacts managed by ```libcampaign.js```
 were picked up.
 
-## camSetEnemyBases(bases)
+## camSetEnemyBases([bases])
 
 Tell ```libcampaign.js``` to manage a certain set of enemy bases.
 Management assumes auto-cleanup of leftovers on destruction, and also
@@ -78,7 +78,7 @@ where LABEL is the label of the base group:
 * ```camEnemyBaseEliminated_LABEL``` Called when the base is eliminated,
 	right after leftovers were cleaned up.
 
-## camDetectEnemyBase(base label)
+## camDetectEnemyBase(baseLabel)
 
 Plays the "enemy base detected" message and places a beacon
 for the enemy base defined by the label, as if the base
@@ -89,16 +89,16 @@ was actually found by the player.
 Returns true if all enemy bases managed by ```libcampaign.js```
 are destroyed.
 
-## camMarkTiles(label | array of labels)
+## camMarkTiles(label | labels)
 
 Mark area on the map by label(s), but only if debug mode is enabled.
 Otherwise, remember what to mark in case it is going to be.
 
-## camUnmarkTiles(label | array of labels)
+## camUnmarkTiles(label | labels)
 
 No longer mark area(s) with given label(s) in debug mode.
 
-## camDebug(string...)
+## camDebug(...strings)
 
 Pretty debug prints - a wrapper around ```debug()```.
 Prints a function call stack and the argument message,
@@ -108,18 +108,18 @@ print things when nothing is broken. If you want to keep
 some prints around to make debugging easier without distracting
 the user, use ```camTrace()```.
 
-## camDebugOnce(string...)
+## camDebugOnce(...strings)
 
 Same as ```camDebug()```, but prints each message only once
 during script lifetime.
 
-## camTrace(string...)
+## camTrace(...strings)
 
 Same as ```camDebug()```, but only warns in cheat mode.
 Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
 calls in your code for easier debugging.
 
-## camTraceOnce(string...)
+## camTraceOnce(...strings)
 
 Same as ```camTrace()```, but prints each message only once
 during script lifetime.
@@ -136,7 +136,7 @@ A saveload safe version of newGroup() so as not to create group ID clashes.
 
 check if this droid is forced to never group.
 
-## camNeverGroupDroid(what, [filter])
+## camNeverGroupDroid(what[, playerFilter])
 
 A means to not auto group some droids.
 
@@ -158,11 +158,11 @@ Returns true if something is a string, false otherwise.
 
 A non-synchronous random integer in range [0, max - 1].
 
-## camCallOnce(function name)
+## camCallOnce(functionName)
 
 Call a function by name, but only if it has not been called yet.
 
-## camSafeRemoveObject(obj[, special effects?])
+## camSafeRemoveObject(obj[, specialEffects])
 
 Remove a game object (by value or label) if it exists, do nothing otherwise.
 
@@ -178,32 +178,32 @@ object containing its x, y and id.
 
 A wrapper for ```distBetweenTwoPoints()```.
 
-## camPlayerMatchesFilter(player, filter)
+## camPlayerMatchesFilter(player, playerFilter)
 
 A function to handle player filters in a way similar to
 how JS API functions (eg. ```enumDroid(filter, ...)```) handle them.
 
-## camRemoveDuplicates(array)
+## camRemoveDuplicates(items)
 
 Remove duplicate items from an array.
 
-## camCountStructuresInArea(label, [player])
+## camCountStructuresInArea(label[, playerFilter])
 
 Mimics wzscript's numStructsButNotWallsInArea().
 
-## camChangeOnDiff(numeric value)
+## camChangeOnDiff(numericValue)
 
 Change a numeric value based on campaign difficulty.
 
-## camIsSystemDroid(game object)
+## camIsSystemDroid(gameObject)
 
 Determine if the passed in object is a non-weapon based droid.
 
-## camMakeGroup(what, filter)
+## camMakeGroup(what[, playerFilter])
 
 Make a new group out of array of droids, single game object,
 or label string, with fuzzy auto-detection of argument type.
-Only droids would be added to the group. ```filter``` can be one of
+Only droids would be added to the group. ```playerFilter``` can be one of
 a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```;
 defaults to ```ENEMIES```.
 
@@ -248,7 +248,7 @@ is a JavaScript object with the following fields:
 Factories won't start production immediately; call
 ```camEnableFactory()``` to turn them on when necessary.
 
-## camSetFactoryData(factory label, factory description)
+## camSetFactoryData(factoryLabel, factoryData)
 
 Similar to ```camSetFactories()```, but one factory at a time.
 If the factory was already managing a group of droids, it keeps
@@ -256,7 +256,7 @@ managing it. If a new group is specified in the description,
 the old group is merged into it. NOTE: This function disables the
 factory. You would need to call ```camEnableFactory()``` again.
 
-## camEnableFactory(factory label)
+## camEnableFactory(factoryLabel)
 
 Enable a managed factory by the given label. Once the factory is enabled,
 it starts producing units and executing orders as given.
@@ -267,7 +267,7 @@ Queues up an extra droid template for production. It would be produced
 in the first factory that is capable of producing it, at the end of
 its production loop, first queued first served.
 
-## camSetPropulsionTypeLimit(number)
+## camSetPropulsionTypeLimit([limit])
 
 On hard and insane the propulsion type can be limited with this. For type II
 pass in 2, and for type III pass in 3. Hard defaults to type II and
@@ -303,7 +303,7 @@ a position label. Kind can be one of:
 	incoming transporters for the same player. If a transporter is already
 	on map, it will be correctly queued up and sent later.
 
-## camSetBaseReinforcements(base label, interval, callback, kind, data)
+## camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 
 Periodically brings reinforcements to an enemy base, until the base is
 eliminated. Interval is the pause, in milliseconds, between reinforcements.
@@ -312,11 +312,11 @@ which may be different every time. Kind and data work similarly to
 ```camSendReinforcement()```.
 Use CAM_REINFORCE_NONE as kind to disable previously set reinforcements.
 
-## camEnableRes(list, player)
+## camEnableRes(researchIds, player)
 
 Grants research from the given list to player
 
-## camCompleteRequiredResearch(items, player)
+## camCompleteRequiredResearch(researchIds, player)
 
 Grants research from the given list to player and also researches
 the required research for that item.
@@ -409,11 +409,11 @@ Tell ```libcampaign.js``` to stop managing a certain group.
 
 Print campaign order as string, useful for debugging.
 
-## camIsTransporter(game object)
+## camIsTransporter(gameObject)
 
 Determine if the object is a transporter.
 
-## camSetupTransport(place x, place y, exit x, exit y)
+## camSetupTransporter(placeX, placeY, exitX, exitY)
 
 A convenient function for placing the standard campaign transport
 for loading in pre-away missions. The exit point for the transport
@@ -439,7 +439,7 @@ is finished. If position is unspecified, the building would be built
 near the first available truck. Otherwise, position may be a label
 or a POSITION-like object.
 
-## camNextLevel(next level)
+## camNextLevel(nextLevel)
 
 A wrapper around ```loadLevel()```. Remembers to give bonus power
 for completing the mission faster.
@@ -494,4 +494,3 @@ function will play one video sequence should one be provided. Also,
 should a sound file be in a string (pcvX.ogg)  __camEnqueueVideos() will recognize it
 as a sound to play before a video. Of which is only supported when passed as
 an array.
-

@@ -12,7 +12,7 @@
 //;; marks the area until the event is triggered, and traces entering the area
 //;; in the TRACE log.
 //;;
-function camAreaEvent(label, code)
+function camAreaEvent(label, callback)
 {
 	var eventName = "eventArea" + label;
 	camMarkTiles(label);
@@ -23,7 +23,7 @@ function camAreaEvent(label, code)
 			camTrace("Player", droid.player, "enters", label);
 		}
 		camUnmarkTiles(label);
-		code(droid);
+		callback(droid);
 	});
 }
 

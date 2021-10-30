@@ -66,7 +66,7 @@ function camSendReinforcement(player, position, list, kind, data)
 	}
 }
 
-//;; ## camSetBaseReinforcements(base label, interval, callback, kind, data)
+//;; ## camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 //;;
 //;; Periodically brings reinforcements to an enemy base, until the base is
 //;; eliminated. Interval is the pause, in milliseconds, between reinforcements.
@@ -75,15 +75,15 @@ function camSendReinforcement(player, position, list, kind, data)
 //;; ```camSendReinforcement()```.
 //;; Use CAM_REINFORCE_NONE as kind to disable previously set reinforcements.
 //;;
-function camSetBaseReinforcements(blabel, interval, callback, kind, data)
+function camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 {
-	if (!camIsString(callback))
+	if (!camIsString(callbackName))
 	{
-		camDebug("Callback name must be a string (received", callback, ")");
+		camDebug("Callback name must be a string (received", callbackName, ")");
 	}
-	var bi = __camEnemyBases[blabel];
+	var bi = __camEnemyBases[baseLabel];
 	bi.reinforce_kind = kind;
 	bi.reinforce_interval = interval;
-	bi.reinforce_callback = callback;
+	bi.reinforce_callback = callbackName;
 	bi.reinforce_data = data;
 }

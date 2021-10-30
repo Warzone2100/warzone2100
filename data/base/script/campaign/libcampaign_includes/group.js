@@ -40,15 +40,15 @@ function camInNeverGroup(droid)
 	return false;
 }
 
-//;; ## camNeverGroupDroid(what, [filter])
+//;; ## camNeverGroupDroid(what[, playerFilter])
 //;;
 //;; A means to not auto group some droids.
 //;;
-function camNeverGroupDroid(what, filter)
+function camNeverGroupDroid(what, playerFilter)
 {
-	if (!camDef(filter))
+	if (!camDef(playerFilter))
 	{
-		filter = ENEMIES;
+		playerFilter = ENEMIES;
 	}
 	var array;
 	var obj;
@@ -97,7 +97,7 @@ function camNeverGroupDroid(what, filter)
 			{
 				continue;
 			}
-			if (o.type === DROID && camPlayerMatchesFilter(o.player, filter))
+			if (o.type === DROID && camPlayerMatchesFilter(o.player, playerFilter))
 			{
 				__camNeverGroupDroids.push(o.id);
 			}

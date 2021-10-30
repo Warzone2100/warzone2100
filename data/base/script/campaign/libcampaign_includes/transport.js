@@ -3,36 +3,36 @@
 // Transporter management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camIsTransporter(game object)
+//;; ## camIsTransporter(gameObject)
 //;;
 //;; Determine if the object is a transporter.
 //;;
-function camIsTransporter(object)
+function camIsTransporter(gameObject)
 {
-	if (!camDef(object) || !object)
+	if (!camDef(gameObject) || !gameObject)
 	{
 		return false;
 	}
 
-	if (object.type !== DROID)
+	if (gameObject.type !== DROID)
 	{
 		camTrace("Attempted to check if a non-droid object is a transporter.");
 		return false;
 	}
 
-	return object.droidType === DROID_SUPERTRANSPORTER;
+	return gameObject.droidType === DROID_SUPERTRANSPORTER;
 }
 
-//;; ## camSetupTransport(place x, place y, exit x, exit y)
+//;; ## camSetupTransporter(placeX, placeY, exitX, exitY)
 //;;
 //;; A convenient function for placing the standard campaign transport
 //;; for loading in pre-away missions. The exit point for the transport
 //;; is set up as well.
 //;;
-function camSetupTransporter(x, y, x1, y1)
+function camSetupTransporter(placeX, placeY, exitX, exitY)
 {
-	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
-	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
+	addDroid(CAM_HUMAN_PLAYER, placeX, placeY, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
+	setTransporterExit(exitX, exitY, CAM_HUMAN_PLAYER);
 }
 
 //;; ## camRemoveEnemyTransporterBlip()

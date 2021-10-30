@@ -3,7 +3,7 @@
 // Victory celebration helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camNextLevel(next level)
+//;; ## camNextLevel(nextLevel)
 //;;
 //;; A wrapper around ```loadLevel()```. Remembers to give bonus power
 //;; for completing the mission faster.

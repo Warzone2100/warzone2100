@@ -3,7 +3,7 @@
 // Enemy base management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camSetEnemyBases(bases)
+//;; ## camSetEnemyBases(bases?)
 //;;
 //;; Tell ```libcampaign.js``` to manage a certain set of enemy bases.
 //;; Management assumes auto-cleanup of leftovers on destruction, and also
@@ -43,10 +43,10 @@ function camSetEnemyBases(bases)
 		__camNumEnemyBases = 0;
 	}
 	// convert label strings to groups and store
-	for (const blabel in __camEnemyBases)
+	for (const baseLabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
-		var obj = getObject(blabel);
+		var bi = __camEnemyBases[baseLabel];
+		var obj = getObject(baseLabel);
 		if (camDef(obj) && obj) // group already defined
 		{
 			if (!camDef(bi.group))
@@ -56,7 +56,7 @@ function camSetEnemyBases(bases)
 			else
 			{
 				var structures = enumGroup(bi.group);
-				addLabel({ type: GROUP, id: bi.group }, blabel);
+				addLabel({ type: GROUP, id: bi.group }, baseLabel);
 				for (let idx = 0, len = structures.length; idx < len; ++idx)
 				{
 					var s = structures[idx];
@@ -66,7 +66,7 @@ function camSetEnemyBases(bases)
 					}
 					if (!camDef(bi.player) || camPlayerMatchesFilter(s.player, bi.player))
 					{
-						//camTrace("Auto-adding", s.id, "to base", blabel);
+						//camTrace("Auto-adding", s.id, "to base", baseLabel);
 						groupAdd(bi.group, s);
 					}
 				}
@@ -92,8 +92,8 @@ function camSetEnemyBases(bases)
 						if (o.y > a.y2) a.y2 = o.y;
 					}
 					a.x -= OFFSET; a.y -= OFFSET; a.x2 += OFFSET; a.y2 += OFFSET;
-					camTrace("Auto-detected cleanup area for", blabel, ":", a.x, a.y, a.x2, a.y2);
-					bi.cleanup = "__cam_enemy_base_cleanup__" + blabel;
+					camTrace("Auto-detected cleanup area for", baseLabel, ":", a.x, a.y, a.x2, a.y2);
+					bi.cleanup = "__cam_enemy_base_cleanup__" + baseLabel;
 					addLabel(a, bi.cleanup);
 				}
 			}
@@ -102,11 +102,11 @@ function camSetEnemyBases(bases)
 		{
 			if (!camDef(bi.cleanup))
 			{
-				camDebug("Neither group nor cleanup area found for", blabel);
+				camDebug("Neither group nor cleanup area found for", baseLabel);
 				continue;
 			}
 			bi.group = camNewGroup();
-			addLabel({ type: GROUP, id: bi.group }, blabel);
+			addLabel({ type: GROUP, id: bi.group }, baseLabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
 			for (let idx = 0, len = structs.length; idx < len; ++idx)
 			{
@@ -117,39 +117,39 @@ function camSetEnemyBases(bases)
 				}
 				if (!camDef(bi.player) || camPlayerMatchesFilter(s.player, bi.player))
 				{
-					//camTrace("Auto-adding", s.id, "to base", blabel);
+					//camTrace("Auto-adding", s.id, "to base", baseLabel);
 					groupAdd(bi.group, s);
 				}
 			}
 		}
 		if (groupSize(bi.group) === 0)
 		{
-			//camDebug("Base", blabel, "defined as empty group");
+			//camDebug("Base", baseLabel, "defined as empty group");
 		}
 		if (!reload)
 		{
 			bi.detected = false;
 			bi.eliminated = false;
 		}
-		//camTrace("Resetting label", blabel);
-		resetLabel(blabel, CAM_HUMAN_PLAYER); // subscribe for eventGroupSeen
+		//camTrace("Resetting label", baseLabel);
+		resetLabel(baseLabel, CAM_HUMAN_PLAYER); // subscribe for eventGroupSeen
 	}
 }
 
-//;; ## camDetectEnemyBase(base label)
+//;; ## camDetectEnemyBase(baseLabel)
 //;;
 //;; Plays the "enemy base detected" message and places a beacon
 //;; for the enemy base defined by the label, as if the base
 //;; was actually found by the player.
 //;;
-function camDetectEnemyBase(blabel)
+function camDetectEnemyBase(baseLabel)
 {
-	var bi = __camEnemyBases[blabel];
+	var bi = __camEnemyBases[baseLabel];
 	if (bi.detected || bi.eliminated)
 	{
 		return;
 	}
-	camTrace("Enemy base", blabel, "detected");
+	camTrace("Enemy base", baseLabel, "detected");
 	bi.detected = true;
 	if (camDef(bi.detectSnd))
 	{
@@ -172,7 +172,7 @@ function camDetectEnemyBase(blabel)
 	{
 		hackAddMessage(bi.detectMsg, PROX_MSG, CAM_HUMAN_PLAYER, false);
 	}
-	var callback = __camGlobalContext()["camEnemyBaseDetected_" + blabel];
+	var callback = __camGlobalContext()["camEnemyBaseDetected_" + baseLabel];
 	if (camDef(callback))
 	{
 		callback();
@@ -204,14 +204,14 @@ function __camCheckBaseSeen(seen)
 		return;
 	}
 	// FIXME: O(n) lookup here
-	for (const blabel in __camEnemyBases)
+	for (const baseLabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
+		var bi = __camEnemyBases[baseLabel];
 		if (bi.group !== group)
 		{
 			continue;
 		}
-		camDetectEnemyBase(blabel);
+		camDetectEnemyBase(baseLabel);
 	}
 }
 
@@ -251,9 +251,9 @@ function __camShouldDestroyLeftover(objInfo, basePlayer)
 function __camCheckBaseEliminated(group)
 {
 	// FIXME: O(n) lookup here
-	for (const blabel in __camEnemyBases)
+	for (const baseLabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
+		var bi = __camEnemyBases[baseLabel];
 		var leftovers = [];
 		if (bi.eliminated || (bi.group !== group))
 		{
@@ -294,19 +294,19 @@ function __camCheckBaseEliminated(group)
 		}
 		else
 		{
-			camDebug("All bases must have a cleanup area : " + blabel);
+			camDebug("All bases must have a cleanup area : " + baseLabel);
 			continue;
 		}
 		if (camDef(bi.detectMsg) && bi.detected) // remove the beacon
 		{
 			hackRemoveMessage(bi.detectMsg, PROX_MSG, CAM_HUMAN_PLAYER);
 		}
-		camTrace("Enemy base", blabel, "eliminated");
+		camTrace("Enemy base", baseLabel, "eliminated");
 		bi.eliminated = true;
 		// bump counter before the callback, so that it was
 		// actual during the callback
 		++__camNumEnemyBases;
-		var callback = __camGlobalContext()["camEnemyBaseEliminated_" + blabel];
+		var callback = __camGlobalContext()["camEnemyBaseEliminated_" + baseLabel];
 		if (camDef(callback))
 		{
 			callback();
@@ -318,9 +318,9 @@ function __camCheckBaseEliminated(group)
 
 function __camBasesTick()
 {
-	for (const blabel in __camEnemyBases)
+	for (const baseLabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
+		var bi = __camEnemyBases[baseLabel];
 		if (bi.eliminated || !camDef(bi.reinforce_kind))
 		{
 			continue;
@@ -331,12 +331,12 @@ function __camBasesTick()
 		}
 		if (!camDef(bi.player))
 		{
-			camDebug("Enemy base player needs to be set for", blabel);
+			camDebug("Enemy base player needs to be set for", baseLabel);
 			return;
 		}
 		if (!camDef(bi.cleanup))
 		{
-			camDebug("Enemy base cleanup area needs to be set for", blabel);
+			camDebug("Enemy base cleanup area needs to be set for", baseLabel);
 			return;
 		}
 		bi.reinforce_last = gameTime;

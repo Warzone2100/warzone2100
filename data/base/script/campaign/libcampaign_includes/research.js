@@ -3,41 +3,41 @@
 // Research related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camEnableRes(list, player)
+//;; ## camEnableRes(researchIds, player)
 //;;
 //;; Grants research from the given list to player
 //;;
-function camEnableRes(list, player)
+function camEnableRes(researchIds, player)
 {
-	for (let i = 0, l = list.length; i < l; ++i)
+	for (let i = 0, l = researchIds.length; i < l; ++i)
 	{
-		var research = list[i];
-		enableResearch(research, player);
-		completeResearch(research, player);
+		var researchId = researchIds[i];
+		enableResearch(researchId, player);
+		completeResearch(researchId, player);
 	}
 }
 
-//;; ## camCompleteRequiredResearch(items, player)
+//;; ## camCompleteRequiredResearch(researchIds, player)
 //;;
 //;; Grants research from the given list to player and also researches
 //;; the required research for that item.
 //;;
-function camCompleteRequiredResearch(items, player)
+function camCompleteRequiredResearch(researchIds, player)
 {
 	dump("\n*Player " + player + " requesting accelerated research.");
 
-	for (let i = 0, l = items.length; i < l; ++i)
+	for (let i = 0, l = researchIds.length; i < l; ++i)
 	{
-		var research = items[i];
-		dump("Searching for required research of item: " + research);
-		var reqRes = findResearch(research, player).reverse();
+		var researchId = researchIds[i];
+		dump("Searching for required research of item: " + researchId);
+		var reqRes = findResearch(researchId, player).reverse();
 
 		if (reqRes.length === 0)
 		{
 			//HACK: autorepair like upgrades don't work after mission transition.
-			if (research === "R-Sys-NEXUSrepair")
+			if (researchId === "R-Sys-NEXUSrepair")
 			{
-				completeResearch(research, player, true);
+				completeResearch(researchId, player, true);
 			}
 			continue;
 		}

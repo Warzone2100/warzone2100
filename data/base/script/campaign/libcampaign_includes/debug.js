@@ -3,7 +3,7 @@
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camMarkTiles(label | array of labels)
+//;; ## camMarkTiles(label | labels)
 //;;
 //;; Mark area on the map by label(s), but only if debug mode is enabled.
 //;; Otherwise, remember what to mark in case it is going to be.
@@ -25,7 +25,7 @@ function camMarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; ## camUnmarkTiles(label | array of labels)
+//;; ## camUnmarkTiles(label | labels)
 //;;
 //;; No longer mark area(s) with given label(s) in debug mode.
 //;;
@@ -46,7 +46,7 @@ function camUnmarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; ## camDebug(string...)
+//;; ## camDebug(...strings)
 //;;
 //;; Pretty debug prints - a wrapper around ```debug()```.
 //;; Prints a function call stack and the argument message,
@@ -65,7 +65,7 @@ function camDebug()
 	                  __camBacktrace());
 }
 
-//;; ## camDebugOnce(string...)
+//;; ## camDebugOnce(...strings)
 //;;
 //;; Same as ```camDebug()```, but prints each message only once
 //;; during script lifetime.
@@ -85,7 +85,7 @@ function camDebugOnce()
 	                  __camBacktrace());
 }
 
-//;; ## camTrace(string...)
+//;; ## camTrace(...strings)
 //;;
 //;; Same as ```camDebug()```, but only warns in cheat mode.
 //;; Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
@@ -102,7 +102,7 @@ function camTrace()
 	                  arguments);
 }
 
-//;; ## camTraceOnce(string...)
+//;; ## camTraceOnce(...strings)
 //;;
 //;; Same as ```camTrace()```, but prints each message only once
 //;; during script lifetime.

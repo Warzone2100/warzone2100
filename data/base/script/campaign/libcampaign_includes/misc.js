@@ -34,25 +34,25 @@ function camRand(max)
 	camDebug("Max should be positive");
 }
 
-//;; ## camCallOnce(function name)
+//;; ## camCallOnce(functionName)
 //;;
 //;; Call a function by name, but only if it has not been called yet.
 //;;
-function camCallOnce(callback)
+function camCallOnce(functionName)
 {
-	if (camDef(__camCalledOnce[callback]) && __camCalledOnce[callback])
+	if (camDef(__camCalledOnce[functionName]) && __camCalledOnce[functionName])
 	{
 		return;
 	}
-	__camCalledOnce[callback] = true;
-	__camGlobalContext()[callback]();
+	__camCalledOnce[functionName] = true;
+	__camGlobalContext()[functionName]();
 }
 
-//;; ## camSafeRemoveObject(obj[, special effects?])
+//;; ## camSafeRemoveObject(obj[, specialEffects])
 //;;
 //;; Remove a game object (by value or label) if it exists, do nothing otherwise.
 //;;
-function camSafeRemoveObject(obj, flashy)
+function camSafeRemoveObject(obj, specialEffects)
 {
 	if (__camLevelEnded)
 	{
@@ -64,7 +64,7 @@ function camSafeRemoveObject(obj, flashy)
 	}
 	if (camDef(obj) && obj)
 	{
-		removeObject(obj, flashy);
+		removeObject(obj, specialEffects);
 	}
 }
 
@@ -148,14 +148,14 @@ function camDist(x1, y1, x2, y2)
 	}
 }
 
-//;; ## camPlayerMatchesFilter(player, filter)
+//;; ## camPlayerMatchesFilter(player, playerFilter)
 //;;
 //;; A function to handle player filters in a way similar to
 //;; how JS API functions (eg. ```enumDroid(filter, ...)```) handle them.
 //;;
-function camPlayerMatchesFilter(player, filter)
+function camPlayerMatchesFilter(player, playerFilter)
 {
-	switch (filter) {
+	switch (playerFilter) {
 		case ALL_PLAYERS:
 			return true;
 		case ALLIES:
@@ -163,20 +163,20 @@ function camPlayerMatchesFilter(player, filter)
 		case ENEMIES:
 			return player >= 0 && player < CAM_MAX_PLAYERS && player !== CAM_HUMAN_PLAYER;
 		default:
-			return player === filter;
+			return player === playerFilter;
 	}
 }
 
-//;; ## camRemoveDuplicates(array)
+//;; ## camRemoveDuplicates(items)
 //;;
 //;; Remove duplicate items from an array.
 //;;
-function camRemoveDuplicates(array)
+function camRemoveDuplicates(items)
 {
 	var prims = {"boolean":{}, "number":{}, "string":{}};
 	var objs = [];
 
-	return array.filter((item) => {
+	return items.filter((item) => {
 		var type = typeof item;
 		if (type in prims)
 		{
@@ -189,17 +189,17 @@ function camRemoveDuplicates(array)
 	});
 }
 
-//;; ## camCountStructuresInArea(label, [player])
+//;; ## camCountStructuresInArea(label[, playerFilter])
 //;;
 //;; Mimics wzscript's numStructsButNotWallsInArea().
 //;;
-function camCountStructuresInArea(lab, player)
+function camCountStructuresInArea(label, playerFilter)
 {
-	if (!camDef(player))
+	if (!camDef(playerFilter))
 	{
-		player = CAM_HUMAN_PLAYER;
+		playerFilter = CAM_HUMAN_PLAYER;
 	}
-	var list = enumArea(lab, player, false);
+	var list = enumArea(label, playerFilter, false);
 	var ret = 0;
 	for (let i = 0, l = list.length; i < l; ++i)
 	{
@@ -212,11 +212,11 @@ function camCountStructuresInArea(lab, player)
 	return ret;
 }
 
-//;; ## camChangeOnDiff(numeric value)
+//;; ## camChangeOnDiff(numericValue)
 //;;
 //;; Change a numeric value based on campaign difficulty.
 //;;
-function camChangeOnDiff(num)
+function camChangeOnDiff(numericValue)
 {
 	var modifier = 0;
 
@@ -239,42 +239,42 @@ function camChangeOnDiff(num)
 			break;
 	}
 
-	return Math.floor(num * modifier);
+	return Math.floor(numericValue * modifier);
 }
 
-//;; ## camIsSystemDroid(game object)
+//;; ## camIsSystemDroid(gameObject)
 //;;
 //;; Determine if the passed in object is a non-weapon based droid.
 //;;
-function camIsSystemDroid(obj)
+function camIsSystemDroid(gameObject)
 {
-	if (!camDef(obj) || !obj)
+	if (!camDef(gameObject) || !gameObject)
 	{
 		return false;
 	}
 
-	if (obj.type !== DROID)
+	if (gameObject.type !== DROID)
 	{
-		camTrace("Non-droid: " + obj.type + " pl: " + obj.name);
+		camTrace("Non-droid: " + gameObject.type + " pl: " + gameObject.name);
 		return false;
 	}
 
-	return (obj.droidType === DROID_SENSOR || obj.droidType === DROID_CONSTRUCT || obj.droidType === DROID_REPAIR);
+	return (gameObject.droidType === DROID_SENSOR || gameObject.droidType === DROID_CONSTRUCT || gameObject.droidType === DROID_REPAIR);
 }
 
-//;; ## camMakeGroup(what, filter)
+//;; ## camMakeGroup(what[, playerFilter])
 //;;
 //;; Make a new group out of array of droids, single game object,
 //;; or label string, with fuzzy auto-detection of argument type.
-//;; Only droids would be added to the group. ```filter``` can be one of
+//;; Only droids would be added to the group. ```playerFilter``` can be one of
 //;; a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```;
 //;; defaults to ```ENEMIES```.
 //;;
-function camMakeGroup(what, filter)
+function camMakeGroup(what, playerFilter)
 {
-	if (!camDef(filter))
+	if (!camDef(playerFilter))
 	{
-		filter = ENEMIES;
+		playerFilter = ENEMIES;
 	}
 	var array;
 	var obj;
@@ -327,7 +327,7 @@ function camMakeGroup(what, filter)
 				camDebug("Trying to add", o);
 				continue;
 			}
-			if (o.type === DROID && o.droidType !== DROID_CONSTRUCT && camPlayerMatchesFilter(o.player, filter))
+			if (o.type === DROID && o.droidType !== DROID_CONSTRUCT && camPlayerMatchesFilter(o.player, playerFilter))
 			{
 				groupAdd(group, o);
 			}

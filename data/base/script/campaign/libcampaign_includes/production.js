@@ -47,13 +47,13 @@
 //;;
 function camSetFactories(factories)
 {
-	for (const flabel in factories)
+	for (const factoryLabel in factories)
 	{
-		camSetFactoryData(flabel, factories[flabel]);
+		camSetFactoryData(factoryLabel, factories[factoryLabel]);
 	}
 }
 
-//;; ## camSetFactoryData(factory label, factory description)
+//;; ## camSetFactoryData(factoryLabel, factoryData)
 //;;
 //;; Similar to ```camSetFactories()```, but one factory at a time.
 //;; If the factory was already managing a group of droids, it keeps
@@ -61,24 +61,24 @@ function camSetFactories(factories)
 //;; the old group is merged into it. NOTE: This function disables the
 //;; factory. You would need to call ```camEnableFactory()``` again.
 //;;
-function camSetFactoryData(flabel, fdata)
+function camSetFactoryData(factoryLabel, factoryData)
 {
-	var structure = getObject(flabel);
+	var structure = getObject(factoryLabel);
 	if (!camDef(structure) || !structure)
 	{
 		// Not an error! It's ok if the factory is already destroyed
 		// when its data was updated.
-		camTrace("Factory", flabel, "not found");
+		camTrace("Factory", factoryLabel, "not found");
 		return;
 	}
 	// remember the old factory group, if any
 	var droids = [];
-	if (camDef(__camFactoryInfo[flabel]))
+	if (camDef(__camFactoryInfo[factoryLabel]))
 	{
-		droids = enumGroup(__camFactoryInfo[flabel].group);
+		droids = enumGroup(__camFactoryInfo[factoryLabel].group);
 	}
-	__camFactoryInfo[flabel] = fdata;
-	var fi = __camFactoryInfo[flabel];
+	__camFactoryInfo[factoryLabel] = factoryData;
+	var fi = __camFactoryInfo[factoryLabel];
 	if (!camDef(fi.data))
 	{
 		fi.data = {};
@@ -100,35 +100,35 @@ function camSetFactoryData(flabel, fdata)
 	}
 }
 
-//;; ## camEnableFactory(factory label)
+//;; ## camEnableFactory(factoryLabel)
 //;;
 //;; Enable a managed factory by the given label. Once the factory is enabled,
 //;; it starts producing units and executing orders as given.
 //;;
-function camEnableFactory(flabel)
+function camEnableFactory(factoryLabel)
 {
-	var fi = __camFactoryInfo[flabel];
+	var fi = __camFactoryInfo[factoryLabel];
 	if (!camDef(fi) || !fi)
 	{
-		camDebug("Factory not managed", flabel);
+		camDebug("Factory not managed", factoryLabel);
 		return;
 	}
 	if (fi.enabled)
 	{
 		// safe, no error
-		camTrace("Factory", flabel, "enabled again");
+		camTrace("Factory", factoryLabel, "enabled again");
 		return;
 	}
-	camTrace("Enabling", flabel);
+	camTrace("Enabling", factoryLabel);
 	fi.enabled = true;
-	var obj = getObject(flabel);
+	var obj = getObject(factoryLabel);
 	if (!camDef(obj) || !obj)
 	{
-		camTrace("Factory", flabel, "not found, probably already dead");
+		camTrace("Factory", factoryLabel, "not found, probably already dead");
 		return;
 	}
-	__camContinueProduction(flabel);
-	__camFactoryUpdateTactics(flabel);
+	__camContinueProduction(factoryLabel);
+	__camFactoryUpdateTactics(factoryLabel);
 }
 
 //;; ## camQueueDroidProduction(player, template)
@@ -146,24 +146,24 @@ function camQueueDroidProduction(player, template)
 	__camFactoryQueue[player][__camFactoryQueue[player].length] = template;
 }
 
-//;; ## camSetPropulsionTypeLimit(number)
+//;; ## camSetPropulsionTypeLimit([limit])
 //;;
 //;; On hard and insane the propulsion type can be limited with this. For type II
 //;; pass in 2, and for type III pass in 3. Hard defaults to type II and
 //;; insane defaults to type III. If nothing is passed in then the type
 //;; limit will match what is in templates.json.
 //;;
-function camSetPropulsionTypeLimit(num)
+function camSetPropulsionTypeLimit(limit)
 {
-	if (!camDef(num))
+	if (!camDef(limit))
 	{
 		__camPropulsionTypeLimit = "NO_USE";
 	}
-	else if (num === 2)
+	else if (limit === 2)
 	{
 		__camPropulsionTypeLimit = "02";
 	}
-	else if (num === 3)
+	else if (limit === 3)
 	{
 		__camPropulsionTypeLimit = "03";
 	}
