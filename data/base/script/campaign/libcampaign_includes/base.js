@@ -3,7 +3,7 @@
 // Enemy base management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camSetEnemyBases(bases?)
+//;; ## camSetEnemyBases([bases])
 //;;
 //;; Tell ```libcampaign.js``` to manage a certain set of enemy bases.
 //;; Management assumes auto-cleanup of leftovers on destruction, and also
