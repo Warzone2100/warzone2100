@@ -22,6 +22,7 @@
 #include "../include/wzmaplib/map_debug.h"
 #include "map_internal.h"
 
+#include <algorithm>
 #include <cinttypes>
 #include <limits>
 
@@ -388,6 +389,284 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 	return JS_TRUE;
 }
 
+//MAP-- ## generateFractalValueNoise(width, height, range, crispness, scale, normalizeToRange = 0,
+//MAP--                              [[x1, y1, x2, y2, (x, y, layerIdx, layerRange) => value], ...] = [])
+//MAP--
+//MAP-- A fast (native) fractal value noise generator, a cheaper version of Perlin noise.
+//MAP-- Such noise can aid random map generation in a variety of ways, most prominently
+//MAP-- for generating beautiful realistic landscapes.
+//MAP--
+//MAP-- This function returns a contiguous 2D array of size `(width * height)`
+//MAP-- filled with random values that constitute fractal value noise. Such noise
+//MAP-- is a sum of white noise layers with exponentially increasing resolution
+//MAP-- and exponentially decreasing range, interpolated linearly when stretched
+//MAP-- to the original (`width` x `height`) rectangle.
+//MAP--
+//MAP-- `range` is the range of the first layer. In other words, the first layer of noise
+//MAP-- will have values populated via `gameRand(range)`.
+//MAP--
+//MAP-- `crispness` controls the range decay. Each next layer has range `(crispness/10)` times
+//MAP-- the previous layer's range. Integer values from 1 to 10 typically make sense.
+//MAP--
+//MAP-- `scale` is the resolution of the first layer. For example, a `scale` of 16
+//MAP-- means that the first layer would stretch every white noise pixel to
+//MAP-- a 16x16 square in the final noise. Each next layer doubles the
+//MAP-- resolution, so the noise with `scale` equal to 16 shall have 5 layers
+//MAP-- in total, with pixel sizes 16, 8, 4, 2, 1 respectively.
+//MAP--
+//MAP-- `normalizedRange` is an optional argument that causes scales the final output
+//MAP-- to be scaled to `[0, normalizeToRange)`. The maximum observed value of the resulting noise
+//MAP-- becomes `normalizeToRange` and the minimum observed value becomes `0`. If
+//MAP-- `normalizedRange` is unset or set to 0, normalization is not performed.
+//MAP-- Specifying this parameter yields much better performance than manual normalization.
+//MAP--
+//MAP-- The last optional argument allows finer control over certain areas of the map.
+//MAP-- Each element specifies such "rigged" rectangle [x1, x2] x [y1, y2] and the callback
+//MAP-- that determines the value of each noise layer within that rectangle.
+//MAP-- That value has to be within range [0, layerRange).
+//MAP-- For example, if you want to make sure there's room for a player base
+//MAP-- at the top left corner of the map, you can rig the respective rectangle
+//MAP-- to always have a value of 0 by including an element, say,
+//MAP-- `[0, 0, 32, 32, () => 0]`. This gives much nicer results than post-processing
+//MAP-- the noise manually to reset these values to 0 because it causes the surrounding noise
+//MAP-- to blend smoothly with the rigged area. The rigged area does not need to
+//MAP-- be flat; an arbitrary function of `x` and `y` can be provided.
+//MAP-- The callback shall not be stored for later use or called after
+//MAP-- `generateFractalValueNoise` returns.
+static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	MAPSCRIPT_GET_CONTEXT_DATA()//;
+	auto pCustomLogger = data.pCustomLogger;
+
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, argc >= 5 && argc <= 7, "Must have 5 to 7 parameters");
+	JSValue jsVal_width = argv[0];
+	JSValue jsVal_height = argv[1];
+	JSValue jsVal_range = argv[2];
+	JSValue jsVal_crispness = argv[3];
+	JSValue jsVal_scale = argv[4];
+
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_width), "width must be number");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_height), "height must be number");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_range), "range must be number");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_crispness), "crispness must be number");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_scale), "scale must be number");
+
+	int32_t width = JSValueToInt32(ctx, jsVal_width);
+	int32_t height = JSValueToInt32(ctx, jsVal_height);
+	int32_t range = JSValueToInt32(ctx, jsVal_range);
+	int32_t scale = JSValueToInt32(ctx, jsVal_scale);
+	int32_t crispness = JSValueToInt32(ctx, jsVal_crispness);
+
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, width > 0, "width must be positive");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, height > 0, "height must be positive");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, range > 0, "range must be positive");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, scale > 0, "scale must be positive");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, crispness > 0, "crispness must be positive");
+
+	int32_t normalizeToRange = 0;
+	if (argc >= 6) {
+		JSValue jsVal_normalizeToRange = argv[5];
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_normalizeToRange),
+		                              "normalizeToRange must be number");
+		normalizeToRange = JSValueToInt32(ctx, jsVal_normalizeToRange);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, normalizeToRange >= 0,
+		                              "normalizeToRange must be positive or zero");
+	}
+
+	struct RiggedRegion
+	{
+		int32_t x1, y1, x2, y2;
+		JSValue callback;
+	};
+
+	std::vector<RiggedRegion> riggedRegions;
+	if (argc == 7)
+	{
+		// Unwrap JS regions for faster lookup.
+		JSValue jsVal_riggedRegions = argv[6];
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, jsVal_riggedRegions), "width must be array");
+
+		uint64_t regionsArrayLength = 0;
+		bool bGotRegionsArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegions, regionsArrayLength);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotRegionsArrayLength,
+		                              "Unable to retrieve riggedRegions array length");
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, regionsArrayLength <= std::numeric_limits<size_t>::max(),
+		                              "Too many riggedRegions (%zu)", regionsArrayLength);
+
+		size_t numRiggedRegions = regionsArrayLength;
+		riggedRegions.reserve(numRiggedRegions);
+		auto free_riggedRegions_ref = gsl::finally([ctx, &riggedRegions]
+		{
+			for (const auto &r : riggedRegions)
+			{
+				JS_FreeValue(ctx, r.callback);
+			}
+		});
+
+		for (size_t i = 0; i < numRiggedRegions; ++i)
+		{
+			JSValue jsVal_riggedRegion = JS_GetPropertyUint32(ctx, jsVal_riggedRegions, i);
+			auto free_riggedRegion_ref = gsl::finally([ctx, jsVal_riggedRegion] { JS_FreeValue(ctx, jsVal_riggedRegion); });
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, jsVal_riggedRegion),
+			                              "riggedRegion %zu must be array", i);
+			uint64_t regionArrayLength = 0;
+			bool bGotRegionArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegion, regionArrayLength);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotRegionArrayLength && regionArrayLength == 5,
+			                              "riggedRegion[%zu] length must be 5; actual length %zu",
+			                              i, regionArrayLength);
+			JSValue jsVal_x1 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 0);
+			JSValue jsVal_y1 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 1);
+			JSValue jsVal_x2 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 2);
+			JSValue jsVal_y2 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 3);
+			JSValue jsVal_callback = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 4);
+
+			auto free_riggedRegionValues_ref = gsl::finally([ctx, jsVal_x1, jsVal_y1, jsVal_x2, jsVal_y2, jsVal_callback]
+			{
+				JS_FreeValue(ctx, jsVal_x1);
+				JS_FreeValue(ctx, jsVal_y1);
+				JS_FreeValue(ctx, jsVal_x2);
+				JS_FreeValue(ctx, jsVal_y2);
+				JS_FreeValue(ctx, jsVal_callback);
+			});
+
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_x1), "riggedRegion[%zu][0] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_y1), "riggedRegion[%zu][1] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_x2), "riggedRegion[%zu][2] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_y2), "riggedRegion[%zu][3] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsFunction(ctx, jsVal_callback),
+			                              "riggedRegion[%zu][4] must be function", i);
+
+			riggedRegions.push_back(RiggedRegion
+			{
+				JSValueToInt32(ctx, jsVal_x1),
+				JSValueToInt32(ctx, jsVal_y1),
+				JSValueToInt32(ctx, jsVal_x2),
+				JSValueToInt32(ctx, jsVal_y2),
+				JS_DupValue(ctx, jsVal_callback)
+			});
+		};
+	}
+
+	size_t size = width * height;
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, size <= std::numeric_limits<int32_t>::max(),
+	                              "Requested data too large to fit into Array");
+
+	size_t maxLayerSize = (width + 1) * (height + 1);
+
+	// This check covers a lot of other multiplications.
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, maxLayerSize / (width + 1) == height + 1, "integer overflow");
+
+	std::vector<int32_t> noiseData(size, 0);
+
+	// Allocate layer data once and reuse it for performance.
+	std::vector<int32_t> layerData(maxLayerSize);
+
+	int32_t layerScale = scale;
+	int32_t layerRange = range;
+	int32_t layerIdx = -1;
+
+	do
+	{
+		layerScale /= 2;
+		layerRange = layerRange * crispness / 10;
+		++layerIdx;
+
+		int32_t layerWidth = width / layerScale + 1;
+		int32_t layerHeight = height / layerScale + 1;
+
+		int32_t layerScaleArea = layerScale * layerScale;
+
+		for (size_t x = 0; x < layerWidth; ++x)
+		{
+			for (size_t y = 0; y < layerHeight; ++y)
+			{
+				size_t mapX = x * layerScale, mapY = y * layerScale;
+
+				bool rigged = false;
+				for (const auto &r : riggedRegions)
+				{
+					if (mapX >= r.x1 && mapY >= r.y1 && mapX <= r.x2 && mapY <= r.y2)
+					{
+						rigged = true;
+						JSValue callArgv[4] =
+						{
+							JS_NewInt32(ctx, mapX),
+							JS_NewInt32(ctx, mapY),
+							JS_NewInt32(ctx, layerIdx),
+							JS_NewInt32(ctx, layerRange)
+						};
+						JSValue jsVal_ret = JS_Call(ctx, r.callback, this_val, 4, callArgv);
+						auto free_ret_ref = gsl::finally([ctx, jsVal_ret] { JS_FreeValue(ctx, jsVal_ret); });
+						SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_ret),
+							"riggedRegion callback must return number");
+						int32_t ret = JSValueToInt32(ctx, jsVal_ret);
+						SCRIPT_ASSERT_AND_RETURNERROR(ctx, ret >= 0 && ret < layerRange,
+							"riggedRegion callback must return non-negative number within range");
+						layerData[x * layerHeight + y] = ret;
+					}
+				}
+
+				if (!rigged)
+				{
+					// This is equivalent to gameRand(layerRange).
+					uint32_t num = data.mt() % layerRange;
+					layerData[x * layerHeight + y] = (int32_t)num;
+				}
+			}
+		}
+
+
+		for (size_t x = 0; x < layerWidth - 1; ++x)
+		{
+			for (size_t y = 0; y < layerHeight - 1; ++y)
+			{
+				int32_t mapX = x * layerScale, mapY = y * layerScale;
+
+				int32_t tl = layerData[x * layerHeight + y];
+				int32_t tr = layerData[(x + 1) * layerHeight + y];
+				int32_t bl = layerData[x * layerHeight + (y + 1)];
+				int32_t br = layerData[(x + 1) * layerHeight + (y + 1)];
+
+				for (size_t innerX = 0; innerX < layerScale; ++innerX)
+				{
+					for (size_t innerY = 0; innerY < layerScale; ++innerY)
+					{
+						// Interpolation.
+						noiseData[(mapX + innerX) * height + (mapY + innerY)] += (
+							br * innerX * innerY +
+							bl * (layerScale - 1 - innerX) * innerY +
+							tr * innerX * (layerScale - 1 - innerY) +
+							tl * (layerScale - 1 - innerX) * (layerScale - 1 - innerY)
+						) / layerScaleArea;
+					}
+				}
+			}
+		}
+	}
+	while (layerScale > 1 && layerRange > 1);
+
+	// Normalization.
+	if (normalizeToRange > 0)
+	{
+		auto minmax = std::minmax_element(noiseData.begin(), noiseData.end());
+		int32_t min = *minmax.first;
+		int32_t max = *minmax.second;
+		std::transform(
+			noiseData.begin(), noiseData.end(), noiseData.begin(),
+			[min, max, normalizeToRange] (int32_t val)
+			{
+				return (val - min) * normalizeToRange / (max - min);
+			});
+	}
+
+	JSValue retVal = JS_NewArray(ctx);
+	for (size_t i = 0; i < size; ++i)
+	{
+		JS_SetPropertyUint32(ctx, retVal, i, JS_NewInt32(ctx, noiseData[i]));
+	}
+	return retVal;
+}
+
 struct MapScriptRuntimeInfo {
 	std::chrono::system_clock::time_point startTime;
 };
@@ -482,7 +761,8 @@ std::unique_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	static const JSCFunctionListEntry js_builtin_mapFuncs[] = {
 		QJS_CFUNC_DEF("gameRand", 0, runMap_gameRand ),
 		QJS_CFUNC_DEF("log", 1, runMap_log ),
-		QJS_CFUNC_DEF("setMapData", 7, runMap_setMapData )
+		QJS_CFUNC_DEF("setMapData", 7, runMap_setMapData ),
+		QJS_CFUNC_DEF("generateFractalValueNoise", 6, runMap_generateFractalValueNoise )
 	};
 	JS_SetPropertyFunctionList(ctx, global_obj, js_builtin_mapFuncs, sizeof(js_builtin_mapFuncs) / sizeof(js_builtin_mapFuncs[0]));
 
