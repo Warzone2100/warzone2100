@@ -57,6 +57,7 @@ How to install the Latest Ubuntu release:
 1. Open the [Releases](https://github.com/Warzone2100/warzone2100/releases) page and find the appropriate `.deb` file:
 - warzone2100_ubuntu18.04_amd64.deb -- For Ubuntu 18.04
 - warzone2100_ubuntu20.04_amd64.deb -- For Ubuntu 20.04
+> Note: A version normally works with later Ubuntu releases, so 20.04 works for 20.10, 21.04, and 21.10, and 18.04 works for 18.10, 19.04, and 19.10.
 2. Download and install. Version 4.2.0 and Ubuntu 20.04 used as example, update for later releases:
 ```
 wget https://github.com/Warzone2100/warzone2100/releases/download/4.2.0/warzone2100_ubuntu20.04_amd64.deb
