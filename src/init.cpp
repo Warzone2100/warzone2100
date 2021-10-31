@@ -183,28 +183,28 @@ static bool InitialiseGlobals()
 }
 
 
-bool loadLevFile(const char *filename, searchPathMode pathMode, bool ignoreWrf, char const *realFileName)
+bool loadLevFile(const std::string& filename, searchPathMode pathMode, bool ignoreWrf, char const *realFileName)
 {
 	char *pBuffer;
 	UDWORD size;
 
 	if (realFileName == nullptr)
 	{
-		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename);
+		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename.c_str());
 	}
 	else
 	{
-		debug(LOG_WZ, "Loading lev file: \"%s\" from \"%s\"\n", filename, realFileName);
+		debug(LOG_WZ, "Loading lev file: \"%s\" from \"%s\"\n", filename.c_str(), realFileName);
 	}
 
-	if (!PHYSFS_exists(filename) || !loadFile(filename, &pBuffer, &size))
+	if (!PHYSFS_exists(filename.c_str()) || !loadFile(filename.c_str(), &pBuffer, &size))
 	{
-		debug(LOG_ERROR, "File not found: %s\n", filename);
+		debug(LOG_ERROR, "File not found: %s\n", filename.c_str());
 		return false; // only in NDEBUG case
 	}
 	if (!levParse(pBuffer, size, pathMode, ignoreWrf, realFileName))
 	{
-		debug(LOG_ERROR, "Parse error in %s\n", filename);
+		debug(LOG_ERROR, "Parse error in %s\n", filename.c_str());
 		free(pBuffer);
 		return false;
 	}
@@ -724,25 +724,22 @@ bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
 }
 
 // Mount the archive under the mountpoint, and enumerate the archive according to lookin
-static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpoint, const std::vector<const char *>& lookin_list)
+static inline std::pair<bool, bool> CheckInMap(const char *archive, const std::string& mountpoint, const std::vector<std::string>& lookin_list)
 {
 	bool mapmod = false;
 	bool isRandom = false;
 
-	if (!PHYSFS_mount(archive, mountpoint, PHYSFS_APPEND))
+	for (auto lookin_subdir : lookin_list)
 	{
-		// We already checked to see if this was valid before, and now, something went seriously wrong.
-		debug(LOG_FATAL, "Could not mount %s, because: %s. Please delete the file, and run the game again. Game will now exit.", archive, WZ_PHYSFS_getLastError());
-		exit(-1);
-	}
-
-	for (auto lookin : lookin_list)
-	{
-		std::string checkpath = lookin;
-		checkpath.append("/");
-		WZ_PHYSFS_enumerateFiles(lookin, [&](const char *file) -> bool {
+		std::string lookin = mountpoint;
+		if (!lookin_subdir.empty())
+		{
+			lookin.append("/");
+			lookin.append(lookin_subdir);
+		}
+		WZ_PHYSFS_enumerateFiles(lookin.c_str(), [&](const char *file) -> bool {
 			std::string checkfile = file;
-			if (WZ_PHYSFS_isDirectory((checkpath + checkfile).c_str()))
+			if (WZ_PHYSFS_isDirectory((lookin + "/" + checkfile).c_str()))
 			{
 				if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
 					|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
@@ -760,7 +757,7 @@ static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpo
 			return true; // continue
 		});
 
-		std::string maps = checkpath + "/multiplay/maps";
+		std::string maps = lookin + "/multiplay/maps";
 		WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
 			if (WZ_PHYSFS_isDirectory((maps + "/" + file).c_str()) && PHYSFS_exists((maps + "/" + file + "/game.js").c_str()))
 			{
@@ -771,11 +768,60 @@ static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpo
 		});
 	}
 
-	if (!WZ_PHYSFS_unmount(archive))
-	{
-		debug(LOG_ERROR, "Could not unmount %s, %s", archive, WZ_PHYSFS_getLastError());
-	}
 	return {mapmod, isRandom};
+}
+
+static std::vector<std::string> lookin_list = { "", "multiplay" };
+
+// Process a map that has been mounted in the PhysFS virtual filesystem
+//
+// Verifies the index data, determines attributes, and adds to the level loading system so it can be loaded
+//
+// - archive: Directory or archive added to the path, in platform-dependent notation
+// - realFileName_platformIndependent:
+//     For actual map archives, this is the platform independent unique filename + parent path for the map
+//     For "virtual" map archives this is basically a lookup key that should be unique
+// - mountPoint: Location in the interpolated PhysFS tree that this archive was "mounted" (in platform-independent notation)
+bool processMap(const char* archive, const char* realFileName_platformIndependent, const std::string& mountPoint)
+{
+	struct WZmapInfo CurrentMap;
+
+	bool containsMap = false;
+	bool enumSuccess = WZ_PHYSFS_enumerateFiles(mountPoint.c_str(), [&](const char *file) -> bool {
+		size_t len = strlen(file);
+		if ((len > 10 && !strcasecmp(file + (len - 10), ".addon.lev"))  // Do not add addon.lev again // <--- Err, what? The code has loaded .addon.lev for a while...
+			|| (len > 13 && !strcasecmp(file + (len - 13), ".xplayers.lev"))) // add support for X player maps using a new name to prevent conflicts.
+		{
+			std::string fullPath = mountPoint + "/" + file;
+			if (loadLevFile(mountPoint + "/" + file, mod_multiplay, true, realFileName_platformIndependent))
+			{
+				containsMap = true;
+				return false; // stop enumerating
+			}
+		}
+		return true; // continue
+	});
+
+	if (!containsMap)
+	{
+		// not sure what this is, but it doesn't seem to contain a map
+		return false;
+	}
+
+	if (!enumSuccess)
+	{
+		// Failed to enumerate contents - corrupt map archive
+		return false;
+	}
+
+	auto chk = CheckInMap(archive, mountPoint, lookin_list);
+
+	const std::string& MapName = realFileName_platformIndependent;
+	CurrentMap.isMapMod = chk.first;
+	CurrentMap.isRandom = chk.second;
+	WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, std::move(CurrentMap)));
+
+	return true;
 }
 
 bool buildMapList()
@@ -787,10 +833,8 @@ bool buildMapList()
 	loadLevFile("addon.lev", mod_multiplay, false, nullptr);
 	WZ_Maps.clear();
 	MapFileList realFileNames = listMapFiles();
-	const std::vector<const char *> lookin_list = { "WZMap", "WZMap/multiplay" };
 	for (auto &realFileName : realFileNames)
 	{
-		struct WZmapInfo CurrentMap;
 		const char * pRealDirStr = PHYSFS_getRealDir(realFileName.platformIndependent.c_str());
 		if (!pRealDirStr)
 		{
@@ -799,42 +843,22 @@ bool buildMapList()
 		}
 		std::string realFilePathAndName = pRealDirStr + realFileName.platformDependent;
 
-		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND) == 0)
+		if (PHYSFS_mount(realFilePathAndName.c_str(), "WZMap", PHYSFS_APPEND) == 0)
 		{
 			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
 			continue; // skip
 		}
 
-		bool enumSuccess = WZ_PHYSFS_enumerateFiles("", [&](const char *file) -> bool {
-			size_t len = strlen(file);
-			if (len > 10 && !strcasecmp(file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
-			{
-				loadLevFile(file, mod_multiplay, true, realFileName.platformIndependent.c_str());
-			}
-			// add support for X player maps using a new name to prevent conflicts.
-			if (len > 13 && !strcasecmp(file + (len - 13), ".xplayers.lev"))
-			{
-				loadLevFile(file, mod_multiplay, true, realFileName.platformIndependent.c_str());
-			}
-			return true; // continue
-		});
+		if (!processMap(realFilePathAndName.c_str(), realFileName.platformIndependent.c_str(), "WZMap"))
+		{
+			// Failed to enumerate contents - corrupt map archive
+			debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", realFilePathAndName.c_str());
+		}
 
 		if (WZ_PHYSFS_unmount(realFilePathAndName.c_str()) == 0)
 		{
 			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
 		}
-		if (!enumSuccess)
-		{
-			// Failed to enumerate contents - corrupt map archive
-			debug(LOG_ERROR, "Failed to enumerate - corrupt map file: %s", realFilePathAndName.c_str());
-		}
-
-		auto chk = CheckInMap(realFilePathAndName.c_str(), "WZMap", lookin_list);
-
-		const std::string& MapName = realFileName.platformIndependent;
-		CurrentMap.isMapMod = chk.first;
-		CurrentMap.isRandom = chk.second;
-		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, std::move(CurrentMap)));
 	}
 
 	return true;

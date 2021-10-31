@@ -430,7 +430,7 @@ static void frontEndNewGame(int which)
 	if (!list[which].loading.isEmpty())
 	{
 		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().c_str());
-		if (!loadLevFile(list[which].loading.toUtf8().c_str(), mod_campaign, false, nullptr))
+		if (!loadLevFile(list[which].loading.toUtf8(), mod_campaign, false, nullptr))
 		{
 			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().c_str());
 			return;
