@@ -63,7 +63,7 @@ bool buildMapList();
 bool CheckForMod(char const *mapFile);
 bool CheckForRandom(char const *mapFile, char const *mapDataFile0);
 
-bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
+bool loadLevFile(const std::string& filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
 extern IMAGEFILE	*FrontImages;
 
