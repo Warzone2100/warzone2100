@@ -29,18 +29,15 @@ How to install the Latest release of Warzone 2100.
 
 ### Windows
 
-1. Open the [Releases](https://github.com/Warzone2100/warzone2100/releases) page.
-2. Download and install `warzone2100_win_x86_installer.exe`.
+Download and install `warzone2100_win_x86_installer.exe` from the [Releases](https://github.com/Warzone2100/warzone2100/releases) page.
 
 ### macOS
 
-1. Open the [Releases](https://github.com/Warzone2100/warzone2100/releases) page.
-2. Download, unpack and install `warzone2100_macOS_universal.zip`.
+Download, unpack and install `warzone2100_macOS_universal.zip` from the [Releases](https://github.com/Warzone2100/warzone2100/releases) page.
 
 ### Ubuntu
 
-1. Open the [Releases](https://github.com/Warzone2100/warzone2100/releases) page.
-2. . Find the appropriate `.deb` file:
+1. Find the appropriate `.deb` file on the [Releases](https://github.com/Warzone2100/warzone2100/releases) page:
 - warzone2100_ubuntu18.04_amd64.deb -- For Ubuntu 18.04
 - warzone2100_ubuntu20.04_amd64.deb -- For Ubuntu 20.04
 > Note: A version normally works with later Ubuntu releases, so 20.04 works for 20.10, 21.04, and 21.10, and 18.04 works for 18.10, 19.04, and 19.10.
