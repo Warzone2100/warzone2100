@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:05\n"
+"PO-Revision-Date: 2021-10-31 09:53\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -160,11 +160,11 @@ msgstr "МІСІЯ БАЗИ АЛЬФА: Створення Передової Б
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Створити передову базу на плато та відгородитися від Нової Парадигми."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Будувати оборонні споруди доти, доки не зникне зелений спалах."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "Як тільки буде організовано безпечну з�
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "МІСІЯ БАЗИ БЕТУ: Вижити та евакуюватися! Захопіть вантажівку"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -1527,7 +1527,8 @@ msgstr "Покращення ПБ Сенсора"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "\n"
+"Модернізація датчиків СВ Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:477
