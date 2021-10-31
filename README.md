@@ -22,6 +22,35 @@ proprietary technologies have been replaced with open-source counterparts.
 Right now supported platforms are Linux, Windows, and macOS. There are reports 
 that Warzone 2100 is working on BSD, too.
 
+Installation
+------------
+
+### Windows
+
+*ToDo: Add instructions.*
+
+### macOS
+
+*ToDo: Add instructions.*
+
+### Ubuntu
+
+How to install the Latest Ubuntu release:
+1. Open the [Releases](https://github.com/Warzone2100/warzone2100/releases) page and find the appropriate `.deb` file:
+- warzone2100_ubuntu18.04_amd64.deb -- For Ubuntu 18.04
+- warzone2100_ubuntu20.04_amd64.deb -- For Ubuntu 20.04
+> Note: A version normally works with later Ubuntu releases, so 20.04 works for 20.10, 21.04, and 21.10, and 18.04 works for 18.10, 19.04, and 19.10.
+2. Download and install. Version 4.2.0 and Ubuntu 20.04 used as example, update for later releases:
+```
+wget https://github.com/Warzone2100/warzone2100/releases/download/4.2.0/warzone2100_ubuntu20.04_amd64.deb
+sudo apt install ./warzone2100_ubuntu20.04_amd64.deb
+```
+3. Download the videos for important information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use these commands:
+```
+mkdir ~/.local/share/warzone2100
+wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
+```
+
 Latest development builds
 -------------------------
 
@@ -53,20 +82,23 @@ How to get the latest macOS development builds:
 
 ### Ubuntu
 
-How to install the Latest Ubuntu release:
-1. Open the [Releases](https://github.com/Warzone2100/warzone2100/releases) page and find the appropriate `.deb` file:
-- warzone2100_ubuntu18.04_amd64.deb -- For Ubuntu 18.04
-- warzone2100_ubuntu20.04_amd64.deb -- For Ubuntu 20.04
-> Note: A version normally works with later Ubuntu releases, so 20.04 works for 20.10, 21.04, and 21.10, and 18.04 works for 18.10, 19.04, and 19.10.
-2. Download and install. Version 4.2.0 and Ubuntu 20.04 used as example, update for later releases:
+How to get the latest Ubuntu development builds:
+1. View the **[latest successful Ubuntu builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush+is%3Asuccess)**.
+2. Select the latest workflow run in the table / list.
+   This should display a list of **Artifacts** from the run.
+3. Download the appropriate `warzone2100_ubuntu<version>_amd64_deb` artifact.
+   - If you are running Ubuntu 18.04: `warzone2100_ubuntu18.04_amd64_deb`
+   - If you are running Ubuntu 20.04: `warzone2100_ubuntu20.04_amd64_deb`
+> Note: A free GitHub account is currently required to download the artifacts.
+4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu<version>_amd64.deb`) to your Desktop.
+5. Execute the following commands in Terminal:
 ```
-wget https://github.com/Warzone2100/warzone2100/releases/download/4.2.0/warzone2100_ubuntu20.04_amd64.deb
-sudo apt install ./warzone2100_ubuntu20.04_amd64.deb
+cd ~/Desktop
+sudo apt install ./warzone2100_ubuntu<version>_amd64.deb
 ```
-3. Download the videos for important information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use these commands:
+6. Download the video for crucial information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use this command (update `warzone2100-<version>`):
 ```
-mkdir ~/.local/share/warzone2100
-wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
+wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100-<version>/sequences.wz
 ```
 
 ### Linux (from source)
