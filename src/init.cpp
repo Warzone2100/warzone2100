@@ -289,6 +289,60 @@ void registerSearchPath(const char path[], unsigned int priority)
 	}
 }
 
+std::list<std::string> getPhysFSSearchPathsAsStr()
+{
+	std::list<std::string> results;
+	char **list = PHYSFS_getSearchPath();
+	if (list == NULL)
+	{
+		return {};
+	}
+	for (char **i = list; *i != NULL; i++)
+	{
+		results.push_back(*i);
+	}
+	PHYSFS_freeList(list);
+	return results;
+}
+
+static void clearAllPhysFSSearchPaths()
+{
+	auto searchPaths = getPhysFSSearchPathsAsStr();
+	if (searchPaths.empty())
+	{
+		return;
+	}
+
+	std::unordered_map<std::string, std::string> mountPathToErrorUnmounting;
+	size_t searchPathsRemoved = 0;
+	do
+	{
+		searchPathsRemoved = 0;
+		mountPathToErrorUnmounting.clear();
+		for (auto i = searchPaths.begin(); i != searchPaths.end();)
+		{
+			if (WZ_PHYSFS_unmount(i->c_str()) != 0)
+			{
+				++searchPathsRemoved;
+				i = searchPaths.erase(i);
+			}
+			else
+			{
+				const char* pErrorStr = WZ_PHYSFS_getLastError();
+				mountPathToErrorUnmounting[*i] = (pErrorStr) ? pErrorStr : "<unknown>";
+				++i;
+			}
+		}
+	} while (!searchPaths.empty() && searchPathsRemoved > 0);
+
+
+	for (auto i = searchPaths.begin(); i != searchPaths.end(); i++)
+	{
+		auto it_error = mountPathToErrorUnmounting.find(*i);
+		debug(LOG_INFO, "Unable to unmount search path: %s; (Reason: %s)", i->c_str(), (it_error != mountPathToErrorUnmounting.end()) ? it_error->second.c_str() : "");
+	}
+}
+
 
 /*!
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
@@ -365,6 +419,10 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				WZ_PHYSFS_unmount(tmpstr);
 				curSearchPath = curSearchPath->higherPriority;
 			}
+
+			// This should properly remove all paths, but testing is needed to ensure that all supported versions of PhysFS behave as expected
+			// For now, keep the old code above as well as this new method
+			clearAllPhysFSSearchPaths();
 			break;
 		case mod_campaign:
 			debug(LOG_WZ, "*** Switching to campaign mods ***");
