@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp.h"
+#include "lib/gamelib/gtime.h"
 
 #if defined(__clang__)
 #  pragma clang diagnostic push
@@ -144,7 +145,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	settings["gameOptions"] = gameOptions;
 
 	auto data = settings.dump();
-	PHYSFS_writeSBE32(replaySaveHandle, data.size());
+	PHYSFS_writeUBE32(replaySaveHandle, data.size());
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
 
 	// Save extra map data (if present)
@@ -205,6 +206,11 @@ bool NETreplaySaveStop()
 		return false;
 	}
 
+	// v2: Append the "REPLAY_ENDED" message (from hostPlayer)
+	auto replayEndedMessage = NetMessage(REPLAY_ENDED);
+	latestWriteBuffer.push_back(NetPlay.hostPlayer);
+	replayEndedMessage.rawDataAppendToVector(latestWriteBuffer);
+
 	// Queue the last chunk for writing
 	if (!latestWriteBuffer.empty())
 	{
@@ -226,6 +232,17 @@ bool NETreplaySaveStop()
 		// do the writing now on the main thread
 		replaySaveThreadFunc(replaySaveHandle);
 	}
+
+	// v2: Write the "end of game info" chunk
+	// (this is JSON that is preceded *and* followed by its size - so it should be possible to seek to the end of the file, read the last uint32_t, and then back up and grab the JSON without processing the whole file)
+	nlohmann::json endOfGameInfo = nlohmann::json::object();
+	endOfGameInfo["gameTimeElapsed"] = gameTime;
+	// FUTURE TODO: Could save things like the game results / winners + losers
+
+	auto data = endOfGameInfo.dump();
+	PHYSFS_writeUBE32(replaySaveHandle, data.size());
+	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
+	PHYSFS_writeUBE32(replaySaveHandle, data.size()); // should also end with the json size for easy reading from end of file
 
 	if (!PHYSFS_close(replaySaveHandle))
 	{
@@ -258,7 +275,7 @@ void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player)
 	}
 }
 
-bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler)
+bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler, uint32_t& output_replayFormatVer)
 {
 	auto onFail = [&](char const *reason) {
 		debug(LOG_ERROR, "Could not load replay file %s: %s", filename.c_str(), reason);
@@ -283,10 +300,10 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 		return onFail("bad header");
 	}
 
-	int32_t dataSize = 0;
-	PHYSFS_readSBE32(replayLoadHandle, &dataSize);
+	uint32_t dataSize = 0;
+	PHYSFS_readUBE32(replayLoadHandle, &dataSize);
 	std::string data;
-	data.resize((uint32_t)dataSize);
+	data.resize(dataSize);
 	size_t dataRead = WZ_PHYSFS_readBytes(replayLoadHandle, &data[0], data.size());
 	if (dataRead != data.size())
 	{
@@ -299,6 +316,7 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 		nlohmann::json settings = nlohmann::json::parse(data);
 
 		uint32_t replayFormatVer = settings.at("replayFormatVer").get<uint32_t>();
+		output_replayFormatVer = replayFormatVer;
 		if (replayFormatVer > currentReplayFormatVer)
 		{
 			std::string mismatchVersionDescription = _("The replay file format is newer than this version of Warzone 2100 can support.");
@@ -404,7 +422,7 @@ bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &play
 		return false;
 	}
 
-	return message->type > GAME_MIN_TYPE && message->type < GAME_MAX_TYPE;
+	return (message->type > GAME_MIN_TYPE && message->type < GAME_MAX_TYPE) || message->type == REPLAY_ENDED;
 }
 
 bool NETreplayLoadStop()
