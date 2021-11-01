@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_INIT_H__
 #define __INCLUDED_SRC_INIT_H__
 
+#include <vector>
+
 struct IMAGEFILE;
 
 // the size of the file loading buffer
@@ -62,6 +64,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map 
 bool buildMapList();
 bool CheckForMod(char const *mapFile);
 bool CheckForRandom(char const *mapFile, char const *mapDataFile0);
+bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData);
 
 bool loadLevFile(const std::string& filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 

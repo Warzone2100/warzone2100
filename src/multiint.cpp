@@ -116,6 +116,7 @@
 
 #include "activity.h"
 #include <algorithm>
+#include "3rdparty/gsl_finally.h"
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 #define VOTE_TAG                 "voting"
@@ -8129,6 +8130,60 @@ bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
 	return true;
 }
 
+constexpr PHYSFS_sint64 MAX_REPLAY_EMBEDDED_MAP_SIZE_LIMIT = 150 * 1024;
+
+size_t WZGameReplayOptionsHandler::maximumEmbeddedMapBufferSize() const
+{
+	return MAX_REPLAY_EMBEDDED_MAP_SIZE_LIMIT;
+}
+
+bool WZGameReplayOptionsHandler::saveMap(EmbeddedMapData& embeddedMapData) const
+{
+	ASSERT_OR_RETURN(false, embeddedMapData.mapBinaryData.empty(), "Non empty output buffer?");
+
+	// Provide "version" for this data, just in case it needs to change in the future
+	embeddedMapData.dataVersion = 1;
+
+	if (game.isMapMod)
+	{
+		// do not store map-mods in the replay as they are (a) deprecated and (b) may be huge
+		return true;
+	}
+
+	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
+	ASSERT_OR_RETURN(false, mapData != nullptr, "Unable to find map??");
+
+	if (!mapData->realFileName)
+	{
+		// built-in maps don't have realFileNames for the map archives, nor do we want to save them
+		return true;
+	}
+
+	PHYSFS_file *mapFileHandle = PHYSFS_openRead(mapData->realFileName);
+	if (mapFileHandle == nullptr)
+	{
+		debug(LOG_INFO, "Unable to open for reading: %s; error: %s", mapData->realFileName, WZ_PHYSFS_getLastError());
+		return false;
+	}
+	{
+		auto free_map_handle_ref = gsl::finally([mapFileHandle] { PHYSFS_close(mapFileHandle); });  // establish exit action
+
+		PHYSFS_sint64 filesize = PHYSFS_fileLength(mapFileHandle);
+		ASSERT_OR_RETURN(false, filesize > 0, "Invalid filesize");
+		if (filesize > MAX_REPLAY_EMBEDDED_MAP_SIZE_LIMIT)
+		{
+			// currently, an expected failure
+			return true;
+		}
+		// resize the mapBinaryData to be able to contain the map data
+		embeddedMapData.mapBinaryData.resize(static_cast<size_t>(filesize));
+		auto readBytes = WZ_PHYSFS_readBytes(mapFileHandle, embeddedMapData.mapBinaryData.data(), static_cast<PHYSFS_uint32>(filesize));
+		ASSERT_OR_RETURN(false, readBytes == filesize, "Read failed");
+	}
+
+	return true;
+}
+
 size_t WZGameReplayOptionsHandler::desiredBufferSize() const
 {
 	auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
@@ -8152,7 +8207,7 @@ size_t WZGameReplayOptionsHandler::desiredBufferSize() const
 	return 0;
 }
 
-bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor)
+bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, EmbeddedMapData&& embeddedMapData, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor)
 {
 	// random seed
 	uint32_t rand_seed = object.at("randSeed").get<uint32_t>();
@@ -8240,6 +8295,21 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, ui
 	{
 		debug(LOG_ERROR, "Failed to build map list");
 		return false;
+	}
+
+	if (embeddedMapData.dataVersion == 1)
+	{
+		if (!embeddedMapData.mapBinaryData.empty())
+		{
+			if (embeddedMapData.mapBinaryData.size() <= MAX_REPLAY_EMBEDDED_MAP_SIZE_LIMIT)
+			{
+				setSpecialInMemoryMap(std::move(embeddedMapData.mapBinaryData));
+			}
+			else
+			{
+				debug(LOG_ERROR, "Embedded map data size (%zu) exceeds maximum supported size", embeddedMapData.mapBinaryData.size());
+			}
+		}
 	}
 
 	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);

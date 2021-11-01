@@ -30,6 +30,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
+#include "3rdparty/physfs_memoryio.h"
 #include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -111,6 +112,26 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 IMAGEFILE *FrontImages;
 
 static wzSearchPath *searchPathRegistry = nullptr;
+
+static std::string inMemoryMapVirtualFilenameUID;
+static std::vector<uint8_t> inMemoryMapArchiveData;
+static size_t inMemoryMapArchiveMounted = 0;
+
+struct WZmapInfo
+{
+public:
+	WZmapInfo(bool isMapMod, bool isRandom)
+	: isMapMod(isMapMod)
+	, isRandom(isRandom)
+	{ }
+public:
+	bool isMapMod;
+	bool isRandom;
+};
+
+typedef std::string MapName;
+typedef std::unordered_map<MapName, WZmapInfo> WZMapInfo_Map;
+WZMapInfo_Map WZ_Maps;
 
 enum MODS_PATHS: size_t
 {
@@ -339,10 +360,26 @@ static void clearAllPhysFSSearchPaths()
 	for (auto i = searchPaths.begin(); i != searchPaths.end(); i++)
 	{
 		auto it_error = mountPathToErrorUnmounting.find(*i);
-		debug(LOG_INFO, "Unable to unmount search path: %s; (Reason: %s)", i->c_str(), (it_error != mountPathToErrorUnmounting.end()) ? it_error->second.c_str() : "");
+		debug(LOG_WZ, "Unable to unmount search path: %s; (Reason: %s)", i->c_str(), (it_error != mountPathToErrorUnmounting.end()) ? it_error->second.c_str() : "");
 	}
 }
 
+static void clearInMemoryMapFile(void *pData)
+{
+	ASSERT_OR_RETURN(, !inMemoryMapArchiveData.empty(), "Already freed??");
+	ASSERT_OR_RETURN(, inMemoryMapArchiveData.data() == pData, "Unexpected pointer received?");
+	if (!inMemoryMapVirtualFilenameUID.empty())
+	{
+		levRemoveDataSetByRealFileName(inMemoryMapVirtualFilenameUID.c_str(), nullptr);
+		WZ_Maps.erase(inMemoryMapVirtualFilenameUID);
+	}
+	inMemoryMapVirtualFilenameUID.clear();
+	inMemoryMapArchiveData.clear();
+	if (inMemoryMapArchiveMounted > 0)
+	{
+		--inMemoryMapArchiveMounted;
+	}
+}
 
 /*!
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
@@ -487,9 +524,25 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 			// Add the selected map first, for mapmod support
 			if (current_map != nullptr)
 			{
-				WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
-				realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
-				PHYSFS_mount(realPathAndDir.toUtf8().c_str(), NULL, PHYSFS_APPEND);
+				if (inMemoryMapVirtualFilenameUID.empty() || current_map != inMemoryMapVirtualFilenameUID)
+				{
+					// mount it as a normal physical map path
+					WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
+					realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
+					PHYSFS_mount(realPathAndDir.toUtf8().c_str(), NULL, PHYSFS_APPEND);
+				}
+				else if (!inMemoryMapArchiveData.empty())
+				{
+					// mount the in-memory map archive as a virtual file
+					if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), clearInMemoryMapFile, inMemoryMapVirtualFilenameUID.c_str(), NULL, PHYSFS_APPEND) != 0)
+					{
+						inMemoryMapArchiveMounted++;
+					}
+				}
+				else
+				{
+					debug(LOG_ERROR, "Specified virtual map file, but no data?");
+				}
 			}
 			curSearchPath = searchPathRegistry;
 			while (curSearchPath->lowerPriority)
@@ -671,15 +724,6 @@ static MapFileList listMapFiles()
 }
 
 // Map processing
-struct WZmapInfo
-{
-	bool isMapMod;
-	bool isRandom;
-};
-
-typedef std::string MapName;
-typedef std::unordered_map<MapName, WZmapInfo> WZMapInfo_Map;
-WZMapInfo_Map WZ_Maps;
 
 static inline WZMapInfo_Map::iterator findMap(char const *name)
 {
@@ -724,7 +768,7 @@ bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
 }
 
 // Mount the archive under the mountpoint, and enumerate the archive according to lookin
-static inline std::pair<bool, bool> CheckInMap(const char *archive, const std::string& mountpoint, const std::vector<std::string>& lookin_list)
+static inline optional<WZmapInfo> CheckInMap(const char *archive, const std::string& mountpoint, const std::vector<std::string>& lookin_list)
 {
 	bool mapmod = false;
 	bool isRandom = false;
@@ -737,7 +781,7 @@ static inline std::pair<bool, bool> CheckInMap(const char *archive, const std::s
 			lookin.append("/");
 			lookin.append(lookin_subdir);
 		}
-		WZ_PHYSFS_enumerateFiles(lookin.c_str(), [&](const char *file) -> bool {
+		bool enumResult = WZ_PHYSFS_enumerateFiles(lookin.c_str(), [&](const char *file) -> bool {
 			std::string checkfile = file;
 			if (WZ_PHYSFS_isDirectory((lookin + "/" + checkfile).c_str()))
 			{
@@ -756,9 +800,14 @@ static inline std::pair<bool, bool> CheckInMap(const char *archive, const std::s
 			}
 			return true; // continue
 		});
+		if (!enumResult)
+		{
+			// failed to enumerate - just exit out
+			return nullopt;
+		}
 
 		std::string maps = lookin + "/multiplay/maps";
-		WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
+		enumResult = WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
 			if (WZ_PHYSFS_isDirectory((maps + "/" + file).c_str()) && PHYSFS_exists((maps + "/" + file + "/game.js").c_str()))
 			{
 				isRandom = true;
@@ -766,9 +815,14 @@ static inline std::pair<bool, bool> CheckInMap(const char *archive, const std::s
 			}
 			return true; // continue
 		});
+		if (!enumResult)
+		{
+			// failed to enumerate - just exit out
+			return nullopt;
+		}
 	}
 
-	return {mapmod, isRandom};
+	return WZmapInfo(mapmod, isRandom);
 }
 
 static std::vector<std::string> lookin_list = { "", "multiplay" };
@@ -782,9 +836,19 @@ static std::vector<std::string> lookin_list = { "", "multiplay" };
 //     For actual map archives, this is the platform independent unique filename + parent path for the map
 //     For "virtual" map archives this is basically a lookup key that should be unique
 // - mountPoint: Location in the interpolated PhysFS tree that this archive was "mounted" (in platform-independent notation)
-bool processMap(const char* archive, const char* realFileName_platformIndependent, const std::string& mountPoint)
+bool processMap(const char* archive, const char* realFileName_platformIndependent, const std::string& mountPoint, bool rejectMapMods = false)
 {
-	struct WZmapInfo CurrentMap;
+	auto WZmapInfoResult = CheckInMap(archive, mountPoint, lookin_list);
+	if (!WZmapInfoResult.has_value())
+	{
+		// failed to enumerate contents
+		return false;
+	}
+	if (rejectMapMods && WZmapInfoResult.value().isMapMod)
+	{
+		debug(LOG_WZ, "Rejecting map mod: %s", archive);
+		return false;
+	}
 
 	bool containsMap = false;
 	bool enumSuccess = WZ_PHYSFS_enumerateFiles(mountPoint.c_str(), [&](const char *file) -> bool {
@@ -814,15 +878,65 @@ bool processMap(const char* archive, const char* realFileName_platformIndependen
 		return false;
 	}
 
-	auto chk = CheckInMap(archive, mountPoint, lookin_list);
-
-	const std::string& MapName = realFileName_platformIndependent;
-	CurrentMap.isMapMod = chk.first;
-	CurrentMap.isRandom = chk.second;
-	WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, std::move(CurrentMap)));
+	std::string MapName = realFileName_platformIndependent;
+	WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
 
 	return true;
 }
+
+#if defined(HAS_PHYSFS_IO_SUPPORT)
+bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
+{
+	ASSERT_OR_RETURN(false, !mapArchiveData.empty(), "Null map archive data passed?");
+	ASSERT_OR_RETURN(false, inMemoryMapArchiveMounted == 0, "In-memory map archive already mounted");
+
+	// calculate a hash for the map data
+	Sha256 mapHash = sha256Sum(mapArchiveData.data(), mapArchiveData.size());
+
+	// generate a new unique filename UID for the in-memory map
+	inMemoryMapVirtualFilenameUID = "<in-memory>::mapArchive::" + mapHash.toString();
+
+	// store the map archive data
+	inMemoryMapArchiveData = std::move(mapArchiveData);
+
+	// try to mount the in-memory archive
+	if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), nullptr, inMemoryMapVirtualFilenameUID.c_str(), "WZMap", PHYSFS_APPEND) == 0)
+	{
+		// Failed to mount data - corrupt map archive
+		debug(LOG_ERROR, "Failed to mount - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
+		inMemoryMapVirtualFilenameUID.clear();
+		inMemoryMapArchiveData.clear();
+		return false;
+	}
+
+	// load it into the level-loading system
+	if (!processMap(inMemoryMapVirtualFilenameUID.c_str(), inMemoryMapVirtualFilenameUID.c_str(), "WZMap", true))
+	{
+		// Failed to enumerate contents - corrupt map archive
+		debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
+		inMemoryMapVirtualFilenameUID.clear();
+		inMemoryMapArchiveData.clear();
+		return false;
+	}
+
+	if (WZ_PHYSFS_unmount(inMemoryMapVirtualFilenameUID.c_str()) == 0)
+	{
+		debug(LOG_ERROR, "Could not unmount %s, %s", inMemoryMapVirtualFilenameUID.c_str(), WZ_PHYSFS_getLastError());
+	}
+
+	// fix-up level hash
+	levSetFileHashByRealFileName(inMemoryMapVirtualFilenameUID.c_str(), mapHash);
+
+	return true;
+}
+#else
+bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
+{
+	// Sadly, the version of PhysFS used for compilation is too old
+	debug(LOG_INFO, "The version of PhysFS used for compilation is too old, and does not support PHYSFS_Io");
+	return false;
+}
+#endif
 
 bool buildMapList()
 {
@@ -832,6 +946,11 @@ bool buildMapList()
 	}
 	loadLevFile("addon.lev", mod_multiplay, false, nullptr);
 	WZ_Maps.clear();
+	if (!inMemoryMapArchiveMounted && !inMemoryMapArchiveData.empty())
+	{
+		debug(LOG_INFO, "Clearing in-memory map archive (since it isn't currently loaded)");
+		clearInMemoryMapFile(inMemoryMapArchiveData.data());
+	}
 	MapFileList realFileNames = listMapFiles();
 	for (auto &realFileName : realFileNames)
 	{
