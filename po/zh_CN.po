@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-29 09:49\n"
+"PO-Revision-Date: 2021-11-01 10:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -34,7 +34,7 @@ msgstr "这个遗迹存在着对我们的计画来说相当重要的科技"
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "ALPHA 基地任务：拾荒者入侵！"
+msgstr "ALPHA 基地任务：流寇来袭！"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
@@ -356,7 +356,7 @@ msgstr "侦测到拾荒者的基地"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "消灭山贼并收回所有遗失科技"
+msgstr "击溃流寇，回收所有遗留科技。"
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -5619,18 +5619,18 @@ msgstr ""
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1461
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "终极流寇"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1458
 #: src/multiint.cpp:1462
 msgid "Scavengers"
-msgstr "山贼"
+msgstr "流寇"
 
 #: data/mp/multiplay/script/rules/printsettings.js:9
 #: src/multiint.cpp:1464
 msgid "No Scavengers"
-msgstr "没有山贼"
+msgstr "没有流寇"
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
 #: src/multiint.cpp:1472
@@ -11783,7 +11783,7 @@ msgstr "NEXUS钛钢筋墙"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4324
 msgid "Nexus"
-msgstr "小试牛刀"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -12953,7 +12953,7 @@ msgstr "拾荒者发电厂"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5081
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "流寇维修站"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12973,7 +12973,7 @@ msgstr "拾荒者"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5092
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "流寇 Nexus 链接炮塔"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
