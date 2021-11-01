@@ -52,7 +52,7 @@ static PHYSFS_file *replaySaveHandle = nullptr;
 static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
-static const uint32_t currentReplayFormatVer = 1;
+static const uint32_t currentReplayFormatVer = 2;
 static const size_t DefaultReplayBufferSize = 32768;
 static const size_t MaxReplayBufferSize = 2 * 1024 * 1024;
 
@@ -146,6 +146,23 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	auto data = settings.dump();
 	PHYSFS_writeSBE32(replaySaveHandle, data.size());
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
+
+	// Save extra map data (if present)
+	ReplayOptionsHandler::EmbeddedMapData embeddedMapData;
+	if (!optionsHandler.saveMap(embeddedMapData))
+	{
+		// Failed to save map data - just empty it out for now
+		embeddedMapData.mapBinaryData.clear();
+	}
+	PHYSFS_writeUBE32(replaySaveHandle, embeddedMapData.dataVersion);
+#if SIZE_MAX > UINT32_MAX
+	ASSERT_OR_RETURN(false, embeddedMapData.mapBinaryData.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Embedded map data is way too big");
+#endif
+	PHYSFS_writeUBE32(replaySaveHandle, static_cast<uint32_t>(embeddedMapData.mapBinaryData.size()));
+	if (!embeddedMapData.mapBinaryData.empty())
+	{
+		WZ_PHYSFS_writeBytes(replaySaveHandle, embeddedMapData.mapBinaryData.data(), static_cast<uint32_t>(embeddedMapData.mapBinaryData.size()));
+	}
 
 	// determine best buffer size
 	size_t desiredBufferSize = optionsHandler.desiredBufferSize();
@@ -301,8 +318,43 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 			// do not immediately fail out - restoreOptions handles displaying a nicer warning popup
 		}
 
+		ReplayOptionsHandler::EmbeddedMapData embeddedMapData;
+		if (replayFormatVer >= 2)
+		{
+			PHYSFS_readUBE32(replayLoadHandle, &embeddedMapData.dataVersion);
+			uint32_t binaryDataSize = 0;
+			PHYSFS_readUBE32(replayLoadHandle, &binaryDataSize);
+			if (binaryDataSize > 0)
+			{
+				if (binaryDataSize <= optionsHandler.maximumEmbeddedMapBufferSize())
+				{
+					embeddedMapData.mapBinaryData.resize(binaryDataSize);
+					PHYSFS_sint64 binaryDataRead = WZ_PHYSFS_readBytes(replayLoadHandle, embeddedMapData.mapBinaryData.data(), embeddedMapData.mapBinaryData.size());
+					if (binaryDataRead != binaryDataSize)
+					{
+						return onFail("truncated embedded map data");
+					}
+				}
+				else
+				{
+					// don't even bother trying to load this - it's too big
+					// just attempt to skip to where it claims the map data ends
+					PHYSFS_sint64 filePos = PHYSFS_tell(replayLoadHandle);
+					if (filePos < 0)
+					{
+						return onFail("error getting current file position");
+					}
+					PHYSFS_uint64 afterMapDataPos = filePos + binaryDataSize;
+					if (PHYSFS_seek(replayLoadHandle, afterMapDataPos) == 0)
+					{
+						return onFail("failed to seek after map data");
+					}
+				}
+			}
+		}
+
 		// Load game options using optionsHandler
-		if (!optionsHandler.restoreOptions(settings.at("gameOptions"), replay_netcodeMajor, replay_netcodeMinor))
+		if (!optionsHandler.restoreOptions(settings.at("gameOptions"), std::move(embeddedMapData), replay_netcodeMajor, replay_netcodeMinor))
 		{
 			return onFail("invalid options");
 		}
