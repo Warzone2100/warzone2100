@@ -29,7 +29,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 bool NETreplaySaveStop();
 void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player);
 
-bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler);
+bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler, uint32_t& output_replayFormatVer);
 bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &player);
 bool NETreplayLoadStop();
 

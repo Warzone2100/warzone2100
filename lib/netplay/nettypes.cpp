@@ -856,12 +856,14 @@ ReplayOptionsHandler::~ReplayOptionsHandler() { }
 // TODO Call this function somewhere.
 bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler)
 {
-	if (!NETreplayLoadStart(filename, optionsHandler))
+	uint32_t replayFormatVer = 0;
+	if (!NETreplayLoadStart(filename, optionsHandler, replayFormatVer))
 	{
 		return false;
 	}
 	std::unique_ptr<NetMessage> newMessage;
 	uint8_t player;
+	bool gotReplayEnded = false;
 	while (NETreplayLoadNetMessage(newMessage, player))
 	{
 		if ((player >= MAX_PLAYERS && player != NetPlay.hostPlayer) || gameQueues[player] == nullptr)
@@ -869,7 +871,19 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 			debug(LOG_ERROR, "Skipping message to player %d in replay.", player);
 			continue;
 		}
+		if (newMessage->type == REPLAY_ENDED)
+		{
+			gotReplayEnded = true;
+			break;
+		}
 		gameQueues[player]->pushMessage(*newMessage);
+	}
+	if (!gotReplayEnded && replayFormatVer >= 2)
+	{
+		debug(LOG_POPUP, _("Unable to load replay: The replay file is incomplete or corrupted."));
+		bIsReplay = true;
+		NETshutdownReplay();
+		return false;
 	}
 	// Add special REPLAY_ENDED message to the end of the host's gameQueue
 	newMessage = std::unique_ptr<NetMessage>(new NetMessage(REPLAY_ENDED));
