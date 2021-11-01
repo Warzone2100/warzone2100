@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-01 10:00\n"
+"PO-Revision-Date: 2021-11-01 21:56\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4996,27 +4996,27 @@ msgstr "Ваші сили тепер мої! Ласкаво просимо до 
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "Командир, ви виявилися більш стійкими, ніж я думав."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "Так шкода, що ви відмовилися приєднатися до мене раніше."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "Але як би там не було, тебе тут довго не буде."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "Після довгих пошуків та перепрограмування, я нарешті відновив усі свої системи."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "Якось я знищив світ ядерним вогнем, щоб розчистити шлях для мого кібернетичного майбутнього."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "Тепер я маю намір і далі формувати світ за своїм образом і подобою, видаляючи хірургічним шляхом небажані нарости, такі як ви."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
@@ -5658,7 +5658,7 @@ msgstr "Закріплені Команди"
 #: data/mp/multiplay/script/rules/printsettings.js:18
 #: src/multiint.cpp:1474
 msgid "Locked Teams, No Shared Research"
-msgstr ""
+msgstr "Закриті групи, спільні дослідження не проводяться"
 
 #: data/mp/multiplay/script/rules/printsettings.js:24
 #: src/multiint.cpp:1483
@@ -5692,39 +5692,39 @@ msgstr "Старт з Розвиненими Базами"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "ЛЕГКО"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "СЕРЕДНІЙ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "СКЛАДНИЙ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "ВВЕДЕННЯ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
-msgstr ""
+msgstr "Особистість змінена успішно."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "Немає такого особистості! Спробуйте один з них:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "Примусові дослідження очищалися, досліджуватимуть все, що мені потрібно."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Дослідження заблоковані, наразі нічого не буде."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Дослідження фундаментальної технології."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
