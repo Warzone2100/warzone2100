@@ -1649,7 +1649,7 @@ bool NetworkTextMessage::receive(NETQUEUE queue)
 		sender = queue.index;  // Fix corrupted sender.
 	}
 
-	if (sender >= MAX_CONNECTED_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
+	if (sender >= MAX_CONNECTED_PLAYERS || (sender >= 0 && (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN)))
 	{
 		return false;
 	}
