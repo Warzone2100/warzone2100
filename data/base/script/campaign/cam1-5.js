@@ -25,39 +25,50 @@ var useHeavyReinforcement;
 //Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
-	const LIGHT_ATTACKER_LIMIT = 8;
-	const HEAVY_ATTACKER_LIMIT = 3;
-	var unitTemplates;
-	var list = [];
+    var lightAttackerLimit = 8;
+    var heavyAttackerLimit = 3;
+    var unitTemplates;
+    var list = [];
 
-	if (useHeavyReinforcement)
-	{
-		var artillery = [cTempl.npmor];
-		var other = [cTempl.npmmct];
-		if (camRand(2) > 0)
-		{
-			//Add a sensor if artillery was chosen for the heavy units
-			list.push(cTempl.npsens);
-			unitTemplates = artillery;
-		}
-		else
-		{
-			unitTemplates = other;
-		}
-	}
-	else
-	{
-		unitTemplates = [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt];
-	}
+    if (difficulty === HARD)
+    {
+        lightAttackerLimit = 9;
+        heavyAttackerLimit = 4;
+    }
+    else if (difficulty === INSANE)
+    {
+        lightAttackerLimit = 10;
+        heavyAttackerLimit = 5;
+    }
 
-	var lim = useHeavyReinforcement ? HEAVY_ATTACKER_LIMIT : LIGHT_ATTACKER_LIMIT;
-	for (var i = 0; i < lim; ++i)
-	{
-		list.push(unitTemplates[camRand(unitTemplates.length)]);
-	}
+    if (useHeavyReinforcement)
+    {
+        var artillery = [cTempl.npmor];
+        var other = [cTempl.npmmct];
+        if (camRand(2) > 0)
+        {
+            //Add a sensor if artillery was chosen for the heavy units
+            list.push(cTempl.npsens);
+            unitTemplates = artillery;
+        }
+        else
+        {
+            unitTemplates = other;
+        }
+    }
+    else
+    {
+        unitTemplates = [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt];
+    }
 
-	useHeavyReinforcement = !useHeavyReinforcement; //switch it
-	return list;
+    var lim = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
+    for (var i = 0; i < lim; ++i)
+    {
+        list.push(unitTemplates[camRand(unitTemplates.length)]);
+    }
+
+    useHeavyReinforcement = !useHeavyReinforcement; //switch it
+    return list;
 }
 
 //These enable Scav and NP factories when close enough
