@@ -926,10 +926,15 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 // Initialise all the surfaces,graphics etc. used by the interface.
 //
-void intInitialiseGraphics()
+bool intInitialiseGraphics()
 {
 	// Initialise any bitmaps used by the interface.
-	imageInitBitmaps();
+	if (!imageInitBitmaps())
+	{
+		return false;
+	}
+
+	return true;
 }
 
 // Clear a button bitmap. ( copy the button background ).

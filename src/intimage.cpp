@@ -29,6 +29,7 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "modding.h"
 
 #include "intimage.h"
 
@@ -121,6 +122,17 @@ IMAGEFRAME FrameRadar =
 bool imageInitBitmaps()
 {
 	IntImages = (IMAGEFILE *)resGetData("IMG", "intfac.img");
+	if (IntImages == nullptr)
+	{
+		std::string errorMessage = astringf(_("Unable to load: %s."), "intfac.img");
+		if (!getLoadedMods().empty())
+		{
+			errorMessage += " ";
+			errorMessage += _("Please remove all incompatible mods.");
+		}
+		debug(LOG_FATAL, "%s", errorMessage.c_str());
+		return false;
+	}
 
 	return true;
 }

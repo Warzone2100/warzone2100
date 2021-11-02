@@ -895,7 +895,11 @@ bool intInitialise()
 
 	psSelectedBuilder = nullptr;
 
-	intInitialiseGraphics();
+	if (!intInitialiseGraphics())
+	{
+		debug(LOG_ERROR, "Failed to initialize interface graphics");
+		return false;
+	}
 
 	psWScreen = W_SCREEN::make();
 
