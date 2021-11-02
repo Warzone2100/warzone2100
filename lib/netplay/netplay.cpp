@@ -802,6 +802,7 @@ static void NETplayerClientDisconnect(uint32_t index)
  */
 static void NETplayerLeaving(UDWORD index)
 {
+	ASSERT(index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
 	if (connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, static_cast<void *>(connected_bsocket[index]));
@@ -817,11 +818,15 @@ static void NETplayerLeaving(UDWORD index)
 		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
 	sync_counter.left++;
+	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(index);		// more cleanup
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		NET_DestroyPlayer(index);       // sets index player's array to false
-		resetReadyStatus(false);		// reset ready status for all players
+		if (!wasSpectator)
+		{
+			resetReadyStatus(false);		// reset ready status for all players
+		}
 	}
 }
 
@@ -832,6 +837,7 @@ static void NETplayerLeaving(UDWORD index)
  */
 static void NETplayerDropped(UDWORD index)
 {
+	ASSERT(index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
 	uint32_t id = index;
 
 	if (!NetPlay.isHost)
@@ -841,6 +847,7 @@ static void NETplayerDropped(UDWORD index)
 	}
 
 	sync_counter.drops++;
+	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(id);			// more cleanup
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
@@ -850,7 +857,10 @@ static void NETplayerDropped(UDWORD index)
 		NETend();
 		debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
 		NET_DestroyPlayer(id);          // just clears array
-		resetReadyStatus(false);		// reset ready status for all players
+		if (!wasSpectator)
+		{
+			resetReadyStatus(false);		// reset ready status for all players
+		}
 	}
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, id);
