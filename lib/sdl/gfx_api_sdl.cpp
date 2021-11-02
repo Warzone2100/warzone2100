@@ -37,14 +37,14 @@ std::unique_ptr<gfx_api::backend_Null_Impl> SDL_gfx_api_Impl_Factory::createNull
 
 std::unique_ptr<gfx_api::backend_OpenGL_Impl> SDL_gfx_api_Impl_Factory::createOpenGLBackendImpl() const
 {
-	ASSERT(window != nullptr, "Invalid SDL_Window*");
+	ASSERT_OR_RETURN(nullptr, window != nullptr, "Invalid SDL_Window*");
 	return std::unique_ptr<gfx_api::backend_OpenGL_Impl>(new sdl_OpenGL_Impl(window, config.useOpenGLES, config.useOpenGLESLibrary));
 }
 
 #if defined(WZ_VULKAN_ENABLED)
 std::unique_ptr<gfx_api::backend_Vulkan_Impl> SDL_gfx_api_Impl_Factory::createVulkanBackendImpl() const
 {
-	ASSERT(window != nullptr, "Invalid SDL_Window*");
+	ASSERT_OR_RETURN(nullptr, window != nullptr, "Invalid SDL_Window*");
 #if defined(HAVE_SDL_VULKAN_H)
 	return std::unique_ptr<gfx_api::backend_Vulkan_Impl>(new sdl_Vulkan_Impl(window));
 #else // !defined(HAVE_SDL_VULKAN_H)
