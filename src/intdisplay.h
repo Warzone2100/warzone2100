@@ -99,7 +99,7 @@ private:
 void SetFormAudioIDs(int OpenID, int CloseID);
 
 // Initialise interface graphics.
-void intInitialiseGraphics();
+bool intInitialiseGraphics();
 
 class PowerBar: public W_BARGRAPH
 {
