@@ -2842,7 +2842,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	mapSeed = gameRandU32();
 	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, false, std::unique_ptr<WzMap::LoggingProtocol>(new WzMapDebugLogger()), std::unique_ptr<WzMapPhysFSIO>(new WzMapPhysFSIO()));
 
-	if (data->wasScriptGenerated())
+	if (data && data->wasScriptGenerated())
 	{
 		// Log the random seed used to generate this instance of the map
 		debug(LOG_INFO, "Loaded script-generated map \"%s\" with random seed: %" PRIu32, aFileName, mapSeed);
