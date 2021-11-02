@@ -2164,8 +2164,6 @@ bool gl_context::initGLContext()
 		glBindVertexArray(vaoId);
 	}
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
 	if (GLAD_GL_ARB_timer_query)
 	{
 		glGenQueries(PERF_COUNT, perfpos);
