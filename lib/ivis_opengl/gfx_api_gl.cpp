@@ -2151,6 +2151,22 @@ bool gl_context::initGLContext()
 	}
 	enabledVertexAttribIndexes.resize(static_cast<size_t>(glmaxVertexAttribs), false);
 
+	if (khr_debug)
+	{
+		if (glDebugMessageCallback && glDebugMessageControl)
+		{
+			glDebugMessageCallback(khr_callback, nullptr);
+			glEnable(GL_DEBUG_OUTPUT);
+			// Do not want to output notifications. Some drivers spam them too much.
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+			debug(LOG_3D, "Enabling KHR_debug message callback");
+		}
+		else
+		{
+			debug(LOG_3D, "Failed to enable KHR_debug message callback");
+		}
+	}
+
 	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
 	{
 		// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
@@ -2167,22 +2183,6 @@ bool gl_context::initGLContext()
 	if (GLAD_GL_ARB_timer_query)
 	{
 		glGenQueries(PERF_COUNT, perfpos);
-	}
-
-	if (khr_debug)
-	{
-		if (glDebugMessageCallback && glDebugMessageControl)
-		{
-			glDebugMessageCallback(khr_callback, nullptr);
-			glEnable(GL_DEBUG_OUTPUT);
-			// Do not want to output notifications. Some drivers spam them too much.
-			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-			debug(LOG_3D, "Enabling KHR_debug message callback");
-		}
-		else
-		{
-			debug(LOG_3D, "Failed to enable KHR_debug message callback");
-		}
 	}
 
 	glGenBuffers(1, &scratchbuffer);
