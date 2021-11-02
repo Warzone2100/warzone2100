@@ -105,11 +105,21 @@ camAreaEvent("NPFactoryTrigger", function(droid)
 });
 
 //Land New Paradigm transport in the LZ area (protected by four hardpoints in the New Paradigm base)
+camAreaEvent("NPLZTriggerEast", function()
+{
+    camCallOnce("activateNPLZTransporter");
+});
+
 camAreaEvent("NPLZTrigger", function()
 {
-	setTimer("sendNPTransport", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	sendNPTransport();
+    camCallOnce("activateNPLZTransporter");
 });
+
+function activateNPLZTransporter()
+{
+    setTimer("sendNPTransport", camChangeOnDiff(camMinutesToMilliseconds(3)));
+    sendNPTransport();
+}
 
 function sendNPTransport()
 {
