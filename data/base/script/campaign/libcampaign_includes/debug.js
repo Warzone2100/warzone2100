@@ -58,11 +58,11 @@ function camUnmarkTiles(label)
  * @param {...string} args
  * @returns {void}
  */
-function camDebug()
+function camDebug(...args)
 {
 	__camGenericDebug("DEBUG",
 	                  debugGetCallerFuncName(),
-	                  arguments,
+	                  args,
 	                  true,
 	                  __camBacktrace());
 }
@@ -72,9 +72,9 @@ function camDebug()
  * @param {...string} args
  * @returns {void}
  */
-function camDebugOnce()
+function camDebugOnce(...args)
 {
-	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
+	var str = debugGetCallerFuncName() + ": " + args.join(" ");
 	if (camDef(__camDebuggedOnce[str]))
 	{
 		return;
@@ -82,7 +82,7 @@ function camDebugOnce()
 	__camDebuggedOnce[str] = true;
 	__camGenericDebug("DEBUG",
 	                  debugGetCallerFuncName(),
-	                  arguments,
+	                  args,
 	                  true,
 	                  __camBacktrace());
 }
@@ -93,7 +93,7 @@ function camDebugOnce()
  * @param {...string} args
  * @returns {void}
  */
-function camTrace()
+function camTrace(...args)
 {
 	if (!camIsCheating())
 	{
@@ -101,7 +101,7 @@ function camTrace()
 	}
 	__camGenericDebug("TRACE",
 	                  debugGetCallerFuncName(),
-	                  arguments);
+	                  args);
 }
 
 /**
@@ -109,13 +109,13 @@ function camTrace()
  * @param {...string} args
  * @returns {void}
  */
-function camTraceOnce()
+function camTraceOnce(...args)
 {
 	if (!camIsCheating())
 	{
 		return;
 	}
-	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
+	var str = debugGetCallerFuncName() + ": " + args.join(" ");
 	if (camDef(__camTracedOnce[str]))
 	{
 		return;
@@ -123,7 +123,7 @@ function camTraceOnce()
 	__camTracedOnce[str] = true;
 	__camGenericDebug("TRACE",
 	                  debugGetCallerFuncName(),
-	                  arguments);
+	                  args);
 }
 
 /**
