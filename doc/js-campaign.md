@@ -89,16 +89,16 @@ was actually found by the player.
 Returns true if all enemy bases managed by ```libcampaign.js```
 are destroyed.
 
-## camMarkTiles(label | labels)
+## camMarkTiles(label)
 
 Mark area on the map by label(s), but only if debug mode is enabled.
 Otherwise, remember what to mark in case it is going to be.
 
-## camUnmarkTiles(label | labels)
+## camUnmarkTiles(label)
 
 No longer mark area(s) with given label(s) in debug mode.
 
-## camDebug(...strings)
+## camDebug(...args)
 
 Pretty debug prints - a wrapper around ```debug()```.
 Prints a function call stack and the argument message,
@@ -108,18 +108,18 @@ print things when nothing is broken. If you want to keep
 some prints around to make debugging easier without distracting
 the user, use ```camTrace()```.
 
-## camDebugOnce(...strings)
+## camDebugOnce(...args)
 
 Same as ```camDebug()```, but prints each message only once
 during script lifetime.
 
-## camTrace(...strings)
+## camTrace(...args)
 
 Same as ```camDebug()```, but only warns in cheat mode.
 Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
 calls in your code for easier debugging.
 
-## camTraceOnce(...strings)
+## camTraceOnce(...args)
 
 Same as ```camTrace()```, but prints each message only once
 during script lifetime.
@@ -142,9 +142,9 @@ A means to not auto group some droids.
 
 ## camAreaEvent(label, function(droid))
 
-Implement eventArea<label> in a debugging-friendly way. The function
-marks the area until the event is triggered, and traces entering the area
-in the TRACE log.
+Implement ```eventArea${label}``` in a debugging-friendly way.
+The function marks the area until the event is triggered,
+and traces entering the area in the TRACE log.
 
 ## camDef(something)
 
@@ -166,10 +166,10 @@ Call a function by name, but only if it has not been called yet.
 
 Remove a game object (by value or label) if it exists, do nothing otherwise.
 
-## camMakePos(x, y | label | object)
+## camMakePos(x|label|object[, y])
 
 Make a POSITION-like object, unless already done. Often useful
-for making functions that would accept positions in both xx,yy and {x:xx,y:yy} forms.
+for making functions that would accept positions in both x,y and {x:x,y:y} forms.
 Also accepts labels. If label of AREA is given, returns the center of the area.
 If an existing object or label of such is given, returns a safe JavaScript
 object containing its x, y and id.
@@ -282,7 +282,7 @@ as used in templates.js. A fourth parameter can be specified to ignore specific 
 IDs. Useful if a droid is assigned to an object label. It can be either an array
 or a single ID number.
 
-## camSendReinforcement(player, position, droids, kind, data)
+## camSendReinforcement(player, position, droids, kind[, data])
 
 Give a single bunch of droids (template list) for a player at
 a position label. Kind can be one of:
@@ -429,7 +429,7 @@ Manage trucks for an AI player. This assumes recapturing oils and
 rebuilding destroyed trucks in factories, the latter is implemented
 via ```camQueueDroidProduction()``` mechanism.
 
-## camQueueBuilding(player, stat[, pos])
+## camQueueBuilding(player, stat[, position])
 
 Assuming truck management is enabled for the player, issue an order
 to build a specific building near a certain position. The order

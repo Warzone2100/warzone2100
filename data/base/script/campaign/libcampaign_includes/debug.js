@@ -3,11 +3,12 @@
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camMarkTiles(label | labels)
-//;;
-//;; Mark area on the map by label(s), but only if debug mode is enabled.
-//;; Otherwise, remember what to mark in case it is going to be.
-//;;
+/**
+ * Mark area on the map by label(s), but only if debug mode is enabled.
+ * Otherwise, remember what to mark in case it is going to be.
+ * @param {string|string[]} label
+ * @returns {void}
+ */
 function camMarkTiles(label)
 {
 	if (camIsString(label))
@@ -25,10 +26,11 @@ function camMarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; ## camUnmarkTiles(label | labels)
-//;;
-//;; No longer mark area(s) with given label(s) in debug mode.
-//;;
+/**
+ * No longer mark area(s) with given label(s) in debug mode.
+ * @param {string|string[]} label
+ * @returns {void}
+ */
 function camUnmarkTiles(label)
 {
 	if (camIsString(label))
@@ -46,16 +48,16 @@ function camUnmarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; ## camDebug(...strings)
-//;;
-//;; Pretty debug prints - a wrapper around ```debug()```.
-//;; Prints a function call stack and the argument message,
-//;; prefixed with "DEBUG". Only use this function to indicate
-//;; actual bugs in the scenario script, because game shouldn't
-//;; print things when nothing is broken. If you want to keep
-//;; some prints around to make debugging easier without distracting
-//;; the user, use ```camTrace()```.
-//;;
+/**
+ * Pretty debug prints - a wrapper around ```debug()```.
+ * Prints a function call stack and the argument message, prefixed with "DEBUG".
+ * Only use this function to indicate actual bugs in the scenario script,
+ * because game shouldn't print things when nothing is broken.
+ * If you want to keep some prints around to make debugging easier
+ * without distracting the user, use ```camTrace()```.
+ * @param {...string} args
+ * @returns {void}
+ */
 function camDebug()
 {
 	__camGenericDebug("DEBUG",
@@ -65,11 +67,11 @@ function camDebug()
 	                  __camBacktrace());
 }
 
-//;; ## camDebugOnce(...strings)
-//;;
-//;; Same as ```camDebug()```, but prints each message only once
-//;; during script lifetime.
-//;;
+/**
+ * Same as ```camDebug()```, but prints each message only once during script lifetime.
+ * @param {...string} args
+ * @returns {void}
+ */
 function camDebugOnce()
 {
 	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
@@ -85,12 +87,12 @@ function camDebugOnce()
 	                  __camBacktrace());
 }
 
-//;; ## camTrace(...strings)
-//;;
-//;; Same as ```camDebug()```, but only warns in cheat mode.
-//;; Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
-//;; calls in your code for easier debugging.
-//;;
+/**
+ * Same as ```camDebug()```, but only warns in cheat mode.
+ * Prefixed with "TRACE". It's safe and natural to keep ```camTrace()``` calls in your code for easier debugging.
+ * @param {...string} args
+ * @returns {void}
+ */
 function camTrace()
 {
 	if (!camIsCheating())
@@ -102,11 +104,11 @@ function camTrace()
 	                  arguments);
 }
 
-//;; ## camTraceOnce(...strings)
-//;;
-//;; Same as ```camTrace()```, but prints each message only once
-//;; during script lifetime.
-//;;
+/**
+ * Same as ```camTrace()```, but prints each message only once during script lifetime.
+ * @param {...string} args
+ * @returns {void}
+ */
 function camTraceOnce()
 {
 	if (!camIsCheating())
@@ -124,10 +126,10 @@ function camTraceOnce()
 	                  arguments);
 }
 
-//;; ## camIsCheating()
-//;;
-//;; Check if the player is in cheat mode.
-//;;
+/**
+ * Check if the player is in cheat mode.
+ * @returns {boolean}
+ */
 function camIsCheating()
 {
 	return __camCheatMode;

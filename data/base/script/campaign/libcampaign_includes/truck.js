@@ -3,31 +3,32 @@
 // Truck management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camManageTrucks(player)
-//;;
-//;; Manage trucks for an AI player. This assumes recapturing oils and
-//;; rebuilding destroyed trucks in factories, the latter is implemented
-//;; via ```camQueueDroidProduction()``` mechanism.
-//;;
+/**
+ * Manage trucks for an AI player. This assumes recapturing oils and rebuilding destroyed trucks
+ * in factories, the latter is implemented via ```camQueueDroidProduction()``` mechanism.
+ * @param {number} player
+ * @returns {void}
+ */
 function camManageTrucks(player)
 {
 	__camTruckInfo[player] = { enabled: 1, queue: [], player: player };
 }
 
-//;; ## camQueueBuilding(player, stat[, pos])
-//;;
-//;; Assuming truck management is enabled for the player, issue an order
-//;; to build a specific building near a certain position. The order
-//;; would be issued once as soon as a free truck becomes available. It will
-//;; not be re-issued in case the truck is destroyed before the building
-//;; is finished. If position is unspecified, the building would be built
-//;; near the first available truck. Otherwise, position may be a label
-//;; or a POSITION-like object.
-//;;
-function camQueueBuilding(player, stat, pos)
+/**
+ * Assuming truck management is enabled for the player, issue an order to build a specific building
+ * near a certain position. The order would be issued once as soon as a free truck becomes available.
+ * It will not be re-issued in case the truck is destroyed before the building is finished.
+ * If position is unspecified, the building would be built near the first available truck.
+ * Otherwise, position may be a label or a POSITION-like object.
+ * @param {number} player
+ * @param {string} stat
+ * @param {string|Object} [position]
+ * @returns {void}
+ */
+function camQueueBuilding(player, stat, position)
 {
 	var ti = __camTruckInfo[player];
-	ti.queue.push({ stat: stat, pos: camMakePos(pos) });
+	ti.queue.push({ stat: stat, pos: camMakePos(position) });
 }
 
 //////////// privates

@@ -6,12 +6,14 @@
 // or something BAD would happen.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camAreaEvent(label, function(droid))
-//;;
-//;; Implement eventArea<label> in a debugging-friendly way. The function
-//;; marks the area until the event is triggered, and traces entering the area
-//;; in the TRACE log.
-//;;
+/**
+ * Implement ```eventArea${label}``` in a debugging-friendly way.
+ * The function marks the area until the event is triggered,
+ * and traces entering the area in the TRACE log.
+ * @param {string} label
+ * @param {Function} callback
+ * @returns {void}
+ */
 function camAreaEvent(label, callback)
 {
 	var eventName = "eventArea" + label;
