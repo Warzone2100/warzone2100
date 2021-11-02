@@ -935,6 +935,18 @@ bool frontendInitialise(const char *ResourceFile)
 	}
 
 	FrontImages = (IMAGEFILE *)resGetData("IMG", "frontend.img");
+	if (FrontImages == nullptr)
+	{
+		std::string errorMessage = astringf(_("Unable to load: %s."), "frontend.img");
+		if (!getLoadedMods().empty())
+		{
+			errorMessage += " ";
+			errorMessage += _("Please remove all incompatible mods.");
+		}
+		debug(LOG_FATAL, "%s", errorMessage.c_str());
+		return false;
+	}
+
 	/* Shift the interface initialisation here temporarily so that it
 		can pick up the stats after they have been loaded */
 	if (!intInitialise())
