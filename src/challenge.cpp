@@ -107,6 +107,12 @@ void updateChallenge(bool gameWon)
 	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
 
 	fStr = strrchr(sRequestResult, '/');
+	if (!fStr)
+	{
+		// strrchr may return NULL
+		debug(LOG_ERROR, "Challenge file path doesn't contain '/'? (%s)", sRequestResult);
+		return;
+	}
 	fStr++;	// skip slash
 	if (*fStr == '\0')
 	{
