@@ -825,7 +825,7 @@ static inline optional<WZmapInfo> CheckInMap(const char *archive, const std::str
 	return WZmapInfo(mapmod, isRandom);
 }
 
-static std::vector<std::string> lookin_list = { "", "multiplay" };
+static std::vector<std::string> map_lookin_list = { "", "multiplay" };
 
 // Process a map that has been mounted in the PhysFS virtual filesystem
 //
@@ -838,7 +838,7 @@ static std::vector<std::string> lookin_list = { "", "multiplay" };
 // - mountPoint: Location in the interpolated PhysFS tree that this archive was "mounted" (in platform-independent notation)
 bool processMap(const char* archive, const char* realFileName_platformIndependent, const std::string& mountPoint, bool rejectMapMods = false)
 {
-	auto WZmapInfoResult = CheckInMap(archive, mountPoint, lookin_list);
+	auto WZmapInfoResult = CheckInMap(archive, mountPoint, map_lookin_list);
 	if (!WZmapInfoResult.has_value())
 	{
 		// failed to enumerate contents
