@@ -1247,6 +1247,12 @@ bool recvMessage()
 				}
 				NETend();
 
+				if (player_id >= MAX_CONNECTED_PLAYERS)
+				{
+					debug(LOG_INFO, "** player %u has dropped - huh?", player_id);
+					break;
+				}
+
 				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
 				{
 					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);

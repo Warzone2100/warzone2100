@@ -278,6 +278,12 @@ bool recvPing(NETQUEUE queue)
 		return false;
 	}
 
+	if (whosResponsible(sender) != queue.index)
+	{
+		HandleBadParam("NET_PING given incorrect params.", sender, queue.index);
+		return false;
+	}
+
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
