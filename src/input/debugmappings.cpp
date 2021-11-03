@@ -42,6 +42,7 @@ bool DebugInputManager::getPlayerWantsDebugMappings(const unsigned int playerInd
 
 void DebugInputManager::setPlayerWantsDebugMappings(const unsigned int playerIndex, const bool bWants)
 {
+	ASSERT_OR_RETURN(, playerIndex < playerWantsDebugMappings.size(), "playerIndex is invalid: %u", playerIndex);
 	playerWantsDebugMappings[playerIndex] = bWants;
 	bDoingDebugMappings = true;
 	for (unsigned int n = 0; n < playerWantsDebugMappings.size(); ++n)

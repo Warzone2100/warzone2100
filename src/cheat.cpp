@@ -172,6 +172,10 @@ void sendProcessDebugMappings(bool val)
 	{
 		return;
 	}
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return;
+	}
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
 	NETbool(&val);
 	NETend();
