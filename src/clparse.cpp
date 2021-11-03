@@ -641,7 +641,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			NetPlay.bComms = false;
 			bMultiPlayer = false;
 			bMultiMessages = false;
-			for (int i = 0; i < MAX_PLAYERS; i++)
+			for (unsigned int i = 0; i < MAX_PLAYERS; i++)
 			{
 				NET_InitPlayer(i, true);
 			}

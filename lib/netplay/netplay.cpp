@@ -510,8 +510,10 @@ static void initPlayerNetworkProps(int playerIndex)
 	ingame.JoiningInProgress[playerIndex] = false;
 }
 
-void NET_InitPlayer(int i, bool initPosition, bool initTeams, bool initSpectator)
+void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpectator)
 {
+	ASSERT_OR_RETURN(, i < NetPlay.players.size(), "Invalid player_id: (%" PRIu32")",  i);
+
 	initPlayerNetworkProps(i);
 
 	NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
@@ -736,6 +738,7 @@ static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowes
 
 static void NET_DestroyPlayer(unsigned int index, bool suppressActivityUpdates = false)
 {
+	ASSERT_OR_RETURN(, index < NetPlay.players.size(), "Invalid player_id: (%" PRIu32")",  index);
 	debug(LOG_NET, "Freeing slot %u for a new player", index);
 	NETlogEntry("Freeing slot for a new player.", SYNC_FLAG, index);
 	bool wasAllocated = NetPlay.players[index].allocated;
@@ -837,7 +840,7 @@ static void NETplayerLeaving(UDWORD index)
  */
 static void NETplayerDropped(UDWORD index)
 {
-	ASSERT(index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
+	ASSERT_OR_RETURN(, index < NetPlay.players.size(), "Invalid index: %" PRIu32, index);
 	uint32_t id = index;
 
 	if (!NetPlay.isHost)
