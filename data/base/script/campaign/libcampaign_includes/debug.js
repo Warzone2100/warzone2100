@@ -156,20 +156,20 @@ function __camLetMeWin()
 	__camGameWon();
 }
 
-function __camGenericDebug(flag, func, args, err, bt)
+function __camGenericDebug(flag, functionName, args, err, backtrace)
 {
-	if (camDef(bt) && bt)
+	if (camDef(backtrace) && backtrace)
 	{
-		for (let i = bt.length - 1; i >= 0; --i)
+		for (let i = backtrace.length - 1; i >= 0; --i)
 		{
-			debug("STACK: from", JSON.stringify([bt[i]]));
+			debug("STACK: from", [backtrace[i]]);
 		}
 	}
-	if (!func)
+	if (!functionName)
 	{
-		func = "<anonymous>";
+		functionName = "<anonymous>";
 	}
-	var str = flag + ": " + func + ": " + Array.prototype.join.call(args, " ");
+	var str = flag + ": " + functionName + ": " + Array.prototype.join.call(args, " ");
 	debug(str);
 	if (camDef(err) && err)
 	{
