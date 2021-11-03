@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-01 21:56\n"
+"PO-Revision-Date: 2021-11-03 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -5020,39 +5020,39 @@ msgstr "Тепер я маю намір і далі формувати світ 
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr ""
+msgstr "Мої лазерні супутники зараз заряджаються. Я маю намір спочатку випробувати їх на вас, командире!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr ""
+msgstr "Корпорація була заснована Dr Allan Reed. У 2080 році д-р Рід уклав договір зі військовими США для розробки технології синаптичних зв’язків."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr ""
+msgstr "Запатентувавши синаптичний зв'язок через п'ять років, доктор Рід продовжив свої дослідження в галузі кібернетики."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr ""
+msgstr "Його мета цього разу полягала в тому, щоб перенести людську свідомість у потоки даних, які могли б працювати з комп'ютерними технологіями. В той час як в Кіберпросторі тіла операторів зберігалися в імлосних танках."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr ""
+msgstr "Знову отримавши підтримку військових, доктор Рід розпочав роботу над програмою NEXUS Intruder. Після трьох років без особливого прогресу військові відмовилися від проекту \"Нексус\" та скоротили фінансування доктора Ріда."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr ""
+msgstr "За повідомленнями того часу, доктор Рід був лютий і поклявся помститися всім, хто стане на його шляху."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr ""
+msgstr "Схоже, д-р Рід досяг успіху в своїх цілях і завершив Вірусну Програму НЕКСУС."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr ""
+msgstr "Подібність між NEXUS і доктором Рідом вражає."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "Такий цікавий урок історії. А тепер дозвольте мені ввести вас у курс справи."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
