@@ -131,7 +131,6 @@ var __camDebuggedOnce = {};
 var __camTracedOnce = {};
 
 //events
-var __camLastHitTime = 0;
 var __camSaveLoading;
 
 //group
