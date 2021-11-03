@@ -115,33 +115,33 @@ function camEnemyBaseEliminated_NPCentralFactory()
 
 function getDroidsForNPLZ(args)
 {
-    var scouts = [ cTempl.nppod, cTempl.nphmg ];
-    var heavies = [ cTempl.npslc, cTempl.npsmct ];
-    var useArtillery = (camRand(100) < 50);
+	var scouts = [ cTempl.nppod, cTempl.nphmg ];
+	var heavies = [ cTempl.npslc, cTempl.npsmct ];
+	var useArtillery = (camRand(100) < 50);
 
 
-    var numScouts = camRand(5) + 1;
-    var heavy = heavies[camRand(heavies.length)];
-    var list = [];
+	var numScouts = camRand(5) + 1;
+	var heavy = heavies[camRand(heavies.length)];
+	var list = [];
 
-    if (useArtillery)
-    {
-        list[list.length] = cTempl.npsens; //sensor will count towards scout total
-        numScouts = numScouts - 1;
-        heavy = cTempl.npmor;
-    }
+	if (useArtillery)
+	{
+		list[list.length] = cTempl.npsens; //sensor will count towards scout total
+		numScouts = numScouts - 1;
+		heavy = cTempl.npmor;
+	}
 
-    for (var i = 0; i < numScouts; ++i)
-    {
-        list[list.length] = scouts[camRand(scouts.length)];
-    }
+	for (var i = 0; i < numScouts; ++i)
+	{
+		list[list.length] = scouts[camRand(scouts.length)];
+	}
 
-    for (var a = numScouts; a < 8; ++a)
-    {
-        list[list.length] = heavy;
-    }
+	for (var a = numScouts; a < 8; ++a)
+	{
+		list[list.length] = heavy;
+	}
 
-    return list;
+	return list;
 }
 
 camAreaEvent("NPLZ1Trigger", function()
