@@ -25,50 +25,50 @@ var useHeavyReinforcement;
 //Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
-    var lightAttackerLimit = 8;
-    var heavyAttackerLimit = 3;
-    var unitTemplates;
-    var list = [];
+	var lightAttackerLimit = 8;
+	var heavyAttackerLimit = 3;
+	var unitTemplates;
+	var list = [];
 
-    if (difficulty === HARD)
-    {
-        lightAttackerLimit = 9;
-        heavyAttackerLimit = 4;
-    }
-    else if (difficulty === INSANE)
-    {
-        lightAttackerLimit = 10;
-        heavyAttackerLimit = 5;
-    }
+	if (difficulty === HARD)
+	{
+		lightAttackerLimit = 9;
+		heavyAttackerLimit = 4;
+	}
+	else if (difficulty === INSANE)
+	{
+		lightAttackerLimit = 10;
+		heavyAttackerLimit = 5;
+	}
 
-    if (useHeavyReinforcement)
-    {
-        var artillery = [cTempl.npmor];
-        var other = [cTempl.npmmct];
-        if (camRand(2) > 0)
-        {
-            //Add a sensor if artillery was chosen for the heavy units
-            list.push(cTempl.npsens);
-            unitTemplates = artillery;
-        }
-        else
-        {
-            unitTemplates = other;
-        }
-    }
-    else
-    {
-        unitTemplates = [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt];
-    }
+	if (useHeavyReinforcement)
+	{
+		var artillery = [cTempl.npmor];
+		var other = [cTempl.npmmct];
+		if (camRand(2) > 0)
+		{
+			//Add a sensor if artillery was chosen for the heavy units
+			list.push(cTempl.npsens);
+			unitTemplates = artillery;
+		}
+		else
+		{
+			unitTemplates = other;
+		}
+	}
+	else
+	{
+		unitTemplates = [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt];
+	}
 
-    var lim = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
-    for (var i = 0; i < lim; ++i)
-    {
-        list.push(unitTemplates[camRand(unitTemplates.length)]);
-    }
+	var lim = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
+	for (var i = 0; i < lim; ++i)
+	{
+		list.push(unitTemplates[camRand(unitTemplates.length)]);
+	}
 
-    useHeavyReinforcement = !useHeavyReinforcement; //switch it
-    return list;
+	useHeavyReinforcement = !useHeavyReinforcement; //switch it
+	return list;
 }
 
 //These enable Scav and NP factories when close enough
@@ -107,18 +107,18 @@ camAreaEvent("NPFactoryTrigger", function(droid)
 //Land New Paradigm transport in the LZ area (protected by four hardpoints in the New Paradigm base)
 camAreaEvent("NPLZTriggerEast", function()
 {
-    camCallOnce("activateNPLZTransporter");
+	camCallOnce("activateNPLZTransporter");
 });
 
 camAreaEvent("NPLZTrigger", function()
 {
-    camCallOnce("activateNPLZTransporter");
+	camCallOnce("activateNPLZTransporter");
 });
 
 function activateNPLZTransporter()
 {
-    setTimer("sendNPTransport", camChangeOnDiff(camMinutesToMilliseconds(3)));
-    sendNPTransport();
+	setTimer("sendNPTransport", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	sendNPTransport();
 }
 
 function sendNPTransport()
