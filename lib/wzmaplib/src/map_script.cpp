@@ -463,6 +463,9 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, scale > 0, "scale must be positive");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, crispness > 0, "crispness must be positive");
 
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, width <= 256, "width must be <= 256");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, height <= 256, "height must be <= 256");
+
 	int32_t normalizeToRange = 0;
 	if (argc >= 6) {
 		JSValue jsVal_normalizeToRange = argv[5];
@@ -490,10 +493,10 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		bool bGotRegionsArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegions, regionsArrayLength);
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotRegionsArrayLength,
 		                              "Unable to retrieve riggedRegions array length");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, regionsArrayLength <= std::numeric_limits<size_t>::max(),
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, regionsArrayLength <= UINT16_MAX,
 		                              "Too many riggedRegions (%" PRIu64 ")", regionsArrayLength);
 
-		size_t numRiggedRegions = regionsArrayLength;
+		size_t numRiggedRegions = static_cast<size_t>(regionsArrayLength);
 		riggedRegions.reserve(numRiggedRegions);
 		auto free_riggedRegions_ref = gsl::finally([ctx, &riggedRegions]
 		{
@@ -547,8 +550,8 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		};
 	}
 
-	size_t size = width * height;
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, size <= std::numeric_limits<int32_t>::max(),
+	size_t size = static_cast<size_t>(width) * static_cast<size_t>(height);
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, size <= UINT16_MAX,
 	                              "Requested data too large to fit into Array");
 
 	size_t maxLayerSize = (width + 1) * (height + 1);
