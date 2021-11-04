@@ -491,7 +491,7 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotRegionsArrayLength,
 		                              "Unable to retrieve riggedRegions array length");
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, regionsArrayLength <= std::numeric_limits<size_t>::max(),
-		                              "Too many riggedRegions (%zu)", regionsArrayLength);
+		                              "Too many riggedRegions (%" PRIu64 ")", regionsArrayLength);
 
 		size_t numRiggedRegions = regionsArrayLength;
 		riggedRegions.reserve(numRiggedRegions);
@@ -512,7 +512,7 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 			uint64_t regionArrayLength = 0;
 			bool bGotRegionArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegion, regionArrayLength);
 			SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotRegionArrayLength && regionArrayLength == 5,
-			                              "riggedRegion[%zu] length must be 5; actual length %zu",
+			                              "riggedRegion[%zu] length must be 5; actual length %" PRIu64,
 			                              i, regionArrayLength);
 			JSValue jsVal_x1 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 0);
 			JSValue jsVal_y1 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 1);
