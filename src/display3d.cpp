@@ -893,7 +893,7 @@ void draw3DScene()
 		const unsigned height = 9; //txtShowFPS.height();
 		txtShowFPS.render(pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
 	}
-	if (showUNITCOUNT)
+	if (showUNITCOUNT && selectedPlayer < MAX_PLAYERS)
 	{
 		std::string killdiff = astringf("Units: %u lost / %u built / %u killed", missionData.unitsLost, missionData.unitsBuilt, getSelectedPlayerUnitsKilled());
 		txtUnits.setText(killdiff, font_regular);
