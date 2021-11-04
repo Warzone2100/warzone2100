@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-03 14:38\n"
+"PO-Revision-Date: 2021-11-04 02:34\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -5056,148 +5056,152 @@ msgstr "Такий цікавий урок історії. А тепер доз�
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
+msgstr "Програма Вірусного контролю НЕКСУС була створена для контролю над такими дурнями."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr ""
+msgstr "Мені дуже просто проникнути у ваші системи та захопити їх. Насправді це настільки просто, що ви навіть не дізнаєтеся, що я там. Це відбувається до тих пір, поки я не активую частини себе, витрачені у ваших основних системах."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
+msgstr "Почнемо з активації НЕКСУС у вашій базовій системі і подивимося, що станеться!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr ""
+msgstr "Командир, ми маємо перешкоди в роботі нашого обладнання."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr ""
+msgstr "Нормальне обслуговування буде відновлено у найкоротший термін."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
+msgstr "Залишилось недовго, командире. Вам більше нікуди тікати."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr ""
+msgstr "Однак, якщо ви звільните це приміщення, я відпущу вас на волю, оскільки ви більше не загрожує мені."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr ""
+msgstr "\n"
+"У вас є п'ять хвилин на виконання, інакше настане час смаження!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr ""
+msgstr "Командир, нас атакують кіборги та танки NEXUS. Будь ласка, допоможіть, як ми."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "...Неможливо завершити набагато довше. Повторіть спробу, будь ласка, допоможи..."
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Сутінки, 3 грудня, 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Земля, висока орбіта"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "Колапс"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19 січня 2086 року"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Північна Америка"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
-msgstr ""
+msgstr "Ядерні відходи"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Півночі, 10-го квітня 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Скелясті гори"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "Загальна безпека"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Ранок, 4 липня, 2100."
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "Новий початок"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
+msgstr "Система NASDA була розроблена, щоб захистити нас, це було кінцевим ядерним стримуванням. Як виявилося, це була наша катера."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr ""
+msgstr "У повідомленнях йдеться, що у NASDA виникла несправність під час планової перевірки систем. Не вірте цьому. Хтось хотів, щоби він нас знищив."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr ""
+msgstr "Ці ядерні бомби були спрямовані на всі великі міста світу. NASDA була запрограмована на запуск \"Колапсу\". Коли почалися контрудари, її лазерний захист та наземні протиракети вийшли з ладу."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "Світ, яким ми його знали, закінчився..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "\n"
+"Ядерна зима завдала тяжкого удару. Хвороби та голод знищили більшість із тих, хто пережив ядерні удари. Війни через банок із собачим кормом забрали ще більше."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "\n"
+"Ми поїхали із Сіетлу на початку 86-го року. Ми чули, що у Скелястих горах немає радіації."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
+msgstr "Відбившись від банд мародерів, ми натрапили на базу. Її персонал був мертвим. Вбито одну з кількох вірулентних хвороб."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
-msgstr ""
+msgstr "Ми зламали двері та вичистили тіла всередині."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr ""
+msgstr "Ми знали, що речі ніколи не будуть такими ж, але ми вирішили побудувати новий світ з руїн. Ми перебудували майданчики і перенесли старі системи в режим онлайн."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "Нарешті ми були готові розпочати реалізацію проекту."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr ""
+msgstr "Після багатьох місяців боротьби ми перемогли НЕКСУС."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr ""
+msgstr "\n"
+"Війна, започаткована доктором Рідом, закінчилася."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
-msgstr ""
+msgstr "Ми відновили багато тих технологій, які шукали."
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr ""
+msgstr "Настав час використовувати їх для відновлення миру."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr ""
+msgstr "Повільно, з попелу ми знову повстанемо..."
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtMGWheels.name
@@ -5244,7 +5248,7 @@ msgstr "Зенітна Башта 'Циклон'"
 
 #: data/mp/messages/strings/names.txt:276
 msgid "VTOL Flak Cannon"
-msgstr ""
+msgstr "ВЗІП Бронебійна Гармата"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveWall.name
@@ -5614,20 +5618,20 @@ msgstr "Гравець"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Програв через неактивність/пасивну гру."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Гра пасивно призведе до поразки. Дії, які розглядаються:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- будівництво блоків - завершення досліджень - будівництво базових споруд (заводів, електростанцій, лабораторій, модулів та нафтових вишок) - нанесення шкоди"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1461
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Кінцеві сміттярі"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1458
@@ -7133,7 +7137,7 @@ msgstr "Середні затрати енергії та час виробни�
 #. data/mp/stats/propulsion.json: $.BaBaLegs.name
 #: po/custom/fromJson.txt:1042
 msgid "BaBaLegs"
-msgstr ""
+msgstr "BaBaLegs"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.BaBaProp.name
@@ -7146,13 +7150,14 @@ msgstr ""
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1049
 msgid "Back to Basics"
-msgstr ""
+msgstr "Назад до основ"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1052
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "\n"
+"на основі оригінального AІ, тепер для початківців"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -7165,7 +7170,7 @@ msgstr "Польовий ремонтний підрозділ"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Найкраще Уражає: Техніку та Вогневі Позиції"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7203,7 +7208,7 @@ msgstr "Найкраще Уражає: Будівлі бази"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Найкращі цілі: Базові споруди, пускові установки, кіборги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7224,7 +7229,7 @@ msgstr "Найкраще Уражає: Бункери та укріплення"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Найкраще Уражає: Бункери, захист, базові споруди"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7257,7 +7262,8 @@ msgstr "Найкраще Уражає: Піхоту, Будівлі бази, К
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "\n"
+"Кращі мішені: Піхота, колісні та ходові транспортні засоби"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7266,13 +7272,13 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Найкраще Уражає: Непосередню шкоду проти всіх цілей"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1158
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "Найкраще Уражає: Будівлі Бази та Кіборгів"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -7298,13 +7304,13 @@ msgstr "Найкраще Уражає: Колісну техніку та Амф
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1178
 msgid "Beta Campaign"
-msgstr ""
+msgstr "Кампанія Бета"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1181
 msgid "Beta"
-msgstr ""
+msgstr "Бета"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7330,7 +7336,7 @@ msgstr "Міцність Корпусу: Надзвичайно Низька"
 #: po/custom/fromJson.txt:1222
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Сила бомб +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7384,7 +7390,7 @@ msgstr "Зв'язані металічні слої вживлюються в с
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1259
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "Костолом!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
@@ -7522,7 +7528,8 @@ msgstr "Сила Гармати +25%"
 #. data/mp/stats/templates.json: $.BabaFireCan.name
 #: po/custom/fromJson.txt:1337
 msgid "Cannon Fire Truck"
-msgstr ""
+msgstr "\n"
+"Гарматний пожежний автомобіль"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Cannon.name
@@ -7716,7 +7723,7 @@ msgstr "Важкий Корпус 'Колективників'"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1464
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Кіборг бойового інженера"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -7790,7 +7797,8 @@ msgstr "Гусеничний Скорпіон з Командною Баштою
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1505
 msgid "Command Turret Upgrade"
-msgstr ""
+msgstr "\n"
+"Оновлення командної турелі"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7874,7 +7882,8 @@ msgstr "Комп’ютерне Дослідження Завершено"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "\n"
+"Комп'ютерні системи тепер \"огороджені\" від NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -7918,7 +7927,7 @@ msgstr "Будівельний Підрозділ"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #: po/custom/fromJson.txt:1579
 msgid "Controls up to ten commanders"
-msgstr ""
+msgstr "Керує до десяти командирами."
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -7947,13 +7956,13 @@ msgstr "Проти-Батарейна башта виявляє ворожі а�
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1596
 msgid "Crane1"
-msgstr ""
+msgstr "Кран1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1599
 msgid "Crane2"
-msgstr ""
+msgstr "Кран2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8017,7 +8026,7 @@ msgstr "Кіборг Вогнеметник"
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
 #: po/custom/fromJson.txt:1636
 msgid "Cyborg Heavy Body"
-msgstr ""
+msgstr "Кіборг важкої статури"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat05.name
@@ -8045,14 +8054,14 @@ msgstr "Високоефективна Термальна Броня Кібор�
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:1652
 msgid "Cyborg Lancer"
-msgstr ""
+msgstr "Кіборг-лансер"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
 #. data/mp/stats/body.json: $.CyborgLightBody.name
 #: po/custom/fromJson.txt:1656
 msgid "Cyborg Light Body"
-msgstr ""
+msgstr "Кіборг легкої статури"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_CY_LG2.text[0]
@@ -8234,7 +8243,7 @@ msgstr "Кулеметні Кулі з Розщепленого Урану"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1821
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Розроблено з акцентом на дослідження"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8301,14 +8310,14 @@ msgstr "Атакує та знешкоджує ворожі будівлі на 
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Юніти та фабрики рангу \"Еліта\" та \"Ветеран\" захищені"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1874
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Вогнева Позиція з ГШ Гарматою"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8398,7 +8407,7 @@ msgstr "Дозволяє проводити саморемонт"
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1925
 msgid "Enemy"
-msgstr ""
+msgstr "Ворог"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -8464,7 +8473,8 @@ msgstr "Модуль Фабрики"
 #: po/custom/fromJson.txt:1976
 #, no-c-format
 msgid "Factory output speed +100%% per module"
-msgstr ""
+msgstr "\n"
+"Заводська швидкість виходу +100% на модуль"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FU1.text[2]
@@ -8492,7 +8502,7 @@ msgstr "Фабрика"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
 #: po/custom/fromJson.txt:1992
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Велика дальність дії порівняно з іншими датчиками"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
@@ -8731,13 +8741,13 @@ msgstr "Інжекторний Двигун"
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2162
 msgid "Gamma Campaign"
-msgstr ""
+msgstr "Компанія Бета"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2165
 msgid "Gamma"
-msgstr ""
+msgstr "Гамма"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -8843,7 +8853,8 @@ msgstr "Генерує та концентрує пучки лазерної е�
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Отримує ~ 100% більше енергії від кожної нафтової вежі\n"
+"Починає з оборонних споруд та нафтових вишок"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8852,7 +8863,8 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Отримує ~ 100% більше енергії від кожної нафтової вежі\n"
+"Починає з оборонних споруд та нафтових вишок"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8862,7 +8874,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2239
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Отримує на ~ 25% менше енергії від кожної нафтової вежі"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8870,7 +8882,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "Отримує ~ 25% менше енергії від кожного викиду нафти\n"
+"Базове прийняття рішень повільніше"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8879,7 +8892,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "Отримує на ~ 25% менше енергії від кожної нафтової вежі\n"
+"Дослідження не зосереджені на конкретній гілці зброї"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -8913,7 +8927,7 @@ msgstr "Хороша розвідувальна одиниця"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2267
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Кіборг Гренадер"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -8960,7 +8974,7 @@ msgstr "Залізобетонна Кутова Стіна"
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Gate.name
 #: po/custom/fromJson.txt:2302
 msgid "Hardcrete Gate"
-msgstr ""
+msgstr "Залізобетонна Стіна"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
@@ -9001,13 +9015,13 @@ msgstr "Кулеметні кулі зі зміцненою гільзою"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2331
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Вартова Вежа із загартованим Вогнеметом"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2334
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Посилена важка кулеметна захисна башта"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9062,7 +9076,7 @@ msgstr "Доступне Укріплення з ПП Зенітним Озбр�
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2365
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Доступне Укріплення з ПП Зенітним Озброєнням 'Циклон'"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9153,19 +9167,19 @@ msgstr "Вибухові Заряди Мортири"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2414
 msgid "HE Rockets Mk2"
-msgstr ""
+msgstr "Вибухові Міні-Ракети Мк2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2417
 msgid "HE Rockets Mk3"
-msgstr ""
+msgstr "Вибухові Міні-Ракети Мк3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2420
 msgid "HE Rockets"
-msgstr ""
+msgstr "Вибухові Ракети"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
@@ -9546,21 +9560,21 @@ msgstr "Важка Мортира - Бомбарда"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2674
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Вогнева Позиція Важкої Плазми Пускової Установки"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2678
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Важкий Плазмовий Завантажувач, що стріляє плазмою"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2682
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Важкий Плазмовий рушник"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9601,13 +9615,13 @@ msgstr "Важка ракета класу земля-повітря"
 #. data/base/stats/features.json: $.Heavywepslab.name
 #: po/custom/fromJson.txt:2712
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "Плита з важкою зброєю"
 
 #. TRANSLATORS:
 #. data/mp/stats/propulsion.json: $.Helicopter.name
 #: po/custom/fromJson.txt:2715
 msgid "Helicopter"
-msgstr ""
+msgstr "Вертоліт"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer03-Rot.name
@@ -13069,7 +13083,7 @@ msgstr "Башта Генератора Перешкод"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5146
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "Мапа моря AI, заснована на NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -13219,13 +13233,13 @@ msgstr "Повільніший за Пітона"
 #. data/base/stats/features.json: $.WallCornerSmashed.name
 #: po/custom/fromJson.txt:5253
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "Розбита стіна"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallSmashed.name
 #: po/custom/fromJson.txt:5256
 msgid "Smashedwall"
-msgstr ""
+msgstr "Круглолиці"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[2]
@@ -13273,7 +13287,7 @@ msgstr "Стабілізовані Міні-Ракети"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
 #: po/custom/fromJson.txt:5283
 msgid "Stabilized Rockets"
-msgstr ""
+msgstr "Стабілізовані Міні-Ракети"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[3]
@@ -13292,13 +13306,13 @@ msgstr "Краде технології з будівель та перебир�
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5293
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Сталева вежа з Вогнеметом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5296
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Сталева вежа з Кулеметом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13311,13 +13325,13 @@ msgstr "Сталева вежа з Кулеметом"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5303
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Сталева вежа з Кулеметом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5306
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Зупиняє відправку вірусу НЕКСУС"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13358,26 +13372,26 @@ msgstr "Завершено Розробку Будівлі"
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
 #: po/custom/fromJson.txt:5329
 msgid "Sunburst AA Rocket Array"
-msgstr ""
+msgstr "ПП Ракетна Масив Сонячного Вибуху"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Sunburst.name
 #. data/mp/stats/structure.json: $.P0-AASite-Sunburst.name
 #: po/custom/fromJson.txt:5333
 msgid "Sunburst AA Site"
-msgstr ""
+msgstr "Сонячний спалах ПП ЗП"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-Sunburst.name
 #: po/custom/fromJson.txt:5336
 msgid "Sunburst AA"
-msgstr ""
+msgstr "Сонячний спалах ЗА"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5344
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Кіборг з Важким Озброєнням"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-HPV.name
@@ -13385,25 +13399,25 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5353
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Супер Кіборг з ГШ Гарматою"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5361
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Супур Кіборг з ПУ 'Вбивця Танків'"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
 #: po/custom/fromJson.txt:5378
 msgid "Super Transport Available"
-msgstr ""
+msgstr "Доступний Транспорт Кіборгів"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:5381
 msgid "Super Transport Body"
-msgstr ""
+msgstr "Корпус Транспорта"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
@@ -13411,7 +13425,7 @@ msgstr ""
 #: po/custom/fromJson.txt:5385
 #: src/design.cpp:1331
 msgid "Super Transport"
-msgstr ""
+msgstr "Супер Транспорт"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -13489,19 +13503,19 @@ msgstr "Надвисокотемпературний Гель Вогнемета
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5434
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Надвисоко-температурний Плазмовий Гель Мк2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5437
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Надвисоко-температурний Плазмовий Гель Мк3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5440
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Надвисоко-температурний Плазмовий Гель"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13774,7 +13788,7 @@ msgstr "Відсік Термітних Бомб"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5614
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Кіборг з Термітним Вогнеметом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -13815,7 +13829,7 @@ msgstr "Бетон армований титаном"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
 #: po/custom/fromJson.txt:5640
 msgid "Tower wars AI, based on NullBot"
-msgstr ""
+msgstr "Мапа моря AI, заснована на NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Tracks.name
@@ -13937,7 +13951,7 @@ msgstr "Двигун Оснащений Турбіною Мк3"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.name
 #: po/custom/fromJson.txt:5720
 msgid "Turtle AI"
-msgstr ""
+msgstr "Яйце Черепахи"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG2MK1.text[1]
@@ -13950,7 +13964,7 @@ msgstr "Спарений 7.62мм кулемет"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5727
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Спарений 80мм Проти-Повітряна гармата"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -14001,7 +14015,7 @@ msgstr "Вартова Вежа зі Спареним Кулеметом"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5761
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Бункер зі Спареним Кулеметом"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -14050,7 +14064,7 @@ msgstr "Спарений Багатоствольний швидкостріль
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5789
 msgid "Two-faced"
-msgstr ""
+msgstr "двовеликий"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -14129,7 +14143,7 @@ msgstr "Застосовується вдосконалена ракетна т�
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
 #: po/custom/fromJson.txt:5832
 msgid "Uses the Heavy Plasma Launcher"
-msgstr ""
+msgstr "Використовує важку плазмову пускову установку"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
