@@ -121,7 +121,7 @@
 		"mountModel": "TRLSNSR1.PIE",
 		"name": "Sensor Turret",
 		"power": 1000,
-		"range": 1536,
+		"range": 1792,
 		"sensorModel": "GNLSNSR1.PIE",
 		"type": "STANDARD",
 		"weight": 100
