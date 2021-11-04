@@ -31,7 +31,7 @@
 static CURSOR currentCursor = CURSOR_MAX;
 static CURSOR lastAppliedCursor = CURSOR_MAX;
 static SDL_Cursor *aCursors[CURSOR_MAX] = {};
-static bool monoCursor;
+static bool monoCursor = false;
 static bool cursorsEnabled = false;
 
 /* TODO: do bridge and attach need swapping? */
@@ -1303,10 +1303,10 @@ SDL_Cursor *init_system_ColorCursor(CURSOR cur, const char *fileName)
 		exit(-1);
 	}
 
-	// free up image & surface data
+	// free up surface & image data
+	SDL_FreeSurface(surface);
 	free(psSprite->bmp);
 	free(psSprite);
-	SDL_FreeSurface(surface);
 
 	return pointer;
 }
