@@ -110,5 +110,5 @@ static inline bool alliancesCanGiveAnything(int t)
 {
 	return t != NO_ALLIANCES;
 }
-WZ_DECL_PURE bool targetDoesMatchPreference(const DROID *psDroid, const BASE_OBJECT *psObject);
+WZ_DECL_PURE bool targetDoesMatchPreference(const DROID *psDroid, const BASE_OBJECT *psObject, SDWORD weapon_slot);
 #endif // __INCLUDED_SRC_AI_H__

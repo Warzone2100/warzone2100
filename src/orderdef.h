@@ -123,9 +123,8 @@ enum SECONDARY_STATE
 	DSS_HALT_PURSUE     = 0x0000c0,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid pursues the target by its free will. */
 	DSS_RECYCLE_SET     = 0x000100,	/**< state referred to secondary order DSO_RECYCLE. If set, the droid can be recycled. */
 	DSS_PREF_ANY        = 0x000200,	/**< state referred to secondary order DSO_ATTACK_PREF. Droid will attack anything. */
-	DSS_PREF_VEHICLE    = 0x000400,	/**< state referred to secondary order DSO_ATTACK_PREF. Droid will only attack tanks and VTOLS, but not cyborgs nor buildings */
-	DSS_PREF_STRUCTURES = 0x000600,	/**< state referred to secondary order DSO_ATTACK_PREF. Droid will only attack buildings, but not tanks nor cyborgs */
-	DSS_PREF_CYBORG     = 0x000800, /**< state referred to secondary order DSO_ATTACK_PREF. Droid will only attack cyborgs, but not tanks nor buildings */
+	DSS_PREF_GOOD_ENOUGH= 0x000400,	/**< state referred to secondary order DSO_ATTACK_PREF. Droid will only targets that have modifier >=75% */
+	DSS_PREF_BEST       = 0x000600, /**< state referred to secondary order DSO_ATTACK_PREF. Droid will only targets that have modifier >=100% */
 	DSS_RTL_REPAIR      = 0x080000,	/**< state set to send order DORDER_RTR to droid. */
 	DSS_RTL_BASE        = 0x100000,	/**< state set to send order DORDER_RTB to droid. */
 	DSS_RTL_TRANSPORT   = 0x200000,	/**< state set to send order DORDER_E	MBARK to droid. */

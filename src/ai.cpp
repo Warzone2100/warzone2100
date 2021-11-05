@@ -80,40 +80,34 @@ PlayerMask alliancebits[MAX_PLAYER_SLOTS];
 /// A bitfield for the satellite uplink
 PlayerMask satuplinkbits;
 
-bool targetDoesMatchPreference(const DROID *psDroid, const BASE_OBJECT *psObject)
+bool targetDoesMatchPreference(const DROID *psDroid, const BASE_OBJECT *psObject, SDWORD weapon_slot)
 {
 	// check target type
 	const auto secState = secondaryGetState(psDroid, DSO_ATTACK_PREF);
+	if (secState == DSS_PREF_ANY) return true;
 	bool ret = false;
-	if (secState == DSS_PREF_ANY)
+	const auto attackerWeapon = (WEAPON_STATS *)(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat);
+	const auto weaponEffect = attackerWeapon->weaponEffect;
+	if (psObject->type == OBJ_DROID)
 	{
-		ret = true;
+		const auto targetDroid = (const DROID *) psObject;
+		// propulsion modifier
+		const auto modifier = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION])->propulsionType];
+		if (secState == DSS_PREF_BEST) return modifier >= 100;
+		return modifier >= 75;
 	}
-	else if (secState == DSS_PREF_STRUCTURES && psObject->type == OBJ_STRUCTURE)
+	else if (psObject->type == OBJ_STRUCTURE)
 	{
-		ret = true;
+		const auto targetStructure = (const STRUCTURE *) psObject;
+		const auto modifier = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength];
+		if (secState == DSS_PREF_BEST) return modifier >= 100;
+		return modifier >= 75;
 	}
-	else if (secState == DSS_PREF_CYBORG && psObject->type == OBJ_DROID) {
-		const DROID *targetDroid = (const DROID *) psObject;
-		ret = (targetDroid->droidType == DROID_CYBORG) || 
-				(targetDroid->droidType == DROID_CYBORG_CONSTRUCT) ||
-				(targetDroid->droidType == DROID_CYBORG_REPAIR) ||
-				(targetDroid->droidType == DROID_CYBORG_SUPER) || 
-				(targetDroid->droidType == DROID_PERSON);
+	else 
+	{
+		// it's a feature: don't be shy to shoot it
+		return true;
 	}
-	else if (secState == DSS_PREF_VEHICLE && psObject->type == OBJ_DROID){
-		const DROID *targetDroid = (const DROID *) psObject;
-		ret =  (targetDroid->droidType == DROID_WEAPON) || 
-				(targetDroid->droidType == DROID_SENSOR) ||
-				(targetDroid->droidType == DROID_ECM) ||
-				(targetDroid->droidType == DROID_TRANSPORTER) ||
-				(targetDroid->droidType == DROID_REPAIR) ||
-				(targetDroid->droidType == DROID_CONSTRUCT) ||
-				(targetDroid->droidType == DROID_COMMAND) || 
-				(targetDroid->droidType == DROID_SUPERTRANSPORTER);
-
-	}
-	//debug(LOG_INFO, "target match? %i, ss %x, target %i", ret, secState, psObject->type);
 	return ret;
 }
 
@@ -610,7 +604,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
 		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 		debug(LOG_INFO, "found target for %i from aiSearchSensorTargets %i", psDroid->id, bestTarget->id);
-		if (!targetDoesMatchPreference(psDroid, bestTarget))
+		if (!targetDoesMatchPreference(psDroid, bestTarget, 0))
 		{
 			debug(LOG_INFO, "resetting target, because doesn't match preferences");
 			bestTarget = nullptr;
@@ -678,7 +672,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		    && !aiCheckAlliances(targetInQuestion->player, psDroid->player)
 		    && validTarget(psDroid, targetInQuestion, weapon_slot)
 		    && objPosDiffSq(psDroid, targetInQuestion) < droidRange * droidRange
-			&& targetDoesMatchPreference(psDroid, targetInQuestion))
+			&& targetDoesMatchPreference(psDroid, targetInQuestion, 0))
 		{
 			if (targetInQuestion->type == OBJ_DROID)
 			{
@@ -748,7 +742,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		}
 	}
 
-	if (bestTarget && targetDoesMatchPreference(psDroid, bestTarget))
+	if (bestTarget && targetDoesMatchPreference(psDroid, bestTarget, 0))
 	{
 		ASSERT(!bestTarget->died, "AI gave us a target that is already dead.");
 		targetStructure = visGetBlockingWall(psDroid, bestTarget);

@@ -3388,7 +3388,6 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	case DSO_ATTACK_PREF:
 		secondaryMask = DSS_ATTACK_PREF_MASK;
 		secondarySet = State;
-		//debug(LOG_INFO, "setting DSO_PREF: 0x%08X(%i)", State, State);
 		break;
 	case DSO_UNUSED:
 	case DSO_FIRE_DESIGNATOR:
@@ -3701,6 +3700,33 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	case DSO_ATTACK_PREF:
 		CurrState &= ~DSS_ATTACK_PREF_MASK;
 		CurrState |= State;
+		// drop current target if it doesn match
+		if (psDroid->order.type == DORDER_ATTACKTARGET)
+		{
+			// explicit attack order was given => don't stop
+			debug(LOG_INFO, "not dropping DORDER_ATTACKTARGET!");
+			break;
+		}
+		else if (psDroid->order.type == DORDER_ATTACK)
+		{
+			// command droid ordered us to attack => set order to NONE
+			debug(LOG_INFO, "dropping order to NONE");
+			DroidOrder order{};
+			orderDroidBase(psDroid, &order);
+			break;
+		}
+		else if (psDroid->action == DACTION_ATTACK)
+		{
+			
+			// attacking for any other reason => stop doing that
+			debug(LOG_INFO, "dropping order to NONE, action was ATTACK");
+			DroidOrder order{};
+			// this causes crash currently
+			//orderDroidBase(psDroid, &order);
+			// this doesn't, but droid still does MOVETOATTACK and MOVETOFIRE, because DORDER_GUARD and DACTION_NONE tells him so
+			actionDroid(psDroid, DACTION_NONE);
+			break;
+		}
 	default:
 		break;
 	}

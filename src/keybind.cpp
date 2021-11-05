@@ -2623,17 +2623,13 @@ void kf_setAttackPreference(const char what)
 	SPECTATOR_NO_OP();
 	const SECONDARY_ORDER secOrder = DSO_ATTACK_PREF;
 	SECONDARY_STATE state = DSS_NONE;
-	if (what == 'c')
+	if (what == 'b')
 	{
-		state = DSS_PREF_CYBORG;
+		state = DSS_PREF_BEST;
 	}
-	else if (what == 'b')
+	else if (what == 'g')
 	{
-		state = DSS_PREF_STRUCTURES;
-	}
-	else if (what == 't')
-	{
-		state = DSS_PREF_VEHICLE;
+		state = DSS_PREF_GOOD_ENOUGH;
 	}
 	else
 	{
