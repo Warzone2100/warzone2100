@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-05 10:37\n"
+"PO-Revision-Date: 2021-11-05 22:41\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -5749,27 +5749,30 @@ msgstr "Ви можете використовувати це."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "На жаль, помилка переказу дроїда."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "Передача електроенергії."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "\n"
+"Будь ласка, встановіть маячок!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "В дорозі"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "\n"
+"Вибачте, але я не маю вільних сил, щоб послати по допомогу!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "\n"
+"Будь-коли, великий бос!"
 
 #: lib/framework/i18n.cpp:104
 #: lib/framework/i18n.cpp:169
@@ -5779,30 +5782,31 @@ msgstr "Мова локалізації системи"
 #: lib/netplay/netplay.cpp:1349
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr ""
+msgstr "Не вдалося відкрити необхідний порт (%s) на (%s)"
 
 #: lib/netplay/netplay.cpp:1353
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
-msgstr ""
+msgstr "Ви повинні вручну налаштувати свій маршрутизатор і брандмауер відкрити порт 2100, перш ніж ви зможете приймати ігри."
 
 #: lib/netplay/netplay.cpp:1363
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr ""
+msgstr "Гра налаштована порт (%s) правильно на (%s)\n"
+"Ваш зовнішній IP є %s"
 
 #: lib/netplay/netplay.cpp:2045
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "Клієнт не зміг отримати підкачування індексу гравця"
 
 #: lib/netplay/netplay.cpp:2056
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Збій доставки повідомлення - повторіть спробу"
 
 #: lib/netplay/netplay.cpp:2650
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
+msgstr "Не знайдено жодного пристрою UPnP. Змініть маршрутизатор/брандмауер, щоб відкрити порт 2100!"
 
 #: lib/netplay/netplay.cpp:3267
 #, c-format
@@ -5815,62 +5819,65 @@ msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr ""
+msgstr "Помилка підключення до сервера лобів: %s.\n"
+"Переконайтеся, що порт %d може отримати вхідні підключення.\n"
+"Якщо ви використовуєте маршрутизатор, налаштуйте його за допомогою UPnP\n"
+" або переслати порт до системи."
 
 #: lib/netplay/netplay.cpp:4186
 msgid "Failed to get a lobby response!"
-msgstr ""
+msgstr "Не вдалося отримати відповідь у лобі!"
 
 #: lib/netplay/netreplay.cpp:257
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Формат файлу відтворення є новішим, ніж може підтримувати ця версія Warzone 2100."
 
 #: lib/netplay/netreplay.cpp:259
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Повтор формат версії: %u"
 
 #: lib/netplay/netreplay.cpp:260
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Формат файлу повтору не підтримується"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Меню"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:2024
 #: src/frontend.cpp:2068
 msgid "Campaign"
-msgstr ""
+msgstr "Компанія."
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Випробування"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Сутичка."
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Мультиплеєр"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Музика меню"
 
 #: lib/widget/form.cpp:343
 msgid "(untitled)"
-msgstr ""
+msgstr "(Без назви)"
 
 #: lib/widget/jsontable.cpp:496
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Копіювати шлях у буфер обміну"
 
 #: lib/widget/jsontable.cpp:503
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Скопіювати JSON в буфер обміну"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
@@ -5967,27 +5974,27 @@ msgstr "ПП Ланцюговий Зарядний Пристрій"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "ПП Вогнева Позиція ПП Зенітної Гармати"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "ПП Вогнева Позиція ПП Зенітної Гармати"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "Напівгусеничний Пітон з ПП Зенітною Гарматою"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "ПП Циклонова Гармата"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6073,27 +6080,27 @@ msgstr "ПП Термальний Сенсор"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "ПП Вогнева Позиція ПП Зенітної Гармати"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "ПП Вогнева Позиція ПП Зенітної Гармати"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "ПП Торнадо Гармата"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
 #: po/custom/fromJson.txt:169
 msgid "Adaptive AI with multiple personalities"
-msgstr ""
+msgstr "Адаптивна ШІ з декількома особистостями"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials08.name
@@ -6231,20 +6238,20 @@ msgstr "Вдосконалене виробництво ВЗІП"
 #. data/base/stats/features.json: $.Advmaterialslab.name
 #: po/custom/fromJson.txt:256
 msgid "Advancedmaterialslab"
-msgstr ""
+msgstr "Площа надщів"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #: po/custom/fromJson.txt:266
 msgid "Aerodynamic Jump Pack"
-msgstr ""
+msgstr "Пакет Jump Aerodynamic"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Aerodynamicslab.name
 #: po/custom/fromJson.txt:269
 msgid "Aerodynamicslab"
-msgstr ""
+msgstr "Аеродинамічна плита"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[3]
@@ -6341,19 +6348,19 @@ msgstr "Всі ВЗІПи покращуються автоматично"
 #. data/mp/tests/miza.json: $.player_2.name
 #: po/custom/fromJson.txt:482
 msgid "Ally"
-msgstr ""
+msgstr "Союзник"
 
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:485
 msgid "Alpha Campaign"
-msgstr ""
+msgstr "Компанія Альфа"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:488
 msgid "Alpha"
-msgstr ""
+msgstr "Альфа"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -6556,7 +6563,7 @@ msgstr "Кіборг озброєний протитанковою пусков�
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Озброєний протитанковою ракетою Lancer"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -6674,7 +6681,7 @@ msgstr "Броньована вартова вежа з Міні-ракетам�
 #. data/mp/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:688
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr ""
+msgstr "Броньована сторожова вежа з міні-ракетною установкою"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
@@ -6907,7 +6914,7 @@ msgstr "Штурмова Гармата"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:865
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Вежа з Штурмовим Кулеметом"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6919,7 +6926,7 @@ msgstr "Вогнева Позиція з Штурмовим Кулеметом"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:871
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Вартова Вежа з Штурмовим Кулеметом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -7005,7 +7012,7 @@ msgstr "Закріплені ВЗІПи атакують ворожі одини
 #. data/mp/stats/repair.json: $.AutoRepair.name
 #: po/custom/fromJson.txt:927
 msgid "Auto Repair"
-msgstr ""
+msgstr "Само-ремонт"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Autorepair-General.name
@@ -12971,7 +12978,7 @@ msgstr "Енергогенератор Звалищників"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5081
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Ремонтний центр \"Падальник\""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -14310,7 +14317,7 @@ msgstr "ВЗІП Штурмовий Кулемет"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5955
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "ВЗІП Посадковий Майданчик"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14514,7 +14521,7 @@ msgstr "ВЗІП ПУ 'Спис'"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6076
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "ВЗІП Кулемет"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14527,7 +14534,7 @@ msgstr "ВЗІП Кулемет"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6083
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "ВЗІП установка Міні-ракет"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -14643,7 +14650,7 @@ msgstr "Ударна Башта ВЗІП"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Sunburst.name
 #: po/custom/fromJson.txt:6166
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "ВЗІП сонячний спалах AA"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
@@ -14677,13 +14684,13 @@ msgstr "ВЗІП"
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6191
 msgid "Wall"
-msgstr ""
+msgstr "Стіна"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
 #: po/custom/fromJson.txt:6194
 msgid "Wallcorner"
-msgstr ""
+msgstr "Настінний куточок"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbWarehouse1.name
@@ -14806,7 +14813,7 @@ msgstr "Виверна"
 #: po/custom/fromJson.txt:6265
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Еліта"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14822,7 +14829,7 @@ msgstr "Зелений"
 #: po/custom/fromJson.txt:6273
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Герой"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14830,7 +14837,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6277
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "Професіонал"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14838,7 +14845,8 @@ msgstr ""
 #: po/custom/fromJson.txt:6281
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "\n"
+"Регулярний."
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14846,7 +14854,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6285
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Новобранець"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14854,7 +14862,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6289
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Особливий"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14862,7 +14870,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6293
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Підготовлений"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14870,29 +14878,30 @@ msgstr ""
 #: po/custom/fromJson.txt:6297
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Ветеран"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
+msgstr "Авторське право © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2020 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr ""
+msgstr "Файл Warzone 2100 / Mod"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
+msgstr "Файл Warzone 2100 / Mod"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr ""
+msgstr "Файл Warzone 2100 / Mod"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
@@ -14908,51 +14917,51 @@ msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Пост'ядерна стратегія реальному часі"
 
 #: po/custom/warzone2100.desktop.txt:3
 msgid "Strategy Game"
-msgstr ""
+msgstr "Стратегії гри"
 
 #: src/chat.cpp:63
 msgid "Global"
-msgstr ""
+msgstr "Глобальний"
 
 #: src/chat.cpp:67
 #: src/chat.cpp:73
 msgid "Allies"
-msgstr ""
+msgstr "Союзники"
 
 #: src/chat.cpp:75
 msgid "private to "
-msgstr ""
+msgstr "приватно до"
 
 #: src/chat.cpp:86
 msgid " and "
-msgstr ""
+msgstr " і "
 
 #: src/chat.cpp:173
 #: src/multiint.cpp:3633
 msgid "Spectators"
-msgstr ""
+msgstr "Глядачі"
 
 #: src/cheat.cpp:212
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s хоче увімкнути режим налагодження. Увімкнено: %s, Вимкнено: %s."
 
 #: src/cheat.cpp:221
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s хоче увімкнути режим налагодження. Увімкнено: %s, Вимкнено: %s."
 
 #: src/cheat.cpp:231
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "Режим налагодження тепер увімкнено!"
 
 #: src/cheat.cpp:238
 msgid "Debug mode now disabled!"
-msgstr ""
+msgstr "Режим налагодження тепер увімкнено!"
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:162
@@ -14970,7 +14979,7 @@ msgstr "директорія конфігурації"
 
 #: src/clparse.cpp:357
 msgid "Add data directory"
-msgstr ""
+msgstr "Додати каталог даних"
 
 #: src/clparse.cpp:357
 msgid "data directory"
@@ -15002,15 +15011,15 @@ msgstr "Грати у повноекранному режимі"
 
 #: src/clparse.cpp:362
 msgid "Load a specific game mode"
-msgstr ""
+msgstr "Завантажити конкретний ігровий режим"
 
 #: src/clparse.cpp:362
 msgid "level name"
-msgstr ""
+msgstr "Назва рівня"
 
 #: src/clparse.cpp:363
 msgid "Show options and exit"
-msgstr ""
+msgstr "Показати параметри і вийти"
 
 #: src/clparse.cpp:364
 msgid "Enable a global mod"
@@ -15040,7 +15049,7 @@ msgstr "Провокує краш для перевірки протикрашо
 
 #: src/clparse.cpp:369
 msgid "Load a saved skirmish game"
-msgstr ""
+msgstr "Завантажте збережену сутичку"
 
 #: src/clparse.cpp:369
 #: src/clparse.cpp:370
@@ -15049,7 +15058,7 @@ msgstr "збережена гра"
 
 #: src/clparse.cpp:370
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "Завантажте збережену компанію гри"
 
 #: src/clparse.cpp:371
 msgid "Play in windowed mode"
@@ -15085,7 +15094,7 @@ msgstr "Вимкнути звук"
 
 #: src/clparse.cpp:378
 msgid "Connect directly to IP/hostname"
-msgstr ""
+msgstr "Підключення безпосередньо до IP/hostname"
 
 #: src/clparse.cpp:378
 #: src/clparse.cpp:379
@@ -15094,27 +15103,27 @@ msgstr "хост"
 
 #: src/clparse.cpp:379
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "Підключатися безпосередньо до IP/hostname в якості глядача"
 
 #: src/clparse.cpp:380
 msgid "Go directly to host screen"
-msgstr ""
+msgstr "Перейти безпосередньо на головний екран"
 
 #: src/clparse.cpp:381
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Увімкнути апаратне стискання"
 
 #: src/clparse.cpp:382
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Увімкнути апаратне стискання"
 
 #: src/clparse.cpp:383
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Встановити gfx backend"
 
 #: src/clparse.cpp:393
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Використовувати налагодження gfx"
 
 #: src/clparse.cpp:394
 msgid "Set JS backend"
@@ -15537,27 +15546,27 @@ msgstr ""
 
 #: src/frontend.cpp:229
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Перейдіть на форуми та всі новини Warzone 2100! Натисніть на це посилання."
 
 #: src/frontend.cpp:230
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "Пожертвування: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:232
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "Допоможіть підтримати проект з нашими серверними витратами, натисніть це посилання."
 
 #: src/frontend.cpp:233
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Спілкуйтеся з гравцями в Discord або IRC"
 
 #: src/frontend.cpp:235
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Прив'яжіть до Discord або Freenode через веб-чат, натиснувши на це посилання."
 
 #: src/frontend.cpp:236
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Перевірити на наявність новішої версії"
 
 #: src/frontend.cpp:309
 msgid "Fast Play"
@@ -15597,15 +15606,15 @@ msgstr "Виклики"
 
 #: src/frontend.cpp:366
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "Завантажити гру для маркетингової кампанії"
 
 #: src/frontend.cpp:367
 msgid "Load Skirmish Game"
-msgstr ""
+msgstr "Почати Одиночну Гру"
 
 #: src/frontend.cpp:368
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Переглянути повтор Підзорної Ринки"
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -15614,25 +15623,25 @@ msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
 #: src/frontend.cpp:375
 #: src/frontend.cpp:397
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "Не вистачає відео для кампанії! Отримайте їх від http://wz2100.net"
 
 #: src/frontend.cpp:392
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "КАМПАНІЯ"
 
 #: src/frontend.cpp:531
 #: src/ingameop.cpp:1011
 msgid "Load Campaign Saved Game"
-msgstr ""
+msgstr "Завантажити гру для маркетингової кампанії"
 
 #: src/frontend.cpp:537
 #: src/ingameop.cpp:1015
 msgid "Load Skirmish Saved Game"
-msgstr ""
+msgstr "Почати Одиночну Гру"
 
 #: src/frontend.cpp:543
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Переглянути повтор Підзорної Ринки"
 
 #: src/frontend.cpp:604
 msgid "MULTI PLAYER"
@@ -15648,15 +15657,15 @@ msgstr "Приєднатись до Гри"
 
 #: src/frontend.cpp:608
 msgid "View Replay"
-msgstr ""
+msgstr "Дивитись повтор"
 
 #: src/frontend.cpp:613
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP порт 2100 повинен бути відкритий у вашій брандмауері або маршрутизатор для зберігання ігор!"
 
 #: src/frontend.cpp:658
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Завантажити повтор мережевої гри"
 
 #: src/frontend.cpp:697
 #: src/multiint.cpp:1380
@@ -15679,7 +15688,7 @@ msgstr "Опції Відео"
 
 #: src/frontend.cpp:701
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "Аудіо / Масштаб"
 
 #: src/frontend.cpp:702
 #: src/ingameop.cpp:574
@@ -15694,39 +15703,39 @@ msgstr "Призначення Клавіш"
 #: src/frontend.cpp:704
 #: src/ingameop.cpp:581
 msgid "Music Manager"
-msgstr ""
+msgstr "Менеджер музики"
 
 #: src/frontend.cpp:706
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Визначте директорію конфігурації"
 
 #: src/frontend.cpp:744
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Не вдалося відкрити каталог конфігурації у стандартному браузері файлів системи."
 
 #: src/frontend.cpp:746
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "Каталог конфігурації повідомляється як:"
 
 #: src/frontend.cpp:750
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Якщо працювати всередині контейнера / ізольованого середовища, це може відрізнятися від фактичного шляху на диску."
 
 #: src/frontend.cpp:752
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Перегляньте документацію для отримання більш детальної інформації про її знаходження вручну."
 
 #: src/frontend.cpp:753
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Не вдалося відкрити директорію конфігурації"
 
 #: src/frontend.cpp:775
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:776
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:777
 #: src/frontend.cpp:1257
@@ -15738,7 +15747,7 @@ msgstr "Повний Екран"
 #: src/frontend.cpp:986
 #: src/frontend.cpp:1963
 msgid "Unsupported"
-msgstr ""
+msgstr "Не підтримується"
 
 #: src/frontend.cpp:786
 #: src/frontend.cpp:795
@@ -15756,7 +15765,7 @@ msgstr "Вимкнено"
 
 #: src/frontend.cpp:787
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:788
 #: src/multiplay.cpp:2206
@@ -15777,19 +15786,19 @@ msgstr "Ввімкнено"
 
 #: src/frontend.cpp:815
 msgid "Rotating"
-msgstr ""
+msgstr "Обертання:"
 
 #: src/frontend.cpp:815
 msgid "Fixed"
-msgstr ""
+msgstr "Виправлено"
 
 #: src/frontend.cpp:820
 msgid "Instant"
-msgstr ""
+msgstr "Миттєво"
 
 #: src/frontend.cpp:820
 msgid "Tracked"
-msgstr ""
+msgstr "Відстежується"
 
 #: src/frontend.cpp:838
 #: src/ingameop.cpp:609
@@ -15799,7 +15808,7 @@ msgstr "Програвання Відео"
 #: src/frontend.cpp:843
 #: src/ingameop.cpp:614
 msgid "Scanlines"
-msgstr ""
+msgstr "Рядки пікселів"
 
 #: src/frontend.cpp:849
 #: src/ingameop.cpp:619
@@ -15808,22 +15817,22 @@ msgstr "Тіні"
 
 #: src/frontend.cpp:854
 msgid "Fog"
-msgstr ""
+msgstr "Туман"
 
 #: src/frontend.cpp:859
 #: src/ingameop.cpp:624
 #: src/input/context.cpp:57
 msgid "Radar"
-msgstr ""
+msgstr "Радар"
 
 #: src/frontend.cpp:864
 #: src/ingameop.cpp:629
 msgid "Radar Jump"
-msgstr ""
+msgstr "Радарний стрибок"
 
 #: src/frontend.cpp:869
 msgid "Screen Shake"
-msgstr ""
+msgstr "Тремтіння екрану"
 
 #: src/frontend.cpp:881
 msgid "GRAPHICS OPTIONS"
@@ -15831,16 +15840,16 @@ msgstr "ОПЦІЇ ГРАФІКИ"
 
 #: src/frontend.cpp:989
 msgid "Disabled"
-msgstr ""
+msgstr "Вимкнено"
 
 #: src/frontend.cpp:992
 msgid "Enabled"
-msgstr ""
+msgstr "Увімкнено"
 
 #: src/frontend.cpp:996
 #: src/frontend.cpp:1002
 msgid "Auto"
-msgstr ""
+msgstr "Автоматично"
 
 #: src/frontend.cpp:1047
 #: src/ingameop.cpp:149
@@ -15864,24 +15873,24 @@ msgstr "Субтитри"
 
 #: src/frontend.cpp:1068
 msgid "HRTF"
-msgstr ""
+msgstr "ГРТФ"
 
 #: src/frontend.cpp:1074
 #: src/frontend.cpp:1076
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "HRTF не підтримується на пристрої / системній / бібліотеці OpenAL"
 
 #: src/frontend.cpp:1080
 msgid "Map Zoom"
-msgstr ""
+msgstr "Збільшення мапи"
 
 #: src/frontend.cpp:1085
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "Віддалити мапу"
 
 #: src/frontend.cpp:1090
 msgid "Radar Zoom"
-msgstr ""
+msgstr "Радарне збільшення"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15889,20 +15898,21 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:1109
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "АУДІО / ZOM ПАРАМЕТРИ"
 
 #: src/frontend.cpp:1221
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "В повноекранному режимі Fullscreen розширення збігається з робочим столом \n"
+"(або в доступному режимі віконного менеджера)."
 
 #: src/frontend.cpp:1223
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Ви можете змінити роздільну здатність шляхом нормального зміни розміру вікна. (Спробуйте перетягування куту/краю.)"
 
 #: src/frontend.cpp:1253
 msgid "Desktop Full"
-msgstr ""
+msgstr "Повний робочий стіл"
 
 #: src/frontend.cpp:1255
 msgid "Windowed"
@@ -16239,7 +16249,7 @@ msgstr ""
 #: src/ingameop.cpp:176
 #: src/ingameop.cpp:1051
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "Тактичний інтерфейс (значок цільового джерела): Показати"
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:1055
