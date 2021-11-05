@@ -7074,7 +7074,7 @@
 		"name": "Howitzer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage04",
-			"R-Wpn-Cannon-Damage05",
+			"R-Wpn-Mortar02Hvy",
 			"R-Sys-Sensor-Upgrade01"
 		],
 		"researchPoints": 9000,
