@@ -283,7 +283,7 @@ function eventGameInit()
 
 function setLimits()
 {
-	setDroidLimit(selectedPlayer, 100, DROID_ANY);
+	setDroidLimit(selectedPlayer, 101, DROID_ANY); //note: the transporter is a unit you own
 	setDroidLimit(selectedPlayer, 10, DROID_COMMAND);
 	setDroidLimit(selectedPlayer, 15, DROID_CONSTRUCT);
 
