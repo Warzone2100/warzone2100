@@ -451,34 +451,38 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_crispness), "crispness must be number");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_scale), "scale must be number");
 
-	int32_t width = JSValueToInt32(ctx, jsVal_width);
-	int32_t height = JSValueToInt32(ctx, jsVal_height);
-	int32_t range = JSValueToInt32(ctx, jsVal_range);
-	int32_t scale = JSValueToInt32(ctx, jsVal_scale);
-	int32_t crispness = JSValueToInt32(ctx, jsVal_crispness);
+	uint32_t width = JSValueToUint32(ctx, jsVal_width);
+	uint32_t height = JSValueToUint32(ctx, jsVal_height);
+	uint32_t range = JSValueToUint32(ctx, jsVal_range);
+	uint32_t scale = JSValueToUint32(ctx, jsVal_scale);
+	uint32_t crispness = JSValueToUint32(ctx, jsVal_crispness);
 
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, width > 0, "width must be positive");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, height > 0, "height must be positive");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, range > 0, "range must be positive");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, scale > 0, "scale must be positive");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, crispness > 0, "crispness must be positive");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, width > 0, "width must be > 0");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, height > 0, "height must be > 0");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, range > 0, "range must be > 0");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, scale > 0, "scale must be > 0");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, crispness > 0, "crispness must be > 0");
 
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, width <= 256, "width must be <= 256");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, height <= 256, "height must be <= 256");
 
-	int32_t normalizeToRange = 0;
+	uint32_t normalizeToRange = 0;
 	if (argc >= 6) {
 		JSValue jsVal_normalizeToRange = argv[5];
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_normalizeToRange),
 		                              "normalizeToRange must be number");
-		normalizeToRange = JSValueToInt32(ctx, jsVal_normalizeToRange);
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, normalizeToRange >= 0,
+		int64_t normalizeToRange_int64 = 0;
+		int result = JS_ToInt64(ctx, &normalizeToRange_int64, jsVal_normalizeToRange);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, result == 0,
+									  "JS_ToInt64 failed - normalizeToRange must be an integer >= 0");
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, normalizeToRange_int64 >= 0 && normalizeToRange_int64 <= UINT32_MAX,
 		                              "normalizeToRange must be positive or zero");
+		normalizeToRange = static_cast<uint32_t>(normalizeToRange_int64);
 	}
 
 	struct RiggedRegion
 	{
-		int32_t x1, y1, x2, y2;
+		uint32_t x1, y1, x2, y2;
 		JSValue callback;
 	};
 
@@ -541,10 +545,10 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 
 			riggedRegions.push_back(RiggedRegion
 			{
-				JSValueToInt32(ctx, jsVal_x1),
-				JSValueToInt32(ctx, jsVal_y1),
-				JSValueToInt32(ctx, jsVal_x2),
-				JSValueToInt32(ctx, jsVal_y2),
+				JSValueToUint32(ctx, jsVal_x1),
+				JSValueToUint32(ctx, jsVal_y1),
+				JSValueToUint32(ctx, jsVal_x2),
+				JSValueToUint32(ctx, jsVal_y2),
 				JS_DupValue(ctx, jsVal_callback)
 			});
 		};
@@ -554,19 +558,19 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, size <= UINT16_MAX,
 	                              "Requested data too large to fit into Array");
 
-	size_t maxLayerSize = (width + 1) * (height + 1);
+	size_t maxLayerSize = static_cast<size_t>((width + 1) * (height + 1));
 
 	// This check covers a lot of other multiplications.
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, maxLayerSize / (width + 1) == height + 1, "integer overflow");
 
-	std::vector<int32_t> noiseData(size, 0);
+	std::vector<uint32_t> noiseData(size, 0);
 
 	// Allocate layer data once and reuse it for performance.
-	std::vector<int32_t> layerData(maxLayerSize);
+	std::vector<uint32_t> layerData(maxLayerSize);
 
-	int32_t layerScale = scale;
-	int32_t layerRange = range;
-	int32_t layerIdx = -1;
+	uint32_t layerScale = scale;
+	uint32_t layerRange = range;
+	uint32_t layerIdx = -1;
 
 	do
 	{
@@ -574,16 +578,16 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		layerRange = layerRange * crispness / 10;
 		++layerIdx;
 
-		int32_t layerWidth = width / layerScale + 1;
-		int32_t layerHeight = height / layerScale + 1;
+		uint32_t layerWidth = width / layerScale + 1;
+		uint32_t layerHeight = height / layerScale + 1;
 
-		int32_t layerScaleArea = layerScale * layerScale;
+		uint32_t layerScaleArea = layerScale * layerScale;
 
-		for (size_t x = 0; x < layerWidth; ++x)
+		for (uint32_t x = 0; x < layerWidth; ++x)
 		{
-			for (size_t y = 0; y < layerHeight; ++y)
+			for (uint32_t y = 0; y < layerHeight; ++y)
 			{
-				size_t mapX = x * layerScale, mapY = y * layerScale;
+				uint32_t mapX = x * layerScale, mapY = y * layerScale;
 
 				bool rigged = false;
 				for (const auto &r : riggedRegions)
@@ -593,16 +597,16 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 						rigged = true;
 						JSValue callArgv[4] =
 						{
-							JS_NewInt32(ctx, mapX),
-							JS_NewInt32(ctx, mapY),
-							JS_NewInt32(ctx, layerIdx),
-							JS_NewInt32(ctx, layerRange)
+							JS_NewUint32(ctx, mapX),
+							JS_NewUint32(ctx, mapY),
+							JS_NewUint32(ctx, layerIdx),
+							JS_NewUint32(ctx, layerRange)
 						};
 						JSValue jsVal_ret = JS_Call(ctx, r.callback, this_val, 4, callArgv);
 						auto free_ret_ref = gsl::finally([ctx, jsVal_ret] { JS_FreeValue(ctx, jsVal_ret); });
 						SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_ret),
 							"riggedRegion callback must return number");
-						int32_t ret = JSValueToInt32(ctx, jsVal_ret);
+						uint32_t ret = JSValueToUint32(ctx, jsVal_ret);
 						SCRIPT_ASSERT_AND_RETURNERROR(ctx, ret >= 0 && ret < layerRange,
 							"riggedRegion callback must return non-negative number within range");
 						layerData[x * layerHeight + y] = ret;
@@ -613,26 +617,26 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 				{
 					// This is equivalent to gameRand(layerRange).
 					uint32_t num = data.mt() % layerRange;
-					layerData[x * layerHeight + y] = (int32_t)num;
+					layerData[x * layerHeight + y] = num;
 				}
 			}
 		}
 
 
-		for (size_t x = 0; x < layerWidth - 1; ++x)
+		for (uint32_t x = 0; x < layerWidth - 1; ++x)
 		{
-			for (size_t y = 0; y < layerHeight - 1; ++y)
+			for (uint32_t y = 0; y < layerHeight - 1; ++y)
 			{
-				int32_t mapX = x * layerScale, mapY = y * layerScale;
+				uint32_t mapX = x * layerScale, mapY = y * layerScale;
 
-				int32_t tl = layerData[x * layerHeight + y];
-				int32_t tr = layerData[(x + 1) * layerHeight + y];
-				int32_t bl = layerData[x * layerHeight + (y + 1)];
-				int32_t br = layerData[(x + 1) * layerHeight + (y + 1)];
+				uint32_t tl = layerData[x * layerHeight + y];
+				uint32_t tr = layerData[(x + 1) * layerHeight + y];
+				uint32_t bl = layerData[x * layerHeight + (y + 1)];
+				uint32_t br = layerData[(x + 1) * layerHeight + (y + 1)];
 
-				for (size_t innerX = 0; innerX < layerScale; ++innerX)
+				for (uint32_t innerX = 0; innerX < layerScale; ++innerX)
 				{
-					for (size_t innerY = 0; innerY < layerScale; ++innerY)
+					for (uint32_t innerY = 0; innerY < layerScale; ++innerY)
 					{
 						// Interpolation.
 						noiseData[(mapX + innerX) * height + (mapY + innerY)] += (
@@ -652,20 +656,20 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	if (normalizeToRange > 0)
 	{
 		auto minmax = std::minmax_element(noiseData.begin(), noiseData.end());
-		int32_t min = *minmax.first;
-		int32_t max = *minmax.second;
+		uint32_t min = *minmax.first;
+		uint32_t max = *minmax.second;
 		std::transform(
 			noiseData.begin(), noiseData.end(), noiseData.begin(),
-			[min, max, normalizeToRange] (int32_t val)
+			[min, max, normalizeToRange] (uint32_t val)
 			{
 				return (val - min) * normalizeToRange / (max - min);
 			});
 	}
 
 	JSValue retVal = JS_NewArray(ctx);
-	for (size_t i = 0; i < size; ++i)
+	for (uint32_t i = 0; i < size; ++i)
 	{
-		JS_SetPropertyUint32(ctx, retVal, i, JS_NewInt32(ctx, noiseData[i]));
+		JS_SetPropertyUint32(ctx, retVal, i, JS_NewUint32(ctx, noiseData[i]));
 	}
 	return retVal;
 }
