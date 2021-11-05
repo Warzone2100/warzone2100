@@ -7916,11 +7916,10 @@
 		"msgName": "RES_W_M_AC2",
 		"name": "Thermal Imaging Mortar Shells",
 		"requiredResearch": [
-			"R-Wpn-Mortar-Acc01",
-			"R-Struc-Research-Upgrade04"
+			"R-Wpn-Mortar-Acc01"
 		],
-		"researchPoints": 5000,
-		"researchPower": 156,
+		"researchPoints": 4800,
+		"researchPower": 150,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7947,11 +7946,10 @@
 		"msgName": "RES_W_M_AC3",
 		"name": "Target Acquisition Mortar Shells",
 		"requiredResearch": [
-			"R-Struc-Research-Upgrade05",
 			"R-Wpn-Mortar-Acc02"
 		],
-		"researchPoints": 8800,
-		"researchPower": 275,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"results": [
 			{
 				"class": "Weapon",
