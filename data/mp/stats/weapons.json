@@ -3304,7 +3304,7 @@
 		"name": "Incendiary Mortar",
 		"numExplosions": 10,
 		"periodicalDamage": 30,
-		"periodicalDamageRadius": 160,
+		"periodicalDamageRadius": 128,
 		"periodicalDamageTime": 60,
 		"periodicalDamageWeaponClass": "HEAT",
 		"periodicalDamageWeaponEffect": "FLAMER",
@@ -3364,7 +3364,7 @@
 		"weight": 2000
 	},
 	"Mortar2Mk1": {
-		"buildPoints": 1000,
+		"buildPoints": 900,
 		"buildPower": 200,
 		"damage": 120,
 		"designable": 1,
@@ -3405,7 +3405,7 @@
 		"weight": 5000
 	},
 	"Mortar3ROTARYMk1": {
-		"buildPoints": 1000,
+		"buildPoints": 900,
 		"buildPower": 200,
 		"damage": 60,
 		"designable": 1,
