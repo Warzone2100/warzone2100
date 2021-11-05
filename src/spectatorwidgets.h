@@ -26,6 +26,7 @@
 #include "lib/widget/widget.h"
 #include "lib/widget/form.h"
 
+bool specLayerInit(bool showButton = true);
 void specToggleOverlays();
 bool specStatsViewShutdown();
 void specStatsViewCreate();

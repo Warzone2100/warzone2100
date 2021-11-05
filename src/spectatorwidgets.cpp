@@ -29,7 +29,9 @@
 
 #include "frontend.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "hci.h"
+#include "intimage.h"
 #include "intdisplay.h"
 #include "multiplay.h"
 #include "power.h"
@@ -76,13 +78,72 @@ private:
 };
 
 static std::shared_ptr<W_SCREEN> statsOverlay = nullptr;
+static std::shared_ptr<W_BUTTON> specStatsButton = nullptr;
 static std::shared_ptr<SpectatorStatsView> globalStatsForm = nullptr;
+
+#define SPEC_STATS_BUTTON_X RET_X
+#define SPEC_STATS_BUTTON_Y 20
+
+bool specLayerInit(bool showButton /*= true*/)
+{
+	if (selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator
+			 && realSelectedPlayer < NetPlay.players.size() && NetPlay.players[realSelectedPlayer].isSpectator)
+	{
+		if (!statsOverlay)
+		{
+			statsOverlay = W_SCREEN::make();
+			statsOverlay->psForm->hide(); // hiding the root form does not stop display of children, but *does* prevent it from accepting mouse over itself - i.e. basically makes it transparent
+		}
+		widgRegisterOverlayScreen(statsOverlay, std::numeric_limits<uint16_t>::max() - 3);
+
+		// Add the spec stats button
+		if (showButton && !specStatsButton)
+		{
+			int x = SPEC_STATS_BUTTON_X;
+			int y = SPEC_STATS_BUTTON_Y;
+			int width = iV_GetImageWidth(IntImages, IMAGE_SPECSTATS_UP);
+			int height = iV_GetImageHeight(IntImages, IMAGE_SPECSTATS_UP);
+			ASSERT_OR_RETURN(true, width > 0 && height > 0, "Possibly missing specstats button image?");
+
+			specStatsButton = std::make_shared<W_BUTTON>();
+			specStatsButton->displayFunction = intDisplayImageHilight;
+			specStatsButton->UserData = PACKDWORD_TRI(0, IMAGE_SPECSTATS_DOWN, IMAGE_SPECSTATS_UP);
+			specStatsButton->pTip = _("Show Player Stats");
+			specStatsButton->addOnClickHandler([](W_BUTTON& button){
+				widgScheduleTask([](){
+					specStatsViewCreate();
+				});
+			});
+			specStatsButton->setGeometry(x, y, width, height);
+			statsOverlay->psForm->attach(specStatsButton);
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+void specStatsViewClose()
+{
+	if (globalStatsForm)
+	{
+		globalStatsForm->deleteLater();
+		globalStatsForm = nullptr;
+	}
+
+	// Show the spec stats button
+	if (specStatsButton)
+	{
+		specStatsButton->show();
+	}
+}
 
 void specToggleOverlays()
 {
-	if (globalStatsForm || statsOverlay)
+	if (globalStatsForm)
 	{
-		specStatsViewShutdown();
+		specStatsViewClose();
 	}
 	else if (selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator
 			 && realSelectedPlayer < NetPlay.players.size() && NetPlay.players[realSelectedPlayer].isSpectator)
@@ -97,18 +158,14 @@ bool specStatsViewShutdown()
 	{
 		widgRemoveOverlayScreen(statsOverlay);
 	}
-	if (globalStatsForm)
-	{
-		globalStatsForm->deleteLater();
-		globalStatsForm = nullptr;
-	}
+	specStatsViewClose();
+	specStatsButton = nullptr; // widget is owned by parent form, so will be detached / destroyed there as long as we don't keep a ref
 	statsOverlay = nullptr;
 	return true;
 }
 
 void specStatsViewCreate()
 {
-	specStatsViewShutdown();
 	if (realSelectedPlayer >= NetPlay.players.size() || !NetPlay.players[realSelectedPlayer].isSpectator)
 	{
 		if (statsOverlay)
@@ -117,13 +174,26 @@ void specStatsViewCreate()
 		}
 		return;
 	}
-	statsOverlay = W_SCREEN::make();
-	statsOverlay->psForm->hide(); // hiding the root form does not stop display of children, but *does* prevent it from accepting mouse over itself - i.e. basically makes it transparent
-	widgRegisterOverlayScreen(statsOverlay, std::numeric_limits<uint16_t>::max() - 3);
-	globalStatsForm = SpectatorStatsView::make();
-	if (globalStatsForm)
+	if (!statsOverlay)
 	{
-		statsOverlay->psForm->attach(globalStatsForm);
+		specLayerInit();
+		if (!statsOverlay)
+		{
+			return;
+		}
+	}
+	if (!globalStatsForm)
+	{
+		globalStatsForm = SpectatorStatsView::make();
+		if (globalStatsForm)
+		{
+			statsOverlay->psForm->attach(globalStatsForm);
+		}
+	}
+	// Hide the spec stats button
+	if (specStatsButton)
+	{
+		specStatsButton->hide();
 	}
 }
 
@@ -710,7 +780,7 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 		auto psParent = std::dynamic_pointer_cast<SpectatorStatsView>(button.parent());
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 		widgScheduleTask([](){
-			specStatsViewShutdown();
+			specStatsViewClose();
 		});
 	});
 	result->closeButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
