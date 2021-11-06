@@ -5674,6 +5674,7 @@ static void randomizeOptions()
 		updateMapWidgets(mapData);
 		loadMapPreview(false);
 		loadMapChallengeAndPlayerSettings();
+		debug(LOG_INFO, "Switching map: %s (builtin: %d)", (mapData->pName) ? mapData->pName : "n/a", (int)builtInMap);
 	}
 
 	// Reset and randomize player positions, also to guard
@@ -6879,6 +6880,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 					game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
 					loadMapPreview(true);
 					loadMapChallengeAndPlayerSettings();
+					debug(LOG_INFO, "Switching map: %s (builtin: %d)", (mapData->pName) ? mapData->pName : "n/a", (int)builtInMap);
 
 					WzString name = formatGameName(game.map);
 					widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
