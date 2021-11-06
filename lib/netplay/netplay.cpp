@@ -1751,7 +1751,7 @@ void NETflush()
 			// We are the host, send directly to player.
 			if (connected_bsocket[player] != nullptr)
 			{
-				socketFlush(connected_bsocket[player], &compressedRawLen);
+				socketFlush(connected_bsocket[player], player, &compressedRawLen);
 				nStats.rawBytes.sent += compressedRawLen;
 			}
 		}
@@ -1760,7 +1760,7 @@ void NETflush()
 			// We are the host, send directly to player.
 			if (tmp_socket[player] != nullptr)
 			{
-				socketFlush(tmp_socket[player], &compressedRawLen);
+				socketFlush(tmp_socket[player], std::numeric_limits<uint8_t>::max(), &compressedRawLen);
 				nStats.rawBytes.sent += compressedRawLen;
 			}
 		}
@@ -1769,7 +1769,7 @@ void NETflush()
 	{
 		if (bsocket != nullptr)
 		{
-			socketFlush(bsocket, &compressedRawLen);
+			socketFlush(bsocket, NetPlay.hostPlayer, &compressedRawLen);
 			nStats.rawBytes.sent += compressedRawLen;
 		}
 	}
@@ -4429,7 +4429,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool a
 	{
 		return false;  // Connection dropped while sending NET_JOIN.
 	}
-	socketFlush(bsocket);  // Make sure the message was completely sent.
+	socketFlush(bsocket, NetPlay.hostPlayer);  // Make sure the message was completely sent.
 
 	i = wzGetTicks();
 	// Loop until we've been accepted into the game

@@ -121,7 +121,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 // Sockets, compressed.
 WZ_DECL_NONNULL(1) void socketBeginCompression(Socket *sock); ///< Makes future data sent compressed, and future data received expected to be compressed.
 WZ_DECL_NONNULL(1) bool socketReadDisconnected(Socket *sock);  ///< If readNoInt returned 0, returns true if this is the result of a disconnect, or false if the input compressed data just hasn't produced any output bytes.
-WZ_DECL_NONNULL(1) void socketFlush(Socket *sock, size_t *rawByteCount = nullptr); ///< Actually sends the data written with writeAll. Only useful on compressed sockets. Note that flushing too often makes compression less effective. Raw count of bytes (after compression) returned in rawByteCount.
+WZ_DECL_NONNULL(1) void socketFlush(Socket *sock, uint8_t player, size_t *rawByteCount = nullptr); ///< Actually sends the data written with writeAll. Only useful on compressed sockets. Note that flushing too often makes compression less effective. Raw count of bytes (after compression) returned in rawByteCount.
 
 // Socket sets.
 WZ_DECL_ALLOCATION SocketSet *allocSocketSet();                         ///< Constructs a SocketSet.
