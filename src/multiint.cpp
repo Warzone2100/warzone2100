@@ -4783,6 +4783,8 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 {
 	ASSERT_HOST_ONLY(return);
 
+	debug(LOG_INFO, "Kicking player %u (%s). Reason: %s", (unsigned int)player_id, getPlayerName(player_id), reason);
+
 	// send a kick msg
 	NETbeginEncode(NETbroadcastQueue(), NET_KICK);
 	NETuint32_t(&player_id);
@@ -4791,7 +4793,6 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	NETend();
 	NETflush();
 	wzDelay(300);
-	debug(LOG_NET, "Kicking player %u (%s). Reason: %s", (unsigned int)player_id, getPlayerName(player_id), reason);
 
 	ActivityManager::instance().hostKickPlayer(NetPlay.players[player_id], type, reason);
 
