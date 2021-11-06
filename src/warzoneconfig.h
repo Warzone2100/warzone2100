@@ -122,6 +122,8 @@ bool war_getDisableReplayRecording();
 void war_setDisableReplayRecording(bool disable);
 uint32_t war_getMPInactivityMinutes();
 void war_setMPInactivityMinutes(uint32_t minutes);
+uint16_t war_getMPopenSpectatorSlots();
+void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
 
 /**
  * Enable or disable sound initialization

@@ -7069,7 +7069,7 @@ void WzMultiplayerOptionsTitleUI::start()
 		resetPlayerConfiguration(true);
 		memset(&locked, 0, sizeof(locked));
 		spectatorHost = false;
-		defaultOpenSpectatorSlots = 0;
+		defaultOpenSpectatorSlots = war_getMPopenSpectatorSlots();
 		loadMapChallengeAndPlayerSettings(true);
 		game.isMapMod = false;
 		game.isRandom = false;

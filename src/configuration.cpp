@@ -483,6 +483,8 @@ bool loadConfig()
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
+	int openSpecSlotsIntValue = iniGetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots()).value();
+	war_setMPopenSpectatorSlots(static_cast<uint16_t>(std::max<int>(0, std::min<int>(openSpecSlotsIntValue, MAX_SPECTATOR_SLOTS))));
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -603,6 +605,11 @@ bool saveConfig()
 			{
 				iniSetString("gameName", game.name);			//  last hosted game
 				iniSetInteger("inactivityMinutesMP", game.inactivityMinutes);
+
+				// remember number of spectator slots in MP games
+				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
+				war_setMPopenSpectatorSlots(currentSpectatorSlotInfo.totalSpectatorSlots);
+				iniSetInteger("openSpectatorSlotsMP", (int)currentSpectatorSlotInfo.totalSpectatorSlots);
 			}
 			iniSetString("mapName", game.map);				//  map name
 			iniSetString("mapHash", game.hash.toString());          //  map hash
