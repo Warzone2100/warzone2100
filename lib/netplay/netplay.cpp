@@ -1661,6 +1661,11 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 			if (sockets[player] != nullptr && player != queue.exclude)
 			{
 				uint8_t *rawData = message->rawDataDup();
+				if (!rawData)
+				{
+					debug(LOG_FATAL, "Failed to allocate raw data (message type: %" PRIu8 ", player: %d)", message->type, player);
+					abort();
+				}
 				ssize_t rawLen   = message->rawLen();
 				size_t compressedRawLen;
 				result = writeAll(sockets[player], rawData, rawLen, &compressedRawLen);
