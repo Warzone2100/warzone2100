@@ -542,7 +542,7 @@ bool wzapi::syncRequest(WZAPI_PARAMS(int32_t reqId, int32_t _x, int32_t _y, opti
 	const BASE_OBJECT *psObj1 = nullptr, *psObj2 = nullptr;
 	if (_psObj1.has_value())
 	{
-		psObj = _psObj1.value();
+		psObj1 = _psObj1.value();
 		SCRIPT_ASSERT(false, context, psObj1, "No valid object (obj1) provided");
 	}
 	if (_psObj2.has_value())
@@ -1869,7 +1869,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 //-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
 //-- pass -1 as both x and y.
 //--
-wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list bodybodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
+wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	bool onMission = (x == -1) && (y == -1);
