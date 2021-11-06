@@ -107,7 +107,7 @@ bool decode_uint32_t(uint8_t b, uint32_t &v, unsigned n)
 uint8_t *NetMessage::rawDataDup() const
 {
 #if SIZE_MAX > UINT32_MAX
-	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Trying to duplicate a very large packet (%zu bytes).", data.size());
+	ASSERT_OR_RETURN(nullptr, data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Trying to duplicate a very large packet (%zu bytes). (Message type: %" PRIu8 ")", data.size(), type);
 #endif
 	uint32_t dataSizeU32 = static_cast<uint32_t>(data.size());
 	unsigned encodedLengthOfSize = encodedlength_uint32_t(dataSizeU32);
