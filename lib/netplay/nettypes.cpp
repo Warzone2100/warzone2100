@@ -552,7 +552,7 @@ bool NETend()
 		{
 			NETsend(queueInfo, &queue->getMessageForNet());
 			queue->popMessageForNet();
-			ASSERT(queue->numMessagesForNet() == 0, "Queue not empty.");
+			ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining). (message = type: %" PRIu8 ", size: %zu), (queue = index: %" PRIu8 "; queueType: %" PRIu8 "; exclude: %" PRIu8 "; isPair: %d)", queue->numMessagesForNet(), message.type, message.data.size(), queueInfo.index, queueInfo.queueType, queueInfo.exclude, (int)queueInfo.isPair);
 		}
 
 		// We have ended the serialisation, so mark the direction invalid

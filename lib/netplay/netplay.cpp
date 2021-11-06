@@ -1675,7 +1675,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 				else if (result == SOCKET_ERROR)
 				{
 					// Write error, most likely client disconnect.
-					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+					debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to %" PRIu8 ": %s", message->type, message->rawLen(), compressedRawLen, player, strSockError(getSockErr()));
 					if (!isTmpQueue)
 					{
 						NETlogEntry("client disconnect?", SYNC_FLAG, player);
