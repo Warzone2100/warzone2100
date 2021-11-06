@@ -2351,6 +2351,10 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 		}
 	}
 
+	if (!quietly)
+	{
+		debug(LOG_INFO, "player: %" PRIu32 " (gameTime: %" PRIu32 ")", playerIndex, gameTime);
+	}
 	if (!NETisReplay() || playerIndex != realSelectedPlayer)
 	{
 		syncDebug("player%u", (unsigned)playerIndex);
