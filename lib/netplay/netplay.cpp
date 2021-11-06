@@ -3886,7 +3886,7 @@ static void NETallowJoining()
 
 					char buf[250] = {'\0'};
 					const char* pPlayerType = (NetPlay.players[index].isSpectator) ? "Spectator" : "Player";
-					snprintf(buf, sizeof(buf), "%s %s has joined, IP is: %s", pPlayerType, name, NetPlay.players[index].IPtextAddress);
+					snprintf(buf, sizeof(buf), "%s[%" PRIu8 "] %s has joined, IP is: %s", pPlayerType, index, name, NetPlay.players[index].IPtextAddress);
 					debug(LOG_INFO, "%s", buf);
 					NETlogEntry(buf, SYNC_FLAG, index);
 
