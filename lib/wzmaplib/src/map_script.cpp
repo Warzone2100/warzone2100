@@ -510,16 +510,16 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 			}
 		});
 
-		for (size_t i = 0; i < numRiggedRegions; ++i)
+		for (uint32_t i = 0; i < numRiggedRegions; ++i)
 		{
 			JSValue jsVal_riggedRegion = JS_GetPropertyUint32(ctx, jsVal_riggedRegions, i);
 			auto free_riggedRegion_ref = gsl::finally([ctx, jsVal_riggedRegion] { JS_FreeValue(ctx, jsVal_riggedRegion); });
 			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, jsVal_riggedRegion),
-			                              "riggedRegion %zu must be array", i);
+			                              "riggedRegion %" PRIu32 " must be array", i);
 			uint64_t regionArrayLength = 0;
 			bool bGotRegionArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegion, regionArrayLength);
 			SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotRegionArrayLength && regionArrayLength == 5,
-			                              "riggedRegion[%zu] length must be 5; actual length %" PRIu64,
+			                              "riggedRegion[%" PRIu32 "] length must be 5; actual length %" PRIu64,
 			                              i, regionArrayLength);
 			JSValue jsVal_x1 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 0);
 			JSValue jsVal_y1 = JS_GetPropertyUint32(ctx, jsVal_riggedRegion, 1);
@@ -536,12 +536,12 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 				JS_FreeValue(ctx, jsVal_callback);
 			});
 
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_x1), "riggedRegion[%zu][0] must be number", i);
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_y1), "riggedRegion[%zu][1] must be number", i);
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_x2), "riggedRegion[%zu][2] must be number", i);
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_y2), "riggedRegion[%zu][3] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_x1), "riggedRegion[%" PRIu32 "][0] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_y1), "riggedRegion[%" PRIu32 "][1] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_x2), "riggedRegion[%" PRIu32 "][2] must be number", i);
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_y2), "riggedRegion[%" PRIu32 "][3] must be number", i);
 			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsFunction(ctx, jsVal_callback),
-			                              "riggedRegion[%zu][4] must be function", i);
+			                              "riggedRegion[%" PRIu32 "][4] must be function", i);
 
 			riggedRegions.push_back(RiggedRegion
 			{
@@ -554,11 +554,11 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		};
 	}
 
-	size_t size = static_cast<size_t>(width) * static_cast<size_t>(height);
+	uint32_t size = width * height;
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, size <= UINT16_MAX,
 	                              "Requested data too large to fit into Array");
 
-	size_t maxLayerSize = static_cast<size_t>((width + 1) * (height + 1));
+	uint32_t maxLayerSize = (width + 1) * (height + 1);
 
 	// This check covers a lot of other multiplications.
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, maxLayerSize / (width + 1) == height + 1, "integer overflow");
