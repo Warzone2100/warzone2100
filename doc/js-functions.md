@@ -97,14 +97,14 @@ Returns a boolean that is true on success. (3.2+ only)
 Reset the trigger on an label. Next time a unit enters the area, it will trigger
 an area event. Next time an object or a group is seen, it will trigger a seen event.
 Optionally add a filter on it in the second parameter, which can
-be a specific player to watch for, or ```ALL_PLAYERS``` by default.
+be a specific player to watch for, or `ALL_PLAYERS` by default.
 This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 
 ## resetArea(labelName[, playerFilter])
 
 Reset the trigger on an area. Next time a unit enters the area, it will trigger
 an area event. Optionally add a filter on it in the second parameter, which can
-be a specific player to watch for, or ```ALL_PLAYERS``` by default.
+be a specific player to watch for, or `ALL_PLAYERS` by default.
 This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
 
 ## enumLabels([filterLabelType])
@@ -135,14 +135,14 @@ Fetch something denoted by a label, a map position or its object ID. A label ref
 a position or a **game object** on the map defined using the map editor and stored
 together with the map. In this case, the only argument is a text label. The function
 returns an object that has a type variable defining what it is (in case this is
-unclear). This type will be one of ```DROID```, ```STRUCTURE```, ```FEATURE```, ```AREA```, ```GROUP``` or ```POSITION```.
-The ```AREA``` has defined 'x', 'y', 'x2', and 'y2', while ```POSITION``` has only defined 'x' and 'y'.
-The ```GROUP``` type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
+unclear). This type will be one of `DROID`, `STRUCTURE`, `FEATURE`, `AREA`, `GROUP` or `POSITION`.
+The `AREA` has defined 'x', 'y', 'x2', and 'y2', while `POSITION` has only defined 'x' and 'y'.
+The `GROUP` type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
 This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
 undefined value is returned. If whatever object the label should point at no longer exists,
 a null value is returned.
 
-You can also fetch a ```STRUCTURE``` or ```FEATURE``` type game object from a given map position (if any).
+You can also fetch a `STRUCTURE` or `FEATURE` type game object from a given map position (if any).
 This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
 manner, since they do not have a unique placement on map tiles. Finally, you can fetch an object using
 its ID, in which case you need to pass its type, owner and unique object ID. This is an
@@ -151,10 +151,10 @@ operation of O(n) algorithmic complexity. (3.2+ only)
 ## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
 
 Returns an array of game objects seen within the given area that passes the optional filter
-which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
-```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
+which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, filter is
+`ALL_PLAYERS`. Finally an optional parameter can specify whether only visible objects should be
 returned; by default only visible objects are returned. The label can either be actual
-positions or a label to an ```AREA```. Calling this function is much faster than iterating over all
+positions or a label to an `AREA`. Calling this function is much faster than iterating over all
 game objects using other enum functions. (3.2+ only)
 
 ## enumGroup(groupId)
@@ -226,7 +226,7 @@ Set the colour of the fog (4.2.5+ only)
 
 ## setWeather(weatherType)
 
-Set the current weather. This should be one of ```WEATHER_RAIN```, ```WEATHER_SNOW``` or ```WEATHER_CLEAR```. (3.2+ only)
+Set the current weather. This should be one of `WEATHER_RAIN`, `WEATHER_SNOW` or `WEATHER_CLEAR`. (3.2+ only)
 
 ## setSky(textureFilename, windSpeed, scale)
 
@@ -246,10 +246,10 @@ Make the camera follow the given droid object around. Pass in a null object to s
 
 ## addSpotter(x, y, player, range, radar, expiry)
 
-Add an invisible viewer at a given position for given player that shows map in given range. ```radar```
+Add an invisible viewer at a given position for given player that shows map in given range. `radar`
 is false for vision reveal, or true for radar reveal. The difference is that a radar reveal can be obstructed
-by ECM jammers. ```expiry```, if non-zero, is the game time at which the spotter shall automatically be
-removed. The function returns a unique ID that can be used to remove the spotter with ```removeSpotter```. (3.2+ only)
+by ECM jammers. `expiry`, if non-zero, is the game time at which the spotter shall automatically be
+removed. The function returns a unique ID that can be used to remove the spotter with `removeSpotter`. (3.2+ only)
 
 ## removeSpotter(spotterId)
 
@@ -268,7 +268,7 @@ looks, or to add variety to the looks of droids in campaign missions. (3.2+ only
 
 ## changePlayerColour(player, colour)
 
-Change a player's colour slot. The current player colour can be read from the ```playerData``` array. There are as many
+Change a player's colour slot. The current player colour can be read from the `playerData` array. There are as many
 colour slots as the maximum number of players. (3.2.3+ only)
 
 ## setHealth(object, health)
@@ -329,7 +329,7 @@ See wzscript docs for info, to the extent any exist. (3.2+ only)
 
 ## hackGetObj(objectType, player, id)
 
-Function to find and return a game object of ```DROID```, ```FEATURE``` or ```STRUCTURE``` types, if it exists.
+Function to find and return a game object of `DROID`, `FEATURE` or `STRUCTURE` types, if it exists.
 Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
 
 ## hackAssert(condition, ...message)
@@ -357,7 +357,7 @@ Currently only used from the tutorial.
 
 ## hackMarkTiles([label | x, y[, x2, y2]])
 
-Mark the given tile(s) on the map. Either give a ```POSITION``` or ```AREA``` label,
+Mark the given tile(s) on the map. Either give a `POSITION` or `AREA` label,
 or a tile x, y position, or four positions for a square area. If no parameter
 is given, all marked tiles are cleared. (3.2+ only)
 
@@ -386,7 +386,7 @@ Is given structure idle?
 Returns an array of structure objects. If no parameters given, it will
 return all of the structures for the current player. The second parameter
 can be either a string with the name of the structure type as defined in
-"structures.json", or a stattype as defined in ```Structure```. The
+"structures.json", or a stattype as defined in `Structure`. The
 third parameter can be used to filter by visibility, the default is not
 to filter.
 
@@ -395,7 +395,7 @@ to filter.
 Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 If no parameters given, it will return all of the structures for the current player.
 The second parameter can be either a string with the name of the structure type as defined
-in "structures.json", or a stattype as defined in ```Structure```.
+in "structures.json", or a stattype as defined in `Structure`.
 The third parameter can be used to filter by visibility, the default is not
 to filter.
 
@@ -409,7 +409,7 @@ visibility - the default is not to filter.
 ## enumFeature(playerFilter[, featureName])
 
 Returns an array of all features seen by player of given name, as defined in "features.json".
-If player is ```ALL_PLAYERS```, it will return all features irrespective of visibility to any player. If
+If player is `ALL_PLAYERS`, it will return all features irrespective of visibility to any player. If
 name is empty, it will return any feature.
 
 ## enumBlips(player)
@@ -439,8 +439,8 @@ Returns an array of all research objects that are currently and immediately avai
 ## enumRange(x, y, range[, playerFilter[, seen]])
 
 Returns an array of game objects seen within range of given position that passes the optional filter
-which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
-```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
+which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, filter is
+`ALL_PLAYERS`. Finally an optional parameter can specify whether only visible objects should be
 returned; by default only visible objects are returned. Calling this function is much faster than
 iterating over all game objects using other enum functions. (3.2+ only)
 
@@ -480,7 +480,7 @@ Returns true if given structure can be built. It checks both research and unit l
 ## pickStructLocation(droid, structureName, x, y[, maxBlockingTiles])
 
 Pick a location for constructing a certain type of building near some given position.
-Returns an object containing "type" ```POSITION```, and "x" and "y" values, if successful.
+Returns an object containing "type" `POSITION`, and "x" and "y" values, if successful.
 
 ## droidCanReach(droid, x, y)
 
@@ -494,7 +494,7 @@ Does not take player built blockades into account. (3.2+ only)
 
 ## terrainType(x, y)
 
-Returns tile type of a given map tile, such as ```TER_WATER``` for water tiles or ```TER_CLIFFFACE``` for cliffs.
+Returns tile type of a given map tile, such as `TER_WATER` for water tiles or `TER_CLIFFFACE` for cliffs.
 Tile types regulate which units may pass through this tile. (3.2+ only)
 
 ## tileIsBurning(x, y)
@@ -558,17 +558,17 @@ The lassat needs a target.
 
 ## chat(playerFilter, message)
 
-Send a message to target player. Target may also be ```ALL_PLAYERS``` or ```ALLIES```.
+Send a message to target player. Target may also be `ALL_PLAYERS` or `ALLIES`.
 Returns a boolean that is true on success. (3.2+ only)
 
 ## addBeacon(x, y, playerFilter[, message])
 
-Send a beacon message to target player. Target may also be ```ALLIES```.
+Send a beacon message to target player. Target may also be `ALLIES`.
 Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
 
 ## removeBeacon(playerFilter)
 
-Remove a beacon message sent to target player. Target may also be ```ALLIES```.
+Remove a beacon message sent to target player. Target may also be `ALLIES`.
 Returns a boolean that is true on success. (3.2+ only)
 
 ## getDroidProduction(factory)
@@ -592,7 +592,7 @@ Get the percentage of experience this player droids are going to gain. (3.2+ onl
 
 Set the maximum number of droids that this player can produce. If a third
 parameter is added, this is the droid type to limit. It can be DROID_ANY
-for droids in general, ```DROID_CONSTRUCT``` for constructors, or ```DROID_COMMAND```
+for droids in general, `DROID_CONSTRUCT` for constructors, or `DROID_COMMAND`
 for commanders. (3.2+ only)
 
 ## setCommanderLimit(player, maxNumber)
@@ -654,7 +654,7 @@ Get time remaining on mission countdown in seconds. (3.2+ only)
 
 Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
 is removed and the timer stopped. Time is in seconds.
-If time equals to the magic ```LZ_COMPROMISED_TIME``` constant, reinforcement GUI ticker
+If time equals to the magic `LZ_COMPROMISED_TIME` constant, reinforcement GUI ticker
 is set to "--:--" and reinforcements are suppressed until this function is called
 again with a regular time value.
 
@@ -780,13 +780,13 @@ Returns build limits for a structure.
 ## countStruct(structureName[, playerFilter])
 
 Count the number of structures of a given type.
-The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 
 ## countDroid([droidType[, playerFilter]])
 
 Count the number of droids that a given player has. Droid type must be either
-```DROID_ANY```, ```DROID_COMMAND``` or ```DROID_CONSTRUCT```.
-The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+`DROID_ANY`, `DROID_COMMAND` or `DROID_CONSTRUCT`.
+The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 
 ## loadLevel(levelName)
 
@@ -809,7 +809,7 @@ Donate power to another player. Returns true. (3.2+ only)
 ## setNoGoArea(x1, y1, x2, y2, playerFilter)
 
 Creates an area on the map on which nothing can be built. If player is zero,
-then landing lights are placed. If player is ```ALL_PLAYERS```, then a limbo landing zone
+then landing lights are placed. If player is `ALL_PLAYERS`, then a limbo landing zone
 is created and limbo droids placed.
 
 ## startTransporterEntry(x, y, player)
@@ -827,7 +827,7 @@ Set the exit position for the mission transporter. (3.2+ only)
 
 Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
 needs wrapping in a syncRequest. (3.3+ only.)
-Recognized object flags: ```OBJECT_FLAG_UNSELECTABLE``` - makes object unavailable for selection from player UI.
+Recognized object flags: `OBJECT_FLAG_UNSELECTABLE` - makes object unavailable for selection from player UI.
 
 ## fireWeaponAtLoc(weaponName, x, y[, player])
 

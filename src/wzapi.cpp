@@ -445,7 +445,7 @@ bool wzapi::setFogColour(WZAPI_PARAMS(int r, int g, int b))
 
 //-- ## setWeather(weatherType)
 //--
-//-- Set the current weather. This should be one of ```WEATHER_RAIN```, ```WEATHER_SNOW``` or ```WEATHER_CLEAR```. (3.2+ only)
+//-- Set the current weather. This should be one of `WEATHER_RAIN`, `WEATHER_SNOW` or `WEATHER_CLEAR`. (3.2+ only)
 //--
 bool wzapi::setWeather(WZAPI_PARAMS(int weatherType))
 {
@@ -510,10 +510,10 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 
 //-- ## addSpotter(x, y, player, range, radar, expiry)
 //--
-//-- Add an invisible viewer at a given position for given player that shows map in given range. ```radar```
+//-- Add an invisible viewer at a given position for given player that shows map in given range. `radar`
 //-- is false for vision reveal, or true for radar reveal. The difference is that a radar reveal can be obstructed
-//-- by ECM jammers. ```expiry```, if non-zero, is the game time at which the spotter shall automatically be
-//-- removed. The function returns a unique ID that can be used to remove the spotter with ```removeSpotter```. (3.2+ only)
+//-- by ECM jammers. `expiry`, if non-zero, is the game time at which the spotter shall automatically be
+//-- removed. The function returns a unique ID that can be used to remove the spotter with `removeSpotter`. (3.2+ only)
 //--
 uint32_t wzapi::addSpotter(WZAPI_PARAMS(int x, int y, int player, int range, bool radar, uint32_t expiry))
 {
@@ -566,7 +566,7 @@ bool wzapi::replaceTexture(WZAPI_PARAMS(std::string oldFilename, std::string new
 
 //-- ## changePlayerColour(player, colour)
 //--
-//-- Change a player's colour slot. The current player colour can be read from the ```playerData``` array. There are as many
+//-- Change a player's colour slot. The current player colour can be read from the `playerData` array. There are as many
 //-- colour slots as the maximum number of players. (3.2.3+ only)
 //--
 bool wzapi::changePlayerColour(WZAPI_PARAMS(int player, int colour))
@@ -772,7 +772,7 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 
 //-- ## hackGetObj(objectType, player, id)
 //--
-//-- Function to find and return a game object of ```DROID```, ```FEATURE``` or ```STRUCTURE``` types, if it exists.
+//-- Function to find and return a game object of `DROID`, `FEATURE` or `STRUCTURE` types, if it exists.
 //-- Otherwise, it will return null. This function is DEPRECATED by getObject(). (3.2+ only)
 //--
 wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _objectType, int player, int id)) WZAPI_DEPRECATED
@@ -856,7 +856,7 @@ wzapi::no_return_value wzapi::hackStopIngameAudio(WZAPI_NO_PARAMS)
 
 //-- ## hackMarkTiles([label | x, y[, x2, y2]])
 //--
-//-- Mark the given tile(s) on the map. Either give a ```POSITION``` or ```AREA``` label,
+//-- Mark the given tile(s) on the map. Either give a `POSITION` or `AREA` label,
 //-- or a tile x, y position, or four positions for a square area. If no parameter
 //-- is given, all marked tiles are cleared. (3.2+ only)
 //--
@@ -1032,7 +1032,7 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
 //-- can be either a string with the name of the structure type as defined in
-//-- "structures.json", or a stattype as defined in ```Structure```. The
+//-- "structures.json", or a stattype as defined in `Structure`. The
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
@@ -1046,7 +1046,7 @@ std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _pla
 //-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 //-- If no parameters given, it will return all of the structures for the current player.
 //-- The second parameter can be either a string with the name of the structure type as defined
-//-- in "structures.json", or a stattype as defined in ```Structure```.
+//-- in "structures.json", or a stattype as defined in `Structure`.
 //-- The third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
@@ -1103,7 +1103,7 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 //-- ## enumFeature(playerFilter[, featureName])
 //--
 //-- Returns an array of all features seen by player of given name, as defined in "features.json".
-//-- If player is ```ALL_PLAYERS```, it will return all features irrespective of visibility to any player. If
+//-- If player is `ALL_PLAYERS`, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
 //--
 std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, optional<std::string> _featureName))
@@ -1224,8 +1224,8 @@ wzapi::researchResults wzapi::enumResearch(WZAPI_NO_PARAMS)
 //-- ## enumRange(x, y, range[, playerFilter[, seen]])
 //--
 //-- Returns an array of game objects seen within range of given position that passes the optional playerFilter
-//-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, playerFilter is
-//-- ```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
+//-- which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, playerFilter is
+//-- `ALL_PLAYERS`. Finally an optional parameter can specify whether only visible objects should be
 //-- returned; by default only visible objects are returned. Calling this function is much faster than
 //-- iterating over all game objects using other enum functions. (3.2+ only)
 //--
@@ -1549,7 +1549,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 //-- ## pickStructLocation(droid, structureName, x, y[, maxBlockingTiles])
 //--
 //-- Pick a location for constructing a certain type of building near some given position.
-//-- Returns an object containing "type" ```POSITION```, and "x" and "y" values, if successful.
+//-- Returns an object containing "type" `POSITION`, and "x" and "y" values, if successful.
 //--
 optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string structureName, int startX, int startY, optional<int> _maxBlockingTiles))
 {
@@ -1666,7 +1666,7 @@ bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, 
 
 //-- ## terrainType(x, y)
 //--
-//-- Returns tile type of a given map tile, such as ```TER_WATER``` for water tiles or ```TER_CLIFFFACE``` for cliffs.
+//-- Returns tile type of a given map tile, such as `TER_WATER` for water tiles or `TER_CLIFFFACE` for cliffs.
 //-- Tile types regulate which units may pass through this tile. (3.2+ only)
 //--
 int wzapi::terrainType(WZAPI_PARAMS(int x, int y))
@@ -2024,7 +2024,7 @@ bool wzapi::activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OB
 
 //-- ## chat(playerFilter, message)
 //--
-//-- Send a message to playerFilter. playerFilter may also be ```ALL_PLAYERS``` or ```ALLIES```.
+//-- Send a message to playerFilter. playerFilter may also be `ALL_PLAYERS` or `ALLIES`.
 //-- Returns a boolean that is true on success. (3.2+ only)
 //--
 bool wzapi::chat(WZAPI_PARAMS(int playerFilter, std::string message))
@@ -2047,7 +2047,7 @@ bool wzapi::chat(WZAPI_PARAMS(int playerFilter, std::string message))
 
 //-- ## addBeacon(x, y, playerFilter[, message])
 //--
-//-- Send a beacon message to target player. Target may also be ```ALLIES```.
+//-- Send a beacon message to target player. Target may also be `ALLIES`.
 //-- Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
 //--
 bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<std::string> _message))
@@ -2075,7 +2075,7 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 
 //-- ## removeBeacon(playerFilter)
 //--
-//-- Remove a beacon message sent to playerFilter. Target may also be ```ALLIES```.
+//-- Remove a beacon message sent to playerFilter. Target may also be `ALLIES`.
 //-- Returns a boolean that is true on success. (3.2+ only)
 //--
 bool wzapi::removeBeacon(WZAPI_PARAMS(int playerFilter))
@@ -2170,8 +2170,8 @@ int wzapi::getExperienceModifier(WZAPI_PARAMS(int player))
 //-- ## setDroidLimit(player, maxNumber[, droidType])
 //--
 //-- Set the maximum number of droids that this player can produce. If a third
-//-- parameter is added, this is the droid type to limit. It can be ```DROID_ANY```
-//-- for droids in general, ```DROID_CONSTRUCT``` for constructors, or ```DROID_COMMAND```
+//-- parameter is added, this is the droid type to limit. It can be `DROID_ANY`
+//-- for droids in general, `DROID_CONSTRUCT` for constructors, or `DROID_COMMAND`
 //-- for commanders. (3.2+ only)
 //--
 bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int maxNumber, optional<int> _droidType))
@@ -2470,7 +2470,7 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 //--
 //-- Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
 //-- is removed and the timer stopped. Time is in seconds.
-//-- If time equals to the magic ```LZ_COMPROMISED_TIME``` constant, reinforcement GUI ticker
+//-- If time equals to the magic `LZ_COMPROMISED_TIME` constant, reinforcement GUI ticker
 //-- is set to "--:--" and reinforcements are suppressed until this function is called
 //-- again with a regular time value.
 //--
@@ -3010,7 +3010,7 @@ unsigned int wzapi::getStructureLimit(WZAPI_PARAMS(std::string structureName, op
 //-- ## countStruct(structureName[, playerFilter])
 //--
 //-- Count the number of structures of a given type.
-//-- The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+//-- The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 //--
 int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _playerFilter))
 {
@@ -3036,8 +3036,8 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 //-- ## countDroid([droidType[, playerFilter]])
 //--
 //-- Count the number of droids that a given player has. Droid type must be either
-//-- ```DROID_ANY```, ```DROID_COMMAND``` or ```DROID_CONSTRUCT```.
-//-- The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+//-- `DROID_ANY`, `DROID_COMMAND` or `DROID_CONSTRUCT`.
+//-- The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 //--
 int wzapi::countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _playerFilter))
 {
@@ -3164,7 +3164,7 @@ bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 //-- ## setNoGoArea(x1, y1, x2, y2, playerFilter)
 //--
 //-- Creates an area on the map on which nothing can be built. If playerFilter is zero,
-//-- then landing lights are placed. If playerFilter is ```ALL_PLAYERS```, then a limbo landing zone
+//-- then landing lights are placed. If playerFilter is `ALL_PLAYERS`, then a limbo landing zone
 //-- is created and limbo droids placed.
 //--
 // FIXME: missing a way to call initNoGoAreas(); check if we can call this in
@@ -3219,7 +3219,7 @@ wzapi::no_return_value wzapi::setTransporterExit(WZAPI_PARAMS(int x, int y, int 
 //--
 //-- Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
 //-- needs wrapping in a syncRequest. (3.3+ only.)
-//-- Recognized object flags: ```OBJECT_FLAG_UNSELECTABLE``` - makes object unavailable for selection from player UI.
+//-- Recognized object flags: `OBJECT_FLAG_UNSELECTABLE` - makes object unavailable for selection from player UI.
 //--
 wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool flagValue)) MULTIPLAY_SYNCREQUEST_REQUIRED
 {
@@ -3986,9 +3986,9 @@ wzapi::GameEntityRules::value_type wzapi::GameEntityRules::setPropertyValue(cons
 
 std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 {
-	//== * ```Upgrades``` A special array containing per-player rules information for game entity types,
+	//== * `Upgrades` A special array containing per-player rules information for game entity types,
 	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
-	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
+	//== array contains a subset of the sparse array of rules information in the `Stats` global.
 	//== These values are defined:
 	std::vector<PerPlayerUpgrades> upgrades;
 	upgrades.reserve(MAX_PLAYERS);
@@ -3997,7 +3997,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		upgrades.push_back(PerPlayerUpgrades(i));
 		PerPlayerUpgrades& node = upgrades.back();
 
-		//==   * ```Body``` Droid bodies
+		//==   * `Body` Droid bodies
 		GameEntityRuleContainer bodybase;
 		for (unsigned j = 0; j < numBodyStats; j++)
 		{
@@ -4014,7 +4014,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("Body", std::move(bodybase));
 
-		//==   * ```Sensor``` Sensor turrets
+		//==   * `Sensor` Sensor turrets
 		GameEntityRuleContainer sensorbase;
 		for (unsigned j = 0; j < numSensorStats; j++)
 		{
@@ -4028,7 +4028,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("Sensor", std::move(sensorbase));
 
-		//==   * ```Propulsion``` Propulsions
+		//==   * `Propulsion` Propulsions
 		GameEntityRuleContainer propbase;
 		for (unsigned j = 0; j < numPropulsionStats; j++)
 		{
@@ -4042,7 +4042,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("Propulsion", std::move(propbase));
 
-		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
+		//==   * `ECM` ECM (Electronic Counter-Measure) turrets
 		GameEntityRuleContainer ecmbase;
 		for (unsigned j = 0; j < numECMStats; j++)
 		{
@@ -4056,7 +4056,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("ECM", std::move(ecmbase));
 
-		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
+		//==   * `Repair` Repair turrets (not used, incidentally, for repair centers)
 		GameEntityRuleContainer repairbase;
 		for (unsigned j = 0; j < numRepairStats; j++)
 		{
@@ -4070,7 +4070,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("Repair", std::move(repairbase));
 
-		//==   * ```Construct``` Constructor turrets (eg for trucks)
+		//==   * `Construct` Constructor turrets (eg for trucks)
 		GameEntityRuleContainer conbase;
 		for (unsigned j = 0; j < numConstructStats; j++)
 		{
@@ -4084,7 +4084,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("Construct", std::move(conbase));
 
-		//==   * ```Brain``` Brains
+		//==   * `Brain` Brains
 		//== BaseCommandLimit: How many droids a commander can command. CommandLimitByLevel: How many extra droids
 		//== a commander can command for each of its rank levels. RankThresholds: An array describing how many
 		//== kills are required for this brain to level up to the next rank. To alter this from scripts, you must
@@ -4104,7 +4104,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("Brain", std::move(brainbase));
 
-		//==   * ```Weapon``` Weapon turrets
+		//==   * `Weapon` Weapon turrets
 		GameEntityRuleContainer wbase;
 		for (unsigned j = 0; j < numWeaponStats; j++)
 		{
@@ -4132,7 +4132,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		}
 		node.addGameEntity("Weapon", std::move(wbase));
 
-		//==   * ```Building``` Buildings
+		//==   * `Building` Buildings
 		GameEntityRuleContainer structbase;
 		for (unsigned j = 0; j < numStructureStats; j++)
 		{
@@ -4174,13 +4174,13 @@ nlohmann::json register_common(COMPONENT_STATS *psStats)
 nlohmann::json wzapi::constructStatsObject()
 {
 	/// Register 'Stats' object. It is a read-only representation of basic game component states.
-	//== * ```Stats``` A sparse, read-only array containing rules information for game entity types.
+	//== * `Stats` A sparse, read-only array containing rules information for game entity types.
 	//== (For now only the highest level member attributes are documented here. Use the 'jsdebug' cheat
 	//== to see them all.)
 	//== These values are defined:
 	nlohmann::json stats = nlohmann::json::object();
 	{
-		//==   * ```Body``` Droid bodies
+		//==   * `Body` Droid bodies
 		nlohmann::json bodybase = nlohmann::json::object();
 		for (int j = 0; j < numBodyStats; j++)
 		{
@@ -4197,7 +4197,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["Body"] = std::move(bodybase);
 
-		//==   * ```Sensor``` Sensor turrets
+		//==   * `Sensor` Sensor turrets
 		nlohmann::json sensorbase = nlohmann::json::object();
 		for (int j = 0; j < numSensorStats; j++)
 		{
@@ -4208,7 +4208,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["Sensor"] = std::move(sensorbase);
 
-		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
+		//==   * `ECM` ECM (Electronic Counter-Measure) turrets
 		nlohmann::json ecmbase = nlohmann::json::object();
 		for (int j = 0; j < numECMStats; j++)
 		{
@@ -4219,7 +4219,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["ECM"] = std::move(ecmbase);
 
-		//==   * ```Propulsion``` Propulsions
+		//==   * `Propulsion` Propulsions
 		nlohmann::json propbase = nlohmann::json::object();
 		for (int j = 0; j < numPropulsionStats; j++)
 		{
@@ -4237,7 +4237,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["Propulsion"] = std::move(propbase);
 
-		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
+		//==   * `Repair` Repair turrets (not used, incidentally, for repair centers)
 		nlohmann::json repairbase = nlohmann::json::object();
 		for (int j = 0; j < numRepairStats; j++)
 		{
@@ -4248,7 +4248,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["Repair"] = std::move(repairbase);
 
-		//==   * ```Construct``` Constructor turrets (eg for trucks)
+		//==   * `Construct` Constructor turrets (eg for trucks)
 		nlohmann::json conbase = nlohmann::json::object();
 		for (int j = 0; j < numConstructStats; j++)
 		{
@@ -4259,7 +4259,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["Construct"] = std::move(conbase);
 
-		//==   * ```Brain``` Brains
+		//==   * `Brain` Brains
 		nlohmann::json brainbase = nlohmann::json::object();
 		for (int j = 0; j < numBrainStats; j++)
 		{
@@ -4283,7 +4283,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["Brain"] = std::move(brainbase);
 
-		//==   * ```Weapon``` Weapon turrets
+		//==   * `Weapon` Weapon turrets
 		nlohmann::json wbase = nlohmann::json::object();
 		for (int j = 0; j < numWeaponStats; j++)
 		{
@@ -4323,7 +4323,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["Weapon"] = std::move(wbase);
 
-		//==   * ```WeaponClass``` Defined weapon classes
+		//==   * `WeaponClass` Defined weapon classes
 		nlohmann::json weaponTypes = nlohmann::json::array(); //engine->newArray(WSC_NUM_WEAPON_SUBCLASSES);
 		for (int j = 0; j < WSC_NUM_WEAPON_SUBCLASSES; j++)
 		{
@@ -4331,7 +4331,7 @@ nlohmann::json wzapi::constructStatsObject()
 		}
 		stats["WeaponClass"] = std::move(weaponTypes);
 
-		//==   * ```Building``` Buildings
+		//==   * `Building` Buildings
 		nlohmann::json structbase = nlohmann::json::object();
 		for (int j = 0; j < numStructureStats; j++)
 		{
@@ -4477,15 +4477,15 @@ nlohmann::json wzapi::getUsefulConstants()
 nlohmann::json wzapi::constructStaticPlayerData()
 {
 	// Static knowledge about players
-	//== * ```playerData``` An array of information about the players in a game. Each item in the array is an object
+	//== * `playerData` An array of information about the players in a game. Each item in the array is an object
 	//== containing the following variables:
-	//==   * ```difficulty``` (see ```difficulty``` global constant)
-	//==   * ```colour``` number describing the colour of the player
-	//==   * ```position``` number describing the position of the player in the game's setup screen
-	//==   * ```isAI``` whether the player is an AI (3.2+ only)
-	//==   * ```isHuman``` whether the player is human (3.2+ only)
-	//==   * ```name``` the name of the player (3.2+ only)
-	//==   * ```team``` the number of the team the player is part of
+	//==   * `difficulty` (see `difficulty` global constant)
+	//==   * `colour` number describing the colour of the player
+	//==   * `position` number describing the position of the player in the game's setup screen
+	//==   * `isAI` whether the player is an AI (3.2+ only)
+	//==   * `isHuman` whether the player is human (3.2+ only)
+	//==   * `name` the name of the player (3.2+ only)
+	//==   * `team` the number of the team the player is part of
 	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -4507,12 +4507,12 @@ nlohmann::json wzapi::constructStaticPlayerData()
 nlohmann::json wzapi::constructMapTilesArray()
 {
 	// Static knowledge about map tiles
-	//== * ```MapTiles``` A two-dimensional array of static information about the map tiles in a game. Each item in MapTiles[y][x] is an object
+	//== * `MapTiles` A two-dimensional array of static information about the map tiles in a game. Each item in MapTiles[y][x] is an object
 	//== containing the following variables:
-	//==   * ```terrainType``` (see ```terrainType(x, y)``` function)
-	//==   * ```height``` the height at the top left of the tile
-	//==   * ```hoverContinent``` (For hover type propulsions)
-	//==   * ```limitedContinent``` (For land or sea limited propulsion types)
+	//==   * `terrainType` (see `terrainType(x, y)` function)
+	//==   * `height` the height at the top left of the tile
+	//==   * `hoverContinent` (For hover type propulsions)
+	//==   * `limitedContinent` (For land or sea limited propulsion types)
 	nlohmann::json mapTileArray = nlohmann::json::array();
 	for (SDWORD y = 0; y < mapHeight; y++)
 	{

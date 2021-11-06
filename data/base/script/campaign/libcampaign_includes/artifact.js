@@ -4,13 +4,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Tell ```libcampaign.js``` to manage a certain set of artifacts.
+ * Tell `libcampaign.js` to manage a certain set of artifacts.
  * The argument is a JavaScript map from object labels to artifact
  * description. If the label points to a game object, artifact will be
  * placed when this object is destroyed; if the label is a position, the
  * artifact will be placed instantly. Artifact description is a JavaScript
  * object with the following fields:
- * * ```tech``` The technology to grant when the artifact is recovered.
+ * * `tech` The technology to grant when the artifact is recovered.
  * Note that this can be made into an array to make artifacts give out
  * more than one technology, if desired.
  * On __let me win__ cheat, all technologies stored in the artifacts
@@ -18,7 +18,7 @@
  * Additionally, this function would call special event callbacks if they are
  * defined in your script, which should be named as follows,
  * where LABEL is the artifact label:
- * * ```camArtifactPickup_LABEL``` Called when the player picks up the artifact.
+ * * `camArtifactPickup_LABEL` Called when the player picks up the artifact.
  * @param {Object} artifacts
  * @returns {void}
  */
@@ -46,7 +46,7 @@ function camSetArtifacts(artifacts)
 }
 
 /**
- * Returns true if all artifacts managed by ```libcampaign.js``` were picked up.
+ * Returns true if all artifacts managed by `libcampaign.js` were picked up.
  * @returns {boolean}
  */
 function camAllArtifactsPickedUp()

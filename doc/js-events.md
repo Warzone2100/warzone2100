@@ -2,7 +2,7 @@
 
 This section describes event callbacks (or 'events' for short) that are called from the
 game when something specific happens. Which scripts receive them is usually filtered
-by player. Call ```receiveAllEvents(true)``` to start receiving all events unfiltered.
+by player. Call `receiveAllEvents(true)` to start receiving all events unfiltered.
 
 ## eventGameInit()
 
@@ -108,11 +108,11 @@ An event that is run when current user opens the manufacture menu.
 ## eventSelectionChanged(objects)
 
 An event that is triggered whenever the host player selects one or more game objects.
-The ```objects``` parameter contains an array of the currently selected game objects.
+The `objects` parameter contains an array of the currently selected game objects.
 Keep in mind that the player may drag and drop select many units at once, select one
 unit specifically, or even add more selections to a current selection one at a time.
 This event will trigger once for each user action, not once for each selected or
-deselected object. If all selected game objects are deselected, ```objects``` will
+deselected object. If all selected game objects are deselected, `objects` will
 be empty.
 
 ## eventObjectRecycled(object)
@@ -136,13 +136,13 @@ A droid should be given new orders.
 
 An event that is run every time a droid is built. The structure parameter is set
 if the droid was produced in a factory. It is not triggered for droid theft or
-gift (check ```eventObjectTransfer``` for that).
+gift (check `eventObjectTransfer` for that).
 
 ## eventStructureBuilt(structure[, droid])
 
 An event that is run every time a structure is produced. The droid parameter is set
 if the structure was built by a droid. It is not triggered for building theft
-(check ```eventObjectTransfer``` for that).
+(check `eventObjectTransfer` for that).
 
 ## eventStructureDemolish(structure[, droid])
 
@@ -200,20 +200,20 @@ so the target player is in object.player. The event is called for both players.
 
 ## eventChat(from, to, message)
 
-An event that is run whenever a chat message is received. The ```from``` parameter is the
-player sending the chat message. For the moment, the ```to``` parameter is always the script
+An event that is run whenever a chat message is received. The `from` parameter is the
+player sending the chat message. For the moment, the `to` parameter is always the script
 player.
 
 ## eventBeacon(x, y, from, to[, message])
 
-An event that is run whenever a beacon message is received. The ```from``` parameter is the
-player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+An event that is run whenever a beacon message is received. The `from` parameter is the
+player sending the beacon. For the moment, the `to` parameter is always the script player.
 Message may be undefined.
 
 ## eventBeaconRemoved(from, to)
 
-An event that is run whenever a beacon message is removed. The ```from``` parameter is the
-player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+An event that is run whenever a beacon message is removed. The `from` parameter is the
+player sending the beacon. For the moment, the `to` parameter is always the script player.
 
 ## eventGroupLoss(object, groupId, newSize)
 

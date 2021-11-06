@@ -131,7 +131,7 @@ function camMakePos(x, y)
 }
 
 /**
- * A wrapper for ```distBetweenTwoPoints()```.
+ * A wrapper for `distBetweenTwoPoints()`.
  * camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)
  * @param {number|Object} x1
  * @param {number|Object} y1
@@ -161,7 +161,7 @@ function camDist(x1, y1, x2, y2)
 }
 
 /**
- * A function to handle player filters in a way similar to how JS API functions (eg. ```enumDroid(filter, ...)```) handle them.
+ * A function to handle player filters in a way similar to how JS API functions (eg. `enumDroid(filter, ...)`) handle them.
  * @param {number} player
  * @param {number} playerFilter
  * @returns {boolean}
@@ -283,8 +283,8 @@ function camIsSystemDroid(gameObject)
 /**
  * Make a new group out of array of droids, single game object, or label string,
  * with fuzzy auto-detection of argument type.
- * Only droids would be added to the group. ```playerFilter``` can be one of a
- * player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```; defaults to ```ENEMIES```.
+ * Only droids would be added to the group. `playerFilter` can be one of a
+ * player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`; defaults to `ENEMIES`.
  * @param {string|Object|Object[]} what
  * @param {number} [playerFilter]
  * @returns {number|void}

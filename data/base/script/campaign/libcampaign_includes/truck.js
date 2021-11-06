@@ -5,7 +5,7 @@
 
 /**
  * Manage trucks for an AI player. This assumes recapturing oils and rebuilding destroyed trucks
- * in factories, the latter is implemented via ```camQueueDroidProduction()``` mechanism.
+ * in factories, the latter is implemented via `camQueueDroidProduction()` mechanism.
  * @param {number} player
  * @returns {void}
  */

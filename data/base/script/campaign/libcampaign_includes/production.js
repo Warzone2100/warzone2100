@@ -9,39 +9,39 @@
 // to turn them on.
 
 /**
- * Tell ```libcampaign.js``` to manage a certain set of enemy factories.
+ * Tell `libcampaign.js` to manage a certain set of enemy factories.
  * Management assumes producing droids, packing them into groups and
  * executing orders once the group becomes large-enough.
  * The argument is a JavaScript map from group labels to factory descriptions.
  * Each label points to a factory object. Factory description
  * is a JavaScript object with the following fields:
- * * ```assembly``` A rally point position label, where the group would
+ * * `assembly` A rally point position label, where the group would
  * 	gather.
- * * ```order``` An order to execute for every group produced in the
- * 	factory. Same as the order parameter for ```camManageGroup()```.
- * * ```data``` Order data. Same as the data parameter for
- * 	```camManageGroup()```.
- * * ```groupSize``` Number of droids to produce before executing the order.
- * 	Also, if order is ```CAM_ORDER_ATTACK```, data.count defaults to this value.
- * * ```maxSize``` Halt production when reaching that many droids in the
+ * * `order` An order to execute for every group produced in the
+ * 	factory. Same as the order parameter for `camManageGroup()`.
+ * * `data` Order data. Same as the data parameter for
+ * 	`camManageGroup()`.
+ * * `groupSize` Number of droids to produce before executing the order.
+ * 	Also, if order is `CAM_ORDER_ATTACK`, data.count defaults to this value.
+ * * `maxSize` Halt production when reaching that many droids in the
  * 	factory group. Resume when some droids die. Unlimited if unspecified.
- * * ```throttle``` If defined, produce droids only every that many
+ * * `throttle` If defined, produce droids only every that many
  * 	milliseconds, and keep the factory idle between ticks.
- * * ```group``` If defined, make the factory manage this group,
+ * * `group` If defined, make the factory manage this group,
  * 	otherwise create a new empty group to manage.
  * 	Droids produced in the factory would automatically be
  * 	added to the group, and order and data parameters
  * 	would be applied to this group.
- * * ```templates``` List of droid templates to produce in the factory.
+ * * `templates` List of droid templates to produce in the factory.
  * 	Each template is a JavaScript object with the following fields:
- *   * ```body``` Body stat name.
- *   * ```prop``` Propulsion stat name.
- *   * ```weap``` Weapon stat name. Only single-turret droids are
+ *   * `body` Body stat name.
+ *   * `prop` Propulsion stat name.
+ *   * `weap` Weapon stat name. Only single-turret droids are
  * 		currently supported.
  * 	Note that all template components are automatically made available
  * 	to the factory owner.
  * Factories won't start production immediately; call
- * ```camEnableFactory()``` to turn them on when necessary.
+ * `camEnableFactory()` to turn them on when necessary.
  * @param {Object} factories
  * @returns {void}
  */
@@ -54,10 +54,10 @@ function camSetFactories(factories)
 }
 
 /**
- * Similar to ```camSetFactories()```, but one factory at a time.
+ * Similar to `camSetFactories()`, but one factory at a time.
  * If the factory was already managing a group of droids, it keeps managing it.
  * If a new group is specified in the description, the old group is merged into it.
- * NOTE: This function disables the factory. You would need to call ```camEnableFactory()``` again.
+ * NOTE: This function disables the factory. You would need to call `camEnableFactory()` again.
  * @param {string} factoryLabel
  * @param {Object} factoryData
  * @returns {void}

@@ -33,7 +33,7 @@
 //__
 //__ This section describes event callbacks (or 'events' for short) that are
 //__ called from the game when something specific happens. Which scripts
-//__ receive them is usually filtered by player. Call ```receiveAllEvents(true)```
+//__ receive them is usually filtered by player. Call `receiveAllEvents(true)`
 //__ to start receiving all events unfiltered.
 //__
 //-- # Functions
@@ -317,11 +317,11 @@ namespace wzapi
 		//__ ## eventSelectionChanged(objects)
 		//__
 		//__ An event that is triggered whenever the host player selects one or more game objects.
-		//__ The ```objects``` parameter contains an array of the currently selected game objects.
+		//__ The `objects` parameter contains an array of the currently selected game objects.
 		//__ Keep in mind that the player may drag and drop select many units at once, select one
 		//__ unit specifically, or even add more selections to a current selection one at a time.
 		//__ This event will trigger once for each user action, not once for each selected or
-		//__ deselected object. If all selected game objects are deselected, ```objects``` will
+		//__ deselected object. If all selected game objects are deselected, `objects` will
 		//__ be empty.
 		//__
 		virtual bool handle_eventSelectionChanged(const std::vector<const BASE_OBJECT *>& objects) SCRIPTING_EVENT_NON_REQUIRED
@@ -358,7 +358,7 @@ namespace wzapi
 		//__
 		//__ An event that is run every time a droid is built. The structure parameter is set
 		//__ if the droid was produced in a factory. It is not triggered for droid theft or
-		//__ gift (check ```eventObjectTransfer``` for that).
+		//__ gift (check `eventObjectTransfer` for that).
 		//__
 		virtual bool handle_eventDroidBuilt(const DROID *psDroid, optional<const STRUCTURE *> psFactory) = 0;
 
@@ -366,7 +366,7 @@ namespace wzapi
 		//__
 		//__ An event that is run every time a structure is produced. The droid parameter is set
 		//__ if the structure was built by a droid. It is not triggered for building theft
-		//__ (check ```eventObjectTransfer``` for that).
+		//__ (check `eventObjectTransfer` for that).
 		//__
 		virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, optional<const DROID *> psDroid) = 0;
 
@@ -452,24 +452,24 @@ namespace wzapi
 
 		//__ ## eventChat(from, to, message)
 		//__
-		//__ An event that is run whenever a chat message is received. The ```from``` parameter is the
-		//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+		//__ An event that is run whenever a chat message is received. The `from` parameter is the
+		//__ player sending the chat message. For the moment, the `to` parameter is always the script
 		//__ player.
 		//__
 		virtual bool handle_eventChat(int from, int to, const char *message) = 0;
 
 		//__ ## eventBeacon(x, y, from, to[, message])
 		//__
-		//__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
-		//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+		//__ An event that is run whenever a beacon message is received. The `from` parameter is the
+		//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
 		//__ Message may be undefined.
 		//__
 		virtual bool handle_eventBeacon(int x, int y, int from, int to, optional<const char *> message) = 0;
 
 		//__ ## eventBeaconRemoved(from, to)
 		//__
-		//__ An event that is run whenever a beacon message is removed. The ```from``` parameter is the
-		//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+		//__ An event that is run whenever a beacon message is removed. The `from` parameter is the
+		//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
 		//__
 		virtual bool handle_eventBeaconRemoved(int from, int to) = 0;
 

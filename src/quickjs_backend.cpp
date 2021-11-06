@@ -413,11 +413,11 @@ public:
 	//__ ## eventSelectionChanged(objects)
 	//__
 	//__ An event that is triggered whenever the host player selects one or more game objects.
-	//__ The ```objects``` parameter contains an array of the currently selected game objects.
+	//__ The `objects` parameter contains an array of the currently selected game objects.
 	//__ Keep in mind that the player may drag and drop select many units at once, select one
 	//__ unit specifically, or even add more selections to a current selection one at a time.
 	//__ This event will trigger once for each user action, not once for each selected or
-	//__ deselected object. If all selected game objects are deselected, ```objects``` will
+	//__ deselected object. If all selected game objects are deselected, `objects` will
 	//__ be empty.
 	//__
 	virtual bool handle_eventSelectionChanged(const std::vector<const BASE_OBJECT *>& objects) override;
@@ -454,7 +454,7 @@ public:
 	//__
 	//__ An event that is run every time a droid is built. The structure parameter is set
 	//__ if the droid was produced in a factory. It is not triggered for droid theft or
-	//__ gift (check ```eventObjectTransfer``` for that).
+	//__ gift (check `eventObjectTransfer` for that).
 	//__
 	virtual bool handle_eventDroidBuilt(const DROID *psDroid, optional<const STRUCTURE *> psFactory) override;
 
@@ -462,7 +462,7 @@ public:
 	//__
 	//__ An event that is run every time a structure is produced. The droid parameter is set
 	//__ if the structure was built by a droid. It is not triggered for building theft
-	//__ (check ```eventObjectTransfer``` for that).
+	//__ (check `eventObjectTransfer` for that).
 	//__
 	virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, optional<const DROID *> psDroid) override;
 
@@ -548,24 +548,24 @@ public:
 
 	//__ ## eventChat(from, to, message)
 	//__
-	//__ An event that is run whenever a chat message is received. The ```from``` parameter is the
-	//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+	//__ An event that is run whenever a chat message is received. The `from` parameter is the
+	//__ player sending the chat message. For the moment, the `to` parameter is always the script
 	//__ player.
 	//__
 	virtual bool handle_eventChat(int from, int to, const char *message) override;
 
 	//__ ## eventBeacon(x, y, from, to[, message])
 	//__
-	//__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
-	//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+	//__ An event that is run whenever a beacon message is received. The `from` parameter is the
+	//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
 	//__ Message may be undefined.
 	//__
 	virtual bool handle_eventBeacon(int x, int y, int from, int to, optional<const char *> message) override;
 
 	//__ ## eventBeaconRemoved(from, to)
 	//__
-	//__ An event that is run whenever a beacon message is removed. The ```from``` parameter is the
-	//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+	//__ An event that is run whenever a beacon message is removed. The `from` parameter is the
+	//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
 	//__
 	virtual bool handle_eventBeaconRemoved(int from, int to) override;
 
@@ -719,13 +719,13 @@ static int QuickJS_DefinePropertyValue(JSContext *ctx, JSValueConst this_obj, co
 //;;
 //;; Describes a research item. The following properties are defined:
 //;;
-//;; * ```power``` Number of power points needed for starting the research.
-//;; * ```points``` Number of research points needed to complete the research.
-//;; * ```started``` A boolean saying whether or not this research has been started by current player or any of its allies.
-//;; * ```done``` A boolean saying whether or not this research has been completed.
-//;; * ```name``` A string containing the full name of the research.
-//;; * ```id``` A string containing the index name of the research.
-//;; * ```type``` The type will always be ```RESEARCH_DATA```.
+//;; * `power` Number of power points needed for starting the research.
+//;; * `points` Number of research points needed to complete the research.
+//;; * `started` A boolean saying whether or not this research has been started by current player or any of its allies.
+//;; * `done` A boolean saying whether or not this research has been completed.
+//;; * `name` A string containing the full name of the research.
+//;; * `id` A string containing the index name of the research.
+//;; * `type` The type will always be `RESEARCH_DATA`.
 //;;
 JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 {
@@ -760,21 +760,21 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 //;; Describes a structure (building). It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
 //;;
-//;; * ```status``` The completeness status of the structure. It will be one of ```BEING_BUILT``` and ```BUILT```.
-//;; * ```type``` The type will always be ```STRUCTURE```.
-//;; * ```cost``` What it would cost to build this structure. (3.2+ only)
-//;; * ```stattype``` The stattype defines the type of structure. It will be one of ```HQ```, ```FACTORY```, ```POWER_GEN```,
-//;; ```RESOURCE_EXTRACTOR```, ```LASSAT```, ```DEFENSE```, ```WALL```, ```RESEARCH_LAB```, ```REPAIR_FACILITY```,
-//;; ```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE``` and ```COMMAND_CONTROL```.
-//;; * ```modules``` If the stattype is set to one of the factories, ```POWER_GEN``` or ```RESEARCH_LAB```, then this property is set to the
+//;; * `status` The completeness status of the structure. It will be one of `BEING_BUILT` and `BUILT`.
+//;; * `type` The type will always be `STRUCTURE`.
+//;; * `cost` What it would cost to build this structure. (3.2+ only)
+//;; * `stattype` The stattype defines the type of structure. It will be one of `HQ`, `FACTORY`, `POWER_GEN`,
+//;; `RESOURCE_EXTRACTOR`, `LASSAT`, `DEFENSE`, `WALL`, `RESEARCH_LAB`, `REPAIR_FACILITY`,
+//;; `CYBORG_FACTORY`, `VTOL_FACTORY`, `REARM_PAD`, `SAT_UPLINK`, `GATE` and `COMMAND_CONTROL`.
+//;; * `modules` If the stattype is set to one of the factories, `POWER_GEN` or `RESEARCH_LAB`, then this property is set to the
 //;; number of module upgrades it has.
-//;; * ```canHitAir``` True if the structure has anti-air capabilities. (3.2+ only)
-//;; * ```canHitGround``` True if the structure has anti-ground capabilities. (3.2+ only)
-//;; * ```isSensor``` True if the structure has sensor ability. (3.2+ only)
-//;; * ```isCB``` True if the structure has counter-battery ability. (3.2+ only)
-//;; * ```isRadarDetector``` True if the structure has radar detector ability. (3.2+ only)
-//;; * ```range``` Maximum range of its weapons. (3.2+ only)
-//;; * ```hasIndirect``` One or more of the structure's weapons are indirect. (3.2+ only)
+//;; * `canHitAir` True if the structure has anti-air capabilities. (3.2+ only)
+//;; * `canHitGround` True if the structure has anti-ground capabilities. (3.2+ only)
+//;; * `isSensor` True if the structure has sensor ability. (3.2+ only)
+//;; * `isCB` True if the structure has counter-battery ability. (3.2+ only)
+//;; * `isRadarDetector` True if the structure has radar detector ability. (3.2+ only)
+//;; * `range` Maximum range of its weapons. (3.2+ only)
+//;; * `hasIndirect` One or more of the structure's weapons are indirect. (3.2+ only)
 //;;
 JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 {
@@ -851,9 +851,9 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 //;;
 //;; Describes a feature (a **game object** not owned by any player). It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
-//;; * ```type``` It will always be ```FEATURE```.
-//;; * ```stattype``` The type of feature. Defined types are ```OIL_RESOURCE```, ```OIL_DRUM``` and ```ARTIFACT```.
-//;; * ```damageable``` Can this feature be damaged?
+//;; * `type` It will always be `FEATURE`.
+//;; * `stattype` The type of feature. Defined types are `OIL_RESOURCE`, `OIL_DRUM` and `ARTIFACT`.
+//;; * `damageable` Can this feature be damaged?
 //;;
 JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 {
@@ -870,62 +870,62 @@ JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 //;; Describes a droid. It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
 //;;
-//;; * ```type``` It will always be ```DROID```.
-//;; * ```order``` The current order of the droid. This is its plan. The following orders are defined:
-//;;   * ```DORDER_ATTACK``` Order a droid to attack something.
-//;;   * ```DORDER_MOVE``` Order a droid to move somewhere.
-//;;   * ```DORDER_SCOUT``` Order a droid to move somewhere and stop to attack anything on the way.
-//;;   * ```DORDER_BUILD``` Order a droid to build something.
-//;;   * ```DORDER_HELPBUILD``` Order a droid to help build something.
-//;;   * ```DORDER_LINEBUILD``` Order a droid to build something repeatedly in a line.
-//;;   * ```DORDER_REPAIR``` Order a droid to repair something.
-//;;   * ```DORDER_PATROL``` Order a droid to patrol.
-//;;   * ```DORDER_DEMOLISH``` Order a droid to demolish something.
-//;;   * ```DORDER_EMBARK``` Order a droid to embark on a transport.
-//;;   * ```DORDER_DISEMBARK``` Order a transport to disembark its units at the given position.
-//;;   * ```DORDER_FIRESUPPORT``` Order a droid to fire at whatever the target sensor is targeting. (3.2+ only)
-//;;   * ```DORDER_COMMANDERSUPPORT``` Assign the droid to a commander. (3.2+ only)
-//;;   * ```DORDER_STOP``` Order a droid to stop whatever it is doing. (3.2+ only)
-//;;   * ```DORDER_RTR``` Order a droid to return for repairs. (3.2+ only)
-//;;   * ```DORDER_RTB``` Order a droid to return to base. (3.2+ only)
-//;;   * ```DORDER_HOLD``` Order a droid to hold its position. (3.2+ only)
-//;;   * ```DORDER_REARM``` Order a VTOL droid to rearm. If given a target, will go to specified rearm pad. If not, will go to nearest rearm pad. (3.2+ only)
-//;;   * ```DORDER_OBSERVE``` Order a droid to keep a target in sensor view. (3.2+ only)
-//;;   * ```DORDER_RECOVER``` Order a droid to pick up something. (3.2+ only)
-//;;   * ```DORDER_RECYCLE``` Order a droid to factory for recycling. (3.2+ only)
-//;; * ```action``` The current action of the droid. This is how it intends to carry out its plan. The
+//;; * `type` It will always be `DROID`.
+//;; * `order` The current order of the droid. This is its plan. The following orders are defined:
+//;;   * `DORDER_ATTACK` Order a droid to attack something.
+//;;   * `DORDER_MOVE` Order a droid to move somewhere.
+//;;   * `DORDER_SCOUT` Order a droid to move somewhere and stop to attack anything on the way.
+//;;   * `DORDER_BUILD` Order a droid to build something.
+//;;   * `DORDER_HELPBUILD` Order a droid to help build something.
+//;;   * `DORDER_LINEBUILD` Order a droid to build something repeatedly in a line.
+//;;   * `DORDER_REPAIR` Order a droid to repair something.
+//;;   * `DORDER_PATROL` Order a droid to patrol.
+//;;   * `DORDER_DEMOLISH` Order a droid to demolish something.
+//;;   * `DORDER_EMBARK` Order a droid to embark on a transport.
+//;;   * `DORDER_DISEMBARK` Order a transport to disembark its units at the given position.
+//;;   * `DORDER_FIRESUPPORT` Order a droid to fire at whatever the target sensor is targeting. (3.2+ only)
+//;;   * `DORDER_COMMANDERSUPPORT` Assign the droid to a commander. (3.2+ only)
+//;;   * `DORDER_STOP` Order a droid to stop whatever it is doing. (3.2+ only)
+//;;   * `DORDER_RTR` Order a droid to return for repairs. (3.2+ only)
+//;;   * `DORDER_RTB` Order a droid to return to base. (3.2+ only)
+//;;   * `DORDER_HOLD` Order a droid to hold its position. (3.2+ only)
+//;;   * `DORDER_REARM` Order a VTOL droid to rearm. If given a target, will go to specified rearm pad. If not, will go to nearest rearm pad. (3.2+ only)
+//;;   * `DORDER_OBSERVE` Order a droid to keep a target in sensor view. (3.2+ only)
+//;;   * `DORDER_RECOVER` Order a droid to pick up something. (3.2+ only)
+//;;   * `DORDER_RECYCLE` Order a droid to factory for recycling. (3.2+ only)
+//;; * `action` The current action of the droid. This is how it intends to carry out its plan. The
 //;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
 //;; the action directly, but it may be interesting to look at what it currently is.
-//;; * ```droidType``` The droid's type. The following types are defined:
-//;;   * ```DROID_CONSTRUCT``` Trucks and cyborg constructors.
-//;;   * ```DROID_WEAPON``` Droids with weapon turrets, except cyborgs.
-//;;   * ```DROID_PERSON``` Non-cyborg two-legged units, like scavengers.
-//;;   * ```DROID_REPAIR``` Units with repair turret, including repair cyborgs.
-//;;   * ```DROID_SENSOR``` Units with sensor turret.
-//;;   * ```DROID_ECM``` Unit with ECM jammer turret.
-//;;   * ```DROID_CYBORG``` Cyborgs with weapons.
-//;;   * ```DROID_TRANSPORTER``` Cyborg transporter.
-//;;   * ```DROID_SUPERTRANSPORTER``` Droid transporter.
-//;;   * ```DROID_COMMAND``` Commanders.
-//;; * ```group``` The group this droid is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
-//;; * ```armed``` The percentage of weapon capability that is fully armed. Will be \emph{null} for droids other than VTOLs.
-//;; * ```experience``` Amount of experience this droid has, based on damage it has dealt to enemies.
-//;; * ```cost``` What it would cost to build the droid. (3.2+ only)
-//;; * ```isVTOL``` True if the droid is VTOL. (3.2+ only)
-//;; * ```canHitAir``` True if the droid has anti-air capabilities. (3.2+ only)
-//;; * ```canHitGround``` True if the droid has anti-ground capabilities. (3.2+ only)
-//;; * ```isSensor``` True if the droid has sensor ability. (3.2+ only)
-//;; * ```isCB``` True if the droid has counter-battery ability. (3.2+ only)
-//;; * ```isRadarDetector``` True if the droid has radar detector ability. (3.2+ only)
-//;; * ```hasIndirect``` One or more of the droid's weapons are indirect. (3.2+ only)
-//;; * ```range``` Maximum range of its weapons. (3.2+ only)
-//;; * ```body``` The body component of the droid. (3.2+ only)
-//;; * ```propulsion``` The propulsion component of the droid. (3.2+ only)
-//;; * ```weapons``` The weapon components of the droid, as an array. Contains 'name', 'id', 'armed' percentage and 'lastFired' properties. (3.2+ only)
-//;; * ```cargoCapacity``` Defined for transporters only: Total cargo capacity (number of items that will fit may depend on their size). (3.2+ only)
-//;; * ```cargoLeft``` Defined for transporters only: Cargo capacity left. (3.2+ only)
-//;; * ```cargoCount``` Defined for transporters only: Number of individual \emph{items} in the cargo hold. (3.2+ only)
-//;; * ```cargoSize``` The amount of cargo space the droid will take inside a transport. (3.2+ only)
+//;; * `droidType` The droid's type. The following types are defined:
+//;;   * `DROID_CONSTRUCT` Trucks and cyborg constructors.
+//;;   * `DROID_WEAPON` Droids with weapon turrets, except cyborgs.
+//;;   * `DROID_PERSON` Non-cyborg two-legged units, like scavengers.
+//;;   * `DROID_REPAIR` Units with repair turret, including repair cyborgs.
+//;;   * `DROID_SENSOR` Units with sensor turret.
+//;;   * `DROID_ECM` Unit with ECM jammer turret.
+//;;   * `DROID_CYBORG` Cyborgs with weapons.
+//;;   * `DROID_TRANSPORTER` Cyborg transporter.
+//;;   * `DROID_SUPERTRANSPORTER` Droid transporter.
+//;;   * `DROID_COMMAND` Commanders.
+//;; * `group` The group this droid is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
+//;; * `armed` The percentage of weapon capability that is fully armed. Will be \emph{null} for droids other than VTOLs.
+//;; * `experience` Amount of experience this droid has, based on damage it has dealt to enemies.
+//;; * `cost` What it would cost to build the droid. (3.2+ only)
+//;; * `isVTOL` True if the droid is VTOL. (3.2+ only)
+//;; * `canHitAir` True if the droid has anti-air capabilities. (3.2+ only)
+//;; * `canHitGround` True if the droid has anti-ground capabilities. (3.2+ only)
+//;; * `isSensor` True if the droid has sensor ability. (3.2+ only)
+//;; * `isCB` True if the droid has counter-battery ability. (3.2+ only)
+//;; * `isRadarDetector` True if the droid has radar detector ability. (3.2+ only)
+//;; * `hasIndirect` One or more of the droid's weapons are indirect. (3.2+ only)
+//;; * `range` Maximum range of its weapons. (3.2+ only)
+//;; * `body` The body component of the droid. (3.2+ only)
+//;; * `propulsion` The propulsion component of the droid. (3.2+ only)
+//;; * `weapons` The weapon components of the droid, as an array. Contains 'name', 'id', 'armed' percentage and 'lastFired' properties. (3.2+ only)
+//;; * `cargoCapacity` Defined for transporters only: Total cargo capacity (number of items that will fit may depend on their size). (3.2+ only)
+//;; * `cargoLeft` Defined for transporters only: Cargo capacity left. (3.2+ only)
+//;; * `cargoCount` Defined for transporters only: Number of individual \emph{items} in the cargo hold. (3.2+ only)
+//;; * `cargoSize` The amount of cargo space the droid will take inside a transport. (3.2+ only)
 //;;
 JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 {
@@ -1020,18 +1020,18 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 //;; fields are also inherited by the droid, structure and feature objects.
 //;; The following properties are defined:
 //;;
-//;; * ```type``` It will be one of ```DROID```, ```STRUCTURE``` or ```FEATURE```.
-//;; * ```id``` The unique ID of this object.
-//;; * ```x``` X position of the object in tiles.
-//;; * ```y``` Y position of the object in tiles.
-//;; * ```z``` Z (height) position of the object in tiles.
-//;; * ```player``` The player owning this object.
-//;; * ```selected``` A boolean saying whether 'selectedPlayer' has selected this object.
-//;; * ```name``` A user-friendly name for this object.
-//;; * ```health``` Percentage that this object is damaged (where 100 means not damaged at all).
-//;; * ```armour``` Amount of armour points that protect against kinetic weapons.
-//;; * ```thermal``` Amount of thermal protection that protect against heat based weapons.
-//;; * ```born``` The game time at which this object was produced or came into the world. (3.2+ only)
+//;; * `type` It will be one of `DROID`, `STRUCTURE` or `FEATURE`.
+//;; * `id` The unique ID of this object.
+//;; * `x` X position of the object in tiles.
+//;; * `y` Y position of the object in tiles.
+//;; * `z` Z (height) position of the object in tiles.
+//;; * `player` The player owning this object.
+//;; * `selected` A boolean saying whether 'selectedPlayer' has selected this object.
+//;; * `name` A user-friendly name for this object.
+//;; * `health` Percentage that this object is damaged (where 100 means not damaged at all).
+//;; * `armour` Amount of armour points that protect against kinetic weapons.
+//;; * `thermal` Amount of thermal protection that protect against heat based weapons.
+//;; * `born` The game time at which this object was produced or came into the world. (3.2+ only)
 //;;
 JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx)
 {
@@ -1066,17 +1066,17 @@ JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx)
 //;; Describes a template type. Templates are droid designs that a player has created.
 //;; The following properties are defined:
 //;;
-//;; * ```id``` The ID of this object.
-//;; * ```name``` Name of the template.
-//;; * ```cost``` The power cost of the template if put into production.
-//;; * ```droidType``` The type of droid that would be created.
-//;; * ```body``` The name of the body type.
-//;; * ```propulsion``` The name of the propulsion type.
-//;; * ```brain``` The name of the brain type.
-//;; * ```repair``` The name of the repair type.
-//;; * ```ecm``` The name of the ECM (electronic counter-measure) type.
-//;; * ```construct``` The name of the construction type.
-//;; * ```weapons``` An array of weapon names attached to this template.
+//;; * `id` The ID of this object.
+//;; * `name` Name of the template.
+//;; * `cost` The power cost of the template if put into production.
+//;; * `droidType` The type of droid that would be created.
+//;; * `body` The name of the body type.
+//;; * `propulsion` The name of the propulsion type.
+//;; * `brain` The name of the brain type.
+//;; * `repair` The name of the repair type.
+//;; * `ecm` The name of the ECM (electronic counter-measure) type.
+//;; * `construct` The name of the construction type.
+//;; * `weapons` An array of weapon names attached to this template.
 JSValue convTemplate(const DROID_TEMPLATE *psTempl, JSContext *ctx)
 {
 	JSValue value = JS_NewObject(ctx);
@@ -3126,7 +3126,7 @@ IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
 //-- ## removeBeacon(playerFilter)
 //--
-//-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
+//-- Remove a beacon message sent to target player. Target may also be `ALLIES`.
 //-- Returns a boolean that is true on success. (3.2+ only)
 //--
 static JSValue js_removeBeacon(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -3304,9 +3304,9 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 {
 	debug(LOG_WZ, "Loading functions for context %p, script %s", static_cast<void *>(ctx), scriptName.c_str());
 
-	//== * ```Upgrades``` A special array containing per-player rules information for game entity types,
+	//== * `Upgrades` A special array containing per-player rules information for game entity types,
 	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
-	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
+	//== array contains a subset of the sparse array of rules information in the `Stats` global.
 	//== These values are defined:
 	JSValue upgrades = constructUpgradesQuickJSValue(ctx);
 	JS_DefinePropertyValueStr(ctx, global_obj, "Upgrades", upgrades, JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);

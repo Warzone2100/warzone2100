@@ -35,7 +35,7 @@
 //__
 //__ This section describes event callbacks (or 'events' for short) that are
 //__ called from the game when something specific happens. Which scripts
-//__ receive them is usually filtered by player. Call ```receiveAllEvents(true)```
+//__ receive them is usually filtered by player. Call `receiveAllEvents(true)`
 //__ to start receiving all events unfiltered.
 //__
 
@@ -306,7 +306,7 @@ Vector2i getPlayerStartPosition(int player)
 nlohmann::json scripting_engine::constructDerrickPositions()
 {
 	// Static map knowledge about start positions
-	//== * ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
+	//== * `derrickPositions` An array of derrick starting positions on the current map. Each item in the array is an
 	//== object containing the x and y variables for a derrick.
 	nlohmann::json derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
 	for (int i = 0; i < derricks.size(); i++)
@@ -323,7 +323,7 @@ nlohmann::json scripting_engine::constructDerrickPositions()
 nlohmann::json scripting_engine::constructStartPositions()
 {
 	// Static map knowledge about start positions
-	//== * ```startPositions``` An array of player start positions on the current map. Each item in the array is an
+	//== * `startPositions` An array of player start positions on the current map. Each item in the array is an
 	//== object containing the x and y variables for a player start position.
 	nlohmann::json startPositions = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
 	for (int i = 0; i < game.maxPlayers; i++)
@@ -539,18 +539,18 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	json globalVars = json::object();
 	// Special global variables
-	//== * ```version``` Current version of the game, set in *major.minor* format.
+	//== * `version` Current version of the game, set in *major.minor* format.
 	globalVars["version"] = version_getVersionString();
-	//== * ```selectedPlayer``` The player controlled by the client on which the script runs.
+	//== * `selectedPlayer` The player controlled by the client on which the script runs.
 	globalVars["selectedPlayer"] = selectedPlayer;
-	//== * ```gameTime``` The current game time. Updated before every invokation of a script.
+	//== * `gameTime` The current game time. Updated before every invokation of a script.
 	pNewInstance->setSpecifiedGlobalVariable("gameTime", gameTime, wzapi::GlobalVariableFlags::ReadOnlyUpdatedFromApp | wzapi::GlobalVariableFlags::DoNotSave);
-	//== * ```modList``` The current loaded mods.
+	//== * `modList` The current loaded mods.
 	globalVars["modList"] = getModList();
 
 
-	//== * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
-	//== ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
+	//== * `difficulty` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
+	//== `EASY`, `MEDIUM`, `HARD` or `INSANE`.
 	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		globalVars["difficulty"] = static_cast<int8_t>(difficulty);
@@ -559,9 +559,9 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	{
 		globalVars["difficulty"] = (int)getDifficultyLevel();
 	}
-	//== * ```mapName``` The name of the current map.
+	//== * `mapName` The name of the current map.
 	globalVars["mapName"] = game.map;
-	//== * ```tilesetType``` The area name of the map.
+	//== * `tilesetType` The area name of the map.
 	std::string tilesetType("CUSTOM");
 	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
@@ -576,27 +576,27 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 		tilesetType = "ROCKIES";
 	}
 	globalVars["tilesetType"] = tilesetType;
-	//== * ```baseType``` The type of base that the game starts with. It will be one of ```CAMP_CLEAN```, ```CAMP_BASE``` or ```CAMP_WALLS```.
+	//== * `baseType` The type of base that the game starts with. It will be one of `CAMP_CLEAN`, `CAMP_BASE` or `CAMP_WALLS`.
 	globalVars["baseType"] = game.base;
-	//== * ```alliancesType``` The type of alliances permitted in this game. It will be one of ```NO_ALLIANCES```, ```ALLIANCES```, ```ALLIANCES_UNSHARED``` or ```ALLIANCES_TEAMS```.
+	//== * `alliancesType` The type of alliances permitted in this game. It will be one of `NO_ALLIANCES`, `ALLIANCES`, `ALLIANCES_UNSHARED` or `ALLIANCES_TEAMS`.
 	globalVars["alliancesType"] = game.alliance;
-	//== * ```powerType``` The power level set for this game.
+	//== * `powerType` The power level set for this game.
 	globalVars["powerType"] = game.power;
-	//== * ```maxPlayers``` The number of active players in this game.
+	//== * `maxPlayers` The number of active players in this game.
 	globalVars["maxPlayers"] = game.maxPlayers;
-	//== * ```scavengers``` Whether or not scavengers are activated in this game, and, if so, which type.
+	//== * `scavengers` Whether or not scavengers are activated in this game, and, if so, which type.
 	globalVars["scavengers"] = game.scavengers;
-	//== * ```mapWidth``` Width of map in tiles.
+	//== * `mapWidth` Width of map in tiles.
 	globalVars["mapWidth"] = mapWidth;
-	//== * ```mapHeight``` Height of map in tiles.
+	//== * `mapHeight` Height of map in tiles.
 	globalVars["mapHeight"] = mapHeight;
-	//== * ```scavengerPlayer``` Index of scavenger player. (3.2+ only)
+	//== * `scavengerPlayer` Index of scavenger player. (3.2+ only)
 	globalVars["scavengerPlayer"] = scavengerSlot();
-	//== * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
+	//== * `isMultiplayer` If the current game is a online multiplayer game or not. (3.2+ only)
 	globalVars["isMultiplayer"] = NetPlay.bComms;
-	//== * ```challenge``` If the current game is a challenge. (4.1.4+ only)
+	//== * `challenge` If the current game is a challenge. (4.1.4+ only)
 	globalVars["challenge"] = challengeActive;
-	//== * ```idleTime``` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
+	//== * `idleTime` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
 	globalVars["idleTime"] = game.inactivityMinutes * 60 * 1000;
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
@@ -611,7 +611,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	pNewInstance->setSpecifiedGlobalVariables(wzapi::getUsefulConstants(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
 	/// Place to store group sizes
-	//== * ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
+	//== * `groupSizes` A sparse array of group sizes. If a group has never been used, the entry in this array will
 	//== be undefined.
 	pNewInstance->setSpecifiedGlobalVariable("groupSizes", nlohmann::json::object(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
@@ -625,15 +625,15 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
 	json globalVarsToSave = json::object();
 	// We need to always save the 'me' special variable.
-	//== * ```me``` The player the script is currently running as.
+	//== * `me` The player the script is currently running as.
 	globalVarsToSave["me"] = player;
 
 	// We also need to save the special 'scriptName' variable.
-	//== * ```scriptName``` Base name of the script that is running.
+	//== * `scriptName` Base name of the script that is running.
 	globalVarsToSave["scriptName"] = basename.baseName();
 
 	// We also need to save the special 'scriptPath' variable.
-	//== * ```scriptPath``` Base path of the script that is running.
+	//== * `scriptPath` Base path of the script that is running.
 	globalVarsToSave["scriptPath"] = basename.path();
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVarsToSave, wzapi::GlobalVariableFlags::ReadOnly); // ensure these are saved
@@ -1177,7 +1177,7 @@ bool triggerEventDroidIdle(DROID *psDroid)
 //__
 //__ An event that is run every time a droid is built. The structure parameter is set
 //__ if the droid was produced in a factory. It is not triggered for droid theft or
-//__ gift (check ```eventObjectTransfer``` for that).
+//__ gift (check `eventObjectTransfer` for that).
 //__
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
@@ -1199,7 +1199,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 //__
 //__ An event that is run every time a structure is produced. The droid parameter is set
 //__ if the structure was built by a droid. It is not triggered for building theft
-//__ (check ```eventObjectTransfer``` for that).
+//__ (check `eventObjectTransfer` for that).
 //__
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
@@ -1433,8 +1433,8 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 
 //__ ## eventChat(from, to, message)
 //__
-//__ An event that is run whenever a chat message is received. The ```from``` parameter is the
-//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+//__ An event that is run whenever a chat message is received. The `from` parameter is the
+//__ player sending the chat message. For the moment, the `to` parameter is always the script
 //__ player.
 //__
 bool triggerEventChat(int from, int to, const char *message)
@@ -1459,8 +1459,8 @@ bool triggerEventChat(int from, int to, const char *message)
 
 //__ ## eventBeacon(x, y, from, to[, message])
 //__
-//__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
-//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+//__ An event that is run whenever a beacon message is received. The `from` parameter is the
+//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
 //__ Message may be undefined.
 //__
 bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
@@ -1481,8 +1481,8 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 
 //__ ## eventBeaconRemoved(from, to)
 //__
-//__ An event that is run whenever a beacon message is removed. The ```from``` parameter is the
-//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+//__ An event that is run whenever a beacon message is removed. The `from` parameter is the
+//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
 //__
 bool triggerEventBeaconRemoved(int from, int to)
 {
@@ -1502,11 +1502,11 @@ bool triggerEventBeaconRemoved(int from, int to)
 //__ ## eventSelectionChanged(objects)
 //__
 //__ An event that is triggered whenever the host player selects one or more game objects.
-//__ The ```objects``` parameter contains an array of the currently selected game objects.
+//__ The `objects` parameter contains an array of the currently selected game objects.
 //__ Keep in mind that the player may drag and drop select many units at once, select one
 //__ unit specifically, or even add more selections to a current selection one at a time.
 //__ This event will trigger once for each user action, not once for each selected or
-//__ deselected object. If all selected game objects are deselected, ```objects``` will
+//__ deselected object. If all selected game objects are deselected, `objects` will
 //__ be empty.
 //__
 bool triggerEventSelected()
@@ -2158,14 +2158,14 @@ bool scripting_engine::writeLabels(const char *filename)
 //-- Reset the trigger on an label. Next time a unit enters the area, it will trigger
 //-- an area event. Next time an object or a group is seen, it will trigger a seen event.
 //-- Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
+//-- be a specific player to watch for, or `ALL_PLAYERS` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 //--
 //-- ## resetArea(labelName[, playerFilter])
 //--
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
+//-- be a specific player to watch for, or `ALL_PLAYERS` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
 //--
 wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter))
@@ -2501,8 +2501,8 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 //-- ## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
 //--
 //-- Returns an array of game objects seen within the given area that passes the optional filter
-//-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
-//-- ```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
+//-- which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, filter is
+//-- `ALL_PLAYERS`. Finally an optional parameter can specify whether only visible objects should be
 //-- returned; by default only visible objects are returned. The label can either be actual
 //-- positions or a label to an AREA. Calling this function is much faster than iterating over all
 //-- game objects using other enum functions. (3.2+ only)

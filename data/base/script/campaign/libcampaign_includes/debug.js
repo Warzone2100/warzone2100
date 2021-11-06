@@ -49,12 +49,12 @@ function camUnmarkTiles(label)
 }
 
 /**
- * Pretty debug prints - a wrapper around ```debug()```.
+ * Pretty debug prints - a wrapper around `debug()`.
  * Prints a function call stack and the argument message, prefixed with "DEBUG".
  * Only use this function to indicate actual bugs in the scenario script,
  * because game shouldn't print things when nothing is broken.
  * If you want to keep some prints around to make debugging easier
- * without distracting the user, use ```camTrace()```.
+ * without distracting the user, use `camTrace()`.
  * @param {...string} args
  * @returns {void}
  */
@@ -68,7 +68,7 @@ function camDebug(...args)
 }
 
 /**
- * Same as ```camDebug()```, but prints each message only once during script lifetime.
+ * Same as `camDebug()`, but prints each message only once during script lifetime.
  * @param {...string} args
  * @returns {void}
  */
@@ -88,8 +88,8 @@ function camDebugOnce(...args)
 }
 
 /**
- * Same as ```camDebug()```, but only warns in cheat mode.
- * Prefixed with "TRACE". It's safe and natural to keep ```camTrace()``` calls in your code for easier debugging.
+ * Same as `camDebug()`, but only warns in cheat mode.
+ * Prefixed with "TRACE". It's safe and natural to keep `camTrace()` calls in your code for easier debugging.
  * @param {...string} args
  * @returns {void}
  */
@@ -105,7 +105,7 @@ function camTrace(...args)
 }
 
 /**
- * Same as ```camTrace()```, but prints each message only once during script lifetime.
+ * Same as `camTrace()`, but prints each message only once during script lifetime.
  * @param {...string} args
  * @returns {void}
  */
