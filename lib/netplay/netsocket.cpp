@@ -692,7 +692,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 	return size;
 }
 
-void socketFlush(Socket *sock, size_t *rawByteCount)
+void socketFlush(Socket *sock, uint8_t player, size_t *rawByteCount)
 {
 	size_t ignored;
 	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
@@ -702,6 +702,8 @@ void socketFlush(Socket *sock, size_t *rawByteCount)
 	{
 		return;  // Not compressed, so don't mess with zlib.
 	}
+
+	ASSERT(!sock->writeError, "Socket write error?? (Player: %" PRIu8 "", player);
 
 	// Flush data out of zlib compression state.
 	do
