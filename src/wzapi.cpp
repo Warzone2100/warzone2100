@@ -529,28 +529,28 @@ bool wzapi::removeSpotter(WZAPI_PARAMS(uint32_t spotterId))
 	return ::removeSpotter(spotterId);
 }
 
-//-- ## syncRequest(req_id, x, y[, object[, object2]])
+//-- ## syncRequest(reqId, x, y[, object1[, object2]])
 //--
 //-- Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
 //-- Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
 //-- take care only to define sync requests that can be validated against cheating. (3.2+ only)
 //--
-bool wzapi::syncRequest(WZAPI_PARAMS(int32_t req_id, int32_t _x, int32_t _y, optional<const BASE_OBJECT *> _psObj, optional<const BASE_OBJECT *> _psObj2))
+bool wzapi::syncRequest(WZAPI_PARAMS(int32_t reqId, int32_t _x, int32_t _y, optional<const BASE_OBJECT *> _psObj1, optional<const BASE_OBJECT *> _psObj2))
 {
 	int32_t x = world_coord(_x);
 	int32_t y = world_coord(_y);
-	const BASE_OBJECT *psObj = nullptr, *psObj2 = nullptr;
-	if (_psObj.has_value())
+	const BASE_OBJECT *psObj1 = nullptr, *psObj2 = nullptr;
+	if (_psObj1.has_value())
 	{
-		psObj = _psObj.value();
-		SCRIPT_ASSERT(false, context, psObj, "No valid object (obj1) provided");
+		psObj = _psObj1.value();
+		SCRIPT_ASSERT(false, context, psObj1, "No valid object (obj1) provided");
 	}
 	if (_psObj2.has_value())
 	{
 		psObj2 = _psObj2.value();
 		SCRIPT_ASSERT(false, context, psObj2, "No valid object (obj2) provided");
 	}
-	sendSyncRequest(req_id, x, y, psObj, psObj2);
+	sendSyncRequest(reqId, x, y, psObj1, psObj2);
 	return true;
 }
 
@@ -782,7 +782,7 @@ wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(i
 	return IdToObject(objectType, id, player);
 }
 
-//-- ## hackAssert(condition, message...)
+//-- ## hackAssert(condition, ...message)
 //--
 //-- Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
 //--
@@ -949,7 +949,7 @@ wzapi::no_return_value wzapi::debugOutputStrings(WZAPI_PARAMS(wzapi::va_list_tre
 	return {};
 }
 
-//-- ## console(strings...)
+//-- ## console(...strings)
 //--
 //-- Print text to the player console.
 //--
@@ -1259,7 +1259,7 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 	return list;
 }
 
-//-- ## pursueResearch(labStructure, research)
+//-- ## pursueResearch(labStructure, researchNames)
 //--
 //-- Start researching the first available technology on the way to the given technology.
 //-- First parameter is the structure to research in, which must be a research lab. The
@@ -1267,13 +1267,13 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 //-- The second parameter may also be an array of such strings. The first technology that has
 //-- not yet been researched in that list will be pursued.
 //--
-bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_string_list research))
+bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_string_list researchNames))
 {
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
 	int player = psStruct->player;
 
 	RESEARCH *psResearch = nullptr;  // Dummy initialisation.
-	for (const auto& researchName : research.strings)
+	for (const auto& researchName : researchNames.strings)
 	{
 		RESEARCH *psCurrResearch = ::getResearch(researchName.c_str());
 		SCRIPT_ASSERT(false, context, psCurrResearch, "No such research: %s", researchName.c_str());
@@ -1287,9 +1287,9 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 	}
 	if (psResearch == nullptr)
 	{
-		if (research.strings.size() == 1)
+		if (researchNames.strings.size() == 1)
 		{
-			debug(LOG_SCRIPT, "%s has already been researched!", research.strings.front().c_str());
+			debug(LOG_SCRIPT, "%s has already been researched!", researchNames.strings.front().c_str());
 		}
 		else
 		{
@@ -1814,16 +1814,14 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	}
 }
 
-//-- ## buildDroid(factory, templateName, body, propulsion, reserved, reserved, turrets...)
+//-- ## buildDroid(factory, templateName, bodyName, propulsionName, reserved1, reserved2, ...turrets)
 //--
 //-- Start factory production of new droid with the given name, body, propulsion and turrets.
-//-- The reserved parameter should be passed **null** for now. The components can be
+//-- The reserved1 parameters should be passed "" for now. The components can be
 //-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
-//-- component in the list will be used. The second reserved parameter used to be a droid type.
-//-- It is now unused and in 3.2+ should be passed "", while in 3.1 it should be the
-//-- droid type to be built. Returns a boolean that is true if production was started.
+//-- component in the list will be used. Returns a boolean that is true if production was started.
 //--
-bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets))
+bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets))
 {
 	STRUCTURE *psStruct = psFactory;
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
@@ -1833,7 +1831,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	const int capacity = psStruct->capacity; // body size limit
 	SCRIPT_ASSERT(false, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
-	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, capacity, true);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, bodyName, propulsionName, turrets, capacity, true);
 	if (psTemplate)
 	{
 		SCRIPT_ASSERT(false, context, validTemplateForFactory(psTemplate.get(), psStruct, true),
@@ -1863,7 +1861,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 	return false;
 }
 
-//-- ## addDroid(player, x, y, templateName, body, propulsion, reserved, reserved, turrets...)
+//-- ## addDroid(player, x, y, templateName, bodyName, propulsionName, reserved1, reserved2, ...turrets)
 //--
 //-- Create and place a droid at the given x, y position as belonging to the given player, built with
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
@@ -1871,13 +1869,13 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 //-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
 //-- pass -1 as both x and y.
 //--
-wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
+wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list bodybodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	bool onMission = (x == -1) && (y == -1);
 	SCRIPT_ASSERT(nullptr, context, (onMission || (x >= 0 && y >= 0)), "Invalid coordinates (%d, %d) for droid", x, y);
 	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
-	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, SIZE_NUM, false);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, bodyName, propulsionName, turrets, SIZE_NUM, false);
 	if (psTemplate)
 	{
 		DROID *psDroid = nullptr;
@@ -1914,17 +1912,17 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 	return nullptr;
 }
 
-//-- ## makeTemplate(player, templateName, body, propulsion, reserved, turrets...)
+//-- ## makeTemplate(player, templateName, bodyName, propulsionName, reserved, ...turrets)
 //--
 //-- Create a template (virtual droid) with the given components. Can be useful for calculating the cost
 //-- of droids before putting them into production, for instance. Will fail and return null if template
 //-- could not possibly be built using current research. (3.2+ only)
 //--
-std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets))
+std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved, va_list<string_or_string_list> turrets))
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
-	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, SIZE_NUM, true);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, bodyName, propulsionName, turrets, SIZE_NUM, true);
 	return std::unique_ptr<const DROID_TEMPLATE>(std::move(psTemplate));
 }
 

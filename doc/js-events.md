@@ -53,11 +53,11 @@ An event that is run when the mission transporter has no more reinforcements to 
 
 An event that is run when the mission transporter has landed with reinforcements.
 
-## eventDeliveryPointMoving()
+## eventDeliveryPointMoving(structure)
 
 An event that is run when the current player starts to move a delivery point.
 
-## eventDeliveryPointMoved()
+## eventDeliveryPointMoved(structure)
 
 An event that is run after the current player has moved a delivery point.
 
@@ -115,7 +115,7 @@ This event will trigger once for each user action, not once for each selected or
 deselected object. If all selected game objects are deselected, ```objects``` will
 be empty.
 
-## eventObjectRecycled()
+## eventObjectRecycled(object)
 
 An event that is run when an object (ex. droid, structure) is recycled.
 
@@ -186,7 +186,7 @@ which was reset through resetLabel() to subscribe for events, goes from not seen
 An event that is run sometimes when an objectm  goes from not seen to seen.
 First parameter is **game object** doing the seeing, the next the game object being seen.
 
-## eventGroupSeen(viewer, group)
+## eventGroupSeen(viewer, groupId)
 
 An event that is run sometimes when a member of a group, which was marked by a group label,
 which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
@@ -242,7 +242,7 @@ An event that is called whenever an alliance is accepted.
 
 An event that is called whenever an alliance is broken.
 
-## eventSyncRequest(req_id, x, y, obj_id, obj_id2)
+## eventSyncRequest(from, reqId, x, y, objId1, objId2)
 
 An event that is called from a script and synchronized with all other scripts and hosts
 to prevent desync from happening. Sync requests must be carefully validated to prevent

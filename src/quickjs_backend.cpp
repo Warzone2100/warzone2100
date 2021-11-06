@@ -329,13 +329,13 @@ public:
 public:
 	// MARK: UI-related events (intended for the tutorial)
 
-	//__ ## eventDeliveryPointMoving()
+	//__ ## eventDeliveryPointMoving(structure)
 	//__
 	//__ An event that is run when the current player starts to move a delivery point.
 	//__
 	virtual bool handle_eventDeliveryPointMoving(const BASE_OBJECT *psStruct) override;
 
-	//__ ## eventDeliveryPointMoved()
+	//__ ## eventDeliveryPointMoved(structure)
 	//__
 	//__ An event that is run after the current player has moved a delivery point.
 	//__
@@ -425,7 +425,7 @@ public:
 public:
 	// MARK: Game state-change events
 
-	//__ ## eventObjectRecycled()
+	//__ ## eventObjectRecycled(object)
 	//__
 	//__ An event that is run when an object (ex. droid, structure) is recycled.
 	//__
@@ -528,7 +528,7 @@ public:
 	virtual bool handle_eventObjectSeen(const BASE_OBJECT *psViewer, const BASE_OBJECT *psSeen) override;
 
 	//__
-	//__ ## eventGroupSeen(viewer, group)
+	//__ ## eventGroupSeen(viewer, groupId)
 	//__
 	//__ An event that is run sometimes when a member of a group, which was marked by a group label,
 	//__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
@@ -575,7 +575,7 @@ public:
 	//__ is the about to be killed object, the group's id, and the new group size.
 	//__
 //		// Since groups are entities local to one context, we do not iterate over them here.
-	virtual bool handle_eventGroupLoss(const BASE_OBJECT *psObj, int group, int size) override;
+	virtual bool handle_eventGroupLoss(const BASE_OBJECT *psObj, int groupId, int size) override;
 
 	//__ ## eventArea<label>(droid)
 	//__
@@ -613,13 +613,13 @@ public:
 public:
 	// MARK: Special input events
 
-	//__ ## eventSyncRequest(req_id, x, y, obj_id, obj_id2)
+	//__ ## eventSyncRequest(from, reqId, x, y, objId1, objId2)
 	//__
 	//__ An event that is called from a script and synchronized with all other scripts and hosts
 	//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
 	//__ cheating!
 	//__
-	virtual bool handle_eventSyncRequest(int from, int req_id, int x, int y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2) override;
+	virtual bool handle_eventSyncRequest(int from, int reqId, int x, int y, const BASE_OBJECT *psObj1, const BASE_OBJECT *psObj2) override;
 
 	//__ ## eventKeyPressed(meta, key)
 	//__

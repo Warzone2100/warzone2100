@@ -233,13 +233,13 @@ namespace wzapi
 	public:
 		// MARK: UI-related events (intended for the tutorial)
 
-		//__ ## eventDeliveryPointMoving()
+		//__ ## eventDeliveryPointMoving(structure)
 		//__
 		//__ An event that is run when the current player starts to move a delivery point.
 		//__
 		virtual bool handle_eventDeliveryPointMoving(const BASE_OBJECT *psStruct) SCRIPTING_EVENT_NON_REQUIRED
 
-		//__ ## eventDeliveryPointMoved()
+		//__ ## eventDeliveryPointMoved(structure)
 		//__
 		//__ An event that is run after the current player has moved a delivery point.
 		//__
@@ -329,7 +329,7 @@ namespace wzapi
 	public:
 		// MARK: Game state-change events
 
-		//__ ## eventObjectRecycled()
+		//__ ## eventObjectRecycled(object)
 		//__
 		//__ An event that is run when an object (ex. droid, structure) is recycled.
 		//__
@@ -432,7 +432,7 @@ namespace wzapi
 		virtual bool handle_eventObjectSeen(const BASE_OBJECT *psViewer, const BASE_OBJECT *psSeen) = 0;
 
 		//__
-		//__ ## eventGroupSeen(viewer, group)
+		//__ ## eventGroupSeen(viewer, groupId)
 		//__
 		//__ An event that is run sometimes when a member of a group, which was marked by a group label,
 		//__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
@@ -479,7 +479,7 @@ namespace wzapi
 		//__ is the about to be killed object, the group's id, and the new group size.
 		//__
 //		// Since groups are entities local to one context, we do not iterate over them here.
-		virtual bool handle_eventGroupLoss(const BASE_OBJECT *psObj, int group, int size) = 0;
+		virtual bool handle_eventGroupLoss(const BASE_OBJECT *psObj, int groupId, int size) = 0;
 
 		//__ ## eventArea<label>(droid)
 		//__
@@ -517,13 +517,13 @@ namespace wzapi
 	public:
 		// MARK: Special input events
 
-		//__ ## eventSyncRequest(req_id, x, y, obj_id, obj_id2)
+		//__ ## eventSyncRequest(from, reqId, x, y, objId1, objId2)
 		//__
 		//__ An event that is called from a script and synchronized with all other scripts and hosts
 		//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
 		//__ cheating!
 		//__
-		virtual bool handle_eventSyncRequest(int from, int req_id, int x, int y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2) = 0;
+		virtual bool handle_eventSyncRequest(int from, int reqId, int x, int y, const BASE_OBJECT *psObj1, const BASE_OBJECT *psObj2) = 0;
 
 		//__ ## eventKeyPressed(meta, key)
 		//__
@@ -969,7 +969,7 @@ namespace wzapi
 	bool cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid));
 	uint32_t addSpotter(WZAPI_PARAMS(int x, int y, int player, int range, bool radar, uint32_t expiry));
 	bool removeSpotter(WZAPI_PARAMS(uint32_t spotterId));
-	bool syncRequest(WZAPI_PARAMS(int32_t req_id, int32_t x, int32_t y, optional<const BASE_OBJECT *> _psObj, optional<const BASE_OBJECT *> _psObj2));
+	bool syncRequest(WZAPI_PARAMS(int32_t reqId, int32_t x, int32_t y, optional<const BASE_OBJECT *> _psObj1, optional<const BASE_OBJECT *> _psObj2));
 	bool replaceTexture(WZAPI_PARAMS(std::string oldFilename, std::string newFilename));
 	bool changePlayerColour(WZAPI_PARAMS(int player, int colour));
 	bool setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)); MULTIPLAY_SYNCREQUEST_REQUIRED
@@ -1011,7 +1011,7 @@ namespace wzapi
 	researchResult getResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player));
 	researchResults enumResearch(WZAPI_NO_PARAMS);
 	std::vector<const BASE_OBJECT *> enumRange(WZAPI_PARAMS(int x, int y, int range, optional<int> _playerFilter, optional<bool> _seen));
-	bool pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_string_list research));
+	bool pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_string_list researchNames));
 	researchResults findResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player));
 	int32_t distBetweenTwoPoints(WZAPI_PARAMS(int32_t x1, int32_t y1, int32_t x2, int32_t y2));
 	bool orderDroidLoc(WZAPI_PARAMS(DROID *psDroid, int order_, int x, int y));
@@ -1024,9 +1024,9 @@ namespace wzapi
 	int terrainType(WZAPI_PARAMS(int x, int y));
 	bool tileIsBurning(WZAPI_PARAMS(int x, int y));
 	bool orderDroidObj(WZAPI_PARAMS(DROID *psDroid, int _order, BASE_OBJECT *psObj));
-	bool buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets));
-	returned_nullable_ptr<const DROID> addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)); MUTLIPLAY_UNSAFE
-	std::unique_ptr<const DROID_TEMPLATE> makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets));
+	bool buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets));
+	returned_nullable_ptr<const DROID> addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)); MUTLIPLAY_UNSAFE
+	std::unique_ptr<const DROID_TEMPLATE> makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, va_list<string_or_string_list> turrets));
 	bool addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporter, game_object_identifier droid));
 	returned_nullable_ptr<const FEATURE> addFeature(WZAPI_PARAMS(std::string featureName, int x, int y)) MUTLIPLAY_UNSAFE;
 	bool componentAvailable(WZAPI_PARAMS(std::string componentType, optional<std::string> _componentName));

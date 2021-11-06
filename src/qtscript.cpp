@@ -944,11 +944,11 @@ void jsShowDebug()
 //__
 //__ An event that is run after game is saved. There is usually no need to use this event.
 //__
-//__ ## eventDeliveryPointMoving()
+//__ ## eventDeliveryPointMoving(structure)
 //__
 //__ An event that is run when the current player starts to move a delivery point.
 //__
-//__ ## eventDeliveryPointMoved()
+//__ ## eventDeliveryPointMoved(structure)
 //__
 //__ An event that is run after the current player has moved a delivery point.
 //__
@@ -1377,7 +1377,7 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 //__ First parameter is **game object** doing the seeing, the next the game
 //__ object being seen.
 //__
-//__ ## eventGroupSeen(viewer, group)
+//__ ## eventGroupSeen(viewer, groupId)
 //__
 //__ An event that is run sometimes when a member of a group, which was marked by a group label,
 //__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
@@ -1522,10 +1522,10 @@ bool triggerEventSelected()
 //__ is the about to be killed object, the group's id, and the new group size.
 //__
 // Since groups are entities local to one context, we do not iterate over them here.
-bool triggerEventGroupLoss(const BASE_OBJECT *psObj, int group, int size, wzapi::scripting_instance *instance)
+bool triggerEventGroupLoss(const BASE_OBJECT *psObj, int groupId, int size, wzapi::scripting_instance *instance)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	return instance->handle_eventGroupLoss(psObj, group, size);
+	return instance->handle_eventGroupLoss(psObj, groupId, size);
 }
 
 // This is not a trigger yet.
@@ -1613,18 +1613,18 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 	return true;
 }
 
-//__ ## eventSyncRequest(req_id, x, y, obj_id, obj_id2)
+//__ ## eventSyncRequest(from, reqId, x, y, objId1, objId2)
 //__
 //__ An event that is called from a script and synchronized with all other scripts and hosts
 //__ to prevent desync from happening. Sync requests must be carefully validated to prevent
 //__ cheating!
 //__
-bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
+bool triggerEventSyncRequest(int from, int reqId, int x, int y, BASE_OBJECT *psObj1, BASE_OBJECT *psObj2)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (auto *instance : scripts)
 	{
-		instance->handle_eventSyncRequest(from, req_id, x, y, psObj, psObj2);
+		instance->handle_eventSyncRequest(from, reqId, x, y, psObj1, psObj2);
 	}
 	return true;
 }

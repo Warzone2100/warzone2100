@@ -255,7 +255,7 @@ removed. The function returns a unique ID that can be used to remove the spotter
 
 Remove a spotter given its unique ID. (3.2+ only)
 
-## syncRequest(req_id, x, y[, object[, object2]])
+## syncRequest(reqId, x, y[, object1[, object2]])
 
 Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
 Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
@@ -332,7 +332,7 @@ See wzscript docs for info, to the extent any exist. (3.2+ only)
 Function to find and return a game object of ```DROID```, ```FEATURE``` or ```STRUCTURE``` types, if it exists.
 Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
 
-## hackAssert(condition, message...)
+## hackAssert(condition, ...message)
 
 Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
 
@@ -361,15 +361,15 @@ Mark the given tile(s) on the map. Either give a ```POSITION``` or ```AREA``` la
 or a tile x, y position, or four positions for a square area. If no parameter
 is given, all marked tiles are cleared. (3.2+ only)
 
-## dump(string...)
+## dump(...string)
 
 Output text to a debug file. (3.2+ only)
 
-## debug(string...)
+## debug(...string)
 
 Output text to the command line.
 
-## console(strings...)
+## console(...string)
 
 Print text to the player console.
 
@@ -444,7 +444,7 @@ which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIE
 returned; by default only visible objects are returned. Calling this function is much faster than
 iterating over all game objects using other enum functions. (3.2+ only)
 
-## pursueResearch(labStructure, research)
+## pursueResearch(labStructure, researchNames)
 
 Start researching the first available technology on the way to the given technology.
 First parameter is the structure to research in, which must be a research lab. The
@@ -505,16 +505,14 @@ Returns whether the given map tile is burning. (3.5+ only)
 
 Give a droid an order to do something to something.
 
-## buildDroid(factory, templateName, body, propulsion, reserved, reserved, turrets...)
+## buildDroid(factory, templateName, bodyName, propulsionName, reserved1, reserved2, ...turrets)
 
 Start factory production of new droid with the given name, body, propulsion and turrets.
-The reserved parameter should be passed **null** for now. The components can be
+The reserved parameters should be passed "" for now. The components can be
 passed as ordinary strings, or as a list of strings. If passed as a list, the first available
-component in the list will be used. The second reserved parameter used to be a droid type.
-It is now unused and in 3.2+ should be passed "", while in 3.1 it should be the
-droid type to be built. Returns a boolean that is true if production was started.
+component in the list will be used. Returns a boolean that is true if production was started.
 
-## addDroid(player, x, y, templateName, body, propulsion, reserved, reserved, turrets...)
+## addDroid(player, x, y, templateName, bodyName, propulsionName, reserved1, reserved2, ...turrets)
 
 Create and place a droid at the given x, y position as belonging to the given player, built with
 the given components. Currently does not support placing droids in multiplayer, doing so will
@@ -522,7 +520,7 @@ cause a desync. Returns the created droid on success, otherwise returns null. Pa
 reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
 pass -1 as both x and y.
 
-## makeTemplate(player, templateName, body, propulsion, reserved, turrets...)
+## makeTemplate(player, templateName, bodyName, propulsionName, reserved, ...turrets)
 
 Create a template (virtual droid) with the given components. Can be useful for calculating the cost
 of droids before putting them into production, for instance. Will fail and return null if template
@@ -660,7 +658,7 @@ If time equals to the magic ```LZ_COMPROMISED_TIME``` constant, reinforcement GU
 is set to "--:--" and reinforcements are suppressed until this function is called
 again with a regular time value.
 
-## completeResearch(research[, player[, forceResearch]])
+## completeResearch(researchName[, player[, forceResearch]])
 
 Finish a research for the given player.
 forceResearch will allow a research topic to be researched again. 3.3+
