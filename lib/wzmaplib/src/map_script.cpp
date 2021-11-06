@@ -607,7 +607,7 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 						SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_ret),
 							"riggedRegion callback must return number");
 						uint32_t ret = JSValueToUint32(ctx, jsVal_ret);
-						SCRIPT_ASSERT_AND_RETURNERROR(ctx, ret >= 0 && ret < layerRange,
+						SCRIPT_ASSERT_AND_RETURNERROR(ctx, ret < layerRange,
 							"riggedRegion callback must return non-negative number within range");
 						layerData[x * layerHeight + y] = ret;
 					}
