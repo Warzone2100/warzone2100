@@ -67,6 +67,7 @@ struct WARZONE_GLOBALS
 	int autoLagKickSeconds = 60;
 	bool disableReplayRecording = false;
 	uint32_t MPinactivityMinutes = 4;
+	uint8_t MPopenSpectatorSlots = 0;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -442,4 +443,15 @@ void war_setMPInactivityMinutes(uint32_t minutes)
 		minutes = MIN_MPINACTIVITY_MINUTES;
 	}
 	warGlobs.MPinactivityMinutes = minutes;
+}
+
+uint16_t war_getMPopenSpectatorSlots()
+{
+	return warGlobs.MPopenSpectatorSlots;
+}
+
+void war_setMPopenSpectatorSlots(uint16_t spectatorSlots)
+{
+	spectatorSlots = std::min<uint16_t>(spectatorSlots, MAX_SPECTATOR_SLOTS);
+	warGlobs.MPopenSpectatorSlots = spectatorSlots;
 }
