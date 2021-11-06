@@ -324,7 +324,7 @@ void recvPlayerLeft(NETQUEUE queue)
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
 
-	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
+	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 

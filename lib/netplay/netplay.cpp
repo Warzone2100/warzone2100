@@ -2060,6 +2060,7 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 		char msg[256] = {'\0'};
 		ssprintf(msg, "Auto-kicking player %u, did not ack player index change within required timeframe.", (unsigned int)sender);
 		sendInGameSystemMessage(msg);
+		debug(LOG_INFO, "Client (player: %u) failed to ack player index swap", sender);
 		kickPlayer(sender, _("Client failed to ack player index swap"), ERROR_INVALID);
 		return true; // filter original message, of course
 	}
