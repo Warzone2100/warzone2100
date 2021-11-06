@@ -379,6 +379,7 @@ const char *getAIName(int player)
 {
 	if (NetPlay.players[player].ai >= 0 && NetPlay.players[player].ai != AI_CUSTOM)
 	{
+		ASSERT_OR_RETURN(_("Commander"), NetPlay.players[player].ai < aidata.size(), "Invalid AI (index: %" PRIi8 ", num AIs: %zu)", NetPlay.players[player].ai, aidata.size());
 		return aidata[NetPlay.players[player].ai].name;
 	}
 	else
