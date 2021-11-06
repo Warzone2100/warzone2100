@@ -283,7 +283,7 @@ static void resetMultiVisibility(UDWORD player)
 
 static void sendPlayerLeft(uint32_t playerIndex)
 {
-	ASSERT(NetPlay.isHost, "Only host should call this.");
+	ASSERT_OR_RETURN(, NetPlay.isHost, "Only host should call this.");
 
 	uint32_t forcedPlayerIndex = whosResponsible(playerIndex);
 	NETQUEUE(*netQueueType)(unsigned) = forcedPlayerIndex != selectedPlayer ? NETgameQueueForced : NETgameQueue;
