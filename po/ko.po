@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-06 10:41\n"
+"PO-Revision-Date: 2021-11-06 22:41\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -4628,7 +4628,7 @@ msgstr "이전 적의 기지에서 발견된 정보가 새 패러다임이 시�
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr "두번째 켐페인"
+msgstr "두번째 캠페인"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
@@ -5688,7 +5688,7 @@ msgstr "쉬움"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr "보통"
+msgstr "중간"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
@@ -5740,7 +5740,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "전력이 이송되었습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
@@ -5748,7 +5748,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "가고 있습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
@@ -5833,11 +5833,11 @@ msgstr "캠페인"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "도전"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr "소규모 전투"
+msgstr "소규모전투"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
@@ -6334,13 +6334,13 @@ msgstr ""
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:485
 msgid "Alpha Campaign"
-msgstr ""
+msgstr "알파 캠페인"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:488
 msgid "Alpha"
-msgstr ""
+msgstr "알파"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -10482,7 +10482,7 @@ msgstr "점프사이보그가 연구 가능합니다"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3409
 msgid "Keeps map areas under constant surveillance"
-msgstr "지도의 영역을 지속적인 감시 아래 유지합니다"
+msgstr "맵 영역을 지속적인 감시 아래 유지합니다"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -14454,13 +14454,13 @@ msgstr "VTOL 초고속도 캐논"
 #. data/base/stats/propulsion.json: $.V-Tol02.name
 #: po/custom/fromJson.txt:6057
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:6060
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14648,7 +14648,7 @@ msgstr "VTOL 쌍기관총"
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6182
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -14831,7 +14831,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6289
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "스페셜"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14862,19 +14862,19 @@ msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr ""
+msgstr "Warzone 2100 맵 / 모드 파일"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
+msgstr "Warzone 2100 캠페인 모드 파일"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr ""
+msgstr "Warzone 2100 멀티플레이어 모드 파일"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr ""
+msgstr "Warzone 2100 글로벌 모드 파일"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
@@ -14882,7 +14882,7 @@ msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr ""
+msgstr "Warzone 2100 음악 모드 파일"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
@@ -14890,7 +14890,7 @@ msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
 msgid "Strategy Game"
-msgstr ""
+msgstr "전략 게임"
 
 #: src/chat.cpp:63
 msgid "Global"
@@ -14912,7 +14912,7 @@ msgstr " 및 "
 #: src/chat.cpp:173
 #: src/multiint.cpp:3633
 msgid "Spectators"
-msgstr ""
+msgstr "관전자들"
 
 #: src/cheat.cpp:212
 #, c-format
@@ -14926,11 +14926,11 @@ msgstr ""
 
 #: src/cheat.cpp:231
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "디버그 모드가 현재 활성화됨!"
 
 #: src/cheat.cpp:238
 msgid "Debug mode now disabled!"
-msgstr ""
+msgstr "디버그 모드가 현재 비활성화됨!"
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:162
@@ -14948,7 +14948,7 @@ msgstr "환경 설정 디렉토리"
 
 #: src/clparse.cpp:357
 msgid "Add data directory"
-msgstr ""
+msgstr "데이터 디렉토리 추가"
 
 #: src/clparse.cpp:357
 msgid "data directory"
@@ -14956,7 +14956,7 @@ msgstr "자료 디렉토리"
 
 #: src/clparse.cpp:358
 msgid "Show debug for given level"
-msgstr "특정 레벨의 디버깅 표시"
+msgstr "특정 레벨의 디버깅 보기"
 
 #: src/clparse.cpp:358
 msgid "debug level"
@@ -14988,25 +14988,25 @@ msgstr "레벨 이름"
 
 #: src/clparse.cpp:363
 msgid "Show options and exit"
-msgstr ""
+msgstr "옵션 보기 및 종료"
 
 #: src/clparse.cpp:364
 msgid "Enable a global mod"
-msgstr "글로벌 mod를 활성화하기"
+msgstr "글로벌 모드를 활성화하기"
 
 #: src/clparse.cpp:364
 #: src/clparse.cpp:365
 #: src/clparse.cpp:366
 msgid "mod"
-msgstr ""
+msgstr "모드"
 
 #: src/clparse.cpp:365
 msgid "Enable a campaign only mod"
-msgstr "캠페인용 mod를 활성화하기"
+msgstr "캠페인용 모드를 활성화하기"
 
 #: src/clparse.cpp:366
 msgid "Enable a multiplay only mod"
-msgstr "멀티플레이어용 mod를 활성화하기"
+msgstr "멀티플레이어용 모드를 활성화하기"
 
 #: src/clparse.cpp:367
 msgid "Disable asserts"
@@ -15018,7 +15018,7 @@ msgstr "(컴퓨터) 크래시 핸들러를 시험하기 위해 크래시를 일�
 
 #: src/clparse.cpp:369
 msgid "Load a saved skirmish game"
-msgstr ""
+msgstr "저장된 소규모전투 게임 불러오기"
 
 #: src/clparse.cpp:369
 #: src/clparse.cpp:370
@@ -15027,7 +15027,7 @@ msgstr "세이브게임"
 
 #: src/clparse.cpp:370
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "저장된 캠페인 게임 불러오기"
 
 #: src/clparse.cpp:371
 msgid "Play in windowed mode"
@@ -15132,7 +15132,7 @@ msgstr ""
 
 #: src/clparse.cpp:404
 msgid "autohost"
-msgstr ""
+msgstr "자동 호스트"
 
 #: src/clparse.cpp:405
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
@@ -15140,7 +15140,7 @@ msgstr ""
 
 #: src/clparse.cpp:405
 msgid "autorating"
-msgstr ""
+msgstr "자동 조정"
 
 #: src/clparse.cpp:407
 msgid "Attach or create a console window and display console output (Windows only)"
@@ -15408,7 +15408,7 @@ msgstr[0] "유닛 %u개가 부대 %u에 할당되었습니다"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
+msgstr[0] "%u 유닛이 해당 그룹에서 제거되었습니다"
 
 #: src/droid.cpp:2001
 #, c-format
@@ -15444,11 +15444,11 @@ msgstr ""
 
 #: src/frontend.cpp:177
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "캠페인 비디오가 없습니다"
 
 #: src/frontend.cpp:178
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "동영상 설치 방법에 대한 FAQ를 참조하십시오"
 
 #: src/frontend.cpp:198
 msgid "Single Player"
@@ -15475,7 +15475,7 @@ msgstr "인트로 영상 보기"
 
 #: src/frontend.cpp:211
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr ""
+msgstr "동영상이 없습니다. http://wz2100.net에서 다운로드하십시오."
 
 #: src/frontend.cpp:218
 #: src/frontend.cpp:222
@@ -15484,7 +15484,7 @@ msgstr "최근 저장에서 계속"
 
 #: src/frontend.cpp:223
 msgid "No last save available"
-msgstr ""
+msgstr "접근 가능한 마지막 저장 없음"
 
 #: src/frontend.cpp:225
 msgid "Quit Game"
@@ -15560,15 +15560,15 @@ msgstr "챌런지(도전)"
 
 #: src/frontend.cpp:366
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "캠페인 게임 불러오기"
 
 #: src/frontend.cpp:367
 msgid "Load Skirmish Game"
-msgstr ""
+msgstr "소규모전투 게임 불러오기"
 
 #: src/frontend.cpp:368
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "소규모전투 리플레이 보기"
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -15581,7 +15581,7 @@ msgstr ""
 
 #: src/frontend.cpp:392
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "캠페인"
 
 #: src/frontend.cpp:531
 #: src/ingameop.cpp:1011
@@ -15595,7 +15595,7 @@ msgstr ""
 
 #: src/frontend.cpp:543
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "소규모전투 리플레이 불러오기"
 
 #: src/frontend.cpp:604
 msgid "MULTI PLAYER"
@@ -15611,7 +15611,7 @@ msgstr "네트워크 게임 참여하기"
 
 #: src/frontend.cpp:608
 msgid "View Replay"
-msgstr "Replay 보기"
+msgstr "리플레이 보기"
 
 #: src/frontend.cpp:613
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15619,7 +15619,7 @@ msgstr ""
 
 #: src/frontend.cpp:658
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "멀티플레이 리플레이 불러오기"
 
 #: src/frontend.cpp:697
 #: src/multiint.cpp:1380
@@ -15657,19 +15657,19 @@ msgstr "키보드 매핑(Mapping)"
 #: src/frontend.cpp:704
 #: src/ingameop.cpp:581
 msgid "Music Manager"
-msgstr ""
+msgstr "음악 관리자"
 
 #: src/frontend.cpp:706
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "환경 설정 디렉토리 열기"
 
 #: src/frontend.cpp:744
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "시스템 기본 파일 브라우저에서 환경 설정 디렉토리를 열지 못했습니다."
 
 #: src/frontend.cpp:746
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "환경 설정 디렉토리는 다음과 같이 보고됩니다:"
 
 #: src/frontend.cpp:750
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
@@ -15681,7 +15681,7 @@ msgstr ""
 
 #: src/frontend.cpp:753
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "환경 설정 디렉토리를 열지 못했습니다"
 
 #: src/frontend.cpp:775
 msgid "1×"
@@ -15794,11 +15794,11 @@ msgstr "그래픽 옵션"
 
 #: src/frontend.cpp:989
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: src/frontend.cpp:992
 msgid "Enabled"
-msgstr ""
+msgstr "활성화됨"
 
 #: src/frontend.cpp:996
 #: src/frontend.cpp:1002
@@ -15836,15 +15836,15 @@ msgstr ""
 
 #: src/frontend.cpp:1080
 msgid "Map Zoom"
-msgstr ""
+msgstr "맵 확대/축소"
 
 #: src/frontend.cpp:1085
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "맵 확대/축소 비율"
 
 #: src/frontend.cpp:1090
 msgid "Radar Zoom"
-msgstr ""
+msgstr "레이더 줌"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15873,7 +15873,7 @@ msgstr "윈도우(창) 모드"
 
 #: src/frontend.cpp:1276
 msgid "Graphics Mode"
-msgstr ""
+msgstr "그래픽 모드"
 
 #: src/frontend.cpp:1281
 msgid "Resolution"
@@ -16009,7 +16009,7 @@ msgstr ""
 #: src/frontend.cpp:2034
 #: src/frontend.cpp:2069
 msgid "Skirmish/Multiplayer"
-msgstr ""
+msgstr "소규모전투/멀티플레이"
 
 #: src/frontend.cpp:2040
 #, c-format
@@ -16018,7 +16018,7 @@ msgstr ""
 
 #: src/frontend.cpp:2042
 msgid "Click to open webpage."
-msgstr ""
+msgstr "웹 페이지를 열려면 클릭하시오."
 
 #: src/frontend.cpp:2045
 #: src/frontend.cpp:2064
@@ -16027,7 +16027,7 @@ msgstr "게임 옵션"
 
 #: src/frontend.cpp:2090
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "매우 어려움"
 
 #: src/frontend.cpp:2091
 msgid "This difficulty is for very experienced players!"
@@ -16036,7 +16036,7 @@ msgstr ""
 #: src/frontend.cpp:2193
 #: src/multiint.cpp:5121
 msgid "Mod: "
-msgstr "Mod (Modification):"
+msgstr "모드: "
 
 #: src/frontend.cpp:2653
 msgid "Increase Game Display Scale?"
@@ -16134,11 +16134,11 @@ msgstr ""
 
 #: src/hci.cpp:2927
 msgid "Chat: All"
-msgstr ""
+msgstr "채팅: 모두"
 
 #: src/hci.cpp:2932
 msgid "Chat: Team"
-msgstr ""
+msgstr "채팅: 팀"
 
 #: src/hci/build.cpp:305
 msgid "Build Progress"
@@ -16217,7 +16217,7 @@ msgstr ""
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:779
 msgid "Go Back"
-msgstr ""
+msgstr "뒤로 가기"
 
 #: src/ingameop.cpp:246
 #: src/ingameop.cpp:255
@@ -16236,7 +16236,7 @@ msgstr "종료"
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "경고: 확실합니까?"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
@@ -16276,18 +16276,18 @@ msgstr "흔들기"
 
 #: src/ingameop.cpp:1019
 msgid "Save Campaign Game"
-msgstr ""
+msgstr "캠페인 게임 저장"
 
 #: src/ingameop.cpp:1023
 msgid "Save Skirmish Game"
-msgstr ""
+msgstr "소규모전투 게임 저장"
 
 #: src/init.cpp:498
 #, c-format
 msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
-msgstr "요구된 mod를 로드할 수 없었습니다: %s\n\n"
-"Warzone은 게임을 mod 없이 로드 해보겠습니다."
+msgstr "요구된 모드를 로드할 수 없었습니다: %s\n\n"
+"Warzone은 게임을 모드 없이 로드 해보겠습니다."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -16299,7 +16299,7 @@ msgstr ""
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
-msgstr ""
+msgstr "게임 플레이"
 
 #: src/input/context.cpp:58
 msgid "Debug"
@@ -16543,19 +16543,19 @@ msgstr "멀티플레이어 옵션 / 동맹 다이얼로그"
 
 #: src/input/keyconfig.cpp:104
 msgid "Move Camera Up"
-msgstr ""
+msgstr "위로 카메라 이동"
 
 #: src/input/keyconfig.cpp:105
 msgid "Move Camera Down"
-msgstr ""
+msgstr "아래로 카메라 이동"
 
 #: src/input/keyconfig.cpp:106
 msgid "Move Camera Right"
-msgstr ""
+msgstr "오른쪽으로 카메라 이동"
 
 #: src/input/keyconfig.cpp:107
 msgid "Move Camera Left"
-msgstr ""
+msgstr "왼쪽으로 카메라 이동"
 
 #: src/input/keyconfig.cpp:108
 msgid "Snap View to North"
@@ -16754,11 +16754,11 @@ msgstr "장거리"
 
 #: src/input/keyconfig.cpp:155
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "글로벌 텍스트 메시지 보내기"
 
 #: src/input/keyconfig.cpp:156
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "팀 텍스트 메시지 보내기"
 
 #: src/input/keyconfig.cpp:157
 msgid "Drop a beacon"
@@ -16782,7 +16782,7 @@ msgstr "아군/적군 레이더 전망 켜짐/꺼짐"
 
 #: src/input/keyconfig.cpp:162
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "모든 키보드 매핑 보기"
 
 #: src/input/keyconfig.cpp:164
 #: src/intorder.cpp:169
@@ -16805,7 +16805,7 @@ msgstr "모든 전투 유닛을 선택하기"
 
 #: src/input/keyconfig.cpp:169
 msgid "Select all Cyborgs"
-msgstr ""
+msgstr "모든 사이보그 선택하기"
 
 #: src/input/keyconfig.cpp:170
 msgid "Select all Heavily Damaged Units"
@@ -16870,7 +16870,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:186
 msgid "Select all Combat Cyborgs"
-msgstr ""
+msgstr "모든 전투 사이보그 선택하기"
 
 #: src/input/keyconfig.cpp:187
 msgid "Select all Combat Cyborgs without group"
@@ -16878,7 +16878,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:188
 msgid "Select all Engineers"
-msgstr ""
+msgstr "모든 엔지니어 선택하기"
 
 #: src/input/keyconfig.cpp:189
 msgid "Select all Land Combat Units"
@@ -16890,19 +16890,19 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:191
 msgid "Select all Mechanics"
-msgstr ""
+msgstr "모든 정비공 선택하기"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Transporters"
-msgstr ""
+msgstr "모든 수송선 선택하기"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Repair Tanks"
-msgstr ""
+msgstr "모든 수리 탱크 선택하기"
 
 #: src/input/keyconfig.cpp:194
 msgid "Select all Sensor Units"
-msgstr ""
+msgstr "모든 센서 유닛 선택하기"
 
 #: src/input/keyconfig.cpp:195
 msgid "Select all Sensor Units without group"
@@ -16910,7 +16910,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:196
 msgid "Select all Trucks"
-msgstr ""
+msgstr "모든 트럭 선택하기"
 
 #: src/input/keyconfig.cpp:198
 msgid "Select next Factory"
@@ -17142,26 +17142,26 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:535
 msgid "Playing: Campaign"
-msgstr ""
+msgstr "플레이 중: 캠페인"
 
 #: src/integrations/wzdiscordrpc.cpp:560
 msgid "Playing: Challenge"
-msgstr ""
+msgstr "플레이 중: 도전"
 
 #: src/integrations/wzdiscordrpc.cpp:578
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "플레이 중: 소규모전투"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:583
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "플레이 중: %s 소규모전투"
 
 #: src/integrations/wzdiscordrpc.cpp:586
 #: src/integrations/wzdiscordrpc.cpp:822
 msgid "Map:"
-msgstr ""
+msgstr "맵:"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
@@ -17173,11 +17173,11 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:612
 #: src/integrations/wzdiscordrpc.cpp:802
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "멀티플레이어 로비에서"
 
 #: src/integrations/wzdiscordrpc.cpp:638
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "멀티플레이어 게임에서"
 
 #: src/integrations/wzdiscordrpc.cpp:834
 #, c-format
@@ -17215,7 +17215,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:1070
 msgid "Allow"
-msgstr ""
+msgstr "허용"
 
 #: src/intelmap.cpp:217
 #: src/keybind.cpp:1372
@@ -17431,39 +17431,39 @@ msgstr "마우스 커서 가두기 %s"
 
 #: src/keybind.cpp:1384
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "캠페인"
 
 #: src/keybind.cpp:1388
 msgid "CHALLENGE"
-msgstr ""
+msgstr "도전"
 
 #: src/keybind.cpp:1391
 msgid "SKIRMISH"
-msgstr ""
+msgstr "소규모전투"
 
 #: src/keybind.cpp:1409
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "난이도: 쉬움"
 
 #: src/keybind.cpp:1412
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "난이도: 보통"
 
 #: src/keybind.cpp:1415
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "난이도: 어려움"
 
 #: src/keybind.cpp:1418
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "난이도: 매우 어려움"
 
 #: src/keybind.cpp:1427
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "채팅: 활성화"
 
 #: src/keybind.cpp:1429
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "채팅: 비활성화"
 
 #: src/keybind.cpp:1488
 msgid "Researched EVERYTHING for you!"
@@ -17628,15 +17628,15 @@ msgstr "기본으로 선택하기"
 
 #: src/loadsave.cpp:361
 msgid "Parent directory"
-msgstr ""
+msgstr "상위 디렉토리"
 
 #: src/loadsave.cpp:366
 msgid "Autosave directory"
-msgstr ""
+msgstr "자동저장 디렉토리"
 
 #: src/loadsave.cpp:366
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "자동저장 디렉토리 (저장 허용되지 않음)"
 
 #: src/loadsave.cpp:663
 msgid "cheated"
@@ -17744,12 +17744,12 @@ msgstr "당신이 %s의 청사진을 발견하였습니다"
 
 #: src/multiint.cpp:265
 msgid "Medium"
-msgstr ""
+msgstr "중간"
 
 #: src/multiint.cpp:385
 #: src/multiplay.cpp:571
 msgid "Commander"
-msgstr ""
+msgstr "사령관님"
 
 #: src/multiint.cpp:811
 msgid "MISSING AI NAME"
@@ -17766,7 +17766,7 @@ msgstr ""
 
 #: src/multiint.cpp:1043
 msgid "Error while joining."
-msgstr ""
+msgstr "참여 중 오류가 발생했습니다."
 
 #: src/multiint.cpp:1170
 msgid "Tanks disabled!!"
@@ -17799,7 +17799,7 @@ msgstr ""
 
 #: src/multiint.cpp:1317
 msgid "Vote"
-msgstr ""
+msgstr "투표"
 
 #: src/multiint.cpp:1318
 msgid "Allow host to change map or randomize?"
@@ -17816,7 +17816,7 @@ msgstr "게임 이름 선택"
 #: src/multiint.cpp:1389
 #: src/titleui/gamefind.cpp:263
 msgid "Game Name"
-msgstr ""
+msgstr "게임 이름"
 
 #: src/multiint.cpp:1390
 msgid "One-Player Skirmish"
@@ -17829,11 +17829,11 @@ msgstr ""
 
 #: src/multiint.cpp:1414
 msgid "Map-Mod!"
-msgstr ""
+msgstr "맵-모드!"
 
 #: src/multiint.cpp:1415
 msgid "Random map!"
-msgstr ""
+msgstr "랜덤 맵!"
 
 #: src/multiint.cpp:1432
 msgid "Click to set Password"
@@ -17887,19 +17887,19 @@ msgstr ""
 
 #: src/multiint.cpp:1536
 msgid "Technology Level 1"
-msgstr ""
+msgstr "기술 수준 1"
 
 #: src/multiint.cpp:1537
 msgid "Technology Level 2"
-msgstr ""
+msgstr "기술 수준 2"
 
 #: src/multiint.cpp:1538
 msgid "Technology Level 3"
-msgstr ""
+msgstr "기술 수준 3"
 
 #: src/multiint.cpp:1539
 msgid "Technology Level 4"
-msgstr ""
+msgstr "기술 수준 4"
 
 #: src/multiint.cpp:1548
 #: src/multiint.cpp:1549
@@ -17963,7 +17963,7 @@ msgstr ""
 
 #: src/multiint.cpp:2041
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "호스트와 바꿀 수 없습니다"
 
 #: src/multiint.cpp:2282
 msgid "Team"
@@ -17975,7 +17975,7 @@ msgstr "팀"
 #: src/multiint.cpp:7489
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "관전자"
 
 #: src/multiint.cpp:2303
 #: src/multiint.cpp:4430
@@ -18002,15 +18002,15 @@ msgstr ""
 
 #: src/multiint.cpp:2367
 msgid "Move to Spectators"
-msgstr ""
+msgstr "관전자들에게 이동"
 
 #: src/multiint.cpp:2388
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "관전자에게 플레이 요청"
 
 #: src/multiint.cpp:2404
 msgid "Ask to Play"
-msgstr ""
+msgstr "플레이 요청"
 
 #: src/multiint.cpp:3010
 #, c-format
@@ -18032,7 +18032,7 @@ msgstr ""
 
 #: src/multiint.cpp:3054
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "관전하시겠습니까?"
 
 #: src/multiint.cpp:3055
 msgid "The host of this game wants to know if you're willing to spectate?"
@@ -18040,15 +18040,15 @@ msgstr ""
 
 #: src/multiint.cpp:3057
 msgid "You are currently a Player."
-msgstr ""
+msgstr "현재 플레이어입니다."
 
 #: src/multiint.cpp:3058
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "예, 관전하겠습니다!"
 
 #: src/multiint.cpp:3063
 msgid "Do you want to play?"
-msgstr ""
+msgstr "플레이 하시겠습니까?"
 
 #: src/multiint.cpp:3064
 msgid "The host of this game wants to know if you'd like to play?"
@@ -18056,11 +18056,11 @@ msgstr ""
 
 #: src/multiint.cpp:3066
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "현재 관전자입니다."
 
 #: src/multiint.cpp:3067
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "예, 플레이 하고 싶습니다!"
 
 #: src/multiint.cpp:3110
 #, c-format
@@ -18086,15 +18086,15 @@ msgstr ""
 
 #: src/multiint.cpp:3155
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "예, 플레이어 슬롯을 선택합니다"
 
 #: src/multiint.cpp:3438
 msgid "Joined:"
-msgstr ""
+msgstr "참여함:"
 
 #: src/multiint.cpp:3441
 msgid "Ready:"
-msgstr ""
+msgstr "준비:"
 
 #: src/multiint.cpp:3619
 #: src/titleui/gamefind.cpp:269
@@ -18103,15 +18103,15 @@ msgstr "플레이어"
 
 #: src/multiint.cpp:3649
 msgid "Host Options"
-msgstr ""
+msgstr "호스트 옵션"
 
 #: src/multiint.cpp:3930
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "관전자 참여 활성화"
 
 #: src/multiint.cpp:3940
 msgid "Lock Teams"
-msgstr ""
+msgstr "팀 잠금"
 
 #: src/multiint.cpp:4196
 msgid "Choose Team"
@@ -18119,11 +18119,11 @@ msgstr "팀 선택"
 
 #: src/multiint.cpp:4200
 msgid "Teams locked"
-msgstr ""
+msgstr "팀 잠김"
 
 #: src/multiint.cpp:4221
 msgid "Click to change player colour"
-msgstr ""
+msgstr "플레이어의 색을 바꾸려면 클릭하십시오"
 
 #: src/multiint.cpp:4231
 msgid "Click to change player faction"
@@ -18131,7 +18131,7 @@ msgstr ""
 
 #: src/multiint.cpp:4242
 msgid "Click to change player position"
-msgstr ""
+msgstr "플레이어 포지션을 변경하려면 클릭하십시오"
 
 #: src/multiint.cpp:4251
 msgid "Click to change AI, right click to distribute choice"
@@ -18139,7 +18139,7 @@ msgstr ""
 
 #: src/multiint.cpp:4255
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "관전자 슬롯을 닫으려면 클릭하십시오"
 
 #: src/multiint.cpp:4271
 msgid "Player ID: "
@@ -18151,19 +18151,19 @@ msgstr "(없음)"
 
 #: src/multiint.cpp:4339
 msgid "Click to change difficulty"
-msgstr ""
+msgstr "난이도를 변경하려면 클릭하십시오"
 
 #: src/multiint.cpp:4377
 msgid "Waiting for player"
-msgstr ""
+msgstr "플레이어를 기다리고 있습니다"
 
 #: src/multiint.cpp:4377
 msgid "Player is ready"
-msgstr ""
+msgstr "플레이어 준비 완료"
 
 #: src/multiint.cpp:4377
 msgid "Player is downloading"
-msgstr ""
+msgstr "플레이어 다운로드 중"
 
 #: src/multiint.cpp:4377
 msgid "Click when ready"
@@ -18171,7 +18171,7 @@ msgstr "준비되었을 때 클릭하십시오"
 
 #: src/multiint.cpp:4377
 msgid "Waiting for download"
-msgstr ""
+msgstr "다운로드 대기 중"
 
 #: src/multiint.cpp:4449
 msgid "READY?"
@@ -18187,7 +18187,7 @@ msgstr ""
 
 #: src/multiint.cpp:4552
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "플레이어 슬롯 선택"
 
 #: src/multiint.cpp:4623
 msgid "PLAYERS"
@@ -18195,15 +18195,15 @@ msgstr "플레이어"
 
 #: src/multiint.cpp:4727
 msgid "Add spectator slot"
-msgstr ""
+msgstr "관전자 슬롯 추가"
 
 #: src/multiint.cpp:4803
 msgid "Kicked from game"
-msgstr ""
+msgstr "게임에서 강퇴"
 
 #: src/multiint.cpp:5028
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "텍스트를 클립보드에 복사"
 
 #: src/multiint.cpp:5117
 msgid "CHAT"
@@ -18215,7 +18215,7 @@ msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
 #: src/multiint.cpp:5841
 msgid "Game Name Updated."
-msgstr ""
+msgstr "게임 이름이 업데이트 되었습니다."
 
 #: src/multiint.cpp:5965
 #, c-format
@@ -18244,11 +18244,11 @@ msgstr ""
 
 #: src/multiint.cpp:6640
 msgid "You have been kicked: "
-msgstr ""
+msgstr "강퇴당했습니다: "
 
 #: src/multiint.cpp:6654
 msgid "No connection to host."
-msgstr ""
+msgstr "호스트와의 연결이 없습니다."
 
 #: src/multiint.cpp:6706
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
@@ -18268,7 +18268,7 @@ msgstr ""
 
 #: src/multiint.cpp:6962
 msgid "The host has quit."
-msgstr ""
+msgstr "호스트가 종료되었습니다."
 
 #: src/multiint.cpp:7000
 msgid "UPnP has been enabled."
@@ -18297,12 +18297,12 @@ msgstr ""
 #: src/multiint.cpp:7238
 #: src/multiint.cpp:7493
 msgid "Closed"
-msgstr ""
+msgstr "닫기"
 
 #: src/multiint.cpp:7241
 #: src/multiint.cpp:7485
 msgid "Open"
-msgstr ""
+msgstr "열기"
 
 #: src/multiint.cpp:7324
 #, c-format
@@ -18365,7 +18365,7 @@ msgstr "%d에게 파일 전송이 취소되었습니다"
 
 #: src/multijoin.cpp:420
 msgid "The game is already full."
-msgstr ""
+msgstr "게임이 이미 만원입니다."
 
 #: src/multijoin.cpp:500
 #: src/multiplay.cpp:786
@@ -18383,11 +18383,11 @@ msgstr ""
 #: src/multijoin.cpp:539
 #, c-format
 msgid "%s is joining the game"
-msgstr ""
+msgstr "%s 님이 게임에 참여했습니다"
 
 #: src/multijoin.cpp:551
 msgid "Server message:"
-msgstr ""
+msgstr "서버 메시지:"
 
 #: src/multijoin.cpp:564
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
@@ -18435,7 +18435,7 @@ msgstr "플레이어 수 무제한"
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] ""
+msgstr[0] "%d 플레이어"
 
 #: src/multimenu.cpp:773
 msgid "Structs"
@@ -18522,7 +18522,7 @@ msgstr "데이터 무결성 시험을 건너뛰려 했기 때문에 %s가 퇴장
 
 #: src/multiplay.cpp:371
 msgid "Invalid data!"
-msgstr ""
+msgstr "유효하지 않은 데이터!"
 
 #: src/multiplay.cpp:1122
 #, c-format
@@ -18630,32 +18630,32 @@ msgstr "갈색"
 
 #: src/multiplay.cpp:2375
 msgid "Spectator Mode"
-msgstr ""
+msgstr "관전 모드"
 
 #: src/multiplay.cpp:2376
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "당신은 관전자입니다. 게임을 즐겨보세요!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "지금 플레이 중"
 
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:680
 msgid "Album"
-msgstr ""
+msgstr "앨범"
 
 #: src/musicmanager.cpp:545
 msgid "Date"
-msgstr ""
+msgstr "날짜"
 
 #: src/musicmanager.cpp:671
 msgid "Title"
-msgstr ""
+msgstr "제목"
 
 #: src/musicmanager.cpp:860
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "음악 관리자"
 
 #: src/notifications.cpp:638
 msgid "Dismiss"
@@ -18663,7 +18663,7 @@ msgstr ""
 
 #: src/notifications.cpp:719
 msgid "Do not show again"
-msgstr ""
+msgstr "다시 표시하지 않기"
 
 #: src/order.cpp:791
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -18820,7 +18820,7 @@ msgstr[0] "유닛 %u개가 선택되었습니다"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr ""
+msgstr "무기 등급"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
@@ -18938,7 +18938,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:163
 msgid "Refreshing..."
-msgstr ""
+msgstr "새로고침..."
 
 #: src/titleui/gamefind.cpp:171
 msgid "Searching"
@@ -18950,29 +18950,29 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:266
 msgid "Map Name"
-msgstr ""
+msgstr "맵 이름"
 
 #: src/titleui/gamefind.cpp:272
 msgid "Status"
-msgstr ""
+msgstr "상태"
 
 #: src/titleui/gamefind.cpp:328
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "로비 서버에 연결할 수 없습니다!"
 
 #: src/titleui/gamefind.cpp:421
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "모드: %s"
 
 #: src/titleui/gamefind.cpp:427
 msgid "Mods: None!"
-msgstr ""
+msgstr "모드: 없음!"
 
 #: src/titleui/gamefind.cpp:433
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "버전: %s"
 
 #: src/titleui/gamefind.cpp:458
 msgid "Join as spectator"
@@ -18984,24 +18984,24 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:510
 msgid "[Password required]"
-msgstr ""
+msgstr "[비밀번호 필요]"
 
 #: src/titleui/gamefind.cpp:514
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[탱크 없음]"
 
 #: src/titleui/gamefind.cpp:518
 msgid "[No Cyborgs]"
-msgstr ""
+msgstr "[사이보그 없음]"
 
 #: src/titleui/gamefind.cpp:522
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[VTOL 없음]"
 
 #: src/titleui/gamefind.cpp:526
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "%s에 의해 호스트 됨"
 
 #: src/titleui/gamefind.cpp:530
 #, c-format
@@ -19010,7 +19010,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:662
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "버전에 맞는 게임을 찾을 수 없습니다."
 
 #: src/titleui/gamefind.cpp:678
 msgid "There appears to be a game update available!"
@@ -19054,7 +19054,7 @@ msgstr "연결 에러(Error)"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "계속하기"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
@@ -19079,7 +19079,7 @@ msgstr "로비"
 
 #: src/titleui/protocol.cpp:85
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:201
 msgid "IP Address or Machine Name"
@@ -19117,7 +19117,7 @@ msgstr "지금 업데이트하기"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "호환성 경고"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
@@ -19134,7 +19134,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "더 많은 정보"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
@@ -19156,11 +19156,11 @@ msgstr ""
 
 #: src/wrappers.cpp:365
 msgid "GAME OVER"
-msgstr ""
+msgstr "게임 오버"
 
 #: src/wrappers.cpp:366
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "전투가 종료되었습니다 - 방을 나갈 수 있습니다."
 
 #: src/wzapi.cpp:2337
 msgid "YOU ARE VICTORIOUS!"
@@ -19172,5 +19172,5 @@ msgstr "당신이 패배했습니다!"
 
 #: src/wzscriptdebug.cpp:1905
 msgid "Script Debugger"
-msgstr ""
+msgstr "스크립트 디버거"
 
