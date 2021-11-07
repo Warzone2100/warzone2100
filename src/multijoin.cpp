@@ -359,14 +359,14 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	}
 	NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 
-	if (!NetPlay.players[playerIndex].wzFiles.empty())
+	if (NetPlay.players[playerIndex].wzFiles && NetPlay.players[playerIndex].fileSendInProgress())
 	{
 		char buf[256];
 
 		ssprintf(buf, _("File transfer has been aborted for %d.") , playerIndex);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		debug(LOG_INFO, "=== File has been aborted for %d ===", playerIndex);
-		NetPlay.players[playerIndex].wzFiles.clear();
+		NetPlay.players[playerIndex].wzFiles->clear();
 	}
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))

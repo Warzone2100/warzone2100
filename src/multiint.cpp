@@ -634,7 +634,7 @@ void loadMapPreview(bool hideInterface)
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 	if (psLevel == nullptr)
 	{
-		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), !NetPlay.wzFiles.empty() ? "are" : "aren't");
+		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), !NET_getDownloadingWzFiles().empty() ? "are" : "aren't");
 		loadEmptyMapPreview();
 		return;
 	}
@@ -2682,7 +2682,7 @@ bool recvReadyRequest(NETQUEUE queue)
 
 	// do not allow players to select 'ready' if we are sending a map too them!
 	// TODO: make a new icon to show this state?
-	if (!NetPlay.players[player].wzFiles.empty())
+	if (NetPlay.players[player].fileSendInProgress())
 	{
 		return false;
 	}
@@ -5180,15 +5180,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		sendLeavingMsg();								// say goodbye
 		NETclose();										// quit running game.
 
-		// if we were in a midle of transferring a file, then close the file handle
-		for (auto const &file : NetPlay.wzFiles)
-		{
-			debug(LOG_NET, "closing aborted file");
-			PHYSFS_close(file.handle);
-			ASSERT(!file.filename.empty(), "filename must not be empty");
-			PHYSFS_delete(file.filename.c_str()); 		// delete incomplete (map) file
-		}
-		NetPlay.wzFiles.clear();
+		NET_clearDownloadingWZFiles();
 		ingame.localJoiningInProgress = false;			// reset local flags
 		ingame.localOptionsReceived = false;
 
@@ -6167,7 +6159,7 @@ void handleAutoReadyRequest()
 	// and not-ready when files remain to be downloaded
 	if (NetPlay.players[selectedPlayer].isSpectator)
 	{
-		bool haveData = NetPlay.wzFiles.empty();
+		bool haveData = NET_getDownloadingWzFiles().empty();
 		desiredReadyState = haveData;
 	}
 
@@ -6390,7 +6382,13 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				NETend();
 
 				debug(LOG_WARNING, "Received file cancel request from player %u, they weren't expecting the file.", queue.index);
-				auto &wzFiles = NetPlay.players[queue.index].wzFiles;
+				auto &pWzFiles = NetPlay.players[queue.index].wzFiles;
+				if (pWzFiles == nullptr)
+				{
+					ASSERT(false, "Null wzFiles (player: %" PRIu8 ")", queue.index);
+					break;
+				}
+				auto &wzFiles = *pWzFiles;
 				wzFiles.erase(std::remove_if(wzFiles.begin(), wzFiles.end(), [&](WZFile const &file) { return file.hash == hash; }), wzFiles.end());
 			}
 			break;
@@ -7511,7 +7509,7 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int j = psWidget->UserData;
 
 	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
-	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
+	if (!NetPlay.players[j].fileSendInProgress() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
 	{
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
@@ -7526,7 +7524,7 @@ void displayFaction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int j = psWidget->UserData;
 
 	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
-	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
+	if (!NetPlay.players[j].fileSendInProgress() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
 	{
 		FactionID faction = NetPlay.players[j].faction;
 		iV_DrawImage(FrontImages, factionIcon(faction), x + 5, y + 8);
@@ -8052,7 +8050,14 @@ inline void from_json(const nlohmann::json& j, PLAYER& p) {
 	p.difficulty = static_cast<AIDifficulty>(difficultyInt); // TODO CHECK
 	// autoGame // MAYBE NOT?
 	// Do not persist wzFiles
-	p.wzFiles.clear();
+	if (p.wzFiles)
+	{
+		p.wzFiles->clear();
+	}
+	else
+	{
+		ASSERT(false, "Null wzFiles?");
+	}
 	// Do not persist IPtextAddress
 	auto factionUint = j.at("faction").get<uint8_t>();
 	p.faction = static_cast<FactionID>(factionUint); // TODO CHECK

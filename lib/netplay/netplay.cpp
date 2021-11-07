@@ -236,6 +236,8 @@ static bool		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
 
+static std::vector<WZFile> DownloadingWzFiles;
+
 // update flags
 bool netPlayersUpdated;
 
@@ -291,6 +293,63 @@ static PlayerManagementRecord playerManagementRecord;
 static char const *versionString = version_getVersionString();
 
 #include "lib/netplay/netplay_config.h"
+
+static inline bool physfs_file_safe_close_impl(PHYSFS_file* f)
+{
+	if (!f)
+	{
+		return false;
+	}
+	if (!PHYSFS_isInit())
+	{
+		debug(LOG_INFO, "PhysFS isn't init - ignoring attempt to close (likely at program shutdown?)");
+		return false;
+	}
+	PHYSFS_close(f);
+	f = nullptr;
+	return true;
+}
+
+void physfs_file_safe_close(PHYSFS_file* f)
+{
+	physfs_file_safe_close_impl(f);
+}
+
+WZFile::~WZFile()
+{ }
+
+bool WZFile::closeFile()
+{
+	if (!handle_)
+	{
+		return false;
+	}
+	PHYSFS_file *file = handle_.release();
+	return physfs_file_safe_close_impl(file);
+}
+
+const std::vector<WZFile>& NET_getDownloadingWzFiles()
+{
+	return DownloadingWzFiles;
+}
+
+void NET_addDownloadingWZFile(WZFile&& newFile)
+{
+	DownloadingWzFiles.push_back(std::move(newFile));
+}
+
+void NET_clearDownloadingWZFiles()
+{
+	// if we were in a middle of transferring a file, then close the file handle
+	for (auto &file : DownloadingWzFiles)
+	{
+		debug(LOG_NET, "closing aborted file");
+		file.closeFile();
+		ASSERT(!file.filename.empty(), "filename must not be empty");
+		PHYSFS_delete(file.filename.c_str()); 		// delete incomplete (map) file
+	}
+	DownloadingWzFiles.clear();
+}
 
 NETPLAY::NETPLAY()
 {
@@ -506,7 +565,14 @@ static void initPlayerNetworkProps(int playerIndex)
 	NetPlay.players[playerIndex].kick = false;
 	NetPlay.players[playerIndex].ready = false;
 
-	NetPlay.players[playerIndex].wzFiles.clear();
+	if (NetPlay.players[playerIndex].wzFiles)
+	{
+		NetPlay.players[playerIndex].wzFiles->clear();
+	}
+	else
+	{
+		ASSERT(false, "PLAYERS.wzFiles is uninitialized??");
+	}
 	ingame.JoiningInProgress[playerIndex] = false;
 }
 
@@ -579,7 +645,7 @@ void NET_InitPlayers(bool initTeams, bool initSpectator)
 
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
-	NetPlay.wzFiles.clear();
+	DownloadingWzFiles.clear();
 	NET_waitingForIndexChangeAckSince = std::vector<optional<uint32_t>>(MAX_CONNECTED_PLAYERS, nullopt);
 	debug(LOG_NET, "Players initialized");
 }
@@ -2807,18 +2873,17 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 int NETsendFile(WZFile &file, unsigned player)
 {
 	ASSERT_OR_RETURN(100, NetPlay.isHost, "Trying to send a file and we are not the host!");
-	ASSERT_OR_RETURN(100, file.handle != nullptr, "Null file handle");
+	ASSERT_OR_RETURN(100, file.handle() != nullptr, "Null file handle");
 
 	uint8_t inBuff[MAX_FILE_TRANSFER_PACKET];
 	memset(inBuff, 0x0, sizeof(inBuff));
 
 	// read some bytes.
-	PHYSFS_sint64 readBytesResult = WZ_PHYSFS_readBytes(file.handle, inBuff, MAX_FILE_TRANSFER_PACKET);
+	PHYSFS_sint64 readBytesResult = WZ_PHYSFS_readBytes(file.handle(), inBuff, MAX_FILE_TRANSFER_PACKET);
 	if (readBytesResult < 0)
 	{
 		ASSERT(readBytesResult >= 0, "Error reading file.");
-		PHYSFS_close(file.handle);
-		file.handle = nullptr;
+		file.closeFile();
 		return 100;
 	}
 	uint32_t bytesToRead = static_cast<uint32_t>(readBytesResult);
@@ -2834,8 +2899,7 @@ int NETsendFile(WZFile &file, unsigned player)
 	file.pos += bytesToRead;  // update position!
 	if (file.pos == file.size)
 	{
-		PHYSFS_close(file.handle);
-		file.handle = nullptr;  // We are done sending to this client.
+		file.closeFile(); // We are done sending to this client.
 	}
 
 	return static_cast<int>((uint64_t)file.pos * 100 / file.size);
@@ -2987,7 +3051,7 @@ int NETrecvFile(NETQUEUE queue)
 
 	debug(LOG_NET, "New file position is %u", pos);
 
-	auto file = std::find_if(NetPlay.wzFiles.begin(), NetPlay.wzFiles.end(), [&](WZFile const &file) { return file.hash == hash; });
+	auto file = std::find_if(DownloadingWzFiles.begin(), DownloadingWzFiles.end(), [&](WZFile const &file) { return file.hash == hash; });
 
 	auto sendCancelFileDownload = [](Sha256 &hash) {
 		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_FILE_CANCELLED);
@@ -2995,7 +3059,7 @@ int NETrecvFile(NETQUEUE queue)
 		NETend();
 	};
 
-	if (file == NetPlay.wzFiles.end())
+	if (file == DownloadingWzFiles.end())
 	{
 		debug(LOG_WARNING, "Receiving file data we didn't request.");
 		sendCancelFileDownload(hash);
@@ -3003,15 +3067,13 @@ int NETrecvFile(NETQUEUE queue)
 	}
 
 	auto terminateFileDownload = [sendCancelFileDownload](std::vector<WZFile>::iterator &file) {
-		int noError = PHYSFS_close(file->handle);
-		if (noError == 0)
+		if (!file->closeFile())
 		{
 			debug(LOG_ERROR, "Could not close file handle after trying to terminate download: %s", WZ_PHYSFS_getLastError());
 		}
-		file->handle = nullptr;
 		PHYSFS_delete(file->filename.c_str());
 		sendCancelFileDownload(file->hash);
-		NetPlay.wzFiles.erase(file);
+		DownloadingWzFiles.erase(file);
 	};
 
 	//sanity checks
@@ -3040,7 +3102,7 @@ int NETrecvFile(NETQUEUE queue)
 		return 100;
 	}
 
-	if (PHYSFS_tell(file->handle) != static_cast<PHYSFS_sint64>(pos))
+	if (PHYSFS_tell(file->handle()) != static_cast<PHYSFS_sint64>(pos))
 	{
 		// actual position in file does not equal the expected position in the file (sent by the host)
 		debug(LOG_ERROR, "Invalid file position in downloaded file; (desired: %" PRIu32")", pos);
@@ -3049,19 +3111,17 @@ int NETrecvFile(NETQUEUE queue)
 	}
 
 	// Write packet to the file.
-	WZ_PHYSFS_writeBytes(file->handle, buf, bytesToRead);
+	WZ_PHYSFS_writeBytes(file->handle(), buf, bytesToRead);
 
 	uint32_t newPos = pos + bytesToRead;
 	file->pos = newPos;
 
 	if (newPos >= size)  // last packet
 	{
-		int noError = PHYSFS_close(file->handle);
-		if (noError == 0)
+		if (!file->closeFile())
 		{
 			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", WZ_PHYSFS_getLastError());
 		}
-		file->handle = nullptr;
 
 		if(!validateReceivedFile(*file))
 		{
@@ -3074,7 +3134,7 @@ int NETrecvFile(NETQUEUE queue)
 			markAsDownloadedFile(file->filename.c_str());
 		}
 
-		NetPlay.wzFiles.erase(file);
+		DownloadingWzFiles.erase(file);
 	}
 	// 'file' may now be an invalidated iterator.
 
@@ -3089,12 +3149,14 @@ int NETrecvFile(NETQUEUE queue)
 
 unsigned NETgetDownloadProgress(unsigned player)
 {
-	std::vector<WZFile> const &files = player == selectedPlayer ?
-		NetPlay.wzFiles :  // Check our own download progress.
-		NetPlay.players[player].wzFiles;  // Check their download progress (currently only works if we are the host).
+	std::vector<WZFile> const *files = player == selectedPlayer ?
+		&DownloadingWzFiles :  // Check our own download progress.
+		NetPlay.players[player].wzFiles.get();  // Check their download progress (currently only works if we are the host).
+
+	ASSERT_OR_RETURN(100, files != nullptr, "Uninitialized wzFiles? (Player %u)", player);
 
 	uint32_t progress = 100;
-	for (WZFile const &file : files)
+	for (WZFile const &file : *files)
 	{
 		progress = std::min<uint32_t>(progress, (uint32_t)((uint64_t)file.pos * 100 / (uint64_t)std::max<uint32_t>(file.size, 1)));
 	}
@@ -3926,7 +3988,14 @@ static void NETallowJoining()
 					NETregisterServer(WZ_SERVER_UPDATE);
 
 					// reset flags for new players
-					NetPlay.players[index].wzFiles.clear();
+					if (NetPlay.players[index].wzFiles)
+					{
+						NetPlay.players[index].wzFiles->clear();
+					}
+					else
+					{
+						ASSERT(false, "wzFiles is uninitialized?? (Player: %" PRIu8 ")", index);
+					}
 				}
 			}
 		}

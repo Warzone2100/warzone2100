@@ -1878,8 +1878,9 @@ bool recvMapFileRequested(NETQUEUE queue)
 	NETbin(hash.bytes, hash.Bytes);
 	NETend();
 
-	auto &files = NetPlay.players[player].wzFiles;
-	if (std::any_of(files.begin(), files.end(), [&](WZFile const &file) { return file.hash == hash; }))
+	auto files = NetPlay.players[player].wzFiles;
+	ASSERT_OR_RETURN(false, files != nullptr, "wzFiles is uninitialized?? (Player: %" PRIu32 ")", player);
+	if (std::any_of(files->begin(), files->end(), [&](WZFile const &file) { return file.hash == hash; }))
 	{
 		return true;  // Already sending this file, do nothing.
 	}
@@ -1936,7 +1937,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 
 	// Schedule file to be sent.
 	debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", WZ_PHYSFS_getRealDir_String(filename.c_str()).c_str(), filename.c_str(), player);
-	files.emplace_back(pFileHandle, filename, hash, fileSize_u32);
+	files->emplace_back(pFileHandle, filename, hash, fileSize_u32);
 
 	return true;
 }
@@ -1952,7 +1953,7 @@ void sendMap()
 	uint64_t totalFilesToSend = 0;
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		totalFilesToSend += NetPlay.players[i].wzFiles.size();
+		totalFilesToSend += (NetPlay.players[i].wzFiles) ? NetPlay.players[i].wzFiles->size() : 0;
 	}
 	const uint64_t maxMicroSecondsPerFile = maxMicroSecondsPerSendMapCall / std::max((uint64_t)1, totalFilesToSend);
 
@@ -1962,7 +1963,12 @@ void sendMap()
 
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		auto &files = NetPlay.players[i].wzFiles;
+		auto pFiles = NetPlay.players[i].wzFiles;
+		if (pFiles == nullptr)
+		{
+			continue;
+		}
+		auto &files = *pFiles;
 		for (auto &file : files)
 		{
 			int done = 0;
@@ -1980,7 +1986,7 @@ void sendMap()
 				debug(LOG_INFO, "=== File has been sent to player %d ===", i);
 			}
 		}
-		files.erase(std::remove_if(files.begin(), files.end(), [](WZFile const &file) { return file.handle == nullptr; }), files.end());
+		files.erase(std::remove_if(files.begin(), files.end(), [](WZFile const &file) { return file.handle() == nullptr; }), files.end());
 	}
 }
 
@@ -1988,7 +1994,7 @@ void sendMap()
 bool recvMapFileData(NETQUEUE queue)
 {
 	NETrecvFile(queue);
-	if (NetPlay.wzFiles.empty())
+	if (NET_getDownloadingWzFiles().empty())
 	{
 		netPlayersUpdated = true;  // Remove download icon from ourselves.
 		addConsoleMessage(_("MAP DOWNLOADED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
