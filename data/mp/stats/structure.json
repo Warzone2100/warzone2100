@@ -2067,8 +2067,8 @@
 	"Sys-SensoTowerWS": {
 		"armour": 15,
 		"breadth": 1,
-		"buildPoints": 800,
-		"buildPower": 350,
+		"buildPoints": 600,
+		"buildPower": 250,
 		"height": 3,
 		"hitpoints": 600,
 		"id": "Sys-SensoTowerWS",
