@@ -409,9 +409,9 @@ void ActivityManager::startingSavedGame()
 	ActivitySink::GameMode mode = currentGameTypeToMode();
 	bEndedCurrentMission = false;
 
-	if (mode == ActivitySink::GameMode::SKIRMISH)
+	if (mode == ActivitySink::GameMode::SKIRMISH || (mode == ActivitySink::GameMode::MULTIPLAYER && NETisReplay()))
 	{
-		// synthesize an "update multiplay game data" call on skirmish save game load
+		// synthesize an "update multiplay game data" call on skirmish save game load (or loading MP replay)
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, false);
 	}
 
