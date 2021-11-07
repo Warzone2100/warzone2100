@@ -1,4 +1,4 @@
-${LangFileString} WZWelcomeText "欢迎来到 Warzone 2100！\r\n\r\n此处将引导你完成游戏的安装\r\n\r\n建议安装前关闭其他应用程序，以确保相关系统文件的更新、避免后续重启。\r\n\r\nWarzone 2100 是免费的，且完全开放源代码\r\n\r\n下一步继续。"
+${LangFileString} WZWelcomeText "欢迎来到 Warzone 2100 世界！\r\n\r\n此向导将助你完成游戏的安装\r\n\r\n建议继续前关闭所有其他的应用程序，以确保相关系统文件的更新、避免后续重启。\r\n\r\nWarzone 2100 完全免费、并且开放源代码\r\n\r\n下一步继续。"
 
 ${LangFileString} WZWelcomeText_Portable "海内存知己，天涯若比邻！\r\n\r\n此处将引导您完成 Warzone 2100 的安装。\r\n\r\n游戏亦可以随时删除、卸载。\r\n\r\n免费、开源、有趣的战争！\r\n\r\n下一步继续。"
 
