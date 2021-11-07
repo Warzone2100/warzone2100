@@ -81,8 +81,8 @@
 		"weight": 100
 	},
 	"Sensor-WideSpec": {
-		"buildPoints": 1200,
-		"buildPower": 450,
+		"buildPoints": 700,
+		"buildPower": 300,
 		"designable": 1,
 		"droidType": "DROID_SENSOR",
 		"hitpoints": 200,
@@ -111,8 +111,8 @@
 		"weight": 100
 	},
 	"SensorTurret1Mk1": {
-		"buildPoints": 100,
-		"buildPower": 20,
+		"buildPoints": 500,
+		"buildPower": 150,
 		"designable": 1,
 		"droidType": "DROID_SENSOR",
 		"hitpoints": 200,
@@ -121,7 +121,7 @@
 		"mountModel": "TRLSNSR1.PIE",
 		"name": "Sensor Turret",
 		"power": 1000,
-		"range": 1792,
+		"range": 2048,
 		"sensorModel": "GNLSNSR1.PIE",
 		"type": "STANDARD",
 		"weight": 100
