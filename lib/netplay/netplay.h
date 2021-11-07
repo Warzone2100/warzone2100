@@ -213,16 +213,38 @@ struct SYNC_COUNTER
 	uint16_t	rejected;
 };
 
+void physfs_file_safe_close(PHYSFS_file* f);
+
 struct WZFile
 {
-	//WZFile() : handle(nullptr), size(0), pos(0) { hash.setZero(); }
-	WZFile(PHYSFS_file *handle, const std::string &filename, Sha256 hash, uint32_t size = 0) : handle(handle), filename(filename), hash(hash), size(size), pos(0) {}
+public:
+//	WZFile() : handle_(nullptr, physfs_file_safe_close), size(0), pos(0) { hash.setZero(); }
+	WZFile(PHYSFS_file *handle, const std::string &filename, Sha256 hash, uint32_t size = 0) : handle_(handle, physfs_file_safe_close), filename(filename), hash(hash), size(size), pos(0) {}
 
-	PHYSFS_file *handle;
+	~WZFile();
+
+	// Prevent copies
+	WZFile(const WZFile&) = delete;
+	void operator=(const WZFile&) = delete;
+
+	// Allow move semantics
+	WZFile(WZFile&& other) = default;
+	WZFile& operator=(WZFile&& other) = default;
+
+public:
+	bool closeFile();
+	inline PHYSFS_file* handle() const
+	{
+		return handle_.get();
+	}
+
+private:
+	std::unique_ptr<PHYSFS_file, void(*)(PHYSFS_file*)> handle_;
+public:
 	std::string filename;
 	Sha256 hash;
-	uint32_t size;
-	uint32_t pos;  // Current position, the range [0; currPos[ has been sent or received already.
+	uint32_t size = 0;
+	uint32_t pos = 0;  // Current position, the range [0; currPos[ has been sent or received already.
 };
 
 enum class AIDifficulty : int8_t
@@ -266,8 +288,13 @@ struct PLAYER
 	bool				isSpectator;		///< whether this slot is a spectator slot
 
 	// used on host-ONLY (not transmitted to other clients):
-	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
+	std::shared_ptr<std::vector<WZFile>> wzFiles = std::make_shared<std::vector<WZFile>>();            ///< for each player, we keep track of map/mod download progress
 	char                IPtextAddress[40];  ///< IP of this player
+	bool fileSendInProgress() const
+	{
+		ASSERT_OR_RETURN(false, wzFiles != nullptr, "Null wzFiles");
+		return !wzFiles->empty();
+	}
 
 	void resetAll()
 	{
@@ -304,7 +331,6 @@ struct NETPLAY
 	bool		isUPNP_CONFIGURED;	// if UPnP was successful
 	bool		isUPNP_ERROR;		//If we had a error during detection/config process
 	bool		isHostAlive;	/// if the host is still alive
-	std::vector<WZFile> wzFiles;      ///< Only non-empty during map/mod download.
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
@@ -459,6 +485,10 @@ uint8_t NET_numHumanPlayers(void);
 void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
 std::vector<uint8_t> NET_getHumanPlayers(void);
 
+const std::vector<WZFile>& NET_getDownloadingWzFiles();
+void NET_addDownloadingWZFile(WZFile&& newFile);
+void NET_clearDownloadingWZFiles();
+
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
@@ -503,6 +533,7 @@ struct PlayerReference
 	void disconnect()
 	{
 		detached = std::unique_ptr<PLAYER>(new PLAYER(NetPlay.players[index]));
+		detached->wzFiles = std::make_shared<std::vector<WZFile>>();
 	}
 
 	PLAYER const *operator ->() const
