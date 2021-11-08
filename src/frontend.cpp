@@ -78,6 +78,7 @@
 #include "game.h"
 #include "map.h" //for builtInMap
 #include "notifications.h"
+#include "activity.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables

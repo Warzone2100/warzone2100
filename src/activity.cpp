@@ -108,6 +108,12 @@ std::string to_string(const END_GAME_STATS_DATA& stats)
 
 class LoggingActivitySink : public ActivitySink {
 public:
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) override
+	{
+		debug(LOG_ACTIVITY, "- navigatedToMenu: %s", menuName.c_str());
+	}
+
 	// campaign games
 	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) override
 	{
@@ -512,6 +518,11 @@ void ActivityManager::preSystemShutdown()
 		// quitGame was never generated - synthesize it
 		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
 	}
+}
+
+void ActivityManager::navigateToMenu(const std::string& menuName)
+{
+	for (auto sink : activitySinks) { sink->navigatedToMenu(menuName); }
 }
 
 void ActivityManager::beginLoadingSettings()
