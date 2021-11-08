@@ -1,3 +1,37 @@
+2021-11-08: Version 4.2.1:
+ * General:
+   * Add: Replay v2 format: Embed downloaded maps, store "end of game" info block (too many commits, #2347)
+   * Fix: Improve replay saving performance / behavior (commit:e4e604aa55f229ce1f9ac582388a4c3b20f9409b, #2345)
+   * Fix: Handle frontend.img / intfac.img load failure explicitly (commit:5ea99dd6ebe1bfd9e8efd94ac25fa841d3600913, commit:406956ad1f197925f20b8e638e49432554af0c6f, #2355)
+   * Fix: updateChallenge() crash (commit:2f912f7bf6588752ce95cc010df916b30c85ec9f, #2348)
+   * Fix: loadGame() crash if map load failed (commit:45fbedd4b67de805246d0a95d2ea9f75b8766a31, #2352)
+   * Fix: Various additional bounds checks & error logging (too many commits, #2359, #2373, #2374, #2377)
+   * Fix: cursors_sdl: Null checks, cleanup order fixes (commit:bf0b642306c34f0a73806715eb2e11e30ccaa4f4, commit:8bfc6ae13b03b1beb99ce4421d62dde5a31d641d, #2360)
+   * Fix: showUNITCOUNT should only apply to player slots (commit:340d5ec8fd9a9c87ced84953a33493ad0bda2955, #2366)
+ * Graphics:
+   * Fix: Further OpenGL init tweaks (too many commits, #2350)
+ * Campaign:
+   * Change: Alpha 09 tweaks (commit:120cb3ddf03ddf31c0de67706cf0073ddeb33df5, #2356)
+   * Change: Alpha 06 NP reinforcement tweak (commit:5485ebe25147f8f4d1e8a95afd6502de5d4cd249, #2357)
+   * Change: Update a Nexus Resistance Circuit research item name (commit:04d1692b7ba96cb6dc03c1636fc548c9f135c9b5, #2369)
+   * Fix: Account for the transporter in campaign unit limit (commit:dbf34209c3c8b8b8a14e286c4265223a2e80b47b, #2369)
+ * Scripting:
+   * Add: Provide a native fractal value noise generator for use in map scripts (commit:469df2d69f137183aef3e2413fa285db3e83908a, #2341)
+ * Multiplayer:
+   * Add: Add specstats button (commit:12fffa2c845b2a3c48262a23078fac9a30ce7238, #2370)
+   * Change: Host: Remember number of spectator slots in MP games (commit:33b9c498f333952e849dbb3619d667b5fad7daa2, #2372)
+   * Fix: Improve spectator lag / fast-forward behavior (too many commits, #2338)
+   * Fix: Do not reset ready status of players on spectator leave (commit:30cf5a2003e86eb8fe7b22fa97bda04907dcbb45, #2353)
+   * Fix: NetworkTextMessage::receive() crash (commit:a63e016f2faa562292437591e7e958caea1d9440, #2354)
+   * Fix: ActivityManager: updateMultiplayGameData on MP replay load (commit:4c36ed5934077962370316b3e057e5242bbaca53, #2375)
+   * Fix: Revamp WZFiles cleanup (commit:13849b065378d830f55771e35878670f38a544b2, #2376)
+ * MP-Balance:
+   * Change: Rollback "ALL ROUNDER" damage value against "Legged", Increase the accuracy at long range of all MGs from 50 to 55 (commit:e00eff60500ec59ef25c6ac90aa1397fe366f819, #2361)
+   * Change: Increase the weight of HVC, add 0.5 tiles range to HVC cyborg, and reduce ROF of these weapons (commit:6e4d2561de3f5e6f6f90adae04a96fbb8591c26a, #2363)
+   * Change: Increase the research time "High Temperature Flamer Gel Mk3" so it is no longer included in "Advanced Base" (commit:2745499133bd237924df03e1e416ca1f6f2ab2ca, #2364)
+   * Change: Faster Bombard and Pepperpot production, weaken Incendiary Mortar burn radius and damage, and earlier access to mortar accuracy research (commit:27bce204cd198f4bec1d23a48ea31a5345792f08, #2367)
+   * Change: Required research for Howitzer: APFSDS Cannon Rounds Mk2 -> Heavy Mortar - Bombard (commit:06e5b5ca3b0d4ac2267314d8aff0932582a55bad, #2368)
+
 2021-10-26: Version 4.2.0:
  * General:
    * Fix: Handle repair point choice better so it doesn't pick less than ideal ones (commit:4a3d528b6c70fd5763ad1ebabf181e2e6fc7f321, #2313)
