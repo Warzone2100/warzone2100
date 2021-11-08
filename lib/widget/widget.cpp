@@ -788,6 +788,7 @@ void widgDeleteLater(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 /* Find a widget on a form from its id number */
 std::shared_ptr<WIDGET> widgFormGetFromID(const std::shared_ptr<WIDGET>& widget, UDWORD id)
 {
+	ASSERT_OR_RETURN(nullptr, widget != nullptr, "Invalid widget pointer");
 	if (widget->id == id)
 	{
 		return widget->shared_from_this();

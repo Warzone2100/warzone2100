@@ -7792,7 +7792,9 @@ std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWOR
 
 std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha)
 {
-	return addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc, alpha);
+	WIDGET *pWidget = widgGetFromID(screen, formid);
+	ASSERT(pWidget != nullptr, "Unable to find formID: %" PRIu32, formid);
+	return addMultiBut(*pWidget, id, x, y, width, height, tipres, norm, down, hi, tc, alpha);
 }
 
 /* Returns true if the multiplayer game can start (i.e. all players are ready) */

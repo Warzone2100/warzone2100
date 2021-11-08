@@ -2363,6 +2363,7 @@ W_FORM *addBackdrop(const std::shared_ptr<W_SCREEN> &screen)
 void addTopForm(bool wide)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	ASSERT(parent != nullptr, "Unable to find FRONTEND_BACKDROP?");
 
 	auto topForm = std::make_shared<IntFormTransparent>();
 	parent->attach(topForm);
@@ -2420,6 +2421,7 @@ void addBottomForm()
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, formID);
+	ASSERT(parent != nullptr, "Unable to find formID: %" PRIu32, formID);
 
 	auto label = std::make_shared<W_LABEL>();
 	parent->attach(label);
@@ -2527,7 +2529,9 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 		button->move(PosX + 35, PosY);
 	}
 
-	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(button);
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+	ASSERT(parent != nullptr, "Unable to find FRONTEND_BOTFORM?");
+	parent->attach(button);
 }
 
 W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
