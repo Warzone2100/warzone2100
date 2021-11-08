@@ -46,7 +46,7 @@
 #  define WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN ""
 # endif
 static bool enabledSentryProvider = false;
-# define WZ_SENTRY_MAX_BREADCRUMBS 50
+# define WZ_SENTRY_MAX_BREADCRUMBS 60
 #endif
 
 const size_t tagKeyMaxLength = 32;
@@ -231,6 +231,12 @@ public:
 	SentryCrashHandlerActivitySink()
 	{
 		gameStateToMenus();
+	}
+
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) override
+	{
+		gameStateChange(std::string("/menus/") + menuName + "/");
 	}
 
 	// campaign games

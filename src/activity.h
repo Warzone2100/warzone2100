@@ -56,6 +56,9 @@ public:
 public:
 	virtual ~ActivitySink() { }
 public:
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) { }
+
 	// campaign games
 	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) { }
 	virtual void endedCampaignMission(const std::string& campaign, const std::string& levelName, GameEndReason result, END_GAME_STATS_DATA stats, bool cheatsUsed) { }
@@ -175,6 +178,9 @@ public:
 	void completedMission(bool result, END_GAME_STATS_DATA stats, bool cheatsUsed);
 	void quitGame(END_GAME_STATS_DATA stats, bool cheatsUsed);
 	void preSystemShutdown();
+
+	// navigating main menus
+	void navigateToMenu(const std::string& menuName);
 
 	// changing settings
 	void beginLoadingSettings();
