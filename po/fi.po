@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:06\n"
+"PO-Revision-Date: 2021-11-08 17:15\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -71,7 +71,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Paikanna ja tuo esineet"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -83,7 +83,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Ota selvää tutkimuskeskuksesta"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -96,7 +96,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Koodattuja signaaleja havaittu"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
@@ -108,7 +108,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Vihollisten kuljetus havaittu"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
@@ -120,7 +120,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Synaptisen linkin sijainti"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -132,7 +132,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Uudet tavoitteet"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -144,7 +144,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Vihollisten tukikohtaa rakennetaan"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
@@ -475,7 +475,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Pysäytä saattue"
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
@@ -504,7 +504,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Etsi ja tuhoa saattue"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
@@ -525,7 +525,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Pelasta siviilit vankileiriltä"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
@@ -562,7 +562,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Tuhoa tai aja pois vihollisten kuljetus"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
@@ -583,7 +583,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Tuhoa reaktori"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
@@ -641,7 +641,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Tuhoa vihollisen SAM asemat"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
@@ -654,7 +654,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Perusta turvapaikka"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
@@ -707,7 +707,7 @@ msgstr ""
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Pohjoinen sektori"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
@@ -735,7 +735,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Perusta etuvartioasema"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
@@ -749,7 +749,7 @@ msgstr ""
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Ohjusten laukaisuaseman koordinaatit"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -836,7 +836,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Alpha joukkue havaittu"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -864,7 +864,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
-msgstr ""
+msgstr "Tämän tutkimisesta voi olla valtavasti hyötyä."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
@@ -876,11 +876,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr ""
+msgstr "Etsi ja tuhoa ...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Väijytä NEXUXsen joukot"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
@@ -1081,7 +1081,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr ""
+msgstr "KULJETUSTEHTÄVÄ: Hyökkää NEXUXSEN viimeiseen tukikohtaan"
 
 #: data/base/messages/strings/cam3strings.txt:181
 msgid "We have located NEXUS' base at this location."
@@ -1134,7 +1134,7 @@ msgstr ""
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
 msgid "Mission Target"
-msgstr ""
+msgstr "Tehtävän kohde"
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
@@ -1146,11 +1146,11 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
-msgstr ""
+msgstr "Tehtävä epäonnistui"
 
 #: data/base/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
-msgstr ""
+msgstr "Tehtävä onnistui"
 
 #: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
@@ -1162,7 +1162,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
-msgstr ""
+msgstr "Saapuva lähetys"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
@@ -4421,7 +4421,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
 msgid "Incoming Transmission"
-msgstr ""
+msgstr "Saapuva lähetys"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
