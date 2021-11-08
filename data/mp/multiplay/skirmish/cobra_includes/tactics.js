@@ -405,7 +405,7 @@ function recycleForHover()
 	}
 
 	const MIN_FACTORY = 1;
-	var systems = enumDroid(me, DROID_CONSTRUCT).concat(enumDroid(me, DROID_SENSOR)).concat(enumDroid(me, DROID_REPAIR)).filter(function(dr) {
+	var systems = enumDroid(me, DROID_CONSTRUCT).concat(enumDroid(me, DROID_SENSOR)).filter(function(dr) {
 		return (dr.body !== "CyborgLightBody" && dr.propulsion !== "hover01");
 	});
 	var unfinished = unfinishedStructures();
@@ -438,42 +438,6 @@ function recycleForHover()
 			if (NON_HOVER_TANKS + NON_HOVER_SYSTEMS === 0)
 			{
 				removeThisTimer("recycleForHover");
-			}
-		}
-	}
-}
-
-//Tell the repair group to go repair other droids.
-function repairDroidTactics()
-{
-	if (currently_dead)
-	{
-		return;
-	}
-
-	var reps = enumGroup(repairGroup);
-	const LEN = reps.length;
-
-	if (LEN > 0)
-	{
-		var myDroids = enumGroup(attackGroup).filter(function(dr) {
-			return dr.order !== DORDER_RTR;
-		});
-
-		if (myDroids.length > 0)
-		{
-			myDroids = myDroids.sort(sortDroidsByHealth);
-			var weakest = myDroids[0];
-			var dorder_droidrepair = 26; //FIXME: when DORDER_DROIDREPAIR can be called, remove this.
-
-			for (var i = 0; i < LEN; ++i)
-			{
-				const REPAIR_UNIT = reps[i];
-				if ((REPAIR_UNIT.order !== dorder_droidrepair) && (Math.ceil(weakest.health) < 100))
-				{
-					orderDroidLoc(weakest, DORDER_MOVE, REPAIR_UNIT.x, REPAIR_UNIT.y);
-					orderDroidObj(REPAIR_UNIT, dorder_droidrepair, weakest);
-				}
 			}
 		}
 	}

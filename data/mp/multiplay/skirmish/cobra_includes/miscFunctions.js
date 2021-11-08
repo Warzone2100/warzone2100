@@ -352,7 +352,6 @@ function initCobraGroups()
 	attackGroup = newGroup();
 	vtolGroup = newGroup();
 	sensorGroup = newGroup();
-	repairGroup = newGroup();
 	artilleryGroup = newGroup();
 	constructGroup = newGroup();
 	constructGroupNTWExtra = newGroup();
@@ -363,7 +362,6 @@ function initCobraGroups()
 	addDroidsToGroup(attackGroup, enumDroid(me, DROID_CYBORG));
 	addDroidsToGroup(vtolGroup, enumDroid(me).filter(function(obj) { return isVTOL(obj); }));
 	addDroidsToGroup(sensorGroup, enumDroid(me, DROID_SENSOR));
-	addDroidsToGroup(repairGroup, enumDroid(me, DROID_REPAIR));
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return obj.isCB; }));
 
 	var cons = enumDroid(me, DROID_CONSTRUCT);

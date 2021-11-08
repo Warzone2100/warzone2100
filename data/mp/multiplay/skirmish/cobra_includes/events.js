@@ -25,7 +25,6 @@ function eventStartLevel()
 	setTimer("checkAllForRepair", 600 + delay + (4 * easyTimeDelay));
 	setTimer("research", 800 + delay + (3 * easyTimeDelay));
 	setTimer("lookForOil", 1000 + delay + (2 * easyTimeDelay));
-	setTimer("repairDroidTactics", 1200 + delay);
 	setTimer("artilleryTactics", 1400 + delay);
 	setTimer("vtolTactics", 1600 + delay);
 	setTimer("groundTactics", 2000 + delay);
@@ -127,10 +126,6 @@ function eventDroidBuilt(droid, struct)
 	else if (droid.droidType === DROID_SENSOR)
 	{
 		groupAdd(sensorGroup, droid);
-	}
-	else if (droid.droidType === DROID_REPAIR)
-	{
-		groupAdd(repairGroup, droid);
 	}
 	else if (isVTOL(droid))
 	{

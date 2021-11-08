@@ -523,7 +523,6 @@ function analyzeQueuedSystems()
 	var fac = enumStruct(me, FACTORY);
 	var trucks = 0;
 	var sens = 0;
-	var reps = 0;
 
 	for (var i = 0, l = fac.length; i < l; ++i)
 	{
@@ -540,14 +539,10 @@ function analyzeQueuedSystems()
 			{
 				sens += 1;
 			}
-			if (TYPE === DROID_REPAIR)
-			{
-				reps += 1;
-			}
 		}
 	}
 
-	return { "truck": trucks, "sensor": sens, "repair": reps };
+	return { "truck": trucks, "sensor": sens };
 }
 
 function attackerCountsGood(recycle)
@@ -579,14 +574,11 @@ function produce()
 		return; //Stop spamming about having the droid limit reached.
 	}
 	const MIN_SENSORS = 1;
-	const MIN_REPAIRS = 2;
 	var useCybEngineer = !countStruct(structures.factory); //use them if we have no factory
 	var systems = analyzeQueuedSystems();
 
 	var attackers = enumGroup(attackGroup).length;
-	var allowSpecialSystems = isDefined(attackers) ? attackers > 10 : false;
 	var buildSensors = ((enumGroup(sensorGroup).length + systems.sensor) < MIN_SENSORS);
-	var buildRepairs = ((enumGroup(repairGroup).length + systems.repair) < MIN_REPAIRS);
 	var buildTrucks = ((enumGroup(constructGroup).length +
 		enumGroup(oilGrabberGroup).length +
 		enumGroup(constructGroupNTWExtra).length +
@@ -644,12 +636,6 @@ function produce()
 						componentAvailable("SensorTurret1Mk1"))
 					{
 						buildSys(FC.id);
-					}
-					else if (allowSpecialSystems &&
-						buildRepairs &&
-						componentAvailable("LightRepair1"))
-					{
-						buildSys(FC.id, REPAIR_TURRETS);
 					}
 					else
 					{
