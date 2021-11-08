@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-05 22:41\n"
+"PO-Revision-Date: 2021-11-08 05:12\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -1527,14 +1527,12 @@ msgstr "Покращення ПБ Сенсора"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk2"
-msgstr "\n"
-"Модернізація датчиків СВ Mk2"
+msgstr "Модернізація датчиків СВ Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:477
 msgid "CB Sensor Upgrade Mk3"
-msgstr "\n"
-"Модернізація датчиків СВ Mk2"
+msgstr "Модернізація датчиків СВ Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:480
