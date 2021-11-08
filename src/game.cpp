@@ -3601,7 +3601,7 @@ static bool gameLoad(const char *fileName)
 {
 	char CurrentFileName[PATH_MAX];
 	strcpy(CurrentFileName, fileName);
-	GAME_SAVEHEADER fileHeader;
+	GAME_SAVEHEADER fileHeader = {};
 	auto gamJsonSave = readGamJson(fileName);
 	debug(LOG_SAVEGAME, "loading %s", fileName);
 	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
