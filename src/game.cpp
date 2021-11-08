@@ -3605,7 +3605,7 @@ static bool gameLoad(const char *fileName)
 	auto gamJsonSave = readGamJson(fileName);
 	debug(LOG_SAVEGAME, "loading %s", fileName);
 	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
-	if (!gamJsonSave.has_value())
+	if (!gamJsonSave.has_value() && fileHandle)
 	{
 		// haven't converted .gam to .json yet!
 		// Read the header from the file
@@ -3615,7 +3615,8 @@ static bool gameLoad(const char *fileName)
 			PHYSFS_close(fileHandle);
 			return false;
 		}
-	} else
+	}
+	else if (gamJsonSave.has_value())
 	{
 		// be compatible with .gam logic
 		fileHeader.version = gamJsonSave.value().at("version").get<uint32_t>();
