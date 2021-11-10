@@ -3194,24 +3194,30 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 			}
 		}
 	}
-
-	// one of these lists is empty when on mission
-	DROID *psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
-	for (DROID *psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
+	// if we are repair droid ourselves, don't consider other repairs droids
+	// because that causes havoc on front line: RT repairing themselves,
+	// blocking everyone else. And everyone else moving toward RT, also toward front line.s
+	// Ideally, we should just avoid retreating toward "danger", but dangerMap is only for multiplayer
+	if (psDroid->droidType != DROID_REPAIR && psDroid->droidType != DROID_CYBORG_REPAIR)
 	{
-		if (psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
+		// one of these lists is empty when on mission
+		DROID *psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
+		for (DROID *psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			thisDistToRepair = droidSqDist(psDroid, psCurr);
-			if (thisDistToRepair <= 0)
+			if (psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
 			{
-				continue; // unreachable
-			}
-			vDroidPos.push_back(psCurr->pos);
-			vDroid.push_back(psCurr);
-			if (bestDistToRepairDroid > thisDistToRepair)
-			{
-				bestDistToRepairDroid = thisDistToRepair;
-				bestDroidPos = psCurr->pos;
+				thisDistToRepair = droidSqDist(psDroid, psCurr);
+				if (thisDistToRepair <= 0)
+				{
+					continue; // unreachable
+				}
+				vDroidPos.push_back(psCurr->pos);
+				vDroid.push_back(psCurr);
+				if (bestDistToRepairDroid > thisDistToRepair)
+				{
+					bestDistToRepairDroid = thisDistToRepair;
+					bestDroidPos = psCurr->pos;
+				}
 			}
 		}
 	}
