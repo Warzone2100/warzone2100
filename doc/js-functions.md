@@ -112,13 +112,13 @@ This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use re
 Returns a string list of labels that exist for this map. The optional filter
 parameter can be used to only return labels of one specific type. (3.2+ only)
 
-## addLabel(object, label[, triggered])
+## addLabel(object, labelName[, triggered])
 
 Add a label to a game object. If there already is a label by that name, it is overwritten.
 This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 Can optionally specify an initial "triggered" value for the label. (3.4+ only)
 
-## removeLabel(label)
+## removeLabel(labelName)
 
 Remove a label from the game. Returns the number of labels removed, which should normally be
 either 1 (label found) or 0 (label not found). (3.2+ only)
@@ -129,7 +129,7 @@ Get a label string belonging to a game object. If the object has multiple labels
 label found will be returned. If the object has no labels, undefined is returned.
 This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
 
-## getObject(label | x, y | type, player, id)
+## getObject(labelName | x, y | type, player, id)
 
 Fetch something denoted by a label, a map position or its object ID. A label refers to an area,
 a position or a **game object** on the map defined using the map editor and stored
@@ -148,7 +148,7 @@ manner, since they do not have a unique placement on map tiles. Finally, you can
 its ID, in which case you need to pass its type, owner and unique object ID. This is an
 operation of O(n) algorithmic complexity. (3.2+ only)
 
-## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
+## enumArea(<x1, y1, x2, y2 | labelName>[, playerFilter[, seen]])
 
 Returns an array of game objects seen within the given area that passes the optional filter
 which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, filter is
@@ -355,7 +355,7 @@ Stop the in-game music. (3.3+ only)
 This should be called from the eventStartLevel() event (or later).
 Currently only used from the tutorial.
 
-## hackMarkTiles([label | x, y[, x2, y2]])
+## hackMarkTiles([labelName | x, y[, x2, y2]])
 
 Mark the given tile(s) on the map. Either give a `POSITION` or `AREA` label,
 or a tile x, y position, or four positions for a square area. If no parameter
@@ -835,7 +835,7 @@ Fires a weapon at the given coordinates (3.3+ only). The player is who owns the 
 Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
 may have different friendly fire logic for a few weapons (like the lassat).
 
-## fireWeaponAtObj(weapon, gameObject[, player])
+## fireWeaponAtObj(weaponName, gameObject[, player])
 
 Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
 

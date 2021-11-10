@@ -2327,13 +2327,13 @@ LABEL generic_script_object::toNewLabel() const
 	return value;
 }
 
-//-- ## addLabel(object, label[, triggered])
+//-- ## addLabel(object, labelName[, triggered])
 //--
 //-- Add a label to a game object. If there already is a label by that name, it is overwritten.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 //-- Can optionally specify an initial "triggered" value for the label. (3.4+ only)
 //--
-wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered))
+wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_object object, std::string labelName, optional<int> _triggered))
 {
 	LABELMAP& labels = scripting_engine::instance().labels;
 	LABEL value = object.toNewLabel();
@@ -2351,20 +2351,20 @@ wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_ob
 		value.triggered = _triggered.value();
 	}
 
-	labels[label] = value;
+	labels[labelName] = value;
 	jsDebugUpdateLabels();
 	return {};
 }
 
-//-- ## removeLabel(label)
+//-- ## removeLabel(labelName)
 //--
 //-- Remove a label from the game. Returns the number of labels removed, which should normally be
 //-- either 1 (label found) or 0 (label not found). (3.2+ only)
 //--
-int scripting_engine::removeLabel(WZAPI_PARAMS(std::string label))
+int scripting_engine::removeLabel(WZAPI_PARAMS(std::string labelName))
 {
 	LABELMAP& labels = scripting_engine::instance().labels;
-	int result = labels.erase(label);
+	int result = labels.erase(labelName);
 	jsDebugUpdateLabels();
 	return result;
 }
@@ -2414,7 +2414,7 @@ optional<std::string> scripting_engine::_findMatchingLabel(wzapi::game_object_id
 	return retLabel;
 }
 
-//-- ## getObject(label | x, y | type, player, id)
+//-- ## getObject(labelName | x, y | type, player, id)
 //--
 //-- Fetch something denoted by a label, a map position or its object ID. A label refers to an area,
 //-- a position or a **game object** on the map defined using the map editor and stored
@@ -2498,7 +2498,7 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 	return generic_script_object::Null();
 }
 
-//-- ## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
+//-- ## enumArea(<x1, y1, x2, y2 | labelName>[, playerFilter[, seen]])
 //--
 //-- Returns an array of game objects seen within the given area that passes the optional filter
 //-- which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, filter is
@@ -2507,11 +2507,11 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 //-- positions or a label to an AREA. Calling this function is much faster than iterating over all
 //-- game objects using other enum functions. (3.2+ only)
 //--
-std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> _playerFilter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string labelName, optional<int> _playerFilter, optional<bool> _seen))
 {
-	SCRIPT_ASSERT({}, context, instance().labels.count(label) > 0, "Label %s not found", label.c_str());
-	const LABEL &p = instance().labels[label];
-	SCRIPT_ASSERT({}, context, p.type == SCRIPT_AREA, "Wrong label type for %s", label.c_str());
+	SCRIPT_ASSERT({}, context, instance().labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
+	const LABEL &p = instance().labels[labelName];
+	SCRIPT_ASSERT({}, context, p.type == SCRIPT_AREA, "Wrong label type for %s", labelName.c_str());
 	int x1 = p.p1.x;
 	int y1 = p.p1.y;
 	int x2 = p.p2.x;

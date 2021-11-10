@@ -854,7 +854,7 @@ wzapi::no_return_value wzapi::hackStopIngameAudio(WZAPI_NO_PARAMS)
 	return {};
 }
 
-//-- ## hackMarkTiles([label | x, y[, x2, y2]])
+//-- ## hackMarkTiles([labelName | x, y[, x2, y2]])
 //--
 //-- Mark the given tile(s) on the map. Either give a `POSITION` or `AREA` label,
 //-- or a tile x, y position, or four positions for a square area. If no parameter

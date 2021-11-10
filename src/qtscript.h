@@ -384,9 +384,9 @@ public:
 	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter));
 	static std::vector<std::string> enumLabels(WZAPI_PARAMS(optional<int> filterLabelType));
 
-	static wzapi::no_return_value addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered));
+	static wzapi::no_return_value addLabel(WZAPI_PARAMS(generic_script_object object, std::string labelName, optional<int> _triggered));
 
-	static int removeLabel(WZAPI_PARAMS(std::string label));
+	static int removeLabel(WZAPI_PARAMS(std::string labelName));
 	static optional<std::string> getLabel(WZAPI_PARAMS(const BASE_OBJECT *psObj));
 	static optional<std::string> getLabelJS(WZAPI_PARAMS(wzapi::game_object_identifier obj_id));
 
