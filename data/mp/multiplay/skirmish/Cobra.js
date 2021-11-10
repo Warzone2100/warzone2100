@@ -64,7 +64,6 @@ const ESSENTIALS_3 = [
 	"R-Struc-Factory-Upgrade09",
 ];
 const SYSTEM_UPGRADES = [
-	"R-Sys-MobileRepairTurretHvy",
 	"R-Vehicle-Prop-Tracks",
 	"R-Struc-RprFac-Upgrade06",
 	"R-Sys-Sensor-Upgrade03",
@@ -131,10 +130,6 @@ const VTOL_BODY = [
 	"Body8MBT",  // Scorpion
 	"Body5REC",  // Cobra
 	"Body1REC",  // Viper
-];
-const REPAIR_TURRETS = [
-	"HeavyRepair",
-	"LightRepair1",
 ];
 const ARTILLERY_SENSORS = [
 	"Sensor-WideSpec",
@@ -266,7 +261,6 @@ var subPersonalities =
 var attackGroup;
 var vtolGroup;
 var sensorGroup;
-var repairGroup;
 var artilleryGroup;
 var constructGroup;
 var constructGroupNTWExtra;
