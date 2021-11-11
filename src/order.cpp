@@ -1242,8 +1242,18 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 	}
 }
 
-inline bool isRetreating(const DROID *psDroid) {
-	return(psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTB || psDroid->order.type == DORDER_RTR_SPECIFIED);
+/** Returns true if the Droid has been ordered to retreat
+ *  and is assigned to a group.
+ */
+inline bool isRetreatingInGroup(const DROID *psDroid) {
+	if(psDroid->psGroup == nullptr)
+	{
+		return(false);
+	}
+	else
+	{
+	  return(psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTB || psDroid->order.type == DORDER_RTR_SPECIFIED);
+	}
 }
 
 /** This function actually tells the droid to perform the psOrder.
@@ -1347,7 +1357,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_MOVE:
 	case DORDER_SCOUT:
-		if(isRetreating(psDroid)){
+		if(isRetreatingInGroup(psDroid)){
 			break;
 		}
 		// can't move vtols to blocking tiles
@@ -1368,7 +1378,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_PATROL:
-	  if(isRetreating(psDroid)){
+	  if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		psDroid->order = *psOrder;
@@ -1376,7 +1386,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_RECOVER:
-		if(isRetreating(psDroid)){
+		if(isRetreatingInGroup(psDroid)){
       break;
 	  }
 		psDroid->order = *psOrder;
@@ -1402,7 +1412,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if (psDroid->numWeaps == 0
 		    || psDroid->asWeaps[0].nStat == 0
 		    || isTransporter(psDroid)
-			  || isRetreating(psDroid))
+			  || isRetreatingInGroup(psDroid))
 		{
 			break;
 		}
@@ -1437,7 +1447,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
-	  if(isRetreating(psDroid)){
+	  if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		// build a new structure or line of structures
@@ -1449,7 +1459,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_BUILDMODULE:
-	  if(isRetreating(psDroid)){
+	  if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		//build a module onto the structure
@@ -1464,7 +1474,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_HELPBUILD:
-	  if(isRetreating(psDroid)){
+	  if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		// help to build a structure that is starting to be built
@@ -1478,7 +1488,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? getStatsName(psDroid->order.psStats) : "NULL");
 		break;
 	case DORDER_DEMOLISH:
-		if(isRetreating(psDroid)){
+		if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
@@ -1507,7 +1517,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_DROIDREPAIR, psOrder->psObj);
 		break;
 	case DORDER_OBSERVE:
-	  if(isRetreating(psDroid)){
+	  if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		// keep an object within sensor view
@@ -1724,7 +1734,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_GUARD:
-	  if(isRetreating(psDroid)){
+	  if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		psDroid->order = *psOrder;
@@ -1759,7 +1769,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		break;
 	case DORDER_CIRCLE:
-	  if(isRetreating(psDroid)){
+	  if(isRetreatingInGroup(psDroid)){
 		  break;
 	  }
 		if (!isVtolDroid(psDroid))
