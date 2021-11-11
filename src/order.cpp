@@ -1242,6 +1242,9 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 	}
 }
 
+inline bool isRetreating(const DROID *psDroid) {
+	return(psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTB || psDroid->order.type == DORDER_RTR_SPECIFIED);
+}
 
 /** This function actually tells the droid to perform the psOrder.
  * This function is called everytime to send a direct order to a droid.
@@ -1344,6 +1347,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_MOVE:
 	case DORDER_SCOUT:
+		if(isRetreating(psDroid)){
+			break;
+		}
 		// can't move vtols to blocking tiles
 		if (isVtolDroid(psDroid)
 		    && fpathBlockingTile(map_coord(psOrder->pos), getPropulsionStats(psDroid)->propulsionType))
@@ -1362,11 +1368,17 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_PATROL:
+	  if(isRetreating(psDroid)){
+		  break;
+	  }
 		psDroid->order = *psOrder;
 		psDroid->order.pos2 = psDroid->pos.xy();
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_RECOVER:
+		if(isRetreating(psDroid)){
+      break;
+	  }
 		psDroid->order = *psOrder;
 		actionDroid(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		break;
@@ -1389,7 +1401,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_ATTACKTARGET:
 		if (psDroid->numWeaps == 0
 		    || psDroid->asWeaps[0].nStat == 0
-		    || isTransporter(psDroid))
+		    || isTransporter(psDroid)
+			  || isRetreating(psDroid))
 		{
 			break;
 		}
@@ -1424,6 +1437,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
+	  if(isRetreating(psDroid)){
+		  break;
+	  }
 		// build a new structure or line of structures
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "%s cannot construct things!", objInfo(psDroid));
 		ASSERT_OR_RETURN(, psOrder->psStats != nullptr, "invalid structure stats pointer");
@@ -1433,6 +1449,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_BUILDMODULE:
+	  if(isRetreating(psDroid)){
+		  break;
+	  }
 		//build a module onto the structure
 		if (!isConstructionDroid(psDroid) || psOrder->index < nextModuleToBuild((STRUCTURE *)psOrder->psObj, -1))
 		{
@@ -1445,6 +1464,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_HELPBUILD:
+	  if(isRetreating(psDroid)){
+		  break;
+	  }
 		// help to build a structure that is starting to be built
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Help to build a NULL pointer?");
@@ -1456,6 +1478,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? getStatsName(psDroid->order.psStats) : "NULL");
 		break;
 	case DORDER_DEMOLISH:
+		if(isRetreating(psDroid)){
+		  break;
+	  }
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
 		{
 			break;
@@ -1482,6 +1507,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_DROIDREPAIR, psOrder->psObj);
 		break;
 	case DORDER_OBSERVE:
+	  if(isRetreating(psDroid)){
+		  break;
+	  }
 		// keep an object within sensor view
 		psDroid->order = *psOrder;
 		actionDroid(psDroid, DACTION_OBSERVE, psOrder->psObj);
@@ -1696,6 +1724,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_GUARD:
+	  if(isRetreating(psDroid)){
+		  break;
+	  }
 		psDroid->order = *psOrder;
 		if (psOrder->psObj != nullptr)
 		{
@@ -1728,6 +1759,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		break;
 	case DORDER_CIRCLE:
+	  if(isRetreating(psDroid)){
+		  break;
+	  }
 		if (!isVtolDroid(psDroid))
 		{
 			break;
@@ -3109,11 +3143,6 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 {
 	if (secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL)))
 	{
-		if (!isVtolDroid(psDroid))
-		{
-			psDroid->group = UBYTE_MAX;
-		}
-
 		/* set return to repair if not on hold */
 		if (psDroid->order.type != DORDER_RTR &&
 		    psDroid->order.type != DORDER_RTB &&
