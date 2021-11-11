@@ -1727,7 +1727,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					cantDoRepairLikeAction = true;
 				}
-				else if (order->type == DORDER_REPAIR && structureAtPos->body == structureBody(structureAtPos))
+				else if (structureAtPos->body == structureBody(structureAtPos))
 				{
 					cantDoRepairLikeAction = true;
 				}
@@ -1739,11 +1739,11 @@ void actionUpdateDroid(DROID *psDroid)
 				if (cantDoRepairLikeAction)
 				{
 					psDroid->action = DACTION_NONE;
+					moveStopDroid(psDroid);
 					break;
 				}
 			}
 		}
-
 		// see if the droid is at the edge of what it is moving to
 		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, ((STRUCTURE *)psDroid->psActionTarget[0])->rot.direction, order->psStats))
 		{
@@ -1980,6 +1980,16 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_MOVETODROIDREPAIR:
 		{
+			BASE_OBJECT* actionTargetObj = psDroid->psActionTarget[0];
+			ASSERT_OR_RETURN(, actionTargetObj->type == OBJ_DROID, "unexpected repair target");
+			const DROID* actionTarget = (const DROID *) actionTargetObj;
+			if (actionTarget->body == actionTarget->originalBody)
+			{
+				// target is healthy: nothing to do
+				psDroid->action = DACTION_NONE;
+				moveStopDroid(psDroid);
+				break;
+			}
 			Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy();
 			// moving to repair a droid
 			if (!psDroid->psActionTarget[0] ||  // Target missing.
@@ -2064,6 +2074,7 @@ void actionUpdateDroid(DROID *psDroid)
 				if (!droidUpdateDroidRepair(psDroid))
 				{
 					psDroid->action = DACTION_NONE;
+					moveStopDroid(psDroid);
 					//if the order is RTR then resubmit order so that the unit will go to repair facility point
 					if (orderState(psDroid, DORDER_RTR))
 					{
@@ -2467,23 +2478,29 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ensureRearmPadClear((STRUCTURE *)psAction->psObj, psDroid);
 		break;
 	case DACTION_DROIDREPAIR:
-		psDroid->action = psAction->action;
-		psDroid->actionPos.x = psAction->x;
-		psDroid->actionPos.y = psAction->y;
-		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		//initialise the action points
-		psDroid->actionPoints  = 0;
-		psDroid->actionStarted = gameTime;
-		if (secHoldActive && (order->type == DORDER_NONE || order->type == DORDER_HOLD))
 		{
-			psDroid->action = DACTION_DROIDREPAIR;
+			psDroid->action = psAction->action;
+			psDroid->actionPos.x = psAction->x;
+			psDroid->actionPos.y = psAction->y;
+			setDroidActionTarget(psDroid, psAction->psObj, 0);
+			//initialise the action points
+			psDroid->actionPoints  = 0;
+			psDroid->actionStarted = gameTime;
+			const auto xdiff = (SDWORD)psDroid->pos.x - (SDWORD) psAction->x;
+			const auto ydiff = (SDWORD)psDroid->pos.y - (SDWORD) psAction->y;
+			if (secHoldActive && (order->type == DORDER_NONE || order->type == DORDER_HOLD))
+			{
+				psDroid->action = DACTION_DROIDREPAIR;
+			}
+			else if (((!secHoldActive && order->type != DORDER_HOLD) || (secHoldActive && order->type == DORDER_DROIDREPAIR))
+					// check that we actually need to move closer
+					&& ((xdiff * xdiff + ydiff * ydiff) > REPAIR_RANGE * REPAIR_RANGE))
+			{
+				psDroid->action = DACTION_MOVETODROIDREPAIR;
+				moveDroidTo(psDroid, psAction->x, psAction->y);
+			}
+			break;
 		}
-		else if ((!secHoldActive && order->type != DORDER_HOLD) || (secHoldActive && order->type == DORDER_DROIDREPAIR))
-		{
-			psDroid->action = DACTION_MOVETODROIDREPAIR;
-			moveDroidTo(psDroid, psAction->x, psAction->y);
-		}
-		break;
 	case DACTION_RESTORE:
 		ASSERT_OR_RETURN(, order->type == DORDER_RESTORE, "cannot start restore action without a restore order");
 		psDroid->action = psAction->action;
