@@ -29,9 +29,11 @@ using nonstd::nullopt;
 bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* file)>& enumFunc)
 {
 	char **files = PHYSFS_enumerateFiles(dir);
-	if (!files)
+	if (!*files)
 	{
-		debug(LOG_ERROR, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir, WZ_PHYSFS_getLastError());
+		// some folders/files are expected to *not* exist, so technically 
+		// it's up to the caller to decide whether it's an error or not 
+		debug(LOG_WARNING, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir, WZ_PHYSFS_getLastError());
 		return false;
 	}
 	for (char **i = files; *i != nullptr; ++i)
@@ -48,9 +50,11 @@ bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* f
 bool WZ_PHYSFS_enumerateFolders(const std::string &dir, const std::function<bool (char* folder)>& enumFunc)
 {
 	char **files = PHYSFS_enumerateFiles(dir.c_str());
-	if (!files)
+	if (!*files)
 	{
-		debug(LOG_ERROR, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir.c_str(), WZ_PHYSFS_getLastError());
+		// some folders/files are expected to *not* exist, so technically 
+		// it's up to the caller to decide whether it's an error or not 
+		debug(LOG_WARNING, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir.c_str(), WZ_PHYSFS_getLastError());
 		return false;
 	}
 	std::string baseDir = dir;
@@ -167,7 +171,7 @@ int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, i
 		PHYSFS_freeList(files);
 		return 0;
 	}
-
+	debug(LOG_SAVE, "found %i files with ext %s, limit is %i", nfiles, extension, fileLimit);
 	// too many files
 
 	// build a sorted list of file + save time
@@ -187,6 +191,7 @@ int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, i
 	}
 
 	// now delete the oldest
+	debug(LOG_SAVE, "proceed to delete the oldest");
 	int numFilesDeleted = 0;
 	while (nfiles > fileLimit && !fileTimes.empty())
 	{

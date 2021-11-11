@@ -540,8 +540,8 @@ void deleteSaveGame(const char *fileName)
 	strncpy(tmp, fileName, PATH_MAX - 1);
 	tmp[strlen(tmp) - 4] = '\0'; // strip extension
 
-	strcat(tmp, ".es");					// remove script data if it exists.
-	PHYSFS_delete(tmp);
+	strcat(tmp, ".es");					
+	PHYSFS_delete(tmp); // remove script data if it exists or error
 	tmp[strlen(tmp) - 3] = '\0'; // strip extension
 
 	// check for a directory and remove that too.
@@ -555,16 +555,15 @@ void deleteSaveGame(const char *fileName)
 		debug(LOG_SAVE, "Deleting [%s].", del_file);
 
 		// Delete the file
-		if (!PHYSFS_delete(del_file))
+		if (PHYSFS_exists(del_file) && !PHYSFS_delete(del_file))
 		{
 			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file, WZ_PHYSFS_getLastError());
 		}
 		return true; // continue
 	});
-
-	if (!PHYSFS_delete(tmp))		// now (should be)empty directory
+	if (PHYSFS_exists(tmp) && !PHYSFS_delete(tmp))		// now (should be)empty directory
 	{
-		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", fileName, WZ_PHYSFS_getLastError());
+		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", tmp, WZ_PHYSFS_getLastError());
 	}
 }
 
@@ -1005,7 +1004,7 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 // returns true if something was deleted
 static bool freeAutoSaveSlot_old(const char *path)
 {
-	return WZ_PHYSFS_cleanupOldFilesInFolder(path, sSaveGameExtension, -1, [](const char *fileName){ deleteSaveGame(fileName); return true; }) > 0;
+	return WZ_PHYSFS_cleanupOldFilesInFolder(path, sSaveGameExtension, 35, [](const char *fileName){ deleteSaveGame(fileName); return true; }) > 0;
 }
 
 static void freeAutoSaveSlot(SAVEGAME_LOC loc)
