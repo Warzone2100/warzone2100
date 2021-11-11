@@ -29,11 +29,17 @@ using nonstd::nullopt;
 bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* file)>& enumFunc)
 {
 	char **files = PHYSFS_enumerateFiles(dir);
-	if (!*files)
+	if (!files)
 	{
 		// some folders/files are expected to *not* exist, so technically 
 		// it's up to the caller to decide whether it's an error or not 
 		debug(LOG_WARNING, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir, WZ_PHYSFS_getLastError());
+		return false;
+	}
+	// "files" is not null when directory doesn't exist, so check that explicitely
+	if (!WZ_PHYSFS_isDirectory(dir))
+	{
+		debug(LOG_WARNING, "Directory didn't exist [%s]", dir);
 		return false;
 	}
 	for (char **i = files; *i != nullptr; ++i)
@@ -50,11 +56,17 @@ bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* f
 bool WZ_PHYSFS_enumerateFolders(const std::string &dir, const std::function<bool (char* folder)>& enumFunc)
 {
 	char **files = PHYSFS_enumerateFiles(dir.c_str());
-	if (!*files)
+	if (!files)
 	{
 		// some folders/files are expected to *not* exist, so technically 
 		// it's up to the caller to decide whether it's an error or not 
 		debug(LOG_WARNING, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir.c_str(), WZ_PHYSFS_getLastError());
+		return false;
+	}
+	// "files" is not null when directory doesn't exist, so check that explicitely
+	if (!WZ_PHYSFS_isDirectory(dir.c_str()))
+	{
+		debug(LOG_WARNING, "Directory didn't exist [%s]", dir.c_str());
 		return false;
 	}
 	std::string baseDir = dir;
