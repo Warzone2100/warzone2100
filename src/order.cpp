@@ -1448,6 +1448,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		// help to build a structure that is starting to be built
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Help to build a NULL pointer?");
+		if (psDroid->action == DACTION_BUILD && psOrder->psObj == psDroid->psActionTarget[0])
+		{
+			// we are already building it, nothing to do
+			objTrace(psDroid->id, "Ignoring DORDER_HELPBUILD because already buildig object %i", psOrder->psObj->id);
+			break;
+		}
 		psDroid->order = *psOrder;
 		psDroid->order.pos = psOrder->psObj->pos.xy();
 		psDroid->order.psStats = ((STRUCTURE *)psOrder->psObj)->pStructureType;
