@@ -130,7 +130,7 @@ Check if the player is in cheat mode.
 
 ## camNewGroup()
 
-A saveload safe version of newGroup() so as not to create group ID clashes.
+A saveload safe version of `newGroup()` so as not to create group ID clashes.
 
 ## camInNeverGroup(droid)
 
@@ -142,7 +142,7 @@ A means to not auto group some droids.
 
 ## camAreaEvent(label, function(droid))
 
-Implement `eventArea${label}` in a debugging-friendly way.
+Implement `eventArea${label}()` in a debugging-friendly way.
 The function marks the area until the event is triggered,
 and traces entering the area in the TRACE log.
 

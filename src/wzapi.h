@@ -358,7 +358,7 @@ namespace wzapi
 		//__
 		//__ An event that is run every time a droid is built. The structure parameter is set
 		//__ if the droid was produced in a factory. It is not triggered for droid theft or
-		//__ gift (check `eventObjectTransfer` for that).
+		//__ gift (check `eventObjectTransfer()` for that).
 		//__
 		virtual bool handle_eventDroidBuilt(const DROID *psDroid, optional<const STRUCTURE *> psFactory) = 0;
 
@@ -366,7 +366,7 @@ namespace wzapi
 		//__
 		//__ An event that is run every time a structure is produced. The droid parameter is set
 		//__ if the structure was built by a droid. It is not triggered for building theft
-		//__ (check `eventObjectTransfer` for that).
+		//__ (check `eventObjectTransfer()` for that).
 		//__
 		virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, optional<const DROID *> psDroid) = 0;
 
@@ -484,8 +484,8 @@ namespace wzapi
 		//__ ## eventArea<label>(droid)
 		//__
 		//__ An event that is run whenever a droid enters an area label. The area is then
-		//__ deactived. Call resetArea() to reactivate it. The name of the event is
-		//__ `eventArea${label}`.
+		//__ deactived. Call `resetArea()` to reactivate it. The name of the event is
+		//__ `eventArea${label}()`.
 		//__
 		virtual bool handle_eventArea(const std::string& label, const DROID *psDroid) = 0;
 
@@ -988,7 +988,7 @@ namespace wzapi
 	no_return_value hackAddMessage(WZAPI_PARAMS(std::string message, int messageType, int player, bool immediate));
 	no_return_value hackRemoveMessage(WZAPI_PARAMS(std::string message, int messageType, int player));
 	returned_nullable_ptr<const BASE_OBJECT> hackGetObj(WZAPI_PARAMS(int _objectType, int player, int id)) WZAPI_DEPRECATED;
-	no_return_value hackAssert(WZAPI_PARAMS(bool condition, va_list_treat_as_strings message));
+	no_return_value hackAssert(WZAPI_PARAMS(bool condition, va_list_treat_as_strings messages));
 	bool receiveAllEvents(WZAPI_PARAMS(optional<bool> enabled));
 	no_return_value hackDoNotSave(WZAPI_PARAMS(std::string name));
 	no_return_value hackPlayIngameAudio(WZAPI_NO_PARAMS);

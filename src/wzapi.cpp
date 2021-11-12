@@ -532,7 +532,7 @@ bool wzapi::removeSpotter(WZAPI_PARAMS(uint32_t spotterId))
 //-- ## syncRequest(reqId, x, y[, object1[, object2]])
 //--
 //-- Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
-//-- Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
+//-- Must be caught in an `eventSyncRequest()` function. All sync requests must be validated when received, and always
 //-- take care only to define sync requests that can be validated against cheating. (3.2+ only)
 //--
 bool wzapi::syncRequest(WZAPI_PARAMS(int32_t reqId, int32_t _x, int32_t _y, optional<const BASE_OBJECT *> _psObj1, optional<const BASE_OBJECT *> _psObj2))
@@ -577,7 +577,7 @@ bool wzapi::changePlayerColour(WZAPI_PARAMS(int player, int colour))
 //-- ## setHealth(object, health)
 //--
 //-- Change the health of the given game object, in percentage. Does not take care of network sync, so for multiplayer games,
-//-- needs wrapping in a syncRequest. (3.2.3+ only.)
+//-- needs wrapping in a `syncRequest()`. (3.2.3+ only.)
 //--
 bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY_SYNCREQUEST_REQUIRED
 {
@@ -611,7 +611,7 @@ bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY
 //-- ## useSafetyTransport(flag)
 //--
 //-- Change if the mission transporter will fetch droids in non offworld missions
-//-- setReinforcementTime() is be used to hide it before coming back after the set time
+//-- `setReinforcementTime()` is be used to hide it before coming back after the set time
 //-- which is handled by the campaign library in the victory data section (3.3+ only).
 //--
 bool wzapi::useSafetyTransport(WZAPI_PARAMS(bool flag))
@@ -770,7 +770,7 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 	return {};
 }
 
-//-- ## hackGetObj(objectType, player, id)
+//-- ## hackGetObj(objectType, player, id) [DEPRECATED]
 //--
 //-- Function to find and return a game object of `DROID`, `FEATURE` or `STRUCTURE` types, if it exists.
 //-- Otherwise, it will return null. This function is DEPRECATED by getObject(). (3.2+ only)
@@ -782,11 +782,11 @@ wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(i
 	return IdToObject(objectType, id, player);
 }
 
-//-- ## hackAssert(condition, ...message)
+//-- ## hackAssert(condition, ...messages)
 //--
 //-- Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
 //--
-wzapi::no_return_value wzapi::hackAssert(WZAPI_PARAMS(bool condition, va_list_treat_as_strings message))
+wzapi::no_return_value wzapi::hackAssert(WZAPI_PARAMS(bool condition, va_list_treat_as_strings messages))
 {
 	if (condition)
 	{
@@ -794,7 +794,7 @@ wzapi::no_return_value wzapi::hackAssert(WZAPI_PARAMS(bool condition, va_list_tr
 	}
 	// fail
 	std::string result;
-	for (const auto & s : message.strings)
+	for (const auto & s : messages.strings)
 	{
 		if (!result.empty())
 		{
@@ -844,7 +844,7 @@ wzapi::no_return_value wzapi::hackPlayIngameAudio(WZAPI_NO_PARAMS)
 //-- ## hackStopIngameAudio()
 //--
 //-- Stop the in-game music. (3.3+ only)
-//-- This should be called from the eventStartLevel() event (or later).
+//-- This should be called from the `eventStartLevel()` event (or later).
 //-- Currently only used from the tutorial.
 //--
 wzapi::no_return_value wzapi::hackStopIngameAudio(WZAPI_NO_PARAMS)
@@ -2195,7 +2195,7 @@ bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int maxNumber, optional<int> 
 	return true;
 }
 
-//-- ## setCommanderLimit(player, maxNumber)
+//-- ## setCommanderLimit(player, maxNumber) [DEPRECATED]
 //--
 //-- Set the maximum number of commanders that this player can produce.
 //-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
@@ -2207,7 +2207,7 @@ bool wzapi::setCommanderLimit(WZAPI_PARAMS(int player, int maxNumber)) WZAPI_DEP
 	return true;
 }
 
-//-- ## setConstructorLimit(player, maxNumber)
+//-- ## setConstructorLimit(player, maxNumber) [DEPRECATED]
 //--
 //-- Set the maximum number of constructors that this player can produce.
 //-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
@@ -2272,7 +2272,7 @@ bool wzapi::isSpectator(WZAPI_PARAMS(int player))
 	return true;
 }
 
-//-- ## getWeaponInfo(weaponName)
+//-- ## getWeaponInfo(weaponName) [DEPRECATED]
 //--
 //-- Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
 //--
@@ -2875,7 +2875,7 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 	return alliances[player1][player2] == ALLIANCE_FORMED;
 }
 
-//-- ## removeStruct(structure)
+//-- ## removeStruct(structure) [DEPRECATED]
 //--
 //-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
 //-- No special effects are applied. DEPRECATED since 3.2. Use `removeObject` instead.
@@ -3192,7 +3192,7 @@ wzapi::no_return_value wzapi::setNoGoArea(WZAPI_PARAMS(int x1, int y1, int x2, i
 //-- ## startTransporterEntry(x, y, player)
 //--
 //-- Set the entry position for the mission transporter, and make it start flying in
-//-- reinforcements. If you want the camera to follow it in, use cameraTrack() on it.
+//-- reinforcements. If you want the camera to follow it in, use `cameraTrack()` on it.
 //-- The transport needs to be set up with the mission droids, and the first transport
 //-- found will be used. (3.2+ only)
 //--
@@ -3218,7 +3218,7 @@ wzapi::no_return_value wzapi::setTransporterExit(WZAPI_PARAMS(int x, int y, int 
 //-- ## setObjectFlag(object, flag, flagValue)
 //--
 //-- Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
-//-- needs wrapping in a syncRequest. (3.3+ only.)
+//-- needs wrapping in a `syncRequest()`. (3.3+ only.)
 //-- Recognized object flags: `OBJECT_FLAG_UNSELECTABLE` - makes object unavailable for selection from player UI.
 //--
 wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool flagValue)) MULTIPLAY_SYNCREQUEST_REQUIRED
@@ -3234,7 +3234,7 @@ wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int
 //-- ## fireWeaponAtLoc(weaponName, x, y[, player])
 //--
 //-- Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
-//-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
+//-- Please use `fireWeaponAtObj()` to damage objects as multiplayer and campaign
 //-- may have different friendly fire logic for a few weapons (like the lassat).
 //--
 wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player))

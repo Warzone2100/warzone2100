@@ -1177,7 +1177,7 @@ bool triggerEventDroidIdle(DROID *psDroid)
 //__
 //__ An event that is run every time a droid is built. The structure parameter is set
 //__ if the droid was produced in a factory. It is not triggered for droid theft or
-//__ gift (check `eventObjectTransfer` for that).
+//__ gift (check `eventObjectTransfer()` for that).
 //__
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
@@ -1199,7 +1199,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 //__
 //__ An event that is run every time a structure is produced. The droid parameter is set
 //__ if the structure was built by a droid. It is not triggered for building theft
-//__ (check `eventObjectTransfer` for that).
+//__ (check `eventObjectTransfer()` for that).
 //__
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
@@ -1537,8 +1537,8 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 //__ ## eventArea<label>(droid)
 //__
 //__ An event that is run whenever a droid enters an area label. The area is then
-//__ deactived. Call resetArea() to reactivate it. The name of the event is
-//__ `eventArea${label}`.
+//__ deactived. Call `resetArea()` to reactivate it. The name of the event is
+//__ `eventArea${label}()`.
 //__
 bool triggerEventArea(const std::string& label, DROID *psDroid)
 {
@@ -2161,12 +2161,12 @@ bool scripting_engine::writeLabels(const char *filename)
 //-- be a specific player to watch for, or `ALL_PLAYERS` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 //--
-//-- ## resetArea(labelName[, playerFilter])
+//-- ## resetArea(labelName[, playerFilter]) [DEPRECATED]
 //--
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or `ALL_PLAYERS` by default.
-//-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
+//-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use `resetLabel()` instead. (3.2+ only)
 //--
 wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter))
 {
@@ -2588,7 +2588,7 @@ std::vector<const BASE_OBJECT *> scripting_engine::enumGroup(WZAPI_PARAMS(int gr
 	return matches;
 }
 
-//-- ## newGroup()
+//-- ## newGroup() [DEPRECATED]
 //--
 //-- Allocate a new group. Returns its numerical ID. Deprecated since 3.2 - you should now
 //-- use your own number scheme for groups.
@@ -2624,9 +2624,9 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 	return {};
 }
 
-//-- ## groupAddDroid(groupId, droid)
+//-- ## groupAddDroid(groupId, droid) [DEPRECATED]
 //--
-//-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
+//-- Add given droid to given group. Deprecated since 3.2 - use `groupAdd()` instead.
 //--
 wzapi::no_return_value scripting_engine::groupAddDroid(WZAPI_PARAMS(int groupId, const DROID *psDroid))
 {

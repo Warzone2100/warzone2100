@@ -454,7 +454,7 @@ public:
 	//__
 	//__ An event that is run every time a droid is built. The structure parameter is set
 	//__ if the droid was produced in a factory. It is not triggered for droid theft or
-	//__ gift (check `eventObjectTransfer` for that).
+	//__ gift (check `eventObjectTransfer()` for that).
 	//__
 	virtual bool handle_eventDroidBuilt(const DROID *psDroid, optional<const STRUCTURE *> psFactory) override;
 
@@ -462,7 +462,7 @@ public:
 	//__
 	//__ An event that is run every time a structure is produced. The droid parameter is set
 	//__ if the structure was built by a droid. It is not triggered for building theft
-	//__ (check `eventObjectTransfer` for that).
+	//__ (check `eventObjectTransfer()` for that).
 	//__
 	virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, optional<const DROID *> psDroid) override;
 
@@ -580,8 +580,8 @@ public:
 	//__ ## eventArea<label>(droid)
 	//__
 	//__ An event that is run whenever a droid enters an area label. The area is then
-	//__ deactived. Call resetArea() to reactivate it. The name of the event is
-	//__ `eventArea${label}`.
+	//__ deactived. Call `resetArea()` to reactivate it. The name of the event is
+	//__ `eventArea${label}()`.
 	//__
 	virtual bool handle_eventArea(const std::string& label, const DROID *psDroid) override;
 
@@ -2295,7 +2295,7 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 //--
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
-//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash (`/`).
 //--
 static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
@@ -2340,7 +2340,7 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 //-- ## includeJSON(filePath)
 //--
 //-- Reads a JSON file and returns an object. You should generally only specify the filename,
-//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash (`/`).
 //--
 static JSValue js_includeJSON(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {

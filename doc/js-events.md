@@ -136,13 +136,13 @@ A droid should be given new orders.
 
 An event that is run every time a droid is built. The structure parameter is set
 if the droid was produced in a factory. It is not triggered for droid theft or
-gift (check `eventObjectTransfer` for that).
+gift (check `eventObjectTransfer()` for that).
 
 ## eventStructureBuilt(structure[, droid])
 
 An event that is run every time a structure is produced. The droid parameter is set
 if the structure was built by a droid. It is not triggered for building theft
-(check `eventObjectTransfer` for that).
+(check `eventObjectTransfer()` for that).
 
 ## eventStructureDemolish(structure[, droid])
 
@@ -223,7 +223,7 @@ is the about to be killed object, the group's id, and the new group size.
 ## eventArea<label>(droid)
 
 An event that is run whenever a droid enters an area label. The area is then deactived.
-Call resetArea() to reactivate it. The name of the event is `eventArea${label}`.
+Call `resetArea()` to reactivate it. The name of the event is `eventArea${label}()`.
 
 ## eventDesignCreated(template)
 

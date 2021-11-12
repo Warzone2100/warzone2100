@@ -14,12 +14,12 @@ _must be quoted_. (3.2+ only)
 
 Includes another source code file at this point. You should generally only specify the filename,
 not try to specify its path, here.
-However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash (`/`).
 
 ## includeJSON(filePath)
 
 Reads a JSON file and returns an object. You should generally only specify the filename,
-However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash (`/`).
 
 ## setTimer(functionName, milliseconds[, object])
 
@@ -100,12 +100,12 @@ Optionally add a filter on it in the second parameter, which can
 be a specific player to watch for, or `ALL_PLAYERS` by default.
 This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 
-## resetArea(labelName[, playerFilter])
+## resetArea(labelName[, playerFilter]) [DEPRECATED]
 
 Reset the trigger on an area. Next time a unit enters the area, it will trigger
 an area event. Optionally add a filter on it in the second parameter, which can
 be a specific player to watch for, or `ALL_PLAYERS` by default.
-This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
+This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use `resetLabel()` instead. (3.2+ only)
 
 ## enumLabels([filterLabelType])
 
@@ -161,7 +161,7 @@ game objects using other enum functions. (3.2+ only)
 
 Return an array containing all the members of a given group.
 
-## newGroup()
+## newGroup() [DEPRECATED]
 
 Allocate a new group. Returns its numerical ID. Deprecated since 3.2 - you should now
 use your own number scheme for groups.
@@ -170,9 +170,9 @@ use your own number scheme for groups.
 
 Add any droids inside the given area to the given group. (3.2+ only)
 
-## groupAddDroid(groupId, droid)
+## groupAddDroid(groupId, droid) [DEPRECATED]
 
-Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
+Add given droid to given group. Deprecated since 3.2 - use `groupAdd()` instead.
 
 ## groupAdd(groupId, object)
 
@@ -258,7 +258,7 @@ Remove a spotter given its unique ID. (3.2+ only)
 ## syncRequest(reqId, x, y[, object1[, object2]])
 
 Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
-Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
+Must be caught in an `eventSyncRequest()` function. All sync requests must be validated when received, and always
 take care only to define sync requests that can be validated against cheating. (3.2+ only)
 
 ## replaceTexture(oldFilename, newFilename)
@@ -274,12 +274,12 @@ colour slots as the maximum number of players. (3.2.3+ only)
 ## setHealth(object, health)
 
 Change the health of the given game object, in percentage. Does not take care of network sync, so for multiplayer games,
-needs wrapping in a syncRequest. (3.2.3+ only.)
+needs wrapping in a `syncRequest()`. (3.2.3+ only.)
 
 ## useSafetyTransport(flag)
 
 Change if the mission transporter will fetch droids in non offworld missions
-setReinforcementTime() is be used to hide it before coming back after the set time
+`setReinforcementTime()` is be used to hide it before coming back after the set time
 which is handled by the campaign library in the victory data section (3.3+ only).
 
 ## restoreLimboMissionData()
@@ -327,12 +327,12 @@ See wzscript docs for info, to the extent any exist. (3.2+ only)
 
 See wzscript docs for info, to the extent any exist. (3.2+ only)
 
-## hackGetObj(objectType, player, id)
+## hackGetObj(objectType, player, id) [DEPRECATED]
 
 Function to find and return a game object of `DROID`, `FEATURE` or `STRUCTURE` types, if it exists.
-Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
+Otherwise, it will return null. This function is deprecated by `getObject()`. (3.2+ only)
 
-## hackAssert(condition, ...message)
+## hackAssert(condition, ...messages)
 
 Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
 
@@ -352,7 +352,7 @@ done again each time game is loaded, since this too is not saved.
 ## hackStopIngameAudio()
 
 Stop the in-game music. (3.3+ only)
-This should be called from the eventStartLevel() event (or later).
+This should be called from the `eventStartLevel()` event (or later).
 Currently only used from the tutorial.
 
 ## hackMarkTiles([labelName | x, y[, x2, y2]])
@@ -595,12 +595,12 @@ parameter is added, this is the droid type to limit. It can be DROID_ANY
 for droids in general, `DROID_CONSTRUCT` for constructors, or `DROID_COMMAND`
 for commanders. (3.2+ only)
 
-## setCommanderLimit(player, maxNumber)
+## setCommanderLimit(player, maxNumber) [DEPRECATED]
 
 Set the maximum number of commanders that this player can produce.
 THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 
-## setConstructorLimit(player, maxNumber)
+## setConstructorLimit(player, maxNumber) [DEPRECATED]
 
 Set the maximum number of constructors that this player can produce.
 THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
@@ -618,7 +618,7 @@ Returns an array of droid objects inside given transport. (3.2+ only)
 Returns whether a particular player is a spectator. (4.2+ only)
 Can pass -1 as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
 
-## getWeaponInfo(weaponName)
+## getWeaponInfo(weaponName) [DEPRECATED]
 
 Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
 
@@ -749,7 +749,7 @@ actually build designs with it.
 
 Returns true if an alliance exists between the two players, or they are the same player.
 
-## removeStruct(structure)
+## removeStruct(structure) [DEPRECATED]
 
 Immediately remove the given structure from the map. Returns a boolean that is true on success.
 No special effects are applied. Deprecated since 3.2. Use `removeObject` instead.
@@ -815,7 +815,7 @@ is created and limbo droids placed.
 ## startTransporterEntry(x, y, player)
 
 Set the entry position for the mission transporter, and make it start flying in
-reinforcements. If you want the camera to follow it in, use cameraTrack() on it.
+reinforcements. If you want the camera to follow it in, use `cameraTrack()` on it.
 The transport needs to be set up with the mission droids, and the first transport
 found will be used. (3.2+ only)
 
@@ -826,13 +826,13 @@ Set the exit position for the mission transporter. (3.2+ only)
 ## setObjectFlag(object, flag, flagValue)
 
 Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
-needs wrapping in a syncRequest. (3.3+ only.)
+needs wrapping in a `syncRequest()`. (3.3+ only.)
 Recognized object flags: `OBJECT_FLAG_UNSELECTABLE` - makes object unavailable for selection from player UI.
 
 ## fireWeaponAtLoc(weaponName, x, y[, player])
 
 Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
-Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
+Please use `fireWeaponAtObj()` to damage objects as multiplayer and campaign
 may have different friendly fire logic for a few weapons (like the lassat).
 
 ## fireWeaponAtObj(weaponName, gameObject[, player])
