@@ -1246,9 +1246,9 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
  *  and is assigned to a group.
  */
 inline bool isRetreatingInGroup(const DROID *psDroid) {
-	if(psDroid->psGroup == nullptr)
+	if(psDroid->group == UBYTE_MAX)
 	{
-		return(false);
+    return(false);
 	}
 	else
 	{
