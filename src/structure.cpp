@@ -3875,14 +3875,19 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 {
 	std::vector<STRUCTURE_STATS *> structureList;
 	UDWORD			inc;
-	bool			researchModule, factoryModule, powerModule;
 	STRUCTURE		*psCurr;
 	STRUCTURE_STATS	*psBuilding;
 
 	ASSERT_OR_RETURN(structureList, _selectedPlayer < MAX_PLAYERS, "_selectedPlayer = %" PRIu32 "", _selectedPlayer);
 
-	//check to see if able to build research/factory modules
-	researchModule = factoryModule = powerModule = false;
+	// counters for current nb of buildings, max buildings, current nb modules
+	int8_t researchLabCurrMax[] 	= {0, 0};
+	int8_t factoriesCurrMax[] 		= {0, 0};
+	int8_t vtolFactoriesCurrMax[] 	= {0, 0};
+	int8_t powerGenCurrMax[]		= {0, 0};
+	int8_t factoryModules 			= 0;
+	int8_t powerGenModules			= 0;
+	int8_t researchModules			= 0;
 
 	//if currently on a mission can't build factory/research/power/derricks
 	if (!missionIsOffworld())
@@ -3891,18 +3896,61 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 		{
 			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status == SS_BUILT)
 			{
-				researchModule = true;
+				researchModules += psCurr->capacity;
 			}
 			else if (psCurr->pStructureType->type == REF_FACTORY && psCurr->status == SS_BUILT)
 			{
-				factoryModule = true;
+				factoryModules += psCurr->capacity;
 			}
 			else if (psCurr->pStructureType->type == REF_POWER_GEN && psCurr->status == SS_BUILT)
 			{
-				powerModule = true;
+				powerGenModules += psCurr->capacity;
+			}
+			else if (psCurr->pStructureType->type == REF_VTOL_FACTORY && psCurr->status == SS_BUILT)
+			{
+				// same as REF_FACTORY
+				factoryModules += psCurr->capacity;
 			}
 		}
 	}
+
+	// find maximum allowed limits (current built numbers already available, just grab them)
+	for (inc = 0; inc < numStructureStats; inc++)
+	{
+		if (apStructTypeLists[_selectedPlayer][inc] == AVAILABLE || (includeRedundantDesigns && apStructTypeLists[_selectedPlayer][inc] == REDUNDANT))
+		{
+			int8_t *counter;
+			if (asStructureStats[inc].type == REF_RESEARCH)
+			{
+				counter = researchLabCurrMax; 
+			}
+			else if (asStructureStats[inc].type == REF_FACTORY)
+			{
+				counter = factoriesCurrMax;
+			}
+			else if (asStructureStats[inc].type == REF_VTOL_FACTORY)
+			{
+				counter = vtolFactoriesCurrMax;
+			}
+			else if (asStructureStats[inc].type == REF_POWER_GEN)
+			{
+				counter = powerGenCurrMax;
+			}
+			else
+			{
+				continue;
+			}
+			counter[0] = asStructureStats[inc].curCount[_selectedPlayer];
+		    counter[1] = asStructureStats[inc].upgrade[_selectedPlayer].limit;
+
+		}
+	}
+
+	debug(LOG_NEVER, "structures: RL %i/%i (%i), F %i/%i (%i), VF %i/%i, PG %i/%i (%i)",
+					researchLabCurrMax[0], researchLabCurrMax[1], researchModules,
+					factoriesCurrMax[0], factoriesCurrMax[1], factoryModules,
+					vtolFactoriesCurrMax[0], vtolFactoriesCurrMax[1],
+					powerGenCurrMax[0], powerGenCurrMax[1], powerGenModules);
 
 	//set the list of Structures to build
 	for (inc = 0; inc < numStructureStats; inc++)
@@ -3947,8 +3995,9 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 
 				if (psBuilding->type == REF_RESEARCH_MODULE)
 				{
-					//don't add to list if Research Facility not presently built
-					if (!researchModule)
+					//don't add to list if Research Facility not presently built 
+					//or if all labs already have a module
+					if (!researchLabCurrMax[0] || researchModules >= researchLabCurrMax[1])
 					{
 						continue;
 					}
@@ -3956,7 +4005,8 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 				else if (psBuilding->type == REF_FACTORY_MODULE)
 				{
 					//don't add to list if Factory not presently built
-					if (!factoryModule)
+					//or if all factories already have all possible modules
+					if (!factoriesCurrMax[0] || (factoryModules >= (factoriesCurrMax[1] + vtolFactoriesCurrMax[1]) * 2))
 					{
 						continue;
 					}
@@ -3964,7 +4014,8 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 				else if (psBuilding->type == REF_POWER_MODULE)
 				{
 					//don't add to list if Power Gen not presently built
-					if (!powerModule)
+					//or if all generators already have a module
+					if (!powerGenCurrMax[0] || (powerGenModules >= powerGenCurrMax[1]))
 					{
 						continue;
 					}
