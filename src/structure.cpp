@@ -4239,8 +4239,9 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 				if (psStruct && (psStruct->pStructureType->type == REF_FACTORY ||
-				                 psStruct->pStructureType->type == REF_VTOL_FACTORY) &&
-				    psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player))
+				                 psStruct->pStructureType->type == REF_VTOL_FACTORY) 
+					&& psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player)
+					&& nextModuleToBuild(psStruct, -1) > 0)
 				{
 					break;
 				}
@@ -4250,8 +4251,10 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			if (TileHasStructure(worldTile(pos)))
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH &&
-				    psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player))
+				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH 
+					&& psStruct->status == SS_BUILT 
+					&& aiCheckAlliances(player, psStruct->player)
+					&& nextModuleToBuild(psStruct, -1) > 0)
 				{
 					break;
 				}
@@ -4261,8 +4264,10 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			if (TileHasStructure(worldTile(pos)))
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN &&
-				    psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player))
+				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN 
+					&& psStruct->status == SS_BUILT 
+					&& aiCheckAlliances(player, psStruct->player)
+					&& nextModuleToBuild(psStruct, -1) > 0)
 				{
 					break;
 				}
