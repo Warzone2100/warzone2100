@@ -507,36 +507,48 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 // Actually send the droid info.
 void sendQueuedDroidInfo()
 {
-	// Sort queued orders, to group the same order to multiple droids.
-	std::sort(queuedOrders.begin(), queuedOrders.end());
-
-	std::vector<QueuedDroidInfo>::iterator eqBegin, eqEnd;
-	for (eqBegin = queuedOrders.begin(); eqBegin != queuedOrders.end(); eqBegin = eqEnd)
+	// Given an order type, we bring all other orders of the same type together
+	// WHILE KEEPING their relative order!! This is important because 
+	// sending all MOVE and then all HOLD_POSITION is clearly not the same as 
+	// sending all HOLD_POSITION and then MOVE
+	// yes, we need an ordered map here, not std::sort
+	static std::map<DROID_ORDER, std::vector<QueuedDroidInfo> > orderedMap; // static to avoid allocations
+	orderedMap.clear();
+	for (auto &info: queuedOrders)
 	{
-		// Find end of range of orders which differ only by the droid ID.
-		for (eqEnd = eqBegin + 1; eqEnd != queuedOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
-		{}
-
-		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
-		NETQueuedDroidInfo(&*eqBegin);
-
-		uint32_t num = eqEnd - eqBegin;
-		NETuint32_t(&num);
-
-		uint32_t prevDroidId = 0;
-		for (unsigned n = 0; n < num; ++n)
-		{
-			uint32_t droidId = (eqBegin + n)->droidId;
-
-			// Encode deltas between droid IDs, since the deltas are smaller than the actual droid IDs, and will encode to less bytes on average.
-			uint32_t deltaDroidId = droidId - prevDroidId;
-			NETuint32_t(&deltaDroidId);
-
-			prevDroidId = droidId;
-		}
-		NETend();
+		orderedMap[info.order].push_back(info);
 	}
+	std::vector<QueuedDroidInfo>::iterator eqBegin, eqEnd;
+	for (auto &pair: orderedMap)
+	{
+		auto qOrders = pair.second;
+		for (eqBegin = qOrders.begin(); eqBegin != qOrders.end(); eqBegin = eqEnd)
+		{
+			// Find end of range of orders which differ only by the droid ID.
+			for (eqEnd = eqBegin + 1; eqEnd != qOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
+			{}
 
+			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
+			NETQueuedDroidInfo(&*eqBegin);
+
+			uint32_t num = eqEnd - eqBegin;
+			NETuint32_t(&num);
+
+			uint32_t prevDroidId = 0;
+			for (unsigned n = 0; n < num; ++n)
+			{
+				uint32_t droidId = (eqBegin + n)->droidId;
+
+				// Encode deltas between droid IDs, since the deltas are smaller than the actual droid IDs, and will encode to less bytes on average.
+				uint32_t deltaDroidId = droidId - prevDroidId;
+				NETuint32_t(&deltaDroidId);
+
+				prevDroidId = droidId;
+			}
+			NETend();
+		}
+		qOrders.clear();
+	}	
 	// Sent the orders. Don't send them again.
 	queuedOrders.clear();
 }
