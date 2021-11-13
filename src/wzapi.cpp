@@ -2135,26 +2135,27 @@ std::unique_ptr<const DROID> wzapi::getDroidProduction(WZAPI_PARAMS(const STRUCT
 //-- fixed throughout a game and the same for all players. If no arguments are passed,
 //-- returns general droid limit for the current player. If a second, droid type argument
 //-- is passed, the limit for this droid type is returned, which may be different from
-//-- the general droid limit (eg for commanders and construction droids). (3.2+ only)
+//-- the general droid limit (eg for commanders and construction droids).
+//-- Droid type must be either `DROID_CONSTRUCT`, `DROID_COMMAND` or `DROID_ANY`. (3.2+ only)
 //--
 int wzapi::getDroidLimit(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType))
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	if (_droidType.has_value())
+
+	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
+	SCRIPT_ASSERT(-1, context, droidType == DROID_CONSTRUCT || droidType == DROID_COMMAND || droidType == DROID_ANY, "Bad droid type parameter");
+
+	switch (droidType)
 	{
-		DROID_TYPE droidType = (DROID_TYPE)_droidType.value();
-		if (droidType == DROID_COMMAND)
-		{
-			return getMaxCommanders(player);
-		}
-		else if (droidType == DROID_CONSTRUCT)
-		{
-			return getMaxConstructors(player);
-		}
-		// else return general unit limit
+	case DROID_CONSTRUCT:
+		return getMaxConstructors(player);
+	case DROID_COMMAND:
+		return getMaxCommanders(player);
+	case DROID_ANY:
+	default:
+		return getMaxDroids(player);
 	}
-	return getMaxDroids(player);
 }
 
 //-- ## getExperienceModifier(player)
@@ -2170,14 +2171,16 @@ int wzapi::getExperienceModifier(WZAPI_PARAMS(int player))
 //-- ## setDroidLimit(player, maxNumber[, droidType])
 //--
 //-- Set the maximum number of droids that this player can produce. If a third
-//-- parameter is added, this is the droid type to limit. It can be `DROID_ANY`
-//-- for droids in general, `DROID_CONSTRUCT` for constructors, or `DROID_COMMAND`
-//-- for commanders. (3.2+ only)
+//-- parameter is added, this is the droid type to limit. It can be
+//-- `DROID_CONSTRUCT` for constructors, `DROID_COMMAND` for commanders,
+//-- or `DROID_ANY` for droids in general. (3.2+ only)
 //--
 bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int maxNumber, optional<int> _droidType))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
+
 	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
+	SCRIPT_ASSERT(-1, context, droidType == DROID_CONSTRUCT || droidType == DROID_COMMAND || droidType == DROID_ANY, "Bad droid type parameter");
 
 	switch (droidType)
 	{
@@ -2187,8 +2190,8 @@ bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int maxNumber, optional<int> 
 	case DROID_COMMAND:
 		setMaxCommanders(player, maxNumber);
 		break;
-	default:
 	case DROID_ANY:
+	default:
 		setMaxDroids(player, maxNumber);
 		break;
 	}
@@ -3036,13 +3039,14 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 //-- ## countDroid([droidType[, playerFilter]])
 //--
 //-- Count the number of droids that a given player has. Droid type must be either
-//-- `DROID_ANY`, `DROID_COMMAND` or `DROID_CONSTRUCT`.
+//-- `DROID_CONSTRUCT`, `DROID_COMMAND` or `DROID_ANY`.
 //-- The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 //--
 int wzapi::countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _playerFilter))
 {
-	int droidType = _droidType.value_or(DROID_ANY);
-	SCRIPT_ASSERT(-1, context, droidType <= DROID_ANY, "Bad droid type parameter");
+	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
+	SCRIPT_ASSERT(-1, context, droidType == DROID_CONSTRUCT || droidType == DROID_COMMAND || droidType == DROID_ANY, "Bad droid type parameter");
+
 	int me = context.player();
 	int playerFilter = _playerFilter.value_or(me);
 	SCRIPT_ASSERT(-1, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Player index out of range: %d", playerFilter);

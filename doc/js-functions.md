@@ -582,7 +582,8 @@ Return maximum number of droids that this player can produce. This limit is usua
 fixed throughout a game and the same for all players. If no arguments are passed,
 returns general droid limit for the current player. If a second, droid type argument
 is passed, the limit for this droid type is returned, which may be different from
-the general droid limit (eg for commanders and construction droids). (3.2+ only)
+the general droid limit (eg for commanders and construction droids).
+Droid type must be either `DROID_CONSTRUCT`, `DROID_COMMAND` or `DROID_ANY`. (3.2+ only)
 
 ## getExperienceModifier(player)
 
@@ -591,9 +592,9 @@ Get the percentage of experience this player droids are going to gain. (3.2+ onl
 ## setDroidLimit(player, maxNumber[, droidType])
 
 Set the maximum number of droids that this player can produce. If a third
-parameter is added, this is the droid type to limit. It can be DROID_ANY
-for droids in general, `DROID_CONSTRUCT` for constructors, or `DROID_COMMAND`
-for commanders. (3.2+ only)
+parameter is added, this is the droid type to limit. It can be
+`DROID_CONSTRUCT` for constructors, or `DROID_COMMAND` for commanders,
+or `DROID_ANY` for droids in general. (3.2+ only)
 
 ## setCommanderLimit(player, maxNumber) [DEPRECATED]
 
@@ -785,7 +786,7 @@ The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or 
 ## countDroid([droidType[, playerFilter]])
 
 Count the number of droids that a given player has. Droid type must be either
-`DROID_ANY`, `DROID_COMMAND` or `DROID_CONSTRUCT`.
+`DROID_CONSTRUCT`, `DROID_COMMAND` or `DROID_ANY`.
 The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 
 ## loadLevel(levelName)
