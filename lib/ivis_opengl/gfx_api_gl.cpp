@@ -1965,6 +1965,30 @@ static const GLubyte* wzSafeGlGetString(GLenum name)
 	return result;
 }
 
+bool gl_context::isBlocklistedGraphicsDriver() const
+{
+	WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
+	WzString openGL_version = (const char*)wzSafeGlGetString(GL_VERSION);
+
+	debug(LOG_3D, "Checking: Renderer: \"%s\", Version: \"%s\"", openGL_renderer.toUtf8().c_str(), openGL_version.toUtf8().c_str());
+
+#if defined(WZ_OS_WIN)
+	// Renderer: Intel(R) HD Graphics 4000
+	if (openGL_renderer == "Intel(R) HD Graphics 4000")
+	{
+		// Version: 3.1.0 - Build 10.18.10.3304
+		// Version: <opengl version> - Build 10.18.10.3304
+		// This is a problematic old driver on Windows that just crashes after init.
+		if (openGL_version.endsWith("Build 10.18.10.3304"))
+		{
+			return true;
+		}
+	}
+#endif
+
+	return false;
+}
+
 bool gl_context::initGLContext()
 {
 	frameNum = 1;
@@ -2005,6 +2029,13 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "%s", opengl.version);
 
 	formattedRendererInfoString = calculateFormattedRendererInfoString();
+
+	if (isBlocklistedGraphicsDriver())
+	{
+		debug(LOG_INFO, "Warzone's OpenGL backend is not supported on this system. (%s, %s)", opengl.renderer, opengl.version);
+		debug(LOG_INFO, "Please update your graphics drivers or try a different backend.");
+		return false;
+	}
 
 	khr_debug = GLAD_GL_KHR_debug;
 
