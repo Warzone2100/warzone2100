@@ -132,7 +132,7 @@ static bool selNoGroup(DROID *psDroid)
 }
 static bool selCombatLandMildlyOrNotDamaged(DROID *psDroid)
 {
-	return PERCENT(psDroid->body, psDroid->originalBody) > REPAIRLEV_LOW && selCombatLand(psDroid) && ! selNoGroup(psDroid);
+	return PERCENT(psDroid->body, psDroid->originalBody) > REPAIRLEV_LOW && selCombatLand(psDroid) && !selNoGroup(psDroid);
 }
 
 // ---------------------------------------------------------------------
