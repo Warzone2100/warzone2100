@@ -1725,13 +1725,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_REARM:
 		// didn't get executed before
-		if (!isVtolDroid(psDroid))
+		if (!vtolRearming(psDroid))
 		{
-			break;
+			psDroid->order = *psOrder;
+			actionDroid(psDroid, DACTION_MOVETOREARM, psOrder->psObj);
+			assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		}
-		psDroid->order = *psOrder;
-		actionDroid(psDroid, DACTION_MOVETOREARM, psOrder->psObj);
-		assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		break;
 	case DORDER_CIRCLE:
 		if (!isVtolDroid(psDroid))
