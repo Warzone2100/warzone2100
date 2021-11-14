@@ -1448,7 +1448,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		// help to build a structure that is starting to be built
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Help to build a NULL pointer?");
-		if (psDroid->action == DACTION_BUILD && psOrder->psObj == psDroid->psActionTarget[0] 
+		if (psDroid->action == DACTION_BUILD && psOrder->psObj == psDroid->psActionTarget[0]
 			// skip DORDER_LINEBUILD -> we still want to drop pending structure blueprints
 			// this isn't a perfect solution, because ordering a LINEBUILD with negative energy, and then clicking
 			// on first structure being built, will remove it, as we change order from DORDR_LINEBUILD to DORDER_BUILD
