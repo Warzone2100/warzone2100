@@ -157,6 +157,7 @@ const __CAM_DEFENSE_RADIUS = 4;
 const __CAM_CLOSE_RADIUS = 2;
 const __CAM_CLUSTER_SIZE = 4;
 const __CAM_FALLBACK_TIME_ON_REGROUP = 5000;
+var __camGroupAvgCoord = {x: 0, y: 0};
 
 //time
 const MILLISECONDS_IN_SECOND = 1000;
