@@ -3941,7 +3941,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 				continue;
 			}
 			counter[0] = asStructureStats[inc].curCount[_selectedPlayer];
-		    	counter[1] = asStructureStats[inc].upgrade[_selectedPlayer].limit;
+			counter[1] = asStructureStats[inc].upgrade[_selectedPlayer].limit;
 
 		}
 	}
