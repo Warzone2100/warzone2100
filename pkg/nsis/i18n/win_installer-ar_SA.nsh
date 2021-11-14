@@ -1,35 +1,35 @@
-${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText "مرحباً بك في برنامج تثبيت Warzone 2100!\r\n\r\n سيقوم هذا البرنامج بتوجيهك أثناء عملية تثبيت اللعبة.\r\n\r\n يستحسن أن تغلق كل التطبيقات الأخرى قبل متابعة عملية التثبيت، لأن هذا سيمكّن البرنامج من تحديث ملفات النظام المرتبطة باللعبة من دون أن تحتاج إلى إعادة تشغيل الحاسوب.\r\n\r\nإن Warzone 2100 برنامجٌ مفتوح المصدر بالكامل، ومجانيٌ 100%\r\n\r\nاضغط "التالي" للمتابعة."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "مرحباً بك في النسخة المحمولة من برنامج تثبيت Warzone 2100!\r\n\r\nسيقوم هذا البرنامج بتوجيهك أثناء عملية تثبيت النسخة المحمولة من اللعبة.\r\n\r\nبعد انتهاء التثبيت، سيحتوي مجلد اللعبة على كل الملفات الضرورية لتشغيلها ولن يعتمد على أي ملفاتٍ خارجية، مما يعني أن بإمكانك حذفها بأيّ وقت بمجرّد حذف المجلّد.\r\n\r\nإن Warzone 2100 برنامجٌ مفتوح المصدر بالكامل، ومجانيٌ 100%\r\n\r\nاضغط "التالي" للمتابعة."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "قم بزيارة صفحتنا الرئيسية الرسمية على https://wz2100.net للحصول على آخر إصدارٍ من اللعبة."
 
 ${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
 
-${LangFileString} WZ_GPL_NEXT "Next"
+${LangFileString} WZ_GPL_NEXT "التالي"
 
-${LangFileString} TEXT_SecBase "Core files"
-${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
+${LangFileString} TEXT_SecBase "الملفّات الأساسية"
+${LangFileString} DESC_SecBase "الملفات الأساسية الضرورية لتشغيل Warzone 2100."
 
-${LangFileString} TEXT_SecFMVs "Videos"
-${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
+${LangFileString} TEXT_SecFMVs "مقاطع الفيديو"
+${LangFileString} DESC_SecFMVs "حمّل وثبّت مقاطع الفيديو التي تظهر في اللعبة."
 
-${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngHi "مقاطع بالإنكليزية (عالية الدقة)"
+${LangFileString} DESC_SecFMVs_EngHi "حمّل وثبّت مقاطع الفيديو الإنكليزية عالية الدقة التي تظهر في اللعبة."
 
-${LangFileString} TEXT_SecFMVs_Eng "English"
-${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Eng "مقاطع بالإنكليزية"
+${LangFileString} DESC_SecFMVs_Eng "حمّل وثبّت مقاطع الفيديو الإنجليزية التي تظهر في اللعبة."
 
-${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
-${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngLo "مقاطع بالإنكليزية (منخفضة الدقة)"
+${LangFileString} DESC_SecFMVs_EngLo "حمّل وثبّت مقاطع الفيديو الإنكليزية منخفضة الدقة التي تظهر في اللعبة."
 
-${LangFileString} TEXT_SecFMVs_Ger "German"
-${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Ger "مقاطع بالألمانية"
+${LangFileString} DESC_SecFMVs_Ger "حمّل وثبّت مقاطع الفيديو التي تظهر باللعبة باللغة الألمانية."
 
-${LangFileString} TEXT_SecNLS "Language files"
-${LangFileString} DESC_SecNLS "Support for languages other than English."
+${LangFileString} TEXT_SecNLS "ملفات اللغة"
+${LangFileString} DESC_SecNLS "الملفات الخاصة باللغات الأخرى المختلفة عن الإنكليزية."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
 ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
@@ -37,9 +37,9 @@ ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the se
 ${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
 ${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "جارٍ التنزيل"
+${LangFileString} DLTEXT_SysLibDLFailed "لقد فشلت عملية تحميل واحدةٍ من مكتبات النظام"
+${LangFileString} DLTEXT_VideosDLFailed "لقد فشلت عملية تحميل الفيديوهات"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "يجب أن تعيد تشغيل الحاسوب لإتمام عملية التثبيت. هل تريد القيام بذلك الآن؟"
+${LangFileString} TEXT_MsgRebootFailed "لقد فشلت عملية إعادة التشغيل. نرجو منك أن تعيد تشغيل الحاسوب يدوياً."
