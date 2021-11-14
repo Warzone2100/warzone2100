@@ -405,7 +405,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 
 
 /* Calls all the update functions for each different currently active effect */
-void processEffects(const glm::mat4 &viewMatrix)
+void processEffects(const glm::mat4 &perspectiveViewMatrix)
 {
 	for (auto it = activeList.begin(); it != activeList.end(); )
 	{
@@ -421,7 +421,7 @@ void processEffects(const glm::mat4 &viewMatrix)
 			}
 			if (psEffect->group != EFFECT_FREED && clipXY(static_cast<SDWORD>(psEffect->position.x), static_cast<SDWORD>(psEffect->position.z)))
 			{
-				bucketAddTypeToList(RENDER_EFFECT, psEffect, viewMatrix);
+				bucketAddTypeToList(RENDER_EFFECT, psEffect, perspectiveViewMatrix);
 			}
 		}
 		++it;

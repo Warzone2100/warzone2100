@@ -59,7 +59,7 @@ struct BUCKET_TAG
 
 static std::vector<BUCKET_TAG> bucketArray;
 
-static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm::mat4 &viewMatrix)
+static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm::mat4 &perspectiveViewMatrix)
 {
 	SDWORD				z = 0, radius;
 	Vector2i				pixel(0, 0);
@@ -82,7 +82,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		position.z = -(position.z - playerPos.p.z);
 
 		/* 16 below is HACK!!! */
-		z = pie_RotateProject(&position, viewMatrix, &pixel) - 16;
+		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel) - 16;
 		if (z > 0)
 		{
 			//particle use the image radius
@@ -116,7 +116,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 
 			position.y = psSimpObj->pos.z;
 
-			z = pie_RotateProject(&position, viewMatrix, &pixel);
+			z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
 
 			if (z > 0)
 			{
@@ -151,7 +151,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 			radius = (((STRUCTURE *)pObject)->sDisplay.imd->radius);
 		}
 
-		z = pie_RotateProject(&position, viewMatrix, &pixel);
+		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
 
 		if (z > 0)
 		{
@@ -172,7 +172,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 
 		position.y = psSimpObj->pos.z + 2;
 
-		z = pie_RotateProject(&position, viewMatrix, &pixel);
+		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
 
 		if (z > 0)
 		{
@@ -197,7 +197,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 
 		psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 		droidSize = psBStats->pIMD->radius;
-		z = pie_RotateProject(&position, viewMatrix, &pixel) - (droidSize * 2);
+		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel) - (droidSize * 2);
 
 		if (z > 0)
 		{
@@ -234,7 +234,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 			position.z = -(ptr->psMessage->psObj->pos.y - playerPos.p.z);
 			position.y = ptr->psMessage->psObj->pos.z;
 		}
-		z = pie_RotateProject(&position, viewMatrix, &pixel);
+		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
 
 		if (z > 0)
 		{
@@ -256,7 +256,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		position.y = static_cast<int>(((EFFECT *)pObject)->position.y);
 
 		/* 16 below is HACK!!! */
-		z = pie_RotateProject(&position, viewMatrix, &pixel) - 16;
+		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel) - 16;
 
 		if (z > 0)
 		{
@@ -283,7 +283,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		               coords.y - playerPos.p.z);
 		position.y = ((FLAG_POSITION *)pObject)->coords.z;
 
-		z = pie_RotateProject(&position, viewMatrix, &pixel);
+		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
 
 		if (z > 0)
 		{
@@ -308,11 +308,11 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 }
 
 /* add an object to the current render list */
-void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 &viewMatrix)
+void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 &perspectiveViewMatrix)
 {
 	const iIMDShape *pie;
 	BUCKET_TAG	newTag;
-	int32_t		z = bucketCalculateZ(objectType, pObject, viewMatrix);
+	int32_t		z = bucketCalculateZ(objectType, pObject, perspectiveViewMatrix);
 
 	if (z < 0)
 	{
@@ -383,11 +383,11 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 }
 
 /* render Objects in list */
-void bucketRenderCurrentList(const glm::mat4 &viewMatrix)
+void bucketRenderCurrentList(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	std::sort(bucketArray.begin(), bucketArray.end());
 
-	for (std::vector<BUCKET_TAG>::const_iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag)
+	for (auto thisTag = bucketArray.cbegin(); thisTag != bucketArray.cend(); ++thisTag)
 	{
 		switch (thisTag->objectType)
 		{
@@ -398,22 +398,22 @@ void bucketRenderCurrentList(const glm::mat4 &viewMatrix)
 			renderEffect((EFFECT *)thisTag->pObject, viewMatrix);
 			break;
 		case RENDER_DROID:
-			displayComponentObject((DROID *)thisTag->pObject, viewMatrix);
+			displayComponentObject((DROID *)thisTag->pObject, viewMatrix, perspectiveViewMatrix);
 			break;
 		case RENDER_STRUCTURE:
-			renderStructure((STRUCTURE *)thisTag->pObject, viewMatrix);
+			renderStructure((STRUCTURE *)thisTag->pObject, viewMatrix, perspectiveViewMatrix);
 			break;
 		case RENDER_FEATURE:
-			renderFeature((FEATURE *)thisTag->pObject, viewMatrix);
+			renderFeature((FEATURE *)thisTag->pObject, viewMatrix, perspectiveViewMatrix);
 			break;
 		case RENDER_PROXMSG:
-			renderProximityMsg((PROXIMITY_DISPLAY *)thisTag->pObject, viewMatrix);
+			renderProximityMsg((PROXIMITY_DISPLAY *)thisTag->pObject, viewMatrix, perspectiveViewMatrix);
 			break;
 		case RENDER_PROJECTILE:
-			renderProjectile((PROJECTILE *)thisTag->pObject, viewMatrix);
+			renderProjectile((PROJECTILE *)thisTag->pObject, viewMatrix, perspectiveViewMatrix);
 			break;
 		case RENDER_DELIVPOINT:
-			renderDeliveryPoint((FLAG_POSITION *)thisTag->pObject, false, viewMatrix);
+			renderDeliveryPoint((FLAG_POSITION *)thisTag->pObject, false, viewMatrix, perspectiveViewMatrix);
 			break;
 		}
 	}

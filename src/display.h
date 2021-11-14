@@ -193,7 +193,7 @@ void cancelDeliveryRepos();
 void startDeliveryPosition(FLAG_POSITION *psFlag);
 bool deliveryReposValid();
 void processDeliveryRepos();
-void renderDeliveryRepos(const glm::mat4 &viewMatrix);
+void renderDeliveryRepos(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 bool deliveryReposFinished(FLAG_POSITION *psFlag = nullptr);
 
 bool	getRotActive();
@@ -230,7 +230,7 @@ bool ctrlShiftDown();
 void animateToViewDistance(float target, float speed = DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED);
 void incrementViewDistance(float amount);
 void displayRenderLoop();
-bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
-bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
+bool clipXYZ(int x, int y, int z, const glm::mat4 &perspectiveViewMatrix);
+bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &perspectiveViewMatrix);
 
 #endif // __INCLUDED_SRC_DISPLAY_H__

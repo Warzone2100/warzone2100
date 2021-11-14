@@ -307,7 +307,7 @@ void atmosUpdateSystem()
 	}
 }
 
-void atmosDrawParticles(const glm::mat4 &viewMatrix)
+void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	UDWORD	i;
 
@@ -323,7 +323,7 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix)
 		if (asAtmosParts[i].status == APS_ACTIVE)
 		{
 			/* Is it visible on the screen? */
-			if (clipXYZ(static_cast<int>(asAtmosParts[i].position.x), static_cast<int>(asAtmosParts[i].position.z), static_cast<int>(asAtmosParts[i].position.y), viewMatrix))
+			if (clipXYZ(static_cast<int>(asAtmosParts[i].position.x), static_cast<int>(asAtmosParts[i].position.z), static_cast<int>(asAtmosParts[i].position.y), perspectiveViewMatrix))
 			{
 				renderParticle(&asAtmosParts[i], viewMatrix);
 			}

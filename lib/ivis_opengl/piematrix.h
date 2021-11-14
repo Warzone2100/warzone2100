@@ -24,7 +24,7 @@
 #include "lib/ivis_opengl/piedef.h"
 #include <glm/fwd.hpp>
 
-int32_t pie_RotateProject(const Vector3i *src, const glm::mat4& matrix, Vector2i *dest);
+int32_t pie_RotateProjectWithPerspective(const Vector3i *v3d, const glm::mat4 &perspectiveViewMatrix, Vector2i *v2d);
 const glm::mat4& pie_PerspectiveGet();
 void pie_SetGeometricOffset(int x, int y);
 void pie_Begin3DScene();
