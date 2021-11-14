@@ -202,13 +202,15 @@ Send an alliance request to a player. (3.3+ only)
 
 ## orderDroid(droid, order)
 
-Give a droid an order to do something. (3.2+ only)
+Give a droid an order to do something.
+Order must be either `DORDER_STOP`, `DORDER_RTB`, `DORDER_RTR`, `DORDER_RECYCLE`, `DORDER_REARM` or `DORDER_HOLD`. (3.2+ only)
 
 ## orderDroidBuild(droid, order, structureName, x, y[, direction])
 
 Give a droid an order to build something at the given position. Returns true if allowed.
+Order must be `DORDER_BUILD`.
 
-## setAssemblyPoint(structure, x, y)
+## setAssemblyPoint(factoryStructure, x, y)
 
 Set the assembly point droids go to when built for the specified structure. (3.2+ only)
 
@@ -271,7 +273,7 @@ looks, or to add variety to the looks of droids in campaign missions. (3.2+ only
 Change a player's colour slot. The current player colour can be read from the `playerData` array. There are as many
 colour slots as the maximum number of players. (3.2.3+ only)
 
-## setHealth(object, health)
+## setHealth(gameObject, health)
 
 Change the health of the given game object, in percentage. Does not take care of network sync, so for multiplayer games,
 needs wrapping in a `syncRequest()`. (3.2.3+ only.)
@@ -381,7 +383,7 @@ Clear the console. (3.3+ only)
 
 Is given structure idle?
 
-## enumStruct([player[, structureType[, playerFilter]]])
+## enumStruct([player[, structureTypeOrStructureName[, playerFilter]]])
 
 Returns an array of structure objects. If no parameters given, it will
 return all of the structures for the current player. The second parameter
@@ -390,7 +392,7 @@ can be either a string with the name of the structure type as defined in
 third parameter can be used to filter by visibility, the default is not
 to filter.
 
-## enumStructOffWorld([player[, structureType[, playerFilter]]])
+## enumStructOffWorld([player[, structureTypeOrStructureName[, playerFilter]]])
 
 Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 If no parameters given, it will return all of the structures for the current player.
@@ -444,7 +446,7 @@ which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By def
 returned; by default only visible objects are returned. Calling this function is much faster than
 iterating over all game objects using other enum functions. (3.2+ only)
 
-## pursueResearch(labStructure, researchNames)
+## pursueResearch(researchStructure, researchNames)
 
 Start researching the first available technology on the way to the given technology.
 First parameter is the structure to research in, which must be a research lab. The
@@ -505,14 +507,14 @@ Returns whether the given map tile is burning. (3.5+ only)
 
 Give a droid an order to do something to something.
 
-## buildDroid(factory, templateName, bodyName, propulsionName, reserved1, reserved2, ...turrets)
+## buildDroid(factoryStructure, templateName, bodyNames, propulsionNames, reserved1, reserved2, ...turretNames)
 
 Start factory production of new droid with the given name, body, propulsion and turrets.
 The reserved parameters should be passed "" for now. The components can be
 passed as ordinary strings, or as a list of strings. If passed as a list, the first available
 component in the list will be used. Returns a boolean that is true if production was started.
 
-## addDroid(player, x, y, templateName, bodyName, propulsionName, reserved1, reserved2, ...turrets)
+## addDroid(player, x, y, templateName, bodyNames, propulsionNames, reserved1, reserved2, ...turretNames)
 
 Create and place a droid at the given x, y position as belonging to the given player, built with
 the given components. Currently does not support placing droids in multiplayer, doing so will
@@ -520,13 +522,13 @@ cause a desync. Returns the created droid on success, otherwise returns null. Pa
 reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
 pass -1 as both x and y.
 
-## makeTemplate(player, templateName, bodyName, propulsionName, reserved, ...turrets)
+## makeTemplate(player, templateName, bodyNames, propulsionNames, reserved, ...turretNames)
 
 Create a template (virtual droid) with the given components. Can be useful for calculating the cost
 of droids before putting them into production, for instance. Will fail and return null if template
 could not possibly be built using current research. (3.2+ only)
 
-## addDroidToTransporter(transporter, droid)
+## addDroidToTransporter(transporterDroid, droid)
 
 Load a droid, which is currently located on the campaign off-world mission list,
 into a transporter, which is also currently on the campaign off-world mission list.
@@ -571,7 +573,7 @@ Message is currently unused. Returns a boolean that is true on success. (3.2+ on
 Remove a beacon message sent to target player. Target may also be `ALLIES`.
 Returns a boolean that is true on success. (3.2+ only)
 
-## getDroidProduction(factory)
+## getDroidProduction(factoryStructure)
 
 Return droid in production in given factory. Note that this droid is fully
 virtual, and should never be passed anywhere. (3.2+ only)
@@ -755,7 +757,7 @@ Returns true if an alliance exists between the two players, or they are the same
 Immediately remove the given structure from the map. Returns a boolean that is true on success.
 No special effects are applied. Deprecated since 3.2. Use `removeObject` instead.
 
-## removeObject(gameObject[, sfx])
+## removeObject(gameObject[, specialEffects])
 
 Remove the given game object with special effects. Returns a boolean that is true on success.
 A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
@@ -797,7 +799,7 @@ Load the level with the given name.
 
 Set the amount of experience a droid has. Experience is read using floating point precision.
 
-## donateObject(object, player)
+## donateObject(gameObject, player)
 
 Donate a game object (restricted to droids before 3.2.3) to another player. Returns true if
 donation was successful. May return false if this donation would push the receiving player
@@ -824,7 +826,7 @@ found will be used. (3.2+ only)
 
 Set the exit position for the mission transporter. (3.2+ only)
 
-## setObjectFlag(object, flag, flagValue)
+## setObjectFlag(gameObject, flag, flagValue)
 
 Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
 needs wrapping in a `syncRequest()`. (3.3+ only.)

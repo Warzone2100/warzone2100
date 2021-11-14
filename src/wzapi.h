@@ -1001,8 +1001,8 @@ namespace wzapi
 	bool console(WZAPI_PARAMS(va_list_treat_as_strings strings));
 	bool clearConsole(WZAPI_NO_PARAMS);
 	bool structureIdle(WZAPI_PARAMS(const STRUCTURE *psStruct));
-	std::vector<const STRUCTURE *> enumStruct(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter));
-	std::vector<const STRUCTURE *> enumStructOffWorld(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter));
+	std::vector<const STRUCTURE *> enumStruct(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureTypeOrStructureName, optional<int> _playerFilter));
+	std::vector<const STRUCTURE *> enumStructOffWorld(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureTypeOrStructureName, optional<int> _playerFilter));
 	std::vector<const DROID *> enumDroid(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType, optional<int> _playerFilter));
 	std::vector<const FEATURE *> enumFeature(WZAPI_PARAMS(int playerFilter, optional<std::string> _featureName));
 	std::vector<scr_position> enumBlips(WZAPI_PARAMS(int player));
@@ -1024,9 +1024,9 @@ namespace wzapi
 	int terrainType(WZAPI_PARAMS(int x, int y));
 	bool tileIsBurning(WZAPI_PARAMS(int x, int y));
 	bool orderDroidObj(WZAPI_PARAMS(DROID *psDroid, int _order, BASE_OBJECT *psObj));
-	bool buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets));
-	returned_nullable_ptr<const DROID> addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)); MUTLIPLAY_UNSAFE
-	std::unique_ptr<const DROID_TEMPLATE> makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list bodyName, string_or_string_list propulsionName, reservedParam reserved1, va_list<string_or_string_list> turrets));
+	bool buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list bodyNames, string_or_string_list propulsionNames, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turretNames));
+	returned_nullable_ptr<const DROID> addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list bodyNames, string_or_string_list propulsionNames, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turretNames)); MUTLIPLAY_UNSAFE
+	std::unique_ptr<const DROID_TEMPLATE> makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list bodyNames, string_or_string_list propulsionNames, reservedParam reserved1, va_list<string_or_string_list> turretNames));
 	bool addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporter, game_object_identifier droid));
 	returned_nullable_ptr<const FEATURE> addFeature(WZAPI_PARAMS(std::string featureName, int x, int y)) MUTLIPLAY_UNSAFE;
 	bool componentAvailable(WZAPI_PARAMS(std::string componentType, optional<std::string> _componentName));
