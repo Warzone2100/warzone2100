@@ -1492,11 +1492,11 @@ void cancelDeliveryRepos()
 	flagReposVarsValid = false;
 }
 
-void renderDeliveryRepos(const glm::mat4 &viewMatrix)
+void renderDeliveryRepos(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	if (flagReposVarsValid)
 	{
-		renderDeliveryPoint(&flagPos, true, viewMatrix);
+		renderDeliveryPoint(&flagPos, true, viewMatrix, perspectiveViewMatrix);
 	}
 }
 

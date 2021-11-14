@@ -56,17 +56,18 @@ static PerspectiveCache perspectiveCache;
  * 3D vector perspective projection
  * Projects 3D vector into 2D screen space
  * \param v3d       3D vector to project
+ * \param perspectiveViewMatrix		precomputed perspective multipled by view matrix
  * \param[out] v2d  resulting 2D vector
  * \return projected z component of v2d
  */
-int32_t pie_RotateProject(const Vector3i *v3d, const glm::mat4& matrix, Vector2i *v2d)
+int32_t pie_RotateProjectWithPerspective(const Vector3i *v3d, const glm::mat4 &perspectiveViewMatrix, Vector2i *v2d)
 {
 	float hackScaleFactor = 1.0f / (3 * 330);  // HACK: This seems to work by experimentation, not sure why.
 
 	/*
 	 * v = curMatrix . v3d
 	 */
-	glm::vec4 v(pie_PerspectiveGet() * matrix * glm::vec4(*v3d, 1.f));
+	glm::vec4 v(perspectiveViewMatrix * glm::vec4(*v3d, 1.f));
 
 	const float xx = v.x / v.w;
 	const float yy = v.y / v.w;

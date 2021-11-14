@@ -36,9 +36,9 @@ enum RENDER_TYPE
 //function prototypes
 
 /* add an object to the current render list */
-void bucketAddTypeToList(RENDER_TYPE objectType, void *object, const glm::mat4 &viewMatrix);
+void bucketAddTypeToList(RENDER_TYPE objectType, void *object, const glm::mat4 &perspectiveViewMatrix);
 
 /* render Objects in list */
-void bucketRenderCurrentList(const glm::mat4 &viewMatrix);
+void bucketRenderCurrentList(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 
 #endif // __INCLUDED_SRC_BUCKET3D_H__

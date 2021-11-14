@@ -77,13 +77,13 @@ void disp3d_oldView(); // for save games <= 10
 void disp3d_getView(iView *newView);
 void screenCoordToWorld(const Vector2i, Vector2i&, SDWORD&, SDWORD&);
 void draw3DScene();
-void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
-void renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix);
-void renderProximityMsg(PROXIMITY_DISPLAY	*psProxDisp, const glm::mat4 &viewMatrix);
-void renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix);
-void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::mat4 &viewMatrix);
+void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
+void renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
+void renderProximityMsg(PROXIMITY_DISPLAY	*psProxDisp, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
+void renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
+void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 
-void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix);
+void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix);
 ENERGY_BAR toggleEnergyBars();
 void drawDroidSelection(DROID *psDroid, bool drawBox);
 
@@ -91,9 +91,9 @@ bool doWeDrawProximitys();
 void setProximityDraw(bool val);
 
 bool	clipXY(SDWORD x, SDWORD y);
-inline bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4& viewModelMatrix, int overdrawScreenPoints = 10);
-bool clipDroidOnScreen(DROID *psDroid, const glm::mat4& viewModelMatrix, int overdrawScreenPoints = 25);
-bool clipStructureOnScreen(STRUCTURE *psStructure, const glm::mat4 &viewModelMatrix, int overdrawScreenPoints = 0);
+inline bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4 &perspectiveViewModelMatrix, int overdrawScreenPoints = 10);
+bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatrix, int overdrawScreenPoints = 25);
+bool clipStructureOnScreen(STRUCTURE *psStructure);
 
 bool init3DView();
 void shutdown3DView();

@@ -394,7 +394,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
-static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMatrix)
+static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewModelMatrix)
 {
 	iIMDShape *psMoveAnim, *psStillAnim;
 	SDWORD				iConnector;
@@ -526,7 +526,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	if (!bButton)
 	{
 		/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
-		calcScreenCoords(psDroid, viewModelMatrix);
+		calcScreenCoords(psDroid, perspectiveViewModelMatrix);
 	}
 
 	/* set default components transparent */
@@ -813,7 +813,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, const Vector3i *
 	Droid.rot = Vector3i(0, 0, 0);
 
 	//draw multi component object as a button object
-	displayCompObj(&Droid, true, matrix);
+	displayCompObj(&Droid, true, matrix, pie_PerspectiveGet() * matrix);
 }
 
 
@@ -832,12 +832,12 @@ void displayComponentButtonObject(DROID *psDroid, const Vector3i *Rotation, cons
 
 	// And render the composite object.
 	//draw multi component object as a button object
-	displayCompObj(psDroid, true, matrix);
+	displayCompObj(psDroid, true, matrix, pie_PerspectiveGet() * matrix);
 }
 
 /* Assumes matrix context is already set */
 // multiple turrets display removed the pointless mountRotation
-void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
+void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	Vector3i position, rotation;
 	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
@@ -872,7 +872,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 	}
 
 	// now check if the projected circle is within the screen boundaries
-	if(!clipDroidOnScreen(psDroid, viewMatrix * modelMatrix))
+	if(!clipDroidOnScreen(psDroid, perspectiveViewMatrix * modelMatrix))
 	{
 		return;
 	}
@@ -893,7 +893,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 	{
 		//ingame not button object
 		//should render 3 mounted weapons now
-		if (displayCompObj(psDroid, false, viewMatrix * modelMatrix))
+		if (displayCompObj(psDroid, false, viewMatrix * modelMatrix, perspectiveViewMatrix * modelMatrix))
 		{
 			// did draw something to the screen - update the framenumber
 			psDroid->sDisplay.frameNumber = frameGetFrameNumber();
