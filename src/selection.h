@@ -50,7 +50,8 @@ enum SELECTIONTYPE
 	DST_ALL_COMBAT_LAND,
 	DST_ALL_COMBAT_CYBORG,
 	DST_ALL_DAMAGED,
-	DST_ALL_SAME
+	DST_ALL_SAME,
+	DST_ALL_LAND_MILDLY_OR_NOT_DAMAGED,
 };
 
 unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen);
