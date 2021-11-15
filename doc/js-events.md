@@ -182,14 +182,14 @@ Careful passing the parameter object around, since it is about to vanish! (3.2+ 
 ## eventObjectSeen(viewer, seen)
 
 An event that is run sometimes when an object, which was marked by an object label,
-which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
+which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
 An event that is run sometimes when an objectm  goes from not seen to seen.
 First parameter is **game object** doing the seeing, the next the game object being seen.
 
 ## eventGroupSeen(viewer, groupId)
 
 An event that is run sometimes when a member of a group, which was marked by a group label,
-which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
+which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
 First parameter is **game object** doing the seeing, the next the id of the group being seen.
 
 ## eventObjectTransfer(object, from)

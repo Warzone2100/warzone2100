@@ -425,7 +425,7 @@ namespace wzapi
 		//__ ## eventObjectSeen(viewer, seen)
 		//__
 		//__ An event that is run sometimes when an object, which was marked by an object label,
-		//__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
+		//__ which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
 		//__ An event that is run sometimes when an objectm  goes from not seen to seen.
 		//__ First parameter is **game object** doing the seeing, the next the game
 		//__ object being seen.
@@ -435,7 +435,7 @@ namespace wzapi
 		//__ ## eventGroupSeen(viewer, groupId)
 		//__
 		//__ An event that is run sometimes when a member of a group, which was marked by a group label,
-		//__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
+		//__ which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
 		//__ First parameter is **game object** doing the seeing, the next the id of the group
 		//__ being seen.
 		//__

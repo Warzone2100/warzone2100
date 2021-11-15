@@ -2183,7 +2183,7 @@ bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int maxNumber, optional<int> 
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 
 	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
-	SCRIPT_ASSERT(-1, context, droidType == DROID_CONSTRUCT || droidType == DROID_COMMAND || droidType == DROID_ANY, "Bad droid type parameter");
+	SCRIPT_ASSERT(false, context, droidType == DROID_CONSTRUCT || droidType == DROID_COMMAND || droidType == DROID_ANY, "Bad droid type parameter");
 
 	switch (droidType)
 	{
@@ -2918,6 +2918,7 @@ bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _specia
 		case OBJ_FEATURE:
 			return destroyFeature((FEATURE *)psObj, gameTime);
 		default:
+			break;
 		}
 	}
 	else
@@ -2931,6 +2932,7 @@ bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _specia
 		case OBJ_FEATURE:
 			return removeFeature((FEATURE *)psObj);
 		default:
+			break;
 		}
 	}
 	return false;
@@ -3245,7 +3247,7 @@ wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int
 {
 	SCRIPT_ASSERT({}, context, psObj, "No valid object provided");
 	OBJECT_TYPE objectType = psObj->type;
-	SCRIPT_ASSERT(false, context, objectType == OBJ_DROID || objectType == OBJ_STRUCTURE || objectType == OBJ_FEATURE, "Wrong game object type");
+	SCRIPT_ASSERT({}, context, objectType == OBJ_DROID || objectType == OBJ_STRUCTURE || objectType == OBJ_FEATURE, "Wrong game object type");
 	OBJECT_FLAG flag = (OBJECT_FLAG)_flag;
 	SCRIPT_ASSERT({}, context, flag >= 0 && flag < OBJECT_FLAG_COUNT, "Bad flag value %d", flag);
 	psObj->flags.set(flag, flagValue);
