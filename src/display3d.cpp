@@ -101,10 +101,12 @@ static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
 static void	drawDragBox();
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const glm::mat4 &modelViewMatrix);
+static void calcStructureScreenCoords(STRUCTURE *psStructure, const glm::mat4 &modelViewMatrix);
 static void	drawTiles(iView *player);
 static void	display3DProjectiles(const glm::mat4 &viewMatrix);
 static void	drawDroidSelections();
 static void	drawStructureSelections();
+static void drawStructureSelectedBox(STRUCTURE *psStructure);
 static void displayBlueprints(const glm::mat4 &viewMatrix);
 static void	processSensorTarget();
 static void	processDestinationTarget();
@@ -2505,8 +2507,15 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 				pieFlag = pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
+
 			pie_Draw3DShape(getFactionIMD(faction, psStructure->pStructureType->pBaseIMD), 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
 				viewMatrix * modelMatrix);
+		}
+
+		if (psStructure->selected)
+		{
+			calcStructureScreenCoords(psStructure, viewMatrix * modelMatrix);
+			drawStructureSelectedBox(psStructure);
 		}
 
 		// override
@@ -2835,6 +2844,79 @@ static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, int weapon_slot)
 	default:
 		debug(LOG_WARNING, "Unexpected target origin in structure(%d)!", psStruct->id);
 	}
+}
+
+static void drawStructureSelectedBox(STRUCTURE *psStruct)
+{
+	int bracketLength = 15;
+	int bracketThickness = 2;
+	std::vector<PIERECT_DrawRequest> rectsToDraw;
+
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY + psStruct->sDisplay.screenR - bracketLength,
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR + bracketThickness,
+		psStruct->sDisplay.screenY + psStruct->sDisplay.screenR,
+		WZCOL_WHITE)
+	);
+
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY + psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR + bracketLength,
+		psStruct->sDisplay.screenY + psStruct->sDisplay.screenR + bracketThickness,
+		WZCOL_WHITE)
+	);
+
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR - bracketLength,
+		psStruct->sDisplay.screenY + psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY + psStruct->sDisplay.screenR + bracketThickness,
+		WZCOL_WHITE)
+	);
+
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY + psStruct->sDisplay.screenR - bracketLength,
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR + bracketThickness,
+		 psStruct->sDisplay.screenY + psStruct->sDisplay.screenR + bracketThickness,
+		 WZCOL_WHITE)
+	);
+
+	//BACK
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY - psStruct->sDisplay.screenR + bracketLength,
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR + bracketThickness,
+		psStruct->sDisplay.screenY - psStruct->sDisplay.screenR,
+		WZCOL_WHITE)
+	);
+
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY - psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenX - psStruct->sDisplay.screenR + bracketLength,
+		psStruct->sDisplay.screenY - psStruct->sDisplay.screenR - bracketThickness,
+		WZCOL_WHITE)
+	);
+
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR - bracketLength,
+		psStruct->sDisplay.screenY - psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY - psStruct->sDisplay.screenR + bracketThickness,
+		WZCOL_WHITE)
+	);
+
+	rectsToDraw.push_back(PIERECT_DrawRequest(
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR,
+		psStruct->sDisplay.screenY - psStruct->sDisplay.screenR + bracketLength,
+		psStruct->sDisplay.screenX + psStruct->sDisplay.screenR + bracketThickness,
+		 psStruct->sDisplay.screenY - psStruct->sDisplay.screenR - bracketThickness,
+		 WZCOL_WHITE)
+	);
+	pie_DrawMultiRect(rectsToDraw);
 }
 
 /// draw the health bar for the specified structure
@@ -3448,6 +3530,37 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	psDroid->sDisplay.screenX = center.x;
 	psDroid->sDisplay.screenY = center.y;
 	psDroid->sDisplay.screenR = static_cast<UDWORD>(radius);
+}
+
+static void calcStructureScreenCoords(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
+{
+	/* Get it's absolute dimensions */
+	Vector3i origin;
+	Vector2i center(0, 0);
+	int wsRadius = 1;
+	float radius;
+
+	wsRadius = MAX(psStructure->pStructureType->baseWidth, psStructure->pStructureType->baseBreadth) * 64;
+
+	origin = Vector3i(0, 0, 0); // take the center of the object
+
+	/* get the screen coordinates */
+	const float cZ = pie_RotateProject(&origin, viewMatrix, &center) * 0.1f;
+
+	// avoid division by zero
+	if (cZ > 0)
+	{
+		radius = wsRadius / cZ * pie_GetResScalingFactor();
+	}
+	else
+	{
+		radius = 1; // 1 just in case some other code assumes radius != 0
+	}
+
+	/* Store away the screen coordinates so we can select the droids without doing a transform */
+	psStructure->sDisplay.screenX = center.x;
+	psStructure->sDisplay.screenY = center.y;
+	psStructure->sDisplay.screenR = static_cast<UDWORD>(radius);
 }
 
 void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tileX, SDWORD &tileY)
