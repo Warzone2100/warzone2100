@@ -562,7 +562,7 @@ void deleteSaveGame(const char *fileName)
 		return true; // continue
 	});
 
-	if (!PHYSFS_delete(tmp))		// now (should be)empty directory
+	if (WZ_PHYSFS_isDirectory(tmp) && !PHYSFS_delete(tmp))		// now (should be)empty directory
 	{
 		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", fileName, WZ_PHYSFS_getLastError());
 	}
