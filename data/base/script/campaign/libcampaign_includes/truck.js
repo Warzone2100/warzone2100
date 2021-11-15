@@ -129,7 +129,7 @@ function __camTruckTick()
 		}
 
 		// Then, capture free oils.
-		var oils = enumFeature(-1, "OilResource");
+		var oils = enumFeature(ALL_PLAYERS, "OilResource");
 		if (oils.length === 0)
 		{
 			continue;

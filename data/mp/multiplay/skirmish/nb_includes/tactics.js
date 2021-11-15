@@ -128,7 +128,7 @@ function findTarget(gr) {
 	if (gr === miscGroup) {
 		var list = enumStructList(miscTargets, enumLivingPlayers().filter(isEnemy).random());
 		powerUps.forEach(function(stat) { // pick up oil drums and artifacts
-			list = list.concat(enumFeature(-1, stat));
+			list = list.concat(enumFeature(ALL_PLAYERS, stat));
 		});
 		list = list.filter(targetSuitableForHarass).filter(function(feature) {
 			if (iHaveHover())

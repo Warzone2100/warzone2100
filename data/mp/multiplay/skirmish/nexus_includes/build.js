@@ -246,7 +246,7 @@ function buildDerrick()
 		return;
 	}
 
-	var oils = enumFeature(-1, FEATURE_STATS.oils).sort(sortByDistToBase);
+	var oils = enumFeature(ALL_PLAYERS, FEATURE_STATS.oils).sort(sortByDistToBase);
 
 	for (var i = 0, oilLen = oils.length; i < oilLen; ++i)
 	{

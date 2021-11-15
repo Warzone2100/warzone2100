@@ -195,7 +195,7 @@ function lookForOil()
 {
 	const UNSAFE_AREA_RANGE = 7;
 	var droids = enumGroup(oilBuilders);
-	var oils = enumFeature(-1, OIL_RES_STAT).sort(sortByDistToBase); // grab closer oils first;
+	var oils = enumFeature(ALL_PLAYERS, OIL_RES_STAT).sort(sortByDistToBase); // grab closer oils first;
 	var bestDroid = null;
 	var bestDist = 99999;
 	var success = false;
