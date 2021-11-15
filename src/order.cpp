@@ -1381,18 +1381,18 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_PATROL:
 	  if (isRetreatingInGroup(psDroid))
-	  {
+		{
 		  break;
-    }
+		}
 		psDroid->order = *psOrder;
 		psDroid->order.pos2 = psDroid->pos.xy();
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_RECOVER:
 	  if (isRetreatingInGroup(psDroid))
-	  {
+		{
 		  break;
-    }
+		}
 		psDroid->order = *psOrder;
 		actionDroid(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		break;
@@ -1454,7 +1454,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	  if (isRetreatingInGroup(psDroid))
 		{
 		  break;
-    }
+		}
 		// build a new structure or line of structures
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "%s cannot construct things!", objInfo(psDroid));
 		ASSERT_OR_RETURN(, psOrder->psStats != nullptr, "invalid structure stats pointer");
@@ -1467,7 +1467,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	  if (isRetreatingInGroup(psDroid))
 		{
 		  break;
-    }
+		}
 		//build a module onto the structure
 		if (!isConstructionDroid(psDroid) || psOrder->index < nextModuleToBuild((STRUCTURE *)psOrder->psObj, -1))
 		{
@@ -1483,7 +1483,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	  if (isRetreatingInGroup(psDroid))
 		{
 		  break;
-    }
+		}
 		// help to build a structure that is starting to be built
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Help to build a NULL pointer?");
@@ -1498,7 +1498,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
-    }
+		}
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
 		{
 			break;
@@ -1528,7 +1528,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	  if (isRetreatingInGroup(psDroid))
 		{
 		  break;
-    }
+		}
 		// keep an object within sensor view
 		psDroid->order = *psOrder;
 		actionDroid(psDroid, DACTION_OBSERVE, psOrder->psObj);
@@ -1746,7 +1746,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	  if (isRetreatingInGroup(psDroid))
 		{
 		  break;
-    }
+		}
 		psDroid->order = *psOrder;
 		if (psOrder->psObj != nullptr)
 		{
@@ -1782,7 +1782,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	  if (isRetreatingInGroup(psDroid))
 		{
 		  break;
-    }
+		}
 		if (!isVtolDroid(psDroid))
 		{
 			break;
