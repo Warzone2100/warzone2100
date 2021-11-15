@@ -386,7 +386,7 @@ function lookForOil()
 	}
 
 	var droids = enumGroup(oilGrabberGroup);
-	var oils = enumFeature(-1, OIL_RES).sort(distanceToBase);
+	var oils = enumFeature(ALL_PLAYERS, OIL_RES).sort(distanceToBase);
 
 	if (!forceDerrickBuildDefense && (oils.length < 2))
 	{

@@ -67,7 +67,7 @@ function countAllResources()
 {
 	function uncached()
 	{
-		var amount = enumFeature(-1, OIL_RES).length;
+		var amount = enumFeature(ALL_PLAYERS, OIL_RES).length;
 		for (var i = 0; i < maxPlayers; ++i)
 		{
 			amount += enumStruct(i, structures.derrick).length;
