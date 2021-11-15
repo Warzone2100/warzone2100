@@ -1,0 +1,3662 @@
+{
+	"feature_0185": {
+		"name": "OilResource",
+		"position": [6208, 22336, 339],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0186": {
+		"name": "Boulder1",
+		"position": [24384, 10304, 159],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0187": {
+		"name": "Boulder3",
+		"position": [24512, 9920, 186],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0188": {
+		"name": "Boulder3",
+		"position": [24256, 11200, 36],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0189": {
+		"name": "OilResource",
+		"position": [11968, 19264, 482],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0190": {
+		"name": "OilResource",
+		"position": [4160, 7104, 458],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0191": {
+		"name": "OilResource",
+		"position": [3904, 4672, 338],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0192": {
+		"name": "OilResource",
+		"position": [1984, 16320, 472],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0193": {
+		"name": "OilResource",
+		"position": [7360, 14400, 484],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0194": {
+		"name": "OilResource",
+		"position": [4800, 15680, 494],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0195": {
+		"name": "OilResource",
+		"position": [3392, 13504, 336],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0196": {
+		"name": "OilResource",
+		"position": [5696, 11968, 312],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0197": {
+		"name": "OilResource",
+		"position": [7744, 16704, 320],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0198": {
+		"name": "OilResource",
+		"position": [2752, 18368, 312],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0199": {
+		"name": "OilResource",
+		"position": [7872, 1728, 184],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0200": {
+		"name": "OilResource",
+		"position": [6208, 5952, 470],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0201": {
+		"name": "OilResource",
+		"position": [8768, 6080, 160],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0202": {
+		"name": "OilResource",
+		"position": [10816, 8640, 480],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0203": {
+		"name": "OilResource",
+		"position": [10816, 10048, 468],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0204": {
+		"name": "OilResource",
+		"position": [16192, 8128, 476],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0205": {
+		"name": "OilResource",
+		"position": [7104, 22080, 472],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0206": {
+		"name": "OilResource",
+		"position": [7360, 21056, 170],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0207": {
+		"name": "OilResource",
+		"position": [13760, 3648, 496],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0208": {
+		"name": "OilResource",
+		"position": [15552, 1984, 314],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0209": {
+		"name": "OilResource",
+		"position": [9792, 19008, 22],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0210": {
+		"name": "OilResource",
+		"position": [16192, 9920, 172],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0211": {
+		"name": "OilResource",
+		"position": [14656, 8512, 206],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0212": {
+		"name": "OilResource",
+		"position": [10816, 16448, 468],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0213": {
+		"name": "OilResource",
+		"position": [9536, 14912, 378],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0214": {
+		"name": "OilResource",
+		"position": [8384, 10048, 176],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0215": {
+		"name": "OilResource",
+		"position": [14784, 19520, 468],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0216": {
+		"name": "OilResource",
+		"position": [15808, 23232, 332],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0217": {
+		"name": "OilResource",
+		"position": [18112, 21056, 324],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0218": {
+		"name": "OilResource",
+		"position": [13376, 17088, 322],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0219": {
+		"name": "OilResource",
+		"position": [23360, 17728, 484],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0220": {
+		"name": "OilResource",
+		"position": [12352, 15040, 480],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0221": {
+		"name": "OilResource",
+		"position": [15552, 14912, 480],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0222": {
+		"name": "OilResource",
+		"position": [13632, 10688, 26],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0223": {
+		"name": "OilResource",
+		"position": [19136, 11200, 24],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0224": {
+		"name": "OilResource",
+		"position": [15424, 6848, 318],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0225": {
+		"name": "OilResource",
+		"position": [21440, 15680, 172],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0226": {
+		"name": "OilResource",
+		"position": [18240, 14528, 494],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0227": {
+		"name": "OilResource",
+		"position": [19904, 14272, 336],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0228": {
+		"name": "OilResource",
+		"position": [16320, 18112, 332],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0229": {
+		"name": "OilResource",
+		"position": [15936, 19392, 174],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0230": {
+		"name": "OilResource",
+		"position": [22720, 14784, 312],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0231": {
+		"name": "OilResource",
+		"position": [11200, 5056, 164],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0232": {
+		"name": "OilResource",
+		"position": [9664, 23488, 464],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0233": {
+		"name": "OilResource",
+		"position": [20800, 6848, 30],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0234": {
+		"name": "OilResource",
+		"position": [5440, 13376, 176],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0235": {
+		"name": "OilResource",
+		"position": [23488, 8000, 468],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0236": {
+		"name": "OilResource",
+		"position": [9152, 12992, 328],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0237": {
+		"name": "OilResource",
+		"position": [14272, 2112, 186],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0238": {
+		"name": "OilResource",
+		"position": [18752, 7744, 458],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0239": {
+		"name": "OilResource",
+		"position": [17216, 8128, 176],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0240": {
+		"name": "OilResource",
+		"position": [13504, 9920, 326],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0241": {
+		"name": "OilResource",
+		"position": [14912, 12224, 28],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0242": {
+		"name": "OilResource",
+		"position": [17344, 13248, 186],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0243": {
+		"name": "OilResource",
+		"position": [10688, 18880, 336],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0244": {
+		"name": "OilResource",
+		"position": [10176, 3008, 180],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0245": {
+		"name": "OilResource",
+		"position": [18112, 15552, 326],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0246": {
+		"name": "OilResource",
+		"position": [18368, 2240, 316],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0247": {
+		"name": "OilResource",
+		"position": [19392, 5056, 334],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0248": {
+		"name": "OilResource",
+		"position": [20288, 10944, 322],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0249": {
+		"name": "OilResource",
+		"position": [14912, 16192, 166],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0250": {
+		"name": "OilResource",
+		"position": [3392, 15424, 332],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0251": {
+		"name": "OilResource",
+		"position": [6720, 15168, 177],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0252": {
+		"name": "OilResource",
+		"position": [5824, 8384, 335],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0253": {
+		"name": "OilResource",
+		"position": [10304, 21312, 328],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0254": {
+		"name": "OilResource",
+		"position": [20928, 14016, 167],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0255": {
+		"name": "OilResource",
+		"position": [11712, 15168, 331],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0256": {
+		"name": "OilResource",
+		"position": [15040, 5184, 312],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0257": {
+		"name": "OilResource",
+		"position": [16064, 17216, 28],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0258": {
+		"name": "OilResource",
+		"position": [11712, 10432, 176],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0259": {
+		"name": "OilResource",
+		"position": [16064, 21696, 473],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0260": {
+		"name": "OilResource",
+		"position": [14144, 5952, 171],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0261": {
+		"name": "OilResource",
+		"position": [12352, 8000, 173],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0262": {
+		"name": "OilResource",
+		"position": [21312, 8896, 227],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0263": {
+		"name": "OilResource",
+		"position": [22464, 17600, 179],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0264": {
+		"name": "OilResource",
+		"position": [8640, 12736, 173],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0265": {
+		"name": "OilResource",
+		"position": [9792, 16832, 213],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0266": {
+		"name": "OilResource",
+		"position": [4160, 9024, 317],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0267": {
+		"name": "OilResource",
+		"position": [10688, 7616, 181],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0268": {
+		"name": "OilResource",
+		"position": [10432, 10944, 170],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0269": {
+		"name": "OilResource",
+		"position": [19008, 9792, 187],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0270": {
+		"name": "OilResource",
+		"position": [9664, 20672, 185],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0271": {
+		"name": "OilResource",
+		"position": [8256, 22848, 314],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0272": {
+		"name": "OilResource",
+		"position": [7488, 8000, 176],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0273": {
+		"name": "OilResource",
+		"position": [12864, 6592, 319],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0274": {
+		"name": "OilResource",
+		"position": [12736, 5568, 491],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0275": {
+		"name": "BarbHUT",
+		"position": [20160, 21440, 168],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0276": {
+		"name": "BarbHUT",
+		"position": [20032, 21440, 181],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0277": {
+		"name": "BarbHUT",
+		"position": [19904, 21568, 185],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0278": {
+		"name": "BarbHUT",
+		"position": [18752, 21056, 175],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0279": {
+		"name": "BarbHUT",
+		"position": [18752, 21312, 174],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0280": {
+		"name": "BarbHUT",
+		"position": [19008, 21056, 153],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0281": {
+		"name": "BarbHUT",
+		"position": [17344, 21952, 340],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0282": {
+		"name": "BarbHUT",
+		"position": [17472, 22208, 338],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0283": {
+		"name": "BarbHUT",
+		"position": [17088, 21696, 331],
+		"rotation": [32768, 0, 0]
+	},
+	"feature_0284": {
+		"name": "BarbHUT",
+		"position": [17856, 21952, 341],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0285": {
+		"name": "BarbHUT",
+		"position": [16704, 22976, 460],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0286": {
+		"name": "BarbHUT",
+		"position": [16960, 22208, 481],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0287": {
+		"name": "BarbHUT",
+		"position": [15296, 22208, 174],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0288": {
+		"name": "BarbHUT",
+		"position": [15424, 21952, 168],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0289": {
+		"name": "BarbHUT",
+		"position": [14912, 22336, 178],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0290": {
+		"name": "BarbHUT",
+		"position": [14784, 22080, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0291": {
+		"name": "BarbHUT",
+		"position": [9792, 21952, 333],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0292": {
+		"name": "BarbHUT",
+		"position": [9920, 21696, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0293": {
+		"name": "BarbHUT",
+		"position": [9792, 22208, 330],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0294": {
+		"name": "BarbHUT",
+		"position": [9664, 22464, 327],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0295": {
+		"name": "BarbHUT",
+		"position": [8768, 23360, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0296": {
+		"name": "BarbHUT",
+		"position": [8768, 23104, 318],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0297": {
+		"name": "BarbWarehouse2",
+		"position": [8576, 22848, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0298": {
+		"name": "BarbTechRuin",
+		"position": [9344, 22208, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0299": {
+		"name": "BarbHUT",
+		"position": [5824, 22592, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0300": {
+		"name": "BarbHUT",
+		"position": [6080, 22592, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0301": {
+		"name": "BarbHUT",
+		"position": [5696, 22208, 348],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0302": {
+		"name": "BarbHUT",
+		"position": [6848, 21824, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0303": {
+		"name": "BarbHUT",
+		"position": [7360, 21952, 459],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0304": {
+		"name": "BarbHUT",
+		"position": [6720, 21952, 488],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0305": {
+		"name": "BarbHUT",
+		"position": [8384, 21696, 468],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0306": {
+		"name": "BarbHUT",
+		"position": [8512, 21952, 456],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0307": {
+		"name": "BarbHUT",
+		"position": [7616, 22848, 333],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0308": {
+		"name": "BarbHUT",
+		"position": [7360, 23488, 334],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0309": {
+		"name": "BarbHUT",
+		"position": [7360, 23232, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0310": {
+		"name": "BarbHUT",
+		"position": [10304, 17472, 320],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0311": {
+		"name": "BarbHUT",
+		"position": [10560, 17728, 328],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0312": {
+		"name": "BarbHUT",
+		"position": [10048, 17728, 331],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0313": {
+		"name": "BarbHUT",
+		"position": [10176, 17856, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0314": {
+		"name": "BarbHUT",
+		"position": [10048, 17984, 333],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0315": {
+		"name": "BarbHUT",
+		"position": [10816, 18624, 334],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0316": {
+		"name": "BarbHUT",
+		"position": [6080, 16192, 162],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0317": {
+		"name": "BarbHUT",
+		"position": [6208, 15936, 167],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0318": {
+		"name": "BarbHUT",
+		"position": [6336, 15680, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0319": {
+		"name": "BarbHUT",
+		"position": [5824, 16192, 174],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0320": {
+		"name": "BarbHUT",
+		"position": [4288, 17088, 330],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0321": {
+		"name": "BarbHUT",
+		"position": [3776, 17216, 299],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0322": {
+		"name": "BarbHUT",
+		"position": [3904, 16960, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0323": {
+		"name": "BarbHUT",
+		"position": [3392, 16832, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0324": {
+		"name": "BarbHUT",
+		"position": [3392, 16576, 327],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0325": {
+		"name": "BarbHUT",
+		"position": [1728, 14272, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0326": {
+		"name": "BarbHUT",
+		"position": [1472, 14400, 341],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0327": {
+		"name": "BarbHUT",
+		"position": [1600, 14144, 340],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0328": {
+		"name": "BarbHUT",
+		"position": [1856, 14656, 343],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0329": {
+		"name": "BarbHUT",
+		"position": [2240, 14272, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0330": {
+		"name": "BarbHUT",
+		"position": [5056, 12992, 183],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0331": {
+		"name": "BarbHUT",
+		"position": [4928, 13376, 180],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0332": {
+		"name": "BarbHUT",
+		"position": [5568, 13120, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0333": {
+		"name": "BarbHUT",
+		"position": [5312, 12992, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0334": {
+		"name": "BarbHUT",
+		"position": [4416, 13760, 180],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0335": {
+		"name": "BarbHUT",
+		"position": [7232, 10816, 180],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0336": {
+		"name": "BarbHUT",
+		"position": [7232, 10560, 170],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0337": {
+		"name": "BarbHUT",
+		"position": [7232, 10304, 162],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0338": {
+		"name": "BarbHUT",
+		"position": [6848, 10304, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0339": {
+		"name": "BarbWarehouse3",
+		"position": [6848, 10560, 178],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0340": {
+		"name": "BarbWarehouse3",
+		"position": [7104, 9792, 44],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0341": {
+		"name": "BarbHUT",
+		"position": [5440, 12224, 346],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0342": {
+		"name": "BarbHUT",
+		"position": [5952, 11968, 317],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0343": {
+		"name": "BarbHUT",
+		"position": [5568, 11584, 315],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0344": {
+		"name": "BarbHUT",
+		"position": [8640, 9792, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0345": {
+		"name": "BarbHUT",
+		"position": [8512, 9408, 171],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0346": {
+		"name": "BarbHUT",
+		"position": [8128, 9280, 182],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0347": {
+		"name": "BarbHUT",
+		"position": [7360, 9536, 41],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0348": {
+		"name": "BarbHUT",
+		"position": [9152, 15296, 340],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0349": {
+		"name": "BarbHUT",
+		"position": [9280, 15040, 342],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0350": {
+		"name": "BarbHUT",
+		"position": [10688, 15936, 484],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0351": {
+		"name": "BarbHUT",
+		"position": [10560, 15552, 488],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0352": {
+		"name": "BarbHUT",
+		"position": [10560, 15296, 486],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0353": {
+		"name": "BarbHUT",
+		"position": [10560, 14912, 483],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0354": {
+		"name": "BarbHUT",
+		"position": [6080, 8000, 335],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0355": {
+		"name": "BarbHUT",
+		"position": [5056, 8640, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0356": {
+		"name": "BarbHUT",
+		"position": [4800, 8768, 305],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0357": {
+		"name": "BarbHUT",
+		"position": [4800, 8384, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0358": {
+		"name": "BarbHUT",
+		"position": [4672, 8256, 328],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0359": {
+		"name": "BarbHUT",
+		"position": [4544, 8640, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0360": {
+		"name": "BarbHUT",
+		"position": [5824, 7616, 344],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0361": {
+		"name": "BarbHUT",
+		"position": [5696, 4416, 479],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0362": {
+		"name": "BarbHUT",
+		"position": [5824, 4160, 506],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0363": {
+		"name": "BarbHUT",
+		"position": [6208, 4800, 497],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0364": {
+		"name": "BarbHUT",
+		"position": [5952, 4672, 499],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0365": {
+		"name": "BarbHUT",
+		"position": [6080, 4288, 491],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0366": {
+		"name": "BarbHUT",
+		"position": [7232, 3648, 349],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0367": {
+		"name": "BarbHUT",
+		"position": [7360, 3264, 336],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0368": {
+		"name": "BarbHUT",
+		"position": [7488, 3904, 347],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0369": {
+		"name": "BarbHUT",
+		"position": [6976, 4928, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0370": {
+		"name": "BarbHUT",
+		"position": [6464, 6592, 493],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0371": {
+		"name": "BarbHUT",
+		"position": [6720, 6848, 484],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0372": {
+		"name": "BarbHUT",
+		"position": [6720, 7360, 473],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0373": {
+		"name": "BarbHUT",
+		"position": [7872, 6592, 324],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0374": {
+		"name": "BarbHUT",
+		"position": [7744, 6976, 324],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0375": {
+		"name": "BarbHUT",
+		"position": [15296, 5952, 331],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0376": {
+		"name": "BarbHUT",
+		"position": [14400, 5440, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0377": {
+		"name": "BarbHUT",
+		"position": [14784, 4928, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0378": {
+		"name": "BarbHUT",
+		"position": [14400, 4800, 315],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0379": {
+		"name": "BarbHUT",
+		"position": [14656, 5696, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0380": {
+		"name": "BarbHUT",
+		"position": [14656, 5952, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0381": {
+		"name": "BarbHUT",
+		"position": [15552, 6592, 336],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0382": {
+		"name": "BarbHUT",
+		"position": [15552, 6336, 346],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0383": {
+		"name": "BarbHUT",
+		"position": [16192, 5824, 120],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0384": {
+		"name": "BarbHUT",
+		"position": [16448, 5952, 146],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0385": {
+		"name": "BarbHUT",
+		"position": [16576, 6336, 271],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0386": {
+		"name": "BarbHUT",
+		"position": [11712, 6720, 487],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0387": {
+		"name": "BarbHUT",
+		"position": [11584, 6464, 478],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0388": {
+		"name": "BarbHUT",
+		"position": [11456, 6976, 473],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0389": {
+		"name": "BarbHUT",
+		"position": [11456, 6720, 473],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0390": {
+		"name": "BarbHUT",
+		"position": [11456, 6208, 476],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0391": {
+		"name": "BarbHUT",
+		"position": [12736, 5184, 496],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0392": {
+		"name": "BarbHUT",
+		"position": [12352, 5440, 481],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0393": {
+		"name": "BarbHUT",
+		"position": [12096, 5952, 476],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0394": {
+		"name": "BarbHUT",
+		"position": [10688, 9408, 476],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0395": {
+		"name": "BarbHUT",
+		"position": [10304, 9152, 453],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0396": {
+		"name": "BarbHUT",
+		"position": [10688, 8512, 481],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0397": {
+		"name": "BarbHUT",
+		"position": [10816, 9920, 464],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0398": {
+		"name": "BarbHUT",
+		"position": [11712, 8896, 185],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0399": {
+		"name": "BarbHUT",
+		"position": [11712, 8640, 193],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0400": {
+		"name": "BarbHUT",
+		"position": [11968, 8384, 190],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0401": {
+		"name": "BarbHUT",
+		"position": [14144, 1472, 321],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0402": {
+		"name": "BarbHUT",
+		"position": [13888, 1216, 310],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0403": {
+		"name": "BarbHUT",
+		"position": [13888, 2240, 196],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0404": {
+		"name": "BarbHUT",
+		"position": [14528, 2240, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0405": {
+		"name": "BarbHUT",
+		"position": [16064, 1600, 328],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0406": {
+		"name": "BarbHUT",
+		"position": [15936, 2112, 335],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0407": {
+		"name": "BarbHUT",
+		"position": [15552, 1728, 309],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0408": {
+		"name": "BarbHUT",
+		"position": [15424, 2240, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0409": {
+		"name": "BarbHUT",
+		"position": [15168, 1984, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0410": {
+		"name": "BarbHUT",
+		"position": [18240, 16192, 338],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0411": {
+		"name": "BarbHUT",
+		"position": [18240, 15936, 331],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0412": {
+		"name": "BarbHUT",
+		"position": [17984, 15680, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0413": {
+		"name": "BarbHUT",
+		"position": [18368, 15680, 340],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0414": {
+		"name": "BarbHUT",
+		"position": [17984, 16192, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0415": {
+		"name": "BarbHUT",
+		"position": [17984, 16448, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0416": {
+		"name": "BarbHUT",
+		"position": [19648, 16448, 178],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0417": {
+		"name": "BarbHUT",
+		"position": [20416, 16960, 24],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0418": {
+		"name": "BarbHUT",
+		"position": [20672, 16960, 25],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0419": {
+		"name": "BarbHUT",
+		"position": [20544, 17344, 48],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0420": {
+		"name": "BarbHUT",
+		"position": [21440, 18240, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0421": {
+		"name": "BarbHUT",
+		"position": [22080, 18496, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0422": {
+		"name": "BarbHUT",
+		"position": [21824, 18368, 328],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0423": {
+		"name": "BarbHUT",
+		"position": [21568, 18496, 343],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0424": {
+		"name": "BarbHUT",
+		"position": [21568, 17472, 160],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0425": {
+		"name": "BarbHUT",
+		"position": [21952, 17472, 173],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0426": {
+		"name": "BarbHUT",
+		"position": [23488, 17344, 488],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0427": {
+		"name": "BarbHUT",
+		"position": [23488, 16960, 317],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0428": {
+		"name": "BarbHUT",
+		"position": [23616, 16704, 321],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0429": {
+		"name": "BarbHUT",
+		"position": [21952, 16832, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0430": {
+		"name": "BarbHUT",
+		"position": [20928, 16320, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0431": {
+		"name": "BarbHUT",
+		"position": [14272, 15296, 485],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0432": {
+		"name": "BarbHUT",
+		"position": [13888, 15424, 480],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0433": {
+		"name": "BarbHUT",
+		"position": [13376, 15296, 460],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0434": {
+		"name": "BarbHUT",
+		"position": [14912, 15424, 474],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0435": {
+		"name": "BarbHUT",
+		"position": [15936, 14912, 483],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0436": {
+		"name": "BarbHUT",
+		"position": [21952, 8000, 200],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0437": {
+		"name": "BarbHUT",
+		"position": [21952, 7488, 183],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0438": {
+		"name": "BarbHUT",
+		"position": [22208, 8000, 198],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0439": {
+		"name": "BarbHUT",
+		"position": [20544, 6720, 28],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0440": {
+		"name": "BarbHUT",
+		"position": [20288, 6464, 32],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0441": {
+		"name": "BarbHUT",
+		"position": [20928, 6464, 44],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0442": {
+		"name": "BarbHUT",
+		"position": [20672, 7232, 35],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0443": {
+		"name": "BarbHUT",
+		"position": [20544, 8512, 192],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0444": {
+		"name": "BarbHUT",
+		"position": [22848, 7488, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0445": {
+		"name": "BarbHUT",
+		"position": [23232, 7488, 313],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0446": {
+		"name": "BarbHUT",
+		"position": [22464, 8896, 397],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0447": {
+		"name": "BarbHUT",
+		"position": [17344, 10688, 171],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0448": {
+		"name": "BarbHUT",
+		"position": [17472, 10048, 174],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0449": {
+		"name": "BarbHUT",
+		"position": [17216, 10048, 170],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0450": {
+		"name": "BarbHUT",
+		"position": [18368, 10432, 186],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0451": {
+		"name": "BarbHUT",
+		"position": [17600, 11200, 62],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0452": {
+		"name": "BarbHUT",
+		"position": [16576, 11584, 31],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0453": {
+		"name": "BarbHUT",
+		"position": [16448, 11328, 23],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0454": {
+		"name": "BarbHUT",
+		"position": [16320, 11584, 12],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0455": {
+		"name": "BarbHUT",
+		"position": [16064, 11584, 18],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0456": {
+		"name": "BarbHUT",
+		"position": [15552, 11584, 37],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0457": {
+		"name": "BarbHUT",
+		"position": [15680, 11328, 34],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0458": {
+		"name": "BarbHUT",
+		"position": [15808, 18880, 168],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0459": {
+		"name": "BarbHUT",
+		"position": [16064, 19136, 179],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0460": {
+		"name": "BarbHUT",
+		"position": [14656, 20416, 341],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0461": {
+		"name": "BarbHUT",
+		"position": [15168, 20800, 341],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0462": {
+		"name": "BarbHUT",
+		"position": [14144, 20800, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0463": {
+		"name": "BarbHUT",
+		"position": [14528, 20544, 337],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0464": {
+		"name": "BarbHUT",
+		"position": [17984, 20672, 320],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0465": {
+		"name": "BarbHUT",
+		"position": [17472, 21056, 315],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0466": {
+		"name": "BarbHUT",
+		"position": [20544, 12864, 205],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0467": {
+		"name": "BarbHUT",
+		"position": [20672, 13376, 188],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0468": {
+		"name": "BarbHUT",
+		"position": [19520, 13376, 330],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0469": {
+		"name": "BarbHUT",
+		"position": [19264, 13120, 337],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0470": {
+		"name": "WaterTower",
+		"position": [24768, 11072, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0471": {
+		"name": "Boulder2",
+		"position": [8000, 23360, 324],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0472": {
+		"name": "Boulder2",
+		"position": [7616, 22208, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0473": {
+		"name": "Boulder2",
+		"position": [8000, 21696, 481],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0474": {
+		"name": "Boulder2",
+		"position": [8896, 21568, 422],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0475": {
+		"name": "Boulder2",
+		"position": [7616, 20288, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0476": {
+		"name": "Boulder2",
+		"position": [6336, 20416, 349],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0477": {
+		"name": "Boulder2",
+		"position": [4288, 20800, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0478": {
+		"name": "Boulder2",
+		"position": [3776, 20160, 169],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0479": {
+		"name": "Boulder2",
+		"position": [3392, 19776, 209],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0480": {
+		"name": "Boulder2",
+		"position": [3520, 19008, 190],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0481": {
+		"name": "Boulder2",
+		"position": [3776, 18496, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0482": {
+		"name": "Boulder2",
+		"position": [3520, 18240, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0483": {
+		"name": "Boulder2",
+		"position": [3136, 18496, 182],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0484": {
+		"name": "Boulder2",
+		"position": [4032, 17216, 317],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0485": {
+		"name": "Boulder2",
+		"position": [4544, 16576, 344],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0486": {
+		"name": "Boulder2",
+		"position": [4928, 16576, 335],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0487": {
+		"name": "Boulder2",
+		"position": [5184, 16064, 390],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0488": {
+		"name": "Boulder2",
+		"position": [3008, 15808, 335],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0489": {
+		"name": "Boulder2",
+		"position": [1984, 16704, 469],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0490": {
+		"name": "Boulder2",
+		"position": [1728, 17088, 466],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0491": {
+		"name": "Boulder2",
+		"position": [2496, 16960, 480],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0492": {
+		"name": "Boulder2",
+		"position": [4544, 14400, 488],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0493": {
+		"name": "Boulder2",
+		"position": [5184, 14272, 469],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0494": {
+		"name": "Boulder2",
+		"position": [4416, 13120, 176],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0495": {
+		"name": "Boulder2",
+		"position": [4672, 12864, 185],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0496": {
+		"name": "Boulder2",
+		"position": [2624, 13504, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0497": {
+		"name": "Boulder2",
+		"position": [704, 13376, 188],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0498": {
+		"name": "Boulder2",
+		"position": [704, 14016, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0499": {
+		"name": "Boulder3",
+		"position": [960, 12864, 190],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0500": {
+		"name": "Boulder3",
+		"position": [1216, 10304, 13],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0501": {
+		"name": "Boulder3",
+		"position": [4544, 11968, 61],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0502": {
+		"name": "Boulder3",
+		"position": [4928, 11328, 24],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0503": {
+		"name": "Boulder3",
+		"position": [4800, 10432, 24],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0504": {
+		"name": "Boulder3",
+		"position": [5056, 9920, 32],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0505": {
+		"name": "Boulder3",
+		"position": [5824, 9280, 27],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0506": {
+		"name": "Boulder3",
+		"position": [4288, 8128, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0507": {
+		"name": "Boulder3",
+		"position": [4288, 7232, 467],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0508": {
+		"name": "Boulder3",
+		"position": [4928, 7488, 401],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0509": {
+		"name": "Boulder3",
+		"position": [3008, 7360, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0510": {
+		"name": "Boulder3",
+		"position": [3008, 6720, 297],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0511": {
+		"name": "Boulder3",
+		"position": [4672, 5312, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0512": {
+		"name": "Boulder3",
+		"position": [4288, 5568, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0513": {
+		"name": "Boulder3",
+		"position": [5056, 6720, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0514": {
+		"name": "Boulder3",
+		"position": [5568, 6976, 185],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0515": {
+		"name": "Boulder3",
+		"position": [8384, 14784, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0516": {
+		"name": "Boulder3",
+		"position": [8256, 13888, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0517": {
+		"name": "Boulder3",
+		"position": [8768, 13504, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0518": {
+		"name": "Boulder3",
+		"position": [7488, 15680, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0519": {
+		"name": "Boulder3",
+		"position": [8384, 15936, 190],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0520": {
+		"name": "Boulder3",
+		"position": [10304, 13504, 311],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0521": {
+		"name": "Boulder3",
+		"position": [10304, 12992, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0522": {
+		"name": "Boulder3",
+		"position": [10560, 12608, 300],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0523": {
+		"name": "Boulder3",
+		"position": [10176, 12224, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0524": {
+		"name": "Boulder3",
+		"position": [10176, 11584, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0525": {
+		"name": "Boulder3",
+		"position": [9792, 10816, 321],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0526": {
+		"name": "Boulder3",
+		"position": [9152, 11072, 336],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0527": {
+		"name": "Boulder3",
+		"position": [9280, 10560, 343],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0528": {
+		"name": "Boulder3",
+		"position": [6080, 14400, 467],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0529": {
+		"name": "Boulder3",
+		"position": [5952, 14144, 468],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0530": {
+		"name": "Boulder3",
+		"position": [4800, 15936, 476],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0531": {
+		"name": "Boulder3",
+		"position": [4544, 15680, 495],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0532": {
+		"name": "Boulder3",
+		"position": [2624, 17216, 495],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0533": {
+		"name": "Boulder3",
+		"position": [2624, 16704, 471],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0534": {
+		"name": "Boulder3",
+		"position": [6208, 12736, 162],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0535": {
+		"name": "Boulder3",
+		"position": [6720, 12224, 188],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0536": {
+		"name": "Boulder3",
+		"position": [9024, 24128, 472],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0537": {
+		"name": "Boulder3",
+		"position": [9792, 22976, 449],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0538": {
+		"name": "Boulder3",
+		"position": [8896, 22592, 336],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0539": {
+		"name": "Boulder3",
+		"position": [7232, 20800, 170],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0540": {
+		"name": "Boulder3",
+		"position": [6592, 21696, 488],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0541": {
+		"name": "Boulder3",
+		"position": [5568, 21568, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0542": {
+		"name": "Boulder3",
+		"position": [5184, 22208, 363],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0543": {
+		"name": "Boulder3",
+		"position": [7104, 19904, 327],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0544": {
+		"name": "Boulder3",
+		"position": [8384, 19648, 197],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0545": {
+		"name": "Boulder3",
+		"position": [7488, 18752, 28],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0546": {
+		"name": "Boulder3",
+		"position": [14912, 17728, 16],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0547": {
+		"name": "Boulder3",
+		"position": [14528, 17088, 179],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0548": {
+		"name": "Boulder3",
+		"position": [14784, 16832, 179],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0549": {
+		"name": "Boulder3",
+		"position": [13632, 18880, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0550": {
+		"name": "Boulder3",
+		"position": [11840, 17728, 460],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0551": {
+		"name": "Boulder3",
+		"position": [11584, 18112, 465],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0552": {
+		"name": "Boulder3",
+		"position": [11200, 17600, 453],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0553": {
+		"name": "Boulder3",
+		"position": [11584, 16960, 468],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0554": {
+		"name": "Boulder3",
+		"position": [11712, 17216, 457],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0555": {
+		"name": "Boulder3",
+		"position": [11712, 15424, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0556": {
+		"name": "Boulder3",
+		"position": [13248, 16960, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0557": {
+		"name": "Boulder3",
+		"position": [12864, 17216, 313],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0558": {
+		"name": "Boulder3",
+		"position": [16960, 23488, 474],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0559": {
+		"name": "Boulder3",
+		"position": [17216, 23232, 465],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0560": {
+		"name": "Boulder3",
+		"position": [15936, 23744, 312],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0561": {
+		"name": "Boulder3",
+		"position": [16064, 22592, 474],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0562": {
+		"name": "Boulder3",
+		"position": [16064, 21312, 485],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0563": {
+		"name": "Boulder3",
+		"position": [16192, 20800, 466],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0564": {
+		"name": "Boulder3",
+		"position": [16704, 20672, 482],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0565": {
+		"name": "Boulder3",
+		"position": [20032, 14912, 472],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0566": {
+		"name": "Boulder3",
+		"position": [19648, 15296, 464],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0567": {
+		"name": "Boulder3",
+		"position": [19136, 15552, 469],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0568": {
+		"name": "Boulder3",
+		"position": [19392, 16448, 210],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0569": {
+		"name": "Boulder3",
+		"position": [18752, 15040, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0570": {
+		"name": "Boulder3",
+		"position": [18624, 14400, 484],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0571": {
+		"name": "Boulder3",
+		"position": [23232, 15552, 330],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0572": {
+		"name": "Boulder3",
+		"position": [23488, 15168, 312],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0573": {
+		"name": "Boulder3",
+		"position": [23104, 14912, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0574": {
+		"name": "Boulder3",
+		"position": [22592, 15680, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0575": {
+		"name": "Boulder3",
+		"position": [22336, 14528, 205],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0576": {
+		"name": "Boulder3",
+		"position": [23232, 14144, 334],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0577": {
+		"name": "Boulder3",
+		"position": [23872, 17600, 492],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0578": {
+		"name": "Boulder3",
+		"position": [23616, 18240, 487],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0579": {
+		"name": "Boulder3",
+		"position": [23488, 18752, 351],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0580": {
+		"name": "Boulder3",
+		"position": [17856, 18880, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0581": {
+		"name": "Boulder3",
+		"position": [16320, 12864, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0582": {
+		"name": "Boulder3",
+		"position": [15296, 12352, 20],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0583": {
+		"name": "Boulder3",
+		"position": [16064, 12224, 174],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0584": {
+		"name": "Boulder3",
+		"position": [17088, 12352, 176],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0585": {
+		"name": "Boulder3",
+		"position": [17472, 11968, 45],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0586": {
+		"name": "Boulder3",
+		"position": [16960, 13888, 320],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0587": {
+		"name": "Boulder3",
+		"position": [16448, 13504, 315],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0588": {
+		"name": "Boulder3",
+		"position": [16064, 14528, 455],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0589": {
+		"name": "Boulder3",
+		"position": [15040, 9280, 169],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0590": {
+		"name": "Boulder3",
+		"position": [14144, 10048, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0591": {
+		"name": "Boulder3",
+		"position": [15168, 9792, 182],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0592": {
+		"name": "Boulder3",
+		"position": [14400, 8768, 190],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0593": {
+		"name": "Boulder3",
+		"position": [14016, 8384, 163],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0594": {
+		"name": "Boulder3",
+		"position": [16192, 8896, 468],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0595": {
+		"name": "Boulder3",
+		"position": [16704, 8768, 479],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0596": {
+		"name": "Boulder3",
+		"position": [15680, 8256, 474],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0597": {
+		"name": "Boulder3",
+		"position": [15552, 7616, 480],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0598": {
+		"name": "Boulder3",
+		"position": [16448, 7872, 471],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0599": {
+		"name": "Boulder3",
+		"position": [14912, 7104, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0600": {
+		"name": "Boulder3",
+		"position": [13760, 7360, 337],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0601": {
+		"name": "Boulder3",
+		"position": [13504, 6976, 338],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0602": {
+		"name": "Boulder3",
+		"position": [13504, 8000, 170],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0603": {
+		"name": "Boulder3",
+		"position": [14400, 6976, 342],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0604": {
+		"name": "Boulder3",
+		"position": [12992, 8128, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0605": {
+		"name": "Boulder3",
+		"position": [12864, 8896, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0606": {
+		"name": "Boulder3",
+		"position": [12480, 9280, 295],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0607": {
+		"name": "Boulder3",
+		"position": [12864, 9920, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0608": {
+		"name": "Boulder3",
+		"position": [12224, 10176, 295],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0609": {
+		"name": "Boulder3",
+		"position": [19904, 6336, 47],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0610": {
+		"name": "Boulder3",
+		"position": [19264, 6208, 293],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0611": {
+		"name": "Boulder3",
+		"position": [18496, 5824, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0612": {
+		"name": "Boulder3",
+		"position": [19008, 5568, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0613": {
+		"name": "Boulder3",
+		"position": [18496, 6976, 495],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0614": {
+		"name": "Boulder3",
+		"position": [17216, 5696, 25],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0615": {
+		"name": "Boulder3",
+		"position": [18240, 6720, 466],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0616": {
+		"name": "Boulder3",
+		"position": [17344, 7232, 470],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0617": {
+		"name": "Boulder3",
+		"position": [17088, 2240, 174],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0618": {
+		"name": "Boulder3",
+		"position": [15936, 2880, 328],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0619": {
+		"name": "Boulder3",
+		"position": [16192, 2624, 336],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0620": {
+		"name": "Boulder3",
+		"position": [16448, 1600, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0621": {
+		"name": "Boulder3",
+		"position": [15424, 3520, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0622": {
+		"name": "Boulder3",
+		"position": [15808, 4160, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0623": {
+		"name": "Boulder3",
+		"position": [15040, 3136, 501],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0624": {
+		"name": "Boulder3",
+		"position": [14272, 2368, 183],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0625": {
+		"name": "Boulder3",
+		"position": [13120, 3008, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0626": {
+		"name": "Boulder3",
+		"position": [13760, 3520, 497],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0627": {
+		"name": "Boulder3",
+		"position": [14272, 3264, 476],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0628": {
+		"name": "Boulder3",
+		"position": [9408, 8640, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0629": {
+		"name": "Boulder3",
+		"position": [9536, 8000, 176],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0630": {
+		"name": "Boulder3",
+		"position": [9280, 9664, 327],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0631": {
+		"name": "Boulder3",
+		"position": [9664, 9792, 344],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0632": {
+		"name": "Boulder3",
+		"position": [10176, 10304, 320],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0633": {
+		"name": "Boulder3",
+		"position": [8128, 9536, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0634": {
+		"name": "Boulder3",
+		"position": [11456, 7360, 462],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0635": {
+		"name": "Boulder3",
+		"position": [12224, 6208, 482],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0636": {
+		"name": "Boulder3",
+		"position": [12096, 7488, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0637": {
+		"name": "Boulder3",
+		"position": [12224, 5056, 491],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0638": {
+		"name": "Boulder3",
+		"position": [11840, 5440, 482],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0639": {
+		"name": "Boulder3",
+		"position": [7104, 4032, 346],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0640": {
+		"name": "Boulder3",
+		"position": [7104, 3136, 331],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0641": {
+		"name": "Boulder3",
+		"position": [7616, 2880, 345],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0642": {
+		"name": "Boulder3",
+		"position": [5952, 4928, 499],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0643": {
+		"name": "Boulder3",
+		"position": [8128, 3904, 32],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0644": {
+		"name": "Boulder3",
+		"position": [8512, 2496, 43],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0645": {
+		"name": "Boulder3",
+		"position": [5952, 5184, 489],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0646": {
+		"name": "Boulder3",
+		"position": [3520, 14016, 335],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0647": {
+		"name": "Boulder3",
+		"position": [3648, 12864, 168],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0648": {
+		"name": "Boulder3",
+		"position": [2752, 14784, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0649": {
+		"name": "Boulder3",
+		"position": [2368, 15040, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0650": {
+		"name": "Boulder3",
+		"position": [4416, 15040, 486],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0651": {
+		"name": "Boulder3",
+		"position": [4800, 14656, 475],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0652": {
+		"name": "Boulder3",
+		"position": [5184, 15296, 489],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0653": {
+		"name": "Boulder3",
+		"position": [10176, 20800, 321],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0654": {
+		"name": "Boulder3",
+		"position": [10432, 20288, 294],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0655": {
+		"name": "Boulder3",
+		"position": [10944, 20032, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0656": {
+		"name": "Boulder3",
+		"position": [8512, 6848, 75],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0657": {
+		"name": "arizonabush4",
+		"position": [9536, 7616, 169],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0658": {
+		"name": "arizonabush4",
+		"position": [9536, 7744, 168],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0659": {
+		"name": "arizonabush4",
+		"position": [10304, 6976, 167],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0660": {
+		"name": "arizonabush4",
+		"position": [10560, 6720, 154],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0661": {
+		"name": "arizonabush4",
+		"position": [10560, 7104, 160],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0662": {
+		"name": "arizonabush4",
+		"position": [9920, 6464, 54],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0663": {
+		"name": "arizonabush4",
+		"position": [9792, 6208, 45],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0664": {
+		"name": "arizonabush4",
+		"position": [9280, 6336, 15],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0665": {
+		"name": "arizonabush4",
+		"position": [8000, 8000, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0666": {
+		"name": "arizonabush4",
+		"position": [7872, 8384, 176],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0667": {
+		"name": "arizonabush4",
+		"position": [8512, 5824, 162],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0668": {
+		"name": "arizonabush4",
+		"position": [8000, 6976, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0669": {
+		"name": "arizonabush4",
+		"position": [8128, 7232, 303],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0670": {
+		"name": "arizonabush4",
+		"position": [10432, 5696, 180],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0671": {
+		"name": "arizonabush4",
+		"position": [5440, 10048, 47],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0672": {
+		"name": "arizonabush4",
+		"position": [5696, 9664, 50],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0673": {
+		"name": "arizonabush4",
+		"position": [5952, 10304, 71],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0674": {
+		"name": "arizonabush4",
+		"position": [5440, 10304, 45],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0675": {
+		"name": "arizonabush4",
+		"position": [12224, 9792, 320],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0676": {
+		"name": "arizonabush4",
+		"position": [13632, 9536, 310],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0677": {
+		"name": "arizonabush4",
+		"position": [14016, 8768, 187],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0678": {
+		"name": "arizonabush4",
+		"position": [6336, 5568, 452],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0679": {
+		"name": "arizonabush4",
+		"position": [6464, 5824, 459],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0680": {
+		"name": "arizonabush4",
+		"position": [6720, 3904, 338],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0681": {
+		"name": "arizonabush4",
+		"position": [5056, 3648, 486],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0682": {
+		"name": "arizonabush4",
+		"position": [4800, 6464, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0683": {
+		"name": "arizonabush4",
+		"position": [5568, 7744, 311],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0684": {
+		"name": "arizonabush4",
+		"position": [5056, 7872, 341],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0685": {
+		"name": "arizonabush4",
+		"position": [5056, 6464, 166],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0686": {
+		"name": "arizonabush4",
+		"position": [3776, 8128, 312],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0687": {
+		"name": "arizonabush4",
+		"position": [3904, 8384, 324],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0688": {
+		"name": "arizonabush4",
+		"position": [3904, 9024, 304],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0689": {
+		"name": "arizonabush4",
+		"position": [5696, 8128, 330],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0690": {
+		"name": "arizonabush4",
+		"position": [5440, 8256, 345],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0691": {
+		"name": "arizonabush4",
+		"position": [5184, 9408, 41],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0692": {
+		"name": "arizonabush4",
+		"position": [1472, 10304, 9],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0693": {
+		"name": "arizonabush4",
+		"position": [1344, 10560, 17],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0694": {
+		"name": "arizonabush4",
+		"position": [5696, 9920, 49],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0695": {
+		"name": "arizonabush4",
+		"position": [5184, 9536, 41],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0696": {
+		"name": "arizonabush4",
+		"position": [3264, 12352, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0697": {
+		"name": "arizonabush4",
+		"position": [2112, 13248, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0698": {
+		"name": "arizonabush4",
+		"position": [5952, 10176, 47],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0699": {
+		"name": "arizonabush4",
+		"position": [7104, 12608, 176],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0700": {
+		"name": "arizonabush4",
+		"position": [7488, 12224, 168],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0701": {
+		"name": "arizonabush4",
+		"position": [7360, 13376, 345],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0702": {
+		"name": "arizonabush4",
+		"position": [7488, 13632, 339],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0703": {
+		"name": "arizonabush4",
+		"position": [7104, 13632, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0704": {
+		"name": "arizonabush4",
+		"position": [3008, 14656, 343],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0705": {
+		"name": "arizonabush4",
+		"position": [5440, 14272, 472],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0706": {
+		"name": "arizonabush4",
+		"position": [4800, 15040, 479],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0707": {
+		"name": "arizonabush4",
+		"position": [5568, 14784, 458],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0708": {
+		"name": "arizonabush4",
+		"position": [5440, 15552, 481],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0709": {
+		"name": "arizonabush4",
+		"position": [1344, 16192, 479],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0710": {
+		"name": "arizonabush4",
+		"position": [1472, 15424, 459],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0711": {
+		"name": "arizonabush4",
+		"position": [1984, 16832, 469],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0712": {
+		"name": "arizonabush4",
+		"position": [6720, 16576, 216],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0713": {
+		"name": "arizonabush4",
+		"position": [4416, 17728, 28],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0714": {
+		"name": "arizonabush4",
+		"position": [7360, 16704, 310],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0715": {
+		"name": "arizonabush4",
+		"position": [7232, 16576, 303],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0716": {
+		"name": "arizonabush4",
+		"position": [6848, 15680, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0717": {
+		"name": "arizonabush4",
+		"position": [6976, 15424, 163],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0718": {
+		"name": "arizonabush4",
+		"position": [8000, 15552, 192],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0719": {
+		"name": "arizonabush4",
+		"position": [8000, 15808, 179],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0720": {
+		"name": "arizonabush4",
+		"position": [8512, 15424, 204],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0721": {
+		"name": "arizonabush4",
+		"position": [6848, 17600, 45],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0722": {
+		"name": "arizonabush4",
+		"position": [6720, 17984, 39],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0723": {
+		"name": "arizonabush4",
+		"position": [7104, 17984, 24],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0724": {
+		"name": "arizonabush4",
+		"position": [7232, 18496, 20],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0725": {
+		"name": "arizonabush4",
+		"position": [8000, 18240, 33],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0726": {
+		"name": "arizonabush4",
+		"position": [8000, 17472, 33],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0727": {
+		"name": "arizonabush4",
+		"position": [8256, 17472, 21],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0728": {
+		"name": "arizonabush4",
+		"position": [7872, 19008, 185],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0729": {
+		"name": "arizonabush4",
+		"position": [8128, 18624, 178],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0730": {
+		"name": "arizonabush4",
+		"position": [9024, 17600, 24],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0731": {
+		"name": "arizonabush4",
+		"position": [9024, 16704, 191],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0732": {
+		"name": "arizonabush4",
+		"position": [9408, 16064, 227],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0733": {
+		"name": "arizonabush4",
+		"position": [8896, 16320, 198],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0734": {
+		"name": "arizonabush4",
+		"position": [9024, 18368, 42],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0735": {
+		"name": "arizonabush4",
+		"position": [7872, 18752, 183],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0736": {
+		"name": "arizonabush4",
+		"position": [9792, 19136, 22],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0737": {
+		"name": "arizonabush4",
+		"position": [9664, 20160, 166],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0738": {
+		"name": "arizonabush4",
+		"position": [9664, 21184, 337],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0739": {
+		"name": "arizonabush4",
+		"position": [8128, 21056, 487],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0740": {
+		"name": "arizonabush4",
+		"position": [8512, 21056, 472],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0741": {
+		"name": "arizonabush4",
+		"position": [8384, 20800, 480],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0742": {
+		"name": "arizonabush4",
+		"position": [7744, 22080, 478],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0743": {
+		"name": "arizonabush4",
+		"position": [7744, 21952, 479],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0744": {
+		"name": "arizonabush4",
+		"position": [4672, 21824, 311],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0745": {
+		"name": "arizonabush4",
+		"position": [10176, 22592, 195],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0746": {
+		"name": "arizonabush4",
+		"position": [11200, 22592, 125],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0747": {
+		"name": "arizonabush4",
+		"position": [11840, 22080, 20],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0748": {
+		"name": "WaterTower",
+		"position": [24768, 11456, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0749": {
+		"name": "arizonabush4",
+		"position": [8000, 23104, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0750": {
+		"name": "arizonabush4",
+		"position": [10688, 20672, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0751": {
+		"name": "arizonabush4",
+		"position": [11328, 19520, 292],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0752": {
+		"name": "arizonabush4",
+		"position": [12736, 19520, 462],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0753": {
+		"name": "arizonabush4",
+		"position": [11200, 18880, 337],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0754": {
+		"name": "arizonabush4",
+		"position": [9920, 19264, 15],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0755": {
+		"name": "arizonabush4",
+		"position": [9024, 16320, 197],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0756": {
+		"name": "arizonabush4",
+		"position": [9408, 15808, 282],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0757": {
+		"name": "arizonabush4",
+		"position": [12096, 15808, 189],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0758": {
+		"name": "arizonabush4",
+		"position": [12096, 16192, 191],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0759": {
+		"name": "arizonabush4",
+		"position": [13248, 16192, 293],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0760": {
+		"name": "arizonabush4",
+		"position": [13632, 16064, 314],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0761": {
+		"name": "arizonabush4",
+		"position": [12992, 16704, 335],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0762": {
+		"name": "arizonabush4",
+		"position": [12736, 17344, 311],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0763": {
+		"name": "arizonabush4",
+		"position": [13248, 17600, 247],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0764": {
+		"name": "arizonabush4",
+		"position": [10048, 16064, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0765": {
+		"name": "arizonabush4",
+		"position": [9920, 14528, 464],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0766": {
+		"name": "arizonabush4",
+		"position": [10560, 14272, 439],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0767": {
+		"name": "arizonabush4",
+		"position": [11456, 14144, 338],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0768": {
+		"name": "arizonabush4",
+		"position": [12608, 15040, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0769": {
+		"name": "arizonabush4",
+		"position": [14016, 17088, 161],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0770": {
+		"name": "arizonabush4",
+		"position": [14656, 16448, 161],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0771": {
+		"name": "arizonabush4",
+		"position": [10944, 16832, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0772": {
+		"name": "arizonabush4",
+		"position": [11328, 17984, 460],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0773": {
+		"name": "arizonabush4",
+		"position": [11072, 17728, 457],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0774": {
+		"name": "arizonabush4",
+		"position": [10304, 16960, 471],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0775": {
+		"name": "arizonabush4",
+		"position": [10048, 15680, 484],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0776": {
+		"name": "arizonabush4",
+		"position": [10176, 15168, 489],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0777": {
+		"name": "arizonabush4",
+		"position": [16704, 21312, 433],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0778": {
+		"name": "arizonabush4",
+		"position": [16704, 20800, 470],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0779": {
+		"name": "arizonabush4",
+		"position": [17344, 21440, 335],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0780": {
+		"name": "arizonabush4",
+		"position": [17600, 21184, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0781": {
+		"name": "arizonabush4",
+		"position": [17856, 20416, 315],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0782": {
+		"name": "arizonabush4",
+		"position": [17856, 20160, 328],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0783": {
+		"name": "arizonabush4",
+		"position": [17728, 19904, 334],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0784": {
+		"name": "arizonabush4",
+		"position": [18240, 20288, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0785": {
+		"name": "arizonabush4",
+		"position": [18240, 19520, 327],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0786": {
+		"name": "arizonabush4",
+		"position": [17600, 21696, 346],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0787": {
+		"name": "arizonabush4",
+		"position": [16704, 22336, 478],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0788": {
+		"name": "arizonabush4",
+		"position": [17088, 22848, 481],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0789": {
+		"name": "arizonabush4",
+		"position": [16320, 21568, 469],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0790": {
+		"name": "arizonabush4",
+		"position": [15296, 21568, 185],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0791": {
+		"name": "arizonabush4",
+		"position": [14912, 21312, 202],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0792": {
+		"name": "arizonabush4",
+		"position": [14912, 21568, 192],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0793": {
+		"name": "arizonabush4",
+		"position": [13888, 20160, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0794": {
+		"name": "arizonabush4",
+		"position": [13760, 19392, 312],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0795": {
+		"name": "arizonabush4",
+		"position": [13376, 20032, 328],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0796": {
+		"name": "arizonabush4",
+		"position": [15296, 18880, 173],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0797": {
+		"name": "arizonabush4",
+		"position": [15168, 18624, 170],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0798": {
+		"name": "arizonabush4",
+		"position": [16576, 18240, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0799": {
+		"name": "arizonabush4",
+		"position": [17344, 18240, 338],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0800": {
+		"name": "arizonabush4",
+		"position": [17088, 18112, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0801": {
+		"name": "arizonabush4",
+		"position": [16064, 16832, 38],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0802": {
+		"name": "arizonabush4",
+		"position": [17216, 16704, 42],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0803": {
+		"name": "arizonabush4",
+		"position": [20672, 21952, 482],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0804": {
+		"name": "arizonabush4",
+		"position": [21440, 20928, 308],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0805": {
+		"name": "arizonabush4",
+		"position": [19904, 20800, 168],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0806": {
+		"name": "arizonabush4",
+		"position": [19648, 21440, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0807": {
+		"name": "arizonabush4",
+		"position": [22976, 19136, 339],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0808": {
+		"name": "arizonabush4",
+		"position": [22464, 18496, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0809": {
+		"name": "arizonabush4",
+		"position": [20160, 18368, 26],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0810": {
+		"name": "arizonabush4",
+		"position": [16704, 14656, 334],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0811": {
+		"name": "arizonabush4",
+		"position": [17216, 15040, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0812": {
+		"name": "arizonabush4",
+		"position": [16576, 14272, 346],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0813": {
+		"name": "arizonabush4",
+		"position": [15936, 13120, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0814": {
+		"name": "arizonabush4",
+		"position": [16576, 12736, 166],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0815": {
+		"name": "arizonabush4",
+		"position": [16832, 12992, 177],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0816": {
+		"name": "arizonabush4",
+		"position": [15808, 12608, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0817": {
+		"name": "arizonabush4",
+		"position": [17472, 12736, 199],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0818": {
+		"name": "arizonabush4",
+		"position": [18240, 13120, 192],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0819": {
+		"name": "arizonabush4",
+		"position": [17984, 12608, 195],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0820": {
+		"name": "arizonabush4",
+		"position": [17984, 13120, 188],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0821": {
+		"name": "arizonabush4",
+		"position": [18368, 12864, 191],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0822": {
+		"name": "arizonabush4",
+		"position": [21824, 15040, 175],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0823": {
+		"name": "arizonabush4",
+		"position": [21952, 15296, 170],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0824": {
+		"name": "arizonabush4",
+		"position": [22464, 14400, 251],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0825": {
+		"name": "arizonabush4",
+		"position": [22976, 14528, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0826": {
+		"name": "arizonabush4",
+		"position": [22720, 15168, 315],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0827": {
+		"name": "arizonabush4",
+		"position": [21696, 15424, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0828": {
+		"name": "arizonabush4",
+		"position": [21056, 14656, 183],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0829": {
+		"name": "arizonabush4",
+		"position": [20800, 13632, 186],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0830": {
+		"name": "arizonabush4",
+		"position": [20928, 13376, 183],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0831": {
+		"name": "arizonabush4",
+		"position": [19904, 13504, 309],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0832": {
+		"name": "arizonabush4",
+		"position": [18240, 14144, 487],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0833": {
+		"name": "arizonabush4",
+		"position": [19776, 13888, 336],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0834": {
+		"name": "arizonabush4",
+		"position": [18880, 15296, 466],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0835": {
+		"name": "arizonabush4",
+		"position": [21568, 16320, 319],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0836": {
+		"name": "arizonabush4",
+		"position": [22208, 16448, 339],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0837": {
+		"name": "arizonabush4",
+		"position": [22464, 16064, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0838": {
+		"name": "arizonabush4",
+		"position": [19776, 17344, 142],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0839": {
+		"name": "arizonabush4",
+		"position": [19904, 16832, 165],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0840": {
+		"name": "arizonabush4",
+		"position": [18752, 16448, 327],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0841": {
+		"name": "arizonabush4",
+		"position": [18624, 15808, 331],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0842": {
+		"name": "arizonabush4",
+		"position": [18112, 13888, 483],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0843": {
+		"name": "arizonabush4",
+		"position": [21312, 14400, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0844": {
+		"name": "arizonabush4",
+		"position": [11840, 6848, 477],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0845": {
+		"name": "arizonabush4",
+		"position": [11840, 7232, 474],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0846": {
+		"name": "arizonabush4",
+		"position": [12352, 8384, 166],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0847": {
+		"name": "arizonabush4",
+		"position": [12096, 9024, 216],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0848": {
+		"name": "arizonabush4",
+		"position": [11328, 9536, 475],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0849": {
+		"name": "arizonabush4",
+		"position": [9920, 9920, 358],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0850": {
+		"name": "arizonabush4",
+		"position": [9536, 10176, 337],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0851": {
+		"name": "arizonabush4",
+		"position": [9920, 10432, 332],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0852": {
+		"name": "arizonabush4",
+		"position": [13632, 8768, 169],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0853": {
+		"name": "arizonabush4",
+		"position": [13376, 8384, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0854": {
+		"name": "arizonabush4",
+		"position": [14016, 8896, 187],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0855": {
+		"name": "arizonabush4",
+		"position": [13888, 7616, 329],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0856": {
+		"name": "arizonabush4",
+		"position": [14912, 5824, 333],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0857": {
+		"name": "arizonabush4",
+		"position": [14144, 6976, 341],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0858": {
+		"name": "arizonabush4",
+		"position": [14144, 7744, 313],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0859": {
+		"name": "arizonabush4",
+		"position": [14912, 7488, 371],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0860": {
+		"name": "arizonabush4",
+		"position": [15168, 6336, 322],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0861": {
+		"name": "arizonabush4",
+		"position": [16320, 6592, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0862": {
+		"name": "arizonabush4",
+		"position": [14912, 7872, 389],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0863": {
+		"name": "arizonabush4",
+		"position": [12736, 4800, 461],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0864": {
+		"name": "arizonabush4",
+		"position": [12864, 4672, 472],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0865": {
+		"name": "arizonabush4",
+		"position": [12096, 4416, 227],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0866": {
+		"name": "arizonabush4",
+		"position": [11968, 3776, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0867": {
+		"name": "arizonabush4",
+		"position": [11968, 3008, 99],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0868": {
+		"name": "arizonabush4",
+		"position": [11328, 2624, 41],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0869": {
+		"name": "arizonabush4",
+		"position": [10304, 2880, 184],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0870": {
+		"name": "arizonabush4",
+		"position": [8640, 2112, 44],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0871": {
+		"name": "arizonabush4",
+		"position": [11072, 1088, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0872": {
+		"name": "arizonabush4",
+		"position": [12352, 704, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0873": {
+		"name": "arizonabush4",
+		"position": [12736, 1344, 339],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0874": {
+		"name": "arizonabush4",
+		"position": [13248, 704, 310],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0875": {
+		"name": "arizonabush4",
+		"position": [15168, 1344, 318],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0876": {
+		"name": "arizonabush4",
+		"position": [14528, 3264, 476],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0877": {
+		"name": "arizonabush4",
+		"position": [15424, 3904, 326],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0878": {
+		"name": "arizonabush4",
+		"position": [15680, 5184, 19],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0879": {
+		"name": "arizonabush4",
+		"position": [13504, 5568, 181],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0880": {
+		"name": "arizonabush4",
+		"position": [17728, 8256, 177],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0881": {
+		"name": "arizonabush4",
+		"position": [17856, 8768, 193],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0882": {
+		"name": "arizonabush4",
+		"position": [18496, 9152, 169],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0883": {
+		"name": "arizonabush4",
+		"position": [19136, 8768, 179],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0884": {
+		"name": "arizonabush4",
+		"position": [20032, 8256, 186],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0885": {
+		"name": "arizonabush4",
+		"position": [20032, 7616, 173],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0886": {
+		"name": "arizonabush4",
+		"position": [19392, 7104, 168],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0887": {
+		"name": "arizonabush4",
+		"position": [19392, 6592, 225],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0888": {
+		"name": "arizonabush4",
+		"position": [17984, 5824, 337],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0889": {
+		"name": "arizonabush4",
+		"position": [19392, 5696, 311],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0890": {
+		"name": "arizonabush4",
+		"position": [17728, 7232, 469],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0891": {
+		"name": "arizonabush4",
+		"position": [17600, 8000, 170],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0892": {
+		"name": "arizonabush4",
+		"position": [16064, 7744, 480],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0893": {
+		"name": "arizonabush4",
+		"position": [16192, 7360, 459],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0894": {
+		"name": "arizonabush4",
+		"position": [22976, 8128, 414],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0895": {
+		"name": "arizonabush4",
+		"position": [23360, 8512, 480],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0896": {
+		"name": "arizonabush4",
+		"position": [22720, 9408, 323],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0897": {
+		"name": "arizonabush4",
+		"position": [23360, 9536, 331],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0898": {
+		"name": "arizonabush4",
+		"position": [21824, 9024, 316],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0899": {
+		"name": "arizonabush4",
+		"position": [23744, 10304, 155],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0900": {
+		"name": "arizonabush4",
+		"position": [20160, 9536, 37],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0901": {
+		"name": "arizonabush4",
+		"position": [19008, 9408, 193],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0902": {
+		"name": "arizonabush4",
+		"position": [10816, 11072, 172],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0903": {
+		"name": "arizonabush4",
+		"position": [12224, 10560, 203],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0904": {
+		"name": "arizonabush4",
+		"position": [9280, 12352, 309],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0905": {
+		"name": "arizonabush4",
+		"position": [9280, 11712, 325],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0906": {
+		"name": "arizonabush4",
+		"position": [9792, 13248, 340],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0907": {
+		"name": "arizonabush4",
+		"position": [8384, 13248, 193],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0908": {
+		"name": "WaterTower",
+		"position": [10560, 704, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0909": {
+		"name": "WaterTower",
+		"position": [9920, 960, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0910": {
+		"name": "WaterTower",
+		"position": [9280, 1088, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0911": {
+		"name": "WaterTower",
+		"position": [576, 12096, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0912": {
+		"name": "WaterTower",
+		"position": [576, 11200, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0913": {
+		"name": "WaterTower",
+		"position": [1088, 9024, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0914": {
+		"name": "WaterTower",
+		"position": [14144, 25024, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0915": {
+		"name": "WaterTower",
+		"position": [13760, 24896, 510],
+		"rotation": [8192, 0, 0]
+	},
+	"feature_0916": {
+		"name": "WaterTower",
+		"position": [24768, 12736, 510],
+		"rotation": [8192, 0, 0]
+	}
+}
