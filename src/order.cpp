@@ -1245,14 +1245,15 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 /** Returns true if the Droid has been ordered to retreat
  *  and is assigned to a group.
  */
-inline bool isRetreatingInGroup(const DROID *psDroid) {
-	if(psDroid->group == UBYTE_MAX)
+inline bool isRetreatingInGroup(const DROID *psDroid)
+{
+	if (psDroid->group == UBYTE_MAX)
 	{
-    return(false);
+    return false;
 	}
 	else
 	{
-	  return(psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTB || psDroid->order.type == DORDER_RTR_SPECIFIED);
+	  return psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTB || psDroid->order.type == DORDER_RTR_SPECIFIED;
 	}
 }
 
@@ -1357,7 +1358,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_MOVE:
 	case DORDER_SCOUT:
-		if(isRetreatingInGroup(psDroid)){
+		if (isRetreatingInGroup(psDroid))
+		{
 			break;
 		}
 		// can't move vtols to blocking tiles
@@ -1378,7 +1380,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_PATROL:
-	  if(isRetreatingInGroup(psDroid)){
+	  if (isRetreatingInGroup(psDroid))
+	  {
 		  break;
 	  }
 		psDroid->order = *psOrder;
@@ -1386,8 +1389,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_RECOVER:
-		if(isRetreatingInGroup(psDroid)){
-      break;
+	  if (isRetreatingInGroup(psDroid))
+	  {
+		  break;
 	  }
 		psDroid->order = *psOrder;
 		actionDroid(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
@@ -1447,7 +1451,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
-	  if(isRetreatingInGroup(psDroid)){
+	  if (isRetreatingInGroup(psDroid))
+		{
 		  break;
 	  }
 		// build a new structure or line of structures
@@ -1459,7 +1464,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_BUILDMODULE:
-	  if(isRetreatingInGroup(psDroid)){
+	  if (isRetreatingInGroup(psDroid))
+		{
 		  break;
 	  }
 		//build a module onto the structure
@@ -1474,7 +1480,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_HELPBUILD:
-	  if(isRetreatingInGroup(psDroid)){
+	  if (isRetreatingInGroup(psDroid))
+		{
 		  break;
 	  }
 		// help to build a structure that is starting to be built
@@ -1488,7 +1495,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? getStatsName(psDroid->order.psStats) : "NULL");
 		break;
 	case DORDER_DEMOLISH:
-		if(isRetreatingInGroup(psDroid)){
+		if (isRetreatingInGroup(psDroid))
+		{
 		  break;
 	  }
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
@@ -1517,7 +1525,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_DROIDREPAIR, psOrder->psObj);
 		break;
 	case DORDER_OBSERVE:
-	  if(isRetreatingInGroup(psDroid)){
+	  if (isRetreatingInGroup(psDroid))
+		{
 		  break;
 	  }
 		// keep an object within sensor view
@@ -1734,7 +1743,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_GUARD:
-	  if(isRetreatingInGroup(psDroid)){
+	  if (isRetreatingInGroup(psDroid))
+		{
 		  break;
 	  }
 		psDroid->order = *psOrder;
@@ -1769,7 +1779,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		break;
 	case DORDER_CIRCLE:
-	  if(isRetreatingInGroup(psDroid)){
+	  if (isRetreatingInGroup(psDroid))
+		{
 		  break;
 	  }
 		if (!isVtolDroid(psDroid))
