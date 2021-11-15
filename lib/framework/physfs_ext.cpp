@@ -169,6 +169,7 @@ int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, i
 	}
 
 	// too many files
+	debug(LOG_SAVE, "found %i files with ext %s, limit is %i", nfiles, extension, fileLimit);
 
 	// build a sorted list of file + save time
 	std::multiset<SaveTimePair, compareTimes> fileTimes;
