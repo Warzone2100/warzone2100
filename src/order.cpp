@@ -1380,7 +1380,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_PATROL:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
@@ -1389,7 +1389,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_RECOVER:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
@@ -1414,9 +1414,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_ATTACK:
 	case DORDER_ATTACKTARGET:
 		if (psDroid->numWeaps == 0
-		    || psDroid->asWeaps[0].nStat == 0
-		    || isTransporter(psDroid)
-			  || isRetreatingInGroup(psDroid))
+			|| psDroid->asWeaps[0].nStat == 0
+			|| isTransporter(psDroid)
+			|| isRetreatingInGroup(psDroid))
 		{
 			break;
 		}
@@ -1451,7 +1451,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
@@ -1464,7 +1464,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_BUILDMODULE:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
@@ -1480,7 +1480,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_HELPBUILD:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
@@ -1525,7 +1525,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_DROIDREPAIR, psOrder->psObj);
 		break;
 	case DORDER_OBSERVE:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
@@ -1743,7 +1743,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_GUARD:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
@@ -1779,7 +1779,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		break;
 	case DORDER_CIRCLE:
-	  if (isRetreatingInGroup(psDroid))
+		if (isRetreatingInGroup(psDroid))
 		{
 		  break;
 		}
