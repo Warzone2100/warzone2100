@@ -8186,11 +8186,11 @@
 		"msgName": "RES_IMORT",
 		"name": "Incendiary Mortar",
 		"requiredResearch": [
-			"R-Wpn-Mortar-Damage03",
+			"R-Wpn-Mortar-Damage02",
 			"R-Wpn-Flame2"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 4800,
+		"researchPower": 150,
 		"resultComponents": [
 			"Mortar-Incendiary"
 		],
