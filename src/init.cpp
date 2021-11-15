@@ -1047,8 +1047,7 @@ void systemShutdown()
 
 	pie_ShutdownRadar();
 	clearLoadedMods();
-	flushConsoleMessages();
-	clearInfoMessages();
+	shutdownConsoleMessages();
 
 	shutdownEffectsSystem();
 	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".

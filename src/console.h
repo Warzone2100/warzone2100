@@ -71,6 +71,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 bool addConsoleMessageDebounced(const char* Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, const DEBOUNCED_MESSAGE & debouncedMessage, bool team = false, UDWORD duration = DEFAULT_CONSOLE_MESSAGE_DURATION);
 void updateConsoleMessages();
 void initConsoleMessages();
+void shutdownConsoleMessages();
 void removeTopConsoleMessage();
 void displayConsoleMessages();
 void displayOldMessages();

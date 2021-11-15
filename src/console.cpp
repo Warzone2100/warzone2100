@@ -157,6 +157,13 @@ void	initConsoleMessages()
 	permitNewConsoleMessages(true);							// Allow new messages
 }
 
+void shutdownConsoleMessages()
+{
+	permitNewConsoleMessages(false);
+	flushConsoleMessages();
+	clearInfoMessages();
+}
+
 void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	if (calcLayoutFunc == nullptr) return;
