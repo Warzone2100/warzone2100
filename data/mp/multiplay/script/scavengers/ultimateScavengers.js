@@ -372,7 +372,7 @@ function buildThingsWithDroid(droid)
             }
         break;
         case 3:
-            var result = findNearest(enumFeature(-1, oilres), droid.x, droid.y, true);
+            var result = findNearest(enumFeature(ALL_PLAYERS, oilres), droid.x, droid.y, true);
             if (result)
             {
                 orderDroidBuild(droid, DORDER_BUILD, derrick, result.x, result.y);
