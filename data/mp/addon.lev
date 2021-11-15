@@ -377,3 +377,9 @@ players 4
 type    14
 dataset MULTI_CAM_2
 game    "multiplay/maps/4c-DustyMaze-FFA.gam"
+
+level   Thales
+players 7
+type    14
+dataset MULTI_CAM_1
+game    "multiplay/maps/7c-Thales.gam"

@@ -61,6 +61,8 @@ data/mp/multiplay/maps/2c-DustyMaze/*
 data/mp/multiplay/maps/4c-DustyMaze-2v2/*
 data/mp/multiplay/maps/4c-DustyMaze-FFA/*
 	- CC0, original work by AbcLmn18
+data/mp/multiplay/maps/7c-Thales/*
+	- CC BY SA 3.0 - original work by montetank
 lib/exceptionhandler/3rdparty/StackWalker.*
 	- BSD 3-Clause License - Copyright (c) 2005 - 2017, Jochen Kalmbach (https://github.com/JochenKalmbach/StackWalker)
 lib/ivis_opengl/3rdparty/stb_image_resize.h
