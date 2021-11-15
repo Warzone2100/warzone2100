@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-10-25 03:06\n"
+"PO-Revision-Date: 2021-11-15 16:39\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -5783,7 +5783,7 @@ msgstr "Il gioco ha configurato la porta (%s) correttamente su (%s)\n"
 
 #: lib/netplay/netplay.cpp:2045
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "Il client non ha potuto riconoscere il cambio d'indice del giocatore"
 
 #: lib/netplay/netplay.cpp:2056
 msgid "Message delivery failure - try again"
@@ -5815,16 +5815,16 @@ msgstr "Impossibile avere risposte della lobby!"
 
 #: lib/netplay/netreplay.cpp:257
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Il formato del file del replay è più recente di quanto questa versione di Warzone 2100 possa supportare."
 
 #: lib/netplay/netreplay.cpp:259
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Versione del Formato del Replay: %u"
 
 #: lib/netplay/netreplay.cpp:260
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Formato del File del Replay Non Supportato"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -5850,7 +5850,7 @@ msgstr "Più giocatori"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Musica del Menu"
 
 #: lib/widget/form.cpp:343
 msgid "(untitled)"
@@ -7871,7 +7871,7 @@ msgstr "Ricerca dei computer completata"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "I sistemi computerizzati sono ora 'isolabili' da NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -7944,13 +7944,13 @@ msgstr "La torretta di Contro-batteria rileva le batterie nemiche a fuoco indire
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1596
 msgid "Crane1"
-msgstr ""
+msgstr "Gru1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1599
 msgid "Crane2"
-msgstr ""
+msgstr "Gru2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8298,7 +8298,7 @@ msgstr "Attacca elettronicamente e interrompe i collegamenti tra le strutture ne
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Le unità di rango Elite e Veteran e le Fabbriche sono protette"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
@@ -9009,7 +9009,7 @@ msgstr "Torre di guardia con lanciafiamme rinforzata"
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2334
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Torre di Guardia con Mitragliatrice Pesante Rinforzata"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9622,7 +9622,7 @@ msgstr "Hellstorm"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2728
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Le unità di rango Eroe e Speciale sono protette"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
