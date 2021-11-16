@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-15 16:39\n"
+"PO-Revision-Date: 2021-11-16 04:46\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -5619,7 +5619,7 @@ msgstr "- costruzione di unità - completamento della ricerca - costruzione di s
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1461
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Sciacalli Definitivi"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1458
@@ -10003,7 +10003,7 @@ msgstr "Cannone ad Iper Velocità"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2995
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Proiettile Iper-Veloce Perforante ad Abbandono d'Involucro con Pinne Stabilizzanti"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -11770,7 +11770,7 @@ msgstr "Circuiti Resistenti a NEXUS Mk3"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4312
 msgid "NEXUS Resistance Circuits Mk4"
-msgstr ""
+msgstr "Circuiti di Resistenza Mk4 NEXUS"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
@@ -12111,7 +12111,7 @@ msgstr "Produce Cyborg"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4524
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Le unità di rango Professionista e Regolare sono protette"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -12898,7 +12898,7 @@ msgstr "Bunker degli Sciacalli"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5048
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Fabbrica di Elicotteri degli Sciacalli"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12939,13 +12939,13 @@ msgstr "Muro orizzontale degli Sciacalli"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5071
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "Torre con MG degli Sciacalli"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
 #: po/custom/fromJson.txt:5074
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "MG Fisso degli Sciacalli"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
@@ -13319,7 +13319,7 @@ msgstr "Torre in acciaio con mitragliatrice doppia"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5306
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Interrompe l'acquisizione di NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -14297,7 +14297,7 @@ msgstr "Mitragliatrice d'assalto per VTOL"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5955
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "Piattaforma di Riarmo VTOL BaBa"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14501,7 +14501,7 @@ msgstr "Lanciatore per VTOL"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6076
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "Mitragliatrice VTOL Sciacalli"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14514,7 +14514,7 @@ msgstr "Mitragliatrice per VTOL"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6083
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "Mini-Razzo VTOL Sciacalli"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -15102,7 +15102,7 @@ msgstr "Imposta il motore gfx"
 
 #: src/clparse.cpp:393
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Usa il debug del backend gfx"
 
 #: src/clparse.cpp:394
 msgid "Set JS backend"
@@ -15114,7 +15114,7 @@ msgstr "Esegui partite automaticamente per testing"
 
 #: src/clparse.cpp:400
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Modalità Headless (supportata solo specificando anche --autogame, --autohost, --skirmish)"
 
 #: src/clparse.cpp:401
 msgid "Immediately save game and quit"
@@ -15146,7 +15146,7 @@ msgstr "ospita automaticamente"
 
 #: src/clparse.cpp:405
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
-msgstr ""
+msgstr "Interroga le valutazioni dall'url del server dato (contenente \"{HASH}\"), ospitando"
 
 #: src/clparse.cpp:405
 msgid "autorating"
@@ -15154,7 +15154,7 @@ msgstr "valutazione automatica"
 
 #: src/clparse.cpp:407
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Allega o crea una finestra della console e mostra l'output della console (solo Windows)"
 
 #: src/clparse.cpp:409
 msgid "Set game server port"
@@ -15166,19 +15166,19 @@ msgstr "porta"
 
 #: src/clparse.cpp:412
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Abilita i comandi slash della lobby (per connettere i client)"
 
 #: src/clparse.cpp:413
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Aggiunge un hash d'identità dell'amministratore della lobby (per i comandi slash)"
 
 #: src/clparse.cpp:413
 msgid "hash string"
-msgstr ""
+msgstr "stringa dell'hash"
 
 #: src/clparse.cpp:414
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Aggiungi una chiave pubblica dell'admin della lobby (per i comandi slash)"
 
 #: src/clparse.cpp:414
 msgid "b64-pub-key"
@@ -15186,15 +15186,15 @@ msgstr ""
 
 #: src/clparse.cpp:415
 msgid "Enable command interface"
-msgstr ""
+msgstr "Abilita l'interfaccia di comando"
 
 #: src/clparse.cpp:415
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:416
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Giocatori minimi necessari per l'avvio automatico della partita"
 
 #: src/clparse.cpp:416
 msgid "startplayers"
@@ -15420,8 +15420,8 @@ msgstr[1] "%u unità assegnate al gruppo %u"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u unità rimosse dal loro gruppo"
+msgstr[1] "%u unità rimosse dal loro gruppo"
 
 #: src/droid.cpp:2001
 #, c-format
@@ -15459,11 +15459,11 @@ msgstr "Collettivo"
 
 #: src/frontend.cpp:177
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "I video della campagna sono mancanti"
 
 #: src/frontend.cpp:178
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Visualizza la nostra FAQ su come installare i video"
 
 #: src/frontend.cpp:198
 msgid "Single Player"
@@ -16476,7 +16476,7 @@ msgstr "Aggiungi al gruppo 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Rimuovi dal Gruppo corrente"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -16979,7 +16979,7 @@ msgstr "Cambia lo stato delle mappature di debug"
 
 #: src/input/keyconfig.cpp:210
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Priorità alle Mappature di Debug"
 
 #: src/input/keyconfig.cpp:211
 msgid "Toggle Level Editor"
@@ -17065,7 +17065,7 @@ msgstr "Energia"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Potenza Al Secondo"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17118,7 +17118,7 @@ msgstr "Impossibile unirsi al gioco"
 
 #: src/integrations/wzdiscordrpc.cpp:350
 msgid "The invite link you have followed specifies a non-default lobby server:"
-msgstr ""
+msgstr "Il link d'invito che hai seguito specifica un server della lobby non predefinito:"
 
 #: src/integrations/wzdiscordrpc.cpp:353
 msgid "Do you wish to trust this lobby server, and continue?"
@@ -17126,7 +17126,7 @@ msgstr "Vuoi fidarti di questo server della lobby e continuare?"
 
 #: src/integrations/wzdiscordrpc.cpp:357
 msgid "Discord: Connect to Untrusted Lobby?"
-msgstr ""
+msgstr "Discord: Connettersi alla Lobby Non Attendibile?"
 
 #: src/integrations/wzdiscordrpc.cpp:359
 #: src/integrations/wzdiscordrpc.cpp:433
@@ -17139,7 +17139,7 @@ msgstr "Il collegamento d'invito che hai seguito specifica una connessione diret
 
 #: src/integrations/wzdiscordrpc.cpp:425
 msgid "It has not been vetted / verified by a lobby server."
-msgstr ""
+msgstr "Non è stato controllato / verificato da un server della lobby."
 
 #: src/integrations/wzdiscordrpc.cpp:427
 msgid "Do you wish to trust this direct connection invite?"
@@ -17163,21 +17163,21 @@ msgstr "Discord: invito non supportato o non valido"
 
 #: src/integrations/wzdiscordrpc.cpp:535
 msgid "Playing: Campaign"
-msgstr ""
+msgstr "Giocando: Campagna"
 
 #: src/integrations/wzdiscordrpc.cpp:560
 msgid "Playing: Challenge"
-msgstr ""
+msgstr "Giocando: Sfida"
 
 #: src/integrations/wzdiscordrpc.cpp:578
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "Giocando: Schermaglia"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:583
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "Giocando: %s Schermaglia"
 
 #: src/integrations/wzdiscordrpc.cpp:586
 #: src/integrations/wzdiscordrpc.cpp:822
@@ -17423,7 +17423,7 @@ msgstr "Imposta ingrandimento del radar a %u"
 
 #: src/keybind.cpp:1213
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Attivando/Disattivando la priorità della mappatura di debug: "
 
 #: src/keybind.cpp:1223
 msgid "Disabling level editor"
@@ -17628,7 +17628,7 @@ msgstr "Il radar mostra l'altitudine"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "<not bound>"
 
 #: src/keyedit.cpp:544
 msgid "KEY MAPPING"
@@ -17661,7 +17661,7 @@ msgstr "Cartella di autosalvataggio (salvataggio manuale non permesso)"
 
 #: src/loadsave.cpp:663
 msgid "cheated"
-msgstr ""
+msgstr "barato"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -17972,11 +17972,11 @@ msgstr "Fai clic per passare a questo slot"
 #: src/multiint.cpp:1981
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "Clicca per prendere lo slot del giocatore %u"
 
 #: src/multiint.cpp:2018
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "Clicca per cambiare a questo slot il giocatore"
 
 #: src/multiint.cpp:2035
 #: src/multiint.cpp:3126
@@ -18051,7 +18051,7 @@ msgstr "L'host ha rifiutato di spostarti a giocatore"
 
 #: src/multiint.cpp:3026
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Impossibile passare a Spettatore"
 
 #: src/multiint.cpp:3054
 msgid "Do you want to spectate?"
@@ -18226,7 +18226,7 @@ msgstr "Cacciato dal gioco"
 
 #: src/multiint.cpp:5028
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Copia Testo negli Appunti"
 
 #: src/multiint.cpp:5117
 msgid "CHAT"
@@ -18263,7 +18263,7 @@ msgstr "L'host sta avviando la partita"
 
 #: src/multiint.cpp:6406
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "L'host ha fornito opzioni non valide"
 
 #: src/multiint.cpp:6640
 msgid "You have been kicked: "
@@ -18448,7 +18448,7 @@ msgstr "Limiti ripristinati ai valori predefiniti"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "L'amministratore ti ha cacciato dalla partita."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18512,7 +18512,7 @@ msgstr "Totale inviati/ricevuti —"
 #: src/multimenu.cpp:1090
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "Traf: %lu/%lu"
 
 #: src/multimenu.cpp:1094
 #, c-format
@@ -18551,19 +18551,19 @@ msgstr "Dati non validi!"
 #: src/multiplay.cpp:1122
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "Cacciando automaticamente il giocatore %s, comando non valido ricevuto: %u"
 
 #: src/multiplay.cpp:1124
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Comando di rete non autorizzato"
 
 #: src/multiplay.cpp:1224
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "REPLAY TERMINATO"
 
 #: src/multiplay.cpp:1225
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Premi ESC per uscire.)"
 
 #: src/multiplay.cpp:1373
 #, c-format
@@ -18845,15 +18845,15 @@ msgstr[1] "%u unità selezionate"
 
 #: src/spectatorwidgets.cpp:523
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Grado dell'Arma"
 
 #: src/spectatorwidgets.cpp:734
 msgid "Power/Rate"
-msgstr ""
+msgstr "Potenza/Frequenza"
 
 #: src/spectatorwidgets.cpp:735
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Potenza Corrente / Potenza Per Secondo"
 
 #: src/spectatorwidgets.cpp:736
 msgid "PowerLost"
@@ -18861,12 +18861,12 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:738
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Armatura Cinetica"
 
 #: src/spectatorwidgets.cpp:738
 #: src/spectatorwidgets.cpp:740
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Carri Armati / Cyborg)"
 
 #: src/structure.cpp:2552
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -19157,7 +19157,7 @@ msgstr "Fai clic sul pulsante qui sotto per ulteriori informazioni su come risol
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(ID dell'Avviso: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
