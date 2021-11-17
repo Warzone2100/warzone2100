@@ -413,7 +413,7 @@ int war_getAutoLagKickSeconds()
 
 void war_setAutoLagKickSeconds(int seconds)
 {
-	seconds = std::min(seconds, 0);
+	seconds = std::max(seconds, 0);
 	if (seconds > 0)
 	{
 		seconds = std::max(seconds, 60);
