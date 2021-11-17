@@ -167,6 +167,8 @@ private:
 			onChange(*this);
 		}
 	}
+
+	int calculateDropdownListScreenPosY() const;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_DROPDOWN_H__
