@@ -104,6 +104,10 @@ void WzOldTitleUI::start()
 		ActivityManager::instance().navigateToMenu("Music Manager");
 		startMusicManager();
 		break;
+	case MULTIPLAY_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Multiplay Options");
+		startMultiplayOptionsMenu();
+		break;
 	case STARTGAME:
 	case QUIT:
 	case LOADSAVEGAME:
@@ -180,6 +184,10 @@ TITLECODE WzOldTitleUI::run()
 
 	case MOUSE_OPTIONS:
 		runMouseOptionsMenu();
+		break;
+
+	case MULTIPLAY_OPTIONS:
+		runMultiplayOptionsMenu();
 		break;
 
 	case QUIT:

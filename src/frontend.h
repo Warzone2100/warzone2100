@@ -46,6 +46,7 @@ enum tMode
 	MOUSE_OPTIONS,          // 16 mouse options menu
 	CAMPAIGNS,              // 17 campaign selector
 	MUSIC_MANAGER,			// 18 music manager
+	MULTIPLAY_OPTIONS,		// 19 multiplay options menu
 };
 
 #define MAX_LEVEL_NAME_SIZE	(256)
@@ -61,6 +62,7 @@ bool runSinglePlayerMenu();
 bool runCampaignSelector();
 bool runMultiPlayerMenu();
 bool runGameOptionsMenu();
+bool runMultiplayOptionsMenu();
 bool runOptionsMenu();
 bool runGraphicsOptionsMenu();
 bool runAudioAndZoomOptionsMenu();
@@ -79,6 +81,7 @@ void startAudioAndZoomOptionsMenu();
 void startVideoOptionsMenu();
 void startMouseOptionsMenu();
 void startGameOptionsMenu();
+void startMultiplayOptionsMenu();
 void refreshCurrentVideoOptionsValues();
 
 void addTopForm(bool wide);
@@ -329,6 +332,18 @@ enum
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
 
 	FRONTEND_MUSICMANAGER   = 27000,	// Music manager menu
+
+	FRONTEND_MULTIPLAYOPTIONS = 28000,	// Multiplayer Options Menu
+	FRONTEND_GAME_PORT,
+	FRONTEND_GAME_PORT_R,
+	FRONTEND_UPNP,
+	FRONTEND_UPNP_R,
+	FRONTEND_INACTIVITY_TIMEOUT,
+	FRONTEND_INACTIVITY_TIMEOUT_DROPDOWN,
+	FRONTEND_LAG_KICK,
+	FRONTEND_LAG_KICK_DROPDOWN,
+	FRONTEND_SPECTATOR_SLOTS,
+	FRONTEND_SPECTATOR_SLOTS_DROPDOWN,
 
 	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 
