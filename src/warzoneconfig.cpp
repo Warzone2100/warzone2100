@@ -66,7 +66,7 @@ struct WARZONE_GLOBALS
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
 	bool disableReplayRecording = false;
-	uint32_t MPinactivityMinutes = 4;
+	uint32_t MPinactivityMinutes = 5;
 	uint8_t MPopenSpectatorSlots = 0;
 };
 
