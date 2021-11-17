@@ -384,7 +384,7 @@ bool loadConfig()
 	game.base = iniGetInteger("base", CAMP_BASE).value();
 	game.alliance = iniGetInteger("alliance", NO_ALLIANCES).value();
 	game.scavengers = iniGetInteger("newScavengers", SCAVENGERS).value();
-	war_setMPInactivityMinutes(iniSectionGetInteger(iniGeneral, "inactivityMinutesMP", war_getMPInactivityMinutes()).value());
+	war_setMPInactivityMinutes(iniGetInteger("inactivityMinutesMP", war_getMPInactivityMinutes()).value());
 	game.inactivityMinutes = war_getMPInactivityMinutes();
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
@@ -604,7 +604,7 @@ bool saveConfig()
 			if (bMultiPlayer && NetPlay.bComms)
 			{
 				iniSetString("gameName", game.name);			//  last hosted game
-				iniSetInteger("inactivityMinutesMP", game.inactivityMinutes);
+				war_setMPInactivityMinutes(game.inactivityMinutes);
 
 				// remember number of spectator slots in MP games
 				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
@@ -622,6 +622,7 @@ bool saveConfig()
 		iniSetString("playerName", (char *)sPlayer);		// player name
 	}
 	iniSetInteger("colourMP", war_getMPcolour());
+	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
 	iniSetString("favoriteStructs", getFavoriteStructs().toUtf8());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetString("jsbackend", to_string(war_getJSBackend()));
