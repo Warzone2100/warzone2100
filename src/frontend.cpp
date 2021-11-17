@@ -695,14 +695,33 @@ void startOptionsMenu()
 	addTopForm(false);
 	addBottomForm();
 
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+	ASSERT_OR_RETURN(, parent != nullptr, "Unable to find FRONTEND_BOTFORM??");
+
+	auto scrollableList = ScrollableListWidget::make();
+
+	auto addTextButton = [scrollableList](UDWORD id, const std::string &txt, unsigned int style)
+	{
+		auto button = makeTextButton(id, txt, style);
+		if (style & WBUT_TXTCENTRE)
+		{
+			button->setGeometry(0, 0, FRONTEND_BUTWIDTH, button->height());
+		}
+		scrollableList->addItem(button);
+	};
+
+	addTextButton(FRONTEND_GAMEOPTIONS, _("Game Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_GRAPHICSOPTIONS, _("Graphics Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_VIDEOOPTIONS, _("Video Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_AUDIO_AND_ZOOMOPTIONS, _("Audio / Zoom Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MOUSEOPTIONS, _("Mouse Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_KEYMAP, _("Key Mappings"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MUSICMANAGER, _("Music Manager"), WBUT_TXTCENTRE);
+
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_POS9Y - FRONTEND_POS2Y);
+	parent->attach(scrollableList);
+
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("OPTIONS"));
-	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X, FRONTEND_POS2Y, _("Game Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_GRAPHICSOPTIONS, FRONTEND_POS3X, FRONTEND_POS3Y, _("Graphics Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_VIDEOOPTIONS, FRONTEND_POS4X, FRONTEND_POS4Y, _("Video Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_AUDIO_AND_ZOOMOPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Audio / Zoom Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_MUSICMANAGER, FRONTEND_POS8X, FRONTEND_POS8Y, _("Music Manager"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Open Configuration Directory"), 0);
 }
