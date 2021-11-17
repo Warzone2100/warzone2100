@@ -93,7 +93,7 @@ void DropdownWidget::run(W_CONTEXT *psContext)
 {
 	if (overlayScreen)
 	{
-		itemsList->setGeometry(screenPosX(), screenPosY() + height(), width(), itemsList->height());
+		itemsList->setGeometry(screenPosX(), calculateDropdownListScreenPosY(), width(), itemsList->height());
 
 		if (keyPressed(KEY_ESC))
 		{
@@ -116,6 +116,24 @@ void DropdownWidget::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 	open();
 }
 
+int DropdownWidget::calculateDropdownListScreenPosY() const
+{
+	int dropDownOverlayPosY = screenPosY() + height();
+	if (dropDownOverlayPosY + itemsList->height() > screenHeight)
+	{
+		// Positioning the dropdown below would cause it to appear partially or fully offscreen
+		// So, instead, position it above
+		dropDownOverlayPosY = screenPosY() - itemsList->height();
+		if (dropDownOverlayPosY < 0)
+		{
+			// Well, this would be off-screen too...
+			// For now: Just position it at the top
+			dropDownOverlayPosY = 0;
+		}
+	}
+	return dropDownOverlayPosY;
+}
+
 void DropdownWidget::open()
 {
 	if (overlayScreen != nullptr) { return; }
@@ -125,7 +143,7 @@ void DropdownWidget::open()
 		{
 			dropdownWidget->overlayScreen = W_SCREEN::make();
 			widgRegisterOverlayScreenOnTopOfScreen(dropdownWidget->overlayScreen, dropdownWidget->screenPointer.lock());
-			dropdownWidget->itemsList->setGeometry(dropdownWidget->screenPosX(), dropdownWidget->screenPosY() + dropdownWidget->height(), dropdownWidget->width(), dropdownWidget->itemsList->height());
+			dropdownWidget->itemsList->setGeometry(dropdownWidget->screenPosX(), dropdownWidget->calculateDropdownListScreenPosY(), dropdownWidget->width(), dropdownWidget->itemsList->height());
 			dropdownWidget->overlayScreen->psForm->attach(dropdownWidget->itemsList);
 			dropdownWidget->overlayScreen->psForm->attach(std::make_shared<DropdownOverlay>([pWeakThis]() { if (auto dropdownWidget = pWeakThis.lock()) { dropdownWidget->close(); } }));
 		}
