@@ -609,7 +609,6 @@ bool saveConfig()
 				// remember number of spectator slots in MP games
 				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
 				war_setMPopenSpectatorSlots(currentSpectatorSlotInfo.totalSpectatorSlots);
-				iniSetInteger("openSpectatorSlotsMP", (int)currentSpectatorSlotInfo.totalSpectatorSlots);
 			}
 			iniSetString("mapName", game.map);				//  map name
 			iniSetString("mapHash", game.hash.toString());          //  map hash
@@ -623,6 +622,7 @@ bool saveConfig()
 	}
 	iniSetInteger("colourMP", war_getMPcolour());
 	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
+	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
 	iniSetString("favoriteStructs", getFavoriteStructs().toUtf8());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetString("jsbackend", to_string(war_getJSBackend()));
