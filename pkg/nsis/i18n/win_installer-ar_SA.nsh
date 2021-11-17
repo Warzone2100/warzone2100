@@ -4,9 +4,9 @@ ${LangFileString} WZWelcomeText_Portable "مرحباً بك في النسخة ا
 
 ${LangFileString} WZWelcomeHomepageLink "قم بزيارة صفحتنا الرئيسية الرسمية على https://wz2100.net للحصول على آخر إصدارٍ من اللعبة."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "هنالك إصدارٌ من Warzone 2001 يدعم معالجات 64 بت.$\r$\nقم بزيارة https://wz2100.net/ للحصول على المزيد من التفاصيل$\r$\n هل تريد المتابعة على أيّ حال وتثبيت إصدار 32 بت؟"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "إنه هذا الإصدار من Wazrone 2001 مخصّصٌ لمعالجات 64 بت.$\r$\n يرجى منك تحميل الإصدار المخصّص لمعالجات 32 بت من على https://wz2100.net/ $\r$\nاضغط موافق لإنهاء عملية التثبيت."
 
 ${LangFileString} WZ_GPL_NEXT "التالي"
 
@@ -31,7 +31,7 @@ ${LangFileString} DESC_SecFMVs_Ger "حمّل وثبّت مقاطع الفيدي�
 ${LangFileString} TEXT_SecNLS "ملفات اللغة"
 ${LangFileString} DESC_SecNLS "الملفات الخاصة باللغات الأخرى المختلفة عن الإنكليزية."
 
-${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
+${LangFileString} TEXT_SecNLS_WinFonts "خطوط Windows"
 ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
