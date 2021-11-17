@@ -21,6 +21,7 @@
 
 import bpy
 import bmesh
+import os
 from .shared import getTexAnimGrp
 
 
@@ -44,8 +45,8 @@ def newTexAnimGroup(ob, poly):
 class Importer():
 
     headers = [
-        'PIE', 'TYPE', 'TEXTURE', 'NORMALMAP', 'SPECULARMAP', 'EVENT', 
-        'LEVELS', 'LEVEL', 'POINTS', 'NORMALS', 'POLYGONS', 'CONNECTORS', 
+        'PIE', 'TYPE', 'TEXTURE', 'NORMALMAP', 'SPECULARMAP', 'EVENT',
+        'LEVELS', 'LEVEL', 'POINTS', 'NORMALS', 'POLYGONS', 'CONNECTORS',
         'ANIMOBJECT', 'SHADOWPOINTS', 'SHADOWPOLYGONS',
     ]
 
@@ -106,7 +107,7 @@ class Importer():
 
                 if reading in ['POINTS', 'SHADOWPOINTS', 'CONNECTORS']:
                     li = convertStrListToNumList(ls)
-                    
+
                     if reading == 'CONNECTORS':
                         result = (li[0] * 0.01, li[1] * 0.01, li[2] * 0.01)
                     else:
@@ -152,7 +153,7 @@ class Importer():
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
 
             armatureObject.data.bones[boneName].use_relative_parent = True
-            
+
             mesh = bpy.data.meshes.new(nameStr)
             mesh.uv_layers.new()
 
@@ -170,7 +171,7 @@ class Importer():
 
             pie_points = level['POINTS']
             pie_polygons = []
-            
+
             for p in level['POLYGONS']:
                 pie_polygons.append((p[2], p[3], p[4]))
 
@@ -198,7 +199,7 @@ class Importer():
                     uvData[L + 0].uv = ((p[5 + m] / n, (-p[6 + m] / n) + 1))
                     uvData[L + 1].uv = ((p[7 + m] / n, (-p[8 + m] / n) + 1))
                     uvData[L + 2].uv = ((p[9 + m] / n, (-p[10 + m] / n) + 1))
-                    
+
             bpy.ops.object.mode_set(mode='EDIT', toggle=False)
             bm = bmesh.from_edit_mesh(mesh)
             faces = bm.faces
@@ -216,10 +217,10 @@ class Importer():
                 else:
                     success = False
                     for jj, tAnimGp in enumerate(meshOb.pie_tex_anim_grps):
-                
-                        if (int(p[5]) == tAnimGp.texAnimImages and 
-                                int(p[6]) == tAnimGp.texAnimRate and 
-                                int(p[7]) == tAnimGp.texAnimWidth and 
+
+                        if (int(p[5]) == tAnimGp.texAnimImages and
+                                int(p[6]) == tAnimGp.texAnimRate and
+                                int(p[7]) == tAnimGp.texAnimWidth and
                                 int(p[8]) == tAnimGp.texAnimHeight):
 
                             layer = getTexAnimGrp(bm, str(jj))
@@ -227,7 +228,7 @@ class Importer():
                             faces[ii][layer] = 1
                             success = True
                             break
-                
+
                     if success is False:
                         newTexAnimGroup(meshOb, p)
                         layer = getTexAnimGrp(
@@ -243,7 +244,7 @@ class Importer():
             if level['SHADOWPOINTS'] and level['SHADOWPOLYGONS']:
 
                 meshOb.pie_object_prop.shadowType = 'CUSTOM'
-            
+
                 shMesh = bpy.data.meshes.new(nameStr + ' Shadow')
                 shMeshOb = bpy.data.objects.new(nameStr + ' Shadow', shMesh)
                 shMeshOb.parent = meshOb
@@ -254,7 +255,7 @@ class Importer():
 
                 sh_points = level['SHADOWPOINTS']
                 sh_polygons = []
-                
+
                 for p in level['SHADOWPOLYGONS']:
                     sh_polygons.append((p[2], p[3], p[4]))
 
@@ -311,7 +312,7 @@ class Importer():
                     self.scene.frame_start = level['ANIMOBJECT'][1][0]
 
                 for key in level['ANIMOBJECT']:
-                    
+
                     if len(key) < 10:
                         meshOb.pie_object_prop.animTime = key[0]
                         meshOb.pie_object_prop.animCycle = key[1]
@@ -373,7 +374,7 @@ class Importer():
     def pie_import_quick(self, scene, pieDir, pieMesh):
         self.scene = scene
 
-        pieParse = self.pie_parse(pieDir + '\\\\' + pieMesh)
+        pieParse = self.pie_parse(os.path.join(pieDir,pieMesh))
 
         self.pie_generateBlenderObjects(pieParse, pieMesh)
 
@@ -383,5 +384,5 @@ class Importer():
         pieParse = self.pie_parse(pieDir)
 
         self.pie_generateBlenderObjects(
-            pieParse, pieDir.rsplit('.', 1)[0].rsplit('\\', 1)[1]
+            pieParse, os.path.splitext(os.path.basename(pieDir))[0]
         )
