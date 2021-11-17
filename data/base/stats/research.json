@@ -126,9 +126,6 @@
 		"requiredResearch": [
 			"R-Struc-CommandRelay"
 		],
-		"requiredStructures": [
-			"A0ComDroidControl"
-		],
 		"researchPoints": 1200,
 		"researchPower": 37,
 		"resultComponents": [
