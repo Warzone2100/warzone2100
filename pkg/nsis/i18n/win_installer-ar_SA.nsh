@@ -32,10 +32,10 @@ ${LangFileString} TEXT_SecNLS "ملفات اللغة"
 ${LangFileString} DESC_SecNLS "الملفات الخاصة باللغات الأخرى المختلفة عن الإنكليزية."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "خطوط Windows"
-${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+${LangFileString} DESC_SecNLS_WinFonts "قم بتضمين مجلد خطوط Windows في مسار البحث. عليك تفعيل هذا الخيار إذا كنت تريد استعمال خطوط مخصّصة في ملف التكوين، أو كنت تواجه مشاكل عند استعمال الخط الأساسي، ولكنه قد يسبب بطء اللعبة عند استعمال نظام Vista أو نسخةٍ أحدث!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} TEXT_SecMSSysLibraries "مكتبات تشغيلٍ مهمة من Microsoft"
+${LangFileString} DESC_SecMSSysLibraries "قم بتحميل وتثبيت (أو تحديث) حُزم Microsoft Visual C++ القابلة لإعادة التوزيع، والتي قد تكون ضروريةً لتشغيل بعض المكوّنات."
 
 ${LangFileString} DLTEXT_Downloading "جارٍ التنزيل"
 ${LangFileString} DLTEXT_SysLibDLFailed "لقد فشلت عملية تحميل واحدةٍ من مكتبات النظام"
