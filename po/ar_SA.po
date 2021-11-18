@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-13 16:23\n"
+"PO-Revision-Date: 2021-11-18 07:27\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "الهدف الرئيسي"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
@@ -1158,7 +1158,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
-msgstr ""
+msgstr "قاعدةٌ للأعداء"
 
 #: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
@@ -1175,7 +1175,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr ""
+msgstr "تصميمٌ جديد"
 
 #: data/base/messages/strings/names.txt:103
 #: data/mp/messages/strings/names.txt:160
@@ -4072,7 +4072,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
-msgstr ""
+msgstr "القواعد التي تمّ تدميرها"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
@@ -9157,7 +9157,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2420
 msgid "HE Rockets"
-msgstr ""
+msgstr "صواريخ شديدة الانفاجر"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
@@ -9599,7 +9599,7 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.Helicopter.name
 #: po/custom/fromJson.txt:2715
 msgid "Helicopter"
-msgstr ""
+msgstr "مروحيّة"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer03-Rot.name
@@ -12975,7 +12975,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaBusCan.name
 #: po/custom/fromJson.txt:5096
 msgid "School Bus"
-msgstr ""
+msgstr "حافلة مدرسة"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body8MBT.name
@@ -16570,7 +16570,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:105
 msgid "Move Camera Down"
-msgstr ""
+msgstr "حرّك الكاميرا للأسفل"
 
 #: src/input/keyconfig.cpp:106
 msgid "Move Camera Right"
@@ -16578,7 +16578,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:107
 msgid "Move Camera Left"
-msgstr ""
+msgstr "حرّك الكاميرا لليسار"
 
 #: src/input/keyconfig.cpp:108
 msgid "Snap View to North"
@@ -17067,7 +17067,7 @@ msgstr ""
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "الطاقة المولّدة في الثانية"
 
 #: src/intdisplay.cpp:288
 #, c-format
