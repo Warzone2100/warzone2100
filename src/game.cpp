@@ -3614,7 +3614,7 @@ static bool gameLoad(const char *fileName)
 	GAME_SAVEHEADER fileHeader = {};
 	auto gamJsonSave = readGamJson(fileName);
 	debug(LOG_SAVEGAME, "loading %s", fileName);
-	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
+	PHYSFS_file *fileHandle = openLoadFile(fileName, false);
 	if (!gamJsonSave.has_value() && fileHandle)
 	{
 		// haven't converted .gam to .json yet!
