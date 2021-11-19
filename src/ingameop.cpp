@@ -437,6 +437,17 @@ static void ProcessOptionFinished()
 
 void intCloseInGameOptionsNoAnim()
 {
+	if (isKeyMapEditorUp)
+	{
+		runInGameKeyMapEditor(gInputManager, gKeyFuncConfig, KM_RETURN);
+	}
+	isKeyMapEditorUp = false;
+	if (isMusicManagerUp)
+	{
+		runInGameMusicManager(MM_RETURN, gInputManager);
+	}
+	isMusicManagerUp = false;
+
 	if (NetPlay.isHost)
 	{
 		widgDelete(psWScreen, INTINGAMEPOPUP);
@@ -541,6 +552,7 @@ void intReopenMenuWithoutUnPausing()
 		widgDelete(psWScreen, INTINGAMEPOPUP);
 	}
 	widgDelete(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
 	intAddInGameOptions();
 }
 
@@ -553,6 +565,7 @@ static bool startIGOptionsMenu()
 	isMouseOptionsUp = false;
 	isKeyMapEditorUp = false;
 	isMusicManagerUp = false;
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
 	isInGameConfirmQuitUp = false;
 
 	// add form
