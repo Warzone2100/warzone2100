@@ -3907,14 +3907,16 @@ static UDWORD getCampaignV(PHYSFS_file *fileHandle, unsigned int version, nonstd
 // -----------------------------------------------------------------------------------------
 // Returns the campaign number  --- apparently this is does alot less than it look like
 /// it now does even less than it looks like on the psx ... cause its pc only
+/// 2021-11: This appears to be useless, as scripts set the campaign number... Probably can & should remove this completely?
 UDWORD getCampaign(const char *fileName)
 {
 	GAME_SAVEHEADER fileHeader;
 	auto gamJson = readGamJson(fileName);
-	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
+	PHYSFS_file *fileHandle = openLoadFile(fileName, false);
 	if (!fileHandle)
 	{
-		// Failure to open the file is a failure to load the specified savegame
+		// Failure to open the file *may NOT be* a failure to load the specified savegame
+		// TODO: If this really is needed, we need to add the new JSON format parsing here... but this whole function appears to be useless??
 		return false;
 	}
 
