@@ -13,7 +13,7 @@ const CRANE_WEAP = "scavCrane";
 
 
 const derrick = "A0ResourceExtractor";
-const factory = "A0BaBaFactory";
+const factoryBaba = "A0BaBaFactory";
 const vtolfac = "A0BaBaVtolFactory";
 const gen = "A0BaBaPowerGenerator";
 const oilres = "OilResource";
@@ -81,6 +81,7 @@ const vtolTemplates = [
 var globalDefendGroup; // tanks that defend all bases
 var needToPickGroup; // a group
 var baseInfo = [];
+const BASE_FIND_NEAREST = "Base"; //avoid passing a giant baseInfo to findNearest()
 
 // unit limit constant
 function atLimits()
@@ -200,6 +201,11 @@ function constructBaseInfo(factory)
 
 function findNearest(list, x, y, flag)
 {
+    if (typeof list === "string" && list === BASE_FIND_NEAREST)
+    {
+        list = baseInfo;
+    }
+
     var minDist = Infinity, minIdx;
     for (var i = 0, len = list.length; i < len; ++i)
     {
@@ -235,7 +241,7 @@ function reviseGroups()
 
 function addDroidToSomeGroup(droid)
 {
-    var base = findNearest(baseInfo, droid.x, droid.y, true);
+    var base = findNearest(BASE_FIND_NEAREST, droid.x, droid.y, true);
     if (!base)
     {
         return false;
@@ -335,28 +341,16 @@ function buildTower(droid)
     return buildStructure(droid, defenses[random(defenses.length)]);
 }
 
-function establishBase(droid)
-{
-    if (buildStructure(droid, factory))
-    {
-        baseInfo.push(constructBaseInfo(factory));
-        groupAddDroid(baseInfo[baseInfo.length - 1].builderGroup, droid);
-        return true;
-    }
-
-    return false;
-}
-
 function buildThingsWithDroid(droid)
 {
-    const MAX_FACTORY_COUNT = 30;
+    const MAX_FACTORY_COUNT = 200;
 
     switch (random(7))
     {
         case 0:
-            if ((countStruct(factory) < MAX_FACTORY_COUNT) && ((5 * countStruct(factory)) < countStruct(derrick)) || (playerPower(me) > 500))
+            if ((countStruct(factoryBaba) < MAX_FACTORY_COUNT) && (((5 * countStruct(factoryBaba)) < countStruct(derrick)) || (playerPower(me) > 500)))
             {
-                establishBase(droid);
+                buildStructure(droid, factoryBaba);
             }
         break;
         case 1:
@@ -366,7 +360,7 @@ function buildThingsWithDroid(droid)
             }
         break;
         case 2:
-            if (helicoptersAreAllowed() && (4 * countStruct(vtolfac)) < countStruct(factory))
+            if (helicoptersAreAllowed() && (4 * countStruct(vtolfac)) < countStruct(factoryBaba))
             {
                 buildStructure(droid, vtolfac);
             }
@@ -514,7 +508,7 @@ function produceThings()
         return;
     }
 
-    var list = enumStruct(me, factory).concat(enumStruct(me, vtolfac));
+    var list = enumStruct(me, factoryBaba).concat(enumStruct(me, vtolfac));
     for (var i = 0, len = list.length; i < len; ++i)
     {
         var fac = list[i];
@@ -689,7 +683,7 @@ function eventAttacked(victim, attacker)
 
     if (victim.type === STRUCTURE)
     {
-        var base = findNearest(baseInfo, victim.x, victim.y, true);
+        var base = findNearest(BASE_FIND_NEAREST, victim.x, victim.y, true);
         if (!base)
         {
             return;
@@ -730,6 +724,12 @@ function eventStructureBuilt(structure, droid)
 {
     if (structure.stattype === FACTORY)
     {
+        baseInfo.push(constructBaseInfo(structure));
+        if (droid)
+        {
+            groupAddDroid(baseInfo[baseInfo.length - 1].builderGroup, droid);
+        }
+
         if (!produceCrane(structure))
         {
             produceDroid(structure);
@@ -791,7 +791,7 @@ function cleanupBaseInfo()
             var def = enumGroup(base.defendGroup);
             var con = enumGroup(base.builderGroup);
             var cop = enumGroup(base.helicopterAttackers);
-            units.concat(atk).concat(nex).concat(def).concat(con).concat(cop);
+            units = atk.concat(nex).concat(def).concat(con).concat(cop);
             baseInfo.splice(i, 1);
             break;
         }
@@ -806,7 +806,7 @@ function cleanupBaseInfo()
 
 function eventStartLevel()
 {
-    var factories = enumStruct(me, factory);
+    var factories = enumStruct(me, factoryBaba);
     for (var i = 0, len = factories.length; i < len; ++i)
     {
         var fac = factories[i];
@@ -827,5 +827,5 @@ function eventStartLevel()
     setTimer("buildThings", 900);
     setTimer("groundAttackStuff", 1200);
     setTimer("helicopterAttack", 2900);
-    //setTimer("cleanupBaseInfo", 4000);
+    setTimer("cleanupBaseInfo", 30000);
 }
