@@ -2999,7 +2999,21 @@ bool VkRoot::createLogicalDevice()
 		.setQueueCreateInfoCount(static_cast<uint32_t>(queueCreateInfos.size()))
 		.setPQueueCreateInfos(queueCreateInfos.data());
 
-	dev = physicalDevice.createDevice(deviceCreateInfo, nullptr, vkDynLoader);
+	try {
+		dev = physicalDevice.createDevice(deviceCreateInfo, nullptr, vkDynLoader);
+	}
+	catch (vk::SystemError& e)
+	{
+		debug(LOG_ERROR, "vk::PhysicalDevice::createDevice: failed with error: %s", e.what());
+		// TODO: Any cleanup here?
+		return false;
+	}
+	catch (std::exception& e)
+	{
+		debug(LOG_ERROR, "vk::PhysicalDevice::createDevice: failed with unexpected exception: %s", e.what());
+		// TODO: Any cleanup here?
+		return false;
+	}
 
 	if(!dev)
 	{
