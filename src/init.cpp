@@ -1043,6 +1043,11 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 //
 void systemShutdown()
 {
+	if (bLoadSaveUp)
+	{
+		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
+	}
+
 	seqReleaseAll();
 
 	pie_ShutdownRadar();
