@@ -1113,7 +1113,7 @@
 	"CannonSuper": {
 		"buildPoints": 2000,
 		"buildPower": 800,
-		"damage": 380,
+		"damage": 320,
 		"effectSize": 100,
 		"explosionWav": "lrgexpl.ogg",
 		"faceInFlight": 1,
@@ -1139,7 +1139,7 @@
 		"name": "Cannon Fortress",
 		"numExplosions": 1,
 		"radius": 256,
-		"radiusDamage": 260,
+		"radiusDamage": 160,
 		"recoilValue": 150,
 		"shortHit": 80,
 		"shortRange": 128,
