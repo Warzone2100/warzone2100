@@ -51,6 +51,7 @@
 #include <unordered_set>
 #include <deque>
 
+static	bool	bWidgetsInitialized = false;
 static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
@@ -134,6 +135,7 @@ static inline void _widgDebugAssertIfRunningScreen(const char *function)
 /* Initialise the widget module */
 bool widgInitialise()
 {
+	bWidgetsInitialized = true;
 	tipInitialise();
 	return true;
 }
@@ -169,6 +171,7 @@ void widgShutDown(void)
 		ASSERT(debugLiveWidgets.empty(), "There are %zu widgets that were not cleaned up.", debugLiveWidgets.size());
 	}
 #endif
+	bWidgetsInitialized = false;
 }
 
 void widgScheduleTask(std::function<void ()> task)
@@ -602,7 +605,10 @@ W_SCREEN::~W_SCREEN()
 	if (auto focusedWidget = psFocus.lock())
 	{
 		// must trigger a resignation of focus
-		focusedWidget->focusLost();
+		if (bWidgetsInitialized) // do not call focusLost if widgets have already shutdown / are not initialized
+		{
+			focusedWidget->focusLost();
+		}
 	}
 	psFocus.reset();
 }
@@ -1441,7 +1447,10 @@ void W_SCREEN::setFocus(const std::shared_ptr<WIDGET> &widget)
 {
 	if (auto locked = psFocus.lock())
 	{
-		locked->focusLost();
+		if (bWidgetsInitialized) // do not call focusLost if widgets have already shutdown / are not initialized
+		{
+			locked->focusLost();
+		}
 	}
 	psFocus = widget;
 }
