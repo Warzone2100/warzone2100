@@ -1981,7 +1981,7 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_MOVETODROIDREPAIR:
 		{
 			BASE_OBJECT* actionTargetObj = psDroid->psActionTarget[0];
-			ASSERT_OR_RETURN(, actionTargetObj->type == OBJ_DROID, "unexpected repair target");
+			ASSERT_OR_RETURN(, actionTargetObj != nullptr && actionTargetObj->type == OBJ_DROID, "unexpected repair target");
 			const DROID* actionTarget = (const DROID *) actionTargetObj;
 			if (actionTarget->body == actionTarget->originalBody)
 			{
