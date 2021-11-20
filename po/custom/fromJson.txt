@@ -551,13 +551,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-_("Armed with Cyborg Assault Gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 _("Armed with Cyborg assault gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+_("Armed with Cyborg Assault Gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -4276,6 +4276,9 @@ _("NEXUS CWall")
 // data/mp/messages/resmessages3.json: $.RES_V_B10.text[0]
 _("NEXUS Heavy Body")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
+_("NEXUS Immunization System")  
+// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
 _("NEXUS Intruder Program analyzed")  
@@ -4307,9 +4310,6 @@ _("NEXUS Resistance Circuits Mk2")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
 _("NEXUS Resistance Circuits Mk3")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
-_("NEXUS Resistance Circuits Mk4")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
 _("NEXUS Resistance Circuits")  

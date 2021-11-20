@@ -357,6 +357,7 @@ lib/wzmaplib/src/map_terrain_types.cpp
 po/custom/fromJson.txt
 po/custom/mac-infoplist.txt
 po/custom/warzone2100.desktop.txt
+src/3rdparty/physfs_memoryio.cpp
 src/3rdparty/propertymatcher.cpp
 src/action.cpp
 src/activity.cpp
