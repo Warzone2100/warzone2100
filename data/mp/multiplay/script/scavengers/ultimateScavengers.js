@@ -166,8 +166,8 @@ function mapLimits(x, y, num1, num2, xOffset, yOffset)
 //Return a closeby enemy object. Will be undefined if none.
 function rangeStep(obj, visibility)
 {
-    const MAX_TILE_LIMIT = 260;
-    const STEP = 5;
+    const MAX_TILE_LIMIT = 250;
+    const STEP = 25;
     var target;
 
     for (var i = 0; i <= MAX_TILE_LIMIT; i += STEP)
@@ -343,7 +343,7 @@ function buildTower(droid)
 
 function buildThingsWithDroid(droid)
 {
-    const MAX_FACTORY_COUNT = 200;
+    const MAX_FACTORY_COUNT = 100;
 
     switch (random(7))
     {
@@ -800,8 +800,10 @@ function cleanupBaseInfo()
     for (var i = 0, len = units.length; i < len; ++i)
     {
         var droid = units[i];
-        eventDroidBuilt(droid, null);
+        groupAddDroid(needToPickGroup, droid);
     }
+
+    reviseGroups();
 }
 
 function eventStartLevel()
@@ -827,5 +829,5 @@ function eventStartLevel()
     setTimer("buildThings", 900);
     setTimer("groundAttackStuff", 1200);
     setTimer("helicopterAttack", 2900);
-    setTimer("cleanupBaseInfo", 30000);
+    setTimer("cleanupBaseInfo", 8000);
 }
