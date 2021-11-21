@@ -2583,12 +2583,12 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time))
 //--
 wzapi::no_return_value wzapi::completeResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player, optional<bool> _forceResearch))
 {
+	int player = _player.value_or(context.player());
+	SCRIPT_ASSERT_PLAYER({}, context, player);
+
 	RESEARCH *psResearch = ::getResearch(researchName.c_str());
 	SCRIPT_ASSERT({}, context, psResearch, "No such research %s for player %d", researchName.c_str(), player);
 	SCRIPT_ASSERT({}, context, psResearch->index < asResearch.size(), "Research index out of bounds");
-
-	int player = _player.value_or(context.player());
-	SCRIPT_ASSERT_PLAYER({}, context, player);
 
 	bool forceResearch = _forceResearch.value_or(false);
 	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
@@ -2643,11 +2643,11 @@ wzapi::no_return_value wzapi::completeAllResearch(WZAPI_PARAMS(optional<int> _pl
 //--
 bool wzapi::enableResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player))
 {
-	RESEARCH *psResearch = ::getResearch(researchName.c_str());
-	SCRIPT_ASSERT(false, context, psResearch, "No such research %s for player %d", researchName.c_str(), player);
-
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(false, context, player);
+
+	RESEARCH *psResearch = ::getResearch(researchName.c_str());
+	SCRIPT_ASSERT(false, context, psResearch, "No such research %s for player %d", researchName.c_str(), player);
 
 	if (!::enableResearch(psResearch, player))
 	{
