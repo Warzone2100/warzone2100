@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-10-24 22:31+0000\n"
-"PO-Revision-Date: 2021-11-08 17:15\n"
+"POT-Creation-Date: 2021-11-20 22:25+0000\n"
+"PO-Revision-Date: 2021-11-21 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -1848,7 +1848,7 @@ msgstr "Необхідна Фабрика Кіборгів для виробни
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:556
+#: po/custom/fromJson.txt:560
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Кіборг озброєний Штурмовим Кулеметом"
 
@@ -4170,8 +4170,8 @@ msgstr "Командири – спочатку командири виробн�
 #: data/base/script/tutorial.js:251
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/script/rules/reticule.js:111
-#: src/challenge.cpp:240
-#: src/hci.cpp:2203
+#: src/challenge.cpp:252
+#: src/hci.cpp:2209
 #: src/hci/objects_stats.cpp:235
 #: src/hci/objects_stats.cpp:320
 #: src/intelmap.cpp:357
@@ -4179,7 +4179,7 @@ msgstr "Командири – спочатку командири виробн�
 #: src/loadsave.cpp:295
 #: src/multimenu.cpp:422
 #: src/multimenu.cpp:1156
-#: src/spectatorwidgets.cpp:704
+#: src/spectatorwidgets.cpp:774
 #: src/transporter.cpp:202
 #: src/transporter.cpp:263
 #: src/transporter.cpp:551
@@ -5601,7 +5601,7 @@ msgstr "Командна Башта IV"
 #: data/mp/multiplay/script/rules/endconditions.js:237
 #: src/configuration.cpp:374
 #: src/multistat.cpp:310
-#: src/spectatorwidgets.cpp:733
+#: src/spectatorwidgets.cpp:803
 msgid "Player"
 msgstr "Гравець"
 
@@ -5618,68 +5618,68 @@ msgid "- unit building - research completion - construction of base structures (
 msgstr "- будівництво блоків - завершення досліджень - будівництво базових споруд (заводів, електростанцій, лабораторій, модулів та нафтових вишок) - нанесення шкоди"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
-#: src/multiint.cpp:1461
+#: src/multiint.cpp:1463
 msgid "Ultimate Scavengers"
 msgstr "Кінцеві сміттярі"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
-#: src/multiint.cpp:1458
-#: src/multiint.cpp:1462
+#: src/multiint.cpp:1460
+#: src/multiint.cpp:1464
 msgid "Scavengers"
 msgstr "Звалищники"
 
 #: data/mp/multiplay/script/rules/printsettings.js:9
-#: src/multiint.cpp:1464
+#: src/multiint.cpp:1466
 msgid "No Scavengers"
 msgstr "Без Звалищників"
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
-#: src/multiint.cpp:1472
+#: src/multiint.cpp:1474
 msgid "No Alliances"
 msgstr "Без Союзів"
 
 #: data/mp/multiplay/script/rules/printsettings.js:16
-#: src/multiint.cpp:1473
+#: src/multiint.cpp:1475
 msgid "Allow Alliances"
 msgstr "Союзи Дозволені"
 
 #: data/mp/multiplay/script/rules/printsettings.js:17
-#: src/multiint.cpp:1475
+#: src/multiint.cpp:1477
 msgid "Locked Teams"
 msgstr "Закріплені Команди"
 
 #: data/mp/multiplay/script/rules/printsettings.js:18
-#: src/multiint.cpp:1474
+#: src/multiint.cpp:1476
 msgid "Locked Teams, No Shared Research"
 msgstr "Закриті групи, спільні дослідження не проводяться"
 
 #: data/mp/multiplay/script/rules/printsettings.js:24
-#: src/multiint.cpp:1483
+#: src/multiint.cpp:1485
 msgid "Low Power Levels"
 msgstr "Низькі Рівні Енергії"
 
 #: data/mp/multiplay/script/rules/printsettings.js:25
-#: src/multiint.cpp:1484
+#: src/multiint.cpp:1486
 msgid "Medium Power Levels"
 msgstr "Середні Рівні Енергії"
 
 #: data/mp/multiplay/script/rules/printsettings.js:26
-#: src/multiint.cpp:1485
+#: src/multiint.cpp:1487
 msgid "High Power Levels"
 msgstr "Високі Рівні Енергії"
 
 #: data/mp/multiplay/script/rules/printsettings.js:32
-#: src/multiint.cpp:1493
+#: src/multiint.cpp:1495
 msgid "Start with No Bases"
 msgstr "Старт без Баз"
 
 #: data/mp/multiplay/script/rules/printsettings.js:33
-#: src/multiint.cpp:1494
+#: src/multiint.cpp:1496
 msgid "Start with Bases"
 msgstr "Старт з Базами"
 
 #: data/mp/multiplay/script/rules/printsettings.js:34
-#: src/multiint.cpp:1495
+#: src/multiint.cpp:1497
 msgid "Start with Advanced Bases"
 msgstr "Старт з Розвиненими Базами"
 
@@ -5764,41 +5764,41 @@ msgstr "Будь-коли, великий бос!"
 msgid "System locale"
 msgstr "Мова локалізації системи"
 
-#: lib/netplay/netplay.cpp:1349
+#: lib/netplay/netplay.cpp:1428
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr "Не вдалося відкрити необхідний порт (%s) на (%s)"
 
-#: lib/netplay/netplay.cpp:1353
+#: lib/netplay/netplay.cpp:1432
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr "Ви повинні вручну налаштувати свій маршрутизатор і брандмауер відкрити порт 2100, перш ніж ви зможете приймати ігри."
 
-#: lib/netplay/netplay.cpp:1363
+#: lib/netplay/netplay.cpp:1442
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr "Гра налаштована порт (%s) правильно на (%s)\n"
 "Ваш зовнішній IP є %s"
 
-#: lib/netplay/netplay.cpp:2045
+#: lib/netplay/netplay.cpp:2130
 msgid "Client failed to ack player index swap"
 msgstr "Клієнт не зміг отримати підкачування індексу гравця"
 
-#: lib/netplay/netplay.cpp:2056
+#: lib/netplay/netplay.cpp:2141
 msgid "Message delivery failure - try again"
 msgstr "Збій доставки повідомлення - повторіть спробу"
 
-#: lib/netplay/netplay.cpp:2650
+#: lib/netplay/netplay.cpp:2735
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr "Не знайдено жодного пристрою UPnP. Змініть маршрутизатор/брандмауер, щоб відкрити порт 2100!"
 
-#: lib/netplay/netplay.cpp:3267
+#: lib/netplay/netplay.cpp:3348
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Неможливо отримати ім'я основного сервера (%s)!"
 
-#: lib/netplay/netplay.cpp:3292
+#: lib/netplay/netplay.cpp:3373
 #, c-format
 msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
@@ -5809,30 +5809,34 @@ msgstr "Помилка підключення до сервера лобів: %s
 "Якщо ви використовуєте маршрутизатор, налаштуйте його за допомогою UPnP\n"
 " або переслати порт до системи."
 
-#: lib/netplay/netplay.cpp:4186
+#: lib/netplay/netplay.cpp:4274
 msgid "Failed to get a lobby response!"
 msgstr "Не вдалося отримати відповідь у лобі!"
 
-#: lib/netplay/netreplay.cpp:257
+#: lib/netplay/netreplay.cpp:322
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Формат файлу відтворення є новішим, ніж може підтримувати ця версія Warzone 2100."
 
-#: lib/netplay/netreplay.cpp:259
+#: lib/netplay/netreplay.cpp:324
 #, c-format
 msgid "Replay Format Version: %u"
 msgstr "Повтор формат версії: %u"
 
-#: lib/netplay/netreplay.cpp:260
+#: lib/netplay/netreplay.cpp:325
 msgid "Replay File Format Unsupported"
 msgstr "Формат файлу повтору не підтримується"
+
+#: lib/netplay/nettypes.cpp:883
+msgid "Unable to load replay: The replay file is incomplete or corrupted."
+msgstr ""
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
 msgstr "Меню"
 
 #: lib/sound/cdaudio.cpp:63
-#: src/frontend.cpp:2024
-#: src/frontend.cpp:2068
+#: src/frontend.cpp:2048
+#: src/frontend.cpp:2092
 msgid "Campaign"
 msgstr "Компанія."
 
@@ -6455,7 +6459,7 @@ msgstr "ПУ 'Архангел'"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:560
+#: po/custom/fromJson.txt:556
 msgid "Armed with Cyborg assault gun"
 msgstr "Кіборг озброєний Штурмовим Кулеметом"
 
@@ -11708,69 +11712,69 @@ msgid "NEXUS Heavy Body"
 msgstr "Важкий Корпус 'НЕКСУСу'"
 
 #. TRANSLATORS:
+#. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
+#: po/custom/fromJson.txt:4280
+msgid "NEXUS Immunization System"
+msgstr ""
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
-#: po/custom/fromJson.txt:4281
+#: po/custom/fromJson.txt:4284
 msgid "NEXUS Intruder Program analyzed"
 msgstr "Проведено аналіз Вірусної Програми НЕКСУС"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance.name
-#: po/custom/fromJson.txt:4284
+#: po/custom/fromJson.txt:4287
 msgid "NEXUS Intruder Program"
 msgstr "Вірусна Програма НЕКСУС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B03.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_V_B03.text[0]
-#: po/custom/fromJson.txt:4288
+#: po/custom/fromJson.txt:4291
 msgid "NEXUS Light Body"
 msgstr "Легкий Корпус 'НЕКСУСу'"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTower.name
 #. data/mp/stats/structure.json: $.Sys-SpyTower.name
-#: po/custom/fromJson.txt:4292
+#: po/custom/fromJson.txt:4295
 msgid "Nexus Link Tower"
 msgstr "Вежа зі Зв'язком з НЕКСУСом"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTurret.name
 #. data/mp/stats/weapons.json: $.SpyTurret01.name
-#: po/custom/fromJson.txt:4296
+#: po/custom/fromJson.txt:4299
 msgid "Nexus Link Turret"
 msgstr "Башта Зв'язку з НЕКСУСом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B07.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_V_B07.text[0]
-#: po/custom/fromJson.txt:4300
+#: po/custom/fromJson.txt:4303
 msgid "NEXUS Medium Body"
 msgstr "Середній Корпус 'НЕКСУСу'"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NX-ANTI-SATSite.name
-#: po/custom/fromJson.txt:4303
+#: po/custom/fromJson.txt:4306
 msgid "Nexus Missile Silo"
 msgstr "Ракетна шахта Нексус"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
-#: po/custom/fromJson.txt:4306
+#: po/custom/fromJson.txt:4309
 msgid "NEXUS Resistance Circuits Mk2"
 msgstr "Мікросхеми Стійкі до НЕКСУСу Мк2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
-#: po/custom/fromJson.txt:4309
+#: po/custom/fromJson.txt:4312
 msgid "NEXUS Resistance Circuits Mk3"
 msgstr "Мікросхеми Стійкі до НЕКСУСу Мк3"
-
-#. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
-#: po/custom/fromJson.txt:4312
-msgid "NEXUS Resistance Circuits Mk4"
-msgstr "Мікросхеми Стійкі до НЕКСУСу Мк2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
@@ -13747,7 +13751,7 @@ msgstr "Термальна Броня Мк3"
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat01.name
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat01.name
 #: po/custom/fromJson.txt:5599
-#: src/spectatorwidgets.cpp:740
+#: src/spectatorwidgets.cpp:810
 msgid "Thermal Armor"
 msgstr "Термальна Броня"
 
@@ -14921,283 +14925,291 @@ msgid " and "
 msgstr " і "
 
 #: src/chat.cpp:173
-#: src/multiint.cpp:3633
+#: src/multiint.cpp:3635
 msgid "Spectators"
 msgstr "Глядачі"
 
-#: src/cheat.cpp:212
+#: src/cheat.cpp:216
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s хоче увімкнути режим налагодження. Увімкнено: %s, Вимкнено: %s."
 
-#: src/cheat.cpp:221
+#: src/cheat.cpp:225
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s хоче увімкнути режим налагодження. Увімкнено: %s, Вимкнено: %s."
 
-#: src/cheat.cpp:231
+#: src/cheat.cpp:235
 msgid "Debug mode now enabled!"
 msgstr "Режим налагодження тепер увімкнено!"
 
-#: src/cheat.cpp:238
+#: src/cheat.cpp:242
 msgid "Debug mode now disabled!"
 msgstr "Режим налагодження тепер увімкнено!"
 
 #. TRANSLATORS: Summary of commandline option syntax
-#: src/clparse.cpp:162
+#: src/clparse.cpp:163
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
 msgstr ""
 
-#: src/clparse.cpp:356
+#: src/clparse.cpp:358
 msgid "Set configuration directory"
 msgstr "Визначте директорію конфігурації"
 
-#: src/clparse.cpp:356
+#: src/clparse.cpp:358
 msgid "configuration directory"
 msgstr "директорія конфігурації"
 
-#: src/clparse.cpp:357
+#: src/clparse.cpp:359
 msgid "Add data directory"
 msgstr "Додати каталог даних"
 
-#: src/clparse.cpp:357
+#: src/clparse.cpp:359
 msgid "data directory"
 msgstr "директорія даних"
 
-#: src/clparse.cpp:358
+#: src/clparse.cpp:360
 msgid "Show debug for given level"
 msgstr "Показати налагодження для даного рівня"
 
-#: src/clparse.cpp:358
+#: src/clparse.cpp:360
 msgid "debug level"
 msgstr "налагодити рівень"
 
-#: src/clparse.cpp:359
+#: src/clparse.cpp:361
 msgid "Log debug output to file"
 msgstr "Вивести результат налагодження у файл"
 
-#: src/clparse.cpp:359
+#: src/clparse.cpp:361
 msgid "file"
 msgstr "файл"
 
-#: src/clparse.cpp:360
+#: src/clparse.cpp:362
 msgid "Flush all debug output written to stderr"
 msgstr "Видалити всі дані налагодження записані до stderr"
 
-#: src/clparse.cpp:361
+#: src/clparse.cpp:363
 msgid "Play in fullscreen mode"
 msgstr "Грати у повноекранному режимі"
 
-#: src/clparse.cpp:362
+#: src/clparse.cpp:364
 msgid "Load a specific game mode"
 msgstr "Завантажити конкретний ігровий режим"
 
-#: src/clparse.cpp:362
+#: src/clparse.cpp:364
 msgid "level name"
 msgstr "Назва рівня"
 
-#: src/clparse.cpp:363
+#: src/clparse.cpp:365
 msgid "Show options and exit"
 msgstr "Показати параметри і вийти"
 
-#: src/clparse.cpp:364
+#: src/clparse.cpp:366
 msgid "Enable a global mod"
 msgstr "Задіяти глобальний мод"
 
-#: src/clparse.cpp:364
-#: src/clparse.cpp:365
 #: src/clparse.cpp:366
+#: src/clparse.cpp:367
+#: src/clparse.cpp:368
 msgid "mod"
 msgstr "мод"
 
-#: src/clparse.cpp:365
+#: src/clparse.cpp:367
 msgid "Enable a campaign only mod"
 msgstr "Задіяти мод лише для кампанії"
 
-#: src/clparse.cpp:366
+#: src/clparse.cpp:368
 msgid "Enable a multiplay only mod"
 msgstr "Задіяти мож лише для мультиплеєра"
 
-#: src/clparse.cpp:367
+#: src/clparse.cpp:369
 msgid "Disable asserts"
 msgstr "Відключити підтвердження"
 
-#: src/clparse.cpp:368
+#: src/clparse.cpp:370
 msgid "Causes a crash to test the crash handler"
 msgstr "Провокує краш для перевірки протикрашової системи"
 
-#: src/clparse.cpp:369
+#: src/clparse.cpp:371
 msgid "Load a saved skirmish game"
 msgstr "Завантажте збережену сутичку"
 
-#: src/clparse.cpp:369
-#: src/clparse.cpp:370
+#: src/clparse.cpp:371
+#: src/clparse.cpp:372
 msgid "savegame"
 msgstr "збережена гра"
 
-#: src/clparse.cpp:370
+#: src/clparse.cpp:372
 msgid "Load a saved campaign game"
 msgstr "Завантажте збережену компанію гри"
 
-#: src/clparse.cpp:371
+#: src/clparse.cpp:373
+msgid "Load a replay"
+msgstr ""
+
+#: src/clparse.cpp:373
+msgid "replay file"
+msgstr ""
+
+#: src/clparse.cpp:374
 msgid "Play in windowed mode"
 msgstr "Грати у віконному режимі"
 
-#: src/clparse.cpp:372
+#: src/clparse.cpp:375
 msgid "Show version information and exit"
 msgstr "Показати інформацію про версію та вийти"
 
-#: src/clparse.cpp:373
+#: src/clparse.cpp:376
 msgid "Set the resolution to use"
 msgstr "Встановити робочу роздільну здатність"
 
-#: src/clparse.cpp:373
+#: src/clparse.cpp:376
 msgid "WIDTHxHEIGHT"
 msgstr "ШИРИНАхВИСОТА"
 
-#: src/clparse.cpp:374
+#: src/clparse.cpp:377
 msgid "Enable shadows"
 msgstr "Ввімкнути тіні"
 
-#: src/clparse.cpp:375
+#: src/clparse.cpp:378
 msgid "Disable shadows"
 msgstr "Вимкнути тіні"
 
-#: src/clparse.cpp:376
+#: src/clparse.cpp:379
 msgid "Enable sound"
 msgstr "Ввімкнути звук"
 
-#: src/clparse.cpp:377
+#: src/clparse.cpp:380
 msgid "Disable sound"
 msgstr "Вимкнути звук"
 
-#: src/clparse.cpp:378
+#: src/clparse.cpp:381
 msgid "Connect directly to IP/hostname"
 msgstr "Підключення безпосередньо до IP/hostname"
 
-#: src/clparse.cpp:378
-#: src/clparse.cpp:379
+#: src/clparse.cpp:381
+#: src/clparse.cpp:382
 msgid "host"
 msgstr "хост"
 
-#: src/clparse.cpp:379
+#: src/clparse.cpp:382
 msgid "Connect directly to IP/hostname as a spectator"
 msgstr "Підключатися безпосередньо до IP/hostname в якості глядача"
 
-#: src/clparse.cpp:380
+#: src/clparse.cpp:383
 msgid "Go directly to host screen"
 msgstr "Перейти безпосередньо на головний екран"
 
-#: src/clparse.cpp:381
+#: src/clparse.cpp:384
 msgid "Enable texture compression"
 msgstr "Увімкнути апаратне стискання"
 
-#: src/clparse.cpp:382
+#: src/clparse.cpp:385
 msgid "Disable texture compression"
 msgstr "Увімкнути апаратне стискання"
 
-#: src/clparse.cpp:383
+#: src/clparse.cpp:386
 msgid "Set gfx backend"
 msgstr "Встановити gfx backend"
 
-#: src/clparse.cpp:393
+#: src/clparse.cpp:396
 msgid "Use gfx backend debug"
 msgstr "Використовувати налагодження gfx"
 
-#: src/clparse.cpp:394
+#: src/clparse.cpp:397
 msgid "Set JS backend"
 msgstr "Встановити JS бекенд"
 
-#: src/clparse.cpp:399
+#: src/clparse.cpp:402
 msgid "Run games automatically for testing"
 msgstr "Автоматично запускайте ігри для тестування"
 
-#: src/clparse.cpp:400
+#: src/clparse.cpp:403
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
 msgstr "Безголовий режим (підтримується лише при вказівці --autogame, --autohost, --skirmish)"
 
-#: src/clparse.cpp:401
+#: src/clparse.cpp:404
 msgid "Immediately save game and quit"
 msgstr "Негайне збереження гри та вихід з гри"
 
-#: src/clparse.cpp:401
+#: src/clparse.cpp:404
 msgid "save name"
 msgstr "зберегти ім'я"
 
-#: src/clparse.cpp:402
+#: src/clparse.cpp:405
 msgid "Start skirmish game with given settings file"
 msgstr "Почніть гру із заданим файлом налаштувань"
 
-#: src/clparse.cpp:402
+#: src/clparse.cpp:405
 msgid "test"
 msgstr "випробування"
 
-#: src/clparse.cpp:403
+#: src/clparse.cpp:406
 msgid "Continue the last saved game"
 msgstr "Продовжити останню збережену гру"
 
-#: src/clparse.cpp:404
+#: src/clparse.cpp:407
 msgid "Start host game with given settings file"
 msgstr "Запуск хост-ігри із заданим файлом налаштувань"
 
-#: src/clparse.cpp:404
+#: src/clparse.cpp:407
 msgid "autohost"
 msgstr "автопост"
 
-#: src/clparse.cpp:405
+#: src/clparse.cpp:408
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
 msgstr "Запит рейтингів із заданого url сервера (що містить \"{HASH}\"), коли хостинг"
 
-#: src/clparse.cpp:405
+#: src/clparse.cpp:408
 msgid "autorating"
 msgstr "авторейтинг"
 
-#: src/clparse.cpp:407
+#: src/clparse.cpp:410
 msgid "Attach or create a console window and display console output (Windows only)"
 msgstr "Прикріпити або створити консольне вікно та відобразити виведення консолі (лише для Windows)"
 
-#: src/clparse.cpp:409
+#: src/clparse.cpp:412
 msgid "Set game server port"
 msgstr "Встановіть порт ігрового сервера"
 
-#: src/clparse.cpp:409
+#: src/clparse.cpp:412
 msgid "port"
 msgstr "порт"
 
-#: src/clparse.cpp:412
+#: src/clparse.cpp:415
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Увімкнути команди slash (при з'єднанні клієнтів)"
 
-#: src/clparse.cpp:413
+#: src/clparse.cpp:416
 msgid "Add a lobby admin identity hash (for slash commands)"
 msgstr "Додати хеш для панелі адміністрування (для кослеш-команд)"
 
-#: src/clparse.cpp:413
+#: src/clparse.cpp:416
 msgid "hash string"
 msgstr "хеш-рядок"
 
-#: src/clparse.cpp:414
+#: src/clparse.cpp:417
 msgid "Add a lobby admin public key (for slash commands)"
 msgstr "Додати хеш для панелі адміністрування (для кослеш-команд)"
 
-#: src/clparse.cpp:414
+#: src/clparse.cpp:417
 msgid "b64-pub-key"
 msgstr "b64-публічний ключ"
 
-#: src/clparse.cpp:415
+#: src/clparse.cpp:418
 msgid "Enable command interface"
 msgstr "Включити новий інтерфейс"
 
-#: src/clparse.cpp:415
+#: src/clparse.cpp:418
 msgid "(stdin)"
 msgstr "(обід)"
 
-#: src/clparse.cpp:416
+#: src/clparse.cpp:419
 msgid "Minimum required players to auto-start game"
 msgstr "Мінімум потрібних гравців для автозапуску гри"
 
-#: src/clparse.cpp:416
+#: src/clparse.cpp:419
 msgid "startplayers"
 msgstr "Початківці"
 
@@ -15361,15 +15373,35 @@ msgstr "Дизайн Магазину"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
+#: src/display.cpp:1596
+#, c-format
+msgid "%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u - kills %d"
+msgstr ""
+
 #: src/display.cpp:1604
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
 msgstr "%s - Гітпункти %d/%d - Досвід %.1f, %s, вбиває %d"
 
+#: src/display.cpp:1628
+#, c-format
+msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
+msgstr ""
+
 #: src/display.cpp:1772
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - союзники - Гітпункти %d/%d - досвід %d, %s"
+
+#: src/display.cpp:1788
+#, c-format
+msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
+msgstr ""
+
+#: src/display.cpp:2063
+#, c-format
+msgid "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d"
+msgstr ""
 
 #: src/display3d.cpp:750
 msgid "Player left"
@@ -15380,7 +15412,7 @@ msgid "Player dropped"
 msgstr "Гравець здався"
 
 #: src/display3d.cpp:758
-#: src/multiint.cpp:4377
+#: src/multiint.cpp:4379
 msgid "Waiting for other players"
 msgstr "Чекаємо інших гравців"
 
@@ -15454,7 +15486,7 @@ msgstr "Передача пристрою не вдалася - перевище
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
-#: src/frontend.cpp:1959
+#: src/frontend.cpp:1983
 msgid "Normal"
 msgstr "Нормально"
 
@@ -15468,407 +15500,416 @@ msgstr "NEXUS"
 msgid "Collective"
 msgstr "Колекція"
 
-#: src/frontend.cpp:177
+#: src/frontend.cpp:178
 msgid "Campaign videos are missing"
 msgstr "Не знайдені відео кампанії"
 
-#: src/frontend.cpp:178
+#: src/frontend.cpp:179
 msgid "See our FAQ on how to install videos"
 msgstr "Дивіться наш FAQ про встановлення відео"
 
-#: src/frontend.cpp:198
+#: src/frontend.cpp:199
 msgid "Single Player"
 msgstr "Один Гравець"
 
-#: src/frontend.cpp:199
+#: src/frontend.cpp:200
 msgid "Multi Player"
 msgstr "Кілька Гравців"
 
-#: src/frontend.cpp:200
-#: src/frontend.cpp:308
+#: src/frontend.cpp:201
+#: src/frontend.cpp:309
 msgid "Tutorial"
 msgstr "Навчання"
 
-#: src/frontend.cpp:201
+#: src/frontend.cpp:202
 #: src/ingameop.cpp:238
 msgid "Options"
 msgstr "Опції"
 
-#: src/frontend.cpp:206
-#: src/frontend.cpp:210
+#: src/frontend.cpp:207
+#: src/frontend.cpp:211
 msgid "View Intro"
 msgstr "Показати Заставку"
 
-#: src/frontend.cpp:211
+#: src/frontend.cpp:212
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr "Відео відсутні, завантажте їх http://wz2100.net"
 
-#: src/frontend.cpp:218
-#: src/frontend.cpp:222
+#: src/frontend.cpp:219
+#: src/frontend.cpp:223
 msgid "Continue Last Save"
 msgstr "Продовжити збереження"
 
-#: src/frontend.cpp:223
+#: src/frontend.cpp:224
 msgid "No last save available"
 msgstr "доступний останній день"
 
-#: src/frontend.cpp:225
+#: src/frontend.cpp:226
 msgid "Quit Game"
 msgstr "Вийти з Гри"
 
-#: src/frontend.cpp:226
+#: src/frontend.cpp:227
 msgid "MAIN MENU"
 msgstr "ГОЛОВНЕ МЕНЮ"
 
-#: src/frontend.cpp:228
+#: src/frontend.cpp:229
 msgid "Official site: http://wz2100.net/"
 msgstr "Офіційний сайт: http://wz2100.net/"
 
-#: src/frontend.cpp:229
+#: src/frontend.cpp:230
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr "Перейдіть на форуми та всі новини Warzone 2100! Натисніть на це посилання."
 
-#: src/frontend.cpp:230
+#: src/frontend.cpp:231
 msgid "Donate: http://donations.wz2100.net/"
 msgstr "Пожертвування: http://donations.wz2100.net/"
 
-#: src/frontend.cpp:232
+#: src/frontend.cpp:233
 msgid "Help support the project with our server costs, Click this link."
 msgstr "Допоможіть підтримати проект з нашими серверними витратами, натисніть це посилання."
 
-#: src/frontend.cpp:233
+#: src/frontend.cpp:234
 msgid "Chat with players on Discord or IRC"
 msgstr "Спілкуйтеся з гравцями в Discord або IRC"
 
-#: src/frontend.cpp:235
+#: src/frontend.cpp:236
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
 msgstr "Прив'яжіть до Discord або Freenode через веб-чат, натиснувши на це посилання."
 
-#: src/frontend.cpp:236
+#: src/frontend.cpp:237
 msgid "Check for a newer version"
 msgstr "Перевірити на наявність новішої версії"
 
-#: src/frontend.cpp:309
+#: src/frontend.cpp:310
 msgid "Fast Play"
 msgstr "Швидка Гра"
 
-#: src/frontend.cpp:310
+#: src/frontend.cpp:311
 msgid "TUTORIALS"
 msgstr "НАВЧАННЯ"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:312
-#: src/frontend.cpp:371
-#: src/frontend.cpp:393
-#: src/frontend.cpp:610
-#: src/frontend.cpp:705
-#: src/frontend.cpp:885
-#: src/frontend.cpp:1102
-#: src/frontend.cpp:1604
-#: src/frontend.cpp:1896
-#: src/frontend.cpp:2037
-#: src/frontend.cpp:2065
+#: src/frontend.cpp:313
+#: src/frontend.cpp:372
+#: src/frontend.cpp:394
+#: src/frontend.cpp:611
+#: src/frontend.cpp:726
+#: src/frontend.cpp:909
+#: src/frontend.cpp:1126
+#: src/frontend.cpp:1628
+#: src/frontend.cpp:1920
+#: src/frontend.cpp:2061
+#: src/frontend.cpp:2089
+#: src/frontend.cpp:2394
 msgctxt "menu"
 msgid "Return"
 msgstr "Повернутись"
 
-#: src/frontend.cpp:363
+#: src/frontend.cpp:364
 msgid "New Campaign"
 msgstr "Нова Кампанія"
 
-#: src/frontend.cpp:364
+#: src/frontend.cpp:365
 msgid "Start Skirmish Game"
 msgstr "Почати Одиночну Гру"
 
-#: src/frontend.cpp:365
+#: src/frontend.cpp:366
 msgid "Challenges"
 msgstr "Виклики"
 
-#: src/frontend.cpp:366
+#: src/frontend.cpp:367
 msgid "Load Campaign Game"
 msgstr "Завантажити гру для маркетингової кампанії"
 
-#: src/frontend.cpp:367
+#: src/frontend.cpp:368
 msgid "Load Skirmish Game"
 msgstr "Почати Одиночну Гру"
 
-#: src/frontend.cpp:368
+#: src/frontend.cpp:369
 msgid "View Skirmish Replay"
 msgstr "Переглянути повтор Підзорної Ринки"
 
-#: src/frontend.cpp:370
+#: src/frontend.cpp:371
 msgid "SINGLE PLAYER"
 msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
 
-#: src/frontend.cpp:375
-#: src/frontend.cpp:397
+#: src/frontend.cpp:376
+#: src/frontend.cpp:398
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Не вистачає відео для кампанії! Отримайте їх від http://wz2100.net"
 
-#: src/frontend.cpp:392
+#: src/frontend.cpp:393
 msgid "CAMPAIGNS"
 msgstr "КАМПАНІЯ"
 
-#: src/frontend.cpp:531
-#: src/ingameop.cpp:1011
+#: src/frontend.cpp:532
+#: src/ingameop.cpp:1024
 msgid "Load Campaign Saved Game"
 msgstr "Завантажити гру для маркетингової кампанії"
 
-#: src/frontend.cpp:537
-#: src/ingameop.cpp:1015
+#: src/frontend.cpp:538
+#: src/ingameop.cpp:1028
 msgid "Load Skirmish Saved Game"
 msgstr "Почати Одиночну Гру"
 
-#: src/frontend.cpp:543
+#: src/frontend.cpp:544
 msgid "Load Skirmish Replay"
 msgstr "Переглянути повтор Підзорної Ринки"
 
-#: src/frontend.cpp:604
+#: src/frontend.cpp:605
 msgid "MULTI PLAYER"
 msgstr "РЕЖИМ КІЛЬКОХ ГРАВЦІВ"
 
-#: src/frontend.cpp:606
+#: src/frontend.cpp:607
 msgid "Host Game"
 msgstr "Створити Гру"
 
-#: src/frontend.cpp:607
+#: src/frontend.cpp:608
 msgid "Join Game"
 msgstr "Приєднатись до Гри"
 
-#: src/frontend.cpp:608
+#: src/frontend.cpp:609
 msgid "View Replay"
 msgstr "Дивитись повтор"
 
-#: src/frontend.cpp:613
+#: src/frontend.cpp:614
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "TCP порт 2100 повинен бути відкритий у вашій брандмауері або маршрутизатор для зберігання ігор!"
 
-#: src/frontend.cpp:658
+#: src/frontend.cpp:659
 msgid "Load Multiplayer Replay"
 msgstr "Завантажити повтор мережевої гри"
 
-#: src/frontend.cpp:697
-#: src/multiint.cpp:1380
-msgid "OPTIONS"
-msgstr "ОПЦІЇ"
-
-#: src/frontend.cpp:698
+#: src/frontend.cpp:713
 msgid "Game Options"
 msgstr "Ігрові Опції"
 
-#: src/frontend.cpp:699
-#: src/ingameop.cpp:564
+#: src/frontend.cpp:714
+#: src/ingameop.cpp:577
 msgid "Graphics Options"
 msgstr "Опції Графіки"
 
-#: src/frontend.cpp:700
-#: src/ingameop.cpp:567
+#: src/frontend.cpp:715
+#: src/ingameop.cpp:580
 msgid "Video Options"
 msgstr "Опції Відео"
 
-#: src/frontend.cpp:701
+#: src/frontend.cpp:716
 msgid "Audio / Zoom Options"
 msgstr "Аудіо / Масштаб"
 
-#: src/frontend.cpp:702
-#: src/ingameop.cpp:574
+#: src/frontend.cpp:717
+#: src/ingameop.cpp:587
 msgid "Mouse Options"
 msgstr "Опції Мишки"
 
-#: src/frontend.cpp:703
-#: src/ingameop.cpp:578
+#: src/frontend.cpp:718
+#: src/ingameop.cpp:591
 msgid "Key Mappings"
 msgstr "Призначення Клавіш"
 
-#: src/frontend.cpp:704
-#: src/ingameop.cpp:581
+#: src/frontend.cpp:719
+#: src/ingameop.cpp:594
 msgid "Music Manager"
 msgstr "Менеджер музики"
 
-#: src/frontend.cpp:706
+#: src/frontend.cpp:720
+msgid "Multiplay Options"
+msgstr ""
+
+#: src/frontend.cpp:725
+#: src/multiint.cpp:1382
+msgid "OPTIONS"
+msgstr "ОПЦІЇ"
+
+#: src/frontend.cpp:727
 msgid "Open Configuration Directory"
 msgstr "Визначте директорію конфігурації"
 
-#: src/frontend.cpp:744
+#: src/frontend.cpp:768
 msgid "Failed to open configuration directory in system default file browser."
 msgstr "Не вдалося відкрити каталог конфігурації у стандартному браузері файлів системи."
 
-#: src/frontend.cpp:746
+#: src/frontend.cpp:770
 msgid "Configuration directory is reported as:"
 msgstr "Каталог конфігурації повідомляється як:"
 
-#: src/frontend.cpp:750
+#: src/frontend.cpp:774
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
 msgstr "Якщо працювати всередині контейнера / ізольованого середовища, це може відрізнятися від фактичного шляху на диску."
 
-#: src/frontend.cpp:752
+#: src/frontend.cpp:776
 msgid "Please see the documentation for more information on how to locate it manually."
 msgstr "Перегляньте документацію для отримання більш детальної інформації про її знаходження вручну."
 
-#: src/frontend.cpp:753
+#: src/frontend.cpp:777
 msgid "Failed to open configuration directory"
 msgstr "Не вдалося відкрити директорію конфігурації"
 
-#: src/frontend.cpp:775
+#: src/frontend.cpp:799
 msgid "1×"
 msgstr "1×"
 
-#: src/frontend.cpp:776
+#: src/frontend.cpp:800
 msgid "2×"
 msgstr "2×"
 
-#: src/frontend.cpp:777
-#: src/frontend.cpp:1257
+#: src/frontend.cpp:801
+#: src/frontend.cpp:1281
 msgid "Fullscreen"
 msgstr "Повний Екран"
 
-#: src/frontend.cpp:778
-#: src/frontend.cpp:789
-#: src/frontend.cpp:986
-#: src/frontend.cpp:1963
+#: src/frontend.cpp:802
+#: src/frontend.cpp:813
+#: src/frontend.cpp:1010
+#: src/frontend.cpp:1987
 msgid "Unsupported"
 msgstr "Не підтримується"
 
-#: src/frontend.cpp:786
-#: src/frontend.cpp:795
-#: src/frontend.cpp:800
-#: src/frontend.cpp:805
 #: src/frontend.cpp:810
-#: src/frontend.cpp:1266
-#: src/frontend.cpp:1310
-#: src/frontend.cpp:1821
-#: src/frontend.cpp:1826
-#: src/frontend.cpp:1831
-#: src/frontend.cpp:1841
+#: src/frontend.cpp:819
+#: src/frontend.cpp:824
+#: src/frontend.cpp:829
+#: src/frontend.cpp:834
+#: src/frontend.cpp:1290
+#: src/frontend.cpp:1334
+#: src/frontend.cpp:1845
+#: src/frontend.cpp:1850
+#: src/frontend.cpp:1855
+#: src/frontend.cpp:1865
+#: src/frontend.cpp:2209
+#: src/frontend.cpp:2257
+#: src/frontend.cpp:2341
 msgid "Off"
 msgstr "Вимкнено"
 
-#: src/frontend.cpp:787
+#: src/frontend.cpp:811
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:788
-#: src/multiplay.cpp:2206
+#: src/frontend.cpp:812
+#: src/multiplay.cpp:2219
 msgid "Black"
 msgstr "Чорний"
 
-#: src/frontend.cpp:795
-#: src/frontend.cpp:800
-#: src/frontend.cpp:805
-#: src/frontend.cpp:810
-#: src/frontend.cpp:1312
-#: src/frontend.cpp:1821
-#: src/frontend.cpp:1826
-#: src/frontend.cpp:1831
-#: src/frontend.cpp:1841
+#: src/frontend.cpp:819
+#: src/frontend.cpp:824
+#: src/frontend.cpp:829
+#: src/frontend.cpp:834
+#: src/frontend.cpp:1336
+#: src/frontend.cpp:1845
+#: src/frontend.cpp:1850
+#: src/frontend.cpp:1855
+#: src/frontend.cpp:1865
+#: src/frontend.cpp:2341
 msgid "On"
 msgstr "Ввімкнено"
 
-#: src/frontend.cpp:815
+#: src/frontend.cpp:839
 msgid "Rotating"
 msgstr "Обертання:"
 
-#: src/frontend.cpp:815
+#: src/frontend.cpp:839
 msgid "Fixed"
 msgstr "Виправлено"
 
-#: src/frontend.cpp:820
+#: src/frontend.cpp:844
 msgid "Instant"
 msgstr "Миттєво"
 
-#: src/frontend.cpp:820
+#: src/frontend.cpp:844
 msgid "Tracked"
 msgstr "Відстежується"
 
-#: src/frontend.cpp:838
-#: src/ingameop.cpp:609
+#: src/frontend.cpp:862
+#: src/ingameop.cpp:622
 msgid "Video Playback"
 msgstr "Програвання Відео"
 
-#: src/frontend.cpp:843
-#: src/ingameop.cpp:614
+#: src/frontend.cpp:867
+#: src/ingameop.cpp:627
 msgid "Scanlines"
 msgstr "Рядки пікселів"
 
-#: src/frontend.cpp:849
-#: src/ingameop.cpp:619
+#: src/frontend.cpp:873
+#: src/ingameop.cpp:632
 msgid "Shadows"
 msgstr "Тіні"
 
-#: src/frontend.cpp:854
+#: src/frontend.cpp:878
 msgid "Fog"
 msgstr "Туман"
 
-#: src/frontend.cpp:859
-#: src/ingameop.cpp:624
+#: src/frontend.cpp:883
+#: src/ingameop.cpp:637
 #: src/input/context.cpp:57
 msgid "Radar"
 msgstr "Радар"
 
-#: src/frontend.cpp:864
-#: src/ingameop.cpp:629
+#: src/frontend.cpp:888
+#: src/ingameop.cpp:642
 msgid "Radar Jump"
 msgstr "Радарний стрибок"
 
-#: src/frontend.cpp:869
+#: src/frontend.cpp:893
 msgid "Screen Shake"
 msgstr "Тремтіння екрану"
 
-#: src/frontend.cpp:881
+#: src/frontend.cpp:905
 msgid "GRAPHICS OPTIONS"
 msgstr "ОПЦІЇ ГРАФІКИ"
 
-#: src/frontend.cpp:989
+#: src/frontend.cpp:1013
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: src/frontend.cpp:992
+#: src/frontend.cpp:1016
 msgid "Enabled"
 msgstr "Увімкнено"
 
-#: src/frontend.cpp:996
-#: src/frontend.cpp:1002
+#: src/frontend.cpp:1020
+#: src/frontend.cpp:1026
 msgid "Auto"
 msgstr "Автоматично"
 
-#: src/frontend.cpp:1047
+#: src/frontend.cpp:1071
 #: src/ingameop.cpp:149
 msgid "Voice Volume"
 msgstr "Гучність Звуку"
 
-#: src/frontend.cpp:1052
+#: src/frontend.cpp:1076
 #: src/ingameop.cpp:155
 msgid "FX Volume"
 msgstr "Гучність Ефектів"
 
-#: src/frontend.cpp:1057
+#: src/frontend.cpp:1081
 #: src/ingameop.cpp:161
 msgid "Music Volume"
 msgstr "Гучність Музики"
 
-#: src/frontend.cpp:1063
+#: src/frontend.cpp:1087
 #: src/ingameop.cpp:167
 msgid "Subtitles"
 msgstr "Субтитри"
 
-#: src/frontend.cpp:1068
+#: src/frontend.cpp:1092
 msgid "HRTF"
 msgstr "ГРТФ"
 
-#: src/frontend.cpp:1074
-#: src/frontend.cpp:1076
+#: src/frontend.cpp:1098
+#: src/frontend.cpp:1100
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "HRTF не підтримується на пристрої / системній / бібліотеці OpenAL"
 
-#: src/frontend.cpp:1080
+#: src/frontend.cpp:1104
 msgid "Map Zoom"
 msgstr "Збільшення мапи"
 
-#: src/frontend.cpp:1085
+#: src/frontend.cpp:1109
 msgid "Map Zoom Rate"
 msgstr "Віддалити мапу"
 
-#: src/frontend.cpp:1090
+#: src/frontend.cpp:1114
 msgid "Radar Zoom"
 msgstr "Радарне збільшення"
 
@@ -15876,296 +15917,339 @@ msgstr "Радарне збільшення"
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:1109
+#: src/frontend.cpp:1133
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr "АУДІО / ZOM ПАРАМЕТРИ"
 
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1245
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr "В повноекранному режимі Fullscreen розширення збігається з робочим столом \n"
 "(або в доступному режимі віконного менеджера)."
 
-#: src/frontend.cpp:1223
+#: src/frontend.cpp:1247
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr "Ви можете змінити роздільну здатність шляхом нормального зміни розміру вікна. (Спробуйте перетягування куту/краю.)"
 
-#: src/frontend.cpp:1253
+#: src/frontend.cpp:1277
 msgid "Desktop Full"
 msgstr "Повний робочий стіл"
 
-#: src/frontend.cpp:1255
+#: src/frontend.cpp:1279
 msgid "Windowed"
 msgstr "Віконний Режим"
 
-#: src/frontend.cpp:1276
+#: src/frontend.cpp:1300
 msgid "Graphics Mode"
 msgstr "Режим Графіки"
 
-#: src/frontend.cpp:1281
+#: src/frontend.cpp:1305
 msgid "Resolution"
 msgstr "Роздільна Здатність"
 
-#: src/frontend.cpp:1286
+#: src/frontend.cpp:1310
 msgid "Display Scale"
 msgstr "Відображення масштабу"
 
-#: src/frontend.cpp:1314
+#: src/frontend.cpp:1338
 msgid "Adaptive"
 msgstr "Адаптивний"
 
-#: src/frontend.cpp:1525
+#: src/frontend.cpp:1549
 msgid "* Takes effect on game restart"
 msgstr "* Зміни всупають в силу після перезавантаження гри"
 
-#: src/frontend.cpp:1558
+#: src/frontend.cpp:1582
 msgid "Texture size"
 msgstr "Розмір Текстур"
 
-#: src/frontend.cpp:1563
-#: src/ingameop.cpp:730
+#: src/frontend.cpp:1587
+#: src/ingameop.cpp:743
 msgid "Vertical sync"
 msgstr "Верт. синхронізація"
 
-#: src/frontend.cpp:1568
+#: src/frontend.cpp:1592
 msgid "Antialiasing*"
 msgstr "Згладжування"
 
-#: src/frontend.cpp:1576
+#: src/frontend.cpp:1600
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr "Попередження: згладжування може викликати збії, особливо зі значеннями > 16"
 
-#: src/frontend.cpp:1589
+#: src/frontend.cpp:1613
 msgid "Graphics Backend*"
 msgstr "Графічний інтерфейс програми*"
 
-#: src/frontend.cpp:1601
+#: src/frontend.cpp:1625
 msgid "VIDEO OPTIONS"
 msgstr "ОПЦІЇ ВІДЕО"
 
-#: src/frontend.cpp:1644
+#: src/frontend.cpp:1668
 msgid "Unable to change Window Mode"
 msgstr "Неможливо змінити режим вікна"
 
-#: src/frontend.cpp:1644
+#: src/frontend.cpp:1668
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Не вдалося змінити режим вікна.\n"
 "Можливо, ваш системний / драйвера не підтримують інші режими."
 
-#: src/frontend.cpp:1670
+#: src/frontend.cpp:1694
 msgid "Unable to change Vertical Sync"
 msgstr "Не вдалося змінити вертикальну синхронізацію"
 
-#: src/frontend.cpp:1670
+#: src/frontend.cpp:1694
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Не вдалося змінити режим вікна.\n"
 "Можливо, ваш системний / драйвера не підтримують інші режими."
 
-#: src/frontend.cpp:1836
+#: src/frontend.cpp:1860
 msgid "Middle Mouse"
 msgstr "Середня клавіша миші"
 
-#: src/frontend.cpp:1836
+#: src/frontend.cpp:1860
 msgid "Right Mouse"
 msgstr "Права миша"
 
-#: src/frontend.cpp:1859
-#: src/ingameop.cpp:806
+#: src/frontend.cpp:1883
+#: src/ingameop.cpp:819
 msgid "Reverse Rotation"
 msgstr "Зворотнє Обертання"
 
-#: src/frontend.cpp:1864
-#: src/ingameop.cpp:812
+#: src/frontend.cpp:1888
+#: src/ingameop.cpp:825
 msgid "Trap Cursor"
 msgstr "Зафіксувати Курсор"
 
-#: src/frontend.cpp:1870
-#: src/ingameop.cpp:818
+#: src/frontend.cpp:1894
+#: src/ingameop.cpp:831
 msgid "Switch Mouse Buttons"
 msgstr "Поміняти Призначення Кнопок Миші"
 
-#: src/frontend.cpp:1876
-#: src/ingameop.cpp:823
+#: src/frontend.cpp:1900
+#: src/ingameop.cpp:836
 msgid "Rotate Screen"
 msgstr "Обернути екран"
 
-#: src/frontend.cpp:1881
-#: src/ingameop.cpp:828
+#: src/frontend.cpp:1905
+#: src/ingameop.cpp:841
 msgid "Colored Cursors"
 msgstr "Кольорові курсори"
 
-#: src/frontend.cpp:1893
+#: src/frontend.cpp:1917
 msgid "MOUSE OPTIONS"
 msgstr "ОПЦІЇ МИШКИ"
 
-#: src/frontend.cpp:1958
-#: src/multiint.cpp:265
+#: src/frontend.cpp:1982
+#: src/multiint.cpp:266
 msgid "Easy"
 msgstr "Легко"
 
-#: src/frontend.cpp:1960
-#: src/multiint.cpp:265
+#: src/frontend.cpp:1984
+#: src/multiint.cpp:266
 msgid "Hard"
 msgstr "Важко"
 
-#: src/frontend.cpp:1961
-#: src/multiint.cpp:265
+#: src/frontend.cpp:1985
+#: src/multiint.cpp:266
 msgid "Insane"
 msgstr "[Select_CString( CHARACTER.IsFemale, 'Божевільна', 'Божевільний' )]"
 
-#: src/frontend.cpp:1992
-#: src/frontend.cpp:2066
+#: src/frontend.cpp:2016
+#: src/frontend.cpp:2090
 msgid "Language"
 msgstr "Мова"
 
-#: src/frontend.cpp:1996
-#: src/frontend.cpp:2070
+#: src/frontend.cpp:2020
+#: src/frontend.cpp:2094
 msgid "Campaign Difficulty"
 msgstr "Труднощі кампанії"
 
-#: src/frontend.cpp:2000
-#: src/frontend.cpp:2071
+#: src/frontend.cpp:2024
+#: src/frontend.cpp:2095
 msgid "Camera Speed"
 msgstr "Швидкість руху камери"
 
-#: src/frontend.cpp:2004
-#: src/frontend.cpp:2067
+#: src/frontend.cpp:2028
+#: src/frontend.cpp:2091
 msgid "Unit Colour:"
 msgstr "Колір відділу:"
 
-#: src/frontend.cpp:2034
-#: src/frontend.cpp:2069
+#: src/frontend.cpp:2058
+#: src/frontend.cpp:2093
 msgid "Skirmish/Multiplayer"
 msgstr "Сутичка/Мультиплеєр"
 
-#: src/frontend.cpp:2040
+#: src/frontend.cpp:2064
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
 msgstr "Допоможіть нам покращити переклади Warzone 2100: %s"
 
-#: src/frontend.cpp:2042
+#: src/frontend.cpp:2066
 msgid "Click to open webpage."
 msgstr "Натисніть, щоб додати веб-сторінку"
 
-#: src/frontend.cpp:2045
-#: src/frontend.cpp:2064
+#: src/frontend.cpp:2069
+#: src/frontend.cpp:2088
 msgid "GAME OPTIONS"
 msgstr "ІГРОВІ ОПЦІЇ"
 
-#: src/frontend.cpp:2090
+#: src/frontend.cpp:2114
 msgid "Insane Difficulty"
 msgstr "Складність"
 
-#: src/frontend.cpp:2091
+#: src/frontend.cpp:2115
 msgid "This difficulty is for very experienced players!"
 msgstr "Ця складність для дуже досвідчених гравців!"
 
-#: src/frontend.cpp:2193
-#: src/multiint.cpp:5121
+#: src/frontend.cpp:2213
+#, c-format
+msgid "%u minutes"
+msgstr ""
+
+#: src/frontend.cpp:2268
+#: src/frontend.cpp:2276
+#, c-format
+msgid "%u seconds"
+msgstr ""
+
+#: src/frontend.cpp:2307
+msgid "None"
+msgstr ""
+
+#: src/frontend.cpp:2358
+msgid "Hosting Options:"
+msgstr ""
+
+#: src/frontend.cpp:2362
+msgid "Game Port"
+msgstr ""
+
+#: src/frontend.cpp:2367
+msgid "Enable UPnP"
+msgstr ""
+
+#: src/frontend.cpp:2372
+msgid "Inactivity Timeout"
+msgstr ""
+
+#: src/frontend.cpp:2377
+msgid "Lag Kick"
+msgstr ""
+
+#: src/frontend.cpp:2382
+msgid "Spectator Slots"
+msgstr ""
+
+#: src/frontend.cpp:2397
+msgid "MULTIPLAY OPTIONS"
+msgstr ""
+
+#: src/frontend.cpp:2457
+#: src/multiint.cpp:5124
 msgid "Mod: "
 msgstr ", моди: "
 
-#: src/frontend.cpp:2653
+#: src/frontend.cpp:2921
 msgid "Increase Game Display Scale?"
 msgstr "Збільшити відображення гри?"
 
-#: src/frontend.cpp:2655
+#: src/frontend.cpp:2923
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
 msgstr "Завдяки параметрам вашого поточного розміру та дисплею, користувацький інтерфейс може виглядати малою, а перспектива гри може виявитися спотвореною."
 
-#: src/frontend.cpp:2657
+#: src/frontend.cpp:2925
 msgid "You can fix this by increasing the game's Display Scale setting."
 msgstr "Ви можете виправити це, збільшивши налаштування екрану гри."
 
-#: src/frontend.cpp:2659
+#: src/frontend.cpp:2927
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
 msgstr "Бажаєте збільшити масштаб показу гри на: %u%%?"
 
-#: src/frontend.cpp:2661
+#: src/frontend.cpp:2929
 msgid "Increase Display Scale"
 msgstr "Збільшити відображення гри"
 
-#: src/frontend.cpp:2678
+#: src/frontend.cpp:2946
 #, c-format
 msgid "Display Scale Increased to: %u%%"
 msgstr "Масштаб дисплея збільшено: %u%%"
 
-#: src/frontend.cpp:2679
-#: src/frontend.cpp:2695
+#: src/frontend.cpp:2947
+#: src/frontend.cpp:2963
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
 msgstr "Можна налаштувати масштаб дисплею в будь-який час в меню «Параметри»."
 
-#: src/frontend.cpp:2694
+#: src/frontend.cpp:2962
 msgid "Tip: Adjusting Display Scale"
 msgstr "Порада: Налаштування масштабу дисплея"
 
-#: src/hci.cpp:723
+#: src/hci.cpp:725
 msgid "Replay"
 msgstr "Повтор"
 
-#: src/hci.cpp:738
+#: src/hci.cpp:740
 msgid "Pause"
 msgstr "Пауза"
 
-#: src/hci.cpp:753
+#: src/hci.cpp:755
 msgid "Resume"
 msgstr "Продовжити"
 
-#: src/hci.cpp:770
+#: src/hci.cpp:772
 msgid "Fast-Forward"
 msgstr "Перемотати вперед"
 
-#: src/hci.cpp:1318
+#: src/hci.cpp:1324
 #: src/loop.cpp:252
 #: src/loop.cpp:268
 msgid "GAME SAVED: "
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
-#: src/hci.cpp:1728
+#: src/hci.cpp:1734
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову будівлю : %s."
 
-#: src/hci.cpp:1737
+#: src/hci.cpp:1743
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову властивість : %s."
 
-#: src/hci.cpp:1756
+#: src/hci.cpp:1762
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : %s."
 
-#: src/hci.cpp:1764
+#: src/hci.cpp:1770
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : ."
 
-#: src/hci.cpp:2158
+#: src/hci.cpp:2164
 #: src/hci/build.cpp:583
 #: src/hci/manufacture.cpp:598
 msgid "Hiding Obsolete Tech"
 msgstr "Хідінг застаріла технології"
 
-#: src/hci.cpp:2160
+#: src/hci.cpp:2166
 #: src/hci/build.cpp:585
 #: src/hci/manufacture.cpp:600
 msgid "Showing Obsolete Tech"
 msgstr "Показувати застарілу техніку"
 
-#: src/hci.cpp:2283
+#: src/hci.cpp:2289
 msgid "\n"
 "Cost: %1"
 msgstr "Вартість: %1$s"
 
-#: src/hci.cpp:2927
+#: src/hci.cpp:2933
 msgid "Chat: All"
 msgstr "Чат: Усі"
 
-#: src/hci.cpp:2932
+#: src/hci.cpp:2938
 msgid "Chat: Team"
 msgstr "Чат: Команда"
 
@@ -16212,10 +16296,10 @@ msgstr ""
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:189
 #: src/ingameop.cpp:234
-#: src/ingameop.cpp:587
-#: src/ingameop.cpp:641
-#: src/ingameop.cpp:748
-#: src/ingameop.cpp:836
+#: src/ingameop.cpp:600
+#: src/ingameop.cpp:654
+#: src/ingameop.cpp:761
+#: src/ingameop.cpp:849
 #: src/keyedit.cpp:594
 #: src/musicmanager.cpp:780
 msgid "Resume Game"
@@ -16231,20 +16315,20 @@ msgid "Host Quit"
 msgstr ""
 
 #: src/ingameop.cpp:176
-#: src/ingameop.cpp:1051
+#: src/ingameop.cpp:1064
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr "Тактичний інтерфейс (значок цільового джерела): Показати"
 
 #: src/ingameop.cpp:181
-#: src/ingameop.cpp:1055
+#: src/ingameop.cpp:1068
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
 #: src/ingameop.cpp:186
-#: src/ingameop.cpp:584
-#: src/ingameop.cpp:638
-#: src/ingameop.cpp:744
-#: src/ingameop.cpp:832
+#: src/ingameop.cpp:597
+#: src/ingameop.cpp:651
+#: src/ingameop.cpp:757
+#: src/ingameop.cpp:845
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:779
 msgid "Go Back"
@@ -16293,32 +16377,43 @@ msgstr "Гра не може продовжуватись без хосту."
 msgid "-->  QUIT  <--"
 msgstr "-->  ВИХІД  <--"
 
-#: src/ingameop.cpp:571
+#: src/ingameop.cpp:584
 msgid "Audio Options"
 msgstr "Опції Звуку"
 
-#: src/ingameop.cpp:578
+#: src/ingameop.cpp:591
 msgid "View Key Mappings"
 msgstr ""
 
-#: src/ingameop.cpp:634
+#: src/ingameop.cpp:647
 msgid "Shake"
 msgstr ""
 
-#: src/ingameop.cpp:1019
+#: src/ingameop.cpp:1032
 msgid "Save Campaign Game"
 msgstr ""
 
-#: src/ingameop.cpp:1023
+#: src/ingameop.cpp:1036
 msgid "Save Skirmish Game"
 msgstr ""
 
-#: src/init.cpp:498
+#: src/init.cpp:609
 #, c-format
 msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr "Необхідний мод не був завантажений: %s\n\n"
 "Warzone спробує запустити гру без нього."
+
+#: src/init.cpp:1146
+#: src/intimage.cpp:127
+#, c-format
+msgid "Unable to load: %s."
+msgstr ""
+
+#: src/init.cpp:1150
+#: src/intimage.cpp:131
+msgid "Please remove all incompatible mods."
+msgstr ""
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -16369,6 +16464,7 @@ msgid "Commanders"
 msgstr "Командири"
 
 #: src/input/keyconfig.cpp:45
+#: src/keybind.cpp:2558
 msgid "QuickSave"
 msgstr ""
 
@@ -16377,6 +16473,7 @@ msgid "Toggle Radar"
 msgstr "Прибрати Радар"
 
 #: src/input/keyconfig.cpp:47
+#: src/keybind.cpp:2583
 msgid "QuickLoad"
 msgstr ""
 
@@ -16843,223 +16940,228 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Обрати всі Підрозділи з Сильними Ушкодженнями"
 
 #: src/input/keyconfig.cpp:171
+#, c-format
+msgid "Select all Combat Land units with health >50% and no Groups."
+msgstr ""
+
+#: src/input/keyconfig.cpp:172
 msgid "Select all Half-tracks"
 msgstr "Обрати всі Напівгусеничні Підрозділи"
 
-#: src/input/keyconfig.cpp:172
+#: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks without group"
 msgstr "Вибрати всі Напівгусениці без групи"
 
-#: src/input/keyconfig.cpp:173
+#: src/input/keyconfig.cpp:174
 msgid "Select all Hovers"
 msgstr "Обрати всі Амфібії"
 
-#: src/input/keyconfig.cpp:174
+#: src/input/keyconfig.cpp:175
 #: src/intorder.cpp:182
 msgid "Return for Recycling"
 msgstr "Повернутися на Переробку"
 
-#: src/input/keyconfig.cpp:175
+#: src/input/keyconfig.cpp:176
 msgid "Select all Units on Screen"
 msgstr "Обрати всі Підрозділи на Екрані"
 
-#: src/input/keyconfig.cpp:176
+#: src/input/keyconfig.cpp:177
 msgid "Select all Tracks"
 msgstr "Обрати всі Гусеничні Підрозділи"
 
-#: src/input/keyconfig.cpp:177
+#: src/input/keyconfig.cpp:178
 msgid "Select all Tracks without group"
 msgstr "Вибрати усі доріжки без групи"
 
-#: src/input/keyconfig.cpp:178
+#: src/input/keyconfig.cpp:179
 msgid "Select EVERY unit"
 msgstr "Обрати ВСІ Підрозділи"
 
-#: src/input/keyconfig.cpp:179
+#: src/input/keyconfig.cpp:180
 msgid "Select all VTOLs"
 msgstr "Обрати всі ВЗІПи"
 
-#: src/input/keyconfig.cpp:180
+#: src/input/keyconfig.cpp:181
 msgid "Select all fully-armed VTOLs"
 msgstr "Оберіть всі повні збройні ВЗІПи"
 
-#: src/input/keyconfig.cpp:181
+#: src/input/keyconfig.cpp:182
 msgid "Select all fully-armed VTOLs without group"
 msgstr "Виділіть усі повністю озброєні ВЗІПи без групи"
 
-#: src/input/keyconfig.cpp:182
+#: src/input/keyconfig.cpp:183
 msgid "Select all Wheels"
 msgstr "Обрати всі Колісні Підрозділи"
 
-#: src/input/keyconfig.cpp:183
+#: src/input/keyconfig.cpp:184
 msgid "Show frame rate"
 msgstr "Нова частота кадрів:"
 
-#: src/input/keyconfig.cpp:184
+#: src/input/keyconfig.cpp:185
 msgid "Select all units with the same components"
 msgstr "Обрати всі одиниці виміру з однаковими компонентами"
 
-#: src/input/keyconfig.cpp:186
+#: src/input/keyconfig.cpp:187
 msgid "Select all Combat Cyborgs"
 msgstr "Обрати всі Бойові Підрозділи"
 
-#: src/input/keyconfig.cpp:187
+#: src/input/keyconfig.cpp:188
 msgid "Select all Combat Cyborgs without group"
 msgstr "Обрати всі бойові Кіборгів без групи"
 
-#: src/input/keyconfig.cpp:188
+#: src/input/keyconfig.cpp:189
 msgid "Select all Engineers"
 msgstr "Обрати всі Амфібії"
 
-#: src/input/keyconfig.cpp:189
+#: src/input/keyconfig.cpp:190
 msgid "Select all Land Combat Units"
 msgstr "Обрати всі Бойові Підрозділи"
 
-#: src/input/keyconfig.cpp:190
+#: src/input/keyconfig.cpp:191
 msgid "Select all Land Combat Units without group"
 msgstr "Обрати всі бойові Кіборгів без групи"
 
-#: src/input/keyconfig.cpp:191
+#: src/input/keyconfig.cpp:192
 msgid "Select all Mechanics"
 msgstr "Обрати всі Механіки"
 
-#: src/input/keyconfig.cpp:192
+#: src/input/keyconfig.cpp:193
 msgid "Select all Transporters"
 msgstr "Вибрати всі транспортери"
 
-#: src/input/keyconfig.cpp:193
+#: src/input/keyconfig.cpp:194
 msgid "Select all Repair Tanks"
 msgstr "Обрати всі ремонтні танки"
 
-#: src/input/keyconfig.cpp:194
+#: src/input/keyconfig.cpp:195
 msgid "Select all Sensor Units"
 msgstr "Обрати всі Підрозділи Цього Типу"
 
-#: src/input/keyconfig.cpp:195
+#: src/input/keyconfig.cpp:196
 msgid "Select all Sensor Units without group"
 msgstr "Обрати всі бойові Кіборгів без групи"
 
-#: src/input/keyconfig.cpp:196
+#: src/input/keyconfig.cpp:197
 msgid "Select all Trucks"
 msgstr "Обрати всі Гусеничні Підрозділи"
 
-#: src/input/keyconfig.cpp:198
+#: src/input/keyconfig.cpp:199
 msgid "Select next Factory"
 msgstr "Обрати наступну Фабрику"
 
-#: src/input/keyconfig.cpp:199
+#: src/input/keyconfig.cpp:200
 msgid "Select next Research Facility"
 msgstr "Обрати наступну Дослідницьку Станцію"
 
-#: src/input/keyconfig.cpp:200
+#: src/input/keyconfig.cpp:201
 msgid "Select next Power Generator"
 msgstr "Обрати наступний Енергогенератор"
 
-#: src/input/keyconfig.cpp:201
+#: src/input/keyconfig.cpp:202
 msgid "Select next Cyborg Factory"
 msgstr "Обрати наступну Фабрику Кіборгів"
 
-#: src/input/keyconfig.cpp:202
+#: src/input/keyconfig.cpp:203
 msgid "Select next VTOL Factory"
 msgstr "Обрати наступну Фабрику"
 
-#: src/input/keyconfig.cpp:203
+#: src/input/keyconfig.cpp:204
 msgid "Jump to next Factory"
 msgstr "Перейти до наступної фабрики"
 
-#: src/input/keyconfig.cpp:204
+#: src/input/keyconfig.cpp:205
 msgid "Jump to next Research Facility"
 msgstr "Перейти до наступного об'єкта дослідження"
 
-#: src/input/keyconfig.cpp:205
+#: src/input/keyconfig.cpp:206
 msgid "Jump to next Power Generator"
 msgstr "Перейти до наступного генератора енергії"
 
-#: src/input/keyconfig.cpp:206
+#: src/input/keyconfig.cpp:207
 msgid "Jump to next Cyborg Factory"
 msgstr "Перейти до наступної фабрики кіборгів"
 
-#: src/input/keyconfig.cpp:207
+#: src/input/keyconfig.cpp:208
 msgid "Jump to next VTOL Factory"
 msgstr "Перейти до наступної фабрики"
 
-#: src/input/keyconfig.cpp:209
+#: src/input/keyconfig.cpp:210
 msgid "Toggle Debug Mappings"
 msgstr "Ввімкнути/вимкнути відображення відладки"
 
-#: src/input/keyconfig.cpp:210
+#: src/input/keyconfig.cpp:211
 msgid "Prioritize Debug Mappings"
 msgstr "Пріоритет налагодження"
 
-#: src/input/keyconfig.cpp:211
+#: src/input/keyconfig.cpp:212
 msgid "Toggle Level Editor"
 msgstr "Перемкнути редактор рівнів"
 
-#: src/input/keyconfig.cpp:212
+#: src/input/keyconfig.cpp:213
 msgid "Toggle display of droid path"
 msgstr "Перемкнути відображення шляху до дроїда"
 
-#: src/input/keyconfig.cpp:213
+#: src/input/keyconfig.cpp:214
 msgid "Toggle display of gateways"
 msgstr "Перемкнути відображення шлюзів"
 
-#: src/input/keyconfig.cpp:214
+#: src/input/keyconfig.cpp:215
 msgid "Toggle visibility"
 msgstr "Перемкнути видимість"
 
-#: src/input/keyconfig.cpp:215
+#: src/input/keyconfig.cpp:216
 msgid "Raise tile height"
 msgstr "Підняти висоту плитки"
 
-#: src/input/keyconfig.cpp:216
+#: src/input/keyconfig.cpp:217
 msgid "Lower tile height"
 msgstr "Нижня висота плитки"
 
-#: src/input/keyconfig.cpp:217
+#: src/input/keyconfig.cpp:218
 msgid "Toggles All fog"
 msgstr "Перемкнути всі тумани"
 
-#: src/input/keyconfig.cpp:218
+#: src/input/keyconfig.cpp:219
 msgid "Trigger some weather"
 msgstr "Запустіть трохи погоди"
 
-#: src/input/keyconfig.cpp:219
+#: src/input/keyconfig.cpp:220
 msgid "Flip terrain triangle"
 msgstr "Віддзеркалити трикутник"
 
-#: src/input/keyconfig.cpp:220
+#: src/input/keyconfig.cpp:221
 msgid "Make a performance measurement sample"
 msgstr "Зробити зразок вимірювання продуктивності"
 
-#: src/input/keyconfig.cpp:221
+#: src/input/keyconfig.cpp:222
 msgid "Make all items available"
 msgstr "Зробити всі елементи, те ж саме"
 
-#: src/input/keyconfig.cpp:222
+#: src/input/keyconfig.cpp:223
 msgid "Kill Selected Unit(s)"
 msgstr "Вбити вибрані одиниці(і)"
 
-#: src/input/keyconfig.cpp:223
+#: src/input/keyconfig.cpp:224
 msgid "Toggle god Mode Status"
 msgstr "Перемкнути статус god"
 
-#: src/input/keyconfig.cpp:224
+#: src/input/keyconfig.cpp:225
 msgid "Display Options Screen"
 msgstr "Екран блокування"
 
-#: src/input/keyconfig.cpp:225
+#: src/input/keyconfig.cpp:226
 msgid "Complete current research"
 msgstr "Завершити поточне дослідження"
 
-#: src/input/keyconfig.cpp:226
+#: src/input/keyconfig.cpp:227
 msgid "Reveal map at mouse position"
 msgstr "Показати карту в позиції миші"
 
-#: src/input/keyconfig.cpp:227
+#: src/input/keyconfig.cpp:228
 msgid "Trace a game object"
 msgstr "Слідкувати за ігровим об’єктом"
 
-#: src/input/keyconfig.cpp:231
+#: src/input/keyconfig.cpp:232
 msgid "Toggle fullscreen"
 msgstr "перемикання повноекранного режиму"
 
@@ -17068,7 +17170,7 @@ msgid "Waiting for Power"
 msgstr "Очікування: "
 
 #: src/intdisplay.cpp:172
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1484
 #: src/multimenu.cpp:771
 msgid "Power"
 msgstr "Енергія"
@@ -17309,6 +17411,19 @@ msgstr "На жаль, це шахрайство не діє у мультипл
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Обережно! Це шахрайство нестабільне. Ми рекомендуємо його не застосовувати."
 
+#: src/keybind.cpp:157
+msgid "Gateways toggled."
+msgstr ""
+
+#: src/keybind.cpp:163
+msgid "Path display toggled."
+msgstr ""
+
+#: src/keybind.cpp:191
+#, c-format
+msgid "Player %d: %d power"
+msgstr ""
+
 #: src/keybind.cpp:217
 msgid "Ouch! Droid's health is down 20%!"
 msgstr "Лусь! Дроїда нижче 20%!"
@@ -17415,9 +17530,17 @@ msgstr "Вимкнено необмежену енергію"
 msgid "Infinite power enabled"
 msgstr "Задіяно необмежену енергію"
 
+#: src/keybind.cpp:772
+msgid "Lighting values for all tiles recalculated"
+msgstr ""
+
 #: src/keybind.cpp:802
 msgid "All items made available"
 msgstr "Стало доступне все"
+
+#: src/keybind.cpp:827
+msgid "Tile info dumped into log"
+msgstr ""
 
 #: src/keybind.cpp:842
 msgid "Fog on"
@@ -17638,6 +17761,26 @@ msgstr "Радар показує місцевість"
 msgid "Radar showing height"
 msgstr "Радар показує рельєф"
 
+#: src/keybind.cpp:2493
+msgid "Asserts turned off"
+msgstr ""
+
+#: src/keybind.cpp:2541
+msgid "QuickSave not allowed for multiplayer or tutorial games"
+msgstr ""
+
+#: src/keybind.cpp:2562
+msgid "QuickSave failed"
+msgstr ""
+
+#: src/keybind.cpp:2571
+msgid "QuickLoad not allowed for multiplayer or tutorial games"
+msgstr ""
+
+#: src/keybind.cpp:2598
+msgid "QuickSave file does not exist yet"
+msgstr ""
+
 #: src/keyedit.cpp:165
 msgid "<not bound>"
 msgstr "<не пов'язаний>"
@@ -17647,7 +17790,7 @@ msgid "KEY MAPPING"
 msgstr "ПРИЗНАЧЕННЯ КЛАВІШ"
 
 #: src/keyedit.cpp:575
-#: src/multiint.cpp:1560
+#: src/multiint.cpp:1562
 #: src/musicmanager.cpp:769
 #: src/titleui/gamefind.cpp:84
 #: src/titleui/protocol.cpp:82
@@ -17674,6 +17817,16 @@ msgstr "Каталог автозбереження (не дозволено д�
 #: src/loadsave.cpp:663
 msgid "cheated"
 msgstr "обдурив"
+
+#: src/loadsave.cpp:1090
+#, c-format
+msgid "AutoSave %s"
+msgstr ""
+
+#: src/loadsave.cpp:1095
+#, c-format
+msgid "AutoSave %s failed"
+msgstr ""
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -17775,617 +17928,618 @@ msgstr "%s Сформував Союз З %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Ви Знайшли Креслення Для %s"
 
-#: src/multiint.cpp:265
+#: src/multiint.cpp:266
 msgid "Medium"
 msgstr "Середня"
 
-#: src/multiint.cpp:385
-#: src/multiplay.cpp:571
+#: src/multiint.cpp:382
+#: src/multiint.cpp:387
+#: src/multiplay.cpp:572
 msgid "Commander"
 msgstr "Командир"
 
-#: src/multiint.cpp:811
+#: src/multiint.cpp:813
 msgid "MISSING AI NAME"
 msgstr "НЕВІДОМИЙ ІМ'Я"
 
-#: src/multiint.cpp:836
+#: src/multiint.cpp:838
 msgid "MISSING AI DESCRIPTION"
 msgstr "ОПИС МІСЦЯ ПРИСТРОЮ"
 
-#: src/multiint.cpp:850
+#: src/multiint.cpp:852
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "Турнір: %3.1f%% перемогла, %3.1f%% втрати, %3.1f%% нічиє"
 
-#: src/multiint.cpp:1043
+#: src/multiint.cpp:1045
 msgid "Error while joining."
 msgstr "Помилка під час приєднання."
 
-#: src/multiint.cpp:1170
+#: src/multiint.cpp:1172
 msgid "Tanks disabled!!"
 msgstr "Танки відключені!"
 
-#: src/multiint.cpp:1171
+#: src/multiint.cpp:1173
 msgid "Cyborgs disabled."
 msgstr "Кіборги виведено з ладу."
 
-#: src/multiint.cpp:1172
+#: src/multiint.cpp:1174
 msgid "VTOLs disabled."
 msgstr "ВЗІПи вимкнено."
 
-#: src/multiint.cpp:1173
+#: src/multiint.cpp:1175
 msgid "Satellite Uplink disabled."
 msgstr "Супутниковий зв'язок вимкнено."
 
-#: src/multiint.cpp:1174
+#: src/multiint.cpp:1176
 msgid "Laser Satellite disabled."
 msgstr "Лазерний супутник вимкнено."
 
-#: src/multiint.cpp:1175
+#: src/multiint.cpp:1177
 msgid "Structure Limits Enforced."
 msgstr "Обмеження структури дотримуються."
 
-#: src/multiint.cpp:1296
+#: src/multiint.cpp:1298
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
 msgstr "%s (%d) дозволена зміна мапи: %d/%d"
 
-#: src/multiint.cpp:1317
+#: src/multiint.cpp:1319
 msgid "Vote"
 msgstr "Голосування"
 
-#: src/multiint.cpp:1318
+#: src/multiint.cpp:1320
 msgid "Allow host to change map or randomize?"
 msgstr "Дозволити хосту міняти карту чи випадковим чином?"
 
-#: src/multiint.cpp:1349
+#: src/multiint.cpp:1351
 msgid "Not enough votes to randomize or change the map."
 msgstr "Недостатньо голосів для рандомізації чи зміни карти."
 
-#: src/multiint.cpp:1385
+#: src/multiint.cpp:1387
 msgid "Select Game Name"
 msgstr "Виберіть Ім’я Гри"
 
-#: src/multiint.cpp:1389
-#: src/titleui/gamefind.cpp:263
+#: src/multiint.cpp:1391
+#: src/titleui/gamefind.cpp:264
 msgid "Game Name"
 msgstr "Назва гри"
 
-#: src/multiint.cpp:1390
+#: src/multiint.cpp:1392
 msgid "One-Player Skirmish"
 msgstr "Сутичка для Одного Гравця"
 
-#: src/multiint.cpp:1413
+#: src/multiint.cpp:1415
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr "Виберіть картку\n"
 "Може бути заблоковано голосами гравців"
 
-#: src/multiint.cpp:1414
+#: src/multiint.cpp:1416
 msgid "Map-Mod!"
 msgstr "Карта-Мод!"
 
-#: src/multiint.cpp:1415
+#: src/multiint.cpp:1417
 msgid "Random map!"
 msgstr "Випадкова картка!"
 
-#: src/multiint.cpp:1432
+#: src/multiint.cpp:1434
 msgid "Click to set Password"
 msgstr "Натисніть аби встановити Пароль"
 
-#: src/multiint.cpp:1433
+#: src/multiint.cpp:1435
 msgid "Enter password here"
 msgstr "Визначте Пароль"
 
-#: src/multiint.cpp:1447
+#: src/multiint.cpp:1449
 msgid "Select Player Name"
 msgstr "Виберіть Ім’я Гравця"
 
-#: src/multiint.cpp:1471
+#: src/multiint.cpp:1473
 #: src/multimenu.cpp:775
 msgid "Alliances"
 msgstr "Союзи"
 
-#: src/multiint.cpp:1492
+#: src/multiint.cpp:1494
 msgid "Base"
 msgstr "База"
 
-#: src/multiint.cpp:1502
+#: src/multiint.cpp:1504
 msgid "Map Preview"
 msgstr "Вигляд Мапи"
 
-#: src/multiint.cpp:1503
+#: src/multiint.cpp:1505
 msgid "Click to see Map"
 msgstr "Натисни, щоб побачити Мапу"
 
-#: src/multiint.cpp:1509
+#: src/multiint.cpp:1511
 msgid "Show Structure Limits"
 msgstr "Показати Межу Кількості Будівель"
 
-#: src/multiint.cpp:1509
+#: src/multiint.cpp:1511
 msgid "Set Structure Limits"
 msgstr "Встановити Межу Кількості Будівель"
 
-#: src/multiint.cpp:1523
+#: src/multiint.cpp:1525
 msgid "Random Game Options"
 msgstr "Варіанти випадкових ігор"
 
-#: src/multiint.cpp:1524
+#: src/multiint.cpp:1526
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr "Опції випадкової гри\n"
 "Може бути заблоковано голосами гравців"
 
-#: src/multiint.cpp:1535
+#: src/multiint.cpp:1537
 msgid "Tech"
 msgstr "Техніка"
 
-#: src/multiint.cpp:1536
+#: src/multiint.cpp:1538
 msgid "Technology Level 1"
 msgstr "Технологія Рівень 1"
 
-#: src/multiint.cpp:1537
+#: src/multiint.cpp:1539
 msgid "Technology Level 2"
 msgstr "Технологія Рівень 2"
 
-#: src/multiint.cpp:1538
+#: src/multiint.cpp:1540
 msgid "Technology Level 3"
 msgstr "Технологія Рівень 3"
 
-#: src/multiint.cpp:1539
+#: src/multiint.cpp:1541
 msgid "Technology Level 4"
 msgstr "Технологія Рівень 4"
 
-#: src/multiint.cpp:1548
-#: src/multiint.cpp:1549
+#: src/multiint.cpp:1550
+#: src/multiint.cpp:1551
 msgid "Start Hosting Game"
 msgstr "Створити Гру"
 
-#: src/multiint.cpp:1711
+#: src/multiint.cpp:1713
 msgid "DIFFICULTY"
 msgstr "ДИФЕРЕНЦІАЦІЯ"
 
-#: src/multiint.cpp:1741
+#: src/multiint.cpp:1743
 msgid "Starts disadvantaged"
 msgstr ""
 
-#: src/multiint.cpp:1742
+#: src/multiint.cpp:1744
 msgid "Plays nice"
 msgstr ""
 
-#: src/multiint.cpp:1743
+#: src/multiint.cpp:1745
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1744
+#: src/multiint.cpp:1746
 msgid "Starts with advantages"
 msgstr ""
 
-#: src/multiint.cpp:1770
+#: src/multiint.cpp:1772
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1839
+#: src/multiint.cpp:1841
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1850
+#: src/multiint.cpp:1852
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:1870
+#: src/multiint.cpp:1872
 msgid "Allow spectators to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1954
+#: src/multiint.cpp:1956
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:1981
+#: src/multiint.cpp:1983
 #, c-format
 msgid "Click to take player slot %u"
 msgstr ""
 
-#: src/multiint.cpp:2018
+#: src/multiint.cpp:2020
 msgid "Click to swap player to this slot"
 msgstr ""
 
-#: src/multiint.cpp:2035
-#: src/multiint.cpp:3126
+#: src/multiint.cpp:2037
+#: src/multiint.cpp:3128
 #, c-format
 msgid "Spectator %s has moved to Players"
 msgstr ""
 
-#: src/multiint.cpp:2041
+#: src/multiint.cpp:2043
 msgid "Cannot swap with host"
 msgstr ""
 
-#: src/multiint.cpp:2282
+#: src/multiint.cpp:2284
 msgid "Team"
 msgstr "Команда"
 
-#: src/multiint.cpp:2292
-#: src/multiint.cpp:4192
-#: src/multiint.cpp:7244
-#: src/multiint.cpp:7489
+#: src/multiint.cpp:2294
+#: src/multiint.cpp:4194
+#: src/multiint.cpp:7247
+#: src/multiint.cpp:7492
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
 msgstr ""
 
-#: src/multiint.cpp:2303
-#: src/multiint.cpp:4430
+#: src/multiint.cpp:2305
+#: src/multiint.cpp:4432
 #: src/multimenu.cpp:1282
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост викинув %s з гри!"
 
-#: src/multiint.cpp:2304
-#: src/multiint.cpp:4432
+#: src/multiint.cpp:2306
+#: src/multiint.cpp:4434
 #: src/multimenu.cpp:1286
 msgid "The host has kicked you from the game."
 msgstr ""
 
-#: src/multiint.cpp:2339
+#: src/multiint.cpp:2341
 #, c-format
 msgid "Failed to move %s to Spectators"
 msgstr ""
 
-#: src/multiint.cpp:2344
+#: src/multiint.cpp:2346
 #, c-format
 msgid "The host has moved %s to Spectators!"
 msgstr ""
 
-#: src/multiint.cpp:2367
+#: src/multiint.cpp:2369
 msgid "Move to Spectators"
 msgstr ""
 
-#: src/multiint.cpp:2388
+#: src/multiint.cpp:2390
 msgid "Ask Spectator to Play"
 msgstr ""
 
-#: src/multiint.cpp:2404
+#: src/multiint.cpp:2406
 msgid "Ask to Play"
 msgstr ""
 
-#: src/multiint.cpp:3010
+#: src/multiint.cpp:3012
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
 msgstr ""
 
-#: src/multiint.cpp:3014
+#: src/multiint.cpp:3016
 #, c-format
 msgid "Player %s wants to remain a Player"
 msgstr ""
 
-#: src/multiint.cpp:3022
+#: src/multiint.cpp:3024
 msgid "Host has declined to switch you to a Player"
 msgstr ""
 
-#: src/multiint.cpp:3026
+#: src/multiint.cpp:3028
 msgid "Unable to switch to Spectator"
 msgstr ""
 
-#: src/multiint.cpp:3054
+#: src/multiint.cpp:3056
 msgid "Do you want to spectate?"
 msgstr ""
 
-#: src/multiint.cpp:3055
+#: src/multiint.cpp:3057
 msgid "The host of this game wants to know if you're willing to spectate?"
 msgstr ""
 
-#: src/multiint.cpp:3057
+#: src/multiint.cpp:3059
 msgid "You are currently a Player."
 msgstr ""
 
-#: src/multiint.cpp:3058
+#: src/multiint.cpp:3060
 msgid "Yes, I will spectate!"
 msgstr ""
 
-#: src/multiint.cpp:3063
+#: src/multiint.cpp:3065
 msgid "Do you want to play?"
 msgstr ""
 
-#: src/multiint.cpp:3064
+#: src/multiint.cpp:3066
 msgid "The host of this game wants to know if you'd like to play?"
 msgstr ""
 
-#: src/multiint.cpp:3066
+#: src/multiint.cpp:3068
 msgid "You are currently a Spectator."
 msgstr ""
 
-#: src/multiint.cpp:3067
+#: src/multiint.cpp:3069
 msgid "Yes, I want to play!"
 msgstr ""
 
-#: src/multiint.cpp:3110
+#: src/multiint.cpp:3112
 #, c-format
 msgid "Player %s has moved to Spectators"
 msgstr ""
 
-#: src/multiint.cpp:3149
+#: src/multiint.cpp:3151
 msgid "Spectator would like to become a Player"
 msgstr ""
 
-#: src/multiint.cpp:3150
+#: src/multiint.cpp:3152
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
 msgstr ""
 
-#: src/multiint.cpp:3152
+#: src/multiint.cpp:3154
 msgid "However, there are currently no open Player slots."
 msgstr ""
 
-#: src/multiint.cpp:3154
+#: src/multiint.cpp:3156
 msgid "Would you like to swap this Spectator with a Player?"
 msgstr ""
 
-#: src/multiint.cpp:3155
+#: src/multiint.cpp:3157
 msgid "Yes, select Player slot"
 msgstr ""
 
-#: src/multiint.cpp:3438
+#: src/multiint.cpp:3440
 msgid "Joined:"
 msgstr ""
 
-#: src/multiint.cpp:3441
+#: src/multiint.cpp:3443
 msgid "Ready:"
 msgstr ""
 
-#: src/multiint.cpp:3619
-#: src/titleui/gamefind.cpp:269
+#: src/multiint.cpp:3621
+#: src/titleui/gamefind.cpp:270
 msgid "Players"
 msgstr "Гравці"
 
-#: src/multiint.cpp:3649
+#: src/multiint.cpp:3651
 msgid "Host Options"
 msgstr ""
 
-#: src/multiint.cpp:3930
+#: src/multiint.cpp:3932
 msgid "Enable Spectator Join"
 msgstr ""
 
-#: src/multiint.cpp:3940
+#: src/multiint.cpp:3942
 msgid "Lock Teams"
 msgstr ""
 
-#: src/multiint.cpp:4196
+#: src/multiint.cpp:4198
 msgid "Choose Team"
 msgstr ""
 
-#: src/multiint.cpp:4200
+#: src/multiint.cpp:4202
 msgid "Teams locked"
 msgstr ""
 
-#: src/multiint.cpp:4221
+#: src/multiint.cpp:4223
 msgid "Click to change player colour"
 msgstr ""
 
-#: src/multiint.cpp:4231
+#: src/multiint.cpp:4233
 msgid "Click to change player faction"
 msgstr ""
 
-#: src/multiint.cpp:4242
+#: src/multiint.cpp:4244
 msgid "Click to change player position"
 msgstr ""
 
-#: src/multiint.cpp:4251
+#: src/multiint.cpp:4253
 msgid "Click to change AI, right click to distribute choice"
 msgstr "Клацніть, щоб змінити AI, правий клік організувати вибір"
 
-#: src/multiint.cpp:4255
+#: src/multiint.cpp:4257
 msgid "Click to close spectator slot"
 msgstr "\n"
 "Натисніть, щоб закрити слот для глядачів"
 
-#: src/multiint.cpp:4271
+#: src/multiint.cpp:4273
 msgid "Player ID: "
 msgstr "ID Гравця"
 
-#: src/multiint.cpp:4272
+#: src/multiint.cpp:4274
 msgid "(none)"
 msgstr "(немає)"
 
-#: src/multiint.cpp:4339
+#: src/multiint.cpp:4341
 msgid "Click to change difficulty"
 msgstr "Натисніть, щоб змінити складність"
 
-#: src/multiint.cpp:4377
+#: src/multiint.cpp:4379
 msgid "Waiting for player"
 msgstr "Чекаємо гравців..."
 
-#: src/multiint.cpp:4377
+#: src/multiint.cpp:4379
 msgid "Player is ready"
 msgstr "\n"
 "Гравець готовий"
 
-#: src/multiint.cpp:4377
+#: src/multiint.cpp:4379
 msgid "Player is downloading"
 msgstr "Програвач завантажується"
 
-#: src/multiint.cpp:4377
+#: src/multiint.cpp:4379
 msgid "Click when ready"
 msgstr "Натисни, коли готовий"
 
-#: src/multiint.cpp:4377
+#: src/multiint.cpp:4379
 msgid "Waiting for download"
 msgstr "Очікування завантаження"
 
-#: src/multiint.cpp:4449
+#: src/multiint.cpp:4451
 msgid "READY?"
 msgstr "ГОТОВІ?"
 
-#: src/multiint.cpp:4534
+#: src/multiint.cpp:4536
 msgid "For Spectator:"
 msgstr "Для глядачів:"
 
-#: src/multiint.cpp:4534
+#: src/multiint.cpp:4536
 msgid "For Player:"
 msgstr "Для гравця:"
 
-#: src/multiint.cpp:4552
+#: src/multiint.cpp:4554
 msgid "Choose Player Slot"
 msgstr "Виберіть слот гравця"
 
-#: src/multiint.cpp:4623
+#: src/multiint.cpp:4625
 msgid "PLAYERS"
 msgstr "ГРАВЦІ"
 
-#: src/multiint.cpp:4727
+#: src/multiint.cpp:4729
 msgid "Add spectator slot"
 msgstr "\n"
 "Додати місце для глядачів"
 
-#: src/multiint.cpp:4803
+#: src/multiint.cpp:4806
 msgid "Kicked from game"
 msgstr "Видалення з гри"
 
-#: src/multiint.cpp:5028
+#: src/multiint.cpp:5031
 msgid "Copy Text to Clipboard"
 msgstr "Копіювання тексту в буфер обміну"
 
-#: src/multiint.cpp:5117
+#: src/multiint.cpp:5120
 msgid "CHAT"
 msgstr "ЧАТ"
 
-#: src/multiint.cpp:5780
+#: src/multiint.cpp:5776
 msgid "Sorry! Failed to host the game."
 msgstr "Вибачте! Не далося створити гру."
 
-#: src/multiint.cpp:5841
+#: src/multiint.cpp:5837
 msgid "Game Name Updated."
 msgstr "\n"
 "Оновлено назву гри."
 
-#: src/multiint.cpp:5965
+#: src/multiint.cpp:5961
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "\n"
 "*** Тепер потрібен пароль [%s]! ***"
 
-#: src/multiint.cpp:5971
+#: src/multiint.cpp:5967
 msgid "*** password is NOT required! ***"
 msgstr "*** пароль НЕ потрібен! ***"
 
-#: src/multiint.cpp:5984
+#: src/multiint.cpp:5980
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "Це карта мод, вона може змінити ваш ігровий досвід!"
 
-#: src/multiint.cpp:5989
+#: src/multiint.cpp:5985
 msgid "This is a random map, it can vary your playing experience!"
 msgstr "Це карта мод, вона може змінити ваш ігровий досвід!"
 
-#: src/multiint.cpp:6141
+#: src/multiint.cpp:6137
 msgid "Host is Starting Game"
 msgstr "Хост Починає Гру"
 
-#: src/multiint.cpp:6406
+#: src/multiint.cpp:6408
 msgid "Host supplied invalid options"
 msgstr "Хост надав неприпустимі параметри"
 
-#: src/multiint.cpp:6640
+#: src/multiint.cpp:6642
 msgid "You have been kicked: "
 msgstr "Тебе вигнали:"
 
-#: src/multiint.cpp:6654
+#: src/multiint.cpp:6656
 msgid "No connection to host."
 msgstr "Немає зв'язку з хостом."
 
-#: src/multiint.cpp:6706
+#: src/multiint.cpp:6708
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
 msgstr "Хост переїхав мене до гравців, але я ніколи не дав дозволу на ці зміни. До побачення!"
 
-#: src/multiint.cpp:6708
+#: src/multiint.cpp:6710
 msgid "The host tried to move us to Players, but we never gave permission."
 msgstr "Хост намагався перемістити нас до гравців, але ми ніколи не дали дозвілу."
 
-#: src/multiint.cpp:6857
+#: src/multiint.cpp:6859
 msgid "Cannot change to a map with too few slots for all players."
 msgstr "Неможливо змінити на мапу із занадто мало слотів для всіх гравців."
 
-#: src/multiint.cpp:6862
+#: src/multiint.cpp:6864
 msgid "Cannot change to a map with fewer slots."
 msgstr "Не можна змінити на мапу з меншою кількістю слотів."
 
-#: src/multiint.cpp:6962
+#: src/multiint.cpp:6965
 msgid "The host has quit."
 msgstr "Хост вийшов."
 
-#: src/multiint.cpp:7000
+#: src/multiint.cpp:7003
 msgid "UPnP has been enabled."
 msgstr "Функцію UPnP було увімкнено."
 
-#: src/multiint.cpp:7006
+#: src/multiint.cpp:7009
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "Помилка визначення UPnP. Ви повинні вручну налаштувати маршрутизатор."
 
-#: src/multiint.cpp:7010
+#: src/multiint.cpp:7013
 msgid "UPnP detection is in progress..."
 msgstr "Йде процес виявлення UPnP..."
 
-#: src/multiint.cpp:7017
+#: src/multiint.cpp:7020
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "Виявлення UPnP вимкнено користувачем. Автоконфігурація порту 2100 не відбувається."
 
-#: src/multiint.cpp:7023
+#: src/multiint.cpp:7026
 msgid "Hit the ready box to begin your challenge!"
 msgstr "Натисніть кнопку готовності, щоб розпочати свій виклик!"
 
-#: src/multiint.cpp:7027
+#: src/multiint.cpp:7030
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Натисніть кнопку \"Почати хостинг\", щоб розпочати хостинг гри."
 
-#: src/multiint.cpp:7238
-#: src/multiint.cpp:7493
+#: src/multiint.cpp:7241
+#: src/multiint.cpp:7496
 msgid "Closed"
 msgstr "Закрити"
 
-#: src/multiint.cpp:7241
-#: src/multiint.cpp:7485
+#: src/multiint.cpp:7244
+#: src/multiint.cpp:7488
 msgid "Open"
 msgstr "Відкрити"
 
-#: src/multiint.cpp:7324
+#: src/multiint.cpp:7327
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Відправляється Карта: %u%% "
 
-#: src/multiint.cpp:7324
+#: src/multiint.cpp:7327
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "Мапа: %u%% завантажена"
 
-#: src/multiint.cpp:7371
+#: src/multiint.cpp:7374
 msgid "HOST"
 msgstr "ХОСТ"
 
-#: src/multiint.cpp:7378
+#: src/multiint.cpp:7381
 #: src/multimenu.cpp:772
 msgid "Ping"
 msgstr "Пінг"
 
-#: src/multiint.cpp:8149
+#: src/multiint.cpp:8238
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Версія Warzone 2100 служить для збереження цього файла повтору не відповідає поточній версії."
 
-#: src/multiint.cpp:8151
+#: src/multiint.cpp:8240
 #, c-format
 msgid "Replay File Saved With: \"%s\""
 msgstr "Повторити файл збереженого в: \"%s\""
 
-#: src/multiint.cpp:8155
+#: src/multiint.cpp:8244
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
 msgstr "Поточна версія Warzone 2100: \"%s\""
 
-#: src/multiint.cpp:8165
+#: src/multiint.cpp:8254
 msgid "Replays should usually be played back with the same version used to save the replay."
 msgstr "Повтори зазвичай повинні відтворені з тією ж версією, що використовується для збереження повтору."
 
-#: src/multiint.cpp:8167
+#: src/multiint.cpp:8256
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
 msgstr "Повтор не може відтворити відео успішно, або ж розрив у симуляції може бути різним."
 
-#: src/multiint.cpp:8168
+#: src/multiint.cpp:8257
 msgid "Replay Version Mismatch"
 msgstr "Версії модів не збігаються"
 
@@ -18408,28 +18562,28 @@ msgid "The game is already full."
 msgstr "Ця їздова сутність уже заповнена."
 
 #: src/multijoin.cpp:500
-#: src/multiplay.cpp:786
-#: src/multiplay.cpp:970
+#: src/multiplay.cpp:787
+#: src/multiplay.cpp:971
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) має несумісний мод, отже був викинутий."
 
 #: src/multijoin.cpp:504
-#: src/multiplay.cpp:790
-#: src/multiplay.cpp:974
+#: src/multiplay.cpp:791
+#: src/multiplay.cpp:975
 msgid "Your data doesn't match the host's!"
 msgstr "Ваші дані не збігаються з хостами!"
 
-#: src/multijoin.cpp:539
+#: src/multijoin.cpp:538
 #, c-format
 msgid "%s is joining the game"
 msgstr "%s приєднується до гри"
 
-#: src/multijoin.cpp:551
+#: src/multijoin.cpp:550
 msgid "Server message:"
 msgstr "Повідомлення сервера"
 
-#: src/multijoin.cpp:564
+#: src/multijoin.cpp:563
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
 msgstr "Оновлення гри, будь ласка, відвідайте https://wz2100.net для завантаження нової версії."
 
@@ -18548,134 +18702,146 @@ msgstr ""
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr ""
 
+#: src/multiopt.cpp:304
+msgid "MAP REQUESTED!"
+msgstr ""
+
+#: src/multiopt.cpp:329
+msgid "MOD REQUESTED!"
+msgstr ""
+
 #: src/multiopt.cpp:347
-#: src/multiplay.cpp:2007
+#: src/multiplay.cpp:2020
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr ""
 
 #: src/multiopt.cpp:348
-#: src/multiplay.cpp:2011
+#: src/multiplay.cpp:2024
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr ""
 
-#: src/multiplay.cpp:365
+#: src/multiplay.cpp:366
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Викидуємо гравця %s, тому що він намагався обійти перевірку цілісності даних!"
 
-#: src/multiplay.cpp:371
+#: src/multiplay.cpp:372
 msgid "Invalid data!"
 msgstr ""
 
-#: src/multiplay.cpp:1122
+#: src/multiplay.cpp:1123
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
 msgstr ""
 
-#: src/multiplay.cpp:1124
+#: src/multiplay.cpp:1125
 msgid "Unauthorized network command"
 msgstr ""
 
-#: src/multiplay.cpp:1224
+#: src/multiplay.cpp:1225
 msgid "REPLAY HAS ENDED"
 msgstr ""
 
-#: src/multiplay.cpp:1225
+#: src/multiplay.cpp:1226
 msgid "(Press ESC to quit.)"
 msgstr ""
 
-#: src/multiplay.cpp:1373
+#: src/multiplay.cpp:1380
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
 msgstr ""
 
-#: src/multiplay.cpp:1885
+#: src/multiplay.cpp:1893
 msgid "Map was requested: SENDING MAP!"
 msgstr ""
 
-#: src/multiplay.cpp:1907
+#: src/multiplay.cpp:1915
 msgid "Mod was requested: SENDING MOD!"
 msgstr ""
 
-#: src/multiplay.cpp:1972
+#: src/multiplay.cpp:1985
 msgid "FILE SENT!"
 msgstr ""
 
-#: src/multiplay.cpp:2043
+#: src/multiplay.cpp:2000
+msgid "MAP DOWNLOADED!"
+msgstr ""
+
+#: src/multiplay.cpp:2056
 #, c-format
 msgid "Beacon %d"
 msgstr "Сигнал %d"
 
-#: src/multiplay.cpp:2152
+#: src/multiplay.cpp:2165
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Отримано Сигнал від %s!"
 
-#: src/multiplay.cpp:2203
+#: src/multiplay.cpp:2216
 msgid "Green"
 msgstr "Зелений"
 
-#: src/multiplay.cpp:2204
+#: src/multiplay.cpp:2217
 msgid "Orange"
 msgstr "Помаранчовий"
 
-#: src/multiplay.cpp:2205
+#: src/multiplay.cpp:2218
 msgid "Grey"
 msgstr "Сірий"
 
-#: src/multiplay.cpp:2207
+#: src/multiplay.cpp:2220
 msgid "Red"
 msgstr "Червоний"
 
-#: src/multiplay.cpp:2208
+#: src/multiplay.cpp:2221
 msgid "Blue"
 msgstr "Синій"
 
-#: src/multiplay.cpp:2209
+#: src/multiplay.cpp:2222
 msgid "Pink"
 msgstr "Рожевий"
 
-#: src/multiplay.cpp:2210
+#: src/multiplay.cpp:2223
 msgid "Cyan"
 msgstr "Блакитний"
 
-#: src/multiplay.cpp:2211
+#: src/multiplay.cpp:2224
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:2212
+#: src/multiplay.cpp:2225
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:2213
+#: src/multiplay.cpp:2226
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:2214
+#: src/multiplay.cpp:2227
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:2215
+#: src/multiplay.cpp:2228
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:2216
+#: src/multiplay.cpp:2229
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:2217
+#: src/multiplay.cpp:2230
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:2218
+#: src/multiplay.cpp:2231
 msgid "Brown"
 msgstr ""
 
-#: src/multiplay.cpp:2375
+#: src/multiplay.cpp:2395
 msgid "Spectator Mode"
 msgstr ""
 
-#: src/multiplay.cpp:2376
+#: src/multiplay.cpp:2396
 msgid "You are a spectator. Enjoy watching the game!"
 msgstr ""
 
@@ -18710,6 +18876,15 @@ msgstr ""
 
 #: src/order.cpp:791
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
+msgstr ""
+
+#: src/qtscript.cpp:893
+msgid "Failed to load selected AI! Check your logs to see why."
+msgstr ""
+
+#: src/qtscript.cpp:896
+#, c-format
+msgid "Loaded the %s AI script for current player!"
 msgstr ""
 
 #: src/research.cpp:1017
@@ -18838,24 +19013,28 @@ msgstr "Повний Час Гри - %s"
 msgid "You cheated!"
 msgstr "Ви застосували шахрайство!"
 
-#: src/selection.cpp:360
-#: src/selection.cpp:442
+#: src/selection.cpp:368
+#: src/selection.cpp:450
 msgid "Unable to locate any repair units!"
 msgstr "Не можу знайти жодного ремонтного підрозділу!"
 
-#: src/selection.cpp:363
+#: src/selection.cpp:371
 msgid "Unable to locate any Trucks!"
 msgstr "Не можу знайти жодного Інженера!"
 
-#: src/selection.cpp:366
+#: src/selection.cpp:374
 msgid "Unable to locate any Sensor Units!"
 msgstr "Не можу знайти жодного Сенсорного Підрозділу!"
 
-#: src/selection.cpp:369
+#: src/selection.cpp:377
 msgid "Unable to locate any Commanders!"
 msgstr "Не можу знайти  жодного Командира!"
 
-#: src/selection.cpp:651
+#: src/selection.cpp:511
+msgid "Cannot find required building!"
+msgstr ""
+
+#: src/selection.cpp:662
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
@@ -18864,28 +19043,32 @@ msgstr[1] "%u підрозділи обрано"
 msgstr[2] "%u підрозділи обрано"
 msgstr[3] "%u підрозділи обрано"
 
-#: src/spectatorwidgets.cpp:523
+#: src/spectatorwidgets.cpp:111
+msgid "Show Player Stats"
+msgstr ""
+
+#: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
 msgstr ""
 
-#: src/spectatorwidgets.cpp:734
+#: src/spectatorwidgets.cpp:804
 msgid "Power/Rate"
 msgstr ""
 
-#: src/spectatorwidgets.cpp:735
+#: src/spectatorwidgets.cpp:805
 msgid "Current Power / Power Per Second"
 msgstr ""
 
-#: src/spectatorwidgets.cpp:736
+#: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
 msgstr ""
 
-#: src/spectatorwidgets.cpp:738
+#: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
 msgstr ""
 
-#: src/spectatorwidgets.cpp:738
-#: src/spectatorwidgets.cpp:740
+#: src/spectatorwidgets.cpp:808
+#: src/spectatorwidgets.cpp:810
 msgid "(Tanks / Cyborgs)"
 msgstr ""
 
@@ -18908,7 +19091,7 @@ msgstr ""
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:5297
+#: src/structure.cpp:5353
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
@@ -18917,7 +19100,12 @@ msgstr[1] "%s - %u Підрозділи закріплено - Пошкодже�
 msgstr[2] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
 msgstr[3] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
 
-#: src/structure.cpp:5316
+#: src/structure.cpp:5357
+#, c-format
+msgid "ID %d - sensor range %d - ECM %d"
+msgstr ""
+
+#: src/structure.cpp:5372
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
@@ -18926,53 +19114,93 @@ msgstr[1] "%s - %u Підрозділи закріплено - Пошкодже�
 msgstr[2] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
 msgstr[3] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
 
-#: src/structure.cpp:5321
-#: src/structure.cpp:5331
-#: src/structure.cpp:5338
-#: src/structure.cpp:5364
-#: src/structure.cpp:5373
-#: src/structure.cpp:5380
-#: src/structure.cpp:5388
+#: src/structure.cpp:5377
+#: src/structure.cpp:5387
+#: src/structure.cpp:5394
+#: src/structure.cpp:5420
+#: src/structure.cpp:5429
+#: src/structure.cpp:5436
+#: src/structure.cpp:5444
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr "%s - Пошкоджень %d/%d"
 
-#: src/structure.cpp:5354
+#: src/structure.cpp:5381
+#, c-format
+msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
+msgstr ""
+
+#: src/structure.cpp:5390
+#, c-format
+msgid "ID %d - Queue %d"
+msgstr ""
+
+#: src/structure.cpp:5397
+#, c-format
+msgid "ID %d - %s"
+msgstr ""
+
+#: src/structure.cpp:5410
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5509
-#: src/structure.cpp:5554
+#: src/structure.cpp:5414
+#, c-format
+msgid "ID %u - Multiplier: %u"
+msgstr ""
+
+#: src/structure.cpp:5423
+#, c-format
+msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
+msgstr ""
+
+#: src/structure.cpp:5432
+#, c-format
+msgid "ID %u - Research Points: %u"
+msgstr ""
+
+#: src/structure.cpp:5439
+#, c-format
+msgid "tile %d,%d - target %s"
+msgstr ""
+
+#: src/structure.cpp:5447
+#, c-format
+msgid "ID %u - sensor range %d - ECM %d"
+msgstr ""
+
+#: src/structure.cpp:5565
+#: src/structure.cpp:5610
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Електронних Ушкоджень"
 
-#: src/structure.cpp:5681
+#: src/structure.cpp:5737
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна Винагорода - Звіт про Зону Видимості"
 
-#: src/structure.cpp:5723
+#: src/structure.cpp:5779
 msgid "Factory Reward - Propulsion"
 msgstr "Винагорода Фабрики - Ходова"
 
-#: src/structure.cpp:5745
+#: src/structure.cpp:5801
 msgid "Factory Reward - Body"
 msgstr "Винагорода Фабрики - Корпус"
 
-#: src/structure.cpp:5767
+#: src/structure.cpp:5823
 msgid "Factory Reward - Weapon"
 msgstr "Винагорода Фабрики - Озброєння"
 
-#: src/structure.cpp:5775
+#: src/structure.cpp:5831
 msgid "Factory Reward - Nothing"
 msgstr "Винагорода Фабрики - Нічого"
 
-#: src/structure.cpp:5805
+#: src/structure.cpp:5861
 msgid "Repair Facility Award - Repair"
 msgstr "Винагорода Ремонтної Майстерні - Ремонт"
 
-#: src/structure.cpp:5811
+#: src/structure.cpp:5867
 msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 
@@ -18988,120 +19216,120 @@ msgstr "Оновити Список Ігор"
 msgid "Filter Games List"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:163
+#: src/titleui/gamefind.cpp:164
 msgid "Refreshing..."
 msgstr ""
 
-#: src/titleui/gamefind.cpp:171
+#: src/titleui/gamefind.cpp:172
 msgid "Searching"
 msgstr "Пошук"
 
-#: src/titleui/gamefind.cpp:225
+#: src/titleui/gamefind.cpp:226
 msgid "Connecting to the lobby server..."
 msgstr "Підключення до POP3 сервера"
 
-#: src/titleui/gamefind.cpp:266
+#: src/titleui/gamefind.cpp:267
 msgid "Map Name"
 msgstr "Назва карти"
 
-#: src/titleui/gamefind.cpp:272
+#: src/titleui/gamefind.cpp:273
 msgid "Status"
 msgstr "\n"
 "Становище"
 
-#: src/titleui/gamefind.cpp:328
+#: src/titleui/gamefind.cpp:329
 msgid "Can't connect to lobby server!"
 msgstr "Неможливо підключитися до сервера лобі!"
 
-#: src/titleui/gamefind.cpp:421
+#: src/titleui/gamefind.cpp:422
 #, c-format
 msgid "Mods: %s"
 msgstr "Режими: %s"
 
-#: src/titleui/gamefind.cpp:427
+#: src/titleui/gamefind.cpp:428
 msgid "Mods: None!"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:433
+#: src/titleui/gamefind.cpp:434
 #, c-format
 msgid "Version: %s"
 msgstr "Версія: %s"
 
-#: src/titleui/gamefind.cpp:458
+#: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
 msgstr "Приєднайтеся до глядачів"
 
-#: src/titleui/gamefind.cpp:481
+#: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "Ваша версія Warzone несумісна з цією грою."
 
-#: src/titleui/gamefind.cpp:510
+#: src/titleui/gamefind.cpp:511
 msgid "[Password required]"
 msgstr "Потрібен пароль"
 
-#: src/titleui/gamefind.cpp:514
+#: src/titleui/gamefind.cpp:515
 msgid "[No Tanks]"
 msgstr "[Без танків]"
 
-#: src/titleui/gamefind.cpp:518
+#: src/titleui/gamefind.cpp:519
 msgid "[No Cyborgs]"
 msgstr "[Без Кіборгів]"
 
-#: src/titleui/gamefind.cpp:522
+#: src/titleui/gamefind.cpp:523
 msgid "[No VTOLs]"
 msgstr "[Без ВЗІПів]"
 
-#: src/titleui/gamefind.cpp:526
+#: src/titleui/gamefind.cpp:527
 #, c-format
 msgid "Hosted by %s"
 msgstr "Організовано %@"
 
-#: src/titleui/gamefind.cpp:530
+#: src/titleui/gamefind.cpp:531
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr "Хостинг від %s —%s"
 
-#: src/titleui/gamefind.cpp:662
+#: src/titleui/gamefind.cpp:663
 msgid "Can't find any games for your version."
 msgstr "Не можу знайти жодної гри для вашої версії."
 
-#: src/titleui/gamefind.cpp:678
+#: src/titleui/gamefind.cpp:679
 msgid "There appears to be a game update available!"
 msgstr "Здається, наявне оновлення гри!"
 
-#: src/titleui/gamefind.cpp:682
+#: src/titleui/gamefind.cpp:683
 msgid "No games are available for your version"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:686
+#: src/titleui/gamefind.cpp:687
 msgid "Game is full"
 msgstr "Гра повна"
 
-#: src/titleui/gamefind.cpp:690
+#: src/titleui/gamefind.cpp:691
 msgid "You were kicked!"
 msgstr "Вас викинуто!"
 
-#: src/titleui/gamefind.cpp:693
+#: src/titleui/gamefind.cpp:694
 msgid "Wrong Game Version!"
 msgstr "Невірна Версія Гри!"
 
-#: src/titleui/gamefind.cpp:696
+#: src/titleui/gamefind.cpp:697
 msgid "You have an incompatible mod."
 msgstr "У вас несумісний мод."
 
-#: src/titleui/gamefind.cpp:700
+#: src/titleui/gamefind.cpp:701
 msgid "Host couldn't send file?"
 msgstr "Хост не зміг відправити файл?"
 
-#: src/titleui/gamefind.cpp:704
+#: src/titleui/gamefind.cpp:705
 msgid "Incorrect Password!"
 msgstr "Невірний Пароль!"
 
-#: src/titleui/gamefind.cpp:707
+#: src/titleui/gamefind.cpp:708
 msgid "Host has dropped connection!"
 msgstr "Хост обірвав з'єднання!"
 
-#: src/titleui/gamefind.cpp:711
+#: src/titleui/gamefind.cpp:712
 msgid "Connection Error"
 msgstr "Помилка З’єднання"
 
@@ -19215,11 +19443,11 @@ msgstr ""
 msgid "The battle is over - you can leave the room."
 msgstr ""
 
-#: src/wzapi.cpp:2337
+#: src/wzapi.cpp:2339
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ВИ ПЕРЕМОГЛИ!"
 
-#: src/wzapi.cpp:2344
+#: src/wzapi.cpp:2346
 msgid "YOU WERE DEFEATED!"
 msgstr "ВИ ЗАЗНАЛИ ПОРАЗКИ!"
 
