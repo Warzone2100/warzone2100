@@ -724,6 +724,7 @@ Function .onInstSuccess
       NoReboot:
     ${EndIf}
   !endif
+  ExecShell "open" "https://warzone2100.github.io/update-data/redirect/afterinstall.html"
 FunctionEnd
 
 Function .onRebootFailed
