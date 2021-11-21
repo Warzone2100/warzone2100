@@ -198,33 +198,33 @@ namespace wzapi
 	public:
 		// MARK: Transporter events
 
-		//__ ## eventTransporterLaunch(transport)
+		//__ ## eventTransporterLaunch(transporterDroid)
 		//__
 		//__ An event that is run when the mission transporter has been ordered to fly off.
 		//__
 		virtual bool handle_eventLaunchTransporter() SCRIPTING_EVENT_NON_REQUIRED // DEPRECATED!
 		virtual bool handle_eventTransporterLaunch(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
 
-		//__ ## eventTransporterArrived(transport)
+		//__ ## eventTransporterArrived(transporterDroid)
 		//__
 		//__ An event that is run when the mission transporter has arrived at the map edge with reinforcements.
 		//__
 		virtual bool handle_eventReinforcementsArrived() SCRIPTING_EVENT_NON_REQUIRED // DEPRECATED!
 		virtual bool handle_eventTransporterArrived(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
 
-		//__ ## eventTransporterExit(transport)
+		//__ ## eventTransporterExit(transporterDroid)
 		//__
 		//__ An event that is run when the mission transporter has left the map.
 		//__
 		virtual bool handle_eventTransporterExit(const BASE_OBJECT *psObj) SCRIPTING_EVENT_NON_REQUIRED
 
-		//__ ## eventTransporterDone(transport)
+		//__ ## eventTransporterDone(transporterDroid)
 		//__
 		//__ An event that is run when the mission transporter has no more reinforcements to deliver.
 		//__
 		virtual bool handle_eventTransporterDone(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
 
-		//__ ## eventTransporterLanded(transport)
+		//__ ## eventTransporterLanded(transporterDroid)
 		//__
 		//__ An event that is run when the mission transporter has landed with reinforcements.
 		//__
@@ -314,22 +314,22 @@ namespace wzapi
 		//__
 		virtual bool handle_eventMenuManufacture() SCRIPTING_EVENT_NON_REQUIRED
 
-		//__ ## eventSelectionChanged(objects)
+		//__ ## eventSelectionChanged(droidsAndStructures)
 		//__
 		//__ An event that is triggered whenever the host player selects one or more game objects.
-		//__ The `objects` parameter contains an array of the currently selected game objects.
+		//__ The `droidsAndStructures` parameter contains an array of the currently selected game objects.
 		//__ Keep in mind that the player may drag and drop select many units at once, select one
 		//__ unit specifically, or even add more selections to a current selection one at a time.
 		//__ This event will trigger once for each user action, not once for each selected or
-		//__ deselected object. If all selected game objects are deselected, `objects` will
+		//__ deselected object. If all selected game objects are deselected, `droidsAndStructures` will
 		//__ be empty.
 		//__
-		virtual bool handle_eventSelectionChanged(const std::vector<const BASE_OBJECT *>& objects) SCRIPTING_EVENT_NON_REQUIRED
+		virtual bool handle_eventSelectionChanged(const std::vector<const BASE_OBJECT *>& droidsAndStructures) SCRIPTING_EVENT_NON_REQUIRED
 
 	public:
 		// MARK: Game state-change events
 
-		//__ ## eventObjectRecycled(object)
+		//__ ## eventObjectRecycled(droidOrStructure)
 		//__
 		//__ An event that is run when an object (ex. droid, structure) is recycled.
 		//__
@@ -344,7 +344,7 @@ namespace wzapi
 		//__ ## eventCheatMode(entered)
 		//__
 		//__ Game entered or left cheat/debug mode.
-		//__ The entered parameter is true if cheat mode entered, false otherwise.
+		//__ The entered parameter is `true` if cheat mode entered, `false` otherwise.
 		//__
 		virtual bool handle_eventCheatMode(bool entered) = 0;
 
@@ -398,12 +398,12 @@ namespace wzapi
 		//__
 		virtual bool handle_eventAttacked(const BASE_OBJECT *psVictim, const BASE_OBJECT *psAttacker) = 0;
 
-		//__ ## eventResearched(research, structure, player)
+		//__ ## eventResearched(research, researchStructure, player)
 		//__
-		//__ An event that is run whenever a new research is available. The structure
+		//__ An event that is run whenever a new research is available. The `structure`
 		//__ parameter is set if the research comes from a research lab owned by the
-		//__ current player. If an ally does the research, the structure parameter will
-		//__ be set to null. The player parameter gives the player it is called for.
+		//__ current player. If an ally does the research, the `researchStructure` parameter will
+		//__ be set to `null`. The `player` parameter gives the player it is called for.
 		//__
 		virtual bool handle_eventResearched(const researchResult& research, event_nullable_ptr<const STRUCTURE> psStruct, int player) = 0;
 
@@ -426,7 +426,7 @@ namespace wzapi
 		//__
 		//__ An event that is run sometimes when an object, which was marked by an object label,
 		//__ which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
-		//__ An event that is run sometimes when an objectm  goes from not seen to seen.
+		//__ An event that is run sometimes when an object goes from not seen to seen.
 		//__ First parameter is **game object** doing the seeing, the next the game
 		//__ object being seen.
 		virtual bool handle_eventObjectSeen(const BASE_OBJECT *psViewer, const BASE_OBJECT *psSeen) = 0;
@@ -441,45 +441,45 @@ namespace wzapi
 		//__
 		virtual bool handle_eventGroupSeen(const BASE_OBJECT *psViewer, int groupId) = 0;
 
-		//__ ## eventObjectTransfer(object, from)
+		//__ ## eventObjectTransfer(droidOrStructure, fromPlayer)
 		//__
 		//__ An event that is run whenever an object is transferred between players,
 		//__ for example due to a Nexus Link weapon. The event is called after the
-		//__ object has been transferred, so the target player is in object.player.
+		//__ object has been transferred, so the target player is in `droidOrStructure.player`.
 		//__ The event is called for both players.
 		//__
-		virtual bool handle_eventObjectTransfer(const BASE_OBJECT *psObj, int from) = 0;
+		virtual bool handle_eventObjectTransfer(const BASE_OBJECT *psObj, int fromPlayer) = 0;
 
-		//__ ## eventChat(from, to, message)
+		//__ ## eventChat(fromPlayer, toPlayer, message)
 		//__
-		//__ An event that is run whenever a chat message is received. The `from` parameter is the
-		//__ player sending the chat message. For the moment, the `to` parameter is always the script
+		//__ An event that is run whenever a chat message is received. The `fromPlayer` parameter is the
+		//__ player sending the chat message. For the moment, the `toPlayer` parameter is always the script
 		//__ player.
 		//__
-		virtual bool handle_eventChat(int from, int to, const char *message) = 0;
+		virtual bool handle_eventChat(int fromPlayer, int toPlayer, const char *message) = 0;
 
-		//__ ## eventBeacon(x, y, from, to[, message])
+		//__ ## eventBeacon(x, y, fromPlayer, toPlayer[, message])
 		//__
-		//__ An event that is run whenever a beacon message is received. The `from` parameter is the
-		//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
+		//__ An event that is run whenever a beacon message is received. The `fromPlayer` parameter is the
+		//__ player sending the beacon. For the moment, the `toPlayer` parameter is always the script player.
 		//__ Message may be undefined.
 		//__
-		virtual bool handle_eventBeacon(int x, int y, int from, int to, optional<const char *> message) = 0;
+		virtual bool handle_eventBeacon(int x, int y, int fromPlayer, int toPlayer, optional<const char *> message) = 0;
 
-		//__ ## eventBeaconRemoved(from, to)
+		//__ ## eventBeaconRemoved(fromPlayer, toPlayer)
 		//__
-		//__ An event that is run whenever a beacon message is removed. The `from` parameter is the
-		//__ player sending the beacon. For the moment, the `to` parameter is always the script player.
+		//__ An event that is run whenever a beacon message is removed. The `fromPlayer` parameter is the
+		//__ player sending the beacon. For the moment, the `toPlayer` parameter is always the script player.
 		//__
-		virtual bool handle_eventBeaconRemoved(int from, int to) = 0;
+		virtual bool handle_eventBeaconRemoved(int fromPlayer, int toPlayer) = 0;
 
-		//__ ## eventGroupLoss(gameObject, groupId, newSize)
+		//__ ## eventGroupLoss(gameObject, groupId, newGroupSize)
 		//__
 		//__ An event that is run whenever a group becomes empty. Input parameter
 		//__ is the about to be killed object, the group's id, and the new group size.
 		//__
 //		// Since groups are entities local to one context, we do not iterate over them here.
-		virtual bool handle_eventGroupLoss(const BASE_OBJECT *psObj, int groupId, int size) = 0;
+		virtual bool handle_eventGroupLoss(const BASE_OBJECT *psObj, int groupId, int newGroupSize) = 0;
 
 		//__ ## eventArea<label>(droid)
 		//__
@@ -496,23 +496,23 @@ namespace wzapi
 		//__
 		virtual bool handle_eventDesignCreated(const DROID_TEMPLATE *psTemplate) = 0;
 
-		//__ ## eventAllianceOffer(from, to)
+		//__ ## eventAllianceOffer(fromPlayer, toPlayer)
 		//__
 		//__ An event that is called whenever an alliance offer is requested.
 		//__
-		virtual bool handle_eventAllianceOffer(uint8_t from, uint8_t to) = 0;
+		virtual bool handle_eventAllianceOffer(uint8_t fromPlayer, uint8_t toPlayer) = 0;
 
-		//__ ## eventAllianceAccepted(from, to)
+		//__ ## eventAllianceAccepted(fromPlayer, toPlayer)
 		//__
 		//__ An event that is called whenever an alliance is accepted.
 		//__
-		virtual bool handle_eventAllianceAccepted(uint8_t from, uint8_t to) = 0;
+		virtual bool handle_eventAllianceAccepted(uint8_t fromPlayer, uint8_t toPlayer) = 0;
 
-		//__ ## eventAllianceBroken(from, to)
+		//__ ## eventAllianceBroken(fromPlayer, toPlayer)
 		//__
 		//__ An event that is called whenever an alliance is broken.
 		//__
-		virtual bool handle_eventAllianceBroken(uint8_t from, uint8_t to) = 0;
+		virtual bool handle_eventAllianceBroken(uint8_t fromPlayer, uint8_t toPlayer) = 0;
 
 	public:
 		// MARK: Special input events
@@ -525,11 +525,11 @@ namespace wzapi
 		//__
 		virtual bool handle_eventSyncRequest(int from, int reqId, int x, int y, const BASE_OBJECT *psObj1, const BASE_OBJECT *psObj2) = 0;
 
-		//__ ## eventKeyPressed(meta, key)
+		//__ ## eventKeyPressed(metaKeyCode, keyCode)
 		//__
 		//__ An event that is called whenever user presses a key in the game, not counting chat
 		//__ or other pop-up user interfaces. The key values are currently undocumented.
-		virtual bool handle_eventKeyPressed(int meta, int key) SCRIPTING_EVENT_NON_REQUIRED
+		virtual bool handle_eventKeyPressed(int metaKeyCode, int keyCode) SCRIPTING_EVENT_NON_REQUIRED
 	};
 
 	enum class GlobalVariableFlags
