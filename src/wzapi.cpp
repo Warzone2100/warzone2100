@@ -1193,7 +1193,7 @@ GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
 //-- ## getResearch(researchName[, player])
 //--
 //-- Fetch information about a given technology item, given by a string that matches
-//-- its definition in "research.json". If not found, returns null.
+//-- its definition in `research.json`. If not found, returns `null`.
 //--
 wzapi::researchResult wzapi::getResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player))
 {
@@ -3115,14 +3115,15 @@ wzapi::no_return_value wzapi::loadLevel(WZAPI_PARAMS(std::string levelName))
 wzapi::no_return_value wzapi::setDroidExperience(WZAPI_PARAMS(DROID *psDroid, double experience))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
+
 	psDroid->experience = static_cast<uint32_t>(experience * 65536);
 	return {};
 }
 
-//-- ## donateObject(gameObject, player)
+//-- ## donateObject(droidOrStructure, player)
 //--
-//-- Donate a game object (restricted to droids before 3.2.3) to another player. Returns true if
-//-- donation was successful. May return false if this donation would push the receiving player
+//-- Donate a game object (restricted to droids before 3.2.3) to another player. Returns `true` if
+//-- donation was successful. May return `false` if this donation would push the receiving player
 //-- over unit limits. (3.2+ only)
 //--
 bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))

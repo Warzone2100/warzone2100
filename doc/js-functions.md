@@ -432,7 +432,7 @@ x1, y1, x2 and y2. (3.2+ only)
 ## getResearch(researchName[, player])
 
 Fetch information about a given technology item, given by a string that matches
-its definition in "research.json". If not found, returns null.
+its definition in `research.json`. If not found, returns `null`.
 
 ## enumResearch()
 
@@ -799,10 +799,10 @@ Load the level with the given name.
 
 Set the amount of experience a droid has. Experience is read using floating point precision.
 
-## donateObject(gameObject, player)
+## donateObject(droidOrStructure, player)
 
-Donate a game object (restricted to droids before 3.2.3) to another player. Returns true if
-donation was successful. May return false if this donation would push the receiving player
+Donate a game object (restricted to droids before 3.2.3) to another player. Returns `true` if
+donation was successful. May return `false` if this donation would push the receiving player
 over unit limits. (3.2+ only)
 
 ## donatePower(amount, player)

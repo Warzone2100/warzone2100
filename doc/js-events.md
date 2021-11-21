@@ -215,7 +215,7 @@ Message may be undefined.
 An event that is run whenever a beacon message is removed. The `fromPlayer` parameter is the
 player sending the beacon. For the moment, the `toPlayer` parameter is always the script player.
 
-## eventGroupLoss(object, groupId, newGroupSize)
+## eventGroupLoss(gameObject, groupId, newGroupSize)
 
 An event that is run whenever a group becomes empty. Input parameter
 is the about to be killed object, the group's id, and the new group size.

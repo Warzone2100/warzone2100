@@ -1516,7 +1516,7 @@ bool triggerEventSelected()
 	return true;
 }
 
-//__ ## eventGroupLoss(object, groupId, newGroupSize)
+//__ ## eventGroupLoss(gameObject, groupId, newGroupSize)
 //__
 //__ An event that is run whenever a group becomes empty. Input parameter
 //__ is the about to be killed object, the group's id, and the new group size.
