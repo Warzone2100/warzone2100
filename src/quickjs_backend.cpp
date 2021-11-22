@@ -558,7 +558,7 @@ public:
 	//__
 	//__ An event that is run whenever a beacon message is received. The `fromPlayer` parameter is the
 	//__ player sending the beacon. For the moment, the `toPlayer` parameter is always the script player.
-	//__ Message may be undefined.
+	//__ Message may be `undefined`.
 	//__
 	virtual bool handle_eventBeacon(int x, int y, int fromPlayer, int toPlayer, optional<const char *> message) override;
 
@@ -2401,7 +2401,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 //-- is the first parameter, and it _must be quoted_, otherwise the function will
 //-- be inlined. The second parameter is the interval, in milliseconds. A third, optional
 //-- parameter can be a **game object** to pass to the timer function. If the **game object**
-//-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
+//-- dies, the timer stops running. The minimum number of milliseconds is `100`, but such
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
 //-- ```js
@@ -2485,10 +2485,10 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 //--
 //-- Queues up a function to run at a later game frame. This is useful to prevent
 //-- stuttering during the game, which can happen if too much script processing is
-//-- done at once.  The function to run is the first parameter, and it
+//-- done at once. The function to run is the first parameter, and it
 //-- _must be quoted_, otherwise the function will be inlined.
-//-- The second parameter is the delay in milliseconds, if it is omitted or 0,
-//-- the function will be run at a later frame.  A third optional
+//-- The second parameter is the delay in milliseconds, if it is omitted or `0`,
+//-- the function will be run at a later frame. A third optional
 //-- parameter can be a **game object** to pass to the queued function. If the **game object**
 //-- dies before the queued call runs, nothing happens.
 //--

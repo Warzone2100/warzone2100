@@ -293,7 +293,7 @@ int32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 
 //-- ## setAlliance(player1, player2, areAllies)
 //--
-//-- Set alliance status between two players to either true or false. (3.2+ only)
+//-- Set alliance status between two players to either `true` or `false`. (3.2+ only)
 //--
 bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies))
 {
@@ -359,7 +359,7 @@ bool wzapi::orderDroid(WZAPI_PARAMS(DROID* psDroid, int order))
 
 //-- ## orderDroidBuild(droid, order, structureName, x, y[, direction])
 //--
-//-- Give a droid an order to build something at the given position. Returns true if allowed.
+//-- Give a droid an order to build something at the given position. Returns `true` if allowed.
 //-- Order must be `DORDER_BUILD`.
 //--
 bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string structureName, int x, int y, optional<float> _direction))
@@ -481,7 +481,7 @@ bool wzapi::cameraSlide(WZAPI_PARAMS(float x, float y))
 
 //-- ## cameraZoom(viewDistance, speed)
 //--
-//-- Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000. (3.2+ only)
+//-- Slide the camera to the given zoom distance. Normal camera zoom ranges between `500` and `5000`. (3.2+ only)
 //--
 bool wzapi::cameraZoom(WZAPI_PARAMS(float viewDistance, float speed))
 {
@@ -491,7 +491,7 @@ bool wzapi::cameraZoom(WZAPI_PARAMS(float viewDistance, float speed))
 
 //-- ## cameraTrack([droid])
 //--
-//-- Make the camera follow the given droid object around. Pass in a null object to stop. (3.2+ only)
+//-- Make the camera follow the given droid object around. Pass in a `null` object to stop. (3.2+ only)
 //--
 bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 {
@@ -516,9 +516,9 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 //-- ## addSpotter(x, y, player, range, radar, expiry)
 //--
 //-- Add an invisible viewer at a given position for given player that shows map in given range. `radar`
-//-- is false for vision reveal, or true for radar reveal. The difference is that a radar reveal can be obstructed
+//-- is `false` for vision reveal, or `true` for radar reveal. The difference is that a radar reveal can be obstructed
 //-- by ECM jammers. `expiry`, if non-zero, is the game time at which the spotter shall automatically be
-//-- removed. The function returns a unique ID that can be used to remove the spotter with `removeSpotter`. (3.2+ only)
+//-- removed. The function returns a unique ID that can be used to remove the spotter with `removeSpotter()`. (3.2+ only)
 //--
 uint32_t wzapi::addSpotter(WZAPI_PARAMS(int x, int y, int player, int range, bool radar, uint32_t expiry))
 {
@@ -783,7 +783,7 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 //-- ## hackGetObj(objectType, player, id) [DEPRECATED]
 //--
 //-- Function to find and return a game object of `DROID`, `FEATURE` or `STRUCTURE` types, if it exists.
-//-- Otherwise, it will return null. This function is DEPRECATED by getObject(). (3.2+ only)
+//-- Otherwise, it will return `null`. This function is DEPRECATED by `getObject()`. (3.2+ only)
 //--
 wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _objectType, int player, int id)) WZAPI_DEPRECATED
 {
@@ -819,7 +819,7 @@ wzapi::no_return_value wzapi::hackAssert(WZAPI_PARAMS(bool condition, va_list_tr
 
 //-- ## receiveAllEvents([enabled])
 //--
-//-- Make the current script receive all events, even those not meant for 'me'. (3.2+ only)
+//-- Make the current script receive all events, even those not meant for `me`. (3.2+ only)
 //--
 bool wzapi::receiveAllEvents(WZAPI_PARAMS(optional<bool> enabled))
 {
@@ -1045,7 +1045,7 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
 //-- can be either a string with the name of the structure type as defined in
-//-- "structures.json", or a stattype as defined in `Structure`. The
+//-- `structures.json`, or a stattype as defined in `Structure`. The
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
@@ -1059,7 +1059,7 @@ std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _pla
 //-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 //-- If no parameters given, it will return all of the structures for the current player.
 //-- The second parameter can be either a string with the name of the structure type as defined
-//-- in "structures.json", or a stattype as defined in `Structure`.
+//-- in `structures.json`, or a stattype as defined in `Structure`.
 //-- The third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
@@ -1117,7 +1117,7 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 
 //-- ## enumFeature(playerFilter[, featureName])
 //--
-//-- Returns an array of all features seen by player of given name, as defined in "features.json".
+//-- Returns an array of all features seen by player of given name, as defined in `features.json`.
 //-- If player is `ALL_PLAYERS`, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
 //--
@@ -1283,7 +1283,7 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 //--
 //-- Start researching the first available technology on the way to the given technology.
 //-- First parameter is the structure to research in, which must be a research lab. The
-//-- second parameter is the technology to pursue, as a text string as defined in "research.json".
+//-- second parameter is the technology to pursue, as a text string as defined in `research.json`.
 //-- The second parameter may also be an array of such strings. The first technology that has
 //-- not yet been researched in that list will be pursued.
 //--
@@ -1484,7 +1484,7 @@ int wzapi::queuedPower(WZAPI_PARAMS(int player))
 
 //-- ## isStructureAvailable(structureName[, player])
 //--
-//-- Returns true if given structure can be built. It checks both research and unit limits.
+//-- Returns `true` if given structure can be built. It checks both research and unit limits.
 //--
 bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structureName, optional<int> _player))
 {
@@ -1686,7 +1686,7 @@ bool wzapi::droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y))
 
 //-- ## propulsionCanReach(propulsionName, x1, y1, x2, y2)
 //--
-//-- Return true if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
+//-- Return `true` if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
 //-- Does not take player built blockades into account. (3.2+ only)
 //--
 bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, int y1, int x2, int y2))
@@ -1855,9 +1855,9 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 //-- ## buildDroid(factoryStructure, templateName, bodyNames, propulsionNames, reserved1, reserved2, ...turretNames)
 //--
 //-- Start factory production of new droid with the given name, body, propulsion and turrets.
-//-- The reserved1 parameters should be passed "" for now. The components can be
+//-- The reserved1 parameters should be passed `""` for now. The components can be
 //-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
-//-- component in the list will be used. Returns a boolean that is true if production was started.
+//-- component in the list will be used. Returns a boolean that is `true` if production was started.
 //--
 bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list bodyNames, string_or_string_list propulsionNames, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turretNames))
 {
@@ -1904,11 +1904,11 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 
 //-- ## addDroid(player, x, y, templateName, bodyNames, propulsionNames, reserved1, reserved2, ...turretNames)
 //--
-//-- Create and place a droid at the given x, y position as belonging to the given player, built with
+//-- Create and place a droid at the given `x`, `y` position as belonging to the given player, built with
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
-//-- cause a desync. Returns the created droid on success, otherwise returns null. Passing "" for
+//-- cause a desync. Returns the created droid on success, otherwise returns `null`. Passing `""` for
 //-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
-//-- pass -1 as both x and y.
+//-- pass `-1` as both `x` and `y`.
 //--
 wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list bodyNames, string_or_string_list propulsionNames, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turretNames)) MUTLIPLAY_UNSAFE
 {
@@ -1959,7 +1959,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 //-- ## makeTemplate(player, templateName, bodyNames, propulsionNames, reserved, ...turretNames)
 //--
 //-- Create a template (virtual droid) with the given components. Can be useful for calculating the cost
-//-- of droids before putting them into production, for instance. Will fail and return null if template
+//-- of droids before putting them into production, for instance. Will fail and return `null` if template
 //-- could not possibly be built using current research. (3.2+ only)
 //--
 std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list bodyNames, string_or_string_list propulsionNames, reservedParam reserved, va_list<string_or_string_list> turretNames))
@@ -1997,8 +1997,8 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 
 //-- ## addFeature(featureName, x, y)
 //--
-//-- Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
-//-- Returns the created game object on success, null otherwise. (3.2+ only)
+//-- Create and place a feature at the given `x`, `y` position. Will cause a desync in multiplayer.
+//-- Returns the created game object on success, `null` otherwise. (3.2+ only)
 //--
 wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::string featureName, int x, int y)) MUTLIPLAY_UNSAFE
 {
@@ -2033,7 +2033,7 @@ bool wzapi::componentAvailable(WZAPI_PARAMS(std::string componentType, optional<
 
 //-- ## isVTOL(droid)
 //--
-//-- Returns true if given droid is a VTOL (not including transports).
+//-- Returns `true` if given droid is a VTOL (not including transports).
 //--
 bool wzapi::isVTOL(WZAPI_PARAMS(const DROID *psDroid))
 {
@@ -2044,7 +2044,7 @@ bool wzapi::isVTOL(WZAPI_PARAMS(const DROID *psDroid))
 
 //-- ## safeDest(player, x, y)
 //--
-//-- Returns true if given player is safe from hostile fire at the given location, to
+//-- Returns `true` if given player is safe from hostile fire at the given location, to
 //-- the best of that player's map knowledge. Does not work in campaign at the moment.
 //--
 bool wzapi::safeDest(WZAPI_PARAMS(int player, int x, int y))
@@ -2074,8 +2074,8 @@ bool wzapi::activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OB
 
 //-- ## chat(playerFilter, message)
 //--
-//-- Send a message to playerFilter. playerFilter may also be `ALL_PLAYERS` or `ALLIES`.
-//-- Returns a boolean that is true on success. (3.2+ only)
+//-- Send a message to target `playerFilter`. Target may also be `ALL_PLAYERS` or `ALLIES`.
+//-- Returns a boolean that is `true` on success. (3.2+ only)
 //--
 bool wzapi::chat(WZAPI_PARAMS(int playerFilter, std::string message))
 {
@@ -2098,8 +2098,8 @@ bool wzapi::chat(WZAPI_PARAMS(int playerFilter, std::string message))
 
 //-- ## addBeacon(x, y, playerFilter[, message])
 //--
-//-- Send a beacon message to target player. Target may also be `ALLIES`.
-//-- Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
+//-- Send a beacon message to target `playerFilter`. Target may also be `ALLIES`.
+//-- Message is currently unused. Returns a boolean that is `true` on success. (3.2+ only)
 //--
 bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<std::string> _message))
 {
@@ -2127,8 +2127,8 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 
 //-- ## removeBeacon(playerFilter)
 //--
-//-- Remove a beacon message sent to playerFilter. Target may also be `ALLIES`.
-//-- Returns a boolean that is true on success. (3.2+ only)
+//-- Remove a beacon message sent to target `playerFilter`. Target may also be `ALLIES`.
+//-- Returns a boolean that is `true` on success. (3.2+ only)
 //--
 bool wzapi::removeBeacon(WZAPI_PARAMS(int playerFilter))
 {
@@ -2316,7 +2316,7 @@ std::vector<const DROID *> wzapi::enumCargo(WZAPI_PARAMS(const DROID *psDroid))
 //-- ## isSpectator(player)
 //--
 //-- Returns whether a particular player is a spectator. (4.2+ only)
-//-- Can pass -1 as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
+//-- Can pass `-1` as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
 //--
 bool wzapi::isSpectator(WZAPI_PARAMS(int player))
 {
@@ -2537,7 +2537,7 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 //-- Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
 //-- is removed and the timer stopped. Time is in seconds.
 //-- If time equals to the magic `LZ_COMPROMISED_TIME` constant, reinforcement GUI ticker
-//-- is set to "--:--" and reinforcements are suppressed until this function is called
+//-- is set to `--:--` and reinforcements are suppressed until this function is called
 //-- again with a regular time value.
 //--
 wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time))
@@ -2713,7 +2713,7 @@ wzapi::no_return_value wzapi::extraPowerTime(WZAPI_PARAMS(int time, optional<int
 
 //-- ## setTutorialMode(enableTutorialMode)
 //--
-//-- Sets a number of restrictions appropriate for tutorial if set to true.
+//-- Sets a number of restrictions appropriate for tutorial if set to `true`.
 //--
 wzapi::no_return_value wzapi::setTutorialMode(WZAPI_PARAMS(bool enableTutorialMode))
 {
@@ -2949,7 +2949,7 @@ wzapi::no_return_value wzapi::makeComponentAvailable(WZAPI_PARAMS(std::string co
 
 //-- ## allianceExistsBetween(player1, player2)
 //--
-//-- Returns true if an alliance exists between the two players, or they are the same player.
+//-- Returns `true` if an alliance exists between the two players, or they are the same player.
 //--
 bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 {
@@ -2961,8 +2961,8 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 
 //-- ## removeStruct(structure) [DEPRECATED]
 //--
-//-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
-//-- No special effects are applied. DEPRECATED since 3.2. Use `removeObject` instead.
+//-- Immediately remove the given structure from the map. Returns a boolean that is `true` on success.
+//-- No special effects are applied. DEPRECATED since 3.2. Use `removeObject()` instead.
 //--
 bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 {
@@ -2975,7 +2975,7 @@ bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 
 //-- ## removeObject(gameObject[, specialEffects])
 //--
-//-- Remove the given game object with special effects. Returns a boolean that is true on success.
+//-- Remove the given game object with special effects. Returns a boolean that is `true` on success.
 //-- A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
 //--
 bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _specialEffects))
@@ -3070,9 +3070,9 @@ scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
 
 //-- ## addStructure(structureName, player, x, y)
 //--
-//-- Create a structure on the given position. Returns the structure on success, null otherwise.
+//-- Create a structure on the given position. Returns the structure on success, `null` otherwise.
 //-- Position uses world coordinates, if you want use position based on Map Tiles, then
-//-- use as addStructure(structureName, players, x*128, y*128)
+//-- use as `addStructure(structureName, players, x*128, y*128)`.
 //--
 wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y))
 {
@@ -3259,7 +3259,7 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 
 //-- ## donatePower(amount, player)
 //--
-//-- Donate power to another player. Returns true. (3.2+ only)
+//-- Donate power to another player. Returns `true`. (3.2+ only)
 //--
 bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 {

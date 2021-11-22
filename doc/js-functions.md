@@ -27,7 +27,7 @@ Set a function to run repeated at some given time interval. The function to run
 is the first parameter, and it _must be quoted_, otherwise the function will
 be inlined. The second parameter is the interval, in milliseconds. A third, optional
 parameter can be a **game object** to pass to the timer function. If the **game object**
-dies, the timer stops running. The minimum number of milliseconds is 100, but such
+dies, the timer stops running. The minimum number of milliseconds is `100`, but such
 fast timers are strongly discouraged as they may deteriorate the game performance.
 
 ```js
@@ -48,10 +48,10 @@ and its name _must be quoted_.
 
 Queues up a function to run at a later game frame. This is useful to prevent
 stuttering during the game, which can happen if too much script processing is
-done at once.  The function to run is the first parameter, and it
+done at once. The function to run is the first parameter, and it
 _must be quoted_, otherwise the function will be inlined.
-The second parameter is the delay in milliseconds, if it is omitted or 0,
-the function will be run at a later frame.  A third optional
+The second parameter is the delay in milliseconds, if it is omitted or `0`,
+the function will be run at a later frame. A third optional
 parameter can be a **game object** to pass to the queued function. If the **game object**
 dies before the queued call runs, nothing happens.
 
@@ -116,17 +116,17 @@ parameter can be used to only return labels of one specific type. (3.2+ only)
 
 Add a label to a game object. If there already is a label by that name, it is overwritten.
 This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-Can optionally specify an initial "triggered" value for the label. (3.4+ only)
+Can optionally specify an initial `triggered` value for the label. (3.4+ only)
 
 ## removeLabel(labelName)
 
 Remove a label from the game. Returns the number of labels removed, which should normally be
-either 1 (label found) or 0 (label not found). (3.2+ only)
+either `1` (label found) or `0` (label not found). (3.2+ only)
 
 ## getLabel(object)
 
 Get a label string belonging to a game object. If the object has multiple labels, only the first
-label found will be returned. If the object has no labels, undefined is returned.
+label found will be returned. If the object has no labels, `undefined` is returned.
 This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
 
 ## getObject(labelName | x, y | type, player, id)
@@ -136,11 +136,11 @@ a position or a **game object** on the map defined using the map editor and stor
 together with the map. In this case, the only argument is a text label. The function
 returns an object that has a type variable defining what it is (in case this is
 unclear). This type will be one of `DROID`, `STRUCTURE`, `FEATURE`, `AREA`, `GROUP` or `POSITION`.
-The `AREA` has defined 'x', 'y', 'x2', and 'y2', while `POSITION` has only defined 'x' and 'y'.
-The `GROUP` type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
+The `AREA` has defined "x", "y", "x2", and "y2", while `POSITION` has only defined "x" and "y".
+The `GROUP` type has defined "type" and "id" of the group, which can be passed to `enumGroup()`.
 This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
-undefined value is returned. If whatever object the label should point at no longer exists,
-a null value is returned.
+`undefined` value is returned. If whatever object the label should point at no longer exists,
+a `null` value is returned.
 
 You can also fetch a `STRUCTURE` or `FEATURE` type game object from a given map position (if any).
 This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
@@ -194,7 +194,7 @@ the case for AIs, for instance), then game sync will break. (3.2+ only)
 
 ## setAlliance(player1, player2, areAllies)
 
-Set alliance status between two players to either true or false. (3.2+ only)
+Set alliance status between two players to either `true` or `false`. (3.2+ only)
 
 ## sendAllianceRequest(player)
 
@@ -207,7 +207,7 @@ Order must be either `DORDER_STOP`, `DORDER_RTB`, `DORDER_RTR`, `DORDER_RECYCLE`
 
 ## orderDroidBuild(droid, order, structureName, x, y[, direction])
 
-Give a droid an order to build something at the given position. Returns true if allowed.
+Give a droid an order to build something at the given position. Returns `true` if allowed.
 Order must be `DORDER_BUILD`.
 
 ## setAssemblyPoint(factoryStructure, x, y)
@@ -240,18 +240,18 @@ Slide the camera over to the given position on the map. (3.2+ only)
 
 ## cameraZoom(viewDistance, speed)
 
-Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000. (3.2+ only)
+Slide the camera to the given zoom distance. Normal camera zoom ranges between `500` and `5000`. (3.2+ only)
 
 ## cameraTrack([droid])
 
-Make the camera follow the given droid object around. Pass in a null object to stop. (3.2+ only)
+Make the camera follow the given droid object around. Pass in a `null` object to stop. (3.2+ only)
 
 ## addSpotter(x, y, player, range, radar, expiry)
 
 Add an invisible viewer at a given position for given player that shows map in given range. `radar`
-is false for vision reveal, or true for radar reveal. The difference is that a radar reveal can be obstructed
+is `false` for vision reveal, or `true` for radar reveal. The difference is that a radar reveal can be obstructed
 by ECM jammers. `expiry`, if non-zero, is the game time at which the spotter shall automatically be
-removed. The function returns a unique ID that can be used to remove the spotter with `removeSpotter`. (3.2+ only)
+removed. The function returns a unique ID that can be used to remove the spotter with `removeSpotter()`. (3.2+ only)
 
 ## removeSpotter(spotterId)
 
@@ -332,7 +332,7 @@ See wzscript docs for info, to the extent any exist. (3.2+ only)
 ## hackGetObj(objectType, player, id) [DEPRECATED]
 
 Function to find and return a game object of `DROID`, `FEATURE` or `STRUCTURE` types, if it exists.
-Otherwise, it will return null. This function is deprecated by `getObject()`. (3.2+ only)
+Otherwise, it will return `null`. This function is deprecated by `getObject()`. (3.2+ only)
 
 ## hackAssert(condition, ...messages)
 
@@ -340,7 +340,7 @@ Function to perform unit testing. It will throw a script error and a game assert
 
 ## receiveAllEvents([enabled])
 
-Make the current script receive all events, even those not meant for 'me'. (3.2+ only)
+Make the current script receive all events, even those not meant for `me`. (3.2+ only)
 
 ## hackDoNotSave(name)
 
@@ -388,7 +388,7 @@ Is given structure idle?
 Returns an array of structure objects. If no parameters given, it will
 return all of the structures for the current player. The second parameter
 can be either a string with the name of the structure type as defined in
-"structures.json", or a stattype as defined in `Structure`. The
+`structures.json`, or a stattype as defined in `Structure`. The
 third parameter can be used to filter by visibility, the default is not
 to filter.
 
@@ -397,7 +397,7 @@ to filter.
 Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 If no parameters given, it will return all of the structures for the current player.
 The second parameter can be either a string with the name of the structure type as defined
-in "structures.json", or a stattype as defined in `Structure`.
+in `structures.json`, or a stattype as defined in `Structure`.
 The third parameter can be used to filter by visibility, the default is not
 to filter.
 
@@ -410,7 +410,7 @@ visibility - the default is not to filter.
 
 ## enumFeature(playerFilter[, featureName])
 
-Returns an array of all features seen by player of given name, as defined in "features.json".
+Returns an array of all features seen by player of given name, as defined in `features.json`.
 If player is `ALL_PLAYERS`, it will return all features irrespective of visibility to any player. If
 name is empty, it will return any feature.
 
@@ -450,7 +450,7 @@ iterating over all game objects using other enum functions. (3.2+ only)
 
 Start researching the first available technology on the way to the given technology.
 First parameter is the structure to research in, which must be a research lab. The
-second parameter is the technology to pursue, as a text string as defined in "research.json".
+second parameter is the technology to pursue, as a text string as defined in `research.json`.
 The second parameter may also be an array of such strings. The first technology that has
 not yet been researched in that list will be pursued.
 
@@ -477,7 +477,7 @@ Return amount of power queued up for production by the given player. (3.2+ only)
 
 ## isStructureAvailable(structureName[, player])
 
-Returns true if given structure can be built. It checks both research and unit limits.
+Returns `true` if given structure can be built. It checks both research and unit limits.
 
 ## pickStructLocation(droid, structureName, x, y[, maxBlockingTiles])
 
@@ -491,7 +491,7 @@ not take player built blockades into account.
 
 ## propulsionCanReach(propulsionName, x1, y1, x2, y2)
 
-Return true if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
+Return `true` if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
 Does not take player built blockades into account. (3.2+ only)
 
 ## terrainType(x, y)
@@ -510,22 +510,22 @@ Give a droid an order to do something to something.
 ## buildDroid(factoryStructure, templateName, bodyNames, propulsionNames, reserved1, reserved2, ...turretNames)
 
 Start factory production of new droid with the given name, body, propulsion and turrets.
-The reserved parameters should be passed "" for now. The components can be
+The reserved parameters should be passed `""` for now. The components can be
 passed as ordinary strings, or as a list of strings. If passed as a list, the first available
-component in the list will be used. Returns a boolean that is true if production was started.
+component in the list will be used. Returns a boolean that is `true` if production was started.
 
 ## addDroid(player, x, y, templateName, bodyNames, propulsionNames, reserved1, reserved2, ...turretNames)
 
-Create and place a droid at the given x, y position as belonging to the given player, built with
+Create and place a droid at the given `x`, `y` position as belonging to the given player, built with
 the given components. Currently does not support placing droids in multiplayer, doing so will
-cause a desync. Returns the created droid on success, otherwise returns null. Passing "" for
+cause a desync. Returns the created droid on success, otherwise returns `null`. Passing `""` for
 reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
-pass -1 as both x and y.
+pass `-1` as both `x` and `y`.
 
 ## makeTemplate(player, templateName, bodyNames, propulsionNames, reserved, ...turretNames)
 
 Create a template (virtual droid) with the given components. Can be useful for calculating the cost
-of droids before putting them into production, for instance. Will fail and return null if template
+of droids before putting them into production, for instance. Will fail and return `null` if template
 could not possibly be built using current research. (3.2+ only)
 
 ## addDroidToTransporter(transporterDroid, droid)
@@ -536,8 +536,8 @@ into a transporter, which is also currently on the campaign off-world mission li
 
 ## addFeature(featureName, x, y)
 
-Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
-Returns the created game object on success, null otherwise. (3.2+ only)
+Create and place a feature at the given `x`, `y` position. Will cause a desync in multiplayer.
+Returns the created game object on success, `null` otherwise. (3.2+ only)
 
 ## componentAvailable([componentType, ]componentName)
 
@@ -546,11 +546,11 @@ optional and deprecated.
 
 ## isVTOL(droid)
 
-Returns true if given droid is a VTOL (not including transports).
+Returns `true` if given droid is a VTOL (not including transports).
 
 ## safeDest(player, x, y)
 
-Returns true if given player is safe from hostile fire at the given location, to
+Returns `true` if given player is safe from hostile fire at the given location, to
 the best of that player's map knowledge. Does not work in campaign at the moment.
 
 ## activateStructure(structure[, target])
@@ -560,18 +560,18 @@ The lassat needs a target.
 
 ## chat(playerFilter, message)
 
-Send a message to target player. Target may also be `ALL_PLAYERS` or `ALLIES`.
-Returns a boolean that is true on success. (3.2+ only)
+Send a message to target `playerFilter`. Target may also be `ALL_PLAYERS` or `ALLIES`.
+Returns a boolean that is `true` on success. (3.2+ only)
 
 ## addBeacon(x, y, playerFilter[, message])
 
-Send a beacon message to target player. Target may also be `ALLIES`.
-Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
+Send a beacon message to target `playerFilter`. Target may also be `ALLIES`.
+Message is currently unused. Returns a boolean that is `true` on success. (3.2+ only)
 
 ## removeBeacon(playerFilter)
 
-Remove a beacon message sent to target player. Target may also be `ALLIES`.
-Returns a boolean that is true on success. (3.2+ only)
+Remove a beacon message sent to target `playerFilter`. Target may also be `ALLIES`.
+Returns a boolean that is `true` on success. (3.2+ only)
 
 ## getDroidProduction(factoryStructure)
 
@@ -619,7 +619,7 @@ Returns an array of droid objects inside given transport. (3.2+ only)
 ## isSpectator(player)
 
 Returns whether a particular player is a spectator. (4.2+ only)
-Can pass -1 as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
+Can pass `-1` as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
 
 ## getWeaponInfo(weaponName) [DEPRECATED]
 
@@ -658,7 +658,7 @@ Get time remaining on mission countdown in seconds. (3.2+ only)
 Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
 is removed and the timer stopped. Time is in seconds.
 If time equals to the magic `LZ_COMPROMISED_TIME` constant, reinforcement GUI ticker
-is set to "--:--" and reinforcements are suppressed until this function is called
+is set to `--:--` and reinforcements are suppressed until this function is called
 again with a regular time value.
 
 ## completeResearch(researchName[, player[, forceResearch]])
@@ -693,7 +693,7 @@ over the given amount of extra time. (3.2+ only)
 
 ## setTutorialMode(enableTutorialMode)
 
-Sets a number of restrictions appropriate for tutorial if set to true.
+Sets a number of restrictions appropriate for tutorial if set to `true`.
 
 ## setDesign(allowDesignValue)
 
@@ -750,16 +750,16 @@ actually build designs with it.
 
 ## allianceExistsBetween(player1, player2)
 
-Returns true if an alliance exists between the two players, or they are the same player.
+Returns `true` if an alliance exists between the two players, or they are the same player.
 
 ## removeStruct(structure) [DEPRECATED]
 
-Immediately remove the given structure from the map. Returns a boolean that is true on success.
-No special effects are applied. Deprecated since 3.2. Use `removeObject` instead.
+Immediately remove the given structure from the map. Returns a boolean that is `true` on success.
+No special effects are applied. Deprecated since 3.2. Use `removeObject()` instead.
 
 ## removeObject(gameObject[, specialEffects])
 
-Remove the given game object with special effects. Returns a boolean that is true on success.
+Remove the given game object with special effects. Returns a boolean that is `true` on success.
 A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
 
 ## setScrollLimits(x1, y1, x2, y2)
@@ -772,9 +772,9 @@ Get the limits of the scrollable area of the map as an area object. (3.2+ only)
 
 ## addStructure(structureName, player, x, y)
 
-Create a structure on the given position. Returns the structure on success, null otherwise.
+Create a structure on the given position. Returns the structure on success, `null` otherwise.
 Position uses world coordinates, if you want use position based on Map Tiles, then
-use as addStructure(structureName, players, x*128, y*128)
+use as `addStructure(structureName, players, x*128, y*128)`.
 
 ## getStructureLimit(structureName[, player])
 
@@ -807,7 +807,7 @@ over unit limits. (3.2+ only)
 
 ## donatePower(amount, player)
 
-Donate power to another player. Returns true. (3.2+ only)
+Donate power to another player. Returns `true`. (3.2+ only)
 
 ## setNoGoArea(x1, y1, x2, y2, playerFilter)
 

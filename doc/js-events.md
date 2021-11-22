@@ -208,7 +208,7 @@ player.
 
 An event that is run whenever a beacon message is received. The `fromPlayer` parameter is the
 player sending the beacon. For the moment, the `toPlayer` parameter is always the script player.
-Message may be undefined.
+Message may be `undefined`.
 
 ## eventBeaconRemoved(fromPlayer, toPlayer)
 

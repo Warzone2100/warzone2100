@@ -44,7 +44,7 @@ where LABEL is the artifact label:
 
 ## camAllArtifactsPickedUp()
 
-Returns true if all artifacts managed by `libcampaign.js`
+Returns `true` if all artifacts managed by `libcampaign.js`
 were picked up.
 
 ## camSetEnemyBases([bases])
@@ -86,7 +86,7 @@ was actually found by the player.
 
 ## camAllEnemyBasesEliminated()
 
-Returns true if all enemy bases managed by `libcampaign.js`
+Returns `true` if all enemy bases managed by `libcampaign.js`
 are destroyed.
 
 ## camMarkTiles(label)
@@ -148,11 +148,11 @@ and traces entering the area in the TRACE log.
 
 ## camDef(something)
 
-Returns false if something is JavaScript-undefined, true otherwise.
+Returns `false` if something is JavaScript-undefined, `true` otherwise.
 
 ## camIsString(something)
 
-Returns true if something is a string, false otherwise.
+Returns `true` if something is a string, `false` otherwise.
 
 ## camRand(max)
 
@@ -270,7 +270,7 @@ its production loop, first queued first served.
 ## camSetPropulsionTypeLimit([limit])
 
 On hard and insane the propulsion type can be limited with this. For type II
-pass in 2, and for type III pass in 3. Hard defaults to type II and
+pass in `2`, and for type III pass in `3`. Hard defaults to type II and
 insane defaults to type III. If nothing is passed in then the type
 limit will match what is in templates.json.
 
@@ -335,7 +335,7 @@ different aspects of behavior. The order parameter is one of:
 		first positions in the list will be attacked first.
   * `radius` Circle radius around `pos` to scan for targets.
   * `fallback` Position to retreat.
-  * `morale` An integer from 1 to 100. If that high percentage
+  * `morale` An integer from `1` to `100`. If that high percentage
 		of the original group dies, fall back to the fallback position.
 		If new droids are added to the group, it can recover and attack
 		again.
@@ -344,9 +344,9 @@ different aspects of behavior. The order parameter is one of:
 		and regroup is calculated against this value.
   * `repair` Health percentage to fall back to repair facility,
 		if any.
-  * `regroup` If set to true, the group will not move forward unless
+  * `regroup` If set to `true`, the group will not move forward unless
 		it has at least `count` droids in its biggest cluster.
-		If `count` is set to -1, at least 2/3 of group's droids should be in
+		If `count` is set to `-1`, at least 2/3 of group's droids should be in
 		the biggest cluster.
 * `CAM_ORDER_DEFEND` Protect the given position. If too far, retreat
 	back there ignoring fire. The following data object fields are
@@ -358,9 +358,9 @@ different aspects of behavior. The order parameter is one of:
 		against this value.
   * `repair` Health percentage to fall back to repair facility,
 		if any.
-  * `regroup` If set to true, the group will not move forward unless
+  * `regroup` If set to `true`, the group will not move forward unless
 		it has at least `count` droids in its biggest cluster.
-		If `count` is set to -1, at least 2/3 of group's droids should be in
+		If `count` is set to `-1`, at least 2/3 of group's droids should be in
 		the biggest cluster.
 * `CAM_ORDER_PATROL` Move droids randomly between a given list of
 	positions. The following data object fields are available:
@@ -371,9 +371,9 @@ different aspects of behavior. The order parameter is one of:
 		against this value.
   * `repair` Health percentage to fall back to repair facility,
 		if any.
-  * `regroup` If set to true, the group will not move forward unless
+  * `regroup` If set to `true`, the group will not move forward unless
 		it has at least `count` droids in its biggest cluster.
-		If `count` is set to -1, at least 2/3 of group's droids should be in
+		If `count` is set to `-1`, at least 2/3 of group's droids should be in
 		the biggest cluster.
 * `CAM_ORDER_COMPROMISE` Same as CAM_ORDER_ATTACK, just stay near the
 	last (or only) attack position instead of looking for the player
@@ -388,9 +388,9 @@ different aspects of behavior. The order parameter is one of:
 		against this value.
   * `repair` Health percentage to fall back to repair facility,
 		if any.
-  * `regroup` If set to true, the group will not move forward unless
+  * `regroup` If set to `true`, the group will not move forward unless
 		it has at least `count` droids in its biggest cluster.
-		If `count` is set to -1, at least 2/3 of group's droids should be in
+		If `count` is set to `-1`, at least 2/3 of group's droids should be in
 		the biggest cluster.
 * `CAM_ORDER_FOLLOW` Assign the group to commander. The sub-order
 	is defined to be given to the commander. When commander dies,

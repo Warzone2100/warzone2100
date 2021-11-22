@@ -462,7 +462,7 @@ namespace wzapi
 		//__
 		//__ An event that is run whenever a beacon message is received. The `fromPlayer` parameter is the
 		//__ player sending the beacon. For the moment, the `toPlayer` parameter is always the script player.
-		//__ Message may be undefined.
+		//__ Message may be `undefined`.
 		//__
 		virtual bool handle_eventBeacon(int x, int y, int fromPlayer, int toPlayer, optional<const char *> message) = 0;
 

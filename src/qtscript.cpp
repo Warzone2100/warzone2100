@@ -601,10 +601,10 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
-	// Register 'Stats' object. It is a read-only representation of basic game component states.
+	// Register `Stats` object. It is a read-only representation of basic game component states.
 	pNewInstance->setSpecifiedGlobalVariable("Stats", wzapi::constructStatsObject(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
-	// Register 'MapTiles' two-dimensional array. It is a read-only representation of static map tile states.
+	// Register `MapTiles` two-dimensional array. It is a read-only representation of static map tile states.
 	pNewInstance->setSpecifiedGlobalVariable("MapTiles", wzapi::constructMapTilesArray(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
 	// Set some useful constants
@@ -624,15 +624,15 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
 	json globalVarsToSave = json::object();
-	// We need to always save the 'me' special variable.
+	// We need to always save the `me` special variable.
 	//== * `me` The player the script is currently running as.
 	globalVarsToSave["me"] = player;
 
-	// We also need to save the special 'scriptName' variable.
+	// We also need to save the special `scriptName` variable.
 	//== * `scriptName` Base name of the script that is running.
 	globalVarsToSave["scriptName"] = basename.baseName();
 
-	// We also need to save the special 'scriptPath' variable.
+	// We also need to save the special `scriptPath` variable.
 	//== * `scriptPath` Base path of the script that is running.
 	globalVarsToSave["scriptPath"] = basename.path();
 
@@ -678,12 +678,12 @@ bool scripting_engine::saveScriptStates(const char *filename)
 
 		nlohmann::json globalsResult = nlohmann::json::object();
 		instance->saveScriptGlobals(globalsResult);
-		// 'scriptName' and 'me' should be saved implicitly by the backend's saveScriptGlobals
+		// `scriptName` and `me` should be saved implicitly by the backend's saveScriptGlobals
 		ASSERT(globalsResult.contains("me"), "Missing required global \"me\"");
 		ASSERT(globalsResult.contains("scriptName"), "Missing required global \"scriptName\"");
 		ini.setValue("globals_" + WzString::number(i), globalsResult);
 
-		// we have to save 'scriptName' and 'me' explicitly
+		// we have to save `scriptName` and `me` explicitly
 		nlohmann::json groupsResult = nlohmann::json::object();
 		saveGroups(groupsResult, instance);
 		groupsResult["me"] = instance->player();
@@ -696,7 +696,7 @@ bool scripting_engine::saveScriptStates(const char *filename)
 		nlohmann::json nodeInfo = nlohmann::json::object();
 		nodeInfo["timerID"] = node->timerID;
 		nodeInfo["timerName"] = node->timerName;
-		// we have to save 'scriptName' and 'me' explicitly
+		// we have to save `scriptName` and `me` explicitly
 		nodeInfo["me"] = node->player;
 		nodeInfo["scriptName"] = node->instance->scriptName();
 		nodeInfo["functionRestoreInfo"] = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam.get());
@@ -1461,7 +1461,7 @@ bool triggerEventChat(int fromPlayer, int toPlayer, const char *message)
 //__
 //__ An event that is run whenever a beacon message is received. The `fromPlayer` parameter is the
 //__ player sending the beacon. For the moment, the `toPlayer` parameter is always the script player.
-//__ Message may be undefined.
+//__ Message may be `undefined`.
 //__
 bool triggerEventBeacon(int fromPlayer, int toPlayer, const char *message, int x, int y)
 {
@@ -2331,7 +2331,7 @@ LABEL generic_script_object::toNewLabel() const
 //--
 //-- Add a label to a game object. If there already is a label by that name, it is overwritten.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-//-- Can optionally specify an initial "triggered" value for the label. (3.4+ only)
+//-- Can optionally specify an initial `triggered` value for the label. (3.4+ only)
 //--
 wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_object object, std::string labelName, optional<int> _triggered))
 {
@@ -2359,7 +2359,7 @@ wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_ob
 //-- ## removeLabel(labelName)
 //--
 //-- Remove a label from the game. Returns the number of labels removed, which should normally be
-//-- either 1 (label found) or 0 (label not found). (3.2+ only)
+//-- either `1` (label found) or `0` (label not found). (3.2+ only)
 //--
 int scripting_engine::removeLabel(WZAPI_PARAMS(std::string labelName))
 {
@@ -2372,7 +2372,7 @@ int scripting_engine::removeLabel(WZAPI_PARAMS(std::string labelName))
 //-- ## getLabel(object)
 //--
 //-- Get a label string belonging to a game object. If the object has multiple labels, only the first
-//-- label found will be returned. If the object has no labels, undefined is returned.
+//-- label found will be returned. If the object has no labels, `undefined` is returned.
 //-- This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
 //--
 optional<std::string> scripting_engine::getLabel(WZAPI_PARAMS(const BASE_OBJECT *psObj))
@@ -2420,14 +2420,14 @@ optional<std::string> scripting_engine::_findMatchingLabel(wzapi::game_object_id
 //-- a position or a **game object** on the map defined using the map editor and stored
 //-- together with the map. In this case, the only argument is a text label. The function
 //-- returns an object that has a type variable defining what it is (in case this is
-//-- unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA, GROUP or POSITION.
-//-- The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only defined 'x' and 'y'.
-//-- The GROUP type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
+//-- unclear). This type will be one of `DROID`, `STRUCTURE`, `FEATURE`, `AREA`, `GROUP` or `POSITION`.
+//-- The `AREA` has defined "x", "y", "x2", and "y2", while `POSITION` has only defined "x" and "y".
+//-- The `GROUP` type has defined "type" and "id" of the group, which can be passed to `enumGroup()`.
 //-- This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
-//-- undefined value is returned. If whatever object the label should point at no longer exists,
-//-- a null value is returned.
+//-- `undefined` value is returned. If whatever object the label should point at no longer exists,
+//-- a `null` value is returned.
 //--
-//-- You can also fetch a STRUCTURE or FEATURE type game object from a given map position (if any).
+//-- You can also fetch a `STRUCTURE` or `FEATURE` type game object from a given map position (if any).
 //-- This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
 //-- manner, since they do not have a unique placement on map tiles. Finally, you can fetch an object using
 //-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
