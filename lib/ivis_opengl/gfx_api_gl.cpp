@@ -1983,6 +1983,14 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 		{
 			return true;
 		}
+
+		// Version: 3.1.0 - Build 9.17.10.2843
+		// Version: <opengl version> - Build 9.17.10.2843
+		// This is a problematic old driver (seen on Windows 8) that likes to crash during gameplay or sometimes at init.
+		if (openGL_version.endsWith("Build 9.17.10.2843"))
+		{
+			return true;
+		}
 	}
 #endif
 
