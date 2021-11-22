@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-21 16:45\n"
+"PO-Revision-Date: 2021-11-22 04:44\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -5829,7 +5829,7 @@ msgstr ""
 
 #: lib/netplay/nettypes.cpp:883
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Не удается загрузить реплей: файл незавершен или поврежден."
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -11716,7 +11716,7 @@ msgstr "Тяжёлый корпус НЕКСУС"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4280
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "Имунная система НЕКСУС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -15046,11 +15046,11 @@ msgstr "Загрузить сохранённую игру кампании"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
-msgstr ""
+msgstr "Загрузить реплей"
 
 #: src/clparse.cpp:373
 msgid "replay file"
-msgstr ""
+msgstr "файл реплея"
 
 #: src/clparse.cpp:374
 msgid "Play in windowed mode"
@@ -15715,7 +15715,7 @@ msgstr "Менеджер Музыки"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Настройки мультиплеера"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -16106,33 +16106,33 @@ msgstr "Эта сложность для очень опытных игроко�
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u минут"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u секунд"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Нет"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Параметры хоста:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Игровой порт"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Включить UPnP"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Тайм-аут бездействия"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
@@ -16140,11 +16140,11 @@ msgstr ""
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Слоты наблюдателей"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "НАСТРОЙКИ МУЛЬТИПЛЕЕРА"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5124
@@ -16409,12 +16409,12 @@ msgstr "Требуемый мод не может быть загружен: %s\
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Не удается загрузить: %s."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Пожалуйста, удалите все несовместимые моды."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -16943,7 +16943,7 @@ msgstr "Выделить всю сильно повреждённую техни
 #: src/input/keyconfig.cpp:171
 #, c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Выбрать всеx наземных боевыx юнитов с здоровьем >50% без группы."
 
 #: src/input/keyconfig.cpp:172
 msgid "Select all Half-tracks"
@@ -17423,7 +17423,7 @@ msgstr ""
 #: src/keybind.cpp:191
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "Игрок %d: энергия %d"
 
 #: src/keybind.cpp:217
 msgid "Ouch! Droid's health is down 20%!"
@@ -17532,7 +17532,7 @@ msgstr "Бесконечная энергия включена"
 
 #: src/keybind.cpp:772
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Значения освещения пересчитаны для всех тайлов"
 
 #: src/keybind.cpp:802
 msgid "All items made available"
@@ -17540,7 +17540,7 @@ msgstr "Доступно абсолютно все"
 
 #: src/keybind.cpp:827
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Информация о тайле сброшена в журнал"
 
 #: src/keybind.cpp:842
 msgid "Fog on"
@@ -17766,19 +17766,19 @@ msgstr ""
 
 #: src/keybind.cpp:2541
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Быстрое сохранение не разрешено для многопользовательских или обучающих игр"
 
 #: src/keybind.cpp:2562
 msgid "QuickSave failed"
-msgstr ""
+msgstr "Ошибка быстрого сохранения"
 
 #: src/keybind.cpp:2571
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Быстрая загрузка не разрешена для многопользовательских или обучающих игр"
 
 #: src/keybind.cpp:2598
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "Файл быстрого сохранения еще не существует"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -17820,12 +17820,12 @@ msgstr "жульничал"
 #: src/loadsave.cpp:1090
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "Автосохранение %s"
 
 #: src/loadsave.cpp:1095
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "Автосохранение %s не удалось"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -18698,11 +18698,11 @@ msgstr "Выкинули %s : %s из игр, и добавлены в бан-л
 
 #: src/multiopt.cpp:304
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "КАРТА ЗАПРОШЕНА!"
 
 #: src/multiopt.cpp:329
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "МОД ЗАПРОШЕН!"
 
 #: src/multiopt.cpp:347
 #: src/multiplay.cpp:2020
@@ -18759,7 +18759,7 @@ msgstr "ФАЙЛ ОТПРАВЛЕН!"
 
 #: src/multiplay.cpp:2000
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "КАРТА ЗАГРУЖЕНА!"
 
 #: src/multiplay.cpp:2056
 #, c-format
@@ -18874,12 +18874,12 @@ msgstr "Мы не киборги, чтобы использовать Транс
 
 #: src/qtscript.cpp:893
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "Не удалось загрузить выбранный ИИ! Проверьте журналы, чтобы увидеть почему."
 
 #: src/qtscript.cpp:896
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "Загружен %s скрипт ИИ для текущего игрока!"
 
 #: src/research.cpp:1017
 #, c-format
@@ -19026,7 +19026,7 @@ msgstr "Не найдено ни одного командира!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "Не удается найти нужное здание!"
 
 #: src/selection.cpp:662
 #, c-format
@@ -19039,7 +19039,7 @@ msgstr[3] "выбрано %u юнитов"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Показать статистику игроков"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
