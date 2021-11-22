@@ -180,7 +180,7 @@ Add given game object to the given group.
 
 ## groupSize(groupId)
 
-Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
+Return the number of droids currently in the given group. Note that you can use `groupSizes[]` instead.
 
 ## _(string)
 
@@ -287,7 +287,7 @@ which is handled by the campaign library in the victory data section (3.3+ only)
 ## restoreLimboMissionData()
 
 Swap mission type and bring back units previously stored at the start
-of the mission (see cam3-c mission). (3.3+ only).
+of the mission (see `cam3-c` mission). (3.3+ only).
 
 ## getMultiTechLevel()
 
@@ -440,8 +440,8 @@ Returns an array of all research objects that are currently and immediately avai
 
 ## enumRange(x, y, range[, playerFilter[, seen]])
 
-Returns an array of game objects seen within range of given position that passes the optional filter
-which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, filter is
+Returns an array of game objects seen within range of given position that passes the optional `playerFilter`
+which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, `playerFilter` is
 `ALL_PLAYERS`. Finally an optional parameter can specify whether only visible objects should be
 returned; by default only visible objects are returned. Calling this function is much faster than
 iterating over all game objects using other enum functions. (3.2+ only)
@@ -582,10 +582,10 @@ virtual, and should never be passed anywhere. (3.2+ only)
 
 Return maximum number of droids that this player can produce. This limit is usually
 fixed throughout a game and the same for all players. If no arguments are passed,
-returns general droid limit for the current player. If a second, droid type argument
-is passed, the limit for this droid type is returned, which may be different from
+returns general droid limit for the current player. If a second, `droidType` argument
+is passed, the limit for this `droidType` is returned, which may be different from
 the general droid limit (eg for commanders and construction droids).
-Droid type must be either `DROID_CONSTRUCT`, `DROID_COMMAND` or `DROID_ANY`. (3.2+ only)
+`droidType` must be either `DROID_CONSTRUCT`, `DROID_COMMAND` or `DROID_ANY`. (3.2+ only)
 
 ## getExperienceModifier(player)
 
@@ -593,19 +593,19 @@ Get the percentage of experience this player droids are going to gain. (3.2+ onl
 
 ## setDroidLimit(player, maxNumber[, droidType])
 
-Set the maximum number of droids that this player can produce. If a third
-parameter is added, this is the droid type to limit. It can be
+Set the maximum number of droids that this `player` can produce. If a third
+parameter is added, this is the `droidType` to limit. It can be
 `DROID_CONSTRUCT` for constructors, or `DROID_COMMAND` for commanders,
 or `DROID_ANY` for droids in general. (3.2+ only)
 
 ## setCommanderLimit(player, maxNumber) [DEPRECATED]
 
-Set the maximum number of commanders that this player can produce.
+Set the maximum number of commanders that this `player` can produce.
 THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 
 ## setConstructorLimit(player, maxNumber) [DEPRECATED]
 
-Set the maximum number of constructors that this player can produce.
+Set the maximum number of constructors that this `player` can produce.
 THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 
 ## setExperienceModifier(player, percent)
@@ -618,8 +618,8 @@ Returns an array of droid objects inside given transport. (3.2+ only)
 
 ## isSpectator(player)
 
-Returns whether a particular player is a spectator. (4.2+ only)
-Can pass `-1` as player to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
+Returns whether a particular `player` is a spectator. (4.2+ only)
+Can pass `-1` as `player` to get the spectator status of the client running the script. (Useful for the "rules" scripts.)
 
 ## getWeaponInfo(weaponName) [DEPRECATED]
 
@@ -655,16 +655,16 @@ Get time remaining on mission countdown in seconds. (3.2+ only)
 
 ## setReinforcementTime(time)
 
-Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
+Set time for reinforcements to arrive. If `time` is negative, the reinforcement GUI
 is removed and the timer stopped. Time is in seconds.
-If time equals to the magic `LZ_COMPROMISED_TIME` constant, reinforcement GUI ticker
+If `time` equals to the magic `LZ_COMPROMISED_TIME` constant, reinforcement GUI ticker
 is set to `--:--` and reinforcements are suppressed until this function is called
 again with a regular time value.
 
 ## completeResearch(researchName[, player[, forceResearch]])
 
 Finish a research for the given player.
-forceResearch will allow a research topic to be researched again. 3.3+
+`forceResearch` will allow a research topic to be researched again. 3.3+
 
 ## completeAllResearch([player])
 
@@ -713,9 +713,9 @@ Turns visible minimap on or off in the GUI.
 
 ## setReticuleButton(buttonId, tooltip, filename, filenameDown[, callback])
 
-Add reticule button. buttonId is which button to change, where zero is zero is the middle button, then going clockwise from
-the uppermost button. filename is button graphics and filenameDown is for highlighting. The tooltip is the text you see when
-you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
+Add reticule button. `buttonId` is which button to change, where `0` is the middle button, then going clockwise from
+the uppermost button. `filename` is button graphics and `filenameDown` is for highlighting. The `tooltip` is the text you see when
+you mouse over the button. Finally, the `callback` is which scripting function to call. Hide and show the user interface
 for such changes to take effect. (3.2+ only)
 
 ## setReticuleFlash(buttonId, flash)
@@ -736,16 +736,16 @@ Hide user interface. (3.2+ only)
 
 ## enableStructure(structureName[, player])
 
-The given structure type is made available to the given player. It will appear in the
+The given structure type is made available to the given `player`. It will appear in the
 player's build list.
 
 ## enableComponent(componentName, player)
 
-The given component is made available for research for the given player.
+The given component is made available for research for the given `player`.
 
 ## makeComponentAvailable(componentName, player)
 
-The given component is made available to the given player. This means the player can
+The given component is made available to the given `player`. This means the player can
 actually build designs with it.
 
 ## allianceExistsBetween(player1, player2)
@@ -783,13 +783,13 @@ Returns build limits for a structure.
 ## countStruct(structureName[, playerFilter])
 
 Count the number of structures of a given type.
-The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
+The `playerFilter` parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 
 ## countDroid([droidType[, playerFilter]])
 
-Count the number of droids that a given player has. Droid type must be either
+Count the number of droids that a given player has. `droidType` must be either
 `DROID_CONSTRUCT`, `DROID_COMMAND` or `DROID_ANY`.
-The playerFilter parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
+The `playerFilter` parameter can be a specific player, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`.
 
 ## loadLevel(levelName)
 
@@ -797,12 +797,12 @@ Load the level with the given name.
 
 ## setDroidExperience(droid, experience)
 
-Set the amount of experience a droid has. Experience is read using floating point precision.
+Set the amount of `experience` a `droid` has. Experience is read using floating point precision.
 
 ## donateObject(droidOrStructure, player)
 
-Donate a game object (restricted to droids before 3.2.3) to another player. Returns `true` if
-donation was successful. May return `false` if this donation would push the receiving player
+Donate a game object (restricted to droids before 3.2.3) to another `player`. Returns `true` if
+donation was successful. May return `false` if this donation would push the receiving `player`
 over unit limits. (3.2+ only)
 
 ## donatePower(amount, player)
@@ -811,8 +811,8 @@ Donate power to another player. Returns `true`. (3.2+ only)
 
 ## setNoGoArea(x1, y1, x2, y2, playerFilter)
 
-Creates an area on the map on which nothing can be built. If player is zero,
-then landing lights are placed. If player is `ALL_PLAYERS`, then a limbo landing zone
+Creates an area on the map on which nothing can be built. If `playerFilter` is `0`,
+then landing lights are placed. If `playerFilter` is `ALL_PLAYERS`, then a limbo landing zone
 is created and limbo droids placed.
 
 ## startTransporterEntry(x, y, player)
@@ -834,15 +834,15 @@ Recognized object flags: `OBJECT_FLAG_UNSELECTABLE` - makes object unavailable f
 
 ## fireWeaponAtLoc(weaponName, x, y[, player])
 
-Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+Fires a weapon at the given coordinates (3.3+ only). The `player` is who owns the projectile.
 Please use `fireWeaponAtObj()` to damage objects as multiplayer and campaign
 may have different friendly fire logic for a few weapons (like the lassat).
 
 ## fireWeaponAtObj(weaponName, gameObject[, player])
 
-Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
+Fires a weapon at a game object (3.3+ only). The `player` is who owns the projectile.
 
 ## transformPlayerToSpectator(player)
 
-Transform a player to a spectator. (4.2+ only)
+Transform a `player` to a spectator. (4.2+ only)
 This is a one-time transformation, destroys the player's HQ and all of their remaining units, and must occur deterministically on all clients.

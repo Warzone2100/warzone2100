@@ -2648,7 +2648,7 @@ wzapi::no_return_value scripting_engine::groupAdd(WZAPI_PARAMS(int groupId, cons
 
 //-- ## groupSize(groupId)
 //--
-//-- Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
+//-- Return the number of droids currently in the given group. Note that you can use `groupSizes[]` instead.
 //--
 int scripting_engine::groupSize(WZAPI_PARAMS(int groupId))
 {
