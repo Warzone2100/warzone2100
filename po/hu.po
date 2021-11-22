@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-21 16:47\n"
+"PO-Revision-Date: 2021-11-22 17:04\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -5828,7 +5828,7 @@ msgstr "A visszajátszási fájl formátuma nem támogatott"
 
 #: lib/netplay/nettypes.cpp:883
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "A visszajátszás nem tölthető be: A visszajátszási fájl hiányos vagy sérült."
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -11715,7 +11715,7 @@ msgstr "NEXUS nehéz karosszéria"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4280
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "NEXUS immunizációs rendszer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -15045,11 +15045,11 @@ msgstr "Egy mentett játék betöltése"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
-msgstr ""
+msgstr "Visszajátszás betöltése"
 
 #: src/clparse.cpp:373
 msgid "replay file"
-msgstr ""
+msgstr "visszajátszási fájl"
 
 #: src/clparse.cpp:374
 msgid "Play in windowed mode"
@@ -15375,7 +15375,7 @@ msgstr "Nem lehet építeni, amíg az olajmező lángol."
 #: src/display.cpp:1596
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u - kills %d"
-msgstr ""
+msgstr "%s - Életerő %d/%d – azonosító: %d – tapasztalat: %f, %s – parancs: %s – művelet: %s – érzékelőtávolság: %hu – ECM %u – dőlésszög: %.0f – frusztráció: %u – kilövések: %d"
 
 #: src/display.cpp:1604
 #, c-format
@@ -15385,7 +15385,7 @@ msgstr ""
 #: src/display.cpp:1628
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Ellenség!) %s – Életerő: %d/%d – azonosító: %d – tapasztalat: %f, %s – parancs: %s – művelet: %s – érzékelőtávolság: %d – ECM %d – dőlésszög: %.0f"
 
 #: src/display.cpp:1772
 #, c-format
@@ -15395,12 +15395,12 @@ msgstr "%s - szövetséges - kár %d/%d - tapasztalat %d, %s"
 #: src/display.cpp:1788
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Ellenség!) %s, ref: %d, azonosító: %d Életerő: %d/%d"
 
 #: src/display.cpp:2063
 #, c-format
 msgid "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d"
-msgstr ""
+msgstr "%s csempe %d, %d [%d, %d] kontinens(l%d, h%d) szint %g megvilágítás %d %s %s w=%d s=%d j=%d"
 
 #: src/display3d.cpp:750
 msgid "Player left"
@@ -15704,7 +15704,7 @@ msgstr "Zenei menedzser"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Többjátékos beállítások"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -16092,45 +16092,45 @@ msgstr "Ez a nehézség csak haladó játékosoknak!"
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u perc"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u másodperc"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Nincs"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Házigazdai beállítások:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Játék portja"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "UPnP engedélyezése"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Tétlenségi időtúllépés"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
-msgstr ""
+msgstr "Kirúgás lag miatt"
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Megfigyelők helyeinek száma"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "TÖBBJÁTÉKOS BEÁLLÍTÁSOK"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5124
@@ -16393,12 +16393,12 @@ msgstr "A mod nem tölthető be: %s\n\n"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Nem tölthető be: %s."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Távolítsa el az összes nem kompatibilis modot."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -16927,7 +16927,7 @@ msgstr "Kiválaszt minden erősen sérült egységet"
 #: src/input/keyconfig.cpp:171
 #, c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Az összes olyan szárazföldi harci egység kiválasztása, melyek életereje >50%, és nem tagjai csoportnak."
 
 #: src/input/keyconfig.cpp:172
 msgid "Select all Half-tracks"
@@ -17402,12 +17402,12 @@ msgstr ""
 
 #: src/keybind.cpp:163
 msgid "Path display toggled."
-msgstr ""
+msgstr "Útvonal megjelenítése átváltva."
 
 #: src/keybind.cpp:191
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "%d. játékos: %d energia"
 
 #: src/keybind.cpp:217
 msgid "Ouch! Droid's health is down 20%!"
@@ -17516,7 +17516,7 @@ msgstr "Végtelen erő engedélyezve"
 
 #: src/keybind.cpp:772
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Megvilágítási értékek újraszámolva minden csempéhez"
 
 #: src/keybind.cpp:802
 msgid "All items made available"
@@ -17524,7 +17524,7 @@ msgstr "Minden tétel elérhető"
 
 #: src/keybind.cpp:827
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Csempeinformáció kiírva a naplóba"
 
 #: src/keybind.cpp:842
 msgid "Fog on"
@@ -17750,19 +17750,19 @@ msgstr ""
 
 #: src/keybind.cpp:2541
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "A gyors mentés nem engedélyezett a többjátékos vagy oktatójátékokban"
 
 #: src/keybind.cpp:2562
 msgid "QuickSave failed"
-msgstr ""
+msgstr "Gyors mentés sikertelen"
 
 #: src/keybind.cpp:2571
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "A gyors betöltés nem engedélyezett a többjátékos vagy oktatójátékokban"
 
 #: src/keybind.cpp:2598
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "A gyors mentési fájl még nem létezik"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -17804,12 +17804,12 @@ msgstr ""
 #: src/loadsave.cpp:1090
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "Gyors mentés: %s"
 
 #: src/loadsave.cpp:1095
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "A(z) „%s” automatikus mentés sikertelen"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -18678,11 +18678,11 @@ msgstr "%s : %s ki lettek rúgva a játékból, és a tiltó listára kerültek.
 
 #: src/multiopt.cpp:304
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "TÉRKÉP KÉRVE!"
 
 #: src/multiopt.cpp:329
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "MOD KÉRVE!"
 
 #: src/multiopt.cpp:347
 #: src/multiplay.cpp:2020
@@ -18739,7 +18739,7 @@ msgstr ""
 
 #: src/multiplay.cpp:2000
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "TÉRKÉP LETÖLTVE!"
 
 #: src/multiplay.cpp:2056
 #, c-format
@@ -18854,12 +18854,12 @@ msgstr "Ezt nem teheti meg: Cyborg egységnek kell lennie, hogy használhassa a 
 
 #: src/qtscript.cpp:893
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "A kiválasztott MI betöltése sikertelen! Nézze meg a naplókat, hogy miért."
 
 #: src/qtscript.cpp:896
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "A(z) %s MI parancsfájl betöltve a jelenlegi játékoshoz!"
 
 #: src/research.cpp:1017
 #, c-format
@@ -19006,7 +19006,7 @@ msgstr "Képtelen lokalizálni bármely parancsnokot!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "A kért épület nem található!"
 
 #: src/selection.cpp:662
 #, c-format
@@ -19017,7 +19017,7 @@ msgstr[1] "%u egységek kiválasztása"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Játékosstatisztikák megjelenítése"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
@@ -19073,7 +19073,7 @@ msgstr[1] "%s - %u Egységek felhatalmazása - Kár %d/%d"
 #: src/structure.cpp:5357
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr ""
+msgstr "Azonosító: %d – érzékelőtávolság: %d – ECM: %d"
 
 #: src/structure.cpp:5372
 #, c-format
@@ -19096,17 +19096,17 @@ msgstr "%s - Életerő %d/%d"
 #: src/structure.cpp:5381
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr ""
+msgstr "Azonosító: %d – páncél: %d|%d – érzékelőtávolság: %d – ECM %d – született: %u – mélység %.02f"
 
 #: src/structure.cpp:5390
 #, c-format
 msgid "ID %d - Queue %d"
-msgstr ""
+msgstr "Azonosító: %d – Sor: %d"
 
 #: src/structure.cpp:5397
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "Azonosító: %d – %s"
 
 #: src/structure.cpp:5410
 #, c-format
@@ -19116,27 +19116,27 @@ msgstr "%s - kapcsolódott %u, összesen: %u - kár %d/%d"
 #: src/structure.cpp:5414
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "Azonosító: %u – Szorzó: %u"
 
 #: src/structure.cpp:5423
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "Azonosító: %u – Termelési kimenet: %u – Megmaradt építési pontok: %u – Ellenállás: %d / %d"
 
 #: src/structure.cpp:5432
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "Azonosító: %u – Kutatási pontok: %u"
 
 #: src/structure.cpp:5439
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "csempe: %d,%d – cél: %s"
 
 #: src/structure.cpp:5447
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr ""
+msgstr "Azonosító: %u – érzékelőtávolság: %d – ECM: %d"
 
 #: src/structure.cpp:5565
 #: src/structure.cpp:5610
