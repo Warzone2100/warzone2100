@@ -1,3 +1,38 @@
+2021-11-22: Version 4.2.2:
+ * General:
+   * Add: Multiplay Options menu (too many commits, #2415)
+   * Add: Hotkey to "Select all land combat units, with health >50%, not assigned to any group" (commit:b7ff3b346e1b9c07c257f8084b6b3d9a99995485, #2329)
+   * Fix: Reject certain crashy OpenGL drivers, and fallback to other backends (commit:c71c0c9aae85dec46f94124a2a11e941e2699dbc, commit:720ccab774c8df4e8581f3ccca27f721460544da, #2400, #2427)
+   * Fix: Handle exceptions creating Vulkan device (commit:1091109a0ae3a59ba864c8864188183d7b34f75c, #2421)
+   * Fix: Repairs & Builders: Don't move needlessly (commit:df8997b5f08afa26cc69b93ab8279db04e643e3d, #2391)
+   * Fix: Re-ordering construction units to build something shouldn't cancel it (commit:5a106269f68d9d1c708114853d0da20cf442843c, #2395)
+   * Fix: Don't reset attack range under commander (commit:7ac86b51bc9ff96d1881544799d620d267e45de0, #2394)
+   * Fix: Ignore rearm order when already rearming (commit:e9fef35ea95c95df6e78df8e95a2b378b4ccb5b3, #2399)
+   * Fix: Don't show green overlay when impossible to build next module (commit:24b570d887275d685ee944570d05f07bb3339dd9, #2398)
+   * Fix: Don't show modules in build list when unable to build more buildings of that type (commit:af3f237f0f64ac3da11dd0a83a46a89e41d0afbf, #2396)
+   * Fix: Don't retreat repair turrets (RT) to other RT (commit:d4cf74d30ff79fad6d0c4c5cffe3129b7310b959, #2389)
+   * Fix: Improve resource cleanup on shutdown (too many commits, #2405, #2423)
+   * Fix: Prevent DIVIDE_BY_ZERO in displayBigSlider (commit:0979c692f941689505e35c782040fe80f1f29d86, #2408)
+   * Fix: Various savegame / autosave issues (too many commits, #2409, #2419)
+   * Fix: Remove Command Relay structure requirement for Command Turret research (commit:0248233152c341fcd36a6f14c94c4a2bb57aa5e1, #2414)
+   * Fix: Partial UI soft-lock with certain in-game menus (commit:b429ffe3d146baf04b8e55b279ef5a3b6543f4f2, #2418)
+   * Fix: Preserve ordering of sync msgs in MP; fixes Factory set Hold Position bug (commit:cda0183a1abf868103e67649aedb73768e7ba521, #2397)
+   * Fix: Toggling debug mode in skirmish as spectator (commit:ca936ba49bd3473472ffb095614de4f0cab88dac, #2420)
+   * Fix: Ultimate Scavengers building an absurd amount of factories (commit:f0fce501741a7c2075452abb8b77c8fa66e10b19, #2417)
+ * Graphics:
+   * Fix: Missing parts on the Nexus Link turret (commit:06a8600dfde844bff1bc3c70a08c32a1d574e07b, #2392)
+ * AI:
+   * Fix: Rip out mobile repair tactics from Cobra AI (commit:3fc79370c16b597009040e06fc5439ec030168de, #2387)
+ * Scripting:
+   * Fix: Use constants instead of plain numbers (commit:70e03ad9790be91d009f9e73d11aa1492868a37e, commit:dd815aeae262f3d955b8828073e64c407d8fa774, #2406)
+ * Multiplayer:
+   * Add: Add 7-player map "Thales" (commit:a927e712eb5fecfa7bda7d946291e8a1c7375ba8, #2404)
+ * MP-Balance:
+   * Change: Adjust Heavy Plasma Launcher: Reduce damage 250 -> 225, increase firePause 300 -> 350, reduce periodical Damage Radius 128 -> 64 (commit:b8685b5df12091ace6f5590e80984eecbcbe2fa0, #2386)
+   * Change: Adjust Incendiary Mortar: "researchPoints": 3600 -> 4800, "researchPower": 112 -> 150 (commit:1d2976ed52d4365e0ae8b4aae31d23333247dea6, #2407)
+ * Other:
+   * Fix: pie_import to handle filepaths properly in Blender 2.9x .PIE plugin (commit:97427c87d4ceeaea436c1dd52418f3db60579b96, #2412)
+
 2021-11-08: Version 4.2.1:
  * General:
    * Add: Replay v2 format: Embed downloaded maps, store "end of game" info block (too many commits, #2347)
