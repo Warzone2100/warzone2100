@@ -7929,9 +7929,9 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERGAME& p) {
 	j = nlohmann::json::object();
 	j["type"] = p.type;
 	j["scavengers"] = p.scavengers;
-	j["map"] = p.map;
+	j["map"] = WzString::fromUtf8(p.map).toStdString(); // Wrap this in WzString to handle invalid UTF-8 before adding to json object
 	j["maxPlayers"] = p.maxPlayers;
-	j["name"] = p.name;
+	j["name"] = WzString::fromUtf8(p.name).toStdString(); // Wrap this in WzString to handle invalid UTF-8 before adding to json object
 	j["hash"] = p.hash;
 	j["modHashes"] = p.modHashes;
 	j["power"] = p.power;
@@ -8027,7 +8027,7 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERINGAME& p) {
 inline void to_json(nlohmann::json& j, const PLAYER& p) {
 
 	j = nlohmann::json::object();
-	j["name"] = p.name;
+	j["name"] = WzString::fromUtf8(p.name).toStdString(); // Wrap this in WzString to handle invalid UTF-8 before adding to json object
 	j["position"] = p.position;
 	j["colour"] = p.colour;
 	j["allocated"] = p.allocated;

@@ -144,7 +144,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	optionsHandler.saveOptions(gameOptions);
 	settings["gameOptions"] = gameOptions;
 
-	auto data = settings.dump();
+	auto data = settings.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
 	PHYSFS_writeUBE32(replaySaveHandle, data.size());
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
 
