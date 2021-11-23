@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-21 16:45\n"
+"PO-Revision-Date: 2021-11-23 13:26\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -180,7 +180,7 @@ msgstr "Udrž základne a odraz akýkoľvek útok."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "MISIA ZÁKLADNE ALFA: Prichádzajúci prenos"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
