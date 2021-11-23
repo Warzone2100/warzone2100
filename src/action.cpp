@@ -740,7 +740,7 @@ void actionUpdateDroid(DROID *psDroid)
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
 							psDroid->action = DACTION_ATTACK;
-							setDroidActionTarget(psDroid, psTemp, i);						
+							setDroidActionTarget(psDroid, psTemp, i);
 						}
 					}
 				}
@@ -1603,7 +1603,7 @@ void actionUpdateDroid(DROID *psDroid)
 						}
 						else if ((psStruct->pStructureType->type == REF_FACTORY && order->psStats->type == REF_FACTORY_MODULE) ||
 								(psStruct->pStructureType->type == REF_RESEARCH && order->psStats->type == REF_RESEARCH_MODULE) ||
-								(psStruct->pStructureType->type == REF_POWER_GEN && order->psStats->type == REF_POWER_MODULE) || 
+								(psStruct->pStructureType->type == REF_POWER_GEN && order->psStats->type == REF_POWER_MODULE) ||
 								(psStruct->pStructureType->type == REF_VTOL_FACTORY && order->psStats->type == REF_FACTORY_MODULE))
 							{
 							// upgrade current structure in a row
@@ -1727,7 +1727,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					cantDoRepairLikeAction = true;
 				}
-				else if (structureAtPos->body == structureBody(structureAtPos))
+				else if (order->type != DORDER_DEMOLISH && structureAtPos->body == structureBody(structureAtPos))
 				{
 					cantDoRepairLikeAction = true;
 				}
@@ -1867,7 +1867,7 @@ void actionUpdateDroid(DROID *psDroid)
 					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 					orderDroidObj(psDroid, DORDER_GUARD, psDroid->order.psObj, ModeImmediate);
 				}
-				else 
+				else
 				{
 					objTrace(psDroid->id, "Stopping and waiting for repairs %d", (int)psDroid->id);
 					moveStopDroid(psDroid);
