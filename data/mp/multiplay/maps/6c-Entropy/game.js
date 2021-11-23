@@ -233,7 +233,7 @@ for (var y = 0; y < mapHeight; ++y) {
 			isSnow[i00] = nearSnow;
 		} else {
 			// Pick randomly from the corners to set the tile texture.
-			var reg = sample([reg00, reg01, reg10, reg11])
+			var reg = sample([reg00, reg01, reg10, reg11]);
 			texture[i00] = sampleTexture(reg.texture);
 			smoothDirs[i00] |= 3;
 			smoothDirs[i01] |= 6;
@@ -398,7 +398,7 @@ function genStartPos(fields, regions) {
 		var newPos = randPos(player);
 		// Based on very rough slightly-asymmetric pathfinding approximation.
 		function scoreAt(pos) {  // eslint-disable-line no-inner-declarations
-			var next = []
+			var next = [];
 			var visit = [];
 			function queue(i, pos, dist) {
 				if (regions[i].texture === WATER) {

@@ -32,7 +32,7 @@ function camPlayVideos(obj)
 		}
 		if (!camDef(obj.type) || (obj.type !== MISS_MSG && obj.type !== CAMP_MSG))
 		{
-			camDebug("Video message type was NOT specified. Please specify one.")
+			camDebug("Video message type was NOT specified. Please specify one.");
 			return;
 		}
 		if (!camDef(obj.immediate))
