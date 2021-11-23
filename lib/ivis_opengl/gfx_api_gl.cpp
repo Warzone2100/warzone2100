@@ -1992,6 +1992,13 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 			return true;
 		}
 	}
+
+	// Renderer: Intel(R) Graphics Media Accelerator 3600 Series
+	if (openGL_renderer == "Intel(R) Graphics Media Accelerator 3600 Series")
+	{
+		// Does not work with WZ. (No indications that there is a driver version that does not crash.)
+		return true;
+	}
 #endif
 
 	return false;
