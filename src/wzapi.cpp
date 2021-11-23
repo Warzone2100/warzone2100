@@ -1081,7 +1081,7 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 
 	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
-	SCRIPT_ASSERT({}, context, droidType >= 0 || droidType <= DROID_ANY, "Bad droid type parameter: %d", droidType);
+	SCRIPT_ASSERT({}, context, droidType >= 0 && droidType <= DROID_ANY, "Bad droid type parameter: %d", droidType);
 
 	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
