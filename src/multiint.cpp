@@ -4329,11 +4329,14 @@ public:
 			if (playerDifficulty >= 0)
 			{
 				sstrcpy(tooltip, _(difficultyList[playerDifficulty]));
-				const char *difficultyTip = aidata[NetPlay.players[playerIdx].ai].difficultyTips[playerDifficulty];
-				if (strcmp(difficultyTip, "") != 0)
+				if (NetPlay.players[playerIdx].ai < aidata.size())
 				{
-					sstrcat(tooltip, "\n");
-					sstrcat(tooltip, difficultyTip);
+					const char *difficultyTip = aidata[NetPlay.players[playerIdx].ai].difficultyTips[playerDifficulty];
+					if (strcmp(difficultyTip, "") != 0)
+					{
+						sstrcat(tooltip, "\n");
+						sstrcat(tooltip, difficultyTip);
+					}
 				}
 			}
 			bool freshDifficultyButton = (difficultyChooserButton == nullptr);
@@ -7229,8 +7232,14 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	PIELIGHT textColor = WZCOL_FORM_TEXT;
 	if (j >= 0)
 	{
-		ASSERT(j < aidata.size(), "Invalid aidata index: %d", j);
-		displayText = aidata[j].name;
+		if (j < aidata.size())
+		{
+			displayText = aidata[j].name;
+		}
+		else
+		{
+			debug(LOG_ERROR, "Invalid aidata index: %d; (num AIs: %zu)", j, aidata.size());
+		}
 	}
 	else
 	{
