@@ -204,7 +204,7 @@ function produceDroids(){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
-		var myarmy = []
+		var myarmy = [];
 		myarmy = myarmy.concat(enumDroid(me, DROID_WEAPON));
 		myarmy = myarmy.concat(enumDroid(me, DROID_CYBORG));
 		if(myarmy.length <= enemyarmy.length){
@@ -253,7 +253,7 @@ function produceCyborgs(){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
-		var myarmy = []
+		var myarmy = [];
 		myarmy = myarmy.concat(enumDroid(me, DROID_WEAPON));
 		myarmy = myarmy.concat(enumDroid(me, DROID_CYBORG));
 		if(myarmy.length <= enemyarmy.length){
@@ -298,7 +298,7 @@ function produceVTOL(){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
-		var myarmy = []
+		var myarmy = [];
 		myarmy = myarmy.concat(enumDroid(me, DROID_WEAPON));
 		myarmy = myarmy.concat(enumDroid(me, DROID_CYBORG));
 		if(myarmy.length <= enemyarmy.length){

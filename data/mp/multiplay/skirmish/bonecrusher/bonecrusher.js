@@ -507,7 +507,7 @@ function init(){
 		maxPartisans = 4;
 		builderPts = 150;
 		maxRegular = 100;
-		scannersTimer = 120000
+		scannersTimer = 120000;
 	} else {
 		//Если есть союзники бонкрашеры
 		if(bc_ally.length > 1){
