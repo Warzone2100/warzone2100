@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-24 01:23\n"
+"PO-Revision-Date: 2021-11-24 13:27\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -16106,35 +16106,35 @@ msgstr "%u Sekunden"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Keine"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Spieleröffnungsoptionen:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Game Port"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "UPnP aktivieren"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Inaktivitäts-Timeout"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
-msgstr ""
+msgstr "Lag Kick"
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Zuschauerplätze"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "MEHRSPIELOPTIONEN"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5124
@@ -16399,12 +16399,12 @@ msgstr "Die benötigte Mod konnte nicht geladen werden: %s\n\n"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Kann nicht geladen werden: %s."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Bitte entferne alle inkompatiblen Mods."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -16933,7 +16933,7 @@ msgstr "Alle schwer beschädigten Einheiten auswählen"
 #: src/input/keyconfig.cpp:171
 #, c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Wähle alle Landkampfeinheiten mit mehr als 50% Gesundheit und ohne Gruppenzuordnung."
 
 #: src/input/keyconfig.cpp:172
 msgid "Select all Half-tracks"
@@ -17404,16 +17404,16 @@ msgstr "Warnung! Dieser Cheat ist fehlerbehaftet. Wir empfehlen ihn NICHT zu nut
 
 #: src/keybind.cpp:157
 msgid "Gateways toggled."
-msgstr ""
+msgstr "Gateways umgeschaltet."
 
 #: src/keybind.cpp:163
 msgid "Path display toggled."
-msgstr ""
+msgstr "Pfadanzeige umgeschaltet."
 
 #: src/keybind.cpp:191
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "Spieler %d: %d Energie"
 
 #: src/keybind.cpp:217
 msgid "Ouch! Droid's health is down 20%!"
@@ -17522,7 +17522,7 @@ msgstr "Unbegrenzte Energie aktiviert"
 
 #: src/keybind.cpp:772
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Lichtwerte für alle Tiles neu berechnet"
 
 #: src/keybind.cpp:802
 msgid "All items made available"
@@ -17530,7 +17530,7 @@ msgstr "Alle Gegenstände wurden verfügbar gemacht"
 
 #: src/keybind.cpp:827
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Tileinfo in Log abgelegt"
 
 #: src/keybind.cpp:842
 msgid "Fog on"
@@ -17752,23 +17752,23 @@ msgstr "Minikarte zeigt Höheninformation"
 
 #: src/keybind.cpp:2493
 msgid "Asserts turned off"
-msgstr ""
+msgstr "Asserts ausgeschaltet"
 
 #: src/keybind.cpp:2541
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "QuickSave ist nicht erlaubt für Mehrspieler- oder Tutorialspiele"
 
 #: src/keybind.cpp:2562
 msgid "QuickSave failed"
-msgstr ""
+msgstr "QuickSave fehlgeschlagen"
 
 #: src/keybind.cpp:2571
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "QuickLoad ist nicht erlaubt für Mehrspieler- oder Tutorialspiele"
 
 #: src/keybind.cpp:2598
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "QuickSave Datei existiert noch nicht"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -17810,12 +17810,12 @@ msgstr "cheated"
 #: src/loadsave.cpp:1090
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "AutoSave %s"
 
 #: src/loadsave.cpp:1095
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "AutoSave %s fehlgeschlagen"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -18686,11 +18686,11 @@ msgstr "%s : %s aus dem Spiel geworfen und zur Bannliste hinzugefügt!"
 
 #: src/multiopt.cpp:304
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "KARTE ANGEFORDERT!"
 
 #: src/multiopt.cpp:329
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "MOD ANGEFORDERT!"
 
 #: src/multiopt.cpp:347
 #: src/multiplay.cpp:2020
@@ -18747,7 +18747,7 @@ msgstr "DATEI VERSANDT!"
 
 #: src/multiplay.cpp:2000
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "KARTE HERUNTERGELADEN!"
 
 #: src/multiplay.cpp:2056
 #, c-format
@@ -18862,12 +18862,12 @@ msgstr "Wir können das nicht! Wir müssen ein Cyborg sein, um den Cyborgtranspo
 
 #: src/qtscript.cpp:893
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "Fehler beim Laden der ausgewählten KI! Überprüfe Deine Logs, um zu sehen warum."
 
 #: src/qtscript.cpp:896
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "Das %s AI Skript für den aktuellen Spieler geladen!"
 
 #: src/research.cpp:1017
 #, c-format
@@ -19014,7 +19014,7 @@ msgstr "Kann keinen Commander finden!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "Kann das benötigte Gebäude nicht finden!"
 
 #: src/selection.cpp:662
 #, c-format
@@ -19025,7 +19025,7 @@ msgstr[1] "%u Einheiten ausgewählt"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Spielerstatistiken anzeigen"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
@@ -19081,7 +19081,7 @@ msgstr[1] "%s - %u Einheiten zugewiesen - Trefferpunkte %d/%d"
 #: src/structure.cpp:5357
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %d - Sensorreichweite %d - ECM %d"
 
 #: src/structure.cpp:5372
 #, c-format
@@ -19104,17 +19104,17 @@ msgstr "%s - Trefferpunkte %d/%d"
 #: src/structure.cpp:5381
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr ""
+msgstr "ID %d - Panzerung %d|%d - Sensorreichweite %d - ECM %d - born %u - depth %.02f"
 
 #: src/structure.cpp:5390
 #, c-format
 msgid "ID %d - Queue %d"
-msgstr ""
+msgstr "ID %d - Warteschlange %d"
 
 #: src/structure.cpp:5397
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "ID %d - %s"
 
 #: src/structure.cpp:5410
 #, c-format
@@ -19124,7 +19124,7 @@ msgstr "%s - %u von %u verbunden - Trefferpunkte %d/%d"
 #: src/structure.cpp:5414
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "ID %u - Multiplikator: %u"
 
 #: src/structure.cpp:5423
 #, c-format
