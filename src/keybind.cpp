@@ -22,6 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/rational.h"
+#include "lib/framework/physfs_ext.h"
 #include "objects.h"
 #include "levels.h"
 #include "basedef.h"
@@ -93,10 +94,12 @@ char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each p
 static STRUCTURE	*psOldRE = nullptr;
 static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
 
+#define QUICKSAVE_CAM_FOLDER "savegames/campaign/QuickSave"
+#define QUICKSAVE_SKI_FOLDER "savegames/skirmish/QuickSave"
 #define QUICKSAVE_CAM_FILENAME "savegames/campaign/QuickSave.gam"
 #define QUICKSAVE_SKI_FILENAME "savegames/skirmish/QuickSave.gam"
-#define QUICKSAVE_CAM_JSON_FILENAME "savegames/campaign/QuickSave/QuickSave.json"
-#define QUICKSAVE_SKI_JSON_FILENAME "savegames/skirmish/QuickSave/QuickSave.json"
+#define QUICKSAVE_CAM_JSON_FILENAME QUICKSAVE_CAM_FOLDER "/QuickSave.json"
+#define QUICKSAVE_SKI_JSON_FILENAME QUICKSAVE_SKI_FOLDER "/QuickSave.json"
 
 #define SPECTATOR_NO_OP() do { if (selectedPlayer >= MAX_PLAYERS || NetPlay.players[selectedPlayer].isSpectator) { return; } } while (0)
 
@@ -2547,13 +2550,12 @@ void kf_QuickSave()
 	}
 
 	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
-	if (PHYSFS_exists(filename))
+	const char *quickSaveFolder = bMultiPlayer? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
+	if (WZ_PHYSFS_isDirectory(quickSaveFolder))
 	{
-		char *oldsave = strdup(filename);
-		deleteSaveGame(oldsave);
-		free(oldsave);
+		deleteSaveGame(quickSaveFolder);
 	}
-	if (saveGame(filename, GTYPE_SAVE_MIDMISSION))
+	if (saveGame(filename, GTYPE_SAVE_MIDMISSION)) // still expects a .gam filename... TODO: FIX
 	{
 		console(_("QuickSave"));
 	}

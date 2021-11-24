@@ -258,7 +258,7 @@ static GAMECODE renderLoop()
 						ASSERT(false, "Mission Results: saveGame Failed");
 						sstrcpy(msgbuffer, _("Could not save game!"));
 						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-						deleteSaveGame(sRequestResult);
+						deleteSaveGame_classic(sRequestResult);
 					}
 				}
 				else if (bMultiPlayer || saveMidMission())
@@ -274,7 +274,7 @@ static GAMECODE renderLoop()
 						ASSERT(!"saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION) failed", "Mid Mission: saveGame Failed");
 						sstrcpy(msgbuffer, _("Could not save game!"));
 						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-						deleteSaveGame(sRequestResult);
+						deleteSaveGame_classic(sRequestResult);
 					}
 				}
 				else
