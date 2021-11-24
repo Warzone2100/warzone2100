@@ -85,7 +85,8 @@ bool saveInMissionRes();
 // return whether the save screen was displayed in the middle of a mission
 bool saveMidMission();
 
-void deleteSaveGame(const char *fileName);
+void deleteSaveGame_classic(const char *fileName);
+void deleteSaveGame(std::string saveGameFolderPath);
 
 void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 

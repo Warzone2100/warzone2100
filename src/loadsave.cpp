@@ -531,40 +531,59 @@ bool closeLoadSaveOnShutdown()
 	filename reference.  We delete this file, any .es file with the same
 	name, and any files in the directory with the same name.
 ***************************************************************************/
-void deleteSaveGame(const char *fileName)
+// TODO: Replace the old uses of .gam files with the savegame folder and call deleteSaveGame directly?
+void deleteSaveGame_classic(const char *gamFileName)
 {
-	ASSERT(strlen(fileName) < MAX_STR_LENGTH, "deleteSaveGame; save game name too long");
-	PHYSFS_delete(fileName);
+	ASSERT_OR_RETURN(, gamFileName != nullptr, "Null gamFileName");
+	std::string gamFolderPath = gamFileName;
 
-	char tmp[PATH_MAX] = {0};
-	strncpy(tmp, fileName, PATH_MAX - 1);
-	tmp[strlen(tmp) - 4] = '\0'; // strip extension
+	// Old method of stripping file extension - makes lots of assumptions (like there *is* a file extension and it has a length of 4 including the period)
+	ASSERT_OR_RETURN(, gamFolderPath.size() > 4, "Input gamFileName too short?: %s", gamFileName);
+	gamFolderPath.resize(gamFolderPath.size() - 4);
 
-	strcat(tmp, ".es");					// remove script data if it exists.
-	PHYSFS_delete(tmp);
-	tmp[strlen(tmp) - 3] = '\0'; // strip extension
+	deleteSaveGame(gamFolderPath);
+}
+
+void deleteSaveGame(std::string saveGameFolderPath)
+{
+	// Remove any trailing path separators (/)
+	while (!saveGameFolderPath.empty() && (saveGameFolderPath.rfind("/", std::string::npos) == (saveGameFolderPath.length() - 1)))
+	{
+		saveGameFolderPath.resize(saveGameFolderPath.length() - 1); // Remove trailing path separators
+	}
+
+	// First, check if some old files in the parent directory (named the same as this directory, but with specific extensions) exist
+	// (since we removed trailing directory separators above, we can just append the appropriate file extensions)
+	std::string oldParentFile = saveGameFolderPath + ".gam";
+	if (PHYSFS_exists(WzString::fromUtf8(oldParentFile)) != 0)
+	{
+		PHYSFS_delete(oldParentFile.c_str());
+	}
+	oldParentFile = saveGameFolderPath + ".es"; // ancient script data file
+	if (PHYSFS_exists(WzString::fromUtf8(oldParentFile)) != 0)
+	{
+		PHYSFS_delete(oldParentFile.c_str());
+	}
 
 	// check for a directory and remove that too.
-	WZ_PHYSFS_enumerateFiles(tmp, [tmp](const char *i) -> bool {
-		char del_file[PATH_MAX];
-
+	WZ_PHYSFS_enumerateFiles(saveGameFolderPath.c_str(), [saveGameFolderPath](const char *i) -> bool {
 		// Construct the full path to the file by appending the
 		// filename to the directory it is in.
-		snprintf(del_file, sizeof(del_file), "%s/%s", tmp, i);
+		std::string del_file = astringf("%s/%s", saveGameFolderPath.c_str(), i);
 
-		debug(LOG_SAVE, "Deleting [%s].", del_file);
+		debug(LOG_SAVE, "Deleting [%s].", del_file.c_str());
 
 		// Delete the file
-		if (!PHYSFS_delete(del_file))
+		if (!PHYSFS_delete(del_file.c_str()))
 		{
-			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file, WZ_PHYSFS_getLastError());
+			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file.c_str(), WZ_PHYSFS_getLastError());
 		}
 		return true; // continue
 	});
 
-	if (WZ_PHYSFS_isDirectory(tmp) && !PHYSFS_delete(tmp))		// now (should be)empty directory
+	if (WZ_PHYSFS_isDirectory(saveGameFolderPath.c_str()) && !PHYSFS_delete(saveGameFolderPath.c_str()))		// now (should be)empty directory
 	{
-		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", fileName, WZ_PHYSFS_getLastError());
+		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", saveGameFolderPath.c_str(), WZ_PHYSFS_getLastError());
 	}
 }
 
@@ -863,7 +882,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath.c_str(), sTemp, sSaveGameExtension);
 			if (strlen(sDelete) != 0)
 			{
-				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
+				deleteSaveGame_classic(sDelete);	//only delete game if a new game fills the slot
 			}
 		}
 
@@ -1005,7 +1024,7 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 // returns true if something was deleted
 static bool freeAutoSaveSlot_old(const char *path)
 {
-	return WZ_PHYSFS_cleanupOldFilesInFolder(path, sSaveGameExtension, -1, [](const char *fileName){ deleteSaveGame(fileName); return true; }) > 0;
+	return WZ_PHYSFS_cleanupOldFilesInFolder(path, sSaveGameExtension, -1, [](const char *fileName){ deleteSaveGame_classic(fileName); return true; }) > 0;
 }
 
 static void freeAutoSaveSlot(SAVEGAME_LOC loc)
@@ -1052,7 +1071,7 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 	char savefile[PATH_MAX];
 	snprintf(savefile, sizeof(savefile), "%s/%s.gam", path, oldestKey.c_str());
 	debug(LOG_SAVEGAME, "deleting the oldest autosave file %s", savefile);
-	deleteSaveGame(savefile);
+	deleteSaveGame_classic(savefile);
 }
 
 bool autoSave()

@@ -1333,7 +1333,7 @@ INT_RETVAL intRunWidgets()
 			else
 			{
 				ASSERT(false, "intRunWidgets: saveGame Failed");
-				deleteSaveGame(sRequestResult);
+				deleteSaveGame_classic(sRequestResult);
 			}
 		}
 	}
