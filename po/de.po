@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-21 16:46\n"
+"PO-Revision-Date: 2021-11-24 01:23\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -5828,7 +5828,7 @@ msgstr "Format der Aufzeichnungsdatei wird nicht unterstützt"
 
 #: lib/netplay/nettypes.cpp:883
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Die Aufzeichnung kann nicht geladen werden: Die Aufzeichnungs-Datei ist unvollständig oder beschädigt."
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -11715,7 +11715,7 @@ msgstr "Schwerer Rumpf des NEXUS"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4280
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "NEXUS Immunisierungssystem"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -15045,11 +15045,11 @@ msgstr "Gespeicherte Kampagne laden"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
-msgstr ""
+msgstr "Lade eine Aufzeichnung"
 
 #: src/clparse.cpp:373
 msgid "replay file"
-msgstr ""
+msgstr "Aufzeichnungs-Datei"
 
 #: src/clparse.cpp:374
 msgid "Play in windowed mode"
@@ -15375,7 +15375,7 @@ msgstr "Bau nicht möglich. Ölquelle brennt."
 #: src/display.cpp:1596
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u - kills %d"
-msgstr ""
+msgstr "%s - Trefferpunkte %d/%d - ID %d - Erfahrung %f, %s - Befehl %s - Aktion %s - Sensorreichweite %hu - ECM %u - Neigung %.0f - frust %u - Abschüsse %d"
 
 #: src/display.cpp:1604
 #, c-format
@@ -15385,7 +15385,7 @@ msgstr "%s - Hitpoints %d/%d - Erfahrung %.1f, %s, Abschüsse %d"
 #: src/display.cpp:1628
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Feind!) %s - Trefferpunkte %d/%d - ID %d - Erfahrung %f, %s - Befehl %s - Aktion %s - Sensorreichweite %d - ECM %d - Neigung %.0f"
 
 #: src/display.cpp:1772
 #, c-format
@@ -15395,7 +15395,7 @@ msgstr "%s - Verbündet - Trefferpunkte %d/%d - Erfahrung %d, %s"
 #: src/display.cpp:1788
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Feind!) %s, ref: %d, ID: %d Trefferpunkte: %d/%d"
 
 #: src/display.cpp:2063
 #, c-format
@@ -15704,7 +15704,7 @@ msgstr "Musik-Manager"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Mehrspieloptionen"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -16096,13 +16096,13 @@ msgstr "Diese Schwierigkeit ist für sehr erfahrene Spieler!"
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u Minuten"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u Sekunden"
 
 #: src/frontend.cpp:2307
 msgid "None"
