@@ -97,7 +97,11 @@ static inline int WZ_PHYSFS_isDirectory (const char * fname)
 {
 #if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	PHYSFS_Stat metaData;
-	PHYSFS_stat(fname, &metaData);
+	if (PHYSFS_stat(fname, &metaData) == 0)
+	{
+		// PHYSFS_stat failed
+		return 0;
+	}
 	return (metaData.filetype == PHYSFS_FILETYPE_DIRECTORY) ? 1 : 0;
 #else
 	return PHYSFS_isDirectory(fname);
