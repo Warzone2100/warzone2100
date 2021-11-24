@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-23 13:26\n"
+"PO-Revision-Date: 2021-11-24 01:23\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Gratulujeme, veliteľ."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
