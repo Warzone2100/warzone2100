@@ -22,6 +22,17 @@ proprietary technologies have been replaced with open-source counterparts.
 Right now supported platforms are Linux, Windows, and macOS. There are reports 
 that Warzone 2100 is working on BSD, too.
 
+Installation
+------------
+
+Visit https://wz2100.net for the latest stable release for Windows, macOS and Ubuntu.
+
+Note for videos in Ubuntu: For important information during the game, download the videos manually. Assuming the game is installed in the standard `~/.local/share/` folder, use these commands:
+```
+mkdir ~/.local/share/warzone2100
+wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
+```
+
 Latest development builds
 -------------------------
 
@@ -82,8 +93,7 @@ Clone this Git repo and build, following the instructions under:
 > but they should be considered a work-in-progress.
 
 ### Videos
-You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will
-need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
+You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
 Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
 Reporting bugs
