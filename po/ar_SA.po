@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-21 16:46\n"
+"PO-Revision-Date: 2021-11-26 17:53\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -4232,11 +4232,11 @@ msgstr ""
 
 #: data/base/script/tutorial.js:38
 msgid "Now left click the power generator site"
-msgstr ""
+msgstr "اضغط بالزر الأيسر للفأرة على موقع مولّد الطاقة"
 
 #: data/base/script/tutorial.js:39
 msgid "The other truck will now help to build the power generator"
-msgstr ""
+msgstr "ستشارك الشاحنة الأخرى الآن في عملية بناء مولّد الطاقة"
 
 #: data/base/script/tutorial.js:41
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -6287,7 +6287,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[3]
 #: po/custom/fromJson.txt:387
 msgid "All power generators upgraded automatically"
-msgstr ""
+msgstr "تمّت ترقية كل مولّدات الطاقة بشكلٍ تلقائي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[3]
@@ -7732,7 +7732,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0CommandCentre.name
 #: po/custom/fromJson.txt:1475
 msgid "Command Center"
-msgstr ""
+msgstr "مركز القيادة"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ComDroidControl.name
@@ -10102,7 +10102,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:3066
 msgid "Improved Power Generator Performance"
-msgstr ""
+msgstr "تحسين أداء مولّد الطاقة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
@@ -12044,7 +12044,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4480
 msgid "Power Generator"
-msgstr ""
+msgstr "مولّد الطاقة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -17047,7 +17047,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:201
 msgid "Select next Power Generator"
-msgstr ""
+msgstr "اختر مولّد الطاقة التالي"
 
 #: src/input/keyconfig.cpp:202
 msgid "Select next Cyborg Factory"
@@ -17067,7 +17067,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:206
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "انتقل إلى مولّد الطاقة التالي"
 
 #: src/input/keyconfig.cpp:207
 msgid "Jump to next Cyborg Factory"
