@@ -5,9 +5,6 @@
 
 20	432	13.0	17.0	_("Buried beneath this silo is a tactical nuclear warhead that is set to go off soon.")
 
-
 20	432	19.0	22.0	_("As I cannot launch it, it'll just have to blow where it is.")
 
 20	432	22.4	26.0	_("Please note that all entrances to the underground complex have been sealed. Goodbye, Commander.")
-
-

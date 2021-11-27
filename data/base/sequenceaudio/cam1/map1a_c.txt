@@ -1,5 +1,5 @@
-//pos		frame	
-//x	y		start	end	Text	
+//pos		frame
+//x	y		start	end	Text
 
 20	432	2.6	7.6	_("The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military.")
 
@@ -12,5 +12,3 @@
 20	432	54.0	68.0	_("The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century.")
 
 20	432	68.6	77.0	_("Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies.")
-
-
