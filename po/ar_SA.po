@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-26 17:53\n"
+"PO-Revision-Date: 2021-11-27 05:53\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -4313,15 +4313,15 @@ msgstr ""
 
 #: data/base/script/tutorial.js:64
 msgid "A factory is now required to manufacture your new vehicle"
-msgstr ""
+msgstr "ستحتاج الآن إلى مصنعٍ لتصنيع مركبتك الجديدة"
 
 #: data/base/script/tutorial.js:66
 msgid "Now left click the factory icon and position it at your base"
-msgstr ""
+msgstr "انقر الآن على أيقونة المصنع وضعه في قاعدتك"
 
 #: data/base/script/tutorial.js:67
 msgid "Select a location for your factory"
-msgstr ""
+msgstr "حدّد موقعاً لبناء مصنعك فيه"
 
 #: data/base/script/tutorial.js:68
 msgid "The delivery point is indicated by the number 1"
@@ -4341,7 +4341,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:72
 msgid "The factory can now be ordered to build a new unit"
-msgstr ""
+msgstr "يمكنك الآن أن تطلب من المصنع بناء وحدةٍ جديدة"
 
 #: data/base/script/tutorial.js:73
 msgid "Left click the flashing MANUFACTURE icon"
@@ -4353,7 +4353,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:76
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr ""
+msgstr "انتظر إلى أن ينتهي المصنع من بناء الوحدة أو الوحدات الجديدة"
 
 #: data/base/script/tutorial.js:78
 msgid "Congratulations commander - you are ready for your first mission"
@@ -8475,14 +8475,14 @@ msgstr ""
 #: po/custom/fromJson.txt:1985
 #, no-c-format
 msgid "Factory production rate +60%"
-msgstr ""
+msgstr "معدّل الإنتاج الخاص بالمصنع +60%"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0LightFactory.name
 #. data/mp/stats/structure.json: $.A0LightFactory.name
 #: po/custom/fromJson.txt:1989
 msgid "Factory"
-msgstr ""
+msgstr "المصنع"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
@@ -12858,7 +12858,7 @@ msgstr ""
 #. data/base/stats/features.json: $.BarbTechRuin.name
 #: po/custom/fromJson.txt:5025
 msgid "Ruined Factory"
-msgstr ""
+msgstr "مصنعٌ مدمَّر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_SAM1.text[1]
@@ -15508,16 +15508,16 @@ msgstr ""
 
 #: src/frontend.cpp:199
 msgid "Single Player"
-msgstr ""
+msgstr "لعبةٌ فردية"
 
 #: src/frontend.cpp:200
 msgid "Multi Player"
-msgstr ""
+msgstr "لعبةٌ جماعية"
 
 #: src/frontend.cpp:201
 #: src/frontend.cpp:309
 msgid "Tutorial"
-msgstr ""
+msgstr "الدرس التعليمي"
 
 #: src/frontend.cpp:202
 #: src/ingameop.cpp:238
@@ -15629,7 +15629,7 @@ msgstr ""
 
 #: src/frontend.cpp:371
 msgid "SINGLE PLAYER"
-msgstr ""
+msgstr "لعبةٌ فردية"
 
 #: src/frontend.cpp:376
 #: src/frontend.cpp:398
@@ -17039,7 +17039,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:199
 msgid "Select next Factory"
-msgstr ""
+msgstr "اختر المصنع التالي"
 
 #: src/input/keyconfig.cpp:200
 msgid "Select next Research Facility"
@@ -17059,7 +17059,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:204
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "انتقل إلى المصنع التالي"
 
 #: src/input/keyconfig.cpp:205
 msgid "Jump to next Research Facility"
@@ -17302,7 +17302,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:638
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "في لعبةٍ جماعية"
 
 #: src/integrations/wzdiscordrpc.cpp:834
 #, c-format
@@ -17710,7 +17710,7 @@ msgstr ""
 
 #: src/keybind.cpp:2301
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr ""
+msgstr "عذراً، لا يمكن تغيير سرعة اللعبة أثناء اللعب جماعياً."
 
 #: src/keybind.cpp:2337
 #: src/keybind.cpp:2391
@@ -17757,7 +17757,7 @@ msgstr ""
 
 #: src/keybind.cpp:2541
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "لا يُسمح باستعمال الحفظ السريع أثناء اللعب جماعياً أو في الدروس التعليمية"
 
 #: src/keybind.cpp:2562
 msgid "QuickSave failed"
