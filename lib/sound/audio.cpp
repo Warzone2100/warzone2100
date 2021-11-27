@@ -926,6 +926,16 @@ void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack)
 		psSample = psSample->psNext;
 	}
 }
+static UDWORD lastTimeBuildFailedPlayed = 0;
+// Play annoying sound only once per tick
+void audio_PlayBuildFailedOnce()
+{
+	if (lastTimeBuildFailedPlayed != gameTime)
+	{
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		lastTimeBuildFailedPlayed = gameTime;
+	}
+}
 
 //*
 //

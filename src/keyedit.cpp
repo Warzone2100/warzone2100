@@ -220,7 +220,7 @@ public:
 		const KeyFunctionInfo& info = targetFunctionData.info;
 		if (info.type != KeyMappingType::ASSIGNABLE)
 		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 			psParentForm->unhighlightSelected();
 			return;
 		}
@@ -742,7 +742,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		const InputContext context = inputManager.contexts().get(mapping.info.context);
 		if (context.isAlwaysActive())
 		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 			unhighlightSelected();
 			return false;
 		}

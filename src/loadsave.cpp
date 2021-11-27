@@ -867,7 +867,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 				{
 					widgDelete(psRequestScreen, SAVEENTRY_EDIT);	//unselect this box, and go back ..
 					widgReveal(psRequestScreen, chosenSlotId);
-					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+					audio_PlayBuildFailedOnce();
 					return true;
 				}
 			}
