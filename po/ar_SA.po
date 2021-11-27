@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-27 05:53\n"
+"PO-Revision-Date: 2021-11-27 17:57\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -55,7 +55,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "استكشف المنطقة وقم بتأمينها."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
@@ -92,7 +92,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "يمكنك طلب التعزيزات."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -152,7 +152,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "دمّر القاعدة تدميراً شاملاً وأمّن على المنطقة."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "تهانينا أيها القائد."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
@@ -204,7 +204,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "لقد صارت أول منطقتين آمنتان الآن."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
@@ -1025,7 +1025,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
-msgstr ""
+msgstr "قم بتوكيل هذه المهمة إلى إحدى مراكز الأبحاث."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
@@ -4098,7 +4098,7 @@ msgstr ""
 #: data/base/script/tutorial.js:122
 #: data/mp/multiplay/script/rules/reticule.js:21
 msgid "Manufacture (F1)"
-msgstr ""
+msgstr "التصنيع (F1)"
 
 #: data/base/script/rules.js:59
 #: data/base/script/tutorial.js:112
@@ -4106,13 +4106,13 @@ msgstr ""
 #: data/mp/multiplay/script/rules/reticule.js:25
 #: data/mp/multiplay/script/rules/reticule.js:114
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "التصنيع - ابنِ مصنعاً قبل كل شيء"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
 #: data/mp/multiplay/script/rules/reticule.js:48
 msgid "Research (F2)"
-msgstr ""
+msgstr "الأبحاث (F2)"
 
 #: data/base/script/rules.js:109
 #: data/base/script/tutorial.js:217
@@ -4120,7 +4120,7 @@ msgstr ""
 #: data/mp/multiplay/script/rules/reticule.js:52
 #: data/mp/multiplay/script/rules/reticule.js:115
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "الأبحاث - ابنِ مركزاً للأبحاث قبل كل شيء"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4128,7 +4128,7 @@ msgstr ""
 #: data/base/script/tutorial.js:354
 #: data/mp/multiplay/script/rules/reticule.js:60
 msgid "Build (F3)"
-msgstr ""
+msgstr "البناء (F3)"
 
 #: data/base/script/rules.js:121
 #: data/base/script/tutorial.js:277
@@ -4138,13 +4138,13 @@ msgstr ""
 #: data/mp/multiplay/script/rules/reticule.js:64
 #: data/mp/multiplay/script/rules/reticule.js:116
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "البناء - اصنع روبوتات البناء قبل كل شيء"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
 #: data/mp/multiplay/script/rules/reticule.js:87
 msgid "Design (F4)"
-msgstr ""
+msgstr "التصميم (F4)"
 
 #: data/base/script/rules.js:172
 #: data/base/script/tutorial.js:261
@@ -4152,7 +4152,7 @@ msgstr ""
 #: data/mp/multiplay/script/rules/reticule.js:92
 #: data/mp/multiplay/script/rules/reticule.js:117
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "التصميم - ابنِ مقرّاً قبل كل شيء"
 
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/script/rules/reticule.js:101
@@ -4185,50 +4185,50 @@ msgstr ""
 #: src/transporter.cpp:551
 #: src/wzscriptdebug.cpp:1997
 msgid "Close"
-msgstr ""
+msgstr "إغلاق"
 
 #: data/base/script/rules.js:196
 #: data/base/script/tutorial.js:516
 #: data/mp/multiplay/script/rules/reticule.js:118
 #: data/mp/multiplay/script/rules/reticule.js:126
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "شاشة الاستخبارات (F5)"
 
 #: data/base/script/tutorial.js:28
 msgid "In this training session you'll learn how to build an effective base"
-msgstr ""
+msgstr "ستتعلم في هذا الدرس التدريبي كيفية بناء قاعدةٍ قادرةٍ على بناء جيشٍ قويٍ بفعاليّة"
 
 #: data/base/script/tutorial.js:29
 msgid "Oil resources are key to your success"
-msgstr ""
+msgstr "إن الموارد النفطية هي مفتاح نجاحك"
 
 #: data/base/script/tutorial.js:30
 msgid "To build an oil derrick, select one of your trucks"
-msgstr ""
+msgstr "اختر واحدةً من شاحناتك لكي تبني مضخةً نفطية"
 
 #: data/base/script/tutorial.js:31
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr ""
+msgstr "اضغط على البئر النفطي المُشار إليه باستخدام وميض الرادار لكي تطلب من شاحنتك بناء مضخةٍ فوقه"
 
 #: data/base/script/tutorial.js:32
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr ""
+msgstr "إن مضخة النفط ساكنةٌ حالياً. قم ببناء مولّد طاقة لتحويل النفط إلى طاقة"
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة البناء المومضة"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
-msgstr ""
+msgstr "اضغط الآن بالزر الأيسر للفأرة على مولّد الطاقة في قائمة البناء الموجودة على يسار الشاشة"
 
 #: data/base/script/tutorial.js:36
 msgid "Position the square at your base and left click to start the build process"
-msgstr ""
+msgstr "ضع المربّع في قاعدتك واضغط بالزر الأيسر للفأرة لكي تبدأ عملية البناء"
 
 #: data/base/script/tutorial.js:37
 msgid "To increase your build rate, select your second truck"
-msgstr ""
+msgstr "استعمل شاحنتك الثانية لستريع وتيرة البناء"
 
 #: data/base/script/tutorial.js:38
 msgid "Now left click the power generator site"
@@ -4240,7 +4240,7 @@ msgstr "ستشارك الشاحنة الأخرى الآن في عملية بنا
 
 #: data/base/script/tutorial.js:41
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr ""
+msgstr "تحتاج أثناء المهمات إلى إيجاد واستعادة التقنيات التي تعود إلى ما قبل \"الانهيار\""
 
 #: data/base/script/tutorial.js:42
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
@@ -4257,15 +4257,15 @@ msgstr ""
 #: data/base/script/tutorial.js:46
 #: data/base/script/tutorial.js:65
 msgid "Left click the flashing BUILD icon"
-msgstr ""
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة البناء المومضة"
 
 #: data/base/script/tutorial.js:47
 msgid "Now left click the research facility and position it at your base"
-msgstr ""
+msgstr "اضغط الآن على مركز الأبحاث وضعه في قاعدتك"
 
 #: data/base/script/tutorial.js:48
 msgid "Use your other truck to help build the research facility"
-msgstr ""
+msgstr "استعمل شاحنتك الأخرى للمساعدة في بناء مركز الأبحاث"
 
 #: data/base/script/tutorial.js:50
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
@@ -4281,35 +4281,35 @@ msgstr ""
 
 #: data/base/script/tutorial.js:53
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr ""
+msgstr "يمكنك استعمال الرشاش الذي وصلت إليه عبر أبحاثك لكي تصمّم مركبةً جديدة"
 
 #: data/base/script/tutorial.js:54
 msgid "Left click the flashing DESIGN icon"
-msgstr ""
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة التصميم المومضة"
 
 #: data/base/script/tutorial.js:55
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr ""
+msgstr "اضغط بالزر الأيسر على أيقونة \"تصميمٍ جديد\" لكي تبدأ العمل على تصميمك"
 
 #: data/base/script/tutorial.js:56
 msgid "Now left click the Vehicle Body icon"
-msgstr ""
+msgstr "اضغط على أيقونة \"جسم المركبة\""
 
 #: data/base/script/tutorial.js:57
 msgid "Then left click the Viper body"
-msgstr ""
+msgstr "ثم اضغط بالزر الأيسر على جسم الأفعى"
 
 #: data/base/script/tutorial.js:58
 msgid "Left click the Wheels icon"
-msgstr ""
+msgstr "اضغط بالزر الأيسر على أيقونة العجلات"
 
 #: data/base/script/tutorial.js:59
 msgid "Then left click the machinegun to complete your design"
-msgstr ""
+msgstr "ثم اضغط بالزر الأيسر على الرشّاش لإكمال تصميمك"
 
 #: data/base/script/tutorial.js:62
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr ""
+msgstr "اضغط بالزر الأيسر على أيقونة \"إغلاق\" لإنهاء تصميمك"
 
 #: data/base/script/tutorial.js:64
 msgid "A factory is now required to manufacture your new vehicle"
@@ -4345,11 +4345,11 @@ msgstr "يمكنك الآن أن تطلب من المصنع بناء وحدةٍ 
 
 #: data/base/script/tutorial.js:73
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr ""
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة التصنيع المومضة"
 
 #: data/base/script/tutorial.js:75
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr ""
+msgstr "اضغط بالزر الأيسر على الوحدات التي تريد بناءها من القائمة الموجودة على يسار الشاشة"
 
 #: data/base/script/tutorial.js:76
 msgid "Please wait whilst the factory manufactures the new unit(s)"
@@ -4357,7 +4357,7 @@ msgstr "انتظر إلى أن ينتهي المصنع من بناء الوحد�
 
 #: data/base/script/tutorial.js:78
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr ""
+msgstr "تهانينا أيها القائد - لقد صرت مستعداً لمهمّتك الأولى"
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
@@ -5223,7 +5223,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:271
 #: po/custom/fromJson.txt:3676
 msgid "Machinegun"
-msgstr ""
+msgstr "رشّاش"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun02.name
@@ -5386,7 +5386,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:405
 #: po/custom/fromJson.txt:2647
 msgid "Heavy Machinegun Tower"
-msgstr ""
+msgstr "برجٌ برشّاشٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Flame1Mk1-Tower.name
@@ -5728,7 +5728,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "آسف، ولكنني لا أملك أي شاحناتٍ."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
@@ -7739,7 +7739,7 @@ msgstr "مركز القيادة"
 #. data/mp/stats/structure.json: $.A0ComDroidControl.name
 #: po/custom/fromJson.txt:1479
 msgid "Command Relay Center"
-msgstr ""
+msgstr "مركز القيادة التوجيهي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-CommandRelay.name
@@ -8839,7 +8839,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "احصل على طاقةٍ أكثر بنسبة 100% من كل مضخةٍ نفطية\n"
+"ستبدأ بالمباني الدفاعية والمضخّات النفطية"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8858,7 +8859,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2239
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "احصل على طاقةٍ أقل بنسبة 25% من مضخةٍ نفطية"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8991,7 +8992,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D1.text[1]
 #: po/custom/fromJson.txt:2328
 msgid "Hardened case machinegun bullets"
-msgstr ""
+msgstr "طلقاتٌ رشاشٍ مقواة"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower4H.name
@@ -9528,7 +9529,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG3Mk1.name
 #: po/custom/fromJson.txt:2666
 msgid "Heavy Machinegun"
-msgstr ""
+msgstr "رشاشٌ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar02Hvy.name
@@ -11813,7 +11814,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResourceExtractor.name
 #: po/custom/fromJson.txt:4340
 msgid "Oil Derrick"
-msgstr ""
+msgstr "مضخةٌ نفطية"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.OilDrum.name
@@ -12551,7 +12552,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResearchFacility.name
 #: po/custom/fromJson.txt:4827
 msgid "Research Facility"
-msgstr ""
+msgstr "مركز الأبحاث"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[3]
@@ -13301,13 +13302,13 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_TOWER1.text[1]
 #: po/custom/fromJson.txt:5300
 msgid "Steel tower with machinegun"
-msgstr ""
+msgstr "برجٌ فولاذي برشّاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5303
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "برجٌ فولاذي برشّاشين"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
@@ -13892,7 +13893,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:5687
 msgid "Truck"
-msgstr ""
+msgstr "شاحنة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage06.name
@@ -13997,7 +13998,7 @@ msgstr ""
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5761
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "برجٌ برشّاشين"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -14027,7 +14028,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG2Mk1.name
 #: po/custom/fromJson.txt:5779
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "رشّاشان"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
@@ -16759,7 +16760,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:128
 msgid "View next Oil Derrick"
-msgstr ""
+msgstr "مشاهدة المضخّة النفطية التالية"
 
 #: src/input/keyconfig.cpp:129
 msgid "View next Repair Unit"
@@ -17035,7 +17036,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:197
 msgid "Select all Trucks"
-msgstr ""
+msgstr "حدّد كل الشاحنات"
 
 #: src/input/keyconfig.cpp:199
 msgid "Select next Factory"
@@ -17646,7 +17647,7 @@ msgstr ""
 
 #: src/keybind.cpp:1621
 msgid "Unable to locate any oil derricks!"
-msgstr ""
+msgstr "لم نتمكن من العثور على أيّ مضخاتٍ نفطية!"
 
 #: src/keybind.cpp:1787
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -17765,7 +17766,7 @@ msgstr ""
 
 #: src/keybind.cpp:2571
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "لا يُسمح باستعمال التحميل السريع أثناء اللعب جماعياً أو في الدروس التعليمية"
 
 #: src/keybind.cpp:2598
 msgid "QuickSave file does not exist yet"
@@ -19005,7 +19006,7 @@ msgstr ""
 
 #: src/selection.cpp:371
 msgid "Unable to locate any Trucks!"
-msgstr ""
+msgstr "لم نتمكن من العثور على أي شاحنات!"
 
 #: src/selection.cpp:374
 msgid "Unable to locate any Sensor Units!"
@@ -19066,7 +19067,7 @@ msgstr ""
 #: src/structure.cpp:2560
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr ""
+msgstr "لا يمكن بناء \"%s\" من دون مركز القيادة التوجيهي - لقد توقفت عملية التصنيع"
 
 #: src/structure.cpp:2565
 #, c-format
