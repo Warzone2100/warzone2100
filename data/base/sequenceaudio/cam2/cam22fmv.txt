@@ -17,22 +17,4 @@
 
 20	453	142.5	147.083333333	_("If the centre is found intact, NEXUS may gain control of the satellites.")
 
-20	432	148.333333333	154.166666667	_("Nexus claimed that it had already destroyed the world.") 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+20	432	148.333333333	154.166666667	_("Nexus claimed that it had already destroyed the world.")

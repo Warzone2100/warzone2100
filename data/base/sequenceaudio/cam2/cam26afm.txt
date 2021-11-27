@@ -6,4 +6,3 @@
 20	432	43.3333333333	68.75	_("The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus.")
 
 20	432	72.9166666667	83.3333333333	_("Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes.")
-

@@ -2,5 +2,3 @@
 
 20	432	27.0833333333	41.6666666667	_("Nexus now asks us to crush the Project.")
 0	0	27.0833333333	41.6666666667	_("Cleanse and destroy!!")
-
-
