@@ -636,7 +636,7 @@ function countHelicopters()
 
 function groundAttackStuff()
 {
-    for (var i = 0, len = baseInfo.length; i < len; ++i)
+    for (let i = 0, len = baseInfo.length; i < len; ++i)
     {
         var base = baseInfo[i];
         var target = rangeStep(base, false);
@@ -646,17 +646,17 @@ function groundAttackStuff()
             var nexusDroids = enumGroup(base.nexusGroup);
             if (groupSize(base.attackGroup) > MIN_ATTACKERS)
             {
-                for (var i = 0, len2 = attackDroids.length; i < len2; ++i)
+                for (let droidIdx = 0, len2 = attackDroids.length; droidIdx < len2; ++droidIdx)
                 {
-                    attackWithDroid(attackDroids[i], target, false);
+                    attackWithDroid(attackDroids[droidIdx], target, false);
                 }
             }
 
             if (groupSize(base.nexusGroup) > MIN_NEXUS)
             {
-                for (var i = 0, len2 = nexusDroids.length; i < len2; ++i)
+                for (let droidIdx = 0, len2 = nexusDroids.length; droidIdx < len2; ++droidIdx)
                 {
-                    attackWithDroid(nexusDroids[i], target, false);
+                    attackWithDroid(nexusDroids[droidIdx], target, false);
                 }
             }
         }
