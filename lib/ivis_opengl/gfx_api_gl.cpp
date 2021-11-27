@@ -1993,6 +1993,18 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 		}
 	}
 
+	// Renderer: Intel(R) HD Graphics
+	if (openGL_renderer == "Intel(R) HD Graphics")
+	{
+		// Version: 3.1.0 - Build 10.18.10.3277
+		// Version: <opengl version> - Build 10.18.10.3277
+		// This is a problematic old driver on Windows that likes to crash during gameplay (and throw various errors about the shaders).
+		if (openGL_version.endsWith("Build 10.18.10.3277"))
+		{
+			return true;
+		}
+	}
+
 	// Renderer: Intel(R) Graphics Media Accelerator 3600 Series
 	if (openGL_renderer == "Intel(R) Graphics Media Accelerator 3600 Series")
 	{
