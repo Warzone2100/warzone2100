@@ -927,13 +927,14 @@ void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack)
 	}
 }
 static UDWORD lastTimeBuildFailedPlayed = 0;
+#define REPEAT_AUDIO_CUE_THRESHOLD 100
 // Play annoying sound only once per tick
 void audio_PlayBuildFailedOnce()
 {
-	if (lastTimeBuildFailedPlayed != gameTime)
+	if (realTime - lastTimeBuildFailedPlayed >= REPEAT_AUDIO_CUE_THRESHOLD)
 	{
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		lastTimeBuildFailedPlayed = gameTime;
+		lastTimeBuildFailedPlayed = realTime;
 	}
 }
 
