@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-21 16:45\n"
+"POT-Creation-Date: 2021-11-28 04:17+0000\n"
+"PO-Revision-Date: 2021-11-28 05:52\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -15372,11 +15372,6 @@ msgstr "Salvar Design"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Poço em chamas."
 
-#: src/display.cpp:1596
-#, c-format
-msgid "%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u - kills %d"
-msgstr ""
-
 #: src/display.cpp:1604
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
@@ -15392,14 +15387,10 @@ msgstr ""
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Aliado - Danos %d%d - Experiência %d, %s"
 
-#: src/display.cpp:1788
+#. TRANSLATORS: "ref" is an internal unique id of the item (can leave untranslated as a technical term)
+#: src/display.cpp:1789
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
-
-#: src/display.cpp:2063
-#, c-format
-msgid "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d"
 msgstr ""
 
 #: src/display3d.cpp:750
@@ -15411,7 +15402,7 @@ msgid "Player dropped"
 msgstr "Jogador desconectou-se"
 
 #: src/display3d.cpp:758
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Waiting for other players"
 msgstr "Aguardando outros jogadores"
 
@@ -16136,7 +16127,7 @@ msgid "MULTIPLAY OPTIONS"
 msgstr ""
 
 #: src/frontend.cpp:2457
-#: src/multiint.cpp:5124
+#: src/multiint.cpp:5127
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -16454,7 +16445,7 @@ msgid "Commanders"
 msgstr "Comandantes"
 
 #: src/input/keyconfig.cpp:45
-#: src/keybind.cpp:2558
+#: src/keybind.cpp:2560
 msgid "QuickSave"
 msgstr "Gravação Rápida"
 
@@ -16463,7 +16454,7 @@ msgid "Toggle Radar"
 msgstr "Liga/Desliga o Radar"
 
 #: src/input/keyconfig.cpp:47
-#: src/keybind.cpp:2583
+#: src/keybind.cpp:2585
 msgid "QuickLoad"
 msgstr "Carregamento Rápido"
 
@@ -17341,7 +17332,7 @@ msgid "Allow"
 msgstr "Permitir"
 
 #: src/intelmap.cpp:217
-#: src/keybind.cpp:1372
+#: src/keybind.cpp:1375
 msgid "PAUSED"
 msgstr "PAUSA"
 
@@ -17393,379 +17384,379 @@ msgstr "Designar Produção de VTOL"
 msgid "Circle"
 msgstr "Circular"
 
-#: src/keybind.cpp:118
+#: src/keybind.cpp:121
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Desculpe, as trapaças estão desativadas em jogos multijogador."
 
-#: src/keybind.cpp:151
+#: src/keybind.cpp:154
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Atenção! Essa trapaça é instável. Recomendamos contra o seu uso."
 
-#: src/keybind.cpp:157
+#: src/keybind.cpp:160
 msgid "Gateways toggled."
 msgstr ""
 
-#: src/keybind.cpp:163
+#: src/keybind.cpp:166
 msgid "Path display toggled."
 msgstr ""
 
-#: src/keybind.cpp:191
+#: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
 msgstr ""
 
-#: src/keybind.cpp:217
+#: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
 msgstr "Ai! Integridade do droide abaixou em 20%!"
 
-#: src/keybind.cpp:233
+#: src/keybind.cpp:236
 msgid "Ouch! Structure's health is down 20%!"
 msgstr "Ai! Integridade da estrutura abaixou em 20%!"
 
-#: src/keybind.cpp:294
+#: src/keybind.cpp:297
 msgid "Lets us see what you see!"
 msgstr "Vamos ver o quê você vê!"
 
-#: src/keybind.cpp:298
+#: src/keybind.cpp:301
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Está bem, alcances não serão exibidos!"
 
-#: src/keybind.cpp:330
+#: src/keybind.cpp:333
 msgid "View Aligned to South"
 msgstr "Visão alinhada com o Sul"
 
-#: src/keybind.cpp:340
+#: src/keybind.cpp:343
 msgid "View Aligned to East"
 msgstr "Visão alinhada com o Leste"
 
-#: src/keybind.cpp:350
+#: src/keybind.cpp:353
 msgid "View Aligned to West"
 msgstr "Visão alinhada com o Oeste"
 
-#: src/keybind.cpp:424
+#: src/keybind.cpp:427
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
 msgstr "O jogador %u está trapaceando, obtendo uma nova armada dróide de %d × %s."
 
-#: src/keybind.cpp:559
-#: src/keybind.cpp:587
-#: src/keybind.cpp:602
-#: src/keybind.cpp:643
-#: src/keybind.cpp:761
-#: src/keybind.cpp:801
-#: src/keybind.cpp:1311
-#: src/keybind.cpp:1487
-#: src/keybind.cpp:1588
-#: src/keybind.cpp:1888
-#: src/keybind.cpp:1931
+#: src/keybind.cpp:562
+#: src/keybind.cpp:590
+#: src/keybind.cpp:605
+#: src/keybind.cpp:646
+#: src/keybind.cpp:764
+#: src/keybind.cpp:804
+#: src/keybind.cpp:1314
+#: src/keybind.cpp:1490
+#: src/keybind.cpp:1591
+#: src/keybind.cpp:1891
+#: src/keybind.cpp:1934
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Jogador %u) está trapaceando: %s"
 
-#: src/keybind.cpp:560
+#: src/keybind.cpp:563
 msgid "Hard as nails!!!"
 msgstr "Duro como pedra!!!"
 
-#: src/keybind.cpp:574
+#: src/keybind.cpp:577
 msgid "Takings thing easy!"
 msgstr "Vamos com calma!"
 
-#: src/keybind.cpp:588
+#: src/keybind.cpp:591
 msgid "1000 big ones!!!"
 msgstr "1000 grandinhas!!!"
 
-#: src/keybind.cpp:603
+#: src/keybind.cpp:606
 msgid "Power overwhelming"
 msgstr "Energia avassaladora"
 
-#: src/keybind.cpp:618
+#: src/keybind.cpp:621
 msgid "Back to normality!"
 msgstr "Voltar a normalidade!"
 
-#: src/keybind.cpp:631
+#: src/keybind.cpp:634
 msgid "Getting tricky!"
 msgstr "Está ficando complicado!"
 
-#: src/keybind.cpp:644
+#: src/keybind.cpp:647
 msgid "Twice as nice!"
 msgstr "Duas vezes mais agradável!"
 
-#: src/keybind.cpp:655
+#: src/keybind.cpp:658
 msgid "FPS display is enabled."
 msgstr "FPS serão mostrados."
 
-#: src/keybind.cpp:659
+#: src/keybind.cpp:662
 msgid "FPS display is disabled."
 msgstr "FPS não serão mostrados."
 
-#: src/keybind.cpp:669
+#: src/keybind.cpp:672
 msgid "Unit count display is enabled."
 msgstr "Exibição da contagem de unidades está ativada."
 
-#: src/keybind.cpp:673
+#: src/keybind.cpp:676
 msgid "Unit count display is disabled."
 msgstr "Exibição da contagem de unidades está desativada."
 
-#: src/keybind.cpp:725
+#: src/keybind.cpp:728
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Jogador %u) está trapaceando - No. Ciborgues: %d No. Estruturas: %d No. Características: %d"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:765
 msgid "Infinite power disabled"
 msgstr "Poder infinito desativado"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:765
 msgid "Infinite power enabled"
 msgstr "Poder infinito ativado"
 
-#: src/keybind.cpp:772
+#: src/keybind.cpp:775
 msgid "Lighting values for all tiles recalculated"
 msgstr ""
 
-#: src/keybind.cpp:802
+#: src/keybind.cpp:805
 msgid "All items made available"
 msgstr "Todos os itens disponibilizados"
 
-#: src/keybind.cpp:827
+#: src/keybind.cpp:830
 msgid "Tile info dumped into log"
 msgstr ""
 
-#: src/keybind.cpp:842
+#: src/keybind.cpp:845
 msgid "Fog on"
 msgstr "Nevoeiro ligado"
 
-#: src/keybind.cpp:842
+#: src/keybind.cpp:845
 msgid "Fog off"
 msgstr "Nevoeiro desligado"
 
-#: src/keybind.cpp:948
+#: src/keybind.cpp:951
 #, c-format
 msgid "Setting radar zoom to %u"
 msgstr "Zoom do radar em %u"
 
-#: src/keybind.cpp:1213
+#: src/keybind.cpp:1216
 msgid "Toggling debug mapping priority: "
 msgstr ""
 
-#: src/keybind.cpp:1223
+#: src/keybind.cpp:1226
 msgid "Disabling level editor"
 msgstr ""
 
-#: src/keybind.cpp:1228
+#: src/keybind.cpp:1231
 msgid "Enabling level editor"
 msgstr ""
 
-#: src/keybind.cpp:1312
+#: src/keybind.cpp:1315
 msgid "God Mode ON"
 msgstr "Modo Deus LIGADO"
 
-#: src/keybind.cpp:1312
+#: src/keybind.cpp:1315
 msgid "God Mode OFF"
 msgstr "Modo Deus DESLIGADO"
 
-#: src/keybind.cpp:1324
+#: src/keybind.cpp:1327
 msgid "View Aligned to North"
 msgstr "Visão alinhada com o Norte"
 
-#: src/keybind.cpp:1340
+#: src/keybind.cpp:1343
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Travar Cursor %s"
 
-#: src/keybind.cpp:1384
+#: src/keybind.cpp:1387
 msgid "CAMPAIGN"
 msgstr "CAMPANHA"
 
-#: src/keybind.cpp:1388
+#: src/keybind.cpp:1391
 msgid "CHALLENGE"
 msgstr "DESAFIO"
 
-#: src/keybind.cpp:1391
+#: src/keybind.cpp:1394
 msgid "SKIRMISH"
 msgstr "vs IA"
 
-#: src/keybind.cpp:1409
+#: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
 msgstr "DIFICULDADE: FÁCIL"
 
-#: src/keybind.cpp:1412
+#: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
 msgstr "DIFICULDADE: NORMAL"
 
-#: src/keybind.cpp:1415
+#: src/keybind.cpp:1418
 msgid "DIFFICULTY: HARD"
 msgstr "DIFICULDADE: DIFÍCIL"
 
-#: src/keybind.cpp:1418
+#: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
 msgstr "DIFICULDADE: INSANO"
 
-#: src/keybind.cpp:1427
+#: src/keybind.cpp:1430
 msgid "CHEATS: ENABLED"
 msgstr "CHEATS: HABILITADOS"
 
-#: src/keybind.cpp:1429
+#: src/keybind.cpp:1432
 msgid "CHEATS: DISABLED"
 msgstr "CHEATS: DESABILITADOS"
 
-#: src/keybind.cpp:1488
+#: src/keybind.cpp:1491
 msgid "Researched EVERYTHING for you!"
 msgstr "Pesquisou TUDO para você!"
 
-#: src/keybind.cpp:1515
+#: src/keybind.cpp:1518
 msgid "Selected buildings instantly recharged!"
 msgstr "Edifícios selecionados recarregados!"
 
-#: src/keybind.cpp:1558
+#: src/keybind.cpp:1561
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Jogador %u) está trapaceando :%s %s"
 
-#: src/keybind.cpp:1558
+#: src/keybind.cpp:1561
 msgid "Researched"
 msgstr "Pesquisado"
 
-#: src/keybind.cpp:1572
+#: src/keybind.cpp:1575
 msgid "Only displaying energy bars when selected"
 msgstr "Exibindo barras de energia apenas quando selecionado"
 
-#: src/keybind.cpp:1575
+#: src/keybind.cpp:1578
 msgid "Always displaying energy bars for units"
 msgstr "Sempre exibindo barras de energia para unidades"
 
-#: src/keybind.cpp:1578
+#: src/keybind.cpp:1581
 msgid "Always displaying energy bars for units and structures"
 msgstr "Sempre exibindo barras de energia para unidades e estruturas"
 
-#: src/keybind.cpp:1589
+#: src/keybind.cpp:1592
 msgid "Debug menu is Open"
 msgstr "Menu de Debug está Aberto"
 
-#: src/keybind.cpp:1621
+#: src/keybind.cpp:1624
 msgid "Unable to locate any oil derricks!"
 msgstr "Impossível localicar extratores!"
 
-#: src/keybind.cpp:1787
+#: src/keybind.cpp:1790
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Branco como a neve... NEVE"
 
-#: src/keybind.cpp:1793
+#: src/keybind.cpp:1796
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "São as águas de Março fechando o verão... CHUVA"
 
-#: src/keybind.cpp:1799
+#: src/keybind.cpp:1802
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Previsão do tempo : Céu aberto em todas as cidades... TEMPO LIMPO"
 
-#: src/keybind.cpp:1887
+#: src/keybind.cpp:1890
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Atenção! Isso pode ter consequências drásticas se usado incorretamente em missões."
 
-#: src/keybind.cpp:1889
+#: src/keybind.cpp:1892
 msgid "All enemies destroyed by cheating!"
 msgstr "Inimigos destruidos por trapaça!"
 
-#: src/keybind.cpp:1932
+#: src/keybind.cpp:1935
 msgid "Destroying selected droids and structures!"
 msgstr "Destruindo ciborgues e estruturas selecionadas!"
 
-#: src/keybind.cpp:2080
+#: src/keybind.cpp:2083
 msgid "Reveal OFF"
 msgstr "Revelar DESL"
 
-#: src/keybind.cpp:2085
+#: src/keybind.cpp:2088
 msgid "Reveal ON"
 msgstr "Revelar LIG"
 
-#: src/keybind.cpp:2169
+#: src/keybind.cpp:2172
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centralizado no QG, alinhado com o NORTE"
 
-#: src/keybind.cpp:2181
+#: src/keybind.cpp:2184
 msgid "Unable to locate HQ!"
 msgstr "Impossível localizar QG!"
 
-#: src/keybind.cpp:2188
+#: src/keybind.cpp:2191
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Limite de velocidade em formação removido devido a falhas."
 
-#: src/keybind.cpp:2229
+#: src/keybind.cpp:2232
 msgid "Vertical rotation direction: Normal"
 msgstr "Direção da rotação vertical: Normal"
 
-#: src/keybind.cpp:2234
+#: src/keybind.cpp:2237
 msgid "Vertical rotation direction: Flipped"
 msgstr "Direção da rotação vertical: Invertida"
 
-#: src/keybind.cpp:2244
+#: src/keybind.cpp:2247
 msgid "Screen shake when things die: Off"
 msgstr "Vibrar a tela quando as coisas morrerem: Desligado"
 
-#: src/keybind.cpp:2249
+#: src/keybind.cpp:2252
 msgid "Screen shake when things die: On"
 msgstr "Vibrar a tela quando as coisas morrerem: Ligado"
 
-#: src/keybind.cpp:2301
+#: src/keybind.cpp:2304
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Desculpe, não se pode mudar a velocidade em jogos multijogador."
 
-#: src/keybind.cpp:2337
-#: src/keybind.cpp:2391
+#: src/keybind.cpp:2340
+#: src/keybind.cpp:2394
 msgid "Game Speed Reset"
 msgstr "Velocidade do Jogo Restaurada"
 
-#: src/keybind.cpp:2341
+#: src/keybind.cpp:2344
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Velocidade do Jogo Aumentada para %s"
 
-#: src/keybind.cpp:2345
+#: src/keybind.cpp:2348
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Velocidade do Jogo Diminuída para %s"
 
-#: src/keybind.cpp:2403
+#: src/keybind.cpp:2406
 msgid "Radar showing friend-foe colors"
 msgstr "Radar exibe cores de aliados-inimigos"
 
-#: src/keybind.cpp:2407
+#: src/keybind.cpp:2410
 msgid "Radar showing player colors"
 msgstr "Radar exibe cores dos jogadores"
 
-#: src/keybind.cpp:2422
+#: src/keybind.cpp:2425
 msgid "Radar showing only objects"
 msgstr "Radar exibe apenas objetos"
 
-#: src/keybind.cpp:2425
+#: src/keybind.cpp:2428
 msgid "Radar blending terrain and height"
 msgstr "Radar exibe terreno e altitudes"
 
-#: src/keybind.cpp:2428
+#: src/keybind.cpp:2431
 msgid "Radar showing terrain"
 msgstr "Radar exibe terreno"
 
-#: src/keybind.cpp:2431
+#: src/keybind.cpp:2434
 msgid "Radar showing height"
 msgstr "Radar exibe altitudes"
 
-#: src/keybind.cpp:2493
+#: src/keybind.cpp:2496
 msgid "Asserts turned off"
 msgstr ""
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
 msgstr ""
 
-#: src/keybind.cpp:2562
+#: src/keybind.cpp:2564
 msgid "QuickSave failed"
 msgstr ""
 
-#: src/keybind.cpp:2571
+#: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
 msgstr ""
 
-#: src/keybind.cpp:2598
+#: src/keybind.cpp:2600
 msgid "QuickSave file does not exist yet"
 msgstr ""
 
@@ -17802,16 +17793,16 @@ msgstr "Directório do autosave"
 msgid "Autosave directory (not allowed for saving)"
 msgstr "Directório do autosave (não autorizado para gravar manualmente)"
 
-#: src/loadsave.cpp:663
+#: src/loadsave.cpp:682
 msgid "cheated"
 msgstr "trapaceado"
 
-#: src/loadsave.cpp:1090
+#: src/loadsave.cpp:1109
 #, c-format
 msgid "AutoSave %s"
 msgstr ""
 
-#: src/loadsave.cpp:1095
+#: src/loadsave.cpp:1114
 #, c-format
 msgid "AutoSave %s failed"
 msgstr ""
@@ -18148,21 +18139,21 @@ msgstr "Time"
 
 #: src/multiint.cpp:2294
 #: src/multiint.cpp:4194
-#: src/multiint.cpp:7247
-#: src/multiint.cpp:7492
+#: src/multiint.cpp:7256
+#: src/multiint.cpp:7501
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
 msgstr ""
 
 #: src/multiint.cpp:2305
-#: src/multiint.cpp:4432
+#: src/multiint.cpp:4435
 #: src/multimenu.cpp:1282
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O Hosp. chutou %s do jogo!"
 
 #: src/multiint.cpp:2306
-#: src/multiint.cpp:4434
+#: src/multiint.cpp:4437
 #: src/multimenu.cpp:1286
 msgid "The host has kicked you from the game."
 msgstr "O anfitrião te expulsou do jogo."
@@ -18326,203 +18317,203 @@ msgstr "ID do Jogador: "
 msgid "(none)"
 msgstr "(nenhum)"
 
-#: src/multiint.cpp:4341
+#: src/multiint.cpp:4344
 msgid "Click to change difficulty"
 msgstr "Clique para ajustar a dificuldade"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Waiting for player"
 msgstr "Aguardando jogador"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Player is ready"
 msgstr "Jogador está pronto"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Player is downloading"
 msgstr "Jogador está baixando"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Click when ready"
 msgstr "Clique quando estiver pronto"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Waiting for download"
 msgstr "Esperando pelo download"
 
-#: src/multiint.cpp:4451
+#: src/multiint.cpp:4454
 msgid "READY?"
 msgstr "PRONTO?"
 
-#: src/multiint.cpp:4536
+#: src/multiint.cpp:4539
 msgid "For Spectator:"
 msgstr ""
 
-#: src/multiint.cpp:4536
+#: src/multiint.cpp:4539
 msgid "For Player:"
 msgstr ""
 
-#: src/multiint.cpp:4554
+#: src/multiint.cpp:4557
 msgid "Choose Player Slot"
 msgstr ""
 
-#: src/multiint.cpp:4625
+#: src/multiint.cpp:4628
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.cpp:4729
+#: src/multiint.cpp:4732
 msgid "Add spectator slot"
 msgstr ""
 
-#: src/multiint.cpp:4806
+#: src/multiint.cpp:4809
 msgid "Kicked from game"
 msgstr "Expulso do jogo"
 
-#: src/multiint.cpp:5031
+#: src/multiint.cpp:5034
 msgid "Copy Text to Clipboard"
 msgstr ""
 
-#: src/multiint.cpp:5120
+#: src/multiint.cpp:5123
 msgid "CHAT"
 msgstr "BATE-PAPO"
 
-#: src/multiint.cpp:5776
+#: src/multiint.cpp:5779
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpe! Falha ao hospedar uma sessão."
 
-#: src/multiint.cpp:5837
+#: src/multiint.cpp:5840
 msgid "Game Name Updated."
 msgstr "Nome do Jogo Atualizado."
 
-#: src/multiint.cpp:5961
+#: src/multiint.cpp:5964
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** senha [%s] agora é necessária! ***"
 
-#: src/multiint.cpp:5967
+#: src/multiint.cpp:5970
 msgid "*** password is NOT required! ***"
 msgstr "*** senhã NÃO é necessária ***"
 
-#: src/multiint.cpp:5980
+#: src/multiint.cpp:5983
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "Esse é um mod de para, pode mudar a sua experiência de jogo!"
 
-#: src/multiint.cpp:5985
+#: src/multiint.cpp:5988
 msgid "This is a random map, it can vary your playing experience!"
 msgstr "Este é um mapa aleatório, o que ajuda a variar sua experiência de jogo!"
 
-#: src/multiint.cpp:6137
+#: src/multiint.cpp:6140
 msgid "Host is Starting Game"
 msgstr "O Hosp. iniciou o Jogo"
 
-#: src/multiint.cpp:6408
+#: src/multiint.cpp:6411
 msgid "Host supplied invalid options"
 msgstr ""
 
-#: src/multiint.cpp:6642
+#: src/multiint.cpp:6645
 msgid "You have been kicked: "
 msgstr "Você foi expulso: "
 
-#: src/multiint.cpp:6656
+#: src/multiint.cpp:6659
 msgid "No connection to host."
 msgstr "Sem conexão com o anfitrião."
 
-#: src/multiint.cpp:6708
+#: src/multiint.cpp:6711
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
 msgstr ""
 
-#: src/multiint.cpp:6710
+#: src/multiint.cpp:6713
 msgid "The host tried to move us to Players, but we never gave permission."
 msgstr ""
 
-#: src/multiint.cpp:6859
+#: src/multiint.cpp:6862
 msgid "Cannot change to a map with too few slots for all players."
 msgstr "Não é possível mudar para um mapa sem slots suficientes para todos os jogadores."
 
-#: src/multiint.cpp:6864
+#: src/multiint.cpp:6867
 msgid "Cannot change to a map with fewer slots."
 msgstr "Não é possível mudar para um mapa com menos slots."
 
-#: src/multiint.cpp:6965
+#: src/multiint.cpp:6968
 msgid "The host has quit."
 msgstr "O Anfitrião saiu."
 
-#: src/multiint.cpp:7003
+#: src/multiint.cpp:7006
 msgid "UPnP has been enabled."
 msgstr "UPnP foi ativado."
 
-#: src/multiint.cpp:7009
+#: src/multiint.cpp:7012
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "Detecção de UPnP falhou. Você deve configurar seu roteador manualmente."
 
-#: src/multiint.cpp:7013
+#: src/multiint.cpp:7016
 msgid "UPnP detection is in progress..."
 msgstr "Detecção UPnP em progresso..."
 
-#: src/multiint.cpp:7020
+#: src/multiint.cpp:7023
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "Detecção de UPnP desativada pelo usuário. Config. automática na porta 2100 não será feita."
 
-#: src/multiint.cpp:7026
+#: src/multiint.cpp:7029
 msgid "Hit the ready box to begin your challenge!"
 msgstr "Marque a caixa de \"Pronto!\" para começar seu desafio!"
 
-#: src/multiint.cpp:7030
+#: src/multiint.cpp:7033
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Pressione o botão de hospedagem para hospedar um jogo."
 
-#: src/multiint.cpp:7241
-#: src/multiint.cpp:7496
+#: src/multiint.cpp:7250
+#: src/multiint.cpp:7505
 msgid "Closed"
 msgstr "Fechado"
 
-#: src/multiint.cpp:7244
-#: src/multiint.cpp:7488
+#: src/multiint.cpp:7253
+#: src/multiint.cpp:7497
 msgid "Open"
 msgstr "Aberto"
 
-#: src/multiint.cpp:7327
+#: src/multiint.cpp:7336
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Enviando mapa: %u%% "
 
-#: src/multiint.cpp:7327
+#: src/multiint.cpp:7336
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "Mapa: %u%% baixado"
 
-#: src/multiint.cpp:7374
+#: src/multiint.cpp:7383
 msgid "HOST"
 msgstr "HOSPEDEIRO"
 
-#: src/multiint.cpp:7381
+#: src/multiint.cpp:7390
 #: src/multimenu.cpp:772
 msgid "Ping"
 msgstr "Latência"
 
-#: src/multiint.cpp:8238
+#: src/multiint.cpp:8247
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
 
-#: src/multiint.cpp:8240
+#: src/multiint.cpp:8249
 #, c-format
 msgid "Replay File Saved With: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8244
+#: src/multiint.cpp:8253
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8254
+#: src/multiint.cpp:8263
 msgid "Replays should usually be played back with the same version used to save the replay."
 msgstr ""
 
-#: src/multiint.cpp:8256
+#: src/multiint.cpp:8265
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
 msgstr ""
 
-#: src/multiint.cpp:8257
+#: src/multiint.cpp:8266
 msgid "Replay Version Mismatch"
 msgstr ""
 
