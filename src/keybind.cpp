@@ -2509,7 +2509,7 @@ void kf_BuildPrevPage()
 
 	if ((psTForm->currentPage() == 0) || !psTForm->setCurrentPage(psTForm->currentPage() - 1))
 	{
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		audio_PlayBuildFailedOnce();
 		return;
 	}
 
@@ -2529,7 +2529,7 @@ void kf_BuildNextPage()
 	if (!psTForm->setCurrentPage(psTForm->currentPage() + 1))
 	{
 		// went over max
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		audio_PlayBuildFailedOnce();
 		return;
 	}
 

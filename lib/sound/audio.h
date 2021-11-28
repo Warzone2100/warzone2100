@@ -31,7 +31,7 @@ bool audio_Disabled();
 
 bool audio_LoadTrackFromFile(char szFileName[]);
 unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
-
+void audio_PlayBuildFailedOnce();
 bool audio_PlayStaticTrack(SDWORD iX, SDWORD iY, int iTrack);
 bool audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack);
 bool audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);

@@ -1001,7 +1001,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		if (psTransporter->player == selectedPlayer)
 		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 			if (lastTransportIsFullMsgTime + MAX_TRANSPORT_FULL_MESSAGE_PAUSE < gameTime)
 			{
 				addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);

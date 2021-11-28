@@ -588,7 +588,7 @@ static void CheckStartWallDrag()
 		else if (intBuildSelectMode())//if we were in build select mode
 		{
 			//uhoh no place to build here
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 		}
 	}
 }
@@ -1584,7 +1584,7 @@ void AddDerrickBurningMessage()
 {
 	if (addConsoleMessageDebounced(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, CANNOT_BUILD_BURNING))
 	{
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		audio_PlayBuildFailedOnce();
 	}
 }
 

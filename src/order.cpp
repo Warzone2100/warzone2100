@@ -787,7 +787,7 @@ void orderUpdateDroid(DROID *psDroid)
 				actionDroid(psDroid, DACTION_NONE);
 				if (psDroid->player == selectedPlayer)
 				{
-					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+					audio_PlayBuildFailedOnce();
 					addConsoleMessage(_("We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
 				}
 			}
@@ -1533,7 +1533,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		else if (psDroid->player == selectedPlayer)
 		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 		}
 		break;
 	case DORDER_RTB:
