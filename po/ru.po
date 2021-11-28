@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-11-20 22:25+0000\n"
-"PO-Revision-Date: 2021-11-22 04:44\n"
+"POT-Creation-Date: 2021-11-28 04:17+0000\n"
+"PO-Revision-Date: 2021-11-28 05:52\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -15373,11 +15373,6 @@ msgstr "Сохранить дизайн"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Строительство невозможно. Горит нефть."
 
-#: src/display.cpp:1596
-#, c-format
-msgid "%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u - kills %d"
-msgstr ""
-
 #: src/display.cpp:1604
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
@@ -15393,14 +15388,10 @@ msgstr ""
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Союзник - Целостность %d/%d - Опыт %d, %s"
 
-#: src/display.cpp:1788
+#. TRANSLATORS: "ref" is an internal unique id of the item (can leave untranslated as a technical term)
+#: src/display.cpp:1789
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
-
-#: src/display.cpp:2063
-#, c-format
-msgid "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d"
 msgstr ""
 
 #: src/display3d.cpp:750
@@ -15412,7 +15403,7 @@ msgid "Player dropped"
 msgstr "Игрок исчез"
 
 #: src/display3d.cpp:758
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Waiting for other players"
 msgstr "Ожидание других игроков"
 
@@ -16147,7 +16138,7 @@ msgid "MULTIPLAY OPTIONS"
 msgstr "НАСТРОЙКИ МУЛЬТИПЛЕЕРА"
 
 #: src/frontend.cpp:2457
-#: src/multiint.cpp:5124
+#: src/multiint.cpp:5127
 msgid "Mod: "
 msgstr "Мод: "
 
@@ -16465,7 +16456,7 @@ msgid "Commanders"
 msgstr "Командиры"
 
 #: src/input/keyconfig.cpp:45
-#: src/keybind.cpp:2558
+#: src/keybind.cpp:2560
 msgid "QuickSave"
 msgstr "Быстрое сохранение"
 
@@ -16474,7 +16465,7 @@ msgid "Toggle Radar"
 msgstr "Переключатель радара"
 
 #: src/input/keyconfig.cpp:47
-#: src/keybind.cpp:2583
+#: src/keybind.cpp:2585
 msgid "QuickLoad"
 msgstr "БыстраяЗагрузка"
 
@@ -17352,7 +17343,7 @@ msgid "Allow"
 msgstr "Разрешить"
 
 #: src/intelmap.cpp:217
-#: src/keybind.cpp:1372
+#: src/keybind.cpp:1375
 msgid "PAUSED"
 msgstr "ПАУЗА"
 
@@ -17404,379 +17395,379 @@ msgstr "Назначить производство ВВП"
 msgid "Circle"
 msgstr "Круг"
 
-#: src/keybind.cpp:118
+#: src/keybind.cpp:121
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Извините, в сетевой игре жульничество отключено."
 
-#: src/keybind.cpp:151
+#: src/keybind.cpp:154
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "Внимание! Это жульничество может вызвать нестабильность игры. Рекомендуем не использовать его."
 
-#: src/keybind.cpp:157
+#: src/keybind.cpp:160
 msgid "Gateways toggled."
 msgstr ""
 
-#: src/keybind.cpp:163
+#: src/keybind.cpp:166
 msgid "Path display toggled."
 msgstr ""
 
-#: src/keybind.cpp:191
+#: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
 msgstr "Игрок %d: энергия %d"
 
-#: src/keybind.cpp:217
+#: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
 msgstr "Ауч! Прочность дроида ниже 20%!"
 
-#: src/keybind.cpp:233
+#: src/keybind.cpp:236
 msgid "Ouch! Structure's health is down 20%!"
 msgstr "Ауч! Прочность строения ниже 20%!"
 
-#: src/keybind.cpp:294
+#: src/keybind.cpp:297
 msgid "Lets us see what you see!"
 msgstr "Позволь увидеть нам то, что видишь ты!"
 
-#: src/keybind.cpp:298
+#: src/keybind.cpp:301
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Отлично, сенсорный дисплей выключен!"
 
-#: src/keybind.cpp:330
+#: src/keybind.cpp:333
 msgid "View Aligned to South"
 msgstr "Вид выравнивается на юг"
 
-#: src/keybind.cpp:340
+#: src/keybind.cpp:343
 msgid "View Aligned to East"
 msgstr "Вид выравнивается на Восток"
 
-#: src/keybind.cpp:350
+#: src/keybind.cpp:353
 msgid "View Aligned to West"
 msgstr "Вид выравнивается на Запад"
 
-#: src/keybind.cpp:424
+#: src/keybind.cpp:427
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
 msgstr "Игрок %u сжульничал и создал себе новую армию дроидов: %d × %s."
 
-#: src/keybind.cpp:559
-#: src/keybind.cpp:587
-#: src/keybind.cpp:602
-#: src/keybind.cpp:643
-#: src/keybind.cpp:761
-#: src/keybind.cpp:801
-#: src/keybind.cpp:1311
-#: src/keybind.cpp:1487
-#: src/keybind.cpp:1588
-#: src/keybind.cpp:1888
-#: src/keybind.cpp:1931
+#: src/keybind.cpp:562
+#: src/keybind.cpp:590
+#: src/keybind.cpp:605
+#: src/keybind.cpp:646
+#: src/keybind.cpp:764
+#: src/keybind.cpp:804
+#: src/keybind.cpp:1314
+#: src/keybind.cpp:1490
+#: src/keybind.cpp:1591
+#: src/keybind.cpp:1891
+#: src/keybind.cpp:1934
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Игрок %u) использует жульничество :%s"
 
-#: src/keybind.cpp:560
+#: src/keybind.cpp:563
 msgid "Hard as nails!!!"
 msgstr "Трудно как на гвоздях!!!"
 
-#: src/keybind.cpp:574
+#: src/keybind.cpp:577
 msgid "Takings thing easy!"
 msgstr "Собирать вещи легко!"
 
-#: src/keybind.cpp:588
+#: src/keybind.cpp:591
 msgid "1000 big ones!!!"
 msgstr "1000 больших!!!"
 
-#: src/keybind.cpp:603
+#: src/keybind.cpp:606
 msgid "Power overwhelming"
 msgstr "Неиссякаемая энергия"
 
-#: src/keybind.cpp:618
+#: src/keybind.cpp:621
 msgid "Back to normality!"
 msgstr "Вернуться в нормальное состояние!"
 
-#: src/keybind.cpp:631
+#: src/keybind.cpp:634
 msgid "Getting tricky!"
 msgstr "Хитро получаешь!"
 
-#: src/keybind.cpp:644
+#: src/keybind.cpp:647
 msgid "Twice as nice!"
 msgstr "Один хорошо - двое лучше!"
 
-#: src/keybind.cpp:655
+#: src/keybind.cpp:658
 msgid "FPS display is enabled."
 msgstr "Отображение FPS включено."
 
-#: src/keybind.cpp:659
+#: src/keybind.cpp:662
 msgid "FPS display is disabled."
 msgstr "Отображение FPS выключено."
 
-#: src/keybind.cpp:669
+#: src/keybind.cpp:672
 msgid "Unit count display is enabled."
 msgstr "Отображение количества единиц включено."
 
-#: src/keybind.cpp:673
+#: src/keybind.cpp:676
 msgid "Unit count display is disabled."
 msgstr "Отображение количества единиц отключено."
 
-#: src/keybind.cpp:725
+#: src/keybind.cpp:728
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Игрок %u) использует жульничество. Число дроидов: %d, построек: %d, особых элементов: %d"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:765
 msgid "Infinite power disabled"
 msgstr "Бесконечная энергия отключена"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:765
 msgid "Infinite power enabled"
 msgstr "Бесконечная энергия включена"
 
-#: src/keybind.cpp:772
+#: src/keybind.cpp:775
 msgid "Lighting values for all tiles recalculated"
 msgstr "Значения освещения пересчитаны для всех тайлов"
 
-#: src/keybind.cpp:802
+#: src/keybind.cpp:805
 msgid "All items made available"
 msgstr "Доступно абсолютно все"
 
-#: src/keybind.cpp:827
+#: src/keybind.cpp:830
 msgid "Tile info dumped into log"
 msgstr "Информация о тайле сброшена в журнал"
 
-#: src/keybind.cpp:842
+#: src/keybind.cpp:845
 msgid "Fog on"
 msgstr "Туман включён"
 
-#: src/keybind.cpp:842
+#: src/keybind.cpp:845
 msgid "Fog off"
 msgstr "Туман выключен"
 
-#: src/keybind.cpp:948
+#: src/keybind.cpp:951
 #, c-format
 msgid "Setting radar zoom to %u"
 msgstr "Установлено увеличение радара  %u"
 
-#: src/keybind.cpp:1213
+#: src/keybind.cpp:1216
 msgid "Toggling debug mapping priority: "
 msgstr "Переключаю приоритет раскладки клавиатуры для отладки: "
 
-#: src/keybind.cpp:1223
+#: src/keybind.cpp:1226
 msgid "Disabling level editor"
 msgstr "Отключение редактора уровня"
 
-#: src/keybind.cpp:1228
+#: src/keybind.cpp:1231
 msgid "Enabling level editor"
 msgstr "Включение редактора уровня"
 
-#: src/keybind.cpp:1312
+#: src/keybind.cpp:1315
 msgid "God Mode ON"
 msgstr "Режим бога включён"
 
-#: src/keybind.cpp:1312
+#: src/keybind.cpp:1315
 msgid "God Mode OFF"
 msgstr "Режим бога выключен"
 
-#: src/keybind.cpp:1324
+#: src/keybind.cpp:1327
 msgid "View Aligned to North"
 msgstr "Вид выровнен по северу"
 
-#: src/keybind.cpp:1340
+#: src/keybind.cpp:1343
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Захват курсора: %s"
 
-#: src/keybind.cpp:1384
+#: src/keybind.cpp:1387
 msgid "CAMPAIGN"
 msgstr "КАМПАНИЯ"
 
-#: src/keybind.cpp:1388
+#: src/keybind.cpp:1391
 msgid "CHALLENGE"
 msgstr "ИСПЫТАНИЕ"
 
-#: src/keybind.cpp:1391
+#: src/keybind.cpp:1394
 msgid "SKIRMISH"
 msgstr "СРАЖЕНИЕ"
 
-#: src/keybind.cpp:1409
+#: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
 msgstr "СЛОЖНОСТЬ: ЛЁГКАЯ"
 
-#: src/keybind.cpp:1412
+#: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
 msgstr "СЛОЖНОСТЬ: СРЕДНЯЯ"
 
-#: src/keybind.cpp:1415
+#: src/keybind.cpp:1418
 msgid "DIFFICULTY: HARD"
 msgstr "СЛОЖНОСТЬ: ТЯЖЁЛАЯ"
 
-#: src/keybind.cpp:1418
+#: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
 msgstr "СЛОЖНОСТЬ: БЕЗУМНАЯ"
 
-#: src/keybind.cpp:1427
+#: src/keybind.cpp:1430
 msgid "CHEATS: ENABLED"
 msgstr "ЖУЛЬНИЧЕСТВО: ВКЛЮЧЕНО"
 
-#: src/keybind.cpp:1429
+#: src/keybind.cpp:1432
 msgid "CHEATS: DISABLED"
 msgstr "ЖУЛЬНИЧЕСТВО: ВЫКЛЮЧЕНО"
 
-#: src/keybind.cpp:1488
+#: src/keybind.cpp:1491
 msgid "Researched EVERYTHING for you!"
 msgstr "Все исследования доступны!"
 
-#: src/keybind.cpp:1515
+#: src/keybind.cpp:1518
 msgid "Selected buildings instantly recharged!"
 msgstr "Выбранные здания мгновенно перезаряжаются!"
 
-#: src/keybind.cpp:1558
+#: src/keybind.cpp:1561
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Игрок %u) использует жульничество :%s %s"
 
-#: src/keybind.cpp:1558
+#: src/keybind.cpp:1561
 msgid "Researched"
 msgstr "Исследовано"
 
-#: src/keybind.cpp:1572
+#: src/keybind.cpp:1575
 msgid "Only displaying energy bars when selected"
 msgstr "Отображать панель прогресса только для выбранных единиц"
 
-#: src/keybind.cpp:1575
+#: src/keybind.cpp:1578
 msgid "Always displaying energy bars for units"
 msgstr "Всегда отображать панель прогресса для юнитов"
 
-#: src/keybind.cpp:1578
+#: src/keybind.cpp:1581
 msgid "Always displaying energy bars for units and structures"
 msgstr "Всегда отображать панели прогресса для юнитов и построек"
 
-#: src/keybind.cpp:1589
+#: src/keybind.cpp:1592
 msgid "Debug menu is Open"
 msgstr "Открыто меню отладки"
 
-#: src/keybind.cpp:1621
+#: src/keybind.cpp:1624
 msgid "Unable to locate any oil derricks!"
 msgstr "Невозможно найти ни одной нефтяной вышки!"
 
-#: src/keybind.cpp:1787
+#: src/keybind.cpp:1790
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Ох! Погода снаружи ужасна... СНЕГ"
 
-#: src/keybind.cpp:1793
+#: src/keybind.cpp:1796
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Ну а дождь все льёт и льёт..."
 
-#: src/keybind.cpp:1799
+#: src/keybind.cpp:1802
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Прогноз на сегодня: осадков не ожидается!"
 
-#: src/keybind.cpp:1887
+#: src/keybind.cpp:1890
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Внимание! При неправильном использовании в миссиях могут возникнуть серьёзные последствия."
 
-#: src/keybind.cpp:1889
+#: src/keybind.cpp:1892
 msgid "All enemies destroyed by cheating!"
 msgstr "Враги уничтожены с помощью жульничества!"
 
-#: src/keybind.cpp:1932
+#: src/keybind.cpp:1935
 msgid "Destroying selected droids and structures!"
 msgstr "Уничтожаю выбранные постройки и машины!"
 
-#: src/keybind.cpp:2080
+#: src/keybind.cpp:2083
 msgid "Reveal OFF"
 msgstr "Обнаружение ВЫКЛ"
 
-#: src/keybind.cpp:2085
+#: src/keybind.cpp:2088
 msgid "Reveal ON"
 msgstr "Обнаружение ВКЛ"
 
-#: src/keybind.cpp:2169
+#: src/keybind.cpp:2172
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Фокус на штабе, вид на СЕВЕР"
 
-#: src/keybind.cpp:2181
+#: src/keybind.cpp:2184
 msgid "Unable to locate HQ!"
 msgstr "Невозможно найти штаб!"
 
-#: src/keybind.cpp:2188
+#: src/keybind.cpp:2191
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Ограничение скорости снято из-за багов."
 
-#: src/keybind.cpp:2229
+#: src/keybind.cpp:2232
 msgid "Vertical rotation direction: Normal"
 msgstr "Вращение по вертикали: нормально"
 
-#: src/keybind.cpp:2234
+#: src/keybind.cpp:2237
 msgid "Vertical rotation direction: Flipped"
 msgstr "Вращение по вертикали: инверсия"
 
-#: src/keybind.cpp:2244
+#: src/keybind.cpp:2247
 msgid "Screen shake when things die: Off"
 msgstr "Дрожь экрана при уничтожении объекта: Выкл"
 
-#: src/keybind.cpp:2249
+#: src/keybind.cpp:2252
 msgid "Screen shake when things die: On"
 msgstr "Дрожь экрана при уничтожении объекта: Вкл"
 
-#: src/keybind.cpp:2301
+#: src/keybind.cpp:2304
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Извините, скорость игры не меняется в сетевой игре."
 
-#: src/keybind.cpp:2337
-#: src/keybind.cpp:2391
+#: src/keybind.cpp:2340
+#: src/keybind.cpp:2394
 msgid "Game Speed Reset"
 msgstr "Скорость Игры Сброшена"
 
-#: src/keybind.cpp:2341
+#: src/keybind.cpp:2344
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Скорость игры увеличена в %s"
 
-#: src/keybind.cpp:2345
+#: src/keybind.cpp:2348
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Скорость игры уменьшена в %s"
 
-#: src/keybind.cpp:2403
+#: src/keybind.cpp:2406
 msgid "Radar showing friend-foe colors"
 msgstr "Радар отображает цвета свой-чужой"
 
-#: src/keybind.cpp:2407
+#: src/keybind.cpp:2410
 msgid "Radar showing player colors"
 msgstr "Радар отображает цвета игрока"
 
-#: src/keybind.cpp:2422
+#: src/keybind.cpp:2425
 msgid "Radar showing only objects"
 msgstr "Радар отображает только объекты"
 
-#: src/keybind.cpp:2425
+#: src/keybind.cpp:2428
 msgid "Radar blending terrain and height"
 msgstr "Радар не различает ландшафт и рельеф"
 
-#: src/keybind.cpp:2428
+#: src/keybind.cpp:2431
 msgid "Radar showing terrain"
 msgstr "Радар отображает поверхность"
 
-#: src/keybind.cpp:2431
+#: src/keybind.cpp:2434
 msgid "Radar showing height"
 msgstr "Радар показывает рельеф"
 
-#: src/keybind.cpp:2493
+#: src/keybind.cpp:2496
 msgid "Asserts turned off"
 msgstr ""
 
-#: src/keybind.cpp:2541
+#: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
 msgstr "Быстрое сохранение не разрешено для многопользовательских или обучающих игр"
 
-#: src/keybind.cpp:2562
+#: src/keybind.cpp:2564
 msgid "QuickSave failed"
 msgstr "Ошибка быстрого сохранения"
 
-#: src/keybind.cpp:2571
+#: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
 msgstr "Быстрая загрузка не разрешена для многопользовательских или обучающих игр"
 
-#: src/keybind.cpp:2598
+#: src/keybind.cpp:2600
 msgid "QuickSave file does not exist yet"
 msgstr "Файл быстрого сохранения еще не существует"
 
@@ -17813,16 +17804,16 @@ msgstr "Каталог автоматических сохранений"
 msgid "Autosave directory (not allowed for saving)"
 msgstr "Каталог автосохранения"
 
-#: src/loadsave.cpp:663
+#: src/loadsave.cpp:682
 msgid "cheated"
 msgstr "жульничал"
 
-#: src/loadsave.cpp:1090
+#: src/loadsave.cpp:1109
 #, c-format
 msgid "AutoSave %s"
 msgstr "Автосохранение %s"
 
-#: src/loadsave.cpp:1095
+#: src/loadsave.cpp:1114
 #, c-format
 msgid "AutoSave %s failed"
 msgstr "Автосохранение %s не удалось"
@@ -18159,21 +18150,21 @@ msgstr "Команда"
 
 #: src/multiint.cpp:2294
 #: src/multiint.cpp:4194
-#: src/multiint.cpp:7247
-#: src/multiint.cpp:7492
+#: src/multiint.cpp:7256
+#: src/multiint.cpp:7501
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
 msgstr "Наблюдатель"
 
 #: src/multiint.cpp:2305
-#: src/multiint.cpp:4432
+#: src/multiint.cpp:4435
 #: src/multimenu.cpp:1282
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост выкинул %s из игры!"
 
 #: src/multiint.cpp:2306
-#: src/multiint.cpp:4434
+#: src/multiint.cpp:4437
 #: src/multimenu.cpp:1286
 msgid "The host has kicked you from the game."
 msgstr "Хост выгнал вас из игры."
@@ -18337,203 +18328,203 @@ msgstr "ID игрока: "
 msgid "(none)"
 msgstr "(нет)"
 
-#: src/multiint.cpp:4341
+#: src/multiint.cpp:4344
 msgid "Click to change difficulty"
 msgstr "Нажмите для изменения сложности"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Waiting for player"
 msgstr "Ожидание игрока"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Player is ready"
 msgstr "Игрок готов"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Player is downloading"
 msgstr "Игрок загружает"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Click when ready"
 msgstr "Щёлкни когда будешь готов"
 
-#: src/multiint.cpp:4379
+#: src/multiint.cpp:4382
 msgid "Waiting for download"
 msgstr "Ожидание загрузки"
 
-#: src/multiint.cpp:4451
+#: src/multiint.cpp:4454
 msgid "READY?"
 msgstr "ГОТОВ?"
 
-#: src/multiint.cpp:4536
+#: src/multiint.cpp:4539
 msgid "For Spectator:"
 msgstr "Для наблюдателя:"
 
-#: src/multiint.cpp:4536
+#: src/multiint.cpp:4539
 msgid "For Player:"
 msgstr "Для игрока:"
 
-#: src/multiint.cpp:4554
+#: src/multiint.cpp:4557
 msgid "Choose Player Slot"
 msgstr "Выберете слот игрока"
 
-#: src/multiint.cpp:4625
+#: src/multiint.cpp:4628
 msgid "PLAYERS"
 msgstr "ИГРОКИ"
 
-#: src/multiint.cpp:4729
+#: src/multiint.cpp:4732
 msgid "Add spectator slot"
 msgstr "Добавить слот наблюдателя"
 
-#: src/multiint.cpp:4806
+#: src/multiint.cpp:4809
 msgid "Kicked from game"
 msgstr "Кикнут из игры"
 
-#: src/multiint.cpp:5031
+#: src/multiint.cpp:5034
 msgid "Copy Text to Clipboard"
 msgstr "Копировать текст в буфер обмена"
 
-#: src/multiint.cpp:5120
+#: src/multiint.cpp:5123
 msgid "CHAT"
 msgstr "ЧАТ"
 
-#: src/multiint.cpp:5776
+#: src/multiint.cpp:5779
 msgid "Sorry! Failed to host the game."
 msgstr "Извините! Не удалось создать игру."
 
-#: src/multiint.cpp:5837
+#: src/multiint.cpp:5840
 msgid "Game Name Updated."
 msgstr "Имя игры обновлено."
 
-#: src/multiint.cpp:5961
+#: src/multiint.cpp:5964
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "***Теперь требуется пароль [%s]!***"
 
-#: src/multiint.cpp:5967
+#: src/multiint.cpp:5970
 msgid "*** password is NOT required! ***"
 msgstr "*** пароль не требуется! ***"
 
-#: src/multiint.cpp:5980
+#: src/multiint.cpp:5983
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "Это мод-карта, она может изменить ваш игровой опыт!"
 
-#: src/multiint.cpp:5985
+#: src/multiint.cpp:5988
 msgid "This is a random map, it can vary your playing experience!"
 msgstr "Это случайная карта, она может изменить ваш игровой опыт!"
 
-#: src/multiint.cpp:6137
+#: src/multiint.cpp:6140
 msgid "Host is Starting Game"
 msgstr "Хост стартует"
 
-#: src/multiint.cpp:6408
+#: src/multiint.cpp:6411
 msgid "Host supplied invalid options"
 msgstr ""
 
-#: src/multiint.cpp:6642
+#: src/multiint.cpp:6645
 msgid "You have been kicked: "
 msgstr "Вы были исключены: "
 
-#: src/multiint.cpp:6656
+#: src/multiint.cpp:6659
 msgid "No connection to host."
 msgstr "Нет соединения с хостом."
 
-#: src/multiint.cpp:6708
+#: src/multiint.cpp:6711
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
 msgstr "Хост переместил меня в Игроки, но я не давал разрешения на это изменение. До следуещего!"
 
-#: src/multiint.cpp:6710
+#: src/multiint.cpp:6713
 msgid "The host tried to move us to Players, but we never gave permission."
 msgstr "Хост пытался переместить нас в Игроки, но мы не давали такого разрешения."
 
-#: src/multiint.cpp:6859
+#: src/multiint.cpp:6862
 msgid "Cannot change to a map with too few slots for all players."
 msgstr "Нельзя изменить карту, слишком мало мест для всех игроков."
 
-#: src/multiint.cpp:6864
+#: src/multiint.cpp:6867
 msgid "Cannot change to a map with fewer slots."
 msgstr "Невозможно изменить на карту с меньшим количеством мест для игроков."
 
-#: src/multiint.cpp:6965
+#: src/multiint.cpp:6968
 msgid "The host has quit."
 msgstr "Хост вышел."
 
-#: src/multiint.cpp:7003
+#: src/multiint.cpp:7006
 msgid "UPnP has been enabled."
 msgstr "UPnP был включен."
 
-#: src/multiint.cpp:7009
+#: src/multiint.cpp:7012
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "Обнаружение UPnP не удалось. Вы должны вручную настроить маршрутизатор самостоятельно."
 
-#: src/multiint.cpp:7013
+#: src/multiint.cpp:7016
 msgid "UPnP detection is in progress..."
 msgstr "Обнаружение UPnP в процессе ..."
 
-#: src/multiint.cpp:7020
+#: src/multiint.cpp:7023
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "Обнаружение UPnP отключено пользователем. Автоконфигурация порта 2100 не произойдет."
 
-#: src/multiint.cpp:7026
+#: src/multiint.cpp:7029
 msgid "Hit the ready box to begin your challenge!"
 msgstr "Нажмите готов в квадратике, чтобы начать свое сражение!"
 
-#: src/multiint.cpp:7030
+#: src/multiint.cpp:7033
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Нажмите кнопку запуска хостинга, чтобы начать хостинг игры."
 
-#: src/multiint.cpp:7241
-#: src/multiint.cpp:7496
+#: src/multiint.cpp:7250
+#: src/multiint.cpp:7505
 msgid "Closed"
 msgstr "Закрыто"
 
-#: src/multiint.cpp:7244
-#: src/multiint.cpp:7488
+#: src/multiint.cpp:7253
+#: src/multiint.cpp:7497
 msgid "Open"
 msgstr "Открыть"
 
-#: src/multiint.cpp:7327
+#: src/multiint.cpp:7336
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Отправка карты: %u%% "
 
-#: src/multiint.cpp:7327
+#: src/multiint.cpp:7336
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "Карта: %u%% загружена"
 
-#: src/multiint.cpp:7374
+#: src/multiint.cpp:7383
 msgid "HOST"
 msgstr "ХОСТ"
 
-#: src/multiint.cpp:7381
+#: src/multiint.cpp:7390
 #: src/multimenu.cpp:772
 msgid "Ping"
 msgstr "Пинг"
 
-#: src/multiint.cpp:8238
+#: src/multiint.cpp:8247
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Версия этого файла не совпадает с текущей версией Warzone 2100."
 
-#: src/multiint.cpp:8240
+#: src/multiint.cpp:8249
 #, c-format
 msgid "Replay File Saved With: \"%s\""
 msgstr "Файл повтора сохранен: \"%s\""
 
-#: src/multiint.cpp:8244
+#: src/multiint.cpp:8253
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
 msgstr "Текущая версия Warzone 2100: \"%s\""
 
-#: src/multiint.cpp:8254
+#: src/multiint.cpp:8263
 msgid "Replays should usually be played back with the same version used to save the replay."
 msgstr "Повторы обычно должны воспроизводиться с той же версией, которая используется для сохранения повтора."
 
-#: src/multiint.cpp:8256
+#: src/multiint.cpp:8265
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
 msgstr "Повтор может не воспроизводиться, или могут возникнуть различия в симуляции."
 
-#: src/multiint.cpp:8257
+#: src/multiint.cpp:8266
 msgid "Replay Version Mismatch"
 msgstr "Версии повтора не совпадают"
 
