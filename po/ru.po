@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-28 04:17+0000\n"
-"PO-Revision-Date: 2021-11-28 05:52\n"
+"PO-Revision-Date: 2021-11-28 17:53\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -5816,16 +5816,16 @@ msgstr "Не получилось получить ответ от лобби!"
 
 #: lib/netplay/netreplay.cpp:322
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Формат файла повтора новее, чем эта версия Warzone 2100."
 
 #: lib/netplay/netreplay.cpp:324
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Версия формата повтора: %u"
 
 #: lib/netplay/netreplay.cpp:325
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Формат повтора не поддерживается"
 
 #: lib/netplay/nettypes.cpp:883
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
@@ -8303,7 +8303,7 @@ msgstr "Электронная атака разрушает вражеские 
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Единицы ранга Элита и Ветеран, а также Фабрики, защищены"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
@@ -13324,7 +13324,7 @@ msgstr "Стальная башня со спаренным пулеметом"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5306
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Предотвращает захват НЕКСУСОМ"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -15493,11 +15493,11 @@ msgstr "Альянс"
 
 #: src/frontend.cpp:178
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Отсутствуют видео кампании"
 
 #: src/frontend.cpp:179
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Смотрите наш FAQ о том, как установить видео"
 
 #: src/frontend.cpp:199
 msgid "Single Player"
@@ -16127,7 +16127,7 @@ msgstr "Тайм-аут бездействия"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
-msgstr ""
+msgstr "Кик из-за лага"
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
@@ -17169,7 +17169,7 @@ msgstr "Энергия"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Энергия в секунду"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17409,7 +17409,7 @@ msgstr ""
 
 #: src/keybind.cpp:166
 msgid "Path display toggled."
-msgstr ""
+msgstr "Отображение пути включено."
 
 #: src/keybind.cpp:194
 #, c-format
@@ -18128,7 +18128,7 @@ msgstr "Нажмите, чтобы выбрать этот слот"
 #: src/multiint.cpp:1983
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "Нажмите, чтобы занять слот игрока %u"
 
 #: src/multiint.cpp:2020
 msgid "Click to swap player to this slot"
@@ -18419,7 +18419,7 @@ msgstr "Хост стартует"
 
 #: src/multiint.cpp:6411
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "Хост предоставил недопустимые параметры"
 
 #: src/multiint.cpp:6645
 msgid "You have been kicked: "
