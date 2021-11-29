@@ -77,7 +77,7 @@ static WZMAPLIB_FORCE_INLINE unsigned short TileNumber_texture(unsigned short ti
 /* The mask to get internal tile coords from a full coordinate */
 #define TILE_MASK 0x7f
 
-/* The number of units accross a tile */
+/* The number of units across a tile */
 #define TILE_UNITS (1<<TILE_SHIFT)
 
 static WZMAPLIB_FORCE_INLINE int32_t world_coord(int32_t mapCoord)
