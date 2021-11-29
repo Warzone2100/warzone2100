@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-28 04:17+0000\n"
-"PO-Revision-Date: 2021-11-28 05:53\n"
+"PO-Revision-Date: 2021-11-29 21:09\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -19135,7 +19135,7 @@ msgstr ""
 #: src/structure.cpp:5447
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %u - Sensorreichweite %d - ECM %d"
 
 #: src/structure.cpp:5565
 #: src/structure.cpp:5610
