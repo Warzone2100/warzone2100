@@ -56,6 +56,7 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
 #endif
 
+const uint32_t minSupportedVulkanVersion = VK_API_VERSION_1_0;
 #if defined(DEBUG)
 // For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
 const uint32_t maxRequestableInstanceVulkanVersion = VK_API_VERSION_1_0;
@@ -1905,6 +1906,10 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 	return true;
 }
 
+// See: https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#fundamentals-validusage-versions
+#define VK_VERSION_GREATER_THAN_OR_EQUAL(a, b) \
+	( ( VK_VERSION_MAJOR(a) > VK_VERSION_MAJOR(b) ) || ( ( VK_VERSION_MAJOR(a) == VK_VERSION_MAJOR(b) ) && ( VK_VERSION_MINOR(a) >= VK_VERSION_MINOR(b) ) ) )
+
 // WZ-specific functions for rating / determining requirements
 int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const vk::DispatchLoaderDynamic &vkDynLoader)
 {
@@ -1927,6 +1932,12 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 
 	// Maximum possible size of textures affects graphics quality
 	score += deviceProperties.limits.maxImageDimension2D;
+
+	// Requires: deviceProperties.apiVersion >= minSupportedVulkanVersion
+	if (!VK_VERSION_GREATER_THAN_OR_EQUAL(deviceProperties.apiVersion, minSupportedVulkanVersion))
+	{
+		return 0;
+	}
 
 	// Requires: limits.maxDescriptorSetUniformBuffers >= minRequired_DescriptorSetUniformBuffers
 	if (deviceProperties.limits.maxDescriptorSetUniformBuffers < minRequired_DescriptorSetUniformBuffers)
@@ -2686,10 +2697,6 @@ bool VkRoot::createSwapchain()
 
 	return true;
 }
-
-// See: https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#fundamentals-validusage-versions
-#define VK_VERSION_GREATER_THAN_OR_EQUAL(a, b) \
-	( ( VK_VERSION_MAJOR(a) > VK_VERSION_MAJOR(b) ) || ( ( VK_VERSION_MAJOR(a) == VK_VERSION_MAJOR(b) ) && ( VK_VERSION_MINOR(a) >= VK_VERSION_MINOR(b) ) ) )
 
 bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion)
 {
