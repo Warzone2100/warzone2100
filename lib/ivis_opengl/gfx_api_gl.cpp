@@ -51,6 +51,48 @@ OPENGL_DATA opengl;
 static GLuint perfpos[PERF_COUNT];
 static bool perfStarted = false;
 
+static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gles)
+{
+	switch (format)
+	{
+		// UNCOMPRESSED FORMATS
+		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+			return GL_RGBA8;
+		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
+			return GL_RGBA8; // must store as RGBA8
+		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+			return GL_RGB8;
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			if (gles && GLAD_GL_EXT_texture_rg)
+			{
+				// the internal format is GL_RG_EXT
+				return GL_RG_EXT;
+			}
+			else
+			{
+				// for Desktop OpenGL, use GL_RG8 for the internal format
+				return GL_RG8;
+			}
+		case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			if ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0))
+			{
+				// OpenGL 3.0+ or OpenGL ES 3.0+
+				return GL_R8;
+			}
+			else
+			{
+				// older version fallback
+				// use GL_LUMINANCE because:
+				// (a) it's available and
+				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
+				return GL_LUMINANCE;
+			}
+		default:
+			debug(LOG_FATAL, "Unrecognised pixel format");
+	}
+	return GL_INVALID_ENUM;
+}
+
 static std::pair<GLenum, GLenum> to_gl(const gfx_api::pixel_format& format)
 {
 	switch (format)
@@ -1099,7 +1141,7 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 
 	}
 }
 
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2i &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec2 &v)
 {
 	glUniform2i(locations[uniformIdx], v.x, v.y);
 	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
@@ -1108,7 +1150,7 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2i &v)
 	}
 }
 
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2f &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec2 &v)
 {
 	glUniform2f(locations[uniformIdx], v.x, v.y);
 	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
@@ -1935,6 +1977,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		return false;
 	}
 
+	initPixelFormatsSupport();
+
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
 	debug(LOG_WZ, "Drawable Size: %d x %d", width, height);
@@ -2262,6 +2306,97 @@ void gl_context::endRenderPass()
 	backend_impl->swapWindow();
 	glUseProgram(0);
 	current_program = nullptr;
+}
+
+static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(gfx_api::pixel_format format, bool gles)
+{
+	gfx_api::pixel_format_usage::flags retVal = gfx_api::pixel_format_usage::none;
+
+	auto internal_format = to_gl_internalformat(format, gles);
+	if (internal_format == GL_INVALID_ENUM || internal_format == GL_FALSE)
+	{
+		return retVal;
+	}
+
+	if (gles || !GLAD_GL_ARB_internalformat_query2 || !glGetInternalformativ)
+	{
+		// the query function is not available, so just assume that the format is available
+		// for now, mark it as available for sampled_image - TODO: investigate whether we can safely assume it's available for other usages
+		retVal |= gfx_api::pixel_format_usage::sampled_image;
+		return retVal;
+	}
+
+	GLint supported = GL_FALSE;
+	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_INTERNALFORMAT_SUPPORTED, 1, &supported);
+	if (!supported)
+	{
+		return retVal;
+	}
+
+	supported = GL_NONE;
+	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_FRAGMENT_TEXTURE, 1, &supported);
+	if (supported == GL_FULL_SUPPORT) // ignore caveat support for now
+	{
+		retVal |= gfx_api::pixel_format_usage::sampled_image;
+	}
+
+	GLint shader_image_load = GL_NONE;
+	GLint shader_image_store = GL_NONE;
+	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_SHADER_IMAGE_LOAD, 1, &shader_image_load);
+	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_SHADER_IMAGE_STORE, 1, &shader_image_store);
+	if (shader_image_load == GL_FULL_SUPPORT && shader_image_store == GL_FULL_SUPPORT) // ignore caveat support for now
+	{
+		retVal |= gfx_api::pixel_format_usage::storage_image;
+	}
+
+	GLint depth_renderable = GL_FALSE;
+	GLint stencil_renderable = GL_FALSE;
+	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_DEPTH_RENDERABLE, 1, &depth_renderable);
+	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_STENCIL_RENDERABLE, 1, &stencil_renderable);
+	if (depth_renderable && stencil_renderable)
+	{
+		retVal |= gfx_api::pixel_format_usage::depth_stencil_attachment;
+	}
+
+	return retVal;
+}
+
+bool gl_context::texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+{
+	size_t formatIdx = static_cast<size_t>(format);
+	ASSERT_OR_RETURN(false, formatIdx < texture2DFormatsSupport.size(), "Invalid format index: %zu", formatIdx);
+	return (texture2DFormatsSupport[formatIdx] & usage) == usage;
+}
+
+void gl_context::initPixelFormatsSupport()
+{
+	// set any existing entries to false
+	for (size_t i = 0; i < texture2DFormatsSupport.size(); i++)
+	{
+		texture2DFormatsSupport[i] = gfx_api::pixel_format_usage::none;
+	}
+	texture2DFormatsSupport.resize(static_cast<size_t>(gfx_api::MAX_PIXEL_FORMAT) + 1, gfx_api::pixel_format_usage::none);
+
+	#define PIXEL_FORMAT_SUPPORT_SET(x) \
+	texture2DFormatsSupport[static_cast<size_t>(x)] = getPixelFormatUsageSupport_gl(x, gles);
+
+	// The following are always guaranteed to be supported
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)] = true;
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)] = true;
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)] = true;
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_R8_UNORM)] = true;
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
+
+	// RG8
+	// Desktop OpenGL: OpenGL 3.0+, or GL_ARB_texture_rg
+	// OpenGL ES: GL_EXT_texture_rg
+	if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_ARB_texture_rg)) || (gles && GLAD_GL_EXT_texture_rg))
+	{
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+	}
 }
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)

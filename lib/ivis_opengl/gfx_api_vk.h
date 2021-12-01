@@ -516,8 +516,8 @@ private:
 	vk::PhysicalDevice pickPhysicalDevice();
 
 	bool createSurface();
-	bool canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion);
-	bool canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion);
+	bool canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion) const;
+	bool canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const;
 
 	// pickPhysicalDevice();
 	void getQueueFamiliesInfo();
@@ -530,7 +530,7 @@ private:
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
 	void setupSwapchainImages();
 
-	vk::Format get_format(const gfx_api::pixel_format& format);
+	vk::Format get_format(const gfx_api::pixel_format& format) const;
 
 private:
 	static vk::IndexType to_vk(const gfx_api::index_type& index);
@@ -585,12 +585,16 @@ public:
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
+	virtual bool texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
+	void initPixelFormatsSupport();
+	gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport(gfx_api::pixel_format format) const;
 	std::string calculateFormattedRendererInfoString() const;
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
 private:
 	std::string formattedRendererInfoString;
+	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED)
