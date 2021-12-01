@@ -138,8 +138,8 @@ private:
 	 */
 	void setUniforms(size_t uniformIdx, const ::glm::vec4 &v);
 	void setUniforms(size_t uniformIdx, const ::glm::mat4 &m);
-	void setUniforms(size_t uniformIdx, const Vector2i &v);
-	void setUniforms(size_t uniformIdx, const Vector2f &v);
+	void setUniforms(size_t uniformIdx, const ::glm::ivec2 &v);
+	void setUniforms(size_t uniformIdx, const ::glm::vec2 &v);
 	void setUniforms(size_t uniformIdx, const int32_t &v);
 	void setUniforms(size_t uniformIdx, const float &v);
 
@@ -223,8 +223,10 @@ struct gl_context final : public gfx_api::context
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
+	virtual bool texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
+	void initPixelFormatsSupport();
 private:
 	bool initGLContext();
 	void enableVertexAttribArray(GLuint index);
@@ -235,4 +237,5 @@ private:
 	std::vector<bool> enabledVertexAttribIndexes;
 	size_t frameNum = 0;
 	std::string formattedRendererInfoString;
+	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
 };

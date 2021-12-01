@@ -376,3 +376,8 @@ gfx_api::context::swap_interval_mode null_context::getSwapInterval() const
 	return backend_impl->getSwapInterval();
 }
 
+bool null_context::texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+{
+	// no matter what the input is, return true (since this null backend doesn't care and no-ops whatever it gets)
+	return true;
+}

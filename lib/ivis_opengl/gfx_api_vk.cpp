@@ -184,17 +184,26 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	return -1;
 }
 
+bool checkFormatSupport(const vk::PhysicalDevice& physicalDevice, vk::Format format, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	vk::FormatProperties props;
+	physicalDevice.getFormatProperties(format, &props, vkDynLoader);
+
+	if (tiling == vk::ImageTiling::eLinear && (props.linearTilingFeatures & features) == features)
+	{
+		return true;
+	}
+	else if (tiling == vk::ImageTiling::eOptimal && (props.optimalTilingFeatures & features) == features)
+	{
+		return true;
+	}
+	return false;
+}
+
 vk::Format findSupportedFormat(const vk::PhysicalDevice& physicalDevice, const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const vk::DispatchLoaderDynamic& vkDynLoader) {
 	for (vk::Format format : candidates)
 	{
-		vk::FormatProperties props;
-		physicalDevice.getFormatProperties(format, &props, vkDynLoader);
-
-		if (tiling == vk::ImageTiling::eLinear && (props.linearTilingFeatures & features) == features)
-		{
-			return format;
-		}
-		else if (tiling == vk::ImageTiling::eOptimal && (props.optimalTilingFeatures & features) == features)
+		if (checkFormatSupport(physicalDevice, format, tiling, features, vkDynLoader))
 		{
 			return format;
 		}
@@ -1438,6 +1447,8 @@ size_t VkTexture::format_size(const gfx_api::pixel_format& format)
 			return 4;
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			return 3;
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			return 2;
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
 			return 1;
 		default:
@@ -1638,9 +1649,9 @@ void VkTexture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t
 		int output_h = std::max(1, input_h >> 1);
 
 		unsigned char *output_pixels = (unsigned char *)malloc(output_w * output_h * components);
-		stbir_resize_uint8(input_pixels, input_w, input_h, 0,
-						   output_pixels, output_w, output_h, 0,
-						   static_cast<int>(components));
+//		stbir_resize_uint8(input_pixels, input_w, input_h, 0,
+//						   output_pixels, output_w, output_h, 0,
+//						   static_cast<int>(components));
 //		stbir_resize_uint8_generic(input_pixels, input_w, input_h, 0,
 //								   output_pixels, output_w, output_h, 0,
 //								   components, components == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, STBIR_FLAG_ALPHA_PREMULTIPLIED,
@@ -1648,6 +1659,13 @@ void VkTexture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t
 //								   STBIR_FILTER_MITCHELL,
 //								   STBIR_COLORSPACE_LINEAR,
 //								   nullptr);
+		stbir_resize_uint8_generic(input_pixels, input_w, input_h, 0,
+								   output_pixels, output_w, output_h, 0,
+								   static_cast<int>(components), components == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, 0,
+								   STBIR_EDGE_CLAMP,
+								   STBIR_FILTER_MITCHELL,
+								   STBIR_COLORSPACE_LINEAR,
+								   nullptr);
 
 		upload(i, offset_x, offset_y, output_w, output_h, buffer_format, (const void*)output_pixels);
 
@@ -2698,13 +2716,13 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
-bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion)
+bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion) const
 {
 	ASSERT(inst, "Instance is null");
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion);
 }
 
-bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion)
+bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const
 {
 	ASSERT(physicalDevice, "Physical device is null");
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion) && VK_VERSION_GREATER_THAN_OR_EQUAL(physDeviceProps.apiVersion, minVulkanAPICoreVersion);
@@ -2879,6 +2897,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
 	const auto formatSupport = physicalDevice.getFormatProperties(vk::Format::eR8G8B8Unorm, vkDynLoader);
 	supports_rgb = bool(formatSupport.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage);
+	initPixelFormatsSupport();
 
 	// convert antialiasing to vk::SampleCountFlagBits
 	if (antialiasing >= 64)
@@ -2941,6 +2960,79 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 
 	return true;
+}
+
+gfx_api::pixel_format_usage::flags VkRoot::getPixelFormatUsageSupport(gfx_api::pixel_format format) const
+{
+	gfx_api::pixel_format_usage::flags retVal = gfx_api::pixel_format_usage::none;
+	ASSERT_OR_RETURN(retVal, physicalDevice, "Physical device is null");
+
+	vk::Format vulkan_format = get_format(format);
+	// TODO: Handle error getting format?
+
+	bool checkTransferDstBit = canUseVulkanDeviceAPI((uint32_t)VK_MAKE_VERSION(1, 1, 0));
+
+	// [sampled_image support]
+	// NOTE:
+	//	- For WZ, the following feature bits are required for sampled_image usage:
+	//		- VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT (of course)
+	//		- VK_FORMAT_FEATURE_BLIT_SRC_BIT (may not technically be needed yet? but is generally available when the former and latter ones are)
+	//		- VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT (needed for many textures - we don't currently differentiate)
+	//	- And if Vulkan >= 1.1, check VK_FORMAT_FEATURE_TRANSFER_DST_BIT to verify we can actually copy from the staging buffer to the image
+	vk::FormatFeatureFlags sampledImageFormatFlags = vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eBlitSrc | vk::FormatFeatureFlagBits::eSampledImageFilterLinear;
+	if (checkTransferDstBit)
+	{
+		sampledImageFormatFlags |= vk::FormatFeatureFlagBits::eTransferDst;
+	}
+	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eOptimal, sampledImageFormatFlags, vkDynLoader))
+	{
+		retVal |= gfx_api::pixel_format_usage::sampled_image;
+	}
+
+	// [storage_image support]
+	//	- Following feature bits are required:
+	//		- VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT (of course)
+	//		- TODO: Will we need to check any other bits for WZ's use-cases?
+	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eLinear /* ? */, vk::FormatFeatureFlagBits::eStorageImage, vkDynLoader))
+	{
+		retVal |= gfx_api::pixel_format_usage::storage_image;
+	}
+
+	// [depth_stencil_attachment support]
+	//	- Following feature bits are required:
+	//		- VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment, vkDynLoader))
+	{
+		retVal |= gfx_api::pixel_format_usage::depth_stencil_attachment;
+	}
+
+	return retVal;
+}
+
+void VkRoot::initPixelFormatsSupport()
+{
+	ASSERT(backend_impl, "Backend implementation is null");
+	ASSERT(inst, "Instance is null");
+	ASSERT(physicalDevice, "Physical device is null");
+
+	// set any existing entries to false
+	for (size_t i = 0; i < texture2DFormatsSupport.size(); i++)
+	{
+		texture2DFormatsSupport[i] = gfx_api::pixel_format_usage::none;
+	}
+	texture2DFormatsSupport.resize(static_cast<size_t>(gfx_api::MAX_PIXEL_FORMAT) + 1, gfx_api::pixel_format_usage::none);
+
+	#define PIXEL_FORMAT_SUPPORT_SET(x) \
+	texture2DFormatsSupport[static_cast<size_t>(x)] = getPixelFormatUsageSupport(x);
+
+	// these uncompressed formats should be mandatory
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
+
+	// RGB8 is optional
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
 }
 
 bool VkRoot::createSurface()
@@ -3235,22 +3327,33 @@ void VkRoot::setupSwapchainImages()
 	graphicsQueue.waitIdle(vkDynLoader);
 }
 
-vk::Format VkRoot::get_format(const gfx_api::pixel_format& format)
+vk::Format VkRoot::get_format(const gfx_api::pixel_format& format) const
 {
 	switch (format)
 	{
-	case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-		return supports_rgb ? vk::Format::eR8G8B8Unorm : vk::Format::eR8G8B8A8Unorm;
-	case gfx_api::pixel_format::FORMAT_R8_UNORM:
-		return vk::Format::eR8Unorm;
 	case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
 		return vk::Format::eR8G8B8A8Unorm;
 	case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
 		return vk::Format::eB8G8R8A8Unorm;
+	case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+		// TODO: After we properly handle converting formats elsewhere, change this to only return
+		// return vk::Format::eR8G8B8Unorm;
+		return supports_rgb ? vk::Format::eR8G8B8Unorm : vk::Format::eR8G8B8A8Unorm;
+	case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+		return vk::Format::eR8G8Unorm;
+	case gfx_api::pixel_format::FORMAT_R8_UNORM:
+		return vk::Format::eR8Unorm;
 	default:
 		debug(LOG_FATAL, "Unsupported format: %d", (int)format);
 	}
 	throw;
+}
+
+bool VkRoot::texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+{
+	size_t formatIdx = static_cast<size_t>(format);
+	ASSERT_OR_RETURN(false, formatIdx < texture2DFormatsSupport.size(), "Invalid format index: %zu", formatIdx);
+	return (texture2DFormatsSupport[formatIdx] & usage) == usage;
 }
 
 gfx_api::texture* VkRoot::create_texture(const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename)
