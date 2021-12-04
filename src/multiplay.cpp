@@ -1556,6 +1556,12 @@ bool recvResearchStatus(NETQUEUE queue)
 		// Set that facility to research
 		if (psBuilding && psBuilding->pFunctionality)
 		{
+			if (!psBuilding->pStructureType || psBuilding->pStructureType->type != REF_RESEARCH)
+			{
+				debug(LOG_INFO, "Structure is not a research facility: \"%s\".", (psBuilding->pStructureType) ? psBuilding->pStructureType->id.toUtf8().c_str() : "");
+				return false;
+			}
+
 			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
 
 			popStatusPending(*psResFacilty);  // Research is no longer pending, as it's actually starting now.
@@ -1612,6 +1618,12 @@ bool recvResearchStatus(NETQUEUE queue)
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
+			if (!psBuilding->pStructureType || psBuilding->pStructureType->type != REF_RESEARCH)
+			{
+				debug(LOG_INFO, "Structure is not a research facility: \"%s\".", (psBuilding->pStructureType) ? psBuilding->pStructureType->id.toUtf8().c_str() : "");
+				return false;
+			}
+
 			cancelResearch(psBuilding, ModeImmediate);
 			popStatusPending(*(RESEARCH_FACILITY *)psBuilding->pFunctionality);  // Research cancellation is no longer pending, as it's actually cancelling now.
 		}
