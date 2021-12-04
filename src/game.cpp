@@ -91,6 +91,7 @@
 #include <ctime>
 #include "multimenu.h"
 #include "console.h"
+#include "multigifts.h"
 #include "wzscriptdebug.h"
 #include "build_tools/autorevision.h"
 
@@ -2698,6 +2699,37 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
+		}
+	}
+
+	/* decide if we have to create teams, ONLY in multiplayer mode!*/
+	if (bMultiPlayer && alliancesSharedVision(game.alliance))
+	{
+		createTeamAlliances();
+
+		/* Update ally vision for pre-placed structures and droids */
+		for (unsigned int pl = 0; pl < MAX_PLAYERS; pl++)
+		{
+			if (pl != selectedPlayer)
+			{
+				/* Structures */
+				for (STRUCTURE *psStr = apsStructLists[pl]; psStr; psStr = psStr->psNext)
+				{
+					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psStr->player, selectedPlayer))
+					{
+						visTilesUpdate((BASE_OBJECT *)psStr);
+					}
+				}
+
+				/* Droids */
+				for (DROID *psDroid = apsDroidLists[pl]; psDroid; psDroid = psDroid->psNext)
+				{
+					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psDroid->player, selectedPlayer))
+					{
+						visTilesUpdate((BASE_OBJECT *)psDroid);
+					}
+				}
+			}
 		}
 	}
 
