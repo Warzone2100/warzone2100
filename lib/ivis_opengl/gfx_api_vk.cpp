@@ -477,7 +477,7 @@ void BlockBufferAllocator::allocateNewBlock(uint32_t minimumSize)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		throwResultException( result, "vmaCreateBuffer" );
+		vk::throwResultException( result, "vmaCreateBuffer" );
 	}
 
 	if (autoMap)
@@ -1304,7 +1304,7 @@ VkPSO::VkPSO(vk::Device _dev,
 			object = std::move(result.value);
 			break;
 		default:
-			throwResultException(result.result, "createGraphicsPipeline");
+			vk::throwResultException(result.result, "createGraphicsPipeline");
 	}
 }
 
@@ -1368,7 +1368,7 @@ void VkBuf::allocateBufferObject(const std::size_t& size)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		throwResultException( result, "vmaCreateBuffer" );
+		vk::throwResultException( result, "vmaCreateBuffer" );
 	}
 
 	buffer_size = size;
@@ -1486,7 +1486,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		throwResultException( result, "vmaCreateImage" );
+		vk::throwResultException( result, "vmaCreateImage" );
 	}
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
