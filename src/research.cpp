@@ -1131,7 +1131,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	UDWORD              topicInc;
 	PLAYER_RESEARCH	    *pPlayerRes;
 
-	ASSERT_OR_RETURN(, psBuilding->pStructureType->type == REF_RESEARCH, "Structure not a research facility");
+	ASSERT_OR_RETURN(, psBuilding->pStructureType && psBuilding->pStructureType->type == REF_RESEARCH, "Structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 	if (!(RESEARCH *)psResFac->psSubject)
