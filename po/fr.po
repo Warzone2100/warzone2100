@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-28 04:17+0000\n"
-"PO-Revision-Date: 2021-11-28 05:53\n"
+"PO-Revision-Date: 2021-12-05 05:09\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16083,21 +16083,21 @@ msgstr "Cette difficulté s'adresse aux joueurs très expérimentés !"
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u minutes"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u secondes"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Options d'hébergement :"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
