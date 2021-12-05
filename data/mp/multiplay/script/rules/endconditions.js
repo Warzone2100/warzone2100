@@ -248,7 +248,7 @@ function checkEndConditions()
 	{
 		return team.isContender();
 	});
-	if (contenderTeams.length <= 1) // game end
+	if (contenderTeams.length <= 1 && newlyLosingTeams.length !== 0) // game end
 	{
 		contenderTeams.forEach((team) =>
 		{
