@@ -191,8 +191,50 @@ function scanAndDefendPosition(structure, droid)
 	}
 }
 
+function bringBackOilBuilders()
+{
+	var builders = enumGroup(oilBuilders);
+
+	for (var i = 0, len = builders.length; i < len; ++i)
+	{
+		if (builders[i].order !== DORDER_BUILD &&
+			builders[i].order !== DORDER_RTB &&
+			builders[i].order !== DORDER_RECYCLE)
+		{
+			orderDroid(builders[i], DORDER_RTB);
+		}
+	}
+}
+
+function skipOilGrabIfEasy()
+{
+	if (difficulty === EASY)
+	{
+		var myDerrickCount = enumStruct(me, DERRICK_STAT).filter(function(obj) {
+			return obj.status === BUILT;
+		}).length;
+		var enemies = getAliveEnemyPlayers();
+
+		for (var i = 0, len = enemies.length; i < len; ++i)
+		{
+			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(DERRICK_STAT, enemies[i]) && enemies[i] !== scavengerPlayer)
+			{
+				bringBackOilBuilders();
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 function lookForOil()
 {
+	if (skipOilGrabIfEasy())
+	{
+		return;
+	}
+
 	const UNSAFE_AREA_RANGE = 7;
 	var droids = enumGroup(oilBuilders);
 	var oils = enumFeature(ALL_PLAYERS, OIL_RES_STAT).sort(sortByDistToBase); // grab closer oils first;
