@@ -287,7 +287,7 @@ function eventStructureBuilt(structure, droid)
 			return (o.type === FEATURE && o.stattype === OIL_RESOURCE);
 		});
 
-		if (oils.length > 0)
+		if (oils.length > 0 && !skipOilGrabIfEasy())
 		{
 			orderDroidBuild(droid, DORDER_BUILD, BASE_STRUCTURES.derricks, oils[0].x, oils[0].y);
 		}
