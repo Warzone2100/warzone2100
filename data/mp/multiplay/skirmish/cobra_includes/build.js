@@ -378,6 +378,42 @@ function checkUnfinishedStructures(group)
 	return false;
 }
 
+function holdAllOilTrucks()
+{
+	var oilGrabbers = enumGroup(oilGrabberGroup);
+
+	for (var i = 0, len = oilGrabbers.length; i < len; ++i)
+	{
+		if (oilGrabbers[i].order !== DORDER_RECYCLE &&
+			oilGrabbers[i].order !== DORDER_HOLD)
+		{
+			orderDroid(oilGrabbers[i], DORDER_HOLD);
+		}
+	}
+}
+
+function skipOilGrabIfEasy()
+{
+	if (difficulty === EASY)
+	{
+		var myDerrickCount = enumStruct(me, structures.derrick).filter(function(obj) {
+			return obj.status === BUILT;
+		}).length;
+		var enemies = findLivingEnemies();
+
+		for (var i = 0, len = enemies.length; i < len; ++i)
+		{
+			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(structures.derrick, enemies[i]))
+			{
+				holdAllOilTrucks();
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 function lookForOil()
 {
 	if (currently_dead)
@@ -399,6 +435,10 @@ function lookForOil()
 	}
 
 	if (oils.length === 0 && highOilMap() && maintenance(oilGrabberGroup))
+	{
+		return;
+	}
+	if (skipOilGrabIfEasy())
 	{
 		return;
 	}

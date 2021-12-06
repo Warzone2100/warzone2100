@@ -24,7 +24,7 @@ function eventStartLevel()
 	setTimer("retreatTactics", 500 + delay);
 	setTimer("checkAllForRepair", 600 + delay + (4 * easyTimeDelay));
 	setTimer("research", 800 + delay + (3 * easyTimeDelay));
-	setTimer("lookForOil", 1000 + delay + (2 * easyTimeDelay));
+	setTimer("lookForOil", 1000 + delay);
 	setTimer("artilleryTactics", 1400 + delay);
 	setTimer("vtolTactics", 1600 + delay);
 	setTimer("groundTactics", 2000 + delay);
@@ -46,7 +46,7 @@ function eventStructureBuilt(structure, droid)
 		return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
 	}).sort(distanceToBase);
 
-	if (nearbyOils.length > 0)
+	if (nearbyOils.length > 0 && !skipOilGrabIfEasy())
 	{
 		orderDroidBuild(droid, DORDER_BUILD, structures.derrick, nearbyOils[0].x, nearbyOils[0].y);
 		return;
