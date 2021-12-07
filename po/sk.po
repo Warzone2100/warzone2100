@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-28 04:17+0000\n"
-"PO-Revision-Date: 2021-11-28 05:52\n"
+"PO-Revision-Date: 2021-12-07 15:34\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -67,7 +67,7 @@ msgstr "Nová Paradigma vlastní technológiu špičkových zbraní."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Môžu mať technológiu synaptických spojení, jej zíkanie je zásadné."
+msgstr "Môžu mať technológiu pre synaptické spojenia, jej získanie je zásadné."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -160,11 +160,11 @@ msgstr "MISIA ZÁKLADNE ALFA: Založ predsunutú základňu"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Založ predsunutú základňu na plošine a odraz Novú Paradigmu."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Stavajte obranné štruktúry, kým nezmizne zelená značka cieľu misie."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -184,7 +184,7 @@ msgstr "MISIA ZÁKLADNE ALFA: Prichádzajúci prenos"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Na týchto miestach detekujeme nepriateľské sily."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
@@ -204,7 +204,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "Prvé dve oblasti sú teraz bezpečné."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
