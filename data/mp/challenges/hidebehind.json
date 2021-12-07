@@ -18,12 +18,14 @@
 		"team": 0
 	},
 	"player_1": {
+		"ai": "multiplay/skirmish/nb_generic.js",
 		"difficulty": "Medium",
 		"name": "Ally",
 		"position": 4,
 		"team": 0
 	},
 	"player_2": {
+		"ai": "multiplay/skirmish/nb_generic.js",
 		"difficulty": "Medium",
 		"name": "Ally",
 		"position": 6,
