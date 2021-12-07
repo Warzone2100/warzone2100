@@ -853,7 +853,7 @@ void readAIs()
 			sstrcat(ai.tip, statistics);
 		}
 
-		if (strcmp(file, "nb_generic.json") == 0)
+		if (strcmp(file, "nexus.json") == 0)
 		{
 			aidata.insert(aidata.begin(), ai);
 		}
@@ -2696,8 +2696,8 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 	NETBroadcastPlayerInfo(player);
 	netPlayersUpdated = true;
 	// Player is fast! Clicked the "Ready" button before we had a chance to ping him/her
-	// change PingTime to some value less than PING_LIMIT, so that multiplayPlayersReady 
-	// doesnt block 
+	// change PingTime to some value less than PING_LIMIT, so that multiplayPlayersReady
+	// doesnt block
 	ingame.PingTimes[player] = ingame.PingTimes[player] == PING_LIMIT ? 1 : ingame.PingTimes[player];
 	return true;
 }
@@ -6056,7 +6056,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		break;
 
 	case CON_CANCEL:
-		
+
 		setHostLaunch(HostLaunch::Normal); // Dont load the autohost file on subsequent hosts
 		performedFirstStart = false; // Reset everything
 		if (!challengeActive)
