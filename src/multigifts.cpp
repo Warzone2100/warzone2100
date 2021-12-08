@@ -234,7 +234,7 @@ void giftRadar(uint8_t from, uint8_t to, bool send)
 	else
 	{
 		hqReward(from, to);
-		if (to == selectedPlayer)
+		if (to == selectedPlayer && loopMissionState == LMS_NORMAL)
 		{
 			CONPRINTF(_("%s Gives You A Visibility Report"), getPlayerName(from));
 		}
