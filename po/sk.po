@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-28 04:17+0000\n"
-"PO-Revision-Date: 2021-12-07 15:34\n"
+"PO-Revision-Date: 2021-12-08 10:35\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -188,7 +188,7 @@ msgstr "Na týchto miestach detekujeme nepriateľské sily."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "Toto je naša šanca poraziť Novú Paradigmu a zničiť ich základňu."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -196,11 +196,11 @@ msgstr "Gratulujeme, veliteľ."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Máme pre teba teraz nové úlohy."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISIA ZÁKLADNE ALFA: Nájdi a získaj artefakty"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
