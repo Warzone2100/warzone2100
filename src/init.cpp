@@ -1523,9 +1523,6 @@ bool stageTwoShutDown()
 
 bool stageThreeInitialise()
 {
-	STRUCTURE *psStr;
-	UDWORD i;
-	DROID *psDroid;
 	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
 
 	debug(LOG_WZ, "== stageThreeInitialise ==");
@@ -1595,37 +1592,6 @@ bool stageThreeInitialise()
 	resizeRadar();
 
 	setAllPauseStates(false);
-
-	/* decide if we have to create teams, ONLY in multiplayer mode!*/
-	if (bMultiPlayer && alliancesSharedVision(game.alliance))
-	{
-		createTeamAlliances();
-
-		/* Update ally vision for pre-placed structures and droids */
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (i != selectedPlayer)
-			{
-				/* Structures */
-				for (psStr = apsStructLists[i]; psStr; psStr = psStr->psNext)
-				{
-					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psStr->player, selectedPlayer))
-					{
-						visTilesUpdate((BASE_OBJECT *)psStr);
-					}
-				}
-
-				/* Droids */
-				for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
-				{
-					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psDroid->player, selectedPlayer))
-					{
-						visTilesUpdate((BASE_OBJECT *)psDroid);
-					}
-				}
-			}
-		}
-	}
 
 	countUpdate();
 

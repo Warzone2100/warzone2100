@@ -1584,7 +1584,10 @@ bool triggerEventAllianceOffer(uint8_t from, uint8_t to)
 //__
 bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 {
-	ASSERT(scriptsReady, "Scripts not initialized yet");
+	if (!scriptsReady)
+	{
+		return false; //silently ignore
+	}
 	for (auto *instance : scripts)
 	{
 		instance->handle_eventAllianceAccepted(from, to);
@@ -1598,7 +1601,10 @@ bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 //__
 bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 {
-	ASSERT(scriptsReady, "Scripts not initialized yet");
+	if (!scriptsReady)
+	{
+		return false; //silently ignore
+	}
 	for (auto *instance : scripts)
 	{
 		instance->handle_eventAllianceBroken(from, to);
