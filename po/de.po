@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-11-28 04:17+0000\n"
-"PO-Revision-Date: 2021-11-29 21:09\n"
+"PO-Revision-Date: 2021-12-09 23:33\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -9626,7 +9626,7 @@ msgstr "Hellstorm"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2728
 msgid "Hero and Special rank units are protected"
-msgstr "Einheiten mit dem Rängen Held und Spezialist sind geschützt"
+msgstr "Einheiten mit den Rängen Held und Spezialist sind geschützt"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
