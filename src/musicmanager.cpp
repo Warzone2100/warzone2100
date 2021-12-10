@@ -623,6 +623,14 @@ public:
 	{
 		AudioCallback = nullptr;
 	}
+	virtual ~W_MusicListHeaderColImage() override
+	{
+		if (pAlbumCoverTexture)
+		{
+			delete pAlbumCoverTexture;
+			pAlbumCoverTexture = nullptr;
+		}
+	}
 
 	bool loadImage(const std::string& imagePath)
 	{
