@@ -68,22 +68,14 @@ function chooseWeaponType(weaps)
 	// "good enough" randomization of electronic/super weapons cause these are hard to say which is best
 	if (weaps.alias === "nex" || weaps.alias === "as")
 	{
-		if (weaps.alias === "as" && !getResearch("R-Wpn-HeavyPlasmaLauncher").done)
+		var rdm = [];
+
+		while (rdm.length !== weaps.weapons.length)
 		{
-			weaponType = [weaps.weapons[0]]; // to account for Cobra's Hard/Insane difficulty cheat behavior with heavy plasma launcher
+			rdm.push(weaps.weapons[random(weaps.weapons.length)]);
 		}
-		else
-		{
-			var rdm = [];
 
-			while (rdm.length !== weaps.weapons.length)
-			{
-
-				rdm.push(weaps.weapons[random(weaps.weapons.length)]);
-			}
-
-			weaponType = rdm;
-		}
+		weaponType = rdm;
 	}
 
 	if (isDefined(weaps.fastFire) && (random(100) < 50))
@@ -188,25 +180,8 @@ function choosePersonalityWeapon(type)
 		weaps = chooseRandomWeapon();
 		weaponList = shuffleWeaponList(chooseWeaponType(weaps));
 
-		//randomly choose an unbalanced and overpowered weapon if on hard or insane difficulty.
-		if ((difficulty >= HARD) && componentAvailable("tracked01") && (random(100) < 2))
-		{
-			if (difficulty >= INSANE && random(100) <= 50)
-			{
-				weaponList = [];
-				skip = true;
-				weaponList.push("MortarEMP");
-			}
-			else if (gameTime > 900000)
-			{
-				weaponList = [];
-				skip = true;
-				weaponList.push("PlasmaHeavy");
-			}
-		}
-
 		// Choose an anti-air weapon instead... checks target player and then total player vtols.
-		if (!skip && ((playerVtolRatio(getMostHarmfulPlayer()) >= 0.06) || (countEnemyVTOL() >= 7)) && random(100) < 20)
+		if (((playerVtolRatio(getMostHarmfulPlayer()) >= 0.06) || (countEnemyVTOL() >= 7)) && random(100) < 20)
 		{
 			weaponList = [];
 			skip = true;
