@@ -195,11 +195,11 @@ function eventResearched(research, structure, player)
 	}
 	else if (research.name === "R-Sys-Resistance-Upgrade02")
 	{
-		hackFailChance = 80;
+		hackFailChance = 70;
 	}
 	else if (research.name === "R-Sys-Resistance-Upgrade03")
 	{
-		hackFailChance = 95;
+		hackFailChance = 85;
 	}
 	else if (research.name === "R-Sys-Resistance-Upgrade04")
 	{
