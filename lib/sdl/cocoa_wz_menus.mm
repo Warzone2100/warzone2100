@@ -147,10 +147,6 @@ bool cocoaSetupWZMenus()
 		}
 		[rootMenu addItem:mainMenuHelpItem];
 
-		// Add "About Warzone" menu item (which opens the standard Cocoa About panel)
-		// to the first menu item's submenu (which should be the "Warzone" menu)
-		NSMenu* firstSubmenu = [[rootMenu itemAtIndex:0] submenu];
-		[firstSubmenu insertItemWithTitle:@"About Warzone" action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@"" atIndex:0];
 	}
 
 	return true;
