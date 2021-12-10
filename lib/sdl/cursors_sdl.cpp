@@ -26,7 +26,8 @@
 #include "lib/ivis_opengl/tex.h"
 #include "src/warzoneconfig.h"
 #include "cursors_sdl.h"
-#include <SDL.h>
+#include <SDL_mouse.h>
+#include <SDL_surface.h>
 
 static CURSOR currentCursor = CURSOR_MAX;
 static CURSOR lastAppliedCursor = CURSOR_MAX;

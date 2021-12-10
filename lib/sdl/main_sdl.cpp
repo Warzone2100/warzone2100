@@ -36,6 +36,14 @@
 #include "src/game.h"
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
+
+#if defined( _MSC_VER )
+	// Silence warning when using MSVC ARM64 compiler
+	//	warning C4121: 'SDL_hid_device_info': alignment of a member was sensitive to packing
+	#pragma warning( push )
+	#pragma warning( disable : 4121 )
+#endif
+
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_clipboard.h>
@@ -43,6 +51,11 @@
 #include <SDL_vulkan.h>
 #endif
 #include <SDL_version.h>
+
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
+
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
 #include <algorithm>
