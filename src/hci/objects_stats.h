@@ -154,10 +154,10 @@ public:
 protected:
 	std::string getTip() override
 	{
-		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
-		costString.replace("%1", WzString::number(getCost()));
+		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), getCost()));
 		auto stats = getStats();
 		WzString tipString = (stats == nullptr) ? "" : getStatsName(stats);
+		tipString.append("\n");
 		tipString.append(costString);
 		return tipString.toUtf8();
 	}
