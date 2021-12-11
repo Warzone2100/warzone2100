@@ -34,17 +34,9 @@ function checkEnemyVtolArea()
 	}
 }
 
-//Play last video sequence and destroy all droids on map.
+//Play last video sequence.
 function playLastVideo()
 {
-	var droids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return (obj.type === DROID && !camIsTransporter(obj));
-	});
-
-	for (var i = 0, l = droids.length; i < l; ++i)
-	{
-		camSafeRemoveObject(droids[i], false);
-	}
 	camPlayVideos({video: "CAM2_OUT", type: CAMP_MSG});
 }
 
