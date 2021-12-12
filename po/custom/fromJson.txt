@@ -551,13 +551,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-_("Armed with Cyborg assault gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 _("Armed with Cyborg Assault Gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+_("Armed with Cyborg assault gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -1094,17 +1094,17 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
-// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
-// ... + 4 refs
-_("Best Targets: Base Structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
+// ... + 4 refs
+_("Best Targets: Base Structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -2221,15 +2221,11 @@ _("Gauss Cannon")
 _("Generates and concentrates bursts of laser energy")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/bonecrusher.json: $.AI.insane_tip
+// data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 // data/mp/multiplay/skirmish/nb_generic.json: $.AI.insane_tip
-// data/mp/multiplay/skirmish/nb_hover.json: $.AI.insane_tip
-// ... + 3 refs
+// ... + 4 refs
 // xgettext:no-c-format
 _("Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks")  
-// TRANSLATORS: 
-// data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
-// xgettext:no-c-format
-_("Gets ~ 100% more power from each oil derrick\nUses the Heavy Plasma Launcher and EMP Mortar\nStarts with defensive structures and oil derricks")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
 // data/mp/multiplay/skirmish/nb_hover.json: $.AI.easy_tip
@@ -4235,15 +4231,15 @@ _("New Systems Structure Available")
 // ... + 6 refs
 _("New Systems Tower Available")  
 // TRANSLATORS: 
-// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-_("New Systems Turret Available For Design")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 // data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 _("New Systems Turret Available for Design")  
+// TRANSLATORS: 
+// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+_("New Systems Turret Available For Design")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[0]
@@ -5569,14 +5565,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
-// TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
@@ -5827,9 +5823,6 @@ _("Uses advanced missile gun technology")
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_EMP_RKT.text[1]
 _("Uses advanced rocket gun technology")  
-// TRANSLATORS: 
-// data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
-_("Uses the Heavy Plasma Launcher")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
 // data/mp/messages/resmessages3.json: $.RES_POWU2.text[1]
