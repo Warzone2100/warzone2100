@@ -137,7 +137,7 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	// admin-only commands
 	sendRoomSystemMessageToSingleReceiver("Admin-only commands: (All slots count from 0)", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "swap <slot-from> <slot-to> - Swap player/slot positions", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player", receiver);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player; (or s<slot> for spectator - ex. s0)", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "team <slot> <team> - Change team for player/slot", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "base <base level> - Change base level (0, 1, 2)", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "alliance <alliance type> - Change alliance setting (0, 1, 2, 3)", receiver);
@@ -281,14 +281,29 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("kick");
 		unsigned int playerPos = MAX_PLAYERS + 1;
+		unsigned int playerIdx = MAX_CONNECTED_PLAYERS + 1;
 		int r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick %u", &playerPos);
-		unsigned int playerIdx = posToNetPlayer(playerPos);
-		if (r != 1 || playerPos > MAX_PLAYERS)
+		if (r == 1)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "kick <slot>");
-			return false;
+			playerIdx = posToNetPlayer(playerPos);
+			if (playerIdx >= MAX_PLAYERS)
+			{
+				sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "kick <slot>");
+				return false;
+			}
 		}
-		if (playerPos == NetPlay.hostPlayer)
+		else
+		{
+			r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick s%u", &playerPos);
+			if (r != 1 || playerPos >= MAX_SPECTATOR_SLOTS)
+			{
+				sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "kick <slot>");
+				return false;
+			}
+			playerIdx = MAX_PLAYER_SLOTS + playerPos;
+			ASSERT_OR_RETURN(false, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid index: %u", playerIdx);
+		}
+		if (playerIdx == NetPlay.hostPlayer)
 		{
 			// Can't kick the host...
 			sendRoomSystemMessage("Can't kick the host.");
@@ -296,7 +311,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		}
 		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game.")))
 		{
-			std::string msg = astringf("Failed to kick player: %u", playerPos);
+			std::string msg = astringf("Failed to kick %s: %u", (playerIdx < MAX_PLAYER_SLOTS) ? "player" : "spectator", playerPos);
 			sendRoomSystemMessage(msg.c_str());
 			return false;
 		}

@@ -6284,7 +6284,8 @@ public:
 			debug(LOG_INFO, "Unable to kick player: %" PRIu32 " - not a connected human player", player);
 			return false;
 		}
-		sendRoomSystemMessage((std::string("Kicking player ")+std::string(NetPlay.players[player].name)).c_str());
+		std::string slotType = (NetPlay.players[player].isSpectator) ? "spectator" : "player";
+		sendRoomSystemMessage((std::string("Kicking ")+slotType+": "+std::string(NetPlay.players[player].name)).c_str());
 		::kickPlayer(player, reason, ERROR_KICKED);
 		resetReadyStatus(false);
 		return true;
