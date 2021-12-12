@@ -137,6 +137,7 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	// admin-only commands
 	sendRoomSystemMessageToSingleReceiver("Admin-only commands: (All slots count from 0)", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "swap <slot-from> <slot-to> - Swap player/slot positions", receiver);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makespec <slot> - Move a player to spectators", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player; (or s<slot> for spectator - ex. s0)", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "team <slot> <team> - Change team for player/slot", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "base <base level> - Change base level (0, 1, 2)", receiver);
@@ -438,6 +439,36 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		}
 
 		sendRoomSystemMessage((std::string("Scavangers set to ")+std::to_string(scavsValue)).c_str());
+	}
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makespec", 8) == 0)
+	{
+		ADMIN_REQUIRED_FOR_COMMAND("makespec");
+		unsigned int playerPos = MAX_PLAYERS + 1;
+		int r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makespec %u", &playerPos);
+		unsigned int playerIdx = posToNetPlayer(playerPos);
+		if (r != 1 || playerPos >= MAX_PLAYERS)
+		{
+			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "makespec <slot>");
+			return false;
+		}
+		if (playerIdx == NetPlay.hostPlayer)
+		{
+			// Can't move the host...
+			sendRoomSystemMessage("Can't move the host.");
+			return false;
+		}
+		if (playerIdx == message.sender)
+		{
+			// Can't move self this way (or it'll prevent us from moving back) - use the UI!
+			sendRoomSystemMessageToSingleReceiver("Use the UI to move yourself.", static_cast<uint32_t>(message.sender));
+			return false;
+		}
+		if (!cmdInterface.movePlayerToSpectators(playerIdx))
+		{
+			std::string msg = astringf("Failed to move player to spectators: %u", playerPos);
+			sendRoomSystemMessage(msg.c_str());
+			return false;
+		}
 	}
 	else
 	{

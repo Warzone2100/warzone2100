@@ -6290,6 +6290,27 @@ public:
 		resetReadyStatus(false);
 		return true;
 	}
+	virtual bool movePlayerToSpectators(uint32_t player) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to move the host");
+		ASSERT_OR_RETURN(false, player < MAX_PLAYER_SLOTS, "Invalid player id: %" PRIu32, player);
+		if (!isHumanPlayer(player))
+		{
+			debug(LOG_INFO, "Unable to move player: %" PRIu32 " - not a connected human player", player);
+			return false;
+		}
+		std::string playerName = getPlayerName(player);
+		if (!NETmovePlayerToSpectatorOnlySlot(player, true))
+		{
+			// failure is already logged by NETmovePlayerToSpectatorOnlySlot
+			return false;
+		}
+		std::string msg = astringf(_("Moving %s to Spectators!"), playerName.c_str());
+		sendRoomSystemMessage(msg.c_str());
+		resetReadyStatus(true);		//reset and send notification to all clients
+		return true;
+	}
 	virtual void quitGame(int exitCode) override
 	{
 		ASSERT_HOST_ONLY(return);
