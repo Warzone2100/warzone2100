@@ -3145,7 +3145,7 @@ std::string getCampaignName()
 	UDWORD campaignNum = getCampaignNumber();
 	std::string campaignName;
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
-	if (list.size() >= campaignNum)
+	if (campaignNum > 0 && campaignNum <= list.size())
 	{
 		campaignName = list[campaignNum - 1].name.toStdString();
 	}
