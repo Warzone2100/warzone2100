@@ -1581,6 +1581,43 @@ static void wzCmdInterfaceShutdown()
 	stdInThreadShutdown();
 }
 
+static void cleanupOldLogFiles()
+{
+	constexpr int MAX_OLD_LOGS = 50;
+	ASSERT_OR_RETURN(, PHYSFS_isInit() != 0, "PhysFS isn't initialized");
+	// safety check to ensure we *never* delete the current log file
+	WzString fullCurrentLogFileName = WzString::fromUtf8(getDefaultLogFilePath("/"));
+	if (fullCurrentLogFileName.startsWith("logs/"))
+	{
+		fullCurrentLogFileName.remove(0, 5);
+	}
+
+	CleanupFileEnumFilterFunctions filterFuncs;
+	constexpr std::chrono::hours MinDeletableAge(24 * 7); // never delete logs that are less than a week old
+	auto currentTime = std::chrono::system_clock::now();
+	filterFuncs.fileNameFilterFunction = [](const char *fileName) -> bool {
+		return filenameEndWithExtension(fileName, ".txt") || filenameEndWithExtension(fileName, ".log");
+	};
+	filterFuncs.fileLastModifiedFilterFunction = [currentTime, MinDeletableAge](time_t fileLastModified) -> bool {
+		return std::chrono::duration_cast<std::chrono::hours>(currentTime - std::chrono::system_clock::from_time_t(fileLastModified)) >= MinDeletableAge;
+	};
+
+	// clean up old log .txt / .log files
+	WZ_PHYSFS_cleanupOldFilesInFolder("logs", filterFuncs, MAX_OLD_LOGS, [fullCurrentLogFileName](const char *fileName){
+		if (fullCurrentLogFileName.compare(fileName) == 0)
+		{
+			// skip
+			return true;
+		}
+		if (PHYSFS_delete(fileName) == 0)
+		{
+			debug(LOG_ERROR, "Failed to delete old log file: %s", fileName);
+			return false;
+		}
+		return true;
+	});
+}
+
 // for backend detection
 extern const char *BACKEND;
 
@@ -1985,6 +2022,7 @@ int realmain(int argc, char *argv[])
 #endif
 	wzCmdInterfaceShutdown();
 	urlRequestShutdown();
+	cleanupOldLogFiles();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
 	for (int i = 0; i < argc; i++)

@@ -124,7 +124,7 @@ bool WZ_PHYSFS_createPlatformPrefDir(const WzString& basePath, const WzString& a
 	return true;
 }
 
-static bool filenameEndWithExtension(const char *filename, const char *extension)
+bool filenameEndWithExtension(const char *filename, const char *extension)
 {
 	if (nullptr == filename)
 	{
@@ -146,8 +146,17 @@ struct compareTimes {
 
 int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, int fileLimit, const std::function<bool (const char *fileName)>& deleteFileFunction)
 {
-	ASSERT_OR_RETURN(-1, path != nullptr, "Null path");
 	ASSERT_OR_RETURN(-1, extension != nullptr, "Null extension");
+	CleanupFileEnumFilterFunctions filterFuncs;
+	filterFuncs.fileNameFilterFunction = [extension](const char *fileName) -> bool {
+		return filenameEndWithExtension(fileName, extension);
+	};
+	return WZ_PHYSFS_cleanupOldFilesInFolder(path, filterFuncs, fileLimit, deleteFileFunction);
+}
+
+int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const CleanupFileEnumFilterFunctions& fileFilterFunctions, int fileLimit, const std::function<bool (const char *fileName)>& deleteFileFunction)
+{
+	ASSERT_OR_RETURN(-1, path != nullptr, "Null path");
 	ASSERT_OR_RETURN(-1, deleteFileFunction != nullptr, "No deleteFileFunction");
 	char **i, **files;
 	files = PHYSFS_enumerateFiles(path);
@@ -155,9 +164,8 @@ int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, i
 	int nfiles = 0;
 	for (i = files; *i != nullptr; ++i)
 	{
-		if (!filenameEndWithExtension(*i, extension))
+		if (fileFilterFunctions.fileNameFilterFunction != nullptr && !fileFilterFunctions.fileNameFilterFunction(*i))
 		{
-			// If it doesn't, move on to the next filename
 			continue;
 		}
 		nfiles++;
@@ -169,21 +177,24 @@ int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, i
 	}
 
 	// too many files
-	debug(LOG_SAVE, "found %i files with ext %s, limit is %i", nfiles, extension, fileLimit);
+	debug(LOG_SAVE, "found %i matching files in %s, limit is %i", nfiles, path, fileLimit);
 
 	// build a sorted list of file + save time
 	std::multiset<SaveTimePair, compareTimes> fileTimes;
 	char savefile[PATH_MAX];
 	for (i = files; *i != nullptr; ++i)
 	{
-		if (!filenameEndWithExtension(*i, extension))
+		if (fileFilterFunctions.fileNameFilterFunction != nullptr && !fileFilterFunctions.fileNameFilterFunction(*i))
 		{
-			// If it doesn't, move on to the next filename
 			continue;
 		}
 		/* Gather save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", path, *i);
 		time_t savetime = WZ_PHYSFS_getLastModTime(savefile);
+		if (fileFilterFunctions.fileLastModifiedFilterFunction != nullptr && !fileFilterFunctions.fileLastModifiedFilterFunction(savetime))
+		{
+			continue;
+		}
 		fileTimes.insert(SaveTimePair{*i, savetime});
 	}
 

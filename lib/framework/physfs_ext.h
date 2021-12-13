@@ -287,4 +287,15 @@ bool WZ_PHYSFS_createPlatformPrefDir(const WzString& basePath, const WzString& a
 // fileLimit: < 0, pass the single oldest matching file to deleteFileFunction
 int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, int fileLimit, const std::function<bool (const char *fileName)>& deleteFileFunction);
 
+struct CleanupFileEnumFilterFunctions
+{
+	// Return `true` to include a file, `false` to exclude it
+	std::function<bool (const char *fileName)> fileNameFilterFunction;
+	std::function<bool (time_t fileLastModified)> fileLastModifiedFilterFunction;
+};
+
+int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const CleanupFileEnumFilterFunctions& fileFilterFunctions, int fileLimit, const std::function<bool (const char *fileName)>& deleteFileFunction);
+
+bool filenameEndWithExtension(const char *filename, const char *extension);
+
 #endif // _physfs_ext_h
