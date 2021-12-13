@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:26\n"
+"PO-Revision-Date: 2021-12-13 04:34\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -4016,7 +4016,7 @@ msgstr "Keresse meg és mentse meg egységeit a lelőtt szállítótól"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr "Mentse meg a civileket a kollektívából, mielőtt túl sok embert elfognak"
+msgstr "Mentse meg a civileket a Kollektívától, mielőtt túl sok embert fognának el"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
@@ -4024,7 +4024,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Küldjön el legalább egy szállítót egy teherautóval, és az időzítő lejártáig élje túl a Kollektíva támadását"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -16203,7 +16203,7 @@ msgstr "Elavult technika mutatása"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Költség: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
