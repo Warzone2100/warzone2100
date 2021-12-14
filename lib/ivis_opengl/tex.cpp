@@ -56,6 +56,7 @@ struct iTexPage
 {
 	std::string name;
 	gfx_api::texture* id = nullptr;
+	gfx_api::texture_type textureType = gfx_api::texture_type::user_interface;
 
 	iTexPage() = default;
 
@@ -109,39 +110,38 @@ void pie_AssignTexture(size_t page, gfx_api::texture* texture)
 	_TEX_PAGE[page].id = texture;
 }
 
-static size_t pie_AddTexPage_Impl(iV_Image *s, const char *filename, bool gameTexture, size_t page)
+static size_t pie_AddTexPage_Impl(iV_Image *s, const char *filename, gfx_api::texture_type textureType, size_t page)
 {
 	ASSERT(s && filename, "Bad input parameter");
 
 	_NAME_TO_TEX_PAGE_MAP[filename] = page;
 	debug(LOG_TEXTURE, "%s page=%zu", filename, page);
 
-	if (gameTexture) // this is a game texture, use texture compression
+	if (textureType != gfx_api::texture_type::user_interface) // this is a game texture, use texture compression (if available / configured) // TODO:
 	{
-		gfx_api::pixel_format format = iV_getPixelFormat(s);
+		gfx_api::pixel_format sourceFormat = iV_getPixelFormat(s);
 		if (_TEX_PAGE[page].id)
 			delete _TEX_PAGE[page].id;
-		size_t mip_count = static_cast<size_t>(floor(log(std::max(s->width, s->height)))) + 1;
-		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(mip_count, s->width, s->height, format, filename);
-		pie_Texture(page).upload_and_generate_mipmaps(0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
+		size_t mip_count = static_cast<size_t>(floor(log(std::max(s->width(), s->height())))) + 1;
+		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(mip_count, s->width(), s->height(), sourceFormat, filename);
+		pie_Texture(page).upload_and_generate_mipmaps(0u, 0u, s->width(), s->height(), iV_getPixelFormat(s), s->bmp());
 	}
-	else	// this is an interface texture, do not use compression
+	else	// this is an interface texture, do not use compression or mipmaps
 	{
 		if (_TEX_PAGE[page].id)
 			delete _TEX_PAGE[page].id;
-		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(1, s->width, s->height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, filename);
-		pie_Texture(page).upload(0u, 0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
+		_TEX_PAGE[page].id = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *s, filename);
+		pie_Texture(page).upload(0u, 0u, 0u, *s);
 	}
 
 	// it is uploaded, we do not need it anymore
-	free(s->bmp);
-	s->bmp = nullptr;
+	s->clear();
 
 	/* Send back the texpage number so we can store it in the IMD */
 	return page;
 }
 
-size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture)
+size_t pie_AddTexPage(iV_Image *s, const char *filename, gfx_api::texture_type textureType)
 {
 	ASSERT(s && filename, "Bad input parameter");
 	ASSERT(_NAME_TO_TEX_PAGE_MAP.count(filename) == 0, "tex page %s already exists", filename);
@@ -150,10 +150,10 @@ size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture)
 	tex.name = filename;
 	_TEX_PAGE.push_back(std::move(tex));
 
-	return pie_AddTexPage_Impl(s, filename, gameTexture, page);
+	return pie_AddTexPage_Impl(s, filename, textureType, page);
 }
 
-size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, size_t page)
+size_t pie_AddTexPage(iV_Image *s, const char *filename, gfx_api::texture_type textureType, size_t page)
 {
 	ASSERT(s && filename, "Bad input parameter");
 
@@ -161,7 +161,7 @@ size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, size_
 	_NAME_TO_TEX_PAGE_MAP.erase(_TEX_PAGE[page].name);
 	_TEX_PAGE[page].name = filename;
 
-	return pie_AddTexPage_Impl(s, filename, gameTexture, page);
+	return pie_AddTexPage_Impl(s, filename, textureType, page);
 }
 
 /*!
@@ -201,38 +201,10 @@ std::string pie_MakeTexPageTCMaskName(const std::string& filename)
 	return result;
 }
 
+// TODO: Remove this wrapper
 bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
 {
-	if ((maxWidth <= 0 || s->width <= maxWidth) && (maxHeight <= 0 || s->height <= maxHeight))
-	{
-		return false;
-	}
-
-	double scalingRatio;
-	double widthRatio = (double)maxWidth / (double)s->width;
-	double heightRatio = (double)maxHeight / (double)s->height;
-	if (maxWidth > 0 && maxHeight > 0)
-	{
-		scalingRatio = std::min<double>(widthRatio, heightRatio);
-	}
-	else
-	{
-		scalingRatio = (maxWidth > 0) ? widthRatio : heightRatio;
-	}
-
-	int output_w = static_cast<int>(s->width * scalingRatio);
-	int output_h = static_cast<int>(s->height * scalingRatio);
-
-	unsigned char *output_pixels = (unsigned char *)malloc(static_cast<size_t>(output_w) * static_cast<size_t>(output_h) * s->depth);
-	stbir_resize_uint8(s->bmp, s->width, s->height, 0,
-					   output_pixels, output_w, output_h, 0,
-					   s->depth);
-	free(s->bmp);
-	s->width = output_w;
-	s->height = output_h;
-	s->bmp = output_pixels;
-
-	return true;
+	return s->scale_image_max_size(maxWidth, maxHeight);
 }
 
 /** Retrieve the texture number for a given texture resource.
@@ -248,7 +220,7 @@ bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void (iV_Image&)> transformImageData, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+optional<size_t> iV_GetTransformTexture(const char *filename, gfx_api::texture_type textureType, std::function<void (iV_Image&)> transformImageData, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(filename != nullptr, "filename must not be null");
 	iV_Image sSprite;
@@ -274,14 +246,14 @@ optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void
 	{
 		transformImageData(sSprite);
 	}
-	size_t page = pie_AddTexPage(&sSprite, path.c_str(), compression);
+	size_t page = pie_AddTexPage(&sSprite, path.c_str(), textureType);
 	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
 	return optional<size_t>(page);
 }
 
-optional<size_t> iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
-	return iV_GetTransformTexture(filename, nullptr, compression, maxWidth, maxHeight);
+	return iV_GetTransformTexture(filename, textureType, nullptr, maxWidth, maxHeight);
 }
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile)
@@ -300,9 +272,10 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 	{
 		gfx_api::context::get().debugStringMarker("Replacing texture");
 		size_t page = it->second;
+		gfx_api::texture_type exitingTextureType = _TEX_PAGE[page].textureType;
 		debug(LOG_TEXTURE, "Replacing texture %s with %s from index %zu (tex id %u)", it->first.c_str(), newfile.toUtf8().c_str(), page, _TEX_PAGE[page].id->id());
 		tmpname = pie_MakeTexPageName(newfile.toUtf8());
-		pie_AddTexPage(&image, tmpname.c_str(), true, page);
+		pie_AddTexPage(&image, tmpname.c_str(), exitingTextureType, page);
 		iV_unloadImage(&image);
 		return true;
 	}
@@ -328,11 +301,7 @@ void iV_unloadImage(iV_Image *image)
 {
 	if (image)
 	{
-		if (image->bmp)
-		{
-			free(image->bmp);
-			image->bmp = nullptr;
-		}
+		image->clear();
 	}
 	else
 	{
@@ -342,16 +311,18 @@ void iV_unloadImage(iV_Image *image)
 
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image)
 {
-	switch (image->depth)
+	switch (image->channels())
 	{
 	case 1:
 		return gfx_api::pixel_format::FORMAT_R8_UNORM;
+	case 2:
+		return gfx_api::pixel_format::FORMAT_RG8_UNORM;
 	case 3:
 		return gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
 	case 4:
 		return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	default:
-		debug(LOG_FATAL, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
+		debug(LOG_FATAL, "iV_getPixelFormat: Unsupported image channels: %u", image->channels());
 		return gfx_api::pixel_format::invalid;
 	}
 }

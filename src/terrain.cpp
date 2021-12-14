@@ -104,7 +104,7 @@ static unsigned int lightmapLastUpdate;
 static size_t lightmapWidth;
 static size_t lightmapHeight;
 /// Lightmap image
-static std::unique_ptr<gfx_api::gfxUByte[]> lightmapPixmap;
+static std::unique_ptr<iV_Image> lightmapPixmap;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
 
@@ -600,7 +600,7 @@ void loadTerrainTextures()
 	for (int layer = 0; layer < numGroundTypes; layer++)
 	{
 		// pre-load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
+		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", psGroundTypes[layer].textureName);
 	}
 }
@@ -960,8 +960,8 @@ bool initTerrain()
 	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
 	// Prepare the lightmap pixmap and texture
-	lightmapPixmap = std::unique_ptr<gfx_api::gfxUByte[]> (new gfx_api::gfxUByte[lightmapWidth * lightmapHeight * 3]());
-	if (lightmapPixmap == nullptr)
+	lightmapPixmap = std::unique_ptr<iV_Image>(new iV_Image());
+	if (lightmapPixmap == nullptr || !lightmapPixmap->allocate(lightmapWidth, lightmapHeight, 3, true))
 	{
 		debug(LOG_FATAL, "Out of memory!");
 		abort();
@@ -969,9 +969,9 @@ bool initTerrain()
 	}
 	if (lightmap_texture)
 		delete lightmap_texture;
-	lightmap_texture = gfx_api::context::get().create_texture(1, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8);
+	lightmap_texture = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *lightmapPixmap, "mem::lightmap");
 
-	lightmap_texture->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
+	lightmap_texture->upload(0, 0, 0, *lightmapPixmap);
 	terrainInitialised = true;
 
 	return true;
@@ -1021,6 +1021,7 @@ void shutdownTerrain()
 
 static void updateLightMap()
 {
+	unsigned char* lightMapWritePtr = lightmapPixmap->bmp_w();
 	for (int j = 0; j < mapHeight; ++j)
 	{
 		for (int i = 0; i < mapWidth; ++i)
@@ -1038,9 +1039,9 @@ static void updateLightMap()
 				colour.byte.r = MAX(m, 255 - m);
 			}
 
-			lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
-			lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
-			lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = colour.byte.b;
+			lightMapWritePtr[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
+			lightMapWritePtr[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
+			lightMapWritePtr[(i + j * lightmapWidth) * 3 + 2] = colour.byte.b;
 
 			if (!pie_GetFogStatus())
 			{
@@ -1073,15 +1074,15 @@ static void updateLightMap()
 				darken = (distToEdge) / 2.0f;
 				if (darken <= 0)
 				{
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = 0;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = 0;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 0] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 1] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 2] = 0;
 				}
 				else if (darken < 1)
 				{
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] *= darken;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] *= darken;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 0] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 1] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 2] *= darken;
 				}
 			}
 		}
@@ -1179,7 +1180,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 		// load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
+		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", psGroundTypes[layer].textureName);
 		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_texture);
 
@@ -1274,7 +1275,7 @@ void drawTerrain(const glm::mat4 &mvp)
 		lightmapLastUpdate = realTime;
 		updateLightMap();
 
-		lightmap_texture->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
+		lightmap_texture->upload(0, 0, 0, *lightmapPixmap);
 	}
 
 	///////////////////////////////////
@@ -1317,8 +1318,8 @@ void drawWater(const glm::mat4 &viewMatrix)
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
-	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png", true, maxTerrainTextureSize, maxTerrainTextureSize);
-	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", true, maxTerrainTextureSize, maxTerrainTextureSize);
+	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
+	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
 	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()));

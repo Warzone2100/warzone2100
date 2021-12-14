@@ -89,6 +89,7 @@ public:
 	/// Allocate space on the GPU for texture of given parameters. If image is non-NULL,
 	/// then that memory buffer is uploaded to the GPU.
 	void makeTexture(size_t width, size_t height, const gfx_api::pixel_format& format = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, const void *image = nullptr);
+	void makeTexture(const iV_Image* image /*= nullptr*/, const std::string& filename);
 
 	/// Upload given memory buffer to already allocated texture space on the GPU
 	void updateTexture(const void *image, size_t width = 0, size_t height = 0);

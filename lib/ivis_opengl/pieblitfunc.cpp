@@ -88,7 +88,7 @@ void GFX::loadTexture(const char *filename, int maxWidth /*= -1*/, int maxHeight
 	if (iV_loadImage_PNG(filename, &image))
 	{
 		scaleImageMaxSize(&image, maxWidth, maxHeight);
-		makeTexture(image.width, image.height, iV_getPixelFormat(&image), image.bmp);
+		makeTexture(&image, filename);
 		iV_unloadImage(&image);
 	}
 }
@@ -106,6 +106,30 @@ void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& 
 	}
 	mWidth = width;
 	mHeight = height;
+	mFormat = format;
+}
+
+void GFX::makeTexture(const iV_Image* image /*= nullptr*/, const std::string& filename)
+{
+	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
+	if (mTexture)
+		delete mTexture;
+	if (!image)
+	{
+		mWidth = 0;
+		mHeight = 0;
+		mFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+		return;
+	}
+	auto format = image->pixel_format();
+	if (image->width() > 0 && image->height() > 0)
+	{
+		mTexture = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *image, filename);
+		if (image->size_in_bytes() > 0)
+			mTexture->upload(0u, 0u, 0u, *image);
+	}
+	mWidth = image->width();
+	mHeight = image->height();
 	mFormat = format;
 }
 

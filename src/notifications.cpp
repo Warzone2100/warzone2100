@@ -803,7 +803,7 @@ gfx_api::texture* WZ_Notification_Image::loadImageToTexture() const
 		// empty or unhandled case
 		return nullptr;
 	}
-	pTexture = makeTexture(ivImage.width, ivImage.height, iV_getPixelFormat(&ivImage), ivImage.bmp);
+	pTexture = makeTexture(ivImage.width(), ivImage.height(), iV_getPixelFormat(&ivImage), ivImage.bmp());
 	iV_unloadImage(&ivImage);
 	return pTexture;
 }

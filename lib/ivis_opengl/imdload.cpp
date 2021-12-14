@@ -1248,7 +1248,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	// load texture page if specified
 	if (bTextured)
 	{
-		optional<size_t> texpage = iV_GetTexture(texfile);
+		optional<size_t> texpage = iV_GetTexture(texfile, gfx_api::texture_type::game_texture);
 		optional<size_t> normalpage;
 		optional<size_t> specpage;
 
@@ -1257,41 +1257,16 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (normalfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, filename.toUtf8().c_str());
-			normalpage = iV_GetTexture(normalfile, false);
+			normalpage = iV_GetTexture(normalfile, gfx_api::texture_type::normal_map);
 			ASSERT_OR_RETURN(, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), normalfile);
 		}
 
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, filename.toUtf8().c_str());
-			specpage = iV_GetTransformTexture(specfile, [filename, specfile](iV_Image& sSprite){
-				if (sSprite.depth == 1) { return; }
-				// Otherwise, expecting 3 or 4-channel (RGB/RGBA)
-				ASSERT_OR_RETURN(, sSprite.depth == 3 || sSprite.depth == 4, "(%s): Does not have 1, 3 or 4 channels", specfile);
-				auto originalBmpData = sSprite.bmp;
-				const size_t numPixels = static_cast<size_t>(sSprite.height) * static_cast<size_t>(sSprite.width);
-				sSprite.bmp = (unsigned char *)malloc(numPixels);
-				for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
-				{
-					uint32_t red = originalBmpData[(pixelIdx * sSprite.depth)];
-					uint32_t green = originalBmpData[(pixelIdx * sSprite.depth) + 1];
-					uint32_t blue = originalBmpData[(pixelIdx * sSprite.depth) + 2];
-					if (red == green && red == blue)
-					{
-						// all channels are the same - just use the first channel
-						sSprite.bmp[pixelIdx] = static_cast<unsigned char>(red);
-					}
-					else
-					{
-						// quick approximation of a weighted RGB -> Luma method
-						// (R+R+B+G+G+G)/6
-						uint32_t lum = (red+red+blue+green+green+green) / 6;
-						sSprite.bmp[pixelIdx] = static_cast<unsigned char>(std::min<uint32_t>(lum, 255));
-					}
-				}
-				sSprite.depth = 1;
-				// free the original bitmap data
-				free(originalBmpData);
+			specpage = iV_GetTransformTexture(specfile, gfx_api::texture_type::specular_map, [filename, specfile](iV_Image& sSprite){
+				bool result = sSprite.convert_to_luma();
+				ASSERT_OR_RETURN(, result, "(%s): Failed to convert specular map", specfile);
 			});
 			ASSERT_OR_RETURN(, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
 		}
@@ -1311,19 +1286,9 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		{
 			std::string tcmask_name = pie_MakeTexPageTCMaskName(texfile);
 			tcmask_name += ".png";
-			optional<size_t> texpage_mask = iV_GetTransformTexture(tcmask_name.c_str(), [filename, tcmask_name](iV_Image& sSprite){
-				ASSERT_OR_RETURN(, sSprite.depth == 4, "(%s) tcmask png (%s) does not have 4 channels, as expected", filename.toUtf8().c_str(), tcmask_name.c_str());
-				auto originalBmpData = sSprite.bmp;
-				const size_t numPixels = static_cast<size_t>(sSprite.height) * static_cast<size_t>(sSprite.width);
-				// copy just the alpha channel over
-				sSprite.bmp = (unsigned char *)malloc(numPixels);
-				for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
-				{
-					sSprite.bmp[pixelIdx] = originalBmpData[(pixelIdx * 4) + 3];
-				}
-				sSprite.depth = 1;
-				// free the original bitmap data
-				free(originalBmpData);
+			optional<size_t> texpage_mask = iV_GetTransformTexture(tcmask_name.c_str(), gfx_api::texture_type::alpha_mask, [filename, tcmask_name](iV_Image& sSprite){
+				ASSERT_OR_RETURN(, sSprite.channels() == 4, "(%s) tcmask png (%s) does not have 4 channels, as expected", filename.toUtf8().c_str(), tcmask_name.c_str());
+				sSprite.convert_to_single_channel(3); // alpha channel
 			});
 
 			ASSERT_OR_RETURN(, texpage_mask.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());

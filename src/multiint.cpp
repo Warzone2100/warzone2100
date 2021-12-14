@@ -519,7 +519,13 @@ static MAP_TILESET guessMapTilesetType(LEVEL_DATASET *psLevel)
 static void loadEmptyMapPreview()
 {
 	// No map is available to preview, so improvise.
-	char *imageData = (char *)malloc(BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3);
+	iV_Image bckImage;
+	if (!bckImage.allocate(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, 3, true))
+	{
+		debug(LOG_ERROR, "Failed to allocate memory for map preview");
+		return;
+	}
+	unsigned char *imageData = bckImage.bmp_w();
 	memset(imageData, 0, BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
 	int const ex = 100, ey = 100, bx = 5, by = 8;
 	for (unsigned n = 0; n < 125; ++n)
@@ -543,8 +549,8 @@ static void loadEmptyMapPreview()
 
 	screen_enableMapPreview(ex, ey, playerpos);
 
-	screen_Upload(imageData);
-	free(imageData);
+	screen_Upload(&bckImage);
+	bckImage.clear();
 }
 
 static inline WzMap::MapPreviewColor PIELIGHT_to_MapPreviewColor(PIELIGHT color)
@@ -701,8 +707,14 @@ void loadMapPreview(bool hideInterface)
 	}
 
 	// for the backdrop, we currently need to copy this to the top-left of an image that's BACKDROP_HACK_WIDTH x BACKDROP_HACK_HEIGHT
-	size_t backdropSize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
-	char *backdropData = (char *)malloc(backdropSize * 3);		// used for the texture
+	iV_Image bckImage;
+	if (!bckImage.allocate(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, 3, true))
+	{
+		debug(LOG_FATAL, "Failed to allocate memory for map preview");
+		abort();	// should be a fatal error ?
+		return;
+	}
+	unsigned char *backdropData = bckImage.bmp_w();
 	if (!backdropData)
 	{
 		debug(LOG_FATAL, "Out of memory for texture!");
@@ -711,11 +723,11 @@ void loadMapPreview(bool hideInterface)
 	}
 	ASSERT(mapPreviewResult->width <= BACKDROP_HACK_WIDTH, "mapData width somehow exceeds backdrop width?");
 	memset(backdropData, 0, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
-	char *imageData = reinterpret_cast<char*>(mapPreviewResult->imageData.data());
+	unsigned char *imageData = mapPreviewResult->imageData.data();
 	for (int y = 0; y < mapPreviewResult->height; ++y)
 	{
-		char *pSrc = imageData + (3 * (y * mapPreviewResult->width));
-		char *pDst = backdropData + (3 * (y * BACKDROP_HACK_WIDTH));
+		unsigned char *pSrc = imageData + (3 * (y * mapPreviewResult->width));
+		unsigned char *pDst = backdropData + (3 * (y * BACKDROP_HACK_WIDTH));
 		memcpy(pDst, pSrc, std::min<size_t>(mapPreviewResult->width, BACKDROP_HACK_WIDTH) * 3);
 	}
 
@@ -733,9 +745,8 @@ void loadMapPreview(bool hideInterface)
 
 	screen_enableMapPreview(mapPreviewResult->width, mapPreviewResult->height, playerpos);
 
-	screen_Upload(backdropData);
-
-	free(backdropData);
+	screen_Upload(&bckImage);
+	bckImage.clear();
 
 	if (hideInterface)
 	{

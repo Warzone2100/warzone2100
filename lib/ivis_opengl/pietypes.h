@@ -31,6 +31,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
+#include "gfx_api_formats_def.h"
 
 /***************************************************************************/
 /*
@@ -116,10 +117,81 @@ enum SHADER_MODE
 //
 //*************************************************************************
 
-struct iV_Image
+// An uncompressed bitmap (R, RG, RGB, or RGBA)
+// Not thread-safe
+class iV_Image
 {
-	unsigned int width, height, depth;
-	unsigned char *bmp;
+private:
+	unsigned int m_width = 0, m_height = 0, m_channels = 0;
+	unsigned char *m_bmp = nullptr;
+
+public:
+	unsigned int width() const { return m_width; }
+	unsigned int height() const { return m_height; }
+	unsigned int channels() const { return m_channels; }
+	unsigned int depth() const { return m_channels * 8; }
+
+public:
+	static gfx_api::pixel_format pixel_format_for_channels(unsigned int channels);
+
+public:
+	// Allocate a new iV_Image buffer
+	bool allocate(unsigned int width = 0, unsigned int height = 0, unsigned int channels = 0, bool zeroMemory = false);
+
+	// Duplicate an iV_Image (makes a deep copy)
+	bool duplicate(const iV_Image& other);
+
+	// Clear (free) the image contents / data
+	void clear();
+
+	// Get a pointer to the bitmap data that can be read
+	const unsigned char* bmp() const;
+
+	// Get a pointer to the bitmap data that can be written to
+	unsigned char* bmp_w();
+
+public:
+	// Get bmp size (in bytes)
+	inline size_t size_in_bytes() const
+	{
+		if (!bmp()) { return 0; }
+		return static_cast<size_t>(m_width) * static_cast<size_t>(m_height) * static_cast<size_t>(m_channels);
+	}
+
+	// Get the current bitmap pixel format
+	gfx_api::pixel_format pixel_format() const;
+
+	// Convert and N-component bitmap to an N+1-component bitmap (as long as N < 4)
+	// If the channel that's added is the 4th (alpha) channel, it's set to all opaque
+	bool expand_channels_towards_rgba();
+
+	// Convert any 1, 2, or 3 component bitmap to 4-component (RGBA)
+	bool convert_to_rgba();
+
+	// Convert a 2 (or more) component image to a 4-component (RGBA) image where the G channel is stored in the last component (A)
+	bool convert_rg_to_ra_rgba();
+
+	// Converts a 3 or 4 component (RGB/RGBA) image to a 1-component (luma)
+	bool convert_to_luma();
+
+	// Converts an image to a single-component image of the selected component/channel
+	bool convert_to_single_channel(unsigned int channel = 0);
+
+	bool resize(int newWidth, int newHeight);
+	bool scale_image_max_size(int maxWidth, int maxHeight);
+
+public:
+	// iV_Image is non-copyable
+	iV_Image(const iV_Image&) = delete;
+	iV_Image& operator= (const iV_Image&) = delete;
+
+	// iV_Image is movable
+	iV_Image(iV_Image&& other);
+	iV_Image& operator=(iV_Image&& other);
+
+public:
+	iV_Image() = default;
+	~iV_Image();
 };
 
 struct PIELIGHTBYTES
