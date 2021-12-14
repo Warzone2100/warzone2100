@@ -3491,6 +3491,7 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	if (psStruct->type != OBJ_STRUCTURE) {
 		ASSERT(false, "%c Broken psStruct->type %u!", ch, psStruct->type);
 		syncDebug("Broken psStruct->type %u!", psStruct->type);
+		return;
 	}
 	int ref = 0;
 	int refChr = ' ';
