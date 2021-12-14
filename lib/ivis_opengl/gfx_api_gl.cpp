@@ -1892,14 +1892,13 @@ bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> c
 	}
 
 	auto image = std::unique_ptr<iV_Image>(new iV_Image());
-	image->width = m_viewport[2];
-	image->height = m_viewport[3];
-	image->depth = 8;
-	image->bmp = (unsigned char *)malloc((size_t)channelsPerPixel * (size_t)image->width * (size_t)image->height);
-	ASSERT_OR_RETURN(false, image->bmp != nullptr, "Failed to allocate buffer");
+	auto width = m_viewport[2];
+	auto height = m_viewport[3];
+	bool allocateResult = image->allocate(width, height, channelsPerPixel); // RGB
+	ASSERT_OR_RETURN(false, allocateResult, "Failed to allocate buffer");
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(0, 0, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->bmp);
+	glReadPixels(0, 0, image->width(), image->height(), GL_RGB, GL_UNSIGNED_BYTE, image->bmp_w());
 
 	callback(std::move(image));
 

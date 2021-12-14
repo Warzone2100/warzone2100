@@ -187,23 +187,29 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
 
-	image->width = png_get_image_width(png_ptr, info_ptr);
-	image->height = png_get_image_height(png_ptr, info_ptr);
-	image->depth = png_get_channels(png_ptr, info_ptr);
-	image->bmp = (unsigned char *)malloc(image->height * png_get_rowbytes(png_ptr, info_ptr));
+	png_uint_32 width = png_get_image_width(png_ptr, info_ptr);
+	png_uint_32 height = png_get_image_height(png_ptr, info_ptr);
+	png_byte depth = png_get_channels(png_ptr, info_ptr);
+	if (png_get_rowbytes(png_ptr, info_ptr) != (width * depth))
+	{
+		// something is wrong - unexpected row size
+		png_error(png_ptr, "unexpected row bytes");
+	}
+	image->allocate(width, height, depth);
 
 	{
 		unsigned int i = 0;
 		png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+		unsigned char* bmp_write_ptr = image->bmp_w();
 		for (i = 0; i < png_get_image_height(png_ptr, info_ptr); i++)
 		{
-			memcpy(image->bmp + (png_get_rowbytes(png_ptr, info_ptr) * i), row_pointers[i], png_get_rowbytes(png_ptr, info_ptr));
+			memcpy(bmp_write_ptr + (png_get_rowbytes(png_ptr, info_ptr) * i), row_pointers[i], png_get_rowbytes(png_ptr, info_ptr));
 		}
 	}
 
 	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 
-	ASSERT_OR_RETURN(false, image->depth > 3, "Unsupported image depth (%d) found.  We only support 3 (RGB) or 4 (ARGB)", image->depth);
+	ASSERT_OR_RETURN(false, image->channels() > 3, "Unsupported image channels (%d) found.  We only support 3 (RGB) or 4 (ARGB)", image->channels());
 
 	return true;
 }
@@ -323,27 +329,33 @@ IMGSaveError iV_loadImage_PNG(const std::vector<unsigned char>& memoryBuffer, iV
 
 	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
 
-	image->width = png_get_image_width(png_ptr, info_ptr);
-	image->height = png_get_image_height(png_ptr, info_ptr);
-	image->depth = png_get_channels(png_ptr, info_ptr);
-	image->bmp = (unsigned char *)malloc(image->height * png_get_rowbytes(png_ptr, info_ptr));
+	png_uint_32 width = png_get_image_width(png_ptr, info_ptr);
+	png_uint_32 height = png_get_image_height(png_ptr, info_ptr);
+	png_byte depth = png_get_channels(png_ptr, info_ptr);
+	if (png_get_rowbytes(png_ptr, info_ptr) != (width * depth))
+	{
+		// something is wrong - unexpected row size
+		png_error(png_ptr, "unexpected row bytes");
+	}
+	image->allocate(width, height, depth);
 
 	{
 		unsigned int i = 0;
 		png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
+		unsigned char* bmp_write_ptr = image->bmp_w();
 		for (i = 0; i < png_get_image_height(png_ptr, info_ptr); i++)
 		{
-			memcpy(image->bmp + (png_get_rowbytes(png_ptr, info_ptr) * i), row_pointers[i], png_get_rowbytes(png_ptr, info_ptr));
+			memcpy(bmp_write_ptr + (png_get_rowbytes(png_ptr, info_ptr) * i), row_pointers[i], png_get_rowbytes(png_ptr, info_ptr));
 		}
 	}
 
 	PNGReadCleanup(&info_ptr, &png_ptr, nullptr);
 
-	if (image->depth < 3 || image->depth > 4)
+	if (image->channels() < 3 || image->channels() > 4)
 	{
 		IMGSaveError error;
-		error.text = "Unsupported image depth (";
-		error.text += std::to_string(image->depth);
+		error.text = "Unsupported image channels (";
+		error.text += std::to_string(image->channels());
 		error.text += ") found.  We only support 3 (RGB) or 4 (ARGB)";
 		return error;
 	}
@@ -361,7 +373,7 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 	PHYSFS_file *fileHandle;
 
 	scanlines = nullptr;
-	ASSERT(image->depth != 0, "Bad depth");
+	ASSERT(image->channels() != 0, "Bad channels");
 
 	fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == nullptr)
@@ -404,9 +416,9 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 		{
 			channelsPerPixel = 1;
 		}
-		row_stride = image->width * channelsPerPixel * image->depth / 8;
+		row_stride = image->width() * channelsPerPixel;
 
-		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * image->height);
+		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * image->height());
 		if (scanlines == nullptr)
 		{
 			PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
@@ -441,15 +453,16 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 		// so to spare some CPU cycles we comment this out.
 		// png_set_compression_level(png_ptr, Z_DEFAULT_COMPRESSION);
 
-		png_set_IHDR(png_ptr, info_ptr, image->width, image->height, image->depth,
+		png_set_IHDR(png_ptr, info_ptr, image->width(), image->height(), 8,
 		             color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
 		// Create an array of scanlines
-		for (currentRow = 0; currentRow < image->height; ++currentRow)
+		unsigned char* bitmap_ptr = const_cast<unsigned char*>(image->bmp());
+		for (currentRow = 0; currentRow < image->height(); ++currentRow)
 		{
 			// We're filling the scanline from the bottom up here,
 			// otherwise we'd have a vertically mirrored image.
-			scanlines[currentRow] = &image->bmp[row_stride * (image->height - currentRow - 1)];
+			scanlines[currentRow] = &bitmap_ptr[row_stride * (image->height() - currentRow - 1)];
 		}
 
 		png_set_rows(png_ptr, info_ptr, (png_bytepp)scanlines);
@@ -483,7 +496,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	unsigned char *jpeg = nullptr;
 	char newfilename[PATH_MAX];
 	unsigned int currentRow;
-	const unsigned int row_stride = image->width * 3; // 3 bytes per pixel
+	const unsigned int row_stride = image->width() * 3; // 3 bytes per pixel
 	PHYSFS_file *fileHandle;
 	unsigned char *jpeg_end;
 
@@ -496,7 +509,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 		return;
 	}
 
-	buffer = (unsigned char *)malloc(sizeof(const char *) * image->height * image->width); // Suspect it should be sizeof(unsigned char)*3 == 3 here, not sizeof(const char *) == 8.
+	buffer = (unsigned char *)malloc(sizeof(const char *) * image->height() * image->width()); // Suspect it should be sizeof(unsigned char)*3 == 3 here, not sizeof(const char *) == 8.
 	if (buffer == nullptr)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
@@ -504,14 +517,15 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	}
 
 	// Create an array of scanlines
-	for (currentRow = 0; currentRow < image->height; ++currentRow)
+	const unsigned char* bitmap_ptr = image->bmp();
+	for (currentRow = 0; currentRow < image->height(); ++currentRow)
 	{
 		// We're filling the scanline from the bottom up here,
 		// otherwise we'd have a vertically mirrored image.
-		memcpy(buffer + row_stride * currentRow, &image->bmp[row_stride * (image->height - currentRow - 1)], row_stride);
+		memcpy(buffer + row_stride * currentRow, &bitmap_ptr[row_stride * (image->height() - currentRow - 1)], row_stride);
 	}
 
-	jpeg = (unsigned char *)malloc(sizeof(const char *) * image->height * image->width); // Suspect it should be something else here, but sizeof(const char *) == 8 is hopefully big enough...
+	jpeg = (unsigned char *)malloc(sizeof(const char *) * image->height() * image->width()); // Suspect it should be something else here, but sizeof(const char *) == 8 is hopefully big enough...
 	if (jpeg == nullptr)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
@@ -519,7 +533,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 		return;
 	}
 
-	jpeg_end = jpeg_encode_image(buffer, jpeg, 1, JPEG_FORMAT_RGB, image->width, image->height);
+	jpeg_end = jpeg_encode_image(buffer, jpeg, 1, JPEG_FORMAT_RGB, image->width(), image->height());
 	WZ_PHYSFS_writeBytes(fileHandle, jpeg, jpeg_end - jpeg);
 
 	free(buffer);

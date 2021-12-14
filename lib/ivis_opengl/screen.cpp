@@ -389,15 +389,15 @@ void screen_GenerateCoordinatesAndVBOs()
 	backdropGfx->buffers(4, vertices, texcoords);
 }
 
-void screen_Upload(const char *newBackDropBmp)
+void screen_Upload(const iV_Image* newBackdropImage)
 {
 	backdropIsMapPreview = false;
 
-	if (newBackDropBmp) // preview
+	if (newBackdropImage) // preview
 	{
 		// Slight hack to display maps previews in background.
 		// Bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, newBackDropBmp);
+		backdropGfx->makeTexture(newBackdropImage, "mem::generated_map_preview");
 		backdropIsMapPreview = true;
 	}
 
@@ -529,9 +529,9 @@ void screenDoDumpToDiskIfRequired()
 				std::move(image),
 				[](const ScreenshotSaveRequest& request)
 				{
-					if (request.image->bmp)
+					if (request.image)
 					{
-						free(request.image->bmp);
+						request.image->clear();
 					}
 				}
 			);

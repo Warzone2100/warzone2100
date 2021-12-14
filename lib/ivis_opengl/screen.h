@@ -36,6 +36,8 @@
 #include "lib/framework/types.h"
 #include "lib/framework/vector.h"
 
+class iV_Image;
+
 /* ------------------------------------------------------------------------------------------- */
 
 
@@ -50,7 +52,7 @@ void screen_StopBackDrop();
 void screen_RestartBackDrop();
 bool screen_GetBackDrop();
 void screen_FlipIfBackDropTransition();
-void screen_Upload(const char *newBackDropBmp);
+void screen_Upload(const iV_Image* newBackdropImage);
 void screen_Display();
 
 /* screendump */

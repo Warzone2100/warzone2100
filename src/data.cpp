@@ -502,7 +502,7 @@ static void dataSMSGRelease(void *pData)
  */
 static bool dataImageLoad(const char *fileName, void **ppData)
 {
-	iV_Image *psSprite = (iV_Image *)malloc(sizeof(iV_Image));
+	iV_Image *psSprite = new iV_Image();
 	if (!psSprite)
 	{
 		return false;
@@ -511,7 +511,7 @@ static bool dataImageLoad(const char *fileName, void **ppData)
 	if (!iV_loadImage_PNG(fileName, psSprite))
 	{
 		debug(LOG_ERROR, "IMGPAGE load failed");
-		free(psSprite);
+		delete psSprite;
 		return false;
 	}
 
@@ -561,7 +561,7 @@ static void dataImageRelease(void *pData)
 
 	if (psSprite)
 	{
-		free(psSprite);
+		delete psSprite;
 	}
 }
 

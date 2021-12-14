@@ -1,6 +1,7 @@
 file(GLOB HEADERS
 	"bitimage.h"
 	"gfx_api.h"
+	"gfx_api_formats_def.h"
 	"gfx_api_gl.h"
 	"gfx_api_null.h"
 	"gfx_api_vk.h"
@@ -36,6 +37,7 @@ file(GLOB SRC
 	"pieclip.cpp"
 	"piedraw.cpp"
 	"piefunc.cpp"
+	"pieimage.cpp"
 	"piematrix.cpp"
 	"piemode.cpp"
 	"piepalette.cpp"

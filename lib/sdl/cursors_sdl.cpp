@@ -1266,7 +1266,7 @@ static const struct
 SDL_Cursor *init_system_ColorCursor(CURSOR cur, const char *fileName)
 {
 
-	iV_Image *psSprite = (iV_Image *)malloc(sizeof(iV_Image));
+	iV_Image *psSprite = new iV_Image();
 	if (!psSprite)
 	{
 		debug(LOG_FATAL, "Could not allocate memory for cursor sprite. Exiting.");
@@ -1291,13 +1291,13 @@ SDL_Cursor *init_system_ColorCursor(CURSOR cur, const char *fileName)
 	uint32_t amask = 0xff000000;
 #endif
 
-	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(psSprite->bmp, psSprite->width, psSprite->height, psSprite->depth * 8, psSprite->width * 4, rmask, gmask, bmask, amask);
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(psSprite->bmp_w(), psSprite->width(), psSprite->height(), psSprite->depth(), psSprite->width() * 4, rmask, gmask, bmask, amask);
 	if (!surface)
 	{
 		debug(LOG_FATAL, "Failed to create cursor because: %s", SDL_GetError());
 		return nullptr;
 	}
-	SDL_Cursor *pointer = SDL_CreateColorCursor(surface, psSprite->width / 2, psSprite->height / 2);	// We center the hotspot for all (FIXME ?)
+	SDL_Cursor *pointer = SDL_CreateColorCursor(surface, psSprite->width() / 2, psSprite->height() / 2);	// We center the hotspot for all (FIXME ?)
 	if (!pointer)
 	{
 		debug(LOG_FATAL, "Could not create cursor because %s", SDL_GetError());
@@ -1306,8 +1306,8 @@ SDL_Cursor *init_system_ColorCursor(CURSOR cur, const char *fileName)
 
 	// free up surface & image data
 	SDL_FreeSurface(surface);
-	free(psSprite->bmp);
-	free(psSprite);
+	psSprite->clear();
+	delete psSprite;
 
 	return pointer;
 }

@@ -31,8 +31,13 @@
 #include "lib/framework/frame.h"
 #include "screen.h"
 #include "pietypes.h"
+#include "gfx_api_formats_def.h"
 
 #include <glm/glm.hpp>
+
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 namespace gfx_api
 {
@@ -77,54 +82,6 @@ namespace gfx_api
 	using gfxUByte = unsigned char;
 #endif
 
-	enum class pixel_format
-	{
-		invalid,
-
-		// [UNCOMPRESSED FORMATS]
-		FORMAT_RGBA8_UNORM_PACK8,
-		FORMAT_BGRA8_UNORM_PACK8,
-		FORMAT_RGB8_UNORM_PACK8,
-		FORMAT_RG8_UNORM,			// not guaranteed support
-		FORMAT_R8_UNORM,
-	};
-	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_R8_UNORM;
-
-	namespace pixel_format_usage
-	{
-		enum flags: uint32_t
-		{
-			none						= 0,		// 0 (if the format is unsupported)
-			sampled_image				= 1 << 0,	// 00001 == 1
-			storage_image				= 1 << 1,	// 00010 == 2
-			depth_stencil_attachment	= 1 << 2,	// 00100 == 4
-		};
-		constexpr flags flag_max = flags::depth_stencil_attachment; // must be updated if the above enum is updated
-
-		inline flags& operator|=(flags& a, flags b) {
-			return a = static_cast<flags> (a | b);
-		}
-		inline flags operator|(flags a, flags b) {
-	//		return static_cast<pixel_format_usage::value>((std::underlying_type_t<pixel_format_usage::value>(a) | std::underlying_type_t<pixel_format_usage::value>(b)));
-	//		return a = static_cast<pixel_format_usage::value> (a | b);
-			return static_cast<flags>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
-		}
-		inline flags operator&(flags a, flags b) {
-			return static_cast<flags>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
-		}
-	}
-
-	enum class texture_type
-	{
-		user_interface,
-		game_texture, // a RGB / RGBA texture, possibly stored in a compressed format
-		alpha_mask,	// a single-channel texture, containing the alpha values
-		normal_map,
-		specular_map // a single-channel texture, containing the specular / luma value
-	};
-	constexpr texture_type MAX_TEXTURE_TYPE = texture_type::specular_map;
-	constexpr size_t TEXTURE_TYPE_COUNT = static_cast<size_t>(MAX_TEXTURE_TYPE) + 1;
-
 	struct texture
 	{
 		virtual ~texture() {};
@@ -132,6 +89,7 @@ namespace gfx_api
 		virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const pixel_format& buffer_format, const void* data) = 0;
 		virtual void upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const pixel_format& buffer_format, const void* data) = 0;
 		virtual unsigned id() = 0;
+		void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& bitmap);
 
 		texture( const texture& other ) = delete; // non construction-copyable
 		texture& operator=( const texture& ) = delete; // non copyable
@@ -361,6 +319,8 @@ namespace gfx_api
 		virtual bool setSwapInterval(swap_interval_mode mode) = 0;
 		virtual swap_interval_mode getSwapInterval() const = 0;
 		virtual bool texture2DFormatIsSupported(pixel_format format, pixel_format_usage::flags usage) = 0;
+	public:
+		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) = 0;
 	};

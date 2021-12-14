@@ -64,3 +64,65 @@ gfx_api::context& gfx_api::context::get()
 {
 	return *current_backend_context;
 }
+
+// MARK: - texture
+
+static inline nonstd::optional<size_t> getClosestSupportedUncompressedImageFormatChannels(size_t channels)
+{
+	auto format = iV_Image::pixel_format_for_channels(channels);
+
+	// Verify that the gfx backend supports this format
+	while (!gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::flags::sampled_image))
+	{
+		ASSERT_OR_RETURN(nonstd::nullopt, channels < 4, "Exhausted all possible uncompressed formats??");
+		channels += 1;
+		format = iV_Image::pixel_format_for_channels(channels);
+	}
+
+	return channels;
+}
+
+gfx_api::texture* gfx_api::context::createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename)
+{
+	// Get the channels of this iV_Image
+	auto channels = bitmap.channels();
+	// Verify that the gfx backend supports this format
+	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(channels);
+	ASSERT_OR_RETURN(nullptr, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
+
+	auto target_pixel_format = iV_Image::pixel_format_for_channels(closestSupportedChannels.value());
+
+	gfx_api::texture* pTexture = gfx_api::context::get().create_texture(1, bitmap.width(), bitmap.height(), target_pixel_format, filename);
+	return pTexture;
+}
+
+void gfx_api::texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& bitmap)
+{
+	ASSERT_OR_RETURN(, bitmap.size_in_bytes() > 0, "Empty bitmap - ignoring");
+
+	// Get the channels of this iV_Image
+	auto channels = bitmap.channels();
+	// Verify that the gfx backend supports this format
+	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(channels);
+	ASSERT_OR_RETURN(, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
+
+	// found the nearest supported format
+	if (closestSupportedChannels.value() == channels)
+	{
+		// Upload the texture (no conversion needed)
+		upload(mip_level, offset_x, offset_y, bitmap.width(), bitmap.height(), bitmap.pixel_format(), bitmap.bmp());
+	}
+	else
+	{
+		// Make a copy of the image and convert to the desired output format
+		iV_Image bitmapCopy;
+		bitmapCopy.duplicate(bitmap);
+		for (auto i = bitmapCopy.channels(); i < closestSupportedChannels; i++)
+		{
+			bitmapCopy.expand_channels_towards_rgba();
+		}
+		// Upload the texture
+		upload(mip_level, offset_x, offset_y, bitmapCopy.width(), bitmapCopy.height(), bitmapCopy.pixel_format(), bitmapCopy.bmp());
+	}
+
+}
