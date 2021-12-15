@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:24\n"
+"PO-Revision-Date: 2021-12-15 14:22\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -16204,7 +16204,7 @@ msgstr "Eski Teknoloji Gösteriliyor"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Bedel: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
