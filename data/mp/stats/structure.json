@@ -881,6 +881,256 @@
 		],
 		"width": 1
 	},
+	"CO-Tower-HVCan": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "CO-Tower-HVCan",
+		"name": "*CO-Tower-HVCan*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD2.pie"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"Cannon4AUTOMk1"
+		],
+		"width": 1
+	},
+	"CO-Tower-HvATRkt": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "CO-Tower-HvATRkt",
+		"name": "*CO-Tower-HvATRkt*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD2.pie"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"Rocket-HvyA-T"
+		],
+		"width": 1
+	},
+	"CO-Tower-HvFlame": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 1,
+		"hitpoints": 300,
+		"id": "CO-Tower-HvFlame",
+		"name": "*CO-Tower-HvFlame*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"BLHARDPT.pie"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"Flame2"
+		],
+		"width": 1
+	},
+	"CO-Tower-LtATRkt": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "CO-Tower-LtATRkt",
+		"name": "*CO-Tower-LtATRkt*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"blguardn.pie"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"Rocket-LtA-T"
+		],
+		"width": 1
+	},
+	"CO-Tower-MG3": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "CO-Tower-MG3",
+		"name": "*CO-Tower-MG3*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"blguardn.PIE"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"MG3Mk1"
+		],
+		"width": 1
+	},
+	"CO-Tower-MdCan": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "CO-Tower-MdCan",
+		"name": "*CO-Tower-MdCan*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD2.pie"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"Cannon2A-TMk1"
+		],
+		"width": 1
+	},
+	"CO-Tower-RotMG": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "CO-Tower-RotMG",
+		"name": "*CO-Tower-RotMG*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"blguardn.PIE"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"MG4ROTARYMk1"
+		],
+		"width": 1
+	},
+	"CO-WallTower-HvCan": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 400,
+		"id": "CO-WallTower-HvCan",
+		"name": "*CO-WallTower-HvCan*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD2.pie"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"Cannon375mmMk1"
+		],
+		"width": 1
+	},
+	"CO-WallTower-RotCan": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 400,
+		"id": "CO-WallTower-RotCan",
+		"name": "*CO-WallTower-RotCan*",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD2.pie"
+		],
+		"thermal": 12,
+		"type": "DEFENSE",
+		"weapons": [
+			"Cannon5VulcanMk1"
+		],
+		"width": 1
+	},
+	"CollectiveCWall": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 125,
+		"buildPower": 25,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 250,
+		"id": "CollectiveCWall",
+		"name": "Collective CWall",
+		"sensorID": "ZNULLSENSOR",
+		"strength": "HARD",
+		"structureModel": [
+			"BLWALLC2.pie"
+		],
+		"thermal": 12,
+		"type": "CORNER WALL",
+		"width": 1
+	},
+	"CollectiveWall": {
+		"armour": 12,
+		"breadth": 1,
+		"buildPoints": 125,
+		"buildPower": 25,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 250,
+		"id": "CollectiveWall",
+		"name": "Collective Wall",
+		"sensorID": "ZNULLSENSOR",
+		"strength": "HARD",
+		"structureModel": [
+			"BLWALL2.pie"
+		],
+		"thermal": 12,
+		"type": "WALL",
+		"width": 1
+	},
 	"CoolingTower": {
 		"armour": 20,
 		"breadth": 1,
@@ -1684,6 +1934,292 @@
 		"type": "CORNER WALL",
 		"width": 1
 	},
+	"NEXUSCWall": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 125,
+		"buildPower": 25,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 250,
+		"id": "NEXUSCWall",
+		"name": "NEXUS CWall",
+		"sensorID": "ZNULLSENSOR",
+		"strength": "HARD",
+		"structureModel": [
+			"BLWALLC3.pie"
+		],
+		"thermal": 15,
+		"type": "CORNER WALL",
+		"width": 1
+	},
+	"NEXUSWall": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 125,
+		"buildPower": 25,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 250,
+		"id": "NEXUSWall",
+		"name": "NEXUS Wall",
+		"sensorID": "ZNULLSENSOR",
+		"strength": "HARD",
+		"structureModel": [
+			"BLWALL3.pie"
+		],
+		"thermal": 15,
+		"type": "WALL",
+		"width": 1
+	},
+	"NX-ANTI-SATSite": {
+		"armour": 999,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 1,
+		"hitpoints": 999,
+		"id": "NX-ANTI-SATSite",
+		"name": "Nexus Missile Silo",
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "BUNKER",
+		"structureModel": [
+			"blmssilo.pie"
+		],
+		"thermal": 999,
+		"type": "MISSILE SILO",
+		"width": 1
+	},
+	"NX-CruiseSite": {
+		"armour": 20,
+		"breadth": 1,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 1,
+		"hitpoints": 300,
+		"id": "NX-CruiseSite",
+		"name": "Missile Silo",
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "BUNKER",
+		"structureModel": [
+			"blbunkms.pie"
+		],
+		"thermal": 20,
+		"type": "DEFENSE",
+		"width": 1
+	},
+	"NX-Emp-MedArtMiss-Pit": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 1,
+		"hitpoints": 200,
+		"id": "NX-Emp-MedArtMiss-Pit",
+		"name": "*NX-Emp-MedArtMiss-Pit*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"BLHARDPT.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"Missile-MdArt"
+		],
+		"width": 1
+	},
+	"NX-Emp-MultiArtMiss-Pit": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 1,
+		"hitpoints": 200,
+		"id": "NX-Emp-MultiArtMiss-Pit",
+		"name": "*NX-Emp-MultiArtMiss-Pit*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"BLHARDPT.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"Missile-HvyArt"
+		],
+		"width": 1
+	},
+	"NX-Emp-Plasma-Pit": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 1,
+		"hitpoints": 200,
+		"id": "NX-Emp-Plasma-Pit",
+		"name": "*NX-Emp-Plasma-Pit*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"Blaamnt2.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"PlasmaHeavy"
+		],
+		"width": 1
+	},
+	"NX-Tower-ATMiss": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 40,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "NX-Tower-ATMiss",
+		"name": "*NX-Tower-ATMiss*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"Blgrdnex.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"Missile-A-T"
+		],
+		"width": 1
+	},
+	"NX-Tower-PulseLas": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 40,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "NX-Tower-PulseLas",
+		"name": "*NX-Tower-PulseLas*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"Blgrdnex.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"Laser2PULSEMk1"
+		],
+		"width": 1
+	},
+	"NX-Tower-Rail1": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 40,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 300,
+		"id": "NX-Tower-Rail1",
+		"name": "*NX-Tower-Rail1*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"Blgrdnex.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"RailGun1Mk1"
+		],
+		"width": 1
+	},
+	"NX-WallTower-BeamLas": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 400,
+		"id": "NX-WallTower-BeamLas",
+		"name": "*NX-WallTower-BeamLas*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD3.pie"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"Laser3BEAMMk1"
+		],
+		"width": 1
+	},
+	"NX-WallTower-Rail2": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 400,
+		"id": "NX-WallTower-Rail2",
+		"name": "*NX-WallTower-Rail2*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD3.pie"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"RailGun2Mk1"
+		],
+		"width": 1
+	},
+	"NX-WallTower-Rail3": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"combinesWithWall": true,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 400,
+		"id": "NX-WallTower-Rail3",
+		"name": "*NX-WallTower-Rail3*",
+		"resistance": 150,
+		"sensorID": "NavGunSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"BLGUARD3.pie"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"RailGun3Mk1"
+		],
+		"width": 1
+	},
 	"NuclearReactor": {
 		"armour": 20,
 		"breadth": 2,
@@ -2002,6 +2538,108 @@
 		"strength": "HARD",
 		"structureModel": [
 			"BLGUARDR.pie"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"width": 1
+	},
+	"Sys-NEXUSLinkTOW": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 400,
+		"id": "Sys-NEXUSLinkTOW",
+		"name": "*Sys-NEXUSLinkTOW*",
+		"sensorID": "NavGunSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"Blgrdnex.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"weapons": [
+			"SpyTurret01"
+		],
+		"width": 1
+	},
+	"Sys-NX-CBTower": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 400,
+		"id": "Sys-NX-CBTower",
+		"name": "*Sys-NX-CBTower*",
+		"resistance": 150,
+		"sensorID": "Sys-CBTower01",
+		"strength": "HARD",
+		"structureModel": [
+			"Blgrdnex.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"width": 1
+	},
+	"Sys-NX-SensorTower": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 400,
+		"id": "Sys-NX-SensorTower",
+		"name": "*Sys-NX-SensorTower*",
+		"resistance": 150,
+		"sensorID": "SensorTower2Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"Blgrdnex.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"width": 1
+	},
+	"Sys-NX-VTOL-CB-Tow": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 400,
+		"id": "Sys-NX-VTOL-CB-Tow",
+		"name": "*Sys-NX-VTOL-CB-Tow*",
+		"resistance": 150,
+		"sensorID": "Sys-VTOLCBTower01",
+		"strength": "HARD",
+		"structureModel": [
+			"Blgrdnex.PIE"
+		],
+		"thermal": 15,
+		"type": "DEFENSE",
+		"width": 1
+	},
+	"Sys-NX-VTOL-RadTow": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 400,
+		"id": "Sys-NX-VTOL-RadTow",
+		"name": "*Sys-NX-VTOL-RadTow*",
+		"resistance": 150,
+		"sensorID": "Sys-VTOLRadarTower01",
+		"strength": "HARD",
+		"structureModel": [
+			"Blgrdnex.PIE"
 		],
 		"thermal": 15,
 		"type": "DEFENSE",
