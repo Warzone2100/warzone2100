@@ -293,8 +293,10 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		char arbitraryName[256];
 		ssprintf(arbitraryName, "%s-%03u", fileName, p);
 		// Now we can set imageFile->pages[p].id. This free()s the ivImages[p].bmp array!
-		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, gfx_api::texture_type::user_interface);
+		gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(ivImages[p]), gfx_api::texture_type::user_interface, arbitraryName);
+		imageFile->pages[p].id = pie_AddTexPage(pTexture, arbitraryName, gfx_api::texture_type::user_interface);
 	}
+	ivImages.clear();
 
 	// duplicate some data, since we want another access point to these data structures now, FIXME
 	for (unsigned i = 0; i < imageFile->imageDefs.size(); i++)

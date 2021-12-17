@@ -38,14 +38,13 @@ void null_texture::bind()
 	// no-op
 }
 
-void null_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data)
+void null_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
 {
+	ASSERT_OR_RETURN(, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
-	// no-op
-}
-
-void null_texture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const  gfx_api::pixel_format& buffer_format, const void* data)
-{
 	// no-op
 }
 
@@ -122,6 +121,7 @@ null_context::~null_context()
 gfx_api::texture* null_context::create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename)
 {
 	auto* new_texture = new null_texture();
+	new_texture->internal_format = internal_format;
 	return new_texture;
 }
 

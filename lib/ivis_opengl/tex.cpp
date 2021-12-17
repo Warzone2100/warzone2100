@@ -110,58 +110,42 @@ void pie_AssignTexture(size_t page, gfx_api::texture* texture)
 	_TEX_PAGE[page].id = texture;
 }
 
-static size_t pie_AddTexPage_Impl(iV_Image *s, const char *filename, gfx_api::texture_type textureType, size_t page)
+static size_t pie_AddTexPage_Impl(gfx_api::texture *pTexture, const char *filename, gfx_api::texture_type textureType, size_t page)
 {
-	ASSERT(s && filename, "Bad input parameter");
+	ASSERT(pTexture && filename, "Bad input parameter");
 
 	_NAME_TO_TEX_PAGE_MAP[filename] = page;
 	debug(LOG_TEXTURE, "%s page=%zu", filename, page);
 
-	if (textureType != gfx_api::texture_type::user_interface) // this is a game texture, use texture compression (if available / configured) // TODO:
-	{
-		gfx_api::pixel_format sourceFormat = iV_getPixelFormat(s);
-		if (_TEX_PAGE[page].id)
-			delete _TEX_PAGE[page].id;
-		size_t mip_count = static_cast<size_t>(floor(log(std::max(s->width(), s->height())))) + 1;
-		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(mip_count, s->width(), s->height(), sourceFormat, filename);
-		pie_Texture(page).upload_and_generate_mipmaps(0u, 0u, s->width(), s->height(), iV_getPixelFormat(s), s->bmp());
-	}
-	else	// this is an interface texture, do not use compression or mipmaps
-	{
-		if (_TEX_PAGE[page].id)
-			delete _TEX_PAGE[page].id;
-		_TEX_PAGE[page].id = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *s, filename);
-		pie_Texture(page).upload(0u, 0u, 0u, *s);
-	}
-
-	// it is uploaded, we do not need it anymore
-	s->clear();
+	if (_TEX_PAGE[page].id)
+		delete _TEX_PAGE[page].id;
+	_TEX_PAGE[page].id = pTexture;
 
 	/* Send back the texpage number so we can store it in the IMD */
 	return page;
 }
 
-size_t pie_AddTexPage(iV_Image *s, const char *filename, gfx_api::texture_type textureType)
+size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api::texture_type textureType)
 {
-	ASSERT(s && filename, "Bad input parameter");
+	ASSERT_OR_RETURN(0, pTexture && filename, "Bad input parameter");
 	ASSERT(_NAME_TO_TEX_PAGE_MAP.count(filename) == 0, "tex page %s already exists", filename);
 	iTexPage tex;
 	size_t page = _TEX_PAGE.size();
 	tex.name = filename;
 	_TEX_PAGE.push_back(std::move(tex));
 
-	return pie_AddTexPage_Impl(s, filename, textureType, page);
+	return pie_AddTexPage_Impl(pTexture, filename, textureType, page);
 }
 
-size_t pie_AddTexPage(iV_Image *s, const char *filename, gfx_api::texture_type textureType, size_t page)
+size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api::texture_type textureType, size_t page)
 {
-	ASSERT(s && filename, "Bad input parameter");
+	ASSERT_OR_RETURN(0, pTexture && filename, "Bad input parameter");
 
 	// replace
 	_NAME_TO_TEX_PAGE_MAP.erase(_TEX_PAGE[page].name);
 	_TEX_PAGE[page].name = filename;
 
-	return pie_AddTexPage_Impl(s, filename, textureType, page);
+	return pie_AddTexPage_Impl(pTexture, filename, textureType, page);
 }
 
 /*!
@@ -220,10 +204,9 @@ bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-optional<size_t> iV_GetTransformTexture(const char *filename, gfx_api::texture_type textureType, std::function<void (iV_Image&)> transformImageData, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(filename != nullptr, "filename must not be null");
-	iV_Image sSprite;
 
 	/* Have we already loaded this one then? */
 	std::string path = pie_MakeTexPageName(filename);
@@ -236,35 +219,21 @@ optional<size_t> iV_GetTransformTexture(const char *filename, gfx_api::texture_t
 	// Try to load it
 	std::string loadPath = "texpages/";
 	loadPath += filename;
-	if (!iV_loadImage_PNG(loadPath.c_str(), &sSprite))
+	gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromFile(loadPath.c_str(), textureType, maxWidth, maxHeight);
+	if (!pTexture)
 	{
 		debug(LOG_ERROR, "Failed to load %s", loadPath.c_str());
 		return nullopt;
 	}
-	scaleImageMaxSize(&sSprite, maxWidth, maxHeight);
-	if (transformImageData)
-	{
-		transformImageData(sSprite);
-	}
-	size_t page = pie_AddTexPage(&sSprite, path.c_str(), textureType);
+
+	size_t page = pie_AddTexPage(pTexture, path.c_str(), textureType);
 	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
 	return optional<size_t>(page);
-}
-
-optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
-{
-	return iV_GetTransformTexture(filename, textureType, nullptr, maxWidth, maxHeight);
 }
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 {
 	// Load new one to replace it
-	iV_Image image;
-	if (!iV_loadImage_PNG(WzString("texpages/" + newfile).toUtf8().c_str(), &image))
-	{
-		debug(LOG_ERROR, "Failed to load image: %s", newfile.toUtf8().c_str());
-		return false;
-	}
 	std::string tmpname = pie_MakeTexPageName(oldfile.toUtf8());
 	// Have we already loaded this one?
 	const auto it = _NAME_TO_TEX_PAGE_MAP.find(tmpname);
@@ -272,14 +241,13 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 	{
 		gfx_api::context::get().debugStringMarker("Replacing texture");
 		size_t page = it->second;
-		gfx_api::texture_type exitingTextureType = _TEX_PAGE[page].textureType;
+		gfx_api::texture_type existingTextureType = _TEX_PAGE[page].textureType;
 		debug(LOG_TEXTURE, "Replacing texture %s with %s from index %zu (tex id %u)", it->first.c_str(), newfile.toUtf8().c_str(), page, _TEX_PAGE[page].id->id());
+		gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromFile(WzString("texpages/" + newfile).toUtf8().c_str(), existingTextureType);
 		tmpname = pie_MakeTexPageName(newfile.toUtf8());
-		pie_AddTexPage(&image, tmpname.c_str(), exitingTextureType, page);
-		iV_unloadImage(&image);
+		pie_AddTexPage(pTexture, tmpname.c_str(), existingTextureType, page);
 		return true;
 	}
-	iV_unloadImage(&image);
 	debug(LOG_ERROR, "Nothing to replace!");
 	return false;
 }

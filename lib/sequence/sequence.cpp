@@ -129,7 +129,8 @@ static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for pr
 class VideoProvider;
 static std::shared_ptr<VideoProvider> inVideoProvider;
 
-static uint32_t *RGBAframe = nullptr;					// texture buffer
+static iV_Image VideoFrameBitmap;				// texture buffer
+static SCANLINE_MODE scanMode = SCANLINES_OFF;
 static ogg_int16_t *audiobuf = nullptr;			// audio buffer
 
 // For timing
@@ -380,22 +381,17 @@ const size_t texture_height = 1024;
  */
 static void Allocate_videoFrame(void)
 {
-	int size = videodata.ti.frame_width * videodata.ti.frame_height * 4;
-	if (!seq_getScanlinesDisabled() && seq_getScanlineMode())
-	{
-		size *= 2;
-	}
+	scanMode = seq_getScanlinesDisabled() ? SCANLINES_OFF : seq_getScanlineMode();
+	const ogg_uint32_t height_factor = (scanMode ? 2 : 1);
+	int expected_size = videodata.ti.frame_width * videodata.ti.frame_height * 4 * height_factor;
 
-	RGBAframe = (uint32_t *)malloc(size);
-	memset(RGBAframe, 0, size);
+	VideoFrameBitmap.allocate(videodata.ti.frame_width, videodata.ti.frame_height * height_factor, 4, true);
+	ASSERT(VideoFrameBitmap.data_size() == expected_size, "Allocated size does not match expected size!");
 }
 
 static void deallocateVideoFrame(void)
 {
-	if (RGBAframe)
-	{
-		free(RGBAframe);
-	}
+	VideoFrameBitmap.clear();
 }
 
 #ifndef __BIG_ENDIAN__
@@ -421,9 +417,7 @@ static void video_write(bool update)
 	unsigned int x = 0, y = 0;
 	const int video_width = videodata.ti.frame_width;
 	const int video_height = videodata.ti.frame_height;
-	SCANLINE_MODE scanMode = seq_getScanlinesDisabled() ? SCANLINES_OFF : seq_getScanlineMode();
-	// when using scanlines we need to double the height
-	const int height_factor = (scanMode ? 2 : 1);
+	uint32_t* RGBAframe = reinterpret_cast<uint32_t*>(VideoFrameBitmap.bmp_w());
 	yuv_buffer yuv;
 
 	if (update)
@@ -495,7 +489,7 @@ static void video_write(bool update)
 			}
 		}
 
-		videoGfx->updateTexture(RGBAframe, static_cast<size_t>(video_width), static_cast<size_t>(video_height) * static_cast<size_t>(height_factor));
+		videoGfx->updateTexture(VideoFrameBitmap);
 	}
 
 	const auto& modelViewProjectionMatrix = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f) *
@@ -804,7 +798,8 @@ bool seq_Play(const std::shared_ptr<VideoProvider>& video)
 			videoGfx = nullptr;
 			return false;
 		}
-		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
+		iV_Image blackFrame;
+		blackFrame.allocate(texture_width, texture_height, 4, true);
 
 		// disable scanlines temporarily if the video is too large for the texture or shown too small
 		if (videodata.ti.frame_height * 2 > texture_height || vertices[3][1] < videodata.ti.frame_height * 2)
@@ -813,8 +808,8 @@ bool seq_Play(const std::shared_ptr<VideoProvider>& video)
 		}
 
 		Allocate_videoFrame();
-		videoGfx->makeTexture(texture_width, texture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, blackframe);
-		free(blackframe);
+		videoGfx->makeCompatibleTexture(&blackFrame, "mem::blackframe");
+		blackFrame.clear();
 
 		// when using scanlines we need to double the height
 		const uint32_t height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);

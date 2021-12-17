@@ -1471,7 +1471,7 @@ size_t VkTexture::format_size(const vk::Format& format)
 	throw;
 }
 
-VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const vk::Format& _internal_format, const std::string& filename)
+VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& _internal_format, const std::string& filename)
 	: dev(root.dev), internal_format(_internal_format), mipmap_levels(mipmap_count), root(&root)
 {
 	ASSERT(width > 0 && height > 0, "0 width/height textures are unsupported");
@@ -1479,13 +1479,15 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
 	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mipmap_count (%zu) exceeds uint32_t max", mipmap_count);
 
+	vk::Format internal_vk_format = root.get_format(_internal_format);
+
 	auto imageCreateInfo = vk::ImageCreateInfo()
 	.setArrayLayers(1)
 	.setExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	.setImageType(vk::ImageType::e2D)
 	.setMipLevels(static_cast<uint32_t>(mipmap_count))
 	.setTiling(vk::ImageTiling::eOptimal)
-	.setFormat(internal_format)
+	.setFormat(internal_vk_format)
 	.setUsage(vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled)
 	.setInitialLayout(vk::ImageLayout::eUndefined)
 	.setSamples(vk::SampleCountFlagBits::e1)
@@ -1504,7 +1506,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
 		.setViewType(vk::ImageViewType::e2D)
-		.setFormat(internal_format)
+		.setFormat(internal_vk_format)
 		.setComponents(vk::ComponentMapping())
 		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_count), 0, 1));
 
@@ -1529,8 +1531,12 @@ VkTexture::~VkTexture()
 
 void VkTexture::bind() {}
 
-void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& buffer_format, const void* data)
+void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const iV_BaseImage& image)
 {
+	ASSERT_OR_RETURN(, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 
 	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mip_level (%zu) exceeds uint32_t max", mip_level);
@@ -1541,38 +1547,14 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 
 	size_t dynamicAlignment = std::max(0x4 * format_size(internal_format), static_cast<size_t>(root->physDeviceProps.limits.optimalBufferCopyOffsetAlignment));
 	auto& frameResources = buffering_mechanism::get_current_resources();
-	const size_t stagingBufferSize = width * height * format_size(internal_format);
+	const size_t stagingBufferSize = image.data_size();
 	ASSERT(stagingBufferSize <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "stagingBufferSize (%zu) exceeds uint32_t max", stagingBufferSize);
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(stagingBufferSize), static_cast<uint32_t>(dynamicAlignment));
 
 	auto* mappedMem = reinterpret_cast<uint8_t*>(frameResources.stagingBufferAllocator.mapMemory(stagingMemory));
 	ASSERT(mappedMem != nullptr, "Failed to map memory");
-	auto* srcMem = reinterpret_cast<const uint8_t*>(data);
 
-	if (format_size(buffer_format) == format_size(internal_format))
-	{
-		// fast-path
-		memcpy(mappedMem, data, (width * height * format_size(buffer_format)));
-	}
-	else
-	{
-		for (unsigned row = 0; row < height; row++)
-		{
-			for (unsigned col = 0; col < width; col++)
-			{
-				unsigned byte = 0;
-				for (; byte < format_size(buffer_format); byte++)
-				{
-					const auto& texel = srcMem[(row * width + col) * format_size(buffer_format) + byte];
-					mappedMem[(row * width + col) * format_size(internal_format) + byte] = texel;
-				}
-				for (; byte < format_size(internal_format); byte++)
-				{
-					mappedMem[(row * width + col) * format_size(internal_format) + byte] = 255;
-				}
-			}
-		}
-	}
+	memcpy(mappedMem, image.data(), image.data_size());
 
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
 
@@ -1609,80 +1591,6 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 	};
 	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
-}
-
-#if defined(__clang__)
-#  pragma clang diagnostic push
-#  pragma clang diagnostic ignored "-Wcast-align"
-#endif
-#if defined(__GNUC__)
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wcast-qual"
-#endif
-
-#include "3rdparty/stb_image_resize.h"
-
-#if defined(__GNUC__)
-#  pragma GCC diagnostic pop
-#endif
-#if defined(__clang__)
-#  pragma clang diagnostic pop
-#endif
-
-void VkTexture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const gfx_api::pixel_format& buffer_format, const void* data)
-{
-	// upload initial (full) level
-	upload(0, offset_x, offset_y, width, height, buffer_format, data);
-
-	ASSERT(width <= static_cast<size_t>(std::numeric_limits<int>::max()), "width (%zu) exceeds int max", width);
-	ASSERT(height <= static_cast<size_t>(std::numeric_limits<int>::max()), "height (%zu) exceeds int max", height);
-
-	// generate and upload mipmaps
-	const unsigned char * input_pixels = (const unsigned char*)data;
-	void * prev_input_pixels_malloc = nullptr;
-	size_t components = format_size(buffer_format);
-	int input_w = static_cast<int>(width);
-	int input_h = static_cast<int>(height);
-	for (size_t i = 1; i < mipmap_levels; i++)
-	{
-		int output_w = std::max(1, input_w >> 1);
-		int output_h = std::max(1, input_h >> 1);
-
-		unsigned char *output_pixels = (unsigned char *)malloc(output_w * output_h * components);
-//		stbir_resize_uint8(input_pixels, input_w, input_h, 0,
-//						   output_pixels, output_w, output_h, 0,
-//						   static_cast<int>(components));
-//		stbir_resize_uint8_generic(input_pixels, input_w, input_h, 0,
-//								   output_pixels, output_w, output_h, 0,
-//								   components, components == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, STBIR_FLAG_ALPHA_PREMULTIPLIED,
-//								   STBIR_EDGE_CLAMP,
-//								   STBIR_FILTER_MITCHELL,
-//								   STBIR_COLORSPACE_LINEAR,
-//								   nullptr);
-		stbir_resize_uint8_generic(input_pixels, input_w, input_h, 0,
-								   output_pixels, output_w, output_h, 0,
-								   static_cast<int>(components), components == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, 0,
-								   STBIR_EDGE_CLAMP,
-								   STBIR_FILTER_MITCHELL,
-								   STBIR_COLORSPACE_LINEAR,
-								   nullptr);
-
-		upload(i, offset_x, offset_y, output_w, output_h, buffer_format, (const void*)output_pixels);
-
-		if (prev_input_pixels_malloc)
-		{
-			free(prev_input_pixels_malloc);
-		}
-		input_pixels = output_pixels;
-		prev_input_pixels_malloc = (void *)output_pixels;
-
-		input_w = output_w;
-		input_h = output_h;
-	}
-	if (prev_input_pixels_malloc)
-	{
-		free(prev_input_pixels_malloc);
-	}
 }
 
 unsigned VkTexture::id() { return 0; }
@@ -2705,11 +2613,11 @@ bool VkRoot::createSwapchain()
 	// create defaultTexture (2x2, all initialized to 0)
 	const size_t defaultTexture_width = 2;
 	const size_t defaultTexture_height = 2;
-	pDefaultTexture = new VkTexture(*this, 1, defaultTexture_width, defaultTexture_height, get_format(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8), "<default_texture>");
+	pDefaultTexture = new VkTexture(*this, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>");
 
-	const size_t defaultTexture_dataSize = defaultTexture_width * defaultTexture_height * VkTexture::format_size(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
-	std::vector<uint8_t> defaultTexture_zeroData(defaultTexture_dataSize, 0);
-	pDefaultTexture->upload(0, 0, 0, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, defaultTexture_zeroData.data());
+	iV_Image defaultTexture;
+	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
+	pDefaultTexture->upload(0, 0, 0, defaultTexture);
 
 	startRenderPass();
 
@@ -2895,8 +2803,6 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	formattedRendererInfoString = calculateFormattedRendererInfoString(); // must be called after physDeviceProps is populated
 	physDeviceFeatures = physicalDevice.getFeatures(vkDynLoader);
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
-	const auto formatSupport = physicalDevice.getFormatProperties(vk::Format::eR8G8B8Unorm, vkDynLoader);
-	supports_rgb = bool(formatSupport.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage);
 	initPixelFormatsSupport();
 
 	// convert antialiasing to vk::SampleCountFlagBits
@@ -3336,9 +3242,7 @@ vk::Format VkRoot::get_format(const gfx_api::pixel_format& format) const
 	case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
 		return vk::Format::eB8G8R8A8Unorm;
 	case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-		// TODO: After we properly handle converting formats elsewhere, change this to only return
-		// return vk::Format::eR8G8B8Unorm;
-		return supports_rgb ? vk::Format::eR8G8B8Unorm : vk::Format::eR8G8B8A8Unorm;
+		return vk::Format::eR8G8B8Unorm;
 	case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 		return vk::Format::eR8G8Unorm;
 	case gfx_api::pixel_format::FORMAT_R8_UNORM:
@@ -3358,7 +3262,7 @@ bool VkRoot::texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::p
 
 gfx_api::texture* VkRoot::create_texture(const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename)
 {
-	auto result = new VkTexture(*this, mipmap_count, width, height, get_format(internal_format), filename);
+	auto result = new VkTexture(*this, mipmap_count, width, height, internal_format, filename);
 	return result;
 }
 

@@ -52,7 +52,7 @@ void screen_StopBackDrop();
 void screen_RestartBackDrop();
 bool screen_GetBackDrop();
 void screen_FlipIfBackDropTransition();
-void screen_Upload(const iV_Image* newBackdropImage);
+void screen_Upload(iV_Image&& newBackdropImage);
 void screen_Display();
 
 /* screendump */

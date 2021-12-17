@@ -46,13 +46,12 @@ void pie_AssignTexture(size_t page, gfx_api::texture* texture);
 bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight);
 
 optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
-optional<size_t> iV_GetTransformTexture(const char *filename, gfx_api::texture_type textureType, std::function<void (iV_Image&)> transformImageData = nullptr, int maxWidth = -1, int maxHeight = -1);
 void iV_unloadImage(iV_Image *image);
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile);
-size_t pie_AddTexPage(iV_Image *s, const char *filename, gfx_api::texture_type textureType);
-size_t pie_AddTexPage(iV_Image *s, const char *filename, gfx_api::texture_type textureType, size_t page);
+size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api::texture_type textureType);
+size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api::texture_type textureType, size_t page);
 void pie_TexInit();
 
 std::string pie_MakeTexPageName(const std::string& filename);

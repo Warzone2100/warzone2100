@@ -225,8 +225,12 @@ void gl_texture::unbind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data)
+void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
 {
+	ASSERT_OR_RETURN(, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 
 	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "mip_level (%zu) exceeds GLint max", mip_level);
@@ -235,31 +239,8 @@ void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const s
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	bind();
-	glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
-	unbind();
-}
-
-void gl_texture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const  gfx_api::pixel_format& buffer_format, const void* data)
-{
-	ASSERT(offset_x <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_x (%zu) exceeds GLint max", offset_x);
-	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_y (%zu) exceeds GLint max", offset_y);
-	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
-	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
-	bind();
-	if(!glGenerateMipmap)
-	{
-		// fallback for if glGenerateMipmap is unavailable
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	}
-	glTexSubImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
-	if(glGenerateMipmap)
-	{
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
+	// TODO: ASSERT that data_size() matches expected given width,height,pixel_format
+	glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(image.pixel_format())), GL_UNSIGNED_BYTE, image.data());
 	unbind();
 }
 
@@ -1418,6 +1399,7 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	auto* new_texture = new gl_texture();
 	new_texture->mip_count = mipmap_count;
+	new_texture->internal_format = internal_format;
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));

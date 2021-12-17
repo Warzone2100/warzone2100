@@ -59,15 +59,15 @@ struct gl_texture final : public gfx_api::texture
 private:
 	friend struct gl_context;
 	GLuint _id;
-	size_t mip_count;
+	size_t mip_count = 0;
+	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
 
 	gl_texture();
 	virtual ~gl_texture();
 public:
 	virtual void bind() override;
 	void unbind();
-	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data) override;
-	virtual void upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const  gfx_api::pixel_format& buffer_format, const void* data) override;
+	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) override;
 	virtual unsigned id() override;
 };
 

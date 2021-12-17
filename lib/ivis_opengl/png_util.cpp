@@ -214,6 +214,197 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	return true;
 }
 
+bool iV_loadImage_PNG2(const char *fileName, iV_Image& image)
+{
+	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
+	PHYSFS_sint64 readSize;
+
+	png_structp png_ptr = nullptr;
+	png_infop info_ptr = nullptr;
+
+	png_uint_32 width = 0;
+	png_uint_32 height = 0;
+	png_byte color_type = 0;
+	png_byte bit_depth = 0;
+	png_byte channels = 0;
+	png_byte interlace_type = 0;
+	size_t row_bytes = 0;
+
+	png_bytep* row_pointers = nullptr;
+
+	// Open file
+	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
+	ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open %s: %s", fileName, WZ_PHYSFS_getLastError());
+	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
+
+	// Read PNG header from file
+	readSize = WZ_PHYSFS_readBytes(fileHandle, PNGheader, PNG_BYTES_TO_CHECK);
+	if (readSize < PNG_BYTES_TO_CHECK)
+	{
+		debug(LOG_FATAL, "pie_PNGLoadFile: WZ_WZ_PHYSFS_readBytes(%s) failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	// Verify the PNG header to be correct
+	if (png_sig_cmp(PNGheader, 0, PNG_BYTES_TO_CHECK))
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	if (png_ptr == nullptr)
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png struct");
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	info_ptr = png_create_info_struct(png_ptr);
+	if (info_ptr == nullptr)
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png info struct");
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	// Set libpng's failure jump position to the if branch,
+	// setjmp evaluates to false so the else branch will be executed at first
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
+		if (row_pointers != nullptr)
+		{
+			free(row_pointers);
+			row_pointers = nullptr;
+		}
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	// Tell libpng how many byte we already read
+	png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK);
+
+	/* Set up the input control */
+	png_set_read_fn(png_ptr, fileHandle, wzpng_read_data);
+
+	/* Read the PNG info / header */
+	png_read_info(png_ptr, info_ptr);
+	width = png_get_image_width(png_ptr, info_ptr);
+	height = png_get_image_height(png_ptr, info_ptr);
+	color_type = png_get_color_type(png_ptr, info_ptr);
+	bit_depth = png_get_bit_depth(png_ptr, info_ptr);
+	channels = png_get_channels(png_ptr, info_ptr);
+	interlace_type = png_get_interlace_type(png_ptr, info_ptr);
+
+	if (interlace_type != PNG_INTERLACE_NONE)
+	{
+		png_error(png_ptr, "interlaced PNGs are not currently supported");
+		return false;
+	}
+
+	// Most of the following transformations are seemingly not needed
+	// Filler is, however, for an unknown reason required for tertilesc[23]
+
+	/* tell libpng to strip 16 bit/color files down to 8 bits/color */
+	if (bit_depth == 16)
+	{
+		png_set_strip_16(png_ptr);
+	}
+
+	if (color_type == PNG_COLOR_TYPE_PALETTE)
+	{
+		png_set_palette_to_rgb(png_ptr);
+	}
+
+	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+	{
+		png_set_tRNS_to_alpha(png_ptr);
+	}
+
+	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
+	{
+		png_set_expand_gray_1_2_4_to_8(png_ptr); // libPNG 1.2.9+
+	}
+
+	/* Extract multiple pixels with bit depths of 1, 2, and 4 from a single
+	 * byte into separate bytes (useful for paletted and grayscale images).
+	 */
+	if (bit_depth < 8)
+	{
+		png_set_packing(png_ptr);
+	}
+
+	// Fill alpha with 0xFF (if needed)
+	png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
+
+	png_read_update_info(png_ptr, info_ptr);
+
+	color_type = png_get_color_type(png_ptr, info_ptr);
+	bit_depth = png_get_bit_depth(png_ptr, info_ptr);
+	channels = png_get_channels(png_ptr, info_ptr);
+	row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+
+	if (bit_depth != 8)
+	{
+		png_error(png_ptr, "output bit_depth != 8");
+		return false;
+	}
+
+	/* Guard against integer overflow */
+	if (height > (PNG_SIZE_MAX / row_bytes))
+	{
+		png_error(png_ptr, "image_data buffer would be too large");
+		return false;
+	}
+
+	// Figure out output image type
+	auto destFormat = iV_Image::pixel_format_for_channels(channels);
+	if (destFormat == gfx_api::pixel_format::invalid)
+	{
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	if ((height * row_bytes) != (channels * height * width))
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unexpected output size (%zu, expected: %zu): %s", size_t(height * row_bytes), size_t(channels * height * width), fileName);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	// Allocate buffer
+	if (!image.allocate(width, height, channels))
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to allocate memory to load: %s", fileName);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
+	unsigned char *pData = image.bmp_w();
+
+	// construct row pointers
+	row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
+	for (png_uint_32 i = 0; i < height; i++)
+	{
+		row_pointers[i] = &(pData[i * row_bytes]);
+	}
+
+	// read image rows
+	png_read_image(png_ptr, row_pointers);
+
+	if (row_pointers != nullptr)
+	{
+		free(row_pointers);
+		row_pointers = nullptr;
+	}
+	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+
+	return true;
+}
+
 struct MemoryBufferInputStream
 {
 public:
