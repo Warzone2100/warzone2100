@@ -117,19 +117,42 @@ enum SHADER_MODE
 //
 //*************************************************************************
 
+class iV_BaseImage
+{
+public:
+	virtual ~iV_BaseImage() { }
+public:
+	virtual unsigned int width() const = 0;
+	virtual unsigned int height() const = 0;
+	virtual unsigned int channels() const = 0;
+	virtual unsigned int depth() const = 0;
+	virtual gfx_api::pixel_format pixel_format() const = 0;
+
+	// Get a pointer to the image data that can be read
+	virtual const unsigned char* data() const = 0;
+	virtual size_t data_size() const = 0;
+};
+
 // An uncompressed bitmap (R, RG, RGB, or RGBA)
 // Not thread-safe
-class iV_Image
+class iV_Image final : public iV_BaseImage
 {
 private:
 	unsigned int m_width = 0, m_height = 0, m_channels = 0;
 	unsigned char *m_bmp = nullptr;
 
 public:
-	unsigned int width() const { return m_width; }
-	unsigned int height() const { return m_height; }
-	unsigned int channels() const { return m_channels; }
-	unsigned int depth() const { return m_channels * 8; }
+	// iV_BaseImage
+	unsigned int width() const override { return m_width; }
+	unsigned int height() const override { return m_height; }
+	unsigned int channels() const override  { return m_channels; }
+	unsigned int depth() const override { return m_channels * 8; }
+
+	// Get the current bitmap pixel format
+	gfx_api::pixel_format pixel_format() const override;
+
+	const unsigned char* data() const override { return bmp(); }
+	size_t data_size() const override { return size_in_bytes(); }
 
 public:
 	static gfx_api::pixel_format pixel_format_for_channels(unsigned int channels);
@@ -157,9 +180,6 @@ public:
 		if (!bmp()) { return 0; }
 		return static_cast<size_t>(m_width) * static_cast<size_t>(m_height) * static_cast<size_t>(m_channels);
 	}
-
-	// Get the current bitmap pixel format
-	gfx_api::pixel_format pixel_format() const;
 
 	// Convert and N-component bitmap to an N+1-component bitmap (as long as N < 4)
 	// If the channel that's added is the 4th (alpha) channel, it's set to all opaque

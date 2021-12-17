@@ -370,22 +370,21 @@ struct VkTexture final : public gfx_api::texture
 	WZ_vk::UniqueImageView view;
 //	WZ_vk::UniqueDeviceMemory memory;
 	VmaAllocation allocation = VK_NULL_HANDLE;
-	vk::Format internal_format;
-	size_t mipmap_levels;
+	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
+	size_t mipmap_levels = 0;
 
 
 	static size_t format_size(const gfx_api::pixel_format& format);
 
 	static size_t format_size(const vk::Format& format);
 
-	VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const vk::Format& _internal_format, const std::string& filename);
+	VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_pixel_format, const std::string& filename);
 
 	virtual ~VkTexture() override;
 
 	virtual void bind() override;
 
-	virtual void upload(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& buffer_format, const void* data) override;
-	virtual void upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const gfx_api::pixel_format& buffer_format, const void* data) override;
+	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) override;
 	virtual unsigned id() override;
 
 	VkTexture( const VkTexture& other ) = delete; // non construction-copyable
@@ -432,7 +431,6 @@ struct VkRoot final : gfx_api::context
 	vk::PhysicalDeviceProperties physDeviceProps;
 	vk::PhysicalDeviceFeatures physDeviceFeatures;
 	vk::PhysicalDeviceMemoryProperties memprops;
-	bool supports_rgb = false;
 
 	QueueFamilyIndices queueFamilyIndices;
 	std::vector<const char*> enabledDeviceExtensions;
@@ -530,6 +528,7 @@ private:
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
 	void setupSwapchainImages();
 
+public:
 	vk::Format get_format(const gfx_api::pixel_format& format) const;
 
 private:

@@ -82,6 +82,8 @@ static Vector2i player_pos[MAX_PLAYERS];
 static WzText player_Text[MAX_PLAYERS];
 static bool mappreview = false;
 
+static void screen_GenerateCoordinatesAndVBOs();
+
 /* Initialise the double buffered display */
 bool screenInitialise()
 {
@@ -282,8 +284,10 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 void screen_SetBackDropFromFile(const char *filename)
 {
 	int maxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
-	backdropGfx->loadTexture(filename, maxTextureSize, maxTextureSize);
-	screen_Upload(nullptr);
+	backdropGfx->loadTexture(filename, gfx_api::texture_type::game_texture, maxTextureSize, maxTextureSize);
+	backdropIsMapPreview = false;
+	// Generate coordinates and put them into VBOs
+	screen_GenerateCoordinatesAndVBOs();
 }
 
 void screen_StopBackDrop()
@@ -344,7 +348,7 @@ void screen_Display()
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_GenerateCoordinatesAndVBOs()
+static void screen_GenerateCoordinatesAndVBOs()
 {
 	assert(backdropGfx != nullptr);
 
@@ -389,17 +393,12 @@ void screen_GenerateCoordinatesAndVBOs()
 	backdropGfx->buffers(4, vertices, texcoords);
 }
 
-void screen_Upload(const iV_Image* newBackdropImage)
+void screen_Upload(iV_Image&& newBackdropImage)
 {
-	backdropIsMapPreview = false;
-
-	if (newBackdropImage) // preview
-	{
-		// Slight hack to display maps previews in background.
-		// Bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-		backdropGfx->makeTexture(newBackdropImage, "mem::generated_map_preview");
-		backdropIsMapPreview = true;
-	}
+	// Slight hack to display maps previews in background.
+	// Bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
+	backdropGfx->loadTexture(std::move(newBackdropImage), gfx_api::texture_type::user_interface, "mem::generated_map_preview");
+	backdropIsMapPreview = true;
 
 	// Generate coordinates and put them into VBOs
 	screen_GenerateCoordinatesAndVBOs();

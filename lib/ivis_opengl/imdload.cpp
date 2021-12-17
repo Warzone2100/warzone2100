@@ -1264,10 +1264,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, filename.toUtf8().c_str());
-			specpage = iV_GetTransformTexture(specfile, gfx_api::texture_type::specular_map, [filename, specfile](iV_Image& sSprite){
-				bool result = sSprite.convert_to_luma();
-				ASSERT_OR_RETURN(, result, "(%s): Failed to convert specular map", specfile);
-			});
+			specpage = iV_GetTexture(specfile, gfx_api::texture_type::specular_map);
 			ASSERT_OR_RETURN(, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
 		}
 
@@ -1286,10 +1283,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		{
 			std::string tcmask_name = pie_MakeTexPageTCMaskName(texfile);
 			tcmask_name += ".png";
-			optional<size_t> texpage_mask = iV_GetTransformTexture(tcmask_name.c_str(), gfx_api::texture_type::alpha_mask, [filename, tcmask_name](iV_Image& sSprite){
-				ASSERT_OR_RETURN(, sSprite.channels() == 4, "(%s) tcmask png (%s) does not have 4 channels, as expected", filename.toUtf8().c_str(), tcmask_name.c_str());
-				sSprite.convert_to_single_channel(3); // alpha channel
-			});
+			optional<size_t> texpage_mask = iV_GetTexture(tcmask_name.c_str(), gfx_api::texture_type::alpha_mask);
 
 			ASSERT_OR_RETURN(, texpage_mask.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
 

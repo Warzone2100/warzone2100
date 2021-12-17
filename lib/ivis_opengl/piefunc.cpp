@@ -253,7 +253,7 @@ void pie_Skybox_Init()
 
 void pie_Skybox_Texture(const char *filename)
 {
-	skyboxGfx->loadTexture(filename);
+	skyboxGfx->loadTexture(filename, gfx_api::texture_type::game_texture);
 }
 
 void pie_Skybox_Shutdown()

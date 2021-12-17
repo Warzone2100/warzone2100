@@ -75,25 +75,29 @@ GFX::GFX(GFXTYPE type, int coordsPerVertex) : mType(type), mCoordsPerVertex(coor
 {
 }
 
-void GFX::loadTexture(const char *filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+void GFX::loadTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	const char *extension = strrchr(filename, '.'); // determine the filetype
-	iV_Image image;
 	if (!extension || strcmp(extension, ".png") != 0)
 	{
 		debug(LOG_ERROR, "Bad image filename: %s", filename);
 		return;
 	}
-	if (iV_loadImage_PNG(filename, &image))
-	{
-		scaleImageMaxSize(&image, maxWidth, maxHeight);
-		makeTexture(&image, filename);
-		iV_unloadImage(&image);
-	}
+	if (mTexture)
+		delete mTexture;
+	mTexture = gfx_api::context::get().loadTextureFromFile(filename, textureType, maxWidth, maxHeight);
 }
 
-void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& format, const void *image)
+void GFX::loadTexture(iV_Image&& bitmap, gfx_api::texture_type textureType, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
+	if (mTexture)
+		delete mTexture;
+	mTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(bitmap), textureType, filename, maxWidth, maxHeight);
+}
+
+void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& format)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	if (mTexture)
@@ -101,50 +105,25 @@ void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& 
 	if (width > 0 && height > 0)
 	{
 		mTexture = gfx_api::context::get().create_texture(1, width, height, format);
-		if (image != nullptr)
-			mTexture->upload(0u, 0u, 0u, width, height, format, image);
 	}
-	mWidth = width;
-	mHeight = height;
-	mFormat = format;
 }
 
-void GFX::makeTexture(const iV_Image* image /*= nullptr*/, const std::string& filename)
+void GFX::makeCompatibleTexture(const iV_Image* image /*= nullptr*/, const std::string& filename)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	if (mTexture)
 		delete mTexture;
 	if (!image)
 	{
-		mWidth = 0;
-		mHeight = 0;
-		mFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 		return;
 	}
-	auto format = image->pixel_format();
-	if (image->width() > 0 && image->height() > 0)
-	{
-		mTexture = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *image, filename);
-		if (image->size_in_bytes() > 0)
-			mTexture->upload(0u, 0u, 0u, *image);
-	}
-	mWidth = image->width();
-	mHeight = image->height();
-	mFormat = format;
+	mTexture = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *image, filename);
 }
 
-void GFX::updateTexture(const void *image, size_t width, size_t height)
+void GFX::updateTexture(const iV_Image& image /*= nullptr*/)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
-	if (width == 0)
-	{
-		width = mWidth;
-	}
-	if (height == 0)
-	{
-		height = mHeight;
-	}
-	mTexture->upload(0u, 0u, 0u, width, height, mFormat, image);
+	mTexture->upload(0u, 0u, 0u, image);
 }
 
 void GFX::buffers(int vertices, const void *vertBuf, const void *auxBuf)
@@ -682,14 +661,14 @@ void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat wi
 }
 
 /** Store radar texture with given width and height. */
-void pie_DownLoadRadar(UDWORD *buffer)
+void pie_DownLoadRadar(const iV_Image& bitmap)
 {
 	currRadarGfx++;
 	if (currRadarGfx >= NUM_RADAR_TEXTURES)
 	{
 		currRadarGfx = 0;
 	}
-	radarGfx[currRadarGfx]->updateTexture(buffer);
+	radarGfx[currRadarGfx]->updateTexture(bitmap);
 }
 
 /** Display radar texture using the given height and width, depending on zoom level. */

@@ -549,8 +549,7 @@ static void loadEmptyMapPreview()
 
 	screen_enableMapPreview(ex, ey, playerpos);
 
-	screen_Upload(&bckImage);
-	bckImage.clear();
+	screen_Upload(std::move(bckImage));
 }
 
 static inline WzMap::MapPreviewColor PIELIGHT_to_MapPreviewColor(PIELIGHT color)
@@ -745,8 +744,7 @@ void loadMapPreview(bool hideInterface)
 
 	screen_enableMapPreview(mapPreviewResult->width, mapPreviewResult->height, playerpos);
 
-	screen_Upload(&bckImage);
-	bckImage.clear();
+	screen_Upload(std::move(bckImage));
 
 	if (hideInterface)
 	{

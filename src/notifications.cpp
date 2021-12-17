@@ -753,16 +753,6 @@ W_NOTIFICATION::~W_NOTIFICATION()
 
 #include "lib/ivis_opengl/piestate.h"
 
-gfx_api::texture* makeTexture(unsigned int width, unsigned int height, const gfx_api::pixel_format& format, const void *image)
-{
-	size_t mip_count = static_cast<size_t>(floor(log(std::max(width, height)))) + 1;
-	gfx_api::texture* mTexture = gfx_api::context::get().create_texture(mip_count, width, height, format);
-	if (image != nullptr)
-		mTexture->upload_and_generate_mipmaps(0u, 0u, width, height, format, image);
-
-	return mTexture;
-}
-
 gfx_api::texture* W_NOTIFICATION::loadImage(const WZ_Notification_Image& image)
 {
 	return image.loadImageToTexture();
@@ -773,38 +763,26 @@ gfx_api::texture* WZ_Notification_Image::loadImageToTexture() const
 	const WZ_Notification_Image& image = *this;
 
 	gfx_api::texture* pTexture = nullptr;
-	iV_Image ivImage;
 	if (!image.imagePath().empty())
 	{
-		const std::string& filename = image.imagePath();
-		const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
-
-		if (!extension || strcmp(extension, ".png") != 0)
-		{
-			debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
-			return nullptr;
-		}
-		if (!iV_loadImage_PNG(filename.c_str(), &ivImage))
-		{
-			return nullptr;
-		}
+		pTexture = gfx_api::context::get().loadTextureFromFile(image.imagePath().c_str(), gfx_api::texture_type::game_texture);
 	}
 	else if (!image.memoryBuffer().empty())
 	{
+		iV_Image ivImage;
 		auto result = iV_loadImage_PNG(image.memoryBuffer(), &ivImage);
 		if (!result.noError())
 		{
 			debug(LOG_ERROR, "Failed to load image from memory buffer: %s", result.text.c_str());
 			return nullptr;
 		}
+		pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(ivImage), gfx_api::texture_type::game_texture, "mem::notify_image");
 	}
 	else
 	{
 		// empty or unhandled case
 		return nullptr;
 	}
-	pTexture = makeTexture(ivImage.width(), ivImage.height(), iV_getPixelFormat(&ivImage), ivImage.bmp());
-	iV_unloadImage(&ivImage);
 	return pTexture;
 }
 

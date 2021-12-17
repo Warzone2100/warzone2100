@@ -388,7 +388,6 @@ static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
 		return nullptr;
 	}
 
-	iV_Image ivImage;
 	const std::string& filename = imagePath;
 	const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
 
@@ -397,15 +396,8 @@ static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
 		debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
 		return nullptr;
 	}
-	if (!iV_loadImage_PNG(filename.c_str(), &ivImage))
-	{
-		return nullptr;
-	}
-	auto pixel_format = iV_getPixelFormat(&ivImage);
-	size_t mip_count = static_cast<size_t>(floor(log(std::max(ivImage.width(), ivImage.height())))) + 1;
-	gfx_api::texture* pAlbumCoverTexture = gfx_api::context::get().create_texture(mip_count, ivImage.width(), ivImage.height(), pixel_format);
-	pAlbumCoverTexture->upload_and_generate_mipmaps(0u, 0u, ivImage.width(), ivImage.height(), pixel_format, ivImage.bmp());
-	iV_unloadImage(&ivImage);
+
+	gfx_api::texture* pAlbumCoverTexture = gfx_api::context::get().loadTextureFromFile(imagePath.c_str(), gfx_api::texture_type::game_texture);
 	return pAlbumCoverTexture;
 }
 

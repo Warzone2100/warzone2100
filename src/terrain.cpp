@@ -961,17 +961,31 @@ bool initTerrain()
 
 	// Prepare the lightmap pixmap and texture
 	lightmapPixmap = std::unique_ptr<iV_Image>(new iV_Image());
-	if (lightmapPixmap == nullptr || !lightmapPixmap->allocate(lightmapWidth, lightmapHeight, 3, true))
+
+	// not every system may have RGB texture support, so may need to expand to 4-channel (RGBA)
+	auto lightmapChannels = gfx_api::context::get().getClosestSupportedUncompressedImageFormatChannels(3); // ideal is RGB, but check if supported
+	ASSERT_OR_RETURN(false, lightmapChannels.has_value(), "Exhausted all possible uncompressed formats for lightmap texture??");
+
+	if (lightmapPixmap == nullptr || !lightmapPixmap->allocate(lightmapWidth, lightmapHeight, lightmapChannels.value(), true))
 	{
 		debug(LOG_FATAL, "Out of memory!");
 		abort();
 		return false;
 	}
+	if (lightmapPixmap->channels() == 4)
+	{
+		// must set alpha channel to opaque
+		auto lightmapWritePtr = lightmapPixmap->bmp_w();
+		for (size_t pixelIndex = 0; pixelIndex < lightmapPixmap->width() * lightmapPixmap->height(); ++pixelIndex)
+		{
+			lightmapWritePtr[pixelIndex * 4 + 3] = 255;
+		}
+	}
 	if (lightmap_texture)
 		delete lightmap_texture;
-	lightmap_texture = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *lightmapPixmap, "mem::lightmap");
+	lightmap_texture = gfx_api::context::get().create_texture(1, lightmapPixmap->width(), lightmapPixmap->height(), lightmapPixmap->pixel_format(), "mem::lightmap");
 
-	lightmap_texture->upload(0, 0, 0, *lightmapPixmap);
+	lightmap_texture->upload(0, 0, 0, *(lightmapPixmap.get()));
 	terrainInitialised = true;
 
 	return true;
@@ -1021,6 +1035,7 @@ void shutdownTerrain()
 
 static void updateLightMap()
 {
+	size_t lightmapChannels = lightmapPixmap->channels();
 	unsigned char* lightMapWritePtr = lightmapPixmap->bmp_w();
 	for (int j = 0; j < mapHeight; ++j)
 	{
@@ -1039,9 +1054,9 @@ static void updateLightMap()
 				colour.byte.r = MAX(m, 255 - m);
 			}
 
-			lightMapWritePtr[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
-			lightMapWritePtr[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
-			lightMapWritePtr[(i + j * lightmapWidth) * 3 + 2] = colour.byte.b;
+			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 0] = colour.byte.r;
+			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 1] = colour.byte.g;
+			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 2] = colour.byte.b;
 
 			if (!pie_GetFogStatus())
 			{
@@ -1074,15 +1089,15 @@ static void updateLightMap()
 				darken = (distToEdge) / 2.0f;
 				if (darken <= 0)
 				{
-					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 0] = 0;
-					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 1] = 0;
-					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 2] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 0] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 1] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 2] = 0;
 				}
 				else if (darken < 1)
 				{
-					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 0] *= darken;
-					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 1] *= darken;
-					lightMapWritePtr[(i + j * lightmapWidth) * 3 + 2] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 0] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 1] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 2] *= darken;
 				}
 			}
 		}
@@ -1275,7 +1290,7 @@ void drawTerrain(const glm::mat4 &mvp)
 		lightmapLastUpdate = realTime;
 		updateLightMap();
 
-		lightmap_texture->upload(0, 0, 0, *lightmapPixmap);
+		lightmap_texture->upload(0, 0, 0, *(lightmapPixmap.get()));
 	}
 
 	///////////////////////////////////

@@ -65,16 +65,137 @@ gfx_api::context& gfx_api::context::get()
 	return *current_backend_context;
 }
 
+#include "png_util.h"
+
+
+static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	iV_Image loadedUncompressedImage;
+
+	// 1.) Load the PNG into an iV_Image
+	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage))
+	{
+		// Failed to load the image
+		return nullptr;
+	}
+
+	return gfx_api::context::get().loadTextureFromUncompressedImage(std::move(loadedUncompressedImage), textureType, filename, maxWidth, maxHeight);
+}
+
+std::string imageLoadFilenameFromInputFilename(const char *filename)
+{
+	ASSERT_OR_RETURN("", filename != nullptr, "Null filename");
+	// For now, always return the input filename
+	return filename;
+}
+
+// MARK: - High-level texture loading
+
+// Load a texture from a file
+// (which loads straight to a texture based on the appropriate texture_type, handling mip_maps, compression, etc)
+gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	std::string imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
+
+	if (strEndsWith(imageLoadFilename, ".png"))
+	{
+		return loadImageTextureFromFile_PNG(imageLoadFilename, textureType, maxWidth, maxHeight);
+	}
+	else
+	{
+		debug(LOG_ERROR, "Unable to load image file: %s", filename);
+		return nullptr;
+	}
+}
+
+// Takes an iv_Image and texture_type and loads a texture as appropriate / possible
+gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	// 1.) Convert to expected # of channels based on textureType
+	switch (textureType)
+	{
+		case gfx_api::texture_type::specular_map:
+		{
+			bool result = image.convert_to_luma();
+			ASSERT_OR_RETURN(nullptr, result, "(%s): Failed to convert specular map", filename.c_str());
+			break;
+		}
+		case gfx_api::texture_type::alpha_mask:
+		{
+			if (image.channels() > 1)
+			{
+				ASSERT_OR_RETURN(nullptr, image.channels() == 4, "(%s): Alpha mask does not have 1 or 4 channels, as expected", filename.c_str());
+				image.convert_to_single_channel(3); // extract alpha channel
+			}
+			break;
+		}
+		default:
+			break;
+	}
+
+	// 2.) If maxWidth / maxHeight exceed current image dimensions, resize()
+	image.scale_image_max_size(maxWidth, maxHeight);
+
+	// 3.) Determine mipmap levels (if needed / desired)
+	bool generateMipMaps = (textureType != gfx_api::texture_type::user_interface);
+	size_t mipmap_levels = (generateMipMaps) ? static_cast<size_t>(floor(log(std::max(image.width(), image.height())))) + 1 : 1;
+
+	// 4.) Extend channels, if needed, to a supported uncompressed format
+	auto channels = image.channels();
+	// Verify that the gfx backend supports this format
+	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(channels);
+	ASSERT_OR_RETURN(nullptr, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
+	for (auto i = image.channels(); i < closestSupportedChannels; ++i)
+	{
+		image.expand_channels_towards_rgba();
+	}
+
+	auto uploadFormat = image.pixel_format();
+
+	// 5.) Create a new compatible gpu texture object
+	gfx_api::texture* pTexture = gfx_api::context::get().create_texture(mipmap_levels, image.width(), image.height(), uploadFormat, filename);
+
+	// 6.) Upload initial (full) level
+	if (uploadFormat == image.pixel_format())
+	{
+		pTexture->upload(0, 0, 0, image);
+	}
+	else
+	{
+		// FUTURE TODO: real-time compression
+	}
+
+	// 7.) Generate and upload mipmaps (if needed)
+	for (size_t i = 1; i < mipmap_levels; i++)
+	{
+		unsigned int output_w = std::max<unsigned int>(1, image.width() >> 1);
+		unsigned int output_h = std::max<unsigned int>(1, image.height() >> 1);
+
+		image.resize(output_w, output_h);
+
+		if (uploadFormat == image.pixel_format())
+		{
+			pTexture->upload(i, 0, 0, image);
+		}
+		else
+		{
+			// FUTURE TODO: real-time compression
+		}
+	}
+
+	return pTexture;
+}
+
 // MARK: - texture
 
-static inline nonstd::optional<size_t> getClosestSupportedUncompressedImageFormatChannels(size_t channels)
+optional<size_t> gfx_api::context::getClosestSupportedUncompressedImageFormatChannels(size_t channels)
 {
 	auto format = iV_Image::pixel_format_for_channels(channels);
 
 	// Verify that the gfx backend supports this format
 	while (!gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::flags::sampled_image))
 	{
-		ASSERT_OR_RETURN(nonstd::nullopt, channels < 4, "Exhausted all possible uncompressed formats??");
+		ASSERT_OR_RETURN(nullopt, channels < 4, "Exhausted all possible uncompressed formats??");
 		channels += 1;
 		format = iV_Image::pixel_format_for_channels(channels);
 	}
@@ -94,35 +215,4 @@ gfx_api::texture* gfx_api::context::createTextureForCompatibleImageUploads(const
 
 	gfx_api::texture* pTexture = gfx_api::context::get().create_texture(1, bitmap.width(), bitmap.height(), target_pixel_format, filename);
 	return pTexture;
-}
-
-void gfx_api::texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& bitmap)
-{
-	ASSERT_OR_RETURN(, bitmap.size_in_bytes() > 0, "Empty bitmap - ignoring");
-
-	// Get the channels of this iV_Image
-	auto channels = bitmap.channels();
-	// Verify that the gfx backend supports this format
-	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(channels);
-	ASSERT_OR_RETURN(, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
-
-	// found the nearest supported format
-	if (closestSupportedChannels.value() == channels)
-	{
-		// Upload the texture (no conversion needed)
-		upload(mip_level, offset_x, offset_y, bitmap.width(), bitmap.height(), bitmap.pixel_format(), bitmap.bmp());
-	}
-	else
-	{
-		// Make a copy of the image and convert to the desired output format
-		iV_Image bitmapCopy;
-		bitmapCopy.duplicate(bitmap);
-		for (auto i = bitmapCopy.channels(); i < closestSupportedChannels; i++)
-		{
-			bitmapCopy.expand_channels_towards_rgba();
-		}
-		// Upload the texture
-		upload(mip_level, offset_x, offset_y, bitmapCopy.width(), bitmapCopy.height(), bitmapCopy.pixel_format(), bitmapCopy.bmp());
-	}
-
 }

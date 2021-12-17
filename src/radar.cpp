@@ -67,7 +67,7 @@ bool radarRotationArrow = true; ///< display arrow when radar rotation enabled?
 
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
-static UDWORD		*radarBuffer = nullptr;
+static iV_Image		radarBitmap;
 static UDWORD		*radarOverlayBuffer = nullptr;
 static Vector3i		playerpos = {0, 0, 0};
 
@@ -215,10 +215,7 @@ bool InitRadar()
 
 bool resizeRadar()
 {
-	if (radarBuffer)
-	{
-		free(radarBuffer);
-	}
+	radarBitmap.clear();
 	if (radarOverlayBuffer)
 	{
 		free(radarOverlayBuffer);
@@ -226,9 +223,8 @@ bool resizeRadar()
 	radarTexWidth = static_cast<size_t>(std::abs(scrollMaxX - scrollMinX));
 	radarTexHeight = static_cast<size_t>(std::abs(scrollMaxY - scrollMinY));
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
-	radarBuffer = (uint32_t *)malloc(radarBufferSize);
+	radarBitmap.allocate(radarTexWidth, radarTexHeight, 4, true);
 	radarOverlayBuffer = (uint32_t*)malloc(radarBufferSize);
-	memset(radarBuffer, 0, radarBufferSize);
 	memset(radarOverlayBuffer, 0, radarBufferSize);
 	frameSkip = 0;
 	if (rotateRadar)
@@ -248,8 +244,7 @@ bool resizeRadar()
 
 bool ShutdownRadar()
 {
-	free(radarBuffer);
-	radarBuffer = nullptr;
+	radarBitmap.clear();
 	free(radarOverlayBuffer);
 	radarOverlayBuffer = nullptr;
 	frameSkip = 0;
@@ -326,7 +321,7 @@ void drawRadar()
 
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
 
-	ASSERT_OR_RETURN(, radarBuffer, "No radar buffer allocated");
+	ASSERT_OR_RETURN(, radarBitmap.bmp_w(), "No radar buffer allocated");
 	ASSERT_OR_RETURN(, radarOverlayBuffer, "No radar buffer allocated");
 
 	setViewingWindow();
@@ -337,7 +332,7 @@ void drawRadar()
 		DrawRadarTiles();
 		DrawRadarObjects();
 		applyMinimapOverlay();
-		pie_DownLoadRadar(radarBuffer);
+		pie_DownLoadRadar(radarBitmap);
 		frameSkip = RADAR_FRAME_SKIP;
 	}
 	frameSkip--;
@@ -456,6 +451,8 @@ static PIELIGHT inline appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTi
 static void DrawRadarTiles()
 {
 	SDWORD	x, y;
+	size_t radarBufferSize2 = radarBitmap.size_in_bytes();
+	uint32_t* radarBuffer = reinterpret_cast<uint32_t*>(radarBitmap.bmp_w());
 
 	for (x = scrollMinX; x < scrollMaxX; x++)
 	{
@@ -464,7 +461,7 @@ static void DrawRadarTiles()
 			MAPTILE	*psTile = mapTile(x, y);
 			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
 
-			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
+			ASSERT(pos * sizeof(UDWORD) < radarBufferSize2, "Buffer overrun");
 			if (y == scrollMinY || x == scrollMinX || y == scrollMaxY - 1 || x == scrollMaxX - 1)
 			{
 				radarBuffer[pos] = WZCOL_BLACK.rgba;
@@ -610,7 +607,9 @@ static void DrawRadarObjects()
 static void applyMinimapOverlay()
 {
 	size_t radarTexCount = radarTexWidth * radarTexHeight;
-	ASSERT(radarTexCount * sizeof(*radarBuffer) <= radarBufferSize, "Buffer overrun");
+	size_t radarBufferSize2 = radarBitmap.size_in_bytes();
+	uint32_t* radarBuffer = reinterpret_cast<uint32_t*>(radarBitmap.bmp_w());
+	ASSERT(radarTexCount * sizeof(*radarBuffer) <= radarBufferSize2, "Buffer overrun");
 	ASSERT(radarTexCount * sizeof(*radarOverlayBuffer) <= radarBufferSize, "Buffer overrun");
 	for (size_t i = 0; i < radarTexCount; i++)
 	{

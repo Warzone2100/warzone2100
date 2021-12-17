@@ -86,10 +86,8 @@ namespace gfx_api
 	{
 		virtual ~texture() {};
 		virtual void bind() = 0;
-		virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const pixel_format& buffer_format, const void* data) = 0;
-		virtual void upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const pixel_format& buffer_format, const void* data) = 0;
+		virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) = 0;
 		virtual unsigned id() = 0;
-		void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& bitmap);
 
 		texture( const texture& other ) = delete; // non construction-copyable
 		texture& operator=( const texture& ) = delete; // non copyable
@@ -320,6 +318,11 @@ namespace gfx_api
 		virtual swap_interval_mode getSwapInterval() const = 0;
 		virtual bool texture2DFormatIsSupported(pixel_format format, pixel_format_usage::flags usage) = 0;
 	public:
+		// High-level API for getting a texture object from file / uncompressed bitmap
+		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
+		gfx_api::texture* loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
+
+		optional<size_t> getClosestSupportedUncompressedImageFormatChannels(size_t channels);
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) = 0;
