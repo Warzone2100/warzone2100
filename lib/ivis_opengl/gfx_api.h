@@ -322,7 +322,7 @@ namespace gfx_api
 		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
 		gfx_api::texture* loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 
-		optional<size_t> getClosestSupportedUncompressedImageFormatChannels(size_t channels);
+		optional<unsigned int> getClosestSupportedUncompressedImageFormatChannels(unsigned int channels);
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) = 0;

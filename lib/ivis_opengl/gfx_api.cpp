@@ -188,7 +188,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 
 // MARK: - texture
 
-optional<size_t> gfx_api::context::getClosestSupportedUncompressedImageFormatChannels(size_t channels)
+optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFormatChannels(unsigned int channels)
 {
 	auto format = iV_Image::pixel_format_for_channels(channels);
 
