@@ -37,6 +37,7 @@
 #include "main.h"								// for gamemode
 #include "multistat.h"
 #include "multirecv.h"
+#include "stdinreader.h"
 
 #include <array>
 
@@ -309,7 +310,8 @@ bool recvPing(NETQUEUE queue)
 		}
 
 		bool verifiedResponse = false;
-		if (!getMultiStats(sender).identity.empty())
+		const auto& senderIdentity = getMultiStats(sender).identity;
+		if (!senderIdentity.empty())
 		{
 			verifiedResponse = getMultiStats(sender).identity.verify(challengeResponse, expectedPingChallenge.value().data(), PING_CHALLENGE_BYTES);
 		}
@@ -323,8 +325,16 @@ bool recvPing(NETQUEUE queue)
 		// Work out how long it took them to respond
 		ingame.PingTimes[sender] = (realTime - PingSend[sender]) / 2;
 
-		// Record that they've verified the identity
-		ingame.VerifiedIdentity[sender] = true;
+		if (!ingame.VerifiedIdentity[sender])
+		{
+			// Record that they've verified the identity
+			ingame.VerifiedIdentity[sender] = true;
+
+			// Output to stdinterface, if enabled
+			std::string senderPublicKeyB64 = base64Encode(senderIdentity.toBytes(EcKey::Public));
+			std::string senderIdentityHash = senderIdentity.publicHashString();
+			wz_command_interface_output("WZEVENT: player identity VERIFIED: %" PRIu32 " %s %s\n", sender, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
+		}
 
 		// Note that we have received it
 		PingSend[sender] = 0;

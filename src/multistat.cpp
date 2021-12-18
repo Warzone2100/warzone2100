@@ -38,6 +38,7 @@
 #include "mission.h" // for cheats
 #include "multistat.h"
 #include "urlrequest.h"
+#include "stdinreader.h"
 
 #include <utility>
 #include <memory>
@@ -251,6 +252,11 @@ void recvMultiStats(NETQUEUE queue)
 		{
 			ingame.PingTimes[playerIndex] = PING_LIMIT;
 			ingame.VerifiedIdentity[playerIndex] = false;
+
+			// Output to stdinterface, if enabled
+			std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
+			std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
+			wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
 		}
 	}
 	NETend();
