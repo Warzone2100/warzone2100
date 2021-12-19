@@ -7004,6 +7004,11 @@ static void packFavoriteStructs()
 	{
 		if (asStructureStats[i].isFavorite)
 		{
+			if (asStructureStats[i].id.isEmpty())
+			{
+				ASSERT(false, "Invalid struct stats - empty id");
+				continue;
+			}
 			if (first)
 			{
 				first = false;
