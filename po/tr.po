@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:24\n"
+"PO-Revision-Date: 2021-12-16 02:25\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -4024,7 +4024,7 @@ msgstr "Kolektif'e ait olan yer-uydu bağını ele geçir"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Bir kamyon ile beraber bir taşıyıcı gönder ve Kollektif saldırı bitene, sayaç sonra erene kadar hayatta kal"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -16204,7 +16204,7 @@ msgstr "Eski Teknoloji Gösteriliyor"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Bedel: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"

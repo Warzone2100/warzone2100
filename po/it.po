@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:25\n"
+"PO-Revision-Date: 2021-12-19 10:02\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -5824,11 +5824,11 @@ msgstr "Versione del Formato del Replay: %u"
 
 #: lib/netplay/netreplay.cpp:325
 msgid "Replay File Format Unsupported"
-msgstr "Formato del File del Replay Non Supportato"
+msgstr "Formato del file di replay non supportato"
 
 #: lib/netplay/nettypes.cpp:883
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Impossibile caricare il replay: il file è incompleto o danneggiato."
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -15003,7 +15003,7 @@ msgstr "Abilita una mod solo per la campagna"
 
 #: src/clparse.cpp:368
 msgid "Enable a multiplay only mod"
-msgstr "Abilita un mod per la sola modalità giocatore"
+msgstr "Abilita una mod solo per la modalità multigiocatore"
 
 #: src/clparse.cpp:369
 msgid "Disable asserts"
@@ -15028,11 +15028,11 @@ msgstr "Carica una campagna salvata"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
-msgstr ""
+msgstr "Carica un replay"
 
 #: src/clparse.cpp:373
 msgid "replay file"
-msgstr ""
+msgstr "file di replay"
 
 #: src/clparse.cpp:374
 msgid "Play in windowed mode"
@@ -15177,7 +15177,7 @@ msgstr "Aggiungi una chiave pubblica dell'admin della lobby (per i comandi slash
 
 #: src/clparse.cpp:417
 msgid "b64-pub-key"
-msgstr ""
+msgstr "chiave pubblica b64"
 
 #: src/clparse.cpp:418
 msgid "Enable command interface"
@@ -15678,7 +15678,7 @@ msgstr "Gestore della musica"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Opzioni multigiocatore"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -16069,17 +16069,17 @@ msgstr "Questa difficoltà è per i giocatori molto esperti!"
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u minuti"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u secondi"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Nessuno"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
@@ -16087,7 +16087,7 @@ msgstr ""
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Porta del gioco"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
@@ -16107,7 +16107,7 @@ msgstr ""
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "OPZIONI MULTIGIOCATORE"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5127
@@ -16371,12 +16371,12 @@ msgstr "La mod richiesto non può essere caricata: %s\n\n"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Impossibile caricare: %s."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Rimuovi tutte le mod incompatibili."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -17728,19 +17728,19 @@ msgstr ""
 
 #: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Il salvataggio rapido non è permesso nelle partite a più giocatori o nelle esercitazioni"
 
 #: src/keybind.cpp:2564
 msgid "QuickSave failed"
-msgstr ""
+msgstr "Salvataggio rapido non riuscito"
 
 #: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Il salvataggio rapido non è permesso nelle partite a più giocatori o nelle esercitazioni"
 
 #: src/keybind.cpp:2600
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "Il file del salvataggio rapido non esiste ancora"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -18658,11 +18658,11 @@ msgstr "espulso %s: %s dal gioco e aggiunto alla lista dei bannati!"
 
 #: src/multiopt.cpp:304
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "MAPPA RICHIESTA!"
 
 #: src/multiopt.cpp:329
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "RICHIESTA MOD!"
 
 #: src/multiopt.cpp:347
 #: src/multiplay.cpp:2032
@@ -18719,7 +18719,7 @@ msgstr "FILE INVIATO!"
 
 #: src/multiplay.cpp:2012
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "MAPPA SCARICATA!"
 
 #: src/multiplay.cpp:2068
 #, c-format
@@ -19106,7 +19106,7 @@ msgstr ""
 #: src/structure.cpp:5432
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - punti ricerca: %u"
 
 #: src/structure.cpp:5439
 #, c-format

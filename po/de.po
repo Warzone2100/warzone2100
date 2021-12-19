@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 16:35\n"
+"PO-Revision-Date: 2021-12-14 20:11\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -4024,7 +4024,7 @@ msgstr "Sichere den Uplink vor dem Kollektiv"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Starte mindestens einen Transporter mit einem Lkw an Bord und überlebe den Angriff des Kollektivs bis die Zeit abgelaufen ist"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
