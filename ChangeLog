@@ -1,3 +1,24 @@
+2021-12-20: Version 4.2.4:
+ * General:
+   * Fix: Prebuilt ally gates not being passable (commit:428d0b70ff9af2a58a27bcfdade12ffe7fc062b4, #2484)
+   * Fix: Cleanup old log files (commit:d5ed1a5164b50fadba5f0ef5bcf03c619aa2b62f, #2501)
+   * Fix: Various crashes and resource leaks (too many commits, #2480, #2493, #2494, #2499, #2504, #2512)
+ * Campaign:
+   * Change: Ignore VTOLs when a campaign enemy group unit can't hit them (commit:d1fd63899890de6f9b43b4080581378acf631a89, #2475)
+   * Change: Better target selections by sorting targets relative to group average coordinate (commit:b538fb562f55ffd3abd92eea1774ac0cfe98cc4f, #2475)
+   * Change: Add a time range to cam3-1 launch / detonate sounds (commit:c64ca3afdc989a885d12b530647bbd308221c037, #2476)
+   * Change: Make the winning requirements for Beta-end more clear (commit:d89391d05026d8e940bca5ccd507517349965153, #2491)
+   * Change: Make Gamma 5 a little more hectic on Hard / Insane difficulty (commit:f467e476951b89dab56404e68913662734ba54e2, #2502)
+ * Multiplayer:
+   * Add: Additional lobby chat slash commands, cmdinterface event output (too many commits, #2500)
+   * Change: Set default AI back to Nexus (commit:a4f7b6b6d678a25ef76d738779eed00bf8526d69, #2487)
+   * Change: Make some AIs easier when using Easy difficulty (too many commits, #2486)
+   * Change: Remove old Cobra Hard / Insane weapon perks (commit:9c245da200648745d17bee0dc3f200872b7d7b94, #2489)
+   * Fix: Repeated game over message (commit:3e4a146bc6f8d52bddb98634aafc48e1be20b049, #2485)
+   * Fix: Add campaign Collective and Nexus structures back into mp stats file, fixing old maps (commit:3c60e5f9428136de5f494ce5857d9be6008b7701, #2506)
+ * Challenges:
+   * Fix: Specify specific AIs for "Back to Basics" and "Hide Behind Me" (commit:f2e6edabb1fad7193c611800180145faedc60611, #2487)
+
 2021-11-28: Version 4.2.3:
  * General:
    * Fix: Unable to demolish structures at full health (commit:baab23227e5deab3579e313f50f5a7238286a8dd, #2430)
