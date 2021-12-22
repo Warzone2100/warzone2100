@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:25\n"
+"PO-Revision-Date: 2021-12-22 17:52\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -348,7 +348,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "ثم استعمل إحدى الشاحنات لتطوير مولد الطاقة عن طريق بناء وحدةٍ إضافيةٍ فيه."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
@@ -8453,14 +8453,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0FacMod1.name
 #: po/custom/fromJson.txt:1972
 msgid "Factory Module"
-msgstr ""
+msgstr "وحدة مصنعٍ إضافية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
 #: po/custom/fromJson.txt:1976
 #, no-c-format
 msgid "Factory output speed +100%% per module"
-msgstr ""
+msgstr "ستزداد سرعة الإنتاج في المصنع بنسبة 100% لكل وحدةٍ إضافية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FU1.text[2]
@@ -10936,7 +10936,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[3]
 #: po/custom/fromJson.txt:3724
 msgid "May be upgraded using factory modules"
-msgstr ""
+msgstr "يمكن تحديثه عن طريق الوحدات الإضافية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
@@ -12052,7 +12052,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowMod1.name
 #: po/custom/fromJson.txt:4486
 msgid "Power Module"
-msgstr ""
+msgstr "وحدة طاقةٍ إضافية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -12564,7 +12564,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[1]
 #: po/custom/fromJson.txt:4841
 msgid "Research module expands research facilities"
-msgstr ""
+msgstr "ستؤدي وحدة الأبحاث الإضافية إلى توسيع أبحاثك"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Module.name
@@ -12573,7 +12573,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResearchModule1.name
 #: po/custom/fromJson.txt:4847
 msgid "Research Module"
-msgstr ""
+msgstr "وحدة أبحاثٍ إضافية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[2]
@@ -14066,21 +14066,21 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[3]
 #: po/custom/fromJson.txt:5801
 msgid "Use a truck to add modules to a factory"
-msgstr ""
+msgstr "استعمل إحدى الشاحنات لتزويد المصانع بوحدةٍ إضافية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[3]
 #: po/custom/fromJson.txt:5805
 msgid "Use a truck to add the module to a power generator"
-msgstr ""
+msgstr "استعمل إحدى الشاحنات لتزويد مولدات الطاقة بوحدةٍ إضافية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[3]
 #: po/custom/fromJson.txt:5809
 msgid "Use a truck to add the module to a research facility"
-msgstr ""
+msgstr "استعمل إحدى الشاحنات لتزويد مراكز الأبحاث بوحدةٍ إضافية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text[2]
