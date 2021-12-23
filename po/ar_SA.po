@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-22 17:52\n"
+"PO-Revision-Date: 2021-12-23 05:53\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1372,7 +1372,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:2627
 msgid "Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "برج حراسة برشاشٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower04.name
@@ -1381,7 +1381,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:2092
 msgid "Flamer Guard Tower"
-msgstr ""
+msgstr "برج صواريخٍ صغيرة"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
@@ -2369,7 +2369,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:166
 #: po/custom/fromJson.txt:4750
 msgid "Repair Facility Improved"
-msgstr ""
+msgstr "تم تطوير مركز الصيانة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RFU4.text[1]
@@ -5209,7 +5209,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:213
 #: po/custom/fromJson.txt:5190
 msgid "Sensor Tower"
-msgstr ""
+msgstr "برج استشعار"
 
 #: data/mp/messages/strings/names.txt:226
 msgid "Tornado AA Site"
@@ -5554,7 +5554,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:790
 #: po/custom/fromJson.txt:5033
 msgid "Satellite Uplink Center"
-msgstr ""
+msgstr "مركز الاتصال بالقمر الصناعي"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-PulseLsr.name
@@ -6189,7 +6189,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:235
 msgid "Advanced Repair Facility"
-msgstr ""
+msgstr "مركز صيانةٍ متطور"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RFU7.text[1]
@@ -7610,7 +7610,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-CB-Tower01.name
 #: po/custom/fromJson.txt:1393
 msgid "CB Tower"
-msgstr ""
+msgstr "برجٌ مضادٌ للمدفعية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Turret01.name
@@ -8941,28 +8941,28 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0HardcreteMk1CWall.name
 #: po/custom/fromJson.txt:2294
 msgid "Hardcrete Corner Wall"
-msgstr ""
+msgstr "زاويةٌ من الإسمنت الصلب"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HardcreteGate.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Gate.name
 #: po/custom/fromJson.txt:2298
 msgid "Hardcrete Gate"
-msgstr ""
+msgstr "بوابةٌ من الإسمنت الصلب"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Wall.name
 #: po/custom/fromJson.txt:2302
 msgid "Hardcrete Wall"
-msgstr ""
+msgstr "جدارٌ من الإسمنت الصلب"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HardcreteWall.name
 #. data/mp/stats/research.json: $.R-Defense-HardcreteWall.name
 #: po/custom/fromJson.txt:2306
 msgid "Hardcrete"
-msgstr ""
+msgstr "الإسمنت الصلب"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials05.name
@@ -9032,7 +9032,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2352
 msgid "Hardened Sensor Tower"
-msgstr ""
+msgstr "برج استشعارٍ مدعم"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
@@ -10048,21 +10048,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade02.name
 #: po/custom/fromJson.txt:3034
 msgid "Improved Hardcrete Mk2"
-msgstr ""
+msgstr "إسمنتٌ صلبٌ محسّن (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade03.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade03.name
 #: po/custom/fromJson.txt:3038
 msgid "Improved Hardcrete Mk3"
-msgstr ""
+msgstr "إسمنت صلبٌ محسّن (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade01.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade01.name
 #: po/custom/fromJson.txt:3042
 msgid "Improved Hardcrete"
-msgstr ""
+msgstr "إسمنتٌ صلبٌ محسّن"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[1]
@@ -12242,7 +12242,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
 #: po/custom/fromJson.txt:4613
 msgid "Radar Detector Tower"
-msgstr ""
+msgstr "برج كشف الرادار"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-RadarDetector01.name
@@ -12450,7 +12450,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0RepairCentre3.name
 #: po/custom/fromJson.txt:4756
 msgid "Repair Facility"
-msgstr ""
+msgstr "مركز الصيانة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
@@ -14324,7 +14324,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_SY_VCBSTW1.text[1]
 #: po/custom/fromJson.txt:5980
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr ""
+msgstr "يقوم البرج المضاد للمدفعية (طائرات) باكتشاف أسلحة الأعداء التي تطلق نيراناً غير مباشرة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-VTOLCBS-Tower01.name
@@ -14333,7 +14333,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-VTOL-CB-Tower01.name
 #: po/custom/fromJson.txt:5986
 msgid "VTOL CB Tower"
-msgstr ""
+msgstr "برجٌ مضادٌ للمدفعية (طائرات)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-VTOLCBS-Turret01.name
@@ -14580,7 +14580,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTW1.text[1]
 #: po/custom/fromJson.txt:6141
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr ""
+msgstr "يقوم برج الاستشعار (طائرات) باكتشاف الأعداء المتوجهين نحوك"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-VTOLStrike-Tower01.name
@@ -14588,7 +14588,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-VTOL-RadarTower01.name
 #: po/custom/fromJson.txt:6146
 msgid "VTOL Strike Tower"
-msgstr ""
+msgstr "برج استشعار (طائرات)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[1]
@@ -14722,7 +14722,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-SensoTowerWS.name
 #: po/custom/fromJson.txt:6232
 msgid "Wide Spectrum Sensor Tower"
-msgstr ""
+msgstr "برج استشعارٍ واسع النطاق"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-WS.name
