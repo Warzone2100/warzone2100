@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-23 05:53\n"
+"PO-Revision-Date: 2021-12-23 17:54\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -820,11 +820,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr ""
+msgstr "لقد هُزم نيكسوس"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr ""
+msgstr "لقد هزمنا نيكسوس أيها القائد."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
@@ -1351,7 +1351,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:396
 #: po/custom/fromJson.txt:2605
 msgid "Heavy Machinegun Bunker"
-msgstr ""
+msgstr "ملجأٌ برشاشٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PrisLas.name
@@ -4487,7 +4487,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
-msgstr ""
+msgstr "سنبني «النيكسوس»: الرابطة المثالية الإنسان والآلة."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
@@ -5251,7 +5251,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:317
 msgid "Nexus Wall"
-msgstr ""
+msgstr "جدار نيكسوس"
 
 #: data/mp/messages/strings/names.txt:318
 msgid "Nexus Corner Wall"
@@ -5402,7 +5402,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:407
 #: po/custom/fromJson.txt:3475
 msgid "Lancer Tower"
-msgstr ""
+msgstr "برج الرمّاح"
 
 #: data/mp/messages/strings/names.txt:429
 msgid "Advanced Manufacturing Mk3"
@@ -6615,7 +6615,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_PB_FL.text[1]
 #: po/custom/fromJson.txt:658
 msgid "Armored bunker with Flamer"
-msgstr ""
+msgstr "ملجأ محصنٌ وبداخله قاذف لهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_ATR.text[1]
@@ -6628,14 +6628,14 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_PB_LC.text[1]
 #: po/custom/fromJson.txt:665
 msgid "Armored bunker with Light Cannon"
-msgstr ""
+msgstr "ملجأ محصنٌ وبداخله مدفعٌ خفيف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_DF_P1.text[1]
 #: po/custom/fromJson.txt:669
 msgid "Armored bunker with Machinegun"
-msgstr ""
+msgstr "ملجأ محصنٌ وبداخله رشاش"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text[1]
@@ -6653,7 +6653,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:682
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr ""
+msgstr "برج جراسة مزودٌ بصواريح «الرمّاح» المضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
@@ -6691,7 +6691,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_EMP_ATMTOW.text[1]
 #: po/custom/fromJson.txt:702
 msgid "Armored guard tower with Scourge Missile"
-msgstr ""
+msgstr "برج حراسةٍ مدعم ومزودٌ بصواريخ «الجلاد»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_HALFT1.text[1]
@@ -8623,7 +8623,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox5.name
 #: po/custom/fromJson.txt:2070
 msgid "Flamer Bunker"
-msgstr ""
+msgstr "ملجأٌ بقاذف لهب"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraFlameTracks.name
@@ -10390,7 +10390,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Tower-Projector.name
 #: po/custom/fromJson.txt:3356
 msgid "Inferno Bunker"
-msgstr ""
+msgstr "ملجأٌ بقاذف جهنم"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHTracks.name
@@ -10429,7 +10429,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Flame2.name
 #: po/custom/fromJson.txt:3377
 msgid "Inferno"
-msgstr ""
+msgstr "قاذف جهنم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[2]
@@ -10528,7 +10528,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox6.name
 #: po/custom/fromJson.txt:3437
 msgid "Lancer Bunker"
-msgstr ""
+msgstr "ملجأ الرمّاح"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraLtA-Thalftrack.name
@@ -10748,7 +10748,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox4.name
 #: po/custom/fromJson.txt:3575
 msgid "Light Cannon Bunker"
-msgstr ""
+msgstr "ملجأٌ بمدفعٍ خفيف"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraLtCnTrks.name
@@ -10837,7 +10837,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG1-Pillbox.name
 #: po/custom/fromJson.txt:3631
 msgid "Machinegun Bunker"
-msgstr ""
+msgstr "ملجأٌ برشاش"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D1.text[2]
@@ -11394,7 +11394,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.GuardTower-Rail1.name
 #: po/custom/fromJson.txt:4008
 msgid "Needle Gun Tower"
-msgstr ""
+msgstr "برجٌ بمدفع إبر"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Needle.name
@@ -11409,7 +11409,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.RailGun1Mk1.name
 #: po/custom/fromJson.txt:4017
 msgid "Needle Gun"
-msgstr ""
+msgstr "مدفع الإبر"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Rail1.name
@@ -11768,13 +11768,13 @@ msgstr ""
 #. data/base/stats/structure.json: $.NEXUSWall.name
 #: po/custom/fromJson.txt:4317
 msgid "NEXUS Wall"
-msgstr ""
+msgstr "جدار نيكسوس"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4320
 msgid "Nexus"
-msgstr ""
+msgstr "نيكسوس"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11977,14 +11977,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Plasmite-flamer-bunker.name
 #: po/custom/fromJson.txt:4444
 msgid "Plasmite Flamer Bunker"
-msgstr ""
+msgstr "ملجأٌ بقاذف بلازما حارقة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Plasmite-Flamer.name
 #. data/mp/stats/weapons.json: $.PlasmiteFlamer.name
 #: po/custom/fromJson.txt:4448
 msgid "Plasmite Flamer"
-msgstr ""
+msgstr "قاذف البلازما الحارقة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-Plasmite.name
@@ -12189,7 +12189,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.GuardTower-BeamLas.name
 #: po/custom/fromJson.txt:4575
 msgid "Pulse Laser Tower"
-msgstr ""
+msgstr "برجٌ بليزر نبضي"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPulseTracks.name
@@ -12204,7 +12204,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Laser2PULSEMk1.name
 #: po/custom/fromJson.txt:4584
 msgid "Pulse Laser"
-msgstr ""
+msgstr "ليزر نبضي"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0PythonHvyCnTrks.name
@@ -12376,7 +12376,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 #: po/custom/fromJson.txt:4690
 msgid "Rapid fire rail gun firing needle darts"
-msgstr ""
+msgstr "مدفعٌ كهرومغناطيسي قادرٌ على إطلاق قذائف إبرية الشكل بسرعةٍ عالية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
@@ -12831,7 +12831,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:5011
 msgid "Rotary MG Bunker"
-msgstr ""
+msgstr "ملجأٌ برشاش دوار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar3.name
@@ -13017,7 +13017,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.GuardTower-ATMiss.name
 #: po/custom/fromJson.txt:5120
 msgid "Scourge Missile Tower"
-msgstr ""
+msgstr "برجٌ بصواريخ الجلاد"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernScourgeTracks.name
@@ -13032,7 +13032,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Missile-A-T.name
 #: po/custom/fromJson.txt:5129
 msgid "Scourge Missile"
-msgstr ""
+msgstr "صاروخ الجلاد"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonScourgeTracks.name
@@ -13945,7 +13945,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox-Cannon6.name
 #: po/custom/fromJson.txt:5731
 msgid "Twin Assault Cannon Bunker"
-msgstr ""
+msgstr "ملجأٌ بمدفعين هجوميين"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Cannon6TwinAslt.name
@@ -13975,7 +13975,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG2-Pillbox.name
 #: po/custom/fromJson.txt:5749
 msgid "Twin Machinegun Bunker"
-msgstr ""
+msgstr "ملجأٌ برشاشين"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower02.name
@@ -15468,7 +15468,7 @@ msgstr ""
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:201
 msgid "NEXUS"
-msgstr ""
+msgstr "نيكسوس"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
