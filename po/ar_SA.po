@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-24 07:53\n"
+"PO-Revision-Date: 2021-12-24 19:51\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -20,38 +20,38 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "الهدف: اعثر على تقنية المشبك العصبي واستعدها"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "أقم قاعدةً ومن ثم ابحث عن البناء الذي يسبق «الانهيار»."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "يوجد في داخل هذا المبنى تقنيةً ضروريةٌ لضمان نجاح «المشروع»."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «ألفا»: هجوم قطاع الطرق"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "إن قطاع الطرق في طريقهم إلى قاعدتنا."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "دافع عن القاعدة، ومن ثم دمّر معسكرات قطاع الطرق."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «ألفا»: اكتشاف ازديادٍ في الطاقة"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "لقد رصدنا ازدياداً مفاجئاً في الطاقة جنوب مقرنا."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
@@ -75,7 +75,7 @@ msgstr "عملية نقل: اعثر على القطع الأثرية ثم است
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "جهّز قوةً هجومية وأرسلها في المركبة الجوية."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
@@ -83,7 +83,7 @@ msgstr "بعد الهبوط، استكشف الأطلال الموجودة في 
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "عملية نقل: استكشف مركز الأبحاث"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -96,15 +96,15 @@ msgstr "يمكنك طلب التعزيزات."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "عملية نقل: تم رصد إشاراتٍ مشفرة"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "ابعث بقوةٍ استطلاعية لاكتشاف مصدر وطبيعة هذه الإشارات."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "استخدم شاحناتك لتشييد بعض المباني الدفاعية في منطقة الهبوط."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "إن قوات «النهج الحديث» تبحث عن القطع الأثرية في مكانٍ قريبٍ منا."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
@@ -180,7 +180,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «ألفا»: رسالةٌ واردة"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
@@ -196,43 +196,43 @@ msgstr "تهانينا أيها القائد."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "سنوكل لك الآن مهمةً إضافية."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «ألفا»: اعثر على القطع الأثرية واستعدها"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr "لقد صارت أول منطقتين آمنتان الآن."
+msgstr "لقد صارت أول منطقتان آمنتان."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "آخر تطورات فريق «المشروع»"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "آخر التطورات من فريق «بيتا»"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "لقد استرجعنا بعض القطع الأثرية."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "إن القوة العاملة في هذه المنطقة تمتلك معداتٍ أكثر تطوراً."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "آخر التطورات من فريق «جاما»"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "لا يوجد شيءٌ للإبلاغ عنه."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "لم نعثر على أي قطعٍ أثرية أو نواجه أي قوىً معادية."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "ابحث عن القطع الأثرية الموجودة هنا وقم باستعادتها."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "دمّر القاعدة واسترجع أي قطعٍ أثريةٍ موجودةٍ قربها."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
@@ -340,11 +340,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "قطعة «وحدة الطاقة» الأثرية"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "أجرِ أبحاثاً على قطعة «وحدة الطاقة» الأثرية."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
@@ -352,11 +352,11 @@ msgstr "ثم استعمل إحدى الشاحنات لتطوير مولد الط
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "تم اكتشاف قاعدةٍ لقطاع الطرق"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "اهزم قطاع الطرق واستعد أي قطعٍ أثرية تعثر عليها."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -840,7 +840,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr ""
+msgstr "ابعث بقوةٍ استطلاعية إلى هذه الإحداثيات وقم بتقييم الوضع هناك."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
@@ -860,7 +860,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
+msgstr "أيها القائد: لقد استعدنا هذه القطعة الأثرية بعد مغادرتك للقطاع الغربي."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -916,7 +916,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr ""
+msgstr "لقد وردتنا رسالةٌ عبر الراديو من فريقٍ بعيد."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
@@ -1109,11 +1109,11 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "بداية البيان:"
 
 #: data/base/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
-msgstr ""
+msgstr "نقطةٌ عسكرية لقطاع الطرق"
 
 #: data/base/messages/strings/genstrings.txt:8
 msgid "Power Resource"
@@ -1121,7 +1121,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
-msgstr ""
+msgstr "قطعةٌ أثرية مجهولة"
 
 #: data/base/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
@@ -1129,7 +1129,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
-msgstr ""
+msgstr "منطقة الهبوط"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
@@ -1154,7 +1154,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
-msgstr ""
+msgstr "منطقة هبوط الأعداء"
 
 #: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
@@ -1162,7 +1162,7 @@ msgstr "قاعدةٌ للأعداء"
 
 #: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
-msgstr ""
+msgstr "لقد وردتنا رسالةٌ عبر الراديو"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
@@ -1381,7 +1381,7 @@ msgstr "برج حراسة برشاشٍ ثقيل"
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:2092
 msgid "Flamer Guard Tower"
-msgstr "برج صواريخٍ صغيرة"
+msgstr "برج حراسة بقاذف لهب"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
@@ -1824,7 +1824,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:334
 #: po/custom/fromJson.txt:1205
 msgid "Body Points: Medium"
-msgstr ""
+msgstr "نقاط صحة الهيكل: متوسطة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[3]
@@ -1905,7 +1905,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3160
 msgid "Increases Armor and Body Points"
-msgstr ""
+msgstr "يزيد من نقاط صحة الدرع والهيكل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -1977,7 +1977,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:161
 #: po/custom/fromJson.txt:4102
 msgid "New Defensive Structure Available"
-msgstr ""
+msgstr "يتوافر بناءٌ دفاعيٌ جديد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA4.text[1]
@@ -2044,7 +2044,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:129
 #: po/custom/fromJson.txt:1791
 msgid "Defensive Strength: Medium"
-msgstr ""
+msgstr "القوة الدفاعية: متوسطة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[1]
@@ -2189,7 +2189,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:113
 #: po/custom/fromJson.txt:1002
 msgid "Automatically targets enemies in range"
-msgstr ""
+msgstr "سيستهدف تلقائياً الأعداء الواقعين ضمن مداه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HPV.text[1]
@@ -2225,7 +2225,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:164
 #: po/custom/fromJson.txt:1779
 msgid "Defensive Strength: High"
-msgstr ""
+msgstr "القوة الدفاعية: مرتفعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVFL.text[1]
@@ -2284,7 +2284,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:158
 #: po/custom/fromJson.txt:1008
 msgid "Automatically targets enemies within sensor range"
-msgstr ""
+msgstr "سيستهدف تلقائياً كل الأعداء الواقعين ضمن مدى جهاز استشعاره"
 
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:122
@@ -2349,7 +2349,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:162
 #: po/custom/fromJson.txt:4734
 msgid "Reinforced concrete tank traps"
-msgstr ""
+msgstr "فخ دباباتٍ مصنوعٌ من الإسمنت المسلح"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[2]
@@ -2358,7 +2358,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:163
 #: po/custom/fromJson.txt:4507
 msgid "Prevents enemy movement"
-msgstr ""
+msgstr "يمنع الأعداء من التحرك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[0]
@@ -3127,7 +3127,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:288
 #: po/custom/fromJson.txt:3169
 msgid "Increases Body Points"
-msgstr ""
+msgstr "يزيد من نقاط صحة الهيكل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[3]
@@ -3380,7 +3380,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:333
 #: po/custom/fromJson.txt:1081
 msgid "Best Targets: Base Structures and Defenses"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية والدفاعية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB2.text[1]
@@ -3419,7 +3419,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:338
 #: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base Structures"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[3]
@@ -3440,7 +3440,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:384
 #: po/custom/fromJson.txt:1199
 msgid "Body Points: Low"
-msgstr ""
+msgstr "نقاط صحة الهيكل: منخفضة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB2.text[1]
@@ -3457,7 +3457,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:343
 #: po/custom/fromJson.txt:1134
 msgid "Best Targets: Defenses"
-msgstr ""
+msgstr "مثاليٌ ضد: الدفاعات"
 
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346
@@ -3520,7 +3520,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:358
 #: po/custom/fromJson.txt:1167
 msgid "Best Targets: Vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: المركبات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
@@ -3548,7 +3548,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:359
 #: po/custom/fromJson.txt:1193
 msgid "Body Points: High"
-msgstr ""
+msgstr "نقاط صحة الهيكل: مرتفعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_FLAME2.text[1]
@@ -3568,7 +3568,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1125
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: الملاجئ، والمركبات الحوامة أو التي تستعمل العجلات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3579,7 +3579,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:366
 #: po/custom/fromJson.txt:2109
 msgid "Flamer Upgrade"
-msgstr ""
+msgstr "تحديثٌ لقاذف اللهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_FL_D4.text[1]
@@ -3609,7 +3609,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:369
 #: po/custom/fromJson.txt:333
 msgid "All flamers upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل قواذف اللهب تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[0]
@@ -3648,7 +3648,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1107
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية، والأفراد، والمركبات التي تستعمل العجلات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3675,7 +3675,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:383
 #: po/custom/fromJson.txt:1091
 msgid "Best Targets: Base Structures, bunkers"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية والملاجئ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[0]
@@ -3778,7 +3778,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:406
 #: po/custom/fromJson.txt:3654
 msgid "Machinegun Upgrade"
-msgstr ""
+msgstr "تحديثٌ للرشاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_MG_D5.text[1]
@@ -3798,7 +3798,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:403
 #: po/custom/fromJson.txt:3255
 msgid "Increases Machinegun damage"
-msgstr ""
+msgstr "سيزيد من ضرر الرشاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[3]
@@ -3811,7 +3811,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:409
 #: po/custom/fromJson.txt:363
 msgid "All machineguns upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الرشاشات تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_MG_ROF2.text[1]
@@ -3820,7 +3820,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:407
 #: po/custom/fromJson.txt:3010
 msgid "Improved chaingun mechanism"
-msgstr ""
+msgstr "تحسين سرعة إطلاق رشاش السلسلة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -3830,7 +3830,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:408
 #: po/custom/fromJson.txt:3260
 msgid "Increases Machinegun ROF"
-msgstr ""
+msgstr "سيزيد من معدل إطلاق النار الخاص بالرشاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M2.text[1]
@@ -3852,7 +3852,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:413
 #: po/custom/fromJson.txt:1101
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية، والأفراد، والمركبات التي تستعمل العجلات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -3863,7 +3863,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:414
 #: po/custom/fromJson.txt:1211
 msgid "Body Points: Very Low"
-msgstr ""
+msgstr "نقاط صحة الهيكل: شديدة الارتفاع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[0]
@@ -4060,15 +4060,15 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
-msgstr ""
+msgstr "عُد إلى منطقة الهبوط"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "دمّر كل الوحدات والمباني التابعة للعدو"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
-msgstr ""
+msgstr "القطع الأثرية التي جمعتها"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
@@ -4076,23 +4076,23 @@ msgstr "القواعد التي تمّ تدميرها"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "الوحدات المتبقية للأعداء"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "المباني المتبقية للأعداء"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
-msgstr ""
+msgstr "يجب أن تعود إلى منطقة الهبوط"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "دمّر كل الوحدات والقواعد التابعة للعدو"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "اصمد إلى أن يصل عداد الوقت إلى الصفر"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -4216,7 +4216,7 @@ msgstr "إن مضخة النفط ساكنةٌ حالياً. قم ببناء مو
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr "اضغط بالزر الأيسر للفأرة على أيقونة البناء المومضة"
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة البناء الوامضة"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -4240,24 +4240,24 @@ msgstr "ستشارك الشاحنة الأخرى الآن في عملية بنا
 
 #: data/base/script/tutorial.js:41
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr "تحتاج أثناء المهمات إلى إيجاد واستعادة التقنيات التي تعود إلى ما قبل \"الانهيار\""
+msgstr "تحتاج أثناء المهمات إلى إيجاد واستعادة التقنيات التي تعود إلى ما قبل «الانهيار»"
 
 #: data/base/script/tutorial.js:42
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr ""
+msgstr "استعمل إحدى الشاحنات لإيجاد القطعة الأثرية المُشار إليها باستخدام وميض الرادار"
 
 #: data/base/script/tutorial.js:43
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr ""
+msgstr "ضع مؤشر الفأرة على القطعة الأثرية وانقر عليها بالزر الأيسر لاستعادتها"
 
 #: data/base/script/tutorial.js:45
 msgid "A research facility is required to research artifacts"
-msgstr ""
+msgstr "تحتاج إلى مركز أبحاثٍ لإجراء الأبحاث على القطع الأثرية"
 
 #: data/base/script/tutorial.js:46
 #: data/base/script/tutorial.js:65
 msgid "Left click the flashing BUILD icon"
-msgstr "اضغط بالزر الأيسر للفأرة على أيقونة البناء المومضة"
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة البناء الوامضة"
 
 #: data/base/script/tutorial.js:47
 msgid "Now left click the research facility and position it at your base"
@@ -4269,15 +4269,15 @@ msgstr "استعمل شاحنتك الأخرى للمساعدة في بناء م
 
 #: data/base/script/tutorial.js:50
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr ""
+msgstr "لإجراء أبحاثٍ على القطعة الأثرية عليك أن تضغط بالزر الأيسر على أيقونة الأبحاث الوامضة"
 
 #: data/base/script/tutorial.js:51
 msgid "Now left click the machinegun artifact"
-msgstr ""
+msgstr "اضغط الآن على قطعة «الرشاش» الأثرية"
 
 #: data/base/script/tutorial.js:52
 msgid "The artifact is now being researched by the facility"
-msgstr ""
+msgstr "ستجري الآن بعض الأبحاث على هذه القطعة داخل المركز"
 
 #: data/base/script/tutorial.js:53
 msgid "The researched machinegun can now be used to design a new vehicle"
@@ -4285,7 +4285,7 @@ msgstr "يمكنك استعمال الرشاش الذي وصلت إليه عبر
 
 #: data/base/script/tutorial.js:54
 msgid "Left click the flashing DESIGN icon"
-msgstr "اضغط بالزر الأيسر للفأرة على أيقونة التصميم المومضة"
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة التصميم الوامضة"
 
 #: data/base/script/tutorial.js:55
 msgid "To start your design, left click the NEW DESIGN icon"
@@ -4345,7 +4345,7 @@ msgstr "يمكنك الآن أن تطلب من المصنع بناء وحدةٍ 
 
 #: data/base/script/tutorial.js:73
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr "اضغط بالزر الأيسر للفأرة على أيقونة التصنيع المومضة"
+msgstr "اضغط بالزر الأيسر للفأرة على أيقونة التصنيع الوامضة"
 
 #: data/base/script/tutorial.js:75
 msgid "Now left click the units you want to build from the menu at the left"
@@ -4381,15 +4381,15 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "الاثنين، 4 تموز \\ يوليو، 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
-msgstr ""
+msgstr "أثناء الرحلة الجوية إلى القطاع الغربي"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr ""
+msgstr "يقترب فريق «ألفا» من وجهته"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4409,11 +4409,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "لقد اقتربنا من منطقة الهبوط. فيما يلي بيانٌ لفريق «ألفا»."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr ""
+msgstr "أيها القائد: ستكون مسؤولاً عن فريق «ألفا»، وهو واحدٌ من الفرق الثلاثة التي بعث بها «المشروع» لاستعادة القطع الأثرية العائدة إلى ما قبل «الانهيار»."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -4421,7 +4421,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
 msgid "Incoming Transmission"
-msgstr ""
+msgstr "لقد وردتنا رسالةٌ عبر الراديو"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
@@ -4568,7 +4568,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "انتباه!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -4636,11 +4636,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "الاثنين، 1 أيلول \\ سبتمبر، 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
-msgstr ""
+msgstr "أثناء الرحلة الجوية إلى القطاع الشرقي"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
@@ -4860,7 +4860,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
-msgstr ""
+msgstr "أثناء الرحلة الجوية إلى القطاع الشمالي"
 
 #: data/base/sequenceaudio/cam3/c003.txa:10
 msgid "The Final Encounter"
@@ -4868,7 +4868,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
 msgid "Briefing Commences"
-msgstr ""
+msgstr "بداية البيان:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
@@ -5487,14 +5487,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:539
 #: po/custom/fromJson.txt:1814
 msgid "Depleted Uranium MG Bullets Mk2"
-msgstr ""
+msgstr "طلقات رشاشٍ من اليورانيوم المنضّب (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-TUTMG.name
 #: data/mp/messages/strings/names.txt:568
 #: po/custom/fromJson.txt:3627
 msgid "Machinegun Artifact"
-msgstr ""
+msgstr "قطعة «الرشاش» الأثرية"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CommandCentreNP.name
@@ -5625,7 +5625,7 @@ msgstr ""
 #: src/multiint.cpp:1460
 #: src/multiint.cpp:1464
 msgid "Scavengers"
-msgstr ""
+msgstr "قطاع الطرق"
 
 #: data/mp/multiplay/script/rules/printsettings.js:9
 #: src/multiint.cpp:1466
@@ -6391,21 +6391,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage03.name
 #: po/custom/fromJson.txt:514
 msgid "APDSB MG Bullets Mk2"
-msgstr ""
+msgstr "طلقاتٌ خارقة للدروع (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage04.name
 #: po/custom/fromJson.txt:518
 msgid "APDSB MG Bullets Mk3"
-msgstr ""
+msgstr "طلقاتٌ خارقة للدروع (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage02.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage02.name
 #: po/custom/fromJson.txt:522
 msgid "APDSB MG Bullets"
-msgstr ""
+msgstr "طلقاتٌ خارقة للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage05.name
@@ -6594,21 +6594,21 @@ msgstr ""
 #: po/custom/fromJson.txt:642
 #, no-c-format
 msgid "Armor +35%, Body Points +30%"
-msgstr ""
+msgstr "الدرع +35%، نقاط صحة الهيكل +30%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D2.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D2.text[1]
 #: po/custom/fromJson.txt:646
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr ""
+msgstr "طلقاتٌ خارقة للدروع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_D4.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text[1]
 #: po/custom/fromJson.txt:650
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr ""
+msgstr "طلقاتٌ خارقةٌ للدروع، ومزودةٌ بأجنحة في قاعدتها كأجنحة السهم، مما يزيد من ثباتها في الجو"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_FL.text[1]
@@ -6834,13 +6834,13 @@ msgstr ""
 #: po/custom/fromJson.txt:828
 #, no-c-format
 msgid "Armour +35%, Body Points +30%"
-msgstr ""
+msgstr "الدرع +35%، نقاط صحة الهيكل +30%"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Crate.name
 #: po/custom/fromJson.txt:831
 msgid "Artifact"
-msgstr ""
+msgstr "قطعةٌ أثرية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_MdAM.text[1]
@@ -7161,7 +7161,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "مثاليٌ ضد: المركبات والسايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7170,7 +7170,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1065
 msgid "Best Targets : Vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: المركبات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[2]
@@ -7179,20 +7179,20 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1071
 msgid "Best Targets: Aerial targets only"
-msgstr ""
+msgstr "مثاليٌ ضد: الأهداف الجوية حصراً"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1075
 msgid "Best Targets: Base structures and cyborgs"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية والسايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #: po/custom/fromJson.txt:1087
 msgid "Best Targets: Base structures"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[2]
@@ -7220,7 +7220,7 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "مثاليٌ ضد: الملاجئ والدفاعات والمباني الرئيسية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7229,7 +7229,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS2.text[2]
 #: po/custom/fromJson.txt:1131
 msgid "Best Targets: Cyborgs"
-msgstr ""
+msgstr "مثاليٌ ضد: السايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text[2]
@@ -7244,7 +7244,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1143
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: الأفراد، والمباني الرئيسية، والمركبات التي تستعمل العجلات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[2]
@@ -7253,7 +7253,7 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: الأفراد والمركبات الحوامة أو التي تستعمل العجلات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7262,13 +7262,13 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "مثاليٌ ضد: لا يوجد. سيسبب الضرر الوسطي نفسه لكل الأهداف"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1158
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "مثاليٌ ضد: المركبات والسايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -7288,7 +7288,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
 #: po/custom/fromJson.txt:1175
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr ""
+msgstr "مثاليٌ ضد: المركبات الحوامة أو التي تستعمل العجلات"
 
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
@@ -7309,7 +7309,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[2]
 #: po/custom/fromJson.txt:1187
 msgid "Body Points and Speed Increased"
-msgstr ""
+msgstr "زيادة السرعة ونقاط صحة الهيكل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
@@ -7317,7 +7317,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
 #: po/custom/fromJson.txt:1216
 msgid "Body Points: Very low"
-msgstr ""
+msgstr "نقاط صحة الهيكل: شديدة الانخفاض"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7473,7 +7473,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[2]
 #: po/custom/fromJson.txt:1310
 msgid "Burns oil more efficiently"
-msgstr ""
+msgstr "ستحرق المولدات النفط بكفاءةٍ أكبر"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
@@ -7631,14 +7631,14 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[1]
 #: po/custom/fromJson.txt:1405
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr ""
+msgstr "يقوم الرشاش العادي بالاعتماد على قوة دفع المقذوف لتلقيم طلقةٍ جديدة بعد الإطلاق، بينما يعتمد رشاش السلسلة على مجموعةٍ من السلاسل الداخلية للقيام بذلك"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF01.name
 #: po/custom/fromJson.txt:1409
 msgid "Chaingun Upgrade"
-msgstr ""
+msgstr "رشاش السلسلة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BaBaCivilian.name
@@ -8173,7 +8173,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_RKT.text[3]
 #: po/custom/fromJson.txt:1773
 msgid "Defensive Strength : High"
-msgstr ""
+msgstr "القوة الدفاعية: مرتفعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[3]
@@ -8182,7 +8182,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:1785
 msgid "Defensive Strength: Low"
-msgstr ""
+msgstr "القوة الدفاعية: منخفضة"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ADemolishStructure.name
@@ -8224,7 +8224,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage08.name
 #: po/custom/fromJson.txt:1818
 msgid "Depleted Uranium MG Bullets"
-msgstr ""
+msgstr "طلقات رشاشٍ من اليورانيوم المنضّب"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
@@ -8297,7 +8297,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "إن الوحدات الممتازة والمخضرمة محمية، وكذلك المصانع"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
@@ -9002,7 +9002,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage01.name
 #: po/custom/fromJson.txt:2334
 msgid "Hardened MG Bullets"
-msgstr ""
+msgstr "طلقاتٌ رشاشٍ مقواة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Damage02.name
@@ -9322,7 +9322,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[1]
 #: po/custom/fromJson.txt:2522
 msgid "Heavy body increases armor and body points"
-msgstr ""
+msgstr "يزيد الهيكل الثقيل من قوة الدرع ونقاط صحة الهيكل"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cobra-Hover-HC.name
@@ -9608,7 +9608,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2724
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "إن الوحدات الاستثنائية والبطولية محمية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -9753,21 +9753,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 #: po/custom/fromJson.txt:2835
 msgid "High Temperature Flamer Gel Mk2"
-msgstr ""
+msgstr "جلٌّ حارق عالي الحراري (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #: po/custom/fromJson.txt:2839
 msgid "High Temperature Flamer Gel Mk3"
-msgstr ""
+msgstr "جلٌّ حارق عالي الحرارة (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #: po/custom/fromJson.txt:2843
 msgid "High Temperature Flamer Gel"
-msgstr ""
+msgstr "جلٌّ حارق عالي الحرارة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_DF_WU7.text[1]
@@ -9943,7 +9943,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
 #: po/custom/fromJson.txt:2963
 msgid "Hyper Fire Chaingun Upgrade"
-msgstr ""
+msgstr "رشاش سلسلة فائق السرعة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
@@ -10223,7 +10223,7 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[2]
 #: po/custom/fromJson.txt:3163
 msgid "Increases Armour and Body Points"
-msgstr ""
+msgstr "يزيد من نقاط صحة الدرع والهيكل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
@@ -10915,7 +10915,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[1]
 #: po/custom/fromJson.txt:3700
 msgid "Maximum armor and body points"
-msgstr ""
+msgstr "أقوى درع وأقصى عددٍ من نقاط صحة الهيكل"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
@@ -10983,7 +10983,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[1]
 #: po/custom/fromJson.txt:3750
 msgid "Medium body increases armor and body points"
-msgstr ""
+msgstr "يزيد الهيكل المتوسط من قوة الدرع ونقاط صحة الهيكل"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
@@ -12043,7 +12043,7 @@ msgstr "مولّد الطاقة"
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[0]
 #: po/custom/fromJson.txt:4480
 msgid "Power Module Available"
-msgstr ""
+msgstr "يمكن الآن بناء وحدات طاقةٍ إضافية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-PowerModuleMk1.name
@@ -12097,7 +12097,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4520
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "إن الوحدات المحترفة والنظامية محمية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -12125,7 +12125,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[1]
 #: po/custom/fromJson.txt:4536
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
-msgstr ""
+msgstr "جلٌّ من أوكسيد البروبيلين، معالجٌ لكي يولّد حرارةً أكبر عند الاحتراق"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.tip
@@ -12363,13 +12363,13 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF02.name
 #: po/custom/fromJson.txt:4683
 msgid "Rapid Fire Chaingun Upgrade"
-msgstr ""
+msgstr "رشاش السلسلة سريع الإطلاق"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF02.name
 #: po/custom/fromJson.txt:4686
 msgid "Rapid Fire Chaingun"
-msgstr ""
+msgstr "رشاش سلسلة سريع الإطلاق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
@@ -12878,7 +12878,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaBunker.name
 #: po/custom/fromJson.txt:5041
 msgid "Scavenger Bunker"
-msgstr ""
+msgstr "ملجأٌ لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
@@ -12898,7 +12898,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaFactory.name
 #: po/custom/fromJson.txt:5052
 msgid "Scavenger Factory"
-msgstr ""
+msgstr "مصنعٌ لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaFlameTower.name
@@ -12919,13 +12919,13 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaHorizontalWall.name
 #: po/custom/fromJson.txt:5064
 msgid "Scavenger Horizontal Wall"
-msgstr ""
+msgstr "جدارٌ أفقيٌ لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5067
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "برجٌ برشاش لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
@@ -12938,13 +12938,13 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 #: po/custom/fromJson.txt:5074
 msgid "Scavenger Power Generator"
-msgstr ""
+msgstr "مولّد طاقة لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5077
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "مركز صيانةٍ لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12958,7 +12958,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BaBaPeople.name
 #: po/custom/fromJson.txt:5085
 msgid "Scavenger"
-msgstr ""
+msgstr "قاطع طريق"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
@@ -13280,26 +13280,26 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5289
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "برجٌ فولاذي بقاذف لهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5292
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "برجٌ فولاذي برشاشٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_TOWER1.text[1]
 #: po/custom/fromJson.txt:5296
 msgid "Steel tower with machinegun"
-msgstr "برجٌ فولاذي برشّاش"
+msgstr "برجٌ فولاذي برشاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5299
 msgid "Steel tower with twin machinegun"
-msgstr "برجٌ فولاذي برشّاشين"
+msgstr "برجٌ فولاذي برشاشين"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
@@ -13457,21 +13457,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 #: po/custom/fromJson.txt:5419
 msgid "Superhot Flamer Gel Mk2"
-msgstr ""
+msgstr "جلٌّ حارق فائق السخونة (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #: po/custom/fromJson.txt:5423
 msgid "Superhot Flamer Gel Mk3"
-msgstr ""
+msgstr "جلٌّ حارق فائق السخونة (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #: po/custom/fromJson.txt:5427
 msgid "Superhot Flamer Gel"
-msgstr ""
+msgstr "جلٌّ حارق فائق السخونة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
@@ -13629,7 +13629,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:5531
 msgid "Tank Traps"
-msgstr ""
+msgstr "فخ الدبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
@@ -13891,21 +13891,21 @@ msgstr "شاحنة"
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage06.name
 #: po/custom/fromJson.txt:5691
 msgid "Tungsten-Tipped MG Bullets Mk2"
-msgstr ""
+msgstr "طلقات رشاشٍ برأسٍ من التنغستن (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage07.name
 #: po/custom/fromJson.txt:5695
 msgid "Tungsten-Tipped MG Bullets Mk3"
-msgstr ""
+msgstr "طلقات رشاشٍ برأسٍ من التنغستن (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage05.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage05.name
 #: po/custom/fromJson.txt:5699
 msgid "Tungsten-Tipped MG Bullets"
-msgstr ""
+msgstr "طلقات رشاشٍ برأسٍ من التنغستن"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine05.name
@@ -13932,7 +13932,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_MG2MK1.text[1]
 #: po/custom/fromJson.txt:5720
 msgid "Twin 7.62mm machineguns"
-msgstr ""
+msgstr "رشاشان عيار 7.62 مم"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
@@ -13983,7 +13983,7 @@ msgstr "ملجأٌ برشاشين"
 #. data/mp/stats/structure.json: $.GuardTower2.name
 #: po/custom/fromJson.txt:5754
 msgid "Twin Machinegun Guard Tower"
-msgstr ""
+msgstr "برج حراسة برشاشين"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG2-Tower.name
@@ -14773,7 +14773,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6258
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "ممتاز"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14781,7 +14781,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6262
 msgctxt "rank"
 msgid "Green"
-msgstr ""
+msgstr "مبتدئ"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[8]
@@ -14789,7 +14789,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6266
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "بطل"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14797,7 +14797,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6270
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "محترف"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14805,7 +14805,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6274
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "نظامي"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14813,7 +14813,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6278
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "حديث"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14821,7 +14821,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6282
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "استثنائي"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14829,7 +14829,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6286
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "متمرس"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14837,7 +14837,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6290
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "مخضرم"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -15264,7 +15264,7 @@ msgstr ""
 #: src/design.cpp:980
 #: src/design.cpp:995
 msgid "Total Body Points"
-msgstr ""
+msgstr "نقاط صحة الهيكل الكلية"
 
 #: src/design.cpp:1094
 #: src/design.cpp:1113
@@ -15513,7 +15513,7 @@ msgstr ""
 #: src/frontend.cpp:219
 #: src/frontend.cpp:223
 msgid "Continue Last Save"
-msgstr ""
+msgstr "تحميل ملف الحفظ الآخير"
 
 #: src/frontend.cpp:224
 msgid "No last save available"
@@ -15948,7 +15948,7 @@ msgstr ""
 
 #: src/frontend.cpp:1600
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "تحذير: يمكن لتنعيم الحواف أن يسبب توقف اللعبة بشكلٍ مفاجئ، خصوصاً إذا كانت قيمته أكبر من 16"
 
 #: src/frontend.cpp:1613
 msgid "Graphics Backend*"
@@ -16277,7 +16277,7 @@ msgstr ""
 
 #: src/ingameop.cpp:127
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr ""
+msgstr "تحذير: أنت المضيف، وستنتهي اللعبة عند الجميع عند خروجك!"
 
 #: src/ingameop.cpp:131
 #: src/ingameop.cpp:266
@@ -16321,11 +16321,11 @@ msgstr ""
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "تحذير: هل أنت متأكد؟"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "تحذير: هل أنت متأكد؟ ستفقد كل التقدم الذي لم تحفظه."
 
 #: src/ingameop.cpp:323
 msgid "Confirm"
@@ -17322,7 +17322,7 @@ msgstr ""
 #: src/intelmap.cpp:217
 #: src/keybind.cpp:1375
 msgid "PAUSED"
-msgstr ""
+msgstr "متوقفة مؤقتاً"
 
 #: src/intelmap.cpp:1056
 msgid "New Intelligence Report"
@@ -17334,11 +17334,11 @@ msgstr ""
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "أهداف «المشروع» وآخر المستجدات"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
-msgstr ""
+msgstr "الهدف الحالي"
 
 #: src/intorder.cpp:172
 msgid "Fire-At-Will"
@@ -17806,11 +17806,11 @@ msgstr ""
 
 #: src/mission.cpp:2290
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr ""
+msgstr "تم تحقيق الهدف، ولكن بالغش!"
 
 #: src/mission.cpp:2290
 msgid "OBJECTIVE ACHIEVED"
-msgstr ""
+msgstr "تم تحقيق الهدف"
 
 #: src/mission.cpp:2296
 msgid "OBJECTIVE FAILED--and you cheated!"
@@ -17822,7 +17822,7 @@ msgstr ""
 
 #: src/mission.cpp:2325
 msgid "Continue Game"
-msgstr ""
+msgstr "تابع اللعب"
 
 #: src/mission.cpp:2335
 #: src/mission.cpp:2371
@@ -18545,7 +18545,7 @@ msgstr ""
 
 #: src/multijoin.cpp:563
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "يوجدٌ تحديثٌ جديدٌ للعبة. قم من فضلك بزيارة https://wz2100.net لتحميل النسخة الجديدة."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
@@ -18680,7 +18680,7 @@ msgstr ""
 #: src/multiopt.cpp:348
 #: src/multiplay.cpp:2036
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr ""
+msgstr "تحذير: لقد قام المضيف بتعديل كود اللعبة (الرماز المصدري)، ولذا لا يمكن الوثوق بها!"
 
 #: src/multiplay.cpp:366
 #, c-format
@@ -18830,7 +18830,7 @@ msgstr ""
 
 #: src/notifications.cpp:638
 msgid "Dismiss"
-msgstr ""
+msgstr "تجاهل"
 
 #: src/notifications.cpp:719
 msgid "Do not show again"
@@ -18861,37 +18861,37 @@ msgstr ""
 #: src/scores.cpp:102
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "وحداتك: %u"
 
 #: src/scores.cpp:103
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "وحدات الأعداء: %u"
 
 #: src/scores.cpp:104
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "مبانيك: %u"
 
 #: src/scores.cpp:105
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "مباني الأعداء: %u"
 
 #: src/scores.cpp:106
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "الوحدات التي صنعتها: %u"
 
 #: src/scores.cpp:107
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "الوحدات الكلية: %u"
 
 #: src/scores.cpp:108
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "المباني المشيّدة: %u"
 
 #: src/scores.cpp:109
 #, c-format
@@ -18901,79 +18901,79 @@ msgstr ""
 #: src/scores.cpp:111
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "حديث: %u"
 
 #: src/scores.cpp:112
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr ""
+msgstr "مبتدئ: %u"
 
 #: src/scores.cpp:113
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "متمرس: %u"
 
 #: src/scores.cpp:114
 #, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "نظامي: %u"
 
 #: src/scores.cpp:115
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "محترف: %u"
 
 #: src/scores.cpp:116
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "مخضرم: %u"
 
 #: src/scores.cpp:117
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "ممتاز: %u"
 
 #: src/scores.cpp:118
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "استثنائي: %u"
 
 #: src/scores.cpp:119
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "بطل: %u"
 
 #: src/scores.cpp:316
 msgid "Unit Losses"
-msgstr ""
+msgstr "الخسائر في الوحدات"
 
 #: src/scores.cpp:318
 msgid "Structure Losses"
-msgstr ""
+msgstr "الخسائر في المباني"
 
 #: src/scores.cpp:320
 msgid "Force Information"
-msgstr ""
+msgstr "معلوماتٌ حول القوى المقاتلة"
 
 #: src/scores.cpp:397
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr ""
+msgstr "القطع الأثرية المُسترجعة: %d"
 
 #: src/scores.cpp:403
 #, c-format
 msgid "Mission Time - %s"
-msgstr ""
+msgstr "الوقت الذي قضيته في المهمة - %s"
 
 #: src/scores.cpp:409
 #, c-format
 msgid "Total Game Time - %s"
-msgstr ""
+msgstr "الوقت الذي قضيته في اللعبة - %s"
 
 #: src/scores.cpp:416
 msgid "You cheated!"
-msgstr ""
+msgstr "لقد غششت!"
 
 #: src/selection.cpp:368
 #: src/selection.cpp:450
@@ -19348,24 +19348,24 @@ msgstr ""
 
 #: src/updatemanager.cpp:273
 msgid "Update Available"
-msgstr ""
+msgstr "يتوافر تحديثٌ جديد"
 
 #: src/updatemanager.cpp:276
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "يتوافر إصدارٌ جديدٌ من Warzone 2100 (%s)!"
 
 #: src/updatemanager.cpp:280
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "يتوافر إصدارٌ جديدٌ لـ Warzone 2100!"
 
 #: src/updatemanager.cpp:282
 msgid "Get Update Now"
-msgstr ""
+msgstr "احصل على التحديث الآن"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "تحذيرٌ بخصوص التوافقية"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
