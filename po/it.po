@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-19 10:02\n"
+"PO-Revision-Date: 2021-12-25 07:51\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -4024,7 +4024,7 @@ msgstr "Proteggi il collegamento dal Collettivo"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Invia almeno un trasportatore con un camion e sopravvivi all'assalto del Collettivo fino alla fine del timer"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -11704,7 +11704,7 @@ msgstr "Corpo pesante di NEXUS"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4276
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "Sistema d'Immunizzazione NEXUS"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -12971,7 +12971,7 @@ msgstr "Sciacallo"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5088
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "scavengernexuslinkturret"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -15193,7 +15193,7 @@ msgstr "Giocatori minimi necessari per l'avvio automatico della partita"
 
 #: src/clparse.cpp:419
 msgid "startplayers"
-msgstr ""
+msgstr "startplayers"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -16083,7 +16083,7 @@ msgstr "Nessuno"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Opzioni di Hosting:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
@@ -16091,11 +16091,11 @@ msgstr "Porta del gioco"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Abilita UPnP"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Timeout d'Inattività"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
@@ -16103,7 +16103,7 @@ msgstr ""
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Slot Spettatore"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
@@ -16206,7 +16206,7 @@ msgstr "Mostro Tecnologia Obsoleta"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Costo: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
@@ -16905,7 +16905,7 @@ msgstr "Seleziona tutte le unità gravemente danneggiate"
 #: src/input/keyconfig.cpp:172
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Seleziona tutte le unità di Combattimento con salute >50% e nessun Gruppo."
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks"
