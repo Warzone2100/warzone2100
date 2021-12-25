@@ -153,7 +153,10 @@ const char *getDroidActionName(DROID_ACTION action)
 	return name[action];
 }
 
-// check if a target is within weapon range
+/**
+ * When useLongWithOptimum is true: Returns true if distance from psDroid to psObj is within optimum range
+ * When useLongWithOptimum is false: Returns true if if distance from psDroid to psObj is within long range
+*/
 bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_slot, bool useLongWithOptimum)
 {
 	CHECK_DROID(psDroid);
@@ -213,7 +216,10 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	return false;
 }
 
-// check if a target is inside minimum weapon range
+/**
+ * Retuns true if distance from psDroid to target is less than, or equal to droid's 
+ * minimum range
+*/
 static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
 {
 	CHECK_DROID(psDroid);
@@ -1300,7 +1306,7 @@ void actionUpdateDroid(DROID *psDroid)
 					{
 						bool chaseBloke = false;
 						WEAPON_STATS *const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
-
+						const bool actionIsInRange = actionInRange(psDroid, psDroid->psActionTarget[0], i);
 						if (psWeapStats->rotate)
 						{
 							actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[i]);
@@ -1314,7 +1320,7 @@ void actionUpdateDroid(DROID *psDroid)
 							chaseBloke = true;
 						}
 
-						if (actionInRange(psDroid, psDroid->psActionTarget[0], i) && !chaseBloke)
+						if (actionIsInRange && !chaseBloke)
 						{
 							/* init vtol attack runs count if necessary */
 							if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
@@ -1339,7 +1345,7 @@ void actionUpdateDroid(DROID *psDroid)
 								}
 							}
 						}
-						else if (actionInRange(psDroid, psDroid->psActionTarget[0], i))
+						else if (actionIsInRange)
 						{
 							// fire while closing range
 							if ((blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[0])) && proj_Direct(psWeapStats))
@@ -2208,6 +2214,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	CHECK_DROID(psDroid);
 
 	bool secHoldActive = secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD;
+	bool actionIsInRange = false;
 	psDroid->actionStarted = gameTime;
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
@@ -2285,7 +2292,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		// slightly strange place to store this I know, but I didn't want to add any more to the droid
 		psDroid->actionPos = psDroid->pos.xy();
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-
+		actionIsInRange = actionInRange(psDroid, psDroid->psActionTarget[0], 0);
 		if (((order->type == DORDER_ATTACKTARGET
 		   || order->type == DORDER_NONE
 		   || order->type == DORDER_HOLD
@@ -2323,14 +2330,16 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				turnOffMultiMsg(false);
 			}
 		}
-		else if (order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD) // approach closer?
+		else if (order->type != DORDER_HOLD 
+				&& secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD
+				&& !actionIsInRange) // approach closer?
 		{
 			psDroid->action = DACTION_MOVETOATTACK;
 			turnOffMultiMsg(true);
 			moveDroidTo(psDroid, psAction->psObj->pos.x, psAction->psObj->pos.y);
 			turnOffMultiMsg(false);
 		}
-		else if (order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
+		else if (actionIsInRange ||(order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 		{
 			psDroid->action = DACTION_ATTACK;
 		}
