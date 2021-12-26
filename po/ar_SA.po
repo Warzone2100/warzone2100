@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-24 19:51\n"
+"PO-Revision-Date: 2021-12-26 18:01\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -13139,7 +13139,7 @@ msgstr ""
 #. data/mp/stats/sensor.json: $.SensorTurret1Mk1.name
 #: po/custom/fromJson.txt:5203
 msgid "Sensor Turret"
-msgstr ""
+msgstr "رأس الاستشعار"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
