@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-27 06:01\n"
+"PO-Revision-Date: 2021-12-27 17:59\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1824,7 +1824,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:334
 #: po/custom/fromJson.txt:1205
 msgid "Body Points: Medium"
-msgstr "نقاط صحة الهيكل: متوسطة"
+msgstr "نقاط صحة الجسم: متوسطة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[3]
@@ -2464,7 +2464,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:186
 #: po/custom/fromJson.txt:5856
 msgid "Vehicle Production Improved"
-msgstr ""
+msgstr "سيتحسن إنتاج المركبات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[1]
@@ -2562,7 +2562,7 @@ msgstr "سيتم تحديث كل مراكز الأبحاث تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:196
 #: po/custom/fromJson.txt:3199
 msgid "Increases Damage Resistance"
-msgstr ""
+msgstr "يزيد من القدرة على مقاومة الأسلحة المختلفة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
@@ -2908,7 +2908,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:246
 #: po/custom/fromJson.txt:1454
 msgid "Collective Light Body"
-msgstr ""
+msgstr "جسمٌ خفيفٌ من تصميم «الرابطة»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[1]
@@ -2919,7 +2919,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:247
 #: po/custom/fromJson.txt:5448
 msgid "Superior armor and body points to Viper"
-msgstr ""
+msgstr "أكثر قوةً وتصفيحاً من جسم الأفعى"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[2]
@@ -2928,7 +2928,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:248
 #: po/custom/fromJson.txt:5246
 msgid "Slower than Viper"
-msgstr ""
+msgstr "أبطأ من الأفعى"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[3]
@@ -2937,7 +2937,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:249
 #: po/custom/fromJson.txt:2831
 msgid "High power costs and slower to produce than Viper"
-msgstr ""
+msgstr "يتطلب إنتاجه طاقةً كبيرةً ووقتاً أطول من جسم الأفعى"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[0]
@@ -2946,7 +2946,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:251
 #: po/custom/fromJson.txt:1458
 msgid "Collective Medium Body"
-msgstr ""
+msgstr "جسمٌ متوسطٌ من تصميم «الرابطة»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[1]
@@ -2957,7 +2957,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:252
 #: po/custom/fromJson.txt:5442
 msgid "Superior armor and body points to Cobra"
-msgstr ""
+msgstr "أكثر قوةً وتصفيحاً من جسم الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[2]
@@ -2966,7 +2966,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:253
 #: po/custom/fromJson.txt:5238
 msgid "Slower than Cobra"
-msgstr ""
+msgstr "أبطأ من الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[3]
@@ -2975,7 +2975,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:254
 #: po/custom/fromJson.txt:2827
 msgid "High power costs and slower to produce than Cobra"
-msgstr ""
+msgstr "يتطلب إنتاجه طاقةً كبيرةً ووقتاً أطول من جسم الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[0]
@@ -3127,7 +3127,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:288
 #: po/custom/fromJson.txt:3169
 msgid "Increases Body Points"
-msgstr "يزيد من نقاط صحة الهيكل"
+msgstr "يزيد من نقاط صحة الجسم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[3]
@@ -3440,7 +3440,7 @@ msgstr "مثاليٌ ضد: المباني الرئيسية"
 #: data/mp/messages/strings/resstrings.txt:384
 #: po/custom/fromJson.txt:1199
 msgid "Body Points: Low"
-msgstr "نقاط صحة الهيكل: منخفضة"
+msgstr "نقاط صحة الجسم: منخفضة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB2.text[1]
@@ -3548,7 +3548,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:359
 #: po/custom/fromJson.txt:1193
 msgid "Body Points: High"
-msgstr "نقاط صحة الهيكل: مرتفعة"
+msgstr "نقاط صحة الجسم: مرتفعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_FLAME2.text[1]
@@ -3863,7 +3863,7 @@ msgstr "مثاليٌ ضد: المباني الرئيسية، والأفراد، 
 #: data/mp/messages/strings/resstrings.txt:414
 #: po/custom/fromJson.txt:1211
 msgid "Body Points: Very Low"
-msgstr "نقاط صحة الهيكل: شديدة الارتفاع"
+msgstr "نقاط صحة الجسم: شديدة الارتفاع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[0]
@@ -6594,7 +6594,7 @@ msgstr ""
 #: po/custom/fromJson.txt:642
 #, no-c-format
 msgid "Armor +35%, Body Points +30%"
-msgstr "الدرع +35%، نقاط صحة الهيكل +30%"
+msgstr "الدرع +35%، نقاط صحة الجسم +30%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D2.text[1]
@@ -6834,7 +6834,7 @@ msgstr ""
 #: po/custom/fromJson.txt:828
 #, no-c-format
 msgid "Armour +35%, Body Points +30%"
-msgstr "الدرع +35%، نقاط صحة الهيكل +30%"
+msgstr "الدرع +35%، نقاط صحة الجسم +30%"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Crate.name
@@ -7022,13 +7022,13 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade02.name
 #: po/custom/fromJson.txt:941
 msgid "Automated Factory Production Mk2"
-msgstr ""
+msgstr "أتمتة إنتاج المصنع (المستوى 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade03.name
 #: po/custom/fromJson.txt:944
 msgid "Automated Factory Production Mk3"
-msgstr ""
+msgstr "أتمتة إنتاج المصنع (المستوى 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[1]
@@ -7037,7 +7037,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FU1.text[1]
 #: po/custom/fromJson.txt:950
 msgid "Automated Factory Production"
-msgstr ""
+msgstr "أتمتة إنتاج المصنع"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade01.name
@@ -7122,7 +7122,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[3]
 #: po/custom/fromJson.txt:1038
 msgid "Average power costs and production times"
-msgstr ""
+msgstr "يتطلب إنتاجه طاقةً ووقتاً متوسطين نسبياً"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.BaBaLegs.name
@@ -7309,7 +7309,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[2]
 #: po/custom/fromJson.txt:1187
 msgid "Body Points and Speed Increased"
-msgstr "زيادة السرعة ونقاط صحة الهيكل"
+msgstr "زيادة السرعة ونقاط صحة الجسم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
@@ -7317,7 +7317,7 @@ msgstr "زيادة السرعة ونقاط صحة الهيكل"
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
 #: po/custom/fromJson.txt:1216
 msgid "Body Points: Very low"
-msgstr "نقاط صحة الهيكل: شديدة الانخفاض"
+msgstr "نقاط صحة الجسم: شديدة الانخفاض"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7387,7 +7387,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body4ABT.name
 #: po/custom/fromJson.txt:1263
 msgid "Bug"
-msgstr ""
+msgstr "البقّة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianBuggy.name
@@ -7686,7 +7686,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1436
 msgid "Cobra"
-msgstr ""
+msgstr "الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -7706,7 +7706,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text[0]
 #: po/custom/fromJson.txt:1450
 msgid "Collective Heavy Body"
-msgstr ""
+msgstr "جسمٌ ثقيلٌ من تصميم «الرابطة»"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
@@ -8263,7 +8263,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:1843
 msgid "Dragon"
-msgstr ""
+msgstr "التنين"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
@@ -8444,7 +8444,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[1]
 #: po/custom/fromJson.txt:1966
 msgid "Factory module enables medium and large bodies"
-msgstr ""
+msgstr "تسمح لك وحدة المصنع الإضافية بإنتاج الأجسام المتوسطة والثقيلة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Module.name
@@ -8528,7 +8528,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_B07.text[2]
 #: po/custom/fromJson.txt:2014
 msgid "Faster than Cobra"
-msgstr ""
+msgstr "أسرع من الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[2]
@@ -8537,7 +8537,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_B10.text[2]
 #: po/custom/fromJson.txt:2020
 msgid "Faster than Python"
-msgstr ""
+msgstr "أسرع من الحنش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B04.text[2]
@@ -8546,7 +8546,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_B03.text[2]
 #: po/custom/fromJson.txt:2026
 msgid "Faster than Viper"
-msgstr ""
+msgstr "أسرع من الأفعى"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[1]
@@ -8888,7 +8888,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[2]
 #: po/custom/fromJson.txt:2256
 msgid "Good medium tank and support vehicle"
-msgstr ""
+msgstr "مناسبٌ لتصميم الدبابات متوسطة الحجم أو مركبات الدعم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[2]
@@ -9288,21 +9288,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body12.name
 #: po/custom/fromJson.txt:2503
 msgid "Heavy Body - Mantis"
-msgstr ""
+msgstr "جسمٌ ثقيل - العقرب"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body11.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body11.name
 #: po/custom/fromJson.txt:2507
 msgid "Heavy Body - Python"
-msgstr ""
+msgstr "جسمٌ ثقيل - الحنش"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body09.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body09.name
 #: po/custom/fromJson.txt:2511
 msgid "Heavy Body - Tiger"
-msgstr ""
+msgstr "جسمٌ ثقيل - النمر"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body10.name
@@ -9322,7 +9322,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[1]
 #: po/custom/fromJson.txt:2522
 msgid "Heavy body increases armor and body points"
-msgstr "يزيد الهيكل الثقيل من قوة الدرع ونقاط صحة الهيكل"
+msgstr "يزيد الجسم الثقيل من قوة الدرع ونقاط صحة الجسم"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cobra-Hover-HC.name
@@ -9746,7 +9746,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text[3]
 #: po/custom/fromJson.txt:2823
 msgid "High power costs and slow to produce"
-msgstr ""
+msgstr "يتطلب إنتاجه طاقةً كبيرةً ووقتاً طويلاً"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage02.name
@@ -10223,7 +10223,7 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[2]
 #: po/custom/fromJson.txt:3163
 msgid "Increases Armour and Body Points"
-msgstr "يزيد من نقاط صحة الدرع والهيكل"
+msgstr "يزيد من قوة الدرع ونقاط الصحة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
@@ -10376,14 +10376,14 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B08.text[1]
 #: po/custom/fromJson.txt:3348
 msgid "Inferior armor and body points to Cobra"
-msgstr ""
+msgstr "أقل قوةً وتصفيحاً من جسم الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B04.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_V_B04.text[1]
 #: po/custom/fromJson.txt:3352
 msgid "Inferior armor and body points to Viper"
-msgstr ""
+msgstr "أقل قوةً وتصفيحاً من جسم الأفعى"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HvyFlamer.name
@@ -10697,28 +10697,28 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3545
 msgid "Leopard"
-msgstr ""
+msgstr "الفهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text[1]
 #: po/custom/fromJson.txt:3549
 msgid "Less armor and body points than Python"
-msgstr ""
+msgstr "أقل قوةً وتصفيحاً من جسم الحنش"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body04.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body04.name
 #: po/custom/fromJson.txt:3553
 msgid "Light Body - Bug"
-msgstr ""
+msgstr "جسمٌ خفيف - البقّة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body02.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body02.name
 #: po/custom/fromJson.txt:3557
 msgid "Light Body - Leopard"
-msgstr ""
+msgstr "جسمٌ خفيف - الفهد"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body03.name
@@ -10732,14 +10732,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body01.name
 #: po/custom/fromJson.txt:3565
 msgid "Light Body - Viper"
-msgstr ""
+msgstr "جسمٌ خفيف - الأفعى"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[1]
 #: po/custom/fromJson.txt:3569
 msgid "Light body vulnerable to heavy weapons"
-msgstr ""
+msgstr "جسمٌ خفيف، ولا يمكنه مقاومة الأسلحة الثقيلة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox04.name
@@ -10821,7 +10821,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[3]
 #: po/custom/fromJson.txt:3618
 msgid "Low power cost and low production times"
-msgstr ""
+msgstr "يمكن إنتاجه خلال وقتٍ قصير ودون استهلاك الكثير من الطاقة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BDMG3.text[1]
@@ -10896,7 +10896,7 @@ msgstr "يُعتبر مركبةً مثاليةً لاستطلاع ساحة ال�
 #. data/mp/stats/body.json: $.Body12SUP.name
 #: po/custom/fromJson.txt:3690
 msgid "Mantis"
-msgstr ""
+msgstr "العقرب"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MassDriver.name
@@ -10915,7 +10915,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[1]
 #: po/custom/fromJson.txt:3700
 msgid "Maximum armor and body points"
-msgstr "أقوى درع وأقصى عددٍ من نقاط صحة الهيكل"
+msgstr "أقوى درع وأقصى عددٍ من نقاط صحة الجسم"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
@@ -10955,14 +10955,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body05.name
 #: po/custom/fromJson.txt:3734
 msgid "Medium Body - Cobra"
-msgstr ""
+msgstr "جسمٌ متوسط - الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body06.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body06.name
 #: po/custom/fromJson.txt:3738
 msgid "Medium Body - Panther"
-msgstr ""
+msgstr "جسمٌ متوسط - الجاكوار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body07.name
@@ -10976,14 +10976,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body08.name
 #: po/custom/fromJson.txt:3746
 msgid "Medium Body - Scorpion"
-msgstr ""
+msgstr "جسمٌ متوسط - العنكبوت"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[1]
 #: po/custom/fromJson.txt:3750
 msgid "Medium body increases armor and body points"
-msgstr "يزيد الهيكل المتوسط من قوة الدرع ونقاط صحة الهيكل"
+msgstr "يزيد الجسم المتوسط من قوة الدرع ونقاط صحة الجسم"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
@@ -11251,7 +11251,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text[1]
 #: po/custom/fromJson.txt:3916
 msgid "More armor and body points than Python"
-msgstr ""
+msgstr "أكثر قوةً وتصفيحاً من جسم الحنش"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[1]
@@ -11524,21 +11524,21 @@ msgstr "هنالك رأسٌ صاروخيٌ جديدٌ متاحٌ لك"
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text[0]
 #: po/custom/fromJson.txt:4142
 msgid "New Paradigm Heavy Body"
-msgstr ""
+msgstr "جسمٌ ثقيلٌ من تصميم «النهج الحديث»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B04.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B04.text[0]
 #: po/custom/fromJson.txt:4146
 msgid "New Paradigm Light Body"
-msgstr ""
+msgstr "جسمٌ خفيفٌ من تصميم «النهج الحديث»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B08.text[0]
 #: po/custom/fromJson.txt:4150
 msgid "New Paradigm Medium body"
-msgstr ""
+msgstr "جسمٌ متوسطٌ من تصميم «النهج الحديث»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[1]
@@ -11586,7 +11586,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_REPAI1.text[1]
 #: po/custom/fromJson.txt:4186
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr ""
+msgstr "سيقوم مركز الصيانة الجديد بإصلاح الوحدات المتأذية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[0]
@@ -11846,7 +11846,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_REPAI1.text[3]
 #: po/custom/fromJson.txt:4364
 msgid "Or select the Repair Facility as a unit's target"
-msgstr ""
+msgstr "أو اطلب من الوحدة التوجه إلى مركز الصيانة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[2]
@@ -11874,7 +11874,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4386
 msgid "Panther"
-msgstr ""
+msgstr "الجاكوار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -12015,21 +12015,21 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B08.text[3]
 #: po/custom/fromJson.txt:4464
 msgid "Power cost and production time similar to Cobra"
-msgstr ""
+msgstr "يستهلك إنتاجه طاقةً ووقتاً قريبين من أولائك الخاصين بجسم الكوبرا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B04.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_V_B04.text[3]
 #: po/custom/fromJson.txt:4468
 msgid "Power cost and production time similar to Viper"
-msgstr ""
+msgstr "يستهلك إنتاجه طاقةً ووقتاً قريبين من أولائك الخاصين بجسم الأفعى"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text[3]
 #: po/custom/fromJson.txt:4472
 msgid "Power cost and production time the same as Python"
-msgstr ""
+msgstr "يستهلك إنتاجه طاقةً ووقتاً مماثلين لأولائك الخاصين بجسم الحنش"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0PowerGenerator.name
@@ -12104,21 +12104,21 @@ msgstr "إن الوحدات المحترفة والنظامية محمية"
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 #: po/custom/fromJson.txt:4524
 msgid "Project Heavy Body"
-msgstr ""
+msgstr "جسمٌ ثقيلٌ من تصميم «المشروع»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[0]
 #: po/custom/fromJson.txt:4528
 msgid "Project Light Body"
-msgstr ""
+msgstr "جسمٌ خفيفٌ من تصميم «المشروع»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[0]
 #: po/custom/fromJson.txt:4532
 msgid "Project Medium Body"
-msgstr ""
+msgstr "جسمٌ متوسطٌ من تصميم «المشروع»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[1]
@@ -12217,7 +12217,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body11ABT.name
 #: po/custom/fromJson.txt:4591
 msgid "Python"
-msgstr ""
+msgstr "الحنش"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
@@ -12413,14 +12413,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Materials02.name
 #: po/custom/fromJson.txt:4720
 msgid "Reinforced Base Structure Materials Mk2"
-msgstr ""
+msgstr "موادٌ بناءٍ أكثر قوةً (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials03.name
 #. data/mp/stats/research.json: $.R-Struc-Materials03.name
 #: po/custom/fromJson.txt:4724
 msgid "Reinforced Base Structure Materials Mk3"
-msgstr ""
+msgstr "موادٌ بناءٍ أكثر قوةً (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[1]
@@ -12429,7 +12429,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Materials01.name
 #: po/custom/fromJson.txt:4730
 msgid "Reinforced Base Structure Materials"
-msgstr ""
+msgstr "موادٌ بناءٍ أكثر قوةً"
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
@@ -12978,7 +12978,7 @@ msgstr "حافلة مدرسة"
 #. data/mp/stats/body.json: $.Body8MBT.name
 #: po/custom/fromJson.txt:5096
 msgid "Scorpion"
-msgstr ""
+msgstr "العنكبوت"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
@@ -13194,14 +13194,14 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[2]
 #: po/custom/fromJson.txt:5234
 msgid "Slow moving Body"
-msgstr ""
+msgstr "جسمٌ بطيء الحركة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_B09.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text[2]
 #: po/custom/fromJson.txt:5242
 msgid "Slower than Python"
-msgstr ""
+msgstr "أبطأ من الحنش"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCornerSmashed.name
@@ -13790,7 +13790,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body9REC.name
 #: po/custom/fromJson.txt:5629
 msgid "Tiger"
-msgstr ""
+msgstr "النمر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -14087,7 +14087,7 @@ msgstr "استعمل إحدى الشاحنات لتزويد مراكز الأب�
 #. data/mp/messages/resmessages1.json: $.RES_REPAI1.text[2]
 #: po/custom/fromJson.txt:5813
 msgid "Use the Command Console to send units back for repair"
-msgstr ""
+msgstr "استعمل «لوحة القيادة» لإرسال الوحدات إليها بغرض الصيانة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[1]
@@ -14213,13 +14213,13 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[3]
 #: po/custom/fromJson.txt:5911
 msgid "Very high power costs and very slow to produce"
-msgstr ""
+msgstr "يتطلب إنتاجه طاقةً كبيرةً جداً ووقتاً طويلاً إلى حدٍ بعيد"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[2]
 #: po/custom/fromJson.txt:5914
 msgid "Very slow moving Body"
-msgstr ""
+msgstr "جسمٌ بطيء الحركة إلى حدٍ كبير"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[1]
@@ -14257,7 +14257,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body1REC.name
 #: po/custom/fromJson.txt:5937
 msgid "Viper"
-msgstr ""
+msgstr "الأفعى"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
@@ -15202,7 +15202,7 @@ msgstr ""
 
 #: src/design.cpp:720
 msgid "Vehicle Body"
-msgstr ""
+msgstr "جسم المركبة"
 
 #: src/design.cpp:736
 msgid "Vehicle Propulsion"
@@ -15264,7 +15264,7 @@ msgstr ""
 #: src/design.cpp:980
 #: src/design.cpp:995
 msgid "Total Body Points"
-msgstr "نقاط صحة الهيكل الكلية"
+msgstr "نقاط صحة الجسم الإجمالية"
 
 #: src/design.cpp:1094
 #: src/design.cpp:1113
