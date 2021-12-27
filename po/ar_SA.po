@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-26 18:01\n"
+"PO-Revision-Date: 2021-12-27 06:01\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -409,7 +409,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "هنالك تقنياتٌ جديدةٌ متاحةٌ لك."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
@@ -637,7 +637,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr ""
+msgstr "دمّر الموقع وعُد إلى قاعدتك."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
@@ -1372,7 +1372,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:2627
 msgid "Heavy Machinegun Guard Tower"
-msgstr "برج حراسة برشاشٍ ثقيل"
+msgstr "برج حراسةٍ برشاشٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower04.name
@@ -1394,7 +1394,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:410
 #: po/custom/fromJson.txt:2096
 msgid "Flamer Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بقاذف لهب"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
@@ -1740,7 +1740,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:317
 msgid "All Cyborgs upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل السايبورغ تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -1784,7 +1784,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:16
 #: po/custom/fromJson.txt:4092
 msgid "New Cyborg Available"
-msgstr ""
+msgstr "هنالك سايبورغ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
@@ -1883,7 +1883,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:31
 #: po/custom/fromJson.txt:1767
 msgid "Defenses Improved"
-msgstr ""
+msgstr "تم تحسين دفاعاتك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DF_WU4.text[1]
@@ -1905,7 +1905,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3160
 msgid "Increases Armor and Body Points"
-msgstr "يزيد من نقاط صحة الدرع والهيكل"
+msgstr "يزيد من قوة الدرع ونقاط الصحة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -1916,7 +1916,7 @@ msgstr "يزيد من نقاط صحة الدرع والهيكل"
 #: data/mp/messages/strings/resstrings.txt:34
 #: po/custom/fromJson.txt:323
 msgid "All defenses and walls upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الدفاعات والجدران تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[0]
@@ -1977,7 +1977,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:161
 #: po/custom/fromJson.txt:4102
 msgid "New Defensive Structure Available"
-msgstr "يتوافر بناءٌ دفاعيٌ جديد"
+msgstr "هنالك بناءٌ دفاعيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA4.text[1]
@@ -2112,7 +2112,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:88
 #: po/custom/fromJson.txt:916
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr ""
+msgstr "يتم إسناده تلقائياً إلى أقرب مستشعر أو برجٍ مضادٍ للمدفعية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HvyMor.text[1]
@@ -2257,7 +2257,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr ""
+msgstr "برج حراسةٍ محصّن وعليه رشاشٌ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
@@ -2304,7 +2304,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
 msgid "Armored hardpoint with Flamer"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها قاذف لهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT7_RMG.text[1]
@@ -2322,7 +2322,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:147
 #: po/custom/fromJson.txt:710
 msgid "Armored hardpoint with Assault Cannon"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها مدفعٌ هجومي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT11_HFL.text[1]
@@ -2388,7 +2388,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:168
 #: po/custom/fromJson.txt:3308
 msgid "Increases Repair Speed"
-msgstr ""
+msgstr "يزيد من سرعة التصليح"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[3]
@@ -2399,7 +2399,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:169
 #: po/custom/fromJson.txt:405
 msgid "All repair facilities upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل مراكز الصيانة تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[0]
@@ -2447,7 +2447,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:311
 msgid "All Cyborg factories upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل مصانع السايبورغ تلقائياً"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2481,7 +2481,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:183
 #: po/custom/fromJson.txt:3206
 msgid "Increases factory production rate"
-msgstr ""
+msgstr "يزيد من معدلات إنتاج المصانع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[3]
@@ -2493,7 +2493,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:440
 msgid "All vehicle factories upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل مصانع المركبات تلقائياً"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -2507,7 +2507,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:188
 #: po/custom/fromJson.txt:3203
 msgid "Increases factory output"
-msgstr ""
+msgstr "يزيد كمية الإنتاج في المصانع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[0]
@@ -2540,7 +2540,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:193
 #: po/custom/fromJson.txt:3314
 msgid "Increases research speed"
-msgstr ""
+msgstr "يزيد من سرعة الأبحاث"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[3]
@@ -2551,7 +2551,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:194
 #: po/custom/fromJson.txt:411
 msgid "All research facilities upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل مراكز الأبحاث تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[0]
@@ -2584,7 +2584,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:287
 msgid "All base structures upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل المباني الرئيسية تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[0]
@@ -2681,7 +2681,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:226
 #: po/custom/fromJson.txt:4248
 msgid "New Systems Turret Available"
-msgstr ""
+msgstr "هنالك رأسٌ وظيفيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_REPTUHVY.text[1]
@@ -2719,7 +2719,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:218
 msgid "Increases repair speed"
-msgstr ""
+msgstr "يزيد من سرعة التصليح"
 
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
@@ -2733,7 +2733,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:221
 #: po/custom/fromJson.txt:3076
 msgid "Improved Sensor Tower Available"
-msgstr ""
+msgstr "لقد صار هناك برج استشعارٍ أفضل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[1]
@@ -2751,7 +2751,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:223
 #: po/custom/fromJson.txt:4796
 msgid "Replaces existing sensor tower"
-msgstr ""
+msgstr "سيتسبدل برج الاستشعار الحالي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[3]
@@ -2762,7 +2762,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:224
 #: po/custom/fromJson.txt:3706
 msgid "May be assigned as spotter for indirect fire weapons"
-msgstr ""
+msgstr "يمكنك أن توكل له مهمة رصد أهداف الأسلحة التي تطلق نيراناً غير مباشرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[1]
@@ -3008,7 +3008,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:258
 #: po/custom/fromJson.txt:3109
 msgid "Improves vehicle speed"
-msgstr ""
+msgstr "يحسّن من سرعة المركبة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[3]
@@ -3023,7 +3023,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:269
 #: po/custom/fromJson.txt:446
 msgid "All vehicles upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل المركبات تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[0]
@@ -3093,7 +3093,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:286
 #: po/custom/fromJson.txt:5862
 msgid "Vehicle Propulsion Improved"
-msgstr ""
+msgstr "تم تحسين نظام دفع المركبة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[1]
@@ -3188,7 +3188,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:306
 #: po/custom/fromJson.txt:4043
 msgid "New AA Turret Available"
-msgstr ""
+msgstr "هنالك رأسٌ جديدٌ مضادٌ للطائرات متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[1]
@@ -3498,7 +3498,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:361
 #: po/custom/fromJson.txt:4266
 msgid "New Weapon Turret Available"
-msgstr ""
+msgstr "هنالك رأسٌ هجوميٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[1]
@@ -3598,7 +3598,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:368
 #: po/custom/fromJson.txt:3210
 msgid "Increases Flamer damage"
-msgstr ""
+msgstr "يزيد ضرر قاذف اللهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[3]
@@ -3626,7 +3626,7 @@ msgstr "سيتم تحديث كل قواذف اللهب تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:411
 #: po/custom/fromJson.txt:4117
 msgid "New Indirect Fire Weapon Available"
-msgstr ""
+msgstr "هنالكٌ سلاحٌ جديدٌ متاحٌ لك، يطلق نيراناً غير مباشرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HMK1.text[1]
@@ -3756,7 +3756,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:397
 #: po/custom/fromJson.txt:991
 msgid "Automatic loading mechanism replaces manual loader"
-msgstr ""
+msgstr "سيتم استعمال الملقم الآلي بدلاً من تلقيم الهاون يدوياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
@@ -3874,7 +3874,7 @@ msgstr "نقاط صحة الهيكل: شديدة الارتفاع"
 #: data/mp/messages/strings/resstrings.txt:416
 #: po/custom/fromJson.txt:3971
 msgid "Mortar Upgrade"
-msgstr ""
+msgstr "تحديثٌ للهاون"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_M_D4.text[1]
@@ -3892,7 +3892,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:418
 #: po/custom/fromJson.txt:3290
 msgid "Increases Mortar damage"
-msgstr ""
+msgstr "تزيد من الضرر الذي يسببه الهاون"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[3]
@@ -3903,7 +3903,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:419
 #: po/custom/fromJson.txt:381
 msgid "All mortars upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل مدافع الهاون تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[0]
@@ -3985,7 +3985,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:433
 #: po/custom/fromJson.txt:3323
 msgid "Increases Rocket damage"
-msgstr ""
+msgstr "يزيد ضرر الصاروخ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[3]
@@ -4450,12 +4450,12 @@ msgstr ""
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr ""
+msgstr "لن يمر هجومك علينا دون عقاب."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr ""
+msgstr "لقد عصيت أوامر «النهج الحديث»."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -4572,15 +4572,15 @@ msgstr "انتباه!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
-msgstr ""
+msgstr "لا يسمح لك الاقتراب من هذه المنطقة."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "عُد أدراجك أو سيتم تدميرك."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "نكرر: عُد أدراجك أو سيتم تدميرك."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
@@ -4588,7 +4588,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr ""
+msgstr "سيتم سحقك."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
@@ -5459,14 +5459,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:507
 #: po/custom/fromJson.txt:2276
 msgid "Half-tracked Propulsion II"
-msgstr ""
+msgstr "دفع بالجنازير النصفية 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Tracks02.name
 #: data/mp/messages/strings/names.txt:509
 #: po/custom/fromJson.txt:5639
 msgid "Tracked Propulsion II"
-msgstr ""
+msgstr "دفعٌ بالجنازير 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-VTOL02.name
@@ -5480,7 +5480,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:513
 #: po/custom/fromJson.txt:6196
 msgid "Wheeled Propulsion II"
-msgstr ""
+msgstr "دفعٌ بالعجلات 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage09.name
@@ -5880,7 +5880,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_MG3MK1.text[1]
 #: po/custom/fromJson.txt:4
 msgid ".50-calibre heavy machinegun"
-msgstr ""
+msgstr "رشاشٌ ثقيلٌ بعيار 0.50"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_RHOW.text[1]
@@ -6244,7 +6244,7 @@ msgstr ""
 #. ... + 11 refs
 #: po/custom/fromJson.txt:299
 msgid "All cannons upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل المدافع تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[3]
@@ -6260,7 +6260,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[3]
 #: po/custom/fromJson.txt:327
 msgid "All factories upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل المصانع تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[3]
@@ -6269,7 +6269,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:357
 msgid "All lasers upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل أسلحة الليزر تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[3]
@@ -6305,7 +6305,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[3]
 #: po/custom/fromJson.txt:423
 msgid "All sensors upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل أجهزة الاستشعار تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[3]
@@ -6314,7 +6314,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:435
 msgid "All trucks upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الشاحنات تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[3]
@@ -6698,7 +6698,7 @@ msgstr "برج حراسةٍ مدعم ومزودٌ بصواريخ «الجلاد�
 #. data/mp/messages/resmessages1.json: $.RES_HALFT1.text[1]
 #: po/custom/fromJson.txt:706
 msgid "Armored Half-tracks"
-msgstr ""
+msgstr "جنازير مصفحة تغطي نصف العجلات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT14_PLS.text[1]
@@ -6719,14 +6719,14 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_WT4_HC.text[1]
 #: po/custom/fromJson.txt:726
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها مدفعٌ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها رشاشٌ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
@@ -6747,14 +6747,14 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_WT2_LC.text[1]
 #: po/custom/fromJson.txt:746
 msgid "Armored hardpoint with Light Cannon"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها مدفعٌ خفيف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #: po/custom/fromJson.txt:750
 msgid "Armored hardpoint with Medium Cannon"
-msgstr ""
+msgstr "نقطةٌ محصنة وعليها مدفعٌ متوسط"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
@@ -6781,7 +6781,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_EMP_Mpit.text[1]
 #: po/custom/fromJson.txt:779
 msgid "Armored Mortar battery pit"
-msgstr ""
+msgstr "خندقٌ محصّن وفيه مدفع هاون"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PrisLas.text[1]
@@ -6876,7 +6876,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Wall-VulcanCan.name
 #: po/custom/fromJson.txt:852
 msgid "Assault Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفعٍ هجومي"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
@@ -7090,7 +7090,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[1]
 #: po/custom/fromJson.txt:985
 msgid "Automatic loader replaces manual feed"
-msgstr ""
+msgstr "سيتم استعمال الملقم الآلي بدلاً من تلقيم الهاون يدوياً"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-SamSite.name
@@ -7208,13 +7208,13 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:1113
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr ""
+msgstr "مثاليٌ ضد: الملاجئ والنقاط المحصنة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1116
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr ""
+msgstr "مثاليٌ ضد: الملاجئ والنقاط المحصّنة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
@@ -7282,7 +7282,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[2]
 #: po/custom/fromJson.txt:1172
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr ""
+msgstr "مثاليٌ ضد: المركبات والنقاط المحصّنة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
@@ -7892,7 +7892,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1566
 #, no-c-format
 msgid "Construction speed +10%"
-msgstr ""
+msgstr "زيادة سرعة البناء 10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[2]
@@ -7900,7 +7900,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1571
 #, no-c-format
 msgid "Construction speed +20%"
-msgstr ""
+msgstr "زيادة سرعة البناء 20%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -8345,7 +8345,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
 #: po/custom/fromJson.txt:1897
 msgid "Enables Hardcrete walls"
-msgstr ""
+msgstr "يمكنك الآن بناء جدران الإسمنت الصلب"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[3]
@@ -8372,7 +8372,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #: po/custom/fromJson.txt:1912
 msgid "Enables self-repair in all defenses"
-msgstr ""
+msgstr "سيتم تفعيل ميزة الصيانة الذاتية لدى كل الدفاعات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
@@ -8422,7 +8422,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_STW1.text[1]
 #: po/custom/fromJson.txt:1941
 msgid "Extended sensor range"
-msgstr ""
+msgstr "نطاقٌ أوسع للمستشعر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[2]
@@ -8468,7 +8468,7 @@ msgstr "ستزداد سرعة الإنتاج في المصنع بنسبة 100% �
 #: po/custom/fromJson.txt:1981
 #, no-c-format
 msgid "Factory output speed +60%"
-msgstr ""
+msgstr "زيادة سرعة إنتاج المصنع 60%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text[2]
@@ -8915,26 +8915,26 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
 #: po/custom/fromJson.txt:2280
 msgid "Half-tracked Propulsion"
-msgstr ""
+msgstr "دفعٌ بالجنازير النصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.HalfTrack02.name
 #: po/custom/fromJson.txt:2283
 msgid "Half-tracks II"
-msgstr ""
+msgstr "جنازير نصفية 2"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.HalfTrack03.name
 #: po/custom/fromJson.txt:2286
 msgid "Half-tracks III"
-msgstr ""
+msgstr "جنازير نصفية 3"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.HalfTrack.name
 #. data/mp/stats/propulsion.json: $.HalfTrack.name
 #: po/custom/fromJson.txt:2290
 msgid "Half-tracks"
-msgstr ""
+msgstr "جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1CWall.name
@@ -8995,7 +8995,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2330
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "برج حراسةٍ مدعم برشاشٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9121,21 +9121,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Damage02.name
 #: po/custom/fromJson.txt:2399
 msgid "HE Mortar Shells Mk2"
-msgstr ""
+msgstr "قذائف هاون شديدة الانفجار (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Damage03.name
 #: po/custom/fromJson.txt:2403
 msgid "HE Mortar Shells Mk3"
-msgstr ""
+msgstr "قذائف هاون شديدة الانفجار (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Damage01.name
 #: po/custom/fromJson.txt:2407
 msgid "HE Mortar Shells"
-msgstr ""
+msgstr "قذائف هاون شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.name
@@ -9239,21 +9239,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage02.name
 #: po/custom/fromJson.txt:2463
 msgid "HEAT Cannon Shells Mk2"
-msgstr ""
+msgstr "قذائف مضادةٌ للدبابات (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 #: po/custom/fromJson.txt:2467
 msgid "HEAT Cannon Shells Mk3"
-msgstr ""
+msgstr "قذائف مضادةٌ للدبابات (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 #: po/custom/fromJson.txt:2471
 msgid "HEAT Cannon Shells"
-msgstr ""
+msgstr "قذائف مضادةٌ للدبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage02.name
@@ -9351,7 +9351,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower04.name
 #: po/custom/fromJson.txt:2539
 msgid "Heavy Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفعٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
@@ -9477,7 +9477,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2633
 msgid "Heavy Machinegun Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة برشاشٍ ثقيل"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -9670,7 +9670,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[1]
 #: po/custom/fromJson.txt:2759
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr ""
+msgstr "قذائف مدفعية مضادةٌ للدبابات شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[1]
@@ -10069,7 +10069,7 @@ msgstr "إسمنتٌ صلبٌ محسّن"
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text[1]
 #: po/custom/fromJson.txt:3046
 msgid "Improved high explosive shells"
-msgstr ""
+msgstr "قذائف مطوَّرة شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-Accuracy01.name
@@ -10110,7 +10110,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[3]
 #: po/custom/fromJson.txt:3072
 msgid "Improved sensor range"
-msgstr ""
+msgstr "مدىً أكبر للمستشعر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text[1]
@@ -10137,7 +10137,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_DF_WU1.text[1]
 #: po/custom/fromJson.txt:3091
 msgid "Improved Titanium-reinforced concrete"
-msgstr ""
+msgstr "إسمنتٌ مدعمٌ بالتيتانيوم محسّن"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[1]
@@ -10196,14 +10196,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3129
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "خندق هاون حارق 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incendiary.name
 #: po/custom/fromJson.txt:3133
 msgid "Incendiary Mortar Pit"
-msgstr ""
+msgstr "خندق هاون حارق"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Incendiary.name
@@ -10230,7 +10230,7 @@ msgstr "يزيد من نقاط صحة الدرع والهيكل"
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[2]
 #: po/custom/fromJson.txt:3173
 msgid "Increases Cannon accuracy"
-msgstr ""
+msgstr "يزيد دقة المدفع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
@@ -10238,14 +10238,14 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[2]
 #: po/custom/fromJson.txt:3178
 msgid "Increases Cannon damage"
-msgstr ""
+msgstr "يزيد ضرر المدفع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[2]
 #: po/custom/fromJson.txt:3182
 msgid "Increases Cannon ROF"
-msgstr ""
+msgstr "يزيد معدل إطلاق المدفع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[2]
@@ -10253,37 +10253,37 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text[2]
 #: po/custom/fromJson.txt:3187
 msgid "Increases construction speed"
-msgstr ""
+msgstr "يزيد من سرعة البناء"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3213
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "يزيد من مدى قاذف اللهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:3216
 msgid "Increases Flamer ROF"
-msgstr ""
+msgstr "يزيد من معدل إطلاق قاذف اللهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[2]
 #: po/custom/fromJson.txt:3243
 msgid "Increases Laser accuracy"
-msgstr ""
+msgstr "يزيد من دقة الليزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text[2]
 #: po/custom/fromJson.txt:3246
 msgid "Increases Laser damage"
-msgstr ""
+msgstr "يزيد من الضرر الذي يسببه الليزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text[2]
 #: po/custom/fromJson.txt:3249
 msgid "Increases Laser ROF"
-msgstr ""
+msgstr "يزيد من معدل إطلاق الليزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[2]
@@ -10302,20 +10302,20 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text[2]
 #: po/custom/fromJson.txt:3274
 msgid "Increases Missile accuracy"
-msgstr ""
+msgstr "يزيد من دقة الصاروخ الموجه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_D1.text[2]
 #: po/custom/fromJson.txt:3277
 msgid "Increases Missile damage"
-msgstr ""
+msgstr "يزيد من الضرر الذي يسببه الصاروخ الموجه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_ROF1.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[2]
 #: po/custom/fromJson.txt:3281
 msgid "Increases Missile ROF"
-msgstr ""
+msgstr "يزيد من معدل إطلاق الصواريخ الموجهة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
@@ -10323,14 +10323,14 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_M_AC3.text[2]
 #: po/custom/fromJson.txt:3286
 msgid "Increases Mortar accuracy"
-msgstr ""
+msgstr "تزيد من دقة الهاون"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_M_ROF4.text[2]
 #: po/custom/fromJson.txt:3294
 msgid "Increases Mortar ROF"
-msgstr ""
+msgstr "تزيد من معدل إطلاق الهاون"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
@@ -10478,7 +10478,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3405
 msgid "Keeps map areas under constant surveillance"
-msgstr ""
+msgstr "يعمل باستمرار على رصد تحركات الأعداء في المناطق المختلفة من الخريطة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -10762,7 +10762,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_CN1MK1.text[1]
 #: po/custom/fromJson.txt:3583
 msgid "Light Cannon firing 40mm rounds"
-msgstr ""
+msgstr "مدفعٌ خفيفٌ يمكنه إطلاق طلقاتٍ بعيار 40 مم"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower02.name
@@ -10771,7 +10771,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower02.name
 #: po/custom/fromJson.txt:3589
 msgid "Light Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفعٍ خفيف"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
@@ -10807,7 +10807,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon1Mk1.name
 #: po/custom/fromJson.txt:3610
 msgid "Light Cannon"
-msgstr ""
+msgstr "مدفعٌ خفيف"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.LookOutTower.name
@@ -10889,7 +10889,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[2]
 #: po/custom/fromJson.txt:3686
 msgid "Makes excellent scout vehicle"
-msgstr ""
+msgstr "يُعتبر مركبةً مثاليةً لاستطلاع ساحة المعركة"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body12SUP.name
@@ -10929,7 +10929,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_IMORT.text[1]
 #: po/custom/fromJson.txt:3720
 msgid "May be targeted directly or assigned to a sensor turret or tower"
-msgstr ""
+msgstr "يمكن توجيهه مباشرةً أو إسناده إلى رأس مركبةٍ أو برجٍ مزودٍ بمستشعر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[3]
@@ -11019,7 +11019,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower03.name
 #: po/custom/fromJson.txt:3771
 msgid "Medium Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفعٍ متوسط"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-MC.name
@@ -11318,7 +11318,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit01.name
 #: po/custom/fromJson.txt:3956
 msgid "Mortar Pit"
-msgstr ""
+msgstr "خندق هاون"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
@@ -11342,7 +11342,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Mortar1Mk1.name
 #: po/custom/fromJson.txt:3977
 msgid "Mortar"
-msgstr ""
+msgstr "هاون"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-Tower.name
@@ -11447,7 +11447,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[0]
 #: po/custom/fromJson.txt:4046
 msgid "New Advanced Weapon Available"
-msgstr ""
+msgstr "هنالك سلاحٌ متطورٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[0]
@@ -11472,7 +11472,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:4068
 msgid "New Base Structure Available"
-msgstr ""
+msgstr "هنالك بناءٌ رئيسيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[1]
@@ -11486,7 +11486,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[0]
 #: po/custom/fromJson.txt:4082
 msgid "New Construction Options Available"
-msgstr ""
+msgstr "ستجد الآن في قسم البناء عدداً من الخيارات الجديدة المتاحة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[0]
@@ -11508,7 +11508,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4129
 msgid "New Laser Weapon Available"
-msgstr ""
+msgstr "هنالك سلاحٌ ليزريٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text[0]
@@ -11517,7 +11517,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[0]
 #: po/custom/fromJson.txt:4135
 msgid "New Missile Turret Available"
-msgstr ""
+msgstr "هنالك رأسٌ صاروخيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[0]
@@ -11547,7 +11547,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[1]
 #: po/custom/fromJson.txt:4156
 msgid "New power efficient propulsion"
-msgstr ""
+msgstr "هنالك نظام دفعٍ جديدٍ موفرٍ للطاقة متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[1]
@@ -11570,7 +11570,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:4170
 msgid "New Propulsion Available"
-msgstr ""
+msgstr "هنالك نظام دفعٍ جديدٍ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text[0]
@@ -11611,7 +11611,7 @@ msgstr ""
 #. ... + 9 refs
 #: po/custom/fromJson.txt:4210
 msgid "New Rocket Available"
-msgstr ""
+msgstr "هنالك صاروخٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[0]
@@ -11632,14 +11632,14 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4222
 msgid "New Systems Sensor Available"
-msgstr ""
+msgstr "هنالك مستشعرٌ وظيفيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WS.text[0]
 #: po/custom/fromJson.txt:4226
 msgid "New Systems Structure Available"
-msgstr ""
+msgstr "هنالك بناءٌ وظيفيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VCBSTW1.text[0]
@@ -11648,7 +11648,7 @@ msgstr ""
 #. ... + 6 refs
 #: po/custom/fromJson.txt:4232
 msgid "New Systems Tower Available"
-msgstr ""
+msgstr "هنالك برجٌ وظيفيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
@@ -12390,7 +12390,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4698
 #, no-c-format
 msgid "Rearming speed +30%"
-msgstr ""
+msgstr "زيادة سرعة إعادة التسلح 30%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -12465,7 +12465,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4765
 #, no-c-format
 msgid "Repair Speed +100%"
-msgstr ""
+msgstr "زيادة سرعة التصليح 100%"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12582,14 +12582,14 @@ msgstr "وحدة أبحاثٍ إضافية"
 #: po/custom/fromJson.txt:4853
 #, no-c-format
 msgid "Research speed +30%"
-msgstr ""
+msgstr "زيادة سرعة الأبحاث 30%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
 #: po/custom/fromJson.txt:4857
 #, no-c-format
 msgid "Research speed +85%"
-msgstr ""
+msgstr "زيادة سرعة الأبحاث 85%"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -13222,21 +13222,21 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_P_W1.text[2]
 #: po/custom/fromJson.txt:5258
 msgid "Speed: Fast"
-msgstr ""
+msgstr "السرعة: سريعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_HALFT1.text[2]
 #. data/mp/messages/resmessages1.json: $.RES_HALFT1.text[2]
 #: po/custom/fromJson.txt:5262
 msgid "Speed: Medium"
-msgstr ""
+msgstr "السرعة: متوسطة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text[2]
 #. data/mp/messages/resmessages1.json: $.RES_TRACK1.text[2]
 #: po/custom/fromJson.txt:5266
 msgid "Speed: Slow"
-msgstr ""
+msgstr "السرعة: بطيئة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text[2]
@@ -13797,7 +13797,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
 #: po/custom/fromJson.txt:5633
 msgid "Titanium-reinforced concrete"
-msgstr ""
+msgstr "إسمنتٌ مدعمٌ بالتيتانيوم"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
@@ -13810,7 +13810,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Tracks.name
 #: po/custom/fromJson.txt:5643
 msgid "Tracked Propulsion"
-msgstr ""
+msgstr "دفعٌ بالجنازير"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[1]
@@ -13823,20 +13823,20 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.tracked02.name
 #: po/custom/fromJson.txt:5650
 msgid "Tracks II"
-msgstr ""
+msgstr "جنازير 2"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.tracked03.name
 #: po/custom/fromJson.txt:5653
 msgid "Tracks III"
-msgstr ""
+msgstr "جنازير 3"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.tracked01.name
 #. data/mp/stats/propulsion.json: $.tracked01.name
 #: po/custom/fromJson.txt:5657
 msgid "Tracks"
-msgstr ""
+msgstr "جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.TransporterBody.name
@@ -14671,26 +14671,26 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Wheels.name
 #: po/custom/fromJson.txt:6202
 msgid "Wheeled Propulsion"
-msgstr ""
+msgstr "دفعٌ بالعجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.wheeled02.name
 #: po/custom/fromJson.txt:6205
 msgid "Wheels II"
-msgstr ""
+msgstr "عجلات 2"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.wheeled03.name
 #: po/custom/fromJson.txt:6208
 msgid "Wheels III"
-msgstr ""
+msgstr "عجلات 3"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.wheeled01.name
 #. data/mp/stats/propulsion.json: $.wheeled01.name
 #: po/custom/fromJson.txt:6212
 msgid "Wheels"
-msgstr ""
+msgstr "عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadRotMg.name
@@ -15206,7 +15206,7 @@ msgstr ""
 
 #: src/design.cpp:736
 msgid "Vehicle Propulsion"
-msgstr ""
+msgstr "نظام دفع المركبة"
 
 #: src/design.cpp:753
 #: src/design.cpp:772
@@ -15310,22 +15310,22 @@ msgstr ""
 #: src/design.cpp:1814
 #: src/design.cpp:1829
 msgid "Air Speed"
-msgstr ""
+msgstr "السرعة في الهواء"
 
 #: src/design.cpp:1847
 #: src/design.cpp:1875
 msgid "Road Speed"
-msgstr ""
+msgstr "السرعة على الطرقات"
 
 #: src/design.cpp:1855
 #: src/design.cpp:1883
 msgid "Off-Road Speed"
-msgstr ""
+msgstr "السرعة خارج الطرقات المعبدة"
 
 #: src/design.cpp:1861
 #: src/design.cpp:1891
 msgid "Water Speed"
-msgstr ""
+msgstr "السرعة فوق الماء"
 
 #: src/design.cpp:1963
 msgid "Weapons"
@@ -16041,7 +16041,7 @@ msgstr ""
 #: src/frontend.cpp:2024
 #: src/frontend.cpp:2095
 msgid "Camera Speed"
-msgstr ""
+msgstr "سرعة الكاميرا"
 
 #: src/frontend.cpp:2028
 #: src/frontend.cpp:2091
