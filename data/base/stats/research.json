@@ -1268,7 +1268,7 @@
 		"msgName": "RES_DF_HCW1",
 		"name": "Hardcrete",
 		"redStructures": [
-			"GuardTower1",
+			"GuardTower1MG",
 			"GuardTower3",
 			"GuardTower4"
 		],
@@ -1408,9 +1408,9 @@
 		"researchPoints": 600,
 		"researchPower": 18,
 		"resultStructures": [
-			"GuardTower1"
+			"GuardTower1MG"
 		],
-		"statID": "GuardTower1"
+		"statID": "GuardTower1MG"
 	},
 	"R-Defense-Tower02": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -1418,7 +1418,7 @@
         "msgName": "RES_TOWER2",
         "name": "Twin Machinegun Guard Tower",
 		"redStructures": [
-            "GuardTower1"
+            "GuardTower1MG"
         ],
         "requiredResearch": [
             "R-Wpn-MG2Mk1"
