@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-27 17:59\n"
+"PO-Revision-Date: 2021-12-28 12:20\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -59,15 +59,15 @@ msgstr "استكشف المنطقة وقم بتأمينها."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «ألفا»: «النهج الحديث»"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "يمتلك «النهج الحديث» أسلحةً تفوق في قدراتها تلك التي نملكها."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "من المحتمل أن تقنية وصلة المشبك العصبي موجودةٌ بحوذتهم، ويجب علينا استرجاعها."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "لقد رصدنا قوةً هجوميةً معادية في هذه الموقع."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
@@ -4437,7 +4437,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr ""
+msgstr "أيها القائد: لقد تمكنا أن نستحوذ على رأس قيادة من «النهج الحديث»."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
@@ -4445,7 +4445,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
-msgstr ""
+msgstr "أيها القائد: لقد تلقينا هذه الرسالة."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
