@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-29 00:24\n"
+"PO-Revision-Date: 2021-12-29 12:25\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -75,11 +75,11 @@ msgstr "عملية نقل: اعثر على القطع الأثرية ثم است
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr "جهّز قوةً هجومية وأرسلها في المركبة الجوية."
+msgstr "جهّز قوةً هجومية وأرسلها في السفينة الطائرة."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "بعد الهبوط، استكشف الأطلال الموجودة في المنطقة واستعد أي قطعٍ أثرية تعثر عليها."
+msgstr "بعد الإنزال، استكشف الأطلال الموجودة في المنطقة واستعد أي قطعٍ أثرية تعثر عليها."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
@@ -108,27 +108,27 @@ msgstr "استخدم شاحناتك لتشييد بعض المباني الدف�
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "عملية نقل: الاطلاع على رسائل الأعداء"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "استكشف المنطقة المحددة بحثاً عن مراكز أبحاثٍ تابعةٍ للأعداء."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "توجه إلى منطقة الإنزال 2، ولا تشتبك مع العدو هذه المرة."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "عملية نقل: موقع وصلة المشبك العصبي"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "يعمل «النهج الحديث» على تحليل تقنية وصلة المشبك العصبي في هذه المنطقة."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "احشد قوةً هجومية واسترجع تقنية وصلة المشبك العصبي."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -172,11 +172,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "إن القوات المعادية تتجه نحونا من الشرق والشمال."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "دافع عن قواعدك وتصدى لهجماتهم."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
@@ -296,19 +296,19 @@ msgstr "جارٍ فك تشفير الرسالة....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "أيها القائد."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "لقد فككنا شيفرة الرسالة المبعوثة إلى «النهج الحديث»..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "دمّر قاعدة الأعداء"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "احشد قوةً هجومية وتوجه بها إلى السفينة الطائرة."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
@@ -320,7 +320,7 @@ msgstr "لقد استعدنا تقنية وصلة المشبك العصبي!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "ولقد أكدت أبحاثنا الأولية عليها أنها ستكون ذا فائدةٍ عظيمةٍ «للمشروع»."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -1129,7 +1129,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
-msgstr "منطقة الهبوط"
+msgstr "منطقة الإنزال"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
@@ -1154,7 +1154,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
-msgstr "منطقة هبوط الأعداء"
+msgstr "منطقة الإنزال التابعة للأعداء"
 
 #: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
@@ -1180,7 +1180,7 @@ msgstr "تصميمٌ جديد"
 #: data/base/messages/strings/names.txt:103
 #: data/mp/messages/strings/names.txt:160
 msgid "Cyborg Cannon"
-msgstr ""
+msgstr "مدفع السايبورغ"
 
 #: data/base/messages/strings/names.txt:149
 #: data/base/messages/strings/names.txt:182
@@ -1703,7 +1703,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:1
 #: po/custom/fromJson.txt:1662
 msgid "Cyborg Materials Improved"
-msgstr ""
+msgstr "سيتم تحسين المواد التي يُصنع منها السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYMET4.text[1]
@@ -1716,7 +1716,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:262
 #: po/custom/fromJson.txt:3541
 msgid "Layered dense composite alloys and energy-absorbing fibres"
-msgstr ""
+msgstr "خلائط معدنيةً كثيفة ومتعددة الطبقات وأليافٌ ماصةٌ للطاقة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[2]
@@ -1727,7 +1727,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:3
 #: po/custom/fromJson.txt:3234
 msgid "Increases Kinetic Armor and Body Points"
-msgstr ""
+msgstr "يزيد من قوة الدرع الحركي ونقاط صحة الجسم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[3]
@@ -1841,7 +1841,7 @@ msgstr "نقاط صحة الجسم: متوسطة"
 #: data/mp/messages/strings/resstrings.txt:29
 #: po/custom/fromJson.txt:4805
 msgid "Requires Cyborg factory to produce"
-msgstr ""
+msgstr "يجب أن تملك مصنع السايبورغ لكي تنتجه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
@@ -2121,7 +2121,7 @@ msgstr "يتم إسناده تلقائياً إلى أقرب مستشعر أو �
 #: data/mp/messages/strings/resstrings.txt:62
 #: po/custom/fromJson.txt:654
 msgid "Armored Bombard battery pit"
-msgstr ""
+msgstr "خندقٌ محصّن وفيه مدفعٌ عملاق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotMor.text[1]
@@ -2434,7 +2434,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:178
 #: po/custom/fromJson.txt:3193
 msgid "Increases Cyborg factory output"
-msgstr ""
+msgstr "يزيد من إنتاج مصنع السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[3]
@@ -2518,7 +2518,7 @@ msgstr "يزيد كمية الإنتاج في المصانع"
 #: data/mp/messages/strings/resstrings.txt:191
 #: po/custom/fromJson.txt:4829
 msgid "Research Improved"
-msgstr ""
+msgstr "ستزداد قوة أبحاثك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RU4.text[1]
@@ -3045,7 +3045,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:263
 #: po/custom/fromJson.txt:3240
 msgid "Increases kinetic armor and body points"
-msgstr ""
+msgstr "يزيد من قوة الدرع الحركي ونقاط صحة الجسم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[0]
@@ -3841,7 +3841,7 @@ msgstr "سيزيد من معدل إطلاق النار الخاص بالرشاش
 #: data/mp/messages/strings/resstrings.txt:412
 #: po/custom/fromJson.txt:3712
 msgid "May be assigned to a sensor"
-msgstr ""
+msgstr "يمكن إسناده إلى جهاز استشعار"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
@@ -4409,7 +4409,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr "لقد اقتربنا من منطقة الهبوط. فيما يلي بيانٌ لفريق «ألفا»."
+msgstr "لقد اقتربنا من منطقة الإنزال، وفيما يلي بيانٌ لفريق «ألفا»."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
@@ -4544,27 +4544,27 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
-msgstr ""
+msgstr "لقد قامت مؤسسة «ريد» بتطوير «وصلة المشبك العصبي» بالتعاون مع جيش الولايات المتحدة."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
 msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
-msgstr ""
+msgstr "وتسمح وصلة المشبك العصبي بنقل الأفكار من حامليها البشر إلى أجهزة التحكم والتوجيه الخاصة بالمركبات، وبسرعةٍ شبه لحظية. يتم زرع الوصلة في قاعدة الجمجمة بحيث تحيط بالعمود الفقري."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
 msgid "The link has a hi-speed data transfer port that plugs into any computer system."
-msgstr ""
+msgstr "يوجد في الوصلة منفذٌ لنقل البيانات بسرعةٍ عالية، ويمكن وصله بأي نظامٍ حاسوبي."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr ""
+msgstr "والأهم من ذلك هو أن تطوير هذه الوصلة جعل من تصنيع السايبورغ أمراً ممكناً. لقد فشلت المحاولات الأولى في تصميم بذلاتٍ قادرةٍ على زيادة قوة الجنود، لأنها كانت بطيئةً وضعيفة الاستجابة."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
-msgstr ""
+msgstr "باستعمال وصلة المشبك العصبي، صار بإمكان الجنود ارتداء بذلاتٍ شديدة القوة يمكن التحكم فيها بسهولةٍ تضاهي سهولة تحكمهم في أجسامهم، وسمحت هذه البذلات للجنود بالعمل بفعاليةٍ كبيرة في ساحات معارك القرن الواحد والعشرين."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
 msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
-msgstr ""
+msgstr "ولكن ولسوء الحظ، وقعت هذه التقنية في أيد «النهج الحديث»، مما حتّم علينا إجراء الأبحاث عليها وتطوير التقنيات المرتبطة بها."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
@@ -4616,15 +4616,15 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "لقد أبليتم بلاءً حسناً."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr ""
+msgstr "سنحلل هذه التقنية وسنعمل على التأكد من كونها التقنية الحقيقية، وحال الانتهاء من ذلك، ستنالون الجائزة التي تستحقونها."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr ""
+msgstr "تشير المعلومات التي اكتشفناها في القاعدة السابقة للأعداء إلى تمكن «النهج الحديث» من استرجاع قطعتين أثريتين مرتبطين بوصلة المبشك العصبي."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -5349,7 +5349,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:2577
 msgid "Heavy Gunner Cyborg"
-msgstr ""
+msgstr "السايبورغ ذو المدفع الثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Flamer.name
@@ -5359,7 +5359,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:373
 #: po/custom/fromJson.txt:2081
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "السايبورغ حامل قاذف اللهب"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-MG.name
@@ -5369,7 +5369,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:374
 #: po/custom/fromJson.txt:3678
 msgid "Machinegunner Cyborg"
-msgstr ""
+msgstr "السايبورغ حامل الرشاش"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs.name
@@ -6463,21 +6463,21 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 #: po/custom/fromJson.txt:564
 msgid "Armed with Cyborg Cannon"
-msgstr ""
+msgstr "مسلحٌ بمدفع السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_FL1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_CYW_FL1.text[1]
 #: po/custom/fromJson.txt:568
 msgid "Armed with Cyborg Flamer"
-msgstr ""
+msgstr "مسلحٌ بقاذف اللهب الخاص بالسايبوغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
 #: po/custom/fromJson.txt:572
 msgid "Armed with Cyborg Machinegun"
-msgstr ""
+msgstr "مسلحٌ برشاش السايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_PLAS.text[1]
@@ -6541,13 +6541,13 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
 #: po/custom/fromJson.txt:606
 msgid "Armed with Lancer anti-tank missile"
-msgstr ""
+msgstr "مسلحٌ بصاروخ الرمّاح المضاد للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "مسلحٌ بصاروخ الرمّاح المضاد للدبابات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -7235,7 +7235,7 @@ msgstr "مثاليٌ ضد: السايبورغ"
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text[2]
 #: po/custom/fromJson.txt:1137
 msgid "Best Targets: Heavy cyborgs"
-msgstr ""
+msgstr "مثاليٌ ضد: كائنات السايبورغ الثقيلة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_MG1MK1.text[2]
@@ -7360,14 +7360,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit02.name
 #: po/custom/fromJson.txt:1248
 msgid "Bombard Pit"
-msgstr ""
+msgstr "خندق مدفعٍ عملاق"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar2Mk1.name
 #. data/mp/stats/weapons.json: $.Mortar2Mk1.name
 #: po/custom/fromJson.txt:1252
 msgid "Bombard"
-msgstr ""
+msgstr "المدفع العملاق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_DF_WU10.text[1]
@@ -7540,7 +7540,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy01.name
 #: po/custom/fromJson.txt:1350
 msgid "Cannon Laser Rangefinder"
-msgstr ""
+msgstr "مقدّر مسافاتٍ ليزري للمدفع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF05.name
@@ -7823,21 +7823,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Metals02.name
 #: po/custom/fromJson.txt:1527
 msgid "Composite Alloys Mk2"
-msgstr ""
+msgstr "خليطٌ مركّب (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Metals03.name
 #. data/mp/stats/research.json: $.R-Vehicle-Metals03.name
 #: po/custom/fromJson.txt:1531
 msgid "Composite Alloys Mk3"
-msgstr ""
+msgstr "خليطٌ مركّب (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Metals01.name
 #. data/mp/stats/research.json: $.R-Vehicle-Metals01.name
 #: po/custom/fromJson.txt:1535
 msgid "Composite Alloys"
-msgstr ""
+msgstr "خليطٌ مركّب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_HOWAC3.text[1]
@@ -7885,7 +7885,7 @@ msgstr ""
 #. ... + 6 refs
 #: po/custom/fromJson.txt:1562
 msgid "Computer Technology Breakthrough"
-msgstr ""
+msgstr "تعتبر إنجازاً عظيماً في عالم التقنيات الحاسوبية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text[2]
@@ -7956,21 +7956,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Cyborg-Metals02.name
 #: po/custom/fromJson.txt:1603
 msgid "Cyborg Composite Alloys Mk2"
-msgstr ""
+msgstr "خليطٌ مركبٌ للسايبورغ (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals03.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals03.name
 #: po/custom/fromJson.txt:1607
 msgid "Cyborg Composite Alloys Mk3"
-msgstr ""
+msgstr "خليطٌ مركبٌ للسايبورغ (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals01.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals01.name
 #: po/custom/fromJson.txt:1611
 msgid "Cyborg Composite Alloys"
-msgstr ""
+msgstr "خليطٌ مركبٌ للسايبورغ"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals05.name
@@ -8000,20 +8000,20 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1629
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "مصنع السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgFlamer01.name
 #. data/mp/stats/weapons.json: $.CyborgFlamer01.name
 #: po/custom/fromJson.txt:1633
 msgid "Cyborg Flamer"
-msgstr ""
+msgstr "قاذف لهب السايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
 #: po/custom/fromJson.txt:1636
 msgid "Cyborg Heavy Body"
-msgstr ""
+msgstr "جسم سايبورغ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat05.name
@@ -8041,14 +8041,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:1652
 msgid "Cyborg Lancer"
-msgstr ""
+msgstr "صاروخ الرمّاح للسايبورغ"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
 #. data/mp/stats/body.json: $.CyborgLightBody.name
 #: po/custom/fromJson.txt:1656
 msgid "Cyborg Light Body"
-msgstr ""
+msgstr "جسم سايبورغ خفيف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_CY_LG2.text[0]
@@ -8137,7 +8137,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text[2]
 #: po/custom/fromJson.txt:1736
 msgid "Cyborgs can now be researched"
-msgstr ""
+msgstr "يمكنك الآن فتح السايبورغ من مركز أبحاثك"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadBof.name
@@ -8237,7 +8237,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
 #: po/custom/fromJson.txt:1829
 msgid "Determines range to target"
-msgstr ""
+msgstr "يقوم بتحديد المسافة بين المدفع والهدف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text[2]
@@ -8553,7 +8553,7 @@ msgstr "أسرع من الأفعى"
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_AC1.text[1]
 #: po/custom/fromJson.txt:2030
 msgid "Fin-stabilization improves flight trajectory"
-msgstr ""
+msgstr "سيتم تثبيت أجنحةٍ بمؤخرة الصواريخ مما يجعل مسارها أثناء الطيران دقيقاً أكثر"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireTruck.name
@@ -8586,7 +8586,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[1]
 #: po/custom/fromJson.txt:2048
 msgid "Fires salvoes of mini-rockets"
-msgstr ""
+msgstr "تطلق رشقاتٍ من الصواريخ المصغرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[1]
@@ -8881,7 +8881,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[2]
 #: po/custom/fromJson.txt:2252
 msgid "Good main battle tank and heavy artillery platform"
-msgstr ""
+msgstr "ينفع كدبابة قتالٍ رئيسية أو كمنصة مدفعيةٍ ثقيلة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[2]
@@ -9407,7 +9407,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.CyborgCannon.name
 #: po/custom/fromJson.txt:2581
 msgid "Heavy Gunner"
-msgstr ""
+msgstr "السايبورغ المدفعي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HvyHowitzer.name
@@ -9527,7 +9527,7 @@ msgstr "رشاشٌ ثقيل"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar02Hvy.name
 #: po/custom/fromJson.txt:2666
 msgid "Heavy Mortar - Bombard"
-msgstr ""
+msgstr "المدفع العملاق"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HeavyPlasmaLauncher.name
@@ -10101,7 +10101,7 @@ msgstr "تحسين أداء مولّد الطاقة"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
 #: po/custom/fromJson.txt:3066
 msgid "Improved Rocket Wire Guidance"
-msgstr ""
+msgstr "تحسين التوجيه السلكي للصاروخ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[1]
@@ -10356,14 +10356,14 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[2]
 #: po/custom/fromJson.txt:3319
 msgid "Increases Rocket accuracy"
-msgstr ""
+msgstr "يزيد من دقة الصاروخ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[2]
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[2]
 #: po/custom/fromJson.txt:3327
 msgid "Increases Rocket ROF"
-msgstr ""
+msgstr "يزيد من معدل إطلاق الصواريخ"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Indirectlab.name
@@ -10552,7 +10552,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3452
 msgid "Lancer Cyborg"
-msgstr ""
+msgstr "السايبورغ الرمّاح"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower06.name
@@ -10690,7 +10690,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_MET1.text[1]
 #: po/custom/fromJson.txt:3535
 msgid "Layered composite alloys and energy-absorbing fibres"
-msgstr ""
+msgstr "خلائط معدنيةً متعددة الطبقات وأليافٌ ماصةٌ للطاقة"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body2SUP.name
@@ -10882,7 +10882,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.CyborgChaingun.name
 #: po/custom/fromJson.txt:3682
 msgid "Machinegunner"
-msgstr ""
+msgstr "حامل الرشاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[2]
@@ -11074,7 +11074,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_EMP_MRL.text[1]
 #: po/custom/fromJson.txt:3802
 msgid "Mini-rocket armored strongpoint"
-msgstr ""
+msgstr "متراسٌ محصّن وعليه منصة صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
@@ -11124,7 +11124,7 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3828
 msgid "Mini-Rocket Artillery"
-msgstr ""
+msgstr "مدفعية صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-MRL.name
@@ -11133,7 +11133,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-MRL-pit.name
 #: po/custom/fromJson.txt:3834
 msgid "Mini-Rocket Battery"
-msgstr ""
+msgstr "بطارية صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODHTracks.name
@@ -11333,7 +11333,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Acc01.name
 #: po/custom/fromJson.txt:3965
 msgid "Mortar Targeting Computer"
-msgstr ""
+msgstr "نظام استهدافٍ حاسوبي للهاون"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar01Lt.name
@@ -11602,7 +11602,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text[3]
 #: po/custom/fromJson.txt:4196
 msgid "New research options available"
-msgstr ""
+msgstr "هنالك خياراتٌ جديدةٌ متاحةٌ لك في مركز الأبحاث"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[0]
@@ -12091,7 +12091,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
 #: po/custom/fromJson.txt:4511
 msgid "Produces Cyborgs"
-msgstr ""
+msgstr "ينتج السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
@@ -12520,7 +12520,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_LS1.text[3]
 #: po/custom/fromJson.txt:4809
 msgid "Requires cyborg factory to produce"
-msgstr ""
+msgstr "يجب أن تملك مصنع السايبورغ لكي تنتجه"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[3]
@@ -12550,7 +12550,7 @@ msgstr "مركز الأبحاث"
 #. data/mp/messages/resmessages1.json: $.RES_ST_FCY1.text[3]
 #: po/custom/fromJson.txt:4833
 msgid "Research makes additional Cyborgs available"
-msgstr ""
+msgstr "ستؤدي الأبحاث إلى إتاحة المزيد من تصاميم السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[0]
@@ -13249,13 +13249,13 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
 #: po/custom/fromJson.txt:5273
 msgid "Stabilized Mini-Rockets Mk2"
-msgstr ""
+msgstr "صواريخ مصغرة أكثر ثباتاً (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
 #: po/custom/fromJson.txt:5276
 msgid "Stabilized Mini-Rockets"
-msgstr ""
+msgstr "صواريخ مصغرة أكثر ثباتاً"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
@@ -13504,35 +13504,35 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text[1]
 #: po/custom/fromJson.txt:5457
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr ""
+msgstr "تسمح «وصلة المشبك العصبي» للبشر بالتواصل مباشرةً مع الحواسيب"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade02.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade02.name
 #: po/custom/fromJson.txt:5461
 msgid "Synaptic Link Data Analysis Mk2"
-msgstr ""
+msgstr "تحليل بيانات وصلة المشبك العصبي (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade03.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 #: po/custom/fromJson.txt:5465
 msgid "Synaptic Link Data Analysis Mk3"
-msgstr ""
+msgstr "تحليل بيانات وصلة المشبك العصبي (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #: po/custom/fromJson.txt:5469
 msgid "Synaptic link data analysis"
-msgstr ""
+msgstr "تحليل بيانات وصلة المشبك العصبي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #: po/custom/fromJson.txt:5473
 msgid "Synaptic Link Data Analysis"
-msgstr ""
+msgstr "تحليل بيانات وصلة المشبك العصبي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -13556,7 +13556,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Comp-SynapticLink.name
 #: po/custom/fromJson.txt:5488
 msgid "Synaptic Link"
-msgstr ""
+msgstr "وصلة المشبك العصبي"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG5.text[0]
@@ -13677,7 +13677,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text[1]
 #: po/custom/fromJson.txt:5558
 msgid "Targeting systems compensate for distance and weather conditions"
-msgstr ""
+msgstr "نظام استهدافٍ حاسوبي يمكنه تغيير زاوية الإطلاق تلقائياً بالاعتماد على بعد الهدف والظروف الجوية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VP.text[3]
@@ -13817,7 +13817,7 @@ msgstr "دفعٌ بالجنازير"
 #. data/mp/messages/resmessages1.json: $.RES_W_SRK_AC1.text[1]
 #: po/custom/fromJson.txt:5647
 msgid "Tracks and directs in-flight rocket to target"
-msgstr ""
+msgstr "سيتم ربط الصواريخ بنظام التوجيه عن طريق أسلاكٍ دقيقة، مما يمكنك من تعقبها وتوجيهها أثناء الطيران"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.tracked02.name
@@ -16902,7 +16902,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:169
 msgid "Select all Cyborgs"
-msgstr ""
+msgstr "اختر جميع كائنات السايبورغ"
 
 #: src/input/keyconfig.cpp:170
 msgid "Select all Heavily Damaged Units"
@@ -16972,7 +16972,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:188
 msgid "Select all Combat Cyborgs"
-msgstr ""
+msgstr "اختر جميع كائنات السايبورغ المقاتلة"
 
 #: src/input/keyconfig.cpp:189
 msgid "Select all Combat Cyborgs without group"
@@ -17016,7 +17016,7 @@ msgstr "حدّد كل الشاحنات"
 
 #: src/input/keyconfig.cpp:200
 msgid "Select next Factory"
-msgstr "اختر المصنع التالي"
+msgstr "حدد المصنع التالي"
 
 #: src/input/keyconfig.cpp:201
 msgid "Select next Research Facility"
@@ -17024,11 +17024,11 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:202
 msgid "Select next Power Generator"
-msgstr "اختر مولّد الطاقة التالي"
+msgstr "حدد مولّد الطاقة التالي"
 
 #: src/input/keyconfig.cpp:203
 msgid "Select next Cyborg Factory"
-msgstr ""
+msgstr "حدد مصنع السايبورغ التالي"
 
 #: src/input/keyconfig.cpp:204
 msgid "Select next VTOL Factory"
@@ -17048,7 +17048,7 @@ msgstr "انتقل إلى مولّد الطاقة التالي"
 
 #: src/input/keyconfig.cpp:208
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "انتقل إلى مصنع السايبورغ التالي"
 
 #: src/input/keyconfig.cpp:209
 msgid "Jump to next VTOL Factory"
