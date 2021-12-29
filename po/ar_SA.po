@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-28 12:20\n"
+"PO-Revision-Date: 2021-12-29 00:24\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -104,7 +104,7 @@ msgstr "ابعث بقوةٍ استطلاعية لاكتشاف مصدر وطبي�
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "استخدم شاحناتك لتشييد بعض المباني الدفاعية في منطقة الهبوط."
+msgstr "استخدم شاحناتك لتشييد بعض المباني الدفاعية في منطقة الإنزال."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "تحاول القوات المعادية تشييد قاعدةٍ أمامية في هذا الموقع."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
@@ -156,15 +156,15 @@ msgstr "دمّر القاعدة تدميراً شاملاً وأمّن على ا
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «ألفا»: شيّد قاعدةً أمامية"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "شيّد قاعدةً أمامية على التلة وتصدى لقوات «النهج الحديث»."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "قم بتشييد مبانٍ دفاعية إلى أن تختفي الإشارة الضوئية الخضراء التي تمثل الهدف."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -236,7 +236,7 @@ msgstr "لم نعثر على أي قطعٍ أثرية أو نواجه أي قو�
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "تقرير «ألفا» الاستخبراتي: هجومٌ معادٍ"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
@@ -248,7 +248,7 @@ msgstr "الهدف الرئيسي"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "إن هذا المبنى هو الهدف الرئيسي لنا."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -256,15 +256,15 @@ msgstr "ابحث عن القطع الأثرية الموجودة هنا وقم �
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "منطقة إنزالٍ تابعةٌ للأعداء"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "دمّر منطقة الإنزال هذه لكي تمنع الأعداء من إنزال قواتهم فيها."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "تقرير «ألفا» الاستخبراتي: «نيكسوس»"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
@@ -276,23 +276,23 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "رسالةٌ ملحقة"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "لقد كانت وصلة المشبك العصبي موجودةً في هذا المكان، ولكن تم نقلها."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "شيّد قاعدةً أمامية ثم تابع عملية البحث عن وصلة المشبك العصبي."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "لقد وردتنا رسالةٌ عبر الراديو"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "جارٍ فك تشفير الرسالة....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
@@ -316,7 +316,7 @@ msgstr "دمّر القاعدة واسترجع أي قطعٍ أثريةٍ موج
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "لقد استعدنا تقنية وصلة المشبك العصبي!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
@@ -495,7 +495,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "ثم عُد إلى منطقة الإنزال."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
@@ -701,7 +701,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "بالتوفيق أيها القائد."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
@@ -726,7 +726,7 @@ msgstr ""
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
+msgstr "قم بالتأمين على منطقة الإنزال بعد وصولك للجبل، ثم شيّد قاعدةً أمامية."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
@@ -735,7 +735,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "عملية نقل: شيّد قاعدةً أمامية"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
@@ -744,7 +744,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "قم بتأمين منطقة الإنزال، ثم شيّد قاعدةً أمامية."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
@@ -940,7 +940,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "لقد وردتنا رسالةٌ عبر الراديو..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
@@ -2294,12 +2294,12 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr ""
+msgstr "برج حراسةٍ مزودٌ بصواريخ «الرمّاح» المضادة للدبابات"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
 msgid "Armored bunker with Heavy Machinegun"
-msgstr ""
+msgstr "ملجأٌ محصّن وبداخله رشاشٌ ثقيل"
 
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
@@ -2540,7 +2540,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:193
 #: po/custom/fromJson.txt:3314
 msgid "Increases research speed"
-msgstr "يزيد من سرعة الأبحاث"
+msgstr "تزيد من سرعة الأبحاث"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[3]
@@ -2986,7 +2986,7 @@ msgstr "يتطلب إنتاجه طاقةً كبيرةً ووقتاً أطول م
 #: data/mp/messages/strings/resstrings.txt:256
 #: po/custom/fromJson.txt:5851
 msgid "Vehicle Engine Upgrade"
-msgstr ""
+msgstr "تطويرٌ لمحرّك المركبات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_EN4.text[1]
@@ -3916,7 +3916,7 @@ msgstr "سيتم تحديث كل مدافع الهاون تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:426
 #: po/custom/fromJson.txt:3860
 msgid "Mini-Rocket Upgrade"
-msgstr ""
+msgstr "تطويرٌ للصواريخ المصغرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_RK_D4.text[1]
@@ -3933,7 +3933,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:423
 #: po/custom/fromJson.txt:3267
 msgid "Increases Mini-Rocket damage"
-msgstr ""
+msgstr "يزيد من الضرر الذي تسببه الصواريخ المصغرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[3]
@@ -3946,7 +3946,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:429
 #: po/custom/fromJson.txt:369
 msgid "All mini-rockets upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الصواريخ المصغرة تلقائياً"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
@@ -3956,7 +3956,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:953
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Increases Mini-Rocket ROF"
-msgstr ""
+msgstr "يزيد من معدل إطلاق الصواريخ المصغرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[0]
@@ -3967,7 +3967,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:431
 #: po/custom/fromJson.txt:5003
 msgid "Rocket Upgrade"
-msgstr ""
+msgstr "تطويرٌ للصاروخ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_SRK_D4.text[1]
@@ -3985,7 +3985,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:433
 #: po/custom/fromJson.txt:3323
 msgid "Increases Rocket damage"
-msgstr "يزيد ضرر الصاروخ"
+msgstr "يزيد من الضرر الذي يسببه الصاروخ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[3]
@@ -3996,7 +3996,7 @@ msgstr "يزيد ضرر الصاروخ"
 #: data/mp/messages/strings/resstrings.txt:434
 #: po/custom/fromJson.txt:417
 msgid "All rockets upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الصواريخ تلقائياً"
 
 #: data/base/script/campaign/cam1-7.js:244
 msgid "Destroy all New Paradigm units"
@@ -4060,7 +4060,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
-msgstr "عُد إلى منطقة الهبوط"
+msgstr "عُد إلى منطقة الإنزال"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
@@ -4084,7 +4084,7 @@ msgstr "المباني المتبقية للأعداء"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
-msgstr "يجب أن تعود إلى منطقة الهبوط"
+msgstr "يجب أن تعود إلى منطقة الإنزال"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
@@ -4157,14 +4157,14 @@ msgstr "التصميم - ابنِ مقرّاً قبل كل شيء"
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/script/rules/reticule.js:101
 msgid "Commanders (F6)"
-msgstr ""
+msgstr "القادة (F6)"
 
 #: data/base/script/rules.js:185
 #: data/base/script/tutorial.js:517
 #: data/mp/multiplay/script/rules/reticule.js:105
 #: data/mp/multiplay/script/rules/reticule.js:119
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "القادة - اصنع بعض الوحدات القائدة أولاً"
 
 #: data/base/script/rules.js:191
 #: data/base/script/tutorial.js:251
@@ -4471,7 +4471,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
 msgid "Secure the LZ and establish a forward base."
-msgstr ""
+msgstr "قم بتأمين منطقة الإنزال، ثم شيّد قاعدةً أمامية."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
@@ -4592,7 +4592,7 @@ msgstr "سيتم سحقك."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr ""
+msgstr "يا «نيكسوس»: لقد استرجعنا تقنية المشبك العصبي التي طلبتها، وقمنا بإرسالها لك."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
@@ -5585,17 +5585,17 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
 msgid "Command Turret II"
-msgstr ""
+msgstr "رأس القيادة 2"
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
 msgid "Command Turret III"
-msgstr ""
+msgstr "رأس القيادة 3"
 
 #: data/mp/messages/strings/names.txt:833
 #: data/mp/messages/strings/names.txt:834
 msgid "Command Turret IV"
-msgstr ""
+msgstr "رأس القيادة 4"
 
 #: data/mp/multiplay/script/rules/endconditions.js:237
 #: src/configuration.cpp:374
@@ -6384,7 +6384,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_LTAT1.text[1]
 #: po/custom/fromJson.txt:510
 msgid "Anti-tank rocket"
-msgstr ""
+msgstr "صاروخٌ مضادٌ للدبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage03.name
@@ -6615,27 +6615,27 @@ msgstr "طلقاتٌ خارقةٌ للدروع، ومزودةٌ بأجنحة ف�
 #. data/mp/messages/resmessages1.json: $.RES_PB_FL.text[1]
 #: po/custom/fromJson.txt:658
 msgid "Armored bunker with Flamer"
-msgstr "ملجأ محصنٌ وبداخله قاذف لهب"
+msgstr "ملجأٌ محصّن وبداخله قاذف لهب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:661
 msgid "Armored bunker with Lancer AT rocket"
-msgstr ""
+msgstr "ملجأٌ محصّن وبداخله قاذفٌ لصواريخ «الرمّاح» المضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_LC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_PB_LC.text[1]
 #: po/custom/fromJson.txt:665
 msgid "Armored bunker with Light Cannon"
-msgstr "ملجأ محصنٌ وبداخله مدفعٌ خفيف"
+msgstr "ملجأٌ محصّن وبداخله مدفعٌ خفيف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_DF_P1.text[1]
 #: po/custom/fromJson.txt:669
 msgid "Armored bunker with Machinegun"
-msgstr "ملجأ محصنٌ وبداخله رشاش"
+msgstr "ملجأٌ محصّن وبداخله رشاش"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text[1]
@@ -6653,19 +6653,19 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:682
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "برج جراسة مزودٌ بصواريح «الرمّاح» المضادة للدبابات"
+msgstr "برج حراسةٍ مزودٌ بصواريخ «الرمّاح» المضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:685
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr ""
+msgstr "برج حراسةٍ مزودٌ بمنصة صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:688
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr ""
+msgstr "برج حراسةٍ مزودٌ بمنصة صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
@@ -6740,7 +6740,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
 #: po/custom/fromJson.txt:742
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr ""
+msgstr "نقطةٌ محصّنة مزودةٌ بصواريخ الرمّاح المضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT2_LC.text[1]
@@ -6827,7 +6827,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_TRACK1.text[1]
 #: po/custom/fromJson.txt:824
 msgid "Armored Tracks"
-msgstr ""
+msgstr "جنازير مصفحة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_DF_WU1.text[2]
@@ -7050,26 +7050,26 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[1]
 #: po/custom/fromJson.txt:957
 msgid "Automated reload system"
-msgstr ""
+msgstr "نظام تلقيمٍ آلي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade02.name
 #: po/custom/fromJson.txt:960
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "مركز صيانةٍ آلي (التحديث 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade03.name
 #: po/custom/fromJson.txt:963
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "مركز صيانةٍ آلي (التحديث 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade01.name
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade01.name
 #: po/custom/fromJson.txt:967
 msgid "Automated Repair Facility"
-msgstr ""
+msgstr "مركز صيانةٍ آلي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
@@ -7435,7 +7435,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Rocket03-HvAT.name
 #: po/custom/fromJson.txt:1290
 msgid "Bunker Buster Rocket"
-msgstr ""
+msgstr "صاروخ هدّام الملاجئ"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperBBWheels.name
@@ -7466,7 +7466,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-BB.name
 #: po/custom/fromJson.txt:1306
 msgid "Bunker Buster"
-msgstr ""
+msgstr "هدّام الملاجئ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[2]
@@ -7801,7 +7801,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:1514
 msgid "Command Turret"
-msgstr ""
+msgstr "رأس القيادة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[2]
@@ -7810,7 +7810,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:1520
 msgid "Commander leads groups acts as factory delivery point"
-msgstr ""
+msgstr "يقوم القائد بتوجيه مجموعةٍ من الوحدات، ويمكن أن تتوجه إليه المركبات بعد تصنيعها مباشرةً"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[1]
@@ -8379,7 +8379,7 @@ msgstr "سيتم تفعيل ميزة الصيانة الذاتية لدى كل �
 #. data/mp/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
 #: po/custom/fromJson.txt:1916
 msgid "Enables self-repair in all vehicles"
-msgstr ""
+msgstr "ستتمكن كل المركبات من تصليح نفسها بنفسها"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_AR.text[3]
@@ -8494,26 +8494,26 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 #: po/custom/fromJson.txt:1995
 msgid "Fast Fire Mini-Rockets Mk2"
-msgstr ""
+msgstr "صواريخ مصغرة سريعة الإطلاق (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 #: po/custom/fromJson.txt:1998
 msgid "Fast Fire Mini-Rockets Mk3"
-msgstr ""
+msgstr "صواريخ مصغرة سريعة الإطلاق (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF01.name
 #: po/custom/fromJson.txt:2001
 msgid "Fast Fire Mini-Rockets"
-msgstr ""
+msgstr "صواريخ مصغرة سريعة الإطلاق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
 #: po/custom/fromJson.txt:2005
 msgid "Fast firing light anti-vehicle rockets"
-msgstr ""
+msgstr "صواريخ مضادةٌ للمركبات، وتمتاز بخفة الوزن وسرعة الإطلاق الكبيرة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
@@ -8705,14 +8705,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Engine02.name
 #: po/custom/fromJson.txt:2149
 msgid "Fuel Injection Engine Mk2"
-msgstr ""
+msgstr "محركٌ بنظام حقنٍ للوقود (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine03.name
 #. data/mp/stats/research.json: $.R-Vehicle-Engine03.name
 #: po/custom/fromJson.txt:2153
 msgid "Fuel Injection Engine Mk3"
-msgstr ""
+msgstr "محركٌ بنظام حقنٍ للوقود (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[1]
@@ -8721,7 +8721,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Engine01.name
 #: po/custom/fromJson.txt:2159
 msgid "Fuel Injection Engine"
-msgstr ""
+msgstr "محركٌ بنظام حقنٍ للوقود"
 
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
@@ -9102,19 +9102,19 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2389
 msgid "HE Mini-Rockets Mk2"
-msgstr ""
+msgstr "صواريخ مصغرة شديدة الانفجار (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2392
 msgid "HE Mini-Rockets Mk3"
-msgstr ""
+msgstr "صواريخ مصغرة شديدة الانفجار (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2395
 msgid "HE Mini-Rockets"
-msgstr ""
+msgstr "صواريخ مصغرة شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage02.name
@@ -9260,28 +9260,28 @@ msgstr "قذائف مضادةٌ للدبابات"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage05.name
 #: po/custom/fromJson.txt:2481
 msgid "HEAT Rocket Warhead Mk2"
-msgstr ""
+msgstr "رأسٌ حربيٌ شديد الانفجار (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage06.name
 #: po/custom/fromJson.txt:2485
 msgid "HEAT Rocket Warhead Mk3"
-msgstr ""
+msgstr "رأسٌ حربيٌ شديد الانفجار (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage04.name
 #: po/custom/fromJson.txt:2489
 msgid "HEAT Rocket Warhead"
-msgstr ""
+msgstr "رأسٌ حربيٌ شديد الانفجار"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_HvAT.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_HvAT.text[1]
 #: po/custom/fromJson.txt:2499
 msgid "Heavy anti-tank rocket"
-msgstr ""
+msgstr "صاروخٌ ثقيلٌ مضادٌ للدبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body12.name
@@ -10117,7 +10117,7 @@ msgstr "مدىً أكبر للمستشعر"
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_D1.text[1]
 #: po/custom/fromJson.txt:3080
 msgid "Improved shaped charge warhead"
-msgstr ""
+msgstr "سيتم استعمال رؤوسٍ متفجرة متطورة، تمت قولبة حشوتها بحيث تتركز طاقة الانفجار في نقطةٍ واحدة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VS2.text[1]
@@ -10289,13 +10289,13 @@ msgstr "يزيد من معدل إطلاق الليزر"
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[2]
 #: po/custom/fromJson.txt:3263
 msgid "Increases Mini-Rocket accuracy"
-msgstr ""
+msgstr "يزيد من دقة الصواريخ المصغرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
 #: po/custom/fromJson.txt:3270
 msgid "Increases Mini-Rockets ROF"
-msgstr ""
+msgstr "يزيد من معدل إطلاق الصواريخ المصغرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[2]
@@ -10520,7 +10520,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Rocket01-LtAT.name
 #: po/custom/fromJson.txt:3432
 msgid "Lancer AT Rocket"
-msgstr ""
+msgstr "صاروخ الرماح المضاد للدبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox06.name
@@ -10561,7 +10561,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower06.name
 #: po/custom/fromJson.txt:3458
 msgid "Lancer Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بصاروخ الرمّاح"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -10605,7 +10605,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-LtA-T.name
 #: po/custom/fromJson.txt:3486
 msgid "Lancer"
-msgstr ""
+msgstr "صاروخ الرمّاح"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[0]
@@ -11010,7 +11010,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text[1]
 #: po/custom/fromJson.txt:3765
 msgid "Medium Cannon firing 76mm rounds"
-msgstr ""
+msgstr "مدفعٌ متوسط يمكنه إطلاق طلقاتٍ بعيار 76 مم"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower03.name
@@ -11061,7 +11061,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon2A-TMk1.name
 #: po/custom/fromJson.txt:3795
 msgid "Medium Cannon"
-msgstr ""
+msgstr "مدفعٌ متوسط"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[0]
@@ -11152,7 +11152,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.GuardTower6.name
 #: po/custom/fromJson.txt:3844
 msgid "Mini-Rocket Guard Tower"
-msgstr ""
+msgstr "برج حراسة بمنصة صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -11161,14 +11161,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-Pod.name
 #: po/custom/fromJson.txt:3850
 msgid "Mini-Rocket Pod"
-msgstr ""
+msgstr "منصة صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Tower06.name
 #. data/mp/stats/structure.json: $.GuardTower6.name
 #: po/custom/fromJson.txt:3854
 msgid "Mini-Rocket Tower"
-msgstr ""
+msgstr "برج صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
@@ -11463,7 +11463,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_RFU1.text[1]
 #: po/custom/fromJson.txt:4062
 msgid "New automated repair techniques"
-msgstr ""
+msgstr "سيتم استعمال تقنيات صيانةٍ آلية جديدة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text[0]
@@ -11479,7 +11479,7 @@ msgstr "هنالك بناءٌ رئيسيٌ جديدٌ متاحٌ لك"
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[1]
 #: po/custom/fromJson.txt:4072
 msgid "New battlefield computer system"
-msgstr ""
+msgstr "نظامٌ حاسوبيٌ جديد، مخصصٌ لقيادة الوحدات في أرض المعركة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[0]
@@ -11561,7 +11561,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_P_V1.text[0]
 #: po/custom/fromJson.txt:4164
 msgid "New Propulsion Available for Design"
-msgstr ""
+msgstr "يمكنك استخدام نظام دفعٍ جديدٍ في تصاميمك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_HALFT1.text[0]
@@ -11657,14 +11657,14 @@ msgstr "هنالك برجٌ وظيفيٌ جديدٌ متاحٌ لك"
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #: po/custom/fromJson.txt:4238
 msgid "New Systems Turret Available for Design"
-msgstr ""
+msgstr "يمكنك استخدام رأسٍ وظيفيٍ جديدٍ في تصاميمك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #: po/custom/fromJson.txt:4242
 msgid "New Systems Turret Available For Design"
-msgstr ""
+msgstr "يمكنك استخدام رأسٍ وظيفيٍ جديدٍ في تصاميمك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -12557,7 +12557,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[0]
 #: po/custom/fromJson.txt:4837
 msgid "Research Module Available"
-msgstr ""
+msgstr "يمكنك الآن بناء وحدات أبحاثٍ إضافية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[1]
@@ -13334,7 +13334,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT4.text[0]
 #: po/custom/fromJson.txt:5319
 msgid "Stronger Commander Turret Available for Design"
-msgstr ""
+msgstr "يمكنك الآن استخدام رأس قيادةٍ أقوى في تصاميمك"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG1.text[0]
@@ -16430,7 +16430,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:44
 msgid "Commanders"
-msgstr ""
+msgstr "القادة"
 
 #: src/input/keyconfig.cpp:45
 #: src/keybind.cpp:2560
@@ -16596,43 +16596,43 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:91
 msgid "Select Commander 0"
-msgstr ""
+msgstr "اختر القائد 0"
 
 #: src/input/keyconfig.cpp:92
 msgid "Select Commander 1"
-msgstr ""
+msgstr "اختر القائد 1"
 
 #: src/input/keyconfig.cpp:93
 msgid "Select Commander 2"
-msgstr ""
+msgstr "اختر القائد 2"
 
 #: src/input/keyconfig.cpp:94
 msgid "Select Commander 3"
-msgstr ""
+msgstr "اختر القائد 3"
 
 #: src/input/keyconfig.cpp:95
 msgid "Select Commander 4"
-msgstr ""
+msgstr "اختر القائد 4"
 
 #: src/input/keyconfig.cpp:96
 msgid "Select Commander 5"
-msgstr ""
+msgstr "اختر القائد 5"
 
 #: src/input/keyconfig.cpp:97
 msgid "Select Commander 6"
-msgstr ""
+msgstr "اختر القائد 6"
 
 #: src/input/keyconfig.cpp:98
 msgid "Select Commander 7"
-msgstr ""
+msgstr "اختر القائد 7"
 
 #: src/input/keyconfig.cpp:99
 msgid "Select Commander 8"
-msgstr ""
+msgstr "اختر القائد 8"
 
 #: src/input/keyconfig.cpp:100
 msgid "Select Commander 9"
-msgstr ""
+msgstr "اختر القائد 9"
 
 #: src/input/keyconfig.cpp:102
 msgid "Multiplayer Options / Alliance dialog"
@@ -16752,7 +16752,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:132
 msgid "View next Commander"
-msgstr ""
+msgstr "عرض القائد التالي"
 
 #: src/input/keyconfig.cpp:133
 msgid "Toggle Overlays"
@@ -18990,7 +18990,7 @@ msgstr ""
 
 #: src/selection.cpp:377
 msgid "Unable to locate any Commanders!"
-msgstr ""
+msgstr "لم نتمكن من العثور على أي قائد!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
