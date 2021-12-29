@@ -49,6 +49,8 @@ file(GLOB SRC
 	"3rdparty/stb_image_resize.cpp"
 )
 
+add_subdirectory(3rdparty/etcpak)
+
 find_package(PNG 1.2 REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Harfbuzz 1.0 REQUIRED)
@@ -71,6 +73,10 @@ if (Fribidi_FOUND)
 	target_compile_definitions(ivis-opengl PRIVATE "-DWZ_FRIBIDI_ENABLED")
 else()
 	message(WARNING "Fribidi not found - WZ will be compiled *without* Fribidi support")
+endif()
+if(TARGET etcpak)
+	target_link_libraries(ivis-opengl PRIVATE etcpak)
+	target_compile_definitions(ivis-opengl PRIVATE "-DETCPAK_ENABLED")
 endif()
 
 if(WZ_ENABLE_BACKEND_VULKAN)
