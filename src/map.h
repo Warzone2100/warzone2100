@@ -314,7 +314,10 @@ static inline bool TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(MAPTILE *pTile)
 		// always visible
 		return true;
 	}
-	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Players should always have a selectedPlayer / player index < MAX_PLAYERS; non-players are always expected to have godMode enabled; selectedPlayer: %" PRIu32 "", selectedPlayer);
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
 	return TEST_TILE_VISIBLE(selectedPlayer, pTile);
 }
 

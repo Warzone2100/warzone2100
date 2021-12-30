@@ -2399,8 +2399,11 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 		// hide the power bar
 		forceHidePowerBar(true);
 
-		// enable "god mode" for map + object visibility (+ minimap)
-		enableGodMode();
+		if (!headlessGameMode())
+		{
+			// enable "god mode" for map + object visibility (+ minimap)
+			enableGodMode();
+		}
 
 		// add spectator mode message
 		bool lowUISpectatorMode = streamer_spectator_mode() || NETisReplay();

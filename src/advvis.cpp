@@ -46,6 +46,8 @@ void	avUpdateTiles()
 	float maxLevel, increment = graphicsTimeAdjustedIncrement(FADE_IN_TIME);	// call once per frame
 	MAPTILE *psTile;
 
+	PlayerMask playerAllianceBits = (selectedPlayer < MAX_PLAYER_SLOTS) ? alliancebits[selectedPlayer] : 0;
+
 	/* Go through the tiles */
 	for (; i < len; i++)
 	{
@@ -55,7 +57,7 @@ void	avUpdateTiles()
 		if (psTile->level > MIN_ILLUM || psTile->tileExploredBits & playermask)	// seen
 		{
 			// If we are not omniscient, and we are not seeing the tile, and none of our allies see the tile...
-			if (!godMode && !(alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)))
+			if (!godMode && !(playerAllianceBits & (satuplinkbits | psTile->sensorBits)))
 			{
 				maxLevel /= 2;
 			}
