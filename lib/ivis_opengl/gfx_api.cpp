@@ -138,7 +138,21 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 
 	// 3.) Determine mipmap levels (if needed / desired)
 	bool generateMipMaps = (textureType != gfx_api::texture_type::user_interface);
-	size_t mipmap_levels = (generateMipMaps) ? static_cast<size_t>(floor(log(std::max(image.width(), image.height())))) + 1 : 1;
+	size_t mipmap_levels = 1;
+	if (generateMipMaps)
+	{
+		// Calculate how many mip-map levels (with a target minimum level dimension of 4)
+		mipmap_levels = static_cast<size_t>(floor(log2(std::max(image.width(), image.height()))));
+		if (mipmap_levels > 2)
+		{
+			mipmap_levels = (mipmap_levels - 2) + 1 /* for original level */;
+		}
+		else
+		{
+			// just use the original level, which must be small
+			mipmap_levels = 1;
+		}
+	}
 
 	// 4.) Extend channels, if needed, to a supported uncompressed format
 	auto channels = image.channels();
