@@ -223,13 +223,13 @@ function camChangeOnDiff(num)
 	switch (difficulty)
 	{
 		case EASY:
-			modifier = 1.25;
+			modifier = 1.5;
 			break;
 		case MEDIUM:
 			modifier = 1.00;
 			break;
 		case HARD:
-			modifier = 0.80;
+			modifier = 0.85;
 			break;
 		case INSANE:
 			modifier = 0.70;
