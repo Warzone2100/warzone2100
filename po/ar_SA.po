@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-29 12:25\n"
+"PO-Revision-Date: 2021-12-31 15:04\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -15105,7 +15105,7 @@ msgstr ""
 
 #: src/clparse.cpp:404
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "احفظ اللعبة فوراً ثم غادرها"
 
 #: src/clparse.cpp:404
 msgid "save name"
@@ -15485,26 +15485,26 @@ msgstr ""
 
 #: src/frontend.cpp:199
 msgid "Single Player"
-msgstr "لعبةٌ فردية"
+msgstr "الطور الفردي"
 
 #: src/frontend.cpp:200
 msgid "Multi Player"
-msgstr "لعبةٌ جماعية"
+msgstr "الطور الجماعي"
 
 #: src/frontend.cpp:201
 #: src/frontend.cpp:309
 msgid "Tutorial"
-msgstr "الدرس التعليمي"
+msgstr "الدرس التدريبي"
 
 #: src/frontend.cpp:202
 #: src/ingameop.cpp:238
 msgid "Options"
-msgstr ""
+msgstr "الإعدادات"
 
 #: src/frontend.cpp:207
 #: src/frontend.cpp:211
 msgid "View Intro"
-msgstr ""
+msgstr "عرض فيديو المقدمة"
 
 #: src/frontend.cpp:212
 msgid "Videos are missing, download them from http://wz2100.net"
@@ -15513,7 +15513,7 @@ msgstr ""
 #: src/frontend.cpp:219
 #: src/frontend.cpp:223
 msgid "Continue Last Save"
-msgstr "تحميل ملف الحفظ الآخير"
+msgstr "تحميل ملف الحفظ الأخير"
 
 #: src/frontend.cpp:224
 msgid "No last save available"
@@ -15521,15 +15521,15 @@ msgstr ""
 
 #: src/frontend.cpp:226
 msgid "Quit Game"
-msgstr ""
+msgstr "الخروج من اللعبة"
 
 #: src/frontend.cpp:227
 msgid "MAIN MENU"
-msgstr ""
+msgstr "القائمة الرئيسية"
 
 #: src/frontend.cpp:229
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "الموقع الرسمي:http://wz2100.net/"
 
 #: src/frontend.cpp:230
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -15545,7 +15545,7 @@ msgstr ""
 
 #: src/frontend.cpp:234
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "دردش مع اللاعبين عبر Discord أو برامج بروتوكول IRC"
 
 #: src/frontend.cpp:236
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
@@ -15553,7 +15553,7 @@ msgstr ""
 
 #: src/frontend.cpp:237
 msgid "Check for a newer version"
-msgstr ""
+msgstr "تحقق من وجود إصدارٍ جديد"
 
 #: src/frontend.cpp:310
 msgid "Fast Play"
@@ -15606,7 +15606,7 @@ msgstr ""
 
 #: src/frontend.cpp:371
 msgid "SINGLE PLAYER"
-msgstr "لعبةٌ فردية"
+msgstr "الطور الفردي"
 
 #: src/frontend.cpp:376
 #: src/frontend.cpp:398
@@ -15633,7 +15633,7 @@ msgstr ""
 
 #: src/frontend.cpp:605
 msgid "MULTI PLAYER"
-msgstr ""
+msgstr "الطور الجماعي"
 
 #: src/frontend.cpp:607
 msgid "Host Game"
@@ -15695,7 +15695,7 @@ msgstr ""
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
 msgid "OPTIONS"
-msgstr ""
+msgstr "الإعدادات"
 
 #: src/frontend.cpp:727
 msgid "Open Configuration Directory"
@@ -16337,7 +16337,7 @@ msgstr ""
 
 #: src/ingameop.cpp:404
 msgid "Host has quit the game!"
-msgstr ""
+msgstr "لقد غادر المضيف اللعبة!"
 
 #: src/ingameop.cpp:410
 msgid "The game can't continue without the host."
@@ -17163,7 +17163,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:188
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr ""
+msgstr "لا يمكنك الانضمام إلى مباراة أثناء تواجدك في مباراةٍ أخرى. احفظ أو اخرج من المباراة الحالية، ثم عُد إلى القائمة الرئيسية وحاول مجدداً."
 
 #: src/integrations/wzdiscordrpc.cpp:218
 msgid "Discord: Finding & Connecting to Game"
@@ -17828,7 +17828,7 @@ msgstr "تابع اللعب"
 #: src/mission.cpp:2371
 #: src/mission.cpp:2483
 msgid "Quit To Main Menu"
-msgstr ""
+msgstr "الخروج إلى القائمة الرئيسية"
 
 #: src/mission.cpp:2365
 #: src/mission.cpp:2461
