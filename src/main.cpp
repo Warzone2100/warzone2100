@@ -757,6 +757,15 @@ static void scanDataDirs()
 	registerSearchPath("/Library/Application Support/Warzone 2100/", 1);
 #endif
 
+	const char *homeEnv = getenv("HOME");
+	const char *homeDir = "/.local/share/warzone2100-4.1";
+	if (homeEnv != nullptr) {
+		char* homeFull{ new char[strlen(homeEnv) + strlen(homeDir) + 1] };
+		homeFull = strcpy(homeFull, homeEnv);
+		homeFull = strcat(homeFull, homeDir);
+		registerSearchPath(homeFull, 1);
+	}
+
 	// Commandline supplied datadir
 	if (strlen(datadir) != 0)
 	{
