@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-31 15:04\n"
+"PO-Revision-Date: 2022-01-01 03:03\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -920,7 +920,7 @@ msgstr "لقد وردتنا رسالةٌ عبر الراديو من فريقٍ �
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr ""
+msgstr "أيها القائد: سنحاول أن نعود إلى قاعدتنا."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
@@ -4329,7 +4329,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:69
 msgid "All new units will drive to this location once built"
-msgstr ""
+msgstr "ستتوجه كل الوحدات الجديدة إلى هذا الموقع بعد بنائها"
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
@@ -5684,7 +5684,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "سهلة"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
@@ -5692,7 +5692,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "صعبة"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
@@ -5833,7 +5833,7 @@ msgstr ""
 #: src/frontend.cpp:2048
 #: src/frontend.cpp:2092
 msgid "Campaign"
-msgstr ""
+msgstr "طور القصة"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
@@ -14847,7 +14847,7 @@ msgstr ""
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14919,7 +14919,7 @@ msgstr ""
 
 #: src/cheat.cpp:242
 msgid "Debug mode now disabled!"
-msgstr ""
+msgstr "تم تعطيل وضع تصحيح الأخطاء!"
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:163
@@ -15036,7 +15036,7 @@ msgstr ""
 
 #: src/clparse.cpp:376
 msgid "Set the resolution to use"
-msgstr ""
+msgstr "حدد الدقة التي تريد استعمالها"
 
 #: src/clparse.cpp:376
 msgid "WIDTHxHEIGHT"
@@ -15044,11 +15044,11 @@ msgstr ""
 
 #: src/clparse.cpp:377
 msgid "Enable shadows"
-msgstr ""
+msgstr "تفعيل الظلال"
 
 #: src/clparse.cpp:378
 msgid "Disable shadows"
-msgstr ""
+msgstr "تعطيل الظلال"
 
 #: src/clparse.cpp:379
 msgid "Enable sound"
@@ -15388,7 +15388,7 @@ msgstr ""
 #: src/display3d.cpp:2062
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr ""
+msgstr "ستصبح قيمة تقريب الخريطة %.0f"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:245
@@ -15463,7 +15463,7 @@ msgstr ""
 #: src/faction.cpp:198
 #: src/frontend.cpp:1983
 msgid "Normal"
-msgstr ""
+msgstr "عادية"
 
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:201
@@ -15529,7 +15529,7 @@ msgstr "القائمة الرئيسية"
 
 #: src/frontend.cpp:229
 msgid "Official site: http://wz2100.net/"
-msgstr "الموقع الرسمي:http://wz2100.net/"
+msgstr "الموقع الرسمي: http://wz2100.net/"
 
 #: src/frontend.cpp:230
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -15537,7 +15537,7 @@ msgstr ""
 
 #: src/frontend.cpp:231
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "تبرع عبر الرابط: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:233
 msgid "Help support the project with our server costs, Click this link."
@@ -15578,7 +15578,7 @@ msgstr ""
 #: src/frontend.cpp:2394
 msgctxt "menu"
 msgid "Return"
-msgstr ""
+msgstr "العودة"
 
 #: src/frontend.cpp:364
 msgid "New Campaign"
@@ -15657,36 +15657,36 @@ msgstr ""
 
 #: src/frontend.cpp:713
 msgid "Game Options"
-msgstr ""
+msgstr "إعدادات اللعبة"
 
 #: src/frontend.cpp:714
 #: src/ingameop.cpp:577
 msgid "Graphics Options"
-msgstr ""
+msgstr "إعدادات الرسوميات"
 
 #: src/frontend.cpp:715
 #: src/ingameop.cpp:580
 msgid "Video Options"
-msgstr ""
+msgstr "إعدادات الفيديو"
 
 #: src/frontend.cpp:716
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "إعدادات الصوت والتقريب"
 
 #: src/frontend.cpp:717
 #: src/ingameop.cpp:587
 msgid "Mouse Options"
-msgstr ""
+msgstr "إعدادات الفأرة"
 
 #: src/frontend.cpp:718
 #: src/ingameop.cpp:591
 msgid "Key Mappings"
-msgstr ""
+msgstr "ارتباطات المفاتيح"
 
 #: src/frontend.cpp:719
 #: src/ingameop.cpp:594
 msgid "Music Manager"
-msgstr ""
+msgstr "إدارة الموسيقا"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
@@ -15723,16 +15723,16 @@ msgstr ""
 
 #: src/frontend.cpp:799
 msgid "1×"
-msgstr ""
+msgstr "بالحجم الأصلي"
 
 #: src/frontend.cpp:800
 msgid "2×"
-msgstr ""
+msgstr "ضعف الحجم الأصلي"
 
 #: src/frontend.cpp:801
 #: src/frontend.cpp:1281
 msgid "Fullscreen"
-msgstr ""
+msgstr "ملء الشاشة"
 
 #: src/frontend.cpp:802
 #: src/frontend.cpp:813
@@ -15760,12 +15760,12 @@ msgstr ""
 
 #: src/frontend.cpp:811
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:812
 #: src/multiplay.cpp:2231
 msgid "Black"
-msgstr ""
+msgstr "سوداء"
 
 #: src/frontend.cpp:819
 #: src/frontend.cpp:824
@@ -15782,24 +15782,24 @@ msgstr ""
 
 #: src/frontend.cpp:839
 msgid "Rotating"
-msgstr ""
+msgstr "دوّار"
 
 #: src/frontend.cpp:839
 msgid "Fixed"
-msgstr ""
+msgstr "ثابت"
 
 #: src/frontend.cpp:844
 msgid "Instant"
-msgstr ""
+msgstr "فوري"
 
 #: src/frontend.cpp:844
 msgid "Tracked"
-msgstr ""
+msgstr "بالتدريج"
 
 #: src/frontend.cpp:862
 #: src/ingameop.cpp:622
 msgid "Video Playback"
-msgstr ""
+msgstr "حجم فيديوهات القصة"
 
 #: src/frontend.cpp:867
 #: src/ingameop.cpp:627
@@ -15809,26 +15809,26 @@ msgstr ""
 #: src/frontend.cpp:873
 #: src/ingameop.cpp:632
 msgid "Shadows"
-msgstr ""
+msgstr "الظلال"
 
 #: src/frontend.cpp:878
 msgid "Fog"
-msgstr ""
+msgstr "الضباب"
 
 #: src/frontend.cpp:883
 #: src/ingameop.cpp:637
 #: src/input/context.cpp:57
 msgid "Radar"
-msgstr ""
+msgstr "الرادار"
 
 #: src/frontend.cpp:888
 #: src/ingameop.cpp:642
 msgid "Radar Jump"
-msgstr ""
+msgstr "القفز باستخدام الرادار"
 
 #: src/frontend.cpp:893
 msgid "Screen Shake"
-msgstr ""
+msgstr "اهتزاز الشاشة"
 
 #: src/frontend.cpp:905
 msgid "GRAPHICS OPTIONS"
@@ -15836,57 +15836,57 @@ msgstr ""
 
 #: src/frontend.cpp:1013
 msgid "Disabled"
-msgstr ""
+msgstr "معطّل"
 
 #: src/frontend.cpp:1016
 msgid "Enabled"
-msgstr ""
+msgstr "مفعّل"
 
 #: src/frontend.cpp:1020
 #: src/frontend.cpp:1026
 msgid "Auto"
-msgstr ""
+msgstr "تلقائي"
 
 #: src/frontend.cpp:1071
 #: src/ingameop.cpp:149
 msgid "Voice Volume"
-msgstr ""
+msgstr "مستوى صوت المتحدثين"
 
 #: src/frontend.cpp:1076
 #: src/ingameop.cpp:155
 msgid "FX Volume"
-msgstr ""
+msgstr "مستوى صوت المؤثرات"
 
 #: src/frontend.cpp:1081
 #: src/ingameop.cpp:161
 msgid "Music Volume"
-msgstr ""
+msgstr "مستوى صوت الموسيقى"
 
 #: src/frontend.cpp:1087
 #: src/ingameop.cpp:167
 msgid "Subtitles"
-msgstr ""
+msgstr "Subtitles"
 
 #: src/frontend.cpp:1092
 msgid "HRTF"
-msgstr ""
+msgstr "صوتٌ محيطي باستخدام HRTF"
 
 #: src/frontend.cpp:1098
 #: src/frontend.cpp:1100
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "إن تقنية HRTF غير مدعومةٍ على جهازك \\ نظامك \\ مكتبة OpenAL المثبتة لديك"
 
 #: src/frontend.cpp:1104
 msgid "Map Zoom"
-msgstr ""
+msgstr "مستوى تقريب الخريطة"
 
 #: src/frontend.cpp:1109
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "معدل تقريب الخريطة"
 
 #: src/frontend.cpp:1114
 msgid "Radar Zoom"
-msgstr ""
+msgstr "مستوى تقريب الرادار"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15894,36 +15894,37 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:1133
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "إعدادات الصوت والتقريب"
 
 #: src/frontend.cpp:1245
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "عند تحديد خيار \"بدقة سطح المكتب\" ستصبح دقة اللعبة مماثلةً لدقة سطح مكتبك\n"
+"(أو تلك التي يسمح بها مدير النوافذ الخاص بالنظام)."
 
 #: src/frontend.cpp:1247
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "يمكنك تغيير الدقة عن طريق تغيير حجم النافذة. (حاول أن تسحب إحدى الزوايا أو الحواف.)"
 
 #: src/frontend.cpp:1277
 msgid "Desktop Full"
-msgstr ""
+msgstr "بدقة سطح المكتب"
 
 #: src/frontend.cpp:1279
 msgid "Windowed"
-msgstr ""
+msgstr "نافذة"
 
 #: src/frontend.cpp:1300
 msgid "Graphics Mode"
-msgstr ""
+msgstr "الوضع الرسومي"
 
 #: src/frontend.cpp:1305
 msgid "Resolution"
-msgstr ""
+msgstr "الدقة"
 
 #: src/frontend.cpp:1310
 msgid "Display Scale"
-msgstr ""
+msgstr "حجم العناصر المرئية"
 
 #: src/frontend.cpp:1338
 msgid "Adaptive"
@@ -15931,28 +15932,28 @@ msgstr ""
 
 #: src/frontend.cpp:1549
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "* ستأخذ التغييرات مفعولها بعد إعادة تشغيل اللعبة"
 
 #: src/frontend.cpp:1582
 msgid "Texture size"
-msgstr ""
+msgstr "دقة الخامات"
 
 #: src/frontend.cpp:1587
 #: src/ingameop.cpp:743
 msgid "Vertical sync"
-msgstr ""
+msgstr "المزامنة الرأسية"
 
 #: src/frontend.cpp:1592
 msgid "Antialiasing*"
-msgstr ""
+msgstr "تنعيم الحواف*"
 
 #: src/frontend.cpp:1600
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "تحذير: يمكن لتنعيم الحواف أن يسبب توقف اللعبة بشكلٍ مفاجئ، خصوصاً إذا كانت قيمته أكبر من 16"
+msgstr "تحذير: يمكن لتنعيم الحواف أن يسبب تعطل اللعبة، خصوصاً إذا كانت قيمته أكبر من 16"
 
 #: src/frontend.cpp:1613
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "محرك الرسوميات"
 
 #: src/frontend.cpp:1625
 msgid "VIDEO OPTIONS"
@@ -15969,45 +15970,46 @@ msgstr ""
 
 #: src/frontend.cpp:1694
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "لم نتمكن من تغيير المزامنة الرأسية"
 
 #: src/frontend.cpp:1694
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "لم تتمكن Warzone من تغيير وضع المزامنة الرأسية.\n"
+"ربما يكون السبب هو أن نظامك أو برنامج التعريف لا يدعم الأوضاع الأخرى."
 
 #: src/frontend.cpp:1860
 msgid "Middle Mouse"
-msgstr ""
+msgstr "زر الفأرة الأوسط"
 
 #: src/frontend.cpp:1860
 msgid "Right Mouse"
-msgstr ""
+msgstr "زر الفأرة الأيمن"
 
 #: src/frontend.cpp:1883
 #: src/ingameop.cpp:819
 msgid "Reverse Rotation"
-msgstr ""
+msgstr "دورانٌ عكسي"
 
 #: src/frontend.cpp:1888
 #: src/ingameop.cpp:825
 msgid "Trap Cursor"
-msgstr ""
+msgstr "تقييد المؤشر داخل النافذة"
 
 #: src/frontend.cpp:1894
 #: src/ingameop.cpp:831
 msgid "Switch Mouse Buttons"
-msgstr ""
+msgstr "بدّل بين أزرار الفأرة"
 
 #: src/frontend.cpp:1900
 #: src/ingameop.cpp:836
 msgid "Rotate Screen"
-msgstr ""
+msgstr "تدوير الشاشة"
 
 #: src/frontend.cpp:1905
 #: src/ingameop.cpp:841
 msgid "Colored Cursors"
-msgstr ""
+msgstr "مؤشراتٌ ملونة"
 
 #: src/frontend.cpp:1917
 msgid "MOUSE OPTIONS"
@@ -16016,12 +16018,12 @@ msgstr ""
 #: src/frontend.cpp:1982
 #: src/multiint.cpp:266
 msgid "Easy"
-msgstr ""
+msgstr "سهلة"
 
 #: src/frontend.cpp:1984
 #: src/multiint.cpp:266
 msgid "Hard"
-msgstr ""
+msgstr "صعبة"
 
 #: src/frontend.cpp:1985
 #: src/multiint.cpp:266
@@ -16031,12 +16033,12 @@ msgstr ""
 #: src/frontend.cpp:2016
 #: src/frontend.cpp:2090
 msgid "Language"
-msgstr ""
+msgstr "اللغة"
 
 #: src/frontend.cpp:2020
 #: src/frontend.cpp:2094
 msgid "Campaign Difficulty"
-msgstr ""
+msgstr "الصعوبة في طور القصة"
 
 #: src/frontend.cpp:2024
 #: src/frontend.cpp:2095
@@ -16046,17 +16048,17 @@ msgstr "سرعة الكاميرا"
 #: src/frontend.cpp:2028
 #: src/frontend.cpp:2091
 msgid "Unit Colour:"
-msgstr ""
+msgstr "لون الوحدات:"
 
 #: src/frontend.cpp:2058
 #: src/frontend.cpp:2093
 msgid "Skirmish/Multiplayer"
-msgstr ""
+msgstr "مباراة أو لعبة جماعية"
 
 #: src/frontend.cpp:2064
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "ساعدنا على تحسين ترجمات اللعبة: %s"
 
 #: src/frontend.cpp:2066
 msgid "Click to open webpage."
@@ -16065,15 +16067,15 @@ msgstr ""
 #: src/frontend.cpp:2069
 #: src/frontend.cpp:2088
 msgid "GAME OPTIONS"
-msgstr ""
+msgstr "إعدادات اللعبة"
 
 #: src/frontend.cpp:2114
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "الصعوبة الجنونية"
 
 #: src/frontend.cpp:2115
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "إن مستوى الصعوبة هذا مخصصٌ للاعبين ذوي الخبرة الكبيرة!"
 
 #: src/frontend.cpp:2213
 #, c-format
@@ -16125,38 +16127,38 @@ msgstr ""
 
 #: src/frontend.cpp:2921
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "هل تريد زيادة حجم العناصر المرئية والنصوص في اللعبة؟"
 
 #: src/frontend.cpp:2923
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "يمكن أن تبدو واجهة المستخدم صغيرةً بعض الشيء بسبب الإعدادت الحالية الخاصة بالدقة وبحجم العناصر المرئية التي اخترتها، وقد يبدو المنظور من داخل اللعبة مشوهاً أيضاً."
 
 #: src/frontend.cpp:2925
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "يمكنك أن تحلّ هذه المشكلة عن طريق زيادة حجم العناصر المرئية."
 
 #: src/frontend.cpp:2927
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "هل تريد زيادة حجم العناصر المرئية إلى: %u%%؟"
 
 #: src/frontend.cpp:2929
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "زيادة حجم العناصر المرئية والنصوص"
 
 #: src/frontend.cpp:2946
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "تمت زيادة حجم العناصر المرئية إلى: %u%%"
 
 #: src/frontend.cpp:2947
 #: src/frontend.cpp:2963
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "يمكنك تعديل حجم العناصر المرئية والنصوص في أي وقت عن طريق الانتقال لقائمة إعدادات الفيديو."
 
 #: src/frontend.cpp:2962
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "نصيحة: تعديل حجم العناصر المرئية"
 
 #: src/hci.cpp:725
 msgid "Replay"
@@ -16302,7 +16304,7 @@ msgstr ""
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:787
 msgid "Go Back"
-msgstr ""
+msgstr "عُد للخلف"
 
 #: src/ingameop.cpp:246
 #: src/ingameop.cpp:255
@@ -16349,11 +16351,11 @@ msgstr ""
 
 #: src/ingameop.cpp:584
 msgid "Audio Options"
-msgstr ""
+msgstr "إعدادات الصوت"
 
 #: src/ingameop.cpp:591
 msgid "View Key Mappings"
-msgstr ""
+msgstr "عرض ارتباطات المفاتيح"
 
 #: src/ingameop.cpp:647
 msgid "Shake"
@@ -16472,83 +16474,83 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:55
 msgid "Assign Group 0"
-msgstr ""
+msgstr "تعيين كالمجموعة 0"
 
 #: src/input/keyconfig.cpp:56
 msgid "Assign Group 1"
-msgstr ""
+msgstr "تعيين كالمجموعة 1"
 
 #: src/input/keyconfig.cpp:57
 msgid "Assign Group 2"
-msgstr ""
+msgstr "تعيين كالمجموعة 2"
 
 #: src/input/keyconfig.cpp:58
 msgid "Assign Group 3"
-msgstr ""
+msgstr "تعيين كالمجموعة 3"
 
 #: src/input/keyconfig.cpp:59
 msgid "Assign Group 4"
-msgstr ""
+msgstr "تعيين كالمجموعة 4"
 
 #: src/input/keyconfig.cpp:60
 msgid "Assign Group 5"
-msgstr ""
+msgstr "تعيين كالمجموعة 5"
 
 #: src/input/keyconfig.cpp:61
 msgid "Assign Group 6"
-msgstr ""
+msgstr "تعيين كالمجموعة 6"
 
 #: src/input/keyconfig.cpp:62
 msgid "Assign Group 7"
-msgstr ""
+msgstr "تعيين كالمجموعة 7"
 
 #: src/input/keyconfig.cpp:63
 msgid "Assign Group 8"
-msgstr ""
+msgstr "تعيين كالمجموعة 8"
 
 #: src/input/keyconfig.cpp:64
 msgid "Assign Group 9"
-msgstr ""
+msgstr "تعيين كالمجموعة 9"
 
 #: src/input/keyconfig.cpp:66
 msgid "Add to Group 0"
-msgstr ""
+msgstr "أضف إلى المجموعة 0"
 
 #: src/input/keyconfig.cpp:67
 msgid "Add to Group 1"
-msgstr ""
+msgstr "أضف إلى المجموعة 1"
 
 #: src/input/keyconfig.cpp:68
 msgid "Add to Group 2"
-msgstr ""
+msgstr "أضف إلى المجموعة 2"
 
 #: src/input/keyconfig.cpp:69
 msgid "Add to Group 3"
-msgstr ""
+msgstr "أضف إلى المجموعة 3"
 
 #: src/input/keyconfig.cpp:70
 msgid "Add to Group 4"
-msgstr ""
+msgstr "أضف إلى المجموعة 4"
 
 #: src/input/keyconfig.cpp:71
 msgid "Add to Group 5"
-msgstr ""
+msgstr "أضف إلى المجموعة 5"
 
 #: src/input/keyconfig.cpp:72
 msgid "Add to Group 6"
-msgstr ""
+msgstr "أضف إلى المجموعة 6"
 
 #: src/input/keyconfig.cpp:73
 msgid "Add to Group 7"
-msgstr ""
+msgstr "أضف إلى المجموعة 7"
 
 #: src/input/keyconfig.cpp:74
 msgid "Add to Group 8"
-msgstr ""
+msgstr "أضف إلى المجموعة 8"
 
 #: src/input/keyconfig.cpp:75
 msgid "Add to Group 9"
-msgstr ""
+msgstr "أضف إلى المجموعة 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
@@ -16668,19 +16670,19 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:111
 msgid "Zoom Radar Out"
-msgstr ""
+msgstr "التبعيد داخل الرادار"
 
 #: src/input/keyconfig.cpp:112
 msgid "Zoom Radar In"
-msgstr ""
+msgstr "التقريب داخل الرادار"
 
 #: src/input/keyconfig.cpp:113
 msgid "Zoom In"
-msgstr ""
+msgstr "تقريب"
 
 #: src/input/keyconfig.cpp:114
 msgid "Zoom Out"
-msgstr ""
+msgstr "تبعيد"
 
 #: src/input/keyconfig.cpp:115
 msgid "Pitch Forward"
@@ -16790,7 +16792,7 @@ msgstr ""
 #: src/input/keyconfig.cpp:142
 #: src/intorder.cpp:173
 msgid "Return Fire"
-msgstr ""
+msgstr "الرد على النيران المعادية"
 
 #: src/input/keyconfig.cpp:143
 msgid "Fire at Will"
@@ -16803,7 +16805,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:145
 msgid "Return to HQ"
-msgstr ""
+msgstr "عُد إلى المقر"
 
 #: src/input/keyconfig.cpp:146
 #: src/intorder.cpp:178
@@ -16833,7 +16835,7 @@ msgstr ""
 #: src/input/keyconfig.cpp:151
 #: src/intorder.cpp:179
 msgid "Return For Repair"
-msgstr ""
+msgstr "العودة بغرض الصيانة"
 
 #: src/input/keyconfig.cpp:152
 msgid "Stop Droid"
@@ -16867,7 +16869,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:159
 msgid "Trap cursor"
-msgstr ""
+msgstr "تقييد المؤشر داخل النافذة"
 
 #: src/input/keyconfig.cpp:160
 msgid "Toggle radar terrain"
@@ -16879,7 +16881,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:162
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "عرض كل ارتباطات المفاتيح"
 
 #: src/input/keyconfig.cpp:164
 #: src/intorder.cpp:169
@@ -16928,7 +16930,7 @@ msgstr ""
 #: src/input/keyconfig.cpp:176
 #: src/intorder.cpp:182
 msgid "Return for Recycling"
-msgstr ""
+msgstr "العودة بغرض إعادة التدوير"
 
 #: src/input/keyconfig.cpp:177
 msgid "Select all Units on Screen"
@@ -17346,7 +17348,7 @@ msgstr ""
 
 #: src/intorder.cpp:180
 msgid "Return To HQ"
-msgstr ""
+msgstr "العودة إلى المقر"
 
 #: src/intorder.cpp:183
 msgid "Recycle"
@@ -17475,7 +17477,7 @@ msgstr ""
 
 #: src/keybind.cpp:662
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "تم تعطيل عارض عدد الإطارات في الثانية."
 
 #: src/keybind.cpp:672
 msgid "Unit count display is enabled."
@@ -17483,7 +17485,7 @@ msgstr ""
 
 #: src/keybind.cpp:676
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "تم تعطيل عارض عدد الوحدات."
 
 #: src/keybind.cpp:728
 #, c-format
@@ -17512,16 +17514,16 @@ msgstr ""
 
 #: src/keybind.cpp:845
 msgid "Fog on"
-msgstr ""
+msgstr "تفعيل الضباب"
 
 #: src/keybind.cpp:845
 msgid "Fog off"
-msgstr ""
+msgstr "تعطيل الضباب"
 
 #: src/keybind.cpp:951
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "ستصبح قيمة تقريب الرادار %u"
 
 #: src/keybind.cpp:1216
 msgid "Toggling debug mapping priority: "
@@ -17566,19 +17568,19 @@ msgstr ""
 
 #: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "الصعوبة: سهلة"
 
 #: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "الصعوبة: عادية"
 
 #: src/keybind.cpp:1418
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "الصعوبة: صعبة"
 
 #: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "الصعوبة: جنونية"
 
 #: src/keybind.cpp:1430
 msgid "CHEATS: ENABLED"
@@ -17679,11 +17681,11 @@ msgstr ""
 
 #: src/keybind.cpp:2247
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "اهتزاز الشاشة عند تدمير أحد الوحدات: معطل"
 
 #: src/keybind.cpp:2252
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "اهتزاز الشاشة عند تدمير أحد الوحدات: مفعل"
 
 #: src/keybind.cpp:2304
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -17750,7 +17752,7 @@ msgstr ""
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "<غير مرتبطٍ بزر>"
 
 #: src/keyedit.cpp:544
 msgid "KEY MAPPING"
@@ -17762,12 +17764,12 @@ msgstr ""
 #: src/titleui/gamefind.cpp:84
 #: src/titleui/protocol.cpp:82
 msgid "Return To Previous Screen"
-msgstr ""
+msgstr "عُد إلى الشاشة السابقة"
 
 #: src/keyedit.cpp:581
 #: src/keyedit.cpp:598
 msgid "Select Default"
-msgstr ""
+msgstr "اختر الافتراضيات"
 
 #: src/loadsave.cpp:361
 msgid "Parent directory"
@@ -18562,7 +18564,7 @@ msgstr ""
 
 #: src/multilimit.cpp:181
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr ""
+msgstr "طبّق الإعدادات الافتراضية وعُد إلى الشاشة السابقة"
 
 #: src/multilimit.cpp:188
 #: src/titleui/protocol.cpp:179
@@ -18826,7 +18828,7 @@ msgstr ""
 
 #: src/musicmanager.cpp:868
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "إدارة الموسيقا"
 
 #: src/notifications.cpp:638
 msgid "Dismiss"
@@ -19400,7 +19402,7 @@ msgstr ""
 #: src/version.cpp:271
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "الإصدار: %s،%s التاريخ: %s%s"
 
 #: src/wrappers.cpp:365
 msgid "GAME OVER"
