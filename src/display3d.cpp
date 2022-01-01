@@ -2903,7 +2903,33 @@ static void	drawStructureSelections()
 		}
 	}
 	pie_SetFogStatus(false);
-
+	const bool isSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
+	if (isSpectator)
+	{
+		for (int player = 0; player < MAX_PLAYERS; player++)
+		{
+			for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+			{
+				if (psStruct->sDisplay.frameNumber == currentGameFrame)
+				{
+					if (barMode == BAR_DROIDS_AND_STRUCTURES && psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER)
+					{
+						drawStructureHealth(psStruct);
+						for (i = 0; i < psStruct->numWeaps; i++)
+						{
+							drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
+							drawStructureTargetOriginIcon(psStruct, i);
+						}
+					}
+					if (psStruct->status == SS_BEING_BUILT)
+					{
+						drawStructureBuildProgress(psStruct);
+					}
+				}
+			}
+		}
+		return;
+	}
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
 	/* Go thru' all the buildings */
@@ -3105,10 +3131,28 @@ static void	drawDroidSelections()
 			bMouseOverOwnDroid = true;
 		}
 	}
+	const bool isSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
+
+	if (isSpectator)
+	{ 
+		for (int player = 0; player < MAX_PLAYERS; player++)
+		{
+
+			for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+			{
+				/* If it's selected and on screen or it's the one the mouse is over */
+				if (barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES)
+				{
+					drawDroidSelection(psDroid, psDroid->selected);
+				}
+			}
+		}
+		return;
+	}
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
-
 	pie_SetFogStatus(false);
+
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		/* If it's selected and on screen or it's the one the mouse is over */

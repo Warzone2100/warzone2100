@@ -1612,6 +1612,13 @@ static void printDroidClickInfo(DROID *psDroid)
 static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 {
 	bool ownDroid; // Not an allied droid
+	const bool isSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
+	if (isSpectator)
+	{
+		console(_("%s Hitpoints %d/%d - Experience %d, %s"), droidGetName(psDroid), psDroid->body, psDroid->originalBody,
+		        psDroid->experience / 65536, getDroidLevelName(psDroid));
+		return;
+	}
 
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
@@ -1778,7 +1785,14 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selection)
 {
 	bool ownStruct = (psStructure->player == selectedPlayer);
-
+	const bool isSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
+	
+	if (isSpectator)
+	{
+		printStructureInfo(psStructure);
+		return;
+	}
+	
 	if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psStructure->player, selectedPlayer))
 	{
 		/* We've clicked on an enemy building */
