@@ -768,6 +768,7 @@ private:
 		auto lastMargin = margin;
 		lastMargin.right = CLOSE_WIDTH + 5;
 		timerLabel = makeLabel("");
+		timerLabel->setCanTruncate(false);
 		powerLabel = makeLabel(_("Power"));
 		pingLabel = makeLabel(_("Ping"));
 		structsLabel = makeLabel(_("Structs"));
