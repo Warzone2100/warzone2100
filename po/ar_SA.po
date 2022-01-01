@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-01 03:03\n"
+"PO-Revision-Date: 2022-01-01 15:04\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -132,7 +132,7 @@ msgstr "احشد قوةً هجومية واسترجع تقنية وصلة الم
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "عملية نقل: أهدافٌ جديدة"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -140,7 +140,7 @@ msgstr "إن قوات «النهج الحديث» تبحث عن القطع ال�
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "قم باعتراضهم ولا تسمح لأي عدوٍ بمغادرة هذه المنطقة."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
@@ -168,7 +168,7 @@ msgstr "قم بتشييد مبانٍ دفاعية إلى أن تختفي الإ�
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "مهمة قرب قاعدة «ألفا»: هجومٌ مضاد"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -184,11 +184,11 @@ msgstr "مهمةٌ قرب قاعدة «ألفا»: رسالةٌ واردة"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "لقد رصدنا قواتٍ معادية في هذه المواقع."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "هذه هي فرصتنا لهزيمة «النهج الحديث» ولتدمير قاعدتهم."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -268,11 +268,11 @@ msgstr "تقرير «ألفا» الاستخبراتي: «نيكسوس»"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "لدينا هدفٌ جديد."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "لقد اكتشفنا برنامجاً طفيلياً، وقمنا بعزله."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
@@ -332,11 +332,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "لقد اعترضنا هذه الرسالة قبل عدة دقائق."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr ""
+msgstr "وهي قادمةٌ من الشرق."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
@@ -360,39 +360,39 @@ msgstr "اهزم قطاع الطرق واستعد أي قطعٍ أثرية تع�
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
+msgstr "تهانينا أيها القائد. لقد هُزم «النهج الحديث» وصار هذا القطاع آمناً الآن."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr ""
+msgstr "لقد كان «برنامج نيكسوس المتسلل» موجوداً في أنظمة «النهج الحديث»."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr ""
+msgstr "لقد قمنا بتسجيل محادثتين جريتا معه، وسنشغلهما الآن..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr ""
+msgstr "سنبقيك على إطلاعٍ بآخر التطورات"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "أيها القائد: لقد أوكلت إليك مهمة مساعدة فريق «بيتا»"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "مهمة قرب قاعدة «بيتا»: القطاع الشرقي"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "ستتولى قيادة القاعدة حال وصولك إليها."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "يجب أن تدافع عنها وألا تفقد السيطرة عليها."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
@@ -413,29 +413,29 @@ msgstr "هنالك تقنياتٌ جديدةٌ متاحةٌ لك."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "إننا نرصد إشاراتٍ ثنائيةً مشفرة."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "جارٍ فك تشفيرها..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr ""
+msgstr "عملية نقل: سقوط السفينة الجوية"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "لقد تم إسقاط سفينتنا التي تحمل وحداتٍ من فريق «ألفا»."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
+msgstr "وهم يتعرضون لهجومٍ من «الرابطة» في هذا الموقع."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
+msgstr "شكّل فريق إنقاذ لاستعادة السفينة الفضائية وحمولتها."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
@@ -455,23 +455,23 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «بيتا»: تمسّك بالقاعدة مهما كلف الأمر"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr ""
+msgstr "لقد رصدنا إشاراتٍ ثنائيةً مشفّرة، مصدرها «الرابطة»."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «بيتا»: تمسّك بالقاعدة مهما كلف الأمر"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr ""
+msgstr "لقد رصدنا قواتٍ بريةً وجويةً قادمةً من الشمال نحونا."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr ""
+msgstr "تمسك بمواقعك وتصدى للهجمات المعادية، ثم قم بتدمير قاعدة الأعداء الشمالية بشكلٍ كامل."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
@@ -1612,17 +1612,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
 msgid "Rapid Fire Mini-Rockets"
-msgstr ""
+msgstr "صواريخ مصغرة سريعة الإطلاق"
 
 #: data/base/messages/strings/names.txt:441
 #: data/mp/messages/strings/names.txt:554
 msgid "Rapid Fire Mini-Rockets Mk2"
-msgstr ""
+msgstr "صواريخ مصغرة سريعة الإطلاق (النموذج 2)"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:555
 msgid "Rapid Fire Mini-Rockets Mk3"
-msgstr ""
+msgstr "صواريخ مصغرة سريعة الإطلاق (النموذج 3)"
 
 #: data/base/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:579
@@ -1656,7 +1656,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:617
 #: data/mp/messages/strings/names.txt:633
 msgid "Engineering Laboratory"
-msgstr ""
+msgstr "المختبر الهندسي"
 
 #: data/base/messages/strings/names.txt:490
 #: data/base/messages/strings/names.txt:506
@@ -2714,7 +2714,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Research Breakthrough Improves Repair Speeds"
-msgstr ""
+msgstr "إنجازٌ بحثيٌ عظيم يزيد من سرعة الصيانة"
 
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:218
@@ -3149,7 +3149,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:279
 #: po/custom/fromJson.txt:345
 msgid "All hovers upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل المركبات الحوامة تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_TRACK2.text[3]
@@ -3232,7 +3232,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:302
 #: po/custom/fromJson.txt:24
 msgid "30mm Anti-Aircraft machinegun"
-msgstr ""
+msgstr "رشاشٌ مضادٌ للطائرات يطلق طلقاتٍ من عيار 30 مم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA4.text[1]
@@ -3255,7 +3255,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:321
 #: po/custom/fromJson.txt:166
 msgid "AA Upgrade"
-msgstr ""
+msgstr "تطويرٌ للأسلحة المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[1]
@@ -3274,7 +3274,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:313
 #: po/custom/fromJson.txt:3146
 msgid "Increases AA accuracy"
-msgstr ""
+msgstr "زيادة دقة الأسلحة المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[3]
@@ -3287,7 +3287,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:324
 #: po/custom/fromJson.txt:281
 msgid "All AA weapons upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الأسلحة المضادة للطائرات تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[0]
@@ -3298,7 +3298,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:316
 #: po/custom/fromJson.txt:91
 msgid "AA Flak Upgrade"
-msgstr ""
+msgstr "تطويرٌ للمدافع المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[1]
@@ -3307,7 +3307,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:317
 #: po/custom/fromJson.txt:2789
 msgid "High Explosive Flak shards"
-msgstr ""
+msgstr "طلقاتٌ شديدة الانفجار للمدافع المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -3316,7 +3316,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:318
 #: po/custom/fromJson.txt:3150
 msgid "Increases AA Flak damage"
-msgstr ""
+msgstr "زيادة ضرر المدافع المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[3]
@@ -3327,7 +3327,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:275
 msgid "All AA flak weapons upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل المدافع المضادة للطائرات تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[1]
@@ -3336,7 +3336,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:322
 #: po/custom/fromJson.txt:4702
 msgid "Recoil loaded AA ammunition hopper"
-msgstr ""
+msgstr "قمعٌ كبير لتخزين الذخيرة، يتم تركيبه فوق السلاح، ويمكن التلقيم منه تلقائياً بعد كل إطلاق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
@@ -3345,7 +3345,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:323
 #: po/custom/fromJson.txt:3154
 msgid "Increases AA ROF"
-msgstr ""
+msgstr "زيادة معدل إطلاق الأسلحة المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[0]
@@ -3701,7 +3701,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:387
 #: po/custom/fromJson.txt:5159
 msgid "Self-guided rocket powered shells"
-msgstr ""
+msgstr "قذائف صاروخية ذاتية التوجيه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
@@ -3787,7 +3787,7 @@ msgstr "تحديثٌ للرشاش"
 #: data/mp/messages/strings/resstrings.txt:402
 #: po/custom/fromJson.txt:5687
 msgid "Tungsten-tipped armor-piercing bullets"
-msgstr ""
+msgstr "طلقاتٌ خارقةٌ للدروع برؤوسٍ مصنوعةٍ من التنغستن"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[2]
@@ -3883,7 +3883,7 @@ msgstr "تحديثٌ للهاون"
 #: data/mp/messages/strings/resstrings.txt:417
 #: po/custom/fromJson.txt:2778
 msgid "High Explosive Armor-Piercing Shells"
-msgstr ""
+msgstr "قذائف شديدة الانفجار خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[2]
@@ -3924,7 +3924,7 @@ msgstr "تطويرٌ للصواريخ المصغرة"
 #: data/mp/messages/strings/resstrings.txt:422
 #: po/custom/fromJson.txt:2781
 msgid "High Explosive Armor-Piercing warheads"
-msgstr ""
+msgstr "رؤوسٌ حربيةٌ شديد الانفجار خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text[2]
@@ -3976,7 +3976,7 @@ msgstr "تطويرٌ للصاروخ"
 #: data/mp/messages/strings/resstrings.txt:432
 #: po/custom/fromJson.txt:2807
 msgid "High Explosive Squash Head warhead"
-msgstr ""
+msgstr "يستعمل هذا الرأس الحربي شحنةً متفجرة طرية شديدة القوة، تأخذ شكل سطح الهدف قبل الانفجار، مما يزيد من الطاقة المنقولة إليه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[2]
@@ -4361,27 +4361,27 @@ msgstr "تهانينا أيها القائد - لقد صرت مستعداً لم
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr ""
+msgstr "الفصل الأول"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "القطاع الغربي"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "الفجر، 4 تموز \\يوليو، 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
-msgstr ""
+msgstr "مقر المشروع"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "عهدٌ جديد"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr "الاثنين، 4 تموز \\ يوليو، 2100"
+msgstr "صباح 4 تموز \\ يوليو، 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
@@ -4393,19 +4393,19 @@ msgstr "يقترب فريق «ألفا» من وجهته"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "فيما يلي وجهة رحلتكم الجوية:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "«ألفا» - القطاع الغربي...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "يا فريق «ألفا»: أنتم جاهزن للإقلاع."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
-msgstr ""
+msgstr "حظاً موفقاً وصيداً موفقاً."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
@@ -4417,7 +4417,7 @@ msgstr "أيها القائد: ستكون مسؤولاً عن فريق «ألف�
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "إن وجهتكم موجودةٌ في المنطقة الغربية."
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
 msgid "Incoming Transmission"
@@ -4425,15 +4425,15 @@ msgstr "لقد وردتنا رسالةٌ عبر الراديو"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
-msgstr ""
+msgstr "رسالةٌ من قاعدة «بيتا»"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "النجدة! النجدة!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "ساعدونا..."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
@@ -4441,7 +4441,7 @@ msgstr "أيها القائد: لقد تمكنا أن نستحوذ على رأس
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr ""
+msgstr "يسمح لك هذا الرأس بتنسيق هجمات الوحدات المسندة إليه، كما يمكن أن تتوجه إليه الوحدات بعد تصنيعها مباشرةً. إن إجراء الأبحاث على هذه التقنية ومن ثم استعمالها يعتبر أولويةً قصوى."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
@@ -4459,15 +4459,15 @@ msgstr "لقد عصيت أوامر «النهج الحديث»."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr ""
+msgstr "على كل الوحدات المقاتلة أن تبدأ بمهاجمة العدو."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr ""
+msgstr "لقد عصوا أوامر «النهج الحديث»."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
-msgstr ""
+msgstr "يجب القضاء عليهم بشكلٍ نهائي."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
 msgid "Secure the LZ and establish a forward base."
@@ -4475,72 +4475,72 @@ msgstr "قم بتأمين منطقة الإنزال، ثم شيّد قاعدةً
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
-msgstr ""
+msgstr "ثم دمّر قاعدة «النهج الحديث»."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "افتحوا أنظمتكم لي."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr ""
+msgstr "دعوني أندمج مع آلاتكم ومع السايبورغ التابعين لكم."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
-msgstr "سنبني «النيكسوس»: الرابطة المثالية الإنسان والآلة."
+msgstr "سنبني معاً «النيكسوس»: الرابطة المثالية بين الإنسان والآلة."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "يمكننا معاً بناء عالمٍ جديد."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "سأمنحكم قوىً لا يمكنكم تخيلها حتى في أحلامكم."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "افتحوا أنظمتكم لي وستصيرون أقوياء."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
-msgstr ""
+msgstr "يمكنني أن أجعل منكم آلهةً فوق هذه الأرض اليباب."
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
-msgstr ""
+msgstr "وعند تجاهلنا له صارت لهجته تهديدية."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "لقد خربتم المخططات التي رسمتها «للنهج الحديث» ولن يمر ذلك دون عقاب."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
-msgstr ""
+msgstr "أنتم كائناتٌ ضعيفةٌ من اللحم الفاني، أما أنا فقويٌ ولدي الكثير من الأجزاء."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "حتى لو هزمتموني هنا، فسأنهض مجدداً."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "وحال تطهيري للعالم بالنار، سأدمركم أنتم ومشروعكم التافه!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr ""
+msgstr "وبعد ذلك، قام «نيكسوس» بإزالة نفسه من النظام، ودمّر كل الذواكر، وتخلص من بقايا ارتباطاته الخارجية."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr ""
+msgstr "لسنا متأكدين بعد من ماهية «نيكسوس» أو من الشخص أو الشيء الذي يقوم بتوجيهه، ولكن تشير أبحاثنا الأولية إلى ارتباط «برنامج نيكسوس المتسلل» بمؤسسة «ريد»، التي طورت وصلة المشبك العصبي."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr ""
+msgstr "لقد صرنا متأكدين من أن «نيكسوس» هو من زود «النهج الحديث» بكل التقنيات التي كانت بحوذتهم. مهما كانت حقيقة «نيكسوس»، فإنه بالتأكيد ليس مجرد برنامجٍ حاسوبيٍ طفيلي."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr ""
+msgstr "إنه يمتلك ترسانةً من التقنيات والأسلحة. كما أنه يعرف الكثير عنا، ويُظهر العداء لنا."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
@@ -4584,7 +4584,7 @@ msgstr "نكرر: عُد أدراجك أو سيتم تدميرك."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "انتهت الرسالة."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
@@ -4596,23 +4596,23 @@ msgstr "يا «نيكسوس»: لقد استرجعنا تقنية المشبك �
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
-msgstr ""
+msgstr "يعتبر «برنامج نيكسوس المتسلل» صنفاً من الطفيليات الحاسوبية التي تحور نفسها بنفسها، مما يجعل إزالته من الأنظمة بشكلٍ نهائي أمراً صعباً."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "ولم نتمكن بعد من تحديد هدفه أو وظيفته الجوهريان. يسعى البرنامج عندما يكون في شكله البدائي إلى التسلل إلى أجزاءٍ من ذاكرة النظام الذي غزاه بهدف عزلها عنه. ومن ثم، يبدأ بتحوير نفسه وبنى البيانات، مما يعني عملياً إعادة برمجة النظام من داخله."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr ""
+msgstr "لم نتمكن من تحليل البرنامج بشكلٍ أعمق بسبب إيقاف تقنيينا النظام بشكلٍ يدوي لكي نمنع أي عدوىً إضافية قد يسببها «برنامج نيكسوس المتسلل»."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr ""
+msgstr "في المقابل، لم يمنع «النهج الحديث» انتشار «برنامج نيكسوس المتسلل» في أنظمته، ولذا يجب علينا الاستيلاء على الأنظمة الرئيسية التابعة «للنهج الحديث» لكي نتمكن من تفحص «نيكسوس» بشكلٍ أدق ومن تحديد منشأه."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr ""
+msgstr "أيها القائد: عليك أن تضع حداً لأنشطة «النهج الحديث« في هذا القطاع، عن طريق إيجاد قاعدتهم الرئيسية."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
@@ -4628,7 +4628,7 @@ msgstr "تشير المعلومات التي اكتشفناها في القاع�
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "الفصل الثاني"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
@@ -4636,7 +4636,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr "الاثنين، 1 أيلول \\ سبتمبر، 2100"
+msgstr "صباح 1 أيلول \\ سبتمبر، 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
@@ -4648,7 +4648,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
-msgstr ""
+msgstr "يجب أن تدافع عن القاعدة وألا تخسرها مهما كلفك الأمر."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
@@ -4668,7 +4668,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr ""
+msgstr "«نازدا» هي وكالة شمال أمريكا للدفاع الاستراتيجي."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
@@ -4780,11 +4780,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
+msgstr "يا محاربي «الرابطة»: لقد وصل المزيد من الدخلاء إلى أرضنا."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
-msgstr ""
+msgstr "وهم ليسوا جزءاً من الآلة."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
@@ -4796,11 +4796,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr ""
+msgstr "يا محاربي «الرابطة»: لقد صرنا مستعدين لتدمير الدخلاء الذين لوثوا أراضينا."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr ""
+msgstr "إن أتباع «المشروع» لا ينتمون للآلة، ولقد حُرموا من بركتها، ولقد كُتِبَ لنا، نحن الذين احتضنا قوة الآلة، أن نبيد هذه المخلوقات الضعيفة."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
@@ -4848,7 +4848,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "الفصل الثالث"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
@@ -5088,88 +5088,88 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "الفجر، 3 تشرين الثاني \\ نوفمبر، 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "الأرض، في «المدار المرتفع»"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "الانهيار"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19 كانون الثاني \\ يناير"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "أمريكا الشمالية"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
-msgstr ""
+msgstr "الشتاء النووي"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "منتصف الليل، 14 نيسان \\ أبريل، 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "الجبال الصخرية (جبال روكي)، أمريكا الشمالية"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "الأمان"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "الفجر، 4 نيسان \\ أبريل، 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "بدايةٌ جديدة"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
+msgstr "لقد تم تطوير نظام «نازدا» بغرض حمايتنا. وكان من المفترض أن يكون أفضل وسيلةٍ للردع النووي. ولكنه وكما تبين لنا لاحقاً، كان السبب في هلاكنا."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr ""
+msgstr "لقد ذكرت التقارير أن «نازدا» واجه خطأً أثناء إجراء فحصٍ روتينيٍ للأنظمة. لا تصدق ذلك. هنالك من كان يريد منه إبادتنا."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr ""
+msgstr "تم توجيه هذه الصواريخ النووية نحو كل المُدن الكبرى في العالم. لقد تمت برمجة «نازدا» لكي يستهل «الانهيار»، وبعد انطلاق الضربات النووية المعاكسة، لم تعمل أنظمته الدفاعية الليزرية أو بطارياته الأرضية المضادة للصواريخ."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "لقد انتهى العالم الذي كنا نعرفه..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "لقد كان الشتاء النووي قاسياً جداً، وفتك الجوع والمرض بمعظم الناجين من الضربات النووية، كما حصدت الحروب على معلبات طعام الكلاب أرواحاً أكثر."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "لقد هجرنا «سياتل» في بدايات 2086، وسمعنا أن «الجبال الصخرية» خاليةٌ من الإشعاعات نسبياً."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
+msgstr "وصلنا إلى القاعدة بعد تغلبنا على جماعات اللصوص وقطاع الطرق، ووجدنا أن كل أفراده قد ماتوا. لقد كانوا ضحايا للأمراض الفيروسية العديدة التي انتشرت."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
-msgstr ""
+msgstr "لقد كسرنا الأبواب، وأزلنا الجثث الموجودة في الداخل."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr ""
+msgstr "كنا نعلم أن الأمور لن تعود أبداً كما كانت عليه، ولكننا عزمنا على بناء عالمٍ جديدٍ من رحم الأنقاض. لقد أعدنا بناء منصات الإنزال وأعدنا تشغيل الأنظمة القديمة."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "لقد صرنا جاهزين أخيراً للبدء بـ «المشروع»."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
@@ -5452,7 +5452,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:505
 #: po/custom/fromJson.txt:2873
 msgid "Hover Propulsion II"
-msgstr ""
+msgstr "الحوامة الدافعة 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks02.name
@@ -5630,57 +5630,57 @@ msgstr "قطاع الطرق"
 #: data/mp/multiplay/script/rules/printsettings.js:9
 #: src/multiint.cpp:1466
 msgid "No Scavengers"
-msgstr ""
+msgstr "بدون قطاع طرق"
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
 #: src/multiint.cpp:1474
 msgid "No Alliances"
-msgstr ""
+msgstr "بدون تحالفات"
 
 #: data/mp/multiplay/script/rules/printsettings.js:16
 #: src/multiint.cpp:1475
 msgid "Allow Alliances"
-msgstr ""
+msgstr "السماح بالتحالفات"
 
 #: data/mp/multiplay/script/rules/printsettings.js:17
 #: src/multiint.cpp:1477
 msgid "Locked Teams"
-msgstr ""
+msgstr "فرقٌ مقفلة"
 
 #: data/mp/multiplay/script/rules/printsettings.js:18
 #: src/multiint.cpp:1476
 msgid "Locked Teams, No Shared Research"
-msgstr ""
+msgstr "فرقٌ مقفلة، لا يمكن مشاركة الأبحاث"
 
 #: data/mp/multiplay/script/rules/printsettings.js:24
 #: src/multiint.cpp:1485
 msgid "Low Power Levels"
-msgstr ""
+msgstr "مستويات طاقةٍ منخفضة"
 
 #: data/mp/multiplay/script/rules/printsettings.js:25
 #: src/multiint.cpp:1486
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "مستويات طاقةٍ متوسطة"
 
 #: data/mp/multiplay/script/rules/printsettings.js:26
 #: src/multiint.cpp:1487
 msgid "High Power Levels"
-msgstr ""
+msgstr "مستويات طاقةٍ مرتفعة"
 
 #: data/mp/multiplay/script/rules/printsettings.js:32
 #: src/multiint.cpp:1495
 msgid "Start with No Bases"
-msgstr ""
+msgstr "البدء دون قواعد"
 
 #: data/mp/multiplay/script/rules/printsettings.js:33
 #: src/multiint.cpp:1496
 msgid "Start with Bases"
-msgstr ""
+msgstr "البدء بقواعد"
 
 #: data/mp/multiplay/script/rules/printsettings.js:34
 #: src/multiint.cpp:1497
 msgid "Start with Advanced Bases"
-msgstr ""
+msgstr "البدء بقواعد متطورة"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5777,7 +5777,8 @@ msgstr ""
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr ""
+msgstr "تم تكون المنفذ (%s) على عنوان (%s) بالشكل الصحيح\n"
+"إن عنوان IP الخارجي الخاص بك هو %s"
 
 #: lib/netplay/netplay.cpp:2130
 msgid "Client failed to ack player index swap"
@@ -5916,21 +5917,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF02.name
 #: po/custom/fromJson.txt:45
 msgid "AA Ammunition Hopper Mk2"
-msgstr ""
+msgstr "قُمع ذخيرةٍ مضادةٍ للطائرات (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF03.name
 #: po/custom/fromJson.txt:49
 msgid "AA Ammunition Hopper Mk3"
-msgstr ""
+msgstr "قُمع ذخيرةٍ مضادةٍ للطائرات (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF01.name
 #: po/custom/fromJson.txt:53
 msgid "AA Ammunition Hopper"
-msgstr ""
+msgstr "قُمع ذخيرةٍ مضادةٍ للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF05.name
@@ -5986,49 +5987,49 @@ msgstr ""
 #: po/custom/fromJson.txt:85
 #, no-c-format
 msgid "AA Flak damage +25%"
-msgstr ""
+msgstr "زيادة ضرر المدافع المضادة للطائرات 25%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage02.name
 #: po/custom/fromJson.txt:95
 msgid "AA HE Flak Mk2"
-msgstr ""
+msgstr "طلقاتٌ مضادةٌ للطائرات شديدة الانفجار (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage03.name
 #: po/custom/fromJson.txt:99
 msgid "AA HE Flak Mk3"
-msgstr ""
+msgstr "طلقاتٌ مضادةٌ للطائرات شديدة الانفجار (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage01.name
 #: po/custom/fromJson.txt:103
 msgid "AA HE Flak"
-msgstr ""
+msgstr "طلقاتٌ مضادةٌ للطائرات شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage05.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage05.name
 #: po/custom/fromJson.txt:107
 msgid "AA HEAP Flak Mk2"
-msgstr ""
+msgstr "طلقاتٌ مضادةٌ للطائرات خارقةٌ للدروع (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage06.name
 #: po/custom/fromJson.txt:111
 msgid "AA HEAP Flak Mk3"
-msgstr ""
+msgstr "طلقاتٌ مضادةٌ للطائرات خارقةٌ للدروع (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage04.name
 #: po/custom/fromJson.txt:115
 msgid "AA HEAP Flak"
-msgstr ""
+msgstr "طلقاتٌ مضادةٌ للطائرات خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
@@ -6121,14 +6122,14 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text[1]
 #: po/custom/fromJson.txt:194
 msgid "Advanced Engineering Techniques"
-msgstr ""
+msgstr "تقنياتٌ هندسيةٌ متقدمة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering03.name
 #. data/mp/stats/research.json: $.R-Sys-Engineering03.name
 #: po/custom/fromJson.txt:198
 msgid "Advanced Engineering"
-msgstr ""
+msgstr "هندسةٌ متقدمة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_VCBSU3.text[1]
@@ -6338,7 +6339,7 @@ msgstr ""
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:485
 msgid "Alpha Campaign"
-msgstr ""
+msgstr "فصل فريق ألفا"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -6351,7 +6352,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_P_H1.text[1]
 #: po/custom/fromJson.txt:492
 msgid "Amphibious hover propulsion"
-msgstr ""
+msgstr "قاعدة دفعٌ حوامة للمركبات، ويمكنها التنقل على اليابسة والماء"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-MdArtMissile.name
@@ -6412,21 +6413,21 @@ msgstr "طلقاتٌ خارقة للدروع"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage05.name
 #: po/custom/fromJson.txt:526
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr ""
+msgstr "طلقاتٌ مجنّحة خارقةٌ للدروع (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #: po/custom/fromJson.txt:530
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr ""
+msgstr "طلقاتٌ مجنّحة خارقةٌ للدروع (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #: po/custom/fromJson.txt:534
 msgid "APFSDS Cannon Rounds"
-msgstr ""
+msgstr "طلقاتٌ مجنّحة خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyArtMissile.name
@@ -7294,7 +7295,7 @@ msgstr "مثاليٌ ضد: المركبات الحوامة أو التي تست�
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1178
 msgid "Beta Campaign"
-msgstr ""
+msgstr "فصل فريق بيتا"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7533,7 +7534,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy02.name
 #: po/custom/fromJson.txt:1346
 msgid "Cannon Laser Designator"
-msgstr ""
+msgstr "محدد أهدافٍ ليزري للمدفع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Accuracy01.name
@@ -7585,7 +7586,7 @@ msgstr ""
 #. ... + 11 refs
 #: po/custom/fromJson.txt:1377
 msgid "Cannon Upgrade"
-msgstr ""
+msgstr "تطويرٌ للمدفع"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-CBTurret01.name
@@ -7923,21 +7924,21 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[3]
 #: po/custom/fromJson.txt:1585
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr ""
+msgstr "سيتم إطلاق النيران المضادة للمدفعية إلى أن يتم تدمير بطارية العدو"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[1]
 #: po/custom/fromJson.txt:1589
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr ""
+msgstr "يقوم البرج المضاد للمدفعية باكتشاف مواقع البطاريات المعادية التي تطلق نيراناً غير مباشرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
 #: po/custom/fromJson.txt:1593
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr ""
+msgstr "يقوم الرأس المضاد للمدفعية باكتشاف مواقع البطاريات المعادية التي تطلق نيراناً غير مباشرة"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane1.name
@@ -8727,7 +8728,7 @@ msgstr "محركٌ بنظام حقنٍ للوقود"
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2162
 msgid "Gamma Campaign"
-msgstr ""
+msgstr "فصل فريق جاما"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -9199,40 +9200,40 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage05.name
 #: po/custom/fromJson.txt:2441
 msgid "HEAP Mini-Rockets Mk2"
-msgstr ""
+msgstr "صواريخ مصغرة خارقةٌ للدروع (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage06.name
 #: po/custom/fromJson.txt:2444
 msgid "HEAP Mini-Rockets Mk3"
-msgstr ""
+msgstr "صواريخ مصغرة خارقةٌ للدروع (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage04.name
 #: po/custom/fromJson.txt:2447
 msgid "HEAP Mini-Rockets"
-msgstr ""
+msgstr "صواريخ مصغرة خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage05.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Damage05.name
 #: po/custom/fromJson.txt:2451
 msgid "HEAP Mortar Shells Mk2"
-msgstr ""
+msgstr "قذائف هاون خارقةٌ للدروع (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Damage06.name
 #: po/custom/fromJson.txt:2455
 msgid "HEAP Mortar Shells Mk3"
-msgstr ""
+msgstr "قذائف هاون خارقةٌ للدروع (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Damage04.name
 #: po/custom/fromJson.txt:2459
 msgid "HEAP Mortar Shells"
-msgstr ""
+msgstr "قذائف هاون خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage02.name
@@ -9342,7 +9343,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_CN3MK1.text[1]
 #: po/custom/fromJson.txt:2533
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr ""
+msgstr "مدفعٌ ثقيلٌ يمكنه إطلاق طلقاتٍ من عيار 120 مم"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower04.name
@@ -9393,7 +9394,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon375mmMk1.name
 #: po/custom/fromJson.txt:2563
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "مدفعٌ ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flame2.name
@@ -9615,21 +9616,21 @@ msgstr "إن الوحدات الاستثنائية والبطولية محمية
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage08.name
 #: po/custom/fromJson.txt:2728
 msgid "HESH Rocket Warhead Mk2"
-msgstr ""
+msgstr "رأس صاروخ بمتفجراتٍ طرية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage09.name
 #: po/custom/fromJson.txt:2732
 msgid "HESH Rocket Warhead Mk3"
-msgstr ""
+msgstr "رأس صاروخ بمتفجراتٍ طرية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage07.name
 #: po/custom/fromJson.txt:2736
 msgid "HESH Rocket Warhead"
-msgstr ""
+msgstr "رأس صاروخي بمتفجراتٍ طرية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-Damage02.name
@@ -9690,14 +9691,14 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text[1]
 #: po/custom/fromJson.txt:2770
 msgid "High Explosive Armor Piercing Flak"
-msgstr ""
+msgstr "طلقات شديدة الانفجار خارقةٌ للدروع، مخصصةٌ للمدافع المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_HOWD4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[1]
 #: po/custom/fromJson.txt:2774
 msgid "High Explosive Armor Piercing Shells"
-msgstr ""
+msgstr "قذائف شديدة الانفجار خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[1]
@@ -9805,27 +9806,27 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.hover02.name
 #: po/custom/fromJson.txt:2867
 msgid "Hover II"
-msgstr ""
+msgstr "الحوامة 2"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
 #: po/custom/fromJson.txt:2870
 msgid "Hover III"
-msgstr ""
+msgstr "الحوامة 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Hover.name
 #: po/custom/fromJson.txt:2877
 msgid "Hover Propulsion"
-msgstr ""
+msgstr "الحوامة الدافعة"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover01.name
 #. data/mp/stats/propulsion.json: $.hover01.name
 #: po/custom/fromJson.txt:2881
 msgid "Hover"
-msgstr ""
+msgstr "الحوامة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
@@ -9916,21 +9917,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 #: po/custom/fromJson.txt:2948
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr ""
+msgstr "طلقاتٌ خارقةٌ للدروع فائقة السرعة (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #: po/custom/fromJson.txt:2952
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr ""
+msgstr "طلقاتٌ خارقةٌ للدروع فائقة السرعة (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #: po/custom/fromJson.txt:2956
 msgid "HVAPFSDS Cannon Rounds"
-msgstr ""
+msgstr "طلقاتٌ خارقةٌ للدروع فائقة السرعة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
@@ -10025,14 +10026,14 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[1]
 #: po/custom/fromJson.txt:3020
 msgid "Improved Engineering Techniques"
-msgstr ""
+msgstr "تحسين التقنيات الهندسية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering02.name
 #. data/mp/stats/research.json: $.R-Sys-Engineering02.name
 #: po/custom/fromJson.txt:3024
 msgid "Improved Engineering"
-msgstr ""
+msgstr "هندسةٌ متطورة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_CBSU2.text[1]
@@ -10645,7 +10646,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
 #: po/custom/fromJson.txt:3508
 msgid "Laser designator paints and guides rounds to the target"
-msgstr ""
+msgstr "سيقوم الليزر المحدد للأهداف بتوجيه الطلقات نحو الهدف"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASROF1.text[2]
@@ -10762,7 +10763,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_CN1MK1.text[1]
 #: po/custom/fromJson.txt:3583
 msgid "Light Cannon firing 40mm rounds"
-msgstr "مدفعٌ خفيفٌ يمكنه إطلاق طلقاتٍ بعيار 40 مم"
+msgstr "مدفعٌ خفيفٌ يمكنه إطلاق طلقاتٍ من عيار 40 مم"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower02.name
@@ -11010,7 +11011,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text[1]
 #: po/custom/fromJson.txt:3765
 msgid "Medium Cannon firing 76mm rounds"
-msgstr "مدفعٌ متوسط يمكنه إطلاق طلقاتٍ بعيار 76 مم"
+msgstr "مدفعٌ متوسط يمكنه إطلاق طلقاتٍ من عيار 76 مم"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower03.name
@@ -11361,7 +11362,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_MG4.text[1]
 #: po/custom/fromJson.txt:3987
 msgid "Multi-barrel, rapid-fire machinegun"
-msgstr ""
+msgstr "رشاشٌ سريع الإطلاق ومتعدد الفوهات"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -11672,7 +11673,7 @@ msgstr "يمكنك استخدام رأسٍ وظيفيٍ جديدٍ في تصام
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[1]
 #: po/custom/fromJson.txt:4257
 msgid "New Thermal Emissions detection"
-msgstr ""
+msgstr "يمكن للمستشعرات الآن اكتشاف الانبعاثات الحرارية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[0]
@@ -11855,7 +11856,7 @@ msgstr "أو اطلب من الوحدة التوجه إلى مركز الصيا�
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[2]
 #: po/custom/fromJson.txt:4370
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr ""
+msgstr "سيطلب من الوحدات المسندة إليه، والتي تطلق نيراناً غير مباشرة، أن تستهدف بطاريات الأعداء"
 
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
@@ -12536,7 +12537,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4819
 msgid "Research Breakthrough Improves Construction Rates"
-msgstr ""
+msgstr "إنجازٌ بحثيٌ عظيم يزيد من سرعة البناء"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ResearchFacility.name
@@ -12784,7 +12785,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
 #: po/custom/fromJson.txt:4979
 msgid "Rocket Laser Designator"
-msgstr ""
+msgstr "محدد أهدافٍ ليزري للصاروخ"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
@@ -12817,7 +12818,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text[1]
 #: po/custom/fromJson.txt:4997
 msgid "Rocket tracks the laser designator to the target"
-msgstr ""
+msgstr "سيتعقب الصاروخ الهدف الذي يحدده جهاز الليزر المخصص لتحديد الأهداف"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
@@ -13145,20 +13146,20 @@ msgstr "رأس الاستشعار"
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
 #: po/custom/fromJson.txt:5206
 msgid "Sensor Upgrade Mk2"
-msgstr ""
+msgstr "تطويرٌ للمستشعرات (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade03.name
 #: po/custom/fromJson.txt:5209
 msgid "Sensor Upgrade Mk3"
-msgstr ""
+msgstr "تطويرٌ للمستشعرات (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
 #: po/custom/fromJson.txt:5213
 msgid "Sensor Upgrade"
-msgstr ""
+msgstr "تطويرٌ للمستشعرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[0]
@@ -13167,7 +13168,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[0]
 #: po/custom/fromJson.txt:5219
 msgid "Sensors Improved"
-msgstr ""
+msgstr "سيتم تطوير جميع أجهزة الاستشعار"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MdArtMissile.name
@@ -14032,7 +14033,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGUN.text[1]
 #: po/custom/fromJson.txt:5782
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr ""
+msgstr "رشاشان سريعا الإطلاق ومتعددا الفوهات"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.challenge.name
@@ -14901,7 +14902,7 @@ msgstr ""
 #: src/chat.cpp:173
 #: src/multiint.cpp:3635
 msgid "Spectators"
-msgstr ""
+msgstr "المتفرجون"
 
 #: src/cheat.cpp:216
 #, c-format
@@ -15477,7 +15478,7 @@ msgstr ""
 
 #: src/frontend.cpp:178
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "إن فيديوهات القصة مفقودة"
 
 #: src/frontend.cpp:179
 msgid "See our FAQ on how to install videos"
@@ -15553,15 +15554,15 @@ msgstr ""
 
 #: src/frontend.cpp:237
 msgid "Check for a newer version"
-msgstr "تحقق من وجود إصدارٍ جديد"
+msgstr "تحقق من وجود إصدارٍ أحدث"
 
 #: src/frontend.cpp:310
 msgid "Fast Play"
-msgstr ""
+msgstr "لعبةٌ سريعة"
 
 #: src/frontend.cpp:311
 msgid "TUTORIALS"
-msgstr ""
+msgstr "الدروس التدريبية"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:313
@@ -15582,7 +15583,7 @@ msgstr "العودة"
 
 #: src/frontend.cpp:364
 msgid "New Campaign"
-msgstr ""
+msgstr "ابدأ قصةً جديدة"
 
 #: src/frontend.cpp:365
 msgid "Start Skirmish Game"
@@ -15594,7 +15595,7 @@ msgstr ""
 
 #: src/frontend.cpp:367
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "تحميل لعبةٍ من طور القصة"
 
 #: src/frontend.cpp:368
 msgid "Load Skirmish Game"
@@ -15611,16 +15612,16 @@ msgstr "الطور الفردي"
 #: src/frontend.cpp:376
 #: src/frontend.cpp:398
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "إن الفيديوهات الخاصة بالقصة مفقودة! قم بتحميلها من http://wz2100.net"
 
 #: src/frontend.cpp:393
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "الفصول"
 
 #: src/frontend.cpp:532
 #: src/ingameop.cpp:1024
 msgid "Load Campaign Saved Game"
-msgstr ""
+msgstr "تحميل لعبةٍ من طور القصة"
 
 #: src/frontend.cpp:538
 #: src/ingameop.cpp:1028
@@ -15637,23 +15638,23 @@ msgstr "الطور الجماعي"
 
 #: src/frontend.cpp:607
 msgid "Host Game"
-msgstr ""
+msgstr "استضافة لعبة"
 
 #: src/frontend.cpp:608
 msgid "Join Game"
-msgstr ""
+msgstr "الانضمام إلى لعبة"
 
 #: src/frontend.cpp:609
 msgid "View Replay"
-msgstr ""
+msgstr "مشاهد إعادة"
 
 #: src/frontend.cpp:614
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "لكي تتمكن من استضافة الألعاب، يجب أن يكون منفذ TCP 2100 مفتوحاً في الجدار الناري أو جهاز الراوتر!"
 
 #: src/frontend.cpp:659
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "تحميل إعادةٍ لمباراةٍ جماعية"
 
 #: src/frontend.cpp:713
 msgid "Game Options"
@@ -15699,11 +15700,11 @@ msgstr "الإعدادات"
 
 #: src/frontend.cpp:727
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "فتح مجلد التكوين"
 
 #: src/frontend.cpp:768
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "لم نتمكن من فتح مجلد التكوين باستخدام مستعرض الملفات الافتراضي على هذا النظام."
 
 #: src/frontend.cpp:770
 msgid "Configuration directory is reported as:"
@@ -15719,7 +15720,7 @@ msgstr ""
 
 #: src/frontend.cpp:777
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "لم نتمكن من فتح مجلد التكوين"
 
 #: src/frontend.cpp:799
 msgid "1×"
@@ -16363,7 +16364,7 @@ msgstr ""
 
 #: src/ingameop.cpp:1032
 msgid "Save Campaign Game"
-msgstr ""
+msgstr "حفظ لعبةٍ من القصة"
 
 #: src/ingameop.cpp:1036
 msgid "Save Skirmish Game"
@@ -16925,7 +16926,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:175
 msgid "Select all Hovers"
-msgstr ""
+msgstr "حدد كل المركبات الحوامة"
 
 #: src/input/keyconfig.cpp:176
 #: src/intorder.cpp:182
@@ -17144,7 +17145,7 @@ msgstr ""
 #: src/multiint.cpp:1484
 #: src/multimenu.cpp:771
 msgid "Power"
-msgstr ""
+msgstr "الطاقة"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
@@ -17193,11 +17194,11 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:279
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr ""
+msgstr "فشلنا في الانضمام إلى لعبة باستخدام رابط الدعوة المحدد، والخطأ كان:"
 
 #: src/integrations/wzdiscordrpc.cpp:283
 msgid "Failed to Join Game"
-msgstr ""
+msgstr "فشلنا في الانضمام إلى لعبة"
 
 #: src/integrations/wzdiscordrpc.cpp:350
 msgid "The invite link you have followed specifies a non-default lobby server:"
@@ -17297,7 +17298,7 @@ msgstr ""
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:897
 msgid "Alliances:"
-msgstr ""
+msgstr "التحالفات:"
 
 #: src/integrations/wzdiscordrpc.cpp:913
 msgid "In Menu"
@@ -17306,11 +17307,11 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:1062
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "يريد مستخدم Discord الذي يحمل اسم \"%s\" الانضمام إلى لعبتك."
 
 #: src/integrations/wzdiscordrpc.cpp:1064
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "هل تريد السماح لهذا اللاعب بالانضمام إلى لعبتك؟"
 
 #: src/integrations/wzdiscordrpc.cpp:1068
 #, c-format
@@ -17967,7 +17968,7 @@ msgstr ""
 
 #: src/multiint.cpp:1387
 msgid "Select Game Name"
-msgstr ""
+msgstr "اختر اسم المباراة"
 
 #: src/multiint.cpp:1391
 #: src/titleui/gamefind.cpp:264
@@ -17981,7 +17982,8 @@ msgstr ""
 #: src/multiint.cpp:1415
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "اختر الخريطة\n"
+"يمكن أن يرفض اللاعبون خيارك عبر التصويت"
 
 #: src/multiint.cpp:1416
 msgid "Map-Mod!"
@@ -17993,20 +17995,20 @@ msgstr ""
 
 #: src/multiint.cpp:1434
 msgid "Click to set Password"
-msgstr ""
+msgstr "اضغط لتحديد كلمة المرور"
 
 #: src/multiint.cpp:1435
 msgid "Enter password here"
-msgstr ""
+msgstr "أدخل كلمة المرور هنا"
 
 #: src/multiint.cpp:1449
 msgid "Select Player Name"
-msgstr ""
+msgstr "اختر اسم اللاعب"
 
 #: src/multiint.cpp:1473
 #: src/multimenu.cpp:775
 msgid "Alliances"
-msgstr ""
+msgstr "التحالفات"
 
 #: src/multiint.cpp:1494
 msgid "Base"
@@ -18014,7 +18016,7 @@ msgstr ""
 
 #: src/multiint.cpp:1504
 msgid "Map Preview"
-msgstr ""
+msgstr "معاينة الخريطة"
 
 #: src/multiint.cpp:1505
 msgid "Click to see Map"
@@ -18030,12 +18032,13 @@ msgstr ""
 
 #: src/multiint.cpp:1525
 msgid "Random Game Options"
-msgstr ""
+msgstr "إعداداتٌ عشوائيةٌ للعبة"
 
 #: src/multiint.cpp:1526
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "إعداداتٌ عشوائيةٌ للعبة\n"
+"يمكن أن يرفض اللاعبون هذا عبر التصويت"
 
 #: src/multiint.cpp:1537
 msgid "Tech"
@@ -18060,7 +18063,7 @@ msgstr ""
 #: src/multiint.cpp:1550
 #: src/multiint.cpp:1551
 msgid "Start Hosting Game"
-msgstr ""
+msgstr "بدء الاستضافة"
 
 #: src/multiint.cpp:1713
 msgid "DIFFICULTY"
@@ -18131,7 +18134,7 @@ msgstr ""
 #: src/multiint.cpp:7501
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "متفرج"
 
 #: src/multiint.cpp:2305
 #: src/multiint.cpp:4435
@@ -18275,7 +18278,7 @@ msgstr ""
 
 #: src/multiint.cpp:4202
 msgid "Teams locked"
-msgstr ""
+msgstr "إن الفرق مقفلة"
 
 #: src/multiint.cpp:4223
 msgid "Click to change player colour"
@@ -18319,7 +18322,7 @@ msgstr ""
 
 #: src/multiint.cpp:4382
 msgid "Player is downloading"
-msgstr ""
+msgstr "يقوم اللاعب بتحميل بعض الملفات"
 
 #: src/multiint.cpp:4382
 msgid "Click when ready"
@@ -18327,7 +18330,7 @@ msgstr ""
 
 #: src/multiint.cpp:4382
 msgid "Waiting for download"
-msgstr ""
+msgstr "بانتظار انتهاء التحميل"
 
 #: src/multiint.cpp:4454
 msgid "READY?"
@@ -18376,11 +18379,11 @@ msgstr ""
 #: src/multiint.cpp:5964
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr ""
+msgstr "*** لقد صارت كلمة السر [%s] ضروريةً الآن! ***"
 
 #: src/multiint.cpp:5970
 msgid "*** password is NOT required! ***"
-msgstr ""
+msgstr "*** كلمة السر غير ضرورية! ***"
 
 #: src/multiint.cpp:5983
 msgid "This is a map-mod, it can change your playing experience!"
@@ -18448,7 +18451,7 @@ msgstr ""
 
 #: src/multiint.cpp:7033
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "اضغط زر بدء الاستضافة لكي تبدأ باستضافة مباراة."
 
 #: src/multiint.cpp:7250
 #: src/multiint.cpp:7505
@@ -18512,7 +18515,7 @@ msgstr ""
 #: src/multijoin.cpp:300
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "لقد غادر%s اللعبة"
 
 #: src/multijoin.cpp:366
 #, c-format
@@ -18539,7 +18542,7 @@ msgstr ""
 #: src/multijoin.cpp:538
 #, c-format
 msgid "%s is joining the game"
-msgstr ""
+msgstr "سينضم %s إلى اللعبة"
 
 #: src/multijoin.cpp:550
 msgid "Server message:"
@@ -18569,7 +18572,7 @@ msgstr "طبّق الإعدادات الافتراضية وعُد إلى الش�
 #: src/multilimit.cpp:188
 #: src/titleui/protocol.cpp:179
 msgid "Accept Settings"
-msgstr ""
+msgstr "قبول الإعدادات"
 
 #: src/multilimit.cpp:279
 msgid "Limits reset to default values"
@@ -18729,7 +18732,7 @@ msgstr ""
 
 #: src/multiplay.cpp:2012
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "تم تحميل الخريطة!"
 
 #: src/multiplay.cpp:2068
 #, c-format
@@ -18811,12 +18814,12 @@ msgstr ""
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "المقطوعة المشغّلة الآن"
 
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:688
 msgid "Album"
-msgstr ""
+msgstr "الألبوم"
 
 #: src/musicmanager.cpp:545
 msgid "Date"
@@ -18824,7 +18827,7 @@ msgstr ""
 
 #: src/musicmanager.cpp:679
 msgid "Title"
-msgstr ""
+msgstr "عنوان المقطوعة"
 
 #: src/musicmanager.cpp:868
 msgid "MUSIC MANAGER"
@@ -19176,15 +19179,15 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:81
 msgid "GAMES"
-msgstr ""
+msgstr "المباريات"
 
 #: src/titleui/gamefind.cpp:89
 msgid "Refresh Games List"
-msgstr ""
+msgstr "تحديث قائمة المباريات"
 
 #: src/titleui/gamefind.cpp:92
 msgid "Filter Games List"
-msgstr ""
+msgstr "فلترة قائمة المباريات"
 
 #: src/titleui/gamefind.cpp:164
 msgid "Refreshing..."
@@ -19226,7 +19229,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
-msgstr ""
+msgstr "انضم كمتفرج"
 
 #: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
@@ -19260,15 +19263,15 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:663
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "لم نتمكن من العثور على أي مباراةٍ تلائم إصدارك من اللعبة."
 
 #: src/titleui/gamefind.cpp:679
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "يبدو أن هنالك تحديثٌ جديدٌ للعبة!"
 
 #: src/titleui/gamefind.cpp:683
 msgid "No games are available for your version"
-msgstr ""
+msgstr "لا يوجد مبارياتٌ ملائمةٌ للإصدار الذي تملكه"
 
 #: src/titleui/gamefind.cpp:687
 msgid "Game is full"
@@ -19300,7 +19303,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:712
 msgid "Connection Error"
-msgstr ""
+msgstr "خطأٌ في الاتصال"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
@@ -19321,19 +19324,19 @@ msgstr ""
 
 #: src/titleui/protocol.cpp:79
 msgid "CONNECTION"
-msgstr ""
+msgstr "الاتصال"
 
 #: src/titleui/protocol.cpp:84
 msgid "Lobby"
-msgstr ""
+msgstr "قاعة انتظار"
 
 #: src/titleui/protocol.cpp:85
 msgid "IP"
-msgstr ""
+msgstr "عنوان IP"
 
 #: src/titleui/protocol.cpp:201
 msgid "IP Address or Machine Name"
-msgstr ""
+msgstr "عنوان IP أو اسم الجهاز"
 
 #: src/transporter.cpp:300
 #: src/transporter.cpp:348
