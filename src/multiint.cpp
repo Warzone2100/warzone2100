@@ -7131,6 +7131,11 @@ void WzMultiplayerOptionsTitleUI::start()
 		ingame.localOptionsReceived = false;
 
 		PLAYERSTATS	nullStats;
+		for (size_t i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+		{
+			setMultiStats(i, nullStats, true);
+		}
+
 		loadMultiStats((char*)sPlayer, &nullStats);
 		lookupRatingAsync(selectedPlayer);
 
