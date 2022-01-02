@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-01 15:04\n"
+"PO-Revision-Date: 2022-01-02 03:03\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -475,23 +475,23 @@ msgstr "تمسك بمواقعك وتصدى للهجمات المعادية، ث�
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "عملية نقل: اعترض الرتل العسكري."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr ""
+msgstr "تشير البيانات التي جمعناها من قاعدة «الرابطة» إلى تواجد «برنامج نيكسوس المتسلل» في أنظمتهم الحاسوبية."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "لقد تمكنا من الوصول إلى الرسالة التالية قبل أن يعطل «نيكسوس» نفسه."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "يقوم أحد قادة الأعداء باستلام شحنةٍ من «نيكسوس» في هذا المكان."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "قم بعد وصولك إلى منطقة الإنزال بالقضاء على هذا القائد واستعادة الشحنة."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -499,7 +499,7 @@ msgstr "ثم عُد إلى منطقة الإنزال."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr ""
+msgstr "لدينا أخبارٌ مقلقةٌ بخصوص «نازدا»."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -541,49 +541,49 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «بيتا»: دمّر قاعدة الأعداء الجوية واسترجع الطائرات العمودية."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "تشير التحاليل التي أجريناها على مسارات الرحلات الجوية إلى أن الطائرات العمودية التابعة لـ «الرابطة» تعود إلى هذا المكان."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «بيتا»: دمّر قاعدة الأعداء الجوية واسترجع الطائرات العمودية"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "تقع القاعدة الجوية المعادية هنا، وهي تمثل الهدف الرئيسي لنا."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "اقضِ على جميع القوات التابعة لـ «الرابطة» واستعد كل القطع الأثرية التي تعثر عليها."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "مهمةٌ ثانوية: دمّر سفينة الأعداء الجوية أو أجبرها على الانسحاب"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "إن «الرابطة» تعمل على اعتقال جميع المدنيين في هذه المنطقة."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "لتقوم بعد ذلك بالطيران بهم إلى مكانٍ مجهول."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "قم بتدمير السفينة الجوية التابعة لـ «الرابطة» أو أجبرها على مغادرة المنطقة."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr ""
+msgstr "وأنقذ أكبر عددٍ ممكنٍ من المدنيين."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "عملية نقل: دمر المفاعل"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
@@ -2001,7 +2001,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:53
 #: po/custom/fromJson.txt:1018
 msgid "Automatically targets VTOLs"
-msgstr ""
+msgstr "يستهدف الطائرات العمودية تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[3]
@@ -2071,7 +2071,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:48
 #: po/custom/fromJson.txt:1012
 msgid "Automatically targets VTOL"
-msgstr ""
+msgstr "يستهدف الطائرة العمودية تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA3.text[1]
@@ -2615,7 +2615,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:203
 #: po/custom/fromJson.txt:3337
 msgid "Increases VTOL factory output"
-msgstr ""
+msgstr "سيزداد إنتاج مصانع الطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[3]
@@ -2626,7 +2626,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:204
 #: po/custom/fromJson.txt:458
 msgid "All VTOL factories upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل مصانع الطائرات العمودية تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[0]
@@ -2637,7 +2637,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:206
 #: po/custom/fromJson.txt:6127
 msgid "VTOL Rearming Times Reduced"
-msgstr ""
+msgstr "تقليل وقت إعادة تسليح الطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
@@ -2648,7 +2648,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:981
 msgid "Automated VTOL Rearming"
-msgstr ""
+msgstr "إعادة تسليحٍ آلية للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -4524,7 +4524,7 @@ msgstr "حتى لو هزمتموني هنا، فسأنهض مجدداً."
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "وحال تطهيري للعالم بالنار، سأدمركم أنتم ومشروعكم التافه!!"
+msgstr "وكما طهرت العالم سابقاً بالنار، سأدمركم أنتم ومشروعكم التافه!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -4672,47 +4672,47 @@ msgstr "«نازدا» هي وكالة شمال أمريكا للدفاع الا
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "تم تأسيس «نازدا» عام 2076 لحماية أمريكا الشمالية من الهجمات بالأسلحة التقليدية أو النووية. تم الشروع في بناء نظام القمر الصناعي الدفاعي في 2081 وتم الانتهاء منه في 2082."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "وفي عام 2085، قامت الأقمار الصناعية التابعة «لنازدا» بإطلاق رؤوسها النووية نحو الأرض."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
+msgstr "وبالإضافة لذلك، كان هنالك مواقع إطلاقٍ أرضية. صحيحٌ أن معظمها قد تم تدميره عن طريق الضربات النووية المضادة، ولكن من المؤكد أن بعض المواقع قد نجت من هذه الضربات، وهي موجودةٌ في أماكن متفرقة من القارة."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr ""
+msgstr "لقد احتوت الأقمار الصناعية التابعة لـ «نازدا» على أسلحة ليزر نبضية يمكنها إسقاط الصواريخ المتوجهة نحو أمريكا الشمالية."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
+msgstr "لم تتمكن الأقمار الليزرية من إطلاق نيرانها عند وقوع الضربات المعاكسة، ولو تمكنت لاستطاعت أن تلحق ضرراً بالغاً بالأهداف الأرضية."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
+msgstr "لقد استطاعت كل الصواريخ النووية المتوجهة نحو أمريكا الشمالية إصابة أهدافها."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr ""
+msgstr "لقد صرنا على علمٍ بأن «نيكسوس» يبحث عن مقر «نازدا» المركزي في القطاع الشرقي. لقد كان هذا المقر واحداً من المراكز الرئيسية المسؤولة عن التحكم بالأقمار الصناعية."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr ""
+msgstr "إذا استطاع العثور على المركز، ولم يكن مدمراً، فسيصبح «نيكسوس» قادراً على التحكم بالأقمار الصناعية."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
-msgstr ""
+msgstr "لقد ادعى «نيكسوس» أنه قد استطاع فعلاً تدمير العالم كله."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "فيما يلي بيانٌ من «نازدا»..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
-msgstr ""
+msgstr "يجب أن نتأكد من أنه لن يكون قادراً على تكرار ذلك مجدداً."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
@@ -4768,15 +4768,15 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "يا محاربي «الرابطة»: إنني أسعى إلى معرفة موقع مقر «نازدا» المركزي."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "إنه في مكانٍ ما ضمن أراضيكم."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr ""
+msgstr "جدوه لي، وسأقدم لكم لقاء ذلك المزيد من الأسلحة لمساعدتكم في حربكم ضد «المشروع»."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -6324,7 +6324,7 @@ msgstr "سيتم تحديث كل الشاحنات تلقائياً"
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[3]
 #: po/custom/fromJson.txt:470
 msgid "All VTOLs upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الطائرات العمودية تلقائياً"
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_1.name
@@ -7077,14 +7077,14 @@ msgstr "مركز صيانةٍ آلي"
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
 #: po/custom/fromJson.txt:971
 msgid "Automated VTOL Rearming Mk2"
-msgstr ""
+msgstr "إعادة تسليحٍ آلية للطائرات العمودية (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #: po/custom/fromJson.txt:975
 msgid "Automated VTOL Rearming Mk3"
-msgstr ""
+msgstr "إعادة تسليحٍ آلية للطائرات العمودية (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[1]
@@ -12407,7 +12407,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VP.text[1]
 #: po/custom/fromJson.txt:4716
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr ""
+msgstr "مسؤولةٌ عن صيانة الطائرات العمودية وإعادة تزويدها بالوقود والذخيرة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials02.name
@@ -12528,7 +12528,7 @@ msgstr "يجب أن تملك مصنع السايبورغ لكي تنتجه"
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[3]
 #: po/custom/fromJson.txt:4813
 msgid "Requires heavy VTOL factory to produce"
-msgstr ""
+msgstr "يجب أن تملك مصنع طائراتٍ عموديةٍ ثقيلة لإنتاج هذا التصميم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[0]
@@ -13072,7 +13072,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTU1.text[3]
 #: po/custom/fromJson.txt:5153
 msgid "Select new targets to continue the VTOL strikes"
-msgstr ""
+msgstr "حدد أهدافاً جديدة لمواصلة ضربات الطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_M_AC3.text[1]
@@ -13244,7 +13244,7 @@ msgstr "السرعة: بطيئة"
 #. data/mp/messages/resmessagesall.json: $.RES_V_P_V1.text[2]
 #: po/custom/fromJson.txt:5270
 msgid "Speed: VTOL"
-msgstr ""
+msgstr "السرعة: طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
@@ -14387,7 +14387,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0VTolFactory1.name
 #: po/custom/fromJson.txt:6019
 msgid "VTOL Factory"
-msgstr ""
+msgstr "مصنع الطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAM-VTOL.name
@@ -14445,13 +14445,13 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.V-Tol02.name
 #: po/custom/fromJson.txt:6050
 msgid "VTOL II"
-msgstr ""
+msgstr "دفعٌ عمودي 2"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:6053
 msgid "VTOL III"
-msgstr ""
+msgstr "دفعٌ عمودي 3"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14567,7 +14567,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[2]
 #: po/custom/fromJson.txt:6121
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr ""
+msgstr "يجب أن تبني منصات إعادة تسليح الطائرات العمودية لكي تستمر هذه الطائرات بالتحليق"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Missile-VTOL-AT.name
@@ -14639,7 +14639,7 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6175
 msgid "VTOL"
-msgstr ""
+msgstr "دفعٌ عمودي"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -16951,15 +16951,15 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:181
 msgid "Select all VTOLs"
-msgstr ""
+msgstr "حدّد كل الطائرات العمودية"
 
 #: src/input/keyconfig.cpp:182
 msgid "Select all fully-armed VTOLs"
-msgstr ""
+msgstr "حدّد كل الطائرات العمودية المسلحة بالكامل"
 
 #: src/input/keyconfig.cpp:183
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "حدّد كل الطائرات العمودية المسلحة بالكامل والتي لا تنتمي إلى مجموعةٍ معينة"
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Wheels"
@@ -17035,7 +17035,7 @@ msgstr "حدد مصنع السايبورغ التالي"
 
 #: src/input/keyconfig.cpp:204
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "اختر مصنع الطائرات العمودية التالي"
 
 #: src/input/keyconfig.cpp:205
 msgid "Jump to next Factory"
@@ -17055,7 +17055,7 @@ msgstr "انتقل إلى مصنع السايبورغ التالي"
 
 #: src/input/keyconfig.cpp:209
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "انتقل إلى مصنع الطائرات العمودية التالي"
 
 #: src/input/keyconfig.cpp:211
 msgid "Toggle Debug Mappings"
