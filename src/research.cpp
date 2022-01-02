@@ -94,6 +94,7 @@ static void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD o
                                       UDWORD newCompInc, UBYTE player);
 static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
                             UDWORD newCompInc);
+
 static void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                         UDWORD oldCompInc, UDWORD newCompInc);
 
@@ -1396,9 +1397,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	replaceDroidComponent(apsDroidLists[player], oldType, oldCompInc, newCompInc);
 	replaceDroidComponent(mission.apsDroidLists[player], oldType, oldCompInc, newCompInc);
 	replaceDroidComponent(apsLimboDroids[player], oldType, oldCompInc, newCompInc);
-
-	//check thru the templates
-	enumerateTemplates(player, [oldType, oldCompInc, newCompInc](DROID_TEMPLATE* psTemplates) {
+	const auto replaceComponentInTemplate = [oldType, oldCompInc, newCompInc](DROID_TEMPLATE* psTemplates) {
 		switch (oldType)
 		{
 		case COMP_BODY:
@@ -1428,8 +1427,23 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 			return true;
 		}
 		return true;
-	});
-
+	};
+	//check thru the templates
+	enumerateTemplates(player, replaceComponentInTemplate);
+	// also check build queues
+	STRUCTURE *psNBuilding = nullptr;
+	for (STRUCTURE *psCBuilding = apsStructLists[player]; psCBuilding != nullptr; psCBuilding = psNBuilding)
+	{
+		/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
+		psNBuilding = psCBuilding->psNext;
+		if ((psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_FACTORY ||
+			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_CYBORG_FACTORY ||
+			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_VTOL_FACTORY) &&
+			psCBuilding->pFunctionality->factory.psSubject != nullptr)
+		{
+			replaceComponentInTemplate(psCBuilding->pFunctionality->factory.psSubject);
+		}
+	}
 	replaceStructureComponent(apsStructLists[player], oldType, oldCompInc, newCompInc, player);
 	replaceStructureComponent(mission.apsStructLists[player], oldType, oldCompInc, newCompInc, player);
 }
