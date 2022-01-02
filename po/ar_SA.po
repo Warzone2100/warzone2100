@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-02 03:03\n"
+"PO-Revision-Date: 2022-01-02 15:02\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -397,13 +397,13 @@ msgstr "يجب أن تدافع عنها وألا تفقد السيطرة علي�
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «بيتا»: دافع وحصّن"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
+msgstr "احرص على تحصين محيط القاعدة وعلى بناء مدافع مضادةٍ للطائرات."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -439,19 +439,19 @@ msgstr "شكّل فريق إنقاذ لاستعادة السفينة الفضا�
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr ""
+msgstr "بيانٌ أثناء الرحلة"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "يبحث فريق «بيتا» عن تقنية الإقلاع والهبوط العمودي."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "والتي يُعتقد أنها موجودةٌ في هذه المنطقة داخل قاعدةٍ جويةٍ عائدةٍ إلى ما قبل «الانهيار»."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "يتعرض فريق «بيتا» لهجومٍ عنيف"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
@@ -504,40 +504,40 @@ msgstr "لدينا أخبارٌ مقلقةٌ بخصوص «نازدا»."
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "عملية نقل: ابحث عن الرتل ودمره"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr ""
+msgstr "إن الشحنة التي استعدتها لم تكن إلا طعماً لنا."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
-msgstr ""
+msgstr "لقد رصدنا رتلاً آخر يتقدم على طول النهر."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr ""
+msgstr "يجب عليك اعتراضه والاستيلاء على حمولته."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr ""
+msgstr "ومن المرجح أن تحلق الطائرات العمودية على مقربةٍ منه لحمايته."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "عملية النقل: أنقذ المدنيين من معسكر الاحتجاز"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "تعمل «الرابطة» على محاكمة وإبادة المدنيين في هذه القاعدة."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "يجب عليك إنقاذ المدنيين."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "ومن ثم تدمير المعسكر."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
@@ -587,53 +587,53 @@ msgstr "عملية نقل: دمر المفاعل"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "تسعى «الرابطة» لجمع معلوماتٍ عن المفاعلات النووية."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "ويجب إيقافهم."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "توجه من منطقة الإنزال إلى المفاعل، وقم بتدميره."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "لا تسمح لـ «الرابطة» بتشغيل المفاعل."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «بيتا»: سيطر على مقر «نازدا» المركزي"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "قم بالسيطرة على مقر «نازدا» المركزي قبل أن يتمكن «نيكسوس» و«الرابطة» من الاستفادة منه."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "عملية نقل: مركز الاتصال بالقمر الصناعي"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr ""
+msgstr "إن «نيكسوس» يفتش عن بنوك الذواكر التي ما تزال تعمل إلى الآن."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
+msgstr "لقد انتقل جزءٌ من وعيه إلى موقع تحكمٍ بعيدٍ تابعٍ لـ «نازدا»."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "لقد شهدنا انطلاق رسائل إلكترونية من هذا الموقع إلى مدارٍ عالي الارتفاع."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "لقد أعاد «نيكسوس» ربط نفسه بأقمار «نازدا» الصناعية."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr ""
+msgstr "استعمل السفينة الطائرة لنقل قوةٍ هجوميةٍ إلى هذا الموقع."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
@@ -641,62 +641,62 @@ msgstr "دمّر الموقع وعُد إلى قاعدتك."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "عملية نقل: دمّر بطاريات صواريخ الأرض-جو المعادية"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr ""
+msgstr "حتى تتمكن من الهروب، يجب عليك تدمير مواقع صواريخ الأرض-جو المنتشرة حول قاعدتك."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
+msgstr "قم بالطيران إلى منطقة الإنزال، ثم توجه براً نحو مواقع الصواريخ لتدميرها."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "عملية نقل: أسس ملاذاً آمناً"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "لقد تأكدنا من الصاروخ متجهٌ نحو قاعدة «ألفا»."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
+msgstr "يجب عليك تأسيس ملاذٍ آمنٍ لإجلاء الموجودين في قاعدة «بيتا»."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr ""
+msgstr "اقضِ على كل الأعداء الموجودين في المنطقة لتأمينها."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr ""
+msgstr "وبعد إقامة الملاذ الآمن، عُد إلى منطقة الإنزال لكي تتلقى منا المزيد من التوجيهات."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "مهمةٌ قرب قاعدة «بيتا»: انجُ بحياتك وأخلِ القاعدة! اجلب معك شاحنة"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr ""
+msgstr "أيها القائد: هنالك أخبارٌ فظيعة."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "لقد تم تدمير قاعدة «ألفا» بالضربة الصاروخية النووية."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr ""
+msgstr "لا تعلم «الرابطة» بأمر الضربة النووية وقامت بإرسال وحداتٍ جويةٍ إلى قاعدتك."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr ""
+msgstr "لقد اعترضنا هذه الرسالة قبل عدة دقائق..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
-msgstr ""
+msgstr "يجب أن تنقل أكبر عددٍ ممكنٍ من قواتك."
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
@@ -707,21 +707,21 @@ msgstr "بالتوفيق أيها القائد."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr ""
+msgstr "عملية نقل: القطاع الشمالي"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
+msgstr "تهانينا على نجاحك في إجلاء قواتك من قاعدة «بيتا»."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "لقد تمكن «نيكسوس» من الوصول إلى ترسانة الأسلحة النووية وهو عازمٌ على تدمير «المشروع»."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr ""
+msgstr "خُذ قواتك إلى القطاع الشمالي"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
@@ -740,7 +740,7 @@ msgstr "عملية نقل: شيّد قاعدةً أمامية"
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr ""
+msgstr "أيها القائد: إن نجاح «المشروع» يعتمد عليك."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
@@ -749,11 +749,11 @@ msgstr "قم بتأمين منطقة الإنزال، ثم شيّد قاعدةً
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr ""
+msgstr "عملية نقل: إحداثيات موقع إطلاق الصواريخ"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr ""
+msgstr "لقد حددنا الموقع الذي أطلقت منه الصواريخ."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
@@ -761,7 +761,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
+msgstr "سنرسل لك إحداثياتٍ لمنطقة إنزالٍ قريبةٍ من منشآت الإطلاق."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -1105,7 +1105,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr ""
+msgstr "لقد وردنا التقرير الاستخباراتي التالي... فريق جاما"
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
@@ -1166,7 +1166,7 @@ msgstr "لقد وردتنا رسالةٌ عبر الراديو"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
-msgstr ""
+msgstr "لقد وردنا التقرير الاستخباراتي التالي."
 
 #: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
@@ -4012,19 +4012,19 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "اعثر على الوحدات التي كانت موجودةً في السفينة المُسقطة وأنقذهم"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "أنقذ المدنيين من «الرابطة» قبل أن يتم القبض على عددٍ كبيرٍ منهم"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "قم بالتأمين على مركز الاتصال واحمه من «الرابطة»"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "أرسل سفينةً تحمل شاحنة واصمد أمام هجوم «الرابطة» إلى أن ينتهي الوقت"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4632,7 +4632,7 @@ msgstr "الفصل الثاني"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "القطاع الشرقي"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
@@ -4644,7 +4644,7 @@ msgstr "أثناء الرحلة الجوية إلى القطاع الشرقي"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr ""
+msgstr "فريق «ألفا» متوجهٌ إلى قاعدة «بيتا»"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
@@ -4652,19 +4652,19 @@ msgstr "يجب أن تدافع عن القاعدة وألا تخسرها مهم�
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "الرابطة"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
-msgstr ""
+msgstr "أيها القائد: لقد رصدنا إطلاق صاروخٍ آخر."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "وهو متجهٌ إلى موقعك على الأرجح."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr ""
+msgstr "يجب أن تبدأ الإخلاء الفوري لقاعدة «بيتا» وأن تتوجه إلى الملاذ الآمن."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
@@ -4716,55 +4716,55 @@ msgstr "يجب أن نتأكد من أنه لن يكون قادراً على ت�
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr ""
+msgstr "تشير أبحاثنا إلى أن هذه الأنظمة كانت تابعةً لنظام التحكم المركزي الخاص بأقمار «نازدا» الصناعية."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr ""
+msgstr "لقد صرنا متأكدين الآن أن «نيكسوس» كان مسؤولاً عن «الانهيار»."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr ""
+msgstr "لقد قام الخبراء الفنيون التابعون لـ «نازدا» بتعطيل الأنظمة المصابة أثناء المراحل الأولى من «الانهيار» وذلك بهدف الحد من انتشار «نيكسوس»، وربما هذا هو السبب الذي منع الأقمار الليزرية من العمل أثناء إطلاق الضربات المعاكسة."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr ""
+msgstr "وقد أدت النبضات المغنا-نووية التي تبعت ذلك إلى إزالة كل المعلومات الموجودة على قسمٍ كبير من بنوك الذاكرة التابعة لـ «نازدا»، مدمرةً بذلك معالجه المركزي، ومرسلةً موجاتٍ صدمية متفجرة عبر «نيكسوس»."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr ""
+msgstr "لقد تم حرق «نيكسوس» بالكامل بعد سحق أقسامٍ واسعةٍ من وعيه أثناء الضربات النووية المعاكسة."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "أيها القائد: لقد شهدنا انطلاق رسائل إلكترونية من هذا الموقع إلى مدارٍ عالي الارتفاع."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "لقد أعاد «نيكسوس» ربط نفسه بأقمار «نازدا» الصناعية."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "إن هذا يشكل خطراً داهماً على «المشروع» وعلى حياتنا."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr ""
+msgstr "لقد قمنا بتحليل كل الأنظمة الموجودة في مقر «نازدا» المركزي، ولم تترك النتائج مجالاً للشك بأن «الرابطة» قد نشرت «فيروس نيكسوس المتسلل» فيه."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr ""
+msgstr "لقد كانوا ينوون استعمال المفاعل النووي لمد الطاقة إلى شبكةٍ واسعةٍ من الحواسيب التي تعود إلى ما قبل «الانهيار»."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr ""
+msgstr "أيها القائد: لقد رصدنا للتو انطلاق صاروخٍ من هذه الإحداثيات."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr ""
+msgstr "سيقوم فريق «غاما» بإرسال فريقٍ إلى موقع الإطلاق لاستكشافه ولمنع أي صواريخ أخرى من الانطلاق."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr ""
+msgstr "إن التفسير الممكن الوحيد لذلك هو أن «نيكسوس» قد سيطر على هذا الموقع. لم نتمكن من تحديد ما إذا كان الصاروخ يحمل رأساً نووياً ولم نعرف وجهته، ولذا ننصحك ببدء التحضيرات لإجلاء كل القوات الموجودة في قاعدتك."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
@@ -4788,11 +4788,11 @@ msgstr "وهم ليسوا جزءاً من الآلة."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr ""
+msgstr "يا محاربي الرابطة: هاجموا ودمروا كل من يقاوم الآلة."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
-msgstr ""
+msgstr "هجوم! أزيلوا أي وجودٍ لهم في هذه المنطقة!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
@@ -4804,47 +4804,47 @@ msgstr "إن أتباع «المشروع» لا ينتمون للآلة، ولق
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr ""
+msgstr "يجب أن يسقطوا أمام عظمة «الرابطة»."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
-msgstr ""
+msgstr "هاجموا ودمروا كل من يقاوم الآلة."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
-msgstr ""
+msgstr "هجوم!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr ""
+msgstr "يا محاربي «الرابطة»: لقد وهبنا «نيكسوس» قوة الآلة لكي نتمكن من تدمير كل أعدائنا."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr ""
+msgstr "لقد طلب «نيكسوس» منا الآن أن نسحق «المشروع»."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
-msgstr ""
+msgstr "طهروا المنطقة ودمروهم!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
-msgstr ""
+msgstr "يا محاربي الرابطة: لقد أبليتم بلاءً حسناً."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
-msgstr ""
+msgstr "والجائزة التي تستحقونها ستصلكم قريباً."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr ""
+msgstr "يحاول «المشروع» الهروب من قاعدته وسرقة تقنياتكم."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "يجب أن توقفوهم!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr ""
+msgstr "جارٍ فك تشفير الرسالة..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -4852,7 +4852,7 @@ msgstr "الفصل الثالث"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "القطاع الشمالي"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -4872,11 +4872,11 @@ msgstr "بداية البيان:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "لقد أكد لنا العاملون في قاعدة «بيتا» أن الصواريخ النووية التي استهدفت قواعد «ألفا» و«بيتا» قد أطلقت من منشأةٍ لإطلاق الصواريخ تحت الأرض تقع ضمن قطاعهم."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr ""
+msgstr "ويعمل فريق «جاما» الآن على استكشاف موقع المنشأة ومراقبة أنشطة «نيكسوس»."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -5501,14 +5501,14 @@ msgstr "قطعة «الرشاش» الأثرية"
 #: data/mp/messages/strings/names.txt:571
 #: po/custom/fromJson.txt:4138
 msgid "New Paradigm Command Center"
-msgstr ""
+msgstr "مركز قيادة «النهج الحديث»"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CommandCentreCO.name
 #: data/mp/messages/strings/names.txt:572
 #: po/custom/fromJson.txt:1443
 msgid "Collective Command Center"
-msgstr ""
+msgstr "مركز قيادة «الرابطة»"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NX-CruiseSite.name
@@ -17821,7 +17821,7 @@ msgstr ""
 
 #: src/mission.cpp:2296
 msgid "OBJECTIVE FAILED"
-msgstr ""
+msgstr "لقد فشلت في تحقيق الهدف"
 
 #: src/mission.cpp:2325
 msgid "Continue Game"
@@ -17939,7 +17939,7 @@ msgstr ""
 
 #: src/multiint.cpp:1175
 msgid "Satellite Uplink disabled."
-msgstr ""
+msgstr "تم تعطيل مركز الاتصال بالقمر الصناعي."
 
 #: src/multiint.cpp:1176
 msgid "Laser Satellite disabled."
@@ -19421,7 +19421,7 @@ msgstr ""
 
 #: src/wzapi.cpp:2346
 msgid "YOU WERE DEFEATED!"
-msgstr ""
+msgstr "لقد هُزمت!"
 
 #: src/wzscriptdebug.cpp:1905
 msgid "Script Debugger"
