@@ -1615,8 +1615,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 	const bool isSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
 	if (isSpectator)
 	{
-		console(_("%s Hitpoints %d/%d - Experience %d, %s"), droidGetName(psDroid), psDroid->body, psDroid->originalBody,
-		        psDroid->experience / 65536, getDroidLevelName(psDroid));
+		console(_("%s - Hitpoints %d/%d - ID %d - %s"), droidGetName(psDroid), psDroid->body, psDroid->originalBody, psDroid->id, getDroidLevelName(psDroid));
 		return;
 	}
 
