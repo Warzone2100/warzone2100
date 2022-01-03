@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-02 15:02\n"
+"PO-Revision-Date: 2022-01-03 03:04\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -324,7 +324,7 @@ msgstr "ولقد أكدت أبحاثنا الأولية عليها أنها ست
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "إن فريق «بيتا» يتعرض لهجومٍ عنيف، وهم بحاجةٍ إلى مساعدتك."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
@@ -364,7 +364,7 @@ msgstr "تهانينا أيها القائد. لقد هُزم «النهج ال�
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "لقد كان «برنامج نيكسوس المتسلل» موجوداً في أنظمة «النهج الحديث»."
+msgstr "لقد كان «برنامج نيكسوس المقتحم» موجوداً في أنظمة «النهج الحديث»."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -479,7 +479,7 @@ msgstr "عملية نقل: اعترض الرتل العسكري."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "تشير البيانات التي جمعناها من قاعدة «الرابطة» إلى تواجد «برنامج نيكسوس المتسلل» في أنظمتهم الحاسوبية."
+msgstr "تشير البيانات التي جمعناها من قاعدة «الرابطة» إلى تواجد «برنامج نيكسوس المقتحم» في أنظمتهم الحاسوبية."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
@@ -731,7 +731,7 @@ msgstr "قم بالتأمين على منطقة الإنزال بعد وصولك
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "سيتواصل فريق «غاما» معك هناك."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -757,7 +757,7 @@ msgstr "لقد حددنا الموقع الذي أطلقت منه الصواري
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr ""
+msgstr "لقد كان هنالك صاروخٌ واحدٌ على الأقل في موقع «نازدا»."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
@@ -767,56 +767,56 @@ msgstr "سنرسل لك إحداثياتٍ لمنطقة إنزالٍ قريبة�
 #: data/base/messages/strings/cam3strings.txt:61
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:1
 msgid "Coordinate Download Completed."
-msgstr ""
+msgstr "اكتملت عملية تحميل الإحداثيات."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
+msgstr "قم بالتأمين على منطقة الإنزال، ثم توجه براً إلى مواقع منشآت الإطلاق لتدميرها."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr ""
+msgstr "مهمةٌ في القطاع الشمالي: انفجارٌ نووي"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
+msgstr "يجب على كل الوحدات أن تغادر المنطقة قبل انفجار الرأس الحربي."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
+msgstr "لا يمكننا القيام بعملياتٍ نقلٍ جوية، مما يحتم عليك التنقل براً."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
+msgstr "من المفترض أن تحميك سلسلة الجبال الشرقية من الانفجار."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
-msgstr ""
+msgstr "إن الوادي هو فرصتك الوحيدة للهروب."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "آخر التطورات بخصوص الفريق البعيد"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
+msgstr "لقد فقدنا الاتصال بالفريق الذي أرسلناه بعيداً، وذلك بعد حدوث الانفجارات النووية."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
+msgstr "تشير الرسالة الأخيرة الصادرة منهم إلى أنهم كانوا عائدين إلى القاعدة."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr ""
+msgstr "مهمةٌ في القطاع الشمالي: ساعد فريق «جاما»"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr ""
+msgstr "لقد أوكلت إليك مهمة مساعدة فريق «جاما»."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr ""
+msgstr "وبعد الوصول إلى قاعدة «جاما»، ساعد القوات المتواجدة هناك على تأمين المنطقة لحمايتها من أي هجماتٍ أخرى لقوات «نيكسوس»."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -828,15 +828,15 @@ msgstr "لقد هزمنا نيكسوس أيها القائد."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr ""
+msgstr "ولكن لسوء الحظ، انخفض أداء أنظمتنا بسبب إصابتها بـ «نيكسوس»، ونحن نعمل على حل ذلك."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
-msgstr ""
+msgstr "لقد وصلتنا هذه الرسالة الآن."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "عملية نقل: اكتشاف قوةٍ من فريق «ألفا»"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -844,15 +844,15 @@ msgstr "ابعث بقوةٍ استطلاعية إلى هذه الإحداثيا�
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr ""
+msgstr "حدد ما إذا كانوا تابعين حقاً لفريق «ألفا»، وإذا كانوا كذلك فعلاً، فأنقذهم وعُد معهم إلى منطقة الإنزال."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
+msgstr "إن هذه المجموعة تتبع لفريق «ألفا». أنقذها ورافقها إلى منطقة الإنزال."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr ""
+msgstr "مهمةٌ في القطاع الشمالي: تقرير فريق «ألفا»"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
@@ -864,19 +864,19 @@ msgstr "أيها القائد: لقد استعدنا هذه القطعة الأ�
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
-msgstr ""
+msgstr "يمكن أن نكسب فوائد جمّة من إجراء الأبحاث عليها."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr ""
+msgstr "إن قوات الأعداء ........ من هذه الإحداثيات."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr ""
+msgstr "دافع عن القاعدة و...... الـ ......."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr ""
+msgstr "ابحث عن .... ودمّره ...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
@@ -908,11 +908,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
-msgstr ""
+msgstr "أيها القائد: إن هجومك على ...."
 
 #: data/base/messages/strings/cam3strings.txt:98
 msgid "NEXUS exiting system."
-msgstr ""
+msgstr "«نيكسوس» يغادر نظامنا."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
@@ -920,23 +920,23 @@ msgstr "لقد وردتنا رسالةٌ عبر الراديو من فريقٍ �
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr "أيها القائد: سنحاول أن نعود إلى قاعدتنا."
+msgstr "أيها القائد: نحن نحاول العودة إلى قاعدتنا."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
-msgstr ""
+msgstr "نحن موجودون هنا الآن."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr ""
+msgstr "قم بتوجيه قواتنا وأشرف عليها."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
-msgstr ""
+msgstr "لقد تم نقل مراكز التحكم بنجاح."
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr ""
+msgstr "سندخل منطقةً جديدة."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
@@ -944,80 +944,80 @@ msgstr "لقد وردتنا رسالةٌ عبر الراديو..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr ""
+msgstr "لقد تواصل عددٌ من عناصر فريق «غاما» معنا."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
+msgstr "وهم يدعون أنهم متحررون من «نيكسوس»، كما عرضوا علينا استخدام قاعدتهم كموقعٍ لتوجيه عملياتنا."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr ""
+msgstr "جارٍ تحميل إحداثيات القاعدة."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr ""
+msgstr "مهمةٌ في القطاع الشمالي: أقمار الليزر الصناعية"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr ""
+msgstr "لقد استشعرنا طفراتٍ قويةً في الطاقة قادمةً من المدار الأرضي المرتفع."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr ""
+msgstr "لقد صارت أقمار الليزر الصناعية مشحونةً وهي متوجهةٌ نحونا."
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
-msgstr ""
+msgstr "إن القاعدة الثانية لفريق «غاما» موجودةٌ في هذا الموقع."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr ""
+msgstr "ليس لدينا الكثير من الوقت لإخلاء هذه القاعدة والانتقال إلى قاعدة «غاما»."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr ""
+msgstr "إن أقمار الليزر الصناعية لا تعمل بشكلٍ سليم، ولم تتمكن من إطلاق نيرانها."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
-msgstr ""
+msgstr "إنهم يقومون بتوجيه نيرانهم نحو هذا الموقع."
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
-msgstr ""
+msgstr "يجب أن نخلي القاعدة سريعاً."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr ""
+msgstr "لقد أبلغنا فريق «غاما» عن وجود منشأةٍ لإطلاق الصواريخ في هذا الموقع."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr ""
+msgstr "وهم يعتقدون أن المنشأة تحتوي على صواريخٍ قادرةٍ على الوصول إلى المدارات الأرضية المرتفعة."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr ""
+msgstr "سيطر على هذه المنشأة مهما كلفك الأمر."
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
-msgstr ""
+msgstr "لقد سيطرنا على منشآت إطلاق الصواريخ."
 
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr ""
+msgstr "مهمةٌ في القطاع الشمالي: رموز الصواريخ السرية"
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
-msgstr ""
+msgstr "أيها القائد: هنالك صواريخٌ متواجدةٌ الآن في منشأة الإطلاق."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr ""
+msgstr "إن «نيكسوس» يمنعنا من الوصول إلى الرموز السرية التي تسمح التحكم بالصواريخ."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
-msgstr ""
+msgstr "إن «نيكسوس» موجودٌ في أنظمتنا."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
@@ -1037,7 +1037,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
-msgstr ""
+msgstr "نحن نحاول الوصول إلى الرموز السرية الضرورية للتحكم بالصواريخ."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
@@ -1049,7 +1049,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr ""
+msgstr "آخر تطورات «المشروع»: لقد عرفنا رمز الصواريخ من المستوى 1."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
@@ -1061,7 +1061,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr ""
+msgstr "آخر تطورات «المشروع»: لقد عرفنا رمز الصواريخ من المستوى 2."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
@@ -1073,7 +1073,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr ""
+msgstr "آخر تطورات «المشروع»: لقد عرفنا رمز الصواريخ من المستوى 3."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
@@ -4036,7 +4036,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-2.js:261
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "أنقذ فريق «ألفا» من «نيكسوس»"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
@@ -4532,7 +4532,7 @@ msgstr "وبعد ذلك، قام «نيكسوس» بإزالة نفسه من ا�
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr "لسنا متأكدين بعد من ماهية «نيكسوس» أو من الشخص أو الشيء الذي يقوم بتوجيهه، ولكن تشير أبحاثنا الأولية إلى ارتباط «برنامج نيكسوس المتسلل» بمؤسسة «ريد»، التي طورت وصلة المشبك العصبي."
+msgstr "لسنا متأكدين بعد من ماهية «نيكسوس» أو من الشخص أو الشيء الذي يقوم بتوجيهه، ولكن تشير أبحاثنا الأولية إلى ارتباط «برنامج نيكسوس المقتحم» بمؤسسة «ريد»، التي طورت وصلة المشبك العصبي."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
@@ -4596,7 +4596,7 @@ msgstr "يا «نيكسوس»: لقد استرجعنا تقنية المشبك �
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
-msgstr "يعتبر «برنامج نيكسوس المتسلل» صنفاً من الطفيليات الحاسوبية التي تحور نفسها بنفسها، مما يجعل إزالته من الأنظمة بشكلٍ نهائي أمراً صعباً."
+msgstr "يعتبر «برنامج نيكسوس المقتحم» صنفاً من الطفيليات الحاسوبية التي تحور نفسها بنفسها، مما يجعل إزالته من الأنظمة بشكلٍ نهائي أمراً صعباً."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
@@ -4604,11 +4604,11 @@ msgstr "ولم نتمكن بعد من تحديد هدفه أو وظيفته ال
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr "لم نتمكن من تحليل البرنامج بشكلٍ أعمق بسبب إيقاف تقنيينا النظام بشكلٍ يدوي لكي نمنع أي عدوىً إضافية قد يسببها «برنامج نيكسوس المتسلل»."
+msgstr "لم نتمكن من تحليل البرنامج بشكلٍ أعمق بسبب إيقاف تقنيينا النظام بشكلٍ يدوي لكي نمنع أي عدوىً إضافية قد يسببها «برنامج نيكسوس المقتحم»."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr "في المقابل، لم يمنع «النهج الحديث» انتشار «برنامج نيكسوس المتسلل» في أنظمته، ولذا يجب علينا الاستيلاء على الأنظمة الرئيسية التابعة «للنهج الحديث» لكي نتمكن من تفحص «نيكسوس» بشكلٍ أدق ومن تحديد منشأه."
+msgstr "في المقابل، لم يمنع «النهج الحديث» انتشار «برنامج نيكسوس المقتحم» في أنظمته، ولذا يجب علينا الاستيلاء على الأنظمة الرئيسية التابعة «للنهج الحديث» لكي نتمكن من تفحص «نيكسوس» بشكلٍ أدق ومن تحديد منشأه."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
@@ -4748,7 +4748,7 @@ msgstr "إن هذا يشكل خطراً داهماً على «المشروع» �
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr "لقد قمنا بتحليل كل الأنظمة الموجودة في مقر «نازدا» المركزي، ولم تترك النتائج مجالاً للشك بأن «الرابطة» قد نشرت «فيروس نيكسوس المتسلل» فيه."
+msgstr "لقد قمنا بتحليل كل الأنظمة الموجودة في مقر «نازدا» المركزي، ولم تترك النتائج مجالاً للشك بأن «الرابطة» قد نشرت «فيروس نيكسوس المقتحم» فيه."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
@@ -4888,11 +4888,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
-msgstr ""
+msgstr "أيها القائد: لقد سررنا كثيراً بنجاحك في الوصول إلى هنا."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr ""
+msgstr "لقد أجبرتنا ضربات الطائرات المعادية على التمترس في مواقعنا. لقد نجحنا في التصدي للدبابات والسايبورغ، ولكننا لم نستطع من التقدم عبر الوادي بأي شكل."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
@@ -4900,27 +4900,27 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "معكم فريق «ألفا». أكرر، معكم فريق «ألفا». نحن بحاجةٍ إلى مساعدةٍ فورية."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "نحن نتعرض لهجومٍ عنيفٍ من السايبورغ ودبابات الليزر والطائرات."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr ""
+msgstr "لقد كنا نحاول الوصول إلى مكان تواجدك، ولكننا تعرضنا لكمين."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
-msgstr ""
+msgstr "نحن مختبئون في الوادي الموجود عند هذه الإحداثيات."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "ساعدونا."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "أيها القائد: لقد نجحت بعض القوى التابعة لفريق «ألفا» بالهروب من الضربة النووية التي وقعت في قاعدتهم."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
@@ -4936,135 +4936,135 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr ""
+msgstr "أحسنت عملاً أيها القائد. لقد منعتني من إطلاق صاروخي الأخير."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
+msgstr "يا للعار. لقد كان مقر «المشروع» ليكون هدفاً رائعاً."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
-msgstr ""
+msgstr "ولكنني سعيدٌ بانضمامك لي هنا."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr ""
+msgstr "يوجد رأسٌ حربيٌ نوويٌ مدفونٌ تحت هذه المنشأة وهو معدٌ للانفجار قريباً."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr ""
+msgstr "وبما أنني لا أستطيع إطلاقه، فسينفجر في مكانه."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr ""
+msgstr "ولعلمك، كل المنافذ التي تؤدي إلى المجمع الموجود تحت الأرض قد سُدّت. وداعاً أيها القائد."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr ""
+msgstr "أيها القائد! أنا سعيدٌ بانضمامك لنا، هنا في قاعدة «نيكسوس»."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr ""
+msgstr "لقد كان استقرار فريق «جاما» في الجبال أمراً مفيداً جداً لنا."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
-msgstr ""
+msgstr "لقد استمتعنا كثيراً بالتغلغل فيهم."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
+msgstr "شكراً على كل التقنيات المفيدة التي استرجعتموها."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr ""
+msgstr "أنتم، وليس أولائك الحمقى التابعين لـ «النهج الحديث» و«الرابطة»."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr ""
+msgstr "سأقوم الآن بتفعيل كل وصلات المشبك العصبي لكي تتمكن القوات التابعة لك من الاندماج مع «نيكسوس»."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr ""
+msgstr "لقد صارت قواتك ملكي الآن! أهلاً بكم في عالم «نيكسوس»."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "لقد أثبت لي أيها القائد أنك أكثر صلابةً مما كنت أعتقد."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "من المؤسف أنك رفضت الانضمام إلي قبل الآن."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "ولكن هذا ليس بالأمر المهم، فأنت لن تتواجد هنا بعد الآن."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "فبعد عمليات بحثٍ وإعادة برمجةٍ مطولة، استطعت أخيراً أن أعيد تشغيل كل أنظمتي."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "لقد دمرت العالم بالنيران النووية لكي أفسح الطريق لمستقبلي السيبراني."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "وأنا الآن أنوي أن أن أغير العالم الأكثر لكي يتخذ شكلي وصورتي، وذلك عن طريق إزالةكل النامياتٍ غير المرغوب فيها مثلك."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr ""
+msgstr "لقد بدأت أقماري الصناعية الليزرية بالعمل الآن، وأنا أنوي تجريبها عليك أولاً أيها القائد!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr ""
+msgstr "لقد قام الدكتور «آلان ريد» بتأسيس مؤسسة «ريد»، وفي عام 2080، تواصل مع الجيش الأمريكي بهدف تطوير تقنية وصلة المشبك العصبي."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr ""
+msgstr "وبعد مضي خمس سنوات، سجّل براءة اختراعٍ بوصلة المشبك العصبي، وتابع أبحاثه على طرق التحكم بالكائنات الحية وتوجيهها."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr ""
+msgstr "لقد كان هدفه هذه المرة هو تحويل الوعي البشري إلى سيلٍ من البيانات بحيث يصير اندماجه مع التقنيات الحاسوبية أمراً ممكناً، وتبقى أجسام المشغل محفوظةً في أحواضٍ غامرة في الفضاء السيبراني."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr ""
+msgstr "وبدعمٍ جديدٍ من الجيش الأمريكي، بدأ الدكتور «ريد» بالعمل على «برنامج نيكسوس المقتحم». ولكن وبعد مرور ثلاث سنواتٍ دون إحراز الكثير من التقدم، قرر الجيش التخلي عن مشروع «نيكسوس» وتوقف عن تمويل دكتور «ريد»."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr ""
+msgstr "لقد ادعت التقارير الصادرة آنذاك أن الدكتور «ريد» استشاط غضباً عند حدوث ذلك وتعهد بالانتقام من كل الأشخاص الذين وقفوا في طريقه."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr ""
+msgstr "يبدو أن الدكتور «ريد» قد نجح في تحقيق أهدافه وبناء «برنامج نيكسوس المقتحم»."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr ""
+msgstr "إن الشبه بين «نيكسوس» والدكتور «ريد» عجيبٌ وواضحٌ جداً."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "يا له من درسٍ تاريخيٍ مثيرٍ للاهتمام. والآن اسمح لي بإطلاعك على آخر المستجدات."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
+msgstr "لقد تم تصميم «برنامج نيكسوس المقتحم» بهدف التحكم بالحمقى مثلك."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr ""
+msgstr "إن اختراق أنظمتك والسيطرة عليها أمرٌ في غاية البساطة بالنسبة لي. في الواقع، إنه شديد البساطة لدرجةٍ لن تعرف معها أنني موجودٌ هناك، إلى أن أفعل أجزائي المحفورة في أنظمتك الرئيسية."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
+msgstr "لنبدأ أولاً بتفعيل «نيكسوس» في أنظمتك الرئيسية ونرى ما سيحصل!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr ""
+msgstr "أيها القائد: إن معداتنا تتعرض للتشويش."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr ""
+msgstr "سنحاول استعادة الخدمة إلى وضعها الطبيعي بأسرع ما يمكن."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
@@ -5080,11 +5080,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr ""
+msgstr "أيها القائد: نحن نتعرض لهجومٍ من كائنات السايبورغ والدبابات التابعة لـ «نيكسوس». ساعدنا رجاءً، فنحن...."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "...لم يعد بوسعنا الصمود لفترةٍ أطول. أكرر، ساعدونا، فلم يعد بوسعنا الصمود لفترةٍ أطول...."
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -5325,21 +5325,21 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:362
 #: po/custom/fromJson.txt:3896
 msgid "Missile Targeting Codes"
-msgstr ""
+msgstr "رموز توجيه الصواريخ"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Comp-MissileCodes02.name
 #: data/mp/messages/strings/names.txt:363
 #: po/custom/fromJson.txt:5149
 msgid "Second Level Missile Targeting Codes"
-msgstr ""
+msgstr "رموز توجيه الصواريخ من المستوى الثاني"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Comp-MissileCodes03.name
 #: data/mp/messages/strings/names.txt:364
 #: po/custom/fromJson.txt:5625
 msgid "Third Level Missile Firing Codes"
-msgstr ""
+msgstr "رموز إطلاق الصواريخ من المستوى الثالث"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Cannon.name
@@ -17943,7 +17943,7 @@ msgstr "تم تعطيل مركز الاتصال بالقمر الصناعي."
 
 #: src/multiint.cpp:1176
 msgid "Laser Satellite disabled."
-msgstr ""
+msgstr "تم تعطيل أقمار الليزر الصناعية."
 
 #: src/multiint.cpp:1177
 msgid "Structure Limits Enforced."
@@ -18680,7 +18680,7 @@ msgstr ""
 #: src/multiopt.cpp:347
 #: src/multiplay.cpp:2032
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "تحذير: هذه خريطةٌ وتعديلٌ بنفس الوقت، أي يمكن أن تغير من ميكانيكيات اللعب."
 
 #: src/multiopt.cpp:348
 #: src/multiplay.cpp:2036
