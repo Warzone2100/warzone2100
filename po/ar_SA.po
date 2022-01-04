@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-03 15:05\n"
+"PO-Revision-Date: 2022-01-04 03:02\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1385,7 +1385,7 @@ msgstr "برج حراسة بقاذف لهب"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
-msgstr ""
+msgstr "برح حراسة بصاروخ الرمّاح"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.WallTower05.name
@@ -2130,7 +2130,7 @@ msgstr "خندقٌ محصّن وفيه مدفعٌ عملاق"
 #: data/mp/messages/strings/resstrings.txt:67
 #: po/custom/fromJson.txt:783
 msgid "Armored Pepperpot mortar battery pit"
-msgstr ""
+msgstr "خندقٌ محصّن وفيه هاون رشاش الفلفل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HOW.text[1]
@@ -2170,7 +2170,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:92
 #: po/custom/fromJson.txt:820
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها قاذفٌ لصواريخ «قاتل الدبابات»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[2]
@@ -2198,7 +2198,7 @@ msgstr "سيستهدف تلقائياً الأعداء الواقعين ضمن �
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:802
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "نقطةٌ محصنة وعليها مدفعٌ فائق السرعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
@@ -2243,7 +2243,7 @@ msgstr "نقطةٌ محصّنة وعليها قاذف جهنم"
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:787
 msgid "Armored strongpoint with Assault Cannon"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها مدفعٌ هجومي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[1]
@@ -2340,7 +2340,7 @@ msgstr "نقطةٌ محصّنة وعليها قاذف جهنم"
 #: data/mp/messages/strings/resstrings.txt:157
 #: po/custom/fromJson.txt:762
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها قاذفٌ لصواريخ «قاتل الدبابات» المضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[1]
@@ -3507,7 +3507,7 @@ msgstr "هنالك رأسٌ هجوميٌ جديدٌ متاحٌ لك"
 #: data/mp/messages/strings/resstrings.txt:352
 #: po/custom/fromJson.txt:2995
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr ""
+msgstr "مدفعٌ آلي يمكنه إطلاق طلقاتٍ فائقة السرعة من عيار 88 مم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
@@ -3528,7 +3528,7 @@ msgstr "مثاليٌ ضد: المركبات"
 #: data/mp/messages/strings/resstrings.txt:354
 #: po/custom/fromJson.txt:4799
 msgid "Replaces Medium Cannon"
-msgstr ""
+msgstr "يحل محل المدفع المتوسط"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN5.text[1]
@@ -3537,7 +3537,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:357
 #: po/custom/fromJson.txt:32
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "مدفعٌ آلي بأربع فوهات، ويمكنه إطلاق طلقاتٍ فائقة السرعة من عيار 76 مم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[3]
@@ -5901,7 +5901,7 @@ msgstr "رشاشٌ بطلقاتٍ من عيار 7.62 مم"
 #. data/mp/messages/resmessagesall.json: $.RES_W_CN6_T_A.text[1]
 #: po/custom/fromJson.txt:35
 msgid "76mm twin-barrel automatic-cannon"
-msgstr ""
+msgstr "مدفعٌ آلي بفوهتين، ويمكنه إطلاق طلقاتٍ من عيار 76 مم"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAAC1.text[2]
@@ -6529,7 +6529,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_HPV.text[1]
 #: po/custom/fromJson.txt:599
 msgid "Armed with hyper velocity cannon"
-msgstr ""
+msgstr "مسلحٌ بمدفعٍ فائق السرعة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
@@ -6561,7 +6561,7 @@ msgstr "مسلحٌ برشاش"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_MC.text[1]
 #: po/custom/fromJson.txt:616
 msgid "Armed with medium cannon"
-msgstr ""
+msgstr "مسلحٌ بمدفعٍ متوسط"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_RL1.text[1]
@@ -6585,7 +6585,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_TK.text[1]
 #: po/custom/fromJson.txt:635
 msgid "Armed with tank killer rockets"
-msgstr ""
+msgstr "مسلحٌ بصواريخ «قاتل الدبابات»"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_MAT1.text[2]
@@ -6734,7 +6734,7 @@ msgstr "نقطةٌ محصّنة وعليها رشاشٌ ثقيل"
 #. data/mp/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
 #: po/custom/fromJson.txt:734
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "نقطةٌ محصنة وعليها مدفعٌ فائق السرعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
@@ -6868,7 +6868,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Tower-VulcanCan.name
 #: po/custom/fromJson.txt:846
 msgid "Assault Cannon Guard Tower"
-msgstr ""
+msgstr "برج حراسةٍ بمدفعٍ هجومي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Wall-VulcanCan.name
@@ -6892,7 +6892,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 #: po/custom/fromJson.txt:861
 msgid "Assault Cannon"
-msgstr ""
+msgstr "مدفعٌ هجومي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
@@ -7010,7 +7010,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[1]
 #: po/custom/fromJson.txt:934
 msgid "Autoloader increases reload rate"
-msgstr ""
+msgstr "يزيد الملقم الآلي من سرعة إعادة التعبئة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[1]
@@ -7482,28 +7482,28 @@ msgstr "ستحرق المولدات النفط بكفاءةٍ أكبر"
 #: po/custom/fromJson.txt:1315
 #, no-c-format
 msgid "Cannon accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة المدفع 10%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 #: po/custom/fromJson.txt:1319
 msgid "Cannon Autoloader Mk2"
-msgstr ""
+msgstr "ملقمٌ آليٌ للمدفع (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #: po/custom/fromJson.txt:1323
 msgid "Cannon Autoloader Mk3"
-msgstr ""
+msgstr "ملقمٌ آليٌ للمدفع (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF01.name
 #: po/custom/fromJson.txt:1327
 msgid "Cannon Autoloader"
-msgstr ""
+msgstr "ملقمٌ آليٌ للمدفع"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
@@ -7512,7 +7512,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1333
 #, no-c-format
 msgid "Cannon damage +25%"
-msgstr ""
+msgstr "زيادة ضرر المدفع 25%"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireCan.name
@@ -7548,21 +7548,21 @@ msgstr "مقدّر مسافاتٍ ليزري للمدفع"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF05.name
 #: po/custom/fromJson.txt:1354
 msgid "Cannon Rapid Loader Mk2"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للمدفع (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF06.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF06.name
 #: po/custom/fromJson.txt:1358
 msgid "Cannon Rapid Loader Mk3"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للمدفع (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF04.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF04.name
 #: po/custom/fromJson.txt:1362
 msgid "Cannon Rapid Loader"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للمدفع"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_ROF1.text[2]
@@ -7570,14 +7570,14 @@ msgstr ""
 #: po/custom/fromJson.txt:1367
 #, no-c-format
 msgid "Cannon reload time -10%"
-msgstr ""
+msgstr "تقليل وقت إعادة تعبئة الرشاش 10%"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CannonTower.name
 #. data/mp/stats/structure.json: $.A0CannonTower.name
 #: po/custom/fromJson.txt:1371
 msgid "Cannon Tower"
-msgstr ""
+msgstr "برجٌ بمدفع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[0]
@@ -8601,21 +8601,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF02.name
 #: po/custom/fromJson.txt:2056
 msgid "Flamer Autoloader Mk2"
-msgstr ""
+msgstr "ملقمٌ آلي لقاذف اللهب (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 #: po/custom/fromJson.txt:2060
 msgid "Flamer Autoloader Mk3"
-msgstr ""
+msgstr "ملقمٌ آلي لقاذف اللهب (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 #: po/custom/fromJson.txt:2064
 msgid "Flamer Autoloader"
-msgstr ""
+msgstr "ملقمٌ آلي لقاذف اللهب"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox05.name
@@ -9542,14 +9542,14 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2674
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "مُطلق بلازما ثقيل يمكنه إطلاق البلازما"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2678
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "مُطلق بلازما ثقيل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9962,7 +9962,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2975
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفعٍ فائق السرعة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
@@ -9983,14 +9983,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
 #: po/custom/fromJson.txt:2987
 msgid "Hyper Velocity Cannon"
-msgstr ""
+msgstr "مدفعٌ فائق السرعة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2991
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "طلقاتٌ خارقةٌ للدروع وفائقة السرعة، وفي قاعدتها أجنحةٍ كأجنحة السهم، مما يزيد من ثباتها في الجو"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10211,7 +10211,7 @@ msgstr "خندق هاون حارق"
 #. data/mp/stats/weapons.json: $.Mortar-Incendiary.name
 #: po/custom/fromJson.txt:3137
 msgid "Incendiary Mortar"
-msgstr ""
+msgstr "هاونٌ حارق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[1]
@@ -11106,7 +11106,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3818
 msgid "Mini-Rocket Array"
-msgstr ""
+msgstr "راجمة صواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
@@ -11267,28 +11267,28 @@ msgstr ""
 #: po/custom/fromJson.txt:3925
 #, no-c-format
 msgid "Mortar accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة الهاون 10%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-ROF02.name
 #: po/custom/fromJson.txt:3929
 msgid "Mortar Autoloader Mk2"
-msgstr ""
+msgstr "ملقمٌ آلي للهاون (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-ROF03.name
 #: po/custom/fromJson.txt:3933
 msgid "Mortar Autoloader Mk3"
-msgstr ""
+msgstr "ملقمٌ آلي للهاون (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-ROF01.name
 #: po/custom/fromJson.txt:3937
 msgid "Mortar Autoloader"
-msgstr ""
+msgstr "ملقمٌ آلي للهاون"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMortarHalfTrack.name
@@ -11303,14 +11303,14 @@ msgstr ""
 #: po/custom/fromJson.txt:3946
 #, no-c-format
 msgid "Mortar damage +25%"
-msgstr ""
+msgstr "زيادة ضرر الهاون 25%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 #: po/custom/fromJson.txt:3950
 msgid "Mortar Fast Loader"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للهاون"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-MortarPit.name
@@ -11327,7 +11327,7 @@ msgstr "خندق هاون"
 #: po/custom/fromJson.txt:3961
 #, no-c-format
 msgid "Mortar reload time -10%"
-msgstr ""
+msgstr "تقليل وقت إعادة تعبئة الهاون 10%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
@@ -11884,14 +11884,14 @@ msgstr "الجاكوار"
 #. data/mp/stats/structure.json: $.Emplacement-RotMor.name
 #: po/custom/fromJson.txt:4392
 msgid "Pepperpot Pit"
-msgstr ""
+msgstr "خندق رشاش الفلفل"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4396
 msgid "Pepperpot"
-msgstr ""
+msgstr "رشاش الفلفل"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -11946,7 +11946,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASCAN.text[1]
 #: po/custom/fromJson.txt:4427
 msgid "Plasma Cannon firing plasma"
-msgstr ""
+msgstr "مدفع بلازما"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
@@ -11959,7 +11959,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Laser4-PlasmaCannon.name
 #: po/custom/fromJson.txt:4434
 msgid "Plasma Cannon"
-msgstr ""
+msgstr "مدفع البلازما"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb05.name
@@ -12224,7 +12224,7 @@ msgstr "الحنش"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4599
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "أربعة مدافع مضادةٍ للطائرات من عيار 80 مم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12613,7 +12613,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-Rocket06-IDF.name
 #: po/custom/fromJson.txt:4871
 msgid "Ripple Rocket Battery"
-msgstr ""
+msgstr "بطارية صواريخ الصدمة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket06-IDF.name
@@ -12622,7 +12622,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-IDF.name
 #: po/custom/fromJson.txt:4877
 msgid "Ripple Rockets"
-msgstr ""
+msgstr "صواريخ الصدمة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG_ROF3.text[1]
@@ -12726,28 +12726,28 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
 #: po/custom/fromJson.txt:4944
 msgid "Rocket artillery; can be assigned to a sensor"
-msgstr ""
+msgstr "مدفعيةٌ صاروخية، ويمكن إسنادها إلى مستشعر"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 #: po/custom/fromJson.txt:4948
 msgid "Rocket Autoloader Mk2"
-msgstr ""
+msgstr "ملقمٌ آلي للصواريخ (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 #: po/custom/fromJson.txt:4952
 msgid "Rocket Autoloader Mk3"
-msgstr ""
+msgstr "ملقمٌ آلي للصواريخ (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-ROF01.name
 #: po/custom/fromJson.txt:4956
 msgid "Rocket Autoloader"
-msgstr ""
+msgstr "ملقمٌ آلي للصواريخ"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianRKBuggy.name
@@ -12839,7 +12839,7 @@ msgstr "ملجأٌ برشاش دوار"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar3.name
 #: po/custom/fromJson.txt:5015
 msgid "Rotary Mortar - Pepperpot"
-msgstr ""
+msgstr "هاون دوّار - رشّاش الفلفل"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Rotarywepslab.name
@@ -13581,7 +13581,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-HvATrocket.name
 #: po/custom/fromJson.txt:5503
 msgid "Tank Killer Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بقاتل الدبابات"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TK-Mantis-H.name
@@ -13608,7 +13608,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Rocket07-Tank-Killer.name
 #: po/custom/fromJson.txt:5518
 msgid "Tank Killer Rocket"
-msgstr ""
+msgstr "صاروخ «قاتل الدبابات»"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-TK.name
@@ -13621,7 +13621,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-HvyA-T.name
 #: po/custom/fromJson.txt:5525
 msgid "Tank Killer"
-msgstr ""
+msgstr "قاتل الدبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-TankTrap01.name
@@ -13939,7 +13939,7 @@ msgstr "رشاشان عيار 7.62 مم"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5723
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "مدفعان مضادان للطائرات من عيار 80 مم"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -13953,7 +13953,7 @@ msgstr "ملجأٌ بمدفعين هجوميين"
 #. data/mp/stats/weapons.json: $.Cannon6TwinAslt.name
 #: po/custom/fromJson.txt:5735
 msgid "Twin Assault Cannon"
-msgstr ""
+msgstr "مدفعان هجوميان"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-TwinAGun.name
@@ -14094,7 +14094,7 @@ msgstr "استعمل «لوحة القيادة» لإرسال الوحدات إ�
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[1]
 #: po/custom/fromJson.txt:5816
 msgid "Uses advanced cannon technology"
-msgstr ""
+msgstr "يستعمل تقنيات المدافع المتطورة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text[1]
@@ -14265,7 +14265,7 @@ msgstr "الأفعى"
 #. data/mp/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
 #: po/custom/fromJson.txt:5941
 msgid "VTOL Assault Cannon"
-msgstr ""
+msgstr "طائرةٌ عمودية بمدفعٍ هجومي"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG4ROTARY-VTOL.name
@@ -14304,7 +14304,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon1-VTOL.name
 #: po/custom/fromJson.txt:5962
 msgid "VTOL Cannon"
-msgstr ""
+msgstr "طائرةٌ عمودية بمدفع"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-VTOLCBTower01.name
@@ -14439,7 +14439,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 #: po/custom/fromJson.txt:6047
 msgid "VTOL Hyper Velocity Cannon"
-msgstr ""
+msgstr "طائرةٌ عمودية بمدفعٍ فائق السرعة"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol02.name
@@ -14476,7 +14476,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
 #: po/custom/fromJson.txt:6066
 msgid "VTOL Lancer"
-msgstr ""
+msgstr "طائرةٌ عمودية بصاروخ الرمّاح"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
@@ -14502,7 +14502,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod.name
 #: po/custom/fromJson.txt:6080
 msgid "VTOL Mini-Rocket"
-msgstr ""
+msgstr "طائرةٌ عمودية بصواريخ مصغرة"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.RailGun1-VTOL.name
@@ -14618,7 +14618,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
 #: po/custom/fromJson.txt:6163
 msgid "VTOL Tank Killer"
-msgstr ""
+msgstr "طائرةٌ عمودية بصاروخ قاتل الدبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
