@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-04 03:02\n"
+"PO-Revision-Date: 2022-01-04 15:02\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1227,7 +1227,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:251
 #: po/custom/fromJson.txt:2909
 msgid "Howitzer Emplacement"
-msgstr ""
+msgstr "مربض هاوتزر"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyHowitzer.name
@@ -1238,7 +1238,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:252
 #: po/custom/fromJson.txt:2269
 msgid "Ground Shaker Emplacement"
-msgstr ""
+msgstr "مربض مزلزل الأرض"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotHow.name
@@ -1249,17 +1249,17 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:253
 #: po/custom/fromJson.txt:2717
 msgid "Hellstorm Emplacement"
-msgstr ""
+msgstr "مربض إعصار جهنم"
 
 #: data/base/messages/strings/names.txt:228
 #: data/mp/messages/strings/names.txt:264
 msgid "Mortar Emplacement"
-msgstr ""
+msgstr "مربض هاون"
 
 #: data/base/messages/strings/names.txt:229
 #: data/mp/messages/strings/names.txt:265
 msgid "Bombard Emplacement"
-msgstr ""
+msgstr "مربض المدفع العملاق"
 
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
@@ -1362,7 +1362,7 @@ msgstr "ملجأٌ برشاشٍ ثقيل"
 #: data/mp/messages/strings/names.txt:398
 #: po/custom/fromJson.txt:2128
 msgid "Flashlight Emplacement"
-msgstr ""
+msgstr "مربض ليزر الفلاش"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower03.name
@@ -1441,7 +1441,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:442
 msgid "Robotic VTOL Rearming Mk4"
-msgstr ""
+msgstr "إعادة تسليحٍ ربوتية للطائرات (النسخة 4)"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:450
@@ -1582,12 +1582,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:529
 msgid "Improved Laser Focusing Mk2"
-msgstr ""
+msgstr "زيادة تركيز الليزر (النموذج 2)"
 
 #: data/base/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:530
 msgid "Improved Laser Focusing Mk3"
-msgstr ""
+msgstr "زيادة تركيز الليزر (النموذج 3)"
 
 #: data/base/messages/strings/names.txt:429
 #: data/mp/messages/strings/names.txt:542
@@ -1668,7 +1668,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:619
 msgid "Laser Optics Laboratory"
-msgstr ""
+msgstr "مختبر فيزياء الليزر"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:504
@@ -2139,7 +2139,7 @@ msgstr "خندقٌ محصّن وفيه هاون رشاش الفلفل"
 #: data/mp/messages/strings/resstrings.txt:72
 #: po/custom/fromJson.txt:772
 msgid "Armored howitzer emplacement"
-msgstr ""
+msgstr "مربض هاوتزر محصّن"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HvHOW.text[1]
@@ -2148,7 +2148,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:77
 #: po/custom/fromJson.txt:676
 msgid "Armored Ground Shaker howitzer emplacement"
-msgstr ""
+msgstr "مربض هاوتزر مزلزل الأرض"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_IncHOW.text[1]
@@ -2161,7 +2161,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:87
 #: po/custom/fromJson.txt:768
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr ""
+msgstr "مربض هاوتزر إعصار جهنم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVATR.text[1]
@@ -2234,7 +2234,7 @@ msgstr "القوة الدفاعية: مرتفعة"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:806
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "نقطةٌ محصّنة وعليها قاذف جهنم"
+msgstr "نقطةٌ محصّنة وعليها قاذف لهب الجحيم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2331,7 +2331,7 @@ msgstr "نقطةٌ محصّنة وعليها مدفعٌ هجومي"
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:738
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "نقطةٌ محصّنة وعليها قاذف جهنم"
+msgstr "نقطةٌ محصّنة وعليها قاذف لهب الجحيم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2604,7 +2604,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:202
 #: po/custom/fromJson.txt:4919
 msgid "Robotic VTOL Production"
-msgstr ""
+msgstr "إنتاجٌ روبوتي للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[2]
@@ -3264,7 +3264,7 @@ msgstr "تطويرٌ للأسلحة المضادة للطائرات"
 #: data/mp/messages/strings/resstrings.txt:312
 #: po/custom/fromJson.txt:1825
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr ""
+msgstr "يعمل على اكتشاف الانبعاثات الصادرة من محركات الطائرات ومن ثم التثبيت عليها"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[2]
@@ -3635,7 +3635,7 @@ msgstr "هنالكٌ سلاحٌ جديدٌ متاحٌ لك، يطلق نيران
 #: data/mp/messages/strings/resstrings.txt:372
 #: po/custom/fromJson.txt:12
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr ""
+msgstr "مدفع هاوتزر يطلق قذائف من عيار 105 مم، ويمكن إسناده إلى أحد المستشعرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
@@ -3657,7 +3657,7 @@ msgstr "مثاليٌ ضد: المباني الرئيسية، والأفراد، 
 #: data/mp/messages/strings/resstrings.txt:377
 #: po/custom/fromJson.txt:20
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr ""
+msgstr "مدفع هاوتزر يطلق قذائف من عيار 105 مم، ويمكن إسناده إلى أحد المستشعرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[1]
@@ -3666,7 +3666,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:382
 #: po/custom/fromJson.txt:8
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr ""
+msgstr "هاوتزر يطلق قذائف حارقة من عيار 105 مم، ويمكن إسناده إلى أحد المستشعرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -3690,7 +3690,7 @@ msgstr "مثاليٌ ضد: المباني الرئيسية والملاجئ"
 #: data/mp/messages/strings/resstrings.txt:396
 #: po/custom/fromJson.txt:2923
 msgid "Howitzer Upgrade"
-msgstr ""
+msgstr "تطويرٌ للهاوتزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[1]
@@ -3710,7 +3710,7 @@ msgstr "قذائف صاروخية ذاتية التوجيه"
 #: data/mp/messages/strings/resstrings.txt:388
 #: po/custom/fromJson.txt:3220
 msgid "Increases Howitzer accuracy"
-msgstr ""
+msgstr "يزيد من دقة الهاوتزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[3]
@@ -3725,7 +3725,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:399
 #: po/custom/fromJson.txt:351
 msgid "All howitzers upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل مدافع الهاوتزر تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[1]
@@ -3745,7 +3745,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:393
 #: po/custom/fromJson.txt:3224
 msgid "Increases Howitzer damage"
-msgstr ""
+msgstr "يزيد من ضرر الهاوتزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text[1]
@@ -3765,7 +3765,7 @@ msgstr "سيتم استعمال الملقم الآلي بدلاً من تلقي
 #: data/mp/messages/strings/resstrings.txt:398
 #: po/custom/fromJson.txt:3228
 msgid "Increases Howitzer ROF"
-msgstr ""
+msgstr "يزيد من معدل إطلاق الهاوتزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[0]
@@ -5473,7 +5473,7 @@ msgstr "دفعٌ بالجنازير 2"
 #: data/mp/messages/strings/names.txt:511
 #: po/custom/fromJson.txt:6094
 msgid "VTOL Propulsion II"
-msgstr ""
+msgstr "الدفع العمودي 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Wheels02.name
@@ -5888,7 +5888,7 @@ msgstr "رشاشٌ ثقيلٌ بعيار 0.50"
 #. data/mp/messages/resmessages23.json: $.RES_W_RHOW.text[1]
 #: po/custom/fromJson.txt:16
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr ""
+msgstr "هاوتزر متعدد الفوهات، بقذائف من عيار 105 مم، ويمكن إسناده إلى أحد المستشعرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[1]
@@ -6217,7 +6217,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_ST_VFU4.text[1]
 #: po/custom/fromJson.txt:253
 msgid "Advanced VTOL Production"
-msgstr ""
+msgstr "إنتاجٌ متطور للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Advmaterialslab.name
@@ -6297,7 +6297,7 @@ msgstr "تمّت ترقية كل مولّدات الطاقة بشكلٍ تلقا
 #. ... + 3 refs
 #: po/custom/fromJson.txt:393
 msgid "All rail guns upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل المدافع الكهرومغناطيسية تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[3]
@@ -6484,13 +6484,13 @@ msgstr "مسلحٌ برشاش السايبورغ"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_PLAS.text[1]
 #: po/custom/fromJson.txt:575
 msgid "Armed with Cyborg Pulse Laser"
-msgstr ""
+msgstr "مسلحٌ بليزر السايبورغ النبضي"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_RG.text[1]
 #: po/custom/fromJson.txt:578
 msgid "Armed with Cyborg Rail Gun"
-msgstr ""
+msgstr "مسلحٌ بمدفع السايبورغ الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AT.text[1]
@@ -6509,14 +6509,14 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_LS1.text[1]
 #: po/custom/fromJson.txt:588
 msgid "Armed with Flashlight Laser"
-msgstr ""
+msgstr "مسلحٌ بليزر الفلاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYW_LS1.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYW_LS1.text[1]
 #: po/custom/fromJson.txt:592
 msgid "Armed with flashlight laser"
-msgstr ""
+msgstr "مسلحٌ بليزر الفلاش"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_GRN.text[1]
@@ -6570,7 +6570,7 @@ msgstr "مسلحٌ بمدفعٍ متوسط"
 #. data/mp/messages/resmessages3.json: $.RES_CYW_RL1.text[1]
 #: po/custom/fromJson.txt:622
 msgid "Armed with Needle Gun"
-msgstr ""
+msgstr "مسلحٌ بمدفع الإبر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text[1]
@@ -6673,7 +6673,7 @@ msgstr "برج حراسةٍ مزودٌ بمنصة صواريخ مصغرة"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
 #: po/custom/fromJson.txt:692
 msgid "Armored guard tower with Needle Gun"
-msgstr ""
+msgstr "برج حراسةٍ محصّن وعليه مدفع إبر"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPYT.text[1]
@@ -6685,7 +6685,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
 #: po/custom/fromJson.txt:698
 msgid "Armored guard tower with Pulse Laser"
-msgstr ""
+msgstr "برج حراسةٍ محصّن وعليه ليزرٌ نبضي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_ATMTOW.text[1]
@@ -6706,7 +6706,7 @@ msgstr "جنازير مصفحة تغطي نصف العجلات"
 #. data/mp/messages/resmessages3.json: $.RES_WT14_PLS.text[1]
 #: po/custom/fromJson.txt:718
 msgid "Armored hardpoint with Flashlight laser"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها ليزر الفلاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL3.text[1]
@@ -6762,7 +6762,7 @@ msgstr "نقطةٌ محصنة وعليها مدفعٌ متوسط"
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
 #: po/custom/fromJson.txt:754
 msgid "Armored hardpoint with Rail Gun"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها مدفعٌ كهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT9_ATM.text[1]
@@ -6775,7 +6775,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text[1]
 #: po/custom/fromJson.txt:775
 msgid "Armored Incendiary Mortar battery pit"
-msgstr ""
+msgstr "خندقٌ محصّن وفيه مدفع هاون حارق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[1]
@@ -6789,20 +6789,20 @@ msgstr "خندقٌ محصّن وفيه مدفع هاون"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PrisLas.text[1]
 #: po/custom/fromJson.txt:791
 msgid "Armored strongpoint with Flashlight laser"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها ليزر الفلاش"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail3.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail3.text[1]
 #: po/custom/fromJson.txt:795
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها مدفع غاوس"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_HEAVYLAS.text[1]
 #: po/custom/fromJson.txt:798
 msgid "Armored strongpoint with Heavy Laser"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها ليزرٌ كثيف"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PFL.text[1]
@@ -6814,14 +6814,14 @@ msgstr "نقطةٌ محصنة وعليها قاذف بلازما حارقة"
 #. data/base/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
 #: po/custom/fromJson.txt:812
 msgid "Armored strongpoint with Pulse Laser"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها ليزرٌ نبضي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail2.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail2.text[1]
 #: po/custom/fromJson.txt:816
 msgid "Armored strongpoint with Rail Gun"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفعٍ كهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text[1]
@@ -6861,7 +6861,7 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Defense-RotCannon.name
 #: po/custom/fromJson.txt:842
 msgid "Assault Cannon Emplacement"
-msgstr ""
+msgstr "مربض مدفعٍ هجومي"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-VulcanCan.name
@@ -6905,7 +6905,7 @@ msgstr "ملجأٌ برشاشٍ هجومي"
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:868
 msgid "Assault Gun Emplacement"
-msgstr ""
+msgstr "مربض رشاشٍ هجومي"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-RotMg.name
@@ -7200,7 +7200,7 @@ msgstr "مثاليٌ ضد: المباني الرئيسية"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "مثاليٌ ضد: المباني الرئيسية ومرابض المدفعية والسايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7275,7 +7275,7 @@ msgstr "مثاليٌ ضد: المركبات والسايبورغ"
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
 #: po/custom/fromJson.txt:1161
 msgid "Best Targets: Vehicles and Emplacements"
-msgstr ""
+msgstr "مثاليٌ ضد: المركبات ومرابض المدفعية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text[2]
@@ -7859,7 +7859,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[1]
 #: po/custom/fromJson.txt:1547
 msgid "Computer predicts and compensates for target's movement"
-msgstr ""
+msgstr "سيقوم الحاسوب بالتنبؤ بمسار الهدف وسيغيّر من زاوية الإطلاق في حال تحركه"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG3.text[0]
@@ -8520,7 +8520,7 @@ msgstr "صواريخ مضادةٌ للمركبات، وتمتاز بخفة ال�
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 #: po/custom/fromJson.txt:2008
 msgid "Fast Loader"
-msgstr ""
+msgstr "ملقمٌ سريع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[2]
@@ -8573,14 +8573,14 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text[1]
 #: po/custom/fromJson.txt:2040
 msgid "Fires heavy pulses of laser light"
-msgstr ""
+msgstr "يطلق نبضاتٍ قويةً من ضوء الليزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS2.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS2.text[1]
 #: po/custom/fromJson.txt:2044
 msgid "Fires pulses of laser light"
-msgstr ""
+msgstr "يطلق نبضاتٍ من ضوء الليزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[1]
@@ -8686,7 +8686,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:2138
 msgid "Flashlight Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بالفلاش"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
@@ -8699,7 +8699,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 #: po/custom/fromJson.txt:2145
 msgid "Flashlight"
-msgstr ""
+msgstr "الفلاش"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine02.name
@@ -8792,7 +8792,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-Rail3.name
 #: po/custom/fromJson.txt:2199
 msgid "Gauss Cannon Emplacement"
-msgstr ""
+msgstr "مربض مدفع غاوس"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-Rail3.name
@@ -8801,7 +8801,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-Rail3.name
 #: po/custom/fromJson.txt:2205
 msgid "Gauss Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفع غاوس"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
@@ -8822,14 +8822,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.RailGun3Mk1.name
 #: po/custom/fromJson.txt:2217
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "مدفع غاوس"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS1.text[1]
 #: po/custom/fromJson.txt:2221
 msgid "Generates and concentrates bursts of laser energy"
-msgstr ""
+msgstr "يولّد ويركّز رشقاتٍ من الطاقة الليزرية"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.insane_tip
@@ -8909,7 +8909,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Howitzer150Mk1.name
 #: po/custom/fromJson.txt:2273
 msgid "Ground Shaker"
-msgstr ""
+msgstr "مزلزل الأرض"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
@@ -9010,21 +9010,21 @@ msgstr "طلقاتٌ رشاشٍ مقواة"
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Damage02.name
 #: po/custom/fromJson.txt:2338
 msgid "Hardened Rail Dart Mk2"
-msgstr ""
+msgstr "سهمٌ مقوّى (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Damage03.name
 #: po/custom/fromJson.txt:2342
 msgid "Hardened Rail Dart Mk3"
-msgstr ""
+msgstr "سهمٌ مقوّى (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Damage01.name
 #: po/custom/fromJson.txt:2346
 msgid "Hardened Rail Dart"
-msgstr ""
+msgstr "سهمٌ مقوّى"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Tower02.name
@@ -9083,21 +9083,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage02.name
 #: po/custom/fromJson.txt:2378
 msgid "HE Howitzer Shells Mk2"
-msgstr ""
+msgstr "قذائف هاوتزر شديدة الانفجار (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage03.name
 #: po/custom/fromJson.txt:2382
 msgid "HE Howitzer Shells Mk3"
-msgstr ""
+msgstr "قذائف هاوتزر شديدة الانفجار (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage01.name
 #: po/custom/fromJson.txt:2386
 msgid "HE Howitzer Shells"
-msgstr ""
+msgstr "قذائف هاوتزر شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage02.name
@@ -9180,21 +9180,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage05.name
 #: po/custom/fromJson.txt:2430
 msgid "HEAP Howitzer Shells Mk2"
-msgstr ""
+msgstr "قذائف هاوتزر خارقةٌ للدروع (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage06.name
 #: po/custom/fromJson.txt:2434
 msgid "HEAP Howitzer Shells Mk3"
-msgstr ""
+msgstr "قذائف هاوتزر خارقةٌ للدروع (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage04.name
 #: po/custom/fromJson.txt:2438
 msgid "HEAP Howitzer Shells"
-msgstr ""
+msgstr "قذائف هاوتزر خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage05.name
@@ -9401,7 +9401,7 @@ msgstr "مدفعٌ ثقيل"
 #. data/mp/stats/research.json: $.R-Wpn-Flame2.name
 #: po/custom/fromJson.txt:2571
 msgid "Heavy Flamer - Inferno"
-msgstr "قاذف لهبٍ ثقيل - جهنم"
+msgstr "قاذف لهبٍ ثقيل - الجحيم"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgCannon.name
@@ -9415,14 +9415,14 @@ msgstr "السايبورغ المدفعي"
 #. data/mp/stats/research.json: $.R-Wpn-HvyHowitzer.name
 #: po/custom/fromJson.txt:2585
 msgid "Heavy Howitzer - Ground Shaker"
-msgstr ""
+msgstr "هاوتزر ثقيل - مزلزل الأرض"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HeavyLas.name
 #. data/mp/stats/structure.json: $.Emplacement-HeavyLaser.name
 #: po/custom/fromJson.txt:2589
 msgid "Heavy Laser Emplacement"
-msgstr ""
+msgstr "مربض ليزرٍ كثيف"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHvLaserTracks.name
@@ -9441,7 +9441,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.HeavyLaser.name
 #: po/custom/fromJson.txt:2599
 msgid "Heavy Laser"
-msgstr ""
+msgstr "ليزر كثيف"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHMGHalfTrack.name
@@ -9556,7 +9556,7 @@ msgstr "مُطلق بلازما ثقيل"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
 #: po/custom/fromJson.txt:2682
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr ""
+msgstr "مدفعٌ ثقيل يستخدم القوة الكهرومغناطيسية لإطلاق سهامٍ تتمتع بطاقةٍ حركيةٍ مرتفعة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHRepairHover.name
@@ -9603,7 +9603,7 @@ msgstr "مروحيّة"
 #. data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 #: po/custom/fromJson.txt:2721
 msgid "Hellstorm"
-msgstr ""
+msgstr "إعصار جهنم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
@@ -9637,21 +9637,21 @@ msgstr "رأس صاروخي بمتفجراتٍ طرية"
 #. data/mp/stats/research.json: $.R-Wpn-Energy-Damage02.name
 #: po/custom/fromJson.txt:2740
 msgid "Hi-Energy Laser Emitter Mk2"
-msgstr ""
+msgstr "جهازٍ إشعاعٍ ليزري عالي الطاقة (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Energy-Damage03.name
 #: po/custom/fromJson.txt:2744
 msgid "Hi-Energy Laser Emitter Mk3"
-msgstr ""
+msgstr "جهازٍ إشعاعٍ ليزري عالي الطاقة (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Energy-Damage01.name
 #: po/custom/fromJson.txt:2748
 msgid "Hi-Energy Laser Emitter"
-msgstr ""
+msgstr "جهازٍ إشعاعٍ ليزري عالي الطاقة"
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.challenge.name
@@ -9834,28 +9834,28 @@ msgstr "الحوامة"
 #: po/custom/fromJson.txt:2886
 #, no-c-format
 msgid "Howitzer accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة الهاوتزر 10%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 #: po/custom/fromJson.txt:2890
 msgid "Howitzer Autoloader Mk2"
-msgstr ""
+msgstr "ملقمٌ آلي للهاتوزر (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #: po/custom/fromJson.txt:2894
 msgid "Howitzer Autoloader Mk3"
-msgstr ""
+msgstr "ملقمٌ آلي للهاتوزر (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 #: po/custom/fromJson.txt:2898
 msgid "Howitzer Autoloader"
-msgstr ""
+msgstr "ملقمٌ آلي للهاتوزر"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
@@ -9863,13 +9863,13 @@ msgstr ""
 #: po/custom/fromJson.txt:2903
 #, no-c-format
 msgid "Howitzer damage +25%"
-msgstr ""
+msgstr "زيادة ضرر الهاوتزر 25%"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 #: po/custom/fromJson.txt:2912
 msgid "Howitzer Fast Loader"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للهاوتزر"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
@@ -9877,7 +9877,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2917
 #, no-c-format
 msgid "Howitzer reload time -10%"
-msgstr ""
+msgstr "تقليل وقت إ‘ادة تعبئة الهاوتزر 10%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HowitzerMk1.name
@@ -9886,7 +9886,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 #: po/custom/fromJson.txt:2929
 msgid "Howitzer"
-msgstr ""
+msgstr "الهاوتزر"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadMg1.name
@@ -9953,7 +9953,7 @@ msgstr "رشاش سلسلة فائق السرعة"
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2969
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr ""
+msgstr "مربض مدفعٍ فائق السرعة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
@@ -10003,7 +10003,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text[1]
 #: po/custom/fromJson.txt:3002
 msgid "Improved armor-piercing dart"
-msgstr ""
+msgstr "سهمٌ مقوىً خارقٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb-Damage02.name
@@ -10017,7 +10017,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_LASROF1.text[1]
 #: po/custom/fromJson.txt:3014
 msgid "Improved Energizer reduces laser recharge time"
-msgstr ""
+msgstr "سيتم تحسين مولّد الطاقة الليزري مما يقلل من وقت إعادة الشحن"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[1]
@@ -10077,7 +10077,7 @@ msgstr "قذائف مطوَّرة شديدة الانفجار"
 #. data/mp/stats/research.json: $.R-Wpn-Energy-Accuracy01.name
 #: po/custom/fromJson.txt:3050
 msgid "Improved Laser Focusing"
-msgstr ""
+msgstr "زيادة تركيز الليزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[1]
@@ -10152,46 +10152,46 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text[1]
 #: po/custom/fromJson.txt:3099
 msgid "Improvement in laser emission density"
-msgstr ""
+msgstr "يزيد من كثافة إشعاع الليزر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text[1]
 #: po/custom/fromJson.txt:3103
 msgid "Improvement in laser optics reduces light dispersal"
-msgstr ""
+msgstr "سيتم تحسين الصفات الضوئية لليزر مما يقلل من تبعثر الضوء"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3112
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "مربض هاوتزر حارق 2"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
 #: po/custom/fromJson.txt:3115
 msgid "Incendiary howitzer emplacement"
-msgstr ""
+msgstr "مربض هاوتزر حارق"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3119
 msgid "Incendiary Howitzer Emplacement"
-msgstr ""
+msgstr "مربض هاوتزر حارق"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 #: po/custom/fromJson.txt:3122
 msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr ""
+msgstr "يمكن إسناد الهاوتزر الحارق إلى أحد المستشعرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Incendiary.name
 #. data/mp/stats/weapons.json: $.Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3126
 msgid "Incendiary Howitzer"
-msgstr ""
+msgstr "الهاوتزر الحارق"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
@@ -10218,7 +10218,7 @@ msgstr "هاونٌ حارق"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[1]
 #: po/custom/fromJson.txt:3141
 msgid "Increased gauss output speeds up reload time"
-msgstr ""
+msgstr "ستؤدي زيادة قوة المدفع إلى تقليل وقت إعادة التعبئة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[2]
@@ -10337,19 +10337,19 @@ msgstr "تزيد من معدل إطلاق الهاون"
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
 #: po/custom/fromJson.txt:3297
 msgid "Increases Rail Gun accuracy"
-msgstr ""
+msgstr "زيادة دقة المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_D1.text[2]
 #: po/custom/fromJson.txt:3300
 msgid "Increases Rail Gun damage"
-msgstr ""
+msgstr "زيادة ضرر المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[2]
 #: po/custom/fromJson.txt:3303
 msgid "Increases Rail Gun ROF"
-msgstr ""
+msgstr "زيادة معدل إطلاق المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[2]
@@ -10391,7 +10391,7 @@ msgstr "أقل قوةً وتصفيحاً من جسم الأفعى"
 #. data/mp/stats/structure.json: $.Tower-Projector.name
 #: po/custom/fromJson.txt:3356
 msgid "Inferno Bunker"
-msgstr "ملجأٌ بقاذف جهنم"
+msgstr "ملجأٌ بقاذف الجحيم"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHTracks.name
@@ -10410,14 +10410,14 @@ msgstr ""
 #. data/base/stats/structure.json: $.Tower-Projector.name
 #: po/custom/fromJson.txt:3366
 msgid "Inferno Emplacement"
-msgstr ""
+msgstr "مربض قاذف الجحيم"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.WallTower-Projector.name
 #. data/mp/stats/structure.json: $.WallTower-Projector.name
 #: po/custom/fromJson.txt:3370
 msgid "Inferno Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بقاذف الجحيم"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
@@ -10430,7 +10430,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Flame2.name
 #: po/custom/fromJson.txt:3377
 msgid "Inferno"
-msgstr "قاذف جهنم"
+msgstr "الجحيم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[2]
@@ -10619,27 +10619,27 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Laser01.name
 #: po/custom/fromJson.txt:3493
 msgid "Laser - Flashlight"
-msgstr ""
+msgstr "مطلق ليزر - الفلاش"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[0]
 #: po/custom/fromJson.txt:3496
 msgid "Laser AA Gun Available"
-msgstr ""
+msgstr "يمكنك الآن بناء ليزرٍ مضادٍ للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text[2]
 #: po/custom/fromJson.txt:3500
 #, no-c-format
 msgid "Laser accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة الليزر 10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text[2]
 #: po/custom/fromJson.txt:3504
 #, no-c-format
 msgid "Laser damage +25%"
-msgstr ""
+msgstr "زيادة ضرر الليزر 25%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
@@ -10653,7 +10653,7 @@ msgstr "سيقوم الليزر المحدد للأهداف بتوجيه الط�
 #: po/custom/fromJson.txt:3512
 #, no-c-format
 msgid "Laser reload time -15%"
-msgstr ""
+msgstr "تقليل وقت إعادة شحن الليزر 15%"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-LasSat.name
@@ -10670,13 +10670,13 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:3523
 msgid "Laser Upgrade"
-msgstr ""
+msgstr "تطويرٌ لليزر"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Laseropticslab.name
 #: po/custom/fromJson.txt:3526
 msgid "Laseropticslab"
-msgstr ""
+msgstr "مختبر فيزياء الليزر"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.LasSat.name
@@ -11419,7 +11419,7 @@ msgstr "مدفع الإبر"
 #. data/mp/stats/templates.json: $.MP-Cyb-Needle-GRD.name
 #: po/custom/fromJson.txt:4023
 msgid "Needle Gunner Cyborg"
-msgstr ""
+msgstr "السايبورغ ذو مدفع الإبر"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade08.name
@@ -11580,7 +11580,7 @@ msgstr "هنالك نظام دفعٍ جديدٍ متاحٌ لك"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4182
 msgid "New Rail Gun Available"
-msgstr ""
+msgstr "يمكنك الآن استخدام مدفعٍ كهرومغناطيسيٍ جديد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text[1]
@@ -11939,7 +11939,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-PlasmaCannon.name
 #: po/custom/fromJson.txt:4423
 msgid "Plasma Cannon Emplacement"
-msgstr ""
+msgstr "مربض مدفع البلازما"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASCAN.text[1]
@@ -12140,14 +12140,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-PulseLaser.name
 #: po/custom/fromJson.txt:4549
 msgid "Pulse Laser Emplacement"
-msgstr ""
+msgstr "مربض ليزرٍ نبضي"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-PulseLas.name
 #. data/mp/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:4553
 msgid "Pulse Laser Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بليزرٍ نبضي"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
@@ -12257,28 +12257,28 @@ msgstr ""
 #: po/custom/fromJson.txt:4621
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة المدفع الكهرومغناطيسي 10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text[2]
 #: po/custom/fromJson.txt:4625
 #, no-c-format
 msgid "Rail Gun damage +25%"
-msgstr ""
+msgstr "زيادة ضرر المدفع الكهرومغناطيسي 25%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail2.name
 #. data/mp/stats/research.json: $.R-Defense-Rail2.name
 #: po/custom/fromJson.txt:4629
 msgid "Rail Gun Emplacement"
-msgstr ""
+msgstr "مربض مدفعٍ كهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL2.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL2.text[1]
 #: po/custom/fromJson.txt:4633
 msgid "Rail gun firing armor-piercing darts"
-msgstr ""
+msgstr "مدفعٌ يستخدم الطاقة الكهرومغناطيسية لإطلاق سهامٍ خارقةٍ للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-Rail2.name
@@ -12287,7 +12287,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-Rail2.name
 #: po/custom/fromJson.txt:4639
 msgid "Rail Gun Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفعٍ كهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
@@ -12300,28 +12300,28 @@ msgstr ""
 #: po/custom/fromJson.txt:4646
 #, no-c-format
 msgid "Rail Gun reload time -15%"
-msgstr ""
+msgstr "تقليل وقت إعادة تعبئة المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-ROF02.name
 #: po/custom/fromJson.txt:4650
 msgid "Rail Gun ROF Mk2"
-msgstr ""
+msgstr "معدل إطلاق المدافع الكهرومغناطيسية (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-ROF03.name
 #: po/custom/fromJson.txt:4654
 msgid "Rail Gun ROF Mk3"
-msgstr ""
+msgstr "معدل إطلاق المدافع الكهرومغناطيسية (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-ROF01.name
 #: po/custom/fromJson.txt:4658
 msgid "Rail Gun ROF"
-msgstr ""
+msgstr "معدل إطلاق المدافع الكهرومغناطيسية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverRailGun.name
@@ -12336,7 +12336,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4667
 msgid "Rail Gun Upgrade"
-msgstr ""
+msgstr "تطويرٌ للمدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun02.name
@@ -12345,20 +12345,20 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.RailGun2Mk1.name
 #: po/custom/fromJson.txt:4673
 msgid "Rail Gun"
-msgstr ""
+msgstr "المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 #: po/custom/fromJson.txt:4676
 msgid "Rail Target Prediction Computer"
-msgstr ""
+msgstr "حاسوبٌ للتنبؤ بحركة الهدف"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-Rail2.name
 #. data/mp/stats/structure.json: $.Emplacement-Rail2.name
 #: po/custom/fromJson.txt:4680
 msgid "Railgun Emplacement"
-msgstr ""
+msgstr "مربض مدفعٍ كهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF02.name
@@ -12377,7 +12377,7 @@ msgstr "رشاش سلسلة سريع الإطلاق"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 #: po/custom/fromJson.txt:4690
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "مدفعٌ كهرومغناطيسي قادرٌ على إطلاق قذائف إبرية الشكل بسرعةٍ عالية"
+msgstr "مدفعٌ يستخدم الطاقة الكهرومغناطيسية لإطلاق سهامٍ إبرية الشكل بمعدلٍ مرتفع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
@@ -12693,14 +12693,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
 #: po/custom/fromJson.txt:4923
 msgid "Robotic VTOL Rearming Mk2"
-msgstr ""
+msgstr "إعادة تسليحٍ ربوتية للطائرات (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 #: po/custom/fromJson.txt:4927
 msgid "Robotic VTOL Rearming Mk3"
-msgstr ""
+msgstr "إعادة تسليحٍ ربوتية للطائرات (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_VPU4.text[1]
@@ -12709,7 +12709,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade04.name
 #: po/custom/fromJson.txt:4933
 msgid "Robotic VTOL Rearming"
-msgstr ""
+msgstr "إعادة تسليحٍ ربوتية للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_AC1.text[2]
@@ -12825,7 +12825,7 @@ msgstr "سيتعقب الصاروخ الهدف الذي يحدده جهاز ال
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
 #: po/custom/fromJson.txt:5007
 msgid "Rotary Howitzer - Hellstorm"
-msgstr ""
+msgstr "هاوتزر دوار - إعصار جهنم"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-RotMG.name
@@ -13572,7 +13572,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-HvyATrocket.name
 #: po/custom/fromJson.txt:5497
 msgid "Tank Killer Emplacement"
-msgstr ""
+msgstr "مربض قاتل دبابات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HvyA-Trocket.name
@@ -13664,7 +13664,7 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 #: po/custom/fromJson.txt:5550
 msgid "Target Prediction Computer"
-msgstr ""
+msgstr "حاسوبٌ للتنبؤ بحركة الهدف"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy01.name
@@ -14026,7 +14026,7 @@ msgstr "رشّاشان"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:5778
 msgid "Twin Medium Anti-Aircraft Laser"
-msgstr ""
+msgstr "ليزران مضادان للطائرات ومتوسطا القوة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[1]
@@ -14100,7 +14100,7 @@ msgstr "يستعمل تقنيات المدافع المتطورة"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text[1]
 #: po/custom/fromJson.txt:5819
 msgid "Uses advanced mass driver railgun technology"
-msgstr ""
+msgstr "يستعمل تقنياتٍ كهرومغناطيسية متطورة لتسريع المقذوفات وإكسابها سرعاتٍ عالية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MSL.text[1]
@@ -14265,14 +14265,14 @@ msgstr "الأفعى"
 #. data/mp/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
 #: po/custom/fromJson.txt:5941
 msgid "VTOL Assault Cannon"
-msgstr "طائرةٌ عمودية بمدفعٍ هجومي"
+msgstr "مدفعٌ هجومي للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG4ROTARY-VTOL.name
 #. data/mp/stats/weapons.json: $.MG4ROTARY-VTOL.name
 #: po/custom/fromJson.txt:5945
 msgid "VTOL Assault Gun"
-msgstr "طائرةٌ عمودية برشاشين هجوميين"
+msgstr "رشاشان هجوميان للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
@@ -14297,14 +14297,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-BB.name
 #: po/custom/fromJson.txt:5958
 msgid "VTOL Bunker Buster"
-msgstr ""
+msgstr "هدّام الملاجئ للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon1-VTOL.name
 #. data/mp/stats/weapons.json: $.Cannon1-VTOL.name
 #: po/custom/fromJson.txt:5962
 msgid "VTOL Cannon"
-msgstr "طائرةٌ عمودية بمدفع"
+msgstr "مدفعٌ للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-VTOLCBTower01.name
@@ -14394,7 +14394,7 @@ msgstr "مصنع الطائرات العمودية"
 #. data/mp/stats/weapons.json: $.Laser3BEAM-VTOL.name
 #: po/custom/fromJson.txt:6023
 msgid "VTOL Flashlight"
-msgstr ""
+msgstr "ليزر الفلاش للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
@@ -14407,14 +14407,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.HeavyLaser-VTOL.name
 #: po/custom/fromJson.txt:6030
 msgid "VTOL Heavy Laser"
-msgstr ""
+msgstr "ليزرٌ كثيف للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG3-VTOL.name
 #. data/mp/stats/weapons.json: $.MG3-VTOL.name
 #: po/custom/fromJson.txt:6034
 msgid "VTOL Heavy Machinegun"
-msgstr "طائرةٌ عمودية برشاشٍ ثقيل"
+msgstr "رشاشٌ ثقيل للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-HPV.name
@@ -14439,7 +14439,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 #: po/custom/fromJson.txt:6047
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "طائرةٌ عمودية بمدفعٍ فائق السرعة"
+msgstr "مدفعٌ فائق السرعة للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol02.name
@@ -14476,7 +14476,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
 #: po/custom/fromJson.txt:6066
 msgid "VTOL Lancer"
-msgstr "طائرةٌ عمودية بصاروخ الرمّاح"
+msgstr "صاروخ الرمّاح للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
@@ -14489,7 +14489,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG1-VTOL.name
 #: po/custom/fromJson.txt:6073
 msgid "VTOL Machinegun"
-msgstr "طائرةٌ عمودية برشاش"
+msgstr "رشاشٌ للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
@@ -14502,14 +14502,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod.name
 #: po/custom/fromJson.txt:6080
 msgid "VTOL Mini-Rocket"
-msgstr "طائرةٌ عمودية بصواريخ مصغرة"
+msgstr "صواريخ مصغرة للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.RailGun1-VTOL.name
 #. data/mp/stats/weapons.json: $.RailGun1-VTOL.name
 #: po/custom/fromJson.txt:6084
 msgid "VTOL Needle Gun"
-msgstr ""
+msgstr "مدفع الإبر للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
@@ -14529,14 +14529,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-VTOL.name
 #: po/custom/fromJson.txt:6098
 msgid "VTOL Propulsion"
-msgstr ""
+msgstr "دفعٌ عمودي"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser2PULSE-VTOL.name
 #. data/mp/stats/weapons.json: $.Laser2PULSE-VTOL.name
 #: po/custom/fromJson.txt:6102
 msgid "VTOL Pulse Laser"
-msgstr ""
+msgstr "ليزرٌ نبضي للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-VTOLRadarTower01.name
@@ -14551,7 +14551,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.RailGun2-VTOL.name
 #: po/custom/fromJson.txt:6111
 msgid "VTOL Rail Gun"
-msgstr ""
+msgstr "مدفعٌ كهرومغناطيسي للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad.name
@@ -14618,7 +14618,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
 #: po/custom/fromJson.txt:6163
 msgid "VTOL Tank Killer"
-msgstr "طائرةٌ عمودية بصاروخ قاتل الدبابات"
+msgstr "قاتل الدبابات للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
@@ -14632,7 +14632,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG2-VTOL.name
 #: po/custom/fromJson.txt:6171
 msgid "VTOL Twin Machinegun"
-msgstr "طائرةٌ عمودية برشاشين"
+msgstr "رشاشان للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol.name
