@@ -4063,7 +4063,7 @@
 	},
 	"Rocket-Pod": {
 		"buildPoints": 375,
-		"buildPower": 75,
+		"buildPower": 70,
 		"damage": 22,
 		"designable": 1,
 		"effectSize": 25,
