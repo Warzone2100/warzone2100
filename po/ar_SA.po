@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-04 15:02\n"
+"PO-Revision-Date: 2022-01-05 03:06\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1592,22 +1592,22 @@ msgstr "زيادة تركيز الليزر (النموذج 3)"
 #: data/base/messages/strings/names.txt:429
 #: data/mp/messages/strings/names.txt:542
 msgid "HEAP Missile Warhead"
-msgstr ""
+msgstr "رأسٌ حربيٌ خارقٌ للدروع"
 
 #: data/base/messages/strings/names.txt:430
 #: data/mp/messages/strings/names.txt:543
 msgid "HEAP Missile Warhead Mk2"
-msgstr ""
+msgstr "رأسٌ حربيٌ خارقٌ للدروع (النموذج 2)"
 
 #: data/base/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:544
 msgid "HEAP Missile Warhead Mk3"
-msgstr ""
+msgstr "رأسٌ حربيٌ خارقٌ للدروع (النموذج 3)"
 
 #: data/base/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:545
 msgid "Improved Missile Loading System"
-msgstr ""
+msgstr "تحسين نظام تحميل الصواريخ الموجهة"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
@@ -2294,7 +2294,7 @@ msgstr "برج حراسةٍ محصّن وعليه قاذف لهب"
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "برج حراسةٍ مزودٌ بصواريخ «الرمّاح» المضادة للدبابات"
+msgstr "برج حراسةٍ مزودٌ بصواريخ «الرمّاح» غير الموجهة والمضادة للدبابات"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
@@ -3924,7 +3924,7 @@ msgstr "تطويرٌ للصواريخ المصغرة"
 #: data/mp/messages/strings/resstrings.txt:422
 #: po/custom/fromJson.txt:2781
 msgid "High Explosive Armor-Piercing warheads"
-msgstr "رؤوسٌ حربيةٌ شديد الانفجار خارقةٌ للدروع"
+msgstr "رؤوسٌ حربيةٌ شديدة الانفجار خارقةٌ للدروع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text[2]
@@ -5516,7 +5516,7 @@ msgstr "مركز قيادة «الرابطة»"
 #: data/mp/messages/strings/names.txt:726
 #: po/custom/fromJson.txt:3893
 msgid "Missile Silo"
-msgstr ""
+msgstr "منشأة إطلاق صواريخ"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-Mcannon.name
@@ -6115,7 +6115,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Damage03.name
 #: po/custom/fromJson.txt:187
 msgid "Advanced Bomb Warhead"
-msgstr ""
+msgstr "رأسٌ حربيٌ متطور للقنابل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text[1]
@@ -6149,42 +6149,42 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Missile-ROF02.name
 #: po/custom/fromJson.txt:212
 msgid "Advanced Missile Allocation System Mk2"
-msgstr ""
+msgstr "نظام توزيعٍ متقدم للصواريخ الموجهة (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-ROF03.name
 #: po/custom/fromJson.txt:216
 msgid "Advanced Missile Allocation System Mk3"
-msgstr ""
+msgstr "نظام توزيعٍ متقدم للصواريخ الموجهة (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-ROF01.name
 #: po/custom/fromJson.txt:220
 msgid "Advanced Missile Allocation System"
-msgstr ""
+msgstr "نظام توزيعٍ متقدم للصواريخ الموجهة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Damage02.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage02.name
 #: po/custom/fromJson.txt:224
 msgid "Advanced Missile Warhead Mk2"
-msgstr ""
+msgstr "رأسٌ حربيٌ متطور (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage03.name
 #: po/custom/fromJson.txt:228
 msgid "Advanced Missile Warhead Mk3"
-msgstr ""
+msgstr "رأسٌ حربيٌ متطور (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage01.name
 #: po/custom/fromJson.txt:232
 msgid "Advanced Missile Warhead"
-msgstr ""
+msgstr "رأسٌ حربيٌ متطور"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
@@ -6279,7 +6279,7 @@ msgstr "سيتم تحديث كل أسلحة الليزر تلقائياً"
 #. ... + 7 refs
 #: po/custom/fromJson.txt:375
 msgid "All missiles upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل الصواريخ الموجهة تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[3]
@@ -6358,27 +6358,27 @@ msgstr "قاعدة دفعٌ حوامة للمركبات، ويمكنها الت�
 #. data/base/stats/research.json: $.R-Defense-MdArtMissile.name
 #: po/custom/fromJson.txt:495
 msgid "Angel Missile Battery"
-msgstr ""
+msgstr "بطارية صواريخ الملاك"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MdART-pit.name
 #: po/custom/fromJson.txt:498
 msgid "Angel Missile Emplacement"
-msgstr ""
+msgstr "مربض صاروخ الملاك"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MdArtMissile.name
 #. data/base/stats/weapons.json: $.Missile-MdArt.name
 #: po/custom/fromJson.txt:502
 msgid "Angel Missile"
-msgstr ""
+msgstr "صاروخ الملاك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text[1]
 #: po/custom/fromJson.txt:506
 msgid "Anti-tank missile"
-msgstr ""
+msgstr "صاروخٌ موجه مضادٌ للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_LTAT1.text[1]
@@ -6496,7 +6496,7 @@ msgstr "مسلحٌ بمدفع السايبورغ الكهرومغناطيسي"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AT.text[1]
 #: po/custom/fromJson.txt:581
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr ""
+msgstr "مسلحٌ بقاذف صواريخ الجلاد الخاص بالسايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
@@ -6542,13 +6542,13 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
 #: po/custom/fromJson.txt:606
 msgid "Armed with Lancer anti-tank missile"
-msgstr "مسلحٌ بصاروخ الرمّاح المضاد للدبابات"
+msgstr "مسلحٌ بصاروخ الرمّاح غير الموجه والمضاد للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr "مسلحٌ بصاروخ الرمّاح المضاد للدبابات"
+msgstr "مسلحٌ بصاروخ الرمّاح غير الموجه والمضاد للدبابات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -6579,7 +6579,7 @@ msgstr "مسلحٌ بمدفع الإبر"
 #. data/mp/messages/resmessages3.json: $.RES_CYW_ATM.text[1]
 #: po/custom/fromJson.txt:632
 msgid "Armed with Scourge anti-tank missile"
-msgstr ""
+msgstr "مسلحٌ بصاروخ الجلاد الموجه المضاد للدبابات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_TK.text[1]
@@ -6622,7 +6622,7 @@ msgstr "ملجأٌ محصّن وبداخله قاذف لهب"
 #. data/base/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:661
 msgid "Armored bunker with Lancer AT rocket"
-msgstr "ملجأٌ محصّن وبداخله قاذفٌ لصواريخ «الرمّاح» المضادة للدبابات"
+msgstr "ملجأٌ محصّن وبداخله قاذفٌ لصواريخ «الرمّاح» غير الموجهة والمضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_LC.text[1]
@@ -6654,7 +6654,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:682
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "برج حراسةٍ مزودٌ بصواريخ «الرمّاح» المضادة للدبابات"
+msgstr "برج حراسةٍ مزودٌ بصواريخ «الرمّاح» غير الموجهة والمضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
@@ -6741,7 +6741,7 @@ msgstr "نقطةٌ محصنة وعليها مدفعٌ فائق السرعة"
 #. data/mp/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
 #: po/custom/fromJson.txt:742
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "نقطةٌ محصّنة مزودةٌ بصواريخ الرمّاح المضادة للدبابات"
+msgstr "نقطةٌ محصّنة مزودةٌ بصواريخ الرمّاح غير الموجهة والمضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT2_LC.text[1]
@@ -6769,7 +6769,7 @@ msgstr "نقطةٌ محصّنة وعليها مدفعٌ كهرومغناطيسي
 #. data/mp/messages/resmessages3.json: $.RES_WT9_ATM.text[1]
 #: po/custom/fromJson.txt:758
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr ""
+msgstr "نقطة محصّنة مزوّدةٌ بصواريخ الجلاد الموجهة والمضادة للدبابات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text[1]
@@ -7429,7 +7429,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[1]
 #: po/custom/fromJson.txt:1286
 msgid "Bunker buster missile"
-msgstr ""
+msgstr "صاروخ هدّام الدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket03-HvAT.name
@@ -9584,7 +9584,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text[1]
 #: po/custom/fromJson.txt:2705
 msgid "Heavy surface-to-air missile"
-msgstr ""
+msgstr "صاروخ أرض-جو ثقيل"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Heavywepslab.name
@@ -9616,21 +9616,21 @@ msgstr "إن الوحدات الاستثنائية والبطولية محمية
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage08.name
 #: po/custom/fromJson.txt:2728
 msgid "HESH Rocket Warhead Mk2"
-msgstr "رأس صاروخ بمتفجراتٍ طرية"
+msgstr "رأسٌ حربي بمتفجراتٍ طرية (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage09.name
 #: po/custom/fromJson.txt:2732
 msgid "HESH Rocket Warhead Mk3"
-msgstr "رأس صاروخ بمتفجراتٍ طرية"
+msgstr "رأسٌ حربي بمتفجراتٍ طرية (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage07.name
 #: po/custom/fromJson.txt:2736
 msgid "HESH Rocket Warhead"
-msgstr "رأس صاروخي بمتفجراتٍ طرية"
+msgstr "رأسٌ حربي بمتفجراتٍ طرية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-Damage02.name
@@ -9705,21 +9705,21 @@ msgstr "قذائف شديدة الانفجار خارقةٌ للدروع"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[1]
 #: po/custom/fromJson.txt:2785
 msgid "High explosive artillery missile"
-msgstr ""
+msgstr "صاروخٌ مدفعي شديد الانفجار"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text[1]
 #: po/custom/fromJson.txt:2793
 msgid "High explosive heavy artillery missile"
-msgstr ""
+msgstr "صاروخٌ مدفعيٌ ثقيل وشديد الانفجار"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[1]
 #: po/custom/fromJson.txt:2797
 msgid "High explosive shaped charge missile"
-msgstr ""
+msgstr "صاروخٌ موجه شديد الانفجار، تمت قولبة حشوته بحيث تتركز طاقة الانفجار في نقطةٍ واحدة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat05.name
@@ -11190,7 +11190,7 @@ msgstr ""
 #: po/custom/fromJson.txt:3872
 #, no-c-format
 msgid "Missile accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة الصاروخ الموجه 10%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text[1]
@@ -11204,7 +11204,7 @@ msgstr ""
 #: po/custom/fromJson.txt:3880
 #, no-c-format
 msgid "Missile damage +25%"
-msgstr ""
+msgstr "زيادة ضرر الصاروخ الموجه 25%"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Missile.name
@@ -11220,7 +11220,7 @@ msgstr ""
 #: po/custom/fromJson.txt:3890
 #, no-c-format
 msgid "Missile reload time -15%"
-msgstr ""
+msgstr "تقليل وقت إعادة تعبئة الصواريخ الموجهة 15%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[0]
@@ -11229,7 +11229,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:3902
 msgid "Missile Upgrade"
-msgstr ""
+msgstr "تطويرٌ للصاروخ الموجه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_ROF1.text[1]
@@ -11457,7 +11457,7 @@ msgstr "هنالك سلاحٌ متطورٌ جديدٌ متاحٌ لك"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[0]
 #: po/custom/fromJson.txt:4058
 msgid "New Artillery Missile Turret Available"
-msgstr ""
+msgstr "هنالك رأس مدفعيةٍ صاروخيةٍ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[1]
@@ -11518,7 +11518,7 @@ msgstr "هنالك سلاحٌ ليزريٌ جديدٌ متاحٌ لك"
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[0]
 #: po/custom/fromJson.txt:4135
 msgid "New Missile Turret Available"
-msgstr "هنالك رأسٌ صاروخيٌ جديدٌ متاحٌ لك"
+msgstr "يمكنك استخدام رأسٍ جديدٍ يطلق صواريخ موجهة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[0]
@@ -11679,7 +11679,7 @@ msgstr "يمكن للمستشعرات الآن اكتشاف الانبعاثات
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[0]
 #: po/custom/fromJson.txt:4260
 msgid "New VTOL Missile Launcher"
-msgstr ""
+msgstr "قاذف صواريخ موجهة جديد للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NEXUSCWall.name
@@ -11745,7 +11745,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.NX-ANTI-SATSite.name
 #: po/custom/fromJson.txt:4302
 msgid "Nexus Missile Silo"
-msgstr ""
+msgstr "منشأة إطلاقٍ تابعةٌ لـ «نيكسوس»"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
@@ -13009,7 +13009,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-Atmiss.name
 #: po/custom/fromJson.txt:5114
 msgid "Scourge Missile Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بصاروح الجلاد"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-GuardTower-ATMiss.name
@@ -13065,7 +13065,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
 #: po/custom/fromJson.txt:5146
 msgid "Search & Destroy Missiles"
-msgstr ""
+msgstr "صواريخ البحث والتدمير"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[3]
@@ -13498,7 +13498,7 @@ msgstr "جلٌ بلازمي فائق السخونة"
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[1]
 #: po/custom/fromJson.txt:5453
 msgid "Surface-to-air missile"
-msgstr ""
+msgstr "صاروخ أرض-جو"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text[1]
@@ -14574,7 +14574,7 @@ msgstr "يجب أن تبني منصات إعادة تسليح الطائرات �
 #. data/mp/stats/weapons.json: $.Missile-VTOL-AT.name
 #: po/custom/fromJson.txt:6131
 msgid "VTOL Scourge Missile"
-msgstr ""
+msgstr "صاروخ الجلاد للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTW1.text[1]
