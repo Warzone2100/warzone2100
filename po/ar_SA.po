@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-05 03:06\n"
+"PO-Revision-Date: 2022-01-05 15:02\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1216,7 +1216,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:403
 msgid "Dragon's Teeth"
-msgstr ""
+msgstr "أسنان التنين"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Howitzer.name
@@ -1264,7 +1264,7 @@ msgstr "مربض المدفع العملاق"
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
 msgid "Pepperpot Emplacement"
-msgstr ""
+msgstr "مربض رشاشة الفلفل"
 
 #: data/base/messages/strings/names.txt:237
 #: data/base/messages/strings/names.txt:405
@@ -1286,39 +1286,39 @@ msgstr ""
 #: data/base/messages/strings/names.txt:287
 #: data/mp/messages/strings/names.txt:371
 msgid "Bunker Blaster Cyborg"
-msgstr ""
+msgstr "السايبورغ هدّام الملاجئ"
 
 #: data/base/messages/strings/names.txt:289
 msgid "Jump Bunker Blaster"
-msgstr ""
+msgstr "السايبورغ القافز هدّام الملاجئ"
 
 #: data/base/messages/strings/names.txt:290
 msgid "Jump Heavy Gunner"
-msgstr ""
+msgstr "السايبورغ القافز ذو الرشاش الثقيل"
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
-msgstr ""
+msgstr "السايبورغ القافز الرمّاح"
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
-msgstr ""
+msgstr "السايبورغ القافز ذو الرشاش الهجومي"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
-msgstr ""
+msgstr "السايبورغ القافز ذو مدفع الإبر"
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
-msgstr ""
+msgstr "السايبورغ القافز ذو صاروخ الجلاد"
 
 #: data/base/messages/strings/names.txt:295
 msgid "Jump Flashlight Gunner"
-msgstr ""
+msgstr "السايبورغ القافز ذو ليزر الفلاش"
 
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
-msgstr ""
+msgstr "حقيبة القفز للسايبورغ"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs02.name
@@ -1327,7 +1327,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:382
 #: po/custom/fromJson.txt:1672
 msgid "Cyborg Propulsion II"
-msgstr ""
+msgstr "دفع السايبورغ 2"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs03.name
@@ -1335,12 +1335,12 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:383
 #: po/custom/fromJson.txt:1675
 msgid "Cyborg Propulsion III"
-msgstr ""
+msgstr "دفع السايبورغ 3"
 
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:386
 msgid "NP-Hardcrete"
-msgstr ""
+msgstr "إسمنت النهج الحديث الصلب"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox01.name
@@ -1401,42 +1401,42 @@ msgstr "نقطةٌ محصّنة بقاذف لهب"
 #: data/base/messages/strings/names.txt:330
 #: po/custom/fromJson.txt:190
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "إنتاجٌ متطور للسايبورغ"
 
 #: data/base/messages/strings/names.txt:331
 msgid "Advanced Cyborg Production Mk2"
-msgstr ""
+msgstr "إنتاجٌ متطور للسايبورغ (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:332
 msgid "Advanced Cyborg Production Mk3"
-msgstr ""
+msgstr "إنتاجٌ متطور للسايبورغ (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[1]
 #: data/base/messages/strings/names.txt:334
 #: po/custom/fromJson.txt:201
 msgid "Advanced Factory Production"
-msgstr ""
+msgstr "إنتاجٌ متطور في المصانع"
 
 #: data/base/messages/strings/names.txt:335
 msgid "Advanced Factory Production Mk2"
-msgstr ""
+msgstr "إنتاجٌ متطور في المصانع (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:336
 msgid "Advanced Factory Production Mk3"
-msgstr ""
+msgstr "إنتاجٌ متطور في المصانع (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:342
 msgid "Advanced Repair Facility Upgrade"
-msgstr ""
+msgstr "تحديثٌ لمركز الصيانة المتطور"
 
 #: data/base/messages/strings/names.txt:343
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "تحديثٌ لمركز الصيانة المتطور (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:344
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "تحديثٌ لمركز الصيانة المتطور (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:442
@@ -1446,78 +1446,78 @@ msgstr "إعادة تسليحٍ ربوتية للطائرات (النسخة 4)"
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:450
 msgid "Cyborg Self-Repair"
-msgstr ""
+msgstr "صيانةٌ ذاتية للسايبورغ"
 
 #: data/base/messages/strings/names.txt:350
 #: data/mp/messages/strings/names.txt:451
 msgid "Automated Cyborg Repair Mk2"
-msgstr ""
+msgstr "صيانةٌ آلية للسايبورغ (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:351
 #: data/mp/messages/strings/names.txt:452
 msgid "Automated Cyborg Repair Mk3"
-msgstr ""
+msgstr "صيانةٌ آلية للسايبورغ (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:353
 #: data/mp/messages/strings/names.txt:454
 msgid "Defenses Self-Repair"
-msgstr ""
+msgstr "صيانةٌ ذاتية للدفاعات"
 
 #: data/base/messages/strings/names.txt:354
 #: data/mp/messages/strings/names.txt:455
 msgid "Automated Defenses Repair Mk2"
-msgstr ""
+msgstr "صيانةٌ آلية للدفاعات (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:355
 #: data/mp/messages/strings/names.txt:456
 msgid "Automated Defenses Repair Mk3"
-msgstr ""
+msgstr "صيانةٌ آلية للدفاعات (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:357
 #: data/mp/messages/strings/names.txt:458
 msgid "Base Structure Self-Repair"
-msgstr ""
+msgstr "صيانةٌ ذاتية للمباني الرئيسية"
 
 #: data/base/messages/strings/names.txt:358
 #: data/mp/messages/strings/names.txt:459
 msgid "Automated Base Structure Repair Mk2"
-msgstr ""
+msgstr "صيانةٌ آلية للمباني الرئيسية (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:359
 #: data/mp/messages/strings/names.txt:460
 msgid "Automated Base Structure Repair Mk3"
-msgstr ""
+msgstr "صيانةٌ آلية للمباني الرئيسية (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:361
 #: data/mp/messages/strings/names.txt:462
 msgid "Vehicle Self-Repair"
-msgstr ""
+msgstr "صيانةٌ ذاتية للمركبات"
 
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:463
 msgid "Automated Vehicle Repair Mk2"
-msgstr ""
+msgstr "صيانةٌ آلية للمركبات (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:464
 msgid "Automated Vehicle Repair Mk3"
-msgstr ""
+msgstr "صيانةٌ آلية للمركبات (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
-msgstr ""
+msgstr "رأس صيانةٍ متنقل ثقيل"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/resstrings.txt:450
 #: data/mp/messages/strings/names.txt:471
 #: data/mp/messages/strings/resstrings.txt:217
 msgid "Mobile Repair Upgrade"
-msgstr ""
+msgstr "تطوير للصيانة المتنقلة"
 
 #: data/base/messages/strings/names.txt:370
 #: data/mp/messages/strings/names.txt:472
 msgid "Mobile Repair Upgrade Mk2"
-msgstr ""
+msgstr "تطويرٌ للصيانة المتنقلة (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:475
@@ -1863,7 +1863,7 @@ msgstr "مسلحٌ برشاش السايبورغ الهجومي"
 #: data/mp/messages/strings/resstrings.txt:26
 #: po/custom/fromJson.txt:4123
 msgid "New Jump Cyborg Available"
-msgstr ""
+msgstr "يمكنك الآن استخدام سايبورغ قافز جديد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYW_MIS.text[1]
@@ -2130,7 +2130,7 @@ msgstr "خندقٌ محصّن وفيه مدفعٌ عملاق"
 #: data/mp/messages/strings/resstrings.txt:67
 #: po/custom/fromJson.txt:783
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "خندقٌ محصّن وفيه هاون رشاش الفلفل"
+msgstr "خندقٌ محصّن وفيه هاون رشاشة الفلفل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HOW.text[1]
@@ -3589,7 +3589,7 @@ msgstr "تحديثٌ لقاذف اللهب"
 #: data/mp/messages/strings/resstrings.txt:367
 #: po/custom/fromJson.txt:4541
 msgid "Propylene Oxide treated to burn at superhot temperatures"
-msgstr ""
+msgstr "مركب أوكسيد البروبيلين شديد الاشتعال، ومعالجٌ كيميائياً لكي يولّد حرارةً شديدة الارتفاع عند الاحتراق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
@@ -5414,11 +5414,11 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:438
 msgid "Advanced Repair Facility Mk2"
-msgstr ""
+msgstr "مركز صيانةٍ متطور (النسخة 2)"
 
 #: data/mp/messages/strings/names.txt:439
 msgid "Advanced Repair Facility Mk3"
-msgstr ""
+msgstr "مركز صيانةٍ متطور (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.HeavyRepair.name
@@ -6230,7 +6230,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #: po/custom/fromJson.txt:266
 msgid "Aerodynamic Jump Pack"
-msgstr ""
+msgstr "حقيبة قفزٍ أيروديناميكية"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Aerodynamicslab.name
@@ -6434,14 +6434,14 @@ msgstr "طلقاتٌ مجنّحة خارقةٌ للدروع"
 #. data/mp/stats/research.json: $.R-Defense-HvyArtMissile.name
 #: po/custom/fromJson.txt:538
 msgid "Archangel Missile Battery"
-msgstr ""
+msgstr "بطارية صواريخ ملاك الموت"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-HvART-pit.name
 #. data/mp/stats/structure.json: $.Emplacement-HvART-pit.name
 #: po/custom/fromJson.txt:542
 msgid "Archangel Missile Emplacement"
-msgstr ""
+msgstr "مربض صواريخ ملاك موت"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HvArtMissile.name
@@ -6450,7 +6450,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Missile-HvyArt.name
 #: po/custom/fromJson.txt:548
 msgid "Archangel Missile"
-msgstr ""
+msgstr "صاروخ ملاك الموت"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
@@ -6642,13 +6642,13 @@ msgstr "ملجأٌ محصّن وبداخله رشاش"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text[1]
 #: po/custom/fromJson.txt:672
 msgid "Armored EMP Mortar battery pit"
-msgstr ""
+msgstr "خندقٌ محصّن وفيه هاون نبضات الطاقة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
 #: po/custom/fromJson.txt:679
 msgid "Armored guard tower with EMP Cannon"
-msgstr ""
+msgstr "برج حراسةٍ محصّن وعليه مدفع نبضات الطاقة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
@@ -6679,7 +6679,7 @@ msgstr "برج حراسةٍ محصّن وعليه مدفع إبر"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPYT.text[1]
 #: po/custom/fromJson.txt:695
 msgid "Armored guard tower with Nexus Link"
-msgstr ""
+msgstr "برج حراسةٍ محصّن ومسلحٌ بـ «وصلة نيكسوس»"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
@@ -6713,7 +6713,7 @@ msgstr "نقطةٌ محصّنة وعليها ليزر الفلاش"
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL3.text[1]
 #: po/custom/fromJson.txt:722
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها مدفع غاوس"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT4_HC.text[1]
@@ -8305,34 +8305,34 @@ msgstr "إن الوحدات الممتازة والمخضرمة محمية، و�
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1874
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفع نبضات الطاقة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
 #. data/mp/stats/weapons.json: $.EMP-Cannon.name
 #: po/custom/fromJson.txt:1878
 msgid "EMP Cannon"
-msgstr ""
+msgstr "مدفع نبضات الطاقة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb06.name
 #: po/custom/fromJson.txt:1881
 msgid "EMP Missile Launcher"
-msgstr ""
+msgstr "قاذف صواريخ نبضات الطاقة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPMortar.name
 #. data/mp/stats/structure.json: $.Emplacement-MortarEMP.name
 #: po/custom/fromJson.txt:1885
 msgid "EMP Mortar Pit"
-msgstr ""
+msgstr "خندق هاون نبضات الطاقة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MortarEMP.name
 #. data/mp/stats/weapons.json: $.MortarEMP.name
 #: po/custom/fromJson.txt:1889
 msgid "EMP Mortar"
-msgstr ""
+msgstr "هاون نبضات الطاقة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text[1]
@@ -8352,7 +8352,7 @@ msgstr "يمكنك الآن بناء جدران الإسمنت الصلب"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[3]
 #: po/custom/fromJson.txt:1900
 msgid "Enables resistance to Nexus Link technology"
-msgstr ""
+msgstr "يسمح لك بمقاومة تأثير «وصلة نيكسوس»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ASTRUC.text[3]
@@ -8567,7 +8567,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[1]
 #: po/custom/fromJson.txt:2037
 msgid "Fires Electronic Magnetic Pulse Missiles"
-msgstr ""
+msgstr "يطلق صواريخ من نبضات الطاقة الكهرومغناطيسية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text[1]
@@ -9535,7 +9535,7 @@ msgstr "المدفع العملاق"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2670
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "مربض مطلق بلازما ثقيل"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
@@ -9556,7 +9556,7 @@ msgstr "مُطلق بلازما ثقيل"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
 #: po/custom/fromJson.txt:2682
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr "مدفعٌ ثقيل يستخدم القوة الكهرومغناطيسية لإطلاق سهامٍ تتمتع بطاقةٍ حركيةٍ مرتفعة"
+msgstr "مدفعٌ ثقيل يستخدم القوة الكهرومغناطيسية لإطلاق سهامٍ تتمتع بطاقةٍ حركيةٍ مرتفعة، و\"غاوس\" هو واضع النظريات الرياضية المستعملة التي تصف المسرعات المغناطيسية في هذه الأسلحة."
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHRepairHover.name
@@ -10470,7 +10470,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[3]
 #: po/custom/fromJson.txt:3399
 msgid "Jump Cyborgs can now be researched"
-msgstr ""
+msgstr "يمكنك الآن فتح السايبورغ القافز من مركز أبحاثك"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_STW1.text[2]
@@ -11725,14 +11725,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-SpyTower.name
 #: po/custom/fromJson.txt:4291
 msgid "Nexus Link Tower"
-msgstr ""
+msgstr "برج «وصلة نيكسوس»"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTurret.name
 #. data/mp/stats/weapons.json: $.SpyTurret01.name
 #: po/custom/fromJson.txt:4295
 msgid "Nexus Link Turret"
-msgstr ""
+msgstr "رأس «وصلة نيكسوس»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B07.text[0]
@@ -11884,14 +11884,14 @@ msgstr "الجاكوار"
 #. data/mp/stats/structure.json: $.Emplacement-RotMor.name
 #: po/custom/fromJson.txt:4392
 msgid "Pepperpot Pit"
-msgstr "خندق رشاش الفلفل"
+msgstr "خندق رشاشة الفلفل"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4396
 msgid "Pepperpot"
-msgstr "رشاش الفلفل"
+msgstr "رشاشة الفلفل"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -12079,7 +12079,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text[1]
 #: po/custom/fromJson.txt:4500
 msgid "Powerful Electronic magnetic pulse weapon"
-msgstr ""
+msgstr "سلاحٌ شديد القوة يمكنه إطلاق نبضاتٍ من الطاقة الكهرومغناطيسية"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
@@ -12839,7 +12839,7 @@ msgstr "ملجأٌ برشاش دوار"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar3.name
 #: po/custom/fromJson.txt:5015
 msgid "Rotary Mortar - Pepperpot"
-msgstr "هاون دوّار - رشّاش الفلفل"
+msgstr "هاونٌ دوّار - رشاشة الفلفل"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Rotarywepslab.name
@@ -14371,7 +14371,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Bomb6-VTOL-EMP.name
 #: po/custom/fromJson.txt:6009
 msgid "VTOL EMP Missile Launcher"
-msgstr ""
+msgstr "قاذف صواريخ نبضات الطاقة للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[1]
