@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-06 03:05\n"
+"PO-Revision-Date: 2022-01-06 15:02\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1692,7 +1692,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:705
 msgid "Bunker Blaster"
-msgstr ""
+msgstr "هدّام الملاجئ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[0]
@@ -1751,7 +1751,7 @@ msgstr "سيتم تحديث كل السايبورغ تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:6
 #: po/custom/fromJson.txt:1713
 msgid "Cyborg Thermal Armor Improved"
-msgstr ""
+msgstr "تم تحسين الدرع الحراري الخاص بالسايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[1]
@@ -1762,7 +1762,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:7
 #: po/custom/fromJson.txt:2477
 msgid "Heat resistant armored layers"
-msgstr ""
+msgstr "طبقاتٌ مدرعة مقاومةٌ للحرارة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[2]
@@ -1771,7 +1771,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:8
 #: po/custom/fromJson.txt:5583
 msgid "Thermal Armor increased"
-msgstr ""
+msgstr "ستزداد قوة الدرع الحراري"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[0]
@@ -1795,7 +1795,7 @@ msgstr "هنالك سايبورغ جديدٌ متاحٌ لك"
 #: data/mp/messages/strings/resstrings.txt:27
 #: po/custom/fromJson.txt:552
 msgid "Armed with Bunker Buster rocket"
-msgstr ""
+msgstr "مسلحٌ بصاروخ هدّام الملاجئ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[3]
@@ -1892,7 +1892,7 @@ msgstr "تم تحسين دفاعاتك"
 #: data/mp/messages/strings/resstrings.txt:32
 #: po/custom/fromJson.txt:2857
 msgid "High-tensile concrete reinforced with boron"
-msgstr ""
+msgstr "خرسانةٌ مسلّحة بمزيج من الفولاذ وعنصر البورون شديد القوة، مما يجعلها قادرةٌ على مقاومة قوى الشد بفعاليةٍ كبيرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[2]
@@ -2089,7 +2089,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:57
 #: po/custom/fromJson.txt:3341
 msgid "Indirect fire rocket battery"
-msgstr ""
+msgstr "بطارية صواريخ غير موجهة وغير مباشرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[2]
@@ -2378,7 +2378,7 @@ msgstr "تم تطوير مركز الصيانة"
 #: data/mp/messages/strings/resstrings.txt:167
 #: po/custom/fromJson.txt:4200
 msgid "New robotic repair techniques"
-msgstr ""
+msgstr "تقنياتٌ صيانةٍ روبوتية جديدة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[2]
@@ -2412,7 +2412,7 @@ msgstr "سيتم تحديث كل مراكز الصيانة تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:176
 #: po/custom/fromJson.txt:1668
 msgid "Cyborg Production Improved"
-msgstr ""
+msgstr "سيتحسن إنتاج السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FCY4.text[1]
@@ -2421,7 +2421,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:172
 #: po/custom/fromJson.txt:4885
 msgid "Robotic Cyborg Production"
-msgstr ""
+msgstr "إنتاجٌ روبوتي للسايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[2]
@@ -2452,7 +2452,7 @@ msgstr "سيتم تحديث كل مصانع السايبورغ تلقائياً"
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
 msgid "Self-Replicating Cyborg Production"
-msgstr "إنتاجٌ للسايبورغ ذاتي الاستنساخ"
+msgstr "إنتاجٌ السايبورغ باستخدام الاستنساخ الذاتي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[0]
@@ -2473,7 +2473,7 @@ msgstr "سيتحسن إنتاج المركبات"
 #: data/mp/messages/strings/resstrings.txt:182
 #: po/custom/fromJson.txt:4204
 msgid "New Robotic Techniques improve factory production"
-msgstr ""
+msgstr "سيتم استخدام تقنياتٍ روبوتيةٍ جديدة مما يحسّن من إنتاج المصنع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[2]
@@ -2498,7 +2498,7 @@ msgstr "سيتم تحديث كل مصانع المركبات تلقائياً"
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
 msgid "Self-Replicating Factory Production"
-msgstr ""
+msgstr "الإنتاج الصناعي باستخدام الاستنساخ الذاتي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[2]
@@ -2529,7 +2529,7 @@ msgstr "ستزداد قوة أبحاثك"
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:1761
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr ""
+msgstr "وحدةٌ مستقلة لتحليل بيانات وصلة المشبك العصبي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[2]
@@ -2573,7 +2573,7 @@ msgstr "يزيد من القدرة على مقاومة الأسلحة المخت
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:2320
 msgid "Hardened Base Structure Materials"
-msgstr ""
+msgstr "مواد بناءٍ أكثر صلابةٍ للمباني للرئيسية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[3]
@@ -2595,7 +2595,7 @@ msgstr "سيتم تحديث كل المباني الرئيسية تلقائيا�
 #: data/mp/messages/strings/resstrings.txt:201
 #: po/custom/fromJson.txt:4517
 msgid "Production Improved"
-msgstr ""
+msgstr "سيتم تحسين الإنتاج"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[1]
@@ -2668,7 +2668,7 @@ msgstr "يخفف من وقت إعادة التسليح"
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:399
 msgid "All rearming pads upgraded automatically"
-msgstr ""
+msgstr "سيتم تطوير كل منصات إعادة التسليح تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
@@ -2689,7 +2689,7 @@ msgstr "هنالك رأسٌ وظيفيٌ جديدٌ متاحٌ لك"
 #: data/mp/messages/strings/resstrings.txt:212
 #: po/custom/fromJson.txt:2695
 msgid "Heavy repair unit"
-msgstr ""
+msgstr "وحدة صيانةٍ ثقيلة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[2]
@@ -2699,7 +2699,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:996
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "يقوم تلقائياً بإصلاح الوحدات المتضررة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
@@ -2709,7 +2709,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:4360
 msgid "Or damaged units may be selected as target"
-msgstr ""
+msgstr "أو يمكن اختيار الوحدات المتضررة كهدفٍ له"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
@@ -2724,7 +2724,7 @@ msgstr "يزيد من سرعة التصليح"
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
 msgid "All mobile repair units upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل وحدات الصيانة المتنقلة تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[0]
@@ -2742,7 +2742,7 @@ msgstr "لقد صار هناك برج استشعارٍ أفضل"
 #: data/mp/messages/strings/resstrings.txt:222
 #: po/custom/fromJson.txt:4086
 msgid "New construction techniques improve tower"
-msgstr ""
+msgstr "سيتم استعمال تقنيات بناءٍ حديثة مما يحسّن من البرج"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[2]
@@ -2782,7 +2782,7 @@ msgstr "يقوم الرأس المضاد للمدفعية الخاص بالطا�
 #: data/mp/messages/strings/resstrings.txt:228
 #: po/custom/fromJson.txt:4376
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr ""
+msgstr "سيأمر الطائرات العمودية المسندة إليه بمهاجمة بطاريات الأعداء"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[3]
@@ -2793,7 +2793,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:229
 #: po/custom/fromJson.txt:6181
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr ""
+msgstr "ستستمر الطائرات العمودية بمهاجمة بطارية العدو إلى أن تدمرها"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[0]
@@ -2815,7 +2815,7 @@ msgstr "تم تحسين المستشعرات المضادة للمدفعية ا�
 #: data/mp/messages/strings/resstrings.txt:232
 #: po/custom/fromJson.txt:4111
 msgid "New fire detection systems"
-msgstr ""
+msgstr "أنظمةٌ جديدة لاكتشاف النيران المعادية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[2]
@@ -2848,7 +2848,7 @@ msgstr "سيتم تلقائياً تحسين كل المستشعرات المض�
 #: data/mp/messages/strings/resstrings.txt:236
 #: po/custom/fromJson.txt:6137
 msgid "VTOL Strike Improved"
-msgstr ""
+msgstr "تم تطوير برج هجوم الطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[1]
@@ -2857,7 +2857,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:237
 #: po/custom/fromJson.txt:4252
 msgid "New target recognition systems"
-msgstr ""
+msgstr "أنظمةٌ جديدة للتعرف على الهدف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[2]
@@ -2868,7 +2868,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:238
 #: po/custom/fromJson.txt:1962
 msgid "Extends VTOL Strike Range"
-msgstr ""
+msgstr "يزيد من مدى أبراج هجوم الطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[3]
@@ -2879,7 +2879,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:464
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr ""
+msgstr "سيتم تلقائياً تطوير كل مستشعرات أبراج هجوم الطائرات"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
@@ -2889,7 +2889,7 @@ msgstr "تم تطوير جهاز التشويش"
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
 msgid "Improvement in synaptic link technology"
-msgstr ""
+msgstr "تطورٌ في تقنية وصلة المشبك العصبي"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
@@ -2997,7 +2997,7 @@ msgstr "تطويرٌ لمحرّك المركبات"
 #: data/mp/messages/strings/resstrings.txt:257
 #: po/custom/fromJson.txt:5713
 msgid "Turbo-Charged Engine"
-msgstr ""
+msgstr "محركٌ بشاحنٍ توربيني"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[2]
@@ -3034,7 +3034,7 @@ msgstr "سيتم تحديث كل المركبات تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:261
 #: po/custom/fromJson.txt:5845
 msgid "Vehicle Bodies Improved"
-msgstr ""
+msgstr "تم تطوير أجسام المركبات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -3056,7 +3056,7 @@ msgstr "يزيد من قوة الدرع الحركي ونقاط صحة الجس�
 #: data/mp/messages/strings/resstrings.txt:266
 #: po/custom/fromJson.txt:5884
 msgid "Vehicle Thermal Armor Improved"
-msgstr ""
+msgstr "تم تطوير الدرع الحراري الخاص بالمركبات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[1]
@@ -3067,7 +3067,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:267
 #: po/custom/fromJson.txt:2495
 msgid "Heat-resistant armored layers"
-msgstr ""
+msgstr "طبقاتٌ مدرعة مقاومةٌ للحرارة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[2]
@@ -3076,7 +3076,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:268
 #: po/custom/fromJson.txt:3331
 msgid "Increases Thermal Armor"
-msgstr ""
+msgstr "يزيد من قوة الدرع الحراري"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[0]
@@ -3110,7 +3110,7 @@ msgstr "تم تحسين نظام دفع المركبة"
 #: data/mp/messages/strings/resstrings.txt:287
 #: po/custom/fromJson.txt:4052
 msgid "New armored construction"
-msgstr ""
+msgstr "هيكلٌ محصّنٌ جديد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[2]
@@ -3138,7 +3138,7 @@ msgstr "يزيد من نقاط صحة الجسم"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:339
 msgid "All half-tracks upgraded automatically"
-msgstr ""
+msgstr "سيتم تلقائياً تحديث كل المركبات التي تستخدم الجنازير النصفية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_H2.text[3]
@@ -3160,7 +3160,7 @@ msgstr "سيتم تحديث كل المركبات الحوامة تلقائيا�
 #: data/mp/messages/strings/resstrings.txt:284
 #: po/custom/fromJson.txt:429
 msgid "All tracks upgraded automatically"
-msgstr ""
+msgstr "سيتم تلقائياً تحديث كل المركبات التي تستخدم الجنازير"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_W2.text[3]
@@ -3171,7 +3171,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:289
 #: po/custom/fromJson.txt:476
 msgid "All wheels upgraded automatically"
-msgstr ""
+msgstr "سيتم تلقائياً تحديث كل المركبات التي تستخدم العجلات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[0]
@@ -3214,7 +3214,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:308
 #: po/custom/fromJson.txt:262
 msgid "Aerial targets only"
-msgstr ""
+msgstr "مخصصٌ حصراً للأهداف الجوية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA2.text[1]
@@ -3358,7 +3358,7 @@ msgstr "زيادة معدل إطلاق الأسلحة المضادة للطائ�
 #: data/mp/messages/strings/resstrings.txt:331
 #: po/custom/fromJson.txt:4176
 msgid "New Proximity Bomb Turret Available"
-msgstr ""
+msgstr "هنالكٌ رأسٌ جديدٌ يستعمل القنابل المزودة بحساسات للقرب"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
@@ -3367,7 +3367,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:327
 #: po/custom/fromJson.txt:1232
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "ستنفجر القنبلة الموجودة في هذا الرأس عند اقتراب الأعداء منه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[2]
@@ -3389,7 +3389,7 @@ msgstr "مثاليٌ ضد: المباني الرئيسية والدفاعية"
 #: data/mp/messages/strings/resstrings.txt:332
 #: po/custom/fromJson.txt:5385
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "ستنفجر القنبلة الضخمة الموجودة في هذا الرأس عند اقتراب الأعداء منه"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB1.text[0]
@@ -3402,7 +3402,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:341
 #: po/custom/fromJson.txt:4078
 msgid "New Bomb Bay Available"
-msgstr ""
+msgstr "يمكنك الآن استخدام حجرة قنابل جديدة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB1.text[1]
@@ -3411,7 +3411,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:337
 #: po/custom/fromJson.txt:1851
 msgid "Drops High Explosive Cluster bombs"
-msgstr ""
+msgstr "حجرةٌ في أسفل الطائرة لإسقاط قنابل عنقودية شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
@@ -3449,7 +3449,7 @@ msgstr "نقاط صحة الجسم: منخفضة"
 #: data/mp/messages/strings/resstrings.txt:342
 #: po/custom/fromJson.txt:1847
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr ""
+msgstr "حجرةٌ في أسفل الطائرة لإسقاط قنابل خارقةٍ للدروع شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB2.text[2]
@@ -3462,17 +3462,17 @@ msgstr "مثاليٌ ضد: الدفاعات"
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346
 msgid "Bombsight Upgrade"
-msgstr ""
+msgstr "تطويرٌ لجهاز تصويب القنابل"
 
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:347
 msgid "Locks on to thermal emissions"
-msgstr ""
+msgstr "يقوم بتثبيت جهاز التصويب على الانبعاثات الحرارية"
 
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:348
 msgid "Increases Bombing accuracy"
-msgstr ""
+msgstr "يزيد من دقة القصف بالقنابل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[3]
@@ -3483,7 +3483,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:349
 #: po/custom/fromJson.txt:293
 msgid "All bomb bays upgraded automatically"
-msgstr ""
+msgstr "سيتم تلقائياً تحديث كل حجرات القنابل"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[0]
@@ -3557,7 +3557,7 @@ msgstr "نقاط صحة الجسم: مرتفعة"
 #: data/mp/messages/strings/resstrings.txt:362
 #: po/custom/fromJson.txt:2567
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr ""
+msgstr "قاذف لهبٍ ثقيل يطلق جل أوكسيد البروبيلين شديد الاشتعال"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[2]
@@ -3951,7 +3951,7 @@ msgstr "سيتم تحديث كل الصواريخ المصغرة تلقائيا�
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Robotic reload system"
-msgstr ""
+msgstr "نظام إعادة تعبئةٍ روبوتي"
 
 #: data/base/messages/strings/resstrings.txt:953
 #: data/mp/messages/strings/resstrings.txt:428
@@ -4000,15 +4000,15 @@ msgstr "سيتم تحديث كل الصواريخ تلقائياً"
 
 #: data/base/script/campaign/cam1-7.js:244
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "دمّر كل وحدات «النهج الحديث»"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "دمر كل التعزيزات التابعة لـ «النهج الحديث»"
 
 #: data/base/script/campaign/cam1ca.js:142
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "قم ببناء ما لا يقل عن 7 مبانٍ (لا تدخل الجدران في الحساب) على الهضبة، ودمّر كل التعزيزات التابعة لـ «النهج الحديث»"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4325,7 +4325,7 @@ msgstr "حدّد موقعاً لبناء مصنعك فيه"
 
 #: data/base/script/tutorial.js:68
 msgid "The delivery point is indicated by the number 1"
-msgstr ""
+msgstr "ستتم الإشارة إلى نقطة التوصيل بالرقم 1"
 
 #: data/base/script/tutorial.js:69
 msgid "All new units will drive to this location once built"
@@ -4333,11 +4333,11 @@ msgstr "ستتوجه كل الوحدات الجديدة إلى هذا الموق
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr ""
+msgstr "يمكنك تحريك نقطة التوصيل في أي وقت عن طريق النقر عليها بالزر الأيسر للفأرة"
 
 #: data/base/script/tutorial.js:71
 msgid "Now click where you want to position the delivery point"
-msgstr ""
+msgstr "والآن اضغط على المكان الذي تريد وضع نقطة التوصيل فيه"
 
 #: data/base/script/tutorial.js:72
 msgid "The factory can now be ordered to build a new unit"
@@ -5199,7 +5199,7 @@ msgstr "ببطءٍ، سننهض من قلب الرماد مجدداً..."
 #: data/mp/messages/strings/names.txt:15
 #: po/custom/fromJson.txt:3666
 msgid "Machinegun Viper Wheels"
-msgstr ""
+msgstr "رشاش أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Tower01.name
@@ -5243,78 +5243,78 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:294
 #: po/custom/fromJson.txt:1461
 msgid "Collective Wall"
-msgstr ""
+msgstr "جدار «الرابطة»"
 
 #: data/mp/messages/strings/names.txt:295
 msgid "Collective Corner Wall"
-msgstr ""
+msgstr "زاوية «الرابطة»"
 
 #: data/mp/messages/strings/names.txt:317
 msgid "Nexus Wall"
-msgstr "جدار نيكسوس"
+msgstr "جدار «نيكسوس»"
 
 #: data/mp/messages/strings/names.txt:318
 msgid "Nexus Corner Wall"
-msgstr ""
+msgstr "زاوية «نيكسوس»"
 
 #: data/mp/messages/strings/names.txt:336
 msgid "CAM1 RESEARCH"
-msgstr ""
+msgstr "أبحاث الفصل 1"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.ADVANCEDRESEARCH.name
 #: data/mp/messages/strings/names.txt:337
 #: po/custom/fromJson.txt:242
 msgid "ADVANCED RESEARCH"
-msgstr ""
+msgstr "أبحاثٌ متقدمة"
 
 #: data/mp/messages/strings/names.txt:338
 msgid "CAM1 VEHICLES"
-msgstr ""
+msgstr "مركبات الفصل 1"
 
 #: data/mp/messages/strings/names.txt:339
 msgid "CAM1 WEAPONS"
-msgstr ""
+msgstr "أسلحة الفصل 1"
 
 #: data/mp/messages/strings/names.txt:340
 msgid "CAM1 SYSTEMS"
-msgstr ""
+msgstr "أنظمة الفصل 1"
 
 #: data/mp/messages/strings/names.txt:341
 msgid "CAM1 DEFENSES"
-msgstr ""
+msgstr "دفاعات الفصل 1"
 
 #: data/mp/messages/strings/names.txt:342
 msgid "CAM1 STRUCTURES"
-msgstr ""
+msgstr "مباني الفصل 1"
 
 #: data/mp/messages/strings/names.txt:343
 msgid "CAM2 RESEARCH"
-msgstr ""
+msgstr "أبحاث الفصل 2"
 
 #: data/mp/messages/strings/names.txt:344
 msgid "CAM2 VEHICLES"
-msgstr ""
+msgstr "مركبات الفصل 2"
 
 #: data/mp/messages/strings/names.txt:345
 msgid "CAM2 CYBORGS"
-msgstr ""
+msgstr "سايبورغ الفصل 2"
 
 #: data/mp/messages/strings/names.txt:346
 msgid "CAM2 WEAPONS"
-msgstr ""
+msgstr "أسلحة الفصل 2"
 
 #: data/mp/messages/strings/names.txt:347
 msgid "CAM2 SYSTEMS"
-msgstr ""
+msgstr "أنظمة الفصل 2"
 
 #: data/mp/messages/strings/names.txt:348
 msgid "CAM2 DEFENSES"
-msgstr ""
+msgstr "دفاعات الفصل 2"
 
 #: data/mp/messages/strings/names.txt:349
 msgid "CAM2 STRUCTURES"
-msgstr ""
+msgstr "مباني الفصل 2"
 
 #: data/mp/messages/strings/names.txt:351
 msgid "CAM3 RESEARCH"
@@ -5378,7 +5378,7 @@ msgstr "السايبورغ حامل الرشاش"
 #: data/mp/messages/strings/names.txt:381
 #: po/custom/fromJson.txt:1686
 msgid "Cyborg Propulsion"
-msgstr ""
+msgstr "دفع السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG3-Tower.name
@@ -5406,11 +5406,11 @@ msgstr "برج الرمّاح"
 
 #: data/mp/messages/strings/names.txt:429
 msgid "Advanced Manufacturing Mk3"
-msgstr ""
+msgstr "تصنيعٌ متطور (النسخة 3)"
 
 #: data/mp/messages/strings/names.txt:437
 msgid "Robotic Repair Facility Mk3"
-msgstr ""
+msgstr "مركز صيانةٍ روبوتي (النسخة 3)"
 
 #: data/mp/messages/strings/names.txt:438
 msgid "Advanced Repair Facility Mk2"
@@ -5426,11 +5426,11 @@ msgstr "مركز صيانةٍ متطور (النسخة 3)"
 #: data/mp/messages/strings/names.txt:470
 #: po/custom/fromJson.txt:2692
 msgid "Heavy Repair Turret"
-msgstr ""
+msgstr "رأس صيانةٍ ثقيل"
 
 #: data/mp/messages/strings/names.txt:490
 msgid "Nexus Intruder Program"
-msgstr ""
+msgstr "برنامج «نيكسوس» المقتحم"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
@@ -5524,7 +5524,7 @@ msgstr "منشأة إطلاق صواريخ"
 #: data/mp/messages/strings/names.txt:777
 #: po/custom/fromJson.txt:5344
 msgid "Super Heavy-Gunner"
-msgstr ""
+msgstr "السايبورغ الخارق ذو الرشاش الثقيل"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-Acannon.name
@@ -5533,11 +5533,11 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:779
 #: po/custom/fromJson.txt:5337
 msgid "Super Auto-Cannon Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو المدفع الآلي"
 
 #: data/mp/messages/strings/names.txt:781
 msgid "Super HPV Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو المدفع فائق السرعة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-TK.name
@@ -5546,7 +5546,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:783
 #: po/custom/fromJson.txt:5371
 msgid "Super Tank-Killer Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو قاتل الدبابات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-UpLink.name
@@ -5563,7 +5563,7 @@ msgstr "مركز الاتصال بالقمر الصناعي"
 #: data/mp/messages/strings/names.txt:801
 #: po/custom/fromJson.txt:5354
 msgid "Super Pulse Laser Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو الليزر النبضي"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-RailGunner.name
@@ -5571,7 +5571,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:803
 #: po/custom/fromJson.txt:5361
 msgid "Super Rail-Gunner"
-msgstr ""
+msgstr "السايبورغ الخارق ذو المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-A-T.name
@@ -5580,7 +5580,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:805
 #: po/custom/fromJson.txt:5366
 msgid "Super Scourge Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو صاروخ الجلاد"
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -6092,14 +6092,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Materials08.name
 #: po/custom/fromJson.txt:173
 msgid "Advanced Base Structure Materials Mk2"
-msgstr ""
+msgstr "مواد بناءٍ حديثة للمباني الرئيسية (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials09.name
 #. data/mp/stats/research.json: $.R-Struc-Materials09.name
 #: po/custom/fromJson.txt:177
 msgid "Advanced Base Structure Materials Mk3"
-msgstr ""
+msgstr "مواد بناءٍ حديثة للمباني الرئيسية (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT7.text[1]
@@ -6108,7 +6108,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Materials07.name
 #: po/custom/fromJson.txt:183
 msgid "Advanced Base Structure Materials"
-msgstr ""
+msgstr "مواد بناءٍ حديثة للمباني الرئيسية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb-Damage03.name
@@ -6142,7 +6142,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade07.name
 #: po/custom/fromJson.txt:208
 msgid "Advanced Manufacturing"
-msgstr ""
+msgstr "تصنيعٌ متطور"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-ROF02.name
@@ -6883,7 +6883,7 @@ msgstr "نقطةٌ محصّنة بمدفعٍ هجومي"
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
 #: po/custom/fromJson.txt:855
 msgid "Assault Cannon Mantis Hover"
-msgstr ""
+msgstr "مدفعٌ هجومي العقرب حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon5.name
@@ -6933,20 +6933,20 @@ msgstr "نقطةٌ محصّنة برشاشٍ هجومي"
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
 #: po/custom/fromJson.txt:884
 msgid "Assault Gun Python Half Track"
-msgstr ""
+msgstr "مدفعٌ هجومي حنش جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHoverAssGun.name
 #: po/custom/fromJson.txt:887
 msgid "Assault Gun Python Hover"
-msgstr ""
+msgstr "مدفعٌ هجومي حنش حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 #. data/mp/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 #: po/custom/fromJson.txt:891
 msgid "Assault Gun Python Tracks"
-msgstr ""
+msgstr "مدفعٌ هجومي حنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
@@ -7327,7 +7327,7 @@ msgstr "نقاط صحة الجسم: شديدة الانخفاض"
 #: po/custom/fromJson.txt:1222
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "زيادة ضرر القنبلة 10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7336,7 +7336,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1228
 #, no-c-format
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "زيادة ضرر القنبلة 25%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[0]
@@ -7410,19 +7410,19 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Sk-CobraBBHover.name
 #: po/custom/fromJson.txt:1276
 msgid "Bunker Buster Cobra Hover"
-msgstr ""
+msgstr "هدّام الملاجئ كوبرا حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraBBTracks.name
 #: po/custom/fromJson.txt:1279
 msgid "Bunker Buster Cobra Tracks"
-msgstr ""
+msgstr "هدّام الملاجئ كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisBBTracks.name
 #: po/custom/fromJson.txt:1282
 msgid "Bunker Buster Mantis Tracks"
-msgstr ""
+msgstr "هدّام الملاجئ عقرب جنازير"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[1]
@@ -7442,25 +7442,25 @@ msgstr "صاروخ هدّام الملاجئ"
 #. data/mp/stats/templates.json: $.ViperBBWheels.name
 #: po/custom/fromJson.txt:1293
 msgid "Bunker Buster Rockets Viper Wheels"
-msgstr ""
+msgstr "صواريخ هدّام الملاجئ أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpBBTracks.name
 #: po/custom/fromJson.txt:1296
 msgid "Bunker Buster Scorpion Tracks"
-msgstr ""
+msgstr "هدّام الملاجئ عنكبوت جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-BB.name
 #: po/custom/fromJson.txt:1299
 msgid "Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "هدّام الملاجئ عنكبوت طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperBBWheels.name
 #: po/custom/fromJson.txt:1302
 msgid "Bunker Buster Viper Wheels"
-msgstr ""
+msgstr "هدّام الملاجئ أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-BB.name
@@ -7519,7 +7519,7 @@ msgstr "زيادة ضرر المدفع 25%"
 #. data/mp/stats/templates.json: $.BabaFireCan.name
 #: po/custom/fromJson.txt:1337
 msgid "Cannon Fire Truck"
-msgstr ""
+msgstr "مدفع على سيارة إطفاء"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Cannon.name
@@ -7646,31 +7646,31 @@ msgstr "رشاش السلسلة"
 #. data/mp/stats/templates.json: $.BaBaCivilian.name
 #: po/custom/fromJson.txt:1413
 msgid "Civilian"
-msgstr ""
+msgstr "مدني"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1416
 msgid "Cluster Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلةٍ عنقودية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1419
 msgid "Cluster Bombs Bay"
-msgstr ""
+msgstr "حجرة قنابل عنقودية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:1422
 msgid "Cobra Flamer Tracks"
-msgstr ""
+msgstr "قاذف لهب كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraMedCnTrks.name
 #: po/custom/fromJson.txt:1425
 msgid "Cobra Medium Cannon Tracks"
-msgstr ""
+msgstr "مدفعٌ متوسط كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSpadeTracks.name
@@ -7679,7 +7679,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0CobraSpadeTracks.name
 #: po/custom/fromJson.txt:1431
 msgid "Cobra Truck"
-msgstr ""
+msgstr "شاحنة كوبرا"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body5REC.name
@@ -7713,13 +7713,13 @@ msgstr "جسمٌ ثقيلٌ من تصميم «الرابطة»"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1464
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "مهندس السايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
 #: po/custom/fromJson.txt:1467
 msgid "Combat engineer with construction ability"
-msgstr ""
+msgstr "مهندسٌ قتالي ويمتلك القدرة على بناء المباني والدفاعات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WS.text[1]
@@ -7754,19 +7754,19 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraComHalftrack.name
 #: po/custom/fromJson.txt:1487
 msgid "Command Turret Cobra Half-tracks"
-msgstr ""
+msgstr "رأس قيادة كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cobra-Trk-Com.name
 #: po/custom/fromJson.txt:1490
 msgid "Command Turret Cobra Tracks"
-msgstr ""
+msgstr "رأس قيادة كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Mantis-Trk-Com.name
 #: po/custom/fromJson.txt:1493
 msgid "Command Turret Mantis Tracks"
-msgstr ""
+msgstr "رأس قيادة عقرب جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0PythonComTracks.name
@@ -7775,25 +7775,25 @@ msgstr ""
 #. data/mp/stats/templates.json: $.PythonComTracks.name
 #: po/custom/fromJson.txt:1499
 msgid "Command Turret Python Tracks"
-msgstr ""
+msgstr "رأس قيادة حنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scorp-Trk-Com.name
 #: po/custom/fromJson.txt:1502
 msgid "Command Turret Scorpion Tracks"
-msgstr ""
+msgstr "رأس قيادة عنكبوت جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1505
 msgid "Command Turret Upgrade"
-msgstr ""
+msgstr "تطويرٌ لرأس القيادة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
 #: po/custom/fromJson.txt:1508
 msgid "Command Turret Viper Tracks"
-msgstr ""
+msgstr "رأس قيادة أفعى جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.name
@@ -8158,14 +8158,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade05.name
 #: po/custom/fromJson.txt:1751
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
-msgstr ""
+msgstr "وحدةٌ مستقلة لتحليل بيانات وصلة المشبك العصبي (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade06.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade06.name
 #: po/custom/fromJson.txt:1755
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
-msgstr ""
+msgstr "وحدةٌ مستقلة لتحليل بيانات وصلة المشبك العصبي (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[3]
@@ -8270,21 +8270,21 @@ msgstr "التنين"
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
 #: po/custom/fromJson.txt:1854
 msgid "Drops high intensity Plasmite bombs"
-msgstr ""
+msgstr "حجرةٌ في أسفل الطائرة لإسقاط قنابل بلازما شديدة القوة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[1]
 #: po/custom/fromJson.txt:1858
 msgid "Drops high intensity thermite bombs"
-msgstr ""
+msgstr "حجرةٌ في أسفل الطائرة لإسقاط قنابل حارقة شديدة القوة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[1]
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[1]
 #: po/custom/fromJson.txt:1862
 msgid "Drops incendiary bombs"
-msgstr ""
+msgstr "حجرةٌ في أسفل الطائرة لإسقاط قنابل حارقة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[2]
@@ -8359,34 +8359,34 @@ msgstr "يسمح لك بمقاومة تأثير «وصلة نيكسوس»"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ASTRUC.text[3]
 #: po/custom/fromJson.txt:1904
 msgid "Enables self-repair in all base structures"
-msgstr ""
+msgstr "ستتمكن كل المباني الرئيسية من صيانة نفسها بنفسها"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
 #: po/custom/fromJson.txt:1908
 msgid "Enables self-repair in all Cyborgs"
-msgstr ""
+msgstr "سيتمكن كل السايبورغ من صيانة أنفسهم بنفسهم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #: po/custom/fromJson.txt:1912
 msgid "Enables self-repair in all defenses"
-msgstr "سيتم تفعيل ميزة الصيانة الذاتية لدى كل الدفاعات"
+msgstr "ستتمكن كل الدفاعات من صيانة نفسها بنفسها"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
 #: po/custom/fromJson.txt:1916
 msgid "Enables self-repair in all vehicles"
-msgstr "ستتمكن كل المركبات من تصليح نفسها بنفسها"
+msgstr "ستتمكن كل المركبات من صيانة نفسها بنفسها"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_AR.text[3]
 #: po/custom/fromJson.txt:1919
 msgid "Enables self-repair"
-msgstr ""
+msgstr "ستتمكن كل الوحدات والمباني من صيانة نفسها بنفسها"
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_3.name
@@ -8561,7 +8561,7 @@ msgstr "سيتم تثبيت أجنحةٍ بمؤخرة الصواريخ مما ي
 #. data/mp/stats/templates.json: $.BabaFireTruck.name
 #: po/custom/fromJson.txt:2034
 msgid "Fire Truck"
-msgstr ""
+msgstr "سيارة إطفاء"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[1]
@@ -8632,7 +8632,7 @@ msgstr "ملجأٌ بقاذف لهب"
 #. data/mp/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:2075
 msgid "Flamer Cobra Tracks"
-msgstr ""
+msgstr "قاذف لهب كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
@@ -8654,14 +8654,14 @@ msgstr "تقليل وقت إعادة تعبئة قاذف اللهب بنسبة 1
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
 #: po/custom/fromJson.txt:2112
 msgid "Flamer Viper Half-Tracks"
-msgstr ""
+msgstr "قاذف لهب أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperFlameWheels.name
 #. data/mp/stats/templates.json: $.ViperFlameWheels.name
 #: po/custom/fromJson.txt:2116
 msgid "Flamer Viper Wheels"
-msgstr ""
+msgstr "قاذف لهب أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer01Mk1.name
@@ -8970,14 +8970,14 @@ msgstr "الإسمنت الصلب"
 #. data/mp/stats/research.json: $.R-Struc-Materials05.name
 #: po/custom/fromJson.txt:2310
 msgid "Hardened Base Structure Materials Mk2"
-msgstr ""
+msgstr "مواد بناءٍ أكثر صلابةٍ للمباني للرئيسية (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials06.name
 #. data/mp/stats/research.json: $.R-Struc-Materials06.name
 #: po/custom/fromJson.txt:2314
 msgid "Hardened Base Structure Materials Mk3"
-msgstr ""
+msgstr "مواد بناءٍ أكثر صلابةٍ للمباني للرئيسية (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[1]
@@ -9173,7 +9173,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb02.name
 #: po/custom/fromJson.txt:2426
 msgid "HEAP Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلةٍ خارقةٍ للدروع"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage05.name
@@ -9664,7 +9664,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
 #: po/custom/fromJson.txt:2755
 msgid "High Density Base Structure Materials"
-msgstr "مواد بنائية عالية الكثافة"
+msgstr "مواد بناءٍ عالية الكثافة للمباني الرئيسية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[1]
@@ -10489,14 +10489,14 @@ msgstr "يعمل باستمرار على رصد تحركات الأعداء في
 #: po/custom/fromJson.txt:3412
 #, no-c-format
 msgid "Kinetic armor +30%, body points +30%"
-msgstr ""
+msgstr "زيادة الدرع الحركي 30%، زيادة نقاط صحة الجسم 30%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CYMET4.text[2]
 #: po/custom/fromJson.txt:3416
 #, no-c-format
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr ""
+msgstr "زيادة الدرع الحركي 35%، زيادة نقاط صحة الجسم 35%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYMET1.text[2]
@@ -10505,7 +10505,7 @@ msgstr ""
 #: po/custom/fromJson.txt:3422
 #, no-c-format
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr ""
+msgstr "زيادة الدرع الحركي 35%، زيادة نقاط صحة الجسم 35%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYMET10.text[1]
@@ -11769,7 +11769,7 @@ msgstr "داراتٌ مقاومةٌ لـ «نيكسوس»"
 #. data/base/stats/structure.json: $.NEXUSWall.name
 #: po/custom/fromJson.txt:4317
 msgid "NEXUS Wall"
-msgstr "جدار نيكسوس"
+msgstr "جدار «نيكسوس»"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
@@ -11904,7 +11904,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb03.name
 #: po/custom/fromJson.txt:4403
 msgid "Phosphor Bomb Bay"
-msgstr ""
+msgstr "حجرةٍ قنبلة فوسفور"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaPickUp.name
@@ -12060,14 +12060,14 @@ msgstr "وحدة طاقةٍ إضافية"
 #: po/custom/fromJson.txt:4490
 #, no-c-format
 msgid "Power output +25%"
-msgstr ""
+msgstr "زيادة إنتاج الطاقة 25%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[2]
 #: po/custom/fromJson.txt:4494
 #, no-c-format
 msgid "Power output +30%"
-msgstr ""
+msgstr "زيادة إنتاج الطاقة 30%"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text[0]
@@ -12414,14 +12414,14 @@ msgstr "مسؤولةٌ عن صيانة الطائرات العمودية وإع�
 #. data/mp/stats/research.json: $.R-Struc-Materials02.name
 #: po/custom/fromJson.txt:4720
 msgid "Reinforced Base Structure Materials Mk2"
-msgstr "موادٌ بناءٍ أكثر قوةً (التركيبة 2)"
+msgstr "مواد بناءٍ مسلحة للمباني الرئيسية (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials03.name
 #. data/mp/stats/research.json: $.R-Struc-Materials03.name
 #: po/custom/fromJson.txt:4724
 msgid "Reinforced Base Structure Materials Mk3"
-msgstr "موادٌ بناءٍ أكثر قوةً (التركيبة 3)"
+msgstr "مواد بناءٍ مسلحة للمباني الرئيسية (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[1]
@@ -12430,7 +12430,7 @@ msgstr "موادٌ بناءٍ أكثر قوةً (التركيبة 3)"
 #. data/mp/stats/research.json: $.R-Struc-Materials01.name
 #: po/custom/fromJson.txt:4730
 msgid "Reinforced Base Structure Materials"
-msgstr "موادٌ بناءٍ أكثر قوةً"
+msgstr "مواد بناءٍ مسلحة للمباني الرئيسية"
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
@@ -12668,25 +12668,25 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade05.name
 #: po/custom/fromJson.txt:4906
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "تطويرٌ لمركز الصيانة الروبوتي (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:4909
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "تطويرٌ لمركز الصيانة الروبوتي (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 #: po/custom/fromJson.txt:4912
 msgid "Robotic Repair Facility Upgrade"
-msgstr ""
+msgstr "تطويرٌ لمركز الصيانة الروبوتي"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 #: po/custom/fromJson.txt:4915
 msgid "Robotic Repair Facility"
-msgstr ""
+msgstr "مركز صيانةٍ روبوتي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
@@ -12719,7 +12719,7 @@ msgstr "إعادة تسليحٍ ربوتية للطائرات"
 #: po/custom/fromJson.txt:4940
 #, no-c-format
 msgid "Rocket accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة الصاروخ 10%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
@@ -12764,7 +12764,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4967
 #, no-c-format
 msgid "Rocket damage +25%"
-msgstr ""
+msgstr "زيادة ضرر الصاروخ 25%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
@@ -12811,7 +12811,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4993
 #, no-c-format
 msgid "Rocket reload time -15%"
-msgstr ""
+msgstr "تقليل وقت إعادة تعبئة الصواريخ 15%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[1]
@@ -12892,7 +12892,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BabaCornerWall.name
 #: po/custom/fromJson.txt:5048
 msgid "Scavenger CornerWall"
-msgstr ""
+msgstr "زاوية قطاع الطرق"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaFactory.name
@@ -13085,7 +13085,7 @@ msgstr "قذائف صاروخية ذاتية التوجيه"
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade09.name
 #: po/custom/fromJson.txt:5166
 msgid "Self-Replicating Manufacturing"
-msgstr ""
+msgstr "التصنيع بالاستنساخ الذاتي"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
@@ -13104,21 +13104,21 @@ msgstr ""
 #: po/custom/fromJson.txt:5176
 #, no-c-format
 msgid "Sensor Range +10%"
-msgstr ""
+msgstr "زيادة مدى المستشعر 10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[2]
 #: po/custom/fromJson.txt:5180
 #, no-c-format
 msgid "Sensor Range +15%"
-msgstr ""
+msgstr "زيادة مدى المستشعر 15%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
 #: po/custom/fromJson.txt:5184
 #, no-c-format
 msgid "Sensor Range +25%"
-msgstr ""
+msgstr "زيادة مدى المستشعر 25%"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13208,7 +13208,7 @@ msgstr "أبطأ من الحنش"
 #. data/base/stats/features.json: $.WallCornerSmashed.name
 #: po/custom/fromJson.txt:5249
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "زاويةٌ مدمرة"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallSmashed.name
@@ -13366,7 +13366,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5340
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو الرشاش الثقيل"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-HPV.name
@@ -13374,13 +13374,13 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5349
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو المدفع فائق السرعة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5357
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "السايبورغ الخارق ذو المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13757,7 +13757,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb04.name
 #: po/custom/fromJson.txt:5607
 msgid "Thermite Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلةٍ حارقة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
@@ -14148,7 +14148,7 @@ msgstr ""
 #: po/custom/fromJson.txt:5869
 #, no-c-format
 msgid "Vehicle speed +5%"
-msgstr ""
+msgstr "زيادة سرعة المركبة 5%"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -14359,13 +14359,13 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
 #: po/custom/fromJson.txt:6003
 msgid "VTOL Cluster Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلةٍ عنقودية للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
 #: po/custom/fromJson.txt:6006
 msgid "VTOL Cluster Bombs Bay"
-msgstr ""
+msgstr "حجرة قنابل عنقودية للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Bomb6-VTOL-EMP.name
@@ -14401,7 +14401,7 @@ msgstr "ليزر الفلاش للطائرات العمودية"
 #. data/mp/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
 #: po/custom/fromJson.txt:6027
 msgid "VTOL Heap Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلةٍ خارقةٍ للدروع للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.HeavyLaser-VTOL.name
@@ -14516,13 +14516,13 @@ msgstr "مدفع الإبر للطائرات العمودية"
 #. data/mp/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
 #: po/custom/fromJson.txt:6088
 msgid "VTOL Phosphor Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلة فوسفور للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Bomb5-VTOL-Plasmite.name
 #: po/custom/fromJson.txt:6091
 msgid "VTOL Plasmite Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلة بلازما للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-VTOL.name
@@ -14625,7 +14625,7 @@ msgstr "قاتل الدبابات للطائرات العمودية"
 #. data/mp/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
 #: po/custom/fromJson.txt:6167
 msgid "VTOL Thermite Bomb Bay"
-msgstr ""
+msgstr "حجرة قنبلةٍ حارقة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG2-VTOL.name
@@ -14645,13 +14645,13 @@ msgstr "دفعٌ عمودي"
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6184
 msgid "Wall"
-msgstr ""
+msgstr "جدار"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
 #: po/custom/fromJson.txt:6187
 msgid "Wallcorner"
-msgstr ""
+msgstr "زاوي"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbWarehouse1.name
@@ -19237,19 +19237,19 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:511
 msgid "[Password required]"
-msgstr ""
+msgstr "[تتطلب كلمة مرور]"
 
 #: src/titleui/gamefind.cpp:515
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[بدون دبابات]"
 
 #: src/titleui/gamefind.cpp:519
 msgid "[No Cyborgs]"
-msgstr ""
+msgstr "[بدون سايبورغ]"
 
 #: src/titleui/gamefind.cpp:523
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[بدون طائراتٍ عمودية]"
 
 #: src/titleui/gamefind.cpp:527
 #, c-format
@@ -19279,7 +19279,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:691
 msgid "You were kicked!"
-msgstr ""
+msgstr "لقد تم طردك!"
 
 #: src/titleui/gamefind.cpp:694
 msgid "Wrong Game Version!"
@@ -19291,11 +19291,11 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:701
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "ألم يتمكن المضيف من إرسال الملف؟"
 
 #: src/titleui/gamefind.cpp:705
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "كلمة المرور غير صحيحة!"
 
 #: src/titleui/gamefind.cpp:708
 msgid "Host has dropped connection!"
@@ -19409,15 +19409,15 @@ msgstr "الإصدار: %s،%s التاريخ: %s%s"
 
 #: src/wrappers.cpp:365
 msgid "GAME OVER"
-msgstr ""
+msgstr "انتهت اللعبة"
 
 #: src/wrappers.cpp:366
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "لقد انتهت المعركة، ويمكنك مغادرة الغرفة."
 
 #: src/wzapi.cpp:2339
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "لقد انتصرت!"
 
 #: src/wzapi.cpp:2346
 msgid "YOU WERE DEFEATED!"
