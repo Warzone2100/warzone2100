@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-05 15:02\n"
+"PO-Revision-Date: 2022-01-06 03:05\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1276,12 +1276,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:289
 msgid "Proximity Bomb Turret"
-msgstr ""
+msgstr "رأسٌ بقنبلةٍ مع حسّاسٍ للقرب"
 
 #: data/base/messages/strings/names.txt:248
 #: data/mp/messages/strings/names.txt:290
 msgid "Proximity Superbomb Turret"
-msgstr ""
+msgstr "رأسٌ بقنبلةٍ ضخمة مع حسّاسٍ للقرب"
 
 #: data/base/messages/strings/names.txt:287
 #: data/mp/messages/strings/names.txt:371
@@ -1522,62 +1522,62 @@ msgstr "تطويرٌ للصيانة المتنقلة (النسخة 2)"
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade"
-msgstr ""
+msgstr "تطويرٌ للمستشعرات المضادة للمدفعية"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "تطويرٌ للمستشعرات المضادة للمدفعية (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:477
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "تطويرٌ للمستشعرات المضادة للمدفعية (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade"
-msgstr ""
+msgstr "تطويرٌ لمستشعرات الطائرات المضادة للمدفعية"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "تطويرٌ لمستشعرات الطائرات المضادة للمدفعية (2)"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "تطويرٌ لمستشعرات الطائرات المضادة للمدفعية (3)"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:483
 msgid "VTOL Strike Upgrade"
-msgstr ""
+msgstr "تطوير برج هجوم الطائرات"
 
 #: data/base/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:484
 msgid "VTOL Strike Upgrade Mk2"
-msgstr ""
+msgstr "تطوير برج هجوم الطائرات (النسخة 2)"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:485
 msgid "VTOL Strike Upgrade Mk3"
-msgstr ""
+msgstr "تطوير برج هجوم الطائرات (النسخة 3)"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:487
 msgid "Improved Scrambler"
-msgstr ""
+msgstr "جهاز تشويشٍ محسّن"
 
 #: data/base/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:488
 msgid "Scrambler Turret Mk2"
-msgstr ""
+msgstr "رأس التشويش (النموذج 2)"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:495
 msgid "Sensor Lock"
-msgstr ""
+msgstr "تثبيت المستشعر"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:529
@@ -1632,24 +1632,24 @@ msgstr ""
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:590
 msgid "Bridge"
-msgstr ""
+msgstr "جسر"
 
 #: data/base/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:597
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "دبابةٌ محطمة"
 
 #: data/base/messages/strings/names.txt:487
 #: data/base/messages/strings/names.txt:503
 #: data/mp/messages/strings/names.txt:615
 #: data/mp/messages/strings/names.txt:631
 msgid "Cyborg Laboratory"
-msgstr ""
+msgstr "مختبر السايبورغ"
 
 #: data/base/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:616
 msgid "Advanced Warfare Laboratory"
-msgstr ""
+msgstr "مختبر الحروب المتطورة"
 
 #: data/base/messages/strings/names.txt:489
 #: data/base/messages/strings/names.txt:505
@@ -1663,7 +1663,7 @@ msgstr "المختبر الهندسي"
 #: data/mp/messages/strings/names.txt:618
 #: data/mp/messages/strings/names.txt:634
 msgid "Robotics Laboratory"
-msgstr ""
+msgstr "مختبر علوم الروبوتات"
 
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:619
@@ -1675,14 +1675,14 @@ msgstr "مختبر فيزياء الليزر"
 #: data/mp/messages/strings/names.txt:620
 #: data/mp/messages/strings/names.txt:632
 msgid "Electronics Laboratory"
-msgstr ""
+msgstr "مختبر الإلكترونيات"
 
 #: data/base/messages/strings/names.txt:493
 #: data/base/messages/strings/names.txt:502
 #: data/mp/messages/strings/names.txt:621
 #: data/mp/messages/strings/names.txt:630
 msgid "Chemical Laboratory"
-msgstr ""
+msgstr "المختبر الكيميائي"
 
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:629
@@ -2452,7 +2452,7 @@ msgstr "سيتم تحديث كل مصانع السايبورغ تلقائياً"
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
 msgid "Self-Replicating Cyborg Production"
-msgstr ""
+msgstr "إنتاجٌ للسايبورغ ذاتي الاستنساخ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[0]
@@ -2771,7 +2771,7 @@ msgstr "يمكنك أن توكل له مهمة رصد أهداف الأسلحة 
 #: data/mp/messages/strings/resstrings.txt:227
 #: po/custom/fromJson.txt:5990
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr ""
+msgstr "يقوم الرأس المضاد للمدفعية الخاص بالطائرات باكتشاف أسلحة الأعداء التي تطلق نيراناً غير مباشرة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[2]
@@ -2804,7 +2804,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:231
 #: po/custom/fromJson.txt:5968
 msgid "VTOL CB Improved"
-msgstr ""
+msgstr "تم تحسين المستشعرات المضادة للمدفعية الخاصة بالطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[1]
@@ -2826,7 +2826,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:233
 #: po/custom/fromJson.txt:1956
 msgid "Extends VTOL CB Range"
-msgstr ""
+msgstr "زيادة مدى المستشعرات المضادة للمدفعية الخاصة بالطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[3]
@@ -2837,7 +2837,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:234
 #: po/custom/fromJson.txt:452
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr ""
+msgstr "سيتم تلقائياً تحسين كل المستشعرات المضادة للمدفعية الخاصة بالطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[0]
@@ -2884,7 +2884,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
 msgid "Scrambler Improved"
-msgstr ""
+msgstr "تم تطوير جهاز التشويش"
 
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
@@ -2894,12 +2894,12 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
 msgid "Increases scrambler rate"
-msgstr ""
+msgstr "زيادة معدل جهاز التشويش"
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr ""
+msgstr "سيتم تحديث كل أجهزة التشويش تلقائياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[0]
@@ -3736,7 +3736,7 @@ msgstr "سيتم تحديث كل مدافع الهاوتزر تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:392
 #: po/custom/fromJson.txt:2803
 msgid "High Explosive shells"
-msgstr ""
+msgstr "قذائف شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
@@ -6254,7 +6254,7 @@ msgstr "سيتم تحديث كل المدافع تلقائياً"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:305
 msgid "All CB sensors upgraded automatically"
-msgstr ""
+msgstr "سيتم تلقائياً تحسين كل أجهزة الاستشعار المضادة للمدفعية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text[3]
@@ -7593,7 +7593,7 @@ msgstr "تطويرٌ للمدفع"
 #. data/mp/stats/sensor.json: $.Sys-CBTurret01.name
 #: po/custom/fromJson.txt:1381
 msgid "CB Radar Turret"
-msgstr ""
+msgstr "رأس رادارٍ مضادٍ للمدفعية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[0]
@@ -7602,7 +7602,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1387
 msgid "CB Sensor Improved"
-msgstr ""
+msgstr "تم تحسين المستشعر المضاد للمدفعية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Tower01.name
@@ -7618,7 +7618,7 @@ msgstr "برجٌ مضادٌ للمدفعية"
 #. data/mp/stats/research.json: $.R-Sys-CBSensor-Turret01.name
 #: po/custom/fromJson.txt:1397
 msgid "CB Turret"
-msgstr ""
+msgstr "رأسٌ مضادٌ للمدفعية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAROF4.text[1]
@@ -7845,14 +7845,14 @@ msgstr "خليطٌ مركّب"
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[1]
 #: po/custom/fromJson.txt:1539
 msgid "Computer guided shells"
-msgstr ""
+msgstr "قذائف موجهةٌ حاسوبياً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAAC3.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_AAAC3.text[1]
 #: po/custom/fromJson.txt:1543
 msgid "Computer plots and guides shell to target's position"
-msgstr ""
+msgstr "يقوم حاسوبي بتوجيه القذيفة إلى موقع الهدف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[1]
@@ -8432,7 +8432,7 @@ msgstr "نطاقٌ أوسع للمستشعر"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1947
 msgid "Extends CB Range"
-msgstr ""
+msgstr "زيادة مدى المستشعرات المضادة للمدفعية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
@@ -9076,7 +9076,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Damage01.name
 #: po/custom/fromJson.txt:2374
 msgid "HE Bomb Shells"
-msgstr ""
+msgstr "قذائف من القنابل شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage02.name
@@ -9664,7 +9664,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
 #: po/custom/fromJson.txt:2755
 msgid "High Density Base Structure Materials"
-msgstr ""
+msgstr "مواد بنائية عالية الكثافة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[1]
@@ -10450,13 +10450,13 @@ msgstr ""
 #. data/mp/stats/structure.json: $.ECM1PylonMk1.name
 #: po/custom/fromJson.txt:3388
 msgid "Jammer Tower"
-msgstr ""
+msgstr "برج التشويش الإلكتروني"
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3391
 msgid "Jammer Turret"
-msgstr ""
+msgstr "رأس التشويش الإلكتروني"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -13052,7 +13052,7 @@ msgstr ""
 #. data/base/stats/weapons.json: $.SpyTurret01.name
 #: po/custom/fromJson.txt:5139
 msgid "Scrambler Turret"
-msgstr ""
+msgstr "رأس التشويش"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
@@ -13079,7 +13079,7 @@ msgstr "حدد أهدافاً جديدة لمواصلة ضربات الطائر�
 #. data/mp/messages/resmessages3.json: $.RES_W_M_AC3.text[1]
 #: po/custom/fromJson.txt:5163
 msgid "Self-guided rocket-powered shells"
-msgstr ""
+msgstr "قذائف صاروخية ذاتية التوجيه"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade09.name
@@ -13541,7 +13541,7 @@ msgstr "تحليل بيانات وصلة المشبك العصبي"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text[1]
 #: po/custom/fromJson.txt:5478
 msgid "Synaptic Link Scrambler technology"
-msgstr ""
+msgstr "تقنية التشويش باستخدام وصلة المشبك العصبي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[1]
@@ -14311,14 +14311,14 @@ msgstr "مدفعٌ للطائرات العمودية"
 #. data/mp/stats/sensor.json: $.Sys-VTOLCBTower01.name
 #: po/custom/fromJson.txt:5972
 msgid "VTOL CB Radar Tower"
-msgstr ""
+msgstr "برجٌ مضادٌ للمدفعية (طائرات)"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-VTOLCBTurret01.name
 #. data/mp/stats/sensor.json: $.Sys-VTOLCBTurret01.name
 #: po/custom/fromJson.txt:5976
 msgid "VTOL CB Radar Turret"
-msgstr ""
+msgstr "رأس رادارٍ مضادٍ للمدفعية للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VCBSTW1.text[1]
@@ -14341,7 +14341,7 @@ msgstr "برجٌ مضادٌ للمدفعية (طائرات)"
 #. data/mp/stats/research.json: $.R-Sys-VTOLCBS-Turret01.name
 #: po/custom/fromJson.txt:5994
 msgid "VTOL CB Turret"
-msgstr ""
+msgstr "رأسٌ مضادٌ للمدفعية للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-ClusterBomb.name
@@ -14581,7 +14581,7 @@ msgstr "صاروخ الجلاد للطائرات العمودية"
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTW1.text[1]
 #: po/custom/fromJson.txt:6141
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr "يقوم برج الاستشعار (طائرات) باكتشاف الأعداء المتوجهين نحوك"
+msgstr "يقوم برج هجوم الطائرات العمودية باكتشاف الأعداء المتوجهين نحوك"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-VTOLStrike-Tower01.name
@@ -14589,7 +14589,7 @@ msgstr "يقوم برج الاستشعار (طائرات) باكتشاف الأ�
 #. data/mp/stats/structure.json: $.Sys-VTOL-RadarTower01.name
 #: po/custom/fromJson.txt:6146
 msgid "VTOL Strike Tower"
-msgstr "برج استشعار (طائرات)"
+msgstr "برج هجوم الطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[1]
