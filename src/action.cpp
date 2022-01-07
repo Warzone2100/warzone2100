@@ -2341,6 +2341,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		}
 		else if (actionIsInRange ||(order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 		{
+			moveStopDroid(psDroid);
 			psDroid->action = DACTION_ATTACK;
 		}
 		break;
