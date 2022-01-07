@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-07 03:02\n"
+"PO-Revision-Date: 2022-01-07 15:05\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1125,7 +1125,7 @@ msgstr "قطعةٌ أثرية مجهولة"
 
 #: data/base/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
-msgstr ""
+msgstr "مصدر ازدياد الطاقة"
 
 #: data/base/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
@@ -1194,7 +1194,7 @@ msgstr "هدم"
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:3996
 msgid "Naval"
-msgstr ""
+msgstr "قارب"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -5602,24 +5602,24 @@ msgstr "رأس القيادة 4"
 #: src/multistat.cpp:310
 #: src/spectatorwidgets.cpp:803
 msgid "Player"
-msgstr ""
+msgstr "اللاعب"
 
 #: data/mp/multiplay/script/rules/endconditions.js:239
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "خسر المباراة بسبب توقفه عن اللعب \\ عدم اللعب بجدية."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "إذا لم تلعب بجدية فستخسر المباراة. اللعب الجدي يعني القيام بأحد الأفعال التالية:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "بناء الوحدات - إنجاز الأبحاث - بناء المباني الرئيسية (مصانع، مولدات طاقة، مراكز أبحاث، آبار نفط، وحداتٌ إضافيةٌ للمباني...) - إلحاق الضرر بالأعداء"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1463
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "قطاع الطرق المتوحشون"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1460
@@ -5688,7 +5688,7 @@ msgstr "سهلة"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "متوسطة"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
@@ -5696,35 +5696,35 @@ msgstr "صعبة"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "جنونية"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
-msgstr ""
+msgstr "تم تغيير الشخصية بنجاح."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "لا يوجد شخصيةٌ بهذا الاسم! جرّب واحدةً مما يلي:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "لم تعد هنالك أي أبحاثٍ إجبارية، ويمكنني أن أبحث ما أشاء الآن."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "تم تعطيل الأبحاث، ولن أبحث أي شيءٍ الآن."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "سأجري أبحاثاً على التقنيات الأكثر الأساسية."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr ""
+msgstr "أنا أجري أبحاثاً على "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "إن هذا المسار البحثي غير موجود! جرّب واحداً مما يلي:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
@@ -5732,31 +5732,31 @@ msgstr "آسف، ولكنني لا أملك أي شاحناتٍ."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "يمكنك استعمال هذه."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "فشلت عملية النقل."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "تم نقل الطاقة بنجاح."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "قم بوضع علامةٍ من فضلك!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "أنا قادم!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "آسف، ولكن ليس لدي أي قواتٍ فائضة لإرسالها لك!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "نحن في الخدمة دائماً!"
 
 #: lib/framework/i18n.cpp:104
 #: lib/framework/i18n.cpp:169
@@ -5910,7 +5910,7 @@ msgstr "مدفعٌ آلي بفوهتين، ويمكنه إطلاق طلقاتٍ 
 #: po/custom/fromJson.txt:41
 #, no-c-format
 msgid "AA accuracy +10%"
-msgstr ""
+msgstr "زيادة دقة المدافع المضادة للطائرات 10%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
@@ -5938,21 +5938,21 @@ msgstr "قُمع ذخيرةٍ مضادةٍ للطائرات"
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF05.name
 #: po/custom/fromJson.txt:57
 msgid "AA Chainfeed Loader Mk2"
-msgstr ""
+msgstr "تلقيم المدافع المضادة للطائرات بالسلاسل (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF06.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF06.name
 #: po/custom/fromJson.txt:61
 msgid "AA Chainfeed Loader Mk3"
-msgstr ""
+msgstr "تلقيم المدافع المضادة للطائرات بالسلاسل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF04.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF04.name
 #: po/custom/fromJson.txt:65
 msgid "AA Chainfeed Loader"
-msgstr ""
+msgstr "تلقيم المدافع المضادة للطائرات بالسلاسل"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-AASite-QuadBof.name
@@ -6037,21 +6037,21 @@ msgstr "طلقاتٌ مضادةٌ للطائرات خارقةٌ للدروع"
 #: po/custom/fromJson.txt:120
 #, no-c-format
 msgid "AA reload time -15%"
-msgstr ""
+msgstr "تقليل وقت إعادة تعبئة المدافع المضادة للطائرات 15%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
 #: po/custom/fromJson.txt:140
 msgid "AA Target Acquisition Shells"
-msgstr ""
+msgstr "قذائف مضادةٌ للطائرات قادرةٌ على تحديد الهدف"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
 #: po/custom/fromJson.txt:144
 msgid "AA Target Prediction Computer"
-msgstr ""
+msgstr "حاسوبٌ للتنبؤ بحركة الهدف للمدافع المضادة للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
@@ -6204,7 +6204,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_SY_VS3.text[1]
 #: po/custom/fromJson.txt:246
 msgid "Advanced target recognition systems"
-msgstr ""
+msgstr "أنظمةٌ متطورة للتعرف على الهدف"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[1]
@@ -6933,20 +6933,20 @@ msgstr "نقطةٌ محصّنة برشاشٍ هجومي"
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
 #: po/custom/fromJson.txt:884
 msgid "Assault Gun Python Half Track"
-msgstr "مدفعٌ هجومي حنش جنازير نصفية"
+msgstr "مدفعٌ هجومي الحنش جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHoverAssGun.name
 #: po/custom/fromJson.txt:887
 msgid "Assault Gun Python Hover"
-msgstr "مدفعٌ هجومي حنش حوامة"
+msgstr "مدفعٌ هجومي الحنش حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 #. data/mp/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 #: po/custom/fromJson.txt:891
 msgid "Assault Gun Python Tracks"
-msgstr "مدفعٌ هجومي حنش جنازير"
+msgstr "مدفعٌ هجومي الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
@@ -6977,14 +6977,14 @@ msgstr "سايبورغ برشاشٍ هجومي"
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VP.text[2]
 #: po/custom/fromJson.txt:910
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr ""
+msgstr "لإسناد إحدى الطائرات، قم باختيار منصة إعادة التسليح كهدفٍ لها"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[2]
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTU1.text[2]
 #: po/custom/fromJson.txt:920
 msgid "Assigned VTOLs attack the designated targets"
-msgstr ""
+msgstr "ستقوم الطائرات العمودية المسندة إليه بمهاجمة الأهداف المحددة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTW1.text[2]
@@ -7625,7 +7625,7 @@ msgstr "رأسٌ مضادٌ للمدفعية"
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text[1]
 #: po/custom/fromJson.txt:1401
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr ""
+msgstr "سيتم استخدام سلاسل داخلية لتلقيم طلقةٍ جديدة بعد الإطلاق، مما يحسّن من الأداء ويضمن عدم تعليق السلاح"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_MG_ROF1.text[1]
@@ -7775,7 +7775,7 @@ msgstr "رأس قيادة عقرب جنازير"
 #. data/mp/stats/templates.json: $.PythonComTracks.name
 #: po/custom/fromJson.txt:1499
 msgid "Command Turret Python Tracks"
-msgstr "رأس قيادة حنش جنازير"
+msgstr "رأس قيادة الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scorp-Trk-Com.name
@@ -8679,7 +8679,7 @@ msgstr "قاذف اللهب"
 #. data/mp/stats/templates.json: $.MP-Cyb-Laser1-GRD.name
 #: po/custom/fromJson.txt:2134
 msgid "Flashlight Gunner Cyborg"
-msgstr ""
+msgstr "السايبورغ ذو ليزر الفلاش"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-PulseLas.name
@@ -8807,7 +8807,7 @@ msgstr "نقطةٌ محصّنة بمدفع غاوس"
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
 #: po/custom/fromJson.txt:2208
 msgid "Gauss Cannon Python Tracks"
-msgstr "مدفع غاوس أفعى جنازير"
+msgstr "مدفع غاوس الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernGaussTracks.name
@@ -8902,7 +8902,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2263
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "السايبورغ رامي القنابل"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -9160,7 +9160,7 @@ msgstr "صواريخ شديدة الانفاجر"
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
 #: po/custom/fromJson.txt:2419
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr ""
+msgstr "حجرة قنبلةٍ خارقةٍ للدروع العقرب طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-HBB.name
@@ -9329,14 +9329,14 @@ msgstr "يزيد الجسم الثقيل من قوة الدرع ونقاط صح�
 #. data/mp/stats/templates.json: $.Cobra-Hover-HC.name
 #: po/custom/fromJson.txt:2525
 msgid "Heavy Cannon Cobra Hover"
-msgstr ""
+msgstr "مدفعٌ ثقيل كوبرا حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHvyCnTrks.name
 #. data/mp/stats/templates.json: $.CobraHvyCnTrks.name
 #: po/custom/fromJson.txt:2529
 msgid "Heavy Cannon Cobra Tracks"
-msgstr ""
+msgstr "مدفعٌ ثقيل كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN3MK1.text[1]
@@ -9358,13 +9358,13 @@ msgstr "نقطةٌ محصّنة بمدفعٍ ثقيل"
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
 #: po/custom/fromJson.txt:2542
 msgid "Heavy Cannon Mantis Tracks"
-msgstr ""
+msgstr "مدفعٌ ثقيل عقرب جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-HC.name
 #: po/custom/fromJson.txt:2545
 msgid "Heavy Cannon Python Hover"
-msgstr ""
+msgstr "مدفعٌ ثقيل الحنش حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonHvyCnTrks.name
@@ -9373,19 +9373,19 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2551
 msgid "Heavy Cannon Python Tracks"
-msgstr ""
+msgstr "مدفعٌ ثقيل الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-HC.name
 #: po/custom/fromJson.txt:2554
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr ""
+msgstr "مدفعٌ ثقيل عنكبوت جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-HC.name
 #: po/custom/fromJson.txt:2557
 msgid "Heavy Cannon Tiger Tracks"
-msgstr ""
+msgstr "مدفعٌ ثقيل النمر جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon3Mk1.name
@@ -9428,7 +9428,7 @@ msgstr "مربض ليزرٍ كثيف"
 #. data/mp/stats/templates.json: $.TigerHvLaserTracks.name
 #: po/custom/fromJson.txt:2592
 msgid "Heavy Laser Tiger Tracks"
-msgstr ""
+msgstr "ليزرٌ ثقيل النمر جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernHvLaserTracks.name
@@ -9450,26 +9450,26 @@ msgstr "ليزر كثيف"
 #. data/mp/stats/templates.json: $.P0CobraHvyMGHtrack.name
 #: po/custom/fromJson.txt:2611
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr ""
+msgstr "رشاشٌ ثقيل كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-HMG.name
 #: po/custom/fromJson.txt:2614
 msgid "Heavy Machinegun Cobra Hover"
-msgstr ""
+msgstr "رشاشٌ ثقيل كوبرا حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Trk-HMG.name
 #. data/mp/stats/templates.json: $.CobraHMGTracks.name
 #: po/custom/fromJson.txt:2618
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr ""
+msgstr "رشاشٌ ثقيل كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Wheels-HMG.name
 #: po/custom/fromJson.txt:2621
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr ""
+msgstr "رشاشٌ ثقيل كوبرا عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower01.name
@@ -9484,20 +9484,20 @@ msgstr "نقطةٌ محصّنة برشاشٍ ثقيل"
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
 #: po/custom/fromJson.txt:2636
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr ""
+msgstr "رشاشٌ ثقيل عنكبوت جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpTrkHMG.name
 #: po/custom/fromJson.txt:2639
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr ""
+msgstr "رشاشٌ ثقيل عنكبوت جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGHalftrack.name
 #. data/mp/stats/templates.json: $.ViperHMGHalftrack.name
 #: po/custom/fromJson.txt:2647
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr ""
+msgstr "رشاشٌ ثقيل أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGTracks.name
@@ -9505,14 +9505,14 @@ msgstr ""
 #. data/mp/stats/templates.json: $.ViperHMGTracks.name
 #: po/custom/fromJson.txt:2652
 msgid "Heavy Machinegun Viper Tracks"
-msgstr ""
+msgstr "رشاشٌ ثقيل أفعى جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Wheels-HMG.name
 #. data/mp/stats/templates.json: $.ViperHMGWheels.name
 #: po/custom/fromJson.txt:2656
 msgid "Heavy Machinegun Viper Wheels"
-msgstr ""
+msgstr "رشاشٌ ثقيل أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG3Mk1.name
@@ -9562,13 +9562,13 @@ msgstr "مدفعٌ ثقيل يستخدم القوة الكهرومغناطيسي
 #. data/mp/stats/templates.json: $.ScorpHRepairHover.name
 #: po/custom/fromJson.txt:2685
 msgid "Heavy Repair Scorpion Hover"
-msgstr ""
+msgstr "صيانةٌ ثقيل عنكبوت حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraHRepairHover.name
 #: po/custom/fromJson.txt:2688
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr ""
+msgstr "رأس صيانةٍ قيل كوبرا حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9937,7 +9937,7 @@ msgstr "طلقاتٌ خارقةٌ للدروع فائقة السرعة"
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2959
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "مدفعٌ فائق السرعة الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -9968,13 +9968,13 @@ msgstr "نقطةٌ محصّنة بمدفعٍ فائق السرعة"
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
 #: po/custom/fromJson.txt:2978
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr ""
+msgstr "مدفعٌ فائق السرعة الحنش حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2981
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr ""
+msgstr "مدفعٌ فائق السرعة الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -10125,7 +10125,7 @@ msgstr "سيتم استعمال رؤوسٍ متفجرة متطورة، تمت ق
 #. data/mp/messages/resmessages23.json: $.RES_SY_VS2.text[1]
 #: po/custom/fromJson.txt:3084
 msgid "Improved target recognition systems"
-msgstr ""
+msgstr "أنظمةٌ محسّنة للتعرف على الهدف"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[1]
@@ -10397,13 +10397,13 @@ msgstr "ملجأٌ بقاذف الجحيم"
 #. data/mp/stats/templates.json: $.CobraInfernoHTracks.name
 #: po/custom/fromJson.txt:3359
 msgid "Inferno Cobra Half-Tracks"
-msgstr ""
+msgstr "الجحيم كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHover.name
 #: po/custom/fromJson.txt:3362
 msgid "Inferno Cobra Hover"
-msgstr ""
+msgstr "الجحيم كوبرا حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyFlamer.name
@@ -10423,7 +10423,7 @@ msgstr "نقطةٌ محصّنة بقاذف الجحيم"
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
 #: po/custom/fromJson.txt:3373
 msgid "Inferno Python Hover"
-msgstr ""
+msgstr "الجحيم الحنش حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Flame2.name
@@ -10538,13 +10538,13 @@ msgstr "ملجأ الرمّاح"
 #. data/mp/stats/templates.json: $.P0CobraLtATRktHtrack.name
 #: po/custom/fromJson.txt:3443
 msgid "Lancer Cobra Half-tracks"
-msgstr ""
+msgstr "الرمّاح كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraTrkLancer.name
 #: po/custom/fromJson.txt:3446
 msgid "Lancer Cobra Tracks"
-msgstr ""
+msgstr "الرمّاح كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Rocket.name
@@ -10568,38 +10568,38 @@ msgstr "نقطةٌ محصّنة بصاروخ الرمّاح"
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
 #: po/custom/fromJson.txt:3461
 msgid "Lancer Mantis Tracks"
-msgstr ""
+msgstr "الرمّاح عقرب جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Trk-Lancer.name
 #: po/custom/fromJson.txt:3464
 msgid "Lancer Python Tracks"
-msgstr ""
+msgstr "الرمّاح الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-Lancer.name
 #: po/custom/fromJson.txt:3467
 msgid "Lancer Scorpion Tracks"
-msgstr ""
+msgstr "الرمّاح عقرب جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-Lancer.name
 #: po/custom/fromJson.txt:3470
 msgid "Lancer Scorpion VTOL"
-msgstr ""
+msgstr "الرمّاح عقرب طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperTrkLancer.name
 #: po/custom/fromJson.txt:3478
 msgid "Lancer Viper Tracks"
-msgstr ""
+msgstr "الرمّاح أفعى جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtA-Twheels.name
 #. data/mp/stats/templates.json: $.ViperLtA-Twheels.name
 #: po/custom/fromJson.txt:3482
 msgid "Lancer Viper Wheels"
-msgstr ""
+msgstr "الرمّاج أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-LtA-T.name
@@ -10756,7 +10756,7 @@ msgstr "ملجأٌ بمدفعٍ خفيف"
 #. data/mp/stats/templates.json: $.CobraLtCnTrks.name
 #: po/custom/fromJson.txt:3579
 msgid "Light Cannon Cobra Tracks"
-msgstr ""
+msgstr "مدفعٌ خفيف كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[1]
@@ -10779,27 +10779,27 @@ msgstr "نقطةٌ محصّنة بمدفعٍ خفيف"
 #. data/mp/stats/templates.json: $.PythonLtCnTrks.name
 #: po/custom/fromJson.txt:3593
 msgid "Light Cannon Python Tracks"
-msgstr ""
+msgstr "مدفعٌ خفيف الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtCannonHTracks.name
 #: po/custom/fromJson.txt:3596
 msgid "Light Cannon Viper Half-tracks"
-msgstr ""
+msgstr "مدفعٌ خفيف أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonTracks.name
 #. data/mp/stats/templates.json: $.ViperLtCannonTracks.name
 #: po/custom/fromJson.txt:3600
 msgid "Light Cannon Viper Tracks"
-msgstr ""
+msgstr "مدفعٌ خفيف أفعى جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonWheels.name
 #. data/mp/stats/templates.json: $.ViperLtCannonWheels.name
 #: po/custom/fromJson.txt:3604
 msgid "Light Cannon Viper Wheels"
-msgstr ""
+msgstr "مدفعٌ خفيف أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon1Mk1.name
@@ -10870,13 +10870,13 @@ msgstr "تقليل وقت إعادة تعبئة الرشاش بنسبة 15%"
 #. data/mp/stats/templates.json: $.ViperLtMGHalfTracks.name
 #: po/custom/fromJson.txt:3657
 msgid "Machinegun Viper Half-Tracks"
-msgstr ""
+msgstr "رشاش أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Trk-MG.name
 #: po/custom/fromJson.txt:3660
 msgid "Machinegun Viper Tracks"
-msgstr ""
+msgstr "رشاش أفعى جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgChaingun.name
@@ -10943,7 +10943,7 @@ msgstr "يمكن تحديثه عن طريق الوحدات الإضافية"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3727
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "السايبورغ الميكانيكي"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -10990,13 +10990,13 @@ msgstr "يزيد الجسم المتوسط من قوة الدرع ونقاط ص�
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
 #: po/custom/fromJson.txt:3753
 msgid "Medium Cannon Cobra Half Track"
-msgstr ""
+msgstr "مدفعٌ متوسط كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-MC.name
 #: po/custom/fromJson.txt:3756
 msgid "Medium Cannon Cobra Hover"
-msgstr ""
+msgstr "مدفعٌ متوسط كوبرا حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMedCnTrks.name
@@ -11004,7 +11004,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0CobraMedCnTrks.name
 #: po/custom/fromJson.txt:3761
 msgid "Medium Cannon Cobra Tracks"
-msgstr ""
+msgstr "مدفعٌ متوسط كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN2MK1.text[1]
@@ -11026,7 +11026,7 @@ msgstr "نقطةٌ محصّنة بمدفعٍ متوسط"
 #. data/mp/stats/templates.json: $.A-Python-Hover-MC.name
 #: po/custom/fromJson.txt:3774
 msgid "Medium Cannon Python Hover"
-msgstr ""
+msgstr "مدفعٌ متوسط الحنش حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonMedCnTrks.name
@@ -11034,26 +11034,26 @@ msgstr ""
 #. data/mp/stats/templates.json: $.PythonMedCnTrks.name
 #: po/custom/fromJson.txt:3779
 msgid "Medium Cannon Python Tracks"
-msgstr ""
+msgstr "مدفعٌ متوسط الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Scorp-Hover-MC.name
 #: po/custom/fromJson.txt:3782
 msgid "Medium Cannon Scorpion Hover"
-msgstr ""
+msgstr "مدفعٌ متوسط عنكبوت حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Scorp-Trk-MC.name
 #: po/custom/fromJson.txt:3785
 msgid "Medium Cannon Scorpion Tracks"
-msgstr ""
+msgstr "مدفعٌ متوسط عنكبوت جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMedCnTrks.name
 #. data/mp/stats/templates.json: $.ViperMedCnTrks.name
 #: po/custom/fromJson.txt:3789
 msgid "Medium Cannon Viper Tracks"
-msgstr ""
+msgstr "مدفعٌ متوسط أفعى جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon2Mk1.name
@@ -11081,25 +11081,25 @@ msgstr "متراسٌ محصّن وعليه منصة صواريخ مصغرة"
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3805
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr ""
+msgstr "راجمة صواريخٍ مصغرة كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLTracks.name
 #: po/custom/fromJson.txt:3808
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr ""
+msgstr "راجمة صواريخٍ مصغرة كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLHalfTracks.name
 #: po/custom/fromJson.txt:3811
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr ""
+msgstr "راجمة صواريخٍ مصغرة أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3814
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr ""
+msgstr "راجمة صواريخٍ مصغرة أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket02-MRL.name
@@ -11112,13 +11112,13 @@ msgstr "راجمة صواريخ مصغرة"
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3821
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr ""
+msgstr "مدفعية صواريخٍ مصغرة كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3824
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr ""
+msgstr "مدفعية صواريخٍ مصغرة أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket02-MRL.name
@@ -11140,13 +11140,13 @@ msgstr "بطارية صواريخ مصغرة"
 #. data/mp/stats/templates.json: $.CobraPODHTracks.name
 #: po/custom/fromJson.txt:3837
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr ""
+msgstr "صواريخٌ مصغرة كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODTracks.name
 #: po/custom/fromJson.txt:3840
 msgid "Mini-Rocket Cobra Tracks"
-msgstr ""
+msgstr "صواريخٌ مصغرة كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower06.name
@@ -11175,14 +11175,14 @@ msgstr "برج صواريخ مصغرة"
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
 #: po/custom/fromJson.txt:3863
 msgid "Mini-Rocket Viper Half Track"
-msgstr ""
+msgstr "صواريخٌ مصغرة أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperPODWheels.name
 #. data/mp/stats/templates.json: $.ViperPODWheels.name
 #: po/custom/fromJson.txt:3867
 msgid "Mini-Rocket Viper Wheels"
-msgstr ""
+msgstr "صواريخ مصغرة أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text[2]
@@ -11197,7 +11197,7 @@ msgstr "زيادة دقة الصاروخ الموجه 10%"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC2.text[1]
 #: po/custom/fromJson.txt:3876
 msgid "Missile actively seeks and homes on targets"
-msgstr ""
+msgstr "سيقوم الصاروخ الموجه بتعقب الأهداف والتوجه نحوه مباشرةً"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text[2]
@@ -11236,7 +11236,7 @@ msgstr "تطويرٌ للصاروخ الموجه"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_ROF1.text[1]
 #: po/custom/fromJson.txt:3906
 msgid "Missiles detect and lock-on to targets while loading"
-msgstr ""
+msgstr "ستقوم الصواريخ باكتشاف الأهداف ومن ثم التثبيت عليها أثناء التلقيم"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-MobileRepairTurret01.name
@@ -11295,7 +11295,7 @@ msgstr "ملقمٌ آلي للهاون"
 #. data/mp/stats/templates.json: $.CobraMortarHalfTrack.name
 #: po/custom/fromJson.txt:3941
 msgid "Mortar Cobra Half-tracks"
-msgstr ""
+msgstr "هاون كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text[2]
@@ -11386,7 +11386,7 @@ msgstr "مدفع الإبر القصاص جنازير"
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-Needle.name
 #: po/custom/fromJson.txt:4002
 msgid "Needle Gun Tiger Tracks"
-msgstr ""
+msgstr "مدفع الإبر النمر جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-GuardTower-Rail1.name
@@ -11825,7 +11825,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text[1]
 #: po/custom/fromJson.txt:4346
 msgid "On-board computer predicts target movement"
-msgstr ""
+msgstr "حاسوبٌ للتنبؤ بحركة الهدف، مركبٌ داخل السلاح"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[2]
@@ -11897,7 +11897,7 @@ msgstr "رشاشة الفلفل"
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
 #: po/custom/fromJson.txt:4399
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr ""
+msgstr "حجرة قنبلة فوسفور العقرب طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb03.name
@@ -12030,7 +12030,7 @@ msgstr "يستهلك إنتاجه طاقةً ووقتاً قريبين من أو
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text[3]
 #: po/custom/fromJson.txt:4472
 msgid "Power cost and production time the same as Python"
-msgstr "يستهلك إنتاجه طاقةً ووقتاً مماثلين لأولائك الخاصين بجسم الحنش"
+msgstr "يستهلك إنتاجه طاقةً ووقتاً مماثلين لتلك الخاصين بجسم الحنش"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0PowerGenerator.name
@@ -12153,37 +12153,37 @@ msgstr "نقطةٌ محصّنة بليزرٍ نبضي"
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
 #: po/custom/fromJson.txt:4556
 msgid "Pulse Laser Leopard Hover"
-msgstr ""
+msgstr "ليزرٌ نبضي الفهد حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Pulse.name
 #: po/custom/fromJson.txt:4559
 msgid "Pulse Laser Mantis Tracks"
-msgstr ""
+msgstr "ليزرٌ نبضي عقرب جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PantherHoverPulseLas.name
 #: po/custom/fromJson.txt:4562
 msgid "Pulse Laser Panther Hover"
-msgstr ""
+msgstr "ليزرٌ نبضي الجاكوار حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonPulseTracks.name
 #: po/custom/fromJson.txt:4565
 msgid "Pulse Laser Python Tracks"
-msgstr ""
+msgstr "ليزرٌ نبضي الجاكوار جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverPulseLas.name
 #: po/custom/fromJson.txt:4568
 msgid "Pulse Laser Tiger Hover"
-msgstr ""
+msgstr "ليزرٌ نبضي النمر حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerPulseTracks.name
 #: po/custom/fromJson.txt:4571
 msgid "Pulse Laser Tiger Tracks"
-msgstr ""
+msgstr "ليزرٌ نبضي النمر جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-PulseLas.name
@@ -12211,7 +12211,7 @@ msgstr "ليزر نبضي"
 #. data/base/stats/templates.json: $.P0PythonHvyCnTrks.name
 #: po/custom/fromJson.txt:4587
 msgid "Python Heavy Cannon Tracks"
-msgstr ""
+msgstr "الحنش مدفعٌ ثقيل جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body11ABT.name
@@ -12293,7 +12293,7 @@ msgstr "نقطةٌ محصّنة بمدفعٍ كهرومغناطيسي"
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
 #: po/custom/fromJson.txt:4642
 msgid "Rail Gun Mantis Tracks"
-msgstr ""
+msgstr "مدفعٌ كهرومغناطيسي العقرب جنازير"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[2]
@@ -12327,7 +12327,7 @@ msgstr "معدل إطلاق المدافع الكهرومغناطيسية"
 #. data/mp/stats/templates.json: $.TigerHoverRailGun.name
 #: po/custom/fromJson.txt:4661
 msgid "Rail Gun Tiger Hover"
-msgstr ""
+msgstr "مدفعٌ كهرومغناطيسي النمر حوامة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[0]
@@ -12351,7 +12351,7 @@ msgstr "المدفع الكهرومغناطيسي"
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 #: po/custom/fromJson.txt:4676
 msgid "Rail Target Prediction Computer"
-msgstr "حاسوبٌ للتنبؤ بحركة الهدف"
+msgstr "حاسوبٌ للتنبؤ بحركة الهدف للمدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-Rail2.name
@@ -12442,7 +12442,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
 #: po/custom/fromJson.txt:4744
 msgid "Repair Cobra Tracks"
-msgstr ""
+msgstr "صيانة كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RepairFacility.name
@@ -12457,7 +12457,7 @@ msgstr "مركز الصيانة"
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
 #: po/custom/fromJson.txt:4759
 msgid "Repair Scorpion Tracks"
-msgstr ""
+msgstr "صيانة عنكبوت جنازير"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RFU1.text[2]
@@ -12473,32 +12473,32 @@ msgstr "زيادة سرعة التصليح 100%"
 #. data/mp/stats/templates.json: $.A-Rep-Cobra-Trk.name
 #: po/custom/fromJson.txt:4769
 msgid "Repair Turret Cobra Tracks"
-msgstr ""
+msgstr "رأس صيانة كوبرا جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Rep-Mantis-Trk.name
 #: po/custom/fromJson.txt:4772
 msgid "Repair Turret Mantis Tracks"
-msgstr ""
+msgstr "رأس صيانة عقرب جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4775
 msgid "Repair Turret Viper Half-track"
-msgstr ""
+msgstr "رأس صيانة أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4778
 msgid "Repair Turret Viper Half-tracks"
-msgstr ""
+msgstr "رأس صيانة أفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairWheels.name
 #. data/mp/stats/templates.json: $.ViperRepairWheels.name
 #: po/custom/fromJson.txt:4782
 msgid "Repair Turret Viper Wheels"
-msgstr ""
+msgstr "رأس صيانة أفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/repair.json: $.LightRepair1.name
@@ -12629,7 +12629,7 @@ msgstr "صواريخ الصدمة"
 #. data/mp/messages/resmessages23.json: $.RES_W_MG_ROF3.text[1]
 #: po/custom/fromJson.txt:4881
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr ""
+msgstr "مع التطورات الروبوتية الأخيرة صار هنالك تطويرٌ جديدٌ لرشاش السلسلة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade05.name
@@ -12988,19 +12988,19 @@ msgstr "العنكبوت"
 #. data/mp/stats/templates.json: $.MP-Cyb-ATmiss-GRD.name
 #: po/custom/fromJson.txt:5102
 msgid "Scourge Cyborg"
-msgstr ""
+msgstr "السايبورغ ذو صاروخ الجلاد"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scourge-Mantis-H.name
 #: po/custom/fromJson.txt:5105
 msgid "Scourge Mantis Hover"
-msgstr ""
+msgstr "الجلاد العقرب حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisScourgeTracks.name
 #: po/custom/fromJson.txt:5108
 msgid "Scourge Mantis Tracks"
-msgstr ""
+msgstr "الجلاد العقرب جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-A-Tmiss.name
@@ -13039,7 +13039,7 @@ msgstr "صاروخ الجلاد"
 #. data/mp/stats/templates.json: $.PythonScourgeTracks.name
 #: po/custom/fromJson.txt:5132
 msgid "Scourge Python Tracks"
-msgstr ""
+msgstr "الجلاد الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retal-VTOL-Scourge.name
@@ -13097,7 +13097,7 @@ msgstr ""
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5172
 msgid "Sensor Cobra Half-tracks"
-msgstr ""
+msgstr "مستشعر كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[2]
@@ -13124,14 +13124,14 @@ msgstr "زيادة مدى المستشعر 25%"
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5193
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr ""
+msgstr "رأس استشعار كوبرا جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperSensorWheels.name
 #. data/mp/stats/templates.json: $.ViperSensorWheels.name
 #: po/custom/fromJson.txt:5197
 msgid "Sensor Turret Viper Wheels"
-msgstr ""
+msgstr "رأس استشعار الأفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Turret01.name
@@ -13587,13 +13587,13 @@ msgstr "نقطةٌ محصّنة بقاتل الدبابات"
 #. data/mp/stats/templates.json: $.TK-Mantis-H.name
 #: po/custom/fromJson.txt:5506
 msgid "Tank Killer Mantis Hover"
-msgstr ""
+msgstr "قاتل دبابات العقرب حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTKTracks.name
 #: po/custom/fromJson.txt:5509
 msgid "Tank Killer Mantis Tracks"
-msgstr ""
+msgstr "قاتل دبابات العقرب جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHvyATTrk.name
@@ -13601,7 +13601,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.PythonTKTracks.name
 #: po/custom/fromJson.txt:5514
 msgid "Tank Killer Python Tracks"
-msgstr ""
+msgstr "قاتل دبابات الحنش جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket07-Tank-Killer.name
@@ -13637,28 +13637,28 @@ msgstr "فخ الدبابات"
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
 #: po/custom/fromJson.txt:5535
 msgid "Target Acquisition Artillery Shells Mk2"
-msgstr ""
+msgstr "قذائف مدفعية قادرةٌ على تحديد الهدف (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 #: po/custom/fromJson.txt:5539
 msgid "Target Acquisition Artillery Shells"
-msgstr ""
+msgstr "قذائف مدفعية قادرةٌ على تحديد الهدف"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 #: po/custom/fromJson.txt:5543
 msgid "Target Acquisition Mortar Shells"
-msgstr ""
+msgstr "قذائف هاون قادرةٌ على تحديد الهدف"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
 #: po/custom/fromJson.txt:5547
 msgid "Target Prediction Artillery Shells"
-msgstr ""
+msgstr "قذائف مدفعية تتنبأ بحركة الهدف"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
@@ -13671,7 +13671,7 @@ msgstr "حاسوبٌ للتنبؤ بحركة الهدف"
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy01.name
 #: po/custom/fromJson.txt:5554
 msgid "Target Prediction Missiles"
-msgstr ""
+msgstr "صواريخ تتنبأ بحركة الهدف"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_AC1.text[1]
@@ -13864,19 +13864,19 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
 #: po/custom/fromJson.txt:5671
 msgid "Truck Cobra Hover"
-msgstr ""
+msgstr "شاحنة الكوبرا حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverTruck.name
 #: po/custom/fromJson.txt:5674
 msgid "Truck Mantis Hover"
-msgstr ""
+msgstr "شاحنة العقرب حوامة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHoverTruck.name
 #: po/custom/fromJson.txt:5677
 msgid "Truck Scorpion Hover"
-msgstr ""
+msgstr "شاحنة العنكبوت حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/construction.json: $.Spade1Mk1.name
@@ -13997,13 +13997,13 @@ msgstr "برجٌ برشّاشين"
 #. data/mp/stats/templates.json: $.ViperMG02Halftrack.name
 #: po/custom/fromJson.txt:5761
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr ""
+msgstr "رشاشان الأفعى جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Trk-TMG.name
 #: po/custom/fromJson.txt:5764
 msgid "Twin Machinegun Viper Tracks"
-msgstr ""
+msgstr "رشاشان الأفعى جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Wheels.name
@@ -14011,7 +14011,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.ViperMG02Wheels.name
 #: po/custom/fromJson.txt:5769
 msgid "Twin Machinegun Viper Wheels"
-msgstr ""
+msgstr "رشاشان الأفعى عجلات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG2Mk1.name
@@ -14284,13 +14284,13 @@ msgstr ""
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
 #: po/custom/fromJson.txt:5951
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr ""
+msgstr "هدام الملاجئ للطائرات البقّة طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-BB.name
 #: po/custom/fromJson.txt:5954
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "هدام الملاجئ للطائرات العنكبوت طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-BB.name
@@ -14347,13 +14347,13 @@ msgstr "رأسٌ مضادٌ للمدفعية للطائرات"
 #. data/mp/stats/templates.json: $.V-Bug-ClusterBomb.name
 #: po/custom/fromJson.txt:5997
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr ""
+msgstr "قنبلةٌ عنقودية للطائرات البقّة طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-ClusterBomb.name
 #: po/custom/fromJson.txt:6000
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr ""
+msgstr "قنبلةٌ عنقودية للطائرات العنكبوت طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
@@ -14420,19 +14420,19 @@ msgstr "رشاشٌ ثقيل للطائرات العمودية"
 #. data/mp/stats/templates.json: $.V-Bug-HPV.name
 #: po/custom/fromJson.txt:6037
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr ""
+msgstr "مدفعٌ فائق السرعة للطائرات البقّة طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Mantis-HPV.name
 #: po/custom/fromJson.txt:6040
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr ""
+msgstr "مدفعٌ فائق السرعة للطائرات العقرب طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-HPV.name
 #: po/custom/fromJson.txt:6043
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr ""
+msgstr "مدفعٌ فائق السرعة للطائرات العنكبوت طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon4AUTO-VTOL.name
@@ -14457,19 +14457,19 @@ msgstr "دفعٌ عمودي 3"
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
 #: po/custom/fromJson.txt:6056
 msgid "VTOL Lancer Bug VTOL"
-msgstr ""
+msgstr "الرمّاح للطائرات البقّة طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Mantis-Lancer.name
 #: po/custom/fromJson.txt:6059
 msgid "VTOL Lancer Mantis VTOL"
-msgstr ""
+msgstr "الرمّاح للطائرات العقرب طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-Lancer.name
 #: po/custom/fromJson.txt:6062
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr ""
+msgstr "الرمّاح للطائرات العنكبوت طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
@@ -14596,7 +14596,7 @@ msgstr "برج هجوم الطائرات العمودية"
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTU1.text[1]
 #: po/custom/fromJson.txt:6150
 msgid "VTOL Strike turret used to spot targets"
-msgstr ""
+msgstr "يستخدم رأس »هجوم الطائرات العمودية» لاكتشاف الأهداف"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-VTOLStrike-Turret01.name
@@ -16029,7 +16029,7 @@ msgstr "صعبة"
 #: src/frontend.cpp:1985
 #: src/multiint.cpp:266
 msgid "Insane"
-msgstr ""
+msgstr "جنونية"
 
 #: src/frontend.cpp:2016
 #: src/frontend.cpp:2090
