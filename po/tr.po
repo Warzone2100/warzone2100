@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-16 02:25\n"
+"PO-Revision-Date: 2022-01-07 03:02\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -5610,7 +5610,7 @@ msgstr "İnaktif olunduğu / pasif oynandığı nedeniyle kaybedildi."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Pasif oynamak bozguna yol açacaktır. Şu eylemler değerlendirilebilir:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
@@ -5863,11 +5863,11 @@ msgstr "(başlıksız)"
 
 #: lib/widget/jsontable.cpp:496
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Dizini panoya kopyala"
 
 #: lib/widget/jsontable.cpp:503
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "JSON'u panoya kopyala"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
@@ -7332,7 +7332,7 @@ msgstr "Gövde Puanı: Çok düşük"
 #: po/custom/fromJson.txt:1222
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Bomba hasarı +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7949,13 +7949,13 @@ msgstr "Karşı batarya kulesi düşmanın endirek silahlarını tespit eder"
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1596
 msgid "Crane1"
-msgstr ""
+msgstr "Vinç1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1599
 msgid "Crane2"
-msgstr ""
+msgstr "Vinç2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8909,7 +8909,7 @@ msgstr "İyi bir izci aracı"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2263
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Bombacı Sayborg"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -13997,7 +13997,7 @@ msgstr "Çift Makineli Koruma Kulesi"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5757
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "İkiz Makineli Kule"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -14892,12 +14892,12 @@ msgstr "Strateji Oyunu"
 
 #: src/chat.cpp:63
 msgid "Global"
-msgstr ""
+msgstr "Küresel"
 
 #: src/chat.cpp:67
 #: src/chat.cpp:73
 msgid "Allies"
-msgstr ""
+msgstr "Müttefikler"
 
 #: src/chat.cpp:75
 msgid "private to "
@@ -14905,12 +14905,12 @@ msgstr ""
 
 #: src/chat.cpp:86
 msgid " and "
-msgstr ""
+msgstr " ve "
 
 #: src/chat.cpp:173
 #: src/multiint.cpp:3635
 msgid "Spectators"
-msgstr ""
+msgstr "Gözlemciler"
 
 #: src/cheat.cpp:216
 #, c-format
@@ -15029,11 +15029,11 @@ msgstr "Kayıtlı seferberlik oyunu yükle"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
-msgstr ""
+msgstr "Tekrarı yükle"
 
 #: src/clparse.cpp:373
 msgid "replay file"
-msgstr ""
+msgstr "dosyayı tekrar oynat"
 
 #: src/clparse.cpp:374
 msgid "Play in windowed mode"
@@ -15462,7 +15462,7 @@ msgstr ""
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
 msgid "Collective"
-msgstr ""
+msgstr "Kollektif"
 
 #: src/frontend.cpp:178
 msgid "Campaign videos are missing"
@@ -15634,7 +15634,7 @@ msgstr "Oyuna Katıl"
 
 #: src/frontend.cpp:609
 msgid "View Replay"
-msgstr ""
+msgstr "Tekrarı Görüntüle"
 
 #: src/frontend.cpp:614
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15642,7 +15642,7 @@ msgstr "Oyun kurmak için yönlendiricinizde veya güvenlik duvarınızda TCP po
 
 #: src/frontend.cpp:659
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Çoklu-oyuncu tekrarını görüntüle"
 
 #: src/frontend.cpp:713
 msgid "Game Options"
@@ -15675,11 +15675,11 @@ msgstr "Klavye Kısayolları"
 #: src/frontend.cpp:719
 #: src/ingameop.cpp:594
 msgid "Music Manager"
-msgstr ""
+msgstr "Müzik Yöneticisi"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Çoklu-oyuncu Seçenekleri"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -15802,7 +15802,7 @@ msgstr "Gölgeler"
 
 #: src/frontend.cpp:878
 msgid "Fog"
-msgstr ""
+msgstr "Sis"
 
 #: src/frontend.cpp:883
 #: src/ingameop.cpp:637
@@ -15817,7 +15817,7 @@ msgstr "Radar Zıplaması"
 
 #: src/frontend.cpp:893
 msgid "Screen Shake"
-msgstr ""
+msgstr "Ekran sarsıntısı"
 
 #: src/frontend.cpp:905
 msgid "GRAPHICS OPTIONS"
@@ -15888,7 +15888,7 @@ msgstr "SES / YAKINLAŞTIRMA Seçenekleri"
 #: src/frontend.cpp:1245
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "Tam ekran masaüstü modunda, çözünürlük masaüstünüz ile eşleştirilir(veya pencere yöneticisinin çözünürlüğü ile)."
 
 #: src/frontend.cpp:1247
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15896,7 +15896,7 @@ msgstr "Çözünürlüğü pencereyi normal şekilde boyutlandırarak değiştir
 
 #: src/frontend.cpp:1277
 msgid "Desktop Full"
-msgstr ""
+msgstr "Penceresiz Tam Ekran"
 
 #: src/frontend.cpp:1279
 msgid "Windowed"
@@ -15941,7 +15941,7 @@ msgstr "Uyarı: Yaşarma önleme özellikle > 16 değerlerde çökmelere sebep o
 
 #: src/frontend.cpp:1613
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Grafik Altyapısı*"
 
 #: src/frontend.cpp:1625
 msgid "VIDEO OPTIONS"
@@ -15949,12 +15949,13 @@ msgstr "VİDEO AYARLARI"
 
 #: src/frontend.cpp:1668
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Pencere modu değiştirilemedi"
 
 #: src/frontend.cpp:1668
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone, pencere modunu değiştiremedi.\n"
+"Sisteminiz/sürücüleriniz diğer modları desteklemiyor olabilir."
 
 #: src/frontend.cpp:1694
 msgid "Unable to change Vertical Sync"
@@ -15963,7 +15964,8 @@ msgstr "Dikey Senk. değiştirme başarısız"
 #: src/frontend.cpp:1694
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone, dikey senkronizasyon modunu değiştiremedi.\n"
+"Sisteminiz/sürücüleriniz diğer modları desteklemiyor olabilir."
 
 #: src/frontend.cpp:1860
 msgid "Middle Mouse"
@@ -16045,7 +16047,7 @@ msgstr "Çatışma/Çok oyunculu"
 #: src/frontend.cpp:2064
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Warzone 2100 çevirisinin geliştirilmesi için bize yardımcı olun: %s"
 
 #: src/frontend.cpp:2066
 msgid "Click to open webpage."
@@ -16058,26 +16060,26 @@ msgstr "OYUN AYARLARI"
 
 #: src/frontend.cpp:2114
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Çılgın seviyesi zorluk"
 
 #: src/frontend.cpp:2115
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Bu zorluk seviyesi çok tecrübeli oyuncular içindir!"
 
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u dakika"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u saniye"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Hiçbiri"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
@@ -16085,15 +16087,15 @@ msgstr ""
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Oyun Portu"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "UPnP'yi etkinleştir"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Hareketsizlik için zaman aşımı"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
@@ -16101,11 +16103,11 @@ msgstr ""
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Gözlemci Slotları"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "ÇOKLU-OYUNCU SEÇENEKLERİ"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5127
@@ -16114,54 +16116,54 @@ msgstr "Mod: "
 
 #: src/frontend.cpp:2921
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Oyun görüntü ölçeğini arttır?"
 
 #: src/frontend.cpp:2923
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Mevcut çözünürlük & görüntü ölçeği seçenekleri ile, oyun kullanıcı arayüzü küçük gözükebilir ve oyun perspektifi bozuk görüntülenebilir."
 
 #: src/frontend.cpp:2925
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Bunu düzeltmek için Görüntü Ölçeği ayarını arttırabilirsiniz."
 
 #: src/frontend.cpp:2927
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Oyunun Görüntü Ölçeğini %u%% olarak arttırmak ister misiniz?"
 
 #: src/frontend.cpp:2929
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Görüntü Ölçeğini Arttır"
 
 #: src/frontend.cpp:2946
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Görüntü ölçeği %u%% düzeyine yükseltildi"
 
 #: src/frontend.cpp:2947
 #: src/frontend.cpp:2963
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Görüntü Ölçeği ayarını Video Seçenekleri menüsünden her zaman ayarlayabilirsiniz."
 
 #: src/frontend.cpp:2962
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Tüyo: Görüntü Ölçeğini Ayarlama"
 
 #: src/hci.cpp:725
 msgid "Replay"
-msgstr ""
+msgstr "Tekrar oyna"
 
 #: src/hci.cpp:740
 msgid "Pause"
-msgstr ""
+msgstr "Durdur"
 
 #: src/hci.cpp:755
 msgid "Resume"
-msgstr ""
+msgstr "Devam et"
 
 #: src/hci.cpp:772
 msgid "Fast-Forward"
-msgstr ""
+msgstr "Hızlı-ilerlet"
 
 #: src/hci.cpp:1324
 #: src/loop.cpp:252
@@ -16293,7 +16295,7 @@ msgstr "Taktiksel Arayüz (Hedef Kaynak Simgesi): Gizle"
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:787
 msgid "Go Back"
-msgstr ""
+msgstr "Geri git"
 
 #: src/ingameop.cpp:246
 #: src/ingameop.cpp:255
@@ -16312,19 +16314,19 @@ msgstr "Çıkış"
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Uyarı: Emin misiniz?"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Uyarı: Emin misiniz? Kaydedilmemiş ilerlemeler kaybolacaktır."
 
 #: src/ingameop.cpp:323
 msgid "Confirm"
-msgstr ""
+msgstr "Onayla"
 
 #: src/ingameop.cpp:325
 msgid "Back"
-msgstr ""
+msgstr "Geri"
 
 #: src/ingameop.cpp:404
 msgid "Host has quit the game!"
@@ -16348,7 +16350,7 @@ msgstr "Klavye Kısayollarını Göster"
 
 #: src/ingameop.cpp:647
 msgid "Shake"
-msgstr ""
+msgstr "Sarsılma"
 
 #: src/ingameop.cpp:1032
 msgid "Save Campaign Game"
@@ -16369,32 +16371,32 @@ msgstr "Gerekli kip yüklenemedi: %s\n\n"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "%s yüklenemedi."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Lütfen bütün uyumsuz modları kaldırınız."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Genel klavye kısayolları"
 
 #: src/input/context.cpp:55
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Diğer kısayollar"
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
-msgstr ""
+msgstr "Oynanış"
 
 #: src/input/context.cpp:58
 msgid "Debug"
-msgstr ""
+msgstr "Hata-ayıklama"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Hata-ayıklama(bölüm editörü)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
@@ -16544,7 +16546,7 @@ msgstr "9. Gruba Ekle"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Mevcut gruptan kaldır"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -17124,7 +17126,7 @@ msgstr "Bir oyun nesnesini izle"
 
 #: src/input/keyconfig.cpp:233
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Tam ekran"
 
 #: src/intdisplay.cpp:164
 msgid "Waiting for Power"
@@ -17138,7 +17140,7 @@ msgstr "Güç"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Saniye başına güç"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17521,11 +17523,11 @@ msgstr ""
 
 #: src/keybind.cpp:1226
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Bölüm editörü devre dışı bırakılıyor"
 
 #: src/keybind.cpp:1231
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Bölüm editörü etkinleştiriliyor"
 
 #: src/keybind.cpp:1315
 msgid "God Mode ON"
@@ -17546,7 +17548,7 @@ msgstr "İmleci Yakala %s"
 
 #: src/keybind.cpp:1387
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "KAMPANYA"
 
 #: src/keybind.cpp:1391
 msgid "CHALLENGE"
@@ -17558,27 +17560,27 @@ msgstr ""
 
 #: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "ZORLUK: KOLAY"
 
 #: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "ZORLUK: NORMAL"
 
 #: src/keybind.cpp:1418
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "ZORLUK: ZOR"
 
 #: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "ZORLUK: ÇILGIN"
 
 #: src/keybind.cpp:1430
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "HİLELER: ETKİN"
 
 #: src/keybind.cpp:1432
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "HİLELER: DEVRE DIŞI"
 
 #: src/keybind.cpp:1491
 msgid "Researched EVERYTHING for you!"
@@ -17730,7 +17732,7 @@ msgstr ""
 
 #: src/keybind.cpp:2564
 msgid "QuickSave failed"
-msgstr ""
+msgstr "HızlıKayıt başarısız oldu"
 
 #: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
@@ -17742,7 +17744,7 @@ msgstr ""
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "<atanmamış>"
 
 #: src/keyedit.cpp:544
 msgid "KEY MAPPING"
@@ -17775,7 +17777,7 @@ msgstr "Otomatik kaydetme dizini (kayıt için izin verilmiyor)"
 
 #: src/loadsave.cpp:682
 msgid "cheated"
-msgstr ""
+msgstr "hile yaptı"
 
 #: src/loadsave.cpp:1109
 #, c-format
@@ -17785,7 +17787,7 @@ msgstr ""
 #: src/loadsave.cpp:1114
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "OtoKayıt %s başarısız oldu"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -17945,7 +17947,7 @@ msgstr ""
 
 #: src/multiint.cpp:1319
 msgid "Vote"
-msgstr ""
+msgstr "Oyla"
 
 #: src/multiint.cpp:1320
 msgid "Allow host to change map or randomize?"
@@ -18123,7 +18125,7 @@ msgstr "Takım"
 #: src/multiint.cpp:7501
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Gözlemci"
 
 #: src/multiint.cpp:2305
 #: src/multiint.cpp:4435
@@ -18154,7 +18156,7 @@ msgstr ""
 
 #: src/multiint.cpp:2390
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Gözlemcinin oynamasını iste"
 
 #: src/multiint.cpp:2406
 msgid "Ask to Play"
@@ -18180,7 +18182,7 @@ msgstr ""
 
 #: src/multiint.cpp:3056
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "Gözlemci olmak istiyor musun?"
 
 #: src/multiint.cpp:3057
 msgid "The host of this game wants to know if you're willing to spectate?"
@@ -18188,41 +18190,41 @@ msgstr ""
 
 #: src/multiint.cpp:3059
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Şu an oyuncusunuz."
 
 #: src/multiint.cpp:3060
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Evet, gözlemci olacağım!"
 
 #: src/multiint.cpp:3065
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Oynamak istiyor musunuz?"
 
 #: src/multiint.cpp:3066
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "Bu oyunun kurucusu oynamak isteyip istemediğinizi bilmek istiyor?"
 
 #: src/multiint.cpp:3068
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Şu an gözlemcisiniz."
 
 #: src/multiint.cpp:3069
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Evet, oynamak istiyorum!"
 
 #: src/multiint.cpp:3112
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "%s adlı oyuncu Gözlemci oldu"
 
 #: src/multiint.cpp:3151
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Gözlemci, oyuncu olmak istiyor"
 
 #: src/multiint.cpp:3152
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "%s adlı gözlemci, oyuncu olmak istiyor."
 
 #: src/multiint.cpp:3154
 msgid "However, there are currently no open Player slots."
@@ -18230,19 +18232,19 @@ msgstr ""
 
 #: src/multiint.cpp:3156
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Bu gözlemciyi, bir oyuncu ile değiştirmek ister misiniz?"
 
 #: src/multiint.cpp:3157
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Evet, oyuncu slotunu seç"
 
 #: src/multiint.cpp:3440
 msgid "Joined:"
-msgstr ""
+msgstr "Katılanlar:"
 
 #: src/multiint.cpp:3443
 msgid "Ready:"
-msgstr ""
+msgstr "Hazır olanlar:"
 
 #: src/multiint.cpp:3621
 #: src/titleui/gamefind.cpp:270
@@ -18251,15 +18253,15 @@ msgstr "Oyuncular"
 
 #: src/multiint.cpp:3651
 msgid "Host Options"
-msgstr ""
+msgstr "Oyun Seçenekleri"
 
 #: src/multiint.cpp:3932
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Gözlemci katılımını etkinleştir"
 
 #: src/multiint.cpp:3942
 msgid "Lock Teams"
-msgstr ""
+msgstr "Takımları Kilitle"
 
 #: src/multiint.cpp:4198
 msgid "Choose Team"
@@ -18327,15 +18329,15 @@ msgstr "HAZIR MISIN?"
 
 #: src/multiint.cpp:4539
 msgid "For Spectator:"
-msgstr ""
+msgstr "Gözlemci için:"
 
 #: src/multiint.cpp:4539
 msgid "For Player:"
-msgstr ""
+msgstr "Oyuncu İçin:"
 
 #: src/multiint.cpp:4557
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Oyuncu slotu seçiniz"
 
 #: src/multiint.cpp:4628
 msgid "PLAYERS"
@@ -18343,15 +18345,15 @@ msgstr "OYUNCULAR"
 
 #: src/multiint.cpp:4732
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Gözlemci slotu ekleyiniz"
 
 #: src/multiint.cpp:4809
 msgid "Kicked from game"
-msgstr ""
+msgstr "Oyundan atıldınız"
 
 #: src/multiint.cpp:5034
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Metni panoya kopyala"
 
 #: src/multiint.cpp:5123
 msgid "CHAT"
@@ -18483,7 +18485,7 @@ msgstr ""
 #: src/multiint.cpp:8253
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "Mevcut Warzone 2100 sürümü: \"%s\""
 
 #: src/multiint.cpp:8263
 msgid "Replays should usually be played back with the same version used to save the replay."
@@ -18513,7 +18515,7 @@ msgstr "%d için dosya transferi iptal edildi."
 
 #: src/multijoin.cpp:420
 msgid "The game is already full."
-msgstr ""
+msgstr "Oyun zaten dolu."
 
 #: src/multijoin.cpp:500
 #: src/multiplay.cpp:787
@@ -18656,11 +18658,11 @@ msgstr "%s atıldı: oyundan %s ve engelli listesine kaydedildi!"
 
 #: src/multiopt.cpp:304
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "HARİTA TALEP EDİLDİ!"
 
 #: src/multiopt.cpp:329
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "MOD TALEP EDİLDİ!"
 
 #: src/multiopt.cpp:347
 #: src/multiplay.cpp:2032
@@ -18679,12 +18681,12 @@ msgstr "Oyuncu atılıyor %s veri bütünlüğünü korumak için!"
 
 #: src/multiplay.cpp:372
 msgid "Invalid data!"
-msgstr ""
+msgstr "Geçersiz veri!"
 
 #: src/multiplay.cpp:1123
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "%s otomatik olarak oyundan atılıyor, geçersiz komut alındı: %u"
 
 #: src/multiplay.cpp:1125
 msgid "Unauthorized network command"
@@ -18692,11 +18694,11 @@ msgstr ""
 
 #: src/multiplay.cpp:1225
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "TEKRAR SONA ERDİ"
 
 #: src/multiplay.cpp:1226
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Çıkmak için ESC'ye basınız.)"
 
 #: src/multiplay.cpp:1380
 #, c-format
@@ -18717,7 +18719,7 @@ msgstr "DOSYA GÖNDERİLDİ!"
 
 #: src/multiplay.cpp:2012
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "HARİTA İNDİRİLDİ!"
 
 #: src/multiplay.cpp:2068
 #, c-format
@@ -18791,32 +18793,32 @@ msgstr "Kahverengi"
 
 #: src/multiplay.cpp:2407
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Gözlemci Modu"
 
 #: src/multiplay.cpp:2408
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Şu an gözlemcisin. Oyunu seyretmenin tadını çıkar!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "ŞİMDİ OYNUYOR"
 
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:688
 msgid "Album"
-msgstr ""
+msgstr "Albüm"
 
 #: src/musicmanager.cpp:545
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 #: src/musicmanager.cpp:679
 msgid "Title"
-msgstr ""
+msgstr "Başlık"
 
 #: src/musicmanager.cpp:868
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "MÜZİK YÖNETİCİSİ"
 
 #: src/notifications.cpp:638
 msgid "Dismiss"
@@ -18832,7 +18834,7 @@ msgstr "Bunu Yapamıyoruz! Biz Sayborg Taşıma Gemisi'ni kullanmak için bir Sa
 
 #: src/qtscript.cpp:893
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "Seçili YZ yüklenmesinde hata! Sebebini öğrenmek için girdi kayıtlarını (log) kontrol edin."
 
 #: src/qtscript.cpp:896
 #, c-format
@@ -18984,7 +18986,7 @@ msgstr "Hiç Komutan bulunamadı!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "Gerekli yapı bulunamadı!"
 
 #: src/selection.cpp:662
 #, c-format
@@ -18995,7 +18997,7 @@ msgstr[1] "%u birim seçildi"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Oyuncu istatistiklerini görüntüle"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
@@ -19007,7 +19009,7 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:805
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Mevcut Güç / Saniye Başına Güç"
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
@@ -19015,7 +19017,7 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Kinetik Zırh"
 
 #: src/spectatorwidgets.cpp:808
 #: src/spectatorwidgets.cpp:810
@@ -19202,7 +19204,7 @@ msgstr "Sürüm: %s"
 
 #: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
-msgstr ""
+msgstr "Gözlemci olarak katıl"
 
 #: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
@@ -19343,7 +19345,7 @@ msgstr "Güncellemeyi Şimdi Edin"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Uyumluluk Uyarısı"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
@@ -19351,7 +19353,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Düzeltme hakkında daha fazla bilgi için aşağıdaki butona tıklayın."
 
 #: src/updatemanager.cpp:425
 #, c-format
@@ -19360,7 +19362,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Daha fazla bilgi"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
@@ -19382,11 +19384,11 @@ msgstr "Sürüm: %s, %s Yapı: %s %s"
 
 #: src/wrappers.cpp:365
 msgid "GAME OVER"
-msgstr ""
+msgstr "OYUN BİTTİ"
 
 #: src/wrappers.cpp:366
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "Savaş sona erdi - odayı terk edebilirsin."
 
 #: src/wzapi.cpp:2339
 msgid "YOU ARE VICTORIOUS!"
@@ -19398,5 +19400,5 @@ msgstr "YENİLDİN!"
 
 #: src/wzscriptdebug.cpp:1905
 msgid "Script Debugger"
-msgstr ""
+msgstr "Kod hata-ayıklayıcısı"
 
