@@ -265,6 +265,13 @@ function __camPlayerDead()
 			}
 		});
 		dead = droidCount <= 0 && !haveFactories;
+
+		//Finish Beta-end early if they have no units and factories on Easy/Normal.
+		if (dead && (difficulty <= MEDIUM) && (__camNextLevel === "CAM_3A"))
+		{
+			cam_eventMissionTimeout(); //Early victory trigger
+			return false;
+		}
 	}
 
 	return dead;
