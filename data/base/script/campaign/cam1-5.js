@@ -135,7 +135,7 @@ function sendNPTransport()
 			exit: { x: 2, y: 42 },
 			order: CAM_ORDER_ATTACK,
 			data: {
-				regroup: true,
+				regroup: false,
 				count: -1,
 				pos: camMakePos("NPBase"),
 				repair: 66,
