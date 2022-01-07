@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-06 15:02\n"
+"PO-Revision-Date: 2022-01-07 03:02\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -8692,7 +8692,7 @@ msgstr "نقطةٌ محصّنة بالفلاش"
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
 #: po/custom/fromJson.txt:2141
 msgid "Flashlight Retribution Hover"
-msgstr ""
+msgstr "الفلاش القصاص حوامة"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAMMk1.name
@@ -8807,7 +8807,7 @@ msgstr "نقطةٌ محصّنة بمدفع غاوس"
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
 #: po/custom/fromJson.txt:2208
 msgid "Gauss Cannon Python Tracks"
-msgstr ""
+msgstr "مدفع غاوس أفعى جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernGaussTracks.name
@@ -9166,7 +9166,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-HBB.name
 #: po/custom/fromJson.txt:2422
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr ""
+msgstr "حجرة قنبلةٍ خارقةٍ للدروع القصاص طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb02.name
@@ -9310,7 +9310,7 @@ msgstr "جسمٌ ثقيل - النمر"
 #. data/mp/stats/research.json: $.R-Vehicle-Body10.name
 #: po/custom/fromJson.txt:2515
 msgid "Heavy Body - Vengeance"
-msgstr ""
+msgstr "جسمٌ ثقيل - الثأر"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body13.name
@@ -10726,7 +10726,7 @@ msgstr "جسمٌ خفيف - الفهد"
 #. data/mp/stats/research.json: $.R-Vehicle-Body03.name
 #: po/custom/fromJson.txt:3561
 msgid "Light Body - Retaliation"
-msgstr ""
+msgstr "جسمٌ خفيف - الانتقام"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body01.name
@@ -10970,7 +10970,7 @@ msgstr "جسمٌ متوسط - الجاكوار"
 #. data/mp/stats/research.json: $.R-Vehicle-Body07.name
 #: po/custom/fromJson.txt:3742
 msgid "Medium Body - Retribution"
-msgstr ""
+msgstr "جسمٌ متوسط - القصاص"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body08.name
@@ -11258,7 +11258,7 @@ msgstr "أكثر قوةً وتصفيحاً من جسم الحنش"
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[1]
 #: po/custom/fromJson.txt:3919
 msgid "More armor and body points than Vengeance"
-msgstr ""
+msgstr "أكثر قوةً وتصفيحاً من جسم الثأر"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
@@ -11355,7 +11355,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
 #: po/custom/fromJson.txt:3983
 msgid "Multi Turret Body - Dragon"
-msgstr ""
+msgstr "جسمٌ متعدد الرؤس - التنين"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[1]
@@ -11380,7 +11380,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.A-Retrib-Trk-Needle.name
 #: po/custom/fromJson.txt:3999
 msgid "Needle Gun Retribution Tracks"
-msgstr ""
+msgstr "مدفع الإبر القصاص جنازير"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-Needle.name
@@ -11401,7 +11401,7 @@ msgstr "برجٌ بمدفع إبر"
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Needle.name
 #: po/custom/fromJson.txt:4011
 msgid "Needle Gun Vengeance Tracks"
-msgstr ""
+msgstr "مدفع الإبر الثأر جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun01.name
@@ -12597,14 +12597,14 @@ msgstr "زيادة سرعة الأبحاث 85%"
 #. data/mp/stats/body.json: $.Body3MBT.name
 #: po/custom/fromJson.txt:4861
 msgid "Retaliation"
-msgstr ""
+msgstr "الانتقام"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body7ABT.name
 #. data/mp/stats/body.json: $.Body7ABT.name
 #: po/custom/fromJson.txt:4865
 msgid "Retribution"
-msgstr ""
+msgstr "القصاص"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-IDFRocket.name
@@ -13045,7 +13045,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.SK-Retal-VTOL-Scourge.name
 #: po/custom/fromJson.txt:5135
 msgid "Scourge Retaliation VTOL"
-msgstr ""
+msgstr "الجلاد الانتقام طائرةٌ عمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-SpyTurret.name
@@ -13614,7 +13614,7 @@ msgstr "صاروخ «قاتل الدبابات»"
 #. data/mp/stats/templates.json: $.A-Veng-Trk-TK.name
 #: po/custom/fromJson.txt:5521
 msgid "Tank Killer Vengeance Tracks"
-msgstr ""
+msgstr "قاتل الدبابات الثأر جنازير"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-HvyA-T.name
@@ -14172,26 +14172,26 @@ msgstr ""
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Guass.name
 #: po/custom/fromJson.txt:5887
 msgid "Vengeance Tracks Gauss Cannon"
-msgstr ""
+msgstr "الثأر جنازير مدفع غاوس"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Scourge.name
 #: po/custom/fromJson.txt:5890
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr ""
+msgstr "الثأر جنازير الجلاد"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Rail.name
 #: po/custom/fromJson.txt:5893
 msgid "Vengeance Tracks Rail Gun"
-msgstr ""
+msgstr "الثأر جنازير المدفع الكهرومغناطيسي"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body10MBT.name
 #. data/mp/stats/body.json: $.Body10MBT.name
 #: po/custom/fromJson.txt:5897
 msgid "Vengeance"
-msgstr ""
+msgstr "الثأر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text[1]
