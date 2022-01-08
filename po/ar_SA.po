@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-08 03:03\n"
+"PO-Revision-Date: 2022-01-08 15:05\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -224,7 +224,7 @@ msgstr "إن القوة العاملة في هذه المنطقة تمتلك م�
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr "آخر التطورات من فريق «جاما»"
+msgstr "آخر التطورات من فريق «غاما»"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -808,15 +808,15 @@ msgstr "تشير الرسالة الأخيرة الصادرة منهم إلى أ
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr "مهمةٌ في القطاع الشمالي: ساعد فريق «جاما»"
+msgstr "مهمةٌ في القطاع الشمالي: ساعد فريق «غاما»"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr "لقد أوكلت إليك مهمة مساعدة فريق «جاما»."
+msgstr "لقد أُوكلت إليك مهمة مساعدة فريق «غاما»."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "وبعد الوصول إلى قاعدة «جاما»، ساعد القوات المتواجدة هناك على تأمين المنطقة لحمايتها من أي هجماتٍ أخرى لقوات «نيكسوس»."
+msgstr "وبعد الوصول إلى قاعدة «غاما»، ساعد القوات المتواجدة هناك على تأمين المنطقة لحمايتها من أي هجماتٍ أخرى لقوات «نيكسوس»."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -1105,7 +1105,7 @@ msgstr "ابدأ هجومك على «نيكسوس». يجب أن تدمر أنظ
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr "لقد وردنا التقرير الاستخباراتي التالي... فريق جاما"
+msgstr "لقد وردنا التقرير الاستخباراتي التالي... فريق غاما"
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
@@ -4056,7 +4056,7 @@ msgstr "احمِ منشآت الإطلاق وابحث عن رموز الصوار
 
 #: data/base/script/campaign/cam3-c.js:171
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr "اجمع جزءاً من فريق «بيتا» مع النقطة التابعة لفريق «جاما»"
+msgstr "اجمع جزءاً من فريق «بيتا» مع النقطة التابعة لفريق «غاما»"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -4872,11 +4872,11 @@ msgstr "بداية البيان:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr "لقد أكد لنا العاملون في قاعدة «بيتا» أن الصواريخ النووية التي استهدفت قواعد «ألفا» و«بيتا» قد أطلقت من منشأةٍ لإطلاق الصواريخ تحت الأرض تقع ضمن قطاعهم."
+msgstr "لقد أكد لنا العاملون في قاعدة «غاما» أن الصواريخ النووية التي استهدفت قواعد «ألفا» و«بيتا» قد أطلقت من منشأةٍ لإطلاق الصواريخ تحت الأرض تقع ضمن قطاعهم."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr "ويعمل فريق «جاما» الآن على استكشاف موقع المنشأة ومراقبة أنشطة «نيكسوس»."
+msgstr "ويعمل فريق «غاما» الآن على استكشاف موقع المنشأة ومراقبة أنشطة «نيكسوس»."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -4964,7 +4964,7 @@ msgstr "أيها القائد! أنا سعيدٌ بانضمامك لنا، هن�
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr "لقد كان استقرار فريق «جاما» في الجبال أمراً مفيداً جداً لنا."
+msgstr "لقد كان استقرار فريق «غاما» في الجبال أمراً مفيداً جداً لنا."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
@@ -8124,14 +8124,14 @@ msgstr "درعٌ حراريٌ للسايبورغ"
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[0]
 #: po/custom/fromJson.txt:1728
 msgid "Cyborg Transport Available"
-msgstr ""
+msgstr "يمكنك الآن استخدام سفينة نقل السايبورغ"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Transport.name
 #. data/mp/stats/templates.json: $.Transporter.name
 #: po/custom/fromJson.txt:1732
 msgid "Cyborg Transport"
-msgstr ""
+msgstr "سفينة نقل السايبورغ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text[2]
@@ -8231,7 +8231,7 @@ msgstr "طلقات رشاشٍ من اليورانيوم المنضّب"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1821
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "مصممٌ بحيث يركز على إجراء الأبحاث"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8402,28 +8402,28 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Sys-Engineering01.name
 #: po/custom/fromJson.txt:1929
 msgid "Engineering"
-msgstr ""
+msgstr "الهندسة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B07.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_V_B07.text[3]
 #: po/custom/fromJson.txt:1933
 msgid "Expensive and slow to produce"
-msgstr ""
+msgstr "باهظ الثمن وإنتاجه بطيء"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B03.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_V_B03.text[3]
 #: po/custom/fromJson.txt:1937
 msgid "Expensive to produce"
-msgstr ""
+msgstr "تكلفته إنتاجه باهظة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_STW1.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_SY_STW1.text[1]
 #: po/custom/fromJson.txt:1941
 msgid "Extended sensor range"
-msgstr "نطاقٌ أوسع للمستشعر"
+msgstr "زيادةٌ في مدى المستشعر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[2]
@@ -8438,7 +8438,7 @@ msgstr "زيادة مدى المستشعرات المضادة للمدفعية"
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
 #: po/custom/fromJson.txt:1950
 msgid "Extends Sensor Range"
-msgstr ""
+msgstr "يزيد من مدى المستشعر"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[1]
@@ -8489,7 +8489,7 @@ msgstr "المصنع"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
 #: po/custom/fromJson.txt:1992
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "مداه أكبر مقارنةً بأجهزة الاستشعار الأخرى"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
@@ -8594,7 +8594,7 @@ msgstr "تطلق رشقاتٍ من الصواريخ المصغرة"
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[1]
 #: po/custom/fromJson.txt:2052
 msgid "Flame-thrower firing Propylene Oxide gel"
-msgstr ""
+msgstr "قاذف لهبٍ يطلق جل أوكسيد البروبيلين شديد الاشتعال"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF02.name
@@ -8728,34 +8728,34 @@ msgstr "محركٌ بنظام حقنٍ للوقود"
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2162
 msgid "Gamma Campaign"
-msgstr "فصل فريق جاما"
+msgstr "فصل فريق غاما"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2165
 msgid "Gamma"
-msgstr ""
+msgstr "غاما"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text[1]
 #: po/custom/fromJson.txt:2169
 msgid "Gas turbine boosts power output"
-msgstr ""
+msgstr "تتكون هذه المولدات من حجرة احتراق وعنفاتٍ موصولةٍ بضاغطٍ للغازات، وهي تزيد من كمية الطاقة المولدة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine08.name
 #. data/mp/stats/research.json: $.R-Vehicle-Engine08.name
 #: po/custom/fromJson.txt:2173
 msgid "Gas Turbine Engine Mk2"
-msgstr ""
+msgstr "محرك عنفة الغاز (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine09.name
 #. data/mp/stats/research.json: $.R-Vehicle-Engine09.name
 #: po/custom/fromJson.txt:2177
 msgid "Gas Turbine Engine Mk3"
-msgstr ""
+msgstr "محرك عنفة الغاز (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_EN7.text[1]
@@ -8764,26 +8764,26 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Engine07.name
 #: po/custom/fromJson.txt:2183
 msgid "Gas Turbine Engine"
-msgstr ""
+msgstr "محرك عنفة الغاز"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01b.name
 #: po/custom/fromJson.txt:2186
 msgid "Gas Turbine Generator Mk2"
-msgstr ""
+msgstr "مولد عنفة الغاز (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01c.name
 #: po/custom/fromJson.txt:2189
 msgid "Gas Turbine Generator Mk3"
-msgstr ""
+msgstr "مولد عنفة الغاز (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Power-Upgrade01.name
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01.name
 #: po/custom/fromJson.txt:2193
 msgid "Gas Turbine Generator"
-msgstr ""
+msgstr "مولّد عنفة الغاز"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail3.name
