@@ -46,10 +46,10 @@ camAreaEvent("westFactoryTrigger", function(droid)
 	enableAllFactories();
 });
 
-//make the first batch or extra transport droids hero rank.
+//make the first batch of extra transport droids hero rank.
 function setHeroUnits()
 {
-	const DROID_EXP = 512;
+	const DROID_EXP = 1024; //Can make Hero Commanders if recycled.
 	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
 		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
 	});
@@ -79,6 +79,9 @@ function enableAllFactories()
 	{
 		camEnableFactory(FACTORY_NAMES[j]);
 	}
+
+	//If they go really fast, adapt the alloy research to come sooner
+	queue("improveNexusAlloys", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }
 
 function truckDefense()
@@ -189,8 +192,8 @@ function cam3Setup()
 		"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 		"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 		"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage08", "R-Wpn-Mortar-ROF04",
-		"R-Vehicle-Engine07", "R-Vehicle-Metals07", "R-Vehicle-Armor-Heat04",
-		"R-Cyborg-Metals07", "R-Cyborg-Armor-Heat04", "R-Wpn-RocketSlow-ROF04",
+		"R-Vehicle-Engine07", "R-Vehicle-Metals06", "R-Vehicle-Armor-Heat03",
+		"R-Cyborg-Metals06", "R-Cyborg-Armor-Heat03", "R-Wpn-RocketSlow-ROF04",
 		"R-Wpn-AAGun-Damage05", "R-Wpn-AAGun-ROF04", "R-Wpn-Howitzer-Damage09",
 		"R-Wpn-Cannon-Damage07", "R-Wpn-Cannon-ROF04",
 		"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
@@ -207,10 +210,24 @@ function cam3Setup()
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
+	if (difficulty >= HARD)
+	{
+		improveNexusAlloys();
+	}
+
 	enableResearch("R-Wpn-Howitzer03-Rot", CAM_HUMAN_PLAYER);
 	enableResearch("R-Wpn-MG-Damage08", CAM_HUMAN_PLAYER);
 }
 
+//Easy and Normal difficulty has Nexus start off a little bit weaker
+function improveNexusAlloys()
+{
+	var alloys = [
+		"R-Vehicle-Metals07", "R-Cyborg-Metals07",
+		"R-Vehicle-Armor-Heat04", "R-Cyborg-Armor-Heat04"
+	];
+	camCompleteRequiredResearch(alloys, NEXUS);
+}
 
 function eventStartLevel()
 {
@@ -372,4 +389,5 @@ function eventStartLevel()
 	groupPatrolNoTrigger();
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(8)));
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(20)));
+	queue("improveNexusAlloys", camChangeOnDiff(camMinutesToMilliseconds(25)));
 }
