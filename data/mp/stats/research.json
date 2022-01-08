@@ -6806,7 +6806,7 @@
 			"R-Wpn-Howitzer-Damage03",
 			"R-Wpn-Cannon-Damage07"
 		],
-		"researchPoints": 14400,
+		"researchPoints": 18800,
 		"researchPower": 450,
 		"results": [
 			{
@@ -6931,7 +6931,7 @@
 		"requiredResearch": [
 			"R-Wpn-Howitzer-Damage03"
 		],
-		"researchPoints": 14400,
+		"researchPoints": 18800,
 		"researchPower": 450,
 		"results": [
 			{
