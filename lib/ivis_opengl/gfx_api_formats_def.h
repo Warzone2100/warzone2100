@@ -33,8 +33,45 @@ namespace gfx_api
 		FORMAT_RGB8_UNORM_PACK8,
 		FORMAT_RG8_UNORM,			// not guaranteed support
 		FORMAT_R8_UNORM,
+
+		// [COMPRESSED FORMATS]
+
+		// Desktop platforms only (generally), but widely available
+		FORMAT_RGB_BC1_UNORM,   // BC1 / DXT1
+		FORMAT_RGBA_BC2_UNORM,  // BC2 / DXT3
+		FORMAT_RGBA_BC3_UNORM,  // BC3 / DXT5
+		FORMAT_R_BC4_UNORM,		// BC4 / RED_RGTC1 (Interpolated greyscale)
+		FORMAT_RG_BC5_UNORM,	// BC5 / RG_RGTC2 (Interpolated two-channel)
+		FORMAT_RGBA_BPTC_UNORM, // BC7 - higher quality, not quite as widely available (not available at all on macOS)
+
+		// OpenGL ES 2.0+ (with appropriate extension) only:
+		FORMAT_RGB8_ETC1,		// Available on most OpenGL ES 2.0+ - RGB only and not great quality
+
+		// OpenGL ES 3.0 (or 2.0 with appropriate extension):
+		FORMAT_RGB8_ETC2,		// Compresses RGB888 data (successor to ETC1)
+		FORMAT_RGBA8_ETC2_EAC,	// Compresses RGBA8888 data with full alpha support
+
+		FORMAT_R11_EAC,			// one channel unsigned data
+		FORMAT_RG11_EAC,		// two channel unsigned data
 	};
-	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_R8_UNORM;
+	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_RG11_EAC;
+
+	static inline bool is_uncompressed_format(const pixel_format& format)
+	{
+		switch (format)
+		{
+			// UNCOMPRESSED FORMATS
+			case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+			case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
+			case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+			case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			case gfx_api::pixel_format::FORMAT_R8_UNORM:
+				return true;
+			default:
+				return false;
+		}
+		return false;
+	}
 
 	namespace pixel_format_usage
 	{

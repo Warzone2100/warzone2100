@@ -1454,7 +1454,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 		if (textureID)
 			delete textureID;
 		textureID = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *(drawResult.text.bitmap.get()), "text::");
-		textureID->upload(0u, 0u, 0u, *(drawResult.text.bitmap.get()));
+		textureID->upload(0u, *(drawResult.text.bitmap.get()));
 		iV_DrawImageText(*textureID, Vector2f(XPos, YPos), Vector2f((float)drawResult.text.offset_x / _horizScaleFactor, (float)drawResult.text.offset_y / _vertScaleFactor), Vector2f((float)drawResult.text.bitmap->width() / _horizScaleFactor, (float)drawResult.text.bitmap->height() / _vertScaleFactor), rotation, color);
 	}
 }
@@ -1523,7 +1523,7 @@ void WzText::drawAndCacheText(const WzString& string, iV_fonts fontID)
 	if (dimensions.x > 0 && dimensions.y > 0)
 	{
 		texture = gfx_api::context::get().createTextureForCompatibleImageUploads(1, *(drawResult.text.bitmap.get()), "text::");
-		texture->upload(0u, 0u, 0u, *(drawResult.text.bitmap.get()));
+		texture->upload(0u, *(drawResult.text.bitmap.get()));
 	}
 }
 

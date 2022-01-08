@@ -44,7 +44,8 @@ private:
 	virtual ~null_texture();
 public:
 	virtual void bind() override;
-	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) override;
+	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
+	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
 protected:
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;

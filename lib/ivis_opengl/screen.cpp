@@ -284,7 +284,7 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 void screen_SetBackDropFromFile(const char *filename)
 {
 	int maxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
-	backdropGfx->loadTexture(filename, gfx_api::texture_type::game_texture, maxTextureSize, maxTextureSize);
+	backdropGfx->loadTexture(filename, gfx_api::texture_type::user_interface, maxTextureSize, maxTextureSize);
 	backdropIsMapPreview = false;
 	// Generate coordinates and put them into VBOs
 	screen_GenerateCoordinatesAndVBOs();

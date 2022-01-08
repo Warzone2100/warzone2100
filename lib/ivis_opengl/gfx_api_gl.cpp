@@ -87,27 +87,62 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
 				return GL_LUMINANCE;
 			}
+		// COMPRESSED FORMAT
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+			return GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+			return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+			return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
+			return GL_COMPRESSED_RED_RGTC1;
+		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
+			return GL_COMPRESSED_RG_RGTC2;
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+			return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
+			return GL_ETC1_RGB8_OES;
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+			return GL_COMPRESSED_RGB8_ETC2;
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+			return GL_COMPRESSED_RGBA8_ETC2_EAC;
+		case gfx_api::pixel_format::FORMAT_R11_EAC:
+			return GL_COMPRESSED_R11_EAC;
+		case gfx_api::pixel_format::FORMAT_RG11_EAC:
+			return GL_COMPRESSED_RG11_EAC;
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}
 	return GL_INVALID_ENUM;
 }
 
-static std::pair<GLenum, GLenum> to_gl(const gfx_api::pixel_format& format)
+static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
 {
 	switch (format)
 	{
+		// UNCOMPRESSED FORMATS
 		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
-			return std::make_pair(GL_RGBA8, GL_RGBA);
+			return GL_RGBA;
 		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
-			return std::make_pair(GL_RGBA8, GL_BGRA);
+			return GL_BGRA;
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-			return std::make_pair(GL_RGB8, GL_RGB);
+			return GL_RGB;
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			if (gles && GLAD_GL_EXT_texture_rg)
+			{
+				// the internal format is GL_RG_EXT
+				return GL_RG_EXT;
+			}
+			else
+			{
+				// for Desktop OpenGL, use GL_RG for the format
+				return GL_RG;
+			}
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
-			if (GLAD_GL_VERSION_3_0 || GLAD_GL_ES_VERSION_3_0)
+			if ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0))
 			{
 				// OpenGL 3.0+ or OpenGL ES 3.0+
-				return std::make_pair(GL_R8, GL_RED);
+				return GL_RED;
 			}
 			else
 			{
@@ -115,12 +150,13 @@ static std::pair<GLenum, GLenum> to_gl(const gfx_api::pixel_format& format)
 				// use GL_LUMINANCE because:
 				// (a) it's available and
 				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
-				return std::make_pair(GL_LUMINANCE, GL_LUMINANCE);
+				return GL_LUMINANCE;
 			}
+		// COMPRESSED FORMAT
 		default:
-			debug(LOG_FATAL, "Unrecognised pixel format");
+			return to_gl_internalformat(format, gles);
 	}
-	return std::make_pair(GL_INVALID_ENUM, GL_INVALID_ENUM);
+	return GL_INVALID_ENUM;
 }
 
 static GLenum to_gl(const gfx_api::context::buffer_storage_hint& hint)
@@ -225,10 +261,10 @@ void gl_texture::unbind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
+bool gl_texture::upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
 {
-	ASSERT_OR_RETURN(, image.data() != nullptr, "Attempt to upload image without data");
-	ASSERT_OR_RETURN(, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
 	size_t width = image.width();
 	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
@@ -238,10 +274,30 @@ void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const s
 	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_y (%zu) exceeds GLint max", offset_y);
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
+	ASSERT(image.data_size() <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "data_size (%zu) exceeds GLsizei max", image.data_size());
 	bind();
 	// TODO: ASSERT that data_size() matches expected given width,height,pixel_format
-	glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(image.pixel_format())), GL_UNSIGNED_BYTE, image.data());
+	if (is_uncompressed_format(image.pixel_format()))
+	{
+		glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), to_gl_format(image.pixel_format(), gles), GL_UNSIGNED_BYTE, image.data());
+	}
+	else
+	{
+		ASSERT_OR_RETURN(false, offset_x == 0 && offset_y == 0, "Trying to upload compressed sub texture");
+		glCompressedTexImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), to_gl_internalformat(image.pixel_format(), gles), static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, static_cast<GLsizei>(image.data_size()), image.data());
+	}
 	unbind();
+	return true;
+}
+
+bool gl_texture::upload(const size_t& mip_level, const iV_BaseImage& image)
+{
+	return upload_internal(mip_level, 0, 0, image);
+}
+
+bool gl_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+{
+	return upload_internal(mip_level, offset_x, offset_y, image);
 }
 
 unsigned gl_texture::id()
@@ -1398,6 +1454,7 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	auto* new_texture = new gl_texture();
+	new_texture->gles = gles;
 	new_texture->mip_count = mipmap_count;
 	new_texture->internal_format = internal_format;
 	new_texture->bind();
@@ -1409,7 +1466,17 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	}
 	for (GLint i = 0, e = static_cast<GLint>(mipmap_count); i < e; ++i)
 	{
-		glTexImage2D(GL_TEXTURE_2D, i, std::get<0>(to_gl(internal_format)), static_cast<GLsizei>(width >> i), static_cast<GLsizei>(height >> i), 0, std::get<1>(to_gl(internal_format)), GL_UNSIGNED_BYTE, nullptr);
+		if (is_uncompressed_format(internal_format))
+		{
+			// Allocate an empty buffer of the full size
+			// (As uncompressed textures support the upload_sub() function that permits sub texture uploads)
+			glTexImage2D(GL_TEXTURE_2D, i, to_gl_internalformat(internal_format, gles), static_cast<GLsizei>(width >> i), static_cast<GLsizei>(height >> i), 0, to_gl_format(internal_format, gles), GL_UNSIGNED_BYTE, nullptr);
+		}
+		else
+		{
+			// Can't use glCompressedTexImage2D with a null buffer (it's not permitted by the standard, and will crash depending on the driver)
+			// For now, we don't allocate a buffer and instead: only the upload() function that uploads full images is supported
+		}
 	}
 	return new_texture;
 }
@@ -2377,6 +2444,82 @@ void gl_context::initPixelFormatsSupport()
 	if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_ARB_texture_rg)) || (gles && GLAD_GL_EXT_texture_rg))
 	{
 		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+	}
+
+	// S3TC
+	// Desktop OpenGL: GL_EXT_texture_compression_s3tc
+	// OpenGL ES: (May be supported by the same GL_EXT_texture_compression_s3tc, other extensions)
+	if (GLAD_GL_EXT_texture_compression_s3tc)
+	{
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+	}
+	else if (gles)
+	{
+		if (GLAD_GL_ANGLE_texture_compression_dxt3)
+		{
+			texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
+		}
+		if (GLAD_GL_ANGLE_texture_compression_dxt5)
+		{
+			texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
+		}
+		if ((GLAD_GL_ANGLE_texture_compression_dxt3 || GLAD_GL_ANGLE_texture_compression_dxt5) && GLAD_GL_EXT_texture_compression_dxt1)
+		{
+			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+		}
+	}
+
+	// RGTC
+	// Desktop OpenGL: GL_ARB_texture_compression_rgtc (or OpenGL 3.0+ Core?)
+	// OpenGL ES: TODO: Could check for GL_EXT_texture_compression_rgtc, but support seems rare
+	if (!gles && GLAD_GL_ARB_texture_compression_rgtc)
+	{
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
+	}
+
+	// BPTC
+	// Desktop OpenGL: GL_ARB_texture_compression_bptc
+	// TODO: OpenGL ES: Could detect GL_EXT_texture_compression_bptc, but support seems very rare
+	if (!gles && GLAD_GL_ARB_texture_compression_bptc)
+	{
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+	}
+
+	// ETC1
+	if (gles && GLAD_GL_OES_compressed_ETC1_RGB8_texture)
+	{
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC1)
+	}
+
+	// ETC2
+	// Desktop OpenGL: Mandatory in OpenGL 4.3+, or with GL_ARB_ES3_compatibility
+	//	- NOTES:
+	//		- Desktop OpenGL (especially 4.3+ where it's required) may claim support for ETC2/EAC,
+	//		  but may actually not have hardware support (so it'll just decompress in memory)
+	//		- While theoretically the checks in getPixelFormatUsageSupport_gl should detect this,
+	//		  it seems GL_FULL_SUPPORT is sometimes returned instead of GL_CAVEAT_SUPPORT (even when
+	//		  there is no hardware support and the textures are decompressed by the driver in software)
+	//		- To handle this, really restrict when it's permitted on desktop - only permit if S3TC is *not* supported
+	// OpenGL ES: Mandatory in OpenGL ES 3.0+
+	// IMPORTANT: **MUST** come after S3TC/DXT & RGTC is checked !!
+	if ((gles && GLAD_GL_ES_VERSION_3_0) || (!gles && GLAD_GL_ARB_ES3_compatibility))
+	{
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+		if (gles || !texture2DFormatIsSupported(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		{
+			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+		}
+		if (gles || !texture2DFormatIsSupported(gfx_api::pixel_format::FORMAT_R_BC4_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		{
+			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+		}
+		if (gles || !texture2DFormatIsSupported(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		{
+			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+		}
 	}
 }
 
