@@ -109,7 +109,7 @@
 		"label": "cybAttackers",
 		"subscriber": 0,
 		"pos1": [6976, 12480],
-		"pos2": [7360, 12864]
+		"pos2": [7424, 12864]
 	},
 	"area_2": {
 		"label": "hoverPatrolGrp",
@@ -159,8 +159,8 @@
 	"area_11": {
 		"label": "westFactoryTrigger",
 		"subscriber": 0,
-		"pos1": [5312, 13632],
-		"pos2": [6080, 14656]
+		"pos1": [5632, 13312],
+		"pos2": [6144, 14592]
 	},
 	"area_12": {
 		"label": "NXlandingZone",
