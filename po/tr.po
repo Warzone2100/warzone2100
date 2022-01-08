@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-07 03:02\n"
+"PO-Revision-Date: 2022-01-08 03:03\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -30,7 +30,7 @@ msgstr "Bir üs kur, ardından yıkılmak üzere olan bir yapı aramaya başla."
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Bu yapı Proje'nin başarısı için hayati önemde bir teknoloji barındırıyor."
+msgstr "Bu yapı projenin başarısı için hayati önemde bir teknoloji barındırıyor."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -320,7 +320,7 @@ msgstr "Sinaptik bağlantı teknolojisi kurtarıldı!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "İlk araştırma, bunun Proje'ye büyük katkı sağlayacağını onayladı."
+msgstr "İlk araştırma, bunun projeye büyük katkı sağlayacağını onayladı."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -5787,7 +5787,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2141
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Mesaj iletim hatası - tekrar deneyin"
 
 #: lib/netplay/netplay.cpp:2735
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
@@ -5816,20 +5816,20 @@ msgstr "Bekleme odası cevabı alma başarısız!"
 
 #: lib/netplay/netreplay.cpp:322
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Oyun tekrarı dosyasının biçimi, mevcut Warzone 2100'ün destekleyebileceği sürümden daha yeni."
 
 #: lib/netplay/netreplay.cpp:324
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Oyun tekrarı biçimi sürümü: %u"
 
 #: lib/netplay/netreplay.cpp:325
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Oyun tekrarı dosya biçimi desteklenmiyor"
 
 #: lib/netplay/nettypes.cpp:883
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Oyun tekrarı yüklenenemedi: Tekrar dosyası eksik veya bozulmuş."
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -7167,7 +7167,7 @@ msgstr "Savaş alanı tamir birimi"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "En iyi hedefler: Araçlar ve sayborglar"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7205,7 +7205,7 @@ msgstr "Harika Hedefler: Üs binaları"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "En iyi hedefler: Üs yapıları, yerleşkeler, sayborglar"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7226,7 +7226,7 @@ msgstr "Harika Hedefler: Sığınaklar ve bağlama noktaları"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "En iyi hedefler: Sığınaklar, savunmalar, üs yapıları"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7268,13 +7268,13 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "En iyi hedefler: Hiçbiri. Tüm hedeflere ortalama hasar"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1158
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "En iyi hedefler: Araçlar ve sayborglar"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -15094,15 +15094,15 @@ msgstr "Doku sıkıştırma devre dışı"
 
 #: src/clparse.cpp:386
 msgid "Set gfx backend"
-msgstr ""
+msgstr "gfx altyapısını belirle"
 
 #: src/clparse.cpp:396
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "gfx altyapısı hata-ayıklamasını kullan"
 
 #: src/clparse.cpp:397
 msgid "Set JS backend"
-msgstr ""
+msgstr "JS altyapısını belirle"
 
 #: src/clparse.cpp:402
 msgid "Run games automatically for testing"
@@ -15154,11 +15154,11 @@ msgstr ""
 
 #: src/clparse.cpp:412
 msgid "Set game server port"
-msgstr ""
+msgstr "Oyun sunucusunun portunu belirle"
 
 #: src/clparse.cpp:412
 msgid "port"
-msgstr ""
+msgstr "port"
 
 #: src/clparse.cpp:415
 msgid "Enable lobby slash commands (for connecting clients)"
@@ -15190,7 +15190,7 @@ msgstr ""
 
 #: src/clparse.cpp:419
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Oyunu otomatik-başlatmak için gerekli minumun oyuncu sayısı"
 
 #: src/clparse.cpp:419
 msgid "startplayers"
@@ -15466,11 +15466,11 @@ msgstr "Kollektif"
 
 #: src/frontend.cpp:178
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Seferberlik videoları kayıp"
 
 #: src/frontend.cpp:179
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Videoları kurmak için SSS'ye bakınız"
 
 #: src/frontend.cpp:199
 msgid "Single Player"
@@ -15688,23 +15688,23 @@ msgstr "AYARLAR"
 
 #: src/frontend.cpp:727
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Yapılandırma Dizinini Aç"
 
 #: src/frontend.cpp:768
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Varsayılan dosya gezgininde yapılandırma dizini açılamadı."
 
 #: src/frontend.cpp:770
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "Yapılandırma dizini şu şekilde bildirilmiştir:"
 
 #: src/frontend.cpp:774
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Eğer konteyner/izole bir ortamda çalıştırılıyorsa, bu diskteki asıl dizinden farklılaşabilir."
 
 #: src/frontend.cpp:776
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Manuel olarak tespit etme hakkında daha fazla bilgi için lütfen belgelendirmeyi okuyunuz."
 
 #: src/frontend.cpp:777
 msgid "Failed to open configuration directory"
@@ -16400,7 +16400,7 @@ msgstr "Hata-ayıklama(bölüm editörü)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Hata-ayıklama (seçim)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -17328,7 +17328,7 @@ msgstr "Araştırma Güncellemesi"
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "Proje hedefleri ve Güncellemeler"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
@@ -17552,7 +17552,7 @@ msgstr "KAMPANYA"
 
 #: src/keybind.cpp:1391
 msgid "CHALLENGE"
-msgstr ""
+msgstr "MEYDAN OKUMA"
 
 #: src/keybind.cpp:1394
 msgid "SKIRMISH"
@@ -17673,11 +17673,11 @@ msgstr "Dikey Yön: Çevirilmiş"
 
 #: src/keybind.cpp:2247
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Ölüm sırasında ekran sarsılması: Kapalı"
 
 #: src/keybind.cpp:2252
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Ölüm sırasında ekran sarsılması: Açık"
 
 #: src/keybind.cpp:2304
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -17728,7 +17728,7 @@ msgstr ""
 
 #: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "HızlıKayıt, çoklu-oyuncu veya öğretici oyunları için kullanılamaz"
 
 #: src/keybind.cpp:2564
 msgid "QuickSave failed"
@@ -17736,11 +17736,11 @@ msgstr "HızlıKayıt başarısız oldu"
 
 #: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "HızlıYükleme, çokluoyuncu veya öğretici oyunlarında kullanılamaz"
 
 #: src/keybind.cpp:2600
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "HızlıKayıt dosyası henüz mevcut değil"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -17782,7 +17782,7 @@ msgstr "hile yaptı"
 #: src/loadsave.cpp:1109
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "Otokayıt %s"
 
 #: src/loadsave.cpp:1114
 #, c-format
@@ -18090,7 +18090,7 @@ msgstr "Bu yuvayı kapat"
 
 #: src/multiint.cpp:1872
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Bu slota gözlemcilerin katılabilmesine izin ver"
 
 #: src/multiint.cpp:1956
 msgid "Click to change to this slot"
@@ -18109,7 +18109,7 @@ msgstr ""
 #: src/multiint.cpp:3128
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr ""
+msgstr "%s adlı gözlemci, oyuncu slotuna taşındı"
 
 #: src/multiint.cpp:2043
 msgid "Cannot swap with host"
@@ -18138,12 +18138,12 @@ msgstr "Kurucu %s kullanıcısını oyundan attı!"
 #: src/multiint.cpp:4437
 #: src/multimenu.cpp:1286
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "Oyun kurucusu, sizi oyundan attı."
 
 #: src/multiint.cpp:2341
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "%s adlı kişi, gözlemcilere taşınamadı"
 
 #: src/multiint.cpp:2346
 #, c-format
@@ -18152,7 +18152,7 @@ msgstr ""
 
 #: src/multiint.cpp:2369
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Gözlemcilere Taşı"
 
 #: src/multiint.cpp:2390
 msgid "Ask Spectator to Play"
@@ -18160,17 +18160,17 @@ msgstr "Gözlemcinin oynamasını iste"
 
 #: src/multiint.cpp:2406
 msgid "Ask to Play"
-msgstr ""
+msgstr "Oynamayı Sor"
 
 #: src/multiint.cpp:3012
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "%s isimli gözlemci, gözlemci olarak kalmak istiyor"
 
 #: src/multiint.cpp:3016
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "%s adlı oyuncu, oyuncu olarak kalmak istiyor"
 
 #: src/multiint.cpp:3024
 msgid "Host has declined to switch you to a Player"
@@ -18186,7 +18186,7 @@ msgstr "Gözlemci olmak istiyor musun?"
 
 #: src/multiint.cpp:3057
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "Oyun kurucusu, gözlemci olmak isteyip istemediğinizi soruyor?"
 
 #: src/multiint.cpp:3059
 msgid "You are currently a Player."
@@ -18228,7 +18228,7 @@ msgstr "%s adlı gözlemci, oyuncu olmak istiyor."
 
 #: src/multiint.cpp:3154
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "Ancak, şu an açık oyuncu slotu yok."
 
 #: src/multiint.cpp:3156
 msgid "Would you like to swap this Spectator with a Player?"
@@ -18277,7 +18277,7 @@ msgstr "Oyuncu renklerini değiştirmek için tıkla"
 
 #: src/multiint.cpp:4233
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Oyuncu grubunu değiştirmek için tıkla"
 
 #: src/multiint.cpp:4244
 msgid "Click to change player position"
@@ -18289,7 +18289,7 @@ msgstr "YZ değiştirmek için tıklayın, seçimi dağıtmak için sağ tıklay
 
 #: src/multiint.cpp:4257
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Gözlemci slotunu kapatmak için tıkla"
 
 #: src/multiint.cpp:4273
 msgid "Player ID: "
@@ -18390,7 +18390,7 @@ msgstr "Kurucu Oyunu Başlatıyor"
 
 #: src/multiint.cpp:6411
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "Kurucu, geçersiz seçenekler sundu"
 
 #: src/multiint.cpp:6645
 msgid "You have been kicked: "
@@ -18480,7 +18480,7 @@ msgstr ""
 #: src/multiint.cpp:8249
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "Oyun Tekrarı dosyası \"%s\" olarak kaydedildi"
 
 #: src/multiint.cpp:8253
 #, c-format
@@ -18489,7 +18489,7 @@ msgstr "Mevcut Warzone 2100 sürümü: \"%s\""
 
 #: src/multiint.cpp:8263
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "Oyun tekrarları, oyunun tekrarının kaydedildiği aynı sürüm ile oynatılmalıdır."
 
 #: src/multiint.cpp:8265
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
@@ -18497,7 +18497,7 @@ msgstr ""
 
 #: src/multiint.cpp:8266
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "Tekrar sürümü uyuşmazlığı"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18528,7 +18528,7 @@ msgstr "%s (%u) uyumsuz bir moda sahipti ve oyundan atıldı."
 #: src/multiplay.cpp:791
 #: src/multiplay.cpp:975
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "Verileriniz, oyun kurucusunun verileri ile eşleşmiyor!"
 
 #: src/multijoin.cpp:538
 #, c-format
@@ -18571,11 +18571,11 @@ msgstr "Sınırları varsayılana sıfırla"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Sınırlar, varsayılan değerlere sıfırlandı"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "Yönetici, sizi oyundan attı."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18690,7 +18690,7 @@ msgstr "%s otomatik olarak oyundan atılıyor, geçersiz komut alındı: %u"
 
 #: src/multiplay.cpp:1125
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Yetkisi olmayan ağ komutu"
 
 #: src/multiplay.cpp:1225
 msgid "REPLAY HAS ENDED"
@@ -18703,7 +18703,7 @@ msgstr "(Çıkmak için ESC'ye basınız.)"
 #: src/multiplay.cpp:1380
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "%s isimli oyuncu otomatik olarak atılıyor, geçersiz komut alındı."
 
 #: src/multiplay.cpp:1905
 msgid "Map was requested: SENDING MAP!"
@@ -19005,7 +19005,7 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:804
 msgid "Power/Rate"
-msgstr ""
+msgstr "Güç/Oran"
 
 #: src/spectatorwidgets.cpp:805
 msgid "Current Power / Power Per Second"
@@ -19022,7 +19022,7 @@ msgstr "Kinetik Zırh"
 #: src/spectatorwidgets.cpp:808
 #: src/spectatorwidgets.cpp:810
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tanklar / Sayborglar)"
 
 #: src/structure.cpp:2552
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -19349,7 +19349,7 @@ msgstr "Uyumluluk Uyarısı"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Warzone 2100'ün çalışmasını/performansını etkileyebilecek bir sorun tespit edildi."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
