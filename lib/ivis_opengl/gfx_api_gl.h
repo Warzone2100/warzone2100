@@ -61,14 +61,18 @@ private:
 	GLuint _id;
 	size_t mip_count = 0;
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
+	bool gles = false;
 
 	gl_texture();
 	virtual ~gl_texture();
 public:
 	virtual void bind() override;
 	void unbind();
-	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) override;
+	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
+	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
+private:
+	virtual bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
 struct gl_buffer final : public gfx_api::buffer

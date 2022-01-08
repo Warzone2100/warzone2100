@@ -985,7 +985,7 @@ bool initTerrain()
 		delete lightmap_texture;
 	lightmap_texture = gfx_api::context::get().create_texture(1, lightmapPixmap->width(), lightmapPixmap->height(), lightmapPixmap->pixel_format(), "mem::lightmap");
 
-	lightmap_texture->upload(0, 0, 0, *(lightmapPixmap.get()));
+	lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	terrainInitialised = true;
 
 	return true;
@@ -1290,7 +1290,7 @@ void drawTerrain(const glm::mat4 &mvp)
 		lightmapLastUpdate = realTime;
 		updateLightMap();
 
-		lightmap_texture->upload(0, 0, 0, *(lightmapPixmap.get()));
+		lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	}
 
 	///////////////////////////////////

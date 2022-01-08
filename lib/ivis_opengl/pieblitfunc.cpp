@@ -123,7 +123,7 @@ void GFX::makeCompatibleTexture(const iV_Image* image /*= nullptr*/, const std::
 void GFX::updateTexture(const iV_Image& image /*= nullptr*/)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
-	mTexture->upload(0u, 0u, 0u, image);
+	mTexture->upload(0u, image);
 }
 
 void GFX::buffers(int vertices, const void *vertBuf, const void *auxBuf)

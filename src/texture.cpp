@@ -194,7 +194,7 @@ bool texLoad(const char *fileName)
 				break;
 			}
 			// Insert into texture page
-			pie_Texture(texPage).upload(j, xOffset, yOffset, tile);
+			pie_Texture(texPage).upload_sub(j, xOffset, yOffset, tile);
 			tile.clear();
 			if (i == mipmap_max) // dealing with main texture page; so register coordinates
 			{

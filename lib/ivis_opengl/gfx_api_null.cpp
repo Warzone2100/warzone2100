@@ -38,14 +38,26 @@ void null_texture::bind()
 	// no-op
 }
 
-void null_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
+bool null_texture::upload(const size_t& mip_level, const iV_BaseImage& image)
 {
-	ASSERT_OR_RETURN(, image.data() != nullptr, "Attempt to upload image without data");
-	ASSERT_OR_RETURN(, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
 	size_t width = image.width();
 	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 	// no-op
+	return true;
+}
+
+bool null_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+{
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
+	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
+	// no-op
+	return true;
 }
 
 unsigned null_texture::id()

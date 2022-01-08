@@ -86,7 +86,8 @@ namespace gfx_api
 	{
 		virtual ~texture() {};
 		virtual void bind() = 0;
-		virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) = 0;
+		virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) = 0;
+		virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) = 0;
 		virtual unsigned id() = 0;
 
 		texture( const texture& other ) = delete; // non construction-copyable

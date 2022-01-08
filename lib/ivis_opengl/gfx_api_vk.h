@@ -384,11 +384,15 @@ struct VkTexture final : public gfx_api::texture
 
 	virtual void bind() override;
 
-	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) override;
+	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
+	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
 
 	VkTexture( const VkTexture& other ) = delete; // non construction-copyable
 	VkTexture& operator=( const VkTexture& ) = delete; // non copyable
+
+private:
+	bool upload_internal(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const iV_BaseImage& image);
 
 private:
 	const VkRoot* root;

@@ -1451,10 +1451,16 @@ size_t VkTexture::format_size(const gfx_api::pixel_format& format)
 			return 2;
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
 			return 1;
+		// compressed formats
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+			return 3;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+			return 4;
 		default:
-			debug(LOG_FATAL, "Unrecognized pixel format");
+			return 4;
 	}
-	return 0; // silence warning
+	return 4; // silence warning
 }
 
 size_t VkTexture::format_size(const vk::Format& format)
@@ -1531,10 +1537,10 @@ VkTexture::~VkTexture()
 
 void VkTexture::bind() {}
 
-void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const iV_BaseImage& image)
+bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const iV_BaseImage& image)
 {
-	ASSERT_OR_RETURN(, image.data() != nullptr, "Attempt to upload image without data");
-	ASSERT_OR_RETURN(, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
 	size_t width = image.width();
 	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
@@ -1591,6 +1597,18 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 	};
 	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
+
+	return true;
+}
+
+bool VkTexture::upload(const size_t& mip_level, const iV_BaseImage& image)
+{
+	return upload_internal(mip_level, 0, 0, image);
+}
+
+bool VkTexture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+{
+	return upload_internal(mip_level, offset_x, offset_y, image);
 }
 
 unsigned VkTexture::id() { return 0; }
@@ -2617,7 +2635,10 @@ bool VkRoot::createSwapchain()
 
 	iV_Image defaultTexture;
 	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
-	pDefaultTexture->upload(0, 0, 0, defaultTexture);
+	if (!pDefaultTexture->upload(0, defaultTexture))
+	{
+		debug(LOG_ERROR, "Failed to upload default texture??");
+	}
 
 	startRenderPass();
 
@@ -2939,6 +2960,22 @@ void VkRoot::initPixelFormatsSupport()
 
 	// RGB8 is optional
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+
+	// S3TC
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
+
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+
+	// ETC2
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
 }
 
 bool VkRoot::createSurface()
@@ -3247,6 +3284,28 @@ vk::Format VkRoot::get_format(const gfx_api::pixel_format& format) const
 		return vk::Format::eR8G8Unorm;
 	case gfx_api::pixel_format::FORMAT_R8_UNORM:
 		return vk::Format::eR8Unorm;
+	case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+		return vk::Format::eBc1RgbUnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+		return vk::Format::eBc2UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+		return vk::Format::eBc3UnormBlock;
+	case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
+		return vk::Format::eBc4UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
+		return vk::Format::eBc5UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+		return vk::Format::eBc7UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+		return vk::Format::eEtc2R8G8B8UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+		return vk::Format::eEtc2R8G8B8A8UnormBlock;
+	case gfx_api::pixel_format::FORMAT_R11_EAC:
+		return vk::Format::eEacR11UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RG11_EAC:
+		return vk::Format::eEacR11G11UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
+		// Not supported!
 	default:
 		debug(LOG_FATAL, "Unsupported format: %d", (int)format);
 	}

@@ -20,6 +20,7 @@
 #include "gfx_api_vk.h"
 #include "gfx_api_gl.h"
 #include "gfx_api_null.h"
+#include "gfx_api_image_compress_priv.h"
 
 static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
@@ -57,7 +58,16 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 			break;
 	}
 	ASSERT(current_backend_context != nullptr, "Failed to initialize gfx backend context");
-	return gfx_api::context::get()._initialize(impl, antialiasing, swapMode);
+	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Calculate the best available run-time compression formats
+	gfx_api::initBestRealTimeCompressionFormats();
+
+	return result;
 }
 
 gfx_api::context& gfx_api::context::get()
@@ -66,7 +76,6 @@ gfx_api::context& gfx_api::context::get()
 }
 
 #include "png_util.h"
-
 
 static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
@@ -165,18 +174,34 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	}
 
 	auto uploadFormat = image.pixel_format();
+	auto bestAvailableCompressedFormat = gfx_api::bestRealTimeCompressionFormatForImage(image, textureType);
+	if (bestAvailableCompressedFormat.has_value() && bestAvailableCompressedFormat.value() != gfx_api::pixel_format::invalid)
+	{
+		// For now, check that the minimum mipmap level is 4x4 or greater, otherwise do not run-time compress
+		size_t min_mipmap_w = std::max<size_t>(1, image.width() >> (mipmap_levels - 1));
+		size_t min_mipmap_h = std::max<size_t>(1, image.height() >> (mipmap_levels - 1));
+		if (min_mipmap_w >= 4 && min_mipmap_h >= 4)
+		{
+			uploadFormat = bestAvailableCompressedFormat.value();
+		}
+	}
 
 	// 5.) Create a new compatible gpu texture object
-	gfx_api::texture* pTexture = gfx_api::context::get().create_texture(mipmap_levels, image.width(), image.height(), uploadFormat, filename);
+	std::unique_ptr<gfx_api::texture> pTexture = std::unique_ptr<gfx_api::texture>(gfx_api::context::get().create_texture(mipmap_levels, image.width(), image.height(), uploadFormat, filename));
 
 	// 6.) Upload initial (full) level
 	if (uploadFormat == image.pixel_format())
 	{
-		pTexture->upload(0, 0, 0, image);
+		bool uploadResult = pTexture->upload(0, image);
+		ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");
 	}
 	else
 	{
-		// FUTURE TODO: real-time compression
+		// Run-time compression
+		auto compressedImage = gfx_api::compressImage(image, uploadFormat);
+		ASSERT_OR_RETURN(nullptr, compressedImage != nullptr, "Failed to compress image to format: %zu", static_cast<size_t>(uploadFormat));
+		bool uploadResult = pTexture->upload(0, *compressedImage);
+		ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");
 	}
 
 	// 7.) Generate and upload mipmaps (if needed)
@@ -189,15 +214,20 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 
 		if (uploadFormat == image.pixel_format())
 		{
-			pTexture->upload(i, 0, 0, image);
+			bool uploadResult = pTexture->upload(i, image);
+			ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");
 		}
 		else
 		{
-			// FUTURE TODO: real-time compression
+			// Run-time compression
+			auto compressedImage = gfx_api::compressImage(image, uploadFormat);
+			ASSERT_OR_RETURN(nullptr, compressedImage != nullptr, "Failed to compress image to format: %zu", static_cast<size_t>(uploadFormat));
+			bool uploadResult = pTexture->upload(i, *compressedImage);
+			ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");
 		}
 	}
 
-	return pTexture;
+	return pTexture.release();
 }
 
 // MARK: - texture
