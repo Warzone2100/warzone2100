@@ -6803,7 +6803,6 @@
 		"msgName": "RES_W_HOWD4",
 		"name": "HEAP Howitzer Shells",
 		"requiredResearch": [
-			"R-Wpn-HvyHowitzer",
 			"R-Wpn-Howitzer-Damage03",
 			"R-Wpn-Cannon-Damage07"
 		],
@@ -6930,7 +6929,7 @@
 		"msgName": "RES_W_HOWRF1",
 		"name": "Howitzer Autoloader",
 		"requiredResearch": [
-			"R-Wpn-HvyHowitzer"
+			"R-Wpn-Howitzer-Damage03"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -7068,7 +7067,6 @@
 		"name": "Howitzer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage04",
-			"R-Wpn-Mortar02Hvy",
 			"R-Sys-Sensor-Upgrade01"
 		],
 		"researchPoints": 9000,
@@ -7106,7 +7104,8 @@
 		"msgName": "RES_W_HH1",
 		"name": "Heavy Howitzer - Ground Shaker",
 		"requiredResearch": [
-			"R-Wpn-Howitzer-Damage02"
+			"R-Wpn-Howitzer-Damage02",
+			"R-Wpn-Mortar02Hvy"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
