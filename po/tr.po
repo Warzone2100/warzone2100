@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-08 03:03\n"
+"PO-Revision-Date: 2022-01-08 15:05\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -14901,7 +14901,7 @@ msgstr "Müttefikler"
 
 #: src/chat.cpp:75
 msgid "private to "
-msgstr ""
+msgstr "özel "
 
 #: src/chat.cpp:86
 msgid " and "
@@ -15078,7 +15078,7 @@ msgstr "kurucu"
 
 #: src/clparse.cpp:382
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "IP/oyun odası adı'na doğrudan gözlemci olarak bağlan"
 
 #: src/clparse.cpp:383
 msgid "Go directly to host screen"
@@ -15146,7 +15146,7 @@ msgstr ""
 
 #: src/clparse.cpp:408
 msgid "autorating"
-msgstr ""
+msgstr "oto-değerlendirme"
 
 #: src/clparse.cpp:410
 msgid "Attach or create a console window and display console output (Windows only)"
@@ -15182,7 +15182,7 @@ msgstr ""
 
 #: src/clparse.cpp:418
 msgid "Enable command interface"
-msgstr ""
+msgstr "Komut arayüzünü etkinleştir"
 
 #: src/clparse.cpp:418
 msgid "(stdin)"
@@ -15194,7 +15194,7 @@ msgstr "Oyunu otomatik-başlatmak için gerekli minumun oyuncu sayısı"
 
 #: src/clparse.cpp:419
 msgid "startplayers"
-msgstr ""
+msgstr "başlangıçoyuncuları"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -16099,7 +16099,7 @@ msgstr "Hareketsizlik için zaman aşımı"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
-msgstr ""
+msgstr "Gecikme Atması"
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
@@ -16905,7 +16905,7 @@ msgstr "Tüm Ağır Hasarlı Birimleri seç"
 #: src/input/keyconfig.cpp:172
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Sağlığı >%50 olan savaş kara birimlerini seçin ve grupları seçmeyin."
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks"
@@ -17054,7 +17054,7 @@ msgstr "Hata ayıklama anahtarı"
 
 #: src/input/keyconfig.cpp:212
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Hata-ayıklama haritalarını önceliklendir"
 
 #: src/input/keyconfig.cpp:213
 msgid "Toggle Level Editor"
@@ -17556,7 +17556,7 @@ msgstr "MEYDAN OKUMA"
 
 #: src/keybind.cpp:1394
 msgid "SKIRMISH"
-msgstr ""
+msgstr "ÇARPIŞMA"
 
 #: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
@@ -17951,7 +17951,7 @@ msgstr "Oyla"
 
 #: src/multiint.cpp:1320
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Oyun kurucusuna haritayı değiştirmesine veya rastgele belirlemesine izin ver?"
 
 #: src/multiint.cpp:1351
 msgid "Not enough votes to randomize or change the map."
@@ -18148,7 +18148,7 @@ msgstr "%s adlı kişi, gözlemcilere taşınamadı"
 #: src/multiint.cpp:2346
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "Kurucu, %s adlı kişiyi gözlemcilere taşıdı!"
 
 #: src/multiint.cpp:2369
 msgid "Move to Spectators"
@@ -18178,7 +18178,7 @@ msgstr ""
 
 #: src/multiint.cpp:3028
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Gözlemcilere geçilemedi"
 
 #: src/multiint.cpp:3056
 msgid "Do you want to spectate?"
