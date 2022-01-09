@@ -2,7 +2,7 @@ include("script/campaign/transitionTech.js");
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var index; //Number of bonus transports that have flown in.
+var transporterIndex; //Number of bonus transports that have flown in.
 var startedFromMenu;
 var truckLocCounter;
 
@@ -46,17 +46,18 @@ camAreaEvent("westFactoryTrigger", function(droid)
 	enableAllFactories();
 });
 
-//make the first batch of extra transport droids hero rank.
-function setHeroUnits()
+function setUnitRank(transport)
 {
-	const DROID_EXP = 1024; //Can make Hero Commanders if recycled.
-	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
-		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
-	});
+	const DROID_EXP = [1024, 128, 64, 32]; //Can make Hero Commanders if recycled.
+	var droids = enumCargo(transport);
 
-	for (var j = 0, i = droids.length; j < i; ++j)
+	for (var i = 0, len = droids.length; i < len; ++i)
 	{
-		setDroidExperience(droids[j], DROID_EXP);
+		var droid = droids[i];
+		if (!camIsSystemDroid(droid))
+		{
+			setDroidExperience(droid, DROID_EXP[transporterIndex - 1]);
+		}
 	}
 }
 
@@ -64,7 +65,7 @@ function eventTransporterLanded(transport)
 {
 	if (startedFromMenu)
 	{
-		camCallOnce("setHeroUnits");
+		setUnitRank(transport);
 	}
 }
 
@@ -114,12 +115,12 @@ function truckDefense()
 function sendPlayerTransporter()
 {
 	const transportLimit = 4; //Max of four transport loads if starting from menu.
-	if (!camDef(index))
+	if (!camDef(transporterIndex))
 	{
-		index = 0;
+		transporterIndex = 0;
 	}
 
-	if (index === transportLimit)
+	if (transporterIndex === transportLimit)
 	{
 		removeTimer("sendPlayerTransporter");
 		return;
@@ -141,7 +142,7 @@ function sendPlayerTransporter()
 		}
 	);
 
-	index = index + 1;
+	transporterIndex = transporterIndex + 1;
 }
 
 //Setup Nexus VTOL hit and runners.
