@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-08 15:05\n"
+"PO-Revision-Date: 2022-01-09 03:05\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -6904,7 +6904,7 @@ msgstr "Hücum Topu"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:865
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Saldırı Silahı Sığınağı"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -9556,7 +9556,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2678
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Ağır Plasma Atıcı"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -11356,7 +11356,7 @@ msgstr "Havan Topu"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3980
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Kurulu Makinelisilah"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
@@ -13288,13 +13288,13 @@ msgstr "Binalardan teknolojileri çalar ve silah kontrolünü ele geçirir"
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5289
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Ateşli çelik kule"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5292
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Ağır makineli-tüfekli çelik kule"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13307,7 +13307,7 @@ msgstr "Makineli çelik kule"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5299
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "İkiz ağır makineli-tüfekli çelik kule"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
@@ -15591,7 +15591,7 @@ msgstr "Çatışma Oyunu Yükle"
 
 #: src/frontend.cpp:369
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Çatışma Tekrarını Görüntüle"
 
 #: src/frontend.cpp:371
 msgid "SINGLE PLAYER"
@@ -15618,7 +15618,7 @@ msgstr "Çatışma Kayıtlı Oyunu Yükle"
 
 #: src/frontend.cpp:544
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Çatışma Tekrarını Yükle"
 
 #: src/frontend.cpp:605
 msgid "MULTI PLAYER"
@@ -16083,7 +16083,7 @@ msgstr "Hiçbiri"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Oyun Seçenekleri:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
@@ -18103,7 +18103,7 @@ msgstr ""
 
 #: src/multiint.cpp:2020
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "Oyuncuyu bu slotla değiştirmek için tıkla"
 
 #: src/multiint.cpp:2037
 #: src/multiint.cpp:3128
@@ -18113,7 +18113,7 @@ msgstr "%s adlı gözlemci, oyuncu slotuna taşındı"
 
 #: src/multiint.cpp:2043
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "Kurucu ile değiştirilemedi"
 
 #: src/multiint.cpp:2284
 msgid "Team"
@@ -18174,7 +18174,7 @@ msgstr "%s adlı oyuncu, oyuncu olarak kalmak istiyor"
 
 #: src/multiint.cpp:3024
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "Kurucu, seni oyuncu slotuna geçirtmeyi reddetti"
 
 #: src/multiint.cpp:3028
 msgid "Unable to switch to Spectator"
@@ -18402,11 +18402,11 @@ msgstr "Sunucu ile bağlantı yok."
 
 #: src/multiint.cpp:6711
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "Kurucu, beni oyunculara taşımaya çalıştı ancak asla izin vermedim. Hoşça kal!"
 
 #: src/multiint.cpp:6713
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "Kurucu, bizi oyunculara taşımaya çalıştı ancak asla izin vermedik."
 
 #: src/multiint.cpp:6862
 msgid "Cannot change to a map with too few slots for all players."
@@ -18475,7 +18475,7 @@ msgstr "Gecikme"
 
 #: src/multiint.cpp:8247
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "Bu tekrar dosyasını kaydetmek için kullanılan Warzone 2100 sürümü, mevcut çalışan sürüm ile eşleşmiyor."
 
 #: src/multiint.cpp:8249
 #, c-format
@@ -18493,7 +18493,7 @@ msgstr "Oyun tekrarları, oyunun tekrarının kaydedildiği aynı sürüm ile oy
 
 #: src/multiint.cpp:8265
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "Tekrar, başarıyla oynatılamayabilir veya simülasyonda farklılıklar olabilir."
 
 #: src/multiint.cpp:8266
 msgid "Replay Version Mismatch"
@@ -19001,7 +19001,7 @@ msgstr "Oyuncu istatistiklerini görüntüle"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Silah Seviyesi"
 
 #: src/spectatorwidgets.cpp:804
 msgid "Power/Rate"
@@ -19013,7 +19013,7 @@ msgstr "Mevcut Güç / Saniye Başına Güç"
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
-msgstr ""
+msgstr "GüçKaybı"
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
