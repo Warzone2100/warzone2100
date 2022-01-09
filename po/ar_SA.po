@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-08 15:05\n"
+"PO-Revision-Date: 2022-01-09 15:04\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -6223,7 +6223,7 @@ msgstr "إنتاجٌ متطور للطائرات العمودية"
 #. data/base/stats/features.json: $.Advmaterialslab.name
 #: po/custom/fromJson.txt:256
 msgid "Advancedmaterialslab"
-msgstr ""
+msgstr "مختبر مواد البناء المتطورة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[1]
@@ -6236,7 +6236,7 @@ msgstr "حقيبة قفزٍ أيروديناميكية"
 #. data/base/stats/features.json: $.Aerodynamicslab.name
 #: po/custom/fromJson.txt:269
 msgid "Aerodynamicslab"
-msgstr ""
+msgstr "مختبر علوم ديناميكا الهواء"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[3]
@@ -6345,7 +6345,7 @@ msgstr "فصل فريق ألفا"
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:488
 msgid "Alpha"
-msgstr ""
+msgstr "ألفا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -8251,7 +8251,7 @@ msgstr "يقوم بتحليل المعلومات وتوجيهها إلى رؤو�
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[3]
 #: po/custom/fromJson.txt:1836
 msgid "Does not offer sensor targeting"
-msgstr ""
+msgstr "لا يوفر ميزة استهداف الأعداء كباقي المستشعرات"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.WreckedTransporter.name
@@ -8859,7 +8859,8 @@ msgstr "احصل على طاقةٍ أقل بنسبة 25% من مضخةٍ نفط�
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "سيحصل على طاقةٍ أقل بنسبة 25% من كل مضخة\n"
+"سيصير أبطأ في اتخاذ القرارات"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8868,14 +8869,15 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "سيحصل على طاقةٍ أقل بنسبة 25% من كل مضخة\n"
+"لن تركز أبحاثه على تطوير سلاحٍ محدد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[2]
 #: po/custom/fromJson.txt:2248
 msgid "Gives Cyborg limited flight abilities"
-msgstr ""
+msgstr "ستمنح السايبورغ قدرةً محدودةً على الطيران"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[2]
@@ -8896,7 +8898,7 @@ msgstr "مناسبٌ لتصميم الدبابات متوسطة الحجم أو 
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[2]
 #: po/custom/fromJson.txt:2260
 msgid "Good scout vehicle"
-msgstr ""
+msgstr "مركبةٌ استطلاعيةٌ جيدة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
@@ -9142,19 +9144,19 @@ msgstr "قذائف هاون شديدة الانفجار"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2410
 msgid "HE Rockets Mk2"
-msgstr ""
+msgstr "صواريخ شديدة الانفجار (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2413
 msgid "HE Rockets Mk3"
-msgstr ""
+msgstr "صواريخ شديدة الانفجار (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2416
 msgid "HE Rockets"
-msgstr "صواريخ شديدة الانفاجر"
+msgstr "صواريخ شديدة الانفجار"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
@@ -9576,7 +9578,7 @@ msgstr "رأس صيانةٍ قيل كوبرا حوامة"
 #. data/mp/stats/weapons.json: $.RocketSuper.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Bastion"
-msgstr ""
+msgstr "قلعةٌ بقاذف صواريخ ثقيلة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -9910,7 +9912,7 @@ msgstr ""
 #. data/base/stats/features.json: $.BarbHUT.name
 #: po/custom/fromJson.txt:2944
 msgid "Hut"
-msgstr ""
+msgstr "كوخ"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage08.name
@@ -10437,7 +10439,7 @@ msgstr "الجحيم"
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[2]
 #: po/custom/fromJson.txt:3381
 msgid "Intruder parasite isolated"
-msgstr ""
+msgstr "لقد تمكنا من عزل الطفيلي المقتحم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_EN10.text[1]
@@ -10922,7 +10924,7 @@ msgstr "أقوى درع وأقصى عددٍ من نقاط صحة الجسم"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
 #: po/custom/fromJson.txt:3715
 msgid "May be assigned to follow units"
-msgstr "يمكنك أن تطلب منه أن يتبع الوحدات الأخرى"
+msgstr "يمكنك أن تطلب منه تتبع الوحدات الأخرى"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[1]
@@ -11368,7 +11370,7 @@ msgstr "رشاشٌ سريع الإطلاق ومتعدد الفوهات"
 #. data/base/stats/features.json: $.Nanolab.name
 #: po/custom/fromJson.txt:3990
 msgid "Nanolab"
-msgstr ""
+msgstr "مختبر النانو"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
@@ -11426,14 +11428,14 @@ msgstr "السايبورغ ذو مدفع الإبر"
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade08.name
 #: po/custom/fromJson.txt:4027
 msgid "Neural Synapse Research Brain Mk2"
-msgstr ""
+msgstr "دماغ أبحاث المشبك العصبي (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade09.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade09.name
 #: po/custom/fromJson.txt:4031
 msgid "Neural Synapse Research Brain Mk3"
-msgstr ""
+msgstr "دماغ أبحاث المشبك العصبي (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RU7.text[1]
@@ -11442,7 +11444,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade07.name
 #: po/custom/fromJson.txt:4037
 msgid "Neural Synapse Research Brain"
-msgstr ""
+msgstr "دماغ أبحاث المشبك العصبي"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[0]
@@ -11494,13 +11496,13 @@ msgstr "ستجد الآن في قسم البناء عدداً من الخيار�
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[0]
 #: po/custom/fromJson.txt:4096
 msgid "New Cyborg Research Available"
-msgstr ""
+msgstr "يمكنك الآن إجراء أبحاثٍ على سايبورغ جديد"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[0]
 #: po/custom/fromJson.txt:4105
 msgid "New Electronic Technology Discovered"
-msgstr ""
+msgstr "تم اكتشاف تقنيةٍ إلكترونيةٍ جديدة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[0]
@@ -11555,7 +11557,7 @@ msgstr "هنالك نظام دفعٍ جديدٍ موفرٍ للطاقة متاح
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[1]
 #: po/custom/fromJson.txt:4160
 msgid "New Power Generation Technology"
-msgstr ""
+msgstr "تقنيةٌ جديدة لتوليد الطاقة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text[0]
@@ -11596,7 +11598,7 @@ msgstr "سيقوم مركز الصيانة الجديد بإصلاح الوحد�
 #. ... + 6 refs
 #: po/custom/fromJson.txt:4192
 msgid "New Repair Technology Discovered"
-msgstr ""
+msgstr "تم اكتشاف تقنية صيانةٍ جديدة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text[3]
@@ -11627,7 +11629,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[0]
 #: po/custom/fromJson.txt:4219
 msgid "New System Available"
-msgstr ""
+msgstr "هنالك رأسٌ وظيفيٌ جديدٌ متاحٌ لك"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
@@ -11673,7 +11675,7 @@ msgstr "يمكنك استخدام رأسٍ وظيفيٍ جديدٍ في تصام
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[1]
 #: po/custom/fromJson.txt:4257
 msgid "New Thermal Emissions detection"
-msgstr "يمكن للمستشعرات الآن اكتشاف الانبعاثات الحرارية"
+msgstr "مستكشفٌ جديدٌ للانبعاثات الحرارية"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[0]
@@ -11692,7 +11694,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_B10.text[0]
 #: po/custom/fromJson.txt:4273
 msgid "NEXUS Heavy Body"
-msgstr ""
+msgstr "جسمٌ ثقيلٌ من تصميم «نيكسوس»"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
@@ -11705,7 +11707,7 @@ msgstr "نظام التحصين ضد «نيكسوس»"
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
 #: po/custom/fromJson.txt:4280
 msgid "NEXUS Intruder Program analyzed"
-msgstr ""
+msgstr "تم تحليل «برنامج نيكسوس المقتحم»"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance.name
@@ -11718,7 +11720,7 @@ msgstr "برنامج «نيكسوس» المقتحم"
 #. data/mp/messages/resmessages3.json: $.RES_V_B03.text[0]
 #: po/custom/fromJson.txt:4287
 msgid "NEXUS Light Body"
-msgstr ""
+msgstr "جسمٌ خفيفٌ من تصميم «نيكسوس»"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTower.name
@@ -11739,7 +11741,7 @@ msgstr "رأس «وصلة نيكسوس»"
 #. data/mp/messages/resmessages3.json: $.RES_V_B07.text[0]
 #: po/custom/fromJson.txt:4299
 msgid "NEXUS Medium Body"
-msgstr ""
+msgstr "جسمٌ متوسطٌ من تصميم «نيكسوس»"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NX-ANTI-SATSite.name
@@ -11781,25 +11783,25 @@ msgstr "نيكسوس"
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4323
 msgid "No Place To Hide"
-msgstr ""
+msgstr "لا مهرب"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4326
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "لا يغش. هزيمته صعبة، وستستمتع باللعب معه."
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4329
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
 #: po/custom/fromJson.txt:4332
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "سيصير من الصعب العثور على الكائنات بجانبه"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ResourceExtractor.name
@@ -11812,13 +11814,13 @@ msgstr "مضخةٌ نفطية"
 #. data/base/stats/features.json: $.OilDrum.name
 #: po/custom/fromJson.txt:4339
 msgid "Oil Drum"
-msgstr ""
+msgstr "برميل نفط"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.OilResource.name
 #: po/custom/fromJson.txt:4342
 msgid "Oil Resource"
-msgstr ""
+msgstr "موردٌ نفطي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[1]
@@ -11834,13 +11836,13 @@ msgstr "حاسوبٌ للتنبؤ بحركة الهدف، مركبٌ داخل ا
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4352
 msgid "On-board diagnostic and repair systems"
-msgstr ""
+msgstr "أنظمة داخلية لتشخصيص المشاكل وصيانتها"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[2]
 #: po/custom/fromJson.txt:4355
 msgid "On-board resistance circuit systems"
-msgstr ""
+msgstr "دارات مقاومة يتم تثبيتها داخل المركبات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text[3]
@@ -12085,7 +12087,7 @@ msgstr "سلاحٌ شديد القوة يمكنه إطلاق نبضاتٍ من �
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4503
 msgid "Powerlab"
-msgstr ""
+msgstr "مختبر الطاقة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -12237,20 +12239,20 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[2]
 #: po/custom/fromJson.txt:4610
 msgid "Radar detector detects enemy sensors"
-msgstr ""
+msgstr "يقوم الرادار الكاشف باكتشاف أجهزة الاستشعار المعادية"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
 #: po/custom/fromJson.txt:4613
 msgid "Radar Detector Tower"
-msgstr "برج كشف الرادار"
+msgstr "برج الرادار الكاشف"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-RadarDetector01.name
 #. data/mp/stats/sensor.json: $.RadarDetector.name
 #: po/custom/fromJson.txt:4617
 msgid "Radar Detector"
-msgstr ""
+msgstr "الرادار الكاشف"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
@@ -12400,7 +12402,7 @@ msgstr "زيادة سرعة إعادة التسلح 30%"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4708
 msgid "Reduced chance of NEXUS take-over"
-msgstr ""
+msgstr "ستنخفض احتمالية أن يسيطر «نيكسوس» على أنظمتنا"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VP.text[1]
@@ -12845,7 +12847,7 @@ msgstr "هاونٌ دوّار - رشاشة الفلفل"
 #. data/base/stats/features.json: $.Rotarywepslab.name
 #: po/custom/fromJson.txt:5018
 msgid "Rotaryweaponslab"
-msgstr ""
+msgstr "مختبر الأسلحة الدوارة"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbTechRuin.name
@@ -13214,7 +13216,7 @@ msgstr "زاويةٌ مدمرة"
 #. data/base/stats/features.json: $.WallSmashed.name
 #: po/custom/fromJson.txt:5252
 msgid "Smashedwall"
-msgstr ""
+msgstr "جدارٌ محطم"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[2]
@@ -13269,13 +13271,13 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[3]
 #: po/custom/fromJson.txt:5283
 msgid "Steals technology from enemies"
-msgstr ""
+msgstr "يقوم بسرقة التقنيات من الأعداء"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text[3]
 #: po/custom/fromJson.txt:5286
 msgid "Steals technology from structures and takes control of weapons"
-msgstr ""
+msgstr "يقوم بسرقة التقنيات من المباني ويسيطر على أسلحة الأعداء"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -13306,7 +13308,7 @@ msgstr "برجٌ فولاذي برشاشين"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5302
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "يمنع «نيكسوس» من الاستيلاء على أنظمتنا"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13327,7 +13329,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTW1.text[3]
 #: po/custom/fromJson.txt:5314
 msgid "Strike mission continues until enemy destroyed or they retreat"
-msgstr ""
+msgstr "سيستمر الهجوم إلى أن ينسحب العدو أو يتم تدميره"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text[0]
@@ -13550,7 +13552,7 @@ msgstr "تقنية التشويش باستخدام وصلة المشبك الع�
 #. ... + 7 refs
 #: po/custom/fromJson.txt:5484
 msgid "Synaptic Link technology breakthrough"
-msgstr ""
+msgstr "يعتبر إنجازاً عظيماً في مجال وصلة المشبك العصبي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Comp-SynapticLink.name
@@ -14657,7 +14659,7 @@ msgstr "زاوي"
 #. data/base/stats/features.json: $.BarbWarehouse1.name
 #: po/custom/fromJson.txt:6190
 msgid "Warehouse"
-msgstr ""
+msgstr "مستودع"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG6.text[0]
@@ -14736,31 +14738,31 @@ msgstr ""
 #. data/base/stats/features.json: $.WreckedDroidHub.name
 #: po/custom/fromJson.txt:6239
 msgid "Wreck"
-msgstr ""
+msgstr "حطام"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedBridge.name
 #: po/custom/fromJson.txt:6242
 msgid "Wrecked Bridge"
-msgstr ""
+msgstr "جسرٌ مهدّم"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedTankerV.name
 #: po/custom/fromJson.txt:6245
 msgid "Wrecked Tanker"
-msgstr ""
+msgstr "صهريجٌ مدمَّر"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedVertCampVan.name
 #: po/custom/fromJson.txt:6248
 msgid "Wrecked Van"
-msgstr ""
+msgstr "شاحنةٌ مدمَّرة"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedSuzukiJeep.name
 #: po/custom/fromJson.txt:6251
 msgid "Wrecked Vehicle"
-msgstr ""
+msgstr "مركبةٌ مدمَّرة"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.Body13SUP.name
