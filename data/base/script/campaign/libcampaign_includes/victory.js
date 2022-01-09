@@ -258,10 +258,16 @@ function __camPlayerDead()
 		//Make the mission fail if no units are alive on map while having no factories.
 		var droidCount = 0;
 		enumDroid(CAM_HUMAN_PLAYER).forEach(function(obj) {
-			droidCount += 1;
 			if (obj.droidType === DROID_SUPERTRANSPORTER)
 			{
+				//Don't count the transporter itself. This is for the case where
+				//they have no units and no factories and have the transporter
+				//sitting at base unable to launch.
 				droidCount += enumCargo(obj).length;
+			}
+			else
+			{
+				droidCount += 1;
 			}
 		});
 		dead = droidCount <= 0 && !haveFactories;
