@@ -488,6 +488,11 @@ function __camShowVictoryConditions(forceMessage)
 		}
 		if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
 		{
+			if ((camDiscoverCampaign() === BETA_CAMPAIGN_NUMBER) && (difficulty === HARD || difficulty === INSANE))
+			{
+				console(_("Hard / Insane difficulty hint:"));
+				console(_("Fortify a strong base across the map to protect yourself from the Collective"));
+			}
 			return; // do not need this on these missions.
 		}
 	}
