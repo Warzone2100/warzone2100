@@ -90,6 +90,27 @@ const CAM_TICKS_PER_FRAME = 100;
 const AI_POWER = 999999;
 const INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 
+//level load codes here for reference. Might be useful for later code.
+const ALPHA_CAMPAIGN_NUMBER = 1;
+const BETA_CAMPAIGN_NUMBER = 2;
+const GAMMA_CAMPAIGN_NUMBER = 3;
+const CAM_GAMMA_OUT = "GAMMA_OUT"; //Fake next level for the final Gamma mission.
+const UNKNOWN_CAMPAIGN_NUMBER = 1000;
+const ALPHA_LEVELS = [
+    "CAM_1A", "CAM_1B", "SUB_1_1S", "SUB_1_1", "SUB_1_2S", "SUB_1_2", "SUB_1_3S",
+    "SUB_1_3", "CAM_1C", "CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
+    "CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "SUB_1_D", "CAM_1END"
+];
+const BETA_LEVELS = [
+    "CAM_2A", "SUB_2_1S", "SUB_2_1", "CAM_2B", "SUB_2_2S", "SUB_2_2", "CAM_2C",
+    "SUB_2_5S", "SUB_2_5", "SUB_2DS", "SUB_2D", "SUB_2_6S", "SUB_2_6", "SUB_2_7S",
+    "SUB_2_7", "SUB_2_8S", "SUB_2_8", "CAM_2END"
+];
+const GAMMA_LEVELS = [
+    "CAM_3A", "SUB_3_1S", "SUB_3_1", "CAM_3B", "SUB_3_2S", "SUB_3_2", "CAM3A-B",
+    "CAM3C", "CAM3A-D1", "CAM3A-D2", "CAM_3_4S", "CAM_3_4"
+];
+
 //artifact
 var __camArtifacts;
 var __camNumArtifacts;
