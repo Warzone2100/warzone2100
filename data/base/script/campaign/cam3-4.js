@@ -187,7 +187,7 @@ function eventStartLevel()
 	var tpos = getObject("transportEntryExit");
 	var lz = getObject("landingZone");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, CAM_GAMMA_OUT, {
 		area: "RTLZ",
 		reinforcements: camMinutesToSeconds(1),
 		annihilate: true

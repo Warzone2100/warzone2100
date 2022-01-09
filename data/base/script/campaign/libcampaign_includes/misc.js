@@ -455,6 +455,34 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 	return pos;
 }
 
+// Figures out what campaign we are in without reliance on the source at all.
+function camDiscoverCampaign()
+{
+	for (var i = 0, len = ALPHA_LEVELS.length; i < len; ++i)
+	{
+		if (__camNextLevel === ALPHA_LEVELS[i] || __camNextLevel === BETA_LEVELS[0])
+		{
+			return ALPHA_CAMPAIGN_NUMBER;
+		}
+	}
+	for (var i = 0, len = BETA_LEVELS.length; i < len; ++i)
+	{
+		if (__camNextLevel === BETA_LEVELS[i] || __camNextLevel === GAMMA_LEVELS[0])
+		{
+			return BETA_CAMPAIGN_NUMBER;
+		}
+	}
+	for (var i = 0, len = GAMMA_LEVELS.length; i < len; ++i)
+	{
+		if (__camNextLevel === GAMMA_LEVELS[i] || __camNextLevel === CAM_GAMMA_OUT)
+		{
+			return GAMMA_CAMPAIGN_NUMBER;
+		}
+	}
+
+	return UNKNOWN_CAMPAIGN_NUMBER;
+}
+
 //////////// privates
 
 function __camGlobalContext()

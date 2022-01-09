@@ -180,7 +180,7 @@ function __camGameWon()
 	if (camDef(__camNextLevel))
 	{
 		camTrace(__camNextLevel);
-		if (__camNextLevel === "GAMMA_OUT")
+		if (__camNextLevel === CAM_GAMMA_OUT)
 		{
 			gameOverMessage(true, false, true);
 			return;
