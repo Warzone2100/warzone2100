@@ -401,6 +401,8 @@ function initCobraVars()
 	startAttacking = false;
 	lastShuffleTime = 0;
 	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
+	randomResearchLabStart = (random(100) < 20);
+	cyborgOnlyGame = (getStructureLimit(structures.factory, me) === 0 && getStructureLimit(structures.cyborgFactory) > 0);
 }
 
 //Attempt to workaround a bug with pickStructLocation() failing to find valid locations
