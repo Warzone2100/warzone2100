@@ -285,6 +285,8 @@ var enemyUsedElectronicWarfare; //Detect if an enemy used a Nexus Link against u
 var startAttacking;
 var lastShuffleTime;
 var forceDerrickBuildDefense;
+var randomResearchLabStart;
+var cyborgOnlyGame;
 
 // -- Weapon research list (initializeResearchLists).
 var techlist;
