@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-09 15:04\n"
+"PO-Revision-Date: 2022-01-10 03:05\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -348,7 +348,7 @@ msgstr "أجرِ أبحاثاً على قطعة «وحدة الطاقة» الأ
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr "ثم استعمل إحدى الشاحنات لتطوير مولد الطاقة عن طريق بناء وحدةٍ إضافيةٍ فيه."
+msgstr "ثم استعمل إحدى الشاحنات لتطوير مولّد الطاقة عن طريق بناء وحدةٍ إضافيةٍ فيه."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
@@ -5614,7 +5614,7 @@ msgstr "إذا لم تلعب بجدية فستخسر المباراة. اللع�
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr "بناء الوحدات - إنجاز الأبحاث - بناء المباني الرئيسية (مصانع، مولدات طاقة، مراكز أبحاث، آبار نفط، وحداتٌ إضافيةٌ للمباني...) - إلحاق الضرر بالأعداء"
+msgstr "بناء الوحدات - إنجاز الأبحاث - بناء المباني الرئيسية (مصانع، مولّدات طاقة، مراكز أبحاث، آبار نفط، وحداتٌ إضافيةٌ للمباني...) - إلحاق الضرر بالأعداء"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1463
@@ -7474,7 +7474,7 @@ msgstr "هدّام الملاجئ"
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[2]
 #: po/custom/fromJson.txt:1310
 msgid "Burns oil more efficiently"
-msgstr "ستحرق المولدات النفط بكفاءةٍ أكبر"
+msgstr "ستحرق المولّدات النفط بكفاءةٍ أكبر"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
@@ -8741,7 +8741,7 @@ msgstr "غاما"
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text[1]
 #: po/custom/fromJson.txt:2169
 msgid "Gas turbine boosts power output"
-msgstr "تتكون هذه المولدات من حجرة احتراق وعنفاتٍ موصولةٍ بضاغطٍ للغازات، وهي تزيد من كمية الطاقة المولدة"
+msgstr "تتكون هذه المولّدات من حجرة احتراق وعنفاتٍ موصولةٍ بضاغطٍ للغازات، وهي تزيد من كمية الطاقة المولدة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine08.name
@@ -8770,13 +8770,13 @@ msgstr "محرك عنفة الغاز"
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01b.name
 #: po/custom/fromJson.txt:2186
 msgid "Gas Turbine Generator Mk2"
-msgstr "مولد عنفة الغاز (النموذج 2)"
+msgstr "مولّد عنفة الغاز (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01c.name
 #: po/custom/fromJson.txt:2189
 msgid "Gas Turbine Generator Mk3"
-msgstr "مولد عنفة الغاز (النموذج 3)"
+msgstr "مولّد عنفة الغاز (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Power-Upgrade01.name
@@ -11920,21 +11920,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade08.name
 #: po/custom/fromJson.txt:4411
 msgid "Plascrete Mk2"
-msgstr ""
+msgstr "البلا-إسمنت (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade09.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade09.name
 #: po/custom/fromJson.txt:4415
 msgid "Plascrete Mk3"
-msgstr ""
+msgstr "البلا-إسمنت (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade07.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade07.name
 #: po/custom/fromJson.txt:4419
 msgid "Plascrete"
-msgstr ""
+msgstr "البلا-إسمنت"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-PlasmaCannon.name
@@ -11999,19 +11999,19 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade11.name
 #: po/custom/fromJson.txt:4454
 msgid "Plasteel Mk2"
-msgstr ""
+msgstr "البلا-فولاذ (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade12.name
 #: po/custom/fromJson.txt:4457
 msgid "Plasteel Mk3"
-msgstr ""
+msgstr "البلا-فولاذ (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade10.name
 #: po/custom/fromJson.txt:4460
 msgid "Plasteel"
-msgstr ""
+msgstr "البلا-فولاذ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[3]
@@ -12075,7 +12075,7 @@ msgstr "زيادة إنتاج الطاقة 30%"
 #. data/base/messages/messages.json: $.MSG2.text[0]
 #: po/custom/fromJson.txt:4497
 msgid "Power Research Completed"
-msgstr ""
+msgstr "تم الانتهاء من البحث المتعلق بالطاقة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text[1]
@@ -12134,7 +12134,7 @@ msgstr "جلٌّ من أوكسيد البروبيلين، معالجٌ لكي ي
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.tip
 #: po/custom/fromJson.txt:4544
 msgid "Prototypical AI focusing on rockets/missiles"
-msgstr ""
+msgstr "ذكاءٌ اصطناعي نموذجي، ويركز على الصواريخ الموجهة وغير الموجهة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PulseLas.name
@@ -12385,7 +12385,7 @@ msgstr "مدفعٌ يستخدم الطاقة الكهرومغناطيسية لإ
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4693
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "يزيد الملقم السريع من سرعة إعادة التعبئة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -12438,7 +12438,7 @@ msgstr "مواد بناءٍ مسلحة للمباني الرئيسية"
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4741
 msgid "Repair Center Turret"
-msgstr ""
+msgstr "رأس مركز صيانة"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12507,7 +12507,7 @@ msgstr "رأس صيانة أفعى عجلات"
 #. data/mp/stats/repair.json: $.LightRepair1.name
 #: po/custom/fromJson.txt:4786
 msgid "Repair Turret"
-msgstr ""
+msgstr "رأس صيانة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[3]
@@ -12637,19 +12637,19 @@ msgstr "مع التطورات الروبوتية الأخيرة صار هنال�
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade05.name
 #: po/custom/fromJson.txt:4888
 msgid "Robotic Factory Production Mk2"
-msgstr ""
+msgstr "إنتاجٌ روبوتي داخل المصانع (النسخة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade06.name
 #: po/custom/fromJson.txt:4891
 msgid "Robotic Factory Production Mk3"
-msgstr ""
+msgstr "إنتاجٌ روبوتي داخل المصانع (النسخة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 #: po/custom/fromJson.txt:4894
 msgid "Robotic Factory Production"
-msgstr ""
+msgstr "إنتاجٌ روبوتي داخل المصانع"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[1]
@@ -12664,7 +12664,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 #: po/custom/fromJson.txt:4903
 msgid "Robotic Manufacturing"
-msgstr ""
+msgstr "تصنيعٌ روبوتي"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade05.name
@@ -12773,7 +12773,7 @@ msgstr "زيادة ضرر الصاروخ 25%"
 #. data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
 #: po/custom/fromJson.txt:4971
 msgid "Rocket detects and locks on to engine emissions"
-msgstr ""
+msgstr "سيبحث الصاروخ عن الانبعاثات المنبعثة من المحرك وسيقوم بالتثبيت عليها"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaRKJeep.name
@@ -12793,19 +12793,19 @@ msgstr "محدد أهدافٍ ليزري للصاروخ"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4982
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للصواريخ (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4985
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للصواريخ (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4988
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "ملقمٌ سريعٌ للصواريخ"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -12908,7 +12908,7 @@ msgstr "مصنعٌ لقطاع الطرق"
 #. data/mp/stats/structure.json: $.A0BaBaFlameTower.name
 #: po/custom/fromJson.txt:5056
 msgid "Scavenger Flame Tower"
-msgstr ""
+msgstr "برجٌ بقاذف لهب لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaGunTower.name
@@ -12967,7 +12967,7 @@ msgstr "قاطع طريق"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5088
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "رأس وصلة «نيكسوس» لقطاع الطرق"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -13060,7 +13060,7 @@ msgstr "رأس التشويش"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5142
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "ذكاءٌ اصطناعي للخرائط البحرية، ويستند إلى NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -13191,7 +13191,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_M_AC2.text[1]
 #: po/custom/fromJson.txt:5231
 msgid "Shells detect and home to thermal heat signatures"
-msgstr ""
+msgstr "ستبحث القذائف عن البصمات الحرارية لوحدات الأعداء وستتوجه نحوها"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[2]
@@ -13264,7 +13264,7 @@ msgstr "صواريخ مصغرة أكثر ثباتاً"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
 #: po/custom/fromJson.txt:5279
 msgid "Stabilized Rockets"
-msgstr ""
+msgstr "صواريخ أكثر ثباتاً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[3]
@@ -13343,7 +13343,7 @@ msgstr "يمكنك الآن استخدام رأس قيادةٍ أقوى في ت�
 #. data/base/messages/messages.json: $.MSG1.text[0]
 #: po/custom/fromJson.txt:5322
 msgid "Structure Research Completed"
-msgstr ""
+msgstr "تم الانتهاء من البحث المتعلق بالمباني"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
@@ -13409,21 +13409,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade05.name
 #: po/custom/fromJson.txt:5389
 msgid "Supercrete Mk2"
-msgstr ""
+msgstr "الإسمنت الفائق (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade06.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade06.name
 #: po/custom/fromJson.txt:5393
 msgid "Supercrete Mk3"
-msgstr ""
+msgstr "الإسمنت الفائق (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade04.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade04.name
 #: po/custom/fromJson.txt:5397
 msgid "Supercrete"
-msgstr ""
+msgstr "الإسمنت الفائق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYMET7.text[1]
@@ -13432,28 +13432,28 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_MET7.text[1]
 #: po/custom/fromJson.txt:5403
 msgid "Superdense composite alloys and energy-absorbing fibres"
-msgstr ""
+msgstr "خلائط معدنيةً فائقة الكثافة وأليافٌ ماصةٌ للطاقة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Metals08.name
 #. data/mp/stats/research.json: $.R-Vehicle-Metals08.name
 #: po/custom/fromJson.txt:5407
 msgid "Superdense Composite Alloys Mk2"
-msgstr ""
+msgstr "خلائط مركبة فائقة الكثافة (التركيبة 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Metals09.name
 #. data/mp/stats/research.json: $.R-Vehicle-Metals09.name
 #: po/custom/fromJson.txt:5411
 msgid "Superdense Composite Alloys Mk3"
-msgstr ""
+msgstr "خلائط مركبة فائقة الكثافة (التركيبة 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Metals07.name
 #. data/mp/stats/research.json: $.R-Vehicle-Metals07.name
 #: po/custom/fromJson.txt:5415
 msgid "Superdense Composite Alloys"
-msgstr ""
+msgstr "خلائط مركبة فائقة الكثافة"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage05.name
@@ -13745,14 +13745,14 @@ msgstr "درعٌ حراري"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Acc02.name
 #: po/custom/fromJson.txt:5599
 msgid "Thermal Imaging Mortar Shells"
-msgstr ""
+msgstr "قذائف هاون بكاميرا حرارية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Accuracy03.name
 #. data/mp/stats/research.json: $.R-Wpn-RocketSlow-Accuracy02.name
 #: po/custom/fromJson.txt:5603
 msgid "Thermal Imaging Rockets"
-msgstr ""
+msgstr "صواريخٌ بكاميرا حرارية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb04.name
@@ -13806,7 +13806,7 @@ msgstr "إسمنتٌ مدعمٌ بالتيتانيوم"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
 #: po/custom/fromJson.txt:5636
 msgid "Tower wars AI, based on NullBot"
-msgstr ""
+msgstr "ذكاءٌ اصطناعي يركز على بناء الأبراج الدفاعية، ويستند إلى NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Tracks.name
@@ -13915,14 +13915,14 @@ msgstr "طلقات رشاشٍ برأسٍ من التنغستن"
 #. data/mp/stats/research.json: $.R-Vehicle-Engine05.name
 #: po/custom/fromJson.txt:5703
 msgid "Turbo-Charged Engine Mk2"
-msgstr ""
+msgstr "محركٌ بشاحنٍ توربيني (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine06.name
 #. data/mp/stats/research.json: $.R-Vehicle-Engine06.name
 #: po/custom/fromJson.txt:5707
 msgid "Turbo-Charged Engine Mk3"
-msgstr ""
+msgstr "محركٌ بشاحنٍ توربيني (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.name
@@ -14041,13 +14041,13 @@ msgstr "رشاشان سريعا الإطلاق ومتعددا الفوهات"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5785
 msgid "Two-faced"
-msgstr ""
+msgstr "ذو وجهين"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
 #: po/custom/fromJson.txt:5788
 msgid "Unit Research Completed"
-msgstr ""
+msgstr "تم الانتهاء من البحث المتعلق بالوحدات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text[1]
@@ -14055,7 +14055,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT4.text[1]
 #: po/custom/fromJson.txt:5793
 msgid "Upgraded battlefield computer system"
-msgstr ""
+msgstr "نظامٌ حاسوبيٌ مطوَّر، مخصصٌ لقيادة الوحدات في أرض المعركة"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.UplinkSensor.name
@@ -14076,7 +14076,7 @@ msgstr "استعمل إحدى الشاحنات لتزويد المصانع بو�
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[3]
 #: po/custom/fromJson.txt:5805
 msgid "Use a truck to add the module to a power generator"
-msgstr "استعمل إحدى الشاحنات لتزويد مولدات الطاقة بوحدةٍ إضافية"
+msgstr "استعمل إحدى الشاحنات لتزويد مولّد الطاقة بوحدةٍ إضافية"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[3]
@@ -14108,39 +14108,39 @@ msgstr "يستعمل تقنياتٍ كهرومغناطيسية متطورة لت
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MSL.text[1]
 #: po/custom/fromJson.txt:5822
 msgid "Uses advanced missile gun technology"
-msgstr ""
+msgstr "يستخدم أحدث تقنيات الصواريخ الموجهة"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_RKT.text[1]
 #: po/custom/fromJson.txt:5825
 msgid "Uses advanced rocket gun technology"
-msgstr ""
+msgstr "يستعمل أحدث تقنيات الصواريخ غير الموجهة"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[1]
 #: po/custom/fromJson.txt:5829
 msgid "Vapor Turbine boosts power output"
-msgstr ""
+msgstr "تقوم العنفات التي تعمل بالبخار بزيادة الطاقة المنتجة"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade03.name
 #: po/custom/fromJson.txt:5832
 msgid "Vapor Turbine Generator Mk2"
-msgstr ""
+msgstr "مولّد عنفة البخار (النموذج 2)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade03a.name
 #: po/custom/fromJson.txt:5835
 msgid "Vapor Turbine Generator Mk3"
-msgstr ""
+msgstr "مولّد عنفة البخار (النموذج 3)"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Power-Upgrade02.name
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade02.name
 #: po/custom/fromJson.txt:5839
 msgid "Vapor Turbine Generator"
-msgstr ""
+msgstr "مولّد عنفة البخار"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_V_EN1.text[2]
@@ -14156,19 +14156,19 @@ msgstr "زيادة سرعة المركبة 5%"
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
 #: po/custom/fromJson.txt:5872
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr ""
+msgstr "درعٌ حراريٌ فائق الكثافة للمركبات (التصميم 2)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat09.name
 #: po/custom/fromJson.txt:5875
 msgid "Vehicle Superdense Thermal Armor Mk3"
-msgstr ""
+msgstr "درعٌ حراريٌ فائق الكثافة للمركبات (التصميم 3)"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat07.name
 #: po/custom/fromJson.txt:5878
 msgid "Vehicle Superdense Thermal Armor"
-msgstr ""
+msgstr "درعٌ حراريٌ فائق الكثافة للمركبات"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Guass.name
@@ -14200,7 +14200,7 @@ msgstr "الثأر"
 #. data/mp/messages/resmessagesall.json: $.RES_V_P_V1.text[1]
 #: po/custom/fromJson.txt:5901
 msgid "Vertical Take Off and Landing Propulsion"
-msgstr ""
+msgstr "دفع الإقلاع والهبوط العمودي"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B10.text[3]
@@ -14209,7 +14209,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[3]
 #: po/custom/fromJson.txt:5907
 msgid "Very expensive to produce"
-msgstr ""
+msgstr "تكلفته إنتاجه باهظةٌ جداً"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[3]
@@ -14228,7 +14228,7 @@ msgstr "جسمٌ بطيء الحركة إلى حدٍ كبير"
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[1]
 #: po/custom/fromJson.txt:5917
 msgid "Very slow recharge time"
-msgstr ""
+msgstr "ستتطلب إعادة شحنه الكثير من الوقت"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-SamHvy.name
