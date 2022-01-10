@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-10 03:05\n"
+"PO-Revision-Date: 2022-01-10 15:19\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1207,7 +1207,7 @@ msgstr "مركز صيانة"
 #: data/base/messages/strings/names.txt:307
 #: data/mp/messages/strings/names.txt:389
 msgid "Tornado AA Flak Site"
-msgstr ""
+msgstr "نقطة مدفع الدوامة المضاد للطائرات"
 
 #: data/base/messages/strings/names.txt:204
 #: data/base/messages/strings/names.txt:205
@@ -1271,7 +1271,7 @@ msgstr "مربض رشاشة الفلفل"
 #: data/mp/messages/strings/names.txt:275
 #: data/mp/messages/strings/names.txt:517
 msgid "Tornado Flak Turret"
-msgstr ""
+msgstr "رأس مدفع الدوامة المضاد للطائرات"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:289
@@ -1986,7 +1986,7 @@ msgstr "هنالك بناءٌ دفاعيٌ جديدٌ متاحٌ لك"
 #: data/mp/messages/strings/resstrings.txt:37
 #: po/custom/fromJson.txt:132
 msgid "AA Site with Tornado Flak Turret"
-msgstr ""
+msgstr "نقطة دفاعٍ جوي مزودةٌ بمدفع الدوامة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[2]
@@ -2053,7 +2053,7 @@ msgstr "القوة الدفاعية: متوسطة"
 #: data/mp/messages/strings/resstrings.txt:42
 #: po/custom/fromJson.txt:124
 msgid "AA Site with Cyclone Flak Turret"
-msgstr ""
+msgstr "نقطة دفاعٍ جوي مزودةٌ بمدفع الإعصار المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[1]
@@ -2062,7 +2062,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:47
 #: po/custom/fromJson.txt:128
 msgid "AA Site with Hurricane Gun Turret"
-msgstr ""
+msgstr "نقطة دفاعٍ جوي مزودةٌ برشاش العاصفة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[2]
@@ -2080,7 +2080,7 @@ msgstr "يستهدف الطائرة العمودية تلقائياً"
 #: data/mp/messages/strings/resstrings.txt:52
 #: po/custom/fromJson.txt:136
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr ""
+msgstr "نقطة دفاعٍ جوي مزودةٌ برشاش الزوبعة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_IDFR.text[1]
@@ -5213,7 +5213,7 @@ msgstr "برج استشعار"
 
 #: data/mp/messages/strings/names.txt:226
 msgid "Tornado AA Site"
-msgstr ""
+msgstr "نقطة مدفع الدوامة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG1Mk1.name
@@ -5232,7 +5232,7 @@ msgstr "رشّاش"
 #: data/mp/messages/strings/names.txt:516
 #: po/custom/fromJson.txt:1747
 msgid "Cyclone Flak Turret"
-msgstr ""
+msgstr "رأس مدفع الإعصار المضاد للطائرات"
 
 #: data/mp/messages/strings/names.txt:276
 msgid "VTOL Flak Cannon"
@@ -5959,27 +5959,27 @@ msgstr "تلقيم المدافع المضادة للطائرات بالسلاس
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "مربض مزودٌ بمدفع الإعصار المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفع الإعصار المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "مدفع الإعصار المضاد للطائرات الحنش جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "مدفع الإعصار المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6065,21 +6065,21 @@ msgstr ""
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "مربض مزودٌ بمدفع الدوامة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة بمدفع الدوامة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "مدفع الدوامة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -8145,13 +8145,13 @@ msgstr "يمكنك الآن فتح السايبورغ من مركز أبحاثك
 #. data/base/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:1740
 msgid "Cyclone AA Flak Site"
-msgstr ""
+msgstr "نقطة مدفع الإعصار المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:1743
 msgid "Cyclone AA Python Half-tracks"
-msgstr ""
+msgstr "مدفع الإعصار المضاد للطائرات الحنش جنازير نصفية"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade05.name
@@ -9047,13 +9047,13 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[0]
 #: po/custom/fromJson.txt:2358
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr ""
+msgstr "هنالك نقطةٌ محصّنةٌ جديدة وعليها مدفع الإعصار المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2361
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "هنالك نقطةٌ محصّنةٌ جديدة وعليها مدفع الدوامة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9071,7 +9071,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[0]
 #: po/custom/fromJson.txt:2370
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr ""
+msgstr "هنالك نقطةٌ محصّنةٌ جديدة وعليها رشاش الزوبعة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb-Damage01.name
@@ -9897,7 +9897,7 @@ msgstr "الهاوتزر"
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
 #: po/custom/fromJson.txt:2935
 msgid "Hurricane AA Site"
-msgstr ""
+msgstr "نقطة رشاش العاصفة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun03.name
@@ -9906,7 +9906,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
 #: po/custom/fromJson.txt:2941
 msgid "Hurricane AA Turret"
-msgstr ""
+msgstr "رأس رشاش العاصفة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
@@ -14702,7 +14702,7 @@ msgstr "عجلات"
 #. data/mp/stats/structure.json: $.AASite-QuadRotMg.name
 #: po/custom/fromJson.txt:6218
 msgid "Whirlwind AA Site"
-msgstr ""
+msgstr "نقطة رشاش الزوبعة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun04.name
@@ -14711,14 +14711,14 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.QuadRotAAGun.name
 #: po/custom/fromJson.txt:6224
 msgid "Whirlwind AA Turret"
-msgstr ""
+msgstr "رأس رشاش الزوبعة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-QuadRotAA.name
 #. data/mp/stats/structure.json: $.WallTower-QuadRotAAGun.name
 #: po/custom/fromJson.txt:6228
 msgid "Whirlwind Hardpoint"
-msgstr ""
+msgstr "نقطةٌ محصّنة وعليها رشاش الزوبعة المضاد للطائرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-WSTower.name
@@ -14732,7 +14732,7 @@ msgstr "برج استشعارٍ واسع النطاق"
 #. data/mp/stats/sensor.json: $.Sensor-WideSpec.name
 #: po/custom/fromJson.txt:6236
 msgid "Wide Spectrum Sensor"
-msgstr ""
+msgstr "مستشعرٌ واسع النطاق"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedDroidHub.name
@@ -14845,7 +14845,8 @@ msgstr "مخضرم"
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
+msgstr "جميع الحقوق محفوظة © 1999-2004 Eidos Interactive.\n"
+"جميع الحقوق محفوظة © 2005-2020 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -14870,7 +14871,7 @@ msgstr ""
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14882,7 +14883,7 @@ msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
 msgid "Strategy Game"
-msgstr ""
+msgstr "لعبة استراتيجية"
 
 #: src/chat.cpp:63
 msgid "Global"
@@ -14918,7 +14919,7 @@ msgstr ""
 
 #: src/cheat.cpp:235
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "تم تفعيل وضع تصحيح الأخطاء!"
 
 #: src/cheat.cpp:242
 msgid "Debug mode now disabled!"
@@ -14932,19 +14933,19 @@ msgstr ""
 
 #: src/clparse.cpp:358
 msgid "Set configuration directory"
-msgstr ""
+msgstr "تعيين مجلد التكوين"
 
 #: src/clparse.cpp:358
 msgid "configuration directory"
-msgstr ""
+msgstr "مجلد التكوين"
 
 #: src/clparse.cpp:359
 msgid "Add data directory"
-msgstr ""
+msgstr "إضافة مجلد بيانات"
 
 #: src/clparse.cpp:359
 msgid "data directory"
-msgstr ""
+msgstr "مجلد البيانات"
 
 #: src/clparse.cpp:360
 msgid "Show debug for given level"
@@ -14994,11 +14995,11 @@ msgstr ""
 
 #: src/clparse.cpp:367
 msgid "Enable a campaign only mod"
-msgstr ""
+msgstr "قم بتفعيل تعديلٍ لا يؤثر سوى على طور القصة"
 
 #: src/clparse.cpp:368
 msgid "Enable a multiplay only mod"
-msgstr ""
+msgstr "قم بتفعيل تعديل لا يؤثر سوى على طور اللعب الجماعي"
 
 #: src/clparse.cpp:369
 msgid "Disable asserts"
@@ -15010,7 +15011,7 @@ msgstr ""
 
 #: src/clparse.cpp:371
 msgid "Load a saved skirmish game"
-msgstr ""
+msgstr "تحميل مباراةٍ محفوظة"
 
 #: src/clparse.cpp:371
 #: src/clparse.cpp:372
@@ -15019,7 +15020,7 @@ msgstr ""
 
 #: src/clparse.cpp:372
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "تحميل لعبةٍ محفوظة من طور القصة"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
@@ -15035,7 +15036,7 @@ msgstr ""
 
 #: src/clparse.cpp:375
 msgid "Show version information and exit"
-msgstr ""
+msgstr "إظهار معلومات الإصدار ثم الخروج"
 
 #: src/clparse.cpp:376
 msgid "Set the resolution to use"
@@ -15080,11 +15081,11 @@ msgstr "انتقل مباشرةً إلى شاشة الاستضافة"
 
 #: src/clparse.cpp:384
 msgid "Enable texture compression"
-msgstr ""
+msgstr "تمكين ضغط الخامات"
 
 #: src/clparse.cpp:385
 msgid "Disable texture compression"
-msgstr ""
+msgstr "تعطيل ضغط الخامات"
 
 #: src/clparse.cpp:386
 msgid "Set gfx backend"
@@ -15116,7 +15117,7 @@ msgstr ""
 
 #: src/clparse.cpp:405
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "ابدأ مباراةً باستخدام ملف إعداداتٍ محدد"
 
 #: src/clparse.cpp:405
 msgid "test"
@@ -15228,17 +15229,17 @@ msgstr "تخزين القالب"
 #: src/design.cpp:870
 #: src/design.cpp:899
 msgid "Kinetic Armour"
-msgstr ""
+msgstr "الدرع الحركي"
 
 #: src/design.cpp:876
 #: src/design.cpp:909
 msgid "Thermal Armour"
-msgstr ""
+msgstr "الدرع الحراري"
 
 #: src/design.cpp:882
 #: src/design.cpp:918
 msgid "Engine Output"
-msgstr ""
+msgstr "مردود المحرك"
 
 #: src/design.cpp:888
 #: src/design.cpp:927
@@ -15257,12 +15258,12 @@ msgstr ""
 #: src/design.cpp:1869
 #: src/design.cpp:1899
 msgid "Weight"
-msgstr ""
+msgstr "الوزن"
 
 #: src/design.cpp:956
 #: src/design.cpp:970
 msgid "Total Power Required"
-msgstr ""
+msgstr "الطاقة الكلية المطلوبة"
 
 #: src/design.cpp:980
 #: src/design.cpp:995
@@ -15272,7 +15273,7 @@ msgstr "نقاط صحة الجسم الإجمالية"
 #: src/design.cpp:1094
 #: src/design.cpp:1113
 msgid "Power Usage"
-msgstr ""
+msgstr "استهلاك الطاقة"
 
 #: src/design.cpp:1364
 msgid "Hydra "
@@ -15281,7 +15282,7 @@ msgstr ""
 #: src/design.cpp:1519
 #: src/design.cpp:1534
 msgid "Sensor Range"
-msgstr ""
+msgstr "مدى المستشعر"
 
 #: src/design.cpp:1554
 #: src/design.cpp:1565
@@ -15293,22 +15294,22 @@ msgstr ""
 #: src/design.cpp:1615
 #: src/design.cpp:1630
 msgid "Build Points"
-msgstr ""
+msgstr "نقاط البناء"
 
 #: src/design.cpp:1650
 #: src/design.cpp:1677
 msgid "Range"
-msgstr ""
+msgstr "المدى"
 
 #: src/design.cpp:1660
 #: src/design.cpp:1685
 msgid "Damage"
-msgstr ""
+msgstr "الضرر"
 
 #: src/design.cpp:1666
 #: src/design.cpp:1693
 msgid "Rate-of-Fire"
-msgstr ""
+msgstr "معدل إطلاق النار"
 
 #: src/design.cpp:1814
 #: src/design.cpp:1829
@@ -15332,28 +15333,28 @@ msgstr "السرعة فوق الماء"
 
 #: src/design.cpp:1963
 msgid "Weapons"
-msgstr ""
+msgstr "الأسلحة"
 
 #: src/design.cpp:1982
 msgid "Systems"
-msgstr ""
+msgstr "الأنظمة"
 
 #: src/design.cpp:3940
 msgid "Do Not Store Design"
-msgstr ""
+msgstr "لا تخزّن التصميم"
 
 #: src/design.cpp:3945
 msgid "Store Design"
-msgstr ""
+msgstr "خزّن التصميم"
 
 #: src/display.cpp:1585
 msgid "Cannot Build. Oil Resource Burning."
-msgstr ""
+msgstr "لا يمكن البناء، بسبب كون المورد النفطي مشتعلاً."
 
 #: src/display.cpp:1604
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - نقاط الصحة %d\\%d - الخبرة %.1f، %s، الأعداء المقتولون %d"
 
 #: src/display.cpp:1628
 #, c-format
@@ -15382,7 +15383,7 @@ msgstr ""
 #: src/display3d.cpp:758
 #: src/multiint.cpp:4382
 msgid "Waiting for other players"
-msgstr ""
+msgstr "بانتظار بقية اللاعبين"
 
 #: src/display3d.cpp:763
 msgid "Out of sync"
@@ -15397,11 +15398,11 @@ msgstr "ستصبح قيمة تقريب الخريطة %.0f"
 #: src/droid.cpp:245
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "لقد خسرت %s!"
 
 #: src/droid.cpp:1157
 msgid "Structure Restored"
-msgstr ""
+msgstr "تمت استعادة المبنى"
 
 #: src/droid.cpp:1971
 #, c-format
@@ -15460,7 +15461,7 @@ msgstr[5] ""
 
 #: src/droid.cpp:3081
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "فشلت عملية نقل الوحدات، بسبب تجاوز الحد المفروض على عددها"
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
@@ -15476,7 +15477,7 @@ msgstr "نيكسوس"
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
 msgid "Collective"
-msgstr ""
+msgstr "الرابطة"
 
 #: src/frontend.cpp:178
 msgid "Campaign videos are missing"
@@ -15484,7 +15485,7 @@ msgstr "إن فيديوهات القصة مفقودة"
 
 #: src/frontend.cpp:179
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "اطلع على صفحة الأسئلة الشائعة لكي تعرف طريقة تثبيت الفيديوهات"
 
 #: src/frontend.cpp:199
 msgid "Single Player"
@@ -15511,7 +15512,7 @@ msgstr "عرض فيديو المقدمة"
 
 #: src/frontend.cpp:212
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr ""
+msgstr "لم نعثر على الفيديوهات. قم بتحميلها من http://wz2100.net"
 
 #: src/frontend.cpp:219
 #: src/frontend.cpp:223
@@ -15520,7 +15521,7 @@ msgstr "تحميل ملف الحفظ الأخير"
 
 #: src/frontend.cpp:224
 msgid "No last save available"
-msgstr ""
+msgstr "لم نعثر على ملف حفظٍ آخير"
 
 #: src/frontend.cpp:226
 msgid "Quit Game"
@@ -15536,7 +15537,7 @@ msgstr "الموقع الرسمي: http://wz2100.net/"
 
 #: src/frontend.cpp:230
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "قم بزيارة المنتديات واطلع على آخر أخبار Warzone 2100! اضغط على هذا الرابط."
 
 #: src/frontend.cpp:231
 msgid "Donate: http://donations.wz2100.net/"
@@ -15544,7 +15545,7 @@ msgstr "تبرع عبر الرابط: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:233
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "ادعم المشروع بتكاليف الخوادم التي نملكها. اضغط على هذا الرابط."
 
 #: src/frontend.cpp:234
 msgid "Chat with players on Discord or IRC"
@@ -15593,7 +15594,7 @@ msgstr ""
 
 #: src/frontend.cpp:366
 msgid "Challenges"
-msgstr ""
+msgstr "التحديات"
 
 #: src/frontend.cpp:367
 msgid "Load Campaign Game"
@@ -15601,11 +15602,11 @@ msgstr "تحميل لعبةٍ من طور القصة"
 
 #: src/frontend.cpp:368
 msgid "Load Skirmish Game"
-msgstr ""
+msgstr "تحميل مباراة"
 
 #: src/frontend.cpp:369
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "مشاهدة إعادةٍ لمباراة"
 
 #: src/frontend.cpp:371
 msgid "SINGLE PLAYER"
@@ -15628,11 +15629,11 @@ msgstr "تحميل لعبةٍ من طور القصة"
 #: src/frontend.cpp:538
 #: src/ingameop.cpp:1028
 msgid "Load Skirmish Saved Game"
-msgstr ""
+msgstr "تحميل مباراةٍ محفوظة"
 
 #: src/frontend.cpp:544
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "تحميل إعادةٍ لمباراة"
 
 #: src/frontend.cpp:605
 msgid "MULTI PLAYER"
@@ -15693,7 +15694,7 @@ msgstr "إدارة الموسيقا"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "إعدادات اللعب الجماعي"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -15718,7 +15719,7 @@ msgstr ""
 
 #: src/frontend.cpp:776
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "راجع مستندات اللعبة لكي تحصل على المزيد من المعلومات حول كيفية تحديد المجلد بشكلٍ يدوي."
 
 #: src/frontend.cpp:777
 msgid "Failed to open configuration directory"
@@ -15835,7 +15836,7 @@ msgstr "اهتزاز الشاشة"
 
 #: src/frontend.cpp:905
 msgid "GRAPHICS OPTIONS"
-msgstr ""
+msgstr "إعدادات الرسوميات"
 
 #: src/frontend.cpp:1013
 msgid "Disabled"
@@ -15960,16 +15961,17 @@ msgstr "محرك الرسوميات"
 
 #: src/frontend.cpp:1625
 msgid "VIDEO OPTIONS"
-msgstr ""
+msgstr "إعدادات الفيديو"
 
 #: src/frontend.cpp:1668
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "لم نتمكن من تغيير \"وضع النافذة\""
 
 #: src/frontend.cpp:1668
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "لم تتمكن Warzone من تغيير وضع النافذة\n"
+"ربما يكون السبب هو أن نظامك أو برنامج التعريف لا يدعمان الأوضاع الأخرى."
 
 #: src/frontend.cpp:1694
 msgid "Unable to change Vertical Sync"
@@ -15979,7 +15981,7 @@ msgstr "لم نتمكن من تغيير المزامنة الرأسية"
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "لم تتمكن Warzone من تغيير وضع المزامنة الرأسية.\n"
-"ربما يكون السبب هو أن نظامك أو برنامج التعريف لا يدعم الأوضاع الأخرى."
+"ربما يكون السبب هو أن نظامك أو برنامج التعريف لا يدعمان الأوضاع الأخرى."
 
 #: src/frontend.cpp:1860
 msgid "Middle Mouse"
@@ -16016,7 +16018,7 @@ msgstr "مؤشراتٌ ملونة"
 
 #: src/frontend.cpp:1917
 msgid "MOUSE OPTIONS"
-msgstr ""
+msgstr "إعدادات الفأرة"
 
 #: src/frontend.cpp:1982
 #: src/multiint.cpp:266
@@ -16065,7 +16067,7 @@ msgstr "ساعدنا على تحسين ترجمات اللعبة: %s"
 
 #: src/frontend.cpp:2066
 msgid "Click to open webpage."
-msgstr ""
+msgstr "اضغط لفتح صفحة الويب."
 
 #: src/frontend.cpp:2069
 #: src/frontend.cpp:2088
@@ -16117,11 +16119,11 @@ msgstr ""
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "خانات المتفرجين"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "إعدادات اللعب الجماعي"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5127
@@ -16188,22 +16190,22 @@ msgstr ""
 #: src/hci.cpp:1734
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
+msgstr "يحاول اللاعب %u أن يغش (باستخدام قائمة تصحيح الأخطاء) لكي يكسب مبنىً جديداً: %s."
 
 #: src/hci.cpp:1743
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr ""
+msgstr "يحاول اللاعب %u أن يغش (باستخدام قائمة تصحيح الأخطاء) لكي يكسب ميزةً جديدة: %s."
 
 #: src/hci.cpp:1762
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr ""
+msgstr "يحاول اللاعب %u أن يغش (باستخدام قائمة تصحيح الأخطاء) لكي يكسب وحدةً جديدة: %s."
 
 #: src/hci.cpp:1770
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr ""
+msgstr "يحاول اللاعب %u أن يغش (باستخدام قائمة تصحيح الأخطاء) لكي يكسب وحدةً جديدة."
 
 #: src/hci.cpp:2164
 #: src/hci/build.cpp:583
@@ -17497,11 +17499,11 @@ msgstr ""
 
 #: src/keybind.cpp:765
 msgid "Infinite power disabled"
-msgstr ""
+msgstr "تم تعطيل الطاقة اللانهائية"
 
 #: src/keybind.cpp:765
 msgid "Infinite power enabled"
-msgstr ""
+msgstr "تم تفعيل الطاقة اللانهائية"
 
 #: src/keybind.cpp:775
 msgid "Lighting values for all tiles recalculated"
@@ -17697,17 +17699,17 @@ msgstr "عذراً، لا يمكن تغيير سرعة اللعبة أثناء �
 #: src/keybind.cpp:2340
 #: src/keybind.cpp:2394
 msgid "Game Speed Reset"
-msgstr ""
+msgstr "إعادة تعيين سرعة اللعبة"
 
 #: src/keybind.cpp:2344
 #, c-format
 msgid "Game Speed Increased to %s"
-msgstr ""
+msgstr "تمت زيادة سرعة اللعبة إلى %s"
 
 #: src/keybind.cpp:2348
 #, c-format
 msgid "Game Speed Reduced to %s"
-msgstr ""
+msgstr "تم خفض سرعة اللعبة إلى %s"
 
 #: src/keybind.cpp:2406
 msgid "Radar showing friend-foe colors"
@@ -18748,47 +18750,47 @@ msgstr ""
 
 #: src/multiplay.cpp:2228
 msgid "Green"
-msgstr ""
+msgstr "أخضر"
 
 #: src/multiplay.cpp:2229
 msgid "Orange"
-msgstr ""
+msgstr "برتقالي"
 
 #: src/multiplay.cpp:2230
 msgid "Grey"
-msgstr ""
+msgstr "رمادي"
 
 #: src/multiplay.cpp:2232
 msgid "Red"
-msgstr ""
+msgstr "أحمر"
 
 #: src/multiplay.cpp:2233
 msgid "Blue"
-msgstr ""
+msgstr "أزرق"
 
 #: src/multiplay.cpp:2234
 msgid "Pink"
-msgstr ""
+msgstr "وردي"
 
 #: src/multiplay.cpp:2235
 msgid "Cyan"
-msgstr ""
+msgstr "سماوي"
 
 #: src/multiplay.cpp:2236
 msgid "Yellow"
-msgstr ""
+msgstr "أصفر"
 
 #: src/multiplay.cpp:2237
 msgid "Purple"
-msgstr ""
+msgstr "أرجواني"
 
 #: src/multiplay.cpp:2238
 msgid "White"
-msgstr ""
+msgstr "أبيض"
 
 #: src/multiplay.cpp:2239
 msgid "Bright blue"
-msgstr ""
+msgstr "أزرقٌ ناصع"
 
 #: src/multiplay.cpp:2240
 msgid "Neon green"
@@ -18804,7 +18806,7 @@ msgstr ""
 
 #: src/multiplay.cpp:2243
 msgid "Brown"
-msgstr ""
+msgstr "بني"
 
 #: src/multiplay.cpp:2407
 msgid "Spectator Mode"
@@ -18812,7 +18814,7 @@ msgstr ""
 
 #: src/multiplay.cpp:2408
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "أنت واحدٌ من المتفرجين. نتمنى أن تستمتع بمشاهدة اللعبة!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18841,7 +18843,7 @@ msgstr "تجاهل"
 
 #: src/notifications.cpp:719
 msgid "Do not show again"
-msgstr ""
+msgstr "لا تظهر هذا الإشعار مجدداً"
 
 #: src/order.cpp:791
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -18859,7 +18861,7 @@ msgstr ""
 #: src/research.cpp:1017
 #, c-format
 msgid "Research completed: %s"
-msgstr ""
+msgstr "تم إنجاز البحث: %s"
 
 #: src/research.cpp:1517
 msgid "Research Award"
@@ -18903,7 +18905,7 @@ msgstr "المباني المشيّدة: %u"
 #: src/scores.cpp:109
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "العدد الإجمالي للمباني: %u"
 
 #: src/scores.cpp:111
 #, c-format
@@ -18985,7 +18987,7 @@ msgstr "لقد غششت!"
 #: src/selection.cpp:368
 #: src/selection.cpp:450
 msgid "Unable to locate any repair units!"
-msgstr ""
+msgstr "لم نتمكن من العثور على أي وحدات صيانة!"
 
 #: src/selection.cpp:371
 msgid "Unable to locate any Trucks!"
@@ -18993,7 +18995,7 @@ msgstr "لم نتمكن من العثور على أي شاحنات!"
 
 #: src/selection.cpp:374
 msgid "Unable to locate any Sensor Units!"
-msgstr ""
+msgstr "لم نتمكن من العثور على أي وحدات استشعار!"
 
 #: src/selection.cpp:377
 msgid "Unable to locate any Commanders!"
@@ -19001,7 +19003,7 @@ msgstr "لم نتمكن من العثور على أي قائد!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "لم نتمكن من العثور على المبنى المطلوب!"
 
 #: src/selection.cpp:662
 #, c-format
@@ -19016,7 +19018,7 @@ msgstr[5] ""
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "عرض إحصائيات اللاعب"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
@@ -19028,7 +19030,7 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:805
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "الطاقة الحالية \\ الطاقة المولدة في كل ثانية"
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
@@ -19036,7 +19038,7 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "الدرع الحراري"
 
 #: src/spectatorwidgets.cpp:808
 #: src/spectatorwidgets.cpp:810
@@ -19193,41 +19195,41 @@ msgstr "فلترة قائمة المباريات"
 
 #: src/titleui/gamefind.cpp:164
 msgid "Refreshing..."
-msgstr ""
+msgstr "جارٍ التحديث..."
 
 #: src/titleui/gamefind.cpp:172
 msgid "Searching"
-msgstr ""
+msgstr "جارٍ البحث..."
 
 #: src/titleui/gamefind.cpp:226
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "جارٍ الاتصال بخادم قاعة الانتظار..."
 
 #: src/titleui/gamefind.cpp:267
 msgid "Map Name"
-msgstr ""
+msgstr "اسم الخريطة"
 
 #: src/titleui/gamefind.cpp:273
 msgid "Status"
-msgstr ""
+msgstr "الحالة"
 
 #: src/titleui/gamefind.cpp:329
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "لا يمكن الاتصال بخادم قاعة الانتظار!"
 
 #: src/titleui/gamefind.cpp:422
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "التعديلات: %s"
 
 #: src/titleui/gamefind.cpp:428
 msgid "Mods: None!"
-msgstr ""
+msgstr "التعديلات: لا يوجد!"
 
 #: src/titleui/gamefind.cpp:434
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "الإصدار: %s"
 
 #: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
@@ -19235,7 +19237,7 @@ msgstr "انضم كمتفرج"
 
 #: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "إن الإصدار الذي تملكه من Warzone غير متوافقٍ مع هذه المباراة."
 
 #: src/titleui/gamefind.cpp:511
 msgid "[Password required]"
@@ -19256,12 +19258,12 @@ msgstr "[بدون طائراتٍ عمودية]"
 #: src/titleui/gamefind.cpp:527
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "يستضيفها %s"
 
 #: src/titleui/gamefind.cpp:531
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "يستضيفها %s - %s"
 
 #: src/titleui/gamefind.cpp:663
 msgid "Can't find any games for your version."
@@ -19285,11 +19287,11 @@ msgstr "لقد تم طردك!"
 
 #: src/titleui/gamefind.cpp:694
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "إصدارٌ خاطئٌ من اللعبة!"
 
 #: src/titleui/gamefind.cpp:697
 msgid "You have an incompatible mod."
-msgstr ""
+msgstr "أنت تستعمل تعديلاً غير متوافق."
 
 #: src/titleui/gamefind.cpp:701
 msgid "Host couldn't send file?"
@@ -19309,20 +19311,20 @@ msgstr "خطأٌ في الاتصال"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "متابعة"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
-msgstr ""
+msgstr "أدخل كلمة المرور:"
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr ""
+msgstr "موافق"
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:181
 msgid "Cancel"
-msgstr ""
+msgstr "إلغاء"
 
 #: src/titleui/protocol.cpp:79
 msgid "CONNECTION"
@@ -19347,11 +19349,11 @@ msgstr ""
 
 #: src/transporter.cpp:1007
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "لا يوجد ما يكفي من المساحة داخل السفينة!"
 
 #: src/transporter.cpp:1187
 msgid "Reinforcements landing"
-msgstr ""
+msgstr "ستحط التعزيزات"
 
 #: src/updatemanager.cpp:273
 msgid "Update Available"
@@ -19376,11 +19378,11 @@ msgstr "تحذيرٌ بخصوص التوافقية"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "لقد اكتشفنا مشكلةً يمكن أن تؤثر على عمل \\ أداء Warzone 2100."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "اضغط من فضلك على الزر أدناه للحصول على المزيد من المعلومات حول كيفية إصلاح المشكلة."
 
 #: src/updatemanager.cpp:425
 #, c-format
@@ -19389,7 +19391,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "المزيد من المعلومات"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
