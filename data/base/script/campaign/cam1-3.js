@@ -163,6 +163,7 @@ function camEnemyBaseDetected_ScavBaseGroupSouth()
 		pos: camMakePos("SouthConvoyLoc"),
 		regroup: false, //true when movement gets better. Very big group this one is.
 	});
+	queue("camCallOnce", camSecondsToMilliseconds(1), "enableReinforcements");
 }
 
 function camEnemyBaseEliminated_ScavBaseGroup()
