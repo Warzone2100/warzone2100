@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-09 03:05\n"
+"PO-Revision-Date: 2022-01-11 17:34\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -13381,7 +13381,7 @@ msgstr "Süper Ağır Topçu Cyborg"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5349
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Süper HVC Sayborgu"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -17385,7 +17385,7 @@ msgstr ""
 #: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "%d oyuncusu: %d güç"
 
 #: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
