@@ -757,16 +757,6 @@ static void scanDataDirs()
 	registerSearchPath("/Library/Application Support/Warzone 2100/", 1);
 #endif
 
-	// Commandline supplied datadir
-	if (strlen(datadir) != 0)
-	{
-		registerSearchPath(datadir, 1);
-	}
-
-	// User's home dir
-	registerSearchPath(PHYSFS_getWriteDir(), 2);
-	rebuildSearchPath(mod_multiplay, true);
-
 #if !defined(WZ_OS_MAC)
 	// Check PREFIX-based paths
 	std::string tmpstr;
@@ -852,6 +842,16 @@ static void scanDataDirs()
 		}
 	}
 #endif
+
+	// Commandline supplied datadir
+	if (strlen(datadir) != 0)
+	{
+		registerSearchPath(datadir, 1);
+	}
+
+	// User's home dir
+	registerSearchPath(PHYSFS_getWriteDir(), 2);
+	rebuildSearchPath(mod_multiplay, true);
 
 	/** Debugging and sanity checks **/
 
