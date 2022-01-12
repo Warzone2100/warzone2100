@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-12 09:06\n"
+"PO-Revision-Date: 2022-01-12 21:03\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -30,7 +30,7 @@ msgstr "Bir üs kur, ardından yıkılmak üzere olan bir yapı aramaya başla."
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Bu yapı projenin başarısı için hayati önemde bir teknoloji barındırıyor."
+msgstr "Bu yapı Proje'nin başarısı için hayati önemde bir teknoloji barındırıyor."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -160,11 +160,11 @@ msgstr "ALFA ÜSSÜ GÖREVİ: Bir Yönlendirme Üssü Kur"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr "Platoya ileri üs kur ve New Paradigm kuvvetlerini savuştur."
+msgstr "Platoya ileri üs kur ve Yeni Paradigma kuvvetlerini savuştur."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr "Yeşil sinyal kaybolana kadar savunma yapıları inşa et."
+msgstr "Yeşil hedef sinyali kaybolana kadar savunma yapıları inşa et."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -1372,7 +1372,7 @@ msgstr "Flaşışığı Mevzisi"
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:2627
 msgid "Heavy Machinegun Guard Tower"
-msgstr "Ağır Makineli Koruma Kulesi"
+msgstr "Ağır Makineli Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower04.name
@@ -1381,11 +1381,11 @@ msgstr "Ağır Makineli Koruma Kulesi"
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:2092
 msgid "Flamer Guard Tower"
-msgstr "Alev Atıcı Koruma Kulesi"
+msgstr "Alev Atıcı Savunma Kulesi"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
-msgstr "Mızrak Roket Koruma Kulesi"
+msgstr "Mızrak Roket Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.WallTower05.name
@@ -2257,7 +2257,7 @@ msgstr "Hücum Silahlı güçlendirilmiş kule"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Zırhlandırılmış Ağır Makineli koruma kulesi"
+msgstr "Zırhlandırılmış Ağır Makineli savunma kulesi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
@@ -2289,12 +2289,12 @@ msgstr "Menzilindeki düşmanları otomatik olarak hedef alır"
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:122
 msgid "Armored guard tower with Flamer"
-msgstr "Zırhlandırılmış Alev Atıcı koruma kulesi"
+msgstr "Zırhlandırılmış Alev Atıcı savunma kulesi"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Zırhlandırılmış Mızrak Roket TS koruma kulesi"
+msgstr "Zırhlandırılmış Mızrak Roket TS savunma kulesi"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
@@ -5783,7 +5783,7 @@ msgstr "Oyun bağlantı noktasını (%s), (%s) üzerinde düzgün olarak yapıla
 
 #: lib/netplay/netplay.cpp:2130
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "İstemci oyuncu dizin takasını onaylayamadı"
 
 #: lib/netplay/netplay.cpp:2141
 msgid "Message delivery failure - try again"
@@ -5871,7 +5871,7 @@ msgstr "JSON'u panoya kopyala"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "JSON'u StdOut'a çıkar"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -5964,27 +5964,27 @@ msgstr "AA Zincir Yükleme Sistemi"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "AA Girdap Uçaksavar Topu Mevzisi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "AA Girdap Uçaksavar Topu Bağlama Noktası"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "AA Girdap Uçaksavar Topu Piton Yarım Paletler"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "AA Girdap Uçaksavar Topu"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6070,21 +6070,21 @@ msgstr "AA Termal Hedefleme Algılayıcısı"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "AA Tornado Uçaksavar Mevzisi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "AA Tornado Uçaksavar Topu Bağlama Noktası"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "AA Tornado Uçaksavar Topu"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6553,7 +6553,7 @@ msgstr "Mızrak Tanksavar roketi ile silahlandırılmış"
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Mızrak Ts roketli Sayborg ile Zırhlandırılmış"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -6653,25 +6653,25 @@ msgstr "EMP Havan Kuyusu"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
 #: po/custom/fromJson.txt:679
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Zırhlandırılmış EMP Topu koruma kulesi"
+msgstr "Zırhlandırılmış EMP Topu savunma kulesi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:682
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Zırhlandırılmış Mızrak TS roket koruma kulesi"
+msgstr "Zırhlandırılmış Mızrak TS roket savunma kulesi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:685
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Zırhlı Mini Roket Koruma kulesi"
+msgstr "Zırhlı Mini Roket savunma kulesi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:688
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Zırhlandırılmış Mini Roket koruma kulesi"
+msgstr "Zırhlandırılmış Mini Roket savunma kulesi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
@@ -6684,13 +6684,13 @@ msgstr "Zırhlandırılmış İğne Topu mevzisi"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPYT.text[1]
 #: po/custom/fromJson.txt:695
 msgid "Armored guard tower with Nexus Link"
-msgstr "Zırhlandırılmış Nexus Bağlantı koruma kulesi"
+msgstr "Zırhlandırılmış Nexus Bağlantı savunma kulesi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
 #: po/custom/fromJson.txt:698
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Zırhlandırılmış Darbeli Lazer koruma kulesi"
+msgstr "Zırhlandırılmış Darbeli Lazer savunma kulesi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_ATMTOW.text[1]
@@ -6753,14 +6753,14 @@ msgstr "Mızrak TS füzeli Zırhlı bağlama noktası"
 #. data/mp/messages/resmessages1.json: $.RES_WT2_LC.text[1]
 #: po/custom/fromJson.txt:746
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Hafif Topçu Zırhlandırılmış Bağlama Noktası"
+msgstr "Hafif Topçu Zırhlandırılmış bağlama noktası"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #: po/custom/fromJson.txt:750
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Orta Topçu Zırhlandırılmış Bağlama Noktası"
+msgstr "Orta Topçu Zırhlandırılmış bağlama noktası"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
@@ -6873,7 +6873,7 @@ msgstr "Hücum Topu Mevzisi"
 #. data/mp/stats/structure.json: $.Tower-VulcanCan.name
 #: po/custom/fromJson.txt:846
 msgid "Assault Cannon Guard Tower"
-msgstr "Hücum Topu Koruma Kulesi"
+msgstr "Hücum Topu Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Wall-VulcanCan.name
@@ -6916,14 +6916,14 @@ msgstr "Hücum Silahı Mevzisi"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:871
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Hücum Silahlı Savunma Kulesi 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
 #. data/base/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:875
 msgid "Assault Gun Guard Tower"
-msgstr "Hücum Silahlı Koruma Kulesi"
+msgstr "Hücum Silahlı Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Wall-RotMg.name
@@ -7015,7 +7015,7 @@ msgstr "Otomatik Tamir"
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[1]
 #: po/custom/fromJson.txt:934
 msgid "Autoloader increases reload rate"
-msgstr "Oto yükleyici yükleme hızını arttırır"
+msgstr "Oto yükleyici, yeniden yükleme hızını arttırır"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[1]
@@ -7220,7 +7220,7 @@ msgstr "Harika Hedefler: Sığınaklar ve bağlama noktaları"
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1116
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Harika Hedefler: Sığınaklar ve bağlama noktaları"
+msgstr "Harika Hedefler: Sığınaklar ve Bağlama Noktaları"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
@@ -7259,7 +7259,7 @@ msgstr "Harika Hedefler: Piyadeler, üs binaları, tekerlekli araçlar"
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Harika Hedefler: Piyadeler, tekerlekli ve hover araçlar"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7876,7 +7876,7 @@ msgstr "Bilgisayar Araştırması Tamamlandı"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "Bilgisayar sistemleri artık kendini NEXUS virüsünden daha iyi koruyacak"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -8236,7 +8236,7 @@ msgstr "Güçlendirilmiş Uranyum MT Mermileri"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1821
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Araştırma odaklı tasarlandı"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8303,14 +8303,14 @@ msgstr "Elektronik saldırılar ile düşman binalarına saldırır"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1870
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Elit ve Albay seviye birimleri ve Fabrikaları korunur"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1874
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "EMP Topu Bağlama Noktası"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8997,13 +8997,13 @@ msgstr "Sertleştirilmiş makineli mermileri"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2327
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Sertleştirilmiş Alev Atıcı Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2330
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Sertleştirilmiş Ağır Makineli Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9058,7 +9058,7 @@ msgstr "Girdap AA Bağlama Noktası Kullanılabilir"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2361
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Tornado AA Bağlama Noktası Kullanılabilir"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9542,14 +9542,14 @@ msgstr "Ağır Havan - Bombardıman"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2670
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Ağır Plazma Atıcı Mevzisi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2674
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Plasma ateşleyen Ağır Plazma Fırlatıcı"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
@@ -9616,7 +9616,7 @@ msgstr "Cehennem Fırtınası"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2724
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Kahraman ve Özel seviye birimler korunur"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -9788,13 +9788,13 @@ msgstr "Yüksek gerilimli plastik maden alaşımla destekli duvar"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2850
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Yüksek Basınç Gaz Konteyneri"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2853
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Yüksek basınç gaz, yanan jeli daha uzağa fırlatır"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
@@ -9944,7 +9944,7 @@ msgstr "YHZDFSDS Top Mermileri"
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2959
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "YHT Piton Paletleri"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -9997,7 +9997,7 @@ msgstr "Yüksek Hız Topu"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2991
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Çok Yüksek Hızda Zırh Delici Fin Stabilize Sabotaj Mermileri"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10172,7 +10172,7 @@ msgstr "Lazer optiklerindeki gelişmeler sayesinde ışınlardaki hafif dağılm
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3112
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Kundakçı Havan Mevzisi 2"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
@@ -10204,7 +10204,7 @@ msgstr "Kundakçı Obüs"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3129
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Kundakçı Havan Topu Kuyusu 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -10267,7 +10267,7 @@ msgstr "İnşa hızını arttırır"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3213
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Alev Atıcı menzilini arttırır"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10569,7 +10569,7 @@ msgstr "Mızrak Roketli Sayborg"
 #. data/mp/stats/structure.json: $.WallTower06.name
 #: po/custom/fromJson.txt:3458
 msgid "Lancer Hardpoint"
-msgstr "Mızrak Roket bağlama noktası"
+msgstr "Mızrak Roket Bağlama Noktası"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -10862,7 +10862,7 @@ msgstr "Makineli hasarı +%25"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3642
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Makineli Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11082,7 +11082,7 @@ msgstr "Küçük Süper Ağır Gövde"
 #. data/mp/messages/resmessages12.json: $.RES_EMP_MRL.text[1]
 #: po/custom/fromJson.txt:3802
 msgid "Mini-rocket armored strongpoint"
-msgstr "Zırhlı Mini Roket Koruma Kulesi"
+msgstr "Zırhlı Mini Roket güçlü nokta"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
@@ -11160,7 +11160,7 @@ msgstr "Mini Roket Kobra Paletler"
 #. data/base/stats/structure.json: $.GuardTower6.name
 #: po/custom/fromJson.txt:3844
 msgid "Mini-Rocket Guard Tower"
-msgstr "Mini Roket Koruma Kulesi"
+msgstr "Mini Roket Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -11705,7 +11705,7 @@ msgstr "NEXUS Ağır Gövde"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4276
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "NEXUS Bağışıklık Kazandırma Systemi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -12105,7 +12105,7 @@ msgstr "Sayborgları Üretir"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4520
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Profesyonel ve Normal seviye birimler korunur"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -12231,7 +12231,7 @@ msgstr "Piton"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4599
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Dörtlü 80mm Uçaksavar topu"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12390,7 +12390,7 @@ msgstr "Hızlı yükleyicili demir topu iğne oklarını atar"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4693
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "Hızlı Yükleyici, yeniden yükleme hızını arttırır"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -12798,19 +12798,19 @@ msgstr "Roket Lazerli Hedefleme Sistemi"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4982
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Roket Hızlı Yükleme Sistemi Kdm2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4985
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Roket Hızlı Yükleme Sistemi Kdm3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4988
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "Roket Hızlı Yükleme Sistemi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -13313,7 +13313,7 @@ msgstr "İkiz ağır makineli-tüfekli çelik kule"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5302
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "NEXUS alımını durdururur"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13381,7 +13381,7 @@ msgstr "Süper Ağır Topçu Cyborg"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5349
 msgid "Super HVC Cyborg"
-msgstr "Süper HVC Sayborgu"
+msgstr "Süper YHT Sayborgu"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13485,19 +13485,19 @@ msgstr "İnanılmaz Sıcak Flamer Jeli"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5430
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Süper Isıda Plazmit Jeli Kdm2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5433
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Süper Isıda Plazmit Jeli Kdm3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5436
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Süper Isıda Plazmit Jeli"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13770,7 +13770,7 @@ msgstr "Termik Bomba Demeti"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5610
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Termit Yanıcı Sayborg"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -13946,7 +13946,7 @@ msgstr "Çift 7.62mm makineli"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5723
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "İkiz 80mm Uçaksavar topu"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -13991,7 +13991,7 @@ msgstr "Çift Makineli Sığınak"
 #. data/mp/stats/structure.json: $.GuardTower2.name
 #: po/custom/fromJson.txt:5754
 msgid "Twin Machinegun Guard Tower"
-msgstr "Çift Makineli Koruma Kulesi"
+msgstr "Çift Makineli Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG2-Tower.name
@@ -14285,7 +14285,7 @@ msgstr "DİvK Hücum Silahı"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5948
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "DİvK BaBa Silahlandırma Rampası"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14489,7 +14489,7 @@ msgstr "DİvK Mızrak Roket"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6069
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "DİvK Makineli Çöpçü"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14502,7 +14502,7 @@ msgstr "DİvK Makineli"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6076
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "DİvK Mini Roketli Çöpçü"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -15110,7 +15110,7 @@ msgstr "Oyunları test için otomatik çalıştır"
 
 #: src/clparse.cpp:403
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Kısaltılmış kip (yalnızca --autogame, --autohost, --skirmish belirtilirken de desteklenir)"
 
 #: src/clparse.cpp:404
 msgid "Immediately save game and quit"
@@ -15142,7 +15142,7 @@ msgstr "otomatik-barındır"
 
 #: src/clparse.cpp:408
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
-msgstr ""
+msgstr "Barındırma sırasında verilen sunucu url'sinden (\"{HASH}\" içeren) sorgulama derecelendirmeleri"
 
 #: src/clparse.cpp:408
 msgid "autorating"
@@ -15150,7 +15150,7 @@ msgstr "oto-değerlendirme"
 
 #: src/clparse.cpp:410
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Bir konsol penceresi ekleyin veya oluşturun ve konsol çıktısını görüntüleyin (yalnızca Windows)"
 
 #: src/clparse.cpp:412
 msgid "Set game server port"
@@ -15162,23 +15162,23 @@ msgstr "port"
 
 #: src/clparse.cpp:415
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Lobi 'bölü' komutlarını etkinleştir (istemcileri bağlamak için)"
 
 #: src/clparse.cpp:416
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Lobi yönetici kimliği karması ekleyin ('bölü' komutları için)"
 
 #: src/clparse.cpp:416
 msgid "hash string"
-msgstr ""
+msgstr "karma dize"
 
 #: src/clparse.cpp:417
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Lobi yöneticisi ortak anahtarı ekleyin ('bölü' komutları için)"
 
 #: src/clparse.cpp:417
 msgid "b64-pub-key"
-msgstr ""
+msgstr "b64-pub-key"
 
 #: src/clparse.cpp:418
 msgid "Enable command interface"
@@ -15186,7 +15186,7 @@ msgstr "Komut arayüzünü etkinleştir"
 
 #: src/clparse.cpp:418
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:419
 msgid "Minimum required players to auto-start game"
@@ -15359,7 +15359,7 @@ msgstr "İnşa edilemiyor. Petrol Kaynağı Yanıyor."
 #: src/display.cpp:1604
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Sağlık %d/%d - Tecrübe %.1f, %s, Öldürme %d"
 
 #: src/display.cpp:1628
 #, c-format
