@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-11 17:34\n"
+"PO-Revision-Date: 2022-01-12 09:06\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -5614,12 +5614,12 @@ msgstr "Pasif oynamak bozguna yol açacaktır. Şu eylemler değerlendirilebilir
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- birim inşası - araştırmanın tamamlanması - temel yapıların inşası (fabrikalar, enerji santralleri, laboratuvarlar, modüller ve petrol kuleleri) - hasar vermek"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1463
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Muhteşem Çöpçüler"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1460
@@ -12892,7 +12892,7 @@ msgstr "Çöpçü Sığınağı"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5044
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Çöpçü Kesici Fabrikiası"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12933,13 +12933,13 @@ msgstr "Çöpçü Yatay Duvarı"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5067
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "Çöpçü MT kulesi"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
 #: po/custom/fromJson.txt:5070
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "Çöpçü Sabit MT"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
@@ -12952,7 +12952,7 @@ msgstr "Çöpçü Güç Jeneratörü"
 #. data/mp/stats/structure.json: $.ScavRepairCentre.name
 #: po/custom/fromJson.txt:5077
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Çöpçü Onarım Merkezi"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
