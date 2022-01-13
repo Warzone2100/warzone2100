@@ -123,6 +123,7 @@ public:
 		unsigned int lobbyPort;
 		uint32_t lobbyGameId = 0;
 
+		uint32_t hostPlayer = 0;
 		bool isHost;	// whether the current client is the game host
 		bool privateGame;			// whether game is password-protected
 		uint8_t maxPlayers = 0;
