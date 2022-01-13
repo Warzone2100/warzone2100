@@ -586,7 +586,7 @@ void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpec
 	if (ingame.localJoiningInProgress)
 	{
 		// only clear name outside of games.
-		NetPlay.players[i].name[0] = '\0';
+		clearPlayerName(i);
 	}
 	if (initPosition)
 	{
@@ -638,7 +638,7 @@ void NET_InitPlayers(bool initTeams, bool initSpectator)
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NET_InitPlayer(i, true, initTeams, initSpectator);
-		NetPlay.players[i].name[0] = '\0';
+		clearPlayerName(i);
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());
@@ -793,7 +793,7 @@ static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowes
 	NETlogEntry(buf, SYNC_FLAG, index.value());
 	NET_InitPlayer(index.value(), false);  // re-init everything
 	NetPlay.players[index.value()].allocated = true;
-	sstrcpy(NetPlay.players[index.value()].name, name);
+	setPlayerName(index.value(), name);
 	if (!NetPlay.players[index.value()].isSpectator)
 	{
 		++NetPlay.playercount;
@@ -962,14 +962,14 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 {
 	if (!NetPlay.bComms)
 	{
-		sstrcpy(NetPlay.players[0].name, newName);
+		setPlayerName(0, newName);
 		return true;
 	}
 	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", index, newName);
 	NETlogEntry("Player wants a name change.", SYNC_FLAG, index);
 	ASSERT_OR_RETURN(false, index < MAX_CONNECTED_PLAYERS, "invalid index: %" PRIu32 "", index);
 
-	sstrcpy(NetPlay.players[index].name, newName);
+	setPlayerName(index, newName);
 	if (NetPlay.isHost)
 	{
 		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
@@ -1931,7 +1931,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 			ASSERT(playerIndex != PLAYER_FEATURE, "Not expecting to see PLAYER_FEATURE here!");
 			NetPlay.players[playerIndex].difficulty =  AIDifficulty::DISABLED;
 			NetPlay.players[playerIndex].ai = AI_OPEN;
-			NetPlay.players[playerIndex].name[0] = '\0';
+			clearPlayerName(playerIndex);
 		}
 	}
 
@@ -2412,7 +2412,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			}
 
 			oldName = NetPlay.players[player].name;
-			sstrcpy(NetPlay.players[player].name, newName.toUtf8().c_str());
+			setPlayerName(player, newName.toUtf8().c_str());
 
 			if (NetPlay.players[player].allocated && strncmp(oldName.toUtf8().c_str(), NetPlay.players[player].name, sizeof(NetPlay.players[player].name)) != 0)
 			{
@@ -4569,7 +4569,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool a
 			}
 
 			NetPlay.players[index].allocated = true;
-			sstrcpy(NetPlay.players[index].name, playername);
+			setPlayerName(index, playername);
 			NetPlay.players[index].heartbeat = true;
 
 			return true;

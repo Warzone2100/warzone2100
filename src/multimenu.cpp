@@ -837,7 +837,7 @@ private:
 	{
 		auto nameGrid = std::make_shared<GridLayout>();
 		char name[128];
-		ssprintf(name, "%d: %s", NetPlay.players[player].position, getPlayerName(player));
+		ssprintf(name, "%d: %s", NetPlay.players[player].position, getPlayerName(player, true));
 		nameGrid->place({0, 1, false}, {0}, std::make_shared<MultiMenuDroidView>(player));
 		auto nameLabel = makeLabel(name);
 		nameGrid->place({1}, {0}, nameLabel);

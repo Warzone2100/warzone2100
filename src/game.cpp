@@ -2425,7 +2425,7 @@ static void allocatePlayers()
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
 //		NetPlay.players[i].faction; // read and initialized by loadMainFile
-		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
+		setPlayerName(i, saveGameData.sNetPlay.players[i].name);
 		NetPlay.players[i].position = saveGameData.sNetPlay.players[i].position;
 		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && i == 0))
 		{
@@ -4896,7 +4896,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	//version 34
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		sstrcpy(saveGame.sPlayerName[i], getPlayerName(i));
+		sstrcpy(saveGame.sPlayerName[i], (!challengeActive && NetPlay.players[i].ai >= 0 && !NetPlay.players[i].allocated) ? getAIName(i) : getPlayerName(i));
 	}
 
 	//version 38

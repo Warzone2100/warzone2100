@@ -83,6 +83,7 @@
 #include "warzoneconfig.h"
 #include "stdinreader.h"
 #include "spectatorwidgets.h"
+#include "challenge.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -96,7 +97,7 @@ MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
-char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
+char						playerName[MAX_CONNECTED_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
 #define DATACHECK2_INTERVAL_MS 10000
 
@@ -567,22 +568,19 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // return a players name.
-const char *getPlayerName(int player)
+const char *getPlayerName(int player, bool storedName /*= false*/)
 {
 	ASSERT_OR_RETURN(nullptr, player >= 0, "Wrong player index: %d", player);
 
+	const bool aiPlayer = (static_cast<size_t>(player) < NetPlay.players.size()) && (NetPlay.players[player].ai >= 0) && !NetPlay.players[player].allocated;
+
 	// playerName is created through setPlayerName()
-	if (player < MAX_PLAYERS && strcmp(playerName[player], "") != 0)
+	if (storedName && !aiPlayer && player < MAX_CONNECTED_PLAYERS && strcmp(playerName[player], "") != 0)
 	{
 		return (char *)&playerName[player];
 	}
 
-	if (static_cast<size_t>(player) >= NetPlay.players.size() || strlen(NetPlay.players[player].name) == 0)
-	{
-		// for campaign and tutorials
-		return _("Commander");
-	}
-	else if (NetPlay.players[player].ai >= 0 && !NetPlay.players[player].allocated)
+	if (aiPlayer && GetGameMode() == GS_NORMAL && !challengeActive)
 	{
 		ASSERT_OR_RETURN("", player < MAX_PLAYERS, "invalid player: %d", player);
 		static char names[MAX_PLAYERS][StringSize];  // Must be static, since the getPlayerName() return value is used in tool tips... Long live the widget system.
@@ -593,18 +591,25 @@ const char *getPlayerName(int player)
 		return names[player];
 	}
 
+	if (static_cast<size_t>(player) >= NetPlay.players.size() || strlen(NetPlay.players[player].name) == 0)
+	{
+		// for campaign and tutorials
+		return _("Commander");
+	}
+
 	return NetPlay.players[player].name;
 }
 
 bool setPlayerName(int player, const char *sName)
 {
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Player index (%u) out of range", player);
-	sstrcpy(playerName[player], sName);
+	ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS && player >= 0, "Player index (%u) out of range", player);
+	sstrcpy(playerName[player], sName); // Intended for long time storage of player name for Intel menu viewing.
+	sstrcpy(NetPlay.players[player].name, sName);
 	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// to determine human/computer players and responsibilities of each..
+// to determine human/computer players and responsibilities of each.
 bool isHumanPlayer(int player)
 {
 	if (player >= MAX_CONNECTED_PLAYERS || player < 0)
@@ -612,6 +617,24 @@ bool isHumanPlayer(int player)
 		return false;	// obvious, really
 	}
 	return NetPlay.players[player].allocated;
+}
+
+// Clear player name data after game quit.
+void clearPlayerName(unsigned int player)
+{
+	if (player == CLEAR_ALL_NAMES)
+	{
+		for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+		{
+			playerName[i][0] = '\0';
+			NetPlay.players[i].name[0] = '\0';
+		}
+	}
+	else
+	{
+		playerName[player][0] = '\0';
+		NetPlay.players[player].name[0] = '\0';
+	}
 }
 
 // returns player responsible for 'player'

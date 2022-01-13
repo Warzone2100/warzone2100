@@ -485,6 +485,11 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 		widgDelete(psWScreen, INTINGAMEPOPUP);
 	}
 
+	if (!bPutUpLoadSave && !bResetMissionWidgets)
+	{
+		clearPlayerName(CLEAR_ALL_NAMES);
+	}
+
 	if (bPutUpLoadSave || keymapWasUp)
 	{
 		WIDGET *widg = widgGetFromID(psWScreen, INTINGAMEOP);

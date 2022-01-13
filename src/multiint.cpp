@@ -1914,7 +1914,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 				ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 				NetPlay.players[player].isSpectator = false;
 				NetPlay.players[player].ai = aiIdx;
-				sstrcpy(NetPlay.players[player].name, getAIName(player));
+				setPlayerName(player, getAIName(player));
 				NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
 				NETBroadcastPlayerInfo(player);
 				resetReadyStatus(false);
@@ -3288,7 +3288,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		debug(LOG_NET, "NET_PLAYER_SWAP_INDEX received for me. Switching from player %" PRIu32 " to player %" PRIu32 "", oldPlayerIndex,newPlayerIndex);
 
 		NetPlay.players[selectedPlayer].allocated = true;
-		sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
+		setPlayerName(selectedPlayer, sPlayer);
 		NetPlay.players[selectedPlayer].heartbeat = true;
 
 		// Ensure name is set properly (and re-send to host)
@@ -4149,7 +4149,7 @@ public:
 								NetPlay.players[i].ai = NetPlay.players[player].ai;
 								NetPlay.players[i].isSpectator = NetPlay.players[player].isSpectator;
 								NetPlay.players[i].difficulty = NetPlay.players[player].difficulty;
-								sstrcpy(NetPlay.players[i].name, getAIName(player));
+								setPlayerName(i, getAIName(player));
 								NETBroadcastPlayerInfo(i);
 							}
 						}
@@ -5430,11 +5430,11 @@ static void loadMapPlayerSettings(WzConfig& ini)
 		/* Try finding a name field, if not found use AI names for AI players if in SP skirmish */
 		if (ini.contains("name"))
 		{
-			sstrcpy(NetPlay.players[i].name, ini.value("name").toWzString().toUtf8().c_str());
+			setPlayerName(i, ini.value("name").toWzString().toUtf8().c_str());
 		}
 		else if (!NetPlay.bComms && i != selectedPlayer)
 		{
-			sstrcpy(NetPlay.players[i].name, getAIName(i));
+			setPlayerName(i, getAIName(i));
 		}
 
 		NetPlay.players[i].position = MAX_PLAYERS;  // Invalid value, fix later.
@@ -5556,7 +5556,7 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 		{
 			NetPlay.players[playerIndex].difficulty =  AIDifficulty::DISABLED;
 			NetPlay.players[playerIndex].ai = AI_OPEN;
-			NetPlay.players[playerIndex].name[0] = '\0';
+			clearPlayerName(playerIndex);
 			if (playerIndex == PLAYER_FEATURE)
 			{
 				NetPlay.players[playerIndex].ai = AI_CLOSED;
@@ -5568,7 +5568,7 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 			NetPlay.players[playerIndex].ai = 0;
 
 			/* ensure all players have a name in One Player Skirmish games */
-			sstrcpy(NetPlay.players[playerIndex].name, getAIName(playerIndex));
+			setPlayerName(playerIndex, getAIName(playerIndex));
 		}
 	}
 
@@ -5576,7 +5576,7 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 		std::swap(NetPlay.players[selectedPlayer].position, NetPlay.players[selectedPlayerPosition].position);
 	}
 
-	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
+	setPlayerName(selectedPlayer, sPlayer);
 
 	if (selectedPlayer < MAX_PLAYERS)
 	{
@@ -7572,7 +7572,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 			break;
 		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
-		default: sstrcpy(aitext, NetPlay.players[j].name ); break;
+		default: sstrcpy(aitext, getPlayerName(j)); break;
 		}
 		cache.wzMainText.setText(aitext, font_regular);
 		cache.wzMainText.render(x + nameX, y + 22, textColor);
@@ -8459,7 +8459,7 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	size_t replaySpectatorIndex = NetPlay.players.size() - 1;
 	NET_InitPlayer(replaySpectatorIndex, false);  // re-init everything
 	NetPlay.players[replaySpectatorIndex].allocated = true;
-	sstrcpy(NetPlay.players[replaySpectatorIndex].name, "Replay Viewer");
+	setPlayerName(replaySpectatorIndex, "Replay Viewer");
 	NetPlay.players[replaySpectatorIndex].isSpectator = true;
 
 	selectedPlayer = replaySpectatorIndex;

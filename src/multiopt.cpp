@@ -473,7 +473,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	}
 
 	NetPlay.players[selectedPlayer].ready = false;
-	sstrcpy(NetPlay.players[selectedPlayer].name, hostPlayerName);
+	setPlayerName(selectedPlayer, hostPlayerName);
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
