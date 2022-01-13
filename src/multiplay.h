@@ -203,6 +203,8 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define TECH_4					4
 
 #define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
+
+#define CLEAR_ALL_NAMES         -1
 // functions
 
 WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
@@ -212,8 +214,9 @@ WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
-const char *getPlayerName(int player);
+const char *getPlayerName(int player, bool storedName = false);
 bool setPlayerName(int player, const char *sName);
+void clearPlayerName(unsigned int player);
 const char *getPlayerColourName(int player);
 bool isHumanPlayer(int player);				//to tell if the player is a computer or not.
 bool myResponsibility(int player);
