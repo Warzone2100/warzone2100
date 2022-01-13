@@ -768,6 +768,7 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 	currentMultiplayGameInfo.currentPlayerIdx = selectedPlayer;
 	currentMultiplayGameInfo.players = NetPlay.players;
 	currentMultiplayGameInfo.players.resize(multiGame.maxPlayers);
+	currentMultiplayGameInfo.hostPlayer = NetPlay.hostPlayer;
 
 	currentMultiplayGameInfo.limit_no_tanks = (multiInGame.flags & MPFLAGS_NO_TANKS) != 0;
 	currentMultiplayGameInfo.limit_no_cyborgs = (multiInGame.flags & MPFLAGS_NO_CYBORGS) != 0;
@@ -782,7 +783,10 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 
 	if (currentMode == ActivitySink::GameMode::JOINING_IN_PROGRESS || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
-		currentMultiplayGameInfo.hostName = currentMultiplayGameInfo.players[0].name; // host is always player index 0?
+		if (currentMultiplayGameInfo.hostPlayer < currentMultiplayGameInfo.players.size())
+		{
+			currentMultiplayGameInfo.hostName = currentMultiplayGameInfo.players[currentMultiplayGameInfo.hostPlayer].name;
+		}
 	}
 
 	if (currentMode == ActivitySink::GameMode::HOSTING_IN_LOBBY || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)
