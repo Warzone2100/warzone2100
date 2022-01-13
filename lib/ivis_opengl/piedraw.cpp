@@ -673,16 +673,19 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 			edgelistFiltered.resize(edgelist.size());
 			edgelistFiltered.erase(std::set_difference(edgelist.begin(), edgelist.end(), edgelistFlipped.begin(), edgelistFlipped.end(), edgelistFiltered.begin(), edgeLessThan), edgelistFiltered.end());
 
-			drawlist = &edgelistFiltered[0];
 			edge_count = edgelistFiltered.size();
+			drawlist = edgelistFiltered.data();
 			//debug(LOG_WARNING, "we have %i edges", edge_count);
 
 			if (flag & pie_STATIC_SHADOW)
 			{
 				// then store it in the imd
 				shape->nShadowEdges = edge_count;
-				shape->shadowEdgeList = (EDGE *)realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
-				std::copy(drawlist, drawlist + edge_count, shape->shadowEdgeList);
+				if (edge_count > 0)
+				{
+					shape->shadowEdgeList = (EDGE *)realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
+					std::copy(drawlist, drawlist + edge_count, shape->shadowEdgeList);
+				}
 			}
 		}
 
