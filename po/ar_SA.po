@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-10 15:19\n"
+"PO-Revision-Date: 2022-01-14 19:29\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -16417,23 +16417,23 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
-msgstr ""
+msgstr "التصنيع"
 
 #: src/input/keyconfig.cpp:40
 msgid "Research"
-msgstr ""
+msgstr "الأبحاث"
 
 #: src/input/keyconfig.cpp:41
 msgid "Build"
-msgstr ""
+msgstr "البناء"
 
 #: src/input/keyconfig.cpp:42
 msgid "Design"
-msgstr ""
+msgstr "التصميم"
 
 #: src/input/keyconfig.cpp:43
 msgid "Intelligence Display"
-msgstr ""
+msgstr "شاشة الاستخبارات"
 
 #: src/input/keyconfig.cpp:44
 msgid "Commanders"
@@ -16442,16 +16442,16 @@ msgstr "القادة"
 #: src/input/keyconfig.cpp:45
 #: src/keybind.cpp:2560
 msgid "QuickSave"
-msgstr ""
+msgstr "الحفظ السريع"
 
 #: src/input/keyconfig.cpp:46
 msgid "Toggle Radar"
-msgstr ""
+msgstr "إظهار \\ إخفاء الرادار"
 
 #: src/input/keyconfig.cpp:47
 #: src/keybind.cpp:2585
 msgid "QuickLoad"
-msgstr ""
+msgstr "التحميل السريع"
 
 #: src/input/keyconfig.cpp:48
 msgid "Toggle Console Display"
@@ -17741,11 +17741,11 @@ msgstr ""
 
 #: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr "لا يُسمح باستعمال الحفظ السريع أثناء اللعب جماعياً أو في الدروس التعليمية"
+msgstr "لا يُسمح باستعمال الحفظ السريع أثناء اللعب الجماعي أو في الدروس التعليمية"
 
 #: src/keybind.cpp:2564
 msgid "QuickSave failed"
-msgstr ""
+msgstr "فشلت عملية الحفظ السريع"
 
 #: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
@@ -17753,7 +17753,7 @@ msgstr "لا يُسمح باستعمال التحميل السريع أثناء 
 
 #: src/keybind.cpp:2600
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "لم تقم بعد بإنشاء ملف حفظٍ سريع"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
