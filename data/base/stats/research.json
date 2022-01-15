@@ -4764,7 +4764,7 @@
 		"id": "R-Wpn-AAGun-ROF03",
 		"name": "AA Ammunition Hopper Mk3",
 		"requiredResearch": [
-			"R-Wpn-AAGun04",
+			"R-Wpn-MG4",
 			"R-Wpn-AAGun-ROF02"
 		],
 		"researchPoints": 6000,
@@ -4825,6 +4825,7 @@
 	"R-Wpn-AAGun04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun04",
+		"keyTopic": 1,
 		"msgName": "RES_W_AA4",
 		"name": "Whirlwind AA Turret",
 		"redComponents": [
