@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-12 21:03\n"
+"PO-Revision-Date: 2022-01-15 07:32\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -15457,7 +15457,7 @@ msgstr "Normal"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:201
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
@@ -16970,7 +16970,7 @@ msgstr "Tüm Savaş Sayborglarını seç"
 
 #: src/input/keyconfig.cpp:189
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "Tüm Savaş Sayborgları grup olmaksızın seç"
 
 #: src/input/keyconfig.cpp:190
 msgid "Select all Engineers"
