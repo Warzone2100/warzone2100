@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-14 19:29\n"
+"PO-Revision-Date: 2022-01-15 07:32\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -16455,7 +16455,7 @@ msgstr "التحميل السريع"
 
 #: src/input/keyconfig.cpp:48
 msgid "Toggle Console Display"
-msgstr ""
+msgstr "إظهار \\ إخفاء لوحة المعلومات"
 
 #: src/input/keyconfig.cpp:49
 msgid "Toggle Damage Bars On/Off"
@@ -16463,7 +16463,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:50
 msgid "Take Screen Shot"
-msgstr ""
+msgstr "أخذ لقطة شاشة"
 
 #: src/input/keyconfig.cpp:51
 msgid "Toggle Formation Speed Limiting"
@@ -16471,7 +16471,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:52
 msgid "View Location of Previous Message"
-msgstr ""
+msgstr "عرض موقع الرسالة السابقة"
 
 #: src/input/keyconfig.cpp:53
 msgid "Toggle Sensor display"
@@ -16559,47 +16559,47 @@ msgstr "أضف إلى المجموعة 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "إخراج من المجموعة الحالية"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
-msgstr ""
+msgstr "تحديد المجموعة 0"
 
 #: src/input/keyconfig.cpp:81
 msgid "Select Group 1"
-msgstr ""
+msgstr "تحديد المجموعة 1"
 
 #: src/input/keyconfig.cpp:82
 msgid "Select Group 2"
-msgstr ""
+msgstr "تحديد المجموعة 2"
 
 #: src/input/keyconfig.cpp:83
 msgid "Select Group 3"
-msgstr ""
+msgstr "تحديد المجموعة 3"
 
 #: src/input/keyconfig.cpp:84
 msgid "Select Group 4"
-msgstr ""
+msgstr "تحديد المجموعة 4"
 
 #: src/input/keyconfig.cpp:85
 msgid "Select Group 5"
-msgstr ""
+msgstr "تحديد المجموعة 5"
 
 #: src/input/keyconfig.cpp:86
 msgid "Select Group 6"
-msgstr ""
+msgstr "تحديد المجموعة 6"
 
 #: src/input/keyconfig.cpp:87
 msgid "Select Group 7"
-msgstr ""
+msgstr "تحديد المجموعة 7"
 
 #: src/input/keyconfig.cpp:88
 msgid "Select Group 8"
-msgstr ""
+msgstr "تحديد المجموعة 8"
 
 #: src/input/keyconfig.cpp:89
 msgid "Select Group 9"
-msgstr ""
+msgstr "تحديد المجموعة 9"
 
 #: src/input/keyconfig.cpp:91
 msgid "Select Commander 0"
@@ -17333,7 +17333,7 @@ msgstr "متوقفة مؤقتاً"
 
 #: src/intelmap.cpp:1056
 msgid "New Intelligence Report"
-msgstr ""
+msgstr "تقريرٌ استخباراتيٌ جديد"
 
 #: src/intelmap.cpp:1092
 msgid "Research Update"
