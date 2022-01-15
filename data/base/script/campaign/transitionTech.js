@@ -112,9 +112,8 @@ const BETA_RESEARCH_NEW = [
 
 	// 6
 	"R-Struc-Power-Upgrade01", "R-Wpn-Cannon-ROF02", "R-Wpn-MG4", "R-Wpn-RocketSlow-ROF02",
-	"R-Cyborg-Wpn-RotMG", "R-Defense-RotMG", "R-Wpn-AAGun04", "R-Wpn-MG-Damage07",
-	"R-Wpn-Rocket-Damage06", "R-Defense-AASite-QuadRotMg", "R-Defense-Wall-RotMg",
-	"R-Wpn-AAGun-ROF03", "R-Defense-Pillbox-RotMG",
+	"R-Cyborg-Wpn-RotMG", "R-Defense-RotMG", "R-Wpn-MG-Damage07", "R-Wpn-Rocket-Damage06",
+	"R-Defense-Wall-RotMg", "R-Wpn-AAGun-ROF03", "R-Defense-Pillbox-RotMG",
 
 	// 7
 	"R-Wpn-Bomb02", "R-Wpn-Howitzer-Accuracy01", "R-Wpn-Howitzer-Damage02",
@@ -125,7 +124,7 @@ const BETA_RESEARCH_NEW = [
 	"R-Sys-VTOLCBS-Tower01", "R-Wpn-Cannon4AMk1", "R-Wpn-Mortar3", "R-Wpn-Rocket07-Tank-Killer",
 	"R-Defense-Emplacement-HPVcannon", "R-Defense-HvyA-Trocket", "R-Defense-RotMor",
 	"R-Defense-WallTower-HPVcannon", "R-Defense-WallTower-HvyA-Trocket", "R-Sys-VTOLCBS-Turret01",
-	"R-Wpn-Mortar-ROF03", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Mortar-Damage06", "R-Wpn-AAGun04", "R-Defense-AASite-QuadRotMg",
 
 	// 9
 	"R-Wpn-Cannon5", "R-Wpn-RocketSlow-Damage06", "R-Defense-Wall-VulcanCan",

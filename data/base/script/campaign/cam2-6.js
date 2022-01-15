@@ -134,6 +134,7 @@ function eventStartLevel()
 		"COCommandCenter": { tech: "R-Wpn-Mortar3" },
 		"uplink": { tech: "R-Sys-VTOLCBS-Tower01" },
 		"COMediumFactory": { tech: "R-Wpn-Cannon4AMk1" },
+		"COWhirlwindSite": { tech: "R-Wpn-AAGun04" },
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
