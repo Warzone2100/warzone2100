@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-15 07:32\n"
+"PO-Revision-Date: 2022-01-15 19:32\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1687,7 +1687,7 @@ msgstr "المختبر الكيميائي"
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:629
 msgid "Advanced Warfare"
-msgstr ""
+msgstr "مختبر الحروب المتطورة"
 
 #: data/base/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:705
@@ -1872,7 +1872,7 @@ msgstr "يمكنك الآن استخدام سايبورغ قافز جديد"
 #: data/mp/messages/strings/resstrings.txt:22
 #: po/custom/fromJson.txt:626
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr ""
+msgstr "مسلحٌ بصاروخ أرض-جو «المنتقم»"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[0]
@@ -3197,7 +3197,7 @@ msgstr "هنالك رأسٌ جديدٌ مضادٌ للطائرات متاحٌ ل
 #: data/mp/messages/strings/resstrings.txt:292
 #: po/custom/fromJson.txt:5727
 msgid "Twin 80mm flak weapon"
-msgstr ""
+msgstr "مدفعٌ مضادٌ للطائرات عيار 80 مم بفوهتين"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[2]
@@ -3223,7 +3223,7 @@ msgstr "مخصصٌ حصراً للأهداف الجوية"
 #: data/mp/messages/strings/resstrings.txt:297
 #: po/custom/fromJson.txt:4603
 msgid "Quad 80mm flak weapon"
-msgstr ""
+msgstr "مدفعٌ مضادٌ للطائرات عيار 80 مم بأربع فوهات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA3.text[1]
@@ -5236,7 +5236,7 @@ msgstr "رأس مدفع الإعصار المضاد للطائرات"
 
 #: data/mp/messages/strings/names.txt:276
 msgid "VTOL Flak Cannon"
-msgstr ""
+msgstr "مدفع مضادٍ جوي للطائرات العمودية"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveWall.name
@@ -5761,7 +5761,7 @@ msgstr "نحن في الخدمة دائماً!"
 #: lib/framework/i18n.cpp:104
 #: lib/framework/i18n.cpp:169
 msgid "System locale"
-msgstr ""
+msgstr "لغة النظام"
 
 #: lib/netplay/netplay.cpp:1428
 #, c-format
@@ -16603,43 +16603,43 @@ msgstr "تحديد المجموعة 9"
 
 #: src/input/keyconfig.cpp:91
 msgid "Select Commander 0"
-msgstr "اختر القائد 0"
+msgstr "تحديد القائد 0"
 
 #: src/input/keyconfig.cpp:92
 msgid "Select Commander 1"
-msgstr "اختر القائد 1"
+msgstr "تحديد القائد 1"
 
 #: src/input/keyconfig.cpp:93
 msgid "Select Commander 2"
-msgstr "اختر القائد 2"
+msgstr "تحديد القائد 2"
 
 #: src/input/keyconfig.cpp:94
 msgid "Select Commander 3"
-msgstr "اختر القائد 3"
+msgstr "تحديد القائد 3"
 
 #: src/input/keyconfig.cpp:95
 msgid "Select Commander 4"
-msgstr "اختر القائد 4"
+msgstr "تحديد القائد 4"
 
 #: src/input/keyconfig.cpp:96
 msgid "Select Commander 5"
-msgstr "اختر القائد 5"
+msgstr "تحديد القائد 5"
 
 #: src/input/keyconfig.cpp:97
 msgid "Select Commander 6"
-msgstr "اختر القائد 6"
+msgstr "تحديد القائد 6"
 
 #: src/input/keyconfig.cpp:98
 msgid "Select Commander 7"
-msgstr "اختر القائد 7"
+msgstr "تحديد القائد 7"
 
 #: src/input/keyconfig.cpp:99
 msgid "Select Commander 8"
-msgstr "اختر القائد 8"
+msgstr "تحديد القائد 8"
 
 #: src/input/keyconfig.cpp:100
 msgid "Select Commander 9"
-msgstr "اختر القائد 9"
+msgstr "تحديد القائد 9"
 
 #: src/input/keyconfig.cpp:102
 msgid "Multiplayer Options / Alliance dialog"
@@ -16647,7 +16647,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:104
 msgid "Move Camera Up"
-msgstr ""
+msgstr "حرّك الكاميرا للأعلى"
 
 #: src/input/keyconfig.cpp:105
 msgid "Move Camera Down"
@@ -16655,15 +16655,15 @@ msgstr "حرّك الكاميرا للأسفل"
 
 #: src/input/keyconfig.cpp:106
 msgid "Move Camera Right"
-msgstr ""
+msgstr "حرّك الكاميرا نحو اليمين"
 
 #: src/input/keyconfig.cpp:107
 msgid "Move Camera Left"
-msgstr "حرّك الكاميرا لليسار"
+msgstr "حرّك الكاميرا نحو اليسار"
 
 #: src/input/keyconfig.cpp:108
 msgid "Snap View to North"
-msgstr ""
+msgstr "توجيه الكاميرا نحو الشمال"
 
 #: src/input/keyconfig.cpp:109
 msgid "Toggle Tracking Camera"
@@ -16695,7 +16695,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:116
 msgid "Rotate Left"
-msgstr ""
+msgstr "التدوير نحو اليسار"
 
 #: src/input/keyconfig.cpp:117
 msgid "Reset Pitch"
@@ -16703,7 +16703,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:118
 msgid "Rotate Right"
-msgstr ""
+msgstr "التدوير نحو اليمين"
 
 #: src/input/keyconfig.cpp:119
 msgid "Pitch Back"
@@ -16711,19 +16711,19 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:120
 msgid "Orders Menu"
-msgstr ""
+msgstr "قائمة الأوامر"
 
 #: src/input/keyconfig.cpp:121
 msgid "Decrease Game Speed"
-msgstr ""
+msgstr "إنقاص سرعة اللعبة"
 
 #: src/input/keyconfig.cpp:122
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "زيادة سرعة اللعبة"
 
 #: src/input/keyconfig.cpp:123
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "إعادة تعيين سرعة اللعبة"
 
 #: src/input/keyconfig.cpp:124
 msgid "View North"
@@ -16747,15 +16747,15 @@ msgstr "مشاهدة المضخّة النفطية التالية"
 
 #: src/input/keyconfig.cpp:129
 msgid "View next Repair Unit"
-msgstr ""
+msgstr "عرض وحدة الصيانة التالية"
 
 #: src/input/keyconfig.cpp:130
 msgid "View next Truck"
-msgstr ""
+msgstr "عرض الشاحنة التالية"
 
 #: src/input/keyconfig.cpp:131
 msgid "View next Sensor Unit"
-msgstr ""
+msgstr "عرض وحدة الاستشعار التالية"
 
 #: src/input/keyconfig.cpp:132
 msgid "View next Commander"
@@ -16771,24 +16771,24 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:135
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "عرض سجل الدردشة مع الفريق"
 
 #: src/input/keyconfig.cpp:136
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "تدوير المبنى مع عقارب الساعة"
 
 #: src/input/keyconfig.cpp:137
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "تدوير المبنى عكس عقارب الساعة"
 
 #: src/input/keyconfig.cpp:139
 msgid "Center View on HQ"
-msgstr ""
+msgstr "انتقل بالكاميرا إلى المقر"
 
 #: src/input/keyconfig.cpp:140
 #: src/intorder.cpp:174
 msgid "Hold Fire"
-msgstr ""
+msgstr "لا تشتبك مع الأعداء"
 
 #: src/input/keyconfig.cpp:141
 msgid "View Unassigned Units"
@@ -16801,12 +16801,12 @@ msgstr "الرد على النيران المعادية"
 
 #: src/input/keyconfig.cpp:143
 msgid "Fire at Will"
-msgstr ""
+msgstr "أطلق النار متى ما شئت"
 
 #: src/input/keyconfig.cpp:144
 #: src/intorder.cpp:177
 msgid "Guard Position"
-msgstr ""
+msgstr "احرس موقعك الحالي"
 
 #: src/input/keyconfig.cpp:145
 msgid "Return to HQ"
@@ -16815,27 +16815,27 @@ msgstr "عُد إلى المقر"
 #: src/input/keyconfig.cpp:146
 #: src/intorder.cpp:178
 msgid "Hold Position"
-msgstr ""
+msgstr "لا تتحرك من مكانك"
 
 #: src/input/keyconfig.cpp:147
 #: src/intorder.cpp:168
 msgid "Optimum Range"
-msgstr ""
+msgstr "المدى المثالي"
 
 #: src/input/keyconfig.cpp:148
 #: src/intorder.cpp:166
 msgid "Short Range"
-msgstr ""
+msgstr "المدى القصير"
 
 #: src/input/keyconfig.cpp:149
 #: src/intorder.cpp:176
 msgid "Pursue"
-msgstr ""
+msgstr "لاحق الأعداء"
 
 #: src/input/keyconfig.cpp:150
 #: src/intorder.cpp:175
 msgid "Patrol"
-msgstr ""
+msgstr "طُف حول المكان"
 
 #: src/input/keyconfig.cpp:151
 #: src/intorder.cpp:179
@@ -16844,33 +16844,33 @@ msgstr "العودة بغرض الصيانة"
 
 #: src/input/keyconfig.cpp:152
 msgid "Stop Droid"
-msgstr ""
+msgstr "توقف"
 
 #: src/input/keyconfig.cpp:153
 #: src/intorder.cpp:181
 msgid "Go to Transport"
-msgstr ""
+msgstr "اذهب إلى السفينة"
 
 #: src/input/keyconfig.cpp:154
 #: src/intorder.cpp:167
 msgid "Long Range"
-msgstr ""
+msgstr "المدى الطويل"
 
 #: src/input/keyconfig.cpp:155
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "أرسل رسالةً نصيةً عامة"
 
 #: src/input/keyconfig.cpp:156
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "أرسل رسالةً نصيةً للفريق"
 
 #: src/input/keyconfig.cpp:157
 msgid "Drop a beacon"
-msgstr ""
+msgstr "رمي علامةٍ إرشادية"
 
 #: src/input/keyconfig.cpp:158
 msgid "Toggles shadows"
-msgstr ""
+msgstr "تعفيل \\ تعطيل الظلال"
 
 #: src/input/keyconfig.cpp:159
 msgid "Trap cursor"
@@ -16891,46 +16891,46 @@ msgstr "عرض كل ارتباطات المفاتيح"
 #: src/input/keyconfig.cpp:164
 #: src/intorder.cpp:169
 msgid "Retreat at Medium Damage"
-msgstr ""
+msgstr "الانسحاب عند الأذية المتوسطة"
 
 #: src/input/keyconfig.cpp:165
 #: src/intorder.cpp:170
 msgid "Retreat at Heavy Damage"
-msgstr ""
+msgstr "الانسحاب عند الأذية الشديدة"
 
 #: src/input/keyconfig.cpp:166
 #: src/intorder.cpp:171
 msgid "Do or Die!"
-msgstr ""
+msgstr "النجاح أو الموت!"
 
 #: src/input/keyconfig.cpp:168
 msgid "Select all Combat Units"
-msgstr ""
+msgstr "تحديد كل الوحدات القتالية"
 
 #: src/input/keyconfig.cpp:169
 msgid "Select all Cyborgs"
-msgstr "اختر جميع كائنات السايبورغ"
+msgstr "تحديد كل السايبورغ"
 
 #: src/input/keyconfig.cpp:170
 msgid "Select all Heavily Damaged Units"
-msgstr ""
+msgstr "تحديد كل الوحدات المتأذية بشدة"
 
 #: src/input/keyconfig.cpp:172
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "تحديد كل الوحدات القتالية التي تزيد صحتها عن 50% ولا تنتمي لمجموعة."
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks"
-msgstr ""
+msgstr "تحديد كل المركبات بجنازير نصفية"
 
 #: src/input/keyconfig.cpp:174
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "تحديد كل المركبات بجنازير نصفية التي لا تنتمي لمجموعة"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select all Hovers"
-msgstr "حدد كل المركبات الحوامة"
+msgstr "تحديد كل المركبات الحوامة"
 
 #: src/input/keyconfig.cpp:176
 #: src/intorder.cpp:182
@@ -16939,27 +16939,27 @@ msgstr "العودة بغرض إعادة التدوير"
 
 #: src/input/keyconfig.cpp:177
 msgid "Select all Units on Screen"
-msgstr ""
+msgstr "تحديد كل الوحدات الظاهرة على الشاشة"
 
 #: src/input/keyconfig.cpp:178
 msgid "Select all Tracks"
-msgstr ""
+msgstr "تحديد كل المركبات بجنازير"
 
 #: src/input/keyconfig.cpp:179
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "تحديد كل المركبات بجنازير التي لا تنتمي لمجموعة"
 
 #: src/input/keyconfig.cpp:180
 msgid "Select EVERY unit"
-msgstr ""
+msgstr "تحديد «كل» الوحدات"
 
 #: src/input/keyconfig.cpp:181
 msgid "Select all VTOLs"
-msgstr "حدّد كل الطائرات العمودية"
+msgstr "تحديد كل الطائرات العمودية"
 
 #: src/input/keyconfig.cpp:182
 msgid "Select all fully-armed VTOLs"
-msgstr "حدّد كل الطائرات العمودية المسلحة بالكامل"
+msgstr "تحديد كل الطائرات العمودية المسلحة بالكامل"
 
 #: src/input/keyconfig.cpp:183
 msgid "Select all fully-armed VTOLs without group"
@@ -16967,39 +16967,39 @@ msgstr "حدّد كل الطائرات العمودية المسلحة بالك�
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Wheels"
-msgstr ""
+msgstr "تحديد كل المركبات بعجلات"
 
 #: src/input/keyconfig.cpp:185
 msgid "Show frame rate"
-msgstr ""
+msgstr "إظهار معدل الإطارات في الثانية"
 
 #: src/input/keyconfig.cpp:186
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "تحديد جميع الوحدات التي تملك المكونات نفسها"
 
 #: src/input/keyconfig.cpp:188
 msgid "Select all Combat Cyborgs"
-msgstr "اختر جميع كائنات السايبورغ المقاتلة"
+msgstr "تحديد كل السايبورغ المقاتلين"
 
 #: src/input/keyconfig.cpp:189
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "تحديد كل السايبورغ المقاتلين الذين لا ينتمون لمجموعة"
 
 #: src/input/keyconfig.cpp:190
 msgid "Select all Engineers"
-msgstr ""
+msgstr "تحديد كل المهندسين"
 
 #: src/input/keyconfig.cpp:191
 msgid "Select all Land Combat Units"
-msgstr ""
+msgstr "تحديد كل الوحدات القتالية البرية"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "تحديد كل الوحدات القتالية البرية التي لا تنتمي لمجموعة"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Mechanics"
-msgstr ""
+msgstr "تحديد كل الميكانيكيين"
 
 #: src/input/keyconfig.cpp:194
 msgid "Select all Transporters"
@@ -17011,35 +17011,35 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:196
 msgid "Select all Sensor Units"
-msgstr ""
+msgstr "تحديد كل وحدات الاستشعار"
 
 #: src/input/keyconfig.cpp:197
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "تحديد كل وحدات الاستشعار التي لا تنتمي لمجموعة"
 
 #: src/input/keyconfig.cpp:198
 msgid "Select all Trucks"
-msgstr "حدّد كل الشاحنات"
+msgstr "تحديد كل الشاحنات"
 
 #: src/input/keyconfig.cpp:200
 msgid "Select next Factory"
-msgstr "حدد المصنع التالي"
+msgstr "تحديد المصنع التالي"
 
 #: src/input/keyconfig.cpp:201
 msgid "Select next Research Facility"
-msgstr "اختر مركز الأبحاث التالي"
+msgstr "تحديد مركز الأبحاث التالي"
 
 #: src/input/keyconfig.cpp:202
 msgid "Select next Power Generator"
-msgstr "حدد مولّد الطاقة التالي"
+msgstr "تحديد مولّد الطاقة التالي"
 
 #: src/input/keyconfig.cpp:203
 msgid "Select next Cyborg Factory"
-msgstr "حدد مصنع السايبورغ التالي"
+msgstr "تحديد مصنع السايبورغ التالي"
 
 #: src/input/keyconfig.cpp:204
 msgid "Select next VTOL Factory"
-msgstr "اختر مصنع الطائرات العمودية التالي"
+msgstr "تحديد مصنع الطائرات العمودية التالي"
 
 #: src/input/keyconfig.cpp:205
 msgid "Jump to next Factory"
@@ -17071,7 +17071,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:213
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "فتح \\ إغلاق محرر الخريطة"
 
 #: src/input/keyconfig.cpp:214
 msgid "Toggle display of droid path"
@@ -17115,7 +17115,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:224
 msgid "Kill Selected Unit(s)"
-msgstr ""
+msgstr "اقتل الوحدات المحددة"
 
 #: src/input/keyconfig.cpp:225
 msgid "Toggle god Mode Status"
@@ -17139,7 +17139,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:233
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "الدخول في \\ الخروج من وضع ملء الشاشة"
 
 #: src/intdisplay.cpp:164
 msgid "Waiting for Power"
@@ -17774,7 +17774,7 @@ msgstr "عُد إلى الشاشة السابقة"
 #: src/keyedit.cpp:581
 #: src/keyedit.cpp:598
 msgid "Select Default"
-msgstr "اختر الافتراضيات"
+msgstr "اختيار الإعدادات الافتراضية"
 
 #: src/loadsave.cpp:361
 msgid "Parent directory"
@@ -17972,7 +17972,7 @@ msgstr ""
 
 #: src/multiint.cpp:1387
 msgid "Select Game Name"
-msgstr "اختر اسم المباراة"
+msgstr "اختيار اسم المباراة"
 
 #: src/multiint.cpp:1391
 #: src/titleui/gamefind.cpp:264
