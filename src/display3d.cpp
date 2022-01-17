@@ -1282,29 +1282,14 @@ bool init3DView()
 
 	if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0) // Urban = 0x101040 (or, 0xc9920f)
 	{
-		PIELIGHT WZCOL_FOG_URBAN;
-		WZCOL_FOG_URBAN.vector[0] = 0x10;
-		WZCOL_FOG_URBAN.vector[1] = 0x10;
-		WZCOL_FOG_URBAN.vector[2] = 0x40;
-		WZCOL_FOG_URBAN.vector[3] = 0xff;
 		pie_SetFogColour(WZCOL_FOG_URBAN);
 	}
 	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0) // Rockies = 0xb6e1ec
 	{
-		PIELIGHT WZCOL_FOG_ROCKIE;
-		WZCOL_FOG_ROCKIE.vector[0] = 0xb6;
-		WZCOL_FOG_ROCKIE.vector[1] = 0xe1;
-		WZCOL_FOG_ROCKIE.vector[2] = 0xec;
-		WZCOL_FOG_ROCKIE.vector[3] = 0xff;
 		pie_SetFogColour(WZCOL_FOG_ROCKIE);
 	}
 	else // Arizona, eg. strcmp(tilesetDir, "texpages/tertilesc1hw") == 0, and default. = b08f5f (or, 0x78684f)
 	{
-		PIELIGHT WZCOL_FOG_ARIZONA;
-		WZCOL_FOG_ARIZONA.vector[0] = 0xb0;
-		WZCOL_FOG_ARIZONA.vector[1] = 0x8f;
-		WZCOL_FOG_ARIZONA.vector[2] = 0x5f;
-		WZCOL_FOG_ARIZONA.vector[3] = 0xff;
 		pie_SetFogColour(WZCOL_FOG_ARIZONA);
 	}
 

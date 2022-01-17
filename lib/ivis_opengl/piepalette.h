@@ -121,8 +121,11 @@
 #define WZCOL_TRANSPARENT_BOX						psPalette[95]
 #define WZCOL_CONS_TEXT_INFO						psPalette[96]
 #define WZCOL_NOTIFICATION_BOX						psPalette[97]
+#define WZCOL_FOG_ARIZONA							psPalette[98]
+#define WZCOL_FOG_URBAN								psPalette[99]
+#define WZCOL_FOG_ROCKIE							psPalette[100]
 
-#define WZCOL_MAX									98
+#define WZCOL_MAX									101
 
 //*************************************************************************
 
