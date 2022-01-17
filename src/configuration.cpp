@@ -485,6 +485,8 @@ bool loadConfig()
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
 	int openSpecSlotsIntValue = iniGetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots()).value();
 	war_setMPopenSpectatorSlots(static_cast<uint16_t>(std::max<int>(0, std::min<int>(openSpecSlotsIntValue, MAX_SPECTATOR_SLOTS))));
+	war_setFogEnd(iniGetInteger("fogEnd", 8000).value());
+	war_setFogStart(iniGetInteger("fogStart", 4000).value());
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -632,6 +634,8 @@ bool saveConfig()
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
+	iniSetInteger("fogEnd", war_getFogEnd());
+	iniSetInteger("fogStart", war_getFogStart());
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);

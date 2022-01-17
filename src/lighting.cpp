@@ -42,8 +42,6 @@
 #include "warzoneconfig.h"
 
 // These magic values determine the fog
-#define FOG_BEGIN 4000
-#define FOG_END 8000
 #define FOG_ALTITUDE_COEFFICIENT 1.3f
 
 /*	The vector that holds the sun's lighting direction - planar */
@@ -306,7 +304,7 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 /// "popping" tiles
 void updateFogDistance(float distance)
 {
-	pie_UpdateFogDistance(FOG_BEGIN + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT, FOG_END + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT);
+	pie_UpdateFogDistance(war_getFogStart() + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT, war_getFogEnd() + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT);
 }
 
 void setDefaultFogColour()

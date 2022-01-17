@@ -124,6 +124,10 @@ uint32_t war_getMPInactivityMinutes();
 void war_setMPInactivityMinutes(uint32_t minutes);
 uint16_t war_getMPopenSpectatorSlots();
 void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
+int war_getFogEnd();
+int war_getFogStart();
+void war_setFogEnd(int end);
+void war_setFogStart(int start);
 
 /**
  * Enable or disable sound initialization
