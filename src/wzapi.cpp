@@ -32,6 +32,7 @@
 #include "lib/netplay/netplay.h"
 #include "qtscript.h"
 #include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/piestate.h"
 
 #include "action.h"
 #include "clparse.h"
@@ -428,6 +429,17 @@ bool wzapi::setSunIntensity(WZAPI_PARAMS(float ambient_r, float ambient_g, float
 	pie_Lighting0(LIGHT_AMBIENT, ambient);
 	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
 	pie_Lighting0(LIGHT_SPECULAR, specular);
+	return true;
+}
+
+//-- ## setFogColour(r, g, b)
+//--
+//-- Set the colour of the fog (4.2.5+ only)
+//--
+bool wzapi::setFogColour(WZAPI_PARAMS(int r, int g, int b))
+{
+	PIELIGHT newFogColour = pal_RGBA(r, g, b, 255);
+	pie_SetFogColour(newFogColour);
 	return true;
 }
 
