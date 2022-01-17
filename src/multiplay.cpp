@@ -29,7 +29,6 @@
 #include <chrono>
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/physfs_ext.h"
@@ -63,6 +62,7 @@
 #include "qtscript.h"
 #include "design.h"
 #include "advvis.h"
+#include "lighting.h" // for reInitPaletteAndFog()
 
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
@@ -2017,7 +2017,7 @@ bool recvMapFileData(NETQUEUE queue)
 		levShutDown();
 		levInitialise();
 		rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
-		pal_Init(); //Update palettes.
+		reInitPaletteAndFog(); //Update palettes.
 		if (!buildMapList())
 		{
 			return false;

@@ -309,6 +309,27 @@ void updateFogDistance(float distance)
 	pie_UpdateFogDistance(FOG_BEGIN + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT, FOG_END + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT);
 }
 
+void setDefaultFogColour()
+{
+	if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0) // Urban = 0x101040 (or, 0xc9920f)
+	{
+		pie_SetFogColour(WZCOL_FOG_URBAN);
+	}
+	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0) // Rockies = 0xb6e1ec
+	{
+		pie_SetFogColour(WZCOL_FOG_ROCKIE);
+	}
+	else // Arizona, eg. strcmp(tilesetDir, "texpages/tertilesc1hw") == 0, and default. = b08f5f (or, 0x78684f)
+	{
+		pie_SetFogColour(WZCOL_FOG_ARIZONA);
+	}
+}
+
+void reInitPaletteAndFog()
+{
+	pal_Init();
+	setDefaultFogColour();
+}
 
 #define MIN_DROID_LIGHT_LEVEL	96
 #define	DROID_SEEK_LIGHT_SPEED	2

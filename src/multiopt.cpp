@@ -30,7 +30,6 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/physfs_ext.h"
 
-#include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/ivis_opengl/piestate.h"
 
 #include "map.h"
@@ -46,6 +45,7 @@
 #include "configuration.h"			// lobby cfg.
 #include "clparse.h"
 
+#include "lighting.h" // for reInitPaletteAndFog()
 #include "component.h"
 #include "console.h"
 #include "multiplay.h"
@@ -260,7 +260,7 @@ bool recvOptions(NETQUEUE queue)
 		}
 		else
 		{
-			pal_Init(); // Palette could be modded. // Why is this here - isn't there a better place for it?
+			reInitPaletteAndFog(); // Palette could be modded. // Why is this here - isn't there a better place for it?
 			return FileRequestResult::FileExists;  // Have the file already.
 		}
 
