@@ -68,6 +68,8 @@ struct WARZONE_GLOBALS
 	bool disableReplayRecording = false;
 	uint32_t MPinactivityMinutes = 5;
 	uint8_t MPopenSpectatorSlots = 0;
+	int fogStart = 4000;
+	int fogEnd = 8000;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -454,4 +456,24 @@ void war_setMPopenSpectatorSlots(uint16_t spectatorSlots)
 {
 	spectatorSlots = std::min<uint16_t>(spectatorSlots, MAX_SPECTATOR_SLOTS);
 	warGlobs.MPopenSpectatorSlots = spectatorSlots;
+}
+
+int war_getFogEnd()
+{
+	return warGlobs.fogEnd;
+}
+
+int war_getFogStart()
+{
+	return warGlobs.fogStart;
+}
+
+void war_setFogEnd(int end)
+{
+	 warGlobs.fogEnd = end;
+}
+
+void war_setFogStart(int start)
+{
+	 warGlobs.fogStart = start;
 }
