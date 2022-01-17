@@ -961,6 +961,7 @@ namespace wzapi
 	bool setAssemblyPoint(WZAPI_PARAMS(STRUCTURE *psStruct, int x, int y));
 	bool setSunPosition(WZAPI_PARAMS(float x, float y, float z));
 	bool setSunIntensity(WZAPI_PARAMS(float ambient_r, float ambient_g, float ambient_b, float diffuse_r, float diffuse_g, float diffuse_b, float specular_r, float specular_g, float specular_b));
+	bool setFogColour(WZAPI_PARAMS(int r, int g, int b));
 	bool setWeather(WZAPI_PARAMS(int weatherType));
 	bool setSky(WZAPI_PARAMS(std::string textureFilename, float windSpeed, float scale));
 	bool cameraSlide(WZAPI_PARAMS(float x, float y));

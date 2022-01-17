@@ -3150,6 +3150,7 @@ IMPL_JS_FUNC_DEBUGMSGUPDATE(hackAddMessage, wzapi::hackAddMessage)
 IMPL_JS_FUNC_DEBUGMSGUPDATE(hackRemoveMessage, wzapi::hackRemoveMessage)
 IMPL_JS_FUNC(setSunPosition, wzapi::setSunPosition)
 IMPL_JS_FUNC(setSunIntensity, wzapi::setSunIntensity)
+IMPL_JS_FUNC(setFogColour, wzapi::setFogColour)
 IMPL_JS_FUNC(setWeather, wzapi::setWeather)
 IMPL_JS_FUNC(setSky, wzapi::setSky)
 IMPL_JS_FUNC(hackDoNotSave, wzapi::hackDoNotSave)
@@ -3322,6 +3323,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(setAssemblyPoint, 3); // WZAPI
 	JS_REGISTER_FUNC(setSunPosition, 3); // WZAPI
 	JS_REGISTER_FUNC(setSunIntensity, 9); // WZAPI
+	JS_REGISTER_FUNC(setFogColour, 3); // WZAPI
 	JS_REGISTER_FUNC(setWeather, 1); // WZAPI
 	JS_REGISTER_FUNC(setSky, 3); // WZAPI
 	JS_REGISTER_FUNC(cameraSlide, 2); // WZAPI
