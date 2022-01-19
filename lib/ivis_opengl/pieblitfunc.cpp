@@ -123,6 +123,7 @@ void GFX::makeCompatibleTexture(const iV_Image* image /*= nullptr*/, const std::
 void GFX::updateTexture(const iV_Image& image /*= nullptr*/)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
+	ASSERT_OR_RETURN(, mTexture != nullptr, "Null texture??");
 	mTexture->upload(0u, image);
 }
 
