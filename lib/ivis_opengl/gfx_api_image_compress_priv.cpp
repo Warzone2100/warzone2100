@@ -82,52 +82,6 @@ void gfx_api::initBestRealTimeCompressionFormats()
 
 // MARK: - iV_CompressedImage
 
-// An image in a compressed format
-// Not thread-safe
-class iV_CompressedImage final : public iV_BaseImage
-{
-private:
-	unsigned int m_width = 0, m_height = 0;
-	gfx_api::pixel_format m_format = gfx_api::pixel_format::invalid;
-	unsigned char *m_data = nullptr;
-	size_t m_data_size = 0;
-
-public:
-	virtual unsigned int width() const override;
-	virtual unsigned int height() const override;
-	virtual unsigned int channels() const override;
-
-	// Get the current image pixel format
-	virtual gfx_api::pixel_format pixel_format() const override;
-
-	// Get a pointer to the image data that can be read
-	virtual const unsigned char* data() const override;
-	virtual size_t data_size() const override;
-
-public:
-	// Allocate a new iV_CompressedImage buffer
-	bool allocate(gfx_api::pixel_format format, size_t data_size, unsigned int width = 0, unsigned int height = 0, bool zeroMemory = false);
-
-	// Clear (free) the image contents / data
-	void clear();
-
-	// Get a pointer to the image data that can be written to
-	unsigned char* data_w();
-
-public:
-	// iV_Image is non-copyable
-	iV_CompressedImage(const iV_CompressedImage&) = delete;
-	iV_CompressedImage& operator= (const iV_CompressedImage&) = delete;
-
-	// iV_Image is movable
-	iV_CompressedImage(iV_CompressedImage&& other);
-	iV_CompressedImage& operator=(iV_CompressedImage&& other);
-
-public:
-	iV_CompressedImage() = default;
-	~iV_CompressedImage();
-};
-
 iV_CompressedImage::~iV_CompressedImage()
 {
 	clear();
