@@ -184,7 +184,7 @@ bool texLoad(const char *fileName)
 			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d.png", partialPath, k);
 			if (PHYSFS_exists(fullPath)) // avoid dire warning
 			{
-				bool retval = iV_loadImage_PNG(fullPath, &tile);
+				bool retval = iV_loadImage_PNG2(fullPath, tile, true);
 				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
 			}
 			else
