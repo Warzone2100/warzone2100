@@ -3,6 +3,7 @@ file(GLOB HEADERS
 	"gfx_api.h"
 	"gfx_api_formats_def.h"
 	"gfx_api_gl.h"
+	"gfx_api_image_basis_priv.h"
 	"gfx_api_image_compress_priv.h"
 	"gfx_api_null.h"
 	"gfx_api_vk.h"
@@ -30,6 +31,7 @@ file(GLOB SRC
 	"bitimage.cpp"
 	"gfx_api.cpp"
 	"gfx_api_gl.cpp"
+	"gfx_api_image_basis_priv.cpp"
 	"gfx_api_image_compress_priv.cpp"
 	"gfx_api_null.cpp"
 	"gfx_api_vk.cpp"
@@ -79,6 +81,12 @@ endif()
 if(TARGET etcpak)
 	target_link_libraries(ivis-opengl PRIVATE etcpak)
 	target_compile_definitions(ivis-opengl PRIVATE "-DETCPAK_ENABLED")
+endif()
+if(TARGET basis_transcoder)
+	target_link_libraries(ivis-opengl PRIVATE basis_transcoder)
+	target_compile_definitions(ivis-opengl PRIVATE "-DBASIS_ENABLED")
+else()
+	message(WARNING "Basis-universal support is disabled")
 endif()
 
 if(WZ_ENABLE_BACKEND_VULKAN)
