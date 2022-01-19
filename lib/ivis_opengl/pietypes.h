@@ -124,7 +124,6 @@ public:
 public:
 	virtual unsigned int width() const = 0;
 	virtual unsigned int height() const = 0;
-	virtual unsigned int channels() const = 0;
 	virtual gfx_api::pixel_format pixel_format() const = 0;
 
 	// Get a pointer to the image data that can be read
@@ -144,8 +143,8 @@ public:
 	// iV_BaseImage
 	unsigned int width() const override { return m_width; }
 	unsigned int height() const override { return m_height; }
-	unsigned int channels() const override  { return m_channels; }
 
+	unsigned int channels() const  { return m_channels; }
 	unsigned int depth() const { return m_channels * 8; }
 
 	// Get the current bitmap pixel format
