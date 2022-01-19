@@ -214,7 +214,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		ImageMergeRectangle *imageRect = &pageLayout.images[numImages];
 		imageRect->index = numImages;
 		imageRect->data = new iV_Image;
-		if (!iV_loadImage_PNG(spriteName.c_str(), imageRect->data))
+		if (!iV_loadImage_PNG2(spriteName.c_str(), *imageRect->data, true))
 		{
 			debug(LOG_ERROR, "Failed to find image \"%s\" listed in \"%s\".", spriteName.c_str(), fileName);
 			delete imageFile;

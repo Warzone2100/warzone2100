@@ -214,7 +214,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	return true;
 }
 
-bool iV_loadImage_PNG2(const char *fileName, iV_Image& image)
+bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*= false*/)
 {
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
 	PHYSFS_sint64 readSize;
@@ -335,6 +335,12 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image)
 	if (bit_depth < 8)
 	{
 		png_set_packing(png_ptr);
+	}
+
+	if (forceRGBA8)
+	{
+		/* More transformations to ensure we end up with 32bpp, 4 channel RGBA */
+		png_set_gray_to_rgb(png_ptr);
 	}
 
 	// Fill alpha with 0xFF (if needed)
