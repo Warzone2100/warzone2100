@@ -67,3 +67,30 @@ add_subdirectory(optional-lite EXCLUDE_FROM_ALL)
 
 add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
 set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
+
+# basis-universal transcoder
+
+add_library(basis_transcoder STATIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder/basisu_transcoder.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder/basisu_transcoder.h" "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/zstd/zstddeclib.c")
+set_property(TARGET basis_transcoder PROPERTY FOLDER "3rdparty")
+target_include_directories(basis_transcoder PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder")
+
+include(CheckCompilerFlagsOutput)
+if(NOT MSVC)
+	set(_supported_basistranscoder_cxx_compiler_flags "")
+
+	# -fno-strict-aliasing		(GCC, Clang)
+	check_compiler_flags_output("-Werror -fno-strict-aliasing -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-fno-strict-aliasing" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+	if (NOT _supported_basistranscoder_cxx_compiler_flags STREQUAL "")
+		string(REPLACE " " ";" _supported_basistranscoder_cxx_compiler_flags "${_supported_basistranscoder_cxx_compiler_flags}")
+		target_compile_options(basis_transcoder PRIVATE ${_supported_basistranscoder_cxx_compiler_flags})
+	endif()
+endif()
+
+## TODO: Must also set BASISD_IS_BIG_ENDIAN if the target platform is big-endian!!
+# if (# SOME DETECTION FOR TARGET PLATFORM BIG-ENDIAN #)
+# 	target_compile_definitions(basis_transcoder PRIVATE "-DBASISD_IS_BIG_ENDIAN=1")
+# endif()
+
+# Disable certain transcoder formats
+target_compile_definitions(basis_transcoder PRIVATE "-DBASISD_SUPPORT_ATC=0" "-DBASISD_SUPPORT_PVRTC1=0" "-DBASISD_SUPPORT_PVRTC2=0")

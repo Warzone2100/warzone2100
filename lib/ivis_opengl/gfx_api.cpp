@@ -21,6 +21,8 @@
 #include "gfx_api_gl.h"
 #include "gfx_api_null.h"
 #include "gfx_api_image_compress_priv.h"
+#include "gfx_api_image_basis_priv.h"
+#include "lib/framework/physfs_ext.h"
 
 static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
@@ -67,6 +69,11 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 	// Calculate the best available run-time compression formats
 	gfx_api::initBestRealTimeCompressionFormats();
 
+#if defined(BASIS_ENABLED)
+	// Init basis transcoder
+	gfx_api::initBasisTranscoder();
+#endif
+
 	return result;
 }
 
@@ -91,11 +98,27 @@ static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filenam
 	return gfx_api::context::get().loadTextureFromUncompressedImage(std::move(loadedUncompressedImage), textureType, filename, maxWidth, maxHeight);
 }
 
-std::string imageLoadFilenameFromInputFilename(const char *filename)
+#if defined(BASIS_ENABLED)
+const WzString wz_png_extension = WzString(".png");
+#endif
+
+std::string imageLoadFilenameFromInputFilename(const WzString& filename)
 {
-	ASSERT_OR_RETURN("", filename != nullptr, "Null filename");
-	// For now, always return the input filename
-	return filename;
+#if defined(BASIS_ENABLED)
+	// For backwards-compatibility support, filenames that end in ".png" are used as "keys" and we first check for a .ktx2 file with the same filename
+	if (filename.endsWith(wz_png_extension))
+	{
+		WzString ktx2Filename = filename.substr(0, filename.size() - wz_png_extension.length());
+		ktx2Filename.append(".ktx2");
+		// Check for presence of .ktx2 file
+		if (PHYSFS_exists(ktx2Filename))
+		{
+			return ktx2Filename.toUtf8();
+		}
+		// Fall-back to .png file
+	}
+#endif
+	return filename.toUtf8();
 }
 
 // MARK: - High-level texture loading
@@ -106,6 +129,13 @@ gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gf
 {
 	std::string imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
 
+#if defined(BASIS_ENABLED)
+	if (strEndsWith(imageLoadFilename, ".ktx2"))
+	{
+		return gfx_api::loadImageTextureFromFile_KTX2(imageLoadFilename, textureType, maxWidth, maxHeight);
+	}
+	else
+#endif
 	if (strEndsWith(imageLoadFilename, ".png"))
 	{
 		return loadImageTextureFromFile_PNG(imageLoadFilename, textureType, maxWidth, maxHeight);
