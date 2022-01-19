@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-15 07:32\n"
+"PO-Revision-Date: 2022-01-19 22:17\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -439,7 +439,7 @@ msgstr "Kargoyu ve Taşıma Gemisini kurtarmak için bir saldırı düzenle."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr "UÇUŞDA SUNUM"
+msgstr "UÇUŞTA SUNUM"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
@@ -856,7 +856,7 @@ msgstr "KUZEY BÖLGESİ GÖREVİ: Alfa Takımını Sorgula"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr "Alfa takımı güç aktarması devam ediyor..."
+msgstr "Alfa takımı güç aktarması devam ediyor."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
@@ -4204,7 +4204,7 @@ msgstr "Petrol Kaynakları başarının anahtarıdır"
 
 #: data/base/script/tutorial.js:30
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Petrol Kuyusu inşa etmek için, bir kamyonunu seç"
+msgstr "Petrol Kuyusu inşa etmek için, kamyonlarından birini seç"
 
 #: data/base/script/tutorial.js:31
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
@@ -4240,7 +4240,7 @@ msgstr "Diğer kamyon güç jeneratörü inşaatına yardım edecek"
 
 #: data/base/script/tutorial.js:41
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr "Görevler esnasında Yıkımdan önce teknolojileri bulmak ve toplamak zorunda kalacaksın"
+msgstr "Görevler esnasında Yıkımdan önceki teknolojileri bulmak ve kurtarmak zorunda kalacaksın"
 
 #: data/base/script/tutorial.js:42
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
@@ -4349,7 +4349,7 @@ msgstr "Şimdi yanıp sönen ÜRETİM simgesine sol tıkla"
 
 #: data/base/script/tutorial.js:75
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "Soldaki menüden üretmek istediğin birimi seç"
+msgstr "Soldaki menüden üretmek istediğin birim(ler)i seç"
 
 #: data/base/script/tutorial.js:76
 msgid "Please wait whilst the factory manufactures the new unit(s)"
@@ -4405,7 +4405,7 @@ msgstr "Alfa kalkış izniniz verildi."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
-msgstr "İyi şanslar ve İyi avlanmalar."
+msgstr "İyi şanslar ve iyi avlanmalar."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
@@ -8845,7 +8845,7 @@ msgstr "Lazer enerjisi üretir ve düşmana atar"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr "Sahip olur ~ Her petrol kuyusundan %100 daha fazla güç\n"
+msgstr "Her petrol kuyusundan ~%100 daha fazla güç alır\n"
 "Savunma yapıları ve petrol kuyuları ile başlar"
 
 #. TRANSLATORS:
@@ -8856,7 +8856,7 @@ msgstr "Sahip olur ~ Her petrol kuyusundan %100 daha fazla güç\n"
 #: po/custom/fromJson.txt:2235
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr "Sahip olur ~ Her petrol kuyusundan %25 daha az güç"
+msgstr "Her petrol kuyusundan ~%25 daha az güç alır"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8864,8 +8864,8 @@ msgstr "Sahip olur ~ Her petrol kuyusundan %25 daha az güç"
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr "Sahip olur ~ Her petrol kuyusundan %25 daha az güç\n"
-"komuta hızı daha yavaştır"
+msgstr "Her petrol kuyusundan ~%25 daha az güç alır\n"
+"Temel karar verme daha yavaştır"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8874,7 +8874,7 @@ msgstr "Sahip olur ~ Her petrol kuyusundan %25 daha az güç\n"
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr "Her petrol kuyusundan ~ %25 daha az güç alır\n"
+msgstr "Her petrol kuyusundan ~%25 daha az güç alır\n"
 "Araştırma özel bir silah dalına odaklı değildir"
 
 #. TRANSLATORS:
@@ -12972,7 +12972,7 @@ msgstr "Çöpçü"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5088
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "scavengernexuslinkturret"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -15364,7 +15364,7 @@ msgstr "%s - Sağlık %d/%d - Tecrübe %.1f, %s, Öldürme %d"
 #: src/display.cpp:1628
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Düşman!) %s - Sağlık %d/%d - ID %d - deneyim %f, %s - emir %s - eylem %s - sensör menzili %d - ECM %d - eğim %.0f"
 
 #: src/display.cpp:1772
 #, c-format
@@ -15375,7 +15375,7 @@ msgstr "%s - Müttefik - Hasar %d/%d - Tecrübe %d, %s"
 #: src/display.cpp:1789
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Düşman!) %s, ref: %d, ID: %d Sağlık: %d/%d"
 
 #: src/display3d.cpp:750
 msgid "Player left"
@@ -15427,8 +15427,8 @@ msgstr[1] "%u birim %u. gruba atandı"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u birim(ler)i gruplarından kaldırıldı"
+msgstr[1] "%u birim Grubundan kaldırıldı"
 
 #: src/droid.cpp:2001
 #, c-format
@@ -15793,7 +15793,7 @@ msgstr "Video Oynatma"
 #: src/frontend.cpp:867
 #: src/ingameop.cpp:627
 msgid "Scanlines"
-msgstr "Tarama yolları"
+msgstr "Tarama Çizgileri"
 
 #: src/frontend.cpp:873
 #: src/ingameop.cpp:632
@@ -15817,7 +15817,7 @@ msgstr "Radar Zıplaması"
 
 #: src/frontend.cpp:893
 msgid "Screen Shake"
-msgstr "Ekran sarsıntısı"
+msgstr "Ekran Sarsıntısı"
 
 #: src/frontend.cpp:905
 msgid "GRAPHICS OPTIONS"
@@ -15988,7 +15988,7 @@ msgstr "İmleci Yakala"
 #: src/frontend.cpp:1894
 #: src/ingameop.cpp:831
 msgid "Switch Mouse Buttons"
-msgstr "Fare Düğmelerini Değiştir"
+msgstr "Fare Tuşlarını Değiştir"
 
 #: src/frontend.cpp:1900
 #: src/ingameop.cpp:836
@@ -16295,7 +16295,7 @@ msgstr "Taktiksel Arayüz (Hedef Kaynak Simgesi): Gizle"
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:787
 msgid "Go Back"
-msgstr "Geri git"
+msgstr "Geri Dön"
 
 #: src/ingameop.cpp:246
 #: src/ingameop.cpp:255
@@ -16913,7 +16913,7 @@ msgstr "Tüm Yarım Paletli Birimleri seç"
 
 #: src/input/keyconfig.cpp:174
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "Grupsuz tüm Yarım Paletleri seç"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select all Hovers"
@@ -16934,7 +16934,7 @@ msgstr "Tüm Paletli Araçları seç"
 
 #: src/input/keyconfig.cpp:179
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "Grupsuz tüm Paletleri seç"
 
 #: src/input/keyconfig.cpp:180
 msgid "Select EVERY unit"
@@ -16950,7 +16950,7 @@ msgstr "Tüm zırhlı DİvK'ları seç"
 
 #: src/input/keyconfig.cpp:183
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "Grupsuz tüm tam zırhlı DİvK'ları seç"
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Wheels"
@@ -16982,7 +16982,7 @@ msgstr "Tüm Kara Savaş Birimlerini seç"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "Grupsuz tüm Arazi Savaş Birimlerini seç"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Mechanics"
@@ -17002,7 +17002,7 @@ msgstr "Tüm Algılayıcı Birimleri seç"
 
 #: src/input/keyconfig.cpp:197
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "Grupsuz tüm Sensör Birimlerini seç"
 
 #: src/input/keyconfig.cpp:198
 msgid "Select all Trucks"
@@ -17058,7 +17058,7 @@ msgstr "Hata-ayıklama haritalarını önceliklendir"
 
 #: src/input/keyconfig.cpp:213
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Bölüm Editörünü Aç/Kapat"
 
 #: src/input/keyconfig.cpp:214
 msgid "Toggle display of droid path"
@@ -17140,12 +17140,12 @@ msgstr "Güç"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr "Saniye başına güç"
+msgstr "Saniye Başına Güç"
 
 #: src/intdisplay.cpp:288
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d pompa etkin değil"
 
 #: src/intdisplay.cpp:293
 msgid "Need more resources!"
@@ -17376,11 +17376,11 @@ msgstr "Tehlike! Bu hile hatalıdır. Onu kullanmamanızı öneririz."
 
 #: src/keybind.cpp:160
 msgid "Gateways toggled."
-msgstr ""
+msgstr "Geçiş yolu değiştirildi."
 
 #: src/keybind.cpp:166
 msgid "Path display toggled."
-msgstr ""
+msgstr "Yol görünümü değiştirildi."
 
 #: src/keybind.cpp:194
 #, c-format
@@ -17494,7 +17494,7 @@ msgstr "Sonsuz güç devrede"
 
 #: src/keybind.cpp:775
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Tüm karelerin ışık değerleri yeniden hesaplandı"
 
 #: src/keybind.cpp:805
 msgid "All items made available"
@@ -17502,7 +17502,7 @@ msgstr "Her şey kullanılabilir yapıldı"
 
 #: src/keybind.cpp:830
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Kare bilgisi günlüğe yazıldı"
 
 #: src/keybind.cpp:845
 msgid "Fog on"
@@ -17519,7 +17519,7 @@ msgstr "Radar yakınlaştırma %u olarak ayarlanıyor"
 
 #: src/keybind.cpp:1216
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Hata ayıklama eşleme önceliği değiştiriliyor: "
 
 #: src/keybind.cpp:1226
 msgid "Disabling level editor"
@@ -17724,7 +17724,7 @@ msgstr "Radar yüksekliği gösteriyor"
 
 #: src/keybind.cpp:2496
 msgid "Asserts turned off"
-msgstr ""
+msgstr "İddialar kapatıldı"
 
 #: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
@@ -17943,7 +17943,7 @@ msgstr "Yapı Sınırları Zorlanmış."
 #: src/multiint.cpp:1298
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr ""
+msgstr "%s (%d) harita değişimine izin verdi. Toplam: %d/%d"
 
 #: src/multiint.cpp:1319
 msgid "Vote"
@@ -18099,7 +18099,7 @@ msgstr "Bu yuvayı değiştirmek için tıkla"
 #: src/multiint.cpp:1983
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "%u oyuncu yuvasını almak için tıklayın"
 
 #: src/multiint.cpp:2020
 msgid "Click to swap player to this slot"
@@ -18639,17 +18639,17 @@ msgstr "Toplam Gönderilen/Alınan —"
 #: src/multimenu.cpp:1090
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "Trafik: %lu/%lu"
 
 #: src/multimenu.cpp:1094
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Sıkıştırılmamış: %lu/%lu"
 
 #: src/multimenu.cpp:1098
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Paket: %lu/%lu"
 
 #: src/multimenu.cpp:1284
 #, c-format
@@ -18839,7 +18839,7 @@ msgstr "Seçili YZ yüklenmesinde hata! Sebebini öğrenmek için girdi kayıtla
 #: src/qtscript.cpp:896
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "Geçerli oyuncu için %s YZ betiği yüklendi!"
 
 #: src/research.cpp:1017
 #, c-format
@@ -19053,7 +19053,7 @@ msgstr[1] "%s - %u Birim atandı - Sağlık %d/%d"
 #: src/structure.cpp:5357
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %d - sensör menzili %d - ECM %d"
 
 #: src/structure.cpp:5372
 #, c-format
@@ -19076,17 +19076,17 @@ msgstr "%s - Sağlık %d/%d"
 #: src/structure.cpp:5381
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr ""
+msgstr "ID %d - zırh %d|%d - sensör menzili %d - ECM %d - doğum %u - derinlik %.02f"
 
 #: src/structure.cpp:5390
 #, c-format
 msgid "ID %d - Queue %d"
-msgstr ""
+msgstr "ID %d - Kuyruk %d"
 
 #: src/structure.cpp:5397
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "ID %d - %s"
 
 #: src/structure.cpp:5410
 #, c-format
@@ -19096,27 +19096,27 @@ msgstr "%s - Bağlı %u/%u - Sağlık %d/%d"
 #: src/structure.cpp:5414
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "ID %u - Çarpan: %u"
 
 #: src/structure.cpp:5423
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "ID %u - Üretim Çıktısı: %u - KalanİnşaPuanı: %u - Direnç: %d / %d"
 
 #: src/structure.cpp:5432
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - Araştırma Puanı: %u"
 
 #: src/structure.cpp:5439
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "kare %d,%d - hedef %s"
 
 #: src/structure.cpp:5447
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %u - sensör menzili %d - ECM %d"
 
 #: src/structure.cpp:5565
 #: src/structure.cpp:5610
@@ -19358,7 +19358,7 @@ msgstr "Düzeltme hakkında daha fazla bilgi için aşağıdaki butona tıklayı
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(Bilgi Kimliği: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
