@@ -110,6 +110,8 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 			return GL_COMPRESSED_R11_EAC;
 		case gfx_api::pixel_format::FORMAT_RG11_EAC:
 			return GL_COMPRESSED_RG11_EAC;
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+			return GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}
@@ -2482,8 +2484,8 @@ void gl_context::initPixelFormatsSupport()
 
 	// BPTC
 	// Desktop OpenGL: GL_ARB_texture_compression_bptc
-	// TODO: OpenGL ES: Could detect GL_EXT_texture_compression_bptc, but support seems very rare
-	if (!gles && GLAD_GL_ARB_texture_compression_bptc)
+	// OpenGL ES: GL_EXT_texture_compression_bptc
+	if ((!gles && GLAD_GL_ARB_texture_compression_bptc) || (gles && GLAD_GL_EXT_texture_compression_bptc))
 	{
 		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
 	}
@@ -2520,6 +2522,14 @@ void gl_context::initPixelFormatsSupport()
 		{
 			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
 		}
+	}
+
+	// ASTC (LDR)
+	// Either OpenGL: GL_KHR_texture_compression_astc_ldr
+	// However, for now - until more testing is complete - only enable on OpenGL ES
+	if (gles && GLAD_GL_KHR_texture_compression_astc_ldr)
+	{
+		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 	}
 }
 
