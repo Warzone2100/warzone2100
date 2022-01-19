@@ -53,8 +53,11 @@ namespace gfx_api
 
 		FORMAT_R11_EAC,			// one channel unsigned data
 		FORMAT_RG11_EAC,		// two channel unsigned data
+
+		// ASTC (LDR) - requires an extension
+		FORMAT_ASTC_4x4_UNORM,
 	};
-	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_RG11_EAC;
+	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_ASTC_4x4_UNORM;
 
 	static inline bool is_uncompressed_format(const pixel_format& format)
 	{
