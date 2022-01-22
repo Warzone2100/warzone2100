@@ -46,6 +46,10 @@
 		{
 			"name": "angle",
 			"platform": "windows | mingw"
+		},
+		{
+			"name": "basisu",
+			"host": true
 		}
 	],
 	"default-features": [

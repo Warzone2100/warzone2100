@@ -8,6 +8,9 @@ endif()
 
 find_package(ZIP REQUIRED)
 
+###########################
+# GLSLC shader compilation
+
 find_program( GLSLC "glslc"
 			  PATHS "$ENV{VULKAN_SDK}/bin"
 )
@@ -72,6 +75,105 @@ if(TARGET glsl_compilation)
 	)
 endif()
 
+#########################################
+# Texture pages basis-universal encoding
+
+set(BASIS_UNIVERSAL_ENABLED TRUE)
+
+# default texpages path
+set(_texpages_PATHS
+	PATHS
+		"texpages"
+	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base"
+)
+
+if(BASIS_UNIVERSAL_ENABLED)
+	if(NOT DEFINED BASIS_UNIVERSAL_CLI)
+		message(FATAL_ERROR "No basisu tool has been provided - set BASIS_UNIVERSAL_CLI to the path to basisu or disable BASIS_UNIVERSAL_ENABLED!")
+	endif()
+
+	file(GLOB TEXPAGES_TERRAIN
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-82-yellow-sand-arizona.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-83-red-earth-arizona.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-84-tiles-arizona.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-85-cliff-arizona.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-86-bottom-arizona.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-87-mud-arizona.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-88-grass-arizona.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-89-gray-rubble-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-90-green-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-91-tiles-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-92-medium-tiles-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-93-big-tiles-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-94-cliffs-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-95-brown-rocks-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-96-burned-ground-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-97-burned-tiles-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-98-bottom-urban.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-99-grass-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-100-rock-earth-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-101-cliff-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-102-bottom-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-103-tiles-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-104-snowgrass-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-105-snow-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-106-snowrock-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-107-brown-earth-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-108-snowcliff-rockies.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-109-sand-arizona.png"
+	)
+
+	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/texpages")
+	file(MAKE_DIRECTORY "${_output_dir}")
+	foreach(TEXTURE ${TEXPAGES_TERRAIN})
+		get_filename_component(TEXTURE_FILE_PATH ${TEXTURE} DIRECTORY)
+		get_filename_component(TEXTURE_FILE_NAME_WE ${TEXTURE} NAME_WE)
+		set(_output_name "${TEXTURE_FILE_NAME_WE}.ktx2")
+		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
+			COMMAND "${BASIS_UNIVERSAL_CLI}"
+			ARGS -ktx2 -uastc -uastc_level 2 -uastc_rdo_l 1.0 -mipmap -output_file "${_output_dir}/${_output_name}" -file "${TEXTURE}"
+			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages"
+			DEPENDS "${TEXTURE}"
+			VERBATIM
+		)
+		list(APPEND TEXTURE_LIST "${_output_dir}/${_output_name}")
+	endforeach()
+	add_custom_target(texture_encoding DEPENDS ${TEXTURE_LIST})
+	set_property(TARGET texture_encoding PROPERTY FOLDER "data")
+
+	set(PROCESSED_TEXTURE_FILES ${TEXPAGES_TERRAIN})
+
+	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.png" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.radar")
+	list(APPEND ALL_TEXPAGES_unprocessed ${ALL_TEXPAGES})
+	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${PROCESSED_TEXTURE_FILES})
+	foreach(TEXPAGE_FILE ${ALL_TEXPAGES_unprocessed})
+		file(RELATIVE_PATH _output_name "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages" "${TEXPAGE_FILE}")
+		message(STATUS "Copy unprocessed image file: ${_output_name}")
+		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
+			COMMAND "${CMAKE_COMMAND}"
+			ARGS -E copy_if_different "${TEXPAGE_FILE}" "${_output_dir}/${_output_name}"
+			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages"
+			DEPENDS "${TEXPAGE_FILE}"
+			VERBATIM
+		)
+		list(APPEND TEXTURE_UNPROCESSED_LIST "${_output_dir}/${_output_name}")
+	endforeach()
+
+	add_custom_target(texture_staging DEPENDS ${TEXTURE_UNPROCESSED_LIST})
+	set_property(TARGET texture_staging PROPERTY FOLDER "data")
+
+	# set the appropriate texpages path
+	set(_texpages_PATHS
+		PATHS
+			"texpages"
+		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/base"
+	)
+
+endif()
+
+#########################
+# Compress data archives
+
 COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 	COMPRESSION_LEVEL 0
 	PATHS
@@ -91,11 +193,11 @@ COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 		"shaders"
 		"stats"
 		"structs"
-		"texpages"
 		"tileset"
 		"wrf"
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base"
 	${_glsl_generatedfiles_PATHS}
+	${_texpages_PATHS}
 	IGNORE_GIT
 	QUIET
 )
@@ -158,6 +260,12 @@ ADD_CUSTOM_TARGET(data ALL
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/base.wz" "${CMAKE_CURRENT_BINARY_DIR}/mp.wz")
 if(TARGET glsl_compilation)
 	add_dependencies(data glsl_compilation)
+endif()
+if(TARGET texture_encoding)
+	add_dependencies(data texture_encoding)
+endif()
+if(TARGET texture_staging)
+	add_dependencies(data texture_staging)
 endif()
 
 # Copy font files to build directory to support IDE build+run (from the build dir) scenarios
