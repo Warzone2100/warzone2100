@@ -132,6 +132,7 @@ jobs:
             $VCPKG_DEFAULT_TRIPLET = "arm64-windows"
           }
         }
+        $VCPKG_DEFAULT_HOST_TRIPLET = "x64-windows"
         
         $WZ_FULL_POWERSHELL_PATH = (Get-Command powershell.exe).Path
         $WZ_FULL_GIT_PATH = Split-Path -Path ((Get-Command git.exe).Path)
@@ -237,6 +238,7 @@ jobs:
         echo "::set-output name=WZ_ENABLE_SENTRY::${WZ_ENABLE_SENTRY}"
         echo "WZ_REPO_PATH=${WZ_REPO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "VCPKG_DEFAULT_HOST_TRIPLET=${VCPKG_DEFAULT_HOST_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_TARGET_PLATFORMNAME=${WZ_VC_TARGET_PLATFORMNAME}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "::set-output name=WZ_BUILD_DESC::${WZ_BUILD_DESC}"
         echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -407,6 +409,7 @@ jobs:
       shell: msys2 {0}
       run: |
         echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}"
+        echo "VCPKG_DEFAULT_HOST_TRIPLET=${VCPKG_DEFAULT_HOST_TRIPLET}"
         echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}"
         WZ_FULL_POWERSHELL_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_POWERSHELL_PATH }}')"
         echo "WZ_FULL_POWERSHELL_PATH=${WZ_FULL_POWERSHELL_PATH}"
