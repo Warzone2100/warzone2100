@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-30 00:22\n"
+"PO-Revision-Date: 2022-01-25 07:12\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -18716,7 +18716,7 @@ msgstr "Fichier envoyé!"
 
 #: src/multiplay.cpp:2012
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "MAP TÉLÉCHARGÉE !"
 
 #: src/multiplay.cpp:2068
 #, c-format
