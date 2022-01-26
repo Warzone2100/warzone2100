@@ -179,13 +179,13 @@ bool texLoad(const char *fileName)
 		// Load until we cannot find anymore of them
 		for (k = 0; k < MAX_TILES; k++)
 		{
-			iV_Image tile;
+			std::unique_ptr<iV_Image> tile;
 
 			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d.png", partialPath, k);
 			if (PHYSFS_exists(fullPath)) // avoid dire warning
 			{
-				bool retval = iV_loadImage_PNG2(fullPath, tile, true);
-				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
+				tile = gfx_api::loadUncompressedImageFromFile(fullPath, gfx_api::texture_type::game_texture, -1, -1, true);
+				ASSERT_OR_RETURN(false, tile != nullptr, "Could not load %s!", fullPath);
 			}
 			else
 			{
@@ -194,8 +194,9 @@ bool texLoad(const char *fileName)
 				break;
 			}
 			// Insert into texture page
-			pie_Texture(texPage).upload_sub(j, xOffset, yOffset, tile);
-			tile.clear();
+			pie_Texture(texPage).upload_sub(j, xOffset, yOffset, *tile);
+			tile->clear();
+			tile.reset();
 			if (i == mipmap_max) // dealing with main texture page; so register coordinates
 			{
 				tileTexInfo[k].uOffset = (float)xOffset / (float)xSize;

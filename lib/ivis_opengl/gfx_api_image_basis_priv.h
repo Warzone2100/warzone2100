@@ -38,4 +38,5 @@ namespace gfx_api
 	std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis(const char *filename, optional<gfx_api::texture_type> textureType = nullopt, uint32_t maxWidth = UINT32_MAX, uint32_t maxHeight = UINT32_MAX);
 
 	gfx_api::texture* loadImageTextureFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
+	std::unique_ptr<iV_Image> loadUncompressedImageFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
 }
