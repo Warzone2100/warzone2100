@@ -329,6 +329,9 @@ namespace gfx_api
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) = 0;
 	};
 
+	// High-level API for getting an uncompressed image (iV_Image) from a file
+	std::unique_ptr<iV_Image> loadUncompressedImageFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool forceRGBA8 = false);
+
 	template<std::size_t id, vertex_attribute_type type, std::size_t offset>
 	struct vertex_attribute_description
 	{

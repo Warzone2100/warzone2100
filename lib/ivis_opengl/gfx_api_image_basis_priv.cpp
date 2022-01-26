@@ -432,4 +432,27 @@ gfx_api::texture* gfx_api::loadImageTextureFromFile_KTX2(const std::string& file
 	return pTexture.release();
 }
 
+std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	uint32_t maxWidth_u32 = (maxWidth > 0) ? static_cast<uint32_t>(maxWidth) : UINT32_MAX;
+	uint32_t maxHeight_u32 = (maxHeight > 0) ? static_cast<uint32_t>(maxHeight) : UINT32_MAX;
+
+	auto images = loadiVImagesFromFile_Basis_internal(filename.c_str(), nullopt, maxWidth_u32, maxHeight_u32, 1);
+	if (images.empty())
+	{
+		// Failed to load
+		return nullptr;
+	}
+	ASSERT(images.size() == 1, "Should only be a single - top-level - mip level");
+
+	// Verify it's an iV_Image (uncompressed) - which it should be!
+	iV_Image* pUncompressedImage = dynamic_cast<iV_Image*>(images[0].get());
+	ASSERT(pUncompressedImage != nullptr, "Returned image is not uncompressed??");
+	if (pUncompressedImage)
+	{
+		images[0].release();
+	}
+	return std::unique_ptr<iV_Image>(pUncompressedImage);
+}
+
 #endif

@@ -102,7 +102,7 @@ static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filenam
 const WzString wz_png_extension = WzString(".png");
 #endif
 
-std::string imageLoadFilenameFromInputFilename(const WzString& filename)
+static std::string imageLoadFilenameFromInputFilename(const WzString& filename)
 {
 #if defined(BASIS_ENABLED)
 	// For backwards-compatibility support, filenames that end in ".png" are used as "keys" and we first check for a .ktx2 file with the same filename
@@ -147,8 +147,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gf
 	}
 }
 
-// Takes an iv_Image and texture_type and loads a texture as appropriate / possible
-gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api::texture_type textureType, const std::string& filename)
 {
 	// 1.) Convert to expected # of channels based on textureType
 	switch (textureType)
@@ -156,20 +155,32 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 		case gfx_api::texture_type::specular_map:
 		{
 			bool result = image.convert_to_luma();
-			ASSERT_OR_RETURN(nullptr, result, "(%s): Failed to convert specular map", filename.c_str());
+			ASSERT_OR_RETURN(false, result, "(%s): Failed to convert specular map", filename.c_str());
 			break;
 		}
 		case gfx_api::texture_type::alpha_mask:
 		{
 			if (image.channels() > 1)
 			{
-				ASSERT_OR_RETURN(nullptr, image.channels() == 4, "(%s): Alpha mask does not have 1 or 4 channels, as expected", filename.c_str());
+				ASSERT_OR_RETURN(false, image.channels() == 4, "(%s): Alpha mask does not have 1 or 4 channels, as expected", filename.c_str());
 				image.convert_to_single_channel(3); // extract alpha channel
 			}
 			break;
 		}
 		default:
 			break;
+	}
+
+	return true;
+}
+
+// Takes an iv_Image and texture_type and loads a texture as appropriate / possible
+gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	// 1.) Convert to expected # of channels based on textureType
+	if (!uncompressedPNGImageConvertChannels(image, textureType, filename))
+	{
+		return nullptr;
 	}
 
 	// 2.) If maxWidth / maxHeight exceed current image dimensions, resize()
@@ -258,6 +269,53 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	}
 
 	return pTexture.release();
+}
+
+std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool forceRGBA8 /*= false*/)
+{
+	std::string imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
+	std::unique_ptr<iV_Image> loadedUncompressedImage;
+
+#if defined(BASIS_ENABLED)
+	if (strEndsWith(imageLoadFilename, ".ktx2"))
+	{
+		loadedUncompressedImage = gfx_api::loadUncompressedImageFromFile_KTX2(imageLoadFilename, textureType, maxWidth, maxHeight);
+		if (!loadedUncompressedImage)
+		{
+			// Failed to load the image
+			return nullptr;
+		}
+		if (forceRGBA8)
+		{
+			loadedUncompressedImage->convert_to_rgba();
+		}
+	}
+	else
+#endif
+	if (strEndsWith(imageLoadFilename, ".png"))
+	{
+		// Load the PNG into an iV_Image
+		loadedUncompressedImage = std::unique_ptr<iV_Image>(new iV_Image());
+		if (!iV_loadImage_PNG2(imageLoadFilename.c_str(), *loadedUncompressedImage, forceRGBA8))
+		{
+			// Failed to load the image
+			return nullptr;
+		}
+		// Convert to expected # of channels based on textureType (if forceRGBA8 is not set)
+		if (!forceRGBA8 && !uncompressedPNGImageConvertChannels(*loadedUncompressedImage, textureType, imageLoadFilename))
+		{
+			return nullptr;
+		}
+		// If maxWidth / maxHeight exceed current image dimensions, resize()
+		loadedUncompressedImage->scale_image_max_size(maxWidth, maxHeight);
+	}
+	else
+	{
+		debug(LOG_ERROR, "Unable to load image file: %s", filename);
+		return nullptr;
+	}
+
+	return loadedUncompressedImage;
 }
 
 // MARK: - texture
