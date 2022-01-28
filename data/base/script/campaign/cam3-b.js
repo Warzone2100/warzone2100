@@ -152,10 +152,10 @@ function sendNXlandReinforcements()
 
 function transferPower()
 {
-    const AWARD = 5000;
-    var powerTransferSound = "power-transferred.ogg";
-    setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
-    playSound(powerTransferSound);
+	const AWARD = 5000;
+	var powerTransferSound = "power-transferred.ogg";
+	setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
+	playSound(powerTransferSound);
 }
 
 function activateNexusGroups()
