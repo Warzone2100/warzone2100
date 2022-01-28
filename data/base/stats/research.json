@@ -1413,23 +1413,23 @@
 		"statID": "GuardTower1MG"
 	},
 	"R-Defense-Tower02": {
-        "iconID": "IMAGE_RES_DEFENCE",
-        "id": "R-Defense-Tower02",
-        "msgName": "RES_TOWER2",
-        "name": "Twin Machinegun Guard Tower",
+		"iconID": "IMAGE_RES_DEFENCE",
+		"id": "R-Defense-Tower02",
+		"msgName": "RES_TOWER2",
+		"name": "Twin Machinegun Guard Tower",
 		"redStructures": [
-            "GuardTower1MG"
-        ],
-        "requiredResearch": [
-            "R-Wpn-MG2Mk1"
-        ],
-        "researchPoints": 1100,
-        "researchPower": 36,
-        "resultStructures": [
-            "GuardTower2"
-        ],
-        "statID": "GuardTower2"
-    },
+			"GuardTower1MG"
+		],
+		"requiredResearch": [
+			"R-Wpn-MG2Mk1"
+		],
+		"researchPoints": 1100,
+		"researchPower": 36,
+		"resultStructures": [
+			"GuardTower2"
+		],
+		"statID": "GuardTower2"
+	},
 	"R-Defense-Tower03": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Tower03",
