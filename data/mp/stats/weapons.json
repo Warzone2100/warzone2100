@@ -4566,7 +4566,7 @@
 	    "muzzleGfx": "FXMgnVic.PIE",
 	    "name": "Scavenger Mounted MG",
 	    "numExplosions": 1,
-	    "shortRange": 90,
+	    "shortHit": 90,
 	    "shortRange": 512,
 	    "waterGfx": "FXSSplsh.PIE",
 	    "weaponClass": "KINETIC",
