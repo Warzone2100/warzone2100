@@ -188,8 +188,8 @@ function eventStartLevel()
 			assembly: "HeavyNPFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			maxSize: 6,         // this one was exclusively producing trucks
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),    // but we simplify this out
+			maxSize: 6, // this one was exclusively producing trucks
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)), // but we simplify this out
 			templates: [ cTempl.npsmc, cTempl.npmmct, cTempl.npsmc, cTempl.npsmct ]
 		},
 		"MediumNPFactory": {

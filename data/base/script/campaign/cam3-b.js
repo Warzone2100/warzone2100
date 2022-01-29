@@ -152,10 +152,10 @@ function sendNXlandReinforcements()
 
 function transferPower()
 {
-    const AWARD = 5000;
-    var powerTransferSound = "power-transferred.ogg";
-    setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
-    playSound(powerTransferSound);
+	const AWARD = 5000;
+	var powerTransferSound = "power-transferred.ogg";
+	setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
+	playSound(powerTransferSound);
 }
 
 function activateNexusGroups()
@@ -274,7 +274,7 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
-     camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startpos.x, startpos.y);
