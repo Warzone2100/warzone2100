@@ -27,4 +27,4 @@
 			["Warzone 2100 Music Mod File", true]
 		]
 	}
-];
+]
