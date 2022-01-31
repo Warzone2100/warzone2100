@@ -4,37 +4,37 @@ debugMsg('Module: research.js','init');
 //Rewrited for 3.3+ game version
 function doResearch(){
 	if(!running)return false;
-	
+
 	//old dependency
 	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length != 0) return false;
-	
-	
-	
+
+
+
 	//Get labs where build and ready
 	var labs = enumStruct(me,RESEARCH_LAB);
 	var labs_len = labs.length;
 	labs = labs.filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
-	
+
 	//If no ready labs
 	if(labs.length == 0) return false;
-	
+
 	//old dependency
 	if(policy['build'] != 'rich'){
 			if(countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && (labs_len-labs.len) >= 3) return false;
 			if(countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && (labs_len-labs.len) >= 2) return false;
 			if(countStruct('A0ResourceExtractor', me) < 3 && !(playerPower(me) > 300 || berserk) && (labs_len-labs.len) >= 1) return false;
 	}
-	
-	
+
+
 	//Get all available researches, filterout started by ally
 	var avail_research = enumResearch().filter(function(o){if(o.started)return false;return true;});
-	
+
 	if(avail_research.length == 0) return false;
-	
+
 	debugMsg('Labs: '+labs_len+', ready: '+labs.length+', avail_research: '+avail_research.length, 'research');
-	
+
 //	debugMsg('research_path.length:'+research_path.length, 'research');
-	
+
 	//Clear research path from completed researches
 	research_path = research_path.filter(function(o){
 		var r = getResearch(o);
@@ -44,23 +44,23 @@ function doResearch(){
 	});
 
 	var prepare_research = [];
-	
+
 	if(research_path.length != 0 ){
 		//Filter out started researches by me or ally
 		prepare_research = research_path.filter(function(o){if(getResearch(o).started)return false; return true;});
-	
+
 		if(prepare_research.length == 0) return false;
-	
+
 		debugMsg('Path length: '+prepare_research.length+'; follow to: '+prepare_research[0], 'research');
-		
+
 	}
-	
+
 	//Get clean array without objects
 	var researches = [];
 	for(var r in avail_research){researches.push(avail_research[r].id);}
 
 	var to_research = [];
-	
+
 	//Check if we are at a dead end of the technology branch
 	for(var t in prepare_research){
 		var research = findResearch(prepare_research[t]);
@@ -69,15 +69,15 @@ function doResearch(){
 		}
 //		to_research = to_research.filter(o=>researches.indexOf(o)!==-1);
 		to_research = intersect_arrays(to_research, researches);
-		
+
 		if(to_research.length != 0) break;
-		
+
 		debugMsg('Cannot follow to "'+prepare_research[t]+'" for now', 'research');
-		
+
 	}
-	
+
 //	if(findResearch(to_research[0]).filter(function(o){if(getResearch(o).started)return false; return true;}}).length == 0)
-	
+
 	//No more research at this moment
 	if(to_research.length == 0){
 		var rnd = Math.floor(Math.random()*researches.length);
@@ -86,22 +86,22 @@ function doResearch(){
 		debugMsg('Nothing research, start random research: "'+rnd_research+'"', 'research');
 		to_research.push(rnd_research);
 	}
-	
+
 	//Finish research line
 	if(research_path.length == 0 && to_research.length == 0){debugMsg('No more research in research_path', 'error'); return false;}
-	
+
 	debugMsg('Start research: '+to_research[0], 'research');
-	
+
 	//Start pursue research to given technology
 	if(!pursueResearch(labs[0], to_research)){
 		debugMsg('Something wrong in doResearch() function', 'error');
 		return false;
 	}
 	//debug(JSON.stringify(pursueResearch(labs[0], to_research)));
-	
+
 	//If there more technology to research and more ready labs - repeat function
 	if(labs.length > 1 && prepare_research.length > 1) queue("doResearch", 700);
-	
+
 	return true;
 }
 
@@ -118,12 +118,12 @@ function doResearch_old(){
 	//	debugMsg(getInfoNear(base.x,base.y,'safe',base_range).value+" && "+playerPower(me)+"<300 && "+avail_guns.length+"!=0", 'research_advance');
 	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length != 0) return;
 
-	
+
 	var avail_research = enumResearch().filter(function(e){
 		//		debugMsg(e.name+' - '+e.started+' - '+e.done, 'research_advance');
 		if(e.started)return false;return true;
 	});
-		
+
 	if ( research_way.length == 0 || avail_research.length == 0 ) {
 //		debugMsg("doResearch: Исследовательские пути завершены!!! Останов.", 'research_advance');
 		return;
@@ -145,7 +145,7 @@ function doResearch_old(){
 	var _last_r = research_way[_r][research_way[_r].length-1];
 	var _way = getResearch(_last_r);
 	if(!_way) return;
-		
+
 	if (_way.done == true ) {
 		//		debugMsg("doResearch: Путей "+research_way.length+", путь "+_r+" завершён", 'research_advance');
 		research_way.splice(_r,1);
@@ -161,9 +161,9 @@ function doResearch_old(){
 // 	if(countStruct('A0ResourceExtractor', me) < 8 && playerPower(me) < 1000 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 3) return;
 // 	if(countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 2) return;
 // 	if(countStruct('A0ResourceExtractor', me) <= 3 && playerPower(me) < 300 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 1) return;
-	
+
 	for ( var l in labs ){
-		
+
 		if(policy['build'] != 'rich'){
 			if(countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && _busy >= 3) break;
 			if(countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && _busy >= 2) break;
@@ -197,7 +197,7 @@ function fixResearchWay(way){
 	if(!(way instanceof Array)) return false;
 //	debugMsg('Check tech '+way.length, 'research');
 	var _out = [];
-	
+
 	for(var i in way){
 //		debugMsg('Check: '+way[i], 'research');
 		var _res = getResearch(way[i]);
@@ -207,7 +207,7 @@ function fixResearchWay(way){
 		}
 		_out.push(way[i]);
 	}
-	
+
 	debugMsg('Checked research way length='+way.length+', returned='+_out.length, 'init');
 	return _out;
 }
