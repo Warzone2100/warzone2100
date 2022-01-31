@@ -638,7 +638,7 @@ function builderRecycleWalls(builder){
 	if(myWalls.length == 0) return false;
 	myWalls = sortByDistance(myWalls, builder, 0, true);
 //	debugMsg(myWalls[0].id+": "+myWalls[0].x+"x"+myWalls[0].y, 'builders');
-    if(myWalls.length == 0) return false;
+	if(myWalls.length == 0) return false;
 	if(orderDroidObj_p(builder, DORDER_DEMOLISH, myWalls[0])) return true;
 }
 
