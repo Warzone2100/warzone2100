@@ -77,20 +77,20 @@ function chooseBodyWeaponPair(bodies, weapons) {
 }
 
 function produceTank(factory) {
-    // TODO: needs refactoring. Make some more clever sorting.
-    var bodies = [];
-    if (chooseBodyClass() === BODYCLASS.KINETIC) {
-        bodies = bodies.concat(
+	// TODO: needs refactoring. Make some more clever sorting.
+	var bodies = [];
+	if (chooseBodyClass() === BODYCLASS.KINETIC) {
+		bodies = bodies.concat(
 			filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.KINETIC),
 			filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.THERMAL)
 		);
-    } else {
-        bodies = bodies.concat(
+	} else {
+		bodies = bodies.concat(
 			filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.THERMAL),
-            filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.KINETIC)
+			filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.KINETIC)
 		);
-    }
-    var propulsions;
+	}
+	var propulsions;
 	var ret = scopeRatings();
 	var rnd = random(ret.land + ret.sea);
 	if (!defined(rnd)) // we need only vtols?

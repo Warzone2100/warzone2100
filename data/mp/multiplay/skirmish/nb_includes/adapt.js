@@ -159,7 +159,7 @@ function countSeaTargets(player) {
 		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.HOVER)[0];
 		if (!defined(currProp))
 			return 0;
-        var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
+		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
 		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter(function(obj) {
 			return (!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj);
 		}).length;
