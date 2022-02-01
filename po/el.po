@@ -4619,7 +4619,7 @@ msgid "You have done well."
 msgstr "Τα κατάφερες καλά."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgid "Once we have analyzed and authenticated the technology, your reward will follow."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
@@ -4691,7 +4691,7 @@ msgid "During the counterstrikes, these LasSats failed to fire. If brought into 
 msgstr "Κατά τις αντεπιθέσεις, αυτοί οι δορυφόροι φωτακτίνων απέτυχαν να πυροδοτήσουν. Αν επανέλθουν σε λειτουργία, αυτοί οι δορυφόροι φωτακτίνων θα μπορέσουν να προκαλέσουν σημαντικότατες ζημιές σε επίγειους στόχους."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
-msgid "All nukes targeted at  North America found their targets."
+msgid "All nukes targeted at North America found their targets."
 msgstr "Όλα τα πυρηνικά τα οποία στόχευαν την Βόρειο Αμερική βρήκαν το στόχο τους."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
@@ -4723,7 +4723,7 @@ msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "Είναι, πλέον, σίγουρο πως το ΠΛΕΓΜΑ ευθύνεται για Την Κατάρρευση."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgid "During the early stages of the Collapse, NASDA technicians switched off the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
 msgstr "Κατά τα πρώτα στάδια της Κατάρρευσης, τεχνικοί της ΥΣΑΒΑ απενεργοποίησαν τα μολυσμένα τμήματα, με σκοπό να απομονώσουν την εξάπλωση του Πλέγματος. Αυτό φαίνεται, πως εμπόδισε τους δορυφόρους φωτακτίνων να πυροδοτηθούν κατά τις αντεπιθέσεις."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
@@ -4911,7 +4911,7 @@ msgid "We were trying to reach your position, but have been ambushed."
 msgstr "Προσπαθούσαμε να έρθουμε εκεί που βρίσκεστε, αλλά πέσαμε σε ενέδρα."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-msgid "We're holed up in  a valley at these coordinates."
+msgid "We're holed up in a valley at these coordinates."
 msgstr "Αμυνόμαστε καθηλωμένοι σε μία κοιλάδα, στις ακόλουθες συντεταγμένες."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
@@ -5007,7 +5007,7 @@ msgid "Once I destroyed the world with nuclear fire to clear the way for my cybe
 msgstr "Κατέστρεψα τον κόσμο μια φορά, για να ανοίξει ο δρόμος για το κυβερνητικό μέλλον."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgid "I now intend to further shape the world into my own image, by surgically removing unwanted growths like yourself."
 msgstr "Τώρα, προτίθεμαι να δώσω μορφή σε αυτόν τον κόσμο, σύμφωνα με το δικό μου όραμα, απομακρύνοντας, χειρουργικά, τους ανεπιθύμητους, σαν και εσάς."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
@@ -5083,7 +5083,7 @@ msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as
 msgstr "Διοικητή δεχόμαστε επίθεση από ανθρωπομηχανές και τεθωρακισμένα του ΠΛΕΓΜΑΤΟΣ. Παρακαλούμε να μας βοηθήσεις..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
+msgid "...cannot hold out much longer. Repeat, please help, we cannot hold out much longer...."
 msgstr "... δεν θα κρατήσουμε για πολύ ακόμη. Επαναλαμβάνω, παρακαλώ, βοηθήστε μας, δεν θα κρατήσουμε για πολύ ακόμη ..."
 
 #: data/base/sequenceaudio/devastation.txa:4

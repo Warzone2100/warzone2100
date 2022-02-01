@@ -4619,7 +4619,7 @@ msgid "You have done well."
 msgstr "لقد أبليتم بلاءً حسناً."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgid "Once we have analyzed and authenticated the technology, your reward will follow."
 msgstr "سنحلل هذه التقنية وسنعمل على التأكد من كونها التقنية الحقيقية، وحال الانتهاء من ذلك، ستنالون الجائزة التي تستحقونها."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
@@ -4691,7 +4691,7 @@ msgid "During the counterstrikes, these LasSats failed to fire. If brought into 
 msgstr "لم تتمكن الأقمار الليزرية من إطلاق نيرانها عند وقوع الضربات المعاكسة، ولو تمكنت لاستطاعت أن تلحق ضرراً بالغاً بالأهداف الأرضية."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
-msgid "All nukes targeted at  North America found their targets."
+msgid "All nukes targeted at North America found their targets."
 msgstr "لقد استطاعت كل الصواريخ النووية المتوجهة نحو أمريكا الشمالية إصابة أهدافها."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
@@ -4723,7 +4723,7 @@ msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "لقد صرنا متأكدين الآن أن «نيكسوس» كان مسؤولاً عن «الانهيار»."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgid "During the early stages of the Collapse, NASDA technicians switched off the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
 msgstr "لقد قام الخبراء الفنيون التابعون لـ «نازدا» بتعطيل الأنظمة المصابة أثناء المراحل الأولى من «الانهيار» وذلك بهدف الحد من انتشار «نيكسوس»، وربما هذا هو السبب الذي منع الأقمار الليزرية من العمل أثناء إطلاق الضربات المعاكسة."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
@@ -4911,7 +4911,7 @@ msgid "We were trying to reach your position, but have been ambushed."
 msgstr "لقد كنا نحاول الوصول إلى مكان تواجدك، ولكننا تعرضنا لكمين."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-msgid "We're holed up in  a valley at these coordinates."
+msgid "We're holed up in a valley at these coordinates."
 msgstr "نحن مختبئون في الوادي الموجود عند هذه الإحداثيات."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
@@ -5007,7 +5007,7 @@ msgid "Once I destroyed the world with nuclear fire to clear the way for my cybe
 msgstr "لقد دمرت العالم بالنيران النووية لكي أفسح الطريق لمستقبلي السيبراني."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgid "I now intend to further shape the world into my own image, by surgically removing unwanted growths like yourself."
 msgstr "وأنا الآن أنوي أن أن أغير العالم الأكثر لكي يتخذ شكلي وصورتي، وذلك عن طريق إزالةكل النامياتٍ غير المرغوب فيها مثلك."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
@@ -5083,7 +5083,7 @@ msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as
 msgstr "أيها القائد: نحن نتعرض لهجومٍ من كائنات السايبورغ والدبابات التابعة لـ «نيكسوس». ساعدنا رجاءً، فنحن...."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
+msgid "...cannot hold out much longer. Repeat, please help, we cannot hold out much longer...."
 msgstr "...لم يعد بوسعنا الصمود لفترةٍ أطول. أكرر، ساعدونا، فلم يعد بوسعنا الصمود لفترةٍ أطول...."
 
 #: data/base/sequenceaudio/devastation.txa:4
@@ -19431,4 +19431,3 @@ msgstr "لقد هُزمت!"
 #: src/wzscriptdebug.cpp:1905
 msgid "Script Debugger"
 msgstr ""
-

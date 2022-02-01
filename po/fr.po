@@ -4619,7 +4619,7 @@ msgid "You have done well."
 msgstr "Mes félicitations."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgid "Once we have analyzed and authenticated the technology, your reward will follow."
 msgstr "Dès que nous aurons analysé et authentifié la technologie, votre récompense vous sera octroyée."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
@@ -4691,7 +4691,7 @@ msgid "During the counterstrikes, these LasSats failed to fire. If brought into 
 msgstr "Durant les contre-attaques, ces lasers n'ont pas tiré. Si ces satellites étaient engagés comme appuis militaires, ils pourraient infliger des dégâts considérables à des cibles au sol..."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
-msgid "All nukes targeted at  North America found their targets."
+msgid "All nukes targeted at North America found their targets."
 msgstr "Toutes les ogives nuclaires dirigées contre l'Amérique du Nord ont touché leurs cibles."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
@@ -4723,7 +4723,7 @@ msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "Il est maintenant certain que NEXUS est le responsable de l'Apocalypse."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgid "During the early stages of the Collapse, NASDA technicians switched off the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
 msgstr "Au début de l'offensive décisive des satellites contrôlés par NEXUS, les techniciens de la NASDA ont arrêté les systèmes infectés pour stopper la diffusion du virus. Cela semble avoir enrayé la riposte laser des satellites."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
@@ -4911,7 +4911,7 @@ msgid "We were trying to reach your position, but have been ambushed."
 msgstr "Nous étions en train de rejoindre notre position, mais nous sommes tombés dans une embuscade."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-msgid "We're holed up in  a valley at these coordinates."
+msgid "We're holed up in a valley at these coordinates."
 msgstr "Nous nous sommes cachés dans une vallée dont voici les coordonnées."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
@@ -5007,7 +5007,7 @@ msgid "Once I destroyed the world with nuclear fire to clear the way for my cybe
 msgstr "J'ai détruit de monde avec le feu nucléaire pour libérer le voie à mon futur cybernétique."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgid "I now intend to further shape the world into my own image, by surgically removing unwanted growths like yourself."
 msgstr "J'ai maintenant pour projet de reconstruire le monde à mon image, notamment en retirant les excroissances indésirables telles que vous."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
@@ -5083,7 +5083,7 @@ msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as
 msgstr "Commandant, nous subissons des attaques répétées de troupes de NEXUS. Aidez-nous car..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
+msgid "...cannot hold out much longer. Repeat, please help, we cannot hold out much longer...."
 msgstr "...nous ne pouvons pas tenir plus longtemps. Je répète, nous ne pouvons pas tenir plus longtemps..."
 
 #: data/base/sequenceaudio/devastation.txa:4

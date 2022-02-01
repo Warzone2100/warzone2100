@@ -11,7 +11,7 @@
 
 20	432	85.8333333333	106.25	_("During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets.")
 
-20	432	108.333333333	118.333333333	_("All nukes targeted at  North America found their targets.")
+20	432	108.333333333	118.333333333	_("All nukes targeted at North America found their targets.")
 
 20	447	119.166666667	141.666666667	_("We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites.")
 

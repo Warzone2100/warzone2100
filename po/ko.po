@@ -4619,7 +4619,7 @@ msgid "You have done well."
 msgstr "아주 잘했다."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgid "Once we have analyzed and authenticated the technology, your reward will follow."
 msgstr "일단 우리가 분석한 후 기술이 진짜임이 증명되면, 보상이 따를 것이다."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
@@ -4691,7 +4691,7 @@ msgid "During the counterstrikes, these LasSats failed to fire. If brought into 
 msgstr "반격이 진행 중일 때, 이 레이저들을 불발을 일으켰습니다. 사용되었으면 이 레이저들은 지상 표적에 심한 손상을 입힐 수 있었습니다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
-msgid "All nukes targeted at  North America found their targets."
+msgid "All nukes targeted at North America found their targets."
 msgstr "북미로 발사된 모든 핵폭탄은 정확히 표적에 떨어졌습니다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
@@ -4723,7 +4723,7 @@ msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "넥서스가 컬랩스의 윈인이였다는 것이 이제 확실합니다."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgid "During the early stages of the Collapse, NASDA technicians switched off the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
 msgstr "컬랩스의 초기 단계 동안, NASDA 기술자들이 넥서스의 확장을 막기 위해 감염뒨 시스템을 종료하였습니다. 이 때문에 레이저 위성들이 핵 반격 당시 불통이였던 것 같습니다."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
@@ -4911,7 +4911,7 @@ msgid "We were trying to reach your position, but have been ambushed."
 msgstr "우리가 당신의 위치로 가는 도중 습격당했습니다."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-msgid "We're holed up in  a valley at these coordinates."
+msgid "We're holed up in a valley at these coordinates."
 msgstr "이 좌표에 있는 계곡 안에 틀어박혀 있습니다."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
@@ -5007,7 +5007,7 @@ msgid "Once I destroyed the world with nuclear fire to clear the way for my cybe
 msgstr "내 인공 두뇌학 미래의 길을 열기 위해, 한때 나는 세상을 핵으로 파괴하였지."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgid "I now intend to further shape the world into my own image, by surgically removing unwanted growths like yourself."
 msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 나의 형상으로 더 빚을 것이다."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
@@ -5083,7 +5083,7 @@ msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as
 msgstr "사령관님, 우리는 넥서스 사이보그와 탱크의 공격을 받고 있습니다. 제발 도와주십시오 우리는..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
+msgid "...cannot hold out much longer. Repeat, please help, we cannot hold out much longer...."
 msgstr "...오래 버틸 수 없습니다. 반복합니다, 부디 도와주십시오, 우리는 오래 버틸 수 없습니다..."
 
 #: data/base/sequenceaudio/devastation.txa:4

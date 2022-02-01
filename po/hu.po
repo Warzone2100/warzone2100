@@ -4619,7 +4619,7 @@ msgid "You have done well."
 msgstr "Jól szerepeltél."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgid "Once we have analyzed and authenticated the technology, your reward will follow."
 msgstr "Amint elemeztük, és ellenőriztük a technológiát a jutalmad nem marad el."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
@@ -4691,7 +4691,7 @@ msgid "During the counterstrikes, these LasSats failed to fire. If brought into 
 msgstr "Az ellencsapás alatt ezek a műholdak nem tüzeltek. Amennyiben sikerül működésre bírni őket, nagy kárt tudnak tenni a földi célpontokban."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
-msgid "All nukes targeted at  North America found their targets."
+msgid "All nukes targeted at North America found their targets."
 msgstr "Atomfegyverek célpontjai, Észak Amerikában vannak."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
@@ -4723,7 +4723,7 @@ msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "Most már bizonyos, hogy a NEXUS volt a felelős az összeomlásért."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgid "During the early stages of the Collapse, NASDA technicians switched off the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
 msgstr "Az összeomlás korai szakaszában, a NASDA technikusok lekapcsolták a fertőzött rendszereket, hogy izolálhassák a NEXUS terjedését. Úgy tűnik ez megakadályozta a lézerműholdakat az ellencsapásokban."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
@@ -4911,7 +4911,7 @@ msgid "We were trying to reach your position, but have been ambushed."
 msgstr "Megpróbáltuk elérni a pozícióját, de lesből ránk támadtak."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-msgid "We're holed up in  a valley at these coordinates."
+msgid "We're holed up in a valley at these coordinates."
 msgstr "Elrejtőztünk a völgyben, ezeken a koordinátákon."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
@@ -5007,7 +5007,7 @@ msgid "Once I destroyed the world with nuclear fire to clear the way for my cybe
 msgstr "A kibernetikai jövőmért, már egyszer felperzseltem nukleáris tűzzel a világot."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgid "I now intend to further shape the world into my own image, by surgically removing unwanted growths like yourself."
 msgstr "Most tovább formálom a világot a saját képemre úgy, hogy kivágom a nemkívánatos daganatokat, mint ön."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
@@ -5083,7 +5083,7 @@ msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as
 msgstr "Parancsnok, a NEXUS kiborgok és tankok támadása alatt állunk. Segítsen, mert mi..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
+msgid "...cannot hold out much longer. Repeat, please help, we cannot hold out much longer...."
 msgstr "...nem tudjuk már sokáig tartani magunkat. Ismétlem, segítsen, nem tudjuk már sokáig tartani magunkat...."
 
 #: data/base/sequenceaudio/devastation.txa:4

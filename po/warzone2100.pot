@@ -4620,7 +4620,7 @@ msgid "You have done well."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgid "Once we have analyzed and authenticated the technology, your reward will follow."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
@@ -4692,7 +4692,7 @@ msgid "During the counterstrikes, these LasSats failed to fire. If brought into 
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
-msgid "All nukes targeted at  North America found their targets."
+msgid "All nukes targeted at North America found their targets."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
@@ -4724,7 +4724,7 @@ msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgid "During the early stages of the Collapse, NASDA technicians switched off the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
@@ -4912,7 +4912,7 @@ msgid "We were trying to reach your position, but have been ambushed."
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-msgid "We're holed up in  a valley at these coordinates."
+msgid "We're holed up in a valley at these coordinates."
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
@@ -5008,7 +5008,7 @@ msgid "Once I destroyed the world with nuclear fire to clear the way for my cybe
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgid "I now intend to further shape the world into my own image, by surgically removing unwanted growths like yourself."
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
@@ -5084,7 +5084,7 @@ msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
+msgid "...cannot hold out much longer. Repeat, please help, we cannot hold out much longer...."
 msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:4
