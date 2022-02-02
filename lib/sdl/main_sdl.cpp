@@ -2136,7 +2136,7 @@ void wzSDLPreWindowCreate_InitOpenGLAttributes(bool antialiasing, bool useOpenGL
 
 	// Set minimum number of bits for the RGB channels of the color buffer
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
 #if defined(WZ_OS_WIN)
 	if (useOpenGLES)
