@@ -828,7 +828,7 @@ static void scanDataDirs()
 		{
 			WzString resourceDataPath(resourcePath);
 			resourceDataPath += "/data";
-			registerSearchPath(resourceDataPath.toUtf8().c_str(), 8);
+			registerSearchPath(resourceDataPath.toUtf8().c_str(), 3);
 			rebuildSearchPath(mod_multiplay, true);
 		}
 		else
