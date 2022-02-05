@@ -292,7 +292,7 @@ function buildersOrder(order,target) {
 	if(buildersHuntersLen != 0){
 		/*
 		 if ( builder_targets*.length == 0 ) { // Если нет целей для разведки или захвата ресурсов
-			for ( var h in hunters) {if(!builderBusy(hunters[h])){
+			for (const h in hunters) {if(!builderBusy(hunters[h])){
 				if(rigDefence(hunters[h])) continue;
 				orderDroidLoc_p(hunters[h],DORDER_MOVE,base.x,base.y);
 			}}
@@ -301,7 +301,7 @@ function buildersOrder(order,target) {
 		*/
 		var hunters = enumGroup(buildersHunters);
 		var problemBuildings = sortByDistance(getProblemBuildings(), base);
-		for ( var h in hunters) {
+		for (const h in hunters) {
 			var huntOnDuty = oilHunt(hunters[h]);
 			if(huntOnDuty){
 //				debugMsg(hunters[h].id+' oilHunt', 'hunters');
@@ -441,7 +441,7 @@ function defenceQueue(){
 				if(myDefence.length==0) return true; //Если защитных сооружений вообще нет, добавляем все координаты всех наших качалок
 				if(!getInfoNear(e.x,e.y,'buildDef',5,30000,false).value) return false; //Если не получается построить рядом защиту - запоминаем это на 5 минут и пропускаем
 				var defNum = 0;
-				for (var i in myDefence){
+				for (const i in myDefence) {
 					if (distBetweenTwoPoints_p(e.x,e.y,myDefence[i].x,myDefence[i].y) < 7) defNum++; //Если к качалке есть близко на 7 тайлов защита, считаем
 					if ( rage == EASY && defNum != 0) return false;
 					if ((rage == MEDIUM || rage == HARD || berserk) && defNum >= 1) return false; //если к качалке близко есть башня, пропускаем
@@ -454,7 +454,7 @@ function defenceQueue(){
 		var enQueue = enemyRigs.filter(
 			function(e){
 				if(myDefence.length==0) return true; //Если защитных сооружений вообще нет, добавляем все координаты всех наших качалок
-				for (var i in myDefence){
+				for (const i in myDefence) {
 					if (distBetweenTwoPoints_p(e.x,e.y,myDefence[i].x,myDefence[i].y) < 7) return false; //Если к качалке есть близко защита, пропускаем
 				}
 				return true; //Добавляем координаты к очереди
@@ -500,7 +500,7 @@ function oilHunt(obj, nearbase){
 	//Если строитель рядом с вражеским ресурсом
 	/*
 	if(defQueue.length != 0 && defence.length != 0) {
-		for ( var i in oil_enemy ) {if(distBetweenTwoPoints_p(oil_enemy[i].x,oil_enemy[i].y,obj.x,obj.y) <= 15 && !getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'defended').value && getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'safe').value){
+		for (const i in oil_enemy) {if(distBetweenTwoPoints_p(oil_enemy[i].x,oil_enemy[i].y,obj.x,obj.y) <= 15 && !getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'defended').value && getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'safe').value){
 		var toBuild = defence[Math.floor(Math.random()*defence.length)];
 		var pos = pickStructLocation(obj,toBuild,oil_enemy[i].x+Math.round(Math.random()*2-1), oil_enemy[i].y+Math.round(Math.random()*2-1));
 		if(pos && !builderBusy(obj)){
@@ -522,7 +522,7 @@ function oilHunt(obj, nearbase){
 		feature_try = 10;
 	}
 
-	for(var i in builder_targets){
+	for (const i in builder_targets) {
 		if (getInfoNear(builder_targets[i].x,builder_targets[i].y,'safe').value){
 			if(distBetweenTwoPoints_p(builder_targets[i].x,builder_targets[i].y,obj.x,obj.y) <= target_range){
 				if ( typeof builder_targets[i] === "undefined" ) { debugMsg("ERROR in oilHunt(): Выход за пределы массива, исправить!", 'error'); break;}

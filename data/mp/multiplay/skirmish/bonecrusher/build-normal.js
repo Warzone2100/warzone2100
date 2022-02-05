@@ -50,7 +50,7 @@ function mainBuilders(rotation){
 		if(helped < 1){
 			var myBase = enumStruct(me);
 			var _h=false;
-			for ( var b in myBase ){
+			for (const b in myBase) {
 //				if(earlyGame && distBetweenTwoPoints_p(myBase[b].x, myBase[b].y, obj.x, obj.y) > 5){continue;}
 //				if(myBase[b].status == BEING_DEMOLISHED){orderDroidObj_p(obj, DORDER_DEMOLISH, myBase[b]); helped++; _h=true; break;} //TODO
 				if(distBetweenTwoPoints_p(base.x,base.y,myBase[b].x,myBase[b].y) > (base_range/2)){continue;}

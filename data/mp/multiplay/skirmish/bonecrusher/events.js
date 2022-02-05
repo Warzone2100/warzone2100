@@ -549,12 +549,12 @@ function bc_eventChat(sender, to, message) {
 			break;
 		case "dbg":
 			debugMsg("DEBUG: ", 'dbg');
-/*			for(var i in avail_research){
+/*			for (const i in avail_research) {
 				debugMsg(avail_research[i].name, 'dbg');
 			}
 			debugMsg("<==-==>", 'dbg');
 			debugMsg("DEBUG: research_way", 'dbg');
-			for(var i in research_way){
+			for (const i in research_way) {
 				debugMsg(research_way[i], 'dbg');
 			}
 */
