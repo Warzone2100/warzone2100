@@ -318,7 +318,7 @@ function __camPickTarget(group)
 function __camTacticsTick()
 {
 	var dt = CAM_TICKS_PER_FRAME;
-	for (var group in __camGroupInfo)
+	for (const group in __camGroupInfo)
 	{
 		//Remove groups with no droids.
 		if (groupSize(group) === 0)

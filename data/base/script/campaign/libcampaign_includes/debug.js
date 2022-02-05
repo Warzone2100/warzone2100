@@ -140,7 +140,7 @@ function __camUpdateMarkedTiles()
 	hackMarkTiles();
 	if (camIsCheating() && camDef(__camMarkedTiles))
 	{
-		for (var label in __camMarkedTiles)
+		for (const label in __camMarkedTiles)
 		{
 			hackMarkTiles(label);
 		}

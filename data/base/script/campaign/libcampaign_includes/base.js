@@ -43,7 +43,7 @@ function camSetEnemyBases(bases)
 		__camNumEnemyBases = 0;
 	}
 	// convert label strings to groups and store
-	for (var blabel in __camEnemyBases)
+	for (const blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
 		var obj = getObject(blabel);
@@ -204,7 +204,7 @@ function __camCheckBaseSeen(seen)
 		return;
 	}
 	// FIXME: O(n) lookup here
-	for (var blabel in __camEnemyBases)
+	for (const blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
 		if (bi.group !== group)
@@ -251,7 +251,7 @@ function __camShouldDestroyLeftover(objInfo, basePlayer)
 function __camCheckBaseEliminated(group)
 {
 	// FIXME: O(n) lookup here
-	for (var blabel in __camEnemyBases)
+	for (const blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
 		var leftovers = [];
@@ -318,7 +318,7 @@ function __camCheckBaseEliminated(group)
 
 function __camBasesTick()
 {
-	for (var blabel in __camEnemyBases)
+	for (const blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
 		if (bi.eliminated || !camDef(bi.reinforce_kind))
