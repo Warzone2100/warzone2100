@@ -532,48 +532,14 @@ static bool moveNextTarget(DROID *psDroid)
 	return true;
 }
 
-// Watermelon:fix these magic number...the collision radius should be based on pie imd radius not some static int's...
-static	int mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
-
 // Get the radius of a base object for collision
 static SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 {
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		{
-			const DROID *psDroid = (const DROID *)psObj;
-			if (psDroid->droidType == DROID_PERSON)
-			{
-				return mvPersRad;
-			}
-			else if (cyborgDroid(psDroid))
-			{
-				return mvCybRad;
-			}
-			else
-			{
-				const BODY_STATS *psBdyStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
-				switch (psBdyStats->size)
-				{
-				case SIZE_LIGHT:
-					return mvSmRad;
+		return psObj->sDisplay.imd->radius;
 
-				case SIZE_MEDIUM:
-					return mvMedRad;
-
-				case SIZE_HEAVY:
-					return mvLgRad;
-
-				case SIZE_SUPER_HEAVY:
-					return 130;
-
-				default:
-					return psDroid->sDisplay.imd->radius;
-				}
-			}
-			break;
-		}
 	case OBJ_STRUCTURE:
 		return psObj->sDisplay.imd->radius / 2;
 
