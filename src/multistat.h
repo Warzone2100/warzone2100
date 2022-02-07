@@ -39,6 +39,7 @@ struct PLAYERSTATS
 
 	uint32_t recentKills = 0;  // score/kills in last game.
 	uint32_t recentScore = 0;
+	uint64_t recentPowerLost = 0;  // power lost in last game (i.e. from droids / structures being killed by other players)
 
 	struct Autorating
 	{
@@ -77,5 +78,8 @@ void addKnownPlayer(std::string const &name, EcKey const &key, bool override = f
 
 uint32_t getMultiPlayUnitsKilled(uint32_t player);
 uint32_t getSelectedPlayerUnitsKilled();
+
+bool saveMultiStatsToJSON(nlohmann::json& json);
+bool loadMultiStatsFromJSON(const nlohmann::json& json);
 
 #endif // __INCLUDED_SRC_MULTISTATS_H__

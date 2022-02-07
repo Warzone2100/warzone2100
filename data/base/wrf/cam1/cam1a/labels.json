@@ -25,7 +25,7 @@
 	},
 	"position_6": {
 		"label": "base2Assembly",
-		"pos": [5056, 2496]
+		"pos": [5056, 2752]
 	},
 	"position_7": {
 		"label": "base3Assembly",
@@ -84,6 +84,12 @@
 		"subscriber": 0,
 		"pos1": [2900, 500],
 		"pos2": [3800, 3200]
+	},
+	"area_9": {
+		"label": "factoryTrigger",
+		"pos1": [2880, 1600],
+		"pos2": [3136, 2112],
+		"subscriber": 0
 	},
 
 	"object_0": {

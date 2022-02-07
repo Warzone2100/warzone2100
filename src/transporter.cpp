@@ -529,6 +529,8 @@ bool intAddDroidsAvailForm()
 		Animate = false;
 	}
 
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	auto const &parent = psWScreen->psForm;
 
 	/* Add the droids available form */
@@ -638,6 +640,12 @@ int calcRemainingCapacity(const DROID *psTransporter)
 
 	// If it's dead then just return 0.
 	if (isDead((const BASE_OBJECT *)psTransporter))
+	{
+		return 0;
+	}
+
+	// If for some reason it doesn't have an associated psGroup (is it being recycled?), just return 0.
+	if (!psTransporter->psGroup)
 	{
 		return 0;
 	}
@@ -993,7 +1001,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		if (psTransporter->player == selectedPlayer)
 		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 			if (lastTransportIsFullMsgTime + MAX_TRANSPORT_FULL_MESSAGE_PAUSE < gameTime)
 			{
 				addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
@@ -1081,6 +1089,7 @@ int transporterSpaceRequired(const DROID *psDroid)
 /*sets which list of droids to use for the transporter interface*/
 DROID *transInterfaceDroidList()
 {
+	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
 	if (onMission)
 	{
 		return mission.apsDroidLists[selectedPlayer];

@@ -68,22 +68,14 @@ function chooseWeaponType(weaps)
 	// "good enough" randomization of electronic/super weapons cause these are hard to say which is best
 	if (weaps.alias === "nex" || weaps.alias === "as")
 	{
-		if (weaps.alias === "as" && !getResearch("R-Wpn-HeavyPlasmaLauncher").done)
+		var rdm = [];
+
+		while (rdm.length !== weaps.weapons.length)
 		{
-			weaponType = [weaps.weapons[0]]; // to account for Cobra's Hard/Insane difficulty cheat behavior with heavy plasma launcher
+			rdm.push(weaps.weapons[random(weaps.weapons.length)]);
 		}
-		else
-		{
-			var rdm = [];
 
-			while (rdm.length !== weaps.weapons.length)
-			{
-
-				rdm.push(weaps.weapons[random(weaps.weapons.length)]);
-			}
-
-			weaponType = rdm;
-		}
+		weaponType = rdm;
 	}
 
 	if (isDefined(weaps.fastFire) && (random(100) < 50))
@@ -188,25 +180,8 @@ function choosePersonalityWeapon(type)
 		weaps = chooseRandomWeapon();
 		weaponList = shuffleWeaponList(chooseWeaponType(weaps));
 
-		//randomly choose an unbalanced and overpowered weapon if on hard or insane difficulty.
-		if ((difficulty >= HARD) && componentAvailable("tracked01") && (random(100) < 2))
-		{
-			if (difficulty >= INSANE && random(100) <= 50)
-			{
-				weaponList = [];
-				skip = true;
-				weaponList.push("MortarEMP");
-			}
-			else if (gameTime > 900000)
-			{
-				weaponList = [];
-				skip = true;
-				weaponList.push("PlasmaHeavy");
-			}
-		}
-
 		// Choose an anti-air weapon instead... checks target player and then total player vtols.
-		if (!skip && ((playerVtolRatio(getMostHarmfulPlayer()) >= 0.06) || (countEnemyVTOL() >= 7)) && random(100) < 20)
+		if (((playerVtolRatio(getMostHarmfulPlayer()) >= 0.06) || (countEnemyVTOL() >= 7)) && random(100) < 20)
 		{
 			weaponList = [];
 			skip = true;
@@ -223,6 +198,12 @@ function choosePersonalityWeapon(type)
 			}
 
 			var aa = subPersonalities[personality].antiAir.weapons;
+			// Default to machinegun AA line if our current line doesn't exist (useful on team battles)
+			if (!componentAvailable(subPersonalities[personality].antiAir.weapons[0].stat))
+			{
+				aa = weaponStats.AA.weapons;
+			}
+
  			for (var i = aa.length - 1; i >= 0; --i)
 			{
 				var weapObj = aa[i];
@@ -469,7 +450,8 @@ function buildCyborg(id, useEngineer)
 	var weaponLine = choosePersonalityWeapon("CYBORG");
 
 	//Choose MG instead if enemy has enough cyborgs.
-	if ((!turnOffMG && (random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
+	if (((!turnOffMG || (cyborgOnlyGame && !useLasersForCyborgControl() && random(100) < 66)) &&
+		(random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
 		!havePrimaryOrArtilleryWeapon() ||
 		earlyT1MachinegunChance())
 	{
@@ -523,7 +505,6 @@ function analyzeQueuedSystems()
 	var fac = enumStruct(me, FACTORY);
 	var trucks = 0;
 	var sens = 0;
-	var reps = 0;
 
 	for (var i = 0, l = fac.length; i < l; ++i)
 	{
@@ -540,14 +521,10 @@ function analyzeQueuedSystems()
 			{
 				sens += 1;
 			}
-			if (TYPE === DROID_REPAIR)
-			{
-				reps += 1;
-			}
 		}
 	}
 
-	return { "truck": trucks, "sensor": sens, "repair": reps };
+	return { "truck": trucks, "sensor": sens };
 }
 
 function attackerCountsGood(recycle)
@@ -579,18 +556,15 @@ function produce()
 		return; //Stop spamming about having the droid limit reached.
 	}
 	const MIN_SENSORS = 1;
-	const MIN_REPAIRS = 2;
-	var useCybEngineer = !countStruct(structures.factory); //use them if we have no factory
 	var systems = analyzeQueuedSystems();
 
 	var attackers = enumGroup(attackGroup).length;
-	var allowSpecialSystems = isDefined(attackers) ? attackers > 10 : false;
 	var buildSensors = ((enumGroup(sensorGroup).length + systems.sensor) < MIN_SENSORS);
-	var buildRepairs = ((enumGroup(repairGroup).length + systems.repair) < MIN_REPAIRS);
 	var buildTrucks = ((enumGroup(constructGroup).length +
 		enumGroup(oilGrabberGroup).length +
 		enumGroup(constructGroupNTWExtra).length +
 		systems.truck) < minTruckCount());
+	var useCybEngineer = !countStruct(structures.factory) && buildTrucks && (countDroid(DROID_CONSTRUCT) < getDroidLimit(me, DROID_CONSTRUCT)); //use them if we have no factory
 
 	//Loop through factories in the order the personality likes.
 	for (var i = 0; i < 3; ++i)
@@ -645,12 +619,6 @@ function produce()
 					{
 						buildSys(FC.id);
 					}
-					else if (allowSpecialSystems &&
-						buildRepairs &&
-						componentAvailable("LightRepair1"))
-					{
-						buildSys(FC.id, REPAIR_TURRETS);
-					}
 					else
 					{
 						if (!countStruct(structures.gen) || !countStruct(structures.derrick))
@@ -666,7 +634,7 @@ function produce()
 					var cyb = (facType === structures.cyborgFactory);
 					//In some circumstances the bot could be left with no generators and no factories
 					//but still needs to produce combat engineers to, maybe, continue surviving.
-					if (countStruct(structures.gen) || (cyb && useCybEngineer && (gameTime > 480000)))
+					if (countStruct(structures.gen) || (cyb && useCybEngineer && (cyborgOnlyGame || (gameTime > 480000))))
 					{
 						if (cyb && (!turnOffCyborgs || !forceHover))
 						{

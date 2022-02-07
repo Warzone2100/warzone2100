@@ -378,6 +378,42 @@ function checkUnfinishedStructures(group)
 	return false;
 }
 
+function holdAllOilTrucks()
+{
+	var oilGrabbers = enumGroup(oilGrabberGroup);
+
+	for (var i = 0, len = oilGrabbers.length; i < len; ++i)
+	{
+		if (oilGrabbers[i].order !== DORDER_RECYCLE &&
+			oilGrabbers[i].order !== DORDER_HOLD)
+		{
+			orderDroid(oilGrabbers[i], DORDER_HOLD);
+		}
+	}
+}
+
+function skipOilGrabIfEasy()
+{
+	if (difficulty === EASY)
+	{
+		var myDerrickCount = enumStruct(me, structures.derrick).filter(function(obj) {
+			return obj.status === BUILT;
+		}).length;
+		var enemies = findLivingEnemies();
+
+		for (var i = 0, len = enemies.length; i < len; ++i)
+		{
+			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(structures.derrick, enemies[i]))
+			{
+				holdAllOilTrucks();
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 function lookForOil()
 {
 	if (currently_dead)
@@ -386,7 +422,7 @@ function lookForOil()
 	}
 
 	var droids = enumGroup(oilGrabberGroup);
-	var oils = enumFeature(-1, OIL_RES).sort(distanceToBase);
+	var oils = enumFeature(ALL_PLAYERS, OIL_RES).sort(distanceToBase);
 
 	if (!forceDerrickBuildDefense && (oils.length < 2))
 	{
@@ -399,6 +435,10 @@ function lookForOil()
 	}
 
 	if (oils.length === 0 && highOilMap() && maintenance(oilGrabberGroup))
+	{
+		return;
+	}
+	if (skipOilGrabIfEasy())
 	{
 		return;
 	}
@@ -435,9 +475,19 @@ function lookForOil()
 function buildAAForPersonality()
 {
 	const VTOL_COUNT = countEnemyVTOL();
+	var minAAs = Math.floor(VTOL_COUNT / 2);
+	var high = highOilMap();
+	if (!high && (getRealPower() >= MIN_BUILD_POWER))
+	{
+		minAAs = VTOL_COUNT;
+	}
+	else if (high && (getRealPower() >= SUPER_LOW_POWER))
+	{
+		minAAs = VTOL_COUNT * 4;
+	}
 
 	//Use stormbringer if we have it.
-	if (countAndBuild("P0-AASite-Laser", Math.floor(VTOL_COUNT / 2)))
+	if (countAndBuild("P0-AASite-Laser", minAAs))
 	{
 		return true;
 	}
@@ -446,7 +496,7 @@ function buildAAForPersonality()
 		var aaType = subPersonalities[personality].antiAir.defenses;
 		for (var i = aaType.length - 1; i >= 0; --i)
 		{
-			if (countAndBuild(aaType[i].stat, Math.floor(VTOL_COUNT / 2)))
+			if (countAndBuild(aaType[i].stat, minAAs))
 			{
 				return true;
 			}
@@ -612,7 +662,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if ((!GOOD_POWER_LEVEL || getMultiTechLevel() > 1) && countAndBuild(structures.gen, 1))
+		if ((!GOOD_POWER_LEVEL || (getMultiTechLevel() > 1)) && countAndBuild(structures.gen, 1))
 		{
 			return true;
 		}
@@ -662,13 +712,17 @@ function buildBaseStructures()
 	{
 		var haveAllies = (alliancesType === ALLIANCES_TEAMS) && (playerAlliance(true).length > 0);
 
-		if ((!GOOD_POWER_LEVEL || getMultiTechLevel() > 1) && countAndBuild(structures.gen, 1))
+		if ((!GOOD_POWER_LEVEL || (getMultiTechLevel() > 1)) && countAndBuild(structures.gen, 1))
 		{
 			return true;
 		}
 		if (getRealPower() < 550 && countAndBuild(structures.gen, 4))
 		{
 			return true; //a little fail-safe
+		}
+		if (GOOD_POWER_LEVEL && randomResearchLabStart && !researchComplete && countAndBuild(structures.lab, 1))
+		{
+			return true;
 		}
 		if (countAndBuild(structures.factory, 2))
 		{
@@ -849,7 +903,7 @@ function buildSpecialStructures()
 //Build the minimum repairs and any vtol pads.
 function buildExtras()
 {
-	var needVtolPads = Math.floor(1.5 * countStruct(structures.vtolPad)) < enumGroup(vtolGroup).length;
+	var needVtolPads = countStruct(structures.vtolPad) < enumGroup(vtolGroup).length;
 	if (needVtolPads && buildStuff(structures.vtolPad))
 	{
 		return true;

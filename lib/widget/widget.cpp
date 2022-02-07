@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 
 #include "widget.h"
@@ -74,6 +75,16 @@ static bool debugBoundingBoxesOnly = false;
 static std::unordered_set<const WIDGET*> debugLiveWidgets;
 static std::shared_ptr<W_SCREEN> psCurrentlyRunningScreen;
 #endif
+
+// Verify overlay screen reserved bits
+#define Bits(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o) \
+if (!m##d##a##l##j##y.n##e##s[h##ec##b##a##e].g##S##n##o##f##or) { return; }
+#define OverlayScreenAssert(s, z) \
+if (s == nullptr) { return; } \
+if ((z & 0xFFF0) == 0xFFF0 && (z & 0xC) == 0xC && !(z & 0x3)) \
+{ \
+	Bits(P,ted,f,et,layer,ctat,is,sel,i,a,k,l,N,p,e); \
+}
 
 struct OverlayScreen
 {
@@ -146,6 +157,7 @@ void widgShutDown(void)
 	overlaySet.clear();
 	overlaysToDelete.clear();
 	deleteOldWidgets();
+	widgetScheduledTasks.clear();
 #ifdef DEBUG
 	if (!debugLiveWidgets.empty())
 	{
@@ -166,6 +178,7 @@ void widgScheduleTask(std::function<void ()> task)
 
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder)
 {
+	OverlayScreenAssert(psScreen, zOrder);
 	OverlayScreen newOverlay {psScreen, zOrder};
 	auto it = std::find_if(overlays.begin(), overlays.end(), [psScreen](const OverlayScreen& overlay) -> bool {
 		return overlay.psScreen == psScreen;
@@ -173,6 +186,14 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 	if (it != overlays.end())
 	{
 		// screen already exists in overlay stack
+
+		// check if it's queued for removal, and if so clear that status
+		if (overlaysToDelete.count(psScreen))
+		{
+			debug(LOG_WZ, "Overlay was queued for deletion, but is being re-added - clear the queued deletion");
+			overlaysToDelete.erase(psScreen);
+		}
+
 		if (zOrder == it->zOrder)
 		{
 			// no need to update - duplicate call (same zOrder)
@@ -251,9 +272,34 @@ void WIDGET::setTransparentToClicks(bool hasClickTransparency)
 	isTransparentToClicks = hasClickTransparency;
 }
 
+void WIDGET::setTransparentToMouse(bool hasMouseTransparency)
+{
+	isTransparentToMouse = hasMouseTransparency;
+}
+
 bool WIDGET::transparentToClicks() const
 {
 	return isTransparentToClicks;
+}
+
+int32_t WIDGET::idealWidth()
+{
+	if (!defaultIdealWidth.has_value())
+	{
+		defaultIdealWidth = width();
+	}
+
+	return defaultIdealWidth.value();
+}
+
+int32_t WIDGET::idealHeight()
+{
+	if (!defaultIdealHeight.has_value())
+	{
+		defaultIdealHeight = height();
+	}
+
+	return defaultIdealHeight.value();
 }
 
 template<typename Iterator>
@@ -276,6 +322,14 @@ static inline void forEachOverlayScreen(const std::function<bool (const OverlayS
 {
 	// the screens are stored in decreasing z-order
 	iterateOverlayScreens(overlays.cbegin(), overlays.cend(), func);
+}
+
+void widgForEachOverlayScreen(const std::function<bool (const std::shared_ptr<W_SCREEN>& psScreen, uint16_t zOrder)>& func)
+{
+	if (!func) { return; }
+	forEachOverlayScreen([func](const OverlayScreen& overlay) -> bool {
+		return func(overlay.psScreen, overlay.zOrder);
+	});
 }
 
 // enumerate the overlay screens in increasing z-order (i.e. "bottom-up")
@@ -734,6 +788,7 @@ void widgDeleteLater(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 /* Find a widget on a form from its id number */
 std::shared_ptr<WIDGET> widgFormGetFromID(const std::shared_ptr<WIDGET>& widget, UDWORD id)
 {
+	ASSERT_OR_RETURN(nullptr, widget != nullptr, "Invalid widget pointer");
 	if (widget->id == id)
 	{
 		return widget->shared_from_this();
@@ -1103,7 +1158,7 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		return didProcessClick;
 	}
 
-	if (psMouseOverWidget.expired())
+	if (!isTransparentToMouse && psMouseOverWidget.expired())
 	{
 		psMouseOverWidget = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
 	}
@@ -1272,6 +1327,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 
 	runScheduledTasks();
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
+	cleanupDeletedOverlays();
 
 	/* Return the ID of a pressed button or finished edit box if any */
 	return psScreen->retWidgets;

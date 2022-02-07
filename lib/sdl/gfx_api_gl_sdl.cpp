@@ -184,6 +184,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 		{
 			debug(LOG_FATAL, "OpenGL initialization did not give double buffering! (%d)", value);
 			debug(LOG_FATAL, "Double buffering is required for this game!");
+			SDL_GL_DeleteContext(WZglcontext);
 			return false;
 		}
 	}
@@ -204,6 +205,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 		debug(log_type, "Double buffering is required for this game - if it isn't actually enabled, things will fail!");
 		if (log_type == LOG_FATAL)
 		{
+			SDL_GL_DeleteContext(WZglcontext);
 			return false;
 		}
 	}

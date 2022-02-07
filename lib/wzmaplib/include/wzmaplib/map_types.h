@@ -108,4 +108,14 @@ struct TerrainTypeData
 	std::vector<TYPE_OF_TERRAIN> terrainTypes;
 };
 
+// MARK: - General defines
+
+#if defined(__GNUC__) || defined(__clang__)
+  #define WZMAPLIB_FORCE_INLINE inline __attribute__((always_inline))
+#elif defined(_MSC_VER)
+  #define WZMAPLIB_FORCE_INLINE __forceinline
+#else
+  #define WZMAPLIB_FORCE_INLINE inline
+#endif
+
 } // namespace WzMap

@@ -52,7 +52,9 @@
  */
 /***************************************************************************/
 
-static GFX *radarGfx = nullptr;
+#define NUM_RADAR_TEXTURES 2
+static GFX *radarGfx[NUM_RADAR_TEXTURES] = {nullptr};
+static size_t currRadarGfx = 0;
 
 /***************************************************************************/
 /*
@@ -319,6 +321,7 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 {
+	ASSERT_OR_RETURN(false, imageFile != nullptr, "Null imageFile (id: %u)", id);
 	ASSERT_OR_RETURN(false, id < imageFile->imageDefs.size(), "Out of range 1: %u/%d", id, (int)imageFile->imageDefs.size());
 	ASSERT_OR_RETURN(false, imageFile->imageDefs[id].TPageID < imageFile->pages.size(), "Out of range 2: %zu", imageFile->imageDefs[id].TPageID);
 	return true;
@@ -368,7 +371,8 @@ void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, 
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(tu, tv), Vector2f(su, sv), colour, mvp, SHADER_TEXT);
 }
 
-static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
+template<typename PSO>
+static inline void pie_DrawImageTemplate(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
 	size_t texPage = imageFile->pages[image2.TPageID].id;
@@ -380,7 +384,12 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 
 	glm::mat4 mvp = modelViewProjection * glm::translate(glm::vec3((float)dest->x, (float)dest->y, 0.f));
 
-	iv_DrawImageImpl<gfx_api::DrawImagePSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
+	iv_DrawImageImpl<PSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
+}
+
+static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
+{
+	pie_DrawImageTemplate<gfx_api::DrawImagePSO>(imageFile, id, size, dest, colour, modelViewProjection, textureInset);
 }
 
 static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& requests)
@@ -473,7 +482,7 @@ void iV_DrawImage2(const ImageDef *image, float x, float y, float width, float h
 		WZCOL_WHITE, mvp);
 }
 
-void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests, uint8_t alpha)
 {
 	if (!assertValidImage(ImageFile, ID))
 	{
@@ -486,13 +495,29 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 	if (pBatchedRequests == nullptr)
 	{
 		gfx_api::DrawImagePSO::get().bind();
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 	}
 	else
 	{
-		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, WZCOL_WHITE, modelViewProjection);
+		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 		pBatchedRequests->draw(); // draw only if not deferred
 	}
+}
+
+void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection, uint8_t alpha)
+{
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
+
+	PIERECT dest;
+	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	dest.w = size.x;
+	dest.h = size.y;
+
+	gfx_api::DrawImageAnisotropicPSO::get().bind();
+	pie_DrawImageTemplate<gfx_api::DrawImageAnisotropicPSO>(ImageFile, ID, pieImage, &dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 }
 
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection)
@@ -600,31 +625,47 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 
 bool pie_InitRadar()
 {
-	radarGfx = new GFX(GFX_TEXTURE, 2);
+	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
+	{
+		radarGfx[i] = new GFX(GFX_TEXTURE, 2);
+	}
+	currRadarGfx = 0;
 	return true;
 }
 
 bool pie_ShutdownRadar()
 {
-	delete radarGfx;
-	radarGfx = nullptr;
+	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
+	{
+		delete radarGfx[i];
+		radarGfx[i] = nullptr;
+	}
+	currRadarGfx = 0;
 	pie_ViewingWindow_Shutdown();
 	return true;
 }
 
 void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, size_t twidth, size_t theight)
 {
-	radarGfx->makeTexture(twidth, theight);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter. // TODO: Add a gfx_api::sampler_type to handle this case? bilinear, but nearest for mag?
-	gfx_api::gfxFloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
-	gfx_api::gfxFloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
-	radarGfx->buffers(4, vertices, texcoords);
+	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
+	{
+		radarGfx[i]->makeTexture(twidth, theight);
+		//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter. // TODO: Add a gfx_api::sampler_type to handle this case? bilinear, but nearest for mag?
+		gfx_api::gfxFloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
+		gfx_api::gfxFloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
+		radarGfx[i]->buffers(4, vertices, texcoords);
+	}
 }
 
 /** Store radar texture with given width and height. */
 void pie_DownLoadRadar(UDWORD *buffer)
 {
-	radarGfx->updateTexture(buffer);
+	currRadarGfx++;
+	if (currRadarGfx >= NUM_RADAR_TEXTURES)
+	{
+		currRadarGfx = 0;
+	}
+	radarGfx[currRadarGfx]->updateTexture(buffer);
 }
 
 /** Display radar texture using the given height and width, depending on zoom level. */
@@ -632,7 +673,7 @@ void pie_RenderRadar(const glm::mat4 &modelViewProjectionMatrix)
 {
 	gfx_api::RadarPSO::get().bind();
 	gfx_api::RadarPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec2(0), glm::vec2(0), glm::vec4(1), 0 });
-	radarGfx->draw<gfx_api::RadarPSO>(modelViewProjectionMatrix);
+	radarGfx[currRadarGfx]->draw<gfx_api::RadarPSO>(modelViewProjectionMatrix);
 }
 
 /// Load and display a random backdrop picture.

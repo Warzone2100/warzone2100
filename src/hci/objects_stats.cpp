@@ -29,6 +29,11 @@ void BaseObjectsController::selectObject(BASE_OBJECT *object)
 	refresh();
 }
 
+void BaseObjectsController::prepareToClose()
+{
+	clearData();
+}
+
 void BaseObjectsController::jumpToObject(BASE_OBJECT *object)
 {
 	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
@@ -170,6 +175,7 @@ void StatsFormButton::addCostBar()
 	sBarInit.iRange = GAME_TICKS_PER_SEC;
 	attach(costBar = std::make_shared<W_BARGRAPH>(&sBarInit));
 	costBar->setBackgroundColour(WZCOL_BLACK);
+	costBar->setTransparentToMouse(true);
 }
 
 void DynamicIntFancyButton::updateHighlight()
@@ -183,13 +189,16 @@ void DynamicIntFancyButton::updateHighlight()
 
 void ObjectsForm::display(int xOffset, int yOffset)
 {
-	updateButtons();
-	getController().updateHighlighted();
-	if (previousHighlighted != getController().getHighlightedObject())
+	if (!isClosing())
 	{
-		goToHighlightedTab();
+		updateButtons();
+		getController().updateHighlighted();
+		if (previousHighlighted != getController().getHighlightedObject())
+		{
+			goToHighlightedTab();
+		}
+		previousHighlighted = getController().getHighlightedObject();
 	}
-	previousHighlighted = getController().getHighlightedObject();
 	BaseWidget::display(xOffset, yOffset);
 }
 

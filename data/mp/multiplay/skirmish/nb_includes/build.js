@@ -233,7 +233,7 @@ _global.captureSomeOil = function() {
 		return true;
 	function getOilList() {
 		var oils = [];
-		oilResources.forEach(function(stat) { oils = oils.concat(enumFeature(-1, stat)); });
+		oilResources.forEach(function(stat) { oils = oils.concat(enumFeature(ALL_PLAYERS, stat)); });
 		oils = oils.concat(enumStructList(structures.derricks).filterProperty("status", BEING_BUILT));
 		oils = oils.sort(function(one, two) {
 			return distanceToBase(one) - distanceToBase(two);

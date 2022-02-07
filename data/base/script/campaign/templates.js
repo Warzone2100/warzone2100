@@ -64,6 +64,7 @@ npcybr: { body: "CyborgLightBody", prop: "CyborgLegs", weap: "CyborgRocket" },
 nphmgh: { body: "Body8MBT", prop: "hover01", weap: "MG3Mk1" },
 npltath: { body: "Body8MBT", prop: "hover01", weap: "Rocket-LtA-T" },
 nphch: { body: "Body12SUP", prop: "hover01", weap: "Cannon375mmMk1" },
+nphbb: { body: "Body12SUP", prop: "hover01", weap: "Rocket-BB" },
 
 // CAM_2_A
 commgt: { body: "Body6SUPP", prop: "tracked01", weap: "MG3Mk1" },

@@ -1,45 +1,45 @@
-${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText "Bienvenido al instalador de Warzon 2100!\r\n\r\nEste asistente le guiará a través de la instalación de Warzone 2100.\r\n\r\nSe recomienda que cierre todas las demás aplicaciones anted de continuar con esta instalación. Esto hará posible actualizar los archivos de sistema relevantes sin tener que reiniciar el equipo.\r\n\r\nWarzone 2100 es 100% gratis, programa completamente de código abierto\r\n\r\nHaga clic en Siguiente para continuar."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "Bienvenido al instalador portátil de Warzone 2100! \r\n\r\nEste asistente le guiará a través de la instalación de la versión portátil de Warzone 2100.\r\n\r\nEsta instalación es totalmente independiente y puede desinstalar el programa en cualquier momento eliminado el directorio.\r\n\r\nWarzone 2100 es 100% gratis, programa de código abierto! \r\n\r\nHaga clic en Siguiente para continuar."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "Visite nuestra página oficial https://wz2100.net para obtener la última versión."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "Hay una versión de 64-bit de Warzone 2100 disponible.$\r$\nPara detalles visite https://wz2100.net/ $\r$\nProceder con la instalación de 32-bit de todos modos?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Esta es la versión de 64-bit de Warzone 2100.$\r$\nPor favor descargue la versión de 32-bit desde https://wz2100. et/ $\r$\nHaga clic en OK para salir de la instalación."
 
 ${LangFileString} WZ_GPL_NEXT "Siguiente"
 
-${LangFileString} TEXT_SecBase "Core files"
-${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
+${LangFileString} TEXT_SecBase "Archivos del núcleo"
+${LangFileString} DESC_SecBase "Los archivos del núcleo necesarios para ejecutar Warzone 2100."
 
 ${LangFileString} TEXT_SecFMVs "Vídeos"
-${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
+${LangFileString} DESC_SecFMVs "Descárgate e instala escenas de corte en alemán."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "Inglés (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_EngHi "Descargue e instale escenas de corte en el juego de alta calidad."
 
 ${LangFileString} TEXT_SecFMVs_Eng "Inglés"
-${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_Eng "Descargue e instale escenas de corte en inglés."
 
 ${LangFileString} TEXT_SecFMVs_EngLo "Inglés (LQ)"
-${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_EngLo "Descargue e instale una versión de baja calidad de escenas del juego en inglés."
 
 ${LangFileString} TEXT_SecFMVs_Ger "Alemán"
-${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
+${LangFileString} DESC_SecFMVs_Ger "Descárgate e instala escenas de corte en alemán."
 
 ${LangFileString} TEXT_SecNLS "Archivos de idioma"
 ${LangFileString} DESC_SecNLS "Soporte para idiomas distintos del inglés."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
-${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+${LangFileString} DESC_SecNLS_WinFonts "Incluye la carpeta de fuentes de Windows en la ruta de búsqueda. Habilite esto si desea utilizar fuentes personalizadas en el archivo de configuración o teniendo problemas con la fuente estándar. Puede se lento en Vista y posterior!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
+${LangFileString} TEXT_SecMSSysLibraries "DLL de Microsoft Runtime"
 ${LangFileString} DESC_SecMSSysLibraries "Descargar e instalar (o actualizar) las librerías de sistema redistribuibles de Visual C++ de Microsoft, que algunos componentes pueden requerir para ejecutarse."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "Descargando"
+${LangFileString} DLTEXT_SysLibDLFailed "Error al descargar la biblioteca del sistema"
+${LangFileString} DLTEXT_VideosDLFailed "Descarga de videos fallida"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "Se necesita un reinicio para finalizar la instalación. Desea reiniciar el sistema ahora?"
+${LangFileString} TEXT_MsgRebootFailed "Falló el reinicio. Por favor, reincide manualmente."

@@ -26,8 +26,11 @@ function setupGame()
 	{
 		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
 	}
-	// Disabled by default
-	setMiniMap(false);
+	if (!isSpectator(-1))
+	{
+		// Disabled by default
+		setMiniMap(false);
+	}
 	// Enable all templates
 	setDesign(true);
 

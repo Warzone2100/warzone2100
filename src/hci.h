@@ -307,7 +307,7 @@ bool intDemolishSelectMode();
 void addIntelScreen();
 
 /* Reset the widget screen to just the reticule */
-void intResetScreen(bool NoAnim);
+void intResetScreen(bool NoAnim, bool skipMissionResultScreen = false);
 
 void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
@@ -342,7 +342,7 @@ void intHidePowerBar();
 void intShowWidget(int buttonID);
 
 //hides the power bar from the display - regardless of what player requested!
-void forceHidePowerBar();
+void forceHidePowerBar(bool forceSetPowerBarUpState = false);
 
 /* Add the Proximity message buttons */
 bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc);

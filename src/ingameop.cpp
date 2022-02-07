@@ -228,10 +228,6 @@ static bool _intAddInGameOptions()
 	auto ingameOp = std::make_shared<IntFormAnimated>();
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		int lines = ((bMultiPlayer && NetPlay.bComms) || bInTutorial) ? 3 : 5;
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(lines), INTINGAMEOP_W, INTINGAMEOPAUTO_H(lines));
-	}));
 
 	int row = 1;
 	// add 'resume'
@@ -242,7 +238,7 @@ static bool _intAddInGameOptions()
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Options"), OPALIGN);
 	row++;
 
-	if (!((bMultiPlayer && NetPlay.bComms) || bInTutorial))
+	if (!((bMultiPlayer && NetPlay.bComms) || bInTutorial || NETisReplay()))
 	{
 		if (bMultiPlayer)
 		{
@@ -274,6 +270,12 @@ static bool _intAddInGameOptions()
 		addIGTextButton(INTINGAMEOP_CONFIRM_QUIT, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 
+	// calculate layout
+	int lines = row;
+	ingameOp->setCalcLayout([lines](WIDGET *psWidget){
+		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(lines), INTINGAMEOP_W, INTINGAMEOPAUTO_H(lines));
+	});
+
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.
 
@@ -304,7 +306,7 @@ static bool startInGameConfirmQuit()
 	auto label = std::make_shared<W_LABEL>();
 	ingameOp->attach(label);
 	label->setGeometry(INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, 0);
-	if (bMultiPlayer && NetPlay.bComms)
+	if (bMultiPlayer && (NetPlay.bComms || NETisReplay()))
 	{
 		label->setString(_("Warning: Are you sure?")); //Do not mention saving in real multiplayer matches
 	}
@@ -435,6 +437,17 @@ static void ProcessOptionFinished()
 
 void intCloseInGameOptionsNoAnim()
 {
+	if (isKeyMapEditorUp)
+	{
+		runInGameKeyMapEditor(gInputManager, gKeyFuncConfig, KM_RETURN);
+	}
+	isKeyMapEditorUp = false;
+	if (isMusicManagerUp)
+	{
+		runInGameMusicManager(MM_RETURN, gInputManager);
+	}
+	isMusicManagerUp = false;
+
 	if (NetPlay.isHost)
 	{
 		widgDelete(psWScreen, INTINGAMEPOPUP);
@@ -539,6 +552,7 @@ void intReopenMenuWithoutUnPausing()
 		widgDelete(psWScreen, INTINGAMEPOPUP);
 	}
 	widgDelete(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
 	intAddInGameOptions();
 }
 
@@ -551,6 +565,7 @@ static bool startIGOptionsMenu()
 	isMouseOptionsUp = false;
 	isKeyMapEditorUp = false;
 	isMusicManagerUp = false;
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
 	isInGameConfirmQuitUp = false;
 
 	// add form

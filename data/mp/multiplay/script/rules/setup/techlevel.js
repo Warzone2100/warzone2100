@@ -1,6 +1,6 @@
 function setupTechLevel(player)
 {
-	
+
 	//global function, doc/js-functions
 	var techLevel = getMultiTechLevel();
 	if (techLevel == 2)
@@ -15,5 +15,5 @@ function setupTechLevel(player)
 	{
 		completeAllResearch(player);
 	}
-	
+
 }

@@ -22,6 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/rational.h"
+#include "lib/framework/physfs_ext.h"
 #include "objects.h"
 #include "levels.h"
 #include "basedef.h"
@@ -73,6 +74,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "droid.h"
+#include "spectatorwidgets.h"
 
 #include "activity.h"
 
@@ -92,8 +94,14 @@ char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each p
 static STRUCTURE	*psOldRE = nullptr;
 static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
 
+#define QUICKSAVE_CAM_FOLDER "savegames/campaign/QuickSave"
+#define QUICKSAVE_SKI_FOLDER "savegames/skirmish/QuickSave"
 #define QUICKSAVE_CAM_FILENAME "savegames/campaign/QuickSave.gam"
 #define QUICKSAVE_SKI_FILENAME "savegames/skirmish/QuickSave.gam"
+#define QUICKSAVE_CAM_JSON_FILENAME QUICKSAVE_CAM_FOLDER "/QuickSave.json"
+#define QUICKSAVE_SKI_JSON_FILENAME QUICKSAVE_SKI_FOLDER "/QuickSave.json"
+
+#define SPECTATOR_NO_OP() do { if (selectedPlayer >= MAX_PLAYERS || NetPlay.players[selectedPlayer].isSpectator) { return; } } while (0)
 
 /* Support functions to minimise code size */
 static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE State);
@@ -149,13 +157,13 @@ void	kf_ToggleMissionTimer()
 
 void	kf_ToggleShowGateways()
 {
-	addConsoleMessage("Gateways toggled.", DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+	addConsoleMessage(_("Gateways toggled."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 	showGateways = !showGateways;
 }
 
 void	kf_ToggleShowPath()
 {
-	addConsoleMessage("Path display toggled.", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	addConsoleMessage(_("Path display toggled."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	showPath = !showPath;
 }
 
@@ -183,7 +191,7 @@ void	kf_PowerInfo()
 
 	for (i = 0; i < game.maxPlayers; i++)
 	{
-		console("Player %d: %d power", i, (int)getPower(i));
+		console(_("Player %d: %d power"), i, (int)getPower(i));
 	}
 }
 
@@ -197,6 +205,10 @@ void kf_DamageMe()
 		return;
 	}
 #endif
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -235,6 +247,11 @@ void	kf_TraceObject()
 {
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 
 	for (psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
 	{
@@ -342,6 +359,11 @@ void	kf_DebugDroidInfo()
 {
 	DROID	*psDroid;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
+
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -362,6 +384,11 @@ void kf_CloneSelected(int limit)
 		return;
 	}
 #endif
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -417,6 +444,11 @@ void kf_MakeMeHero()
 		return;
 	}
 #endif
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
+
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected && psDroid->droidType == DROID_COMMAND)
@@ -441,6 +473,11 @@ void kf_TeachSelected()
 	}
 #endif
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
+
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -460,6 +497,11 @@ void kf_Unselectable()
 		return;
 	}
 #endif
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
 
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -710,6 +752,9 @@ void	kf_TogglePower()
 	}
 #endif
 
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	powerCalculated = !powerCalculated;
 	if (powerCalculated)
 	{
@@ -727,7 +772,7 @@ void	kf_TogglePower()
 void	kf_RecalcLighting()
 {
 	initLighting(0, 0, mapWidth, mapHeight);
-	addConsoleMessage("Lighting values for all tiles recalculated", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	addConsoleMessage(_("Lighting values for all tiles recalculated"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -752,6 +797,9 @@ void	kf_AllAvailable()
 	}
 #endif
 
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	makeAllAvailable();
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All items made available"));
@@ -766,7 +814,7 @@ void	kf_TriFlip()
 	MAPTILE	*psTile;
 	psTile = mapTile(mouseTileX, mouseTileY);
 	TOGGLE_TRIFLIP(psTile);
-//	addConsoleMessage("Triangle flip status toggled",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
+//	addConsoleMessage(_("Triangle flip status toggled"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
@@ -779,7 +827,7 @@ void	kf_TileInfo()
 	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%d Texture=%u Height=%d Illumination=%u",
 	      mouseTileX, mouseTileY, (int)terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
 	      psTile->illumination);
-	addConsoleMessage("Tile info dumped into log", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	addConsoleMessage(_("Tile info dumped into log"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 /* Toggles fog on/off */
@@ -813,6 +861,11 @@ void	kf_ToggleCamera()
 
 void kf_RevealMapAtPos()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
+
 	addSpotter(mouseTileX, mouseTileY, selectedPlayer, 1024, false, gameTime + 2000);
 }
 
@@ -820,9 +873,20 @@ void kf_RevealMapAtPos()
 
 void kf_MapCheck()
 {
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent desyncs)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
 	FLAG_POSITION	*psCurrFlag;
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -987,6 +1051,9 @@ void kf_ShowMappings()
 /* Selects the player's groups 1..9 */
 void kf_SelectGrouping(UDWORD groupNumber)
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	bool	bAlreadySelected;
 	DROID	*psDroid;
 	bool	Selected;
@@ -1032,6 +1099,9 @@ void kf_SelectGrouping(UDWORD groupNumber)
 MappableFunction kf_SelectGrouping_N(const unsigned int n)
 {
 	return [n]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		kf_SelectGrouping(n);
 	};
 }
@@ -1039,6 +1109,9 @@ MappableFunction kf_SelectGrouping_N(const unsigned int n)
 MappableFunction kf_AssignGrouping_N(const unsigned int n)
 {
 	return [n]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		assignDroidsToGroup(selectedPlayer, n, true);
 	};
 }
@@ -1046,13 +1119,29 @@ MappableFunction kf_AssignGrouping_N(const unsigned int n)
 MappableFunction kf_AddGrouping_N(const unsigned int n)
 {
 	return [n]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		assignDroidsToGroup(selectedPlayer, n, false);
+	};
+}
+
+MappableFunction kf_RemoveFromGrouping()
+{
+	return []() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
+		removeDroidsFromGroup(selectedPlayer);
 	};
 }
 
 MappableFunction kf_SelectCommander_N(const unsigned int n)
 {
 	return [n]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		selCommander(n);
 	};
 }
@@ -1145,9 +1234,34 @@ void kf_ToggleLevelEditor()
 }
 // --------------------------------------------------------------------------
 
+void enableGodMode()
+{
+	if (godMode)
+	{
+		return;
+	}
+
+	// Bail out if we're running a _true_ multiplayer game and we aren't a spectator (to prevent MP cheating)
+	if (runningMultiplayer() && !NetPlay.players[selectedPlayer].isSpectator)
+	{
+		noMPCheatMsg();
+		return;
+	}
+
+	godMode = true; // view all structures and droids
+	revealAll(selectedPlayer);
+	setRevealStatus(true); // view the entire map
+	radarPermitted = true; //add minimap without CC building
+
+	preProcessVisibility();
+}
+
 void	kf_ToggleGodMode()
 {
 	static bool pastReveal = true;
+
+	/* not supported if a spectator - since they automatically get full vis */
+	SPECTATOR_NO_OP();
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1160,6 +1274,8 @@ void	kf_ToggleGodMode()
 
 	if (godMode)
 	{
+		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Cannot disable godMode for spectator-only slots");
+
 		FEATURE	*psFeat = apsFeatureLists[0];
 
 		godMode = false;
@@ -1191,11 +1307,8 @@ void	kf_ToggleGodMode()
 	}
 	else
 	{
-		godMode = true; // view all structures and droids
-		revealAll(selectedPlayer);
 		pastReveal = getRevealStatus();
-		setRevealStatus(true); // view the entire map
-		radarPermitted = true; //add minimap without CC building
+		enableGodMode();
 	}
 
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
@@ -1346,6 +1459,9 @@ void	kf_FinishAllResearch()
 {
 	UDWORD	j;
 
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -1380,6 +1496,9 @@ void kf_Reload()
 {
 	STRUCTURE	*psCurr;
 
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -1406,6 +1525,9 @@ void kf_Reload()
 void	kf_FinishResearch()
 {
 	STRUCTURE	*psCurr;
+
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1480,6 +1602,9 @@ void	kf_ToggleProximitys()
 // --------------------------------------------------------------------------
 void	kf_JumpToResourceExtractor()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	if (psOldRE && (STRUCTURE *)psOldRE->psNextFunc)
 	{
 		psOldRE = psOldRE->psNextFunc;
@@ -1505,6 +1630,9 @@ void	kf_JumpToResourceExtractor()
 MappableFunction kf_JumpToUnits(const DROID_TYPE droidType)
 {
 	return [droidType]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		selNextSpecifiedUnit(droidType);
 	};
 }
@@ -1512,6 +1640,9 @@ MappableFunction kf_JumpToUnits(const DROID_TYPE droidType)
 // --------------------------------------------------------------------------
 void	kf_JumpToUnassignedUnits()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	selNextUnassignedUnit();
 }
 // --------------------------------------------------------------------------
@@ -1532,6 +1663,9 @@ void	kf_ToggleOverlays()
 // --------------------------------------------------------------------------
 void	kf_ChooseCommand()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	if (intCheckReticuleButEnabled(IDRET_COMMAND))
 	{
 		setKeyButtonMapping(IDRET_COMMAND);
@@ -1541,6 +1675,9 @@ void	kf_ChooseCommand()
 // --------------------------------------------------------------------------
 void	kf_ChooseManufacture()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
 	{
 		setKeyButtonMapping(IDRET_MANUFACTURE);
@@ -1559,6 +1696,9 @@ void	kf_ChooseResearch()
 // --------------------------------------------------------------------------
 void	kf_ChooseBuild()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	if (intCheckReticuleButEnabled(IDRET_BUILD))
 	{
 		setKeyButtonMapping(IDRET_BUILD);
@@ -1568,6 +1708,9 @@ void	kf_ChooseBuild()
 // --------------------------------------------------------------------------
 void	kf_ChooseDesign()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	if (intCheckReticuleButEnabled(IDRET_DESIGN))
 	{
 		setKeyButtonMapping(IDRET_DESIGN);
@@ -1670,6 +1813,9 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 	};
 
 	return [factoryType, bJumpToSelected]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		selNextSpecifiedBuilding(factoryType, bJumpToSelected);
 
 		STRUCTURE* psCurrent;
@@ -1699,6 +1845,9 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 MappableFunction kf_SelectNextResearch(const bool bJumpToSelected)
 {
 	return [bJumpToSelected]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		selNextSpecifiedBuilding(REF_RESEARCH, bJumpToSelected);
 		if (intCheckReticuleButEnabled(IDRET_RESEARCH))
 		{
@@ -1712,6 +1861,9 @@ MappableFunction kf_SelectNextResearch(const bool bJumpToSelected)
 MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected)
 {
 	return [bJumpToSelected]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		selNextSpecifiedBuilding(REF_POWER_GEN, bJumpToSelected);
 		triggerEventSelected();
 	};
@@ -1731,6 +1883,8 @@ void	kf_KillEnemy()
 		return;
 	}
 #endif
+
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
 	debug(LOG_DEATH, "Destroying enemy droids and structures");
 	CONPRINTF("%s", _("Warning! This can have drastic consequences if used incorrectly in missions."));
@@ -1764,6 +1918,9 @@ void kf_KillSelected()
 {
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
+
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1818,6 +1975,9 @@ void kf_KillSelected()
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTeamMessage()
 {
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	if (!getWidgetsStatus())
 	{
 		return;
@@ -1882,6 +2042,9 @@ MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTI
 MappableFunction kf_SelectNoGroupUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen)
 {
 	return [selectionClass, selectionType, bOnScreen]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		activateNoGroup(selectedPlayer, selectionType, selectionClass, bOnScreen);
 	};
 }
@@ -1898,6 +2061,9 @@ MappableFunction kf_SetDroid(const SECONDARY_ORDER order, const SECONDARY_STATE 
 MappableFunction kf_OrderDroid(const DroidOrderType order)
 {
 	return [order]() {
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+
 		for (DROID* psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
 			if (psDroid->selected)
@@ -1929,6 +2095,9 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE sta
 {
 	DROID	*psDroid;
 
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	// NOT A CHEAT CODE
 	// This is a function to set unit orders via keyboard shortcuts. It should
 	// _not_ be disallowed in multiplayer games.
@@ -1950,6 +2119,9 @@ void	kf_TriggerRayCast()
 {
 	DROID	*psDroid;
 	bool	found;
+
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
 
 	found = false;
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid && !found;
@@ -1976,6 +2148,9 @@ void	kf_CentreOnBase()
 	STRUCTURE	*psStruct;
 	bool		bGotHQ;
 	UDWORD		xJump = 0, yJump = 0;
+
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
 
 	/* Got through our buildings */
 	for (psStruct = apsStructLists[selectedPlayer], bGotHQ = false;	// start
@@ -2028,6 +2203,9 @@ void	kf_RightOrderMenu()
 		intRemoveOrder();	// close the screen.
 		return;
 	}
+
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
 
 	for (psDroid = apsDroidLists[selectedPlayer], bFound = false;
 	     psDroid && !bFound; psDroid = psDroid->psNext)
@@ -2119,8 +2297,7 @@ const unsigned nb_available_speeds = ARRAY_SIZE(available_speed);
 static void tryChangeSpeed(Rational newMod, Rational oldMod)
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if ((runningMultiplayer() && !dbgInputManager.debugMappingsAllowed()) || bInTutorial)
+	if (runningMultiplayer() || bInTutorial)
 	{
 		if (!bInTutorial)
 		{
@@ -2130,6 +2307,7 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 	}
 
 	// only in debug/cheat mode do we enable all time compression speeds.
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!dbgInputManager.debugMappingsAllowed() && (newMod >= 2 || newMod <= 0))  // 2 = max officially allowed time compression
 	{
 		return;
@@ -2274,6 +2452,9 @@ void	kf_AddHelpBlip()
 		return;
 	}
 
+	/* not supported if a spectator */
+	SPECTATOR_NO_OP();
+
 	debug(LOG_WZ, "Adding beacon='%s'", sCurrentConsoleText);
 
 	/* check if clicked on radar */
@@ -2312,7 +2493,7 @@ void	kf_AddHelpBlip()
 void kf_NoAssert()
 {
 	debugDisableAssert();
-	console("Asserts turned off");
+	console(_("Asserts turned off"));
 	debug(LOG_ERROR, "Asserts turned off");
 }
 
@@ -2328,7 +2509,7 @@ void kf_BuildPrevPage()
 
 	if ((psTForm->currentPage() == 0) || !psTForm->setCurrentPage(psTForm->currentPage() - 1))
 	{
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		audio_PlayBuildFailedOnce();
 		return;
 	}
 
@@ -2348,7 +2529,7 @@ void kf_BuildNextPage()
 	if (!psTForm->setCurrentPage(psTForm->currentPage() + 1))
 	{
 		// went over max
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		audio_PlayBuildFailedOnce();
 		return;
 	}
 
@@ -2360,7 +2541,7 @@ void kf_QuickSave()
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
 	if (runningMultiplayer() || bInTutorial)
 	{
-		console("QuickSave not allowed for multiplayer or tutorial games");
+		console(_("QuickSave not allowed for multiplayer or tutorial games"));
 		return;
 	}
 	if (InGameOpUp || isInGamePopupUp)
@@ -2369,19 +2550,18 @@ void kf_QuickSave()
 	}
 
 	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
-	if (PHYSFS_exists(filename))
+	const char *quickSaveFolder = bMultiPlayer? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
+	if (WZ_PHYSFS_isDirectory(quickSaveFolder))
 	{
-		char *oldsave = strdup(filename);
-		deleteSaveGame(oldsave);
-		free(oldsave);
+		deleteSaveGame(quickSaveFolder);
 	}
-	if (saveGame(filename, GTYPE_SAVE_MIDMISSION))
+	if (saveGame(filename, GTYPE_SAVE_MIDMISSION)) // still expects a .gam filename... TODO: FIX
 	{
-		console("QuickSave");
+		console(_("QuickSave"));
 	}
 	else
 	{
-		console("QuickSave failed");
+		console(_("QuickSave failed"));
 	}
 }
 
@@ -2390,7 +2570,7 @@ void kf_QuickLoad()
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
 	if (runningMultiplayer() || bInTutorial)
 	{
-		console("QuickLoad not allowed for multiplayer or tutorial games");
+		console(_("QuickLoad not allowed for multiplayer or tutorial games"));
 		return;
 	}
 	if (InGameOpUp || isInGamePopupUp)
@@ -2399,9 +2579,10 @@ void kf_QuickLoad()
 	}
 
 	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
-	if (PHYSFS_exists(filename))
+	// check for .json version, because that's what going to be loaded anyway
+	if (PHYSFS_exists(filename) || PHYSFS_exists(bMultiPlayer? QUICKSAVE_SKI_JSON_FILENAME : QUICKSAVE_CAM_JSON_FILENAME))
 	{
-		console("QuickLoad");
+		console(_("QuickLoad"));
 		audio_StopAll();
 		//clear out any mission widgets - timers etc that may be on the screen
 		clearMissionWidgets();
@@ -2416,11 +2597,25 @@ void kf_QuickLoad()
 	}
 	else
 	{
-		console("QuickSave file does not exist yet");
+		console(_("QuickSave file does not exist yet"));
 	}
 }
 
 void kf_ToggleFullscreen()
 {
 	war_setWindowMode(wzAltEnterToggleFullscreen());
+}
+
+void kf_ToggleSpecOverlays()
+{
+	if (realSelectedPlayer >= NetPlay.players.size() || !NetPlay.players[realSelectedPlayer].isSpectator)
+	{
+		return;
+	}
+	specToggleOverlays();
+}
+
+void keybindShutdown()
+{
+	psOldRE = nullptr;
 }

@@ -11,7 +11,7 @@ const SCAVENGER_RES = [
 function exposeNorthBase()
 {
 	camDetectEnemyBase("NorthGroup"); // no problem if already detected
-	camPlayVideos("SB1_2_MSG2");
+	camPlayVideos({video: "SB1_2_MSG2", type: MISS_MSG});
 }
 
 function camArtifactPickup_ScavLab()
@@ -30,7 +30,7 @@ function camArtifactPickup_ScavLab()
 		},
 		groupSize: 5,
 		maxSize: 9,
-		throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
+		throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 13 : 10)),
 		templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 	});
 	camEnableFactory("WestFactory");
@@ -122,7 +122,7 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 15)),
 			group: camMakeGroup("NorthTankGroup"),
 			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 		},
@@ -139,7 +139,7 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 13 : 10)),
 			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 		},
 	});

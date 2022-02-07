@@ -69,6 +69,8 @@
 #include "multistat.h"
 #include "multigifts.h"
 #include "qtscript.h"
+#include "clparse.h"
+#include "multilobbycommands.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
@@ -115,11 +117,17 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 										y + (h / 2) - 8, WZCOL_TEXT_BRIGHT);
 
 	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
-	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	unsigned numUsedPlayerSlots = 0;
+	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		if (isHumanPlayer(player))
 		{
 			++playerCount;
+			++numUsedPlayerSlots;
+		}
+		else if (NetPlay.players[player].ai >= 0)
+		{
+			++numUsedPlayerSlots;
 		}
 	}
 	if (!playerCount)
@@ -131,11 +139,11 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	textCache.wzPlayerCountText.render(x + (w / 2) - 10, y + (h / 2) + 10, WZCOL_TEXT_BRIGHT);
 
 	int yStep = iV_GetTextLineSize(font_small);
-	int yPos = RET_Y - yStep * game.maxPlayers;
+	int yPos = RET_Y - yStep * numUsedPlayerSlots;
 
 	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
 
-	for (unsigned player = 0; player < game.maxPlayers; ++player)
+	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		int status = -1;
 		if (isHumanPlayer(player))
@@ -172,13 +180,23 @@ void clearPlayer(UDWORD player, bool quietly)
 	UDWORD			i;
 	STRUCTURE		*psStruct, *psNext;
 
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
+	ASSERT(player < NetPlay.playerReferences.size(), "Invalid player: %" PRIu32 "", player);
 	NetPlay.playerReferences[player]->disconnect();
 	NetPlay.playerReferences[player] = std::make_shared<PlayerReference>(player);
 
 	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true" : "false");
 
+	ingame.LagCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
+	ingame.lastSentPlayerDataCheck2[player].reset();
+
+	if (player >= MAX_PLAYERS)
+	{
+		return; // no more to do
+	}
 
 	(void)setPlayerName(player, "");				//clear custom player name (will use default instead)
 
@@ -237,6 +255,11 @@ static void resetMultiVisibility(UDWORD player)
 	DROID		*pDroid;
 	STRUCTURE	*pStruct;
 
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
 	for (owned = 0 ; owned < MAX_PLAYERS ; owned++)		// for each player
 	{
 		if (owned != player)								// done reset own stuff..
@@ -260,7 +283,7 @@ static void resetMultiVisibility(UDWORD player)
 
 static void sendPlayerLeft(uint32_t playerIndex)
 {
-	ASSERT(NetPlay.isHost, "Only host should call this.");
+	ASSERT_OR_RETURN(, NetPlay.isHost, "Only host should call this.");
 
 	uint32_t forcedPlayerIndex = whosResponsible(playerIndex);
 	NETQUEUE(*netQueueType)(unsigned) = forcedPlayerIndex != selectedPlayer ? NETgameQueueForced : NETgameQueue;
@@ -301,7 +324,7 @@ void recvPlayerLeft(NETQUEUE queue)
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
 
-	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
+	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
@@ -309,10 +332,16 @@ void recvPlayerLeft(NETQUEUE queue)
 // A remote player has left the game
 bool MultiPlayerLeave(UDWORD playerIndex)
 {
-	if (playerIndex >= MAX_PLAYERS)
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
 		ASSERT(false, "Bad player number");
 		return false;
+	}
+
+	if (NetPlay.isHost)
+	{
+		multiClearHostRequestMoveToPlayer(playerIndex);
+		multiSyncResetPlayerChallenge(playerIndex);
 	}
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
@@ -330,14 +359,14 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	}
 	NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 
-	if (!NetPlay.players[playerIndex].wzFiles.empty())
+	if (NetPlay.players[playerIndex].wzFiles && NetPlay.players[playerIndex].fileSendInProgress())
 	{
 		char buf[256];
 
 		ssprintf(buf, _("File transfer has been aborted for %d.") , playerIndex);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		debug(LOG_INFO, "=== File has been aborted for %d ===", playerIndex);
-		NetPlay.players[playerIndex].wzFiles.clear();
+		NetPlay.players[playerIndex].wzFiles->clear();
 	}
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
@@ -380,6 +409,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 			return true;
 		}
 		ASSERT(NetPlay.playercount <= MAX_PLAYERS, "Too many players!");
+		ASSERT(GetGameMode() != GS_NORMAL, "A player joined after the game started??");
 
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.
@@ -393,13 +423,18 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 		{
 			int i;
 
-			for (i = 0; i < MAX_PLAYERS; i++)
+			for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 			{
 				if (NetPlay.players[i].allocated)
 				{
 					setMultiStats(i, getMultiStats(i), false);
 				}
 			}
+		}
+		if (lobby_slashcommands_enabled())
+		{
+			// Inform the new player that this lobby has slash commands enabled.
+			sendRoomSystemMessageToSingleReceiver("Lobby slash commands enabled. Type " LOBBY_COMMAND_PREFIX "help to see details.", playerIndex);
 		}
 	}
 	return true;
@@ -409,7 +444,7 @@ bool sendDataCheck()
 {
 	int i = 0;
 
-	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_DATA_CHECK);		// only need to send to HOST
+	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK);		// only need to send to HOST
 	for (i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&DataHash[i]);
@@ -438,7 +473,7 @@ bool recvDataCheck(NETQUEUE queue)
 	}
 	NETend();
 
-	if (player >= MAX_PLAYERS) // invalid player number.
+	if (player >= MAX_CONNECTED_PLAYERS) // invalid player number.
 	{
 		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
 		return false;
@@ -467,8 +502,7 @@ bool recvDataCheck(NETQUEUE queue)
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
-			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
-			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+			debug(LOG_ERROR, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
 
 			return false;
 		}
@@ -484,9 +518,15 @@ bool recvDataCheck(NETQUEUE queue)
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
 {
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 	ingame.PingTimes[player] = 0;					// Reset ping time
+	ingame.LagCounter[player] = 0;
+	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
+	ingame.lastSentPlayerDataCheck2[player].reset();
+	multiSyncResetPlayerChallenge(player);
 
 	resetMultiVisibility(player);						// set visibility flags.
 
@@ -519,7 +559,7 @@ void ShowMOTD()
 	}
 	if (NetPlay.HaveUpgrade)
 	{
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		audio_PlayBuildFailedOnce();
 		ssprintf(buf, "%s", _("There is an update to the game, please visit https://wz2100.net to download new version."));
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}

@@ -144,7 +144,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 		unsigned resistance;	// resist enemy takeover; 0 = immune
 		unsigned limit;		// current max limit for this type, LOTS_OF = no limit
 	} upgrade[MAX_PLAYERS], base;
-	bool isFavorite;		///< on Favorites list
+	bool isFavorite = false;		///< on Favorites list
 
 	inline Vector2i size(uint16_t direction) const
 	{
@@ -284,7 +284,7 @@ struct STRUCTURE : public BASE_OBJECT
 	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 	uint32_t prevTime;               ///< Time of structure's previous tick.
 	float foundationDepth;           ///< Depth of structure's foundation
-	uint8_t capacity;                ///< Number of module upgrades
+	uint8_t capacity;                ///< Lame name: current number of module upgrades (*not* maximum nb of upgrades)
 	STRUCT_ANIM_STATES	state;
 	UDWORD lastStateTime;
 	iIMDShape *prebuiltImd;

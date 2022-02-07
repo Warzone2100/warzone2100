@@ -84,6 +84,23 @@ bool recvGift(NETQUEUE queue)
 		return false;
 	}
 
+	if (to >= MAX_PLAYERS)
+	{
+		debug(LOG_WARNING, "Gift (%d) from %d, to %d (invalid recipient player), queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
+		syncDebug("Invalid recipient player.");
+		return false;
+	}
+
+	if (bMultiPlayer && (to < NetPlay.players.size()))
+	{
+		if (NetPlay.players[to].isSpectator)
+		{
+			debug(LOG_WARNING, "Can't gift (%d) from %d, to %d (spectator player), queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
+			syncDebug("Can't gift to spectator.");
+			return false;
+		}
+	}
+
 	// Handle the gift depending on what it is
 	switch (type)
 	{
@@ -128,6 +145,8 @@ bool recvGift(NETQUEUE queue)
 bool sendGift(uint8_t type, uint8_t to)
 {
 	int audioTrack;
+
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Must be a player to send a gift (selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	switch (type)
 	{
@@ -215,7 +234,7 @@ void giftRadar(uint8_t from, uint8_t to, bool send)
 	else
 	{
 		hqReward(from, to);
-		if (to == selectedPlayer)
+		if (to == selectedPlayer && loopMissionState == LMS_NORMAL)
 		{
 			CONPRINTF(_("%s Gives You A Visibility Report"), getPlayerName(from));
 		}
@@ -571,14 +590,41 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 		return false;
 	}
 
+	if (to >= MAX_PLAYERS)
+	{
+		debug(LOG_WARNING, "Invalid recipient player (%d), queue.index %d", (int)to, (int)queue.index);
+		return false;
+	}
+
+	auto prohibitedNewAlliance = [](uint8_t from, uint8_t to) -> bool {
+		if (bMultiPlayer)
+		{
+			if ((static_cast<size_t>(from) < NetPlay.players.size()) && NetPlay.players[from].isSpectator)
+			{
+				debug(LOG_WARNING, "Can't enable alliance from %d (spectator), to %d", (int)from, (int)to);
+				syncDebug("Can't enable alliance from spectator.");
+				return true;
+			}
+			if ((static_cast<size_t>(to) < NetPlay.players.size()) && NetPlay.players[to].isSpectator)
+			{
+				debug(LOG_WARNING, "Can't enable alliance from %d, to %d (spectator)", (int)from, (int)to);
+				syncDebug("Can't enable alliance to spectator.");
+				return true;
+			}
+		}
+		return false;
+	};
+
 	switch (state)
 	{
 	case ALLIANCE_NULL:
 		break;
 	case ALLIANCE_REQUESTED:
+		if (prohibitedNewAlliance(from, to)) { return false; }
 		requestAlliance(from, to, false, allowAudio);
 		break;
 	case ALLIANCE_FORMED:
+		if (prohibitedNewAlliance(from, to)) { return false; }
 		formAlliance(from, to, false, allowAudio, true);
 		break;
 	case ALLIANCE_BROKEN:
@@ -745,7 +791,9 @@ void createTeamAlliances()
 			    && NetPlay.players[i].team == NetPlay.players[j].team		// ...belonging to the same team
 			    && !aiCheckAlliances(i, j)									// ...not allied and not ignoring teams
 			    && NetPlay.players[i].difficulty != AIDifficulty::DISABLED
-			    && NetPlay.players[j].difficulty != AIDifficulty::DISABLED)	// ...not disabled
+			    && NetPlay.players[j].difficulty != AIDifficulty::DISABLED	// ...not disabled
+			    && !NetPlay.players[i].isSpectator
+			    && !NetPlay.players[j].isSpectator)							// ...not spectators
 			{
 				// Create silently
 				formAlliance(i, j, false, false, false);

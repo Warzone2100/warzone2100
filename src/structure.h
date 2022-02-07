@@ -71,12 +71,12 @@ extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRU
 
 void handleAbandonedStructures();
 
-int getMaxDroids(int player);
-int getMaxCommanders(int player);
-int getMaxConstructors(int player);
-void setMaxDroids(int player, int value);
-void setMaxCommanders(int player, int value);
-void setMaxConstructors(int player, int value);
+int getMaxDroids(UDWORD player);
+int getMaxCommanders(UDWORD player);
+int getMaxConstructors(UDWORD player);
+void setMaxDroids(UDWORD player, int value);
+void setMaxCommanders(UDWORD player, int value);
+void setMaxConstructors(UDWORD player, int value);
 
 bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission);
 
@@ -104,7 +104,7 @@ float structureCompletionProgress(const STRUCTURE & structure);
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state);
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool bMission);
 

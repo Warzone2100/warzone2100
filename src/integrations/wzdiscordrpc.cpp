@@ -19,6 +19,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/crc.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/netsocket.h"
@@ -52,22 +53,6 @@ static std::unordered_map<std::string, std::chrono::system_clock::time_point> la
 
 #define JOIN_NOTIFICATION_TAG_PREFIX "joinNotify::"
 #define JOIN_FIND_AND_CONNECT_TAG  std::string(JOIN_NOTIFICATION_TAG_PREFIX "findandconnect")
-
-static std::string b64Tob64UrlSafe(const std::string& inputb64)
-{
-	std::string b64urlsafe = inputb64;
-	std::replace(b64urlsafe.begin(), b64urlsafe.end(), '+', '-');
-	std::replace(b64urlsafe.begin(), b64urlsafe.end(), '/', '_');
-	return b64urlsafe;
-}
-
-static std::string b64UrlSafeTob64(const std::string& inputb64urlsafe)
-{
-	std::string b64 = inputb64urlsafe;
-	std::replace(b64.begin(), b64.end(), '-', '+');
-	std::replace(b64.begin(), b64.end(), '_', '/');
-	return b64;
-}
 
 static void asyncGetDiscordDefaultUserAvatar(const std::string& discord_user_discriminator, const std::function<void (optional<std::vector<unsigned char>> memoryBuffer)>& callback)
 {

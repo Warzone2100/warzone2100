@@ -25,6 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/string_ext.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -41,6 +42,7 @@
 #include "version.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
+#include "multilobbycommands.h"
 
 #include <cwchar>
 
@@ -82,6 +84,10 @@ static std::string wz_saveandquit;
 static std::string wz_test;
 static std::string wz_autoratingUrl;
 static bool wz_cli_headless = false;
+static bool wz_streamer_spectator_mode = false;
+static bool wz_lobby_slashcommands = false;
+static WZ_Command_Interface wz_cmd_interface = WZ_Command_Interface::None;
+static int wz_min_autostart_players = -1;
 
 #if defined(WZ_OS_WIN)
 
@@ -163,7 +169,10 @@ static void poptPrintHelp(poptContext ctx, FILE *output)
 		if (ctx->table[i].argument)
 		{
 			sstrcat(txt, "=");
-			sstrcat(txt, ctx->table[i].argDescrip);
+			if (ctx->table[i].argDescrip)
+			{
+				sstrcat(txt, ctx->table[i].argDescrip);
+			}
 		}
 
 		// calculate number of terminal columns required to print
@@ -304,6 +313,7 @@ typedef enum
 	CLI_MOD_MP,
 	CLI_LOADSKIRMISH,
 	CLI_LOADCAMPAIGN,
+	CLI_LOADREPLAY,
 	CLI_WINDOW,
 	CLI_VERSION,
 	CLI_RESOLUTION,
@@ -312,6 +322,7 @@ typedef enum
 	CLI_SOUND,
 	CLI_NOSOUND,
 	CLI_CONNECTTOIP,
+	CLI_CONNECTTOIP_SPECTATE,
 	CLI_HOSTLAUNCH,
 	CLI_NOASSERT,
 	CLI_CRASH,
@@ -332,6 +343,12 @@ typedef enum
 #endif
 	CLI_GAMEPORT,
 	CLI_WZ_CRASH_RPT,
+	CLI_STREAMER_SPECTATOR,
+	CLI_LOBBY_SLASHCOMMANDS,
+	CLI_ADD_LOBBY_ADMINHASH,
+	CLI_ADD_LOBBY_ADMINPUBLICKEY,
+	CLI_COMMAND_INTERFACE,
+	CLI_STARTPLAYERS,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -353,6 +370,7 @@ static const struct poptOption *getOptionsTable()
 		{ "crash", POPT_ARG_NONE, CLI_CRASH,      N_("Causes a crash to test the crash handler"), nullptr },
 		{ "loadskirmish", POPT_ARG_STRING, CLI_LOADSKIRMISH, N_("Load a saved skirmish game"),     N_("savegame") },
 		{ "loadcampaign", POPT_ARG_STRING, CLI_LOADCAMPAIGN, N_("Load a saved campaign game"),     N_("savegame") },
+		{ "loadreplay", POPT_ARG_STRING, CLI_LOADREPLAY, N_("Load a replay"),     N_("replay file") },
 		{ "window", POPT_ARG_NONE, CLI_WINDOW,     N_("Play in windowed mode"),             nullptr },
 		{ "version", POPT_ARG_NONE, CLI_VERSION,    N_("Show version information and exit"), nullptr },
 		{ "resolution", POPT_ARG_STRING, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
@@ -361,6 +379,7 @@ static const struct poptOption *getOptionsTable()
 		{ "sound", POPT_ARG_NONE, CLI_SOUND,      N_("Enable sound"),                      nullptr },
 		{ "nosound", POPT_ARG_NONE, CLI_NOSOUND,    N_("Disable sound"),                     nullptr },
 		{ "join", POPT_ARG_STRING, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),  N_("host") },
+		{ "spectate", POPT_ARG_STRING, CLI_CONNECTTOIP_SPECTATE, N_("Connect directly to IP/hostname as a spectator"),  N_("host") },
 		{ "host", POPT_ARG_NONE, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr },
 		{ "texturecompression", POPT_ARG_NONE, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr },
 		{ "notexturecompression", POPT_ARG_NONE, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
@@ -392,6 +411,12 @@ static const struct poptOption *getOptionsTable()
 #endif
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
 		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
+		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
+		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
+		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
+		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
+		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin)")},
+		{ "startplayers", POPT_ARG_STRING, CLI_STARTPLAYERS, N_("Minimum required players to auto-start game"), N_("startplayers")},
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -588,6 +613,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			war_setWindowMode(WINDOW_MODE::fullscreen);
 			break;
 		case CLI_CONNECTTOIP:
+		case CLI_CONNECTTOIP_SPECTATE:
 			//get the ip we want to connect with, and go directly to join screen.
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
@@ -595,6 +621,8 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("No IP/hostname given");
 			}
 			sstrcpy(iptoconnect, token);
+			// also set spectate flag
+			cliConnectToIpAsSpectator = (option == CLI_CONNECTTOIP_SPECTATE);
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.
@@ -613,7 +641,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			NetPlay.bComms = false;
 			bMultiPlayer = false;
 			bMultiMessages = false;
-			for (int i = 0; i < MAX_PLAYERS; i++)
+			for (unsigned int i = 0; i < MAX_PLAYERS; i++)
 			{
 				NET_InitPlayer(i, true);
 			}
@@ -719,6 +747,47 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			SPinit(LEVEL_TYPE::CAMPAIGN);
 			SetGameMode(GS_SAVEGAMELOAD);
 			break;
+		case CLI_LOADREPLAY:
+		{
+			// retrieve the replay name
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Unrecognised replay name");
+			}
+			std::string extension;
+			if (!strEndsWith(token, ".wzrp"))
+			{
+				extension = ".wzrp";
+			}
+			// check if we have a full path (relative to the replay dir)
+			snprintf(saveGameName, sizeof(saveGameName), "%s/%s%s", ReplayPath, token, extension.c_str());
+			bool foundReplayFile = PHYSFS_exists(saveGameName) != 0;
+			if (!foundReplayFile)
+			{
+				// look in all possible replay subdirs (maybe we just have a filename)
+				std::vector<std::string> replaySubdirs = {"skirmish", "multiplay"};
+				for (auto& replaySubdir : replaySubdirs)
+				{
+					snprintf(saveGameName, sizeof(saveGameName), "%s/%s/%s%s", ReplayPath, replaySubdir.c_str(), token, extension.c_str());
+					if (PHYSFS_exists(saveGameName))
+					{
+						foundReplayFile = true;
+						break;
+					}
+				}
+			}
+			if (!foundReplayFile)
+			{
+				qFatal("Unable to find specified replay");
+			}
+			sstrcpy(sRequestResult, saveGameName); // hack to avoid crashes
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			bMultiPlayer = true;
+			game.maxPlayers = 4; //DEFAULTSKIRMISHMAPMAXPLAYERS;
+			SetGameMode(GS_SAVEGAMELOAD);
+			break;
+		}
 		case CLI_CONTINUE:
 			if (findLastSave())
 			{
@@ -859,6 +928,64 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			netGameserverPortOverride = true;
 			debug(LOG_INFO, "Games will be hosted on port [%d]", NETgetGameserverPort());
 			break;
+
+		case CLI_STREAMER_SPECTATOR:
+			wz_streamer_spectator_mode = true;
+			break;
+
+		case CLI_LOBBY_SLASHCOMMANDS:
+			wz_lobby_slashcommands = true;
+			break;
+
+		case CLI_ADD_LOBBY_ADMINHASH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Bad admin hash");
+			}
+			addLobbyAdminIdentityHash(token);
+			break;
+
+		case CLI_ADD_LOBBY_ADMINPUBLICKEY:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Bad admin public key");
+			}
+			addLobbyAdminPublicKey(token);
+			break;
+
+		case CLI_COMMAND_INTERFACE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				// use default, which is currently "stdin"
+				token = "stdin";
+			}
+			if (strcmp(token, "stdin") == 0)
+			{
+				// enable stdin
+				wz_cmd_interface = WZ_Command_Interface::StdIn_Interface;
+			}
+			else
+			{
+				qFatal("Unsupported / invalid enablecmdinterface value");
+			}
+			break;
+		case CLI_STARTPLAYERS:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad start players count");
+			}
+			wz_min_autostart_players = atoi(token);
+			if (wz_min_autostart_players < 0)
+			{
+				qFatal("Invalid start players count");
+			}
+			debug(LOG_INFO, "Games will automatically start with [%d] players (when ready)", wz_min_autostart_players);
+			break;
+
 		};
 	}
 
@@ -888,4 +1015,32 @@ std::string autoratingUrl(std::string const &hash) {
 		url.replace(h, 6, hash);
 	}
 	return url;
+}
+
+void setAutoratingUrl(std::string url) {
+	wz_autoratingUrl = url;
+}
+
+std::string getAutoratingUrl() {
+	return wz_autoratingUrl;
+}
+
+bool streamer_spectator_mode()
+{
+	return wz_streamer_spectator_mode;
+}
+
+bool lobby_slashcommands_enabled()
+{
+	return wz_lobby_slashcommands;
+}
+
+WZ_Command_Interface wz_command_interface()
+{
+	return wz_cmd_interface;
+}
+
+int min_autostart_player_count()
+{
+	return wz_min_autostart_players;
 }

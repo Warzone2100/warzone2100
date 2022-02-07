@@ -170,20 +170,50 @@ function camOrderToString(order)
 }
 
 //////////// privates
+function __camFindGroupAvgCoordinate(groupID)
+{
+	var droids = enumGroup(groupID);
+	var len = droids.length;
+	var avgCoord = {x: 0, y: 0};
+
+	if (droids.length === 0)
+	{
+		return null;
+	}
+
+	for (var i = 0; i < len; ++i)
+	{
+		var droid = droids[i];
+		avgCoord.x = avgCoord.x + droid.x;
+		avgCoord.y = avgCoord.y + droid.y;
+	}
+
+	// This global is constantly changing for the tactics code per group
+	__camGroupAvgCoord.x = Math.floor(avgCoord.x / len);
+	__camGroupAvgCoord.y = Math.floor(avgCoord.y / len);
+}
+
+function __camDistToGroupAverage(obj1, obj2)
+{
+	var dist1 = distBetweenTwoPoints(__camGroupAvgCoord.x, __camGroupAvgCoord.y, obj1.x, obj1.y);
+	var dist2 = distBetweenTwoPoints(__camGroupAvgCoord.x, __camGroupAvgCoord.y, obj2.x, obj2.y);
+	return (dist1 - dist2);
+}
 
 function __camPickTarget(group)
 {
 	var targets = [];
 	var gi = __camGroupInfo[group];
 	var droids = enumGroup(group);
+	__camFindGroupAvgCoordinate(group);
 	switch(gi.order)
 	{
 		case CAM_ORDER_ATTACK:
 			if (camDef(gi.target))
 			{
-				targets = enumRange(gi.target.x, gi.target.y,
-				                    __CAM_TARGET_TRACKING_RADIUS,
-				                    CAM_HUMAN_PLAYER, false);
+				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+					return (obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
+				});
 			}
 			// fall-through! we just don't track targets on COMPROMISE
 		case CAM_ORDER_COMPROMISE:
@@ -201,10 +231,7 @@ function __camPickTarget(group)
 					{
 						radius = __CAM_PLAYER_BASE_RADIUS;
 					}
-					targets = enumRange(compromisePos.x,
-					                    compromisePos.y,
-					                    radius,
-					                    CAM_HUMAN_PLAYER, false);
+					targets = enumRange(compromisePos.x, compromisePos.y, radius, CAM_HUMAN_PLAYER, false);
 				}
 			}
 			if (gi.order === CAM_ORDER_COMPROMISE && targets.length === 0)
@@ -231,8 +258,15 @@ function __camPickTarget(group)
 				if (targets.length === 0)
 				{
 					targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
-						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
+						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
+							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
 					});
+					if (targets.length === 0)
+					{
+						targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
+							return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
+						});
+					}
 				}
 			}
 			break;
@@ -271,6 +305,7 @@ function __camPickTarget(group)
 	{
 		return undefined;
 	}
+	targets.sort(__camDistToGroupAverage);
 	var target = targets[0];
 	if (camDef(target) && camDef(target.type) && target.type === DROID && camIsTransporter(target))
 	{
@@ -585,6 +620,8 @@ function __camTacticsTickForGroup(group)
 
 			if (closeBy.length > 0)
 			{
+				__camFindGroupAvgCoordinate(group);
+				closeBy.sort(__camDistToGroupAverage);
 				closeByObj = closeBy[0];
 			}
 
@@ -597,6 +634,11 @@ function __camTacticsTickForGroup(group)
 				{
 					closeByObj = undefined;
 				}
+			}
+
+			if (closeByObj && ((closeByObj.type === DROID) && isVTOL(closeByObj) && (isVTOL(droid) || !droid.canHitAir)))
+			{
+				closeByObj = undefined;
 			}
 
 			if (!defending && closeByObj)

@@ -94,9 +94,9 @@ WzString::WzString(const char * str, int size /*= -1*/)
 		ASSERT_OR_RETURN(, strLen <= static_cast<size_t>(std::numeric_limits<int>::max()), "String length (%zu) exceeds maximum support length: %d", strLen, std::numeric_limits<int>::max());
 		size = static_cast<int>(strLen);
 	}
-	ASSERT(utf8::is_valid(str, str + size), "Input text is not valid UTF-8");
+	ASSERT(utf8::is_valid(str, str + size), "Input text is not valid UTF-8 (size: %d): %s", size, str);
 	try {
-		utf8::replace_invalid(str, str + size, back_inserter(_utf8String), '?');
+		utf8::replace_invalid(str, str + size, std::back_inserter(_utf8String), '?');
 	}
 	catch (const std::exception &e) {
 		// Likely passed an incomplete UTF-8 sequence

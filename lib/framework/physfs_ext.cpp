@@ -18,8 +18,10 @@
 */
 
 #include "physfs_ext.h"
+#include "string_ext.h"
 #include "frame.h"
 
+#include <set>
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -34,6 +36,37 @@ bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* f
 	}
 	for (char **i = files; *i != nullptr; ++i)
 	{
+		if (!enumFunc(*i))
+		{
+			break;
+		}
+	}
+	PHYSFS_freeList(files);
+	return true;
+}
+
+bool WZ_PHYSFS_enumerateFolders(const std::string &dir, const std::function<bool (char* folder)>& enumFunc)
+{
+	char **files = PHYSFS_enumerateFiles(dir.c_str());
+	if (!files)
+	{
+		debug(LOG_ERROR, "PHYSFS_enumerateFiles(\"%s\") failed: %s", dir.c_str(), WZ_PHYSFS_getLastError());
+		return false;
+	}
+	std::string baseDir = dir;
+	if (!strEndsWith(baseDir, "/"))
+	{
+		baseDir += "/";
+	}
+	std::string isDir;
+	for (char **i = files; *i != nullptr; ++i)
+	{
+		isDir = baseDir;
+		isDir.append(*i);
+		if (!WZ_PHYSFS_isDirectory(isDir.c_str()))
+		{
+			continue;
+		}
 		if (!enumFunc(*i))
 		{
 			break;
@@ -89,4 +122,101 @@ bool WZ_PHYSFS_createPlatformPrefDir(const WzString& basePath, const WzString& a
 	PHYSFS_setWriteDir((originalWriteDir.has_value()) ? originalWriteDir.value().c_str() : nullptr);
 
 	return true;
+}
+
+bool filenameEndWithExtension(const char *filename, const char *extension)
+{
+	if (nullptr == filename)
+	{
+		return false;
+	}
+
+	size_t filenameLength = strlen(filename);
+	size_t extensionLength = strlen(extension);
+	return extensionLength < filenameLength && 0 == strcmp(filename + filenameLength - extensionLength, extension);
+}
+
+typedef std::pair<const char*, time_t> SaveTimePair;
+struct compareTimes {
+	bool operator()(const SaveTimePair &lhs,
+					const SaveTimePair &rhs) const {
+		return lhs.second < rhs.second;
+	}
+};
+
+int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const char *extension, int fileLimit, const std::function<bool (const char *fileName)>& deleteFileFunction)
+{
+	ASSERT_OR_RETURN(-1, extension != nullptr, "Null extension");
+	CleanupFileEnumFilterFunctions filterFuncs;
+	filterFuncs.fileNameFilterFunction = [extension](const char *fileName) -> bool {
+		return filenameEndWithExtension(fileName, extension);
+	};
+	return WZ_PHYSFS_cleanupOldFilesInFolder(path, filterFuncs, fileLimit, deleteFileFunction);
+}
+
+int WZ_PHYSFS_cleanupOldFilesInFolder(const char *path, const CleanupFileEnumFilterFunctions& fileFilterFunctions, int fileLimit, const std::function<bool (const char *fileName)>& deleteFileFunction)
+{
+	ASSERT_OR_RETURN(-1, path != nullptr, "Null path");
+	ASSERT_OR_RETURN(-1, deleteFileFunction != nullptr, "No deleteFileFunction");
+	char **i, **files;
+	files = PHYSFS_enumerateFiles(path);
+	ASSERT_OR_RETURN(-1, files, "PHYSFS_enumerateFiles(\"%s\") failed: %s", path, WZ_PHYSFS_getLastError());
+	int nfiles = 0;
+	for (i = files; *i != nullptr; ++i)
+	{
+		if (fileFilterFunctions.fileNameFilterFunction != nullptr && !fileFilterFunctions.fileNameFilterFunction(*i))
+		{
+			continue;
+		}
+		nfiles++;
+	}
+	if (nfiles <= fileLimit || nfiles <= 0)
+	{
+		PHYSFS_freeList(files);
+		return 0;
+	}
+
+	// too many files
+	debug(LOG_SAVE, "found %i matching files in %s, limit is %i", nfiles, path, fileLimit);
+
+	// build a sorted list of file + save time
+	std::multiset<SaveTimePair, compareTimes> fileTimes;
+	char savefile[PATH_MAX];
+	for (i = files; *i != nullptr; ++i)
+	{
+		if (fileFilterFunctions.fileNameFilterFunction != nullptr && !fileFilterFunctions.fileNameFilterFunction(*i))
+		{
+			continue;
+		}
+		/* Gather save-time */
+		snprintf(savefile, sizeof(savefile), "%s/%s", path, *i);
+		time_t savetime = WZ_PHYSFS_getLastModTime(savefile);
+		if (fileFilterFunctions.fileLastModifiedFilterFunction != nullptr && !fileFilterFunctions.fileLastModifiedFilterFunction(savetime))
+		{
+			continue;
+		}
+		fileTimes.insert(SaveTimePair{*i, savetime});
+	}
+
+	// now delete the oldest
+	int numFilesDeleted = 0;
+	while (nfiles > fileLimit && !fileTimes.empty())
+	{
+		const char* pOldestFilename = fileTimes.begin()->first;
+		char oldestSavePath[PATH_MAX];
+		snprintf(oldestSavePath, sizeof(oldestSavePath), "%s/%s", path, pOldestFilename);
+		if (deleteFileFunction(oldestSavePath))
+		{
+			++numFilesDeleted;
+			--nfiles;
+		}
+		fileTimes.erase(fileTimes.begin());
+		if (fileLimit < 0)
+		{
+			break;
+		}
+	}
+	fileTimes.clear();
+	PHYSFS_freeList(files);
+	return numFilesDeleted;
 }

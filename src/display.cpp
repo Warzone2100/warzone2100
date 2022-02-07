@@ -78,6 +78,7 @@
 #include "animation.h"
 #include "input/manager.h"
 #include "input/keyconfig.h"
+#include "mapgrid.h"
 
 InputManager gInputManager;
 KeyFunctionConfiguration gKeyFuncConfig;
@@ -163,6 +164,7 @@ static UDWORD screenShakeLength;
 static const UDWORD FADE_START_OF_GAME_TIME = 1000;
 static UDWORD fadeEndTime = 0;
 static void fadeStartOfGame();
+static void handleAreaDemolition();
 
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
 static bool bSensorAssigned;
@@ -198,7 +200,7 @@ void incrementViewDistance(float amount)
 	auto target = (viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance()) + amount;
 	if (!dbgInputManager.debugMappingsAllowed())
 	{
-		CLIP(target, MINDISTANCE, MAXDISTANCE);
+		CLIP(target, MINDISTANCE, (!NETisReplay()) ? MAXDISTANCE : MAXDISTANCE_REPLAY);
 	}
 
 	animateToViewDistance(target);
@@ -353,7 +355,7 @@ void ProcessRadarInput()
 
 				/* If we're tracking a droid, then cancel that */
 				CalcRadarPosition(x, y, &PosX, &PosY);
-				if (mouseOverRadar)
+				if (mouseOverRadar && selectedPlayer < MAX_PLAYERS)
 				{
 					// MARKER
 					// Send all droids to that location
@@ -409,6 +411,11 @@ void resetInput()
 
 static bool localPlayerHasSelection()
 {
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+
 	for (DROID* psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -487,7 +494,7 @@ static bool OverRadarAndNotDragging()
 	return mouseOverRadar && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING;
 }
 
-static void CheckFinishedDrag()
+static void CheckFinishedDrag(SELECTION_TYPE selection)
 {
 	if (mouseReleased(MOUSE_LMB) || mouseDown(MOUSE_RMB))
 	{
@@ -516,11 +523,47 @@ static void CheckFinishedDrag()
 			dragBox3D.status = DRAG_RELEASED;
 			dragBox3D.x2 = mouseX();
 			dragBox3D.y2 = mouseY();
+			if (selection == SC_DROID_DEMOLISH && ctrlShiftDown())
+			{
+				handleAreaDemolition();
+			}
 		}
 		else
 		{
 			dragBox3D.status = DRAG_INACTIVE;
 			wallDrag.status = DRAG_INACTIVE;
+		}
+	}
+}
+/**
+ * Demolish all structures in given area
+ * Note: Does not attempt to optimize movement paths,
+ * so demolishing can be a little out of order
+*/
+static void handleAreaDemolition()
+{
+	const Vector2i pt1(dragBox3D.x1, dragBox3D.y1);
+	const Vector2i pt2(dragBox3D.x2, dragBox3D.y2);
+	Vector2i worldCoord1(0, 0), worldCoord2(0, 0), tmp;
+	SDWORD notused1 = 0, notused2 = 0;
+	screenCoordToWorld(pt1, worldCoord1, notused1, notused2);
+	screenCoordToWorld(pt2, worldCoord2, notused1, notused2);
+	// swap coordinates to be in increasing order.. otherwise gridIterate doesn't work
+	tmp = worldCoord1;
+	worldCoord1.x = worldCoord1.x < worldCoord2.x ? worldCoord1.x : worldCoord2.x;
+	worldCoord1.y = worldCoord1.y < worldCoord2.y ? worldCoord1.y : worldCoord2.y;
+	worldCoord2.x = worldCoord2.x > tmp.x ? worldCoord2.x : tmp.x;
+	worldCoord2.y = worldCoord2.y > tmp.y ? worldCoord2.y : tmp.y;
+
+	debug(LOG_INFO, "demolish everything in the area (%i %i) -> (%i %i)", worldCoord1.x, worldCoord1.y, worldCoord2.x, worldCoord2.y);
+	std::vector<BASE_OBJECT *> gridList = gridStartIterateArea(worldCoord1.x, worldCoord1.y, worldCoord2.x, worldCoord2.y);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		BASE_OBJECT *psObj = *gi;
+		if (psObj->type == OBJ_STRUCTURE && psObj->player == selectedPlayer)
+		{
+			// add demolish order to queue for every selected unit
+			orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psObj, true);
 		}
 	}
 }
@@ -545,7 +588,7 @@ static void CheckStartWallDrag()
 		else if (intBuildSelectMode())//if we were in build select mode
 		{
 			//uhoh no place to build here
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 		}
 	}
 }
@@ -615,6 +658,8 @@ void processMouseClickInput()
 	SELECTION_TYPE	selection;
 	MOUSE_TARGET	item = MT_NOTARGET;
 	bool OverRadar = OverRadarAndNotDragging();
+	selection = establishSelection(selectedPlayer);
+	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
 	ignoreOrder = CheckFinishedFindPosition();
 
@@ -622,7 +667,7 @@ void processMouseClickInput()
 
 	HandleDrag();
 
-	CheckFinishedDrag();
+	CheckFinishedDrag(selection);
 
 	if (isMouseOverScreenOverlayChild(mouseX(), mouseY()))
 	{
@@ -706,8 +751,6 @@ void processMouseClickInput()
 		panActive = true;
 	}
 
-	selection = establishSelection(selectedPlayer);
-	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
 	if (gamePaused())
 	{
@@ -731,6 +774,7 @@ void processMouseClickInput()
 		item = itemUnderMouse(&ObjUnderMouse);
 		ASSERT(item < POSSIBLE_TARGETS, "Weirdy target!");
 
+		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is too high: %" PRIu32 "", selectedPlayer);
 		ObjAllied = (ObjUnderMouse && selectedPlayer != ObjUnderMouse->player && aiCheckAlliances(selectedPlayer, ObjUnderMouse->player));
 
 		if (item != MT_NOTARGET)
@@ -1272,7 +1316,7 @@ BASE_OBJECT *mouseTarget()
 			dispR = psDroid->sDisplay.screenR;
 
 			// Has the droid been drawn since the start of the last frame
-			if (psDroid->visible[selectedPlayer] && DrawnInLastFrame(psDroid->sDisplay.frameNumber))
+			if (psDroid->visibleForLocalDisplay() && DrawnInLastFrame(psDroid->sDisplay.frameNumber))
 			{
 				if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
 				{
@@ -1314,6 +1358,8 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 		return;
 	}
 
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid player (selectedPlayer: %" PRIu32 ")", selectedPlayer);
+
 	//clear the selected delivery point
 	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
 	{
@@ -1344,24 +1390,29 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 void finishDeliveryPosition()
 {
 	STRUCTURE *psStruct = nullptr;
-	FLAG_POSITION *psFlagPos;
+
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid player (selectedPlayer: %" PRIu32 ")", selectedPlayer);
+
 	if (flagStructId)
 	{
 		flagReposVarsValid = false;
 		psStruct = IdToStruct(flagStructId, selectedPlayer);
-		if (StructIsFactory(psStruct) && psStruct->pFunctionality
-		    && psStruct->pFunctionality->factory.psAssemblyPoint)
+		if (psStruct)
 		{
-			setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
-			                 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
-		}
-		else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->pFunctionality != nullptr)
-		{
-			setAssemblyPoint(psStruct->pFunctionality->repairFacility.psDeliveryPoint,
-			                 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
+			if (StructIsFactory(psStruct) && psStruct->pFunctionality
+				&& psStruct->pFunctionality->factory.psAssemblyPoint)
+			{
+				setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
+								 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
+			}
+			else if (psStruct->pStructureType && psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->pFunctionality != nullptr)
+			{
+				setAssemblyPoint(psStruct->pFunctionality->repairFacility.psDeliveryPoint,
+								 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
+			}
 		}
 		//deselect once moved
-		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
+		for (FLAG_POSITION *psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
 		{
 			psFlagPos->selected = false;
 		}
@@ -1377,6 +1428,8 @@ bool deliveryReposValid()
 	{
 		return false;
 	}
+
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Invalid player (selectedPlayer: %" PRIu32 ")", selectedPlayer);
 
 	Vector2i map = map_coord(flagPos.coords.xy());
 
@@ -1531,7 +1584,7 @@ void AddDerrickBurningMessage()
 {
 	if (addConsoleMessageDebounced(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, CANNOT_BUILD_BURNING))
 	{
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		audio_PlayBuildFailedOnce();
 	}
 }
 
@@ -1560,6 +1613,11 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 {
 	bool ownDroid; // Not an allied droid
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op
+	}
+
 	if (!aiCheckAlliances(selectedPlayer, psDroid->player))
 	{
 		memset(DROIDDOING, 0x0 , sizeof(DROIDDOING)); // take over the other players droid by debug menu.
@@ -1567,7 +1625,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
-			console("(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f",
+			console(_("(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"),
 			        droidGetName(psDroid),  psDroid->body, psDroid->originalBody, psDroid->id,
 			        psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type),
 			        getDroidActionName(psDroid->action), droidSensorRange(psDroid), objJammerPower(psDroid), UNDEG(psDroid->rot.pitch));
@@ -1721,13 +1779,14 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 {
 	bool ownStruct = (psStructure->player == selectedPlayer);
 
-	if (!aiCheckAlliances(psStructure->player, selectedPlayer))
+	if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psStructure->player, selectedPlayer))
 	{
 		/* We've clicked on an enemy building */
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
-			console("(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d", getID(psStructure->pStructureType), psStructure->pStructureType->ref,
+			// TRANSLATORS: "ref" is an internal unique id of the item (can leave untranslated as a technical term)
+			console(_("(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"), getID(psStructure->pStructureType), psStructure->pStructureType->ref,
 			        psStructure->id, psStructure->body, psStructure->pStructureType->upgrade[psStructure->player].hitpoints);
 		}
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psStructure, ctrlShiftDown());
@@ -1746,6 +1805,11 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 	if (!bRightClickOrders)
 	{
 		printStructureInfo(psStructure);
+	}
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // do not proceed
 	}
 
 	/* Got to be built. Also, you can't 'select' derricks */
@@ -1827,6 +1891,11 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 
 static void dealWithLMBFeature(FEATURE *psFeature)
 {
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		goto debugOuput;
+	}
+
 	//go on to check for
 	if (psFeature->psStats->damageable)
 	{
@@ -1895,6 +1964,8 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 			break;
 		}
 	}
+
+debugOuput:
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (dbgInputManager.debugMappingsAllowed())
 	{
@@ -1945,7 +2016,13 @@ void	dealWithLMB()
 	if (psClickedOn)
 	{
 		dealWithLMBObject(psClickedOn);
+
 		return;
+	}
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // shortcut the rest (for now)
 	}
 
 	if (auto deliveryPoint = findMouseDeliveryPoint())
@@ -2049,6 +2126,11 @@ static void dealWithLMBDClick()
  */
 static FLAG_POSITION *findMouseDeliveryPoint()
 {
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return nullptr;
+	}
+
 	for (auto psPoint = apsFlagPosLists[selectedPlayer]; psPoint; psPoint = psPoint->psNext)
 	{
 		if (psPoint->type != POS_DELIVERY) {
@@ -2272,12 +2354,12 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 			dispY = psDroid->sDisplay.screenY;
 			dispR = psDroid->sDisplay.screenR;
 			/* Only check droids that're on screen */
-			if (psDroid->sDisplay.frameNumber + 1 == currentFrame && psDroid->visible[selectedPlayer])
+			if (psDroid->sDisplay.frameNumber + 1 == currentFrame && psDroid->visibleForLocalDisplay())
 			{
 				if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
 				{
 					/* We HAVE clicked on droid! */
-					if (aiCheckAlliances(psDroid->player, selectedPlayer))
+					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psDroid->player, selectedPlayer))
 					{
 						*ppObjectUnderMouse = (BASE_OBJECT *)psDroid;
 						// need to check for command droids here as well
@@ -2381,7 +2463,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 		{
 			psStructure = (STRUCTURE *)psNotDroid;
 
-			if (aiCheckAlliances(psNotDroid->player, selectedPlayer))
+			if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psNotDroid->player, selectedPlayer))
 			{
 				if (psStructure->status == SS_BEING_BUILT || isBlueprint(psStructure))
 				{
@@ -2439,7 +2521,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 
 	/* Send the result back - if it's null then we clicked on an area of terrain */
 	/* make unseen objects just look like terrain. */
-	if (retVal == MT_NOTARGET || (psNotDroid && !(psNotDroid->visible[selectedPlayer])))
+	if (retVal == MT_NOTARGET || (psNotDroid && !(psNotDroid->visibleForLocalDisplay())))
 	{
 		retVal = MT_TERRAIN;
 	}
@@ -2479,6 +2561,11 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 	DROID *psDominant = nullptr;
 	UBYTE CurrWeight = UBYTE_MAX;
 	SELECTION_TYPE selectionClass = SC_INVALID;
+
+	if (_selectedPlayer >= MAX_PLAYERS)
+	{
+		return SC_INVALID;
+	}
 
 	for (DROID *psDroid = apsDroidLists[_selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -2568,6 +2655,8 @@ static bool	buildingDamaged(STRUCTURE *psStructure)
 /*Looks through the list of selected players droids to see if one is a repair droid*/
 bool	repairDroidSelected(UDWORD player)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
+
 	DROID	*psCurr;
 
 	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
@@ -2587,6 +2676,8 @@ bool	repairDroidSelected(UDWORD player)
 /*Looks through the list of selected players droids to see if one is a VTOL droid*/
 bool	vtolDroidSelected(UDWORD player)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "player: %" PRIu32 "", player);
+
 	DROID	*psCurr;
 
 	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
@@ -2606,6 +2697,8 @@ bool	vtolDroidSelected(UDWORD player)
 /*Looks through the list of selected players droids to see if any is selected*/
 bool	anyDroidSelected(UDWORD player)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
+
 	DROID	*psCurr;
 
 	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
@@ -2623,6 +2716,8 @@ bool	anyDroidSelected(UDWORD player)
 /*Looks through the list of selected players droids to see if one is a cyborg droid*/
 bool cyborgDroidSelected(UDWORD player)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
+
 	DROID	*psCurr;
 
 	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
@@ -2645,6 +2740,11 @@ void clearSelection()
 	FLAG_POSITION	*psFlagPos;
 
 	memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return;
+	}
 
 	for (psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid; psCurrDroid = psCurrDroid->psNext)
 	{

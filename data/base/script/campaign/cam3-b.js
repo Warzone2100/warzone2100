@@ -4,6 +4,7 @@ include("script/campaign/transitionTech.js");
 
 var trapActive;
 var gammaAttackCount;
+var truckLocCounter;
 const GAMMA = 1; // Player 1 is Gamma team.
 const NEXUS_RES = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade08", "R-Struc-Materials08",
@@ -151,10 +152,10 @@ function sendNXlandReinforcements()
 
 function transferPower()
 {
-    const AWARD = 5000;
-    var powerTransferSound = "power-transferred.ogg";
-    setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
-    playSound(powerTransferSound);
+	const AWARD = 5000;
+	var powerTransferSound = "power-transferred.ogg";
+	setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
+	playSound(powerTransferSound);
 }
 
 function activateNexusGroups()
@@ -197,12 +198,37 @@ function activateNexusGroups()
 	});
 }
 
+function truckDefense()
+{
+	if (enumDroid(GAMMA, DROID_CONSTRUCT).length === 0)
+	{
+		removeTimer("truckDefense");
+		return;
+	}
+
+	var list = ["Emplacement-Howitzer105", "Emplacement-MdART-pit", "Emplacement-RotHow"];
+	var position;
+
+	if (truckLocCounter === 0)
+	{
+		position = camMakePos("buildPos1");
+		truckLocCounter += 1;
+	}
+	else
+	{
+		position = camMakePos("buildPos2");
+		truckLocCounter = 0;
+	}
+
+	camQueueBuilding(GAMMA, list[camRand(list.length)], position);
+}
+
 //Take everything Gamma has and donate to Nexus.
 function trapSprung()
 {
 	setAlliance(GAMMA, NEXUS, true);
 	setAlliance(GAMMA, CAM_HUMAN_PLAYER, false);
-	camPlayVideos("MB3_B_MSG3");
+	camPlayVideos({video: "MB3_B_MSG3", type: CAMP_MSG});
 	hackRemoveMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
@@ -215,6 +241,7 @@ function trapSprung()
 
 	setTimer("sendNXTransporter", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendNXlandReinforcements", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 }
 
 function setupCapture()
@@ -243,10 +270,11 @@ function eventStartLevel()
 {
 	trapActive = false;
 	gammaAttackCount = 0;
+	truckLocCounter = 0;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
-     camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startpos.x, startpos.y);
@@ -321,9 +349,16 @@ function eventStartLevel()
 		}
 	});
 
+	if (difficulty >= HARD)
+	{
+		addDroid(GAMMA, 28, 5, "Truck Python Tracks", "Body11ABT", "tracked01", "", "", "Spade1Mk1");
+
+		camManageTrucks(GAMMA);
+	}
+
 	setAlliance(GAMMA, CAM_HUMAN_PLAYER, true);
-	hackAddMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	camPlayVideos(["MB3_B_MSG", "MB3_B_MSG2"]);
+	hackAddMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, false);
+	camPlayVideos([{video: "MB3_B_MSG", type: CAMP_MSG}, {video: "MB3_B_MSG2", type: MISS_MSG}]);
 
 	changePlayerColour(GAMMA, 0);
 	setAlliance(GAMMA, CAM_HUMAN_PLAYER, true);

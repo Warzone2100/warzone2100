@@ -130,10 +130,10 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (width() - barSize) / numStops;
+				stopSize = (width() - barSize) / std::max<int>(numStops, 1);
 				pos = (mx + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (width() - barSize);
+				      / std::max<int>((width() - barSize), 1);
 			}
 			break;
 		case WSLD_RIGHT:
@@ -148,11 +148,11 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (width() - barSize) / numStops;
+				stopSize = (width() - barSize) / std::max<int>(numStops, 1);
 				pos = numStops
 				      - (mx + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (width() - barSize);
+				      / std::max<int>((width() - barSize), 1);
 			}
 			break;
 		case WSLD_TOP:
@@ -167,10 +167,10 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (height() - barSize) / numStops;
+				stopSize = (height() - barSize) / std::max<int>(numStops, 1);
 				pos = (my + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (height() - barSize);
+				      / std::max<int>((height() - barSize), 1);
 			}
 			break;
 		case WSLD_BOTTOM:
@@ -185,11 +185,11 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (height() - barSize) / numStops;
+				stopSize = (height() - barSize) / std::max<int>(numStops, 1);
 				pos = numStops
 				      - (my + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (height() - barSize);
+				      / std::max<int>((height() - barSize), 1);
 			}
 			break;
 		}

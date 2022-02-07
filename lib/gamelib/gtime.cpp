@@ -39,6 +39,8 @@
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
+UDWORD extraGameTicksProcessed = 0;
+
 /** The current clock modifier. Set to speed up the game. */
 static Rational modifier;
 
@@ -51,9 +53,9 @@ static uint32_t prevRealTime;
   **/
 static UDWORD	stopCount;
 
-static uint32_t gameQueueTime[MAX_PLAYERS];
-static uint32_t gameQueueCheckTime[MAX_PLAYERS];
-static uint32_t gameQueueCheckCrc[MAX_PLAYERS];
+static uint32_t gameQueueTime[MAX_GAMEQUEUE_SLOTS];
+static uint32_t gameQueueCheckTime[MAX_GAMEQUEUE_SLOTS];
+static uint32_t gameQueueCheckCrc[MAX_GAMEQUEUE_SLOTS];
 static bool     crcError = false;
 
 static uint32_t updateReadyTime = 0;
@@ -61,7 +63,10 @@ static uint32_t updateWantedTime = 0;
 static uint16_t chosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t discreteChosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatency = GAME_TICKS_PER_UPDATE;
-static uint16_t wantedLatencies[MAX_PLAYERS];
+static uint16_t wantedLatencies[MAX_GAMEQUEUE_SLOTS];
+
+static optional<uint32_t> waitingOnPlayersStartTime;
+#define MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS GAME_TICKS_PER_UPDATE
 
 static void updateLatency(void);
 
@@ -106,12 +111,15 @@ void gameTimeInit(void)
 	chosenLatency = GAME_TICKS_PER_UPDATE * 2;
 	discreteChosenLatency = GAME_TICKS_PER_UPDATE * 2;
 	wantedLatency = GAME_TICKS_PER_UPDATE * 2;
-	for (player = 0; player != MAX_PLAYERS; ++player)
+	for (player = 0; player < MAX_GAMEQUEUE_SLOTS; ++player)
 	{
+		gameQueueCheckTime[player] = 0;
+		gameQueueCheckCrc[player] = 0;
 		wantedLatencies[player] = 0;
 	}
 
 	// Don't let syncDebug from previous games cause a desynch dump at gameTime 102.
+	crcError = false;
 	resetSyncDebug();
 }
 
@@ -145,11 +153,17 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 	return realTime % MAX(1, timePeriod) * requiredRange / MAX(1, timePeriod);
 }
 
-/* Call this each loop to update the game timer */
-void gameTimeUpdate(bool mayUpdate)
+void gameTimeUpdateBegin()
 {
 	deltaGameTime = 0;
 	deltaGraphicsTime = 0;
+	extraGameTicksProcessed = 0;
+}
+
+/* Call this each loop to update the game timer */
+GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
+{
+	GameTimeUpdateResult result = GameTimeUpdateResult::NO_UPDATE;
 
 	uint32_t currTime = wzGetTicks();
 
@@ -165,7 +179,7 @@ void gameTimeUpdate(bool mayUpdate)
 	// Do not update the game time if gameTimeStop has been called
 	if (stopCount != 0)
 	{
-		return;
+		return GameTimeUpdateResult::NO_UPDATE;
 	}
 
 	// Calculate the new game time
@@ -185,41 +199,74 @@ void gameTimeUpdate(bool mayUpdate)
 		updateWantedTime = currTime;  // This is the time that we wanted to tick.
 	}
 
-	if (newGraphicsTime > gameTime && !checkPlayerGameTime(NET_ALL_PLAYERS))
+	bool timeForGameTickUpdate = newGraphicsTime > gameTime;
+
+	if ((timeForGameTickUpdate || forceTryGameTickUpdate) && !checkPlayerGameTime(NET_ALL_PLAYERS))
 	{
 		// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
-
-		debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
-
-		for (unsigned player = 0; player < game.maxPlayers; ++player)
+		if (!waitingOnPlayersStartTime.has_value())
 		{
-			if (!checkPlayerGameTime(player))
+			waitingOnPlayersStartTime = realTime;
+		}
+
+		bool shouldDisplayWaitingStatus = true;
+		if (NetPlay.players[selectedPlayer].isSpectator && !NetPlay.isHost)
+		{
+			shouldDisplayWaitingStatus = (realTime - waitingOnPlayersStartTime.value_or(0)) > MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS;
+		}
+		if (timeForGameTickUpdate && shouldDisplayWaitingStatus)
+		{
+			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + MAX_CONNECTED_PLAYERS).c_str());
+
+			for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 			{
-				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_WAITING_FOR_PLAYER, player);
-				break;  // GAME_GAME_TIME is processed serially, so don't know if waiting for more players.
+				if (!checkPlayerGameTime(player))
+				{
+					NETsetPlayerConnectionStatus(CONNECTIONSTATUS_WAITING_FOR_PLAYER, player);
+					break;  // GAME_GAME_TIME is processed serially, so don't know if waiting for more players.
+				}
 			}
 		}
+
+		timeForGameTickUpdate = false;
+		forceTryGameTickUpdate = false;
 	}
 
 	// Adjust deltas.
-	if (newGraphicsTime > gameTime)
+	if (timeForGameTickUpdate || forceTryGameTickUpdate)
 	{
 		// Update the game time.
 		deltaGameTime = GAME_TICKS_PER_UPDATE;
 		gameTime += deltaGameTime;
 
+		waitingOnPlayersStartTime = nullopt;
+
+		result = (timeForGameTickUpdate) ? GameTimeUpdateResult::GAME_TIME_UPDATED : GameTimeUpdateResult::GAME_TIME_UPDATED_FORCED;
+
+		if (!timeForGameTickUpdate && forceTryGameTickUpdate)
+		{
+			extraGameTicksProcessed++;
+		}
+
 		updateLatency();
 		if (crcError)
 		{
-			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
-			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
+			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + MAX_GAMEQUEUE_SLOTS).c_str());
+			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + MAX_GAMEQUEUE_SLOTS).c_str());
 			crcError = false;
 		}
 	}
 	else
 	{
+		if (extraGameTicksProcessed > 0)
+		{
+			// If extra game ticks have been processed, newGraphicsTime/newDeltaGraphicsTime must be "fast-forwarded" to appropriate values based on gameTime
+			newGraphicsTime = gameTime;
+			newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		}
+
 		// Update the graphics time.
 		graphicsTime      = newGraphicsTime;
 		deltaGraphicsTime = newDeltaGraphicsTime;
@@ -232,6 +279,7 @@ void gameTimeUpdate(bool mayUpdate)
 	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
 
 	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
+	return result;
 }
 
 void gameTimeUpdateEnd()
@@ -328,9 +376,11 @@ static void updateLatency()
 	uint16_t prevDiscreteChosenLatency = discreteChosenLatency;
 
 	// Find out what latency has been agreed on, next.
-	for (player = 0; player < game.maxPlayers; ++player)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
-		if (NetPlay.players[player].allocated)  // Don't wait for dropped/kicked players.
+		if (NetPlay.players[player].allocated  // Don't wait for dropped/kicked players.
+			&& (NetPlay.players[player].position < game.maxPlayers) // should always be a valid map / player position
+			&& (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer)) // Don't wait for spectators (that are not the host)
 		{
 			//minWantedLatency = MIN(minWantedLatency, wantedLatencies[player]);  // Minimum, so the clients don't increase the latency to try to make one slow computer run faster.
 			maxWantedLatency = MAX(maxWantedLatency, wantedLatencies[player]);  // Maximum, since the host experiences lower latency than everyone else.
@@ -361,7 +411,7 @@ void sendPlayerGameTime()
 	uint32_t checkTime = gameTime;
 	GameCrcType checkCrc = nextDebugSync();
 
-	for (player = 0; player < game.maxPlayers; ++player)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
 		if (!myResponsibility(player))
 		{
@@ -377,8 +427,29 @@ void sendPlayerGameTime()
 	}
 }
 
+static inline bool shouldWaitForPlayerSlot(unsigned player)
+{
+	return NetPlay.players[player].allocated  // Don't wait for players that have been kicked/dropped.
+	&& (!NetPlay.players[player].isSpectator || !ingame.TimeEveryoneIsInGame.has_value() || player == NetPlay.hostPlayer); // Don't wait for spectators (that are not the host) once the game has started
+}
+
+// publicly-exposed function
+bool gtimeShouldWaitForPlayer(unsigned player)
+{
+	return shouldWaitForPlayerSlot(player);
+}
+
+static inline bool shouldCheckDebugSyncForPlayerSlot(unsigned player)
+{
+	return NetPlay.players[player].allocated	// human player
+		&& !ingame.endTime.has_value()			// and game hasn't ended
+		&& (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer);
+}
+
 void recvPlayerGameTime(NETQUEUE queue)
 {
+	ASSERT(queue.index < MAX_GAMEQUEUE_SLOTS, "Unexpected queue.index: %" PRIu8 "", queue.index);
+
 	uint32_t latencyTicks = 0;
 	uint32_t checkTime = 0;
 	GameCrcType checkCrc = 0;
@@ -390,18 +461,22 @@ void recvPlayerGameTime(NETQUEUE queue)
 	NETuint16_t(&wantedLatencies[queue.index]);
 	NETend();
 
-	syncDebug("GAME_GAME_TIME p%d;lat%u,ct%u,crc%04X,wlat%u", queue.index, latencyTicks, checkTime, checkCrc, wantedLatencies[queue.index]);
-
 	gameQueueTime[queue.index] = checkTime + latencyTicks * GAME_TICKS_PER_UPDATE;  // gameTime when future messages shall be processed.
 
 	gameQueueCheckTime[queue.index] = checkTime;
 	gameQueueCheckCrc[queue.index] = checkCrc;
-	if (!checkDebugSync(checkTime, checkCrc))
+
+	if (shouldCheckDebugSyncForPlayerSlot(queue.index))
 	{
-		crcError = true;
-		if (NetPlay.players[queue.index].allocated)
+		syncDebug("GAME_GAME_TIME p%d;lat%u,ct%u,crc%04X,wlat%u", queue.index, latencyTicks, checkTime, checkCrc, wantedLatencies[queue.index]);
+		if (!checkDebugSync(checkTime, checkCrc))
 		{
-			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, queue.index);
+			debug(LOG_ERROR, "Found CRC error when receiving GAME_GAME_TIME for player: %" PRIu8 " (checkTime: %" PRIu32 ", checkCrc: %" PRIu16 ")", queue.index, checkTime, checkCrc);
+			crcError = true;
+			if (NetPlay.players[queue.index].allocated)
+			{
+				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, queue.index);
+			}
 		}
 	}
 
@@ -417,12 +492,13 @@ bool checkPlayerGameTime(unsigned player)
 	if (player == NET_ALL_PLAYERS)
 	{
 		begin = 0;
-		end = game.maxPlayers;
+		end = MAX_CONNECTED_PLAYERS;
 	}
 
 	for (player = begin; player < end; ++player)
 	{
-		if (gameTime > gameQueueTime[player] && NetPlay.players[player].allocated)  // Don't wait for players that have been kicked/dropped.
+		if (gameTime > gameQueueTime[player]
+			&& shouldWaitForPlayerSlot(player))
 		{
 			return false;  // Still waiting for this player.
 		}
@@ -435,13 +511,14 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < game.maxPlayers; ++player)
+		for (player = 0; player < MAX_GAMEQUEUE_SLOTS; ++player)
 		{
 			gameQueueTime[player] = time;
 		}
 	}
 	else
 	{
+		ASSERT(player < MAX_GAMEQUEUE_SLOTS, "Unexpected player: %u", player);
 		gameQueueTime[player] = time;
 	}
 }

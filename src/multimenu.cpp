@@ -139,7 +139,7 @@ static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
 static PIELIGHT GetPlayerTextColor(int mode, UDWORD player)
 {
 	// override color if they are dead...
-	if (!apsDroidLists[player] && !apsStructLists[player])
+	if (player >= MAX_PLAYERS || (!apsDroidLists[player] && !apsStructLists[player]))
 	{
 		return WZCOL_GREY;			// dead text color
 	}
@@ -629,6 +629,8 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 
 static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return; }
+
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch (alliances[selectedPlayer][player])
 	{
@@ -663,6 +665,7 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD player = psWidget->UserData;
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "invalid player: %" PRIu32 "", player);
 
 	if (openchannels[player])
 	{
@@ -690,8 +693,8 @@ public:
 	void display(int xOffset, int yOffset) override
 	{
 		// a droid of theirs.
-		DROID *displayDroid = apsDroidLists[player];
-		while (displayDroid != nullptr && !displayDroid->visible[selectedPlayer])
+		DROID *displayDroid = (player < MAX_PLAYERS) ? apsDroidLists[player] : nullptr;
+		while (displayDroid != nullptr && !displayDroid->visibleForLocalDisplay())
 		{
 			displayDroid = displayDroid->psNext;
 		}
@@ -714,7 +717,7 @@ public:
 
 			displayComponentButtonObject(displayDroid, &rotation, &position, 100);
 		}
-		else if (apsDroidLists[player])
+		else if ((player < MAX_PLAYERS) && apsDroidLists[player])
 		{
 			// Show that they have droids, but not which droids, since we can't see them.
 			iV_DrawImageTc(
@@ -765,6 +768,7 @@ private:
 		auto lastMargin = margin;
 		lastMargin.right = CLOSE_WIDTH + 5;
 		timerLabel = makeLabel("");
+		timerLabel->setCanTruncate(false);
 		powerLabel = makeLabel(_("Power"));
 		pingLabel = makeLabel(_("Ping"));
 		structsLabel = makeLabel(_("Structs"));
@@ -777,7 +781,7 @@ private:
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(pingLabel)));
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(structsLabel)));
 
-		for (auto player = 0; player < MAX_PLAYERS; player++)
+		for (auto player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 		{
 			if (isHumanPlayer(player) || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers && NetPlay.players[player].difficulty != AIDifficulty::DISABLED))
 			{
@@ -812,8 +816,12 @@ private:
 
 		auto alliancesGrid = std::make_shared<GridLayout>();
 
+		bool selectedPlayerIsSpectator = NetPlay.players[selectedPlayer].isSpectator;
+
 		// add channel opener.
-		if (player != selectedPlayer)
+		// - not configurable for self (obviously)
+		// - players shouldn't configure channel to spectators
+		if ((player != selectedPlayer) && (selectedPlayerIsSpectator || !NetPlay.players[player].isSpectator))
 		{
 			W_BUTINIT sButInit;
 			sButInit.width	= 35;
@@ -825,7 +833,7 @@ private:
 			alliancesGrid->place({0}, {0}, Margin(0, 1, 0, 0).wrap(std::make_shared<W_BUTTON>(&sButInit)));
 		}
 
-		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer)
+		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer && player < MAX_PLAYERS && !NetPlay.players[player].isSpectator)
 		{
 			W_BUTINIT sButInit;
 			//alliance
@@ -904,9 +912,9 @@ private:
 	{
 		for (auto &playerWidget: playersWidgets)
 		{
-			const auto color = GetPlayerTextColor(alliances[selectedPlayer][playerWidget.player], playerWidget.player);
+			const auto color = GetPlayerTextColor((selectedPlayer < MAX_PLAYERS && playerWidget.player < MAX_PLAYERS) ? alliances[selectedPlayer][playerWidget.player] : 0, playerWidget.player);
 			const bool isHuman = isHumanPlayer(playerWidget.player);
-			const bool isAlly = aiCheckAlliances(selectedPlayer, playerWidget.player);
+			const bool isAlly = (selectedPlayer < MAX_PLAYERS && playerWidget.player < MAX_PLAYERS) && aiCheckAlliances(selectedPlayer, playerWidget.player);
 			const bool isSelectedPlayer = playerWidget.player == selectedPlayer;
 
 			playerWidget.name->setFontColour(color);
@@ -914,6 +922,11 @@ private:
 			playerWidget.kills->setFontColour(color);
 			playerWidget.units->setFontColour(color);
 			playerWidget.lastColumn->setFontColour(color);
+
+			if (playerWidget.player >= MAX_PLAYERS)
+			{
+				continue;
+			}
 
 			char scoreString[128];
 			char killsString[20];
@@ -1228,7 +1241,7 @@ void intProcessMultiMenu(UDWORD id)
 	}
 
 	//alliance button
-	if (id >= MULTIMENU_ALLIANCE_BASE  &&  id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS)
+	if (id >= MULTIMENU_ALLIANCE_BASE  &&  id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS  &&  selectedPlayer < MAX_PLAYERS)
 	{
 		i = (UBYTE)(id - MULTIMENU_ALLIANCE_BASE);
 
@@ -1254,7 +1267,7 @@ void intProcessMultiMenu(UDWORD id)
 
 
 	//channel opens.
-	if (id >= MULTIMENU_CHANNEL &&  id < MULTIMENU_CHANNEL + MAX_PLAYERS)
+	if (id >= MULTIMENU_CHANNEL &&  id < MULTIMENU_CHANNEL + MAX_CONNECTED_PLAYERS)
 	{
 		i = id - MULTIMENU_CHANNEL;
 		openchannels[i] = !openchannels[i];

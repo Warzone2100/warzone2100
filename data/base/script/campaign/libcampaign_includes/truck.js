@@ -11,7 +11,7 @@
 //;;
 function camManageTrucks(player)
 {
-	__camTruckInfo[player] = { enabled: 1, queue: [] };
+	__camTruckInfo[player] = { enabled: 1, queue: [], player: player };
 }
 
 //;; ## camQueueBuilding(player, stat[, pos])
@@ -80,9 +80,10 @@ function __camTruckTick()
 {
 	// Issue truck orders for each player.
 	// See comments inside the loop to understand priority.
-	for (var player in __camTruckInfo)
+	for (var playerObj in __camTruckInfo)
 	{
-		var ti = __camTruckInfo[player];
+		var ti = __camTruckInfo[playerObj];
+		var player = ti.player;
 		var truck;
 
 		// First, build things that were explicitly ordered.
@@ -92,6 +93,7 @@ function __camTruckTick()
 			var pos = qi.pos;
 			var randx = 0;
 			var randy = 0;
+
 			if (camDef(pos))
 			{
 				// Find the truck most suitable for the job.
@@ -127,14 +129,14 @@ function __camTruckTick()
 		}
 
 		// Then, capture free oils.
-		var oils = enumFeature(-1, "OilResource");
+		var oils = enumFeature(ALL_PLAYERS, "OilResource");
 		if (oils.length === 0)
 		{
 			continue;
 		}
 		var oil = oils[0];
 		truck = __camGetClosestTruck(player, oil);
-		if (camDef(truck))
+		if (camDef(truck) && player !== NEXUS)
 		{
 			enableStructure("A0ResourceExtractor", player);
 			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor", oil.x, oil.y);

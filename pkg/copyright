@@ -103,6 +103,12 @@ Copyright: 2013 Kevin Howell and others
            2021 Warzone 2100 Project
 License: Zlib
 
+Files: src/3rdparty/physfs_memoryio.cpp
+       lib/3rdparty/physfs_memoryio.h
+Copyright: 2001-2021 Ryan C. Gordon and others
+           2021 Warzone 2100 Project
+License: Zlib
+
 Files: src/3rdparty/propertymatcher.*
 Copyright: 2020 past-due
 License: Expat
@@ -183,6 +189,9 @@ Files: data/base/images/notifications/connect_wait.png
        data/base/images/notifications/shield_questionmark.png
        data/base/images/notifications/skull_crossbones.png
        data/base/images/notifications/user_questionmark.png
+       data/base/images/replay/fast_forward.png
+       data/base/images/replay/pause.png
+       data/base/images/replay/play.png
 Copyright: Font Awesome Free by @fontawesome
 License: CC-BY-4.0
 

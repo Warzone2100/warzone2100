@@ -85,4 +85,6 @@ bool seq_GetSubtitles();
 /*returns the next sequence in the list to play*/
 void seq_StartNextFullScreenVideo();
 
+void seqReleaseAll();
+
 #endif	// __INCLUDED_SRC_SEQDISP_H__

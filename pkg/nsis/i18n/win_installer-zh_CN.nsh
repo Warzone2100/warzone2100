@@ -1,12 +1,12 @@
 ${LangFileString} WZWelcomeText "欢迎来到 Warzone 2100！\r\n\r\n此处将引导你完成游戏的安装\r\n\r\n建议安装前关闭其他应用程序，以确保相关系统文件的更新、避免后续重启。\r\n\r\nWarzone 2100 是免费的，且完全开放源代码\r\n\r\n下一步继续。"
 
-${LangFileString} WZWelcomeText_Portable "海内存知己，天涯若比邻！\r\n\r\n此处将引导您安装 Warzone 2100。\r\n\r\n游戏可以随时删除、卸载。\r\n\r\n免费、开源、有趣的战争！\r\n\r\n下一步继续。"
+${LangFileString} WZWelcomeText_Portable "海内存知己，天涯若比邻！\r\n\r\n此处将引导您完成 Warzone 2100 的安装。\r\n\r\n游戏亦可以随时删除、卸载。\r\n\r\n免费、开源、有趣的战争！\r\n\r\n下一步继续。"
 
 ${LangFileString} WZWelcomeHomepageLink "最新版本请访问官方主页 https://wz2100.net。"
 
-${LangFileString} WZ_64BIT_AVAILABLE "有 64 位版本的 Warzone 21100，$\r$\n详情请访问 https://wz2100.net/ $\r$\n仍要继续安装 32 位的吗？"
+${LangFileString} WZ_64BIT_AVAILABLE "有 64 位版本的 Warzone 21100，$\r$\n详情请访问 https://wz2100.net/ $\r$\n仍要继续 32 位的安装吗？"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "这是 64 位版本的 Warzone 2100.$\r\n请从 https://wz2100.net/ 下载 32 位版本。 /$\r$\n点击确定以退出。"
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "这是 64 位版本的 Warzone 2100。\r\n请从 https://wz2100.net/ 下载 32 位版本。 /$\r$\n点击确定以退出。"
 
 ${LangFileString} WZ_GPL_NEXT "下一步"
 

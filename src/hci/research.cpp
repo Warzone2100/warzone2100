@@ -108,9 +108,18 @@ void ResearchController::refresh()
 	}
 }
 
+void ResearchController::clearData()
+{
+	facilities.clear();
+	setHighlightedObject(nullptr);
+	stats.clear();
+}
+
 void ResearchController::startResearch(RESEARCH &research)
 {
 	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
+
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid player: %" PRIu32 "", selectedPlayer);
 
 	auto facility = getHighlightedObject();
 
@@ -399,6 +408,7 @@ private:
 			return;
 		}
 
+		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid player: %" PRIu32 "", selectedPlayer);
 		auto& playerResList = asPlayerResList[selectedPlayer];
 		ASSERT_OR_RETURN(, research->psSubject->index < playerResList.size(), "Invalid index");
 		auto currentPoints = playerResList[research->psSubject->index].currentPoints;

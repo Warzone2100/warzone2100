@@ -36,6 +36,14 @@
 #include "src/game.h"
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
+
+#if defined( _MSC_VER )
+	// Silence warning when using MSVC ARM64 compiler
+	//	warning C4121: 'SDL_hid_device_info': alignment of a member was sensitive to packing
+	#pragma warning( push )
+	#pragma warning( disable : 4121 )
+#endif
+
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_clipboard.h>
@@ -43,6 +51,11 @@
 #include <SDL_vulkan.h>
 #endif
 #include <SDL_version.h>
+
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
+
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
 #include <algorithm>
@@ -55,6 +68,10 @@
 #include "cocoa_sdl_helpers.h"
 #include "cocoa_wz_menus.h"
 #endif
+
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 void mainLoop();
 // used in crash reports & version info
@@ -183,6 +200,8 @@ static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 void* GetTextEventsOwner = nullptr;
+
+static optional<int> wzQuitExitCode;
 
 /**************************/
 /***     Misc support   ***/
@@ -449,6 +468,22 @@ int wzGetTicks()
 
 void wzDisplayDialog(DialogType type, const char *title, const char *message)
 {
+	if (!WZbackend.has_value())
+	{
+		// while this could be thread_local, thread_local may not yet be supported on all platforms properly
+		// and wzDisplayDialog should probably be called **only** on the main thread anyway
+		static bool processingDialog = false;
+		if (!processingDialog)
+		{
+			// in headless mode, do not display a messagebox (which might block the main thread)
+			// but just log the details
+			processingDialog = true;
+			debug(LOG_INFO, "Suppressed dialog (headless):\n\tTitle: %s\n\tMessage: %s", title, message);
+			processingDialog = false;
+		}
+		return;
+	}
+
 	Uint32 sdl_messagebox_flags = 0;
 	switch (type)
 	{
@@ -607,12 +642,21 @@ bool wzIsMaximized()
 	return false;
 }
 
-void wzQuit()
+void wzQuit(int exitCode)
 {
+	if (!wzQuitExitCode.has_value())
+	{
+		wzQuitExitCode = exitCode;
+	}
 	// Create a quit event to halt game loop.
 	SDL_Event quitEvent;
 	quitEvent.type = SDL_QUIT;
 	SDL_PushEvent(&quitEvent);
+}
+
+int wzGetQuitExitCode()
+{
+	return wzQuitExitCode.value_or(0);
 }
 
 void wzGrabMouse()

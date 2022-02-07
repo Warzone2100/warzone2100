@@ -56,6 +56,9 @@ public:
 public:
 	virtual ~ActivitySink() { }
 public:
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) { }
+
 	// campaign games
 	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) { }
 	virtual void endedCampaignMission(const std::string& campaign, const std::string& levelName, GameEndReason result, END_GAME_STATS_DATA stats, bool cheatsUsed) { }
@@ -91,6 +94,9 @@ public:
 		};
 		AllianceOption alliances;
 
+		// is this a loaded replay?
+		bool isReplay = false;
+
 	public:
 		virtual ~SkirmishGameInfo() { }
 		// some convenience functions to get data
@@ -117,11 +123,14 @@ public:
 		unsigned int lobbyPort;
 		uint32_t lobbyGameId = 0;
 
+		uint32_t hostPlayer = 0;
 		bool isHost;	// whether the current client is the game host
 		bool privateGame;			// whether game is password-protected
 		uint8_t maxPlayers = 0;
 		uint8_t numHumanPlayers = 0;
 		uint8_t numAvailableSlots = 0;
+		uint8_t numSpectators = 0;
+		uint8_t numOpenSpectatorSlots = 0;
 	};
 	virtual void hostingMultiplayerGame(const MultiplayerGameInfo& info) { }
 	virtual void joinedMultiplayerGame(const MultiplayerGameInfo& info) { }
@@ -170,6 +179,9 @@ public:
 	void completedMission(bool result, END_GAME_STATS_DATA stats, bool cheatsUsed);
 	void quitGame(END_GAME_STATS_DATA stats, bool cheatsUsed);
 	void preSystemShutdown();
+
+	// navigating main menus
+	void navigateToMenu(const std::string& menuName);
 
 	// changing settings
 	void beginLoadingSettings();

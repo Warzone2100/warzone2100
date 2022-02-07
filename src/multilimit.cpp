@@ -443,6 +443,15 @@ bool applyLimitSet()
 	{
 		RecursivelyDisableResearchByFlags(MPFLAGS_NO_UPLINK);
 	}
+
+	// A bit of a hack:
+	// - We have to retain the `structureLimits` for saving in the replay, but the process of actually saving the replay init data
+	//   happens *after* the scripts initialize and are sent eventGameInit, which calls applyLimitSet() - this function - which then
+	//   calls `freeLimitSet` below (which clears ingame.structureLimits)
+	// - While this should be refactored at some point... for now, just stash `structureLimits` in `lastAppliedStructureLimits`
+	//   before clearing it, and then the replay init data can save `ingame.lastAppliedStructureLimits`
+	ingame.lastAppliedStructureLimits = ingame.structureLimits;
+
 	freeLimitSet();
 	return true;
 }

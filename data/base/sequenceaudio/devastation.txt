@@ -2,7 +2,7 @@
 
 20	432	11.0	22.0	_("Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out.")
 
-20	432	25.0	39.4	_("Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed.") 
+20	432	25.0	39.4	_("Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed.")
 
 20	432	40.4	45.0	_("The world as we knew it ended...")
 
@@ -17,7 +17,3 @@
 20	432	89.0	102.4	_("We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line.")
 
 20	432	104.0	110.0	_("We were finally ready to begin the Project.")
-
-
-
-

@@ -1,10 +1,8 @@
 /*
  * Skirmish Base Script.
- * 
+ *
  * contains the rules for starting and ending a game.
  * as well as warning messages.
- * 
- *
 */
 
 

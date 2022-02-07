@@ -58,7 +58,12 @@ static bool		leftFirst;
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
 bool setPlayerColour(UDWORD player, UDWORD col)
 {
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
+	if (player >= MAX_PLAYERS)
+	{
+		NetPlay.players[player].colour = MAX_PLAYERS;
+		return true;
+	}
+	ASSERT_OR_RETURN(false, col < MAX_PLAYERS, "Bad colour setting");
 	NetPlay.players[player].colour = col;
 	return true;
 }
@@ -884,7 +889,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 		addEffect(&effectPosition, EFFECT_EXPLOSION, EXPLOSION_TYPE_PLASMA, false, nullptr, 0);
 	}
 
-	if (psDroid->visible[selectedPlayer] == UBYTE_MAX)
+	if (psDroid->visibleForLocalDisplay() == UBYTE_MAX)
 	{
 		//ingame not button object
 		//should render 3 mounted weapons now
@@ -897,7 +902,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 	else
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
-		if (pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2, viewMatrix * modelMatrix))
+		if (pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visibleForLocalDisplay() / 2, viewMatrix * modelMatrix))
 		{
 			psDroid->sDisplay.frameNumber = frameGetFrameNumber();
 		}
@@ -978,7 +983,7 @@ void	compPersonToBits(DROID *psDroid)
 	iIMDShape	*headImd, *legsImd, *armImd, *bodyImd;
 	UDWORD		col;
 
-	if (!psDroid->visible[selectedPlayer])
+	if (!psDroid->visibleForLocalDisplay()) // display only - should not affect game state
 	{
 		/* We can't see the person or cyborg - so get out */
 		return;

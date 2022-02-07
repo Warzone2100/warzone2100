@@ -77,6 +77,12 @@
 		"pos1": [3776, 5568],
 		"pos2": [4800, 6080]
 	},
+	"area_8": {
+		"label": "NPLZTriggerEast",
+		"subscriber": 0,
+		"pos1": [6976, 4928],
+		"pos2": [7616, 5312]
+	},
 
 	"object_0": {
 		"label": "NPLeftFactory",
@@ -142,25 +148,25 @@
 	"radius_0": {
 		"label": "NorthScavFactoryTrigger",
 		"subscriber": 0,
-		"pos": [3200, 900],
+		"pos": [3200, 896],
 		"radius": 1280
 	},
 	"radius_1": {
 		"label": "SouthWestScavFactoryTrigger",
 		"subscriber": 0,
-		"pos": [4200, 7500],
+		"pos": [4224, 7424],
 		"radius": 1024
 	},
 	"radius_2": {
 		"label": "SouthEastScavFactoryTrigger",
 		"subscriber": 0,
-		"pos": [5600, 7500],
+		"pos": [5504, 7424],
 		"radius": 1024
 	},
 	"radius_3": {
 		"label": "NPLZTrigger",
 		"subscriber": 0,
 		"pos": [4288, 4160],
-		"radius": 1100
+		"radius": 1088
 	}
 }

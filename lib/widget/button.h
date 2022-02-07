@@ -128,6 +128,9 @@ public:
 	// To disable a ProgressBorder, use `setProgressBorder(nullopt)`
 	void setProgressBorder(optional<ProgressBorder> progressBorder, optional<PIELIGHT> borderColour = nullopt);
 
+	// May be called from within W_BUTTON_ONCLICK_FUNC (onclick handler) to retrieve the button pressed
+	WIDGET_KEY getOnClickButtonPressed() const;
+
 public:
 	bool isHighlighted() const;
 
@@ -149,6 +152,7 @@ private:
 	std::vector<W_BUTTON_ONCLICK_FUNC> onClickHandlers;
 	optional<ProgressBorder> progressBorder;
 	PIELIGHT				 progressBorderColour;
+	WIDGET_KEY				 lastClickButton = WKEY_NONE;
 };
 
 class MultipleChoiceButton : public W_BUTTON
@@ -172,5 +176,13 @@ private:
 	std::map<int, std::string> tips;
 	std::map<int, Images> imageSets;
 };
+
+std::shared_ptr<W_BUTTON> makeFormTransparentCornerButton(const char* text, int buttonPadding /* = TAB_BUTTONS_PADDING */, PIELIGHT buttonBackgroundFill /* = WZCOL_DEBUG_FILL_COLOR */);
+
+struct PopoverMenuButtonDisplayCache
+{
+	WzText text;
+};
+void PopoverMenuButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 #endif // __INCLUDED_LIB_WIDGET_BUTTON_H__

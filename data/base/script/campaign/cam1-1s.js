@@ -15,13 +15,13 @@ function eventChat(from, to, message)
 function resPowModVideo()
 {
 	powModVideoPlayed = true;
-	camPlayVideos("MB1_B2_MSG");
+	camPlayVideos({video: "MB1_B2_MSG", type: MISS_MSG});
 }
 
 //Sector clear commander!
 function secondVideo()
 {
-	camPlayVideos("SB1_1_MSG");
+	camPlayVideos({video: "SB1_1_MSG", type: MISS_MSG});
 }
 
 //Has player built the power module?

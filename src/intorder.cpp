@@ -388,9 +388,12 @@ bool OrderUp = false;
 //
 static bool BuildSelectedDroidList()
 {
-	DROID *psDroid;
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
 		{

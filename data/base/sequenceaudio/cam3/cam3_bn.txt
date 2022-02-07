@@ -11,5 +11,4 @@
 
 20	432	25.2	28.8	_("Your forces are now mine! Welcome to Nexus.")
 
-
 //_(" for me. Had I known you'd be so useful, I'd have hired ")

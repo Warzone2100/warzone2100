@@ -69,6 +69,9 @@ int64_t getExtractedPower(unsigned player);
 /// Get amount of power wasted during the whole game
 int64_t getWastedPower(unsigned player);
 
+/// Get the approximate power generated per second for the specified player (for display purposes - not to be used for calculations)
+std::string getApproxPowerGeneratedPerSecForDisplay(unsigned player);
+
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(bool on);
 

@@ -38,7 +38,8 @@ void main()
 	texCoord = vertexTexCoord;
 
 	// Lighting we pass to the fragment shader
-	vec3 eyeVec = normalize((ModelViewMatrix * vertex).xyz);
+	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME
+	vec3 eyeVec = normalize(-viewVertex.xyz);
 	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
 	lightDir = normalize(lightPosition.xyz);
 
@@ -49,16 +50,13 @@ void main()
 		vec3 b = cross (n, t) * vertexTangent.w;
 		mat3 TangentSpaceMatrix = mat3(t, n, b);
 
-		// Transform calculated normals for vanilla models by tangent basis
-		n = n * TangentSpaceMatrix;
-
 		// Transform light and eye direction vectors by tangent basis
 		lightDir *= TangentSpaceMatrix;
 		eyeVec *= TangentSpaceMatrix;
 	}
 
 	normal = n;
-	halfVec = lightDir + eyeVec; //can be normalized for better quality
+	halfVec = lightDir + eyeVec;
 
 	// Implement building stretching to accommodate terrain
 	vec4 position = vertex;

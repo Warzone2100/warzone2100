@@ -551,13 +551,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-_("Armed with Cyborg assault gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 _("Armed with Cyborg Assault Gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+_("Armed with Cyborg assault gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -1080,11 +1080,11 @@ _("Best Targets: Base structures and cyborgs")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB2.text[2]
 _("Best Targets: Base Structures and Defenses")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-_("Best Targets: Base structures")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 _("Best Targets: Base Structures")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+_("Best Targets: Base structures")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -1094,17 +1094,17 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
-// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
-// ... + 4 refs
-_("Best Targets: Base Structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
+// ... + 4 refs
+_("Best Targets: Base Structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -1204,16 +1204,16 @@ _("Body Points: Low")
 // ... + 76 refs
 _("Body Points: Medium")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-_("Body Points: Very low")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
 // data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[3]
 // ... + 29 refs
 _("Body Points: Very Low")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
+_("Body Points: Very low")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
 // data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[2]
@@ -1549,14 +1549,16 @@ _("Computer predicts and compensates for target's movement")
 // data/base/messages/messages.json: $.MSG3.text[0]
 _("Computer Research Completed")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
+_("Computer systems are now 'ring-fenced' from NEXUS")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
 _("Computer systems can now be 'ring-fenced' from NEXUS")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_SL1.text[0]
 // data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[0]
 // data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[0]
-// ... + 3 refs
+// ... + 6 refs
 _("Computer Technology Breakthrough")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_ENGIN1.text[2]
@@ -1589,6 +1591,12 @@ _("Counter-battery tower detects enemy indirect fire batteries")
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
 _("Counter-battery turret detects enemy indirect fire batteries")  
+// TRANSLATORS: 
+// data/mp/stats/construction.json: $.scavCrane1.name
+_("Crane1")  
+// TRANSLATORS: 
+// data/mp/stats/construction.json: $.scavCrane2.name
+_("Crane2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals02.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals02.name
@@ -1857,6 +1865,9 @@ _("Drops incendiary bombs")
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text[2]
 _("Electronically attacks and disrupts enemy structures")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
+_("Elite and Veteran rank units and Factories are protected")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-EMPCannon.name
 // data/mp/stats/structure.json: $.WallTower-EMP.name
@@ -2210,15 +2221,11 @@ _("Gauss Cannon")
 _("Generates and concentrates bursts of laser energy")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/bonecrusher.json: $.AI.insane_tip
+// data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 // data/mp/multiplay/skirmish/nb_generic.json: $.AI.insane_tip
-// data/mp/multiplay/skirmish/nb_hover.json: $.AI.insane_tip
-// ... + 3 refs
+// ... + 4 refs
 // xgettext:no-c-format
 _("Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks")  
-// TRANSLATORS: 
-// data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
-// xgettext:no-c-format
-_("Gets ~ 100% more power from each oil derrick\nUses the Heavy Plasma Launcher and EMP Mortar\nStarts with defensive structures and oil derricks")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
 // data/mp/multiplay/skirmish/nb_hover.json: $.AI.easy_tip
@@ -2320,7 +2327,7 @@ _("Hardened case machinegun bullets")
 _("Hardened Flamer Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.GuardTower3H.name
-_("Hardened Heavy Machinegun Tower")  
+_("Hardened Heavy Machinegun Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -2614,6 +2621,7 @@ _("Heavy Machinegun Cobra Tracks")
 _("Heavy Machinegun Cobra Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower03.name
+// data/base/stats/structure.json: $.GuardTower3.name
 // data/mp/stats/research.json: $.R-Defense-Tower01.name
 // data/mp/stats/structure.json: $.GuardTower1.name
 _("Heavy Machinegun Guard Tower")  
@@ -2630,7 +2638,6 @@ _("Heavy Machinegun Scorpion Half Tracks")
 // data/mp/stats/templates.json: $.ScorpTrkHMG.name
 _("Heavy Machinegun Scorpion Tracks")  
 // TRANSLATORS: 
-// data/base/stats/structure.json: $.GuardTower3.name
 // data/base/stats/weapons.json: $.MG3-Tower.name
 // data/mp/stats/structure.json: $.GuardTower3.name
 _("Heavy Machinegun Tower")  
@@ -2712,6 +2719,9 @@ _("Hellstorm Emplacement")
 // data/base/stats/weapons.json: $.Howitzer03-Rot.name
 // data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 _("Hellstorm")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
+_("Hero and Special rank units are protected")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage08.name
@@ -2945,14 +2955,6 @@ _("HVAPFSDS Cannon Rounds Mk3")
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 _("HVAPFSDS Cannon Rounds")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
-// data/base/stats/structure.json: $.Emplacement-HPVcannon.name
-_("HVC Emplacement")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
-// data/base/stats/structure.json: $.WallTower-HPVcannon.name
-_("HVC Hardpoint")  
-// TRANSLATORS: 
 // data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 _("HVC Python Tracks")  
 // TRANSLATORS: 
@@ -2960,10 +2962,14 @@ _("HVC Python Tracks")
 // data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
 _("Hyper Fire Chaingun Upgrade")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
+// data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 // data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 // data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 _("Hyper Velocity Cannon Emplacement")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
+// data/base/stats/structure.json: $.WallTower-HPVcannon.name
 // data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 // data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 _("Hyper Velocity Cannon Hardpoint")  
@@ -3044,7 +3050,9 @@ _("Improved high explosive shells")
 _("Improved Laser Focusing")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[1]
-// data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[1]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[1]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[1]
+// ... + 2 refs
 _("Improved NEXUS resistance circuitry")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_POWMD1.text[1]
@@ -3832,6 +3840,7 @@ _("Mini-Rocket Cobra Half-Tracks")
 _("Mini-Rocket Cobra Tracks")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower06.name
+// data/base/stats/structure.json: $.GuardTower6.name
 _("Mini-Rocket Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -3840,7 +3849,6 @@ _("Mini-Rocket Guard Tower")
 // data/mp/stats/weapons.json: $.Rocket-Pod.name
 _("Mini-Rocket Pod")  
 // TRANSLATORS: 
-// data/base/stats/structure.json: $.GuardTower6.name
 // data/mp/stats/research.json: $.R-Defense-Tower06.name
 // data/mp/stats/structure.json: $.GuardTower6.name
 _("Mini-Rocket Tower")  
@@ -4264,6 +4272,9 @@ _("NEXUS CWall")
 // data/mp/messages/resmessages3.json: $.RES_V_B10.text[0]
 _("NEXUS Heavy Body")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
+_("NEXUS Immunization System")  
+// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
 _("NEXUS Intruder Program analyzed")  
@@ -4505,6 +4516,9 @@ _("Produces Cyborgs")
 // ... + 5 refs
 _("Production Improved")  
 // TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
+_("Professional and Regular rank units are protected")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
 // data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 _("Project Heavy Body")  
@@ -4688,9 +4702,9 @@ _("Rearming speed +30%")
 _("Recoil loaded AA ammunition hopper")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
-// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
-// data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
-// data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
+// data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[2]
+// ... + 3 refs
 _("Reduced chance of NEXUS take-over")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -5026,6 +5040,9 @@ _("Scavenger AT-Rocket Pit")
 // data/mp/stats/structure.json: $.A0BaBaBunker.name
 _("Scavenger Bunker")  
 // TRANSLATORS: 
+// data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
+_("Scavenger Chopper Factory")  
+// TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BabaCornerWall.name
 // data/mp/stats/structure.json: $.A0BabaCornerWall.name
 _("Scavenger CornerWall")  
@@ -5046,9 +5063,18 @@ _("Scavenger Gun Tower")
 // data/mp/stats/structure.json: $.A0BaBaHorizontalWall.name
 _("Scavenger Horizontal Wall")  
 // TRANSLATORS: 
+// data/mp/stats/structure.json: $.bbaatow.name
+_("Scavenger MG tower")  
+// TRANSLATORS: 
+// data/mp/stats/weapons.json: $.bbaawep.name
+_("Scavenger Mounted MG")  
+// TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
 // data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 _("Scavenger Power Generator")  
+// TRANSLATORS: 
+// data/mp/stats/structure.json: $.ScavRepairCentre.name
+_("Scavenger Repair Center")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaRocketPit.name
 // data/mp/stats/structure.json: $.A0BaBaRocketPit.name
@@ -5057,6 +5083,9 @@ _("Scavenger Rocket Pit")
 // data/base/stats/templates.json: $.BaBaPeople.name
 // data/mp/stats/templates.json: $.BaBaPeople.name
 _("Scavenger")  
+// TRANSLATORS: 
+// data/mp/stats/weapons.json: $.ScavNEXUSlink.name
+_("scavengernexuslinkturret")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaBusCan.name
 // data/mp/stats/templates.json: $.BabaBusCan.name
@@ -5268,6 +5297,9 @@ _("Steel tower with machinegun")
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 _("Steel tower with twin machinegun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
+_("Stops NEXUS take-over")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-AALaser.name
 // data/mp/stats/weapons.json: $.AAGunLaser.name
@@ -5533,14 +5565,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
-// TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
@@ -5792,9 +5824,6 @@ _("Uses advanced missile gun technology")
 // data/mp/messages/resmessagesall.json: $.RES_EMP_RKT.text[1]
 _("Uses advanced rocket gun technology")  
 // TRANSLATORS: 
-// data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
-_("Uses the Heavy Plasma Launcher")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
 // data/mp/messages/resmessages3.json: $.RES_POWU2.text[1]
 _("Vapor Turbine boosts power output")  
@@ -5915,6 +5944,9 @@ _("VTOL Assault Cannon")
 // data/mp/stats/weapons.json: $.MG4ROTARY-VTOL.name
 _("VTOL Assault Gun")  
 // TRANSLATORS: 
+// data/mp/stats/structure.json: $.A0BaBaVtolPad.name
+_("VTOL BaBa Rearming Pad")  
+// TRANSLATORS: 
 // data/mp/stats/templates.json: $.V-Bug-BB.name
 _("VTOL Bunker Buster Bug VTOL")  
 // TRANSLATORS: 
@@ -6033,9 +6065,15 @@ _("VTOL Lancer Scorpion VTOL")
 // data/mp/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
 _("VTOL Lancer")  
 // TRANSLATORS: 
+// data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
+_("VTOL Machinegun Scav")  
+// TRANSLATORS: 
 // data/base/stats/weapons.json: $.MG1-VTOL.name
 // data/mp/stats/weapons.json: $.MG1-VTOL.name
 _("VTOL Machinegun")  
+// TRANSLATORS: 
+// data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
+_("VTOL Mini-Rocket Scav")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
 // data/mp/stats/weapons.json: $.Rocket-VTOL-Pod.name

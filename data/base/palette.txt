@@ -96,3 +96,6 @@ b0,b0,ff,ff	// Server knows this player.
 10,10,80,80	// Default filled GUI box colour
 1b,ff,5f,ff // Info messages text color
 10,10,80,bb	// Default notification box colour
+b0,8f,5f,ff	// Arizona fog
+10,10,40,ff	// Urban fog
+b6,e1,ec,ff	// Rockie fog

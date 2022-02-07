@@ -41,6 +41,7 @@
 #include "../musicmanager.h"
 #include "../warzoneconfig.h"
 #include "../frend.h"
+#include "../activity.h"
 
 WzOldTitleUI::WzOldTitleUI(tMode mode) : mode(mode)
 {
@@ -52,49 +53,68 @@ void WzOldTitleUI::start()
 	switch (mode)
 	{
 	case CAMPAIGNS:
+		ActivityManager::instance().navigateToMenu("Campaign");
 		startCampaignSelector();
 		break;
 	case SINGLE:
+		ActivityManager::instance().navigateToMenu("Single Player");
 		startSinglePlayerMenu();
 		break;
 	case GAME:
+		ActivityManager::instance().navigateToMenu("Game Options");
 		startGameOptionsMenu();
 		break;
 	case GRAPHICS_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Graphics Options");
 		startGraphicsOptionsMenu();
 		break;
 	case AUDIO_AND_ZOOM_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Audio + Zoom Options");
 		startAudioAndZoomOptionsMenu();
 		break;
 	case VIDEO_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Video Options");
 		startVideoOptionsMenu();
 		break;
 	case MOUSE_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Mouse Options");
 		startMouseOptionsMenu();
 		break;
 	case TUTORIAL:
+		ActivityManager::instance().navigateToMenu("Tutorial");
 		startTutorialMenu();
 		break;
 	case OPTIONS:
+		ActivityManager::instance().navigateToMenu("Options");
 		startOptionsMenu();
 		break;
 	case TITLE:
+		ActivityManager::instance().navigateToMenu("Main");
 		startTitleMenu();
 		break;
 	case MULTI:
+		ActivityManager::instance().navigateToMenu("Multiplayer");
 		startMultiPlayerMenu();		// goto multiplayer menu
 		break;
 	case KEYMAP:
+		ActivityManager::instance().navigateToMenu("KeyMap Editor");
 		startKeyMapEditor(gInputManager, gKeyFuncConfig, true);
 		break;
 	case MUSIC_MANAGER:
+		ActivityManager::instance().navigateToMenu("Music Manager");
 		startMusicManager();
+		break;
+	case MULTIPLAY_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Multiplay Options");
+		startMultiplayOptionsMenu();
 		break;
 	case STARTGAME:
 	case QUIT:
 	case LOADSAVEGAME:
 		bLimiterLoaded = false;
+		break;
 	case SHOWINTRO:
+		ActivityManager::instance().navigateToMenu("Show Intro");
 		break;
 	default:
 		debug(LOG_FATAL, "Unknown title mode requested");
@@ -164,6 +184,10 @@ TITLECODE WzOldTitleUI::run()
 
 	case MOUSE_OPTIONS:
 		runMouseOptionsMenu();
+		break;
+
+	case MULTIPLAY_OPTIONS:
+		runMultiplayOptionsMenu();
 		break;
 
 	case QUIT:

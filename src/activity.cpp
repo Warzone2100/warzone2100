@@ -47,7 +47,12 @@ std::string ActivitySink::getTeamDescription(const ActivitySink::SkirmishGameInf
 		}
 		else if (p.ai == AI_OPEN)
 		{
-			if (!p.allocated)
+			if (p.isSpectator)
+			{
+				// spectator slot - skip
+				continue;
+			}
+			else if (!p.allocated)
 			{
 				// available slot - count team association
 				// (since available slots can have assigned teams)
@@ -103,6 +108,12 @@ std::string to_string(const END_GAME_STATS_DATA& stats)
 
 class LoggingActivitySink : public ActivitySink {
 public:
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) override
+	{
+		debug(LOG_ACTIVITY, "- navigatedToMenu: %s", menuName.c_str());
+	}
+
 	// campaign games
 	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) override
 	{
@@ -404,9 +415,9 @@ void ActivityManager::startingSavedGame()
 	ActivitySink::GameMode mode = currentGameTypeToMode();
 	bEndedCurrentMission = false;
 
-	if (mode == ActivitySink::GameMode::SKIRMISH)
+	if (mode == ActivitySink::GameMode::SKIRMISH || (mode == ActivitySink::GameMode::MULTIPLAYER && NETisReplay()))
 	{
-		// synthesize an "update multiplay game data" call on skirmish save game load
+		// synthesize an "update multiplay game data" call on skirmish save game load (or loading MP replay)
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, false);
 	}
 
@@ -507,6 +518,11 @@ void ActivityManager::preSystemShutdown()
 		// quitGame was never generated - synthesize it
 		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
 	}
+}
+
+void ActivityManager::navigateToMenu(const std::string& menuName)
+{
+	for (auto sink : activitySinks) { sink->navigatedToMenu(menuName); }
 }
 
 void ActivityManager::beginLoadingSettings()
@@ -667,11 +683,17 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 	uint8_t numAIBotPlayers = 0;
 	uint8_t numHumanPlayers = 0;
 	uint8_t numAvailableSlots = 0;
+	uint8_t numSpectators = 0;
+	uint8_t numOpenSpectatorSlots = 0;
 
 	for (size_t index = 0; index < std::min<size_t>(MAX_PLAYERS, (size_t)multiGame.maxPlayers); ++index)
 	{
 		PLAYER const &p = NetPlay.players[index];
 		if (p.ai == AI_CLOSED)
+		{
+			--maxPlayers;
+		}
+		else if (p.isSpectator)
 		{
 			--maxPlayers;
 		}
@@ -699,6 +721,21 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 		}
 	}
 
+	for (const auto& slot : NetPlay.players)
+	{
+		if (slot.isSpectator)
+		{
+			if (!slot.allocated)
+			{
+				++numOpenSpectatorSlots;
+			}
+			else
+			{
+				++numSpectators;
+			}
+		}
+	}
+
 	ActivitySink::MultiplayerGameInfo::AllianceOption alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::NO_ALLIANCES;
 	if (multiGame.alliance == ::AllianceType::ALLIANCES)
 	{
@@ -717,6 +754,8 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 	currentMultiplayGameInfo.maxPlayers = maxPlayers; // accounts for closed slots
 	currentMultiplayGameInfo.numHumanPlayers = numHumanPlayers;
 	currentMultiplayGameInfo.numAvailableSlots = numAvailableSlots;
+	currentMultiplayGameInfo.numSpectators = numSpectators;
+	currentMultiplayGameInfo.numOpenSpectatorSlots = numOpenSpectatorSlots;
 	// NOTE: privateGame will currently only be up-to-date for the host
 	// for a joined client, it will reflect the passworded state at the time of join
 	if (privateGame.has_value())
@@ -729,6 +768,7 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 	currentMultiplayGameInfo.currentPlayerIdx = selectedPlayer;
 	currentMultiplayGameInfo.players = NetPlay.players;
 	currentMultiplayGameInfo.players.resize(multiGame.maxPlayers);
+	currentMultiplayGameInfo.hostPlayer = NetPlay.hostPlayer;
 
 	currentMultiplayGameInfo.limit_no_tanks = (multiInGame.flags & MPFLAGS_NO_TANKS) != 0;
 	currentMultiplayGameInfo.limit_no_cyborgs = (multiInGame.flags & MPFLAGS_NO_CYBORGS) != 0;
@@ -739,9 +779,14 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, 
 
 	currentMultiplayGameInfo.structureLimits = multiInGame.structureLimits;
 
+	currentMultiplayGameInfo.isReplay = NETisReplay();
+
 	if (currentMode == ActivitySink::GameMode::JOINING_IN_PROGRESS || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
-		currentMultiplayGameInfo.hostName = currentMultiplayGameInfo.players[0].name; // host is always player index 0?
+		if (currentMultiplayGameInfo.hostPlayer < currentMultiplayGameInfo.players.size())
+		{
+			currentMultiplayGameInfo.hostName = currentMultiplayGameInfo.players[currentMultiplayGameInfo.hostPlayer].name;
+		}
 	}
 
 	if (currentMode == ActivitySink::GameMode::HOSTING_IN_LOBBY || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)

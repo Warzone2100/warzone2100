@@ -229,6 +229,7 @@ private:
 	void enableVertexAttribArray(GLuint index);
 	void disableVertexAttribArray(GLuint index);
 	std::string calculateFormattedRendererInfoString() const;
+	bool isBlocklistedGraphicsDriver() const;
 
 	std::vector<bool> enabledVertexAttribIndexes;
 	size_t frameNum = 0;

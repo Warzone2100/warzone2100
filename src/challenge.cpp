@@ -101,20 +101,32 @@ const char* currentChallengeName()
 // quite the hack, game name is stored in global sRequestResult
 void updateChallenge(bool gameWon)
 {
-	char sPath[64], *fStr;
+	char *fStr;
 	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 	bool victory = false;
 	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
+	ASSERT_OR_RETURN(, strlen(sRequestResult) > 0, "Empty sRequestResult");
 
 	fStr = strrchr(sRequestResult, '/');
-	fStr++;	// skip slash
+	if (fStr != nullptr)
+	{
+		fStr++;	// skip slash
+	}
+	else
+	{
+		fStr = sRequestResult;
+	}
 	if (*fStr == '\0')
 	{
 		debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
 		return;
 	}
-	sstrcpy(sPath, fStr);
-	sPath[strlen(sPath) - 5] = '\0';	// remove .json
+	WzString sPath = fStr;
+	// remove .json
+	if (sPath.endsWith(".json"))
+	{
+		sPath.truncate(sPath.length() - 5);
+	}
 	scores.beginGroup(sPath);
 	victory = scores.value("victory", false).toBool();
 	seconds = scores.value("seconds", 0).toInt();

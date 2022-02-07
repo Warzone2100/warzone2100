@@ -46,6 +46,8 @@ private:
 	void sendToHumanPlayers();
 	void sendToAiPlayers();
 	void sendToAiPlayer(uint32_t receiver);
+	void sendToSpectators();
+	void enqueueSpectatorMessage(NETQUEUE queue, char const* formattedMsg);
 };
 
 #endif // __INCLUDED_SRC_CHAT_H__

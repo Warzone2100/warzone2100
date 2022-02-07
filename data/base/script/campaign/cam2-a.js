@@ -3,7 +3,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const TRANSPORT_LIMIT = 4;
-var index; //Number of transport loads sent into the level
+var transporterIndex; //Number of transport loads sent into the level
 var startedFromMenu;
 
 
@@ -16,7 +16,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Attack and destroy all those who resist the Machine! -The Collective
 function secondVideo()
 {
-	camPlayVideos("MB2A_MSG2");
+	camPlayVideos({video: "MB2A_MSG2", type: CAMP_MSG});
 }
 
 //Damage the base and droids for the player
@@ -101,12 +101,12 @@ function sendCOTransporter()
 //from the main menu. Otherwise a player can just bring in there Alpha units
 function sendPlayerTransporter()
 {
-	if (!camDef(index))
+	if (!camDef(transporterIndex))
 	{
-		index = 0;
+		transporterIndex = 0;
 	}
 
-	if (index === TRANSPORT_LIMIT)
+	if (transporterIndex === TRANSPORT_LIMIT)
 	{
 		downTransporter();
 		return;
@@ -215,21 +215,32 @@ function cam2Setup()
 	preDamageStuff();
 }
 
-//Get some higher rank droids at start and first Transport drop.
-function setUnitRank()
+//Get some higher rank droids.
+function setUnitRank(transport)
 {
-	const DROID_EXP = 32;
-	const MIN_TO_AWARD = 16;
-	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
-		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
-	});
+	const DROID_EXP = [128, 64, 32, 16];
+	var droids;
+	var mapRun = false;
 
-	for (var j = 0, i = droids.length; j < i; ++j)
+	if (transport)
 	{
-		var droid = droids[j];
-		if (Math.floor(droid.experience) < MIN_TO_AWARD)
+		droids = enumCargo(transport);
+	}
+	else
+	{
+		mapRun = true;
+		//These are the units in the base already at the start.
+		droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
+			return !camIsTransporter(dr);
+		});
+	}
+
+	for (var i = 0, len = droids.length; i < len; ++i)
+	{
+		var droid = droids[i];
+		if (!camIsSystemDroid(droid))
 		{
-			setDroidExperience(droids[j], DROID_EXP);
+			setDroidExperience(droid, DROID_EXP[mapRun ? 0 : (transporterIndex - 1)]);
 		}
 	}
 }
@@ -239,18 +250,19 @@ function eventTransporterLanded(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
+		if (!camDef(transporterIndex))
+		{
+			transporterIndex = 0;
+		}
+
+		transporterIndex = transporterIndex + 1;
+
 		if (startedFromMenu)
 		{
-			camCallOnce("setUnitRank");
+			setUnitRank(transport);
 		}
 
-		if (!camDef(index))
-		{
-			index = 0;
-		}
-
-		index = index + 1;
-		if (index >= TRANSPORT_LIMIT)
+		if (transporterIndex >= TRANSPORT_LIMIT)
 		{
 			queue("downTransporter", camMinutesToMilliseconds(1));
 		}
@@ -275,7 +287,7 @@ function downTransporter()
 
 function eventTransporterLaunch(transport)
 {
-	if (index >= TRANSPORT_LIMIT)
+	if (transporterIndex >= TRANSPORT_LIMIT)
 	{
 		queue("downTransporter", camMinutesToMilliseconds(1));
 	}
@@ -283,7 +295,7 @@ function eventTransporterLaunch(transport)
 
 function eventGameLoaded()
 {
-	if (index >= TRANSPORT_LIMIT)
+	if (transporterIndex >= TRANSPORT_LIMIT)
 	{
 		setReinforcementTime(LZ_COMPROMISED_TIME);
 	}
@@ -336,7 +348,7 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	setUnitRank(); //All pre-placed player droids are ranked.
-	camPlayVideos("MB2A_MSG");
+	camPlayVideos({video: "MB2A_MSG", type: MISS_MSG});
 	startedFromMenu = false;
 
 	//Only if starting Beta directly rather than going through Alpha
@@ -354,7 +366,7 @@ function eventStartLevel()
 	queue("secondVideo", camSecondsToMilliseconds(12));
 	queue("groupPatrol", camChangeOnDiff(camMinutesToMilliseconds(1)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
 }

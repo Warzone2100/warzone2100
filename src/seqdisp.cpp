@@ -386,6 +386,12 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	return true;
 }
 
+void seqReleaseAll()
+{
+	seq_Shutdown();
+	wzCachedSeqText.clear();
+}
+
 bool seq_StopFullScreenVideo()
 {
 	if (!seq_AnySeqLeft())

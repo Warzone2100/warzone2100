@@ -115,13 +115,21 @@ function camEnemyBaseEliminated_NPCentralFactory()
 
 function getDroidsForNPLZ(args)
 {
-	var scouts = [ cTempl.npsens, cTempl.nppod, cTempl.nphmg ];
-	var heavies = [ cTempl.npslc, cTempl.npsmct, cTempl.npmor ];
+	var scouts = [ cTempl.nppod, cTempl.nphmg ];
+	var heavies = [ cTempl.npslc, cTempl.npsmct ];
+	var useArtillery = (camRand(100) < 50);
 
 
 	var numScouts = camRand(5) + 1;
 	var heavy = heavies[camRand(heavies.length)];
 	var list = [];
+
+	if (useArtillery)
+	{
+		list[list.length] = cTempl.npsens; //sensor will count towards scout total
+		numScouts = numScouts - 1;
+		heavy = cTempl.npmor;
+	}
 
 	for (var i = 0; i < numScouts; ++i)
 	{
@@ -140,7 +148,7 @@ camAreaEvent("NPLZ1Trigger", function()
 {
 	// Message4 here, Message3 for the second LZ, and
 	// please don't ask me why they did it this way
-	camPlayVideos("MB1C4_MSG");
+	camPlayVideos({video: "MB1C4_MSG", type: MISS_MSG});
 	camDetectEnemyBase("NPLZ1Group");
 
 	camSetBaseReinforcements("NPLZ1Group", camChangeOnDiff(camMinutesToMilliseconds(5)), "getDroidsForNPLZ",
@@ -153,7 +161,7 @@ camAreaEvent("NPLZ1Trigger", function()
 
 camAreaEvent("NPLZ2Trigger", function()
 {
-	camPlayVideos("MB1C3_MSG");
+	camPlayVideos({video: "MB1C3_MSG", type: MISS_MSG});
 	camDetectEnemyBase("NPLZ2Group");
 
 	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(camMinutesToMilliseconds(5)), "getDroidsForNPLZ",
@@ -276,7 +284,7 @@ function eventStartLevel()
 	});
 
 	hackAddMessage("C1C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); // initial beacon
-	camPlayVideos(["MB1C_MSG", "MB1C2_MSG"]);
+	camPlayVideos([{video: "MB1C_MSG", type: CAMP_MSG}, {video: "MB1C2_MSG", type: CAMP_MSG}]);
 
 	camSetArtifacts({
 		"ScavSouthFactory": { tech: ["R-Wpn-Rocket05-MiniPod", "R-Wpn-Cannon2Mk1"] },

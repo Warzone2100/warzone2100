@@ -46,7 +46,7 @@
 #  define WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN ""
 # endif
 static bool enabledSentryProvider = false;
-# define WZ_SENTRY_MAX_BREADCRUMBS 50
+# define WZ_SENTRY_MAX_BREADCRUMBS 60
 #endif
 
 const size_t tagKeyMaxLength = 32;
@@ -233,6 +233,12 @@ public:
 		gameStateToMenus();
 	}
 
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) override
+	{
+		gameStateChange(std::string("/menus/") + menuName + "/");
+	}
+
 	// campaign games
 	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) override
 	{
@@ -267,6 +273,8 @@ public:
 		nlohmann::json additionalData = nlohmann::json::object();
 		additionalData["map"] = info.game.map;
 		additionalData["bots"] = info.numAIBotPlayers;
+		additionalData["currentPlayerIdx"] = info.currentPlayerIdx;
+		additionalData["isReplay"] = info.isReplay;
 		std::string teamDescription = ActivitySink::getTeamDescription(info);
 		if (!teamDescription.empty())
 		{
@@ -307,6 +315,12 @@ public:
 		additionalData["settings"] = "T" + std::to_string(info.game.techLevel) + "P" + std::to_string(info.game.power) + "B" + std::to_string(info.game.base);
 		additionalData["players"] = info.maxPlayers - info.numAvailableSlots;
 		additionalData["maxplayers"] = info.maxPlayers;
+		additionalData["currentPlayerIdx"] = info.currentPlayerIdx;
+		if (info.currentPlayerIdx < info.players.size())
+		{
+			additionalData["isSpectator"] = info.players[info.currentPlayerIdx].isSpectator;
+		}
+		additionalData["isReplay"] = info.isReplay;
 		gameStateChange("/multiplayer", additionalData);
 	}
 	virtual void endedMultiplayerGame(const MultiplayerGameInfo& info, GameEndReason result, const END_GAME_STATS_DATA& stats) override

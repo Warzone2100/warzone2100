@@ -86,7 +86,11 @@ public:
 
 	static EcKey generate();
 
+	// Returns the SHA256 hash of the public key
 	std::string publicHashString(size_t truncateToLength = 0) const;
+
+	// Returns the public key, hex-encoded
+	std::string publicKeyHexString(size_t truncateToLength = 0) const;
 
 private:
 	void *vKey;
@@ -96,6 +100,10 @@ private:
 std::string base64Encode(std::vector<uint8_t> const &bytes);
 std::vector<uint8_t> base64Decode(std::string const &str);
 
+std::string b64Tob64UrlSafe(const std::string& inputb64);
+std::string b64UrlSafeTob64(const std::string& inputb64urlsafe);
+
 std::vector<uint8_t> genSecRandomBytes(size_t numBytes);
+void genSecRandomBytes(void * const buf, const size_t size);
 
 #endif //_CRC_H_

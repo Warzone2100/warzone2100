@@ -46,7 +46,8 @@
 
 // FIXME: When we switch over to full JS, use class version of this file
 
-#define	DEFAULT_MESSAGE_DURATION	GAME_TICKS_PER_SEC * 4
+#define	DEFAULT_MESSAGE_DURATION			GAME_TICKS_PER_SEC * 5
+#define	DEFAULT_MESSAGE_DURATION_CAMPAIGN	GAME_TICKS_PER_SEC * 12
 // Chat/history "window"
 #define CON_BORDER_WIDTH			4
 #define CON_BORDER_HEIGHT			4
@@ -137,9 +138,10 @@ void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc)
 /** Sets the system up */
 void	initConsoleMessages()
 {
+	unsigned int duration = (game.type == LEVEL_TYPE::SKIRMISH) ? DEFAULT_MESSAGE_DURATION : DEFAULT_MESSAGE_DURATION_CAMPAIGN;
 	linePitch = iV_GetTextLineSize(font_regular);
 	bConsoleDropped = false;
-	setConsoleMessageDuration(DEFAULT_MESSAGE_DURATION);	// Setup how long messages are displayed for
+	setConsoleMessageDuration(duration);					// Setup how long messages are displayed for
 	setConsoleBackdropStatus(true);							// No box under the text
 	enableConsoleDisplay(true);								// Turn on the console display
 
@@ -153,6 +155,13 @@ void	initConsoleMessages()
 	setConsoleLineInfo(MAX_CONSOLE_MESSAGES / 4 + 4);
 	setConsolePermanence(false, true);						// We're not initially having permanent messages
 	permitNewConsoleMessages(true);							// Allow new messages
+}
+
+void shutdownConsoleMessages()
+{
+	permitNewConsoleMessages(false);
+	flushConsoleMessages();
+	clearInfoMessages();
 }
 
 void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
@@ -344,22 +353,30 @@ static PIELIGHT getConsoleTextColor(int player)
 	{
 		return WZCOL_CONS_TEXT_INFO;
 	}
+	else if (player == SPECTATOR_MESSAGE)
+	{
+		return WZCOL_TEXT_MEDIUM;
+	}
 	else
 	{
-		// Don't use friend-foe colors in the lobby
-		if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
+		// Only use friend-foe colors if we are (potentially) a player
+		if (selectedPlayer < MAX_PLAYERS)
 		{
-			if (aiCheckAlliances(player, selectedPlayer))
+			// Don't use friend-foe colors in the lobby
+			if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
 			{
-				if (selectedPlayer == player)
+				if (aiCheckAlliances(player, selectedPlayer))
 				{
-					return WZCOL_TEXT_BRIGHT;
+					if (selectedPlayer == player)
+					{
+						return WZCOL_TEXT_BRIGHT;
+					}
+					return WZCOL_CONS_TEXT_USER_ALLY;
 				}
-				return WZCOL_CONS_TEXT_USER_ALLY;
-			}
-			else
-			{
-				return WZCOL_CONS_TEXT_USER_ENEMY;
+				else
+				{
+					return WZCOL_CONS_TEXT_USER_ENEMY;
+				}
 			}
 		}
 
@@ -475,7 +492,7 @@ void	displayConsoleMessages()
 		tmp -= i->display.width();
 		console_drawtext(i->display, getConsoleTextColor(i->player), tmp - 6, linePitch - 2, i->JustifyType, i->display.width());
 	}
-	
+
 	if (!ActiveMessages.empty())
 	{
 		int TextYpos = mainConsole.topY;

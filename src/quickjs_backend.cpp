@@ -73,6 +73,7 @@
 #include "wzapi.h"
 #include "qtscript.h"
 #include "featuredef.h"
+#include "data.h"
 
 
 #include <unordered_set>
@@ -149,7 +150,9 @@ public:
 	: scripting_instance(player, scriptName, scriptPath)
 	{
 		rt = JS_NewRuntime();
+		ASSERT(rt != nullptr, "JS_NewRuntime failed?");
 		ctx = JS_NewContext(rt);
+		ASSERT(ctx != nullptr, "JS_NewContext failed?");
 		global_obj = JS_GetGlobalObject(ctx);
 
 		engineToInstanceMap.insert(std::pair<JSContext*, quickjs_scripting_instance*>(ctx, this));
@@ -165,10 +168,18 @@ public:
 		}
 
 		JS_FreeValue(ctx, global_obj);
-		JS_FreeContext(ctx);
-		ctx = nullptr;
-		JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Error);
-		rt = nullptr;
+		ASSERT(ctx != nullptr, "context is null??");
+		if (ctx)
+		{
+			JS_FreeContext(ctx);
+			ctx = nullptr;
+		}
+		ASSERT(rt != nullptr, "runtime is null??");
+		if (rt)
+		{
+			JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Error);
+			rt = nullptr;
+		}
 	}
 	bool loadScript(const WzString& path, int player, int difficulty);
 	bool readyInstanceForExecution() override;
@@ -420,11 +431,11 @@ public:
 	//__
 	virtual bool handle_eventObjectRecycled(const BASE_OBJECT *psObj) override;
 
-	//__ ## eventPlayerLeft(player index)
+	//__ ## eventPlayerLeft(player)
 	//__
 	//__ An event that is run after a player has left the game.
 	//__
-	virtual bool handle_eventPlayerLeft(int id) override;
+	virtual bool handle_eventPlayerLeft(int player) override;
 
 	//__ ## eventCheatMode(entered)
 	//__
@@ -558,7 +569,7 @@ public:
 	//__
 	virtual bool handle_eventBeaconRemoved(int from, int to) override;
 
-	//__ ## eventGroupLoss(object, group id, new size)
+	//__ ## eventGroupLoss(object, groupId, newSize)
 	//__
 	//__ An event that is run whenever a group becomes empty. Input parameter
 	//__ is the about to be killed object, the group's id, and the new group size.
@@ -570,7 +581,7 @@ public:
 	//__
 	//__ An event that is run whenever a droid enters an area label. The area is then
 	//__ deactived. Call resetArea() to reactivate it. The name of the event is
-	//__ eventArea + the name of the label.
+	//__ `eventArea${label}`.
 	//__
 	virtual bool handle_eventArea(const std::string& label, const DROID *psDroid) override;
 
@@ -625,15 +636,6 @@ public:
 		if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
 			JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
 			return JS_NULL; } } while (0)
-
-#define SCRIPT_ASSERT_AND_RETURNERROR(context, expr, ...) \
-	do { bool _wzeval = (expr); \
-		if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
-			return JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
-			} } while (0)
-
-#define SCRIPT_ASSERT_PLAYER(_context, _player) \
-	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
 
 // ----------------------------------------------------------------------------------------
@@ -2233,7 +2235,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 
 // Wraps a QuickJS instance
 
-//-- ## profile(function[, arguments])
+//-- ## profile(functionName[, arguments])
 //-- Calls a function with given arguments, measures time it took to evaluate the function,
 //-- and adds this time to performance monitor statistics. Transparently returns the
 //-- function's return value. The function to run is the first parameter, and it
@@ -2243,13 +2245,13 @@ static JSValue js_profile(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 {
 	SCRIPT_ASSERT(ctx, argc >= 1, "Must have at least one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Profiled functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	std::vector<JSValue> args;
 	for (int i = 1; i < argc; ++i)
 	{
 		args.push_back(argv[i]);
 	}
-	return callFunction(ctx, funcName, args);
+	return callFunction(ctx, functionName, args);
 }
 
 static std::string QuickJS_DumpObject(JSContext *ctx, JSValue obj)
@@ -2287,7 +2289,7 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 	return result;
 }
 
-//-- ## include(file)
+//-- ## include(filePath)
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
@@ -2332,7 +2334,7 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	return JS_TRUE;
 }
 
-//-- ## includeJSON(file)
+//-- ## includeJSON(filePath)
 //-- Reads a JSON file and returns an object. You should generally only specify the filename,
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
@@ -2389,7 +2391,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 	, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg)));
 }
 
-//-- ## setTimer(function, milliseconds[, object])
+//-- ## setTimer(functionName, milliseconds[, object])
 //--
 //-- Set a function to run repeated at some given time interval. The function to run
 //-- is the first parameter, and it _must be quoted_, otherwise the function will
@@ -2399,27 +2401,27 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
 //-- ```javascript
-//--   function conDroids()
-//--   {
-//--      ... do stuff ...
-//--   }
-//--   // call conDroids every 4 seconds
-//--   setTimer("conDroids", 4000);
+//-- function conDroids()
+//-- {
+//--   ... do stuff ...
+//-- }
+//-- // call conDroids every 4 seconds
+//-- setTimer("conDroids", 4000);
 //-- ```
 //--
 static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	SCRIPT_ASSERT(ctx, argc >= 2, "Must have at least two parameters");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	int32_t ms = JSValueToInt32(ctx, argv[1]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 	int player = QuickJS_GetInt32(ctx, global_obj, "me");
 
-	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, funcName.c_str()); // check existence
-	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", funcName.c_str());
+	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
 	JS_FreeValue(ctx, funcObj);
 
 	std::string stringArg;
@@ -2439,12 +2441,12 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 		}
 	}
 
-	SetQuickJSTimer(ctx, player, funcName, ms, stringArg, psObj, TIMER_REPEAT);
+	SetQuickJSTimer(ctx, player, functionName, ms, stringArg, psObj, TIMER_REPEAT);
 
 	return JS_TRUE;
 }
 
-//-- ## removeTimer(function)
+//-- ## removeTimer(functionName)
 //--
 //-- Removes an existing timer. The first parameter is the function timer to remove,
 //-- and its name _must be quoted_.
@@ -2453,7 +2455,7 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 {
 	SCRIPT_ASSERT(ctx, argc == 1, "Must have one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
-	std::string function = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
@@ -2461,21 +2463,21 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 
 	wzapi::scripting_instance* instance = engineToInstanceMap.at(ctx);
 	std::vector<uniqueTimerID> removedTimerIDs = scripting_engine::instance().removeTimersIf(
-		[instance, function, player](const scripting_engine::timerNode& node)
+		[instance, functionName, player](const scripting_engine::timerNode& node)
 	{
-		return (node.instance == instance) && (node.timerName == function) && (node.player == player);
+		return node.instance == instance && node.timerName == functionName && node.player == player;
 	});
 	if (removedTimerIDs.empty())
 	{
 		// Friendly warning
-		std::string warnName = function;
+		std::string warnName = functionName;
 		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.c_str());
 		return JS_FALSE;
 	}
 	return JS_TRUE;
 }
 
-//-- ## queue(function[, milliseconds[, object]])
+//-- ## queue(functionName[, milliseconds[, object]])
 //--
 //-- Queues up a function to run at a later game frame. This is useful to prevent
 //-- stuttering during the game, which can happen if too much script processing is
@@ -2492,13 +2494,13 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 {
 	SCRIPT_ASSERT(ctx, argc >= 1, "Must have at least one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Queued functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 
-	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, funcName.c_str()); // check existence
-	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", funcName.c_str());
+	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
 	JS_FreeValue(ctx, funcObj);
 
 	int32_t ms = 0;
@@ -2525,7 +2527,7 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 		}
 	}
 
-	SetQuickJSTimer(ctx, player, funcName, ms, stringArg, psObj, TIMER_ONESHOT_READY);
+	SetQuickJSTimer(ctx, player, functionName, ms, stringArg, psObj, TIMER_ONESHOT_READY);
 
 	return JS_TRUE;
 }
@@ -2555,16 +2557,16 @@ static JSValue debugGetCallerFuncObject(JSContext *ctx, JSValueConst this_val, i
 //-- Returns the function name of the caller of the current context as a string (if available).
 //-- ex.
 //-- ```javascript
-//--   function FuncA() {
-//--     var callerFuncName = debugGetCallerFuncName();
-//--     debug(callerFuncName);
-//--   }
-//--   function FuncB() {
-//--     FuncA();
-//--   }
-//--   FuncB();
+//-- function funcA() {
+//--   const callerFuncName = debugGetCallerFuncName();
+//--   debug(callerFuncName);
+//-- }
+//-- function funcB() {
+//--   funcA();
+//-- }
+//-- funcB();
 //-- ```
-//-- Will output: "FuncB"
+//-- Will output: "funcB"
 //-- Useful for debug logging.
 //--
 static JSValue debugGetCallerFuncName(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -2645,6 +2647,10 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 	{
 		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
 		return false;
+	}
+	if (!isHostAI())
+	{
+		calcDataHash(reinterpret_cast<const uint8_t *>(bytes), size, DATA_SCRIPT);
 	}
 	m_path = path.toUtf8();
 	compiledScriptObj = JS_Eval(ctx, bytes, size, path.toUtf8().c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
@@ -2792,8 +2798,8 @@ nlohmann::json quickjs_scripting_instance::debugGetAllScriptGlobals()
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
-		if (((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
-			/*&& !it.value().equals(engine->globalObject()*/))
+		if ((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
+			/*&& !it.value().equals(engine->globalObject())*/)
 			|| nameStr == "Upgrades" || nameStr == "Stats")
 		{
 			globals[nameStr] = JSContextValue{ctx, jsVal, false}; // uses to_json JSContextValue implementation
@@ -3074,7 +3080,7 @@ IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
 
-//-- ## removeReticuleButton(button type)
+//-- ## removeReticuleButton(buttonId)
 //--
 //-- Remove reticule button. DO NOT USE FOR ANYTHING.
 //--
@@ -3112,7 +3118,7 @@ IMPL_JS_FUNC(enumRange, wzapi::enumRange)
 IMPL_JS_FUNC(enumArea, scripting_engine::enumAreaJS)
 IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
-//-- ## removeBeacon(target player)
+//-- ## removeBeacon(playerFilter)
 //--
 //-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
 //-- Returns a boolean that is true on success. (3.2+ only)
@@ -3144,6 +3150,7 @@ IMPL_JS_FUNC_DEBUGMSGUPDATE(hackAddMessage, wzapi::hackAddMessage)
 IMPL_JS_FUNC_DEBUGMSGUPDATE(hackRemoveMessage, wzapi::hackRemoveMessage)
 IMPL_JS_FUNC(setSunPosition, wzapi::setSunPosition)
 IMPL_JS_FUNC(setSunIntensity, wzapi::setSunIntensity)
+IMPL_JS_FUNC(setFogColour, wzapi::setFogColour)
 IMPL_JS_FUNC(setWeather, wzapi::setWeather)
 IMPL_JS_FUNC(setSky, wzapi::setSky)
 IMPL_JS_FUNC(hackDoNotSave, wzapi::hackDoNotSave)
@@ -3160,6 +3167,8 @@ IMPL_JS_FUNC(syncRequest, wzapi::syncRequest)
 IMPL_JS_FUNC(replaceTexture, wzapi::replaceTexture)
 IMPL_JS_FUNC(fireWeaponAtLoc, wzapi::fireWeaponAtLoc)
 IMPL_JS_FUNC(fireWeaponAtObj, wzapi::fireWeaponAtObj)
+IMPL_JS_FUNC(transformPlayerToSpectator, wzapi::transformPlayerToSpectator)
+IMPL_JS_FUNC(isSpectator, wzapi::isSpectator)
 IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
 IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
 IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
@@ -3314,6 +3323,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(setAssemblyPoint, 3); // WZAPI
 	JS_REGISTER_FUNC(setSunPosition, 3); // WZAPI
 	JS_REGISTER_FUNC(setSunIntensity, 9); // WZAPI
+	JS_REGISTER_FUNC(setFogColour, 3); // WZAPI
 	JS_REGISTER_FUNC(setWeather, 1); // WZAPI
 	JS_REGISTER_FUNC(setSky, 3); // WZAPI
 	JS_REGISTER_FUNC(cameraSlide, 2); // WZAPI
@@ -3459,6 +3469,8 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(setObjectFlag, 3); // WZAPI
 	JS_REGISTER_FUNC2(fireWeaponAtLoc, 3, 4); // WZAPI
 	JS_REGISTER_FUNC2(fireWeaponAtObj, 2, 3); // WZAPI
+	JS_REGISTER_FUNC(transformPlayerToSpectator, 1); // WZAPI
+	JS_REGISTER_FUNC(isSpectator, 1); // WZAPI
 
 	return true;
 }
@@ -3557,7 +3569,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		case JS_TAG_STRING:
 		{
 			const char* pStr = JS_ToCString(v.ctx, v.value);
-			j = json((pStr) ? pStr : "");
+			j = json(pStr ? pStr : "");
 			JS_FreeCString(v.ctx, pStr);
 			break;
 		}

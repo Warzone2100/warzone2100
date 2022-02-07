@@ -32,11 +32,41 @@ enum GS_GAMEMODE
 extern bool gameInitialised;
 extern bool customDebugfile;
 
+extern const char* SAVEGAME_CAM;
+extern const char* SAVEGAME_CAM_AUTO;
+extern const char* SAVEGAME_SKI;
+extern const char* SAVEGAME_SKI_AUTO;
+
+enum SAVEGAME_LOC
+{
+	SAVEGAME_LOC_CAM,
+	SAVEGAME_LOC_CAM_AUTO,
+	SAVEGAME_LOC_SKI,
+	SAVEGAME_LOC_SKI_AUTO,
+};
+
+extern const char *SaveGameLocToPath[];
+
+struct SaveGamePath_t
+{
+	enum class Extension
+	{
+		GAM,
+		JSON,
+	};
+	SAVEGAME_LOC loc;
+	// not a path, just the name
+	std::string gameName;
+	std::string toPath(Extension ext);
+};
+
+
 GS_GAMEMODE GetGameMode() WZ_DECL_PURE;
 void SetGameMode(GS_GAMEMODE status);
 void mainLoop();
 
 extern char SaveGamePath[PATH_MAX];
+extern char ReplayPath[PATH_MAX];
 extern char datadir[PATH_MAX];
 extern char configdir[PATH_MAX];
 extern char KeyMapPath[PATH_MAX];

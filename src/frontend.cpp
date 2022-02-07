@@ -78,6 +78,7 @@
 #include "game.h"
 #include "map.h" //for builtInMap
 #include "notifications.h"
+#include "activity.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -139,53 +140,6 @@ static void moveToParentRightEdge(WIDGET *widget, int32_t right)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-void startTitleMenu()
-{
-	intRemoveReticule();
-
-	addBackdrop();
-	addTopForm(false);
-	addBottomForm();
-
-	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
-
-	// check whether video sequences are installed
-	if (PHYSFS_exists("sequences/devastation.ogg"))
-	{
-		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
-	}
-	else
-	{
-		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE | WBUT_DISABLE);
-		widgSetTip(psWScreen, FRONTEND_PLAYINTRO, _("Videos are missing, download them from http://wz2100.net"));
-	}
-
-	if (findLastSave())
-	{
-		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE);
-	}
-	else
-	{
-		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE | WBUT_DISABLE);
-		widgSetTip(psWScreen, FRONTEND_CONTINUE, _("No last save available"));
-	}
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS8X, FRONTEND_POS8Y, _("Quit Game"), WBUT_TXTCENTRE);
-	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
-
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
-	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
-	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS9X + 360, FRONTEND_POS9Y, _("Donate: http://donations.wz2100.net/"), 0);
-	moveToParentRightEdge(pRightAlignedButton, 1);
-	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
-	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on Discord or IRC"), 0);
-	moveToParentRightEdge(pRightAlignedButton, 6);
-	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Discord or Freenode through webchat by clicking this link."));
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
-}
-
 static void runUpgrdHyperlink()
 {
 	std::string link = "https://wz2100.net/versioncheck/?ver=";
@@ -214,12 +168,81 @@ static void runchatlink()
 	openURLInBrowser("https://wz2100.net/webchat/");
 }
 
+static void notifyAboutMissingVideos()
+{
+	const std::string VIDEO_TAG = "videoMissing";
+	if (!hasNotificationsWithTag(VIDEO_TAG))
+	{
+		WZ_Notification notification;
+		notification.duration = 0;
+		notification.contentTitle = _("Campaign videos are missing");
+		notification.contentText = _("See our FAQ on how to install videos");
+		notification.tag = VIDEO_TAG;
+		notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
+		notification.action = WZ_Notification_Action("Open wz2100.net", [](const WZ_Notification&) {
+			runHyperlink();
+		});
+		notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable("campaignVideoNotification", 2);
+
+		addNotification(notification, WZ_Notification_Trigger(GAME_TICKS_PER_SEC));
+	}
+}
+
+void startTitleMenu()
+{
+	intRemoveReticule();
+
+	addBackdrop();
+	addTopForm(false);
+	addBottomForm();
+
+	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
+
+	// check whether video sequences are installed
+	if (PHYSFS_exists("sequences/devastation.ogg"))
+	{
+		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
+	}
+	else
+	{
+		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE | WBUT_DISABLE);
+		widgSetTip(psWScreen, FRONTEND_PLAYINTRO, _("Videos are missing, download them from http://wz2100.net"));
+
+		notifyAboutMissingVideos();
+	}
+
+	if (findLastSave())
+	{
+		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE);
+	}
+	else
+	{
+		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE | WBUT_DISABLE);
+		widgSetTip(psWScreen, FRONTEND_CONTINUE, _("No last save available"));
+	}
+	addTextButton(FRONTEND_QUIT, FRONTEND_POS8X, FRONTEND_POS8Y, _("Quit Game"), WBUT_TXTCENTRE);
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
+
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
+	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
+	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS9X + 360, FRONTEND_POS9Y, _("Donate: http://donations.wz2100.net/"), 0);
+	moveToParentRightEdge(pRightAlignedButton, 1);
+	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
+	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on Discord or IRC"), 0);
+	moveToParentRightEdge(pRightAlignedButton, 6);
+	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Discord or Freenode through webchat by clicking this link."));
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
+}
+
 void runContinue()
 {
 	SPinit(lastSaveMP ? LEVEL_TYPE::SKIRMISH : LEVEL_TYPE::CAMPAIGN);
-	sstrcpy(saveGameName, lastSavePath);
+	sstrcpy(saveGameName, lastSavePath.toPath(SaveGamePath_t::Extension::GAM).c_str());
 	bMultiPlayer = lastSaveMP;
-	setCampaignNumber(getCampaign(lastSavePath));
+	setCampaignNumber(getCampaign(saveGameName));
 }
 
 bool runTitleMenu()
@@ -343,6 +366,7 @@ void startSinglePlayerMenu()
 	addTextButton(FRONTEND_CHALLENGES, FRONTEND_POS4X, FRONTEND_POS4Y, _("Challenges"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_LOADGAME_MISSION, FRONTEND_POS5X, FRONTEND_POS5Y, _("Load Campaign Game"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_LOADGAME_SKIRMISH, FRONTEND_POS6X, FRONTEND_POS6Y, _("Load Skirmish Game"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_REPLAY, FRONTEND_POS7X,FRONTEND_POS7Y, _("View Skirmish Replay"), WBUT_TXTCENTRE);
 
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -350,6 +374,7 @@ void startSinglePlayerMenu()
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		notifyAboutMissingVideos();
 	}
 }
 
@@ -371,6 +396,7 @@ void startCampaignSelector()
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		notifyAboutMissingVideos();
 	}
 }
 
@@ -405,7 +431,7 @@ static void frontEndNewGame(int which)
 	if (!list[which].loading.isEmpty())
 	{
 		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().c_str());
-		if (!loadLevFile(list[which].loading.toUtf8().c_str(), mod_campaign, false, nullptr))
+		if (!loadLevFile(list[which].loading.toUtf8(), mod_campaign, false, nullptr))
 		{
 			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().c_str());
 			return;
@@ -512,6 +538,12 @@ bool runSinglePlayerMenu()
 			addLoadSave(LOAD_FRONTEND_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
 			break;
 
+		case FRONTEND_REPLAY:
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			bMultiPlayer = true;
+			addLoadSave(LOADREPLAY_FRONTEND_SKIRMISH, _("Load Skirmish Replay"));  // change mode when loadsave returns
+			break;
+
 		case FRONTEND_SKIRMISH:
 			SPinit(LEVEL_TYPE::SKIRMISH);
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
@@ -574,6 +606,7 @@ void startMultiPlayerMenu()
 
 	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X, FRONTEND_POS2Y, _("Host Game"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X, FRONTEND_POS3Y, _("Join Game"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_REPLAY,   FRONTEND_POS7X, FRONTEND_POS7Y, _("View Replay"), WBUT_TXTCENTRE);
 
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
@@ -583,46 +616,69 @@ void startMultiPlayerMenu()
 
 bool runMultiPlayerMenu()
 {
-	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
-
-	switch (id)
+	if (bLoadSaveUp)
 	{
-	case FRONTEND_HOST:
-		// don't pretend we are running a network game. Really do it!
-		NetPlay.bComms = true; // use network = true
-		NetPlay.isUPNP_CONFIGURED = false;
-		NetPlay.isUPNP_ERROR = false;
-		ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
-		bMultiPlayer = true;
-		bMultiMessages = true;
-		NETinit(true);
-		NETdiscoverUPnPDevices();
-		game.type = LEVEL_TYPE::SKIRMISH;		// needed?
-		changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
-		break;
-	case FRONTEND_JOIN:
-		NETinit(true);
-		ingame.side = InGameSide::MULTIPLAYER_CLIENT;
-		if (getLobbyError() != ERROR_INVALID)
+		if (runLoadSave(false)) // check for file name.
 		{
-			setLobbyError(ERROR_NOERROR);
+			loadOK();
 		}
-		changeTitleUI(std::make_shared<WzProtocolTitleUI>());
-		break;
+	}
+	else
+	{
+		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+		unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
-	case FRONTEND_QUIT:
-		changeTitleMode(TITLE);
-		break;
-	default:
-		break;
+		switch (id)
+		{
+		case FRONTEND_HOST:
+			// don't pretend we are running a network game. Really do it!
+			NetPlay.bComms = true; // use network = true
+			NetPlay.isUPNP_CONFIGURED = false;
+			NetPlay.isUPNP_ERROR = false;
+			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
+			bMultiPlayer = true;
+			bMultiMessages = true;
+			NETinit(true);
+			NETdiscoverUPnPDevices();
+			game.type = LEVEL_TYPE::SKIRMISH;		// needed?
+			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
+			break;
+		case FRONTEND_JOIN:
+			NETinit(true);
+			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+			if (getLobbyError() != ERROR_INVALID)
+			{
+				setLobbyError(ERROR_NOERROR);
+			}
+			changeTitleUI(std::make_shared<WzProtocolTitleUI>());
+			break;
+		case FRONTEND_REPLAY:
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			bMultiPlayer = true;
+			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
+			addLoadSave(LOADREPLAY_FRONTEND_MULTI, _("Load Multiplayer Replay"));  // change mode when loadsave returns
+			break;
+
+		case FRONTEND_QUIT:
+			changeTitleMode(TITLE);
+			break;
+		default:
+			break;
+		}
+
+		if (CancelPressed())
+		{
+			changeTitleMode(TITLE);
+		}
 	}
 
-	widgDisplayScreen(psWScreen); // show the widgets currently running
-
-	if (CancelPressed())
+	if (!bLoadSaveUp)
 	{
-		changeTitleMode(TITLE);
+		widgDisplayScreen(psWScreen);		// show the widgets currently running
+	}
+	else if (bLoadSaveUp)					// if save/load screen is up
+	{
+		displayLoadSave();
 	}
 
 	return true;
@@ -639,14 +695,34 @@ void startOptionsMenu()
 	addTopForm(false);
 	addBottomForm();
 
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+	ASSERT_OR_RETURN(, parent != nullptr, "Unable to find FRONTEND_BOTFORM??");
+
+	auto scrollableList = ScrollableListWidget::make();
+
+	auto addTextButton = [scrollableList](UDWORD id, const std::string &txt, unsigned int style)
+	{
+		auto button = makeTextButton(id, txt, style);
+		if (style & WBUT_TXTCENTRE)
+		{
+			button->setGeometry(0, 0, FRONTEND_BUTWIDTH, button->height());
+		}
+		scrollableList->addItem(button);
+	};
+
+	addTextButton(FRONTEND_GAMEOPTIONS, _("Game Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_GRAPHICSOPTIONS, _("Graphics Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_VIDEOOPTIONS, _("Video Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_AUDIO_AND_ZOOMOPTIONS, _("Audio / Zoom Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MOUSEOPTIONS, _("Mouse Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_KEYMAP, _("Key Mappings"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MUSICMANAGER, _("Music Manager"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MULTIPLAYOPTIONS, _("Multiplay Options"), WBUT_TXTCENTRE);
+
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_POS9Y - FRONTEND_POS2Y);
+	parent->attach(scrollableList);
+
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("OPTIONS"));
-	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X, FRONTEND_POS2Y, _("Game Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_GRAPHICSOPTIONS, FRONTEND_POS3X, FRONTEND_POS3Y, _("Graphics Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_VIDEOOPTIONS, FRONTEND_POS4X, FRONTEND_POS4Y, _("Video Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_AUDIO_AND_ZOOMOPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Audio / Zoom Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_MUSICMANAGER, FRONTEND_POS8X, FRONTEND_POS8Y, _("Music Manager"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Open Configuration Directory"), 0);
 }
@@ -678,6 +754,9 @@ bool runOptionsMenu()
 		break;
 	case FRONTEND_MUSICMANAGER:
 		changeTitleMode(MUSIC_MANAGER);
+		break;
+	case FRONTEND_MULTIPLAYOPTIONS:
+		changeTitleMode(MULTIPLAY_OPTIONS);
 		break;
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
@@ -2119,6 +2198,246 @@ bool runGameOptionsMenu()
 	return true;
 }
 
+static std::shared_ptr<WIDGET> makeInactivityMinutesMPDropdown()
+{
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_INACTIVITY_TIMEOUT_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
+	const auto paddingSize = 10;
+
+	std::vector<uint32_t> inactivityMinutesValues;
+	dropdown->addItem(Margin(0, paddingSize).wrap(makeTextButton(0, _("Off"), 0)));
+	inactivityMinutesValues.push_back(0);
+
+	auto addInactivityMinutesRow = [&](uint32_t inactivityMinutes) {
+		auto item = makeTextButton(0, astringf(_("%u minutes"), inactivityMinutes), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+		inactivityMinutesValues.push_back(inactivityMinutes);
+	};
+
+	for (uint32_t inactivityMinutes = MIN_MPINACTIVITY_MINUTES; inactivityMinutes <= (MIN_MPINACTIVITY_MINUTES + 6); inactivityMinutes++)
+	{
+		addInactivityMinutesRow(inactivityMinutes);
+	}
+
+	if (!std::any_of(inactivityMinutesValues.begin(), inactivityMinutesValues.end(), [](uint32_t inactivityMinutes) {
+		return inactivityMinutes == war_getMPInactivityMinutes();
+	}))
+	{
+		// add the current value, which must be a custom manual config edit
+		addInactivityMinutesRow(war_getMPInactivityMinutes());
+	}
+
+	auto it = std::find(inactivityMinutesValues.begin(), inactivityMinutesValues.end(), war_getMPInactivityMinutes());
+	if (it != inactivityMinutesValues.end())
+	{
+		dropdown->setSelectedIndex(it - inactivityMinutesValues.begin());
+	}
+
+	dropdown->setOnChange([inactivityMinutesValues](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			ASSERT_OR_RETURN(, selectedIndex.value() < inactivityMinutesValues.size(), "Invalid selected index: %zu", selectedIndex.value());
+			uint32_t newInactivityMinutes = inactivityMinutesValues[selectedIndex.value()];
+			war_setMPInactivityMinutes(newInactivityMinutes);
+			game.inactivityMinutes = war_getMPInactivityMinutes();
+		}
+	});
+
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
+static std::shared_ptr<WIDGET> makeLagKickDropdown()
+{
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_LAG_KICK_DROPDOWN;
+	const auto paddingSize = 10;
+
+	std::vector<int> lagKickSecondsValues;
+	dropdown->addItem(Margin(0, paddingSize).wrap(makeTextButton(0, _("Off"), 0)));
+	lagKickSecondsValues.push_back(0);
+
+	auto addLagKickSecondsRow = [&](int lagKickSeconds, const std::string& label) {
+		auto item = makeTextButton(0, label, 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+		lagKickSecondsValues.push_back(lagKickSeconds);
+	};
+
+	for (int lagKickSeconds = 60; lagKickSeconds <= 120; lagKickSeconds += 30)
+	{
+		addLagKickSecondsRow(lagKickSeconds, astringf(_("%u seconds"), (unsigned)lagKickSeconds));
+	}
+
+	if (!std::any_of(lagKickSecondsValues.begin(), lagKickSecondsValues.end(), [](int lagKickSeconds) {
+		return lagKickSeconds == war_getAutoLagKickSeconds();
+	}))
+	{
+		// add the current value, which must be a custom manual config edit
+		addLagKickSecondsRow(war_getAutoLagKickSeconds(), astringf(_("%u seconds"), (unsigned)war_getAutoLagKickSeconds()));
+	}
+
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<int>(5, lagKickSecondsValues.size()));
+
+	auto it = std::find(lagKickSecondsValues.begin(), lagKickSecondsValues.end(), war_getAutoLagKickSeconds());
+	if (it != lagKickSecondsValues.end())
+	{
+		dropdown->setSelectedIndex(it - lagKickSecondsValues.begin());
+	}
+
+	dropdown->setOnChange([lagKickSecondsValues](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			ASSERT_OR_RETURN(, selectedIndex.value() < lagKickSecondsValues.size(), "Invalid selected index: %zu", selectedIndex.value());
+			int newAutoLagKickSeconds = lagKickSecondsValues[selectedIndex.value()];
+			war_setAutoLagKickSeconds(newAutoLagKickSeconds);
+		}
+	});
+
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
+static std::shared_ptr<WIDGET> makeOpenSpectatorSlotsMPDropdown()
+{
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_SPECTATOR_SLOTS_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
+	const auto paddingSize = 10;
+
+	std::vector<uint16_t> openSpectatorSlotsValues;
+	dropdown->addItem(Margin(0, paddingSize).wrap(makeTextButton(0, _("None"), 0)));
+	openSpectatorSlotsValues.push_back(0);
+
+	auto addOpenSpectatorSlotsRow = [&](uint16_t openSpectatorSlots) {
+		auto item = makeTextButton(0, astringf("%u", openSpectatorSlots), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+		openSpectatorSlotsValues.push_back(openSpectatorSlots);
+	};
+
+	for (uint32_t openSpectatorSlots = 1; openSpectatorSlots <= MAX_SPECTATOR_SLOTS; openSpectatorSlots++)
+	{
+		addOpenSpectatorSlotsRow(openSpectatorSlots);
+	}
+
+	auto it = std::find(openSpectatorSlotsValues.begin(), openSpectatorSlotsValues.end(), war_getMPopenSpectatorSlots());
+	if (it != openSpectatorSlotsValues.end())
+	{
+		dropdown->setSelectedIndex(it - openSpectatorSlotsValues.begin());
+	}
+
+	dropdown->setOnChange([openSpectatorSlotsValues](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			ASSERT_OR_RETURN(, selectedIndex.value() < openSpectatorSlotsValues.size(), "Invalid selected index: %zu", selectedIndex.value());
+			uint16_t newOpenSpectatorSlots = openSpectatorSlotsValues[selectedIndex.value()];
+			war_setMPopenSpectatorSlots(newOpenSpectatorSlots);
+		}
+	});
+
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
+char const *multiplayOptionsUPnPString()
+{
+	return NetPlay.isUPNP ? _("On") : _("Off");
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+// Multiplay Options Menu
+void startMultiplayOptionsMenu()
+{
+	addBackdrop();
+	addTopForm(false);
+	addBottomForm();
+
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	auto grid = std::make_shared<GridLayout>();
+	grid_allocation::slot row(0);
+
+	// "Hosting Options" title
+	grid->place({0, 2}, row, addMargin(makeTextButton(FRONTEND_FX, _("Hosting Options:"), WBUT_DISABLE)));
+	row.start++;
+
+	// Game Port
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_GAME_PORT, _("Game Port"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GAME_PORT_R, std::to_string(NETgetGameserverPort()), WBUT_DISABLE))); // FUTURE TODO: Make this an input field or similar and allow editing (although reject ports <= 1024)
+	row.start++;
+
+	// Enable UPnP
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_UPNP, _("Enable UPnP"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_UPNP_R, multiplayOptionsUPnPString(), WBUT_SECONDARY)));
+	row.start++;
+
+	// Inactivity Kick
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_INACTIVITY_TIMEOUT, _("Inactivity Timeout"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeInactivityMinutesMPDropdown()));
+	row.start++;
+
+	// Lag Kick
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_LAG_KICK, _("Lag Kick"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeLagKickDropdown()));
+	row.start++;
+
+	// Spectator Slots
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SPECTATOR_SLOTS, _("Spectator Slots"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeOpenSpectatorSlotsMPDropdown()));
+	row.start++;
+
+	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
+
+	auto scrollableList = ScrollableListWidget::make();
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->addItem(grid);
+	parent->attach(scrollableList);
+
+	// quit.
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+
+	//add some text down the side of the form
+	WzString messageString = WzString::fromUtf8(_("MULTIPLAY OPTIONS"));
+	std::vector<WzString> messageStringLines = messageString.split("\n");
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, messageStringLines[0].toUtf8().c_str());
+	// show a second sidetext line if the translation requires it
+	if (messageStringLines.size() > 1)
+	{
+		messageString.remove(0, messageStringLines[0].length() + 1);
+		addSideText(FRONTEND_MULTILINE_SIDETEXT, FRONTEND_SIDEX + 22, \
+		FRONTEND_SIDEY, messageString.toUtf8().c_str());
+	}
+}
+
+bool runMultiplayOptionsMenu()
+{
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
+
+	switch (id)
+	{
+	case FRONTEND_UPNP:
+	case FRONTEND_UPNP_R:
+		NetPlay.isUPNP = !NetPlay.isUPNP;
+		widgSetString(psWScreen, FRONTEND_UPNP_R, multiplayOptionsUPnPString());
+		break;
+
+	case FRONTEND_QUIT:
+		changeTitleMode(OPTIONS);
+		break;
+
+	default:
+		break;
+	}
+
+	// If close button pressed then return from this menu.
+	if (CancelPressed())
+	{
+		changeTitleMode(OPTIONS);
+	}
+
+	widgDisplayScreen(psWScreen);						// show the widgets currently running
+
+	return true;
+}
+
 struct TitleBitmapCache {
 	WzText formattedVersionString;
 	WzText modListText;
@@ -2183,7 +2502,7 @@ static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BIG, x + STAT_SLD_OX, y + STAT_SLD_OY);			// draw bdrop
 
-	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / std::max<int>(Slider->numStops, 1);  // determine pos.
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BIGBUT, x + 3 + sx, y + 3);								//draw amount
 }
 
@@ -2308,6 +2627,7 @@ W_FORM *addBackdrop(const std::shared_ptr<W_SCREEN> &screen)
 void addTopForm(bool wide)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	ASSERT(parent != nullptr, "Unable to find FRONTEND_BACKDROP?");
 
 	auto topForm = std::make_shared<IntFormTransparent>();
 	parent->attach(topForm);
@@ -2365,6 +2685,7 @@ void addBottomForm()
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, formID);
+	ASSERT(parent != nullptr, "Unable to find formID: %" PRIu32, formID);
 
 	auto label = std::make_shared<W_LABEL>();
 	parent->attach(label);
@@ -2472,7 +2793,9 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 		button->move(PosX + 35, PosY);
 	}
 
-	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(button);
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+	ASSERT(parent != nullptr, "Unable to find FRONTEND_BOTFORM?");
+	parent->attach(button);
 }
 
 W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)

@@ -21,6 +21,8 @@ public:
 	virtual bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const = 0;
 	virtual void refresh() = 0;
 	virtual bool showInterface() = 0;
+	virtual void prepareToClose();
+	virtual void clearData() = 0;
 	void jumpToObject(BASE_OBJECT *object);
 	void updateHighlighted();
 	void clearSelection();
@@ -152,10 +154,10 @@ public:
 protected:
 	std::string getTip() override
 	{
-		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
-		costString.replace("%1", WzString::number(getCost()));
+		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), getCost()));
 		auto stats = getStats();
 		WzString tipString = (stats == nullptr) ? "" : getStatsName(stats);
+		tipString.append("\n");
 		tipString.append(costString);
 		return tipString.toUtf8();
 	}

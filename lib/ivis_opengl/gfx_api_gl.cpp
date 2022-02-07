@@ -1965,6 +1965,57 @@ static const GLubyte* wzSafeGlGetString(GLenum name)
 	return result;
 }
 
+bool gl_context::isBlocklistedGraphicsDriver() const
+{
+	WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
+	WzString openGL_version = (const char*)wzSafeGlGetString(GL_VERSION);
+
+	debug(LOG_3D, "Checking: Renderer: \"%s\", Version: \"%s\"", openGL_renderer.toUtf8().c_str(), openGL_version.toUtf8().c_str());
+
+#if defined(WZ_OS_WIN)
+	// Renderer: Intel(R) HD Graphics 4000
+	if (openGL_renderer == "Intel(R) HD Graphics 4000")
+	{
+		// Version: 3.1.0 - Build 10.18.10.3304
+		// Version: <opengl version> - Build 10.18.10.3304
+		// This is a problematic old driver on Windows that just crashes after init.
+		if (openGL_version.endsWith("Build 10.18.10.3304"))
+		{
+			return true;
+		}
+
+		// Version: 3.1.0 - Build 9.17.10.2843
+		// Version: <opengl version> - Build 9.17.10.2843
+		// This is a problematic old driver (seen on Windows 8) that likes to crash during gameplay or sometimes at init.
+		if (openGL_version.endsWith("Build 9.17.10.2843"))
+		{
+			return true;
+		}
+	}
+
+	// Renderer: Intel(R) HD Graphics
+	if (openGL_renderer == "Intel(R) HD Graphics")
+	{
+		// Version: 3.1.0 - Build 10.18.10.3277
+		// Version: <opengl version> - Build 10.18.10.3277
+		// This is a problematic old driver on Windows that likes to crash during gameplay (and throw various errors about the shaders).
+		if (openGL_version.endsWith("Build 10.18.10.3277"))
+		{
+			return true;
+		}
+	}
+
+	// Renderer: Intel(R) Graphics Media Accelerator 3600 Series
+	if (openGL_renderer == "Intel(R) Graphics Media Accelerator 3600 Series")
+	{
+		// Does not work with WZ. (No indications that there is a driver version that does not crash.)
+		return true;
+	}
+#endif
+
+	return false;
+}
+
 bool gl_context::initGLContext()
 {
 	frameNum = 1;
@@ -2005,6 +2056,13 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "%s", opengl.version);
 
 	formattedRendererInfoString = calculateFormattedRendererInfoString();
+
+	if (isBlocklistedGraphicsDriver())
+	{
+		debug(LOG_INFO, "Warzone's OpenGL backend is not supported on this system. (%s, %s)", opengl.renderer, opengl.version);
+		debug(LOG_INFO, "Please update your graphics drivers or try a different backend.");
+		return false;
+	}
 
 	khr_debug = GLAD_GL_KHR_debug;
 
@@ -2151,26 +2209,6 @@ bool gl_context::initGLContext()
 	}
 	enabledVertexAttribIndexes.resize(static_cast<size_t>(glmaxVertexAttribs), false);
 
-	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
-	{
-		// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
-		static GLuint vaoId = 0;
-		if (glGenVertexArrays == nullptr)
-		{
-			debug(LOG_FATAL, "glGenVertexArrays is not available, but context is OpenGL 3.0+");
-			return false;
-		}
-		glGenVertexArrays(1, &vaoId);
-		glBindVertexArray(vaoId);
-	}
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	if (GLAD_GL_ARB_timer_query)
-	{
-		glGenQueries(PERF_COUNT, perfpos);
-	}
-
 	if (khr_debug)
 	{
 		if (glDebugMessageCallback && glDebugMessageControl)
@@ -2185,6 +2223,24 @@ bool gl_context::initGLContext()
 		{
 			debug(LOG_3D, "Failed to enable KHR_debug message callback");
 		}
+	}
+
+	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
+	{
+		// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
+		static GLuint vaoId = 0;
+		if (glGenVertexArrays == nullptr)
+		{
+			debug(LOG_FATAL, "glGenVertexArrays is not available, but context is OpenGL 3.0+");
+			return false;
+		}
+		glGenVertexArrays(1, &vaoId);
+		glBindVertexArray(vaoId);
+	}
+
+	if (GLAD_GL_ARB_timer_query)
+	{
+		glGenQueries(PERF_COUNT, perfpos);
 	}
 
 	glGenBuffers(1, &scratchbuffer);

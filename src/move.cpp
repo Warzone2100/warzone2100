@@ -1834,7 +1834,7 @@ bool moveCheckDroidMovingAndVisible(void *psObj)
 	/* check for dead, not moving or invisible to player */
 	if (psDroid->died || moveDroidStopped(psDroid, 0) ||
 	    (isTransporter(psDroid) && psDroid->order.type == DORDER_NONE) ||
-	    !(psDroid->visible[selectedPlayer]))
+	    !(psDroid->visibleForLocalDisplay()))
 	{
 		psDroid->iAudioID = NO_SOUND;
 		return false;
@@ -1853,7 +1853,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	ASSERT_OR_RETURN(, psDroid != nullptr, "Unit pointer invalid");
 
 	if ((psDroid != nullptr) &&
-	    (psDroid->visible[selectedPlayer]))
+	    (psDroid->visibleForLocalDisplay()))
 	{
 		PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
@@ -1964,7 +1964,7 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 	}
 
 	if ((iAudioID != NO_SOUND) &&
-	    (psDroid->visible[selectedPlayer]))
+	    (psDroid->visibleForLocalDisplay()))
 	{
 		if (audio_PlayObjDynamicTrack(psDroid, iAudioID,
 		                              pAudioCallback))
@@ -1977,11 +1977,26 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 
 static bool pickupOilDrum(int toPlayer, int fromPlayer)
 {
-	addPower(toPlayer, OILDRUM_POWER);  // give power
+	unsigned int power = OILDRUM_POWER;
+
+	if (!bMultiPlayer && !bInTutorial)
+	{
+		// Let Beta and Gamma campaign oil drums give a little more power
+		if (getCampaignNumber() == 2)
+		{
+			power = OILDRUM_POWER + (OILDRUM_POWER / 2);
+		}
+		else if (getCampaignNumber() == 3)
+		{
+			power = OILDRUM_POWER * 2;
+		}
+	}
+
+	addPower(toPlayer, power);  // give power
 
 	if (toPlayer == selectedPlayer)
 	{
-		CONPRINTF(_("You found %u power in an oil drum."), OILDRUM_POWER);
+		CONPRINTF(_("You found %u power in an oil drum."), power);
 	}
 
 	return true;
@@ -2306,7 +2321,7 @@ void moveUpdateDroid(DROID *psDroid)
 		objTrace(psDroid->id, "MOVETURNTOTARGET complete");
 	}
 
-	if (psDroid->periodicalDamageStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visible[selectedPlayer])
+	if (psDroid->periodicalDamageStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visibleForLocalDisplay()) // display-only check for adding effect
 	{
 		pos.x = psDroid->pos.x + (18 - rand() % 36);
 		pos.z = psDroid->pos.y + (18 - rand() % 36);

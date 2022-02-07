@@ -25,6 +25,7 @@
 
 #include "lib/framework/wzglobal.h"
 #include "lib/framework/string_ext.h"
+#include "lib/gamelib/gtime.h"
 #include <string.h>
 
 #ifndef WZ_OS_WIN
@@ -35,6 +36,7 @@
 
 #include "../framework/frame.h"
 #include "netplay.h"
+#include "netreplay.h"
 #include "nettypes.h"
 #include "netqueue.h"
 #include "netlog.h"
@@ -45,14 +47,15 @@
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
 /// messages at the same game time. The game queues should be used, even in single-player. Players should write to their own queue, not to other player's
 /// queues, and should read messages from all queues including their own.
-static NetQueue *gameQueues[MAX_PLAYERS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+/// (Note: Extra +1 for the added replay spectator)
+static NetQueue *gameQueues[MAX_GAMEQUEUE_SLOTS] = {nullptr};
 
 /// There is a bidirectional net queue for communicating with each client or host. Each queue corresponds either to a real socket, or a virtual socket
 /// which routes via the host.
-static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {nullptr};
 
 /// These queues are for clients which just connected, but haven't yet been assigned a player number.
-static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {nullptr};
 
 /// Sending a message to the broadcast queue is equivalent to sending the message to the net queues of all other players.
 static NetQueue *broadcastQueue = nullptr;
@@ -64,12 +67,11 @@ static NetMessage message;    ///< A message which is being serialised or deseri
 static NETQUEUE queueInfo;    ///< Indicates which queue is currently being (de)serialised.
 static PACKETDIR NetDir;      ///< Indicates whether a message is being serialised (PACKET_ENCODE) or deserialised (PACKET_DECODE), or not doing anything (PACKET_INVALID).
 
+static bool bIsReplay = false;
+
 static void NETsetPacketDir(PACKETDIR dir)
 {
 	NetDir = dir;
-
-	// Can't put STATIC_ASSERT in global scope, arbitrarily putting it here.
-	STATIC_ASSERT(MAX_PLAYERS == MAX_CONNECTED_PLAYERS);  // Things might break if each connected player doesn't correspond to a player of the same index.
 }
 
 PACKETDIR NETgetPacketDir()
@@ -342,7 +344,12 @@ NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer)
 NETQUEUE NETgameQueue(unsigned player)
 {
 	NETQUEUE ret;
-	ASSERT(player < MAX_PLAYERS, "Huh?");
+	if (player >= MAX_GAMEQUEUE_SLOTS)
+	{
+		// found one
+		debug(LOG_ERROR, "Found the call");
+	}
+	ASSERT(player < MAX_GAMEQUEUE_SLOTS, "Huh?");
 	NetQueue *queue = gameQueues[player];
 	ret.queue = queue;
 	ret.isPair = false;
@@ -352,10 +359,37 @@ NETQUEUE NETgameQueue(unsigned player)
 	return ret;
 }
 
+bool NETgameIsBehindPlayersByAtLeast(size_t numGameTimeUpdates /*= 2*/)
+{
+	// if we should be waited on, then there's no reason we should be behind other players
+	if (gtimeShouldWaitForPlayer(realSelectedPlayer))
+	{
+		return false;
+	}
+
+	unsigned begin = 0, end = MAX_CONNECTED_PLAYERS;
+
+	for (unsigned player = begin; player < end; ++player)
+	{
+		auto pPlayerGameQueue = gameQueues[player];
+		if (!pPlayerGameQueue)
+		{
+			continue;
+		}
+
+		if (gtimeShouldWaitForPlayer(player) && pPlayerGameQueue->numPendingGameTimeUpdateMessages() < numGameTimeUpdates)
+		{
+			return false;  // Do not have enough pending game time updates for this player
+		}
+	}
+
+	return true;  // Have enough pending game time updates from all players that should be waited on
+}
+
 NETQUEUE NETgameQueueForced(unsigned player)
 {
 	NETQUEUE ret;
-	ASSERT(player < MAX_PLAYERS, "Huh?");
+	ASSERT(player < MAX_CONNECTED_PLAYERS, "Huh?");
 	NetQueue *queue = gameQueues[player];
 	ret.queue = queue;
 	ret.isPair = false;
@@ -425,7 +459,7 @@ void NETinitQueue(NETQUEUE queue)
 
 void NETdeleteQueue(void)
 {
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		delete pairQueue(NETnetQueue(i));
 		pairQueue(NETnetQueue(i)) = nullptr;
@@ -433,8 +467,14 @@ void NETdeleteQueue(void)
 		gameQueues[i] = nullptr;
 	}
 
+	// extra replay spectator gamequeue
+	delete gameQueues[MAX_CONNECTED_PLAYERS];
+	gameQueues[MAX_CONNECTED_PLAYERS] = nullptr;
+
 	delete broadcastQueue;
 	broadcastQueue = nullptr;
+
+	bIsReplay = false;
 }
 
 void NETsetNoSendOverNetwork(NETQUEUE queue)
@@ -448,6 +488,13 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst)
 	ASSERT(dst.isPair, "Huh?");
 	delete pairQueue(dst);
 	pairQueue(dst) = nullptr;
+	std::swap(pairQueue(src), pairQueue(dst));
+}
+
+void NETswapQueues(NETQUEUE src, NETQUEUE dst)
+{
+	ASSERT(src.isPair, "Huh?");
+	ASSERT(dst.isPair, "Huh?");
 	std::swap(pairQueue(src), pairQueue(dst));
 }
 
@@ -476,6 +523,13 @@ bool NETend()
 	// If we are encoding just return true
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
+		if (bIsReplay && queueInfo.index != realSelectedPlayer)
+		{
+			// don't bother adding to the send queue if we're playing a replay
+			NETsetPacketDir(PACKET_INVALID);
+			return true;
+		}
+
 		// Push the message onto the list.
 		NetQueue *queue = sendQueue(queueInfo);
 		if (queue == nullptr) {
@@ -498,7 +552,7 @@ bool NETend()
 		{
 			NETsend(queueInfo, &queue->getMessageForNet());
 			queue->popMessageForNet();
-			ASSERT(queue->numMessagesForNet() == 0, "Queue not empty.");
+			ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining). (message = type: %" PRIu8 ", size: %zu), (queue = index: %" PRIu8 "; queueType: %" PRIu8 "; exclude: %" PRIu8 "; isPair: %d)", queue->numMessagesForNet(), message.type, message.data.size(), queueInfo.index, queueInfo.queueType, queueInfo.exclude, (int)queueInfo.isPair);
 		}
 
 		// We have ended the serialisation, so mark the direction invalid
@@ -556,7 +610,7 @@ bool NETend()
 
 void NETflushGameQueues()
 {
-	for (uint8_t player = 0; player < MAX_PLAYERS; ++player)
+	for (uint8_t player = 0; player < MAX_GAMEQUEUE_SLOTS; ++player)
 	{
 		NetQueue *queue = gameQueues[player];
 
@@ -571,6 +625,8 @@ void NETflushGameQueues()
 		{
 			continue;  // Nothing to send for this player.
 		}
+
+		ASSERT(!bIsReplay, "Where are we sending this if it's a replay?");
 
 		// Decoded in NETprocessSystemMessage in netplay.cpp.
 		NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
@@ -793,4 +849,63 @@ void NETnetMessage(NetMessage const **msg)
 		*msg = m;
 		return;
 	}
+}
+
+ReplayOptionsHandler::~ReplayOptionsHandler() { }
+
+// TODO Call this function somewhere.
+bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler)
+{
+	uint32_t replayFormatVer = 0;
+	if (!NETreplayLoadStart(filename, optionsHandler, replayFormatVer))
+	{
+		return false;
+	}
+	std::unique_ptr<NetMessage> newMessage;
+	uint8_t player;
+	bool gotReplayEnded = false;
+	while (NETreplayLoadNetMessage(newMessage, player))
+	{
+		if ((player >= MAX_PLAYERS && player != NetPlay.hostPlayer) || gameQueues[player] == nullptr)
+		{
+			debug((newMessage->type != GAME_GAME_TIME) ? LOG_ERROR : LOG_INFO, "Skipping message to player %d in replay.", player);
+			continue;
+		}
+		if (newMessage->type == REPLAY_ENDED)
+		{
+			gotReplayEnded = true;
+			break;
+		}
+		gameQueues[player]->pushMessage(*newMessage);
+	}
+	if (!gotReplayEnded && replayFormatVer >= 2)
+	{
+		debug(LOG_POPUP, _("Unable to load replay: The replay file is incomplete or corrupted."));
+		bIsReplay = true;
+		NETshutdownReplay();
+		return false;
+	}
+	// Add special REPLAY_ENDED message to the end of the host's gameQueue
+	newMessage = std::unique_ptr<NetMessage>(new NetMessage(REPLAY_ENDED));
+	gameQueues[NetPlay.hostPlayer]->pushMessage(*newMessage);
+	NETreplayLoadStop();
+	bIsReplay = true;
+	return true;
+}
+
+bool NETisReplay()
+{
+	return bIsReplay;
+}
+
+void NETshutdownReplay()
+{
+	if (bIsReplay)
+	{
+		// extra replay spectator gamequeue
+		delete gameQueues[MAX_CONNECTED_PLAYERS];
+		gameQueues[MAX_CONNECTED_PLAYERS] = nullptr;
+	}
+	
+	bIsReplay = false;
 }

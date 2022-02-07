@@ -159,7 +159,7 @@ function produceDroids(){
 	){
 		buildersTrigger = gameTime + buildersTimer;
 		debugMsg("buildersTrigger="+buildersTrigger+", gameTime="+gameTime+", buildersTimer="+buildersTimer, 'production');
-		buildDroid(droid_factories[0], "Truck", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','wheeled01'], "", DROID_CONSTRUCT, "Spade1Mk1");
+		buildDroid(droid_factories[0], "Truck", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','wheeled01'], "", "", "Spade1Mk1");
 		return;
 	}
 
@@ -167,7 +167,7 @@ function produceDroids(){
 	if(enumDroid(me, DROID_SENSOR).length == 0 && getInfoNear(base.x,base.y,'safe',base_range).value && scannersTrigger < gameTime){
 		var hq = enumStruct(me, HQ).filter(function (e){if(e.status == BUILT)return true;return false;});
 		if (hq.length != 0){
-			buildDroid(droid_factories[0], "Scanner", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','HalfTrack','wheeled01'], "", DROID_SENSOR, "SensorTurret1Mk1");
+			buildDroid(droid_factories[0], "Scanner", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','HalfTrack','wheeled01'], "", "", "SensorTurret1Mk1");
 			scannersTrigger = gameTime + scannersTimer;
 			return;
 		}
@@ -179,7 +179,7 @@ function produceDroids(){
 		fixersTrigger = gameTime + fixersTimer;
 		var _repair = "LightRepair1";
 		if(getResearch("R-Sys-MobileRepairTurretHvy").done) _repair = "HeavyRepair";
-		buildDroid(droid_factories[0], "Fixer", _body, _prop, "", DROID_REPAIR, _repair);
+		buildDroid(droid_factories[0], "Fixer", _body, _prop, "", "", _repair);
 		return;
 	}
 /*
@@ -187,7 +187,7 @@ function produceDroids(){
 		var _jammer = "ECM1TurretMk1";
 		produceTrigger[droid_factories[0].id] = 'jammer';
 		debugMsg("ADD jammer "+droid_factories[0].id, 'triggers');
-		buildDroid(droid_factories[0], "Jammer", _body, _prop, "", DROID_ECM, _jammer);
+		buildDroid(droid_factories[0], "Jammer", _body, _prop, "", "", _jammer);
 	}
 */
 
@@ -204,7 +204,7 @@ function produceDroids(){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
-		var myarmy = []
+		var myarmy = [];
 		myarmy = myarmy.concat(enumDroid(me, DROID_WEAPON));
 		myarmy = myarmy.concat(enumDroid(me, DROID_CYBORG));
 		if(myarmy.length <= enemyarmy.length){
@@ -221,7 +221,7 @@ function produceDroids(){
 			var _weapon = avail_guns[Math.floor(Math.random()*avail_guns.length)];
 			var _second = avail_guns[Math.floor(Math.random()*avail_guns.length)];
 			debugMsg(_body+" "+_prop+" "+_weapon, 'template');
-			buildDroid(droid_factories[0], "Army", _body, _prop, "", DROID_WEAPON, _weapon, _second);
+			buildDroid(droid_factories[0], "Army", _body, _prop, "", "", _weapon, _second);
 		}
 	}
 
@@ -235,7 +235,7 @@ function produceCyborgs(){
 	if(enumStruct(me, FACTORY).length == 0){
 		var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
 		if(cyborg_factories.length != 0){
-			buildDroid(cyborg_factories[0], 'Emergency Builder', 'CyborgLightBody', "CyborgLegs", "", 10, 'CyborgSpade');
+			buildDroid(cyborg_factories[0], 'Emergency Builder', 'CyborgLightBody', "CyborgLegs", "", "", 'CyborgSpade');
 		}
 		return;
 	}
@@ -253,7 +253,7 @@ function produceCyborgs(){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
-		var myarmy = []
+		var myarmy = [];
 		myarmy = myarmy.concat(enumDroid(me, DROID_WEAPON));
 		myarmy = myarmy.concat(enumDroid(me, DROID_CYBORG));
 		if(myarmy.length <= enemyarmy.length){
@@ -273,8 +273,8 @@ function produceCyborgs(){
 //		var _body = 'CyborgLightBody';
 		var _weapon = _cyb[1];
 		debugMsg("Cyborg: body="+_body+"; weapon="+_weapon ,'production');
-		//buildDroid(cyborg_factories[0], "Terminator", _body, "CyborgLegs", "", DROID_CYBORG, _weapon);
-		buildDroid(cyborg_factories[0], _weapon, _body, "CyborgLegs", "", DROID_CYBORG, _weapon);
+		//buildDroid(cyborg_factories[0], "Terminator", _body, "CyborgLegs", "", "", _weapon);
+		buildDroid(cyborg_factories[0], _weapon, _body, "CyborgLegs", "", "", _weapon);
 	}
 }
 
@@ -298,7 +298,7 @@ function produceVTOL(){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
-		var myarmy = []
+		var myarmy = [];
 		myarmy = myarmy.concat(enumDroid(me, DROID_WEAPON));
 		myarmy = myarmy.concat(enumDroid(me, DROID_CYBORG));
 		if(myarmy.length <= enemyarmy.length){
@@ -361,7 +361,7 @@ function produceVTOL(){
 	if(((playerPower(me)>300 && playerPower(me)<500) || forceproduce) && medium_bodies.length != 0) _body = medium_bodies;
 	if((playerPower(me)>800 || forceproduce) && heavy_bodies.length != 0) _body = heavy_bodies;
 	var _weapon = avail_vtols[Math.floor(Math.random()*Math.min(avail_vtols.length, 5))]; //Случайная из 5 последних крутых пушек
-	buildDroid(vtol_factories[0], "Bomber", _body, "V-Tol", "", DROID_WEAPON, _weapon);
+	buildDroid(vtol_factories[0], "Bomber", _body, "V-Tol", "", "", _weapon);
 
 }
 

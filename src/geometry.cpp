@@ -50,6 +50,8 @@ DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 	DROID *psBestUnit = nullptr;
 	unsigned bestSoFar = UDWORD_MAX;
 
+	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{

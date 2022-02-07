@@ -201,6 +201,7 @@ bool	getRotActive();
 #define MAX_PLAYER_X_ANGLE	(-1)
 #define MIN_PLAYER_X_ANGLE	(-90)
 
+#define MAXDISTANCE_REPLAY	(7000)
 #define MAXDISTANCE	(5000)
 #define MINDISTANCE	(0)
 #define MINDISTANCE_CONFIG (1600)

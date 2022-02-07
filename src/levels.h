@@ -94,6 +94,11 @@ LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = nullptr);
 Sha256 levGetFileHash(LEVEL_DATASET *level);
 Sha256 levGetMapNameHash(char const *name);
 
+// should only be used for special cases
+LEVEL_DATASET *levFindDataSetByRealFileName(char const *realFileName, Sha256 const *hash);
+bool levRemoveDataSetByRealFileName(char const *realFileName, Sha256 const *hash);
+bool levSetFileHashByRealFileName(char const *realFileName, Sha256 const &hash);
+
 // free the currently loaded dataset
 bool levReleaseAll();
 

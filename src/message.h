@@ -39,6 +39,8 @@ extern iIMDShape	*pProximityMsgIMD;
 /** The list of proximity displays allocated. */
 extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 
+extern bool releaseObjectives;
+
 /** Allocates the viewdata heap. */
 bool initViewData();
 
@@ -72,6 +74,9 @@ VIEWDATA *getViewData(const WzString &name);
 
 /// Get a list of viewdata entries
 std::vector<WzString> getViewDataKeys();
+
+// Get rid of mission objectives
+void releaseAllFlicMessages(MESSAGE *list[]);
 
 /** Release the viewdata memory. */
 void viewDataShutDown(const char *fileName);

@@ -55,11 +55,12 @@ static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 }
 
 /// WARNING: Returns NULL if tile not visible to selectedPlayer.
+/// Must *NOT* be used for anything game-state/simulation-calculation related
 static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
 {
 	MAPTILE *psTile = mapTile(x, y);
 
-	if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
+	if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 	{
 		return mapTile(x, y)->psObject;
 	}

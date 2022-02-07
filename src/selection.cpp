@@ -53,6 +53,8 @@ static std::vector<std::vector<uint32_t> > combinations;
 template <typename T>
 static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen)
 {
+	if (player >= MAX_PLAYERS) { return 0; }
+
 	unsigned count = 0;
 
 	selDroidDeselect(player);
@@ -124,12 +126,21 @@ static bool selDamaged(DROID *droid)
 {
 	return PERCENT(droid->body, droid->originalBody) < REPAIRLEV_LOW && !selTransporter(droid);
 }
+static bool selNoGroup(DROID *psDroid)
+{
+	return psDroid->group != UBYTE_MAX;
+}
+static bool selCombatLandMildlyOrNotDamaged(DROID *psDroid)
+{
+	return PERCENT(psDroid->body, psDroid->originalBody) > REPAIRLEV_LOW && selCombatLand(psDroid) && !selNoGroup(psDroid);
+}
 
 // ---------------------------------------------------------------------
 // Deselects all units for the player
 unsigned int selDroidDeselect(unsigned int player)
 {
 	unsigned int count = 0;
+	if (player >= MAX_PLAYERS) { return 0; }
 
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -148,6 +159,7 @@ unsigned int selDroidDeselect(unsigned int player)
 unsigned int selNumSelected(unsigned int player)
 {
 	unsigned int count = 0;
+	if (player >= MAX_PLAYERS) { return 0; }
 
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -218,6 +230,8 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 
 	combinations.clear();
 
+	if (player >= MAX_PLAYERS) { return 0; }
+
 	// find out which units will need to be compared to which component combinations
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -267,6 +281,8 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 	static DROID *psOldRD = nullptr; // pointer to last selected repair unit
 	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
+
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
 	{
@@ -372,6 +388,8 @@ void selNextUnassignedUnit()
 	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
 	{
 		/* Only look at unselected ones */
@@ -439,6 +457,8 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 	STRUCTURE *psResult = nullptr, *psOldStruct = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u", structType);
 
@@ -488,7 +508,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 	else
 	{
 		// Can't find required building
-		addConsoleMessage("Cannot find required building!", LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("Cannot find required building!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -516,6 +536,8 @@ static bool droidIsCommanderNum(DROID *psDroid, SDWORD n)
 // select the n'th command droid
 void selCommander(int n)
 {
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (droidIsCommanderNum(psCurr, n))
@@ -557,6 +579,8 @@ void selCommander(int n)
    */
 unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen)
 {
+	if (player >= MAX_PLAYERS) { return 0; }
+
 	/* So far, we haven't selected any */
 	unsigned int retVal = 0;
 
@@ -622,6 +646,9 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 			break;
 		case DST_ALL_SAME:
 			retVal = selSelectAllSame(player, bOnScreen);
+			break;
+		case DST_ALL_LAND_MILDLY_OR_NOT_DAMAGED:
+			retVal = selSelectUnitsIf(player, selCombatLandMildlyOrNotDamaged, bOnScreen);
 			break;
 		default:
 			ASSERT(false, "Invalid selection type");

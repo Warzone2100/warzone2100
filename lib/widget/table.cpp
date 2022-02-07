@@ -57,13 +57,21 @@ std::shared_ptr<TableRow> TableRow::make(const std::vector<std::shared_ptr<WIDGE
 		{
 			rowHeight = std::max(rowHeight, widget->height());
 		}
+		// vertically center any column widgets that are less than the rowHeight
+		for (auto& widget : result->columnWidgets)
+		{
+			if (widget->height() < rowHeight)
+			{
+				widget->setGeometry(widget->x(), (rowHeight - widget->height()) / 2, widget->width(), widget->height());
+			}
+		}
 	}
 	else
 	{
 		// use fixed row height
 		for (auto& widget : result->columnWidgets)
 		{
-			widget->setGeometry(widget->x(), widget->y(), widget->width(), rowHeight);
+			widget->setGeometry(widget->x(), 0, widget->width(), rowHeight);
 		}
 	}
 	result->setGeometry(result->x(), result->y(), result->width(), rowHeight);
@@ -79,6 +87,16 @@ std::shared_ptr<TableRow> TableRow::make(const std::vector<std::shared_ptr<WIDGE
 void TableRow::setHighlightsOnMouseOver(bool value)
 {
 	highlightsOnMouseOver = value;
+}
+
+int32_t TableRow::getColumnTotalContentIdealWidth()
+{
+	int32_t totalContentIdealWidth = 0;
+	for (auto& column : columnWidgets)
+	{
+		totalContentIdealWidth += column->idealWidth();
+	}
+	return totalContentIdealWidth;
 }
 
 void TableRow::display(int xOffset, int yOffset)
@@ -125,6 +143,12 @@ void TableRow::resizeColumns(const std::vector<size_t>& newColumnWidths, int col
 	{
 		columnWidgets[colIdx]->hide();
 	}
+}
+
+std::shared_ptr<WIDGET> TableRow::getWidgetAtColumn(size_t col) const
+{
+	ASSERT_OR_RETURN(nullptr, col < columnWidgets.size(), "Invalid column index: %zu", col);
+	return columnWidgets[col];
 }
 
 // MARK: - TableHeader
@@ -360,6 +384,12 @@ void ScrollableTableWidget::geometryChanged()
 	scrollableList->callCalcLayout();
 }
 
+int32_t ScrollableTableWidget::idealHeight()
+{
+	ASSERT_OR_RETURN(0, scrollableList != nullptr, "scrollableList not yet initialized?");
+	return scrollableList->y() + scrollableList->idealHeight();
+}
+
 void ScrollableTableWidget::setBackgroundColor(PIELIGHT const &color)
 {
 	scrollableList->setBackgroundColor(color);
@@ -442,6 +472,19 @@ void ScrollableTableWidget::setMinimumColumnWidth(size_t col, size_t newMinColum
 	ASSERT_OR_RETURN(, col < minColumnWidths.size(), "Invalid column index: %zu", col);
 	minColumnWidths[col] = newMinColumnWidth;
 	relayoutColumns(columnWidths);
+}
+
+// Get the maximum idealWidth() returned by any of the row widgets in the specified column
+int32_t ScrollableTableWidget::getColumnMaxContentIdealWidth(size_t col)
+{
+	int32_t maxIdealWidth = 0;
+	for (auto& row : rows)
+	{
+		auto pColWidget = row->getWidgetAtColumn(col);
+		if (!pColWidget) { continue; }
+		maxIdealWidth = std::max(maxIdealWidth, pColWidget->idealWidth());
+	}
+	return maxIdealWidth;
 }
 
 std::vector<size_t> ScrollableTableWidget::getShrinkableColumnIndexes(const std::vector<size_t>& currentColumnWidths)
@@ -591,12 +634,22 @@ bool ScrollableTableWidget::relayoutColumns(std::vector<size_t> proposedColumnWi
 	return true;
 }
 
-size_t ScrollableTableWidget::getMaxColumnTotalWidth(size_t numColumns) const
+size_t ScrollableTableWidget::totalPaddingWidthFor(size_t numColumns) const
 {
 	// TABLE_COL_PADDING is on all sides of all columns
 	// also factor in scrollbar width
 	size_t totalPaddingWidth = TABLE_COL_PADDING + ((numColumns - 1) * 2 * TABLE_COL_PADDING) + TABLE_COL_PADDING + scrollableList->getScrollbarWidth();
-	return static_cast<size_t>(width()) - totalPaddingWidth;
+	return totalPaddingWidth;
+}
+
+size_t ScrollableTableWidget::getMaxColumnTotalWidth(size_t numColumns) const
+{
+	return static_cast<size_t>(width()) - totalPaddingWidthFor(numColumns);
+}
+
+size_t ScrollableTableWidget::getTableWidthNeededForTotalColumnWidth(size_t numColumns, size_t totalMinimumColumnWidth) const
+{
+	return totalPaddingWidthFor(numColumns) + totalMinimumColumnWidth;
 }
 
 bool ScrollableTableWidget::isUserDraggingColumnHeader() const

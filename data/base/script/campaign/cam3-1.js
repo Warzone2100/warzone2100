@@ -164,7 +164,7 @@ function setupNextMission()
 	{
 		camSetExtraObjectiveMessage(_("Move all units into the valley"));
 
-		camPlayVideos(["labort.ogg", "MB3_1B_MSG", "MB3_1B_MSG2"]);
+		camPlayVideos(["labort.ogg", {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
 		setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
@@ -181,6 +181,7 @@ function setupNextMission()
 //Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {
+	const ACCEPTABLE_TIME_DIFF = 2;
 	var silosDestroyed = missileSilosDestroyed();
 	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
@@ -190,7 +191,7 @@ function getCountdown()
 		var currentTime = getMissionTime();
 		if (currentTime <= countdownObject[0].time)
 		{
-			if (len > 1 && (currentTime <= countdownObject[1].time))
+			if (currentTime < (countdownObject[0].time - ACCEPTABLE_TIME_DIFF))
 			{
 				skip = true; //Huge time jump?
 			}

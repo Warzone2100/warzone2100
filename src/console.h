@@ -60,6 +60,7 @@ const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING = {2500};
 #define	SYSTEM_MESSAGE				(-1)
 #define NOTIFY_MESSAGE				(-2)	// mainly used for lobby & error messages
 #define INFO_MESSAGE				(-3)	// This type is not stored, it is used for simple messages
+#define SPECTATOR_MESSAGE			(-4)	// Used for in-game spectator messages (NET_SPECTEXTMSG)
 
 #define MAX_CONSOLE_MESSAGE_DURATION	((UDWORD)-1)
 #define DEFAULT_CONSOLE_MESSAGE_DURATION	0
@@ -70,6 +71,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 bool addConsoleMessageDebounced(const char* Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, const DEBOUNCED_MESSAGE & debouncedMessage, bool team = false, UDWORD duration = DEFAULT_CONSOLE_MESSAGE_DURATION);
 void updateConsoleMessages();
 void initConsoleMessages();
+void shutdownConsoleMessages();
 void removeTopConsoleMessage();
 void displayConsoleMessages();
 void displayOldMessages();

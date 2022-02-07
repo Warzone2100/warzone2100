@@ -71,6 +71,7 @@ void kf_SelectGrouping(UDWORD groupNumber);
 MappableFunction kf_SelectGrouping_N(const unsigned int n);
 MappableFunction kf_AssignGrouping_N(const unsigned int n);
 MappableFunction kf_AddGrouping_N(const unsigned int n);
+MappableFunction kf_RemoveFromGrouping();
 void kf_ToggleDroidInfo();
 void kf_addInGameOptions();
 void kf_addMultiMenu();
@@ -195,4 +196,9 @@ void kf_QuickLoad();
 
 void kf_ToggleFullscreen();
 
+void kf_ToggleSpecOverlays();
+
+void enableGodMode();
+
+void keybindShutdown();
 #endif // __INCLUDED_SRC_KEYBIND_H__

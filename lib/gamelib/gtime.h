@@ -63,11 +63,20 @@ void gameTimeInit();
 /// Changes the game (and graphics) time.
 void setGameTime(uint32_t newGameTime);
 
+/// Called before the first call to gameTimeUpdate in gameLoop
+void gameTimeUpdateBegin();
+
 /** Call this each loop to update the gameTime, graphicsTime and realTime timers, and corresponding deltaGameTime, deltaGraphicsTime and deltaRealTime.
  * The game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK.
  * @returns true iff the game time ticked.
  */
-void gameTimeUpdate(bool mayUpdate);
+enum class GameTimeUpdateResult
+{
+	NO_UPDATE,
+	GAME_TIME_UPDATED,
+	GAME_TIME_UPDATED_FORCED
+};
+GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate = false);
 
 /// Call after updating the state, and before processing any net messages that use deltaGameTime. (Sets deltaGameTime = 0.)
 void gameTimeUpdateEnd();
@@ -193,5 +202,7 @@ void sendPlayerGameTime();                                ///< Sends a GAME_GAME
 void recvPlayerGameTime(NETQUEUE queue);                  ///< Processes a GAME_GAME_TIME message.
 bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
 void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
+
+bool gtimeShouldWaitForPlayer(unsigned player);
 
 #endif

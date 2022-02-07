@@ -78,7 +78,6 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static std::unordered_map<WzString, BASE_STATS *> lookupStatPtr;
-static std::unordered_map<WzString, STRUCTURE_STATS *> lookupStructStatPtr;
 static std::unordered_map<WzString, COMPONENT_STATS *> lookupCompStatPtr;
 
 static bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model);
@@ -135,7 +134,6 @@ void statsInitVars()
 bool statsShutDown()
 {
 	lookupStatPtr.clear();
-	lookupStructStatPtr.clear();
 	lookupCompStatPtr.clear();
 
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
@@ -239,7 +237,11 @@ static void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
 void loadStructureStats_BaseStats(WzConfig &json, STRUCTURE_STATS *psStats, size_t index)
 {
 	loadStats(json, psStats, index);
-	lookupStructStatPtr.insert(std::make_pair(psStats->id, psStats));
+}
+
+void unloadStructureStats_BaseStats(const STRUCTURE_STATS &psStats)
+{
+	lookupStatPtr.erase(psStats.id);
 }
 
 static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index)
@@ -1255,17 +1257,6 @@ COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 	return psComp;
 }
 
-STRUCTURE_STATS *getStructStatsFromName(const WzString &name)
-{
-	STRUCTURE_STATS *psStat = nullptr;
-	auto it = lookupStructStatPtr.find(name);
-	if (it != lookupStructStatPtr.end())
-	{
-		psStat = it->second;
-	}
-	return psStat;
-}
-
 BASE_STATS *getBaseStatsFromName(const WzString &name)
 {
 	BASE_STATS *psStat = nullptr;
@@ -1525,70 +1516,86 @@ bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass)
 	return true;
 }
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 /*Access functions for the upgradeable stats of a weapon*/
 int weaponFirePause(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].firePause;
 }
 
 /* Reload time is reduced for weapons with salvo fire */
 int weaponReloadTime(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].reloadTime;
 }
 
 int weaponLongHit(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].hitChance;
 }
 
 int weaponShortHit(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].shortHitChance;
 }
 
 int weaponDamage(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].damage;
 }
 
 int weaponRadDamage(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].radiusDamage;
 }
 
 int weaponPeriodicalDamage(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].periodicalDamage;
 }
 
 int sensorRange(const SENSOR_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].range;
 }
 
 int ecmRange(const ECM_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].range;
 }
 
 int repairPoints(const REPAIR_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].repairPoints;
 }
 
 int constructorPoints(const CONSTRUCT_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].constructPoints;
 }
 
 int bodyPower(const BODY_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].power;
 }
 
 int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	switch (weaponClass)
 	{
 	case WC_KINETIC:
@@ -1605,6 +1612,7 @@ int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass)
 //calculates the weapons ROF based on the fire pause and the salvos
 int weaponROF(const WEAPON_STATS *psStat, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	int rof = 0;
 	// if there are salvos
 	if (player >= 0

@@ -65,9 +65,7 @@ void main()
 
 		// Complete replace normal with new value
 		N = normalFromMap.xzy * 2.0 - 1.0;
-
-		// To match wz's light
-		N.y = -N.y;
+		N.y = -N.y; // FIXME - to match WZ's light
 
 		// For object-space normal map
 		if (hasTangents == 0)
@@ -79,13 +77,12 @@ void main()
 
 	// Сalculate and combine final lightning
 	vec4 light = sceneColor;
-	vec3 L = lightDir; //can be normalized for better quality
-	float lambertTerm = max(dot(N, L), 0.0);
+	vec3 L = normalize(lightDir);
+	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
 
 	if (lambertTerm > 0.0)
 	{
-		// Vanilla models shouldn't use diffuse light
-		float vanillaFactor = 0.0;
+		float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
 
 		if (specularmap != 0)
 		{
@@ -94,21 +91,17 @@ void main()
 
 			// Gaussian specular term computation
 			vec3 H = normalize(halfVec);
-			float angle = acos(dot(H, N));
-			float exponent = angle / 0.2;
-			exponent = -(exponent * exponent);
-			float gaussianTerm = exp(exponent);
+			float exponent = acos(dot(H, N)) / 0.33; //0.33 is shininess
+			float gaussianTerm = exp(-(exponent * exponent));
 
 			light += specular * gaussianTerm * lambertTerm * specularFromMap;
 
-			// Neutralize factor for spec map
-			vanillaFactor = 1.0;
+			vanillaFactor = 1.0; // Neutralize factor for spec map
 		}
 
 		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
 	}
-	// NOTE: this doubled for non-spec map case to keep results similar to old shader
-	// We rely on specularmap to be either 1 or 0 to avoid adding another if
+	// ambient light maxed for classic models to keep results similar to original
 	light += ambient * diffuseMap * (1.0 + (1.0 - float(specularmap)));
 
 	vec4 fragColour;

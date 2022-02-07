@@ -17,6 +17,8 @@ void CommanderController::updateCommandersList()
 {
 	commanders.clear();
 
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
+
 	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
 	{
 		if (droid->droidType == DROID_COMMAND && droid->died == 0)
@@ -53,6 +55,12 @@ void CommanderController::refresh()
 	{
 		displayOrderForm();
 	}
+}
+
+void CommanderController::clearData()
+{
+	commanders.clear();
+	setHighlightedObject(nullptr);
 }
 
 void CommanderController::setHighlightedObject(BASE_OBJECT *object)

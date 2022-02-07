@@ -133,7 +133,7 @@ void CancelAllResearch(UDWORD pl);
 
 bool researchInitVars();
 
-bool researchAvailable(int inc, int playerID, QUEUE_MODE mode);
+bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode);
 
 struct AllyResearch
 {
@@ -144,5 +144,15 @@ struct AllyResearch
 	bool active;
 };
 std::vector<AllyResearch> const &listAllyResearch(unsigned ref);
+
+// various counts / statistics
+uint32_t getNumWeaponImpactClassUpgrades(uint32_t player, WEAPON_SUBCLASS subClass);
+enum class BodyClass
+{
+	Tank,
+	Cyborg
+};
+uint32_t getNumBodyClassArmourUpgrades(uint32_t player, BodyClass bodyClass);
+uint32_t getNumBodyClassThermalArmourUpgrades(uint32_t player, BodyClass bodyClass);
 
 #endif // __INCLUDED_SRC_RESEARCH_H__

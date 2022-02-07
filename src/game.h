@@ -32,7 +32,9 @@
 #include "lib/framework/vector.h"
 #include "gamedef.h"
 #include "levels.h"
-
+#include <3rdparty/json/json_fwd.hpp>
+#include <optional-lite/optional.hpp>
+#include <sstream>
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -64,5 +66,6 @@ GAME_TYPE getSaveGameType();
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor);
-
+nonstd::optional<nlohmann::json> parseJsonFile(const char *filename);
+bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName);
 #endif // __INCLUDED_SRC_GAME_H__

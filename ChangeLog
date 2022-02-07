@@ -1,3 +1,227 @@
+2021-12-20: Version 4.2.4:
+ * General:
+   * Fix: Prebuilt ally gates not being passable (commit:428d0b70ff9af2a58a27bcfdade12ffe7fc062b4, #2484)
+   * Fix: Cleanup old log files (commit:d5ed1a5164b50fadba5f0ef5bcf03c619aa2b62f, #2501)
+   * Fix: Various crashes and resource leaks (too many commits, #2480, #2493, #2494, #2499, #2504, #2512)
+ * Campaign:
+   * Change: Ignore VTOLs when a campaign enemy group unit can't hit them (commit:d1fd63899890de6f9b43b4080581378acf631a89, #2475)
+   * Change: Better target selections by sorting targets relative to group average coordinate (commit:b538fb562f55ffd3abd92eea1774ac0cfe98cc4f, #2475)
+   * Change: Add a time range to cam3-1 launch / detonate sounds (commit:c64ca3afdc989a885d12b530647bbd308221c037, #2476)
+   * Change: Make the winning requirements for Beta-end more clear (commit:d89391d05026d8e940bca5ccd507517349965153, #2491)
+   * Change: Make Gamma 5 a little more hectic on Hard / Insane difficulty (commit:f467e476951b89dab56404e68913662734ba54e2, #2502)
+ * Multiplayer:
+   * Add: Additional lobby chat slash commands, cmdinterface event output (too many commits, #2500)
+   * Change: Set default AI back to Nexus (commit:a4f7b6b6d678a25ef76d738779eed00bf8526d69, #2487)
+   * Change: Make some AIs easier when using Easy difficulty (too many commits, #2486)
+   * Change: Remove old Cobra Hard / Insane weapon perks (commit:9c245da200648745d17bee0dc3f200872b7d7b94, #2489)
+   * Fix: Repeated game over message (commit:3e4a146bc6f8d52bddb98634aafc48e1be20b049, #2485)
+   * Fix: Add campaign Collective and Nexus structures back into mp stats file, fixing old maps (commit:3c60e5f9428136de5f494ce5857d9be6008b7701, #2506)
+ * Challenges:
+   * Fix: Specify specific AIs for "Back to Basics" and "Hide Behind Me" (commit:f2e6edabb1fad7193c611800180145faedc60611, #2487)
+
+2021-11-28: Version 4.2.3:
+ * General:
+   * Fix: Unable to demolish structures at full health (commit:baab23227e5deab3579e313f50f5a7238286a8dd, #2430)
+   * Fix: Properly remove old QuickSave data when quick-saving (commit:c0e4bcfbf9809eca8ac33210a019a194851f9c61, #2442)
+   * Fix: Drop pending structures on first click (commit:ccdff9e9bf241d3d0f53cd675c40c0de86f02d88, #2452)
+   * Fix: Play buzz sound once per interval (commit:69a9de00c819dc9ef0b94946d3cdbdc02f527a16, #2456)
+   * Fix: Ultimate Scavengers freeze on certain maps (commit:e56a5cfb27fa739dd528a8786ba7e6e892b973e6, #2458)
+   * Fix: Improve OpenGL context cleanup on init failure (commit:eda3996d2efdd80d6e848fdabbc1b2ceb7a4161a, #2462)
+   * Fix: Various crashes (too many commits, #2433, #2434, #2453)
+ * Multiplayer:
+   * Fix: Game doesn't end when autohosting if all players leave simultaneously (commit:0dc476077676e4642c3ebd0fe572b0989d805203, #2455)
+
+2021-11-22: Version 4.2.2:
+ * General:
+   * Add: Multiplay Options menu (too many commits, #2415)
+   * Add: Hotkey to "Select all land combat units, with health >50%, not assigned to any group" (commit:b7ff3b346e1b9c07c257f8084b6b3d9a99995485, #2329)
+   * Fix: Reject certain crashy OpenGL drivers, and fallback to other backends (commit:c71c0c9aae85dec46f94124a2a11e941e2699dbc, commit:720ccab774c8df4e8581f3ccca27f721460544da, #2400, #2427)
+   * Fix: Handle exceptions creating Vulkan device (commit:1091109a0ae3a59ba864c8864188183d7b34f75c, #2421)
+   * Fix: Repairs & Builders: Don't move needlessly (commit:df8997b5f08afa26cc69b93ab8279db04e643e3d, #2391)
+   * Fix: Re-ordering construction units to build something shouldn't cancel it (commit:5a106269f68d9d1c708114853d0da20cf442843c, #2395)
+   * Fix: Don't reset attack range under commander (commit:7ac86b51bc9ff96d1881544799d620d267e45de0, #2394)
+   * Fix: Ignore rearm order when already rearming (commit:e9fef35ea95c95df6e78df8e95a2b378b4ccb5b3, #2399)
+   * Fix: Don't show green overlay when impossible to build next module (commit:24b570d887275d685ee944570d05f07bb3339dd9, #2398)
+   * Fix: Don't show modules in build list when unable to build more buildings of that type (commit:af3f237f0f64ac3da11dd0a83a46a89e41d0afbf, #2396)
+   * Fix: Don't retreat repair turrets (RT) to other RT (commit:d4cf74d30ff79fad6d0c4c5cffe3129b7310b959, #2389)
+   * Fix: Improve resource cleanup on shutdown (too many commits, #2405, #2423)
+   * Fix: Prevent DIVIDE_BY_ZERO in displayBigSlider (commit:0979c692f941689505e35c782040fe80f1f29d86, #2408)
+   * Fix: Various savegame / autosave issues (too many commits, #2409, #2419)
+   * Fix: Remove Command Relay structure requirement for Command Turret research (commit:0248233152c341fcd36a6f14c94c4a2bb57aa5e1, #2414)
+   * Fix: Partial UI soft-lock with certain in-game menus (commit:b429ffe3d146baf04b8e55b279ef5a3b6543f4f2, #2418)
+   * Fix: Preserve ordering of sync msgs in MP; fixes Factory set Hold Position bug (commit:cda0183a1abf868103e67649aedb73768e7ba521, #2397)
+   * Fix: Toggling debug mode in skirmish as spectator (commit:ca936ba49bd3473472ffb095614de4f0cab88dac, #2420)
+   * Fix: Ultimate Scavengers building an absurd amount of factories (commit:f0fce501741a7c2075452abb8b77c8fa66e10b19, #2417)
+ * Graphics:
+   * Fix: Missing parts on the Nexus Link turret (commit:06a8600dfde844bff1bc3c70a08c32a1d574e07b, #2392)
+ * AI:
+   * Fix: Rip out mobile repair tactics from Cobra AI (commit:3fc79370c16b597009040e06fc5439ec030168de, #2387)
+ * Scripting:
+   * Fix: Use constants instead of plain numbers (commit:70e03ad9790be91d009f9e73d11aa1492868a37e, commit:dd815aeae262f3d955b8828073e64c407d8fa774, #2406)
+ * Multiplayer:
+   * Add: Add 7-player map "Thales" (commit:a927e712eb5fecfa7bda7d946291e8a1c7375ba8, #2404)
+ * MP-Balance:
+   * Change: Adjust Heavy Plasma Launcher: Reduce damage 250 -> 225, increase firePause 300 -> 350, reduce periodical Damage Radius 128 -> 64 (commit:b8685b5df12091ace6f5590e80984eecbcbe2fa0, #2386)
+   * Change: Adjust Incendiary Mortar: "researchPoints": 3600 -> 4800, "researchPower": 112 -> 150 (commit:1d2976ed52d4365e0ae8b4aae31d23333247dea6, #2407)
+ * Other:
+   * Fix: pie_import to handle filepaths properly in Blender 2.9x .PIE plugin (commit:97427c87d4ceeaea436c1dd52418f3db60579b96, #2412)
+
+2021-11-08: Version 4.2.1:
+ * General:
+   * Add: Replay v2 format: Embed downloaded maps, store "end of game" info block (too many commits, #2347)
+   * Fix: Improve replay saving performance / behavior (commit:e4e604aa55f229ce1f9ac582388a4c3b20f9409b, #2345)
+   * Fix: Handle frontend.img / intfac.img load failure explicitly (commit:5ea99dd6ebe1bfd9e8efd94ac25fa841d3600913, commit:406956ad1f197925f20b8e638e49432554af0c6f, #2355)
+   * Fix: updateChallenge() crash (commit:2f912f7bf6588752ce95cc010df916b30c85ec9f, #2348)
+   * Fix: loadGame() crash if map load failed (commit:45fbedd4b67de805246d0a95d2ea9f75b8766a31, #2352)
+   * Fix: Various additional bounds checks & error logging (too many commits, #2359, #2373, #2374, #2377)
+   * Fix: cursors_sdl: Null checks, cleanup order fixes (commit:bf0b642306c34f0a73806715eb2e11e30ccaa4f4, commit:8bfc6ae13b03b1beb99ce4421d62dde5a31d641d, #2360)
+   * Fix: showUNITCOUNT should only apply to player slots (commit:340d5ec8fd9a9c87ced84953a33493ad0bda2955, #2366)
+ * Graphics:
+   * Fix: Further OpenGL init tweaks (too many commits, #2350)
+ * Campaign:
+   * Change: Alpha 09 tweaks (commit:120cb3ddf03ddf31c0de67706cf0073ddeb33df5, #2356)
+   * Change: Alpha 06 NP reinforcement tweak (commit:5485ebe25147f8f4d1e8a95afd6502de5d4cd249, #2357)
+   * Change: Update a Nexus Resistance Circuit research item name (commit:04d1692b7ba96cb6dc03c1636fc548c9f135c9b5, #2369)
+   * Fix: Account for the transporter in campaign unit limit (commit:dbf34209c3c8b8b8a14e286c4265223a2e80b47b, #2369)
+ * Scripting:
+   * Add: Provide a native fractal value noise generator for use in map scripts (commit:469df2d69f137183aef3e2413fa285db3e83908a, #2341)
+ * Multiplayer:
+   * Add: Add specstats button (commit:12fffa2c845b2a3c48262a23078fac9a30ce7238, #2370)
+   * Change: Host: Remember number of spectator slots in MP games (commit:33b9c498f333952e849dbb3619d667b5fad7daa2, #2372)
+   * Fix: Improve spectator lag / fast-forward behavior (too many commits, #2338)
+   * Fix: Do not reset ready status of players on spectator leave (commit:30cf5a2003e86eb8fe7b22fa97bda04907dcbb45, #2353)
+   * Fix: NetworkTextMessage::receive() crash (commit:a63e016f2faa562292437591e7e958caea1d9440, #2354)
+   * Fix: ActivityManager: updateMultiplayGameData on MP replay load (commit:4c36ed5934077962370316b3e057e5242bbaca53, #2375)
+   * Fix: Revamp WZFiles cleanup (commit:13849b065378d830f55771e35878670f38a544b2, #2376)
+ * MP-Balance:
+   * Change: Rollback "ALL ROUNDER" damage value against "Legged", Increase the accuracy at long range of all MGs from 50 to 55 (commit:e00eff60500ec59ef25c6ac90aa1397fe366f819, #2361)
+   * Change: Increase the weight of HVC, add 0.5 tiles range to HVC cyborg, and reduce ROF of these weapons (commit:6e4d2561de3f5e6f6f90adae04a96fbb8591c26a, #2363)
+   * Change: Increase the research time "High Temperature Flamer Gel Mk3" so it is no longer included in "Advanced Base" (commit:2745499133bd237924df03e1e416ca1f6f2ab2ca, #2364)
+   * Change: Faster Bombard and Pepperpot production, weaken Incendiary Mortar burn radius and damage, and earlier access to mortar accuracy research (commit:27bce204cd198f4bec1d23a48ea31a5345792f08, #2367)
+   * Change: Required research for Howitzer: APFSDS Cannon Rounds Mk2 -> Heavy Mortar - Bombard (commit:06e5b5ca3b0d4ac2267314d8aff0932582a55bad, #2368)
+
+2021-10-26: Version 4.2.0:
+ * General:
+   * Fix: Handle repair point choice better so it doesn't pick less than ideal ones (commit:4a3d528b6c70fd5763ad1ebabf181e2e6fc7f321, #2313)
+   * Add: --loadreplay command line option (commit:19c59750c55d74b15f65ee3551ebd08b5777f32e, #2323)
+ * Graphics:
+   * Add: Update Ultimate Scavengers button image (commit:51c535432c1777e4a002e5d41f9865928734dd17, #2305)
+ * Campaign:
+   * Add: Increase oil drum power in Beta (150) and Gamma (200) (commit:211e0a72a0e886e79651e776384f7fe64c5c2a28, #2310)
+   * Fix: Fix fastplay video not working since 4.2.0-beta2 (commit:55b656f1a9c660a5a521a35f2e5de28b41e85824, #2311)
+   * Fix: Prevent old transporter issue on Beta-end where it can come back and fail the player due to little time left to send it away again (commit:2dab78359b0ca05157c73b52d13aa160108c8ce3, #2317)
+ * Scripting:
+   * Change: Update JS documents (commit:1b50d7040c70e4b5c4bab6a1e21f27c58dd4d1f6, #2290)
+ * Multiplayer:
+   * Change: Display team chooser column at all times (commit:8a6b20424d55e5acac0271ef56d82a7cc157c25f, #2302)
+   * Change: Make inactivityMinutes / idleTime configurable (too many commits, #2307)
+   * Fix: Fix a desync in replays due to structure limits not being the same in the replay (commit:79f1580e36b96584616a94d680b7eb09325d9e94, commit:d8f3f8cdcf1550e9680658fc3ff070e640c66b08 commit:c317fc92036952e3bffa90cc7819ce8b1be7e99c, #2288)
+   * Fix: Fix a crash/assert when players were transitioned to spectators (commit:0720478249555a965a1c117d9148816aa6ce4ccf, commit:844afd747987c525c5bfc7e12ad5fd394f426c00, #2293)
+   * Fix: Fix order of players in specstats window (commit:d7ce7f65234011c17f791cad03bca2681d7c5136, #2299)
+   * Fix: Crash on autogame with spectator host (commit:eeb74a0c83be8de18f7645e4f7f5accb763a9a5b, commit:a1d025bd4b6d8cc846eb9f8cb908f97145405e9a, #2323)
+   * Fix: Joining new game after quitting lobby with spectator host (commit:e5e5b3cea4252fd602e0877f251ca373eace39a0, #2323)
+   * Fix: Client sends invalid command to host if autorating URL is enabled (commit:b42006c4295a70554d4c61e53e567a43721c754f, #2323)
+   * Fix: Spectator host autorating URL requests for all clients (commit:9ad707ba27c39aea19e73957a36a9b4e89d5c6dd, #2323)
+   * Fix: Unable to refresh lobby after being kicked (commit:d0b29ee4d0adbd923fb23eae5b4c535998c2f7d1, #2323)
+   * Fix: Replay desync at start due to replay spectator (commit:41142f9dc15dbc139d1155335819c559e73a717d, #2323)
+ * MP-Balance:
+   * Change: Reduced effectiveness of all-rounder weapons against cyborgs to 60% from 65% and make HMG come earlier (commit:37fba9ff657d29ad9e044b447cd1c2063cbb0c35, #2306)
+   * Change: Slightly increase Super Auto-Cannon Cyborgs damage (commit:c8664187f722e2af756a4da7670248c0c7caac68, #2324)
+ * Other:
+   * Fix: Mingw / Clang compile warning fixes (commit:4a4106d59d1ca54938fdc64fb24934b75e38fc86, commit:495ec740a314894aae325c69e9923a11c617edb3, #2291)
+   * Fix: Fix a potential chat related crash (commit:86ea2a27214fb47cbb55fd40af07ec9dd388bf98, #2294)
+   * Fix: Fix potential crash due to 0-sized decals VBO on maps without decals (commit:641b57f61eebb1b860e63eb382b96811ebb72ed2, #2303)
+   * Fix: Crash if transporter is recycled (commit:33bf6b41dab41a583202588aa3aa45897eec5021, #2308)
+   * Fix: Suppress and log wzDisplayDialog in headless mode (commit:aa91f8ef280c52b01a90ccf0149a5f014f544a52, #2323)
+   * Fix: wzapi::gameOverMessage: Trigger a graceful shutdown in autogame / headless mode (commit:3891ec232e85537b71164c8bf838b1f92ba0a84a, #2323)
+
+2021-10-16: Version 4.2.0-beta2:
+ * General:
+   * Add: Make selected structures and units blink on radar (too many commits, #2260)
+   * Add: Power per second to power bar tooltip (commit:dbaf846580c5300ad994eeb2b913bb6699b72d39, #2283)
+   * Fix: Command interface fixes, documentation added (too many commits, #2255, #2266)
+   * Fix: Crash caused by crash-handling provider (commit:9eba84b42b2d9b5491a641cb42ccb81ef8387a13, #2257)
+   * Fix: Always release sequence resources at shutdown (commit:c8db2e117f9116e2b5412edc42281a0cd7f37db7, #2258)
+   * Fix: Additional null checks (commit:c9822b47c630b71d4e8308b2f4c5365985f296c8, commit:5c84be3edf87fdd4daa37b8e2cdb3e8338a9e1cd, #2259, #2280)
+   * Fix: Repair: Return to HQ as fallback (commit:c2c8a1b455c931eef8a892d71136b4022d407ef1, #2261)
+   * Fix: Improve replay warning / error messages (too many commits, #2263)
+   * Fix: NETSendNPlayerInfoTo: Only assert when multiplay game in lobby (commit:a554be6214cf75b0c958a96ea7bd6de4f730b5fd, #2274)
+   * Fix: Struct stats lookup maps tweaks / refactoring (commit:259a0af9cebe5d3260fd3d965e147724c99fecbe, commit:b1947b59d491623588f1e28e3250f2037fe32fd3, #2275)
+   * Fix: Add a missing break for attack orders (commit:899e32a7aaaa2b11d07bc58ceb843098543e315e, #2277)
+ * Campaign:
+   * Change: Decrease the player return LZ in Beta 08 (commit:aca3f4590f08753e81edec46995c4dd1f9f43af5, #2271)
+   * Change: Add additional research messages for Nexus Resistance Circuits (commit:4f62603de92be6e9857de86ed73961db8f21da93, #2276)
+ * Multiplayer:
+   * Change: Ignore allies' attack to determine activity (commit:145c7667baa776cbfbb0764db6f177fe3b7151b7, #2262)
+   * Change: Limit Ultimate Scavengers' Helicopter usage times on T1 technology (commit:ae2031af9e109d71fe3326c7c60f76c43a100af1, #2268)
+   * Fix: Desync when moving to repair (commit:49f3a398d6746fa66d377cd218e4511572b5f06e, #2267)
+   * Fix: Don't load map preview twice for the host (commit:20f2ac22f03f779e2c183067377a1c973657c4b9, #2282)
+ * Other:
+   * Change: Add video install information for Ubuntu in README (commit:980a222986fd6876891051b2d51fb68a4815503c, #2279)
+
+2021-10-09: Version 4.2.0-beta1:
+ * General:
+   * Add: Add Ultimate Scavengers to the game (commit:21f7935791a9816815dc69c95bebe91b6daf3328, commit:9c7fc3569d11fbdb1e840f3b4901a6863090aaad, commit:71f1b17794ca5559eefbbc172539eecbb728da97, #2211, #2131, #1995)
+   * Add: Implement remove from group shortcut (commit:c12d3798a173bd5eb942a6905ea20935ebc24dee, #2197)
+   * Add: Use a stable config directory for release builds (commit:d3b10cd790aea97335149ac352c129c21ec1058b, commit:47d27df891caad7f0f21051eb4065a8cd53b2aaa, #2248)
+   * Change: First steps at moving savegame format totally to JSON--now converted the .gam file (too many commits, #2191)
+   * Change: Return units to mobiles turrets & randomize repair points (commit:5910fc43e3381ec4e06ce51dad0e4e72dd6d47f2, #1829)
+   * Fix: Fix orders from Commanders after loading saves (commit:2b04681dd54e65d10ff8d80d94bcbdfb6dd16d31, #2113)
+   * Fix: Don't reveal artillery unless the CB tower is completely built (commit:960adb4e6fd78735f337b7a7ae66636aebc47ce7, #2139)
+   * Fix: Fix sensors logic under commander so attaching them isn't useless (commit:13f0587dd56600097d1180511fb1d8d7844a7437, #2146)
+   * Fix: Prevent lobby refresh and filter buttons from disappearing unless invalid data gets sent somehow (commit:2ae01399210fcf59931fb2060db7240561fa53c5, #2151)
+   * Fix: Only play "assigned to commander" sound if group is not full (commit:b2d5d011d3f40dbd806987298b52ecaf4e4b4390, #2156)
+   * Fix: Don't block ready status button when player clicks ready too fast (commit:6125af3677ef918c03b5c1d7cd1ebf9be54892ef, #2152)
+   * Fix: Primary AA turret units not attacking things if the Secondary could, among other fixes (commit:85145678baff20e9a9b111be195f2aa19346950b, #2172)
+   * Fix: Improve ManufactureOptions/StatsButton clickability (commit:c21187897b41a1213c8911c2b460c2fe79d130d8, #2166)
+ * Graphics:
+   * Change: Major revision to the Blender 2.9x pie addon (commit:344b5d327455b96a949ee6a71a8ae5c338a55056, #2180)
+   * Fix: OpenGL init resiliency (too many commits, #2121)
+ * Campaign:
+   * Change: Update Beta 11 mission objectives in the Intel menu (commit:cff3b7808c2082667467afb706466a21ac02bd21, #2181)
+   * Change: Increase default message duration times for campaigns (commit:d7a2c7a7bb876846b8cc9bf8064fa6ee141d3370, #2200)
+   * Change: Improve the Alpha 7 Intel objective text (commit:49a643ca287f2da5dfae8a2811581ca77b2ff55f, #2200)
+   * Change: Update camBalance for Gamma. Campaign rebalance is basically complete (commit:db7ed93ccd2ce2186b48c7e5dbaf9136ccc33b15, #2231)
+   * Fix: Allow mission objectives to persist into offworld missions (commit:bf4407e2ec8e33a8712f8264931908fa8327a98d, #2185)
+ * Multiplayer:
+   * Add: Spectator slots for multiplayer games + replay functionality for skirmish/multiplayer (too many commits, #2143, #2243, #2247)
+   * Add: Support non-0-index hostPlayer, configuring "spectatorHost" from autohost json (too many commits, #2212)
+   * Add: Headless / autohost enhancements, spectator stats, lobby chat slash commands, netplay bug fixes (too many commits, #2223)
+   * Add: Add new random maps "DustyMaze": one 2-player and two 4-player maps (too many commits, #2237)
+   * Change: Make lobby games scrollable (too many commits, #2155)
+   * Fix: Fix double host exit screen (commit:003d69fd8f665c8baeac1363bf6c3035294484f6, #2122)
+   * Fix: Properly load ttypes.ttp for script maps so water is shown and more (commit:33c0ec4d8f9863b765505b100cf54b3ef935e8c7, #2199)
+ * Scripting:
+   * Add: Add a way for scripts to determine if games are a challenge (commit:dae3c3fd9dfaf39301859cde8a2cff4aeca665f7, #2137)
+   * Change: Cleanup and improve JS API documentation (too many commits, #1872)
+ * Balance:
+   * Change: Make Machineguns less powerful short-term but not as to weaken them long-term (commit:1b0d9889dc0cb8d4cc7dcd27abd4066412145685, #2136)
+   * Change: Make phosphorus and thermite bombs less strong with only 2 bombs and a flamer modifier instead of artillery round (commit:072569f92526b34050a8de493e80e9f97de75f2b, #2147)
+   * Change: Tweak timeline and research cost of Bombard, Pepperpot, and Incendiary Mortar (commit:ca750cae70e865a320118311f89b793a8944be79, #2153)
+   * Change: Tweaks to Anti-Air research costs and timeline (commit:d096c058a0dbd51d7dccd13b32d4effb82367fc7, #2162)
+   * Change: Change the required research for the Nexus Link Turret and Nexus Resistance Circuits. Balancing weapon parameters (commit:ed2de106d2ab6935bdcdc6ac6720ba728023bb83, #2168)
+   * Change: Heavy Laser weight reduction from 20,000 to 5,000. Restoring the playability of this turret (commit:76ba3222ede7798a2d37c7a1d649c8cf51478a7c, #2171)
+   * Change: Additional reduction in the cost of Tank Killer and Super Tank Killer Cyborg research (commit:f406e7ad25ecbddf9d748a0a665056329df0048e, #2184)
+   * Change: Reducing the cost and time of producing black and red bodies to increase the relevance of their use (commit:643d39073e5b9562eb490ca499f000854b6ad170, #2194)
+   * Change: Increase Super Rail Cyborg range and reduce damage to maintain relevance (commit:0393afd4e8f3961fd129eb6788c6bc0f34472899, #2198)
+   * Change: Make the VTOL MG parameters more balanced by reducing damage (commit:2fc3c33e0e7ae1d87bdf0c00ff38b87c9c07d35a, #2201)
+   * Change: Change Howitzer research to not depend on Cannon Laser Designator, Bind Hellstorm Emplacement to Howitzer Emplacement, Increase Ground Shaker production time, reduce periodical damage on Incendiary Howitzer (commit:1720a7ec7000a0167f5b6848198a6063b3ee133f, #2202)
+   * Change: Improve accuracy of VTOL HMG (commit:2d21b6407e6a382bd8a61d36ccf72153c177f6de, #2204)
+   * Change: Swap precedence of VTOL Factory, VTOL Propulsion, and VTOL Rearming Pad (commit:726b2b9f83d292980c82a24819a7a32321e1fe25, #2213)
+   * Change: Nerf VTOL Heavy Laser range and damage, VTOL Pulse Laser damage, and VTOL Scourge Missile splash radius (commit:368d33e94c8bb1f37e965bb47a46564229d9a075, #2216)
+   * Change: Reduce costs of Anti-Air structures, Increase Stormbringer range, reduce weights of Tornado, Vindicator, Stormbringer, and Whirlwind, reduce build time for Whirlwind, and reduce total held rockets in Sunburst AA before a rearm (commit:9ea437be616ad1f9eef47f19208f66cdd8d78117, #2215)
+   * Change: start time Base 4.5 -> 3, AdvancedBase 7.9 -> 6.4 (commit:82c55fb6572874e10b17ca923af5507696e7e7e2, commit:d72f367913da71f948fd6f0d83665154405567dc, #2218, #2229)
+   * Change: Nerf Super Auto-Cannon Cyborg damage, improved ROF of HVC Cyborg, improved ROF of Super Tank-Killer Cyborg and Tank Killer Rocket (commit:8513682c3efa8f318d61475f28de048dc94634ee, #2220)
+   * Change: Increasing HVC turret range from 9 to 9.5 and decreasing weight from 4000 to 2500 to make HVC playable on light bodies, Slightly improved ROF for Super HVC Cyborg (commit:f6226b76ec0ab5d3887003a4400da307560876a7, #2221)
+   * Change: Balancing and rolling back to version 3.4.1 of some VTOL weapons damages and accuracy (commit:b2daf54b0ff3a378e45b694ae7255b18a90fcb4e, #2222)
+   * Change: Move Tank-Killer so it comes a littler earlier and only depend on the fifth rocket damage upgrade (commit:9dbecb0f75fc7628f12b5dc54cec7db09ba83cee, #2226)
+   * Change: Slight Incendiary Mortar research cost and timeline reduction (commit:e923492c8bbf2b55c072db1b34458b102bff1f51, #2230)
+ * Other:
+   * Add: Add autorating url in config (commit:242f322bce687cfa84c8ffbe6a25dbebb006e1fe, #2165)
+   * Change: Don't show enemy building being repaired (commit:fe1bfba7a6f9865b5378b3fa9c2705928afda954, #2141)
+   * Fix: Don't crash with JumpToResourceExtractor keybind after level reload (commit:0b8e502586507b74c45bbbc194501065a624e2dc, #2178)
+   * Fix: Don't double load a random backdrop on a connection cancel (commit:7e47d9779a3ed376ea569d4926725d25a0f6d9dd, #2239)
+
 2021-08-09: Version 4.1.3:
  * General:
    * Fix: clearLoadedMods(): Clear mod_hash_list (commit:dbd3921a02df1f45579c77b22706b0ffdc7b93bc, #2096)

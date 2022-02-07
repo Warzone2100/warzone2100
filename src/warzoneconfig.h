@@ -34,6 +34,8 @@
 #define	CAMERASPEED_DEFAULT	(2500)
 #define	CAMERASPEED_STEP	(100)
 
+#define MIN_MPINACTIVITY_MINUTES 4
+
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -114,6 +116,18 @@ JS_BACKEND war_getJSBackend();
 void war_setJSBackend(JS_BACKEND backend);
 bool war_getAutoAdjustDisplayScale();
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
+int war_getAutoLagKickSeconds();
+void war_setAutoLagKickSeconds(int seconds);
+bool war_getDisableReplayRecording();
+void war_setDisableReplayRecording(bool disable);
+uint32_t war_getMPInactivityMinutes();
+void war_setMPInactivityMinutes(uint32_t minutes);
+uint16_t war_getMPopenSpectatorSlots();
+void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
+int war_getFogEnd();
+int war_getFogStart();
+void war_setFogEnd(int end);
+void war_setFogStart(int start);
 
 /**
  * Enable or disable sound initialization

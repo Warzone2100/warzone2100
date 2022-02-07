@@ -113,22 +113,27 @@ SDWORD getLevelLoadType()
 	return levelLoadType;
 }
 
+static inline void freeLevel(LEVEL_DATASET* toDelete)
+{
+	for (auto &apDataFile : toDelete->apDataFiles)
+	{
+		if (apDataFile != nullptr)
+		{
+			free(apDataFile);
+		}
+	}
+
+	free(toDelete->pName);
+	free(toDelete->realFileName);
+	free(toDelete);
+}
+
 // shutdown the level system
 void levShutDown()
 {
 	for (auto toDelete : psLevels)
 	{
-		for (auto &apDataFile : toDelete->apDataFiles)
-		{
-			if (apDataFile != nullptr)
-			{
-				free(apDataFile);
-			}
-		}
-
-		free(toDelete->pName);
-		free(toDelete->realFileName);
-		free(toDelete);
+		freeLevel(toDelete);
 	}
 	psLevels.clear();
 }
@@ -165,6 +170,61 @@ LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 	return nullptr;
 }
 
+LEVEL_DATASET *levFindDataSetByRealFileName(char const *realFileName, Sha256 const *hash)
+{
+	if (hash != nullptr && hash->isZero())
+	{
+		hash = nullptr;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
+	}
+
+	for (auto psNewLevel : psLevels)
+	{
+		if (psNewLevel->realFileName && strcmp(psNewLevel->realFileName, realFileName) == 0)
+		{
+			if (hash == nullptr || levGetFileHash(psNewLevel) == *hash)
+			{
+				return psNewLevel;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+bool levRemoveDataSetByRealFileName(char const *realFileName, Sha256 const *hash)
+{
+	if (hash != nullptr && hash->isZero())
+	{
+		hash = nullptr;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
+	}
+
+	size_t numRemoved = 0;
+	for (auto it = psLevels.begin(); it != psLevels.end();)
+	{
+		LEVEL_DATASET *level = *it;
+		if (level && level->realFileName && strcmp(level->realFileName, realFileName) == 0)
+		{
+			if (hash == nullptr || levGetFileHash(level) == *hash)
+			{
+				if (psCurrLevel == *it)
+				{
+					ASSERT(false, "Trying to remove what is still the current level");
+					continue;
+				}
+
+				LEVEL_DATASET* toDelete = *it;
+				it = psLevels.erase(it);
+				freeLevel(toDelete);
+				++numRemoved;
+				continue;
+			}
+		}
+		++it;
+	}
+
+	return numRemoved > 0;
+}
+
 Sha256 levGetFileHash(LEVEL_DATASET *level)
 {
 	if (level->realFileName != nullptr && level->realFileHash.isZero())
@@ -173,6 +233,21 @@ Sha256 levGetFileHash(LEVEL_DATASET *level)
 		debug(LOG_WZ, "Hash of file \"%s\" is %s.", level->realFileName, level->realFileHash.toString().c_str());
 	}
 	return level->realFileHash;
+}
+
+bool levSetFileHashByRealFileName(char const *realFileName, Sha256 const &hash)
+{
+	size_t numAffected = 0;
+	for (auto psNewLevel : psLevels)
+	{
+		if (psNewLevel && psNewLevel->realFileName && strcmp(psNewLevel->realFileName, realFileName) == 0)
+		{
+			ASSERT(psNewLevel->realFileHash.isZero(), "Level already has a hash??");
+			psNewLevel->realFileHash = hash;
+			++numAffected;
+		}
+	}
+	return numAffected > 0;
 }
 
 Sha256 levGetMapNameHash(char const *mapName)
@@ -513,6 +588,7 @@ bool levReleaseMissionData()
 			}
 		}
 	}
+	releaseObjectives = true; // allow releasing mission objectives after quitting / saveload
 	return true;
 }
 
@@ -554,14 +630,14 @@ bool levReleaseAll()
 			}
 		}
 
+		psCurrLevel = nullptr;
+
 		if (!stageOneShutDown())
 		{
 			debug(LOG_ERROR, "Failed stage one shutdown");
 			return false;
 		}
 	}
-
-	psCurrLevel = nullptr;
 
 	return true;
 }
@@ -1056,7 +1132,14 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		gameTimeSetMod(Rational(500));
 		if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
 		{
-			jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+			if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
+			{
+				jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+			}
+			else
+			{
+				debug(LOG_INFO, "Skipping autogame auto-AI for selectedPlayer %" PRIu32 "", selectedPlayer);
+			}
 		}
 	}
 

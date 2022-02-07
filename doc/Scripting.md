@@ -16,11 +16,11 @@ directory. Here is an example of such a file that defines an AI implemented usin
 
 ```json
 {
-    "AI": {
+	"AI": {
 	"js": "semperfi.js",
-        "name": "SemperFi JavaScript",
-        "tip": "Prototypical JavaScript AI focusing on rockets/missiles"
-    }
+		"name": "SemperFi JavaScript",
+		"tip": "Prototypical JavaScript AI focusing on rockets/missiles"
+	}
 }
 ```
 
@@ -40,10 +40,10 @@ the 'for (... in ...)' construct to iterate over an array of objects. This does 
 like the following:
 
 ```javascript
-var droidlist = enumDroid(me, DROID_CONSTRUCT);
-for (var i = 0; i < droidlist.length; i++)
+const droidList = enumDroid(me, DROID_CONSTRUCT);
+for (let i = 0; i < droidList.length; i++)
 {
-	var droid = droidlist[i];
+	const droid = droidList[i];
 	...
 }
 ```
@@ -66,8 +66,7 @@ this case, you must implement your own rules for winning and losing, among other
 of such a scripts section:
 
 ```json
-"scripts":
-{
+"scripts": {
 	"rules": "towerdefense.js"
 }
 ```

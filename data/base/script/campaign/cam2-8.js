@@ -185,7 +185,7 @@ function eventStartLevel()
 	truckDefense();
 
 	queue("setupLandGroups", camSecondsToMilliseconds(50));
-	queue("vtolAttack", camMinutesToMilliseconds(1));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 	queue("enableFactories", camChangeOnDiff(camMinutesToMilliseconds(2.5)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

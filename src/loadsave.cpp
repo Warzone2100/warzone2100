@@ -26,6 +26,7 @@
  */
 
 #include <physfs.h>
+#include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include <ctime>
 
@@ -46,7 +47,6 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "frontend.h"
-#include "main.h"
 #include "display.h"
 #include "lib/netplay/netplay.h"
 #include "loop.h"
@@ -58,7 +58,8 @@
 #include "qtscript.h"
 #include "clparse.h"
 #include "ingameop.h"
-
+#include "game.h"
+#include "version.h"
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 64		// guessing 64 max chars for filename.
@@ -87,8 +88,6 @@
 #define LOADENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
-#define AUTOSAVE_CAM_DIR "savegames/campaign/auto"
-#define AUTOSAVE_SKI_DIR "savegames/skirmish/auto"
 
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -100,7 +99,9 @@ struct LoadSaveDisplayLoadSlotCache {
 };
 
 static std::shared_ptr<W_SCREEN> psRequestScreen = nullptr; // Widget screen for requester
-static	bool		mode;
+static bool modeLoad;
+static bool modeReplay;
+static bool modeIngame;
 static	UDWORD		chosenSlotId;
 
 bool				bLoadSaveUp = false;        // true when interface is up and should be run.
@@ -108,30 +109,27 @@ char				saveGameName[256];          //the name of the save game to load from the
 char				sRequestResult[PATH_MAX];   // filename returned;
 bool				bRequestLoad = false;
 bool				autosaveEnabled = true;
+bool                bRequestLoadReplay = false;
 LOADSAVE_MODE		bLoadSaveMode;
 static const char *savedTitle;
 static const char *sSaveGameExtension = ".gam";
+static const char *sSaveReplayExtension = ".wzrp";
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the specified filename looks like a saved game file, i.e. ends with .gam
-bool isASavedGamefile(const char* filename)
+// Note: this is left for backward compatibiiliy. Remove it later.
+static bool isASavedGamefile(const char *filename, const char *extension)
 {
-	static const size_t saveGameExtensionLength = strlen(sSaveGameExtension);
-
 	if (nullptr == filename)
 	{
 		return false;
 	}
 
 	size_t filenameLength = strlen(filename);
-	if (filenameLength <= saveGameExtensionLength)
-	{
-		// reject filename of insufficient length to contain "<anything>.gam"
-		return false;
-	}
-	return 0 == strcmp(filename + filenameLength - saveGameExtensionLength, sSaveGameExtension);
+	size_t extensionLength = strlen(extension);
+	// reject filename of insufficient length to contain "<anything>.gam"
+	return extensionLength < filenameLength && 0 == strcmp(filename + filenameLength - extensionLength, extension);
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
@@ -153,11 +151,56 @@ void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, 
 	psRequestScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
+static std::string getNewSaveGamePathFromMode(LOADSAVE_MODE savemode)
+{
+	std::string result;
+
+	switch (savemode)
+	{
+	case LOAD_FRONTEND_MISSION:
+	case LOAD_INGAME_MISSION:
+	case LOAD_MISSIONEND:
+		result = astringf("%s%s/", SaveGamePath, "campaign");
+		break;
+	case LOAD_FRONTEND_SKIRMISH:
+	case LOAD_INGAME_SKIRMISH:
+		result = astringf("%s%s/", SaveGamePath, "skirmish");
+		break;
+	case LOAD_FRONTEND_MISSION_AUTO:
+	case LOAD_INGAME_MISSION_AUTO:
+	case LOAD_MISSIONEND_AUTO:
+		result = astringf("%s%s/", SaveGamePath, "campaign/auto");
+		break;
+	case LOAD_FRONTEND_SKIRMISH_AUTO:
+	case LOAD_INGAME_SKIRMISH_AUTO:
+		result = astringf("%s%s/", SaveGamePath, "skirmish/auto");
+		break;
+	case SAVE_MISSIONEND:
+	case SAVE_INGAME_MISSION:
+		result = astringf("%s%s/", SaveGamePath, "campaign");
+		break;
+	case SAVE_INGAME_SKIRMISH:
+		result = astringf("%s%s/", SaveGamePath, "skirmish");
+		break;
+	case LOADREPLAY_FRONTEND_SKIRMISH:
+		result = astringf("%s%s/", ReplayPath, "skirmish");
+		break;
+	case LOADREPLAY_FRONTEND_MULTI:
+		result = astringf("%s%s/", ReplayPath, "multiplay");
+		break;
+	default:
+		ASSERT("Invalid load/save mode!", "Invalid load/save mode!");
+		result = astringf("%s%s/", SaveGamePath, "campaign");
+		break;
+	}
+
+	return result;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 {
-	bool bLoad = true;
-	char NewSaveGamePath[PATH_MAX] = {'\0'};
+	std::string NewSaveGamePath;
 	bLoadSaveMode = savemode;
 	savedTitle = title;
 	UDWORD			slotCount;
@@ -166,47 +209,34 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	static char	sSlotCaps[totalslots][totalslotspace];
 	static char	sSlotTips[totalslots][totalslotspace];
 
+	bool bLoad = true;
+	bool bReplay = false;
+	NewSaveGamePath = getNewSaveGamePathFromMode(savemode);
 	switch (savemode)
 	{
-	case LOAD_FRONTEND_MISSION:
-	case LOAD_INGAME_MISSION:
-	case LOAD_MISSIONEND:
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
-		break;
-	case LOAD_FRONTEND_SKIRMISH:
-	case LOAD_INGAME_SKIRMISH:
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
-		break;
-	case LOAD_FRONTEND_MISSION_AUTO:
-	case LOAD_INGAME_MISSION_AUTO:
-	case LOAD_MISSIONEND_AUTO:
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign/auto");
-		break;
-	case LOAD_FRONTEND_SKIRMISH_AUTO:
-	case LOAD_INGAME_SKIRMISH_AUTO:
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish/auto");
-		break;
 	case SAVE_MISSIONEND:
 	case SAVE_INGAME_MISSION:
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+	case SAVE_INGAME_SKIRMISH:
 		bLoad = false;
 		break;
-	case SAVE_INGAME_SKIRMISH:
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
-		bLoad = false;
+	case LOADREPLAY_FRONTEND_SKIRMISH:
+	case LOADREPLAY_FRONTEND_MULTI:
+		bReplay = true;
 		break;
 	default:
-		ASSERT("Invalid load/save mode!", "Invalid load/save mode!");
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
 		break;
 	}
 
-	mode = bLoad;
+	bool bIngame = bLoadSaveMode == LOAD_INGAME_MISSION || bLoadSaveMode == SAVE_INGAME_MISSION
+	    || bLoadSaveMode == LOAD_INGAME_SKIRMISH || bLoadSaveMode == SAVE_INGAME_SKIRMISH
+	    || bLoadSaveMode == LOAD_INGAME_MISSION_AUTO || bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO;
+
+	modeLoad = bLoad;
+	modeIngame = bIngame;
+	modeReplay = bReplay;
 	debug(LOG_SAVE, "called (%d, %s)", bLoad, title);
 
-	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
-	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
-	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
+	if (bIngame)
 	{
 		if (!bMultiPlayer || !NetPlay.bComms)
 		{
@@ -333,34 +363,76 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		}
 		else
 		{
-			button->pTip = mode? _("Autosave directory") : _("Autosave directory (not allowed for saving)");
+			button->pTip = modeLoad? _("Autosave directory") : _("Autosave directory (not allowed for saving)");
 			button->pText = "[auto]";
 		}
 		slotCount++;
 	}
 
-	debug(LOG_SAVE, "Searching \"%s\" for savegames", NewSaveGamePath);
+	debug(LOG_SAVE, "Searching \"%s\" for savegames", NewSaveGamePath.c_str());
 
 	// add savegame filenames minus extensions to buttons
 
 	struct SaveGameNamesAndTimes
 	{
 		std::string name;
-		time_t savetime;
+		int64_t epoch;
 
-		SaveGameNamesAndTimes(std::string name, time_t savetime)
+		SaveGameNamesAndTimes(std::string name, int64_t epoch)
 		: name(std::move(name))
-		, savetime(savetime)
+		, epoch(epoch)
 		{ }
 	};
 
 	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
+	const TagVer buildTagVer = version_extractVersionNumberFromTag(version_getLatestTag()).value();
+	try
+	{		
+		WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [NewSaveGamePath, &buildTagVer, &saveGameNamesAndTimes](const char* dirName){
+			if (strcmp(dirName, "auto") == 0)
+			{
+				return true; // continue
+			}
+			const auto saveInfoFilename = std::string(NewSaveGamePath) + dirName + "/save-info.json";
 
-	WZ_PHYSFS_enumerateFiles(NewSaveGamePath, [&NewSaveGamePath, &saveGameNamesAndTimes](char *i) -> bool {
+			// avoid spamming stdout if doesn't exist
+			if (!PHYSFS_exists(saveInfoFilename.c_str())) return true;
+
+			const auto saveInfoDataOpt = parseJsonFile(saveInfoFilename.c_str());
+			if (saveInfoDataOpt.has_value())
+			{
+				const auto saveInfoData = saveInfoDataOpt.value();
+				// decide what savegames are viewable/loadable
+				// assume that we can safely load games older than current version
+				const auto saveLatestTagArray = saveInfoData.at("latestTagArray").get<std::vector<uint16_t>>();
+				TagVer saveTagVer(saveLatestTagArray, "");
+				if (saveTagVer <= buildTagVer)
+				{
+					// looks like loadable
+					saveGameNamesAndTimes.emplace_back(std::string(dirName), saveInfoData.at("epoch").get<int64_t>());
+				}
+				else
+				{
+					debug(LOG_SAVEGAME, "not showing savegame '%s', because version is higher than this game", saveInfoFilename.c_str());
+				}
+			}
+			return true;
+		});
+	} catch( nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "can't load game: %s", e.what());
+		// continue, because still may find old .gam to load
+	}
+
+	char const *extension = bReplay? sSaveReplayExtension : sSaveGameExtension;
+	size_t extensionLen = strlen(extension);
+	// Note: this is left for backward compatibility reasons.
+	// we want to be able to load .gam but only when no save-info was found
+	WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension, extensionLen](char *i) -> bool {
 		char savefile[256];
 		time_t savetime;
 
-		if (!isASavedGamefile(i))
+		if (!isASavedGamefile(i, extension))
 		{
 			// If it doesn't, move on to the next filename
 			return true;
@@ -369,11 +441,19 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		debug(LOG_SAVE, "We found [%s]", i);
 
 		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, i);
+		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath.c_str(), i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 
-		(i)[strlen(i) - 4] = '\0'; // remove .gam extension
-
+		(i)[strlen(i) - extensionLen] = '\0'; // remove .gam/.wzrp extension
+		for(auto &el: saveGameNamesAndTimes)
+		{
+			// only add if doesn't exist yet
+			// also don't compare std::string, to avoid building std::string from char*
+			if (strcmp(i, el.name.c_str()) == 0)
+			{
+				return true; // move to next
+			}
+		}
 		saveGameNamesAndTimes.emplace_back(i, savetime);
 		return true;
 	});
@@ -381,7 +461,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	// Sort the save games so that the most recent one appears first
 	std::sort(saveGameNamesAndTimes.begin(),
 			  saveGameNamesAndTimes.end(),
-			  [](SaveGameNamesAndTimes& a, SaveGameNamesAndTimes& b) { return a.savetime > b.savetime; });
+			  [](SaveGameNamesAndTimes& a, SaveGameNamesAndTimes& b) { return a.epoch > b.epoch; });
 
 	// Now store the sorted save game names to the buttons
 	slotCount = 1;
@@ -389,7 +469,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		{
 			/* Set the button-text and tip text (the save time) into static storage */
 			sstrcpy(sSlotCaps[slotCount], saveGameNameAndTime.name.c_str());
-			auto newtime = getLocalTime(saveGameNameAndTime.savetime);
+			auto newtime = getLocalTime(saveGameNameAndTime.epoch);
 			strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", &newtime);
 
 			/* Add a button that references the static strings */
@@ -411,9 +491,7 @@ bool closeLoadSave(bool goBack)
 {
 	bLoadSaveUp = false;
 
-	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
-	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
-	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
+	if (modeIngame)
 	{
 		if (goBack)
 		{
@@ -453,65 +531,132 @@ bool closeLoadSaveOnShutdown()
 	filename reference.  We delete this file, any .es file with the same
 	name, and any files in the directory with the same name.
 ***************************************************************************/
-void deleteSaveGame(char *fileName)
+// TODO: Replace the old uses of .gam files with the savegame folder and call deleteSaveGame directly?
+void deleteSaveGame_classic(const char *gamFileName)
 {
-	ASSERT(strlen(fileName) < MAX_STR_LENGTH, "deleteSaveGame; save game name too long");
+	ASSERT_OR_RETURN(, gamFileName != nullptr, "Null gamFileName");
+	std::string gamFolderPath = gamFileName;
 
-	PHYSFS_delete(fileName);
-	fileName[strlen(fileName) - 4] = '\0'; // strip extension
+	// Old method of stripping file extension - makes lots of assumptions (like there *is* a file extension and it has a length of 4 including the period)
+	ASSERT_OR_RETURN(, gamFolderPath.size() > 4, "Input gamFileName too short?: %s", gamFileName);
+	gamFolderPath.resize(gamFolderPath.size() - 4);
 
-	strcat(fileName, ".es");					// remove script data if it exists.
-	PHYSFS_delete(fileName);
-	fileName[strlen(fileName) - 3] = '\0'; // strip extension
+	deleteSaveGame(gamFolderPath);
+}
+
+void deleteSaveGame(std::string saveGameFolderPath)
+{
+	// Remove any trailing path separators (/)
+	while (!saveGameFolderPath.empty() && (saveGameFolderPath.rfind("/", std::string::npos) == (saveGameFolderPath.length() - 1)))
+	{
+		saveGameFolderPath.resize(saveGameFolderPath.length() - 1); // Remove trailing path separators
+	}
+
+	// First, check if some old files in the parent directory (named the same as this directory, but with specific extensions) exist
+	// (since we removed trailing directory separators above, we can just append the appropriate file extensions)
+	std::string oldParentFile = saveGameFolderPath + ".gam";
+	if (PHYSFS_exists(WzString::fromUtf8(oldParentFile)) != 0)
+	{
+		PHYSFS_delete(oldParentFile.c_str());
+	}
+	oldParentFile = saveGameFolderPath + ".es"; // ancient script data file
+	if (PHYSFS_exists(WzString::fromUtf8(oldParentFile)) != 0)
+	{
+		PHYSFS_delete(oldParentFile.c_str());
+	}
 
 	// check for a directory and remove that too.
-	WZ_PHYSFS_enumerateFiles(fileName, [fileName](const char *i) -> bool {
-		char del_file[PATH_MAX];
-
+	WZ_PHYSFS_enumerateFiles(saveGameFolderPath.c_str(), [saveGameFolderPath](const char *i) -> bool {
 		// Construct the full path to the file by appending the
 		// filename to the directory it is in.
-		snprintf(del_file, sizeof(del_file), "%s/%s", fileName, i);
+		std::string del_file = astringf("%s/%s", saveGameFolderPath.c_str(), i);
 
-		debug(LOG_SAVE, "Deleting [%s].", del_file);
+		debug(LOG_SAVE, "Deleting [%s].", del_file.c_str());
 
 		// Delete the file
-		if (!PHYSFS_delete(del_file))
+		if (!PHYSFS_delete(del_file.c_str()))
 		{
-			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file, WZ_PHYSFS_getLastError());
+			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file.c_str(), WZ_PHYSFS_getLastError());
 		}
 		return true; // continue
 	});
 
-	if (!PHYSFS_delete(fileName))		// now (should be)empty directory
+	if (WZ_PHYSFS_isDirectory(saveGameFolderPath.c_str()) && !PHYSFS_delete(saveGameFolderPath.c_str()))		// now (should be)empty directory
 	{
-		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", fileName, WZ_PHYSFS_getLastError());
+		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", saveGameFolderPath.c_str(), WZ_PHYSFS_getLastError());
 	}
 }
 
-char lastSavePath[PATH_MAX];
+SaveGamePath_t lastSavePath;
 bool lastSaveMP;
-static time_t lastSaveTime;
+static int64_t lastSaveTime;
 
-static bool findLastSaveFrom(const char *path)
+static bool findLastSaveFrom(SAVEGAME_LOC loc)
 {
 	bool found = false;
+	const char *path = SaveGameLocToPath[loc];
+	debug(LOG_SAVEGAME, "looking for last save in %s", path);
+	const std::string pathToCommonSaveDir = std::string(path);
+	try
+	{
+		WZ_PHYSFS_enumerateFolders(pathToCommonSaveDir, [&found, &pathToCommonSaveDir, loc] (const char * dirName) {
+			if (strcmp(dirName, "auto") == 0)
+			{
+				// skip "auto" folder, it will be iterated on its own
+				return true;
+			}
+			const std::string pathToSaveInfo = pathToCommonSaveDir + + "/" + std::string(dirName) + "/save-info.json";
+			if (PHYSFS_exists(pathToSaveInfo.c_str()))
+			{
+				const auto saveInfoDataOpt = parseJsonFile(pathToSaveInfo.c_str());
+				if (!saveInfoDataOpt.has_value())
+				{
+					debug(LOG_SAVEGAME, "wierd directory without save-info.json: %s", dirName);
+					return true;
+				}
+				const auto saveInfo = saveInfoDataOpt.value();
+				const auto epoch = saveInfo.at("epoch").get<int64_t>();
+				if (epoch > lastSaveTime)
+				{
+					lastSaveTime = epoch;
+					found = true;
+					lastSavePath.loc = loc;
+					lastSavePath.gameName = std::string(dirName);
+					debug(LOG_SAVEGAME, "found last saved game: %s%s", pathToCommonSaveDir.c_str(), lastSavePath.gameName.c_str());
+				}
+			}
+			return true;
+		});
+	} catch (nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "find last save failed:%s", e.what());
+		return false;
+	}
 
-	WZ_PHYSFS_enumerateFiles(path, [&path, &found](const char *i) -> bool {
+
+	// Note: this is left for backward compatibility with old .gam files
+	// Remove it later
+	WZ_PHYSFS_enumerateFiles(path, [&path, &found, loc](const char *i) -> bool {
 		char savefile[PATH_MAX];
 		time_t savetime;
 
-		if (!isASavedGamefile(i))
+		if (!isASavedGamefile(i, sSaveGameExtension))
 		{
 			// If it doesn't, move on to the next filename
 			return true;
 		}
+		char tmp[PATH_MAX] = {0};
+		strncpy(tmp, i, PATH_MAX - 1);
+		// strip .gam extension
+		tmp[strlen(i) - 4] = '\0';
 		/* Figure save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", path, i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 		if (difftime(savetime, lastSaveTime) > 0.0)
 		{
 			lastSaveTime = savetime;
-			strcpy(lastSavePath, savefile);
+			lastSavePath.loc = loc;
+			lastSavePath.gameName = std::string(tmp);
 			found = true;
 		}
 		return true;
@@ -521,28 +666,17 @@ static bool findLastSaveFrom(const char *path)
 
 bool findLastSave()
 {
-	char NewSaveGamePath[PATH_MAX] = {'\0'};
 	bool foundMP, foundCAM;
-
 	lastSaveTime = 0;
-	lastSaveMP = false;
-	lastSavePath[0] = '\0';
-	ssprintf(NewSaveGamePath, "%scampaign/", SaveGamePath);
-	foundCAM = findLastSaveFrom(NewSaveGamePath);
-	ssprintf(NewSaveGamePath, "%scampaign/auto/", SaveGamePath);
-	foundCAM |= findLastSaveFrom(NewSaveGamePath);
-	ssprintf(NewSaveGamePath, "%sskirmish/", SaveGamePath);
-	foundMP = findLastSaveFrom(NewSaveGamePath);
-	ssprintf(NewSaveGamePath, "%sskirmish/auto/", SaveGamePath);
-	foundMP |= findLastSaveFrom(NewSaveGamePath);
-	if (foundMP)
-	{
-		lastSaveMP = true;
-	}
+	foundCAM = findLastSaveFrom(SAVEGAME_LOC_CAM);
+	foundCAM |= findLastSaveFrom(SAVEGAME_LOC_CAM_AUTO);
+	foundMP = findLastSaveFrom(SAVEGAME_LOC_SKI);
+	foundMP |= findLastSaveFrom(SAVEGAME_LOC_SKI_AUTO);
+	lastSaveMP = foundMP;
 	return foundMP | foundCAM;
 }
 
-static WzString suggestSaveName(const char *NewSaveGamePath)
+static WzString suggestSaveName(const char *saveGamePath)
 {
 	const WzString levelName = getLevelName();
 	const std::string cheatedSuffix = Cheated ? _("cheated") : "";
@@ -576,26 +710,23 @@ static WzString suggestSaveName(const char *NewSaveGamePath)
 				humanPlayers++;
 			}
 		}
-
 		ssprintf(saveNamePartial, "%s %dp %s", levelName.toStdString().c_str(), humanPlayers, cheatedSuffix.c_str());
 	}
 
 	WzString saveName = WzString(saveNamePartial).trimmed();
 	int similarSaveGames = 0;
-	WZ_PHYSFS_enumerateFiles(NewSaveGamePath, [&similarSaveGames, &saveName](const char *fileName) -> bool {
-		if (isASavedGamefile(fileName) && WzString(fileName).startsWith(saveName))
+	WZ_PHYSFS_enumerateFolders(saveGamePath, [&saveName, &similarSaveGames](const char *dirName){
+		if (WzString(dirName).startsWith(saveName))
 		{
 			similarSaveGames++;
 		}
 		return true;
 	});
 
-
 	if (similarSaveGames > 0)
 	{
 		saveName += " " + WzString::number(similarSaveGames + 1);
 	}
-
 	return saveName;
 }
 
@@ -603,6 +734,7 @@ static void runLoadSaveCleanup(bool resetWidgets, bool goBack)
 {
 	closeLoadSave(goBack);
 	bRequestLoad = false;
+	bRequestLoadReplay = false;
 	if (!goBack && resetWidgets && widgGetFromID(psWScreen, IDMISSIONRES_FORM) == nullptr)
 	{
 		resetMissionWidgets();
@@ -611,11 +743,20 @@ static void runLoadSaveCleanup(bool resetWidgets, bool goBack)
 
 static void runLoadCleanup()
 {
-	int campaign = getCampaign(sRequestResult);
+	bRequestLoadReplay = modeReplay;
+	bRequestLoad = !modeReplay;
+	if (modeReplay)
+	{
+		// Load a replay.
+		closeLoadSave();
+		return;
+	}
+
+	// Load a savegame.
+	unsigned campaign = getCampaign(sRequestResult);
 	setCampaignNumber(campaign);
 	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
 	closeLoadSave();
-	bRequestLoad = true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -625,7 +766,7 @@ static void runLoadCleanup()
 bool runLoadSave(bool bResetMissionWidgets)
 {
 	static char     sDelete[PATH_MAX];
-	char NewSaveGamePath[PATH_MAX] = {'\0'};
+	std::string		NewSaveGamePath;
 
 	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -637,29 +778,8 @@ bool runLoadSave(bool bResetMissionWidgets)
 		runLoadSaveCleanup(bResetMissionWidgets, true);
 		return true;
 	}
-	if (bMultiPlayer)
-	{
-		if (bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO)
-		{
-			ssprintf(NewSaveGamePath, "%s%s/auto/", SaveGamePath, "skirmish");
-		}
-		else
-		{
-			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
-		}
-	}
-	else
-	{
-		if (bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO)
-		{
-			ssprintf(NewSaveGamePath, "%s%s/auto/", SaveGamePath, "campaign");
-		}
-		else
-		{
-			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
-		}
-	}
-	if (id == LOADENTRY_START && mode) // [auto] or [..], ignore click for saves
+	NewSaveGamePath = getNewSaveGamePathFromMode(bLoadSaveMode);
+	if (id == LOADENTRY_START && modeLoad) // [auto] or [..], ignore click for saves
 	{
 		int iLoadSaveMode = (int)bLoadSaveMode; // for evil integer arithmetics
 		bLoadSaveMode = (enum LOADSAVE_MODE)(iLoadSaveMode ^ 16); // toggle _AUTO bit
@@ -672,16 +792,13 @@ bool runLoadSave(bool bResetMissionWidgets)
 	{
 		W_BUTTON *slotButton = (W_BUTTON *)widgGetFromID(psRequestScreen, id);
 
-		if (mode)								// Loading, return that entry.
+		if (modeLoad)								// Loading, return that entry.
 		{
-			if (!slotButton->pText.isEmpty())
+			if (slotButton->pText.isEmpty())
 			{
-				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), sSaveGameExtension);
+				return false;  // clicked on an empty box
 			}
-			else
-			{
-				return false;				// clicked on an empty box
-			}
+			ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath.c_str(), ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), modeReplay? sSaveReplayExtension : sSaveGameExtension);
 
 			runLoadCleanup();
 			return true;
@@ -703,11 +820,11 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 				if (!slotButton->pText.isEmpty())
 				{
-					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().c_str(), sSaveGameExtension);
+					ssprintf(sDelete, "%s%s%s", NewSaveGamePath.c_str(), slotButton->pText.toUtf8().c_str(), sSaveGameExtension);
 				}
 				else
 				{
-					WzString suggestedSaveName = suggestSaveName(NewSaveGamePath);
+					WzString suggestedSaveName = suggestSaveName(NewSaveGamePath.c_str());
 					saveEntryEdit->setString(suggestedSaveName);
 					sstrcpy(sDelete, "");
 				}
@@ -740,7 +857,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		// scan to see if that game exists in another slot, if so then fail.
 		sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 
-		for (int i = LOADENTRY_START; i < LOADENTRY_END; i++)
+		for (unsigned i = LOADENTRY_START; i < LOADENTRY_END; ++i)
 		{
 			if (i != chosenSlotId)
 			{
@@ -750,7 +867,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 				{
 					widgDelete(psRequestScreen, SAVEENTRY_EDIT);	//unselect this box, and go back ..
 					widgReveal(psRequestScreen, chosenSlotId);
-					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+					audio_PlayBuildFailedOnce();
 					return true;
 				}
 			}
@@ -762,10 +879,10 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 			removeWildcards(sTemp);
-			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath, sTemp, sSaveGameExtension);
+			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath.c_str(), sTemp, sSaveGameExtension);
 			if (strlen(sDelete) != 0)
 			{
-				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
+				deleteSaveGame_classic(sDelete);	//only delete game if a new game fills the slot
 			}
 		}
 
@@ -903,50 +1020,58 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 	drawBlueBoxInset(x - 1, y - 1, w + 2, h + 2);
 }
 
-static void freeAutoSaveSlot(const char *path)
+// Note: remove later at some point
+// returns true if something was deleted
+static bool freeAutoSaveSlot_old(const char *path)
 {
-	char **i, **files;
-	files = PHYSFS_enumerateFiles(path);
-	ASSERT_OR_RETURN(, files, "PHYSFS_enumerateFiles(\"%s\") failed: %s", path, WZ_PHYSFS_getLastError());
-	int nfiles = 0;
-	for (i = files; *i != nullptr; ++i)
+	return WZ_PHYSFS_cleanupOldFilesInFolder(path, sSaveGameExtension, -1, [](const char *fileName){ deleteSaveGame_classic(fileName); return true; }) > 0;
+}
+
+static void freeAutoSaveSlot(SAVEGAME_LOC loc)
+{
+	const char *path = SaveGameLocToPath[loc];
+	int64_t oldestEpoch = INT64_MAX;
+	std::string oldestKey;
+	unsigned count = 0;
+	try
 	{
-		if (!isASavedGamefile(*i))
-		{
-			// If it doesn't, move on to the next filename
-			continue;
-		}
-		nfiles++;
-	}
-	if (nfiles < totalslots)
+		WZ_PHYSFS_enumerateFolders(path, [path, &oldestKey, &oldestEpoch, &count](const char* dirName){
+			if (strcmp(dirName, "auto") == 0)
+			{
+				return true; // continue
+			}
+			count++;
+			const auto saveInfoFilename = std::string(path) + "/" + dirName + "/save-info.json";
+			auto saveInfoDataOpt = parseJsonFile(saveInfoFilename.c_str());
+			if (!saveInfoDataOpt.has_value() && !PHYSFS_exists(saveInfoFilename.c_str()))
+			{
+				// nothing to do, this has been handled by old routine
+				return true; 
+			}
+			const auto saveInfoData = saveInfoDataOpt.value();
+			const auto epoch = saveInfoData.at("epoch").get<int64_t>();
+			if (epoch < oldestEpoch)
+			{
+				oldestEpoch = epoch;
+				oldestKey = std::string(dirName);
+			}
+			return true;
+		});
+	} catch (nlohmann::json::exception &e)
 	{
-		PHYSFS_freeList(files);
+		debug(LOG_ERROR, "failed to remove an autosave game: %s", e.what());
 		return;
 	}
 
-	// too many autosaves, let's delete the oldest
-	char oldestSavePath[PATH_MAX];
-	time_t oldestSaveTime = time(nullptr);
-	for (i = files; *i != nullptr; ++i)
+	if (count < totalslots)
 	{
-		char savefile[PATH_MAX];
-
-		if (!isASavedGamefile(*i))
-		{
-			// If it doesn't, move on to the next filename
-			continue;
-		}
-		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", path, *i);
-		time_t savetime = WZ_PHYSFS_getLastModTime(savefile);
-		if (difftime(savetime, oldestSaveTime) < 0.0)
-		{
-			oldestSaveTime = savetime;
-			strcpy(oldestSavePath, savefile);
-		}
+		return;
 	}
-	PHYSFS_freeList(files);
-	deleteSaveGame(oldestSavePath);
+	ASSERT(oldestKey.size() > 0, "Bug: oldestKey can't be empty here");
+	char savefile[PATH_MAX];
+	snprintf(savefile, sizeof(savefile), "%s/%s.gam", path, oldestKey.c_str());
+	debug(LOG_SAVEGAME, "deleting the oldest autosave file %s", savefile);
+	deleteSaveGame_classic(savefile);
 }
 
 bool autoSave()
@@ -957,9 +1082,20 @@ bool autoSave()
 	{
 		return false;
 	}
-	const char *dir = bMultiPlayer? AUTOSAVE_SKI_DIR : AUTOSAVE_CAM_DIR;
-	freeAutoSaveSlot(dir);
+	// Bail out if we're running a replay
+	if (NETisReplay())
+	{
+		return false;
+	}
+	const char *dir = bMultiPlayer? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
+	// Backward compatibility: remove later
+	if (!freeAutoSaveSlot_old(dir))
+	{
+		// no old .gam found: check for new saves
+		freeAutoSaveSlot(bMultiPlayer? SAVEGAME_LOC_SKI_AUTO: SAVEGAME_LOC_CAM_AUTO);
 
+	}
+	
 	time_t now = time(nullptr);
 	struct tm timeinfo = getLocalTime(now);
 	char savedate[PATH_MAX];
@@ -970,12 +1106,12 @@ bool autoSave()
 	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, withoutTechlevel.c_str(), savedate);
 	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
 	{
-		console("AutoSave %s", savefile);
+		console(_("AutoSave %s"), savefile);
 		return true;
 	}
 	else
 	{
-		console("AutoSave %s failed", savefile);
+		console(_("AutoSave %s failed"), savefile);
 		return false;
 	}
 }

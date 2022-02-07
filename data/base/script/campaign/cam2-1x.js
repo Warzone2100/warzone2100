@@ -130,7 +130,7 @@ function eventStartLevel()
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	//Add crash site blip and from an alliance with the crashed team.
-	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
 
 	//set downed transport team colour to be Project Green.

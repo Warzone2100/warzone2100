@@ -20,11 +20,11 @@ camAreaEvent("AttackArea1", function(droid)
 	// sic! hill factory
 	camSetFactoryData("base2factory", {
  		assembly: "assembly2",
-		order: CAM_ORDER_ATTACK,  // changes
+		order: CAM_ORDER_ATTACK, // changes
 		data: { pos: "playerBase" }, // changes
 		groupSize: 10, // changes
 		maxSize: 10,
-		throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
+		throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 15)),
 		templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin, ] // changes
 	});
 	camEnableFactory("base2factory"); // re-enable
@@ -120,7 +120,7 @@ function eventStartLevel()
 		},
 	});
 
-	camPlayVideos("MB1B_MSG");
+	camPlayVideos({video: "MB1B_MSG", type: MISS_MSG});
 	camDetectEnemyBase("base4group"); // power surge detected
 
 	camSetFactories({
@@ -130,7 +130,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 6,
 			maxSize: 6,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(8)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 11 : 8)),
 			templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin ]
 		},
 		"base2factory": { // the hill harass factory
@@ -143,7 +143,7 @@ function eventStartLevel()
 			group: camMakeGroup("hillForce"), // will override later
 			groupSize: 4, // will override later
 			maxSize: 10,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(18)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 24 : 18)),
 			templates: [ cTempl.bloketwin ] // will override later
 		},
 		"base4factory": {
@@ -152,7 +152,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
  			groupSize: 8,
 			maxSize: 8,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(12)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 16 : 12)),
 			templates: [ cTempl.trike, cTempl.bloketwin, cTempl.buggytwin, cTempl.bjeeptwin ]
 		},
 	});

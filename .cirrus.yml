@@ -7,14 +7,14 @@ freebsd_build_task:
   freebsd_instance:
     # See the list of available FreeBSD image families here: https://cirrus-ci.org/guide/FreeBSD/
     matrix:
+      - image_family: freebsd-13-0 # FreeBSD 13.0-RELEASE
       - image_family: freebsd-12-2 # FreeBSD 12.2-RELEASE
-      - image_family: freebsd-11-4 # FreeBSD 11.4-RELEASE
 #    cpu: 4
 #    memory: 8G
 
   install_script:
     - pkg update -f
-    - pkg clean -a
+    - pkg clean -a -y
     - pkg install -y git cmake ninja p7zip gettext pkgconf png sdl2 openal-soft physfs libvorbis libtheora freetype2 harfbuzz curl libsodium sqlite3 rubygem-asciidoctor
 
   init_git_submodules_script: git submodule update --init --recursive
@@ -45,7 +45,7 @@ freebsd_build_task:
 #     - brew install cmake
 #     - brew install gettext
 #     # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-#     - sudo gem install asciidoctor -v 2.0.15 --no-document
+#     - sudo gem install asciidoctor -v 2.0.16 --no-document
 #     # gcc6+ is currently required to bootstrap vcpkg on macOS
 #     - brew install gcc@7
 #     - sudo bundle install --gemfile="macosx/BuildBot/Gemfile"

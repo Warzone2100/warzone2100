@@ -134,6 +134,7 @@ static inline void updateTileVis(MAPTILE *psTile)
 
 uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry)
 {
+	ASSERT_OR_RETURN(0, player >= 0 && player < MAX_PLAYERS, "invalid player: %d", player);
 	SPOTTER *psSpot = new SPOTTER(x, y, player, radius, (int)radar, expiry);
 	size_t size;
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
@@ -454,6 +455,11 @@ void revealAll(UBYTE player)
 	SDWORD   i, j;
 	MAPTILE	*psTile;
 
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
 	//reveal all tiles
 	for (i = 0; i < mapWidth; i++)
 	{
@@ -642,13 +648,16 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 
 bool hasSharedVision(unsigned viewer, unsigned ally)
 {
-	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
+	if (viewer >= MAX_PLAYERS) { return false; }
+	ASSERT_OR_RETURN(false, ally < MAX_PLAYERS, "Bad ally %u (viewer: %u)", ally, viewer);
 
 	return viewer == ally || (bMultiPlayer && alliancesSharedVision(game.alliance) && aiCheckAlliances(viewer, ally));
 }
 
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
+	if (viewer >= MAX_PLAYERS) { return; }
+
 	//forward out vision to our allies
 	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
@@ -661,6 +670,8 @@ static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX
 
 static void setSeenByInstantly(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
+	if (viewer >= MAX_PLAYERS) { return; }
+
 	//forward out vision to our allies
 	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
@@ -889,6 +900,11 @@ void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player)
 	STRUCTURE	*psStructure;
 	FEATURE_STATS const *psStats;
 	MAPTILE		*psTile;
+
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
 
 	if (psObj->type == OBJ_FEATURE)
 	{

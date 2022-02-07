@@ -1,6 +1,6 @@
 function placeOilDrum()
 {
-	var drums = enumFeature(-1, "OilDrum").length;
+	var drums = enumFeature(ALL_PLAYERS, "OilDrum").length;
 	if (drums >= oilDrumData.maxOilDrums)
 	{
 		return;

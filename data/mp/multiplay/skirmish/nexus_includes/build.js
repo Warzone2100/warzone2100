@@ -228,8 +228,49 @@ function grabTrucksAndBuild(stat, location, tileRange, maxBlockingTiles, group)
 	return (numHelpDroids > 0);
 }
 
+function bringBackOilTrucks()
+{
+	var builders = enumGroup(groups.oilBuilders);
+
+	for (var i = 0, len = builders.length; i < len; ++i)
+	{
+		if (builders[i].order !== DORDER_RECYCLE &&
+			builders[i].order !== DORDER_RTB)
+		{
+			orderDroid(builders[i], DORDER_RTB);
+		}
+	}
+}
+
+function skipOilGrabIfEasy()
+{
+	if (difficulty === EASY)
+	{
+		var myDerrickCount = enumStruct(me, BASE_STRUCTURES.derricks).filter(function(obj) {
+			return obj.status === BUILT;
+		}).length;
+		var enemies = getAliveEnemyPlayers();
+
+		for (var i = 0, len = enemies.length; i < len; ++i)
+		{
+			if (myDerrickCount >= 3 && (myDerrickCount + 1) >= countStruct(BASE_STRUCTURES.derricks, enemies[i]) && enemies[i] !== scavengerPlayer)
+			{
+				bringBackOilTrucks();
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 function buildDerrick()
 {
+	if (skipOilGrabIfEasy())
+	{
+		return;
+	}
+
 	var numBusy = 0;
 	var droids = enumGroup(groups.oilBuilders);
 	var drLen = droids.length;
@@ -246,7 +287,7 @@ function buildDerrick()
 		return;
 	}
 
-	var oils = enumFeature(-1, FEATURE_STATS.oils).sort(sortByDistToBase);
+	var oils = enumFeature(ALL_PLAYERS, FEATURE_STATS.oils).sort(sortByDistToBase);
 
 	for (var i = 0, oilLen = oils.length; i < oilLen; ++i)
 	{

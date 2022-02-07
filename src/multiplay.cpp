@@ -29,7 +29,6 @@
 #include <chrono>
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/physfs_ext.h"
@@ -42,6 +41,8 @@
 #include "research.h"
 #include "display3d.h"								// for changing the viewpoint
 #include "console.h"								// for screen messages
+#include "clparse.h"
+#include "data.h"
 #include "power.h"
 #include "cmddroid.h"								//  for commanddroidupdatekills
 #include "wrappers.h"								// for game over
@@ -60,6 +61,8 @@
 #include "keybind.h"
 #include "qtscript.h"
 #include "design.h"
+#include "advvis.h"
+#include "lighting.h" // for reInitPaletteAndFog()
 
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
@@ -75,13 +78,17 @@
 #include "multiint.h"
 #include "activity.h"
 #include "lib/framework/wztime.h"
+#include "chat.h" // for InGameChatMessage
+#include "warzoneconfig.h"
+#include "stdinreader.h"
+#include "spectatorwidgets.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
 bool						bMultiPlayer				= false;	// true when more than 1 player.
 bool						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
-bool						openchannels[MAX_PLAYERS] = {true};
+bool						openchannels[MAX_CONNECTED_PLAYERS] = {true};
 UBYTE						bDisplayMultiJoiningStatus;
 
 MULTIPLAYERGAME				game;									//info to describe game.
@@ -90,13 +97,98 @@ MULTIPLAYERINGAME			ingame;
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
+#define DATACHECK2_INTERVAL_MS 10000
+
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
 static bool recvBeacon(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
+static bool sendDataCheck2();
 
 void startMultiplayerGame();
+
+// ////////////////////////////////////////////////////////////////////////////
+// Auto Lag Kick Handling
+
+#define LAG_INITIAL_LOAD_GRACEPERIOD 60
+#define LAG_CHECK_INTERVAL 1000
+const std::chrono::milliseconds LagCheckInterval(LAG_CHECK_INTERVAL);
+
+static void sendTextMessage(const char* msg)
+{
+	auto message = InGameChatMessage(selectedPlayer, msg);
+	message.send();
+}
+
+static void autoLagKickRoutine()
+{
+	if (!NetPlay.isHost)
+	{
+		return;
+	}
+
+	int LagAutoKickSeconds = war_getAutoLagKickSeconds();
+	if (LagAutoKickSeconds <= 0)
+	{
+		return;
+	}
+
+	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastLagCheck) < LagCheckInterval)
+	{
+		return;
+	}
+
+	ingame.lastLagCheck = now;
+	uint32_t playerCheckLimit = (!ingame.TimeEveryoneIsInGame.has_value()) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
+	for (uint32_t i = 0; i < playerCheckLimit; ++i)
+	{
+		if (!isHumanPlayer(i))
+		{
+			continue;
+		}
+		if (i > MAX_PLAYERS && !gtimeShouldWaitForPlayer(i))
+		{
+			continue;
+		}
+		bool isLagging = (ingame.PingTimes[i] >= PING_LIMIT);
+		bool isWaitingForInitialLoad = !ingame.TimeEveryoneIsInGame.has_value() && ingame.JoiningInProgress[i];
+		if (isWaitingForInitialLoad && (std::chrono::duration_cast<std::chrono::seconds>(now - ingame.startTime) < std::chrono::seconds(LAG_INITIAL_LOAD_GRACEPERIOD)))
+		{
+			isLagging = false;
+			isWaitingForInitialLoad = false;
+		}
+		if (!isLagging && !isWaitingForInitialLoad)
+		{
+			if(ingame.LagCounter[i] > 0)
+			{
+				ingame.LagCounter[i]--;
+			}
+			continue;
+		}
+
+		ingame.LagCounter[i]++;
+		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+			wz_command_interface_output("WZEVENT: lag-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
+			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION);
+			ingame.LagCounter[i] = 0;
+		}
+		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+		}
+		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+		}
+	}
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
@@ -120,6 +212,11 @@ bool multiplayerWinSequence(bool firstCall)
 	static UDWORD last = 0;
 	float		rotAmount;
 	STRUCTURE	*psStruct;
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
 
 	if (firstCall)
 	{
@@ -203,7 +300,7 @@ bool multiPlayerLoop()
 	UBYTE		joinCount;
 
 	joinCount = 0;
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (isHumanPlayer(i) && ingame.JoiningInProgress[i])
 		{
@@ -234,30 +331,35 @@ bool multiPlayerLoop()
 			clearDisplayMultiJoiningStatusCache();
 			setWidgetsStatus(true);
 		}
-		if (!ingame.TimeEveryoneIsInGame)
+		if (!ingame.TimeEveryoneIsInGame.has_value())
 		{
 			ingame.TimeEveryoneIsInGame = gameTime;
-			debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame);
+			debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame.value());
 			if (!NetPlay.isHost)
 			{
 				debug(LOG_NET, "=== Sending hash to host ===");
 				sendDataCheck();
 			}
+			ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::now();
 		}
 		if (NetPlay.bComms)
 		{
 			sendPing();
 		}
+		if (NetPlay.isHost && NetPlay.bComms)
+		{
+			sendDataCheck2();
+		}
 		// Only have to do this on a true MP game
 		if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
 		{
-			if (gameTime - ingame.TimeEveryoneIsInGame > GAME_TICKS_PER_SEC * 60)
+			if (gameTime - ingame.TimeEveryoneIsInGame.value() > GAME_TICKS_PER_SEC * 60)
 			{
 				// we waited 60 secs to make sure people didn't bypass the data integrity checks
 				int index;
-				for (index = 0; index < MAX_PLAYERS; index++)
+				for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 				{
-					if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NET_HOST_ONLY)
+					if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NetPlay.hostPlayer)
 					{
 						char msg[256] = {'\0'};
 
@@ -275,6 +377,11 @@ bool multiPlayerLoop()
 				ingame.isAllPlayersDataOK = true;
 			}
 		}
+	}
+
+	if (NetPlay.isHost)
+	{
+		autoLagKickRoutine();
 	}
 
 	// if player has won then process the win effects...
@@ -451,21 +558,22 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 // return a players name.
 const char *getPlayerName(int player)
 {
-	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS , "Wrong player index: %u", player);
+	ASSERT_OR_RETURN(nullptr, player >= 0, "Wrong player index: %d", player);
 
 	// playerName is created through setPlayerName()
-	if (strcmp(playerName[player], "") != 0)
+	if (player < MAX_PLAYERS && strcmp(playerName[player], "") != 0)
 	{
 		return (char *)&playerName[player];
 	}
 
-	if (strlen(NetPlay.players[player].name) == 0)
+	if (static_cast<size_t>(player) >= NetPlay.players.size() || strlen(NetPlay.players[player].name) == 0)
 	{
 		// for campaign and tutorials
 		return _("Commander");
 	}
 	else if (NetPlay.players[player].ai >= 0 && !NetPlay.players[player].allocated)
 	{
+		ASSERT_OR_RETURN("", player < MAX_PLAYERS, "invalid player: %d", player);
 		static char names[MAX_PLAYERS][StringSize];  // Must be static, since the getPlayerName() return value is used in tool tips... Long live the widget system.
 		// Add colour to player name.
 		sstrcpy(names[player], getPlayerColourName(player));
@@ -488,7 +596,7 @@ bool setPlayerName(int player, const char *sName)
 // to determine human/computer players and responsibilities of each..
 bool isHumanPlayer(int player)
 {
-	if (player >= MAX_PLAYERS || player < 0)
+	if (player >= MAX_CONNECTED_PLAYERS || player < 0)
 	{
 		return false;	// obvious, really
 	}
@@ -508,7 +616,7 @@ int whosResponsible(int player)
 	}
 	else
 	{
-		return NET_HOST_ONLY;	// host responsible for all AIs
+		return NetPlay.hostPlayer;	// host responsible for all AIs
 	}
 }
 
@@ -548,21 +656,24 @@ int scavengerPlayer()
 Vector3i cameraToHome(UDWORD player, bool scroll)
 {
 	UDWORD x, y;
-	STRUCTURE	*psBuilding;
+	STRUCTURE	*psBuilding = nullptr;
 
-	for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding = psBuilding->psNext) {}
+	if (player < MAX_PLAYERS)
+	{
+		for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding = psBuilding->psNext) {}
+	}
 
 	if (psBuilding)
 	{
 		x = map_coord(psBuilding->pos.x);
 		y = map_coord(psBuilding->pos.y);
 	}
-	else if (apsDroidLists[player])				// or first droid
+	else if ((player < MAX_PLAYERS) && apsDroidLists[player])				// or first droid
 	{
 		x = map_coord(apsDroidLists[player]->pos.x);
 		y =	map_coord(apsDroidLists[player]->pos.y);
 	}
-	else if (apsStructLists[player])							// center on first struct
+	else if ((player < MAX_PLAYERS) && apsStructLists[player])				// center on first struct
 	{
 		x = map_coord(apsStructLists[player]->pos.x);
 		y = map_coord(apsStructLists[player]->pos.y);
@@ -645,6 +756,380 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *ps
 	NETend();
 }
 
+static inline std::chrono::seconds maxDataCheck2WaitSeconds()
+{
+	return std::chrono::seconds(std::max(war_getAutoLagKickSeconds() + 3, 60));
+}
+
+static bool sendDataCheck2()
+{
+	if (NetPlay.isHost)
+	{
+		const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastPlayerDataCheck2) < std::chrono::milliseconds(DATACHECK2_INTERVAL_MS))
+		{
+			return true;
+		}
+		// Send a request to all active players
+		const auto maxWaitSeconds = maxDataCheck2WaitSeconds();
+		for (uint32_t player = 0; player < std::min<uint32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
+		{
+			if (player == NetPlay.hostPlayer || !isHumanPlayer(player) || NetPlay.players[player].isSpectator)
+			{
+				continue;
+			}
+
+			// Check when the last unanswered request was sent
+			if (ingame.lastSentPlayerDataCheck2[player].has_value()
+				&& (std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastSentPlayerDataCheck2[player].value()) >= maxWaitSeconds))
+			{
+				// If it's after the allowed time, kick the player
+				std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+				sendInGameSystemMessage(msg.c_str());
+				addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+				kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
+				debug(LOG_INFO, "%s (%u) did not respond with a NET_DATA_CHECK2 within the required timeframe (%s seconds), and has been kicked", getPlayerName(player), player, std::to_string(maxWaitSeconds.count()).c_str());
+				ingame.lastSentPlayerDataCheck2[player].reset();
+				continue;
+			}
+
+			NETbeginEncode(NETnetQueue(player), NET_DATA_CHECK2);
+			NETuint32_t(&NetPlay.hostPlayer);
+			NETend();
+			if (!ingame.lastSentPlayerDataCheck2[player].has_value())
+			{
+				ingame.lastSentPlayerDataCheck2[player] = now;
+			}
+		}
+		ingame.lastPlayerDataCheck2 = now;
+		return true;
+	}
+
+	// For a player, respond to the host
+	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK2);		// only need to send to HOST
+	NETuint32_t(&selectedPlayer);
+	NETuint32_t(&realSelectedPlayer);
+	std::unordered_map<uint16_t, uint32_t> layers;
+	widgForEachOverlayScreen([&layers](const std::shared_ptr<W_SCREEN> &pScreen, uint16_t zOrder) -> bool {
+		layers[zOrder]++;
+		return true;
+	});
+	uint32_t layersSize = static_cast<uint32_t>(layers.size());
+	NETuint32_t(&layersSize);
+	for (auto& layer : layers)
+	{
+		uint16_t zOrder = layer.first;
+		NETuint16_t(&zOrder);
+		NETuint32_t(&layer.second);
+	}
+	for (size_t i = 0; i < DATA_MAXDATA; i++)
+	{
+		NETuint32_t(&DataHash[i]);
+	}
+	int8_t aiIndex = NetPlay.players[realSelectedPlayer].ai;
+	NETint8_t(&aiIndex);
+	bool bValue = godMode;
+	NETbool(&bValue);
+	NETend();
+	return true;
+}
+
+static bool recvDataCheck2(NETQUEUE queue)
+{
+	uint32_t player = queue.index;
+	uint32_t recvSelectedPlayer = 0;
+	uint32_t recvRealSelectedPlayer = 0;
+	std::unordered_map<uint16_t, uint32_t> layers;
+	uint32_t tempBuffer[DATA_MAXDATA] = {0};
+	int8_t aiIndex = 0;
+	bool recvGM;
+
+	if (!NetPlay.isHost) // the host can send NET_DATA_CHECK2 messages to clients to request a check
+	{
+		ASSERT_OR_RETURN(false, NetPlay.hostPlayer == queue.index, "Non-host player (%u) is sending NET_DATA_CHECK2 to us??", queue.index);
+		NETbeginDecode(queue, NET_DATA_CHECK2);
+		NETuint32_t(&recvSelectedPlayer);
+		NETend();
+		ASSERT_OR_RETURN(false, NetPlay.hostPlayer == recvSelectedPlayer, "Non-host player (selectedPlayer: %u) is sending NET_DATA_CHECK2 to us??", recvSelectedPlayer);
+		sendDataCheck2();
+		return true;
+	}
+
+	NETbeginDecode(queue, NET_DATA_CHECK2);
+	NETuint32_t(&recvSelectedPlayer);
+	NETuint32_t(&recvRealSelectedPlayer);
+	uint32_t layersSize = 0;
+	uint16_t zOrder = 0;
+	uint32_t layerCount = 0;
+	NETuint32_t(&layersSize);
+	for (uint32_t i = 0; i < layersSize; ++i)
+	{
+		NETuint16_t(&zOrder);
+		NETuint32_t(&layerCount);
+		layers[zOrder] = layerCount;
+	}
+	for (size_t i = 0; i < DATA_MAXDATA; ++i)
+	{
+		NETuint32_t(&tempBuffer[i]);
+	}
+	NETint8_t(&aiIndex);
+	NETbool(&recvGM);
+	NETend();
+
+	if (player >= MAX_CONNECTED_PLAYERS) // invalid player number.
+	{
+		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_DATA_CHECK2 given incorrect params.", player, queue.index);
+		return false;
+	}
+
+	if (recvRealSelectedPlayer >= NetPlay.players.size())
+	{
+		HandleBadParam("NET_DATA_CHECK2 given invalid param.", recvRealSelectedPlayer, queue.index);
+		return false;
+	}
+
+	if (!isHumanPlayer(player) || NetPlay.players[player].kick)
+	{
+		// Ignoring
+		return false;
+	}
+
+	debug(LOG_NET, "** Received NET_DATA_CHECK2 from player %u", player);
+	ingame.lastSentPlayerDataCheck2[player].reset();
+
+	bool hasWrongData = false;
+
+	if (!NetPlay.players[player].isSpectator && (recvSelectedPlayer != player || recvRealSelectedPlayer != player))
+	{
+		debug(LOG_INFO, "%s (%u) has a corrupted player index. (selectedPlayer: %" PRIu32 ", realSelectedPlayer: %" PRIu32 ")", getPlayerName(player), player, recvSelectedPlayer, recvRealSelectedPlayer);
+		hasWrongData = true;
+	}
+
+	if (layersSize > 1024)
+	{
+		debug(LOG_INFO, "%s (%u) has a very high layersSize - something is probably wrong. (layersSize: %" PRIu32 ")", getPlayerName(player), player, layersSize);
+		hasWrongData = true;
+	}
+
+	if (!NetPlay.players[player].isSpectator)
+	{
+		for (uint16_t zCheck = 65530; zOrder < std::numeric_limits<uint16_t>::max() - 2; ++zOrder)
+		{
+			auto it = layers.find(zCheck);
+			if (it != layers.end())
+			{
+				debug(LOG_INFO, "%s (%u) has an unexpected display layer. (layer: %" PRIu16 ", count: %" PRIu32 ")", getPlayerName(player), player, zCheck, it->second);
+			}
+		}
+		uint16_t zCheck = std::numeric_limits<uint16_t>::max() - 2;
+		if (layers.count(zCheck) > 0 && !gInputManager.debugManager().debugMappingsAllowed())
+		{
+			debug(LOG_INFO, "%s (%u) has an unexpected display layer (script debugger).", getPlayerName(player), player);
+			hasWrongData = true;
+		}
+		zCheck = std::numeric_limits<uint16_t>::max();
+		auto it = layers.find(zCheck);
+		if (it != layers.end() && it->second > 1)
+		{
+			debug(LOG_INFO, "%s (%u) has an unexpected number of notification layers. (count: %" PRIu32 ")", getPlayerName(player), player, it->second);
+		}
+	}
+
+	if (memcmp(DataHash, tempBuffer, sizeof(DataHash)))
+	{
+		int i = 0;
+		for (; DataHash[i] == tempBuffer[i]; ++i)
+		{
+		}
+
+		debug(LOG_INFO, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+		hasWrongData = true;
+	}
+
+	if (aiIndex != NetPlay.players[player].ai)
+	{
+		debug(LOG_INFO, "%s (%u) has a corrupted player state value. (ai: %" PRIi8 "; should be: %" PRIi8 ")", getPlayerName(player), player, aiIndex, NetPlay.players[player].ai);
+		hasWrongData = true;
+	}
+
+	if (!NetPlay.players[player].isSpectator && recvGM)
+	{
+		debug(LOG_INFO, "%s (%u) has a corrupted global state value. (godMode: %s)", getPlayerName(player), player, (recvGM) ? "true" : "false");
+		hasWrongData = true;
+	}
+
+	if (hasWrongData)
+	{
+		ASSERT_HOST_ONLY(return false);
+		std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+		sendInGameSystemMessage(msg.c_str());
+		addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+		kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
+		return false;
+	}
+
+	return true;
+}
+
+
+HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
+{
+	if (queue.index == NetPlay.hostPlayer)
+	{
+		// host gets access to all messages
+		return HandleMessageAction::Process_Message;
+	}
+
+	bool senderIsSpectator = NetPlay.players[queue.index].isSpectator;
+
+	if (type > NET_MIN_TYPE && type < NET_MAX_TYPE)
+	{
+		switch (type)
+		{
+			case NET_OPTIONS:
+			case NET_PLAYER_INFO:
+			case NET_PLAYER_JOINED:
+			case NET_FILE_PAYLOAD:
+			case NET_VOTE_REQUEST:
+				// only the host is allowed to send these messages
+				if (queue.index != NetPlay.hostPlayer)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
+			case NET_KICK:
+			case NET_AITEXTMSG:
+			case NET_BEACONMSG:
+			case NET_TEAMREQUEST: // spectators should not be allowed to request a team / non-spectator slot status
+			case NET_POSITIONREQUEST:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
+			case NET_TEXTMSG:
+				// Normal chat messages are available to spectators in the game room / lobby chat, but *not* in-game
+				if (senderIsSpectator && GetGameMode() == GS_NORMAL)
+				{
+					if (gameInitialised && !bDisplayMultiJoiningStatus)
+					{
+						// If the game is actually initialized and everyone has joined the game, treat this as a kickable offense
+						return HandleMessageAction::Disallow_And_Kick_Sender;
+					}
+					else
+					{
+						// Otherwise just silently ignore it
+						return HandleMessageAction::Silently_Ignore;
+					}
+				}
+				break;
+			case NET_SPECTEXTMSG:
+				if (!senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
+			case NET_VOTE:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
+			case NET_COLOURREQUEST:
+				// for now, *must* be allowed
+				return HandleMessageAction::Process_Message;
+			case NET_DATA_CHECK2:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
+			default:
+				// certain messages are always allowed, no matter who it is
+				return HandleMessageAction::Process_Message;
+		}
+	}
+
+	if (type > GAME_MIN_TYPE && type < GAME_MAX_TYPE)
+	{
+		switch (type)
+		{
+			case GAME_GAME_TIME:
+			case GAME_PLAYER_LEFT:
+				// always allowed
+				return HandleMessageAction::Process_Message;
+			case GAME_SYNC_REQUEST:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Silently_Ignore;
+				}
+				break;
+			case GAME_DEBUG_MODE:
+			case GAME_DEBUG_ADD_DROID:
+			case GAME_DEBUG_ADD_STRUCTURE:
+			case GAME_DEBUG_ADD_FEATURE:
+			case GAME_DEBUG_REMOVE_DROID:
+			case GAME_DEBUG_REMOVE_STRUCTURE:
+			case GAME_DEBUG_REMOVE_FEATURE:
+			case GAME_DEBUG_FINISH_RESEARCH:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
+			default:
+				if (senderIsSpectator)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
+		}
+	}
+
+	if (type == REPLAY_ENDED)
+	{
+		return HandleMessageAction::Silently_Ignore;
+	}
+
+	return HandleMessageAction::Process_Message;
+}
+
+bool shouldProcessMessage(NETQUEUE& queue, uint8_t type)
+{
+	auto action = getMessageHandlingAction(queue, type);
+	switch (action)
+	{
+		case HandleMessageAction::Process_Message:
+			return true;
+		case HandleMessageAction::Silently_Ignore:
+			NETpop(queue); // remove message from queue
+			return false;
+		case HandleMessageAction::Disallow_And_Kick_Sender:
+		{
+			NETpop(queue); // remove message from queue
+			if (NetPlay.isHost)
+			{
+				// kick sender for sending unauthorized message
+				char buf[255];
+				auto senderPlayerIdx = queue.index;
+				ssprintf(buf, _("Auto kicking player %s, invalid command received: %u"), NetPlay.players[senderPlayerIdx].name, type);
+				sendInGameSystemMessage(buf);
+				kickPlayer(queue.index, _("Unauthorized network command"), ERROR_INVALID);
+			}
+			return false;
+		}
+	}
+	return false; // silence warnings
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Recv Messages. Get a message and dispatch to relevant function.
@@ -663,6 +1148,11 @@ bool recvMessage()
 			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
 		}
 
+		if (!shouldProcessMessage(queue, type))
+		{
+			continue;
+		}
+
 		// messages only in game.
 		if (!ingame.localJoiningInProgress)
 		{
@@ -678,8 +1168,14 @@ bool recvMessage()
 			case NET_DATA_CHECK:
 				recvDataCheck(queue);
 				break;
+			case NET_DATA_CHECK2:
+				recvDataCheck2(queue);
+				break;
 			case NET_AITEXTMSG:					//multiplayer AI text message
 				recvTextMessageAI(queue);
+				break;
+			case NET_SPECTEXTMSG:
+				recvSpecInGameTextMessage(queue); // multiplayer spectator text message
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
@@ -720,6 +1216,15 @@ bool recvMessage()
 			case GAME_DEBUG_FINISH_RESEARCH:
 				recvResearch(queue);
 				break;
+			case REPLAY_ENDED:
+				if (!NETisReplay())
+				{
+					// ignore
+					break;
+				}
+				addConsoleMessage(_("REPLAY HAS ENDED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+				addConsoleMessage(_("(Press ESC to quit.)"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+				break;
 			default:
 				processedMessage1 = false;
 				break;
@@ -733,9 +1238,6 @@ bool recvMessage()
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
 			break;
-		case NET_OPTIONS:
-			recvOptions(queue);
-			break;
 		case NET_PLAYER_DROPPED:				// remote player got disconnected
 			{
 				uint32_t player_id;
@@ -746,7 +1248,13 @@ bool recvMessage()
 				}
 				NETend();
 
-				if (whosResponsible(player_id) != queue.index && queue.index != NET_HOST_ONLY)
+				if (player_id >= MAX_CONNECTED_PLAYERS)
+				{
+					debug(LOG_INFO, "** player %u has dropped - huh?", player_id);
+					break;
+				}
+
+				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
 				{
 					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
 					break;
@@ -773,7 +1281,7 @@ bool recvMessage()
 				// the player that has just responded
 				NETuint32_t(&player_id);
 				NETend();
-				if (player_id >= MAX_PLAYERS)
+				if (player_id >= MAX_CONNECTED_PLAYERS)
 				{
 					debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
 					break;
@@ -801,7 +1309,7 @@ bool recvMessage()
 				NETenum(&KICK_TYPE);
 				NETend();
 
-				if (player_id == NET_HOST_ONLY)
+				if (player_id == NetPlay.hostPlayer)
 				{
 					char buf[250] = {'\0'};
 
@@ -1031,7 +1539,7 @@ bool recvResearchStatus(NETQUEUE queue)
 	}
 
 	int prevResearchState = 0;
-	if (aiCheckAlliances(selectedPlayer, player))
+	if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, player))
 	{
 		prevResearchState = intGetResearchState();
 	}
@@ -1048,6 +1556,12 @@ bool recvResearchStatus(NETQUEUE queue)
 		// Set that facility to research
 		if (psBuilding && psBuilding->pFunctionality)
 		{
+			if (!psBuilding->pStructureType || psBuilding->pStructureType->type != REF_RESEARCH)
+			{
+				debug(LOG_INFO, "Structure is not a research facility: \"%s\".", (psBuilding->pStructureType) ? psBuilding->pStructureType->id.toUtf8().c_str() : "");
+				return false;
+			}
+
 			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
 
 			popStatusPending(*psResFacilty);  // Research is no longer pending, as it's actually starting now.
@@ -1104,12 +1618,18 @@ bool recvResearchStatus(NETQUEUE queue)
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
+			if (!psBuilding->pStructureType || psBuilding->pStructureType->type != REF_RESEARCH)
+			{
+				debug(LOG_INFO, "Structure is not a research facility: \"%s\".", (psBuilding->pStructureType) ? psBuilding->pStructureType->id.toUtf8().c_str() : "");
+				return false;
+			}
+
 			cancelResearch(psBuilding, ModeImmediate);
 			popStatusPending(*(RESEARCH_FACILITY *)psBuilding->pFunctionality);  // Research cancellation is no longer pending, as it's actually cancelling now.
 		}
 	}
 
-	if (aiCheckAlliances(selectedPlayer, player))
+	if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(selectedPlayer, player))
 	{
 		intAlliedResearchChanged();
 		intNotifyResearchButton(prevResearchState);
@@ -1148,7 +1668,7 @@ bool NetworkTextMessage::receive(NETQUEUE queue)
 		sender = queue.index;  // Fix corrupted sender.
 	}
 
-	if (sender >= MAX_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
+	if (sender >= MAX_CONNECTED_PLAYERS || (sender >= 0 && (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN)))
 	{
 		return false;
 	}
@@ -1177,7 +1697,12 @@ void sendInGameSystemMessage(const char *text)
 {
 	NetworkTextMessage message(SYSTEM_MESSAGE, text);
 	printInGameTextMessage(message);
-	message.enqueue(NETbroadcastQueue());
+	if (NetPlay.isHost || !NetPlay.players[selectedPlayer].isSpectator || GetGameMode() != GS_NORMAL)
+	{
+		// host + players can broadcast these at any time
+		// spectators can only broadcast in-game system messages before the game has started (i.e. in lobby)
+		message.enqueue(NETbroadcastQueue());
+	}
 }
 
 void printConsoleNameChange(const char *oldName, const char *newName)
@@ -1273,6 +1798,47 @@ bool recvTextMessageAI(NETQUEUE queue)
 	return true;
 }
 
+bool recvSpecInGameTextMessage(NETQUEUE queue)
+{
+	UDWORD	sender;
+	char	newmsg[MAX_CONSOLE_STRING_LENGTH] = {};
+
+	NETbeginDecode(queue, NET_SPECTEXTMSG);
+	NETuint32_t(&sender);			//in-game player index ('normal' one)
+	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
+	NETend();
+
+	if (whosResponsible(sender) != queue.index)
+	{
+		sender = queue.index;  // Fix corrupted sender.
+	}
+
+	if (sender >= MAX_CONNECTED_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
+	{
+		return false;
+	}
+
+	if (!NetPlay.players[selectedPlayer].isSpectator)
+	{
+		return false; // ignore
+	}
+
+	auto message = NetworkTextMessage(SPECTATOR_MESSAGE, newmsg);
+	printInGameTextMessage(message);
+
+	// make some noise!
+	if (GetGameMode() != GS_NORMAL)
+	{
+		audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+	}
+	else if (!ingame.localJoiningInProgress)
+	{
+		audio_PlayTrack(ID_SOUND_MESSAGEEND);
+	}
+
+	return true;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Features
@@ -1324,8 +1890,9 @@ bool recvMapFileRequested(NETQUEUE queue)
 	NETbin(hash.bytes, hash.Bytes);
 	NETend();
 
-	auto &files = NetPlay.players[player].wzFiles;
-	if (std::any_of(files.begin(), files.end(), [&](WZFile const &file) { return file.hash == hash; }))
+	auto files = NetPlay.players[player].wzFiles;
+	ASSERT_OR_RETURN(false, files != nullptr, "wzFiles is uninitialized?? (Player: %" PRIu32 ")", player);
+	if (std::any_of(files->begin(), files->end(), [&](WZFile const &file) { return file.hash == hash; }))
 	{
 		return true;  // Already sending this file, do nothing.
 	}
@@ -1382,7 +1949,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 
 	// Schedule file to be sent.
 	debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", WZ_PHYSFS_getRealDir_String(filename.c_str()).c_str(), filename.c_str(), player);
-	files.emplace_back(pFileHandle, filename, hash, fileSize_u32);
+	files->emplace_back(pFileHandle, filename, hash, fileSize_u32);
 
 	return true;
 }
@@ -1396,9 +1963,9 @@ void sendMap()
 
 	// calculate the time budget per file
 	uint64_t totalFilesToSend = 0;
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		totalFilesToSend += NetPlay.players[i].wzFiles.size();
+		totalFilesToSend += (NetPlay.players[i].wzFiles) ? NetPlay.players[i].wzFiles->size() : 0;
 	}
 	const uint64_t maxMicroSecondsPerFile = maxMicroSecondsPerSendMapCall / std::max((uint64_t)1, totalFilesToSend);
 
@@ -1406,9 +1973,14 @@ void sendMap()
 	auto file_startTime = std::chrono::high_resolution_clock::now();
 	microDuration file_currentDuration;
 
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		auto &files = NetPlay.players[i].wzFiles;
+		auto pFiles = NetPlay.players[i].wzFiles;
+		if (pFiles == nullptr)
+		{
+			continue;
+		}
+		auto &files = *pFiles;
 		for (auto &file : files)
 		{
 			int done = 0;
@@ -1426,7 +1998,7 @@ void sendMap()
 				debug(LOG_INFO, "=== File has been sent to player %d ===", i);
 			}
 		}
-		files.erase(std::remove_if(files.begin(), files.end(), [](WZFile const &file) { return file.handle == nullptr; }), files.end());
+		files.erase(std::remove_if(files.begin(), files.end(), [](WZFile const &file) { return file.handle() == nullptr; }), files.end());
 	}
 }
 
@@ -1434,10 +2006,10 @@ void sendMap()
 bool recvMapFileData(NETQUEUE queue)
 {
 	NETrecvFile(queue);
-	if (NetPlay.wzFiles.empty())
+	if (NET_getDownloadingWzFiles().empty())
 	{
 		netPlayersUpdated = true;  // Remove download icon from ourselves.
-		addConsoleMessage("MAP DOWNLOADED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("MAP DOWNLOADED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		sendInGameSystemMessage("MAP DOWNLOADED");
 		debug(LOG_INFO, "=== File has been received. ===");
 
@@ -1445,7 +2017,7 @@ bool recvMapFileData(NETQUEUE queue)
 		levShutDown();
 		levInitialise();
 		rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
-		pal_Init(); //Update palettes.
+		reInitPaletteAndFog(); //Update palettes.
 		if (!buildMapList())
 		{
 			return false;
@@ -1534,6 +2106,8 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 /* Looks through the players list of messages to find VIEW_BEACON (one per player!) pointer */
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 {
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Unsupported player: %" PRIu32 "", player);
+
 	for (MESSAGE *psCurr = apsMessages[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		//look for VIEW_BEACON, should only be 1 per player
@@ -1693,7 +2267,7 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 	//Really reset ready status
 	if (NetPlay.isHost && !ignoreReadyReset)
 	{
-		for (unsigned int i = 0; i < game.maxPlayers; ++i)
+		for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
 			//Ignore for autohost launch option.
 			if (selectedPlayer == i && getHostLaunch() == HostLaunch::Autohost)
@@ -1719,4 +2293,127 @@ int32_t findPlayerIndexByPosition(uint32_t position)
 	}
 
 	return -1;
+}
+
+bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quietly)
+{
+	// Remove objects quietly if the player is starting off as a spectator
+	quietly = quietly || NetPlay.players[playerIndex].isSpectator;
+
+	turnOffMultiMsg(true);
+
+	if (playerIndex < MAX_PLAYERS)
+	{
+		setPower(playerIndex, 0);
+
+		// Destroy HQ
+		std::vector<STRUCTURE *> hqStructs;
+		for (STRUCTURE *psStruct = apsStructLists[playerIndex]; psStruct; psStruct = psStruct->psNext)
+		{
+			if (REF_HQ == psStruct->pStructureType->type)
+			{
+				hqStructs.push_back(psStruct);
+			}
+		}
+		for (auto psStruct : hqStructs)
+		{
+			if (quietly)
+			{
+				removeStruct(psStruct, true);
+			}
+			else			// show effects
+			{
+				destroyStruct(psStruct, gameTime);
+			}
+		}
+
+		// Destroy all droids
+		debug(LOG_DEATH, "killing off all droids for player %d", playerIndex);
+		while (apsDroidLists[playerIndex])				// delete all droids
+		{
+			if (quietly)			// don't show effects
+			{
+				killDroid(apsDroidLists[playerIndex]);
+			}
+			else				// show effects
+			{
+				destroyDroid(apsDroidLists[playerIndex], gameTime);
+			}
+		}
+
+		// Destroy structs
+		debug(LOG_DEATH, "killing off structures for player %d", playerIndex);
+		STRUCTURE *psStruct = apsStructLists[playerIndex];
+		while (psStruct)				// delete structs
+		{
+			STRUCTURE * psNext = psStruct->psNext;
+
+			if (removeAllStructs
+				|| psStruct->pStructureType->type == REF_POWER_GEN
+				|| psStruct->pStructureType->type == REF_RESEARCH
+				|| psStruct->pStructureType->type == REF_COMMAND_CONTROL
+				|| StructIsFactory(psStruct))
+			{
+				// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
+				if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+				{
+					removeStruct(psStruct, true);
+				}
+				else			// show effects
+				{
+					destroyStruct(psStruct, gameTime);
+				}
+			}
+
+			psStruct = psNext;
+		}
+	}
+
+	if (!quietly)
+	{
+		debug(LOG_INFO, "player: %" PRIu32 " (gameTime: %" PRIu32 ")", playerIndex, gameTime);
+	}
+	if (!NETisReplay() || playerIndex != realSelectedPlayer)
+	{
+		syncDebug("player%u", (unsigned)playerIndex);
+	}
+	NetPlay.players[playerIndex].isSpectator = true; // must come before enableGodMode
+
+	if (playerIndex == selectedPlayer)
+	{
+		// reset the widget screen to just the reticule (close all panels)
+		auto savedIntMode = intMode;
+		intResetScreen(false, true);
+		intMode = savedIntMode; // restore intMode from before intResetScreen call (or it may not be possible to click "continue game" on the mission results screen)
+
+		// disable various reticule buttons
+		std::array<UDWORD, 5> reticuleButtonsToDisable{IDRET_MANUFACTURE, IDRET_RESEARCH, IDRET_BUILD, IDRET_DESIGN, IDRET_COMMAND};
+		for (UDWORD buttonID : reticuleButtonsToDisable)
+		{
+			if (intCheckReticuleButEnabled(buttonID))
+			{
+				setReticuleStats(buttonID, "", "", "");
+			}
+		}
+
+		// hide the power bar
+		forceHidePowerBar(true);
+
+		if (!headlessGameMode())
+		{
+			// enable "god mode" for map + object visibility (+ minimap)
+			enableGodMode();
+		}
+
+		// add spectator mode message
+		bool lowUISpectatorMode = streamer_spectator_mode() || NETisReplay();
+		addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? MAX_CONSOLE_MESSAGE_DURATION : 15);
+		addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? 30 : 15);
+
+		specLayerInit(!streamer_spectator_mode());
+	}
+
+	turnOffMultiMsg(false);
+
+	return true;
 }

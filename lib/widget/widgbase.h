@@ -213,6 +213,10 @@ public:
 		}
 		childWidgets = {};
 	}
+	WzRect screenGeometry() const
+	{
+		return WzRect(screenPosX(), screenPosY(), width(), height());
+	}
 	WzRect const &geometry() const
 	{
 		return dim;
@@ -225,12 +229,20 @@ public:
 	{
 		return dim.y();
 	}
+	virtual int parentRelativeXOffset(int coord) const
+	{
+		return x() + coord;
+	}
+	virtual int parentRelativeYOffset(int coord) const
+	{
+		return y() + coord;
+	}
 	int screenPosX() const
 	{
 		int screenX = x();
 		for (auto psParent = parent(); psParent != nullptr; psParent = psParent->parent())
 		{
-			screenX += psParent->x();
+			screenX = psParent->parentRelativeXOffset(screenX);
 		}
 		return screenX;
 	}
@@ -239,7 +251,7 @@ public:
 		int screenY = y();
 		for (auto psParent = parent(); psParent != nullptr; psParent = psParent->parent())
 		{
-			screenY += psParent->y();
+			screenY = psParent->parentRelativeYOffset(screenY);
 		}
 		return screenY;
 	}
@@ -294,27 +306,11 @@ public:
 	bool isMouseOverWidget() const;
 
 	void setTransparentToClicks(bool hasClickTransparency);
+	void setTransparentToMouse(bool hasMouseTransparency);
 	bool transparentToClicks() const;
 
-	virtual int32_t idealWidth()
-	{
-		if (!defaultIdealWidth.has_value())
-		{
-			defaultIdealWidth = width();
-		}
-
-		return defaultIdealWidth.value();
-	}
-
-	virtual int32_t idealHeight()
-	{
-		if (!defaultIdealHeight.has_value())
-		{
-			defaultIdealHeight = height();
-		}
-
-		return defaultIdealHeight.value();
-	}
+	virtual int32_t idealWidth();
+	virtual int32_t idealHeight();
 
 	virtual nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets()
 	{
@@ -356,6 +352,7 @@ private:
 
 	WzRect                  dim;
 	bool					isTransparentToClicks = false;
+	bool					isTransparentToMouse = false;
 
 	WIDGET(WIDGET const &) = delete;
 	WIDGET &operator =(WIDGET const &) = delete;

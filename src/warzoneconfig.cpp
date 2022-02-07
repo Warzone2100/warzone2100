@@ -64,6 +64,12 @@ struct WARZONE_GLOBALS
 	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
+	int autoLagKickSeconds = 60;
+	bool disableReplayRecording = false;
+	uint32_t MPinactivityMinutes = 5;
+	uint8_t MPopenSpectatorSlots = 0;
+	int fogStart = 4000;
+	int fogEnd = 8000;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -400,4 +406,74 @@ bool war_getAutoAdjustDisplayScale()
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale)
 {
 	warGlobs.autoAdjustDisplayScale = autoAdjustDisplayScale;
+}
+
+int war_getAutoLagKickSeconds()
+{
+	return warGlobs.autoLagKickSeconds;
+}
+
+void war_setAutoLagKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 60);
+	}
+	warGlobs.autoLagKickSeconds = seconds;
+}
+
+bool war_getDisableReplayRecording()
+{
+	return warGlobs.disableReplayRecording;
+}
+
+void war_setDisableReplayRecording(bool disable)
+{
+	warGlobs.disableReplayRecording = disable;
+}
+
+uint32_t war_getMPInactivityMinutes()
+{
+	return warGlobs.MPinactivityMinutes;
+}
+
+void war_setMPInactivityMinutes(uint32_t minutes)
+{
+	if (minutes > 0 && minutes < MIN_MPINACTIVITY_MINUTES)
+	{
+		minutes = MIN_MPINACTIVITY_MINUTES;
+	}
+	warGlobs.MPinactivityMinutes = minutes;
+}
+
+uint16_t war_getMPopenSpectatorSlots()
+{
+	return warGlobs.MPopenSpectatorSlots;
+}
+
+void war_setMPopenSpectatorSlots(uint16_t spectatorSlots)
+{
+	spectatorSlots = std::min<uint16_t>(spectatorSlots, MAX_SPECTATOR_SLOTS);
+	warGlobs.MPopenSpectatorSlots = spectatorSlots;
+}
+
+int war_getFogEnd()
+{
+	return warGlobs.fogEnd;
+}
+
+int war_getFogStart()
+{
+	return warGlobs.fogStart;
+}
+
+void war_setFogEnd(int end)
+{
+	 warGlobs.fogEnd = end;
+}
+
+void war_setFogStart(int start)
+{
+	 warGlobs.fogStart = start;
 }

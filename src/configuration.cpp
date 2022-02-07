@@ -51,6 +51,7 @@
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
+#include "clparse.h" // for autoratingUrl
 
 #include <type_traits>
 
@@ -349,6 +350,7 @@ bool loadConfig()
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
+	setAutoratingUrl(iniGetString("autoratingUrl", "").value());
 	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
 	mpSetServerName(iniGetString("server_name", "").value().c_str());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
@@ -382,6 +384,8 @@ bool loadConfig()
 	game.base = iniGetInteger("base", CAMP_BASE).value();
 	game.alliance = iniGetInteger("alliance", NO_ALLIANCES).value();
 	game.scavengers = iniGetInteger("newScavengers", SCAVENGERS).value();
+	war_setMPInactivityMinutes(iniGetInteger("inactivityMinutesMP", war_getMPInactivityMinutes()).value());
+	game.inactivityMinutes = war_getMPInactivityMinutes();
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -477,6 +481,12 @@ bool loadConfig()
 		pie_SetFogStatus(false);
 		pie_EnableFog(false);
 	}
+	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
+	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
+	int openSpecSlotsIntValue = iniGetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots()).value();
+	war_setMPopenSpectatorSlots(static_cast<uint16_t>(std::max<int>(0, std::min<int>(openSpecSlotsIntValue, MAX_SPECTATOR_SLOTS))));
+	war_setFogEnd(iniGetInteger("fogEnd", 8000).value());
+	war_setFogStart(iniGetInteger("fogStart", 4000).value());
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -572,6 +582,7 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
+	iniSetString("autoratingUrl", getAutoratingUrl());
 	iniSetString("masterserver_name", NETgetMasterserverName());
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
 	iniSetString("server_name", mpGetServerName());
@@ -595,6 +606,11 @@ bool saveConfig()
 			if (bMultiPlayer && NetPlay.bComms)
 			{
 				iniSetString("gameName", game.name);			//  last hosted game
+				war_setMPInactivityMinutes(game.inactivityMinutes);
+
+				// remember number of spectator slots in MP games
+				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
+				war_setMPopenSpectatorSlots(currentSpectatorSlotInfo.totalSpectatorSlots);
 			}
 			iniSetString("mapName", game.map);				//  map name
 			iniSetString("mapHash", game.hash.toString());          //  map hash
@@ -607,6 +623,8 @@ bool saveConfig()
 		iniSetString("playerName", (char *)sPlayer);		// player name
 	}
 	iniSetInteger("colourMP", war_getMPcolour());
+	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
+	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
 	iniSetString("favoriteStructs", getFavoriteStructs().toUtf8());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetString("jsbackend", to_string(war_getJSBackend()));
@@ -614,6 +632,10 @@ bool saveConfig()
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
 	iniSetBool("autosaveEnabled", autosaveEnabled);
 	iniSetBool("fog", pie_GetFogEnabled());
+	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
+	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
+	iniSetInteger("fogEnd", war_getFogEnd());
+	iniSetInteger("fogStart", war_getFogStart());
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);
@@ -710,6 +732,7 @@ bool reloadMPConfig()
 	game.power = iniSectionGetInteger(iniGeneral, "powerLevel", LEV_MED).value();
 	game.base = iniSectionGetInteger(iniGeneral, "base", CAMP_BASE).value();
 	game.alliance = iniSectionGetInteger(iniGeneral, "alliance", NO_ALLIANCES).value();
+	game.inactivityMinutes = war_getMPInactivityMinutes();
 
 	return true;
 }

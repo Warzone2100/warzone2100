@@ -77,7 +77,7 @@ jobs:
       id: asciidoctor-dl
       run: |
         echo "Installing Asciidoctor"
-        gem install asciidoctor -v 2.0.15 --no-document | Out-Null
+        gem install asciidoctor -v 2.0.16 --no-document | Out-Null
         echo "Installing Asciidoctor... finished"
         $AsciidoctorBat = (Get-Command asciidoctor.bat).Path
         echo "Asciidoctor.bat: ${AsciidoctorBat}"
@@ -248,8 +248,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.2.182.0/windows/VulkanSDK-1.2.182.0-Installer.exe?Human=true"
-        $VULKAN_DL_SHA256 = "7089d48011f06c4a02a593913c6a9385d1652ab7765c25d2666d5d6ef4e24af8"
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.2.189.2/windows/VulkanSDK-1.2.189.2-Installer.exe?Human=true"
+        $VULKAN_DL_SHA256 = "43ef1f8362f827c6db0d5aceb70652835180ceded9183a3a1103e5e2c8e58b50"
 
         $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
         $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
@@ -258,7 +258,7 @@ jobs:
         $req = Req -Params @{ 'Method'='GET';'Uri'="$VULKAN_DL_URL";'OutFile'="${VK_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${VULKAN_DL_SHA256}" -Algorithm SHA256
 
         Write-Host "Running Vulkan SDK installer..."
-        Start-Process "${VK_DL_PATH}" -ArgumentList "/S" -Wait
+        Start-Process "${VK_DL_PATH}" -ArgumentList "--accept-licenses","--default-answer","--confirm-command","install" -Wait
         Write-Host "Vulkan SDK installer completed"
 
         $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
@@ -474,11 +474,13 @@ jobs:
         echo "::remove-matcher owner=clang::"
     - name: Package Portable Installer
       working-directory: '${{ github.workspace }}\build'
+      env:
+        FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
       run: |
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
         # Run CPack
-        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_portable" -D CPACK_WZ_PORTABLE=ON -G NSIS -C "Release"
+        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_portable" -D CPACK_WZ_PORTABLE=ON -G NSIS -C "Release"
         # Rename the portable installer
         Move-Item -LiteralPath ".\warzone2100_portable.exe" -Destination "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
     - name: Collect Failure Logs
@@ -503,29 +505,35 @@ jobs:
         if-no-files-found: 'warn'
     - name: Package Full Installer
       working-directory: '${{ github.workspace }}\build'
+      env:
+        FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
       run: |
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
         # Run CPack
-        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_installer" -D CPACK_WZ_PORTABLE=OFF -G NSIS -C "Release"
+        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_installer" -D CPACK_WZ_PORTABLE=OFF -G NSIS -C "Release"
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_installer.exe" -Destination "${{ github.workspace }}\output\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe"
     - name: Archive .ZIP of Regular build
       working-directory: '${{ github.workspace }}\build'
+      env:
+        FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
       run: |
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
         # Run CPack
-        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE=ON -G ZIP -C "Release"
+        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE=ON -G ZIP -C "Release"
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
     - name: Archive Debug Symbols
       working-directory: '${{ github.workspace }}\build'
+      env:
+        FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
       run: |
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
         # Run CPack
-        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_debugsymbols" -D CPACK_COMPONENTS_ALL=DebugSymbols -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -G 7Z -C "Release"
+        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_debugsymbols" -D CPACK_COMPONENTS_ALL=DebugSymbols -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -G 7Z -C "Release"
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_debugsymbols.7z" -Destination "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
     - name: Compare Build Outputs

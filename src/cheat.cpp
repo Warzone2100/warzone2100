@@ -109,6 +109,11 @@ bool _attemptCheatCode(const char *cheat_name)
 		kf_ToggleUnitCount();
 		return true;
 	}
+	if (!strcasecmp("specstats", cheat_name))
+	{
+		kf_ToggleSpecOverlays();
+		return true;
+	}
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
@@ -163,6 +168,14 @@ bool attemptCheatCode(const char *cheat_name)
 
 void sendProcessDebugMappings(bool val)
 {
+	if (NETisReplay())
+	{
+		return;
+	}
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return;
+	}
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
 	NETbool(&val);
 	NETend();
@@ -174,7 +187,7 @@ static std::string getWantedDebugMappingStatuses(const DebugInputManager& dbgInp
 	char* p = ret;
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
-		if (NetPlay.players[n].allocated && (dbgInputManager.getPlayerWantsDebugMappings(n) == bStatus))
+		if (NetPlay.players[n].allocated && !NetPlay.players[n].isSpectator && (dbgInputManager.getPlayerWantsDebugMappings(n) == bStatus))
 		{
 			*p++ = '0' + NetPlay.players[n].position;
 		}
@@ -227,7 +240,10 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	else if (oldDebugMode && !newDebugMode)
 	{
 		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
-		gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::INACTIVE);
+		if (!NETisReplay())
+		{
+			gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::INACTIVE);
+		}
 		triggerEventCheatMode(false);
 	}
 }

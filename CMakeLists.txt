@@ -681,10 +681,14 @@ CHECK_INCLUDE_FILES("sys/stat.h" HAVE_SYS_STAT_H)
 CHECK_INCLUDE_FILES("sys/types.h" HAVE_SYS_TYPES_H)
 CHECK_INCLUDE_FILES("sys/ucontext.h" HAVE_SYS_UCONTEXT_H)
 CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD_H)
+CHECK_INCLUDE_FILES("sys/eventfd.h" HAVE_SYS_EVENTFD_H)
+CHECK_INCLUDE_FILES("sys/poll.h" HAVE_SYS_POLL_H)
+CHECK_INCLUDE_FILES("poll.h" HAVE_POLL_H)
 
 INCLUDE (CheckFunctionExists)
 INCLUDE (CMakePushCheckState)
 INCLUDE (CheckCXXSymbolExists)
+INCLUDE (CheckCXXSourceCompiles)
 cmake_reset_check_state()
 list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_ALL_SOURCE=${_ALL_SOURCE}")
 list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE=${_GNU_SOURCE}")
@@ -709,6 +713,12 @@ CHECK_CXX_SYMBOL_EXISTS(setenv "stdlib.h" HAVE_SETENV)
 CHECK_CXX_SYMBOL_EXISTS(posix_spawn "spawn.h" HAVE_POSIX_SPAWN)
 CHECK_CXX_SYMBOL_EXISTS(posix_spawnp "spawn.h" HAVE_POSIX_SPAWNP)
 CHECK_CXX_SYMBOL_EXISTS(environ "unistd.h" HAVE_ENVIRON_DECL)
+CHECK_CXX_SOURCE_COMPILES("
+	#include <unistd.h>
+	int main(void) {
+		int fd[2];
+		return pipe2(fd, 0);
+	}" HAVE_PIPE2)
 cmake_reset_check_state()
 include(CheckCXXStdThread)
 CHECK_CXX_STD_THREAD(HAVE_STD_THREAD)

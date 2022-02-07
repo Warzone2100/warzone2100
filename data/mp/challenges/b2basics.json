@@ -18,6 +18,7 @@
 		"team": 0
 	},
 	"player_1": {
+		"ai": "multiplay/skirmish/nb_generic.js",
 		"difficulty": "Medium",
 		"team": 1
 	}

@@ -39,7 +39,7 @@ bool recvDroidDisEmbark(NETQUEUE queue);
 bool recvColourRequest(NETQUEUE queue);
 bool recvFactionRequest(NETQUEUE queue);
 bool recvPositionRequest(NETQUEUE queue);
-void recvOptions(NETQUEUE queue);
+bool recvOptions(NETQUEUE queue);
 void sendOptions();
 
 bool recvResearchStatus(NETQUEUE queue);
@@ -51,5 +51,7 @@ bool recvMapFileRequested(NETQUEUE queue);
 bool recvTextMessageAI(NETQUEUE queue);         //AI multiplayer message
 bool recvTeamRequest(NETQUEUE queue);
 bool recvReadyRequest(NETQUEUE queue);
+
+bool recvSpecInGameTextMessage(NETQUEUE queue);
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

@@ -510,7 +510,7 @@ static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path
 
 wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
 {
-	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
+	ASSERT_OR_RETURN(nullptr, player >= 0 && (player < MAX_PLAYERS || player == selectedPlayer), "Player index %d out of bounds", player);
 
 	debug(LOG_SCRIPT, "loadPlayerScript[%d]: %s", player, path.toUtf8().c_str());
 
@@ -596,6 +596,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["isMultiplayer"] = NetPlay.bComms;
 	//== * ```challenge``` If the current game is a challenge. (4.1.4+ only)
 	globalVars["challenge"] = challengeActive;
+	//== * ```idleTime``` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
+	globalVars["idleTime"] = game.inactivityMinutes * 60 * 1000;
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
@@ -888,10 +890,10 @@ void jsAutogameSpecific(const WzString &name, int player)
 	wzapi::scripting_instance* instance = loadPlayerScript(name, player, AIDifficulty::MEDIUM);
 	if (!instance)
 	{
-		console("Failed to load selected AI! Check your logs to see why.");
+		console(_("Failed to load selected AI! Check your logs to see why."));
 		return;
 	}
-	console("Loaded the %s AI script for current player!", name.toUtf8().c_str());
+	console(_("Loaded the %s AI script for current player!"), name.toUtf8().c_str());
 	instance->handle_eventGameInit();
 	instance->handle_eventStartLevel();
 }
@@ -905,7 +907,8 @@ void jsShowDebug()
 {
 	globalDialog = true;
 	class make_shared_enabler : public scripting_engine::DebugInterface { };
-	jsDebugCreate(std::make_shared<make_shared_enabler>(), jsHandleDebugClosed);
+	bool isSpectator = NetPlay.players[selectedPlayer].isSpectator;
+	jsDebugCreate(std::make_shared<make_shared_enabler>(), jsHandleDebugClosed, isSpectator);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1122,16 +1125,16 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 	return true;
 }
 
-//__ ## eventPlayerLeft(player index)
+//__ ## eventPlayerLeft(player)
 //__
 //__ An event that is run after a player has left the game.
 //__
-bool triggerEventPlayerLeft(int id)
+bool triggerEventPlayerLeft(int player)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (auto *instance : scripts)
 	{
-		instance->handle_eventPlayerLeft(id);
+		instance->handle_eventPlayerLeft(player);
 	}
 	return true;
 }
@@ -1512,7 +1515,7 @@ bool triggerEventSelected()
 	return true;
 }
 
-//__ ## eventGroupLoss(object, group id, new size)
+//__ ## eventGroupLoss(object, groupId, newSize)
 //__
 //__ An event that is run whenever a group becomes empty. Input parameter
 //__ is the about to be killed object, the group's id, and the new group size.
@@ -1534,7 +1537,7 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 //__
 //__ An event that is run whenever a droid enters an area label. The area is then
 //__ deactived. Call resetArea() to reactivate it. The name of the event is
-//__ eventArea + the name of the label.
+//__ `eventArea${label}`.
 //__
 bool triggerEventArea(const std::string& label, DROID *psDroid)
 {
@@ -1581,7 +1584,10 @@ bool triggerEventAllianceOffer(uint8_t from, uint8_t to)
 //__
 bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 {
-	ASSERT(scriptsReady, "Scripts not initialized yet");
+	if (!scriptsReady)
+	{
+		return false; //silently ignore
+	}
 	for (auto *instance : scripts)
 	{
 		instance->handle_eventAllianceAccepted(from, to);
@@ -1595,7 +1601,10 @@ bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 //__
 bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 {
-	ASSERT(scriptsReady, "Scripts not initialized yet");
+	if (!scriptsReady)
+	{
+		return false; //silently ignore
+	}
 	for (auto *instance : scripts)
 	{
 		instance->handle_eventAllianceBroken(from, to);
@@ -2132,30 +2141,30 @@ bool scripting_engine::writeLabels(const char *filename)
 #define SCRIPT_ASSERT_PLAYER(retval, _context, _player) \
 	SCRIPT_ASSERT(retval, _context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
-//-- ## resetLabel(label[, filter])
+//-- ## resetLabel(labelName[, playerFilter])
 //--
 //-- Reset the trigger on an label. Next time a unit enters the area, it will trigger
 //-- an area event. Next time an object or a group is seen, it will trigger a seen event.
 //-- Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ALL_PLAYERS by default.
+//-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-//-- ## resetArea(label[, filter])
+//-- ## resetArea(labelName[, playerFilter])
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ALL_PLAYERS by default.
+//-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
 //--
-wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> filter))
+wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter))
 {
 	LABELMAP& labels = scripting_engine::instance().labels;
 	SCRIPT_ASSERT({}, context, labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
-	LABEL &l = labels[labelName];
-	l.triggered = 0; // make active again
-	l.subscriber = (filter.has_value()) ? filter.value() : ALL_PLAYERS;
+	LABEL &label = labels[labelName];
+	label.triggered = 0; // make active again
+	label.subscriber = playerFilter.value_or(ALL_PLAYERS);
 	return {};
 }
 
-//-- ## enumLabels([filter])
+//-- ## enumLabels([filterLabelType])
 //--
 //-- Returns a string list of labels that exist for this map. The optional filter
 //-- parameter can be used to only return labels of one specific type. (3.2+ only)
@@ -2169,8 +2178,8 @@ std::vector<std::string> scripting_engine::enumLabels(WZAPI_PARAMS(optional<int>
 		SCRIPT_TYPE type = (SCRIPT_TYPE)filterLabelType.value();
 		for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
 		{
-			const LABEL &l = i->second;
-			if (l.type == type)
+			const LABEL &label = i->second;
+			if (label.type == type)
 			{
 				matches.push_back(i->first);
 			}
@@ -2474,16 +2483,16 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 	return generic_script_object::Null();
 }
 
-//-- ## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
+//-- ## enumArea(<x1, y1, x2, y2 | label>[, playerFilter[, seen]])
 //--
 //-- Returns an array of game objects seen within the given area that passes the optional filter
-//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
-//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
+//-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
+//-- ```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
 //-- returned; by default only visible objects are returned. The label can either be actual
 //-- positions or a label to an AREA. Calling this function is much faster than iterating over all
 //-- game objects using other enum functions. (3.2+ only)
 //--
-std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> _filter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> _playerFilter, optional<bool> _seen))
 {
 	SCRIPT_ASSERT({}, context, instance().labels.count(label) > 0, "Label %s not found", label.c_str());
 	const LABEL &p = instance().labels[label];
@@ -2492,26 +2501,26 @@ std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(
 	int y1 = p.p1.y;
 	int x2 = p.p2.x;
 	int y2 = p.p2.y;
-	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _filter, _seen);
+	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _playerFilter, _seen);
 }
 
 typedef std::vector<BASE_OBJECT *> GridList;
 #include "mapgrid.h"
 
-std::vector<const BASE_OBJECT *> scripting_engine::enumArea(WZAPI_PARAMS(scr_area area, optional<int> _filter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> scripting_engine::enumArea(WZAPI_PARAMS(scr_area area, optional<int> _playerFilter, optional<bool> _seen))
 {
 	int x1 = world_coord(area.x1);
 	int y1 = world_coord(area.y1);
 	int x2 = world_coord(area.x2);
 	int y2 = world_coord(area.y2);
-	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _filter, _seen);
+	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _playerFilter, _seen);
 }
 
-std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> _filter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> _playerFilter, optional<bool> _seen))
 {
 	int player = context.player();
-	int filter = (_filter.has_value()) ? _filter.value() : ALL_PLAYERS;
-	bool seen = (_seen.has_value()) ? _seen.value() : true;
+	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
+	bool seen = _seen.value_or(true);
 
 	static GridList gridList;  // static to avoid allocations. // not thread-safe
 	gridList = gridStartIterateArea(x1, y1, x2, y2);
@@ -2521,9 +2530,9 @@ std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PA
 		BASE_OBJECT *psObj = *gi;
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
-			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
-			    || (filter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
-			    || (filter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
+			if ((playerFilter >= 0 && psObj->player == playerFilter) || playerFilter == ALL_PLAYERS
+			    || (playerFilter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
+			    || (playerFilter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
 			{
 				list.push_back(psObj);
 			}
@@ -2532,23 +2541,23 @@ std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PA
 	return list;
 }
 
-std::vector<const BASE_OBJECT *> scripting_engine::enumAreaJS(WZAPI_PARAMS(scripting_engine::area_by_values_or_area_label_lookup area_lookup, optional<int> filter, optional<bool> seen))
+std::vector<const BASE_OBJECT *> scripting_engine::enumAreaJS(WZAPI_PARAMS(scripting_engine::area_by_values_or_area_label_lookup area_lookup, optional<int> playerFilter, optional<bool> seen))
 {
 	if (area_lookup.isLabel())
 	{
 		auto optLabel = area_lookup.label();
 		ASSERT(optLabel.has_value(), "optional label is null");
-		return enumAreaByLabel(context, optLabel.value(), filter, seen);
+		return enumAreaByLabel(context, optLabel.value(), playerFilter, seen);
 	}
 	else
 	{
 		auto optArea = area_lookup.area();
 		ASSERT(optArea.has_value(), "optional area is null");
-		return enumArea(context, optArea.value(), filter, seen);
+		return enumArea(context, optArea.value(), playerFilter, seen);
 	}
 }
 
-//-- ## enumGroup(group)
+//-- ## enumGroup(groupId)
 //--
 //-- Return an array containing all the members of a given group.
 //--
@@ -2578,7 +2587,7 @@ int scripting_engine::newGroup(WZAPI_NO_PARAMS)
 	return i;
 }
 
-//-- ## groupAddArea(group, x1, y1, x2, y2)
+//-- ## groupAddArea(groupId, x1, y1, x2, y2)
 //--
 //-- Add any droids inside the given area to the given group. (3.2+ only)
 //--
@@ -2600,7 +2609,7 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 	return {};
 }
 
-//-- ## groupAddDroid(group, droid)
+//-- ## groupAddDroid(groupId, droid)
 //--
 //-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
 //--
@@ -2611,7 +2620,7 @@ wzapi::no_return_value scripting_engine::groupAddDroid(WZAPI_PARAMS(int groupId,
 	return {};
 }
 
-//-- ## groupAdd(group, object)
+//-- ## groupAdd(groupId, object)
 //--
 //-- Add given game object to the given group.
 //--
@@ -2622,7 +2631,7 @@ wzapi::no_return_value scripting_engine::groupAdd(WZAPI_PARAMS(int groupId, cons
 	return {};
 }
 
-//-- ## groupSize(group)
+//-- ## groupSize(groupId)
 //--
 //-- Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
 //--

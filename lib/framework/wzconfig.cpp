@@ -71,8 +71,8 @@ static nlohmann::json jsonMerge(nlohmann::json original, const nlohmann::json& o
 WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 : mArray(nlohmann::json::array())
 {
-	UDWORD size;
-	char *data;
+	UDWORD size = 0;
+	char *data = nullptr;
 
 	mFilename = name;
 	mStatus = true;
@@ -98,8 +98,11 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	}
 	if (!loadFile(name.toUtf8().c_str(), &data, &size))
 	{
+		mStatus = false;
 		debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().c_str());
+		return;
 	}
+	ASSERT_OR_RETURN(, data != nullptr, "Null data?");
 
 	try {
 		mRoot = nlohmann::json::parse(data, data + size);
@@ -417,6 +420,10 @@ void WzConfig::beginArray(const WzString &name)
 		}
 		ASSERT(it.value().is_array(), "%s: beginArray() on non-array key \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 		mArray = it.value();
+		if (mArray.size() == 0)
+		{
+			return;
+		}
 		ASSERT(mArray.front().is_object(), "%s: beginArray() on non-object array \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 		pCurrentObj = &mArray.front();
 	}

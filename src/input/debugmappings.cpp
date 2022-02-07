@@ -21,6 +21,7 @@
 #include "debugmappings.h"
 
 #include "lib/netplay/netplay.h"
+#include "../multiplay.h"
 
 DebugInputManager::DebugInputManager(const unsigned int maxPlayers)
 	: bDoingDebugMappings(false)
@@ -42,14 +43,17 @@ bool DebugInputManager::getPlayerWantsDebugMappings(const unsigned int playerInd
 
 void DebugInputManager::setPlayerWantsDebugMappings(const unsigned int playerIndex, const bool bWants)
 {
+	ASSERT_OR_RETURN(, playerIndex < playerWantsDebugMappings.size(), "playerIndex is invalid: %u", playerIndex);
 	playerWantsDebugMappings[playerIndex] = bWants;
 	bDoingDebugMappings = true;
+	const bool bIsTrueMultiplayerGame = bMultiPlayer && NetPlay.bComms;
 	for (unsigned int n = 0; n < playerWantsDebugMappings.size(); ++n)
 	{
 		ASSERT_OR_RETURN(, n < MAX_PLAYERS, "playerWantsDebugMappings has more entries than MAX_PLAYERS");
 
 		const bool bIsEmptySlot = !NetPlay.players[n].allocated;
-		const bool bPlayerNWantsDebugMappings = bIsEmptySlot || playerWantsDebugMappings[n];
+		const bool bIsSpectatorSlot = NetPlay.players[n].isSpectator;
+		const bool bPlayerNWantsDebugMappings = bIsEmptySlot || (bIsSpectatorSlot && bIsTrueMultiplayerGame) || playerWantsDebugMappings[n];
 		bDoingDebugMappings &= bPlayerNWantsDebugMappings;
 	}
 }

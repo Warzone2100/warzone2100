@@ -166,6 +166,7 @@ DROID_TYPE droidType(DROID *psDroid);
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
 void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
+void removeDroidsFromGroup(UDWORD playerNumber);
 
 bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen);
 

@@ -118,6 +118,7 @@ extern std::unique_ptr<uint8_t[]> psAuxMap[MAX_PLAYERS + AUX_MAX];	// yes, we wa
 /// Find aux bitfield for a given tile
 WZ_DECL_ALWAYS_INLINE static inline uint8_t auxTile(int x, int y, int player)
 {
+	ASSERT_OR_RETURN(AUXBITS_ALL, player >= 0 && player < MAX_PLAYERS + AUX_MAX, "invalid player: %d", player);
 	return psAuxMap[player][x + y * mapWidth];
 }
 
@@ -226,7 +227,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxClearBlocking(int x, int y, int stat
  * Check if tile contains a structure or feature. Function is thread-safe,
  * but do not rely on the result if you mean to alter the object pointer.
  */
-static inline bool TileIsOccupied(const MAPTILE *tile)
+WZ_DECL_ALWAYS_INLINE static inline bool TileIsOccupied(const MAPTILE *tile)
 {
 	return tile->psObject != nullptr;
 }
@@ -269,10 +270,11 @@ static inline bool TileIsBurning(const MAPTILE *tile)
 /** Check if tile has been explored. */
 static inline bool tileIsExplored(const MAPTILE *psTile)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return true; }
 	return psTile->tileExploredBits & (1 << selectedPlayer);
 }
 
-/** Is the tile ACTUALLY, 100% visible? 
+/** Is the tile ACTUALLY, 100% visible? -- (For DISPLAY-ONLY purposes - *NOT* game-state calculations!)
  * This is not the same as for ex. psStructure->visible[selectedPlayer],
  * because that would only mean the psStructure is in *explored Tile*
  * psDroid->visible on the other hand, works correctly,
@@ -280,6 +282,7 @@ static inline bool tileIsExplored(const MAPTILE *psTile)
 */
 static inline bool tileIsClearlyVisible(const MAPTILE *psTile)
 {
+	if (selectedPlayer >= MAX_PLAYERS || godMode) { return true; }
 	return psTile->sensorBits & (1 << selectedPlayer);
 }
 
@@ -301,6 +304,22 @@ static inline bool TileHasSmallStructure(const MAPTILE *tile)
 
 /* Can player number p has explored tile t? */
 #define TEST_TILE_VISIBLE(p,t)	((t)->tileExploredBits & (1<<(p)))
+
+/* Can selectedPlayer see tile t? */
+/* To be used for *DISPLAY* purposes only (*not* game-state/calculation related) */
+static inline bool TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(MAPTILE *pTile)
+{
+	if (godMode)
+	{
+		// always visible
+		return true;
+	}
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	return TEST_TILE_VISIBLE(selectedPlayer, pTile);
+}
 
 /* Set a tile to be visible for a player */
 #define SET_TILE_VISIBLE(p,t) ((t)->tileExploredBits |= alliancebits[p])
@@ -522,7 +541,9 @@ bool fireOnLocation(unsigned int x, unsigned int y);
  */
 WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
-	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
+	return ((player == selectedPlayer && godMode) ||
+			((player < MAX_PLAYER_SLOTS) && (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)))
+			);
 }
 
 void mapInit();

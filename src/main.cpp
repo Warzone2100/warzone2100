@@ -70,6 +70,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/netreplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 
@@ -105,6 +106,7 @@
 #include <sodium.h>
 #include "updatemanager.h"
 #include "activity.h"
+#include "stdinreader.h"
 #if defined(ENABLE_DISCORD)
 #include "integrations/wzdiscordrpc.h"
 #endif
@@ -147,8 +149,36 @@ char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules ap
 char rulesettag[40] = "";
 
 //flag to indicate when initialisation is complete
+const char* SAVEGAME_CAM = "savegames/campaign";
+const char* SAVEGAME_CAM_AUTO = "savegames/campaign/auto";
+const char* SAVEGAME_SKI = "savegames/skirmish";
+const char* SAVEGAME_SKI_AUTO = "savegames/skirmish/auto";
+
+const char *SaveGameLocToPath[] = {
+	SAVEGAME_CAM,
+	SAVEGAME_CAM_AUTO,
+	SAVEGAME_SKI,
+	SAVEGAME_SKI_AUTO,
+};
+
+std::string SaveGamePath_t::toPath(SaveGamePath_t::Extension ext)
+{
+	std::string out;
+	switch (ext)
+	{
+	case SaveGamePath_t::Extension::GAM:
+		out = std::string(SaveGameLocToPath[loc]) + "/" + gameName + ".gam";
+		break;
+	case SaveGamePath_t::Extension::JSON:
+		out = std::string(SaveGameLocToPath[loc]) + "/" + gameName + ".json";
+		break;
+	};
+	return out;
+}
+
 bool	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
+char    ReplayPath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
@@ -727,16 +757,6 @@ static void scanDataDirs()
 	registerSearchPath("/Library/Application Support/Warzone 2100/", 1);
 #endif
 
-	// Commandline supplied datadir
-	if (strlen(datadir) != 0)
-	{
-		registerSearchPath(datadir, 1);
-	}
-
-	// User's home dir
-	registerSearchPath(PHYSFS_getWriteDir(), 2);
-	rebuildSearchPath(mod_multiplay, true);
-
 #if !defined(WZ_OS_MAC)
 	// Check PREFIX-based paths
 	std::string tmpstr;
@@ -808,7 +828,7 @@ static void scanDataDirs()
 		{
 			WzString resourceDataPath(resourcePath);
 			resourceDataPath += "/data";
-			registerSearchPath(resourceDataPath.toUtf8().c_str(), 8);
+			registerSearchPath(resourceDataPath.toUtf8().c_str(), 3);
 			rebuildSearchPath(mod_multiplay, true);
 		}
 		else
@@ -822,6 +842,16 @@ static void scanDataDirs()
 		}
 	}
 #endif
+
+	// Commandline supplied datadir
+	if (strlen(datadir) != 0)
+	{
+		registerSearchPath(datadir, 1);
+	}
+
+	// User's home dir
+	registerSearchPath(PHYSFS_getWriteDir(), 2);
+	rebuildSearchPath(mod_multiplay, true);
 
 	/** Debugging and sanity checks **/
 
@@ -970,6 +1000,38 @@ static void startGameLoop()
 	}
 	triggerEvent(TRIGGER_START_LEVEL);
 	screen_disableMapPreview();
+
+	auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
+	switch (currentGameMode)
+	{
+		case ActivitySink::GameMode::MENUS:
+			// should not happen
+			break;
+		case ActivitySink::GameMode::CAMPAIGN:
+		case ActivitySink::GameMode::CHALLENGE:
+			// replays not currently supported
+			break;
+		case ActivitySink::GameMode::SKIRMISH:
+		case ActivitySink::GameMode::MULTIPLAYER:
+		{
+			// start saving a replay
+			if (!war_getDisableReplayRecording())
+			{
+				WZGameReplayOptionsHandler replayOptions;
+				NETreplaySaveStart((currentGameMode == ActivitySink::GameMode::MULTIPLAYER) ? "multiplay" : "skirmish", replayOptions, (currentGameMode == ActivitySink::GameMode::MULTIPLAYER));
+			}
+			break;
+		}
+		default:
+			debug(LOG_INFO, "Unhandled case: %u", (unsigned int)currentGameMode);
+	}
+
+	setMaxFastForwardTicks(WZ_DEFAULT_MAX_FASTFORWARD_TICKS, true); // default value / spectator "catch-up" behavior
+	if (NETisReplay())
+	{
+		// for replays, ensure we don't start off fast-forwarding
+		setMaxFastForwardTicks(0, true);
+	}
 }
 
 
@@ -980,6 +1042,10 @@ static void startGameLoop()
 static void stopGameLoop()
 {
 	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
+
+	NETreplaySaveStop();
+	NETshutdownReplay();
+
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
 		clearBlueprints();
@@ -994,6 +1060,7 @@ static void stopGameLoop()
 			{
 				player.resetAll();
 			}
+			NetPlay.players.resize(MAX_CONNECTED_PLAYERS);
 		}
 		closeLoadingScreen();
 		reloadMPConfig();
@@ -1115,7 +1182,7 @@ static void runTitleLoop()
 	case TITLECODE_QUITGAME:
 		debug(LOG_MAIN, "TITLECODE_QUITGAME");
 		stopTitleLoop();
-		wzQuit();
+		wzQuit(0);
 		break;
 	case TITLECODE_SAVEGAMELOAD:
 		{
@@ -1497,6 +1564,60 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 	return true;
 }
 
+static void wzCmdInterfaceInit()
+{
+	switch (wz_command_interface())
+	{
+		case WZ_Command_Interface::None:
+			return;
+		case WZ_Command_Interface::StdIn_Interface:
+			stdInThreadInit();
+			break;
+	}
+}
+
+static void wzCmdInterfaceShutdown()
+{
+	stdInThreadShutdown();
+}
+
+static void cleanupOldLogFiles()
+{
+	constexpr int MAX_OLD_LOGS = 50;
+	ASSERT_OR_RETURN(, PHYSFS_isInit() != 0, "PhysFS isn't initialized");
+	// safety check to ensure we *never* delete the current log file
+	WzString fullCurrentLogFileName = WzString::fromUtf8(getDefaultLogFilePath("/"));
+	if (fullCurrentLogFileName.startsWith("logs/"))
+	{
+		fullCurrentLogFileName.remove(0, 5);
+	}
+
+	CleanupFileEnumFilterFunctions filterFuncs;
+	constexpr std::chrono::hours MinDeletableAge(24 * 7); // never delete logs that are less than a week old
+	auto currentTime = std::chrono::system_clock::now();
+	filterFuncs.fileNameFilterFunction = [](const char *fileName) -> bool {
+		return filenameEndWithExtension(fileName, ".txt") || filenameEndWithExtension(fileName, ".log");
+	};
+	filterFuncs.fileLastModifiedFilterFunction = [currentTime, MinDeletableAge](time_t fileLastModified) -> bool {
+		return std::chrono::duration_cast<std::chrono::hours>(currentTime - std::chrono::system_clock::from_time_t(fileLastModified)) >= MinDeletableAge;
+	};
+
+	// clean up old log .txt / .log files
+	WZ_PHYSFS_cleanupOldFilesInFolder("logs", filterFuncs, MAX_OLD_LOGS, [fullCurrentLogFileName](const char *fileName){
+		if (fullCurrentLogFileName.compare(fileName) == 0)
+		{
+			// skip
+			return true;
+		}
+		if (PHYSFS_delete(fileName) == 0)
+		{
+			debug(LOG_ERROR, "Failed to delete old log file: %s", fileName);
+			return false;
+		}
+		return true;
+	});
+}
+
 // for backend detection
 extern const char *BACKEND;
 
@@ -1578,22 +1699,26 @@ int realmain(int argc, char *argv[])
 
 	make_dir(MultiCustomMapsPath, "maps", nullptr); // needed to prevent crashes when getting map
 
-	PHYSFS_mkdir("mods/autoload");	// mods that are automatically loaded
-	PHYSFS_mkdir("mods/campaign");	// campaign only mods activated with --mod_ca=example.wz
-	PHYSFS_mkdir("mods/downloads");	// mod download directory
-	PHYSFS_mkdir("mods/global");	// global mods activated with --mod=example.wz
-	PHYSFS_mkdir("mods/multiplay");	// multiplay only mods activated with --mod_mp=example.wz
-	PHYSFS_mkdir("mods/music");	// music mods that are automatically loaded
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("autoload").c_str());	// mods that are automatically loaded
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("campaign").c_str());	// campaign only mods activated with --mod_ca=example.wz
+	PHYSFS_mkdir("mods/downloads");	// mod download directory - NOT currently versioned
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("global").c_str());	// global mods activated with --mod=example.wz
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("multiplay").c_str());	// multiplay only mods activated with --mod_mp=example.wz
+	PHYSFS_mkdir(version_getVersionedModsFolderPath("music").c_str());	// music mods that are automatically loaded
 
 	make_dir(MultiPlayersPath, "multiplay", "players"); // player profiles
 
 	PHYSFS_mkdir("music");	// custom music overriding default music and music mods
 
 	make_dir(SaveGamePath, "savegames", nullptr); 	// save games
-	PHYSFS_mkdir("savegames/campaign");		// campaign save games
-	PHYSFS_mkdir("savegames/campaign/auto");	// campaign autosave games
-	PHYSFS_mkdir("savegames/skirmish");		// skirmish save games
-	PHYSFS_mkdir("savegames/skirmish/auto");	// skirmish autosave games
+	PHYSFS_mkdir(SAVEGAME_CAM);		// campaign save games
+	PHYSFS_mkdir(SAVEGAME_CAM_AUTO);	// campaign autosave games
+	PHYSFS_mkdir(SAVEGAME_SKI);		// skirmish save games
+	PHYSFS_mkdir(SAVEGAME_SKI_AUTO);	// skirmish autosave games
+
+	make_dir(ReplayPath, "replay", nullptr);  // replays
+	PHYSFS_mkdir("replay/skirmish");
+	PHYSFS_mkdir("replay/multiplay");
 
 	make_dir(ScreenDumpPath, "screenshots", nullptr);	// for screenshots
 
@@ -1674,19 +1799,20 @@ int realmain(int argc, char *argv[])
 	// Now we check the mods to see if they exist or not (specified on the command line)
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
-		char modtocheck[256];
+		std::string modtocheck;
 #if defined WZ_PHYSFS_2_1_OR_GREATER
 		PHYSFS_Stat metaData;
 #endif
 
 		// check whether given global mods are regular files
+		auto globalModsPath = version_getVersionedModsFolderPath("global");
 		for (auto iterator = global_mods.begin(); iterator != global_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/global/%s", iterator->c_str());
+			modtocheck = globalModsPath + "/" + *iterator;
 #if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
 #elif defined WZ_PHYSFS_2_1_OR_GREATER
-			PHYSFS_stat(modtocheck, &metaData);
+			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
 #endif
 			{
@@ -1701,13 +1827,14 @@ int realmain(int argc, char *argv[])
 			}
 		}
 		// check whether given campaign mods are regular files
+		auto campaignModsPath = version_getVersionedModsFolderPath("campaign");
 		for (auto iterator = campaign_mods.begin(); iterator != campaign_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/campaign/%s", iterator->c_str());
+			modtocheck = campaignModsPath + "/" + *iterator;
 #if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
 #elif defined WZ_PHYSFS_2_1_OR_GREATER
-			PHYSFS_stat(modtocheck, &metaData);
+			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
 #endif
 			{
@@ -1722,13 +1849,14 @@ int realmain(int argc, char *argv[])
 			}
 		}
 		// check whether given multiplay mods are regular files
+		auto multiplayModsPath = version_getVersionedModsFolderPath("multiplay");
 		for (auto iterator = multiplay_mods.begin(); iterator != multiplay_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/multiplay/%s", iterator->c_str());
+			modtocheck = multiplayModsPath + "/" + *iterator;
 #if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
 #elif defined WZ_PHYSFS_2_1_OR_GREATER
-			PHYSFS_stat(modtocheck, &metaData);
+			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
 #endif
 			{
@@ -1756,6 +1884,8 @@ int realmain(int argc, char *argv[])
 	}
 
 	initializeCrashHandlingContext(gfxbackend);
+
+	wzCmdInterfaceInit();
 
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString(false));
 	debug(LOG_WZ, "Using language: %s", getLanguage());
@@ -1890,7 +2020,9 @@ int realmain(int argc, char *argv[])
 #if defined(ENABLE_DISCORD)
 	discordRPCShutdown();
 #endif
+	wzCmdInterfaceShutdown();
 	urlRequestShutdown();
+	cleanupOldLogFiles();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
 	for (int i = 0; i < argc; i++)
@@ -1901,9 +2033,10 @@ int realmain(int argc, char *argv[])
 	free(utfargv);
 #endif
 	ActivityManager::instance().shutdown();
+	int exitCode = wzGetQuitExitCode();
 	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
-	return EXIT_SUCCESS;
+	return exitCode;
 }
 
 /*!

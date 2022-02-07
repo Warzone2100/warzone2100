@@ -230,22 +230,21 @@ function eventStartLevel()
 	//This mission shows you the approximate base locations at the start.
 	//These are removed once the base it is close to is seen and is replaced
 	//with a more precise proximity blip.
-	hackAddMessage("C27_OBJECTIVE1", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	hackAddMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C27_OBJECTIVE1", PROX_MSG, CAM_HUMAN_PLAYER, false);
+	hackAddMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER, false);
+	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, false);
+	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	if (difficulty >= HARD)
 	{
 		addDroid(THE_COLLECTIVE, 55, 25, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
 
 		camManageTrucks(THE_COLLECTIVE);
-		queue("truckDefense", camSecondsToMilliseconds(10));
 
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}
 
-	queue("baseThreeVtolAttack", camSecondsToMilliseconds(30));
-	queue("baseFourVtolAttack", camMinutesToMilliseconds(1));
-	queue("enableFactoriesAndHovers", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
+	queue("baseThreeVtolAttack", camChangeOnDiff(camSecondsToMilliseconds(90)));
+	queue("baseFourVtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
+	queue("enableFactoriesAndHovers", camChangeOnDiff(camMinutesToMilliseconds(2)));
 }
