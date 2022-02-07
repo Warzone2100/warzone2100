@@ -1,5 +1,4 @@
 include("script/campaign/libcampaign.js");
-var index;
 
 function eventStartLevel()
 {
