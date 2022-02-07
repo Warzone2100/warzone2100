@@ -22,7 +22,6 @@ function droidCanReach_p(obj,x,y){
 }
 
 var perfOrder=[];
-var perfCommands=0;
 
 /*
 function orderDroidObj_p(who, order, obj){

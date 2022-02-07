@@ -133,7 +133,7 @@ function produceDroids(){
 	if(earlyGame && getResearch("R-Sys-Sensor-Turret01").done){
 		
 		//SensorTurret1Mk1
-		var todo;
+		// TODO
 	}
 */		
 	//Строители
