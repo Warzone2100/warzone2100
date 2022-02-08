@@ -86,7 +86,7 @@ struct SIMPLE_OBJECT
 	virtual ~SIMPLE_OBJECT();
 
 	const OBJECT_TYPE type;                         ///< The type of object
-	uint32_t        id;                             ///< ID number of the object
+	uint32_t        id;                       		///< ID number of the object
 	Position        pos = Position(0, 0, 0);        ///< Position of the object
 	Rotation        rot;                            ///< Object's yaw +ve rotation around up-axis
 	uint8_t         player;                         ///< Which player the object belongs to
@@ -151,6 +151,11 @@ struct Spacetime
 	Position pos = Position(0, 0, 0);   ///< Position of the object
 	Rotation rot;                       ///< Rotation of the object
 };
+
+static inline void setId(SIMPLE_OBJECT* psObj, uint32_t id)
+{
+	psObj->id = id;
+}
 
 static inline Spacetime getSpacetime(SIMPLE_OBJECT const *psObj)
 {

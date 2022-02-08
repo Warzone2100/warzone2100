@@ -5045,7 +5045,7 @@ static bool loadWzMapDroidInit(WzMap::Map &wzMap)
 		}
 		if (droid.id.has_value())
 		{
-			psDroid->id = droid.id.value() > 0 ? droid.id.value() : 0xFEDBCA98;	// hack to remove droid id zero
+			setId(psDroid, droid.id.value() > 0 ? droid.id.value() : 0xFEDBCA98);  // hack to remove droid id zero
 		}
 		ASSERT(psDroid->id != 0, "Droid ID should never be zero here");
 
@@ -5482,7 +5482,8 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		// Copy the values across
 		if (id > 0)
 		{
-			psDroid->id = id; // force correct ID, unless ID is set to eg -1, in which case we should keep new ID (useful for starting units in campaign)
+			// force correct ID, unless ID is set to eg -1, in which case we should keep new ID (useful for starting units in campaign)
+			setId(psDroid, id);
 		}
 		ASSERT(id != 0, "Droid ID should never be zero here");
 		// conditional check so that existing saved games don't break
@@ -5903,7 +5904,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		}
 		// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
 		// the scripts -so in ALL CASES overwrite the ID!
-		psStructure->id = psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98; // hack to remove struct id zero
+		setId(psStructure, psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98);  // hack to remove struct id zero
 		psStructure->periodicalDamage = psSaveStructure->periodicalDamage;
 		periodicalDamageTime = psSaveStructure->periodicalDamageStart;
 		psStructure->periodicalDamageStart = periodicalDamageTime;
@@ -5995,7 +5996,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap)
 		{
 			// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
 			// the scripts -so in ALL CASES overwrite the ID!
-			psStructure->id = structure.id.value() > 0 ? structure.id.value() : 0xFEDBCA98; // hack to remove struct id zero
+			setId(psStructure, structure.id.value() > 0 ? structure.id.value() : 0xFEDBCA98);  // hack to remove struct id zero
 		}
 		if (structure.modules > 0)
 		{
@@ -6099,7 +6100,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		}
 		if (id > 0)
 		{
-			psStructure->id = id;	// force correct ID
+			setId(psStructure, id);   // force correct ID
 		}
 
 		// common BASE_OBJECT info
@@ -6646,7 +6647,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		pFeature->id = psSaveFeature->id;
+		setId(pFeature, psSaveFeature->id);
 		pFeature->rot.direction = DEG(psSaveFeature->direction);
 		pFeature->periodicalDamage = psSaveFeature->periodicalDamage;
 		if (psHeader->version >= VERSION_14)
@@ -6691,7 +6692,7 @@ static bool loadWzMapFeature(WzMap::Map &wzMap)
 		//restore values
 		if (feature.id.has_value())
 		{
-			pFeature->id = feature.id.value();
+			setId(pFeature, feature.id.value());
 		}
 		else
 		{
@@ -6758,11 +6759,11 @@ bool loadSaveFeature2(const char *pFileName)
 		int id = ini.value("id", -1).toInt();
 		if (id > 0)
 		{
-			pFeature->id = id;
+			setId(pFeature, id);
 		}
 		else
 		{
-			pFeature->id = generateSynchronisedObjectId();
+			setId(pFeature, generateSynchronisedObjectId());
 		}
 		pFeature->rot = ini.vector3i("rotation");
 		pFeature->player = ini.value("player", PLAYER_FEATURE).toInt();
