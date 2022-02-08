@@ -115,6 +115,9 @@ comrotmh: { body: "Body6SUPP", prop: "tracked01", weap: "Mortar3ROTARYMk1" },
 // SUB_2_8
 comhvat: { body: "Body6SUPP", prop: "V-Tol", weap: "Rocket-VTOL-HvyA-T" },
 
+// CAM_2_END
+cowwt: { body: "Body9REC", prop: "tracked01", weap: "QuadRotAAGun" },
+
 // CAM_3_A
 nxmscouh: { body: "Body7ABT", prop: "hover02", weap: "Missile-A-T" },
 nxcyrail: { body: "CybNXRail1Jmp", prop: "CyborgLegs02", weap: "NX-Cyb-Rail1" },
