@@ -61,8 +61,9 @@ function eventTransporterLaunch(transporter)
 }
 
 //Return randomly selected droid templates.
-function randomTemplates(list, transporterAmount)
+function randomTemplates(list, transporterAmount, useWhirlwinds)
 {
+	const WHIRLWIND_AMOUNT = 2;
 	var droids = [];
 	var size;
 
@@ -78,6 +79,15 @@ function randomTemplates(list, transporterAmount)
 	for (var i = 0; i < size; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
+	}
+
+	if (useWhirlwinds)
+	{
+		// Include Whirlwinds for ground reinforcements.
+		for (var i = 0; i < WHIRLWIND_AMOUNT; ++i)
+		{
+			droids.push(cTempl.cowwt);
+		}
 	}
 
 	return droids;
@@ -110,7 +120,7 @@ function cyborgAttack()
 	var southCyborgAssembly = {x: 123, y: 125};
 	var list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
 
-	camSendReinforcement(THE_COLLECTIVE, camMakePos(southCyborgAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(southCyborgAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
 	});
 }
@@ -119,7 +129,7 @@ function cyborgAttackRandom()
 {
 	var list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.npcybc, cTempl.comrotm]; //favor cannon cyborg
 
-	camSendReinforcement(THE_COLLECTIVE, camMakePos(camGenerateRandomMapEdgeCoordinate(startpos)), randomTemplates(list).concat(cTempl.comsens), CAM_REINFORCE_GROUND, {
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(camGenerateRandomMapEdgeCoordinate(startpos)), randomTemplates(list, false, true).concat(cTempl.comsens), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
 	});
 }
@@ -130,7 +140,7 @@ function tankAttack()
 	var northTankAssembly = {x: 95, y: 3};
 	var list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
 
-	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
 	});
 }
@@ -140,7 +150,7 @@ function tankAttackWest()
 	var westTankAssembly = {x: 3, y: 112}; //This was unused. Now part of Hard/Insane playthroughs.
 	var list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
 
-	camSendReinforcement(THE_COLLECTIVE, camMakePos(westTankAssembly), randomTemplates(list, true), CAM_REINFORCE_GROUND, {
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(westTankAssembly), randomTemplates(list, true, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
 	});
 }
@@ -149,7 +159,7 @@ function transporterAttack()
 {
 	var droids = [cTempl.cohact, cTempl.comhltat, cTempl.cohbbt, cTempl.cohhpv];
 
-	camSendReinforcement(THE_COLLECTIVE, camMakePos(camGenerateRandomMapCoordinate(startpos, 10, 1)), randomTemplates(droids, true),
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(camGenerateRandomMapCoordinate(startpos, 10, 1)), randomTemplates(droids, true, false),
 		CAM_REINFORCE_TRANSPORT, {
 			entry: camGenerateRandomMapEdgeCoordinate(),
 			exit: camGenerateRandomMapEdgeCoordinate()
