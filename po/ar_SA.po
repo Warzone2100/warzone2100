@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-01-15 19:32\n"
+"PO-Revision-Date: 2022-02-09 10:13\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -13177,14 +13177,14 @@ msgstr "سيتم تطوير جميع أجهزة الاستشعار"
 #. data/mp/stats/weapons.json: $.Missile-MdArt.name
 #: po/custom/fromJson.txt:5223
 msgid "Seraph Missile Array"
-msgstr ""
+msgstr "راجمة صواريخ الشيطان"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MdArtMissile.name
 #. data/mp/stats/structure.json: $.Emplacement-MdART-pit.name
 #: po/custom/fromJson.txt:5227
 msgid "Seraph Missile Battery"
-msgstr ""
+msgstr "بطارية صواريخ الشيطان"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_M_AC2.text[1]
