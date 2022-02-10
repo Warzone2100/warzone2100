@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-02-09 10:13\n"
+"PO-Revision-Date: 2022-02-10 11:42\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -5137,7 +5137,8 @@ msgstr "لقد تم تطوير نظام «نازدا» بغرض حمايتنا. 
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "لقد ذكرت التقارير أن «نازدا» واجه خطأً أثناء إجراء فحصٍ روتينيٍ للأنظمة. لا تصدق ذلك. هنالك من كان يريد منه إبادتنا."
+msgstr "لقد ذكرت التقارير أن «نازدا» واجه خطأً أثناء إجراء فحصٍ روتينيٍ للأنظمة.\n"
+"لا تصدق ذلك. هنالك من كان يريد منه إبادتنا."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
