@@ -1,12 +1,11 @@
 
 /*
- * This file defines a standard AI personality for the base game. 
- * 
+ * This file defines a standard AI personality for the base game.
+ *
  * It relies on ruleset definition in /rulesets/ to provide
  * standard strategy descriptions and necessary game stat information.
- * 
+ *
  * Then it passes control to the main code.
- * 
  */
 
 // You can redefine these paths when you make a customized AI
