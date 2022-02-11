@@ -221,7 +221,7 @@ function eventStartLevel()
 	vtolAttack();
 	if (difficulty === INSANE)
 	{
-		setPower(playerPower(CAM_HUMAN_PLAYER) + 10000);
+		setPower(playerPower(CAM_HUMAN_PLAYER) + 12000);
 		setTimer("transporterAttack", camMinutesToMilliseconds(4));
 	}
 	if (difficulty >= HARD)
