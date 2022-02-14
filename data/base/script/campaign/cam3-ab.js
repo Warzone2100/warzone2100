@@ -267,7 +267,7 @@ function eventStartLevel()
 	winFlag = false;
 	hackFailChance = 30;
 
-	vtolAttack();
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 
 	queue("powerTransfer", camSecondsToMilliseconds(0.8));
 	queue("synapticsSound", camSecondsToMilliseconds(2.5));

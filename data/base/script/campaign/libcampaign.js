@@ -216,13 +216,7 @@ var __camAllowVictoryMsgClear;
 var __camVideoSequences;
 
 //vtol
-var __camVtolPlayer;
-var __camVtolStartPosition;
-var __camVtolTemplates;
-var __camVtolExitPosition;
-var __camVtolSpawnActive;
-var __camVtolSpawnStopObject;
-var __camVtolExtras;
+var __camVtolDataSystem;
 //////////globals vars end
 
 // A hack to make sure we do not put this variable into the savegame. It is
