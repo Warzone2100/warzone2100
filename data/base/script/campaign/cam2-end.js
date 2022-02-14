@@ -218,7 +218,7 @@ function eventStartLevel()
 	allowWin = false;
 	camPlayVideos([{video: "MB2_DII_MSG", type: CAMP_MSG}, {video: "MB2_DII_MSG2", type: MISS_MSG}]);
 
-	vtolAttack();
+	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds(30)));
 	if (difficulty === INSANE)
 	{
 		setPower(playerPower(CAM_HUMAN_PLAYER) + 12000);

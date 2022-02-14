@@ -60,9 +60,9 @@ camAreaEvent("rescueTrigger", function(droid)
 //Play videos, donate alpha to the player and setup reinforcements.
 camAreaEvent("phantomFacTrigger", function(droid)
 {
-	vtolAttack();
 	camPlayVideos(["pcv456.ogg", {video: "MB3_2_MSG3", type: CAMP_MSG}]); //Warn about VTOLs.
 	queue("enableReinforcements", camSecondsToMilliseconds(5));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 });
 
 function setAlphaExp()
