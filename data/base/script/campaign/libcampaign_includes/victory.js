@@ -157,6 +157,12 @@ function camSetExtraObjectiveMessage(message)
 	__camExtraObjectiveMessage = message;
 }
 
+//If the script wants to allow __camSetupConsoleForVictoryConditions() to clear the console.
+function camClearConsoleOnVictoryMessage(clear)
+{
+	__camAllowVictoryMsgClear = clear;
+}
+
 //////////// privates
 
 function __camGameLostCB()
@@ -474,27 +480,32 @@ function __camVictoryOffworld()
 	}
 }
 
-function __camShowVictoryConditions(forceMessage)
+function __camSetupConsoleForVictoryConditions()
 {
-	if (!camDef(forceMessage))
+	// Console clears are only done when collecting artifacts or destroying bases.
+	if (__camAllowVictoryMsgClear)
 	{
-		if (__camVictoryMessageThrottle + camSecondsToMilliseconds(10) > gameTime)
+		clearConsole();
+	}
+
+	queue("__camShowVictoryConditions", camSecondsToMilliseconds(0.5));
+}
+
+function __camShowVictoryConditions()
+{
+	if (!camDef(__camNextLevel))
+	{
+		return; // fastplay / tutorial. Should be a better identifier for this.
+	}
+
+	if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
+	{
+		if ((camDiscoverCampaign() === BETA_CAMPAIGN_NUMBER) && (difficulty === HARD || difficulty === INSANE))
 		{
-			return;
+			console(_("Hard / Insane difficulty hint:"));
+			console(_("Fortify a strong base across the map to protect yourself from the Collective"));
 		}
-		if (!camDef(__camNextLevel))
-		{
-			return; // fastplay / tutorial. Should be a better identifier for this.
-		}
-		if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
-		{
-			if ((camDiscoverCampaign() === BETA_CAMPAIGN_NUMBER) && (difficulty === HARD || difficulty === INSANE))
-			{
-				console(_("Hard / Insane difficulty hint:"));
-				console(_("Fortify a strong base across the map to protect yourself from the Collective"));
-			}
-			return; // do not need this on these missions.
-		}
+		return; // do not need this on these missions.
 	}
 
 	const ANNIHILATE_MESSAGE = _("Destroy all enemy units and structures");
@@ -560,6 +571,4 @@ function __camShowVictoryConditions(forceMessage)
 			console(__camExtraObjectiveMessage);
 		}
 	}
-
-	__camVictoryMessageThrottle = gameTime;
 }

@@ -210,7 +210,7 @@ var __camLZCompromisedTicker;
 var __camLastAttackTriggered;
 var __camLevelEnded;
 var __camExtraObjectiveMessage;
-var __camVictoryMessageThrottle;
+var __camAllowVictoryMsgClear;
 
 //video
 var __camVideoSequences;

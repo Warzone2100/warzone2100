@@ -312,7 +312,7 @@ function __camCheckBaseEliminated(group)
 			callback();
 		}
 
-		queue("__camShowVictoryConditions", camSecondsToMilliseconds(1));
+		__camSetupConsoleForVictoryConditions();
 	}
 }
 

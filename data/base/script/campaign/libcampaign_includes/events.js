@@ -46,7 +46,7 @@ function cam_eventChat(from, to, message)
 {
 	if (message === "win info")
 	{
-		__camShowVictoryConditions(true);
+		__camShowVictoryConditions();
 	}
 	if (!camIsCheating())
 	{
@@ -128,7 +128,7 @@ function cam_eventStartLevel()
 	__camSaveLoading = false;
 	__camNeverGroupDroids = [];
 	__camNumTransporterExits = 0;
-	__camVictoryMessageThrottle = 0;
+	__camAllowVictoryMsgClear = true;
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	__camAiPowerReset(); //grant power to the AI
 	setTimer("__checkEnemyFactoryProductionTick", camSecondsToMilliseconds(0.8));
