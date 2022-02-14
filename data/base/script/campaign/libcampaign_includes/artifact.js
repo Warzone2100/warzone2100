@@ -171,7 +171,7 @@ function __camPickupArtifact(artifact)
 		callback();
 	}
 
-	queue("__camShowVictoryConditions", camSecondsToMilliseconds(1));
+	__camSetupConsoleForVictoryConditions();
 }
 
 function __camLetMeWinArtifacts()
