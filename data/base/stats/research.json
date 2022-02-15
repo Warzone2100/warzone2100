@@ -7904,7 +7904,8 @@
 		"id": "R-Wpn-RocketSlow-ROF05",
 		"name": "Rocket Rapid Loader Mk2",
 		"requiredResearch": [
-			"R-Wpn-Cannon-ROF05"
+			"R-Wpn-Cannon-ROF05",
+			"R-Wpn-RocketSlow-ROF04"
 		],
 		"researchPoints": 12000,
 		"researchPower": 375,
