@@ -186,15 +186,15 @@ bool NETlogEntry(const char *str, UDWORD a, UDWORD b)
 	if (a < NUM_GAME_PACKETS)
 		// replace common msgs with txt descriptions
 	{
-		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, messageTypeToString(a), b, getAscTime(newtime).c_str());
+		snprintf(buf, sizeof(buf), "%s # %s \t: %s \t:%d\n", getAscTime(newtime).c_str(), str, messageTypeToString(a), b);
 	}
 	else if (a == SYNC_FLAG)
 	{
-		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, getAscTime(newtime).c_str());
+		snprintf(buf, sizeof(buf), "%s # %s \t: %d \t(Sync)\n", getAscTime(newtime).c_str(), str, b);
 	}
 	else
 	{
-		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, getAscTime(newtime).c_str());
+		snprintf(buf, sizeof(buf), "%s # %s \t:%d \t\t\t:%d\n", getAscTime(newtime).c_str(), str, a, b);
 	}
 
 	if (a == NET_PLAYER_LEAVING || a == NET_PLAYER_DROPPED)

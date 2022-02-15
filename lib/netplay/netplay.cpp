@@ -661,7 +661,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 	for (unsigned n = 0; n < indexLen; ++n)
 	{
 		debug(LOG_NET, "sending player's (%u) info to all players", index[n]);
-		NETlogEntry(" sending player's info to all players", SYNC_FLAG, index[n]);
+		NETlogEntry("Sending player's info to all players", SYNC_FLAG, index[n]);
 		NETuint32_t(&index[n]);
 		NETbool(&NetPlay.players[index[n]].allocated);
 		NETbool(&NetPlay.players[index[n]].heartbeat);
