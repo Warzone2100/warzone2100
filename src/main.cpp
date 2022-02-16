@@ -1018,7 +1018,7 @@ static void startGameLoop()
 			if (!war_getDisableReplayRecording())
 			{
 				WZGameReplayOptionsHandler replayOptions;
-				NETreplaySaveStart((currentGameMode == ActivitySink::GameMode::MULTIPLAYER) ? "multiplay" : "skirmish", replayOptions, (currentGameMode == ActivitySink::GameMode::MULTIPLAYER));
+				NETreplaySaveStart((currentGameMode == ActivitySink::GameMode::MULTIPLAYER) ? "multiplay" : "skirmish", replayOptions, war_getMaxReplaysSaved(), (currentGameMode == ActivitySink::GameMode::MULTIPLAYER));
 			}
 			break;
 		}

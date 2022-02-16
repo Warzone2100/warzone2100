@@ -120,6 +120,8 @@ int war_getAutoLagKickSeconds();
 void war_setAutoLagKickSeconds(int seconds);
 bool war_getDisableReplayRecording();
 void war_setDisableReplayRecording(bool disable);
+int war_getMaxReplaysSaved();
+void war_setMaxReplaysSaved(int maxReplaysSaved);
 uint32_t war_getMPInactivityMinutes();
 void war_setMPInactivityMinutes(uint32_t minutes);
 uint16_t war_getMPopenSpectatorSlots();
