@@ -1370,6 +1370,7 @@ static unsigned calcUpgradeSum(const uint8_t (&asParts)[DROID_MAXCOMP], int numW
 		// asWeaps[i] > 0 check only needed for droids, not templates.
 		if (asWeaps[i] > 0)
 		{
+			ASSERT(asWeaps[i] < numWeaponStats, "Invalid weapon stat index (%" PRIu32 ", numWeaponStats: %" PRIu32 ") (player: %d)", asWeaps[i], numWeaponStats, player);
 			sum += func(asWeaponStats[asWeaps[i]].upgrade[player]);
 		}
 	}
