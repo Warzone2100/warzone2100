@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:24\n"
+"PO-Revision-Date: 2022-01-11 03:15\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -14909,7 +14909,7 @@ msgstr " e "
 #: src/chat.cpp:173
 #: src/multiint.cpp:3635
 msgid "Spectators"
-msgstr ""
+msgstr "Espectadores"
 
 #: src/cheat.cpp:216
 #, c-format
@@ -15028,11 +15028,11 @@ msgstr "Carregar jogo de campanha salvo"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
-msgstr ""
+msgstr "Carregar um replay"
 
 #: src/clparse.cpp:373
 msgid "replay file"
-msgstr ""
+msgstr "Arquivo de replay"
 
 #: src/clparse.cpp:374
 msgid "Play in windowed mode"
@@ -15181,7 +15181,7 @@ msgstr ""
 
 #: src/clparse.cpp:418
 msgid "Enable command interface"
-msgstr ""
+msgstr "Habilitar interface de comando"
 
 #: src/clparse.cpp:418
 msgid "(stdin)"
@@ -15189,7 +15189,7 @@ msgstr ""
 
 #: src/clparse.cpp:419
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Mínimo de jogadores necessários para iniciar o jogo automaticamente"
 
 #: src/clparse.cpp:419
 msgid "startplayers"
@@ -15465,11 +15465,11 @@ msgstr "Coletividade"
 
 #: src/frontend.cpp:178
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Vídeos de campanha não encontrados"
 
 #: src/frontend.cpp:179
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Consulte nossas Perguntas Frequentes sobre como instalar vídeos"
 
 #: src/frontend.cpp:199
 msgid "Single Player"
@@ -15590,7 +15590,7 @@ msgstr "Carregar Jogo vs. Computador"
 
 #: src/frontend.cpp:369
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Ver Replay de Confronto"
 
 #: src/frontend.cpp:371
 msgid "SINGLE PLAYER"
@@ -15617,7 +15617,7 @@ msgstr "Carregar Jogo vs. Computador Salvo"
 
 #: src/frontend.cpp:544
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Carregar Replay de Confronto"
 
 #: src/frontend.cpp:605
 msgid "MULTI PLAYER"
@@ -15633,7 +15633,7 @@ msgstr "Conectar-se a um jogo"
 
 #: src/frontend.cpp:609
 msgid "View Replay"
-msgstr ""
+msgstr "Ver Replay"
 
 #: src/frontend.cpp:614
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15641,7 +15641,7 @@ msgstr "A porta TCP 2100 deve estar aberta em seu firewall/roteador para hospeda
 
 #: src/frontend.cpp:659
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Carregar Replay de Multijogador"
 
 #: src/frontend.cpp:713
 msgid "Game Options"
@@ -15678,7 +15678,7 @@ msgstr "Gerenciador de Música"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Opções de multijogador"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -16079,23 +16079,23 @@ msgstr ""
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Nenhum"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Opções de hospedagem:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Porta do Jogo"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Habilitar UPnP"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Tempo de espera por inatividade"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
@@ -16103,11 +16103,11 @@ msgstr ""
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Slots de Espectador"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "Opções de multijogador"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5127
@@ -16151,19 +16151,19 @@ msgstr "Dica: Ajustar Escala de Exibição"
 
 #: src/hci.cpp:725
 msgid "Replay"
-msgstr ""
+msgstr "Reproduzir"
 
 #: src/hci.cpp:740
 msgid "Pause"
-msgstr ""
+msgstr "Pausar"
 
 #: src/hci.cpp:755
 msgid "Resume"
-msgstr ""
+msgstr "Retomar"
 
 #: src/hci.cpp:772
 msgid "Fast-Forward"
-msgstr ""
+msgstr "Avançar"
 
 #: src/hci.cpp:1324
 #: src/loop.cpp:252
@@ -16206,7 +16206,7 @@ msgstr "Exibindo Tecn. Obsoletas"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Custo: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
@@ -16371,12 +16371,12 @@ msgstr "O mod necessário não pôde ser carregado: %s \n\n"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Não foi possível carregar: %s."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Por favor, remova todos os mods incompatíveis."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -16396,11 +16396,11 @@ msgstr "Depuração"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Debug (editor de nível)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Debug (seleção)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16546,7 +16546,7 @@ msgstr "Adicionar ao Grupo 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Remover do Grupo atual"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -16905,7 +16905,7 @@ msgstr "Selecionar todas as unidades muito danificadas"
 #: src/input/keyconfig.cpp:172
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Selecione todas as unidades de Combate em Terra com vida >50% e sem grupos."
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks"
@@ -17140,7 +17140,7 @@ msgstr "Energia"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Poder Por Segundo"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17328,7 +17328,7 @@ msgstr "Atualização de Pesquisas"
 
 #: src/intelmap.cpp:1094
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "Objetivos e atualizações do projeto"
 
 #: src/intelmap.cpp:1096
 msgid "Current Objective"
@@ -17523,11 +17523,11 @@ msgstr ""
 
 #: src/keybind.cpp:1226
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Desabilitando editor de nível"
 
 #: src/keybind.cpp:1231
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Habilitando editor de níveis"
 
 #: src/keybind.cpp:1315
 msgid "God Mode ON"
@@ -17728,19 +17728,19 @@ msgstr ""
 
 #: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "O salvamento rápido não é permitido para partidas de multijogador ou tutorial"
 
 #: src/keybind.cpp:2564
 msgid "QuickSave failed"
-msgstr ""
+msgstr "O salvamento rápido falhou"
 
 #: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "O carregamento rápido não é permitido para partidas de multijogador ou tutorial"
 
 #: src/keybind.cpp:2600
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "O arquivo de salvamento rápido ainda não existe"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -17782,12 +17782,12 @@ msgstr "trapaceado"
 #: src/loadsave.cpp:1109
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "Salvamento automático %s"
 
 #: src/loadsave.cpp:1114
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "Salvamento automático %s falhou"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -18090,7 +18090,7 @@ msgstr "Deixar esse slot vazio"
 
 #: src/multiint.cpp:1872
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Permitir que os espectadores se juntem a este slot"
 
 #: src/multiint.cpp:1956
 msgid "Click to change to this slot"
@@ -18103,7 +18103,7 @@ msgstr ""
 
 #: src/multiint.cpp:2020
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "Clique para mover o jogador para esse slot"
 
 #: src/multiint.cpp:2037
 #: src/multiint.cpp:3128
@@ -18113,7 +18113,7 @@ msgstr ""
 
 #: src/multiint.cpp:2043
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "Não é possível trocar com host"
 
 #: src/multiint.cpp:2284
 msgid "Team"
@@ -18125,7 +18125,7 @@ msgstr "Time"
 #: src/multiint.cpp:7501
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Espectador"
 
 #: src/multiint.cpp:2305
 #: src/multiint.cpp:4435
@@ -18143,108 +18143,108 @@ msgstr "O anfitrião te expulsou do jogo."
 #: src/multiint.cpp:2341
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "Falha ao mover %s para Espectadores"
 
 #: src/multiint.cpp:2346
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "O host moveu %s para espectadores!"
 
 #: src/multiint.cpp:2369
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Mover para espectadores"
 
 #: src/multiint.cpp:2390
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Pedir ao Espectador para jogar"
 
 #: src/multiint.cpp:2406
 msgid "Ask to Play"
-msgstr ""
+msgstr "Pedir para jogar"
 
 #: src/multiint.cpp:3012
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "Espectador %s quer permanecer como um Espectador"
 
 #: src/multiint.cpp:3016
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "Jogador %s quer continuar jogador"
 
 #: src/multiint.cpp:3024
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "O host recusou mudar você para Jogador"
 
 #: src/multiint.cpp:3028
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Não foi possível mudar para Espectador"
 
 #: src/multiint.cpp:3056
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "Você quer assistir?"
 
 #: src/multiint.cpp:3057
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "O host desta partida quer saber se você gostaria de assistir?"
 
 #: src/multiint.cpp:3059
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Você atualmente é um Jogador."
 
 #: src/multiint.cpp:3060
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Sim, eu vou assistir!"
 
 #: src/multiint.cpp:3065
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Você quer jogar?"
 
 #: src/multiint.cpp:3066
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "O host desta partida quer saber se você gostaria de jogar?"
 
 #: src/multiint.cpp:3068
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Você atualmente é um espectador."
 
 #: src/multiint.cpp:3069
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Sim, eu quero jogar!"
 
 #: src/multiint.cpp:3112
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "Jogador %s foi movido para Espectadores"
 
 #: src/multiint.cpp:3151
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Espectador gostaria de se tornar um jogador"
 
 #: src/multiint.cpp:3152
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Espectador \"%s\" gostaria de se tornar um jogador."
 
 #: src/multiint.cpp:3154
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "No entanto, não há slots de Player abertos no momento."
 
 #: src/multiint.cpp:3156
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Gostaria de trocar este Espectador por um Player?"
 
 #: src/multiint.cpp:3157
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Sim, selecione o slot do jogador"
 
 #: src/multiint.cpp:3440
 msgid "Joined:"
-msgstr ""
+msgstr "Entrou:"
 
 #: src/multiint.cpp:3443
 msgid "Ready:"
-msgstr ""
+msgstr "Pronto:"
 
 #: src/multiint.cpp:3621
 #: src/titleui/gamefind.cpp:270
@@ -18253,15 +18253,15 @@ msgstr "Jogadores"
 
 #: src/multiint.cpp:3651
 msgid "Host Options"
-msgstr ""
+msgstr "Opções do Host"
 
 #: src/multiint.cpp:3932
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Habilitar Entrada de Espectador"
 
 #: src/multiint.cpp:3942
 msgid "Lock Teams"
-msgstr ""
+msgstr "Trancar equipes"
 
 #: src/multiint.cpp:4198
 msgid "Choose Team"
@@ -18289,7 +18289,7 @@ msgstr "Clique para mudar a IA, clique com o botão direito para distribuir a es
 
 #: src/multiint.cpp:4257
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Clique para fechar o slot de espectador"
 
 #: src/multiint.cpp:4273
 msgid "Player ID: "
@@ -18329,15 +18329,15 @@ msgstr "PRONTO?"
 
 #: src/multiint.cpp:4539
 msgid "For Spectator:"
-msgstr ""
+msgstr "Para Espectador:"
 
 #: src/multiint.cpp:4539
 msgid "For Player:"
-msgstr ""
+msgstr "Para o jogador:"
 
 #: src/multiint.cpp:4557
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Escolha um Slot de Jogador"
 
 #: src/multiint.cpp:4628
 msgid "PLAYERS"
@@ -18345,7 +18345,7 @@ msgstr "JOGADORES"
 
 #: src/multiint.cpp:4732
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Adicionar espaço de espectador"
 
 #: src/multiint.cpp:4809
 msgid "Kicked from game"
@@ -18353,7 +18353,7 @@ msgstr "Expulso do jogo"
 
 #: src/multiint.cpp:5034
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Copiar Texto para a Área de Transferência"
 
 #: src/multiint.cpp:5123
 msgid "CHAT"
@@ -18390,7 +18390,7 @@ msgstr "O Hosp. iniciou o Jogo"
 
 #: src/multiint.cpp:6411
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "Opções de host fornecidas inválidas"
 
 #: src/multiint.cpp:6645
 msgid "You have been kicked: "
@@ -18402,11 +18402,11 @@ msgstr "Sem conexão com o anfitrião."
 
 #: src/multiint.cpp:6711
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "O host me moveu para os jogadores, mas eu nunca dei permissão para essa mudança. Tchau!"
 
 #: src/multiint.cpp:6713
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "O host tentou nos mover para os jogadores, mas nós nunca damos permissão."
 
 #: src/multiint.cpp:6862
 msgid "Cannot change to a map with too few slots for all players."
@@ -18475,29 +18475,29 @@ msgstr "Latência"
 
 #: src/multiint.cpp:8247
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "A versão de Warzone 2100 usada para salvar este arquivo de replay não corresponde à versão atual."
 
 #: src/multiint.cpp:8249
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "Arquivo de replay salvo com: \"%s\""
 
 #: src/multiint.cpp:8253
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "Versão atual do Warzone 2100: \"%s\""
 
 #: src/multiint.cpp:8263
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "Replays geralmente devem ser reproduzidos com a mesma versão usada para salvar o replay."
 
 #: src/multiint.cpp:8265
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "O replay pode não ser reproduzido com sucesso, ou podem haver diferenças na simulação."
 
 #: src/multiint.cpp:8266
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "Versão do Replay Incompatível"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18575,7 +18575,7 @@ msgstr "Limites redefinidos para valores padrão"
 
 #: src/multilobbycommands.cpp:297
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "O administrador te expulsou do jogo."
 
 #: src/multimenu.cpp:518
 msgid "Any number of players"
@@ -18658,11 +18658,11 @@ msgstr "expulsou %s: %s do jogo, e o baniu!"
 
 #: src/multiopt.cpp:304
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "MAPA SOLICITADO!"
 
 #: src/multiopt.cpp:329
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "MOD SOLICITADO!"
 
 #: src/multiopt.cpp:347
 #: src/multiplay.cpp:2032
@@ -18686,19 +18686,19 @@ msgstr "Dados inválidos!"
 #: src/multiplay.cpp:1123
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "Expulsando automaticamente o jogador %s, comando inválido recebido: %u"
 
 #: src/multiplay.cpp:1125
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Comando de rede não autorizado"
 
 #: src/multiplay.cpp:1225
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "O REPLAY ACABOU"
 
 #: src/multiplay.cpp:1226
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Pressione ESC para sair.)"
 
 #: src/multiplay.cpp:1380
 #, c-format
@@ -18719,7 +18719,7 @@ msgstr "ARQUIVO ENVIADO!"
 
 #: src/multiplay.cpp:2012
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "MAPA BAIXADO!"
 
 #: src/multiplay.cpp:2068
 #, c-format
@@ -18793,11 +18793,11 @@ msgstr "Marrom"
 
 #: src/multiplay.cpp:2407
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Modo de Espectador"
 
 #: src/multiplay.cpp:2408
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Você é um espectador. Divirta-se assistindo ao jogo!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18834,12 +18834,12 @@ msgstr "Não podemos fazer isso! Devemos ser um Ciborgue para usar um Transporte
 
 #: src/qtscript.cpp:893
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "Falha ao carregar a IA solicitada! Verifique os seus logs para ver o porquê."
 
 #: src/qtscript.cpp:896
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "Carregado o script de IA %s para o jogador atual!"
 
 #: src/research.cpp:1017
 #, c-format
@@ -18986,7 +18986,7 @@ msgstr "Impossível localizar Comandantes!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "Não foi possível encontrar a construção necessária!"
 
 #: src/selection.cpp:662
 #, c-format
@@ -18997,32 +18997,32 @@ msgstr[1] "%u unidades selecionadas"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Mostrar estatísticas do jogador"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Classe da arma"
 
 #: src/spectatorwidgets.cpp:804
 msgid "Power/Rate"
-msgstr ""
+msgstr "Poder/Taxa"
 
 #: src/spectatorwidgets.cpp:805
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Poder atual / Poder por segundo"
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
-msgstr ""
+msgstr "Poder perdido"
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Armadura Cinética"
 
 #: src/spectatorwidgets.cpp:808
 #: src/spectatorwidgets.cpp:810
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tanques / Ciborgues)"
 
 #: src/structure.cpp:2552
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -19204,7 +19204,7 @@ msgstr "Versão %s"
 
 #: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
-msgstr ""
+msgstr "Entrar como espectador"
 
 #: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
@@ -19345,15 +19345,15 @@ msgstr "Atualizar Agora"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Alerta de compatibilidade"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Foi detectado um problema que pode afetar a operação / desempenho do Warzone 2100."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Por favor, clique no botão abaixo para mais informações sobre como consertá-lo."
 
 #: src/updatemanager.cpp:425
 #, c-format
@@ -19362,7 +19362,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Mais informações"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
@@ -19384,11 +19384,11 @@ msgstr "Versão: %s,%s Construído:%s%s"
 
 #: src/wrappers.cpp:365
 msgid "GAME OVER"
-msgstr ""
+msgstr "FIM DE JOGO"
 
 #: src/wrappers.cpp:366
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "A batalha terminou - você pode sair da sala."
 
 #: src/wzapi.cpp:2339
 msgid "YOU ARE VICTORIOUS!"

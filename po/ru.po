@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:24\n"
+"PO-Revision-Date: 2021-12-30 00:22\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -4024,7 +4024,7 @@ msgstr "Защитите Пост Связи от Альянса"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Отправьте хотя бы одного транспортера с грузовиком, и выживайте до тех пор, пока таймер не закончится"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -7876,7 +7876,7 @@ msgstr "Исследование компьютерных технологий �
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1553
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "Компьютерные системы теперь ограждены от НЕКСУС"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -9616,7 +9616,7 @@ msgstr "Адский шторм"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2724
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Юниты рангов Герои и Специалисты теперь защищены"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -12105,7 +12105,7 @@ msgstr "Производит киборгов"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4520
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Единицы ранга Элита и Ветеран, а также Фабрики, защищены"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -15364,7 +15364,7 @@ msgstr "%s - Целостность %d/%d - Опыт %.1f, %s, Убийства 
 #: src/display.cpp:1628
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Враг!) %s - Жизнь %d/%d - ID %d - опыт %f, %s - приказ %s - действие %s - диапазон датчиков %d - ECM %d - высота %.0f"
 
 #: src/display.cpp:1772
 #, c-format
@@ -15375,7 +15375,7 @@ msgstr "%s - Союзник - Целостность %d/%d - Опыт %d, %s"
 #: src/display.cpp:1789
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Враг!) %s, ref: %d, ID: %d Жизнь: %d/%d"
 
 #: src/display3d.cpp:750
 msgid "Player left"
@@ -16217,7 +16217,7 @@ msgstr "Отобразить устаревшее технологии"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Стоимость: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
@@ -17387,7 +17387,7 @@ msgstr "Внимание! Это жульничество может вызва�
 
 #: src/keybind.cpp:160
 msgid "Gateways toggled."
-msgstr ""
+msgstr "Порталы переключены."
 
 #: src/keybind.cpp:166
 msgid "Path display toggled."
@@ -17735,7 +17735,7 @@ msgstr "Радар показывает рельеф"
 
 #: src/keybind.cpp:2496
 msgid "Asserts turned off"
-msgstr ""
+msgstr "Ассерты игнорируются"
 
 #: src/keybind.cpp:2544
 msgid "QuickSave not allowed for multiplayer or tutorial games"
@@ -19070,7 +19070,7 @@ msgstr[3] "%s - %u Юнитов назначено - Здоровье %d/%d"
 #: src/structure.cpp:5357
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %d - диапазон датчиков %d - ECM %d"
 
 #: src/structure.cpp:5372
 #, c-format
@@ -19095,17 +19095,17 @@ msgstr "%s - Жизни %d/%d"
 #: src/structure.cpp:5381
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr ""
+msgstr "ID %d - броня %d|%d - диапазон датчиков %d - ECM %d - родился %u - глубина %.02f"
 
 #: src/structure.cpp:5390
 #, c-format
 msgid "ID %d - Queue %d"
-msgstr ""
+msgstr "ID %d - Очередь %d"
 
 #: src/structure.cpp:5397
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "ID %d - %s"
 
 #: src/structure.cpp:5410
 #, c-format
@@ -19115,27 +19115,27 @@ msgstr "%s - Подключено %u из %u - Здоровье %d/%d"
 #: src/structure.cpp:5414
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "ID %u - Множитель: %u"
 
 #: src/structure.cpp:5423
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "ID %u - Производство: %u - Оставшиеся очки здания: %u - Сопротивление: %d / %d"
 
 #: src/structure.cpp:5432
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - Очки исследований: %u"
 
 #: src/structure.cpp:5439
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "клетка %d,%d - Цель %s"
 
 #: src/structure.cpp:5447
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %u - диапазон датчиков %d - ECM %d"
 
 #: src/structure.cpp:5565
 #: src/structure.cpp:5610

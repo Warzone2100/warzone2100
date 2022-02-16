@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:25\n"
+"PO-Revision-Date: 2022-01-25 07:12\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4024,7 +4024,7 @@ msgstr "Sécurisez la Liaison du Collectif"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Envoyez au moins un transporteur avec un camion, et survivez jusqu'à la fin du chronomètre"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -16203,7 +16203,7 @@ msgstr "Montrer les technologies obsolètes"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Coût: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
@@ -18716,7 +18716,7 @@ msgstr "Fichier envoyé!"
 
 #: src/multiplay.cpp:2012
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "MAP TÉLÉCHARGÉE !"
 
 #: src/multiplay.cpp:2068
 #, c-format
