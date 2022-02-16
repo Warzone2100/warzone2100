@@ -1892,7 +1892,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// align the turret
 		actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 
-		if (!cbSensorDroid(psDroid))
+		if (!cbSensorDroid(psDroid) && psDroid->psActionTarget[0])
 		{
 			// make sure the target is within sensor range
 			const int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
