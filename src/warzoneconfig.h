@@ -122,6 +122,8 @@ bool war_getDisableReplayRecording();
 void war_setDisableReplayRecording(bool disable);
 int war_getMaxReplaysSaved();
 void war_setMaxReplaysSaved(int maxReplaysSaved);
+int war_getOldLogsLimit();
+void war_setOldLogsLimit(int oldLogsLimit);
 uint32_t war_getMPInactivityMinutes();
 void war_setMPInactivityMinutes(uint32_t minutes);
 uint16_t war_getMPopenSpectatorSlots();
