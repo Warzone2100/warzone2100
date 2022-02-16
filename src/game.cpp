@@ -5375,6 +5375,13 @@ static void writeSaveObjectJSON(nlohmann::json &jsonObj, BASE_OBJECT *psObj)
 	}
 }
 
+template<typename T>
+inline T getCompFromName_NullCompOnFail(COMPONENT_TYPE compType, const WzString &name)
+{
+	int index = getCompFromName(compType, name);
+	return (index >= 0) ? static_cast<T>(index) : 0; // 0 to reference the null weapon / body / etc
+}
+
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
@@ -5452,16 +5459,16 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			templ.droidType = (DROID_TYPE)ini.value("droidType").toInt();
 			templ.numWeaps = ini.value("weapons", 0).toInt();
 			ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
-			templ.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toWzString());
-			templ.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toWzString());
-			templ.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toWzString());
-			templ.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toWzString());
-			templ.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toWzString());
-			templ.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toWzString());
-			templ.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toWzString());
-			templ.asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toWzString());
-			templ.asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toWzString());
-			templ.asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toWzString());
+			templ.asParts[COMP_BODY] = getCompFromName_NullCompOnFail<uint8_t>(COMP_BODY, ini.value("body", "ZNULLBODY").toWzString());
+			templ.asParts[COMP_BRAIN] = getCompFromName_NullCompOnFail<uint8_t>(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toWzString());
+			templ.asParts[COMP_PROPULSION] = getCompFromName_NullCompOnFail<uint8_t>(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toWzString());
+			templ.asParts[COMP_REPAIRUNIT] = getCompFromName_NullCompOnFail<uint8_t>(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toWzString());
+			templ.asParts[COMP_ECM] = getCompFromName_NullCompOnFail<uint8_t>(COMP_ECM, ini.value("ecm", "ZNULLECM").toWzString());
+			templ.asParts[COMP_SENSOR] = getCompFromName_NullCompOnFail<uint8_t>(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toWzString());
+			templ.asParts[COMP_CONSTRUCT] = getCompFromName_NullCompOnFail<uint8_t>(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toWzString());
+			templ.asWeaps[0] = getCompFromName_NullCompOnFail<uint32_t>(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toWzString());
+			templ.asWeaps[1] = getCompFromName_NullCompOnFail<uint32_t>(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toWzString());
+			templ.asWeaps[2] = getCompFromName_NullCompOnFail<uint32_t>(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toWzString());
 			ini.endGroup();
 			psTemplate = &templ;
 		}
