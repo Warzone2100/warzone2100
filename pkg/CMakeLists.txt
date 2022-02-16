@@ -202,8 +202,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	if(MSVC OR MINGW) # MINGW may link with the Universal C Runtime, and the VC runtime installer can be used to ensure that system component is installed
 		set(NSIS_MSVCRUNTIME "on")
 		# Determine the latest available version of the MSVC runtime
-		# Fetch https://aka.ms/vs/16/release/vc_redist.x64.exe
-		set(_vcredict_dl_url "https://aka.ms/vs/16/release/vc_redist.x64.exe")
+		# Fetch https://aka.ms/vs/17/release/vc_redist.x64.exe
+		set(_vcredict_dl_url "https://aka.ms/vs/17/release/vc_redist.x64.exe")
 		set(_tmp_vcredist_dl_path "${CMAKE_BINARY_DIR}/_tmp/vc_redist.x64.exe")
 		downloadFile("${_vcredict_dl_url}" "${_tmp_vcredist_dl_path}" 3 _dl_status_code _dl_status_string)
 		if (_dl_status_code EQUAL 0)
@@ -227,9 +227,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			list(GET _applocalconfig_build_info_strings 0 NSIS_APPLOCALCONFIG_VERSION)
 			message(STATUS "NSIS_APPLOCALCONFIG_VERSION: \"${NSIS_APPLOCALCONFIG_VERSION}\"")
 			# Calculate the hashes for the current version
-			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2019-x86.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_x86_sha512)
-			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2019-x64.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_x64_sha512)
-			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2019-arm64.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_arm64_sha512)
+			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2022-x86.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_x86_sha512)
+			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2022-x64.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_x64_sha512)
+			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2022-arm64.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_arm64_sha512)
 			if(NOT _applocalconfig_x86_sha512 OR NOT _applocalconfig_x64_sha512 OR NOT _applocalconfig_arm64_sha512)
 				message(FATAL_ERROR "Unable to fetch / calculate hash for applocalconfig: ${NSIS_APPLOCALCONFIG_VERSION}")
 			endif()

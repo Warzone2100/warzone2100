@@ -433,7 +433,7 @@ ${EndIf}
 
       ${If} "${VS_PLATFORM_NAME}" == "Win32"
       ${AndIf} $MSVCRT16_x86_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x86.exe" "$(DLTEXT_Downloading) vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/17/release/vc_redist.x86.exe" "$(DLTEXT_Downloading) vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2022 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x86.exe ..."
@@ -448,7 +448,7 @@ ${EndIf}
       ${EndIf}
       ${If} "${VS_PLATFORM_NAME}" == "x64"
       ${AndIf} $MSVCRT16_x64_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x64.exe" "$(DLTEXT_Downloading) vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/17/release/vc_redist.x64.exe" "$(DLTEXT_Downloading) vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2022 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x64.exe ..."
@@ -463,7 +463,7 @@ ${EndIf}
       ${EndIf}
       ${If} "${VS_PLATFORM_NAME}" == "arm64"
       ${AndIf} $MSVCRT16_ARM64_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/VC_redist.arm64.exe" "$(DLTEXT_Downloading) VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/17/release/vc_redist.arm64.exe" "$(DLTEXT_Downloading) VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2022 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "VC_redist.arm64.exe ..."
@@ -596,8 +596,8 @@ Function .onInit
 
     !ifndef PORTABLE
 
-      ; Check for presence of MSVC++ 14 System Runtime (VC2019, works with 2015/2017)
-      ; NOTE: Because VC 15/16 is ABI compatible with VC 14, the version # used is still 14.
+      ; Check for presence of MSVC++ 14 System Runtime (VC2022, works with 2015/2017/2019)
+      ; NOTE: Because VC 15/16/17 is ABI compatible with VC 14, the version # used is still 14.
       ; The VCRuntime includes the Universal C Runtime system component (the UCRT does not have to be detected / handled separately)
       !ifndef MSVCRT14_BLD_MINIMUM
         !error "MSVCRT14_BLD_MINIMUM is not defined"
