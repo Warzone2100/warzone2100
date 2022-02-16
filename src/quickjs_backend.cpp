@@ -939,6 +939,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	{
 		if (psDroid->asWeaps[i].nStat)
 		{
+			ASSERT(psDroid->asWeaps[i].nStat < numWeaponStats, "Invalid nStat (%d) referenced for asWeaps[%d]; numWeaponStats (%d); droid: \"%s\" (numWeaps: %u)", psDroid->asWeaps[i].nStat, i, numWeaponStats, psDroid->aName, psDroid->numWeaps);
 			WEAPON_STATS *psWeap = &asWeaponStats[psDroid->asWeaps[i].nStat];
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
@@ -1114,7 +1115,7 @@ JSValue convMax(const BASE_OBJECT *psObj, JSContext *ctx)
 	case OBJ_DROID: return convDroid((const DROID *)psObj, ctx);
 	case OBJ_STRUCTURE: return convStructure((const STRUCTURE *)psObj, ctx);
 	case OBJ_FEATURE: return convFeature((const FEATURE *)psObj, ctx);
-	default: ASSERT(false, "No such supported object type"); return convObj(psObj, ctx);
+	default: ASSERT(false, "No such supported object type: %d", static_cast<int>(psObj->type)); return convObj(psObj, ctx);
 	}
 }
 
