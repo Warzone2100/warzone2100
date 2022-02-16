@@ -25,7 +25,7 @@
 #include "netplay.h"
 
 
-bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, bool appendPlayerToFilename = false);
+bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename = false);
 bool NETreplaySaveStop();
 void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player);
 
