@@ -379,26 +379,34 @@ struct TextShaper
 		const uint32_t x_advance = (shapingResult.x_advance / 64);
 		const uint32_t y_advance = (shapingResult.y_advance / 64);
 
-		std::unique_ptr<unsigned char[]> stringTexture(new unsigned char[4 * texture_width * texture_height]);
-		memset(stringTexture.get(), 0, 4 * texture_width * texture_height);
+		const size_t stringTextureSize = 4 * texture_width * texture_height;
+		std::unique_ptr<unsigned char[]> stringTexture(new unsigned char[stringTextureSize]);
+		memset(stringTexture.get(), 0, stringTextureSize);
 
+		size_t glyphNum = 0;
 		std::for_each(glyphs.begin(), glyphs.end(),
 			[&](const glyphRaster &g)
 			{
+				const auto glyphBufferSize = g.pitch * g.size.y;
 				for (int i = 0; i < g.size.y; ++i)
 				{
 					uint32_t i0 = g.pixelPosition.y - min_y;
 					for (int j = 0; j < g.size.x; ++j)
 					{
 						uint32_t j0 = g.pixelPosition.x - min_x;
-						uint8_t const *src = &g.buffer[i * g.pitch + 3 * j];
-						uint8_t *dst = &stringTexture[4 * ((i0 + i) * texture_width + j + j0)];
+						const auto srcBufferPos = i * g.pitch + 3 * j;
+						ASSERT(srcBufferPos + 2 < glyphBufferSize, "Invalid source (%" PRIu32" / %" PRIu32") reading glyph %zu for string \"%s\"; (%d, %d, %d, %d, %" PRIu32 ", %d, %d, %d, %" PRIu32 ", %" PRIu32 ")", srcBufferPos, glyphBufferSize, glyphNum, text.text.c_str(), i, g.size.y, g.pixelPosition.y, min_y, i0, j, g.pixelPosition.x, min_x, j0, g.pitch);
+						uint8_t const *src = &g.buffer[srcBufferPos];
+						const auto stringTexturePos = 4 * ((i0 + i) * texture_width + j + j0);
+						ASSERT(stringTexturePos + 3 < stringTextureSize, "Invalid destination (%" PRIu32" / %zu) writing glyph %zu for string \"%s\"; (%d, %d, %d, %d, %" PRIu32 ", %d, %d, %d, %" PRIu32 ", %" PRIu32 ")", stringTexturePos, stringTextureSize, glyphNum, text.text.c_str(), i, g.size.y, g.pixelPosition.y, min_y, i0, j, g.pixelPosition.x, min_x, j0, texture_width);
+						uint8_t *dst = &stringTexture[stringTexturePos];
 						dst[0] = std::min(dst[0] + src[0], 255);
 						dst[1] = std::min(dst[1] + src[1], 255);
 						dst[2] = std::min(dst[2] + src[2], 255);
 						dst[3] = std::min(dst[3] + ((src[0] * 77 + src[1] * 150 + src[2] * 29) >> 8), 255);
 					}
 				}
+				++glyphNum;
 			});
 		return DrawTextResult(
 				RenderedText(std::move(stringTexture), texture_width, texture_height, min_x, min_y),
