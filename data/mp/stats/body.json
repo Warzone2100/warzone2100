@@ -132,10 +132,8 @@
 		"powerOutput": 2000,
 		"propulsionExtraModels": {
 			"Helicopter": {
-				"left": "prlheli1.pie",
 				"moving": "chblades.pie",
-				"still": "mediumheli_rotor_stationary.pie",
-				"right": "prlheli1.pie"
+				"still": "mediumheli_rotor_stationary.pie"
 			}
 		},
 		"size": "LIGHT",
@@ -155,10 +153,8 @@
 		"powerOutput": 2100,
 		"propulsionExtraModels": {
 			"Helicopter": {
-				"left": "prmheli1.pie",
 				"moving": "hvyblades.pie",
-				"still": "hvyblades-still.pie",
-				"right": "prmheli1.pie"
+				"still": "hvyblades-still.pie"
 			}
 		},
 		"size": "LIGHT",
