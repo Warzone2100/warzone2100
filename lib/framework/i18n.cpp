@@ -46,6 +46,7 @@
 #  endif
 #endif
 // Language names (http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes)
+#define LANG_NAME_ARABIC "العربية"
 #define LANG_NAME_BASQUE "euskara"
 #define LANG_NAME_BULGARIAN "български език"
 #define LANG_NAME_CATALAN "català"
@@ -103,6 +104,7 @@ static const struct
 {
 	{ "", N_("System locale"), LANG_NEUTRAL, SUBLANG_DEFAULT },
 #  if defined(ENABLE_NLS)
+	{ "ar_SA", LANG_NAME_ARABIC, LANG_ARABIC, SUBLANG_DEFAULT },
 	{ "bg", LANG_NAME_BULGARIAN, LANG_BULGARIAN, SUBLANG_DEFAULT },
 	{ "ca", LANG_NAME_CATALAN, LANG_CATALAN, SUBLANG_DEFAULT },
 	{ "cs", LANG_NAME_CZECH, LANG_CZECH, SUBLANG_DEFAULT },
@@ -168,6 +170,7 @@ static const struct
 {
 	{ "",   N_("System locale"), "", "" },
 #  if defined(ENABLE_NLS)
+	{ "ar_SA", LANG_NAME_ARABIC, "ar_SA.UTF-8", "ar_SA"},
 	{ "bg", LANG_NAME_BULGARIAN, "bg_BG.UTF-8", "bg" },
 	{ "ca_ES", LANG_NAME_CATALAN, "ca_ES.UTF-8", "ca" },
 	{ "cs_CZ", LANG_NAME_CZECH, "cs_CZ.UTF-8", "cs" },
