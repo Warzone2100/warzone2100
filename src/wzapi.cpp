@@ -2372,7 +2372,7 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 		if (gameWon && showOutro)
 		{
 			showBackDrop = false;
-			seq_AddSeqToList("outro.ogg", nullptr, "outro.txa", false);
+			seq_AddSeqToList("outro.ogg", nullptr, "outro_text.srt", false);
 			seq_StartNextFullScreenVideo();
 		}
 		else

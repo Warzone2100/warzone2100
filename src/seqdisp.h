@@ -17,6 +17,7 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
 /** @file
  *  Functions for the display of the Escape Sequences
  */
@@ -25,6 +26,7 @@
 #define __INCLUDED_SRC_SEQDISP_H__
 
 #include "lib/framework/types.h"
+#include <string>
 
 /***************************************************************************/
 /*
@@ -32,11 +34,13 @@
  */
 /***************************************************************************/
 
-#define  SEQUENCE_KILL 3//stop
-#define  SEQUENCE_HOLD 4//play once and hold last frame
+#define  SEQUENCE_KILL 3 //stop
+#define  SEQUENCE_HOLD 4 //play once and hold last frame
 
 #define  SEQUENCE_MIN_SKIP_DELAY 75 //amount of loops before skipping is allowed
 
+// POSITION is for ordinary text, such as the name of the mission.
+// JUSTIFy is for subtitles. It is more like center.
 enum SEQ_TEXT_POSITIONING
 {
 	/**
@@ -45,9 +49,9 @@ enum SEQ_TEXT_POSITIONING
 	SEQ_TEXT_POSITION,
 
 	/**
-	 * Justify if less than 520/600 length.
+	 * Center if less than 520/600 length.
 	 */
-	SEQ_TEXT_JUSTIFY,
+	SEQ_TEXT_CENTER,
 };
 
 /***************************************************************************/
@@ -61,28 +65,28 @@ enum SEQ_TEXT_POSITIONING
  *	Global ProtoTypes
  */
 /***************************************************************************/
-//buffer render
+
 bool seq_RenderVideoToBuffer(const WzString &sequenceName, int seqCommand);
 
 bool seq_UpdateFullScreenVideo(int *bClear);
 
 bool seq_StopFullScreenVideo();
-//control
+
 bool seq_GetVideoSize(SDWORD *pWidth, SDWORD *pHeight);
-//text
-bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification);
-//clear the sequence list
+
+void seq_AddLineForVideo(const std::string& text, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification);
+
 void seq_ClearSeqList();
-//add a sequence to the list to be played
-void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop);
-/*checks to see if there are any sequences left in the list to play*/
+
+void seq_AddSeqToList(const WzString &seqName, const WzString &audioName, const std::string& textFileName, bool loop);
+
 bool seq_AnySeqLeft();
 
-//set and check subtitle mode, true subtitles on
+// set and check subtitle mode, true subtitles on
 void seq_SetSubtitles(bool bNewState);
 bool seq_GetSubtitles();
 
-/*returns the next sequence in the list to play*/
+/* start the next sequence in the list to play */
 void seq_StartNextFullScreenVideo();
 
 void seqReleaseAll();
