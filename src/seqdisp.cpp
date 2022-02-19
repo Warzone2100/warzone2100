@@ -219,7 +219,7 @@ std::istream& crossPlatformGetLine(std::istream& input, std::string& str)
  * The function will first try to find a subtitles file that match the current selected
  * language of the game. If it does not find it, it will look for an English one.
  * 
- * @param seqName The name of sequence (with or without an extension).
+ * @param seqName The name of sequence.
  * 
  * @return The name of the subtitles file or empty string if not found.
  */
@@ -229,7 +229,7 @@ std::string getSubtitleFile(std::string seqName)
 	seqName = seqName.substr(0, seqName.find_last_of('.'));
 
 	std::string language = getLanguage();
-	std::string translation_file = "sequenceaudio/" + language + "_" + seqName + ".srt";
+	std::string translation_file = "sequenceaudio/subs/" + language + '/' + seqName + ".srt";
 	std::string en_file = "sequenceaudio/" + seqName + ".srt";
 
 	if (PHYSFS_exists(translation_file.c_str()))
