@@ -6330,6 +6330,11 @@ bool writeStructFile(const char *pFileName)
 	{
 		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
+			if (!psCurr->pStructureType)
+			{
+				ASSERT(psCurr->pStructureType, "Structure has null pStructureType??");
+				continue;
+			}
 			ini.beginGroup("structure_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
 			ini.setValue("name", psCurr->pStructureType->id);
 
