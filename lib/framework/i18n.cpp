@@ -170,7 +170,7 @@ static const struct
 {
 	{ "",   N_("System locale"), "", "" },
 #  if defined(ENABLE_NLS)
-	{ "ar_SA", LANG_NAME_ARABIC, "ar_SA.UTF-8", "ar_SA"},
+	{ "ar_SA", LANG_NAME_ARABIC, "ar_SA.UTF-8", "ar"},
 	{ "bg", LANG_NAME_BULGARIAN, "bg_BG.UTF-8", "bg" },
 	{ "ca_ES", LANG_NAME_CATALAN, "ca_ES.UTF-8", "ca" },
 	{ "cs_CZ", LANG_NAME_CZECH, "cs_CZ.UTF-8", "cs" },
