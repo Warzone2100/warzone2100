@@ -3843,6 +3843,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 
 STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 	: BASE_OBJECT(OBJ_STRUCTURE, id, player)
+	, pStructureType(nullptr)
 	, pFunctionality(nullptr)
 	, buildRate(1)  // Initialise to 1 instead of 0, to make sure we don't get destroyed first tick due to inactivity.
 	, lastBuildRate(0)
