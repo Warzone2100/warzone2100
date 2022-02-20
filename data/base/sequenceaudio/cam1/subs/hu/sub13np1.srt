@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Figyelmeztetés!
+
+2
+00:00:08,000 --> 00:00:11,000
+Beléptél egy lezárt övezetbe.
+
+3
+00:00:12,000 --> 00:00:22,000
+Térj vissza a kijelölt zónádba vagy megsemmisítelek.
+
+4
+00:00:12,000 --> 00:00:22,000
+Ismétlem. Térj vissza a kijelölt zónádba vagy megsemmisítelek.
+
+5
+00:00:12,000 --> 00:00:22,000
+Üzenet vége.
+

@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Tujuan transporter sebagai berikut:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alpha - Sektor Barat....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alpha Anda siap untuk lepas landas.
+
+4
+00:00:09,000 --> 00:00:14,000
+Semoga beruntung, dan selamat berburu.
+
+5
+00:00:30,000 --> 00:00:35,000
+Mendekati Zona Pendaratan. Pengarahan Tim Alpha dimulai.
+
+6
+00:00:37,000 --> 00:00:46,000
+Komandan, Anda memimpin Tim Alpha, satu dari tiga tim ekpedisi yang dikirim oleh Proyek untuk memperoleh kembali artefak sebelum Keruntuhan.
+
+7
+00:00:47,000 --> 00:00:49,599
+Tujuan Anda berada di zona barat.
+

@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Comandant, hem recuperat una torreta de comandament del Nou Paradigma
+
+2
+00:00:05,000 --> 00:00:15,000
+Aquesta torreta permet els comandants coordinar les unitats assignades durant els atacs i actuar com a punt de lliurament per les fàbriques. Investigar i utilitzar aquesta tecnologia té la màxima prioritat.
+
+3
+00:00:17,000 --> 00:00:19,000
+Comandant, estem rebent una transmissió.
+

@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Uyarı!
+
+2
+00:00:08,000 --> 00:00:11,000
+Yasak bölgeye giriyorsunuz.
+
+3
+00:00:12,000 --> 00:00:22,000
+Belirlenen yere dön veya ölmeye hazır ol.
+
+4
+00:00:12,000 --> 00:00:22,000
+Tekrar ediyorum. Belirlenen yere dön veya ölmeye hazır ol.
+
+5
+00:00:12,000 --> 00:00:22,000
+Mesaj Sonu.
+

@@ -1,0 +1,12 @@
+1
+00:01:10,833 --> 00:01:25,416
+Le personnel de la base Gamma nous a confirmé que les missiles nucléaires envoyés sur les bases Alpha et Beta ont été lancés depuis un site localisé dans leur secteur.
+
+2
+00:01:35,833 --> 00:01:44,166
+La Division Gamma est actuellement à la recherche de l'emplacement des puits de lancement, et surveille les mouvements de NEXUS.
+
+3
+00:01:46,250 --> 00:01:52,500
+Commandant, la survie du Projet dépend entièrement de vous !
+

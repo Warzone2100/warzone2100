@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+A vizsgálatok arra engednek következtetni, hogy ezek a rendszerek a NASDA műholdak irányítórendszerének részét képezték.
+
+2
+00:00:01,666 --> 00:00:16,666
+Most már bizonyos, hogy a NEXUS volt a felelős az összeomlásért.
+
+3
+00:00:18,333 --> 00:00:41,666
+Az összeomlás korai szakaszában, a NASDA technikusok lekapcsolták a fertőzött rendszereket, hogy izolálhassák a NEXUS terjedését. Úgy tűnik ez megakadályozta a lézerműholdakat az ellencsapásokban.
+
+4
+00:00:43,333 --> 00:01:08,750
+Az ezt követő nukleáris-mágneses impulzusok tisztára törölték a NASDA adattárak nagyrészét, meghasadt a rendszermag, és robbanó lökéshullámokat küldött a NEXUSon keresztül.
+
+5
+00:01:12,916 --> 00:01:23,333
+A NEXUS megsült, öntudatának egyes részei törlődtek az ellencsapásokban.
+

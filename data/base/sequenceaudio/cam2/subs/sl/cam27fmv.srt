@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Poveljnik, pravkar smo zaznali izstrelitev izstrelka na teh koordinatah.
+
+2
+00:00:10,416 --> 00:00:21,666
+Skupina Gama pošilja skupino za preiskavo izstrelitvenega mesta in preprečitev nadaljnih izstrelitev.
+
+3
+00:00:22,500 --> 00:00:47,083
+Lahko le domnevamo, da je Nexus prevzel nadzor nad tem mestom. Ne moremo določiti, ali je izstrelek jedrsko oborožen ali kam je usmerjen. Svetujemo vam, da začnete priprave za evakuacijo vaše baze.
+

@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Commandant, we hebben een raket lancering gedetecteerd op deze coördinaten.
+
+2
+00:00:10,416 --> 00:00:21,666
+Team Gamma stuurt een team om het lanceer platform te onderzoeken en om verdere lanceringen te voorkomen.
+
+3
+00:00:22,500 --> 00:00:47,083
+We kunnen alleen aannemen dat Nexus controle heeft over dit platform. We kunnen niet uitzoeken of de raket nucleair is of waar zijn doel is. We kunnen alleen adviseren om een evacuatie van je basis voor te bereiden.
+

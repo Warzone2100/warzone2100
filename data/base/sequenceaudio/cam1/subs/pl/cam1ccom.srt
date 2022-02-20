@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Dowódco, odzyskaliśmy wieżyczkę dowodzącą od New Paradigm.
+
+2
+00:00:05,000 --> 00:00:15,000
+Ta wieżyczka umożliwia dowódcom koordynację ataków przypisanych jednostek oraz działa jako punkt dostaw dla fabryk. Zbadanie i użycie tej technologii ma najwyższy priorytet.
+
+3
+00:00:17,000 --> 00:00:19,000
+Dowódco, właśnie odbieramy tą transmisję.
+

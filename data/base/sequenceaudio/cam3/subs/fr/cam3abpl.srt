@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:08,000
+Commandant, nous avons des problèmes informatiques avec nos équipements.
+
+2
+00:00:01,000 --> 00:00:08,000
+Nous allons restaurer le service de base aussi vite que possible.
+

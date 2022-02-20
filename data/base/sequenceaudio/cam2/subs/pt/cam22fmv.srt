@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,416
+NASDA é a North American Strategic Defense Agency - Agência de Defesa Estratégica Norte Americana.
+
+2
+00:00:12,500 --> 00:00:36,250
+A NASDA foi criada em 2076 para defender a América do Norte de ataques convencionais e nucleares. A construção de um sistema de satélites de defesa começou em 2081 e terminou em 2082.
+
+3
+00:00:37,500 --> 00:00:49,166
+Em 2085 os satélites da NASDA lançaram suas ogivas na Terra.
+
+4
+00:00:52,916 --> 00:01:06,666
+Também haviam locais de lançamento em terra. Muitos desses foram destruídos nos contra-ataques nucleares, mas ainda deverão sobrar alguns por aí.
+
+5
+00:01:08,750 --> 00:01:23,333
+Os satélites NASDA também continham lasers, instalados para abater mísseis que se aproximassem da América do Norte.
+
+6
+00:01:25,833 --> 00:01:46,250
+Durante os contra-ataques, os SatLasers falharam ao disparar. Se trazidos de volta ao activo, os SatLasers podem causar danos sérios a alvos em terra.
+
+7
+00:01:48,333 --> 00:01:58,333
+Todas as ogivas designadas à America do Norte atingiram seus alvos.
+
+8
+00:01:59,166 --> 00:02:21,666
+Sabemos que o Nexus está procurando pela Central da NASDA do Sector Leste. Esta era um dos centros de controlo terrestre dos satélites.
+
+9
+00:02:22,500 --> 00:02:27,083
+Se a central for encontrada intacta, NEXUS poderá obter o controlo dos satélites.
+
+10
+00:02:28,333 --> 00:02:34,166
+Nexus alegou que já tinha destruído o mundo.
+

@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:02,400
+Dohodno sporočilo
+
+2
+00:00:02,799 --> 00:00:10,000
+Sporočilo iz baze Beta
+
+3
+00:00:02,799 --> 00:00:10,000
+Klic v sili! Klic v sili!
+
+4
+00:00:02,799 --> 00:00:10,000
+Prosimo pomagajte!...
+
+5
+00:00:29,200 --> 00:00:33,759
+Poveljnik, pomagati morate timu Beta
+

@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:07,000
+Zavarujte PO in vzpostavite prednjo bazo.
+
+2
+00:00:01,000 --> 00:00:07,000
+Nato uničite bazo Nove Paradigme.
+

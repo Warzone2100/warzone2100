@@ -1,0 +1,4 @@
+1
+00:00:00,400 --> 00:00:04,000
+Bunu tekrarlamayacağına emin olmalıyız.
+

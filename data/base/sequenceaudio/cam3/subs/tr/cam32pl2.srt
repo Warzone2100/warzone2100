@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Koordinat İndirme Tamamlandı.
+
+2
+00:00:03,599 --> 00:00:08,000
+Komutanım, Alfa Birlikleri üslerine yapılan nükleer saldırı sırasında kaçmayı başarmışlar.
+

@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:08,000
+Poveljnik, izkušamo motnje v naši opremi.
+
+2
+00:00:01,000 --> 00:00:08,000
+Običajna dejavnost bo vzpostavljena takoj, ko bo možno.
+

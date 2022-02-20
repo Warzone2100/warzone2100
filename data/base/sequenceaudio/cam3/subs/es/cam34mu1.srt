@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:04,400
+Estamos experimentando algunas interferencias por parte de NEXUS.
+
+2
+00:00:04,599 --> 00:00:08,800
+Debes destruir su centro de mando antes de que perdamos el control sobre los sistemas clave.
+

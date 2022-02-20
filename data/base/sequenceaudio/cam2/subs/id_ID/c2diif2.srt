@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Komandan, suatu peluncuran baru telah terdeteksi.
+
+2
+00:00:01,600 --> 00:00:08,000
+Target dari peluncuran ini berkemungkinan tinggi adalah lokasi Anda.
+
+3
+00:00:08,800 --> 00:00:15,399
+Anda akan memulai evakuasi Markas Beta ke zona aman segera.
+

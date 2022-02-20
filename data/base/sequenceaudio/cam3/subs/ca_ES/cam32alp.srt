@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Aquí l'Equip Alfa. Repetim, Aquí l'Equip Alfa. Necessitem ajuda immediata.
+
+2
+00:00:07,599 --> 00:00:12,000
+Estem sota l'atac de ciborgs, tancs làser i convertiplans.
+
+3
+00:00:12,600 --> 00:00:18,000
+Hem intentat arribar a la vostra posició, però hem estat emboscats.
+
+4
+00:00:12,600 --> 00:00:18,000
+Estem refugiats en una vall en aquestes coordenades.
+
+5
+00:00:12,600 --> 00:00:18,000
+Si us plau, ajudeu-nos.
+

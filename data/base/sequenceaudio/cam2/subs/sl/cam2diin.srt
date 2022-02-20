@@ -1,0 +1,16 @@
+1
+00:00:09,600 --> 00:00:15,199
+Bojevniki Kolektiva. Delali ste dobro.
+
+2
+00:00:09,600 --> 00:00:15,199
+Vaša pravična nagrada je na poti.
+
+3
+00:00:15,600 --> 00:00:21,000
+Projekt beži iz svoje baze in krade vašo tehnologijo.
+
+4
+00:00:15,600 --> 00:00:21,000
+Morate jih ustaviti!
+

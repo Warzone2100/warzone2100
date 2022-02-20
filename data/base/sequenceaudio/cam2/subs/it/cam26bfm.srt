@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Comandante stiamo rilevando trasmissioni da questa località che stanno raggiungendo l'orbita alta.
+
+2
+00:00:13,000 --> 00:00:16,399
+NEXUS si è riconnesso con i satelliti NASDA.
+
+3
+00:00:16,799 --> 00:00:22,600
+Ciò rappresenta una grave minaccia per il Progetto e per la nostra sopravvivenza.
+

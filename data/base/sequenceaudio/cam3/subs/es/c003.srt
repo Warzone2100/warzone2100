@@ -1,0 +1,12 @@
+1
+00:01:10,833 --> 00:01:25,416
+El personal de la Base Gamma ha confirmado que los misiles nucleares apuntados a las Bases Alfa y Beta han sido lanzados desde un silo en su sector.
+
+2
+00:01:35,833 --> 00:01:44,166
+El Equipo Gamma está reconociendo la posición del silo y vigilando la actividad de NEXUS.
+
+3
+00:01:46,250 --> 00:01:52,500
+Comandante, el éxito del Proyecto te pertenece.
+

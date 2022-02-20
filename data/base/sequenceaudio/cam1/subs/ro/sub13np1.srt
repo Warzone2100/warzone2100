@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Atenție!
+
+2
+00:00:08,000 --> 00:00:11,000
+Ați intrat într-o zonă interzisă.
+
+3
+00:00:12,000 --> 00:00:22,000
+Întoarceți-vă la zona voastră sau veți fi distruși.
+
+4
+00:00:12,000 --> 00:00:22,000
+Repet. Întoarceți-vă la zona voastră sau veți fi distruşi.
+
+5
+00:00:12,000 --> 00:00:22,000
+Mesaj terminat.
+

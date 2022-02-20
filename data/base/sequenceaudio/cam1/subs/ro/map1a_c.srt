@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+Legătura sinaptică a fost dezvoltată de Corporația Reed, în colaborare cu armata SUA.
+
+2
+00:00:08,000 --> 00:00:22,000
+Legătura sinaptică permite transferul aproape imediat de gânduri de la un operator către sistemele de control și ghidaj ale vehiculelor. Legătura sinaptică este montată la baza craniului, înconjurând șira spinării.
+
+3
+00:00:25,000 --> 00:00:30,000
+Legătura are un port rapid de transfer de date ce e compatibil cu orice sistem.
+
+4
+00:00:37,000 --> 00:00:48,000
+Mai important, dezvoltarea legăturii sinaptice a făcut posibilă crearea de cyborgi. Încercările inițiale de exoschelete pentru soldați au eșuat deoarece s-au dovedit a fi prea lente și greu de controlat.
+
+5
+00:00:54,000 --> 00:01:08,000
+Legătura sinaptică a permis soldaților să fie plasați în costume armate pe care le pot controla ca și pe propriile corpuri. Aceste costume au permis infanteriei să lupte pe câmpurile de bătălie ale secolului 21.
+
+6
+00:01:08,599 --> 00:01:17,000
+Din nefericire, această tehnologie a căzut în mâinile Noii Paradigme. Este imperativ să cercetezi și să dezvolți tehnologii bazate pe legătura sinaptică.
+

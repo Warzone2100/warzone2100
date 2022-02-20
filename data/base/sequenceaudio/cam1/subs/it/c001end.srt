@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:02,400
+Trasmissione in Arrivo
+
+2
+00:00:02,799 --> 00:00:10,000
+Trasmissione dalla base Beta
+
+3
+00:00:02,799 --> 00:00:10,000
+Mayday! Mayday!
+
+4
+00:00:02,799 --> 00:00:10,000
+Richiediamo assistenza!...
+
+5
+00:00:29,200 --> 00:00:33,759
+Comandante, dovete assistere la Squadra Beta
+

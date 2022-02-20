@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Itt Alfa csapat. Ismétlem, itt Alfa csapat. Azonnali segítséget igénylünk.
+
+2
+00:00:07,599 --> 00:00:12,000
+Támadás alatt állunk, mindenhol Cyborgok, lézertankok és VTOL-ek.
+
+3
+00:00:12,600 --> 00:00:18,000
+Megpróbáltuk elérni a pozícióját, de lesből ránk támadtak.
+
+4
+00:00:12,600 --> 00:00:18,000
+Elrejtőztünk a völgyben, ezeken a koordinátákon.
+
+5
+00:00:12,600 --> 00:00:18,000
+Kérlek segíts.
+

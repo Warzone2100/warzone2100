@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Hier ist Team Alpha. Wiederhole, hier ist Team Alpha. Wir benötigen sofortige Unterstützung.
+
+2
+00:00:07,599 --> 00:00:12,000
+Wir liegen unter heftigem Beschuss durch Cyborgs, Laserpanzer und VTOLs.
+
+3
+00:00:12,600 --> 00:00:18,000
+Wir haben versucht Ihre Stellung zu erreichen, gerieten aber in einen Hinterhalt.
+
+4
+00:00:12,600 --> 00:00:18,000
+Wir haben uns in einem Tal bei diesen Koordinaten eingegraben.
+
+5
+00:00:12,600 --> 00:00:18,000
+Wir erbitten Unterstützung.
+

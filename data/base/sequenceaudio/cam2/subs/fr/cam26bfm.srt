@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Nous détectons des transmissions provenant de cet endroit qui atteignent l'orbite stratosphérique.
+
+2
+00:00:13,000 --> 00:00:16,399
+Le NEXUS s'est maintenant reconnecté sur les satellites de la NASDA.
+
+3
+00:00:16,799 --> 00:00:22,600
+Ceci est synonyme d'une grande menace à l'encontre du Projet et de notre propre survie.
+

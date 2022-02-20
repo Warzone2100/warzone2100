@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:08,000
+Dowódco, występują zakłócenia w działaniu naszego sprzętu.
+
+2
+00:00:01,000 --> 00:00:08,000
+Normalne działanie zostanie przywrócone tak szybko jak to możliwe.
+

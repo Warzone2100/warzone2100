@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:07,599
+Le NEXUS s'est alors effacé de lui-même de nos systèmes, en détruisant toute trace de son passage, y compris de ses connexions extérieures.
+
+2
+00:00:08,000 --> 00:00:19,000
+Nous ne sommes pas sûrs de ce qu'est NEXUS ni de savoir qui le dirige. Des recherches préliminaires ont permis d'associer le virus de NEXUS à la Reed Corporation, firme qui a développé la technologie du Lien Synaptique.
+
+3
+00:00:20,000 --> 00:00:28,399
+Nous avons cependant la certitude que NEXUS a aidé le Nouveau Paradigme en lui fournissant des technologies avancées. Quel que puisse être le NEXUS, c'est en tous cas quelque chose de bien plus dangereux qu'un simple parasite informatique...
+
+4
+00:00:29,000 --> 00:00:36,000
+Le NEXUS possède des technologies et des armes. Il sait des choses sur nous et n'a pas l'air amical.
+

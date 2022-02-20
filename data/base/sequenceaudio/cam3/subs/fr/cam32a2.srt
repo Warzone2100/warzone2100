@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Je suis heureux que vous ayiez pu le faire, Commandant.
+
+2
+00:00:05,833 --> 00:00:19,583
+Les tours de contrôle ennemies nous ont repérés. Nous avons réussi à repousser leurs tanks et leurs Cyborgs, mais nous n'avons pas progressé le long de la vallée.
+
+3
+00:00:20,416 --> 00:00:22,916
+Pouvez-vous essayer de nous rejoindre avec des unités anti-aériennes?
+

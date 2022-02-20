@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Parancsnok, visszaszereztünk egy parancsnoki tornyot az Új Paradigmától.
+
+2
+00:00:05,000 --> 00:00:15,000
+Ez a torony lehetővé teszi a támadások koordinálását, ahogy a szállítási pont a gyáraknál. A technológia kifejlesztése és használata elsődleges fontosságú.
+
+3
+00:00:17,000 --> 00:00:19,000
+Parancsnok, az utasítást vettük.
+

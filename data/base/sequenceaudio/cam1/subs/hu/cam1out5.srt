@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:07,599
+NEXUS eltávolította magát a rendszerből miközben megsemmisítette a memóriablokkjait, és eltávolította a külső kapcsolatai minden nyomát.
+
+2
+00:00:08,000 --> 00:00:19,000
+Nem vagyunk biztosak abban, mi is a NEXUS vagy ki vagy mi irányítja azt. A kezdeti kutatások kapcsolatba hozzák a NEXUS behatoló programot a Reed vállalattal, a szinaptikus kapcsolat fejlesztőjével.
+
+3
+00:00:20,000 --> 00:00:28,399
+Meggyőződtünk arról, hogy NEXUS indukálta az Új paradigmát a technológiája legnagyobb részével. Következésképpen a NEXUS több egy számítógép vírusnál.
+
+4
+00:00:29,000 --> 00:00:36,000
+Van technológiája és fegyverei. Tud rólunk, és nem barátságos.
+

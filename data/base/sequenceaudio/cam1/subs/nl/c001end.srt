@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:02,400
+Inkomende Transmissie
+
+2
+00:00:02,799 --> 00:00:10,000
+Transmissie van Beta Basis
+
+3
+00:00:02,799 --> 00:00:10,000
+Mayday! Mayday!
+
+4
+00:00:02,799 --> 00:00:10,000
+Help alsjeblieft!...
+
+5
+00:00:29,200 --> 00:00:33,759
+Commandant je gaat Team Beta assisteren
+

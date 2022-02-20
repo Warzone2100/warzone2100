@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Uwaga!
+
+2
+00:00:08,000 --> 00:00:11,000
+Wchodzisz do obszaru zastrzeżonego.
+
+3
+00:00:12,000 --> 00:00:22,000
+Powróć do swojej strefy lub zostaniesz zniszczony.
+
+4
+00:00:12,000 --> 00:00:22,000
+Powtarzam. Powróć do swojej strefy lub zostaniesz zniszczony.
+
+5
+00:00:12,000 --> 00:00:22,000
+Koniec wiadomości.
+

@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Nexus Davetsiz Misafir Programı mutasyona uğrayabilen bir bilgisayar virüsüdür. Tespit edilse bile sistemden silinmesi çok zordur.
+
+2
+00:00:12,000 --> 00:00:29,399
+İşleme amacını anlayamadık. İlk formunda işgal edilmiş sistemden kalan bölümleri araştırdı ve izole etti. Sonra da kendisi ve veri yapısını mutasyona uğratmaya başladı ve kendi bilgileri ile sistemi yeniden programladı.
+
+3
+00:00:30,000 --> 00:00:38,400
+Daha ileri analizlerde sistemin Nexus Davetsiz Misafir Programından daha fazla etkilenmemesi için teknisyenlerimiz el ile sistemi kapattı.
+
+4
+00:00:39,000 --> 00:00:49,000
+Fakat, Nexus Davetsiz Misafir Programı yayılışı Yeni Paradigma tarafından kontrol edilmedi. Nexus'un ne olduğunu anlamak için Yeni Paradigmanın çekirdek sistemleri bize gerekli.
+
+5
+00:00:50,000 --> 00:00:57,000
+Komutanım, bu bölgedeki Yeni Paradigma hareketlerini engellemek için ana üslerinin yerini tespit etmelisin.
+

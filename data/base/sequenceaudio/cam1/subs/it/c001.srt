@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Le destinazioni dei trasporti seguono:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - settore occidentale....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa avete il permesso per decollare.
+
+4
+00:00:09,000 --> 00:00:14,000
+Buona fortuna e buona caccia.
+
+5
+00:00:30,000 --> 00:00:35,000
+In avvicinamento alla zona di atterraggio. Inizia il briefing della squadra Alfa.
+
+6
+00:00:37,000 --> 00:00:46,000
+Comandante, lei guida la squadra Alfa, una delle tre squadre di spedizione mandate dal Progetto per recuperare gli artefatti del periodo precedente al Collasso.
+
+7
+00:00:47,000 --> 00:00:49,599
+La vostra destinazione risiede nella zona occidentale.
+

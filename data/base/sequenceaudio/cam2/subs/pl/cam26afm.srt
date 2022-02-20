@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Analizy wskazują na to, że te systemy były częścią systemu sterowania satelitów NASDA.
+
+2
+00:00:01,666 --> 00:00:16,666
+Jest już pewne, że to Nexus jest odpowiedzialny za Zniszczenie.
+
+3
+00:00:18,333 --> 00:00:41,666
+We wczesnej fazie Zniszczenia technicy NASDA wyłączyli zainfekowane systemy w celu ograniczenia rozprzestrzeniania się Nexus. Wygląda na to, że uniemożliwiło to satelitom laserowym strzelanie w czasie przeciwuderzenia.
+
+4
+00:00:43,333 --> 00:01:08,750
+Impulsy magnetyczne po wybuchach atomowych skasowały duże ilości modułów pamięci NASDA, zniszczyły jej procesor główny oraz wysłały niszczącą falę przez Nexus.
+
+5
+00:01:12,916 --> 00:01:23,333
+Nexus został usmażony, kiedy całe części jego świadomości zostały wymazane w czasie przeciwuderzenia.
+

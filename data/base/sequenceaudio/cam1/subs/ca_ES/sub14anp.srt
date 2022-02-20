@@ -1,0 +1,4 @@
+1
+00:00:08,399 --> 00:00:15,199
+Nexus, la tecnologia de l'enllaç sinàptic que requeríeu ha  estat recuperada i enviada.
+

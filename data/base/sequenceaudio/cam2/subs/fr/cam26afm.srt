@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Les analyses indiquent que ces systèmes s'étaient introduits dans le système de contrôle des satellites de la NASDA.
+
+2
+00:00:01,666 --> 00:00:16,666
+Il est maintenant certain que NEXUS est le responsable de l'Apocalypse.
+
+3
+00:00:18,333 --> 00:00:41,666
+Au début de l'offensive décisive des satellites contrôlés par NEXUS, les techniciens de la NASDA ont arrêté les systèmes infectés pour stopper la diffusion du virus. Cela semble avoir enrayé la riposte laser des satellites.
+
+4
+00:00:43,333 --> 00:01:08,750
+Les impulsions magnétiques engendrés par les explosions nucléaires ont effacé la majeure partie des banques de données de la NASDA, démoli leurs superordinateurs centraux, et gravement atteint le virus de NEXUS.
+
+5
+00:01:12,916 --> 00:01:23,333
+Le virus a été endommagé et des sections entières de sa conscience artificielle ont été perdues.
+

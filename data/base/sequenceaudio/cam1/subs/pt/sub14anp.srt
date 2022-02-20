@@ -1,0 +1,4 @@
+1
+00:00:08,399 --> 00:00:15,199
+NEXUS, a tecnologia de Ligação Sináptica que pediu foi recuperada e enviada para recolha.
+

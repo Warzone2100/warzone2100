@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Comandante, detectăm transmisiuni de la această locație care ajung pe orbită.
+
+2
+00:00:13,000 --> 00:00:16,399
+NEXUS este acum reconectat la sateliții NASDA.
+
+3
+00:00:16,799 --> 00:00:22,600
+Aceasta este o amenințare serioasă împotriva Proiectului și a supraviețuirii noastre.
+

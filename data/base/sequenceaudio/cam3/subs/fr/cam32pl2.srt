@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Téléchargement des coordonnées terminé.
+
+2
+00:00:03,599 --> 00:00:08,000
+Commandant, des forces de la Division Alpha ont survécu à l'attaque nucléaire contre leur base.
+

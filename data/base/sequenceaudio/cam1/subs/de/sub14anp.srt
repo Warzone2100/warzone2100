@@ -1,0 +1,4 @@
+1
+00:00:08,399 --> 00:00:15,199
+NEXUS, die geforderte synaptische Technologie wurde geborgen und auf den Weg geschickt.
+

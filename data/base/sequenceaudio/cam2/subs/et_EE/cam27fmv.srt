@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Komandör, me avastasime just raketirünnaku nendest kordinaatidest.
+
+2
+00:00:10,416 --> 00:00:21,666
+Team Gamma are sending a team to investigate the launch site and to prevent any further launches.
+
+3
+00:00:22,500 --> 00:00:47,083
+We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base.
+

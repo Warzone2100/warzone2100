@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+O Programa de Intrusão Nexus é um vírus de computador auto-mutante. Isso o torna difícil de ser erradicado de sistemas uma vez identificado.
+
+2
+00:00:12,000 --> 00:00:29,399
+Não pudemos identificar sua função ou objectivo principal. Na sua forma inicial, ele procura e isola secções da memória do resto do sistema invadido. Então, começa a mutar-se ele próprio e estruturas de dados, praticamente reprogramando o sistema de dentro para fora.
+
+3
+00:00:30,000 --> 00:00:38,400
+Análises mais a fundo não foram possíveis devido *a desactivação manual dos sistemas pelos nossos técnicos para impedir contaminação adicional pelo Programa de Intrusão Nexus.
+
+4
+00:00:39,000 --> 00:00:49,000
+No entanto, a infecção do Programa de Intrusão Nexus não foi verificada pelo Novo Paradigma. Precisamos capturar os sistemas centrais do Novo Paradigma para investigar o Nexus mais a fundo e determinar suas origens.
+
+5
+00:00:50,000 --> 00:00:57,000
+Comandante, você deve restringir as actividades do Novo Paradigma neste sector e localizar a sua base principal.
+

@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Descărcarea coordonatelor terminată.
+
+2
+00:00:03,599 --> 00:00:08,000
+Comandante, forţe de la echipa Alpha au scăpat de atacul nuclear asupra bazei Alpha.
+

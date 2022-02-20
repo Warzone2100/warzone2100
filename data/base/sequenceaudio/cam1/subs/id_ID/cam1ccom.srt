@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Komandan, kami telah memperoleh sebuah turet komando dari Paradigma Baru.
+
+2
+00:00:05,000 --> 00:00:15,000
+Turet ini membolehkan komandan untuk mengkoordinasikan serangan antara unit yang ditugaskan dan juga berperan sebagai poin pengantaran untuk pabrik. Meneliti dan menggunakan teknologi ini memiliki prioritas tertinggi.
+
+3
+00:00:17,000 --> 00:00:19,000
+Komandan, kami sedang menerima transmisi ini.
+

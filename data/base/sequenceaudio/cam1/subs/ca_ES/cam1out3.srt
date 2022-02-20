@@ -1,0 +1,4 @@
+1
+00:00:01,000 --> 00:00:05,000
+En no rebre cap resposta per part nostra, s'ha tornat amenaçador.
+

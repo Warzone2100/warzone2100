@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Tu drużyna Alfa. Powtarzam, tu drużyna Alfa. Potrzebujemy natychmiastowego wsparcia.
+
+2
+00:00:07,599 --> 00:00:12,000
+Jesteśmy silnie atakowani przez cyborgi, czołgi laserowe i uderzeniowe jednostki VTOL.
+
+3
+00:00:12,600 --> 00:00:18,000
+Próbowaliśmy dotrzeć do waszej pozycji, ale zostaliśmy otoczeni.
+
+4
+00:00:12,600 --> 00:00:18,000
+Jesteśmy umocnieni w dolinie na tych współrzędnych.
+
+5
+00:00:12,600 --> 00:00:18,000
+Prosimy o wsparcie.
+

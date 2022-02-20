@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Ce virus NEXUS est un programme en mutation constante. Il est donc très difficile de l'éliminer des systèmes, à condition bien sûr de pouvoir le détecter...
+
+2
+00:00:12,000 --> 00:00:29,399
+Nous sommes incapables de déterminer son but ou sa fonction finale. Dans sa forme initiale, il recherche et isole des espaces mémoire du reste du système. Il commence alors à muter en structures de données, et reprogramme tout le système informatique infecté.
+
+3
+00:00:30,000 --> 00:00:38,400
+Les dégâts ont pu être limités grâce à la coupure manuelle du système, effectuée en urgence par nos techniciens.
+
+4
+00:00:39,000 --> 00:00:49,000
+Cependant, cette conquête du virus NEXUS n'a pas été coordonnée par le Nouveau Paradigme. Nous devons capturer leurs systèmes informatiques pour enquêter sur le NEXUS et déterminer ses origines.
+
+5
+00:00:50,000 --> 00:00:57,000
+Commandant, vous devez stopper l'expansion du Nouveau Paradigme dans votre secteur et localiser leur base principale.
+

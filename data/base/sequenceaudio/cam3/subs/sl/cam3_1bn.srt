@@ -1,0 +1,24 @@
+1
+00:00:03,000 --> 00:00:10,000
+Dobro opravljeno, poveljnik; preprečili ste izstrelitev mojega zadnjega izstrelka.
+
+2
+00:00:03,000 --> 00:00:10,000
+Kakšna škoda. Vaše poveljstvo Projekta bi naredilo čudovito tarčo.
+
+3
+00:00:11,000 --> 00:00:12,800
+Vendar je dobro, da ste se mi pridružili tukaj.
+
+4
+00:00:13,000 --> 00:00:17,000
+Pod silosom je zakopana taktična jedrska bojna glava, ki je nastavljena, da jo kmalu raznese.
+
+5
+00:00:19,000 --> 00:00:22,000
+Ker je ne morem izstreliti, jo bo pač moralo raznesti kjer je.
+
+6
+00:00:22,399 --> 00:00:26,000
+Zavedajte se prosim, da so bili vsi vhodi v podzemni kompleks zaprti. Nasvidenje, poveljnik.
+

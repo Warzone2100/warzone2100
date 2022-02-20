@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Descàrrega de les coordenades completada.
+
+2
+00:00:03,599 --> 00:00:08,000
+Comandant, forces de l'Equip Alfa han escapat de l'atac nuclear a la Base Alfa
+

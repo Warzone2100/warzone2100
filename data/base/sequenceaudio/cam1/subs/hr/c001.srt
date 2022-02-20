@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Transport destinacije slijedi:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Zapadni Sektor
+
+3
+00:00:09,000 --> 00:00:14,000
+Alpha vi ste spremni za polijetanje.
+
+4
+00:00:09,000 --> 00:00:14,000
+Sretno i dobar lov.
+
+5
+00:00:30,000 --> 00:00:35,000
+Približavanje zoni slijetanja. Team Alpha počinje Briefing.
+
+6
+00:00:37,000 --> 00:00:46,000
+Zapovjednik, vi vodite Alfa Tim, jedan od triju ekspedicijskih timova poslan od strane Projekta za pronalaženje predmeta prije kolapsa.
+
+7
+00:00:47,000 --> 00:00:49,599
+Tvoja destinacija je u zapadnoj zoni
+

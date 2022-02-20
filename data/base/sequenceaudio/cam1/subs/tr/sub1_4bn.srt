@@ -1,0 +1,8 @@
+1
+00:00:06,000 --> 00:00:15,000
+İyi iş.
+
+2
+00:00:06,000 --> 00:00:15,000
+Teknolojiyi analiz ettikten sonra, ödülünüzü göndereceğiz.
+

@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:07,599
+Nexus s-a șters după aceea din sistem, distrugând memoria și eliminând orice dovadă a conexiunilor externe.
+
+2
+00:00:08,000 --> 00:00:19,000
+Nu suntem siguri ce anume este Nexus sau cine îl operează. Cercetările inițiale arată o legătură între programul intrus Nexus și Corporația Reed, dezvoltatorii legăturii sinaptice.
+
+3
+00:00:20,000 --> 00:00:28,399
+Am ajuns la concluzia că Nexus a oferit Noii Paradigme marea parte a tehnologiei. Orice ar fi Nexus, este mai mult decât un parazit digital.
+
+4
+00:00:29,000 --> 00:00:36,000
+Dispune de arme și tehnologie. Știe despre noi, și nu ne e prietenos.
+

@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Attention !
+
+2
+00:00:08,000 --> 00:00:11,000
+Vous entrez dans une zone interdite.
+
+3
+00:00:12,000 --> 00:00:22,000
+Revenez sur vos pas si vous ne voulez pas être éliminés !
+
+4
+00:00:12,000 --> 00:00:22,000
+Je répète : revenez sur vos pas si vous ne voulez pas être éliminés !
+
+5
+00:00:12,000 --> 00:00:22,000
+Fin du message.
+

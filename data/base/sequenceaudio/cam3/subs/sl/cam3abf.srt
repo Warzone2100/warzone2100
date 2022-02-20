@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:16,666
+Korporacijo Reed je ustanovil dr. Allan Reed. Leta 2080 je dr. Reed sklenil pogodbo z vojsko ZD za razvoj tehnologije sinaptične povezave.
+
+2
+00:00:18,750 --> 00:00:29,166
+Ko je pet let kasneje patentiral sinaptično povezavo, je dr. Reed nadaljeval svoje raziskave v kibernetiki.
+
+3
+00:00:31,250 --> 00:00:50,000
+Njegov tokratni cilj je bil omogočenje prenosa človeške zavesti v podatkovne tokove, ki bi se lahko zlili z računalniškimi tehnologijami.
+
+4
+00:00:52,083 --> 00:01:10,833
+Ponovno podprt od vojske je dr. Reed začel delo na vdornem programu NEXUS. Po treh letih z malo napredka je vojska opustila Projekt Nexus in prekinila financiranje dr. Reed-a.
+
+5
+00:01:12,916 --> 00:01:23,333
+Poročila iz tega časa trdijo, da je bil dr. Reed besen in je zaprisegel maščevanje vsem, ki so mu bili napoti.
+
+6
+00:01:25,416 --> 00:01:42,083
+Izgleda, da je dr. Reed-u uspelo doseči cilj in je dokončal vdorni program Nexus.
+
+7
+00:01:25,416 --> 00:01:42,083
+Podobnost med NEXUS-om in dr. Reed-om je vpadljiva.
+
+8
+00:01:47,500 --> 00:02:03,750
+Tako zanimiva učna ura zgodovine. Zdaj mi dovolite, da osvežim vaše znanje.
+
+9
+00:01:47,500 --> 00:02:03,750
+Vdorni program NEXUS je bil narejen za nadzor neumnežev, kot ste vi.
+
+10
+00:02:04,166 --> 00:02:26,666
+Zelo enostavno se mi je vtihotapiti v vaše sisteme in jih prevzeti. Tako enostavno pravzaprav, da ne bi niti vedeli, da sem tam. To je, dokler ne sprožim svojih delov, vrezanih v vaše osrednje sisteme.
+
+11
+00:02:27,500 --> 00:02:34,166
+Začnimo z sprožitvijo NEXUS-a v vaših osrednjih sistemih in poglejmo, kaj se zgodi!
+

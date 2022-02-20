@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Este Programa de Intrusión Nexus, es un parásito informático auto-mutante. Lo hace difícil de erradicar de los sistemas una vez ha sido indentificado.
+
+2
+00:00:12,000 --> 00:00:29,399
+No hemos sido capaces de descubrir su objetivo final o función. En su forma inicial, busca y aísla secciones de la memoria del resto del sistema invadido. Empieza a mutarse a sí mismo y sus estructuras de datos, reprogramando el sistema desde dentro.
+
+3
+00:00:30,000 --> 00:00:38,400
+El posterior análisis fué prevenido mediante el apagado manual del sistema por nuestros técnicos, para prevenir la contaminación adiciónal del Programa de Intrusión Nexus.
+
+4
+00:00:39,000 --> 00:00:49,000
+Sin embargo, la dispersión del Programa de Intrusión Nexus no fué comprobada por el Nuevo Paradigma. Necesitamos capturar los sistemas del núcleo del Nuevo Paradigma para contínuar investigando Nexus y determinar sus orígenes.
+
+5
+00:00:50,000 --> 00:00:57,000
+Comandante, estás para limitar las actividades del Nuevo Paradigma en este sector y localizar su base principal.
+

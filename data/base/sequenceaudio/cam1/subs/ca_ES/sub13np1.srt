@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Avís!
+
+2
+00:00:08,000 --> 00:00:11,000
+Esteu entrant en una àrea restringida.
+
+3
+00:00:12,000 --> 00:00:22,000
+Torneu a la vostra zona que se us ha assignat o sereu destruït.
+
+4
+00:00:12,000 --> 00:00:22,000
+Repetim. Torneu a la zona que se us a assignat o sereu destruït.
+
+5
+00:00:12,000 --> 00:00:22,000
+Fi del missatge.
+

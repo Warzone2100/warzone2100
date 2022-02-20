@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Gideceğiniz alanları söylüyorum:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Batı Bölgesi....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa kalkış izniniz verildi.
+
+4
+00:00:09,000 --> 00:00:14,000
+İyi şanslar ve iyi avlanmalar.
+
+5
+00:00:30,000 --> 00:00:35,000
+İniş Bölgesine Yaklaşıyoruz. Alfa Takımı Sunumunuz Başlıyor.
+
+6
+00:00:37,000 --> 00:00:46,000
+Komutanım, Alfa Takımına liderlik edeceksin. Bu takım Proje tarafından yıkımdan önce kalıntıları toplamak için gönderilen üç takımdan biri.
+
+7
+00:00:47,000 --> 00:00:49,599
+Hedefiniz batı bölgesinde.
+

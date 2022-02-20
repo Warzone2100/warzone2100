@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,416
+La NASDA est l'Agence de Défense Stratégique de l'Amérique du Nord.
+
+2
+00:00:12,500 --> 00:00:36,250
+La NASDA a été crée en 2076 dans le but d'assurer la défense de l'Amérique du Nord contre des attaques conventionnelles et nucléaires. La mise en place d'un système de défense satellitaire commença en 2081 et s'est achevé en 2082.
+
+3
+00:00:37,500 --> 00:00:49,166
+En 2085, les satellites de la NASDA larguèrent leurs bombes nucléaires sur la Terre.
+
+4
+00:00:52,916 --> 00:01:06,666
+Il y avait aussi des sites basés au sol, qui s'auto-détruisirent dans de gigantesques explosions nucléaires. Mais il semble que certains soient restés intacts...
+
+5
+00:01:08,750 --> 00:01:23,333
+Les satellites de la NASDA étaient aussi équipés de puissants lasers destinés à détruire en vol des missiles dirigés contre les nations d'Amérique du Nord.
+
+6
+00:01:25,833 --> 00:01:46,250
+Durant les contre-attaques, ces lasers n'ont pas tiré. Si ces satellites étaient engagés comme appuis militaires, ils pourraient infliger des dégâts considérables à des cibles au sol...
+
+7
+00:01:48,333 --> 00:01:58,333
+Toutes les ogives nuclaires dirigées contre l'Amérique du Nord ont touché leurs cibles.
+
+8
+00:01:59,166 --> 00:02:21,666
+Nous savons que NEXUS est à la recherche d'un centre de la NASDA dans le secteur Est. Il s'agissait de l'un des postes de commande des satellites.
+
+9
+00:02:22,500 --> 00:02:27,083
+Si le centre est encore intact, NEXUS pourrait prendre le contrôle des satellites.
+
+10
+00:02:28,333 --> 00:02:34,166
+NEXUS a déclaré qu'il avait déjà détruit le monde.
+

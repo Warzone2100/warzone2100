@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Comandante, o nouă lansare a fost detectată.
+
+2
+00:00:01,600 --> 00:00:08,000
+E foarte probabil să aibă locația ta ca țintă.
+
+3
+00:00:08,800 --> 00:00:15,399
+Trebuie să începi evacuarea de urgență a bazei Beta spre refugiul sigur.
+

@@ -1,0 +1,16 @@
+1
+00:00:02,083 --> 00:00:24,166
+Combattants du Collectif, d'autres intrus s'infiltrent sur votre territoire.
+
+2
+00:00:02,083 --> 00:00:24,166
+Ils ne font pas partie intégrante de la Machine.
+
+3
+00:00:25,000 --> 00:00:52,083
+Combattants du Collectif, attaquez et tuez tout ceux qui s'opposeront à la Machine.
+
+4
+00:00:25,000 --> 00:00:52,083
+Attaquez-les ! Faites-les disparaître de cette zone !
+

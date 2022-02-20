@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Transport bestemmingen volgen:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Westelijke Sector
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa je kunt opstijgen.
+
+4
+00:00:09,000 --> 00:00:14,000
+Veel succes en een goede jacht.
+
+5
+00:00:30,000 --> 00:00:35,000
+Naderen Landingszone. Team Alfa overleg begint.
+
+6
+00:00:37,000 --> 00:00:46,000
+Commandant, jij leid Team Alfa, een van de drie expeditie teams uitgezonden door het Project om artefacten te verzamelen van voor de ineenstorting.
+
+7
+00:00:47,000 --> 00:00:49,599
+Je bestemming ligt in de westelijke sector.
+

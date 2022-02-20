@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:08,000
+Comandant, estem experimentant interferències en el nostre equipament.
+
+2
+00:00:01,000 --> 00:00:08,000
+El servei es normalitzarà tant aviat com sigui possible.
+

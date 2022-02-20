@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,416
+NASDA ist die North American Strategic Defense Agency.
+
+2
+00:00:12,500 --> 00:00:36,250
+Die NASDA wurde im Jahre 2076 gegründet, um Nordamerika gegen konventionelle und nukleare Angriffe zu verteidigen. Der Bau eines Satellitenverteidigungssystems wurde im Jahre 2081 aufgenommen und 2082 beendet.
+
+3
+00:00:37,500 --> 00:00:49,166
+Im Jahre 2085 feuerten die NASDA-Satelliten ihre Atomraketen auf die Erde ab und verursachten den Kollaps.
+
+4
+00:00:52,916 --> 00:01:06,666
+Es gab auch bodengestützte Einrichtungen. Viele von ihnen wurden während des atomaren Gegenschlags zerstört, aber es werden immer noch einige dort draußen vermutet.
+
+5
+00:01:08,750 --> 00:01:23,333
+Die NASDA-Satelliten verfügten auch über Pulslaser, die Nordamerika anfliegende Raketen zerstören sollten.
+
+6
+00:01:25,833 --> 00:01:46,250
+Während des Gegenschlags versagten diese Lasersatelliten. Sollten diese Lasersatelliten wieder in Betrieb genommen werden, könnten sie Bodenzielen große Schäden zufügen.
+
+7
+00:01:48,333 --> 00:01:58,333
+Alle auf Nordamerika gerichteten Raketen trafen ihre Ziele.
+
+8
+00:01:59,166 --> 00:02:21,666
+Wir wissen, dass NEXUS die NASDA-Zentrale im Östlichen Sektor sucht. Diese war eines der bodengestützten Kontrollzentren für die Satelliten.
+
+9
+00:02:22,500 --> 00:02:27,083
+Wenn die Zentrale intakt ist und in die Hände von NEXUS fällt, kann NEXUS die Satelliten kontrollieren.
+
+10
+00:02:28,333 --> 00:02:34,166
+NEXUS behauptet, schon einmal die Welt zerstört zu haben.
+

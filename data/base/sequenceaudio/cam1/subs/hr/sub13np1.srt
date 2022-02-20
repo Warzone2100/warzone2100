@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Oprez!
+
+2
+00:00:08,000 --> 00:00:11,000
+Vi sada ulazite u zabranjenu zonu.
+
+3
+00:00:12,000 --> 00:00:22,000
+Vratite se u zadanu zonu ili budi te uništeni.
+
+4
+00:00:12,000 --> 00:00:22,000
+Ponavljam. Vratite se u zadanu zonu ili budi te uništeni.
+
+5
+00:00:12,000 --> 00:00:22,000
+Kraj Poruke.
+

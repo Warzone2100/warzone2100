@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Prevozni cilji sledijo:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - zahodni sektor...
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa, imate dovoljenje za vzlet.
+
+4
+00:00:09,000 --> 00:00:14,000
+Srečno in dober ulov.
+
+5
+00:00:30,000 --> 00:00:35,000
+Približujemo se pristajalnemu območju. Napotki za tim Alfa se začenjajo.
+
+6
+00:00:37,000 --> 00:00:46,000
+Poveljnik, vodite tim Alfa, eno izmed treh raziskovalnih ekip, ki jih je Projekt poslal ven za pridobitev artefaktov izpred Propada.
+
+7
+00:00:47,000 --> 00:00:49,599
+Vaš cilj se nahaja v zahodnem območju.
+

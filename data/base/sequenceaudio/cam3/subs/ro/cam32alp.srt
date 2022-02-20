@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Echipa Alfa aici. Repet, echipa Alfa aici. Avem nevoie imediată de ajutor.
+
+2
+00:00:07,599 --> 00:00:12,000
+Suntem sub atac masiv din partea cyborgilor, a tancurilor cu laser, DAV-uri de atac.
+
+3
+00:00:12,600 --> 00:00:18,000
+Încercam să ajungem la poziţia dumneavoastră, dar am fost prinşi in ambuscadă.
+
+4
+00:00:12,600 --> 00:00:18,000
+Suntem ascunşi într-o vale la aceste coordonate.
+
+5
+00:00:12,600 --> 00:00:18,000
+Cerem ajutor.
+

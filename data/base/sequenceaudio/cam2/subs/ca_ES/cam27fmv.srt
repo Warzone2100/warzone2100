@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Comandant, acabem de detectar un llançament de míssils des d'aquestes coordenades.
+
+2
+00:00:10,416 --> 00:00:21,666
+L'Equip Gamma està enviant un equip a investigar el punt de llançament i pervenir-ne de futurs.
+
+3
+00:00:22,500 --> 00:00:47,083
+Hem d'assumir que Nexus ha aconseguit controlar aquest punt. No podem determinat si els míssils porten càrrega nuclear o quin és el seu objectiu. Estigueu preparat per evacuar la vostra base.
+

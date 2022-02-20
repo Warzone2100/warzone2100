@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:16,666
+Reed şirketi Dr. Allan Reed tarafından kuruldu. 2080 yılında Dr. Reed ABD ordusu ile Sinaptik Bağlantı teknolojisini bulmak için kontrat imzaladi.
+
+2
+00:00:18,750 --> 00:00:29,166
+Sinaptik bağlantinin patenti verildikten 5 yıl sonra, Dr. Reed sibernetik araştırmalarına devam etti.
+
+3
+00:00:31,250 --> 00:00:50,000
+O zamanda amacı, insan bilincini veri akımı olarak bilgisayarlara iletmekti. Siberuzayda iken operatör bedenleri daldırma tankları içinde korundu.
+
+4
+00:00:52,083 --> 00:01:10,833
+Askeri yardımı yeniden kazanınca, Dr. Reed NEXUS Davetsiz Misafir Programı üzerinde çalışmaya başladı. Küçük gelişmeler ile geçen 3 yıl sonra, askeriye Nexus Proje'sinden vazgeçti ve Dr. Reed'e askeri fon desteği kapandı.
+
+5
+00:01:12,916 --> 00:01:23,333
+Raporlara göre Dr. Reed öfkeliydi ve yoluna çıkan herkesten intikamını alacağına yemin etmiş.
+
+6
+00:01:25,416 --> 00:01:42,083
+Görünüşe göre Dr. Reed hedeflerine ulaşmış ve Nexus Davetsiz Misafir Programını tamamlamış.
+
+7
+00:01:25,416 --> 00:01:42,083
+NEXUS ve Dr. Reed arasındakı benzerlik çarpıcı.
+
+8
+00:01:47,500 --> 00:02:03,750
+Ne ilginç bir tarih dersi. Şimdi sana gerçeği göstermeme izin ver.
+
+9
+00:01:47,500 --> 00:02:03,750
+NEXUS Davetsiz Misafir Programı senin gibi salakları kontrol etmek için üretilmişti.
+
+10
+00:02:04,166 --> 00:02:26,666
+Benim için sistemlerinize girip ele geçirmek çok basit. Hemde çok. Hatta orada olduğumu bile anlamayacaksın. Ta ki sistemlerinden parçamı aktive edene kadar.
+
+11
+00:02:27,500 --> 00:02:34,166
+Çekirdek sisteminizdeki NEXUS'u aktif hale getirelim ve ne olduğunu görelim!
+

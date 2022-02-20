@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Atenção!
+
+2
+00:00:08,000 --> 00:00:11,000
+Você está entrando em uma área restrita.
+
+3
+00:00:12,000 --> 00:00:22,000
+Retorne à sua zona designada ou será destruído.
+
+4
+00:00:12,000 --> 00:00:22,000
+Repetimos. Retorne à sua zona designada ou será destruído.
+
+5
+00:00:12,000 --> 00:00:22,000
+Fim da mensagem.
+

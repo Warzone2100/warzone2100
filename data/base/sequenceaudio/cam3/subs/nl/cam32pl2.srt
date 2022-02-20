@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Downloaden van de coördinaten voltooid.
+
+2
+00:00:03,599 --> 00:00:08,000
+Commandant, troepen van Team Alfa zijn ontsnapt aan de nucleaire aanval op Alfa Basis.
+

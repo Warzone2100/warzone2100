@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Ein neuer Raketenstart wurde geortet.
+
+2
+00:00:01,600 --> 00:00:08,000
+Es ist wahrscheinlich, dass er gegen Ihre Stellung gerichtet ist.
+
+3
+00:00:08,800 --> 00:00:15,399
+Beginnen Sie sofort damit die Betabasis zum sicheren Hafen zu evakuieren.
+

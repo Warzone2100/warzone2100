@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:04,400
+Nos systèmes sont perturbés par des interférences provenant de NEXUS.
+
+2
+00:00:04,599 --> 00:00:08,800
+Vous devez détruire ce centre de commande avant que nos systèmes ne deviennent instables.
+

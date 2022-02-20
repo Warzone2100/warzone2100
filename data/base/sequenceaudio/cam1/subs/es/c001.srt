@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Destinos de Transportes a continuación:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Sector Oeste....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa, tiene permiso para despegar.
+
+4
+00:00:09,000 --> 00:00:14,000
+Buena suerte y buena caza.
+
+5
+00:00:30,000 --> 00:00:35,000
+Aproximándose a la Zona de Aterrizaje. El informe del Equipo Alfa comienza.
+
+6
+00:00:37,000 --> 00:00:46,000
+Comandante, tu diriges el equipo Alfa, uno de los tres equipos expedicionarios enviados por el Proyecto para recuperar artefactos anteriores al Colapso.
+
+7
+00:00:47,000 --> 00:00:49,599
+Tu destino está en la zona oeste.
+

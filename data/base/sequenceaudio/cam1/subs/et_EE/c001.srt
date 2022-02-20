@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Järgnev Transpordi Sihtkoht
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Lääne Sektor....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa te olete valmis õhku tõusma.
+
+4
+00:00:09,000 --> 00:00:14,000
+Head õnne ja head jahtimist.
+
+5
+00:00:30,000 --> 00:00:35,000
+Lähenemine Maandumis Tsooni. Tiim Alfa briifingu algus.
+
+6
+00:00:37,000 --> 00:00:46,000
+Komandör, sa juhit Tiim Alfat, ühte kolmest otsingurühmast mis saadeti teele Projekti poolt, et leida artifakte enne Kollapsi ajast.
+
+7
+00:00:47,000 --> 00:00:49,599
+Sinu sihtpunkt asub lääne tsoonis.
+

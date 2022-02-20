@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:07,599
+Następnie Nexus usunął się z systemu, niszcząc moduły pamięci oraz usuwając wszystkie ślady ich zewnętrznych połączeń.
+
+2
+00:00:08,000 --> 00:00:19,000
+Nie jesteśmy pewni czym jest Nexus lub kto nim kieruje. Wstępne badania łączą program NEXUS Intruder z Reed Corporation, twórcą technologii połączenia synaptycznego.
+
+3
+00:00:20,000 --> 00:00:28,399
+Stwierdziliśmy, że Nexus dostarczył New Paradigm większość swoich technologii. Czymkolwiek jest Nexus, to jest czymś więcej niż komputerowym pasożytem.
+
+4
+00:00:29,000 --> 00:00:36,000
+Posiada technologie i uzbrojenie. Wie o nas i nie jest przyjazny.
+

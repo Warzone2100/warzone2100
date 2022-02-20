@@ -1,0 +1,4 @@
+1
+00:00:08,399 --> 00:00:15,199
+NEXUS, teknologi sinapsis yang anda perlukan telah diperoleh kembali dan dikirim untuk pengumpulan.
+

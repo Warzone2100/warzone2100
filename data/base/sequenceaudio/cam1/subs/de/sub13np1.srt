@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Warnung!
+
+2
+00:00:08,000 --> 00:00:11,000
+Sie betreten ein Sperrgebiet.
+
+3
+00:00:12,000 --> 00:00:22,000
+Kehren Sie in die Ihnen zugewiesene Zone zurück oder Sie werden zerstört werden.
+
+4
+00:00:12,000 --> 00:00:22,000
+Ich wiederhole. Kehren Sie in die Ihnen zugewiesene Zone zurück oder Sie werden zerstört werden.
+
+5
+00:00:12,000 --> 00:00:22,000
+Ende der Nachricht.
+

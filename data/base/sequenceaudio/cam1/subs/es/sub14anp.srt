@@ -1,0 +1,4 @@
+1
+00:00:08,399 --> 00:00:15,199
+NEXUS, la tecnología sináptica que has pedido, ha sido recuperada y enviada para su recogida.
+

@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Commandant, nous avons récupéré les plans de la tourelle de commandement du Nouveau Paradigme...
+
+2
+00:00:05,000 --> 00:00:15,000
+Cette tourelle permet aux commandants de coordonner les actions entre plusieurs unités d'attaque et de mettre à leurs ordres des unités nouvellement produites. Effectuer des recherches sur cette technologie puis la mettre en oeuvre constitue pour vous la plus haute priorité.
+
+3
+00:00:17,000 --> 00:00:19,000
+Nous captons à l'instant cette transmission :
+

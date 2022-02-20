@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Commander, wir haben einen Commanderturm des New Paradigm erbeutet.
+
+2
+00:00:05,000 --> 00:00:15,000
+Dieser Turm gestattet es Commandern Angriffe zugewiesener Einheiten zu koordinieren und als Fabrikauslieferungspunkt zu fungieren. Die Erforschung und der Einsatz dieser Technologie hat oberste Priorität.
+
+3
+00:00:17,000 --> 00:00:19,000
+Commander, wir erhalten gerade folgende Übertragung.
+

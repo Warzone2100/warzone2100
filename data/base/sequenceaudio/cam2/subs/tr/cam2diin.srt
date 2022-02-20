@@ -1,0 +1,16 @@
+1
+00:00:09,600 --> 00:00:15,199
+Kolektifin Askerleri, harika bir iş yaptınız.
+
+2
+00:00:09,600 --> 00:00:15,199
+Ödülünüz yolda.
+
+3
+00:00:15,600 --> 00:00:21,000
+Proje kendi üssüne kaçıyor ve teknolojinizi çalıyor.
+
+4
+00:00:15,600 --> 00:00:21,000
+Onları durdurmalısınız!
+

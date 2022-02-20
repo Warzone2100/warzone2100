@@ -1,0 +1,8 @@
+1
+00:00:06,000 --> 00:00:15,000
+Ben fet.
+
+2
+00:00:06,000 --> 00:00:15,000
+Un cop hagem analitzat i autenticat la tecnologia, obtindreu la recompensa.
+

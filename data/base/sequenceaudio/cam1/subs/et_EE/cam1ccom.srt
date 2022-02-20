@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Komandör, me saime New Paradigmidelt komandöritorni.
+
+2
+00:00:05,000 --> 00:00:15,000
+This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority.
+
+3
+00:00:17,000 --> 00:00:19,000
+Komandör, me saame selle ülekande.
+

@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Ez a NEXUS behatoló program egy önfejlesztő számítógép parazita. Ami fertőzés után megnehezíti a kiirtását a rendszerből.
+
+2
+00:00:12,000 --> 00:00:29,399
+Nem voltunk képesek arra, hogy felderítsük a végső célját vagy küldetését. Kezdeti formájában felkutatta és izolálta a fertőzött rendszer elemeit. Majd elkezdte újraprogramozni önmagát és az adatstruktúráját a hatékonyság érdekében.
+
+3
+00:00:30,000 --> 00:00:38,400
+További vizsgálatok nem voltak lehetségesek, mivel a technikusaink leállították a rendszert, hogy megakadályozzák a további fertőzést a NEXUS Behatoló Program részéről.
+
+4
+00:00:39,000 --> 00:00:49,000
+Azonban a NEXUS behatoló program elterjedését nem ellenőrizte az Új Paradigma. Meg kell szereznünk az Új paradigma rendszerének legbelső adatait, hogy további vizsgálatokat folytassunk a NEXUSról, feltérképezve eredetét.
+
+5
+00:00:50,000 --> 00:00:57,000
+Parancsnok! Számolja fel az Új Paradigma aktivitását ebben a szektorban, és mérje be a bázisát.
+

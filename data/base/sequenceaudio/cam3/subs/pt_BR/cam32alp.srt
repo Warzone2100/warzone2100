@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Aqui é o Time Alfa. Repito, aqui é o Time Alfa. Precisamos de ajuda imediatamente.
+
+2
+00:00:07,599 --> 00:00:12,000
+Estamos sob ataque pesado de ciborgues, tanques laser e VTOL's de ataque.
+
+3
+00:00:12,600 --> 00:00:18,000
+Estávamos tentado te alcançar, mas caímos numa armadilha.
+
+4
+00:00:12,600 --> 00:00:18,000
+Estamos recuados num vale nessas coordenadas.
+
+5
+00:00:12,600 --> 00:00:18,000
+Favor ajudar.
+

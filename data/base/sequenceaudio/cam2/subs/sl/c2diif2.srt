@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Poveljnik, zaznana je bila nova izstrelitev.
+
+2
+00:00:01,600 --> 00:00:08,000
+Zelo verjetno je usmerjena na vaš položaj.
+
+3
+00:00:08,800 --> 00:00:15,399
+Začeti morate takojšnjo evakuacijo baze Beta v varno zavetje.
+

@@ -1,0 +1,24 @@
+1
+00:00:03,000 --> 00:00:10,000
+Muito bem Comandante, você impediu meu último míssil de ser lançado.
+
+2
+00:00:03,000 --> 00:00:10,000
+Que pena. Seu QG do Projeto seria um ótimo alvo.
+
+3
+00:00:11,000 --> 00:00:12,800
+Mas gostei de você ter se juntado a mim aqui.
+
+4
+00:00:13,000 --> 00:00:17,000
+Enterrado sob esse silo está uma ogiva nuclear tática que está programada para explodir daqui a pouco.
+
+5
+00:00:19,000 --> 00:00:22,000
+Como eu não tenho como lançá-la, eu terei de explodi-la ali mesmo.
+
+6
+00:00:22,399 --> 00:00:26,000
+Por favor note que todas as entradas para o complexo subterrâneo foram seladas. Até mais, Comandante.
+

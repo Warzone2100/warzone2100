@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:07,000
+İniş Alanının güvenliğini sağla ve bir yönlendirme üssü kur.
+
+2
+00:00:01,000 --> 00:00:07,000
+Sonra Yeni Paradigma üssünü yok et.
+

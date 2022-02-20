@@ -1,0 +1,24 @@
+1
+00:00:03,000 --> 00:00:10,000
+Rendben van parancsnok, megakadályozta az utolsó rakéta kilövését.
+
+2
+00:00:03,000 --> 00:00:10,000
+Milyen kár. A Terv főhadiszállása csodálatos cél lett volna.
+
+3
+00:00:11,000 --> 00:00:12,800
+Örülök, hogy csatlakozik hozzám.
+
+4
+00:00:13,000 --> 00:00:17,000
+Eltemetve a siló alatt, egy taktikai nukleáris robbanófej van, kilövésre programozva.
+
+5
+00:00:19,000 --> 00:00:22,000
+Nem tudom elindítani, fel kell robbantani ott ahol van.
+
+6
+00:00:22,399 --> 00:00:26,000
+Kérem vegye figyelembe, hogy minden bejárat ami a föld alávezet, használhatatlan. Minden jót, parancsnok.
+

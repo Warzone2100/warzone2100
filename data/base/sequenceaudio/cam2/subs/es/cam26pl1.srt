@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:07,599
+El análisis de la Central ADENA no deja de que el Colectivo ha introducido al Intruso Nexus.
+
+2
+00:00:08,399 --> 00:00:14,000
+El reactor nuclear iba a ser usado para proveer energía a una vasta red de sistemas informáticos anteriores al Colapso.
+

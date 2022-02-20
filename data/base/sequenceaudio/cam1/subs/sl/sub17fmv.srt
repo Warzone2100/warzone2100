@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Ta vdorni program Nexus je samo-mutacijski računalniški parazit.
+
+2
+00:00:12,000 --> 00:00:29,399
+Nismo uspeli določiti njegovega končnega cilja ali delovanja. V svoji začetni obliki išče in osami območja spomina od ostalega vdrtega sistema. Nato začne mutirati sebe in podatkovne strukture, s čimer učinkovito reprogramira sistem od znotraj.
+
+3
+00:00:30,000 --> 00:00:38,400
+Nadaljna analiza je bila preprečena zaradi ročnega izklopa sistema s strani naših tehnikov, da bi preprečili dodatno kontaminacijo od vdornega programa Nexus.
+
+4
+00:00:39,000 --> 00:00:49,000
+Vendar pa širitev vdornega programa Nexus ni bila preverjena od Nove Paradigme. Pridobiti moramo osrednje sisteme Nove Paradigme za nadaljno preiskavo Nexus-a in določiti njegove izvore.
+
+5
+00:00:50,000 --> 00:00:57,000
+Poveljnik, okrnite dejavnosti Nove Paradigme v tem sektorju in locirajte njihovo glavno bazo.
+

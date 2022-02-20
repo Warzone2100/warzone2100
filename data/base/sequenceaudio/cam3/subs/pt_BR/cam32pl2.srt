@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Download Das Coordenadas Concluído.
+
+2
+00:00:03,599 --> 00:00:08,000
+Comandante, forças do Time Alfa escaparam o ataque nuclear na Base Alfa.
+

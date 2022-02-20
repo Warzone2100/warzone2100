@@ -1,0 +1,4 @@
+1
+00:00:02,083 --> 00:00:15,833
+Les informations récupérées dans la base précédente indiquent que le Nouveau Paradigme a découvert deux artefacts du Lien Synaptique.
+

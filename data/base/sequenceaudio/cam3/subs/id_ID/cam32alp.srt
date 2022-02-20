@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Ini Tim Alpha. Diulangi, ini Tim Alpha. Kami butuh bantuan segera.
+
+2
+00:00:07,599 --> 00:00:12,000
+Kami sedang diserang oleh cyborg, tank laser, dan VTOL penyerang.
+
+3
+00:00:12,600 --> 00:00:18,000
+Kami sedang berusaha mencapai posisi Anda, namun kami disergap.
+
+4
+00:00:12,600 --> 00:00:18,000
+Kami telah berkumpul di sebuah lembah di koordinat ini.
+
+5
+00:00:12,600 --> 00:00:18,000
+Kami meminta bantuan.
+

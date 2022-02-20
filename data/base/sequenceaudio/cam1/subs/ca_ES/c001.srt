@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Els destins dels transports són els següents:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Sector oest...
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa, teniu permís per enlairar-vos.
+
+4
+00:00:09,000 --> 00:00:14,000
+Bona sort i bona cacera.
+
+5
+00:00:30,000 --> 00:00:35,000
+Ens apropem a la zona d'aterratge. Comença la reunió de l'Equip Alfa
+
+6
+00:00:37,000 --> 00:00:46,000
+Comandant, lidereu l'Equip Alfa, una de les tres expedicions enviades pel Projecte per recuperar artefactes anterior al Col·lapse
+
+7
+00:00:47,000 --> 00:00:49,599
+El vostre destí és a la zona oest.
+

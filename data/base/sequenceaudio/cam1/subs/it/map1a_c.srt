@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+Il Collegamento Sinaptico fu sviluppato dalla corporazione Reed insieme ai militari statunitensi.
+
+2
+00:00:08,000 --> 00:00:22,000
+Il Collegamento Sinaptico permette un trasferimento quasi istantaneo del pensiero dagli operatori umani ai controlli del veicolo e ai sistemi di guida. Il Collegamento Sinaptico è installato alla base del cranio circondando la colonna spinale.
+
+3
+00:00:25,000 --> 00:00:30,000
+Il collegamento ha una porta per trasferimento dati ad alta velocità che può collegarsi in qualsiasi sistema computerizzato.
+
+4
+00:00:37,000 --> 00:00:48,000
+Ma più importante, lo sviluppo del collegamento sinaptico permise la creazione dei cyborg. I primi tentativi di una corazza potenziata per soldati fallirono in quanto si dimostrarono lenti e poco reattivi.
+
+5
+00:00:54,000 --> 00:01:08,000
+Il collegamento sinaptico permise ai soldati di essere messi in corazze potenziate che potevano controllare facilmente come i loro corpi. Le corazze potenziate permisero alla fanteria di funzionare con efficacia nei campi di battaglia del 21° secolo.
+
+6
+00:01:08,599 --> 00:01:17,000
+Sfortunatamente, questa tecnologia è caduta nelle mani del Nuovo Paradigma. E' imperativo ricercare e sviluppare delle tecnologie a collegamento sinaptico.
+

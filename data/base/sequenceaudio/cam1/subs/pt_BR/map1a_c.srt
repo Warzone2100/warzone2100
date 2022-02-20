@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+A Conexão Sináptica foi desenvolvida pela Corporação Reed junto com o Exército dos EUA.
+
+2
+00:00:08,000 --> 00:00:22,000
+A conexão sináptica permite transferência quase instantânea de pensamentos de operadores humanos a controladores de veículos e sistemas de mira. A conexão é instalada na base do crânio, ao redor da coluna.
+
+3
+00:00:25,000 --> 00:00:30,000
+A conexão tem uma saída de transferência de dados de alta velocidade que se conecta em qualquer sistema computadorizado.
+
+4
+00:00:37,000 --> 00:00:48,000
+O mais importante é que a conexão permitiu a criação de ciborgues. Tentativas iniciais de armaduras de força para soldados individuais falharam, ao provarem ser lentas e difíceis de controlar.
+
+5
+00:00:54,000 --> 00:01:08,000
+A conexão permitiu soldados serem postos em armaduras que eles controlassem como seus próprios corpos. Armaduras de força permitiram a infantaria ser mais efetiva nas zonas de batalha do século 21.
+
+6
+00:01:08,599 --> 00:01:17,000
+Infelizmente, essa tecnologia caiu nas mãos do Novo Paradigma. É imprescindível que você pesquise e desenvolva a tecnologia de conexão sináptica.
+

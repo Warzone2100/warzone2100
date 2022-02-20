@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Die Untersuchungen zeigen, dass diese Systeme Bestandteil eines Kontrollsystems für die NASDA-Satelliten waren.
+
+2
+00:00:01,666 --> 00:00:16,666
+Jetzt wissen wir, dass NEXUS für den Kollaps verantwortlich war.
+
+3
+00:00:18,333 --> 00:00:41,666
+In den frühen Phasen des Kollaps schalteten NASDA-Techniker die infizierten Systeme ab, um eine Verbreitung von NEXUS zu verhindern. Dadurch wurden die Lasersatelliten während der Gegenschläge nicht abgefeuert.
+
+4
+00:00:43,333 --> 00:01:08,750
+Die darauf folgenden elektromagnetischen Impulse löschten große Bereiche der NASDA-Speicherbänke, zerstörten den Kernprozessor und sandten Schockwellen durch NEXUS.
+
+5
+00:01:12,916 --> 00:01:23,333
+NEXUS wurde übel mitgenommen, als komplette Teile seines Bewusstseins in den Gegenschlägen verlorengingen.
+

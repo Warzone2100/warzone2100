@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Opozorilo!
+
+2
+00:00:08,000 --> 00:00:11,000
+Vstopate na prepovedano območje.
+
+3
+00:00:12,000 --> 00:00:22,000
+Vrnite se v vašo dodeljeno cono ali bodite uničeni.
+
+4
+00:00:12,000 --> 00:00:22,000
+Ponavljam. Vrnite se v vašo dodeljeno cono ali bodite uničeni.
+
+5
+00:00:12,000 --> 00:00:22,000
+Konec sporočila.
+

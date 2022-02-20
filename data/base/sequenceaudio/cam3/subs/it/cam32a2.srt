@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Siamo felici che ce l'abbiate fatta, Comandante.
+
+2
+00:00:05,833 --> 00:00:19,583
+I VTOL d'attacco nemici ci hanno bloccato. Siamo riusciti a tenere a bada i cyborg e i carri, ma non siamo riusciti a fare alcun progresso nella valle.
+
+3
+00:00:20,416 --> 00:00:22,916
+Potete cercare di raggiungerci con unità antiaeree?
+

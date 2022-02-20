@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,416
+NASDA és l'agencia de defensa estratègica d'Amèrica del nord.
+
+2
+00:00:12,500 --> 00:00:36,250
+NASDA va ser creada l'any 2076 per defensar Amèrica del nord d'un atac nuclear o convencional. La construcció d'un sistema de defensa per satèl·lit va començar l'any 2081 i es va acabar el 2082.
+
+3
+00:00:37,500 --> 00:00:49,166
+El 2085 els satèl·lits de NASDA van llançar els seus caps nuclears cap a la terra.
+
+4
+00:00:52,916 --> 00:01:06,666
+També hi havia bases terrestres. Moltes van ser destruïdes en el contraatac nuclear, però de ben segur que en queden algunes.
+
+5
+00:01:08,750 --> 00:01:23,333
+Els satèl·lits NASDA també contenien làsers d'impulsos dissenyats per eliminar els míssils que s'acostin a Amèrica del nord.
+
+6
+00:01:25,833 --> 00:01:46,250
+Durant el contraatac, aquests làsers no van funcionar. Si es posen en marxa, els làsers poden infligir molts danys a les unitats de terra.
+
+7
+00:01:48,333 --> 00:01:58,333
+Tots els caps que apuntaven a Amèrica del nord van trobar els seus objectius
+
+8
+00:01:59,166 --> 00:02:21,666
+Sabem que és el que Nexus busca a la central de NASDA del sector Est. Era un dels centres de control de terra dels satèl·lits.
+
+9
+00:02:22,500 --> 00:02:27,083
+Si troben el centre intacte, NEXUS podria controlar els satèl·lits.
+
+10
+00:02:28,333 --> 00:02:34,166
+El que busca NEXUS ja va destruir el món una vegada.
+

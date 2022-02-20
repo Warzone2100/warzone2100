@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Encantats de veure'l, Comandant.
+
+2
+00:00:05,833 --> 00:00:19,583
+Els atacts dels convertiplans ens té bloquejats. Hem aconseguit aguantar els ciborgs i els tancs, però no podem avançar per la vall
+
+3
+00:00:20,416 --> 00:00:22,916
+Podeu arribar fins nosaltres amb unitats antiaèries?
+

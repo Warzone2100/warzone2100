@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Análises indicam que esses sistemas eram parte do sistema de controle dos satélites NASDA.
+
+2
+00:00:01,666 --> 00:00:16,666
+Agora é certo que o Nexus foi o responsável pelo Colapso.
+
+3
+00:00:18,333 --> 00:00:41,666
+Durante os primeiros estágios do Colapso, os técnicos da NASDA desligaram os sistemas infectados para isolar a infecção do Nexus. Isso parece ter impedido o disparo dos SatLasers durante o contra-ataque.
+
+4
+00:00:43,333 --> 00:01:08,750
+Os pulsos eletro-magnéticos nucleares limparam grande parte dos bancos de memória da NASDA, destruindo seu processador central, e enviaram ondas de choque, destruindo Nexus.
+
+5
+00:01:12,916 --> 00:01:23,333
+Nexus foi fritado quando seções inteiras de sua consciência foram erradicadas durante os contra-ataques.
+

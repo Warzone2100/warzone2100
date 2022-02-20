@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Commandant, un nouveau lancement de missile a été détecté.
+
+2
+00:00:01,600 --> 00:00:08,000
+Il semble être dirigé vers votre secteur.
+
+3
+00:00:08,800 --> 00:00:15,399
+Vous devez commencer immédiatement l'évacuation de la base Beta vers le refuge sûr.
+

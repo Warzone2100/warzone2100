@@ -1,0 +1,8 @@
+1
+00:00:06,000 --> 00:00:15,000
+Gute Arbeit.
+
+2
+00:00:06,000 --> 00:00:15,000
+Sobald wir das Artefakt analysiert und für echt befunden haben, folgt die Belohnung.
+

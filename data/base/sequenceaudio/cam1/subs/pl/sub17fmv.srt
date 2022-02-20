@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Program NEXUS Intruder jest samo-mutującym pasożytem komputerowym. Czyni to go trudnym do usunięcia po jego identyfikacji.
+
+2
+00:00:12,000 --> 00:00:29,399
+Nie jesteśmy w stanie ustalić jego celu lub funkcji. W swojej początkowej formie wyszukuje on i izoluje części pamięci zaatakowanego systemu. Następnie zaczyna mutować siebie i struktury danych, skutecznie przeprogramowując system od wewnątrz.
+
+3
+00:00:30,000 --> 00:00:38,400
+Dalsze analizy zostały uniemożliwione przez ręczne zamknięcie systemu przez naszych techników aby zapobiec dalszemu skażeniu przez program NEXUS Intruder.
+
+4
+00:00:39,000 --> 00:00:49,000
+Jednak rozprzestrzenianie się programu NEXUS Intruder nie zostało sprawdzone przez New Paradigm. Dla dalszych badań i ustalenia jego pochodzenia musimy przejąć systemy podstawowe New Paradigm.
+
+5
+00:00:50,000 --> 00:00:57,000
+Dowódco, musisz zdławić New Paradigm w tym sektorze i zlokalizować ich główną bazę.
+

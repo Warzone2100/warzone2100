@@ -1,0 +1,24 @@
+1
+00:00:03,000 --> 00:00:10,000
+Foarte bine, Comandante, mi-ai oprit ultima rachetă de la lansare.
+
+2
+00:00:03,000 --> 00:00:10,000
+Ce păcat. Sediul Proiectului ar fi fost o țintă atât de frumoasă.
+
+3
+00:00:11,000 --> 00:00:12,800
+Dar e bine că mi te-ai alăturat aici.
+
+4
+00:00:13,000 --> 00:00:17,000
+Sub acest siloz se află o rachetă nucleară programată să detoneze curând.
+
+5
+00:00:19,000 --> 00:00:22,000
+Din moment ce nu o pot lansa, va trebui s-o detonez aici unde este.
+
+6
+00:00:22,399 --> 00:00:26,000
+Ia notă de faptul că toate intrările în complexul subteran au fost sigilate. La revedere, Comandante.
+
