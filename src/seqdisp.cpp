@@ -727,7 +727,7 @@ void seq_AddSeqToList(const WzString &seqName, const WzString &audioName, const 
 	if (!textFileName.empty())
 	{
 		// Ordinary text shouldn't be justified
-		std::string textFile = "sequenceaudio/" + textFileName;
+		std::string textFile = getSubtitleFile(textFileName);
 		seq_AddTextFromFile(seq, textFile, SEQ_TEXT_POSITION);
 	}
 
