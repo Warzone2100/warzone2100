@@ -5623,6 +5623,7 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 static void randomizeLimit(const char *name)
 {
 	int stat = getStructStatFromName(name);
+	ASSERT_OR_RETURN(, stat >= 0, "Invalid struct stat name: %s", (name) ? name : "");
 	if (rand() % 2 == 0)
 	{
 		asStructureStats[stat].upgrade[0].limit = asStructureStats[stat].base.limit;
