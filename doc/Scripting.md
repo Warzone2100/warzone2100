@@ -35,16 +35,31 @@ returned from API functions defined here around in the global scope. They are no
 bad things may happen. If you need to keep static arrays around, it is better to keep them locally defined to a
 function, as they will then not be saved and loaded.
 
-One error that it is easy to make upon initially learning JavaScript and using this API, is to try to use
-the `for (... in ...)` construct to iterate over an array of objects. This does not work! Instead, use code
-like the following:
+One error that it is easy to make upon initially learning JavaScript and using this API, is mixing up the iteration over arrays and objects.
+For objects use `for (const key in obj) { ... }` and for arrays use `for (const item of list) { ... }`.
 
 ```js
+// Example for iterating over a list of droids
 const droidList = enumDroid(me, DROID_CONSTRUCT);
-for (let i = 0; i < droidList.length; ++i)
+for (const droid of droidList)
 {
-	const droid = droidList[i];
+	// do something with `droid` here
 	...
+}
+
+// Example for iterating over an object
+const obj = {
+	key1: "value1",
+	key2: "value2"
+};
+for (const key of obj)
+{
+	if (obj.hasOwnProperty(key))
+	{
+		const value = obj[key];
+		// do something with `value` here
+		...
+	}
 }
 ```
 
