@@ -28,5 +28,8 @@ files:
         eo: eo # Esperanto
         la-LA: la # Latin
         nb: nb # Norwegian Bokmal
+  - source: /data/base/sequenceaudio/**/*.srt
+    translation: /data/base/sequenceaudio/**/subs/%locale_with_underscore%/%original_file_name%
+    ignore: [/data/base/sequenceaudio/**/subs/%locale_with_underscore%/%original_file_name%]
   - source: /pkg/nsis/i18n/win_installer_base.nsh
     translation: /pkg/nsis/i18n/win_installer-%locale_with_underscore%.nsh
