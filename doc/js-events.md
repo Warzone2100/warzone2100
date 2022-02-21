@@ -169,7 +169,7 @@ An event that is run whenever a new research is available. The `researchStructur
 the research comes from a research lab owned by the current player. If an ally does the research,
 the `researchStructure` parameter will be set to `null`. The `player` parameter gives the player it is called for.
 
-## eventDestroyed(object)
+## eventDestroyed(gameObject)
 
 An event that is run whenever an object is destroyed. Careful passing
 the parameter object around, since it is about to vanish!

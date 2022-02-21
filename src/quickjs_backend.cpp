@@ -503,7 +503,7 @@ public:
 	//__
 	virtual bool handle_eventResearched(const wzapi::researchResult& research, wzapi::event_nullable_ptr<const STRUCTURE> psStruct, int player) override;
 
-	//__ ## eventDestroyed(object)
+	//__ ## eventDestroyed(gameObject)
 	//__
 	//__ An event that is run whenever an object is destroyed. Careful passing
 	//__ the parameter object around, since it is about to vanish!
