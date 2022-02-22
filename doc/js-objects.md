@@ -93,11 +93,13 @@ Describes a structure (building). It inherits all the properties of the **Base O
 In addition, the following properties are defined:
 
 * `type` The type will always be `STRUCTURE`.
-* `status` The completeness status of the structure. It will be one of `BEING_BUILT` and `BUILT`.
+* `status` The completeness status of the structure. It will be one of `BEING_BUILT` or `BUILT`.
 * `cost` What it would cost to build this structure. (3.2+ only)
-* `stattype` The stattype defines the type of structure. It will be one of `HQ`, `FACTORY`, `POWER_GEN`, `RESOURCE_EXTRACTOR`, `LASSAT`,
-  `DEFENSE`, `WALL`, `RESEARCH_LAB`, `REPAIR_FACILITY`, `CYBORG_FACTORY`, `VTOL_FACTORY`, `REARM_PAD`, `SAT_UPLINK`, `GATE` and `COMMAND_CONTROL`.
-* `modules` If the stattype is set to one of the factories, `POWER_GEN` or `RESEARCH_LAB`, then this property is set to the number of module upgrades it has.
+* `stattype` The stattype defines the type of structure. It will be one of:
+  `HQ`, `FACTORY`, `POWER_GEN`, `RESOURCE_EXTRACTOR`, `LASSAT`, `DEFENSE`, `WALL`, `RESEARCH_LAB`,
+  `REPAIR_FACILITY`, `CYBORG_FACTORY`, `VTOL_FACTORY`, `REARM_PAD`, `SAT_UPLINK`, `GATE` or `COMMAND_CONTROL`.
+* `modules` If the stattype is set to one of the factories, `POWER_GEN` or `RESEARCH_LAB`,
+  then this property is set to the number of module upgrades it has.
 * `canHitAir` True if the structure has anti-air capabilities. (3.2+ only)
 * `canHitGround` True if the structure has anti-ground capabilities. (3.2+ only)
 * `isSensor` True if the structure has sensor ability. (3.2+ only)

@@ -690,13 +690,13 @@ int JS_DeletePropertyStr(JSContext *ctx, JSValueConst this_obj,
 }
 
 // Forward-declare
+JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx);
 JSValue convDroid(const DROID *psDroid, JSContext *ctx);
 JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx);
-JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx);
 JSValue convFeature(const FEATURE *psFeature, JSContext *ctx);
-JSValue convMax(const BASE_OBJECT *psObj, JSContext *ctx);
-JSValue convTemplate(const DROID_TEMPLATE *psTemplate, JSContext *ctx);
 JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player);
+JSValue convTemplate(const DROID_TEMPLATE *psTemplate, JSContext *ctx);
+JSValue convMax(const BASE_OBJECT *psObj, JSContext *ctx);
 
 static int QuickJS_DefinePropertyValue(JSContext *ctx, JSValueConst this_obj, const char* prop, JSValue val, int flags)
 {
@@ -706,159 +706,57 @@ static int QuickJS_DefinePropertyValue(JSContext *ctx, JSValueConst this_obj, co
 	return ret;
 }
 
-//;; ## Research
+//;; ## Base Object
 //;;
-//;; Describes a research item. The following properties are defined:
+//;; Describes a basic object. It will always be a **Droid**, **Structure** or **Feature**,
+//;; but sometimes the difference does not matter, and you can treat any of them simply as a basic object.
+//;; These fields are also inherited by the **Droid**, **Structure** and **Feature** objects.
+//;; The following properties are defined:
 //;;
-//;; * `power` Number of power points needed for starting the research.
-//;; * `points` Number of research points needed to complete the research.
-//;; * `started` A boolean saying whether or not this research has been started by current player or any of its allies.
-//;; * `done` A boolean saying whether or not this research has been completed.
-//;; * `name` A string containing the full name of the research.
-//;; * `id` A string containing the index name of the research.
-//;; * `type` The type will always be `RESEARCH_DATA`.
+//;; * `type` It will be one of `DROID`, `STRUCTURE` or `FEATURE`.
+//;; * `id` The unique ID of this object.
+//;; * `x` X position of the object in tiles.
+//;; * `y` Y position of the object in tiles.
+//;; * `z` Z (height) position of the object in tiles.
+//;; * `player` The player owning this object.
+//;; * `selected` A boolean saying whether 'selectedPlayer' has selected this object.
+//;; * `name` A user-friendly name for this object.
+//;; * `health` Percentage that this object is damaged (where 100 means not damaged at all).
+//;; * `armour` Amount of armour points that protect against kinetic weapons.
+//;; * `thermal` Amount of thermal protection that protect against heat based weapons.
+//;; * `born` The game time at which this object was produced or came into the world. (3.2+ only)
 //;;
-JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
+JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx)
 {
-	if (psResearch == nullptr)
-	{
-		return JS_NULL;
-	}
 	JSValue value = JS_NewObject(ctx);
-	QuickJS_DefinePropertyValue(ctx, value, "power", JS_NewInt32(ctx, (int)psResearch->researchPower), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "points", JS_NewInt32(ctx, (int)psResearch->researchPoints), JS_PROP_ENUMERABLE);
-	bool started = false;
-	for (int i = 0; i < game.maxPlayers; i++)
+	ASSERT_OR_RETURN(value, psObj, "No object for conversion");
+	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewUint32(ctx, psObj->id), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "x", JS_NewInt32(ctx, map_coord(psObj->pos.x)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "y", JS_NewInt32(ctx, map_coord(psObj->pos.y)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "z", JS_NewInt32(ctx, map_coord(psObj->pos.z)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "player", JS_NewUint32(ctx, psObj->player), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "armour", JS_NewInt32(ctx, objArmour(psObj, WC_KINETIC)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "thermal", JS_NewInt32(ctx, objArmour(psObj, WC_HEAT)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, psObj->type), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "selected", JS_NewUint32(ctx, psObj->selected), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, objInfo(psObj)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "born", JS_NewUint32(ctx, psObj->born), JS_PROP_ENUMERABLE);
+	scripting_engine::GROUPMAP *psMap = scripting_engine::instance().getGroupMap(engineToInstanceMap.at(ctx));
+	if (psMap != nullptr && psMap->map().count(psObj) > 0) // FIXME:
 	{
-		if (aiCheckAlliances(player, i) || player == i)
-		{
-			int bits = asPlayerResList[i][psResearch->index].ResearchStatus;
-			started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING) || (bits & RESBITS_PENDING_ONLY);
-		}
-	}
-	QuickJS_DefinePropertyValue(ctx, value, "started", JS_NewBool(ctx, started), JS_PROP_ENUMERABLE); // including whether an ally has started it
-	QuickJS_DefinePropertyValue(ctx, value, "done", JS_NewBool(ctx, IsResearchCompleted(&asPlayerResList[player][psResearch->index])), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "fullname", JS_NewString(ctx, psResearch->name.toUtf8().c_str()), JS_PROP_ENUMERABLE); // temporary
-	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain fullname
-	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, SCRIPT_RESEARCH), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "results", mapJsonToQuickJSValue(ctx, psResearch->results, 0), JS_PROP_ENUMERABLE);
-	return value;
-}
-
-//;; ## Structure
-//;;
-//;; Describes a structure (building). It inherits all the properties of the base object (see below).
-//;; In addition, the following properties are defined:
-//;;
-//;; * `status` The completeness status of the structure. It will be one of `BEING_BUILT` and `BUILT`.
-//;; * `type` The type will always be `STRUCTURE`.
-//;; * `cost` What it would cost to build this structure. (3.2+ only)
-//;; * `stattype` The stattype defines the type of structure. It will be one of `HQ`, `FACTORY`, `POWER_GEN`,
-//;; `RESOURCE_EXTRACTOR`, `LASSAT`, `DEFENSE`, `WALL`, `RESEARCH_LAB`, `REPAIR_FACILITY`,
-//;; `CYBORG_FACTORY`, `VTOL_FACTORY`, `REARM_PAD`, `SAT_UPLINK`, `GATE` and `COMMAND_CONTROL`.
-//;; * `modules` If the stattype is set to one of the factories, `POWER_GEN` or `RESEARCH_LAB`, then this property is set to the
-//;; number of module upgrades it has.
-//;; * `canHitAir` True if the structure has anti-air capabilities. (3.2+ only)
-//;; * `canHitGround` True if the structure has anti-ground capabilities. (3.2+ only)
-//;; * `isSensor` True if the structure has sensor ability. (3.2+ only)
-//;; * `isCB` True if the structure has counter-battery ability. (3.2+ only)
-//;; * `isRadarDetector` True if the structure has radar detector ability. (3.2+ only)
-//;; * `range` Maximum range of its weapons. (3.2+ only)
-//;; * `hasIndirect` One or more of the structure's weapons are indirect. (3.2+ only)
-//;;
-JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
-{
-	bool aa = false;
-	bool ga = false;
-	bool indirect = false;
-	int range = -1;
-	for (int i = 0; i < psStruct->numWeaps; i++)
-	{
-		if (psStruct->asWeaps[i].nStat)
-		{
-			WEAPON_STATS *psWeap = &asWeaponStats[psStruct->asWeaps[i].nStat];
-			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
-			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
-			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
-			range = MAX(proj_GetLongRange(psWeap, psStruct->player), range);
-		}
-	}
-	JSValue value = convObj(psStruct, ctx);
-	QuickJS_DefinePropertyValue(ctx, value, "isCB", JS_NewBool(ctx, structCBSensor(psStruct)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "isSensor", JS_NewBool(ctx, structStandardSensor(psStruct)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "hasIndirect", JS_NewBool(ctx, indirect), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "isRadarDetector", JS_NewBool(ctx, objRadarDetector(psStruct)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "range", JS_NewInt32(ctx, range), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "status", JS_NewInt32(ctx, (int)psStruct->status), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, structureBody(psStruct))), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewInt32(ctx, psStruct->pStructureType->powerToBuild), JS_PROP_ENUMERABLE);
-	int stattype = 0;
-	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
-	{
-	case REF_WALL:
-	case REF_WALLCORNER:
-	case REF_GATE:
-		stattype = (int)REF_WALL;
-		break;
-	case REF_GENERIC:
-	case REF_DEFENSE:
-		stattype = (int)REF_DEFENSE;
-		break;
-	default:
-		stattype = (int)psStruct->pStructureType->type;
-		break;
-	}
-	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, stattype), JS_PROP_ENUMERABLE);
-	if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-	    || psStruct->pStructureType->type == REF_VTOL_FACTORY
-	    || psStruct->pStructureType->type == REF_RESEARCH
-	    || psStruct->pStructureType->type == REF_POWER_GEN)
-	{
-		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NewUint32(ctx, psStruct->capacity), JS_PROP_ENUMERABLE);
+		int group = psMap->map().at(psObj); // FIXME:
+		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NewInt32(ctx, group), JS_PROP_ENUMERABLE);
 	}
 	else
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NULL, JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NULL, JS_PROP_ENUMERABLE);
 	}
-	JSValue weaponlist = JS_NewArray(ctx);
-	for (int j = 0; j < psStruct->numWeaps; j++)
-	{
-		JSValue weapon = JS_NewObject(ctx);
-		const WEAPON_STATS *psStats = asWeaponStats + psStruct->asWeaps[j].nStat;
-		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
-		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
-		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
-		QuickJS_DefinePropertyValue(ctx, weapon, "lastFired", JS_NewUint32(ctx, psStruct->asWeaps[j].lastFired), JS_PROP_ENUMERABLE);
-		JS_DefinePropertyValueUint32(ctx, weaponlist, j, weapon, JS_PROP_ENUMERABLE);
-	}
-	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, JS_PROP_ENUMERABLE);
-	return value;
-}
-
-//;; ## Feature
-//;;
-//;; Describes a feature (a **game object** not owned by any player). It inherits all the properties of the base object (see below).
-//;; In addition, the following properties are defined:
-//;; * `type` It will always be `FEATURE`.
-//;; * `stattype` The type of feature. Defined types are `OIL_RESOURCE`, `OIL_DRUM` and `ARTIFACT`.
-//;; * `damageable` Can this feature be damaged?
-//;;
-JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
-{
-	JSValue value = convObj(psFeature, ctx);
-	const FEATURE_STATS *psStats = psFeature->psStats;
-	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewUint32(ctx, 100 * psStats->body / MAX(1, psFeature->body)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "damageable", JS_NewBool(ctx, psStats->damageable), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, psStats->subType), JS_PROP_ENUMERABLE);
 	return value;
 }
 
 //;; ## Droid
 //;;
-//;; Describes a droid. It inherits all the properties of the base object (see below).
+//;; Describes a droid. It inherits all the properties of the **Base Object** (see above).
 //;; In addition, the following properties are defined:
 //;;
 //;; * `type` It will always be `DROID`.
@@ -884,9 +782,9 @@ JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 //;;   * `DORDER_OBSERVE` Order a droid to keep a target in sensor view. (3.2+ only)
 //;;   * `DORDER_RECOVER` Order a droid to pick up something. (3.2+ only)
 //;;   * `DORDER_RECYCLE` Order a droid to factory for recycling. (3.2+ only)
-//;; * `action` The current action of the droid. This is how it intends to carry out its plan. The
-//;; C++ code may change the action frequently as it tries to carry out its order. You never want to set
-//;; the action directly, but it may be interesting to look at what it currently is.
+//;; * `action` The current action of the droid. This is how it intends to carry out its plan.
+//;;   The C++ code may change the action frequently as it tries to carry out its order.
+//;;   You never want to set the action directly, but it may be interesting to look at what it currently is.
 //;; * `droidType` The droid's type. The following types are defined:
 //;;   * `DROID_CONSTRUCT` Trucks and cyborg constructors.
 //;;   * `DROID_WEAPON` Droids with weapon turrets, except cyborgs.
@@ -1004,51 +902,155 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	return value;
 }
 
-//;; ## Base Object
+//;; ## Structure
 //;;
-//;; Describes a basic object. It will always be a droid, structure or feature, but sometimes the
-//;; difference does not matter, and you can treat any of them simply as a basic object. These
-//;; fields are also inherited by the droid, structure and feature objects.
-//;; The following properties are defined:
+//;; Describes a structure (building). It inherits all the properties of the **Base Object** (see above).
+//;; In addition, the following properties are defined:
 //;;
-//;; * `type` It will be one of `DROID`, `STRUCTURE` or `FEATURE`.
-//;; * `id` The unique ID of this object.
-//;; * `x` X position of the object in tiles.
-//;; * `y` Y position of the object in tiles.
-//;; * `z` Z (height) position of the object in tiles.
-//;; * `player` The player owning this object.
-//;; * `selected` A boolean saying whether 'selectedPlayer' has selected this object.
-//;; * `name` A user-friendly name for this object.
-//;; * `health` Percentage that this object is damaged (where 100 means not damaged at all).
-//;; * `armour` Amount of armour points that protect against kinetic weapons.
-//;; * `thermal` Amount of thermal protection that protect against heat based weapons.
-//;; * `born` The game time at which this object was produced or came into the world. (3.2+ only)
+//;; * `type` The type will always be `STRUCTURE`.
+//;; * `status` The completeness status of the structure. It will be one of `BEING_BUILT` or `BUILT`.
+//;; * `cost` What it would cost to build this structure. (3.2+ only)
+//;; * `stattype` The stattype defines the type of structure. It will be one of:
+//;;   `HQ`, `FACTORY`, `POWER_GEN`, `RESOURCE_EXTRACTOR`, `LASSAT`, `DEFENSE`, `WALL`, `RESEARCH_LAB`,
+//;;   `REPAIR_FACILITY`, `CYBORG_FACTORY`, `VTOL_FACTORY`, `REARM_PAD`, `SAT_UPLINK`, `GATE` or `COMMAND_CONTROL`.
+//;; * `modules` If the stattype is set to one of the factories, `POWER_GEN` or `RESEARCH_LAB`,
+//;;   then this property is set to the number of module upgrades it has.
+//;; * `canHitAir` True if the structure has anti-air capabilities. (3.2+ only)
+//;; * `canHitGround` True if the structure has anti-ground capabilities. (3.2+ only)
+//;; * `isSensor` True if the structure has sensor ability. (3.2+ only)
+//;; * `isCB` True if the structure has counter-battery ability. (3.2+ only)
+//;; * `isRadarDetector` True if the structure has radar detector ability. (3.2+ only)
+//;; * `range` Maximum range of its weapons. (3.2+ only)
+//;; * `hasIndirect` One or more of the structure's weapons are indirect. (3.2+ only)
 //;;
-JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx)
+JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 {
-	JSValue value = JS_NewObject(ctx);
-	ASSERT_OR_RETURN(value, psObj, "No object for conversion");
-	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewUint32(ctx, psObj->id), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "x", JS_NewInt32(ctx, map_coord(psObj->pos.x)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "y", JS_NewInt32(ctx, map_coord(psObj->pos.y)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "z", JS_NewInt32(ctx, map_coord(psObj->pos.z)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "player", JS_NewUint32(ctx, psObj->player), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "armour", JS_NewInt32(ctx, objArmour(psObj, WC_KINETIC)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "thermal", JS_NewInt32(ctx, objArmour(psObj, WC_HEAT)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, psObj->type), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "selected", JS_NewUint32(ctx, psObj->selected), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, objInfo(psObj)), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "born", JS_NewUint32(ctx, psObj->born), JS_PROP_ENUMERABLE);
-	scripting_engine::GROUPMAP *psMap = scripting_engine::instance().getGroupMap(engineToInstanceMap.at(ctx));
-	if (psMap != nullptr && psMap->map().count(psObj) > 0) // FIXME:
+	bool aa = false;
+	bool ga = false;
+	bool indirect = false;
+	int range = -1;
+	for (int i = 0; i < psStruct->numWeaps; i++)
 	{
-		int group = psMap->map().at(psObj); // FIXME:
-		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NewInt32(ctx, group), JS_PROP_ENUMERABLE);
+		if (psStruct->asWeaps[i].nStat)
+		{
+			WEAPON_STATS *psWeap = &asWeaponStats[psStruct->asWeaps[i].nStat];
+			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
+			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
+			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
+			range = MAX(proj_GetLongRange(psWeap, psStruct->player), range);
+		}
+	}
+	JSValue value = convObj(psStruct, ctx);
+	QuickJS_DefinePropertyValue(ctx, value, "isCB", JS_NewBool(ctx, structCBSensor(psStruct)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isSensor", JS_NewBool(ctx, structStandardSensor(psStruct)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "hasIndirect", JS_NewBool(ctx, indirect), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isRadarDetector", JS_NewBool(ctx, objRadarDetector(psStruct)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "range", JS_NewInt32(ctx, range), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "status", JS_NewInt32(ctx, (int)psStruct->status), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, structureBody(psStruct))), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewInt32(ctx, psStruct->pStructureType->powerToBuild), JS_PROP_ENUMERABLE);
+	int stattype = 0;
+	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
+	{
+	case REF_WALL:
+	case REF_WALLCORNER:
+	case REF_GATE:
+		stattype = (int)REF_WALL;
+		break;
+	case REF_GENERIC:
+	case REF_DEFENSE:
+		stattype = (int)REF_DEFENSE;
+		break;
+	default:
+		stattype = (int)psStruct->pStructureType->type;
+		break;
+	}
+	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, stattype), JS_PROP_ENUMERABLE);
+	if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+	    || psStruct->pStructureType->type == REF_VTOL_FACTORY
+	    || psStruct->pStructureType->type == REF_RESEARCH
+	    || psStruct->pStructureType->type == REF_POWER_GEN)
+	{
+		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NewUint32(ctx, psStruct->capacity), JS_PROP_ENUMERABLE);
 	}
 	else
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NULL, JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NULL, JS_PROP_ENUMERABLE);
 	}
+	JSValue weaponlist = JS_NewArray(ctx);
+	for (int j = 0; j < psStruct->numWeaps; j++)
+	{
+		JSValue weapon = JS_NewObject(ctx);
+		const WEAPON_STATS *psStats = asWeaponStats + psStruct->asWeaps[j].nStat;
+		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
+		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, weapon, "lastFired", JS_NewUint32(ctx, psStruct->asWeaps[j].lastFired), JS_PROP_ENUMERABLE);
+		JS_DefinePropertyValueUint32(ctx, weaponlist, j, weapon, JS_PROP_ENUMERABLE);
+	}
+	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, JS_PROP_ENUMERABLE);
+	return value;
+}
+
+//;; ## Feature
+//;;
+//;; Describes a feature (a **game object** not owned by any player). It inherits all the properties of the **Base Object** (see above).
+//;; In addition, the following properties are defined:
+//;;
+//;; * `type` It will always be `FEATURE`.
+//;; * `stattype` The type of feature. Defined types are `OIL_RESOURCE`, `OIL_DRUM` and `ARTIFACT`.
+//;; * `damageable` Can this feature be damaged?
+//;;
+JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
+{
+	JSValue value = convObj(psFeature, ctx);
+	const FEATURE_STATS *psStats = psFeature->psStats;
+	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewUint32(ctx, 100 * psStats->body / MAX(1, psFeature->body)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "damageable", JS_NewBool(ctx, psStats->damageable), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, psStats->subType), JS_PROP_ENUMERABLE);
+	return value;
+}
+
+//;; ## Research
+//;;
+//;; Describes a research item.
+//;; The following properties are defined:
+//;;
+//;; * `type` The type will always be `RESEARCH_DATA`.
+//;; * `id` A string containing the index name of the research.
+//;; * `name` A string containing the full name of the research.
+//;; * `power` Number of power points needed for starting the research.
+//;; * `points` Number of research points needed to complete the research.
+//;; * `started` A boolean saying whether or not this research has been started by current player or any of its allies.
+//;; * `done` A boolean saying whether or not this research has been completed.
+//;;
+JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
+{
+	if (psResearch == nullptr)
+	{
+		return JS_NULL;
+	}
+	JSValue value = JS_NewObject(ctx);
+	QuickJS_DefinePropertyValue(ctx, value, "power", JS_NewInt32(ctx, (int)psResearch->researchPower), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "points", JS_NewInt32(ctx, (int)psResearch->researchPoints), JS_PROP_ENUMERABLE);
+	bool started = false;
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		if (aiCheckAlliances(player, i) || player == i)
+		{
+			int bits = asPlayerResList[i][psResearch->index].ResearchStatus;
+			started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING) || (bits & RESBITS_PENDING_ONLY);
+		}
+	}
+	QuickJS_DefinePropertyValue(ctx, value, "started", JS_NewBool(ctx, started), JS_PROP_ENUMERABLE); // including whether an ally has started it
+	QuickJS_DefinePropertyValue(ctx, value, "done", JS_NewBool(ctx, IsResearchCompleted(&asPlayerResList[player][psResearch->index])), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "fullname", JS_NewString(ctx, psResearch->name.toUtf8().c_str()), JS_PROP_ENUMERABLE); // temporary
+	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain fullname
+	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, SCRIPT_RESEARCH), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "results", mapJsonToQuickJSValue(ctx, psResearch->results, 0), JS_PROP_ENUMERABLE);
 	return value;
 }
 
@@ -3296,9 +3298,9 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	debug(LOG_WZ, "Loading functions for context %p, script %s", static_cast<void *>(ctx), scriptName.c_str());
 
 	//== * `Upgrades` A special array containing per-player rules information for game entity types,
-	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
-	//== array contains a subset of the sparse array of rules information in the `Stats` global.
-	//== These values are defined:
+	//==   which can be written to in order to implement upgrades and other dynamic rules changes.
+	//==   Each item in the array contains a subset of the sparse array of rules information in the `Stats` global.
+	//==   These values are defined:
 	JSValue upgrades = constructUpgradesQuickJSValue(ctx);
 	JS_DefinePropertyValueStr(ctx, global_obj, "Upgrades", upgrades, JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 

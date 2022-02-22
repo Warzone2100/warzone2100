@@ -1,6 +1,6 @@
 # Events
 
-This section describes event callbacks (or 'events' for short) that are called from the
+This section describes event callbacks (or "events" for short) that are called from the
 game when something specific happens. Which scripts receive them is usually filtered
 by player. Call `receiveAllEvents(true)` to start receiving all events unfiltered.
 

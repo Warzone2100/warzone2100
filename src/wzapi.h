@@ -25,20 +25,19 @@
 
 //== # Globals
 //==
-//== This section describes global variables (or 'globals' for short) that are
-//== available from all scripts. You typically cannot write to these variables,
-//== they are read-only.
+//== This section describes global variables (or "globals" for short) that are available from all scripts.
+//== You typically cannot write to these variables, they are read-only.
 //==
 //__ # Events
 //__
-//__ This section describes event callbacks (or 'events' for short) that are called from the
+//__ This section describes event callbacks (or "events" for short) that are called from the
 //__ game when something specific happens. Which scripts receive them is usually filtered
 //__ by player. Call `receiveAllEvents(true)` to start receiving all events unfiltered.
 //__
 //-- # Functions
 //--
 //-- This section describes functions that can be called from scripts to make
-//-- things happen in the game (usually called our script 'API').
+//-- things happen in the game (usually called our script "API").
 //--
 //;; # Game objects
 //;;

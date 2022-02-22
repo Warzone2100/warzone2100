@@ -4,6 +4,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * ## camIsTransporter(gameObject)
+ *
  * Determine if the object is a transporter.
  * @param {Object} gameObject
  * @returns {boolean}
@@ -25,6 +27,8 @@ function camIsTransporter(gameObject)
 }
 
 /**
+ * ## camSetupTransporter(placeX, placeY, exitX, exitY)
+ *
  * A convenient function for placing the standard campaign transport for loading in pre-away missions.
  * The exit point for the transport is set up as well.
  * @param {number} placeX
@@ -40,6 +44,8 @@ function camSetupTransporter(placeX, placeY, exitX, exitY)
 }
 
 /**
+ * ## camRemoveEnemyTransporterBlip()
+ *
  * Removes the last blip that an enemy transporter left behind, if any.
  * @returns {void}
  */

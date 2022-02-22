@@ -4,6 +4,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * ## camMarkTiles(label)
+ *
  * Mark area on the map by label(s), but only if debug mode is enabled.
  * Otherwise, remember what to mark in case it is going to be.
  * @param {string|string[]} label
@@ -27,6 +29,8 @@ function camMarkTiles(label)
 }
 
 /**
+ * ## camUnmarkTiles(label)
+ *
  * No longer mark area(s) with given label(s) in debug mode.
  * @param {string|string[]} label
  * @returns {void}
@@ -49,8 +53,10 @@ function camUnmarkTiles(label)
 }
 
 /**
+ * ## camDebug(...args)
+ *
  * Pretty debug prints - a wrapper around `debug()`.
- * Prints a function call stack and the argument message, prefixed with "DEBUG".
+ * Prints a function call stack and the argument message, prefixed with `DEBUG`.
  * Only use this function to indicate actual bugs in the scenario script,
  * because game shouldn't print things when nothing is broken.
  * If you want to keep some prints around to make debugging easier
@@ -68,6 +74,8 @@ function camDebug(...args)
 }
 
 /**
+ * ## camDebugOnce(...args)
+ *
  * Same as `camDebug()`, but prints each message only once during script lifetime.
  * @param {...string} args
  * @returns {void}
@@ -88,8 +96,10 @@ function camDebugOnce(...args)
 }
 
 /**
+ * ## camTrace(...args)
+ *
  * Same as `camDebug()`, but only warns in cheat mode.
- * Prefixed with "TRACE". It's safe and natural to keep `camTrace()` calls in your code for easier debugging.
+ * Prefixed with `TRACE`. It's safe and natural to keep `camTrace()` calls in your code for easier debugging.
  * @param {...string} args
  * @returns {void}
  */
@@ -105,6 +115,8 @@ function camTrace(...args)
 }
 
 /**
+ * ## camTraceOnce(...args)
+ *
  * Same as `camTrace()`, but prints each message only once during script lifetime.
  * @param {...string} args
  * @returns {void}
@@ -127,6 +139,8 @@ function camTraceOnce(...args)
 }
 
 /**
+ * ## camIsCheating()
+ *
  * Check if the player is in cheat mode.
  * @returns {boolean}
  */

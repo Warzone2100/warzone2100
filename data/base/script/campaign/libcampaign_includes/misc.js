@@ -4,7 +4,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns false if something is JavaScript-undefined, true otherwise.
+ * ## camDef(something)
+ *
+ * Returns `false` if something is JavaScript-undefined, `true` otherwise.
  * @param {*} something
  * @returns {boolean}
  */
@@ -14,7 +16,9 @@ function camDef(something)
 }
 
 /**
- * Returns true if something is a string, false otherwise.
+ * ## camIsString(something)
+ *
+ * Returns `true` if something is a string, `false` otherwise.
  * @param {*} something
  * @returns {boolean}
  */
@@ -24,6 +28,8 @@ function camIsString(something)
 }
 
 /**
+ * ## camRand(max)
+ *
  * A non-synchronous random integer in range [0, max - 1].
  * @param {number} max
  * @returns {number}
@@ -38,6 +44,8 @@ function camRand(max)
 }
 
 /**
+ * ## camCallOnce(functionName)
+ *
  * Call a function by name, but only if it has not been called yet.
  * @param {string} functionName
  * @returns {void}
@@ -53,6 +61,8 @@ function camCallOnce(functionName)
 }
 
 /**
+ * ## camSafeRemoveObject(obj[, specialEffects])
+ *
  * Remove a game object (by value or label) if it exists, do nothing otherwise.
  * @param {string|Object} obj
  * @param {boolean} [specialEffects]
@@ -75,7 +85,9 @@ function camSafeRemoveObject(obj, specialEffects)
 }
 
 /**
- * Make a POSITION-like object, unless already done.
+ * ## camMakePos(x|label|object[, y])
+ *
+ * Make a `POSITION`-like object, unless already done.
  * Often useful for making functions that would accept positions in both x,y and {x:x,y:y} forms.
  * Also accepts labels. If label of AREA is given, returns the center of the area.
  * If an existing object or label of such is given, returns a safe JavaScript object containing its x, y and id.
@@ -131,8 +143,9 @@ function camMakePos(x, y)
 }
 
 /**
+ * ## camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)
+ *
  * A wrapper for `distBetweenTwoPoints()`.
- * camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)
  * @param {number|Object} x1
  * @param {number|Object} y1
  * @param {number} [x2]
@@ -161,6 +174,8 @@ function camDist(x1, y1, x2, y2)
 }
 
 /**
+ * ## camPlayerMatchesFilter(player, playerFilter)
+ *
  * A function to handle player filters in a way similar to how JS API functions (eg. `enumDroid(filter, ...)`) handle them.
  * @param {number} player
  * @param {number} playerFilter
@@ -181,6 +196,8 @@ function camPlayerMatchesFilter(player, playerFilter)
 }
 
 /**
+ * ## camRemoveDuplicates(items)
+ *
  * Remove duplicate items from an array.
  * @param {*[]} items
  * @returns {*[]}
@@ -204,7 +221,9 @@ function camRemoveDuplicates(items)
 }
 
 /**
- * Mimics wzscript's numStructsButNotWallsInArea().
+ * ## camCountStructuresInArea(label[, playerFilter])
+ *
+ * Mimics wzscript's `numStructsButNotWallsInArea()`.
  * @param {string} label
  * @param {number} [playerFilter]
  * @returns {number}
@@ -229,6 +248,8 @@ function camCountStructuresInArea(label, playerFilter)
 }
 
 /**
+ * ## camChangeOnDiff(numericValue)
+ *
  * Change a numeric value based on campaign difficulty.
  * @param {number} numericValue
  * @returns {number}
@@ -260,6 +281,8 @@ function camChangeOnDiff(numericValue)
 }
 
 /**
+ * ## camIsSystemDroid(gameObject)
+ *
  * Determine if the passed in object is a non-weapon based droid.
  * @param {Object} gameObject
  * @returns {boolean}
@@ -281,6 +304,8 @@ function camIsSystemDroid(gameObject)
 }
 
 /**
+ * ## camMakeGroup(what[, playerFilter])
+ *
  * Make a new group out of array of droids, single game object, or label string,
  * with fuzzy auto-detection of argument type.
  * Only droids would be added to the group. `playerFilter` can be one of a
@@ -357,6 +382,8 @@ function camMakeGroup(what, playerFilter)
 }
 
 /**
+ * ## camBreakAlliances()
+ *
  * Break alliances between all players.
  * @returns {void}
  */

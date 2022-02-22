@@ -4,31 +4,29 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Give a single bunch of droids (template list) for a player at
- * a position label. Kind can be one of:
- * * `CAM_REINFORCE_GROUND` Reinforcements magically appear
- * 	on the ground.
- * * `CAM_REINFORCE_TRANSPORT` Reinforcements are unloaded from
- * 	a transporter.
- * 	__NOTE:__ the game engine doesn't seem to support two simultaneous
- * 	incoming transporters for the same player. Avoid this at all costs!
- * 	The following data fields are required:
+ * ## camSendReinforcement(player, position, templates, kind[, data])
+ *
+ * Give a single bunch of droids (template list) for a player at a position label. Kind can be one of:
+ * * `CAM_REINFORCE_GROUND` Reinforcements magically appear on the ground.
+ * * `CAM_REINFORCE_TRANSPORT` Reinforcements are unloaded from a transporter.
+ *   **NOTE:** the game engine doesn't seem to support two simultaneous incoming transporters for the same player.
+ *   Avoid this at all costs!
+ *   The following data fields are required:
  *   * `entry` Transporter entry position.
  *   * `exit` Transporter exit position.
  *   * `message` `PROX_MSG` to display when transport is landing.
  *   * `order` Order to give to newly landed droids
  *   * `data` Order data.
- * 	 __NOTE:__ the game engine doesn't seem to support two simultaneous
- * 	incoming transporters for the same player. If a transporter is already
- * 	on map, it will be correctly queued up and sent later.
+ *   **NOTE:** the game engine doesn't seem to support two simultaneous incoming transporters for the same player.
+ *   If a transporter is already on map, it will be correctly queued up and sent later.
  * @param {number} player
  * @param {string|Object|undefined} position
- * @param {Object[]} list
+ * @param {Object[]} templates
  * @param {number} kind
  * @param {Object} [data]
  * @returns {void}
  */
-function camSendReinforcement(player, position, list, kind, data)
+function camSendReinforcement(player, position, templates, kind, data)
 {
 	var pos = camMakePos(position);
 	var order = CAM_ORDER_ATTACK;
@@ -45,9 +43,9 @@ function camSendReinforcement(player, position, list, kind, data)
 	{
 		case CAM_REINFORCE_GROUND:
 			var droids = [];
-			for (let i = 0, l = list.length; i < l; ++i)
+			for (let i = 0, l = templates.length; i < l; ++i)
 			{
-				var template = list[i];
+				var template = templates[i];
 				var prop = __camChangePropulsionOnDiff(template.prop);
 				droids.push(addDroid(player, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap));
 			}
@@ -57,7 +55,7 @@ function camSendReinforcement(player, position, list, kind, data)
 			__camTransporterQueue.push({
 				player: player,
 				position: position,
-				list: list,
+				list: templates,
 				data: data,
 				order: order,
 				order_data: order_data
@@ -71,11 +69,13 @@ function camSendReinforcement(player, position, list, kind, data)
 }
 
 /**
+ * ## camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
+ *
  * Periodically brings reinforcements to an enemy base, until the base is eliminated.
  * Interval is the pause, in milliseconds, between reinforcements.
  * Callback is name of a function that returns a list of droid templates to spawn,
  * which may be different every time. Kind and data work similarly to `camSendReinforcement()`.
- * Use CAM_REINFORCE_NONE as kind to disable previously set reinforcements.
+ * Use `CAM_REINFORCE_NONE` as kind to disable previously set reinforcements.
  * @param {string} baseLabel
  * @param {number} interval
  * @param {string} callbackName

@@ -1,7 +1,7 @@
 # Functions
 
 This section describes functions that can be called from scripts to make
-things happen in the game (usually called our script 'API').
+things happen in the game (usually called our script "API").
 
 ## profile(functionName[, arguments])
 

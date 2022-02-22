@@ -7,7 +7,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Implement `eventArea${label}` in a debugging-friendly way.
+ * ## camAreaEvent(label, callback(droid))
+ *
+ * Implement `eventArea${label}()` in a debugging-friendly way.
  * The function marks the area until the event is triggered,
  * and traces entering the area in the TRACE log.
  * @param {string} label

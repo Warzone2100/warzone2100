@@ -4,6 +4,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * ## camEnableRes(researchIds, player)
+ *
  * Grants research from the given list to player
  * @param {string[]} researchIds
  * @param {number} player
@@ -20,6 +22,8 @@ function camEnableRes(researchIds, player)
 }
 
 /**
+ * ## camCompleteRequiredResearch(researchIds, player)
+ *
  * Grants research from the given list to player and also researches the required research for that item.
  * @param {string[]} researchIds
  * @param {number} player

@@ -4101,9 +4101,9 @@ wzapi::GameEntityRules::value_type wzapi::GameEntityRules::setPropertyValue(cons
 std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 {
 	//== * `Upgrades` A special array containing per-player rules information for game entity types,
-	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
-	//== array contains a subset of the sparse array of rules information in the `Stats` global.
-	//== These values are defined:
+	//==   which can be written to in order to implement upgrades and other dynamic rules changes.
+	//==   Each item in the array contains a subset of the sparse array of rules information in the `Stats` global.
+	//==   These values are defined:
 	std::vector<PerPlayerUpgrades> upgrades;
 	upgrades.reserve(MAX_PLAYERS);
 	for (int i = 0; i < MAX_PLAYERS; i++)
@@ -4199,10 +4199,10 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		node.addGameEntity("Construct", std::move(conbase));
 
 		//==   * `Brain` Brains
-		//== BaseCommandLimit: How many droids a commander can command. CommandLimitByLevel: How many extra droids
-		//== a commander can command for each of its rank levels. RankThresholds: An array describing how many
-		//== kills are required for this brain to level up to the next rank. To alter this from scripts, you must
-		//== set the entire array at once. Setting each item in the array will not work at the moment.
+		//==     BaseCommandLimit: How many droids a commander can command.
+		//==     CommandLimitByLevel: How many extra droids a commander can command for each of its rank levels.
+		//==     RankThresholds: An array describing how many kills are required for this brain to level up to the next rank.
+		//==     To alter this from scripts, you must set the entire array at once. Setting each item in the array will not work at the moment.
 		GameEntityRuleContainer brainbase;
 		for (unsigned j = 0; j < numBrainStats; j++)
 		{
@@ -4289,9 +4289,8 @@ nlohmann::json wzapi::constructStatsObject()
 {
 	/// Register 'Stats' object. It is a read-only representation of basic game component states.
 	//== * `Stats` A sparse, read-only array containing rules information for game entity types.
-	//== (For now only the highest level member attributes are documented here. Use the 'jsdebug' cheat
-	//== to see them all.)
-	//== These values are defined:
+	//==   (For now only the highest level member attributes are documented here. Use the `jsdebug` cheat to see them all.)
+	//==   These values are defined:
 	nlohmann::json stats = nlohmann::json::object();
 	{
 		//==   * `Body` Droid bodies
@@ -4591,8 +4590,8 @@ nlohmann::json wzapi::getUsefulConstants()
 nlohmann::json wzapi::constructStaticPlayerData()
 {
 	// Static knowledge about players
-	//== * `playerData` An array of information about the players in a game. Each item in the array is an object
-	//== containing the following variables:
+	//== * `playerData` An array of information about the players in a game.
+	//==   Each item in the array is an object containing the following variables:
 	//==   * `difficulty` (see `difficulty` global constant)
 	//==   * `colour` number describing the colour of the player
 	//==   * `position` number describing the position of the player in the game's setup screen
@@ -4621,8 +4620,8 @@ nlohmann::json wzapi::constructStaticPlayerData()
 nlohmann::json wzapi::constructMapTilesArray()
 {
 	// Static knowledge about map tiles
-	//== * `MapTiles` A two-dimensional array of static information about the map tiles in a game. Each item in MapTiles[y][x] is an object
-	//== containing the following variables:
+	//== * `MapTiles` A two-dimensional array of static information about the map tiles in a game.
+	//==   Each item in `MapTiles[y][x]` is an object containing the following variables:
 	//==   * `terrainType` (see `terrainType(x, y)` function)
 	//==   * `height` the height at the top left of the tile
 	//==   * `hoverContinent` (For hover type propulsions)

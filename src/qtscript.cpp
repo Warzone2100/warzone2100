@@ -27,13 +27,12 @@
 
 //== # Globals
 //==
-//== This section describes global variables (or 'globals' for short) that are
-//== available from all scripts. You typically cannot write to these variables,
-//== they are read-only.
+//== This section describes global variables (or "globals" for short) that are available from all scripts.
+//== You typically cannot write to these variables, they are read-only.
 //==
 //__ # Events
 //__
-//__ This section describes event callbacks (or 'events' for short) that are called from the
+//__ This section describes event callbacks (or "events" for short) that are called from the
 //__ game when something specific happens. Which scripts receive them is usually filtered
 //__ by player. Call `receiveAllEvents(true)` to start receiving all events unfiltered.
 //__
@@ -305,8 +304,8 @@ Vector2i getPlayerStartPosition(int player)
 nlohmann::json scripting_engine::constructDerrickPositions()
 {
 	// Static map knowledge about start positions
-	//== * `derrickPositions` An array of derrick starting positions on the current map. Each item in the array is an
-	//== object containing the x and y variables for a derrick.
+	//== * `derrickPositions` An array of derrick starting positions on the current map.
+	//==   Each item in the array is an object containing the x and y variables for a derrick.
 	nlohmann::json derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
 	for (int i = 0; i < derricks.size(); i++)
 	{
@@ -322,8 +321,8 @@ nlohmann::json scripting_engine::constructDerrickPositions()
 nlohmann::json scripting_engine::constructStartPositions()
 {
 	// Static map knowledge about start positions
-	//== * `startPositions` An array of player start positions on the current map. Each item in the array is an
-	//== object containing the x and y variables for a player start position.
+	//== * `startPositions` An array of player start positions on the current map.
+	//==   Each item in the array is an object containing the x and y variables for a player start position.
 	nlohmann::json startPositions = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -538,7 +537,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	json globalVars = json::object();
 	// Special global variables
-	//== * `version` Current version of the game, set in *major.minor* format.
+	//== * `version` Current version of the game, set in `major.minor` format.
 	globalVars["version"] = version_getVersionString();
 	//== * `selectedPlayer` The player controlled by the client on which the script runs.
 	globalVars["selectedPlayer"] = selectedPlayer;
@@ -548,8 +547,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["modList"] = getModList();
 
 
-	//== * `difficulty` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
-	//== `EASY`, `MEDIUM`, `HARD` or `INSANE`.
+	//== * `difficulty` The currently set campaign difficulty, or the current AI's difficulty setting.
+	//==   It will be one of: `EASY`, `MEDIUM`, `HARD` or `INSANE`.
 	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		globalVars["difficulty"] = static_cast<int8_t>(difficulty);
@@ -610,8 +609,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	pNewInstance->setSpecifiedGlobalVariables(wzapi::getUsefulConstants(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
 	/// Place to store group sizes
-	//== * `groupSizes` A sparse array of group sizes. If a group has never been used, the entry in this array will
-	//== be undefined.
+	//== * `groupSizes` A sparse array of group sizes. If a group has never been used, the entry in this array will be undefined.
 	pNewInstance->setSpecifiedGlobalVariable("groupSizes", nlohmann::json::object(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
 	// Static knowledge about players

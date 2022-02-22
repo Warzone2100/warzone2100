@@ -4,6 +4,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * ## camSetEnemyBases([bases])
+ *
  * Tell `libcampaign.js` to manage a certain set of enemy bases.
  * Management assumes auto-cleanup of leftovers on destruction, and also
  * counting how many bases have been successfully destroyed by the player.
@@ -12,25 +14,20 @@
  * with this name is defined, a group is created automatically
  * based on `cleanup` area and labeled. Base description
  * is a JavaScript object with the following optional fields:
- * * `cleanup` An area label to clean up features in once base is
- * 	destroyed. If base id is not a group label, this field is required
- * 	in order to auto-create the group of stuff in the area which doesn't
- * 	qualify as a valid leftover.
+ * * `cleanup` An area label to clean up features in once base is destroyed.
+ *   If base id is not a group label, this field is required in order to auto-create
+ *   the group of stuff in the area which doesn't qualify as a valid leftover.
  * * `detectMsg` A `PROX_MSG` message id to play when the base is detected.
  * * `detectSnd` A sound file to play when the base is detected.
  * * `eliminateSnd` A sound file to play when the base is eliminated.
- * 	The sound is played in the center of the cleanup area,
- * 	which needs to be defined.
- * * `player` If base is detected by cleanup area, only objects
- * 	matching this player filter would be added to the base group or
- * 	cleaned up. Note that this most likely disables feature cleanup.
- * Additionally, this function would call special event callbacks if they are
- * defined in your script, which should be named as follows,
- * where LABEL is the label of the base group:
- * * `camEnemyBaseDetected_LABEL` Called when the player sees an object from
- * 	the enemy base group for the first time.
- * * `camEnemyBaseEliminated_LABEL` Called when the base is eliminated,
- * 	right after leftovers were cleaned up.
+ *   The sound is played in the center of the cleanup area, which needs to be defined.
+ * * `player` If base is detected by cleanup area, only objects matching
+ *   this player filter would be added to the base group or cleaned up.
+ *   Note that this most likely disables feature cleanup.
+ *   Additionally, this function would call special event callbacks if they are defined in your script,
+ *   which should be named as follows, where LABEL is the label of the base group:
+ * * `camEnemyBaseDetected_LABEL` Called when the player sees an object from the enemy base group for the first time.
+ * * `camEnemyBaseEliminated_LABEL` Called when the base is eliminated, right after leftovers were cleaned up.
  * @param {Object} [bases]
  * @returns {void}
  */
@@ -137,6 +134,8 @@ function camSetEnemyBases(bases)
 }
 
 /**
+ * ## camDetectEnemyBase(baseLabel)
+ *
  * Plays the "enemy base detected" message and places a beacon for the enemy base
  * defined by the label, as if the base was actually found by the player.
  * @param {string} baseLabel
@@ -180,7 +179,9 @@ function camDetectEnemyBase(baseLabel)
 }
 
 /**
- * Returns true if all enemy bases managed by `libcampaign.js` are destroyed.
+ * ## camAllEnemyBasesEliminated()
+ *
+ * Returns `true` if all enemy bases managed by `libcampaign.js` are destroyed.
  * @returns {boolean}
  */
 function camAllEnemyBasesEliminated()
