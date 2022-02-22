@@ -33,10 +33,9 @@
 //==
 //__ # Events
 //__
-//__ This section describes event callbacks (or 'events' for short) that are
-//__ called from the game when something specific happens. Which scripts
-//__ receive them is usually filtered by player. Call `receiveAllEvents(true)`
-//__ to start receiving all events unfiltered.
+//__ This section describes event callbacks (or 'events' for short) that are called from the
+//__ game when something specific happens. Which scripts receive them is usually filtered
+//__ by player. Call `receiveAllEvents(true)` to start receiving all events unfiltered.
 //__
 
 #include "lib/framework/wzapp.h"
@@ -1143,7 +1142,7 @@ bool triggerEventPlayerLeft(int player)
 //__ ## eventCheatMode(entered)
 //__
 //__ Game entered or left cheat/debug mode.
-//__ The entered parameter is `true` if cheat mode entered, `false` otherwise.
+//__ The `entered` parameter is `true` if cheat mode entered, `false` otherwise.
 //__
 bool triggerEventCheatMode(bool entered)
 {
@@ -1175,7 +1174,7 @@ bool triggerEventDroidIdle(DROID *psDroid)
 
 //__ ## eventDroidBuilt(droid[, structure])
 //__
-//__ An event that is run every time a droid is built. The structure parameter is set
+//__ An event that is run every time a droid is built. The `structure` parameter is set
 //__ if the droid was produced in a factory. It is not triggered for droid theft or
 //__ gift (check `eventObjectTransfer()` for that).
 //__
@@ -1197,7 +1196,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 
 //__ ## eventStructureBuilt(structure[, droid])
 //__
-//__ An event that is run every time a structure is produced. The droid parameter is set
+//__ An event that is run every time a structure is produced. The `droid` parameter is set
 //__ if the structure was built by a droid. It is not triggered for building theft
 //__ (check `eventObjectTransfer()` for that).
 //__
@@ -1219,8 +1218,8 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 
 //__ ## eventStructureDemolish(structure[, droid])
 //__
-//__ An event that is run every time a structure begins to be demolished. This does
-//__ not trigger again if the structure is partially demolished.
+//__ An event that is run every time a structure begins to be demolished.
+//__ This does not trigger again if the structure is partially demolished.
 //__
 bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
 {
@@ -1240,9 +1239,8 @@ bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
 
 //__ ## eventStructureReady(structure)
 //__
-//__ An event that is run every time a structure is ready to perform some
-//__ special ability. It will only fire once, so if the time is not right,
-//__ register your own timer to keep checking.
+//__ An event that is run every time a structure is ready to perform some special ability.
+//__ It will only fire once, so if the time is not right, register your own timer to keep checking.
 //__
 bool triggerEventStructureReady(STRUCTURE *psStruct)
 {
@@ -1280,8 +1278,8 @@ bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct)
 
 //__ ## eventAttacked(victim, attacker)
 //__
-//__ An event that is run when an object belonging to the script's controlling player is
-//__ attacked. The attacker parameter may be either a structure or a droid.
+//__ An event that is run when an object belonging to the script's controlling player is attacked.
+//__ The `attacker` parameter may be either a structure or a droid.
 //__
 bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit)
 {
@@ -1312,9 +1310,9 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 //__ ## eventResearched(research, researchStructure, player)
 //__
 //__ An event that is run whenever a new research is available. The `researchStructure`
-//__ parameter is set if the research comes from a research lab owned by the
-//__ current player. If an ally does the research, the `researchStructure` parameter will
-//__ be set to `null`. The `player` parameter gives the player it is called for.
+//__ parameter is set if the research comes from a research lab owned by the current player.
+//__ If an ally does the research, the `researchStructure` parameter will be set to `null`.
+//__ The `player` parameter gives the player it is called for.
 //__
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
@@ -1355,8 +1353,7 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 
 //__ ## eventPickup(feature, droid)
 //__
-//__ An event that is run whenever a feature is picked up. It is called for
-//__ all players / scripts.
+//__ An event that is run whenever a feature is picked up. It is called for all players / scripts.
 //__ Careful passing the parameter object around, since it is about to vanish! (3.2+ only)
 //__
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
@@ -1374,15 +1371,13 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 //__ An event that is run sometimes when an object, which was marked by an object label,
 //__ which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
 //__ An event that is run sometimes when an object goes from not seen to seen.
-//__ First parameter is **game object** doing the seeing, the next the game
-//__ object being seen.
+//__ First parameter is **game object** doing the seeing, the next the game object being seen.
 //__
 //__ ## eventGroupSeen(viewer, groupId)
 //__
 //__ An event that is run sometimes when a member of a group, which was marked by a group label,
 //__ which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
-//__ First parameter is **game object** doing the seeing, the next the id of the group
-//__ being seen.
+//__ First parameter is **game object** doing the seeing, the next the id of the group being seen.
 //__
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {
@@ -1410,10 +1405,9 @@ bool scripting_engine::triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSe
 
 //__ ## eventObjectTransfer(droidOrStructure, fromPlayer)
 //__
-//__ An event that is run whenever an object is transferred between players,
-//__ for example due to a Nexus Link weapon. The event is called after the
-//__ object has been transferred, so the target player is in `droidOrStructure.player`.
-//__ The event is called for both players.
+//__ An event that is run whenever an object is transferred between players, for example due
+//__ to a Nexus Link weapon. The event is called after the object has been transferred,
+//__ so the target player is in `droidOrStructure.player`. The event is called for both players.
 //__
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int fromPlayer)
 {
@@ -1433,9 +1427,8 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int fromPlayer)
 
 //__ ## eventChat(fromPlayer, toPlayer, message)
 //__
-//__ An event that is run whenever a chat message is received. The `fromPlayer` parameter is the
-//__ player sending the chat message. For the moment, the `toPlayer` parameter is always the script
-//__ player.
+//__ An event that is run whenever a chat message is received. The `fromPlayer` parameter is the player
+//__ sending the chat message. For the moment, the `toPlayer` parameter is always the script player.
 //__
 bool triggerEventChat(int fromPlayer, int toPlayer, const char *message)
 {
@@ -1505,9 +1498,8 @@ bool triggerEventBeaconRemoved(int fromPlayer, int toPlayer)
 //__ The `droidsAndStructures` parameter contains an array of the currently selected game objects.
 //__ Keep in mind that the player may drag and drop select many units at once, select one
 //__ unit specifically, or even add more selections to a current selection one at a time.
-//__ This event will trigger once for each user action, not once for each selected or
-//__ deselected object. If all selected game objects are deselected, `droidsAndStructures` will
-//__ be empty.
+//__ This event will trigger once for each user action, not once for each selected or deselected object.
+//__ If all selected game objects are deselected, `droidsAndStructures` will be empty.
 //__
 bool triggerEventSelected()
 {
@@ -1536,9 +1528,8 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 
 //__ ## eventArea<label>(droid)
 //__
-//__ An event that is run whenever a droid enters an area label. The area is then
-//__ deactived. Call `resetArea()` to reactivate it. The name of the event is
-//__ `eventArea${label}()`.
+//__ An event that is run whenever a droid enters an area label. The area is then deactived.
+//__ Call `resetArea()` to reactivate it. The name of the event is `eventArea${label}()`.
 //__
 bool triggerEventArea(const std::string& label, DROID *psDroid)
 {
@@ -1552,8 +1543,8 @@ bool triggerEventArea(const std::string& label, DROID *psDroid)
 
 //__ ## eventDesignCreated(template)
 //__
-//__ An event that is run whenever a new droid template is created. It is only
-//__ run on the client of the player designing the template.
+//__ An event that is run whenever a new droid template is created.
+//__ It is only run on the client of the player designing the template.
 //__
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 {
@@ -1615,9 +1606,8 @@ bool triggerEventAllianceBroken(uint8_t fromPlayer, uint8_t toPlayer)
 
 //__ ## eventSyncRequest(from, reqId, x, y, objId1, objId2)
 //__
-//__ An event that is called from a script and synchronized with all other scripts and hosts
-//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
-//__ cheating!
+//__ An event that is called from a script and synchronized with all other scripts and hosts to
+//__ prevent desync from happening. Sync requests must be carefully validated to prevent cheating!
 //__
 bool triggerEventSyncRequest(int from, int reqId, int x, int y, BASE_OBJECT *psObj1, BASE_OBJECT *psObj2)
 {
@@ -2504,7 +2494,7 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 //-- which can be one of a player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`. By default, filter is
 //-- `ALL_PLAYERS`. Finally an optional parameter can specify whether only visible objects should be
 //-- returned; by default only visible objects are returned. The label can either be actual
-//-- positions or a label to an AREA. Calling this function is much faster than iterating over all
+//-- positions or a label to an `AREA`. Calling this function is much faster than iterating over all
 //-- game objects using other enum functions. (3.2+ only)
 //--
 std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string labelName, optional<int> _playerFilter, optional<bool> _seen))

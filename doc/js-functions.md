@@ -89,7 +89,7 @@ Remove reticule button. DO NOT USE FOR ANYTHING.
 
 ## removeBeacon(playerFilter)
 
-Remove a beacon message sent to target player. Target may also be ```ALLIES```.
+Remove a beacon message sent to target player. Target may also be `ALLIES`.
 Returns a boolean that is true on success. (3.2+ only)
 
 ## resetLabel(labelName[, playerFilter])
@@ -363,15 +363,15 @@ Mark the given tile(s) on the map. Either give a `POSITION` or `AREA` label,
 or a tile x, y position, or four positions for a square area. If no parameter
 is given, all marked tiles are cleared. (3.2+ only)
 
-## dump(...string)
+## dump(...strings)
 
 Output text to a debug file. (3.2+ only)
 
-## debug(...string)
+## debug(...strings)
 
 Output text to the command line.
 
-## console(...string)
+## console(...strings)
 
 Print text to the player console.
 
@@ -595,7 +595,7 @@ Get the percentage of experience this player droids are going to gain. (3.2+ onl
 
 Set the maximum number of droids that this `player` can produce. If a third
 parameter is added, this is the `droidType` to limit. It can be
-`DROID_CONSTRUCT` for constructors, or `DROID_COMMAND` for commanders,
+`DROID_CONSTRUCT` for constructors, `DROID_COMMAND` for commanders,
 or `DROID_ANY` for droids in general. (3.2+ only)
 
 ## setCommanderLimit(player, maxNumber) [DEPRECATED]

@@ -111,9 +111,8 @@ An event that is triggered whenever the host player selects one or more game obj
 The `droidsAndStructures` parameter contains an array of the currently selected game objects.
 Keep in mind that the player may drag and drop select many units at once, select one
 unit specifically, or even add more selections to a current selection one at a time.
-This event will trigger once for each user action, not once for each selected or
-deselected object. If all selected game objects are deselected, `droidsAndStructures` will
-be empty.
+This event will trigger once for each user action, not once for each selected or deselected object.
+If all selected game objects are deselected, `droidsAndStructures` will be empty.
 
 ## eventObjectRecycled(droidOrStructure)
 
@@ -165,9 +164,10 @@ The `attacker` parameter may be either a structure or a droid.
 
 ## eventResearched(research, researchStructure, player)
 
-An event that is run whenever a new research is available. The `researchStructure` parameter is set if
-the research comes from a research lab owned by the current player. If an ally does the research,
-the `researchStructure` parameter will be set to `null`. The `player` parameter gives the player it is called for.
+An event that is run whenever a new research is available. The `researchStructure`
+parameter is set if the research comes from a research lab owned by the current player.
+If an ally does the research, the `researchStructure` parameter will be set to `null`.
+The `player` parameter gives the player it is called for.
 
 ## eventDestroyed(gameObject)
 
@@ -200,9 +200,8 @@ so the target player is in `droidOrStructure.player`. The event is called for bo
 
 ## eventChat(fromPlayer, toPlayer, message)
 
-An event that is run whenever a chat message is received. The `fromPlayer` parameter is the
-player sending the chat message. For the moment, the `toPlayer` parameter is always the script
-player.
+An event that is run whenever a chat message is received. The `fromPlayer` parameter is the player
+sending the chat message. For the moment, the `toPlayer` parameter is always the script player.
 
 ## eventBeacon(x, y, fromPlayer, toPlayer[, message])
 
@@ -244,9 +243,8 @@ An event that is called whenever an alliance is broken.
 
 ## eventSyncRequest(from, reqId, x, y, objId1, objId2)
 
-An event that is called from a script and synchronized with all other scripts and hosts
-to prevent desync from happening. Sync requests must be carefully validated to prevent
-cheating!
+An event that is called from a script and synchronized with all other scripts and hosts to
+prevent desync from happening. Sync requests must be carefully validated to prevent cheating!
 
 ## eventKeyPressed(metaKeyCode, keyCode)
 

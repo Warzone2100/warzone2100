@@ -31,10 +31,9 @@
 //==
 //__ # Events
 //__
-//__ This section describes event callbacks (or 'events' for short) that are
-//__ called from the game when something specific happens. Which scripts
-//__ receive them is usually filtered by player. Call `receiveAllEvents(true)`
-//__ to start receiving all events unfiltered.
+//__ This section describes event callbacks (or 'events' for short) that are called from the
+//__ game when something specific happens. Which scripts receive them is usually filtered
+//__ by player. Call `receiveAllEvents(true)` to start receiving all events unfiltered.
 //__
 //-- # Functions
 //--
@@ -320,9 +319,8 @@ namespace wzapi
 		//__ The `droidsAndStructures` parameter contains an array of the currently selected game objects.
 		//__ Keep in mind that the player may drag and drop select many units at once, select one
 		//__ unit specifically, or even add more selections to a current selection one at a time.
-		//__ This event will trigger once for each user action, not once for each selected or
-		//__ deselected object. If all selected game objects are deselected, `droidsAndStructures` will
-		//__ be empty.
+		//__ This event will trigger once for each user action, not once for each selected or deselected object.
+		//__ If all selected game objects are deselected, `droidsAndStructures` will be empty.
 		//__
 		virtual bool handle_eventSelectionChanged(const std::vector<const BASE_OBJECT *>& droidsAndStructures) SCRIPTING_EVENT_NON_REQUIRED
 
@@ -344,7 +342,7 @@ namespace wzapi
 		//__ ## eventCheatMode(entered)
 		//__
 		//__ Game entered or left cheat/debug mode.
-		//__ The entered parameter is `true` if cheat mode entered, `false` otherwise.
+		//__ The `entered` parameter is `true` if cheat mode entered, `false` otherwise.
 		//__
 		virtual bool handle_eventCheatMode(bool entered) = 0;
 
@@ -356,7 +354,7 @@ namespace wzapi
 
 		//__ ## eventDroidBuilt(droid[, structure])
 		//__
-		//__ An event that is run every time a droid is built. The structure parameter is set
+		//__ An event that is run every time a droid is built. The `structure` parameter is set
 		//__ if the droid was produced in a factory. It is not triggered for droid theft or
 		//__ gift (check `eventObjectTransfer()` for that).
 		//__
@@ -364,7 +362,7 @@ namespace wzapi
 
 		//__ ## eventStructureBuilt(structure[, droid])
 		//__
-		//__ An event that is run every time a structure is produced. The droid parameter is set
+		//__ An event that is run every time a structure is produced. The `droid` parameter is set
 		//__ if the structure was built by a droid. It is not triggered for building theft
 		//__ (check `eventObjectTransfer()` for that).
 		//__
@@ -372,16 +370,15 @@ namespace wzapi
 
 		//__ ## eventStructureDemolish(structure[, droid])
 		//__
-		//__ An event that is run every time a structure begins to be demolished. This does
-		//__ not trigger again if the structure is partially demolished.
+		//__ An event that is run every time a structure begins to be demolished.
+		//__ This does not trigger again if the structure is partially demolished.
 		//__
 		virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, optional<const DROID *> psDroid) = 0;
 
 		//__ ## eventStructureReady(structure)
 		//__
-		//__ An event that is run every time a structure is ready to perform some
-		//__ special ability. It will only fire once, so if the time is not right,
-		//__ register your own timer to keep checking.
+		//__ An event that is run every time a structure is ready to perform some special ability.
+		//__ It will only fire once, so if the time is not right, register your own timer to keep checking.
 		//__
 		virtual bool handle_eventStructureReady(const STRUCTURE *psStruct) = 0;
 
@@ -393,17 +390,17 @@ namespace wzapi
 
 		//__ ## eventAttacked(victim, attacker)
 		//__
-		//__ An event that is run when an object belonging to the script's controlling player is
-		//__ attacked. The attacker parameter may be either a structure or a droid.
+		//__ An event that is run when an object belonging to the script's controlling player is attacked.
+		//__ The `attacker` parameter may be either a structure or a droid.
 		//__
 		virtual bool handle_eventAttacked(const BASE_OBJECT *psVictim, const BASE_OBJECT *psAttacker) = 0;
 
 		//__ ## eventResearched(research, researchStructure, player)
 		//__
-		//__ An event that is run whenever a new research is available. The `structure`
-		//__ parameter is set if the research comes from a research lab owned by the
-		//__ current player. If an ally does the research, the `researchStructure` parameter will
-		//__ be set to `null`. The `player` parameter gives the player it is called for.
+		//__ An event that is run whenever a new research is available. The `researchStructure`
+		//__ parameter is set if the research comes from a research lab owned by the current player.
+		//__ If an ally does the research, the `researchStructure` parameter will be set to `null`.
+		//__ The `player` parameter gives the player it is called for.
 		//__
 		virtual bool handle_eventResearched(const researchResult& research, event_nullable_ptr<const STRUCTURE> psStruct, int player) = 0;
 
@@ -416,8 +413,7 @@ namespace wzapi
 
 		//__ ## eventPickup(feature, droid)
 		//__
-		//__ An event that is run whenever a feature is picked up. It is called for
-		//__ all players / scripts.
+		//__ An event that is run whenever a feature is picked up. It is called for all players / scripts.
 		//__ Careful passing the parameter object around, since it is about to vanish! (3.2+ only)
 		//__
 		virtual bool handle_eventPickup(const FEATURE *psFeat, const DROID *psDroid) = 0;
@@ -427,8 +423,7 @@ namespace wzapi
 		//__ An event that is run sometimes when an object, which was marked by an object label,
 		//__ which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
 		//__ An event that is run sometimes when an object goes from not seen to seen.
-		//__ First parameter is **game object** doing the seeing, the next the game
-		//__ object being seen.
+		//__ First parameter is **game object** doing the seeing, the next the game object being seen.
 		virtual bool handle_eventObjectSeen(const BASE_OBJECT *psViewer, const BASE_OBJECT *psSeen) = 0;
 
 		//__
@@ -436,25 +431,22 @@ namespace wzapi
 		//__
 		//__ An event that is run sometimes when a member of a group, which was marked by a group label,
 		//__ which was reset through `resetLabel()` to subscribe for events, goes from not seen to seen.
-		//__ First parameter is **game object** doing the seeing, the next the id of the group
-		//__ being seen.
+		//__ First parameter is **game object** doing the seeing, the next the id of the group being seen.
 		//__
 		virtual bool handle_eventGroupSeen(const BASE_OBJECT *psViewer, int groupId) = 0;
 
 		//__ ## eventObjectTransfer(droidOrStructure, fromPlayer)
 		//__
-		//__ An event that is run whenever an object is transferred between players,
-		//__ for example due to a Nexus Link weapon. The event is called after the
-		//__ object has been transferred, so the target player is in `droidOrStructure.player`.
-		//__ The event is called for both players.
+		//__ An event that is run whenever an object is transferred between players, for example due
+		//__ to a Nexus Link weapon. The event is called after the object has been transferred,
+		//__ so the target player is in `droidOrStructure.player`. The event is called for both players.
 		//__
 		virtual bool handle_eventObjectTransfer(const BASE_OBJECT *psObj, int fromPlayer) = 0;
 
 		//__ ## eventChat(fromPlayer, toPlayer, message)
 		//__
-		//__ An event that is run whenever a chat message is received. The `fromPlayer` parameter is the
-		//__ player sending the chat message. For the moment, the `toPlayer` parameter is always the script
-		//__ player.
+		//__ An event that is run whenever a chat message is received. The `fromPlayer` parameter is the player
+		//__ sending the chat message. For the moment, the `toPlayer` parameter is always the script player.
 		//__
 		virtual bool handle_eventChat(int fromPlayer, int toPlayer, const char *message) = 0;
 
@@ -483,16 +475,15 @@ namespace wzapi
 
 		//__ ## eventArea<label>(droid)
 		//__
-		//__ An event that is run whenever a droid enters an area label. The area is then
-		//__ deactived. Call `resetArea()` to reactivate it. The name of the event is
-		//__ `eventArea${label}()`.
+		//__ An event that is run whenever a droid enters an area label. The area is then deactived.
+		//__ Call `resetArea()` to reactivate it. The name of the event is `eventArea${label}()`.
 		//__
 		virtual bool handle_eventArea(const std::string& label, const DROID *psDroid) = 0;
 
 		//__ ## eventDesignCreated(template)
 		//__
-		//__ An event that is run whenever a new droid template is created. It is only
-		//__ run on the client of the player designing the template.
+		//__ An event that is run whenever a new droid template is created.
+		//__ It is only run on the client of the player designing the template.
 		//__
 		virtual bool handle_eventDesignCreated(const DROID_TEMPLATE *psTemplate) = 0;
 
@@ -519,9 +510,8 @@ namespace wzapi
 
 		//__ ## eventSyncRequest(from, reqId, x, y, objId1, objId2)
 		//__
-		//__ An event that is called from a script and synchronized with all other scripts and hosts
-		//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
-		//__ cheating!
+		//__ An event that is called from a script and synchronized with all other scripts and hosts to
+		//__ prevent desync from happening. Sync requests must be carefully validated to prevent cheating!
 		//__
 		virtual bool handle_eventSyncRequest(int from, int reqId, int x, int y, const BASE_OBJECT *psObj1, const BASE_OBJECT *psObj2) = 0;
 

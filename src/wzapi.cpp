@@ -384,7 +384,7 @@ bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string 
 	return true;
 }
 
-//-- ## setAssemblyPoint(structure, x, y)
+//-- ## setAssemblyPoint(factoryStructure, x, y)
 //--
 //-- Set the assembly point droids go to when built for the specified structure. (3.2+ only)
 //--
@@ -783,7 +783,7 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 //-- ## hackGetObj(objectType, player, id) [DEPRECATED]
 //--
 //-- Function to find and return a game object of `DROID`, `FEATURE` or `STRUCTURE` types, if it exists.
-//-- Otherwise, it will return `null`. This function is DEPRECATED by `getObject()`. (3.2+ only)
+//-- Otherwise, it will return `null`. This function is deprecated by `getObject()`. (3.2+ only)
 //--
 wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _objectType, int player, int id)) WZAPI_DEPRECATED
 {
@@ -917,7 +917,7 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 
 // MARK: - General functions -- geared for use in AI scripts
 
-//-- ## dump(string...)
+//-- ## dump(...strings)
 //--
 //-- Output text to a debug file. (3.2+ only)
 //--
@@ -939,7 +939,7 @@ wzapi::no_return_value wzapi::dump(WZAPI_PARAMS(va_list_treat_as_strings strings
 	return {};
 }
 
-//-- ## debug(string...)
+//-- ## debug(...strings)
 //--
 //-- Output text to the command line.
 //--
@@ -1855,7 +1855,7 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 //-- ## buildDroid(factoryStructure, templateName, bodyNames, propulsionNames, reserved1, reserved2, ...turretNames)
 //--
 //-- Start factory production of new droid with the given name, body, propulsion and turrets.
-//-- The reserved1 parameters should be passed `""` for now. The components can be
+//-- The reserved parameters should be passed `""` for now. The components can be
 //-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
 //-- component in the list will be used. Returns a boolean that is `true` if production was started.
 //--
@@ -2962,7 +2962,7 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 //-- ## removeStruct(structure) [DEPRECATED]
 //--
 //-- Immediately remove the given structure from the map. Returns a boolean that is `true` on success.
-//-- No special effects are applied. DEPRECATED since 3.2. Use `removeObject()` instead.
+//-- No special effects are applied. Deprecated since 3.2. Use `removeObject()` instead.
 //--
 bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 {
