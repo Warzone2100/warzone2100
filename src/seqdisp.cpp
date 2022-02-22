@@ -229,8 +229,8 @@ std::string getSubtitleFile(std::string seqName)
 	seqName = seqName.substr(0, seqName.find_last_of('.'));
 
 	std::string language = getLanguage();
-	std::string translatedFile = "subtitles/translations/" + language + "/" + seqName + ".srt"; 
-	std::string enFile = "subtitles/" + seqName + ".srt";
+	std::string translatedFile = "subtitles/" + language + "/" + seqName + ".srt"; 
+	std::string enFile = "sequenceaudio/" + seqName + ".srt";
 
 	if (PHYSFS_exists(translatedFile.c_str()))
 	{

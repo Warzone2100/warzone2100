@@ -1,0 +1,26 @@
+1
+00:00:00,000 --> 00:00:08,333
+CAMPAIGN THREE
+NORTHERN SECTOR
+
+3
+00:00:09,416 --> 00:00:39,916
+TRANSPORT MISSION: Northern Sector
+
+6
+00:01:23,333 --> 00:01:42,083
+Dusk, December 3rd, 2100
+
+7
+00:01:23,333 --> 00:01:42,083
+In-flight to Northern Sector
+The Final Encounter
+
+9
+00:01:46,500 --> 00:01:51,500
+Следва инструктаж
+
+10
+00:01:52,250 --> 00:02:27,333
+TRANSPORT MISSION: Northern Sector
+

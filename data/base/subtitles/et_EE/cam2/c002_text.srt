@@ -1,0 +1,29 @@
+1
+00:00:00,000 --> 00:00:08,333
+CAMPAIGN TWO
+EASTERN SECTOR
+
+3
+00:00:08,750 --> 00:00:23,750
+Morning, September 1st, 2100
+In-flight to Eastern Sector
+Team Alpha approaches Beta Base
+
+6
+00:00:26,666 --> 00:01:16,000
+BETA BASE MISSION: Eastern Sector
+Upon arrival you are to assume command of the base.
+You must defend and hold it at all costs.
+
+9
+00:01:17,083 --> 00:01:33,750
+COLLECTIV
+
+10
+00:02:24,166 --> 00:02:27,500
+BEETA BAASI MISSIOON: Ida Sector
+
+11
+00:02:30,000 --> 00:02:57,250
+BEETA BAASI MISSIOON: Kaitse ja Kindlusta
+
