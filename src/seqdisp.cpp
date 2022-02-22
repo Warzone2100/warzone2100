@@ -229,16 +229,16 @@ std::string getSubtitleFile(std::string seqName)
 	seqName = seqName.substr(0, seqName.find_last_of('.'));
 
 	std::string language = getLanguage();
-	std::string translation_file = "sequenceaudio/subs/" + language + '/' + seqName + ".srt";
-	std::string en_file = "sequenceaudio/" + seqName + ".srt";
+	std::string translatedFile = "subtitles/translations/" + language + "/" + seqName + ".srt"; 
+	std::string enFile = "subtitles/" + seqName + ".srt";
 
-	if (PHYSFS_exists(translation_file.c_str()))
+	if (PHYSFS_exists(translatedFile.c_str()))
 	{
-		return translation_file;
+		return translatedFile;
 	}
-	else if (PHYSFS_exists(en_file.c_str()))
+	else if (PHYSFS_exists(enFile.c_str()))
 	{
-		return en_file;
+		return enFile;
 	}
 	else
 	{

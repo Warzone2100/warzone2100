@@ -29,7 +29,33 @@ files:
         la-LA: la # Latin
         nb: nb # Norwegian Bokmal
   - source: /data/base/sequenceaudio/**/*.srt
-    translation: /data/base/sequenceaudio/**/subs/%locale_with_underscore%/%original_file_name%
-    ignore: [/data/base/sequenceaudio/**/subs/%locale_with_underscore%/%original_file_name%]
+    translation: /data/base/subtitles/translations/%locale_with_underscore%/**/%original_file_name%
+    languages_mapping:
+      locale_with_underscore:
+        ro: ro # Romanian
+        fr: fr # French
+        es-ES: es # Spanish
+        cs: cs # Czech
+        da: da # Danish
+        de: de # German
+        el: el # Greek
+        fy-NL: fy # Frisian
+        fi: fi # Finnish
+        ga-IE: ga # Irish
+        hu: hu # Hungarian
+        it: it # Italian
+        ko: ko # Korean
+        lt: lt # Lithuanian
+        nl: nl # Dutch
+        pl: pl # Polish
+        pt-PT: pt # Portuguese
+        ru: ru # Russian
+        sk: sk # Slovak
+        sl: sl # Slovenian
+        tr: tr # Turkish
+        hr: hr # Croatian
+        eo: eo # Esperanto
+        la-LA: la # Latin
+        nb: nb # Norwegian Bokmal
   - source: /pkg/nsis/i18n/win_installer_base.nsh
     translation: /pkg/nsis/i18n/win_installer-%locale_with_underscore%.nsh
