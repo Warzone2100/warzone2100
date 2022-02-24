@@ -432,6 +432,8 @@ bool multiShutdown()
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
+	clearDisplayMultiJoiningStatusCache();
+
 	return true;
 }
 
