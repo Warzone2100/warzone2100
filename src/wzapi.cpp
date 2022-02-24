@@ -1471,7 +1471,7 @@ bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structureName, optiona
 }
 
 // additional structure check
-static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlockingTiles)
+static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlockingTiles, PROPULSION_TYPE propType)
 {
 	UDWORD		x, y, xTL, yTL, xBR, yBR;
 	UBYTE		count = 0;
@@ -1501,7 +1501,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	y = yTL;	// top
 	for (x = xTL; x != xBR + 1; x++)
 	{
-		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		if (fpathBlockingTile(x, y, propType))
 		{
 			count++;
 			break;
@@ -1511,7 +1511,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	y = yBR;	// bottom
 	for (x = xTL; x != xBR + 1; x++)
 	{
-		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		if (fpathBlockingTile(x, y, propType))
 		{
 			count++;
 			break;
@@ -1521,7 +1521,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	x = xTL;	// left
 	for (y = yTL + 1; y != yBR; y++)
 	{
-		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		if (fpathBlockingTile(x, y, propType))
 		{
 			count++;
 			break;
@@ -1531,7 +1531,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	x = xBR;	// right
 	for (y = yTL + 1; y != yBR; y++)
 	{
-		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		if (fpathBlockingTile(x, y, propType))
 		{
 			count++;
 			break;
@@ -1573,10 +1573,12 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 
 	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));
 
+	PROPULSION_TYPE propType = (psDroid) ? asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType : PROPULSION_TYPE_WHEELED;
+
 	// save a lot of typing... checks whether a position is valid
 #define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
-                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-                        && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
+                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), propType)) \
+                        && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles, propType))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
