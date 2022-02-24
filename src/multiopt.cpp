@@ -292,25 +292,25 @@ bool recvOptions(NETQUEUE queue)
 	{
 		if (nondefaultlimitsize)
 		{
-			addConsoleMessage(astringf("Changed structure limits [%d]:", nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(astringf(_("Changed structure limits [%d]:"), nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 			for (i = 0; i < numStructureLimits; i++) {
 				if (ingame.structureLimits[i].id < numStructureStats)
 				{
 					if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
 					{
 						WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
-						addConsoleMessage(astringf("[%d] Limit [%s]: %d", i, structname.toUtf8().c_str(), ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+						addConsoleMessage(astringf(_("[%d] Limit [%s]: %d"), i, structname.toUtf8().c_str(), ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 					}
 				}
 				else
 				{
-					addConsoleMessage(astringf("[%d] Limit that is bigger than numStructureStats (%d): %d", i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+					addConsoleMessage(astringf(_("[%d] Limit that is bigger than numStructureStats (%d): %d"), i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 				}
 			}
 		}
 		else
 		{
-			addConsoleMessage("Limits were reset to default.", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(_("Limits were reset to default."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 	}
 
