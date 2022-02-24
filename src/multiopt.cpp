@@ -29,6 +29,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/frameresource.h"
 
 #include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/ivis_opengl/piestate.h"
@@ -145,6 +146,8 @@ void sendOptions()
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
+std::vector<MULTISTRUCTLIMITS> oldStructureLimits;
+
 // ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
 // returns: false if the options should be considered invalid and the client should disconnect
@@ -211,6 +214,9 @@ bool recvOptions(NETQUEUE queue)
 	}
 	netPlayersUpdated = true;
 
+	// Make a copy of old structure limits to see what got changed
+	oldStructureLimits = ingame.structureLimits;
+
 	// Free any structure limits we may have in-place
 	ingame.structureLimits.clear();
 
@@ -228,16 +234,85 @@ bool recvOptions(NETQUEUE queue)
 	if (numStructureLimits)
 	{
 		ingame.structureLimits.resize(numStructureLimits);
+		// If host have limits changed everyone should load limits too
+		if (!bLimiterLoaded)
+		{
+			initLoadingScreen(true);
+			if (!resLoad("wrf/limiter_data.wrf", 503))
+			{
+				debug(LOG_INFO, "Unable to load limiter_data during recvOptions!");
+			}
+			else
+			{
+				bLimiterLoaded = true;
+				closeLoadingScreen();
+			}
+		}
 	}
 
+	int nondefaultlimitsize = 0;
 	for (i = 0; i < numStructureLimits; i++)
 	{
 		NETuint32_t(&ingame.structureLimits[i].id);
 		NETuint32_t(&ingame.structureLimits[i].limit);
+		if (ingame.structureLimits[i].id < numStructureStats)
+		{
+			if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
+			{
+				nondefaultlimitsize++;
+			}
+		}
 	}
 	NETuint8_t(&ingame.flags);
 
 	NETend();
+
+	// Check if those vectors are different
+	// Could be done using vector==vector
+	// But I was too confused with operator== overloading --MaX
+	bool structurelimitsUpdated = false;
+	if (oldStructureLimits.size() == ingame.structureLimits.size())
+	{
+		for (i = 0; i < oldStructureLimits.size(); i++)
+		{
+			if (oldStructureLimits[i].id != ingame.structureLimits[i].id || oldStructureLimits[i].limit != ingame.structureLimits[i].limit)
+			{
+				structurelimitsUpdated = true;
+				break;
+			}
+		}
+	}
+	else
+	{
+		structurelimitsUpdated = true;
+	}
+
+	// Notify if structure limits got changed
+	if (structurelimitsUpdated)
+	{
+		if (nondefaultlimitsize)
+		{
+			addConsoleMessage(astringf("Changed structure limits [%d]:", nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			for (i = 0; i < numStructureLimits; i++) {
+				if (ingame.structureLimits[i].id < numStructureStats)
+				{
+					if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
+					{
+						WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
+						addConsoleMessage(astringf("[%d] Limit [%s]: %d", i, structname.toUtf8().c_str(), ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+					}
+				}
+				else
+				{
+					addConsoleMessage(astringf("[%d] Limit that is bigger than numStructureStats (%d): %d", i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				}
+			}
+		}
+		else
+		{
+			addConsoleMessage("Limits were reset to default.", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
 
 	bool bRebuildMapList = strcmp(game.map, priorGameInfo.map) != 0 || game.hash != priorGameInfo.hash || game.modHashes != priorGameInfo.modHashes;
 	if (bRebuildMapList)
