@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-02-15 13:25\n"
+"PO-Revision-Date: 2022-02-25 20:32\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -9319,7 +9319,7 @@ msgstr "جسمٌ ثقيل - الثأر"
 #. data/mp/stats/research.json: $.R-Vehicle-Body13.name
 #: po/custom/fromJson.txt:2518
 msgid "Heavy Body - Wyvern"
-msgstr ""
+msgstr "جسمٌ ثقيل - الويفرن"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[1]
@@ -14769,7 +14769,7 @@ msgstr "مركبةٌ مدمَّرة"
 #. data/mp/stats/body.json: $.Body13SUP.name
 #: po/custom/fromJson.txt:6254
 msgid "Wyvern"
-msgstr ""
+msgstr "ويفرن"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[6]
