@@ -65,6 +65,8 @@
 #include "activity.h"
 #include "warzoneconfig.h"
 
+#define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
+
 // send complete game info set!
 void sendOptions()
 {
@@ -122,6 +124,11 @@ void sendOptions()
 
 	// Send the number of structure limits to expect
 	uint32_t numStructureLimits = static_cast<uint32_t>(ingame.structureLimits.size());
+	if (numStructureLimits > MAX_STRUCTURE_LIMITS)
+	{
+		debug(LOG_ERROR, "Number of structure limits (%" PRIu32") exceeds maximum supported - truncating", numStructureLimits);
+		numStructureLimits = MAX_STRUCTURE_LIMITS;
+	}
 	NETuint32_t(&numStructureLimits);
 	debug(LOG_NET, "(Host) Structure limits to process on client is %zu", ingame.structureLimits.size());
 	// Send the structures changed
@@ -211,6 +218,12 @@ bool recvOptions(NETQUEUE queue)
 	uint32_t numStructureLimits = 0;
 	NETuint32_t(&numStructureLimits);
 	debug(LOG_NET, "Host is sending us %u structure limits", numStructureLimits);
+	if (numStructureLimits > MAX_STRUCTURE_LIMITS)
+	{
+		debug(LOG_POPUP, "Number of structure limits (%" PRIu32") exceeds maximum supported. Incompatible host.", numStructureLimits);
+		NETend();
+		return false;
+	}
 	// If there were any changes allocate memory for them
 	if (numStructureLimits)
 	{
