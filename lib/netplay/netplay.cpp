@@ -1907,6 +1907,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	std::swap(ingame.JoiningInProgress[playerIndexA], ingame.JoiningInProgress[playerIndexB]);
 	std::swap(ingame.DataIntegrity[playerIndexA], ingame.DataIntegrity[playerIndexB]);
 	std::swap(ingame.lastSentPlayerDataCheck2[playerIndexA], ingame.lastSentPlayerDataCheck2[playerIndexB]);
+	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 
 	// Ensure we filter messages appropriately waiting for the client ack *at each new index*

@@ -42,6 +42,7 @@
 
 #include <utility>
 #include <memory>
+#include <chrono>
 #include <SQLiteCpp/SQLiteCpp.h>
 
 
@@ -252,6 +253,16 @@ void recvMultiStats(NETQUEUE queue)
 		{
 			ingame.PingTimes[playerIndex] = PING_LIMIT;
 			ingame.VerifiedIdentity[playerIndex] = false;
+
+			if (!ingame.muteChat[playerIndex])
+			{
+				// check if the new identity was previously muted
+				auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
+				if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
+				{
+					ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
+				}
+			}
 
 			// Output to stdinterface, if enabled
 			std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
@@ -501,6 +512,13 @@ public:
 		EcKey::Key pk;
 	};
 
+	struct PlayerOptions {
+		std::string name;
+		EcKey::Key pk;
+		optional<std::chrono::system_clock::time_point> mutedTime;
+		optional<std::chrono::system_clock::time_point> bannedTime;
+	};
+
 public:
 	// Caller is expected to handle thrown exceptions
 	KnownPlayersDB(const std::string& knownPlayersDBPath)
@@ -508,13 +526,16 @@ public:
 		db = std::unique_ptr<SQLite::Database>(new SQLite::Database(knownPlayersDBPath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE));
 		db->exec("PRAGMA journal_mode=WAL");
 		createKnownPlayersDBTables();
-		query_findPlayerByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT local_id, name, pk FROM known_players WHERE name = ?"));
+		query_findPlayerIdentityByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT local_id, name, pk FROM known_players WHERE name = ?"));
 		query_insertNewKnownPlayer = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO known_players(name, pk) VALUES(?, ?)"));
 		query_updateKnownPlayerKey = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE known_players SET pk = ? WHERE name = ?"));
+		query_findPlayerOptionsByPK = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT name, muted, banned FROM player_options WHERE pk = ?"));
+		query_insertNewPlayerOptions = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO player_options(pk, name, muted, banned) VALUES(?, ?, ?, ?)"));
+		query_updatePlayerOptionsMuted = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE player_options SET muted = ? WHERE pk = ? AND name = ?"));
 	}
 
 public:
-	optional<PlayerInfo> findPlayerByName(const std::string& name)
+	optional<PlayerInfo> findPlayerIdentityByName(const std::string& name)
 	{
 		if (name.empty())
 		{
@@ -528,13 +549,13 @@ public:
 		}
 		optional<PlayerInfo> result;
 		try {
-			query_findPlayerByName->bind(1, name);
-			if (query_findPlayerByName->executeStep())
+			query_findPlayerIdentityByName->bind(1, name);
+			if (query_findPlayerIdentityByName->executeStep())
 			{
 				PlayerInfo data;
-				data.local_id = query_findPlayerByName->getColumn(0).getInt64();
-				data.name = query_findPlayerByName->getColumn(1).getString();
-				std::string publicKeyb64 = query_findPlayerByName->getColumn(2).getString();
+				data.local_id = query_findPlayerIdentityByName->getColumn(0).getInt64();
+				data.name = query_findPlayerIdentityByName->getColumn(1).getString();
+				std::string publicKeyb64 = query_findPlayerIdentityByName->getColumn(2).getString();
 				data.pk = base64Decode(publicKeyb64);
 				result = data;
 			}
@@ -544,7 +565,7 @@ public:
 			result = nullopt;
 		}
 		try {
-			query_findPlayerByName->reset();
+			query_findPlayerIdentityByName->reset();
 		}
 		catch (const std::exception& e) {
 			debug(LOG_ERROR, "Failed to reset prepared statement; error: %s", e.what());
@@ -555,7 +576,7 @@ public:
 	}
 
 	// Note: May throw on database error!
-	void addKnownPlayer(std::string const &name, EcKey const &key, bool overrideCurrentKey)
+	void addKnownPlayerIdentity(std::string const &name, EcKey const &key, bool overrideCurrentKey)
 	{
 		if (key.empty())
 		{
@@ -588,13 +609,117 @@ public:
 		transaction.commit();
 	}
 
+public:
+	std::vector<PlayerOptions> findPlayerOptions(const std::string& name, EcKey const &key)
+	{
+		if (key.empty())
+		{
+			return {};
+		}
+
+		std::string publicKeyb64 = base64Encode(key.toBytes(EcKey::Public));
+
+		std::vector<PlayerOptions> result;
+		try {
+			query_findPlayerOptionsByPK->bind(1, publicKeyb64);
+			while (query_findPlayerOptionsByPK->executeStep())
+			{
+				PlayerOptions data;
+				data.name = query_findPlayerOptionsByPK->getColumn(0).getString();
+				data.pk = key.toBytes(EcKey::Public);
+				auto mutedTime = std::chrono::seconds(query_findPlayerOptionsByPK->getColumn(1).getInt64());
+				if (mutedTime.count() > 0)
+				{
+					data.mutedTime = std::chrono::system_clock::time_point(mutedTime);
+				}
+				auto bannedTime = std::chrono::seconds(query_findPlayerOptionsByPK->getColumn(2).getInt64());
+				if (bannedTime.count() > 0)
+				{
+					data.bannedTime = std::chrono::system_clock::time_point(bannedTime);
+				}
+				if (data.name == name)
+				{
+					// if we find an exact match (for both pk *and* name), use it!
+					result.clear();
+					result.push_back(data);
+					break;
+				}
+				result.push_back(data);
+			}
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failure to query database for player; error: %s", e.what());
+			result.clear();
+		}
+		try {
+			query_findPlayerOptionsByPK->reset();
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failed to reset prepared statement; error: %s", e.what());
+		}
+
+		return result;
+	}
+
+	// Note: May throw on database error!
+	void setPlayerMuted(std::string const &name, EcKey const &key, optional<std::chrono::system_clock::time_point> mutedTime)
+	{
+		std::string publicKeyb64;
+		if (!key.empty())
+		{
+			publicKeyb64 = base64Encode(key.toBytes(EcKey::Public));
+		}
+
+		// Begin transaction
+		SQLite::Transaction transaction(*db);
+
+		auto mutedTimeValue = mutedTime.has_value() ? mutedTime.value().time_since_epoch().count() : 0;
+
+		query_insertNewPlayerOptions->bind(1, publicKeyb64);
+		query_insertNewPlayerOptions->bind(2, name);
+		query_insertNewPlayerOptions->bind(3, mutedTimeValue);
+		query_insertNewPlayerOptions->bind(4, -1); // default "never set" is -1, not 0
+		if (query_insertNewPlayerOptions->exec() == 0)
+		{
+			query_updatePlayerOptionsMuted->bind(1, mutedTimeValue);
+			query_updatePlayerOptionsMuted->bind(2, publicKeyb64);
+			query_updatePlayerOptionsMuted->bind(3, name);
+			if (query_updatePlayerOptionsMuted->exec() == 0)
+			{
+				debug(LOG_WARNING, "Failed to update player_options (%s)", name.c_str());
+			}
+			query_updatePlayerOptionsMuted->reset();
+		}
+		query_insertNewPlayerOptions->reset();
+
+		// Commit transaction
+		transaction.commit();
+	}
+
 private:
 	void createKnownPlayersDBTables()
 	{
 		SQLite::Transaction transaction(*db);
 		if (!db->tableExists("known_players"))
 		{
+			// used to store association of name and known player key
 			db->exec("CREATE TABLE known_players (local_id INTEGER PRIMARY KEY, name TEXT UNIQUE, pk TEXT)");
+		}
+		int dbVersion = db->execAndGet("PRAGMA user_version").getInt();
+		// database schema upgrades
+		switch (dbVersion)
+		{
+			case 0:
+				// used to store player_options that may be associated with a player identity
+				// NOTE: In this case, "name" does *NOT* have a unique constraint
+				db->exec("CREATE TABLE player_options (local_id INTEGER PRIMARY KEY, pk TEXT NOT NULL, name TEXT NOT NULL, muted INTEGER, banned INTEGER)");
+				db->exec("CREATE UNIQUE INDEX idx_player_options_pk_name ON player_options (pk, name)");
+				db->exec("PRAGMA user_version = 1");
+				dbVersion = 1;
+				// fall-through
+			default:
+				// done
+				break;
 		}
 		transaction.commit();
 	}
@@ -611,10 +736,13 @@ private:
 
 private:
 	std::unique_ptr<SQLite::Database> db; // Must be the first-listed member variable so it is destructed last
-	std::unique_ptr<SQLite::Statement> query_findPlayerByName;
+	std::unique_ptr<SQLite::Statement> query_findPlayerIdentityByName;
 	std::unique_ptr<SQLite::Statement> query_insertNewKnownPlayer;
 	std::unique_ptr<SQLite::Statement> query_updateKnownPlayerKey;
 	std::unordered_map<std::string, std::pair<optional<PlayerInfo>, UDWORD>> findPlayerCache;
+	std::unique_ptr<SQLite::Statement> query_findPlayerOptionsByPK;
+	std::unique_ptr<SQLite::Statement> query_insertNewPlayerOptions;
+	std::unique_ptr<SQLite::Statement> query_updatePlayerOptionsMuted;
 	UDWORD lastCacheClean = 0;
 };
 
@@ -650,7 +778,7 @@ bool isLocallyKnownPlayer(std::string const &name, EcKey const &key)
 	{
 		return false;
 	}
-	auto result = knownPlayersDB->findPlayerByName(name);
+	auto result = knownPlayersDB->findPlayerIdentityByName(name);
 	if (!result.has_value())
 	{
 		return false;
@@ -667,10 +795,50 @@ void addKnownPlayer(std::string const &name, EcKey const &key, bool override)
 	ASSERT_OR_RETURN(, knownPlayersDB.operator bool(), "knownPlayersDB is uninitialized");
 
 	try {
-		knownPlayersDB->addKnownPlayer(name, key, override);
+		knownPlayersDB->addKnownPlayerIdentity(name, key, override);
 	}
 	catch (const std::exception& e) {
 		debug(LOG_ERROR, "Failed to add known_player with error: %s", e.what());
+	}
+}
+
+optional<StoredPlayerOptions> getStoredPlayerOptions(std::string const &name, EcKey const &key)
+{
+	ASSERT_OR_RETURN(nullopt, knownPlayersDB.operator bool(), "knownPlayersDB is uninitialized");
+	auto results = knownPlayersDB->findPlayerOptions(name, key);
+	if (results.empty())
+	{
+		return nullopt;
+	}
+	// findPlayerOptions may have returned more than one result, so sort through and find the "newest" for each setting
+	StoredPlayerOptions playerOptions;
+	for (const auto& result : results)
+	{
+		if (result.mutedTime.has_value())
+		{
+			playerOptions.mutedTime = std::max(result.mutedTime.value(), playerOptions.mutedTime.value_or(std::chrono::system_clock::time_point()));
+		}
+		if (result.bannedTime.has_value())
+		{
+			playerOptions.bannedTime = std::max(result.bannedTime.value(), playerOptions.bannedTime.value_or(std::chrono::system_clock::time_point()));
+		}
+	}
+	return playerOptions;
+}
+
+void storePlayerMuteOption(std::string const &name, EcKey const &key, bool muted)
+{
+	ASSERT_OR_RETURN(, knownPlayersDB.operator bool(), "knownPlayersDB is uninitialized");
+	optional<std::chrono::system_clock::time_point> mutedTime;
+	if (muted)
+	{
+		mutedTime = std::chrono::system_clock::now();
+	}
+	try {
+		knownPlayersDB->setPlayerMuted(name, key, mutedTime);
+	}
+	catch (const std::exception& e) {
+		debug(LOG_ERROR, "Failed to store player mute option with error: %s", e.what());
 	}
 }
 

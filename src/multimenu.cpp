@@ -115,6 +115,8 @@ static const unsigned M_REQUEST_NP[] = {M_REQUEST_2P,    M_REQUEST_3P,    M_REQU
 #define M_REQUEST_BUT	(MULTIMENU+100)		// allow loads of buttons.
 #define M_REQUEST_BUTM	(MULTIMENU+1100)
 
+#define MULTIMENU_PLAYER_MUTE_START M_REQUEST_BUTM + 1
+
 #define M_REQUEST_X		MULTIOP_PLAYERSX
 #define M_REQUEST_Y		MULTIOP_PLAYERSY
 #define M_REQUEST_W		MULTIOP_PLAYERSW
@@ -679,6 +681,31 @@ static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	psWidget->UserData = player;
 }
 
+static void displayMuteState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	UDWORD player = psWidget->UserData;
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "invalid player: %" PRIu32 "", player);
+
+	UWORD ImageID = IMAGE_INTFAC_VOLUME_UP;
+	if (!ingame.muteChat[player])
+	{
+		ImageID = IMAGE_INTFAC_VOLUME_UP;
+	}
+	else
+	{
+		ImageID = IMAGE_INTFAC_VOLUME_MUTE;
+	}
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	bool isHighlighted = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
+	bool isDown = (psWidget->getState() & WBUT_DOWN) != 0;
+	if (isHighlighted || isDown)
+	{
+		pie_UniTransBoxFill(x-2, y-2, x + 16 + 4, y + 16 + 4, (isDown) ? WZCOL_TRANSPARENT_BOX : pal_RGBA(255, 255, 255, 65));
+	}
+	iV_DrawImageFileAnisotropic(IntImages, ImageID, x + 1, y + 1, Vector2f{16,16});
+}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -780,6 +807,7 @@ private:
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(powerLabel)));
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(pingLabel)));
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(structsLabel)));
+		place({6}, {0}, MinSize::minWidth(16).wrap(lastMargin.wrap(makeLabel(""))));
 
 		for (auto player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 		{
@@ -899,6 +927,31 @@ private:
 			lastColumnLabel,
 		});
 
+		// chat mute button
+		std::shared_ptr<WIDGET> muteWidget;
+		if (player != selectedPlayer)
+		{
+			W_BUTINIT sButInit;
+			sButInit.id		= MULTIMENU_PLAYER_MUTE_START + player;
+			sButInit.pTip	= _("Toggle Chat Mute");
+			sButInit.pDisplay = displayMuteState;
+			sButInit.UserData = player;
+			sButInit.width	= 18;
+			sButInit.height = 18;
+			auto muteButton = std::make_shared<W_BUTTON>(&sButInit);
+			muteButton->addOnClickHandler([](W_BUTTON& button) {
+				auto playerIdx = button.UserData;
+				ASSERT_OR_RETURN(, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid playerIdx: %" PRIu32, playerIdx);
+				setPlayerMuted(playerIdx, !ingame.muteChat[playerIdx]);
+			});
+			muteWidget = muteButton;
+		}
+		else
+		{
+			muteWidget = std::make_shared<WIDGET>();
+			muteWidget->setGeometry(0, 0, 0, 0);
+		}
+
 		Margin margin(0, CELL_HORIZONTAL_PADDING);
 		place({0}, {row}, Margin(0, CELL_HORIZONTAL_PADDING, 0, 0).wrap(nameGrid));
 		place({1}, {row}, margin.wrap(Alignment::center().wrap(alliancesGrid)));
@@ -906,6 +959,7 @@ private:
 		place({3}, {row}, margin.wrap(killsLabel));
 		place({4}, {row}, margin.wrap(unitsLabel));
 		place({5}, {row}, margin.wrap(lastColumnLabel));
+		place({6}, {row}, margin.wrap(Alignment::center().wrap(muteWidget)));
 	}
 
 	void updatePlayersWidgets()
@@ -1070,6 +1124,7 @@ public:
 			glm::ivec4(x0 + columns[3], y0, x0 + columns[3], y0 + height()),
 			glm::ivec4(x0 + columns[4], y0, x0 + columns[4], y0 + height()),
 			glm::ivec4(x0 + columns[5], y0, x0 + columns[5], y0 + height()),
+			glm::ivec4(x0 + columns[6], y0, x0 + columns[6], y0 + height()),
 		};
 
 		iV_Lines(lines, WZCOL_BLACK);
