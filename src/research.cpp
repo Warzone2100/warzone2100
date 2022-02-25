@@ -1506,7 +1506,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			if (psFacility->psBestTopic)
 			{
 				topicIndex = ((RESEARCH *)psFacility->psBestTopic)->ref - STAT_RESEARCH;
-				if (topicIndex)
+				if (topicIndex && !IsResearchCompleted(&asPlayerResList[rewardPlayer][topicIndex]))
 				{
 					//if it cost more - it is better (or should be)
 					if (researchPoints < asResearch[topicIndex].researchPoints)
