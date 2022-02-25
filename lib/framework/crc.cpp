@@ -315,7 +315,7 @@ bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
 
 	if (sig.size() != currentSignatureSizeInBytes)
 	{
-		debug(LOG_ERROR, "Signature is the wrong size");
+		debug(LOG_INFO, "Signature is the wrong size (received: %zu, expecting: %zu)", sig.size(), currentSignatureSizeInBytes);
 		return false;
 	}
 

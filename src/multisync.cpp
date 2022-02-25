@@ -313,7 +313,7 @@ bool recvPing(NETQUEUE queue)
 		const auto& senderIdentity = getMultiStats(sender).identity;
 		if (!senderIdentity.empty())
 		{
-			verifiedResponse = getMultiStats(sender).identity.verify(challengeResponse, expectedPingChallenge.value().data(), PING_CHALLENGE_BYTES);
+			verifiedResponse = senderIdentity.verify(challengeResponse, expectedPingChallenge.value().data(), PING_CHALLENGE_BYTES);
 		}
 		if (!verifiedResponse)
 		{
