@@ -28,6 +28,10 @@
 #include "lib/netplay/netplay.h"
 #include <3rdparty/json/json_fwd.hpp>
 #include <map>
+#include <chrono>
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 struct PLAYERSTATS
 {
@@ -75,6 +79,13 @@ void initKnownPlayers();
 void shutdownKnownPlayers();
 bool isLocallyKnownPlayer(std::string const &name, EcKey const &key);
 void addKnownPlayer(std::string const &name, EcKey const &key, bool override = false);
+struct StoredPlayerOptions
+{
+	optional<std::chrono::system_clock::time_point> mutedTime;
+	optional<std::chrono::system_clock::time_point> bannedTime;
+};
+optional<StoredPlayerOptions> getStoredPlayerOptions(std::string const &name, EcKey const &key);
+void storePlayerMuteOption(std::string const &name, EcKey const &key, bool muted);
 
 uint32_t getMultiPlayUnitsKilled(uint32_t player);
 uint32_t getSelectedPlayerUnitsKilled();

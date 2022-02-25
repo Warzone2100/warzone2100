@@ -526,6 +526,7 @@ void setupNewPlayer(UDWORD player)
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
+	ingame.muteChat[player] = false;
 	multiSyncResetPlayerChallenge(player);
 
 	resetMultiVisibility(player);						// set visibility flags.

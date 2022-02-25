@@ -110,6 +110,7 @@ struct MULTIPLAYERINGAME
 	std::chrono::steady_clock::time_point lastLagCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
+	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
@@ -155,7 +156,7 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern bool bMultiPlayer;				// true when more than 1 player.
 extern bool bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
-extern bool openchannels[MAX_CONNECTED_PLAYERS];
+extern bool openchannels[MAX_CONNECTED_PLAYERS]; // outgoing message channels (i.e. who you are willing to send messages to)
 extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define RUN_ONLY_ON_SIDE(_side) \
@@ -312,6 +313,9 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *ps
 bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
+
+void setPlayerMuted(uint32_t playerIdx, bool muted);
+bool isPlayerMuted(uint32_t sender);
 
 bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool quietly = false);
 

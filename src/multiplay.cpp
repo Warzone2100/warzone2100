@@ -1638,6 +1638,27 @@ bool recvResearchStatus(NETQUEUE queue)
 	return true;
 }
 
+void setPlayerMuted(uint32_t playerIdx, bool muted)
+{
+	ASSERT_OR_RETURN(, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid playerIdx: %" PRIu32, playerIdx);
+	if (muted == ingame.muteChat[playerIdx])
+	{
+		// no change
+		return;
+	}
+	ingame.muteChat[playerIdx] = muted;
+	if (isHumanPlayer(playerIdx))
+	{
+		storePlayerMuteOption(NetPlay.players[playerIdx].name, getMultiStats(playerIdx).identity, muted);
+	}
+}
+
+bool isPlayerMuted(uint32_t sender)
+{
+	ASSERT_OR_RETURN(false, sender < MAX_CONNECTED_PLAYERS, "Invalid sender: %" PRIu32, sender);
+	return ingame.muteChat[sender];
+}
+
 NetworkTextMessage::NetworkTextMessage(int32_t messageSender, char const *messageText)
 {
 	sender = messageSender;
@@ -1756,6 +1777,11 @@ bool receiveInGameTextMessage(NETQUEUE queue)
 {
 	NetworkTextMessage message;
 	if (!message.receive(queue)) {
+		return false;
+	}
+
+	if (message.sender >= 0 && isPlayerMuted(message.sender))
+	{
 		return false;
 	}
 

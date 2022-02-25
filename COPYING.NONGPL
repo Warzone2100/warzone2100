@@ -48,6 +48,8 @@ data/base/components/prop/prllwhl1.pie
 data/base/components/prop/prhrwhl1.pie
 data/base/components/prop/prhlwhl1.pie
 	- CC BY SA 3.0 - Copyright (c) 2008 <Mysteryem>
+data/base/images/intfac/image_volume_mute.png
+data/base/images/intfac/image_volume_up.png
 data/base/images/notifications/connect_wait.png
 data/base/images/notifications/exclamation_triangle.png
 data/base/images/notifications/shield_questionmark.png

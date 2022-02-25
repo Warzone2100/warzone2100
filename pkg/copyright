@@ -184,7 +184,9 @@ Copyright: 2007-2008 Warzone 2100 Resurrection Project
            2008-2020 Warzone 2100 Project
 License: GPL-2+
 
-Files: data/base/images/notifications/connect_wait.png
+Files: data/base/images/intfac/image_volume_mute.png
+       data/base/images/intfac/image_volume_up.png
+       data/base/images/notifications/connect_wait.png
        data/base/images/notifications/exclamation_triangle.png
        data/base/images/notifications/shield_questionmark.png
        data/base/images/notifications/skull_crossbones.png

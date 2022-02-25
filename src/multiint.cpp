@@ -5772,6 +5772,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 		ingame.VerifiedIdentity[i] = false;
 		ingame.LagCounter[i] = 0;
 		ingame.lastSentPlayerDataCheck2[i].reset();
+		ingame.muteChat[i] = false;
 	}
 	multiSyncResetAllChallenges();
 
@@ -6690,8 +6691,12 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			{
 				NetworkTextMessage message;
 				if (message.receive(queue)) {
-					displayRoomMessage(buildMessage(message.sender, message.text));
-					audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+
+					if (message.sender < 0 || !isPlayerMuted(message.sender))
+					{
+						displayRoomMessage(buildMessage(message.sender, message.text));
+						audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+					}
 
 					if (lobby_slashcommands_enabled())
 					{
