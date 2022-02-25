@@ -546,6 +546,18 @@ struct PlayerReference
 		return index == NetPlay.hostPlayer;
 	}
 
+	bool isDetached() const
+	{
+		return detached != nullptr;
+	}
+
+	// Generally prefer to use the -> operator!
+	// (This is only safe if isDetached() == false !!)
+	uint32_t originalIndex() const
+	{
+		return index;
+	}
+
 private:
 	std::unique_ptr<PLAYER> detached = nullptr;
 	uint32_t index;

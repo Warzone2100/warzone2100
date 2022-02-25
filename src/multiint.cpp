@@ -336,8 +336,8 @@ private:
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
 	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
 
-	void displayParagraphContextualMenu(const std::string& textToCopy);
-	std::shared_ptr<WIDGET> createParagraphContextualMenuPopoverForm(std::string textToCopy);
+	void displayParagraphContextualMenu(const std::string& textToCopy, const std::shared_ptr<PlayerReference>& sender);
+	std::shared_ptr<WIDGET> createParagraphContextualMenuPopoverForm(std::string textToCopy, std::shared_ptr<PlayerReference> sender);
 
 	void displayMessage(RoomMessage const &message);
 
@@ -4984,7 +4984,8 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 	}
 
 	std::string msgText = message.text;
-	paragraph->addOnClickHandler([msgText](Paragraph& paragraph, WIDGET_KEY key) {
+	std::shared_ptr<PlayerReference> senderCopy = (message.type == RoomMessagePlayer) ? message.sender : nullptr;
+	paragraph->addOnClickHandler([msgText, senderCopy](Paragraph& paragraph, WIDGET_KEY key) {
 		// take advantage of the fact that this widget is the great-grand-child of the ChatBoxWidget
 		auto psParent = paragraph.parent();
 		ASSERT_OR_RETURN(, psParent != nullptr, "Expected parent?");
@@ -4993,7 +4994,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		auto psChatBoxWidget = std::dynamic_pointer_cast<ChatBoxWidget>(psMessages->parent());
 		ASSERT_OR_RETURN(, psChatBoxWidget != nullptr, "Expected great-grand-parent missing?");
 		// display contextual menu
-		psChatBoxWidget->displayParagraphContextualMenu(msgText);
+		psChatBoxWidget->displayParagraphContextualMenu(msgText, senderCopy);
 	});
 
 	messages->addItem(paragraph);
@@ -5001,7 +5002,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 
 #define MENU_BUTTONS_PADDING 20
 
-std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(std::string textToCopy)
+std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(std::string textToCopy, std::shared_ptr<PlayerReference> sender)
 {
 	// create all the buttons / option rows
 	std::weak_ptr<ChatBoxWidget> weakChatBoxWidget = std::dynamic_pointer_cast<ChatBoxWidget>(shared_from_this());
@@ -5038,6 +5039,30 @@ std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(
 			wzSetClipboardText(textToCopy.c_str());
 		}
 	}));
+	if (sender && !sender->isDetached())
+	{
+		auto senderIdx = sender->originalIndex();
+		if (senderIdx != selectedPlayer)
+		{
+			bool currentlyMuted = ingame.muteChat[senderIdx];
+			std::string muteString;
+			if (!currentlyMuted)
+			{
+				muteString = astringf(_("Mute Player: %s"), (*sender)->name);
+			}
+			else
+			{
+				muteString = astringf(_("Unmute Player: %s"), (*sender)->name);
+			}
+			buttons.push_back(createOptionsButton(WzString::fromUtf8(muteString), [sender, currentlyMuted](W_BUTTON& button){
+				if (!sender->isDetached())
+				{
+					auto playerIdx = sender->originalIndex();
+					setPlayerMuted(playerIdx, !currentlyMuted);
+				}
+			}));
+		}
+	}
 
 	// determine required height for all buttons
 	int totalButtonHeight = std::accumulate(buttons.begin(), buttons.end(), 0, [](int a, const std::shared_ptr<WIDGET>& b) {
@@ -5061,7 +5086,7 @@ std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(
 	return itemsList;
 }
 
-void ChatBoxWidget::displayParagraphContextualMenu(const std::string& textToCopy)
+void ChatBoxWidget::displayParagraphContextualMenu(const std::string& textToCopy, const std::shared_ptr<PlayerReference>& sender)
 {
 	auto lockedScreen = screenPointer.lock();
 	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
@@ -5087,7 +5112,7 @@ void ChatBoxWidget::displayParagraphContextualMenu(const std::string& textToCopy
 	optionsOverlayScreen->psForm->attach(newRootFrm);
 
 	// Create the pop-over form
-	auto optionsPopOver = createParagraphContextualMenuPopoverForm(textToCopy);
+	auto optionsPopOver = createParagraphContextualMenuPopoverForm(textToCopy, sender);
 	newRootFrm->attach(optionsPopOver);
 
 	// Position the pop-over form - use current mouse position
