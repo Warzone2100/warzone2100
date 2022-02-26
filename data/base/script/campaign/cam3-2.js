@@ -17,7 +17,6 @@ const NEXUS_RES = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03",
 ];
-var edgeMapIndex;
 var alphaUnitIDs;
 var startExtraLoss;
 

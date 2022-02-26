@@ -175,8 +175,6 @@ var ally=[];
 
 var enemy=[];
 
-var rWay;
-
 //Массив всех приказов юнитам
 var _globalOrders = [];
 
@@ -211,13 +209,10 @@ var targRegular={x:0,y:0};
 var lastImpact=false;
 var pointRegular=false;
 var lastEnemiesSeen = 0;
-var armySupport = newGroup();
 var armyCyborgs = newGroup();
 var armyFixers = newGroup();
 var armyJammers = newGroup();
 var armyScanners = newGroup();
-var armyScouts = newGroup();
-var partJammers = newGroup();
 var VTOLAttacker = newGroup();
 var droidsRecycle = newGroup();
 var droidsBroken = newGroup();
@@ -260,8 +255,6 @@ eventsRun['targetSensors'] = 0;
 //Предустановки на исследование
 var research_way = []; //Главный путь развития, компануется далее, в функциях, в зависимости от уровня сложности и др. настроек
 var research_primary = []; //Первичный, один из главных под-путей развития, к которому задаётся режим его исследований(строгий, размазанный или случайный)
-//Предустановки, на случай researchCustom
-var researchCustom = false; //Задаётся в файле настроек, вынесенный за пределы мода
 const research_synapse = ["R-Struc-Research-Upgrade09"];
 const research_power = ["R-Struc-Power-Upgrade03a"];
 const research_armor = ["R-Vehicle-Metals09"];
@@ -597,7 +590,6 @@ function init(){
 
 	if(nf['policy'] == 'island'){
 		debugMsg("Тактика игры: "+nf['policy'], 'init');
-		var _msg='Change policy form: '+policy['build'];
 		switchToIsland();
 	}
 
