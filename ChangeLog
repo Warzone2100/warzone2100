@@ -1,3 +1,48 @@
+2022-2-28: Version 4.2.5:
+ * General:
+   * Fix: Do not make units move unnecessarily when attached to commanders and ordering an attack (commit:41f7e8adba087177fc05aa154eebb98e6e53dd40, commit:157491c232f36714051033d4acbde114b993f8b1, #2518, #2533)
+   * Fix: Fix Autorepair not working on units waiting to be built inside a factory when the research is completed (commit:7d5ea8f5e71571aa906e26ef1780ffa7ced2dd12, #2529)
+   * Fix: Headless spectator performance improvements (commit:83a82a4bf573e9208dfc9eb99b97a709880cb367, #2524)
+   * Fix: Prevent the drawing of the Command Turret from crashing some systems using flatpak versions (commit:acc46736452cf10cbb94b414818d1669c1d5fea6, #2542)
+   * Fix: Various potential crashes (too many commits, #2578, #2579, #2589, #2590, #2591)
+ * Graphics:
+   * Add: Allow modding fog color via the palette file and move the fog start/end distance to the config file (too many commits, #2548)
+ * Campaign:
+   * Add: Restore a new early finish feature on Beta-end like in old versions for Easy/Normal difficulty (commit:d96c6bfabe28e07e1bd87ca35b68cb6c20bb87a4, #2536)
+   * Change: Bump Easy modifier to 1.5 for numeric values and Hard to 0.85 from 0.80 (commit:00a88cd9426952be9735d514b56ffffc2a1b6fd8, #2523)
+   * Change: Decrease the base cleanup area on Alpha 12 to remove a lone bunker in the very NorthWest part of the middle base (commit:3783ba59347ea27a2bb40808351a5128da49c106, #2525)
+   * Change: Give generous experience to all transporter unit loads on Beta/Gamma when starting from the main menu (commit:f4d081db414620cbe982efcc03bd7e024c156049, #2536)
+   * Change: Make the southern scavenger base on Alpha 5 also trigger the transporter reinforcements for the player (commit:fcf9c5ccd00deda1b04c71d7a0df75daf4917f89, #2536)
+   * Change: Upgrade a few campaign maps with better defenses for camBalance, add missing modules on some buildings, and add oil drums to many Beta maps (commit:856feca473f3bc725c523663cb2eac6156795303, #2532)
+   * Change: Move Whirlwind research later into Beta campaign so Cyclone gets used for a bit longer (commit:3d64d9443a859f2d256c99fc9da3f2188f797b8b, #2532)
+   * Change: The Collective uses Whirlwind tanks like in previous versions again (commit:3d64d9443a859f2d256c99fc9da3f2188f797b8b, #2532)
+   * Change: Clear console when displaying automatic victory reminders (commit:07d2e3702bb83f9c98c922643d629dc107b5b108, #2592)
+   * Change: Allow campaign library to handle multiple VTOL spawn systems. Fix array out-of-bounds access for the "alternate" VTOL templates option (commit:81b40b61f96016fde12757c33070ae16895c4916, #2593)
+   * Fix: Fix campaign HMG tower structure for Flame map editor and on a few Alpha maps (commit:92e3273fb688be915b4a9fa9b5f9da55d7cecd37, #2519)
+   * Fix: Make Beta-end fail if the player finds themselves with no units, factories, and just a empty transporter (commit:4359220d50762ab63aed36214a8e70a907749b9e, #2536)
+ * Multiplayer:
+   * Add: Add in-game "Mute Player" functionality via right-clicks on their name in lobby and a button in the Intelligence menu (too many commits, #2601)
+   * Change: Spectators: Make F9 work and clicking on droids/structures for information purposes.
+   * Fix: Fix the Ultimate Scavenger weapon "Scavenger Mounted MG" not having a short range (commit:b0889915c3d51608239b881ab9a954f17205082b, #2555)
+   * Fix: Ultimate Scavengers not building a few vehicles due to components not unlocked for them (commit:a510b42bbe9d66c3c2fc92ae9f6bd22d1e5cbbc5, #2570)
+   * Fix: Remove extra propulsion models on scavenger helicopters (commit:3560692fbe4ad54bc5f7e3f54d91bf637641d96e, #2586)
+   * Fix: Format the netplay log file better (commit:54e1ff90d20570f55755e153842f5f4ee1f491c8, #2574)
+ * Modding:
+   * Fix: Modding gamedesc.lev no longer causes a crash anymore (commit:e20ab7b7d92dde4d5ed828ee3f20e6e223d56176, #2541)
+ * AI:
+   * Change: Small improvements to Cobra AI and allow it to play cyborg only games (commit:757a5399fb1ce1db30f9eb3c36a3ba4e9a0e81bf, #2539)
+ * MP-Balance:
+   * Change: Balance Mini-Rocket Pod against Light Cannon better by reducing Mini-Rocket Pod cost from 75 to 70 (commit:2f06bec04a9e5b2a2efd07df71fef0783a08d785, #2531)
+   * Change: Increase cost of Cannon Fortress to 1000 from 900 as it was incredibly cheap compared to other fortresses (commit:7963c4319ad0bc69dcc4afd0df2567bf4816974a, #2535)
+   * Change: Make Bombard unlock Ground Shaker instead of the Howitzer, Remove Ground Shaker requirement for HEAP Howitzer Shells, and make Howitzer Autoloader depend on HE Howitzer Shells Mk3 (commit:b5acaba550959116dfbb4da000845339863dd766, commit:fb1c07f5db37457b0c0634b1497e6c636be092eb, #2534)
+ * Other:
+   * Add: New maxReplaySaved and oldLogsLimit config options (commit:d0eedf739c9948db12a9460af32084a7abefd441, commit:a18639d6643ecb2b62fb5706f580a0ab1b6645ce, #2580)
+   * Fix: Prevent truncating time in the Intelligence menu in skirmish/multiplayer (commit:39f0b9bc7366f524adb33ca56104cb88d0ebc7e, #2527)
+   * Fix: Discord Rich Presence displaying the wrong host when host is a spectator/autohost (commit:10128b2402980c45536a64554bf84b80fbaac134, #2543)
+   * Fix: Fix macOS-specific search path priority (commit:12185fa159b82c5d60ffaf3d184b664eba1d737c, #2541)
+   * Fix: Add Arabic to the list of available languages (commit:65bf0f28aa1203f1b5e261d4028cecb9cc726331, #2584)
+   * Fix: Check for electronic research rewards already researched (commit:7c887108aaea2814d291d941fb640fa7e10b7427, #2604)
+
 2021-12-20: Version 4.2.4:
  * General:
    * Fix: Prebuilt ally gates not being passable (commit:428d0b70ff9af2a58a27bcfdade12ffe7fc062b4, #2484)
