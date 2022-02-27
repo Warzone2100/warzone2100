@@ -3,7 +3,7 @@
 
 `warzone2100_win_(arch)_installer.exe` -- The main Windows build (full installer)
 `warzone2100_win_(arch)_portable.exe` -- The portable version of the Windows build (self contained -- install it anywhere!)
-`warzone2100_macOS.zip`  -- For macOS (10.10+)
+`warzone2100_macOS_universal.zip`  -- For macOS (10.10+)
 `warzone2100_ubuntu18.04_amd64.deb` -- For Ubuntu 18.04
 `warzone2100_ubuntu20.04_amd64.deb` -- For Ubuntu 20.04
 `warzone2100_src.tar.xz` -- The tarball for Linux / BSD / whatever systems. (full source / data)
