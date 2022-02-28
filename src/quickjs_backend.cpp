@@ -794,7 +794,6 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 		}
 	}
 	JSValue value = convObj(psStruct, ctx);
-	//QuickJS_DefinePropertyValue(ctx, value, "objectId", JS_NewUint32(ctx, psStruct->id), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "isCB", JS_NewBool(ctx, structCBSensor(psStruct)), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "isSensor", JS_NewBool(ctx, structStandardSensor(psStruct)), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), JS_PROP_ENUMERABLE);
