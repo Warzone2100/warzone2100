@@ -50,6 +50,7 @@
 #define ACTION_START_TIME	0
 
 extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
+extern std::unordered_map<UDWORD, UDWORD> moduleToBuilding[MAX_PLAYER_SLOTS];
 
 //Value is stored for easy access to this structure stat
 extern UDWORD	factoryModuleStat;
@@ -102,6 +103,7 @@ float structureCompletionProgress(const STRUCTURE & structure);
 
 //builds a specified structure at a given location
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
+STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
 STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);

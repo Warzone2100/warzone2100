@@ -179,12 +179,17 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	}
 }
 
-
-/* Create a feature on the map */
 FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 {
+	const auto id = generateSynchronisedObjectId();
+	return buildFeature(psStats, x, y, FromSave, id);
+}
+
+/* Create a feature on the map */
+FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
+{
 	//try and create the Feature
-	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
+	FEATURE *psFeature = new FEATURE(id, psStats);
 
 	if (psFeature == nullptr)
 	{

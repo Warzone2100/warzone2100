@@ -91,6 +91,7 @@ void NETint16_t(int16_t *ip);
 void NETuint16_t(uint16_t *ip);
 void NETint32_t(int32_t *ip);         ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
 void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
+void NETuint32_t(const uint32_t *ip);
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETbool(bool *bp);

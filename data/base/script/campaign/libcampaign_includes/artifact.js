@@ -109,7 +109,7 @@ function __camCheckPlaceArtifact(obj)
 	}
 	if (ai.placed)
 	{
-		camDebug("Object to which artifact", alabel, "is bound has died twice");
+		camDebug("Object to which artifact", alabel, "is bound, has died twice");
 		return;
 	}
 	if (ai.tech instanceof Array)

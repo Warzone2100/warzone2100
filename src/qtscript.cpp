@@ -2016,9 +2016,18 @@ bool scripting_engine::loadLabels(const char *filename)
 		}
 		else if (list[i].startsWith("object"))
 		{
-			p.id = ini.value("id").toInt();
+			auto id = ini.value("id").toInt();
+			const auto player = ini.value("player").toInt();
+			const auto it = moduleToBuilding[player].find(id);
+			if (it != moduleToBuilding[player].end())
+			{
+				// replace moduleId with its building id
+				debug(LOG_NEVER, "replaced with %i;%i", id, it->second);
+				id = it->second;
+			}
+			p.id = id;
 			p.type = ini.value("type").toInt();
-			p.player = ini.value("player").toInt();
+			p.player = player;
 			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
 			labels[label] = p;
@@ -2112,9 +2121,11 @@ bool scripting_engine::writeLabels(const char *filename)
 		}
 		else
 		{
+			auto id = l.id;
+			auto player = l.player;
 			ini.beginGroup("object_" + WzString::number(c[4]++));
-			ini.setValue("id", l.id);
-			ini.setValue("player", l.player);
+			ini.setValue("id", id);
+			ini.setValue("player", player);
 			ini.setValue("type", l.type);
 			ini.setValue("label", WzString::fromUtf8(key));
 			ini.setValue("triggered", l.triggered);
@@ -2381,6 +2392,7 @@ optional<std::string> scripting_engine::_findMatchingLabel(wzapi::game_object_id
 	value.id = obj_id.id;
 	value.player = obj_id.player;
 	value.type = obj_id.type;
+	debug(LOG_NEVER, "looking for label %i;%i;%i", obj_id.id, obj_id.player, obj_id.type);
 	std::string label;
 	for (const auto &it : labels)
 	{

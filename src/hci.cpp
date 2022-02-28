@@ -1699,10 +1699,10 @@ INT_RETVAL intRunWidgets()
 					auto psBuilding = castStructureStats(psPositionStats);
 					if (psBuilding && selectedPlayer < MAX_PLAYERS)
 					{
-						STRUCTURE tmp(0, selectedPlayer);
 
 						if (psBuilding->type == REF_DEMOLISH)
 						{
+							STRUCTURE tmp(0, selectedPlayer);
 							MAPTILE *psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
 							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
@@ -1719,8 +1719,8 @@ INT_RETVAL intRunWidgets()
 						}
 						else
 						{
+							STRUCTURE tmp(generateNewObjectId(), selectedPlayer);
 							STRUCTURE *psStructure = &tmp;
-							tmp.id = generateNewObjectId();
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
 							tmp.pos = {pos.x, pos.y, map_Height(pos.x, pos.y) + world_coord(1) / 10};
 
