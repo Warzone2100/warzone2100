@@ -121,7 +121,6 @@ bool recvBuildFinished(NETQUEUE queue)
 	for (typeindex = 0; typeindex < numStructureStats && asStructureStats[typeindex].ref != type; typeindex++) {}	// Find structure target
 
 	// Build the structure
-	debug(LOG_INFO, "trying to build received structure %i;%i;%s", structId, player, psStruct->pStructureType->name.toUtf8().c_str());
 	psStruct = buildStructureDir(&(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId);
 	if (psStruct)
 	{
