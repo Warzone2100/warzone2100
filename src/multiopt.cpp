@@ -235,7 +235,8 @@ bool recvOptions(NETQUEUE queue)
 	{
 		ingame.structureLimits.resize(numStructureLimits);
 		// If host have limits changed everyone should load limits too
-		if (!bLimiterLoaded)
+		// Do not load limits if mods present because mods are not loaded yet
+		if (!modHashesSize && !bLimiterLoaded)
 		{
 			initLoadingScreen(true);
 			if (!resLoad("wrf/limiter_data.wrf", 503))
@@ -255,7 +256,7 @@ bool recvOptions(NETQUEUE queue)
 	{
 		NETuint32_t(&ingame.structureLimits[i].id);
 		NETuint32_t(&ingame.structureLimits[i].limit);
-		if (ingame.structureLimits[i].id < numStructureStats)
+		if (bLimiterLoaded && ingame.structureLimits[i].id < numStructureStats)
 		{
 			if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
 			{
@@ -267,52 +268,63 @@ bool recvOptions(NETQUEUE queue)
 
 	NETend();
 
-	// Check if those vectors are different
-	// Could be done using vector==vector
-	// But I was too confused with operator== overloading --MaX
-	bool structurelimitsUpdated = false;
-	if (oldStructureLimits.size() == ingame.structureLimits.size())
+	// Do not print limits information if we don't have them loaded
+	if (bLimiterLoaded)
 	{
-		for (i = 0; i < oldStructureLimits.size(); i++)
+		// Check if those vectors are different
+		// Could be done using vector==vector
+		// But I was too confused with operator== overloading --MaX
+		bool structurelimitsUpdated = false;
+		if (oldStructureLimits.size() == ingame.structureLimits.size())
 		{
-			if (oldStructureLimits[i].id != ingame.structureLimits[i].id || oldStructureLimits[i].limit != ingame.structureLimits[i].limit)
+			for (i = 0; i < oldStructureLimits.size(); i++)
 			{
-				structurelimitsUpdated = true;
-				break;
-			}
-		}
-	}
-	else
-	{
-		structurelimitsUpdated = true;
-	}
-
-	// Notify if structure limits got changed
-	if (structurelimitsUpdated)
-	{
-		if (nondefaultlimitsize)
-		{
-			addConsoleMessage(astringf(_("Changed structure limits [%d]:"), nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-			for (i = 0; i < numStructureLimits; i++) {
-				if (ingame.structureLimits[i].id < numStructureStats)
+				if (oldStructureLimits[i].id != ingame.structureLimits[i].id || oldStructureLimits[i].limit != ingame.structureLimits[i].limit)
 				{
-					if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
-					{
-						WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
-						addConsoleMessage(astringf(_("[%d] Limit [%s]: %d"), i, structname.toUtf8().c_str(), ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-					}
-				}
-				else
-				{
-					addConsoleMessage(astringf(_("[%d] Limit that is bigger than numStructureStats (%d): %d"), i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+					structurelimitsUpdated = true;
+					break;
 				}
 			}
 		}
 		else
 		{
-			addConsoleMessage(_("Limits were reset to default."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			structurelimitsUpdated = true;
+		}
+		// Notify if structure limits got changed
+		if (structurelimitsUpdated)
+		{
+			if (nondefaultlimitsize)
+			{
+				addConsoleMessage(astringf(_("Changed structure limits [%d]:"), nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				for (i = 0; i < numStructureLimits; i++) {
+					if (ingame.structureLimits[i].id < numStructureStats)
+					{
+						if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
+						{
+							WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
+							addConsoleMessage(astringf(_("[%d] Limit [%s]: %d"), i, structname.toUtf8().c_str(), ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+						}
+					}
+					else
+					{
+						addConsoleMessage(astringf(_("[%d] Limit that is bigger than numStructureStats (%d): %d"), i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+					}
+				}
+			}
+			else
+			{
+				addConsoleMessage(_("Limits were reset to default."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
 		}
 	}
+	else
+	{
+		if (numStructureLimits)
+		{
+			addConsoleMessage(astringf(_("Host initialized %d limits, unable to show them due to mods"), numStructureLimits).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
+
 
 	bool bRebuildMapList = strcmp(game.map, priorGameInfo.map) != 0 || game.hash != priorGameInfo.hash || game.modHashes != priorGameInfo.modHashes;
 	if (bRebuildMapList)
