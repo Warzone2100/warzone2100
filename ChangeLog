@@ -21,7 +21,7 @@
    * Fix: Fix campaign HMG tower structure for Flame map editor and on a few Alpha maps (commit:92e3273fb688be915b4a9fa9b5f9da55d7cecd37, #2519)
    * Fix: Make Beta-end fail if the player finds themselves with no units, factories, and just a empty transporter (commit:4359220d50762ab63aed36214a8e70a907749b9e, #2536)
  * Multiplayer:
-   * Add: Add in-game "Mute Player" functionality via right-clicks on their name in lobby and a button in the Intelligence menu (too many commits, #2601)
+   * Add: Add in-game "Mute Player" functionality via right-clicks on chat messages in lobby, and a button in the Intelligence menu in-game (too many commits, #2601)
    * Change: Spectators: Make F9 work and clicking on droids/structures for information purposes.
    * Fix: Fix the Ultimate Scavenger weapon "Scavenger Mounted MG" not having a short range (commit:b0889915c3d51608239b881ab9a954f17205082b, #2555)
    * Fix: Ultimate Scavengers not building a few vehicles due to components not unlocked for them (commit:a510b42bbe9d66c3c2fc92ae9f6bd22d1e5cbbc5, #2570)
