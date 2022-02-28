@@ -2146,7 +2146,7 @@ bool gl_context::initGLContext()
 
 	if (!GLAD_GL_VERSION_2_1 && !GLAD_GL_ES_VERSION_2_0)
 	{
-		debug(LOG_FATAL, "OpenGL 2.1+ / OpenGL ES 2.0+ not supported! Please upgrade your drivers.");
+		debug(LOG_POPUP, "OpenGL 2.1+ / OpenGL ES 2.0+ not supported! Please upgrade your drivers.");
 		return false;
 	}
 
