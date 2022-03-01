@@ -324,12 +324,6 @@ void setDefaultFogColour()
 	}
 }
 
-void reInitPaletteAndFog()
-{
-	pal_Init();
-	setDefaultFogColour();
-}
-
 #define MIN_DROID_LIGHT_LEVEL	96
 #define	DROID_SEEK_LIGHT_SPEED	2
 
