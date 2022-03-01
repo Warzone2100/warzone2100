@@ -93,7 +93,6 @@
 #include "notifications.h"
 #include "radar.h"
 #include "lib/framework/wztime.h"
-#include "lighting.h" // for reInitPaletteAndFog()
 
 #include "multiplay.h"
 #include "multiint.h"
@@ -8380,7 +8379,7 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	levShutDown();
 	levInitialise();
 	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
-	reInitPaletteAndFog(); //Update palettes.
+	pal_Init(); //Update palettes.
 	if (!buildMapList())
 	{
 		debug(LOG_ERROR, "Failed to build map list");
