@@ -2343,10 +2343,18 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			if (!isVtolDroid(psDroid))
 			{
-				// don't stop VTOL mid-flight
 				moveStopDroid(psDroid);
+				psDroid->action = DACTION_ATTACK;
 			}
-			psDroid->action = DACTION_ATTACK;
+			else
+			{
+				// this will make droid lift up before attacking
+				// and also make them go to rearm pad if low ammo
+				psDroid->action = DACTION_MOVETOATTACK;
+				turnOffMultiMsg(true);
+				moveDroidTo(psDroid, psAction->psObj->pos.x, psAction->psObj->pos.y);
+				turnOffMultiMsg(false);
+			}
 		}
 		break;
 
