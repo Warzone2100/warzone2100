@@ -1,4 +1,8 @@
-2022-2-28: Version 4.2.5:
+2022-03-01: Version 4.2.6:
+ * General:
+   * Fix: Potential crash due to reinitializing default fog color (commit:1a3835ebd2558901d239f9f1353418297ae54dc9, commit:9310e24f3bf7f2c0816792c3aa04b28b6abcf808, #2612)
+
+2022-02-28: Version 4.2.5:
  * General:
    * Fix: Do not make units move unnecessarily when attached to commanders and ordering an attack (commit:41f7e8adba087177fc05aa154eebb98e6e53dd40, commit:157491c232f36714051033d4acbde114b993f8b1, #2518, #2533)
    * Fix: Fix Autorepair not working on units waiting to be built inside a factory when the research is completed (commit:7d5ea8f5e71571aa906e26ef1780ffa7ced2dd12, #2529)
