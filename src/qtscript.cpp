@@ -270,7 +270,7 @@ bool bInTutorial = false;
 // ----------------------------------------------------------
 
 Vector2i positions[MAX_PLAYERS];
-std::vector<Vector2i> derricks;
+static std::unordered_set<uint16_t> derricks;
 
 void scriptSetStartPos(int position, int x, int y)
 {
@@ -281,8 +281,12 @@ void scriptSetStartPos(int position, int x, int y)
 
 void scriptSetDerrickPos(int x, int y)
 {
-	Vector2i pos(x, y);
-	derricks.push_back(pos);
+	const auto mx = map_coord(x);
+	const auto my = map_coord(y);
+	// MAX_TILE_TEXTURES is 255, so 2 bytes are enough
+	// to describe a map position
+	uint16_t out = (mx << 8) | my;
+	derricks.insert(out);
 }
 
 bool scriptInit()
@@ -303,19 +307,25 @@ Vector2i getPlayerStartPosition(int player)
 	return positions[player];
 }
 
+static nlohmann::json derrickPositions;
 nlohmann::json scripting_engine::constructDerrickPositions()
 {
 	// Static map knowledge about start positions
-	//== * ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
+	//== * ```derrickPositions``` A set of derrick starting positions on the current map. Each item in the set is an
 	//== object containing the x and y variables for a derrick.
-	nlohmann::json derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
-	for (int i = 0; i < derricks.size(); i++)
+	if (derrickPositions.size() == 0)
 	{
-		nlohmann::json vector = nlohmann::json::object();
-		vector["x"] = map_coord(derricks[i].x);
-		vector["y"] = map_coord(derricks[i].y);
-		vector["type"] = SCRIPT_POSITION;
-		derrickPositions.push_back(vector);
+		derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
+		for (uint16_t pos: derricks)
+		{
+			nlohmann::json vector = nlohmann::json::object();
+			const auto mx = (pos & static_cast<uint16_t>(0xff00)) >> 8;
+			const auto my = pos & (static_cast<uint16_t>(0x00ff));
+			vector["x"] = mx;
+			vector["y"] = my;
+			vector["type"] = SCRIPT_POSITION;
+			derrickPositions.push_back(vector);
+		}
 	}
 	return derrickPositions;
 }
