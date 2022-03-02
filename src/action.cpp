@@ -2266,6 +2266,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			// for ex. AA gun can't attack ground unit
 			break;
 		}
+		if (vtolEmpty(psDroid) && vtolRearming(psDroid))
+		{
+			// ignore attack order: we have no ammo and we are rearming right now, or going to rearm, or waiting for it
+			break;
+		}
 		if (electronicDroid(psDroid))
 		{
 			//check for low or zero resistance - just zero resistance!
