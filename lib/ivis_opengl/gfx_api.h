@@ -302,7 +302,8 @@ namespace gfx_api
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
 		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, gfx_api::backend_type backend);
-		virtual void flip(int clearMode) = 0;
+		virtual void beginRenderPass() = 0;
+		virtual void endRenderPass() = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
 		virtual void debugSceneEnd(const char *descr) = 0;

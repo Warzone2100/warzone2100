@@ -218,7 +218,6 @@ TITLECODE titleLoop()
 	audio_Update();
 
 	pie_SetFogStatus(false);
-	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 	{
@@ -242,6 +241,9 @@ void loadingScreenCallback()
 	{
 		return;
 	}
+
+	pie_ScreenFrameRenderBegin();
+
 	lastTick = currTick;
 
 	/* Draw the black rectangle at the bottom, with a two pixel border */
@@ -265,7 +267,7 @@ void loadingScreenCallback()
 		}
 	}
 
-	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// don't clear.
+	pie_ScreenFrameRenderEnd();//loading callback
 	audio_Update();
 
 	wzPumpEventsWhileLoading();
@@ -293,10 +295,6 @@ void initLoadingScreen(bool drawbdrop)
 	{
 		screen_StopBackDrop();
 	}
-
-	// Start with two cleared buffers as the hacky loading screen code re-uses old buffers to create its effect.
-	pie_ScreenFlip(CLEAR_BLACK);
-	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 // shut down the loading screen
@@ -308,7 +306,6 @@ void closeLoadingScreen()
 		stars = nullptr;
 	}
 	resSetLoadCallback(nullptr);
-	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 

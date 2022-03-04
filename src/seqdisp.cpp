@@ -269,7 +269,7 @@ static bool seq_StartFullScreenVideo(const WzString& videoName, const WzString& 
 	return true;
 }
 
-bool seq_UpdateFullScreenVideo(int *pbClear)
+bool seq_UpdateFullScreenVideo()
 {
 	int i;
 	bool bMoreThanOneSequenceLine = false;
@@ -303,10 +303,10 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 
 			if (frameTime >= seqtext.endTime && frameTime < seqtext.endTime)
 			{
-				if (pbClear != nullptr)
-				{
-					*pbClear = CLEAR_BLACK;
-				}
+//				if (pbClear != nullptr)
+//				{
+//					*pbClear = CLEAR_BLACK;
+//				}
 			}
 		}
 	}

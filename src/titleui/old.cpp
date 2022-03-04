@@ -201,7 +201,8 @@ TITLECODE WzOldTitleUI::run()
 
 	case SHOWINTRO:
 		pie_SetFogStatus(false);
-		pie_ScreenFlip(CLEAR_BLACK);
+		pie_ScreenFrameRenderEnd();
+		pie_ScreenFrameRenderBegin();
 		changeTitleMode(TITLE);
 		return TITLECODE_SHOWINTRO;
 

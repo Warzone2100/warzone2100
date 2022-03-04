@@ -372,18 +372,6 @@ static GAMECODE renderLoop()
 		break;
 	}
 
-	int clearMode = 0;
-	if (getDrawShadows())
-	{
-		clearMode |= CLEAR_SHADOW;
-	}
-	if (quitting || loopMissionState == LMS_SAVECONTINUE)
-	{
-		pie_SetFogStatus(false);
-		clearMode = CLEAR_BLACK;
-	}
-	pie_ScreenFlip(clearMode);//gameloopflip
-
 	if (quitting)
 	{
 		return GAMECODE_QUITGAME;
@@ -716,8 +704,7 @@ void videoLoop()
 	ASSERT(videoMode == 1, "videoMode out of sync");
 
 	// display a frame of the FMV
-	videoFinished = !seq_UpdateFullScreenVideo(nullptr);
-	pie_ScreenFlip(CLEAR_BLACK);
+	videoFinished = !seq_UpdateFullScreenVideo();
 
 	if (skipCounter <= SEQUENCE_MIN_SKIP_DELAY)
 	{
@@ -763,7 +750,6 @@ void loop_SetVideoPlaybackMode()
 	audio_StopAll();
 	wzShowMouse(false);
 	screen_StopBackDrop();
-	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 

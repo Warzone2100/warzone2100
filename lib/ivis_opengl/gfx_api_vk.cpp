@@ -3456,7 +3456,12 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 	return AcquireNextSwapchainImageResult::eSuccess;
 }
 
-void VkRoot::flip(int clearMode)
+void VkRoot::beginRenderPass()
+{
+	startRenderPass();
+}
+
+void VkRoot::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
 
@@ -3572,7 +3577,7 @@ void VkRoot::flip(int clearMode)
 		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
 		return; // end processing this flip
 	}
-	startRenderPass();
+
 	buffering_mechanism::get_current_resources().cmdCopy.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 }
 
