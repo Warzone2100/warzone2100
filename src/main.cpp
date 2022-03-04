@@ -1228,6 +1228,8 @@ void mainLoop()
 {
 	frameUpdate(); // General housekeeping
 
+	pie_ScreenFrameRenderBegin();
+
 	// Screenshot key is now available globally
 	if (keyPressed(KEY_F10))
 	{
@@ -1256,6 +1258,8 @@ void mainLoop()
 			}
 		realTimeUpdate(); // Update realTime.
 	}
+
+	pie_ScreenFrameRenderEnd();
 
 	wzApplyCursor();
 	runNotifications();
@@ -1934,13 +1938,13 @@ int realmain(int argc, char *argv[])
 
 	bool fogConfigOption = pie_GetFogEnabled();
 	pie_SetFogStatus(false);
-	pie_ScreenFlip(CLEAR_BLACK);
 
 	pal_Init();
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(false);
-	pie_ScreenFlip(CLEAR_BLACK);
+
+	pie_ScreenFrameRenderEnd();
 
 	if (!systemInitialise(horizScaleFactor, vertScaleFactor))
 	{

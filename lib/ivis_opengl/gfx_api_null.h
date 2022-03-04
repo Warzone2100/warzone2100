@@ -110,7 +110,8 @@ public:
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 
-	virtual void flip(int clearMode) override;
+	virtual void beginRenderPass() override;
+	virtual void endRenderPass() override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;

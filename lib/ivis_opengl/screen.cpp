@@ -586,7 +586,8 @@ void screen_FlipIfBackDropTransition()
 	static auto hadBackDrop = false;
 	if (hadBackDrop != screen_GetBackDrop())
 	{
-		pie_ScreenFlip(CLEAR_BLACK);
+		pie_ScreenFrameRenderEnd();
+		pie_ScreenFrameRenderBegin();
 		hadBackDrop = screen_GetBackDrop();
 	}
 }

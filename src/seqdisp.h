@@ -64,7 +64,7 @@ enum SEQ_TEXT_POSITIONING
 //buffer render
 bool seq_RenderVideoToBuffer(const WzString &sequenceName, int seqCommand);
 
-bool seq_UpdateFullScreenVideo(int *bClear);
+bool seq_UpdateFullScreenVideo();
 
 bool seq_StopFullScreenVideo();
 //control

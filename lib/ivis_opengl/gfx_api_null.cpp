@@ -336,7 +336,12 @@ bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_
 	return true;
 }
 
-void null_context::flip(int clearMode)
+void null_context::beginRenderPass()
+{
+	// no-op
+}
+
+void null_context::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
 

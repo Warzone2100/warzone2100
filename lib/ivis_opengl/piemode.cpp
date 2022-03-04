@@ -91,16 +91,34 @@ void pie_ShutDown()
 
 /***************************************************************************/
 
-void pie_ScreenFlip(int clearMode)
-{
-	screenDoDumpToDiskIfRequired();
-	gfx_api::context::get().flip(clearMode);
-	wzPerfFrame();
+static bool renderingFrame = true; // starts off true
 
+void pie_ScreenFrameRenderBegin()
+{
+	if (renderingFrame)
+	{
+		debug(LOG_WZ, "Call to pie_ScreenFrameRenderBegin when previous frame render hasn't ended yet");
+		return;
+	}
+	renderingFrame = true;
+	gfx_api::context::get().beginRenderPass();
 	if (screen_GetBackDrop())
 	{
 		screen_Display();
 	}
+}
+
+void pie_ScreenFrameRenderEnd()
+{
+	if (!renderingFrame)
+	{
+		debug(LOG_WZ, "Call to pie_ScreenFrameRenderEnd without matching pie_ScreenFrameRenderBegin");
+		return;
+	}
+	renderingFrame = false;
+	screenDoDumpToDiskIfRequired();
+	gfx_api::context::get().endRenderPass();
+	wzPerfFrame();
 }
 
 /***************************************************************************/
