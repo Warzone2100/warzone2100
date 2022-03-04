@@ -730,6 +730,29 @@ void kf_ShowNumObjects()
 	sendInGameSystemMessage(cmsg.c_str());
 }
 
+
+void kf_ListDroids()
+{
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	debug(LOG_INFO, "list droids:");
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		{
+			const auto x = map_coord(psDroid->pos.x);
+			const auto y = map_coord(psDroid->pos.y);
+			debug(LOG_INFO, "droid %i;%s;%i;%i;%i", i, psDroid->aName, psDroid->droidType, x, y);
+		}
+	}
+	
+}
+
+
 // --------------------------------------------------------------------------
 
 /* Toggles radar on off */
