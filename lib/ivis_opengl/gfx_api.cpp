@@ -348,3 +348,57 @@ gfx_api::texture* gfx_api::context::createTextureForCompatibleImageUploads(const
 	gfx_api::texture* pTexture = gfx_api::context::get().create_texture(1, bitmap.width(), bitmap.height(), target_pixel_format, filename);
 	return pTexture;
 }
+
+template <size_t blockWidth, size_t blockHeight>
+static inline size_t calculate_astc_size(size_t width, size_t height)
+{
+	return ((width + blockWidth - 1) / blockWidth) * ((height + blockHeight - 1) / blockHeight) * 16;
+}
+
+size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, size_t height)
+{
+	switch (format)
+	{
+		case gfx_api::pixel_format::invalid:
+			return 0;
+		// [UNCOMPRESSED FORMATS]
+		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
+			return width * height * 4;
+		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+			return width * height * 3;
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			return width * height * 2;
+		case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			return width * height;
+		// [COMPRESSED FORMATS]
+		// BC / DXT formats
+		// 4x4 blocks, each block having a certain number of bytes
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
+		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
+		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
+		// ETC
+		// Size calculations from: https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glCompressedTexImage2D.xhtml
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
+		case gfx_api::pixel_format::FORMAT_R11_EAC:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
+		case gfx_api::pixel_format::FORMAT_RG11_EAC:
+			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
+		// ASTC
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+			return calculate_astc_size<4, 4>(width, height);
+		// no default case to ensure compiler error if more formats are added
+	}
+	return 0; // silence warning
+}

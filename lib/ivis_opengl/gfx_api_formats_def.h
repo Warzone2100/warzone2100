@@ -76,6 +76,8 @@ namespace gfx_api
 		return false;
 	}
 
+	size_t format_memory_size(gfx_api::pixel_format format, size_t width, size_t height);
+
 	namespace pixel_format_usage
 	{
 		enum flags: uint32_t
