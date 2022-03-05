@@ -91,7 +91,7 @@ static void setupLoadingScreen()
 	barLeftX = barRightX - boxWidth;
 	barLeftY = barRightY - boxHeight;
 
-	starsNum = boxWidth / boxHeight;
+	starsNum = boxWidth / std::max<int>(boxHeight, 1);
 	starHeight = static_cast<int>(2.0 * h / 640.0);
 
 	if (!stars)
