@@ -2876,66 +2876,80 @@ static void handleActiveEvent(SDL_Event *event)
 	}
 }
 
+static SDL_Event event;
+
+void wzEventLoopOneFrame(void* arg)
+{
+	/* Deal with any windows messages */
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_KEYUP:
+		case SDL_KEYDOWN:
+			inputHandleKeyEvent(&event.key);
+			break;
+		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEBUTTONDOWN:
+			inputHandleMouseButtonEvent(&event.button);
+			break;
+		case SDL_MOUSEMOTION:
+			inputHandleMouseMotionEvent(&event.motion);
+			break;
+		case SDL_MOUSEWHEEL:
+			inputHandleMouseWheelEvent(&event.wheel);
+			break;
+		case SDL_WINDOWEVENT:
+			handleActiveEvent(&event);
+			break;
+		case SDL_TEXTINPUT:	// SDL now handles text input differently
+			inputhandleText(&event.text);
+			break;
+		case SDL_QUIT:
+			ASSERT(arg != nullptr, "No valid bContinue");
+			if (arg)
+			{
+				bool *bContinue = static_cast<bool*>(arg);
+				*bContinue = false;
+			}
+			return;
+		default:
+			break;
+		}
+
+		if (wzSDLAppEvent == event.type)
+		{
+			// Custom WZ App Event
+			switch (event.user.code)
+			{
+				case wzSDLAppEventCodes::MAINTHREADEXEC:
+					if (event.user.data1 != nullptr)
+					{
+						WZ_MAINTHREADEXEC * pExec = static_cast<WZ_MAINTHREADEXEC *>(event.user.data1);
+						pExec->doExecOnMainThread();
+						delete pExec;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	processScreenSizeChangeNotificationIfNeeded();
+	mainLoop();				// WZ does its thing
+	inputNewFrame();			// reset input states
+}
+
 // Actual mainloop
 void wzMainEventLoop(void)
 {
-	SDL_Event event;
+	event.type = 0;
 
-	while (true)
+	bool bContinue = true;
+	while (bContinue)
 	{
-		/* Deal with any windows messages */
-		while (SDL_PollEvent(&event))
-		{
-			switch (event.type)
-			{
-			case SDL_KEYUP:
-			case SDL_KEYDOWN:
-				inputHandleKeyEvent(&event.key);
-				break;
-			case SDL_MOUSEBUTTONUP:
-			case SDL_MOUSEBUTTONDOWN:
-				inputHandleMouseButtonEvent(&event.button);
-				break;
-			case SDL_MOUSEMOTION:
-				inputHandleMouseMotionEvent(&event.motion);
-				break;
-			case SDL_MOUSEWHEEL:
-				inputHandleMouseWheelEvent(&event.wheel);
-				break;
-			case SDL_WINDOWEVENT:
-				handleActiveEvent(&event);
-				break;
-			case SDL_TEXTINPUT:	// SDL now handles text input differently
-				inputhandleText(&event.text);
-				break;
-			case SDL_QUIT:
-				return;
-			default:
-				break;
-			}
-
-			if (wzSDLAppEvent == event.type)
-			{
-				// Custom WZ App Event
-				switch (event.user.code)
-				{
-					case wzSDLAppEventCodes::MAINTHREADEXEC:
-						if (event.user.data1 != nullptr)
-						{
-							WZ_MAINTHREADEXEC * pExec = static_cast<WZ_MAINTHREADEXEC *>(event.user.data1);
-							pExec->doExecOnMainThread();
-							delete pExec;
-						}
-						break;
-					default:
-						break;
-				}
-			}
-		}
-
-		processScreenSizeChangeNotificationIfNeeded();
-		mainLoop();				// WZ does its thing
-		inputNewFrame();			// reset input states
+		wzEventLoopOneFrame(&bContinue);
 	}
 }
 
