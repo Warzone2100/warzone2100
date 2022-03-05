@@ -103,7 +103,7 @@ static void dumpEOL(const DumpFileHandle file)
 	dumpstr(file, endl);
 }
 
-static void debug_exceptionhandler_data(void **, const char *const str)
+static void debug_exceptionhandler_data(void **, const char *const str, code_part)
 {
 	/* Can't use ASSERT here as that will cause us to be invoked again.
 	 * Possibly resulting in infinite recursion.
