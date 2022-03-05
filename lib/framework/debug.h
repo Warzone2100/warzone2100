@@ -202,7 +202,7 @@ enum code_part
 
 extern bool enabled_debug[LOG_LAST];
 
-typedef void (*debug_callback_fn)(void **, const char *);
+typedef void (*debug_callback_fn)(void **, const char *, code_part);
 typedef bool (*debug_callback_init)(void **);
 typedef void (*debug_callback_exit)(void **);
 
@@ -247,14 +247,14 @@ const char *debugLastError();
  */
 void debug_register_callback(debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void *data);
 
-void debug_callback_file(void **data, const char *outputBuffer);
+void debug_callback_file(void **data, const char *outputBuffer, code_part part);
 bool debug_callback_file_init(void **data);
 void debug_callback_file_exit(void **data);
 
-void debug_callback_stderr(void **data, const char *outputBuffer);
+void debug_callback_stderr(void **data, const char *outputBuffer, code_part part);
 
 #if defined WIN32 && defined DEBUG
-void debug_callback_win32debug(void **data, const char *outputBuffer);
+void debug_callback_win32debug(void **data, const char *outputBuffer, code_part part);
 #endif
 
 /**

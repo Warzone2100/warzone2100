@@ -145,7 +145,7 @@ static code_part code_part_from_str(const char *str)
  * \param	data			Ignored. Use NULL.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer)
+void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer, code_part)
 {
 	if (outputBuffer[strlen(outputBuffer) - 1] != '\n')
 	{
@@ -171,7 +171,7 @@ void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer)
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
 #if defined WIN32 && defined DEBUG
-void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuffer)
+void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuffer, code_part)
 {
 	char tmpStr[MAX_LEN_LOG_LINE];
 
@@ -192,7 +192,7 @@ void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuf
  * \param	data			Filehandle to output to.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-void debug_callback_file(void **data, const char *outputBuffer)
+void debug_callback_file(void **data, const char *outputBuffer, code_part)
 {
 	FILE *logfile = (FILE *)*data;
 
@@ -428,14 +428,14 @@ bool debug_enable_switch(const char *str)
  *
  *  @param str The string to send to debug callbacks.
  */
-static void printToDebugCallbacks(const char *const str)
+static void printToDebugCallbacks(const char *const str, code_part part)
 {
 	debug_callback *curCallback;
 
 	// Loop over all callbacks, invoking them with the given data string
 	for (curCallback = callbackRegistry; curCallback != nullptr; curCallback = curCallback->next)
 	{
-		curCallback->callback(&curCallback->data, str);
+		curCallback->callback(&curCallback->data, str, part);
 	}
 }
 
@@ -450,7 +450,7 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	va_end(ap);
 
 	ssprintf(outputBuffer, "[%6d]: [%s] %s", id, function, vaBuffer);
-	printToDebugCallbacks(outputBuffer);
+	printToDebugCallbacks(outputBuffer, LOG_INFO);
 }
 
 // Thread local to prevent a race condition on read and write to this buffer if multiple
@@ -515,7 +515,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			{
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer);
+			printToDebugCallbacks(outputBuffer, part);
 			prev = repeated;
 			next *= 2;
 		}
@@ -534,7 +534,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			{
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer);
+			printToDebugCallbacks(outputBuffer, part);
 		}
 		repeated = 0;
 		next = 2;
@@ -554,7 +554,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		// Assemble the outputBuffer:
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
-		printToDebugCallbacks(outputBuffer);
+		printToDebugCallbacks(outputBuffer, part);
 
 		if (part == LOG_ERROR)
 		{
