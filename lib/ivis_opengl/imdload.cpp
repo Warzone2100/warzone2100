@@ -868,9 +868,9 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 				s.objanimdata[i].pos.x = pos.x / INT_SCALE;
 				s.objanimdata[i].pos.y = pos.z / INT_SCALE;
 				s.objanimdata[i].pos.z = pos.y / INT_SCALE;
-				s.objanimdata[i].rot.pitch = static_cast<uint16_t>(-(rot.x * DEG_1 / INT_SCALE));
-				s.objanimdata[i].rot.direction = static_cast<uint16_t>(-(rot.z * DEG_1 / INT_SCALE));
-				s.objanimdata[i].rot.roll = static_cast<uint16_t>(-(rot.y * DEG_1 / INT_SCALE));
+				s.objanimdata[i].rot.pitch = static_cast<uint16_t>(static_cast<int32_t>(-(rot.x * DEG_1 / INT_SCALE)));
+				s.objanimdata[i].rot.direction = static_cast<uint16_t>(static_cast<int32_t>(-(rot.z * DEG_1 / INT_SCALE)));
+				s.objanimdata[i].rot.roll = static_cast<uint16_t>(static_cast<int32_t>(-(rot.y * DEG_1 / INT_SCALE)));
 				pFileData += cnt;
 			}
 		}
