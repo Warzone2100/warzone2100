@@ -99,7 +99,7 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
 			return GL_COMPRESSED_RG_RGTC2;
 		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
-			return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB;
+			return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; // same value as GL_COMPRESSED_RGBA_BPTC_UNORM_EXT
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
 			return GL_ETC1_RGB8_OES;
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
@@ -286,7 +286,16 @@ bool gl_texture::upload_internal(const size_t& mip_level, const size_t& offset_x
 	else
 	{
 		ASSERT_OR_RETURN(false, offset_x == 0 && offset_y == 0, "Trying to upload compressed sub texture");
-		glCompressedTexImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), to_gl_internalformat(image.pixel_format(), gles), static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, static_cast<GLsizei>(image.data_size()), image.data());
+		GLenum glFormat = to_gl_internalformat(image.pixel_format(), gles);
+		if (glFormat == GL_COMPRESSED_RGBA_BPTC_UNORM_ARB && (!gles && GLAD_GL_ARB_texture_compression_bptc))
+		{
+			// GL_ARB_texture_compression_bptc specifies glCompressedTexImage2DARB
+			glCompressedTexImage2DARB(GL_TEXTURE_2D, static_cast<GLint>(mip_level), glFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, static_cast<GLsizei>(image.data_size()), image.data());
+		}
+		else
+		{
+			glCompressedTexImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), glFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, static_cast<GLsizei>(image.data_size()), image.data());
+		}
 	}
 	unbind();
 	return true;
@@ -2487,6 +2496,9 @@ void gl_context::initPixelFormatsSupport()
 	// OpenGL ES: GL_EXT_texture_compression_bptc
 	if ((!gles && GLAD_GL_ARB_texture_compression_bptc) || (gles && GLAD_GL_EXT_texture_compression_bptc))
 	{
+		// NOTES:
+		// GL_ARB_texture_compression_bptc claims it is supported in glCompressedTex*Image2DARB, glCompressedTex*Image3DARB // <-- Note *ARB methods!
+		// GL_EXT_texture_compression_bptc claims it is supported in glCompressedTex*Image2D, glCompressedTex*Image3D
 		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
 	}
 
