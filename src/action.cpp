@@ -217,7 +217,7 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 }
 
 /**
- * Retuns true if distance from psDroid to target is less than, or equal to droid's 
+ * Retuns true if distance from psDroid to target is less than, or equal to droid's
  * minimum range
 */
 static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
@@ -2297,7 +2297,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		// slightly strange place to store this I know, but I didn't want to add any more to the droid
 		psDroid->actionPos = psDroid->pos.xy();
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		actionIsInRange = actionInRange(psDroid, psDroid->psActionTarget[0], 0);
+		actionIsInRange = actionInRange(psDroid, psDroid->psActionTarget[0], 0, false);
 		if (((order->type == DORDER_ATTACKTARGET
 		   || order->type == DORDER_NONE
 		   || order->type == DORDER_HOLD
@@ -2335,7 +2335,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				turnOffMultiMsg(false);
 			}
 		}
-		else if (order->type != DORDER_HOLD 
+		else if (order->type != DORDER_HOLD
 				&& secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD
 				&& !actionIsInRange) // approach closer?
 		{
@@ -2344,7 +2344,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			moveDroidTo(psDroid, psAction->psObj->pos.x, psAction->psObj->pos.y);
 			turnOffMultiMsg(false);
 		}
-		else if (actionIsInRange ||(order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
+		else if (actionIsInRange || (order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 		{
 			if (!isVtolDroid(psDroid))
 			{
