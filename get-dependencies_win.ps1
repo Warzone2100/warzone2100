@@ -5,7 +5,7 @@ param([string]$VCPKG_BUILD_TYPE = "")
 ############################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-$VCPKG_COMMIT_SHA = "5bb0c7fc45da94844dfac35c8e441758e03e7666";
+$VCPKG_COMMIT_SHA = "190610bb806e4f3c9e24d9ceadf406b2f63228b7";
 
 # WZ Windows features (for vcpkg install)
 $VCPKG_INSTALL_FEATURES = @()
@@ -105,7 +105,7 @@ If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD
 	If ($triplet.Contains("mingw"))
 	{
 		# A fix for libtool issues with mingw-clang
-		Add-Content -Path $overlayTripletFile -Value "`r`nlist(APPEND VCPKG_MAKE_CONFIGURE_OPTIONS `"lt_cv_deplibs_check_method=pass_all`")";
+		Add-Content -Path $overlayTripletFile -Value "`r`nlist(APPEND VCPKG_CONFIGURE_MAKE_OPTIONS `"lt_cv_deplibs_check_method=pass_all`")";
 	}
 	If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
 	{
