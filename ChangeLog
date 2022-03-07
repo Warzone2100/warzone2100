@@ -1,3 +1,9 @@
+2022-03-07: Version 4.2.7:
+ * General:
+   * Fix: VTOLs occasionally land to attack (commit:579eb5ce08eba4274fbb68620f49e310fc83f8bc, #2616)
+   * Fix: VTOLs may attempt to "attack" when empty (commit:4a10d3ee09f798cca2e2a203af8264d72dd7cc6b, #2616)
+   * Fix: Optimum range not moving past long range when clicking a target (commit:7e5079670ac4605d51c01a6e3d51983be54902d8, #2623)
+
 2022-03-01: Version 4.2.6:
  * General:
    * Fix: Potential crash due to reinitializing default fog color (commit:1a3835ebd2558901d239f9f1353418297ae54dc9, commit:9310e24f3bf7f2c0816792c3aa04b28b6abcf808, #2612)
