@@ -285,6 +285,7 @@ void scriptSetDerrickPos(int x, int y)
 	const auto my = map_coord(y);
 	// MAX_TILE_TEXTURES is 255, so 2 bytes are enough
 	// to describe a map position
+	static_assert(MAX_TILE_TEXTURES <= 255, "If MAX_TILE_TEXTURES is raised above 255, this code will need to change");
 	uint16_t out = (mx << 8) | my;
 	derricks.insert(out);
 }
