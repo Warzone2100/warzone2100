@@ -44,6 +44,8 @@
 // Contains the font color in the following order: red, green, blue, alpha
 static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 
+#include "fribidi.h"
+#include "3rdparty/utfcpp/source/utf8.h"
 #include "hb.h"
 #include "hb-ft.h"
 #include "ft2build.h"
@@ -239,8 +241,19 @@ struct TextRun
 {
 	std::string text;
 	std::string language;
+
+	int startOffset;
+	int endOffset;
 	hb_script_t script;
 	hb_direction_t direction;
+	hb_buffer_t* buffer;
+	unsigned int glyphCount;
+	hb_glyph_info_t* glyphInfos;
+    hb_glyph_position_t* glyphPositions;
+
+	uint32_t* codePoints;
+
+	TextRun() : startOffset(0), endOffset(0) {}
 
 	TextRun(const std::string &t, const std::string &l, hb_script_t s, hb_direction_t d) :
 		text(t), language(l), script(s), direction(d) {}
@@ -289,6 +302,23 @@ struct DrawTextResult
 // only minimal visual difference.
 struct TextShaper
 {
+	hb_buffer_t* m_buffer;
+
+	struct HarfbuzzPosition
+	{
+		hb_codepoint_t codepoint;
+		Vector2i penPosition;
+
+		HarfbuzzPosition(hb_codepoint_t c, Vector2i &&p) : codepoint(c), penPosition(p) {}
+	};
+
+	struct ShapingResult
+	{
+		std::vector<HarfbuzzPosition> glyphes;
+		int32_t x_advance = 0;
+		int32_t y_advance = 0;
+	};
+
 	TextShaper()
 	{
 		m_buffer = hb_buffer_create();
@@ -300,9 +330,10 @@ struct TextShaper
 	}
 
 	// Returns the text width and height *IN PIXELS*
-	TextLayoutMetrics getTextMetrics(const TextRun& text, FTFace &face)
+	TextLayoutMetrics getTextMetrics(const std::string& text, FTFace &face)
 	{
-		const ShapingResult &shapingResult = shapeText(text, face);
+		const ShapingResult& shapingResult = shapeText(text, face);
+
 		if (shapingResult.glyphes.empty())
 		{
 			return TextLayoutMetrics(shapingResult.x_advance / 64, shapingResult.y_advance / 64);
@@ -335,10 +366,25 @@ struct TextShaper
 		return TextLayoutMetrics(std::max(texture_width, x_advance), std::max(texture_height, y_advance));
 	}
 
-	// Draws the text and returns the text buffer, width and height, etc *IN PIXELS*
-	DrawTextResult drawText(const TextRun& text, FTFace &face)
+	FriBidiBracketType getBaseDirection()
 	{
-		const ShapingResult &shapingResult = shapeText(text, face);
+		std::string language = getLanguage();
+
+		if (language == "ar_SA")
+		{
+			return HB_DIRECTION_RTL;
+		}
+		else
+		{
+			return HB_DIRECTION_LTR;
+		}
+	}
+
+	// Draws the text and returns the text buffer, width and height, etc *IN PIXELS*
+	DrawTextResult drawText(const std::string& text, FTFace &face)
+	{
+		ShapingResult shapingResult = shapeText(text, face);
+
 		if (shapingResult.glyphes.empty())
 		{
 			return DrawTextResult(RenderedText(), TextLayoutMetrics(shapingResult.x_advance / 64, shapingResult.y_advance / 64));
@@ -380,9 +426,11 @@ struct TextShaper
 		const uint32_t y_advance = (shapingResult.y_advance / 64);
 
 		const size_t stringTextureSize = 4 * texture_width * texture_height;
+
 		std::unique_ptr<unsigned char[]> stringTexture(new unsigned char[stringTextureSize]);
 		memset(stringTexture.get(), 0, stringTextureSize);
 
+		// TODO: Someone should document this piece.
 		size_t glyphNum = 0;
 		std::for_each(glyphs.begin(), glyphs.end(),
 			[&](const glyphRaster &g)
@@ -395,10 +443,10 @@ struct TextShaper
 					{
 						uint32_t j0 = g.pixelPosition.x - min_x;
 						const auto srcBufferPos = i * g.pitch + 3 * j;
-						ASSERT(srcBufferPos + 2 < glyphBufferSize, "Invalid source (%" PRIu32" / %" PRIu32") reading glyph %zu for string \"%s\"; (%d, %d, %d, %d, %" PRIu32 ", %d, %d, %d, %" PRIu32 ", %" PRIu32 ")", srcBufferPos, glyphBufferSize, glyphNum, text.text.c_str(), i, g.size.y, g.pixelPosition.y, min_y, i0, j, g.pixelPosition.x, min_x, j0, g.pitch);
+						ASSERT(srcBufferPos + 2 < glyphBufferSize, "Invalid source (%" PRIu32" / %" PRIu32") reading glyph %zu for string \"%s\"; (%d, %d, %d, %d, %" PRIu32 ", %d, %d, %d, %" PRIu32 ", %" PRIu32 ")", srcBufferPos, glyphBufferSize, glyphNum, text.c_str(), i, g.size.y, g.pixelPosition.y, min_y, i0, j, g.pixelPosition.x, min_x, j0, g.pitch);
 						uint8_t const *src = &g.buffer[srcBufferPos];
 						const auto stringTexturePos = 4 * ((i0 + i) * texture_width + j + j0);
-						ASSERT(stringTexturePos + 3 < stringTextureSize, "Invalid destination (%" PRIu32" / %zu) writing glyph %zu for string \"%s\"; (%d, %d, %d, %d, %" PRIu32 ", %d, %d, %d, %" PRIu32 ", %" PRIu32 ")", stringTexturePos, stringTextureSize, glyphNum, text.text.c_str(), i, g.size.y, g.pixelPosition.y, min_y, i0, j, g.pixelPosition.x, min_x, j0, texture_width);
+						ASSERT(stringTexturePos + 3 < stringTextureSize, "Invalid destination (%" PRIu32" / %zu) writing glyph %zu for string \"%s\"; (%d, %d, %d, %d, %" PRIu32 ", %d, %d, %d, %" PRIu32 ", %" PRIu32 ")", stringTexturePos, stringTextureSize, glyphNum, text.c_str(), i, g.size.y, g.pixelPosition.y, min_y, i0, j, g.pixelPosition.x, min_x, j0, texture_width);
 						uint8_t *dst = &stringTexture[stringTexturePos];
 						dst[0] = std::min(dst[0] + src[0], 255);
 						dst[1] = std::min(dst[1] + src[1], 255);
@@ -408,66 +456,198 @@ struct TextShaper
 				}
 				++glyphNum;
 			});
+
 		return DrawTextResult(
 				RenderedText(std::move(stringTexture), texture_width, texture_height, min_x, min_y),
 				TextLayoutMetrics(std::max(texture_width, x_advance), std::max(texture_height, y_advance))
 		);
 	}
 
-public:
-	hb_buffer_t* m_buffer;
-
-	struct HarfbuzzPosition
+	ShapingResult shapeText(const std::string& text, FTFace &face)
 	{
-		hb_codepoint_t codepoint;
-		Vector2i penPosition;
+		/* Fribidi assumes that the text is encoded in UTF-32, so we have to
+		   convert from UTF-8 to UTF-32, assuming that the string is indeed in UTF-8.*/
+		std::u32string u32 = utf8::utf8to32(text);
 
-		HarfbuzzPosition(hb_codepoint_t c, Vector2i &&p) : codepoint(c), penPosition(p) {}
-	};
+		// Step 1: Initialize fribidi variables.
+		// TODO: Don't forget to delete them at the end.
 
-	struct ShapingResult
-	{
-		std::vector<HarfbuzzPosition> glyphes;
-		int32_t x_advance = 0;
-		int32_t y_advance = 0;
-	};
+		hb_script_t* scripts;
+		FriBidiCharType* types;
+		FriBidiLevel* levels;
+		FriBidiBracketType* bracketedTypes;
+		uint32_t* codePoints;
 
-	ShapingResult shapeText(const TextRun& text, FTFace &face)
-	{
-		hb_buffer_reset(m_buffer);
-		size_t length = std::min(text.text.size(), static_cast<size_t>(std::numeric_limits<int>::max()));
-		int textLength = static_cast<int>(length);
+		FriBidiParType baseDirection;
+		int size;
 
-		hb_buffer_add_utf8(m_buffer, text.text.c_str(), textLength, 0, textLength);
-		hb_buffer_guess_segment_properties(m_buffer);
-		hb_buffer_set_flags(m_buffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
+		baseDirection = getBaseDirection();
+		size = u32.length();
 
-		// harfbuzz shaping
-		std::array<hb_feature_t, 3> features = { {HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn} };
-		hb_shape(face.m_font, m_buffer, features.data(), static_cast<unsigned int>(features.size()));
+		codePoints = new uint32_t[size];
+		memset(codePoints, 0, size * sizeof(*codePoints));
+		memcpy(codePoints, u32.c_str(), size * sizeof(*codePoints));
+		scripts = new hb_script_t[size];
+		memset(scripts, 0, size * sizeof(*scripts));
+		types = new FriBidiCharType[size];
+		memset(types, 0, size * sizeof(*types));
+		levels = new FriBidiLevel[size];
+		memset(levels, 0, size * sizeof(*levels));
+		bracketedTypes = new FriBidiBracketType[size];
+		memset(bracketedTypes, 0, size * sizeof(*bracketedTypes));
 
-		unsigned int glyphCount;
-		hb_glyph_info_t *glyphInfo = hb_buffer_get_glyph_infos(m_buffer, &glyphCount);
-		hb_glyph_position_t *glyphPos = hb_buffer_get_glyph_positions(m_buffer, &glyphCount);
-		if (glyphCount == 0)
+
+		// Step 2: Run fribidi.
+
+		/* Get the bidi type of each character in the string.*/
+		fribidi_get_bidi_types(codePoints, size, types);
+		fribidi_get_bracket_types(codePoints, size, types, bracketedTypes);
+
+#if defined(FRIBIDI_MAJOR_VERSION) && FRIBIDI_MAJOR_VERSION >= 1
+		FriBidiLevel maxLevel = fribidi_get_par_embedding_levels_ex(types, bracketedTypes, size, &baseDirection, levels);
+		ASSERT(maxLevel != 0, "Error in fribidi_get_par_embedding_levels_ex!");
+#else
+		FriBidiLevel maxLevel = fribidi_get_par_embedding_levels(types, size, &baseDirection, levels);
+		ASSERT(maxLevel != 0, "Error in fribidi_get_par_embedding_levels_ex!");
+#endif
+		
+		/* Fill the array of scripts with scripts of each character */
+		hb_unicode_funcs_t* funcs = hb_unicode_funcs_get_default();
+		for (int i = 0; i < size; ++i)
+			scripts[i] = hb_unicode_script(funcs, codePoints[i]);
+
+
+		// Step 3: Resolve common or inherited scripts.
+
+		hb_script_t lastScriptValue;
+		int lastScriptIndex = -1;
+		int lastSetIndex = -1;
+
+		for (int i = 0; i < size; ++i)
 		{
-			return {};
+			if (scripts[i] == HB_SCRIPT_COMMON || scripts[i] == HB_SCRIPT_INHERITED)
+			{
+				if (lastScriptIndex != -1)
+				{
+					scripts[i] = lastScriptValue;
+					lastSetIndex = i;
+				}
+			}
+			else
+			{
+				for (int j = lastSetIndex + 1; j < i; ++j)
+				{
+					scripts[j] = scripts[i];
+				}
+				lastScriptValue = scripts[i];
+				lastScriptIndex = i;
+				lastSetIndex = i;
+			}
+		}
+
+
+		// Step 4: Create the different runs
+
+		std::vector<TextRun> textRuns;
+
+		hb_script_t lastScript = scripts[0];
+		int lastLevel = levels[0];
+		int lastRunStart = 0; // where the last run started
+
+		/* i == size means that we've reached the end of the string,
+		   and that the last run should be created.*/
+		for (int i = 0; i <= size; ++i)
+		{
+			/* If the script or level is of the current point is the same as the previous one,
+			   then this means that the we have not reached the end of the current run.
+			   If there's change, create a new run.*/
+			if (i == size || (scripts[i] != lastScript) || (levels[i] != lastLevel))
+			{
+				TextRun run;
+				run.startOffset = lastRunStart;
+				run.endOffset = i;
+				run.script = lastScript;
+				run.codePoints = codePoints;
+
+				/* "lastLevel & 1" yields either 1 or 0, depending on the least significant bit of lastLevel.*/
+				run.direction = lastLevel & 1 ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
+
+				textRuns.push_back(run);
+
+				if (i < size)
+				{
+					lastScript = scripts[i];
+					lastLevel = levels[i];
+					lastRunStart = i;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+
+
+		// Step 6: Shape each run using harfbuzz.
+
+		ShapingResult shapingResult;
+
+		for (int i = 0; i < textRuns.size(); ++i)
+		{
+			shapeHarfbuzz(textRuns[i], face);
 		}
 
 		int32_t x = 0;
 		int32_t y = 0;
-		ShapingResult result;
-		for (unsigned int glyphIndex = 0; glyphIndex < glyphCount; ++glyphIndex)
-		{
-			hb_glyph_position_t &current_glyphPos = glyphPos[glyphIndex];
-			result.glyphes.emplace_back(glyphInfo[glyphIndex].codepoint, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset));
 
-			x += glyphPos[glyphIndex].x_advance;
-			y += glyphPos[glyphIndex].y_advance;
-		};
-		result.x_advance = x;
-		result.y_advance = y;
-		return result;
+		/* Theoretically, the direction of loop must change depending on the base direction
+		   (the current direction assumes that the text is RTL). However, since English and
+		   other European strings does not include Arabic or Hebrew words, this direction
+		   will be all that is needed.*/
+		for (int i = (textRuns.size() - 1); i >= 0; --i)
+		{
+			TextRun run = textRuns[i];
+
+			for (unsigned int glyphIndex = 0; glyphIndex < run.glyphCount; ++glyphIndex)
+			{
+				hb_glyph_position_t& current_glyphPos = run.glyphPositions[glyphIndex];
+				
+				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset));
+
+				x += run.glyphPositions[glyphIndex].x_advance;
+				y += run.glyphPositions[glyphIndex].y_advance;
+			}
+		}
+		shapingResult.x_advance += x;
+		shapingResult.y_advance += y;
+
+
+		// Step 7: Finalize.
+
+		delete[] scripts;
+		delete[] types;
+		delete[] levels;
+		delete[] bracketedTypes;
+		delete[] codePoints;
+
+		return shapingResult;
+	}
+
+	void shapeHarfbuzz(TextRun& run, FTFace& face)
+	{
+		run.buffer = hb_buffer_create();
+		hb_buffer_set_direction(run.buffer, run.direction);
+        hb_buffer_set_script(run.buffer, run.script);
+        hb_buffer_add_utf32(run.buffer, run.codePoints + run.startOffset,
+                            run.endOffset - run.startOffset, 0,
+                            run.endOffset - run.startOffset);
+		hb_buffer_set_flags(run.buffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
+		std::array<hb_feature_t, 3> features = { {HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn} };
+        
+		hb_shape(face.m_font, run.buffer, features.data(), static_cast<unsigned int>(features.size()));
+
+		run.glyphInfos = hb_buffer_get_glyph_infos(run.buffer, &run.glyphCount);
+		run.glyphPositions = hb_buffer_get_glyph_positions(run.buffer, &run.glyphCount);
 	}
 };
 
@@ -621,10 +801,9 @@ unsigned int height_pixelsToPoints(unsigned int heightInPixels)
 }
 
 // Returns the text width *in points*
-unsigned int iV_GetTextWidth(const char *string, iV_fonts fontID)
+unsigned int iV_GetTextWidth(const char* string, iV_fonts fontID)
 {
-	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
-	TextLayoutMetrics metrics = getShaper().getTextMetrics(tr, getFTFace(fontID));
+	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, getFTFace(fontID));
 	return width_pixelsToPoints(metrics.width);
 }
 
@@ -635,10 +814,9 @@ unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV
 }
 
 // Returns the text height *in points*
-unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID)
+unsigned int iV_GetTextHeight(const char* string, iV_fonts fontID)
 {
-	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
-	TextLayoutMetrics metrics = getShaper().getTextMetrics(tr, getFTFace(fontID));
+	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, getFTFace(fontID));
 	return height_pixelsToPoints(metrics.height);
 }
 
@@ -830,7 +1008,8 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 	return lineDrawResults;
 }
 
-void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation, iV_fonts fontID)
+// Needs modification
+void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation, iV_fonts fontID)
 {
 	ASSERT_OR_RETURN(, string, "Couldn't render string!");
 
@@ -846,7 +1025,7 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 	color.vector[3] = static_cast<UBYTE>(font_colour[3] * 255.f);
 
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
-	DrawTextResult drawResult = getShaper().drawText(tr, getFTFace(fontID));
+	DrawTextResult drawResult = getShaper().drawText(string, getFTFace(fontID));
 
 	if (drawResult.text.width > 0 && drawResult.text.height > 0)
 	{
@@ -893,14 +1072,13 @@ void WzText::setText(const std::string &string, iV_fonts fontID/*, bool delayRen
 	drawAndCacheText(string, fontID);
 }
 
-void WzText::drawAndCacheText(const std::string &string, iV_fonts fontID)
+void WzText::drawAndCacheText(const std::string& string, iV_fonts fontID)
 {
 	mFontID = fontID;
 	mText = string;
 	mRenderingHorizScaleFactor = iV_GetHorizScaleFactor();
 	mRenderingVertScaleFactor = iV_GetVertScaleFactor();
 
-	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	FTFace &face = getFTFace(fontID);
 	FT_Face &type = face.face();
 
@@ -908,7 +1086,7 @@ void WzText::drawAndCacheText(const std::string &string, iV_fonts fontID)
 	mPtsLineSize = metricsHeight_PixelsToPoints((type->size->metrics.ascender - type->size->metrics.descender) >> 6);
 	mPtsBelowBase = metricsHeight_PixelsToPoints(type->size->metrics.descender >> 6);
 
-	DrawTextResult drawResult = getShaper().drawText(tr, face);
+	DrawTextResult drawResult = getShaper().drawText(string, face);
 	dimensions = Vector2i(drawResult.text.width, drawResult.text.height);
 	offsets = Vector2i(drawResult.text.offset_x, drawResult.text.offset_y);
 	layoutMetrics = Vector2i(drawResult.layoutMetrics.width, drawResult.layoutMetrics.height);
