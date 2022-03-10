@@ -45,13 +45,18 @@
 static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 
 #include "fribidi.h"
-#include "3rdparty/utfcpp/source/utf8.h"
 #include "hb.h"
 #include "hb-ft.h"
 #include "ft2build.h"
 #include <unordered_map>
 #include <memory>
 #include <limits>
+
+/* Defined in order to use the convenient functions of utfcpp.*/
+#define UTF_CPP_CPLUSPLUS 201103L
+
+#include "3rdparty/utfcpp/source/utf8.h"
+
 
 #if defined(HB_VERSION_ATLEAST) && HB_VERSION_ATLEAST(1,0,5)
 //	#define WZ_FT_LOAD_FLAGS (FT_LOAD_DEFAULT | FT_LOAD_TARGET_LCD) // Needs further testing on low-DPI displays
@@ -479,7 +484,7 @@ struct TextShaper
 		uint32_t* codePoints;
 
 		FriBidiParType baseDirection;
-		int size;
+		size_t size;
 
 		baseDirection = getBaseDirection();
 		size = u32.length();
@@ -604,9 +609,9 @@ struct TextShaper
 		   (the current direction assumes that the text is RTL). However, since English and
 		   other European strings does not include Arabic or Hebrew words, this direction
 		   will be all that is needed.*/
-		for (int i = (textRuns.size() - 1); i >= 0; --i)
+		for (size_t i = (textRuns.size()); i > 0; --i)
 		{
-			TextRun run = textRuns[i];
+			TextRun run = textRuns[i - 1];
 
 			for (unsigned int glyphIndex = 0; glyphIndex < run.glyphCount; ++glyphIndex)
 			{

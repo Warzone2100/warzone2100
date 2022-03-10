@@ -430,7 +430,6 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 		{
 			currentLength--;
 		}
-		//currentLength--;
 	}
 
 	memcpy(currentText, pText, currentLength);
