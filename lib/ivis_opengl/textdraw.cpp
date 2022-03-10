@@ -524,7 +524,7 @@ struct TextShaper
 
 		// Step 3: Resolve common or inherited scripts.
 
-		hb_script_t lastScriptValue;
+		hb_script_t lastScriptValue = HB_SCRIPT_UNKNOWN;
 		int lastScriptIndex = -1;
 		int lastSetIndex = -1;
 
