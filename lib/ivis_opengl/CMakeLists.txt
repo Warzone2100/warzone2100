@@ -50,6 +50,7 @@ file(GLOB SRC
 find_package(PNG 1.2 REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Harfbuzz 1.0 REQUIRED)
+find_package(Fribidi REQUIRED)
 
 include(CheckCXXCompilerFlag)
 
@@ -57,10 +58,12 @@ add_library(ivis-opengl STATIC ${HEADERS} ${SRC})
 set_property(TARGET ivis-opengl PROPERTY FOLDER "lib")
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(ivis-opengl)
-target_include_directories(ivis-opengl PRIVATE ${HARFBUZZ_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIR_ft2build})
-target_link_libraries(ivis-opengl PRIVATE framework PNG::PNG ${HARFBUZZ_LIBRARIES} ${FREETYPE_LIBRARIES})
+
+target_include_directories(ivis-opengl PRIVATE ${HARFBUZZ_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIR_ft2build} ${FRIBIDI_INCLUDE_DIRS})
+target_link_libraries(ivis-opengl PRIVATE framework PNG::PNG ${HARFBUZZ_LIBRARIES} ${FREETYPE_LIBRARIES} ${FRIBIDI_LIBRARIES})
 target_link_libraries(ivis-opengl PUBLIC glad)
 target_link_libraries(ivis-opengl PUBLIC optional-lite)
+
 if(WZ_ENABLE_BACKEND_VULKAN)
 	find_package(VulkanHeaders 148) # minimum supported version of the Vulkan headers is 148
 	set(_vulkanheaders_dl_gittag "sdk-1.2.198.0")

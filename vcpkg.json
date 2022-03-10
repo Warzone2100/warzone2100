@@ -5,6 +5,7 @@
 		"sdl2",
 		"physfs",
 		"harfbuzz",
+		"fribidi",
 		"libogg",
 		"libtheora",
 		"libvorbis",
