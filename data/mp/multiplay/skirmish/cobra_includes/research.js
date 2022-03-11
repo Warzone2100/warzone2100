@@ -147,9 +147,9 @@ function research()
 		return;
 	}
 
-	var labList = enumStruct(me, structures.lab).filter((lb) => {
-		return (lb.status === BUILT && structureIdle(lb));
-	});
+	var labList = enumStruct(me, structures.lab).filter((lb) => (
+		lb.status === BUILT && structureIdle(lb)
+	));
 
 	var enemyPlayer = getMostHarmfulPlayer();
 	var antiCyborgChance = Math.floor(playerCyborgRatio(enemyPlayer) * 100);
