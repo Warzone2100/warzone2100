@@ -722,7 +722,7 @@
 		"flightSpeed": 1000,
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 1,
-		"id": "BabaMG",
+		"id": "BabaTwinMG",
 		"longHit": 60,
 		"longRange": 768,
 		"maxElevation": 90,
