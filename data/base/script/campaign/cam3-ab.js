@@ -151,10 +151,10 @@ function nexusManufacture()
 
 function manualGrouping()
 {
-	var vtols = enumDroid(NEXUS).filter(function(obj) {
+	var vtols = enumDroid(NEXUS).filter((obj) => {
 		return obj.group === null && isVTOL(obj);
 	});
-	var nonVtols = enumDroid(NEXUS).filter(function(obj) {
+	var nonVtols = enumDroid(NEXUS).filter((obj) => {
 		return obj.group === null && !isVTOL(obj);
 	});
 	if (vtols.length)

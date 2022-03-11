@@ -50,7 +50,7 @@ camAreaEvent("base3Trigger", function(droid)
 //Send idle droids in this base to attack when the player spots the base
 function camEnemyBaseDetected_COAirBase()
 {
-	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter(function(obj) {
+	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter((obj) => {
 		return obj.type === DROID && obj.group === null;
 	});
 

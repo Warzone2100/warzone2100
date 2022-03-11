@@ -176,7 +176,7 @@ function camRemoveDuplicates(array)
 	var prims = {"boolean":{}, "number":{}, "string":{}};
 	var objs = [];
 
-	return array.filter(function(item) {
+	return array.filter((item) => {
 		var type = typeof item;
 		if (type in prims)
 		{

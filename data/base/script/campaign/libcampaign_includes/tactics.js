@@ -211,7 +211,7 @@ function __camPickTarget(group)
 		case CAM_ORDER_ATTACK:
 			if (camDef(gi.target))
 			{
-				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter((obj) => {
 					return (obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
 				});
 			}
@@ -247,23 +247,23 @@ function __camPickTarget(group)
 				}
 			}
 			var dr = droids[0];
-			targets = targets.filter(function(obj) {
+			targets = targets.filter((obj) => {
 				return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 			});
 			if (targets.length === 0)
 			{
-				targets = enumStruct(CAM_HUMAN_PLAYER).filter(function(obj) {
+				targets = enumStruct(CAM_HUMAN_PLAYER).filter((obj) => {
 					return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 				});
 				if (targets.length === 0)
 				{
-					targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
+					targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => {
 						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
 							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
 					});
 					if (targets.length === 0)
 					{
-						targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
+						targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => {
 							return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 						});
 					}

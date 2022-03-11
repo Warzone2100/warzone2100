@@ -64,7 +64,7 @@ camAreaEvent("wayPoint2Rad", function(droid)
 	}
 
 	var point = getObject("wayPoint3");
-	var defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter(function(obj) {
+	var defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter((obj) => {
 		return (obj.droidType === DROID_WEAPON);
 	});
 

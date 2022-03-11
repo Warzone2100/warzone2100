@@ -206,7 +206,7 @@ function __camGameWon()
 function __camPlayerDead()
 {
 	var dead = true;
-	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter(function(obj) {
+	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter((obj) => {
 		return obj.status === BUILT;
 	}).length > 0;
 
@@ -263,7 +263,7 @@ function __camPlayerDead()
 	{
 		//Make the mission fail if no units are alive on map while having no factories.
 		var droidCount = 0;
-		enumDroid(CAM_HUMAN_PLAYER).forEach(function(obj) {
+		enumDroid(CAM_HUMAN_PLAYER).forEach((obj) => {
 			if (obj.droidType === DROID_SUPERTRANSPORTER)
 			{
 				//Don't count the transporter itself. This is for the case where
@@ -295,7 +295,7 @@ function __camTriggerLastAttack()
 	{
 		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 		// Do not order systems (sensor/trucks/repairs) to attack stuff.
-		enemies = enemies.filter(function(obj) {
+		enemies = enemies.filter((obj) => {
 			return ((obj.type === DROID) && !camIsTransporter(obj) && !camIsSystemDroid(obj));
 		});
 		camTrace(enemies.length, "enemy droids remaining");
@@ -369,7 +369,7 @@ function __camVictoryOffworld()
 		{
 			if (camAllEnemyBasesEliminated())
 			{
-				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
+				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter((obj) => {
 					return obj.type === DROID;
 				}).length;
 
@@ -405,7 +405,7 @@ function __camVictoryOffworld()
 			}
 
 			//Make sure to only count droids here.
-			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter((obj) => {
 				return (obj.type === DROID && !camIsTransporter(obj));
 			}).length;
 			if (((!forceLZ && !destroyAll) || (forceLZ && destroyAll && !enemyLen) || (forceLZ && !destroyAll)) && (atlz === total))
@@ -510,7 +510,7 @@ function __camShowVictoryConditions()
 	var unitsOnMap = 0;
 	var structuresOnMap = 0;
 
-	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach(function(obj) {
+	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach((obj) => {
 		if (obj.type === DROID)
 		{
 			++unitsOnMap;

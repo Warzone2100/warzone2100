@@ -112,7 +112,7 @@ function truckDefense()
 function vaporizeTarget()
 {
 	var target;
-	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
+	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => {
 		return obj.type === DROID || obj.type === STRUCTURE;
 	});
 
@@ -126,9 +126,9 @@ function vaporizeTarget()
 	}
 	else
 	{
-		var dr = targets.filter(function(obj) { return obj.type === DROID && !isVTOL(obj); });
-		var vt = targets.filter(function(obj) { return obj.type === DROID && isVTOL(obj); });
-		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
+		var dr = targets.filter((obj) => { return obj.type === DROID && !isVTOL(obj); });
+		var vt = targets.filter((obj) => { return obj.type === DROID && isVTOL(obj); });
+		var st = targets.filter((obj) => { return obj.type === STRUCTURE; });
 
 		if (dr.length)
 		{
@@ -236,8 +236,8 @@ function checkMissileSilos()
 
 	var siloArea = camMakePos(getObject("missileSilos"));
 	var safe = enumRange(siloArea.x, siloArea.y, 10, ALL_PLAYERS, false);
-	var enemies = safe.filter(function(obj) { return obj.player === NEXUS; });
-	var player = safe.filter(function(obj) { return obj.player === CAM_HUMAN_PLAYER; });
+	var enemies = safe.filter((obj) => { return obj.player === NEXUS; });
+	var player = safe.filter((obj) => { return obj.player === CAM_HUMAN_PLAYER; });
 	if (!enemies.length && player.length)
 	{
 		camCallOnce("allySiloWithPlayer");

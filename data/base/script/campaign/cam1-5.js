@@ -123,7 +123,7 @@ function activateNPLZTransporter()
 
 function sendNPTransport()
 {
-	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter(function(obj) {
+	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter((obj) => {
 		return (obj.type === STRUCTURE && obj.stattype === DEFENSE);
 	});
 

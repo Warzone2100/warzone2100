@@ -268,7 +268,7 @@ function cam_eventAttacked(victim, attacker)
 			{
 				const DEFAULT_RADIUS = 6;
 				var loc = {x: victim.x, y: victim.y};
-				var droids = enumRange(loc.x, loc.y, DEFAULT_RADIUS, victim.player, false).filter(function(obj) {
+				var droids = enumRange(loc.x, loc.y, DEFAULT_RADIUS, victim.player, false).filter((obj) => {
 					return (obj.type === DROID &&
 						obj.group === null &&
 						(obj.canHitGround || obj.isSensor) &&

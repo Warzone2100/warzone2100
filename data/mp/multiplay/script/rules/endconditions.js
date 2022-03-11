@@ -69,8 +69,7 @@ class Player
 			return true;
 		}
 
-		let oils = enumFeature(ALL_PLAYERS).filter(function(e)
-		{
+		let oils = enumFeature(ALL_PLAYERS).filter((e) => {
 			return e.stattype === OIL_RESOURCE;
 		});
 		for (let playnum = 0; playnum < maxPlayers; playnum++)
@@ -118,8 +117,7 @@ class Team
 {
 	constructor(playerPlayNums)
 	{
-		this.players = playerPlayNums.map(function(playNum)
-		{
+		this.players = playerPlayNums.map((playNum) => {
 			return new Player(playNum);
 		}); // array class instance  Player
 		this.lastActivity = gameTime;
@@ -223,12 +221,10 @@ class Team
 
 function checkEndConditions()
 {
-	const newlyLosingTeams = teams.filter((team) =>
-	{
+	const newlyLosingTeams = teams.filter((team) => {
 		return (team.isContender() && !team.canPlay());
 	});
-	newlyLosingTeams.forEach((team) =>
-	{
+	newlyLosingTeams.forEach((team) => {
 		// inform other players if this team / player lost by virtue of being inactive
 		if (!team.activeGame() && ENABLE_activity)
 		{
@@ -244,14 +240,12 @@ function checkEndConditions()
 		// set to loser status
 		team.setState(STATE_loser);
 	});
-	const contenderTeams = teams.filter((team) =>
-	{
+	const contenderTeams = teams.filter((team) => {
 		return team.isContender();
 	});
 	if (contenderTeams.length <= 1 && newlyLosingTeams.length > 0) // game end
 	{
-		contenderTeams.forEach((team) =>
-		{
+		contenderTeams.forEach((team) => {
 			team.setState(STATE_winner);
 		});
 

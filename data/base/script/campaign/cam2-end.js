@@ -21,7 +21,7 @@ const startpos = {x: 88, y: 101};
 function checkEnemyVtolArea()
 {
 	var pos = {x: 127, y: 64};
-	var vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter(function(obj) {
+	var vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter((obj) => {
 		return isVTOL(obj);
 	});
 
@@ -170,7 +170,7 @@ function transporterAttack()
 //NOTE: this is only called once from the library's eventMissionTimeout().
 function checkIfLaunched()
 {
-	var transporters = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+	var transporters = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => {
 		return (obj.type === DROID && camIsTransporter(obj));
 	});
 	if (transporters.length > 0)

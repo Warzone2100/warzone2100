@@ -24,10 +24,10 @@ function vtolAttack()
 
 function setupLandGroups()
 {
-	var hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter(function(obj) {
+	var hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => {
 		return obj.type === DROID && obj.propulsion === "hover01";
 	});
-	var tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter(function(obj) {
+	var tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => {
 		return obj.type === DROID && obj.propulsion !== "hover01";
 	});
 

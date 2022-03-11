@@ -34,7 +34,7 @@ function camEnemyBaseDetected_COMiddleBase()
 {
 	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter(function(obj) {
+	var droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter((obj) => {
 		return obj.type === DROID && obj.group === null;
 	});
 

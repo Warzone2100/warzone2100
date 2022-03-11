@@ -34,7 +34,7 @@ function camEnemyBaseEliminated_COEastBase()
 //Tell everything not grouped on map to attack
 function camEnemyBaseDetected_COEastBase()
 {
-	var droids = enumArea(0, 0, mapWidth, mapHeight, THE_COLLECTIVE, false).filter(function(obj) {
+	var droids = enumArea(0, 0, mapWidth, mapHeight, THE_COLLECTIVE, false).filter((obj) => {
 		return obj.type === DROID && obj.group === null && obj.canHitGround;
 	});
 

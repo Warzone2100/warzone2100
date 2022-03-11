@@ -123,7 +123,7 @@ function discoverGammaBase()
 
 function findBetaUnitIds()
 {
-	var droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter(function(obj) {
+	var droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter((obj) => {
 		return obj.type === DROID;
 	});
 
