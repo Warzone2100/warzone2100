@@ -484,10 +484,10 @@ struct TextShaper
 		uint32_t* codePoints;
 
 		FriBidiParType baseDirection;
-		size_t size;
+		FriBidiStrIndex size;
 
 		baseDirection = getBaseDirection();
-		size = u32.length();
+		size = static_cast<FriBidiStrIndex>(u32.length());
 
 		codePoints = new uint32_t[size];
 		memset(codePoints, 0, size * sizeof(*codePoints));
