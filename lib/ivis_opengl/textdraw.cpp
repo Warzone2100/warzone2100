@@ -54,6 +54,7 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 
 /* Defined in order to use the convenient functions of utfcpp.*/
 #define UTF_CPP_CPLUSPLUS 201103L
+#define USE_NEW_FRIBIDI_API (FRIBIDI_MAJOR_VERSION >= 1)
 
 #include "3rdparty/utfcpp/source/utf8.h"
 
@@ -371,7 +372,7 @@ struct TextShaper
 		return TextLayoutMetrics(std::max(texture_width, x_advance), std::max(texture_height, y_advance));
 	}
 
-	FriBidiBracketType getBaseDirection()
+	FriBidiParType getBaseDirection()
 	{
 		std::string language = getLanguage();
 
@@ -480,11 +481,10 @@ struct TextShaper
 		hb_script_t* scripts;
 		FriBidiCharType* types;
 		FriBidiLevel* levels;
-		FriBidiBracketType* bracketedTypes;
 		uint32_t* codePoints;
-
 		FriBidiParType baseDirection;
 		FriBidiStrIndex size;
+
 
 		baseDirection = getBaseDirection();
 		size = static_cast<FriBidiStrIndex>(u32.length());
@@ -498,17 +498,20 @@ struct TextShaper
 		memset(types, 0, size * sizeof(*types));
 		levels = new FriBidiLevel[size];
 		memset(levels, 0, size * sizeof(*levels));
-		bracketedTypes = new FriBidiBracketType[size];
+#if USE_NEW_FRIBIDI_API
+		FriBidiBracketType* bracketedTypes = new FriBidiBracketType[size];
 		memset(bracketedTypes, 0, size * sizeof(*bracketedTypes));
+#endif
 
 
 		// Step 2: Run fribidi.
 
 		/* Get the bidi type of each character in the string.*/
 		fribidi_get_bidi_types(codePoints, size, types);
+
+#if USE_NEW_FRIBIDI_API
 		fribidi_get_bracket_types(codePoints, size, types, bracketedTypes);
 
-#if defined(FRIBIDI_MAJOR_VERSION) && FRIBIDI_MAJOR_VERSION >= 1
 		FriBidiLevel maxLevel = fribidi_get_par_embedding_levels_ex(types, bracketedTypes, size, &baseDirection, levels);
 		ASSERT(maxLevel != 0, "Error in fribidi_get_par_embedding_levels_ex!");
 #else
@@ -632,9 +635,10 @@ struct TextShaper
 		delete[] scripts;
 		delete[] types;
 		delete[] levels;
-		delete[] bracketedTypes;
 		delete[] codePoints;
-
+#if USE_NEW_FRIBIDI_API
+		delete[] bracketedTypes;
+#endif
 		return shapingResult;
 	}
 
