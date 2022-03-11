@@ -158,9 +158,7 @@ function __camChooseNexusTarget(player)
 
 	if (camRand(100) < TARGET_UNIT_CHANCE)
 	{
-		objects = enumDroid(player).filter((d) => {
-			return !camIsTransporter(d);
-		});
+		objects = enumDroid(player).filter((d) => (!camIsTransporter(d)));
 
 		const EXP = {
 			rookie: 0,
@@ -221,30 +219,23 @@ function __camChooseNexusTarget(player)
 		//Has explicit chances to target factories or research labs.
 		switch (camRand(8))
 		{
-			case 0: objects = enumStruct(player, FACTORY).filter((s) => { return (s.status === BUILT); }); break;
-			case 1: objects = enumStruct(player, CYBORG_FACTORY).filter((s) => { return (s.status === BUILT); }); break;
-			case 2: objects = enumStruct(player, VTOL_FACTORY).filter((s) => { return (s.status === BUILT); }); break;
-			case 3: objects = enumStruct(player, RESEARCH_LAB).filter((r) => { return (r.status === BUILT); }); break;
+			case 0: objects = enumStruct(player, FACTORY).filter((s) => (s.status === BUILT)); break;
+			case 1: objects = enumStruct(player, CYBORG_FACTORY).filter((s) => (s.status === BUILT)); break;
+			case 2: objects = enumStruct(player, VTOL_FACTORY).filter((s) => (s.status === BUILT)); break;
+			case 3: objects = enumStruct(player, RESEARCH_LAB).filter((r) => (r.status === BUILT)); break;
 			default: //do nothing
 		}
 
 		if (objects.length === 0)
 		{
-			objects = enumStruct(player).filter((s) => { return (s.status === BUILT); });
+			objects = enumStruct(player).filter((s) => (s.status === BUILT));
 		}
 
-		objects = objects.filter((s) => {
+		objects = objects.filter((s) => (
 			//cam3-ab is way too annoying if Nexus can still take factories after the second resistance upgrade.
-			if (getResearch("R-Sys-Resistance-Upgrade02").done &&
-				(s.stattype === FACTORY ||
-				s.stattype === CYBORG_FACTORY ||
-				s.stattype === VTOL_FACTORY))
-			{
-				return false;
-			}
-
-			return true;
-		});
+			!(getResearch("R-Sys-Resistance-Upgrade02").done &&
+			(s.stattype === FACTORY || s.stattype === CYBORG_FACTORY || s.stattype === VTOL_FACTORY))
+		));
 	}
 
 	return objects;

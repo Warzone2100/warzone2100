@@ -67,9 +67,9 @@ camAreaEvent("phantomFacTrigger", function(droid)
 function setAlphaExp()
 {
 	const DROID_EXP = 512; //Hero rank.
-	var alphaDroids = enumArea("alphaPit", ALPHA, false).filter((obj) => {
-		return obj.type === DROID;
-	});
+	var alphaDroids = enumArea("alphaPit", ALPHA, false).filter((obj) => (
+		obj.type === DROID
+	));
 
 	for (var i = 0, l = alphaDroids.length; i < l; ++i)
 	{
@@ -85,9 +85,9 @@ function setAlphaExp()
 function getAlphaUnitIDs()
 {
 	alphaUnitIDs = [];
-	var alphaDroids = enumArea("alphaPit", CAM_HUMAN_PLAYER, false).filter((obj) => {
-		return obj.type === DROID && obj.experience === 512;
-	});
+	var alphaDroids = enumArea("alphaPit", CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID && obj.experience === 512
+	));
 
 	for (var i = 0, l = alphaDroids.length; i < l; ++i)
 	{
@@ -227,9 +227,9 @@ function alphaTeamAlive()
 	if (camDef(alphaUnitIDs) && startExtraLoss)
 	{
 		var alphaAlive = false;
-		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => {
-			return obj.type === DROID;
-		});
+		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+			obj.type === DROID
+		));
 
 		for (var i = 0, l = alive.length; i < l; ++i)
 		{

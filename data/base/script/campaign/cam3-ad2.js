@@ -105,9 +105,9 @@ function phantomFactorySpawn()
 function vaporizeTarget()
 {
 	var target;
-	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => {
-		return obj.type === DROID || obj.type === STRUCTURE;
-	});
+	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID || obj.type === STRUCTURE
+	));
 
 	if (!targets.length)
 	{
@@ -124,9 +124,9 @@ function vaporizeTarget()
 	}
 	else
 	{
-		var dr = targets.filter((obj) => { return obj.type === DROID && !isVTOL(obj); });
-		var vt = targets.filter((obj) => { return obj.type === DROID && isVTOL(obj); });
-		var st = targets.filter((obj) => { return obj.type === STRUCTURE; });
+		var dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
+		var vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
+		var st = targets.filter((obj) => (obj.type === STRUCTURE));
 
 		if (dr.length)
 		{

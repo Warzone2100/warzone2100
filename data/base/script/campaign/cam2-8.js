@@ -24,12 +24,12 @@ function vtolAttack()
 
 function setupLandGroups()
 {
-	var hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => {
-		return obj.type === DROID && obj.propulsion === "hover01";
-	});
-	var tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => {
-		return obj.type === DROID && obj.propulsion !== "hover01";
-	});
+	var hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.propulsion === "hover01"
+	));
+	var tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.propulsion !== "hover01"
+	));
 
 	camManageGroup(camMakeGroup(hovers), CAM_ORDER_PATROL, {
 		pos: [

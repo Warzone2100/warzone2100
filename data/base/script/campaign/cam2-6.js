@@ -46,9 +46,9 @@ function camEnemyBaseEliminated_COUplinkBase()
 //Group together attack droids in this base that are not already in a group
 function camEnemyBaseDetected_COMediumBase()
 {
-	var droids = enumArea("mediumBaseCleanup", THE_COLLECTIVE, false).filter((obj) => {
-		return obj.type === DROID && obj.group === null && obj.canHitGround;
-	});
+	var droids = enumArea("mediumBaseCleanup", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.group === null && obj.canHitGround
+	));
 
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		regroup: false,

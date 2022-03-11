@@ -24,9 +24,9 @@ function camEnemyBaseDetected_COBase2()
 {
 	hackRemoveMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter((obj) => {
-		return obj.type === DROID && isVTOL(obj);
-	});
+	var vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && isVTOL(obj)
+	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
 		regroup: false,
 	});
@@ -44,9 +44,9 @@ function camEnemyBaseDetected_COBase4()
 
 function baseThreeVtolAttack()
 {
-	var vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter((obj) => {
-		return obj.type === DROID && isVTOL(obj);
-	});
+	var vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && isVTOL(obj)
+	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
 		regroup: false,
 	});
@@ -54,9 +54,9 @@ function baseThreeVtolAttack()
 
 function baseFourVtolAttack()
 {
-	var vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter((obj) => {
-		return obj.type === DROID && isVTOL(obj);
-	});
+	var vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && isVTOL(obj)
+	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
 		regroup: false,
 	});

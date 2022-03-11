@@ -69,9 +69,9 @@ class Player
 			return true;
 		}
 
-		let oils = enumFeature(ALL_PLAYERS).filter((e) => {
-			return e.stattype === OIL_RESOURCE;
-		});
+		let oils = enumFeature(ALL_PLAYERS).filter((e) => (
+			e.stattype === OIL_RESOURCE
+		));
 		for (let playnum = 0; playnum < maxPlayers; playnum++)
 		{
 			oils = oils.concat(enumStruct(playnum, "A0ResourceExtractor"));
@@ -117,19 +117,14 @@ class Team
 {
 	constructor(playerPlayNums)
 	{
-		this.players = playerPlayNums.map((playNum) => {
-			return new Player(playNum);
-		}); // array class instance  Player
+		this.players = playerPlayNums.map((playNum) => (new Player(playNum))); // array class instance  Player
 		this.lastActivity = gameTime;
-		this.onlyAIbots = playerPlayNums.some((playNum) => {
-			return playerData[playNum].isAI === true;
+		this.onlyAIbots = playerPlayNums.some((playNum) => (
+			playerData[playNum].isAI === true
+		));
+		playerPlayNums.forEach((playerNum) => {
+			playersTeam[playerNum] = this;
 		});
-		playerPlayNums.forEach(
-			(playerNum) =>
-			{
-				playersTeam[playerNum]= this;
-			}
-		);
 	}
 
 	activeGame()
@@ -221,9 +216,9 @@ class Team
 
 function checkEndConditions()
 {
-	const newlyLosingTeams = teams.filter((team) => {
-		return (team.isContender() && !team.canPlay());
-	});
+	const newlyLosingTeams = teams.filter((team) => (
+		team.isContender() && !team.canPlay()
+	));
 	newlyLosingTeams.forEach((team) => {
 		// inform other players if this team / player lost by virtue of being inactive
 		if (!team.activeGame() && ENABLE_activity)
@@ -240,9 +235,7 @@ function checkEndConditions()
 		// set to loser status
 		team.setState(STATE_loser);
 	});
-	const contenderTeams = teams.filter((team) => {
-		return team.isContender();
-	});
+	const contenderTeams = teams.filter((team) => (team.isContender()));
 	if (contenderTeams.length <= 1 && newlyLosingTeams.length > 0) // game end
 	{
 		contenderTeams.forEach((team) => {
@@ -253,7 +246,7 @@ function checkEndConditions()
 		// (can be spectator-only slots who have not yet received a message,
 		// or previous losers who were converted to spectators who should now receive
 		// a new message that the game has fully ended)
-		if (isSpectator(-1) && !newlyLosingTeams.some((team) => { return team.containsPlayer(selectedPlayer); }))
+		if (isSpectator(-1) && !newlyLosingTeams.some((team) => (team.containsPlayer(selectedPlayer))))
 		{
 			gameOverMessage(false);
 		}

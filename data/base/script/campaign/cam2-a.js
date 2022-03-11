@@ -230,9 +230,7 @@ function setUnitRank(transport)
 	{
 		mapRun = true;
 		//These are the units in the base already at the start.
-		droids = enumDroid(CAM_HUMAN_PLAYER).filter((dr) => {
-			return !camIsTransporter(dr);
-		});
+		droids = enumDroid(CAM_HUMAN_PLAYER).filter((dr) => (!camIsTransporter(dr)));
 	}
 
 	for (var i = 0, len = droids.length; i < len; ++i)

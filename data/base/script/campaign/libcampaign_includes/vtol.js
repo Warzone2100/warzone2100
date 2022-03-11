@@ -214,9 +214,7 @@ function __camRetreatVtols()
 		{
 			const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
 			const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
-			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => {
-				return isVTOL(obj);
-			});
+			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => (isVTOL(obj)));
 
 			for (let i = 0, len = vtols.length; i < len; ++i)
 			{

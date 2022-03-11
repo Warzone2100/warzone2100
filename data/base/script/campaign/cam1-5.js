@@ -123,9 +123,9 @@ function activateNPLZTransporter()
 
 function sendNPTransport()
 {
-	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter((obj) => {
-		return (obj.type === STRUCTURE && obj.stattype === DEFENSE);
-	});
+	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter((obj) => (
+		obj.type === STRUCTURE && obj.stattype === DEFENSE
+	));
 
 	if (nearbyDefense.length > 0)
 	{

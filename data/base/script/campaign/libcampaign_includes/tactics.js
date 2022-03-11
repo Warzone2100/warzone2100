@@ -211,9 +211,9 @@ function __camPickTarget(group)
 		case CAM_ORDER_ATTACK:
 			if (camDef(gi.target))
 			{
-				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter((obj) => {
-					return (obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
-				});
+				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter((obj) => (
+					obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj))
+				));
 			}
 			// fall-through! we just don't track targets on COMPROMISE
 		case CAM_ORDER_COMPROMISE:
@@ -247,25 +247,25 @@ function __camPickTarget(group)
 				}
 			}
 			var dr = droids[0];
-			targets = targets.filter((obj) => {
-				return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-			});
+			targets = targets.filter((obj) => (
+				propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+			));
 			if (targets.length === 0)
 			{
-				targets = enumStruct(CAM_HUMAN_PLAYER).filter((obj) => {
-					return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-				});
+				targets = enumStruct(CAM_HUMAN_PLAYER).filter((obj) => (
+					propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+				));
 				if (targets.length === 0)
 				{
-					targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => {
-						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
-							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
-					});
+					targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => (
+						propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
+							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)))
+					));
 					if (targets.length === 0)
 					{
-						targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => {
-							return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-						});
+						targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => (
+							propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+						));
 					}
 				}
 			}

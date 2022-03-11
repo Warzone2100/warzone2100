@@ -50,9 +50,9 @@ camAreaEvent("base3Trigger", function(droid)
 //Send idle droids in this base to attack when the player spots the base
 function camEnemyBaseDetected_COAirBase()
 {
-	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter((obj) => {
-		return obj.type === DROID && obj.group === null;
-	});
+	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.group === null
+	));
 
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		count: -1,
