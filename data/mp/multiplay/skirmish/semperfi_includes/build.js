@@ -108,7 +108,7 @@ function checkLocalJobs()
 	var trucks = findIdleTrucks();
 	var freeTrucks = trucks.length;
 	var success = false;
-	var structlist = enumStruct(me).filter(function(obj) {
+	var structlist = enumStruct(me).filter((obj) => {
 		return (obj.status !== BUILT &&
 			obj.stattype !== RESOURCE_EXTRACTOR &&
 			obj.stattype !== DEFENSE &&
@@ -153,10 +153,10 @@ function scanAndDefendPosition(structure, droid)
 	}
 
 	var chance = ((structure && structure.stattype === RESOURCE_EXTRACTOR) || random(100) < 15);
-	var structs = enumRange(droid.x, droid.y, 5, me, false).filter(function (obj) {
+	var structs = enumRange(droid.x, droid.y, 5, me, false).filter((obj) => {
 		return obj.type === STRUCTURE;
 	});
-	var defenses = structs.filter(function(obj) {
+	var defenses = structs.filter((obj) => {
 		return obj.stattype === DEFENSE;
 	});
 	var enemyDerr = enumRange(droid.x, droid.y, 3, ENEMIES, false).filter(isDerrick);
@@ -210,7 +210,7 @@ function skipOilGrabIfEasy()
 {
 	if (difficulty === EASY)
 	{
-		var myDerrickCount = enumStruct(me, DERRICK_STAT).filter(function(obj) {
+		var myDerrickCount = enumStruct(me, DERRICK_STAT).filter((obj) => {
 			return obj.status === BUILT;
 		}).length;
 		var enemies = getAliveEnemyPlayers();
@@ -287,7 +287,7 @@ function buildAntiAir(buildExtras)
 	}
 	const MAX_DEFENSES = countStruct(FACTORY_STAT) * 3;
 	const SAM_SITES = ["P0-AASite-SAM2", "P0-AASite-SAM1", "P0-AASite-Sunburst"];
-	var antiAirs = enumStruct(me).filter(function(obj) { return obj.canHitAir; }).length;
+	var antiAirs = enumStruct(me).filter((obj) => { return obj.canHitAir; }).length;
 
 	if (buildExtras === false && antiAirs > MAX_DEFENSES)
 	{
@@ -417,13 +417,13 @@ function changeTruckRoleOnce()
 		return false;
 	}
 
-	var completeGen = enumStruct(me, POW_GEN_STAT).filter(function(obj) {
+	var completeGen = enumStruct(me, POW_GEN_STAT).filter((obj) => {
 		return obj.status === BUILT;
 	});
 
 	if (completeGen.length > 0)
 	{
-		enumDroid(me).forEach(function(droid) {
+		enumDroid(me).forEach((droid) => {
 			if (droid.droidType === DROID_CONSTRUCT && droid.group === baseBuilders)
 			{
 				orderDroid(droid, DORDER_STOP);

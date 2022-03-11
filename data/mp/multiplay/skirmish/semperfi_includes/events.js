@@ -122,7 +122,7 @@ function eventStartLevel()
 	baseBuilders = newGroup();
 	oilBuilders = newGroup();
 	truckRoleSwapped = false;
-	enumDroid(me).forEach(function(droid) {
+	enumDroid(me).forEach((droid) => {
 		if (droid.droidType !== DROID_CONSTRUCT)
 		{
 			eventDroidBuilt(droid, null);

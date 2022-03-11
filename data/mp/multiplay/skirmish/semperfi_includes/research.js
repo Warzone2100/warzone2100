@@ -125,7 +125,7 @@ function lookForResearch(tech, labParam)
 	}
 	else
 	{
-		labList = enumStruct(me, RES_LAB_STAT).filter(function(lab) {
+		labList = enumStruct(me, RES_LAB_STAT).filter((lab) => {
 			return (lab.status === BUILT && structureIdle(lab));
 		});
 	}

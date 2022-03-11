@@ -246,7 +246,7 @@ function skipOilGrabIfEasy()
 {
 	if (difficulty === EASY)
 	{
-		var myDerrickCount = enumStruct(me, BASE_STRUCTURES.derricks).filter(function(obj) {
+		var myDerrickCount = enumStruct(me, BASE_STRUCTURES.derricks).filter((obj) => {
 			return obj.status === BUILT;
 		}).length;
 		var enemies = getAliveEnemyPlayers();
@@ -274,7 +274,7 @@ function buildDerrick()
 	var numBusy = 0;
 	var droids = enumGroup(groups.oilBuilders);
 	var drLen = droids.length;
-	droids.forEach(function(d) {
+	droids.forEach((d) => {
 		if (!conCanHelp(d.id, d.x, d.y, false))
 		{
 			++numBusy;

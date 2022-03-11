@@ -388,7 +388,7 @@ function numDroidsInBase(player)
 		player = me;
 	}
 
-	enumDroid(player).forEach(function (d) {
+	enumDroid(player).forEach((d) => {
 		if (insideBase(d.x, d.y))
 		{
 			++len;
@@ -662,7 +662,7 @@ function initPersonalityData(personality)
 	}
 
 	//If switching the personality branch then got to readd the units to the groups again.
-	enumDroid(me).forEach(function(droid) {
+	enumDroid(me).forEach((droid) => {
 		if (droid.droidType !== DROID_CONSTRUCT)
 		{
 			eventDroidBuilt(droid, null);

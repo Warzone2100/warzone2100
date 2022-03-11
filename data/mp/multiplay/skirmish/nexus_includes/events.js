@@ -283,7 +283,7 @@ function eventStructureBuilt(structure, droid)
 	if (droid && droid.player === me && structure.stattype === RESOURCE_EXTRACTOR)
 	{
 		const SCAN_RANGE = 10;
-		var oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter(function(o) {
+		var oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter((o) => {
 			return (o.type === FEATURE && o.stattype === OIL_RESOURCE);
 		});
 
