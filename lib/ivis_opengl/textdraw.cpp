@@ -473,7 +473,8 @@ struct TextShaper
 	{
 		/* Fribidi assumes that the text is encoded in UTF-32, so we have to
 		   convert from UTF-8 to UTF-32, assuming that the string is indeed in UTF-8.*/
-		std::u32string u32 = utf8::utf8to32(text);
+		std::u32string u32;
+		utf8::unchecked::utf8to32(text.begin(), text.end(), std::back_inserter(u32));
 
 		// Step 1: Initialize fribidi variables.
 		// TODO: Don't forget to delete them at the end.
@@ -877,6 +878,11 @@ static bool breaksWord(char const c)
 	return c == ASCII_SPACE || breaksLine(c);
 }
 
+/* This funtion might not be fail-proof. It presumes that a "char" equals a "character" in any language.
+   Since the game was translated into different other languages, an Arabic or Chinese "character"
+   could occupy several bytes (that is, "char"s) in memory (assuming the string is in UTF-8). Therefore,
+   expressions such as "++curChar" might not yield the next "character", but just a byte of its
+   representation. */
 std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines /*= false*/)
 {
 	std::vector<TextLine> lineDrawResults;
