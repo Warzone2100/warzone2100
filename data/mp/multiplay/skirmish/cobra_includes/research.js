@@ -147,7 +147,7 @@ function research()
 		return;
 	}
 
-	var labList = enumStruct(me, structures.lab).filter(function(lb) {
+	var labList = enumStruct(me, structures.lab).filter((lb) => {
 		return (lb.status === BUILT && structureIdle(lb));
 	});
 

@@ -42,7 +42,7 @@ function eventStructureBuilt(structure, droid)
 		return;
 	}
 
-	var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter(function(obj) {
+	var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter((obj) => {
 		return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
 	}).sort(distanceToBase);
 
@@ -79,7 +79,7 @@ function eventDroidIdle(droid)
 	else if (forceDerrickBuildDefense && droid.droidType === DROID_CONSTRUCT && droid.group === oilGrabberGroup)
 	{
 		const SCAN_RANGE = 7;
-		var enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter(function(obj) {
+		var enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter((obj) => {
 			return obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR;
 		});
 
@@ -155,7 +155,7 @@ function eventAttacked(victim, attacker)
 	const SCAV_ATTACKER = isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer);
 	const GROUP_SCAN_RADIUS = subPersonalities[personality].retreatScanRange;
 
-	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter(function(obj) {
+	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter((obj) => {
 		return obj.type === DROID;
 	});
 
@@ -179,7 +179,7 @@ function eventAttacked(victim, attacker)
 			//Be more aggressive with scavenger stuff
 			if (SCAV_ATTACKER)
 			{
-				nearbyEnemies.forEach(function(obj) {
+				nearbyEnemies.forEach((obj) => {
 					nearbyScavs += (obj.player === scavengerPlayer);
 				});
 
@@ -223,7 +223,7 @@ function eventAttacked(victim, attacker)
 			return;
 		}
 
-		var units = nearbyUnits.filter(function(dr) {
+		var units = nearbyUnits.filter((dr) => {
 			return (dr.id !== victim.id &&
 				dr.group !== retreatGroup &&
 				!isConstruct(dr.id, false) &&

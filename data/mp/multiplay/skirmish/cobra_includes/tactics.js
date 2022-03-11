@@ -190,7 +190,7 @@ function findNearestEnemyDroid(enemy)
 		var badDroids = enumDroid(enemy);
 		if (badDroids.length > 0)
 		{
-			var temp = badDroids.filter(function(dr) { return !isVTOL(dr); });
+			var temp = badDroids.filter((dr) => { return !isVTOL(dr); });
 			if (temp.length === 0)
 			{
 				temp = badDroids;
@@ -216,7 +216,7 @@ function findNearestEnemyStructure(enemy)
 			enemy = getMostHarmfulPlayer();
 		}
 
-		var s = enumStruct(enemy).filter(function(obj) { return (obj.stattype !== WALL); });
+		var s = enumStruct(enemy).filter((obj) => { return (obj.stattype !== WALL); });
 		if (s.length === 0)
 		{
 			s = enumStruct(enemy);
@@ -264,7 +264,7 @@ function artilleryTactics()
 	{
 		return;
 	}
-	var sensors = enumGroup(sensorGroup).filter(function(dr) {
+	var sensors = enumGroup(sensorGroup).filter((dr) => {
 		return droidReady(dr.id);
 	});
 	const ARTILLERY_UNITS = enumGroup(artilleryGroup);
@@ -338,7 +338,7 @@ function groundTactics()
 		var target = rangeStep();
 		if (isDefined(target))
 		{
-			const UNITS = enumGroup(attackGroup).filter(function(dr) {
+			const UNITS = enumGroup(attackGroup).filter((dr) => {
 				return droidReady(dr.id);
 			});
 
@@ -405,7 +405,7 @@ function recycleForHover()
 	}
 
 	const MIN_FACTORY = 1;
-	var systems = enumDroid(me, DROID_CONSTRUCT).concat(enumDroid(me, DROID_SENSOR)).filter(function(dr) {
+	var systems = enumDroid(me, DROID_CONSTRUCT).concat(enumDroid(me, DROID_SENSOR)).filter((dr) => {
 		return (dr.body !== "CyborgLightBody" && dr.propulsion !== "hover01");
 	});
 	var unfinished = unfinishedStructures();
@@ -428,7 +428,7 @@ function recycleForHover()
 
 		if (forceHover)
 		{
-			var tanks = enumGroup(attackGroup).filter(function(dr) { return (dr.propulsion !== "hover01"); });
+			var tanks = enumGroup(attackGroup).filter((dr) => { return (dr.propulsion !== "hover01"); });
 			const NON_HOVER_TANKS = tanks.length;
 			for (var j = 0; j < NON_HOVER_TANKS; ++j)
 			{
@@ -468,7 +468,7 @@ function vtolTactics()
 	}
 
 	const MIN_VTOLS = 5;
-	var vtols = enumGroup(vtolGroup).filter(function(dr) {
+	var vtols = enumGroup(vtolGroup).filter((dr) => {
 		return droidReady(dr.id);
 	});
 	const LEN = vtols.length;
@@ -554,7 +554,7 @@ function attackThisObject(droidID, target)
 function enemyUnitsInBase()
 {
 	var area = cobraBaseArea();
-	var enemyUnits = enumArea(area.x1, area.y1, area.x2, area.y2, ENEMIES, false).filter(function(obj) {
+	var enemyUnits = enumArea(area.x1, area.y1, area.x2, area.y2, ENEMIES, false).filter((obj) => {
 		return (obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG));
 	}).sort(distanceToBase);
 
@@ -598,7 +598,7 @@ function donateSomePower()
 		return;
 	}
 
-	const ALLY_PLAYERS = playerAlliance(true).filter(function(player) { return playerData[player].isAI; });
+	const ALLY_PLAYERS = playerAlliance(true).filter((player) => { return playerData[player].isAI; });
 	const LEN = ALLY_PLAYERS.length;
 	const ALIVE_ENEMIES = findLivingEnemies().length;
 
@@ -762,7 +762,7 @@ function retreatTactics()
 	for (var i = 0, len = droids.length; i < len; ++i)
 	{
 		var droid = droids[i];
-		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter(function(obj) {
+		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter((obj) => {
 			return obj.type === DROID;
 		});
 
