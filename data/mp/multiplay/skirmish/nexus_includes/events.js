@@ -283,9 +283,9 @@ function eventStructureBuilt(structure, droid)
 	if (droid && droid.player === me && structure.stattype === RESOURCE_EXTRACTOR)
 	{
 		const SCAN_RANGE = 10;
-		var oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter((o) => {
-			return (o.type === FEATURE && o.stattype === OIL_RESOURCE);
-		});
+		var oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter((o) => (
+			o.type === FEATURE && o.stattype === OIL_RESOURCE
+		));
 
 		if (oils.length > 0 && !skipOilGrabIfEasy())
 		{

@@ -17,7 +17,7 @@ function produceTruck(factory, turrets) {
 		turret = turrets.concat();
 	turret.reverse();
 	// TODO: switch to using chooseBodyWeaponPair() here
-	var bodies = filterBodyStatsByUsage(BODYUSAGE.TRUCK, BODYCLASS.KINETIC).map((val) => { return val.stat; });
+	var bodies = filterBodyStatsByUsage(BODYUSAGE.TRUCK, BODYCLASS.KINETIC).map((val) => (val.stat));
 	var propulsions = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER);
 	return ourBuildDroid(factory, "Fancy Truck", bodies, propulsions, turret);
 }
@@ -144,9 +144,9 @@ function produceTemplate(factory) {
 
 _global.checkTruckProduction = function() {
 	var trucks = enumTrucks();
-	var hoverTrucksCount = trucks.filter((droid) => { return isHoverPropulsion(droid.propulsion); }).length;
+	var hoverTrucksCount = trucks.filter((droid) => (isHoverPropulsion(droid.propulsion))).length;
 	if (iHaveHover() && hoverTrucksCount < personality.minHoverTrucks) {
-		var groundTrucks = trucks.filter((droid) => { return !isHoverPropulsion(droid.propulsion); });
+		var groundTrucks = trucks.filter((droid) => (!isHoverPropulsion(droid.propulsion)));
 		if (groundTrucks.length > personality.minTrucks) {
 			groundTrucks.length -= personality.minTrucks;
 			groundTrucks.forEach((droid) => { orderDroid(droid, DORDER_RECYCLE); });

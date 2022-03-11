@@ -17,7 +17,7 @@ _global.fireLassat = function(structure) {
 	});
 	var maxIdx, maxPrice = 0;
 	list.forEach((obj, idx) => {
-		var price = enumRange(obj.x, obj.y, lassatSplash / 2, ENEMIES, false).reduce((prev, curr) => { return prev + curr.cost; }, 0);
+		var price = enumRange(obj.x, obj.y, lassatSplash / 2, ENEMIES, false).reduce((prev, curr) => (prev + curr.cost), 0);
 		if (price > maxPrice) {
 			maxPrice = price;
 			maxIdx = idx;

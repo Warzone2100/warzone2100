@@ -246,9 +246,9 @@ function skipOilGrabIfEasy()
 {
 	if (difficulty === EASY)
 	{
-		var myDerrickCount = enumStruct(me, BASE_STRUCTURES.derricks).filter((obj) => {
-			return obj.status === BUILT;
-		}).length;
+		var myDerrickCount = enumStruct(me, BASE_STRUCTURES.derricks).filter((obj) => (
+			obj.status === BUILT
+		)).length;
 		var enemies = getAliveEnemyPlayers();
 
 		for (var i = 0, len = enemies.length; i < len; ++i)

@@ -68,19 +68,15 @@ Array.prototype.last = function() {
 }
 
 Array.prototype.filterProperty = function(property, value) {
-	return this.filter((element) => {
-		return element[property] === value;
-	});
+	return this.filter((element) => (element[property] === value));
 }
 
 Array.prototype.someProperty = function(property, value) {
-	return this.some((element) => {
-		return element[property] === value;
-	});
+	return this.some((element) => (element[property] === value));
 }
 
 Array.prototype.shuffle = function() {
-	return this.sort(() => { return 0.5 - Math.random(); })
+	return this.sort(() => (0.5 - Math.random()))
 }
 
 _global.zeroArray = function(l) {

@@ -12,8 +12,8 @@ function adaptVote(our, their, verbose) {
 	if (!defined(verbose))
 		verbose = false;
 	var l = our.length;
-	var ourTotal = our.reduce((prev, curr) => { return prev + curr; });
-	var theirTotal = their.reduce((prev, curr) => { return prev + curr; });
+	var ourTotal = our.reduce((prev, curr) => (prev + curr));
+	var theirTotal = their.reduce((prev, curr) => (prev + curr));
 	if (theirTotal === 0)
 		return verbose ? randomUnitArray(l) : random(l);
 	var rating = [];
@@ -23,7 +23,7 @@ function adaptVote(our, their, verbose) {
 		for (var i = 0; i < l; ++i)
 			rating[i] -= our[i] / ourTotal;
 	if (verbose)
-		return rating.map((val) => { return (val + 1) / 2; });
+		return rating.map((val) => ((val + 1) / 2));
 	var maxRating = -Infinity;
 	var maxIdx = 0;
 	for (var i = 0; i < l; ++i)
@@ -146,9 +146,7 @@ function countLandTargets(player) {
 		if (!defined(currProp))
 			return 0;
 		var list = enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT));
-		return list.filter((obj) => {
-			return canReachFromBase(currProp, obj);
-		}).length;
+		return list.filter((obj) => (canReachFromBase(currProp, obj))).length;
 	}
 	return cached(uncached, 5000, player);
 }
@@ -160,9 +158,9 @@ function countSeaTargets(player) {
 		if (!defined(currProp))
 			return 0;
 		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
-		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => {
-			return (!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj);
-		}).length;
+		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => (
+			(!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj)
+		)).length;
 	}
 	return cached(uncached, 5000, player);
 }
@@ -174,9 +172,9 @@ function countAirTargets(player) {
 		if (!defined(currProp))
 			return 0;
 		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER)[0];
-		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => {
-			return (!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj);
-		}).length;
+		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => (
+			(!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj)
+		)).length;
 	}
 	return cached(uncached, 5000, player);
 }

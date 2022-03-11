@@ -108,13 +108,12 @@ function checkLocalJobs()
 	var trucks = findIdleTrucks();
 	var freeTrucks = trucks.length;
 	var success = false;
-	var structlist = enumStruct(me).filter((obj) => {
-		return (obj.status !== BUILT &&
-			obj.stattype !== RESOURCE_EXTRACTOR &&
-			obj.stattype !== DEFENSE &&
-			distBetweenTwoPoints(BASE.x, BASE.y, obj.x, obj.y) < HELP_CONSTRUCT_AREA
-		);
-	});
+	var structlist = enumStruct(me).filter((obj) => (
+		obj.status !== BUILT &&
+		obj.stattype !== RESOURCE_EXTRACTOR &&
+		obj.stattype !== DEFENSE &&
+		distBetweenTwoPoints(BASE.x, BASE.y, obj.x, obj.y) < HELP_CONSTRUCT_AREA
+	));
 
 	if (freeTrucks && structlist.length)
 	{
@@ -153,12 +152,10 @@ function scanAndDefendPosition(structure, droid)
 	}
 
 	var chance = ((structure && structure.stattype === RESOURCE_EXTRACTOR) || random(100) < 15);
-	var structs = enumRange(droid.x, droid.y, 5, me, false).filter((obj) => {
-		return obj.type === STRUCTURE;
-	});
-	var defenses = structs.filter((obj) => {
-		return obj.stattype === DEFENSE;
-	});
+	var structs = enumRange(droid.x, droid.y, 5, me, false).filter((obj) => (
+		obj.type === STRUCTURE
+	));
+	var defenses = structs.filter((obj) => (obj.stattype === DEFENSE));
 	var enemyDerr = enumRange(droid.x, droid.y, 3, ENEMIES, false).filter(isDerrick);
 	//Build a defense structure here.
 	if (chance || (defenses.length < MIN_DEFENSES) || (enemyDerr.length > 0 && defenses.length === 0))
@@ -210,9 +207,9 @@ function skipOilGrabIfEasy()
 {
 	if (difficulty === EASY)
 	{
-		var myDerrickCount = enumStruct(me, DERRICK_STAT).filter((obj) => {
-			return obj.status === BUILT;
-		}).length;
+		var myDerrickCount = enumStruct(me, DERRICK_STAT).filter((obj) => (
+			obj.status === BUILT
+		)).length;
 		var enemies = getAliveEnemyPlayers();
 
 		for (var i = 0, len = enemies.length; i < len; ++i)
@@ -287,7 +284,7 @@ function buildAntiAir(buildExtras)
 	}
 	const MAX_DEFENSES = countStruct(FACTORY_STAT) * 3;
 	const SAM_SITES = ["P0-AASite-SAM2", "P0-AASite-SAM1", "P0-AASite-Sunburst"];
-	var antiAirs = enumStruct(me).filter((obj) => { return obj.canHitAir; }).length;
+	var antiAirs = enumStruct(me).filter((obj) => (obj.canHitAir)).length;
 
 	if (buildExtras === false && antiAirs > MAX_DEFENSES)
 	{
@@ -417,9 +414,9 @@ function changeTruckRoleOnce()
 		return false;
 	}
 
-	var completeGen = enumStruct(me, POW_GEN_STAT).filter((obj) => {
-		return obj.status === BUILT;
-	});
+	var completeGen = enumStruct(me, POW_GEN_STAT).filter((obj) => (
+		obj.status === BUILT
+	));
 
 	if (completeGen.length > 0)
 	{

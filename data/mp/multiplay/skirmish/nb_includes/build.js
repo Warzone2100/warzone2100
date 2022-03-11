@@ -49,11 +49,9 @@ function getTwoFreeTrucks() {
 }
 
 function getFreeTruckAround(x, y) {
-	var list = enumTrucks().filter(truckFree).filter((droid) => {
-		return droidCanReach(droid, x, y);
-	}).sort((one, two) => {
-		return distance(one, x, y) - distance(two, x, y);
-	});
+	var list = enumTrucks().filter(truckFree).filter((droid) => (
+		droidCanReach(droid, x, y)
+	)).sort((one, two) => (distance(one, x, y) - distance(two, x, y)));
 	if (list.length > 0)
 		return list[0];
 }
@@ -62,7 +60,7 @@ function buildModule(struct) {
 	var trucks = getTwoFreeTrucks();
 	if (trucks.length <= 0)
 		return BUILDRET.FAILURE;
-	var moduleInfo = modules.filter((item) => { return isAvailable(item.module) && item.base === struct.stattype; }).last();
+	var moduleInfo = modules.filter((item) => (isAvailable(item.module) && item.base === struct.stattype)).last();
 	if (!defined(moduleInfo))
 		return BUILDRET.UNAVAILABLE;
 	if (struct.modules >= moduleInfo.count)
@@ -206,7 +204,7 @@ function buildGateways() {
 			cnt    -= enumRange(gate.x1, gate.y1, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
 			cnt    -= enumRange(gate.x2, gate.y2, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
 			return cnt >= 0 && (cnt < l || (personality.defensiveness === 100 && withChance(70))); // turtle AI needs to keep building towers
-		}).sort((one, two) => { return distanceToBase({x: one.x1, y: one.y1}) - distanceToBase({x: two.x1, y: two.y1}); });
+		}).sort((one, two) => (distanceToBase({x: one.x1, y: one.y1}) - distanceToBase({x: two.x1, y: two.y1})));
 		if (gates.length === 0)
 			return BUILDRET.FAILURE;
 		if (withChance(50))
@@ -235,9 +233,7 @@ _global.captureSomeOil = function() {
 		var oils = [];
 		oilResources.forEach((stat) => { oils = oils.concat(enumFeature(ALL_PLAYERS, stat)); });
 		oils = oils.concat(enumStructList(structures.derricks).filterProperty("status", BEING_BUILT));
-		oils = oils.sort((one, two) => {
-			return distanceToBase(one) - distanceToBase(two);
-		});
+		oils = oils.sort((one, two) => (distanceToBase(one) - distanceToBase(two)));
 		if (oils.length > 10)
 			oils.length = 10;
 		return oils;
