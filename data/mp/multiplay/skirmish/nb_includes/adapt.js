@@ -111,12 +111,12 @@ function MyStat() {
 
 var enemyStats = [], enemyStatsTemp = [];
 for (var i = 0; i < maxPlayers; ++i) {
-	enemyStats[i] = new EnemyStat;
-	enemyStatsTemp[i] = new EnemyStat;
+	enemyStats[i] = new EnemyStat();
+	enemyStatsTemp[i] = new EnemyStat();
 }
 
-var myStats = new MyStat;
-var myStatsTemp = new MyStat;
+var myStats = new MyStat();
+var myStatsTemp = new MyStat();
 
 var stack = [];
 var MAX_PER_CYCLE = 20;
@@ -317,10 +317,10 @@ _global.adaptCycle = function() {
 	}
 	if (adaptCycle.player === me) {
 		myStats = myStatsTemp;
-		myStatsTemp = new MyStat;
+		myStatsTemp = new MyStat();
 	} else {
 		enemyStats[adaptCycle.player] = enemyStatsTemp[adaptCycle.player];
-		enemyStatsTemp[adaptCycle.player] = new EnemyStat;
+		enemyStatsTemp[adaptCycle.player] = new EnemyStat();
 	}
 	do {
 		++adaptCycle.player;
