@@ -43,19 +43,19 @@ function checkBase(){
 	ccontrol = enumStruct(me, COMMAND_CONTROL);
 	repfac = enumStruct(me, REPAIR_FACILITY);
 
-	factory_ready = factory.filter((e) => {if(e.status == 1)return true; return false;});
-	power_gen_ready = power_gen.filter((e) => {if(e.status == 1)return true; return false;});
-	resource_extractor_ready = resource_extractor.filter((e) => {if(e.status == 1)return true; return false;});
+	factory_ready = factory.filter((e) => (e.status == 1));
+	power_gen_ready = power_gen.filter((e) => (e.status == 1));
+	resource_extractor_ready = resource_extractor.filter((e) => (e.status == 1));
 	se_r = resource_extractor_ready.length;
-	research_lab_ready = research_lab.filter((e) => {if(e.status == 1)return true; return false;});
-	hq_ready = hq.filter((e) => {if(e.status == 1)return true; return false;});
-	cyborg_factory_ready = cyborg_factory.filter((e) => {if(e.status == 1)return true; return false;});
-	vtol_factory_ready = vtol_factory.filter((e) => {if(e.status == 1)return true; return false;});
-	rearm_pad_ready = rearm_pad.filter((e) => {if(e.status == 1)return true; return false;});
-	uplink_center_ready = uplink_center.filter((e) => {if(e.status == 1)return true; return false;});
-	lassat_ready = lassat.filter((e) => {if(e.status == 1)return true; return false;});
-	ccontrol_ready = ccontrol.filter((e) => {if(e.status == 1)return true; return false;});
-	repfac_ready = repfac.filter((e) => {if(e.status == 1)return true; return false;});
+	research_lab_ready = research_lab.filter((e) => (e.status == 1));
+	hq_ready = hq.filter((e) => (e.status == 1));
+	cyborg_factory_ready = cyborg_factory.filter((e) => (e.status == 1));
+	vtol_factory_ready = vtol_factory.filter((e) => (e.status == 1));
+	rearm_pad_ready = rearm_pad.filter((e) => (e.status == 1));
+	uplink_center_ready = uplink_center.filter((e) => (e.status == 1));
+	lassat_ready = lassat.filter((e) => (e.status == 1));
+	ccontrol_ready = ccontrol.filter((e) => (e.status == 1));
+	repfac_ready = repfac.filter((e) => (e.status == 1));
 
 
 	/*
@@ -114,9 +114,9 @@ function builderBuild(droid, structure, rotation, position){
 			if(repfac.length === 0){
 				var target = getUnknownResources();
 				target = target.concat(getSeeResources());
-				target = sortByDistance(target, base).filter((e) => {
-					if(distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) < base_range && droidCanReach(droid, e.x,e.y) )return true;return false;
-				});
+				target = sortByDistance(target, base).filter((e) => (
+					distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) < base_range && droidCanReach(droid, e.x,e.y)
+				));
 				_pos = target[0];
 			}else{
 				_pos = repfac[0];
@@ -139,9 +139,9 @@ function builderBuild(droid, structure, rotation, position){
 			}
 		}else{
 			//Перевод базы на хрен знает что..
-			var _base = sortByDistance(getSeeResources(), base).filter((e) => {
-				if(distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) > base_range && droidCanReach(droid, e.x,e.y) )return true;return false;
-			});
+			var _base = sortByDistance(getSeeResources(), base).filter((e) => (
+				distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) > base_range && droidCanReach(droid, e.x,e.y)
+			));
 			if(_base.length > 0){
 //				debugMsg("WARNING: Не найдено подходящей площадки для постройки "+pos.x+"x"+pos.y+" "+structure+", меняем позицию базы с "+base.x+"x"+base.y+" на "+_base[0].x+"x"+_base[0].y+", dist="
 //				+distBetweenTwoPoints_p(base.x,base.y,_base[0].x,_base[0].y), 'builders');
@@ -398,13 +398,13 @@ function defenceQueue(){
 	if(!running)return;
 	if(defence.length === 0) return;
 	var myDefence = enumStruct(me,DEFENSE);
-	var onBase = myDefence.filter((e) => {if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;});
+	var onBase = myDefence.filter((e) => (distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range));
 	var myRigs = [];
 
 	if(policy['build'] == 'rich' ){
 
 		if(rage == INSANE){
-			myRigs = myRigs.concat(enumGroup(armyRegular).filter((e) => {if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) > (base_range/2))return true;return false;}));
+			myRigs = myRigs.concat(enumGroup(armyRegular).filter((e) => (distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) > (base_range/2))));
 		}else{
 
 			if(pointRegular){
@@ -420,8 +420,8 @@ function defenceQueue(){
 	}
 	else
 	{
-		myRigs = myRigs.concat(allResources.filter((e) => {if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2) && onBase.length > 20) return false; return true;}));
-	//	var myRigs = enumStruct(me,RESOURCE_EXTRACTOR).filter((e) => {if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2) && onBase.length > 20) return false; return true;});
+		myRigs = myRigs.concat(allResources.filter((e) => (!(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2) && onBase.length > 20))));
+	//	var myRigs = enumStruct(me,RESOURCE_EXTRACTOR).filter((e) => (!(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2) && onBase.length > 20)));
 	//	myRigs = myRigs.concat(enumFeature(me, "OilResource")); //Добавляем незанятые
 
 
@@ -494,7 +494,7 @@ function oilHunt(obj, nearbase){
 	if(builder_targets.length === 0) return false;
 	if (builderBusy(obj)) return false;
 	var myDefence = enumStruct(me,DEFENSE);
-	builder_targets = builder_targets.concat(myDefence.filter((e) => {if(e.status == 0 || e.health < 100) return true; return false;})); //Добавляем к целям недостроенные защитные сооружения
+	builder_targets = builder_targets.concat(myDefence.filter((e) => (e.status == 0 || e.health < 100))); //Добавляем к целям недостроенные защитные сооружения
 
 
 	//Если строитель рядом с вражеским ресурсом
@@ -550,7 +550,7 @@ function oilHunt(obj, nearbase){
 					//Проверяем, вдруг рядом другой строитель уже строит защитную башню
 
 					var def = enumRange(builder_targets[i].x, builder_targets[i].y, 7, ALLIES)
-					.filter((e) => {if(e.type == STRUCTURE && e.stattype == DEFENSE && e.status == BEING_BUILT)return true; return false;});
+					.filter((e) => (e.type == STRUCTURE && e.stattype == DEFENSE && e.status == BEING_BUILT));
 					if(def.length > 0){
 						orderDroidObj_p(obj, DORDER_HELPBUILD, def[0]);
 						return true;

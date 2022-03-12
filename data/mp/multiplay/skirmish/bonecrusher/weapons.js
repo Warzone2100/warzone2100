@@ -39,11 +39,7 @@ function _weaponsGetGuns(num){
 	}
 
 	if(_weapons.length > 0){
-		_weapons.sort((a, b) => {
-			if(a[1] < b[1]) return -1;
-			if(a[1] > b[1]) return 1;
-			return 0;
-		});
+		_weapons.sort((a, b) => (a[1] < b[1]));
 		_weapons.reverse();
 		_weapons=_weapons.slice(0, num);
 

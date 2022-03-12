@@ -400,8 +400,8 @@ function init(){
 
 	//Получаем координаты всех ресурсов и занятых и свободных
 	var freeResources = getFreeResources();
-	var nearResources = freeResources.filter((e) => {if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;});
-	nearResources = nearResources.concat(enumStruct(me, "A0ResourceExtractor").filter((e) => {if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;}));
+	var nearResources = freeResources.filter((e) => (distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range));
+	nearResources = nearResources.concat(enumStruct(me, "A0ResourceExtractor").filter((e) => (distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range)));
 	debugMsg("На карте "+freeResources.length+" свободных ресурсов", 'init');
 
 	allResources = getAllResources();
@@ -619,7 +619,7 @@ function letsRockThisFxxxingWorld(init){
 	include("multiplay/skirmish/"+vernum+"/weap-init.js");
 
 	//Remove chaingun and flamer cyborgs if better available
-	cyborgs = cyborgs.filter((e) => {if( (e[2] == 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] == 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done) )return false;return true;});
+	cyborgs = cyborgs.filter((e) => (!((e[2] == 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] == 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done))));
 
 	//Первых военных в группу
 	enumDroid(me,DROID_CYBORG).forEach((e) => {groupAdd(armyCyborgs, e);});
