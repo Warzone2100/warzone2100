@@ -99,7 +99,7 @@ UDWORD			researchModuleStat;
 
 //holder for all StructureStats
 STRUCTURE_STATS		*asStructureStats = nullptr;
-UDWORD				numStructureStats;
+UDWORD				numStructureStats = 0;
 static std::unordered_map<WzString, STRUCTURE_STATS *> lookupStructStatPtr;
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
