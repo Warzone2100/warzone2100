@@ -54,5 +54,6 @@ static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, 
 AtlasImageDef *iV_GetImage(const WzString &filename);
 IMAGEFILE *iV_LoadImageFile(const char *FileData);
 void iV_FreeImageFile(IMAGEFILE *ImageFile);
+void iV_ImageFileShutdown();
 
 #endif

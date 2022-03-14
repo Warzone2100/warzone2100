@@ -30,7 +30,6 @@
 #include <unordered_map>
 #include <vector>
 
-static std::unordered_map<WzString, AtlasImageDef *> images;
 static std::vector<IMAGEFILE *> files;
 
 struct ImageMergeRectangle
@@ -66,13 +65,16 @@ struct ImageMerge
 
 AtlasImageDef *iV_GetImage(const WzString &filename)
 {
-	auto it = images.find(filename);
-	if (it == images.end())
+	for (const auto& file : files)
 	{
-		debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().c_str());
-		return nullptr;
+		auto pImageDef = file->find(filename);
+		if (pImageDef != nullptr)
+		{
+			return pImageDef;
+		}
 	}
-	return it->second;
+	debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().c_str());
+	return nullptr;
 }
 
 // Used to provide empty space between sprites arranged on the page, to avoid display glitches when scaling + drawing
@@ -187,7 +189,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	}
 	IMAGEFILE *imageFile = new IMAGEFILE;
 	imageFile->imageDefs.resize(numImages);
-	imageFile->imageNames.resize(numImages);
+	imageFile->imageNamesMap.reserve(numImages);
 	ImageMerge pageLayout;
 	pageLayout.images.resize(numImages);
 	ptr = pFileData;
@@ -206,8 +208,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 			free(pFileData);
 			return nullptr;
 		}
-		imageFile->imageNames[numImages].first = tmpName;
-		imageFile->imageNames[numImages].second = numImages;
+		imageFile->imageNamesMap.insert(std::make_pair(WzString::fromUtf8(tmpName), AtlasImageDef));
 		std::string spriteName = imageDir + tmpName;
 
 		ImageMergeRectangle *imageRect = &pageLayout.images[numImages];
@@ -224,12 +225,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		numImages++;
 		ptr += temp;
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
-
-		images.insert(std::make_pair(WzString::fromUtf8(tmpName), AtlasImageDef));
 	}
 	free(pFileData);
-
-	std::sort(imageFile->imageNames.begin(), imageFile->imageNames.end());
 
 	pageLayout.arrange();  // Arrange all the images onto texture pages (attempt to do so with as few pages as possible).
 	imageFile->pages.resize(pageLayout.pages.size());
@@ -317,19 +314,37 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 
 void iV_FreeImageFile(IMAGEFILE *imageFile)
 {
-	// so when we get here, it is time to redo everything. will clean this up later. TODO.
-	files.clear();
-	images.clear();
 	delete imageFile;
 }
 
-AtlasImage IMAGEFILE::find(std::string const &name)
+IMAGEFILE::~IMAGEFILE()
 {
-	std::pair<std::string, int> val(name, 0);
-	std::vector<std::pair<std::string, int>>::const_iterator i = std::lower_bound(imageNames.begin(), imageNames.end(), val);
-	if (i != imageNames.end() && i->first == name)
+	auto it = std::find(files.begin(), files.end(), this);
+	ASSERT(it != files.end(), "Calling iV_FreeImageFile for IMAGEFILE that wasn't loaded??");
+	if (it != files.end())
 	{
-		return AtlasImage(this, i->second);
+		files.erase(it);
 	}
-	return AtlasImage(this, 0);  // Error, image not found.
+}
+
+AtlasImageDef* IMAGEFILE::find(WzString const &filename)
+{
+	auto it = imageNamesMap.find(filename);
+	if (it != imageNamesMap.end())
+	{
+		return it->second;
+
+	}
+//	debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().c_str());
+	return nullptr; // Error, image not found.
+}
+
+void iV_ImageFileShutdown()
+{
+	ASSERT(files.empty(), "%zu IMAGEFILEs were not properly unloaded", files.size());
+	for (auto file : files)
+	{
+		delete file;
+	}
+	files.clear();
 }

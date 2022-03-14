@@ -40,6 +40,7 @@
 #include "lib/framework/physfs_ext.h"
 
 #include "screen.h"
+#include "bitimage.h"
 #include "src/console.h"
 #include "src/levels.h"
 #include "lib/framework/wzapp.h"
@@ -237,6 +238,8 @@ void screenShutDown()
 	{
 		player_Text[i] = WzText();
 	}
+
+	iV_ImageFileShutdown();
 }
 
 /// Display a random backdrop from files in dirname starting with basename.
