@@ -431,12 +431,12 @@ bool recvDroid(NETQUEUE queue)
 	}
 
 	// Create that droid on this machine.
-	psDroid = reallyBuildDroid(pT, pos, player, false);
+	const auto r = Rotation();
+	psDroid = reallyBuildDroid(pT, pos, player, false, r, id);
 
 	// If we were able to build the droid set it up
 	if (psDroid)
 	{
-		psDroid->id = id;
 		addDroid(psDroid, apsDroidLists);
 
 		if (haveInitialOrders)

@@ -160,7 +160,7 @@ function __camGenericDebug(flag, func, args, err, bt)
 	{
 		for (var i = bt.length - 1; i >= 0; --i)
 		{
-			debug("STACK: from", [bt[i]]);
+			debug("STACK: from", JSON.stringify([bt[i]]));
 		}
 	}
 	if (!func)

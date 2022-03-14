@@ -66,7 +66,7 @@ function camSetEnemyBases(bases)
 					}
 					if (!camDef(bi.player) || camPlayerMatchesFilter(s.player, bi.player))
 					{
-						camTrace("Auto-adding", s.id, "to base", blabel);
+						//camTrace("Auto-adding", s.id, "to base", blabel);
 						groupAdd(bi.group, s);
 					}
 				}
@@ -117,21 +117,21 @@ function camSetEnemyBases(bases)
 				}
 				if (!camDef(bi.player) || camPlayerMatchesFilter(s.player, bi.player))
 				{
-					camTrace("Auto-adding", s.id, "to base", blabel);
+					//camTrace("Auto-adding", s.id, "to base", blabel);
 					groupAdd(bi.group, s);
 				}
 			}
 		}
 		if (groupSize(bi.group) === 0)
 		{
-			camDebug("Base", blabel, "defined as empty group");
+			//camDebug("Base", blabel, "defined as empty group");
 		}
 		if(!reload)
 		{
 			bi.detected = false;
 			bi.eliminated = false;
 		}
-		camTrace("Resetting label", blabel);
+		//camTrace("Resetting label", blabel);
 		resetLabel(blabel, CAM_HUMAN_PLAYER); // subscribe for eventGroupSeen
 	}
 }

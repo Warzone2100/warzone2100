@@ -676,6 +676,12 @@ void NETuint32_t(uint32_t *ip)
 	queueAuto(*ip);
 }
 
+void NETuint32_t(const uint32_t *ip)
+{
+	uint32_t ip_ = *ip;
+	queueAuto(ip_);
+}
+
 void NETint64_t(int64_t *ip)
 {
 	queueAuto(*ip);

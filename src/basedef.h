@@ -86,7 +86,7 @@ struct SIMPLE_OBJECT
 	virtual ~SIMPLE_OBJECT();
 
 	const OBJECT_TYPE type;                         ///< The type of object
-	uint32_t        id;                             ///< ID number of the object
+	const uint32_t  id;                             ///< ID number of the object
 	Position        pos = Position(0, 0, 0);        ///< Position of the object
 	Rotation        rot;                            ///< Object's yaw +ve rotation around up-axis
 	uint8_t         player;                         ///< Which player the object belongs to

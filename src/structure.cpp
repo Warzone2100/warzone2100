@@ -152,6 +152,12 @@ static int commanderLimit[MAX_PLAYERS];
 // max number of constructors
 static int constructorLimit[MAX_PLAYERS];
 
+// JS compatibility: remembers which module_id maps to which building
+// - why "MAX_PLAYER_SLOTS" instead of "MAX_PLAYERS"?
+// 	 because in Campaign, we have objects with player==12
+//   I don't what's the reason but we definitely need to handle more than MAX_PLAYERS 
+std::unordered_map<UDWORD, UDWORD> moduleToBuilding[MAX_PLAYER_SLOTS];
+
 static WzString favoriteStructs;
 
 #define MAX_UNIT_MESSAGE_PAUSE 40000
@@ -1303,10 +1309,15 @@ void alignStructure(STRUCTURE *psBuilding)
 /*Builds an instance of a Structure - the x/y passed in are in world coords. */
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave)
 {
-	return buildStructureDir(pStructureType, x, y, 0, player, FromSave);
+	return buildStructureDir(pStructureType, x, y, 0, player, FromSave, generateSynchronisedObjectId());
 }
 
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave)
+{
+	return buildStructureDir(pStructureType, x, y, direction, player, FromSave, generateSynchronisedObjectId());
+}
+
+STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id)
 {
 	STRUCTURE *psBuilding = nullptr;
 	const Vector2i size = pStructureType->size(direction);
@@ -1361,7 +1372,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		// allocate memory for and initialize a structure object
-		psBuilding = new STRUCTURE(generateSynchronisedObjectId(), player);
+		psBuilding = new STRUCTURE(id, player);
 		if (psBuilding == nullptr)
 		{
 			return nullptr;
@@ -1647,6 +1658,13 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			return nullptr;
 		}
 
+		// backward compatibility:
+		// JS scripts try to find buildings by their modules ids, which isn't possible anymore
+		// (because SIMPLE_OBJECT.id is const),
+		// so we maintain a map from module_id to buildings, so that qtscripts.cpp::loadLabels 
+		// can replace module_id with building_id
+		// *Not* doing so will break campaign (no artifacts being spawned from modules)
+		moduleToBuilding[player].emplace(id, psBuilding->id);
 		int prevResearchState = intGetResearchState();
 
 		if (pStructureType->type == REF_FACTORY_MODULE)

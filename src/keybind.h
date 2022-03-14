@@ -46,6 +46,7 @@ void kf_ToggleSamples();		// Displays # of sound samples in Queue/list.
 void kf_ToggleOrders();		//displays unit's Order/action state.
 void kf_FrameRate();
 void kf_ShowNumObjects();
+void kf_ListDroids();
 void kf_ToggleRadar();
 void kf_TogglePower();
 void kf_RecalcLighting();

@@ -90,6 +90,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"autogame on", kf_AutoGame},
 	{"autogame off", kf_AutoGame},
 	{"shakey", kf_ToggleShakeStatus}, //shakey
+	{"list droids", kf_ListDroids},
 
 };
 

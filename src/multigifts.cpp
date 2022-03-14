@@ -726,8 +726,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 		if (asFeatureStats[i].ref == ref)
 		{
 			// Create a feature of the specified type at the given location
-			FEATURE *result = buildFeature(&asFeatureStats[i], x, y, false);
-			result->id = id;
+			buildFeature(&asFeatureStats[i], x, y, false, id);
 			break;
 		}
 	}

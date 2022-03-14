@@ -455,16 +455,8 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	return nullptr;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// find a structure
-STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
+static STRUCTURE* _IdToStruct(UDWORD id, UDWORD beginPlayer, UDWORD endPlayer)
 {
-	int beginPlayer = 0, endPlayer = MAX_PLAYERS;
-	if (player != ANYPLAYER)
-	{
-		beginPlayer = player;
-		endPlayer = std::min<int>(player + 1, MAX_PLAYERS);
-	}
 	STRUCTURE **lists[2] = {apsStructLists, mission.apsStructLists};
 	for (int j = 0; j < 2; ++j)
 	{
@@ -478,6 +470,24 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 				}
 			}
 		}
+	}
+	return nullptr;
+}
+// ////////////////////////////////////////////////////////////////////////////
+// find a structure
+STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
+{
+	int beginPlayer = 0, endPlayer = MAX_PLAYERS;
+	if (player != ANYPLAYER)
+	{
+		beginPlayer = player;
+		endPlayer = std::min<int>(player + 1, MAX_PLAYERS);
+	}
+	STRUCTURE *out = nullptr;
+	out = _IdToStruct(id, beginPlayer, endPlayer);
+	if (out)
+	{
+		return out;
 	}
 	return nullptr;
 }

@@ -2217,7 +2217,7 @@ static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentD
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
-static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList);
+static bool loadSaveStructure2(const char *pFileName);
 static bool loadWzMapStructure(WzMap::Map& wzMap);
 static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
@@ -2817,7 +2817,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "mstruct.json");
 
 		//load in the mission structures
-		if (!loadSaveStructure2(aFileName, apsStructLists))
+		if (!loadSaveStructure2(aFileName))
 		{
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "mstruct.bjo");
@@ -3099,7 +3099,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			resetFactoryNumFlag();	//reset flags into the masks
 		}
 	}
-	else if (!loadSaveStructure2(aFileName, apsStructLists))
+	else if (!loadSaveStructure2(aFileName))
 	{
 		debug(LOG_ERROR, "Failed with: %s", aFileName);
 		goto error;
@@ -5036,16 +5036,19 @@ static bool loadWzMapDroidInit(WzMap::Map &wzMap)
 			continue;
 		}
 		turnOffMultiMsg(true);
-		auto psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0});
+		DROID *psDroid = nullptr;
+		if (droid.id.has_value() && droid.id.value() > 0)
+		{
+			psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0}, droid.id.value());
+		} else
+		{
+			psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0});
+		}
 		turnOffMultiMsg(false);
 		if (psDroid == nullptr)
 		{
 			debug(LOG_ERROR, "Failed to build unit %s", droid.name.c_str());
 			continue;
-		}
-		if (droid.id.has_value())
-		{
-			psDroid->id = droid.id.value() > 0 ? droid.id.value() : 0xFEDBCA98;	// hack to remove droid id zero
 		}
 		ASSERT(psDroid->id != 0, "Droid ID should never be zero here");
 
@@ -5482,15 +5485,16 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 
 		/* Create the Droid */
 		turnOffMultiMsg(true);
-		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
-		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().c_str());
-		turnOffMultiMsg(false);
-
-		// Copy the values across
 		if (id > 0)
 		{
-			psDroid->id = id; // force correct ID, unless ID is set to eg -1, in which case we should keep new ID (useful for starting units in campaign)
+			psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot, id);
+		} else
+		{
+			// will generate a new id
+			psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
 		}
+		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().c_str());
+		turnOffMultiMsg(false);
 		ASSERT(id != 0, "Droid ID should never be zero here");
 		// conditional check so that existing saved games don't break
 		if (ini.contains("originalBody"))
@@ -5908,9 +5912,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		{
 			continue;
 		}
-		// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
-		// the scripts -so in ALL CASES overwrite the ID!
-		psStructure->id = psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98; // hack to remove struct id zero
+
 		psStructure->periodicalDamage = psSaveStructure->periodicalDamage;
 		periodicalDamageTime = psSaveStructure->periodicalDamageStart;
 		psStructure->periodicalDamageStart = periodicalDamageTime;
@@ -5992,18 +5994,26 @@ static bool loadWzMapStructure(WzMap::Map& wzMap)
 			player = MAX_PLAYERS - 1;
 			NumberOfSkippedStructures++;
 		}
-		STRUCTURE *psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
+		STRUCTURE *psStructure = nullptr;
+		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", structure.id.value(), player, 
+				structure.name.c_str(), map_coord(structure.position.x), map_coord(structure.position.y));
+		if (structure.id.has_value() && structure.id.value() > 0)
+		{
+			psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true, structure.id.value());
+		} else
+		{
+			// generate new synchronised id
+			psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
+		}
+		
 		if (psStructure == nullptr)
 		{
 			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.c_str());
 			continue;
 		}
-		if (structure.id.has_value())
-		{
-			// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
-			// the scripts -so in ALL CASES overwrite the ID!
-			psStructure->id = structure.id.value() > 0 ? structure.id.value() : 0xFEDBCA98; // hack to remove struct id zero
-		}
+		// Previously, we would override building's ID with module's ID
+		// now, "id" is const, we can't do that. 
+		// this may break some mods which look up structures by theirs module id.
 		if (structure.modules > 0)
 		{
 			auto moduleStat = getModuleStat(psStructure);
@@ -6039,7 +6049,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap)
 
 // -----------------------------------------------------------------------------------------
 /* code for versions after version 20 of a save structure */
-static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
+static bool loadSaveStructure2(const char *pFileName)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
@@ -6097,18 +6107,18 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			ini.endGroup();
 			continue; // skip it
 		}
-		psStructure = buildStructureDir(psStats, pos.x, pos.y, rot.direction, player, true);
+		if (id <= 0)
+		{
+			id = generateSynchronisedObjectId();
+		}
+		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", id, player, psStats->name.toUtf8().c_str(), map_coord(pos.y), map_coord(pos.y));
+		psStructure = buildStructureDir(psStats, pos.x, pos.y, rot.direction, player, true, id);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure)
 		{
 			ini.endGroup();
 			continue;
 		}
-		if (id > 0)
-		{
-			psStructure->id = id;	// force correct ID
-		}
-
 		// common BASE_OBJECT info
 		loadSaveObject(ini, psStructure);
 
@@ -6141,6 +6151,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				for (int moduleIdx = 0; moduleIdx < capacity; moduleIdx++)
 				{
 					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
+					
 				}
 			}
 			if (ini.contains("Factory/template"))
@@ -6642,12 +6653,12 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 		//if haven't found the feature - ignore this record!
 		if (!found)
 		{
-			debug(LOG_ERROR, "This feature no longer exists - %s", psSaveFeature->name);
+			debug(LOG_ERROR, "This feature no longer exists - %s;%i", psSaveFeature->name, psSaveFeature->id);
 			//ignore this
 			continue;
 		}
 		//create the Feature
-		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y, true);
+		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y, true, psSaveFeature->id);
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
@@ -6658,7 +6669,6 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		pFeature->id = psSaveFeature->id;
 		pFeature->rot.direction = DEG(psSaveFeature->direction);
 		pFeature->periodicalDamage = psSaveFeature->periodicalDamage;
 		if (psHeader->version >= VERSION_14)
@@ -6690,7 +6700,15 @@ static bool loadWzMapFeature(WzMap::Map &wzMap)
 			continue;  // ignore this
 		}
 		// Create the Feature
-		auto pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true);
+		FEATURE *pFeature = nullptr;
+		//restore values && create Feature
+		if (feature.id.has_value())
+		{
+			pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true, feature.id.value());
+		} else
+		{
+			pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true);
+		}
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", feature.name.c_str());
@@ -6700,15 +6718,7 @@ static bool loadWzMapFeature(WzMap::Map &wzMap)
 		{
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
-		//restore values
-		if (feature.id.has_value())
-		{
-			pFeature->id = feature.id.value();
-		}
-		else
-		{
-			pFeature->id = generateSynchronisedObjectId();
-		}
+
 		pFeature->rot.direction = feature.direction;
 		pFeature->player = (feature.player.has_value()) ? feature.player.value() : PLAYER_FEATURE;
 	}
@@ -6756,7 +6766,15 @@ bool loadSaveFeature2(const char *pFileName)
 			continue;
 		}
 		//create the Feature
-		pFeature = buildFeature(psStats, pos.x, pos.y, true);
+		int id = ini.value("id", -1).toInt();
+		if (id > 0)
+		{
+			pFeature = buildFeature(psStats, pos.x, pos.y, true, id);
+		}
+		else
+		{
+			pFeature = buildFeature(psStats, pos.x, pos.y, true);
+		}
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", name.toUtf8().c_str());
@@ -6767,15 +6785,6 @@ bool loadSaveFeature2(const char *pFileName)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		int id = ini.value("id", -1).toInt();
-		if (id > 0)
-		{
-			pFeature->id = id;
-		}
-		else
-		{
-			pFeature->id = generateSynchronisedObjectId();
-		}
 		pFeature->rot = ini.vector3i("rotation");
 		pFeature->player = ini.value("player", PLAYER_FEATURE).toInt();
 
