@@ -337,7 +337,7 @@ ActivityManager::ActivityManager()
 	ASSERT(pWriteDir != nullptr, "PHYSFS_getWriteDir returned null");
 	if (pWriteDir)
 	{
-		std::string statsDBPath = std::string(pWriteDir) + PHYSFS_getDirSeparator() + "stats.db";
+		std::string statsDBPath = std::string(pWriteDir) + "/" + "stats.db";
 		try {
 			activityDatabase = std::make_shared<ActivityDatabase>(statsDBPath);
 		}
