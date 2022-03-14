@@ -281,13 +281,16 @@ bool recvOptions(NETQUEUE queue)
 			if (nondefaultlimitsize)
 			{
 				addConsoleMessage(astringf(_("Changed structure limits [%d]:"), nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-				for (i = 0; i < numStructureLimits; i++) {
+				int changedNum = 1;
+				for (i = 0; i < numStructureLimits; i++)
+				{
 					if (ingame.structureLimits[i].id < numStructureStats)
 					{
 						if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
 						{
 							WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
-							addConsoleMessage(astringf(_("[%d] Limit [%s]: %d"), i, structname.toUtf8().c_str(), ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							addConsoleMessage(astringf(_("[%d] Limit [%s]: %d (default: %d)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit, asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							changedNum++;
 						}
 					}
 					else
