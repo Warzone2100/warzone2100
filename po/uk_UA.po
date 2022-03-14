@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:25\n"
+"PO-Revision-Date: 2022-03-14 17:14\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4024,7 +4024,7 @@ msgstr "Захистіть пост Зв'язку від Альянсу"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Відправте принаймні один транспорт з вантажівкою та переживіть атаку Колективу допоки не сплине таймер"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -5828,7 +5828,7 @@ msgstr "Формат файлу повтору не підтримується"
 
 #: lib/netplay/nettypes.cpp:883
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Неможливо завантажити повтор: Файл повтору неповний або пошкоджений."
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -11704,7 +11704,7 @@ msgstr "Важкий Корпус 'НЕКСУСу'"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4276
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "Система захисту НЕКСУС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -12971,7 +12971,7 @@ msgstr "Звалищник"
 #. data/mp/stats/weapons.json: $.ScavNEXUSlink.name
 #: po/custom/fromJson.txt:5088
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "Башта турелі зв'язку НЕКСУС сміттярів"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -14933,7 +14933,7 @@ msgstr "Режим налагодження тепер увімкнено!"
 #: src/clparse.cpp:163
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "Використання: %s [OPTION...]\n"
 
 #: src/clparse.cpp:358
 msgid "Set configuration directory"
@@ -15028,7 +15028,7 @@ msgstr "Завантажте збережену компанію гри"
 
 #: src/clparse.cpp:373
 msgid "Load a replay"
-msgstr ""
+msgstr "Завантажити повтор"
 
 #: src/clparse.cpp:373
 msgid "replay file"
