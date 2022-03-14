@@ -36,6 +36,7 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 
 //*************************************************************************
@@ -191,11 +192,12 @@ struct IMAGEFILE
 		int size;  /// Size of texture in pixels. (Should be square.)
 	};
 
-	AtlasImage find(std::string const &name);  // Defined in bitimage.cpp.
+	~IMAGEFILE(); // Defined in bitimage.cpp.
+	AtlasImageDef* find(WzString const &name);  // Defined in bitimage.cpp.
 
 	std::vector<Page> pages;          /// Texture pages.
 	std::vector<AtlasImageDef> imageDefs;  /// Stored images.
-	std::vector<std::pair<std::string, int>> imageNames;  ///< Names of images, sorted by name. Can lookup indices from name.
+	std::unordered_map<WzString, AtlasImageDef *> imageNamesMap; // Names of images -> AtlasImageDef
 };
 
 struct AtlasImage
