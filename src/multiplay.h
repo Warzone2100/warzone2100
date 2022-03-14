@@ -82,6 +82,11 @@ struct MULTISTRUCTLIMITS
 {
 	uint32_t        id;
 	uint32_t        limit;
+
+	inline bool operator==(const MULTISTRUCTLIMITS& a) const
+	{
+		return (id == a.id && limit == a.limit);
+	}
 };
 
 // The side we are *configured* as. Used to indicate whether we are the server or the client. Note that when

@@ -258,6 +258,7 @@ bool recvOptions(NETQUEUE queue)
 		NETuint32_t(&ingame.structureLimits[i].limit);
 		if (bLimiterLoaded && ingame.structureLimits[i].id < numStructureStats)
 		{
+			ASSERT(asStructureStats != nullptr, "numStructureStats > 0, but asStructureStats is null??");
 			if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
 			{
 				nondefaultlimitsize++;
@@ -272,25 +273,9 @@ bool recvOptions(NETQUEUE queue)
 	if (bLimiterLoaded)
 	{
 		// Check if those vectors are different
-		// Could be done using vector==vector
-		// But I was too confused with operator== overloading --MaX
-		bool structurelimitsUpdated = false;
-		if (oldStructureLimits.size() == ingame.structureLimits.size())
-		{
-			for (i = 0; i < oldStructureLimits.size(); i++)
-			{
-				if (oldStructureLimits[i].id != ingame.structureLimits[i].id || oldStructureLimits[i].limit != ingame.structureLimits[i].limit)
-				{
-					structurelimitsUpdated = true;
-					break;
-				}
-			}
-		}
-		else
-		{
-			structurelimitsUpdated = true;
-		}
-		// Notify if structure limits got changed
+		bool structurelimitsUpdated = (oldStructureLimits.size() != ingame.structureLimits.size()) || (oldStructureLimits != ingame.structureLimits);
+	
+		// Notify if structure limits were changed
 		if (structurelimitsUpdated)
 		{
 			if (nondefaultlimitsize)
