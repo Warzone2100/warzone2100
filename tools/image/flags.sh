@@ -35,7 +35,7 @@ main() {
 			gravity=West
 		fi
 
-		convert temp.png -resize 50^x45^ -gravity "$gravity" -extent 50x45 "$WZ_ROOT/data/base/images/frontend/flag-$flag.png"
+		convert temp.png -resize 50^x45^ -gravity "$gravity" -extent 50x45 "$WZ_ROOT/data/base/images/flags/flag-$flag.png"
 	done
 }
 
