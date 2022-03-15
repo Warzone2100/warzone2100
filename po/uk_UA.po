@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-03-14 17:14\n"
+"PO-Revision-Date: 2022-03-15 05:14\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -15032,7 +15032,7 @@ msgstr "Завантажити повтор"
 
 #: src/clparse.cpp:373
 msgid "replay file"
-msgstr ""
+msgstr "файл повтору"
 
 #: src/clparse.cpp:374
 msgid "Play in windowed mode"
@@ -15363,7 +15363,7 @@ msgstr "%s - Гітпункти %d/%d - Досвід %.1f, %s, вбиває %d"
 #: src/display.cpp:1628
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Ворог!) %s - Здоров'я %d/%d - ID %d - досвід %f, %s - наказ %s - дія %s - радіус датчику %d - ECM %d - pitch %.0f"
 
 #: src/display.cpp:1772
 #, c-format
@@ -15374,7 +15374,7 @@ msgstr "%s - союзники - Гітпункти %d/%d - досвід %d, %s"
 #: src/display.cpp:1789
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Ворог!) %s, ref: %d, ID: %d Здоров'я: %d/%d"
 
 #: src/display3d.cpp:750
 msgid "Player left"
@@ -15688,7 +15688,7 @@ msgstr "Менеджер музики"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Опції мультиплеєру"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -16079,45 +16079,45 @@ msgstr "Ця складність для дуже досвідчених гра�
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u хвилин"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u секунд"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Пусто"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Опції хостингу:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Порт гри"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Увімкніть UPnP"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Час бездіяльності"
 
 #: src/frontend.cpp:2377
 msgid "Lag Kick"
-msgstr ""
+msgstr "Виключення через лаги"
 
 #: src/frontend.cpp:2382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Місця спостерігачів"
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "Опції мультиплеєру"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5127
@@ -16216,7 +16216,7 @@ msgstr "Показувати застарілу техніку"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Вартість: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
@@ -16264,7 +16264,7 @@ msgstr "Хід дослідження"
 
 #: src/hci/research.cpp:496
 msgid "Ally progress"
-msgstr ""
+msgstr "Прогрес союзників"
 
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:189
@@ -16285,7 +16285,7 @@ msgstr "ОБЕРЕЖНО: Ви хост. Якщо ви вийдете, гра з
 #: src/ingameop.cpp:131
 #: src/ingameop.cpp:266
 msgid "Host Quit"
-msgstr ""
+msgstr "Хост вийшов"
 
 #: src/ingameop.cpp:176
 #: src/ingameop.cpp:1064
@@ -16295,7 +16295,7 @@ msgstr "Тактичний інтерфейс (значок цільового �
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:1068
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "Тактичний інтерфейс (Ціль): Приховати"
 
 #: src/ingameop.cpp:186
 #: src/ingameop.cpp:597
@@ -16305,7 +16305,7 @@ msgstr ""
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:787
 msgid "Go Back"
-msgstr ""
+msgstr "Повернутися"
 
 #: src/ingameop.cpp:246
 #: src/ingameop.cpp:255
@@ -16324,19 +16324,19 @@ msgstr "Вийти"
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Увага: Ви впевнені?"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Увага: Ви впевнені? Весь незбережений прогрес буде втрачено."
 
 #: src/ingameop.cpp:323
 msgid "Confirm"
-msgstr ""
+msgstr "Підтвердити"
 
 #: src/ingameop.cpp:325
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: src/ingameop.cpp:404
 msgid "Host has quit the game!"
@@ -16356,19 +16356,19 @@ msgstr "Опції Звуку"
 
 #: src/ingameop.cpp:591
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Показати прив'язку клавіш"
 
 #: src/ingameop.cpp:647
 msgid "Shake"
-msgstr ""
+msgstr "Двигтіння"
 
 #: src/ingameop.cpp:1032
 msgid "Save Campaign Game"
-msgstr ""
+msgstr "Зберегти кампанію"
 
 #: src/ingameop.cpp:1036
 msgid "Save Skirmish Game"
-msgstr ""
+msgstr "Зберегти сутичку"
 
 #: src/init.cpp:609
 #, c-format
@@ -16381,36 +16381,36 @@ msgstr "Необхідний мод не був завантажений: %s\n\n
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Неможливо завантажити: %s."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Будь ласка, приберіть усі несумісні моди."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Глобальні гарячі клавіші"
 
 #: src/input/context.cpp:55
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Інші гарячі клавіші"
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
-msgstr ""
+msgstr "Геймплей"
 
 #: src/input/context.cpp:58
 msgid "Debug"
-msgstr ""
+msgstr "Режим відладки"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Відладка (редактор рівнів)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Відладка (вибір)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16439,7 +16439,7 @@ msgstr "Командири"
 #: src/input/keyconfig.cpp:45
 #: src/keybind.cpp:2560
 msgid "QuickSave"
-msgstr ""
+msgstr "Швидке збереження"
 
 #: src/input/keyconfig.cpp:46
 msgid "Toggle Radar"
@@ -16448,7 +16448,7 @@ msgstr "Прибрати Радар"
 #: src/input/keyconfig.cpp:47
 #: src/keybind.cpp:2585
 msgid "QuickLoad"
-msgstr ""
+msgstr "Швидке завантаження"
 
 #: src/input/keyconfig.cpp:48
 msgid "Toggle Console Display"
@@ -16472,7 +16472,7 @@ msgstr "Показати Місце Попереднього Повідомле�
 
 #: src/input/keyconfig.cpp:53
 msgid "Toggle Sensor display"
-msgstr ""
+msgstr "Перемкнути зображення датчиків"
 
 #: src/input/keyconfig.cpp:55
 msgid "Assign Group 0"
@@ -16516,47 +16516,47 @@ msgstr "Призначити Групу 9"
 
 #: src/input/keyconfig.cpp:66
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Додати до групи 0"
 
 #: src/input/keyconfig.cpp:67
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Додати до групи 1"
 
 #: src/input/keyconfig.cpp:68
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Додати до групи 2"
 
 #: src/input/keyconfig.cpp:69
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Додати до групи 3"
 
 #: src/input/keyconfig.cpp:70
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Додати до групи 4"
 
 #: src/input/keyconfig.cpp:71
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Додати до групи 5"
 
 #: src/input/keyconfig.cpp:72
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Додати до групи 6"
 
 #: src/input/keyconfig.cpp:73
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Додати до групи 7"
 
 #: src/input/keyconfig.cpp:74
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Додати до групи 8"
 
 #: src/input/keyconfig.cpp:75
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Додати до групи 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "Видалити з поточної групи"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -16644,19 +16644,19 @@ msgstr "Опції Мультиплеєра / Діалог альянсу"
 
 #: src/input/keyconfig.cpp:104
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Перемістити камеру вгору"
 
 #: src/input/keyconfig.cpp:105
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Перемістити камеру вниз"
 
 #: src/input/keyconfig.cpp:106
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Перемістити камеру праворуч"
 
 #: src/input/keyconfig.cpp:107
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Перемістити камеру ліворуч"
 
 #: src/input/keyconfig.cpp:108
 msgid "Snap View to North"
@@ -16764,19 +16764,19 @@ msgstr "Задіяти Накладення"
 
 #: src/input/keyconfig.cpp:134
 msgid "Toggle Console History "
-msgstr ""
+msgstr "Показати історію консолі "
 
 #: src/input/keyconfig.cpp:135
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Показати історію чату команди"
 
 #: src/input/keyconfig.cpp:136
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Повернути будівлю за годинниковою стрілкою"
 
 #: src/input/keyconfig.cpp:137
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Повернути будівлю проти годинникової стрілки"
 
 #: src/input/keyconfig.cpp:139
 msgid "Center View on HQ"
@@ -16841,7 +16841,7 @@ msgstr "Повернутися для Ремонту"
 
 #: src/input/keyconfig.cpp:152
 msgid "Stop Droid"
-msgstr ""
+msgstr "Зупинити дроїда"
 
 #: src/input/keyconfig.cpp:153
 #: src/intorder.cpp:181
@@ -16855,31 +16855,31 @@ msgstr "Великий радіус"
 
 #: src/input/keyconfig.cpp:155
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "Надіслати текстове повідомлення усім"
 
 #: src/input/keyconfig.cpp:156
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "Надіслати текстове повідомлення команді"
 
 #: src/input/keyconfig.cpp:157
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Встановити маячок"
 
 #: src/input/keyconfig.cpp:158
 msgid "Toggles shadows"
-msgstr ""
+msgstr "Переключити тіні"
 
 #: src/input/keyconfig.cpp:159
 msgid "Trap cursor"
-msgstr ""
+msgstr "Зафіксувати курсор"
 
 #: src/input/keyconfig.cpp:160
 msgid "Toggle radar terrain"
-msgstr ""
+msgstr "Перемкнути режим зображення ландшафту на радарі"
 
 #: src/input/keyconfig.cpp:161
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "Перемкнути режим зображення своїх-чужих на радарі"
 
 #: src/input/keyconfig.cpp:162
 msgid "Show all keyboard mappings"
@@ -16915,7 +16915,7 @@ msgstr "Обрати всі Підрозділи з Сильними Ушкод�
 #: src/input/keyconfig.cpp:172
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Обрати всіх бойових наземних юнітів із здоров'ям >50%, що не належать до груп."
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks"
@@ -18148,105 +18148,105 @@ msgstr "Хост викинув %s з гри!"
 #: src/multiint.cpp:4437
 #: src/multimenu.cpp:1286
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "Хост вилучив вас з гри."
 
 #: src/multiint.cpp:2341
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "Не вдалося перемістити %s до спостерігачів"
 
 #: src/multiint.cpp:2346
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "Хост перемістив %s до спостерігачів!"
 
 #: src/multiint.cpp:2369
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Перемістити до спостерігачів"
 
 #: src/multiint.cpp:2390
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Попросити спостерігача грати"
 
 #: src/multiint.cpp:2406
 msgid "Ask to Play"
-msgstr ""
+msgstr "Попросити грати"
 
 #: src/multiint.cpp:3012
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "Спостерігач %s хоче залишатися спостерігачем"
 
 #: src/multiint.cpp:3016
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "Гравець %s хоче залишатися гравцем"
 
 #: src/multiint.cpp:3024
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "Хост відмовився робити вас гравцем"
 
 #: src/multiint.cpp:3028
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Не вдалося стати спостерігачем"
 
 #: src/multiint.cpp:3056
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "Чи хочете ви спостерігати?"
 
 #: src/multiint.cpp:3057
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "Хост цієї кімнати хоче знати чи маєте ви бажання спостерігати?"
 
 #: src/multiint.cpp:3059
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Ви зараз є гравцем."
 
 #: src/multiint.cpp:3060
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "Так, я буду спостерігати!"
 
 #: src/multiint.cpp:3065
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Чи хочете ви грати?"
 
 #: src/multiint.cpp:3066
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "Хост цієї кімнати хоче знати чи не зіграли б ви?"
 
 #: src/multiint.cpp:3068
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Ви зараз є спостерігачем."
 
 #: src/multiint.cpp:3069
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Так, я хочу грати!"
 
 #: src/multiint.cpp:3112
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "Гравця %s було переміщено до спостергачів"
 
 #: src/multiint.cpp:3151
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Спостерігач хотів би стати гравцем"
 
 #: src/multiint.cpp:3152
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Спостерігач \"%s\" хотів би стати гравцем."
 
 #: src/multiint.cpp:3154
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "Все ж таки, зараз немає вільних місць для гравців."
 
 #: src/multiint.cpp:3156
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Чи не хочете ви змінити цього спостерігача на гравця?"
 
 #: src/multiint.cpp:3157
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Так, оберіть місце для гравця"
 
 #: src/multiint.cpp:3440
 msgid "Joined:"
