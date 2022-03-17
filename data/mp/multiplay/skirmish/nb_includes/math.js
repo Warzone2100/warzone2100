@@ -47,7 +47,7 @@ _global.distance = function distance(obj1, obj2, obj3, obj4) {
 }
 
 _global.defined = function(variable) {
-	return typeof(variable) !== "undefined";
+	return typeof variable !== "undefined";
 }
 
 // returns a random number between 0 and max-1 inclusively
