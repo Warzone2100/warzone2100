@@ -125,7 +125,6 @@ function sendTransport()
 	if (index === 5)
 	{
 		removeTimer("sendTransport");
-		return;
 	}
 }
 
