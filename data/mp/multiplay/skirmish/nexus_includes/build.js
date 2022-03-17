@@ -60,8 +60,8 @@ function structuresBuiltInRange(structInfo, x, y, playerType, range, visible)
 
 	var infoStore = [];
 	var objects = enumRange(x, y, range, playerType, visible);
-	var isString = (typeof(structInfo) === "string");
-	var isNum = (typeof(structInfo) === "number");
+	var isString = typeof structInfo === "string";
+	var isNum = typeof structInfo === "number";
 
 	if (!isNum && !isString)
 	{
