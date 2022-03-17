@@ -139,7 +139,7 @@ function doResearch_old(){
 
 
 	var labs = enumStruct(me,RESEARCH_LAB);
-	if ( typeof _r === "undefined" ) _r = 0;
+	if (typeof _r === "undefined") _r = 0;
 	var _busy = 0;
 
 	var _last_r = research_way[_r][research_way[_r].length-1];
@@ -193,7 +193,7 @@ function doResearch_old(){
 
 
 function fixResearchWay(way){
-	if ( typeof way === "undefined" ) return false;
+	if (typeof way === "undefined") return false;
 	if(!(way instanceof Array)) return false;
 //	debugMsg('Check tech '+way.length, 'research');
 	var _out = [];
@@ -213,7 +213,7 @@ function fixResearchWay(way){
 }
 
 function addPrimaryWay(){
-	if ( typeof research_primary === "undefined" ) return false;
+	if (typeof research_primary === "undefined") return false;
 	if(!(research_primary instanceof Array)) return false;
 	if(researchStrategy == "Smudged"){
 		research_primary.reverse();

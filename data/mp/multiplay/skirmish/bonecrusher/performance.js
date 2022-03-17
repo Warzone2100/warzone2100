@@ -26,7 +26,7 @@ var perfOrder=[];
 /*
 function orderDroidObj_p(who, order, obj){
 	var result = orderDroidObj(who, order, obj);
-	if (typeof perfOrder[droidTypes[who.droidType]+'_'+droidOrders[order]] != 'number'){
+	if (typeof perfOrder[droidTypes[who.droidType]+'_'+droidOrders[order]] !== "number"){
 		debugMsg(perfOrder[droidTypes[who.droidType]+'->'+droidOrders[order]], 'performance');
 		perfOrder[droidTypes[who.droidType]+'->'+droidOrders[order]]=1;
 		debugMsg(droidTypes[who.droidType]+'->'+droidOrders[order]+'->'+obj.type+'('+obj.x+'x'+obj.y+')', 'performance');
@@ -52,7 +52,7 @@ function orderDroidObj_p(who, order, obj){
 	var type_order = droidTypes[who.droidType]+'_'+droidOrders[order];
 	var orders = perfOrder[type_order];
 
-	if (typeof orders != 'number'){
+	if (typeof orders !== "number"){
 		orders = 1;
 	}
 	else {
@@ -75,7 +75,7 @@ function orderDroidLoc_p(who, order, x, y){
 	var type_order = droidTypes[who.droidType]+'_'+droidOrders[order];
 	var orders = perfOrder[type_order];
 
-	if (typeof orders != 'number'){
+	if (typeof orders !== "number"){
 		orders = 1;
 	}
 	else {
@@ -95,7 +95,7 @@ function orderDroidBuild_p(who, order, building, x, y, rotation){
 	var type_order = droidTypes[who.droidType]+'_'+droidOrders[order];
 	var orders = perfOrder[type_order];
 
-	if (typeof orders != 'number'){
+	if (typeof orders !== "number"){
 		orders = 1;
 	}
 	else {

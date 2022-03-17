@@ -19,23 +19,23 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 	/*
 	if(command == 'buildRig'){
 		debugMsg('DEBUG: '+x+','+y+','+command+','+time+','+inc, 'temp');
-		if(typeof _globalInfoNear[x+'_'+y+'_'+command] !== 'undefined'){
+		if(typeof _globalInfoNear[x+'_'+y+'_'+command] !== "undefined"){
 			debugMsg((gameTime-_globalInfoNear[x+'_'+y+'_'+command].setTime)+' left', 'temp');
 		}
 	}*/
 
 	debugMsg(x+'x'+y+' '+command, 'gi');
 
-	if ( typeof _globalInfoNear[x+'_'+y+'_'+command] !== 'undefined'
+	if (typeof _globalInfoNear[x+'_'+y+'_'+command] !== "undefined"
 	&& gameTime < (_globalInfoNear[x+'_'+y+'_'+command].setTime + _globalInfoNear[x+'_'+y+'_'+command].updateIn) ) {
 		if(inc){
 			_globalInfoNear[x+'_'+y+'_'+command].value++;
 		}
 		return _globalInfoNear[x+'_'+y+'_'+command];
 	}else{
-		if(typeof time === 'undefined') time = 30000;
-		if(typeof range === 'undefined') range = 7;
-		if(typeof cheat === 'undefined') var view = me;
+		if(typeof time === "undefined") time = 30000;
+		if(typeof range === "undefined") range = 7;
+		if(typeof cheat === "undefined") var view = me;
 		else if(cheat == true) var view = -1;
 //		_globalInfoNear[x+'_'+y+'_'+command] = new Array();
 		_globalInfoNear[x+'_'+y+'_'+command] = { setTime: gameTime, updateIn: time };
@@ -96,7 +96,7 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 			}
 			return _globalInfoNear[x+'_'+y+'_'+command];
 		}else if(command == 'actionTry'){
-			if(typeof _globalInfoNear[x+'_'+y+'_'+command].value === 'undefined'){
+			if(typeof _globalInfoNear[x+'_'+y+'_'+command].value === "undefined"){
 				_globalInfoNear[x+'_'+y+'_'+command].value = 0;
 //				debugMsg('getInfoNear set 0','temp');
 
@@ -161,7 +161,7 @@ function checkDonate(obj){
 
 function groupArmy(droid, type){
 
-	if ( typeof type === "undefined" ) type = false;
+	if (typeof type === "undefined") type = false;
 
 	if(type == 'jammer'){
 //		debugMsg("armyJammers +1", 'group');
@@ -240,7 +240,7 @@ function stats(){
 //Функция определяет подвергается ли ремонту наша цель
 //Если да, возвращяем объект, кто ремонтирует нашу цель
 function isBeingRepaired(who){
-	if ( typeof who === "undefined" ) {
+	if (typeof who === "undefined") {
 //		debugMsg("Атакующий неизвестен",5);
 		return false;
 	}
@@ -292,8 +292,8 @@ function isBeingRepaired(who){
 //если num не передан, возвращает полный сортированный массив
 //если num равен 1, то всё равно возвращается массив но с единственным объектом
 function sortByDistance(arr, obj, num, reach){
-	if ( typeof reach === "undefined" ) reach = false;
-	if ( typeof num === "undefined" || num == null || num == false) num = 0;
+	if (typeof reach === "undefined") reach = false;
+	if (typeof num === "undefined" || num == null || num == false) num = 0;
 	else if ( arr.length == 1 ) num = 1;
 
 	if ( num == 1 ) {
@@ -521,7 +521,7 @@ function getEnemyNearAlly(){
 }
 
 function getEnemyNearPos(x,y,r){
-	if(typeof r === 'undefined') r = 7;
+	if(typeof r === "undefined") r = 7;
 	var targ = [];
 	var enemy = [];
 	for ( var e = 0; e < maxPlayers; ++e ) {
@@ -919,7 +919,7 @@ function unitIdle(obj){
 //num - количество целей для распределения от 1 до 10
 function attackObjects(targets, warriors, num, scouting){
 	if ( targets.length == 0 || warriors.length == 0 ) return false;
-	if ( typeof num === "undefined" || num == null || num == 0 ) num = 3;
+	if (typeof num === "undefined" || num == null || num == 0) num = 3;
 	if ( num > 10 ) num = 10;
 	if ( warriors.length < num ) num = warriors.length;
 
@@ -1234,7 +1234,7 @@ function recycleDroid(droid){
 
 function getFixPoints(droid){
 
-	if ( typeof droid === "undefined" ) droid = false;
+	if (typeof droid === "undefined") droid = false;
 
 	var points = enumStruct(me, REPAIR_FACILITY);
 	points = points.concat(enumGroup(armyFixers));
@@ -1275,7 +1275,7 @@ function fixDroid(droid){
 //Отходить должны к ближайшим войскам, после определённого радиуса
 function getFleetPoint(droid){
 
-	if ( typeof droid === "undefined" ) return false;
+	if (typeof droid === "undefined") return false;
 
 	var droidsNear = enumRange(droid.x, droid.y, 10, ALLIES);
 //	debugMsg('dl:'+droidsNear.length, 'temp');

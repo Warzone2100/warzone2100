@@ -1,7 +1,7 @@
 debugMsg('Module: builders.js','init');
 
 function groupBuilders(droid){
-	if ( typeof order === "undefined" ) order = false;
+	if (typeof order === "undefined") order = false;
 	var buildersMainLen = groupSize(buildersMain);
 	var buildersHuntersLen = groupSize(buildersHunters);
 
@@ -77,7 +77,7 @@ function checkBase(){
 
 //Строим базу
 function builderBuild(droid, structure, rotation, position){
-	if(typeof position === 'undefined') position = false;
+	if(typeof position === "undefined") position = false;
 	var struct;
 	switch(structure){
 		case "A0LightFactory":if(enumStruct(me,FACTORY).length >= maxFactories)return false;struct = factory; break;
@@ -125,7 +125,7 @@ function builderBuild(droid, structure, rotation, position){
 
 		debugMsg("droid:"+droid.id+", structure:"+structure+", pos:"+_pos.x+'x'+_pos.y+", try", "builders");
 		var pos = pickStructLocation(droid,structure,_pos.x+1,_pos.y+1);
-		if (pos && !(typeof pos === 'undefined') && (policy['build'] == 'rich' || base_range < 15 || distBetweenTwoPoints_p(pos.x,pos.y,base.x,base.y) < (base_range+10))) {
+		if (pos && !(typeof pos === "undefined") && (policy['build'] == 'rich' || base_range < 15 || distBetweenTwoPoints_p(pos.x,pos.y,base.x,base.y) < (base_range+10))) {
 
 			var result = orderDroidBuild_p(droid, DORDER_BUILD, structure, pos.x, pos.y, rotation);
 			debugMsg("droid:"+droid.id+", structure:"+structure+", pos:"+pos.x+'x'+pos.y+", "+result, "builders");
@@ -194,8 +194,8 @@ function buildersOrder(order,target) {
 	allResources = getAllResources();
 //	debugMsg('buildersOrder()', 'builders_advanced');
 
-//	if ( typeof order === "undefined" ) order = false;
-//	if ( typeof target === "undefined" ) target = false;
+//	if (typeof order === "undefined") order = false;
+//	if (typeof target === "undefined") target = false;
 
 	var buildersMainLen = groupSize(buildersMain);
 	var buildersHuntersLen = groupSize(buildersHunters);
@@ -334,7 +334,7 @@ function buildersOrder(order,target) {
 
 //Функция постройка защиты у ресурса
 function rigDefence(obj, nearbase){
-	if ( typeof nearbase === "undefined" ) nearbase = false;
+	if (typeof nearbase === "undefined") nearbase = false;
 
 //	if( ( (playerPower(me) < 700 && nf['policy'] != 'island' ) || playerPower(me) < 200) && !berserk){
 
@@ -472,7 +472,7 @@ function defenceQueue(){
 
 //Функция строит защиту ПВО
 function AA_build(obj, nearbase){
-//	if ( typeof nearbase === "undefined" ) nearbase = false;
+//	if (typeof nearbase === "undefined") nearbase = false;
 	if(AA_defence.length != 0 && AA_queue.length != 0){
 		var _def = AA_defence[Math.floor(Math.random()*Math.min(AA_defence.length, 3))]; //Случайная из 3 последних
 		var target = AA_queue.shift();
@@ -490,7 +490,7 @@ function AA_build(obj, nearbase){
 
 
 function oilHunt(obj, nearbase){
-	if ( typeof nearbase === "undefined" ) nearbase = false;
+	if (typeof nearbase === "undefined") nearbase = false;
 	if(builder_targets.length == 0) return false;
 	if (builderBusy(obj)) return false;
 	var myDefence = enumStruct(me,DEFENSE);
@@ -525,7 +525,7 @@ function oilHunt(obj, nearbase){
 	for(var i in builder_targets){
 		if (getInfoNear(builder_targets[i].x,builder_targets[i].y,'safe').value){
 			if(distBetweenTwoPoints_p(builder_targets[i].x,builder_targets[i].y,obj.x,obj.y) <= target_range){
-				if ( typeof builder_targets[i] === "undefined" ) { debugMsg("ERROR in oilHunt(): Выход за пределы массива, исправить!", 'error'); break;}
+				if (typeof builder_targets[i] === "undefined") { debugMsg("ERROR in oilHunt(): Выход за пределы массива, исправить!", 'error'); break;}
 //				debugMsg(getInfoNear(builder_targets[i].x,builder_targets[i].y,'buildRig',0,300000,obj,false,true).value, 'temp');
 				if(builder_targets[i].type == FEATURE && getInfoNear(builder_targets[i].x,builder_targets[i].y,'actionTry',0,300000,false,false,true).value < feature_try){
 

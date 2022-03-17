@@ -163,7 +163,7 @@ function bc_eventStructureBuilt(structure, droid){
 	/*
 	if(policy['build'] == 'rich'){
 		var _b = enumGroup(buildersMain)[0];
-		if(typeof _b !== 'undefined'){
+		if(typeof _b !== "undefined"){
 			base.x = _b.x;
 			base.y = _b.y;
 		}
@@ -207,7 +207,7 @@ function bc_eventStructureBuilt(structure, droid){
 
 	//			if(policy['build'] != 'rich'){
 					var _b = enumGroup(buildersMain)[0];
-					if(typeof _b !== 'undefined'){
+					if(typeof _b !== "undefined"){
 						base.x = _b.x;
 						base.y = _b.y;
 					}
