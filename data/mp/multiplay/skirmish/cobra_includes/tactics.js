@@ -33,7 +33,7 @@ function beaconAreaHasEnemies()
 
 	const MAX_SCAN_RANGE = 15;
 
-	return enumRange(beacon.x, beacon.y, MAX_SCAN_RANGE, ENEMIES, false).length !== 0;
+	return enumRange(beacon.x, beacon.y, MAX_SCAN_RANGE, ENEMIES, false).length > 0;
 }
 
 //Modified from Nullbot.
