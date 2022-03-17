@@ -769,7 +769,6 @@ function retreat(obj)
 		{
 			orderDroid(obj, DORDER_RTR);
 		}
-		return;
 	}
 }
 

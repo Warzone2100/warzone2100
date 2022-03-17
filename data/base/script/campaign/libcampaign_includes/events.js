@@ -226,7 +226,6 @@ function cam_eventTransporterExit(transport)
 	{
 		camTrace("Transporter is away.");
 		__camGameWon();
-		return;
 	}
 }
 

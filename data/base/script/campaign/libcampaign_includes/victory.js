@@ -319,7 +319,6 @@ function __camVictoryStandard()
 		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
 		{
 			__camGameWon();
-			return;
 		}
 		else
 		{
@@ -333,7 +332,6 @@ function __camVictoryPreOffworld()
 	if (__camPlayerDead())
 	{
 		__camGameLost();
-		return;
 	}
 	// victory hooked from eventTransporterExit
 }
@@ -343,7 +341,6 @@ function __camVictoryTimeout()
 	if (__camPlayerDead())
 	{
 		__camGameLost();
-		return;
 	}
 	// victory hooked from eventMissionTimeout
 }
