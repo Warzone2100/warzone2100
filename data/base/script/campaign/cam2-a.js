@@ -255,7 +255,7 @@ function eventTransporterLanded(transport)
 			transporterIndex = 0;
 		}
 
-		transporterIndex = transporterIndex + 1;
+		transporterIndex += 1;
 
 		if (startedFromMenu)
 		{

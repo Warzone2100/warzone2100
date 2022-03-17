@@ -155,7 +155,7 @@ function vaporizeTarget()
 		//total tiles = 256. 256 / 2 = 128 tiles. 128 / 60 = 2.13 tiles per minute.
 		//2.13 / 60 = 0.0355 tiles per second. 0.0355 * 10 = ~0.36 tiles every 10 seconds.
 		//This assumes an hour to completely cover the upper half of the home map.
-		mapLimit = mapLimit + 0.36; //sector clear; move closer
+		mapLimit += 0.36; //sector clear; move closer
 	}
 	laserSatFuzzyStrike(target);
 }

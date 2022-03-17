@@ -142,7 +142,7 @@ function sendPlayerTransporter()
 		}
 	);
 
-	transporterIndex = transporterIndex + 1;
+	transporterIndex += 1;
 }
 
 //Setup Nexus VTOL hit and runners.

@@ -184,8 +184,8 @@ function __camFindGroupAvgCoordinate(groupID)
 	for (var i = 0; i < len; ++i)
 	{
 		var droid = droids[i];
-		avgCoord.x = avgCoord.x + droid.x;
-		avgCoord.y = avgCoord.y + droid.y;
+		avgCoord.x += droid.x;
+		avgCoord.y += droid.y;
 	}
 
 	// This global is constantly changing for the tactics code per group

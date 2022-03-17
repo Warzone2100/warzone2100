@@ -81,7 +81,7 @@ function setUpConsoleAndAudioVar()
 
 function increaseTutorialState()
 {
-	tutState = tutState + 1;
+	tutState += 1;
 }
 
 function grantStartTech()

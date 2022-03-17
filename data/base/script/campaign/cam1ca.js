@@ -128,7 +128,7 @@ function sendTransport()
 		data: { regroup: true, count: -1, pos: "buildArea" }
 	});
 
-	totalTransportLoads = totalTransportLoads + 1;
+	totalTransportLoads += 1;
 }
 
 function startTransporterAttack()

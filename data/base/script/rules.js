@@ -321,11 +321,11 @@ function resetPower()
 
 		if (tilesetType === "URBAN")
 		{
-			powerLimit = powerLimit + 5000;
+			powerLimit += 5000;
 		}
 		else if (tilesetType === "ROCKIES")
 		{
-			powerLimit = powerLimit + 10000;
+			powerLimit += 10000;
 		}
 	}
 	else if (difficulty === INSANE)
@@ -335,11 +335,11 @@ function resetPower()
 
 		if (tilesetType === "URBAN")
 		{
-			powerLimit = powerLimit + 2000;
+			powerLimit += 2000;
 		}
 		else if (tilesetType === "ROCKIES")
 		{
-			powerLimit = powerLimit + 4000;
+			powerLimit += 4000;
 		}
 	}
 
