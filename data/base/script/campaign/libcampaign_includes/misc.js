@@ -450,7 +450,7 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 		reachPosition &&
 		!propulsionCanReach("wheeled01", reachPosition.x, reachPosition.y, pos.x, pos.y) &&
 		(camDist(pos, reachPosition) < distFromReach) &&
-		(enumRange(pos.x, pos.y, scanObjectRadius, ALL_PLAYERS, false).length !== 0));
+		(enumRange(pos.x, pos.y, scanObjectRadius, ALL_PLAYERS, false).length > 0));
 
 	return pos;
 }

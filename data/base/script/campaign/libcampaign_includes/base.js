@@ -259,7 +259,7 @@ function __camCheckBaseEliminated(group)
 		{
 			continue;
 		}
-		if (enumGroup(bi.group).length !== 0)
+		if (enumGroup(bi.group).length > 0)
 		{
 			return; //still has something in the base group
 		}

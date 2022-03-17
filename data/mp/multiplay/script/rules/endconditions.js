@@ -64,7 +64,7 @@ class Player
 
 	canReachOil()
 	{
-		if (enumStruct(this.playNum, RESOURCE_EXTRACTOR).length != 0)
+		if (enumStruct(this.playNum, RESOURCE_EXTRACTOR).length > 0)
 		{
 			return true;
 		}
@@ -248,7 +248,7 @@ function checkEndConditions()
 	{
 		return team.isContender();
 	});
-	if (contenderTeams.length <= 1 && newlyLosingTeams.length !== 0) // game end
+	if (contenderTeams.length <= 1 && newlyLosingTeams.length > 0) // game end
 	{
 		contenderTeams.forEach((team) =>
 		{
