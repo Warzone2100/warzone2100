@@ -38,7 +38,7 @@ function _weaponsGetGuns(num){
 		}
 	}
 
-	if(_weapons.length != 0){
+	if(_weapons.length > 0){
 		_weapons.sort(function (a,b){
 			if(a[1] < b[1]) return -1;
 			if(a[1] > b[1]) return 1;

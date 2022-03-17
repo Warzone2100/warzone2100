@@ -447,16 +447,16 @@ function init(){
 	});
 	debugMsg('bc_ally.length: '+bc_ally.length, 'init');
 
-	if(ally.length == 0){
+	if(ally.length === 0){
 		debugMsg("Союзников нет" , 'init');
 	}
-	if(ally.length == 1){
+	if(ally.length === 1){
 		debugMsg("Имеется союзник" , 'init');
 	}
 	if(ally.length > 1){
 		debugMsg("Имеются союзники" , 'init');
 	}
-	if(ally.length != 0){
+	if(ally.length > 0){
 		if(alliancesType == 2) debugMsg("Исследования общие", 'init');
 		if(alliancesType == 3) debugMsg("Исследования раздельные", 'init');
 	}
@@ -699,7 +699,7 @@ function initBase(){
 
 	//Получаем свои координаты
 	var _r = Math.floor(Math.random()*_builders.length);
-	if(_builders.length != 0) base = {x:_builders[_r].x, y:_builders[_r].y};
+	if(_builders.length > 0) base = {x:_builders[_r].x, y:_builders[_r].y};
 
 	_builders.forEach(function(e){groupBuilders(e);});
 

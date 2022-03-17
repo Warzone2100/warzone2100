@@ -184,11 +184,11 @@ function bc_eventStructureBuilt(structure, droid){
 //				power_gen_ready = power_gen.filter(function(e){if(e.status == 1)return true; return false;});
 				factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
 				research_lab_ready = research_lab.filter(function(e){if(e.status == 1)return true; return false;});
-//				if( (factory_ready.length == 1 && research_lab_ready.length == 1) || power_gen_ready.length == 1)
-				if(factory_ready.length == 2 && research_lab_ready.length == 1){
+//				if( (factory_ready.length === 1 && research_lab_ready.length === 1) || power_gen_ready.length === 1)
+				if(factory_ready.length === 2 && research_lab_ready.length === 1){
 					enumGroup(buildersMain).forEach(function(e,i){if(i!=0){groupAdd(buildersHunters, e);debugMsg("FORCE "+i+" Builder --> Hunter +1", 'group');}});
 				}
-				else if( ( ( factory_ready.length == 1 && research_lab_ready.length == 3) || research_lab_ready.length == 4 ) && policy['build'] == 'rich'){
+				else if( ( ( factory_ready.length === 1 && research_lab_ready.length === 3) || research_lab_ready.length === 4 ) && policy['build'] == 'rich'){
 					var e = enumGroup(buildersMain)[0];
 					groupAdd(buildersHunters, e);
 				}
@@ -200,7 +200,7 @@ function bc_eventStructureBuilt(structure, droid){
 			factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
 
 			if(groupSize(buildersMain) != 0){
-				if( ( (factory_ready.length == 1 && research_lab_ready.length == 1) || factory_ready.length == 2 || factory_ready.length == 3) && policy['build'] == 'rich'){
+				if( ( (factory_ready.length === 1 && research_lab_ready.length === 1) || factory_ready.length === 2 || factory_ready.length === 3) && policy['build'] == 'rich'){
 					var e = enumGroup(buildersMain)[0];
 					groupAdd(buildersHunters, e);
 				}
@@ -372,7 +372,7 @@ function bc_eventAttacked(victim, attacker) {
 		//Отходим к союзникам, если союзная армия ближе
 		point = point.concat(getAllyArmy());
 
-		if(point.length != 0){
+		if(point.length > 0){
 			point = sortByDistance(point, victim, 1);
 		} else point = base;
 
@@ -417,7 +417,7 @@ function bc_eventAttacked(victim, attacker) {
 			var enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){
 				return (e.type == DROID);
 			});
-			if(enemies.length != 0){
+			if(enemies.length > 0){
 				enemies = sortByDistance(enemies, victim, 1);
 				orderDroidObj_p(victim, DORDER_ATTACK, enemies[0]);
 				return;
