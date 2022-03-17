@@ -74,7 +74,7 @@ function eventPickup(feature, droid)
 		{
 			oilDrumData.delay = 0;
 		}
-		oilDrumData.delay = oilDrumData.delay + 100;
+		oilDrumData.delay += 100;
 		// amounts to 10 minutes average respawn time
 		queue("placeOilDrum", (delay * 120000) + oilDrumData.delay);
 	}

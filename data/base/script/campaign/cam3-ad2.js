@@ -158,7 +158,7 @@ function vaporizeTarget()
 			//119 tiles / 60 minutes = 1.983 tiles per minute
 			//1.983 tile per minute / 60 seconds = 0.03305 tiles per second
 			//0.03305 * 10 sec = ~0.33 tiles per blast at 10 second intervals.
-			mapLimit = mapLimit + 0.33; //sector clear; move closer
+			mapLimit += 0.33; //sector clear; move closer
 		}
 		laserSatFuzzyStrike(target);
 	}

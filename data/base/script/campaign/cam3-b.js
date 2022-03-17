@@ -262,7 +262,7 @@ function eventAttacked(victim, attacker)
 
 	if (victim.player === GAMMA && attacker.player === NEXUS)
 	{
-		gammaAttackCount = gammaAttackCount + 1;
+		gammaAttackCount += 1;
 	}
 }
 

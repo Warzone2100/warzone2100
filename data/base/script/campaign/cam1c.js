@@ -127,7 +127,7 @@ function getDroidsForNPLZ(args)
 	if (useArtillery)
 	{
 		list[list.length] = cTempl.npsens; //sensor will count towards scout total
-		numScouts = numScouts - 1;
+		numScouts -= 1;
 		heavy = cTempl.npmor;
 	}
 
