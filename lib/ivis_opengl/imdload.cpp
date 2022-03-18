@@ -48,7 +48,6 @@ using Vector4f = glm::vec4;
 #define INT_SCALE       1000
 
 static std::unordered_map<std::string, iIMDShape> models;
-static std::unordered_map<iIMDShape*, std::string> modelsReverse;
 
 static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd);
 
@@ -65,7 +64,6 @@ iIMDShape::~iIMDShape()
 void modelShutdown()
 {
 	models.clear();
-	modelsReverse.clear();
 }
 
 void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDShape& model)>& func)
@@ -98,12 +96,12 @@ static bool tryLoad(const WzString &path, const WzString &filename)
 
 const std::string &modelName(iIMDShape *model)
 {
-	auto it = modelsReverse.find(model);
-	if (it != modelsReverse.end())
+	if (model != nullptr)
 	{
-		return it->second;
+		ASSERT(!model->modelName.empty(), "An IMD pointer could not be backtraced to a filename!");
+		return model->modelName;
 	}
-	ASSERT(false, "An IMD pointer could not be backtraced to a filename!");
+	ASSERT(false, "Null IMD pointer??");
 	static std::string error;
 	return error;
 }
@@ -749,7 +747,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	}
 	ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
 	iIMDShape &s = models[key]; // create entry and return reference
-	modelsReverse[&s] = key;
+	s.modelName = key;
 	s.pShadowPoints = &s.points;
 	s.pShadowPolys = &s.polys;
 
