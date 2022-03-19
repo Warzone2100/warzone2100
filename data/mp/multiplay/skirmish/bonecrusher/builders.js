@@ -649,9 +649,9 @@ function builderRecycleWalls(builder){
 /*
 
 function findRig() {
-	var myBuilders = new Array();
-	var myMainBuilders = new Array();
-	var myHelpBuilders = new Array();
+	var myBuilders = [];
+	var myMainBuilders = [];
+	var myHelpBuilders = [];
 
 	myMainBuilders = enumDroid(me, DROID_CONSTRUCT);
 	myHelpBuilders = enumDroid(me, 10);

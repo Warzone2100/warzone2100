@@ -52,9 +52,9 @@ NTW Авиация исследует кластерные бомбы и при�
 */
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error');
+var debugLevels = ['error'];
 
-//var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
+//var debugLevels = ['init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting'];
 
 
 
