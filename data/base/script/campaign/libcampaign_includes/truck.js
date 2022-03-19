@@ -80,7 +80,7 @@ function __camTruckTick()
 {
 	// Issue truck orders for each player.
 	// See comments inside the loop to understand priority.
-	for (var playerObj in __camTruckInfo)
+	for (const playerObj in __camTruckInfo)
 	{
 		var ti = __camTruckInfo[playerObj];
 		var player = ti.player;

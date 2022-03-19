@@ -26,7 +26,7 @@
 function camSetArtifacts(artifacts)
 {
 	__camArtifacts = artifacts;
-	for (var alabel in __camArtifacts)
+	for (const alabel in __camArtifacts)
 	{
 		var ai = __camArtifacts[alabel];
 		var pos = camMakePos(alabel);
@@ -61,7 +61,7 @@ function camAllArtifactsPickedUp()
 function camGetArtifacts()
 {
 	var camArti = [];
-	for (var alabel in __camArtifacts)
+	for (const alabel in __camArtifacts)
 	{
 		var artifact = __camArtifacts[alabel];
 		var libLabel = __camGetArtifactLabel(alabel);
@@ -176,7 +176,7 @@ function __camPickupArtifact(artifact)
 
 function __camLetMeWinArtifacts()
 {
-	for (var alabel in __camArtifacts)
+	for (const alabel in __camArtifacts)
 	{
 		var ai = __camArtifacts[alabel];
 		if (ai.placed)

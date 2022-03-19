@@ -17,12 +17,9 @@ function eventStartLevel() {
 		}
 		// the random "s" number obtained here is the same for all players in any team
 		var s = s + (new Date()).getMinutes();
+		s = s % Object.keys(subpersonalities).length;
 		j = 0;
-		for (var i in subpersonalities) // count the amount of subpersonalities
-			++j;
-		s = s % j;
-		j = 0;
-		for (var i in subpersonalities) {
+		for (const i in subpersonalities) {
 			if (j === s)
 				personality = subpersonalities[i];
 			++j;

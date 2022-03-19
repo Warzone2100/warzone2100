@@ -81,7 +81,7 @@ function chatWho(sender, argument) {
 
 function chatSet(sender, argument) {
 	var str = "";
-	for (var i in subpersonalities) {
+	for (const i in subpersonalities) {
 		if (subpersonalities[i].chatalias === argument) {
 			personality = subpersonalities[i];
 			return _("Personality change successful.");
@@ -105,7 +105,7 @@ function chatRes(sender, argument) {
 		return _("Researching fundamental technology.");
 	}
 	var str = " cl no fn";
-	for (var i in weaponStats) {
+	for (const i in weaponStats) {
 		if (weaponStats[i].chatalias === argument) {
 			setForcedResearch(weaponStatsToResList(weaponStats[i]));
 			return _("Researching ") + weaponStats[i].chatalias;

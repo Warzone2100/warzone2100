@@ -57,14 +57,14 @@ function doResearch(){
 
 	//Get clean array without objects
 	var researches = [];
-	for(var r in avail_research){researches.push(avail_research[r].id);}
+	for (const r in avail_research) {researches.push(avail_research[r].id);}
 
 	var to_research = [];
 
 	//Check if we are at a dead end of the technology branch
-	for(var t in prepare_research){
+	for (const t in prepare_research) {
 		var research = findResearch(prepare_research[t]);
-		for(var r in research){
+		for (const r in research) {
 			to_research.push(research[r].id);
 		}
 //		to_research = to_research.filter(o=>researches.indexOf(o)!==-1);
@@ -162,7 +162,7 @@ function doResearch_old(){
 // 	if(countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 2) return;
 // 	if(countStruct('A0ResourceExtractor', me) <= 3 && playerPower(me) < 300 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 1) return;
 
-	for ( var l in labs ){
+	for (const l in labs) {
 
 		if(policy['build'] != 'rich'){
 			if(countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && _busy >= 3) break;
@@ -198,7 +198,7 @@ function fixResearchWay(way){
 //	debugMsg('Check tech '+way.length, 'research');
 	var _out = [];
 
-	for(var i in way){
+	for (const i in way) {
 //		debugMsg('Check: '+way[i], 'research');
 		var _res = getResearch(way[i]);
 		if(_res == null){
@@ -217,7 +217,7 @@ function addPrimaryWay(){
 	if(!(research_primary instanceof Array)) return false;
 	if(researchStrategy == "Smudged"){
 		research_primary.reverse();
-		for(var i in research_primary){
+		for (const i in research_primary) {
 			research_way.unshift([research_primary[i]]);
 		}
 		debugMsg("research_primary smudged", 'research');
@@ -225,7 +225,7 @@ function addPrimaryWay(){
 	}
 	if(researchStrategy == "Strict"){
 		var _out=[];
-		for(i in research_primary){
+		for (const i in research_primary) {
 			_out.push(research_primary[i]);
 		}
 		research_way.unshift(_out);
@@ -234,7 +234,7 @@ function addPrimaryWay(){
 	}
 	if(researchStrategy == "Random"){
 		shuffle(research_primary);
-		for(i in research_primary){
+		for (const i in research_primary) {
 			research_way.unshift([research_primary[i]]);
 		}
 		debugMsg("research_primary random", 'research');

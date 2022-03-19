@@ -54,7 +54,7 @@ function SimpleStat() {
 function addStat(to, what, weight) {
 	if (!defined(weight))
 		weight = 1;
-	for (var prop in to) {
+	for (const prop in to) {
 		if (to[prop].constructor === Array)
 			for (var i = 0; i < to[prop].length; ++i)
 				to[prop][i] += what[prop][i] * weight;
@@ -77,7 +77,7 @@ function ScopeStat() {
 	// a function to convert this sort of stat to a SimpleStat
 	this.collapse = function() {
 		var ret = new SimpleStat();
-		for (var i in SCOPES)
+		for (const i in SCOPES)
 			addStat(ret, this[i]);
 		return ret;
 	}
@@ -244,14 +244,14 @@ function summUpEnemyObject(obj, stat) {
 	var ret = classifyObject(obj);
 	var w = obj.cost;
 	if (obj.type === STRUCTURE) {
-		for (var scope in SCOPES)
+		for (const scope in SCOPES)
 			if (canReachBy(scope, obj)) // structures don't move, so they are usually counted as defense
 				addStat(stat.defense[scope], ret, w);
 		if (obj.range > baseScale * 2) // unless they're covering the whole map with their range
 			addStat(stat.offense, ret, w);
 	}
 	if (obj.type === DROID) {
-		for (var scope in SCOPES)
+		for (const scope in SCOPES)
 			if (canReachBy(scope, obj)) // if the droid can't reach your base, we count it as defense only
 				addStat(stat.defense[scope], ret, w);
 		if (threatensBase(obj)) // otherwise count them as offense as well
@@ -265,7 +265,7 @@ function summUpMyObject(obj, stat) {
 	if (obj.type === STRUCTURE) {
 		addStat(stat.defense, ret, w);
 		if (obj.range > baseScale * 2)
-			for (var scope in SCOPES)
+			for (const scope in SCOPES)
 				addStat(stat.offense[scope], ret, w);
 	}
 	if (obj.type === DROID) {

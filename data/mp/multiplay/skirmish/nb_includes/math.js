@@ -105,7 +105,7 @@ Array.prototype.addArray = function(arr) {
 _global.randomItem = function(obj) {
 	var ret;
 	var count = 0;
-	for (var i in obj)
+	for (const i in obj)
 		if (Math.random() < 1/++count)
 			ret = i;
 	return obj[ret];

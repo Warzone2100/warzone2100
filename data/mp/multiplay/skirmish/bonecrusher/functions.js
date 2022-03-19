@@ -54,7 +54,7 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 				danger = danger.concat(enumStruct(scavengerPlayer, DEFENSE, view));
 			}
 
-			for ( var d in danger ) {
+			for (const d in danger) {
 				if ( distBetweenTwoPoints_p(x,y,danger[d].x,danger[d].y) < range ) {
 					_globalInfoNear[x+'_'+y+'_'+command].value = false;
 					return _globalInfoNear[x+'_'+y+'_'+command];
@@ -65,7 +65,7 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 		}else if(command == 'defended'){
 
 			var defenses = enumStruct(me, DEFENSE).filter(function(e){if(e.status == BUILT) return true; return false;});
-			for ( var d in defenses ) {
+			for (const d in defenses) {
 				if ( distBetweenTwoPoints_p(x,y,defenses[d].x,defenses[d].y) < range ) {
 					_globalInfoNear[x+'_'+y+'_'+command].value = true;
 					return _globalInfoNear[x+'_'+y+'_'+command];
@@ -262,7 +262,7 @@ function isBeingRepaired(who){
 //			debugMsg("Нас атакует вражесая башня ["+who.player+"]",5);
 			var droids = enumDroid(who.player,DROID_CONSTRUCT,me);
 			if ( droids.length != 0 ) {
-				for ( var i in droids ) {
+				for (const i in droids) {
 					if ( distBetweenTwoPoints_p(who.x,who.y,droids[i].x,droids[i].y) <= 3 ) {
 //						debugMsg("Атакующая меня башня подвергается ремонту!",5);
 						return droids[i];
@@ -300,7 +300,7 @@ function sortByDistance(arr, obj, num, reach){
 
 		var b = Infinity;
 		var c = new Array();
-		for ( var i in arr ) {
+		for (const i in arr) {
 			if(reach)if(!droidCanReach_p(obj, arr[i].x, arr[i].y))continue;
 //			if(reach)if(!droidCanReach_p(arr[i], obj.x, obj.y))continue;
 			var a = distBetweenTwoPoints_p( obj.x, obj.y, arr[i].x, arr[i].y );
@@ -352,7 +352,7 @@ function checkProcess(){
 		gameStop("loose");
 	}
 
-	for ( var plally in bc_ally ){
+	for (const plally in bc_ally) {
 		if(bc_ally[plally] == me) continue;
 
 		if(getInfoNear(base.x,base.y,'safe',base_range).value){
@@ -579,7 +579,7 @@ function getUnknownResources(){
 	var iSee = getSeeResources();
 	if ( iSee.length == 0 ) return allResources;
 	var notSee = allResources.filter(function (value) {
-		for ( var i in iSee ) {
+		for (const i in iSee) {
 			if ( value.x == iSee[i].x && value.y == iSee[i].y ) return false;
 		}
 		return true;
@@ -671,7 +671,7 @@ function getEnemyCloseBase(){
 
 function getOurDefences(){
 	var targ = [];
-	for ( var a in ally ){
+	for (const a in ally) {
 		targ = targ.concat(enumStruct(a, DEFENSE).filter(function(e){if(e.status == 1)return true; return false;}));
 	}
 	targ = targ.concat(enumStruct(me, DEFENSE).filter(function(e){if(e.status == 1)return true; return false;}));
@@ -896,7 +896,7 @@ function inProduce(type){
 	if(produceTrigger.length == 0) return 0;
 	var _prod = 0;
 
-	for ( var p in produceTrigger ){
+	for (const p in produceTrigger) {
 		if (produceTrigger[p] == type) _prod++;
 	}
 
@@ -925,7 +925,7 @@ function attackObjects(targets, warriors, num, scouting){
 
 	targets = targets.slice(0,num);
 
-	for ( var i in targets ) {
+	for (const i in targets) {
 		var target = isBeingRepaired(targets[i]);
 		if ( target != false) {
 			targets[i] = target;
@@ -942,11 +942,11 @@ function attackObjects(targets, warriors, num, scouting){
 		var a = Math.floor(warriors.length/targets.length);
 		var i=0;
 		var t=0;
-		for ( var n in warriors ) {
+		for (const n in warriors) {
 			t++;
 			if ( i == targets.length ) return true;
 			var busy = false;
-			for ( var j in targets ) {
+			for (const j in targets) {
 				if ( distBetweenTwoPoints_p ( targets[j].x,targets[j].y,warriors[n].x,warriors[n].y ) < 7 ) {
 					if(scouting) orderDroidLoc_p(warriors[n], DORDER_SCOUT, targets[j].x, targets[j].y);
 					else orderDroidObj_p( warriors[n], DORDER_ATTACK, targets[j] );
