@@ -239,7 +239,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	{
 		lobbyCommand_PrintHelp(static_cast<uint32_t>(message.sender));
 	}
-	else if (strcmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "admin") == 0)
+	else if (strcmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "admin") == 0 || strcmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "admins") == 0)
 	{
 		lobbyCommand_Admin();
 	}
