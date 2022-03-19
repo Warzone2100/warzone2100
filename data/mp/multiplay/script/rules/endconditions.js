@@ -295,8 +295,8 @@ function inOneTeam(playnum, splaynum)
 function createTeams()
 {
 	teams = [];
-	playersTeam = new Array(maxPlayers);
-	const inTeamPlayNums = new Array(maxPlayers).fill(false);
+	playersTeam = Array(maxPlayers);
+	const inTeamPlayNums = Array(maxPlayers).fill(false);
 	for (let playNum = 0; playNum < maxPlayers; playNum++)
 	{
 		if (isSpectator(playNum))

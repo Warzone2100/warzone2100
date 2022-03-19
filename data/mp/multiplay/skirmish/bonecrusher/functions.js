@@ -37,11 +37,11 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 		if(typeof range === 'undefined') range = 7;
 		if(typeof cheat === 'undefined') var view = me;
 		else if(cheat == true) var view = -1;
-//		_globalInfoNear[x+'_'+y+'_'+command] = new Array();
+//		_globalInfoNear[x+'_'+y+'_'+command] = [];
 		_globalInfoNear[x+'_'+y+'_'+command] = { setTime: gameTime, updateIn: time };
 
 		if(command == 'safe'){
-			var danger = new Array();
+			var danger = [];
 			for ( var e = 0; e < maxPlayers; ++e ) {
 				if ( allianceExistsBetween(me,e) ) continue;
 				danger = danger.concat(enumDroid(e, DROID_WEAPON, view));
@@ -299,7 +299,7 @@ function sortByDistance(arr, obj, num, reach){
 	if ( num == 1 ) {
 
 		var b = Infinity;
-		var c = new Array();
+		var c = [];
 		for (const i in arr) {
 			if(reach)if(!droidCanReach_p(obj, arr[i].x, arr[i].y))continue;
 //			if(reach)if(!droidCanReach_p(arr[i], obj.x, obj.y))continue;
@@ -590,7 +590,7 @@ function getUnknownResources(){
 
 //Функция возвращает все видимые ресурсы, свободные, свои и занятые кем либо
 function getSeeResources(){
-	var iSee = new Array();
+	var iSee = [];
 	iSee = iSee.concat(enumFeature(me, "OilResource"));
 	for ( var e = 0; e < maxPlayers; ++e ){
 //		if ( !allianceExistsBetween(me,e) ) continue; //Выкидываем вражеские
