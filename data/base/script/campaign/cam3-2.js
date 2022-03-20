@@ -71,9 +71,8 @@ function setAlphaExp()
 		obj.type === DROID
 	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (const dr of alphaDroids)
 	{
-		var dr = alphaDroids[i];
 		if (!camIsSystemDroid(dr))
 		{
 			setDroidExperience(dr, DROID_EXP);
@@ -89,9 +88,8 @@ function getAlphaUnitIDs()
 		obj.type === DROID && obj.experience === 512
 	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (const dr of alphaDroids)
 	{
-		var dr = alphaDroids[i];
 		alphaUnitIDs.push(dr.id);
 	}
 	startExtraLoss = true;
@@ -231,11 +229,11 @@ function alphaTeamAlive()
 			obj.type === DROID
 		));
 
-		for (var i = 0, l = alive.length; i < l; ++i)
+		for (const aliveItem of alive)
 		{
-			for (var x = 0, c = alphaUnitIDs.length; x < c; ++x)
+			for (const alphaUnitID of alphaUnitIDs)
 			{
-				if (alive[i].id === alphaUnitIDs[x])
+				if (aliveItem.id === alphaUnitID)
 				{
 					alphaAlive = true;
 					break;

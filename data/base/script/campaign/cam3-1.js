@@ -126,16 +126,13 @@ function nukeAndCountSurvivors()
 	var foundUnit = false;
 
 	//Make em' explode!
-	for (var i = 0, len = nuked.length; i < len; ++i)
+	for (const obj1 of nuked)
 	{
 		var nukeIt = true;
-		var obj1 = nuked[i];
 
 		//Check if it's in the safe area.
-		for (var j = 0, len2 = safeZone.length; j < len2; ++j)
+		for (const obj2 of safeZone)
 		{
-			var obj2 = safeZone[j];
-
 			if (obj1.id === obj2.id)
 			{
 				if (obj1.type === DROID && obj1.player === CAM_HUMAN_PLAYER)

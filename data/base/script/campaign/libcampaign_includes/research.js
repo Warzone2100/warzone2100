@@ -9,9 +9,8 @@
 //;;
 function camEnableRes(list, player)
 {
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (const research of list)
 	{
-		var research = list[i];
 		enableResearch(research, player);
 		completeResearch(research, player);
 	}
@@ -26,9 +25,8 @@ function camCompleteRequiredResearch(items, player)
 {
 	dump("\n*Player " + player + " requesting accelerated research.");
 
-	for (var i = 0, l = items.length; i < l; ++i)
+	for (const research of items)
 	{
-		var research = items[i];
 		dump("Searching for required research of item: " + research);
 		var reqRes = findResearch(research, player).reverse();
 
@@ -43,9 +41,9 @@ function camCompleteRequiredResearch(items, player)
 		}
 
 		reqRes = camRemoveDuplicates(reqRes);
-		for (var s = 0, r = reqRes.length; s < r; ++s)
+		for (const reqRe of reqRes)
 		{
-			var researchReq = reqRes[s].name;
+			var researchReq = reqRe.name;
 			dump("	Found: " + researchReq);
 			enableResearch(researchReq, player);
 			completeResearch(researchReq, player);

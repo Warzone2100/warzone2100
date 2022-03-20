@@ -201,9 +201,8 @@ function camCountStructuresInArea(lab, player)
 	}
 	var list = enumArea(lab, player, false);
 	var ret = 0;
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (const object of list)
 	{
-		var object = list[i];
 		if (object.type === STRUCTURE && object.stattype !== WALL && object.status === BUILT)
 		{
 			++ret;
@@ -319,9 +318,8 @@ function camMakeGroup(what, filter)
 	if (camDef(array))
 	{
 		var group = camNewGroup();
-		for (var i = 0, l = array.length; i < l; ++i)
+		for (const o of array)
 		{
-			var o = array[i];
 			if (!camDef(o) || !o)
 			{
 				camDebug("Trying to add", o);
@@ -458,23 +456,23 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 // Figures out what campaign we are in without reliance on the source at all.
 function camDiscoverCampaign()
 {
-	for (var i = 0, len = ALPHA_LEVELS.length; i < len; ++i)
+	for (const alphaLevel of ALPHA_LEVELS)
 	{
-		if (__camNextLevel === ALPHA_LEVELS[i] || __camNextLevel === BETA_LEVELS[0])
+		if (__camNextLevel === alphaLevel || __camNextLevel === BETA_LEVELS[0])
 		{
 			return ALPHA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (var i = 0, len = BETA_LEVELS.length; i < len; ++i)
+	for (const betaLevel of BETA_LEVELS)
 	{
-		if (__camNextLevel === BETA_LEVELS[i] || __camNextLevel === GAMMA_LEVELS[0])
+		if (__camNextLevel === betaLevel || __camNextLevel === GAMMA_LEVELS[0])
 		{
 			return BETA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (var i = 0, len = GAMMA_LEVELS.length; i < len; ++i)
+	for (const gammaLevel of GAMMA_LEVELS)
 	{
-		if (__camNextLevel === GAMMA_LEVELS[i] || __camNextLevel === CAM_GAMMA_OUT)
+		if (__camNextLevel === gammaLevel || __camNextLevel === CAM_GAMMA_OUT)
 		{
 			return GAMMA_CAMPAIGN_NUMBER;
 		}
@@ -500,18 +498,18 @@ function __camFindClusters(list, size)
 		var y = list[i].y;
 		var found = false;
 		var n = 0;
-		for (var j = 0; j < ret.clusters.length; ++j)
+		for (const [j, cluster] of ret.clusters.entries())
 		{
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
 			{
-				n = ret.clusters[j].length;
-				ret.clusters[j][n] = list[i];
+				n = cluster.length;
+				cluster[n] = list[i];
 				ret.xav[j] = Math.floor((n * ret.xav[j] + x) / (n + 1));
 				ret.yav[j] = Math.floor((n * ret.yav[j] + y) / (n + 1));
-				if (ret.clusters[j].length > ret.maxCount)
+				if (cluster.length > ret.maxCount)
 				{
 					ret.maxIdx = j;
-					ret.maxCount = ret.clusters[j].length;
+					ret.maxCount = cluster.length;
 				}
 				found = true;
 				break;

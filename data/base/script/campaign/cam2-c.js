@@ -156,16 +156,16 @@ function captureCivilians()
 		//Only count civilians that are not in the the transporter base.
 		var civs = enumArea(0, 0, 35, mapHeight, SCAV_7, false);
 		//Move them
-		for (i = 0; i < civs.length; ++i)
+		for (const civ of civs)
 		{
-			orderDroidLoc(civs[i], DORDER_MOVE, currPos.x, currPos.y);
+			orderDroidLoc(civ, DORDER_MOVE, currPos.x, currPos.y);
 		}
 
 		if (civilianPosIndex <= 5)
 		{
-			for (i = 0; i < shepardDroids.length; ++i)
+			for (const shepardDroid of shepardDroids)
 			{
-				orderDroidLoc(shepardDroids[i], DORDER_MOVE, currPos.x, currPos.y);
+				orderDroidLoc(shepardDroid, DORDER_MOVE, currPos.x, currPos.y);
 			}
 		}
 
@@ -191,15 +191,15 @@ function civilianOrders()
 	var rescued = false;
 
 	//Check if a civilian is close to a player droid.
-	for (var i = 0; i < civs.length; ++i)
+	for (const civ of civs)
 	{
-		var objs = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
-		for (var j = 0; j < objs.length; ++j)
+		var objs = enumRange(civ.x, civ.y, 6, CAM_HUMAN_PLAYER, false);
+		for (const obj of objs)
 		{
-			if (objs[j].type === DROID)
+			if (obj.type === DROID)
 			{
 				rescued = true;
-				orderDroidLoc(civs[i], DORDER_MOVE, lz.x, lz.y);
+				orderDroidLoc(civ, DORDER_MOVE, lz.x, lz.y);
 				break;
 			}
 		}
@@ -224,9 +224,9 @@ function eventTransporterLanded(transport)
 	{
 		playSound(escaping);
 		capturedCivCount += civs.length - 1;
-		for (var i = 0; i < civs.length; ++i)
+		for (const civ of civs)
 		{
-			camSafeRemoveObject(civs[i], false);
+			camSafeRemoveObject(civ, false);
 		}
 	}
 }
@@ -264,9 +264,9 @@ function extraVictoryCondition()
 		var lz = getObject("startPosition");
 		var civs = enumRange(lz.x, lz.y, 30, SCAV_7, false);
 
-		for (var i = 0; i < civs.length; ++i)
+		for (const civ of civs)
 		{
-			camSafeRemoveObject(civs[i], false);
+			camSafeRemoveObject(civ, false);
 		}
 
 		//Win regardless if all civilians do not make it to the LZ.

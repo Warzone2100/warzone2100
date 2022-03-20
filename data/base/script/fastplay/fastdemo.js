@@ -40,9 +40,9 @@ function grantStartTech()
 	];
 
 	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
-	for (var i = 0, l = STRUCTS.length; i < l; ++i)
+	for (const struct of STRUCTS)
 	{
-		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
+		enableStructure(struct, CAM_HUMAN_PLAYER);
 	}
 
 	//NOTE: To prevent extra research from being exposed from the MG damage

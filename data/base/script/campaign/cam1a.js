@@ -89,9 +89,8 @@ function eventStructureBuilt(structure, droid)
 	{
 		// Is it in the base two area?
 		var objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
-		for (var i = 0, l = objs.length; i < l; ++i)
+		for (const obj of objs)
 		{
-			var obj = objs[i];
 			if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
 			{
 				camCallOnce("raidAttack");
@@ -123,9 +122,9 @@ function enableBaseStructures()
 		"A0ResearchFacility", "A0LightFactory",
 	];
 
-	for (var i = 0; i < STRUCTS.length; ++i)
+	for (const struct of STRUCTS)
 	{
-		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
+		enableStructure(struct, CAM_HUMAN_PLAYER);
 	}
 }
 

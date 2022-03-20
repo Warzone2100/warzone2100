@@ -89,9 +89,8 @@ function camSetFactoryData(flabel, fdata)
 	{
 		fi.group = camNewGroup();
 	}
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (const droid of droids)
 	{
-		var droid = droids[i];
 		groupAdd(fi.group, droid);
 	}
 	if (!camDef(fi.data.count))
@@ -187,9 +186,8 @@ function camUpgradeOnMapTemplates(t1, t2, player, excluded)
 
 	var droidsOnMap = enumDroid(player);
 
-	for (var i = 0, l = droidsOnMap.length; i < l; ++i)
+	for (const dr of droidsOnMap)
 	{
-		var dr = droidsOnMap[i];
 		if (!camDef(dr.weapons[0]))
 		{
 			continue; //don't handle systems
@@ -205,9 +203,9 @@ function camUpgradeOnMapTemplates(t1, t2, player, excluded)
 			{
 				if (excluded instanceof Array)
 				{
-					for (var j = 0, c = excluded.length; j < c; ++j)
+					for (const excludedItem of excluded)
 					{
-						if (dr.id === excluded[j])
+						if (dr.id === excludedItem)
 						{
 							skip = true;
 							break;
@@ -309,9 +307,8 @@ function __camChangePropulsionOnDiff(propulsion)
 		name = name.substring(0, name.length - 2);
 	}
 
-	for (var i = 0, l = VALID_PROPS.length; i < l; ++i)
+	for (const currentProp of VALID_PROPS)
 	{
-		var currentProp = VALID_PROPS[i];
 		if (name === currentProp)
 		{
 			//if hard difficulty and a future template has a type III then this will

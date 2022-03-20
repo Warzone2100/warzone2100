@@ -44,11 +44,11 @@ function camSetVtolSpawnState(state, identifier)
 	}
 	else if (typeof identifier === "string")
 	{
-		for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+		for (const camVtolDataSystem of __camVtolDataSystem)
 		{
-			if (__camVtolDataSystem[idx].spawnStopObject === identifier)
+			if (camVtolDataSystem.spawnStopObject === identifier)
 			{
-				__camVtolDataSystem[idx].active = state;
+				camVtolDataSystem.active = state;
 				break;
 			}
 		}
@@ -61,7 +61,7 @@ function camSetVtolSpawnState(state, identifier)
 
 function camSetVtolSpawnStateAll(state)
 {
-	for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+	for (const [idx, camVtolDataSystem] of __camVtolDataSystem.entries())
 	{
 		camSetVtolSpawnState(state, idx);
 	}
@@ -71,11 +71,11 @@ function camSetVtolSpawnStateAll(state)
 
 function __checkVtolSpawnObject()
 {
-	for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+	for (const [idx, camVtolDataSystem] of __camVtolDataSystem.entries())
 	{
-		if (__camVtolDataSystem[idx].active && camDef(__camVtolDataSystem[idx].spawnStopObject))
+		if (camVtolDataSystem.active && camDef(camVtolDataSystem.spawnStopObject))
 		{
-			if (getObject(__camVtolDataSystem[idx].spawnStopObject) === null)
+			if (getObject(camVtolDataSystem.spawnStopObject) === null)
 			{
 				camSetVtolSpawnState(false, idx); //Deactivate hit and runner VTOLs.
 			}
@@ -85,17 +85,17 @@ function __checkVtolSpawnObject()
 
 function __camSpawnVtols()
 {
-	for (let idx = 0; idx < __camVtolDataSystem.length; ++idx)
+	for (const camVtolDataSystem of __camVtolDataSystem)
 	{
-		if (!__camVtolDataSystem[idx].active)
+		if (!camVtolDataSystem.active)
 		{
 			continue;
 		}
-		if (gameTime < __camVtolDataSystem[idx].nextSpawnTime)
+		if (gameTime < camVtolDataSystem.nextSpawnTime)
 		{
-			if (__camVtolDataSystem[idx].isFirstSpawn)
+			if (camVtolDataSystem.isFirstSpawn)
 			{
-				__camVtolDataSystem[idx].isFirstSpawn = false;
+				camVtolDataSystem.isFirstSpawn = false;
 			}
 			else
 			{
@@ -104,22 +104,22 @@ function __camSpawnVtols()
 		}
 		else
 		{
-			__camVtolDataSystem[idx].nextSpawnTime = gameTime + __camVtolDataSystem[idx].timer;
+			camVtolDataSystem.nextSpawnTime = gameTime + camVtolDataSystem.timer;
 		}
 
 		// Default VTOL amounts
 		let minVtolAmount = 5;
 		let maxRandomAdditions = 2;
 
-		if (camDef(__camVtolDataSystem[idx].extras))
+		if (camDef(camVtolDataSystem.extras))
 		{
-			if (camDef(__camVtolDataSystem[idx].extras.minVTOLs))
+			if (camDef(camVtolDataSystem.extras.minVTOLs))
 			{
-				minVtolAmount = __camVtolDataSystem[idx].extras.minVTOLs;
+				minVtolAmount = camVtolDataSystem.extras.minVTOLs;
 			}
-			if (camDef(__camVtolDataSystem[idx].extras.maxRandomVTOLs))
+			if (camDef(camVtolDataSystem.extras.maxRandomVTOLs))
 			{
-				maxRandomAdditions = __camVtolDataSystem[idx].extras.maxRandomVTOLs;
+				maxRandomAdditions = camVtolDataSystem.extras.maxRandomVTOLs;
 			}
 		}
 
@@ -128,49 +128,49 @@ function __camSpawnVtols()
 		let pos;
 
 		//Make sure to catch multiple start positions also.
-		if(__camVtolDataSystem[idx].startPosition instanceof Array)
+		if(camVtolDataSystem.startPosition instanceof Array)
 		{
-			pos = __camVtolDataSystem[idx].startPosition[camRand(__camVtolDataSystem[idx].startPosition.length)];
+			pos = camVtolDataSystem.startPosition[camRand(camVtolDataSystem.startPosition.length)];
 		}
-		else if (camDef(__camVtolDataSystem[idx].startPosition) && __camVtolDataSystem[idx].startPosition)
+		else if (camDef(camVtolDataSystem.startPosition) && camVtolDataSystem.startPosition)
 		{
-			pos = __camVtolDataSystem[idx].startPosition;
+			pos = camVtolDataSystem.startPosition;
 		}
 		else
 		{
 			pos = camGenerateRandomMapEdgeCoordinate();
 		}
 
-		if (!camDef(__camVtolDataSystem[idx].extras))
+		if (!camDef(camVtolDataSystem.extras))
 		{
 			//Pick some droids randomly.
 			for (let i = 0; i < amount; ++i)
 			{
-				droids.push(__camVtolDataSystem[idx].templates[camRand(__camVtolDataSystem[idx].templates.length)]);
+				droids.push(camVtolDataSystem.templates[camRand(camVtolDataSystem.templates.length)]);
 			}
 		}
 		else
 		{
 			var lim = amount;
 			var alternate = false;
-			if (camDef(__camVtolDataSystem[idx].extras.alternate))
+			if (camDef(camVtolDataSystem.extras.alternate))
 			{
-				alternate = __camVtolDataSystem[idx].extras.alternate; //Only use one template type
+				alternate = camVtolDataSystem.extras.alternate; //Only use one template type
 			}
-			if (!camDef(__camVtolDataSystem[idx].extras.altIdx))
+			if (!camDef(camVtolDataSystem.extras.altIdx))
 			{
-				__camVtolDataSystem[idx].extras.altIdx = 0;
+				camVtolDataSystem.extras.altIdx = 0;
 			}
-			if (camDef(__camVtolDataSystem[idx].extras.limit))
+			if (camDef(camVtolDataSystem.extras.limit))
 			{
 				//support an array of limits for each template
-				if (__camVtolDataSystem[idx].extras.limit instanceof Array)
+				if (camVtolDataSystem.extras.limit instanceof Array)
 				{
-					lim = __camVtolDataSystem[idx].extras.limit[__camVtolDataSystem[idx].extras.altIdx]; //max templates to use
+					lim = camVtolDataSystem.extras.limit[camVtolDataSystem.extras.altIdx]; //max templates to use
 				}
 				else
 				{
-					lim = __camVtolDataSystem[idx].extras.limit;
+					lim = camVtolDataSystem.extras.limit;
 				}
 			}
 
@@ -178,26 +178,26 @@ function __camSpawnVtols()
 			{
 				if (!alternate)
 				{
-					droids.push(__camVtolDataSystem[idx].templates[camRand(__camVtolDataSystem[idx].templates.length)]);
+					droids.push(camVtolDataSystem.templates[camRand(camVtolDataSystem.templates.length)]);
 				}
 				else
 				{
-					droids.push(__camVtolDataSystem[idx].templates[__camVtolDataSystem[idx].extras.altIdx]);
+					droids.push(camVtolDataSystem.templates[camVtolDataSystem.extras.altIdx]);
 				}
 			}
 
-			if (__camVtolDataSystem[idx].extras.altIdx < (__camVtolDataSystem[idx].templates.length - 1))
+			if (camVtolDataSystem.extras.altIdx < (camVtolDataSystem.templates.length - 1))
 			{
-				++__camVtolDataSystem[idx].extras.altIdx;
+				++camVtolDataSystem.extras.altIdx;
 			}
 			else
 			{
-				__camVtolDataSystem[idx].extras.altIdx = 0;
+				camVtolDataSystem.extras.altIdx = 0;
 			}
 		}
 
 		//...And send them.
-		camSendReinforcement(__camVtolDataSystem[idx].player, camMakePos(pos), droids, CAM_REINFORCE_GROUND, {
+		camSendReinforcement(camVtolDataSystem.player, camMakePos(pos), droids, CAM_REINFORCE_GROUND, {
 			order: CAM_ORDER_ATTACK,
 			data: { regroup: false, count: -1 }
 		});
@@ -206,24 +206,23 @@ function __camSpawnVtols()
 
 function __camRetreatVtols()
 {
-	for (let idx = 0; idx < __camVtolDataSystem.length; ++idx)
+	for (const camVtolDataSystem of __camVtolDataSystem)
 	{
-		if (camDef(__camVtolDataSystem[idx].exitPosition.x) &&
-			camDef(__camVtolDataSystem[idx].exitPosition.y) &&
-			enumStruct(__camVtolDataSystem[idx].player, REARM_PAD).length === 0)
+		if (camDef(camVtolDataSystem.exitPosition.x) &&
+			camDef(camVtolDataSystem.exitPosition.y) &&
+			enumStruct(camVtolDataSystem.player, REARM_PAD).length === 0)
 		{
 			const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
 			const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
-			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => (isVTOL(obj)));
+			let vtols = enumDroid(camVtolDataSystem.player).filter((obj) => (isVTOL(obj)));
 
-			for (let i = 0, len = vtols.length; i < len; ++i)
+			for (const vt of vtols)
 			{
-				let vt = vtols[i];
-				for (let c = 0, len2 = vt.weapons.length; c < len2; ++c)
+				for (const weapon of vt.weapons)
 				{
-					if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
+					if ((vt.order === DORDER_RTB) || (weapon.armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
 					{
-						orderDroidLoc(vt, DORDER_MOVE, __camVtolDataSystem[idx].exitPosition.x, __camVtolDataSystem[idx].exitPosition.y);
+						orderDroidLoc(vt, DORDER_MOVE, camVtolDataSystem.exitPosition.x, camVtolDataSystem.exitPosition.y);
 						break;
 					}
 				}

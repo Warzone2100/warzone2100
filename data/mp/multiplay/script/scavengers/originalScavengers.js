@@ -45,18 +45,16 @@ function scavtick()
 		{
 			// another way of dealing with lists is to iterate over them
 			// note, you must NOT use the for (... in ...) construct to iterate over an array of objects with properties!
-			for (var i = 0; i < droidlist.length; i++)
+			for (const droid of droidlist)
 			{
-				var droid = droidlist[i];
 				var current = 0;
 				var closest = 9999;
 				var clfac;		// starts undefined
 
 				// Find closest factory; notice that we still have the factory list from earlier, which
 				// saves us a few expensive scripting calls
-				for (var j = 0; j < factorylist.length; j++)
+				for (const fact of factorylist)
 				{
-					var fact = factorylist[j];
 					current = distBetweenTwoPoints(fact.x, fact.y, droid.x, droid.y);
 					if (current < closest)
 					{
@@ -103,9 +101,8 @@ function eventAttacked(victim, attacker)
 	{
 		lastAttack = gameTime;
 		var droidlist = enumGroup(attackGroup);
-		for (var i = 0; i < droidlist.length; i++)
+		for (const droid of droidlist)
 		{
-			var droid = droidlist[i];
 			if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < 24)
 			{
 				orderDroidLoc(droid, DORDER_SCOUT, attacker.x, attacker.y);

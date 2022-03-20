@@ -30,12 +30,12 @@ class Player
 
 	hasFactory()
 	{
-		for (let i = 0; i < STRUCTS.length; ++i)
+		for (const struct of STRUCTS)
 		{
-			const onMapStructss = enumStruct(this.playNum, STRUCTS[i]);
-			for (let j = 0; j < onMapStructss.length; ++j)
+			const onMapStructss = enumStruct(this.playNum, struct);
+			for (const onMapStruct of onMapStructss)
 			{
-				if (onMapStructss[j].status === BUILT)
+				if (onMapStruct.status === BUILT)
 				{
 					return true;
 				}
@@ -78,12 +78,10 @@ class Player
 		}
 
 		const trucks = enumDroid(this.playNum, DROID_CONSTRUCT);
-		for (let i = 0, len = trucks.length; i < len; ++i)
+		for (const truck of trucks)
 		{
-			const truck = trucks[i];
-			for (let j = 0, len2 = oils.length; j < len2; ++j)
+			for (const oil of oils)
 			{
-				const oil = oils[j];
 				if (droidCanReach(truck, oil.x, oil.y))
 				{
 					return true;

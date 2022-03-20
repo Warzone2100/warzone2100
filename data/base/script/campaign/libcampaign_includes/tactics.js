@@ -100,9 +100,9 @@ function camManageGroup(group, order, data)
 		{
 			saneData.pos = [ saneData.pos ];
 		}
-		for (var i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
+		for (const [i, pos] of saneData.pos.entries()) // array of labels?
 		{
-			saneData.pos[i] = camMakePos(saneData.pos[i]);
+			saneData.pos[i] = camMakePos(pos);
 		}
 	}
 	if (camDef(__camGroupInfo[group]) && order !== __camGroupInfo[group].order)
@@ -181,9 +181,8 @@ function __camFindGroupAvgCoordinate(groupID)
 		return null;
 	}
 
-	for (var i = 0; i < len; ++i)
+	for (const droid of droids)
 	{
-		var droid = droids[i];
 		avgCoord.x += droid.x;
 		avgCoord.y += droid.y;
 	}
@@ -219,9 +218,8 @@ function __camPickTarget(group)
 		case CAM_ORDER_COMPROMISE:
 			if (camDef(gi.data.pos))
 			{
-				for (var i = 0; i < gi.data.pos.length; ++i)
+				for (const compromisePos of gi.data.pos)
 				{
-					var compromisePos = gi.data.pos[i];
 					if (targets.length > 0)
 					{
 						break;
@@ -397,9 +395,8 @@ function __camTacticsTickForGroup(group)
 	//repair
 	if (repair.hasFacility || camDef(repair.pos))
 	{
-		for (var i = 0, len = rawDroids.length; i < len; ++i)
+		for (const droid of rawDroids)
 		{
-			var droid = rawDroids[i];
 			var repairLikeAction = false;
 
 			if (droid.order === DORDER_RTR)
@@ -445,13 +442,12 @@ function __camTacticsTickForGroup(group)
 		var groupY = ret.yav[ret.maxIdx];
 		var droids = ret.clusters[ret.maxIdx];
 
-		for (var i = 0, len = ret.clusters.length; i < len; ++i)
+		for (const [i, cluster] of ret.clusters)
 		{
 			if (i !== ret.maxIdx) // move other droids towards main cluster
 			{
-				for (var j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
+				for (const droid of cluster)
 				{
-					var droid = ret.clusters[i][j];
 					if (droid.order !== DORDER_RTR)
 					{
 						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
@@ -464,9 +460,8 @@ function __camTacticsTickForGroup(group)
 		// not enough droids grouped?
 		if (gi.count < 0 ? (ret.maxCount < groupSize(group) * 0.66) : (ret.maxCount < gi.count))
 		{
-			for (var i = 0, len = droids.length; i < len; ++i)
+			for (const droid of droids)
 			{
-				var droid = droids[i];
 				if (droid.order === DORDER_RTR)
 				{
 					continue;
@@ -515,9 +510,8 @@ function __camTacticsTickForGroup(group)
 	var defending = (gi.order === CAM_ORDER_DEFEND);
 	var track = (gi.order === CAM_ORDER_COMPROMISE);
 
-	for (var i = 0, len = healthyDroids.length; i < len; ++i)
+	for (const droid of healthyDroids)
 	{
-		var droid = healthyDroids[i];
 		var vtolUnit = (droid.type === DROID && isVTOL(droid));
 
 		if (droid.player === CAM_HUMAN_PLAYER)

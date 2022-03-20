@@ -51,9 +51,8 @@ function setUnitRank(transport)
 	const DROID_EXP = [1024, 128, 64, 32]; //Can make Hero Commanders if recycled.
 	var droids = enumCargo(transport);
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (const droid of droids)
 	{
-		var droid = droids[i];
 		if (!camIsSystemDroid(droid))
 		{
 			setDroidExperience(droid, DROID_EXP[transporterIndex - 1]);
@@ -76,9 +75,9 @@ function enableAllFactories()
 		"NXcybFac-b3", "NXcybFac-b2-1", "NXcybFac-b2-2", "NXHvyFac-b2", "NXcybFac-b4",
 	];
 
-	for (var j = 0, i = FACTORY_NAMES.length; j < i; ++j)
+	for (const factoryName of FACTORY_NAMES)
 	{
-		camEnableFactory(FACTORY_NAMES[j]);
+		camEnableFactory(factoryName);
 	}
 
 	//If they go really fast, adapt the alloy research to come sooner
@@ -202,9 +201,9 @@ function cam3Setup()
 		"R-Wpn-Energy-Damage02", "R-Wpn-Energy-ROF01", "R-Wpn-Energy-Accuracy01",
 	];
 
-	for (var x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
+	for (const structAlpha of STRUCTS_ALPHA)
 	{
-		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
+		enableStructure(structAlpha, CAM_HUMAN_PLAYER);
 	}
 
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, CAM_HUMAN_PLAYER);

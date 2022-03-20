@@ -226,17 +226,17 @@ function laserSatFuzzyStrike(obj)
 //Play videos and allow winning once the final one is researched.
 function eventResearched(research, structure, player)
 {
-	for (var i = 0, l = videoInfo.length; i < l; ++i)
+	for (const videoInfoItem of videoInfo)
 	{
-		if (research.name === videoInfo[i].res && !videoInfo[i].played)
+		if (research.name === videoInfoItem.res && !videoInfoItem.played)
 		{
-			videoInfo[i].played = true;
-			camPlayVideos({video: videoInfo[i].video, type: videoInfo[i].type});
-			if (videoInfo[i].res === "R-Sys-Resistance")
+			videoInfoItem.played = true;
+			camPlayVideos({video: videoInfoItem.video, type: videoInfoItem.type});
+			if (videoInfoItem.res === "R-Sys-Resistance")
 			{
 				enableResearch("R-Comp-MissileCodes01", CAM_HUMAN_PLAYER);
 			}
-			else if (videoInfo[i].res === "R-Comp-MissileCodes03")
+			else if (videoInfoItem.res === "R-Comp-MissileCodes03")
 			{
 				winFlag = true;
 			}
@@ -298,9 +298,9 @@ function eventStartLevel()
 
 	//Destroy everything above limits
 	var destroyZone = enumArea(0, 0, 64, Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
-	for (var i = 0, l = destroyZone.length; i < l; ++i)
+	for (const destroyZoneItem of destroyZone)
 	{
-		camSafeRemoveObject(destroyZone[i], false);
+		camSafeRemoveObject(destroyZoneItem, false);
 	}
 
 	centreView(startpos.x, startpos.y);

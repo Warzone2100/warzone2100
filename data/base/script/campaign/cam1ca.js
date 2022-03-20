@@ -73,9 +73,8 @@ function sendTransport()
 	// Randomly find an LZ that is not compromised
 	if (camRand(100) < 10)
 	{
-		for (i = 0; i < landingZoneList.length; ++i)
+		for (const [i, lz] of landingZoneList.entries())
 		{
-			var lz = landingZoneList[i];
 			if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
 			{
 				list.push({ idx: i, label: lz });

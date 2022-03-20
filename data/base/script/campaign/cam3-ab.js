@@ -94,9 +94,8 @@ function truckDefense()
 		"NX-Tower-ATMiss", "Sys-NX-CBTower",
 	];
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (const truck of droids)
 	{
-		var truck = droids[i];
 		if (truck.order !== DORDER_BUILD)
 		{
 			var defense = defenses[camRand(defenses.length)];
@@ -130,14 +129,13 @@ function nexusManufacture()
 		{structure: VTOL_FACTORY, temps: [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxmheapv,]},
 	];
 
-	for (var i = 0; i < factoryType.length; ++i)
+	for (const factoryTypeItem of factoryType)
 	{
-		var factories = enumStruct(NEXUS, factoryType[i].structure);
-		var templs = factoryType[i].temps;
+		var factories = enumStruct(NEXUS, factoryTypeItem.structure);
+		var templs = factoryTypeItem.temps;
 
-		for (var j = 0, len = factories.length; j < len; ++j)
+		for (const fac of factories)
 		{
-			var fac = factories[j];
 			if (fac.status !== BUILT || !structureIdle(fac))
 			{
 				return;

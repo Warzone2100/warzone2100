@@ -28,9 +28,9 @@ function secondVideo()
 function powerModuleBuilt()
 {
 	var gens = enumStruct(CAM_HUMAN_PLAYER, POWER_GEN, false);
-	for (var x = 0, l = gens.length; x < l; ++x)
+	for (const gen of gens)
 	{
-		if ((gens[x].modules > 0) && (gens[x].status === BUILT))
+		if ((gen.modules > 0) && (gen.status === BUILT))
 		{
 			return true;
 		}

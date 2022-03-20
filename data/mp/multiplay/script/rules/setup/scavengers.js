@@ -83,36 +83,36 @@ function setupScavenger()	// inside hackNetOff()
 		["HeavyChopper", "Rocket-VTOL-Pod-SCAVS"],
 	];
 
-	for (var i = 0, len = templates.length; i < len; ++i)
+	for (const template of templates)
 	{
-		makeComponentAvailable(templates[i][0], scavengerPlayer);
-		makeComponentAvailable(templates[i][1], scavengerPlayer);
+		makeComponentAvailable(template[0], scavengerPlayer);
+		makeComponentAvailable(template[1], scavengerPlayer);
 
-		if (isDefined(templates[i][2]))
+		if (isDefined(template[2]))
 		{
-			makeComponentAvailable(templates[i][2], scavengerPlayer);
+			makeComponentAvailable(template[2], scavengerPlayer);
 		}
 
-		if (isDefined(templates[i][3]))
+		if (isDefined(template[3]))
 		{
-			makeComponentAvailable(templates[i][3], scavengerPlayer);
+			makeComponentAvailable(template[3], scavengerPlayer);
 		}
 	}
 
-	for (var i = 0, len = vtolTemplates.length; i < len; ++i)
+	for (const vtolTemplate of vtolTemplates)
 	{
 
-		makeComponentAvailable(vtolTemplates[i][0], scavengerPlayer);
-		makeComponentAvailable(vtolTemplates[i][1], scavengerPlayer);
+		makeComponentAvailable(vtolTemplate[0], scavengerPlayer);
+		makeComponentAvailable(vtolTemplate[1], scavengerPlayer);
 
-		if (isDefined(vtolTemplates[i][2]))
+		if (isDefined(vtolTemplate[2]))
 		{
-			makeComponentAvailable(vtolTemplates[i][2], scavengerPlayer);
+			makeComponentAvailable(vtolTemplate[2], scavengerPlayer);
 		}
 
-		if (isDefined(vtolTemplates[i][3]))
+		if (isDefined(vtolTemplate[3]))
 		{
-			makeComponentAvailable(vtolTemplates[i][3], scavengerPlayer);
+			makeComponentAvailable(vtolTemplate[3], scavengerPlayer);
 		}
 
 	}
@@ -164,9 +164,9 @@ function setupScavenger()	// inside hackNetOff()
 		"B2RKJeepBody-Ultimate",
 	];
 
-	for (var i = 0, len = SCAV_COMPONENTS.length; i < len; ++i)
+	for (const scavComponent of SCAV_COMPONENTS)
 	{
-		makeComponentAvailable(SCAV_COMPONENTS[i], scavengerPlayer);
+		makeComponentAvailable(scavComponent, scavengerPlayer);
 	}
 
 	enableStructure(factory, scavengerPlayer);
@@ -176,8 +176,8 @@ function setupScavenger()	// inside hackNetOff()
 	enableStructure(repair, scavengerPlayer);
 	enableStructure(vtolpad, scavengerPlayer);
 
-	for (var i = 0, len = defenses.length; i < len; ++i)
+	for (const defense of defenses)
 	{
-		enableStructure(defenses[i], scavengerPlayer);
+		enableStructure(defense, scavengerPlayer);
 	}
 }

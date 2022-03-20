@@ -247,9 +247,8 @@ function __camPlayerDead()
 		if (transporter.length > 0)
 		{
 			var cargoDroids = enumCargo(transporter[0]);
-			for (var i = 0, len = cargoDroids.length; i < len; ++i)
+			for (const virDroid of cargoDroids)
 			{
-				var virDroid = cargoDroids[i];
 				if (camDef(virDroid) && virDroid && virDroid.droidType === DROID_CONSTRUCT)
 				{
 					dead = false;
@@ -557,9 +556,8 @@ function __camShowVictoryConditions()
 	{
 		if (__camExtraObjectiveMessage instanceof Array)
 		{
-			for (var i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
+			for (const mes of __camExtraObjectiveMessage)
 			{
-				var mes = __camExtraObjectiveMessage[i];
 				console(mes);
 			}
 		}

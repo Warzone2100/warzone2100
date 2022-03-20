@@ -57,9 +57,8 @@ function camSetEnemyBases(bases)
 			{
 				var structures = enumGroup(bi.group);
 				addLabel({ type: GROUP, id: bi.group }, blabel);
-				for (var idx = 0, len = structures.length; idx < len; ++idx)
+				for (const s of structures)
 				{
-					var s = structures[idx];
 					if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 					{
 						continue;
@@ -83,9 +82,8 @@ function camSetEnemyBases(bases)
 						x2: 0, y2: 0
 					};
 					// smallest rectangle to contain all objects
-					for (var idx = 0, len = objs.length; idx < len; ++idx)
+					for (const o of objs)
 					{
-						var o = objs[idx];
 						if (o.x < a.x) a.x = o.x;
 						if (o.y < a.y) a.y = o.y;
 						if (o.x > a.x2) a.x2 = o.x;
@@ -108,9 +106,8 @@ function camSetEnemyBases(bases)
 			bi.group = camNewGroup();
 			addLabel({ type: GROUP, id: bi.group }, blabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
-			for (var idx = 0, len = structs.length; idx < len; ++idx)
+			for (const s of structs)
 			{
-				var s = structs[idx];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 				{
 					continue;
@@ -266,9 +263,8 @@ function __camCheckBaseEliminated(group)
 		if (camDef(bi.cleanup))
 		{
 			var objects = enumArea(bi.cleanup, ENEMIES, false);
-			for (var i = 0, len = objects.length; i < len; ++i)
+			for (const object of objects)
 			{
-				var object = objects[i];
 				var objInfo = {
 					type: object.type,
 					player: object.player,
@@ -279,10 +275,9 @@ function __camCheckBaseEliminated(group)
 					leftovers.push(object);
 				}
 			}
-			for (var i = 0, len = leftovers.length; i < len; i++)
+			for (const leftover of leftovers)
 			{
 				// remove with special effect
-				var leftover = leftovers[i];
 				camSafeRemoveObject(leftover, true);
 			}
 			if (camDef(bi.eliminateSnd))
