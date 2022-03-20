@@ -9,7 +9,7 @@
 //;;
 function camDef(something)
 {
-	return typeof(something) !== "undefined";
+	return typeof something !== "undefined";
 }
 
 //;; ## camIsString(something)
@@ -18,7 +18,7 @@ function camDef(something)
 //;;
 function camIsString(something)
 {
-	return typeof(something) === "string";
+	return typeof something === "string";
 }
 
 //;; ## camRand(max)

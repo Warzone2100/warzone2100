@@ -38,11 +38,11 @@ function camSetVtolData(player, startPos, exitPos, templates, timer, obj, extras
 // the index number or the label of the object that stops the spawn naturally.
 function camSetVtolSpawnState(state, identifier)
 {
-	if (typeof identifier === 'number')
+	if (typeof identifier === "number")
 	{
 		__camVtolDataSystem[identifier].active = state;
 	}
-	else if (typeof identifier === 'string')
+	else if (typeof identifier === "string")
 	{
 		for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
 		{

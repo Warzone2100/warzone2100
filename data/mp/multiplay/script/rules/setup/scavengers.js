@@ -3,7 +3,7 @@ function setupScavenger()	// inside hackNetOff()
 	// Returns true if something is defined
 	function isDefined(data)
 	{
-		return typeof(data) !== "undefined";
+		return typeof data !== "undefined";
 	}
 
 	const derrick = "A0ResourceExtractor";

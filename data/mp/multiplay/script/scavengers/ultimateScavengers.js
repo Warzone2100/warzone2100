@@ -98,7 +98,7 @@ function random(max)
 // Returns true if something is defined
 function isDefined(data)
 {
-	return typeof(data) !== "undefined";
+	return typeof data !== "undefined";
 }
 
 function isCopterPropulsion(droidProp)

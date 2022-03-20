@@ -189,7 +189,7 @@ var avail_research = [];	//Массив возможных исследован�
 
 var rage = difficulty;
 
-if(typeof asPlayer === 'undefined') asPlayer = false;
+if(typeof asPlayer === "undefined") asPlayer = false;
 else rage = HARD;
 
 var buildersMain = newGroup();
@@ -715,7 +715,7 @@ function initBase(){
 }
 
 function debugMsg(msg,level){
-	if (typeof level == 'undefined') return;
+	if (typeof level === "undefined") return;
 //	if (debugName == "Grey" ) return; //Временно
 	if(debugLevels.indexOf(level) == -1) return;
 	var timeMsg = Math.floor(gameTime / 1000);

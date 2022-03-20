@@ -412,8 +412,8 @@ function pointRegularArmy(army){
 
 function targetRegularRich(target, victim){
 //	debugMsg("targetRegularRich():", 'targeting');
-	if(typeof target === 'undefined') target = false;
-	if(typeof victim === 'undefined') victim = false;
+	if(typeof target === "undefined") target = false;
+	if(typeof victim === "undefined") victim = false;
 
 
 	var regular = enumGroup(armyRegular);
@@ -527,7 +527,7 @@ function targetRegularRich(target, victim){
 function targetRegular(target, victim){
 	if(!running)return;
 
-	if(typeof victim === 'undefined') victim = false;
+	if(typeof victim === "undefined") victim = false;
 
 	//	Перенаправляем функцию
 	if(se_r >= army_rich && (rage == MEDIUM || rage == HARD || rage == INSANE)){
@@ -554,7 +554,7 @@ function targetRegular(target, victim){
 		return;
 	}
 
-	if(typeof target === 'undefined') target = false;
+	if(typeof target === "undefined") target = false;
 //	if(target) debugMsg("regular: event от армии "+distBetweenTwoPoints_p(target.x,target.y,regular[0].x,regular[0].y), 'targeting');
 	if(target && !droidCanReach(regular[0],target.x,target.y )){
 //		debugMsg("regular: event не достежим", 'targeting');

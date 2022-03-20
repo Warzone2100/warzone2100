@@ -2,7 +2,7 @@
 //Check is something has been defined. DO NOT PASS GAME OBJECTS!
 function defined(what)
 {
-	return (typeof(what) !== "undefined");
+	return typeof what !== "undefined";
 }
 
 //A simple throttle function to make sure something is not executed too much.

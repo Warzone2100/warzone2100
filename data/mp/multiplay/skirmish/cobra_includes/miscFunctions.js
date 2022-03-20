@@ -10,7 +10,7 @@ function random(max)
 // Returns true if something is defined
 function isDefined(data)
 {
-	return typeof(data) !== "undefined";
+	return typeof data !== "undefined";
 }
 
 //Sort an array from smallest to largest in terms of droid health.

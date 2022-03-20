@@ -14,7 +14,7 @@ function logObj(obj, message)
 // Returns true if something is defined
 function defined(data)
 {
-	return typeof(data) !== "undefined";
+	return typeof data !== "undefined";
 }
 
 //Return a number in the range of 0 to (max - 1).
