@@ -52,7 +52,7 @@ const obj = {
 	key1: "value1",
 	key2: "value2"
 };
-for (const key of obj)
+for (const key in obj)
 {
 	if (obj.hasOwnProperty(key))
 	{
