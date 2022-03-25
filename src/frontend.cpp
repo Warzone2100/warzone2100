@@ -2216,7 +2216,7 @@ void startGameOptionsMenu()
 
 	addBackdrop();
 	addTopForm(false);
-	addBottomForm();
+	addBottomForm(true);
 
 	auto grid = std::make_shared<GridLayout>();
 	SettingsGridBuilder gridBuilder(grid);
@@ -2299,10 +2299,10 @@ void startGameOptionsMenu()
 		multiplayerColor
 	);
 
-	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
+	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH_WIDE, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORM_WIDEW - 1, FRONTEND_BOTFORM_WIDEH - FRONTEND_POS2Y - 1);
 	scrollableList->addItem(grid);
 	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(scrollableList);
 
@@ -2899,16 +2899,26 @@ void addTopForm(bool wide)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addBottomForm()
+void addBottomForm(bool wide)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
 	auto botForm = std::make_shared<IntFormAnimated>();
 	parent->attach(botForm);
 	botForm->id = FRONTEND_BOTFORM;
-	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
-	}));
+
+	if (wide)
+	{
+		botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(FRONTEND_BOTFORM_WIDEX, FRONTEND_BOTFORM_WIDEY, FRONTEND_BOTFORM_WIDEW, FRONTEND_BOTFORM_WIDEH);
+		}));
+	}
+	else
+	{
+		botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
+		}));
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
