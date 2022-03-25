@@ -85,7 +85,7 @@ void startMultiplayOptionsMenu();
 void refreshCurrentVideoOptionsValues();
 
 void addTopForm(bool wide);
-void addBottomForm();
+void addBottomForm(bool wide = false);
 W_FORM *addBackdrop();
 W_FORM *addBackdrop(const std::shared_ptr<W_SCREEN> &screen);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
@@ -137,9 +137,9 @@ struct DisplayTextOptionCache
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
 
-#define FRONTEND_TOPFORMX		30
+#define FRONTEND_TOPFORMX		50
 #define FRONTEND_TOPFORMY		10
-#define FRONTEND_TOPFORMW		580
+#define FRONTEND_TOPFORMW		540
 #define FRONTEND_TOPFORMH		150
 
 
@@ -155,8 +155,17 @@ struct DisplayTextOptionCache
 #define FRONTEND_BOTFORMH		305				// keep Y+H < 480 (minimum display height)
 
 
+#define FRONTEND_BOTFORM_WIDEX		30
+#define FRONTEND_BOTFORM_WIDEY		FRONTEND_BOTFORMY
+#define FRONTEND_BOTFORM_WIDEW		580
+#define FRONTEND_BOTFORM_WIDEH		FRONTEND_BOTFORMH	// keep Y+H < 480 (minimum display height)
+
+
 #define FRONTEND_BUTWIDTH		FRONTEND_BOTFORMW-40 // text button sizes.
 #define FRONTEND_BUTHEIGHT		35
+
+#define FRONTEND_BUTWIDTH_WIDE	FRONTEND_BOTFORM_WIDEW-40 // text button sizes.
+#define FRONTEND_BUTHEIGHT_WIDE	FRONTEND_BUTHEIGHT
 
 #define FRONTEND_POS1X			20				// button positions
 #define FRONTEND_POS1Y			(0*FRONTEND_BUTHEIGHT)
