@@ -2027,9 +2027,10 @@ public:
 		return locales.end();
 	}
 
-	void selectAt(size_t index) const
+	bool selectAt(size_t index) const
 	{
-		setLanguage(locales[index].code);
+		ASSERT_OR_RETURN(false, index < locales.size(), "Invalid index: %zu", index);
+		return setLanguage(locales[index].code);
 	}
 
 	size_t getSelectedIndex() const
@@ -2089,14 +2090,25 @@ public:
 	}
 
 public:
+	void setDisabled()
+	{
+		disabled = true;
+	}
+
 	void display(int, int) override
 	{
+		if (disabled)
+		{
+			label->setFontColour(WZCOL_TEXT_DARK);
+			return;
+		}
 		label->setFontColour(isMouseOverWidget() ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM);
 	}
 
 	static const int HorizontalPadding = 10;
 
 private:
+	bool disabled = false;
 	std::shared_ptr<W_LABEL> label;
 };
 
@@ -2165,10 +2177,23 @@ static std::shared_ptr<WIDGET> makeLanguageDropdown()
 
 	dropdown->setSelectedIndex(model.getSelectedIndex());
 
+	dropdown->setCanChange([model](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		bool success = model.selectAt(newIndex);
+		if (!success)
+		{
+			// unable to change the locale to this entry, so disable the widget
+			auto pImageDropdownItem = std::dynamic_pointer_cast<ImageDropdownItem>(newSelectedWidget);
+			if (pImageDropdownItem)
+			{
+				pImageDropdownItem->setDisabled();
+			}
+		}
+		return success;
+	});
+
 	dropdown->setOnChange([model](DropdownWidget& dropdown) {
 		if (auto selectedIndex = dropdown.getSelectedIndex())
 		{
-			model.selectAt(selectedIndex.value());
 			/* Hack to reset current menu text, which looks fancy. */
 			widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
 			widgGetFromID(psWScreen, FRONTEND_QUIT)->setTip(P_("menu", "Return"));
