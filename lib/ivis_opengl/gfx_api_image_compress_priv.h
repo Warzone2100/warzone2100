@@ -70,8 +70,6 @@ public:
 	// Get a pointer to the image data that can be written to
 	unsigned char* data_w();
 
-	unsigned int channels() const;
-
 public:
 	// iV_Image is non-copyable
 	iV_CompressedImage(const iV_CompressedImage&) = delete;
