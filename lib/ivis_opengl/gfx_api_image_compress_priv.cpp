@@ -152,49 +152,6 @@ void iV_CompressedImage::clear()
 unsigned int iV_CompressedImage::width() const { return m_width; }
 unsigned int iV_CompressedImage::height() const { return m_height; }
 
-unsigned int iV_CompressedImage::channels() const
-{
-	switch (m_format)
-	{
-		// UNCOMPRESSED FORMATS
-		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
-		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-			return 3;
-		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
-			return 2;
-		case gfx_api::pixel_format::FORMAT_R8_UNORM:
-			return 1;
-		// COMPRESSED FORMAT
-		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
-			return 3;
-		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
-			return 1;
-		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
-			return 2;
-		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
-		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
-			return 3;
-		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_R11_EAC:
-			return 1;
-		case gfx_api::pixel_format::FORMAT_RG11_EAC:
-			return 2;
-		default:
-			debug(LOG_FATAL, "Unrecognised pixel format");
-	}
-
-	return 0;
-}
-
 gfx_api::pixel_format iV_CompressedImage::pixel_format() const
 {
 	return m_format;

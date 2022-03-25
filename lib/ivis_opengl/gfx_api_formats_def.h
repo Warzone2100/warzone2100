@@ -76,6 +76,7 @@ namespace gfx_api
 		return false;
 	}
 
+	unsigned int format_channels(gfx_api::pixel_format format);
 	size_t format_memory_size(gfx_api::pixel_format format, size_t width, size_t height);
 
 	namespace pixel_format_usage
