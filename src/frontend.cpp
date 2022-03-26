@@ -89,6 +89,8 @@ char			aLevelName[MAX_LEVEL_NAME_SIZE + 1];	//256];			// vital! the wrf file to 
 
 bool			bLimiterLoaded = false;
 
+static std::shared_ptr<IMAGEFILE> pFlagsImages;
+
 #define TUTORIAL_LEVEL "TUTORIAL3"
 #define TRANSLATION_URL "https://translate.wz2100.net"
 
@@ -2158,9 +2160,29 @@ static std::shared_ptr<WIDGET> makeLanguageDropdown()
 		{"zh_TW", "flag-TW.png"},
 	};
 
+	if (pFlagsImages == nullptr)
+	{
+		pFlagsImages.reset(iV_LoadImageFile("images/flags.img"));
+		if (pFlagsImages == nullptr)
+		{
+			std::string errorMessage = astringf(_("Unable to load: %s."), "flags.img");
+			if (!getLoadedMods().empty())
+			{
+				errorMessage += " ";
+				errorMessage += _("Please remove all incompatible mods.");
+			}
+			debug(LOG_FATAL, "%s", errorMessage.c_str());
+		}
+	}
+
 	auto dropdown = std::make_shared<DropdownWidget>();
 	dropdown->id = FRONTEND_LANGUAGE_R;
 	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
+	// NOTE: By capturing a copy of pFlagsImages in the onDelete handler, we ensure it stays around until the DropdownWidget is deleted
+	std::shared_ptr<IMAGEFILE> flagsImagesCopy = pFlagsImages;
+	dropdown->setOnDelete([flagsImagesCopy](WIDGET *psWidget) mutable {
+		flagsImagesCopy.reset();
+	});
 
 	LanguagesModel model;
 	for (auto locale: model)
@@ -2169,7 +2191,7 @@ static std::shared_ptr<WIDGET> makeLanguageDropdown()
 		auto mapIcon = iconsMap.find(locale.code);
 		if (mapIcon != iconsMap.end())
 		{
-			icon = iV_GetImage(mapIcon->second);
+			icon = (pFlagsImages) ? pFlagsImages->find(mapIcon->second) : nullptr;
 		}
 		auto option = ImageDropdownItem::make(icon, locale.name);
 		dropdown->addItem(option);
@@ -3240,4 +3262,12 @@ void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 	lastProcessedDisplayScale = currentDisplayScale;
 	lastProcessedScreenWidth = newWidth;
 	lastProcessedScreenHeight = newHeight;
+}
+
+// To be called from frontendShutdown(), which for some reason is in init.cpp...
+void frontendIsShuttingDown()
+{
+	std::weak_ptr<IMAGEFILE> pFlagsImagesWeak(pFlagsImages);
+	pFlagsImages.reset();
+	ASSERT(pFlagsImagesWeak.expired(), "A reference to the flags.img IMAGEFILE still exists!");
 }
