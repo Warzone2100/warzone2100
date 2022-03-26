@@ -184,6 +184,10 @@ Copyright: 2007-2008 Warzone 2100 Resurrection Project
            2008-2020 Warzone 2100 Project
 License: GPL-2+
 
+Files: data/base/images/flags/flag-*.png
+Copyright: 2016 Bowtie AB
+License: Expat
+
 Files: data/base/images/intfac/image_volume_mute.png
        data/base/images/intfac/image_volume_up.png
        data/base/images/notifications/connect_wait.png
