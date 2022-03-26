@@ -83,6 +83,7 @@ void startMouseOptionsMenu();
 void startGameOptionsMenu();
 void startMultiplayOptionsMenu();
 void refreshCurrentVideoOptionsValues();
+void frontendIsShuttingDown();
 
 void addTopForm(bool wide);
 void addBottomForm(bool wide = false);
