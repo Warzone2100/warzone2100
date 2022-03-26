@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:25\n"
+"PO-Revision-Date: 2022-03-26 14:53\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -4068,7 +4068,7 @@ msgstr "Destruir todas las unidades y estructuras enemigas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefactos recolectados"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
@@ -5832,7 +5832,7 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menú"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:2048
@@ -5842,19 +5842,19 @@ msgstr "Campaña"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Desafío"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Escaramuza"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multijugador"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Música del Menú"
 
 #: lib/widget/form.cpp:343
 msgid "(untitled)"
