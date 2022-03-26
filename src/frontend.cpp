@@ -2118,6 +2118,7 @@ static std::shared_ptr<WIDGET> makeLanguageDropdown()
 {
 	const std::map<WzString, const char *> iconsMap = {
 		{"", "icon-system.png"},
+		{"ar_SA", "lang-AR.png"},
 		{"bg", "flag-BG.png"},
 		{"ca_ES", "flag-ES.png"},
 		{"cs_CZ", "flag-CZ.png"},
