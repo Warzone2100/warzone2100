@@ -6,7 +6,7 @@ function doResearch(){
 	if(!running)return false;
 
 	//old dependency
-	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length != 0) return false;
+	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length > 0) return false;
 
 
 
@@ -16,7 +16,7 @@ function doResearch(){
 	labs = labs.filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
 
 	//If no ready labs
-	if(labs.length == 0) return false;
+	if(labs.length === 0) return false;
 
 	//old dependency
 	if(policy['build'] != 'rich'){
@@ -29,7 +29,7 @@ function doResearch(){
 	//Get all available researches, filterout started by ally
 	var avail_research = enumResearch().filter(function(o){if(o.started)return false;return true;});
 
-	if(avail_research.length == 0) return false;
+	if(avail_research.length === 0) return false;
 
 	debugMsg('Labs: '+labs_len+', ready: '+labs.length+', avail_research: '+avail_research.length, 'research');
 
@@ -45,11 +45,11 @@ function doResearch(){
 
 	var prepare_research = [];
 
-	if(research_path.length != 0 ){
+	if(research_path.length > 0 ){
 		//Filter out started researches by me or ally
 		prepare_research = research_path.filter(function(o){if(getResearch(o).started)return false; return true;});
 
-		if(prepare_research.length == 0) return false;
+		if(prepare_research.length === 0) return false;
 
 		debugMsg('Path length: '+prepare_research.length+'; follow to: '+prepare_research[0], 'research');
 
@@ -70,16 +70,16 @@ function doResearch(){
 //		to_research = to_research.filter(o=>researches.indexOf(o)!==-1);
 		to_research = intersect_arrays(to_research, researches);
 
-		if(to_research.length != 0) break;
+		if(to_research.length > 0) break;
 
 		debugMsg('Cannot follow to "'+prepare_research[t]+'" for now', 'research');
 
 	}
 
-//	if(findResearch(to_research[0]).filter(function(o){if(getResearch(o).started)return false; return true;}}).length == 0)
+//	if(findResearch(to_research[0]).filter(function(o){if(getResearch(o).started)return false; return true;}}).length === 0)
 
 	//No more research at this moment
-	if(to_research.length == 0){
+	if(to_research.length === 0){
 		var rnd = Math.floor(Math.random()*researches.length);
 		debugMsg('researches.length: '+researches.length+', rnd: '+rnd, 'research');
 		var rnd_research = researches[rnd];
@@ -88,7 +88,7 @@ function doResearch(){
 	}
 
 	//Finish research line
-	if(research_path.length == 0 && to_research.length == 0){debugMsg('No more research in research_path', 'error'); return false;}
+	if(research_path.length === 0 && to_research.length === 0){debugMsg('No more research in research_path', 'error'); return false;}
 
 	debugMsg('Start research: '+to_research[0], 'research');
 
@@ -116,7 +116,7 @@ function doResearch_old(){
 	if(!running)return;
 //	debugMsg("doResearch()", 'research_advance');
 	//	debugMsg(getInfoNear(base.x,base.y,'safe',base_range).value+" && "+playerPower(me)+"<300 && "+avail_guns.length+"!=0", 'research_advance');
-	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length != 0) return;
+	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length > 0) return;
 
 
 	var avail_research = enumResearch().filter(function(e){
@@ -124,7 +124,7 @@ function doResearch_old(){
 		if(e.started)return false;return true;
 	});
 
-	if ( research_way.length == 0 || avail_research.length == 0 ) {
+	if ( research_way.length === 0 || avail_research.length === 0 ) {
 //		debugMsg("doResearch: Исследовательские пути завершены!!! Останов.", 'research_advance');
 		return;
 	}
@@ -151,7 +151,7 @@ function doResearch_old(){
 		research_way.splice(_r,1);
 		//		debugMsg("doResearch: Осталось путей "+research_way.length, 'research_advance');
 		_r=0;
-		if ( research_way.length == 0 ) {
+		if ( research_way.length === 0 ) {
 //			debugMsg("doResearch: Исследовательские пути завершены! Останов.", 'research_advance');
 			return;
 		}

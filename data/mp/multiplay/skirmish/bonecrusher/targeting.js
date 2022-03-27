@@ -11,18 +11,18 @@ function targetVTOL(){
 		target = target.concat(sortByDistance(getEnemyResources(), base));
 	}
 
-	if(target.length == 0) target = target.concat(getEnemyFactoriesVTOL());
-	if(target.length == 0) target = sortByDistance(getEnemyFactories(), base);
-//	if(target.length == 0) target = sortByDistance(getEnemyPads(), base);
-	if(target.length == 0){
+	if(target.length === 0) target = target.concat(getEnemyFactoriesVTOL());
+	if(target.length === 0) target = sortByDistance(getEnemyFactories(), base);
+//	if(target.length === 0) target = sortByDistance(getEnemyPads(), base);
+	if(target.length === 0){
 		scout = scout.concat(getEnemyResources());
 		scout = scout.concat(getEnemyDefences());
 		scout = scout.concat(getEnemyPads());
 		scout = sortByDistance(scout, base, 1);
 	}
 
-	if(target.length == 0){target = getEnemyWarriors();}
-	if(target.length == 0){target = getEnemyStructures();}
+	if(target.length === 0){target = getEnemyWarriors();}
+	if(target.length === 0){target = getEnemyStructures();}
 
 	var ready = enumGroup(VTOLAttacker).filter(function(e){
 //		debugMsg(e.id+"-"+e.action, 'vtol');
@@ -32,9 +32,9 @@ function targetVTOL(){
 
 	var group = enumGroup(VTOLAttacker).filter(function(e){if(e.action == 41 || e.action == 1 || distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) > base_range)return true;return false});
 //	debugMsg("VTOLs: "+groupSize(VTOLAttacker)+"; patrol: "+ready.length+"; ready: "+group.length+"; targets: "+target.length, "vtol");
-	if(group.length >= 3 && (target.length != 0 || scout.length != 0) ) {
+	if(group.length >= 3 && (target.length > 0 || scout.length > 0) ) {
 //		debugMsg("Attack!", "vtol");
-		if(target.length != 0){
+		if(target.length > 0){
 
 			//lassat fire
 			if(lassat_charged){
@@ -43,7 +43,7 @@ function targetVTOL(){
 				debugMsg('lassat buildings: '+laser_sat.length,'lassat');
 				laser_sat = laser_sat.filter(function(e){if(structureIdle(e))return true; return false;});
 				debugMsg('lassat ready: '+laser_sat.length,'lassat');
-				if(laser_sat.length != 0) {
+				if(laser_sat.length > 0) {
 					activateStructure(laser_sat[0], target[0]);
 					debugMsg('lassat fire on '+target[0].x+'x'+target[0].y,'lassat');
 					lassat_charged = false;
@@ -72,7 +72,7 @@ function targetVTOL(){
 			}else{
 				attackObjects(target, group, 5, false);
 			}
-		}else if(scout.length != 0){
+		}else if(scout.length > 0){
 			attackObjects(target, group, 5, true);
 		}
 
@@ -91,12 +91,12 @@ function targetJammers(){
 	else var partisans = enumGroup(armyPartisans);
 
 
-	if(jammers.length == 0 || partisans.length == 0) return;
+	if(jammers.length === 0 || partisans.length === 0) return;
 
 	//Армия дохнет? Спасаем задницу бегством!
 	if(partisans.length <= 3){
 		var def = enumStruct(me,DEFENSE);
-		if(def.length == 0){
+		if(def.length === 0){
 			if(distBetweenTwoPoints_p(base.x, base.y, jammers[0].x, jammers[0].y) > 3) jammers.forEach(function(e){orderDroidLoc_p(e, DORDER_MOVE, base.x, base.y);});
 		}else{
 			def = sortByDistance(def,jammers[0], 1);
@@ -117,12 +117,12 @@ function targetSensors(){
 	var sensors = enumGroup(armyScanners);
 //	debugMsg("sensors="+sensors.length, 'debug');
 	var target = getUnknownResources();
-	if(target.length == 0) target = getEnemyStartPos();
+	if(target.length === 0) target = getEnemyStartPos();
 //	else target = sortByDistance(target, base);
 	target = sortByDistance(target, base, 1);
 //	debug(target.length);
 
-	if(target.length != 0){
+	if(target.length > 0){
 		sensors.forEach(function(e){
 //			debug(target[0].x+'x'+target[0].y);
 			orderDroidLoc_p(e, DORDER_SCOUT, target[0].x, target[0].y);
@@ -138,12 +138,12 @@ function targetFixers(){
 
 	var partisans = enumGroup(armyPartisans);
 
-	if(fixers.length == 0 || partisans.length == 0) return;
+	if(fixers.length === 0 || partisans.length === 0) return;
 
 	//Армия дохнет? Спасаем задницу бегством!
 	if(partisans.length < 2){
 		var def = enumStruct(me,DEFENSE);
-		if(def.length == 0){
+		if(def.length === 0){
 			if(distBetweenTwoPoints_p(base.x, base.y, fixers[0].x, fixers[0].y) > 3) fixers.forEach(function(e){orderDroidLoc_p(e, DORDER_MOVE, base.x, base.y);});
 		}else{
 			def = sortByDistance(def,fixers[0], 1);
@@ -153,15 +153,15 @@ function targetFixers(){
 	}
 
 	var target = enumGroup(droidsBroken);
-	if(target.length == 0) target = enumGroup(droidsFleet).filter(function(o){if(o.health < 95)return true;return false;});
-	if(target.length == 0) target = partisans.filter(function(o){if(o.health < 95)return true;return false;});
+	if(target.length === 0) target = enumGroup(droidsFleet).filter(function(o){if(o.health < 95)return true;return false;});
+	if(target.length === 0) target = partisans.filter(function(o){if(o.health < 95)return true;return false;});
 
 //	partisans = sortByDistance(partisans, base);
 	fixers.reverse();
 
 	fixers.forEach(function(f){
 //		var target = partisans.filter(function(p){if(p.health < 100 && distBetweenTwoPoints_p(p.x,p.y,f.x,f.y) < 7)return true; return false;});
-		if(target.length != 0){
+		if(target.length > 0){
 			target = sortByDistance(target, f, 1);
 //			if(distBetweenTwoPoints_p(f.x,f.y,target[0].x, target[0].y) < 2) orderDroidLoc_p(f, 41, f.x, f.y); // 41 - DORDER_HOLD
 			if(distBetweenTwoPoints_p(f.x,f.y,target[0].x, target[0].y) < 2){
@@ -187,7 +187,7 @@ function targetPartisan(){
 //	debugMsg("targetPartisan():", 'targeting');
 
 	var partisans = enumGroup(armyPartisans);
-	if(partisans.length == 0) return false;
+	if(partisans.length === 0) return false;
 
 	var target=[];
 
@@ -195,14 +195,14 @@ function targetPartisan(){
 	if(!(se_r >= army_rich)){
 		target = target.concat(sortByDistance(getEnemyWalls().filter(function(e){if(distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) < base_range)return true;return false;}), base, 1));
 
-	//	if(target.length != 0) debugMsg("partisans TARGET walls", 'targeting');
+	//	if(target.length > 0) debugMsg("partisans TARGET walls", 'targeting');
 
-		if(target.length == 0){
+		if(target.length === 0){
 			target = target.concat(getEnemyNearBase());
 	//		debugMsg("partisans TARGET near base", 'targeting');
 		}
 
-		if(target.length == 0 && ally.length != 0){
+		if(target.length === 0 && ally.length > 0){
 			target = target.concat(getEnemyNearAlly());
 	//		debugMsg("partisans TARGET near ally", 'targeting');
 		}
@@ -210,8 +210,8 @@ function targetPartisan(){
 		target = sortByDistance(getEnemyBuilders(), partisans[0], 1, true);
 	}
 	//Если слишком мало партизан -И- нет срочной нужны в подмоге, то кучкуем армию у ближайших ресурсов за пределами базы
-	if(partisans.length < minPartisans && target.length==0 && !( gameTime/1000 < 280 && enemyDist > 80 ) ){
-//		if(fixers.length == 0){
+	if(partisans.length < minPartisans && target.length === 0 && !( gameTime/1000 < 280 && enemyDist > 80 ) ){
+//		if(fixers.length === 0){
 			target = target.concat(getUnknownResources());
 			target = target.concat(getSeeResources());
 			target = sortByDistance(target, base).filter(function(e){
@@ -221,7 +221,7 @@ function targetPartisan(){
 //			target = fixers;
 //		}
 
-		if(target.length != 0){
+		if(target.length > 0){
 //			if(target.length > 4) target = target.slice(4);
 //			target = target[Math.floor(Math.random()*target.length)];
 			target = target[0];
@@ -233,28 +233,28 @@ function targetPartisan(){
 
 
 	//Атакую партизанами ближайшую нефтевышку
-	if(target.length == 0){
+	if(target.length === 0){
 		target = getEnemyResources();
 		target = sortByDistance(target, partisans[0], 1, true);
 //		debugMsg("partisans TARGET extractor", 'targeting');
 	}
 
-	if(target.length == 0){
+	if(target.length === 0){
 		target = sortByDistance(getUnknownResources(), partisans[0], 1, true);
 //		debugMsg("partisans GO unknown resources", 'targeting');
 	}
 
-	if(target.length == 0 && partisans.length >= minPartisans){
+	if(target.length === 0 && partisans.length >= minPartisans){
 		target = sortByDistance(getEnemyFactories(), partisans[0], 1, true);
 //		debugMsg("partisans TARGET factories", 'targeting');
 	}
 
-	if(target.length == 0 && partisans.length >= minPartisans){
+	if(target.length === 0 && partisans.length >= minPartisans){
 		target = sortByDistance(getEnemyProduction(), partisans[0], 1, true);
 //		debugMsg("partisans TARGET builders", 'targeting');
 	}
 
-	if(target.length != 0){
+	if(target.length > 0){
 //		debugMsg("Партизан="+partisans.length+", атакую "+target[0].name+" расстояние от партизан="+distBetweenTwoPoints_p(partisans[0].x,partisans[0].y,target[0].x,target[0].y)+", от базы="+distBetweenTwoPoints_p(base.x,base.y,target[0].x,target[0].y), 'targeting');
 		partisans.forEach(function(e){
 
@@ -279,7 +279,7 @@ function targetCyborgs(){
 //	debugMsg("targetCyborgs():", 'targeting');
 
 	var _cyborgs = enumGroup(armyCyborgs).filter(function(e){if(e.order == DORDER_ATTACK)return false;return true;});
-	if(_cyborgs.length == 0) return;
+	if(_cyborgs.length === 0) return;
 
 	var target = [];
 	target = target.concat(getEnemyResources());
@@ -290,11 +290,11 @@ function targetCyborgs(){
 		target = target.concat(getEnemyFactories());
 	}
 	var enemy = getEnemyNearBase();
-	if(enemy.length == 0 && ally.length != 0)enemy = getEnemyNearAlly();
+	if(enemy.length === 0 && ally.length > 0)enemy = getEnemyNearAlly();
 
-	if(enemy.length != 0) target = enemy; //Заменяем
+	if(enemy.length > 0) target = enemy; //Заменяем
 
-	if(target.length != 0){
+	if(target.length > 0){
 		target = sortByDistance(target, _cyborgs[0], 1);
 		_cyborgs.forEach(function(e){
 //			debugMsg("Cyborgs attack "+target[0].name+" at "+target[0].x+"x"+target[0].y, 'targeting');
@@ -322,8 +322,8 @@ function pointRegularArmy(army){
 		var _target = [];
 		var _enemy=0;
 		_target = sortByDistance(getEnemyStructures(),base,1);
-		if(_target.length != 0) _enemy = getEnemyNearPos(_target[0].x, _target[0].y).length;
-		if(_target.length != 0 && _enemy <= 3) return _target[0];
+		if(_target.length > 0) _enemy = getEnemyNearPos(_target[0].x, _target[0].y).length;
+		if(_target.length > 0 && _enemy <= 3) return _target[0];
 	}
 
 	//Если заварушка на базе, ничего не делаем, пусть воюют
@@ -351,7 +351,7 @@ function pointRegularArmy(army){
 
 		//Ближайшие враги к передовой армии
 		var enemy = enumRange(army[0].x, army[0].y, 40, ENEMIES, true).filter(function(obj){if( ( obj.type==DROID && !obj.isVTOL ) || (obj.type == STRUCTURE && obj.stattype == DEFENSE))return true; return false;});
-		if(enemy.length != 0) lastEnemiesSeen = enemy.length;
+		if(enemy.length > 0) lastEnemiesSeen = enemy.length;
 
 //		var pointDist = false;
 	}
@@ -385,7 +385,7 @@ function pointRegularArmy(army){
 			def.reverse();
 		}
 
-		if(def.length != 0){
+		if(def.length > 0){
 			//Отходим к ближайшей защите
 			pointRegular = def[0];
 		}else{
@@ -418,7 +418,7 @@ function targetRegularRich(target, victim){
 
 	var regular = enumGroup(armyRegular);
 	//Если армии нет - выход из функции
-	if(regular.length == 0) return false;
+	if(regular.length === 0) return false;
 
 	//Если из армии атакован огненный боец, берём всех огненных рядом и в партизаны/камикадзе
 	if(victim != false && victim.droidType == DROID_WEAPON){
@@ -470,11 +470,11 @@ function targetRegularRich(target, victim){
 
 	var help = [];
 	var stopPoint;
-	if(ally.length != 0) help = getEnemyNearAlly();
-	if(help.length == 0){
+	if(ally.length > 0) help = getEnemyNearAlly();
+	if(help.length === 0){
 		help = getEnemyCloseBase();
 	}
-	if(help.length != 0){
+	if(help.length > 0){
 		targRegular = {x:help[0].x,y:help[0].y};
 		pointRegular = false;
 	}else{
@@ -497,8 +497,8 @@ function targetRegularRich(target, victim){
 	if(distBetweenTwoPoints_p(endPoint.x,endPoint.y,regular[0].x,regular[0].y) <= 7){
 //		debugMsg('Армия на месте бездельничает', 'targeting');
 		target = sortByDistance(getEnemyFactories(), regular[0], 1);
-		if(target.length == 0) target = sortByDistance(getEnemyProduction(), regular[0], 1);
-//		if(target.length == 0) target = sortByDistance(getEnemyStartPos(), regular[0], 1);
+		if(target.length === 0) target = sortByDistance(getEnemyProduction(), regular[0], 1);
+//		if(target.length === 0) target = sortByDistance(getEnemyStartPos(), regular[0], 1);
 		if(target.length > 0){
 //			debugMsg('Дополнительные цели: '+target.length, 'targeting');
 			targRegular = {x:target[0].x,y:target[0].y};
@@ -538,17 +538,17 @@ function targetRegular(target, victim){
 //	debugMsg("targetRegular():", 'targeting');
 
 	var regular = enumGroup(armyRegular);
-	if(regular.length == 0) return false;
+	if(regular.length === 0) return false;
 
 
 	var help = [];
-	if(ally.length != 0) help = getEnemyNearAlly();
+	if(ally.length > 0) help = getEnemyNearAlly();
 //	debugMsg("Enemy near ally "+help.length, 'targeting');
-	if(help.length == 0){
+	if(help.length === 0){
 		help = getEnemyCloseBase();
 //		debugMsg("Enemy near base "+help.length, 'targeting');
 	}
-	if(help.length != 0){
+	if(help.length > 0){
 //		debugMsg("Helping with our mighty army, targets="+help.length, 'targeting');
 		regular.forEach(function(e){orderDroidLoc_p(e, DORDER_SCOUT, help[0].x, help[0].y);});
 		return;
@@ -578,11 +578,11 @@ function targetRegular(target, victim){
 		}
 		else{
 			target = getEnemyFactories();
-//			if(target.length == 0 && regular.length >= maxRegular/2){	//Если армии больше половины собрано, а целей всё ещё нет
-			if(target.length == 0){	//Если целей всё ещё нет
+//			if(target.length === 0 && regular.length >= maxRegular/2){	//Если армии больше половины собрано, а целей всё ещё нет
+			if(target.length === 0){	//Если целей всё ещё нет
 				target = sortByDistance(getEnemyProduction(), regular[0], 1);
 			}
-			if(target.length != 0){
+			if(target.length > 0){
 //				debugMsg("regular: меняем цель на вражеский завод "+distBetweenTwoPoints_p(target[0].x,target[0].y,regular[0].x,regular[0].y), 'targeting');
 				targRegular = target[0];
 //				targRegular.x = target[0].x;

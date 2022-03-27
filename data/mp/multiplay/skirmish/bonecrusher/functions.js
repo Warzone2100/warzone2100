@@ -77,8 +77,8 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 		}else if(command == 'buildDef'){
 
 			var _builder = enumGroup(buildersHunters);
-			if(_builder.length == 0) _builder = enumDroid(me,DROID_CONSTRUCT);
-			if(_builder.length == 0){ //Невозможно в данный момент проверить, запоминаем на 10 секунд
+			if(_builder.length === 0) _builder = enumDroid(me,DROID_CONSTRUCT);
+			if(_builder.length === 0){ //Невозможно в данный момент проверить, запоминаем на 10 секунд
 				_globalInfoNear[x+'_'+y+'_'+command].updateIn = 10000;
 				_globalInfoNear[x+'_'+y+'_'+command].value = false;
 				return _globalInfoNear[x+'_'+y+'_'+command];
@@ -261,7 +261,7 @@ function isBeingRepaired(who){
 		case STRUCTURE: {
 //			debugMsg("Нас атакует вражесая башня ["+who.player+"]",5);
 			var droids = enumDroid(who.player,DROID_CONSTRUCT,me);
-			if ( droids.length != 0 ) {
+			if ( droids.length > 0 ) {
 				for (const i in droids) {
 					if ( distBetweenTwoPoints_p(who.x,who.y,droids[i].x,droids[i].y) <= 3 ) {
 //						debugMsg("Атакующая меня башня подвергается ремонту!",5);
@@ -294,7 +294,7 @@ function isBeingRepaired(who){
 function sortByDistance(arr, obj, num, reach){
 	if (typeof reach === "undefined") reach = false;
 	if (typeof num === "undefined" || num == null || num == false) num = 0;
-	else if ( arr.length == 1 ) num = 1;
+	else if ( arr.length === 1 ) num = 1;
 
 	if ( num == 1 ) {
 
@@ -366,7 +366,7 @@ function checkProcess(){
 			if(enumDroid(bc_ally[plally], DROID_CONSTRUCT).length < 3){
 				if(groupSize(buildersMain) >= 2){
 					var truck = enumGroup(buildersMain);
-					if(truck.length != 0){
+					if(truck.length > 0){
 						debugMsg("Send builder["+truck[0].id+"] from "+me+" to "+bc_ally[plally], 'ally');
 						donateObject(truck[0], bc_ally[plally]);
 						break;
@@ -375,7 +375,7 @@ function checkProcess(){
 
 				if(groupSize(buildersHunters) > 1){
 					var truck = enumGroup(buildersHunters);
-					if(truck.length != 0){
+					if(truck.length > 0){
 						donateObject(truck[0], bc_ally[plally]);
 						debugMsg("Send hunter["+truck[0].id+"] from "+me+" to "+bc_ally[plally], 'ally');
 						break;
@@ -413,7 +413,7 @@ function gameStop(condition){
 /*
 	Not working, due WZ Engine
 		var myDroids = enumDroid(me);
-		if(myDroids.length != 0 && _ally !== false){
+		if(myDroids.length > 0 && _ally !== false){
 			myDroids.forEach(function(o){
 				donateObject(o, _ally);
 			});
@@ -430,19 +430,19 @@ function gameStop(condition){
 
 function playerLoose(player){
 	var loose = false;
-	if(enumStruct(player,"A0LightFactory").length == 0
-		&& enumDroid(player, DROID_CONSTRUCT).length == 0
-		&& enumStruct(player,"A0CyborgFactory").length == 0
-		&& enumDroid(player, 10).length == 0) loose = true;
+	if(enumStruct(player,"A0LightFactory").length === 0
+		&& enumDroid(player, DROID_CONSTRUCT).length === 0
+		&& enumStruct(player,"A0CyborgFactory").length === 0
+		&& enumDroid(player, 10).length === 0) loose = true;
 	return loose;
 }
 
 function playerSpectator(player){
 	var loose = false;
-	if( ( enumStruct(player, "A0Sat-linkCentre").length == 1 || enumStruct(player, "A0CommandCentre").length == 1 )
-		&& enumStruct(player,"A0LightFactory").length == 0
-		&& enumStruct(player,"A0CyborgFactory").length == 0
-		&& enumDroid(player, 10).length == 0) loose = true;
+	if( ( enumStruct(player, "A0Sat-linkCentre").length === 1 || enumStruct(player, "A0CommandCentre").length === 1 )
+		&& enumStruct(player,"A0LightFactory").length === 0
+		&& enumStruct(player,"A0CyborgFactory").length === 0
+		&& enumDroid(player, 10).length === 0) loose = true;
 	return loose;
 }
 
@@ -577,7 +577,7 @@ function getAllResources(){
 //Просто сравниваем два массива объектов и фильтруем в третий
 function getUnknownResources(){
 	var iSee = getSeeResources();
-	if ( iSee.length == 0 ) return allResources;
+	if ( iSee.length === 0 ) return allResources;
 	var notSee = allResources.filter(function (value) {
 		for (const i in iSee) {
 			if ( value.x == iSee[i].x && value.y == iSee[i].y ) return false;
@@ -893,7 +893,7 @@ function removeDuplicates(originalArray, objKey) {
 
 //Возвращает кол-во производящихся на данный момент типов в заводах.
 function inProduce(type){
-	if(produceTrigger.length == 0) return 0;
+	if(produceTrigger.length === 0) return 0;
 	var _prod = 0;
 
 	for (const p in produceTrigger) {
@@ -918,7 +918,7 @@ function unitIdle(obj){
 //warriors - атакующая группа
 //num - количество целей для распределения от 1 до 10
 function attackObjects(targets, warriors, num, scouting){
-	if ( targets.length == 0 || warriors.length == 0 ) return false;
+	if ( targets.length === 0 || warriors.length === 0 ) return false;
 	if (typeof num === "undefined" || num == null || num == 0) num = 3;
 	if ( num > 10 ) num = 10;
 	if ( warriors.length < num ) num = warriors.length;
@@ -1006,7 +1006,7 @@ function recycleBuilders(){
 	var factory = enumStruct(me, FACTORY);
 	factory = factory.concat(enumStruct(me, REPAIR_FACILITY));
 	var factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
-	if(factory_ready.length != 0){
+	if(factory_ready.length > 0){
 	*/
 	var _builders = enumDroid(me,DROID_CONSTRUCT);
 	_builders.forEach(function(e){
@@ -1104,7 +1104,7 @@ function longCycle(){
 
 	//Повторно отправляем дроидов на продажу
 	var recycle = enumGroup(droidsRecycle);
-	if(recycle.length != 0){
+	if(recycle.length > 0){
 		debugMsg("recycle: "+recycle.length, 'debug');
 		recycle.forEach(function(o){
 			if(o.droidType == DROID_CONSTRUCT && (o.order == DORDER_BUILD || o.order == DORDER_HELPBUILD)) return;
@@ -1145,15 +1145,15 @@ function longCycle(){
 		droids = droids.concat(enumGroup(armyFixers));
 		debugMsg("fixers: "+droids.length, 'debug');
 		debugMsg("droids to recycle: "+droids.length, 'debug');
-		if(droids.length != 0)droids = droids.filter(function(o){if(o.propulsion == "wheeled01" || o.propulsion == "HalfTrack" || o.propulsion == "tracked01")return true;return false;});
+		if(droids.length > 0)droids = droids.filter(function(o){if(o.propulsion == "wheeled01" || o.propulsion == "HalfTrack" || o.propulsion == "tracked01")return true;return false;});
 		droids = droids.concat(enumDroid(me, DROID_CYBORG));
 		debugMsg("filtered droids="+droids.length, 'debug');
-		if(droids.length != 0)droids.forEach(function(o){recycleDroid(o);});
+		if(droids.length > 0)droids.forEach(function(o){recycleDroid(o);});
 	}
 
 	var points = getFixPoints();
 	var broken = enumGroup(droidsBroken);
-	if(broken.length != 0){
+	if(broken.length > 0){
 		broken.forEach(function(o){
 			if(o.health > 80){groupArmy(o); return;}
 			if(!points){recycleDroid(o); return;}
@@ -1223,7 +1223,7 @@ function recycleDroid(droid){
 
 	if(droid.droidType == DROID_CONSTRUCT && (droid.order == DORDER_BUILD || droid.order == DORDER_HELPBUILD)) return false;
 
-	if(factory_ready.length != 0){
+	if(factory_ready.length > 0){
 		orderDroid(droid, DORDER_RECYCLE);
 		return true;
 	}else{
@@ -1239,7 +1239,7 @@ function getFixPoints(droid){
 	var points = enumStruct(me, REPAIR_FACILITY);
 	points = points.concat(enumGroup(armyFixers));
 
-	if(points.length != 0) {
+	if(points.length > 0) {
 
 		if(droid !== false) points = sortByDistance(points, droid, 0, true);
 
@@ -1266,7 +1266,7 @@ function fixDroid(droid){
 		points = sortByDistance(_points, droid);
 	}
 
-	if(points.length != 0) { orderDroidLoc_p(droid, DORDER_MOVE, points[0].x, points[0].y); return true; }
+	if(points.length > 0) { orderDroidLoc_p(droid, DORDER_MOVE, points[0].x, points[0].y); return true; }
 
 	return false;
 }
@@ -1283,7 +1283,7 @@ function getFleetPoint(droid){
 	droidsNear = sortByDistance(droidsNear, base);
 //	debugMsg('dl:'+droidsNear.length, 'temp');
 //	debugMsg('dr:'+droidCanReach(droid, base.x, base.y), 'temp');
-	if(droidsNear.length == 0 || droidsNear[0].id == droid.id) return base
+	if(droidsNear.length === 0 || droidsNear[0].id == droid.id) return base
 	return droidsNear[0];
 
 }
@@ -1303,8 +1303,8 @@ function fleetDroid(droid){
 
 function fleetsReturn(){
 	var fleets = enumGroup(droidsFleet);
-	if (fleets.length == 0) fleets = enumGroup(droidsBroken).filter(function(o){if(o.health > 80)return true; return false;});
-	if(fleets.length != 0){
+	if (fleets.length === 0) fleets = enumGroup(droidsBroken).filter(function(o){if(o.health > 80)return true; return false;});
+	if(fleets.length > 0){
 		fleets.forEach(function(o){
 			if(o.health < 40){fixDroid(o); return;}
 			if(o.health < 10){recycleDroid(o); return;}

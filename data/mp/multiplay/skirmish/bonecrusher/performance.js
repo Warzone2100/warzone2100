@@ -110,7 +110,7 @@ function orderDroidBuild_p(who, order, building, x, y, rotation){
 /*
 function perfMonitor(){
 	if(!running)return;
-	if(Object.keys(perfOrder).length != 0){
+	if(Object.keys(perfOrder).length > 0){
 		var pout=[];
 		Object.keys(perfOrder).map(function(k, i) {
 			pout += "\n"+i+": "+k+"="+perfOrder[k];
