@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-03-26 14:53\n"
+"PO-Revision-Date: 2022-03-27 02:51\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -5858,7 +5858,7 @@ msgstr "Música del Menú"
 
 #: lib/widget/form.cpp:343
 msgid "(untitled)"
-msgstr ""
+msgstr "(sin título)"
 
 #: lib/widget/jsontable.cpp:496
 msgid "Copy Path to Clipboard"
@@ -7331,7 +7331,7 @@ msgstr "Puntos estructurales: Muy bajo"
 #: po/custom/fromJson.txt:1222
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Daño de bomba +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -14891,12 +14891,12 @@ msgstr "Juego de Estrategia"
 
 #: src/chat.cpp:63
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: src/chat.cpp:67
 #: src/chat.cpp:73
 msgid "Allies"
-msgstr ""
+msgstr "Aliados"
 
 #: src/chat.cpp:75
 msgid "private to "
@@ -14904,12 +14904,12 @@ msgstr ""
 
 #: src/chat.cpp:86
 msgid " and "
-msgstr ""
+msgstr " y "
 
 #: src/chat.cpp:173
 #: src/multiint.cpp:3635
 msgid "Spectators"
-msgstr ""
+msgstr "Espectadores"
 
 #: src/cheat.cpp:216
 #, c-format
@@ -15801,7 +15801,7 @@ msgstr "Sombras"
 
 #: src/frontend.cpp:878
 msgid "Fog"
-msgstr ""
+msgstr "Niebla"
 
 #: src/frontend.cpp:883
 #: src/ingameop.cpp:637
@@ -15816,7 +15816,7 @@ msgstr "Salto de Radar"
 
 #: src/frontend.cpp:893
 msgid "Screen Shake"
-msgstr ""
+msgstr "Agitación de Pantalla"
 
 #: src/frontend.cpp:905
 msgid "GRAPHICS OPTIONS"
@@ -15948,7 +15948,7 @@ msgstr "OPCIONES DE VIDEO"
 
 #: src/frontend.cpp:1668
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Incapaz de cambiar a Modo Ventana"
 
 #: src/frontend.cpp:1668
 msgid "Warzone failed to change the Window mode.\n"
@@ -16057,7 +16057,7 @@ msgstr "OPCIONES DE JUEGO"
 
 #: src/frontend.cpp:2114
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Dificultad Loca"
 
 #: src/frontend.cpp:2115
 msgid "This difficulty is for very experienced players!"
@@ -16066,17 +16066,17 @@ msgstr ""
 #: src/frontend.cpp:2213
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u minutos"
 
 #: src/frontend.cpp:2268
 #: src/frontend.cpp:2276
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u segundos"
 
 #: src/frontend.cpp:2307
 msgid "None"
-msgstr ""
+msgstr "Ninguno"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
@@ -16104,7 +16104,7 @@ msgstr ""
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "OPCIONES DE MULTIJUGADOR"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5127
@@ -16152,7 +16152,7 @@ msgstr ""
 
 #: src/hci.cpp:740
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: src/hci.cpp:755
 msgid "Resume"
@@ -17137,7 +17137,7 @@ msgstr "Energía"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Poder Por Segundo"
 
 #: src/intdisplay.cpp:288
 #, c-format
@@ -17545,31 +17545,31 @@ msgstr "Capturar Cursor %s"
 
 #: src/keybind.cpp:1387
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "CAMPAÑA"
 
 #: src/keybind.cpp:1391
 msgid "CHALLENGE"
-msgstr ""
+msgstr "DESAFÍO"
 
 #: src/keybind.cpp:1394
 msgid "SKIRMISH"
-msgstr ""
+msgstr "ESCARAMUZA"
 
 #: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "DIFICULTAD: FÁCIL"
 
 #: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "DIFICULTAD: NORMAL"
 
 #: src/keybind.cpp:1418
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "DIFICULTAD: DIFÍCIL"
 
 #: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "DIFICULTAD: LOCA"
 
 #: src/keybind.cpp:1430
 msgid "CHEATS: ENABLED"
@@ -18122,7 +18122,7 @@ msgstr "Equipo"
 #: src/multiint.cpp:7501
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Espectador"
 
 #: src/multiint.cpp:2305
 #: src/multiint.cpp:4435
@@ -18149,15 +18149,15 @@ msgstr ""
 
 #: src/multiint.cpp:2369
 msgid "Move to Spectators"
-msgstr ""
+msgstr "Mover a Espectadores"
 
 #: src/multiint.cpp:2390
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "Preguntar al Espectador a Jugar"
 
 #: src/multiint.cpp:2406
 msgid "Ask to Play"
-msgstr ""
+msgstr "Preguntar a Jugar"
 
 #: src/multiint.cpp:3012
 #, c-format
@@ -18179,7 +18179,7 @@ msgstr ""
 
 #: src/multiint.cpp:3056
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "¿Quieres espectar?"
 
 #: src/multiint.cpp:3057
 msgid "The host of this game wants to know if you're willing to spectate?"
@@ -18187,15 +18187,15 @@ msgstr ""
 
 #: src/multiint.cpp:3059
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Ahora mismo eres un Jugador."
 
 #: src/multiint.cpp:3060
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "¡Sí, espectaré!"
 
 #: src/multiint.cpp:3065
 msgid "Do you want to play?"
-msgstr ""
+msgstr "¿Quieres jugar?"
 
 #: src/multiint.cpp:3066
 msgid "The host of this game wants to know if you'd like to play?"
@@ -18203,25 +18203,25 @@ msgstr ""
 
 #: src/multiint.cpp:3068
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "Ahora mismo eres un Espectador."
 
 #: src/multiint.cpp:3069
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "¡Sí, quiero jugar!"
 
 #: src/multiint.cpp:3112
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "Jugador %s ha sido movido a Espectadores"
 
 #: src/multiint.cpp:3151
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "Al Espectador le gustaría volverse un Jugador"
 
 #: src/multiint.cpp:3152
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "Al Espectador \"%s\" le gustaría volverse un jugador."
 
 #: src/multiint.cpp:3154
 msgid "However, there are currently no open Player slots."
@@ -18237,11 +18237,11 @@ msgstr ""
 
 #: src/multiint.cpp:3440
 msgid "Joined:"
-msgstr ""
+msgstr "Unido:"
 
 #: src/multiint.cpp:3443
 msgid "Ready:"
-msgstr ""
+msgstr "Listo:"
 
 #: src/multiint.cpp:3621
 #: src/titleui/gamefind.cpp:270
@@ -18326,11 +18326,11 @@ msgstr "¿LISTO?"
 
 #: src/multiint.cpp:4539
 msgid "For Spectator:"
-msgstr ""
+msgstr "Para Espectador:"
 
 #: src/multiint.cpp:4539
 msgid "For Player:"
-msgstr ""
+msgstr "Para Jugador:"
 
 #: src/multiint.cpp:4557
 msgid "Choose Player Slot"
@@ -18346,7 +18346,7 @@ msgstr ""
 
 #: src/multiint.cpp:4809
 msgid "Kicked from game"
-msgstr ""
+msgstr "Expulsado del juego"
 
 #: src/multiint.cpp:5034
 msgid "Copy Text to Clipboard"
@@ -18807,11 +18807,11 @@ msgstr ""
 
 #: src/musicmanager.cpp:545
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: src/musicmanager.cpp:679
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: src/musicmanager.cpp:868
 msgid "MUSIC MANAGER"
@@ -18994,7 +18994,7 @@ msgstr[1] "%u unidades seleccionadas"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Mostrar Estadísticas del Jugador"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
@@ -19201,7 +19201,7 @@ msgstr "Versión: %s"
 
 #: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
-msgstr ""
+msgstr "Unirse como espectador"
 
 #: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
@@ -19342,7 +19342,7 @@ msgstr "Actualizar Ahora"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Aviso de Compatibilidad"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
@@ -19381,7 +19381,7 @@ msgstr "Versión: %s,%s Build: %s%s"
 
 #: src/wrappers.cpp:365
 msgid "GAME OVER"
-msgstr ""
+msgstr "FIN DEL JUEGO"
 
 #: src/wrappers.cpp:366
 msgid "The battle is over - you can leave the room."
