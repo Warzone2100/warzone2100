@@ -82,12 +82,10 @@ function eventAttacked(victim, attacker)
 		//log("Defend!");
 		var loc = {x: attacker.x, y: attacker.y };
 		var defenders = enumGroup(attackGroup);
-		var defLen = defenders.length;
-		if (defLen > MIN_GROUND_UNITS)
+		if (defenders.length > MIN_GROUND_UNITS)
 		{
-			for (var i = 0; i < defLen; ++i)
+			for (const dr of defenders)
 			{
-				var dr = defenders[i];
 				if (dr.order !== DORDER_RECYCLE && !droidNeedsRepair(dr.id) && dr.id !== victim.id)
 				{
 					orderDroidLoc(dr, DORDER_SCOUT, loc.x, loc.y);
@@ -99,9 +97,8 @@ function eventAttacked(victim, attacker)
 		var vtolLen = vtols.length;
 		if (vtolLen > MIN_VTOL_UNITS)
 		{
-			for (var j = 0; j < vtolLen; ++j)
+			for (const vt of vtols)
 			{
-				var vt = vtols[j];
 				if (vtolReady(vt.id))
 				{
 					orderDroidLoc(vt, DORDER_SCOUT, loc.x, loc.y);
@@ -183,9 +180,8 @@ function eventBeacon(x, y, from, to, message)
 		var enemyObjects = enumRange(x, y, BEACON_SCAN_RADIUS, ENEMIES, false);
 		if (enemyObjects.length > 0)
 		{
-			for (var i = 0, l = enemyObjects.length; i < l; ++i)
+			for (const obj of enemyObjects)
 			{
-				var obj = enemyObjects[i];
 				if (obj)
 				{
 					setPlayerAsTarget(obj.player);

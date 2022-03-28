@@ -99,9 +99,9 @@ function evalResearch(labID, list)
 	{
 		return true;
 	}
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (const item of list)
 	{
-		if (!getResearch(list[i]).done && pursueResearch(lab, list[i]))
+		if (!getResearch(item).done && pursueResearch(lab, item))
 		{
 			return true;
 		}
@@ -130,9 +130,8 @@ function lookForResearch(tech, labParam)
 		));
 	}
 
-	for (var i = 0, r = labList.length; i < r; ++i)
+	for (const lab of labList)
 	{
-		var lab = labList[i];
 		var found = evalResearch(lab.id, FUNDAMENTALS);
 
 		// Focus on the hover research for a hover map.

@@ -343,9 +343,9 @@ function recycleDroidsForHover()
 	{
 		if (unfinishedStructures.length === 0)
 		{
-			for (var i = 0; i < NON_HOVER_SYSTEMS; ++i)
+			for (const system of systems)
 			{
-				orderDroid(systems[i], DORDER_RECYCLE);
+				orderDroid(system, DORDER_RECYCLE);
 			}
 
 			if (isSeaMap === false && NON_HOVER_SYSTEMS === 0)
@@ -359,14 +359,13 @@ function recycleDroidsForHover()
 			var tanks = enumGroup(attackGroup).filter((dr) => (
 				dr.droidType == DROID_WEAPON && dr.propulsion !== "hover01"
 			));
-			const NON_HOVER_TANKS = tanks.length;
 
-			for (var j = 0; j < NON_HOVER_TANKS; ++j)
+			for (const tank of tanks)
 			{
-				orderDroid(tanks[j], DORDER_RECYCLE);
+				orderDroid(tank, DORDER_RECYCLE);
 			}
 
-			if (NON_HOVER_TANKS + NON_HOVER_SYSTEMS === 0)
+			if (tanks.length + NON_HOVER_SYSTEMS === 0)
 			{
 				removeTimer("recycleDroidsForHover");
 			}
@@ -390,9 +389,9 @@ function scanForVTOLs()
 	}
 
 	var visibleEnemyDroids = enumDroid(myEnemy, DROID_WEAPON, true);
-	for (var i = 0, l = visibleEnemyDroids.length; i < l; ++i)
+	for (const visibleEnemyDroid of visibleEnemyDroids)
 	{
-		if (isVTOL(visibleEnemyDroids[i]))
+		if (isVTOL(visibleEnemyDroid))
 		{
 			enemyHasVtol = true;
 			break;

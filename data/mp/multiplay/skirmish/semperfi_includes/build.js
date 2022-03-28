@@ -42,11 +42,11 @@ function findIdleTrucks(obj)
 		obj = BASE;
 	}
 
-	for (var i = 0, d = builders.length; i < d; ++i)
+	for (const builder of builders)
 	{
-		if (conCanHelp(builders[i], obj.x, obj.y))
+		if (conCanHelp(builder, obj.x, obj.y))
 		{
-			droidlist.push(builders[i]);
+			droidlist.push(builder);
 		}
 	}
 
@@ -59,9 +59,9 @@ function demolishThis(object)
 	var success = false;
 	var droidList = findIdleTrucks(object);
 
-	for (var i = 0, d = droidList.length; i < d; ++i)
+	for (const droid of droidList)
 	{
-		if (orderDroidObj(droidList[i], DORDER_DEMOLISH, object))
+		if (orderDroidObj(droid, DORDER_DEMOLISH, object))
 		{
 			success = true;
 		}
@@ -86,13 +86,13 @@ function grabTrucksAndBuild(structure, maxBlockingTiles)
 	var droidList = findIdleTrucks();
 	var found = false;
 
-	for (var i = 0, d = droidList.length; i < d; ++i)
+	for (const droid of droidList)
 	{
-		var result = pickStructLocation(droidList[i], structure, BASE.x, BASE.y, maxBlockingTiles);
+		var result = pickStructLocation(droid, structure, BASE.x, BASE.y, maxBlockingTiles);
 		if (result)
 		{
 			//logObj(mydroid, "Construction work");
-			if (orderDroidBuild(droidList[i], DORDER_BUILD, structure, result.x, result.y))
+			if (orderDroidBuild(droid, DORDER_BUILD, structure, result.x, result.y))
 			{
 				found = true;
 			}
@@ -106,7 +106,6 @@ function grabTrucksAndBuild(structure, maxBlockingTiles)
 function checkLocalJobs()
 {
 	var trucks = findIdleTrucks();
-	var freeTrucks = trucks.length;
 	var success = false;
 	var structlist = enumStruct(me).filter((obj) => (
 		obj.status !== BUILT &&
@@ -115,14 +114,14 @@ function checkLocalJobs()
 		distBetweenTwoPoints(BASE.x, BASE.y, obj.x, obj.y) < HELP_CONSTRUCT_AREA
 	));
 
-	if (freeTrucks && structlist.length)
+	if (trucks.length && structlist.length)
 	{
 		structlist = structlist.sort(sortByDistToBase);
-		for (var j = 0; j < freeTrucks; ++j)
+		for (const truck of trucks)
 		{
-			if (orderDroidObj(trucks[j], DORDER_HELPBUILD, structlist[0]))
+			if (orderDroidObj(truck, DORDER_HELPBUILD, structlist[0]))
 			{
-				//logObj(trucks[j], "Go help construction");
+				//logObj(truck, "Go help construction");
 				success = true;
 			}
 		}
@@ -192,13 +191,13 @@ function bringBackOilBuilders()
 {
 	var builders = enumGroup(oilBuilders);
 
-	for (var i = 0, len = builders.length; i < len; ++i)
+	for (const builder of builders)
 	{
-		if (builders[i].order !== DORDER_BUILD &&
-			builders[i].order !== DORDER_RTB &&
-			builders[i].order !== DORDER_RECYCLE)
+		if (builder.order !== DORDER_BUILD &&
+			builder.order !== DORDER_RTB &&
+			builder.order !== DORDER_RECYCLE)
 		{
-			orderDroid(builders[i], DORDER_RTB);
+			orderDroid(builder, DORDER_RTB);
 		}
 	}
 }
@@ -212,9 +211,9 @@ function skipOilGrabIfEasy()
 		)).length;
 		var enemies = getAliveEnemyPlayers();
 
-		for (var i = 0, len = enemies.length; i < len; ++i)
+		for (const enemy of enemies)
 		{
-			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(DERRICK_STAT, enemies[i]) && enemies[i] !== scavengerPlayer)
+			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(DERRICK_STAT, enemy) && enemy !== scavengerPlayer)
 			{
 				bringBackOilBuilders();
 				return true;
@@ -240,12 +239,10 @@ function lookForOil()
 	var success = false;
 	//log("looking for oil... " + oils.length + " available");
 
-	for (var i = 0, oilLen = oils.length; i < oilLen; ++i)
+	for (const oil of oils)
 	{
-		for (var j = 0, drLen = droids.length; j < drLen; ++j)
+		for (const droid of droids)
 		{
-			var droid = droids[j];
-			var oil = oils[i];
 			var dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
 			var unsafe = enumRange(oil.x, oil.y, UNSAFE_AREA_RANGE, ENEMIES, false).filter(isUnsafeEnemyObject);
 			if (droidCanReach(droid, oil.x, oil.y) &&
@@ -291,9 +288,9 @@ function buildAntiAir(buildExtras)
 		return false;
 	}
 
-	for (var j = 0, s = SAM_SITES.length; j < s; ++j)
+	for (const samSite of SAM_SITES)
 	{
-		if (grabTrucksAndBuild(SAM_SITES[j], 1))
+		if (grabTrucksAndBuild(samSite, 1))
 		{
 			return true;
 		}
@@ -637,9 +634,8 @@ function checkResearchCompletion()
 		//log("Done researching - salvage unusable buildings");
 		researchDone = true; // and do not rebuild them
 		var labList = enumStruct(me, RES_LAB_STAT);
-		for (var i = 0, l = labList.length; i < l; ++i)
+		for (const lab of labList)
 		{
-			var lab = labList[i];
 			if (!structureIdle(lab))
 			{
 				continue;
@@ -672,17 +668,17 @@ function maintenance()
 		{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY_STAT}
 	];
 
-	for (var i = 0, l = modList.length; i < l; ++i)
+	for (const mod of modList)
 	{
-		if (isStructureAvailable(modList[i].mod))
+		if (isStructureAvailable(mod.mod))
 		{
-			structList = enumStruct(me, modList[i].structure).sort(sortByDistToBase);
-			for (var c = 0, s = structList.length; c < s; ++c)
+			structList = enumStruct(me, mod.structure).sort(sortByDistToBase);
+			for (const structItem of structList)
 			{
-				if (structList[c].modules < modList[i].amount)
+				if (structItem.modules < mod.amount)
 				{
-					struct = structList[c];
-					module = modList[i].mod;
+					struct = structItem;
+					module = mod.mod;
 					break;
 				}
 			}
@@ -697,9 +693,8 @@ function maintenance()
 	{
 		//log("Found a structure to upgrade");
 		var builders = findIdleTrucks(struct);
-		for (var j = 0, t = builders.length; j < t; ++j)
+		for (const mydroid of builders)
 		{
-			var mydroid = builders[j];
 			if (conCanHelp(mydroid, struct.x, struct.y))
 			{
 				if (orderDroidBuild(mydroid, DORDER_BUILD, module, struct.x, struct.y))

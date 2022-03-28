@@ -93,9 +93,9 @@ function buildAttacker(struct)
 
 	if (enumGroup(attackGroup).length > MIN_ATTACK_GSIZE && enumGroup(busterGroup).length < MIN_BUSTERS)
 	{
-		for (var i = 0; i < TANK_BUNKER_BUSTERS.length; ++i)
+		for (const tankBunkerBuster of TANK_BUNKER_BUSTERS)
 		{
-			if (componentAvailable(TANK_BUNKER_BUSTERS[i]))
+			if (componentAvailable(tankBunkerBuster))
 			{
 				return buildDroid(struct, "Bunker buster", TANK_BODY_LIST, prop, "", "", TANK_BUNKER_BUSTERS, secondary);
 			}
