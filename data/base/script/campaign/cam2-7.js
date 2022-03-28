@@ -158,7 +158,7 @@ function eventStartLevel()
 			assembly: "base2HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 55 : 60)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 54 : 60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -170,7 +170,7 @@ function eventStartLevel()
 			assembly: "base2CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 35 : 40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 36 : 40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -182,7 +182,7 @@ function eventStartLevel()
 			assembly: "base3CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 35 : 40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 36 : 40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -194,7 +194,7 @@ function eventStartLevel()
 			assembly: "base4HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 65 : 70)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 63 : 70)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -206,7 +206,7 @@ function eventStartLevel()
 			assembly: "base4CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 35 : 40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 36 : 40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -218,7 +218,7 @@ function eventStartLevel()
 			assembly: "base4VTOLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 55 : 60)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 54 : 60)),
 			data: {
 				regroup: false,
 				count: -1,

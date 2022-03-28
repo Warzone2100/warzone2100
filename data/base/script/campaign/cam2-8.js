@@ -149,7 +149,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 60 : 70)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 63 : 70)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -172,7 +172,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 60 : 70)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 63 : 70)),
 			data: {
 				regroup: false,
 				count: -1,

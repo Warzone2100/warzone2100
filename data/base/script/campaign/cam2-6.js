@@ -165,7 +165,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactory-ArtiAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 35 : 40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 36 : 40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -201,7 +201,7 @@ function eventStartLevel()
 			assembly: "COHeavyFactory-b2LAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 70 : 80)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 72 : 80)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -213,7 +213,7 @@ function eventStartLevel()
 			assembly: "COHeavyFactory-b2RAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 55 : 60)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 54 : 60)),
 			data: {
 				regroup: false,
 				repair: 20,
