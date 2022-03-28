@@ -235,7 +235,7 @@ function eventStartLevel()
 	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
-	if (difficulty >= HARD)
+	if (difficulty >= MEDIUM)
 	{
 		addDroid(THE_COLLECTIVE, 55, 25, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
 
