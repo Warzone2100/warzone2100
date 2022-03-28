@@ -137,7 +137,7 @@ function eventStartLevel()
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 27 : 30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -149,7 +149,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 60 : 70)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -161,7 +161,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 45 : 50)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -172,7 +172,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 60 : 70)),
 			data: {
 				regroup: false,
 				count: -1,
@@ -185,7 +185,7 @@ function eventStartLevel()
 	truckDefense();
 
 	queue("setupLandGroups", camSecondsToMilliseconds(50));
-	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
-	queue("enableFactories", camChangeOnDiff(camMinutesToMilliseconds(2.5)));
+	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 80 : 90)));
+	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 135 : 150)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
