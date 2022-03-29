@@ -112,7 +112,7 @@ function perfMonitor(){
 	if(!running)return;
 	if(Object.keys(perfOrder).length > 0){
 		var pout=[];
-		Object.keys(perfOrder).map(function(k, i) {
+		Object.keys(perfOrder).map((k, i) => {
 			pout += "\n"+i+": "+k+"="+perfOrder[k];
 		});
 		debugMsg(pout, 'performance');

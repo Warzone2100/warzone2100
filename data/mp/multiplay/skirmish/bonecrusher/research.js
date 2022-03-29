@@ -13,7 +13,7 @@ function doResearch(){
 	//Get labs where build and ready
 	var labs = enumStruct(me,RESEARCH_LAB);
 	var labs_len = labs.length;
-	labs = labs.filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
+	labs = labs.filter((e) => (e.status == BUILT && structureIdle(e)));
 
 	//If no ready labs
 	if(labs.length === 0) return false;
@@ -27,7 +27,7 @@ function doResearch(){
 
 
 	//Get all available researches, filterout started by ally
-	var avail_research = enumResearch().filter(function(o){if(o.started)return false;return true;});
+	var avail_research = enumResearch().filter((o) => (!o.started));
 
 	if(avail_research.length === 0) return false;
 
@@ -36,18 +36,17 @@ function doResearch(){
 //	debugMsg('research_path.length:'+research_path.length, 'research');
 
 	//Clear research path from completed researches
-	research_path = research_path.filter(function(o){
+	research_path = research_path.filter((o) => {
 		var r = getResearch(o);
 		if(!r){debugMsg('Research "'+o+'" not found', 'error');return false;}
-		if(r.done)return false;
-		return true;
+		return !r.done;
 	});
 
 	var prepare_research = [];
 
 	if(research_path.length > 0 ){
 		//Filter out started researches by me or ally
-		prepare_research = research_path.filter(function(o){if(getResearch(o).started)return false; return true;});
+		prepare_research = research_path.filter((o) => (!getResearch(o).started));
 
 		if(prepare_research.length === 0) return false;
 
@@ -67,7 +66,7 @@ function doResearch(){
 		for (const r in research) {
 			to_research.push(research[r].id);
 		}
-//		to_research = to_research.filter(o=>researches.indexOf(o)!==-1);
+//		to_research = to_research.filter((o) => (researches.indexOf(o)!==-1));
 		to_research = intersect_arrays(to_research, researches);
 
 		if(to_research.length > 0) break;
@@ -76,7 +75,7 @@ function doResearch(){
 
 	}
 
-//	if(findResearch(to_research[0]).filter(function(o){if(getResearch(o).started)return false; return true;}}).length === 0)
+	// if(findResearch(to_research[0]).filter((o) => (!getResearch(o).started)).length === 0)
 
 	//No more research at this moment
 	if(to_research.length === 0){
@@ -119,9 +118,9 @@ function doResearch_old(){
 	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length > 0) return;
 
 
-	var avail_research = enumResearch().filter(function(e){
+	var avail_research = enumResearch().filter((e) => {
 		//		debugMsg(e.name+' - '+e.started+' - '+e.done, 'research_advance');
-		if(e.started)return false;return true;
+		return !e.started
 	});
 
 	if ( research_way.length === 0 || avail_research.length === 0 ) {
@@ -158,9 +157,9 @@ function doResearch_old(){
 	}
 
 	//Если меньше 8 нефтевышек, и меньше 1000 денег, и уже запущенны 3 лабы - выход
-// 	if(countStruct('A0ResourceExtractor', me) < 8 && playerPower(me) < 1000 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 3) return;
-// 	if(countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 2) return;
-// 	if(countStruct('A0ResourceExtractor', me) <= 3 && playerPower(me) < 300 && enumStruct(me, RESEARCH_LAB).filter(function(e){if(!structureIdle(e)&&e.status==BUILT)return true;return false;}).length >= 1) return;
+// 	if(countStruct('A0ResourceExtractor', me) < 8 && playerPower(me) < 1000 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status==BUILT)).length >= 3) return;
+// 	if(countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status==BUILT)).length >= 2) return;
+// 	if(countStruct('A0ResourceExtractor', me) <= 3 && playerPower(me) < 300 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status==BUILT)).length >= 1) return;
 
 	for (const l in labs) {
 

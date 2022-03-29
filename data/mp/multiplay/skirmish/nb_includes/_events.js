@@ -29,7 +29,7 @@ function eventStartLevel() {
 		// initialize the subpersonality randomly and don't care
 		personality = randomItem(subpersonalities);
 	}
-	enumDroid(me).forEach(function(droid) {
+	enumDroid(me).forEach((droid) => {
 		if (droid.droidType === DROID_CONSTRUCT)
 		{
 			// the following code is necessary to avoid some strange game bug when droids that

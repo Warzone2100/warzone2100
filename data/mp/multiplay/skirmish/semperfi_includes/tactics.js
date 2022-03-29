@@ -273,9 +273,9 @@ function attackEnemy()
 		//Now send in bunker buster which only focus on structures.
 		var busters = enumGroup(busterGroup);
 		len = busters.length;
-		var enemyStructs = enumRange(loc.x, loc.y, 10, ENEMIES, false).filter(function(obj) {
-			return obj.type === STRUCTURE;
-		});
+		var enemyStructs = enumRange(loc.x, loc.y, 10, ENEMIES, false).filter((obj) => (
+			obj.type === STRUCTURE
+		));
 
 		if (enemyStructs.length > 0)
 		{
@@ -331,12 +331,12 @@ function recycleDroidsForHover()
 	}
 
 	const MIN_FACTORY = 1;
-	var systems = enumDroid(me, DROID_CONSTRUCT).filter(function(dr) {
-		return dr.propulsion !== "hover01";
-	});
-	var unfinishedStructures = enumStruct(me).filter(function(obj) {
-		return obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR && obj.stattype !== DEFENSE;
-	});
+	var systems = enumDroid(me, DROID_CONSTRUCT).filter((dr) => (
+		dr.propulsion !== "hover01"
+	));
+	var unfinishedStructures = enumStruct(me).filter((obj) => (
+		obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR && obj.stattype !== DEFENSE
+	));
 	const NON_HOVER_SYSTEMS = systems.length;
 
 	if (countStruct(FACTORY_STAT) > MIN_FACTORY)
@@ -356,9 +356,9 @@ function recycleDroidsForHover()
 
 		if (isSeaMap)
 		{
-			var tanks = enumGroup(attackGroup).filter(function(dr) {
-				return (dr.droidType == DROID_WEAPON && dr.propulsion !== "hover01");
-			});
+			var tanks = enumGroup(attackGroup).filter((dr) => (
+				dr.droidType == DROID_WEAPON && dr.propulsion !== "hover01"
+			));
 			const NON_HOVER_TANKS = tanks.length;
 
 			for (var j = 0; j < NON_HOVER_TANKS; ++j)

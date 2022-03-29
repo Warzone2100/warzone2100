@@ -48,9 +48,9 @@ function unfinishedStructures()
 {
 	const SAFE_DIST = 20;
 	var unfinished = [];
-	var stuff = enumStruct(me).filter(function(obj) {
-		return obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR;
-	});
+	var stuff = enumStruct(me).filter((obj) => (
+		obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR
+	));
 
 	for (var i = 0, l = stuff.length; i < l; ++i)
 	{
@@ -146,9 +146,9 @@ function fastDefendSpot(structure, droid)
 	}
 
 	var chance = (gameTime > 900000 && ((structure && structure.stattype === RESOURCE_EXTRACTOR) || (random(100) < 20)));
-	var structs = enumRange(droid.x, droid.y, 7, me, false).filter(function(obj) { return obj.type === STRUCTURE; });
-	var defenses = structs.filter(function(obj) { return obj.stattype === DEFENSE; });
-	var enemyDerr = enumRange(droid.x, droid.y, 8, ENEMIES, false).filter(function(obj) { return obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR; });
+	var structs = enumRange(droid.x, droid.y, 7, me, false).filter((obj) => (obj.type === STRUCTURE));
+	var defenses = structs.filter((obj) => (obj.stattype === DEFENSE));
+	var enemyDerr = enumRange(droid.x, droid.y, 8, ENEMIES, false).filter((obj) => (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR));
 	//Build a defense structure here.
 	if (chance || (defenses.length < MIN_DEFENSES) || (enemyDerr.length > 0 && defenses.length === 0))
 	{
@@ -229,10 +229,10 @@ function protectUnguardedDerricks(droid)
 			//Don't defend it ATM if that derrick is surrounded by enemies.
 			if (!HIGH_OIL)
 			{
-				undefended = undefended.filter(function(obj) {
-					return (gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, MY_BASE.x, MY_BASE.y) > 9) ||
-						(enumRange(obj.x, obj.y, 6, ENEMIES, false).length === 0);
-				}).sort(distanceToBase);
+				undefended = undefended.filter((obj) => (
+					(gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, MY_BASE.x, MY_BASE.y) > 9) ||
+						enumRange(obj.x, obj.y, 6, ENEMIES, false).length === 0
+				)).sort(distanceToBase);
 			}
 			else
 			{
@@ -396,9 +396,9 @@ function skipOilGrabIfEasy()
 {
 	if (difficulty === EASY)
 	{
-		var myDerrickCount = enumStruct(me, structures.derrick).filter(function(obj) {
-			return obj.status === BUILT;
-		}).length;
+		var myDerrickCount = enumStruct(me, structures.derrick).filter((obj) => (
+			obj.status === BUILT
+		)).length;
 		var enemies = findLivingEnemies();
 
 		for (var i = 0, len = enemies.length; i < len; ++i)
@@ -596,17 +596,17 @@ function buildDefenseNearTruck(truck, type)
 function defendRandomDerrick()
 {
 	const MAX_DIST = 30;
-	var derrs = enumStruct(me, structures.derrick).filter(function(obj) {
-		return distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj.x, obj.y) > MAX_DIST;
-	});
+	var derrs = enumStruct(me, structures.derrick).filter((obj) => (
+		distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj.x, obj.y) > MAX_DIST
+	));
 
 	if (derrs.length > 0)
 	{
 		const MAX_BLOCKING = 8;
 		var derr = derrs[random(derrs.length)];
-		var defs = enumRange(derr.x, derr.y, 10, ALLIES, false).filter(function(obj) {
-			return obj.type === STRUCTURE && obj.stattype === DEFENSE;
-		}).length;
+		var defs = enumRange(derr.x, derr.y, 10, ALLIES, false).filter((obj) => (
+			obj.type === STRUCTURE && obj.stattype === DEFENSE
+		)).length;
 
 		if ((defs < 4) && buildStuff(returnDefense(), undefined, derr, MAX_BLOCKING, oilGrabberGroup))
 		{

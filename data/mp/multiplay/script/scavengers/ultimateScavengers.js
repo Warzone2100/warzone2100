@@ -624,7 +624,7 @@ function countHelicopters()
 {
 	var count = 0;
 
-	enumDroid(me).forEach(function(droid) {
+	enumDroid(me).forEach((droid) => {
 		if (isCopterPropulsion(droid.propulsion))
 		{
 			++count;

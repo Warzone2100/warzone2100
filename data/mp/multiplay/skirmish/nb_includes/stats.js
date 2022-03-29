@@ -8,19 +8,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 _global.isHoverPropulsion = function(str) {
-	return propulsionStats.some(function(val) { return val.usage === PROPULSIONUSAGE.HOVER && val.stat === str; });
+	return propulsionStats.some((val) => (val.usage === PROPULSIONUSAGE.HOVER && val.stat === str));
 }
 
 _global.isVtolPropulsion = function(str) {
-	return propulsionStats.some(function(val) { return val.usage === PROPULSIONUSAGE.VTOL && val.stat === str; });
+	return propulsionStats.some((val) => (val.usage === PROPULSIONUSAGE.VTOL && val.stat === str));
 }
 
 _global.iHaveHover = function() {
-	return propulsionStats.some(function(val) { return val.usage === PROPULSIONUSAGE.HOVER && componentAvailable(val.stat);} );
+	return propulsionStats.some((val) => (val.usage === PROPULSIONUSAGE.HOVER && componentAvailable(val.stat)));
 }
 
 _global.iHaveVtol = function() {
-	return propulsionStats.some(function(val) { return val.usage === PROPULSIONUSAGE.VTOL && componentAvailable(val.stat);} );
+	return propulsionStats.some((val) => (val.usage === PROPULSIONUSAGE.VTOL && componentAvailable(val.stat)));
 }
 
 _global.iHaveArty = function() {
@@ -40,13 +40,13 @@ _global.safeIsVtol = function(droid) {
 _global.enumStructList = function(list, player) {
 	if (!defined(player))
 		player = me;
-	return list.reduce(function(summ, new_value) { return summ.concat(enumStruct(player, new_value)); }, []);
+	return list.reduce((summ, new_value) => (summ.concat(enumStruct(player, new_value))), []);
 }
 
 _global.countStructList = function(list, player) {
 	if (!defined(player))
 		player = me;
-	return list.reduce(function(summ, new_value) { return summ + countStruct(new_value, player); }, 0);
+	return list.reduce((summ, new_value) => (summ + countStruct(new_value, player)), 0);
 }
 
 _global.enumFinishedStructList = function(list, player) {
@@ -62,7 +62,7 @@ _global.enumIdleStructList = function(list, player) {
 }
 
 _global.structListLimit = function(list) {
-	return list.reduce(function (summ, val) {return summ + getStructureLimit(val)}, 0)
+	return list.reduce((summ, val) => (summ + getStructureLimit(val)), 0);
 }
 
 _global.guessWeaponRole = function (name) {
@@ -70,7 +70,7 @@ _global.guessWeaponRole = function (name) {
 		if (
 			weaponStats[stat].weapons.someProperty("stat", name) ||
 			weaponStats[stat].vtols.someProperty("stat", name) ||
-			weaponStats[stat].templates.some(function (i) {return i.weapons.indexOf(name) > -1;})
+			weaponStats[stat].templates.some((i) => (i.weapons.indexOf(name) > -1))
 		)
 		return weaponStats[stat].roles;
 	}
@@ -83,7 +83,7 @@ function guessWeaponMicro(name) {
 		{
 			if (weaponStats[stat].weapons.someProperty("stat", name))
 				return weaponStats[stat].micro;
-			if (weaponStats[stat].templates.some(function(i) { return i.weapons.indexOf(name) > -1; }))
+			if (weaponStats[stat].templates.some((i) => (i.weapons.indexOf(name) > -1)))
 				return weaponStats[stat].micro;
 		}
 	}
@@ -110,18 +110,18 @@ _global.guessBodyArmor = function(name) {
 function weaponPathIsAvailable(path, objectType, defrole) {
 	switch(objectType) {
 		case 0:
-			return path.weapons.some(function(val) { return componentAvailable(val.stat); })
+			return path.weapons.some((val) => (componentAvailable(val.stat)))
 		case 1:
-			return path.templates.some(function(val) {
+			return path.templates.some((val) => {
 				for (var i = 0; i < val.weapons.length; ++i)
 					if (!componentAvailable(val.weapons[i]))
 						return false;
 				return componentAvailable(val.body) && componentAvailable(val.prop);
 			});
 		case 2:
-			return path.defenses.some(function(val) { return val.defrole === defrole && isAvailable(val.stat); });
+			return path.defenses.some((val) => (val.defrole === defrole && isAvailable(val.stat)));
 		case 3:
-			return path.vtols.some(function(val) { return componentAvailable(val.stat); });
+			return path.vtols.some((val) => (componentAvailable(val.stat)));
 		default: // research
 			return true;
 	}
@@ -135,7 +135,7 @@ _global.getProductionPaths = function() {
 
 _global.chooseAvailableWeaponPathByRoleRatings = function(paths, rating, objectType, defrole) {
 	var minDist = Infinity, minPath;
-	paths.forEach(function(path) {
+	paths.forEach((path) => {
 		if (!weaponPathIsAvailable(path, objectType, defrole))
 			return;
 		var dist = 0;
@@ -157,7 +157,7 @@ _global.chooseAvailableWeaponPathByRoleRatings = function(paths, rating, objectT
 //
 
 function statsToResList(path) {
-	return path.map(function (val) { return val.res; });
+	return path.map((val) => (val.res));
 }
 
 // todo make one StatsToResList and do filtering for path outside
@@ -200,7 +200,7 @@ _global.weaponStatsToResList = function(path, objType) {
 
 // TODO: move this to math. If we have same structure of data <list of objects> we can use it all around.
 _global.filterDataByFlag = function(data, attr_name, flag) {
-		return data.filter(function(obj) { return obj[attr_name] & flag; });
+		return data.filter((obj) => (obj[attr_name] & flag));
 }
 
 _global.filterBodyStatsByUsage = function(usage, armor) {
@@ -214,7 +214,7 @@ _global.filterBodyStatsByUsage = function(usage, armor) {
 
 _global.getPropulsionStatsComponents = function(usage) {
 	var data = filterDataByFlag(propulsionStats, 'usage', usage)
-	return data.map(function(val) { return val.stat; }).reverse()
+	return data.map((val) => (val.stat)).reverse()
 }
 
 //

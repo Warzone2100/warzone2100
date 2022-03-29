@@ -83,9 +83,9 @@ function eventTransporterLanded(transport)
 	if (transport.player === NEW_PARADIGM && enemyHasArtifact)
 	{
 		enemyStoleArtifact = true;
-		var crew = enumRange(transport.x, transport.y, 6, NEW_PARADIGM, false).filter(function(obj) {
-			return obj.type === DROID && obj.group === artiGroup;
-		});
+		var crew = enumRange(transport.x, transport.y, 6, NEW_PARADIGM, false).filter((obj) => (
+			obj.type === DROID && obj.group === artiGroup
+		));
 		for (var i = 0, l = crew.length; i < l; ++i)
 		{
 			camSafeRemoveObject(crew[i], false);
@@ -129,9 +129,9 @@ function getArtifact()
 	}
 
 	const GRAB_RADIUS = 2;
-	var artifact = camGetArtifacts().filter(function(label) {
-		return enemyCanTakeArtifact(label) && getObject(label) !== null;
-	});
+	var artifact = camGetArtifacts().filter((label) => (
+		enemyCanTakeArtifact(label) && getObject(label) !== null
+	));
 	var artiLoc = artiMovePos;
 
 	if (!enemyHasArtifact && !enemyStoleArtifact && artifact.length > 0)
@@ -193,7 +193,7 @@ function buildLancers()
 function extraVictory()
 {
 	var npTransportFound = false;
-	enumDroid(NEW_PARADIGM).forEach(function(dr) {
+	enumDroid(NEW_PARADIGM).forEach((dr) => {
 		if (camIsTransporter(dr))
 		{
 			npTransportFound = true;

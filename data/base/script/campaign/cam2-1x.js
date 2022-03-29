@@ -79,9 +79,9 @@ function setupCyborgGroups()
 function setCrashedTeamExp()
 {
 	const DROID_EXP = 32;
-	var droids = enumDroid(TRANSPORT_TEAM).filter(function(dr) {
-		return !camIsSystemDroid(dr) && !camIsTransporter(dr);
-	});
+	var droids = enumDroid(TRANSPORT_TEAM).filter((dr) => (
+		!camIsSystemDroid(dr) && !camIsTransporter(dr)
+	));
 
 	for (var i = 0; i < droids.length; ++i)
 	{

@@ -151,12 +151,8 @@ function nexusManufacture()
 
 function manualGrouping()
 {
-	var vtols = enumDroid(NEXUS).filter(function(obj) {
-		return obj.group === null && isVTOL(obj);
-	});
-	var nonVtols = enumDroid(NEXUS).filter(function(obj) {
-		return obj.group === null && !isVTOL(obj);
-	});
+	var vtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && isVTOL(obj)));
+	var nonVtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && !isVTOL(obj)));
 	if (vtols.length)
 	{
 		camManageGroup(camMakeGroup(vtols), CAM_ORDER_ATTACK, { regroup: false, count: -1 });

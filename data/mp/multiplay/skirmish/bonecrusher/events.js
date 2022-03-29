@@ -6,7 +6,7 @@ function bc_eventStructureReady(structure) {
 			case LASSAT:
 				lassat_charged = true;
 				debugMsg('lassat charged','lassat');
-				playerData.forEach( function(data, player) {
+				playerData.forEach((data, player) => {
 					chat(player, ' from '+debugName+': '+chatting('lassat_charged'));
 				});
 			break;
@@ -29,8 +29,8 @@ function bc_eventResearched(research, structure, player) {
 	}
 
 	//Remove chaingun and flamer cyborgs if better available
-	if(research.name == 'R-Wpn-MG4'){cyborgs = cyborgs.filter(function(e){if(e[2] == 'CyborgChaingun')return false;return true;});}
-	if(research.name == 'R-Wpn-Flame2'){cyborgs = cyborgs.filter(function(e){if(e[2] == 'CyborgFlamer01')return false;return true;});}
+	if(research.name == 'R-Wpn-MG4'){cyborgs = cyborgs.filter((e) => (e[2] !== 'CyborgChaingun'));}
+	if(research.name == 'R-Wpn-Flame2'){cyborgs = cyborgs.filter((e) => (e[2] !== 'CyborgFlamer01'));}
 	if(research.name == 'R-Struc-PowerModuleMk1'){func_buildersOrder_trigger = 0;buildersOrder();}
 	if(research.name == 'R-Struc-Factory-Module'){func_buildersOrder_trigger = 0;buildersOrder();}
 	if(research.name == 'R-Struc-Research-Module'){func_buildersOrder_trigger = 0;buildersOrder();}
@@ -39,9 +39,9 @@ function bc_eventResearched(research, structure, player) {
 
 //3.2+
 function bc_eventPlayerLeft(player) {
-	bc_ally = bc_ally.filter(function(p){if(p==player) return false; return true;});
-	ally = ally.filter(function(p){if(p==player) return false; return true;});
-	enemy = enemy.filter(function(p){if(p==player) return false; return true;});
+	bc_ally = bc_ally.filter((p) => (p!==player));
+	ally = ally.filter((p) => (p!==player));
+	enemy = enemy.filter((p) => (p!==player));
 	if(player == me) gameStop('kick');
 }
 
@@ -181,12 +181,12 @@ function bc_eventStructureBuilt(structure, droid){
 				factory = enumStruct(me, FACTORY);
 				research_lab = enumStruct(me, RESEARCH_LAB);
 //				power_gen = enumStruct(me, POWER_GEN);
-//				power_gen_ready = power_gen.filter(function(e){if(e.status == 1)return true; return false;});
-				factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
-				research_lab_ready = research_lab.filter(function(e){if(e.status == 1)return true; return false;});
+//				power_gen_ready = power_gen.filter((e) => (e.status == 1));
+				factory_ready = factory.filter((e) => (e.status == 1));
+				research_lab_ready = research_lab.filter((e) => (e.status == 1));
 //				if( (factory_ready.length === 1 && research_lab_ready.length === 1) || power_gen_ready.length === 1)
 				if(factory_ready.length === 2 && research_lab_ready.length === 1){
-					enumGroup(buildersMain).forEach(function(e,i){if(i!=0){groupAdd(buildersHunters, e);debugMsg("FORCE "+i+" Builder --> Hunter +1", 'group');}});
+					enumGroup(buildersMain).forEach((e, i) => {if(i!=0){groupAdd(buildersHunters, e);debugMsg("FORCE "+i+" Builder --> Hunter +1", 'group');}});
 				}
 				else if( ( ( factory_ready.length === 1 && research_lab_ready.length === 3) || research_lab_ready.length === 4 ) && policy['build'] == 'rich'){
 					var e = enumGroup(buildersMain)[0];
@@ -197,7 +197,7 @@ function bc_eventStructureBuilt(structure, droid){
 		break;
 		case FACTORY:
 			factory = enumStruct(me, FACTORY);
-			factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
+			factory_ready = factory.filter((e) => (e.status == 1));
 
 			if(groupSize(buildersMain) != 0){
 				if( ( (factory_ready.length === 1 && research_lab_ready.length === 1) || factory_ready.length === 2 || factory_ready.length === 3) && policy['build'] == 'rich'){
@@ -314,12 +314,10 @@ function bc_eventAttacked(victim, attacker) {
 			if(fixDroid(victim)) return;
 		}
 
-		var myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter(function(o){
-			return (o.player == me && o.type == DROID);
-		});
-		myDroids = myDroids.filter(function(o){
-			return (!(o.droidType == DROID_CONSTRUCT && builderBusy(o)));
-		});
+		var myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter((o) => (
+			o.player == me && o.type == DROID
+		));
+		myDroids = myDroids.filter((o) => (!(o.droidType == DROID_CONSTRUCT && builderBusy(o))));
 
 		var enemyObjects = enumRange(attacker.x, attacker.y, 7, ENEMIES, me);
 
@@ -328,13 +326,13 @@ function bc_eventAttacked(victim, attacker) {
 		var myHP = 0;
 		var enemyHP = 0;
 
-		myDroids.forEach(function(o){myHP+=o.health;});
-		enemyObjects.forEach(function(o){enemyHP+=o.health;});
+		myDroids.forEach((o) => {myHP+=o.health;});
+		enemyObjects.forEach((o) => {enemyHP+=o.health;});
 
 		debugMsg('scav: myHP: '+myHP+', enemyHP: '+enemyHP, 'temp');
 
 		if(myHP < (enemyHP/2)) {
-			myDroids.forEach(function(o){
+			myDroids.forEach((o) => {
 				if(o.droidType != DROID_REPAIR) fleetDroid(o);
 //				groupAdd(droidsFleet, o);
 //				orderDroidLoc_p(o, DORDER_MOVE, base.x, base.y);
@@ -355,8 +353,8 @@ function bc_eventAttacked(victim, attacker) {
 		eventsRun['targetRegular'] = gameTime + 5000;
 		lastImpact = {x:victim.x,y:victim.y};
 		if(distBetweenTwoPoints_p(lastImpact.x, lastImpact.y, base.x, base.y) < base_range){
-			var warriors = enumRange(victim.x, victim.y, 20, ALLIES).filter(function(e){if(e.player == me && e.type == DROID && e.droidType == DROID_WEAPON)return true; return false;});
-			warriors.forEach(function(e){orderDroidLoc_p(e, DORDER_SCOUT, lastImpact.x, lastImpact.y);});
+			var warriors = enumRange(victim.x, victim.y, 20, ALLIES).filter((e) => (e.player == me && e.type == DROID && e.droidType == DROID_WEAPON));
+			warriors.forEach((e) => {orderDroidLoc_p(e, DORDER_SCOUT, lastImpact.x, lastImpact.y);});
 		}
 		targetRegular(attacker, victim);
 	}
@@ -384,18 +382,18 @@ function bc_eventAttacked(victim, attacker) {
 	if(victim.type == DROID && victim.droidType == DROID_WEAPON && !isFixVTOL(victim)){
 		lastImpact = {x:victim.x,y:victim.y};
 
-		var myDroids = enumRange(victim.x, victim.y, 10, ALLIES).filter(function(o){
-			return (o.player == me && o.type == DROID && o.droidType == DROID_WEAPON);
-		});
+		var myDroids = enumRange(victim.x, victim.y, 10, ALLIES).filter((o) => (
+			o.player == me && o.type == DROID && o.droidType == DROID_WEAPON
+		));
 		var enemyObjects = enumRange(attacker.x, attacker.y, 5, ENEMIES, me);
 		var myHP = 0;
 		var enemyHP = 0;
-		myDroids.forEach(function(o){myHP+=o.health;});
-		enemyObjects.forEach(function(o){enemyHP+=o.health;});
+		myDroids.forEach((o) => {myHP+=o.health;});
+		enemyObjects.forEach((o) => {enemyHP+=o.health;});
 		debugMsg('enemy: myHP: '+myHP+', enemyHP: '+enemyHP, 'temp');
 
 		if(myHP < (enemyHP/2)) {
-			myDroids.forEach(function(o){
+			myDroids.forEach((o) => {
 				if(getWeaponInfo(o.weapons[0].name).impactClass != "HEAT") fleetDroid(o);
 //				groupAdd(droidsFleet, o);
 //				orderDroidLoc_p(o, DORDER_MOVE, base.x, base.y);
@@ -414,9 +412,7 @@ function bc_eventAttacked(victim, attacker) {
 
 		//Если атакуют огнемётные войска, атакуем ими ближайшего врага
 		if(getWeaponInfo(victim.weapons[0].name).impactClass == "HEAT"){
-			var enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){
-				return (e.type == DROID);
-			});
+			var enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter((e) => (e.type == DROID));
 			if(enemies.length > 0){
 				enemies = sortByDistance(enemies, victim, 1);
 				orderDroidObj_p(victim, DORDER_ATTACK, enemies[0]);
@@ -444,7 +440,7 @@ function bc_eventAttacked(victim, attacker) {
 		}
 		eventsRun['victimCyborgs'] = gameTime + 10000;
 		var cyborgs = enumGroup(armyCyborgs);
-		cyborgs.forEach(function(e){
+		cyborgs.forEach((e) => {
 			if(distBetweenTwoPoints_p(e.x,e.y,attacker.x,attacker.y) < 10)
 //			orderDroidLoc_p(e, DORDER_SCOUT, {x:attacker.x,y:attacker.y});
 			orderDroidObj_p(e, DORDER_ATTACK, attacker);

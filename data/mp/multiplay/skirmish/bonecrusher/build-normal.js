@@ -16,7 +16,7 @@ function mainBuilders(rotation){
 
 	if(!technology) { len_research_lab_ready = Infinity; len_research_lab = Infinity;}
 
-	//enumGroup(buildersMain).forEach( function(obj, iter){
+	//enumGroup(buildersMain).forEach((obj, iter) => {
 	var rnd = Math.round(Math.random());
 //	debugMsg("lab="+len_research_lab_ready+", fact="+factory_ready.length+", pow="+playerPower(me), 'builders');
 	for (var i=0;i<_b.length;i++){
@@ -68,14 +68,14 @@ function mainBuilders(rotation){
 		var safe = getInfoNear(base.x,base.y,'safe',(base_range/2)).value;
 		var busy = false;
 		if((safe || berserk || policy['build'] == 'rich') && module < 3){
-			if(getResearch("R-Struc-Factory-Module").done && berserk ) { factory.forEach( function(e){ if(e.modules < 2){ if(orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y)){module++;busy=true;}}});if(busy)continue;}
-			if(getResearch("R-Struc-PowerModuleMk1").done) { power_gen.forEach( function(e){ if(e.modules < 1){ orderDroidBuild_p(obj, DORDER_BUILD, "A0PowMod1", e.x, e.y);module++;busy=true;}});}
+			if(getResearch("R-Struc-Factory-Module").done && berserk ) { factory.forEach((e) => { if(e.modules < 2){ if(orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y)){module++;busy=true;}}});if(busy)continue;}
+			if(getResearch("R-Struc-PowerModuleMk1").done) { power_gen.forEach((e) => { if(e.modules < 1){ orderDroidBuild_p(obj, DORDER_BUILD, "A0PowMod1", e.x, e.y);module++;busy=true;}});}
 			if((playerPower(me) > 100 || berserk) && (policy['build'] == 'standart' || (policy['build'] == 'cyborgs' && cyborg_factory_ready.length > 3) || policy['build'] == 'rich' || policy['build'] == 'island')){
-				if(getResearch("R-Struc-Research-Module").done && technology) { research_lab.forEach( function(e){ if(e.modules < 1){ orderDroidBuild_p(obj, DORDER_BUILD, "A0ResearchModule1", e.x, e.y);module++;busy=true;}});}
-				if(getResearch("R-Struc-Factory-Module").done) { factory.forEach( function(e){ if(e.modules < 1){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
-				if(getResearch("R-Struc-Factory-Module").done) { vtol_factory.forEach( function(e){ if(e.modules < 2){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
-//				if(getResearch("R-Struc-Factory-Module").done && ( getResearch("R-Vehicle-Metals02").done && playerPower(me) > 500 || policy['build'] == 'rich') ) { factory.forEach( function(e){ if(e.modules < 2){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
-				if(!earlyGame && getResearch("R-Struc-Factory-Module").done && (playerPower(me) > 500 || berserk || policy['build'] == 'rich' || len_research_lab == Infinity) ) { factory.forEach( function(e){ if(e.modules < 2){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
+				if(getResearch("R-Struc-Research-Module").done && technology) { research_lab.forEach((e) => { if(e.modules < 1){ orderDroidBuild_p(obj, DORDER_BUILD, "A0ResearchModule1", e.x, e.y);module++;busy=true;}});}
+				if(getResearch("R-Struc-Factory-Module").done) { factory.forEach((e) => { if(e.modules < 1){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
+				if(getResearch("R-Struc-Factory-Module").done) { vtol_factory.forEach((e) => { if(e.modules < 2){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
+//				if(getResearch("R-Struc-Factory-Module").done && ( getResearch("R-Vehicle-Metals02").done && playerPower(me) > 500 || policy['build'] == 'rich') ) { factory.forEach((e) => { if(e.modules < 2){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
+				if(!earlyGame && getResearch("R-Struc-Factory-Module").done && (playerPower(me) > 500 || berserk || policy['build'] == 'rich' || len_research_lab == Infinity) ) { factory.forEach((e) => { if(e.modules < 2){ orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y);module++;busy=true;}});}
 			}
 		}
 		if(busy) continue;

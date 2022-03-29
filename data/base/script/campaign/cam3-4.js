@@ -56,9 +56,9 @@ function nexusHackFeature()
 // A little suprise absorbption attack when discovering the SW base.
 function firstAbsorbAttack()
 {
-	var objects = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return (obj.type !== DROID) || (obj.type === DROID && obj.droidType !== DROID_SUPERTRANSPORTER);
-	});
+	var objects = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type !== DROID || (obj.type === DROID && obj.droidType !== DROID_SUPERTRANSPORTER)
+	));
 
 	for (var i = 0, len = objects.length; i < len; ++i)
 	{
