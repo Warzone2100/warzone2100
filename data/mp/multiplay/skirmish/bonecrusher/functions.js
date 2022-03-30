@@ -868,11 +868,11 @@ function removeDuplicates(originalArray, objKey) {
 	var values = [];
 	var value;
 
-	for(var i = 0; i < originalArray.length; i++) {
-		value = originalArray[i][objKey];
+	for (const originalArrayItem of originalArray) {
+		value = originalArrayItem[objKey];
 
 		if(values.indexOf(value) === -1) {
-			trimmedArray.push(originalArray[i]);
+			trimmedArray.push(originalArrayItem);
 			values.push(value);
 		}
 	}
