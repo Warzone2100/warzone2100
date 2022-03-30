@@ -147,11 +147,11 @@ function eventDroidBuilt(droid, structure)
 		}
 		else
 		{
-			for (var i = 0, len = groups.vtolAttackers.length; i < len; ++i)
+			for (const vtolAttacker of groups.vtolAttackers)
 			{
-				if (enumGroup(groups.vtolAttackers[i]).length < nexusBranch[branch].numVtolsPerGroup)
+				if (enumGroup(vtolAttacker).length < nexusBranch[branch].numVtolsPerGroup)
 				{
-					groupAdd(groups.vtolAttackers[i], droid);
+					groupAdd(vtolAttacker, droid);
 				}
 			}
 		}
@@ -251,10 +251,8 @@ function eventDestroyed(what)
 	else if (what.type === STRUCTURE)
 	{
 		// add certain structures to the rebuild list
-		for (var i = 0, len = STANDARD_REBUILD_STRUCTURES.length; i < len; ++i)
+		for (const obj of STANDARD_REBUILD_STRUCTURES)
 		{
-			var obj = STANDARD_REBUILD_STRUCTURES[i];
-
 			//Some things like walls don't have a unique stattype.
 			if (defined(obj.name))
 			{

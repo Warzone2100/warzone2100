@@ -9,9 +9,9 @@ function evalResearch(labID, list)
 		return false;
 	}
 
-	for (var i = 0, len = list.length; i < len; ++i)
+	for (const item of list)
 	{
-		if (pursueResearch(lab, list[i]))
+		if (pursueResearch(lab, item))
 		{
 			return true;
 		}
@@ -30,10 +30,8 @@ function doResearch()
 		return;
 	}
 
-	for (var i = 0, len = resLabs.length; i < len; ++i)
+	for (const lab of resLabs)
 	{
-		var lab = resLabs[i];
-
 		if (lab.status !== BUILT || !structureIdle(lab) || getRealPower(me) < LOW_POWER)
 		{
 			continue;

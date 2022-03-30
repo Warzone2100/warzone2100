@@ -69,9 +69,8 @@ function structuresBuiltInRange(structInfo, x, y, playerType, range, visible)
 		return [];
 	}
 
-	for (var i = 0, len = objects.length; i < len; ++i)
+	for (const obj of objects)
 	{
-		var obj = objects[i];
 		var tmp = {type: obj.type, player: obj.player, id: obj.id};
 
 		if (obj.type !== STRUCTURE)
@@ -170,10 +169,8 @@ function grabTrucksAndBuild(stat, location, tileRange, maxBlockingTiles, group)
 	var numHelpDroids = 0;
 	var droids = enumGroup(group);
 
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (const droid of droids)
 	{
-		var droid = droids[i];
-
 		if (conCanHelp(droid.id, droid.x, droid.y, true))
 		{
 			//Workaround pickStructLocation() disallowing building exactly onto some positions. Mostly
@@ -232,12 +229,12 @@ function bringBackOilTrucks()
 {
 	var builders = enumGroup(groups.oilBuilders);
 
-	for (var i = 0, len = builders.length; i < len; ++i)
+	for (const builder of builders)
 	{
-		if (builders[i].order !== DORDER_RECYCLE &&
-			builders[i].order !== DORDER_RTB)
+		if (builder.order !== DORDER_RECYCLE &&
+			builder.order !== DORDER_RTB)
 		{
-			orderDroid(builders[i], DORDER_RTB);
+			orderDroid(builder, DORDER_RTB);
 		}
 	}
 }
@@ -251,9 +248,9 @@ function skipOilGrabIfEasy()
 		)).length;
 		var enemies = getAliveEnemyPlayers();
 
-		for (var i = 0, len = enemies.length; i < len; ++i)
+		for (const enemy of enemies)
 		{
-			if (myDerrickCount >= 3 && (myDerrickCount + 1) >= countStruct(BASE_STRUCTURES.derricks, enemies[i]) && enemies[i] !== scavengerPlayer)
+			if (myDerrickCount >= 3 && (myDerrickCount + 1) >= countStruct(BASE_STRUCTURES.derricks, enemy) && enemy !== scavengerPlayer)
 			{
 				bringBackOilTrucks();
 				return true;
@@ -273,7 +270,6 @@ function buildDerrick()
 
 	var numBusy = 0;
 	var droids = enumGroup(groups.oilBuilders);
-	var drLen = droids.length;
 	droids.forEach((d) => {
 		if (!conCanHelp(d.id, d.x, d.y, false))
 		{
@@ -282,30 +278,27 @@ function buildDerrick()
 	});
 
 	//Don't check stuff if all our oil getters are busy!
-	if (numBusy === drLen)
+	if (numBusy === droids.length)
 	{
 		return;
 	}
 
 	var oils = enumFeature(ALL_PLAYERS, FEATURE_STATS.oils).sort(sortByDistToBase);
 
-	for (var i = 0, oilLen = oils.length; i < oilLen; ++i)
+	for (const oil of oils)
 	{
 		var targetOil;
 		var bestDroid;
 		var bestDist = Infinity;
 
 		//And don't waste time if all trucks became busy.
-		if (numBusy == drLen)
+		if (numBusy == droids.length)
 		{
 			break;
 		}
 
-		for (var j = 0; j < drLen; ++j)
+		for (const droid of droids)
 		{
-			var oil = oils[i];
-			var droid = droids[j];
-
 			if (!droid.busy &&
 				conCanHelp(droid.id, oil.x, oil.y, false) &&
 				!threatInRange(oil.x, oil.y, ENEMIES, OIL_THREAT_RADIUS, false))
@@ -424,10 +417,8 @@ function findUndefendedObjectLoc(whatToScan, defenses, objectLimit, tower)
 	const MAX_BUILDERS = 2;
 	var objectsToCheck = enumStruct(me, whatToScan);
 
-	for (var i = 0, len = objectsToCheck.length; i < len; ++i)
+	for (const obj of objectsToCheck)
 	{
-		var obj = objectsToCheck[i];
-
 		if (threatInRange(obj.x, obj.y, ENEMIES, 3, false) ||
 			!safeDest(me, obj.x, obj.y) ||
 			numBuildSameBuilding(obj.x, obj.y) >= MAX_BUILDERS)
@@ -492,10 +483,8 @@ function buildPowerGenerators()
 
 function buildMinimumBase()
 {
-	for (var i = 0, len = STANDARD_BUILD_FUNDAMENTALS.length; i < len; ++i)
+	for (const s of STANDARD_BUILD_FUNDAMENTALS)
 	{
-		var s = STANDARD_BUILD_FUNDAMENTALS[i];
-
 		if (countStruct(s) < 1 && grabTrucksAndBuild(s, BASE, 12, 0))
 		{
 			return true;
@@ -563,14 +552,13 @@ function personalityBuildOrder()
 {
 	var success = false;
 
-	for (var i = 0, len = nexusBranch[branch].buildOrder.length; i < len; ++i)
+	for (const obj of nexusBranch[branch].buildOrder)
 	{
 		if (success)
 		{
 			break;
 		}
 
-		var obj = nexusBranch[branch].buildOrder[i];
 		var count;
 
 		switch (obj.stat)
@@ -797,9 +785,8 @@ function numBuildSameBuilding(x, y)
 	/*
 	var numSameBuilding = 0;
 	var trucks = enumGroup(groups.baseBuilders);
-	for (var i = 0, len = trucks.length; i < len; ++i)
+	for (const dr of trucks)
 	{
-		var dr = trucks[i];
 		if (distBetweenTwoPoints(x, y, dr.x, dr.y) <= 1 && conCanHelp(dr.id, x, y, false))
 		{
 			++numSameBuilding;
@@ -816,14 +803,10 @@ function finishStructs()
 	var trucks = enumGroup(groups.baseBuilders);
 	var structures = enumStruct(me);
 
-	for (var i = 0, len = trucks.length; i < len; ++i)
+	for (const dr of trucks)
 	{
-		var dr = trucks[i];
-
-		for (var j = 0, len2 = structures.length; j < len2; ++j)
+		for (const st of structures)
 		{
-			var st = structures[j];
-
 			if (st.status === BUILT || st.stattype === DEFENSE || st.stattype === WALL)
 			{
 				continue;
@@ -847,10 +830,8 @@ function protectCloseDerrick()
 {
 	var trucks = enumGroup(groups.oilBuilders);
 
-	for (var i = 0, len = trucks.length; i < len; ++i)
+	for (const droid of trucks)
 	{
-		var droid = trucks[i];
-
 		if (droid.order === DORDER_RTR || droid.order === DORDER_BUILD || droid.order === DORDER_LINEBUILD)
 		{
 			continue; //not idle
@@ -998,10 +979,8 @@ function findSafeGateTile(gate)
 
 function buildGates()
 {
-	for (var i = 0, len = MAP_GATES.length; i < len; ++i)
+	for (const gate of MAP_GATES)
 	{
-		var gate = MAP_GATES[i];
-
 		//If not in base or at risk of being shot at then skip it
 		if (!gateInBase(gate) || !safeDest(me, gate.x1, gate.y1) || !safeDest(me, gate.x2, gate.y2))
 		{
@@ -1035,10 +1014,8 @@ function rebuildStructures(threatRange)
 		threatRange = 8;
 	}
 
-	for (var i = 0, len = rebuildQueue.length; i < len; ++i)
+	for (const obj of rebuildQueue)
 	{
-		var obj = rebuildQueue[i];
-
 		if (getObject(obj.x, obj.y) !== null)
 		{
 			//Some structure or feature already exists here, or, we built it last time.

@@ -14,10 +14,8 @@ function structureTypeValue(what)
 		return 0;
 	}
 
-	for (var i = 0, len = STANDARD_TARGET_WEIGHTS.length; i < len; ++i)
+	for (const target of STANDARD_TARGET_WEIGHTS)
 	{
-		var target = STANDARD_TARGET_WEIGHTS[i];
-
 		if (what.stattype === target.stat)
 		{
 			return what.status === BUILT ? target.value : Math.floor(target.value * 0.67);
@@ -74,10 +72,8 @@ function orderGroupLoc(group, x, y, order)
 
 	var droids = enumGroup(group);
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (const droid of droids)
 	{
-		var droid = droids[i];
-
 		if (droid.order !== DORDER_RTR)
 		{
 			orderDroidLoc(droid, order, x, y);
@@ -110,10 +106,8 @@ function findMostValuableTarget()
 	var bestTarget;
 	var bestValue = 0;
 
-	for (var i = 0, len = objects.length; i < len; ++i)
+	for (const obj of objects)
 	{
-		var obj = objects[i];
-
 		if (allianceExistsBetween(me, obj.player))
 		{
 			return 0;
@@ -149,18 +143,15 @@ function doAllOutAttack()
 	{
 		const MIN_ATTACKERS = 10; //was 40 originally.
 		var droids = enumGroup(groups.attackers);
-		var len = droids.length;
 		var target = getObject(targetInfo.what.type, targetInfo.what.player, targetInfo.what.id);
 
-		if (len < MIN_ATTACKERS)
+		if (droids.length < MIN_ATTACKERS)
 		{
 			return;
 		}
 
-		for (var i = 0; i < len; ++i)
+		for (const droid of droids)
 		{
-			var droid = droids[i];
-
 			//eventAttacked can snatch one of these droids and make them focus
 			//on something that attacked them while moving to the target. Allow
 			//a small chance to refocus on something else if already attacking.

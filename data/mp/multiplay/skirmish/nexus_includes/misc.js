@@ -79,9 +79,9 @@ function arrayContains(what, array)
 		return false;
 	}
 
-	for (var i = 0, len = array.length; i < len; ++i)
+	for (const item of array)
 	{
-		if (what === array[i])
+		if (what === item)
 		{
 			return true;
 		}
@@ -118,10 +118,8 @@ function groupNearCoordinate(group, loc, range)
 	var count = 0;
 	var members = enumGroup(group);
 
-	for (var i = 0, len = members.length; i < len; ++i)
+	for (const dr of members)
 	{
-		var dr = members[i];
-
 		if (distBetweenTwoPoints(dr.x, dr.y, loc.x, loc.y) <= range)
 		{
 			++count;
@@ -147,12 +145,9 @@ function groupCanReach(group, x, y)
 	}
 
 	var members = enumGroup(group);
-	var len = members.length;
 
-	for (var i = 0; i < len; ++i)
+	for (const dr of members)
 	{
-		var dr = members[i];
-
 		if (!droidCanReach(dr, x, y))
 		{
 			return false;
@@ -174,14 +169,12 @@ function baseDetails(player)
 	var baseRadius = 4;
 	var tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 
-	for (var i = 0, len = STANDARD_BASE_STRUCTURES.length; i < len; ++i)
+	for (const standardBaseStructure of STANDARD_BASE_STRUCTURES)
 	{
-		var sObjs = enumStruct(player, STANDARD_BASE_STRUCTURES[i]);
+		var sObjs = enumStruct(player, standardBaseStructure);
 
-		for (var j = 0, len2 = sObjs.length; j < len2; ++j)
+		for (const struct of sObjs)
 		{
-			var struct = sObjs[j];
-
 			if (struct.x < tmpBase.x1)
 			{
 				tmpBase.x1 = struct.x;
@@ -356,10 +349,8 @@ function threatInRange(x, y, player, scanRadius, visible)
 
 	var stuff = enumRange(x, y, scanRadius, player, visible);
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (const obj of stuff)
 	{
-		var obj = stuff[i];
-
 		if (obj.type !== FEATURE && obj.player !== me && !allianceExistsBetween(me, obj.player))
 		{
 			if (obj.type === DROID && obj.droidType !== DROID_CONSTRUCT)
@@ -424,10 +415,8 @@ function numWeapObjectsInRange(x, y, player, scanRadius, visible)
 	var stuff = enumRange(x, y, scanRadius, player, visible);
 	var count = {structures: 0, droids: 0, safe: true};
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (const obj of stuff)
 	{
-		var obj = stuff[i];
-
 		if (obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT)
 		{
 			count.structures = count.structures + 1;
@@ -463,9 +452,9 @@ function numGroupSameOrder(group, order)
 	var numSame = 0;
 	var grp = enumGroup(group);
 
-	for (var i = 0, len = grp.length; i < len; ++i)
+	for (const g of grp)
 	{
-		if (grp[i].order === order)
+		if (g.order === order)
 		{
 			++numSame;
 		}
@@ -537,17 +526,16 @@ function groupCoordinateAverage(group)
 	}
 
 	var droids = enumGroup(group);
-	var len = droids.length;
 	var xTotal = 0;
 	var yTotal = 0;
 
-	for (var i = 0; i < len; ++i)
+	for (const droid of droids)
 	{
-		xTotal += droids[i].x;
-		yTotal += droids[i].y;
+		xTotal += droid.x;
+		yTotal += droid.y;
 	}
 
-	return ({x: Math.floor(xTotal / len), y: Math.floor(yTotal / len)});
+	return ({x: Math.floor(xTotal / droids.length), y: Math.floor(yTotal / droids.length)});
 }
 
 function numAlliesInBase()

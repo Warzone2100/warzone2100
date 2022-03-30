@@ -102,9 +102,8 @@ function tryBreakingAlliance()
 {
 	var allies = getAllyPlayers(true);
 
-	for (var i = 0, len = allies.length; i < len; ++i)
+	for (const ally of allies)
 	{
-		var ally = allies[i];
 		var breakIt = false;
 		//Break an alliance at random if we are allies for some amount of time.
 		if (random(30) === 0 && (gameTime - allianceTime[ally]) > minutesToMilliseconds(10))
