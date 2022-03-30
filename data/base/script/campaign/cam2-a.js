@@ -24,7 +24,6 @@ function preDamageStuff()
 {
 	var droids = enumDroid(CAM_HUMAN_PLAYER);
 	var structures = enumStruct(CAM_HUMAN_PLAYER);
-	var x = 0;
 
 	for (const droid of droids)
 	{

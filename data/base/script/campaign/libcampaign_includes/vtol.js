@@ -61,7 +61,7 @@ function camSetVtolSpawnState(state, identifier)
 
 function camSetVtolSpawnStateAll(state)
 {
-	for (const [idx, camVtolDataSystem] of __camVtolDataSystem.entries())
+	for (const idx of __camVtolDataSystem.keys())
 	{
 		camSetVtolSpawnState(state, idx);
 	}
