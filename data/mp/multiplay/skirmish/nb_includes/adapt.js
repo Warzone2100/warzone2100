@@ -189,8 +189,8 @@ function classifyObject(obj) {
 		return ret;
 	if (obj.type === FEATURE)
 		return ret;
-	for (var i = 0; i < obj.weapons.length; ++i) {
-		var roles = guessWeaponRole(obj.weapons[i].name); {
+	for (const weapon of obj.weapons) {
+		var roles = guessWeaponRole(weapon.name); {
 			if (!defined(roles)) {
 				if (obj.canHitAir && obj.canHitGround)
 					ret.role.addArray([1/4, 1/4, 1/4, 1/4]);
@@ -202,8 +202,8 @@ function classifyObject(obj) {
 				ret.role.addArray(roles);
 		}
 	}
-	for (var i = 0; i < obj.weapons.length; ++i) {
-		if (getWeaponInfo(obj.weapons[i].name).impactClass === "KINETIC")
+	for (const weapon of obj.weapons) {
+		if (getWeaponInfo(weapon.name).impactClass === "KINETIC")
 			ret.kweapon += 1;
 		else
 			ret.tweapon += 1;

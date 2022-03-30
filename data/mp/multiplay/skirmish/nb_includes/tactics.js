@@ -43,9 +43,9 @@ function findLargestGroupIn(list) {
 		++sizes[object.group];
 	});
 	var maxCount = 0, maxIdx = 0;
-	for (var i = 0; i < sizes.length; ++i)
-		if (sizes[i] > maxCount) {
-			maxCount = sizes[i];
+	for (const [i, size] of sizes.entries())
+		if (size > maxCount) {
+			maxCount = size;
 			maxIdx = i;
 		}
 	return maxIdx;
@@ -59,8 +59,8 @@ function findNearestGroup(x, y) {
 		return undefined;
 	var minDist = Infinity, minIdx;
 	var gr = [];
-	for (var i = 0; i < ret.clusters.length; ++i) {
-		gr[i] = findLargestGroupIn(ret.clusters[i]);
+	for (const [i, cluster] of ret.clusters.entries()) {
+		gr[i] = findLargestGroupIn(cluster);
 		if (groupSize(gr[i]) > attackGroupSize()) {
 			var dist = distance(ret.xav[i], ret.yav[i], x, y);
 			if (dist < minDist) {
@@ -172,16 +172,16 @@ function regroup(gr) {
 	var ret = naiveFindClusters(enumGroup(gr).filter(checkRepaired), (baseScale / 3));
 	if (ret.maxCount === 0)
 		return [];
-	for (var i = 0; i < ret.clusters.length; ++i)
+	for (const [i, cluster] of ret.clusters.entries())
 		if (i !== ret.maxIdx)
-			for (var j = 0; j < ret.clusters[i].length; ++j)
-				orderDroidLoc(ret.clusters[i][j], DORDER_MOVE, ret.xav[ret.maxIdx], ret.yav[ret.maxIdx]);
+			for (const droid of cluster)
+				orderDroidLoc(droid, DORDER_MOVE, ret.xav[ret.maxIdx], ret.yav[ret.maxIdx]);
 	if (ret.maxCount < size) {
-		for (var j = 0; j < ret.clusters[ret.maxIdx].length; ++j) {
+		for (const droid of ret.clusters[ret.maxIdx]) {
 			if (groupInDanger(gr))
-				orderDroid(ret.clusters[ret.maxIdx][j], DORDER_RTB);
+				orderDroid(droid, DORDER_RTB);
 			else
-				orderDroid(ret.clusters[ret.maxIdx][j], DORDER_STOP);
+				orderDroid(droid, DORDER_STOP);
 		}
 		return [];
 	}
@@ -288,8 +288,8 @@ _global.vtolArmed = function(obj, percent) {
 		return;
 	if (!isVTOL(obj))
 		return false;
-	for (var i = 0; i < obj.weapons.length; ++i)
-		if (obj.weapons[i].armed >= percent)
+	for (const weapon of obj.weapons)
+		if (weapon.armed >= percent)
 			return true;
 	return false;
 }
@@ -367,11 +367,11 @@ _global.rebalanceGroups = function() {
 		if (ret[0] > 0 && ret[0] < attackGroupSize())
 			for (var i = 1; i < ret.length; ++i) {
 				var list = enumGroup(ret[i]);
-				for (var j = 0; j < list.length; ++j) {
+				for (const item of list) {
 					var target = findTarget(ret[0]);
 					if (defined(target))
-						if (droidCanReach(list[j], target.x, target.y)) {
-							groupAdd(ret[0], list[j]);
+						if (droidCanReach(item, target.x, target.y)) {
+							groupAdd(ret[0], item);
 							return;
 						}
 				}
@@ -424,11 +424,11 @@ _global.checkAttack = function() {
 _global.pushVtols = function(object) {
 	var vtols = enumRange(object.x, object.y, 20, me, false);
 	var enemies = enumRange(object.x, object.y, 8, ENEMIES, true);
-	for (var i = 0; i < vtols.length; ++i)
-		if (vtolArmed(vtols[i], 1))
-			for (var j = 0; j < enemies.length; ++j)
-				if (vtolCanHit(vtols[i], enemies[j])) {
-					orderDroidObj(vtols[i], DORDER_ATTACK, enemies[j]);
+	for (const vtol of vtols)
+		if (vtolArmed(vtol, 1))
+			for (const enemy of enemies)
+				if (vtolCanHit(vtol, enemy)) {
+					orderDroidObj(vtol, DORDER_ATTACK, enemy);
 					break;
 				}
 }

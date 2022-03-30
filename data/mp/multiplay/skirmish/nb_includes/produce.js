@@ -41,12 +41,12 @@ function chooseBodyWeaponPair(bodies, weapons) {
 		return undefined;
 	if (!defined(weapons))
 		return undefined;
-	for (var i = 0; i < weapons.length; ++i) {
-		var w = weapons[i].stat, ww = weapons[i].weight;
+	for (const weapon of weapons) {
+		var w = weapon.stat, ww = weapon.weight;
 		if (!componentAvailable(w))
 			continue;
-		for (var j = 0; j < bodies.length; ++j) {
-			var b = bodies[j].stat, bw = bodies[j].weight;
+		for (const body of bodies) {
+			var b = body.stat, bw = body.weight;
 			if (!componentAvailable(b))
 				continue;
 			/* eslint-disable no-unreachable */

@@ -25,9 +25,9 @@ _global.iHaveVtol = function() {
 
 _global.iHaveArty = function() {
 	for (const stat in weaponStats)
-		for (var i = 0; i < weaponStats[stat].defenses.length; ++i)
-			if (weaponStats[stat].defenses[i].defrole === DEFROLE.ARTY)
-				if (countStruct(weaponStats[stat].defenses[i].stat) > 0)
+		for (const defense of weaponStats[stat].defenses)
+			if (defense.defrole === DEFROLE.ARTY)
+				if (countStruct(defense.stat) > 0)
 					return true;
 	return false;
 }
@@ -91,8 +91,8 @@ function guessWeaponMicro(name) {
 }
 
 _global.guessDroidMicro = function(droid) {
-	for (var i = 0; i < droid.weapons.length; ++i) {
-		var ret = guessWeaponMicro(droid.weapons[i].name);
+	for (const weapon of droid.weapons) {
+		var ret = guessWeaponMicro(weapon.name);
 		if (ret !== MICRO.RANGED)
 			return ret;
 	}
@@ -113,8 +113,8 @@ function weaponPathIsAvailable(path, objectType, defrole) {
 			return path.weapons.some((val) => (componentAvailable(val.stat)))
 		case 1:
 			return path.templates.some((val) => {
-				for (var i = 0; i < val.weapons.length; ++i)
-					if (!componentAvailable(val.weapons[i]))
+				for (const weapon of val.weapons)
+					if (!componentAvailable(weapon))
 						return false;
 				return componentAvailable(val.body) && componentAvailable(val.prop);
 			});
@@ -225,9 +225,9 @@ _global.weaponStatsToDefenses = function(stats, defrole) {
 	if (!defined(stats))
 		return [];
 	var ret = [];
-	for (var i = 0; i < stats.defenses.length; ++i)
-		if (!defined(defrole) || stats.defenses[i].defrole === defrole)
-			ret.push(stats.defenses[i].stat);
+	for (const defense of stats.defenses)
+		if (!defined(defrole) || defense.defrole === defrole)
+			ret.push(defense.stat);
 	// reverse not needed here
 	return ret;
 }
