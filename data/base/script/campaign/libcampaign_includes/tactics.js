@@ -586,11 +586,11 @@ function __camTacticsTickForGroup(group)
 				{
 					// find random new position to visit
 					var list = [];
-					for (var j = 0, len2 = gi.data.pos.length; j < len2; ++j)
+					for (const i of gi.data.pos.keys())
 					{
-						if (j !== gi.lastspot)
+						if (i !== gi.lastspot)
 						{
-							list.push(j);
+							list.push(i);
 						}
 					}
 					gi.lastspot = list[camRand(list.length)];

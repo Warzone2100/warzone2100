@@ -923,9 +923,9 @@ function attackObjects(targets, warriors, num, scouting){
 	}
 
 	if ( targets.length >= warriors.length ) {
-		for ( var i = 0, len = warriors.length; i<len; ++i ) {
-			if(scouting) orderDroidLoc_p(warriors[i], DORDER_SCOUT, targets[i].x, targets[i].y);
-			else orderDroidObj_p( warriors[i], DORDER_ATTACK, targets[i] );
+		for (const [i, warrior] of warriors.entries()) {
+			if(scouting) orderDroidLoc_p(warrior, DORDER_SCOUT, targets[i].x, targets[i].y);
+			else orderDroidObj_p( warrior, DORDER_ATTACK, targets[i] );
 		}
 		return true;
 	}else{
