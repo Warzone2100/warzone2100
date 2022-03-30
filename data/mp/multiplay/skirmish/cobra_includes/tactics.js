@@ -170,9 +170,9 @@ function checkAllForRepair()
 	}
 
 	var droids = enumGroup(attackGroup);
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (const droid of droids)
 	{
-		repairDroid(droids[i].id);
+		repairDroid(droid.id);
 	}
 }
 
@@ -266,10 +266,9 @@ function artilleryTactics()
 	}
 	var sensors = enumGroup(sensorGroup).filter((dr) => (droidReady(dr.id)));
 	const ARTILLERY_UNITS = enumGroup(artilleryGroup);
-	const ARTI_LEN = ARTILLERY_UNITS.length;
 	const SENS_LEN = sensors.length;
 
-	if (SENS_LEN + ARTI_LEN > 0)
+	if (SENS_LEN + ARTILLERY_UNITS.length > 0)
 	{
 		sensors = sortAndReverseDistance(sensors);
 		var obj = rangeStep();
@@ -283,14 +282,14 @@ function artilleryTactics()
 				orderDroidObj(sensors[0], DORDER_OBSERVE, tempObj);
 			}
 
-			for (var i = 0; i < ARTI_LEN; ++i)
+			for (const artilleryUnit of ARTILLERY_UNITS)
 			{
 				//Send artillery to help at beacon, if possible
 				if ((beacon.endTime > gameTime) &&
 					beaconAreaHasEnemies() &&
-					(i < Math.floor(ARTI_LEN * subPersonalities[personality].beaconArtilleryPercentage)))
+					(i < Math.floor(ARTILLERY_UNITS.length * subPersonalities[personality].beaconArtilleryPercentage)))
 				{
-					if (!beacon.wasVtol || (beacon.wasVtol && ARTILLERY_UNITS[i].weapons[0].canHitAir))
+					if (!beacon.wasVtol || (beacon.wasVtol && artilleryUnit.weapons[0].canHitAir))
 					{
 						//Attack something in this area, if possible.
 						var xRand = (random(100) < 50) ? random(15) : -random(15);
@@ -315,12 +314,12 @@ function artilleryTactics()
 							yPos = mapHeight - 2;
 						}
 
-						orderDroidLoc(ARTILLERY_UNITS[i], DORDER_SCOUT, xPos, yPos);
+						orderDroidLoc(artilleryUnit, DORDER_SCOUT, xPos, yPos);
 						continue;
 					}
 				}
 
-				attackThisObject(ARTILLERY_UNITS[i].id, obj);
+				attackThisObject(artilleryUnit.id, obj);
 			}
 		}
 	}
@@ -345,16 +344,14 @@ function groundTactics()
 				return;
 			}
 
-			for (var i = 0, l = UNITS.length; i < l; ++i)
+			for (const unit of UNITS)
 			{
-				var id = UNITS[i].id;
-
 				//Send most of army to beacon explicitly
 				if ((beacon.endTime > gameTime) &&
 					beaconAreaHasEnemies() &&
 					(i < Math.floor(UNITS.length * subPersonalities[personality].beaconArmyPercentage)))
 				{
-					if (!beacon.wasVtol || (beacon.wasVtol && UNITS[i].weapons[0].canHitAir))
+					if (!beacon.wasVtol || (beacon.wasVtol && unit.weapons[0].canHitAir))
 					{
 						//Attack something in this area, if possible.
 						var xRand = (random(100) < 50) ? random(15) : -random(15);
@@ -379,12 +376,12 @@ function groundTactics()
 							yPos = mapHeight - 2;
 						}
 
-						orderDroidLoc(UNITS[i], DORDER_SCOUT, xPos, yPos);
+						orderDroidLoc(unit, DORDER_SCOUT, xPos, yPos);
 						continue;
 					}
 				}
 
-				attackThisObject(id, target);
+				attackThisObject(unit.id, target);
 			}
 		}
 	}
@@ -407,19 +404,18 @@ function recycleForHover()
 		dr.body !== "CyborgLightBody" && dr.propulsion !== "hover01"
 	));
 	var unfinished = unfinishedStructures();
-	const NON_HOVER_SYSTEMS = systems.length;
 
 	if ((countStruct(structures.factory) > MIN_FACTORY) && componentAvailable("hover01"))
 	{
-		if (!unfinished.length && NON_HOVER_SYSTEMS)
+		if (!unfinished.length && systems.length)
 		{
-			for (var i = 0; i < NON_HOVER_SYSTEMS; ++i)
+			for (const system of systems)
 			{
-				orderDroid(systems[i], DORDER_RECYCLE);
+				orderDroid(system, DORDER_RECYCLE);
 			}
 		}
 
-		if (!forceHover && !NON_HOVER_SYSTEMS)
+		if (!forceHover && !systems.length)
 		{
 			removeThisTimer("recycleForHover");
 		}
@@ -427,13 +423,12 @@ function recycleForHover()
 		if (forceHover)
 		{
 			var tanks = enumGroup(attackGroup).filter((dr) => (dr.propulsion !== "hover01"));
-			const NON_HOVER_TANKS = tanks.length;
-			for (var j = 0; j < NON_HOVER_TANKS; ++j)
+			for (const tank of tanks)
 			{
-				orderDroid(tanks[j], DORDER_RECYCLE);
+				orderDroid(tank, DORDER_RECYCLE);
 			}
 
-			if (NON_HOVER_TANKS + NON_HOVER_SYSTEMS === 0)
+			if (tanks.length + systems.length === 0)
 			{
 				removeThisTimer("recycleForHover");
 			}
@@ -467,41 +462,38 @@ function vtolTactics()
 
 	const MIN_VTOLS = 5;
 	var vtols = enumGroup(vtolGroup).filter((dr) => (droidReady(dr.id)));
-	const LEN = vtols.length;
 	const D_CIRCLE = 40; //DORDER_CIRCLE = 40
 	const SCOUT_TO_CIRCLE_DIST = 2; //when to switch from scout to circle order for beacon
 
-	if (LEN >= MIN_VTOLS)
+	if (vtols.length >= MIN_VTOLS)
 	{
 		var target = rangeStep();
 
 		if (isDefined(target))
 		{
-			for (var i = 0; i < LEN; ++i)
+			for (const vtol of vtols)
 			{
-				var id = vtols[i].id;
-
 				if ((beacon.endTime > gameTime) &&
-					(i < Math.floor(LEN * subPersonalities[personality].beaconVtolPercentage)) &&
-					(!beacon.wasVtol || (beacon.wasVtol && vtols[i].weapons[0].canHitAir)))
+					(i < Math.floor(vtols.length * subPersonalities[personality].beaconVtolPercentage)) &&
+					(!beacon.wasVtol || (beacon.wasVtol && vtol.weapons[0].canHitAir)))
 				{
-					var pos = {x: vtols[i].x, y: vtols[i].y};
+					var pos = {x: vtol.x, y: vtol.y};
 					//Patrol this area for a bit.
-					if (vtols[i].order === D_CIRCLE)
+					if (vtol.order === D_CIRCLE)
 					{
 						continue;
 					}
 					if (distBetweenTwoPoints(pos.x, pos.y, beacon.x, beacon.y) <= SCOUT_TO_CIRCLE_DIST)
 					{
-						orderDroidLoc(vtols[i], D_CIRCLE, beacon.x, beacon.y);
+						orderDroidLoc(vtol, D_CIRCLE, beacon.x, beacon.y);
 						continue;
 					}
 
-					orderDroidLoc(vtols[i], DORDER_SCOUT, beacon.x, beacon.y);
+					orderDroidLoc(vtol, DORDER_SCOUT, beacon.x, beacon.y);
 					continue;
 				}
 
-				attackThisObject(id, target);
+				attackThisObject(vtol.id, target);
 			}
 		}
 	}
@@ -680,17 +672,17 @@ function baseShuffleDefensePattern()
 	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
 	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
 	const MAX_NEARBY_STRUCTURES = 2;
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (const attacker of attackers)
 	{
-		if (attackers[i].order !== DORDER_HOLD)
+		if (attacker.order !== DORDER_HOLD)
 		{
-			if (nearbyStructureCount({x: attackers[i].x, y: attackers[i].y}) <= MAX_NEARBY_STRUCTURES)
+			if (nearbyStructureCount({x: attacker.x, y: attacker.y}) <= MAX_NEARBY_STRUCTURES)
 			{
-				orderDroid(attackers[i], DORDER_HOLD);
+				orderDroid(attacker, DORDER_HOLD);
 			}
 			else
 			{
-				orderDroidLoc(attackers[i], DORDER_SCOUT, x, y);
+				orderDroidLoc(attacker, DORDER_SCOUT, x, y);
 			}
 		}
 	}
@@ -717,10 +709,10 @@ function lowOilDefensePattern()
 		return;
 	}
 
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (const attacker of attackers)
 	{
 		var derr = derricks[random(derricks.length)];
-		orderDroidLoc(attackers[i], DORDER_SCOUT, derr.x, derr.y);
+		orderDroidLoc(attacker, DORDER_SCOUT, derr.x, derr.y);
 	}
 
 	lastShuffleTime = gameTime;
@@ -755,9 +747,8 @@ function retreatTactics()
 	var droids = enumGroup(retreatGroup);
 
 	//Flee!
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (const droid of droids)
 	{
-		var droid = droids[i];
 		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter((obj) => (
 			obj.type === DROID
 		));

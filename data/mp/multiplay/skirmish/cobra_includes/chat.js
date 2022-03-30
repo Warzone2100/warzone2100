@@ -19,13 +19,13 @@ function sendChatMessage(msg, receiver)
 		if (receiver === ALLIES || receiver === ENEMIES)
 		{
 			var players = playerAlliance(receiver === ALLIES);
-			for (var i = 0, len = players.length; i < len; ++i)
+			for (const player of players)
 			{
-				if (msg === "need power" && !playerData[players[i]].isAI)
+				if (msg === "need power" && !playerData[player].isAI)
 				{
 					continue; //don't spam humans with power requests.
 				}
-				chat(players[i], msg);
+				chat(player, msg);
 			}
 		}
 		else

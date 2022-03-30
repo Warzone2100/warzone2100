@@ -47,12 +47,12 @@ function countEnemyVTOL(player)
 		var enemies = isDefined(player) ? [player] : findLivingEnemies();
 		var enemyVtolCount = 0;
 
-		for (var x = 0, e = enemies.length; x < e; ++x)
+		for (const enemy of enemies)
 		{
-			var playerDroids = enumDroid(enemies[x]);
-			for (var c = 0, l = playerDroids.length; c < l; ++c)
+			var playerDroids = enumDroid(enemy);
+			for (const playerDroid of playerDroids)
 			{
-				var prop = playerDroids[c].propulsion;
+				var prop = playerDroid.propulsion;
 				if (prop === "V-Tol" || prop === "Helicopter")
 				{
 					++enemyVtolCount;
@@ -109,9 +109,9 @@ function playerBodySizeRatio(player)
 		var medium = 0;
 		var heavy = 0;
 		var attackers = enumDroid(player, DROID_WEAPON);
-		for (var i = 0, len = attackers.length; i < len; ++i)
+		for (const attacker of attackers)
 		{
-			var body = attackers[i].body;
+			var body = attacker.body;
 
 			if (body === "Body1REC" || body === "Body2SUP" || body === "Body4ABT" || body === "Body3MBT")
 			{
@@ -151,9 +151,9 @@ function playerLandPropRatio(player)
 		var track = 0;
 		var hover = 0;
 		var attackers = enumDroid(player, DROID_WEAPON);
-		for (var i = 0, len = attackers.length; i < len; ++i)
+		for (const attacker of attackers)
 		{
-			var prop = attackers[i].propulsion;
+			var prop = attacker.propulsion;
 
 			if (prop === "wheeled01")
 			{

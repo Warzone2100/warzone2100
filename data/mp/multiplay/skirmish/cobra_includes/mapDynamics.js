@@ -169,15 +169,12 @@ function cobraBaseArea()
 			structures.lassat,
 		];
 
-		for (var i = 0, len = baseStructures.length; i < len; ++i)
+		for (const structureType of baseStructures)
 		{
-			var structureType = baseStructures[i];
 			var objects = enumStruct(me, structureType);
 
-			for (var j = 0, len2 = objects.length; j < len2; ++j)
+			for (const structure of objects)
 			{
-				var structure = objects[j];
-
 				if (structure.x < area.x1)
 				{
 					area.x1 = structure.x;

@@ -231,15 +231,12 @@ function eventAttacked(victim, attacker)
 			(!repairDroid(dr.id)) && droidCanReach(dr, attacker.x, attacker.y))
 		));
 
-		const UNIT_LEN = units.length;
-
-		if (UNIT_LEN >= MIN_ATTACK_DROIDS && shouldCobraAttack())
+		if (units.length >= MIN_ATTACK_DROIDS && shouldCobraAttack())
 		{
-			for (var i = 0; i < UNIT_LEN; i++)
+			for (const unit of units)
 			{
 				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
 				{
-					var unit = units[i];
 					if (unit !== null && distBetweenTwoPoints(unit.x, unit.y, attacker.x, attacker.y) < (GROUP_SCAN_RADIUS + 4))
 					{
 						orderDroidObj(unit, DORDER_ATTACK, attacker);

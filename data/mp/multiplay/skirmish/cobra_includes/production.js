@@ -51,9 +51,9 @@ function shuffleWeaponList(weaps)
 {
 	var weaponList = [];
 
-	for (var i = 0, w = weaps.length; i < w; ++i)
+	for (const weap of weaps)
 	{
-		weaponList.push(weaps[i].stat);
+		weaponList.push(weap.stat);
 	}
 
 	weaponList.reverse();
@@ -283,10 +283,8 @@ function useHover(weap)
 
 	var useHover = false;
 
-	for (var i = 0, w = weap.length; i < w; ++i)
+	for (const NAME of weap)
 	{
-		const NAME = weap[i];
-
 		if ((NAME === "Flame1Mk1") || (NAME === "Flame2") || (NAME === "PlasmiteFlamer"))
 		{
 			useHover = (random(100) <= 40);
@@ -502,13 +500,13 @@ function buildVTOL(id)
 //containing the number or trucks/sensors/repairs queued.
 function analyzeQueuedSystems()
 {
-	var fac = enumStruct(me, FACTORY);
+	var factories = enumStruct(me, FACTORY);
 	var trucks = 0;
 	var sens = 0;
 
-	for (var i = 0, l = fac.length; i < l; ++i)
+	for (const factory of factories)
 	{
-		var virDroid = getDroidProduction(fac[i]);
+		var virDroid = getDroidProduction(factory);
 		if (virDroid !== null)
 		{
 			const TYPE = virDroid.droidType;
@@ -577,9 +575,8 @@ function produce()
 			{
 				continue;
 			}
-			for (var x = 0, l = fac.length; x < l; ++x)
+			for (const FC of fac)
 			{
-				const FC = fac[x];
 				if (!(FC && FC.status === BUILT))
 				{
 					continue;

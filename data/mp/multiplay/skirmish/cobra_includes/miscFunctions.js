@@ -70,9 +70,9 @@ function distanceToBase(obj1, obj2)
 
 function addDroidsToGroup(group, droids)
 {
-	for (var i = 0, d = droids.length; i < d; ++i)
+	for (const droid of droids)
 	{
-		groupAdd(group, droids[i]);
+		groupAdd(group, droid);
 	}
 }
 
@@ -184,24 +184,24 @@ function findLivingEnemies()
 	function uncached()
 	{
 		var alive = [];
-		for (var x = 0; x < maxPlayers; ++x)
+		for (var i = 0; i < maxPlayers; ++i)
 		{
-	 		if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
+			if ((i !== me) && !allianceExistsBetween(i, me) && ((countDroid(DROID_ANY, i) > 0) || (enumStruct(i).length > 0)))
 			{
-				alive.push(x);
+				alive.push(i);
 			}
 			else
 			{
-				if (allianceExistsBetween(x, me) || (x === me))
+				if (allianceExistsBetween(i, me) || (i === me))
 				{
-					grudgeCount[x] = -2; //Friendly player.
+					grudgeCount[i] = -2; //Friendly player.
 				}
 				else
 				{
-					grudgeCount[x] = -1; //Dead enemy.
+					grudgeCount[i] = -1; //Dead enemy.
 				}
 			}
-	 	}
+		}
 
 		return alive;
 	}
@@ -233,11 +233,11 @@ function getMostHarmfulPlayer()
 			return 0; //If nothing to attack, then attack player 0 (happens only after winning).
 		}
 
-	 	for (var x = 0, c = enemies.length; x < c; ++x)
+		for (const enemy of enemies)
 		{
-	 		if((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
+			if((grudgeCount[enemy] >= 0) && (grudgeCount[enemy] > grudgeCount[mostHarmful]))
 			{
-				mostHarmful = enemies[x];
+				mostHarmful = enemy;
 			}
 	 	}
 
@@ -308,9 +308,9 @@ function removeThisTimer(timer)
 {
 	if (timer instanceof Array)
 	{
-		for(var i = 0, l = timer.length; i < l; ++i)
+		for (const timerItem of timer)
 		{
-			removeTimer(timer[i]);
+			removeTimer(timerItem);
 		}
 	}
 	else
@@ -365,10 +365,8 @@ function initCobraGroups()
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter((obj) => (obj.isCB)));
 
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
+	for (const con of cons)
 	{
-		var con = cons[i];
-
 		eventDroidBuilt(con, null);
 	}
 }
