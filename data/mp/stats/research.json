@@ -4620,11 +4620,11 @@
 		"msgName": "RES_W_AAAC1",
 		"name": "AA Thermal Imaging Sensor",
 		"requiredResearch": [
-			"R-Wpn-AAGun03",
-			"R-Wpn-RocketSlow-Accuracy02"
+			"R-Wpn-AAGun-Damage02",
+			"R-Struc-Research-Upgrade03"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 4500,
+		"researchPower": 140,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4651,10 +4651,10 @@
 		"name": "AA Target Acquisition Shells",
 		"requiredResearch": [
 			"R-Wpn-AAGun-Accuracy01",
-			"R-Wpn-Howitzer-Accuracy01"
+			"R-Struc-Research-Upgrade05"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 5400,
+		"researchPower": 168,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4681,24 +4681,25 @@
 		"name": "AA Target Prediction Computer",
 		"requiredResearch": [
 			"R-Wpn-AAGun-Accuracy02",
-			"R-Struc-Research-Upgrade06"
+			"R-Struc-Research-Upgrade07",
+			"R-Wpn-AAGun04"
 		],
-		"researchPoints": 8400,
-		"researchPower": 262,
+		"researchPoints": 6300,
+		"researchPower": 196,
 		"results": [
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "HitChance",
-				"value": 10
+				"value": 40
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "ShortHitChance",
-				"value": 10
+				"value": 40
 			}
 		],
 		"statID": "QuadMg1AAGun",
@@ -4713,8 +4714,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun03"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 4200,
+		"researchPower": 131,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4741,8 +4742,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun-Damage01"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 5040,
+		"researchPower": 157,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4770,8 +4771,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun-Damage02"
 		],
-		"researchPoints": 8400,
-		"researchPower": 262,
+		"researchPoints": 5880,
+		"researchPower": 183,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4799,10 +4800,10 @@
 		"name": "AA HEAP Flak",
 		"requiredResearch": [
 			"R-Wpn-AAGun-Damage03",
-			"R-Wpn-Cannon-Damage07"
+			"R-Wpn-MG-Damage07"
 		],
-		"researchPoints": 9600,
-		"researchPower": 300,
+		"researchPoints": 7680,
+		"researchPower": 240,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4829,8 +4830,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun-Damage04"
 		],
-		"researchPoints": 10800,
-		"researchPower": 337,
+		"researchPoints": 8640,
+		"researchPower": 270,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4856,10 +4857,11 @@
 		"id": "R-Wpn-AAGun-Damage06",
 		"name": "AA HEAP Flak Mk3",
 		"requiredResearch": [
-			"R-Wpn-AAGun-Damage05"
+			"R-Wpn-AAGun-Damage05",
+			"R-Wpn-MG-Damage08"
 		],
-		"researchPoints": 12000,
-		"researchPower": 375,
+		"researchPoints": 9600,
+		"researchPower": 300,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4889,8 +4891,8 @@
 			"R-Wpn-AAGun-Damage01",
 			"R-Wpn-MG-ROF01"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 3240,
+		"researchPower": 101,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4917,8 +4919,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun-ROF01"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 4320,
+		"researchPower": 135,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4944,11 +4946,10 @@
 		"id": "R-Wpn-AAGun-ROF03",
 		"name": "AA Ammunition Hopper Mk3",
 		"requiredResearch": [
-			"R-Wpn-AAGun04",
 			"R-Wpn-AAGun-ROF02"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 5400,
+		"researchPower": 168,
 		"results": [
 			{
 				"class": "Weapon",
@@ -4975,11 +4976,11 @@
 		"msgName": "RES_W_AAROF4",
 		"name": "AA Chainfeed Loader",
 		"requiredResearch": [
-			"R-Wpn-AAGun-ROF03",
-			"R-Wpn-Cannon-ROF04"
+			"R-Wpn-AAGun04",
+			"R-Wpn-AAGun-ROF03"
 		],
-		"researchPoints": 8000,
-		"researchPower": 250,
+		"researchPoints": 6400,
+		"researchPower": 200,
 		"results": [
 			{
 				"class": "Weapon",
@@ -5004,10 +5005,11 @@
 		"id": "R-Wpn-AAGun-ROF05",
 		"name": "AA Chainfeed Loader Mk2",
 		"requiredResearch": [
-			"R-Wpn-AAGun-ROF04"
+			"R-Wpn-AAGun-ROF04",
+			"R-Wpn-MG5"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 8000,
+		"researchPower": 250,
 		"results": [
 			{
 				"class": "Weapon",
@@ -5035,8 +5037,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun-ROF05"
 		],
-		"researchPoints": 12000,
-		"researchPower": 375,
+		"researchPoints": 9600,
+		"researchPower": 300,
 		"results": [
 			{
 				"class": "Weapon",
