@@ -93,7 +93,7 @@ _global.randomUnitArray = function(l) {
 }
 
 Array.prototype.addArray = function(arr) {
-	for (let i = 0; i < this.length; ++i)
+	for (const i of this.keys())
 		this[i] += arr[i];
 }
 

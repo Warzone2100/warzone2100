@@ -56,7 +56,7 @@ function addStat(to, what, weight) {
 		weight = 1;
 	for (const prop in to) {
 		if (to[prop].constructor === Array)
-			for (let i = 0; i < to[prop].length; ++i)
+			for (const i of to[prop].keys())
 				to[prop][i] += what[prop][i] * weight;
 		else
 			to[prop] += what[prop] * weight;
