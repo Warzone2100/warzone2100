@@ -71,8 +71,9 @@ function camSetVtolSpawnStateAll(state)
 
 function __checkVtolSpawnObject()
 {
-	for (const [idx, camVtolDataSystem] of __camVtolDataSystem.entries())
+	for (const idx of __camVtolDataSystem.keys())
 	{
+		const camVtolDataSystem = __camVtolDataSystem[idx];
 		if (camVtolDataSystem.active && camDef(camVtolDataSystem.spawnStopObject))
 		{
 			if (getObject(camVtolDataSystem.spawnStopObject) === null)

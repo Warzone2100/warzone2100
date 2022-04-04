@@ -205,8 +205,9 @@ function findNearest(list, x, y, flag)
 	}
 
 	var minDist = Infinity, minIdx;
-	for (const [i, item] of list.entries())
+	for (const i of list.keys())
 	{
+		const item = list[i];
 		var d = distBetweenTwoPoints(item.x, item.y, x, y);
 		if (d < minDist)
 		{
@@ -766,8 +767,9 @@ function cleanupBaseInfo()
 {
 	var units = [];
 
-	for (const [i, base] of baseInfo.entries())
+	for (const i of baseInfo.keys())
 	{
+		const base = baseInfo[i];
 		var factory = getObject(STRUCTURE, me, base.id);
 
 		if (factory === null)

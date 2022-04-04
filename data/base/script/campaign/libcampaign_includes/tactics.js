@@ -100,9 +100,9 @@ function camManageGroup(group, order, data)
 		{
 			saneData.pos = [ saneData.pos ];
 		}
-		for (const [i, pos] of saneData.pos.entries()) // array of labels?
+		for (const i of saneData.pos.keys()) // array of labels?
 		{
-			saneData.pos[i] = camMakePos(pos);
+			saneData.pos[i] = camMakePos(saneData.pos[i]);
 		}
 	}
 	if (camDef(__camGroupInfo[group]) && order !== __camGroupInfo[group].order)

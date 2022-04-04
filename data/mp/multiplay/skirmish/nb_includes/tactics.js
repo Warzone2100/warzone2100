@@ -43,11 +43,13 @@ function findLargestGroupIn(list) {
 		++sizes[object.group];
 	});
 	var maxCount = 0, maxIdx = 0;
-	for (const [i, size] of sizes.entries())
+	for (const i of sizes.keys()) {
+		const size = sizes[i];
 		if (size > maxCount) {
 			maxCount = size;
 			maxIdx = i;
 		}
+	}
 	return maxIdx;
 }
 
@@ -59,7 +61,8 @@ function findNearestGroup(x, y) {
 		return undefined;
 	var minDist = Infinity, minIdx;
 	var gr = [];
-	for (const [i, cluster] of ret.clusters.entries()) {
+	for (const i of ret.clusters.keys()) {
+		const cluster = ret.clusters[i];
 		gr[i] = findLargestGroupIn(cluster);
 		if (groupSize(gr[i]) > attackGroupSize()) {
 			var dist = distance(ret.xav[i], ret.yav[i], x, y);
@@ -172,10 +175,12 @@ function regroup(gr) {
 	var ret = naiveFindClusters(enumGroup(gr).filter(checkRepaired), (baseScale / 3));
 	if (ret.maxCount === 0)
 		return [];
-	for (const [i, cluster] of ret.clusters.entries())
+	for (const i of ret.clusters.keys()) {
+		const cluster = ret.clusters[i];
 		if (i !== ret.maxIdx)
 			for (const droid of cluster)
 				orderDroidLoc(droid, DORDER_MOVE, ret.xav[ret.maxIdx], ret.yav[ret.maxIdx]);
+	}
 	if (ret.maxCount < size) {
 		for (const droid of ret.clusters[ret.maxIdx]) {
 			if (groupInDanger(gr))

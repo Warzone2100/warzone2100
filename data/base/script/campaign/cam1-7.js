@@ -149,8 +149,9 @@ function getArtifact()
 		var idx = 0;
 		var dist = Infinity;
 
-		for (const [i, artiMember] of artiMembers.entries())
+		for (const i of artiMembers.keys())
 		{
+			const artiMember = artiMembers[i];
 			var drDist = camDist(artiMember, artiLoc);
 			if (drDist < dist)
 			{

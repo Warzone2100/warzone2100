@@ -498,8 +498,9 @@ function __camFindClusters(list, size)
 		var y = list[i].y;
 		var found = false;
 		var n = 0;
-		for (const [j, cluster] of ret.clusters.entries())
+		for (const j of ret.clusters.keys())
 		{
+			const cluster = ret.clusters[j];
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
 			{
 				n = cluster.length;

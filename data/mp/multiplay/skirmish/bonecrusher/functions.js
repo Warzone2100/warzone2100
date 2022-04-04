@@ -915,15 +915,17 @@ function attackObjects(targets, warriors, num, scouting){
 
 	targets = targets.slice(0,num);
 
-	for (const i in targets) {
-		var target = isBeingRepaired(targets[i]);
+	for (const i of targets.keys()) {
+		const tar = targets[i];
+		var target = isBeingRepaired(tar);
 		if ( target != false) {
 			targets[i] = target;
 		}
 	}
 
 	if ( targets.length >= warriors.length ) {
-		for (const [i, warrior] of warriors.entries()) {
+		for (const i of warriors.keys()) {
+			const warrior = warriors[i];
 			if(scouting) orderDroidLoc_p(warrior, DORDER_SCOUT, targets[i].x, targets[i].y);
 			else orderDroidObj_p( warrior, DORDER_ATTACK, targets[i] );
 		}
