@@ -56,15 +56,15 @@ function doResearch(){
 
 	//Get clean array without objects
 	var researches = [];
-	for (const r in avail_research) {researches.push(avail_research[r].id);}
+	for (const research of avail_research) {researches.push(research.id);}
 
 	var to_research = [];
 
 	//Check if we are at a dead end of the technology branch
-	for (const t in prepare_research) {
-		var research = findResearch(prepare_research[t]);
-		for (const r in research) {
-			to_research.push(research[r].id);
+	for (const prepareRes of prepare_research) {
+		var research = findResearch(prepareRes);
+		for (const res of research) {
+			to_research.push(res.id);
 		}
 //		to_research = to_research.filter((o) => (researches.indexOf(o)!==-1));
 		to_research = intersect_arrays(to_research, researches);
@@ -161,18 +161,18 @@ function doResearch_old(){
 // 	if(countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status==BUILT)).length >= 2) return;
 // 	if(countStruct('A0ResourceExtractor', me) <= 3 && playerPower(me) < 300 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status==BUILT)).length >= 1) return;
 
-	for (const l in labs) {
+	for (const lab of labs) {
 
 		if(policy['build'] != 'rich'){
 			if(countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && _busy >= 3) break;
 			if(countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && _busy >= 2) break;
 			if(countStruct('A0ResourceExtractor', me) < 3 && !(playerPower(me) > 300 || berserk) && _busy >= 1) break;
 		}
-		if( (labs[l].status == BUILT) && structureIdle(labs[l]) ){
-//			debugMsg("Лаборатория("+labs[l].id+")["+l+"] исследует путь "+_r, 'research_advance');
-			pursueResearch(labs[l], research_way[_r]);
+		if( (lab.status == BUILT) && structureIdle(lab) ){
+//			debugMsg("Лаборатория("+lab.id+")["+l+"] исследует путь "+_r, 'research_advance');
+			pursueResearch(lab, research_way[_r]);
 		}else{
-//			debugMsg("Лаборатория("+labs[l].id+")["+l+"] занята", 'research_advance');
+//			debugMsg("Лаборатория("+lab.id+")["+l+"] занята", 'research_advance');
 			_busy++;
 		}
 	}
@@ -197,14 +197,14 @@ function fixResearchWay(way){
 //	debugMsg('Check tech '+way.length, 'research');
 	var _out = [];
 
-	for (const i in way) {
-//		debugMsg('Check: '+way[i], 'research');
-		var _res = getResearch(way[i]);
+	for (const item of way) {
+//		debugMsg('Check: '+item, 'research');
+		var _res = getResearch(item);
 		if(_res == null){
-			debugMsg('Unknown research "'+way[i]+'" - ignored', 'error');
+			debugMsg('Unknown research "'+item+'" - ignored', 'error');
 			continue;
 		}
-		_out.push(way[i]);
+		_out.push(item);
 	}
 
 	debugMsg('Checked research way length='+way.length+', returned='+_out.length, 'init');
@@ -216,16 +216,16 @@ function addPrimaryWay(){
 	if(!(research_primary instanceof Array)) return false;
 	if(researchStrategy == "Smudged"){
 		research_primary.reverse();
-		for (const i in research_primary) {
-			research_way.unshift([research_primary[i]]);
+		for (const research of research_primary) {
+			research_way.unshift([research]);
 		}
 		debugMsg("research_primary smudged", 'research');
 		return true;
 	}
 	if(researchStrategy == "Strict"){
 		var _out=[];
-		for (const i in research_primary) {
-			_out.push(research_primary[i]);
+		for (const research of research_primary) {
+			_out.push(research);
 		}
 		research_way.unshift(_out);
 		debugMsg("research_primary strict", 'research');
@@ -233,8 +233,8 @@ function addPrimaryWay(){
 	}
 	if(researchStrategy == "Random"){
 		shuffle(research_primary);
-		for (const i in research_primary) {
-			research_way.unshift([research_primary[i]]);
+		for (const research of research_primary) {
+			research_way.unshift([research]);
 		}
 		debugMsg("research_primary random", 'research');
 		return true;

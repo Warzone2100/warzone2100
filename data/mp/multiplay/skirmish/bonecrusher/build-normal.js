@@ -19,9 +19,8 @@ function mainBuilders(rotation){
 	//enumGroup(buildersMain).forEach((obj, iter) => {
 	var rnd = Math.round(Math.random());
 //	debugMsg("lab="+len_research_lab_ready+", fact="+factory_ready.length+", pow="+playerPower(me), 'builders');
-	for (var i=0;i<_b.length;i++){
+	for (const obj of _b) {
 //		debugMsg('---', 'builders');
-		var obj = _b[i];
 //		var pos = {x:base.x, y:base.y};
 /*
 
@@ -50,14 +49,14 @@ function mainBuilders(rotation){
 		if(helped < 1){
 			var myBase = enumStruct(me);
 			var _h=false;
-			for (const b in myBase) {
-//				if(earlyGame && distBetweenTwoPoints_p(myBase[b].x, myBase[b].y, obj.x, obj.y) > 5){continue;}
-//				if(myBase[b].status == BEING_DEMOLISHED){orderDroidObj_p(obj, DORDER_DEMOLISH, myBase[b]); helped++; _h=true; break;} //TODO
-				if(distBetweenTwoPoints_p(base.x,base.y,myBase[b].x,myBase[b].y) > (base_range/2)){continue;}
-				if(myBase[b].status == BEING_BUILT && myBase[b].stattype == RESOURCE_EXTRACTOR){continue;}
-				if(myBase[b].status == BEING_BUILT && myBase[b].stattype == DEFENSE){continue;}
-				if(myBase[b].status == BEING_BUILT) {orderDroidObj_p(obj, DORDER_HELPBUILD, myBase[b]); helped++; _h=true; break;}
-				if(myBase[b].health < 100) {orderDroidObj_p(obj, DORDER_REPAIR, myBase[b]); helped++; _h=true; break;}
+			for (const baseStruct of myBase) {
+//				if(earlyGame && distBetweenTwoPoints_p(baseStruct.x, baseStruct.y, obj.x, obj.y) > 5){continue;}
+//				if(baseStruct.status == BEING_DEMOLISHED){orderDroidObj_p(obj, DORDER_DEMOLISH, baseStruct); helped++; _h=true; break;} //TODO
+				if(distBetweenTwoPoints_p(base.x,base.y,baseStruct.x,baseStruct.y) > (base_range/2)){continue;}
+				if(baseStruct.status == BEING_BUILT && baseStruct.stattype == RESOURCE_EXTRACTOR){continue;}
+				if(baseStruct.status == BEING_BUILT && baseStruct.stattype == DEFENSE){continue;}
+				if(baseStruct.status == BEING_BUILT) {orderDroidObj_p(obj, DORDER_HELPBUILD, baseStruct); helped++; _h=true; break;}
+				if(baseStruct.health < 100) {orderDroidObj_p(obj, DORDER_REPAIR, baseStruct); helped++; _h=true; break;}
 			}
 			if(_h)continue;
 		}

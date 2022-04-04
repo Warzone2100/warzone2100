@@ -119,10 +119,12 @@ function perfMonitor(){
 		perfOrder=[];
 	}
 
-	for (const i in perfFunc) {if(perfFunc[i]){
-		debugMsg(i+'='+perfFunc[i], 'performance');
-		perfFunc[i]=0;
-
-	}}
+	for (const i of perfFunc.keys()) {
+		const pFunc = perfFunc[i];
+		if(pFunc){
+			debugMsg(i+'='+pFunc, 'performance');
+			perfFunc[i]=0;
+		}
+	}
 }
 */

@@ -50,10 +50,10 @@ function prepeareProduce(){
 		}).sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));
 
 		avail_guns=[];
-		for (const i in _guns) {
-			avail_guns.push(_guns[i][1]);
-//			debugMsg(getResearch(_guns[i][0]).points+" "+_guns[i][0]+"->"+_guns[i][1], 'weap');
-			debugMsg(getResearch(_guns[i][0]).points+" - "+research_name[_guns[i][0]], 'weap');
+		for (const gun of _guns) {
+			avail_guns.push(gun[1]);
+//			debugMsg(getResearch(gun[0]).points+" "+gun[0]+"->"+gun[1], 'weap');
+			debugMsg(getResearch(gun[0]).points+" - "+research_name[gun[0]], 'weap');
 		}
 		if(avail_guns.length > 2) avail_guns.shift(); //Выкидываем первый пулемётик
 		if(avail_guns.length > 2) avail_guns.shift(); //Выкидываем спаренный пулемётик
@@ -63,7 +63,7 @@ function prepeareProduce(){
 		//Дай мне три типа лучших пушек на данный момент
 		avail_guns = _weaponsGetGuns(3);
 
-//		for (const i in avail_guns) debugMsg(avail_guns[i], 'weap');
+//		for (const availGun of avail_guns) debugMsg(availGun, 'weap');
 
 		var technology = enumResearch().length;
 
@@ -71,8 +71,8 @@ function prepeareProduce(){
 		avail_cyborgs=[];
 		var _cyb=cyborgs.filter((e) => ((getResearch(e[0]).done && technology) || (!technology && e[1] == 'CyborgHeavyBody')));
 		/*.sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));*/
-		for (const i in _cyb) {
-			avail_cyborgs.push([_cyb[i][1],_cyb[i][2]]);
+		for (const cyborg of _cyb) {
+			avail_cyborgs.push([cyborg[1],cyborg[2]]);
 		}
 		avail_cyborgs.reverse();
 
@@ -81,8 +81,8 @@ function prepeareProduce(){
 		var _vtols=vtols.filter((e) => (getResearch(e[0]).done)).sort((a, b) => (
 			getResearch(a[0]).points - getResearch(b[0]).points
 		));
-		for (const i in _vtols) {
-			avail_vtols.push(_vtols[i][1]);
+		for (const vtol of _vtols) {
+			avail_vtols.push(vtol[1]);
 		}
 		avail_vtols.reverse();
 		avail_vtols.unshift("Bomb3-VTOL-LtINC");	// <-- *facepalm*

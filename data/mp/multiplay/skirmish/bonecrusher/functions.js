@@ -54,8 +54,8 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 				danger = danger.concat(enumStruct(scavengerPlayer, DEFENSE, view));
 			}
 
-			for (const d in danger) {
-				if ( distBetweenTwoPoints_p(x,y,danger[d].x,danger[d].y) < range ) {
+			for (const d of danger) {
+				if ( distBetweenTwoPoints_p(x,y,d.x,d.y) < range ) {
 					_globalInfoNear[x+'_'+y+'_'+command].value = false;
 					return _globalInfoNear[x+'_'+y+'_'+command];
 				}
@@ -65,8 +65,8 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 		}else if(command == 'defended'){
 
 			var defenses = enumStruct(me, DEFENSE).filter((e) => (e.status == BUILT));
-			for (const d in defenses) {
-				if ( distBetweenTwoPoints_p(x,y,defenses[d].x,defenses[d].y) < range ) {
+			for (const defense of defenses) {
+				if ( distBetweenTwoPoints_p(x,y,defense.x,defense.y) < range ) {
 					_globalInfoNear[x+'_'+y+'_'+command].value = true;
 					return _globalInfoNear[x+'_'+y+'_'+command];
 				}
@@ -262,10 +262,10 @@ function isBeingRepaired(who){
 //			debugMsg("Нас атакует вражесая башня ["+who.player+"]",5);
 			var droids = enumDroid(who.player,DROID_CONSTRUCT,me);
 			if ( droids.length > 0 ) {
-				for (const i in droids) {
-					if ( distBetweenTwoPoints_p(who.x,who.y,droids[i].x,droids[i].y) <= 3 ) {
+				for (const droid of droids) {
+					if ( distBetweenTwoPoints_p(who.x,who.y,droid.x,droid.y) <= 3 ) {
 //						debugMsg("Атакующая меня башня подвергается ремонту!",5);
-						return droids[i];
+						return droid;
 					}
 				}
 			}
@@ -300,13 +300,13 @@ function sortByDistance(arr, obj, num, reach){
 
 		var b = Infinity;
 		var c = [];
-		for (const i in arr) {
-			if(reach)if(!droidCanReach_p(obj, arr[i].x, arr[i].y))continue;
-//			if(reach)if(!droidCanReach_p(arr[i], obj.x, obj.y))continue;
-			var a = distBetweenTwoPoints_p( obj.x, obj.y, arr[i].x, arr[i].y );
+		for (const item of arr) {
+			if(reach)if(!droidCanReach_p(obj, item.x, item.y))continue;
+//			if(reach)if(!droidCanReach_p(item, obj.x, obj.y))continue;
+			var a = distBetweenTwoPoints_p( obj.x, obj.y, item.x, item.y );
 			if ( a < b ) {
 				b = a;
-				c[0] = arr[i];
+				c[0] = item;
 			}
 		}
 		return c;
@@ -346,34 +346,34 @@ function checkProcess(){
 		gameStop("loose");
 	}
 
-	for (const plally in bc_ally) {
-		if(bc_ally[plally] == me) continue;
+	for (const playerAlly of bc_ally) {
+		if(playerAlly == me) continue;
 
 		if(getInfoNear(base.x,base.y,'safe',base_range).value){
 
-			if(playerPower(bc_ally[plally]) < 100 && playerPower(me) > 100){
+			if(playerPower(playerAlly) < 100 && playerPower(me) > 100){
 				var _pow = Math.floor(playerPower(me)/2);
-				debugMsg("Send "+_pow+" power to "+bc_ally[plally], 'ally');
-				donatePower(_pow, bc_ally[plally]);
+				debugMsg("Send "+_pow+" power to "+playerAlly, 'ally');
+				donatePower(_pow, playerAlly);
 			}
 
-			if(enumDroid(bc_ally[plally], DROID_CONSTRUCT).length < 3){
+			if(enumDroid(playerAlly, DROID_CONSTRUCT).length < 3){
 				if(groupSize(buildersMain) >= 2){
 					var truck = enumGroup(buildersMain);
 					if(truck.length > 0){
-						debugMsg("Send builder["+truck[0].id+"] from "+me+" to "+bc_ally[plally], 'ally');
-						donateObject(truck[0], bc_ally[plally]);
+						debugMsg("Send builder["+truck[0].id+"] from "+me+" to "+playerAlly, 'ally');
+						donateObject(truck[0], playerAlly);
 						break;
-					} else { debugMsg("No more builders from "+me+" to "+bc_ally[plally], 'ally');}
+					} else { debugMsg("No more builders from "+me+" to "+playerAlly, 'ally');}
 				}
 
 				if(groupSize(buildersHunters) > 1){
 					var truck = enumGroup(buildersHunters);
 					if(truck.length > 0){
-						donateObject(truck[0], bc_ally[plally]);
-						debugMsg("Send hunter["+truck[0].id+"] from "+me+" to "+bc_ally[plally], 'ally');
+						donateObject(truck[0], playerAlly);
+						debugMsg("Send hunter["+truck[0].id+"] from "+me+" to "+playerAlly, 'ally');
 						break;
-					} else { debugMsg("No more hunters from "+me+" to "+bc_ally[plally], 'ally');}
+					} else { debugMsg("No more hunters from "+me+" to "+playerAlly, 'ally');}
 				}
 			}
 		}
@@ -569,8 +569,8 @@ function getUnknownResources(){
 	var iSee = getSeeResources();
 	if ( iSee.length === 0 ) return allResources;
 	var notSee = allResources.filter((value) => {
-		for (const i in iSee) {
-			if ( value.x == iSee[i].x && value.y == iSee[i].y ) return false;
+		for (const seeRes of iSee) {
+			if ( value.x == seeRes.x && value.y == seeRes.y ) return false;
 		}
 		return true;
 	});
@@ -661,7 +661,7 @@ function getEnemyCloseBase(){
 
 function getOurDefences(){
 	var targ = [];
-	for (const a in ally) {
+	for (const a of ally.keys()) {
 		targ = targ.concat(enumStruct(a, DEFENSE).filter((e) => (e.status == 1)));
 	}
 	targ = targ.concat(enumStruct(me, DEFENSE).filter((e) => (e.status == 1)));
@@ -886,8 +886,8 @@ function inProduce(type){
 	if(produceTrigger.length === 0) return 0;
 	var _prod = 0;
 
-	for (const p in produceTrigger) {
-		if (produceTrigger[p] == type) _prod++;
+	for (const produceTri of produceTrigger) {
+		if (produceTri == type) _prod++;
 	}
 
 	return _prod;
@@ -934,20 +934,20 @@ function attackObjects(targets, warriors, num, scouting){
 		var a = Math.floor(warriors.length/targets.length);
 		var i=0;
 		var t=0;
-		for (const n in warriors) {
+		for (const warrior of warriors) {
 			t++;
 			if ( i == targets.length ) return true;
 			var busy = false;
-			for (const j in targets) {
-				if ( distBetweenTwoPoints_p ( targets[j].x,targets[j].y,warriors[n].x,warriors[n].y ) < 7 ) {
-					if(scouting) orderDroidLoc_p(warriors[n], DORDER_SCOUT, targets[j].x, targets[j].y);
-					else orderDroidObj_p( warriors[n], DORDER_ATTACK, targets[j] );
+			for (const target of targets) {
+				if ( distBetweenTwoPoints_p ( target.x,target.y,warrior.x,warrior.y ) < 7 ) {
+					if(scouting) orderDroidLoc_p(warrior, DORDER_SCOUT, target.x, target.y);
+					else orderDroidObj_p( warrior, DORDER_ATTACK, target );
 					busy = true;
 				}
 			}
 			if ( busy ) continue;
-			if(scouting) orderDroidLoc_p(warriors[n], DORDER_SCOUT, targets[i].x, targets[i].y);
-			else orderDroidObj_p( warriors[n], DORDER_ATTACK, targets[i] );
+			if(scouting) orderDroidLoc_p(warrior, DORDER_SCOUT, targets[i].x, targets[i].y);
+			else orderDroidObj_p( warrior, DORDER_ATTACK, targets[i] );
 			if ( t >= a ){
 //				debugMsg("getTarget: Атака на "+targets.length+" цели по "+a+" юнита ("+targets[i].x+","+targets[i].y+")",4);
 				t=0;

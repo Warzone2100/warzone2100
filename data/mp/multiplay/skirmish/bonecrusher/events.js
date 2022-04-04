@@ -545,13 +545,13 @@ function bc_eventChat(sender, to, message) {
 			break;
 		case "dbg":
 			debugMsg("DEBUG: ", 'dbg');
-/*			for (const i in avail_research) {
-				debugMsg(avail_research[i].name, 'dbg');
+/*			for (const availResearch of avail_research) {
+				debugMsg(availResearch.name, 'dbg');
 			}
 			debugMsg("<==-==>", 'dbg');
 			debugMsg("DEBUG: research_way", 'dbg');
-			for (const i in research_way) {
-				debugMsg(research_way[i], 'dbg');
+			for (const researchItem of research_way) {
+				debugMsg(researchItem, 'dbg');
 			}
 */
 			debug(JSON.stringify(_globalInfoNear));
