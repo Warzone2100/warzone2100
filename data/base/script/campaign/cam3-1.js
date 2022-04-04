@@ -183,7 +183,7 @@ function getCountdown()
 	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
 
-	for (let i = 0; i < countdownObject.length; ++i)
+	for (const _ of countdownObject)
 	{
 		var currentTime = getMissionTime();
 		if (currentTime <= countdownObject[0].time)
