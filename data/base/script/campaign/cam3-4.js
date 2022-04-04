@@ -169,7 +169,7 @@ function truckDefense()
 			"Sys-SensoTower02"
 		];
 
-		for (var i = 0; i < truckNum; ++i)
+		for (let i = 0; i < truckNum; ++i)
 		{
 			camQueueBuilding(NEXUS, list[camRand(list.length)]);
 		}

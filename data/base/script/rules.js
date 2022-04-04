@@ -284,7 +284,7 @@ function setLimits()
 	setDroidLimit(selectedPlayer, 10, DROID_COMMAND);
 	setDroidLimit(selectedPlayer, 15, DROID_CONSTRUCT);
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		setStructureLimits("A0PowerGenerator", 5, i);
 		setStructureLimits("A0ResourceExtractor", 200, i);

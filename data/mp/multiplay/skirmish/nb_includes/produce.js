@@ -121,7 +121,7 @@ function produceVtol(factory) {
 
 function produceTemplateFromList(factory, list) {
 	var ret = scopeRatings();
-	for (var i = list.length - 1; i >= 0; --i) {
+	for (let i = list.length - 1; i >= 0; --i) {
 		if (ret.land === 0 && !isHoverPropulsion(list[i].prop) && !isVtolPropulsion(list[i].prop))
 			continue;
 		if (ret.land === 0 && ret.sea === 0 && !isVtolPropulsion(list[i].prop))

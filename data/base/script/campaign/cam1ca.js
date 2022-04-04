@@ -153,7 +153,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// make sure player doesn't build on enemy LZs
-	for (var i = 1; i <= 5; ++i)
+	for (let i = 1; i <= 5; ++i)
 	{
 		var ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,

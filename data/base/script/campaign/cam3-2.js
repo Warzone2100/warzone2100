@@ -116,7 +116,7 @@ function phantomFactorySE()
 function sendEdgeMapDroids(droidCount, location, list)
 {
 	var droids = [];
-	for (var i = 0; i < droidCount; ++i)
+	for (let i = 0; i < droidCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}

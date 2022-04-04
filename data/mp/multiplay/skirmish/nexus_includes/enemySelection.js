@@ -22,7 +22,7 @@ function getAliveEnemyPlayers()
 {
 	var numEnemies = [];
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i !== me && !allianceExistsBetween(me, i) && isPlayerAlive(i))
 		{

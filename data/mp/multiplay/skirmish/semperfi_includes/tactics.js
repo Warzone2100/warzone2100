@@ -77,7 +77,7 @@ function getAliveEnemyPlayers(player)
 	}
 
 	var numEnemies = [];
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i !== me && !allianceExistsBetween(i, me))
 		{
@@ -296,13 +296,13 @@ function isHoverMap()
 {
 	var hoverMap = false;
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (!propulsionCanReach("wheeled01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y))
 		{
 			//Check if hover can not reach this area.
 			var temp = 0;
-			for (var t = 0; t < maxPlayers; ++t)
+			for (let t = 0; t < maxPlayers; ++t)
 			{
 				var b1 = startPositions[i];
 				var b2 = startPositions[t];

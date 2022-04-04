@@ -5,7 +5,7 @@ function allianceTimeInit()
 	{
 		allianceTime = [];
 
-		for (var i = 0; i < maxPlayers; ++i)
+		for (let i = 0; i < maxPlayers; ++i)
 		{
 			allianceTime.push(0);
 		}
@@ -82,7 +82,7 @@ function getAllyPlayers(alive)
 		alive = false;
 	}
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i !== me && allianceExistsBetween(me, i))
 		{
@@ -138,7 +138,7 @@ function tryFormingAlliances()
 		return;
 	}
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		var time = allianceTime[i];
 		var tooEarly = (gameTime - time < minutesToMilliseconds(12));

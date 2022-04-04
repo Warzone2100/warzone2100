@@ -107,7 +107,7 @@ function missileSilosDestroyed()
 	const SILO_ALIAS = "NXMissileSilo";
 	var destroyed = 0;
 
-	for (var i = 0; i < SILO_COUNT; ++i)
+	for (let i = 0; i < SILO_COUNT; ++i)
 	{
 		destroyed += (getObject(SILO_ALIAS + (i + 1)) === null) ? 1 : 0;
 	}
@@ -183,7 +183,7 @@ function getCountdown()
 	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
 
-	for (var i = 0, len = countdownObject.length; i < len; ++i)
+	for (let i = 0; i < countdownObject.length; ++i)
 	{
 		var currentTime = getMissionTime();
 		if (currentTime <= countdownObject[0].time)

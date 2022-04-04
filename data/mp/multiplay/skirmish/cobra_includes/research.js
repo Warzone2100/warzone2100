@@ -16,7 +16,8 @@ function updateResearchList(stat, len)
 	}
 
 	var list = [];
-	for (var x = 0, d = stat.length - len; x < d; ++x)
+	const length = stat.length - len;
+	for (let x = 0; x < length; ++x)
 	{
 		var st = stat[x];
 		if (isDefined(st.res))

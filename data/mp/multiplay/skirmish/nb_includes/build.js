@@ -333,7 +333,7 @@ function listOutdatedDefenses() {
 	for (const path in weaponStats) {
 		for (const role in DEFROLE) {
 			var list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
-			for (var i = 0; i < list.length - 2; ++i)
+			for (let i = 0; i < list.length - 2; ++i)
 				if (isAvailable(list[i + 2])) {
 					if (countStruct(list[i]) > 0)
 						return enumStruct(me, list[i]);

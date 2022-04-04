@@ -488,7 +488,7 @@ function buildAAForPersonality()
 	else
 	{
 		var aaType = subPersonalities[personality].antiAir.defenses;
-		for (var i = aaType.length - 1; i >= 0; --i)
+		for (let i = aaType.length - 1; i >= 0; --i)
 		{
 			if (countAndBuild(aaType[i].stat, minAAs))
 			{
@@ -534,7 +534,7 @@ function returnDefense(type)
 		}
 	}
 
-	for (var i = defenses.length - 1; i > -1; --i)
+	for (let i = defenses.length - 1; i > -1; --i)
 	{
 		var def = isDefined(defenses[i].stat);
 		if (def && isStructureAvailable(defenses[i].stat))

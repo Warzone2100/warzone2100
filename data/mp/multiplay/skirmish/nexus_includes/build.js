@@ -899,7 +899,7 @@ function bestStructureIn(array)
 		return undefined;
 	}
 
-	for (var i = array.length - 1; i >= 0; --i)
+	for (let i = array.length - 1; i >= 0; --i)
 	{
 		var structure = array[i];
 
@@ -945,7 +945,7 @@ function findSafeGateTile(gate)
 		return undefined; //weird gate.
 	}
 
-	for (var j = (verticalCheck ? gate.y1 : gate.x1); j <= (verticalCheck ? gate.y2 : gate.x2); ++j)
+	for (let j = (verticalCheck ? gate.y1 : gate.x1); j <= (verticalCheck ? gate.y2 : gate.x2); ++j)
 	{
 		var xg = (verticalCheck ? gate.x1 : j);
 		var yg = (verticalCheck ? j : gate.y1);

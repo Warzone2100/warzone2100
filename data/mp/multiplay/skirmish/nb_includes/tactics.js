@@ -26,7 +26,7 @@ function safeGetObject(label) {
 
 function groupsBySize() {
 	var ret = [];
-	for (var i = 0; i < MAX_GROUPS; ++i)
+	for (let i = 0; i < MAX_GROUPS; ++i)
 		if (isEnemy(i))
 			ret.push(i);
 	ret.sort((one, two) => (groupSize(two) - groupSize(one)));
@@ -35,7 +35,7 @@ function groupsBySize() {
 
 function findLargestGroupIn(list) {
 	var sizes = []
-	for (var i = 0; i < MAX_GROUPS; ++i)
+	for (let i = 0; i < MAX_GROUPS; ++i)
 		sizes[i] = 0;
 	list.forEach((object) => {
 		if (!defined(object.group) || object.group < 0 && object.group >= MAX_GROUPS)
@@ -325,7 +325,7 @@ _global.setTarget = function(object, group) {
 }
 
 _global.unsetTarget = function(player) {
-	for (var i = 0; i <= MAX_GROUPS; ++i) {
+	for (let i = 0; i <= MAX_GROUPS; ++i) {
 		var obj = safeGetObject(groupTargetLabel(i));
 		if (defined(obj) && obj.type === POSITION && findBeaconPlayer(obj.x, obj.y) === player)
 			removeLabel(groupTargetLabel(i));
@@ -364,13 +364,13 @@ _global.rebalanceGroups = function() {
 		return;
 	if (groupSize(miscGroup) > personality.maxMiscTanks) {
 		var list = enumGroup(miscGroup).shuffle();
-		for (var i = personality.maxMiscTanks; i < personality.maxMiscTanks + 5 && i < list.length; ++i)
+		for (let i = personality.maxMiscTanks; i < personality.maxMiscTanks + 5 && i < list.length; ++i)
 			groupDroid(list[i]);
 	}
 	var ret = groupsBySize();
 	if (ret.length > 0)
 		if (ret[0] > 0 && ret[0] < attackGroupSize())
-			for (var i = 1; i < ret.length; ++i) {
+			for (let i = 1; i < ret.length; ++i) {
 				var list = enumGroup(ret[i]);
 				for (const item of list) {
 					var target = findTarget(ret[0]);
@@ -407,7 +407,7 @@ _global.dangerLevel = function(loc) {
 _global.checkAttack = function() {
 	if (enumLivingPlayers().filter(isEnemy).length === 0)
 		return;
-	for (var i = 0; i < MAX_GROUPS; ++i)
+	for (let i = 0; i < MAX_GROUPS; ++i)
 		if (!throttled(3000, i)) {
 			regroup(i).forEach(attackTarget);
 			break;

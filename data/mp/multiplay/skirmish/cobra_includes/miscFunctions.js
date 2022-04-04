@@ -146,7 +146,7 @@ function playerAlliance(ally)
 
 	var players = [];
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i === me)
 		{
@@ -184,7 +184,7 @@ function findLivingEnemies()
 	function uncached()
 	{
 		var alive = [];
-		for (var i = 0; i < maxPlayers; ++i)
+		for (let i = 0; i < maxPlayers; ++i)
 		{
 			if ((i !== me) && !allianceExistsBetween(i, me) && ((countDroid(DROID_ANY, i) > 0) || (enumStruct(i).length > 0)))
 			{
@@ -259,12 +259,12 @@ function initializeGrudgeCounter()
 {
 	grudgeCount = [];
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		grudgeCount.push(0);
 	}
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if ((!allianceExistsBetween(i, me)) && (i !== me))
 		{

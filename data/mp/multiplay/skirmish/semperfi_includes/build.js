@@ -167,7 +167,7 @@ function scanAndDefendPosition(structure, droid)
 	if (random(100) < 67 && structs.length < 5)
 	{
 		var sensor;
-		for (var i = SENSOR_TOWERS.length - 1; i > -1; --i)
+		for (let i = SENSOR_TOWERS.length - 1; i > -1; --i)
 		{
 			var sen = SENSOR_TOWERS[i];
 			if (isStructureAvailable(sen))
@@ -478,7 +478,7 @@ function buildBasicBase()
 function factoryBuildOrder()
 {
 	const FAC_ORDER = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT,];
-	for (var x = 0; x < 2; ++x)
+	for (let x = 0; x < 2; ++x)
 	{
 		var num = 1;
 		if (x > 0)
@@ -502,7 +502,7 @@ function factoryBuildOrder()
 			}
 		}
 
-		for (var i = 0; i < 3; ++i)
+		for (let i = 0; i < 3; ++i)
 		{
 			var fac = FAC_ORDER[i];
 			if (!(fac === CYBORG_FACTORY_STAT && isSeaMap) && countStruct(fac) < num && grabTrucksAndBuild(fac, 0))

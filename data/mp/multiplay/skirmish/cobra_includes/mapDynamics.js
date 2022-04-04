@@ -11,7 +11,7 @@ function checkIfSeaMap()
 		var hoverMap = false;
 		seaMapWithLandEnemy = false;
 
-		for (var i = 0; i < maxPlayers; ++i)
+		for (let i = 0; i < maxPlayers; ++i)
 		{
 			if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
 			{
@@ -19,7 +19,7 @@ function checkIfSeaMap()
 				//Check if it is a map 'spotter' pit
 				//Cyborgs will turn off in divided maps with a physical barrier still
 				var temp = 0;
-				for (var t = 0; t < maxPlayers; ++t)
+				for (let t = 0; t < maxPlayers; ++t)
 				{
 					if (!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
 					{
@@ -38,7 +38,7 @@ function checkIfSeaMap()
 		//Determine if we are sharing land on a hover map with an enemy that can reach us via non-hover propulsion.
 		if (hoverMap === true)
 		{
-			for (var i = 0; i < maxPlayers; ++i)
+			for (let i = 0; i < maxPlayers; ++i)
 			{
 				if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
 				{
@@ -68,7 +68,7 @@ function countAllResources()
 	function uncached()
 	{
 		var amount = enumFeature(ALL_PLAYERS, OIL_RES).length;
-		for (var i = 0; i < maxPlayers; ++i)
+		for (let i = 0; i < maxPlayers; ++i)
 		{
 			amount += enumStruct(i, structures.derrick).length;
 		}
@@ -91,7 +91,7 @@ function averageOilPerPlayer()
 	{
 		var players = 0;
 		//maxPlayers is useless here in case there are some empty slots.
-		for (var i = 0; i < maxPlayers; ++i)
+		for (let i = 0; i < maxPlayers; ++i)
 		{
 			var data = playerData[i];
 			players += ((data.isHuman || data.isAI) ? 1 : 0);

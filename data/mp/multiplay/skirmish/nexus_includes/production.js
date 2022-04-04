@@ -95,7 +95,7 @@ function produceConstructors()
 
 		if (totalTrucks < truckLimit && occupiedFactories < MAX_TRUCK_FACTORIES)
 		{
-			for (var j = STANDARD_TRUCK_TEMPLATES.length - 1; j > -1; --j)
+			for (let j = STANDARD_TRUCK_TEMPLATES.length - 1; j > -1; --j)
 			{
 				var tmp = STANDARD_TRUCK_TEMPLATES[j];
 
@@ -120,7 +120,7 @@ function produceConstructors()
 
 		if (totalTrucks < truckLimit)
 		{
-			for (var j = STANDARD_CYBORG_ENGINEER_TEMPLATES.length - 1; j > -1; --j)
+			for (let j = STANDARD_CYBORG_ENGINEER_TEMPLATES.length - 1; j > -1; --j)
 			{
 				var tmp = STANDARD_CYBORG_ENGINEER_TEMPLATES[j];
 

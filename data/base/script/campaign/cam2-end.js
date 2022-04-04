@@ -72,7 +72,7 @@ function randomTemplates(list, transporterAmount, useWhirlwinds)
 		size = (difficulty === INSANE) ? (15 + camRand(3)) : (18 + camRand(8));
 	}
 
-	for (var i = 0; i < size; ++i)
+	for (let i = 0; i < size; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -80,7 +80,7 @@ function randomTemplates(list, transporterAmount, useWhirlwinds)
 	if (useWhirlwinds)
 	{
 		// Include Whirlwinds for ground reinforcements.
-		for (var i = 0; i < WHIRLWIND_AMOUNT; ++i)
+		for (let i = 0; i < WHIRLWIND_AMOUNT; ++i)
 		{
 			droids.push(cTempl.cowwt);
 		}

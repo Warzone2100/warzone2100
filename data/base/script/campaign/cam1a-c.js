@@ -47,7 +47,7 @@ function checkForGroundForces()
 		var droidGroup2 = []; //Sensor and heavy mortar units
 		var templates = [ cTempl.nphct, cTempl.npmsens, cTempl.npmorb ];
 
-		for (var i = 0; i <= maxTanks; ++i)
+		for (let i = 0; i <= maxTanks; ++i)
 		{
 			if (i <= firstAmount)
 			{
@@ -86,7 +86,7 @@ function sendTransport()
 	var templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
 
 	var droids = [];
-	for (var i = 0; i < count; ++i)
+	for (let i = 0; i < count; ++i)
 	{
 		var t = templates[camRand(templates.length)];
 		// two droids of each template
@@ -150,7 +150,7 @@ function eventStartLevel()
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
 	// make sure player doesn't build on enemy LZs
-	for (var i = 6; i <= 10; ++i)
+	for (let i = 6; i <= 10; ++i)
 	{
 		var ph = getObject("NPLZ" + i);
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, NEW_PARADIGM);

@@ -341,9 +341,9 @@ function camMakeGroup(what, filter)
 //;;
 function camBreakAlliances()
 {
-	for (var i = 0; i < CAM_MAX_PLAYERS; ++i)
+	for (let i = 0; i < CAM_MAX_PLAYERS; ++i)
 	{
-		for (var c = 0; c < CAM_MAX_PLAYERS; ++c)
+		for (let c = 0; c < CAM_MAX_PLAYERS; ++c)
 		{
 			if (i !== c && allianceExistsBetween(i, c) === true)
 			{
@@ -492,7 +492,7 @@ function __camFindClusters(list, size)
 {
 	// The good old cluster analysis algorithm taken from NullBot AI.
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
-	for (var i = list.length - 1; i >= 0; --i)
+	for (let i = list.length - 1; i >= 0; --i)
 	{
 		var x = list[i].x;
 		var y = list[i].y;
@@ -545,7 +545,7 @@ function __camTick()
 //Reset AI power back to highest storage possible.
 function __camAiPowerReset()
 {
-	for (var i = 1; i < CAM_MAX_PLAYERS; ++i)
+	for (let i = 1; i < CAM_MAX_PLAYERS; ++i)
 	{
 		setPower(AI_POWER, i);
 	}

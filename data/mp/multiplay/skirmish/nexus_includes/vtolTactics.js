@@ -136,7 +136,7 @@ function tryAttackingVtolTarget(group, targetData)
 
 function vtolAttack()
 {
-	for (var i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
+	for (let i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
 	{
 		var currGroup = groups.vtolAttackers[i];
 		var amtOfAttackers = enumGroup(currGroup).length;
@@ -177,7 +177,7 @@ function rearrangeAttackVtols()
 	var counter = 0;
 
 	//Simply add all the VTOLs in a group into an arrray.
-	for (var i = 0; i < NUM_GROUPS; ++i)
+	for (let i = 0; i < NUM_GROUPS; ++i)
 	{
 		var group = enumGroup(groups.vtolAttackers[i]);
 
@@ -194,7 +194,7 @@ function rearrangeAttackVtols()
 		return;
 	}
 
-	for (var i = 0; i < NUM_GROUPS; ++i)
+	for (let i = 0; i < NUM_GROUPS; ++i)
 	{
 		var groupIdx = groups.vtolAttackers[i];
 
@@ -213,7 +213,7 @@ function chooseVtolTarget(exclusive)
 	var bestScore = 0;
 	var currScore;
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i === me || allianceExistsBetween(me, i))
 		{
@@ -339,7 +339,7 @@ function vtolTargetAssigned(what)
 		return false;
 	}
 
-	for (var i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
+	for (let i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
 	{
 		var obj = targetInfo.vtolGroupWhat[i];
 

@@ -168,7 +168,7 @@ function rangeStep(obj, visibility)
 	const STEP = 25;
 	var target;
 
-	for (var i = 0; i <= MAX_TILE_LIMIT; i += STEP)
+	for (let i = 0; i <= MAX_TILE_LIMIT; i += STEP)
 	{
 		var temp = enumRange(obj.x, obj.y, i, ENEMIES, visibility);
 		if (temp.length > 0)
@@ -400,7 +400,7 @@ function buildThings()
 		if (droid.order !== DORDER_RTR && droid.order !== DORDER_BUILD)
 		{
 			//Build a defense at an enemy derrick should we happen to be idle near one
-			for (var j = 0; j < maxPlayers; ++j)
+			for (let j = 0; j < maxPlayers; ++j)
 			{
 				var dlist = enumStruct(j, derrick);
 				for (const enemy_derrick of dlist)
@@ -473,7 +473,7 @@ function produceDroid(fac)
 		var j = random(templates.length);
 		var name = (templates[j][1].indexOf("NEXUS") > -1) ? "Nexus Tank" : "Scavenger unit";
 
-		for (var x = 1; x < templates[j].length; ++x)
+		for (let x = 1; x < templates[j].length; ++x)
 		{
 			var weapon = templates[j][x];
 			weapons.push(weapon);
@@ -488,7 +488,7 @@ function produceHelicopter(fac)
 	var j = random(vtolTemplates.length);
 	var weapons = [];
 
-	for (var x = 1; x < vtolTemplates[j].length; ++x)
+	for (let x = 1; x < vtolTemplates[j].length; ++x)
 	{
 		var weapon = vtolTemplates[j][x];
 		weapons.push(weapon);

@@ -184,7 +184,7 @@ function getArtifact()
 //New Paradigm truck builds six lancer hardpoints around LZ
 function buildLancers()
 {
-	for (var i = 1; i <= 6; ++i)
+	for (let i = 1; i <= 6; ++i)
 	{
 		camQueueBuilding(NEW_PARADIGM, "WallTower06", "hardPoint" + i);
 	}

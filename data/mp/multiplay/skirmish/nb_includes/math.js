@@ -81,7 +81,7 @@ Array.prototype.shuffle = function() {
 
 _global.zeroArray = function(l) {
 	var ret = [];
-	for (var i = 0; i < l; ++i)
+	for (let i = 0; i < l; ++i)
 		ret[i] = 0;
 	return ret;
 }
@@ -93,7 +93,7 @@ _global.randomUnitArray = function(l) {
 }
 
 Array.prototype.addArray = function(arr) {
-	for (var i = 0; i < this.length; ++i)
+	for (let i = 0; i < this.length; ++i)
 		this[i] += arr[i];
 }
 
@@ -110,7 +110,7 @@ _global.randomItem = function(obj) {
 // cluster analysis happens here
 _global.naiveFindClusters = function(list, size) {
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
-	for (var i = list.length - 1; i >= 0; --i) {
+	for (let i = list.length - 1; i >= 0; --i) {
 		var x = list[i].x, y = list[i].y;
 		var found = false;
 		for (const j of ret.clusters.keys()) {

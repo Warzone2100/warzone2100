@@ -62,7 +62,7 @@ function getDroidsForNPLZ(args)
 	}
 
 	var lim = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
-	for (var i = 0; i < lim; ++i)
+	for (let i = 0; i < lim; ++i)
 	{
 		list.push(unitTemplates[camRand(unitTemplates.length)]);
 	}

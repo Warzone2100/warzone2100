@@ -30,7 +30,7 @@ function placeOilDrum()
 	// see if the random position is valid
 	var occupied = (enumRange(x, y, SCAN_RANGE_OCCUPIED, ALL_PLAYERS, false).length > 0);
 	var unreachable = true;
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (propulsionCanReach("hover01", x, y, startPositions[i].x, startPositions[i].y))
 		{
@@ -83,7 +83,7 @@ function oilDrumInit()
 {
 	// always at least one oil drum, and one more for every 64x64 tiles of map area
 	oilDrumData.maxOilDrums = (mapWidth * mapHeight) >> 12; // replace float division with shift for sync-safety
-	for (var i = 0; i < oilDrumData.maxOilDrums; ++i)
+	for (let i = 0; i < oilDrumData.maxOilDrums; ++i)
 	{
 		queue("placeOilDrum", 10000 * i);
 	}

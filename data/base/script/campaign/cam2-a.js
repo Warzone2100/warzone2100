@@ -57,7 +57,7 @@ function getDroidsForCOLZ()
 		usingHeavy = true;
 	}
 
-	for (var i = 0; i < count; ++i)
+	for (let i = 0; i < count; ++i)
 	{
 		if (!i && usingHeavy)
 		{
@@ -112,7 +112,7 @@ function sendPlayerTransporter()
 	var droids = [];
 	var list = [cTempl.prhct, cTempl.prhct, cTempl.prhct, cTempl.prltat, cTempl.prltat, cTempl.npcybr, cTempl.prrept];
 
-	for (var i = 0; i < 10; ++i)
+	for (let i = 0; i < 10; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -132,7 +132,7 @@ function mapEdgeDroids()
 	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.commrp, cTempl.cohct];
 
 	var droids = [];
-	for (var i = 0; i < TankNum; ++i)
+	for (let i = 0; i < TankNum; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}

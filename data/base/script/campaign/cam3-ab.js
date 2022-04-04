@@ -57,7 +57,7 @@ function sendEdgeMapDroids()
 		edgeMapCounter = 0;
 	}
 
-	for (var i = 0; i < unitCount; ++i)
+	for (let i = 0; i < unitCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}

@@ -56,7 +56,7 @@ function camCompleteRequiredResearch(items, player)
 //granted shortly after mission start to give enemy players instant droid production.
 function __camGrantSpecialResearch()
 {
-	for (var i = 1; i < CAM_MAX_PLAYERS; ++i)
+	for (let i = 1; i < CAM_MAX_PLAYERS; ++i)
 	{
 		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, i) && (countDroid(DROID_ANY, i) > 0 || enumStruct(i).length > 0))
 		{
