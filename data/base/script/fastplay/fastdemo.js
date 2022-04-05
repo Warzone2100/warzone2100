@@ -191,7 +191,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [cTempl.rbjeep, cTempl.trike, cTempl.buggy, cTempl.rbjeep]
+			templates: [cTempl.rbjeep, cTempl.trike, cTempl.buggy, cTempl.rbjeep, cTempl.bjeep]
 		}
 	});
 
