@@ -151,6 +151,12 @@
 		"player": 0,
 		"type": 2
 	},
+	"object_6": {
+		"label": "base1PowerGenerator",
+		"id": 229,
+		"player": 7,
+		"type": 1
+	},
 
 	"radius_0": {
 		"label": "removeObjectiveBlip",

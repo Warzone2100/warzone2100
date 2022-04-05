@@ -165,10 +165,11 @@ function eventStartLevel()
 	camSafeRemoveObject("flamerArti", false);
 	camSetArtifacts({
 		"base1Factory": { tech: "R-Defense-Tower01" },
+		"base1PowerGenerator": { tech: "R-Struc-PowerModuleMk1" },
 		"artifactPos": { tech: "R-Wpn-Flamer01Mk1" },
 		"radarTower": { tech: "R-Sys-Sensor-Turret01" },
 		"base2Factory": { tech: "R-Vehicle-Prop-Halftracks" },
-		"bunkerArti": { tech: "R-Sys-Engineering01" },
+		"bunkerArti": { tech: "R-Sys-Engineering01", "R-Sys-MobileRepairTurret01" },
 	});
 
 	camSetFactories({
