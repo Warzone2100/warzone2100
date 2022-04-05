@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-03-27 02:51\n"
+"PO-Revision-Date: 2022-04-05 10:47\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -8619,7 +8619,7 @@ msgstr "Incendiario autorecarga Mk3"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 #: po/custom/fromJson.txt:2064
 msgid "Flamer Autoloader"
-msgstr "Incendiario autorecarga"
+msgstr "Incendiario Autorrecarga"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox05.name
@@ -10266,7 +10266,7 @@ msgstr "Incrementa la velocidad de construcción"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3213
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Incrementa el rango de los Lanzallamas"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10861,7 +10861,7 @@ msgstr "Daño causado por Ametralladoras +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3642
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Torre de Guardia Ametralladora"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11355,7 +11355,7 @@ msgstr "Mortero"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3980
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Ametralladora Montada"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
@@ -13287,13 +13287,13 @@ msgstr "Roba tecnología de estructuras y toma control de armas"
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5289
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Torre de acero con incendiario"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5292
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Torre de acero con ametralladora pesada"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
