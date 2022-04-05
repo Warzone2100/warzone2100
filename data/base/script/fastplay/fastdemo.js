@@ -169,7 +169,7 @@ function eventStartLevel()
 		"artifactPos": { tech: "R-Wpn-Flamer01Mk1" },
 		"radarTower": { tech: "R-Sys-Sensor-Turret01" },
 		"base2Factory": { tech: "R-Vehicle-Prop-Halftracks" },
-		"bunkerArti": { tech: "R-Sys-Engineering01", "R-Sys-MobileRepairTurret01" },
+		"bunkerArti": { tech: ["R-Sys-Engineering01", "R-Sys-MobileRepairTurret01" ]},
 	});
 
 	camSetFactories({
