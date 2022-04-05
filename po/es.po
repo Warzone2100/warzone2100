@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-04-05 10:47\n"
+"PO-Revision-Date: 2022-04-05 22:43\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -13306,13 +13306,13 @@ msgstr "Torre de acero con ametralladora"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5299
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Torre de acero con ametralladora doble"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5302
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Detiene la toma de control NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13996,7 +13996,7 @@ msgstr "Torre de Guardia Doble Ametralladora"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5757
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Torre de Ametralladora Doble"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -15157,7 +15157,7 @@ msgstr ""
 
 #: src/clparse.cpp:412
 msgid "port"
-msgstr ""
+msgstr "puerto"
 
 #: src/clparse.cpp:415
 msgid "Enable lobby slash commands (for connecting clients)"
@@ -15185,7 +15185,7 @@ msgstr "Activa la interfaz de comandos"
 
 #: src/clparse.cpp:418
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:419
 msgid "Minimum required players to auto-start game"
@@ -15674,7 +15674,7 @@ msgstr "Atajos de Teclado"
 #: src/frontend.cpp:719
 #: src/ingameop.cpp:594
 msgid "Music Manager"
-msgstr ""
+msgstr "Gestor de Música"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
@@ -15895,7 +15895,7 @@ msgstr "Puedes cambiar la resolución redimensionando la ventana. (Prueba arrast
 
 #: src/frontend.cpp:1277
 msgid "Desktop Full"
-msgstr ""
+msgstr "Escritorio Completo"
 
 #: src/frontend.cpp:1279
 msgid "Windowed"
@@ -16080,15 +16080,15 @@ msgstr "Ninguno"
 
 #: src/frontend.cpp:2358
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Opciones de Alojamiento:"
 
 #: src/frontend.cpp:2362
 msgid "Game Port"
-msgstr ""
+msgstr "Puerto de Juego"
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Activar UPnP"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
@@ -16156,7 +16156,7 @@ msgstr "Pausa"
 
 #: src/hci.cpp:755
 msgid "Resume"
-msgstr ""
+msgstr "Reanudar"
 
 #: src/hci.cpp:772
 msgid "Fast-Forward"
@@ -16203,7 +16203,7 @@ msgstr "Mostrando Tecnología Obsoleta"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Coste: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
@@ -16292,7 +16292,7 @@ msgstr "UI Táctica (Icono de origen de objetivo): Ocultar"
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:787
 msgid "Go Back"
-msgstr ""
+msgstr "Ir Atrás"
 
 #: src/ingameop.cpp:246
 #: src/ingameop.cpp:255
@@ -16311,19 +16311,19 @@ msgstr "Salir"
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Advertencia: ¿Estás seguro?"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Advertencia: ¿Estás seguro? Cualquier progreso no guardado será perdido."
 
 #: src/ingameop.cpp:323
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: src/ingameop.cpp:325
 msgid "Back"
-msgstr ""
+msgstr "Atrás"
 
 #: src/ingameop.cpp:404
 msgid "Host has quit the game!"
@@ -16347,7 +16347,7 @@ msgstr "Ver Mapeos de Teclas"
 
 #: src/ingameop.cpp:647
 msgid "Shake"
-msgstr ""
+msgstr "Agitar"
 
 #: src/ingameop.cpp:1032
 msgid "Save Campaign Game"
@@ -16368,12 +16368,12 @@ msgstr "El mod requerido no pudo ser cargado: %s\n\n"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Incapaz de cargar: %s."
 
 #: src/init.cpp:1150
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Por favor elimina todos los mods incompatibles."
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
@@ -17382,7 +17382,7 @@ msgstr ""
 #: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "Jugador %d: %d poder"
 
 #: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
@@ -17729,7 +17729,7 @@ msgstr ""
 
 #: src/keybind.cpp:2564
 msgid "QuickSave failed"
-msgstr ""
+msgstr "GuardadoRápido falló"
 
 #: src/keybind.cpp:2573
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
@@ -17779,12 +17779,12 @@ msgstr ""
 #: src/loadsave.cpp:1109
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "AutoGuardado %s"
 
 #: src/loadsave.cpp:1114
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "AutoGuardado %s falló"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -17944,7 +17944,7 @@ msgstr ""
 
 #: src/multiint.cpp:1319
 msgid "Vote"
-msgstr ""
+msgstr "Votar"
 
 #: src/multiint.cpp:1320
 msgid "Allow host to change map or randomize?"
@@ -17979,7 +17979,7 @@ msgstr "¡Mod de Mapa!"
 
 #: src/multiint.cpp:1417
 msgid "Random map!"
-msgstr ""
+msgstr "¡Mapa aleatorio!"
 
 #: src/multiint.cpp:1434
 msgid "Click to set Password"
@@ -18175,7 +18175,7 @@ msgstr ""
 
 #: src/multiint.cpp:3028
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "Incapaz de cambiar a Espectador"
 
 #: src/multiint.cpp:3056
 msgid "Do you want to spectate?"
@@ -18254,7 +18254,7 @@ msgstr ""
 
 #: src/multiint.cpp:3932
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Activar la Unión del Espectador"
 
 #: src/multiint.cpp:3942
 msgid "Lock Teams"
@@ -18274,7 +18274,7 @@ msgstr "Click para cambiar el color de jugador"
 
 #: src/multiint.cpp:4233
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Clica para cambiar la facción del jugador"
 
 #: src/multiint.cpp:4244
 msgid "Click to change player position"
@@ -18641,12 +18641,12 @@ msgstr ""
 #: src/multimenu.cpp:1094
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Descomprimido: %lu/%lu"
 
 #: src/multimenu.cpp:1098
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Paquete: %lu/%lu"
 
 #: src/multimenu.cpp:1284
 #, c-format
@@ -18678,7 +18678,7 @@ msgstr "¡Expulsado el jugador %s, porque intentó saltar la seguridad de integr
 
 #: src/multiplay.cpp:372
 msgid "Invalid data!"
-msgstr ""
+msgstr "¡Datos no válidos!"
 
 #: src/multiplay.cpp:1123
 #, c-format
@@ -18716,7 +18716,7 @@ msgstr "¡ARCHIVO ENVIADO!"
 
 #: src/multiplay.cpp:2012
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "¡MAPA DESCARGADO!"
 
 #: src/multiplay.cpp:2068
 #, c-format
@@ -18790,20 +18790,20 @@ msgstr "Marrón"
 
 #: src/multiplay.cpp:2407
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Modo Espectador"
 
 #: src/multiplay.cpp:2408
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Eres un espectador. ¡Disfruta viendo el juego!"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "JUGANDO AHORA"
 
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:688
 msgid "Album"
-msgstr ""
+msgstr "Álbum"
 
 #: src/musicmanager.cpp:545
 msgid "Date"
@@ -19019,7 +19019,7 @@ msgstr ""
 #: src/spectatorwidgets.cpp:808
 #: src/spectatorwidgets.cpp:810
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tanques / Cíborgs)"
 
 #: src/structure.cpp:2552
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -19359,7 +19359,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Más Información"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
