@@ -7,7 +7,6 @@ const STATE_loser = "loser";
 const STATE_spectator = "spectator";
 const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which you can continue to play
 
-
 // Uses global var: ```idleTime```
 // The time that the player's inactivity is allowed. Actions are considered
 // - unit building
@@ -111,7 +110,6 @@ class Player
 		}
 	}
 }
-
 
 class Team
 {
@@ -312,7 +310,7 @@ function createTeams()
 				// not an allocated slot (is closed or no player / AI)
 				continue;
 			}
-			if ( inTeamPlayNums[splayNum] === false && inOneTeam(playNum, splayNum) === true)
+			if (inTeamPlayNums[splayNum] === false && inOneTeam(playNum, splayNum) === true)
 			{
 				members.push(splayNum);
 				inTeamPlayNums[splayNum] = true;

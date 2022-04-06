@@ -126,7 +126,7 @@ function camSetEnemyBases(bases)
 		{
 			//camDebug("Base", blabel, "defined as empty group");
 		}
-		if(!reload)
+		if (!reload)
 		{
 			bi.detected = false;
 			bi.eliminated = false;

@@ -11,7 +11,6 @@ const MAX_CRANES = 10;
 const CRANE_BODY = "B2crane";
 const CRANE_WEAP = "scavCrane";
 
-
 const derrick = "A0ResourceExtractor";
 const factoryBaba = "A0BaBaFactory";
 const vtolfac = "A0BaBaVtolFactory";
@@ -712,7 +711,6 @@ function eventAttacked(victim, attacker)
 		retreat(victim);
 	}
 }
-
 
 function eventDroidBuilt(droid, fac)
 {

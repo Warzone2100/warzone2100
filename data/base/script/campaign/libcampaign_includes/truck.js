@@ -30,7 +30,6 @@ function camQueueBuilding(player, stat, pos)
 	ti.queue.push({ stat: stat, pos: camMakePos(pos) });
 }
 
-
 //////////// privates
 
 function __camEnumFreeTrucks(player)

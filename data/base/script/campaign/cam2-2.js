@@ -26,7 +26,6 @@ camAreaEvent("vtolRemoveZone", function(droid)
 	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
 });
 
-
 camAreaEvent("group1Trigger", function(droid)
 {
 	hackRemoveMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);

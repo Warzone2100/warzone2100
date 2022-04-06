@@ -26,7 +26,6 @@ var enemyStoleArtifact; //Reached the LZ with the artifact
 var droidWithArtiID; //The droid ID that was closest to the artifact to take it
 var artiMovePos; //where artiGroup members are moving to
 
-
 //These enable scav factories when close enough
 camAreaEvent("northScavFactoryTrigger", function(droid)
 {

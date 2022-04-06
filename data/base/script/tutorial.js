@@ -1,5 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
+
 var consoleVar;
 var tutState;
 var didTheyHelpBuildGen;

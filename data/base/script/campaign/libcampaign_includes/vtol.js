@@ -128,7 +128,7 @@ function __camSpawnVtols()
 		let pos;
 
 		//Make sure to catch multiple start positions also.
-		if(__camVtolDataSystem[idx].startPosition instanceof Array)
+		if (__camVtolDataSystem[idx].startPosition instanceof Array)
 		{
 			pos = __camVtolDataSystem[idx].startPosition[camRand(__camVtolDataSystem[idx].startPosition.length)];
 		}

@@ -37,7 +37,7 @@ function camSendReinforcement(player, position, list, kind, data)
 			order_data = data.data;
 		}
 	}
-	switch(kind)
+	switch (kind)
 	{
 		case CAM_REINFORCE_GROUND:
 			var droids = [];

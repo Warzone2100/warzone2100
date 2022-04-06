@@ -67,7 +67,6 @@ function camEnemyBaseEliminated_COAirBase()
 	camCallOnce("videoTrigger");
 }
 
-
 function enableFactories()
 {
 	camEnableFactory("COHeavyFac-Leopard");
