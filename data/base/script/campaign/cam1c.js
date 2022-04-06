@@ -119,7 +119,6 @@ function getDroidsForNPLZ(args)
 	var heavies = [ cTempl.npslc, cTempl.npsmct ];
 	var useArtillery = (camRand(100) < 50);
 
-
 	var numScouts = camRand(5) + 1;
 	var heavy = heavies[camRand(heavies.length)];
 	var list = [];

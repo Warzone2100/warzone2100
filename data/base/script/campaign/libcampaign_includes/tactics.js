@@ -146,7 +146,7 @@ function camStopManagingGroup(group)
 function camOrderToString(order)
 {
 	var orderString;
-	switch(order)
+	switch (order)
 	{
 		case CAM_ORDER_ATTACK:
 			orderString = "ATTACK";
@@ -206,7 +206,7 @@ function __camPickTarget(group)
 	var gi = __camGroupInfo[group];
 	var droids = enumGroup(group);
 	__camFindGroupAvgCoordinate(group);
-	switch(gi.order)
+	switch (gi.order)
 	{
 		case CAM_ORDER_ATTACK:
 			if (camDef(gi.target))

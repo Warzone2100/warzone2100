@@ -87,7 +87,7 @@ function camNextLevel(nextLevel)
 //;;
 function camSetStandardWinLossConditions(kind, nextLevel, data)
 {
-	switch(kind)
+	switch (kind)
 	{
 		case CAM_VICTORY_STANDARD:
 			__camWinLossCallback = CAM_VICTORY_STANDARD;
@@ -372,7 +372,6 @@ function __camVictoryOffworld()
 				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter((obj) => (
 					obj.type === DROID
 				)).length;
-
 
 				if (!enemyDroids)
 				{

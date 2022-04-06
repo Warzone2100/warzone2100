@@ -159,6 +159,5 @@ nxlpulsev: { body: "Body3MBT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
 nxllinkh: { body: "Body3MBT", prop: "hover02", weap: "NEXUSlink" },
 nxmpulsev: { body: "Body7ABT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
 
-
 ////////////////////////////////////////////////////////////////////////////////
 };

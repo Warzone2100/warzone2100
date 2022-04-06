@@ -177,7 +177,6 @@ function setupNextMission()
 	}
 }
 
-
 //Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {

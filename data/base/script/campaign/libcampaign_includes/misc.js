@@ -155,7 +155,7 @@ function camDist(x1, y1, x2, y2)
 //;;
 function camPlayerMatchesFilter(player, filter)
 {
-	switch(filter) {
+	switch (filter) {
 		case ALL_PLAYERS:
 			return true;
 		case ALLIES:
@@ -248,7 +248,7 @@ function camChangeOnDiff(num)
 //;;
 function camIsSystemDroid(obj)
 {
-	if(!camDef(obj) || !obj)
+	if (!camDef(obj) || !obj)
 	{
 		return false;
 	}
@@ -292,7 +292,7 @@ function camMakeGroup(what, filter)
 	}
 	if (camDef(obj))
 	{
-		switch(obj.type) {
+		switch (obj.type) {
 			case POSITION:
 				obj = getObject(obj.x, obj.y);
 				// fall-through
@@ -403,7 +403,6 @@ function camGenerateRandomMapEdgeCoordinate(reachPosition)
 
 		loc = location;
 	} while (camDef(reachPosition) && reachPosition && !propulsionCanReach("wheeled01", reachPosition.x, reachPosition.y, loc.x, loc.y));
-
 
 	return loc;
 }

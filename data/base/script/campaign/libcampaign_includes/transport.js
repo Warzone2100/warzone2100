@@ -109,7 +109,7 @@ function __camDispatchTransporterUnsafe()
 		camRemoveEnemyTransporterBlip();
 	}
 
-	if(player !== CAM_HUMAN_PLAYER)
+	if (player !== CAM_HUMAN_PLAYER)
 	{
 		playSound("pcv381.ogg"); //Enemy transport detected.
 	}

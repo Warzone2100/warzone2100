@@ -1,5 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
+
 const SCAVENGER_PLAYER = 7;
 
 camAreaEvent("removeObjectiveBlip", function()

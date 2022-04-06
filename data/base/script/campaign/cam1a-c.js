@@ -28,7 +28,7 @@ var switchLZ; //Counter for incrementing index every third landing
 function extraVictoryCondition()
 {
 	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
-	if(index === 5 && enemies.length === 0)
+	if (index === 5 && enemies.length === 0)
 	{
 		return true;
 	}
@@ -93,7 +93,6 @@ function sendTransport()
 		droids[droids.length] = t;
 		droids[droids.length] = t;
 	}
-
 
 	camSendReinforcement(NEW_PARADIGM, position, droids, CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 126, y: 36 },

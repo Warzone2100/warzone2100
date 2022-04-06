@@ -142,7 +142,6 @@ function vaporizeTarget()
 		}
 	}
 
-
 	//Stop firing LasSat if the third missile unlock code was researched.
 	if (winFlag === false)
 	{

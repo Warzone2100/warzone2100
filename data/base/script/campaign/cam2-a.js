@@ -6,7 +6,6 @@ const TRANSPORT_LIMIT = 4;
 var transporterIndex; //Number of transport loads sent into the level
 var startedFromMenu;
 
-
 camAreaEvent("vtolRemoveZone", function(droid)
 {
 	camSafeRemoveObject(droid, false);
