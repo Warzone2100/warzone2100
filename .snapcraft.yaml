@@ -145,7 +145,6 @@ parts:
       - libfontconfig1-dev
       - libfreetype6-dev
       - libfribidi-dev
-      - libglc-dev
       - libharfbuzz-dev
       - libopenal-dev
       - libphysfs-dev
@@ -164,7 +163,6 @@ parts:
       - libfontconfig1
       - libfreetype6
       - libfribidi0
-      - libglc0
       - libharfbuzz0b
       - libogg0
       - libopenal1
