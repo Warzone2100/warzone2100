@@ -74,6 +74,7 @@ parts:
     - libwayland-dev
     - libx11-dev
     - libxcursor-dev
+    - libxfixes-dev
     - libxext-dev
     - libxi-dev
     - libxinerama-dev
@@ -82,11 +83,13 @@ parts:
     - libxrender-dev
     - libxss-dev
     - libxxf86vm-dev
+    - libgbm-dev
     stage-packages:
     - libdbus-1-3
     - libudev1
     - fcitx-libs
     - libdrm2
+    - libgbm1
     - libegl1-mesa
     - libgl1
     - libgles2
@@ -97,11 +100,13 @@ parts:
     - libts0
     - libsndfile1
     - libwayland-client0
+    - libwayland-cursor0
     - libwayland-egl1-mesa
     - libvulkan1
     - libx11-6
     - libxcursor1
     - libxext6
+    - libxfixes3
     - libxi6
     - libxinerama1
     - libxkbcommon0
