@@ -43,8 +43,8 @@ apps:
 
 parts:
   sdl:
-    source: https://www.libsdl.org/release/SDL2-2.0.14.tar.gz
-    source-checksum: sha512/ebc482585bd565bf3003fbcedd91058b2183e333b9ea566d2f386da0298ff970645d9d25c1aa4459c7c96e9ea839fd1c5f2da0242a56892865b2e456cdd027ee
+    source: https://www.libsdl.org/release/SDL2-2.0.20.tar.gz
+    source-checksum: sha512/4889949eaa674948bdb0a01bb2a842a0943b15b08ff27ec0079b0fd4f79d071ffb32488a5a51c12ad7c74ed5fe73b608cdf6336a44c95dae8a0fb3f47d0f01de
     plugin: autotools
     configflags:
     - --prefix=/usr
