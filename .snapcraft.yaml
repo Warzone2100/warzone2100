@@ -25,7 +25,8 @@ plugs:
 
 apps:
   warzone2100:
-    command: desktop-launch usr/bin/warzone2100
+    extensions: [gnome-3-34]
+    command: usr/bin/warzone2100
     common-id: warzone2100 # should match the appdata/metainfo file's <id> field
     desktop: usr/share/applications/warzone2100.desktop
     plugs:
