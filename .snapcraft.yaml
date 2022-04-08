@@ -41,19 +41,7 @@ apps:
       - wayland
       - x11
 
-  download-videos:
-    command: bin/download-videos
-    plugs: [network]
-
 parts:
-  scripts:
-    plugin: dump
-    source: pkg/snap
-    organize:
-      download-videos: bin/download-videos
-    stage-packages:
-      - curl
-
   desktop-qt5:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
     source-subdir: qt
