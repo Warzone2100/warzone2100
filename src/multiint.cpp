@@ -6398,7 +6398,11 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				bool done = recvMapFileData(queue);
 				if (running)
 				{
-					((MultibuttonWidget *)widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW))->enable(done);  // turn preview button on or off
+					auto psWidget = widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW);
+					if (psWidget)
+					{
+						((MultibuttonWidget *)psWidget)->enable(done);  // turn preview button on or off
+					}
 				}
 				// spectators should automatically become ready as soon as necessary files are downloaded
 				// and not-ready when files remain to be downloaded
