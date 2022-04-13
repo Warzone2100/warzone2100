@@ -186,3 +186,30 @@ parts:
       - mesa-vulkan-drivers
       - unzip
       - zip
+
+  # This part removes all the files in this snap which already exist in
+  # connected content and base snaps. Since these files will be available
+  # at runtime from the content and base snaps, they do not need to be
+  # included in this snap itself.
+  #
+  # More info: https://forum.snapcraft.io/t/reducing-the-size-of-desktop-snaps/17280#heading--cleanup-part
+  #
+  cleanup:
+    after:  # Make this part run last; list all your other parts here
+      - sdl
+      - warzone2100
+    plugin: nil
+    build-snaps:  # List all content-snaps and base snaps you're using here
+      - core18
+      - gtk-common-themes
+      - gnome-3-34-1804
+    override-prime: |
+      set -eux
+      for snap in "core18" "gtk-common-themes" "gnome-3-34-1804"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done
+      # The following is required while using core18 + gnome-3-34
+      # See: https://forum.snapcraft.io/t/undefined-symbol-hb-buffer-set-invisible-glyph-with-gnome-3-34/24287
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libharfbuzz.so.0*
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgio-2.0.so.0*
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libglib-2.0.so.0*
