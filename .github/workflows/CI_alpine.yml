@@ -34,7 +34,7 @@ jobs:
     - name: Build the Docker image
       working-directory: '${{ github.workspace }}/src'
       run: |
-        docker build -f docker/alpine-latest/Dockerfile -t alpine .
+        docker build --build-arg UID=$UID -f docker/alpine-latest/Dockerfile -t alpine .
     - name: Prep Directories
       run: |
         mkdir -p "${{ github.workspace }}/build"

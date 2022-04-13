@@ -84,7 +84,7 @@ jobs:
     - name: Build the Docker image
       working-directory: '${{ github.workspace }}/src'
       run: |
-        docker build -f docker/${{ matrix.docker }}/Dockerfile -t ubuntu .
+        docker build --build-arg UID=$UID -f docker/${{ matrix.docker }}/Dockerfile -t ubuntu .
     - name: Compute build variables
       working-directory: '${{ github.workspace }}/src'
       run: |
@@ -203,7 +203,7 @@ jobs:
     - name: Build the Docker image
       working-directory: '${{ github.workspace }}/src'
       run: |
-        docker build -f docker/ubuntu-18.04/Dockerfile -t ubuntu .
+        docker build --build-arg UID=$UID -f docker/ubuntu-18.04/Dockerfile -t ubuntu .
     - name: Prep Directories
       run: |
         mkdir -p "${{ github.workspace }}/build"
@@ -274,7 +274,7 @@ jobs:
   #       docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   #   - name: Build the Docker image
   #     run: |
-  #       docker build -f docker/ubuntu-20.04/Dockerfile.arm64 -t ubuntu .
+  #       docker build --build-arg UID=$UID -f docker/ubuntu-20.04/Dockerfile.arm64 -t ubuntu .
   #   - name: CMake Configure
   #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
   #   - name: CMake Build

@@ -52,6 +52,16 @@ RUN echo "$SODIUM_SHA256 /tmp/libsodium-1.0.18.tar.gz" | sha256sum -c \
  && cd /tmp \
  && rm -rf /tmp/libsodium-1.0.18
 
+# Defines arguments which can be passed during build time.
+ARG USER=warzone2100
+ARG UID=1000
+# Create a user with given UID.
+RUN useradd -d /home/warzone2100 -m -g root -u "$UID" "$USER"
+# Switch to warzone2100 user by default.
+USER warzone2100
+# Check the current uid of the user.
+RUN id
+
 WORKDIR /code
 CMD ["sh"]
 
