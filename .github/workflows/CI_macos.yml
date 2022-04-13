@@ -49,7 +49,7 @@ jobs:
     runs-on: '${{ matrix.image }}'
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
-      MACOSX_DEPLOYMENT_TARGET: '10.10'
+      MACOSX_DEPLOYMENT_TARGET: '10.9'
       VSCMD_SKIP_SENDTELEMETRY: 1
       DESIRED_XCODE_DEV_DIR: '${{ matrix.xcode_dev_dir }}'
       WZ_INCLUDE_VIDEOS: '${{ matrix.include_videos }}'
