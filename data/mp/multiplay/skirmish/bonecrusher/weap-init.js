@@ -53,7 +53,7 @@ var guns=[
 
 
 //Типы пушек, по приоритету
-var guns_type = [];
+var guns_type = {};
 
 
 //Пулемёты
@@ -130,7 +130,7 @@ guns_type['rl'] = [
 ["R-Wpn-RailGun03", "RailGun3Mk1"],					//Gauss Cannon
 ];
 
-var guns_pts = [];
+var guns_pts = {};
 guns_pts['mg'] = [
 'R-Wpn-MG3Mk1',
 'R-Wpn-MG4',
