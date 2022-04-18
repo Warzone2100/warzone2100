@@ -4931,7 +4931,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 		PHYSFS_mkdir(pathToThisSaveDir.c_str());
 	}
 	const std::string saveInfoJsonFilename = pathToThisSaveDir + "save-info.json";
-	const std::string jsonFileName = pathToThisSaveDir + gameName + ".json";
+	const std::string jsonFileName = pathToThisSaveDir + "gam.json";
 	auto gamJson = nlohmann::json::object();
 	
 	if (!PHYSFS_exists(saveInfoJsonFilename.c_str()))
@@ -4972,9 +4972,22 @@ static nonstd::optional<nlohmann::json> readGamJson(const char* filenameWithGamE
 	ASSERT(lastSep > 0, "unexpected filename format: '%s'", filenameWithGamExtension);
 	const std::string lastSegment(filenameWithGamExtension, lastSep + 1, filenameWithGamExtensionStr.size() - lastSep - 5);
 	const std::string commonPath(filenameWithGamExtension, 0, filenameWithGamExtensionStr.size() - lastSegment.size() - 4);
-	const std::string gamJson = commonPath + lastSegment + "/" + lastSegment + ".json";
-	debug(LOG_SAVEGAME, "last segment was %s, common path %s, save-info %s", lastSegment.c_str(), commonPath.c_str(), gamJson.c_str());
-	return parseJsonFile(gamJson.c_str());
+	const std::string containingFolder = commonPath + lastSegment + "/";
+	// "gam.json" in the containingFolder
+	const std::string gamJson = containingFolder + "gam.json";
+	auto result = parseJsonFile(gamJson.c_str());
+	if (result.has_value())
+	{
+		debug(LOG_SAVEGAME, "last segment was %s, common path %s, save-info %s", lastSegment.c_str(), commonPath.c_str(), gamJson.c_str());
+	}
+	else
+	{
+		// FALLBACK for older saves: prior behavior was to save "<lastSegment>.json" in the containingFolder
+		const std::string oldGamJsonPath = containingFolder + lastSegment + ".json";
+		debug(LOG_SAVEGAME, "last segment was %s, common path %s, save-info %s", lastSegment.c_str(), commonPath.c_str(), oldGamJsonPath.c_str());
+		result = parseJsonFile(oldGamJsonPath.c_str());
+	}
+	return result;
 }
 
 nonstd::optional<nlohmann::json> parseJsonFile(const char *filename)
