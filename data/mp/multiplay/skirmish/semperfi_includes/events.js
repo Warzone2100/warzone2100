@@ -183,7 +183,7 @@ function eventBeacon(x, y, from, to, message)
 		var enemyObjects = enumRange(x, y, BEACON_SCAN_RADIUS, ENEMIES, false);
 		if (enemyObjects.length > 0)
 		{
-			for (var i = 0, l = enemyObjects.length; i < l; ++i)
+			for (var i = 0; i < enemyObjects.length; ++i)
 			{
 				var obj = enemyObjects[i];
 				if (obj)

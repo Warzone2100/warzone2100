@@ -99,7 +99,7 @@ function evalResearch(labID, list)
 	{
 		return true;
 	}
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (var i = 0; i < list.length; ++i)
 	{
 		if (!getResearch(list[i]).done && pursueResearch(lab, list[i]))
 		{
@@ -130,7 +130,7 @@ function lookForResearch(tech, labParam)
 		));
 	}
 
-	for (var i = 0, r = labList.length; i < r; ++i)
+	for (var i = 0; i < labList.length; ++i)
 	{
 		var lab = labList[i];
 		var found = evalResearch(lab.id, FUNDAMENTALS);

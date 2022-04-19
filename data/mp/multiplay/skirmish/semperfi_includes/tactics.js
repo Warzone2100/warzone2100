@@ -390,7 +390,7 @@ function scanForVTOLs()
 	}
 
 	var visibleEnemyDroids = enumDroid(myEnemy, DROID_WEAPON, true);
-	for (var i = 0, l = visibleEnemyDroids.length; i < l; ++i)
+	for (var i = 0; i < visibleEnemyDroids.length; ++i)
 	{
 		if (isVTOL(visibleEnemyDroids[i]))
 		{

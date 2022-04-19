@@ -42,7 +42,7 @@ function findIdleTrucks(obj)
 		obj = BASE;
 	}
 
-	for (var i = 0, d = builders.length; i < d; ++i)
+	for (var i = 0; i < builders.length; ++i)
 	{
 		if (conCanHelp(builders[i], obj.x, obj.y))
 		{
@@ -59,7 +59,7 @@ function demolishThis(object)
 	var success = false;
 	var droidList = findIdleTrucks(object);
 
-	for (var i = 0, d = droidList.length; i < d; ++i)
+	for (var i = 0; i < droidList.length; ++i)
 	{
 		if (orderDroidObj(droidList[i], DORDER_DEMOLISH, object))
 		{
@@ -86,7 +86,7 @@ function grabTrucksAndBuild(structure, maxBlockingTiles)
 	var droidList = findIdleTrucks();
 	var found = false;
 
-	for (var i = 0, d = droidList.length; i < d; ++i)
+	for (var i = 0; i < droidList.length; ++i)
 	{
 		var result = pickStructLocation(droidList[i], structure, BASE.x, BASE.y, maxBlockingTiles);
 		if (result)
@@ -192,7 +192,7 @@ function bringBackOilBuilders()
 {
 	var builders = enumGroup(oilBuilders);
 
-	for (var i = 0, len = builders.length; i < len; ++i)
+	for (var i = 0; i < builders.length; ++i)
 	{
 		if (builders[i].order !== DORDER_BUILD &&
 			builders[i].order !== DORDER_RTB &&
@@ -212,7 +212,7 @@ function skipOilGrabIfEasy()
 		)).length;
 		var enemies = getAliveEnemyPlayers();
 
-		for (var i = 0, len = enemies.length; i < len; ++i)
+		for (var i = 0; i < enemies.length; ++i)
 		{
 			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(DERRICK_STAT, enemies[i]) && enemies[i] !== scavengerPlayer)
 			{
@@ -240,9 +240,9 @@ function lookForOil()
 	var success = false;
 	//log("looking for oil... " + oils.length + " available");
 
-	for (var i = 0, oilLen = oils.length; i < oilLen; ++i)
+	for (var i = 0; i < oils.length; ++i)
 	{
-		for (var j = 0, drLen = droids.length; j < drLen; ++j)
+		for (var j = 0; j < droids.length; ++j)
 		{
 			var droid = droids[j];
 			var oil = oils[i];
@@ -291,7 +291,7 @@ function buildAntiAir(buildExtras)
 		return false;
 	}
 
-	for (var j = 0, s = SAM_SITES.length; j < s; ++j)
+	for (var j = 0; j < SAM_SITES.length; ++j)
 	{
 		if (grabTrucksAndBuild(SAM_SITES[j], 1))
 		{
@@ -637,7 +637,7 @@ function checkResearchCompletion()
 		//log("Done researching - salvage unusable buildings");
 		researchDone = true; // and do not rebuild them
 		var labList = enumStruct(me, RES_LAB_STAT);
-		for (var i = 0, l = labList.length; i < l; ++i)
+		for (var i = 0; i < labList.length; ++i)
 		{
 			var lab = labList[i];
 			if (!structureIdle(lab))
@@ -672,12 +672,12 @@ function maintenance()
 		{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY_STAT}
 	];
 
-	for (var i = 0, l = modList.length; i < l; ++i)
+	for (var i = 0; i < modList.length; ++i)
 	{
 		if (isStructureAvailable(modList[i].mod))
 		{
 			structList = enumStruct(me, modList[i].structure).sort(sortByDistToBase);
-			for (var c = 0, s = structList.length; c < s; ++c)
+			for (var c = 0; c < structList.length; ++c)
 			{
 				if (structList[c].modules < modList[i].amount)
 				{
@@ -697,7 +697,7 @@ function maintenance()
 	{
 		//log("Found a structure to upgrade");
 		var builders = findIdleTrucks(struct);
-		for (var j = 0, t = builders.length; j < t; ++j)
+		for (var j = 0; j < builders.length; ++j)
 		{
 			var mydroid = builders[j];
 			if (conCanHelp(mydroid, struct.x, struct.y))

@@ -62,7 +62,7 @@ function isDerrick(obj)
 function setupTruckGroups()
 {
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
+	for (var i = 0; i < cons.length; ++i)
 	{
 		var droid = cons[i];
 		if (l < MIN_BASE_TRUCKS)
