@@ -79,7 +79,7 @@ function arrayContains(what, array)
 		return false;
 	}
 
-	for (var i = 0, len = array.length; i < len; ++i)
+	for (var i = 0; i < array.length; ++i)
 	{
 		if (what === array[i])
 		{
@@ -118,7 +118,7 @@ function groupNearCoordinate(group, loc, range)
 	var count = 0;
 	var members = enumGroup(group);
 
-	for (var i = 0, len = members.length; i < len; ++i)
+	for (var i = 0; i < members.length; ++i)
 	{
 		var dr = members[i];
 
@@ -174,11 +174,11 @@ function baseDetails(player)
 	var baseRadius = 4;
 	var tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 
-	for (var i = 0, len = STANDARD_BASE_STRUCTURES.length; i < len; ++i)
+	for (var i = 0; i < STANDARD_BASE_STRUCTURES.length; ++i)
 	{
 		var sObjs = enumStruct(player, STANDARD_BASE_STRUCTURES[i]);
 
-		for (var j = 0, len2 = sObjs.length; j < len2; ++j)
+		for (var j = 0; j < sObjs.length; ++j)
 		{
 			var struct = sObjs[j];
 
@@ -356,7 +356,7 @@ function threatInRange(x, y, player, scanRadius, visible)
 
 	var stuff = enumRange(x, y, scanRadius, player, visible);
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (var i = 0; i < stuff.length; ++i)
 	{
 		var obj = stuff[i];
 
@@ -424,7 +424,7 @@ function numWeapObjectsInRange(x, y, player, scanRadius, visible)
 	var stuff = enumRange(x, y, scanRadius, player, visible);
 	var count = {structures: 0, droids: 0, safe: true};
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (var i = 0; i < stuff.length; ++i)
 	{
 		var obj = stuff[i];
 
@@ -463,7 +463,7 @@ function numGroupSameOrder(group, order)
 	var numSame = 0;
 	var grp = enumGroup(group);
 
-	for (var i = 0, len = grp.length; i < len; ++i)
+	for (var i = 0; i < grp.length; ++i)
 	{
 		if (grp[i].order === order)
 		{

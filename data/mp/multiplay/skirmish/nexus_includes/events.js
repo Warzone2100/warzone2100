@@ -147,7 +147,7 @@ function eventDroidBuilt(droid, structure)
 		}
 		else
 		{
-			for (var i = 0, len = groups.vtolAttackers.length; i < len; ++i)
+			for (var i = 0; i < groups.vtolAttackers.length; ++i)
 			{
 				if (enumGroup(groups.vtolAttackers[i]).length < nexusBranch[branch].numVtolsPerGroup)
 				{
@@ -251,7 +251,7 @@ function eventDestroyed(what)
 	else if (what.type === STRUCTURE)
 	{
 		// add certain structures to the rebuild list
-		for (var i = 0, len = STANDARD_REBUILD_STRUCTURES.length; i < len; ++i)
+		for (var i = 0; i < STANDARD_REBUILD_STRUCTURES.length; ++i)
 		{
 			var obj = STANDARD_REBUILD_STRUCTURES[i];
 

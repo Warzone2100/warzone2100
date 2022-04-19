@@ -118,7 +118,7 @@ function tryAttackingVtolTarget(group, targetData)
 
 		var attackers = enumGroup(group);
 
-		for (var i = 0, len = attackers.length; i < len; ++i)
+		for (var i = 0; i < attackers.length; ++i)
 		{
 			var vtol = attackers[i];
 
@@ -222,12 +222,12 @@ function chooseVtolTarget(exclusive)
 			continue;
 		}
 
-		for (var j = 0, len = nexusBranch[branch].vtolTargets.length; j < len; ++j)
+		for (var j = 0; j < nexusBranch[branch].vtolTargets.length; ++j)
 		{
 			var ttype = nexusBranch[branch].vtolTargets[j].structure;
 			var structs = enumStruct(i, ttype);
 
-			for (var c = 0, len2 = structs.length; c < len2; ++c)
+			for (var c = 0; c < structs.length; ++c)
 			{
 				var st = structs[c];
 				var obj = {type: st.type, player: st.player, id: st.id};
@@ -280,7 +280,7 @@ function getVtolTargetWeight(what)
 		return 0;
 	}
 
-	for (var i = 0, len = nexusBranch[branch].vtolTargets.length; i < len; ++i)
+	for (var i = 0; i < nexusBranch[branch].vtolTargets.length; ++i)
 	{
 		var type = nexusBranch[branch].vtolTargets[i];
 
@@ -315,7 +315,7 @@ function numEnemyAAInRange(x, y, range)
 	var total = 0;
 	var stuff = enumRange(x, y, range, ENEMIES, false);
 
-	for (var i = 0, len = stuff.length; i < len; ++i)
+	for (var i = 0; i < stuff.length; ++i)
 	{
 		var s = stuff[i];
 

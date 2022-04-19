@@ -53,7 +53,7 @@ function getVirtualSystemCount()
 
 function hoverPropulsionAvailable()
 {
-	for (var i = 0, len = HOVER_PROPULSIONS.length; i < len; ++i)
+	for (var i = 0; i < HOVER_PROPULSIONS.length; ++i)
 	{
 		if (componentAvailable(HOVER_PROPULSIONS[i]))
 		{
@@ -86,7 +86,7 @@ function produceConstructors()
 	var factories = enumStruct(me, BASE_STRUCTURES.factories);
 	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
-	for (var i = 0, len = factories.length; i < len; ++i)
+	for (var i = 0; i < factories.length; ++i)
 	{
 		var factory = factories[i];
 
@@ -113,7 +113,7 @@ function produceConstructors()
 	}
 
 	// build cyborg engineers if needed, no building limit here
-	for (var i = 0, len = cybFactories.length; i < len; ++i)
+	for (var i = 0; i < cybFactories.length; ++i)
 	{
 		var cybFactory = cybFactories[i];
 
@@ -194,7 +194,7 @@ function getBestRandomTemplate(type, offset)
 		{
 			var num = 0;
 
-			for (var i = 0, len = tmp.weaps.length; i < len; ++i)
+			for (var i = 0; i < tmp.weaps.length; ++i)
 			{
 				if (componentAvailable(tmp.weaps[i]))
 				{
@@ -258,7 +258,7 @@ function getBestRepairTemplate(cyborgFlag)
 {
 	var templates = defined(cyborgFlag) ? STANDARD_CYBORG_MECHANIC_TEMPLATES : STANDARD_TANK_REPAIRS;
 
-	for (var i = 0, len = templates.length; i < len; ++i)
+	for (var i = 0; i < templates.length; ++i)
 	{
 		var tmp = templates[i];
 
@@ -278,7 +278,7 @@ function produceGroundUnits()
 	var factories = enumStruct(me, BASE_STRUCTURES.factories);
 	var totalReps = (getVirtualSystemCount().repairs + enumDroid(me, DROID_REPAIR).length);
 
-	for (var i = 0, len = factories.length; i < len; ++i)
+	for (var i = 0; i < factories.length; ++i)
 	{
 		var factory = factories[i];
 
@@ -329,7 +329,7 @@ function produceCyborgs()
 	var success = false;
 	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
-	for (var i = 0, len = cybFactories.length; i < len; ++i)
+	for (var i = 0; i < cybFactories.length; ++i)
 	{
 		var cybFactory = cybFactories[i];
 
@@ -377,7 +377,7 @@ function produceVtols()
 	var success = false;
 	var vtolFactories = enumStruct(me, BASE_STRUCTURES.vtolFactories);
 
-	for (var i = 0, len = vtolFactories.length; i < len; ++i)
+	for (var i = 0; i < vtolFactories.length; ++i)
 	{
 		var vtolFactory = vtolFactories[i];
 
@@ -424,7 +424,7 @@ function productionMain()
 	}
 
 	//NOTE: Manufacturing is queued from here on out. 1 tick per "type" of factory.
-	for (var i = 0, len = nexusBranch[branch].factoryPreference.length; i < len; ++i)
+	for (var i = 0; i < nexusBranch[branch].factoryPreference.length; ++i)
 	{
 		var pref = nexusBranch[branch].factoryPreference[i];
 

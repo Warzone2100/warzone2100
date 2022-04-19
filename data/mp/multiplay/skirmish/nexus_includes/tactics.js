@@ -14,7 +14,7 @@ function structureTypeValue(what)
 		return 0;
 	}
 
-	for (var i = 0, len = STANDARD_TARGET_WEIGHTS.length; i < len; ++i)
+	for (var i = 0; i < STANDARD_TARGET_WEIGHTS.length; ++i)
 	{
 		var target = STANDARD_TARGET_WEIGHTS[i];
 
@@ -74,7 +74,7 @@ function orderGroupLoc(group, x, y, order)
 
 	var droids = enumGroup(group);
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 
@@ -110,7 +110,7 @@ function findMostValuableTarget()
 	var bestTarget;
 	var bestValue = 0;
 
-	for (var i = 0, len = objects.length; i < len; ++i)
+	for (var i = 0; i < objects.length; ++i)
 	{
 		var obj = objects[i];
 

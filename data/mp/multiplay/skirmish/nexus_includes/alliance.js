@@ -102,7 +102,7 @@ function tryBreakingAlliance()
 {
 	var allies = getAllyPlayers(true);
 
-	for (var i = 0, len = allies.length; i < len; ++i)
+	for (var i = 0; i < allies.length; ++i)
 	{
 		var ally = allies[i];
 		var breakIt = false;
