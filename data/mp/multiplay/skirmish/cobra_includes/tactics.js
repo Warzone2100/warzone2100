@@ -170,7 +170,7 @@ function checkAllForRepair()
 	}
 
 	var droids = enumGroup(attackGroup);
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		repairDroid(droids[i].id);
 	}
@@ -345,7 +345,7 @@ function groundTactics()
 				return;
 			}
 
-			for (var i = 0, l = UNITS.length; i < l; ++i)
+			for (var i = 0; i < UNITS.length; ++i)
 			{
 				var id = UNITS[i].id;
 
@@ -680,7 +680,7 @@ function baseShuffleDefensePattern()
 	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
 	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
 	const MAX_NEARBY_STRUCTURES = 2;
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (var i = 0; i < attackers.length; ++i)
 	{
 		if (attackers[i].order !== DORDER_HOLD)
 		{
@@ -717,7 +717,7 @@ function lowOilDefensePattern()
 		return;
 	}
 
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (var i = 0; i < attackers.length; ++i)
 	{
 		var derr = derricks[random(derricks.length)];
 		orderDroidLoc(attackers[i], DORDER_SCOUT, derr.x, derr.y);
@@ -755,7 +755,7 @@ function retreatTactics()
 	var droids = enumGroup(retreatGroup);
 
 	//Flee!
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter((obj) => (

@@ -52,7 +52,7 @@ function unfinishedStructures()
 		obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR
 	));
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (var i = 0; i < stuff.length; ++i)
 	{
 		var s = stuff[i];
 		if (s.stattype === DEFENSE && ((!componentAvailable("hover01") || (distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, s.x, s.y) > SAFE_DIST))))
@@ -99,7 +99,7 @@ function findIdleTrucks(group)
 		builders = enumGroup(group);
 	}
 
-	for (var i = 0, s = builders.length; i < s; i++)
+	for (var i = 0; i < builders.length; i++)
 	{
 		var con = builders[i];
 		if (conCanHelp(con.id, con.x, con.y))
@@ -162,7 +162,7 @@ function fastDefendSpot(structure, droid)
 		var sensor;
 		//const CB_TOWER = "Sys-CB-Tower01";
 		const TOWERS = [ "Sys-SensoTowerWS", "Sys-SensoTower02" ];
-		for (var i = 0, len = TOWERS.length; i < len; ++i)
+		for (var i = 0; i < TOWERS.length; ++i)
 		{
 			var sen = TOWERS[i];
 			if (isStructureAvailable(sen))
@@ -209,7 +209,7 @@ function protectUnguardedDerricks(droid)
 			var found = false;
 			var objects = enumRange(derrs[i].x, derrs[i].y, (HIGH_OIL) ? 4 : 8, me, false);
 
-			for (var c = 0, u = objects.length; c < u; ++c)
+			for (var c = 0; c < objects.length; ++c)
 			{
 				if ((objects[c].type === STRUCTURE) && (objects[c].stattype === DEFENSE))
 				{
@@ -351,7 +351,7 @@ function checkUnfinishedStructures(group)
 	}
 
 	var structs = unfinishedStructures();
-	for (var i = 0, len = structs.length; i < len; ++i)
+	for (var i = 0; i < structs.length; ++i)
 	{
 		var structure = getObject(STRUCTURE, me, structs[i]);
 		if (structure === null)
@@ -360,7 +360,7 @@ function checkUnfinishedStructures(group)
 		}
 
 		var trucks = findIdleTrucks(group);
-		for (var j = 0, len2 = trucks.length; j < len2; ++j)
+		for (var j = 0; j < trucks.length; ++j)
 		{
 			var truck = getObject(DROID, me, trucks[j]);
 			if (truck === null)
@@ -382,7 +382,7 @@ function holdAllOilTrucks()
 {
 	var oilGrabbers = enumGroup(oilGrabberGroup);
 
-	for (var i = 0, len = oilGrabbers.length; i < len; ++i)
+	for (var i = 0; i < oilGrabbers.length; ++i)
 	{
 		if (oilGrabbers[i].order !== DORDER_RECYCLE &&
 			oilGrabbers[i].order !== DORDER_HOLD)
@@ -401,7 +401,7 @@ function skipOilGrabIfEasy()
 		)).length;
 		var enemies = findLivingEnemies();
 
-		for (var i = 0, len = enemies.length; i < len; ++i)
+		for (var i = 0; i < enemies.length; ++i)
 		{
 			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(structures.derrick, enemies[i]))
 			{
@@ -443,13 +443,13 @@ function lookForOil()
 		return;
 	}
 
-	for (var i = 0, oilLen = oils.length; i < oilLen; i++)
+	for (var i = 0; i < oils.length; i++)
 	{
 		var bestDroid;
 		var bestDist = Infinity;
 		var oil = oils[i];
 
-		for (var j = 0, drLen = droids.length; j < drLen; j++)
+		for (var j = 0; j < droids.length; j++)
 		{
 			var droid = droids[j];
 			var dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
@@ -525,7 +525,7 @@ function returnDefense(type)
 	if (random(100) < ELECTRONIC_CHANCE)
 	{
 		var avail = 0;
-		for (var i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
+		for (var i = 0; i < ELECTRONIC_DEFENSES.length; ++i)
 		{
 			if(isStructureAvailable(ELECTRONIC_DEFENSES[i]))
 			{
@@ -1025,7 +1025,7 @@ function maintenance(group)
 		modList = modList.reverse();
 	}
 
-	for (var i = 0, l = modList.length; i < l; ++i)
+	for (var i = 0; i < modList.length; ++i)
 	{
 		var modObj = modList[i];
 
@@ -1044,7 +1044,7 @@ function maintenance(group)
 				structList = structList.reverse();
 			}
 
-			for (var c = 0, s = structList.length; c < s; ++c)
+			for (var c = 0; c < structList.length; ++c)
 			{
 				if (structList[c].modules < modObj.amount)
 				{

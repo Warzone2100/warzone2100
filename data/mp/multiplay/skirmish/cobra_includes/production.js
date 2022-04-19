@@ -51,7 +51,7 @@ function shuffleWeaponList(weaps)
 {
 	var weaponList = [];
 
-	for (var i = 0, w = weaps.length; i < w; ++i)
+	for (var i = 0; i < weaps.length; ++i)
 	{
 		weaponList.push(weaps[i].stat);
 	}
@@ -283,7 +283,7 @@ function useHover(weap)
 
 	var useHover = false;
 
-	for (var i = 0, w = weap.length; i < w; ++i)
+	for (var i = 0; i < weap.length; ++i)
 	{
 		const NAME = weap[i];
 
@@ -506,7 +506,7 @@ function analyzeQueuedSystems()
 	var trucks = 0;
 	var sens = 0;
 
-	for (var i = 0, l = fac.length; i < l; ++i)
+	for (var i = 0; i < fac.length; ++i)
 	{
 		var virDroid = getDroidProduction(fac[i]);
 		if (virDroid !== null)
@@ -577,7 +577,7 @@ function produce()
 			{
 				continue;
 			}
-			for (var x = 0, l = fac.length; x < l; ++x)
+			for (var x = 0; x < fac.length; ++x)
 			{
 				const FC = fac[x];
 				if (!(FC && FC.status === BUILT))

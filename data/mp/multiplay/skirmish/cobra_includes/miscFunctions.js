@@ -70,7 +70,7 @@ function distanceToBase(obj1, obj2)
 
 function addDroidsToGroup(group, droids)
 {
-	for (var i = 0, d = droids.length; i < d; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		groupAdd(group, droids[i]);
 	}
@@ -233,7 +233,7 @@ function getMostHarmfulPlayer()
 			return 0; //If nothing to attack, then attack player 0 (happens only after winning).
 		}
 
-	 	for (var x = 0, c = enemies.length; x < c; ++x)
+	 	for (var x = 0; x < enemies.length; ++x)
 		{
 	 		if((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
 			{
@@ -365,7 +365,7 @@ function initCobraGroups()
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter((obj) => (obj.isCB)));
 
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
+	for (var i = 0; i < cons.length; ++i)
 	{
 		var con = cons[i];
 
