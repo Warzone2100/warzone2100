@@ -89,7 +89,7 @@ function camSetFactoryData(flabel, fdata)
 	{
 		fi.group = camNewGroup();
 	}
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 		groupAdd(fi.group, droid);
@@ -187,7 +187,7 @@ function camUpgradeOnMapTemplates(t1, t2, player, excluded)
 
 	var droidsOnMap = enumDroid(player);
 
-	for (var i = 0, l = droidsOnMap.length; i < l; ++i)
+	for (var i = 0; i < droidsOnMap.length; ++i)
 	{
 		var dr = droidsOnMap[i];
 		if (!camDef(dr.weapons[0]))
@@ -205,7 +205,7 @@ function camUpgradeOnMapTemplates(t1, t2, player, excluded)
 			{
 				if (excluded instanceof Array)
 				{
-					for (var j = 0, c = excluded.length; j < c; ++j)
+					for (var j = 0; j < excluded.length; ++j)
 					{
 						if (dr.id === excluded[j])
 						{
@@ -309,7 +309,7 @@ function __camChangePropulsionOnDiff(propulsion)
 		name = name.substring(0, name.length - 2);
 	}
 
-	for (var i = 0, l = VALID_PROPS.length; i < l; ++i)
+	for (var i = 0; i < VALID_PROPS.length; ++i)
 	{
 		var currentProp = VALID_PROPS[i];
 		if (name === currentProp)

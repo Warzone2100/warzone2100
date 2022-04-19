@@ -16,7 +16,7 @@ function camMarkTiles(label)
 	}
 	else
 	{
-		for (var i = 0, l = label.length; i < l; ++i)
+		for (var i = 0; i < label.length; ++i)
 		{
 			__camMarkedTiles[label[i]] = true;
 		}
@@ -37,7 +37,7 @@ function camUnmarkTiles(label)
 	}
 	else
 	{
-		for (var i = 0, l = label.length; i < l; ++i)
+		for (var i = 0; i < label.length; ++i)
 		{
 			delete __camMarkedTiles[label[i]];
 		}

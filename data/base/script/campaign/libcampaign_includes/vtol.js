@@ -44,7 +44,7 @@ function camSetVtolSpawnState(state, identifier)
 	}
 	else if (typeof identifier === "string")
 	{
-		for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+		for (let idx = 0; idx < __camVtolDataSystem.length; ++idx)
 		{
 			if (__camVtolDataSystem[idx].spawnStopObject === identifier)
 			{
@@ -61,7 +61,7 @@ function camSetVtolSpawnState(state, identifier)
 
 function camSetVtolSpawnStateAll(state)
 {
-	for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+	for (let idx = 0; idx < __camVtolDataSystem.length; ++idx)
 	{
 		camSetVtolSpawnState(state, idx);
 	}
@@ -71,7 +71,7 @@ function camSetVtolSpawnStateAll(state)
 
 function __checkVtolSpawnObject()
 {
-	for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+	for (let idx = 0; idx < __camVtolDataSystem.length; ++idx)
 	{
 		if (__camVtolDataSystem[idx].active && camDef(__camVtolDataSystem[idx].spawnStopObject))
 		{
@@ -216,10 +216,10 @@ function __camRetreatVtols()
 			const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
 			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => (isVTOL(obj)));
 
-			for (let i = 0, len = vtols.length; i < len; ++i)
+			for (let i = 0; i < vtols.length; ++i)
 			{
 				let vt = vtols[i];
-				for (let c = 0, len2 = vt.weapons.length; c < len2; ++c)
+				for (let c = 0; c < vt.weapons.length; ++c)
 				{
 					if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
 					{

@@ -28,7 +28,7 @@ function camInNeverGroup(droid)
 		camDebug("Non-droid in camInNeverGroup.");
 		return false;
 	}
-	for (var i = 0, l = __camNeverGroupDroids.length; i < l; ++i)
+	for (var i = 0; i < __camNeverGroupDroids.length; ++i)
 	{
 		var neverDroidID = __camNeverGroupDroids[i];
 		if (droid.id === neverDroidID)
@@ -90,7 +90,7 @@ function camNeverGroupDroid(what, filter)
 	}
 	if (camDef(array))
 	{
-		for (var i = 0, l = array.length; i < l; ++i)
+		for (var i = 0; i < array.length; ++i)
 		{
 			var o = array[i];
 			if (!camDef(o) || !o)

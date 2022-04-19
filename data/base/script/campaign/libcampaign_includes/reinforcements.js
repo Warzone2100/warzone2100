@@ -41,7 +41,7 @@ function camSendReinforcement(player, position, list, kind, data)
 	{
 		case CAM_REINFORCE_GROUND:
 			var droids = [];
-			for (var i = 0, l = list.length; i < l; ++i)
+			for (var i = 0; i < list.length; ++i)
 			{
 				var template = list[i];
 				var prop = __camChangePropulsionOnDiff(template.prop);

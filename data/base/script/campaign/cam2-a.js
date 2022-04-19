@@ -199,7 +199,7 @@ function cam2Setup()
 		"R-Wpn-RocketSlow-Damage04", "R-Sys-Sensor-Upgrade01"
 	];
 
-	for (var x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
+	for (var x = 0; x < STRUCTS_ALPHA.length; ++x)
 	{
 		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}
@@ -232,7 +232,7 @@ function setUnitRank(transport)
 		droids = enumDroid(CAM_HUMAN_PLAYER).filter((dr) => (!camIsTransporter(dr)));
 	}
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 		if (!camIsSystemDroid(droid))

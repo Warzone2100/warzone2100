@@ -127,7 +127,7 @@ function findBetaUnitIds()
 		obj.type === DROID
 	));
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		betaUnitIds.push(droids[i].id);
 	}
@@ -143,9 +143,9 @@ function betaAlive()
 	var alive = false;
 	var myDroids = enumDroid(CAM_HUMAN_PLAYER);
 
-	for (var i = 0, l = betaUnitIds.length; i < l; ++i)
+	for (var i = 0; i < betaUnitIds.length; ++i)
 	{
-		for (var x = 0, c = myDroids.length; x < c; ++x)
+		for (var x = 0; x < myDroids.length; ++x)
 		{
 			if (myDroids[x].id === betaUnitIds[i])
 			{

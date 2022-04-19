@@ -100,7 +100,7 @@ function camManageGroup(group, order, data)
 		{
 			saneData.pos = [ saneData.pos ];
 		}
-		for (var i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
+		for (var i = 0; i < saneData.pos.length; ++i) // array of labels?
 		{
 			saneData.pos[i] = camMakePos(saneData.pos[i]);
 		}
@@ -397,7 +397,7 @@ function __camTacticsTickForGroup(group)
 	//repair
 	if (repair.hasFacility || camDef(repair.pos))
 	{
-		for (var i = 0, len = rawDroids.length; i < len; ++i)
+		for (var i = 0; i < rawDroids.length; ++i)
 		{
 			var droid = rawDroids[i];
 			var repairLikeAction = false;
@@ -445,11 +445,11 @@ function __camTacticsTickForGroup(group)
 		var groupY = ret.yav[ret.maxIdx];
 		var droids = ret.clusters[ret.maxIdx];
 
-		for (var i = 0, len = ret.clusters.length; i < len; ++i)
+		for (var i = 0; i < ret.clusters.length; ++i)
 		{
 			if (i !== ret.maxIdx) // move other droids towards main cluster
 			{
-				for (var j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
+				for (var j = 0; j < ret.clusters[i].length; ++j)
 				{
 					var droid = ret.clusters[i][j];
 					if (droid.order !== DORDER_RTR)
@@ -464,7 +464,7 @@ function __camTacticsTickForGroup(group)
 		// not enough droids grouped?
 		if (gi.count < 0 ? (ret.maxCount < groupSize(group) * 0.66) : (ret.maxCount < gi.count))
 		{
-			for (var i = 0, len = droids.length; i < len; ++i)
+			for (var i = 0; i < droids.length; ++i)
 			{
 				var droid = droids[i];
 				if (droid.order === DORDER_RTR)
@@ -515,7 +515,7 @@ function __camTacticsTickForGroup(group)
 	var defending = (gi.order === CAM_ORDER_DEFEND);
 	var track = (gi.order === CAM_ORDER_COMPROMISE);
 
-	for (var i = 0, len = healthyDroids.length; i < len; ++i)
+	for (var i = 0; i < healthyDroids.length; ++i)
 	{
 		var droid = healthyDroids[i];
 		var vtolUnit = (droid.type === DROID && isVTOL(droid));
@@ -592,7 +592,7 @@ function __camTacticsTickForGroup(group)
 				{
 					// find random new position to visit
 					var list = [];
-					for (var j = 0, len2 = gi.data.pos.length; j < len2; ++j)
+					for (var j = 0; j < gi.data.pos.length; ++j)
 					{
 						if (j !== gi.lastspot)
 						{

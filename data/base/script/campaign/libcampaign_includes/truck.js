@@ -36,7 +36,7 @@ function __camEnumFreeTrucks(player)
 {
 	var rawDroids = enumDroid(player, DROID_CONSTRUCT);
 	var droids = [];
-	for (var i = 0, l = rawDroids.length; i < l; ++i)
+	for (var i = 0; i < rawDroids.length; ++i)
 	{
 		var droid = rawDroids[i];
 		if (droid.order !== DORDER_BUILD && droid.order !== DORDER_HELPBUILD && droid.order !== DORDER_LINEBUILD)
@@ -58,7 +58,7 @@ function __camGetClosestTruck(player, pos)
 	// Find out which one is the closest.
 	var minDroid = droids[0];
 	var minDist = camDist(minDroid, pos);
-	for (var i = 1, l = droids.length; i < l; ++i)
+	for (var i = 1; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 		if (!droidCanReach(droid, pos.x, pos.y))

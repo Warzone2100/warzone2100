@@ -85,7 +85,7 @@ function eventTransporterLanded(transport)
 		var crew = enumRange(transport.x, transport.y, 6, NEW_PARADIGM, false).filter((obj) => (
 			obj.type === DROID && obj.group === artiGroup
 		));
-		for (var i = 0, l = crew.length; i < l; ++i)
+		for (var i = 0; i < crew.length; ++i)
 		{
 			camSafeRemoveObject(crew[i], false);
 		}
@@ -148,7 +148,7 @@ function getArtifact()
 		var idx = 0;
 		var dist = Infinity;
 
-		for (var i = 0, l = artiMembers.length; i < l; ++i)
+		for (var i = 0; i < artiMembers.length; ++i)
 		{
 			var drDist = camDist(artiMembers[i], artiLoc);
 			if (drDist < dist)

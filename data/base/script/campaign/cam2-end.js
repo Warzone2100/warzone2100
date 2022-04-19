@@ -23,7 +23,7 @@ function checkEnemyVtolArea()
 	var pos = {x: 127, y: 64};
 	var vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter((obj) => (isVTOL(obj)));
 
-	for (var i = 0, l = vtols.length; i < l; ++i)
+	for (var i = 0; i < vtols.length; ++i)
 	{
 		if ((vtols[i].weapons[0].armed < 20) || (vtols[i].health < 60))
 		{
@@ -45,7 +45,7 @@ function eventTransporterLaunch(transporter)
 	{
 		var cargoDroids = enumCargo(transporter);
 
-		for (var i = 0, len = cargoDroids.length; i < len; ++i)
+		for (var i = 0; i < cargoDroids.length; ++i)
 		{
 			var virDroid = cargoDroids[i];
 

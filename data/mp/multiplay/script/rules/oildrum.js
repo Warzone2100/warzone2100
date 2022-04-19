@@ -14,7 +14,7 @@ function placeOilDrum()
 	var nearbyTruck = false;
 	const SCAN_RANGE_TRUCKS = 6;
 	var nearbyObjects = enumRange(x, y, SCAN_RANGE_TRUCKS, ALL_PLAYERS, false);
-	for (var i = 0, len = nearbyObjects.length; i < len; ++i)
+	for (var i = 0; i < nearbyObjects.length; ++i)
 	{
 		var object = nearbyObjects[i];
 		if (object.type === DROID && object.droidType === DROID_CONSTRUCT)

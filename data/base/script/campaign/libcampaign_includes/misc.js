@@ -201,7 +201,7 @@ function camCountStructuresInArea(lab, player)
 	}
 	var list = enumArea(lab, player, false);
 	var ret = 0;
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (var i = 0; i < list.length; ++i)
 	{
 		var object = list[i];
 		if (object.type === STRUCTURE && object.stattype !== WALL && object.status === BUILT)
@@ -319,7 +319,7 @@ function camMakeGroup(what, filter)
 	if (camDef(array))
 	{
 		var group = camNewGroup();
-		for (var i = 0, l = array.length; i < l; ++i)
+		for (var i = 0; i < array.length; ++i)
 		{
 			var o = array[i];
 			if (!camDef(o) || !o)
@@ -457,21 +457,21 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 // Figures out what campaign we are in without reliance on the source at all.
 function camDiscoverCampaign()
 {
-	for (var i = 0, len = ALPHA_LEVELS.length; i < len; ++i)
+	for (var i = 0; i < ALPHA_LEVELS.length; ++i)
 	{
 		if (__camNextLevel === ALPHA_LEVELS[i] || __camNextLevel === BETA_LEVELS[0])
 		{
 			return ALPHA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (var i = 0, len = BETA_LEVELS.length; i < len; ++i)
+	for (var i = 0; i < BETA_LEVELS.length; ++i)
 	{
 		if (__camNextLevel === BETA_LEVELS[i] || __camNextLevel === GAMMA_LEVELS[0])
 		{
 			return BETA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (var i = 0, len = GAMMA_LEVELS.length; i < len; ++i)
+	for (var i = 0; i < GAMMA_LEVELS.length; ++i)
 	{
 		if (__camNextLevel === GAMMA_LEVELS[i] || __camNextLevel === CAM_GAMMA_OUT)
 		{

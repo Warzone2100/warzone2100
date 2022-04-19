@@ -15,7 +15,7 @@ function reticuleManufactureCheck()
 	var structureComplete = false;
 	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
-	for (var i = 0, len = facs.length; i < len; ++i)
+	for (var i = 0; i < facs.length; ++i)
 	{
 		var facType = facs[i];
 		var offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
@@ -23,7 +23,7 @@ function reticuleManufactureCheck()
 
 		if (offWorldFacs !== null)
 		{
-			for (var j = 0, len2 = offWorldFacs.length; j < len2; ++j)
+			for (var j = 0; j < offWorldFacs.length; ++j)
 			{
 				if (offWorldFacs[j].status === BUILT)
 				{
@@ -34,7 +34,7 @@ function reticuleManufactureCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapFacs.length; j < len2; ++j)
+			for (var j = 0; j < onMapFacs.length; ++j)
 			{
 				if (onMapFacs[j].status === BUILT)
 				{
@@ -65,7 +65,7 @@ function reticuleResearchCheck()
 	var structureComplete = false;
 	var labs = [RESEARCH_LAB,];
 
-	for (var i = 0, len = labs.length; i < len; ++i)
+	for (var i = 0; i < labs.length; ++i)
 	{
 		var resType = labs[i];
 		var offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
@@ -73,7 +73,7 @@ function reticuleResearchCheck()
 
 		if (offWorldLabs !== null)
 		{
-			for (var j = 0, len2 = offWorldLabs.length; j < len2; ++j)
+			for (var j = 0; j < offWorldLabs.length; ++j)
 			{
 				if (offWorldLabs[j].status === BUILT)
 				{
@@ -84,7 +84,7 @@ function reticuleResearchCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapLabs.length; j < len2; ++j)
+			for (var j = 0; j < onMapLabs.length; ++j)
 			{
 				if (onMapLabs[j].status === BUILT)
 				{
@@ -127,7 +127,7 @@ function reticuleDesignCheck()
 	var structureComplete = false;
 	var hqs = [HQ,];
 
-	for (var i = 0, len = hqs.length; i < len; ++i)
+	for (var i = 0; i < hqs.length; ++i)
 	{
 		var hqType = hqs[i];
 		var offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
@@ -135,7 +135,7 @@ function reticuleDesignCheck()
 
 		if (offWorldHq !== null)
 		{
-			for (var j = 0, len2 = offWorldHq.length; j < len2; ++j)
+			for (var j = 0; j < offWorldHq.length; ++j)
 			{
 				if (offWorldHq[j].status === BUILT)
 				{
@@ -146,7 +146,7 @@ function reticuleDesignCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapHq.length; j < len2; ++j)
+			for (var j = 0; j < onMapHq.length; ++j)
 			{
 				if (onMapHq[j].status === BUILT)
 				{

@@ -71,7 +71,7 @@ function setAlphaExp()
 		obj.type === DROID
 	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (var i = 0; i < alphaDroids.length; ++i)
 	{
 		var dr = alphaDroids[i];
 		if (!camIsSystemDroid(dr))
@@ -89,7 +89,7 @@ function getAlphaUnitIDs()
 		obj.type === DROID && obj.experience === 512
 	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (var i = 0; i < alphaDroids.length; ++i)
 	{
 		var dr = alphaDroids[i];
 		alphaUnitIDs.push(dr.id);
@@ -231,9 +231,9 @@ function alphaTeamAlive()
 			obj.type === DROID
 		));
 
-		for (var i = 0, l = alive.length; i < l; ++i)
+		for (var i = 0; i < alive.length; ++i)
 		{
-			for (var x = 0, c = alphaUnitIDs.length; x < c; ++x)
+			for (var x = 0; x < alphaUnitIDs.length; ++x)
 			{
 				if (alive[i].id === alphaUnitIDs[x])
 				{

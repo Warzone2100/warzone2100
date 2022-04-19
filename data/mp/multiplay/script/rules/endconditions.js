@@ -77,10 +77,10 @@ class Player
 		}
 
 		const trucks = enumDroid(this.playNum, DROID_CONSTRUCT);
-		for (let i = 0, len = trucks.length; i < len; ++i)
+		for (let i = 0; i < trucks.length; ++i)
 		{
 			const truck = trucks[i];
-			for (let j = 0, len2 = oils.length; j < len2; ++j)
+			for (let j = 0; j < oils.length; ++j)
 			{
 				const oil = oils[j];
 				if (droidCanReach(truck, oil.x, oil.y))

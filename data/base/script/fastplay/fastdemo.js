@@ -41,7 +41,7 @@ function grantStartTech()
 	];
 
 	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
-	for (var i = 0, l = STRUCTS.length; i < l; ++i)
+	for (var i = 0; i < STRUCTS.length; ++i)
 	{
 		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
 	}

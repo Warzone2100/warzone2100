@@ -89,7 +89,7 @@ function eventStructureBuilt(structure, droid)
 	{
 		// Is it in the base two area?
 		var objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
-		for (var i = 0, l = objs.length; i < l; ++i)
+		for (var i = 0; i < objs.length; ++i)
 		{
 			var obj = objs[i];
 			if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
