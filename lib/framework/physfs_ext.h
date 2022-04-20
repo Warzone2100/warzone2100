@@ -154,10 +154,10 @@ static inline PHYSFS_ErrorCode _WZ_PHYSFS_setBuffer(PHYSFS_File *fileHandle, PHY
 #endif
 
 // enumFunc receives each enumerated file, and returns true to continue enumeration, or false to shortcut / stop enumeration
-bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* file)>& enumFunc);
+bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (const char* file)>& enumFunc);
 
 // enumFunc receives each enumerated subfolder, and returns true to continue enumeration, or false to shortcut / stop enumeration
-bool WZ_PHYSFS_enumerateFolders(const std::string &dir, const std::function<bool (char* folder)>& enumFunc);
+bool WZ_PHYSFS_enumerateFolders(const std::string &dir, const std::function<bool (const char* folder)>& enumFunc);
 
 // Older wrappers
 
