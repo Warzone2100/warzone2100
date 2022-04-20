@@ -428,7 +428,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	size_t extensionLen = strlen(extension);
 	// Note: this is left for backward compatibility reasons.
 	// we want to be able to load .gam but only when no save-info was found
-	WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension, extensionLen](char *i) -> bool {
+	WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension, extensionLen](const char *i) -> bool {
 		char savefile[256];
 		time_t savetime;
 
@@ -444,17 +444,17 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath.c_str(), i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 
-		(i)[strlen(i) - extensionLen] = '\0'; // remove .gam/.wzrp extension
+		size_t lenIWithoutExtension = strlen(i) - extensionLen;
+		std::string fileNameWithoutExtension(i, lenIWithoutExtension);
 		for(auto &el: saveGameNamesAndTimes)
 		{
 			// only add if doesn't exist yet
-			// also don't compare std::string, to avoid building std::string from char*
-			if (strcmp(i, el.name.c_str()) == 0)
+			if (el.name.compare(fileNameWithoutExtension) == 0)
 			{
 				return true; // move to next
 			}
 		}
-		saveGameNamesAndTimes.emplace_back(i, savetime);
+		saveGameNamesAndTimes.emplace_back(std::move(fileNameWithoutExtension), savetime);
 		return true;
 	});
 
