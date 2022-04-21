@@ -2367,21 +2367,21 @@ bool wzapi::centreView(WZAPI_PARAMS(int x, int y))
 	return true;
 }
 
-//-- ## playSound(sound[, x, y, z])
+//-- ## playSound(soundFileName[, x, y, z])
 //--
 //-- Play a sound, optionally at a location.
 //--
-bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional<int> _y, optional<int> _z))
+bool wzapi::playSound(WZAPI_PARAMS(std::string soundFileName, optional<int> _x, optional<int> _y, optional<int> _z))
 {
 	int player = context.player();
 	if (player != selectedPlayer)
 	{
 		return false;
 	}
-	int soundID = audio_GetTrackID(sound.c_str());
+	int soundID = audio_GetTrackID(soundFileName.c_str());
 	if (soundID == SAMPLE_NOT_FOUND)
 	{
-		soundID = audio_SetTrackVals(sound.c_str(), false, 100, 1800);
+		soundID = audio_SetTrackVals(soundFileName.c_str(), false, 100, 1800);
 	}
 	if (_x.has_value())
 	{

@@ -629,7 +629,7 @@ Return information about a particular weapon type. DEPRECATED - query the Stats 
 
 Center the player's camera at the given position.
 
-## playSound(sound[, x, y, z])
+## playSound(soundFileName[, x, y, z])
 
 Play a sound, optionally at a location.
 

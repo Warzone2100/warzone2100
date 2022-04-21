@@ -1039,7 +1039,7 @@ namespace wzapi
 
 	// MARK: - Functions that operate on the current player only
 	bool centreView(WZAPI_PARAMS(int x, int y));
-	bool playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional<int> _y, optional<int> _z));
+	bool playSound(WZAPI_PARAMS(std::string soundFileName, optional<int> _x, optional<int> _y, optional<int> _z));
 	bool gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackDrop, optional<bool> _showOutro));
 
 	// MARK: - Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
