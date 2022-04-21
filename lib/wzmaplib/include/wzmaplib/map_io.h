@@ -75,6 +75,14 @@ public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) = 0;
 	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) = 0;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) = 0;
+
+	virtual const char* pathSeparator() const = 0;
+	
+	// enumFunc receives each enumerated file, and returns true to continue enumeration, or false to shortcut / stop enumeration
+	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc);
+
+	// enumFunc receives each enumerated subfolder, and returns true to continue enumeration, or false to shortcut / stop enumeration
+	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc);
 };
 
 // MARK: - Default implementation, using C stdio
@@ -85,6 +93,11 @@ public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) override;
 	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
+
+	virtual const char* pathSeparator() const override;
+
+	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
+	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 };
 
 } // namespace WzMap

@@ -837,6 +837,32 @@ bool WzMapPhysFSIO::writeFullFile(const std::string& filename, const char *ppFil
 	return saveFile(filename.c_str(), ppFileData, fileSize);
 }
 
+const char* WzMapPhysFSIO::pathSeparator() const
+{
+	return "/";
+}
+
+bool WzMapPhysFSIO::enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	return WZ_PHYSFS_enumerateFiles(basePath.c_str(), [basePath, enumFunc](const char* file) -> bool {
+		if (file == nullptr) { return true; }
+		if (*file == '\0') { return true; }
+		std::string fullPath = basePath + "/" + file;
+		if (WZ_PHYSFS_isDirectory(fullPath.c_str()))
+		{
+			return true; // skip and continue
+		}
+		return enumFunc(file);
+	});
+
+	return WZ_PHYSFS_enumerateFiles(basePath.c_str(), enumFunc);
+}
+
+bool WzMapPhysFSIO::enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	return WZ_PHYSFS_enumerateFolders(basePath.c_str(), enumFunc);
+}
+
 WzMapDebugLogger::~WzMapDebugLogger()
 { }
 
