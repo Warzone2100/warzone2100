@@ -1906,17 +1906,19 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 	FLAG_POSITION	*psFlagPos;
 	SELECTIONTYPE dselectionType = selectionType;
 	SELECTION_CLASS dselectionClass = selectionClass;
+	unsigned selectionCount = 0;
 	bool dbOnScreen = bOnScreen;
 
 	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
-	selDroidSelection(selectedPlayer, dselectionClass, dselectionType, dbOnScreen);
+	selectionCount = selDroidSelection(selectedPlayer, dselectionClass, dselectionType, dbOnScreen);
 	for (psDroid = apsDroidLists[playerNumber]; psDroid; psDroid = psDroid->psNext)
 	{
 		/* Wipe out the ones in the wrong group */
 		if (psDroid->selected && psDroid->group != UBYTE_MAX)
 		{
 			DeSelectDroid(psDroid);
+			selectionCount--;
 		}
 	}
 	if (selected)
@@ -1929,6 +1931,7 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 			psFlagPos->selected = false;
 		}
 	}
+	CONPRINTF(ngettext("%u unit selected", "%u units selected", selectionCount), selectionCount);
 	return selected;
 }
 
