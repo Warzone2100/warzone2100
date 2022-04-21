@@ -68,4 +68,9 @@ void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol:
 
 optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, WzMap::IOProvider& mapIO, WzMap::LoggingProtocol* pCustomLogger = nullptr);
 
+#if defined(_WIN32)
+bool win_utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr);
+bool win_utf16toUtf8(const wchar_t* buffer, std::vector<char>& u8_buffer);
+#endif
+
 } // namespace WzMap
