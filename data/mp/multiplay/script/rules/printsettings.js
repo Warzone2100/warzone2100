@@ -36,6 +36,6 @@ var human = {
 		},
 	};
 
-//	debug( [mapName, human.scavengers(), human.alliancesType(), human.powerType(), human.baseType(), "T" + getMultiTechLevel(), version ].join("\n"));
-	console( [mapName, human.scavengers(), human.alliancesType(), human.powerType(), human.baseType() ].join("\n"));
+//	debug([mapName, human.scavengers(), human.alliancesType(), human.powerType(), human.baseType(), "T" + getMultiTechLevel(), version ].join("\n"));
+	console([mapName, human.scavengers(), human.alliancesType(), human.powerType(), human.baseType() ].join("\n"));
 }
