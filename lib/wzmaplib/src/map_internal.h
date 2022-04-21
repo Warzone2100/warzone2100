@@ -23,8 +23,16 @@
 #include "../include/wzmaplib/map_debug.h"
 #include <cstdarg>
 #include <cstdio>
+#include <string>
+
+#include <json/json.hpp>
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 namespace WzMap {
+
+class IOProvider;
 
 #if defined __GNUC__ && defined __GNUC_MINOR__
 #  define MAPLIB_CC_GNU_PREREQ(maj, min) \
@@ -57,5 +65,7 @@ void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol:
 #else
 void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol::LogLevel level, const char *function, const char *str, ...) MAPLIB_DECL_FORMAT(printf, 5, 6);
 #endif
+
+optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, WzMap::IOProvider& mapIO, WzMap::LoggingProtocol* pCustomLogger = nullptr);
 
 } // namespace WzMap

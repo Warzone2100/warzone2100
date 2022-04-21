@@ -328,7 +328,7 @@ bool writeMapData(const MapData& map, const std::string &filename, IOProvider& m
 }
 
 // MARK: - Helper functions for loading / saving JSON files
-static optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	const auto &path = filename.c_str();
 	std::vector<char> data;
