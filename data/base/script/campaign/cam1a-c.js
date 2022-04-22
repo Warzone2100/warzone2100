@@ -101,9 +101,9 @@ function sendTransport()
 		order: CAM_ORDER_PATROL,
 		data: {
 			pos:[
-				camMakePos( cyborgPatrolList[(3 * index)] ),
-				camMakePos( cyborgPatrolList[(3 * index) + 1] ),
-				camMakePos( cyborgPatrolList[(3 * index) + 2] ),
+				camMakePos(cyborgPatrolList[(3 * index)]),
+				camMakePos(cyborgPatrolList[(3 * index) + 1]),
+				camMakePos(cyborgPatrolList[(3 * index) + 2]),
 			],
 			radius: 8,
 			interval: camMinutesToMilliseconds(1),

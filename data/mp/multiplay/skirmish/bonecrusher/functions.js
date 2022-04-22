@@ -303,7 +303,7 @@ function sortByDistance(arr, obj, num, reach){
 		for (const i in arr) {
 			if(reach)if(!droidCanReach_p(obj, arr[i].x, arr[i].y))continue;
 //			if(reach)if(!droidCanReach_p(arr[i], obj.x, obj.y))continue;
-			var a = distBetweenTwoPoints_p( obj.x, obj.y, arr[i].x, arr[i].y );
+			var a = distBetweenTwoPoints_p(obj.x, obj.y, arr[i].x, arr[i].y);
 			if ( a < b ) {
 				b = a;
 				c[0] = arr[i];
@@ -314,7 +314,7 @@ function sortByDistance(arr, obj, num, reach){
 
 	if ( num != 1 ) {
 		arr.sort((a, b) => (
-			distBetweenTwoPoints_p( obj.x, obj.y, a.x, a.y ) - distBetweenTwoPoints_p( obj.x, obj.y, b.x, b.y )
+			distBetweenTwoPoints_p(obj.x, obj.y, a.x, a.y) - distBetweenTwoPoints_p(obj.x, obj.y, b.x, b.y)
 		));
 	}
 
@@ -925,7 +925,7 @@ function attackObjects(targets, warriors, num, scouting){
 	if ( targets.length >= warriors.length ) {
 		for (var i = 0, len = warriors.length; i<len; ++i) {
 			if(scouting) orderDroidLoc_p(warriors[i], DORDER_SCOUT, targets[i].x, targets[i].y);
-			else orderDroidObj_p( warriors[i], DORDER_ATTACK, targets[i] );
+			else orderDroidObj_p(warriors[i], DORDER_ATTACK, targets[i]);
 		}
 		return true;
 	}else{
@@ -939,13 +939,13 @@ function attackObjects(targets, warriors, num, scouting){
 			for (const j in targets) {
 				if ( distBetweenTwoPoints_p ( targets[j].x,targets[j].y,warriors[n].x,warriors[n].y ) < 7 ) {
 					if(scouting) orderDroidLoc_p(warriors[n], DORDER_SCOUT, targets[j].x, targets[j].y);
-					else orderDroidObj_p( warriors[n], DORDER_ATTACK, targets[j] );
+					else orderDroidObj_p(warriors[n], DORDER_ATTACK, targets[j]);
 					busy = true;
 				}
 			}
 			if ( busy ) continue;
 			if(scouting) orderDroidLoc_p(warriors[n], DORDER_SCOUT, targets[i].x, targets[i].y);
-			else orderDroidObj_p( warriors[n], DORDER_ATTACK, targets[i] );
+			else orderDroidObj_p(warriors[n], DORDER_ATTACK, targets[i]);
 			if ( t >= a ){
 //				debugMsg("getTarget: Атака на "+targets.length+" цели по "+a+" юнита ("+targets[i].x+","+targets[i].y+")",4);
 				t=0;
