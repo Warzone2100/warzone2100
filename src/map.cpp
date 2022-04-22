@@ -120,7 +120,7 @@ static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
 static bool hasDecals(int i, int j);
 static void SetDecals(const char *filename, const char *decal_type);
-static void init_tileNames(int type);
+static void init_tileNames(MAP_TILESET type);
 
 /// The different ground types
 std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
@@ -136,7 +136,7 @@ static std::unique_ptr<bool[]> mapDecals;           // array that tells us what 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
-static void init_tileNames(int type)
+static void init_tileNames(MAP_TILESET type)
 {
 	char	*pFileData = nullptr;
 	char	name[MAX_STR_LENGTH] = {'\0'};
@@ -147,7 +147,7 @@ static void init_tileNames(int type)
 
 	switch (type)
 	{
-	case ARIZONA:
+	case MAP_TILESET::ARIZONA:
 		{
 			if (!loadFileToBuffer("tileset/arizona_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -165,7 +165,7 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-	case URBAN:
+	case MAP_TILESET::URBAN:
 		{
 			if (!loadFileToBuffer("tileset/urban_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -183,7 +183,7 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-	case ROCKIE:
+	case MAP_TILESET::ROCKIES:
 		{
 			if (!loadFileToBuffer("tileset/rockie_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -201,9 +201,6 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-	default:
-		debug(LOG_FATAL, "Unknown type (%d) given.  Aborting.", type);
-		abort();
 	}
 
 	debug(LOG_TERRAIN, "name: %s, with %d entries", name, numlines);
@@ -249,11 +246,11 @@ static bool mapLoadGroundTypes(bool preview)
 	{
 fallback:
 		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(ARIZONA))
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::ARIZONA))
 		{
 			debug(LOG_POPUP, "Failed to load terrain type override");
 		}
-		init_tileNames(ARIZONA);
+		init_tileNames(MAP_TILESET::ARIZONA);
 		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_FATAL, "tileset/tertilesc1hwGtype.txt not found, aborting.");
@@ -293,11 +290,11 @@ fallback:
 	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
 	{
 		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(URBAN))
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::URBAN))
 		{
 			debug(LOG_POPUP, "Failed to load terrain type override");
 		}
-		init_tileNames(URBAN);
+		init_tileNames(MAP_TILESET::URBAN);
 		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_POPUP, "tileset/tertilesc2hwGtype.txt not found, using default terrain ground types.");
@@ -337,11 +334,11 @@ fallback:
 	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
 	{
 		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(ROCKIE))
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::ROCKIES))
 		{
 			debug(LOG_POPUP, "Failed to load terrain type override");
 		}
-		init_tileNames(ROCKIE);
+		init_tileNames(MAP_TILESET::ROCKIES);
 		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_POPUP, "tileset/tertilesc3hwGtype.txt not found, using default terrain ground types.");
