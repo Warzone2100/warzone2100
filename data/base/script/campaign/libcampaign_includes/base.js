@@ -279,7 +279,7 @@ function __camCheckBaseEliminated(group)
 					leftovers.push(object);
 				}
 			}
-			for (let i = 0, len = leftovers.length; i < len; i++)
+			for (let i = 0, len = leftovers.length; i < len; ++i)
 			{
 				// remove with special effect
 				var leftover = leftovers[i];
