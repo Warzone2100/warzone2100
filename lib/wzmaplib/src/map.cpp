@@ -2262,7 +2262,7 @@ optional<Map::LoadedFormat> Map::loadedMapFormat()
 
 	// process the loaded map object file versions
 	std::unordered_map<LoadedFileVersion::FileType, size_t, FileTypeFileHash> numFilesOfType;
-	optional<uint32_t> lastFileVersion;
+	optional<uint32_t> lastJSONFileVersion;
 	for (auto& it : m_fileVersions)
 	{
 		// skip MapData and TerrainData, which are currently always binary file types
@@ -2283,9 +2283,9 @@ optional<Map::LoadedFormat> Map::loadedMapFormat()
 		if (fileType == LoadedFileVersion::FileType::JSON)
 		{
 			// Need to check for consistent version
-			if (lastFileVersion.has_value())
+			if (lastJSONFileVersion.has_value())
 			{
-				if (lastFileVersion.value() != it.second.fileVersion())
+				if (lastJSONFileVersion.value() != it.second.fileVersion())
 				{
 					// File version is different from all prior file versions - JSON maps are expected to have files of the same version
 					return Map::LoadedFormat::MIXED;
@@ -2293,13 +2293,13 @@ optional<Map::LoadedFormat> Map::loadedMapFormat()
 			}
 			else
 			{
-				lastFileVersion = it.second.fileVersion();
+				lastJSONFileVersion = it.second.fileVersion();
 			}
 		}
 	}
 
 	// if we reached here, we should have all map object files of the same FileType
-	if (numFilesOfType.size() != 1 || !lastFileVersion.has_value())
+	if (numFilesOfType.size() != 1)
 	{
 		// or not? (presumably this isn't a loaded map)
 		return nullopt;
@@ -2314,6 +2314,11 @@ optional<Map::LoadedFormat> Map::loadedMapFormat()
 			break;
 		case LoadedFileVersion::FileType::JSON:
 		{
+			if (!lastJSONFileVersion.has_value())
+			{
+				// should not happen
+				return nullopt;
+			}
 			auto mapDataFileVersionResult = getFileVersion(MapFile::MapData);
 			if (!mapDataFileVersionResult.has_value())
 			{
@@ -2321,11 +2326,11 @@ optional<Map::LoadedFormat> Map::loadedMapFormat()
 				return nullopt;
 			}
 			auto mapDataFileVersion = mapDataFileVersionResult.value();
-			if (lastFileVersion.value() == 1)
+			if (lastJSONFileVersion.value() == 1)
 			{
 				return ((mapDataFileVersion.fileType() == LoadedFileVersion::FileType::BinaryBJO) && (mapDataFileVersion.fileVersion() < VERSION_40)) ? Map::LoadedFormat::JSON_v1 : Map::LoadedFormat::MIXED;
 			}
-			else if (lastFileVersion.value() == 2)
+			else if (lastJSONFileVersion.value() == 2)
 			{
 				return ((mapDataFileVersion.fileType() == LoadedFileVersion::FileType::BinaryBJO) && (mapDataFileVersion.fileVersion() == VERSION_40)) ? Map::LoadedFormat::JSON_v2 : Map::LoadedFormat::MIXED;
 			}
