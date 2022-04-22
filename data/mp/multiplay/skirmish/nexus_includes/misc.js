@@ -79,7 +79,7 @@ function arrayContains(what, array)
 		return false;
 	}
 
-	for (var i = 0, len = array.length; i < len; ++i)
+	for (let i = 0, len = array.length; i < len; ++i)
 	{
 		if (what === array[i])
 		{
@@ -118,7 +118,7 @@ function groupNearCoordinate(group, loc, range)
 	var count = 0;
 	var members = enumGroup(group);
 
-	for (var i = 0, len = members.length; i < len; ++i)
+	for (let i = 0, len = members.length; i < len; ++i)
 	{
 		var dr = members[i];
 
@@ -149,7 +149,7 @@ function groupCanReach(group, x, y)
 	var members = enumGroup(group);
 	var len = members.length;
 
-	for (var i = 0; i < len; ++i)
+	for (let i = 0; i < len; ++i)
 	{
 		var dr = members[i];
 
@@ -174,11 +174,11 @@ function baseDetails(player)
 	var baseRadius = 4;
 	var tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 
-	for (var i = 0, len = STANDARD_BASE_STRUCTURES.length; i < len; ++i)
+	for (let i = 0, len = STANDARD_BASE_STRUCTURES.length; i < len; ++i)
 	{
 		var sObjs = enumStruct(player, STANDARD_BASE_STRUCTURES[i]);
 
-		for (var j = 0, len2 = sObjs.length; j < len2; ++j)
+		for (let j = 0, len2 = sObjs.length; j < len2; ++j)
 		{
 			var struct = sObjs[j];
 
@@ -356,7 +356,7 @@ function threatInRange(x, y, player, scanRadius, visible)
 
 	var stuff = enumRange(x, y, scanRadius, player, visible);
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
 		var obj = stuff[i];
 
@@ -424,7 +424,7 @@ function numWeapObjectsInRange(x, y, player, scanRadius, visible)
 	var stuff = enumRange(x, y, scanRadius, player, visible);
 	var count = {structures: 0, droids: 0, safe: true};
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
 		var obj = stuff[i];
 
@@ -463,7 +463,7 @@ function numGroupSameOrder(group, order)
 	var numSame = 0;
 	var grp = enumGroup(group);
 
-	for (var i = 0, len = grp.length; i < len; ++i)
+	for (let i = 0, len = grp.length; i < len; ++i)
 	{
 		if (grp[i].order === order)
 		{
@@ -541,7 +541,7 @@ function groupCoordinateAverage(group)
 	var xTotal = 0;
 	var yTotal = 0;
 
-	for (var i = 0; i < len; ++i)
+	for (let i = 0; i < len; ++i)
 	{
 		xTotal += droids[i].x;
 		yTotal += droids[i].y;
