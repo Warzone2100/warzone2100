@@ -86,7 +86,7 @@ function getDroidsForNXLZ(isTransport)
 	var units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmlinkh, cTempl.nxmrailh, cTempl.nxmsamh];
 
 	var droids = [];
-	for (var i = 0; i < COUNT; ++i)
+	for (let i = 0; i < COUNT; ++i)
 	{
 		droids.push(units[camRand(units.length)]);
 	}

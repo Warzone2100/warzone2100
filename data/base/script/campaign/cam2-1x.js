@@ -37,7 +37,7 @@ camAreaEvent("crashSite", function(droid)
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	var droids = enumDroid(TRANSPORT_TEAM);
-	for (var i = 0; i < droids.length; ++i)
+	for (let i = 0; i < droids.length; ++i)
 	{
 		donateObject(droids[i], CAM_HUMAN_PLAYER);
 	}
@@ -52,7 +52,7 @@ function preDamageUnits()
 {
 	setHealth(getObject("transporter"), 40);
 	var droids = enumDroid(TRANSPORT_TEAM);
-	for (var j = 0; j < droids.length; ++j)
+	for (let j = 0; j < droids.length; ++j)
 	{
 		setHealth(droids[j], 40 + camRand(20));
 	}
@@ -84,7 +84,7 @@ function setCrashedTeamExp()
 		!camIsSystemDroid(dr) && !camIsTransporter(dr)
 	));
 
-	for (var i = 0; i < droids.length; ++i)
+	for (let i = 0; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 		setDroidExperience(droid, DROID_EXP);

@@ -15,7 +15,7 @@ function eventGameInit()
 	//From script/setup/setupscavenger.js
 	setupScavenger();
 
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	for (let playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		//From script/setup/powermodifier.js
 		setupPowerModifier(playnum);

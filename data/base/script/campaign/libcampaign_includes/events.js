@@ -83,7 +83,7 @@ function cam_eventChat(from, to, message)
 			{
 				break;
 			}
-			for (var i = 0, len = research.length; i < len; ++i)
+			for (let i = 0, len = research.length; i < len; ++i)
 			{
 				var researchName = research[i].name;
 				completeResearch(researchName, CAM_HUMAN_PLAYER);
@@ -316,7 +316,7 @@ function cam_eventGameLoaded()
 
 	//Need to set the scavenger kevlar vests when loading a save from later Alpha
 	//missions or else it reverts to the original texture.
-	for (var i = 0, l = SCAV_KEVLAR_MISSIONS.length; i < l; ++i)
+	for (let i = 0, l = SCAV_KEVLAR_MISSIONS.length; i < l; ++i)
 	{
 		var mission = SCAV_KEVLAR_MISSIONS[i];
 		if (__camNextLevel === mission)

@@ -83,7 +83,7 @@ function __camDispatchTransporterUnsafe()
 	}
 	var trans = __camPlayerTransports[player];
 	var droids = [];
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (let i = 0, l = list.length; i < l; ++i)
 	{
 		var template = list[i];
 		var prop = __camChangePropulsionOnDiff(template.prop);
