@@ -52,7 +52,7 @@ function unfinishedStructures()
 		obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR
 	));
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
 		var s = stuff[i];
 		if (s.stattype === DEFENSE && ((!componentAvailable("hover01") || (distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, s.x, s.y) > SAFE_DIST))))
@@ -99,7 +99,7 @@ function findIdleTrucks(group)
 		builders = enumGroup(group);
 	}
 
-	for (var i = 0, s = builders.length; i < s; i++)
+	for (let i = 0, s = builders.length; i < s; i++)
 	{
 		var con = builders[i];
 		if (conCanHelp(con.id, con.x, con.y))
@@ -162,7 +162,7 @@ function fastDefendSpot(structure, droid)
 		var sensor;
 		//const CB_TOWER = "Sys-CB-Tower01";
 		const TOWERS = [ "Sys-SensoTowerWS", "Sys-SensoTower02" ];
-		for (var i = 0, len = TOWERS.length; i < len; ++i)
+		for (let i = 0, len = TOWERS.length; i < len; ++i)
 		{
 			var sen = TOWERS[i];
 			if (isStructureAvailable(sen))
@@ -204,12 +204,12 @@ function protectUnguardedDerricks(droid)
 	{
 		var undefended = [];
 
-		for (var i = 0; i < LEN; ++i)
+		for (let i = 0; i < LEN; ++i)
 		{
 			var found = false;
 			var objects = enumRange(derrs[i].x, derrs[i].y, (HIGH_OIL) ? 4 : 8, me, false);
 
-			for (var c = 0, u = objects.length; c < u; ++c)
+			for (let c = 0, u = objects.length; c < u; ++c)
 			{
 				if ((objects[c].type === STRUCTURE) && (objects[c].stattype === DEFENSE))
 				{
@@ -351,7 +351,7 @@ function checkUnfinishedStructures(group)
 	}
 
 	var structs = unfinishedStructures();
-	for (var i = 0, len = structs.length; i < len; ++i)
+	for (let i = 0, len = structs.length; i < len; ++i)
 	{
 		var structure = getObject(STRUCTURE, me, structs[i]);
 		if (structure === null)
@@ -360,7 +360,7 @@ function checkUnfinishedStructures(group)
 		}
 
 		var trucks = findIdleTrucks(group);
-		for (var j = 0, len2 = trucks.length; j < len2; ++j)
+		for (let j = 0, len2 = trucks.length; j < len2; ++j)
 		{
 			var truck = getObject(DROID, me, trucks[j]);
 			if (truck === null)
@@ -382,7 +382,7 @@ function holdAllOilTrucks()
 {
 	var oilGrabbers = enumGroup(oilGrabberGroup);
 
-	for (var i = 0, len = oilGrabbers.length; i < len; ++i)
+	for (let i = 0, len = oilGrabbers.length; i < len; ++i)
 	{
 		if (oilGrabbers[i].order !== DORDER_RECYCLE &&
 			oilGrabbers[i].order !== DORDER_HOLD)
@@ -401,7 +401,7 @@ function skipOilGrabIfEasy()
 		)).length;
 		var enemies = findLivingEnemies();
 
-		for (var i = 0, len = enemies.length; i < len; ++i)
+		for (let i = 0, len = enemies.length; i < len; ++i)
 		{
 			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(structures.derrick, enemies[i]))
 			{
@@ -443,13 +443,13 @@ function lookForOil()
 		return;
 	}
 
-	for (var i = 0, oilLen = oils.length; i < oilLen; i++)
+	for (let i = 0, oilLen = oils.length; i < oilLen; i++)
 	{
 		var bestDroid;
 		var bestDist = Infinity;
 		var oil = oils[i];
 
-		for (var j = 0, drLen = droids.length; j < drLen; j++)
+		for (let j = 0, drLen = droids.length; j < drLen; j++)
 		{
 			var droid = droids[j];
 			var dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
@@ -494,7 +494,7 @@ function buildAAForPersonality()
 	else
 	{
 		var aaType = subPersonalities[personality].antiAir.defenses;
-		for (var i = aaType.length - 1; i >= 0; --i)
+		for (let i = aaType.length - 1; i >= 0; --i)
 		{
 			if (countAndBuild(aaType[i].stat, minAAs))
 			{
@@ -525,7 +525,7 @@ function returnDefense(type)
 	if (random(100) < ELECTRONIC_CHANCE)
 	{
 		var avail = 0;
-		for (var i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
+		for (let i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
 		{
 			if(isStructureAvailable(ELECTRONIC_DEFENSES[i]))
 			{
@@ -540,7 +540,7 @@ function returnDefense(type)
 		}
 	}
 
-	for (var i = defenses.length - 1; i > -1; --i)
+	for (let i = defenses.length - 1; i > -1; --i)
 	{
 		var def = isDefined(defenses[i].stat);
 		if (def && isStructureAvailable(defenses[i].stat))
@@ -788,7 +788,7 @@ function factoryBuildOrder()
 	const MIN_FACTORY_COUNT = 1;
 	const MAX_FACTORY_COUNT = 5;
 
-	for (var i = 0; i < subPersonalities[personality].factoryOrder.length; ++i)
+	for (let i = 0; i < subPersonalities[personality].factoryOrder.length; ++i)
 	{
 		var fac = subPersonalities[personality].factoryOrder[i];
 
@@ -1025,7 +1025,7 @@ function maintenance(group)
 		modList = modList.reverse();
 	}
 
-	for (var i = 0, l = modList.length; i < l; ++i)
+	for (let i = 0, l = modList.length; i < l; ++i)
 	{
 		var modObj = modList[i];
 
@@ -1044,7 +1044,7 @@ function maintenance(group)
 				structList = structList.reverse();
 			}
 
-			for (var c = 0, s = structList.length; c < s; ++c)
+			for (let c = 0, s = structList.length; c < s; ++c)
 			{
 				if (structList[c].modules < modObj.amount)
 				{

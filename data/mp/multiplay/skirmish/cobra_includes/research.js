@@ -16,7 +16,7 @@ function updateResearchList(stat, len)
 	}
 
 	var list = [];
-	for (var x = 0, d = stat.length - len; x < d; ++x)
+	for (let x = 0, d = stat.length - len; x < d; ++x)
 	{
 		var st = stat[x];
 		if (isDefined(st.res))
@@ -68,7 +68,7 @@ function isPowerResearch(research)
 		"R-Struc-Power-Upgrade03a",
 	];
 
-	for (var i = 0, len = POWERS.length; i < len; ++i)
+	for (let i = 0, len = POWERS.length; i < len; ++i)
 	{
 		if (research === POWERS[i])
 		{
@@ -87,7 +87,7 @@ function evalResearch(lab, list)
 {
 	var sufficientPower = getRealPower() > 2500;
 
-	for (var i = 0, a = list.length; i < a; ++i)
+	for (let i = 0, a = list.length; i < a; ++i)
 	{
 		if (sufficientPower && isPowerResearch(list[i]))
 		{
@@ -166,7 +166,7 @@ function research()
 		antiCyborgChance = 10; //just in case...
 	}
 
-	for (var i = 0, a = labList.length; i < a; ++i)
+	for (let i = 0, a = labList.length; i < a; ++i)
 	{
 		var lab = labList[i];
 		var forceLaser = false;

@@ -235,7 +235,7 @@ function eventAttacked(victim, attacker)
 
 		if (UNIT_LEN >= MIN_ATTACK_DROIDS && shouldCobraAttack())
 		{
-			for (var i = 0; i < UNIT_LEN; i++)
+			for (let i = 0; i < UNIT_LEN; i++)
 			{
 				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
 				{
