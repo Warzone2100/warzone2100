@@ -42,7 +42,7 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 
 		if(command == 'safe'){
 			var danger = [];
-			for (var e = 0; e < maxPlayers; ++e) {
+			for (let e = 0; e < maxPlayers; ++e) {
 				if ( allianceExistsBetween(me,e) ) continue;
 				danger = danger.concat(enumDroid(e, DROID_WEAPON, view));
 				danger = danger.concat(enumDroid(e, DROID_CYBORG, view));
@@ -443,7 +443,7 @@ function playerSpectator(player){
 //функция отфильтровывает объекты, которые находяться близко
 //к "живым" союзникам, полезно для отказа от захвата ресурсов союзника
 function filterNearAlly(obj){
-	for (var p = 0; p < maxPlayers; ++p) {
+	for (let p = 0; p < maxPlayers; ++p) {
 		if ( p == me ) continue; //Выкидываем себя
 		if ( !allianceExistsBetween(me,p) ) continue; //Выкидываем вражеские
 //		if ( playerLoose(p) ) continue; //Пропускаем проигравших
@@ -485,7 +485,7 @@ function getEnemyNearAlly(){
 //	return []; // <-- disable this funtion
 	var targ = [];
 	var enemy = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
 	}
@@ -493,7 +493,7 @@ function getEnemyNearAlly(){
 		targ = targ.concat(enumDroid(scavengerPlayer, DROID_WEAPON, me));
 	}
 
-	for (var p = 0; p < maxPlayers; ++p) {
+	for (let p = 0; p < maxPlayers; ++p) {
 		if ( p == me ) continue;
 		if ( !allianceExistsBetween(me,p) ) continue;
 //		if ( playerLoose(p) ) continue; //Пропускаем проигравших
@@ -514,7 +514,7 @@ function getEnemyNearPos(x,y,r){
 	if(typeof r === "undefined") r = 7;
 	var targ = [];
 	var enemy = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		if ( playerSpectator(e) ) continue;
 		if ( e == me ) continue;
@@ -533,7 +533,7 @@ function getEnemyNearPos(x,y,r){
 function getAllyArmy(){
 	var army = [];
 
-	for (var p = 0; p < maxPlayers; ++p) {
+	for (let p = 0; p < maxPlayers; ++p) {
 		if ( p == me ) continue;
 		if ( !allianceExistsBetween(me,p) ) continue;
 		if ( playerSpectator(p) ) continue;
@@ -553,7 +553,7 @@ function getFreeResources(){
 //Функция возвращает все свободные и занятые нефтеточки на карте.
 function getAllResources(){
 	var resources = getFreeResources();
-	for (var e = 0; e < maxPlayers; ++e) resources = resources.concat(enumStruct(e,RESOURCE_EXTRACTOR));
+	for (let e = 0; e < maxPlayers; ++e) resources = resources.concat(enumStruct(e,RESOURCE_EXTRACTOR));
 	if(scavengers != NO_SCAVENGERS){
 		resources = resources.concat(enumStruct(scavengerPlayer, "A0ResourceExtractor"));
 	}
@@ -582,7 +582,7 @@ function getUnknownResources(){
 function getSeeResources(){
 	var iSee = [];
 	iSee = iSee.concat(enumFeature(me, "OilResource"));
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 //		if ( !allianceExistsBetween(me,e) ) continue; //Выкидываем вражеские
 		iSee = iSee.concat(enumStruct(e, RESOURCE_EXTRACTOR, me));
 	}
@@ -593,7 +593,7 @@ function getSeeResources(){
 
 function getProblemBuildings(){
 	var targ=[];
-	for (var p = 0; p < maxPlayers; ++p) {
+	for (let p = 0; p < maxPlayers; ++p) {
 		if ( !allianceExistsBetween(me,p) ) continue; //Выкидываем вражеские
 		if ( playerSpectator(p) ) continue; //Пропускаем неиграющих
 		targ = targ.concat(enumStruct(p).filter((e) => (e.status == BEING_BUILT || e.health < 99)));
@@ -603,7 +603,7 @@ function getProblemBuildings(){
 
 function getEnemyFactories(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, FACTORY, me));
 		targ = targ.concat(enumStruct(e, CYBORG_FACTORY, me));
@@ -617,7 +617,7 @@ function getEnemyFactories(){
 
 function getEnemyFactoriesVTOL(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, VTOL_FACTORY, me));
 	}
@@ -626,7 +626,7 @@ function getEnemyFactoriesVTOL(){
 
 function getEnemyPads(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, REARM_PAD, me));
 	}
@@ -636,7 +636,7 @@ function getEnemyPads(){
 
 function getEnemyNearBase(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumDroid(e, DROID_ANY, me));
 		targ = targ.concat(enumStruct(e, DEFENSE, me));
@@ -649,7 +649,7 @@ function getEnemyNearBase(){
 }
 function getEnemyCloseBase(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumDroid(e, DROID_ANY, me));
 	}
@@ -674,7 +674,7 @@ function getNearFreeResources(pos){
 
 function getNumEnemies(){
 	var enemies = 0;
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		if ( playerSpectator(e) ) continue;
 		if ( playerLoose(e) ) continue;
@@ -691,7 +691,7 @@ function isHumanOverride(){
 
 
 function isHumanAlly(){
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if(playerData[e].isHuman && allianceExistsBetween(me, e)) return true;
 	}
 	return false;
@@ -748,7 +748,7 @@ function mark(x,y){
 
 function getEnemyStartPos(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		if ( playerSpectator(e) ) continue;
 		if ( playerLoose(e) ) continue;
@@ -759,7 +759,7 @@ function getEnemyStartPos(){
 
 function getEnemyBuilders(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumDroid(e, DROID_CONSTRUCT, me));
 //		targ = targ.concat(enumDroid(e, 10, me)); // Киборг-строитель
@@ -770,7 +770,7 @@ function getEnemyBuilders(){
 
 function getEnemyWarriors(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
 		targ = targ.concat(enumDroid(e, DROID_CYBORG, me));
@@ -780,7 +780,7 @@ function getEnemyWarriors(){
 
 function getEnemyDefences(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, DEFENSE, me));
 	}
@@ -793,7 +793,7 @@ function getEnemyDefences(){
 
 function getEnemyStructures(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( e == me ) continue;
 		if ( allianceExistsBetween(me,e) ) continue;
 		if ( playerSpectator(e) ) continue;
@@ -819,7 +819,7 @@ function getEnemyStructures(){
 
 function getEnemyWalls(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, WALL, me));
 	}
@@ -832,7 +832,7 @@ function getEnemyWalls(){
 //Функция возвращает все видимые вражеские ресурсы
 function getEnemyResources(){
 	var enemyRigs = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		var tmp = enumStruct(e, RESOURCE_EXTRACTOR, me);
 		enemyRigs = enemyRigs.concat(tmp);
@@ -845,7 +845,7 @@ function getEnemyResources(){
 //Возвращает строителей, инженеров, заводы и киборг-заводы
 function getEnemyProduction(){
 	var targ = [];
-	for (var e = 0; e < maxPlayers; ++e) {
+	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, RESOURCE_EXTRACTOR, me));
 		targ = targ.concat(enumDroid(e, DROID_CONSTRUCT, me));
@@ -868,7 +868,7 @@ function removeDuplicates(originalArray, objKey) {
 	var values = [];
 	var value;
 
-	for (var i = 0; i < originalArray.length; i++) {
+	for (let i = 0; i < originalArray.length; i++) {
 		value = originalArray[i][objKey];
 
 		if(values.indexOf(value) === -1) {
@@ -923,7 +923,7 @@ function attackObjects(targets, warriors, num, scouting){
 	}
 
 	if ( targets.length >= warriors.length ) {
-		for (var i = 0, len = warriors.length; i<len; ++i) {
+		for (let i = 0, len = warriors.length; i<len; ++i) {
 			if(scouting) orderDroidLoc_p(warriors[i], DORDER_SCOUT, targets[i].x, targets[i].y);
 			else orderDroidObj_p(warriors[i], DORDER_ATTACK, targets[i]);
 		}
