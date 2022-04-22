@@ -54,7 +54,6 @@ bool loadScriptState(char *pFileName);
 
 /// Load the terrain types
 bool loadTerrainTypeMap(const char *pFilePath);
-bool loadTerrainTypeMapOverride(unsigned int tileSet);
 
 bool saveGame(const char *aFileName, GAME_TYPE saveType);
 

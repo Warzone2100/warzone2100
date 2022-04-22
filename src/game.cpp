@@ -6981,7 +6981,7 @@ bool loadTerrainTypeMap(const char *pFilePath)
 	return true;
 }
 
-bool loadTerrainTypeMapOverride(unsigned int tileSet)
+bool loadTerrainTypeMapOverride(MAP_TILESET tileSet)
 {
 	resForceBaseDir("/data/base/");
 	WzString iniName = "tileset/tileTypes.json";
@@ -6993,23 +6993,21 @@ bool loadTerrainTypeMapOverride(unsigned int tileSet)
 	WzConfig ini(iniName, WzConfig::ReadOnly);
 	WzString tileTypeKey;
 
-	if (tileSet == ARIZONA)
+	switch (tileSet)
 	{
-		tileTypeKey = "Arizona";
-	}
-	else if (tileSet == URBAN)
-	{
-		tileTypeKey = "Urban";
-	}
-	else if (tileSet == ROCKIE)
-	{
-		tileTypeKey = "Rockies";
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unknown tile type");
-		resForceBaseDir("");
-		return false;
+		case MAP_TILESET::ARIZONA:
+			tileTypeKey = "Arizona";
+			break;
+		case MAP_TILESET::URBAN:
+			tileTypeKey = "Urban";
+			break;
+		case MAP_TILESET::ROCKIES:
+			tileTypeKey = "Rockies";
+			break;
+//		default:
+//			debug(LOG_ERROR, "Unknown tile type");
+//			resForceBaseDir("");
+//			return false;
 	}
 
 	std::vector<WzString> list = ini.childGroups();

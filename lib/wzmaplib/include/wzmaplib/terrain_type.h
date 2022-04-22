@@ -38,3 +38,10 @@ enum TYPE_OF_TERRAIN
 
 	TER_MAX,
 };
+
+enum class MAP_TILESET
+{
+	ARIZONA = 0,
+	URBAN = 1,
+	ROCKIES = 2
+};

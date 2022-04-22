@@ -490,7 +490,7 @@ void loadMultiScripts()
 	resForceBaseDir("");
 }
 
-static MAP_TILESET_TYPE guessMapTilesetType(LEVEL_DATASET *psLevel)
+static MAP_TILESET guessMapTilesetType(LEVEL_DATASET *psLevel)
 {
 	unsigned t = 0, c = 0;
 
@@ -505,18 +505,18 @@ static MAP_TILESET_TYPE guessMapTilesetType(LEVEL_DATASET *psLevel)
 	switch (c)
 	{
 	case 1:
-		return TILESET_ARIZONA;
+		return MAP_TILESET::ARIZONA;
 		break;
 	case 2:
-		return TILESET_URBAN;
+		return MAP_TILESET::URBAN;
 		break;
 	case 3:
-		return TILESET_ROCKIES;
+		return MAP_TILESET::ROCKIES;
 		break;
 	}
 
 	debug(LOG_MAP, "Could not guess map tileset, using ARIZONA.");
-	return TILESET_ARIZONA;
+	return MAP_TILESET::ARIZONA;
 }
 
 static void loadEmptyMapPreview()
@@ -671,20 +671,20 @@ void loadMapPreview(bool hideInterface)
 	previewColorScheme.playerColorProvider = std::unique_ptr<WzMap::MapPlayerColorProvider>(new WzLobbyPreviewPlayerColorProvider());
 	switch (guessMapTilesetType(psLevel))
 	{
-	case TILESET_ARIZONA:
+	case MAP_TILESET::ARIZONA:
 		previewColorScheme.tilesetColors = WzMap::TilesetColorScheme::TilesetArizona();
 		break;
-	case TILESET_URBAN:
+	case MAP_TILESET::URBAN:
 		previewColorScheme.tilesetColors = WzMap::TilesetColorScheme::TilesetUrban();
 		break;
-	case TILESET_ROCKIES:
+	case MAP_TILESET::ROCKIES:
 		previewColorScheme.tilesetColors = WzMap::TilesetColorScheme::TilesetRockies();
 		break;
-	default:
-		debug(LOG_FATAL, "Invalid tileset type");
-		// silence warnings
-		abort();
-		return;
+//	default:
+//		debug(LOG_FATAL, "Invalid tileset type");
+//		// silence warnings
+//		abort();
+//		return;
 	}
 
 	// Slight hack to init array with a special value used to determine how many players on map

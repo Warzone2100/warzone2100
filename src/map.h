@@ -34,17 +34,6 @@
 #include "display.h"
 #include "ai.h"
 
-#define ARIZONA 1
-#define URBAN 2
-#define ROCKIE 3
-
-enum MAP_TILESET_TYPE
-{
-	TILESET_ARIZONA = 0,
-	TILESET_URBAN = 1,
-	TILESET_ROCKIES = 2
-};
-
 #define TALLOBJECT_YMAX		(200)
 #define TALLOBJECT_ADJUST	(300)
 
@@ -552,6 +541,8 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 
 void mapInit();
 void mapUpdate();
+
+bool loadTerrainTypeMapOverride(MAP_TILESET tileSet);
 
 //For saves to determine if loading the terrain type override should occur
 extern bool builtInMap;
