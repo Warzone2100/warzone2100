@@ -19,7 +19,7 @@ function mainBuilders(rotation){
 	//enumGroup(buildersMain).forEach((obj, iter) => {
 	var rnd = Math.round(Math.random());
 //	debugMsg("lab="+len_research_lab_ready+", fact="+factory_ready.length+", pow="+playerPower(me), 'builders');
-	for (let i = 0; i < _b.length; i++) {
+	for (let i = 0; i < _b.length; ++i) {
 //		debugMsg('---', 'builders');
 		var obj = _b[i];
 //		var pos = {x:base.x, y:base.y};

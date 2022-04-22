@@ -868,7 +868,7 @@ function removeDuplicates(originalArray, objKey) {
 	var values = [];
 	var value;
 
-	for (let i = 0; i < originalArray.length; i++) {
+	for (let i = 0; i < originalArray.length; ++i) {
 		value = originalArray[i][objKey];
 
 		if(values.indexOf(value) === -1) {

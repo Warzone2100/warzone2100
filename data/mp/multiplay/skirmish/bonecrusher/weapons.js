@@ -47,7 +47,7 @@ function _weaponsGetGuns(num){
 
 		for (const w in _weapons) {
 			debugMsg(_weapons[w][0]+", "+_weapons[w][1], 'weap');
-			for (let i = 0; i < _weapons[w][1]; i++) _out.push(_weapons[w][0]);
+			for (let i = 0; i < _weapons[w][1]; ++i) _out.push(_weapons[w][0]);
 		}
 		return _out;
 	}else return [];
