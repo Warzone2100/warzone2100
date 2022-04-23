@@ -1027,6 +1027,37 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 	return matches;
 }
 
+int _countStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter), STRUCTURE **psStructLists)
+{
+	int matches = 0;
+	WzString statsName;
+	STRUCTURE_TYPE type = NUM_DIFF_BUILDINGS;
+
+	int player = _player.value_or(context.player());
+	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
+
+	if (_structureType.has_value())
+	{
+		type = _structureType.value().type;
+		statsName = WzString::fromUtf8(_structureType.value().statsName);
+	}
+
+	SCRIPT_ASSERT_PLAYER(0, context, player);
+	SCRIPT_ASSERT(0, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
+	for (STRUCTURE *psStruct = psStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	{
+		if ((playerFilter == ALL_PLAYERS || psStruct->visible[playerFilter])
+			&& !psStruct->died
+			&& (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
+			&& (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->id) == 0))
+		{
+			++matches;
+		}
+	}
+
+	return matches;
+}
+
 //-- ## enumStruct([player[, structureType[, playerFilter]]])
 //--
 //-- Returns an array of structure objects. If no parameters given, it will
@@ -1039,6 +1070,16 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter))
 {
 	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, apsStructLists);
+}
+
+//-- ## countStructEx([player[, structureType[, playerFilter]]])
+//--
+//-- Just like `enumStruct`, except it only returns a count of the number of (matching) structures.
+//-- (Useful if all you need is the count - avoids creating a lot of JS temporaries.)
+//--
+int wzapi::countStructEx(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter))
+{
+	return _countStruct_fromList(context, _player, _structureType, _playerFilter, apsStructLists);
 }
 
 //-- ## enumStructOffWorld([player[, structureType[, playerFilter]]])
@@ -1095,6 +1136,49 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 		    && (droidType == DROID_ANY || droidType == psDroid->droidType || droidType2 == psDroid->droidType))
 		{
 			matches.push_back(psDroid);
+		}
+	}
+	return matches;
+}
+
+//-- ## countDroidEx([player[, droidType[, playerFilter]]])
+//--
+//-- Just like `enumDroid`, except it only returns a count of the number of (matching) droids.
+//-- (Useful if all you need is the count - avoids creating a lot of JS temporaries.)
+//--
+int wzapi::countDroidEx(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType, optional<int> _playerFilter))
+{
+	int matches = 0;
+	DROID_TYPE droidType2;
+
+	int player = _player.value_or(context.player());
+	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
+
+	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
+
+	switch (droidType) // hide some engine craziness
+	{
+	case DROID_CONSTRUCT:
+		droidType2 = DROID_CYBORG_CONSTRUCT; break;
+	case DROID_WEAPON:
+		droidType2 = DROID_CYBORG_SUPER; break;
+	case DROID_REPAIR:
+		droidType2 = DROID_CYBORG_REPAIR; break;
+	case DROID_CYBORG:
+		droidType2 = DROID_CYBORG_SUPER; break;
+	default:
+		droidType2 = droidType;
+		break;
+	}
+	SCRIPT_ASSERT_PLAYER(0, context, player);
+	SCRIPT_ASSERT(0, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		if ((playerFilter == ALL_PLAYERS || psDroid->visible[playerFilter])
+			&& !psDroid->died
+			&& (droidType == DROID_ANY || droidType == psDroid->droidType || droidType2 == psDroid->droidType))
+		{
+			++matches;
 		}
 	}
 	return matches;

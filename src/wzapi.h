@@ -1002,8 +1002,10 @@ namespace wzapi
 	bool clearConsole(WZAPI_NO_PARAMS);
 	bool structureIdle(WZAPI_PARAMS(const STRUCTURE *psStruct));
 	std::vector<const STRUCTURE *> enumStruct(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter));
+	int countStructEx(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter));
 	std::vector<const STRUCTURE *> enumStructOffWorld(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter));
 	std::vector<const DROID *> enumDroid(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType, optional<int> _playerFilter));
+	int countDroidEx(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType, optional<int> _playerFilter));
 	std::vector<const FEATURE *> enumFeature(WZAPI_PARAMS(int playerFilter, optional<std::string> _featureName));
 	std::vector<scr_position> enumBlips(WZAPI_PARAMS(int player));
 	std::vector<const BASE_OBJECT *> enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT);

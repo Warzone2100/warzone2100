@@ -3037,10 +3037,12 @@ IMPL_JS_FUNC(addDroidToTransporter, wzapi::addDroidToTransporter)
 IMPL_JS_FUNC(makeTemplate, wzapi::makeTemplate)
 IMPL_JS_FUNC(buildDroid, wzapi::buildDroid)
 IMPL_JS_FUNC(enumStruct, wzapi::enumStruct)
+IMPL_JS_FUNC(countStructEx, wzapi::countStructEx)
 IMPL_JS_FUNC(enumStructOffWorld, wzapi::enumStructOffWorld)
 IMPL_JS_FUNC(enumFeature, wzapi::enumFeature)
 IMPL_JS_FUNC(enumCargo, wzapi::enumCargo)
 IMPL_JS_FUNC(enumDroid, wzapi::enumDroid)
+IMPL_JS_FUNC(countDroidEx, wzapi::countDroidEx)
 IMPL_JS_FUNC(dump, wzapi::dump)
 IMPL_JS_FUNC(debug, wzapi::debugOutputStrings)
 IMPL_JS_FUNC(pickStructLocation, wzapi::pickStructLocation)
@@ -3375,8 +3377,10 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(clearConsole, 0); // WZAPI
 	JS_REGISTER_FUNC(structureIdle, 1); // WZAPI
 	JS_REGISTER_FUNC2(enumStruct, 0, 3); // WZAPI
+	JS_REGISTER_FUNC2(countStructEx, 0, 3); // WZAPI
 	JS_REGISTER_FUNC2(enumStructOffWorld, 0, 3); // WZAPI
 	JS_REGISTER_FUNC2(enumDroid, 0, 3); // WZAPI
+	JS_REGISTER_FUNC2(countDroidEx, 0, 3); // WZAPI
 	JS_REGISTER_FUNC(enumGroup, 1); // scripting_engine
 	JS_REGISTER_FUNC2(enumFeature, 1, 2); // WZAPI
 	JS_REGISTER_FUNC(enumBlips, 1); // WZAPI
