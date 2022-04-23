@@ -25,6 +25,7 @@ endif()
 target_include_directories(wzmaplib PUBLIC "include")
 # for optional-lite + nlohmann::json header-only libraries
 target_include_directories(wzmaplib PUBLIC "../../3rdparty/")
+target_compile_definitions(wzmaplib PRIVATE "JSON_USE_IMPLICIT_CONVERSIONS=0")
 
 if(NOT TARGET quickjs)
 	add_subdirectory("../../3rdparty/quickjs" "3rdparty/quickjs" EXCLUDE_FROM_ALL)
