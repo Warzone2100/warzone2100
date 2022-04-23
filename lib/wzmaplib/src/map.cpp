@@ -1932,7 +1932,7 @@ Map::Map()
 	m_terrainTypes = std::make_shared<TerrainTypeData>();
 }
 
-Map::Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, std::unique_ptr<LoggingProtocol> logger, std::unique_ptr<IOProvider> mapIO)
+Map::Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, std::unique_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO)
 : m_mapFolderPath(mapFolderPath)
 , m_mapType(mapType)
 , m_mapMaxPlayers(mapMaxPlayers)
@@ -1944,7 +1944,7 @@ Map::Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlaye
 // - previewOnly (set to true to shortcut processing of map details that don't factor into preview generation)
 // - a logger
 // - a WzMap::IOProvider
-std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly, std::unique_ptr<LoggingProtocol> logger, std::unique_ptr<IOProvider> mapIO)
+std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly, std::unique_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO)
 {
 	if (!mapIO)
 	{
@@ -1978,7 +1978,7 @@ std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType
 	return pMap;
 }
 
-bool Map::exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::unique_ptr<LoggingProtocol> logger, std::unique_ptr<IOProvider> mapIO)
+bool Map::exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::unique_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO)
 {
 	if (!mapIO)
 	{

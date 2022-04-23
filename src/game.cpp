@@ -2882,7 +2882,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	// construct the WzMap object for loading map data
 	aFileName[fileExten] = '\0';
 	mapSeed = gameRandU32();
-	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, false, std::unique_ptr<WzMap::LoggingProtocol>(new WzMapDebugLogger()), std::unique_ptr<WzMapPhysFSIO>(new WzMapPhysFSIO()));
+	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, false, std::unique_ptr<WzMap::LoggingProtocol>(new WzMapDebugLogger()), std::make_shared<WzMapPhysFSIO>());
 
 	if (data && data->wasScriptGenerated())
 	{
