@@ -19,6 +19,7 @@
 */
 
 #include "../include/wzmaplib/map_io.h"
+#include "map_internal.h"
 #include <cstdio>
 #include <cstring>
 
@@ -165,6 +166,18 @@ bool IOProvider::enumerateFolders(const std::string& basePath, const std::functi
 {
 	// Must implement in subclasses
 	return false;
+}
+
+std::string IOProvider::pathJoin(const std::string& a, const std::string& b)
+{
+	std::string fullPath = a;
+	std::string separator = pathSeparator();
+	if (!fullPath.empty() && !WzMap::strEndsWith(fullPath, separator))
+	{
+		fullPath += separator;
+	}
+	fullPath += b;
+	return fullPath;
 }
 
 
