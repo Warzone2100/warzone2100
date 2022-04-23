@@ -128,7 +128,7 @@ enum class MapType
 class Map
 {
 private:
-	Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, std::unique_ptr<LoggingProtocol> logger, std::unique_ptr<IOProvider> mapIO = std::unique_ptr<IOProvider>(new StdIOProvider()));
+	Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, std::unique_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
 
 public:
 	// Construct an empty Map, for modification
@@ -138,10 +138,10 @@ public:
 	// - previewOnly (set to true to shortcut processing of map details that don't factor into preview generation)
 	// - a logger
 	// - a WzMap::IOProvider
-	static std::unique_ptr<Map> loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly = false, std::unique_ptr<LoggingProtocol> logger = nullptr, std::unique_ptr<IOProvider> mapIO = std::unique_ptr<IOProvider>(new StdIOProvider()));
+	static std::unique_ptr<Map> loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly = false, std::unique_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
 
 	// Export a map to a specified folder path in a specified output format (version)
-	static bool exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::unique_ptr<LoggingProtocol> logger = nullptr, std::unique_ptr<IOProvider> mapIO = std::unique_ptr<IOProvider>(new StdIOProvider()));
+	static bool exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::unique_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
 
 	// High-level data loading functions
 
@@ -192,7 +192,7 @@ private:
 	MapType m_mapType;
 	uint32_t m_mapMaxPlayers = 8;
 	std::unique_ptr<LoggingProtocol> m_logger;
-	std::unique_ptr<WzMap::IOProvider> m_mapIO;
+	std::shared_ptr<WzMap::IOProvider> m_mapIO;
 	bool m_wasScriptGenerated = false;
 	std::shared_ptr<MapData> m_mapData;
 	std::shared_ptr<std::vector<Structure>> m_structures;
