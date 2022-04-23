@@ -1953,8 +1953,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			JSValue result = JS_NewArray(ctx);
 			for (uint32_t i = 0; i < value.size(); i++)
 			{
-				VectorType item = value.at(i);
-				JS_DefinePropertyValueUint32(ctx, result, i, box(item, ctx), JS_PROP_C_W_E); // TODO: Check return value?
+				int ret = JS_DefinePropertyValueUint32(ctx, result, i, box(value.at(i), ctx), JS_PROP_C_W_E);
+				if (ret != 1)
+				{
+					// Failed to define property value??
+					debug(LOG_ERROR, "Failed to define property value vector[%" PRIu32 "]", i);
+				}
 			}
 			return result;
 		}
@@ -1966,7 +1970,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			uint32_t i = 0;
 			for (auto item : value)
 			{
-				JS_DefinePropertyValueUint32(ctx, result, i, box(item, ctx), JS_PROP_C_W_E); // TODO: Check return value?
+				int ret = JS_DefinePropertyValueUint32(ctx, result, i, box(item, ctx), JS_PROP_C_W_E);
+				if (ret != 1)
+				{
+					// Failed to define property value??
+					debug(LOG_ERROR, "Failed to define property value list[%" PRIu32 "]", i);
+				}
 				i++;
 			}
 			return result;
