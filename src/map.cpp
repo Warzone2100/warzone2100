@@ -767,11 +767,7 @@ public:
 	}
 	virtual ~WzMapBinaryPhysFSStream()
 	{
-		if (pFile)
-		{
-			PHYSFS_close(pFile);
-			pFile = nullptr;
-		}
+		close();
 	};
 
 	bool openedFile() const { return pFile != nullptr; }
@@ -798,6 +794,18 @@ public:
 			return nullopt;
 		}
 		return static_cast<size_t>(result);
+	}
+
+	virtual bool close() override
+	{
+		if (pFile == nullptr)
+		{
+			return false;
+		}
+
+		PHYSFS_close(pFile);
+		pFile = nullptr;
+		return true;
 	}
 
 	virtual bool endOfStream() override

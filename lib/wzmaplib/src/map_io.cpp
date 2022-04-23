@@ -227,11 +227,7 @@ public:
 
 	~WzMapBinaryStdIOStream()
 	{
-		if (pFile != nullptr)
-		{
-			fclose(pFile);
-			pFile = nullptr;
-		}
+		close();
 	}
 
 	bool openedFile() const
@@ -262,6 +258,19 @@ public:
 		}
 		return result;
 	};
+
+	virtual bool close() override
+	{
+		if (pFile == nullptr)
+		{
+			return false;
+		}
+
+		fclose(pFile);
+		pFile = nullptr;
+		return true;
+	}
+
 	virtual bool endOfStream() override
 	{
 		bool endOfStream = (feof(pFile) != 0);

@@ -47,6 +47,7 @@ public:
 	virtual optional<size_t> readBytes(void *buffer, size_t len) = 0;
 	virtual optional<size_t> writeBytes(const void *buffer, size_t len) = 0;
 	virtual bool endOfStream() = 0;
+	virtual bool close() = 0;
 
 	virtual bool readULE8(uint8_t *pVal);
 	virtual bool readULE16(uint16_t *pVal);
