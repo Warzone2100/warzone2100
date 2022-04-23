@@ -1177,13 +1177,13 @@ bool writeMapStructureInit(const std::vector<Structure>& structures, uint32_t ma
 	switch (format)
 	{
 		case OutputFormat::VER1_BINARY_OLD:
-			retVal = writeMapStructureInitBJO(structures, mapMaxPlayers, mapFolderPath + "/struct.bjo", mapIO, 8, pCustomLogger);
+			retVal = writeMapStructureInitBJO(structures, mapMaxPlayers, mapIO.pathJoin(mapFolderPath, "struct.bjo"), mapIO, 8, pCustomLogger);
 			break;
 		case OutputFormat::VER2:
-			retVal = writeMapStructureInitJSON(structures, mapType, mapFolderPath + "/struct.json", mapIO, 1, pCustomLogger);
+			retVal = writeMapStructureInitJSON(structures, mapType, mapIO.pathJoin(mapFolderPath, "struct.json"), mapIO, 1, pCustomLogger);
 			break;
 		case OutputFormat::VER3:
-			retVal = writeMapStructureInitJSON(structures, mapType, mapFolderPath + "/struct.json", mapIO, 2, pCustomLogger);
+			retVal = writeMapStructureInitJSON(structures, mapType, mapIO.pathJoin(mapFolderPath, "struct.json"), mapIO, 2, pCustomLogger);
 			break;
 	}
 	return retVal;
@@ -1515,13 +1515,13 @@ bool writeMapDroidInit(const std::vector<Droid>& droids, uint32_t mapMaxPlayers,
 	switch (format)
 	{
 		case OutputFormat::VER1_BINARY_OLD:
-			retVal = writeMapDroidInitBJO(droids, mapMaxPlayers, mapFolderPath + "/dinit.bjo", mapIO, 8, pCustomLogger);
+			retVal = writeMapDroidInitBJO(droids, mapMaxPlayers, mapIO.pathJoin(mapFolderPath, "dinit.bjo"), mapIO, 8, pCustomLogger);
 			break;
 		case OutputFormat::VER2:
-			retVal = writeMapDroidInitJSON(droids, mapType, mapFolderPath + "/droid.json", mapIO, 1, pCustomLogger);
+			retVal = writeMapDroidInitJSON(droids, mapType, mapIO.pathJoin(mapFolderPath, "droid.json"), mapIO, 1, pCustomLogger);
 			break;
 		case OutputFormat::VER3:
-			retVal = writeMapDroidInitJSON(droids, mapType, mapFolderPath + "/droid.json", mapIO, 2, pCustomLogger);
+			retVal = writeMapDroidInitJSON(droids, mapType, mapIO.pathJoin(mapFolderPath, "droid.json"), mapIO, 2, pCustomLogger);
 			break;
 	}
 	return retVal;
@@ -1908,13 +1908,13 @@ bool writeMapFeatureInit(const std::vector<Feature>& features, uint32_t mapMaxPl
 	switch (format)
 	{
 		case OutputFormat::VER1_BINARY_OLD:
-			retVal = writeMapFeatureInitBJO(features, mapMaxPlayers, mapFolderPath + "/feat.bjo", mapIO, 8, pCustomLogger);
+			retVal = writeMapFeatureInitBJO(features, mapMaxPlayers, mapIO.pathJoin(mapFolderPath, "feat.bjo"), mapIO, 8, pCustomLogger);
 			break;
 		case OutputFormat::VER2:
-			retVal = writeMapFeatureInitJSON(features, mapType, mapFolderPath + "/feature.json", mapIO, 1, pCustomLogger);
+			retVal = writeMapFeatureInitJSON(features, mapType, mapIO.pathJoin(mapFolderPath, "feature.json"), mapIO, 1, pCustomLogger);
 			break;
 		case OutputFormat::VER3:
-			retVal = writeMapFeatureInitJSON(features, mapType, mapFolderPath + "/feature.json", mapIO, 2, pCustomLogger);
+			retVal = writeMapFeatureInitJSON(features, mapType, mapIO.pathJoin(mapFolderPath, "feature.json"), mapIO, 2, pCustomLogger);
 			break;
 	}
 	return retVal;
@@ -1954,7 +1954,7 @@ std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType
 
 	std::vector<char> fileData;
 	// First, check for new game.js format
-	std::string gameJSPath = mapFolderPath + "/" + "game.js";
+	std::string gameJSPath = mapIO->pathJoin(mapFolderPath, "game.js");
 	if (mapIO->loadFullFile(gameJSPath, fileData))
 	{
 		debug(logger.get(), LOG_INFO, "Loading: %s", gameJSPath.c_str());
@@ -1992,7 +1992,7 @@ bool Map::exportMapToPath(Map& map, const std::string& mapFolderPath, MapType ma
 		debug(logger.get(), LOG_ERROR, "Failed to load / retrieve map data from: %s", map.mapFolderPath().c_str());
 		return false;
 	}
-	if (!writeMapData(*(mapData.get()), mapFolderPath + "/game.map", *(mapIO.get()), format, logger.get()))
+	if (!writeMapData(*(mapData.get()), mapIO->pathJoin(mapFolderPath, "game.map"), *(mapIO.get()), format, logger.get()))
 	{
 		debug(logger.get(), LOG_ERROR, "Failed to write map data to path: %s", mapFolderPath.c_str());
 		return false;
@@ -2004,7 +2004,7 @@ bool Map::exportMapToPath(Map& map, const std::string& mapFolderPath, MapType ma
 		debug(logger.get(), LOG_ERROR, "Failed to load / retrieve map terrain type data from: %s", map.mapFolderPath().c_str());
 		return false;
 	}
-	if (!writeTerrainTypes(*(mapTerrainTypes.get()), mapFolderPath + "/ttypes.ttp", *(mapIO.get()), format, logger.get()))
+	if (!writeTerrainTypes(*(mapTerrainTypes.get()), mapIO->pathJoin(mapFolderPath, "ttypes.ttp"), *(mapIO.get()), format, logger.get()))
 	{
 		debug(logger.get(), LOG_ERROR, "Failed to write map terrain type data to path: %s", mapFolderPath.c_str());
 		return false;
@@ -2057,7 +2057,7 @@ std::shared_ptr<MapData> Map::mapData()
 
 	// otherwise, load the map data on first request
 	if (!m_mapIO) { return nullptr; }
-	auto loadResult = loadMapData_Internal(m_mapFolderPath + "/" + "game.map", *m_mapIO, m_logger.get());
+	auto loadResult = loadMapData_Internal(m_mapIO->pathJoin(m_mapFolderPath, "game.map"), *m_mapIO, m_logger.get());
 	if (loadResult.has_value())
 	{
 		m_mapData = std::make_shared<MapData>(std::move(loadResult.value().mapData));
@@ -2077,12 +2077,12 @@ std::shared_ptr<std::vector<Structure>> Map::mapStructures()
 	if (!m_mapIO) { return nullptr; }
 	// Try JSON first
 	auto fileType = LoadedFileVersion::FileType::JSON;
-	auto loadResult = loadJsonStructureInit(m_mapFolderPath + "/" + "struct.json", m_mapType, *m_mapIO, m_logger.get());
+	auto loadResult = loadJsonStructureInit(m_mapIO->pathJoin(m_mapFolderPath, "struct.json"), m_mapType, *m_mapIO, m_logger.get());
 	if (!loadResult.has_value())
 	{
 		// Fallback to .bjo (old binary format)
 		fileType = LoadedFileVersion::FileType::BinaryBJO;
-		loadResult = loadBJOStructureInit(m_mapFolderPath + "/" + "struct.bjo", m_mapMaxPlayers, *m_mapIO, m_logger.get());
+		loadResult = loadBJOStructureInit(m_mapIO->pathJoin(m_mapFolderPath, "struct.bjo"), m_mapMaxPlayers, *m_mapIO, m_logger.get());
 	}
 	if (loadResult.has_value())
 	{
@@ -2103,12 +2103,12 @@ std::shared_ptr<std::vector<Droid>> Map::mapDroids()
 	if (!m_mapIO) { return nullptr; }
 	// Try JSON first
 	auto fileType = LoadedFileVersion::FileType::JSON;
-	auto loadResult = loadJsonDroidInit(m_mapFolderPath + "/" + "droid.json", m_mapType, *m_mapIO, m_logger.get());
+	auto loadResult = loadJsonDroidInit(m_mapIO->pathJoin(m_mapFolderPath, "droid.json"), m_mapType, *m_mapIO, m_logger.get());
 	if (!loadResult.has_value())
 	{
 		// Fallback to .bjo (old binary format)
 		fileType = LoadedFileVersion::FileType::BinaryBJO;
-		loadResult = loadBJODroidInit(m_mapFolderPath + "/" + "dinit.bjo", m_mapMaxPlayers, *m_mapIO, m_logger.get());
+		loadResult = loadBJODroidInit(m_mapIO->pathJoin(m_mapFolderPath, "dinit.bjo"), m_mapMaxPlayers, *m_mapIO, m_logger.get());
 	}
 	if (loadResult.has_value())
 	{
@@ -2129,12 +2129,12 @@ std::shared_ptr<std::vector<Feature>> Map::mapFeatures()
 	if (!m_mapIO) { return nullptr; }
 	// Try JSON first
 	auto fileType = LoadedFileVersion::FileType::JSON;
-	auto loadResult = loadJsonFeatureInit(m_mapFolderPath + "/" + "feature.json", m_mapType, *m_mapIO, m_logger.get());
+	auto loadResult = loadJsonFeatureInit(m_mapIO->pathJoin(m_mapFolderPath, "feature.json"), m_mapType, *m_mapIO, m_logger.get());
 	if (!loadResult.has_value())
 	{
 		// Fallback to .bjo (old binary format)
 		fileType = LoadedFileVersion::FileType::BinaryBJO;
-		loadResult = loadBJOFeatureInit(m_mapFolderPath + "/" + "feat.bjo", m_mapMaxPlayers, *m_mapIO, m_logger.get());
+		loadResult = loadBJOFeatureInit(m_mapIO->pathJoin(m_mapFolderPath, "feat.bjo"), m_mapMaxPlayers, *m_mapIO, m_logger.get());
 	}
 	if (loadResult.has_value())
 	{
@@ -2151,7 +2151,7 @@ std::shared_ptr<TerrainTypeData> Map::mapTerrainTypes()
 
 	// Otherwise, load the data on first request
 	if (!m_mapIO) { return nullptr; }
-	auto loadResult = loadTerrainTypes(m_mapFolderPath + "/" + "ttypes.ttp", *m_mapIO, m_logger.get());
+	auto loadResult = loadTerrainTypes(m_mapIO->pathJoin(m_mapFolderPath, "ttypes.ttp"), *m_mapIO, m_logger.get());
 	if (loadResult)
 	{
 		m_terrainTypes = std::make_shared<TerrainTypeData>();

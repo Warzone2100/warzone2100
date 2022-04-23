@@ -84,6 +84,9 @@ public:
 
 	// enumFunc receives each enumerated subfolder, and returns true to continue enumeration, or false to shortcut / stop enumeration
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc);
+
+public:
+	std::string pathJoin(const std::string& a, const std::string& b);
 };
 
 // MARK: - Default implementation, using C stdio
