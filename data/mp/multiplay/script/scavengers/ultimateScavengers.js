@@ -106,7 +106,7 @@ function isCopterPropulsion(droidProp)
 		"Helicopter",
 	];
 
-	for (var i = 0, len = helicopterPropulsions.length; i < len; ++i)
+	for (let i = 0, len = helicopterPropulsions.length; i < len; ++i)
 	{
 		var propulsion = helicopterPropulsions[i];
 
@@ -169,7 +169,7 @@ function rangeStep(obj, visibility)
 	const STEP = 25;
 	var target;
 
-	for (var i = 0; i <= MAX_TILE_LIMIT; i += STEP)
+	for (let i = 0; i <= MAX_TILE_LIMIT; i += STEP)
 	{
 		var temp = enumRange(obj.x, obj.y, i, ENEMIES, visibility);
 		if (temp.length > 0)
@@ -206,7 +206,7 @@ function findNearest(list, x, y, flag)
 	}
 
 	var minDist = Infinity, minIdx;
-	for (var i = 0, len = list.length; i < len; ++i)
+	for (let i = 0, len = list.length; i < len; ++i)
 	{
 		var d = distBetweenTwoPoints(list[i].x, list[i].y, x, y);
 		if (d < minDist)
@@ -227,7 +227,7 @@ function findNearest(list, x, y, flag)
 function reviseGroups()
 {
 	var list = enumGroup(needToPickGroup);
-	for (var i = 0, len = list.length; i < len; ++i)
+	for (let i = 0, len = list.length; i < len; ++i)
 	{
 		var droid = list[i];
 		if (addDroidToSomeGroup(droid))
@@ -305,7 +305,7 @@ function addDroidToSomeGroup(droid)
 
 function groupOfTank(droid)
 {
-	for (var i = 0, b = baseInfo.length; i < b; ++i)
+	for (let i = 0, b = baseInfo.length; i < b; ++i)
 	{
 		if (droid.group === baseInfo[i].attackGroup)
 		{
@@ -396,16 +396,16 @@ function buildThings()
 {
 	var list = enumDroid(me, DROID_CONSTRUCT);
 
-	for (var i = 0, len = list.length; i < len; ++i)
+	for (let i = 0, len = list.length; i < len; ++i)
 	{
 		var droid = list[i];
 		if (droid.order !== DORDER_RTR && droid.order !== DORDER_BUILD)
 		{
 			//Build a defense at an enemy derrick should we happen to be idle near one
-			for (var j = 0; j < maxPlayers; ++j)
+			for (let j = 0; j < maxPlayers; ++j)
 			{
 				var dlist = enumStruct(j, derrick);
-				for (var x = 0, len2 = dlist.length; x < len2; ++x)
+				for (let x = 0, len2 = dlist.length; x < len2; ++x)
 				{
 					var enemy_derrick = dlist[x];
 					if (distBetweenTwoPoints(droid.x, droid.y, enemy_derrick.x, enemy_derrick.y) < 3)
@@ -476,7 +476,7 @@ function produceDroid(fac)
 		var j = random(templates.length);
 		var name = (templates[j][1].indexOf("NEXUS") > -1) ? "Nexus Tank" : "Scavenger unit";
 
-		for (var x = 1; x < templates[j].length; ++x)
+		for (let x = 1; x < templates[j].length; ++x)
 		{
 			var weapon = templates[j][x];
 			weapons.push(weapon);
@@ -491,7 +491,7 @@ function produceHelicopter(fac)
 	var j = random(vtolTemplates.length);
 	var weapons = [];
 
-	for (var x = 1; x < vtolTemplates[j].length; ++x)
+	for (let x = 1; x < vtolTemplates[j].length; ++x)
 	{
 		var weapon = vtolTemplates[j][x];
 		weapons.push(weapon);
@@ -508,7 +508,7 @@ function produceThings()
 	}
 
 	var list = enumStruct(me, factoryBaba).concat(enumStruct(me, vtolfac));
-	for (var i = 0, len = list.length; i < len; ++i)
+	for (let i = 0, len = list.length; i < len; ++i)
 	{
 		var fac = list[i];
 
@@ -551,7 +551,7 @@ function attackWithDroid(droid, target, force)
 
 function helicopterArmed(obj)
 {
-	for (var i = 0, len = obj.weapons.length; i < len; ++i)
+	for (let i = 0, len = obj.weapons.length; i < len; ++i)
 	{
 		var weapon = obj.weapons[i];
 		if (weapon.armed > 0)
@@ -584,13 +584,13 @@ function helicopterReady(droid)
 //Helicopters can only attack things that the scavengers have seen
 function helicopterAttack()
 {
-	for (var i = 0, len = baseInfo.length; i < len; ++i)
+	for (let i = 0, len = baseInfo.length; i < len; ++i)
 	{
 		var base = baseInfo[i];
 		var copters = enumGroup(base.helicopterAttackers);
 		var target = rangeStep(base, false);
 
-		for (var j = 0, len2 = copters.length; j < len2; ++j)
+		for (let j = 0, len2 = copters.length; j < len2; ++j)
 		{
 			var coords = [];
 			var droid = copters[j];
@@ -671,7 +671,7 @@ function eventAttacked(victim, attacker)
 	}
 
 	var droids = enumGroup(globalDefendGroup);
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (let i = 0, len = droids.length; i < len; ++i)
 	{
 		var droid = droids[i];
 		if (droid.order !== DORDER_ATTACK)
@@ -696,7 +696,7 @@ function eventAttacked(victim, attacker)
 			list = enumGroup(base.attackDroids);
 		}
 
-		for (var i = 0, len = list.length; i < len; ++i)
+		for (let i = 0, len = list.length; i < len; ++i)
 		{
 			attackWithDroid(list[i], attacker, true);
 		}
@@ -776,7 +776,7 @@ function cleanupBaseInfo()
 {
 	var units = [];
 
-	for (var i = 0, len = baseInfo.length; i < len; ++i)
+	for (let i = 0, len = baseInfo.length; i < len; ++i)
 	{
 		var base = baseInfo[i];
 		var factory = getObject(STRUCTURE, me, base.id);
@@ -794,7 +794,7 @@ function cleanupBaseInfo()
 		}
 	}
 
-	for (var i = 0, len = units.length; i < len; ++i)
+	for (let i = 0, len = units.length; i < len; ++i)
 	{
 		var droid = units[i];
 		groupAddDroid(needToPickGroup, droid);
@@ -806,14 +806,14 @@ function cleanupBaseInfo()
 function eventStartLevel()
 {
 	var factories = enumStruct(me, factoryBaba);
-	for (var i = 0, len = factories.length; i < len; ++i)
+	for (let i = 0, len = factories.length; i < len; ++i)
 	{
 		var fac = factories[i];
 		baseInfo.push(constructBaseInfo(fac));
 	}
 
 	var droids = enumDroid(me);
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (let i = 0, len = droids.length; i < len; ++i)
 	{
 		addDroidToSomeGroup(droids[i]);
 	}

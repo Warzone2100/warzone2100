@@ -71,7 +71,7 @@ function setAlphaExp()
 		obj.type === DROID
 	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (let i = 0, l = alphaDroids.length; i < l; ++i)
 	{
 		var dr = alphaDroids[i];
 		if (!camIsSystemDroid(dr))
@@ -89,7 +89,7 @@ function getAlphaUnitIDs()
 		obj.type === DROID && obj.experience === 512
 	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (let i = 0, l = alphaDroids.length; i < l; ++i)
 	{
 		var dr = alphaDroids[i];
 		alphaUnitIDs.push(dr.id);
@@ -118,7 +118,7 @@ function phantomFactorySE()
 function sendEdgeMapDroids(droidCount, location, list)
 {
 	var droids = [];
-	for (var i = 0; i < droidCount; ++i)
+	for (let i = 0; i < droidCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -231,9 +231,9 @@ function alphaTeamAlive()
 			obj.type === DROID
 		));
 
-		for (var i = 0, l = alive.length; i < l; ++i)
+		for (let i = 0, l = alive.length; i < l; ++i)
 		{
-			for (var x = 0, c = alphaUnitIDs.length; x < c; ++x)
+			for (let x = 0, c = alphaUnitIDs.length; x < c; ++x)
 			{
 				if (alive[i].id === alphaUnitIDs[x])
 				{

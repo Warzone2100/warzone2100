@@ -10,7 +10,7 @@ function eventStartLevel() {
 		// initialize subpersonality pseudo-randomly here
 		// to make sure teammates have the same personality
 		var j = 1, s = 0;
-		for (var i = 0; i < maxPlayers; ++i) {
+		for (let i = 0; i < maxPlayers; ++i) {
 			if (allianceExistsBetween(me, i))
 				s += j;
 			j *= 2;
@@ -77,7 +77,7 @@ function eventAttacked(victim, attacker) {
 		if (throttled(5000))
 			return;
 		if (inPanic())
-			for (var i = 0; i < MAX_GROUPS; ++i)
+			for (let i = 0; i < MAX_GROUPS; ++i)
 				if (groupSize(i) > 0)
 					setTarget(attacker, i);
 		setTarget(attacker, miscGroup);

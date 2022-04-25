@@ -66,7 +66,7 @@ function buildModule(struct) {
 	if (struct.modules >= moduleInfo.count)
 		return BUILDRET.UNAVAILABLE;
 	var success = false;
-	for (var i = 0; i < trucks.length; ++i)
+	for (let i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, moduleInfo.module, struct.x, struct.y) || success;
 	if (success)
 		return BUILDRET.SUCCESS;
@@ -84,7 +84,7 @@ function buildBasicStructure(statlist, importance) {
 	// choose structure type (out of the statlist),
 	// together with suitable location
 	var idx, loc, avail = false;
-	for (var i = 0; i < statlist.length; ++i)
+	for (let i = 0; i < statlist.length; ++i)
 		if (isAvailable(statlist[i])) {
 			avail = true;
 			if (distanceToBase(trucks[0]) <= baseScale)
@@ -104,7 +104,7 @@ function buildBasicStructure(statlist, importance) {
 		return BUILDRET.FAILURE;
 	// now actually build
 	var success = false;
-	for (var i = 0; i < trucks.length; ++i)
+	for (let i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, statlist[idx], loc.x, loc.y) || success;
 	if (success)
 		return BUILDRET.SUCCESS;
@@ -114,7 +114,7 @@ function buildBasicStructure(statlist, importance) {
 function finishStructures() {
 	var success = false;
 	var list = enumStruct(me).filterProperty("status", BEING_BUILT);
-	for (var i = 0; i < list.length; ++i) {
+	for (let i = 0; i < list.length; ++i) {
 		if (success)
 			return;
 		if (throttled(10000, list[i].id))
@@ -140,7 +140,7 @@ function buildStructureAround(statlist, loc, unique) {
 		if (unique !== true)
 			return true;
 		var list = enumStruct(me, s);
-		for (var i = 0; i < list.length; ++i)
+		for (let i = 0; i < list.length; ++i)
 			if (distance(list[i], loc) < baseScale / 2)
 				return false;
 		return true;
@@ -241,7 +241,7 @@ _global.captureSomeOil = function() {
 	var oils = cached(getOilList, 5000);
 	if (countFinishedStructList(structures.derricks) >= 4 * structListLimit(structures.gens))
 		return false;
-	for (var i = 0; i < oils.length; ++i)
+	for (let i = 0; i < oils.length; ++i)
 		if (captureOil(oils[i]) === BUILDRET.SUCCESS)
 			return true;
 	return false;
@@ -289,11 +289,11 @@ function buildEnergy() {
 
 function buildModules() {
 	var str = [];
-	for (var i = 0; i < modules.length; ++i) {
+	for (let i = 0; i < modules.length; ++i) {
 		if (modules[i].base === FACTORY && needFastestResearch() !== PROPULSIONUSAGE.GROUND)
 			continue;
 		str = enumStruct(me, modules[i].base);
-		for (var j = 0; j < str.length; ++j)
+		for (let j = 0; j < str.length; ++j)
 			if (buildModule(str[j]) !== BUILDRET.UNAVAILABLE)
 				return true;
 	}
@@ -333,7 +333,7 @@ function listOutdatedDefenses() {
 	for (const path in weaponStats) {
 		for (const role in DEFROLE) {
 			var list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
-			for (var i = 0; i < list.length - 2; ++i)
+			for (let i = 0; i < list.length - 2; ++i)
 				if (isAvailable(list[i + 2])) {
 					if (countStruct(list[i]) > 0)
 						return enumStruct(me, list[i]);
@@ -348,8 +348,8 @@ function recycleDefenses() {
 	if (trucks.length <= 0)
 		return false;
 	var list = listOutdatedDefenses();
-	for (var i = 0; i < list.length; ++i)
-		for (var j = 0; j < trucks.length; ++j)
+	for (let i = 0; i < list.length; ++i)
+		for (let j = 0; j < trucks.length; ++j)
 			if (droidCanReach(trucks[j], list[i].x, list[i].y)) {
 				orderDroidObj(trucks[j], DORDER_DEMOLISH, list[i]);
 				return true;

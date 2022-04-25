@@ -184,7 +184,7 @@ function produceDroids(){
 	var forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
-		for (var e = 0; e < maxPlayers; ++e) {
+		for (let e = 0; e < maxPlayers; ++e) {
 			if ( allianceExistsBetween(me,e) ) continue;
 			if(seer){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));
@@ -233,7 +233,7 @@ function produceCyborgs(){
 	var forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
-		for (var e = 0; e < maxPlayers; ++e) {
+		for (let e = 0; e < maxPlayers; ++e) {
 			if ( allianceExistsBetween(me,e) ) continue;
 			if(seer){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));
@@ -278,7 +278,7 @@ function produceVTOL(){
 	var forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
-		for (var e = 0; e < maxPlayers; ++e) {
+		for (let e = 0; e < maxPlayers; ++e) {
 			if ( allianceExistsBetween(me,e) ) continue;
 			if(seer){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));

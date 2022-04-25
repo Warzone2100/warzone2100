@@ -170,7 +170,7 @@ function checkAllForRepair()
 	}
 
 	var droids = enumGroup(attackGroup);
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (let i = 0, l = droids.length; i < l; ++i)
 	{
 		repairDroid(droids[i].id);
 	}
@@ -283,7 +283,7 @@ function artilleryTactics()
 				orderDroidObj(sensors[0], DORDER_OBSERVE, tempObj);
 			}
 
-			for (var i = 0; i < ARTI_LEN; ++i)
+			for (let i = 0; i < ARTI_LEN; ++i)
 			{
 				//Send artillery to help at beacon, if possible
 				if ((beacon.endTime > gameTime) &&
@@ -345,7 +345,7 @@ function groundTactics()
 				return;
 			}
 
-			for (var i = 0, l = UNITS.length; i < l; ++i)
+			for (let i = 0, l = UNITS.length; i < l; ++i)
 			{
 				var id = UNITS[i].id;
 
@@ -413,7 +413,7 @@ function recycleForHover()
 	{
 		if (!unfinished.length && NON_HOVER_SYSTEMS)
 		{
-			for (var i = 0; i < NON_HOVER_SYSTEMS; ++i)
+			for (let i = 0; i < NON_HOVER_SYSTEMS; ++i)
 			{
 				orderDroid(systems[i], DORDER_RECYCLE);
 			}
@@ -428,7 +428,7 @@ function recycleForHover()
 		{
 			var tanks = enumGroup(attackGroup).filter((dr) => (dr.propulsion !== "hover01"));
 			const NON_HOVER_TANKS = tanks.length;
-			for (var j = 0; j < NON_HOVER_TANKS; ++j)
+			for (let j = 0; j < NON_HOVER_TANKS; ++j)
 			{
 				orderDroid(tanks[j], DORDER_RECYCLE);
 			}
@@ -477,7 +477,7 @@ function vtolTactics()
 
 		if (isDefined(target))
 		{
-			for (var i = 0; i < LEN; ++i)
+			for (let i = 0; i < LEN; ++i)
 			{
 				var id = vtols[i].id;
 
@@ -680,7 +680,7 @@ function baseShuffleDefensePattern()
 	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
 	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
 	const MAX_NEARBY_STRUCTURES = 2;
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (let i = 0, len = attackers.length; i < len; ++i)
 	{
 		if (attackers[i].order !== DORDER_HOLD)
 		{
@@ -717,7 +717,7 @@ function lowOilDefensePattern()
 		return;
 	}
 
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (let i = 0, len = attackers.length; i < len; ++i)
 	{
 		var derr = derricks[random(derricks.length)];
 		orderDroidLoc(attackers[i], DORDER_SCOUT, derr.x, derr.y);
@@ -755,7 +755,7 @@ function retreatTactics()
 	var droids = enumGroup(retreatGroup);
 
 	//Flee!
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (let i = 0, len = droids.length; i < len; ++i)
 	{
 		var droid = droids[i];
 		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter((obj) => (

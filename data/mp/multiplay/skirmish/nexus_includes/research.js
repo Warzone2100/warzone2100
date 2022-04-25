@@ -9,7 +9,7 @@ function evalResearch(labID, list)
 		return false;
 	}
 
-	for (var i = 0, len = list.length; i < len; ++i)
+	for (let i = 0, len = list.length; i < len; ++i)
 	{
 		if (pursueResearch(lab, list[i]))
 		{
@@ -30,7 +30,7 @@ function doResearch()
 		return;
 	}
 
-	for (var i = 0, len = resLabs.length; i < len; ++i)
+	for (let i = 0, len = resLabs.length; i < len; ++i)
 	{
 		var lab = resLabs[i];
 

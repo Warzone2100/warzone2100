@@ -662,7 +662,7 @@ function findRig() {
 	seeResources = sortByDistance(seeResources,base,null);
 
 
-	for (var m = 0, len = myMainBuilders.length; m < len; ++m) {
+	for (let m = 0, len = myMainBuilders.length; m < len; ++m) {
 		if ( m >= seeResources.length ) break;
 		if ( !builderBusy(myMainBuilders[m]) ){
 //			if ( )

@@ -93,7 +93,7 @@ function buildAttacker(struct)
 
 	if (enumGroup(attackGroup).length > MIN_ATTACK_GSIZE && enumGroup(busterGroup).length < MIN_BUSTERS)
 	{
-		for (var i = 0; i < TANK_BUNKER_BUSTERS.length; ++i)
+		for (let i = 0; i < TANK_BUNKER_BUSTERS.length; ++i)
 		{
 			if (componentAvailable(TANK_BUNKER_BUSTERS[i]))
 			{

@@ -60,7 +60,7 @@ function firstAbsorbAttack()
 		obj.type !== DROID || (obj.type === DROID && obj.droidType !== DROID_SUPERTRANSPORTER)
 	));
 
-	for (var i = 0, len = objects.length; i < len; ++i)
+	for (let i = 0, len = objects.length; i < len; ++i)
 	{
 		var obj = objects[i];
 		//Destroy all the VTOLs to prevent a player from instantly defeating the HQ in a rush.
@@ -148,7 +148,7 @@ function enableAllFactories()
 		"NX-VtolFactory2", "NX-SWCyborgFactory1", "NX-SWCyborgFactory2",
 	];
 
-	for (var i = 0, l = FACTORY_LIST.length; i < l; ++i)
+	for (let i = 0, l = FACTORY_LIST.length; i < l; ++i)
 	{
 		camEnableFactory(FACTORY_LIST[i]);
 	}
@@ -170,7 +170,7 @@ function truckDefense()
 			"Sys-SensoTower02"
 		];
 
-		for (var i = 0; i < truckNum; ++i)
+		for (let i = 0; i < truckNum; ++i)
 		{
 			camQueueBuilding(NEXUS, list[camRand(list.length)]);
 		}

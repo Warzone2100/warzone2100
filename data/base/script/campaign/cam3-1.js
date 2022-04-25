@@ -107,7 +107,7 @@ function missileSilosDestroyed()
 	const SILO_ALIAS = "NXMissileSilo";
 	var destroyed = 0;
 
-	for (var i = 0; i < SILO_COUNT; ++i)
+	for (let i = 0; i < SILO_COUNT; ++i)
 	{
 		destroyed += (getObject(SILO_ALIAS + (i + 1)) === null) ? 1 : 0;
 	}
@@ -126,13 +126,13 @@ function nukeAndCountSurvivors()
 	var foundUnit = false;
 
 	//Make em' explode!
-	for (var i = 0, len = nuked.length; i < len; ++i)
+	for (let i = 0, len = nuked.length; i < len; ++i)
 	{
 		var nukeIt = true;
 		var obj1 = nuked[i];
 
 		//Check if it's in the safe area.
-		for (var j = 0, len2 = safeZone.length; j < len2; ++j)
+		for (let j = 0, len2 = safeZone.length; j < len2; ++j)
 		{
 			var obj2 = safeZone[j];
 
@@ -185,7 +185,7 @@ function getCountdown()
 	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
 
-	for (var i = 0, len = countdownObject.length; i < len; ++i)
+	for (let i = 0, len = countdownObject.length; i < len; ++i)
 	{
 		var currentTime = getMissionTime();
 		if (currentTime <= countdownObject[0].time)

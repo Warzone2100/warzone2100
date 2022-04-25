@@ -40,7 +40,7 @@ _global.unnoticeBeacon = function(from) {
 }
 
 _global.findBeaconPlayer = function(x, y) {
-	for (var i = 0; i < beaconInfo.length; ++i)
+	for (let i = 0; i < beaconInfo.length; ++i)
 		if (defined(beaconInfo[i]) && beaconInfo[i].x === x && beaconInfo[i].y === y)
 			return i;
 }
