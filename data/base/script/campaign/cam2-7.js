@@ -125,6 +125,8 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohact, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COBase1": {

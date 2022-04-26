@@ -302,6 +302,8 @@ function eventStartLevel()
 	setAlliance(THE_COLLECTIVE, SCAV_7, true);
 	setAlliance(CAM_HUMAN_PLAYER, SCAV_7, true);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COAirBase": {
