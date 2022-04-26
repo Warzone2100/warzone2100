@@ -41,11 +41,7 @@ function setupLandGroups()
 		regroup: false,
 	});
 
-	camManageGroup(camMakeGroup(tanks), CAM_ORDER_DEFEND, {
-		pos: [
-			camMakePos("NWTankPos3"),
-		],
-		radius: 15,
+	camManageGroup(camMakeGroup(tanks), CAM_ORDER_ATTACK, {
 		regroup: false,
 	});
 
@@ -136,20 +132,20 @@ function eventStartLevel()
 		"COCyborgFac-b1": {
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
+			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 27 : 30)),
 			data: {
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.npcybr, cTempl.npcybf, cTempl.npcybc]
+			templates: [cTempl.cocybag, cTempl.npcybr]
 		},
 		"COHeavyFacL-b2": {
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 63 : 70)),
+			groupSize: 4,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 50 : 55)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -160,7 +156,7 @@ function eventStartLevel()
 		"COHeavyFacR-b2": {
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
+			groupSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 45 : 50)),
 			data: {
 				regroup: false,
@@ -172,7 +168,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 63 : 70)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 45 : 50)),
 			data: {
 				regroup: false,
 				count: -1,
