@@ -26,7 +26,6 @@ camAreaEvent("vtolRemoveZone", function(droid)
 	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
 });
 
-
 camAreaEvent("group1Trigger", function(droid)
 {
 	hackRemoveMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -64,9 +63,9 @@ camAreaEvent("wayPoint2Rad", function(droid)
 	}
 
 	var point = getObject("wayPoint3");
-	var defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter(function(obj) {
-		return (obj.droidType === DROID_WEAPON);
-	});
+	var defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter((obj) => (
+		obj.droidType === DROID_WEAPON
+	));
 
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("wayPoint4"),

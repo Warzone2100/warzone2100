@@ -62,7 +62,7 @@ function getDroidsForNPLZ(args)
 	}
 
 	var lim = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
-	for (var i = 0; i < lim; ++i)
+	for (let i = 0; i < lim; ++i)
 	{
 		list.push(unitTemplates[camRand(unitTemplates.length)]);
 	}
@@ -123,9 +123,9 @@ function activateNPLZTransporter()
 
 function sendNPTransport()
 {
-	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter(function(obj) {
-		return (obj.type === STRUCTURE && obj.stattype === DEFENSE);
-	});
+	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter((obj) => (
+		obj.type === STRUCTURE && obj.stattype === DEFENSE
+	));
 
 	if (nearbyDefense.length > 0)
 	{

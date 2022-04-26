@@ -8,13 +8,13 @@ debugMsg('Module: produce.js','init');
 function prepeareProduce(){
 //	debugMsg('prepeareProduce()', 'production')
 	//Если есть HQ
-	var hq = enumStruct(me, HQ).filter(function (e){if(e.status == BUILT)return true;return false;});
+	var hq = enumStruct(me, HQ).filter((e) => (e.status == BUILT));
 	if (hq.length > 0){
 		//Составляем корпуса
 		light_bodies=[];
 		medium_bodies=[];
 		heavy_bodies=[];
-		bodies.forEach(function(e){
+		bodies.forEach((e) => {
 			//			debugMsg("Body: "+e[1]+" "+getResearch(e[0]).done, 'production');
 			switch (e[1]){
 				case "Body1REC":
@@ -44,14 +44,10 @@ function prepeareProduce(){
 
 		/*
 		//Сортируем пушки по "крутизне", базируясь на research.points
-		var _guns=guns.filter(function(e){
+		var _guns=guns.filter((e) => {
 			debugMsg(e[0]+' - '+getResearch(e[0]).done, 'weap');
-			if(getResearch(e[0]).done)return true;return false;
-		}).sort(function (a,b){
-			if(getResearch(a[0]).points < getResearch(b[0]).points ) return -1;
-			if(getResearch(a[0]).points > getResearch(b[0]).points ) return 1;
-			return 0;
-		});
+			return getResearch(e[0]).done;
+		}).sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));
 
 		avail_guns=[];
 		for (const i in _guns) {
@@ -73,12 +69,8 @@ function prepeareProduce(){
 
 		//Сайборги заполонили!
 		avail_cyborgs=[];
-		var _cyb=cyborgs.filter(function(e){if( (getResearch(e[0]).done && technology) || (!technology && e[1] == 'CyborgHeavyBody'))return true;return false;});
-		/*.sort(function (a,b){
-			if(getResearch(a[0]).points < getResearch(b[0]).points ) return -1;
-			if(getResearch(a[0]).points > getResearch(b[0]).points ) return 1;
-			return 0;
-		});*/
+		var _cyb=cyborgs.filter((e) => ((getResearch(e[0]).done && technology) || (!technology && e[1] == 'CyborgHeavyBody')));
+		/*.sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));*/
 		for (const i in _cyb) {
 			avail_cyborgs.push([_cyb[i][1],_cyb[i][2]]);
 		}
@@ -86,11 +78,9 @@ function prepeareProduce(){
 
 		//В.В.иП.
 		avail_vtols=[];
-		var _vtols=vtols.filter(function(e){if(getResearch(e[0]).done)return true;return false;}).sort(function (a,b){
-			if(getResearch(a[0]).points < getResearch(b[0]).points ) return -1;
-			if(getResearch(a[0]).points > getResearch(b[0]).points ) return 1;
-			return 0;
-		});
+		var _vtols=vtols.filter((e) => (getResearch(e[0]).done)).sort((a, b) => (
+			getResearch(a[0]).points - getResearch(b[0]).points
+		));
 		for (const i in _vtols) {
 			avail_vtols.push(_vtols[i][1]);
 		}
@@ -100,10 +90,10 @@ function prepeareProduce(){
 	}
 
 	defence=[];
-	towers.forEach(function(e){if(getResearch(e[0]).done)defence.unshift(e[1]);});
+	towers.forEach((e) => {if(getResearch(e[0]).done)defence.unshift(e[1]);});
 
 	AA_defence=[];
-	AA_towers.forEach(function(e){if(getResearch(e[0]).done)AA_defence.unshift(e[1]);});
+	AA_towers.forEach((e) => {if(getResearch(e[0]).done)AA_defence.unshift(e[1]);});
 
 	//	if(AA_defence.length > 0) defence.unshift(AA_defence[0]); //add best AA to normal defence
 
@@ -112,7 +102,7 @@ function prepeareProduce(){
 function produceDroids(){
 	if(!running)return;
 	debugMsg('produceDroids()', 'production');
-	var droid_factories = enumStruct(me,FACTORY).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
+	var droid_factories = enumStruct(me,FACTORY).filter((e) => (e.status == BUILT && structureIdle(e)));
 	if(droid_factories.length === 0) return;
 
 
@@ -165,7 +155,7 @@ function produceDroids(){
 
 
 	if(enumDroid(me, DROID_SENSOR).length === 0 && getInfoNear(base.x,base.y,'safe',base_range).value && scannersTrigger < gameTime){
-		var hq = enumStruct(me, HQ).filter(function (e){if(e.status == BUILT)return true;return false;});
+		var hq = enumStruct(me, HQ).filter((e) => (e.status == BUILT));
 		if (hq.length > 0){
 			buildDroid(droid_factories[0], "Scanner", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','HalfTrack','wheeled01'], "", "", "SensorTurret1Mk1");
 			scannersTrigger = gameTime + scannersTimer;
@@ -194,7 +184,7 @@ function produceDroids(){
 	var forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
-		for ( var e = 0; e < maxPlayers; ++e ) {
+		for (let e = 0; e < maxPlayers; ++e) {
 			if ( allianceExistsBetween(me,e) ) continue;
 			if(seer){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));
@@ -228,12 +218,12 @@ function produceDroids(){
 }
 function produceCyborgs(){
 	if(!running) return;
-	var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
+	var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter((e) => (e.status == BUILT && structureIdle(e)));
 	if(cyborg_factories.length === 0) return;
 
 
 	if(enumStruct(me, FACTORY).length === 0){
-		var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
+		var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter((e) => (e.status == BUILT && structureIdle(e)));
 		if(cyborg_factories.length > 0){
 			buildDroid(cyborg_factories[0], 'Emergency Builder', 'CyborgLightBody', "CyborgLegs", "", "", 'CyborgSpade');
 		}
@@ -243,7 +233,7 @@ function produceCyborgs(){
 	var forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
-		for ( var e = 0; e < maxPlayers; ++e ) {
+		for (let e = 0; e < maxPlayers; ++e) {
 			if ( allianceExistsBetween(me,e) ) continue;
 			if(seer){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));
@@ -281,14 +271,14 @@ function produceCyborgs(){
 function produceVTOL(){
 	if(!running)return;
 	var vtol_factory = enumStruct(me, VTOL_FACTORY);
-	var vtol_factories = vtol_factory.filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
+	var vtol_factories = vtol_factory.filter((e) => (e.status == BUILT && structureIdle(e)));
 
 	if(vtol_factories.length === 0) return;
 
 	var forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
-		for ( var e = 0; e < maxPlayers; ++e ) {
+		for (let e = 0; e < maxPlayers; ++e) {
 			if ( allianceExistsBetween(me,e) ) continue;
 			if(seer){
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));

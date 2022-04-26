@@ -147,7 +147,7 @@ function eventDroidBuilt(droid, structure)
 		}
 		else
 		{
-			for (var i = 0, len = groups.vtolAttackers.length; i < len; ++i)
+			for (let i = 0, len = groups.vtolAttackers.length; i < len; ++i)
 			{
 				if (enumGroup(groups.vtolAttackers[i]).length < nexusBranch[branch].numVtolsPerGroup)
 				{
@@ -251,7 +251,7 @@ function eventDestroyed(what)
 	else if (what.type === STRUCTURE)
 	{
 		// add certain structures to the rebuild list
-		for (var i = 0, len = STANDARD_REBUILD_STRUCTURES.length; i < len; ++i)
+		for (let i = 0, len = STANDARD_REBUILD_STRUCTURES.length; i < len; ++i)
 		{
 			var obj = STANDARD_REBUILD_STRUCTURES[i];
 
@@ -283,9 +283,9 @@ function eventStructureBuilt(structure, droid)
 	if (droid && droid.player === me && structure.stattype === RESOURCE_EXTRACTOR)
 	{
 		const SCAN_RANGE = 10;
-		var oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter(function(o) {
-			return (o.type === FEATURE && o.stattype === OIL_RESOURCE);
-		});
+		var oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter((o) => (
+			o.type === FEATURE && o.stattype === OIL_RESOURCE
+		));
 
 		if (oils.length > 0 && !skipOilGrabIfEasy())
 		{

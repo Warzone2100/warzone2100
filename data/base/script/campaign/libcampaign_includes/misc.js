@@ -155,7 +155,7 @@ function camDist(x1, y1, x2, y2)
 //;;
 function camPlayerMatchesFilter(player, filter)
 {
-	switch(filter) {
+	switch (filter) {
 		case ALL_PLAYERS:
 			return true;
 		case ALLIES:
@@ -176,7 +176,7 @@ function camRemoveDuplicates(array)
 	var prims = {"boolean":{}, "number":{}, "string":{}};
 	var objs = [];
 
-	return array.filter(function(item) {
+	return array.filter((item) => {
 		var type = typeof item;
 		if (type in prims)
 		{
@@ -201,7 +201,7 @@ function camCountStructuresInArea(lab, player)
 	}
 	var list = enumArea(lab, player, false);
 	var ret = 0;
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (let i = 0, l = list.length; i < l; ++i)
 	{
 		var object = list[i];
 		if (object.type === STRUCTURE && object.stattype !== WALL && object.status === BUILT)
@@ -248,7 +248,7 @@ function camChangeOnDiff(num)
 //;;
 function camIsSystemDroid(obj)
 {
-	if(!camDef(obj) || !obj)
+	if (!camDef(obj) || !obj)
 	{
 		return false;
 	}
@@ -292,7 +292,7 @@ function camMakeGroup(what, filter)
 	}
 	if (camDef(obj))
 	{
-		switch(obj.type) {
+		switch (obj.type) {
 			case POSITION:
 				obj = getObject(obj.x, obj.y);
 				// fall-through
@@ -319,7 +319,7 @@ function camMakeGroup(what, filter)
 	if (camDef(array))
 	{
 		var group = camNewGroup();
-		for (var i = 0, l = array.length; i < l; ++i)
+		for (let i = 0, l = array.length; i < l; ++i)
 		{
 			var o = array[i];
 			if (!camDef(o) || !o)
@@ -343,9 +343,9 @@ function camMakeGroup(what, filter)
 //;;
 function camBreakAlliances()
 {
-	for (var i = 0; i < CAM_MAX_PLAYERS; ++i)
+	for (let i = 0; i < CAM_MAX_PLAYERS; ++i)
 	{
-		for (var c = 0; c < CAM_MAX_PLAYERS; ++c)
+		for (let c = 0; c < CAM_MAX_PLAYERS; ++c)
 		{
 			if (i !== c && allianceExistsBetween(i, c) === true)
 			{
@@ -404,7 +404,6 @@ function camGenerateRandomMapEdgeCoordinate(reachPosition)
 		loc = location;
 	} while (camDef(reachPosition) && reachPosition && !propulsionCanReach("wheeled01", reachPosition.x, reachPosition.y, loc.x, loc.y));
 
-
 	return loc;
 }
 
@@ -458,21 +457,21 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 // Figures out what campaign we are in without reliance on the source at all.
 function camDiscoverCampaign()
 {
-	for (var i = 0, len = ALPHA_LEVELS.length; i < len; ++i)
+	for (let i = 0, len = ALPHA_LEVELS.length; i < len; ++i)
 	{
 		if (__camNextLevel === ALPHA_LEVELS[i] || __camNextLevel === BETA_LEVELS[0])
 		{
 			return ALPHA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (var i = 0, len = BETA_LEVELS.length; i < len; ++i)
+	for (let i = 0, len = BETA_LEVELS.length; i < len; ++i)
 	{
 		if (__camNextLevel === BETA_LEVELS[i] || __camNextLevel === GAMMA_LEVELS[0])
 		{
 			return BETA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (var i = 0, len = GAMMA_LEVELS.length; i < len; ++i)
+	for (let i = 0, len = GAMMA_LEVELS.length; i < len; ++i)
 	{
 		if (__camNextLevel === GAMMA_LEVELS[i] || __camNextLevel === CAM_GAMMA_OUT)
 		{
@@ -494,13 +493,13 @@ function __camFindClusters(list, size)
 {
 	// The good old cluster analysis algorithm taken from NullBot AI.
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
-	for (var i = list.length - 1; i >= 0; --i)
+	for (let i = list.length - 1; i >= 0; --i)
 	{
 		var x = list[i].x;
 		var y = list[i].y;
 		var found = false;
 		var n = 0;
-		for (var j = 0; j < ret.clusters.length; ++j)
+		for (let j = 0; j < ret.clusters.length; ++j)
 		{
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
 			{
@@ -546,7 +545,7 @@ function __camTick()
 //Reset AI power back to highest storage possible.
 function __camAiPowerReset()
 {
-	for (var i = 1; i < CAM_MAX_PLAYERS; ++i)
+	for (let i = 1; i < CAM_MAX_PLAYERS; ++i)
 	{
 		setPower(AI_POWER, i);
 	}

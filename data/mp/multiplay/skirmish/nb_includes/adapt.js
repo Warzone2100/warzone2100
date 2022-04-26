@@ -12,21 +12,21 @@ function adaptVote(our, their, verbose) {
 	if (!defined(verbose))
 		verbose = false;
 	var l = our.length;
-	var ourTotal = our.reduce(function(prev, curr) { return prev + curr; });
-	var theirTotal = their.reduce(function(prev, curr) { return prev + curr; });
+	var ourTotal = our.reduce((prev, curr) => (prev + curr));
+	var theirTotal = their.reduce((prev, curr) => (prev + curr));
 	if (theirTotal === 0)
 		return verbose ? randomUnitArray(l) : random(l);
 	var rating = [];
-	for (var i = 0; i < l; ++i)
+	for (let i = 0; i < l; ++i)
 		rating[i] = their[i] / theirTotal;
 	if (ourTotal > 0)
-		for (var i = 0; i < l; ++i)
+		for (let i = 0; i < l; ++i)
 			rating[i] -= our[i] / ourTotal;
 	if (verbose)
-		return rating.map(function(val) { return (val + 1) / 2; });
+		return rating.map((val) => ((val + 1) / 2));
 	var maxRating = -Infinity;
 	var maxIdx = 0;
-	for (var i = 0; i < l; ++i)
+	for (let i = 0; i < l; ++i)
 		if (rating[i] > maxRating) {
 			maxRating = rating[i];
 			maxIdx = i;
@@ -56,7 +56,7 @@ function addStat(to, what, weight) {
 		weight = 1;
 	for (const prop in to) {
 		if (to[prop].constructor === Array)
-			for (var i = 0; i < to[prop].length; ++i)
+			for (let i = 0; i < to[prop].length; ++i)
 				to[prop][i] += what[prop][i] * weight;
 		else
 			to[prop] += what[prop] * weight;
@@ -110,7 +110,7 @@ function MyStat() {
 }
 
 var enemyStats = [], enemyStatsTemp = [];
-for (var i = 0; i < maxPlayers; ++i) {
+for (let i = 0; i < maxPlayers; ++i) {
 	enemyStats[i] = new EnemyStat();
 	enemyStatsTemp[i] = new EnemyStat();
 }
@@ -146,9 +146,7 @@ function countLandTargets(player) {
 		if (!defined(currProp))
 			return 0;
 		var list = enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT));
-		return list.filter(function(obj) {
-			return canReachFromBase(currProp, obj);
-		}).length;
+		return list.filter((obj) => (canReachFromBase(currProp, obj))).length;
 	}
 	return cached(uncached, 5000, player);
 }
@@ -160,9 +158,9 @@ function countSeaTargets(player) {
 		if (!defined(currProp))
 			return 0;
 		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
-		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter(function(obj) {
-			return (!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj);
-		}).length;
+		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => (
+			(!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj)
+		)).length;
 	}
 	return cached(uncached, 5000, player);
 }
@@ -174,9 +172,9 @@ function countAirTargets(player) {
 		if (!defined(currProp))
 			return 0;
 		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER)[0];
-		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter(function(obj) {
-			return (!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj);
-		}).length;
+		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => (
+			(!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj)
+		)).length;
 	}
 	return cached(uncached, 5000, player);
 }
@@ -191,7 +189,7 @@ function classifyObject(obj) {
 		return ret;
 	if (obj.type === FEATURE)
 		return ret;
-	for (var i = 0; i < obj.weapons.length; ++i) {
+	for (let i = 0; i < obj.weapons.length; ++i) {
 		var roles = guessWeaponRole(obj.weapons[i].name); {
 			if (!defined(roles)) {
 				if (obj.canHitAir && obj.canHitGround)
@@ -204,7 +202,7 @@ function classifyObject(obj) {
 				ret.role.addArray(roles);
 		}
 	}
-	for (var i = 0; i < obj.weapons.length; ++i) {
+	for (let i = 0; i < obj.weapons.length; ++i) {
 		if (getWeaponInfo(obj.weapons[i].name).impactClass === "KINETIC")
 			ret.kweapon += 1;
 		else
@@ -272,7 +270,7 @@ function summUpMyObject(obj, stat) {
 		if (obj.group === miscGroup)
 			addStat(stat.defense, ret, w);
 		var list = enumLivingPlayers();
-		list.forEach(function(p) {
+		list.forEach((p) => {
 			if (isEnemy(p)) {
 				if (countLandTargets(p) > 0)
 					addStat(stat.offense.land, ret, w / list.length);
@@ -294,7 +292,7 @@ _global.adaptCycle = function() {
 		var items = MAX_PER_CYCLE;
 		if (items > stack.length)
 			items = stack.length;
-		for (var i = 0; i < items; ++i) {
+		for (let i = 0; i < items; ++i) {
 			var obj = stack.pop();
 			if (isEnemy(adaptCycle.player))
 				summUpEnemyObject(obj, enemyStatsTemp[adaptCycle.player]);
@@ -332,7 +330,7 @@ _global.adaptCycle = function() {
 
 function getMyGroupInfo(gr) {
 	var ret = new MyStat();
-	enumGroup(gr).forEach(function(obj) { summUpMyObject(obj, ret); });
+	enumGroup(gr).forEach((obj) => { summUpMyObject(obj, ret); });
 	return ret;
 }
 
@@ -363,7 +361,7 @@ function groupAttackOurs(gr) {
 
 function enemyOffense() {
 	var theirs = new SimpleStat();
-	enumLivingPlayers().filter(isEnemy).forEach(function(p) {
+	enumLivingPlayers().filter(isEnemy).forEach((p) => {
 		addStat(theirs, enemyStats[p].offense);
 	});
 	return theirs;
@@ -378,7 +376,7 @@ function groupTheirs(gr) {
 				return enemyStats[gr].collapse();
 		} else {
 			var theirs = new SimpleStat();
-			enumLivingPlayers().filter(isEnemy).forEach(function(p) {
+			enumLivingPlayers().filter(isEnemy).forEach((p) => {
 				addStat(theirs, enemyStats[p].collapse());
 			});
 			return theirs;
@@ -464,7 +462,7 @@ _global.chooseObjectType = function() {
 _global.scopeRatings = function() {
 	function uncached() {
 		var ret = { land: 0, sea: 0, air: 0 };
-		enumLivingPlayers().filter(isEnemy).forEach(function(player) {
+		enumLivingPlayers().filter(isEnemy).forEach((player) => {
 			ret.land += countLandTargets(player);
 			ret.sea += countSeaTargets(player);
 			ret.air += countAirTargets(player);

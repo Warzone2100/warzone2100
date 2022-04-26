@@ -67,11 +67,11 @@ camAreaEvent("phantomFacTrigger", function(droid)
 function setAlphaExp()
 {
 	const DROID_EXP = 512; //Hero rank.
-	var alphaDroids = enumArea("alphaPit", ALPHA, false).filter(function(obj) {
-		return obj.type === DROID;
-	});
+	var alphaDroids = enumArea("alphaPit", ALPHA, false).filter((obj) => (
+		obj.type === DROID
+	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (let i = 0, l = alphaDroids.length; i < l; ++i)
 	{
 		var dr = alphaDroids[i];
 		if (!camIsSystemDroid(dr))
@@ -85,11 +85,11 @@ function setAlphaExp()
 function getAlphaUnitIDs()
 {
 	alphaUnitIDs = [];
-	var alphaDroids = enumArea("alphaPit", CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID && obj.experience === 512;
-	});
+	var alphaDroids = enumArea("alphaPit", CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID && obj.experience === 512
+	));
 
-	for (var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (let i = 0, l = alphaDroids.length; i < l; ++i)
 	{
 		var dr = alphaDroids[i];
 		alphaUnitIDs.push(dr.id);
@@ -118,7 +118,7 @@ function phantomFactorySE()
 function sendEdgeMapDroids(droidCount, location, list)
 {
 	var droids = [];
-	for (var i = 0; i < droidCount; ++i)
+	for (let i = 0; i < droidCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -227,13 +227,13 @@ function alphaTeamAlive()
 	if (camDef(alphaUnitIDs) && startExtraLoss)
 	{
 		var alphaAlive = false;
-		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-			return obj.type === DROID;
-		});
+		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+			obj.type === DROID
+		));
 
-		for (var i = 0, l = alive.length; i < l; ++i)
+		for (let i = 0, l = alive.length; i < l; ++i)
 		{
-			for (var x = 0, c = alphaUnitIDs.length; x < c; ++x)
+			for (let x = 0, c = alphaUnitIDs.length; x < c; ++x)
 			{
 				if (alive[i].id === alphaUnitIDs[x])
 				{

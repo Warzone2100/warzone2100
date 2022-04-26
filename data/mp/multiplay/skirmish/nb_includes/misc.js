@@ -35,7 +35,7 @@ function isEnemy(player) {
 function enumLivingPlayers() {
 	function uncached() {
 		var ret = [];
-		for (var i = 0; i < maxPlayers; ++i) {
+		for (let i = 0; i < maxPlayers; ++i) {
 			if (countStructList(targets, i) > 0) {
 				ret.push(i);
 				continue;

@@ -22,7 +22,6 @@ include("multiplay/script/rules/setup/research.js");
 include("multiplay/script/rules/setup/components.js");
 include("multiplay/script/rules/setup/base.js");
 
-
 /* *** RULES *** */
 // Displays the set match rules at the beginning of the match, for those who did not pay attention to the settings in the lobby
 include("multiplay/script/rules/printsettings.js");
@@ -38,8 +37,6 @@ include("multiplay/script/rules/endconditions.js");
 
 // Logic of places oil barrels on the battlefield
 include("multiplay/script/rules/oildrum.js");
-
-
 
 /* *** EVENTS *** */
 //Function to be executed when certain events occur in the game.

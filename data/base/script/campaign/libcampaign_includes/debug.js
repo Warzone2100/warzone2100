@@ -16,7 +16,7 @@ function camMarkTiles(label)
 	}
 	else
 	{
-		for (var i = 0, l = label.length; i < l; ++i)
+		for (let i = 0, l = label.length; i < l; ++i)
 		{
 			__camMarkedTiles[label[i]] = true;
 		}
@@ -37,7 +37,7 @@ function camUnmarkTiles(label)
 	}
 	else
 	{
-		for (var i = 0, l = label.length; i < l; ++i)
+		for (let i = 0, l = label.length; i < l; ++i)
 		{
 			delete __camMarkedTiles[label[i]];
 		}
@@ -158,7 +158,7 @@ function __camGenericDebug(flag, func, args, err, bt)
 {
 	if (camDef(bt) && bt)
 	{
-		for (var i = bt.length - 1; i >= 0; --i)
+		for (let i = bt.length - 1; i >= 0; --i)
 		{
 			debug("STACK: from", JSON.stringify([bt[i]]));
 		}

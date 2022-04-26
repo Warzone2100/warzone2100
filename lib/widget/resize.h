@@ -17,42 +17,53 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_LIB_WIDGET_MINSIZE_H__
-#define __INCLUDED_LIB_WIDGET_MINSIZE_H__
+#ifndef __INCLUDED_LIB_WIDGET_RESIZE_H__
+#define __INCLUDED_LIB_WIDGET_RESIZE_H__
 
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "widget.h"
 #include <optional-lite/optional.hpp>
 
-class MinSizeWidget;
-struct MinSize
+class ResizeWidget;
+struct Resize
 {
-    MinSize(nonstd::optional<int32_t> width, nonstd::optional<int32_t> height)
-        : width(width)
-        , height(height)
-        {}
-
-	static MinSize minWidth(int32_t width)
+	static Resize width(nonstd::optional<int32_t> min, nonstd::optional<int32_t> max = nonstd::nullopt)
 	{
-		return MinSize(width, nonstd::nullopt);
+		Resize resize;
+		resize.minWidth = min;
+		resize.maxWidth = max;
+		return resize;
 	}
 
-	static MinSize minHeight(int32_t height)
+	static Resize height(nonstd::optional<int32_t> min, nonstd::optional<int32_t> max = nonstd::nullopt)
 	{
-		return MinSize(nonstd::nullopt, height);
+		Resize resize;
+		resize.minHeight = min;
+		resize.maxHeight = max;
+		return resize;
 	}
 
-    std::shared_ptr<MinSizeWidget> wrap(std::shared_ptr<WIDGET> widget);
+	static Resize fixed(int32_t width, int32_t height)
+	{
+		return Resize{width, width, height, height};
+	}
 
-    nonstd::optional<int32_t> width;
-    nonstd::optional<int32_t> height;
+    std::shared_ptr<ResizeWidget> wrap(std::shared_ptr<WIDGET> widget);
+
+    nonstd::optional<int32_t> minWidth;
+    nonstd::optional<int32_t> maxWidth;
+    nonstd::optional<int32_t> minHeight;
+    nonstd::optional<int32_t> maxHeight;
 };
 
-class MinSizeWidget: public WIDGET
+class ResizeWidget: public WIDGET
 {
 public:
-    explicit MinSizeWidget(MinSize minSize): minSize(minSize) {}
+    explicit ResizeWidget(Resize resize): resize(resize)
+	{
+		setTransparentToMouse(true);
+	}
 
 protected:
     void geometryChanged() override;
@@ -60,7 +71,7 @@ protected:
     int32_t idealHeight() override;
 
 private:
-    MinSize minSize;
+    Resize resize;
 };
 
-#endif // __INCLUDED_LIB_WIDGET_MINSIZE_H__
+#endif // __INCLUDED_LIB_WIDGET_RESIZE_H__

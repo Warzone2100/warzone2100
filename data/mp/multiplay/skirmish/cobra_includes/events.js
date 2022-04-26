@@ -42,9 +42,9 @@ function eventStructureBuilt(structure, droid)
 		return;
 	}
 
-	var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter(function(obj) {
-		return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
-	}).sort(distanceToBase);
+	var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter((obj) => (
+		obj.type === FEATURE && obj.stattype === OIL_RESOURCE
+	)).sort(distanceToBase);
 
 	if (nearbyOils.length > 0 && !skipOilGrabIfEasy())
 	{
@@ -79,9 +79,9 @@ function eventDroidIdle(droid)
 	else if (forceDerrickBuildDefense && droid.droidType === DROID_CONSTRUCT && droid.group === oilGrabberGroup)
 	{
 		const SCAN_RANGE = 7;
-		var enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter(function(obj) {
-			return obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR;
-		});
+		var enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter((obj) => (
+			obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR
+		));
 
 		//most likely an enemy truck got the oil before us, so try to build a defense near it.
 		if (enemyDerrs.length > 0)
@@ -155,9 +155,9 @@ function eventAttacked(victim, attacker)
 	const SCAV_ATTACKER = isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer);
 	const GROUP_SCAN_RADIUS = subPersonalities[personality].retreatScanRange;
 
-	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter(function(obj) {
-		return obj.type === DROID;
-	});
+	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter((obj) => (
+		obj.type === DROID
+	));
 
 	//Custom SemperFi-JS's localized regrouping code to be used to retreat away from highly outnumbered contests.
 	if (victim.type === DROID && victim.player === me)
@@ -179,7 +179,7 @@ function eventAttacked(victim, attacker)
 			//Be more aggressive with scavenger stuff
 			if (SCAV_ATTACKER)
 			{
-				nearbyEnemies.forEach(function(obj) {
+				nearbyEnemies.forEach((obj) => {
 					nearbyScavs += (obj.player === scavengerPlayer);
 				});
 
@@ -223,20 +223,19 @@ function eventAttacked(victim, attacker)
 			return;
 		}
 
-		var units = nearbyUnits.filter(function(dr) {
-			return (dr.id !== victim.id &&
-				dr.group !== retreatGroup &&
-				!isConstruct(dr.id, false) &&
-				((isVTOL(dr) && droidReady(dr.id)) ||
-				(!repairDroid(dr.id)) && droidCanReach(dr, attacker.x, attacker.y))
-			);
-		});
+		var units = nearbyUnits.filter((dr) => (
+			dr.id !== victim.id &&
+			dr.group !== retreatGroup &&
+			!isConstruct(dr.id, false) &&
+			((isVTOL(dr) && droidReady(dr.id)) ||
+			(!repairDroid(dr.id)) && droidCanReach(dr, attacker.x, attacker.y))
+		));
 
 		const UNIT_LEN = units.length;
 
 		if (UNIT_LEN >= MIN_ATTACK_DROIDS && shouldCobraAttack())
 		{
-			for (var i = 0; i < UNIT_LEN; i++)
+			for (let i = 0; i < UNIT_LEN; i++)
 			{
 				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
 				{

@@ -70,7 +70,7 @@ function distanceToBase(obj1, obj2)
 
 function addDroidsToGroup(group, droids)
 {
-	for (var i = 0, d = droids.length; i < d; ++i)
+	for (let i = 0, d = droids.length; i < d; ++i)
 	{
 		groupAdd(group, droids[i]);
 	}
@@ -78,9 +78,9 @@ function addDroidsToGroup(group, droids)
 
 function nearbyStructureCount(location)
 {
-	return enumRange(location.x, location.y, 8, ALLIES, false).filter(function(obj) {
-		return obj.type === STRUCTURE;
-	}).length;
+	return enumRange(location.x, location.y, 8, ALLIES, false).filter((obj) => (
+		obj.type === STRUCTURE
+	)).length;
 }
 
 //Returns closest enemy object.
@@ -146,7 +146,7 @@ function playerAlliance(ally)
 
 	var players = [];
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i === me)
 		{
@@ -184,7 +184,7 @@ function findLivingEnemies()
 	function uncached()
 	{
 		var alive = [];
-		for (var x = 0; x < maxPlayers; ++x)
+		for (let x = 0; x < maxPlayers; ++x)
 		{
 	 		if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
 			{
@@ -233,7 +233,7 @@ function getMostHarmfulPlayer()
 			return 0; //If nothing to attack, then attack player 0 (happens only after winning).
 		}
 
-	 	for (var x = 0, c = enemies.length; x < c; ++x)
+	 	for (let x = 0, c = enemies.length; x < c; ++x)
 		{
 	 		if((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
 			{
@@ -259,12 +259,12 @@ function initializeGrudgeCounter()
 {
 	grudgeCount = [];
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		grudgeCount.push(0);
 	}
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if ((!allianceExistsBetween(i, me)) && (i !== me))
 		{
@@ -288,12 +288,12 @@ function donateFromGroup(from, group)
 		switch (group)
 		{
 			case "ATTACK": chosenGroup = enumGroup(attackGroup); break;
-			case "CYBORG": chosenGroup = enumGroup(attackGroup).filter(function(dr) { return dr.droidType === DROID_CYBORG; }); break;
+			case "CYBORG": chosenGroup = enumGroup(attackGroup).filter((dr) => (dr.droidType === DROID_CYBORG)); break;
 			case "VTOL": chosenGroup = enumGroup(vtolGroup); break;
 			default: chosenGroup = enumGroup(attackGroup); break;
 		}
 
-		var droids = chosenGroup.filter(function(dr) { return (dr.health > MIN_HEALTH); });
+		var droids = chosenGroup.filter((dr) => (dr.health > MIN_HEALTH));
 		const CACHE_DROIDS = droids.length;
 
 		if (CACHE_DROIDS >= MIN_ATTACK_DROIDS)
@@ -308,7 +308,7 @@ function removeThisTimer(timer)
 {
 	if (timer instanceof Array)
 	{
-		for(var i = 0, l = timer.length; i < l; ++i)
+		for (let i = 0, l = timer.length; i < l; ++i)
 		{
 			removeTimer(timer[i]);
 		}
@@ -358,14 +358,14 @@ function initCobraGroups()
 	oilGrabberGroup = newGroup();
 	retreatGroup = newGroup();
 
-	addDroidsToGroup(attackGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return !obj.isCB; }));
+	addDroidsToGroup(attackGroup, enumDroid(me, DROID_WEAPON).filter((obj) => (!obj.isCB)));
 	addDroidsToGroup(attackGroup, enumDroid(me, DROID_CYBORG));
-	addDroidsToGroup(vtolGroup, enumDroid(me).filter(function(obj) { return isVTOL(obj); }));
+	addDroidsToGroup(vtolGroup, enumDroid(me).filter((obj) => (isVTOL(obj))));
 	addDroidsToGroup(sensorGroup, enumDroid(me, DROID_SENSOR));
-	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return obj.isCB; }));
+	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter((obj) => (obj.isCB)));
 
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
+	for (let i = 0, l = cons.length; i < l; ++i)
 	{
 		var con = cons[i];
 

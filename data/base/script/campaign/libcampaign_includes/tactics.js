@@ -100,7 +100,7 @@ function camManageGroup(group, order, data)
 		{
 			saneData.pos = [ saneData.pos ];
 		}
-		for (var i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
+		for (let i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
 		{
 			saneData.pos[i] = camMakePos(saneData.pos[i]);
 		}
@@ -146,7 +146,7 @@ function camStopManagingGroup(group)
 function camOrderToString(order)
 {
 	var orderString;
-	switch(order)
+	switch (order)
 	{
 		case CAM_ORDER_ATTACK:
 			orderString = "ATTACK";
@@ -181,7 +181,7 @@ function __camFindGroupAvgCoordinate(groupID)
 		return null;
 	}
 
-	for (var i = 0; i < len; ++i)
+	for (let i = 0; i < len; ++i)
 	{
 		var droid = droids[i];
 		avgCoord.x += droid.x;
@@ -206,20 +206,20 @@ function __camPickTarget(group)
 	var gi = __camGroupInfo[group];
 	var droids = enumGroup(group);
 	__camFindGroupAvgCoordinate(group);
-	switch(gi.order)
+	switch (gi.order)
 	{
 		case CAM_ORDER_ATTACK:
 			if (camDef(gi.target))
 			{
-				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-					return (obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
-				});
+				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter((obj) => (
+					obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj))
+				));
 			}
 			// fall-through! we just don't track targets on COMPROMISE
 		case CAM_ORDER_COMPROMISE:
 			if (camDef(gi.data.pos))
 			{
-				for (var i = 0; i < gi.data.pos.length; ++i)
+				for (let i = 0; i < gi.data.pos.length; ++i)
 				{
 					var compromisePos = gi.data.pos[i];
 					if (targets.length > 0)
@@ -247,25 +247,25 @@ function __camPickTarget(group)
 				}
 			}
 			var dr = droids[0];
-			targets = targets.filter(function(obj) {
-				return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-			});
+			targets = targets.filter((obj) => (
+				propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+			));
 			if (targets.length === 0)
 			{
-				targets = enumStruct(CAM_HUMAN_PLAYER).filter(function(obj) {
-					return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-				});
+				targets = enumStruct(CAM_HUMAN_PLAYER).filter((obj) => (
+					propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+				));
 				if (targets.length === 0)
 				{
-					targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
-						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
-							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)));
-					});
+					targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => (
+						propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
+							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)))
+					));
 					if (targets.length === 0)
 					{
-						targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
-							return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-						});
+						targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => (
+							propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+						));
 					}
 				}
 			}
@@ -397,7 +397,7 @@ function __camTacticsTickForGroup(group)
 	//repair
 	if (repair.hasFacility || camDef(repair.pos))
 	{
-		for (var i = 0, len = rawDroids.length; i < len; ++i)
+		for (let i = 0, len = rawDroids.length; i < len; ++i)
 		{
 			var droid = rawDroids[i];
 			var repairLikeAction = false;
@@ -445,11 +445,11 @@ function __camTacticsTickForGroup(group)
 		var groupY = ret.yav[ret.maxIdx];
 		var droids = ret.clusters[ret.maxIdx];
 
-		for (var i = 0, len = ret.clusters.length; i < len; ++i)
+		for (let i = 0, len = ret.clusters.length; i < len; ++i)
 		{
 			if (i !== ret.maxIdx) // move other droids towards main cluster
 			{
-				for (var j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
+				for (let j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
 				{
 					var droid = ret.clusters[i][j];
 					if (droid.order !== DORDER_RTR)
@@ -464,7 +464,7 @@ function __camTacticsTickForGroup(group)
 		// not enough droids grouped?
 		if (gi.count < 0 ? (ret.maxCount < groupSize(group) * 0.66) : (ret.maxCount < gi.count))
 		{
-			for (var i = 0, len = droids.length; i < len; ++i)
+			for (let i = 0, len = droids.length; i < len; ++i)
 			{
 				var droid = droids[i];
 				if (droid.order === DORDER_RTR)
@@ -515,7 +515,7 @@ function __camTacticsTickForGroup(group)
 	var defending = (gi.order === CAM_ORDER_DEFEND);
 	var track = (gi.order === CAM_ORDER_COMPROMISE);
 
-	for (var i = 0, len = healthyDroids.length; i < len; ++i)
+	for (let i = 0, len = healthyDroids.length; i < len; ++i)
 	{
 		var droid = healthyDroids[i];
 		var vtolUnit = (droid.type === DROID && isVTOL(droid));
@@ -592,7 +592,7 @@ function __camTacticsTickForGroup(group)
 				{
 					// find random new position to visit
 					var list = [];
-					for (var j = 0, len2 = gi.data.pos.length; j < len2; ++j)
+					for (let j = 0, len2 = gi.data.pos.length; j < len2; ++j)
 					{
 						if (j !== gi.lastspot)
 						{

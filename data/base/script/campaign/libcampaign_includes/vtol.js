@@ -128,7 +128,7 @@ function __camSpawnVtols()
 		let pos;
 
 		//Make sure to catch multiple start positions also.
-		if(__camVtolDataSystem[idx].startPosition instanceof Array)
+		if (__camVtolDataSystem[idx].startPosition instanceof Array)
 		{
 			pos = __camVtolDataSystem[idx].startPosition[camRand(__camVtolDataSystem[idx].startPosition.length)];
 		}
@@ -214,9 +214,7 @@ function __camRetreatVtols()
 		{
 			const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
 			const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
-			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter(function(obj) {
-				return isVTOL(obj);
-			});
+			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => (isVTOL(obj)));
 
 			for (let i = 0, len = vtols.length; i < len; ++i)
 			{

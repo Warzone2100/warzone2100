@@ -574,7 +574,8 @@ endif()
 if(Git_FOUND)
 	execute_process( COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
 					 OUTPUT_VARIABLE _test_isCurrentDirectoryInGitRepo_Output
-					 OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+					 ERROR_VARIABLE _test_isCurrentDirectoryInGitRepo_Error
+					 OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
 	string(LENGTH "${_test_isCurrentDirectoryInGitRepo_Output}" _test_isCurrentDirectoryInGitRepo_Output_Len)
 	if(_test_isCurrentDirectoryInGitRepo_Output_Len GREATER 0)
 		set(_currentDirectoryIsInGitRepo ON)
@@ -690,6 +691,9 @@ elseif(EXISTS "${CACHEFILE}")
 		message( STATUS "Imported revision data from cache file" )
 	endif()
 else()
+	if(DEFINED _test_isCurrentDirectoryInGitRepo_Error)
+		message(WARNING "Git error: ${_test_isCurrentDirectoryInGitRepo_Error}")
+	endif()
 	message( FATAL_ERROR "No repo, cache, or other data source detected." )
 endif()
 

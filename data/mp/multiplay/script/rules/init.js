@@ -5,7 +5,6 @@
  * as well as warning messages.
 */
 
-
 //All stuff of rules
 include("multiplay/script/rules/includes.js");
 

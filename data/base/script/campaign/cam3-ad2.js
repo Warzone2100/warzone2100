@@ -105,9 +105,9 @@ function phantomFactorySpawn()
 function vaporizeTarget()
 {
 	var target;
-	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID || obj.type === STRUCTURE;
-	});
+	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID || obj.type === STRUCTURE
+	));
 
 	if (!targets.length)
 	{
@@ -124,9 +124,9 @@ function vaporizeTarget()
 	}
 	else
 	{
-		var dr = targets.filter(function(obj) { return obj.type === DROID && !isVTOL(obj); });
-		var vt = targets.filter(function(obj) { return obj.type === DROID && isVTOL(obj); });
-		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
+		var dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
+		var vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
+		var st = targets.filter((obj) => (obj.type === STRUCTURE));
 
 		if (dr.length)
 		{
@@ -141,7 +141,6 @@ function vaporizeTarget()
 			target = st[0];
 		}
 	}
-
 
 	//Stop firing LasSat if the third missile unlock code was researched.
 	if (winFlag === false)
@@ -226,7 +225,7 @@ function laserSatFuzzyStrike(obj)
 //Play videos and allow winning once the final one is researched.
 function eventResearched(research, structure, player)
 {
-	for (var i = 0, l = videoInfo.length; i < l; ++i)
+	for (let i = 0, l = videoInfo.length; i < l; ++i)
 	{
 		if (research.name === videoInfo[i].res && !videoInfo[i].played)
 		{
@@ -298,7 +297,7 @@ function eventStartLevel()
 
 	//Destroy everything above limits
 	var destroyZone = enumArea(0, 0, 64, Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
-	for (var i = 0, l = destroyZone.length; i < l; ++i)
+	for (let i = 0, l = destroyZone.length; i < l; ++i)
 	{
 		camSafeRemoveObject(destroyZone[i], false);
 	}

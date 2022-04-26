@@ -57,7 +57,7 @@ function camSetEnemyBases(bases)
 			{
 				var structures = enumGroup(bi.group);
 				addLabel({ type: GROUP, id: bi.group }, blabel);
-				for (var idx = 0, len = structures.length; idx < len; ++idx)
+				for (let idx = 0, len = structures.length; idx < len; ++idx)
 				{
 					var s = structures[idx];
 					if (s.type !== STRUCTURE || __camIsValidLeftover(s))
@@ -83,7 +83,7 @@ function camSetEnemyBases(bases)
 						x2: 0, y2: 0
 					};
 					// smallest rectangle to contain all objects
-					for (var idx = 0, len = objs.length; idx < len; ++idx)
+					for (let idx = 0, len = objs.length; idx < len; ++idx)
 					{
 						var o = objs[idx];
 						if (o.x < a.x) a.x = o.x;
@@ -108,7 +108,7 @@ function camSetEnemyBases(bases)
 			bi.group = camNewGroup();
 			addLabel({ type: GROUP, id: bi.group }, blabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
-			for (var idx = 0, len = structs.length; idx < len; ++idx)
+			for (let idx = 0, len = structs.length; idx < len; ++idx)
 			{
 				var s = structs[idx];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
@@ -126,7 +126,7 @@ function camSetEnemyBases(bases)
 		{
 			//camDebug("Base", blabel, "defined as empty group");
 		}
-		if(!reload)
+		if (!reload)
 		{
 			bi.detected = false;
 			bi.eliminated = false;
@@ -266,7 +266,7 @@ function __camCheckBaseEliminated(group)
 		if (camDef(bi.cleanup))
 		{
 			var objects = enumArea(bi.cleanup, ENEMIES, false);
-			for (var i = 0, len = objects.length; i < len; ++i)
+			for (let i = 0, len = objects.length; i < len; ++i)
 			{
 				var object = objects[i];
 				var objInfo = {
@@ -279,7 +279,7 @@ function __camCheckBaseEliminated(group)
 					leftovers.push(object);
 				}
 			}
-			for (var i = 0, len = leftovers.length; i < len; i++)
+			for (let i = 0, len = leftovers.length; i < len; i++)
 			{
 				// remove with special effect
 				var leftover = leftovers[i];

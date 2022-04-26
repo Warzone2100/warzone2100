@@ -31,6 +31,7 @@
 // explicitly disable variable-sized arrays before including gettext.h
 #define _LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS 0
 #include "gettext.h"
+#include <vector>
 
 // Enable NLS for our parsers when it's enabled for us
 #define YYENABLE_NLS ENABLE_NLS
@@ -55,9 +56,15 @@
 WZ_DECL_PURE const char *getLanguage();
 WZ_DECL_PURE const char *getLanguageName();
 WZ_DECL_NONNULL(1) bool setLanguage(const char *name);
-void setNextLanguage(bool prev = false);
 void initI18n();
 
+struct locale_info
+{
+	const char *code;
+	const char *name;
+};
+
 const char *getCompileDate();
+std::vector<locale_info> getLocales();
 
 #endif // _i18n_h

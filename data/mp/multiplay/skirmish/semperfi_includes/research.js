@@ -99,7 +99,7 @@ function evalResearch(labID, list)
 	{
 		return true;
 	}
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (let i = 0, l = list.length; i < l; ++i)
 	{
 		if (!getResearch(list[i]).done && pursueResearch(lab, list[i]))
 		{
@@ -125,12 +125,12 @@ function lookForResearch(tech, labParam)
 	}
 	else
 	{
-		labList = enumStruct(me, RES_LAB_STAT).filter(function(lab) {
-			return (lab.status === BUILT && structureIdle(lab));
-		});
+		labList = enumStruct(me, RES_LAB_STAT).filter((lab) => (
+			lab.status === BUILT && structureIdle(lab)
+		));
 	}
 
-	for (var i = 0, r = labList.length; i < r; ++i)
+	for (let i = 0, r = labList.length; i < r; ++i)
 	{
 		var lab = labList[i];
 		var found = evalResearch(lab.id, FUNDAMENTALS);

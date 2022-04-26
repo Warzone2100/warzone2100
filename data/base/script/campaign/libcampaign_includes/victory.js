@@ -87,7 +87,7 @@ function camNextLevel(nextLevel)
 //;;
 function camSetStandardWinLossConditions(kind, nextLevel, data)
 {
-	switch(kind)
+	switch (kind)
 	{
 		case CAM_VICTORY_STANDARD:
 			__camWinLossCallback = CAM_VICTORY_STANDARD;
@@ -206,9 +206,9 @@ function __camGameWon()
 function __camPlayerDead()
 {
 	var dead = true;
-	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter(function(obj) {
-		return obj.status === BUILT;
-	}).length > 0;
+	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter((obj) => (
+		obj.status === BUILT
+	)).length > 0;
 
 	if (haveFactories)
 	{
@@ -247,7 +247,7 @@ function __camPlayerDead()
 		if (transporter.length > 0)
 		{
 			var cargoDroids = enumCargo(transporter[0]);
-			for (var i = 0, len = cargoDroids.length; i < len; ++i)
+			for (let i = 0, len = cargoDroids.length; i < len; ++i)
 			{
 				var virDroid = cargoDroids[i];
 				if (camDef(virDroid) && virDroid && virDroid.droidType === DROID_CONSTRUCT)
@@ -263,7 +263,7 @@ function __camPlayerDead()
 	{
 		//Make the mission fail if no units are alive on map while having no factories.
 		var droidCount = 0;
-		enumDroid(CAM_HUMAN_PLAYER).forEach(function(obj) {
+		enumDroid(CAM_HUMAN_PLAYER).forEach((obj) => {
 			if (obj.droidType === DROID_SUPERTRANSPORTER)
 			{
 				//Don't count the transporter itself. This is for the case where
@@ -295,9 +295,9 @@ function __camTriggerLastAttack()
 	{
 		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 		// Do not order systems (sensor/trucks/repairs) to attack stuff.
-		enemies = enemies.filter(function(obj) {
-			return ((obj.type === DROID) && !camIsTransporter(obj) && !camIsSystemDroid(obj));
-		});
+		enemies = enemies.filter((obj) => (
+			obj.type === DROID && !camIsTransporter(obj) && !camIsSystemDroid(obj)
+		));
 		camTrace(enemies.length, "enemy droids remaining");
 		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
 		__camLastAttackTriggered = true;
@@ -369,10 +369,9 @@ function __camVictoryOffworld()
 		{
 			if (camAllEnemyBasesEliminated())
 			{
-				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
-					return obj.type === DROID;
-				}).length;
-
+				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter((obj) => (
+					obj.type === DROID
+				)).length;
 
 				if (!enemyDroids)
 				{
@@ -405,9 +404,9 @@ function __camVictoryOffworld()
 			}
 
 			//Make sure to only count droids here.
-			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-				return (obj.type === DROID && !camIsTransporter(obj));
-			}).length;
+			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter((obj) => (
+				obj.type === DROID && !camIsTransporter(obj)
+			)).length;
 			if (((!forceLZ && !destroyAll) || (forceLZ && destroyAll && !enemyLen) || (forceLZ && !destroyAll)) && (atlz === total))
 			{
 				__camGameWon();
@@ -510,7 +509,7 @@ function __camShowVictoryConditions()
 	var unitsOnMap = 0;
 	var structuresOnMap = 0;
 
-	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach(function(obj) {
+	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach((obj) => {
 		if (obj.type === DROID)
 		{
 			++unitsOnMap;
@@ -557,7 +556,7 @@ function __camShowVictoryConditions()
 	{
 		if (__camExtraObjectiveMessage instanceof Array)
 		{
-			for (var i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
+			for (let i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
 			{
 				var mes = __camExtraObjectiveMessage[i];
 				console(mes);

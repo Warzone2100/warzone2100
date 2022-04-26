@@ -1204,6 +1204,7 @@ bool frontendShutdown()
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
+	frontendIsShuttingDown();
 
 	if (!objShutdown())
 	{

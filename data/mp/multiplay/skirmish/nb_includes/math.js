@@ -68,24 +68,20 @@ Array.prototype.last = function() {
 }
 
 Array.prototype.filterProperty = function(property, value) {
-	return this.filter(function(element) {
-		return element[property] === value;
-	});
+	return this.filter((element) => (element[property] === value));
 }
 
 Array.prototype.someProperty = function(property, value) {
-	return this.some(function(element) {
-		return element[property] === value;
-	});
+	return this.some((element) => (element[property] === value));
 }
 
 Array.prototype.shuffle = function() {
-	return this.sort(function() { return 0.5 - Math.random(); })
+	return this.sort(() => (0.5 - Math.random()))
 }
 
 _global.zeroArray = function(l) {
 	var ret = [];
-	for (var i = 0; i < l; ++i)
+	for (let i = 0; i < l; ++i)
 		ret[i] = 0;
 	return ret;
 }
@@ -97,7 +93,7 @@ _global.randomUnitArray = function(l) {
 }
 
 Array.prototype.addArray = function(arr) {
-	for (var i = 0; i < this.length; ++i)
+	for (let i = 0; i < this.length; ++i)
 		this[i] += arr[i];
 }
 
@@ -114,10 +110,10 @@ _global.randomItem = function(obj) {
 // cluster analysis happens here
 _global.naiveFindClusters = function(list, size) {
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
-	for (var i = list.length - 1; i >= 0; --i) {
+	for (let i = list.length - 1; i >= 0; --i) {
 		var x = list[i].x, y = list[i].y;
 		var found = false;
-		for (var j = 0; j < ret.clusters.length; ++j) {
+		for (let j = 0; j < ret.clusters.length; ++j) {
 			if (distance(ret.xav[j], ret.yav[j], x, y) < size) {
 				var n = ret.clusters[j].length;
 				ret.clusters[j][n] = list[i];

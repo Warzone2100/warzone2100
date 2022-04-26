@@ -400,8 +400,8 @@ function init(){
 
 	//Получаем координаты всех ресурсов и занятых и свободных
 	var freeResources = getFreeResources();
-	var nearResources = freeResources.filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;});
-	nearResources = nearResources.concat(enumStruct(me, "A0ResourceExtractor").filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;}));
+	var nearResources = freeResources.filter((e) => (distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range));
+	nearResources = nearResources.concat(enumStruct(me, "A0ResourceExtractor").filter((e) => (distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range)));
 	debugMsg("На карте "+freeResources.length+" свободных ресурсов", 'init');
 
 	allResources = getAllResources();
@@ -412,7 +412,7 @@ function init(){
 
 	debugMsg("Игроков на карте: "+maxPlayers,2);
 	var access=false;
-	playerData.forEach( function(data, player) {
+	playerData.forEach((data, player) => {
 		var msg = "Игрок №"+player+" "+colors[data.colour];
 		var dist = distBetweenTwoPoints_p(base.x,base.y,startPositions[player].x,startPositions[player].y);
 
@@ -593,9 +593,9 @@ function init(){
 		switchToIsland();
 	}
 
-	if(!release)research_path.forEach(function(e){debugMsg(e, 'init');});
+	if(!release)research_path.forEach((e) => {debugMsg(e, 'init');});
 
-	if(!release) for ( var p = 0; p < maxPlayers; ++p ) {debugMsg("startPositions["+p+"] "+startPositions[p].x+"x"+startPositions[p].y, 'init');}
+	if(!release) for (let p = 0; p < maxPlayers; ++p) {debugMsg("startPositions["+p+"] "+startPositions[p].x+"x"+startPositions[p].y, 'init');}
 
 	//Просто дебаг информация
 	var oilDrums = enumFeature(ALL_PLAYERS, "OilDrum");
@@ -607,7 +607,7 @@ function init(){
 }
 
 function welcome(){
-	playerData.forEach( function(data, player) {
+	playerData.forEach((data, player) => {
 		if(!asPlayer)chat(player, ' from '+debugName+': '+chatting('welcome'));
 	});
 }
@@ -619,11 +619,11 @@ function letsRockThisFxxxingWorld(init){
 	include("multiplay/skirmish/"+vernum+"/weap-init.js");
 
 	//Remove chaingun and flamer cyborgs if better available
-	cyborgs = cyborgs.filter(function(e){if( (e[2] == 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] == 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done) )return false;return true;});
+	cyborgs = cyborgs.filter((e) => (!((e[2] == 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] == 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done))));
 
 	//Первых военных в группу
-	enumDroid(me,DROID_CYBORG).forEach(function(e){groupAdd(armyCyborgs, e);});
-	enumDroid(me,DROID_WEAPON).forEach(function(e){groupAdd(armyCyborgs, e);}); // <-- Это не ошибка, первых бесплатных определяем как киборгов (работа у них будет киборгская)
+	enumDroid(me,DROID_CYBORG).forEach((e) => {groupAdd(armyCyborgs, e);});
+	enumDroid(me,DROID_WEAPON).forEach((e) => {groupAdd(armyCyborgs, e);}); // <-- Это не ошибка, первых бесплатных определяем как киборгов (работа у них будет киборгская)
 
 	setTimer("secondTick", 1000);
 	queue("buildersOrder", 1000);
@@ -701,7 +701,7 @@ function initBase(){
 	var _r = Math.floor(Math.random()*_builders.length);
 	if(_builders.length > 0) base = {x:_builders[_r].x, y:_builders[_r].y};
 
-	_builders.forEach(function(e){groupBuilders(e);});
+	_builders.forEach((e) => {groupBuilders(e);});
 
 	if(policy['build'] == 'rich' && _builders.length > 4){
 		groupAdd(buildersHunters, _builders[0]);
@@ -737,7 +737,7 @@ function bc_eventGameSaving(){
 
 function bc_eventGameSaved(){
 	running = true;
-	playerData.forEach( function(data, player) {
+	playerData.forEach((data, player) => {
 		if(!asPlayer)chat(player, ' from '+debugName+': '+chatting('saved'));
 	});
 }

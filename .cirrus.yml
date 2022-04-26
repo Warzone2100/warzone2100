@@ -8,7 +8,7 @@ freebsd_build_task:
     # See the list of available FreeBSD image families here: https://cirrus-ci.org/guide/FreeBSD/
     matrix:
       - image_family: freebsd-13-0 # FreeBSD 13.0-RELEASE
-      - image_family: freebsd-12-2 # FreeBSD 12.2-RELEASE
+      - image_family: freebsd-12-3 # FreeBSD 12.3-RELEASE
 #    cpu: 4
 #    memory: 8G
 

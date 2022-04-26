@@ -5,6 +5,7 @@ Authors: Cristian Odorico (Alpha93) / KJeff01
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 include("script/campaign/transitionTech.js");
+
 var victoryFlag;
 
 const TRANSPORT_TEAM = 1;
@@ -36,7 +37,7 @@ camAreaEvent("crashSite", function(droid)
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	var droids = enumDroid(TRANSPORT_TEAM);
-	for (var i = 0; i < droids.length; ++i)
+	for (let i = 0; i < droids.length; ++i)
 	{
 		donateObject(droids[i], CAM_HUMAN_PLAYER);
 	}
@@ -51,7 +52,7 @@ function preDamageUnits()
 {
 	setHealth(getObject("transporter"), 40);
 	var droids = enumDroid(TRANSPORT_TEAM);
-	for (var j = 0; j < droids.length; ++j)
+	for (let j = 0; j < droids.length; ++j)
 	{
 		setHealth(droids[j], 40 + camRand(20));
 	}
@@ -79,11 +80,11 @@ function setupCyborgGroups()
 function setCrashedTeamExp()
 {
 	const DROID_EXP = 32;
-	var droids = enumDroid(TRANSPORT_TEAM).filter(function(dr) {
-		return !camIsSystemDroid(dr) && !camIsTransporter(dr);
-	});
+	var droids = enumDroid(TRANSPORT_TEAM).filter((dr) => (
+		!camIsSystemDroid(dr) && !camIsTransporter(dr)
+	));
 
-	for (var i = 0; i < droids.length; ++i)
+	for (let i = 0; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 		setDroidExperience(droid, DROID_EXP);

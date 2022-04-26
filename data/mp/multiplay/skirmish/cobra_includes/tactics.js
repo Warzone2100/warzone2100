@@ -170,7 +170,7 @@ function checkAllForRepair()
 	}
 
 	var droids = enumGroup(attackGroup);
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (let i = 0, l = droids.length; i < l; ++i)
 	{
 		repairDroid(droids[i].id);
 	}
@@ -190,7 +190,7 @@ function findNearestEnemyDroid(enemy)
 		var badDroids = enumDroid(enemy);
 		if (badDroids.length > 0)
 		{
-			var temp = badDroids.filter(function(dr) { return !isVTOL(dr); });
+			var temp = badDroids.filter((dr) => (!isVTOL(dr)));
 			if (temp.length === 0)
 			{
 				temp = badDroids;
@@ -216,7 +216,7 @@ function findNearestEnemyStructure(enemy)
 			enemy = getMostHarmfulPlayer();
 		}
 
-		var s = enumStruct(enemy).filter(function(obj) { return (obj.stattype !== WALL); });
+		var s = enumStruct(enemy).filter((obj) => (obj.stattype !== WALL));
 		if (s.length === 0)
 		{
 			s = enumStruct(enemy);
@@ -264,9 +264,7 @@ function artilleryTactics()
 	{
 		return;
 	}
-	var sensors = enumGroup(sensorGroup).filter(function(dr) {
-		return droidReady(dr.id);
-	});
+	var sensors = enumGroup(sensorGroup).filter((dr) => (droidReady(dr.id)));
 	const ARTILLERY_UNITS = enumGroup(artilleryGroup);
 	const ARTI_LEN = ARTILLERY_UNITS.length;
 	const SENS_LEN = sensors.length;
@@ -285,7 +283,7 @@ function artilleryTactics()
 				orderDroidObj(sensors[0], DORDER_OBSERVE, tempObj);
 			}
 
-			for (var i = 0; i < ARTI_LEN; ++i)
+			for (let i = 0; i < ARTI_LEN; ++i)
 			{
 				//Send artillery to help at beacon, if possible
 				if ((beacon.endTime > gameTime) &&
@@ -338,16 +336,16 @@ function groundTactics()
 		var target = rangeStep();
 		if (isDefined(target))
 		{
-			const UNITS = enumGroup(attackGroup).filter(function(dr) {
-				return droidReady(dr.id);
-			});
+			const UNITS = enumGroup(attackGroup).filter((dr) => (
+				droidReady(dr.id)
+			));
 
 			if (UNITS.length < MIN_ATTACK_DROIDS)
 			{
 				return;
 			}
 
-			for (var i = 0, l = UNITS.length; i < l; ++i)
+			for (let i = 0, l = UNITS.length; i < l; ++i)
 			{
 				var id = UNITS[i].id;
 
@@ -405,9 +403,9 @@ function recycleForHover()
 	}
 
 	const MIN_FACTORY = 1;
-	var systems = enumDroid(me, DROID_CONSTRUCT).concat(enumDroid(me, DROID_SENSOR)).filter(function(dr) {
-		return (dr.body !== "CyborgLightBody" && dr.propulsion !== "hover01");
-	});
+	var systems = enumDroid(me, DROID_CONSTRUCT).concat(enumDroid(me, DROID_SENSOR)).filter((dr) => (
+		dr.body !== "CyborgLightBody" && dr.propulsion !== "hover01"
+	));
 	var unfinished = unfinishedStructures();
 	const NON_HOVER_SYSTEMS = systems.length;
 
@@ -415,7 +413,7 @@ function recycleForHover()
 	{
 		if (!unfinished.length && NON_HOVER_SYSTEMS)
 		{
-			for (var i = 0; i < NON_HOVER_SYSTEMS; ++i)
+			for (let i = 0; i < NON_HOVER_SYSTEMS; ++i)
 			{
 				orderDroid(systems[i], DORDER_RECYCLE);
 			}
@@ -428,9 +426,9 @@ function recycleForHover()
 
 		if (forceHover)
 		{
-			var tanks = enumGroup(attackGroup).filter(function(dr) { return (dr.propulsion !== "hover01"); });
+			var tanks = enumGroup(attackGroup).filter((dr) => (dr.propulsion !== "hover01"));
 			const NON_HOVER_TANKS = tanks.length;
-			for (var j = 0; j < NON_HOVER_TANKS; ++j)
+			for (let j = 0; j < NON_HOVER_TANKS; ++j)
 			{
 				orderDroid(tanks[j], DORDER_RECYCLE);
 			}
@@ -468,9 +466,7 @@ function vtolTactics()
 	}
 
 	const MIN_VTOLS = 5;
-	var vtols = enumGroup(vtolGroup).filter(function(dr) {
-		return droidReady(dr.id);
-	});
+	var vtols = enumGroup(vtolGroup).filter((dr) => (droidReady(dr.id)));
 	const LEN = vtols.length;
 	const D_CIRCLE = 40; //DORDER_CIRCLE = 40
 	const SCOUT_TO_CIRCLE_DIST = 2; //when to switch from scout to circle order for beacon
@@ -481,7 +477,7 @@ function vtolTactics()
 
 		if (isDefined(target))
 		{
-			for (var i = 0; i < LEN; ++i)
+			for (let i = 0; i < LEN; ++i)
 			{
 				var id = vtols[i].id;
 
@@ -554,9 +550,9 @@ function attackThisObject(droidID, target)
 function enemyUnitsInBase()
 {
 	var area = cobraBaseArea();
-	var enemyUnits = enumArea(area.x1, area.y1, area.x2, area.y2, ENEMIES, false).filter(function(obj) {
-		return (obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG));
-	}).sort(distanceToBase);
+	var enemyUnits = enumArea(area.x1, area.y1, area.x2, area.y2, ENEMIES, false).filter((obj) => (
+		obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG)
+	)).sort(distanceToBase);
 
 	//The attack code automatically chooses the closest object of the
 	//most harmful player anyway so this should suffice for defense.
@@ -598,7 +594,7 @@ function donateSomePower()
 		return;
 	}
 
-	const ALLY_PLAYERS = playerAlliance(true).filter(function(player) { return playerData[player].isAI; });
+	const ALLY_PLAYERS = playerAlliance(true).filter((player) => (playerData[player].isAI));
 	const LEN = ALLY_PLAYERS.length;
 	const ALIVE_ENEMIES = findLivingEnemies().length;
 
@@ -684,7 +680,7 @@ function baseShuffleDefensePattern()
 	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
 	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
 	const MAX_NEARBY_STRUCTURES = 2;
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (let i = 0, len = attackers.length; i < len; ++i)
 	{
 		if (attackers[i].order !== DORDER_HOLD)
 		{
@@ -721,7 +717,7 @@ function lowOilDefensePattern()
 		return;
 	}
 
-	for (var i = 0, len = attackers.length; i < len; ++i)
+	for (let i = 0, len = attackers.length; i < len; ++i)
 	{
 		var derr = derricks[random(derricks.length)];
 		orderDroidLoc(attackers[i], DORDER_SCOUT, derr.x, derr.y);
@@ -759,12 +755,12 @@ function retreatTactics()
 	var droids = enumGroup(retreatGroup);
 
 	//Flee!
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (let i = 0, len = droids.length; i < len; ++i)
 	{
 		var droid = droids[i];
-		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter(function(obj) {
-			return obj.type === DROID;
-		});
+		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter((obj) => (
+			obj.type === DROID
+		));
 
 		if (enumRange(droid.x, droid.y, SCAN_RADIUS, ENEMIES, !highOilMap()).length > friends.length)
 		{

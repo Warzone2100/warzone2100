@@ -48,11 +48,11 @@ function unfinishedStructures()
 {
 	const SAFE_DIST = 20;
 	var unfinished = [];
-	var stuff = enumStruct(me).filter(function(obj) {
-		return obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR;
-	});
+	var stuff = enumStruct(me).filter((obj) => (
+		obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR
+	));
 
-	for (var i = 0, l = stuff.length; i < l; ++i)
+	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
 		var s = stuff[i];
 		if (s.stattype === DEFENSE && ((!componentAvailable("hover01") || (distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, s.x, s.y) > SAFE_DIST))))
@@ -99,7 +99,7 @@ function findIdleTrucks(group)
 		builders = enumGroup(group);
 	}
 
-	for (var i = 0, s = builders.length; i < s; i++)
+	for (let i = 0, s = builders.length; i < s; i++)
 	{
 		var con = builders[i];
 		if (conCanHelp(con.id, con.x, con.y))
@@ -146,9 +146,9 @@ function fastDefendSpot(structure, droid)
 	}
 
 	var chance = (gameTime > 900000 && ((structure && structure.stattype === RESOURCE_EXTRACTOR) || (random(100) < 20)));
-	var structs = enumRange(droid.x, droid.y, 7, me, false).filter(function(obj) { return obj.type === STRUCTURE; });
-	var defenses = structs.filter(function(obj) { return obj.stattype === DEFENSE; });
-	var enemyDerr = enumRange(droid.x, droid.y, 8, ENEMIES, false).filter(function(obj) { return obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR; });
+	var structs = enumRange(droid.x, droid.y, 7, me, false).filter((obj) => (obj.type === STRUCTURE));
+	var defenses = structs.filter((obj) => (obj.stattype === DEFENSE));
+	var enemyDerr = enumRange(droid.x, droid.y, 8, ENEMIES, false).filter((obj) => (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR));
 	//Build a defense structure here.
 	if (chance || (defenses.length < MIN_DEFENSES) || (enemyDerr.length > 0 && defenses.length === 0))
 	{
@@ -162,7 +162,7 @@ function fastDefendSpot(structure, droid)
 		var sensor;
 		//const CB_TOWER = "Sys-CB-Tower01";
 		const TOWERS = [ "Sys-SensoTowerWS", "Sys-SensoTower02" ];
-		for (var i = 0, len = TOWERS.length; i < len; ++i)
+		for (let i = 0, len = TOWERS.length; i < len; ++i)
 		{
 			var sen = TOWERS[i];
 			if (isStructureAvailable(sen))
@@ -204,12 +204,12 @@ function protectUnguardedDerricks(droid)
 	{
 		var undefended = [];
 
-		for (var i = 0; i < LEN; ++i)
+		for (let i = 0; i < LEN; ++i)
 		{
 			var found = false;
 			var objects = enumRange(derrs[i].x, derrs[i].y, (HIGH_OIL) ? 4 : 8, me, false);
 
-			for (var c = 0, u = objects.length; c < u; ++c)
+			for (let c = 0, u = objects.length; c < u; ++c)
 			{
 				if ((objects[c].type === STRUCTURE) && (objects[c].stattype === DEFENSE))
 				{
@@ -229,10 +229,10 @@ function protectUnguardedDerricks(droid)
 			//Don't defend it ATM if that derrick is surrounded by enemies.
 			if (!HIGH_OIL)
 			{
-				undefended = undefended.filter(function(obj) {
-					return (gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, MY_BASE.x, MY_BASE.y) > 9) ||
-						(enumRange(obj.x, obj.y, 6, ENEMIES, false).length === 0);
-				}).sort(distanceToBase);
+				undefended = undefended.filter((obj) => (
+					(gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, MY_BASE.x, MY_BASE.y) > 9) ||
+						enumRange(obj.x, obj.y, 6, ENEMIES, false).length === 0
+				)).sort(distanceToBase);
 			}
 			else
 			{
@@ -351,7 +351,7 @@ function checkUnfinishedStructures(group)
 	}
 
 	var structs = unfinishedStructures();
-	for (var i = 0, len = structs.length; i < len; ++i)
+	for (let i = 0, len = structs.length; i < len; ++i)
 	{
 		var structure = getObject(STRUCTURE, me, structs[i]);
 		if (structure === null)
@@ -360,7 +360,7 @@ function checkUnfinishedStructures(group)
 		}
 
 		var trucks = findIdleTrucks(group);
-		for (var j = 0, len2 = trucks.length; j < len2; ++j)
+		for (let j = 0, len2 = trucks.length; j < len2; ++j)
 		{
 			var truck = getObject(DROID, me, trucks[j]);
 			if (truck === null)
@@ -382,7 +382,7 @@ function holdAllOilTrucks()
 {
 	var oilGrabbers = enumGroup(oilGrabberGroup);
 
-	for (var i = 0, len = oilGrabbers.length; i < len; ++i)
+	for (let i = 0, len = oilGrabbers.length; i < len; ++i)
 	{
 		if (oilGrabbers[i].order !== DORDER_RECYCLE &&
 			oilGrabbers[i].order !== DORDER_HOLD)
@@ -396,12 +396,12 @@ function skipOilGrabIfEasy()
 {
 	if (difficulty === EASY)
 	{
-		var myDerrickCount = enumStruct(me, structures.derrick).filter(function(obj) {
-			return obj.status === BUILT;
-		}).length;
+		var myDerrickCount = enumStruct(me, structures.derrick).filter((obj) => (
+			obj.status === BUILT
+		)).length;
 		var enemies = findLivingEnemies();
 
-		for (var i = 0, len = enemies.length; i < len; ++i)
+		for (let i = 0, len = enemies.length; i < len; ++i)
 		{
 			if (myDerrickCount >= 5 && myDerrickCount >= countStruct(structures.derrick, enemies[i]))
 			{
@@ -443,13 +443,13 @@ function lookForOil()
 		return;
 	}
 
-	for (var i = 0, oilLen = oils.length; i < oilLen; i++)
+	for (let i = 0, oilLen = oils.length; i < oilLen; i++)
 	{
 		var bestDroid;
 		var bestDist = Infinity;
 		var oil = oils[i];
 
-		for (var j = 0, drLen = droids.length; j < drLen; j++)
+		for (let j = 0, drLen = droids.length; j < drLen; j++)
 		{
 			var droid = droids[j];
 			var dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
@@ -494,7 +494,7 @@ function buildAAForPersonality()
 	else
 	{
 		var aaType = subPersonalities[personality].antiAir.defenses;
-		for (var i = aaType.length - 1; i >= 0; --i)
+		for (let i = aaType.length - 1; i >= 0; --i)
 		{
 			if (countAndBuild(aaType[i].stat, minAAs))
 			{
@@ -525,7 +525,7 @@ function returnDefense(type)
 	if (random(100) < ELECTRONIC_CHANCE)
 	{
 		var avail = 0;
-		for (var i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
+		for (let i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
 		{
 			if(isStructureAvailable(ELECTRONIC_DEFENSES[i]))
 			{
@@ -540,7 +540,7 @@ function returnDefense(type)
 		}
 	}
 
-	for (var i = defenses.length - 1; i > -1; --i)
+	for (let i = defenses.length - 1; i > -1; --i)
 	{
 		var def = isDefined(defenses[i].stat);
 		if (def && isStructureAvailable(defenses[i].stat))
@@ -596,17 +596,17 @@ function buildDefenseNearTruck(truck, type)
 function defendRandomDerrick()
 {
 	const MAX_DIST = 30;
-	var derrs = enumStruct(me, structures.derrick).filter(function(obj) {
-		return distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj.x, obj.y) > MAX_DIST;
-	});
+	var derrs = enumStruct(me, structures.derrick).filter((obj) => (
+		distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj.x, obj.y) > MAX_DIST
+	));
 
 	if (derrs.length > 0)
 	{
 		const MAX_BLOCKING = 8;
 		var derr = derrs[random(derrs.length)];
-		var defs = enumRange(derr.x, derr.y, 10, ALLIES, false).filter(function(obj) {
-			return obj.type === STRUCTURE && obj.stattype === DEFENSE;
-		}).length;
+		var defs = enumRange(derr.x, derr.y, 10, ALLIES, false).filter((obj) => (
+			obj.type === STRUCTURE && obj.stattype === DEFENSE
+		)).length;
 
 		if ((defs < 4) && buildStuff(returnDefense(), undefined, derr, MAX_BLOCKING, oilGrabberGroup))
 		{
@@ -788,7 +788,7 @@ function factoryBuildOrder()
 	const MIN_FACTORY_COUNT = 1;
 	const MAX_FACTORY_COUNT = 5;
 
-	for (var i = 0; i < subPersonalities[personality].factoryOrder.length; ++i)
+	for (let i = 0; i < subPersonalities[personality].factoryOrder.length; ++i)
 	{
 		var fac = subPersonalities[personality].factoryOrder[i];
 
@@ -1025,7 +1025,7 @@ function maintenance(group)
 		modList = modList.reverse();
 	}
 
-	for (var i = 0, l = modList.length; i < l; ++i)
+	for (let i = 0, l = modList.length; i < l; ++i)
 	{
 		var modObj = modList[i];
 
@@ -1044,7 +1044,7 @@ function maintenance(group)
 				structList = structList.reverse();
 			}
 
-			for (var c = 0, s = structList.length; c < s; ++c)
+			for (let c = 0, s = structList.length; c < s; ++c)
 			{
 				if (structList[c].modules < modObj.amount)
 				{

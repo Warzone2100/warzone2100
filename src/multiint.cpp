@@ -291,22 +291,6 @@ struct AIDATA
 };
 static std::vector<AIDATA> aidata;
 
-struct WzMultiButton : public W_BUTTON
-{
-	WzMultiButton() : W_BUTTON() {}
-
-	void display(int xOffset, int yOffset) override;
-
-	AtlasImage imNormal;
-	AtlasImage imDown;
-	unsigned doHighlight;
-	unsigned tc;
-	uint8_t alpha = 255;
-	unsigned downStateMask = WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK;
-	unsigned greyStateMask = WBUT_DISABLE;
-	optional<bool> drawBlueBorder;
-};
-
 class ChatBoxWidget : public IntFormAnimated
 {
 protected:
@@ -7841,6 +7825,25 @@ static W_EDITBOX* addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, 
 	return editBox;
 }
 
+void updateMultiBut(std::shared_ptr<WzMultiButton> button, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha = 255)
+{
+	button->setGeometry(button->x(), button->y(), width, height);
+	button->setTip((tipres != nullptr) ? std::string(tipres) : std::string());
+	button->imNormal = AtlasImage(FrontImages, norm);
+	button->imDown = AtlasImage(FrontImages, down);
+	button->doHighlight = hi;
+	button->tc = tc;
+	button->alpha = alpha;
+}
+
+std::shared_ptr<WzMultiButton> makeMultiBut(UDWORD id, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha)
+{
+	auto button = std::make_shared<WzMultiButton>();
+	button->id = id;
+	updateMultiBut(button, width, height, tipres, norm, down, hi, tc, alpha);
+	return button;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha)
 {
@@ -7856,13 +7859,8 @@ std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWOR
 		parent.attach(button);
 		button->id = id;
 	}
-	button->setGeometry(x, y, width, height);
-	button->setTip((tipres != nullptr) ? std::string(tipres) : std::string());
-	button->imNormal = AtlasImage(FrontImages, norm);
-	button->imDown = AtlasImage(FrontImages, down);
-	button->doHighlight = hi;
-	button->tc = tc;
-	button->alpha = alpha;
+	button->move(x, y);
+	updateMultiBut(button, width, height, tipres, norm, down, hi, tc, alpha);
 	return button;
 }
 

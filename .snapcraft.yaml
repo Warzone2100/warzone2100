@@ -25,8 +25,8 @@ plugs:
 
 apps:
   warzone2100:
+    extensions: [gnome-3-34]
     command: usr/bin/warzone2100
-    command-chain: [bin/desktop-launch]
     common-id: warzone2100 # should match the appdata/metainfo file's <id> field
     desktop: usr/share/applications/warzone2100.desktop
     plugs:
@@ -41,46 +41,10 @@ apps:
       - wayland
       - x11
 
-  download-videos:
-    command: bin/download-videos
-    plugs: [network]
-
 parts:
-  scripts:
-    plugin: dump
-    source: pkg/snap
-    organize:
-      download-videos: bin/download-videos
-    stage-packages:
-      - curl
-
-  desktop-qt5:
-    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-    source-subdir: qt
-    plugin: make
-    make-parameters: ["FLAVOR=qt5"]
-    build-packages:
-      - qtbase5-dev
-      - dpkg-dev
-    stage-packages:
-      - libxkbcommon0
-      - ttf-ubuntu-font-family
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - shared-mime-info
-      - libqt5gui5
-      - libgdk-pixbuf2.0-0
-      - libqt5svg5 # for loading icon themes which are svg
-      - qtwayland5
-      - try: [appmenu-qt5] # not available on core18
-      - locales-all
-      - libgtk2.0-0
-
   sdl:
-    source: https://www.libsdl.org/release/SDL2-2.0.14.tar.gz
-    source-checksum: sha512/ebc482585bd565bf3003fbcedd91058b2183e333b9ea566d2f386da0298ff970645d9d25c1aa4459c7c96e9ea839fd1c5f2da0242a56892865b2e456cdd027ee
+    source: https://www.libsdl.org/release/SDL2-2.0.20.tar.gz
+    source-checksum: sha512/4889949eaa674948bdb0a01bb2a842a0943b15b08ff27ec0079b0fd4f79d071ffb32488a5a51c12ad7c74ed5fe73b608cdf6336a44c95dae8a0fb3f47d0f01de
     plugin: autotools
     configflags:
     - --prefix=/usr
@@ -110,6 +74,7 @@ parts:
     - libwayland-dev
     - libx11-dev
     - libxcursor-dev
+    - libxfixes-dev
     - libxext-dev
     - libxi-dev
     - libxinerama-dev
@@ -118,11 +83,13 @@ parts:
     - libxrender-dev
     - libxss-dev
     - libxxf86vm-dev
+    - libgbm-dev
     stage-packages:
     - libdbus-1-3
     - libudev1
     - fcitx-libs
     - libdrm2
+    - libgbm1
     - libegl1-mesa
     - libgl1
     - libgles2
@@ -133,11 +100,13 @@ parts:
     - libts0
     - libsndfile1
     - libwayland-client0
+    - libwayland-cursor0
     - libwayland-egl1-mesa
     - libvulkan1
     - libx11-6
     - libxcursor1
     - libxext6
+    - libxfixes3
     - libxi6
     - libxinerama1
     - libxkbcommon0
@@ -147,7 +116,7 @@ parts:
     - libxxf86vm1
 
   warzone2100:
-    after: [desktop-qt5, sdl]
+    after: [sdl]
     plugin: cmake
     source: .
     parse-info:
@@ -182,7 +151,6 @@ parts:
       - libfontconfig1-dev
       - libfreetype6-dev
       - libfribidi-dev
-      - libglc-dev
       - libharfbuzz-dev
       - libopenal-dev
       - libphysfs-dev
@@ -201,7 +169,6 @@ parts:
       - libfontconfig1
       - libfreetype6
       - libfribidi0
-      - libglc0
       - libharfbuzz0b
       - libogg0
       - libopenal1
@@ -219,3 +186,30 @@ parts:
       - mesa-vulkan-drivers
       - unzip
       - zip
+
+  # This part removes all the files in this snap which already exist in
+  # connected content and base snaps. Since these files will be available
+  # at runtime from the content and base snaps, they do not need to be
+  # included in this snap itself.
+  #
+  # More info: https://forum.snapcraft.io/t/reducing-the-size-of-desktop-snaps/17280#heading--cleanup-part
+  #
+  cleanup:
+    after:  # Make this part run last; list all your other parts here
+      - sdl
+      - warzone2100
+    plugin: nil
+    build-snaps:  # List all content-snaps and base snaps you're using here
+      - core18
+      - gtk-common-themes
+      - gnome-3-34-1804
+    override-prime: |
+      set -eux
+      for snap in "core18" "gtk-common-themes" "gnome-3-34-1804"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done
+      # The following is required while using core18 + gnome-3-34
+      # See: https://forum.snapcraft.io/t/undefined-symbol-hb-buffer-set-invisible-glyph-with-gnome-3-34/24287
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libharfbuzz.so.0*
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgio-2.0.so.0*
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libglib-2.0.so.0*

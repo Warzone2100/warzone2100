@@ -49,11 +49,9 @@ function getTwoFreeTrucks() {
 }
 
 function getFreeTruckAround(x, y) {
-	var list = enumTrucks().filter(truckFree).filter(function(droid) {
-		return droidCanReach(droid, x, y);
-	}).sort(function(one, two) {
-		return distance(one, x, y) - distance(two, x, y);
-	});
+	var list = enumTrucks().filter(truckFree).filter((droid) => (
+		droidCanReach(droid, x, y)
+	)).sort((one, two) => (distance(one, x, y) - distance(two, x, y)));
 	if (list.length > 0)
 		return list[0];
 }
@@ -62,13 +60,13 @@ function buildModule(struct) {
 	var trucks = getTwoFreeTrucks();
 	if (trucks.length <= 0)
 		return BUILDRET.FAILURE;
-	var moduleInfo = modules.filter(function(item) { return isAvailable(item.module) && item.base === struct.stattype; }).last();
+	var moduleInfo = modules.filter((item) => (isAvailable(item.module) && item.base === struct.stattype)).last();
 	if (!defined(moduleInfo))
 		return BUILDRET.UNAVAILABLE;
 	if (struct.modules >= moduleInfo.count)
 		return BUILDRET.UNAVAILABLE;
 	var success = false;
-	for (var i = 0; i < trucks.length; ++i)
+	for (let i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, moduleInfo.module, struct.x, struct.y) || success;
 	if (success)
 		return BUILDRET.SUCCESS;
@@ -86,7 +84,7 @@ function buildBasicStructure(statlist, importance) {
 	// choose structure type (out of the statlist),
 	// together with suitable location
 	var idx, loc, avail = false;
-	for (var i = 0; i < statlist.length; ++i)
+	for (let i = 0; i < statlist.length; ++i)
 		if (isAvailable(statlist[i])) {
 			avail = true;
 			if (distanceToBase(trucks[0]) <= baseScale)
@@ -106,7 +104,7 @@ function buildBasicStructure(statlist, importance) {
 		return BUILDRET.FAILURE;
 	// now actually build
 	var success = false;
-	for (var i = 0; i < trucks.length; ++i)
+	for (let i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, statlist[idx], loc.x, loc.y) || success;
 	if (success)
 		return BUILDRET.SUCCESS;
@@ -116,7 +114,7 @@ function buildBasicStructure(statlist, importance) {
 function finishStructures() {
 	var success = false;
 	var list = enumStruct(me).filterProperty("status", BEING_BUILT);
-	for (var i = 0; i < list.length; ++i) {
+	for (let i = 0; i < list.length; ++i) {
 		if (success)
 			return;
 		if (throttled(10000, list[i].id))
@@ -138,11 +136,11 @@ function buildStructureAround(statlist, loc, unique) {
 	var truck = getFreeTruckAround(loc.x, loc.y);
 	if (!defined(truck))
 		return BUILDRET.FAILURE;
-	var stat = statlist.filter(isAvailable).filter(function(s) {
+	var stat = statlist.filter(isAvailable).filter((s) => {
 		if (unique !== true)
 			return true;
 		var list = enumStruct(me, s);
-		for (var i = 0; i < list.length; ++i)
+		for (let i = 0; i < list.length; ++i)
 			if (distance(list[i], loc) < baseScale / 2)
 				return false;
 		return true;
@@ -197,7 +195,7 @@ function buildGateways() {
 		// lets not cycle through all gateways on the map
 		if (!areThereGW())
 			return BUILDRET.FAILURE;
-		var gates = gateways.filter(function(gate) {
+		var gates = gateways.filter((gate) => {
 			var l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
 			if (l < 0)
 				l = -l;
@@ -206,7 +204,7 @@ function buildGateways() {
 			cnt    -= enumRange(gate.x1, gate.y1, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
 			cnt    -= enumRange(gate.x2, gate.y2, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
 			return cnt >= 0 && (cnt < l || (personality.defensiveness === 100 && withChance(70))); // turtle AI needs to keep building towers
-		}).sort(function(one, two) { return distanceToBase({x: one.x1, y: one.y1}) - distanceToBase({x: two.x1, y: two.y1}); });
+		}).sort((one, two) => (distanceToBase({x: one.x1, y: one.y1}) - distanceToBase({x: two.x1, y: two.y1})));
 		if (gates.length === 0)
 			return BUILDRET.FAILURE;
 		if (withChance(50))
@@ -233,11 +231,9 @@ _global.captureSomeOil = function() {
 		return true;
 	function getOilList() {
 		var oils = [];
-		oilResources.forEach(function(stat) { oils = oils.concat(enumFeature(ALL_PLAYERS, stat)); });
+		oilResources.forEach((stat) => { oils = oils.concat(enumFeature(ALL_PLAYERS, stat)); });
 		oils = oils.concat(enumStructList(structures.derricks).filterProperty("status", BEING_BUILT));
-		oils = oils.sort(function(one, two) {
-			return distanceToBase(one) - distanceToBase(two);
-		});
+		oils = oils.sort((one, two) => (distanceToBase(one) - distanceToBase(two)));
 		if (oils.length > 10)
 			oils.length = 10;
 		return oils;
@@ -245,7 +241,7 @@ _global.captureSomeOil = function() {
 	var oils = cached(getOilList, 5000);
 	if (countFinishedStructList(structures.derricks) >= 4 * structListLimit(structures.gens))
 		return false;
-	for (var i = 0; i < oils.length; ++i)
+	for (let i = 0; i < oils.length; ++i)
 		if (captureOil(oils[i]) === BUILDRET.SUCCESS)
 			return true;
 	return false;
@@ -293,11 +289,11 @@ function buildEnergy() {
 
 function buildModules() {
 	var str = [];
-	for (var i = 0; i < modules.length; ++i) {
+	for (let i = 0; i < modules.length; ++i) {
 		if (modules[i].base === FACTORY && needFastestResearch() !== PROPULSIONUSAGE.GROUND)
 			continue;
 		str = enumStruct(me, modules[i].base);
-		for (var j = 0; j < str.length; ++j)
+		for (let j = 0; j < str.length; ++j)
 			if (buildModule(str[j]) !== BUILDRET.UNAVAILABLE)
 				return true;
 	}
@@ -337,7 +333,7 @@ function listOutdatedDefenses() {
 	for (const path in weaponStats) {
 		for (const role in DEFROLE) {
 			var list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
-			for (var i = 0; i < list.length - 2; ++i)
+			for (let i = 0; i < list.length - 2; ++i)
 				if (isAvailable(list[i + 2])) {
 					if (countStruct(list[i]) > 0)
 						return enumStruct(me, list[i]);
@@ -352,8 +348,8 @@ function recycleDefenses() {
 	if (trucks.length <= 0)
 		return false;
 	var list = listOutdatedDefenses();
-	for (var i = 0; i < list.length; ++i)
-		for (var j = 0; j < trucks.length; ++j)
+	for (let i = 0; i < list.length; ++i)
+		for (let j = 0; j < trucks.length; ++j)
 			if (droidCanReach(trucks[j], list[i].x, list[i].y)) {
 				orderDroidObj(trucks[j], DORDER_DEMOLISH, list[i]);
 				return true;

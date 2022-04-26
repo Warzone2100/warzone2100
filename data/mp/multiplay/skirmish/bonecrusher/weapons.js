@@ -39,11 +39,7 @@ function _weaponsGetGuns(num){
 	}
 
 	if(_weapons.length > 0){
-		_weapons.sort(function (a,b){
-			if(a[1] < b[1]) return -1;
-			if(a[1] > b[1]) return 1;
-			return 0;
-		});
+		_weapons.sort((a, b) => (a[1] < b[1]));
 		_weapons.reverse();
 		_weapons=_weapons.slice(0, num);
 
@@ -51,7 +47,7 @@ function _weaponsGetGuns(num){
 
 		for (const w in _weapons) {
 			debugMsg(_weapons[w][0]+", "+_weapons[w][1], 'weap');
-			for(var i=0;i<_weapons[w][1];i++) _out.push(_weapons[w][0]);
+			for (let i = 0; i < _weapons[w][1]; i++) _out.push(_weapons[w][0]);
 		}
 		return _out;
 	}else return [];

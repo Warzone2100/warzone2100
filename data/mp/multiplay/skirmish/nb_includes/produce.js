@@ -17,7 +17,7 @@ function produceTruck(factory, turrets) {
 		turret = turrets.concat();
 	turret.reverse();
 	// TODO: switch to using chooseBodyWeaponPair() here
-	var bodies = filterBodyStatsByUsage(BODYUSAGE.TRUCK, BODYCLASS.KINETIC).map(function(val) { return val.stat; });
+	var bodies = filterBodyStatsByUsage(BODYUSAGE.TRUCK, BODYCLASS.KINETIC).map((val) => (val.stat));
 	var propulsions = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER);
 	return ourBuildDroid(factory, "Fancy Truck", bodies, propulsions, turret);
 }
@@ -41,11 +41,11 @@ function chooseBodyWeaponPair(bodies, weapons) {
 		return undefined;
 	if (!defined(weapons))
 		return undefined;
-	for (var i = 0; i < weapons.length; ++i) {
+	for (let i = 0; i < weapons.length; ++i) {
 		var w = weapons[i].stat, ww = weapons[i].weight;
 		if (!componentAvailable(w))
 			continue;
-		for (var j = 0; j < bodies.length; ++j) {
+		for (let j = 0; j < bodies.length; ++j) {
 			var b = bodies[j].stat, bw = bodies[j].weight;
 			if (!componentAvailable(b))
 				continue;
@@ -121,7 +121,7 @@ function produceVtol(factory) {
 
 function produceTemplateFromList(factory, list) {
 	var ret = scopeRatings();
-	for (var i = list.length - 1; i >= 0; --i) {
+	for (let i = list.length - 1; i >= 0; --i) {
 		if (ret.land === 0 && !isHoverPropulsion(list[i].prop) && !isVtolPropulsion(list[i].prop))
 			continue;
 		if (ret.land === 0 && ret.sea === 0 && !isVtolPropulsion(list[i].prop))
@@ -144,12 +144,12 @@ function produceTemplate(factory) {
 
 _global.checkTruckProduction = function() {
 	var trucks = enumTrucks();
-	var hoverTrucksCount = trucks.filter(function(droid) { return isHoverPropulsion(droid.propulsion); }).length;
+	var hoverTrucksCount = trucks.filter((droid) => (isHoverPropulsion(droid.propulsion))).length;
 	if (iHaveHover() && hoverTrucksCount < personality.minHoverTrucks) {
-		var groundTrucks = trucks.filter(function(droid) { return !isHoverPropulsion(droid.propulsion); });
+		var groundTrucks = trucks.filter((droid) => (!isHoverPropulsion(droid.propulsion)));
 		if (groundTrucks.length > personality.minTrucks) {
 			groundTrucks.length -= personality.minTrucks;
-			groundTrucks.forEach(function(droid) { orderDroid(droid, DORDER_RECYCLE); });
+			groundTrucks.forEach((droid) => { orderDroid(droid, DORDER_RECYCLE); });
 			return false;
 		}
 	}
@@ -189,7 +189,7 @@ function checkTankProduction() {
 	if (!iCanDesign())
 		return false; // don't cheat by producing tanks before design is available (also saves money for early generators)
 	var success = false;
-	enumIdleStructList(structures.factories).forEach(function(factory) {
+	enumIdleStructList(structures.factories).forEach((factory) => {
 		success = success || produceTank(factory);
 	});
 	return success;
@@ -199,8 +199,7 @@ function checkTemplateProduction() {
 	var success = false;
 	enumIdleStructList(structures.templateFactories)
 		.concat(enumIdleStructList(structures.vtolFactories))
-		.forEach(function(factory)
-	{
+		.forEach((factory) => {
 		success = success || produceTemplate(factory);
 	});
 	return success;
@@ -210,7 +209,7 @@ function checkVtolProduction() {
 	var success = false;
 	if (!iCanDesign())
 		return false; // don't cheat by producing vtols before design is available
-	enumIdleStructList(structures.vtolFactories).forEach(function(factory) {
+	enumIdleStructList(structures.vtolFactories).forEach((factory) => {
 		success = success || produceVtol(factory);
 	});
 	return success;

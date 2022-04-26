@@ -96,10 +96,14 @@ public:
 	{
 		itemsList->setGeometry(itemsList->x(), itemsList->y(), itemsList->width(), value);
 	}
-	void setSelectedIndex(size_t index)
+	bool setSelectedIndex(size_t index)
 	{
-		ASSERT_OR_RETURN(, index < items.size(), "Invalid dropdown item index");
-		select(items[index]);
+		ASSERT_OR_RETURN(false, index < items.size(), "Invalid dropdown item index");
+		return select(items[index], index);
+	}
+	void setCanChange(std::function<bool(DropdownWidget&, size_t newIndex, std::shared_ptr<WIDGET>)> value)
+	{
+		canChange = value;
 	}
 	void setOnChange(std::function<void(DropdownWidget&)> value)
 	{
@@ -141,18 +145,39 @@ public:
 		return itemsList->idealWidth();
 	}
 
+	int32_t idealHeight() override
+	{
+		auto max = 0;
+		for (auto const &item: items)
+		{
+			max = std::max(max, item->idealHeight());
+		}
+
+		return max;
+	}
+
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
 	std::shared_ptr<ScrollableListWidget> itemsList;
 	std::shared_ptr<W_SCREEN> overlayScreen;
 	std::shared_ptr<DropdownItemWrapper> selectedItem;
+	std::function<bool(DropdownWidget&, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget)> canChange;
 	std::function<void(DropdownWidget&)> onChange;
 
-	void select(const std::shared_ptr<DropdownItemWrapper> &selected)
+	bool select(const std::shared_ptr<DropdownItemWrapper> &selected, size_t selectedIndex)
 	{
 		if (selectedItem == selected)
 		{
-			return;
+			return true;
+		}
+
+		if (canChange)
+		{
+			if (!canChange(*this, selectedIndex, (selected) ? selected->getItem() : nullptr))
+			{
+				// abort change
+				return false;
+			}
 		}
 
 		if (selectedItem)
@@ -166,6 +191,8 @@ private:
 		{
 			onChange(*this);
 		}
+
+		return true;
 	}
 
 	int calculateDropdownListScreenPosY() const;

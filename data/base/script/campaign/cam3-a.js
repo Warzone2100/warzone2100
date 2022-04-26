@@ -51,7 +51,7 @@ function setUnitRank(transport)
 	const DROID_EXP = [1024, 128, 64, 32]; //Can make Hero Commanders if recycled.
 	var droids = enumCargo(transport);
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (let i = 0, len = droids.length; i < len; ++i)
 	{
 		var droid = droids[i];
 		if (!camIsSystemDroid(droid))
@@ -76,7 +76,7 @@ function enableAllFactories()
 		"NXcybFac-b3", "NXcybFac-b2-1", "NXcybFac-b2-2", "NXHvyFac-b2", "NXcybFac-b4",
 	];
 
-	for (var j = 0, i = FACTORY_NAMES.length; j < i; ++j)
+	for (let j = 0, i = FACTORY_NAMES.length; j < i; ++j)
 	{
 		camEnableFactory(FACTORY_NAMES[j]);
 	}
@@ -130,7 +130,7 @@ function sendPlayerTransporter()
 	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaacnt, cTempl.prtruck];
 
 	// send 4 Assault Guns, 2 Hyper Velocity Cannons, 2 Cyclone AA Turrets and 2 Trucks
-	for (var i = 0, d = list.length; i < 10; ++i)
+	for (let i = 0, d = list.length; i < 10; ++i)
 	{
 		droids.push(i < d * 2 ? list[i % 4] : list[0]);
 	}
@@ -202,7 +202,7 @@ function cam3Setup()
 		"R-Wpn-Energy-Damage02", "R-Wpn-Energy-ROF01", "R-Wpn-Energy-Accuracy01",
 	];
 
-	for (var x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
+	for (let x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
 	{
 		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}

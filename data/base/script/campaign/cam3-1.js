@@ -107,7 +107,7 @@ function missileSilosDestroyed()
 	const SILO_ALIAS = "NXMissileSilo";
 	var destroyed = 0;
 
-	for (var i = 0; i < SILO_COUNT; ++i)
+	for (let i = 0; i < SILO_COUNT; ++i)
 	{
 		destroyed += (getObject(SILO_ALIAS + (i + 1)) === null) ? 1 : 0;
 	}
@@ -119,20 +119,20 @@ function missileSilosDestroyed()
 function nukeAndCountSurvivors()
 {
 	//Avoid destroying the one base if the player opted not to destroy it themselves.
-	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter(function(obj) {
-		return obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null);
-	});
+	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter((obj) => (
+		obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null)
+	));
 	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
 	var foundUnit = false;
 
 	//Make em' explode!
-	for (var i = 0, len = nuked.length; i < len; ++i)
+	for (let i = 0, len = nuked.length; i < len; ++i)
 	{
 		var nukeIt = true;
 		var obj1 = nuked[i];
 
 		//Check if it's in the safe area.
-		for (var j = 0, len2 = safeZone.length; j < len2; ++j)
+		for (let j = 0, len2 = safeZone.length; j < len2; ++j)
 		{
 			var obj2 = safeZone[j];
 
@@ -177,7 +177,6 @@ function setupNextMission()
 	}
 }
 
-
 //Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {
@@ -186,7 +185,7 @@ function getCountdown()
 	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
 
-	for (var i = 0, len = countdownObject.length; i < len; ++i)
+	for (let i = 0, len = countdownObject.length; i < len; ++i)
 	{
 		var currentTime = getMissionTime();
 		if (currentTime <= countdownObject[0].time)
@@ -224,12 +223,12 @@ function enableAllFactories()
 //For now just make sure we have all the droids in the canyon.
 function unitsInValley()
 {
-	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID;
-	});
-	var allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID;
-	});
+	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID
+	));
+	var allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID
+	));
 
 	if (safeZone.length === allDroids.length)
 	{
