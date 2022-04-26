@@ -45,6 +45,13 @@ function setupLandGroups()
 		regroup: false,
 	});
 
+	if (difficulty >= HARD)
+	{
+		camManageGroup(camMakeGroup("ETankGroup"), CAM_ORDER_ATTACK, {
+			regroup: false,
+		});
+	}
+
 	camManageGroup(camMakeGroup("WCyborgGroup"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("WCybPos1"),
@@ -106,6 +113,17 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohhpv, THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.comtath, cTempl.comltath, THE_COLLECTIVE);
+	
+	//New AC Tiger tracked units for Hard and Insane difficulty
+	if (difficulty >= HARD)
+	{
+		addDroid(THE_COLLECTIVE, 30, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(THE_COLLECTIVE, 30, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(THE_COLLECTIVE, 31, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(THE_COLLECTIVE, 31, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
 
 	camSetEnemyBases({
 		"COBase1": {
@@ -180,7 +198,7 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 
-	queue("setupLandGroups", camSecondsToMilliseconds(50));
+	queue("setupLandGroups", camSecondsToMilliseconds(60));
 	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 80 : 90)));
 	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 135 : 150)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
