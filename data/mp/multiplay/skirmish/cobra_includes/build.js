@@ -99,7 +99,7 @@ function findIdleTrucks(group)
 		builders = enumGroup(group);
 	}
 
-	for (let i = 0, s = builders.length; i < s; i++)
+	for (let i = 0, s = builders.length; i < s; ++i)
 	{
 		var con = builders[i];
 		if (conCanHelp(con.id, con.x, con.y))
@@ -443,13 +443,13 @@ function lookForOil()
 		return;
 	}
 
-	for (let i = 0, oilLen = oils.length; i < oilLen; i++)
+	for (let i = 0, oilLen = oils.length; i < oilLen; ++i)
 	{
 		var bestDroid;
 		var bestDist = Infinity;
 		var oil = oils[i];
 
-		for (let j = 0, drLen = droids.length; j < drLen; j++)
+		for (let j = 0, drLen = droids.length; j < drLen; ++j)
 		{
 			var droid = droids[j];
 			var dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);

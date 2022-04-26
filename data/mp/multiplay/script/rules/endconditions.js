@@ -71,7 +71,7 @@ class Player
 		let oils = enumFeature(ALL_PLAYERS).filter((e) => (
 			e.stattype === OIL_RESOURCE
 		));
-		for (let playnum = 0; playnum < maxPlayers; playnum++)
+		for (let playnum = 0; playnum < maxPlayers; ++playnum)
 		{
 			oils = oils.concat(enumStruct(playnum, "A0ResourceExtractor"));
 		}
@@ -282,7 +282,7 @@ function createTeams()
 	teams = [];
 	playersTeam = Array(maxPlayers);
 	const inTeamPlayNums = Array(maxPlayers).fill(false);
-	for (let playNum = 0; playNum < maxPlayers; playNum++)
+	for (let playNum = 0; playNum < maxPlayers; ++playNum)
 	{
 		if (isSpectator(playNum))
 		{
@@ -299,7 +299,7 @@ function createTeams()
 		}
 		inTeamPlayNums[playNum] = true;
 		const members =[playNum];
-		for (let splayNum = 0; splayNum < maxPlayers; splayNum++)
+		for (let splayNum = 0; splayNum < maxPlayers; ++splayNum)
 		{
 			if (isSpectator(splayNum))
 			{

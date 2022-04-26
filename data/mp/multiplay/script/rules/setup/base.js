@@ -6,7 +6,7 @@ function setupBase(player)	// inside hackNetOff()
 		completeResearchOnTime(cleanTech, player);
 		// Keep only some structures for insane AI
 		var structs = enumStruct(player);
-		for (let i = 0; i < structs.length; i++)
+		for (let i = 0; i < structs.length; ++i)
 		{
 			var s = structs[i];
 			if (playerData[player].difficulty != INSANE
@@ -23,7 +23,7 @@ function setupBase(player)	// inside hackNetOff()
 		completeResearchOnTime(timeBaseTech, player);
 		// Keep only some structures
 		var structs = enumStruct(player);
-		for (let i = 0; i < structs.length; i++)
+		for (let i = 0; i < structs.length; ++i)
 		{
 			var s = structs[i];
 			if ((playerData[player].difficulty != INSANE && (s.stattype == WALL || s.stattype == DEFENSE))
