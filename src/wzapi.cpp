@@ -328,8 +328,8 @@ wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player))
 bool wzapi::orderDroid(WZAPI_PARAMS(DROID* psDroid, int order))
 {
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
-	SCRIPT_ASSERT(false, context, order == DORDER_HOLD || order == DORDER_RTR || order == DORDER_STOP
-	              || order == DORDER_RTB || order == DORDER_REARM || order == DORDER_RECYCLE,
+	SCRIPT_ASSERT(false, context, order == DORDER_STOP || order == DORDER_RTB || order == DORDER_RTR ||
+	              order == DORDER_RECYCLE || order == DORDER_REARM || order == DORDER_HOLD,
 	              "Invalid order: %s", getDroidOrderName((DROID_ORDER)order));
 
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;

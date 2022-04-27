@@ -1797,11 +1797,9 @@ bool orderState(DROID *psDroid, DROID_ORDER order)
 /** This function returns true if the order is an acceptable order to give for a given location on the map.*/
 bool validOrderForLoc(DROID_ORDER order)
 {
-	return (order == DORDER_NONE ||	order == DORDER_MOVE ||	order == DORDER_GUARD ||
-	        order == DORDER_SCOUT || order == DORDER_PATROL ||
-	        order == DORDER_TRANSPORTOUT || order == DORDER_TRANSPORTIN  ||
-	        order == DORDER_TRANSPORTRETURN || order == DORDER_DISEMBARK ||
-	        order == DORDER_CIRCLE);
+	return order == DORDER_NONE || order == DORDER_MOVE || order == DORDER_DISEMBARK ||
+	       order == DORDER_TRANSPORTOUT || order == DORDER_TRANSPORTIN || order == DORDER_TRANSPORTRETURN ||
+	       order == DORDER_GUARD || order == DORDER_SCOUT || order == DORDER_PATROL || order == DORDER_CIRCLE;
 }
 
 
@@ -1855,12 +1853,12 @@ bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 /** This function returns true if the order is a valid order to give to an object and false if it's not.*/
 bool validOrderForObj(DROID_ORDER order)
 {
-	return (order == DORDER_NONE || order == DORDER_HELPBUILD || order == DORDER_DEMOLISH ||
-	        order == DORDER_REPAIR || order == DORDER_ATTACK || order == DORDER_FIRESUPPORT || order == DORDER_COMMANDERSUPPORT ||
-	        order == DORDER_OBSERVE || order == DORDER_ATTACKTARGET || order == DORDER_RTR ||
-	        order == DORDER_RTR_SPECIFIED || order == DORDER_EMBARK || order == DORDER_GUARD ||
-	        order == DORDER_DROIDREPAIR || order == DORDER_RESTORE || order == DORDER_BUILDMODULE ||
-	        order == DORDER_REARM || order == DORDER_RECOVER);
+	return order == DORDER_NONE || order == DORDER_ATTACK || order == DORDER_HELPBUILD ||
+	       order == DORDER_DEMOLISH || order == DORDER_REPAIR || order == DORDER_OBSERVE ||
+	       order == DORDER_FIRESUPPORT || order == DORDER_RTR || order == DORDER_EMBARK ||
+	       order == DORDER_ATTACKTARGET || order == DORDER_COMMANDERSUPPORT || order == DORDER_BUILDMODULE ||
+	       order == DORDER_GUARD || order == DORDER_DROIDREPAIR || order == DORDER_RESTORE ||
+	       order == DORDER_REARM || order == DORDER_RECOVER || order == DORDER_RTR_SPECIFIED;
 }
 
 
