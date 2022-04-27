@@ -24,7 +24,7 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 #include "sounddefs.h"
-
+#include "codecs.h"
 #include <AL/al.h>
 #include <functional>
 
@@ -46,6 +46,7 @@ struct AUDIO_STREAM;
 
 struct SIMPLE_OBJECT;
 
+/** Source of various audio samples, but not music */
 struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
@@ -103,7 +104,6 @@ void	sound_SetCallbackFunction(void *fn);
 
 bool	sound_Play2DTrack(AUDIO_SAMPLE *psSample, bool bQueued);
 bool	sound_Play3DTrack(AUDIO_SAMPLE *psSample);
-void	sound_PlayWithCallback(AUDIO_SAMPLE *psSample, SDWORD iCurTime, AUDIO_CALLBACK pDoneFunc);
 void	sound_FinishedCallback(AUDIO_SAMPLE *psSample);
 
 bool	sound_GetSystemActive();
@@ -123,7 +123,7 @@ bool sound_isStreamPlaying(AUDIO_STREAM *stream);
 void sound_StopStream(AUDIO_STREAM *stream);
 void sound_PauseStream(AUDIO_STREAM *stream);
 void sound_ResumeStream(AUDIO_STREAM *stream);
-AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, const std::function<void (const void *)>& onFinished, const void *user_data, size_t streamBufferSize, unsigned int buffer_count, bool allowSeeking = false);
+
 float sound_GetStreamVolume(const AUDIO_STREAM *stream);
 void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
 double sound_GetStreamTotalTime(AUDIO_STREAM *stream);

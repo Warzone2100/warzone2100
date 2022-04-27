@@ -44,13 +44,12 @@ void	sound_StopSample(AUDIO_SAMPLE *psSample);
 void	sound_PauseSample(AUDIO_SAMPLE *psSample);
 void	sound_ResumeSample(AUDIO_SAMPLE *psSample);
 
-AUDIO_STREAM *sound_PlayStream(PHYSFS_file *PHYSFS_fileHandle, float volume, void (*onFinished)(const void *), const void *user_data);
+AUDIO_STREAM *sound_PlayStream(const char*, float volume, const std::function<void (const void *)>& onFinished, const void *user_data);
 
 void	sound_SetSampleFreq(AUDIO_SAMPLE *psSample, SDWORD iFreq);
 void	sound_SetSampleVol(AUDIO_SAMPLE *psSample, SDWORD iVol,
                            bool bScale3D);
 
-int		sound_GetNumSamples();
 bool	sound_SampleIsFinished(AUDIO_SAMPLE *psSample);
 bool	sound_QueueSamplePlaying();
 
