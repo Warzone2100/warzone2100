@@ -21,9 +21,9 @@
 #include <physfs.h>
 #include <limits>
 #include "lib/framework/physfs_ext.h"
+#include "oggvorbis.h"
+#include "openal_callbacks.h"
 
-#include <vorbis/vorbisfile.h>
-#include <vorbis/codec.h>
 
 #ifdef __BIG_ENDIAN__
 #define OGG_ENDIAN 1
@@ -37,311 +37,125 @@
 
 #include "oggvorbis.h"
 
-struct OggVorbisDecoderState
+const ov_callbacks wz_oggVorbis_callbacks =
 {
-	// Internal identifier towards PhysicsFS
-	PHYSFS_file *fileHandle;
-
-	// Wether to allow seeking or not
-	bool         allowSeeking;
-
-	// Internal identifier towards libVorbisFile
-	OggVorbis_File oggVorbis_stream;
-
-	// Internal meta data
-	vorbis_info *VorbisInfo;
-
-	// Total time
-	double total_stream_time = 0.0;
+	wz_ogg_read,
+	wz_ogg_seek,
+	nullptr,
+	wz_ogg_tell
 };
 
-static const char *wz_oggVorbis_getErrorStr(int error)
+WZVorbisDecoder* WZVorbisDecoder::fromFilename(const char* fileName)
 {
+	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
+	if (fileHandle == nullptr)
+	{
+		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
+		return nullptr;
+	}
+	OggVorbis_File* ovf = new OggVorbis_File();
+	// https://xiph.org/vorbis/doc/vorbisfile/ov_open_callbacks.html
+	const int error = ov_open_callbacks(fileHandle, ovf, nullptr, 0, wz_oggVorbis_callbacks);
 	switch (error)
 	{
-	case OV_FALSE:
-		return "OV_FALSE";
-	case OV_HOLE:
-		return "OV_HOLE";
 	case OV_EREAD:
-		return "OV_EREAD";
-	case OV_EFAULT:
-		return "OV_EFAULT";
-	case OV_EIMPL:
-		return "OV_EIMPL";
-	case OV_EINVAL:
-		return "OV_EINVAL";
+		debug(LOG_ERROR, "A read from media returned an error.");
+		PHYSFS_close(fileHandle);
+		return nullptr;
 	case OV_ENOTVORBIS:
-		return "OV_ENOTVORBIS";
-	case OV_EBADHEADER:
-		return "OV_EBADHEADER";
+		debug(LOG_ERROR, "Bitstream does not contain any Vorbis data.");
+		PHYSFS_close(fileHandle);
+		return nullptr;
 	case OV_EVERSION:
-		return "OV_EVERSION";
-	case OV_EBADLINK:
-		return "OV_EBADLINK";
-	case OV_ENOSEEK:
-		return "OV_ENOSEEK";
+		debug(LOG_ERROR, "Vorbis version mismatch.");
+		PHYSFS_close(fileHandle);
+		return nullptr;
+	case OV_EBADHEADER:
+		debug(LOG_ERROR, "Invalid Vorbis bitstream header.");
+		PHYSFS_close(fileHandle);
+		return nullptr;
+	case OV_EFAULT:
+		debug(LOG_ERROR, "Internal logic fault; indicates a bug or heap/stack corruption.");
+		PHYSFS_close(fileHandle);
+		return nullptr;
 	default:
-		return "Unknown Ogg error.";
-	}
-}
-
-static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *datasource)
-{
-	PHYSFS_file *fileHandle;
-
-	ASSERT(datasource != nullptr, "NULL decoder passed!");
-
-	fileHandle = ((struct OggVorbisDecoderState *)datasource)->fileHandle;
-	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
-
-	size_t readLen = size * nmemb;
-	ASSERT(readLen <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "readLen (%zu) exceeds PHYSFS_uint32::max", readLen);
-	return WZ_PHYSFS_readBytes(fileHandle, ptr, static_cast<PHYSFS_uint32>(readLen));
-}
-
-static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
-{
-	PHYSFS_file *fileHandle;
-	bool allowSeeking;
-	int newPos;
-
-	ASSERT(datasource != nullptr, "NULL decoder passed!");
-
-	fileHandle = ((struct OggVorbisDecoderState *)datasource)->fileHandle;
-	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
-
-	allowSeeking = ((struct OggVorbisDecoderState *)datasource)->allowSeeking;
-
-	if (!allowSeeking)
-	{
-		return -1;
-	}
-
-	switch (whence)
-	{
-	// Seek to absolute position
-	case SEEK_SET:
-		newPos = offset;
 		break;
-
-	// Seek `offset` ahead
-	case SEEK_CUR:
-		{
-			int curPos = PHYSFS_tell(fileHandle);
-			if (curPos == -1)
-			{
-				return -1;
-			}
-
-			newPos = curPos + offset;
-			break;
-		}
-
-	// Seek backwards from the end of the file
-	case SEEK_END:
-		{
-			int fileSize = PHYSFS_fileLength(fileHandle);
-			if (fileSize == -1)
-			{
-				return -1;
-			}
-
-			newPos = fileSize - 1 - offset;
-			break;
-		}
-
-	// unrecognized seek instruction
-	default:
-		// indicate failure
-		return -1;
 	}
-
-	// PHYSFS_seek return value of non-zero means success
-	if (PHYSFS_seek(fileHandle, newPos) != 0)
+	ASSERT(ovf, "doesn't make sense");
+	vorbis_info* info = ov_info(ovf, -1);
+	if (!info)
 	{
-		return newPos;    // success
-	}
-	else
-	{
-		return -1;    // failure
-	}
-}
-
-static int wz_oggVorbis_close(WZ_DECL_UNUSED void *datasource)
-{
-	return 0;
-}
-
-static long wz_oggVorbis_tell(void *datasource)
-{
-	PHYSFS_file *fileHandle;
-
-	ASSERT(datasource != nullptr, "NULL decoder passed!");
-
-	fileHandle = ((struct OggVorbisDecoderState *)datasource)->fileHandle;
-	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
-
-	return PHYSFS_tell(fileHandle);
-}
-
-static const ov_callbacks wz_oggVorbis_callbacks =
-{
-	wz_oggVorbis_read,
-	wz_oggVorbis_seek,
-	wz_oggVorbis_close,
-	wz_oggVorbis_tell
-};
-
-struct OggVorbisDecoderState *sound_CreateOggVorbisDecoder(PHYSFS_file *PHYSFS_fileHandle, bool allowSeeking)
-{
-	int error;
-
-	struct OggVorbisDecoderState *decoder = (struct OggVorbisDecoderState *)malloc(sizeof(struct OggVorbisDecoderState));
-	if (decoder == nullptr)
-	{
-		debug(LOG_FATAL, "Out of memory");
-		abort();
+		debug(LOG_ERROR, "ov_info failed on %s", fileName);
+		PHYSFS_close(fileHandle);
 		return nullptr;
 	}
-
-	ASSERT(PHYSFS_fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
-
-	decoder->fileHandle = PHYSFS_fileHandle;
-	decoder->allowSeeking = allowSeeking;
-
-	error = ov_open_callbacks(decoder, &decoder->oggVorbis_stream, nullptr, 0, wz_oggVorbis_callbacks);
-	if (error < 0)
+	
+	long seekable = ov_seekable(ovf);
+	if (!seekable)
 	{
-		debug(LOG_ERROR, "ov_open_callbacks failed with errorcode %s", wz_oggVorbis_getErrorStr(error));
-		free(decoder);
+		debug(LOG_ERROR, "Expecting file to be seekable %s",  fileName);
+		PHYSFS_close(fileHandle);
+		ov_clear(ovf);
 		return nullptr;
 	}
-
-	// Aquire some info about the sound data
-	decoder->VorbisInfo = ov_info(&decoder->oggVorbis_stream, -1);
-	if (allowSeeking)
+	int64_t t = ov_time_total(ovf, -1);
+	if (t == OV_EINVAL)
 	{
-		decoder->total_stream_time = ov_time_total(&decoder->oggVorbis_stream, -1);
+		debug(LOG_ERROR, "%s: the argument was invalid.The requested bitstream did not exist or the bitstream is nonseekable.", fileName);
+		return nullptr;
+	}
+	const auto bitrate = ov_bitrate(ovf, -1);
+	if (bitrate == OV_FALSE)
+	{
+		debug(LOG_ERROR, "bitrate failed");
+		return nullptr;
+	}
+	WZVorbisDecoder* decoder = new WZVorbisDecoder(t, fileHandle, info, ovf);
+	if (!decoder)
+	{
+		debug(LOG_ERROR, "Failed to allocate");
+		PHYSFS_close(fileHandle);
+		return nullptr;
 	}
 
 	return decoder;
 }
 
-double sound_GetOggVorbisTotalTime(struct OggVorbisDecoderState *decoder)
+int WZVorbisDecoder::decode(uint8_t* buffer, size_t bufferSize)
 {
-	ASSERT(decoder != nullptr, "NULL decoder passed!");
-	return decoder->total_stream_time;
-}
-
-void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState *decoder)
-{
-	ASSERT(decoder != nullptr, "NULL decoder passed!");
-
-	// Close the OggVorbis decoding stream
-	ov_clear(&decoder->oggVorbis_stream);
-
-	free(decoder);
-}
-
-static inline unsigned int getSampleCount(struct OggVorbisDecoderState *decoder)
-{
-	int numSamples;
-
-	ASSERT(decoder != nullptr, "NULL decoder passed!");
-
-	numSamples = ov_pcm_total(&decoder->oggVorbis_stream, -1);
-
-	if (numSamples == OV_EINVAL)
+	size_t		bufferOffset = 0;
+	int		    result;
+	//unsigned int sampleCount = m_total_time;
+	if (m_total_time == OV_EINVAL)
 	{
-		return 0;
+		debug(LOG_ERROR, "--sampleCount was OV_EINVAL. The requested bitstream did not exist or the bitstream is nonseekable");
+		return -1;
 	}
 
-	return numSamples;
-}
-
-static inline unsigned int getCurrentSample(struct OggVorbisDecoderState *decoder)
-{
-	int samplePos;
-
-	ASSERT(decoder != nullptr, "NULL decoder passed!");
-
-	samplePos = ov_pcm_tell(&decoder->oggVorbis_stream);
-
-	if (samplePos == OV_EINVAL)
-	{
-		return 0;
-	}
-
-	return samplePos;
-}
-
-soundDataBuffer *sound_DecodeOggVorbis(struct OggVorbisDecoderState *decoder, size_t bufferSize)
-{
-	size_t		size = 0;
-	int		result;
-
-	soundDataBuffer *buffer;
-
-	ASSERT(decoder != nullptr, "NULL decoder passed!");
-
-	if (decoder->allowSeeking)
-	{
-		unsigned int sampleCount = getSampleCount(decoder);
-
-		unsigned int sizeEstimate = sampleCount * decoder->VorbisInfo->channels * 2;
-
-		if (((bufferSize == 0) || (bufferSize > sizeEstimate)) && (sizeEstimate != 0))
-		{
-			bufferSize = static_cast<size_t>(sampleCount - getCurrentSample(decoder)) * static_cast<size_t>(decoder->VorbisInfo->channels) * 2;
-		}
-	}
-
-	// If we can't seek nor receive any suggested size for our buffer, just quit
-	if (bufferSize == 0)
-	{
-		debug(LOG_ERROR, "can't find a proper buffer size");
-		return nullptr;
-	}
-
-	buffer = (soundDataBuffer *)malloc(bufferSize + sizeof(soundDataBuffer));
-	if (buffer == nullptr)
-	{
-		debug(LOG_ERROR, "couldn't allocate memory (%zu bytes requested)", bufferSize + sizeof(soundDataBuffer));
-		return nullptr;
-	}
-
-	buffer->data = (char *)(buffer + 1);
-	buffer->bufferSize = bufferSize;
-	buffer->bitsPerSample = 16;
-
-	buffer->channelCount = decoder->VorbisInfo->channels;
-	buffer->frequency = decoder->VorbisInfo->rate;
-
-	// Decode PCM data into the buffer until there is nothing to decode left
 	do
 	{
-		// Decode
-		int section;
-		size_t readLen = bufferSize - size;
-		ASSERT(readLen <= static_cast<size_t>(std::numeric_limits<int>::max()), "readLen (%zu) exceeds int::max", readLen);
-		result = ov_read(&decoder->oggVorbis_stream, &buffer->data[size], static_cast<int>(readLen), OGG_ENDIAN, 2, 1, &section);
-
-		if (result < 0)
+		int section = 0;
+		size_t spaceLeft = bufferSize - bufferOffset;
+		ASSERT(spaceLeft <= static_cast<size_t>(std::numeric_limits<int>::max()), "spaceLeft (%zu) exceeds int::max", spaceLeft);
+		result = ov_read(m_ovfile, (char*) buffer + bufferOffset, static_cast<int>(spaceLeft), OGG_ENDIAN, 2, 1, &section);
+		switch (result)
 		{
-			debug(LOG_ERROR, "error decoding from OggVorbis file; errorcode from ov_read: %s", wz_oggVorbis_getErrorStr(result));
-			free(buffer);
-			return nullptr;
+		case OV_HOLE:
+			debug(LOG_ERROR, "error decoding from OggVorbis file: there was an interruption in the data, at %zu", bufferOffset);
+			return -1;
+		case OV_EBADLINK:
+			debug(LOG_ERROR, "invalid stream section was supplied to libvorbisfile, or the requested link is corrupt, at %zu", bufferOffset);
+			return -1;
+		case OV_EINVAL:
+			debug(LOG_ERROR, "initial file headers couldn't be read or are corrupt, or that the initial open call for vf failed, at %zu", bufferOffset);
+			return -1;
+		default:
+			break;
 		}
-		else
-		{
-			size += result;
-		}
-
-	}
-	while ((result != 0 && size < bufferSize));
-
-	buffer->size = size;
-
-	return buffer;
+		ASSERT(result >= 0, "unexpected error while decoding: %i", result);
+		bufferOffset += result;
+	} while ((result != 0 && bufferOffset < bufferSize));
+	m_bufferSize = bufferSize;
+	return bufferOffset;
 }

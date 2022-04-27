@@ -21,31 +21,41 @@
 #define _LIBSOUND_OGGVORBIS_H_
 
 #include "lib/framework/frame.h"
+#include "codecs.h"
+#include <vorbis/vorbisfile.h>
+#include <vorbis/codec.h>
 #include <physfs.h>
 
-struct soundDataBuffer
+class WZVorbisDecoder final: public WZDecoder
 {
-	// the size of the data contained in *data (NOTE: this is *NOT* the size of *data itself)
-	size_t size;
+public:
+	static WZVorbisDecoder* fromFilename(const char*);
+  WZVorbisDecoder(const WZVorbisDecoder&)                 = delete;
+  WZVorbisDecoder(WZVorbisDecoder&&)                      = delete;
+  WZVorbisDecoder &operator=(const WZVorbisDecoder &)     = delete;
+  WZVorbisDecoder &operator=(WZVorbisDecoder &&)          = delete;
 
-	// the size of the buffer *data points to plus sizeof(soundDataBuffer)
-	size_t bufferSize;
+  virtual int     decode(uint8_t*, size_t);
+  virtual int64_t totalTime()                    const override { return m_total_time; };
+  virtual int     channels() 	                   const override { return m_info->channels;   }; 
+	virtual size_t  frequency()                    const override { return m_info->rate;  };
 
-	unsigned int bitsPerSample;
-	unsigned int channelCount;
-	unsigned int frequency;
+	/** Returns the total pcm samples of the physical bitstream.  */
+	int64_t totalSamples()                         const { return ov_pcm_total(m_ovfile, -1);}
+  virtual ~WZVorbisDecoder()
+	{
+		ov_clear(m_ovfile);
+		PHYSFS_close(m_file);
+	}
+private:
+	WZVorbisDecoder(int64_t totalTime, PHYSFS_file *f, vorbis_info* info, OggVorbis_File* ovf):
+									m_total_time(totalTime), m_info(info), m_file(f), m_ovfile(ovf) {};
+	int64_t m_total_time = 0;
+	int64_t m_bufferSize = 0;
+	vorbis_info* m_info = nullptr;
+	PHYSFS_file* m_file = nullptr;
+	OggVorbis_File* m_ovfile = nullptr;
 
-	// the raw PCM data
-	char *data;
 };
-
-// Forward declaration so we can take pointers to this type
-struct OggVorbisDecoderState;
-
-struct OggVorbisDecoderState *sound_CreateOggVorbisDecoder(PHYSFS_file *PHYSFS_fileHandle, bool allowSeeking);
-double sound_GetOggVorbisTotalTime(struct OggVorbisDecoderState *decoder);
-void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState *decoder);
-
-soundDataBuffer *sound_DecodeOggVorbis(struct OggVorbisDecoderState *decoder, size_t bufferSize);
 
 #endif // _LIBSOUND_OGGVORBIS_H_

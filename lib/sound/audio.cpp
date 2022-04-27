@@ -24,6 +24,8 @@
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/framework/physfs_ext.h"
 
+#include "oggopus.h"
+#include "oggvorbis.h"
 #include "tracklib.h"
 #include "aud.h"
 #include "audio.h"
@@ -848,7 +850,7 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
 
 /** Plays the given audio file as a stream and reports back when it has finished
  *  playing.
- *  \param fileName the (OggVorbis) file to play from
+ *  \param fileName the (OggVorbis|OggOpus) file to play from
  *  \param volume the volume to use while playing this file (in the range of
  *         0.0 - 1.0)
  *  \param onFinished a callback function to invoke when playing of this stream
@@ -866,32 +868,13 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
  */
 AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFinished)(const void *), const void *user_data)
 {
-	PHYSFS_file *fileHandle;
-	AUDIO_STREAM *stream;
-
 	// If audio is not enabled return false to indicate that the given callback
 	// will not be invoked.
 	if (g_bAudioEnabled == false)
 	{
 		return nullptr;
 	}
-
-	// Open up the file
-	fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
-	if (fileHandle == nullptr)
-	{
-		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
-		return nullptr;
-	}
-
-	stream = sound_PlayStream(fileHandle, volume, onFinished, user_data);
-	if (stream == nullptr)
-	{
-		PHYSFS_close(fileHandle);
-		return nullptr;
-	}
-
+	AUDIO_STREAM *stream = sound_PlayStream(fileName, volume, onFinished, user_data);
 	return stream;
 }
 
