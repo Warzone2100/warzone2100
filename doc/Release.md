@@ -12,7 +12,9 @@ Starting off
 ------------
 We do releases off of the git `master` branch.
 
-    git pull origin master
+```shell
+git pull origin master
+```
 
 
 Update the changelog
@@ -26,7 +28,7 @@ Edit the `ChangeLog` to be in sync with the latest changes. Also make sure to pu
 
 Commit the (above) changes to master
 
-```
+```shell
 git commit -p
 ```
 
@@ -80,9 +82,9 @@ Verify that each installer works, and the game runs. (Start by testing the porta
 
 On both Linux & Windows, you can also test the crash handler now.
 Note, it is better to test the portable version on windows, since then you will always be starting with a virgin config directory.
- * Test the crash handler via the --crash command line option, to make sure it produces a good dump file!
+ * Test the crash handler via the `--crash` command line option, to make sure it produces a good dump file!
  * You will see a assert() in debug builds, and we do NOT want to release debug builds.
- * If you are testing the crash handler in debug builds, use --noassert to skip it.
+ * If you are testing the crash handler in debug builds, use `--noassert` to skip it.
  * '''The Crash dumps it produces should be sane.'''
 
 ### Test the game
@@ -97,9 +99,11 @@ Create the tag for the new release
 
 Since everything works (since you tested it), it is time to make the **annotated** tag. Verify you are on the appropriate branch + commit, then tag it:
 
-    git tag -a 4.0.0
-    git push
-    git push origin 4.0.0
+```shell
+git tag -a 4.0.0
+git push
+git push origin 4.0.0
+```
 
 Where `4.0.0` is the name of the tag.
 
@@ -107,7 +111,7 @@ Where `4.0.0` is the name of the tag.
 > The expected tag version format is: `<SEMVER>(<prereleaseversion>)`
 >
 > Where `<SEMVER>` is `#.#.#` (examples: `4.0.0`, `4.0.1`, `4.9.12`)
-> 
+>
 > And the _optional_ `<prereleaseversion>` is a hyphen-prefixed pre-release identifier + version like: `-beta1` or `-rc1`
 >
 > #### Valid tag examples:
@@ -205,7 +209,7 @@ The release automation process will then:
 Post-Release checklist
 ----------------------
 - [x] Add a new milestone to https://github.com/Warzone2100/warzone2100/milestones
-- [x] Tell everyone about it in the forums. You can use the build_tools/changelog2bbcode.sh script to massage the changelog into BBCode.
+- [x] Tell everyone about it in the forums. You can use the `build_tools/changelog2bbcode.sh` script to massage the changelog into BBCode.
 - [x] Send mail about it on the developer mailing list.
 - [x] Change the title on our IRC channels about the new release.
 - [x] Ask for a raise for doing all this work that nobody else wanted to do, and you got suckered into doing it.
