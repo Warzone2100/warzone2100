@@ -307,9 +307,6 @@ function eventStartLevel()
 	setMissionTime(camMinutesToSeconds(5));
 	enableResearch("R-Sys-Resistance", CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
-
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camPlayVideos({video: "MB3_AD2_MSG", type: MISS_MSG});
 
