@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-04-28 08:09\n"
+"PO-Revision-Date: 2022-04-28 20:07\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -5866,7 +5866,7 @@ msgstr "Copiar la Ruta al Portapapeles"
 
 #: lib/widget/jsontable.cpp:503
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Copiar JSON al Portapapeles"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
@@ -9787,7 +9787,7 @@ msgstr "Compuesto hormigón-plástico de alta resistencia a la tracción"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2850
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Contenedor de Gas de Alta Presión"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
@@ -14900,7 +14900,7 @@ msgstr "Aliados"
 
 #: src/chat.cpp:75
 msgid "private to "
-msgstr ""
+msgstr "privado a "
 
 #: src/chat.cpp:86
 msgid " and "
@@ -15426,8 +15426,8 @@ msgstr[1] "%u unidades asignadas al Grupo %u"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] "%u unidades eliminadas de su grupo"
+msgstr[0] "%u unidades eliminadas de su Grupo"
+msgstr[1] "%u unidades eliminadas de su Grupo"
 
 #: src/droid.cpp:2001
 #, c-format
@@ -15461,11 +15461,11 @@ msgstr ""
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
 msgid "Collective"
-msgstr ""
+msgstr "Colectivo"
 
 #: src/frontend.cpp:178
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Faltan vídeos de la campaña"
 
 #: src/frontend.cpp:179
 msgid "See our FAQ on how to install videos"
@@ -16385,7 +16385,7 @@ msgstr ""
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
-msgstr ""
+msgstr "Juego"
 
 #: src/input/context.cpp:58
 msgid "Debug"
@@ -17520,11 +17520,11 @@ msgstr ""
 
 #: src/keybind.cpp:1226
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Deshabilitando editor de nivel"
 
 #: src/keybind.cpp:1231
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Habilitando editor de nivel"
 
 #: src/keybind.cpp:1315
 msgid "God Mode ON"
@@ -17674,7 +17674,7 @@ msgstr ""
 
 #: src/keybind.cpp:2252
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Sacudida de pantalla cuando cosas mueren: Activado"
 
 #: src/keybind.cpp:2304
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -17741,7 +17741,7 @@ msgstr ""
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "<not bound>"
 
 #: src/keyedit.cpp:544
 msgid "KEY MAPPING"
@@ -19083,7 +19083,7 @@ msgstr ""
 #: src/structure.cpp:5397
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "ID %d - %s"
 
 #: src/structure.cpp:5410
 #, c-format
@@ -19093,7 +19093,7 @@ msgstr "%s - Connectado %u de %u - Salud %d/%d"
 #: src/structure.cpp:5414
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "ID %u - Multiplicador: %u"
 
 #: src/structure.cpp:5423
 #, c-format
