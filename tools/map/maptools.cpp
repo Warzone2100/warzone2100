@@ -122,7 +122,7 @@ inline std::ostream &operator<<(std::ostream &os, const Map::LoadedFormat& mapFo
 
 static bool convertMap(WzMap::MapType mapType, uint32_t mapMaxPlayers, const std::string& inputMapDirectory, const std::string& outputMapDirectory, WzMap::OutputFormat outputFormat, bool verbose)
 {
-	auto wzMap = WzMap::Map::loadFromPath(inputMapDirectory, mapType, mapMaxPlayers, rand(), false, std::unique_ptr<WzMap::LoggingProtocol>(new MapToolDebugLogger(verbose)));
+	auto wzMap = WzMap::Map::loadFromPath(inputMapDirectory, mapType, mapMaxPlayers, rand(), false, std::make_shared<MapToolDebugLogger>(new MapToolDebugLogger(verbose)));
 	if (!wzMap)
 	{
 		// Failed to load map
@@ -130,7 +130,7 @@ static bool convertMap(WzMap::MapType mapType, uint32_t mapMaxPlayers, const std
 		return false;
 	}
 
-	if (!wzMap->exportMapToPath(*(wzMap.get()), outputMapDirectory, mapType, mapMaxPlayers, outputFormat, std::unique_ptr<WzMap::LoggingProtocol>(new MapToolDebugLogger(verbose))))
+	if (!wzMap->exportMapToPath(*(wzMap.get()), outputMapDirectory, mapType, mapMaxPlayers, outputFormat, std::make_shared<MapToolDebugLogger>(new MapToolDebugLogger(verbose))))
 	{
 		// Failed to export map
 		std::cerr << "Failed to export map to: " << outputMapDirectory << std::endl;
@@ -191,7 +191,7 @@ static optional<MapTileset> guessMapTileset(WzMap::Map& wzMap)
 
 static bool generateMapPreviewPNG(WzMap::MapType mapType, uint32_t mapMaxPlayers, const std::string& inputMapDirectory, const std::string& outputPNGPath, bool verbose)
 {
-	auto wzMap = WzMap::Map::loadFromPath(inputMapDirectory, mapType, mapMaxPlayers, rand(), false, std::unique_ptr<WzMap::LoggingProtocol>(new MapToolDebugLogger(verbose)));
+	auto wzMap = WzMap::Map::loadFromPath(inputMapDirectory, mapType, mapMaxPlayers, rand(), false, std::make_shared<MapToolDebugLogger>(new MapToolDebugLogger(verbose)));
 	if (!wzMap)
 	{
 		// Failed to load map
