@@ -251,7 +251,7 @@ function eventStartLevel()
 	var siloZone = getObject("missileSilos");
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
-	var lz2 = getObject("landingZone2");
+	var lz2 = getObject("landingZone2"); //LZ for cam3-4s.
 	mapLimit = 1.0;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D2", {
@@ -260,12 +260,10 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS); //LZ for cam3-4s.
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, CAM_HUMAN_PLAYER);
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS);
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
-
-	var enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
