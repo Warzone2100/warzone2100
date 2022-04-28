@@ -1,7 +1,14 @@
 # wzmaplib
 A self-contained library for loading / parsing / exporting WZ map formats.
 
-### Notes for developers:
+- [Notes for developers](#notes-for-developers)
+- [WzMap::IOProvider](#wzmapioprovider)
+- [WzMap::LoggingProtocol](#wzmaploggingprotocol)
+- [**Maps**](#maps)
+   - [Loading a map](#loading-a-map)
+   - [Saving a map](#saving-a-map)
+
+## Notes for developers:
 
 - It should be possible to `add_subdirectory(<wz_root>/lib/wzmaplib)` directly from an external project and successfully build and link to just `wzmaplib` without building the entire rest of Warzone 2100.
    ```cmake
@@ -14,6 +21,32 @@ A self-contained library for loading / parsing / exporting WZ map formats.
    #include <wzmaplib/map_preview.h>
    ```
 - An example project that uses `wzmaplib` is available in the [`tools/map`](/tools/map) directory.
+
+## WzMap::IOProvider:
+
+An abstraction used to support different IO implementations. A default implementation - `WzMap::StdIOProvider` - is provided that uses C stdio.
+When using the high-level interfaces, you do not need to pass an IOProvider unless you want to override the default.
+(Warzone 2100 provides its own implementation that uses PhysFS, to support map archives.)
+
+## WzMap::LoggingProtocol:
+
+An abstraction used to support logging of info / warnings / errors when loading, saving, and processing maps.
+
+# Maps:
+
+Warzone 2100 has evolved its map format over time:
+
+- Many "classic" maps, such as those made by older tools like the `FlaME` map editor, were saved in a binary data format ("BINARY_OLD").
+   - a `game.map` file that contains the map tile texture + height info, as well as gateway information
+   - a `ttypes.ttp` file that maps terrain tile textures to in-game terrain types (which affects game simulation behavior)
+   - `dinit.bjo`, `feat.bjo`, `struct.bjo` files that contain the initial droid, feature, and structure information for the map
+- This was followed by an initial JSON format ("JSON_v1"), which used JSON files for the droid / structure / feature files. The `game.map` and `ttypes.ttp` files are unchanged from the prior format.
+- In WZ 4.1+, a new JSON format ("JSON_v2") was added that restructured the droid / structure / feature JSON files, and extended the `game.map` to support full-range (16-bit) tile heights.
+
+Additionally, in WZ 4.0+, a "script-generated" map format was added:
+- This replaces all\* the map data files with a single `game.js` that uses a limited set of APIs to generate and provide map data. (\*The only additional file is the `ttypes.ttp` file.)
+
+`wzmaplib` can load all of these formats, and export to many of them.
 
 ## Loading a map:
 
@@ -50,13 +83,3 @@ Saving the terrain type data:
 ```cpp
 bool WzMap::writeTerrainTypes(const WzMap::TerrainTypeData& ttypeData, const std::string& filename, WzMap::IOProvider& mapIO, WzMap::OutputFormat format, WzMap::LoggingProtocol* pCustomLogger = nullptr);
 ```
-
-## WzMap::IOProvider:
-
-An abstraction used to support different IO implementations. A default implementation - `WzMap::StdIOProvider` - is provided that uses C stdio.
-When using the high-level interfaces, you do not need to pass an IOProvider unless you want to override the default.
-(Warzone 2100 provides its own implementation that uses PhysFS, to support map archives.)
-
-## WzMap::LoggingProtocol:
-
-An abstraction used to support logging of info / warnings / errors when loading, saving, and processing maps.
