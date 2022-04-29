@@ -859,7 +859,7 @@ static optional<FileLoadResult<Structure>> loadBJOStructureInit(const std::strin
 
 		Structure structure;
 		structure.id = id;
-		structure.name.assign(nameBuff.begin(), nameBuff.end());
+		structure.name.assign(nameBuff.begin(), std::find(nameBuff.begin(), nameBuff.end(), '\0'));
 		// TODO: Possibly handle collecting modules?
 		structure.position.x = x;
 		structure.position.y = y;
@@ -1251,7 +1251,7 @@ static optional<FileLoadResult<Droid>> loadBJODroidInit(const std::string& filen
 		}
 		Droid droid;
 		droid.id = id;
-		droid.name.assign(nameBuff.begin(), nameBuff.end());
+		droid.name.assign(nameBuff.begin(), std::find(nameBuff.begin(), nameBuff.end(), '\0'));
 		droid.position.x = (x & ~TILE_MASK) + TILE_UNITS / 2;
 		droid.position.y = (y & ~TILE_MASK) + TILE_UNITS / 2;
 		// ignore z component
@@ -1604,7 +1604,7 @@ static optional<FileLoadResult<Feature>> loadBJOFeatureInit(const std::string& f
 
 		Feature feature;
 		feature.id = id;
-		feature.name.assign(nameBuff.begin(), nameBuff.end());
+		feature.name.assign(nameBuff.begin(), std::find(nameBuff.begin(), nameBuff.end(), '\0'));
 		feature.position.x = x;
 		feature.position.y = y;
 		// ignore z component
