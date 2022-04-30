@@ -24,6 +24,7 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
@@ -186,6 +187,9 @@ public:
 	// Other Map instance data
 	bool wasScriptGenerated() const { return m_wasScriptGenerated; }
 	const std::string& mapFolderPath() const { return m_mapFolderPath; }
+
+	// Getting a list of expected file names for a particular map format
+	static std::unordered_set<std::string> expectedFileNames(optional<LoadedFormat> format = nullopt);
 
 private:
 	std::string m_mapFolderPath;
