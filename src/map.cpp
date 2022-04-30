@@ -842,6 +842,11 @@ bool WzMapPhysFSIO::writeFullFile(const std::string& filename, const char *ppFil
 	return saveFile(filename.c_str(), ppFileData, fileSize);
 }
 
+bool WzMapPhysFSIO::makeDirectory(const std::string& directoryPath)
+{
+	return PHYSFS_mkdir(directoryPath.c_str()) != 0;
+}
+
 const char* WzMapPhysFSIO::pathSeparator() const
 {
 	return "/";

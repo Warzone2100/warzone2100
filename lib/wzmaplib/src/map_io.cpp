@@ -22,6 +22,7 @@
 #include "map_internal.h"
 #include <cstdio>
 #include <cstring>
+#include <list>
 
 #if defined(_WIN32)
 # define WIN32_LEAN_AND_MEAN
@@ -156,6 +157,25 @@ bool BinaryIOStream::writeSLE32(int32_t val)
 	return result.value() == sizeof(val);
 }
 
+bool BinaryIOStream::writeUBE32(uint32_t val)
+{
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+	val = SDL_Swap32(val);
+#endif
+	auto result = writeBytes(&val, sizeof(val));
+	if (!result.has_value()) { return false; }
+	return result.value() == sizeof(val);
+}
+bool BinaryIOStream::writeSBE32(int32_t val)
+{
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+	val = SDL_Swap32(val);
+#endif
+	auto result = writeBytes(&val, sizeof(val));
+	if (!result.has_value()) { return false; }
+	return result.value() == sizeof(val);
+}
+
 bool IOProvider::enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
 {
 	// Must implement in subclasses
@@ -171,6 +191,10 @@ bool IOProvider::enumerateFolders(const std::string& basePath, const std::functi
 std::string IOProvider::pathJoin(const std::string& a, const std::string& b)
 {
 	std::string fullPath = a;
+	if (b.empty())
+	{
+		return fullPath;
+	}
 	std::string separator = pathSeparator();
 	if (!fullPath.empty() && !WzMap::strEndsWith(fullPath, separator))
 	{
@@ -178,6 +202,123 @@ std::string IOProvider::pathJoin(const std::string& a, const std::string& b)
 	}
 	fullPath += b;
 	return fullPath;
+}
+
+std::string IOProvider::pathDirName(const std::string& fullPath)
+{
+	// Split the path at the path separator
+	std::string pathSep = pathSeparator();
+	if (pathSep.empty())
+	{
+		return fullPath;
+	}
+	size_t dirnameLength = fullPath.size();
+	size_t lastPos = dirnameLength;
+	do {
+		lastPos = dirnameLength - pathSep.length();
+		dirnameLength = fullPath.rfind(pathSep, lastPos);
+	} while (dirnameLength != std::string::npos && dirnameLength == lastPos);
+
+	return (dirnameLength != std::string::npos) ? fullPath.substr(0, dirnameLength) : "";
+}
+
+std::string IOProvider::pathBaseName(const std::string& fullPath)
+{
+	// Split the path at the path separator
+	std::string pathSep = pathSeparator();
+	if (pathSep.empty())
+	{
+		return fullPath;
+	}
+	size_t dirnameLength = fullPath.size();
+	size_t lastPos = dirnameLength;
+	do {
+		lastPos = dirnameLength - pathSep.length();
+		dirnameLength = fullPath.rfind(pathSep, lastPos);
+	} while (dirnameLength != std::string::npos && dirnameLength == lastPos);
+
+	return (dirnameLength != std::string::npos) ? fullPath.substr(dirnameLength + 1) : fullPath;
+}
+
+bool IOProvider::enumerateFilesRecursive(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	// A base implementation of recursive enumeration that utilizes the regular enumerateFiles/Folders functions.
+	// If a particular IOProvider can provide a more optimal implementation, it can override this.
+
+	// Step 1: Enumerate all the files in this folder
+	bool endEnum = false;
+	bool enumSuccess = enumerateFiles(basePath, [&](const char* file) -> bool {
+		if (!enumFunc(file))
+		{
+			endEnum = true;
+			return false;
+		}
+		return true;
+	});
+	if (!enumSuccess) { return false; }
+	if (endEnum) { return true; }
+
+	// Step 2: Enumerate all the folders in this folder, enumerating all the files in each
+	enumSuccess = enumerateFoldersRecursive(basePath, [&](const char* folder) -> bool {
+		bool enumFilesSuccess = enumerateFiles(pathJoin(basePath, folder), [&](const char* file) -> bool {
+			std::string relativePath = pathJoin(folder, file);
+			if (!enumFunc(relativePath.c_str()))
+			{
+				endEnum = true;
+				return false; // stop enumerating files
+			}
+			return true; // continue enumerating files
+		});
+		if (!enumFilesSuccess || endEnum)
+		{
+			return false; // stop enumerating folders
+		}
+		return true; // continue enumerating folders
+	});
+
+	if (!enumSuccess) { return false; }
+	return true;
+}
+
+bool IOProvider::enumerateFoldersRecursive(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	// A base implementation of recursive enumeration that utilizes the regular enumerateFolders function.
+	// If a particular IOProvider can provide a more optimal implementation, it can override this.
+
+	std::list<std::string> foldersList;
+	foldersList.push_back(""); // "" is used for basePath
+	std::string currentPath;
+	bool endEnum = false;
+	while (!foldersList.empty())
+	{
+		// enumerate the last folder in the foldersList
+		auto it = std::prev(foldersList.end());
+		currentPath = *it;
+		bool enumSuccess = enumerateFolders(pathJoin(basePath, currentPath), [&](const char* subfolder) -> bool {
+			std::string fullRelativePath = currentPath + subfolder;
+			// call enumFunc with the enumerated subfolder
+			if (!enumFunc(fullRelativePath.c_str()))
+			{
+				endEnum = true;
+				return false;
+			}
+
+			// push this subfolder onto the stack
+			foldersList.push_back(fullRelativePath);
+
+			return true; // continue enumerating
+		});
+
+		// remove the item just processed from the stack
+		foldersList.erase(it);
+
+		if (!enumSuccess)
+		{
+			return false;
+		}
+		if (endEnum) { return true; }
+	}
+	return true;
 }
 
 
@@ -381,6 +522,12 @@ bool StdIOProvider::writeFullFile(const std::string& filename, const char *ppFil
 		return false;
 	}
 	return true;
+}
+
+bool StdIOProvider::makeDirectory(const std::string& directoryPath)
+{
+	// TODO: Implement at some point, if needed
+	return false;
 }
 
 const char* StdIOProvider::pathSeparator() const
