@@ -485,6 +485,12 @@ bool WzMapZipIO::writeFullFile(const std::string& filename, const char *ppFileDa
 	return true;
 }
 
+bool WzMapZipIO::makeDirectory(const std::string& directoryPath)
+{
+	// We could explicitly write a directory entry in the zip here, but since this is not necessary just return true
+	return true;
+}
+
 const char* WzMapZipIO::pathSeparator() const
 {
 	return "/";
