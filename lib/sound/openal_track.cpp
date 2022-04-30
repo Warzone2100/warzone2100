@@ -1246,8 +1246,8 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
  */
 static void sound_DestroyStream(AUDIO_STREAM *stream)
 {
-	ALint buffer_count;
-	ALuint *buffers;
+	ALint buffer_count = 0;
+	ALuint *buffers = nullptr;
 
 	// Stop the OpenAL source from playing
 	alGetError();
@@ -1257,7 +1257,11 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
 
 	// Retrieve the amount of buffers which were processed
 	alGetSourcei(stream->source, AL_BUFFERS_PROCESSED, &buffer_count);
-	sound_GetError();
+	if(sound_GetError() != AL_NO_ERROR)
+	{
+		buffer_count = 0;
+		// proceed as if nothing happened
+	}
 
 	// Detach all buffers and retrieve their ID numbers
 	if (buffer_count > 0)
