@@ -2349,4 +2349,36 @@ optional<Map::LoadedFormat> Map::loadedMapFormat()
 	return nullopt; // silence warning
 }
 
+std::unordered_set<std::string> Map::expectedFileNames(optional<LoadedFormat> format /*= nullopt*/)
+{
+	std::unordered_set<std::string> results;
+	if (format.has_value() && format.value() == LoadedFormat::MIXED)
+	{
+		format.reset();
+	}
+	if (!format.has_value())
+	{
+		// ancient .ini files
+		results.insert({"droid.ini", "feature.ini", "struct.ini"});
+	}
+	if (format.value_or(LoadedFormat::BINARY_OLD) == LoadedFormat::BINARY_OLD)
+	{
+		results.insert({"game.map", "ttypes.ttp", "dinit.bjo", "feat.bjo", "struct.bjo"});
+	}
+	if (format.value_or(LoadedFormat::JSON_v1) == LoadedFormat::JSON_v1)
+	{
+		results.insert({"game.map", "ttypes.ttp", "droid.json", "feature.json", "struct.json"});
+	}
+	if (format.value_or(LoadedFormat::SCRIPT_GENERATED) == LoadedFormat::SCRIPT_GENERATED)
+	{
+		results.insert({"game.js", "ttypes.ttp"});
+	}
+	if (format.value_or(LoadedFormat::JSON_v2) == LoadedFormat::JSON_v2)
+	{
+		results.insert({"game.map", "ttypes.ttp", "droid.json", "feature.json", "struct.json"});
+	}
+
+	return results;
+}
+
 } // namespace WzMap
