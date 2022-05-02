@@ -137,6 +137,8 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
 
 	// New HMG Tiger Tracks units in first attack group
 	addDroid(THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");

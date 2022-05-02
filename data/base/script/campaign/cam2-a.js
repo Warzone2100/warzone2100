@@ -208,6 +208,8 @@ function cam2Setup()
 	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, CAM_HUMAN_PLAYER);
+	
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
 
 	enableResearch("R-Wpn-Cannon-Damage04", CAM_HUMAN_PLAYER);
 	enableResearch("R-Wpn-Rocket-Damage04", CAM_HUMAN_PLAYER);

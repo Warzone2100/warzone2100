@@ -41,13 +41,16 @@ function setupLandGroups()
 		regroup: false,
 	});
 
-	camManageGroup(camMakeGroup(tanks), CAM_ORDER_DEFEND, {
-		pos: [
-			camMakePos("NWTankPos3"),
-		],
-		radius: 15,
+	camManageGroup(camMakeGroup(tanks), CAM_ORDER_ATTACK, {
 		regroup: false,
 	});
+
+	if (difficulty >= HARD)
+	{
+		camManageGroup(camMakeGroup("ETankGroup"), CAM_ORDER_ATTACK, {
+			regroup: false,
+		});
+	}
 
 	camManageGroup(camMakeGroup("WCyborgGroup"), CAM_ORDER_PATROL, {
 		pos: [
@@ -110,6 +113,18 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohhpv, THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.comtath, cTempl.comltath, THE_COLLECTIVE);
+	
+	//New AC Tiger tracked units for Hard and Insane difficulty
+	if (difficulty >= HARD)
+	{
+		addDroid(THE_COLLECTIVE, 30, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(THE_COLLECTIVE, 30, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(THE_COLLECTIVE, 31, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(THE_COLLECTIVE, 31, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+	}
 
 	camSetEnemyBases({
 		"COBase1": {
@@ -136,20 +151,20 @@ function eventStartLevel()
 		"COCyborgFac-b1": {
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			groupSize: 4,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 27 : 30)),
 			data: {
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.npcybr, cTempl.npcybf, cTempl.npcybc]
+			templates: [cTempl.cocybag, cTempl.npcybr]
 		},
 		"COHeavyFacL-b2": {
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
+			groupSize: 4,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 50 : 55)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -160,8 +175,8 @@ function eventStartLevel()
 		"COHeavyFacR-b2": {
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
+			groupSize: 6,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 45 : 50)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -172,7 +187,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 45 : 50)),
 			data: {
 				regroup: false,
 				count: -1,
@@ -184,8 +199,8 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 
-	queue("setupLandGroups", camSecondsToMilliseconds(50));
-	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
-	queue("enableFactories", camChangeOnDiff(camMinutesToMilliseconds(2.5)));
+	queue("setupLandGroups", camSecondsToMilliseconds(60));
+	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 80 : 90)));
+	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 135 : 150)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

@@ -70,6 +70,7 @@ nphbb: { body: "Body12SUP", prop: "hover01", weap: "Rocket-BB" },
 commgt: { body: "Body6SUPP", prop: "tracked01", weap: "MG3Mk1" },
 comsens: { body: "Body6SUPP", prop: "tracked01", weap: "SensorTurret1Mk1" },
 cohct: { body: "Body9REC", prop: "tracked01", weap: "Cannon375mmMk1" },
+commc: { body: "Body6SUPP", prop: "tracked01", weap: "Cannon2A-TMk1" },
 commrl: { body: "Body6SUPP", prop: "HalfTrack", weap: "Rocket-MRL" },
 commrp: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-Pod" },
 comorb: { body: "Body6SUPP", prop: "HalfTrack", weap: "Mortar2Mk1" },
@@ -111,6 +112,7 @@ comsensh: { body: "Body6SUPP", prop: "HalfTrack", weap: "SensorTurret1Mk1" },
 
 // SUB_2_7
 comrotmh: { body: "Body6SUPP", prop: "tracked01", weap: "Mortar3ROTARYMk1" },
+comltath: { body: "Body6SUPP", prop: "hover01", weap: "Rocket-HvyA-T" },
 
 // SUB_2_8
 comhvat: { body: "Body6SUPP", prop: "V-Tol", weap: "Rocket-VTOL-HvyA-T" },
@@ -158,6 +160,7 @@ nxlpulsev: { body: "Body3MBT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
 // SUB_3_4
 nxllinkh: { body: "Body3MBT", prop: "hover02", weap: "NEXUSlink" },
 nxmpulsev: { body: "Body7ABT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
+
 
 ////////////////////////////////////////////////////////////////////////////////
 };

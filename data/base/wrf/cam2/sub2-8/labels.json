@@ -109,7 +109,11 @@
 		"pos1": [512, 640],
 		"pos2": [768, 896]
 	},
-
+	"area_9": {
+		"label": "ETankGroup",
+		"pos1": [3584, 2560],
+		"pos2": [4224, 3200]
+	},
 	"object_0": {
 		"label": "COCyborgFac-b1",
 		"id": 155,
