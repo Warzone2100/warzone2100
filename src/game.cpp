@@ -2002,7 +2002,7 @@ static void serializeSaveGameData_json(nlohmann::json &o, nlohmann::json &savein
 {
 	serializeSaveGameV38Data_json(o, (const SAVE_GAME_V38 *) serializeGame);
 	// not sure whether its 38, 39 or 40... different .cpp files are using different numbers
-	o["version"] = VERSION_39; 
+	o["version"] = VERSION_39;
 	
 	// This file lists saved games, and their build info
 	// one per savegame directory
@@ -4033,16 +4033,15 @@ bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json> &gamJs
 
 			return false;
 		}
+
+		/* GAME_SAVE_V7 */
+		endian_udword(&saveGame.gameTime);
+		endian_udword(&saveGame.GameType);
+		endian_sdword(&saveGame.ScrollMinX);
+		endian_sdword(&saveGame.ScrollMinY);
+		endian_udword(&saveGame.ScrollMaxX);
+		endian_udword(&saveGame.ScrollMaxY);
 	}
-
-
-	/* GAME_SAVE_V7 */
-	endian_udword(&saveGame.gameTime);
-	endian_udword(&saveGame.GameType);
-	endian_sdword(&saveGame.ScrollMinX);
-	endian_sdword(&saveGame.ScrollMinY);
-	endian_udword(&saveGame.ScrollMaxX);
-	endian_udword(&saveGame.ScrollMaxY);
 
 	savedGameTime = saveGame.gameTime;
 
