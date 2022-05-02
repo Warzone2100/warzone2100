@@ -675,18 +675,24 @@ static MapFileList listMapFiles()
 		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName.platformDependent;
 		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND))
 		{
-			int unsafe = 0;
-			bool enumSuccess = WZ_PHYSFS_enumerateFiles("multiplay/maps", [&unsafe, &realFilePathAndName](const char *file) -> bool {
+			size_t numMapGamFiles = 0;
+			size_t numMapFolders = 0;
+			bool enumSuccess = WZ_PHYSFS_enumerateFiles("multiplay/maps", [&numMapGamFiles, &numMapFolders, &realFilePathAndName](const char *file) -> bool {
 				std::string isDir = std::string("multiplay/maps/") + file;
 				if (WZ_PHYSFS_isDirectory(isDir.c_str()))
 				{
+					if (numMapFolders++ > 1)
+					{
+						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
+						return false; // break;
+					}
 					return true; // continue;
 				}
 				std::string checkfile = file;
 				debug(LOG_WZ, "checking ... %s", file);
 				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
 				{
-					if (unsafe++ > 1)
+					if (numMapGamFiles++ > 1)
 					{
 						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
 						return false; // break;
@@ -698,9 +704,10 @@ static MapFileList listMapFiles()
 			{
 				// Failed to enumerate contents - corrupt map archive (ignore it)
 				debug(LOG_ERROR, "Failed to enumerate - ignoring corrupt map file: %s", realFilePathAndName.c_str());
-				unsafe = std::numeric_limits<int>::max() - 1;
+				numMapGamFiles = std::numeric_limits<size_t>::max() - 1;
+				numMapFolders = std::numeric_limits<size_t>::max() - 1;
 			}
-			if (unsafe < 2)
+			if (numMapGamFiles < 2 && numMapFolders < 2)
 			{
 				filtered.push_back(realFileName);
 			}
