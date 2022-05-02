@@ -373,6 +373,11 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
 class WzMapPhysFSIO : public WzMap::IOProvider
 {
 public:
+	WzMapPhysFSIO() { }
+	WzMapPhysFSIO(const std::string& baseMountPath)
+	: m_basePath(baseMountPath)
+	{ }
+public:
 	virtual std::unique_ptr<WzMap::BinaryIOStream> openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode) override;
 	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
@@ -381,6 +386,8 @@ public:
 
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
+private:
+	std::string m_basePath;
 };
 
 class WzMapDebugLogger : public WzMap::LoggingProtocol

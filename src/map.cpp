@@ -749,15 +749,15 @@ static bool afterMapLoad();
 class WzMapBinaryPhysFSStream : public WzMap::BinaryIOStream
 {
 public:
-	WzMapBinaryPhysFSStream(const char* pFilename, WzMap::BinaryIOStream::OpenMode mode)
+	WzMapBinaryPhysFSStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode)
 	{
 		switch (mode)
 		{
 			case WzMap::BinaryIOStream::OpenMode::READ:
-				pFile = PHYSFS_openRead(pFilename);
+				pFile = PHYSFS_openRead(filename.c_str());
 				break;
 			case WzMap::BinaryIOStream::OpenMode::WRITE:
-				pFile = PHYSFS_openWrite(pFilename);
+				pFile = PHYSFS_openWrite(filename.c_str());
 				break;
 		}
 		if (pFile)
@@ -819,7 +819,7 @@ private:
 
 std::unique_ptr<WzMap::BinaryIOStream> WzMapPhysFSIO::openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode)
 {
-	WzMapBinaryPhysFSStream* pStream = new WzMapBinaryPhysFSStream(filename.c_str(), mode);
+	WzMapBinaryPhysFSStream* pStream = new WzMapBinaryPhysFSStream((m_basePath.empty()) ? filename : pathJoin(m_basePath, filename), mode);
 	if (!pStream->openedFile())
 	{
 		delete pStream;
@@ -830,47 +830,50 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapPhysFSIO::openBinaryStream(const std
 
 bool WzMapPhysFSIO::loadFullFile(const std::string& filename, std::vector<char>& fileData)
 {
-	if (!PHYSFS_exists(filename.c_str()))
+	std::string filenameFull = (m_basePath.empty()) ? filename : pathJoin(m_basePath, filename);
+	if (!PHYSFS_exists(filenameFull.c_str()))
 	{
 		return false;
 	}
-	return loadFileToBufferVector(filename.c_str(), fileData, true, true);
+	return loadFileToBufferVector(filenameFull.c_str(), fileData, true, true);
 }
 
 bool WzMapPhysFSIO::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)
 {
-	return saveFile(filename.c_str(), ppFileData, fileSize);
+	std::string filenameFull = (m_basePath.empty()) ? filename : pathJoin(m_basePath, filename);
+	return saveFile(filenameFull.c_str(), ppFileData, fileSize);
 }
 
 bool WzMapPhysFSIO::makeDirectory(const std::string& directoryPath)
 {
+	std::string directoryPathFull = (m_basePath.empty()) ? directoryPath : pathJoin(m_basePath, directoryPath);
 	return PHYSFS_mkdir(directoryPath.c_str()) != 0;
 }
 
 const char* WzMapPhysFSIO::pathSeparator() const
 {
-	return "/";
+	return "/"; // the platform-independent PhysFS path separator
 }
 
 bool WzMapPhysFSIO::enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
 {
-	return WZ_PHYSFS_enumerateFiles(basePath.c_str(), [basePath, enumFunc](const char* file) -> bool {
+	std::string basePathFull = (m_basePath.empty()) ? basePath : pathJoin(m_basePath, basePath);
+	return WZ_PHYSFS_enumerateFiles(basePathFull.c_str(), [basePathFull, enumFunc](const char* file) -> bool {
 		if (file == nullptr) { return true; }
 		if (*file == '\0') { return true; }
-		std::string fullPath = basePath + "/" + file;
+		std::string fullPath = basePathFull + "/" + file;
 		if (WZ_PHYSFS_isDirectory(fullPath.c_str()))
 		{
 			return true; // skip and continue
 		}
 		return enumFunc(file);
 	});
-
-	return WZ_PHYSFS_enumerateFiles(basePath.c_str(), enumFunc);
 }
 
 bool WzMapPhysFSIO::enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
 {
-	return WZ_PHYSFS_enumerateFolders(basePath.c_str(), enumFunc);
+	std::string basePathFull = (m_basePath.empty()) ? basePath : pathJoin(m_basePath, basePath);
+	return WZ_PHYSFS_enumerateFolders(basePathFull.c_str(), enumFunc);
 }
 
 WzMapDebugLogger::~WzMapDebugLogger()
