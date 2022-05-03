@@ -33,8 +33,6 @@
 
 #define MAX_PLAYERS         11                 ///< Maximum number of players in the game.
 
-#define PLAYER_SCAVENGERS -1
-
 // 65536 / 360 = 8192 / 45, with a bit less overflow risk.
 #define DEG(degrees) ((degrees) * 8192 / 45)
 
