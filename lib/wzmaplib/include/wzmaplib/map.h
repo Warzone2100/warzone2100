@@ -48,6 +48,9 @@ using nonstd::nullopt;
 #define TILE_MAX_HEIGHT	(255 * ELEVATION_SCALE)
 #define TILE_MIN_HEIGHT	0
 
+// The player number for scavengers (as loaded by this library)
+constexpr int8_t PLAYER_SCAVENGERS = -1;
+
 /* Flags for whether texture tiles are flipped in X and Y or rotated */
 #define TILE_XFLIP		0x8000
 #define TILE_YFLIP		0x4000
