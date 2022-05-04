@@ -2468,7 +2468,7 @@ static WzMap::MapType getWzMapType(bool UserSaveGame)
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
 {
-	std::unique_ptr<WzMap::Map> data;
+	std::shared_ptr<WzMap::Map> data;
 	std::map<WzString, DROID **> droidMap;
 	std::map<WzString, STRUCTURE **> structMap;
 	char			aFileName[256];
@@ -2882,7 +2882,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	// construct the WzMap object for loading map data
 	aFileName[fileExten] = '\0';
 	mapSeed = gameRandU32();
-	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, false, std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
+	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
 
 	if (data && data->wasScriptGenerated())
 	{

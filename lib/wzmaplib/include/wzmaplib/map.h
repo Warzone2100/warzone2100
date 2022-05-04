@@ -140,10 +140,10 @@ public:
 	Map();
 
 	// Load a map from a specified folder path + mapType + maxPlayers + random seed (only used for script-generated maps), optionally supplying:
-	// - previewOnly (set to true to shortcut processing of map details that don't factor into preview generation)
+	// - seed (a seed used for random script-based maps generation)
 	// - a logger
 	// - a WzMap::IOProvider
-	static std::unique_ptr<Map> loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly = false, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
+	static std::shared_ptr<Map> loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
 
 	// Export a map to a specified folder path in a specified output format (version)
 	static bool exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
@@ -188,8 +188,17 @@ public:
 	// Returns nullopt if loading the map data failed, the format can't be determined, or if this WzMap instance was not created by loading a map
 	optional<LoadedFormat> loadedMapFormat();
 
+	// Obtain the script from a loaded script-generated map
+	const std::vector<char>* scriptMapContents() const { return m_mapScriptContents.get(); }
+
+	// Returns a new Map instance, from an existing script-generated map instance, generated using a new seed
+	// Fails if:
+	//	- The current Map is not a script-generated map (wasScriptGenerated() == false)
+	std::shared_ptr<Map> generateFromExistingScriptMap(uint32_t seed, std::shared_ptr<LoggingProtocol> logger = nullptr);
+
 	// Other Map instance data
 	bool wasScriptGenerated() const { return m_wasScriptGenerated; }
+	optional<uint32_t> scriptGeneratedMapSeed() const;
 	const std::string& mapFolderPath() const { return m_mapFolderPath; }
 
 	// Getting a list of expected file names for a particular map format
@@ -204,7 +213,9 @@ private:
 	uint32_t m_mapMaxPlayers = 8;
 	std::shared_ptr<LoggingProtocol> m_logger;
 	std::shared_ptr<WzMap::IOProvider> m_mapIO;
+	uint32_t m_scriptGeneratedMapSeed = 0;
 	bool m_wasScriptGenerated = false;
+	std::shared_ptr<std::vector<char>> m_mapScriptContents;
 	std::shared_ptr<MapData> m_mapData;
 	std::shared_ptr<std::vector<Structure>> m_structures;
 	std::shared_ptr<std::vector<Droid>> m_droids;

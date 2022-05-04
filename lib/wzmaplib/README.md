@@ -52,7 +52,7 @@ Additionally, in WZ 4.0+, a "script-generated" map format was added:
 
 #### High-level interface
 ```cpp
-static std::unique_ptr<WzMap::Map> WzMap::Map::loadFromPath(const std::string& mapFolderPath, WzMap::MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly = false, std::shared_ptr<WzMap::LoggingProtocol> logger = nullptr, std::shared_ptr<WzMap::IOProvider> mapIO = std::shared_ptr<WzMap::IOProvider>(new WzMap::StdIOProvider()));
+static std::shared_ptr<WzMap::Map> WzMap::Map::loadFromPath(const std::string& mapFolderPath, WzMap::MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly = false, std::shared_ptr<WzMap::LoggingProtocol> logger = nullptr, std::shared_ptr<WzMap::IOProvider> mapIO = std::shared_ptr<WzMap::IOProvider>(new WzMap::StdIOProvider()));
 ```
 Then utilize the various methods of the returned `WzMap::Map` instance to obtain the mapData, structures, droids, features, etc.
 For script-generated maps, the script is run on construction of the `WzMap::Map` object. For fixed map formats, the data is lazy-loaded on first request.

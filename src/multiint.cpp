@@ -656,7 +656,7 @@ void loadMapPreview(bool hideInterface)
 
 	// load the map data
 	aFileName += "/";
-	auto data = WzMap::Map::loadFromPath(aFileName, WzMap::MapType::SKIRMISH, psLevel->players, rand(), true, std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
+	auto data = WzMap::Map::loadFromPath(aFileName, WzMap::MapType::SKIRMISH, psLevel->players, rand(), std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
 	if (!data)
 	{
 		debug(LOG_ERROR, "Failed to load map from path: %s", aFileName.c_str());

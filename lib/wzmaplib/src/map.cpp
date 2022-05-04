@@ -1939,10 +1939,9 @@ Map::Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlaye
 { }
 
 // Load a map from a specified folder path + mapType + maxPlayers + random seed (only used for script-generated maps), optionally supplying:
-// - previewOnly (set to true to shortcut processing of map details that don't factor into preview generation)
 // - a logger
 // - a WzMap::IOProvider
-std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, bool previewOnly, std::shared_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO)
+std::shared_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, std::shared_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO)
 {
 	if (!mapIO)
 	{
@@ -1966,13 +1965,15 @@ std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType
 			result->m_mapIO = std::move(mapIO);
 			result->m_logger = std::move(logger);
 			result->m_terrainTypes.reset(); // clear this so the ttypes.ttp file is loaded on-demand
+			result->m_scriptGeneratedMapSeed = seed;
 			result->m_wasScriptGenerated = true;
+			result->m_mapScriptContents = std::make_shared<std::vector<char>>(std::move(fileData));
 		}
 		return result;
 	}
 
 	// Otherwise, construct a lazy-loading Map
-	std::unique_ptr<Map> pMap = std::unique_ptr<Map>(new Map(mapFolderPath, mapType, mapMaxPlayers, std::move(logger), std::move(mapIO)));
+	std::shared_ptr<Map> pMap = std::shared_ptr<Map>(new Map(mapFolderPath, mapType, mapMaxPlayers, std::move(logger), std::move(mapIO)));
 	return pMap;
 }
 
@@ -2345,6 +2346,49 @@ optional<Map::LoadedFormat> Map::loadedMapFormat()
 	}
 
 	return nullopt; // silence warning
+}
+
+std::shared_ptr<Map> Map::generateFromExistingScriptMap(uint32_t seed, std::shared_ptr<LoggingProtocol> logger /*= nullptr*/)
+{
+	if (!m_wasScriptGenerated || m_mapScriptContents == nullptr)
+	{
+		return nullptr;
+	}
+
+	std::string gameJSPath = m_mapIO->pathJoin(m_mapFolderPath, "game.js");
+	// Load script map, which actually loads everything
+	auto result = runMapScript(*m_mapScriptContents.get(), gameJSPath, seed, false, logger.get());
+	if (result)
+	{
+		result->m_mapFolderPath = m_mapFolderPath;
+		result->m_mapType = m_mapType;
+		result->m_mapMaxPlayers = m_mapMaxPlayers;
+		result->m_mapIO = m_mapIO;
+		result->m_logger = std::move(logger);
+		if (m_terrainTypes != nullptr)
+		{
+			// deep-copy over the current terrainTypes data
+			result->m_terrainTypes = std::make_shared<TerrainTypeData>();
+			*(result->m_terrainTypes) = *m_terrainTypes;
+		}
+		else
+		{
+			result->m_terrainTypes.reset(); // clear this so the ttypes.ttp file is loaded on-demand (if possible)
+		}
+		result->m_scriptGeneratedMapSeed = seed;
+		result->m_wasScriptGenerated = true;
+		result->m_mapScriptContents = m_mapScriptContents;
+	}
+	return result;
+}
+
+optional<uint32_t> Map::scriptGeneratedMapSeed() const
+{
+	if (!m_wasScriptGenerated)
+	{
+		return nullopt;
+	}
+	return m_scriptGeneratedMapSeed;
 }
 
 std::unordered_set<std::string> Map::expectedFileNames(optional<LoadedFormat> format /*= nullopt*/)
