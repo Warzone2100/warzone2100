@@ -35,6 +35,7 @@ using nonstd::nullopt;
 #include "map_io.h"
 #include "terrain_type.h"
 #include "map_terrain_types.h"
+#include "map_stats.h"
 
 // MARK: - Various defines needed by both maplib and the game's map-handling code
 
@@ -193,6 +194,9 @@ public:
 
 	// Getting a list of expected file names for a particular map format
 	static std::unordered_set<std::string> expectedFileNames(optional<LoadedFormat> format = nullopt);
+
+	// Extract various map stats / info
+	optional<MapStats> calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfiguration statsConfig = MapStatsConfiguration());
 
 private:
 	std::string m_mapFolderPath;
