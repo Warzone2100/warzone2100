@@ -193,7 +193,7 @@ static inline JSCFunctionListEntry QJS_CFUNC_DEF(const char *name, uint8_t lengt
 
 struct ScriptMapData
 {
-	std::unique_ptr<WzMap::Map> map = std::unique_ptr<WzMap::Map>(new WzMap::Map());
+	std::shared_ptr<WzMap::Map> map = std::make_shared<WzMap::Map>();
 	std::mt19937 mt;
 	WzMap::LoggingProtocol* pCustomLogger = nullptr;
 };
@@ -695,7 +695,7 @@ static void QJSRuntimeFree_LeakHandler_Warning(const char* msg)
 	debug(pRuntimeFree_CustomLogger, LOG_WARNING, "QuickJS FreeRuntime leak: %s", msg);
 }
 
-std::unique_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std::string &path, uint32_t seed, bool preview, LoggingProtocol* pCustomLogger /*= nullptr*/)
+std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std::string &path, uint32_t seed, bool preview, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	ScriptMapData data;
 	data.mt = std::mt19937(seed);
