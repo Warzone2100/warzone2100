@@ -134,6 +134,7 @@ While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
 If ($vcpkg_succeeded -ne 0)
 {
 	Write-Error "vcpkg install failed ($vcpkg_attempts attempts)";
+	exit 1
 }
 
 # Download google-breakpad's dump_syms.exe (if necessary)
