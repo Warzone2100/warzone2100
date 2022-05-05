@@ -496,9 +496,8 @@ const char* WzMapZipIO::pathSeparator() const
 	return "/";
 }
 
-bool WzMapZipIO::enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+bool WzMapZipIO::enumerateFilesInternal(const std::string& basePath, bool recurse, const std::function<bool (const char* file)>& enumFunc)
 {
-	bool recurse = false;
 	if (!enumFunc)
 	{
 		return false;
@@ -575,10 +574,8 @@ bool WzMapZipIO::enumerateFiles(const std::string& basePath, const std::function
 	return true;
 }
 
-bool WzMapZipIO::enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+bool WzMapZipIO::enumerateFoldersInternal(const std::string& basePath, bool recurse, const std::function<bool (const char* file)>& enumFunc)
 {
-	bool recurse = false;
-
 	if (!enumFunc)
 	{
 		return false;
@@ -702,6 +699,26 @@ bool WzMapZipIO::enumerateFolders(const std::string& basePath, const std::functi
 		}
 	}
 	return true;
+}
+
+bool WzMapZipIO::enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	return enumerateFilesInternal(basePath, false, enumFunc);
+}
+
+bool WzMapZipIO::enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	return enumerateFoldersInternal(basePath, false, enumFunc);
+}
+
+bool WzMapZipIO::enumerateFilesRecursive(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	return enumerateFilesInternal(basePath, true, enumFunc);
+}
+
+bool WzMapZipIO::enumerateFoldersRecursive(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	return enumerateFoldersInternal(basePath, true, enumFunc);
 }
 
 bool WzMapZipIO::determineIfMalformedWindowsPathSeparatorWorkaround()

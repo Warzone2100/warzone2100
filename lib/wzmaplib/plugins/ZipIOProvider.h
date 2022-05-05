@@ -49,9 +49,13 @@ public:
 
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
+	virtual bool enumerateFilesRecursive(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
+	virtual bool enumerateFoldersRecursive(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 
 private:
 	bool determineIfMalformedWindowsPathSeparatorWorkaround();
+	bool enumerateFilesInternal(const std::string& basePath, bool recurse, const std::function<bool (const char* file)>& enumFunc);
+	bool enumerateFoldersInternal(const std::string& basePath, bool recurse, const std::function<bool (const char* file)>& enumFunc);
 
 private:
 	std::shared_ptr<WrappedZipArchive> m_zipArchive;
