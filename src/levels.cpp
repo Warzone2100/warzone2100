@@ -52,6 +52,7 @@
 #include "qtscript.h"
 #include "wrappers.h"
 #include "activity.h"
+#include <wzmaplib/map_package.h>
 
 #include <unordered_set>
 
@@ -261,6 +262,76 @@ Sha256 levGetMapNameHash(char const *mapName)
 		return zero;
 	}
 	return levGetFileHash(level);
+}
+
+LEVEL_DATASET* levFindBaseTileset(MAP_TILESET tileset)
+{
+	switch (tileset)
+	{
+		case MAP_TILESET::ARIZONA:
+			return levFindDataSet("MULTI_CAM_1");
+		case MAP_TILESET::URBAN:
+			return levFindDataSet("MULTI_CAM_2");
+		case MAP_TILESET::ROCKIES:
+			return levFindDataSet("MULTI_CAM_3");
+	}
+	return nullptr;
+}
+
+bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName)
+{
+	// start a new level data set
+	LEVEL_DATASET *psDataSet = (LEVEL_DATASET *)malloc(sizeof(LEVEL_DATASET));
+	if (!psDataSet)
+	{
+		debug(LOG_FATAL, "Out of memory");
+		abort();
+		return false;
+	}
+	memset(psDataSet, 0, sizeof(LEVEL_DATASET));
+	
+	psDataSet->players = 1;
+	psDataSet->game = -1;
+	psDataSet->dataDir = pathMode;
+	psDataSet->realFileName = realFileName != nullptr ? strdup(realFileName) : nullptr;
+	psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
+
+	WzMapPhysFSIO mapIO(mountPoint);
+	auto levelDetails = WzMap::loadLevelDetails_JSON(filename, mapIO);
+	if (!levelDetails.has_value())
+	{
+		debug(LOG_ERROR, "Level File JSON load error: Failed to load JSON: %s", filename.c_str());
+		free(psDataSet);
+		return false;
+	}
+
+	switch (levelDetails.value().type)
+	{
+		case WzMap::MapType::CAMPAIGN:
+		case WzMap::MapType::SAVEGAME:
+			// FUTURE TODO: Support other map types
+			debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+			free(psDataSet);
+			return false;
+		case WzMap::MapType::SKIRMISH:
+			psDataSet->type = LEVEL_TYPE::SKIRMISH;
+			break;
+	}
+	psDataSet->players = static_cast<SWORD>(levelDetails.value().players);
+	psDataSet->pName = strdup(levelDetails.value().name.c_str());
+	auto gamFilePath = levelDetails.value().gamFilePath();
+	psDataSet->apDataFiles[0] = strdup(gamFilePath.c_str());
+	psDataSet->game = 0;
+	psDataSet->psBaseData = levFindBaseTileset(levelDetails.value().tileset);
+	if (psDataSet->psBaseData == nullptr)
+	{
+		debug(LOG_ERROR, "Level File JSON load error: Failed to find base tileset for: %d", (int)levelDetails.value().tileset);
+		free(psDataSet);
+		return false;
+	}
+
+	psLevels.push_back(psDataSet);
+	return true;
 }
 
 // parse a level description data file
@@ -1152,11 +1223,7 @@ std::string mapNameWithoutTechlevel(const char *mapName)
 {
 	ASSERT_OR_RETURN("", mapName != nullptr, "null mapName provided");
 	std::string result(mapName);
-	size_t len = result.length();
-	if (len > 2 && result[len - 3] == '-' && result[len - 2] == 'T' && isdigit(result[len - 1]))
-	{
-		result.resize(len - 3);
-	}
+	WzMap::trimTechLevelFromMapName(result);
 	return result;
 }
 

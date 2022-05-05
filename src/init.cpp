@@ -234,6 +234,26 @@ bool loadLevFile(const std::string& filename, searchPathMode pathMode, bool igno
 	return true;
 }
 
+bool loadLevFile_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName)
+{
+	if (realFileName == nullptr)
+	{
+		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename.c_str());
+	}
+	else
+	{
+		debug(LOG_WZ, "Loading lev file: \"%s\" from \"%s\"\n", filename.c_str(), realFileName);
+	}
+
+	if (!levParse_JSON(mountPoint, filename, pathMode, realFileName))
+	{
+		debug(LOG_ERROR, "Failed to load: %s\n", filename.c_str());
+		return false;
+	}
+
+	return true;
+}
+
 
 static void cleanSearchPath()
 {
@@ -857,8 +877,40 @@ bool processMap(const char* archive, const char* realFileName_platformIndependen
 		return false;
 	}
 
+	WzMapPhysFSIO mapIO;
+
 	bool containsMap = false;
-	bool enumSuccess = WZ_PHYSFS_enumerateFiles(mountPoint.c_str(), [&](const char *file) -> bool {
+
+	// First pass: Look for new "self-contained" maps / level.json (which are in multiplay/maps/<map name>)
+	std::string mapsDirPath = mapIO.pathJoin(mountPoint.c_str(), "multiplay/maps");
+	bool enumSuccess = WZ_PHYSFS_enumerateFolders(mapsDirPath, [&](const char *folder) -> bool {
+		if (!folder) { return true; }
+		if (*folder == '\0') { return true; }
+
+		std::string levelJSONPath = std::string("multiplay/maps/") + folder + "/level.json";
+		if (PHYSFS_exists(WzString::fromUtf8(mountPoint + "/" + levelJSONPath)) && loadLevFile_JSON(mountPoint, levelJSONPath, mod_multiplay, realFileName_platformIndependent))
+		{
+			containsMap = true;
+			return false; // stop enumerating
+		}
+		return true;
+	});
+
+	if (!enumSuccess)
+	{
+		// Failed to enumerate contents - corrupt map archive
+		return false;
+	}
+
+	if (containsMap)
+	{
+		std::string MapName = realFileName_platformIndependent;
+		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
+		return true;
+	}
+
+	// Second pass: Look for older / classic maps (with *.addon.lev / *.xplayers.lev in the root)
+	enumSuccess = WZ_PHYSFS_enumerateFiles(mountPoint.c_str(), [&](const char *file) -> bool {
 		size_t len = strlen(file);
 		if ((len > 10 && !strcasecmp(file + (len - 10), ".addon.lev"))  // Do not add addon.lev again // <--- Err, what? The code has loaded .addon.lev for a while...
 			|| (len > 13 && !strcasecmp(file + (len - 13), ".xplayers.lev"))) // add support for X player maps using a new name to prevent conflicts.
@@ -873,22 +925,20 @@ bool processMap(const char* archive, const char* realFileName_platformIndependen
 		return true; // continue
 	});
 
-	if (!containsMap)
-	{
-		// not sure what this is, but it doesn't seem to contain a map
-		return false;
-	}
-
 	if (!enumSuccess)
 	{
 		// Failed to enumerate contents - corrupt map archive
 		return false;
 	}
 
-	std::string MapName = realFileName_platformIndependent;
-	WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
+	if (containsMap)
+	{
+		std::string MapName = realFileName_platformIndependent;
+		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
+		return true;
+	}
 
-	return true;
+	return false;
 }
 
 #if defined(HAS_PHYSFS_IO_SUPPORT)
