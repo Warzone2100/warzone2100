@@ -29,6 +29,7 @@
 #include "gamedef.h"
 
 #include <list>
+#include <string>
 
 /// maximum number of data files
 #define LEVEL_MAXFILES	9
@@ -79,6 +80,8 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 
 // parse a level description data file
 bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
+
+bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName);
 
 // shutdown the level system
 void levShutDown();
