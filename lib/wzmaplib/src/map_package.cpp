@@ -180,8 +180,8 @@ std::string internal_baseDir(const std::string& fullPathToFile, IOProvider& mapI
 	{
 		// Did not find a path separator
 		debug(pCustomLogger, LOG_WARNING, "Did not find parent path in \"%s\" (path separator: \"%s\")", fullPathToFile.c_str(), pathSeparator);
-		// Default to just a single path separator
-		return std::string(pathSeparator);
+		// Default to an empty path
+		return std::string();
 	}
 
 	// Trim off the last path component
@@ -1080,7 +1080,22 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		}
 	}
 
-	// 2.) If no map folder was found, look for a .lev file in the root.
+	// 2.) Look for a level.json file in the root (i.e. a "flattened" plain map package)
+	auto loadedFlatLevelDetails = loadLevelDetails_JSON("level.json", mapIO, pCustomLogger);
+	if (loadedFlatLevelDetails.has_value())
+	{
+		// Successfully found a level.json file inside the root folder
+		std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
+		result->m_levelDetails = loadedFlatLevelDetails.value();
+		result->m_mapType = result->m_levelDetails.type;
+		result->m_pathToMapPackage = pathToMapPackage;
+		result->m_mapIO = pMapIO;
+		result->m_flatMapPackage = true;
+		result->loadGamInfo();
+		return result;
+	}
+
+	// 3.) If no map folder with a valid level.json was found, nor a level.json in the root, look for a .lev file in the root.
 	std::vector<std::string> rootLevFiles;
 	enumSuccess = mapIO.enumerateFiles(pathToMapPackage, [&rootLevFiles](const char *file) -> bool {
 		if (!file) { return true; }
@@ -1198,33 +1213,33 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	auto currentPackageType = packageType();
 
 	// 1.) Determine the path for the map folder, relative to the basePath
-	// For Skirmish maps, this is "multiplay/maps/<map name>"
+	// For Skirmish maps, this is "multiplay/maps/<map name>" (unless it's a "flat" map package)
 	// For Campaign maps, a `mapFolderRelativePathOverride` **MUST** be provided [although campaign maps generally require a mod, and so this really shouldn't be used for campaign maps yet - instead, use the higher-level functions to output a map to the desired folder directly]
 	std::string mapFolderPath = m_levelDetails.mapFolderPath;
+	if (mapFolderPath.empty() && levelFormat == LevelFormat::LEV)
+	{
+		// old LEV format does not support "flattened" map packages
+		switch (m_mapType)
+		{
+			case MapType::CAMPAIGN:
+			case MapType::SAVEGAME:
+				// TODO?
+				break;
+			case MapType::SKIRMISH:
+				mapFolderPath = std::string("multiplay/maps/") + m_levelDetails.name;
+				break;
+		}
+	}
 	if (mapFolderRelativePathOverride.has_value())
 	{
 		debug(pCustomLogger, LOG_INFO, "Overriding map folder relative path (prior: %s) to: %s", mapFolderPath.c_str(), mapFolderRelativePathOverride.value().c_str());
 		mapFolderPath = mapFolderRelativePathOverride.value();
 	}
 
-	// 2.) Determine the output path for the level info file based on the levelFormat
-	// For classic LEV, this is the root basePath
-	// For JSON, this is the same folder we put the map into
-	std::string levelFileOutputFolder;
-	switch (levelFormat)
-	{
-		case LevelFormat::LEV:
-			levelFileOutputFolder = "";
-			break;
-		case LevelFormat::JSON:
-			levelFileOutputFolder = mapFolderPath;
-			break;
-	}
-
 	size_t additionalFilesCopied = 0;
 	if (m_mapIO)
 	{
-		// 3.) Copy any additional files from the original archive / directories (if configured + needed)
+		// 2.) Copy any additional files from the original archive / directories (if configured + needed)
 		if (copyAdditionalFilesFromOriginalLoadedPackage)
 		{
 			// Copy any additional files from the original archive / directories
@@ -1322,14 +1337,38 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 		}
 	}
 
-	// 4.) Output the level info file
+	// 3.) Determine if a "flattened" map package can be output
+	// Based on whether additional files have been copied, and the output format (and other overrides), a "flattened" plain map package might be possible
+	if (!mapFolderRelativePathOverride.has_value() && levelFormat == LevelFormat::JSON && additionalFilesCopied == 0)
+	{
+		// Since the new JSON level format is requested, and a "plain" map package is being output,
+		// Can create a "flattened" map package! (where everything is in the root of the archive)
+		debug(pCustomLogger, LOG_ERROR, "Output map supports a \"flattened\" plain map archive");
+		mapFolderPath = "";
+	}
+
+	// 4.) Determine the output path for the level info file based on the levelFormat
+	// For classic LEV, this is the root basePath
+	// For JSON, this is the same folder we put the map into
+	std::string levelFileOutputFolder;
+	switch (levelFormat)
+	{
+		case LevelFormat::LEV:
+			levelFileOutputFolder = "";
+			break;
+		case LevelFormat::JSON:
+			levelFileOutputFolder = mapFolderPath;
+			break;
+	}
+
+	// 5.) Output the level info file
 	if (!exportLevelDetails(m_levelDetails, levelFormat, exportIO->pathJoin(basePath, levelFileOutputFolder), *exportIO, pCustomLogger))
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to export level details");
 		return false;
 	}
 
-	// 5.) Load the map data
+	// 6.) Load the map data
 	auto pLoadedMap = loadMap(0, logger);
 	if (pLoadedMap == nullptr)
 	{
@@ -1339,7 +1378,7 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 
 	std::string fullPathToOutputMapFolder = exportIO->pathJoin(basePath, mapFolderPath);
 
-	// 6.) Ensure the fullPathToOutputMapFolder is created
+	// 7.) Ensure the fullPathToOutputMapFolder is created
 	if (!fullPathToOutputMapFolder.empty())
 	{
 		if (!exportIO->makeDirectory(fullPathToOutputMapFolder))
@@ -1349,7 +1388,7 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 		}
 	}
 
-	// 7.) Output the .gam file / gam.json file
+	// 8.) Output the .gam file / gam.json file
 	auto pMapData = pLoadedMap->mapData();
 	if (pMapData == nullptr)
 	{
@@ -1358,7 +1397,7 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	}
 	writeGamFileForMapExport(fullPathToOutputMapFolder, levelFormat, m_gamInfo, *(pMapData.get()), *exportIO, pCustomLogger);
 
-	// 8.) Output the map into the map folder
+	// 9.) Output the map into the map folder
 	if (pLoadedMap->wasScriptGenerated() && !(mapOutputFormat == WzMap::OutputFormat::VER1_BINARY_OLD || mapOutputFormat == WzMap::OutputFormat::VER2))
 	{
 		// NOTE: If the original map was a script map, and we're outputting to a modern format, just copy it over directly from the original package!
@@ -1472,6 +1511,16 @@ MapPackage::MapPackageType MapPackage::packageType()
 		return m_packageType.value();
 	}
 
+	// First, check if this is a "flat" modern map package
+	// i.e. if it has "level.json" in its root
+	// (if so, we can skip all of the older checks because it won't be mounted in a path that conflicts with core game files)
+	if (m_flatMapPackage)
+	{
+		m_packageType = MapPackage::MapPackageType::Map_Plain;
+		return m_packageType.value();
+	}
+
+	// otherwise, check package (older checks, non-flat map packages)
 	bool foundUnapprovedPath = false;
 	const std::string multiplay = "multiplay";
 	const std::string maps = "maps";
