@@ -407,7 +407,7 @@ static void clearInMemoryMapFile(void *pData)
  * Priority:
  * maps > mods > base > base.wz
  */
-bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map, const char* current_map_mount_point)
 {
 	static searchPathMode current_mode = mod_clean;
 	static std::string current_current_map;
@@ -549,12 +549,12 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 					// mount it as a normal physical map path
 					WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
 					realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
-					PHYSFS_mount(realPathAndDir.toUtf8().c_str(), NULL, PHYSFS_APPEND);
+					PHYSFS_mount(realPathAndDir.toUtf8().c_str(), current_map_mount_point, PHYSFS_APPEND);
 				}
 				else if (!inMemoryMapArchiveData.empty())
 				{
 					// mount the in-memory map archive as a virtual file
-					if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), clearInMemoryMapFile, inMemoryMapVirtualFilenameUID.c_str(), NULL, PHYSFS_APPEND) != 0)
+					if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), clearInMemoryMapFile, inMemoryMapVirtualFilenameUID.c_str(), current_map_mount_point, PHYSFS_APPEND) != 0)
 					{
 						inMemoryMapArchiveMounted++;
 					}
@@ -881,7 +881,7 @@ bool processMap(const char* archive, const char* realFileName_platformIndependen
 
 	bool containsMap = false;
 
-	// First pass: Look for new "self-contained" maps / level.json (which are in multiplay/maps/<map name>)
+	// First pass: Look for new level.json (which are in multiplay/maps/<map name>)
 	std::string mapsDirPath = mapIO.pathJoin(mountPoint.c_str(), "multiplay/maps");
 	bool enumSuccess = WZ_PHYSFS_enumerateFolders(mapsDirPath, [&](const char *folder) -> bool {
 		if (!folder) { return true; }
@@ -895,11 +895,19 @@ bool processMap(const char* archive, const char* realFileName_platformIndependen
 		}
 		return true;
 	});
-
 	if (!enumSuccess)
 	{
 		// Failed to enumerate contents - corrupt map archive
 		return false;
+	}
+
+	// Or "flattened" self-contained maps (where level.json is in the root)
+	if (!containsMap)
+	{
+		if (PHYSFS_exists(WzString::fromUtf8(mountPoint + "/" + "level.json")) && loadLevFile_JSON(mountPoint, "level.json", mod_multiplay, realFileName_platformIndependent))
+		{
+			containsMap = true;
+		}
 	}
 
 	if (containsMap)

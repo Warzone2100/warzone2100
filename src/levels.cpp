@@ -77,7 +77,7 @@ static LEVEL_DATASET	*psBaseData = nullptr;
 static LEVEL_DATASET	*psCurrLevel = nullptr;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = { LEVEL_TYPE::LDS_COMPLETE, 0, 0, nullptr, mod_clean, {nullptr}, nullptr, nullptr, nullptr, {{0}}};
+static LEVEL_DATASET	sSingleWRF = { LEVEL_TYPE::LDS_COMPLETE, 0, 0, nullptr, mod_clean, {nullptr}, nullptr, nullptr, nullptr, {{0}}, nullptr};
 
 // return values from the lexer
 char *pLevToken;
@@ -126,6 +126,7 @@ static inline void freeLevel(LEVEL_DATASET* toDelete)
 
 	free(toDelete->pName);
 	free(toDelete->realFileName);
+	free(toDelete->customMountPoint);
 	free(toDelete);
 }
 
@@ -305,6 +306,32 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 		return false;
 	}
 
+	const auto& mapFolderPath = levelDetails.value().mapFolderPath;
+	std::string customMountPoint;
+	if (mapFolderPath.empty())
+	{
+		// support "flattened" plain maps
+		// must be mounted within the virtual filesystem at the appropriate location (not at the root)
+		if (levelDetails.value().name.empty())
+		{
+			debug(LOG_ERROR, "Level File JSON load error: Map has empty name??: %s", filename.c_str());
+			free(psDataSet);
+			return false;
+		}
+		switch (levelDetails.value().type)
+		{
+			case WzMap::MapType::CAMPAIGN:
+			case WzMap::MapType::SAVEGAME:
+				// FUTURE TODO: Support other map types
+				debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+				free(psDataSet);
+				return false;
+			case WzMap::MapType::SKIRMISH:
+				customMountPoint = std::string("multiplay/maps/") + levelDetails.value().name;
+				break;
+		}
+	}
+
 	switch (levelDetails.value().type)
 	{
 		case WzMap::MapType::CAMPAIGN:
@@ -319,7 +346,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 	}
 	psDataSet->players = static_cast<SWORD>(levelDetails.value().players);
 	psDataSet->pName = strdup(levelDetails.value().name.c_str());
-	auto gamFilePath = levelDetails.value().gamFilePath();
+	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.value().gamFilePath());
 	psDataSet->apDataFiles[0] = strdup(gamFilePath.c_str());
 	psDataSet->game = 0;
 	psDataSet->psBaseData = levFindBaseTileset(levelDetails.value().tileset);
@@ -328,6 +355,10 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 		debug(LOG_ERROR, "Level File JSON load error: Failed to find base tileset for: %d", (int)levelDetails.value().tileset);
 		free(psDataSet);
 		return false;
+	}
+	if (!customMountPoint.empty())
+	{
+		psDataSet->customMountPoint = strdup(customMountPoint.c_str());
 	}
 
 	psLevels.push_back(psDataSet);
@@ -850,7 +881,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName))
+	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName, psNewLevel->customMountPoint))
 	{
 		debug(LOG_ERROR, "Failed to rebuild search path");
 		return false;

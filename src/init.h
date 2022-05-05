@@ -59,7 +59,7 @@ struct wzSearchPath
 enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
 void registerSearchPath(const char path[], unsigned int priority);
-bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL);
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
 
 bool buildMapList();
 bool CheckForMod(char const *mapFile);

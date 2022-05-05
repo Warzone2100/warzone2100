@@ -638,7 +638,7 @@ void loadMapPreview(bool hideInterface)
 		builtInMap = false;
 		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
-	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName);
+	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName, psLevel->customMountPoint);
 	const char* pGamPath = psLevel->apDataFiles[psLevel->game];
 	if (!pGamPath)
 	{

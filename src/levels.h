@@ -72,6 +72,7 @@ struct LEVEL_DATASET
 
 	char           *realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
 	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
+	char           *customMountPoint;               ///< A custom mount point (to be used for "flattened" map packages, or NULL for the default.
 };
 
 typedef std::vector<LEVEL_DATASET *> LEVEL_LIST;
