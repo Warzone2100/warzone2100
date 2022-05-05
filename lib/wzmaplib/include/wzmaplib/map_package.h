@@ -165,6 +165,7 @@ private:
 	GamInfo	m_gamInfo;
 	MapType m_mapType;
 	optional<MapPackageType> m_packageType;
+	bool m_flatMapPackage = false;
 	optional<uint64_t> m_modTypes;
 	optional<std::string> m_originalGenerator;
 
