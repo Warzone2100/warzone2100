@@ -304,9 +304,9 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 		int missDist = minOffset + (worstShot * num * num * num) / (100 * 100 * 100);
 
-		// Determine the angle of the miss in the 270 degrees in "front" of the target.
+		// Determine the angle of the miss in the 180 degrees in "front" of the target.
 		// The 90 degrees behind would most probably cause an unwanted hit when the projectile will be drawn through the hitbox.
-		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(180)) - DEG(135) + iAtan2(deltaPosPredict.xy()), missDist), 0);
+		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(180)) - DEG(90) + iAtan2(deltaPosPredict.xy()), missDist), 0);
 		predict += miss;
 
 		psTarget = nullptr;  // Missed the target, so don't expect to hit it.
