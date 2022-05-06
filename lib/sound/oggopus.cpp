@@ -195,7 +195,7 @@ int WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 
 	// we need a small buffer to convert from big to little endian
 	// sample_rate (48000/sec) * depth (2 bytes) * 120 milliseconds
-	static const unsigned long TMP_BUF = 48 * 2 * 120; 
+	constexpr size_t TMP_BUF = 48 * 2 * 120;
 	opus_int16 pcm[TMP_BUF];
 
 	size_t		bufferOffset = 0;
@@ -205,7 +205,7 @@ int WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 	do
 	{
 		unsigned long spaceLeft = bufferSize - bufferOffset;
-		unsigned long toRead = std::min(TMP_BUF, spaceLeft);
+		unsigned long toRead = std::min<unsigned long>(TMP_BUF, spaceLeft);
 
 		// Note: the return value is the number of *samples per channel*, not *bytes* !!
 		samples_per_chan = op_read_stereo(m_of, pcm, toRead);
