@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2005-2022  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "lib/framework/frame.h"
 #include "oggopus.h"
 #include "openal_callbacks.h"
@@ -6,10 +25,10 @@
 // https://opus-codec.org/docs/opusfile_api-0.12/index.html
 const OpusFileCallbacks wz_oggOpus_callbacks =
 {
-	wz_ogg_read2,
+	wz_opus_read,
 	// this one must return 0 on success, unlike its libvorbis counterpart
-	wz_ogg_seek2,
-	wz_ogg_tell,
+	wz_opus_seek,
+	wz_opus_tell,
 	nullptr,
 };
 
@@ -61,11 +80,11 @@ WZOpusDecoder* WZOpusDecoder::fromFilename(const char* fileName)
 
 	const OpusHead* head = op_head(of, -1);
 	if (head == nullptr)
-  {
+	{
 		debug(LOG_ERROR, "OP failed to read header");
 		PHYSFS_close(fileHandle);
-    return nullptr;
-  }
+		return nullptr;
+	}
 	WZOpusDecoder *decoder = new WZOpusDecoder(fileHandle, of, head);
 	// Use a negative number to get the ID header information of the current link
 	if (decoder == nullptr)

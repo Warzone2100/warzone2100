@@ -58,8 +58,8 @@ static const unsigned int buffer_count = 16;
 struct AUDIO_STREAM
 {
 	ALuint                  source = -1;        // OpenAL name of the sound source
-	struct WZDecoder       *decoder = nullptr;
-	PHYSFS_file            *fileHandle = nullptr;
+	WZDecoder       		*decoder = nullptr;
+	PHYSFS_file				*fileHandle = nullptr;
 	float                   volume = 0.f;
 
 	// Callbacks
@@ -1197,7 +1197,7 @@ double sound_GetStreamTotalTime(AUDIO_STREAM *stream)
  */
 static bool sound_UpdateStream(AUDIO_STREAM *stream)
 {
-	ALint state, buffer_count;
+	ALint state, buffers_processed_count;
 	alGetError();
 	alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
 	sound_GetError();
@@ -1208,16 +1208,16 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
 	}
 
 	// Retrieve the amount of buffers which were processed and need refilling
-	alGetSourcei(stream->source, AL_BUFFERS_PROCESSED, &buffer_count);
+	alGetSourcei(stream->source, AL_BUFFERS_PROCESSED, &buffers_processed_count);
 	if (sound_GetError() != AL_NO_ERROR) { return false; }
-	if (buffer_count == 0) { return true; }
+	if (buffers_processed_count == 0) { return true; }
 
 	// Determine PCM data format
-	ALuint *alBuffersIds = (ALuint *) malloc(buffer_count * sizeof(ALuint));
-	alSourceUnqueueBuffers(stream->source, buffer_count, alBuffersIds);
+	ALuint *alBuffersIds = (ALuint *) malloc(buffers_processed_count * sizeof(ALuint));
+	alSourceUnqueueBuffers(stream->source, buffers_processed_count, alBuffersIds);
 	if (sound_GetError() != AL_NO_ERROR) { return false; }
 
-	const auto res = sound_fillNBuffers(alBuffersIds, stream->decoder, buffer_count, bufferSize);
+	const auto res = sound_fillNBuffers(alBuffersIds, stream->decoder, buffers_processed_count, bufferSize);
 	if (res == 0)
 	{
 		// end of stream, will be deleted with sound_DestroyStream
@@ -1246,7 +1246,7 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
  */
 static void sound_DestroyStream(AUDIO_STREAM *stream)
 {
-	ALint buffer_count = 0;
+	ALint buffers_processed_count = 0;
 	ALuint *buffers = nullptr;
 
 	// Stop the OpenAL source from playing
@@ -1256,30 +1256,30 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
 	sound_GetError();
 
 	// Retrieve the amount of buffers which were processed
-	alGetSourcei(stream->source, AL_BUFFERS_PROCESSED, &buffer_count);
+	alGetSourcei(stream->source, AL_BUFFERS_PROCESSED, &buffers_processed_count);
 	if(sound_GetError() != AL_NO_ERROR)
 	{
-		buffer_count = 0;
+		buffers_processed_count = 0;
 		// proceed as if nothing happened
 	}
 
 	// Detach all buffers and retrieve their ID numbers
-	if (buffer_count > 0)
+	if (buffers_processed_count > 0)
 	{
-		const size_t buffer_count_sizet = static_cast<size_t>(buffer_count);
+		const size_t buffer_count_sizet = static_cast<size_t>(buffers_processed_count);
 		buffers = (ALuint *)malloc(buffer_count_sizet * sizeof(ALuint));
 		memset(buffers, 0, buffer_count_sizet * sizeof(ALuint));
-		alSourceUnqueueBuffers(stream->source, buffer_count, buffers);
+		alSourceUnqueueBuffers(stream->source, buffers_processed_count, buffers);
 		sound_GetError();
 
 		// Destroy all of these buffers
-		alDeleteBuffers(buffer_count, buffers);
+		alDeleteBuffers(buffers_processed_count, buffers);
 		sound_GetError();
 		free(buffers);
 	}
 	else
 	{
-		debug(LOG_SOUND, "alGetSourcei(AL_BUFFERS_PROCESSED) returned count: %d", buffer_count);
+		debug(LOG_SOUND, "alGetSourcei(AL_BUFFERS_PROCESSED) returned count: %d", buffers_processed_count);
 	}
 
 	// Destroy the OpenAL source

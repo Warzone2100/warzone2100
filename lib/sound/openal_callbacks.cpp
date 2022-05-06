@@ -1,13 +1,25 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2005-2020  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "openal_callbacks.h"
 
-/**
- * 
- * \param	_stream	    The stream to read from.
- * \param 	[out]	 _ptr	The buffer to store the data in.
- * \param _nbytes	    The maximum number of bytes to read. 
-	This function may return fewer, though it will not return zero unless it reaches end-of-file. 
-*/
-int wz_ogg_read2(void *_stream, unsigned char *_ptr, int _nbytes)
+int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes)
 {
 	PHYSFS_file *fileHandle;
 
@@ -20,6 +32,14 @@ int wz_ogg_read2(void *_stream, unsigned char *_ptr, int _nbytes)
 	const int32_t didread = WZ_PHYSFS_readBytes(fileHandle, _ptr, static_cast<PHYSFS_uint32>(_nbytes));
 	return didread;
 }
+
+/**
+ *
+ * \param	_stream	    The stream to read from.
+ * \param 	[out]	 _ptr	The buffer to store the data in.
+ * \param _nbytes	    The maximum number of bytes to read.
+	This function may return fewer, though it will not return zero unless it reaches end-of-file.
+*/
 size_t wz_ogg_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
 	PHYSFS_file *fileHandle;
@@ -94,9 +114,8 @@ int wz_ogg_seek(void *datasource, int64_t offset, int whence)
 	}
 }
 
-int wz_ogg_seek2(void *datasource, int64_t offset, int whence)
+int wz_opus_seek(void *datasource, int64_t offset, int whence)
 {
-	
 	PHYSFS_file *fileHandle;
 	int64_t newPos;
 	ASSERT(datasource != nullptr, "NULL decoder passed!");
@@ -155,23 +174,24 @@ int wz_ogg_seek2(void *datasource, int64_t offset, int whence)
 	}
 }
 
-int64_t wz_ogg_tell(void *datasource)
+long wz_ogg_tell(void *datasource)
 {
 	PHYSFS_file *fileHandle;
 	ASSERT(datasource != nullptr, "NULL decoder passed!");
 
 	fileHandle = ((PHYSFS_file *)datasource);
 	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
-  const int64_t out = PHYSFS_tell(fileHandle);
+	const int64_t out = PHYSFS_tell(fileHandle);
 	return out;
 }
-int64_t wz_ogg_tell2(void *datasource)
+
+int64_t wz_opus_tell(void *datasource)
 {
 	PHYSFS_file *fileHandle;
 	ASSERT(datasource != nullptr, "NULL decoder passed!");
 
 	fileHandle = ((PHYSFS_file *)datasource);
 	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
-  const int64_t out = PHYSFS_tell(fileHandle);
+	const int64_t out = PHYSFS_tell(fileHandle);
 	return out;
 }
