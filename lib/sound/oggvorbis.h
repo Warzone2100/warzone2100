@@ -24,6 +24,7 @@
 #include <vorbis/vorbisfile.h>
 #include <vorbis/codec.h>
 #include <physfs.h>
+#include <memory>
 
 class WZVorbisDecoder final: public WZDecoder
 {
@@ -40,20 +41,20 @@ public:
 	virtual size_t  frequency()                    const override { return m_info->rate;  };
 
 	/** Returns the total pcm samples of the physical bitstream.  */
-	int64_t totalSamples()                         const { return ov_pcm_total(m_ovfile, -1);}
+	int64_t totalSamples()                         const { return ov_pcm_total(m_ovfile.get(), -1);}
 	virtual ~WZVorbisDecoder()
 	{
-		ov_clear(m_ovfile);
+		ov_clear(m_ovfile.get());
 		PHYSFS_close(m_file);
 	}
 private:
-	WZVorbisDecoder(int64_t totalTime, PHYSFS_file *f, vorbis_info* info, OggVorbis_File* ovf)
-	: m_total_time(totalTime), m_info(info), m_file(f), m_ovfile(ovf)
+	WZVorbisDecoder(int64_t totalTime, PHYSFS_file *f, vorbis_info* info, std::unique_ptr<OggVorbis_File> ovf)
+	: m_total_time(totalTime), m_info(info), m_file(f), m_ovfile(std::move(ovf))
 	{};
 	int64_t m_total_time = 0;
 	int64_t m_bufferSize = 0;
 	vorbis_info* m_info = nullptr;
 	PHYSFS_file* m_file = nullptr;
-	OggVorbis_File* m_ovfile = nullptr;
+	std::unique_ptr<OggVorbis_File> m_ovfile;
 
 };
