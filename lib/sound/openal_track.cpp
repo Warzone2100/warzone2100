@@ -906,7 +906,7 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
 	static uint8_t *pcm = (uint8_t*) malloc(buffSize);
 	if (!pcm)
 	{
-		debug(LOG_ERROR, "can't allocate buff of size %li", buffSize);
+		debug(LOG_ERROR, "can't allocate buff of size %zu", buffSize);
 		return -1;
 	}
 	// Determine PCM data format
@@ -1025,7 +1025,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	alGenBuffers(buffer_count, alBuffersIds);
 	if (sound_GetError() != AL_NO_ERROR) { goto _error; }
 	// Copy the audio data into one of OpenAL's own buffers
-	ASSERT(bufferSize <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "soundBuffer->size (%lu) exceeds ALsizei::max", bufferSize);
+	ASSERT(bufferSize <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "soundBuffer->size (%zu) exceeds ALsizei::max", bufferSize);
 	
 	res = sound_fillNBuffers(alBuffersIds, decoder, buffer_count, bufferSize);
 	// Bail out if we didn't fill any buffers
