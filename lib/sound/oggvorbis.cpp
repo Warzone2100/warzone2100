@@ -99,7 +99,7 @@ WZVorbisDecoder* WZVorbisDecoder::fromFilename(const char* fileName)
 		ov_clear(ovf);
 		return nullptr;
 	}
-	int64_t t = ov_time_total(ovf, -1);
+	int64_t t = static_cast<int64_t>(ov_time_total(ovf, -1));
 	if (t == OV_EINVAL)
 	{
 		debug(LOG_ERROR, "%s: the argument was invalid.The requested bitstream did not exist or the bitstream is nonseekable.", fileName);
