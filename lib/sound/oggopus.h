@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2022  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _LIBSOUND_Opus_H_
-#define _LIBSOUND_Opus_H_
+#pragma once
 
 #include "lib/framework/frame.h"
 #include "codecs.h"
@@ -29,24 +28,25 @@ class WZOpusDecoder final: public WZDecoder
 {
 public:
 	static WZOpusDecoder* fromFilename(const char*);
-  WZOpusDecoder(const WZOpusDecoder&)                 = delete;
-  WZOpusDecoder(WZOpusDecoder&&)                      = delete;
-  WZOpusDecoder &operator=(const WZOpusDecoder &)     = delete;
-  WZOpusDecoder &operator=(WZOpusDecoder &&)          = delete;
+	WZOpusDecoder(const WZOpusDecoder&)                 = delete;
+	WZOpusDecoder(WZOpusDecoder&&)                      = delete;
+	WZOpusDecoder &operator=(const WZOpusDecoder &)     = delete;
+	WZOpusDecoder &operator=(WZOpusDecoder &&)          = delete;
 
-  virtual int  decode(uint8_t*, size_t) override;
-  virtual int64_t totalTime()              const override { return m_duration; };
-  virtual int     channels() 	             const override { return 2; }; 
+	virtual int  decode(uint8_t*, size_t) override;
+	virtual int64_t totalTime()              const override { return m_duration; };
+	virtual int     channels() 	             const override { return 2; };
 	virtual size_t  frequency()              const override { return 48000l; };
-  virtual ~WZOpusDecoder()
+	virtual ~WZOpusDecoder()
 	{
 		op_free(m_of);
 		PHYSFS_close(m_file);
 	}
 
 private:
-	WZOpusDecoder(PHYSFS_file *f, OggOpusFile* ovf, const OpusHead *head): 
-								m_of(ovf), m_file(f), m_head(head) {};
+	WZOpusDecoder(PHYSFS_file *f, OggOpusFile* ovf, const OpusHead *head)
+	: m_of(ovf), m_file(f)/*, m_head(head)*/
+	{};
 	OggOpusFile* m_of = nullptr;
 	PHYSFS_file* m_file = nullptr;
 	int64_t m_bufferSize = 0;
@@ -54,9 +54,7 @@ private:
 	// nb samples = nb seconds
 	int64_t   m_duration = 0;
 	// nb links. We do not supported chained files (which have > 1 link), because I am lazy
-	const int m_nlinks = 1;
-	const OpusHead *m_head = nullptr;
+//	const int m_nlinks = 1;
+//	const OpusHead *m_head = nullptr;
 	const int m_nchannels = 2;
 };
-
-#endif // _LIBSOUND_Opus_H_

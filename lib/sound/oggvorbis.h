@@ -17,8 +17,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _LIBSOUND_OGGVORBIS_H_
-#define _LIBSOUND_OGGVORBIS_H_
+#pragma once
 
 #include "lib/framework/frame.h"
 #include "codecs.h"
@@ -30,26 +29,27 @@ class WZVorbisDecoder final: public WZDecoder
 {
 public:
 	static WZVorbisDecoder* fromFilename(const char*);
-  WZVorbisDecoder(const WZVorbisDecoder&)                 = delete;
-  WZVorbisDecoder(WZVorbisDecoder&&)                      = delete;
-  WZVorbisDecoder &operator=(const WZVorbisDecoder &)     = delete;
-  WZVorbisDecoder &operator=(WZVorbisDecoder &&)          = delete;
+	WZVorbisDecoder(const WZVorbisDecoder&)                 = delete;
+	WZVorbisDecoder(WZVorbisDecoder&&)                      = delete;
+	WZVorbisDecoder &operator=(const WZVorbisDecoder &)     = delete;
+	WZVorbisDecoder &operator=(WZVorbisDecoder &&)          = delete;
 
-  virtual int     decode(uint8_t*, size_t) override;
-  virtual int64_t totalTime()                    const override { return m_total_time; };
-  virtual int     channels() 	                   const override { return m_info->channels;   }; 
+	virtual int     decode(uint8_t*, size_t) override;
+	virtual int64_t totalTime()                    const override { return m_total_time; };
+	virtual int     channels() 	                   const override { return m_info->channels;   };
 	virtual size_t  frequency()                    const override { return m_info->rate;  };
 
 	/** Returns the total pcm samples of the physical bitstream.  */
 	int64_t totalSamples()                         const { return ov_pcm_total(m_ovfile, -1);}
-  virtual ~WZVorbisDecoder()
+	virtual ~WZVorbisDecoder()
 	{
 		ov_clear(m_ovfile);
 		PHYSFS_close(m_file);
 	}
 private:
-	WZVorbisDecoder(int64_t totalTime, PHYSFS_file *f, vorbis_info* info, OggVorbis_File* ovf):
-									m_total_time(totalTime), m_info(info), m_file(f), m_ovfile(ovf) {};
+	WZVorbisDecoder(int64_t totalTime, PHYSFS_file *f, vorbis_info* info, OggVorbis_File* ovf)
+	: m_total_time(totalTime), m_info(info), m_file(f), m_ovfile(ovf)
+	{};
 	int64_t m_total_time = 0;
 	int64_t m_bufferSize = 0;
 	vorbis_info* m_info = nullptr;
@@ -57,5 +57,3 @@ private:
 	OggVorbis_File* m_ovfile = nullptr;
 
 };
-
-#endif // _LIBSOUND_OGGVORBIS_H_
