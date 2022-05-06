@@ -312,6 +312,8 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
       * [libvorbis](https://xiph.org/vorbis)
+      * [libogg](https://xiph.org/ogg/)
+      * [opus](https://github.com/xiph/opus)
       * [Freetype](https://www.freetype.org/)
       * [Harfbuzz](https://github.com/harfbuzz/harfbuzz) ≥ 1.0
       * [OpenAL-Soft](https://openal-soft.org)

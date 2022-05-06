@@ -156,6 +156,8 @@ parts:
       - libphysfs-dev
       - libpng-dev
       - libtheora-dev
+      - libogg-dev
+      - libopus-dev
       - libvorbis-dev
       - libcurl4-gnutls-dev
       - libgnutls28-dev
@@ -172,6 +174,7 @@ parts:
       - libharfbuzz0b
       - libogg0
       - libopenal1
+      - libopus0
       - libphysfs1
       - libpng16-16
       - libtheora0
