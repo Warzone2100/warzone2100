@@ -19,7 +19,99 @@
 
 #include "lib/framework/frame.h"
 #include "oggopus.h"
-#include "openal_callbacks.h"
+#include <physfs.h>
+#include <limits>
+#include <algorithm>
+#include "lib/framework/physfs_ext.h"
+
+// MARK: - Opus callbacks
+
+int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes)
+{
+	PHYSFS_file *fileHandle;
+
+	ASSERT(_stream != nullptr, "NULL decoder passed!");
+
+	fileHandle = ((PHYSFS_file *)_stream);
+	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
+
+	ASSERT(_nbytes <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "readLen (%i) exceeds PHYSFS_uint32::max", _nbytes);
+	const int32_t didread = WZ_PHYSFS_readBytes(fileHandle, _ptr, static_cast<PHYSFS_uint32>(_nbytes));
+	return didread;
+}
+
+int wz_opus_seek(void *datasource, opus_int64 offset, int whence)
+{
+	PHYSFS_file *fileHandle;
+	opus_int64 newPos;
+	ASSERT(datasource != nullptr, "NULL decoder passed!");
+	fileHandle = ((PHYSFS_file *)datasource);
+	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
+
+	switch (whence)
+	{
+	// Seek to absolute position
+	case SEEK_SET:
+		newPos = offset;
+		break;
+
+	// Seek `offset` ahead
+	case SEEK_CUR:
+		{
+			int64_t curPos = PHYSFS_tell(fileHandle);
+			if (curPos == -1)
+			{
+				return -1;
+			}
+
+			newPos = curPos + offset;
+			break;
+		}
+
+	// Seek backwards from the end of the file
+	case SEEK_END:
+		{
+			int64_t fileSize = PHYSFS_fileLength(fileHandle);
+			if (fileSize == -1)
+			{
+				return -1;
+			}
+
+			newPos = fileSize - 1 - offset;
+			break;
+		}
+
+	// unrecognized seek instruction
+	default:
+		// indicate failure
+		return -1;
+	}
+
+	// PHYSFS_seek return value of non-zero means success
+	if (PHYSFS_seek(fileHandle, newPos) != 0)
+	{
+	 // success is zero! opposite of what PHYSFS thinks
+		return 0;
+	}
+	else
+	{
+		// indicate failure
+		return -1;    // failure
+	}
+}
+
+opus_int64 wz_opus_tell(void *datasource)
+{
+	PHYSFS_file *fileHandle;
+	ASSERT(datasource != nullptr, "NULL decoder passed!");
+
+	fileHandle = ((PHYSFS_file *)datasource);
+	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
+	const auto out = PHYSFS_tell(fileHandle);
+	return static_cast<opus_int64>(out);
+}
+
+// MARK: - WzOpusDecoder
 
 // https://github.com/xiph/opusfile
 // https://opus-codec.org/docs/opusfile_api-0.12/index.html
