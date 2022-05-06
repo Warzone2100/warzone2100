@@ -26,8 +26,5 @@
 #include "codecs.h"
 
 size_t wz_ogg_read(void *ptr, size_t size, size_t nmemb, void *datasource);
-int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes);
 int wz_ogg_seek(void *datasource, int64_t offset, int whence);
-int wz_opus_seek(void *datasource, int64_t offset, int whence);
 long wz_ogg_tell(void *datasource);
-int64_t wz_opus_tell(void *datasource);
