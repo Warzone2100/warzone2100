@@ -4987,7 +4987,16 @@ nonstd::optional<nlohmann::json> parseJsonFile(const char *filename)
 		debug(LOG_SAVE, "No %s found, sad", filename);
 		return nullopt;
 	}
-	return nlohmann::json::parse(ppFileData);
+	nonstd::optional<nlohmann::json> result;
+	try {
+		result = nlohmann::json::parse(ppFileData);
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "JSON document from %s is invalid: %s", filename, e.what());
+		result = nullopt;
+	}
+	free(ppFileData);
+	return result;
 }
 
 static uint32_t RemapWzMapPlayerNumber(int8_t oldNumber)
