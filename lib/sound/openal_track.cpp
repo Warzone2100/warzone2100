@@ -619,6 +619,7 @@ static inline bool sound_DecodeOggVorbisTrack(TRACK *psTrack, const char* fileNa
 	if (buffer == nullptr)
 	{
 		debug(LOG_ERROR, "couldn't allocate temp buffer to load track %s", fileName);
+		delete decoder;
 		return false;
 	}
 	memset(buffer, 0, estimate);
@@ -627,6 +628,7 @@ static inline bool sound_DecodeOggVorbisTrack(TRACK *psTrack, const char* fileNa
 	{
 		debug(LOG_ERROR, "failed decoding %s", fileName);
 		free(buffer);
+		delete decoder;
 		return false;
 	}
 

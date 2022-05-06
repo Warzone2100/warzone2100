@@ -82,6 +82,7 @@ WZOpusDecoder* WZOpusDecoder::fromFilename(const char* fileName)
 	if (head == nullptr)
 	{
 		debug(LOG_ERROR, "OP failed to read header");
+		op_free(of);
 		PHYSFS_close(fileHandle);
 		return nullptr;
 	}

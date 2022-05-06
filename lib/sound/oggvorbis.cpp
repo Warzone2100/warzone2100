@@ -54,9 +54,9 @@ WZVorbisDecoder* WZVorbisDecoder::fromFilename(const char* fileName)
 		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
 		return nullptr;
 	}
-	OggVorbis_File* ovf = new OggVorbis_File();
+	std::unique_ptr<OggVorbis_File> ovf = std::unique_ptr<OggVorbis_File>(new OggVorbis_File());
 	// https://xiph.org/vorbis/doc/vorbisfile/ov_open_callbacks.html
-	const int error = ov_open_callbacks(fileHandle, ovf, nullptr, 0, wz_oggVorbis_callbacks);
+	const int error = ov_open_callbacks(fileHandle, ovf.get(), nullptr, 0, wz_oggVorbis_callbacks);
 	switch (error)
 	{
 	case OV_EREAD:
@@ -83,38 +83,47 @@ WZVorbisDecoder* WZVorbisDecoder::fromFilename(const char* fileName)
 		break;
 	}
 	ASSERT(ovf, "doesn't make sense");
-	vorbis_info* info = ov_info(ovf, -1);
+	vorbis_info* info = ov_info(ovf.get(), -1);
 	if (!info)
 	{
 		debug(LOG_ERROR, "ov_info failed on %s", fileName);
+		ov_clear(ovf.get());
 		PHYSFS_close(fileHandle);
 		return nullptr;
 	}
 	
-	long seekable = ov_seekable(ovf);
+	long seekable = ov_seekable(ovf.get());
 	if (!seekable)
 	{
 		debug(LOG_ERROR, "Expecting file to be seekable %s",  fileName);
+		ov_clear(ovf.get());
 		PHYSFS_close(fileHandle);
-		ov_clear(ovf);
 		return nullptr;
 	}
-	int64_t t = static_cast<int64_t>(ov_time_total(ovf, -1));
+	int64_t t = static_cast<int64_t>(ov_time_total(ovf.get(), -1));
 	if (t == OV_EINVAL)
 	{
 		debug(LOG_ERROR, "%s: the argument was invalid.The requested bitstream did not exist or the bitstream is nonseekable.", fileName);
+		ov_clear(ovf.get());
+		PHYSFS_close(fileHandle);
 		return nullptr;
 	}
-	const auto bitrate = ov_bitrate(ovf, -1);
+	const auto bitrate = ov_bitrate(ovf.get(), -1);
 	if (bitrate == OV_FALSE)
 	{
 		debug(LOG_ERROR, "bitrate failed");
+		ov_clear(ovf.get());
+		PHYSFS_close(fileHandle);
 		return nullptr;
 	}
-	WZVorbisDecoder* decoder = new WZVorbisDecoder(t, fileHandle, info, ovf);
+	WZVorbisDecoder* decoder = new WZVorbisDecoder(t, fileHandle, info, std::move(ovf));
 	if (!decoder)
 	{
 		debug(LOG_ERROR, "Failed to allocate");
+		if (ovf)
+		{
+			ov_clear(ovf.get());
+		}
 		PHYSFS_close(fileHandle);
 		return nullptr;
 	}
@@ -138,7 +147,7 @@ int WZVorbisDecoder::decode(uint8_t* buffer, size_t bufferSize)
 		int section = 0;
 		size_t spaceLeft = bufferSize - bufferOffset;
 		ASSERT(spaceLeft <= static_cast<size_t>(std::numeric_limits<int>::max()), "spaceLeft (%zu) exceeds int::max", spaceLeft);
-		result = ov_read(m_ovfile, (char*) buffer + bufferOffset, static_cast<int>(spaceLeft), OGG_ENDIAN, 2, 1, &section);
+		result = ov_read(m_ovfile.get(), (char*) buffer + bufferOffset, static_cast<int>(spaceLeft), OGG_ENDIAN, 2, 1, &section);
 		switch (result)
 		{
 		case OV_HOLE:
