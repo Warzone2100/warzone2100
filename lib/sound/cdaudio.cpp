@@ -209,7 +209,6 @@ static bool cdAudio_OpenTrack(std::shared_ptr<const WZ_TRACK> track)
 
 	debug(LOG_SOUND, "successful(%s)", filename.c_str());
 	stopping = false;
-	NOTIFY_MUSIC_EVENT(musicStopped);
 	return true;
 }
 
