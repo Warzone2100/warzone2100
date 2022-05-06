@@ -1,5 +1,4 @@
-FROM fedora:32
-# pin at 32 until pkg-config multi-arch failures on 33 are fixed
+FROM fedora:latest
 #FROM fedora:latest
 
 RUN cat /etc/fedora-release
