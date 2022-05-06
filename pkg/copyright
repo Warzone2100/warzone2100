@@ -89,6 +89,10 @@ Copyright: 2010 by Chris Robinson
            2020 Warzone 2100 Project
 License: Expat
 
+Files: lib/sound/3rdparty/opusfile/*
+Copyright: 1994-2020 Xiph.Org Foundation and contributors
+License: BSD-3-clause-Xiph-org
+
 Files: src/3rdparty/gsl_finally.h
 Copyright: 2015 Microsoft Corporation
 License: Expat
