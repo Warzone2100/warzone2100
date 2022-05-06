@@ -21,7 +21,7 @@
 
 #include "lib/framework/frame.h"
 #include "codecs.h"
-#include <opus/opusfile.h>
+#include <opusfile.h>
 #include <physfs.h>
 
 class WZOpusDecoder final: public WZDecoder
