@@ -623,8 +623,8 @@ static inline bool sound_DecodeOggVorbisTrack(TRACK *psTrack, const char* fileNa
 		return false;
 	}
 	memset(buffer, 0, estimate);
-	int res = decoder->decode(buffer, estimate);
-	if (res < 0)
+	auto res = decoder->decode(buffer, estimate);
+	if (!res.has_value())
 	{
 		debug(LOG_ERROR, "failed decoding %s", fileName);
 		free(buffer);
@@ -916,15 +916,23 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
 	{
 		memset(pcm, 0, buffSize);
 		// Decode some audio data
-		int res = decoder->decode(pcm, buffSize);
+		auto res = decoder->decode(pcm, buffSize);
+
+		if (!res.has_value())
+		{
+			//free(pcm);
+			sound_GetError();
+			return -1;
+		}
 
 		// If we actually decoded some data
-		if (res > 0)
+		if (res.value() > 0)
 		{
-			alBufferData(alBuffersIds[i], format, pcm, static_cast<ALint>(res), decoder->frequency());
+			ASSERT(res.value() <= static_cast<size_t>(std::numeric_limits<ALint>::max()), "read size (%zu) exceeds ALint::max", res.value());
+			alBufferData(alBuffersIds[i], format, pcm, static_cast<ALint>(res.value()), decoder->frequency());
 			sound_GetError();
 		}
-		else if (res == 0)
+		else // if (res.value() == 0)
 		{
 			// If no data has been decoded we're probably at the end of our
 			// stream. So cleanup the excess stuff here.
@@ -932,12 +940,6 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
 			//free(pcm);
 			sound_GetError();
 			break;
-		}
-		else
-		{
-			//free(pcm);
-			sound_GetError();
-			return -1;
 		}
 	}
 	// all good: return how many buffers were actually (at least partially) filled

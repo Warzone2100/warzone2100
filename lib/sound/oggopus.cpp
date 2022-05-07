@@ -190,9 +190,8 @@ WZOpusDecoder* WZOpusDecoder::fromFilename(const char* fileName)
 	return decoder;
 }
 
-int WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
+optional<size_t> WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 {
-
 	// we need a small buffer to convert from big to little endian
 	// sample_rate (48000/sec) * depth (2 bytes) * 120 milliseconds
 	constexpr size_t TMP_BUF = 48 * 2 * 120;
@@ -204,8 +203,9 @@ int WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 	// Decode PCM data into the buffer until there is nothing to decode left OR untill we hit bufferSize limit
 	do
 	{
-		unsigned long spaceLeft = bufferSize - bufferOffset;
-		unsigned long toRead = std::min<unsigned long>(TMP_BUF, spaceLeft);
+		size_t spaceLeft = bufferSize - bufferOffset;
+		ASSERT(spaceLeft <= static_cast<size_t>(std::numeric_limits<int>::max()), "spaceLeft (%zu) exceeds int::max", spaceLeft);
+		int toRead = static_cast<int>(std::min<size_t>(TMP_BUF, spaceLeft));
 
 		// Note: the return value is the number of *samples per channel*, not *bytes* !!
 		samples_per_chan = op_read_stereo(m_of, pcm, toRead);
@@ -213,37 +213,37 @@ int WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 		{
 		case OP_HOLE:
 			debug(LOG_ERROR, "There was a hole in the data, and some samples may have been skipped. Call this function again to continue decoding past the hole.");
-			return -1;
+			return nullopt;
 		case OP_EREAD:
 			debug(LOG_ERROR, "An underlying read operation failed. This may signal a truncation attack from an <https:> source.");
-			return -1;
+			return nullopt;
 		case OP_EFAULT:
 			debug(LOG_ERROR, "An internal memory allocation failed.");
-			return -1;
+			return nullopt;
 		case OP_EIMPL:
 			debug(LOG_ERROR, "An unseekable stream encountered a new link that used a feature that is not implemented, such as an unsupported channel family.");
-			return -1;
+			return nullopt;
 		case OP_EINVAL:
 			debug(LOG_ERROR, "The stream was only partially open.");
-			return -1;
+			return nullopt;
 		case OP_ENOTFORMAT:
 			debug(LOG_ERROR, "An unseekable stream encountered a new link that did not have any logical Opus streams in it. ");
-			return -1;
+			return nullopt;
 		case OP_EBADHEADER:
 			debug(LOG_ERROR, "An unseekable stream encountered a new link with a required header packet that was not properly formatted, contained illegal values, or was missing altogether.");
-			return -1;
+			return nullopt;
 		case OP_EVERSION:
 			debug(LOG_ERROR, "An unseekable stream encountered a new link with an ID header that contained an unrecognized version number.");
-			return -1;
+			return nullopt;
 		case OP_EBADPACKET:
 			debug(LOG_ERROR, "Failed to properly decode the next packet.");
-			return -1;
+			return nullopt;
 		case OP_EBADLINK:
 			debug(LOG_ERROR, "We failed to find data we had seen before.");
-			return -1;
+			return nullopt;
 		case OP_EBADTIMESTAMP:
 			debug(LOG_ERROR, "An unseekable stream encountered a new link with a starting timestamp that failed basic validity checks.");
-			return -1;
+			return nullopt;
 		default:
 			break;
 		}

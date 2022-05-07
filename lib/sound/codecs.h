@@ -4,6 +4,10 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 class WZDecoder
 {
 public:
@@ -19,8 +23,8 @@ public:
    * 
    * \param [out] buffer: preallocated buffer to hold decoded data, little-endian. Will *not* be freed, even on error.
    * \param [in] bufferSize: takes buffer size in *bytes* as input, to be consistent with oggvorbis, 
-   * \returns how much bytes have been placed into buffer, or negative number if error */
-  virtual int     decode(uint8_t*, size_t) = 0;
+   * \returns how much bytes have been placed into buffer, or nullopt  if error */
+  virtual optional<size_t> decode(uint8_t*, size_t) = 0;
   virtual int64_t totalTime()       const = 0;
   virtual int     channels()        const = 0;
 
