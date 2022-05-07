@@ -33,7 +33,7 @@ public:
 	WZOpusDecoder &operator=(const WZOpusDecoder &)     = delete;
 	WZOpusDecoder &operator=(WZOpusDecoder &&)          = delete;
 
-	virtual int  decode(uint8_t*, size_t) override;
+	virtual optional<size_t> decode(uint8_t*, size_t) override;
 	virtual int64_t totalTime()              const override { return m_duration; };
 	virtual int     channels() 	             const override { return 2; };
 	virtual size_t  frequency()              const override { return 48000l; };

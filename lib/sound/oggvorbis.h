@@ -35,7 +35,7 @@ public:
 	WZVorbisDecoder &operator=(const WZVorbisDecoder &)     = delete;
 	WZVorbisDecoder &operator=(WZVorbisDecoder &&)          = delete;
 
-	virtual int     decode(uint8_t*, size_t) override;
+	virtual optional<size_t> decode(uint8_t*, size_t) override;
 	virtual int64_t totalTime()                    const override { return m_total_time; };
 	virtual int     channels() 	                   const override { return m_info->channels;   };
 	virtual size_t  frequency()                    const override { return m_info->rate;  };

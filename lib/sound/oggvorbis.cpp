@@ -131,7 +131,7 @@ WZVorbisDecoder* WZVorbisDecoder::fromFilename(const char* fileName)
 	return decoder;
 }
 
-int WZVorbisDecoder::decode(uint8_t* buffer, size_t bufferSize)
+optional<size_t> WZVorbisDecoder::decode(uint8_t* buffer, size_t bufferSize)
 {
 	size_t		bufferOffset = 0;
 	int		    result;
@@ -152,18 +152,18 @@ int WZVorbisDecoder::decode(uint8_t* buffer, size_t bufferSize)
 		{
 		case OV_HOLE:
 			debug(LOG_ERROR, "error decoding from OggVorbis file: there was an interruption in the data, at %zu", bufferOffset);
-			return -1;
+			return nullopt;
 		case OV_EBADLINK:
 			debug(LOG_ERROR, "invalid stream section was supplied to libvorbisfile, or the requested link is corrupt, at %zu", bufferOffset);
-			return -1;
+			return nullopt;
 		case OV_EINVAL:
 			debug(LOG_ERROR, "initial file headers couldn't be read or are corrupt, or that the initial open call for vf failed, at %zu", bufferOffset);
-			return -1;
+			return nullopt;
 		default:
 			break;
 		}
-		ASSERT(result >= 0, "unexpected error while decoding: %i", result);
-		bufferOffset += result;
+		ASSERT_OR_RETURN(nullopt, result >= 0, "unexpected error while decoding: %i", result);
+		bufferOffset += static_cast<size_t>(result);
 	} while ((result != 0 && bufferOffset < bufferSize));
 	m_bufferSize = bufferSize;
 	return bufferOffset;
