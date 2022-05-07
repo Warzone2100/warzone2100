@@ -639,7 +639,8 @@ static inline bool sound_DecodeOggVorbisTrack(TRACK *psTrack, const char* fileNa
 	alGenBuffers(1, &alBuffer);
 	sound_GetError();
 	ASSERT(estimate <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "soundBuffer->size (%u) exceeds ALsizei::max", estimate);
-	alBufferData(alBuffer, format, buffer, static_cast<ALsizei>(estimate), decoder->frequency());
+	ASSERT(decoder->frequency() <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "decoder->frequency() (%zu) exceeds ALsizei::max ??", decoder->frequency());
+	alBufferData(alBuffer, format, buffer, static_cast<ALsizei>(estimate), static_cast<ALsizei>(decoder->frequency()));
 	sound_GetError();
 
 	// save buffer name in track
@@ -903,6 +904,7 @@ bool sound_Play3DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample)
 */
 static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n, size_t buffSize)
 {
+	ASSERT_OR_RETURN(-1, n <= static_cast<size_t>(std::numeric_limits<int>::max()), "number of buffers (%zu) exceeds int::max", n);
 	static uint8_t *pcm = (uint8_t*) malloc(buffSize);
 	if (!pcm)
 	{
@@ -911,8 +913,9 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
 	}
 	// Determine PCM data format
 	ALenum format = (decoder->channels() == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
-	size_t i = 0;
-	for (; i < n; ++i)
+	int i = 0;
+	const int i_max = static_cast<int>(n);
+	for (; i < i_max; ++i)
 	{
 		memset(pcm, 0, buffSize);
 		// Decode some audio data
@@ -929,7 +932,7 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
 		if (res.value() > 0)
 		{
 			ASSERT(res.value() <= static_cast<size_t>(std::numeric_limits<ALint>::max()), "read size (%zu) exceeds ALint::max", res.value());
-			alBufferData(alBuffersIds[i], format, pcm, static_cast<ALint>(res.value()), decoder->frequency());
+			alBufferData(alBuffersIds[i], format, pcm, static_cast<ALint>(res.value()), static_cast<ALsizei>(decoder->frequency()));
 			sound_GetError();
 		}
 		else // if (res.value() == 0)
@@ -971,11 +974,12 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 		// Clean errors
 	alGetError();
 	WZDecoder *decoder = nullptr;
-	const int len = strnlen(fileName, 255);
-	if (strncasecmp(fileName + len - 4, ".ogg", 4) == 0)
+	const size_t len = strlen(fileName);
+	if (len > 4 && (strncasecmp(fileName + len - 4, ".ogg", 4) == 0))
 	{
 		decoder = WZVorbisDecoder::fromFilename(fileName);
-	} else if (strncasecmp(fileName + len - 5, ".opus", 5) == 0)
+	}
+	else if (len > 5 && (strncasecmp(fileName + len - 5, ".opus", 5) == 0))
 	{
 		decoder = WZOpusDecoder::fromFilename(fileName);
 	}
