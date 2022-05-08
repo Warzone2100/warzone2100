@@ -394,7 +394,7 @@ function bc_eventAttacked(victim, attacker) {
 
 		if(myHP < (enemyHP/2)) {
 			myDroids.forEach((o) => {
-				if(getWeaponInfo(o.weapons[0].name).impactClass != "HEAT") fleetDroid(o);
+				if(Stats.Weapon[o.weapons[0].fullname].ImpactType !== "HEAT") fleetDroid(o);
 //				groupAdd(droidsFleet, o);
 //				orderDroidLoc_p(o, DORDER_MOVE, base.x, base.y);
 			});
@@ -411,7 +411,7 @@ function bc_eventAttacked(victim, attacker) {
 		if(se_r >= army_rich){ targetRegular(attacker, victim);return;}
 
 		//Если атакуют огнемётные войска, атакуем ими ближайшего врага
-		if(getWeaponInfo(victim.weapons[0].name).impactClass == "HEAT"){
+		if(Stats.Weapon[victim.weapons[0].fullname].ImpactType === "HEAT"){
 			var enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter((e) => (e.type == DROID));
 			if(enemies.length > 0){
 				enemies = sortByDistance(enemies, victim, 1);
