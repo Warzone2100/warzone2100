@@ -8,6 +8,13 @@ base: core18
 # Enable LZO compression for the snap
 compression: lzo
 
+# Limit architectures to those supported by the gnome extension (and future core20)
+# NOTE: Specify these as separate build-on lines to ensure separate architecture builds that each support a single architecture
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+  - build-on: armhf
+
 layout:
   /usr/share/vulkan:
     symlink: $SNAP/usr/share/vulkan
