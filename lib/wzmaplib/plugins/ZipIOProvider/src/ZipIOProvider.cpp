@@ -118,13 +118,27 @@ public:
 	virtual optional<size_t> readBytes(void *buffer, size_t len) override
 	{
 		if (!m_pReadHandle) { return nullopt; }
+		size_t extraByte = 0;
+		if (m_extraByteRead.has_value())
+		{
+			uint8_t tmpByte = m_extraByteRead.value();
+			memcpy(buffer, &tmpByte, 1);
+			m_extraByteRead.reset();
+			buffer = reinterpret_cast<char*>(buffer) + 1;
+			len -= 1;
+			extraByte = 1;
+		}
 		auto result = zip_fread(m_pReadHandle, buffer, len);
 		if (result < 0)
 		{
 			// failed
+			if (extraByte)
+			{
+				return extraByte;
+			}
 			return nullopt;
 		}
-		return static_cast<size_t>(result);
+		return static_cast<size_t>(result) + extraByte;
 	}
 
 	virtual optional<size_t> writeBytes(const void *buffer, size_t len) override
@@ -207,10 +221,9 @@ public:
 			return false;
 		}
 		if (!m_pReadHandle) { return false; }
-		// get current position in file
-		auto position = zip_ftell(m_pReadHandle);
-		if (position < 0)
+		if (m_extraByteRead.has_value())
 		{
+			// at least one more byte to read!
 			return false;
 		}
 		// attempt to read a byte
@@ -220,8 +233,8 @@ public:
 			// read failed - assume end of stream
 			return true;
 		}
-		// restore original position
-		zip_fseek(m_pReadHandle, 0, position);
+		// otherwise store the extra byte we read (for the next call to readBytes)
+		m_extraByteRead = tmpByte;
 		return false;
 	}
 private:
@@ -229,6 +242,7 @@ private:
 	optional<WzMap::BinaryIOStream::OpenMode> m_mode;
 	// reading
 	zip_file_t *m_pReadHandle = nullptr;
+	optional<uint8_t> m_extraByteRead;
 	// writing
 	std::string m_filename;
 	unsigned char* m_writeBuffer = nullptr;
