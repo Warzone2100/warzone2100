@@ -26,7 +26,7 @@
 
 // MARK: - Opus callbacks
 
-int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes)
+static int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes)
 {
 	PHYSFS_file *fileHandle;
 
@@ -40,7 +40,7 @@ int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes)
 	return didread;
 }
 
-int wz_opus_seek(void *datasource, opus_int64 offset, int whence)
+static int wz_opus_seek(void *datasource, opus_int64 offset, int whence)
 {
 	PHYSFS_file *fileHandle;
 	opus_int64 newPos;
@@ -100,7 +100,7 @@ int wz_opus_seek(void *datasource, opus_int64 offset, int whence)
 	}
 }
 
-opus_int64 wz_opus_tell(void *datasource)
+static opus_int64 wz_opus_tell(void *datasource)
 {
 	PHYSFS_file *fileHandle;
 	ASSERT(datasource != nullptr, "NULL decoder passed!");
