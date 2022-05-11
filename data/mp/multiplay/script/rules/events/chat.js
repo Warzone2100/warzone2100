@@ -1,6 +1,6 @@
 function eventChat(from, to, message)
 {
-	if (message == "bettertogether" && cheatmode)
+	if (message === "bettertogether" && cheatmode)
 	{
 		for (const i in Upgrades[from].Brain)
 		{
@@ -15,7 +15,7 @@ function eventChat(from, to, message)
 		}
 		console("Made player " + from + "'s commanders SUPERIOR!");
 	}
-	if (message == "makesuperior" && cheatmode)
+	if (message === "makesuperior" && cheatmode)
 	{
 		for (const i in Upgrades[from].Body)
 		{

@@ -95,11 +95,11 @@ class Player
 	finalizeGame(state)
 	{
 		const transformToSpectator = (state === STATE_loser && !isSpectator(this.playNum) && playerData[this.playNum].isHuman);
-		if (state === STATE_loser && this.playNum == selectedPlayer)
+		if (state === STATE_loser && this.playNum === selectedPlayer)
 		{
 			gameOverMessage(false);
 		}
-		if (state === STATE_winner && this.playNum == selectedPlayer)
+		if (state === STATE_winner && this.playNum === selectedPlayer)
 		{
 			gameOverMessage(true);
 		}
@@ -357,7 +357,7 @@ function conditions_eventGameLoaded()
 function activityAlert()
 {
 	// avoid using selectedPlayer to access playersTeam array if it's a spectator (as it may be beyond the bounds of playersTeam.length for spectator-only slots)
-	if (isSpectator(-1) || (playersTeam[selectedPlayer].state != STATE_contender))
+	if (isSpectator(-1) || (playersTeam[selectedPlayer].state !== STATE_contender))
 	{
 		setMissionTime(-1);
 		removeTimer("activityAlert");
