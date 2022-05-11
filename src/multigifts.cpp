@@ -787,6 +787,8 @@ void createTeamAlliances()
 		for (unsigned j = 0; j < MAX_PLAYERS; j++)
 		{
 			if (i != j														// two different players
+			    && i != scavengerSlot()										// ...not scavenger player
+			    && j != scavengerSlot()
 			    && NetPlay.players[i].team == NetPlay.players[j].team		// ...belonging to the same team
 			    && !aiCheckAlliances(i, j)									// ...not allied and not ignoring teams
 			    && NetPlay.players[i].difficulty != AIDifficulty::DISABLED
