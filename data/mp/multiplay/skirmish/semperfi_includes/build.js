@@ -443,7 +443,7 @@ function buildBasicBase()
 	}
 
 	//If we start on T2/T3 no bases then build a few power generators early.
-	if (getMultiTechLevel() > 1 && baseType == CAMP_CLEAN && countStruct(POW_GEN_STAT) < 2 && grabTrucksAndBuild(POW_GEN_STAT, 0))
+	if (getMultiTechLevel() > 1 && baseType === CAMP_CLEAN && countStruct(POW_GEN_STAT) < 2 && grabTrucksAndBuild(POW_GEN_STAT, 0))
 	{
 		return true;
 	}

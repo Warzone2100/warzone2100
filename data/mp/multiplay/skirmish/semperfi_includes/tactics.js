@@ -357,7 +357,7 @@ function recycleDroidsForHover()
 		if (isSeaMap)
 		{
 			var tanks = enumGroup(attackGroup).filter((dr) => (
-				dr.droidType == DROID_WEAPON && dr.propulsion !== "hover01"
+				dr.droidType === DROID_WEAPON && dr.propulsion !== "hover01"
 			));
 			const NON_HOVER_TANKS = tanks.length;
 
