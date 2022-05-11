@@ -121,7 +121,7 @@ function playerBodySizeRatio(player)
 			{
 				++medium;
 			}
-			else if (body === "Body11ABT" || body === "Body9REC" || body === "Body13SUP" || body === "Body14SUP" || body ==="Body12SUP" || body === "Body10MBT")
+			else if (body === "Body11ABT" || body === "Body9REC" || body === "Body13SUP" || body === "Body14SUP" || body === "Body12SUP" || body === "Body10MBT")
 			{
 				++heavy;
 			}

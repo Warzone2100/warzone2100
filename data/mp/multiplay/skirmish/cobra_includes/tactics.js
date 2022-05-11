@@ -131,7 +131,7 @@ function repairDroid(droidID, force)
 	//Ignore repairing combat units if one super high oil map if we have X amount of units.
 	if (countDroid(DROID_ANY, me) >= SAFE_EXTREME_OIL_IGNORE_NUM && highOilMap)
 	{
-		if ((droid.droidType === DROID_WEAPON || droid.droidType == DROID_CYBORG) && droid.health <= forceRepairPercent)
+		if ((droid.droidType === DROID_WEAPON || droid.droidType === DROID_CYBORG) && droid.health <= forceRepairPercent)
 		{
 			return false;
 		}
