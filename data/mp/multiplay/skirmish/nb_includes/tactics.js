@@ -265,11 +265,11 @@ function pickVtolTarget(droid) {
 }
 
 function vtolReady(droid) {
-	if (droid.order == DORDER_ATTACK)
+	if (droid.order === DORDER_ATTACK)
 		return false;
 	if (vtolArmed(droid, 99))
 		return true;
-	if (droid.order != DORDER_REARM) {
+	if (droid.order !== DORDER_REARM) {
 		orderDroid(droid, DORDER_REARM);
 		buildVtols() // actually pads
 	}
@@ -284,7 +284,7 @@ _global.vtolCanHit = function(droid, obj) {
 }
 
 _global.vtolArmed = function(obj, percent) {
-	if (obj.type != DROID)
+	if (obj.type !== DROID)
 		return;
 	if (!isVTOL(obj))
 		return false;
