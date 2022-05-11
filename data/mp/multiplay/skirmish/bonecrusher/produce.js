@@ -8,7 +8,7 @@ debugMsg('Module: produce.js','init');
 function prepeareProduce(){
 //	debugMsg('prepeareProduce()', 'production')
 	//Если есть HQ
-	var hq = enumStruct(me, HQ).filter((e) => (e.status == BUILT));
+	var hq = enumStruct(me, HQ).filter((e) => (e.status === BUILT));
 	if (hq.length > 0){
 		//Составляем корпуса
 		light_bodies=[];
@@ -69,7 +69,7 @@ function prepeareProduce(){
 
 		//Сайборги заполонили!
 		avail_cyborgs=[];
-		var _cyb=cyborgs.filter((e) => ((getResearch(e[0]).done && technology) || (!technology && e[1] == 'CyborgHeavyBody')));
+		var _cyb=cyborgs.filter((e) => ((getResearch(e[0]).done && technology) || (!technology && e[1] === 'CyborgHeavyBody')));
 		/*.sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));*/
 		for (const i in _cyb) {
 			avail_cyborgs.push([_cyb[i][1],_cyb[i][2]]);
@@ -102,7 +102,7 @@ function prepeareProduce(){
 function produceDroids(){
 	if(!running)return;
 	debugMsg('produceDroids()', 'production');
-	var droid_factories = enumStruct(me,FACTORY).filter((e) => (e.status == BUILT && structureIdle(e)));
+	var droid_factories = enumStruct(me,FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
 	if(droid_factories.length === 0) return;
 
 
@@ -113,11 +113,11 @@ function produceDroids(){
 
 	var _body=light_bodies[Math.floor(Math.random()*light_bodies.length)];
 	if(droid_factories[0].modules >= 1 && (playerPower(me)>50 || berserk) && medium_bodies.length > 0) _body = medium_bodies[Math.floor(Math.random()*medium_bodies.length)];
-	if(droid_factories[0].modules == 2 && (playerPower(me)>1000 || berserk) && heavy_bodies.length > 0) _body = heavy_bodies[Math.floor(Math.random()*heavy_bodies.length)];
+	if(droid_factories[0].modules === 2 && (playerPower(me)>1000 || berserk) && heavy_bodies.length > 0) _body = heavy_bodies[Math.floor(Math.random()*heavy_bodies.length)];
 
 	var _prop = ['tracked01','HalfTrack','wheeled01'];
-	if(nf['policy']=='island') _prop = ['hover01'];
-	else if(nf['policy'] == 'both') _prop = ['hover01', 'tracked01', 'HalfTrack', 'wheeled01'];
+	if(nf['policy'] === 'island') _prop = ['hover01'];
+	else if(nf['policy'] === 'both') _prop = ['hover01', 'tracked01', 'HalfTrack', 'wheeled01'];
 
 /*
 	if(earlyGame && getResearch("R-Sys-Sensor-Turret01").done){
@@ -138,14 +138,14 @@ function produceDroids(){
 	if(
 		(
 			builders.length < (maxConstructors-3)
-			&& ( getInfoNear(base.x,base.y,'safe',base_range).value || policy['build'] == 'rich' )
+			&& ( getInfoNear(base.x,base.y,'safe',base_range).value || policy['build'] === 'rich' )
 		) && (
 			( (playerPower(me) > builderPts || berserk) && builder_targets.length > 7 )
-			|| ( (groupSize(buildersMain) == 1 || groupSize(buildersHunters) == 0) && (playerPower(me) > 150 || berserk) )
+			|| ( (groupSize(buildersMain) === 1 || groupSize(buildersHunters) === 0) && (playerPower(me) > 150 || berserk) )
 			|| builders.length === 0
 		)
 		&& buildersTrigger < gameTime
-		&& ( policy['build'] != 'rich' || !isFullBase(me) || (builders.length === 0 && (groupSize(armyPartisans)+groupSize(armyRegular)+groupSize(armyCyborgs))>10 ) )
+		&& ( policy['build'] !== 'rich' || !isFullBase(me) || (builders.length === 0 && (groupSize(armyPartisans)+groupSize(armyRegular)+groupSize(armyCyborgs))>10 ) )
 	){
 		buildersTrigger = gameTime + buildersTimer;
 		debugMsg("buildersTrigger="+buildersTrigger+", gameTime="+gameTime+", buildersTimer="+buildersTimer, 'production');
@@ -155,7 +155,7 @@ function produceDroids(){
 
 
 	if(enumDroid(me, DROID_SENSOR).length === 0 && getInfoNear(base.x,base.y,'safe',base_range).value && scannersTrigger < gameTime){
-		var hq = enumStruct(me, HQ).filter((e) => (e.status == BUILT));
+		var hq = enumStruct(me, HQ).filter((e) => (e.status === BUILT));
 		if (hq.length > 0){
 			buildDroid(droid_factories[0], "Scanner", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','HalfTrack','wheeled01'], "", "", "SensorTurret1Mk1");
 			scannersTrigger = gameTime + scannersTimer;
@@ -164,8 +164,8 @@ function produceDroids(){
 	}
 
 
-	if (policy['build'] != 'rich' && getInfoNear(base.x,base.y,'safe',base_range).value && groupSize(armyFixers) < maxFixers && groupSize(armyPartisans) > 5 && fixersTrigger < gameTime
-		&& ( getResearch("R-Sys-MobileRepairTurret01").done || getResearch("R-Sys-MobileRepairTurretHvy").done) && ((playerPower(me) > 300 || berserk) || groupSize(armyFixers) == 0)){
+	if (policy['build'] !== 'rich' && getInfoNear(base.x,base.y,'safe',base_range).value && groupSize(armyFixers) < maxFixers && groupSize(armyPartisans) > 5 && fixersTrigger < gameTime
+		&& ( getResearch("R-Sys-MobileRepairTurret01").done || getResearch("R-Sys-MobileRepairTurretHvy").done) && ((playerPower(me) > 300 || berserk) || groupSize(armyFixers) === 0)){
 		fixersTrigger = gameTime + fixersTimer;
 		var _repair = "LightRepair1";
 		if(getResearch("R-Sys-MobileRepairTurretHvy").done) _repair = "HeavyRepair";
@@ -173,7 +173,7 @@ function produceDroids(){
 		return;
 	}
 /*
-	if (version.substr(0,3) == '3.2' && getResearch('R-Sys-ECM-Upgrade01').done && getInfoNear(base.x,base.y,'safe',base_range).value && (groupSize(armyJammers) == 0 || groupSize(armyJammers) < maxJammers) && inProduce('jammer') == 0){
+	if (version.substr(0,3) === '3.2' && getResearch('R-Sys-ECM-Upgrade01').done && getInfoNear(base.x,base.y,'safe',base_range).value && (groupSize(armyJammers) === 0 || groupSize(armyJammers) < maxJammers) && inProduce('jammer') === 0){
 		var _jammer = "ECM1TurretMk1";
 		produceTrigger[droid_factories[0].id] = 'jammer';
 		debugMsg("ADD jammer "+droid_factories[0].id, 'triggers');
@@ -218,12 +218,12 @@ function produceDroids(){
 }
 function produceCyborgs(){
 	if(!running) return;
-	var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter((e) => (e.status == BUILT && structureIdle(e)));
+	var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
 	if(cyborg_factories.length === 0) return;
 
 
 	if(enumStruct(me, FACTORY).length === 0){
-		var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter((e) => (e.status == BUILT && structureIdle(e)));
+		var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
 		if(cyborg_factories.length > 0){
 			buildDroid(cyborg_factories[0], 'Emergency Builder', 'CyborgLightBody', "CyborgLegs", "", "", 'CyborgSpade');
 		}
@@ -252,7 +252,7 @@ function produceCyborgs(){
 		}
 	}
 
-	if(nf['policy'] == 'island')return;
+	if(nf['policy'] === 'island')return;
 	if(groupSize(armyCyborgs) >= maxCyborgs && !forceproduce) return;
 	if(!(playerPower(me) > 200 || forceproduce) && groupSize(armyCyborgs) > 2) return;
 //	debugMsg("Cyborg: fact="+cyborg_factories.length+"; cyb="+avail_cyborgs.length, 'production');
@@ -271,7 +271,7 @@ function produceCyborgs(){
 function produceVTOL(){
 	if(!running)return;
 	var vtol_factory = enumStruct(me, VTOL_FACTORY);
-	var vtol_factories = vtol_factory.filter((e) => (e.status == BUILT && structureIdle(e)));
+	var vtol_factories = vtol_factory.filter((e) => (e.status === BUILT && structureIdle(e)));
 
 	if(vtol_factories.length === 0) return;
 
