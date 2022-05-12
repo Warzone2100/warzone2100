@@ -422,10 +422,8 @@ function targetRegularRich(target, victim){
 	//Если из армии атакован огненный боец, берём всех огненных рядом и в партизаны/камикадзе
 	if(victim != false && victim.droidType == DROID_WEAPON){
 //		debugMsg("Check weapon for "+victim.name, "army");
-		var w = victim.weapons[0].name;
-		w = getWeaponInfo(w).impactClass;
-		if(w == "HEAT") {
-			enumRange(victim.x, victim.y, 7, ALLIES).filter((obj) => (obj.type == DROID && obj.droidType == DROID_WEAPON && getWeaponInfo(obj.weapons[0].name).impactClass == "HEAT"))
+		if(Stats.Weapon[victim.weapons[0].fullname].ImpactType === "HEAT") {
+			enumRange(victim.x, victim.y, 7, ALLIES).filter((obj) => (obj.type == DROID && obj.droidType == DROID_WEAPON && Stats.Weapon[obj.weapons[0].fullname].ImpactType === "HEAT"))
 			.forEach((d) => {groupAdd(armyPartisans, d);});
 		}
 	}
