@@ -129,6 +129,7 @@ enum class MapType
 	SAVEGAME,
 	SKIRMISH
 };
+std::string to_string(MapType mapType);
 
 class Map
 {

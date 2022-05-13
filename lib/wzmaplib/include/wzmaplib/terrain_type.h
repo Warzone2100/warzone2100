@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <string>
+
 /* The different types of terrain as far as the game is concerned */
 enum TYPE_OF_TERRAIN
 {
@@ -45,3 +47,9 @@ enum class MAP_TILESET
 	URBAN = 1,
 	ROCKIES = 2
 };
+
+namespace WzMap {
+
+std::string to_string(MAP_TILESET mapTileset);
+
+} // namespace WzMap
