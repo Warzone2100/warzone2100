@@ -374,7 +374,7 @@ optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOP
 
 static bool saveOrderedJsonObjectToFile(const nlohmann::ordered_json& jsonObj, const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
-	std::string jsonStr = jsonObj.dump(4, ' ', false, nlohmann::ordered_json::error_handler_t::ignore);
+	std::string jsonStr = jsonObj.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::ignore);
 #if SIZE_MAX > UINT32_MAX
 	if (jsonStr.size() > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
 	{
