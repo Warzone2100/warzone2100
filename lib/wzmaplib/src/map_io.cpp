@@ -32,9 +32,13 @@
 # include <windows.h>
 #endif
 
+#include <sys/types.h>
+#include <sys/stat.h>
 #if !defined(_WIN32)
 # include <fcntl.h>
 # include <dirent.h> // TODO: Also use CMake check for dirent.h
+#else
+# include <direct.h> // For _mkdir / _wmkdir on Windows
 #endif
 
 #include "3rdparty/SDL_endian.h"
@@ -524,10 +528,72 @@ bool StdIOProvider::writeFullFile(const std::string& filename, const char *ppFil
 	return true;
 }
 
+static bool stdIOFolderExistsInternal(const std::string& dirPath)
+{
+#if defined(_WIN32)
+	std::vector<wchar_t> wDirPath;
+	if (!win_utf8ToUtf16(dirPath.c_str(), wDirPath))
+	{
+		return false;
+	}
+	struct _stat buf;
+	int result = _wstat(wDirPath.data(), &buf);
+	if (result != 0)
+	{
+		return false;
+	}
+	return (buf.st_mode & _S_IFDIR) == _S_IFDIR;
+#else
+	struct stat buf;
+	int result = stat(dirPath.c_str(), &buf);
+	if (result != 0)
+	{
+		return false;
+	}
+	return (buf.st_mode & S_IFDIR) == S_IFDIR;
+#endif
+}
+
+bool StdIOProvider::internalMakeDir(const std::string& dirPath)
+{
+#if defined(_WIN32)
+	std::vector<wchar_t> wDirPath;
+	if (!win_utf8ToUtf16(dirPath.c_str(), wDirPath))
+	{
+		return false;
+	}
+	return _wmkdir(wDirPath.data()) == 0;
+#else
+	return mkdir(dirPath.c_str(), 0755) == 0;
+#endif
+}
+
+// Creates a directory (and any required parent directories) and returns true on success (or if the directory already exists)
 bool StdIOProvider::makeDirectory(const std::string& directoryPath)
 {
-	// TODO: Implement at some point, if needed
-	return false;
+	bool result = false;
+	size_t currSeparatorPos = 0;
+	currSeparatorPos = directoryPath.find(pathSeparator(), currSeparatorPos + 1);
+	do
+	{
+		std::string currentSubpath = directoryPath.substr(0, currSeparatorPos);
+		result = stdIOFolderExistsInternal(currentSubpath);
+		if (!result)
+		{
+			result = internalMakeDir(currentSubpath);
+			if (!result)
+			{
+				return false;
+			}
+		}
+		if (currSeparatorPos == std::string::npos)
+		{
+			return result;
+		}
+		currSeparatorPos = directoryPath.find(pathSeparator(), currSeparatorPos + 1);
+	} while (true);
+
+	return result;
 }
 
 const char* StdIOProvider::pathSeparator() const

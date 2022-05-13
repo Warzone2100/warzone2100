@@ -114,6 +114,9 @@ public:
 
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
+
+private:
+	bool internalMakeDir(const std::string& dirPath);
 };
 
 } // namespace WzMap
