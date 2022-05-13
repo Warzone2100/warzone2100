@@ -25,6 +25,8 @@ object containing the x and y variables for a player start position.
 * ```mapHeight``` Height of map in tiles.
 * ```scavengerPlayer``` Index of scavenger player. (3.2+ only)
 * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
+* `challenge` If the current game is a challenge. (4.1.4+ only)
+* `idleTime` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
 * ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
 be undefined.
 * ```me``` The player the script is currently running as.
