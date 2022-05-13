@@ -155,7 +155,7 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			{&statsConfig.powerGenerators, {&results.playerBalance.powerGenerators, &results.powerGeneratorsPerPlayer}},
 			{&statsConfig.powerModules, {&results.playerBalance.powerGenerators, nullptr}},
 			// factories
-			{&statsConfig.factories, {&results.playerBalance.factories, &results.factoriesPerPlayer}},
+			{&statsConfig.factories, {&results.playerBalance.factories, &results.regFactoriesPerPlayer}},
 			{&statsConfig.factoryModules, {&results.playerBalance.factories, nullptr}},
 			// vtol factories
 			{&statsConfig.vtolFactories, {&results.playerBalance.factories, &results.vtolFactoriesPerPlayer}},

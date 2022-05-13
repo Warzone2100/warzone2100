@@ -179,7 +179,7 @@ public:
 	// NOTE: If the corresponding playerBalance value is false, these are equivalent to the "minimum" of that entity type per player
 	uint32_t resourceExtractorsPerPlayer = 0;
 	uint32_t powerGeneratorsPerPlayer = 0;
-	uint32_t factoriesPerPlayer = 0;
+	uint32_t regFactoriesPerPlayer = 0;
 	uint32_t vtolFactoriesPerPlayer = 0;
 	uint32_t cyborgFactoriesPerPlayer = 0;
 	uint32_t researchCentersPerPlayer = 0;
