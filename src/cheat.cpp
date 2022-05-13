@@ -182,6 +182,11 @@ void sendProcessDebugMappings(bool val)
 	NETend();
 }
 
+#if !defined(__clang__) && defined(__GNUC__) && (12 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
+
 static std::string getWantedDebugMappingStatuses(const DebugInputManager& dbgInputManager, bool bStatus)
 {
 	char ret[MAX_PLAYERS + 1] = "\0";
@@ -197,6 +202,10 @@ static std::string getWantedDebugMappingStatuses(const DebugInputManager& dbgInp
 	*p++ = '\0';
 	return ret;
 }
+
+#if !defined(__clang__) && defined(__GNUC__) && (12 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 
 void recvProcessDebugMappings(NETQUEUE queue)
 {
