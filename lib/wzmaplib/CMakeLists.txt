@@ -31,3 +31,40 @@ if(NOT TARGET quickjs)
 	add_subdirectory("../../3rdparty/quickjs" "3rdparty/quickjs" EXCLUDE_FROM_ALL)
 endif()
 target_link_libraries(wzmaplib PRIVATE quickjs)
+
+############
+# [Plugins]
+
+##################################
+# ZipIOProvider (requires libzip)
+
+find_package(libzip QUIET)
+if (libzip_FOUND)
+	file(GLOB ZIPIOPROVIDER_HEADERS "plugins/ZipIOProvider/include/ZipIOProvider.h")
+	file(GLOB ZIPIOPROVIDER_SRC "plugins/ZipIOProvider/src/ZipIOProvider.cpp")
+
+	add_library(ZipIOProvider STATIC ${ZIPIOPROVIDER_HEADERS} ${ZIPIOPROVIDER_SRC})
+	set_property(TARGET ZipIOProvider PROPERTY FOLDER "lib")
+	if(_wztargetconfiguration_module_path)
+		WZ_TARGET_CONFIGURATION(ZipIOProvider)
+	else()
+		message(STATUS "Unable to find WZTargetConfiguration - continuing without")
+	endif()
+	if(MSVC)
+		target_compile_definitions(ZipIOProvider PRIVATE "_CRT_SECURE_NO_WARNINGS")
+	endif()
+	target_include_directories(ZipIOProvider PUBLIC "plugins/ZipIOProvider/include")
+	target_link_libraries(ZipIOProvider PUBLIC wzmaplib)
+
+	target_link_libraries(ZipIOProvider PRIVATE libzip::zip)
+	# libzip exported CMake config does not currently include all required support libraries - see: https://github.com/nih-at/libzip/issues/205
+	# So manually find and link them
+	find_package (ZLIB REQUIRED)
+	target_link_libraries(ZipIOProvider PRIVATE ZLIB::ZLIB)
+	find_package (BZip2)
+	if (BZip2_FOUND)
+		target_link_libraries(ZipIOProvider PRIVATE BZip2::BZip2)
+	endif()
+else()
+	message(STATUS "Could NOT find libzip - ZipIOProvider target will not be available")
+endif()
