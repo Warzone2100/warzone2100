@@ -1492,6 +1492,29 @@ std::shared_ptr<Map> MapPackage::loadMap(uint32_t seed, std::shared_ptr<LoggingP
 	return m_loadedMap;
 }
 
+static inline bool safeDirectoryPathCompare(const char* folderPath, const char* desiredPath, size_t desiredPathLen, const std::string& pathSeparator)
+{
+	if (!folderPath || !desiredPath) { return false; }
+	if (*folderPath == '\0') { return false; }
+	if (strncmp(desiredPath, folderPath, desiredPathLen) == 0)
+	{
+		size_t folderPathLen = strlen(folderPath);
+		if (folderPathLen == desiredPathLen)
+		{
+			return true; // found match
+		}
+		else if (folderPathLen == (desiredPathLen + pathSeparator.size()))
+		{
+			if (strncmp(pathSeparator.c_str(), folderPath + desiredPathLen, pathSeparator.size()) == 0)
+			{
+				return true; // found match
+			}
+		}
+	}
+
+	return false;
+}
+
 MapPackage::MapPackageType MapPackage::packageType()
 {
 	if (m_packageType.has_value())
@@ -1638,62 +1661,65 @@ uint64_t MapPackage::baseModificationTypes()
 
 	uint64_t modTypes = 0;
 
+	const std::string pathSeparator = m_mapIO->pathSeparator();
+#define dirCmp(a, b) safeDirectoryPathCompare(a, b, strlen(b), pathSeparator)
+
 	// - First pass looks in the root folder
-	bool enumSuccess = m_mapIO->enumerateFolders(m_pathToMapPackage, [&modTypes](const char *name) -> bool {
+	bool enumSuccess = m_mapIO->enumerateFolders(m_pathToMapPackage, [&modTypes, &pathSeparator](const char *name) -> bool {
 		if (!name) { return true; }
 		if (*name == '\0') { return true; }
 
-		if ((strcmp(name, "components") == 0) || (strcmp(name, "features") == 0) || (strcmp(name, "structs") == 0) || (strcmp(name, "misc") == 0))
+		if (dirCmp(name, "components") || dirCmp(name, "features") || dirCmp(name, "structs") || dirCmp(name, "misc"))
 		{
 			modTypes |= ModTypes::GameModels;
 			return true; // continue with next
 		}
-		if (strcmp(name, "effects") == 0)
+		if (dirCmp(name, "effects"))
 		{
 			modTypes |= ModTypes::Effects;
 			return true; // continue with next
 		}
-		if (strcmp(name, "shaders") == 0)
+		if (dirCmp(name, "shaders"))
 		{
 			modTypes |= ModTypes::Shaders;
 			return true; // continue with next
 		}
-		if (strcmp(name, "stats") == 0)
+		if (dirCmp(name, "stats"))
 		{
 			modTypes |= ModTypes::Stats;
 			return true; // continue with next
 		}
-		if (strcmp(name, "texpages") == 0)
+		if (dirCmp(name, "texpages"))
 		{
 			modTypes |= ModTypes::Textures;
 			return true; // continue with next
 		}
-		if (strcmp(name, "script") == 0)
+		if (dirCmp(name, "script"))
 		{
 			modTypes |= ModTypes::Scripts;
 			return true; // continue with next
 		}
-		if (strcmp(name, "messages") == 0)
+		if (dirCmp(name, "messages"))
 		{
 			modTypes |= ModTypes::Messages;
 			return true; // continue with next
 		}
-		if ((strcmp(name, "fonts") == 0) || (strcmp(name, "icons") == 0) || (strcmp(name, "images") == 0))
+		if (dirCmp(name, "fonts") || dirCmp(name, "icons") || dirCmp(name, "images"))
 		{
 			modTypes |= ModTypes::MiscUI;
 			return true; // continue with next
 		}
-		if ((strcmp(name, "audio") == 0) || (strcmp(name, "sequenceaudio") == 0))
+		if (dirCmp(name, "audio") || dirCmp(name, "sequenceaudio"))
 		{
 			modTypes |= ModTypes::Sound;
 			return true; // continue with next
 		}
-		if (strcmp(name, "tileset") == 0)
+		if (dirCmp(name, "tileset"))
 		{
 			modTypes |= ModTypes::Tilesets;
 			return true; // continue with next
 		}
-		if (strcmp(name, "wrf") == 0)
+		if (dirCmp(name, "wrf"))
 		{
 			modTypes |= ModTypes::Datasets;
 			return true; // continue with next
@@ -1708,16 +1734,16 @@ uint64_t MapPackage::baseModificationTypes()
 	}
 
 	// - Second pass (multiplay folder)
-	enumSuccess = m_mapIO->enumerateFolders(m_mapIO->pathJoin(m_pathToMapPackage, "multiplay"), [&modTypes](const char *name) -> bool {
+	enumSuccess = m_mapIO->enumerateFolders(m_mapIO->pathJoin(m_pathToMapPackage, "multiplay"), [&modTypes, &pathSeparator](const char *name) -> bool {
 		if (!name) { return true; }
 		if (*name == '\0') { return true; }
 
-		if (strcmp(name, "script") == 0)
+		if (dirCmp(name, "script"))
 		{
 			modTypes |= ModTypes::Scripts;
 			return true; // continue with next
 		}
-		if (strcmp(name, "skirmish") == 0)
+		if (dirCmp(name, "skirmish"))
 		{
 			modTypes |= ModTypes::SkirmishAI;
 			return true; // continue with next
