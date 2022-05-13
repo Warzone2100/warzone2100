@@ -60,6 +60,7 @@ enum class LevelFormat {
 	LEV, // the old (classic) .lev file format
 	JSON // the new (in-folder) level.json format
 };
+constexpr LevelFormat LatestLevelFormat = LevelFormat::JSON;
 
 constexpr size_t OLD_MAX_LEVEL_SIZE = 20;
 struct GamInfo
@@ -125,6 +126,10 @@ public:
 	// Obtain the LevelDetails
 	const LevelDetails& levelDetails() const;
 
+	// Get the loaded level details format
+	// Note: Returns a value only if the MapPackage was loaded (i.e. via loadPackage)
+	optional<LevelFormat> loadedLevelDetailsFormat() const;
+
 	// Get the map data
 	// Returns nullptr if the loading failed
 	std::shared_ptr<Map> loadMap(uint32_t seed, std::shared_ptr<LoggingProtocol> logger = nullptr);
@@ -135,8 +140,9 @@ public:
 		Map_Mod		// a package that contains a map and (potentially) other modifications to core game files / textures / data (i.e. a "map mod")
 	};
 	MapPackageType packageType();
+	bool isFlatMapPackage() { return m_flatMapPackage; }
 
-	// Get the type of base file modifications in the "map mod"
+	// Types of base file modifications in a "map mod"
 	enum ModTypes {
 		GameModels = (1 << 0),	// .pie models (for components, features, structs, misc)
 		Effects = (1 << 1),		// .pie models (for effects)
@@ -151,7 +157,14 @@ public:
 		Tilesets = (1 << 10),	// tileset
 		Datasets = (1 << 11),	// wrf
 	};
+	static constexpr ModTypes LastModType = ModTypes::Datasets;
+	static std::string to_string(ModTypes modType);
+
+	bool modTypesEnumerate(uint64_t modTypesValue, std::function<void (ModTypes modType)> func);
+
+	// Get the type of base file modifications in the "map mod"
 	uint64_t baseModificationTypes();
+	bool modTypesEnumerate(std::function<void (ModTypes modType)> func);
 
 	// Extract various map stats / info
 	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig = MapStatsConfiguration());
@@ -161,6 +174,7 @@ private:
 
 private:
 	std::string m_pathToMapPackage;
+	optional<LevelFormat> m_loadedLevelFormat;
 	LevelDetails m_levelDetails;
 	GamInfo	m_gamInfo;
 	MapType m_mapType;
