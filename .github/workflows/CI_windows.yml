@@ -20,16 +20,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - compiler: "MSVC_2022"
+          - compiler: "MSVC_2019"
             architecture: "x86"
             deploy_release: true
             support_sentry : true
-          - compiler: "MSVC_2022"
+          - compiler: "MSVC_2019"
             architecture: "x64"
             artifact_description: "msvc_x64"
             deploy_release: false
             support_sentry : true
-          - compiler: "MSVC_2022"
+          - compiler: "MSVC_2019"
             architecture: "arm64"
             deploy_release: true
           - compiler: "MINGW_CLANG"
@@ -45,7 +45,7 @@ jobs:
       UseMultiToolTask: true
       EnforceProcessCountAcrossBuilds: true
     name: '${{ matrix.architecture }} [${{ matrix.compiler }}]'
-    runs-on: windows-2022
+    runs-on: windows-2019
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v2
