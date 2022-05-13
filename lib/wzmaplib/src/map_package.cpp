@@ -179,7 +179,7 @@ std::string internal_baseDir(const std::string& fullPathToFile, IOProvider& mapI
 	if (lastSlash == std::string::npos)
 	{
 		// Did not find a path separator
-		debug(pCustomLogger, LOG_WARNING, "Did not find parent path in \"%s\" (path separator: \"%s\")", fullPathToFile.c_str(), pathSeparator);
+		debug(pCustomLogger, LOG_INFO_VERBOSE, "Did not find parent path in \"%s\" (path separator: \"%s\")", fullPathToFile.c_str(), pathSeparator);
 		// Default to an empty path
 		return std::string();
 	}
@@ -1072,6 +1072,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 			// Successfully found a level.json file inside the enumerated map folder
 			std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
 			result->m_levelDetails = loadedLevelDetails.value();
+			result->m_loadedLevelFormat = LevelFormat::JSON;
 			result->m_mapType = result->m_levelDetails.type;
 			result->m_pathToMapPackage = pathToMapPackage;
 			result->m_mapIO = pMapIO;
@@ -1087,6 +1088,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		// Successfully found a level.json file inside the root folder
 		std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
 		result->m_levelDetails = loadedFlatLevelDetails.value();
+		result->m_loadedLevelFormat = LevelFormat::JSON;
 		result->m_mapType = result->m_levelDetails.type;
 		result->m_pathToMapPackage = pathToMapPackage;
 		result->m_mapIO = pMapIO;
@@ -1130,7 +1132,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 	{
 		const auto& levFile = rootLevFiles[idx];
 		std::string originalGenerator;
-		auto loadedLevelDetails = loadLevelDetails(levFilePath + levFile, mapIO, pCustomLogger, &originalGenerator);
+		auto loadedLevelDetails = loadLevelDetails_LEV(levFilePath + levFile, mapIO, pCustomLogger);
 		if (loadedLevelDetails.has_value())
 		{
 			enumSuccess = mapIO.enumerateFiles(loadedLevelDetails.value().mapFolderPath, [pCustomLogger](const char *file) -> bool {
@@ -1143,6 +1145,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 			// Successfully loaded level details from a .lev file in the root
 			std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
 			result->m_levelDetails = loadedLevelDetails.value();
+			result->m_loadedLevelFormat = LevelFormat::LEV;
 			result->m_mapType = result->m_levelDetails.type;
 			result->m_pathToMapPackage = pathToMapPackage;
 			result->m_mapIO = pMapIO;
@@ -1343,7 +1346,7 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	{
 		// Since the new JSON level format is requested, and a "plain" map package is being output,
 		// Can create a "flattened" map package! (where everything is in the root of the archive)
-		debug(pCustomLogger, LOG_ERROR, "Output map supports a \"flattened\" plain map archive");
+		debug(pCustomLogger, LOG_INFO, "Output map supports a \"flattened\" plain map archive");
 		mapFolderPath = "";
 	}
 
@@ -1451,6 +1454,13 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 const LevelDetails& MapPackage::levelDetails() const
 {
 	return m_levelDetails;
+}
+
+// Get the loaded level details format
+// Note: Returns a value only if the MapPackage was loaded (i.e. via loadPackage)
+optional<LevelFormat> MapPackage::loadedLevelDetailsFormat() const
+{
+	return m_loadedLevelFormat;
 }
 
 // Get the map data
@@ -1759,6 +1769,47 @@ uint64_t MapPackage::baseModificationTypes()
 
 	m_modTypes = modTypes;
 	return modTypes;
+}
+
+bool MapPackage::modTypesEnumerate(std::function<void (ModTypes modType)> func)
+{
+	return modTypesEnumerate(baseModificationTypes(), func);
+}
+
+bool MapPackage::modTypesEnumerate(uint64_t modTypesValue, std::function<void (ModTypes modType)> func)
+{
+	if (modTypesValue == 0) { return false; }
+	for (size_t i = 0; (1 << i) <= static_cast<size_t>(LastModType); i++)
+	{
+		size_t modTypeCurrent = (1 << i);
+		if ((modTypesValue & modTypeCurrent) == modTypeCurrent)
+		{
+			func(static_cast<ModTypes>(modTypeCurrent));
+		}
+	}
+	return true;
+}
+
+// NOTE: There may be clients that rely on the specific output for each of these ModTypes
+// DO NOT EDIT the string output for existing entries!!
+std::string MapPackage::to_string(MapPackage::ModTypes modType)
+{
+	switch (modType)
+	{
+		case MapPackage::ModTypes::GameModels: return "gamemodels";
+		case MapPackage::ModTypes::Effects: return "effects";
+		case MapPackage::ModTypes::Shaders: return "shaders";
+		case MapPackage::ModTypes::Stats: return "stats";
+		case MapPackage::ModTypes::Textures: return "textures";
+		case MapPackage::ModTypes::Scripts: return "scripts";
+		case MapPackage::ModTypes::SkirmishAI: return "skirmishai";
+		case MapPackage::ModTypes::Messages: return "messages";
+		case MapPackage::ModTypes::MiscUI: return "miscui";
+		case MapPackage::ModTypes::Sound: return "sound";
+		case MapPackage::ModTypes::Tilesets: return "tilesets";
+		case MapPackage::ModTypes::Datasets: return "datasets";
+	}
+	return "";	// silence warning
 }
 
 bool MapPackage::loadGamInfo()
