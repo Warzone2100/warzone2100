@@ -26,6 +26,12 @@ endif ()
 add_executable(maptools
 				maptools.cpp pngsave.cpp pngsave.h)
 target_link_libraries(maptools PRIVATE wzmaplib PNG::PNG)
+if (TARGET ZipIOProvider)
+	target_link_libraries(maptools PRIVATE ZipIOProvider)
+else()
+	message(WARNING "ZipIOProvider is not available - please ensure libzip is installed. maptools will be compiled without direct support for .wz archives")
+	target_compile_definitions(maptools PRIVATE "WZ_MAPTOOLS_DISABLE_ARCHIVE_SUPPORT")
+endif()
 
 if(MSVC)
 	target_compile_definitions(maptools PRIVATE "_CRT_SECURE_NO_WARNINGS")
