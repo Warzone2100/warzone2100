@@ -1779,9 +1779,9 @@ bool MapPackage::modTypesEnumerate(std::function<void (ModTypes modType)> func)
 bool MapPackage::modTypesEnumerate(uint64_t modTypesValue, std::function<void (ModTypes modType)> func)
 {
 	if (modTypesValue == 0) { return false; }
-	for (size_t i = 0; (1 << i) <= static_cast<size_t>(LastModType); i++)
+	for (size_t i = 0; (static_cast<size_t>(1) << i) <= static_cast<size_t>(LastModType); i++)
 	{
-		size_t modTypeCurrent = (1 << i);
+		size_t modTypeCurrent = (static_cast<size_t>(1) << i);
 		if ((modTypesValue & modTypeCurrent) == modTypeCurrent)
 		{
 			func(static_cast<ModTypes>(modTypeCurrent));
