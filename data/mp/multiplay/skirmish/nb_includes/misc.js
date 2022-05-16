@@ -58,7 +58,7 @@ function goEasy() {
 
 function areThereGW() {
 	function uncached() {	//should only need to be evaluated once at the start
-		if(gateways.length > 0)
+		if (gateways.length > 0)
 			return true;
 		return false;
 	}
