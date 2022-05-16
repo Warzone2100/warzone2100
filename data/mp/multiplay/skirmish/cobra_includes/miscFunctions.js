@@ -235,7 +235,7 @@ function getMostHarmfulPlayer()
 
 	 	for (let x = 0, c = enemies.length; x < c; ++x)
 		{
-	 		if((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
+	 		if ((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
 			{
 				mostHarmful = enemies[x];
 			}

@@ -527,7 +527,7 @@ function returnDefense(type)
 		var avail = 0;
 		for (let i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
 		{
-			if(isStructureAvailable(ELECTRONIC_DEFENSES[i]))
+			if (isStructureAvailable(ELECTRONIC_DEFENSES[i]))
 			{
 				avail += 1;
 			}

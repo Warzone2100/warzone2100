@@ -37,7 +37,7 @@ function eventStartLevel()
 //defend our derrick if possible.
 function eventStructureBuilt(structure, droid)
 {
-	if (!droid || (droid.player !== me ) || (droid.group !== oilGrabberGroup))
+	if (!droid || (droid.player !== me) || (droid.group !== oilGrabberGroup))
 	{
 		return;
 	}
