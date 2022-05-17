@@ -132,7 +132,7 @@ function buildOrder() {
 	if (gameTime > 300000 || difficulty === INSANE
 	                      || isStructureAvailable("A0ComDroidControl") || baseType !== CAMP_CLEAN)
 		return buildOrder_StandardFallback();
-	if (personality.chatalias === "fc" || personality.chatalias == "fr") {
+	if (personality.chatalias === "fc" || personality.chatalias === "fr") {
 		if (buildMinimum(structures.labs, 1)) return true;
 		if (buildMinimum(structures.factories, 1)) return true;
 		if (buildMinimum(structures.labs, 2)) return true;

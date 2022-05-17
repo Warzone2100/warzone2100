@@ -476,7 +476,7 @@ _global.spendMoney = function() {
 	queue("checkResearch", 100);
 	if (checkTruckProduction())
 		return; // will proceed on the next cycle
-	if (chooseObjectType() == OBJTYPE.DEFS)
+	if (chooseObjectType() === OBJTYPE.DEFS)
 		queue("checkConstruction", 200);
 	else
 		queue("checkProduction", 300);

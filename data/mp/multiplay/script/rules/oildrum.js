@@ -41,7 +41,7 @@ function placeOilDrum()
 	}
 
 	var terrain = terrainType(x, y);
-	if (terrain == TER_WATER || terrain == TER_CLIFFFACE)
+	if (terrain === TER_WATER || terrain === TER_CLIFFFACE)
 	{
 		unreachable = true;
 	}
@@ -59,13 +59,13 @@ function placeOilDrum()
 
 function eventPickup(feature, droid)
 {
-	if (feature.stattype == OIL_DRUM)
+	if (feature.stattype === OIL_DRUM)
 	{
 		var delay;
 		// generate Geom(1/6) distribution for oil drum respawn delay
 		for (delay = 0; ; ++delay)
 		{
-			if (syncRandom(6) == 0)
+			if (syncRandom(6) === 0)
 			{
 				break;
 			}

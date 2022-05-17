@@ -7,7 +7,7 @@ function targetVTOL(){
 	var target = [];
 	var scout = [];
 
-	if(!(policy['build'] == 'rich')) {
+	if(!(policy['build'] === 'rich')) {
 		target = target.concat(sortByDistance(getEnemyResources(), base));
 	}
 
@@ -26,10 +26,10 @@ function targetVTOL(){
 
 	var ready = enumGroup(VTOLAttacker).filter((e) => {
 //		debugMsg(e.id+"-"+e.action, 'vtol');
-		return !(e.action == 32 || e.action == 33 || e.action == 34 || e.action == 35 || e.action == 36 || e.action == 37 || e.action == 41 || e.action == 1);
+		return !(e.action === 32 || e.action === 33 || e.action === 34 || e.action === 35 || e.action === 36 || e.action === 37 || e.action === 41 || e.action === 1);
 	});
 
-	var group = enumGroup(VTOLAttacker).filter((e) => (e.action == 41 || e.action == 1 || distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) > base_range));
+	var group = enumGroup(VTOLAttacker).filter((e) => (e.action === 41 || e.action === 1 || distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) > base_range));
 //	debugMsg("VTOLs: "+groupSize(VTOLAttacker)+"; patrol: "+ready.length+"; ready: "+group.length+"; targets: "+target.length, "vtol");
 	if(group.length >= 3 && (target.length > 0 || scout.length > 0) ) {
 //		debugMsg("Attack!", "vtol");
@@ -55,7 +55,7 @@ function targetVTOL(){
 
 			if(group.length <= 8){
 
-				if(!(policy['build'] == 'rich')){
+				if(!(policy['build'] === 'rich')){
 					attackObjects(target, group, target.length, false);
 				}/* else{
 					group.forEach((e) => {
@@ -257,11 +257,11 @@ function targetPartisan(){
 //		debugMsg("Партизан="+partisans.length+", атакую "+target[0].name+" расстояние от партизан="+distBetweenTwoPoints_p(partisans[0].x,partisans[0].y,target[0].x,target[0].y)+", от базы="+distBetweenTwoPoints_p(base.x,base.y,target[0].x,target[0].y), 'targeting');
 		partisans.forEach((e) => {
 
-			if( (target[0].type == STRUCTURE && target[0].stattype == WALL) || (target[0].type == DROID && target[0].droidType == DROID_CONSTRUCT) ){
+			if( (target[0].type === STRUCTURE && target[0].stattype === WALL) || (target[0].type === DROID && target[0].droidType === DROID_CONSTRUCT) ){
 				orderDroidObj_p(e, DORDER_ATTACK, target[0]);
 //				debugMsg("ATTACK "+target[0].name, 'targeting');
 			}
-			else if(se_r >= army_rich && target[0].type == FEATURE && target[0].stattype == OIL_RESOURCE){
+			else if(se_r >= army_rich && target[0].type === FEATURE && target[0].stattype === OIL_RESOURCE){
 				orderDroidLoc_p(e, DORDER_MOVE, target[0].x, target[0].y);
 			}
 			else{
@@ -331,11 +331,11 @@ function pointRegularArmy(army){
 	//Если есть точка сбора для армии
 	if(pointRegular){
 		//Ближайшие войска к точке сбора
-		var near = enumRange(pointRegular.x, pointRegular.y, 20, ALLIES).filter((obj) => ((obj.type == DROID && (obj.droidType == DROID_WEAPON || obj.droidType == DROID_CYBORG)) || (obj.type == STRUCTURE && obj.stattype == DEFENSE)));
-//		var near = enumRange(pointRegular.x, pointRegular.y, 20, ALLIES).filter((obj) => (obj.group == army[0].group));
+		var near = enumRange(pointRegular.x, pointRegular.y, 20, ALLIES).filter((obj) => ((obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG)) || (obj.type === STRUCTURE && obj.stattype === DEFENSE)));
+//		var near = enumRange(pointRegular.x, pointRegular.y, 20, ALLIES).filter((obj) => (obj.group === army[0].group));
 
 		//Вражеские войска на нашей точке сбора
-		var enemy = enumRange(pointRegular.x, pointRegular.y, 40, ENEMIES, true).filter((obj) => ((obj.type==DROID && !obj.isVTOL) || (obj.type == STRUCTURE && obj.stattype == DEFENSE)));
+		var enemy = enumRange(pointRegular.x, pointRegular.y, 40, ENEMIES, true).filter((obj) => ((obj.type === DROID && !obj.isVTOL) || (obj.type === STRUCTURE && obj.stattype === DEFENSE)));
 
 		//Если точка сбора уже оккупирована, сбрасываем её
 		if(enemy.length > 0) pointRegular = false;
@@ -346,10 +346,10 @@ function pointRegularArmy(army){
 	//Если нет точки сбора
 	if(!pointRegular){
 		//Ближайшие войска к самому дальному от стартовой позиции (передовая армия)
-		var near = enumRange(army[0].x, army[0].y, 20, ALLIES).filter((obj) => ((obj.type == DROID && (obj.droidType == DROID_WEAPON || obj.droidType == DROID_CYBORG)) || (obj.type == STRUCTURE && obj.stattype == DEFENSE)));
+		var near = enumRange(army[0].x, army[0].y, 20, ALLIES).filter((obj) => ((obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG)) || (obj.type === STRUCTURE && obj.stattype === DEFENSE)));
 
 		//Ближайшие враги к передовой армии
-		var enemy = enumRange(army[0].x, army[0].y, 40, ENEMIES, true).filter((obj) => ((obj.type==DROID && !obj.isVTOL) || (obj.type == STRUCTURE && obj.stattype == DEFENSE)));
+		var enemy = enumRange(army[0].x, army[0].y, 40, ENEMIES, true).filter((obj) => ((obj.type === DROID && !obj.isVTOL) || (obj.type === STRUCTURE && obj.stattype === DEFENSE)));
 		if(enemy.length > 0) lastEnemiesSeen = enemy.length;
 
 //		var pointDist = false;
@@ -379,7 +379,7 @@ function pointRegularArmy(army){
 		var armyDist = distBetweenTwoPoints_p(army[0].x, army[0].y, startPos.x, startPos.y);
 
 		var def = [];
-		if(rage == MEDIUM){
+		if(rage === MEDIUM){
 			var def = sortByDistance(getOurDefences().filter((e) => (distBetweenTwoPoints_p(e.x, e.y, startPos.x, startPos.y) < armyDist)), startPos);
 			def.reverse();
 		}
@@ -420,10 +420,10 @@ function targetRegularRich(target, victim){
 	if(regular.length === 0) return false;
 
 	//Если из армии атакован огненный боец, берём всех огненных рядом и в партизаны/камикадзе
-	if(victim != false && victim.droidType == DROID_WEAPON){
+	if(victim != false && victim.droidType === DROID_WEAPON){
 //		debugMsg("Check weapon for "+victim.name, "army");
 		if(Stats.Weapon[victim.weapons[0].fullname].ImpactType === "HEAT") {
-			enumRange(victim.x, victim.y, 7, ALLIES).filter((obj) => (obj.type == DROID && obj.droidType == DROID_WEAPON && Stats.Weapon[obj.weapons[0].fullname].ImpactType === "HEAT"))
+			enumRange(victim.x, victim.y, 7, ALLIES).filter((obj) => (obj.type === DROID && obj.droidType == DROID_WEAPON && Stats.Weapon[obj.weapons[0].fullname].ImpactType === "HEAT"))
 			.forEach((d) => {groupAdd(armyPartisans, d);});
 		}
 	}
@@ -446,13 +446,13 @@ function targetRegularRich(target, victim){
 			//Если атакованный дроид дальше от базы, чем армия, идём туда.
 			if(distBetweenTwoPoints_p(base.x, base.y, victim.x, victim.y) > distBetweenTwoPoints_p(base.x, base.y, regular[0].x,regular[0].y)) targRegular = target;
 
-			if(reactWarriorsTrigger < gameTime && victim.type == DROID && victim.group == regular[0].group){
+			if(reactWarriorsTrigger < gameTime && victim.type === DROID && victim.group === regular[0].group){
 				reactWarriorsTrigger = gameTime + reactWarriorsTimer;
-				var near = enumRange(victim.x, victim.y, 20, ALLIES).filter((obj) => (obj.group == regular[0].group));
+				var near = enumRange(victim.x, victim.y, 20, ALLIES).filter((obj) => (obj.group === regular[0].group));
 //				debugMsg('Ответный огонь '+near.length, 'targeting');
 				near.forEach((e) => {orderDroidLoc_p(e, DORDER_SCOUT, target.x, target.y);});
 			}else{
-				if( (victim.type == DROID && victim.droidType == DROID_CONSTRUCT) || victim.type == STRUCTURE) targRegular = target;
+				if( (victim.type === DROID && victim.droidType === DROID_CONSTRUCT) || victim.type === STRUCTURE) targRegular = target;
 			}
 		}else{
 			targRegular = target;
@@ -485,7 +485,7 @@ function targetRegularRich(target, victim){
 		var endPoint = {x:targRegular.x,y:targRegular.y};
 	}
 
-	if(targRegular.x == 0 && targRegular.y == 0 && !target){
+	if(targRegular.x === 0 && targRegular.y === 0 && !target){
 //		debugMsg("regular: Стандартный сбор у базы", 'targeting');
 		targRegular = base;
 	}
@@ -527,7 +527,7 @@ function targetRegular(target, victim){
 	if(typeof victim === "undefined") victim = false;
 
 	//	Перенаправляем функцию
-	if(se_r >= army_rich && (rage == MEDIUM || rage == HARD || rage == INSANE)){
+	if(se_r >= army_rich && (rage === MEDIUM || rage === HARD || rage === INSANE)){
 		if(targetRegularRich(target, victim)) return true;
 		return false;
 	}
@@ -557,7 +557,7 @@ function targetRegular(target, victim){
 //		debugMsg("regular: event не достежим", 'targeting');
 		target = false;
 	}
-	if(targRegular.x == 0 && targRegular.y == 0 && !target){
+	if(targRegular.x === 0 && targRegular.y === 0 && !target){
 //		debugMsg("regular: Стандартный сбор у базы", 'targeting');
 		targRegular = base;
 	}

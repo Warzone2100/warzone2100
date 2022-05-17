@@ -375,7 +375,7 @@ function init(){
 	//Определеяем моды
 	debugMsg("MODS: "+modList, "init");
 
-	if(modList.indexOf('oilfinite')!==-1){
+	if(modList.indexOf('oilfinite') !== -1){
 		nf['oilfinite'] = true;
 		debugMsg('Consider oilfinite mod', "init");
 	}
@@ -383,7 +383,7 @@ function init(){
 	//Определяем мусорщиков
 	//Больше не требуется, игра сама предоставляет эту переменную
 //	scavengerPlayer = (scavengers) ? Math.max(7,maxPlayers) : -1;
-	if(scavengers != NO_SCAVENGERS)debugMsg("На карте присудствуют гопники! {"+scavengerPlayer+"}", "init");
+	if(scavengers !== NO_SCAVENGERS)debugMsg("На карте присудствуют гопники! {"+scavengerPlayer+"}", "init");
 	else debugMsg("На карте отсутствуют гопники", "init");
 
 //	base = startPositions[me];
@@ -416,7 +416,7 @@ function init(){
 		var msg = "Игрок №"+player+" "+colors[data.colour];
 		var dist = distBetweenTwoPoints_p(base.x,base.y,startPositions[player].x,startPositions[player].y);
 
-		if (player == me) {
+		if (player === me) {
 			msg+=" я сам ИИ";
 			bc_ally.push(player);
 //			debugMsg("TEST: "+bc_ally.length, 'research');
@@ -427,7 +427,7 @@ function init(){
 		else if(allianceExistsBetween(me,player)){
 			msg+=" мой союзник ";
 			ally.push(player);
-			if(data.name == 'bc-master' || data.name.substr(0,11) == "BoneCrusher"){ msg+="BC!"; bc_ally.push(player);}
+			if(data.name === 'bc-master' || data.name.substr(0,11) === "BoneCrusher"){ msg+="BC!"; bc_ally.push(player);}
 			else{msg+=data.name;}
 		}
 		else{
@@ -437,7 +437,7 @@ function init(){
 			else if(propulsionCanReach('hover01', base.x, base.y, startPositions[player].x, startPositions[player].y)){ msg+= ", по воде"; access = 'island';}
 			else if(propulsionCanReach('V-Tol', base.x, base.y, startPositions[player].x, startPositions[player].y)){ msg+= ", по воздуху"; access = 'air';}
 			else {msg+= ", не доступен!"; access = 'island';}
-			if(!nf['policy'] || nf['policy'] == 'island' || nf['policy'] == 'air'){nf['policy'] = access;}
+			if(!nf['policy'] || nf['policy'] === 'island' || nf['policy'] === 'air'){nf['policy'] = access;}
 		}
 
 		msg+=" ["+startPositions[player].x+"x"+startPositions[player].y+"]";
@@ -457,8 +457,8 @@ function init(){
 		debugMsg("Имеются союзники" , 'init');
 	}
 	if(ally.length > 0){
-		if(alliancesType == 2) debugMsg("Исследования общие", 'init');
-		if(alliancesType == 3) debugMsg("Исследования раздельные", 'init');
+		if(alliancesType === 2) debugMsg("Исследования общие", 'init');
+		if(alliancesType === 3) debugMsg("Исследования раздельные", 'init');
 	}
 	if(nearResources.length >= build_rich){
 		policy['build'] = 'rich';
@@ -470,7 +470,7 @@ function init(){
 	debugMsg("Policy build order = "+policy['build'], 'init');
 	debugMsg("nf Policy = "+nf['policy'], 'init');
 
-	if(policy['build'] == 'rich'){
+	if(policy['build'] === 'rich'){
 
 		//Если есть союзники бонкрашеры
 		if(bc_ally.length > 1){
@@ -539,7 +539,7 @@ function init(){
 
 
 	//Лёгкий режим
-	if(rage == EASY){
+	if(rage === EASY){
 		debugMsg("Похоже я играю с нубами, будем поддаваться:", 'init');
 
 		//Забываем все предустановленные исследования
@@ -571,14 +571,14 @@ function init(){
 
 
 
-	}else if(rage == MEDIUM){
+	}else if(rage === MEDIUM){
 		buildersTimer = buildersTimer + Math.floor(Math.random()*5000 - 2000);
 		minBuilders = minBuilders + Math.floor(Math.random() * 5 - 2 );
 		builderPts = builderPts + Math.floor(Math.random() * 200 - 150);
 		minPartisans = minPartisans + Math.floor(Math.random() * 6 - 4);
 
 		//Если в союзниках человек и исслоедования общий, а мы на средней сложности, то просто поддерживаем исследования (без особой ветки)
-		if(alliancesType == 2 && isHumanAlly()){research_path = research_earlygame.concat(research_lasttech);}
+		if(alliancesType === 2 && isHumanAlly()){research_path = research_earlygame.concat(research_lasttech);}
 
 	}
 	debugMsg("minPartisans="+minPartisans+", minBuilders="+minBuilders+", builderPts="+builderPts+", buildersTimer="+buildersTimer, "init");
@@ -588,7 +588,7 @@ function init(){
 
 
 
-	if(nf['policy'] == 'island'){
+	if(nf['policy'] === 'island'){
 		debugMsg("Тактика игры: "+nf['policy'], 'init');
 		switchToIsland();
 	}
@@ -619,7 +619,7 @@ function letsRockThisFxxxingWorld(init){
 	include("multiplay/skirmish/"+vernum+"/weap-init.js");
 
 	//Remove chaingun and flamer cyborgs if better available
-	cyborgs = cyborgs.filter((e) => (!((e[2] == 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] == 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done))));
+	cyborgs = cyborgs.filter((e) => (!((e[2] === 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] === 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done))));
 
 	//Первых военных в группу
 	enumDroid(me,DROID_CYBORG).forEach((e) => {groupAdd(armyCyborgs, e);});
@@ -634,7 +634,7 @@ function letsRockThisFxxxingWorld(init){
 
 	running = true;
 	if(init){
-		if(rage == EASY){
+		if(rage === EASY){
 
 			setTimer("produceDroids", 10000+me*100);
 			setTimer("produceVTOL", 12000+me*100);
@@ -646,12 +646,12 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("targetVTOL", 120000+me*100); //Не раньше 30 сек.
 
 
-		} else if(rage == MEDIUM){
+		} else if(rage === MEDIUM){
 
 			setTimer("produceDroids", 7000+me*100);
 			setTimer("produceVTOL", 8000+me*100);
 			setTimer("produceCyborgs", 9000+me*100);
-//			if(policy['build'] == 'rich') setTimer("buildersOrder", 5000+me*100);
+//			if(policy['build'] === 'rich') setTimer("buildersOrder", 5000+me*100);
 //			else setTimer("buildersOrder", 120000+me*100);
 			setTimer("checkEventIdle", 30000+me*100);	//т.к. eventDroidIdle глючит, будем дополнительно отслежвать.
 			setTimer("doResearch", 30000+me*100);
@@ -659,8 +659,8 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
 			setTimer("targetRegular", 65000+me*100);
 
-			if(policy['build'] == 'rich') func_buildersOrder_timer = 5000+me*100;
-		} else if(rage == HARD || rage == INSANE){
+			if(policy['build'] === 'rich') func_buildersOrder_timer = 5000+me*100;
+		} else if(rage === HARD || rage === INSANE){
 
 //			research_way.unshift(["R-Defense-MortarPit-Incendiary"]);
 
@@ -703,7 +703,7 @@ function initBase(){
 
 	_builders.forEach((e) => {groupBuilders(e);});
 
-	if(policy['build'] == 'rich' && _builders.length > 4){
+	if(policy['build'] === 'rich' && _builders.length > 4){
 		groupAdd(buildersHunters, _builders[0]);
 		debugMsg('Builder --> Hunter +1', 'group');
 	}
@@ -716,14 +716,14 @@ function initBase(){
 
 function debugMsg(msg,level){
 	if (typeof level === "undefined") return;
-//	if (debugName == "Grey" ) return; //Временно
-	if(debugLevels.indexOf(level) == -1) return;
+//	if (debugName === "Grey" ) return; //Временно
+	if(debugLevels.indexOf(level) === -1) return;
 	var timeMsg = Math.floor(gameTime / 1000);
 	debug(shortname+"["+timeMsg+"]{"+debugName+"}("+level+"): "+msg);
 }
 
 function bc_eventStartLevel() {
-	if(version != '3.3.0')
+	if(version !== '3.3.0')
 	queue("init", 1000);
 }
 

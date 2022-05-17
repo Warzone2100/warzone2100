@@ -296,7 +296,7 @@ function buildDerrick()
 		var bestDist = Infinity;
 
 		//And don't waste time if all trucks became busy.
-		if (numBusy == drLen)
+		if (numBusy === drLen)
 		{
 			break;
 		}
