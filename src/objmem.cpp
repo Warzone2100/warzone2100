@@ -511,7 +511,7 @@ void killStruct(STRUCTURE *psBuilding)
 	ASSERT(psBuilding->type == OBJ_STRUCTURE,
 	       "killStruct: pointer is not a droid");
 	ASSERT(psBuilding->player < MAX_PLAYERS,
-	       "killStruct: invalid player for stucture");
+	       "killStruct: invalid player for structure");
 
 	if (psBuilding->pStructureType->pSensor
 	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)

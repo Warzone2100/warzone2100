@@ -119,7 +119,7 @@ slurp_symtab(bfd *abfd, asymbol ***syms, long *symcount)
 	return TRUE;
 }
 
-// This stucture is used to pass information between translate_addresses and find_address_in_section.
+// This structure is used to pass information between translate_addresses and find_address_in_section.
 struct find_handle
 {
 	asymbol **syms;

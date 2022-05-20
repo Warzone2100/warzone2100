@@ -903,7 +903,7 @@ std::pair<std::vector<size_t>, size_t> SpectatorStatsView::getMaxTableColumnData
 	size_t totalNeededColumnWidth = 0;
 	std::vector<size_t> maxColumnDataWidths;
 	auto& minimumColumnWidths = table->getMinimumColumnWidths();
-	ASSERT(minimumColumnWidths.size() == table->getNumColumns(), "Number of minimum column widths does not match number of colums!");
+	ASSERT(minimumColumnWidths.size() == table->getNumColumns(), "Number of minimum column widths does not match number of columns!");
 	for (size_t colIdx = 0; colIdx < table->getNumColumns(); ++colIdx)
 	{
 		int32_t maxIdealContentWidth = table->getColumnMaxContentIdealWidth(colIdx);

@@ -611,7 +611,7 @@ static bool findLastSaveFrom(SAVEGAME_LOC loc)
 				const auto saveInfoDataOpt = parseJsonFile(pathToSaveInfo.c_str());
 				if (!saveInfoDataOpt.has_value())
 				{
-					debug(LOG_SAVEGAME, "wierd directory without save-info.json: %s", dirName);
+					debug(LOG_SAVEGAME, "weird directory without save-info.json: %s", dirName);
 					return true;
 				}
 				const auto saveInfo = saveInfoDataOpt.value();
