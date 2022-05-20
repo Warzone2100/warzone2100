@@ -524,7 +524,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 		// Load the file in a buffer
 		if (!RetreiveResourceFile(aFileName, &Resource))
 		{
-			debug(LOG_ERROR, "resLoadFile: Unable to retreive resource - %s", aFileName);
+			debug(LOG_ERROR, "resLoadFile: Unable to retrieve resource - %s", aFileName);
 			return false;
 		}
 

@@ -651,7 +651,7 @@ public:
 				powerValue = std::stoi(powerString.toStdString());
 			}
 			catch (const std::exception&) {
-				debug(LOG_ERROR, "Invalid power value (not convertable to an integer - use numbers only): %s", powerString.toUtf8().c_str());
+				debug(LOG_ERROR, "Invalid power value (not convertible to an integer - use numbers only): %s", powerString.toUtf8().c_str());
 				return;
 			}
 			auto selectedPlayerCopy = selectedPlayer;

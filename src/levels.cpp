@@ -788,7 +788,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	// reset the old mission data if necessary
 	if (psCurrLevel != nullptr)
 	{
-		debug(LOG_WZ, "Reseting old mission data");
+		debug(LOG_WZ, "Resetting old mission data");
 		if (!levReleaseMissionData())
 		{
 			debug(LOG_ERROR, "Failed to unload old mission data");
