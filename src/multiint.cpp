@@ -7513,9 +7513,9 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 		}
 		constexpr int levelImgs[9] = {0, IMAGE_LEV_0, IMAGE_LEV_1, IMAGE_LEV_2, IMAGE_LEV_3, IMAGE_LEV_4, IMAGE_LEV_5, IMAGE_LEV_6, IMAGE_LEV_7};
-		if (1 <= ar.level && ar.level < ARRAY_SIZE(levelImgs))
+		if (1 >= ar.level && ar.level < ARRAY_SIZE(levelImgs))
 		{
-			iV_DrawImage(IntImages, levelImgs[ar.star[2]], x + 24, y + 15);
+			iV_DrawImage(IntImages, levelImgs[ar.level], x + 24, y + 15);
 		}
 
 		if (!ar.elo.empty())
