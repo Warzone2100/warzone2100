@@ -935,8 +935,8 @@ static bool writeGamFile_OldBinary(const std::string& filePath, const GamInfo& g
 	}
 
 	// Write version numbers below version 35 as little-endian, and those above as big-endian
-	if (version < 35)
-	{
+//	if (version < 35) // uncomment this if version is ever >= 35
+//	{
 		if (!writeStream->writeULE32(version))
 		{
 			return false;
@@ -949,22 +949,22 @@ static bool writeGamFile_OldBinary(const std::string& filePath, const GamInfo& g
 				&& writeStream->writeULE32(gamInfo.ScrollMaxX)
 				&& writeStream->writeULE32(gamInfo.ScrollMaxY)
 				&& writeStream->writeBytes(gamInfo.levelName, OLD_MAX_LEVEL_SIZE) == OLD_MAX_LEVEL_SIZE);
-	}
-	else
-	{
-		if (!writeStream->writeUBE32(version))
-		{
-			return false;
-		}
-
-		return (writeStream->writeUBE32(gamInfo.gameTime)
-				&& writeStream->writeUBE32(gamInfo.GameType)
-				&& writeStream->writeSBE32(gamInfo.ScrollMinX)
-				&& writeStream->writeSBE32(gamInfo.ScrollMinY)
-				&& writeStream->writeUBE32(gamInfo.ScrollMaxX)
-				&& writeStream->writeUBE32(gamInfo.ScrollMaxY)
-				&& writeStream->writeBytes(gamInfo.levelName, OLD_MAX_LEVEL_SIZE) == OLD_MAX_LEVEL_SIZE);
-	}
+//	}
+//	else	// uncomment this if version is ever >= 35
+//	{
+//		if (!writeStream->writeUBE32(version))
+//		{
+//			return false;
+//		}
+//
+//		return (writeStream->writeUBE32(gamInfo.gameTime)
+//				&& writeStream->writeUBE32(gamInfo.GameType)
+//				&& writeStream->writeSBE32(gamInfo.ScrollMinX)
+//				&& writeStream->writeSBE32(gamInfo.ScrollMinY)
+//				&& writeStream->writeUBE32(gamInfo.ScrollMaxX)
+//				&& writeStream->writeUBE32(gamInfo.ScrollMaxY)
+//				&& writeStream->writeBytes(gamInfo.levelName, OLD_MAX_LEVEL_SIZE) == OLD_MAX_LEVEL_SIZE);
+//	}
 }
 
 static bool writeGamFile_JSON(const std::string& filePath, const GamInfo& gamInfo, IOProvider& exportIO, LoggingProtocol* logger)
