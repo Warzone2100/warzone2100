@@ -40,6 +40,37 @@ target_link_libraries(wzmaplib PRIVATE quickjs)
 
 find_package(libzip QUIET)
 if (libzip_FOUND)
+	# Test linking libzip
+	include(CheckCXXSourceCompiles)
+	include(CMakePushCheckState)
+	set(_test_libzip_source
+		"#include <zip.h>\n \
+		void foo() { /* do nothing */ }\n \
+		int main() {\n \
+			const char* libzip_ver_string = zip_libzip_version();\n \
+			if (!libzip_ver_string) { return 1; }\n \
+			return 0;\n \
+		}"
+	)
+	cmake_push_check_state(RESET)
+	set(CMAKE_REQUIRED_LIBRARIES "libzip::zip")
+	# libzip exported CMake config does not currently include all required support libraries - see: https://github.com/nih-at/libzip/issues/205
+	# So manually find and link them
+	find_package (ZLIB REQUIRED)
+	list(APPEND CMAKE_REQUIRED_LIBRARIES "ZLIB::ZLIB")
+	find_package (BZip2)
+	if (BZip2_FOUND)
+		list(APPEND CMAKE_REQUIRED_LIBRARIES "BZip2::BZip2")
+	endif()
+	check_cxx_source_compiles("${_test_libzip_source}" libzip_LINK_TEST)
+	cmake_pop_check_state()
+	if(libzip_LINK_TEST)
+		message( STATUS "Found libzip... (link test successful)" )
+	else()
+		message( STATUS "Found libzip, but link test NOT successful" )
+	endif()
+endif()
+if (libzip_FOUND AND libzip_LINK_TEST)
 	file(GLOB ZIPIOPROVIDER_HEADERS "plugins/ZipIOProvider/include/ZipIOProvider.h")
 	file(GLOB ZIPIOPROVIDER_SRC "plugins/ZipIOProvider/src/ZipIOProvider.cpp")
 
