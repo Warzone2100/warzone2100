@@ -32,7 +32,7 @@
 #include "lib/framework/vector.h"
 #include "gamedef.h"
 #include "levels.h"
-#include <3rdparty/json/json_fwd.hpp>
+#include <nlohmann/json_fwd.hpp>
 #include <optional-lite/optional.hpp>
 #include <sstream>
 /***************************************************************************/

@@ -42,7 +42,7 @@
 #  endif
 #endif
 
-#include <3rdparty/json/json.hpp>
+#include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
 #if defined(__clang__) && defined(__has_cpp_attribute)

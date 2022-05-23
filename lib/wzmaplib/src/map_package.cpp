@@ -23,7 +23,7 @@
 #include "map_internal.h"
 #include "map_levparse.h"
 #include "../include/wzmaplib/map_package.h"
-#include <json/json.hpp>
+#include <nlohmann/json.hpp>
 #include <cinttypes>
 #include <unordered_set>
 #include <limits>

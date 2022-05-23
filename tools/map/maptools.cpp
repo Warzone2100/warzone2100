@@ -32,7 +32,7 @@
 #if !defined(WZ_MAPTOOLS_DISABLE_ARCHIVE_SUPPORT)
 #include <ZipIOProvider.h>
 #endif
-#include <json/json.hpp>
+#include <nlohmann/json.hpp>
 #include <iostream>
 #include <string>
 #include <cstdlib>

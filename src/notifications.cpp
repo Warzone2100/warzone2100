@@ -23,7 +23,7 @@
  *
  */
 
-#include <3rdparty/json/json.hpp> // Must come before WZ includes
+#include <nlohmann/json.hpp> // Must come before WZ includes
 using json = nlohmann::json;
 
 #include "lib/framework/frame.h"

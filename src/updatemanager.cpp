@@ -17,7 +17,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include <3rdparty/json/json.hpp> // Must come before WZ includes
+#include <nlohmann/json.hpp> // Must come before WZ includes
 using json = nlohmann::json;
 
 #include "version.h"

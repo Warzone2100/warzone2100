@@ -23,10 +23,15 @@ if(MSVC)
 	target_compile_definitions(wzmaplib PRIVATE "_CRT_SECURE_NO_WARNINGS")
 endif()
 target_include_directories(wzmaplib PUBLIC "include")
-# for optional-lite + nlohmann::json header-only libraries
+# for optional-lite header-only library
 target_include_directories(wzmaplib PUBLIC "../../3rdparty/")
-target_compile_definitions(wzmaplib PRIVATE "JSON_USE_IMPLICIT_CONVERSIONS=0")
 
+if(NOT TARGET nlohmann_json)
+	set(JSON_ImplicitConversions OFF CACHE BOOL "Enable implicit conversions." FORCE)
+	set(JSON_SystemInclude ON CACHE BOOL "Include as system headers (skip for clang-tidy)." FORCE)
+	add_subdirectory("../../3rdparty/json" "3rdparty/json" EXCLUDE_FROM_ALL)
+endif()
+target_link_libraries(wzmaplib PRIVATE nlohmann_json)
 if(NOT TARGET quickjs)
 	add_subdirectory("../../3rdparty/quickjs-wz" "3rdparty/quickjs-wz" EXCLUDE_FROM_ALL)
 endif()
