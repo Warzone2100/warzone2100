@@ -20,6 +20,7 @@
 #include "../include/wzmaplib/map_stats.h"
 #include "../include/wzmaplib/map.h"
 #include "map_internal.h"
+#include "map_jsonhelpers.h"
 
 #include <vector>
 #include <unordered_map>

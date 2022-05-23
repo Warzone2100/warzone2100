@@ -21,6 +21,7 @@
 #include "map_crc.h"
 #include "map_script.h"
 #include "map_internal.h"
+#include "map_jsonhelpers.h"
 #include "map_levparse.h"
 #include "../include/wzmaplib/map_package.h"
 #include <nlohmann/json.hpp>

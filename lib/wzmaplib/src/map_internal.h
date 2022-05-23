@@ -24,8 +24,8 @@
 #include <cstdarg>
 #include <cstdio>
 #include <string>
+#include <vector>
 
-#include <nlohmann/json.hpp>
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -65,8 +65,6 @@ void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol:
 #else
 void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol::LogLevel level, const char *function, const char *str, ...) MAPLIB_DECL_FORMAT(printf, 5, 6);
 #endif
-
-optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, WzMap::IOProvider& mapIO, WzMap::LoggingProtocol* pCustomLogger = nullptr);
 
 static inline bool strEndsWith(const std::string &str, const std::string &suffix)
 {
