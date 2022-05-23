@@ -22,6 +22,7 @@
 #include "map_crc.h"
 #include "map_script.h"
 #include "map_internal.h"
+#include "map_jsonhelpers.h"
 #include <nlohmann/json.hpp>
 #include <cinttypes>
 #include <unordered_set>
@@ -326,64 +327,6 @@ bool writeMapData(const MapData& map, const std::string &filename, IOProvider& m
 }
 
 // MARK: - Helper functions for loading / saving JSON files
-optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
-{
-	const auto &path = filename.c_str();
-	std::vector<char> data;
-	if (!mapIO.loadFullFile(filename, data))
-	{
-		return nullopt;
-	}
-	if (data.empty())
-	{
-		debug(pCustomLogger, LOG_ERROR, "Empty file: %s", path);
-		return nullopt;
-	}
-	if (data.back() != 0)
-	{
-		data.push_back('\0'); // always ensure data is null-terminated
-	}
-
-	// parse JSON
-	nlohmann::json mRoot;
-	try {
-		mRoot = nlohmann::json::parse(data.begin(), data.end() - 1);
-	}
-	catch (const std::exception &e) {
-		debug(pCustomLogger, LOG_ERROR, "JSON document from %s is invalid: %s", path, e.what());
-		return nullopt;
-	}
-	catch (...) {
-		debug(pCustomLogger, LOG_ERROR, "Unexpected exception parsing JSON %s", path);
-		return nullopt;
-	}
-	if (mRoot.is_null())
-	{
-		debug(pCustomLogger, LOG_ERROR, "JSON document from %s is null", path);
-		return nullopt;
-	}
-	if (!mRoot.is_object())
-	{
-		debug(pCustomLogger, LOG_ERROR, "JSON document from %s is not an object. Read: \n%s", path, data.data());
-		return nullopt;
-	}
-	data.clear();
-
-	return mRoot;
-}
-
-static bool saveOrderedJsonObjectToFile(const nlohmann::ordered_json& jsonObj, const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
-{
-	std::string jsonStr = jsonObj.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::ignore);
-#if SIZE_MAX > UINT32_MAX
-	if (jsonStr.size() > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
-	{
-		debug(pCustomLogger, LOG_ERROR, "jsonString.size (%zu) exceeds uint32_t::max", jsonStr.size());
-		return false;
-	}
-#endif
-	return mapIO.writeFullFile(filename, jsonStr.c_str(), static_cast<uint32_t>(jsonStr.size()));
-}
 
 // Left-pads the current string with codepoint ch up to the minimumStringLength
 // If the current string length() is already >= minimumStringLength, no padding occurs.
