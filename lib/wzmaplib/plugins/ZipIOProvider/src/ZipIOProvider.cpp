@@ -98,7 +98,7 @@ public:
 		return result;
 	}
 
-	static std::unique_ptr<WzMapBinaryZipIOStream> openForWriting(const std::string& filename, std::shared_ptr<WrappedZipArchive> zipArchive)
+	static std::unique_ptr<WzMapBinaryZipIOStream> openForWriting(const std::string& filename, std::shared_ptr<WrappedZipArchive> zipArchive, bool fixedLastMod = false)
 	{
 		if (filename.empty() || zipArchive == nullptr)
 		{
@@ -106,6 +106,7 @@ public:
 		}
 		auto result = std::unique_ptr<WzMapBinaryZipIOStream>(new WzMapBinaryZipIOStream(zipArchive, WzMap::BinaryIOStream::OpenMode::WRITE));
 		result->m_filename = filename;
+		result->m_fixedLastMod = fixedLastMod;
 		return result;
 	}
 
@@ -209,6 +210,11 @@ public:
 				m_filename.clear();
 				return false;
 			}
+			if (m_fixedLastMod)
+			{
+				// Use Jan 1, 1980 + 12 hours and 1 minute to avoid time zone weirdness (matching "strip-nondeterminism" script behavior)
+				zip_file_set_dostime(m_zipArchive->handle(), static_cast<zip_uint64_t>(result), 0x6020, 0x21, 0);
+			}
 			m_filename.clear();
 		}
 		return true;
@@ -248,6 +254,7 @@ private:
 	unsigned char* m_writeBuffer = nullptr;
 	size_t m_writeBufferLen = 0;
 	size_t m_writeBufferCapacity = 0;
+	bool m_fixedLastMod = false;
 };
 
 static zip_int64_t wz_zip_name_locate_impl(zip_t *archive, const char *fname, zip_flags_t flags, bool useWindowsPathWorkaroundIfNeeded)
@@ -318,7 +325,7 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveFS(const char* fileSystemP
 	return result;
 }
 
-std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSystemPath)
+std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSystemPath, bool fixedLastMod /*= false*/)
 {
 	if (fileSystemPath == nullptr) { return nullptr; }
 	if (*fileSystemPath == '\0') { return nullptr; }
@@ -393,6 +400,7 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSyste
 			return;
 		}
 	});
+	result->m_fixedLastMod = fixedLastMod;
 	return result;
 }
 
@@ -417,7 +425,7 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 			break;
 		}
 		case WzMap::BinaryIOStream::OpenMode::WRITE:
-			pStream = WzMapBinaryZipIOStream::openForWriting(filename, m_zipArchive);
+			pStream = WzMapBinaryZipIOStream::openForWriting(filename, m_zipArchive, m_fixedLastMod);
 			break;
 	}
 	return pStream;
@@ -476,7 +484,7 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 
 bool WzMapZipIO::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)
 {
-	auto writeStream = WzMapBinaryZipIOStream::openForWriting(filename, m_zipArchive);
+	auto writeStream = WzMapBinaryZipIOStream::openForWriting(filename, m_zipArchive, m_fixedLastMod);
 	if (!writeStream)
 	{
 		return false;

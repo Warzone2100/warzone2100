@@ -37,7 +37,7 @@ public:
 	static std::shared_ptr<WzMapZipIO> openZipArchiveFS(const char* fileSystemPath, bool extraConsistencyChecks = false, bool readOnly = false);
 
 	// Initialize a new WzMapZipIO provider with a fileSystemPath to a new .zip/.wz archive (to be written)
-	static std::shared_ptr<WzMapZipIO> createZipArchiveFS(const char* fileSystemPath);
+	static std::shared_ptr<WzMapZipIO> createZipArchiveFS(const char* fileSystemPath, bool fixedLastMod = false);
 
 	~WzMapZipIO();
 public:
@@ -60,6 +60,7 @@ private:
 private:
 	std::shared_ptr<WrappedZipArchive> m_zipArchive;
 	std::vector<std::string> m_cachedDirectoriesList;
+	bool m_fixedLastMod = false;
 	// for best-effort handling of malformed / non-standard zip archives
 	optional<bool> m_foundMalformedWindowsPathSeparators;
 };
