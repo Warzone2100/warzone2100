@@ -49,7 +49,7 @@
 		"sequenceName": "res_droid.ogg",
 		"text": [
 			"New Cyborg Available",
-			"Armed with hyper velocity cannon",
+			"Armed with hyper velocity quad-barrel automatic-cannon",
 			"Body Points: Medium",
 			"Requires Cyborg factory to produce"
 		]
@@ -169,10 +169,10 @@
 		"imdName": "MICAPSUL.pie",
 		"sequenceName": "res_struttech.ogg",
 		"text": [
-			"Laser AA Gun Available",
-			"Twin Medium Anti-Aircraft Laser",
-			"Aerial targets only",
-			"Body Points: Medium"
+			"New Defensive Structure Available",
+			"AA Site with Stormbringer Turret",
+			"Automatically targets VTOL",
+			"Defensive Strength: Medium"
 		]
 	},
 	"RES_DEF_EMP": {
@@ -788,6 +788,17 @@
 			"New Laser Weapon Available",
 			"Fires heavy pulses of laser light",
 			"Best Targets: Heavy cyborgs",
+			"Body Points: Medium"
+		]
+	},
+	"RES_W_AALAS": {
+		"id": "RES_W_AALAS",
+		"imdName": "MICAPSUL.pie",
+		"sequenceName": "res_weapons.ogg",
+		"text": [
+			"Laser AA Gun Available",
+			"Twin Medium Anti-Aircraft Laser",
+			"Aerial targets only",
 			"Body Points: Medium"
 		]
 	},
