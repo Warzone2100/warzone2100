@@ -28,7 +28,7 @@
 #include <string.h>
 #include <physfs.h>
 #include <unordered_map>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"

@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_SRC_RESEARCH_H__
 #define __INCLUDED_SRC_RESEARCH_H__
 
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 
 #include "lib/framework/wzconfig.h"
 

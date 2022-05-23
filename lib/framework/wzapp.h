@@ -25,7 +25,7 @@
 #include "wzstring.h"
 #include <vector>
 #include <functional>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
 

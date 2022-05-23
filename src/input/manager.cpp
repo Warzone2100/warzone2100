@@ -20,7 +20,7 @@
 
 #include <list>
 #include <unordered_set>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"

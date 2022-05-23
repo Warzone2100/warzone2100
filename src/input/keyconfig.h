@@ -22,7 +22,7 @@
 #define __INCLUDED_SRC_INPUT_CONFIG_H__
 
 #include <unordered_map>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
