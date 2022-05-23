@@ -1,4 +1,14 @@
-cmake_minimum_required(VERSION 3.5...3.14)
+set(_cmake_min_ver_supported 3.5)
+if (TARGET nlohmann_json AND TARGET optional-lite AND TARGET quickjs)
+	# This should happen if being included in the larger WZ build scripts, thus we don't need FetchContent and can support earlier CMake
+	message(DEBUG "All required dependencies are already available - no need to use FetchContent")
+else()
+	message(STATUS "wzmaplib: One or more dependencies must be fetched")
+	set(_cmake_min_ver_supported 3.11) # CMake 3.11 is the minimum version for FetchContent
+	set(_will_need_fetch_content TRUE)
+endif()
+
+cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.18)
 project (wzmaplib CXX)
 
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
@@ -17,7 +27,7 @@ include(WZTargetConfiguration OPTIONAL RESULT_VARIABLE _wztargetconfiguration_mo
 if(_wztargetconfiguration_module_path)
 	WZ_TARGET_CONFIGURATION(wzmaplib)
 else()
-	message(STATUS "Unable to find WZTargetConfiguration - continuing without")
+	message(VERBOSE "Unable to find WZTargetConfiguration - continuing without")
 endif()
 
 if(MSVC)
@@ -25,18 +35,58 @@ if(MSVC)
 endif()
 target_include_directories(wzmaplib PUBLIC "include")
 
+if(_will_need_fetch_content)
+	include(FetchContent)
+endif()
+
 if(NOT TARGET nlohmann_json)
+	message(STATUS "wzmaplib: Fetching nlohmann/json")
 	set(JSON_ImplicitConversions OFF CACHE BOOL "Enable implicit conversions." FORCE)
 	set(JSON_SystemInclude ON CACHE BOOL "Include as system headers (skip for clang-tidy)." FORCE)
-	add_subdirectory("../../3rdparty/json" "3rdparty/json" EXCLUDE_FROM_ALL)
+	FetchContent_Declare(
+		nlohmannjson
+		GIT_REPOSITORY https://github.com/nlohmann/json.git
+		GIT_TAG        v3.10.5
+		GIT_SHALLOW    TRUE
+	)
+	FetchContent_GetProperties(nlohmannjson)
+	if(NOT nlohmannjson_POPULATED)
+		FetchContent_Populate(nlohmannjson)
+	endif()
+	add_subdirectory("${nlohmannjson_SOURCE_DIR}" "${nlohmannjson_BINARY_DIR}" EXCLUDE_FROM_ALL)
+	# Manually copy json_fwd.hpp to the single_include directory (from the include directory)
+	file(COPY "${nlohmannjson_SOURCE_DIR}/include/nlohmann/json_fwd.hpp" DESTINATION "${nlohmannjson_SOURCE_DIR}/single_include/nlohmann")
 endif()
 target_link_libraries(wzmaplib PRIVATE nlohmann_json)
 if(NOT TARGET optional-lite)
-	add_subdirectory("../../3rdparty/optional-lite" "3rdparty/optional-lite" EXCLUDE_FROM_ALL)
+	message(STATUS "wzmaplib: Fetching martinmoene/optional-lite")
+	FetchContent_Declare(
+		optionallite
+		GIT_REPOSITORY https://github.com/martinmoene/optional-lite.git
+		GIT_TAG        v3.5.0
+		GIT_SHALLOW    TRUE
+	)
+	FetchContent_GetProperties(optionallite)
+	if(NOT optionallite_POPULATED)
+		FetchContent_Populate(optionallite)
+	endif()
+	add_subdirectory("${optionallite_SOURCE_DIR}" "${optionallite_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif()
 target_link_libraries(wzmaplib PUBLIC optional-lite)
 if(NOT TARGET quickjs)
-	add_subdirectory("../../3rdparty/quickjs-wz" "3rdparty/quickjs-wz" EXCLUDE_FROM_ALL)
+	message(STATUS "wzmaplib: Fetching Warzone2100/quickjs-wz")
+	FetchContent_Declare(
+	quickjs_wz
+		GIT_REPOSITORY  https://github.com/Warzone2100/quickjs-wz.git
+		GIT_TAG         origin/main
+		GIT_REMOTE_NAME origin
+		GIT_SHALLOW     TRUE
+	)
+	FetchContent_GetProperties(quickjs_wz)
+	if(NOT quickjs_wz_POPULATED)
+		FetchContent_Populate(quickjs_wz)
+	endif()
+	add_subdirectory("${quickjs_wz_SOURCE_DIR}" "${quickjs_wz_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif()
 target_link_libraries(wzmaplib PRIVATE quickjs)
 
