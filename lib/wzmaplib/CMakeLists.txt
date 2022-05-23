@@ -5,20 +5,21 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 	cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "../../cmake")
-
 file(GLOB PUBLIC_HEADERS "include/wzmaplib/*.h")
 file(GLOB PRIVATE_HEADERS "src/*.h")
 file(GLOB SRC "src/*.cpp")
 
 add_library(wzmaplib STATIC ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SRC})
 set_property(TARGET wzmaplib PROPERTY FOLDER "lib")
+
+# Support being included directly in WZ build (with its custom target configuration)
 include(WZTargetConfiguration OPTIONAL RESULT_VARIABLE _wztargetconfiguration_module_path)
 if(_wztargetconfiguration_module_path)
 	WZ_TARGET_CONFIGURATION(wzmaplib)
 else()
 	message(STATUS "Unable to find WZTargetConfiguration - continuing without")
 endif()
+
 if(MSVC)
 	target_compile_definitions(wzmaplib PRIVATE "_CRT_SECURE_NO_WARNINGS")
 endif()
