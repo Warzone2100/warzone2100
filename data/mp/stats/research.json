@@ -5137,7 +5137,7 @@
 	"R-Wpn-AALaser": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AALaser",
-		"msgName": "RES_W_MS_HvSAM1",
+		"msgName": "RES_W_AALAS",
 		"name": "Stormbringer AA Laser",
 		"requiredResearch": [
 			"R-Wpn-Energy-ROF01"
