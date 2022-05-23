@@ -137,7 +137,7 @@ inline std::ostream &operator<<(std::ostream &os, const LevelFormat& levelFormat
 } // namespace WzMap
 
 
-static bool convertMapPackage(const std::string& mapPackageContentsPath, const std::string& outputPath, WzMap::LevelFormat levelFormat, WzMap::OutputFormat outputFormat, bool copyAdditionalFiles, bool verbose, bool exportUncompressed, std::shared_ptr<WzMap::IOProvider> mapIO = std::shared_ptr<WzMap::IOProvider>(new WzMap::StdIOProvider()))
+static bool convertMapPackage(const std::string& mapPackageContentsPath, const std::string& outputPath, WzMap::LevelFormat levelFormat, WzMap::OutputFormat outputFormat, bool copyAdditionalFiles, bool verbose, bool exportUncompressed, bool fixedLastMod, std::shared_ptr<WzMap::IOProvider> mapIO = std::shared_ptr<WzMap::IOProvider>(new WzMap::StdIOProvider()))
 {
 	auto logger = std::make_shared<MapToolDebugLogger>(new MapToolDebugLogger(verbose));
 
@@ -166,7 +166,7 @@ static bool convertMapPackage(const std::string& mapPackageContentsPath, const s
 	else
 	{
 #if !defined(WZ_MAPTOOLS_DISABLE_ARCHIVE_SUPPORT)
-		exportIO = WzMapZipIO::createZipArchiveFS(outputPath.c_str());
+		exportIO = WzMapZipIO::createZipArchiveFS(outputPath.c_str(), fixedLastMod);
 		if (!exportIO)
 		{
 			std::cerr << "Failed to open map archive file for output: " << outputPath << std::endl;
@@ -206,7 +206,7 @@ static bool convertMapPackage(const std::string& mapPackageContentsPath, const s
 }
 
 #if !defined(WZ_MAPTOOLS_DISABLE_ARCHIVE_SUPPORT)
-static bool convertMapPackage_FromArchive(const std::string& mapArchive, const std::string& outputPath, WzMap::LevelFormat levelFormat, WzMap::OutputFormat outputFormat, bool copyAdditionalFiles, bool verbose, bool outputUncompressed)
+static bool convertMapPackage_FromArchive(const std::string& mapArchive, const std::string& outputPath, WzMap::LevelFormat levelFormat, WzMap::OutputFormat outputFormat, bool copyAdditionalFiles, bool verbose, bool outputUncompressed, bool fixedLastMod)
 {
 	auto zipArchive = WzMapZipIO::openZipArchiveFS(mapArchive.c_str());
 	if (!zipArchive)
@@ -215,7 +215,7 @@ static bool convertMapPackage_FromArchive(const std::string& mapArchive, const s
 		return false;
 	}
 
-	return convertMapPackage("", outputPath, levelFormat, outputFormat, copyAdditionalFiles, verbose, outputUncompressed, zipArchive);
+	return convertMapPackage("", outputPath, levelFormat, outputFormat, copyAdditionalFiles, verbose, outputUncompressed, fixedLastMod, zipArchive);
 }
 #endif // !defined(WZ_MAPTOOLS_DISABLE_ARCHIVE_SUPPORT)
 
@@ -645,13 +645,15 @@ static void addSubCommand_Package(CLI::App& app, int& retVal, bool& verbose)
 		->check(CLI::NonexistentPath);
 	static bool sub_convert_copyadditionalfiles = false;
 	sub_convert->add_flag("--preserve-mods", sub_convert_copyadditionalfiles, "Copy other files from the original map package (i.e. the extra files / modifications in a map-mod)");
+	static bool sub_convert_fixed_last_mod = false;
+	sub_convert->add_flag("--fixed-lastmod", sub_convert_fixed_last_mod, "Fixed last modification date (if outputting to a .wz archive)");
 	static bool sub_convert_uncompressed = false;
 	sub_convert->add_flag("--output-uncompressed", sub_convert_uncompressed, "Output uncompressed to a folder (not in a .wz file)");
 	sub_convert->callback([&]() {
 		if (inputPathIsFile(inputMapPackage))
 		{
 #if !defined(WZ_MAPTOOLS_DISABLE_ARCHIVE_SUPPORT)
-			if (!convertMapPackage_FromArchive(inputMapPackage, outputPath, outputLevelFormat, outputMapFormat, sub_convert_copyadditionalfiles, verbose, sub_convert_uncompressed))
+			if (!convertMapPackage_FromArchive(inputMapPackage, outputPath, outputLevelFormat, outputMapFormat, sub_convert_copyadditionalfiles, verbose, sub_convert_uncompressed, sub_convert_fixed_last_mod))
 			{
 				retVal = 1;
 			}
@@ -662,7 +664,7 @@ static void addSubCommand_Package(CLI::App& app, int& retVal, bool& verbose)
 		}
 		else
 		{
-			if (!convertMapPackage(inputMapPackage, outputPath, outputLevelFormat, outputMapFormat, sub_convert_copyadditionalfiles, verbose, sub_convert_uncompressed))
+			if (!convertMapPackage(inputMapPackage, outputPath, outputLevelFormat, outputMapFormat, sub_convert_copyadditionalfiles, verbose, sub_convert_uncompressed, sub_convert_fixed_last_mod))
 			{
 				retVal = 1;
 			}
