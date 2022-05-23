@@ -125,7 +125,7 @@ add_library(sdl-backend STATIC ${HEADERS} ${SRC})
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(sdl-backend)
 
-target_link_libraries(sdl-backend PRIVATE framework ivis-opengl)
+target_link_libraries(sdl-backend PRIVATE framework ivis-opengl optional-lite)
 set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 message( STATUS "Linking to SDL2 library: ${_sdl2_library}" )
 target_link_libraries(sdl-backend PRIVATE ${_sdl2_library})

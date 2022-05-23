@@ -30,7 +30,7 @@
 #include <vector>
 #include <functional>
 #include <string>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 #include "lib/framework/geometry.h"
 #include "lib/framework/wzstring.h"
 

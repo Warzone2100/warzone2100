@@ -33,7 +33,7 @@
 #include "gamedef.h"
 #include "levels.h"
 #include <nlohmann/json_fwd.hpp>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 #include <sstream>
 /***************************************************************************/
 /*

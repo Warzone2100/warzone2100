@@ -44,6 +44,7 @@ endif()
 target_include_directories(sound PRIVATE "${OGGVORBIS_INCLUDE_DIR}")
 target_link_libraries(sound PRIVATE framework nlohmann_json OpenAL::OpenAL ${OGGVORBIS_LIBRARIES})
 target_link_libraries(sound PRIVATE Ogg::ogg Opus::opus)
+target_link_libraries(sound PUBLIC optional-lite)
 
 # Opusfile
 find_package(Opusfile QUIET)

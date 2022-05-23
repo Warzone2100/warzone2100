@@ -40,7 +40,7 @@
 #include <discord_rpc.h>
 #include <sodium.h>
 #include <EmbeddedJSONSignature.h>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
 

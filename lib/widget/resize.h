@@ -23,7 +23,7 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "widget.h"
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 
 class ResizeWidget;
 struct Resize

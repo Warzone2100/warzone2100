@@ -21,7 +21,7 @@
 #include "widgbase.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include <algorithm>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 #include <map>
 #include <set>
 

@@ -25,7 +25,7 @@
 #include "png_util.h"
 
 #include <functional>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
 

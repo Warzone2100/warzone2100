@@ -66,5 +66,8 @@ set(JSON_SystemInclude ON CACHE BOOL "Include as system headers (skip for clang-
 add_subdirectory(json EXCLUDE_FROM_ALL)
 set_property(TARGET nlohmann_json PROPERTY FOLDER "3rdparty")
 
+add_subdirectory(optional-lite EXCLUDE_FROM_ALL)
+set_property(TARGET optional-lite PROPERTY FOLDER "3rdparty")
+
 add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
 set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
