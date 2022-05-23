@@ -42,7 +42,7 @@ if (HAVE_OPENAL_ALEXT_H)
 	target_compile_definitions(sound PRIVATE "-DHAVE_OPENAL_ALEXT_H")
 endif()
 target_include_directories(sound PRIVATE "${OGGVORBIS_INCLUDE_DIR}")
-target_link_libraries(sound PRIVATE framework OpenAL::OpenAL ${OGGVORBIS_LIBRARIES})
+target_link_libraries(sound PRIVATE framework nlohmann_json OpenAL::OpenAL ${OGGVORBIS_LIBRARIES})
 target_link_libraries(sound PRIVATE Ogg::ogg Opus::opus)
 
 # Opusfile

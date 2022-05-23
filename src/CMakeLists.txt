@@ -108,6 +108,7 @@ if(ENABLE_NLS)
 	target_link_libraries(warzone2100 ${Intl_LIBRARIES})
 endif()
 
+target_link_libraries(warzone2100 nlohmann_json)
 target_link_libraries(warzone2100 quickjs)
 
 include(IncludeFindCurl)

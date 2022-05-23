@@ -26,6 +26,7 @@ endif ()
 add_executable(maptools
 				maptools.cpp pngsave.cpp pngsave.h)
 target_link_libraries(maptools PRIVATE wzmaplib PNG::PNG)
+target_link_libraries(maptools PRIVATE nlohmann_json)
 if (TARGET ZipIOProvider)
 	target_link_libraries(maptools PRIVATE ZipIOProvider)
 else()

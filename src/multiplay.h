@@ -43,7 +43,7 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
-#include <3rdparty/json/json_fwd.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 class DROID_GROUP;
 struct BASE_OBJECT;

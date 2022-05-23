@@ -202,7 +202,7 @@ static inline void NETauto(T (&ar)[N])
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
-#include <3rdparty/json/json_fwd.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 class ReplayOptionsHandler
 {

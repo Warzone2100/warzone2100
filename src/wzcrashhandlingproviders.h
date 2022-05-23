@@ -20,7 +20,7 @@
 #define _WZ_CRASHHANDLING_PROVIDERS_H_
 
 #include <string>
-#include <3rdparty/json/json_fwd.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 bool useCrashHandlingProvider(int argc, const char * const *argv);
 bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::string& defaultLogFilePath);

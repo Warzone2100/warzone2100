@@ -25,7 +25,7 @@
  * load / update / store multiplayer statistics for league tables etc...
  */
 
-#include <3rdparty/json/json.hpp> // Must come before WZ includes
+#include <nlohmann/json.hpp> // Must come before WZ includes
 
 #include "lib/framework/file.h"
 #include "lib/framework/frame.h"

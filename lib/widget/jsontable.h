@@ -36,7 +36,7 @@
 #  endif
 #endif
 
-#include <3rdparty/json/json.hpp>
+#include <nlohmann/json.hpp>
 
 #if defined(_wz_restore_libintl_snprintf)
 #  undef _wz_restore_libintl_snprintf

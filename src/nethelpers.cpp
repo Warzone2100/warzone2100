@@ -24,7 +24,7 @@
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
-#include <3rdparty/json/json.hpp>
+#include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
 static std::string publicIPv4LookupService = WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL;
