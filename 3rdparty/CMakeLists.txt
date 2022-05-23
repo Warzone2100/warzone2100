@@ -64,10 +64,8 @@ target_include_directories(glad PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/glad/include
 set(JSON_ImplicitConversions OFF CACHE BOOL "Enable implicit conversions." FORCE)
 set(JSON_SystemInclude ON CACHE BOOL "Include as system headers (skip for clang-tidy)." FORCE)
 add_subdirectory(json EXCLUDE_FROM_ALL)
-set_property(TARGET nlohmann_json PROPERTY FOLDER "3rdparty")
 
 add_subdirectory(optional-lite EXCLUDE_FROM_ALL)
-set_property(TARGET optional-lite PROPERTY FOLDER "3rdparty")
 
 add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
 set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
