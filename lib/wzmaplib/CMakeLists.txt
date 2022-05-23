@@ -28,7 +28,7 @@ target_include_directories(wzmaplib PUBLIC "../../3rdparty/")
 target_compile_definitions(wzmaplib PRIVATE "JSON_USE_IMPLICIT_CONVERSIONS=0")
 
 if(NOT TARGET quickjs)
-	add_subdirectory("../../3rdparty/quickjs" "3rdparty/quickjs" EXCLUDE_FROM_ALL)
+	add_subdirectory("../../3rdparty/quickjs-wz" "3rdparty/quickjs-wz" EXCLUDE_FROM_ALL)
 endif()
 target_link_libraries(wzmaplib PRIVATE quickjs)
 

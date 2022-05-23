@@ -46,3 +46,6 @@
 [submodule "lib/sound/3rdparty/opusfile"]
 	path = lib/sound/3rdparty/opusfile
 	url = https://github.com/xiph/opusfile.git
+[submodule "3rdparty/quickjs-wz"]
+	path = 3rdparty/quickjs-wz
+	url = https://github.com/Warzone2100/quickjs-wz.git

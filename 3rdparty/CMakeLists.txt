@@ -61,5 +61,5 @@ set_property(TARGET glad PROPERTY FOLDER "3rdparty")
 target_link_libraries(glad PRIVATE ${CMAKE_DL_LIBS})
 target_include_directories(glad PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/glad/include")
 
-add_subdirectory(quickjs EXCLUDE_FROM_ALL)
+add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
 set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
