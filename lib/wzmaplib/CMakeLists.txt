@@ -22,6 +22,13 @@ file(GLOB SRC "src/*.cpp")
 add_library(wzmaplib STATIC ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SRC})
 set_property(TARGET wzmaplib PROPERTY FOLDER "lib")
 
+set_target_properties(wzmaplib
+	PROPERTIES
+		CXX_STANDARD 11
+		CXX_STANDARD_REQUIRED YES
+		CXX_EXTENSIONS NO
+)
+
 # Support being included directly in WZ build (with its custom target configuration)
 include(WZTargetConfiguration OPTIONAL RESULT_VARIABLE _wztargetconfiguration_module_path)
 if(_wztargetconfiguration_module_path)
