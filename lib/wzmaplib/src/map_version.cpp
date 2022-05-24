@@ -17,13 +17,29 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#pragma once
+#include "../include/wzmaplib/map_version.h"
+#include <wzmaplib_internal/map_config_internal.h>
 
 namespace WzMap {
 
-const char* wzmaplib_version_string();
-unsigned int wzmaplib_version_major();
-unsigned int wzmaplib_version_minor();
-unsigned int wzmaplib_version_rev();
+const char* wzmaplib_version_string()
+{
+	return WZMAPLIB_VERSION_STRING;
+}
+
+unsigned int wzmaplib_version_major()
+{
+	return WZMAPLIB_VERSION_MAJOR;
+}
+
+unsigned int wzmaplib_version_minor()
+{
+	return WZMAPLIB_VERSION_MINOR;
+}
+
+unsigned int wzmaplib_version_rev()
+{
+	return WZMAPLIB_VERSION_REV;
+}
 
 } // namespace WzMap

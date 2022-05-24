@@ -1,3 +1,13 @@
+###################
+# wzmaplib version
+
+set(WZMAPLIB_VERSION_MAJOR 1)
+set(WZMAPLIB_VERSION_MINOR 0)
+set(WZMAPLIB_VERSION_REV 0)
+
+###################
+# Determine minimum CMake version
+
 set(_cmake_min_ver_supported 3.5)
 if (TARGET nlohmann_json AND TARGET optional-lite AND TARGET quickjs)
 	# This should happen if being included in the larger WZ build scripts, thus we don't need FetchContent and can support earlier CMake
@@ -7,6 +17,10 @@ else()
 	set(_cmake_min_ver_supported 3.11) # CMake 3.11 is the minimum version for FetchContent
 	set(_will_need_fetch_content TRUE)
 endif()
+
+##############################
+##############################
+# wzmaplib project
 
 cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.18)
 project (wzmaplib CXX)
@@ -19,8 +33,15 @@ file(GLOB PUBLIC_HEADERS "include/wzmaplib/*.h")
 file(GLOB PRIVATE_HEADERS "src/*.h")
 file(GLOB SRC "src/*.cpp")
 
+set(WZMAPLIB_VERSION_STRING "${WZMAPLIB_VERSION_MAJOR}.${WZMAPLIB_VERSION_MINOR}.${WZMAPLIB_VERSION_REV}")
+configure_file("src/map_config_internal.h.in" "${CMAKE_CURRENT_BINARY_DIR}/generated-include/wzmaplib_internal/map_config_internal.h" @ONLY)
+
+###################
+# wzmaplib library
+
 add_library(wzmaplib STATIC ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SRC})
 set_property(TARGET wzmaplib PROPERTY FOLDER "lib")
+set_target_properties(wzmaplib PROPERTIES VERSION "${WZMAPLIB_VERSION_STRING}")
 
 set_target_properties(wzmaplib
 	PROPERTIES
@@ -40,7 +61,11 @@ endif()
 if(MSVC)
 	target_compile_definitions(wzmaplib PRIVATE "_CRT_SECURE_NO_WARNINGS")
 endif()
+target_include_directories(wzmaplib PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated-include/") # for map_config_internal.h
 target_include_directories(wzmaplib PUBLIC "include")
+
+########################
+# wzmaplib dependencies
 
 if(_will_need_fetch_content)
 	include(FetchContent)

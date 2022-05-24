@@ -58,7 +58,7 @@ static std::string gamFilePathFromMapFolderPath(const std::string& mapFolderPath
 
 static std::string getCurrentWzMapLibGeneratorName()
 {
-	return "wzmaplib " WZMAPLIB_VERSION_STRING;
+	return std::string("wzmaplib ") + WzMap::wzmaplib_version_string();
 }
 
 // Returns the ".gam" file path
