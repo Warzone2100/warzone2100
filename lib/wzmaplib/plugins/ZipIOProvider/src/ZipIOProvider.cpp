@@ -384,7 +384,8 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSyste
 
 		std::vector<char> zipDataBuffer(zst.size, 0);
 
-		if (zip_source_read(pMemSource, zipDataBuffer.data(), zst.size) < zst.size)
+		auto readResult = zip_source_read(pMemSource, zipDataBuffer.data(), zst.size);
+		if (readResult < 0 || static_cast<zip_uint64_t>(readResult) < zst.size)
 		{
 			zip_source_close(pMemSource);
 			zip_source_free(pMemSource);
