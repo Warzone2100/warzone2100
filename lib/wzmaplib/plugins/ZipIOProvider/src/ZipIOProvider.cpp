@@ -24,6 +24,8 @@
 
 #include <memory>
 #include <unordered_set>
+#include <cstring>
+#include <algorithm>
 
 #include <zip.h> // from libzip
 
@@ -288,11 +290,11 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveFS(const char* fileSystemP
 #if defined(_WIN32)
 	// Special win32 handling (convert path from UTF-8 to UTF-16 and use the wide-char win32 source functions)
 	std::vector<wchar_t> wFileSystemPathStr;
-	if (!win_utf8ToUtf16(fileSystemPath, wFileSystemPathStr))
+	if (!WzMap::win_utf8ToUtf16(fileSystemPath, wFileSystemPathStr))
 	{
 		return nullptr;
 	}
-	zip_source_t* s = zip_source_win32w_create(wFileSystemPathStr.c_str(), 0, -1, &error);
+	zip_source_t* s = zip_source_win32w_create(wFileSystemPathStr.data(), 0, -1, &error);
 #else
 	zip_source_t* s = zip_source_file_create(fileSystemPath, 0, -1, &error);
 #endif
