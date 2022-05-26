@@ -306,7 +306,7 @@ function isHoverMap()
 			{
 				var b1 = startPositions[i];
 				var b2 = startPositions[t];
-				if(!propulsionCanReach("hover01", b1.x, b1.y, b2.x, b2.y))
+				if (!propulsionCanReach("hover01", b1.x, b1.y, b2.x, b2.y))
 				{
 					temp = temp + 1;
 				}

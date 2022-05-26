@@ -316,11 +316,11 @@ function research()
 				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
-					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
 						found = pursueResearch(lab, cyborgSecondary);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponExtra);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponTech);
 				}
 			}
@@ -371,11 +371,11 @@ function research()
 				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
-					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
 						found = pursueResearch(lab, cyborgSecondary);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponExtra);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponTech);
 				}
 			}
@@ -427,11 +427,11 @@ function research()
 				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
-					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
 						found = pursueResearch(lab, cyborgSecondary);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponExtra);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponTech);
 				}
 
@@ -484,11 +484,11 @@ function research()
 				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
-					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
 						found = pursueResearch(lab, cyborgSecondary);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponExtra);
-					if(!found)
+					if (!found)
 						found = evalResearch(lab, secondaryWeaponTech);
 				}
 			}
@@ -500,7 +500,7 @@ function research()
 				found = pursueResearch(lab, extremeLaserTech);
 			if (componentAvailable("Laser4-PlasmaCannon"))
 			{
-				if(!found)
+				if (!found)
 					found = evalResearch(lab, extremeLaserExtra);
 				if (!found && componentAvailable("PlasmaHeavy"))
 					found = evalResearch(lab, FLAMER);

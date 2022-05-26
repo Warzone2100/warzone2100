@@ -3,10 +3,10 @@ debugMsg('Module: research.js','init');
 
 //Rewrited for 3.3+ game version
 function doResearch(){
-	if(!running)return false;
+	if (!running)return false;
 
 	//old dependency
-	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length > 0) return false;
+	if (!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length > 0) return false;
 
 
 
@@ -16,20 +16,20 @@ function doResearch(){
 	labs = labs.filter((e) => (e.status === BUILT && structureIdle(e)));
 
 	//If no ready labs
-	if(labs.length === 0) return false;
+	if (labs.length === 0) return false;
 
 	//old dependency
-	if(policy['build'] !== 'rich'){
-			if(countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && (labs_len-labs.len) >= 3) return false;
-			if(countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && (labs_len-labs.len) >= 2) return false;
-			if(countStruct('A0ResourceExtractor', me) < 3 && !(playerPower(me) > 300 || berserk) && (labs_len-labs.len) >= 1) return false;
+	if (policy['build'] !== 'rich') {
+			if (countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && (labs_len-labs.len) >= 3) return false;
+			if (countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && (labs_len-labs.len) >= 2) return false;
+			if (countStruct('A0ResourceExtractor', me) < 3 && !(playerPower(me) > 300 || berserk) && (labs_len-labs.len) >= 1) return false;
 	}
 
 
 	//Get all available researches, filterout started by ally
 	var avail_research = enumResearch().filter((o) => (!o.started));
 
-	if(avail_research.length === 0) return false;
+	if (avail_research.length === 0) return false;
 
 	debugMsg('Labs: '+labs_len+', ready: '+labs.length+', avail_research: '+avail_research.length, 'research');
 
@@ -38,17 +38,17 @@ function doResearch(){
 	//Clear research path from completed researches
 	research_path = research_path.filter((o) => {
 		var r = getResearch(o);
-		if(!r){debugMsg('Research "'+o+'" not found', 'error');return false;}
+		if (!r) {debugMsg('Research "'+o+'" not found', 'error');return false;}
 		return !r.done;
 	});
 
 	var prepare_research = [];
 
-	if(research_path.length > 0 ){
+	if (research_path.length > 0) {
 		//Filter out started researches by me or ally
 		prepare_research = research_path.filter((o) => (!getResearch(o).started));
 
-		if(prepare_research.length === 0) return false;
+		if (prepare_research.length === 0) return false;
 
 		debugMsg('Path length: '+prepare_research.length+'; follow to: '+prepare_research[0], 'research');
 
@@ -69,16 +69,16 @@ function doResearch(){
 //		to_research = to_research.filter((o) => (researches.indexOf(o) !== -1));
 		to_research = intersect_arrays(to_research, researches);
 
-		if(to_research.length > 0) break;
+		if (to_research.length > 0) break;
 
 		debugMsg('Cannot follow to "'+prepare_research[t]+'" for now', 'research');
 
 	}
 
-	// if(findResearch(to_research[0]).filter((o) => (!getResearch(o).started)).length === 0)
+	// if (findResearch(to_research[0]).filter((o) => (!getResearch(o).started)).length === 0)
 
 	//No more research at this moment
-	if(to_research.length === 0){
+	if (to_research.length === 0) {
 		var rnd = Math.floor(Math.random()*researches.length);
 		debugMsg('researches.length: '+researches.length+', rnd: '+rnd, 'research');
 		var rnd_research = researches[rnd];
@@ -87,19 +87,19 @@ function doResearch(){
 	}
 
 	//Finish research line
-	if(research_path.length === 0 && to_research.length === 0){debugMsg('No more research in research_path', 'error'); return false;}
+	if (research_path.length === 0 && to_research.length === 0) {debugMsg('No more research in research_path', 'error'); return false;}
 
 	debugMsg('Start research: '+to_research[0], 'research');
 
 	//Start pursue research to given technology
-	if(!pursueResearch(labs[0], to_research)){
+	if (!pursueResearch(labs[0], to_research)) {
 		debugMsg('Something wrong in doResearch() function', 'error');
 		return false;
 	}
 	//debug(JSON.stringify(pursueResearch(labs[0], to_research)));
 
 	//If there more technology to research and more ready labs - repeat function
-	if(labs.length > 1 && prepare_research.length > 1) queue("doResearch", 700);
+	if (labs.length > 1 && prepare_research.length > 1) queue("doResearch", 700);
 
 	return true;
 }
@@ -112,10 +112,10 @@ function doResearch(){
 //2. При постройке лабаротории
 //3. При завершении исследования
 function doResearch_old(){
-	if(!running)return;
+	if (!running)return;
 //	debugMsg("doResearch()", 'research_advance');
 	//	debugMsg(getInfoNear(base.x,base.y,'safe',base_range).value+" && "+playerPower(me)+"<300 && "+avail_guns.length+"!=0", 'research_advance');
-	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length > 0) return;
+	if (!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length > 0) return;
 
 
 	var avail_research = enumResearch().filter((e) => {
@@ -123,12 +123,12 @@ function doResearch_old(){
 		return !e.started
 	});
 
-	if ( research_way.length === 0 || avail_research.length === 0 ) {
+	if (research_way.length === 0 || avail_research.length === 0) {
 //		debugMsg("doResearch: Исследовательские пути завершены!!! Останов.", 'research_advance');
 		return;
 	}
 
-	if ( research_way.length < 5 ){
+	if (research_way.length < 5) {
 		var rnd = Math.floor(Math.random()*avail_research.length);
 		var _research = avail_research[rnd].name;
 //		debugMsg(_research, 'temp');
@@ -143,44 +143,44 @@ function doResearch_old(){
 
 	var _last_r = research_way[_r][research_way[_r].length-1];
 	var _way = getResearch(_last_r);
-	if(!_way) return;
+	if (!_way) return;
 
 	if (_way.done) {
 		//		debugMsg("doResearch: Путей "+research_way.length+", путь "+_r+" завершён", 'research_advance');
 		research_way.splice(_r,1);
 		//		debugMsg("doResearch: Осталось путей "+research_way.length, 'research_advance');
 		_r=0;
-		if ( research_way.length === 0 ) {
+		if (research_way.length === 0) {
 //			debugMsg("doResearch: Исследовательские пути завершены! Останов.", 'research_advance');
 			return;
 		}
 	}
 
 	//Если меньше 8 нефтевышек, и меньше 1000 денег, и уже запущенны 3 лабы - выход
-// 	if(countStruct('A0ResourceExtractor', me) < 8 && playerPower(me) < 1000 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status === BUILT)).length >= 3) return;
-// 	if(countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status === BUILT)).length >= 2) return;
-// 	if(countStruct('A0ResourceExtractor', me) <= 3 && playerPower(me) < 300 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status === BUILT)).length >= 1) return;
+// 	if (countStruct('A0ResourceExtractor', me) < 8 && playerPower(me) < 1000 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status === BUILT)).length >= 3) return;
+// 	if (countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status === BUILT)).length >= 2) return;
+// 	if (countStruct('A0ResourceExtractor', me) <= 3 && playerPower(me) < 300 && enumStruct(me, RESEARCH_LAB).filter((e) => (!structureIdle(e)&&e.status === BUILT)).length >= 1) return;
 
 	for (const l in labs) {
 
-		if(policy['build'] !== 'rich'){
-			if(countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && _busy >= 3) break;
-			if(countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && _busy >= 2) break;
-			if(countStruct('A0ResourceExtractor', me) < 3 && !(playerPower(me) > 300 || berserk) && _busy >= 1) break;
+		if (policy['build'] !== 'rich') {
+			if (countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && _busy >= 3) break;
+			if (countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && _busy >= 2) break;
+			if (countStruct('A0ResourceExtractor', me) < 3 && !(playerPower(me) > 300 || berserk) && _busy >= 1) break;
 		}
-		if( (labs[l].status === BUILT) && structureIdle(labs[l]) ){
+		if ((labs[l].status === BUILT) && structureIdle(labs[l])) {
 //			debugMsg("Лаборатория("+labs[l].id+")["+l+"] исследует путь "+_r, 'research_advance');
 			pursueResearch(labs[l], research_way[_r]);
-		}else{
+		} else {
 //			debugMsg("Лаборатория("+labs[l].id+")["+l+"] занята", 'research_advance');
 			_busy++;
 		}
 	}
 
-	if ( _r == research_way.length-1 ) {
+	if (_r == research_way.length-1) {
 		_r = 0;
 //		debugMsg("doResearch: Все исследования запущены, останов.", 'research_advance');
-	} else if (_busy === labs.length ) {
+	} else if (_busy === labs.length) {
 //		debugMsg("doResearch: Все все лаборатории заняты, останов.", 'research_advance');
 		_r = 0;
 	} else {
@@ -193,14 +193,14 @@ function doResearch_old(){
 
 function fixResearchWay(way){
 	if (typeof way === "undefined") return false;
-	if(!(way instanceof Array)) return false;
+	if (!(way instanceof Array)) return false;
 //	debugMsg('Check tech '+way.length, 'research');
 	var _out = [];
 
 	for (const i in way) {
 //		debugMsg('Check: '+way[i], 'research');
 		var _res = getResearch(way[i]);
-		if(_res == null){
+		if (_res == null) {
 			debugMsg('Unknown research "'+way[i]+'" - ignored', 'error');
 			continue;
 		}
@@ -213,8 +213,8 @@ function fixResearchWay(way){
 
 function addPrimaryWay(){
 	if (typeof research_primary === "undefined") return false;
-	if(!(research_primary instanceof Array)) return false;
-	if(researchStrategy === "Smudged"){
+	if (!(research_primary instanceof Array)) return false;
+	if (researchStrategy === "Smudged") {
 		research_primary.reverse();
 		for (const i in research_primary) {
 			research_way.unshift([research_primary[i]]);
@@ -222,7 +222,7 @@ function addPrimaryWay(){
 		debugMsg("research_primary smudged", 'research');
 		return true;
 	}
-	if(researchStrategy === "Strict"){
+	if (researchStrategy === "Strict") {
 		var _out=[];
 		for (const i in research_primary) {
 			_out.push(research_primary[i]);
@@ -231,7 +231,7 @@ function addPrimaryWay(){
 		debugMsg("research_primary strict", 'research');
 		return true;
 	}
-	if(researchStrategy === "Random"){
+	if (researchStrategy === "Random") {
 		shuffle(research_primary);
 		for (const i in research_primary) {
 			research_way.unshift([research_primary[i]]);

@@ -221,7 +221,7 @@ function attackTarget(droid) {
 					orderDroidObj(droid, DORDER_OBSERVE, target);
 				else if (droid.canHitGround === true && !isVTOL(target))
 					orderDroidObj(droid, DORDER_ATTACK, target);
-				else if(droid.canHitAir === true && isVTOL(target))
+				else if (droid.canHitAir === true && isVTOL(target))
 					orderDroidObj(droid, DORDER_ATTACK, target);
 				else
 					orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);

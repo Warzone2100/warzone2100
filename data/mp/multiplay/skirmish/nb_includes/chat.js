@@ -68,7 +68,7 @@ _global.handleChatMessage = function(sender, receiver, message) {
 
 function chatWho(sender, argument) {
 	var str = "NullBot3 (" + scriptName + ") ";
-	switch(difficulty) {
+	switch (difficulty) {
 		case EASY: str += _("EASY"); break;
 		case MEDIUM: str=str + _("MEDIUM"); break;
 		case HARD: str=str + _("HARD"); break;

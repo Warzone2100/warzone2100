@@ -302,7 +302,7 @@ _global.adaptCycle = function() {
 		return;
 	}
 	++adaptCycle.phase;
-	switch(adaptCycle.phase) {
+	switch (adaptCycle.phase) {
 		case 1:
 			stack = enumStruct(adaptCycle.player, DEFENSE);
 			return;

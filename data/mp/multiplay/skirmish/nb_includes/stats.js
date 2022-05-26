@@ -108,7 +108,7 @@ _global.guessBodyArmor = function(name) {
 }
 
 function weaponPathIsAvailable(path, objectType, defrole) {
-	switch(objectType) {
+	switch (objectType) {
 		case 0:
 			return path.weapons.some((val) => (componentAvailable(val.stat)))
 		case 1:
@@ -173,7 +173,7 @@ _global.weaponStatsToResList = function(path, objType) {
 	if (!defined(path))
 		return [];
 	var ret = [];
-	switch(objType) {
+	switch (objType) {
 		case 0:
 			ret = statsToResList(path.weapons); break;
 		case 1:

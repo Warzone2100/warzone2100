@@ -50,7 +50,7 @@ function chooseBodyWeaponPair(bodies, weapons) {
 			if (!componentAvailable(b))
 				continue;
 			/* eslint-disable no-unreachable */
-			switch(ww) {
+			switch (ww) {
 				case WEIGHT.ULTRALIGHT:
 					if (bw <= WEIGHT.LIGHT)
 						return {b: b, w: w};
@@ -216,7 +216,7 @@ function checkVtolProduction() {
 }
 
 _global.checkProduction = function() {
-	switch(chooseObjectType()) {
+	switch (chooseObjectType()) {
 		case 1:
 			if (checkTemplateProduction())
 				return;
