@@ -344,61 +344,61 @@ public:
 
 	//__ ## eventDesignBody()
 	//__
-	//__An event that is run when current user picks a body in the design menu.
+	//__ An event that is run when current user picks a body in the design menu.
 	//__
 	virtual bool handle_eventDesignBody() override;
 
 	//__ ## eventDesignPropulsion()
 	//__
-	//__An event that is run when current user picks a propulsion in the design menu.
+	//__ An event that is run when current user picks a propulsion in the design menu.
 	//__
 	virtual bool handle_eventDesignPropulsion() override;
 
 	//__ ## eventDesignWeapon()
 	//__
-	//__An event that is run when current user picks a weapon in the design menu.
+	//__ An event that is run when current user picks a weapon in the design menu.
 	//__
 	virtual bool handle_eventDesignWeapon() override;
 
 	//__ ## eventDesignCommand()
 	//__
-	//__An event that is run when current user picks a command turret in the design menu.
+	//__ An event that is run when current user picks a command turret in the design menu.
 	//__
 	virtual bool handle_eventDesignCommand() override;
 
 	//__ ## eventDesignSystem()
 	//__
-	//__An event that is run when current user picks a system other than command turret in the design menu.
+	//__ An event that is run when current user picks a system other than command turret in the design menu.
 	//__
 	virtual bool handle_eventDesignSystem() override;
 
 	//__ ## eventDesignQuit()
 	//__
-	//__An event that is run when current user leaves the design menu.
+	//__ An event that is run when current user leaves the design menu.
 	//__
 	virtual bool handle_eventDesignQuit() override;
 
 	//__ ## eventMenuBuildSelected()
 	//__
-	//__An event that is run when current user picks something new in the build menu.
+	//__ An event that is run when current user picks something new in the build menu.
 	//__
 	virtual bool handle_eventMenuBuildSelected(/*BASE_OBJECT *psObj*/) override;
 
 	//__ ## eventMenuResearchSelected()
 	//__
-	//__An event that is run when current user picks something new in the research menu.
+	//__ An event that is run when current user picks something new in the research menu.
 	//__
 	virtual bool handle_eventMenuResearchSelected(/*BASE_OBJECT *psObj*/) override;
 
 	//__ ## eventMenuBuild()
 	//__
-	//__An event that is run when current user opens the build menu.
+	//__ An event that is run when current user opens the build menu.
 	//__
 	virtual bool handle_eventMenuBuild() override;
 
 	//__ ## eventMenuResearch()
 	//__
-	//__An event that is run when current user opens the research menu.
+	//__ An event that is run when current user opens the research menu.
 	//__
 	virtual bool handle_eventMenuResearch() override;
 
@@ -406,7 +406,7 @@ public:
 	virtual bool handle_eventMenuDesign() override;
 
 	//__ ## eventMenuManufacture()
-	//__An event that is run when current user opens the manufacture menu.
+	//__ An event that is run when current user opens the manufacture menu.
 	//__
 	virtual bool handle_eventMenuManufacture() override;
 

@@ -248,61 +248,61 @@ namespace wzapi
 
 		//__ ## eventDesignBody()
 		//__
-		//__An event that is run when current user picks a body in the design menu.
+		//__ An event that is run when current user picks a body in the design menu.
 		//__
 		virtual bool handle_eventDesignBody() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventDesignPropulsion()
 		//__
-		//__An event that is run when current user picks a propulsion in the design menu.
+		//__ An event that is run when current user picks a propulsion in the design menu.
 		//__
 		virtual bool handle_eventDesignPropulsion() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventDesignWeapon()
 		//__
-		//__An event that is run when current user picks a weapon in the design menu.
+		//__ An event that is run when current user picks a weapon in the design menu.
 		//__
 		virtual bool handle_eventDesignWeapon() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventDesignCommand()
 		//__
-		//__An event that is run when current user picks a command turret in the design menu.
+		//__ An event that is run when current user picks a command turret in the design menu.
 		//__
 		virtual bool handle_eventDesignCommand() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventDesignSystem()
 		//__
-		//__An event that is run when current user picks a system other than command turret in the design menu.
+		//__ An event that is run when current user picks a system other than command turret in the design menu.
 		//__
 		virtual bool handle_eventDesignSystem() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventDesignQuit()
 		//__
-		//__An event that is run when current user leaves the design menu.
+		//__ An event that is run when current user leaves the design menu.
 		//__
 		virtual bool handle_eventDesignQuit() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventMenuBuildSelected()
 		//__
-		//__An event that is run when current user picks something new in the build menu.
+		//__ An event that is run when current user picks something new in the build menu.
 		//__
 		virtual bool handle_eventMenuBuildSelected(/*BASE_OBJECT *psObj*/) SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventMenuResearchSelected()
 		//__
-		//__An event that is run when current user picks something new in the research menu.
+		//__ An event that is run when current user picks something new in the research menu.
 		//__
 		virtual bool handle_eventMenuResearchSelected(/*BASE_OBJECT *psObj*/) SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventMenuBuild()
 		//__
-		//__An event that is run when current user opens the build menu.
+		//__ An event that is run when current user opens the build menu.
 		//__
 		virtual bool handle_eventMenuBuild() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventMenuResearch()
 		//__
-		//__An event that is run when current user opens the research menu.
+		//__ An event that is run when current user opens the research menu.
 		//__
 		virtual bool handle_eventMenuResearch() SCRIPTING_EVENT_NON_REQUIRED
 
@@ -310,7 +310,7 @@ namespace wzapi
 		virtual bool handle_eventMenuDesign() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventMenuManufacture()
-		//__An event that is run when current user opens the manufacture menu.
+		//__ An event that is run when current user opens the manufacture menu.
 		//__
 		virtual bool handle_eventMenuManufacture() SCRIPTING_EVENT_NON_REQUIRED
 
