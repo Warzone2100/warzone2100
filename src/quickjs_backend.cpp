@@ -2401,7 +2401,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 //-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
-//-- ```javascript
+//-- ```js
 //-- function conDroids()
 //-- {
 //--   ... do stuff ...
@@ -2557,7 +2557,7 @@ static JSValue debugGetCallerFuncObject(JSContext *ctx, JSValueConst this_val, i
 //-- ## debugGetCallerFuncName()
 //-- Returns the function name of the caller of the current context as a string (if available).
 //-- ex.
-//-- ```javascript
+//-- ```js
 //-- function funcA() {
 //--   const callerFuncName = debugGetCallerFuncName();
 //--   debug(callerFuncName);

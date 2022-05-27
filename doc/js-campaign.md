@@ -8,7 +8,7 @@ Public API functions of ```libcampaign.js``` are prefixed with
 ```cam```. To use ```libcampaign.js```, add the following include
 into your scenario code:
 
-```javascript
+```js
 include("script/campaign/libcampaign.js");
 ```
 
