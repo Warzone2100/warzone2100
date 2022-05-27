@@ -30,7 +30,7 @@ parameter can be a **game object** to pass to the timer function. If the **game 
 dies, the timer stops running. The minimum number of milliseconds is 100, but such
 fast timers are strongly discouraged as they may deteriorate the game performance.
 
-```javascript
+```js
 function conDroids()
 {
   ... do stuff ...
@@ -66,7 +66,7 @@ inside an event.
 
 Returns the function name of the caller of the current context as a string (if available).
 ex.
-```javascript
+```js
 function funcA() {
   const callerFuncName = debugGetCallerFuncName();
   debug(callerFuncName);
@@ -86,6 +86,11 @@ Return an array containing all the buildable templates for the given player. (3.
 ## removeReticuleButton(buttonId)
 
 Remove reticule button. DO NOT USE FOR ANYTHING.
+
+## removeBeacon(playerFilter)
+
+Remove a beacon message sent to target player. Target may also be ```ALLIES```.
+Returns a boolean that is true on success. (3.2+ only)
 
 ## resetLabel(labelName[, playerFilter])
 
@@ -214,6 +219,10 @@ Move the position of the Sun, which in turn moves where shadows are cast. (3.2+ 
 ## setSunIntensity(ambient_r, ambient_g, ambient_b, diffuse_r, diffuse_g, diffuse_b, specular_r, specular_g, specular_b)
 
 Set the ambient, diffuse and specular colour intensities of the Sun lighting source. (3.2+ only)
+
+## setFogColour(r, g, b)
+
+Set the colour of the fog (4.2.5+ only)
 
 ## setWeather(weatherType)
 

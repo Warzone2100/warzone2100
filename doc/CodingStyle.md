@@ -31,7 +31,7 @@ code will look readable with any tab size. For example, when a line with a two-l
 printf begins, use tab to indent it, then use tab then spaces to indent the following
 line, like this (`\t` for tabs):
 
-```
+```cpp
 \t\tprintf("some text on this line that got long",
 \t\t       "some more text on the next line");
 ```
@@ -56,7 +56,7 @@ line, like this (`\t` for tabs):
 
 For astyle, save the following as "astyle":
 
-```
+```txt
 suffix=none
 indent=tab
 indent-switches
@@ -69,7 +69,7 @@ indent-preprocessor
 
 and call astyle like:
 
-```
+```shell
 astyle --options=astyle <files>
 ```
 

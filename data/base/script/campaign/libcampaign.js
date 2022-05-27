@@ -8,7 +8,7 @@
 //;; ```cam```. To use ```libcampaign.js```, add the following include
 //;; into your scenario code:
 //;;
-//;; ```javascript
+//;; ```js
 //;; include("script/campaign/libcampaign.js");
 //;; ```
 //;;

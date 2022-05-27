@@ -974,42 +974,43 @@ void jsShowDebug()
 //__
 //__ ## eventDesignBody()
 //__
-//__An event that is run when current user picks a body in the design menu.
+//__ An event that is run when current user picks a body in the design menu.
 //__
 //__ ## eventDesignPropulsion()
 //__
-//__An event that is run when current user picks a propulsion in the design menu.
+//__ An event that is run when current user picks a propulsion in the design menu.
 //__
 //__ ## eventDesignWeapon()
 //__
-//__An event that is run when current user picks a weapon in the design menu.
+//__ An event that is run when current user picks a weapon in the design menu.
 //__
 //__ ## eventDesignCommand()
 //__
-//__An event that is run when current user picks a command turret in the design menu.
+//__ An event that is run when current user picks a command turret in the design menu.
 //__
 //__ ## eventDesignSystem()
 //__
-//__An event that is run when current user picks a system other than command turret in the design menu.
+//__ An event that is run when current user picks a system other than command turret in the design menu.
 //__
 //__ ## eventDesignQuit()
 //__
-//__An event that is run when current user leaves the design menu.
+//__ An event that is run when current user leaves the design menu.
 //__
 //__ ## eventMenuBuildSelected()
 //__
-//__An event that is run when current user picks something new in the build menu.
+//__ An event that is run when current user picks something new in the build menu.
 //__
 //__ ## eventMenuBuild()
 //__
-//__An event that is run when current user opens the build menu.
+//__ An event that is run when current user opens the build menu.
 //__
 //__ ## eventMenuResearch()
 //__
-//__An event that is run when current user opens the research menu.
+//__ An event that is run when current user opens the research menu.
 //__
 //__ ## eventMenuManufacture()
-//__An event that is run when current user opens the manufacture menu.
+//__
+//__ An event that is run when current user opens the manufacture menu.
 //__
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 {
@@ -2159,7 +2160,9 @@ bool scripting_engine::writeLabels(const char *filename)
 //-- Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
+//--
 //-- ## resetArea(labelName[, playerFilter])
+//--
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.

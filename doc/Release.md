@@ -216,4 +216,7 @@ Post-Release checklist
 
 And, I am sure that people will spread the word about this new release at the following sites & others.
  * [Reddit](https://www.reddit.com/r/warzone2100)
- * [ModDb](http://www.moddb.com/games/275/warzone-2100), [Softonic](http://warzone-2100.en.softonic.com/), [Gamershell](http://www.gamershell.com/news), [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6)
+ * [ModDb](https://www.moddb.com/games/warzone-2100)
+ * [Softonic](https://warzone-2100.en.softonic.com/)
+ * [Gamershell](http://www.gamershell.com/news)
+ * [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6)

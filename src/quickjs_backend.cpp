@@ -294,7 +294,6 @@ public:
 public:
 	// MARK: Transporter events
 
-	//__
 	//__ ## eventTransporterLaunch(transport)
 	//__
 	//__ An event that is run when the mission transporter has been ordered to fly off.
@@ -344,61 +343,61 @@ public:
 
 	//__ ## eventDesignBody()
 	//__
-	//__An event that is run when current user picks a body in the design menu.
+	//__ An event that is run when current user picks a body in the design menu.
 	//__
 	virtual bool handle_eventDesignBody() override;
 
 	//__ ## eventDesignPropulsion()
 	//__
-	//__An event that is run when current user picks a propulsion in the design menu.
+	//__ An event that is run when current user picks a propulsion in the design menu.
 	//__
 	virtual bool handle_eventDesignPropulsion() override;
 
 	//__ ## eventDesignWeapon()
 	//__
-	//__An event that is run when current user picks a weapon in the design menu.
+	//__ An event that is run when current user picks a weapon in the design menu.
 	//__
 	virtual bool handle_eventDesignWeapon() override;
 
 	//__ ## eventDesignCommand()
 	//__
-	//__An event that is run when current user picks a command turret in the design menu.
+	//__ An event that is run when current user picks a command turret in the design menu.
 	//__
 	virtual bool handle_eventDesignCommand() override;
 
 	//__ ## eventDesignSystem()
 	//__
-	//__An event that is run when current user picks a system other than command turret in the design menu.
+	//__ An event that is run when current user picks a system other than command turret in the design menu.
 	//__
 	virtual bool handle_eventDesignSystem() override;
 
 	//__ ## eventDesignQuit()
 	//__
-	//__An event that is run when current user leaves the design menu.
+	//__ An event that is run when current user leaves the design menu.
 	//__
 	virtual bool handle_eventDesignQuit() override;
 
 	//__ ## eventMenuBuildSelected()
 	//__
-	//__An event that is run when current user picks something new in the build menu.
+	//__ An event that is run when current user picks something new in the build menu.
 	//__
 	virtual bool handle_eventMenuBuildSelected(/*BASE_OBJECT *psObj*/) override;
 
 	//__ ## eventMenuResearchSelected()
 	//__
-	//__An event that is run when current user picks something new in the research menu.
+	//__ An event that is run when current user picks something new in the research menu.
 	//__
 	virtual bool handle_eventMenuResearchSelected(/*BASE_OBJECT *psObj*/) override;
 
 	//__ ## eventMenuBuild()
 	//__
-	//__An event that is run when current user opens the build menu.
+	//__ An event that is run when current user opens the build menu.
 	//__
 	virtual bool handle_eventMenuBuild() override;
 
 	//__ ## eventMenuResearch()
 	//__
-	//__An event that is run when current user opens the research menu.
+	//__ An event that is run when current user opens the research menu.
 	//__
 	virtual bool handle_eventMenuResearch() override;
 
@@ -406,7 +405,8 @@ public:
 	virtual bool handle_eventMenuDesign() override;
 
 	//__ ## eventMenuManufacture()
-	//__An event that is run when current user opens the manufacture menu.
+	//__
+	//__ An event that is run when current user opens the manufacture menu.
 	//__
 	virtual bool handle_eventMenuManufacture() override;
 
@@ -2237,6 +2237,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 // Wraps a QuickJS instance
 
 //-- ## profile(functionName[, arguments])
+//--
 //-- Calls a function with given arguments, measures time it took to evaluate the function,
 //-- and adds this time to performance monitor statistics. Transparently returns the
 //-- function's return value. The function to run is the first parameter, and it
@@ -2291,6 +2292,7 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 }
 
 //-- ## include(filePath)
+//--
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
@@ -2336,6 +2338,7 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 }
 
 //-- ## includeJSON(filePath)
+//--
 //-- Reads a JSON file and returns an object. You should generally only specify the filename,
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
@@ -2401,7 +2404,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 //-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
-//-- ```javascript
+//-- ```js
 //-- function conDroids()
 //-- {
 //--   ... do stuff ...
@@ -2534,6 +2537,7 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 }
 
 //-- ## namespace(prefix)
+//--
 //-- Registers a new event namespace. All events can now have this prefix. This is useful for
 //-- code libraries, to implement event that do not conflict with events in main code. This
 //-- function should be called from global; do not (for hopefully obvious reasons) put it
@@ -2555,9 +2559,10 @@ static JSValue debugGetCallerFuncObject(JSContext *ctx, JSValueConst this_val, i
 }
 
 //-- ## debugGetCallerFuncName()
+//--
 //-- Returns the function name of the caller of the current context as a string (if available).
 //-- ex.
-//-- ```javascript
+//-- ```js
 //-- function funcA() {
 //--   const callerFuncName = debugGetCallerFuncName();
 //--   debug(callerFuncName);
