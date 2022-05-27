@@ -2,16 +2,16 @@
 
 ## Introduction
 
-Warzone2100 contains a scripting language for implementing AIs, campaigns and some of the game
+Warzone 2100 contains a scripting language for implementing AIs, campaigns and some of the game
 rules. It uses JavaScript, so you should become familiar with this language before proceeding
 with this document. A number of very good guides to JavaScript exist on the Internet.
 
 The following hard-coded files exist for game rules that use this API:
 
-* multiplay/skirmish/rules.js Default game rules - base setup, starting research, winning and losing.
-* multiplay/script/scavfact.js Scavenger AI. This script is active if scavengers are.
+* `multiplay/skirmish/rules.js` Default game rules - base setup, starting research, winning and losing.
+* `multiplay/script/scavfact.js` Scavenger AI. This script is active if scavengers are.
 
-For ordinary AI scripts, these are controlled using AI JSON files that are present in the ```multiplayer/skirmish```
+For ordinary AI scripts, these are controlled using AI JSON files that are present in the `multiplayer/skirmish`
 directory. Here is an example of such a file that defines an AI implemented using this API:
 
 ```json
@@ -24,9 +24,9 @@ directory. Here is an example of such a file that defines an AI implemented usin
 }
 ```
 
-It references a '.js' JavaScript file that needs to be in the same directory as the '.json' file.
+It references a `.js` JavaScript file that needs to be in the same directory as the `.json` file.
 
-The code in a javascript file is accessed through specially named functions called 'events'. These are defined below.
+The code in a JavaScript file is accessed through specially named functions called **events**. These are defined below.
 An event is expected to carry out some computation then return immediately. The game is on hold while an event is
 processed, so do not do too many things at once, or else the player will experience stuttering.
 
@@ -36,12 +36,12 @@ bad things may happen. If you need to keep static arrays around, it is better to
 function, as they will then not be saved and loaded.
 
 One error that it is easy to make upon initially learning JavaScript and using this API, is to try to use
-the 'for (... in ...)' construct to iterate over an array of objects. This does not work! Instead, use code
+the `for (... in ...)` construct to iterate over an array of objects. This does not work! Instead, use code
 like the following:
 
-```javascript
+```js
 const droidList = enumDroid(me, DROID_CONSTRUCT);
-for (let i = 0; i < droidList.length; i++)
+for (let i = 0; i < droidList.length; ++i)
 {
 	const droid = droidList[i];
 	...
@@ -54,35 +54,39 @@ The droid object that you receive here has multiple properties that can be acces
 These properties are read-only, and cannot be changed. In fact, objects that you get are just copies of
 game state, and do not give any access to changing the game state itself.
 
-Any value written in ALL_CAPS_WITH_UNDERSCORES are enums, special read-only constants defined by the
+Any value written in `ALL_CAPS_WITH_UNDERSCORES` are enums, special read-only constants defined by the
 game.
 
 ## Challenges
 
-Challenges may load scripts as well, if a 'scripts' dictionary is present in the challenge file, and has the keys
-"extra" or "rules". The "extra" key sets up an additional script to be run during the challenge. The "rules"
-key sets up an alternative rules file, which means that the "rules.js" mentioned above is *not* run. In
+Challenges may load scripts as well, if a `scripts` object is present in the challenge file, and has the keys
+`extra` or `rules`. The `extra` key sets up an additional script to be run during the challenge. The `rules`
+key sets up an alternative rules file, which means that the `rules.js` mentioned above is *not* run. In
 this case, you must implement your own rules for winning and losing, among other things. Here is an example
 of such a scripts section:
 
 ```json
-"scripts": {
-	"rules": "towerdefense.js"
+{
+	"scripts": {
+		"rules": "towerdefense.js"
+	}
 }
 ```
 
 You can also specify which AI scripts are to be run for each player. These must be given a path to the script,
-since you may sometimes want them from the AI directory (```multiplay/skirmish/```) and sometimes from the challenge
-directory (```challenges/```). If you do not want an AI script to be loaded for a player (for example, if you want
-this player to be controlled from one of your challenge scripts), then you can give it the special value "null".
+since you may sometimes want them from the AI directory (`multiplay/skirmish/`) and sometimes from the challenge
+directory (`challenges/`). If you do not want an AI script to be loaded for a player (for example, if you want
+this player to be controlled from one of your challenge scripts), then you can give it the special value `null`.
 Here is an example if a challenge player definition with its AI specified:
 
 ```json
-"player_1": {
-	"name": "Alpha",
-	"ai": "multiplay/skirmish/nb_generic.js",
-	"difficulty": "Hard",
-	"team": 1
+{
+	"player_1": {
+		"name": "Alpha",
+		"ai": "multiplay/skirmish/nb_generic.js",
+		"difficulty": "Hard",
+		"team": 1
+	}
 }
 ```
 
@@ -92,7 +96,7 @@ Some objects are described under the functions creating them. The following obje
 multiple functions and widely used throughout, so it is better to learn about them first.
 
 Note the special term **game object** that is used in several places in this document. This refers
-to the results of any function returning a Structure, Droid, Feature or Base Object as described below.
+to the results of any function returning a **Structure**, **Droid**, **Feature** or **Base Object** as described below.
 Some functions may take such objects as input parameters, in this case they may not take any other kind
 of object as input parameter instead.
 
@@ -102,15 +106,11 @@ Read more in depth about the following topics in their own pages. For newcomers,
 the order we recommended reading them in. If you do not intend to change the campaign (or write a
 new campaign), you can skip the campaign topic.
 
-[Game objects](js-objects.md)
-
-[Events](js-events.md)
-
-[Globals](js-globals.md)
-
-[Functions](js-functions.md)
-
-[Campaign](js-campaign.md)
+- [Game objects](js-objects.md)
+- [Events](js-events.md)
+- [Globals](js-globals.md)
+- [Functions](js-functions.md)
+- [Campaign](js-campaign.md)
 
 ## Gotchas / Bugs
 
@@ -118,8 +118,8 @@ new campaign), you can skip the campaign topic.
 
 Due to a bug that is not so easy to fix in the short term, variables defined in global must be case insensitive.
 Otherwise, they may collide on savegame loading. This is only for variables defined in your script. There is no
-need to maintain case insensitivity in regards to variables defined in global by the game itself, such as ```FACTORY```
-(you can safely define your own 'factory' variable) -- the only exception to this is ```me```.
+need to maintain case insensitivity in regards to variables defined in global by the game itself, such as `FACTORY`
+(you can safely define your own 'factory' variable) -- the only exception to this is `me`.
 
 ### Global objects
 
@@ -145,7 +145,7 @@ adding a custom property. Note that this property will not be remembered when it
 
 ### Early research
 
-You cannot set research topics for research labs directly from eventStartLevel. Instead, queue up a function
+You cannot set research topics for research labs directly from `eventStartLevel()`. Instead, queue up a function
 call to set it at some later frame.
 
 ### Cyborg construction

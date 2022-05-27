@@ -19,7 +19,7 @@ State of the game
 After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
 proprietary technologies have been replaced with open-source counterparts.
 
-Right now supported platforms are Linux, Windows, and macOS. There are reports 
+Right now supported platforms are Linux, Windows, and macOS. There are reports
 that Warzone 2100 is working on BSD, too.
 
 Installation
@@ -28,7 +28,7 @@ Installation
 Visit https://wz2100.net for the latest stable release for Windows, macOS and Ubuntu.
 
 Note for videos in Ubuntu: For important information during the game, download the videos manually. Assuming the game is installed in the standard `~/.local/share/` folder, use these commands:
-```
+```shell
 mkdir ~/.local/share/warzone2100
 wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
 ```
@@ -74,12 +74,12 @@ How to get the latest Ubuntu development builds:
 > Note: A free GitHub account is currently required to download the artifacts.
 4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu<version>_amd64.deb`) to your Desktop.
 5. Execute the following commands in Terminal:
-```
+```shell
 cd ~/Desktop
 sudo apt install ./warzone2100_ubuntu<version>_amd64.deb
 ```
 6. Download the video for crucial information during the game, for more see "Videos" section. Assuming the game is installed in the standard `~/.local/share/` folder, use this command (update `warzone2100-<version>`):
-```
+```shell
 wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100-<version>/sequences.wz
 ```
 
@@ -88,12 +88,12 @@ wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-q
 Clone this Git repo and build, following the instructions under:
 [How to Build](#how-to-build)
 
-> Development builds are a snapshot of the current state of development, from the 
+> Development builds are a snapshot of the current state of development, from the
 > latest (successfully-built) commit. Help testing these builds is always welcomed,
 > but they should be considered a work-in-progress.
 
 ### Videos
-You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will need to rename the downloaded file to `sequences.wz`, and place it into your Warzone directory, as described above.
+You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will need to rename the downloaded file to `sequences.wz`, and place it into your Warzone 2100 directory, as described above.
 Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
 Reporting bugs
@@ -128,36 +128,36 @@ configuration data, save-games and certain other things. Additionally you can
 use this directory to place custom maps and mods so the game can find them. The
 location of this directory depends on the operating system.
 
-### Warzone directory under GNU/Linux
+### Warzone 2100 directory under GNU/Linux
 
-Under GNU/Linux, Warzone conforms to the [XDG base directory spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+Under GNU/Linux, Warzone 2100 conforms to the [XDG base directory spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
 
-By default, the directory `warzone2100-<version>` can be found in your home-directory 
+By default, the directory `warzone2100-<version>` can be found in your home-directory
 under the path `~/.local/share/`.
-(If the `XDG_DATA_HOME` environment variable is defined, the Warzone folder will
+(If the `XDG_DATA_HOME` environment variable is defined, the Warzone 2100 folder will
 be located within `$XDG_DATA_HOME`.)
 
 The leading dot in the `.local` part of the path indicates that it is a hidden
-directory, so depending on your configuration you may not be able to see it. 
+directory, so depending on your configuration you may not be able to see it.
 However, you can still access it by typing the path into your address-bar.
 
-### Warzone directory under Windows
+### Warzone 2100 directory under Windows
 
-The directory `Warzone 2100 Project\Warzone 2100 <version>` is located under the 
+The directory `Warzone 2100 Project\Warzone 2100 <version>` is located under the
 `%APPDATA%` folder.
 
 Typical `%APPDATA%` paths:
 - Windows XP: `\Documents and Settings\$USER$\Application Data`
 - Windows Vista+: `\Users\$USER$\AppData\Roaming`
 
-Hence, the default path for the Warzone configuration data on Windows Vista+ would be:
+Hence, the default path for the Warzone 2100 configuration data on Windows Vista+ would be:
 `C:\Users\$USER$\AppData\Roaming\Warzone 2100 Project\Warzone 2100 <version>\`
 
 By default, the `%APPDATA%` folder is hidden. Entering:
 `%APPDATA%\Warzone 2100 Project\` into the address bar of Windows Explorer
-will browse to your Warzone directory.
+will browse to your Warzone 2100 directory.
 
-### Warzone directory under macOS
+### Warzone 2100 directory under macOS
 
 The directory `Warzone 2100 <version>` can be found in your home-directory at:
 `~/Library/Application Support/`
@@ -173,7 +173,7 @@ options, some of them can be changed by using command-line options or using
 the in-game menus, others can only be changed by editing the file by hand.
 
 If at any point you did something wrong, you can delete the old configuration
-file and just restart Warzone 2100. Then the game will regenerate a new 
+file and just restart Warzone 2100. Then the game will regenerate a new
 configuration file with default values.
 
 Command-line options
@@ -246,34 +246,34 @@ function. Cheats are ordered by their use and where they can be used.
 
 There are many cheat commands. Some examples:
 
-* "biffer baker" - Your units do more damage and are stronger
-* "double up" - Your units are twice as strong
-* "give all" - Allows you to build and research everything
-* "work harder" - All currently active research topics are instantly researched
-* "research all" - Everything is researched instantly
-* "let me win" - You win the current campaign mission
-* "superpower" - Gives you maximum power
-* "teach us" - Gives experience to selected units
-* "makemehero" - Makes selected units Heros
-* "clone wars" - Clone selected units (x10)
-* "clone wars!" - Clone selected units (x40)
-* "clone wars!!" - Clone selected units (x135)
-* "kill" - Kills selected object
-* "john kettley" - Toggles weather conditions
-* "get off my land" - Kills all enemy units and structures
-* "showfps" - Show average FPS
-* "reload me" - Reloads selected weapon instantly
-* "damage me" - Selected object takes 20% damage
-* "showunits" - Displays unit count information
-* "showorders" - Displays unit order/action state
-* "droidinfo" - Show unit stats
+* `biffer baker` - Your units do more damage and are stronger
+* `double up` - Your units are twice as strong
+* `give all` - Allows you to build and research everything
+* `work harder` - All currently active research topics are instantly researched
+* `research all` - Everything is researched instantly
+* `let me win` - You win the current campaign mission
+* `superpower` - Gives you maximum power
+* `teach us` - Gives experience to selected units
+* `makemehero` - Makes selected units Heros
+* `clone wars` - Clone selected units (x10)
+* `clone wars!` - Clone selected units (x40)
+* `clone wars!!` - Clone selected units (x135)
+* `kill` - Kills selected object
+* `john kettley` - Toggles weather conditions
+* `get off my land` - Kills all enemy units and structures
+* `showfps` - Show average FPS
+* `reload me` - Reloads selected weapon instantly
+* `damage me` - Selected object takes 20% damage
+* `showunits` - Displays unit count information
+* `showorders` - Displays unit order/action state
+* `droidinfo` - Show unit stats
 
 All available commands can be found in the file: https://github.com/Warzone2100/warzone2100/blob/master/src/cheat.cpp
 
 Modding information
 -------------------
 
-Warzone AI, maps and campaign can be scripted using javascript.
+Warzone 2100 AI, maps and campaign can be scripted using JavaScript.
 
 Links to further information
 * [Scripting](doc/Scripting.md)
@@ -291,7 +291,7 @@ To properly build the game, either:
   _OR_
 
 - Clone the Git repo:
-  ```
+  ```shell
   git clone https://github.com/Warzone2100/warzone2100.git
   cd warzone2100
   git fetch --tags
@@ -327,40 +327,40 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    * Using `get-dependencies_linux.sh`:
       1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`, `opensuse-tumbleweed`) _REQUIRED_
       2. Specify a mode: (`build-all` (default), `build-dependencies`) _OPTIONAL_
-      
+
       Example:
-      ```
+      ```shell
       sudo ./get-dependencies_linux.sh ubuntu build-dependencies
       ```
    * Manually (Ubuntu 18.04)+:
-     ```
+     ```shell
      sudo apt-get -u update
      sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
      sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
      ```
    * Manually (Fedora):
-     ```
+     ```shell
      sudo dnf -y update && dnf clean all
      sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
      sudo dnf -y install libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
      ```
 * **Building from the command-line:**
    1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
-      ```
+      ```shell
       mkdir build
       ```
    2. Change directory into the sibling `build` directory:
-      ```
+      ```shell
       cd build
       ```
    3. Run CMake configure to generate the build files:
-      ```
+      ```shell
       cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../warzone2100
       ```
       > - [Modify the `CMAKE_INSTALL_PREFIX` parameter value as desired](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) to configure the base installation path.
       > - The `../warzone2100` path at the end should point to the warzone2100 source directory.
    4. Run CMake build:
-      ```
+      ```shell
       cmake --build . --target install
       ```
 

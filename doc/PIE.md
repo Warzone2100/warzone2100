@@ -31,16 +31,16 @@ The first line specifies the version number -- either 2 or 3.
 This indicates the type of the file through a hexadecimal combination of the flags 0x200, 0x10 and 0x1.
 The following flags are available:
 
-* 0x00001 -- Disables additive rendering
-* 0x00002 -- Enables additive rendering
-* 0x00004 -- Enables premultiplied rendering
+* `0x00001` -- Disables additive rendering
+* `0x00002` -- Enables additive rendering
+* `0x00004` -- Enables premultiplied rendering
 
-* 0x00010 -- Rolls object to face the camera. Used for projectiles shaped like a cylinder.
-* 0x00020 -- Pitches object to completely face the camera. Used for projectiles shaped like a sphere.
+* `0x00010` -- Rolls object to face the camera. Used for projectiles shaped like a cylinder.
+* `0x00020` -- Pitches object to completely face the camera. Used for projectiles shaped like a sphere.
 
-* 0x00200 -- Reserved for backward compatibility.
-* 0x01000 -- Specifies that the model should not be stretched to fit terrain. For defensive buildings that have a deep foundation.
-* 0x10000 -- Specifies the usage of the TCMask feature, for which a texture named 'page-N_tcmask.png' (*N* being a number) should be used together with the model's ordinary texture. This flag replaced old team coloration methods (read ticket #851).
+* `0x00200` -- Reserved for backward compatibility.
+* `0x01000` -- Specifies that the model should not be stretched to fit terrain. For defensive buildings that have a deep foundation.
+* `0x10000` -- Specifies the usage of the TCMask feature, for which a texture named 'page-N_tcmask.png' (*N* being a number) should be used together with the model's ordinary texture. This flag replaced old team coloration methods (read ticket #851).
 
 ### INTERPOLATE
 

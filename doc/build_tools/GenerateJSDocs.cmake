@@ -94,6 +94,8 @@ function(PROCESS_LINES inputfile)
 	endif()
 endfunction()
 
+# js-globals.md
+
 PROCESS_LINES("src/qtscript.cpp"
 				MATCHING_LINE_REGEX "//=="
 				STRIP_LINE_PREFIX_REGEX "== ?"
@@ -104,10 +106,14 @@ PROCESS_LINES("src/wzapi.cpp"
 				STRIP_LINE_PREFIX_REGEX "//== ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-globals.md" APPEND)
 
+# js-events.md
+
 PROCESS_LINES("src/wzapi.h"
 				MATCHING_LINE_REGEX "//__"
 				STRIP_LINE_PREFIX_REGEX "//__ ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-events.md")
+
+# js-functions.md
 
 PROCESS_LINES("src/wzapi.h"
 				MATCHING_LINE_REGEX "//--"
@@ -129,6 +135,8 @@ PROCESS_LINES("src/wzapi.cpp"
 				STRIP_LINE_PREFIX_REGEX "//-- ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-functions.md" APPEND)
 
+# js-objects.md
+
 PROCESS_LINES("src/wzapi.h"
 				MATCHING_LINE_REGEX "//[;][;]"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
@@ -138,6 +146,8 @@ PROCESS_LINES("src/quickjs_backend.cpp"
 				MATCHING_LINE_REGEX "//[;][;]"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-objects.md" APPEND)
+
+# js-campaign.md
 
 PROCESS_LINES("data/base/script/campaign/libcampaign.js"
 				MATCHING_LINE_REGEX ".*//[;][;]"
@@ -184,7 +194,6 @@ PROCESS_LINES("data/base/script/campaign/libcampaign_includes/nexus.js"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
 
-
 PROCESS_LINES("data/base/script/campaign/libcampaign_includes/production.js"
 				MATCHING_LINE_REGEX ".*//[;][;]"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
@@ -214,7 +223,6 @@ PROCESS_LINES("data/base/script/campaign/libcampaign_includes/transport.js"
 				MATCHING_LINE_REGEX ".*//[;][;]"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
-
 
 PROCESS_LINES("data/base/script/campaign/libcampaign_includes/truck.js"
 				MATCHING_LINE_REGEX ".*//[;][;]"

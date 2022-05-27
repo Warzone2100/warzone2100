@@ -56,9 +56,9 @@ All messages are sent in plain-text UTF-8 and end with 0x0a (`\n`).
 
 `stdin` interface is super basic but at the same time a powerful tool for automation.
 
-All messages **must end with 0x0a (`\n`) in order to be processed!**
+All messages **must end with `0x0a` (`\n`) in order to be processed!**
 
-If state of interface buffer is unknown and/or corrupted, interface can send a few 0x0a in order to clean reader buffer.
+If state of interface buffer is unknown and/or corrupted, interface can send a few `0x0a` in order to clean reader buffer.
 
 * `exit`\
 	Shuts down **stdin reader interface**
@@ -81,4 +81,3 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 
 * `shutdown now`\
 	Trigger graceful shutdown of the game regardless of state.
-

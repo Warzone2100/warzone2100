@@ -1,4 +1,4 @@
-# Building Warzone for macOS
+# Building Warzone 2100 for macOS
 
 ## Prerequisites:
 
