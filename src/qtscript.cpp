@@ -1009,6 +1009,7 @@ void jsShowDebug()
 //__ An event that is run when current user opens the research menu.
 //__
 //__ ## eventMenuManufacture()
+//__
 //__ An event that is run when current user opens the manufacture menu.
 //__
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
@@ -2159,7 +2160,9 @@ bool scripting_engine::writeLabels(const char *filename)
 //-- Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
+//--
 //-- ## resetArea(labelName[, playerFilter])
+//--
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.

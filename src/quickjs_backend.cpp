@@ -294,7 +294,6 @@ public:
 public:
 	// MARK: Transporter events
 
-	//__
 	//__ ## eventTransporterLaunch(transport)
 	//__
 	//__ An event that is run when the mission transporter has been ordered to fly off.
@@ -406,6 +405,7 @@ public:
 	virtual bool handle_eventMenuDesign() override;
 
 	//__ ## eventMenuManufacture()
+	//__
 	//__ An event that is run when current user opens the manufacture menu.
 	//__
 	virtual bool handle_eventMenuManufacture() override;
@@ -2237,6 +2237,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 // Wraps a QuickJS instance
 
 //-- ## profile(functionName[, arguments])
+//--
 //-- Calls a function with given arguments, measures time it took to evaluate the function,
 //-- and adds this time to performance monitor statistics. Transparently returns the
 //-- function's return value. The function to run is the first parameter, and it
@@ -2291,6 +2292,7 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 }
 
 //-- ## include(filePath)
+//--
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
@@ -2336,6 +2338,7 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 }
 
 //-- ## includeJSON(filePath)
+//--
 //-- Reads a JSON file and returns an object. You should generally only specify the filename,
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
@@ -2534,6 +2537,7 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 }
 
 //-- ## namespace(prefix)
+//--
 //-- Registers a new event namespace. All events can now have this prefix. This is useful for
 //-- code libraries, to implement event that do not conflict with events in main code. This
 //-- function should be called from global; do not (for hopefully obvious reasons) put it
@@ -2555,6 +2559,7 @@ static JSValue debugGetCallerFuncObject(JSContext *ctx, JSValueConst this_val, i
 }
 
 //-- ## debugGetCallerFuncName()
+//--
 //-- Returns the function name of the caller of the current context as a string (if available).
 //-- ex.
 //-- ```js

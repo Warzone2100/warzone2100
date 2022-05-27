@@ -198,7 +198,6 @@ namespace wzapi
 	public:
 		// MARK: Transporter events
 
-		//__
 		//__ ## eventTransporterLaunch(transport)
 		//__
 		//__ An event that is run when the mission transporter has been ordered to fly off.
@@ -310,6 +309,7 @@ namespace wzapi
 		virtual bool handle_eventMenuDesign() SCRIPTING_EVENT_NON_REQUIRED
 
 		//__ ## eventMenuManufacture()
+		//__
 		//__ An event that is run when current user opens the manufacture menu.
 		//__
 		virtual bool handle_eventMenuManufacture() SCRIPTING_EVENT_NON_REQUIRED
