@@ -274,6 +274,14 @@ pass in 2, and for type III pass in 3. Hard defaults to type II and
 insane defaults to type III. If nothing is passed in then the type
 limit will match what is in templates.json.
 
+## camUpgradeOnMapTemplates(template1, template2, player, [excluded object IDs])
+
+Search for template1, save its coordinates, remove it, and then replace with it
+with template2. Template objects are expected to follow the component properties
+as used in templates.js. A fourth parameter can be specified to ignore specific object
+IDs. Useful if a droid is assigned to an object label. It can be either an array
+or a single ID number.
+
 ## camSendReinforcement(player, position, droids, kind, data)
 
 Give a single bunch of droids (template list) for a player at

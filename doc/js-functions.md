@@ -87,6 +87,11 @@ Return an array containing all the buildable templates for the given player. (3.
 
 Remove reticule button. DO NOT USE FOR ANYTHING.
 
+## removeBeacon(playerFilter)
+
+Remove a beacon message sent to target player. Target may also be ```ALLIES```.
+Returns a boolean that is true on success. (3.2+ only)
+
 ## resetLabel(labelName[, playerFilter])
 
 Reset the trigger on an label. Next time a unit enters the area, it will trigger
@@ -214,6 +219,10 @@ Move the position of the Sun, which in turn moves where shadows are cast. (3.2+ 
 ## setSunIntensity(ambient_r, ambient_g, ambient_b, diffuse_r, diffuse_g, diffuse_b, specular_r, specular_g, specular_b)
 
 Set the ambient, diffuse and specular colour intensities of the Sun lighting source. (3.2+ only)
+
+## setFogColour(r, g, b)
+
+Set the colour of the fog (4.2.5+ only)
 
 ## setWeather(weatherType)
 
