@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+Sinaptično povezavo je razvila korporacija Reed v povezavi z vojsko ZDA.
+
+2
+00:00:08,000 --> 00:00:22,000
+Sinaptična povezava dovoljuje skoraj takojšnji prenos misli od človeških operaterjev do krmil in vodilnih sistemov vozil. Sinaptična povezava je vstavljena v lobanjsko dno okoli hrbtenice.
+
+3
+00:00:25,000 --> 00:00:30,000
+Povezava ima visokohitrostni prenosni vhod, ki se priključi v katerikoli računalniški sistem.
+
+4
+00:00:37,000 --> 00:00:48,000
+Bolj pomembno je, da je razvoj sinaptične povezave omogočil izdelavo kiborgov. Zgodnji poskusi na močnih oblekah za posamezne vojake so propadli, saj so se izkazale za počasne in neodzivne.
+
+5
+00:00:54,000 --> 00:01:08,000
+Sinaptična povezava je omogočila vstavitev vojakov v močne obleke, ki so jih krmilili tako enostavno kot svoja lastna telesa.  Močne obleke so omogočile pešadiji učinkovito delovanje na bojiščih 21-ega stoletja.
+
+6
+00:01:08,599 --> 00:01:17,000
+Na žalost je ta tehnologija padla v roke Nove Paradigme. Nujno je, da raziščete in razvijete tehnologije sinaptične povezave.
+

@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Transporterziel folgt:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alpha - Westlicher Sektor....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alpha, Sie haben Starterlaubnis.
+
+4
+00:00:09,000 --> 00:00:14,000
+Viel Glück und Waidmannsheil.
+
+5
+00:00:30,000 --> 00:00:35,000
+Wir nähern uns der Landezone. Missionsbesprechung für Team Alpha beginnt.
+
+6
+00:00:37,000 --> 00:00:46,000
+Commander, Sie leiten Team Alpha, eines von drei Erkundungsteams, die vom Projekt ausgesandt wurden, um Artefakte aus der Zeit vor dem Kollaps zu bergen.
+
+7
+00:00:47,000 --> 00:00:49,599
+Ihr Zielgebiet liegt in der westlichen Zone.
+

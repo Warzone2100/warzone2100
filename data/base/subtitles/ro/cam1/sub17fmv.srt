@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Programul intrus Nexus este un parazit digital polimorf. Aceasta îl face să fie dificil de eradicat odată ce a fost identificat în sistem.
+
+2
+00:00:12,000 --> 00:00:29,399
+Nu am putut încă stabili care îi este scopul final sau funcția. În forma sa inițială, caută și izolează secțiuni de memorie față de restul sistemului invadat. Apoi începe să se modifice pe el și structurile de date, reprogramând sistemul din interior.
+
+3
+00:00:30,000 --> 00:00:38,400
+O analiză mai adâncă a fost împiedicată de oprirea manuală a sistemelor de către tehnicieni, pentru a evita răspândirea programului intrus Nexus.
+
+4
+00:00:39,000 --> 00:00:49,000
+Totuși, răspândirea programului intrus Nexus nu a fost verificată de Noua Paradigmă. Trebuie să capturăm sisteme de bază ale Noii Paradigme pentru a putea investiga în continuare programul intrus Nexis și originea sa.
+
+5
+00:00:50,000 --> 00:00:57,000
+Comandante, va trebui să oprești activitățile Noii Paradigme în acest sector și să le localizezi baza principală.
+

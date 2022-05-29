@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:07,599
+Nexus se eliminó a sí mismo del sistema, destruyendo sus bancos de datos, y eliminando todo rastro de sus conexiones externas.
+
+2
+00:00:08,000 --> 00:00:19,000
+No estamos seguros de qué o quién es Nexus, o quién o qué lo está dirigiendo. Las investigaciones iniciales enlazan el programa de Intrusión Nexus con la Corporación Reed, desarrolladora del enlace sináptico.
+
+3
+00:00:20,000 --> 00:00:28,399
+Hemos cerciorado que Nexus proveyó al Nuevo Paradigma con la mayor parte de su tecnología. Sea lo que sea Nexus, es más que un parásito informático.
+
+4
+00:00:29,000 --> 00:00:36,000
+Tiene tecnología y armas. Nos conoce, y no es amistoso.
+

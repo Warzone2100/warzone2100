@@ -1,0 +1,12 @@
+1
+00:01:10,833 --> 00:01:25,416
+Personalul bazei Gamma au confirmat că rachetele ce țintesc bazele Alpha și Beta au fost lansate dintr-un siloz din sectorul lor.
+
+2
+00:01:35,833 --> 00:01:44,166
+Echipa Gamma cercetează locația silozului și monitorizează activitatea NEXUS.
+
+3
+00:01:46,250 --> 00:01:52,500
+Comandante, succesul Proiectului depinde de tine.
+

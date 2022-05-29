@@ -17,6 +17,7 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
 /**
  * @file seqdisp.c
  *
@@ -46,14 +47,12 @@
 #include "design.h"
 #include "wrappers.h"
 #include "init.h" // For fileLoadBuffer
+#include "3rdparty/physfs.hpp"
 
-/***************************************************************************/
-/*
- *	local Definitions
- */
-/***************************************************************************/
-#define MAX_TEXT_OVERLAYS 32
-#define MAX_SEQ_LIST	  6
+#include <vector>
+#include <regex> // For splitting subtitles
+#include <memory> // For shared_ptr
+
 #define SUBTITLE_BOX_MIN 430
 #define SUBTITLE_BOX_MAX 480
 
@@ -64,60 +63,58 @@
 static int D_W2 = 0;	// Text width offset
 static int D_H2 = 0;	// Text height offset
 
-struct SEQTEXT
+/**
+ * @brief Represents a line of text that should be displayed over a sequence.
+ */
+class Line
 {
-	char pText[MAX_STR_LENGTH];
-	UDWORD x;
-	UDWORD y;
+public:
+	std::string text;
+	int x;
+	int y;
+
+	/** @brief Start time in seconds.*/
 	double startTime;
 	double endTime;
-	bool	bSubtitle;
+	
+	/**
+	 * @brief Is the line a subtitle?
+	 * 
+	 * Will affect how the text is printed.
+	 */
+	bool isSubtitles;
 };
 
-struct SEQLIST
+class Sequence
 {
-	WzString         pSeq;					//name of the sequence to play
-	WzString         pAudio;				//name of the wav to play
-	bool		bSeqLoop;					//loop this sequence
-	int             currentText;			// current number of text messages for this seq
-	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
+public:
+	WzString pSeq; //name of the sequence to play
+	WzString pAudio; //name of the wav to play
 
-	SEQLIST() : bSeqLoop(false), currentText(0)
-	{
-		memset(aText, 0, sizeof(aText));
-	}
-	void reset()
-	{
-		bSeqLoop = false;
-		currentText = 0;
-		memset(aText, 0, sizeof(aText));
-		pSeq.clear();
-		pAudio.clear();
-	}
+	bool loop; //loop this sequence
+
+	/** The lines to be displayed over the sequence.*/
+	std::vector<Line> lines;
+
+	Sequence() : loop(false)
+	{}
+
+	Sequence(WzString seq, WzString audio, bool l) : pSeq(seq), pAudio(audio), loop(l)
+	{}
 };
-/***************************************************************************/
-/*
- *	local Variables
- */
-/***************************************************************************/
 
 static bool bAudioPlaying = false;
 static bool bHoldSeqForAudio = false;
 static bool bSeqSubtitles = true;
 static bool bSeqPlaying = false;
 static WzString aVideoName;
-static SEQLIST aSeqList[MAX_SEQ_LIST];
-static SDWORD currentSeq = -1;
+
+static std::vector<Sequence> seqList;
+
 static SDWORD currentPlaySeq = -1;
 
 // local rendered text cache
 static std::vector<WzText> wzCachedSeqText;
-
-/***************************************************************************/
-/*
- *	local ProtoTypes
- */
-/***************************************************************************/
 
 enum VIDEO_RESOLUTION
 {
@@ -125,13 +122,129 @@ enum VIDEO_RESOLUTION
 	VIDEO_USER_CHOSEN_RESOLUTION,
 };
 
-static bool seq_StartFullScreenVideo(const WzString& videoName, const WzString& audioName, VIDEO_RESOLUTION resolution);
+static bool seq_StartFullScreenVideo(const WzString& videoName, const WzString& audioName, VIDEO_RESOLUTION resolution); // why here?
 
-/***************************************************************************/
-/*
- *	Source
+/**
+ * Splits a string into parts using one or more delimiters.
+ * 
+ * @param input The string to be splitted.
+ * @param delimiters A list of delimiters. There should be no space between each one and the next.
+ *                   For example, ", |" represents three delimiters, namely ',', '|', and the empty space.
+ * 
+ * @return A vector of the parts.
  */
-/***************************************************************************/
+std::vector<std::string> split(const std::string& input, const std::string& delimiters)
+{
+    // [....] Matches one of the characters in the brackets
+    // for instance, Ca[tr] will match Cat or Car.
+    std::regex expr{ "[" + delimiters + "]" };
+
+    std::sregex_token_iterator first{ input.begin(), input.end(), expr, -1 }, last;
+    
+	return std::vector<std::string>{ first, last };
+}
+
+/**
+ * Parse srt time into seconds.
+ * 
+ * The \p time should be in the format "hh:mm:ss,iii" where iii are the milliseconds.
+ * 
+ * @param time A string that represents the time.
+ * 
+ * @return The time in seconds.
+ */
+double srtTimeToSeconds(std::string time)
+{
+	int hours;
+    int minutes;
+    int seconds;
+    int milliseconds;
+
+    std::vector<std::string> parts = split(time, ":,");
+    
+	hours = std::stoi(parts[0]);
+    minutes = std::stoi(parts[1]);
+    seconds = std::stoi(parts[2]);
+    milliseconds = std::stoi(parts[3]);
+
+    return hours * 3600 + minutes * 60 + seconds + (milliseconds / 1000.0);
+}
+
+/**
+ * Reads characters from an input stream and places them into a string.
+ * 
+ * This function is cross-platform in the sense that it can handle both Windows
+ * and linux line endings, no matter what platform you are reading the line from.
+ * For example, if you are on linux, and tried to read a file that was
+ * written on windows, std::getline() will return a string that includes \r in its
+ * tail, instead of skipping it. You can use this function to avoid that issue.
+ * 
+ * @param input The stream to get data from.
+ * @param str The string to put data into.
+ * 
+ * @return \p input
+ */
+std::istream& crossPlatformGetLine(std::istream& input, std::string& str)
+{
+    str.clear();
+
+    std::istream::sentry se(input, true);
+    std::streambuf* buf = input.rdbuf();
+
+    while(true)
+	{
+        int c = buf->sbumpc();
+
+        switch (c)
+		{
+		case '\r': // Windows
+            if(buf->sgetc() == '\n')
+                buf->sbumpc();
+            return input;
+        case '\n': // Linux
+            return input;
+        case std::streambuf::traits_type::eof():
+            if(str.empty())
+                input.setstate(std::ios::eofbit);
+            return input;
+        default:
+            str += (char)c;
+        }
+    }
+}
+
+/**
+ * Get the name of the subtitles file for a specific sequence.
+ * 
+ * The function will first try to find a subtitles file that match the current selected
+ * language of the game. If it does not find it, it will look for an English one.
+ * 
+ * @param seqName The name of sequence.
+ * 
+ * @return The name of the subtitles file or empty string if not found.
+ */
+std::string getSubtitleFile(std::string seqName)
+{
+	// remove extension
+	seqName = seqName.substr(0, seqName.find_last_of('.'));
+
+	std::string language = getLanguage();
+	std::string translatedFile = "subtitles/" + language + "/" + seqName + ".srt"; 
+	std::string enFile = "sequenceaudio/" + seqName + ".srt";
+
+	if (PHYSFS_exists(translatedFile.c_str()))
+	{
+		return translatedFile;
+	}
+	else if (PHYSFS_exists(enFile.c_str()))
+	{
+		return enFile;
+	}
+	else
+	{
+		return "";
+	}
+}
 
 /* Renders a video sequence specified by filename to a buffer*/
 bool seq_RenderVideoToBuffer(const WzString &sequenceName, int seqCommand)
@@ -188,7 +301,6 @@ bool seq_RenderVideoToBuffer(const WzString &sequenceName, int seqCommand)
 	return true;
 }
 
-
 static void seq_SetUserResolution()
 {
 	switch (war_GetFMVmode())
@@ -219,7 +331,6 @@ static void seq_SetUserResolution()
 	}
 }
 
-//full screenvideo functions
 static bool seq_StartFullScreenVideo(const WzString& videoName, const WzString& audioName, VIDEO_RESOLUTION resolution)
 {
 	WzString aAudioName("sequenceaudio/" + audioName);
@@ -269,7 +380,7 @@ static bool seq_StartFullScreenVideo(const WzString& videoName, const WzString& 
 	return true;
 }
 
-bool seq_UpdateFullScreenVideo(int *pbClear)
+bool seq_UpdateFullScreenVideo(int *pbClear) // this function is called in the main loop, but with nullptr argument only
 {
 	int i;
 	bool bMoreThanOneSequenceLine = false;
@@ -280,15 +391,16 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 
 	//get any text lines over bottom of the video
 	double frameTime = seq_GetFrameTime();
-	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
+	for (i = 0; i < seqList[currentPlaySeq].lines.size(); i++)
 	{
-		SEQTEXT seqtext = aSeqList[currentPlaySeq].aText[i];
-		if (seqtext.pText[0] != '\0')
+		Line seqtext = seqList[currentPlaySeq].lines[i];
+
+		if (seqtext.text[0] != '\0')
 		{
-			if (seqtext.bSubtitle)
+			if (seqtext.isSubtitles)
 			{
 				if (((frameTime >= seqtext.startTime) && (frameTime <= seqtext.endTime)) ||
-				    aSeqList[currentPlaySeq].bSeqLoop) //if its a looped video always draw the text
+				    seqList[currentPlaySeq].loop) //if its a looped video always draw the text
 				{
 					if (subMin > seqtext.y && seqtext.y > SUBTITLE_BOX_MIN)
 					{
@@ -303,7 +415,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 
 			if (frameTime >= seqtext.endTime && frameTime < seqtext.endTime)
 			{
-				if (pbClear != nullptr)
+				if (pbClear != nullptr) // what is the purpose of this?
 				{
 					*pbClear = CLEAR_BLACK;
 				}
@@ -333,13 +445,14 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	//print any text over the video
 	frameTime = seq_GetFrameTime();
 
-	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
+	for (i = 0; i < seqList[currentPlaySeq].lines.size(); i++)
 	{
-		SEQTEXT currentText = aSeqList[currentPlaySeq].aText[i];
-		if (currentText.pText[0] != '\0')
+		Line currentText = seqList[currentPlaySeq].lines[i];
+
+		if (currentText.text[0] != '\0')
 		{
 			if (((frameTime >= currentText.startTime) && (frameTime <= currentText.endTime)) ||
-			    (aSeqList[currentPlaySeq].bSeqLoop)) //if its a looped video always draw the text
+			    (seqList[currentPlaySeq].loop)) //if its a looped video always draw the text
 			{
 				if (i >= wzCachedSeqText.size())
 				{
@@ -349,11 +462,13 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 				{
 					currentText.x = 20 + D_W2;
 				}
-				wzCachedSeqText[i].setText(&(currentText.pText[0]), font_scaled);
+				wzCachedSeqText[i].setText(currentText.text, font_scaled);
+				// draw a grey outline
 				wzCachedSeqText[i].render(currentText.x - 1, currentText.y - 1, WZCOL_GREY);
 				wzCachedSeqText[i].render(currentText.x - 1, currentText.y + 1, WZCOL_GREY);
 				wzCachedSeqText[i].render(currentText.x + 1, currentText.y - 1, WZCOL_GREY);
 				wzCachedSeqText[i].render(currentText.x + 1, currentText.y + 1, WZCOL_GREY);
+				// render the actual subtitle in white
 				wzCachedSeqText[i].render(currentText.x, currentText.y, WZCOL_WHITE);
 			}
 		}
@@ -362,7 +477,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	{
 		if (bAudioPlaying)
 		{
-			if (aSeqList[currentPlaySeq].bSeqLoop)
+			if (seqList[currentPlaySeq].loop)
 			{
 				seq_Shutdown();
 
@@ -406,234 +521,251 @@ bool seq_StopFullScreenVideo()
 	return true;
 }
 
-// add a string at x,y or add string below last line if x and y are 0
-bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
+/**
+ * @brief Add a line of text to specific seuquence.
+ * 
+ * The goal of this function is to make sure that the line is not larger than the buffer,
+ * and if this is the case, then to break it into shorter lines.
+ * 
+ * If both \p xOffset and \p yOffset are zero, then the line will be added below the last line.
+ */
+void seq_AddLineForVideo(Sequence& sequence, const std::string& text, int xOffset, int yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
 {
-	SDWORD sourceLength, currentLength;
-	char *currentText;
-	static SDWORD lastX;
-	// make sure we take xOffset into account, we don't always start at 0
+	int currentLength; // rename to current_pos or just pos
+	std::string currentText = text;
+
 	const unsigned int buffer_width = pie_GetVideoBufferWidth() - xOffset;
+	currentLength = text.length();
 
-	ASSERT_OR_RETURN(false, aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS, "too many text lines");
-
-	sourceLength = strlen(pText);
-	currentLength = sourceLength;
-	currentText = &(aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].pText[0]);
-
-	//if the string is bigger than the buffer get the last end of the last fullword in the buffer
-	if (currentLength >= MAX_STR_LENGTH)
+	// Check the string is short enough to print.
+	// If not, keep removing words until it fits.
+	while (iV_GetTextWidth(currentText.c_str(), font_scaled) > buffer_width)
 	{
-		currentLength = MAX_STR_LENGTH - 1;
-		//get end of the last word
-		while ((pText[currentLength] != ' ') && (currentLength > 0))
+		currentLength--;
+
+		while ((text[currentLength] != ' ') && (currentLength > 0))
 		{
 			currentLength--;
 		}
-		currentLength--;
+		currentText = text.substr(0, currentLength);
 	}
 
-	memcpy(currentText, pText, currentLength);
-	currentText[currentLength] = 0;//terminate the string what ever
+	Line line;
+	static int lastX, lastY;
 
-	//check the string is shortenough to print
-	//if not take a word of the end and try again
-	while (iV_GetTextWidth(currentText, font_scaled) > buffer_width)
+	if (xOffset == 0 && yOffset == 0)
 	{
-		currentLength--;
-		while ((pText[currentLength] != ' ') && (currentLength > 0))
-		{
-			currentLength--;
-		}
-		currentText[currentLength] = 0;//terminate the string what ever
-	}
-	currentText[currentLength] = 0;//terminate the string what ever
-
-	//check if x and y are 0 and put text on next line
-	if (((xOffset == 0) && (yOffset == 0)) && (currentLength > 0))
-	{
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = lastX;
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y =
-		    aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText - 1].y + iV_GetTextLineSize(font_scaled);
+		line.x = lastX;
+		line.y = lastY + iV_GetTextLineSize(font_scaled);
 	}
 	else
 	{
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = xOffset + D_W2;
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y = yOffset + D_H2;
+		line.x = xOffset + D_W2;
+		line.y = yOffset + D_H2;
 	}
-	lastX = aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x;
+	lastX = line.x;
+	lastY = line.y;
 
 	const int MIN_JUSTIFICATION = 40;
-	const int justification = buffer_width - iV_GetTextWidth(currentText, font_scaled);
-	if (textJustification == SEQ_TEXT_JUSTIFY && currentLength == sourceLength && justification > MIN_JUSTIFICATION)
+	const int justification = buffer_width - iV_GetTextWidth(currentText.c_str(), font_scaled);
+
+	if (textJustification == SEQ_TEXT_CENTER && currentLength == text.length() && justification > MIN_JUSTIFICATION)
 	{
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x += (justification / 2);
+		line.x += (justification / 2);
 	}
 
-	//set start and finish times for the objects
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].startTime = startTime;
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].endTime = endTime;
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].bSubtitle = textJustification;
+	line.startTime = startTime;
+	line.endTime = endTime;
+	line.isSubtitles = textJustification;
+	line.text = currentText;
 
-	aSeqList[currentSeq].currentText++;
-	if (aSeqList[currentSeq].currentText >= MAX_TEXT_OVERLAYS)
-	{
-		aSeqList[currentSeq].currentText = 0;
-	}
+	sequence.lines.push_back(line);
 
-	//check text is okay on the screen
-	if (currentLength < sourceLength)
+	// if currentLength is less then sourceLength, then there remains text to be displayed.
+	if (currentLength < text.length())
 	{
-		//RECURSE x= 0 y = 0 for nextLine
-		if (textJustification == SEQ_TEXT_JUSTIFY)
+		if (textJustification == SEQ_TEXT_CENTER)
 		{
 			textJustification = SEQ_TEXT_POSITION;
 		}
-		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startTime, endTime, textJustification);
+
+		seq_AddLineForVideo(sequence, text.substr(currentLength + 1), 0, 0, startTime, endTime, textJustification);
 	}
-	return true;
 }
 
-
-static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING textJustification)
+/**
+ * @brief An overload of seq_AddLineForVideo, that adds a line to the last sequence.
+ */
+void seq_AddLineForVideo(const std::string& text, int xOffset, int yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
 {
-	char aTextName[MAX_STR_LENGTH];
-	char *pTextBuffer, *pCurrentLine, *pText;
-	UDWORD fileSize;
-	SDWORD xOffset, yOffset;
-	double startTime, endTime;
-	const char *seps = "\n";
+	seq_AddLineForVideo(seqList.back(), text, xOffset, yOffset, startTime, endTime, textJustification);
+}
 
+/**
+ * @brief Add subtitles or text to a sequence from an .srt file.
+ * 
+ * @param sequence The name of the sequence.
+ * @param textFileName The name of the .srt file.
+ * @param textJustification The justrification of the text
+ * @return true If the text was added successfully to the sequence.
+ * @return false If the text could not be added because \p textFileName is invalid or the file does not exist.
+ */
+static bool seq_AddTextFromFile(Sequence& sequence, const std::string& textFileName, SEQ_TEXT_POSITIONING textJustification)
+{
 	// NOTE: The original game never had a fullscreen mode for FMVs on >640x480 screens.
 	// They would just use double sized videos, and move the text to that area.
 	// We just use the full screen for text right now, instead of using offsets.
 	// However, depending on reaction, we may use the old style again.
-	D_H2 = 0;				//( pie_GetVideoBufferHeight()- 480)/2;
-	D_W2 = 0;				//( pie_GetVideoBufferWidth() - 640)/2;
-	ssprintf(aTextName, "sequenceaudio/%s", pTextName);
+	D_H2 = 0;
+	D_W2 = 0;
 
-	if (loadFileToBufferNoError(aTextName, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE, &fileSize) == false)  //Did I mention this is lame? -Q
+	std::shared_ptr<PhysFS::ifstream> infile = PhysFS::ifstream::make(textFileName);
+	if(!infile)
 	{
 		return false;
 	}
 
-	pTextBuffer = fileLoadBuffer;
-	pCurrentLine = strtok(pTextBuffer, seps);
-	while (pCurrentLine != nullptr)
+	int x, y;
+	double startTime = 0.0, endTime = 0.0;
+	std::vector<std::string> lines;
+	std::string line;
+    int turn = 0;
+
+    while (crossPlatformGetLine(*infile, line))
 	{
-		if (*pCurrentLine != '/')
+        if (!line.empty())
 		{
-			if (sscanf(pCurrentLine, "%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
+            if (turn == 0)
 			{
-				// Since all the positioning was hardcoded to specific values, we now calculate the
-				// ratio of our screen, compared to what the game expects and multiply that to x, y.
-				// This makes the text always take up the full screen, instead of original style.
-				xOffset = static_cast<SDWORD>((double)pie_GetVideoBufferWidth() / 640. * (double)xOffset);
-				yOffset = static_cast<SDWORD>((double)pie_GetVideoBufferHeight() / 480. * (double)yOffset);
-				//get the text
-				pText = strrchr(pCurrentLine, '"');
-				ASSERT(pText != nullptr, "error parsing text file");
-				if (pText != nullptr)
+                if (line.find_first_not_of("0123456789") != std::string::npos)
 				{
-					*pText = (UBYTE)0;
-				}
-				pText = strchr(pCurrentLine, '"');
-				ASSERT(pText != nullptr, "error parsing text file");
-				if (pText != nullptr)
-				{
-					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startTime, endTime, textJustification);
-				}
+					debug(LOG_ERROR, "%s is not a valid .srt file", textFileName.c_str()); 
+                    return false;
+                }
+                turn++;
+                continue;
+            }
+            if (line.find("-->") != std::string::npos)
+			{
+                // Split at the " ". If the file is a valid .srt, then the result should be
+				// three strings, namely the start time, "-->", and the end time.
+                std::vector<std::string> srtTime = split(line, " ");
+
+                startTime = srtTimeToSeconds(srtTime[0]);
+                endTime = srtTimeToSeconds(srtTime[2]);
+            }
+            else
+			{
+				lines.push_back(line);
+            }
+            turn++;
+
+        }
+        else
+		{
+            turn = 0;
+
+			int original_y;
+
+			// First, determine where the coordinates of the line.
+			// These values are kind of arbitrary. They just look right.
+			// Second, add it to the sequence using AddLineForVideo(),
+			// to make sure that it gets breaked correctly if it is too long.
+			
+			if(textJustification == SEQ_TEXT_POSITION)
+			{
+				original_y = 20;
 			}
-		}
-		//get next line
-		pCurrentLine = strtok(nullptr, seps);
-	}
+			else
+			{
+				original_y = 430;
+			}
+
+			for(int i = 0; i < lines.size(); ++i)
+			{
+				if (i == 0)
+				{
+					x = (double)pie_GetVideoBufferWidth() / 640. * (double)20;
+					y = (double)pie_GetVideoBufferHeight() / 480. * (double)original_y;
+				}
+				else
+				{				
+					x = y = 0;
+				}
+            
+				seq_AddLineForVideo(sequence, lines[i], x, y, startTime, endTime, textJustification);
+			}
+
+			lines.clear();
+        }
+    }
+
 	return true;
 }
 
-//clear the sequence list
 void seq_ClearSeqList()
 {
-	currentSeq = -1;
 	currentPlaySeq = -1;
-	for (int i = 0; i < MAX_SEQ_LIST; ++i)
-	{
-		aSeqList[i].reset();
-	}
+	seqList.clear();
 }
 
-//add a sequence to the list to be played
-void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop)
+/**
+ * @brief Add a new sequence to the list of sequences to be played.
+ * 
+ * Additionally, the function will look for the subtitles of the sequence and add them to it.
+ *  
+ * @param pSeqName The name of the sequence to be played.
+ * @param audioName The name of the audio file for the sequence.
+ * @param pTextName The name of the .srt file that contains additional text to be displayed
+ *                  besides to the subtitles. Could be empty.
+ * @param bLoop Determine whether the sequence should be looped or not.
+ */
+void seq_AddSeqToList(const WzString &seqName, const WzString &audioName, const std::string& textFileName, bool loop)
 {
-	currentSeq++;
+	Sequence seq = Sequence(seqName, audioName, loop);
 
-	ASSERT_OR_RETURN(, currentSeq < MAX_SEQ_LIST, "too many sequences");
-
-	//OK so add it to the list
-	aSeqList[currentSeq].pSeq = pSeqName;
-	aSeqList[currentSeq].pAudio = audioName;
-	aSeqList[currentSeq].bSeqLoop = bLoop;
-	if (pTextName != nullptr)
+	if (!textFileName.empty())
 	{
 		// Ordinary text shouldn't be justified
-		seq_AddTextFromFile(pTextName, SEQ_TEXT_POSITION);
+		std::string textFile = getSubtitleFile(textFileName);
+		seq_AddTextFromFile(seq, textFile, SEQ_TEXT_POSITION);
 	}
 
 	if (bSeqSubtitles)
 	{
-		char aSubtitleName[MAX_STR_LENGTH];
-		sstrcpy(aSubtitleName, pSeqName.toUtf8().c_str());
-
-		// check for a subtitle file
-		char *extension = strrchr(aSubtitleName, '.');
-		if (extension)
+		std::string subFile = getSubtitleFile(seqName.toUtf8());
+		if(!subFile.empty())
 		{
-			*extension = '\0';
+			// Subtitles should be center justified
+			seq_AddTextFromFile(seq, subFile, SEQ_TEXT_CENTER);
 		}
-		sstrcat(aSubtitleName, ".txt");
-
-		// Subtitles should be center justified
-		seq_AddTextFromFile(aSubtitleName, SEQ_TEXT_JUSTIFY);
 	}
+
+	seqList.push_back(seq);
 }
 
-/*checks to see if there are any sequences left in the list to play*/
 bool seq_AnySeqLeft()
 {
 	int nextSeq = currentPlaySeq + 1;
-
-	//check haven't reached end
-	if (nextSeq >= MAX_SEQ_LIST)
-	{
-		return false;
-	}
-	return !aSeqList[nextSeq].pSeq.isEmpty();
+	return (nextSeq != seqList.size());
 }
 
 void seq_StartNextFullScreenVideo()
 {
-	bool	bPlayedOK;
+	bool bPlayedOK;
 
 	currentPlaySeq++;
-	if (currentPlaySeq >= MAX_SEQ_LIST)
-	{
-		bPlayedOK = false;
-	}
-	else
-	{
-		bPlayedOK = seq_StartFullScreenVideo(aSeqList[currentPlaySeq].pSeq, aSeqList[currentPlaySeq].pAudio, VIDEO_USER_CHOSEN_RESOLUTION);
-	}
+	bPlayedOK = seq_StartFullScreenVideo(seqList[currentPlaySeq].pSeq, seqList[currentPlaySeq].pAudio, VIDEO_USER_CHOSEN_RESOLUTION);
 
 	if (bPlayedOK == false)
 	{
-		//don't do the callback if we're playing the win/lose video
+		// don't do the callback if we're playing the win/lose video
 		if (getScriptWinLoseVideo())
 		{
 			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN, false);
 		}
 	}
 }
-
 
 void seq_SetSubtitles(bool bNewState)
 {

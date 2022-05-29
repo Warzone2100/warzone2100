@@ -1,0 +1,4 @@
+1
+00:00:02,083 --> 00:00:12,500
+Le briefing sur la NASDA suit :
+

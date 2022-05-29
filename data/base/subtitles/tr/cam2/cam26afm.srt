@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Analizlere göre bu sistem KASSA uydularının kontrol sisteminin bir parçası.
+
+2
+00:00:01,666 --> 00:00:16,666
+Ve bunlara göre Nexus Yıkımın başlamasının sorumlusu.
+
+3
+00:00:18,333 --> 00:00:41,666
+Yıkımın ilk zamanlarında KASSA teknisyenleri, Nexus'un bulaştığı sistemleri kapattı. Görünüşe göre Lazer uydularının ateş edememe sebebi bu.
+
+4
+00:00:43,333 --> 00:01:08,750
+Sonra da gelen nükleer manyetik dalgalar KASSA bellek bankalarını büyük ölçüde silmiş, ana işlemcisini parçalamış ve Nexus'a doğrudan şok dalgaları göndermiş.
+
+5
+00:01:12,916 --> 00:01:23,333
+Karşı saldırılar sırasında Nexus da kızartma oldu ve bilinci silindi.
+

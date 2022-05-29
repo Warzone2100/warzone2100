@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Analysis indicates that these systems were part of the control system for the NASDA satellites.
+
+2
+00:00:01,666 --> 00:00:16,666
+It's now certain that Nexus was responsible for The Collapse.
+
+3
+00:00:18,333 --> 00:00:41,666
+During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes.
+
+4
+00:00:43,333 --> 00:01:08,750
+The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus.
+
+5
+00:01:12,916 --> 00:01:23,333
+Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes.
+

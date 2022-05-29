@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Commandant, nous venons de détecter un lancement de missile à ces coordonnées.
+
+2
+00:00:10,416 --> 00:00:21,666
+La Division Gamma envoie un groupe pour investir le site et empêcher de prochaines opérations de lancement.
+
+3
+00:00:22,500 --> 00:00:47,083
+Nous pouvons juste affirmer que NEXUS a pris le contrôle de ce site. Nous ne sommes pas en mesure de déterminer si le missile est armé avec une charge nucléaire ou non, ni quelle est sa future cible. Vous devez commencer les préparatifs pour l'évacuation de votre base.
+

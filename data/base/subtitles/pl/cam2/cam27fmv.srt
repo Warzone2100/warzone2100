@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Dowódco, przed chwilą wykryto odpalenie rakiety na tych koordynatach.
+
+2
+00:00:10,416 --> 00:00:21,666
+Drużyna Gamma wysyła drużynę w celu zbadania wyrzutni i uniemożliwienia kolejnych odpaleń.
+
+3
+00:00:22,500 --> 00:00:47,083
+Możemy tylko przypuszczać, że Nexus zyskał kontrolę nad tą placówką. Nie możemy określić, czy pocisk posiada głowicę nuklearną i gdzie jest wycelowany. Zaleca się rozpoczęcie przygotowań do ewakuacji bazy.
+

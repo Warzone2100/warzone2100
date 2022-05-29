@@ -1,0 +1,8 @@
+1
+00:00:06,000 --> 00:00:15,000
+Has hecho bien.
+
+2
+00:00:06,000 --> 00:00:15,000
+Una vez hayamos analizado y autenticado la tecnología, vuestra recompensa os será dada.
+

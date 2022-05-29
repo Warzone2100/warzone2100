@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Ainda bem que conseguiu vir, Comandante.
+
+2
+00:00:05,833 --> 00:00:19,583
+Os ataques de VTOLs inimigos forçaram-nos a parar . Conseguimos repelir cyborgs e tanques, mas não conseguimos progredir pelo vale.
+
+3
+00:00:20,416 --> 00:00:22,916
+Podes tentar alcançar-nos com unidades anti-aéreas?
+

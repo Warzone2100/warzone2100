@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance.
+
+2
+00:00:07,599 --> 00:00:12,000
+We are under heavy attack from cyborgs, laser tanks, and strike VTOLs.
+
+3
+00:00:12,600 --> 00:00:18,000
+We were trying to reach your position, but have been ambushed.
+
+4
+00:00:12,600 --> 00:00:18,000
+We're holed up in  a valley at these coordinates.
+
+5
+00:00:12,600 --> 00:00:18,000
+Venligst hjælpe.
+

@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Commander, wir haben gerade einen Raketenabschuss bei diesen Koordinaten geortet.
+
+2
+00:00:10,416 --> 00:00:21,666
+Team Gamma entsendet Truppen, um die Abschussstelle zu untersuchen und weitere Abschüsse zu verhindern.
+
+3
+00:00:22,500 --> 00:00:47,083
+Wir nehmen an, dass NEXUS die Kontrolle über diese Einrichtung erlangt hat. Wir können weder feststellen, ob die Rakete atomar bestückt ist, noch was ihr Ziel ist. Wir raten zur Vorbereitung der Evakuierung Ihrer Basis.
+

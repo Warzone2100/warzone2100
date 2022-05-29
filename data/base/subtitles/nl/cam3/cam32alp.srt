@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Dit is Team Alfa. Herhaal, dit is Team Alfa. We hebben meteen assistentie nodig.
+
+2
+00:00:07,599 --> 00:00:12,000
+We zijn onder zwaar vuur van Cyborgs, laser tanks en aanval VTOL's.
+
+3
+00:00:12,600 --> 00:00:18,000
+We proberen jullie positie te bereiken, maar we zijn onderschept.
+
+4
+00:00:12,600 --> 00:00:18,000
+We zitten vast in een vallei op deze coordinaten.
+
+5
+00:00:12,600 --> 00:00:18,000
+Assisteer alsjeblieft.
+

@@ -1,0 +1,12 @@
+1
+00:01:10,833 --> 00:01:25,416
+Личен състав от база Гама са потвърдили, че ядрените ракети, насочени към бази Алфа и Бета са били изстреляни от силоз в техния сектор.
+
+2
+00:01:35,833 --> 00:01:44,166
+Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity.
+
+3
+00:01:46,250 --> 00:01:52,500
+Commander, the success of the Project lies with you.
+

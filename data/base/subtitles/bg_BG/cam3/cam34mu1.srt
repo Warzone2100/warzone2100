@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:04,400
+We are experiencing some interference from NEXUS.
+
+2
+00:00:04,599 --> 00:00:08,800
+You must destroy his command centre before we lose control of key systems.
+

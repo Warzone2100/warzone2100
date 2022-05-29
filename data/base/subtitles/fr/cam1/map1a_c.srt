@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+Le Lien Synaptique fut développé par la Reed Corporation en coopération avec l'armée américaine.
+
+2
+00:00:08,000 --> 00:00:22,000
+Le Lien Synaptique permet à un opérateur humain de contrôler des systèmes informatiques par la pensée. Il se fixe à la base du crâne et entoure la moelle épinière.
+
+3
+00:00:25,000 --> 00:00:30,000
+Le Lien a un taux de transfert de données haut débit vers un port qui peut être branché à un ordinateur.
+
+4
+00:00:37,000 --> 00:00:48,000
+La conséquence principale de la maîtrise de cette technologie est la possibilité de créer des Cyborgs. Les premiers prototypes de robots sont eux trop lents et pas assez intelligents.
+
+5
+00:00:54,000 --> 00:01:08,000
+Le Lien Synaptique permet aux soldats de contrôler les mouvements de leur armure robotisée aussi facilement que s'il s'agissait de leur propre corps. Ces exosquelettes blindés et puissants ont permis l'utilisation massive de l'infanterie au cours des guerres du 21eme siècle.
+
+6
+00:01:08,599 --> 00:01:17,000
+Malheureusement, cette technologie est tombée entre les mains du Nouveau Paradigme. Il est désormais impératif pour vous de parvenir à effectuer des recherches dans le but de vous approprier la maîtrise du Lien Synaptique.
+

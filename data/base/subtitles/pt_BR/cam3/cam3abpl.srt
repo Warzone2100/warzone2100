@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:08,000
+Comandante, estamos sofrendo interferência em nossos equipamentos.
+
+2
+00:00:01,000 --> 00:00:08,000
+O serviço normal será restaurado assim que possível.
+

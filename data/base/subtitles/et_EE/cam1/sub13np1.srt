@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Hoiatus!
+
+2
+00:00:08,000 --> 00:00:11,000
+Sa sisened keelatud alale.
+
+3
+00:00:12,000 --> 00:00:22,000
+Naaske oma määratud tsooni, või teid hävitatakse.
+
+4
+00:00:12,000 --> 00:00:22,000
+Kordus.Naaske oma määratud tsooni, või teid hävitatakse.
+
+5
+00:00:12,000 --> 00:00:22,000
+Sõnum Lõpeb.
+

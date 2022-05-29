@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Prenos koordinat dokončan.
+
+2
+00:00:03,599 --> 00:00:08,000
+Poveljnik, sile iz skupine Alfa so pobegnile jedrskemu napadu na bazo Alfa.
+

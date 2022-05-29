@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Kami senang Anda bisa datang, Komandan.
+
+2
+00:00:05,833 --> 00:00:19,583
+Pesawat penyerang VTOL musuh terus menyerang kami. Kami berhasil memukul mundur serangan cyborg dan tank, namun kami belum dapat bergerak melalui lembah.
+
+3
+00:00:20,416 --> 00:00:22,916
+Dapatkah Anda mencoba untuk mencapai kami dengan unit-unit anti-pesawat?
+

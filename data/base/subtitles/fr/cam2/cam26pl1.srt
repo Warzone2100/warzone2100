@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:07,599
+L'analyse de la centrale de la NASDA ne laisse aucun doute : le Collectif a bel et bien introduit le virus de NEXUS dans les systèmes de la NASDA.
+
+2
+00:00:08,399 --> 00:00:14,000
+Le réacteur nucléaire était en construction en vue d'alimenter en énergie un vaste réseau d'ordinateurs pré-Apocalyptiques.
+

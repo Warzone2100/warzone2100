@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Commander, a new launch has been detected.
+
+2
+00:00:01,600 --> 00:00:08,000
+It is likely to be targeted at your location.
+
+3
+00:00:08,800 --> 00:00:15,399
+You are to start the immediate evacuation of Beta Base to the safe haven.
+

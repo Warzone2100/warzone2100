@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:02,400
+Transmisi Masuk
+
+2
+00:00:02,799 --> 00:00:10,000
+Transmisi dari Markas Beta
+
+3
+00:00:02,799 --> 00:00:10,000
+Mayday! Mayday!
+
+4
+00:00:02,799 --> 00:00:10,000
+Kami meminta bantuan!...
+
+5
+00:00:29,200 --> 00:00:33,759
+Komandan, Anda akan membantu Tim Beta
+

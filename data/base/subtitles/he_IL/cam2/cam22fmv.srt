@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,416
+NASDA is the North American Strategic Defense Agency.
+
+2
+00:00:12,500 --> 00:00:36,250
+NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082.
+
+3
+00:00:37,500 --> 00:00:49,166
+In 2085 the NASDA satellites fired their nukes at Earth.
+
+4
+00:00:52,916 --> 00:01:06,666
+There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there.
+
+5
+00:01:08,750 --> 00:01:23,333
+The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America.
+
+6
+00:01:25,833 --> 00:01:46,250
+During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets.
+
+7
+00:01:48,333 --> 00:01:58,333
+All nukes targeted at  North America found their targets.
+
+8
+00:01:59,166 --> 00:02:21,666
+We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites.
+
+9
+00:02:22,500 --> 00:02:27,083
+If the centre is found intact, NEXUS may gain control of the satellites.
+
+10
+00:02:28,333 --> 00:02:34,166
+Nexus claimed that it had already destroyed the world.
+

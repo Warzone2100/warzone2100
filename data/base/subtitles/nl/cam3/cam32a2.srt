@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Goed dat je kon komen, commandant.
+
+2
+00:00:05,833 --> 00:00:19,583
+Vijandelijke aanvals VTOL's hebben ons klemgezet. We zijn in staat tanks en Cyborgs op afstand te houden, maar we hebben nog geen vorderingen langs de valei gemaakt.
+
+3
+00:00:20,416 --> 00:00:22,916
+Kun je proberen om ons te bereiken met AA units?
+

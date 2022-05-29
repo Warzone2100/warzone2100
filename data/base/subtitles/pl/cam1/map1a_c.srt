@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+Technologia połączenia synaptycznego została opracowana przez Reed Corporation oraz wojsko Stanów Zjednoczonych.
+
+2
+00:00:08,000 --> 00:00:22,000
+Połączenie synaptyczne umożliwia prawie natychmiastowe przekazywanie myśli operatorów do systemów kontroli i kierowania pojazdów. Połączenie synaptyczne wprowadzane jest do podstawy czaszki.
+
+3
+00:00:25,000 --> 00:00:30,000
+Połączenie posiada szybki port przesyłu danych, który może być podłączony do dowolnego systemu komputerowego.
+
+4
+00:00:37,000 --> 00:00:48,000
+Co ważniejsze, stworzenie technologii połączenia synaptycznego umożliwiło budowę cyborgów. Wczesne próby z pancerzami bojowymi dla żołnierzy nie powiodły się, gdyż okazały się być powolne i mało responsywne.
+
+5
+00:00:54,000 --> 00:01:08,000
+Technologia połączenia synaptycznego umożliwiła żołnierzom użycie pancerzy bojowych, które mogli kontrolować tak jak własne ciała. Pancerze bojowe umożliwiły efektywne skuteczne działanie piechoty na polach bitewnych XXI wieku.
+
+6
+00:01:08,599 --> 00:01:17,000
+Niestety, technologia ta wpadła w ręce New Paradigm. Niezbędne jest abyś zbadał i rozwinął technologie połączenia synaptycznego.
+

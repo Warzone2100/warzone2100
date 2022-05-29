@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:04,400
+Kami sedang mengalami gangguan dari NEXUS.
+
+2
+00:00:04,599 --> 00:00:08,800
+Anda harus menghancurkan pusat komandonya sebelum kita kehilangan kendali dari sistem-sistem penting.
+

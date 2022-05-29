@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Cieszymy się, że ci się udało, dowódco.
+
+2
+00:00:05,833 --> 00:00:19,583
+Wrogie jednostki uderzeniowe VTOL przycisnęły nas do muru. Udało nam się odeprzeć cyborgi i czołgi, ale nie byliśmy w stanie dokonać żadnego postępu w dolinie.
+
+3
+00:00:20,416 --> 00:00:22,916
+Czy uda ci się do nas dotrzeć z jednostkami przeciwlotniczymi?
+

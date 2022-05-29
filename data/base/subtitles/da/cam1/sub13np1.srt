@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Advarsel!
+
+2
+00:00:08,000 --> 00:00:11,000
+You are entering a restricted area.
+
+3
+00:00:12,000 --> 00:00:22,000
+Return to your designated zone or be destroyed.
+
+4
+00:00:12,000 --> 00:00:22,000
+Repeat. Return to your designated zone or be destroyed.
+
+5
+00:00:12,000 --> 00:00:22,000
+Besked afslutter.
+

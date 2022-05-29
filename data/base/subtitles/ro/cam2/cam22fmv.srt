@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,416
+NASDA este "Agenţia Nord-Americană de Apărare Strategică".
+
+2
+00:00:12,500 --> 00:00:36,250
+NASDA a fost înființată în 2076 pentru a apăra America de Nord de atacuri convenționale și nucleare. Construcția de sateliți a început în 2081 și a fost finalizată în 2082.
+
+3
+00:00:37,500 --> 00:00:49,166
+În 2085, sateliții NASDA au lansat armele atomice asupra Pământului.
+
+4
+00:00:52,916 --> 00:01:06,666
+Erau de asemenea şi silozuri în locaţii terestre. Multe dintre acestea au fost distruse în contraatacurile nucleare, dar unele cu siguranţă au rămas.
+
+5
+00:01:08,750 --> 00:01:23,333
+Sateliții NASDA conțineau de asemenea lasere pulsatile pentru a opri rachetele ce se apropiau de America de Nord.
+
+6
+00:01:25,833 --> 00:01:46,250
+În timpul contraatacurilor, acești Sateliți Laser nu au reușit să tragă. Dacă sunt aduși în funcțiune, acești Sateliți Laser ar putea provoca pagube enorme țintelor de la sol.
+
+7
+00:01:48,333 --> 00:01:58,333
+Toate armele atomice ce au țintit America de Nord și-au atins ținta.
+
+8
+00:01:59,166 --> 00:02:21,666
+Știm că Nexus caută centrul de control NASDA în sectorul de est. Acesta a fost un centru de control de la sol al sateliților.
+
+9
+00:02:22,500 --> 00:02:27,083
+Dacă acest centru e descoperit intact, NEXUS ar putea prelua controlul asupra sateliților.
+
+10
+00:02:28,333 --> 00:02:34,166
+Nexus pretinde că a mai distrus odată lumea.
+

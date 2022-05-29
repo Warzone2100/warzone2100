@@ -1,0 +1,4 @@
+1
+00:00:05,599 --> 00:00:08,399
+Acabou o tempo, comandante!!
+

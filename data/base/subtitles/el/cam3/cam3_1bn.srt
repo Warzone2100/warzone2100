@@ -1,0 +1,24 @@
+1
+00:00:03,000 --> 00:00:10,000
+Well done Commander, you've prevented my last missile from launching.
+
+2
+00:00:03,000 --> 00:00:10,000
+Such a shame. Your Project HQ would have made a wonderful target.
+
+3
+00:00:11,000 --> 00:00:12,800
+But it's good of you to join me here.
+
+4
+00:00:13,000 --> 00:00:17,000
+Θαμμένη κάτω από αυτό τον μεγακύλινδρο, βρίσκεται μία πυρηνική κεφαλή, η οποία έχει προγραμματιστεί να εκραγεί σύντομα.
+
+5
+00:00:19,000 --> 00:00:22,000
+As I cannot launch it, it'll just have to blow where it is.
+
+6
+00:00:22,399 --> 00:00:26,000
+Please note that all entrances to the underground complex have been sealed. Goodbye, Commander.
+

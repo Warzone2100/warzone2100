@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:02,400
+Transimssão chegando
+
+2
+00:00:02,799 --> 00:00:10,000
+Recebendo transmissão da Base Beta
+
+3
+00:00:02,799 --> 00:00:10,000
+Socorro! Socorro!
+
+4
+00:00:02,799 --> 00:00:10,000
+Ajude, por favor!...
+
+5
+00:00:29,200 --> 00:00:33,759
+Comandante, você foi designado para ajudar o Time Beta
+

@@ -1,0 +1,21 @@
+1
+00:00:00,000 --> 00:00:04,000
+CAMPAIGN ONE
+WESTERN SECTOR
+
+3
+00:00:04,039 --> 00:00:15,960
+Dawn, July 4th, 2100
+Project HQ
+A New Era
+
+6
+00:00:19,959 --> 00:00:31,959
+Morning, July 4th, 2100
+In-flight to Western Sector
+Team Alpha nears its destination
+
+9
+00:00:50,000 --> 00:01:09,000
+OBJEKTIF: Temukan dan peroleh kembali teknologi sinapsis saraf
+

@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Komutanım bu alandan yüksek yörüngeye ulaşan mesajlar tespit ettik.
+
+2
+00:00:13,000 --> 00:00:16,399
+Nexus KASSA uydularına yeniden bağlandı.
+
+3
+00:00:16,799 --> 00:00:22,600
+Bu bizim ve Proje'nin hayatta kalması için çok büyük bir tehlike.
+

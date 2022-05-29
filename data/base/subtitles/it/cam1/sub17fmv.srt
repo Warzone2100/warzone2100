@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Questo Programma Intruso Nexus è un parassita dei computer automutante. Questo rende difficile da eliminarlo dai sistemi una volta che è stato identificato.
+
+2
+00:00:12,000 --> 00:00:29,399
+Non siamo stati in grado di accertare che sia il fine ultimo o la funzione. Nella sua forma iniziale cerca e isola sezioni di memoria dal resto del sistema invaso. Poi inizia a mutare se stesso e le strutture dei dati, riprogrammando efficacemente il sistema dall'interno.
+
+3
+00:00:30,000 --> 00:00:38,400
+Ulteriori analisi sono state impedite dallo spegnimento manuale del sistema eseguito dai nostri tecnici, per prevenire ulteriori contaminazioni da parte del Programma d'intrusione Nexus.
+
+4
+00:00:39,000 --> 00:00:49,000
+Comunque, la dispersione del Programma d'intrusione Nexus non è stata verificata dal Nuovo Paradigma. Dobbiamo catturare i sistemi centrali del Nuovo Paradigma, in modo da compiere ulteriori investigazioni su Nexus e determinare le sue origini.
+
+5
+00:00:50,000 --> 00:00:57,000
+Comandante, deve ostacolare le attività del Nuovo Paradigma in questo settore e localizzare la loro base principale.
+

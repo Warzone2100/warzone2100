@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Cele transportów są następujące:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Sektor Zachodni....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa, macie pozwolenie na start.
+
+4
+00:00:09,000 --> 00:00:14,000
+Powodzenia oraz udanych łowów.
+
+5
+00:00:30,000 --> 00:00:35,000
+Zbliżamy się do Strefy Lądowania. Rozpoczyna się odprawa drużyny Alfa.
+
+6
+00:00:37,000 --> 00:00:46,000
+Dowódco, przewodzisz drużynie Alfa, jednej z trzech drużyn ekspedycyjnych wysłanych przez Projekt w celu odzyskania artefaktów sprzed Zniszczenia.
+
+7
+00:00:47,000 --> 00:00:49,599
+Twój cel znajduje się w zachodniej strefie.
+

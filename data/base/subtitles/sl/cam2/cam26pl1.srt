@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:07,599
+Analiza NASDA središča ne pušča dvoma, da je Kolektiv vanj vstavil vdorni virus Nexus.
+
+2
+00:00:08,399 --> 00:00:14,000
+Jedrski reaktor je bil namenjen proizvodnji moči za ogromno omrežje pred-propadnih računalniških sistemov.
+

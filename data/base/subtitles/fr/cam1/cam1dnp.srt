@@ -1,0 +1,12 @@
+1
+00:00:08,000 --> 00:00:14,800
+Tous les groupes de combat commencent l'assaut sur l'ennemi.
+
+2
+00:00:08,000 --> 00:00:14,800
+Ils ne sont pas dignes de l'indulgence du Nouveau Paradigme.
+
+3
+00:00:15,399 --> 00:00:18,000
+Ils doivent être arrêtés.
+

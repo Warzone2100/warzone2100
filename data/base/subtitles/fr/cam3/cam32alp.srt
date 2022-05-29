@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Ici la Division Alpha. Je répète, ici la Division Alpha. Nous avons besoin d'un soutien de toute urgence.
+
+2
+00:00:07,599 --> 00:00:12,000
+Nous subissons des attaques massive de Cyborgs, de tanks à laser et de VTOLs.
+
+3
+00:00:12,600 --> 00:00:18,000
+Nous étions en train de rejoindre notre position, mais nous sommes tombés dans une embuscade.
+
+4
+00:00:12,600 --> 00:00:18,000
+Nous nous sommes cachés dans une vallée dont voici les coordonnées.
+
+5
+00:00:12,600 --> 00:00:18,000
+Aidez-nous s'il vous plaît.
+

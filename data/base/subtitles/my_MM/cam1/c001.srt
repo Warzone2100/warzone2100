@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Transport destinations follow:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alpha - Western Sector....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alpha you are cleared for take-off.
+
+4
+00:00:09,000 --> 00:00:14,000
+Good luck and good hunting.
+
+5
+00:00:30,000 --> 00:00:35,000
+Approaching Landing Zone. Team Alpha Briefing commences.
+
+6
+00:00:37,000 --> 00:00:46,000
+Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse.
+
+7
+00:00:47,000 --> 00:00:49,599
+Your destination lies in the western zone.
+

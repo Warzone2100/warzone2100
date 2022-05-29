@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:04,400
+NEXUS beavatkozást észleltük.
+
+2
+00:00:04,599 --> 00:00:08,800
+Meg kell semmisítenie a parancsnoki központját, mielőtt elveszítené a fő rendszerei irányítását. 
+

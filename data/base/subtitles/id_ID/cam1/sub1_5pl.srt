@@ -1,0 +1,4 @@
+1
+00:00:02,083 --> 00:00:15,833
+Informasi yang diterima dari pangkalan musuh sebelumnya mengindikaskan bahwa Paradigma Baru memperoleh dua artefak Tautan Sinapsis.
+

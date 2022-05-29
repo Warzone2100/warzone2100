@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Başarmanıza sevindim, Komutanım.
+
+2
+00:00:05,833 --> 00:00:19,583
+Düşman DİvKları bizi sıkıştırdı. Sayborgları ve tankları durdurabildik ama vadi boyunca ilerlemeyi başaramadık.
+
+3
+00:00:20,416 --> 00:00:22,916
+Uçaksavar birimleri ile bize ulaşabilir misiniz?
+

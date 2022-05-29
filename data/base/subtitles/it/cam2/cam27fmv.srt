@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Comandante, abbiamo appena rilevato un lancio missilistico a queste coordinate.
+
+2
+00:00:10,416 --> 00:00:21,666
+Il Team Gamma sta mandando una squadra a investigare sul sito di lancio e prevenire altri lanci.
+
+3
+00:00:22,500 --> 00:00:47,083
+Possiamo solo assumere che Nexus abbia preso controllo di questo sito. Non possiamo determinare se il missile è nucleare o contro cosa sia puntato. E' consigliabile iniziare le preparazione per l'evacuazione della vostra base.
+

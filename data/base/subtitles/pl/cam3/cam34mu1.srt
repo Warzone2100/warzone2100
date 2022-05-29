@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:04,400
+Doświadczamy pewnej ingerencji z NEXUS.
+
+2
+00:00:04,599 --> 00:00:08,800
+Musisz zniszczyć jego centrum dowodzenia zanim stracimy kontrolę nad kluczowymi systemami.
+

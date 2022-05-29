@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Analiza kaže, da so bili ti sistemi del krmilnega sistema za NASDA satelite.
+
+2
+00:00:01,666 --> 00:00:16,666
+Zdaj je nedvomno, da je bil Nexus odgovoren za Propad.
+
+3
+00:00:18,333 --> 00:00:41,666
+NASDA tehniki so v začetnih stopnjah Propada odklopili okužene sisteme, da bi osamili širjenje Nexus-a. Zdi se, da je to onemogočilo streljanje LasSat-ov med protiudarci.
+
+4
+00:00:43,333 --> 00:01:08,750
+Sledeči jedrsko-magnetni pulzi so počistili velike količine NASDA spominskih bank, razbili njen osrednji procesor in poslali sunkovite udarne valove skozi Nexus.
+
+5
+00:01:12,916 --> 00:01:23,333
+Nexus je bil scvrt, saj so bili celotni oddelki njegove zavesti izbrisani v protiudarcih.
+

@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Iz tega mesta zaznavamo sporočila, ki dosegajo visoko orbito.
+
+2
+00:00:13,000 --> 00:00:16,399
+Nexus se je zdaj ponovno povezal z NASDA sateliti.
+
+3
+00:00:16,799 --> 00:00:22,600
+To predstavlja veliko grožnjo za Projekt in za naše preživetje.
+

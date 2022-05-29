@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+A szinaptikus kapcsolódást az amerikai hadsereggel együtt fejlesztette a Reed Corporation.
+
+2
+00:00:08,000 --> 00:00:22,000
+A szinaptikus kapcsolat lehetővé teszi a közvetlen agyi kapcsolatot az operátor és a jármű vezérlőrendszere között. A szinaptikus kapcsolat a koponya és a gerincoszlop találkozásánál kerül kialakításra.
+
+3
+00:00:25,000 --> 00:00:30,000
+A kapcsolat nagy sebességű adattovábbítást tesz lehetővé, bármely számítástechnikai rendszer felé.
+
+4
+00:00:37,000 --> 00:00:48,000
+Még fontosabb, hogy a szinaptikus kapcsolat fejlesztése lehetővé teszi Cyborgok előállítását. Korai kísérletek a harci öltözékkel megbuktak, mivel túlságosan lassúnak és alkalmatlannak bizonyultak.
+
+5
+00:00:54,000 --> 00:01:08,000
+A szinaptikus kapcsolat lehetővé teszi a katonák számára, hogy a harci öltözetet ugyanolyan könnyedén mozgassák, mint saját testüket. A harci öltözet lehetővé teszi a gyalogos egységek számára, hogy hatékonyak legyenek a 21. századi harcmezőkön.
+
+6
+00:01:08,599 --> 00:01:17,000
+Sajnálatos módon ez a technológia az Új Paradigma kezei közé került. Emiatt halaszthatatlan, hogy kifejleszd a szinaptikus kapcsolat technológiáját.
+

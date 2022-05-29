@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Els anàlisis indiquen que aquests sistemes eren part del sistema de control dels satèl·lits de NASDA.
+
+2
+00:00:01,666 --> 00:00:16,666
+Ara estem segurs que Nexus va ser el responsable del Col·lapse.
+
+3
+00:00:18,333 --> 00:00:41,666
+Durant les primeres etapes del Col·lapse, els tècnics de NASDA van apagar els sistemes infectats per tal d'aïllar el virus de Nexus. Sembla que això va evitar que els LasSats es disparessin durant el contraatac.
+
+4
+00:00:43,333 --> 00:01:08,750
+Els polsos magnètics nuclears van esborrar una gran part dels bancs de memòria de NASDA, van destruir el processador central, i l'ona expansiva va arribar fins a Nexus.
+
+5
+00:01:12,916 --> 00:01:23,333
+Nexus va quedar inutilitzat degut a que seccions completes de la seva consciència van quedar destruïdes en el contraatac.
+

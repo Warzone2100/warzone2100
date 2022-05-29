@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:08,000
+Commander, wir haben Interferenzprobleme mit unserer Ausrüstung.
+
+2
+00:00:01,000 --> 00:00:08,000
+Der Normalbetrieb wird so schnell wie möglich wiederhergestellt.
+

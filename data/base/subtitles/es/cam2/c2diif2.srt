@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Comandante, un nuevo lanzamiento ha sido detectado.
+
+2
+00:00:01,600 --> 00:00:08,000
+Aparentemente, está dirigido a tu posición.
+
+3
+00:00:08,800 --> 00:00:15,399
+Estás para iniciar la inmediata evacuación de la Base Beta al refugio.
+

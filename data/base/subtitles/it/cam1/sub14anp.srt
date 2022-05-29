@@ -1,0 +1,4 @@
+1
+00:00:08,399 --> 00:00:15,199
+NEXUS, la tecnologia del collegamento sinaptico che avete richiesto è stata recuperata e inviata per il recupero.
+

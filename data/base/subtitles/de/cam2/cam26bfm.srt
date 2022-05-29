@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Wir empfangen Übertragungen von dieser Einrichtung, die den hohen Orbit erreichen.
+
+2
+00:00:13,000 --> 00:00:16,399
+Nexus hat wieder Verbindung zu den NASDA-Satelliten aufgenommen.
+
+3
+00:00:16,799 --> 00:00:22,600
+Dies ist eine ernste Bedrohung für das Projekt und unser Überleben.
+

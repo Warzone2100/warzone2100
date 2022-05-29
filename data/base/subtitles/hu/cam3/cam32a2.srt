@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Sok szerencsét, Parancsnok.
+
+2
+00:00:05,833 --> 00:00:19,583
+Ellenséges VTOL csapás ideszögezett minket. Sikerült a Cyborgokat és a tankokat távol tartanunk, de nem volt alkalmunk haladni a völgy mentén.
+
+3
+00:00:20,416 --> 00:00:22,916
+El tud érni minket légvédelmi egységekkel?
+

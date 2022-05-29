@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+El Enlace Sináptico ha sido desarrollado por la Corporación Reed en conjunto con el Ejército Estadounidense.
+
+2
+00:00:08,000 --> 00:00:22,000
+El enlace sináptico permite una transmisión casi instantánea del pensamiento desde los operadores humanos a los sistemas de control y guiado de los vehículos. El enlace sináptico es encajado en la base del cráneo, rodeando la espina dorsal.
+
+3
+00:00:25,000 --> 00:00:30,000
+El enlace tiene un puerto de transferencia de datos de alta velocidad que se conecta a cualquier sistema informático.
+
+4
+00:00:37,000 --> 00:00:48,000
+Lo que es más importante, el desarrollo del enlace sináptico, hizo posible la creación de cyborgs. Los intentos tempranos en tecnoarmaduras para soldados individuales fracasó, ya que demostraron ser lentos y sin reflejos.
+
+5
+00:00:54,000 --> 00:01:08,000
+El enlace sináptico permitió a los soldados ser colocados en tecno-armaduras que controlaron casi tan fácilmente como sus propios cuerpos. Los tecno-trajes permitieron a la infantería actuar de forma efectiva en los campos de batalla del siglo XXI.
+
+6
+00:01:08,599 --> 00:01:17,000
+Degraciadamente, esta tecnología ha caído en manos del Nuevo Paradigma. Y es un imperativo que investigues y desarrolles las tecnologías de enlace sináptico.
+

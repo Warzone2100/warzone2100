@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Program Penyusup Nexus ini adalah komputer parasit yang dapat bermutasi. Ini menyebabkan program ini sulit untuk dimusnahkan setelah diidentifikasi.
+
+2
+00:00:12,000 --> 00:00:29,399
+Kami belum dapat memastikan tujuan akhir atau fungsinya. Dalam bentuk awalnya ia mencari dan mengisolasi bagian-bagian memori sistem yang diserang. Kemudian ia mulai bermutasi dirinya dan struktur-struktur data, pada prakteknya memprogram ulang sistem dari dalam.
+
+3
+00:00:30,000 --> 00:00:38,400
+Analisis lanjut dihentikan dengan penghentian sistem secara manual oleh teknisi kami untuk mencegah kontaminasi lanjut oleh Program Penyusup Nexus.
+
+4
+00:00:39,000 --> 00:00:49,000
+Walaupun begitu, penyebaran Program Penyusup Nexus tidak disadari oleh Paradigma Baru. Kita harus merebut sistem inti Paradigma Baru untuk melanjutkan investigasi mengenai Nexus dan menentukan asal-usulnya.
+
+5
+00:00:50,000 --> 00:00:57,000
+Komandan, Anda akan membatasi aktivitas Paradigma Baru di sektor ini dan mencari lokasi markas utama mereka.
+

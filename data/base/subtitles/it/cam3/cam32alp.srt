@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Qui è la squadra Alfa. Ripeto qui è la squadra Alfa. Richiediamo assistenza immediata.
+
+2
+00:00:07,599 --> 00:00:12,000
+Siamo sotto pesante attacco da cyborg, carri laser, e VTOL d'attacco.
+
+3
+00:00:12,600 --> 00:00:18,000
+Stavamo cercando di raggiungere le vostre posizioni, ma siamo caduti vittima di un imboscata.
+
+4
+00:00:12,600 --> 00:00:18,000
+Siamo chiusi in una valle a queste coordinate.
+
+5
+00:00:12,600 --> 00:00:18,000
+Richiediamo assistenza.
+

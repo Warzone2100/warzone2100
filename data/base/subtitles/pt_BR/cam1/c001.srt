@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Destinos dos transportes seguem:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Setor Oeste...
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa, você está liberado para a decolagem.
+
+4
+00:00:09,000 --> 00:00:14,000
+Boa sorte e boa caçada.
+
+5
+00:00:30,000 --> 00:00:35,000
+Aproximando-se da Área de Pouso. Instruções do Time Alfa seguem.
+
+6
+00:00:37,000 --> 00:00:46,000
+Comandante, você lidera o Time Alfa, uma das três forças expedicionárias enviadas pelo Projeto para recuperar artefatos de antes do Colapso.
+
+7
+00:00:47,000 --> 00:00:49,599
+Seu destino é a zona oeste.
+

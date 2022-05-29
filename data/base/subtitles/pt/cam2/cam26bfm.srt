@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Estamos a detectar transmissões a partir deste ponto em direcção a uma órbita terrestre alta.
+
+2
+00:00:13,000 --> 00:00:16,399
+NEXUS conseguiu reconectar-se com os satélites da NASDA.
+
+3
+00:00:16,799 --> 00:00:22,600
+Isto é uma grande ameaça ao Projecto e à nossa sobrevivência.
+

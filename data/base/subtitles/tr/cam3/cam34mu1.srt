@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:04,400
+NEXUS parazitlenmesi yaşıyoruz.
+
+2
+00:00:04,599 --> 00:00:08,800
+Ana kontrolü kaybetmeden önce Nexus'un Genel Merkezini yok etmelisin.
+

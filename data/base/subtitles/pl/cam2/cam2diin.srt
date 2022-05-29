@@ -1,0 +1,16 @@
+1
+00:00:09,600 --> 00:00:15,199
+Wojownicy Collective. Spisaliście się znakomicie.
+
+2
+00:00:09,600 --> 00:00:15,199
+Wasza nagroda jest już w drodze.
+
+3
+00:00:15,600 --> 00:00:21,000
+Projekt ucieka z swojej bazy i kradnie waszą technologię.
+
+4
+00:00:15,600 --> 00:00:21,000
+Musisz ich powstrzymać!
+

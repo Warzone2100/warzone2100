@@ -1,0 +1,16 @@
+1
+00:00:09,600 --> 00:00:15,199
+Combattants du Collectif, vous avez brillamment rempli votre mission !
+
+2
+00:00:09,600 --> 00:00:15,199
+Voici votre juste récompense.
+
+3
+00:00:15,600 --> 00:00:21,000
+Le Projet déserte cette base en volant votre technologie !
+
+4
+00:00:15,600 --> 00:00:21,000
+Vous devez les arrêter !
+

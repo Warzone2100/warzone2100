@@ -1,0 +1,16 @@
+1
+00:00:09,600 --> 00:00:15,199
+Guerrers de La Col·lectivitat. Heu actuat bé.
+
+2
+00:00:09,600 --> 00:00:15,199
+La vostra recompensa està en camí.
+
+3
+00:00:15,600 --> 00:00:21,000
+El Projecte està abandonant la seva base i s'endú la vostra tecnologia.
+
+4
+00:00:15,600 --> 00:00:21,000
+Els heu d'aturar!
+

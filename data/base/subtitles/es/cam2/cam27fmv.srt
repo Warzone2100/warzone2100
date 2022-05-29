@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Comandante, acabamos de detectar el lanzamiento de un misil en estas coordenadas.
+
+2
+00:00:10,416 --> 00:00:21,666
+El Equipo Gamma está enviando un equipo para investigar la zona de lanzamiento y prevenir lanzamientos posteriores.
+
+3
+00:00:22,500 --> 00:00:47,083
+Solo podemos asumir que Nexus se ha hecho con el control de esta posición. No podemos determinar si el misil está armado nuclearmente o hacia dónde está apuntado. Aconsejamos iniciar las preparaciones para la evacuación de tu base.
+

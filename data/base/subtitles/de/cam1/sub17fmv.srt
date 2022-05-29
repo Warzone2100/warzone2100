@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Dieses NEXUS-Eindringlingsprogramm ist ein selbstständig mutierender Computerparasit. Dadurch ist es nur schwer wieder aus einem System zu entfernen, nachdem es erkannt wurde.
+
+2
+00:00:12,000 --> 00:00:29,399
+Wir konnten seine genaue Funktion oder sein Ziel nicht feststellen. In seiner ursprünglichen Form sucht es Speicherbereiche und isoliert diese vom Rest des Systems. Anschließend beginnt es damit, seine Speicherinhalte und Datenstrukturen zu verändern. So unternimmt es eine Neuprogrammierung des Systems von innen heraus.
+
+3
+00:00:30,000 --> 00:00:38,400
+Weitere Untersuchungen wurden durch das manuelle Abschalten des Systems durch unsere Techniker verhindert, um eine weitere Verseuchung durch das NEXUS-Eindringlingsprogramm zu verhindern.
+
+4
+00:00:39,000 --> 00:00:49,000
+Die Verbreitung des NEXUS-Eindringlingsprogramms wurde vom New Paradigm jedenfalls nicht überprüft. Wir müssen die Kernsysteme des New Paradigm erobern, um NEXUS weiter zu untersuchen und seine Herkunft zu bestimmen.
+
+5
+00:00:50,000 --> 00:00:57,000
+Commander, Sie müssen die Aktivitäten des New Paradigm in diesem Sektor einschränken und ihre Hauptbasis ausmachen.
+

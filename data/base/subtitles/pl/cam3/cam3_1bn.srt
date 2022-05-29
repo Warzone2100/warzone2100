@@ -1,0 +1,24 @@
+1
+00:00:03,000 --> 00:00:10,000
+Dobra robota dowódco, uniemożliwiłeś wystrzelenie mojego ostatniego pocisku.
+
+2
+00:00:03,000 --> 00:00:10,000
+Jaka szkoda. Kwatera główna waszego Projektu byłaby cudownym celem.
+
+3
+00:00:11,000 --> 00:00:12,800
+Ale to dobrze, że dołączyłeś do mnie tutaj.
+
+4
+00:00:13,000 --> 00:00:17,000
+Pod tym silosem zakopana jest taktyczna głowica nuklearna, która wkrótce wybuchnie.
+
+5
+00:00:19,000 --> 00:00:22,000
+Skoro nie mogę jej wystrzelić, to będzie musiała wybuchnąć tam gdzie jest.
+
+6
+00:00:22,399 --> 00:00:26,000
+Zauważ, że wszystkie wejścia do podziemnego kompleksu zostały zasypane. Żegnaj, dowódco.
+

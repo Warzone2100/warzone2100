@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Comandante, abbiamo recuperato una torretta di comando del Nuovo Paradigma.
+
+2
+00:00:05,000 --> 00:00:15,000
+Questa torretta permette ai comandanti di coordinare gli attacchi delle unità assegnate e di agire come punto di consegna per le fabbriche. Ricercare e usare questa tecnologia ha la priorità più alta.
+
+3
+00:00:17,000 --> 00:00:19,000
+Comandante, stiamo ricevendo questa trasmissione.
+

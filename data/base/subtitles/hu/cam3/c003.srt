@@ -1,0 +1,12 @@
+1
+00:01:10,833 --> 00:01:25,416
+A Gamma bázis személyzete megerősítette, hogy nukleáris rakéták vették célba Alfa és Béta bázist, amit a szektorukban lévő silóból indítottak.
+
+2
+00:01:35,833 --> 00:01:44,166
+Gamma csapat jelenleg felderíti a silók helyzetét és felügyeli a NEXUS tevékenységét.
+
+3
+00:01:46,250 --> 00:01:52,500
+Parancsnok, a terv sikeréért ön a felelős.
+

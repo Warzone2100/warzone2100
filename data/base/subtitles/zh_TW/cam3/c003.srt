@@ -1,0 +1,12 @@
+1
+00:01:10,833 --> 00:01:25,416
+Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector.
+
+2
+00:01:35,833 --> 00:01:44,166
+Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity.
+
+3
+00:01:46,250 --> 00:01:52,500
+指揮官，Project的成功要仰賴你了
+

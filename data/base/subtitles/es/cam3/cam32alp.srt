@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Somos el Equipo Alfa. Repito, somos el Equipo Alfa. Necesitamos asistencia inmediata.
+
+2
+00:00:07,599 --> 00:00:12,000
+Estamos bajo fuego intenso de cyborgs, tanques láser, y ADVs de asalto.
+
+3
+00:00:12,600 --> 00:00:18,000
+Hemos intentado alcanzar vuestra posición, pero hemos sido emboscados.
+
+4
+00:00:12,600 --> 00:00:18,000
+Estamos atrincherados en un valle en estas coordenadas.
+
+5
+00:00:12,600 --> 00:00:18,000
+Ayúdenos, por favor.
+

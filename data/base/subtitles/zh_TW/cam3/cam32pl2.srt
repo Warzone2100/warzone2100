@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+座標傳送完畢
+
+2
+00:00:03,599 --> 00:00:08,000
+Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base.
+

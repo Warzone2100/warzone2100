@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Siin Rühm Alfa.Kordan,siin Rühm Alfa. Me vajame kohest abi.
+
+2
+00:00:07,599 --> 00:00:12,000
+Me oleme küborgide, laser tankide ja ründe VTOLite raske rünnaku all.
+
+3
+00:00:12,600 --> 00:00:18,000
+Me oleme proovinud teie asukohta jõuda, aga meid on varitsetud.
+
+4
+00:00:12,600 --> 00:00:18,000
+Me oleme selles orus, nendel kordinaatidel.
+
+5
+00:00:12,600 --> 00:00:18,000
+Palun aidake.
+

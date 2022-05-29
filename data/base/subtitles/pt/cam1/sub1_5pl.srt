@@ -1,0 +1,4 @@
+1
+00:00:02,083 --> 00:00:15,833
+Informações descobertas na base inimiga anterior indica que o Novo Paradigma recuperou dois artefactos de ligação sináptica.
+

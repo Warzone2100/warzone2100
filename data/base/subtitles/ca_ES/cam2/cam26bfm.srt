@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Comandant, hem detectat transmissions des d'aquest punt que arriben a una orbita elevada.
+
+2
+00:00:13,000 --> 00:00:16,399
+Nexus s'ha tornat a connectar als satèl·lits de NASDA.
+
+3
+00:00:16,799 --> 00:00:22,600
+Això suposa una gran amenaça pel Projecte i per la nostra supervivència.
+

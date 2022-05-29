@@ -1,0 +1,12 @@
+1
+00:01:10,833 --> 00:01:25,416
+O pessoal da Base Gama confirmou que os mísseis nucleares lançados contra as bases Alfa e Beta foram lançados de um silo no setor deles.
+
+2
+00:01:35,833 --> 00:01:44,166
+O Time Gama está atualmente explorando a região do silo e monitorando a atividade do NEXUS.
+
+3
+00:01:46,250 --> 00:01:52,500
+Comandante, o sucesso do Projeto depende de você.
+

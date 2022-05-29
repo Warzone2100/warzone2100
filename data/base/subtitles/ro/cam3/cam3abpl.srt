@@ -1,0 +1,8 @@
+1
+00:00:01,000 --> 00:00:08,000
+Comandante, ne confruntăm cu interferențe cu echipamentul nostru.
+
+2
+00:00:01,000 --> 00:00:08,000
+Starea normală va fi restaurată cât mai curând posibil.
+

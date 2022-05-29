@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:05,000
+Estoy contento de que lo hayas conseguido, Comandante.
+
+2
+00:00:05,833 --> 00:00:19,583
+Los ADVs de asalto nos tienen inmovilizados. Nos las hemos arreglado para mantener a raya a los cyborgs y los tanques, pero no hemos sido capaces de hacer ningún progreso en el valle.
+
+3
+00:00:20,416 --> 00:00:22,916
+Puedes intentar alcanzarnos con unidades anti-aéreas?
+

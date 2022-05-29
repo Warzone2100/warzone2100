@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:16,666
+La Reed Corporation fut fondée par le docteur Allan Reed. En 2080, Dr Reed signa un contrat avec l'armée des Nations-Unies pour le développement de la technologie du Lien Synaptique.
+
+2
+00:00:18,750 --> 00:00:29,166
+Après avoir breveté le Lien Synaptique cinq ans plus tard, le Dr Reed continua ses recherches sur la cybernétique.
+
+3
+00:00:31,250 --> 00:00:50,000
+Son but cette fois était de permettre la transcription de la conscience humaine en flux de données qui pourraient contrôler des systèmes informatiques. Ainsi, les opérateurs humains pourraient être en sécurité loin du champ de bataille, tout en contrôlant leurs Cyborgs.
+
+4
+00:00:52,083 --> 00:01:10,833
+A nouveau soutenu par l'armée, le Dr Reed commença à travailler sur le virus informatique NEXUS. Après trois ans durant lesquels le projet n'avançait pas, l'armée abandonna le NEXUS et coupa les fonds au Dr Reed.
+
+5
+00:01:12,916 --> 00:01:23,333
+Les rapports de l'époque faisaient mention de la réaction de Reed ; furieux, il jura de prendre sa revanche sur tous ceux qui l'avaient méprisé.
+
+6
+00:01:25,416 --> 00:01:42,083
+Il semblerait que le docteur Reed ait atteint son but et terminé de mettre au point ce virus NEXUS.
+
+7
+00:01:25,416 --> 00:01:42,083
+Les ressemblances entre NEXUS et Reed sont frappantes.
+
+8
+00:01:47,500 --> 00:02:03,750
+Après cette intéressante leçon d'histoire, laissez-moi à présent vous mettre au courant.
+
+9
+00:01:47,500 --> 00:02:03,750
+Le programme d'intrusion NEXUS a été crée pour contrôler des imbéciles comme vous.
+
+10
+00:02:04,166 --> 00:02:26,666
+Il est trivial pour moi d'infiltrer vos systèmes et en prendre le contrôle. C'est trop simple, en fait, car vous n'auriez jamais détecté ma présence. Jusqu'à-ce que j'active quelques parties de moi-même, gravées dans vos systèmes centraux.
+
+11
+00:02:27,500 --> 00:02:34,166
+Activons à présent NEXUS tout entier, et voyons ce qui se passe !
+

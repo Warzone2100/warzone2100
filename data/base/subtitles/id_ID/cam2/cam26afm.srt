@@ -1,0 +1,20 @@
+1
+00:00:01,666 --> 00:00:16,666
+Analisis mengindikasikan bahwa sistem-sistem ini adalah bagian dari sistem kendali bagi satelit NASDA.
+
+2
+00:00:01,666 --> 00:00:16,666
+Sekarang sudah jelas bahwa Nexus bertanggungjawab atas Keruntuhan.
+
+3
+00:00:18,333 --> 00:00:41,666
+Dalam tahap-tahap awal Keruntuhan, teknisi NASDA mematikan sistem-sistem yang terinfeksi untuk menghambat penyebaran Nexus. Ini tampaknya mencegah satelit-satelit laser untuk menembak saat serangan.
+
+4
+00:00:43,333 --> 00:01:08,750
+Pulsa nuklir-magnetik yang mengikuti menghapus data bank memori NASDA dalam jumlah besar, meruntuhkan prosesor intinya, dan mengguncang Nexus.
+
+5
+00:01:12,916 --> 00:01:23,333
+Nexus pun ikut terbakar karena bagian-bagian besar dari kesadarannya hancur dalam serangan.
+

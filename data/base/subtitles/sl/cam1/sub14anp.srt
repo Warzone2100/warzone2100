@@ -1,0 +1,4 @@
+1
+00:00:08,399 --> 00:00:15,199
+NEXUS, sinaptična tehnologija, ki si jo potreboval, je bila pridobljena in poslana za pobiranje.
+

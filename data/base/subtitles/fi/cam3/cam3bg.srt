@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:06,000
+Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we....
+
+2
+00:00:09,000 --> 00:00:14,399
+...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer....
+

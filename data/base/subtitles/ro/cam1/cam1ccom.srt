@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,000
+Comandante, am recuperat o turelă de comandă de la Noua Paradigmă.
+
+2
+00:00:05,000 --> 00:00:15,000
+Această turelă permite comandanților să coordoneze atacuri între unitățile asociate și să primească întăriri direct de la fabrici. Cercetarea și folosirea acestei tehnologii are cea mai mare prioritate.
+
+3
+00:00:17,000 --> 00:00:19,000
+Comandante, tocmai primim această transmisiune.
+

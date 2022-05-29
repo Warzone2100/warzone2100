@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Comandante, estamos detectando transmissões vindas desse local que estão alcançando a órbita superior.
+
+2
+00:00:13,000 --> 00:00:16,399
+Nexus se reconectou aos satélites da NASDA.
+
+3
+00:00:16,799 --> 00:00:22,600
+Isso é uma ameaça primária ao Projeto e à nossa sobrevivência.
+

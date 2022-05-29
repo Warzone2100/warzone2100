@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Comandant, hem detectat un altre llançament.
+
+2
+00:00:01,600 --> 00:00:08,000
+Sembla que es dirigeix a la vostra localització.
+
+3
+00:00:08,800 --> 00:00:15,399
+Heu de començar immediatament l'evacuació de la base al cel segur.
+

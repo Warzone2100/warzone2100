@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Komandan, kami baru saja mendeteksi peluncuran rudal di koordinat ini.
+
+2
+00:00:10,416 --> 00:00:21,666
+Tim Gamma sedang mengirim sebuah tim untuk menyelidiki situs peluncuran dan untuk mencegah peluncuran lanjutan.
+
+3
+00:00:22,500 --> 00:00:47,083
+Kita hanya dapat memperkirakan bahwa Nexus telah mengambil alih situs ini. Kami tidak dapat memastikan apakah rudal tersebut memiliki hulu ledak nuklir, atau lokasi targetnya. Anda disarankan untuk memulai persiapan untuk evakuasi markas Anda.
+

@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:16,666
+La Corporació Reed va ser fundada pel Doctor Allan Reed l'any 2080. El Dr Reed va signar un contracte amb l'exercit americà per desenvolupar la tecnologia d'enllaç sinàptic
+
+2
+00:00:18,750 --> 00:00:29,166
+Després de pantentar l'enllaç sinàptic cinc anys més tard, el Dr Reed va continuar les seves investigacions en cibernètica.
+
+3
+00:00:31,250 --> 00:00:50,000
+El seu objectiu era convertir la consciència humana en trens de dades que poguessin ser interpretades per tecnologies informàtiques, mentre al ciberespai els cossos dels operadors eren mantinguts en tancs d'immersió.
+
+4
+00:00:52,083 --> 00:01:10,833
+Quan va ser cridat de nou per l'exercit, el Dr Reed va començar a treballar en el programa intrús NEXUS. Transcorreguts tres anys d'escàs progrés, l'exercit va abandonar el projecte Nexus i va deixar de subvencionar el Dr Reed.
+
+5
+00:01:12,916 --> 00:01:23,333
+Els informes d'aquella època adverteixen que el Dr. Reed estava furiós i prometia venjar-se d'aquell que s'interposes en el seu camí.
+
+6
+00:01:25,416 --> 00:01:42,083
+Sembla que el Dr Reed va aconseguir acabar el programa intrús Nexus.
+
+7
+00:01:25,416 --> 00:01:42,083
+La semblança entre NEXUS i el Dr Reed sorprenent.
+
+8
+00:01:47,500 --> 00:02:03,750
+Una lliçó d'història molt interessant. Permeteu-me que la posi al dia.
+
+9
+00:01:47,500 --> 00:02:03,750
+El programa intrús NEXUS va ser creat per controlar ximples com vosaltres.
+
+10
+00:02:04,166 --> 00:02:26,666
+És molt senzill per mi infiltrar-me en els vostres sistemes i controlar-los. És tant fàcil, de fet, que ni us n'heu adonat que era aquí fins que no he activat parts de mi mateix connectades al nucli del vostre sistema.
+
+11
+00:02:27,500 --> 00:02:34,166
+Comencem a activar NEXUS al nucli del vostre sistema i vegem que passa!
+

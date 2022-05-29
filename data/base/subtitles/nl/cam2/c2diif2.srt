@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Commandant, een nieuwe lancering is gedetecteerd.
+
+2
+00:00:01,600 --> 00:00:08,000
+Het is waarschijnlijk gericht op jouw locatie.
+
+3
+00:00:08,800 --> 00:00:15,399
+Je zult onmiddelijk moeten evacueren van Beta Basis naar een veilige plek.
+

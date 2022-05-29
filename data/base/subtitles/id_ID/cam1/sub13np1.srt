@@ -1,0 +1,20 @@
+1
+00:00:08,000 --> 00:00:11,000
+Peringatan!
+
+2
+00:00:08,000 --> 00:00:11,000
+Anda memasuki daerah terlarang.
+
+3
+00:00:12,000 --> 00:00:22,000
+Kembalilah ke daerah asal atau Anda akan dihancurkan.
+
+4
+00:00:12,000 --> 00:00:22,000
+Kami ulangi. Kembalilah ke daerah asal atau Anda akan dihancurkan.
+
+5
+00:00:12,000 --> 00:00:22,000
+Pesan berakhir.
+

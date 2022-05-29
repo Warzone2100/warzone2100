@@ -1,0 +1,8 @@
+1
+00:00:00,800 --> 00:00:03,400
+Scaricamento delle coordinate completato.
+
+2
+00:00:03,599 --> 00:00:08,000
+Comandante, le forze della squadra Alfa sono sopravvissute all'attacco nucleare alla Base Alfa.
+

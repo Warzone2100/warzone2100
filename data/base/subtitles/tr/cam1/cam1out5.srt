@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:07,599
+Nexus sistemden kendini sildi, Bellek bankalarını yok ediyorlar ve dış bağlantıların tüm izlerini yok ediyorlar.
+
+2
+00:00:08,000 --> 00:00:19,000
+Nexus'un kim olduğuna ve onu kimin yönettiğini bilmiyoruz. İlk araştırmamız Nexus Davetsiz Misafir Programı ile Reed Şirketini, sinaptik bağlantıyı geliştiren şirket arasında bir bağ olabileceğini ortaya çıkardı.
+
+3
+00:00:20,000 --> 00:00:28,399
+Nexus'un Yeni Paradigmayı tüm teknolojisi ile desteklediğini tespit ettik. Nexus ne olursa olsun, bir bilgisayar parazitinden fazlası.
+
+4
+00:00:29,000 --> 00:00:36,000
+O teknolojik silahlara sahip. Bizi biliyor ve dostumuz değil.
+

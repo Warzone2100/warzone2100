@@ -1210,8 +1210,8 @@ static void runTitleLoop()
 	case TITLECODE_SHOWINTRO:
 		debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 		seq_ClearSeqList();
-		seq_AddSeqToList("titles.ogg", nullptr, nullptr, false);
-		seq_AddSeqToList("devastation.ogg", nullptr, "devastation.txa", false);
+		seq_AddSeqToList("titles.ogg", nullptr, "", false);
+		seq_AddSeqToList("devastation.ogg", nullptr, "devastation_text.srt", false);
 		seq_StartNextFullScreenVideo();
 		break;
 	default:

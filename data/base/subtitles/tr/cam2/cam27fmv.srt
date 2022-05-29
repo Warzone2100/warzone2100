@@ -1,0 +1,12 @@
+1
+00:00:02,083 --> 00:00:08,333
+Komutanım, bu koordinatlardan füze fırlatmaları tespit ettik.
+
+2
+00:00:10,416 --> 00:00:21,666
+Daha fazla fırlatmayı engellemek ve fırlatmayı incelemek için Takım Gama bir ekip gönderiyor.
+
+3
+00:00:22,500 --> 00:00:47,083
+Sadece Nexus'un bu alanların kontrolünü aldığını biliyoruz. Ve füzelerin nükleer başlıklı olup olmadığını ve hedefinin neresi olduğunu bilmiyoruz. Üssünün tahliyesi için hazırlıklara başlamanızı öneririm.
+

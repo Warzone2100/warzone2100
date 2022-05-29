@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Destinations des transports :
+
+2
+00:00:04,000 --> 00:00:08,000
+Alpha - Secteur Ouest
+
+3
+00:00:09,000 --> 00:00:14,000
+Division Alpha, vous êtes autorisés à décoller.
+
+4
+00:00:09,000 --> 00:00:14,000
+Bonne chance et bonne chasse!
+
+5
+00:00:30,000 --> 00:00:35,000
+Nous approchons de la zone d'atterrissage. Début du briefing.
+
+6
+00:00:37,000 --> 00:00:46,000
+Commandant, vous êtes à la tête de la Division Alpha, l'une des trois équipes expéditionnaires envoyées par le Projet dans le but de récupérer des artefacts pré-Apocalyptiques.
+
+7
+00:00:47,000 --> 00:00:49,599
+Votre destination se trouve dans la zone Ouest.
+

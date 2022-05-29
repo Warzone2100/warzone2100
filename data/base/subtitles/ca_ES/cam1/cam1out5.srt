@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:07,599
+Nexus s'ha retirat tot sol del sistema, destruint els seus bancs de memòria, i eliminant qualsevol traça de connexió externa.
+
+2
+00:00:08,000 --> 00:00:19,000
+No podem assegurar que és Nexus o qui ho controla. Les investigacions inicials connecten el programa intrús de Nexus amb la Corporació Reed, els desenvolupadors de l'enllaç sinàptic.
+
+3
+00:00:20,000 --> 00:00:28,399
+Hem sabut que Nexus proveïa al Nou Paradigma de la majoria de la seva tecnologia. El que sigui que és Nexus, és alguna cosa més que un virus informàtic.
+
+4
+00:00:29,000 --> 00:00:36,000
+Disposa de tecnologia i armes. Ens coneix, i no és amistós.
+

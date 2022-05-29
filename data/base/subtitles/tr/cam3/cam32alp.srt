@@ -1,0 +1,20 @@
+1
+00:00:00,800 --> 00:00:07,199
+Burası Alfa Takımı. Tekrar ediyorum, burası Alfa Takımı. Acil destek gerekiyor.
+
+2
+00:00:07,599 --> 00:00:12,000
+Sayborglar, Lazer Tanklar ve DİvKlar tarafından ağır saldırı altındayız.
+
+3
+00:00:12,600 --> 00:00:18,000
+Konumunuza ulaşmaya çalışıyorduk, fakat pusuya düştük.
+
+4
+00:00:12,600 --> 00:00:18,000
+Vadide bu koordinatlarda yuvalandık.
+
+5
+00:00:12,600 --> 00:00:18,000
+Lütfen yardım gönderin.
+

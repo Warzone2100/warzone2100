@@ -1,0 +1,20 @@
+1
+00:00:20,500 --> 00:00:25,833
+Çok uzun aylar boyunca çabaladıktan sonra, nihayet NEXUS'u yendik.
+
+2
+00:00:26,000 --> 00:00:29,000
+Dr. Reed'in başlattığı savaş sonunda bitti.
+
+3
+00:00:30,000 --> 00:00:33,500
+İstediğimiz teknolojilerin çoğunu aldık.
+
+4
+00:00:34,500 --> 00:00:37,500
+Şimdi bu teknolojileri kullanarak dünyayı yeniden inşa etme zamanı.
+
+5
+00:00:38,333 --> 00:00:54,000
+Yavaşça, küllerimizden yeniden doğacağız...
+

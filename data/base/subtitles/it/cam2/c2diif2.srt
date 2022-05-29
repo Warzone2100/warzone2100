@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:08,000
+Comandante, abbiamo rilevato un nuovo lancio.
+
+2
+00:00:01,600 --> 00:00:08,000
+E' probabilmente puntato alla vostra posizione.
+
+3
+00:00:08,800 --> 00:00:15,399
+Dovete iniziare l'evacuazione immediata della Base Beta al rifugio.
+

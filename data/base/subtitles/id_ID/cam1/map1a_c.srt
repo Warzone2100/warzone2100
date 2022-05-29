@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+Tautan Sinapsis dikembangkan oleh Korporasi Reed dalam kerjasama dengan militer Amerika Serikat.
+
+2
+00:00:08,000 --> 00:00:22,000
+Tautan sinapsis ini memampukan transfer pikiran instan dari operator manusia ke sistem kendali kendaraan. Tautan sinapsis ini dipasang di dasar tengkorak, melingkari tulang belakang.
+
+3
+00:00:25,000 --> 00:00:30,000
+Tautan ini memiliki dok transfer data kecepatan tinggi yang dapat masuk ke segala jenis sistem komputer.
+
+4
+00:00:37,000 --> 00:00:48,000
+Lebih penting lagi, pengembangan tautan sinapsis ini memungkinkan pembangunan cyborg. Percobaan awal membangun baju zirah bertenaga bagi prajurit individual gagal karena mereka terbukti lambat dan tidak responsif.
+
+5
+00:00:54,000 --> 00:01:08,000
+Tautan sinapsis ini memampukan prajurit untuk dimasukkan dalam baju zirah bertenaga yang dapat mereka kendalikan seperti tubuh mereka sendiri. Baju zirah bertenaga ini memampukan infanteri untuk bertempur secara efektif dalam medan tempur Abad ke-21.
+
+6
+00:01:08,599 --> 00:01:17,000
+Sayangnya, teknologi ini telah jatuh ke tangan Paradigma Baru. Sangatlah penting jika Anda meriset dan mengembangkan teknologi tautan sinapsis.
+

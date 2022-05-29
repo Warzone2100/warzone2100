@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:02,400
+Réception d'une transmission.
+
+2
+00:00:02,799 --> 00:00:10,000
+Réception d'un message de la Division Beta.
+
+3
+00:00:02,799 --> 00:00:10,000
+Mayday! Mayday!
+
+4
+00:00:02,799 --> 00:00:10,000
+Aidez-nous s'il vous plaît !...
+
+5
+00:00:29,200 --> 00:00:33,759
+Commandant, vous allez maintenant devoir assister l'équipe Beta.
+

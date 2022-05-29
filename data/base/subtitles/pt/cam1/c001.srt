@@ -1,0 +1,28 @@
+1
+00:00:04,000 --> 00:00:08,000
+Destinos dos transportes:
+
+2
+00:00:04,000 --> 00:00:08,000
+Alfa - Sector Oeste....
+
+3
+00:00:09,000 --> 00:00:14,000
+Alfa, está permitida a sua descolagem.
+
+4
+00:00:09,000 --> 00:00:14,000
+Boa sorte e boa caça.
+
+5
+00:00:30,000 --> 00:00:35,000
+Aproximando-se da Zona de Aterragem. Instruções da Equipa Alfa:
+
+6
+00:00:37,000 --> 00:00:46,000
+Comandante, você lidera a Equipa Alfa, uma das três forças expedicionárias enviadas pelo Projecto para recuperar artefactos pré-Colapso.
+
+7
+00:00:47,000 --> 00:00:49,599
+O seu destino é a zona oeste.
+

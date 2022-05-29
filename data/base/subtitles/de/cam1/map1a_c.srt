@@ -1,0 +1,24 @@
+1
+00:00:02,599 --> 00:00:07,599
+Die synaptische Verbindung wurde von der Reed Corporation in Zusammenarbeit mit dem amerikanischen Militär entwickelt.
+
+2
+00:00:08,000 --> 00:00:22,000
+Die synaptische Verbindung erlaubt die beinahe verzögerungsfreie Übertragung von Gedanken eines menschlichen Bedieners an die Steuersysteme eines Fahrzeugs. Die synaptische Verbindung wird zwischen Schädelbasis und Wirbelsäule angebracht.
+
+3
+00:00:25,000 --> 00:00:30,000
+Die Verbindung verfügt über eine Hochgeschwindigkeitsdatenschnittstelle für beliebige Computersysteme.
+
+4
+00:00:37,000 --> 00:00:48,000
+Noch wichtiger ist, dass die synaptische Verbindung die Erschaffung von Cyborgs möglich machte. Erste Versuche mit Kraftanzügen für einzelne Soldaten erwiesen sich wegen ihrer Langsamkeit und Trägheit als Fehlschläge.
+
+5
+00:00:54,000 --> 00:01:08,000
+Die synaptische Verbindung ermöglichte es Soldaten in Kraftanzüge zu stecken, die sie so einfach wie ihre eigenen Körper bewegen konnten. Kraftanzüge ermöglichten ein effektives Funktionieren der Infanterie auf den Schlachtfeldern des 21. Jahrhunderts.
+
+6
+00:01:08,599 --> 00:01:17,000
+Unglücklicherweise ist diese Technologie in die Hände des New Paradigm gefallen. Es ist wichtig, dass Sie die Technologie der synaptischen Verbindung erforschen und weiterentwickeln.
+

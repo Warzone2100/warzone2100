@@ -1,0 +1,12 @@
+1
+00:00:01,600 --> 00:00:07,000
+Commander we are detecting transmissions from this site that are reaching high orbit.
+
+2
+00:00:13,000 --> 00:00:16,399
+Nexus has now reconnected itself with the NASDA satellites.
+
+3
+00:00:16,799 --> 00:00:22,600
+This poses a major threat to the Project and to our survival.
+

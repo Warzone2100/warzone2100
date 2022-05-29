@@ -504,7 +504,7 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 				bLoop = false;
 			}
 
-			seq_AddSeqToList(psViewReplay->seqList.at(Sequence).sequenceName, psViewReplay->seqList.at(Sequence).audio, nullptr, bLoop);
+			seq_AddSeqToList(psViewReplay->seqList.at(Sequence).sequenceName, psViewReplay->seqList.at(Sequence).audio, "", bLoop);
 
 			debug(LOG_GUI, "StartMessageSequences: sequence=%d", Sequence);
 			addVideoText(&psViewReplay->seqList.at(Sequence), Sequence);
@@ -524,7 +524,7 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		psViewReplay = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
 
 		seq_ClearSeqList();
-		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->audio, nullptr, false);
+		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->audio, "", false);
 		//play first full screen video
 		if (Start == true)
 		{
@@ -961,7 +961,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		x = VIDEO_TEXT_TOP_X;
 		y = VIDEO_TEXT_TOP_Y;
 
-		seq_AddTextForVideo(psSeqDisplay->textMsg[0].toUtf8().c_str(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
+		seq_AddLineForVideo(psSeqDisplay->textMsg[0].toUtf8(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
 
 		//add each message, the rest at the bottom
 		x = VIDEO_TEXT_BOTTOM_X;
@@ -970,7 +970,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		i = 1;
 		while (i < psSeqDisplay->textMsg.size())
 		{
-			seq_AddTextForVideo(psSeqDisplay->textMsg[i].toUtf8().c_str(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
+			seq_AddLineForVideo(psSeqDisplay->textMsg[i].toUtf8(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
 			//initialise after the first setting
 			x = y = 0;
 			i++;

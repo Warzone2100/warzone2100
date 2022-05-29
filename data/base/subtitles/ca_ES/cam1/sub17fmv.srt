@@ -1,0 +1,20 @@
+1
+00:00:03,000 --> 00:00:11,000
+Aquest programa intrús de Nexus és un paràsit per ordinadors auto-mutant. Això fa que sigui difícil de eradicar dels sistemes un cop ha estat identificat.
+
+2
+00:00:12,000 --> 00:00:29,399
+No hem pogut esbrinar la seva funció o el seu objectiu principal. En la seva forma inicial busca aïlla seccions de memòria de la resta del sistema envaït. Llavors comença a mutar ell mateix i les estructures de dades, reprogramant el sistema des de dins.
+
+3
+00:00:30,000 --> 00:00:38,400
+No hem pogut seguir analitzant degut a que els nostres tècnics han hagut d'apagar el sistema per tal de prevenir més contaminació del programa intrús de Nexus.
+
+4
+00:00:39,000 --> 00:00:49,000
+De tota manera, el desplegament del programa intrús de Nexus no ha estat comprovat pel Nou Paradigma. Necessitem capturar nuclis de sistemes del Nou paradigma per seguir investigant Nexus i determinar el seu origen.
+
+5
+00:00:50,000 --> 00:00:57,000
+Comandant, heu de tallar l'activitat del Nou Paradigma en aquest sector i localitzar la seva base principal.
+
