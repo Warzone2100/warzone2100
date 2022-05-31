@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-05-30 15:56\n"
+"PO-Revision-Date: 2022-05-31 03:54\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -25,7 +25,7 @@ msgstr "ЦЕЛ: Намерете и приберете невросинапти�
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "Установете база, след което претърсете за Предколапсова постройка."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -67,7 +67,7 @@ msgstr "Новата Парадигма притежават превъзхож�
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "Те може би притежават невросвързочната технология, жизненоважно е да я добием."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -83,7 +83,7 @@ msgstr "След кацане обиколете руините и прибер�
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Проучете изследователски център"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -120,15 +120,15 @@ msgstr "Продължете към ЗП №2. Засега не прихващ�
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Местоположение на невросвързочна технология"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "Новата Парадигма в момента анализират невросвързочна технология на това местоположение."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "Съберете екип, който да атакува и да прибере невросвързочната технология."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -164,7 +164,7 @@ msgstr "Установете база на предна позиция върх�
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Стройте защитни съоръжения докато зелената мигаща светлина изчезне."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -212,7 +212,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "НОВИНИ ОТ ЕКИП БЕТА"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -224,7 +224,7 @@ msgstr "В тази зона действа по-добре оборудвана
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "НОВИНИ ОТ ЕКИП ГАМА"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -280,11 +280,11 @@ msgstr "Допълнение"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "Неврозвързочната технология е била на това място, но е била премахната."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Установете полева база, след което продължете търсенето на технологията."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -308,7 +308,7 @@ msgstr "Разрушете вражеската база"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "Съберете екип за нападение и го качете на транспортьора."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
@@ -316,7 +316,7 @@ msgstr "Разрушете базата и приберете наличните
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "Невросвързочната технология е била намерена!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
@@ -324,11 +324,11 @@ msgstr "Първоначално изследване потвърждава, ч
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "База Бета е под тежък обстрел, може да се нуждаят от съдействието ви."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "Ще изпращаме нови съобщения, докато пристигат."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
@@ -336,7 +336,7 @@ msgstr "Това съобщение бе прихванато преди няк�
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr ""
+msgstr "Произходът ѝ е от изток."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
@@ -360,7 +360,7 @@ msgstr "Разгромете вехтошарите и приберете вся
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
+msgstr "Поздравления за разгрома на Новата Парадигма, този сектор вече е безопасен."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
@@ -368,16 +368,16 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr ""
+msgstr "Записахме два разговора с нея, следват откъси..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr ""
+msgstr "Ще ви държим в течение за по-нататъшни развития"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "Командире, вие ще помогнете на екип Бета"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
@@ -403,7 +403,7 @@ msgstr "МИСИЯ ЗА БАЗА БЕТА: Отбранете и укрепет�
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
+msgstr "Бъдете сигурни, че сте укрепили периметъра и сте сложили ПВО установки."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -423,7 +423,7 @@ msgstr "Декодиране..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr ""
+msgstr "ОТДАЛЕЧЕНА МИСИЯ: Свален транспортьор"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -2294,7 +2294,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr ""
+msgstr "Укрепена кула, въоръжена с противотанкова ракета Копиеносец"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
@@ -5402,7 +5402,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:407
 #: po/custom/fromJson.txt:3475
 msgid "Lancer Tower"
-msgstr ""
+msgstr "Копиеносец Кула"
 
 #: data/mp/messages/strings/names.txt:429
 msgid "Advanced Manufacturing Mk3"
@@ -6541,13 +6541,13 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
 #: po/custom/fromJson.txt:606
 msgid "Armed with Lancer anti-tank missile"
-msgstr ""
+msgstr "Въоръжено с противотанкова ракета Копиеносец"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Въоръжено с противотанкова ракета Копиеносец"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -6621,7 +6621,7 @@ msgstr "Брониран бункер с огнехвъргачка"
 #. data/base/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:661
 msgid "Armored bunker with Lancer AT rocket"
-msgstr ""
+msgstr "Бункер, въоръжен с противотанкова ракета Копиеносец"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_LC.text[1]
@@ -6653,7 +6653,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:682
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr ""
+msgstr "Защитна кула, въоръжена с противотанкова ракета Копиеносец"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
@@ -6740,7 +6740,7 @@ msgstr "Бронирана укрепена точка с хиперскорос
 #. data/mp/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
 #: po/custom/fromJson.txt:742
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr ""
+msgstr "Укрепена точка, въоръжена с противотанкова ракета Копиеносец"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT2_LC.text[1]
@@ -8041,7 +8041,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:1652
 msgid "Cyborg Lancer"
-msgstr ""
+msgstr "Киборг Копиеносец"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
@@ -10519,7 +10519,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Rocket01-LtAT.name
 #: po/custom/fromJson.txt:3432
 msgid "Lancer AT Rocket"
-msgstr ""
+msgstr "Противотанкова ракета Копиеносец"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox06.name
@@ -10527,7 +10527,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox6.name
 #: po/custom/fromJson.txt:3437
 msgid "Lancer Bunker"
-msgstr ""
+msgstr "Бункер Копиеносец"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraLtA-Thalftrack.name
@@ -10551,7 +10551,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3452
 msgid "Lancer Cyborg"
-msgstr ""
+msgstr "Копиеносец Киборг"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower06.name
@@ -10560,7 +10560,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower06.name
 #: po/custom/fromJson.txt:3458
 msgid "Lancer Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с Копиеносец"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -10597,14 +10597,14 @@ msgstr ""
 #. data/mp/stats/templates.json: $.ViperLtA-Twheels.name
 #: po/custom/fromJson.txt:3482
 msgid "Lancer Viper Wheels"
-msgstr ""
+msgstr "Копиеносец Пепелянка Колела"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-LtA-T.name
 #. data/mp/stats/weapons.json: $.Rocket-LtA-T.name
 #: po/custom/fromJson.txt:3486
 msgid "Lancer"
-msgstr ""
+msgstr "Копиеносец"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[0]
@@ -14474,7 +14474,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
 #: po/custom/fromJson.txt:6066
 msgid "VTOL Lancer"
-msgstr ""
+msgstr "СВиК Копиеносец"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
