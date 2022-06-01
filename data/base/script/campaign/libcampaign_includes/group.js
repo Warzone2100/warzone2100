@@ -3,10 +3,12 @@
 // Group functionality
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camNewGroup()
-//;;
-//;; A saveload safe version of newGroup() so as not to create group ID clashes.
-//;;
+/**
+ * ## camNewGroup()
+ *
+ * A saveload safe version of `newGroup()` so as not to create group ID clashes.
+ * @returns {number}
+ */
 function camNewGroup()
 {
 	if (!camDef(__camNewGroupCounter))
@@ -17,10 +19,13 @@ function camNewGroup()
 	return __camNewGroupCounter;
 }
 
-//;; ## camInNeverGroup(droid)
-//;;
-//;; check if this droid is forced to never group.
-//;;
+/**
+ * ## camInNeverGroup(droid)
+ *
+ * Check if this droid is forced to never group.
+ * @param {Object} droid
+ * @returns {boolean}
+ */
 function camInNeverGroup(droid)
 {
 	if (droid.type !== DROID)
@@ -40,15 +45,19 @@ function camInNeverGroup(droid)
 	return false;
 }
 
-//;; ## camNeverGroupDroid(what, [filter])
-//;;
-//;; A means to not auto group some droids.
-//;;
-function camNeverGroupDroid(what, filter)
+/**
+ * ## camNeverGroupDroid(what[, playerFilter])
+ *
+ * A means to not auto group some droids.
+ * @param {string|Object|Object[]} what
+ * @param {number} [playerFilter]
+ * @returns {void}
+ */
+function camNeverGroupDroid(what, playerFilter)
 {
-	if (!camDef(filter))
+	if (!camDef(playerFilter))
 	{
-		filter = ENEMIES;
+		playerFilter = ENEMIES;
 	}
 	var array;
 	var obj;
@@ -97,7 +106,7 @@ function camNeverGroupDroid(what, filter)
 			{
 				continue;
 			}
-			if (o.type === DROID && camPlayerMatchesFilter(o.player, filter))
+			if (o.type === DROID && camPlayerMatchesFilter(o.player, playerFilter))
 			{
 				__camNeverGroupDroids.push(o.id);
 			}

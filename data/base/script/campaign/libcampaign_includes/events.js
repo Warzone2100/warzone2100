@@ -69,9 +69,9 @@ function cam_eventChat(from, to, message)
 	}
 	if (message === "deity")
 	{
-		for (const blabel in __camEnemyBases)
+		for (const baseLabel in __camEnemyBases)
 		{
-			camDetectEnemyBase(blabel);
+			camDetectEnemyBase(baseLabel);
 		}
 	}
 	if (message === "research available")

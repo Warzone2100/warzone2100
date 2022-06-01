@@ -3,42 +3,52 @@
 // Transporter management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camIsTransporter(game object)
-//;;
-//;; Determine if the object is a transporter.
-//;;
-function camIsTransporter(object)
+/**
+ * ## camIsTransporter(gameObject)
+ *
+ * Determine if the object is a transporter.
+ * @param {Object} gameObject
+ * @returns {boolean}
+ */
+function camIsTransporter(gameObject)
 {
-	if (!camDef(object) || !object)
+	if (!camDef(gameObject) || !gameObject)
 	{
 		return false;
 	}
 
-	if (object.type !== DROID)
+	if (gameObject.type !== DROID)
 	{
 		camTrace("Attempted to check if a non-droid object is a transporter.");
 		return false;
 	}
 
-	return object.droidType === DROID_SUPERTRANSPORTER;
+	return gameObject.droidType === DROID_SUPERTRANSPORTER;
 }
 
-//;; ## camSetupTransport(place x, place y, exit x, exit y)
-//;;
-//;; A convenient function for placing the standard campaign transport
-//;; for loading in pre-away missions. The exit point for the transport
-//;; is set up as well.
-//;;
-function camSetupTransporter(x, y, x1, y1)
+/**
+ * ## camSetupTransporter(placeX, placeY, exitX, exitY)
+ *
+ * A convenient function for placing the standard campaign transport for loading in pre-away missions.
+ * The exit point for the transport is set up as well.
+ * @param {number} placeX
+ * @param {number} placeY
+ * @param {number} exitX
+ * @param {number} exitY
+ * @returns {void}
+ */
+function camSetupTransporter(placeX, placeY, exitX, exitY)
 {
-	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
-	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
+	addDroid(CAM_HUMAN_PLAYER, placeX, placeY, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
+	setTransporterExit(exitX, exitY, CAM_HUMAN_PLAYER);
 }
 
-//;; ## camRemoveEnemyTransporterBlip()
-//;;
-//;; Removes the last blip that an enemy transporter left behind, if any.
-//;;
+/**
+ * ## camRemoveEnemyTransporterBlip()
+ *
+ * Removes the last blip that an enemy transporter left behind, if any.
+ * @returns {void}
+ */
 function camRemoveEnemyTransporterBlip()
 {
 	if (camDef(__camTransporterMessage))

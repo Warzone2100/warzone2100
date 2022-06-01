@@ -3,41 +3,48 @@
 // Research related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camEnableRes(list, player)
-//;;
-//;; Grants research from the given list to player
-//;;
-function camEnableRes(list, player)
+/**
+ * ## camEnableRes(researchIds, playerId)
+ *
+ * Grants research from the given list to player
+ * @param {string[]} researchIds
+ * @param {number} playerId
+ * @returns {void}
+ */
+function camEnableRes(researchIds, playerId)
 {
-	for (let i = 0, l = list.length; i < l; ++i)
+	for (let i = 0, l = researchIds.length; i < l; ++i)
 	{
-		var research = list[i];
-		enableResearch(research, player);
-		completeResearch(research, player);
+		var researchId = researchIds[i];
+		enableResearch(researchId, playerId);
+		completeResearch(researchId, playerId);
 	}
 }
 
-//;; ## camCompleteRequiredResearch(items, player)
-//;;
-//;; Grants research from the given list to player and also researches
-//;; the required research for that item.
-//;;
-function camCompleteRequiredResearch(items, player)
+/**
+ * ## camCompleteRequiredResearch(researchIds, playerId)
+ *
+ * Grants research from the given list to player and also researches the required research for that item.
+ * @param {string[]} researchIds
+ * @param {number} playerId
+ * @returns {void}
+ */
+function camCompleteRequiredResearch(researchIds, playerId)
 {
-	dump("\n*Player " + player + " requesting accelerated research.");
+	dump("\n*Player " + playerId + " requesting accelerated research.");
 
-	for (let i = 0, l = items.length; i < l; ++i)
+	for (let i = 0, l = researchIds.length; i < l; ++i)
 	{
-		var research = items[i];
-		dump("Searching for required research of item: " + research);
-		var reqRes = findResearch(research, player).reverse();
+		var researchId = researchIds[i];
+		dump("Searching for required research of item: " + researchId);
+		var reqRes = findResearch(researchId, playerId).reverse();
 
 		if (reqRes.length === 0)
 		{
 			//HACK: autorepair like upgrades don't work after mission transition.
-			if (research === "R-Sys-NEXUSrepair")
+			if (researchId === "R-Sys-NEXUSrepair")
 			{
-				completeResearch(research, player, true);
+				completeResearch(researchId, playerId, true);
 			}
 			continue;
 		}
@@ -47,8 +54,8 @@ function camCompleteRequiredResearch(items, player)
 		{
 			var researchReq = reqRes[s].name;
 			dump("	Found: " + researchReq);
-			enableResearch(researchReq, player);
-			completeResearch(researchReq, player);
+			enableResearch(researchReq, playerId);
+			completeResearch(researchReq, playerId);
 		}
 	}
 }
