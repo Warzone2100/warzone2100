@@ -123,7 +123,7 @@ function eventStartLevel()
 	var tent = getObject("transporterEntry");
 	var text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
-	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2);
+	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
@@ -140,7 +140,7 @@ function eventStartLevel()
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, TRANSPORT_TEAM);
 	camCompleteRequiredResearch(PLAYER_RES_BETA, TRANSPORT_TEAM);
-	
+
 	camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
 
 	camSetEnemyBases({

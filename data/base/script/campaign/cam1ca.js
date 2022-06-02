@@ -158,7 +158,7 @@ function eventStartLevel()
 		var ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,
 		// note: player 1 is NP
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
+		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 2);
 	}
 
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
