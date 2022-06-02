@@ -465,6 +465,14 @@ jobs:
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_CMAKE_PATH}/cmake.exe" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${ADDITIONAL_CMAKE_PARAMS} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
+    - name: Upload vcpkg logs (on failure)
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: win_${{ matrix.architecture }}_vcpkg_logs
+        path: '${{ github.workspace }}\build\vcpkg\buildtrees\*\*-out.log'
+        if-no-files-found: 'warn'
+        retention-days: 1
     - name: CMake Build (MSVC)
       if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
@@ -508,7 +516,7 @@ jobs:
           Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
         }
     - name: Upload Failure Logs Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: failure()
       with:
         name: win_${{ matrix.architecture }}_error_logs
@@ -560,28 +568,28 @@ jobs:
     # Upload build artifacts
     #####################################################
     - name: 'Upload Artifact - (Portable Build)'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_portable
         path: '${{ github.workspace }}\output\portable'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Regular Installer)'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_installer
         path: '${{ github.workspace }}\output\installer'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Debug Symbols)'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')) && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive
@@ -633,7 +641,7 @@ jobs:
         Get-ChildItem -Path "${env:SOURCE_BUNDLE_OUTPUT_DIR}" -Recurse
     - name: Upload Sentry source bundles
       if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: 'warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_debug_sourcebundles'
         path: '${{ github.workspace }}\output\sentry_source_bundles'
