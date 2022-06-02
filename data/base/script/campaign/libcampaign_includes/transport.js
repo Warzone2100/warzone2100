@@ -60,7 +60,7 @@ function __camDispatchTransporterUnsafe()
 		camDebug("Transporter queue empty!");
 		return false;
 	}
-	const OFFSET = 2; //Increaze LZ "no go" zone area a bit
+	const OFFSET = 1; //Increaze LZ "no go" zone area a bit
 	var args = __camTransporterQueue[0];
 	var player = args.player;
 	var pos = args.position;
