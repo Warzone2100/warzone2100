@@ -260,7 +260,7 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, CAM_HUMAN_PLAYER);
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, 5);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS);
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));

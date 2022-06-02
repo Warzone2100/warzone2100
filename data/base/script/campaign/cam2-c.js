@@ -285,7 +285,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	var enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, 5);
 
 	camSetArtifacts({
 		"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },
@@ -302,7 +302,7 @@ function eventStartLevel()
 	setAlliance(THE_COLLECTIVE, SCAV_7, true);
 	setAlliance(CAM_HUMAN_PLAYER, SCAV_7, true);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	
+
 	camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
 
 	camSetEnemyBases({

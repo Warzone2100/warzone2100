@@ -152,7 +152,7 @@ function eventStartLevel()
 	for (let i = 6; i <= 10; ++i)
 	{
 		var ph = getObject("NPLZ" + i);
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, NEW_PARADIGM);
+		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i - 4);
 	}
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);

@@ -186,7 +186,7 @@ function eventStartLevel()
 	var tent = getObject("TransporterEntry");
 	var text = getObject("TransporterExit");
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEW_PARADIGM);
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, 5);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
