@@ -11,7 +11,7 @@ if [ "$TARGET_BUILD_ARCH" = "amd64" ]; then
 
   # Add Vulkan SDK repo
   wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add -
-  wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.182-bionic.list https://packages.lunarg.com/vulkan/1.2.182/lunarg-vulkan-1.2.182-bionic.list
+  wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.3.211-focal.list https://packages.lunarg.com/vulkan/1.3.211/lunarg-vulkan-1.3.211-focal.list
   apt update
   apt install --yes vulkan-sdk
 
@@ -29,7 +29,7 @@ else
   echo "Fetching shaderc"
   git clone https://github.com/google/shaderc shaderc
   cd shaderc
-  git checkout tags/v2021.1 -b v2021.1
+  git checkout tags/v2022.1 -b v2022.1
   ./utils/git-sync-deps
   cd ..
 
