@@ -3,14 +3,14 @@
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * ## camMarkTiles(label|labels)
- *
- * Mark area on the map by label(s), but only if debug mode is enabled.
- * Otherwise, remember what to mark in case it is going to be.
- * @param {string|string[]} label
- * @returns {void}
- */
+//;; ## camMarkTiles(label|labels)
+//;;
+//;; Mark area on the map by label(s), but only if debug mode is enabled.
+//;; Otherwise, remember what to mark in case it is going to be.
+//;;
+//;; @param {string|string[]} label
+//;; @returns {void}
+//;;
 function camMarkTiles(label)
 {
 	if (camIsString(label))
@@ -28,13 +28,13 @@ function camMarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-/**
- * ## camUnmarkTiles(label|labels)
- *
- * No longer mark area(s) with given label(s) in debug mode.
- * @param {string|string[]} label
- * @returns {void}
- */
+//;; ## camUnmarkTiles(label|labels)
+//;;
+//;; No longer mark area(s) with given label(s) in debug mode.
+//;;
+//;; @param {string|string[]} label
+//;; @returns {void}
+//;;
 function camUnmarkTiles(label)
 {
 	if (camIsString(label))
@@ -52,18 +52,18 @@ function camUnmarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-/**
- * ## camDebug(...args)
- *
- * Pretty debug prints - a wrapper around `debug()`.
- * Prints a function call stack and the argument message, prefixed with `DEBUG`.
- * Only use this function to indicate actual bugs in the scenario script,
- * because game shouldn't print things when nothing is broken.
- * If you want to keep some prints around to make debugging easier
- * without distracting the user, use `camTrace()`.
- * @param {...string} args
- * @returns {void}
- */
+//;; ## camDebug(...args)
+//;;
+//;; Pretty debug prints - a wrapper around `debug()`.
+//;; Prints a function call stack and the argument message, prefixed with `DEBUG`.
+//;; Only use this function to indicate actual bugs in the scenario script,
+//;; because game shouldn't print things when nothing is broken.
+//;; If you want to keep some prints around to make debugging easier
+//;; without distracting the user, use `camTrace()`.
+//;;
+//;; @param {...string} args
+//;; @returns {void}
+//;;
 function camDebug(...args)
 {
 	__camGenericDebug("DEBUG",
@@ -73,13 +73,13 @@ function camDebug(...args)
 	                  __camBacktrace());
 }
 
-/**
- * ## camDebugOnce(...args)
- *
- * Same as `camDebug()`, but prints each message only once during script lifetime.
- * @param {...string} args
- * @returns {void}
- */
+//;; ## camDebugOnce(...args)
+//;;
+//;; Same as `camDebug()`, but prints each message only once during script lifetime.
+//;;
+//;; @param {...string} args
+//;; @returns {void}
+//;;
 function camDebugOnce(...args)
 {
 	var str = debugGetCallerFuncName() + ": " + args.join(" ");
@@ -95,14 +95,14 @@ function camDebugOnce(...args)
 	                  __camBacktrace());
 }
 
-/**
- * ## camTrace(...args)
- *
- * Same as `camDebug()`, but only warns in cheat mode.
- * Prefixed with `TRACE`. It's safe and natural to keep `camTrace()` calls in your code for easier debugging.
- * @param {...string} args
- * @returns {void}
- */
+//;; ## camTrace(...args)
+//;;
+//;; Same as `camDebug()`, but only warns in cheat mode.
+//;; Prefixed with `TRACE`. It's safe and natural to keep `camTrace()` calls in your code for easier debugging.
+//;;
+//;; @param {...string} args
+//;; @returns {void}
+//;;
 function camTrace(...args)
 {
 	if (!camIsCheating())
@@ -114,13 +114,13 @@ function camTrace(...args)
 	                  args);
 }
 
-/**
- * ## camTraceOnce(...args)
- *
- * Same as `camTrace()`, but prints each message only once during script lifetime.
- * @param {...string} args
- * @returns {void}
- */
+//;; ## camTraceOnce(...args)
+//;;
+//;; Same as `camTrace()`, but prints each message only once during script lifetime.
+//;;
+//;; @param {...string} args
+//;; @returns {void}
+//;;
 function camTraceOnce(...args)
 {
 	if (!camIsCheating())
@@ -138,12 +138,12 @@ function camTraceOnce(...args)
 	                  args);
 }
 
-/**
- * ## camIsCheating()
- *
- * Check if the player is in cheat mode.
- * @returns {boolean}
- */
+//;; ## camIsCheating()
+//;;
+//;; Check if the player is in cheat mode.
+//;;
+//;; @returns {boolean}
+//;;
 function camIsCheating()
 {
 	return __camCheatMode;
