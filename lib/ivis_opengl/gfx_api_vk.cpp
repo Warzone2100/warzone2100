@@ -1916,7 +1916,13 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	// Discrete GPUs have a significant performance advantage
 	if (deviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
 	{
-		score += 100000; // picked a number greater than the max seen maxImageDimension2D value: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxImageDimension2D
+		score += 1000000; // picked a number greater than the max seen maxImageDimension2D value: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxImageDimension2D
+	}
+
+	// Integrated GPUs should still be preferred over CPU types
+	if (deviceProperties.deviceType == vk::PhysicalDeviceType::eIntegratedGpu)
+	{
+		score += 100000; // picked a number greater than the max seen maxImageDimension2D value: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxImageDimension2D (but less than the dedicated gpu number above)
 	}
 
 	// Maximum possible size of textures affects graphics quality
