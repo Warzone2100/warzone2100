@@ -175,7 +175,7 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(COLLEVTIVE_RES, THE_COLLECTIVE);
-	
+
 	camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
 
 	camSetEnemyBases({
@@ -224,11 +224,11 @@ function eventStartLevel()
 
 	commandGroup = camMakeGroup("group1NBase");
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 	camEnableFactory("COFactoryWest");
 
 	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("vtolAttack", camMinutesToMilliseconds(3));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	truckDefense();
 }
