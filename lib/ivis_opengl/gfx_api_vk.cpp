@@ -1995,6 +1995,15 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 		return 0;
 	}
 
+	if (deviceProperties.deviceType == vk::PhysicalDeviceType::eCpu && deviceProperties.vendorID == 0x10005)
+	{
+		if (strncmp("llvmpipe", deviceProperties.deviceName, strlen("llvmpipe")) == 0)
+		{
+			// allow llvmpipe, but prioritize it last
+			score = std::min<int>(1, score);
+		}
+	}
+
 	return score;
 }
 
