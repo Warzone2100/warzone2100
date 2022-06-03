@@ -44,7 +44,7 @@ static bool		is_opening_new_track = false;
 static bool		queued_play_track_while_loading = false;
 static AUDIO_STREAM *cdStream = nullptr;
 
-const char MENU_MUSIC[] = "music/menu.ogg";
+const char MENU_MUSIC[] = "music/menu.opus";
 static SONG_CONTEXT currentSongContext = SONG_FRONTEND;
 static std::shared_ptr<const WZ_TRACK> currentTrack;
 static std::vector<std::shared_ptr<CDAudioEventSink>> registeredEventSinks;

@@ -28,7 +28,7 @@
 	shallow = true
 [submodule "data/music"]
 	path = data/music
-	url = https://github.com/Warzone2100/data-music.git
+	url = https://github.com/Warzone2100/data-music-opus.git
 	shallow = true
 [submodule "3rdparty/discord-rpc"]
 	path = 3rdparty/discord-rpc
