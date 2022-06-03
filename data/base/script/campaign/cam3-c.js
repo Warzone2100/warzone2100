@@ -115,10 +115,9 @@ function discoverGammaBase()
 	hackRemoveMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 	hackRemoveMessage("CM3C_BETATEAM", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	truckDefense();
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
+	truckDefense();
 	enableAllFactories();
-
 }
 
 function findBetaUnitIds()

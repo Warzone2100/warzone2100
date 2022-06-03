@@ -113,10 +113,10 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	
+
 	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohhpv, THE_COLLECTIVE);
 	camUpgradeOnMapTemplates(cTempl.comtath, cTempl.comltath, THE_COLLECTIVE);
-	
+
 	//New AC Tiger tracked units for Hard and Insane difficulty
 	if (difficulty >= HARD)
 	{
@@ -197,10 +197,10 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 
 	queue("setupLandGroups", camSecondsToMilliseconds(60));
 	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 80 : 90)));
 	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 135 : 150)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	truckDefense();
 }

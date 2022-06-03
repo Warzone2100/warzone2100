@@ -345,7 +345,6 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 	setUnitRank(); //All pre-placed player droids are ranked.
 	camPlayVideos({video: "MB2A_MSG", type: MISS_MSG});
 	startedFromMenu = false;
@@ -368,4 +367,6 @@ function eventStartLevel()
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
+
+	truckDefense();
 }

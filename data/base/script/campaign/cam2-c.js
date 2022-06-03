@@ -398,7 +398,6 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 	capturedCivCount = 0;
 	civilianPosIndex = 0;
 	lastSoundTime = 0;
@@ -410,4 +409,6 @@ function eventStartLevel()
 
 	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+
+	truckDefense();
 }

@@ -137,7 +137,7 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	
+
 	camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
 
 	// New HMG Tiger Tracks units in first attack group
@@ -242,7 +242,6 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	camEnableFactory("COHeavyFac-b4");
@@ -254,4 +253,6 @@ function eventStartLevel()
 	queue("activateBase1Defenders2", camChangeOnDiff(camMinutesToMilliseconds(20)));
 	queue("activateBase1Defenders", camChangeOnDiff(camMinutesToMilliseconds(30)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+
+	truckDefense();
 }
