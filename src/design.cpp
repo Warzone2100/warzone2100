@@ -392,7 +392,7 @@ protected:
 		if (delta != 0)
 		{
 			deltaText.setText(astringf("%+.*f", precision, delta / (float)denominator), font_small);
-			auto xDeltaText = xOffset + x() + width() - iV_GetTextWidth(deltaText.getText().c_str(), font_small) - PADDING;
+			auto xDeltaText = xOffset + x() + width() - deltaText.width() - PADDING;
 			deltaText.renderOutlined(xDeltaText, iY - 1, (delta < 0) == lessIsBetter ? WZCOL_LGREEN : WZCOL_LRED, {0, 0, 0, 192});
 		}
 	}
