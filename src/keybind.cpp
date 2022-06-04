@@ -98,8 +98,8 @@ static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what us
 #define QUICKSAVE_SKI_FOLDER "savegames/skirmish/QuickSave"
 #define QUICKSAVE_CAM_FILENAME "savegames/campaign/QuickSave.gam"
 #define QUICKSAVE_SKI_FILENAME "savegames/skirmish/QuickSave.gam"
-#define QUICKSAVE_CAM_JSON_FILENAME QUICKSAVE_CAM_FOLDER "/QuickSave.json"
-#define QUICKSAVE_SKI_JSON_FILENAME QUICKSAVE_SKI_FOLDER "/QuickSave.json"
+#define QUICKSAVE_CAM_JSON_FILENAME QUICKSAVE_CAM_FOLDER "/gam.json"
+#define QUICKSAVE_SKI_JSON_FILENAME QUICKSAVE_SKI_FOLDER "/gam.json"
 
 #define SPECTATOR_NO_OP() do { if (selectedPlayer >= MAX_PLAYERS || NetPlay.players[selectedPlayer].isSpectator) { return; } } while (0)
 
@@ -2572,8 +2572,8 @@ void kf_QuickSave()
 		return;
 	}
 
-	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
-	const char *quickSaveFolder = bMultiPlayer? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
+	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
+	const char *quickSaveFolder = bMultiPlayer ? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
 	if (WZ_PHYSFS_isDirectory(quickSaveFolder))
 	{
 		deleteSaveGame(quickSaveFolder);
@@ -2601,9 +2601,9 @@ void kf_QuickLoad()
 		return;
 	}
 
-	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
+	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
 	// check for .json version, because that's what going to be loaded anyway
-	if (PHYSFS_exists(filename) || PHYSFS_exists(bMultiPlayer? QUICKSAVE_SKI_JSON_FILENAME : QUICKSAVE_CAM_JSON_FILENAME))
+	if (PHYSFS_exists(filename) || PHYSFS_exists(bMultiPlayer ? QUICKSAVE_SKI_JSON_FILENAME : QUICKSAVE_CAM_JSON_FILENAME))
 	{
 		console(_("QuickLoad"));
 		audio_StopAll();
