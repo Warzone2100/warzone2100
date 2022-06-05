@@ -312,6 +312,10 @@ protected:
 	void drawNextDroidRank(int xOffset, int yOffset)
 	{
 		const auto factory = controller->getObjectAt(objectIndex);
+		if (!factory) 
+		{
+			return;
+		}
 		const auto player = factory->player;
 		const auto exp = getTopExperience(player);
 		unsigned int lvl = 0;
