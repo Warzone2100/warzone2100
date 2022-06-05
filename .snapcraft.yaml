@@ -3,7 +3,7 @@ name: warzone2100 # no spaces, all lower-case
 adopt-info: warzone2100
 confinement: strict
 grade: stable
-base: core18
+base: core20
 
 # Enable LZO compression for the snap
 compression: lzo
@@ -22,6 +22,13 @@ layout:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_intel.so
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_radeon.so:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_radeon.so
+#  # Try the following once base is updated to core22
+#  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_broadcom.so:
+#    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_broadcom.so
+#  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_freedreno.so:
+#    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_freedreno.so
+#  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so:
+#    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so
 
 plugs:
   wz2100-sequences:
@@ -32,7 +39,7 @@ plugs:
 
 apps:
   warzone2100:
-    extensions: [gnome-3-34]
+    extensions: [gnome-3-38]
     command: usr/bin/warzone2100
     common-id: warzone2100 # should match the appdata/metainfo file's <id> field
     desktop: usr/share/applications/warzone2100.desktop
@@ -53,7 +60,7 @@ parts:
     source: https://www.libsdl.org/release/SDL2-2.0.20.tar.gz
     source-checksum: sha512/4889949eaa674948bdb0a01bb2a842a0943b15b08ff27ec0079b0fd4f79d071ffb32488a5a51c12ad7c74ed5fe73b608cdf6336a44c95dae8a0fb3f47d0f01de
     plugin: autotools
-    configflags:
+    autotools-configure-parameters:
     - --prefix=/usr
     - --disable-alsa
     - --disable-arts
@@ -143,6 +150,7 @@ parts:
       . "${SNAPCRAFT_PART_SRC}/.ci/snap/install_vulkan_sdk.sh"
       
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
+      set +u
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
       cmake -S "$SNAPCRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
       cmake --build . -- -j$SNAPCRAFT_PARALLEL_BUILD_COUNT
@@ -156,7 +164,7 @@ parts:
       - g++
       - gettext
       - libfontconfig1-dev
-      - libfreetype6-dev
+      - libfreetype-dev
       - libfribidi-dev
       - libharfbuzz-dev
       - libopenal-dev
@@ -210,12 +218,12 @@ parts:
       - warzone2100
     plugin: nil
     build-snaps:  # List all content-snaps and base snaps you're using here
-      - core18
+      - core20
       - gtk-common-themes
-      - gnome-3-34-1804
+      - gnome-3-38-2004
     override-prime: |
       set -eux
-      for snap in "core18" "gtk-common-themes" "gnome-3-34-1804"; do  # List all content-snaps and base snaps you're using here
+      for snap in "core20" "gtk-common-themes" "gnome-3-38-2004"; do  # List all content-snaps and base snaps you're using here
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
       done
       # The following is required while using core18 + gnome-3-34

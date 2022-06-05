@@ -27,6 +27,7 @@
 #include <cstring>
 #include <algorithm>
 
+#include <limits>
 #include <zip.h> // from libzip
 
 #include "../src/map_internal.h"
