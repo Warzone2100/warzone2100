@@ -62,6 +62,7 @@ enum PICKTILE
 extern DROID	*psLastDroidHit;
 
 std::priority_queue<int> copy_experience_queue(int player);
+int getTopExperience(int player);
 void add_to_experience_queue(int player, int value);
 
 // initialise droid module
@@ -183,6 +184,7 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
 
 /* Droid experience stuff */
 unsigned int getDroidLevel(const DROID *psDroid);
+unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
 UDWORD getDroidEffectiveLevel(const DROID *psDroid);
 const char *getDroidLevelName(const DROID *psDroid);
 

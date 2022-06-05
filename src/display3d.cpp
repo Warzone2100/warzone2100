@@ -3935,47 +3935,49 @@ void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 		bRangeDisplay = false;
 	}
 }
+UDWORD  getDroidRankGraphicFromLevel(unsigned int level)
+{
+	UDWORD gfxId = UDWORD_MAX;
+	switch (level)
+		{
+		case 0:
+			break;
+		case 1:
+			gfxId = IMAGE_LEV_0;
+			break;
+		case 2:
+			gfxId = IMAGE_LEV_1;
+			break;
+		case 3:
+			gfxId = IMAGE_LEV_2;
+			break;
+		case 4:
+			gfxId = IMAGE_LEV_3;
+			break;
+		case 5:
+			gfxId = IMAGE_LEV_4;
+			break;
+		case 6:
+			gfxId = IMAGE_LEV_5;
+			break;
+		case 7:
+			gfxId = IMAGE_LEV_6;
+			break;
+		case 8:
+			gfxId = IMAGE_LEV_7;
+			break;
+		default:
+			ASSERT(!"out of range droid rank", "Weird droid level in drawDroidRank");
+			break;
+		}
 
+	return gfxId;
+}
 /// Get the graphic ID for a droid rank
 UDWORD  getDroidRankGraphic(DROID *psDroid)
 {
-	UDWORD gfxId = UDWORD_MAX;
-
 	/* Establish the numerical value of the droid's rank */
-	switch (getDroidLevel(psDroid))
-	{
-	case 0:
-		break;
-	case 1:
-		gfxId = IMAGE_LEV_0;
-		break;
-	case 2:
-		gfxId = IMAGE_LEV_1;
-		break;
-	case 3:
-		gfxId = IMAGE_LEV_2;
-		break;
-	case 4:
-		gfxId = IMAGE_LEV_3;
-		break;
-	case 5:
-		gfxId = IMAGE_LEV_4;
-		break;
-	case 6:
-		gfxId = IMAGE_LEV_5;
-		break;
-	case 7:
-		gfxId = IMAGE_LEV_6;
-		break;
-	case 8:
-		gfxId = IMAGE_LEV_7;
-		break;
-	default:
-		ASSERT(!"out of range droid rank", "Weird droid level in drawDroidRank");
-		break;
-	}
-
-	return gfxId;
+	return getDroidRankGraphicFromLevel(getDroidLevel(psDroid));
 }
 
 /**	Will render a graphic depiction of the droid's present rank.

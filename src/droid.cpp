@@ -93,6 +93,14 @@ static void groupConsoleInformOfRemoval();
 static void droidUpdateDroidSelfRepair(DROID *psRepairDroid);
 static UDWORD calcDroidBaseBody(DROID *psDroid);
 
+int getTopExperience(int player)
+{
+	if (recycled_experience[player].size() == 0)
+	{
+		return 0;
+	}
+	return recycled_experience[player].top();
+}
 void cancelBuild(DROID *psDroid)
 {
 	if (psDroid->order.type == DORDER_NONE || psDroid->order.type == DORDER_PATROL || psDroid->order.type == DORDER_HOLD || psDroid->order.type == DORDER_SCOUT || psDroid->order.type == DORDER_GUARD)
@@ -2142,17 +2150,13 @@ struct rankMap
 	const char  *name;           // name of this rank
 };
 
-unsigned int getDroidLevel(const DROID *psDroid)
+unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent)
 {
-	unsigned int numKills = psDroid->experience / 65536;
-	unsigned int i;
-
-	// Search through the array of ranks until one is found
-	// which requires more kills than the droid has.
-	// Then fall back to the previous rank.
-	const BRAIN_STATS *psStats = getBrainStats(psDroid);
-	auto &vec = psStats->upgrade[psDroid->player].rankThresholds;
-	for (i = 1; i < vec.size(); ++i)
+	unsigned int numKills = experience / 65536;
+	const BRAIN_STATS *psStats = asBrainStats + brainComponent;
+	auto &vec = psStats->upgrade[player].rankThresholds;
+	ASSERT_OR_RETURN(0, vec.size() > 0, "rankThreshold was empty?");
+	for (int i = 1; i < vec.size(); ++i)
 	{
 		if (numKills < vec.at(i))
 		{
@@ -2162,6 +2166,11 @@ unsigned int getDroidLevel(const DROID *psDroid)
 
 	// If the criteria of the last rank are met, then select the last one
 	return vec.size() - 1;
+}
+
+unsigned int getDroidLevel(const DROID *psDroid)
+{
+	return getDroidLevel(psDroid->experience, psDroid->player, psDroid->asBits[COMP_BRAIN]);
 }
 
 UDWORD getDroidEffectiveLevel(const DROID *psDroid)

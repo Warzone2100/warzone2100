@@ -6,8 +6,11 @@
 #include "manufacture.h"
 #include "../mission.h"
 #include "../qtscript.h"
+#include "../display3d.h"
 
 STRUCTURE *ManufactureController::highlightedFactory = nullptr;
+static const uint8_t nullBrainComponent = 0; // "0" to reference "NULLxxx" components
+static const uint8_t commandBrainComponent = 1; // hmm there is only 1 "CommandBrain01" anyway..
 
 FACTORY *getFactoryOrNullptr(STRUCTURE *factory)
 {
@@ -291,7 +294,6 @@ protected:
 		auto production = getStats();
 		auto productionPending = factory && StructureIsManufacturingPending(factory);
 		auto objectImage = productionPending && production ? ImdObject::DroidTemplate(production): ImdObject::Component(nullptr);
-
 		displayIMD(AtlasImage(), objectImage, xOffset, yOffset);
 
 		if (productionPending && StructureIsOnHoldPending(factory))
@@ -301,6 +303,36 @@ protected:
 		else
 		{
 			displayIfHighlight(xOffset, yOffset);
+		}
+		drawNextDroidRank(xOffset, yOffset);
+	}
+
+	// show a little icon on the bottom, indicating what rank next unit will be
+	// remember that when it's a commander, same rank will require twice experience
+	void drawNextDroidRank(int xOffset, int yOffset)
+	{
+		const auto factory = controller->getObjectAt(objectIndex);
+		const auto player = factory->player;
+		const auto exp = getTopExperience(player);
+		unsigned int lvl = 0;
+		if (!factory->pFunctionality->factory.psSubject)
+		{
+			// not showing icon when nothing is being built
+			return;
+		}
+		if (factory->pFunctionality->factory.psSubject->droidType == DROID_COMMAND)
+		{
+			lvl = getDroidLevel(exp, player, commandBrainComponent);
+		}
+		else 
+		{
+			lvl = getDroidLevel(exp, player, nullBrainComponent);
+		}
+		const auto expgfx = getDroidRankGraphicFromLevel(lvl);
+		if (expgfx != UDWORD_MAX)
+		{
+			// FIXME: use offsets relative to template positon, not hardcoded values ?
+   		iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);	
 		}
 	}
 
