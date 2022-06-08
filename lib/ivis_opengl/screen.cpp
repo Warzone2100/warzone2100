@@ -316,12 +316,12 @@ void screen_Display()
 		int scale = MIN(s1, s2);
 		int w = preview_width * scale;
 		int h = preview_height * scale;
+		WzString text;
 
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			int x = player_pos[i].x;
 			int y = player_pos[i].y;
-			char text[5];
 
 			if (x == 0x77777777)
 			{
@@ -330,7 +330,7 @@ void screen_Display()
 
 			x = screenWidth / 2 - w / 2 + x * scale;
 			y = screenHeight / 2 - h / 2 + y * scale;
-			ssprintf(text, "%d", i);
+			text = WzString::number(i);
 			player_Text[i].setText(text, font_large);
 			player_Text[i].render(x - 1, y - 1, WZCOL_BLACK);
 			player_Text[i].render(x + 1, y - 1, WZCOL_BLACK);

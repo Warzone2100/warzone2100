@@ -2741,7 +2741,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 	cache.formattedVersionString.setText(version_getFormattedVersionString(), font_regular);
 	cache.modListText.setText(modListText, font_regular);
-	cache.gfxBackend.setText(gfx_api::context::get().getFormattedRendererInfoString(), font_small);
+	cache.gfxBackend.setText(WzString::fromUtf8(gfx_api::context::get().getFormattedRendererInfoString()), font_small);
 
 	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, WZCOL_GREY, 270.f);
 
@@ -2798,7 +2798,7 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
 
 	// TODO: Only works for single-line (not "formatted text") labels
-	cache.wzText.setText(psLab->getString().toUtf8(), font_large);
+	cache.wzText.setText(psLab->getString(), font_large);
 
 	fx = xOffset + psWidget->x();
 	fy = yOffset + psWidget->y() + cache.wzText.width();
@@ -2820,7 +2820,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
 
-	cache.wzText.setText(psBut->pText.toUtf8(), psBut->FontID);
+	cache.wzText.setText(psBut->pText, psBut->FontID);
 
 	if (psBut->isMouseOverWidget()) // if mouse is over text then hilight.
 	{

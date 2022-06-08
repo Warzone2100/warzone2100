@@ -180,7 +180,7 @@ public:
 	}
 	void setCachedText(const std::string &text, iV_fonts fontID, const std::string &fullButString, int widgetWidth)
 	{
-		wzText.setText(text, fontID);
+		wzText.setText(WzString::fromUtf8(text), fontID);
 		_fullButString = fullButString;
 		_widgetWidth = widgetWidth;
 	}

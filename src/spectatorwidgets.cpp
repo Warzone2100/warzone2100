@@ -472,7 +472,7 @@ public:
 		{
 			return it->second;
 		}
-		auto newCachedText = std::make_shared<WzCachedText>(std::to_string(number), font_regular);
+		auto newCachedText = std::make_shared<WzCachedText>(WzString::number(number), font_regular);
 		cachedNumberTexts[number] = newCachedText;
 		return newCachedText;
 	}

@@ -45,7 +45,7 @@ Vector2i WzCheckboxButton::calculateDesiredDimensions()
 
 void WzCheckboxButton::display(int xOffset, int yOffset)
 {
-	wzText.setText(pText.toUtf8(), FontID);
+	wzText.setText(pText, FontID);
 
 	int x0 = xOffset + x();
 	int y0 = yOffset + y();

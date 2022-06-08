@@ -4890,7 +4890,7 @@ public:
 private:
 	std::shared_ptr<PlayerReference> player;
 	iV_fonts font;
-	std::string layoutName;
+	WzString layoutName;
 	WzCachedText cachedText;
 	int32_t horizontalPadding = 3;
 	int32_t leftMargin = 3;
@@ -5000,7 +5000,7 @@ std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(
 			delete static_cast<PopoverMenuButtonDisplayCache *>(psWidget->pUserData);
 			psWidget->pUserData = nullptr;
 		});
-		int minButtonWidthForText = iV_GetTextWidth(text.toUtf8().c_str(), button->FontID);
+		int minButtonWidthForText = iV_GetTextWidth(text, button->FontID);
 		button->setGeometry(0, 0, minButtonWidthForText + MENU_BUTTONS_PADDING, iV_GetTextLineSize(button->FontID) + 4);
 
 		// On click, perform the designated onClickHandler and close the popover form / overlay
@@ -7285,7 +7285,7 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int j = psWidget->UserData;
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	std::string displayText;
+	WzString displayText;
 	PIELIGHT textColor = WZCOL_FORM_TEXT;
 	if (j >= 0)
 	{
@@ -7431,10 +7431,10 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				}
 				name += "...";
 			}
-			cache.wzMainText.setText(name, font_regular);
+			cache.wzMainText.setText(WzString::fromUtf8(name), font_regular);
 			cache.fullMainText = name;
 		}
-		std::string subText;
+		WzString subText;
 		if (j == NetPlay.hostPlayer && NetPlay.bComms)
 		{
 			subText += _("HOST");
@@ -7444,7 +7444,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			char buf[250] = {'\0'};
 
 			// show "actual" ping time
-			ssprintf(buf, "%s%s: ", subText.empty() ? "" : ", ", _("Ping"));
+			ssprintf(buf, "%s%s: ", subText.isEmpty() ? "" : ", ", _("Ping"));
 			subText += buf;
 			if (ingame.PingTimes[j] < PING_LIMIT)
 			{
@@ -7480,8 +7480,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		int H = 5;
-		cache.wzMainText.render(x + nameX, y + 22 - H*!subText.empty() - H*(ar.valid && !ar.elo.empty()), colour);
-		if (!subText.empty())
+		cache.wzMainText.render(x + nameX, y + 22 - H*!subText.isEmpty() - H*(ar.valid && !ar.elo.empty()), colour);
+		if (!subText.isEmpty())
 		{
 			cache.wzSubText.setText(subText, font_small);
 			cache.wzSubText.render(x + nameX, y + 28 - H*!ar.elo.empty(), WZCOL_TEXT_MEDIUM);
@@ -7524,8 +7524,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		if (!ar.elo.empty())
 		{
-			cache.wzEloText.setText(ar.elo, font_small);
-			cache.wzEloText.render(x + nameX, y + 28 + H*!subText.empty(), WZCOL_TEXT_BRIGHT);
+			cache.wzEloText.setText(WzString::fromUtf8(ar.elo), font_small);
+			cache.wzEloText.render(x + nameX, y + 28 + H*!subText.isEmpty(), WZCOL_TEXT_BRIGHT);
 		}
 
 		NetPlay.players[j].difficulty = AIDifficulty::HUMAN;

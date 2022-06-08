@@ -874,9 +874,9 @@ void draw3DScene()
 		Qbuf = astringf("Que: %04u", audio_GetSampleQueueCount());
 		Lbuf = astringf("Lst: %04u", audio_GetSampleListCount());
 		Abuf = astringf("Act: %04u", sound_GetActiveSamplesCount());
-		txtShowSamples_Que.setText(Qbuf, font_regular);
-		txtShowSamples_Lst.setText(Lbuf, font_regular);
-		txtShowSamples_Act.setText(Abuf, font_regular);
+		txtShowSamples_Que.setText(WzString::fromUtf8(Qbuf), font_regular);
+		txtShowSamples_Lst.setText(WzString::fromUtf8(Lbuf), font_regular);
+		txtShowSamples_Act.setText(WzString::fromUtf8(Abuf), font_regular);
 
 		width = txtShowSamples_Que.width() + 11;
 		height = txtShowSamples_Que.height();
@@ -888,7 +888,7 @@ void draw3DScene()
 	if (showFPS)
 	{
 		std::string fps = astringf("FPS: %d", frameRate());
-		txtShowFPS.setText(fps, font_regular);
+		txtShowFPS.setText(WzString::fromUtf8(fps), font_regular);
 		const unsigned width = txtShowFPS.width() + 10;
 		const unsigned height = 9; //txtShowFPS.height();
 		txtShowFPS.render(pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
@@ -896,7 +896,7 @@ void draw3DScene()
 	if (showUNITCOUNT && selectedPlayer < MAX_PLAYERS)
 	{
 		std::string killdiff = astringf("Units: %u lost / %u built / %u killed", missionData.unitsLost, missionData.unitsBuilt, getSelectedPlayerUnitsKilled());
-		txtUnits.setText(killdiff, font_regular);
+		txtUnits.setText(WzString::fromUtf8(killdiff), font_regular);
 		const unsigned width = txtUnits.width() + 10;
 		const unsigned height = 9; //txtUnits.height();
 		txtUnits.render(pie_GetVideoBufferWidth() - width - ((showFPS) ? txtShowFPS.width() + 10 : 0), pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
@@ -1289,7 +1289,7 @@ bool init3DView()
 		return false;
 	}
 
-	txtLevelName.setText(mapNameWithoutTechlevel(getLevelName()), font_small);
+	txtLevelName.setText(WzString::fromUtf8(mapNameWithoutTechlevel(getLevelName())), font_small);
 	txtDebugStatus.setText("DEBUG ", font_small);
 
 	return true;

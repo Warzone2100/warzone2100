@@ -133,7 +133,7 @@ void W_BARGRAPH::run(W_CONTEXT *context)
 
 static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 {
-	if (!barGraph->text.empty())
+	if (!barGraph->text.isEmpty())
 	{
 		barGraph->wzCachedText.setText(barGraph->text, font_bar);
 		int textWidth = barGraph->wzCachedText.width();

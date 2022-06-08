@@ -309,13 +309,17 @@ void W_TrackRow::geometryChanged()
 	}
 }
 
-static std::string truncateTextToMaxWidth(std::string str, iV_fonts fontID, int maxWidth)
+static WzString truncateTextToMaxWidth(WzString str, iV_fonts fontID, int maxWidth)
 {
-	if ((int)iV_GetTextWidth(str.c_str(), fontID) > maxWidth)
+	if ((int)iV_GetTextWidth(str, fontID) > maxWidth)
 	{
-		while (!str.empty() && (int)iV_GetTextWidth((str + "...").c_str(), fontID) > maxWidth)
+		while (!str.isEmpty() && (int)iV_GetTextWidth((str + "..."), fontID) > maxWidth)
 		{
-			str.resize(str.size() - 1);  // Clip name.
+			if (!str.pop_back())  // Clip name.
+			{
+				ASSERT(false, "WzString::pop_back() failed??");
+				break;
+			}
 		}
 		str += "...";
 	}
@@ -339,8 +343,8 @@ void W_TrackRow::display(int xOffset, int yOffset)
 		trackRowsCache[this] = pCache;
 
 		// calculate max displayable length for title and album
-		std::string title_truncated = truncateTextToMaxWidth(track->title, font_regular, W_TRACK_COL_TITLE_W);
-		std::string album_truncated = truncateTextToMaxWidth(album_name, font_regular, W_TRACK_COL_ALBUM_W);
+		WzString title_truncated = truncateTextToMaxWidth(WzString::fromUtf8(track->title), font_regular, W_TRACK_COL_TITLE_W);
+		WzString album_truncated = truncateTextToMaxWidth(WzString::fromUtf8(album_name), font_regular, W_TRACK_COL_ALBUM_W);
 		pCache->wzText_Title.setText(title_truncated, font_regular);
 		pCache->wzText_Album.setText(album_truncated, font_regular);
 	}

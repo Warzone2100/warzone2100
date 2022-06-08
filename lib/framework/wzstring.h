@@ -101,6 +101,7 @@ public:
 	WzString& remove(const WzString &substr);
 
 	void truncate(int position);
+	bool pop_back();
 	void clear();
 
 	WzString toLower() const;

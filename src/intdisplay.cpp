@@ -179,7 +179,6 @@ void PowerBar::display(int xOffset, int yOffset)
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
 	SDWORD		iX, iY;
-	static char		szVal[8];
 
 	double desiredPower = getPowerMinusQueued(selectedPlayer);
 	static double displayPower;
@@ -193,9 +192,8 @@ void PowerBar::display(int xOffset, int yOffset)
 	ManuPower = 0;
 
 	BarWidth = this->width();
-	sprintf(szVal, "%d", realPower);
 
-	cache.wzText.setText(szVal, font_regular);
+	cache.wzText.setText(WzString::number(realPower), font_regular);
 
 	textWidth = cache.wzText.width();
 	BarWidth -= textWidth;
@@ -1939,7 +1937,7 @@ void intDisplayUpdateAllyBar(W_BARGRAPH *psBar, const RESEARCH &research, const 
 	else if (bestCompletion > 0)
 	{
 		// Waiting for module...
-		psBar->text = std::string("—*—");
+		psBar->text = WzString("—*—");
 	}
 	else if (bestPowerNeeded != researchNotStarted)
 	{
