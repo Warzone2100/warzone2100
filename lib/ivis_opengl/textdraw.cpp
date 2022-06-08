@@ -249,17 +249,69 @@ struct TextRun
 	int endOffset;
 	hb_script_t script;
 	hb_direction_t direction;
-	hb_buffer_t* buffer;
+
+	hb_buffer_t* buffer = nullptr; // owned
 	unsigned int glyphCount;
-	hb_glyph_info_t* glyphInfos;
-	hb_glyph_position_t* glyphPositions;
+	hb_glyph_info_t* glyphInfos = nullptr;
+	hb_glyph_position_t* glyphPositions = nullptr;
+	const uint32_t* codePoints = nullptr;
 
-	const uint32_t* codePoints;
-
+public:
 	TextRun() : startOffset(0), endOffset(0) {}
 
 	TextRun(const std::string &t, const std::string &l, hb_script_t s, hb_direction_t d) :
 		text(t), language(l), startOffset(0), endOffset(t.size()), script(s), direction(d) {}
+
+	~TextRun()
+	{
+		if (buffer)
+		{
+			hb_buffer_destroy(buffer);
+		}
+	}
+
+public:
+	// Prevent copies
+	TextRun(const TextRun&) = delete;
+	void operator=(const TextRun&) = delete;
+
+	// Allow move semantics
+	TextRun& operator=(TextRun&& other)
+	{
+		if (this != &other)
+		{
+			// Free the existing (owned) buffer, if any
+			if (buffer)
+			{
+				hb_buffer_destroy(buffer);
+			}
+
+			// Get the other data
+			text = std::move(other.text);
+			language = std::move(other.language);
+			startOffset = other.startOffset;
+			endOffset = other.endOffset;
+			script = other.script;
+			direction = other.direction;
+
+			buffer = other.buffer; // owned
+			glyphCount = other.glyphCount;
+			glyphInfos = other.glyphInfos;
+			glyphPositions = other.glyphPositions;
+			codePoints = other.codePoints;
+
+			// Reset other's pointer types
+			other.buffer = nullptr;
+			other.glyphInfos = nullptr;
+			other.glyphPositions = nullptr;
+		}
+		return *this;
+	}
+
+	TextRun(TextRun&& other)
+	{
+		*this = std::move(other);
+	}
 };
 
 struct TextLayoutMetrics
@@ -305,8 +357,6 @@ struct DrawTextResult
 // only minimal visual difference.
 struct TextShaper
 {
-	hb_buffer_t* m_buffer;
-
 	struct HarfbuzzPosition
 	{
 		hb_codepoint_t codepoint;
@@ -323,14 +373,10 @@ struct TextShaper
 	};
 
 	TextShaper()
-	{
-		m_buffer = hb_buffer_create();
-	}
+	{ }
 
 	~TextShaper()
-	{
-		hb_buffer_destroy(m_buffer);
-	}
+	{ }
 
 	// Returns the text width and height *IN PIXELS*
 	TextLayoutMetrics getTextMetrics(const WzString& text, FTFace &face)
@@ -577,7 +623,7 @@ struct TextShaper
 				/* "lastLevel & 1" yields either 1 or 0, depending on the least significant bit of lastLevel.*/
 				run.direction = lastLevel & 1 ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
 
-				textRuns.push_back(run);
+				textRuns.push_back(std::move(run));
 
 				if (i < size)
 				{
@@ -599,7 +645,7 @@ struct TextShaper
 		singleRun.script = HB_SCRIPT_COMMON;
 		singleRun.codePoints = codePoints.data();
 		singleRun.direction = HB_DIRECTION_LTR;
-		std::array<TextRun, 1> textRuns = { singleRun };
+		std::array<TextRun, 1> textRuns = { std::move(singleRun) };
 #endif // defined(WZ_FRIBIDI_ENABLED)
 
 
@@ -621,7 +667,7 @@ struct TextShaper
 		   will be all that is needed.*/
 		for (size_t i = (textRuns.size()); i > 0; --i)
 		{
-			TextRun run = textRuns[i - 1];
+			const TextRun& run = textRuns[i - 1];
 
 			for (unsigned int glyphIndex = 0; glyphIndex < run.glyphCount; ++glyphIndex)
 			{
