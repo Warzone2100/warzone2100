@@ -291,7 +291,7 @@ function buildersOrder(order,target) {
 	//Назначаем работу строителям-охотникам
 	if (buildersHuntersLen > 0) {
 		/*
-		 if (builder_targets*.length === 0) { // Если нет целей для разведки или захвата ресурсов
+		if (builder_targets*.length === 0) { // Если нет целей для разведки или захвата ресурсов
 			for (const h in hunters) {if (!builderBusy(hunters[h])) {
 				if (rigDefence(hunters[h])) continue;
 				orderDroidLoc_p(hunters[h],DORDER_MOVE,base.x,base.y);
