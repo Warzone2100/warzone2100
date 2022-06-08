@@ -346,12 +346,10 @@ function camMakeGroup(what, playerFilter)
 				array = [ obj ];
 				break;
 			case AREA:
-				array = enumArea(obj.x, obj.y, obj.x2, obj.y2,
-				                 ALL_PLAYERS, false);
+				array = enumArea(obj.x, obj.y, obj.x2, obj.y2, ALL_PLAYERS, false);
 				break;
 			case RADIUS:
-				array = enumRange(obj.x, obj.y, obj.radius,
-				                 ALL_PLAYERS, false);
+				array = enumRange(obj.x, obj.y, obj.radius, ALL_PLAYERS, false);
 				break;
 			case GROUP:
 				array = enumGroup(obj.id);
