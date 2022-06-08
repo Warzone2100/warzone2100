@@ -879,7 +879,7 @@ static void perFrameCleanup()
 	UDWORD currentFrameNum = frameGetFrameNumber();
 	for (auto i = trackRowsCache.begin(), last = trackRowsCache.end(); i != last; )
 	{
-		if (i->second->lastUsedFrameNumber != currentFrameNum)
+		if (currentFrameNum - i->second->lastUsedFrameNumber > 1)
 		{
 			i = trackRowsCache.erase(i);
 		}
