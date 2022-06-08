@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "lib/framework/vector.h"
+#include "lib/framework/wzstring.h"
 #include "gfx_api.h"
 #include "pietypes.h"
 
@@ -65,15 +66,15 @@ public:
 	WzText(WzText&& other);
 
 public:
-	const std::string& getText() const { return mText; }
+	const std::string& getText() const { return mText.toUtf8(); }
 	iV_fonts getFontID() const { return mFontID; }
 
 private:
-	void drawAndCacheText(const std::string &text, iV_fonts fontID);
+	void drawAndCacheText(const WzString &text, iV_fonts fontID);
 	void redrawAndCacheText();
 	void updateCacheIfNecessary();
 private:
-	std::string mText;
+	WzString mText;
 	gfx_api::texture* texture = nullptr;
 	int mPtsAboveBase = 0;
 	int mPtsBelowBase = 0;
