@@ -343,6 +343,19 @@ void WzString::truncate(int position)
 	}
 }
 
+bool WzString::pop_back()
+{
+	if (_utf8String.empty()) { return false; }
+	auto it = _utf8String.end();
+	_utf8_advance(it, -1, _utf8String.begin());
+	if (it != _utf8String.end())
+	{
+		_utf8String.erase(it, _utf8String.end());
+		return true;
+	}
+	return false; // something went wrong?
+}
+
 void WzString::clear()
 {
 	_utf8String.clear();

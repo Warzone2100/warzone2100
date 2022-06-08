@@ -44,7 +44,7 @@ public:
 private:
 	int checkboxSize()
 	{
-		wzText.setText(pText.toUtf8(), FontID);
+		wzText.setText(pText, FontID);
 		return wzText.lineSize() - 2;
 	}
 private:

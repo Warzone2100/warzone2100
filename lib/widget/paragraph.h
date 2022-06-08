@@ -54,7 +54,7 @@ struct ParagraphTextStyle
 class WzCachedText
 {
 public:
-	WzCachedText(std::string text, iV_fonts font, uint32_t cacheDurationMs = 100):
+	WzCachedText(WzString text, iV_fonts font, uint32_t cacheDurationMs = 100):
 		text(text),
 		font(font),
 		cacheDurationMs(cacheDurationMs)
@@ -80,7 +80,7 @@ public:
 	}
 
 private:
-	std::string text;
+	WzString text;
 	iV_fonts font;
 	uint32_t cacheDurationMs;
 	std::unique_ptr<WzText> cachedText = nullptr;

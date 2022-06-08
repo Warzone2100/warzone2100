@@ -231,7 +231,7 @@ private:
 class ParagraphTextWidget: public WIDGET
 {
 public:
-	ParagraphTextWidget(std::string text, ParagraphTextStyle const &textStyle):
+	ParagraphTextWidget(WzString text, ParagraphTextStyle const &textStyle):
 		WIDGET(WIDG_UNSPECIFIED_TYPE),
 		cachedText(text, textStyle.font),
 		textStyle(textStyle)
@@ -268,7 +268,7 @@ public:
 
 	unsigned int getWidth(size_t position, size_t length) const
 	{
-		return iV_GetTextWidth(text.substr(position, length).toUtf8().c_str(), font);
+		return iV_GetTextWidth(text.substr(position, length), font);
 	}
 
 	size_t size() const
@@ -308,7 +308,7 @@ struct ParagraphTextElement: public ParagraphElement
 
 	std::shared_ptr<WIDGET> createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
 	{
-		auto widget = std::make_shared<ParagraphTextWidget>(text.substr(fragment.begin, fragment.length).toUtf8(), style);
+		auto widget = std::make_shared<ParagraphTextWidget>(text.substr(fragment.begin, fragment.length), style);
 		widget->setTransparentToMouse(true);
 		paragraph.attach(widget);
 		fragments.push_back(widget);

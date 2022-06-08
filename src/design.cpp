@@ -375,7 +375,7 @@ protected:
 		auto filledWidth = std::min<int>((int)majorSize * barWidth / 100, barWidth);
 		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, filledWidth, defaultProjectionMatrix(), true);
 
-		valueText.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
+		valueText.setText(WzString::fromUtf8(astringf("%.*f", precision, majorValue / (float)denominator)), font_regular);
 		valueText.render(x0, iY, WZCOL_TEXT_BRIGHT);
 
 		if (minorValue == 0)
@@ -391,7 +391,7 @@ protected:
 		auto delta = minorValue - majorValue;
 		if (delta != 0)
 		{
-			deltaText.setText(astringf("%+.*f", precision, delta / (float)denominator), font_small);
+			deltaText.setText(WzString::fromUtf8(astringf("%+.*f", precision, delta / (float)denominator)), font_small);
 			auto xDeltaText = xOffset + x() + width() - deltaText.width() - PADDING;
 			deltaText.renderOutlined(xDeltaText, iY - 1, (delta < 0) == lessIsBetter ? WZCOL_LGREEN : WZCOL_LRED, {0, 0, 0, 192});
 		}

@@ -237,7 +237,7 @@ void W_EDITBOX::fitStringStart()
 
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp, FontID);
 
 		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
@@ -263,7 +263,7 @@ void W_EDITBOX::fitStringEnd()
 
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp, FontID);
 
 		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
@@ -290,7 +290,7 @@ void W_EDITBOX::setCursorPosPixels(int xPos)
 	int prevPos = printStart + tmp.length();
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp, FontID);
 		int delta = pixelWidth - (xPos - (WEDB_XGAP + WEDB_CURSORSIZE / 2));
 		int pos = printStart + tmp.length();
 
@@ -688,12 +688,12 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 
 	if (aText.isEmpty() && !placeholderText.isEmpty())
 	{
-		displayCache.wzDisplayedText.setText(placeholderText.toUtf8(), FontID);
+		displayCache.wzDisplayedText.setText(placeholderText, FontID);
 		displayCache.wzDisplayedText.render(fx, fy, (state & WEDBS_MASK) == WEDBS_FIXED ? WZCOL_FORM_TEXT : WZCOL_GREY);
 	}
 	else
 	{
-		displayCache.wzDisplayedText.setText(displayedText.toUtf8(), FontID);
+		displayCache.wzDisplayedText.setText(displayedText, FontID);
 		displayCache.wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
 	}
 
@@ -701,7 +701,7 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	if (((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2 == 0)
 	{
 		auto visibleTextBeforeCursor = aText.substr(printStart, insPos - printStart);
-		displayCache.modeText.setText(visibleTextBeforeCursor.toUtf8(), FontID);
+		displayCache.modeText.setText(visibleTextBeforeCursor, FontID);
 		int cursorX = x0 + WEDB_XGAP + displayCache.modeText.width();
 		int cursorY = fy;
 

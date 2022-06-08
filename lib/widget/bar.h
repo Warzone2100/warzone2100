@@ -61,7 +61,7 @@ public:
 	PIELIGHT	minorCol;			// Colour for the minor bar
 	PIELIGHT        textCol;                        // Colour for the text on the bar.
 	std::string         pTip;                           // The tool tip for the graph
-	std::string         text;                           // Text on the bar.
+	WzString            text;                           // Text on the bar.
 
 //private:
 	PIELIGHT backgroundColour;

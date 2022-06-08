@@ -817,7 +817,7 @@ unsigned int height_pixelsToPoints(unsigned int heightInPixels)
 }
 
 // Returns the text width *in points*
-unsigned int iV_GetTextWidth(const char* string, iV_fonts fontID)
+unsigned int iV_GetTextWidth(const WzString& string, iV_fonts fontID)
 {
 	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, getFTFace(fontID));
 	return width_pixelsToPoints(metrics.width);
@@ -1084,14 +1084,13 @@ int WzText::lineSize()
 	return mPtsLineSize;
 }
 
-void WzText::setText(const std::string &string, iV_fonts fontID/*, bool delayRender*/)
+void WzText::setText(const WzString &text, iV_fonts fontID/*, bool delayRender*/)
 {
-	WzString inputStr = WzString::fromUtf8(string);
-	if (mText == inputStr && fontID == mFontID)
+	if (mText == text && fontID == mFontID)
 	{
 		return; // cached
 	}
-	drawAndCacheText(inputStr, fontID);
+	drawAndCacheText(text, fontID);
 }
 
 void WzText::drawAndCacheText(const WzString& string, iV_fonts fontID)
@@ -1131,7 +1130,7 @@ void WzText::redrawAndCacheText()
 	drawAndCacheText(mText, mFontID);
 }
 
-WzText::WzText(const std::string &string, iV_fonts fontID)
+WzText::WzText(const WzString &string, iV_fonts fontID)
 {
 	setText(string, fontID);
 }
@@ -1233,7 +1232,7 @@ void WzText::renderOutlined(int x, int y, PIELIGHT colour, PIELIGHT outlineColou
 
 // Sets the text, truncating to a desired width limit (in *points*) if needed
 // returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
-size_t WidthLimitedWzText::setTruncatableText(const std::string &text, iV_fonts fontID, size_t limitWidthInPoints)
+size_t WidthLimitedWzText::setTruncatableText(const WzString &text, iV_fonts fontID, size_t limitWidthInPoints)
 {
 	if ((mFullText == text) && (mLimitWidthPts == limitWidthInPoints) && (getFontID() == fontID))
 	{
@@ -1243,10 +1242,14 @@ size_t WidthLimitedWzText::setTruncatableText(const std::string &text, iV_fonts 
 	mFullText = text;
 	mLimitWidthPts = limitWidthInPoints;
 
-	std::string truncatedText = text;
-	while ((truncatedText.length() > 0) && (iV_GetTextWidth(truncatedText.c_str(), fontID) > limitWidthInPoints))
+	WzString truncatedText = text;
+	while ((truncatedText.length() > 0) && (iV_GetTextWidth(truncatedText, fontID) > limitWidthInPoints))
 	{
-		truncatedText.pop_back();
+		if (!truncatedText.pop_back())
+		{
+			ASSERT(false, "WzString::pop_back() failed??");
+			break;
+		}
 	}
 
 	WzText::setText(truncatedText, fontID);

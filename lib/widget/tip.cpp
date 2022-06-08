@@ -146,7 +146,7 @@ static void refreshTip(std::shared_ptr<WIDGET> mouseOverWidget)
 	displayCache.wzTip.resize(lines.size());
 	for (size_t n = 0; n < lines.size(); ++n)
 	{
-		displayCache.wzTip[n].setText(lines[n], fontId);
+		displayCache.wzTip[n].setText(WzString::fromUtf8(lines[n]), fontId);
 		maxLineWidth = std::max<int>(maxLineWidth, displayCache.wzTip[n].width());
 	}
 

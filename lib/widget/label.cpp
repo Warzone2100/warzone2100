@@ -68,7 +68,7 @@ int W_LABEL::setFormattedString(WzString string, uint32_t MaxWidth, iV_fonts fon
 	displayCache.wzText.clear();
 	for (size_t idx = 0; idx < aTextLines.size(); idx++)
 	{
-		displayCache.wzText.push_back(WzCachedText(aTextLines[idx].text, FontID, LABEL_DEFAULT_CACHE_EXPIRY));
+		displayCache.wzText.push_back(WzCachedText(WzString::fromUtf8(aTextLines[idx].text), FontID, LABEL_DEFAULT_CACHE_EXPIRY));
 	}
 
 	return requiredHeight();
@@ -206,7 +206,7 @@ void W_LABEL::setString(WzString string)
 	aTextLines.clear();
 	aTextLines.push_back({string.toStdString(), Vector2i(0,0), Vector2i(0,0)});
 	displayCache.wzText.clear();
-	displayCache.wzText.push_back(WzCachedText(string.toStdString(), FontID, LABEL_DEFAULT_CACHE_EXPIRY));
+	displayCache.wzText.push_back(WzCachedText(string, FontID, LABEL_DEFAULT_CACHE_EXPIRY));
 	maxLineWidth = -1; // delay calculating line width until it's requested
 	dirty = true;
 }

@@ -467,7 +467,7 @@ void displayNotificationAction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayNotificationButtonCache& cache = *static_cast<DisplayNotificationButtonCache*>(psWidget->pUserData);
 
-	cache.wzText.setText(psBut->pText.toUtf8(), psBut->FontID);
+	cache.wzText.setText(psBut->pText, psBut->FontID);
 
 	if (psBut->isHighlighted())					// if mouse is over text then hilight.
 	{

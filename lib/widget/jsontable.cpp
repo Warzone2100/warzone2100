@@ -165,7 +165,7 @@ static void PathButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 
 	if (haveText)
 	{
-		cache.text.setText(psButton->pText.toUtf8(), psButton->FontID);
+		cache.text.setText(psButton->pText, psButton->FontID);
 		int fw = cache.text.width();
 		int fx = x0 + (psButton->width() - fw) / 2;
 		int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();
@@ -475,7 +475,7 @@ std::shared_ptr<WIDGET> JSONTableWidget::createOptionsPopoverForm()
 			delete static_cast<PopoverMenuButtonDisplayCache *>(psWidget->pUserData);
 			psWidget->pUserData = nullptr;
 		});
-		int minButtonWidthForText = iV_GetTextWidth(text.toUtf8().c_str(), button->FontID);
+		int minButtonWidthForText = iV_GetTextWidth(text, button->FontID);
 		button->setGeometry(0, 0, minButtonWidthForText + MENU_BUTTONS_PADDING, iV_GetTextLineSize(button->FontID) + 4);
 
 		// On click, perform the designated onClickHandler and close the popover form / overlay
@@ -625,7 +625,7 @@ static void JsonActionButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD
 
 	if (haveText)
 	{
-		cache.text.setText(psButton->pText.toUtf8(), psButton->FontID);
+		cache.text.setText(psButton->pText, psButton->FontID);
 		int fw = cache.text.width();
 		int fx = x0 + (psButton->width() - fw) / 2;
 		int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();

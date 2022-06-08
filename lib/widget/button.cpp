@@ -240,7 +240,7 @@ void W_BUTTON::display(int xOffset, int yOffset)
 
 	if (haveText)
 	{
-		int fw = iV_GetTextWidth(pText.toUtf8().c_str(), FontID);
+		int fw = iV_GetTextWidth(pText, FontID);
 		int fx = x0 + (width() - fw) / 2;
 		int fy = y0 + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
 		if (isDisabled)
@@ -570,7 +570,7 @@ static void CornerButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOf
 
 	if (haveText)
 	{
-		cache.text.setText(psButton->pText.toUtf8(), psButton->FontID);
+		cache.text.setText(psButton->pText, psButton->FontID);
 		int fw = cache.text.width();
 		int fx = x0 + (psButton->width() - fw) / 2;
 		int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();
@@ -645,7 +645,7 @@ void PopoverMenuButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 
 	if (haveText)
 	{
-		cache.text.setText(psButton->pText.toUtf8(), psButton->FontID);
+		cache.text.setText(psButton->pText, psButton->FontID);
 		int fx = x0 + (psButton->width() - cache.text.width()) / 2;
 		int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();
 		PIELIGHT textColor = WZCOL_FORM_TEXT;

@@ -508,7 +508,7 @@ static void TabButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 
 	if (haveText)
 	{
-		cache.text.setText(psButton->pText.toUtf8(), psButton->FontID);
+		cache.text.setText(psButton->pText, psButton->FontID);
 		int fw = cache.text.width();
 		int fx = x0 + (psButton->width() - fw) / 2;
 		int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();
@@ -1347,7 +1347,7 @@ public:
 			currentMaxColumnWidths[1][1] = 0;
 			for (const auto& str : view_type)
 			{
-				currentMaxColumnWidths[1][1] = std::max(currentMaxColumnWidths[1][1], static_cast<size_t>(iV_GetTextWidth(str.toUtf8().c_str(), font_regular)));
+				currentMaxColumnWidths[1][1] = std::max(currentMaxColumnWidths[1][1], static_cast<size_t>(iV_GetTextWidth(str, font_regular)));
 			}
 			currentMaxColumnWidths[1][2] = static_cast<size_t>(width() - currentMaxColumnWidths[1][0] - currentMaxColumnWidths[1][1]);
 		}
