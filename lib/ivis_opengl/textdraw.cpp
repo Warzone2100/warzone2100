@@ -242,9 +242,6 @@ struct FTlib
 
 struct TextRun
 {
-	std::string text;
-	std::string language;
-
 	int startOffset;
 	int endOffset;
 	hb_script_t script;
@@ -257,10 +254,10 @@ struct TextRun
 	const uint32_t* codePoints = nullptr;
 
 public:
-	TextRun() : startOffset(0), endOffset(0) {}
 
-	TextRun(const std::string &t, const std::string &l, hb_script_t s, hb_direction_t d) :
-		text(t), language(l), startOffset(0), endOffset(t.size()), script(s), direction(d) {}
+	TextRun(const uint32_t* codePoints, int startOffset, int endOffset, hb_script_t script, hb_direction_t direction)
+	: startOffset(startOffset), endOffset(endOffset), script(script), direction(direction), codePoints(codePoints)
+	{ }
 
 	~TextRun()
 	{
@@ -287,8 +284,6 @@ public:
 			}
 
 			// Get the other data
-			text = std::move(other.text);
-			language = std::move(other.language);
 			startOffset = other.startOffset;
 			endOffset = other.endOffset;
 			script = other.script;
@@ -519,6 +514,18 @@ struct TextShaper
 		/* Fribidi assumes that the text is encoded in UTF-32, so we have to
 		   convert from UTF-8 to UTF-32, assuming that the string is indeed in UTF-8.*/
 		std::vector<uint32_t> codePoints = text.toUtf32();
+		if (codePoints.empty())
+		{
+			return ShapingResult();
+		}
+		int codePoints_size = static_cast<int>(codePoints.size());
+#if SIZE_MAX > INT32_MAX
+		if (codePoints.size() > static_cast<size_t>(std::numeric_limits<int>::max()))
+		{
+			ASSERT(codePoints.size() <= static_cast<size_t>(std::numeric_limits<int>::max()), "text codePoints.size (%zu) exceeds int_max!", codePoints.size());
+			codePoints_size = std::numeric_limits<int>::max(); // truncate
+		}
+#endif
 
 #if defined(WZ_FRIBIDI_ENABLED)
 		// Step 1: Initialize fribidi variables.
@@ -532,7 +539,7 @@ struct TextShaper
 
 
 		baseDirection = getBaseDirection();
-		size = static_cast<FriBidiStrIndex>(codePoints.size());
+		size = static_cast<FriBidiStrIndex>(codePoints_size);
 
 		scripts = new hb_script_t[size];
 		memset(scripts, 0, size * sizeof(*scripts));
@@ -614,16 +621,14 @@ struct TextShaper
 			   If there's change, create a new run.*/
 			if (i == size || (scripts[i] != lastScript) || (levels[i] != lastLevel))
 			{
-				TextRun run;
-				run.startOffset = lastRunStart;
-				run.endOffset = i;
-				run.script = lastScript;
-				run.codePoints = codePoints.data();
+				int startOffset = lastRunStart;
+				int endOffset = i;
+				hb_script_t script = lastScript;
 
 				/* "lastLevel & 1" yields either 1 or 0, depending on the least significant bit of lastLevel.*/
-				run.direction = lastLevel & 1 ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
+				hb_direction_t direction = lastLevel & 1 ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
 
-				textRuns.push_back(std::move(run));
+				textRuns.emplace_back(codePoints.data(), startOffset, endOffset, script, direction);
 
 				if (i < size)
 				{
@@ -639,13 +644,7 @@ struct TextShaper
 		}
 #else // !defined(WZ_FRIBIDI_ENABLED)
 		// Without Fribidi, just create a single TextRun
-		TextRun singleRun;
-		singleRun.startOffset = 0;
-		singleRun.endOffset = codePoints.size();
-		singleRun.script = HB_SCRIPT_COMMON;
-		singleRun.codePoints = codePoints.data();
-		singleRun.direction = HB_DIRECTION_LTR;
-		std::array<TextRun, 1> textRuns = { std::move(singleRun) };
+		std::array<TextRun, 1> textRuns = { TextRun(codePoints.data(), 0, codePoints_size, HB_SCRIPT_COMMON, HB_DIRECTION_LTR) };
 #endif // defined(WZ_FRIBIDI_ENABLED)
 
 
@@ -1091,7 +1090,6 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	color.vector[2] = static_cast<UBYTE>(font_colour[2] * 255.f);
 	color.vector[3] = static_cast<UBYTE>(font_colour[3] * 255.f);
 
-	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	DrawTextResult drawResult = getShaper().drawText(string, getFTFace(fontID));
 
 	if (drawResult.text.width > 0 && drawResult.text.height > 0)
