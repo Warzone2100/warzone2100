@@ -366,16 +366,17 @@ protected:
 		auto x0 = xOffset + x() + PADDING;
 		auto y0 = yOffset + y() + PADDING;
 
+		valueText.setText(WzString::fromUtf8(astringf("%.*f", precision, majorValue / (float)denominator)), font_regular);
+
 		/* indent to allow text value */
 		auto iX = x0 + maxValueTextWidth;
-		auto iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize(font_regular)) / 2 - iV_GetTextAboveBase(font_regular);
+		auto iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - valueText.lineSize()) / 2 - valueText.aboveBase();
 
 		//draw current value section
 		int barWidth = width() - maxValueTextWidth - 2 * PADDING;
 		auto filledWidth = std::min<int>((int)majorSize * barWidth / 100, barWidth);
 		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, filledWidth, defaultProjectionMatrix(), true);
 
-		valueText.setText(WzString::fromUtf8(astringf("%.*f", precision, majorValue / (float)denominator)), font_regular);
 		valueText.render(x0, iY, WZCOL_TEXT_BRIGHT);
 
 		if (minorValue == 0)
