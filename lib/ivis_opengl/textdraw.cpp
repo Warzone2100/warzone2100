@@ -50,6 +50,7 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 #include <unordered_map>
 #include <memory>
 #include <limits>
+#include <climits>
 
 #if defined(HB_VERSION_ATLEAST) && HB_VERSION_ATLEAST(1,0,5)
 //	#define WZ_FT_LOAD_FLAGS (FT_LOAD_DEFAULT | FT_LOAD_TARGET_LCD) // Needs further testing on low-DPI displays
@@ -105,16 +106,47 @@ struct GlyphMetrics
 	int32_t bearing_y;
 };
 
+static std::unordered_map<std::string, std::shared_ptr<std::vector<char>>> m_loadedFontDataCache;
+
+static std::shared_ptr<std::vector<char>> loadFontData(const std::string &fileName)
+{
+	auto it = m_loadedFontDataCache.find(fileName);
+	if (it == m_loadedFontDataCache.end())
+	{
+		auto loadedFontDataPtr = std::make_shared<std::vector<char>>();
+		debug(LOG_WZ, "Loading font data: %s", fileName.c_str());
+		if (!loadFileToBufferVector(fileName.c_str(), *loadedFontDataPtr, true, false))
+		{
+			debug(LOG_WZ, "Failed to load font file: %s", fileName.c_str());
+			return nullptr;
+		}
+		auto result = m_loadedFontDataCache.insert({fileName, loadedFontDataPtr});
+		it = result.first;
+	}
+	return it->second;
+}
+
+static void clearFontDataCache()
+{
+	m_loadedFontDataCache.clear();
+}
+
 struct FTFace
 {
 	FTFace(FT_Library &lib, const std::string &fileName, int32_t charSize, uint32_t horizDPI, uint32_t vertDPI)
 	{
-		UDWORD pFileSize = 0;
-		if (!loadFile(fileName.c_str(), &pFileData, &pFileSize))
+		pFileData = loadFontData(fileName);
+		if (!pFileData)
 		{
-			debug(LOG_FATAL, "Unknown font file format for %s", fileName.c_str());
+			debug(LOG_FATAL, "Failed to load font file: %s", fileName.c_str());
 		}
-		FT_Error error = FT_New_Memory_Face(lib, (const FT_Byte*)pFileData, pFileSize, 0, &m_face);
+#if SIZE_MAX > LONG_MAX
+		if (pFileData->size() > static_cast<size_t>(std::numeric_limits<FT_Long>::max()))
+		{
+			debug(LOG_FATAL, "Font file size (%zu) is too big: %s", pFileData->size(), fileName.c_str());
+		}
+#endif
+		FT_Error error = FT_New_Memory_Face(lib, (const FT_Byte*)pFileData->data(), static_cast<FT_Long>(pFileData->size()), 0, &m_face);
 		if (error == FT_Err_Unknown_File_Format)
 		{
 			debug(LOG_FATAL, "Unknown font file format for %s", fileName.c_str());
@@ -138,10 +170,6 @@ struct FTFace
 	{
 		hb_font_destroy(m_font);
 		FT_Done_Face(m_face);
-		if (pFileData != nullptr)
-		{
-			free(pFileData);
-		}
 	}
 
 	uint32_t getGlyphWidth(uint32_t codePoint)
@@ -219,7 +247,7 @@ struct FTFace
 	FT_Face &face() { return m_face; }
 
 	hb_font_t *m_font;
-	char *pFileData = nullptr;
+	std::shared_ptr<std::vector<char>> pFileData;
 
 private:
 	FT_Face m_face;
@@ -818,19 +846,22 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 void iV_TextShutdown()
 {
 	delete regular;
-	delete medium;
+	delete regularBold;
 	delete bold;
+	delete medium;
 	delete small;
 	delete smallBold;
 	small = nullptr;
 	regular = nullptr;
-	medium = nullptr;
+	regularBold = nullptr;
 	bold = nullptr;
+	medium = nullptr;
 	small = nullptr;
 	smallBold = nullptr;
 	delete textureID;
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
+	clearFontDataCache();
 }
 
 void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor)
