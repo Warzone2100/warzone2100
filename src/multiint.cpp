@@ -4887,6 +4887,11 @@ public:
 		cachedText.tick();
 	}
 
+	int aboveBase()
+	{
+		return ptsAboveBase;
+	}
+
 private:
 	std::shared_ptr<PlayerReference> player;
 	iV_fonts font;
@@ -4894,11 +4899,13 @@ private:
 	WzCachedText cachedText;
 	int32_t horizontalPadding = 3;
 	int32_t leftMargin = 3;
+	int32_t ptsAboveBase = 0;
 
 	void updateLayout()
 	{
 		layoutName = (*player)->name;
 		cachedText = WzCachedText(layoutName, font);
+		ptsAboveBase = cachedText->aboveBase();
 		setGeometry(x(), y(), cachedText->width() + leftMargin + 2 * horizontalPadding, cachedText->lineSize());
 	}
 };
@@ -4948,7 +4955,8 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		paragraph->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
 		paragraph->addText(formatLocalDateTime("%H:%M", message.time));
 
-		paragraph->addWidget(std::make_shared<ChatBoxPlayerNameWidget>(message.sender), iV_GetTextAboveBase(font_regular));
+		auto playerNameWidget = std::make_shared<ChatBoxPlayerNameWidget>(message.sender);
+		paragraph->addWidget(playerNameWidget, playerNameWidget->aboveBase());
 
 		paragraph->setFont(font_regular);
 		paragraph->setShadeColour({0, 0, 0, 0});
@@ -4994,14 +5002,16 @@ std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(
 		button->setString(text);
 		button->FontID = font_regular;
 		button->displayFunction = PopoverMenuButtonDisplayFunc;
-		button->pUserData = new PopoverMenuButtonDisplayCache();
+		auto cache = new PopoverMenuButtonDisplayCache();
+		button->pUserData = cache;
+		cache->text.setText(text, button->FontID);
 		button->setOnDelete([](WIDGET *psWidget) {
 			assert(psWidget->pUserData != nullptr);
 			delete static_cast<PopoverMenuButtonDisplayCache *>(psWidget->pUserData);
 			psWidget->pUserData = nullptr;
 		});
-		int minButtonWidthForText = iV_GetTextWidth(text, button->FontID);
-		button->setGeometry(0, 0, minButtonWidthForText + MENU_BUTTONS_PADDING, iV_GetTextLineSize(button->FontID) + 4);
+		int minButtonWidthForText = cache->text.width();
+		button->setGeometry(0, 0, minButtonWidthForText + MENU_BUTTONS_PADDING, cache->text.lineSize() + 4);
 
 		// On click, perform the designated onClickHandler and close the popover form / overlay
 		button->addOnClickHandler([weakChatBoxWidget, onClickFunc](W_BUTTON& button) {
