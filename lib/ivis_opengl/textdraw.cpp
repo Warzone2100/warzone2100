@@ -660,24 +660,32 @@ struct TextShaper
 		int32_t x = 0;
 		int32_t y = 0;
 
-		/* Theoretically, the direction of loop must change depending on the base direction
-		   (the current direction assumes that the text is RTL). However, since English and
-		   other European strings does not include Arabic or Hebrew words, this direction
-		   will be all that is needed.*/
-		for (size_t i = (textRuns.size()); i > 0; --i)
-		{
-			const TextRun& run = textRuns[i - 1];
-
+		auto processTextRunGlyphs = [&](const TextRun& run) {
 			for (unsigned int glyphIndex = 0; glyphIndex < run.glyphCount; ++glyphIndex)
 			{
 				hb_glyph_position_t& current_glyphPos = run.glyphPositions[glyphIndex];
-				
+
 				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset));
 
 				x += run.glyphPositions[glyphIndex].x_advance;
 				y += run.glyphPositions[glyphIndex].y_advance;
 			}
+		};
+
+#if defined(WZ_FRIBIDI_ENABLED)
+		// The direction of the loop must change depending on the base direction
+		if (!(FRIBIDI_IS_RTL(baseDirection)))
+		{
+#endif // defined(WZ_FRIBIDI_ENABLED)
+			std::for_each(textRuns.cbegin(), textRuns.cend(), processTextRunGlyphs);
+#if defined(WZ_FRIBIDI_ENABLED)
 		}
+		else
+		{
+			std::for_each(textRuns.crbegin(), textRuns.crend(), processTextRunGlyphs);
+		}
+#endif // defined(WZ_FRIBIDI_ENABLED)
+
 		shapingResult.x_advance += x;
 		shapingResult.y_advance += y;
 
