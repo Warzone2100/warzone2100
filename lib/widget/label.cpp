@@ -57,7 +57,7 @@ int W_LABEL::setFormattedString(WzString string, uint32_t MaxWidth, iV_fonts fon
 {
 	lineSpacing = _lineSpacing;
 	FontID = fontID;
-	aTextLines = iV_FormatText(string.toUtf8().c_str(), MaxWidth, FTEXT_LEFTJUSTIFY, fontID, ignoreNewlines);
+	aTextLines = iV_FormatText(string, MaxWidth, FTEXT_LEFTJUSTIFY, fontID, ignoreNewlines);
 
 	maxLineWidth = 0;
 	for (const auto& line : aTextLines)

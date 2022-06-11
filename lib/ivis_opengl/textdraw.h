@@ -156,7 +156,7 @@ struct TextLine
 	Vector2i dimensions;
 	Vector2i offset;
 };
-std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines = false);
+std::vector<TextLine> iV_FormatText(const WzString& String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines = false);
 void iV_DrawTextRotated(const char *string, float x, float y, float rotation, iV_fonts fontID);
 
 /// Draws text with a printf syntax to the screen.
