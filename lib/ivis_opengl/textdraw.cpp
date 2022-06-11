@@ -253,6 +253,8 @@ private:
 	FT_Face m_face;
 };
 
+static FTFace &getFTFace(iV_fonts FontID, hb_script_t script); // forward-declare
+
 struct FTlib
 {
 	FTlib()
@@ -274,6 +276,8 @@ struct TextRun
 	int endOffset;
 	hb_script_t script;
 	hb_direction_t direction;
+	hb_language_t language;
+	FTFace* fontFace;
 
 	hb_buffer_t* buffer = nullptr; // owned
 	unsigned int glyphCount;
@@ -283,8 +287,8 @@ struct TextRun
 
 public:
 
-	TextRun(const uint32_t* codePoints, int startOffset, int endOffset, hb_script_t script, hb_direction_t direction)
-	: startOffset(startOffset), endOffset(endOffset), script(script), direction(direction), codePoints(codePoints)
+	TextRun(const uint32_t* codePoints, int startOffset, int endOffset, hb_script_t script, hb_direction_t direction, hb_language_t language, FTFace& face)
+	: startOffset(startOffset), endOffset(endOffset), script(script), direction(direction), language(language), fontFace(&face), codePoints(codePoints)
 	{ }
 
 	~TextRun()
@@ -316,6 +320,8 @@ public:
 			endOffset = other.endOffset;
 			script = other.script;
 			direction = other.direction;
+			language = other.language;
+			fontFace = other.fontFace;
 
 			buffer = other.buffer; // owned
 			glyphCount = other.glyphCount;
@@ -384,8 +390,9 @@ struct TextShaper
 	{
 		hb_codepoint_t codepoint;
 		Vector2i penPosition;
+		FTFace& face;
 
-		HarfbuzzPosition(hb_codepoint_t c, Vector2i &&p) : codepoint(c), penPosition(p) {}
+		HarfbuzzPosition(hb_codepoint_t c, Vector2i &&p, FTFace& f) : codepoint(c), penPosition(p), face(f) {}
 	};
 
 	struct ShapingResult
@@ -402,9 +409,9 @@ struct TextShaper
 	{ }
 
 	// Returns the text width and height *IN PIXELS*
-	TextLayoutMetrics getTextMetrics(const WzString& text, FTFace &face)
+	TextLayoutMetrics getTextMetrics(const WzString& text, iV_fonts fontID)
 	{
-		const ShapingResult& shapingResult = shapeText(text, face);
+		const ShapingResult& shapingResult = shapeText(text, fontID);
 
 		if (shapingResult.glyphes.empty())
 		{
@@ -417,8 +424,8 @@ struct TextShaper
 		int32_t max_y;
 
 		std::tie(min_x, max_x, min_y, max_y) = std::accumulate(shapingResult.glyphes.begin(), shapingResult.glyphes.end(), std::make_tuple(1000, -1000, 1000, -1000),
-			[&face] (const std::tuple<int32_t, int32_t, int32_t, int32_t> &bounds, const HarfbuzzPosition &g) {
-			RasterizedGlyph glyph = face.get(g.codepoint, g.penPosition % 64);
+			[] (const std::tuple<int32_t, int32_t, int32_t, int32_t> &bounds, const HarfbuzzPosition &g) {
+			RasterizedGlyph glyph = g.face.get(g.codepoint, g.penPosition % 64);
 			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
 			int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
 			return std::make_tuple(
@@ -455,9 +462,9 @@ struct TextShaper
 #endif
 
 	// Draws the text and returns the text buffer, width and height, etc *IN PIXELS*
-	DrawTextResult drawText(const WzString& text, FTFace &face)
+	DrawTextResult drawText(const WzString& text, iV_fonts fontID)
 	{
-		ShapingResult shapingResult = shapeText(text, face);
+		ShapingResult shapingResult = shapeText(text, fontID);
 
 		if (shapingResult.glyphes.empty())
 		{
@@ -484,7 +491,7 @@ struct TextShaper
 		std::vector<glyphRaster> glyphs;
 		std::transform(shapingResult.glyphes.begin(), shapingResult.glyphes.end(), std::back_inserter(glyphs),
 			[&] (const HarfbuzzPosition &g) {
-			RasterizedGlyph glyph = face.get(g.codepoint, g.penPosition % 64);
+			RasterizedGlyph glyph = g.face.get(g.codepoint, g.penPosition % 64);
 			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
 			int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
 			min_x = std::min(x0, min_x);
@@ -537,7 +544,7 @@ struct TextShaper
 		);
 	}
 
-	ShapingResult shapeText(const WzString& text, FTFace &face)
+	ShapingResult shapeText(const WzString& text, iV_fonts fontID)
 	{
 		/* Fribidi assumes that the text is encoded in UTF-32, so we have to
 		   convert from UTF-8 to UTF-32, assuming that the string is indeed in UTF-8.*/
@@ -555,50 +562,48 @@ struct TextShaper
 		}
 #endif
 
+		std::vector<hb_script_t> scripts(codePoints_size);
+
 #if defined(WZ_FRIBIDI_ENABLED)
 		// Step 1: Initialize fribidi variables.
-		// TODO: Don't forget to delete them at the end.
 
-		hb_script_t* scripts;
-		FriBidiCharType* types;
-		FriBidiLevel* levels;
-		FriBidiParType baseDirection;
-		FriBidiStrIndex size;
-
-
-		baseDirection = getBaseDirection();
-		size = static_cast<FriBidiStrIndex>(codePoints_size);
-
-		scripts = new hb_script_t[size];
-		memset(scripts, 0, size * sizeof(*scripts));
-		types = new FriBidiCharType[size];
-		memset(types, 0, size * sizeof(*types));
-		levels = new FriBidiLevel[size];
-		memset(levels, 0, size * sizeof(*levels));
+		FriBidiParType baseDirection = getBaseDirection();
+		FriBidiStrIndex size = static_cast<FriBidiStrIndex>(codePoints_size);
+		std::vector<FriBidiCharType> types(size, static_cast<FriBidiCharType>(0));
+		std::vector<FriBidiLevel> levels(size, static_cast<FriBidiLevel>(0));
 # if USE_NEW_FRIBIDI_API
-		FriBidiBracketType* bracketedTypes = new FriBidiBracketType[size];
-		memset(bracketedTypes, 0, size * sizeof(*bracketedTypes));
+		std::vector<FriBidiBracketType> bracketedTypes(size, static_cast<FriBidiBracketType>(0));
 # endif // USE_NEW_FRIBIDI_API
 
+#else // !defined(WZ_FRIBIDI_ENABLED)
 
+		std::vector<bool> levels(codePoints_size, 0);
+
+#endif // defined(WZ_FRIBIDI_ENABLED)
+
+
+
+#if defined(WZ_FRIBIDI_ENABLED)
 		// Step 2: Run fribidi.
 
 		/* Get the bidi type of each character in the string.*/
-		fribidi_get_bidi_types(codePoints.data(), size, types);
+		fribidi_get_bidi_types(codePoints.data(), size, types.data());
 
 # if USE_NEW_FRIBIDI_API
-		fribidi_get_bracket_types(codePoints.data(), size, types, bracketedTypes);
+		fribidi_get_bracket_types(codePoints.data(), size, types.data(), bracketedTypes.data());
 
-		FriBidiLevel maxLevel = fribidi_get_par_embedding_levels_ex(types, bracketedTypes, size, &baseDirection, levels);
+		FriBidiLevel maxLevel = fribidi_get_par_embedding_levels_ex(types.data(), bracketedTypes.data(), size, &baseDirection, levels.data());
 		ASSERT(maxLevel != 0, "Error in fribidi_get_par_embedding_levels_ex!");
 # else
-		FriBidiLevel maxLevel = fribidi_get_par_embedding_levels(types, size, &baseDirection, levels);
+		FriBidiLevel maxLevel = fribidi_get_par_embedding_levels(types.data(), size, &baseDirection, levels.data());
 		ASSERT(maxLevel != 0, "Error in fribidi_get_par_embedding_levels_ex!");
 # endif // USE_NEW_FRIBIDI_API
+
+#endif // defined(WZ_FRIBIDI_ENABLED)
 		
 		/* Fill the array of scripts with scripts of each character */
 		hb_unicode_funcs_t* funcs = hb_unicode_funcs_get_default();
-		for (int i = 0; i < size; ++i)
+		for (int i = 0; i < codePoints_size; ++i)
 			scripts[i] = hb_unicode_script(funcs, codePoints[i]);
 
 
@@ -608,7 +613,7 @@ struct TextShaper
 		int lastScriptIndex = -1;
 		int lastSetIndex = -1;
 
-		for (int i = 0; i < size; ++i)
+		for (int i = 0; i < codePoints_size; ++i)
 		{
 			if (scripts[i] == HB_SCRIPT_COMMON || scripts[i] == HB_SCRIPT_INHERITED)
 			{
@@ -629,36 +634,42 @@ struct TextShaper
 				lastSetIndex = i;
 			}
 		}
-#endif // defined(WZ_FRIBIDI_ENABLED)
 
 
 		// Step 4: Create the different runs
 
-#if defined(WZ_FRIBIDI_ENABLED)
+		hb_language_t language = hb_language_get_default(); // Future TODO: We could probably be smarter about this, but this replicates the behavior of hb_buffer_guess_segment_properties()
+
 		std::vector<TextRun> textRuns;
 		hb_script_t lastScript = scripts[0];
-		int lastLevel = levels[0];
+		auto lastLevel = levels[0];
 		int lastRunStart = 0; // where the last run started
 
 		/* i == size means that we've reached the end of the string,
 		   and that the last run should be created.*/
-		for (int i = 0; i <= size; ++i)
+		for (int i = 0; i <= codePoints_size; ++i)
 		{
 			/* If the script or level is of the current point is the same as the previous one,
 			   then this means that the we have not reached the end of the current run.
 			   If there's change, create a new run.*/
-			if (i == size || (scripts[i] != lastScript) || (levels[i] != lastLevel))
+			if (i == codePoints_size || (scripts[i] != lastScript) || (levels[i] != lastLevel))
 			{
 				int startOffset = lastRunStart;
 				int endOffset = i;
 				hb_script_t script = lastScript;
 
+#if defined(WZ_FRIBIDI_ENABLED)
 				/* "lastLevel & 1" yields either 1 or 0, depending on the least significant bit of lastLevel.*/
 				hb_direction_t direction = lastLevel & 1 ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
+#else // !defined(WZ_FRIBIDI_ENABLED)
+				hb_direction_t direction = hb_script_get_horizontal_direction(script);
+#endif // defined(WZ_FRIBIDI_ENABLED)
 
-				textRuns.emplace_back(codePoints.data(), startOffset, endOffset, script, direction);
+				FTFace& face = getFTFace(fontID, script);
 
-				if (i < size)
+				textRuns.emplace_back(codePoints.data(), startOffset, endOffset, script, direction, language, face);
+
+				if (i < codePoints_size)
 				{
 					lastScript = scripts[i];
 					lastLevel = levels[i];
@@ -670,10 +681,6 @@ struct TextShaper
 				}
 			}
 		}
-#else // !defined(WZ_FRIBIDI_ENABLED)
-		// Without Fribidi, just create a single TextRun
-		std::array<TextRun, 1> textRuns = { TextRun(codePoints.data(), 0, codePoints_size, HB_SCRIPT_COMMON, HB_DIRECTION_LTR) };
-#endif // defined(WZ_FRIBIDI_ENABLED)
 
 
 		// Step 6: Shape each run using harfbuzz.
@@ -682,7 +689,7 @@ struct TextShaper
 
 		for (int i = 0; i < textRuns.size(); ++i)
 		{
-			shapeHarfbuzz(textRuns[i], face);
+			shapeHarfbuzz(textRuns[i], *textRuns[i].fontFace);
 		}
 
 		int32_t x = 0;
@@ -693,7 +700,7 @@ struct TextShaper
 			{
 				hb_glyph_position_t& current_glyphPos = run.glyphPositions[glyphIndex];
 
-				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset));
+				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset), *run.fontFace);
 
 				x += run.glyphPositions[glyphIndex].x_advance;
 				y += run.glyphPositions[glyphIndex].y_advance;
@@ -718,14 +725,6 @@ struct TextShaper
 		shapingResult.y_advance += y;
 
 		// Step 7: Finalize.
-#if defined(WZ_FRIBIDI_ENABLED)
-		delete[] scripts;
-		delete[] types;
-		delete[] levels;
-# if USE_NEW_FRIBIDI_API
-		delete[] bracketedTypes;
-# endif // USE_NEW_FRIBIDI_API
-#endif // defined(WZ_FRIBIDI_ENABLED)
 
 		return shapingResult;
 	}
@@ -734,8 +733,9 @@ struct TextShaper
 	{
 		run.buffer = hb_buffer_create();
 		hb_buffer_set_direction(run.buffer, run.direction);
-        hb_buffer_set_script(run.buffer, run.script);
-        hb_buffer_add_utf32(run.buffer, run.codePoints + run.startOffset,
+		hb_buffer_set_script(run.buffer, run.script);
+		hb_buffer_set_language(run.buffer, run.language);
+		hb_buffer_add_utf32(run.buffer, run.codePoints + run.startOffset,
                             run.endOffset - run.startOffset, 0,
                             run.endOffset - run.startOffset);
 		hb_buffer_set_flags(run.buffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
@@ -784,6 +784,8 @@ inline float iV_GetVertScaleFactor()
 // Do not change this, or various layout in the game interface & menus will break.
 #define DEFAULT_DPI 72.0f
 
+static hb_unicode_funcs_t* m_unicode_funcs_hb = nullptr;
+
 static FTFace *regular = nullptr;
 static FTFace *regularBold = nullptr;
 static FTFace *bold = nullptr;
@@ -801,7 +803,7 @@ struct iVFontsHash
 typedef std::unordered_map<iV_fonts, WzText, iVFontsHash> FontToEllipsisMapType;
 static FontToEllipsisMapType fontToEllipsisMap;
 
-static FTFace &getFTFace(iV_fonts FontID)
+static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 {
 	switch (FontID)
 	{
@@ -841,6 +843,11 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI);
 	small = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI);
 	smallBold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI);
+
+	m_unicode_funcs_hb = hb_unicode_funcs_get_default();
+
+	// hb_language_get_default: "To avoid problems, call this function once before multiple threads can call it."
+	hb_language_get_default();
 }
 
 void iV_TextShutdown()
@@ -903,7 +910,7 @@ unsigned int height_pixelsToPoints(unsigned int heightInPixels)
 // Returns the text width *in points*
 unsigned int iV_GetTextWidth(const WzString& string, iV_fonts fontID)
 {
-	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, getFTFace(fontID));
+	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, fontID);
 	return width_pixelsToPoints(metrics.width);
 }
 
@@ -916,14 +923,14 @@ unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV
 // Returns the text height *in points*
 unsigned int iV_GetTextHeight(const char* string, iV_fonts fontID)
 {
-	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, getFTFace(fontID));
+	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, fontID);
 	return height_pixelsToPoints(metrics.height);
 }
 
 // Returns the character width *in points*
 unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID)
 {
-	return width_pixelsToPoints(getFTFace(fontID).getGlyphWidth(charCode) >> 6);
+	return width_pixelsToPoints(getFTFace(fontID, hb_unicode_script(m_unicode_funcs_hb, charCode)).getGlyphWidth(charCode) >> 6);
 }
 
 int metricsHeight_PixelsToPoints(int heightMetric)
@@ -934,19 +941,19 @@ int metricsHeight_PixelsToPoints(int heightMetric)
 
 int iV_GetTextLineSize(iV_fonts fontID)
 {
-	FT_Face face = getFTFace(fontID);
+	FT_Face face = getFTFace(fontID, HB_SCRIPT_COMMON); // TODO: Better handling of script-specific font faces?
 	return metricsHeight_PixelsToPoints((face->size->metrics.ascender - face->size->metrics.descender) >> 6);
 }
 
 int iV_GetTextAboveBase(iV_fonts fontID)
 {
-	FT_Face face = getFTFace(fontID);
+	FT_Face face = getFTFace(fontID, HB_SCRIPT_COMMON); // TODO: Better handling of script-specific font faces?
 	return metricsHeight_PixelsToPoints(-(face->size->metrics.ascender >> 6));
 }
 
 int iV_GetTextBelowBase(iV_fonts fontID)
 {
-	FT_Face face = getFTFace(fontID);
+	FT_Face face = getFTFace(fontID, HB_SCRIPT_COMMON); // TODO: Better handling of script-specific font faces?
 	return metricsHeight_PixelsToPoints(face->size->metrics.descender >> 6);
 }
 
@@ -1129,7 +1136,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	color.vector[2] = static_cast<UBYTE>(font_colour[2] * 255.f);
 	color.vector[3] = static_cast<UBYTE>(font_colour[3] * 255.f);
 
-	DrawTextResult drawResult = getShaper().drawText(string, getFTFace(fontID));
+	DrawTextResult drawResult = getShaper().drawText(string, fontID);
 
 	if (drawResult.text.width > 0 && drawResult.text.height > 0)
 	{
@@ -1183,14 +1190,15 @@ void WzText::drawAndCacheText(const WzString& string, iV_fonts fontID)
 	mRenderingHorizScaleFactor = iV_GetHorizScaleFactor();
 	mRenderingVertScaleFactor = iV_GetVertScaleFactor();
 
-	FTFace &face = getFTFace(fontID);
+	FTFace &face = getFTFace(fontID, HB_SCRIPT_COMMON);
 	FT_Face &type = face.face();
 
+	// TODO: Better handling here of multiple font faces?
 	mPtsAboveBase = metricsHeight_PixelsToPoints(-(type->size->metrics.ascender >> 6));
 	mPtsLineSize = metricsHeight_PixelsToPoints((type->size->metrics.ascender - type->size->metrics.descender) >> 6);
 	mPtsBelowBase = metricsHeight_PixelsToPoints(type->size->metrics.descender >> 6);
 
-	DrawTextResult drawResult = getShaper().drawText(string, face);
+	DrawTextResult drawResult = getShaper().drawText(string, fontID);
 	dimensions = Vector2i(drawResult.text.width, drawResult.text.height);
 	offsets = Vector2i(drawResult.text.offset_x, drawResult.text.offset_y);
 	layoutMetrics = Vector2i(drawResult.layoutMetrics.width, drawResult.layoutMetrics.height);
