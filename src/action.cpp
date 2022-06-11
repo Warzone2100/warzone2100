@@ -1607,17 +1607,9 @@ void actionUpdateDroid(DROID *psDroid)
 								psDroid->action = DACTION_BUILD;
 							}
 						}
-						else if ((psStruct->pStructureType->type == REF_FACTORY && order->psStats->type == REF_FACTORY_MODULE) ||
-								(psStruct->pStructureType->type == REF_RESEARCH && order->psStats->type == REF_RESEARCH_MODULE) ||
-								(psStruct->pStructureType->type == REF_POWER_GEN && order->psStats->type == REF_POWER_MODULE) ||
-								(psStruct->pStructureType->type == REF_VTOL_FACTORY && order->psStats->type == REF_FACTORY_MODULE))
-							{
-							// upgrade current structure in a row
-							if (droidStartBuild(psDroid))
-							{
-								objTrace(psDroid->id, "DACTION_MOVETOBUILD: start building module");
-								psDroid->action = DACTION_BUILD;
-							}
+						else if (IsStatExpansionModule(psStructStats))
+						{
+							setUpBuildModule(psDroid);
 						}
 						else
 						{
