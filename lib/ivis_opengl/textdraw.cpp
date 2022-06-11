@@ -975,12 +975,23 @@ static bool breaksWord(char const c)
 	return c == ASCII_SPACE || breaksLine(c);
 }
 
-/* This funtion might not be fail-proof. It presumes that a "char" equals a "character" in any language.
-   Since the game was translated into different other languages, an Arabic or Chinese "character"
-   could occupy several bytes (that is, "char"s) in memory (assuming the string is in UTF-8). Therefore,
-   expressions such as "++curChar" might not yield the next "character", but just a byte of its
-   representation. */
-std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines /*= false*/)
+inline size_t utf8SequenceLength(const char* pChar)
+{
+	uint8_t first = *pChar;
+
+	if (first < 0x80)
+		return 1;
+	else if ((first >> 5) == 0x6)
+		return 2;
+	else if ((first >> 4) == 0xe)
+		return 3;
+	else if ((first >> 3) == 0x1e)
+		return 4;
+
+	return 0;
+}
+
+std::vector<TextLine> iV_FormatText(const WzString& String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines /*= false*/)
 {
 	std::vector<TextLine> lineDrawResults;
 
@@ -988,12 +999,14 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 	std::string FWord;
 	const int x = 0;
 	const int y = 0;
-	int i;
+	size_t i;
 	int jx = x;		// Default to left justify.
 	int jy = y;
 	UDWORD WWidth;
 	int TWidth;
-	const char *curChar = String;
+	const char *curChar = String.toUtf8().c_str();
+	const char *charEnd = curChar + strlen(curChar);
+	size_t sequenceLen = 1;
 
 	while (*curChar != 0)
 	{
@@ -1005,7 +1018,7 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 
 		WWidth = 0;
 
-		auto indexWithinLine = 0;
+		size_t indexWithinLine = 0;
 
 		// Parse through the string, adding words until width is achieved.
 		while (*curChar != 0 && (WWidth == 0 || WWidth < MaxWidth) && !NewLine)
@@ -1019,9 +1032,20 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 			for (
 				;
 				*curChar && ((indexWithinLine == 0 && !breaksLine(*curChar)) || !breaksWord(*curChar));
-				++i, ++curChar, ++indexWithinLine
+				i += sequenceLen, curChar += sequenceLen, indexWithinLine += sequenceLen
 			)
 			{
+				sequenceLen = utf8SequenceLength(curChar);
+				if (sequenceLen == 0)
+				{
+					ASSERT(false, "curr_sequence_length is 0?? for string: %s", String.toUtf8().c_str());
+					sequenceLen = 1;
+				}
+				if (curChar + sequenceLen > charEnd)
+				{
+					sequenceLen = (charEnd - curChar);
+				}
+
 				if (*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
 				{
 					FWord.push_back(*curChar);
@@ -1030,7 +1054,11 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 					continue;
 				}
 
-				FWord.push_back(*curChar);
+				// Get the full (possibly multi-byte) sequence for this codepoint
+				for (size_t seqIdx = 0; seqIdx < sequenceLen; ++seqIdx)
+				{
+					FWord.push_back(*(curChar + seqIdx));
+				}
 
 				// Update this line's pixel width.
 				//WWidth = FStringWidth + iV_GetCountedTextWidth(FWord.c_str(), i + 1, fontID);  // This triggers tonnes of valgrind warnings, if the string contains unicode. Adding lots of trailing garbage didn't help... Using iV_GetTextWidth with a null-terminated string, instead.
