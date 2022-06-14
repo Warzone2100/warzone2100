@@ -200,63 +200,6 @@ struct FTFace
 		return result;
 	}
 
-	RasterizedGlyph get(uint32_t codePoint, Vector2i subpixeloffset64)
-	{
-		FT_Vector delta;
-		delta.x = subpixeloffset64.x;
-		delta.y = subpixeloffset64.y;
-		FT_Set_Transform(m_face, nullptr, &delta);
-		FT_Error error = FT_Load_Glyph(m_face,
-			codePoint, // the glyph_index in the font file
-			WZ_FT_LOAD_FLAGS
-		);
-		ASSERT(error == FT_Err_Ok, "Unable to load glyph %u", codePoint);
-
-		FT_GlyphSlot slot = m_face->glyph;
-		FT_Render_Glyph(m_face->glyph, WZ_FT_RENDER_MODE);
-		FT_Bitmap ftBitmap = slot->bitmap;
-
-		RasterizedGlyph g;
-		g.buffer.reset(new unsigned char[ftBitmap.pitch * ftBitmap.rows]);
-		if (ftBitmap.buffer != nullptr)
-		{
-			memcpy(g.buffer.get(), ftBitmap.buffer, ftBitmap.pitch * ftBitmap.rows);
-		}
-		else
-		{
-			ASSERT(ftBitmap.pitch == 0 || ftBitmap.rows == 0, "Glyph buffer missing (%d and %d)", ftBitmap.pitch, ftBitmap.rows);
-		}
-		g.width = ftBitmap.width / 3;
-		g.height = ftBitmap.rows;
-		g.bearing_x = slot->bitmap_left;
-		g.bearing_y = slot->bitmap_top;
-		g.pitch = ftBitmap.pitch;
-		return g;
-	}
-
-	GlyphMetrics getGlyphMetrics(uint32_t codePoint, Vector2i subpixeloffset64)
-	{
-		FT_Vector delta;
-		delta.x = subpixeloffset64.x;
-		delta.y = subpixeloffset64.y;
-		FT_Set_Transform(m_face, nullptr, &delta);
-		FT_Error error = FT_Load_Glyph(m_face,
-		                               codePoint, // the glyph_index in the font file
-		                               WZ_FT_LOAD_FLAGS
-		);
-		if (error != FT_Err_Ok)
-		{
-			debug(LOG_FATAL, "unable to load glyph");
-		}
-
-		FT_GlyphSlot slot = m_face->glyph;
-		return {
-			static_cast<uint32_t>(slot->metrics.width),
-			static_cast<uint32_t>(slot->metrics.height),
-			slot->bitmap_left, slot->bitmap_top
-		};
-	}
-
 	operator FT_Face()
 	{
 		return m_face;
