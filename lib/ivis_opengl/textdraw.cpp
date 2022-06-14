@@ -47,6 +47,7 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 #include "hb.h"
 #include "hb-ft.h"
 #include "ft2build.h"
+#include FT_GLYPH_H
 #include <unordered_map>
 #include <memory>
 #include <limits>
@@ -67,6 +68,8 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 # include "fribidi.h"
 # define USE_NEW_FRIBIDI_API (FRIBIDI_MAJOR_VERSION >= 1)
 #endif // defined(WZ_FRIBIDI_ENABLED)
+
+#include "3rdparty/LRUCache11.hpp"
 
 float _horizScaleFactor = 1.0f;
 float _vertScaleFactor = 1.0f;
@@ -182,6 +185,21 @@ struct FTFace
 		return m_face->glyph->metrics.width;
 	}
 
+	FT_Glyph getGlyph(uint32_t codePoint)
+	{
+		FT_Error error = FT_Load_Glyph(m_face,
+			codePoint, // the glyph_index in the font file
+			WZ_FT_LOAD_FLAGS
+		);
+		ASSERT_OR_RETURN(nullptr, error == FT_Err_Ok, "Unable to load glyph %u", codePoint);
+
+		FT_Glyph result;
+		error = FT_Get_Glyph(m_face->glyph, &result);
+		ASSERT_OR_RETURN(nullptr, error == FT_Err_Ok, "Unable to get glyph %u from slot", codePoint);
+
+		return result;
+	}
+
 	RasterizedGlyph get(uint32_t codePoint, Vector2i subpixeloffset64)
 	{
 		FT_Vector delta;
@@ -269,6 +287,173 @@ struct FTlib
 
 	FT_Library lib;
 };
+
+struct FTGlyphCacheKey
+{
+	FTFace* face;
+	uint32_t codepoint;
+
+	FTGlyphCacheKey(FTFace& face, uint32_t codepoint)
+	: face(&face), codepoint(codepoint)
+	{ }
+
+	bool operator==(const FTGlyphCacheKey& other) const
+	{
+		return face == other.face && codepoint == other.codepoint;
+	}
+};
+
+namespace std {
+
+	template <>
+	struct hash<FTGlyphCacheKey>
+	{
+		std::size_t operator()(const FTGlyphCacheKey& k) const
+		{
+			return std::hash<FTFace*>()(k.face)
+				 ^ (std::hash<int>()(k.codepoint) << 1);
+		}
+	};
+
+}
+
+struct FTCache
+{
+	FTCache()
+	: m_glyphCache(256, 16)
+	{ }
+
+	RasterizedGlyph get(FTFace& face, uint32_t codePoint, Vector2i subpixeloffset64)
+	{
+		FT_Glyph glyph = getGlyph(face, codePoint);
+		ASSERT_OR_RETURN({}, glyph != nullptr, "Failed to get glyph: %" PRIu32, codePoint);
+
+		FT_Vector delta;
+		delta.x = subpixeloffset64.x;
+		delta.y = subpixeloffset64.y;
+
+		FT_Error error = FT_Glyph_To_Bitmap(&glyph, WZ_FT_RENDER_MODE, &delta, 0);
+		ASSERT_OR_RETURN({}, error == FT_Err_Ok, "Failed to render glyph: %" PRIu32, codePoint);
+		// After this point, glyph is actually a new FT_BitmapGlyph (which must be released when done)
+
+		FT_BitmapGlyph glyph_bitmap = (FT_BitmapGlyph)glyph;
+		FT_Bitmap ftBitmap = glyph_bitmap->bitmap;
+
+		RasterizedGlyph g;
+		g.buffer.reset(new unsigned char[ftBitmap.pitch * ftBitmap.rows]);
+		if (ftBitmap.buffer != nullptr)
+		{
+			memcpy(g.buffer.get(), ftBitmap.buffer, ftBitmap.pitch * ftBitmap.rows);
+		}
+		else
+		{
+			ASSERT(ftBitmap.pitch == 0 || ftBitmap.rows == 0, "Glyph buffer missing (%d and %d)", ftBitmap.pitch, ftBitmap.rows);
+		}
+		g.width = ftBitmap.width / 3;
+		g.height = ftBitmap.rows;
+		g.bearing_x = glyph_bitmap->left;
+		g.bearing_y = glyph_bitmap->top;
+		g.pitch = ftBitmap.pitch;
+
+		FT_Done_Glyph(glyph);
+		return g;
+	}
+
+	GlyphMetrics getGlyphMetrics(FTFace& face, uint32_t codePoint, Vector2i subpixeloffset64)
+	{
+		FT_Glyph glyph = getGlyph(face, codePoint);
+		ASSERT_OR_RETURN({}, glyph != nullptr, "Failed to get glyph: %" PRIu32, codePoint);
+
+		FT_Vector delta;
+		delta.x = subpixeloffset64.x;
+		delta.y = subpixeloffset64.y;
+
+		// FUTURE FIXME: Surely there is a better way of getting the metrics we need? ....
+		FT_Error error = FT_Glyph_To_Bitmap(&glyph, WZ_FT_RENDER_MODE, &delta, 0);
+		ASSERT_OR_RETURN({}, error == FT_Err_Ok, "Failed to render glyph: %" PRIu32, codePoint);
+		// After this point, glyph is actually a new FT_BitmapGlyph (which must be released when done)
+
+		FT_BitmapGlyph glyph_bitmap = (FT_BitmapGlyph)glyph;
+		FT_Bitmap ftBitmap = glyph_bitmap->bitmap;
+
+		GlyphMetrics result {
+			ftBitmap.width / 3,
+			ftBitmap.rows,
+			glyph_bitmap->left, glyph_bitmap->top
+		};
+
+		FT_Done_Glyph(glyph);
+
+		return result;
+	}
+
+public:
+	void clear()
+	{
+		m_glyphCache.clear();
+	}
+
+private:
+	// The glyph is owned by the cache - if transforms are needed, the caller should use FT_Glyph_Copy to make a copy and modify the copy!
+	FT_Glyph getGlyph(FTFace& face, uint32_t codepoint)
+	{
+		FT_Glyph glyph = nullptr;
+		WZOwnedFTGlyph *pCachedGlyph = m_glyphCache.tryGetPt(FTGlyphCacheKey(face, codepoint));
+		if (pCachedGlyph)
+		{
+			glyph = pCachedGlyph->glyph;
+		}
+		if (!glyph)
+		{
+			// not cached - load fresh
+			glyph = face.getGlyph(codepoint);
+			if (glyph)
+			{
+				// cache it
+				m_glyphCache.insert(FTGlyphCacheKey(face, codepoint), WZOwnedFTGlyph(glyph));
+			}
+		}
+		return glyph;
+	}
+
+private:
+	struct WZOwnedFTGlyph
+	{
+		WZOwnedFTGlyph(FT_Glyph glyph)
+		: glyph(glyph)
+		{ }
+		~WZOwnedFTGlyph() { if (glyph) { FT_Done_Glyph(glyph); } }
+
+		// Prevent copies
+		WZOwnedFTGlyph(const WZOwnedFTGlyph&) = delete;
+		void operator=(const WZOwnedFTGlyph&) = delete;
+
+		// Allow move semantics
+		WZOwnedFTGlyph& operator=(WZOwnedFTGlyph&& other)
+		{
+			if (this != &other)
+			{
+				glyph = other.glyph;
+
+				// Reset other
+				other.glyph = nullptr;
+			}
+			return *this;
+		}
+
+		WZOwnedFTGlyph(WZOwnedFTGlyph&& other)
+		{
+			*this = std::move(other);
+		}
+
+	public:
+		FT_Glyph glyph;
+	};
+
+	lru11::Cache<FTGlyphCacheKey, WZOwnedFTGlyph> m_glyphCache;
+};
+
+static FTCache glyphCache;
 
 struct TextRun
 {
@@ -425,7 +610,7 @@ struct TextShaper
 
 		std::tie(min_x, max_x, min_y, max_y) = std::accumulate(shapingResult.glyphes.begin(), shapingResult.glyphes.end(), std::make_tuple(1000, -1000, 1000, -1000),
 			[] (const std::tuple<int32_t, int32_t, int32_t, int32_t> &bounds, const HarfbuzzPosition &g) {
-			RasterizedGlyph glyph = g.face.get(g.codepoint, g.penPosition % 64);
+			GlyphMetrics glyph = glyphCache.getGlyphMetrics(g.face, g.codepoint, g.penPosition % 64);
 			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
 			int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
 			return std::make_tuple(
@@ -491,7 +676,7 @@ struct TextShaper
 		std::vector<glyphRaster> glyphs;
 		std::transform(shapingResult.glyphes.begin(), shapingResult.glyphes.end(), std::back_inserter(glyphs),
 			[&] (const HarfbuzzPosition &g) {
-			RasterizedGlyph glyph = g.face.get(g.codepoint, g.penPosition % 64);
+			RasterizedGlyph glyph = glyphCache.get(g.face, g.codepoint, g.penPosition % 64);
 			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
 			int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
 			min_x = std::min(x0, min_x);
@@ -857,6 +1042,7 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 
 void iV_TextShutdown()
 {
+	glyphCache.clear();
 	baseFonts = WZFontCollection();
 	delete textureID;
 	textureID = nullptr;
