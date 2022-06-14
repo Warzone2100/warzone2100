@@ -14,10 +14,10 @@ ${LangFileString} TEXT_SecBase "Core files"
 ${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
 
 ${LangFileString} TEXT_SecFMVs "Відео"
-${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
+${LangFileString} DESC_SecFMVs "Завантажте та встановіть ігрові сцени."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "Англійська (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_EngHi "Завантажте та встановіть ігрові сцени високої якості англійською."
 
 ${LangFileString} TEXT_SecFMVs_Eng "Англійська"
 ${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
