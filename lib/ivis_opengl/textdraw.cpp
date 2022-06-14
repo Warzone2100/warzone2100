@@ -786,12 +786,17 @@ inline float iV_GetVertScaleFactor()
 
 static hb_unicode_funcs_t* m_unicode_funcs_hb = nullptr;
 
-static FTFace *regular = nullptr;
-static FTFace *regularBold = nullptr;
-static FTFace *bold = nullptr;
-static FTFace *medium = nullptr;
-static FTFace *small = nullptr;
-static FTFace *smallBold = nullptr;
+struct WZFontCollection
+{
+public:
+	std::unique_ptr<FTFace> regular;
+	std::unique_ptr<FTFace> regularBold;
+	std::unique_ptr<FTFace> bold;
+	std::unique_ptr<FTFace> medium;
+	std::unique_ptr<FTFace> small;
+	std::unique_ptr<FTFace> smallBold;
+};
+static WZFontCollection baseFonts;
 
 struct iVFontsHash
 {
@@ -809,17 +814,17 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 	{
 	default:
 	case font_regular:
-		return *regular;
+		return *(baseFonts.regular);
 	case font_regular_bold:
-		return *regularBold;
+		return *(baseFonts.regularBold);
 	case font_large:
-		return *bold;
+		return *(baseFonts.bold);
 	case font_medium:
-		return *medium;
+		return *(baseFonts.medium);
 	case font_small:
-		return *small;
+		return *(baseFonts.small);
 	case font_bar:
-		return *smallBold;
+		return *(baseFonts.smallBold);
 	}
 }
 
@@ -837,12 +842,12 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * vertScaleFactor);
 	debug(LOG_WZ, "Text-Rendering Scaling Factor: %f x %f; Internal Font DPI: %" PRIu32 " x %" PRIu32 "", _horizScaleFactor, _vertScaleFactor, horizDPI, vertDPI);
 
-	regular = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI);
-	regularBold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI);
-	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI);
-	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI);
-	small = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI);
-	smallBold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI);
+	baseFonts.regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI));
+	baseFonts.regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI));
+	baseFonts.bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI));
+	baseFonts.medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI));
+	baseFonts.small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
+	baseFonts.smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
 
 	m_unicode_funcs_hb = hb_unicode_funcs_get_default();
 
@@ -852,19 +857,7 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 
 void iV_TextShutdown()
 {
-	delete regular;
-	delete regularBold;
-	delete bold;
-	delete medium;
-	delete small;
-	delete smallBold;
-	small = nullptr;
-	regular = nullptr;
-	regularBold = nullptr;
-	bold = nullptr;
-	medium = nullptr;
-	small = nullptr;
-	smallBold = nullptr;
+	baseFonts = WZFontCollection();
 	delete textureID;
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
