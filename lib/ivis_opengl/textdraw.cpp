@@ -47,6 +47,9 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 #include "hb.h"
 #include "hb-ft.h"
 #include "ft2build.h"
+#if defined(FT_MULTIPLE_MASTERS_H)
+#include FT_MULTIPLE_MASTERS_H
+#endif
 #include FT_GLYPH_H
 #include <unordered_map>
 #include <memory>
@@ -136,7 +139,7 @@ static void clearFontDataCache()
 
 struct FTFace
 {
-	FTFace(FT_Library &lib, const std::string &fileName, int32_t charSize, uint32_t horizDPI, uint32_t vertDPI)
+	FTFace(FT_Library &lib, const std::string &fileName, int32_t charSize, uint32_t horizDPI, uint32_t vertDPI, optional<uint16_t> fontWeight = nullopt)
 	{
 		pFileData = loadFontData(fileName);
 		if (!pFileData)
@@ -163,6 +166,66 @@ struct FTFace
 		{
 			debug(LOG_FATAL, "Could not set character size");
 		}
+#if defined(FT_HAS_MULTIPLE_MASTERS)
+		if (fontWeight.has_value() && FT_HAS_MULTIPLE_MASTERS(m_face))
+		{
+			FT_MM_Var *amaster;
+			error = FT_Get_MM_Var(m_face, &amaster);
+			if (error == FT_Err_Ok)
+			{
+				// find the "weight"-tagged axis
+				optional<FT_UInt> weight_axis_idx;
+				auto widthTag = FT_MAKE_TAG('w','g','h','t');
+				for (FT_UInt i = 0; i < amaster->num_axis; ++i)
+				{
+					if (amaster->axis[i].tag == widthTag && !weight_axis_idx.has_value())
+					{
+						weight_axis_idx = i;
+					}
+				}
+				if (weight_axis_idx.has_value())
+				{
+					std::vector<FT_Fixed> variations(amaster->num_axis, 0);
+					error = FT_Get_Var_Design_Coordinates(m_face, amaster->num_axis, variations.data());
+					if (error == FT_Err_Ok)
+					{
+						// set the desired font weight
+						variations[weight_axis_idx.value()] = static_cast<FT_Fixed>(fontWeight.value()) << 16;
+						error = FT_Set_Var_Design_Coordinates(m_face, amaster->num_axis, variations.data());
+						if (error != FT_Err_Ok)
+						{
+							debug(LOG_WZ, "Failed to set the font weight axis (%d): %s", (int)error, fileName.c_str());
+						}
+					}
+					else
+					{
+						debug(LOG_WZ, "FT_Get_Var_Design_Coordinates failed (%d): %s", (int)error, fileName.c_str());
+					}
+				}
+				else
+				{
+					debug(LOG_WZ, "Font has multiple masters, but unable to find 'weight' axis: %s", fileName.c_str());
+				}
+
+#if (FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && (FREETYPE_MINOR >= 9)))
+				FT_Done_MM_Var(lib, amaster);
+#else
+				// FreeType < 2.9 lacks FT_Done_MM_Var - docs say to call `free` on the data structure
+				free(amaster);
+#endif
+				amaster = nullptr;
+			}
+			else
+			{
+				debug(LOG_WZ, "Font claims to have multiple masters, but FT_Get_MM_Var failed (%d): %s", (int)error, fileName.c_str());
+			}
+		}
+#else
+		if (fontWeight.has_value())
+		{
+			debug(LOG_WARNING, "FreeType does not appear to have multiple masters support - using font weight axis modifications will fail. Try upgrading FreeType");
+		}
+#endif
 		m_font = hb_ft_font_create(m_face, nullptr);
 #if defined(HB_VERSION_ATLEAST) && HB_VERSION_ATLEAST(1,0,5)
 		hb_ft_font_set_load_flags(m_font, WZ_FT_LOAD_FLAGS);
