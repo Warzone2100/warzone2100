@@ -1087,13 +1087,12 @@ bool autoSave()
 	{
 		return false;
 	}
-	const char *dir = bMultiPlayer? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
+	const char *dir = bMultiPlayer ? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
 	// Backward compatibility: remove later
 	if (!freeAutoSaveSlot_old(dir))
 	{
 		// no old .gam found: check for new saves
-		freeAutoSaveSlot(bMultiPlayer? SAVEGAME_LOC_SKI_AUTO: SAVEGAME_LOC_CAM_AUTO);
-
+		freeAutoSaveSlot(bMultiPlayer ? SAVEGAME_LOC_SKI_AUTO : SAVEGAME_LOC_CAM_AUTO);
 	}
 	
 	time_t now = time(nullptr);
@@ -1106,12 +1105,12 @@ bool autoSave()
 	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, withoutTechlevel.c_str(), savedate);
 	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
 	{
-		console(_("AutoSave %s"), savefile);
+		console(_("AutoSave %s"), savegameWithoutExtension(savefile));
 		return true;
 	}
 	else
 	{
-		console(_("AutoSave %s failed"), savefile);
+		console(_("AutoSave %s failed"), savegameWithoutExtension(savefile));
 		return false;
 	}
 }

@@ -1322,7 +1322,7 @@ INT_RETVAL intRunWidgets()
 				char msg[256] = {'\0'};
 
 				sstrcpy(msg, _("GAME SAVED: "));
-				sstrcat(msg, saveGameName);
+				sstrcat(msg, savegameWithoutExtension(saveGameName));
 				addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 				if (widgGetFromID(psWScreen, IDMISSIONRES_SAVE))

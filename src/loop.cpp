@@ -250,7 +250,7 @@ static GAMECODE renderLoop()
 					if (saveGame(sRequestResult, GTYPE_SAVE_START))
 					{
 						sstrcpy(msgbuffer, _("GAME SAVED: "));
-						sstrcat(msgbuffer, sRequestResult);
+						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
 						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
 					else
@@ -266,7 +266,7 @@ static GAMECODE renderLoop()
 					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))//mid mission from [esc] menu
 					{
 						sstrcpy(msgbuffer, _("GAME SAVED: "));
-						sstrcat(msgbuffer, sRequestResult);
+						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
 						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
 					else
