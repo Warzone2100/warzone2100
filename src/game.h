@@ -63,6 +63,9 @@ UDWORD getCampaign(const char *fileName);
 /*returns the current type of save game being loaded*/
 GAME_TYPE getSaveGameType();
 
+// Removes .gam from a save for display purposes
+const char *savegameWithoutExtension(const char *name);
+
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor);
 nonstd::optional<nlohmann::json> parseJsonFile(const char *filename);

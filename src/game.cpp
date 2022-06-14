@@ -7741,3 +7741,12 @@ GAME_TYPE getSaveGameType()
 {
 	return gameType;
 }
+
+const char *savegameWithoutExtension(const char *name)
+{
+	static char displaySavegameName[256] = {'\0'};
+	sstrcpy(displaySavegameName, name);
+	displaySavegameName[std::max<size_t>(strlen(displaySavegameName), 4) - 4] = '\0'; //axe the .gam
+
+	return displaySavegameName;
+}

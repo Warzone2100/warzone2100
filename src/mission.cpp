@@ -2427,7 +2427,7 @@ void intRunMissionResult()
 
 					saveGame(sRequestResult, GTYPE_SAVE_START);
 					sstrcpy(msg, _("GAME SAVED :"));
-					sstrcat(msg, sRequestResult);
+					sstrcat(msg, savegameWithoutExtension(sRequestResult));
 					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 				}
 			}
