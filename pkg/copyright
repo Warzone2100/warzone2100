@@ -67,6 +67,10 @@ Copyright: 1992-2007 Trolltech ASA.
            2005-2020 Warzone 2100 Project
 License: GPL-2+
 
+Files: lib/ivis_opengl/3rdparty/LRUCache11.hpp
+Copyright: 2012-2022 SAURAV MOHAPATRA
+License: ISC
+
 Files: lib/ivis_opengl/3rdparty/stb_image_resize.h
 Copyright: 2017 Sean Barrett
 License: Expat
@@ -255,6 +259,19 @@ License: GPL-2+
  .
  On Debian systems, the complete text of the GNU General Public License
  can be found in `/usr/share/common-licenses/GPL-2'.
+
+License: ISC
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 License: Expat
  Permission is hereby granted, free of charge, to any person obtaining a copy
