@@ -166,7 +166,7 @@ struct FTFace
 		{
 			debug(LOG_FATAL, "Could not set character size");
 		}
-#if defined(FT_HAS_MULTIPLE_MASTERS)
+#if defined(FT_HAS_MULTIPLE_MASTERS) && (FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && (FREETYPE_MINOR >= 7))) // FreeType 2.7+ needed for FT_Get_Var_Design_Coordinates
 		if (fontWeight.has_value() && FT_HAS_MULTIPLE_MASTERS(m_face))
 		{
 			FT_MM_Var *amaster;
