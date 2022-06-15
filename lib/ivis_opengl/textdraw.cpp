@@ -988,6 +988,7 @@ public:
 	std::unique_ptr<FTFace> smallBold;
 };
 static WZFontCollection baseFonts;
+static std::unique_ptr<WZFontCollection> cjkFonts;
 
 struct iVFontsHash
 {
@@ -999,8 +1000,52 @@ struct iVFontsHash
 typedef std::unordered_map<iV_fonts, WzText, iVFontsHash> FontToEllipsisMapType;
 static FontToEllipsisMapType fontToEllipsisMap;
 
+#define CJK_FONT_PATH "fonts/NotoSansCJK-VF.otf.ttc"
+
+static void inline initializeCJKFontsIfNeeded()
+{
+	if (cjkFonts) { return; }
+	cjkFonts = std::unique_ptr<WZFontCollection>(new WZFontCollection());
+	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
+	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
+	cjkFonts->regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 400));
+	cjkFonts->regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 700));
+	cjkFonts->bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 21 * 64, horizDPI, vertDPI, 400));
+	cjkFonts->medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 400));
+	cjkFonts->small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 400));
+	cjkFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 700));
+}
+
 static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 {
+	switch (script)
+	{
+		case HB_SCRIPT_HAN:
+		case HB_SCRIPT_BOPOMOFO:
+		case HB_SCRIPT_HANGUL:
+		case HB_SCRIPT_HIRAGANA:
+		case HB_SCRIPT_KATAKANA:
+			initializeCJKFontsIfNeeded();
+			switch (FontID)
+			{
+			default:
+			case font_regular:
+				return *(cjkFonts->regular);
+			case font_regular_bold:
+				return *(cjkFonts->regularBold);
+			case font_large:
+				return *(cjkFonts->bold);
+			case font_medium:
+				return *(cjkFonts->medium);
+			case font_small:
+				return *(cjkFonts->small);
+			case font_bar:
+				return *(cjkFonts->smallBold);
+			}
+			break;
+		default:
+			break;
+	}
 	switch (FontID)
 	{
 	default:
@@ -1040,6 +1085,13 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 	baseFonts.small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
 	baseFonts.smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
 
+	// Do a sanity-check here to make sure the CJK font exists
+	// (since it's only loaded on-demand, and thus might fail with a fatal error later if missing)
+	if (PHYSFS_exists(CJK_FONT_PATH) == 0)
+	{
+		debug(LOG_FATAL, "Missing data file: %s", CJK_FONT_PATH);
+	}
+
 	m_unicode_funcs_hb = hb_unicode_funcs_get_default();
 
 	// hb_language_get_default: "To avoid problems, call this function once before multiple threads can call it."
@@ -1050,6 +1102,7 @@ void iV_TextShutdown()
 {
 	glyphCache.clear();
 	baseFonts = WZFontCollection();
+	cjkFonts.reset();
 	delete textureID;
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
