@@ -307,16 +307,16 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    * Compiling tools (ex. CMake, GCC/G++/Clang, ninja-build)
    * Archiving tools (ex. zip, p7zip)
    * Various libraries:
-      * [SDL](https://www.libsdl.org) ≥ 2.0.5 _(strongly recommended: ≥ 2.0.8)_
+      * [SDL](https://www.libsdl.org) ≥ 2.0.5 _(strongly recommended: ≥ 2.0.20)_
       * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.0.3-3 _(strongly recommended: ≥ 3.0.2)_
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
       * [libvorbis](https://xiph.org/vorbis)
       * [libogg](https://xiph.org/ogg/)
       * [opus](https://github.com/xiph/opus)
-      * [Freetype](https://www.freetype.org/)
-      * [Harfbuzz](https://github.com/harfbuzz/harfbuzz) ≥ 1.0
-      * [fribidi] (https://github.com/fribidi/fribidi)
+      * [Freetype](https://www.freetype.org/) _(strongly recommended: ≥ 2.10.4)_
+      * [Harfbuzz](https://github.com/harfbuzz/harfbuzz) ≥ 1.0 _(strongly recommended: ≥ 3.3.0)_
+      * [fribidi](https://github.com/fribidi/fribidi)
       * [OpenAL-Soft](https://openal-soft.org)
       * [libcurl](https://curl.haxx.se/libcurl/) _(strongly recommended: ≥ 7.58.0)_
       * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
