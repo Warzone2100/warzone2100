@@ -49,3 +49,6 @@
 [submodule "3rdparty/quickjs-wz"]
 	path = 3rdparty/quickjs-wz
 	url = https://github.com/Warzone2100/quickjs-wz.git
+[submodule "data/fonts"]
+	path = data/fonts
+	url = https://github.com/Warzone2100/data-fonts.git

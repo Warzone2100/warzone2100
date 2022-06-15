@@ -314,6 +314,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set_property(
 		SOURCE ${DATA_FILES}
 		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data")
+	set_property(
+		SOURCE ${DATA_FONTS}
+		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/fonts")
 	foreach(_music_file ${DATA_MUSIC_FILES})
 		file(RELATIVE_PATH _music_file_relative_path "${DATA_MUSIC_BASE_SOURCEDIR}" "${_music_file}")
 		get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
@@ -322,11 +325,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/music/${_music_file_subdir_path}")
 	endforeach()
 	set_source_files_properties(
-		${DATA_FILES} ${DATA_MUSIC_FILES} PROPERTIES
+		${DATA_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} PROPERTIES
 		GENERATED TRUE
 		XCODE_LAST_KNOWN_FILE_TYPE "file"
 	)
-	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_MUSIC_FILES})
+	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES})
 
 	# Add the icon
 	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../macosx/Resources/Warzone.icns")
@@ -337,17 +340,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	)
 	target_sources(warzone2100 PRIVATE ${_macos_app_icon})
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_ICON_FILE "Warzone.icns")
-
-	# Bundle the fonts
-	set_property(
-		SOURCE ${wz2100_fonts_FILES}
-		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/Fonts")
-	set_source_files_properties(
-		${wz2100_fonts_FILES} PROPERTIES
-		GENERATED TRUE
-		XCODE_LAST_KNOWN_FILE_TYPE "file"
-	)
-	target_sources(warzone2100 PRIVATE ${wz2100_fonts_FILES})
 
 	# Bundle the translations
 	if(ENABLE_NLS)

@@ -262,7 +262,6 @@ data/*config*/*
 data/config/*
 data/etc/*
 data/std*.txt
-data/fonts/
 devpkg/*
 [Dd]ebug/
 *.opensdf
