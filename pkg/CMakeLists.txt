@@ -82,7 +82,7 @@ set(CPACK_PACKAGE_HOMEPAGE_URL  "https://wz2100.net")
 #########################
 # Default components that are added to package
 
-set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages Fonts)
+set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages)
 if(UNIX AND NOT APPLE)
 	list(APPEND CPACK_COMPONENTS_ALL Manpages)
 endif()
@@ -123,11 +123,6 @@ set(CPACK_COMPONENT_INFO_DISPLAY_NAME "Info")
 set(CPACK_COMPONENT_INFO_REQUIRED ON)
 set(CPACK_COMPONENT_INFO_DESCRIPTION "Info Files")
 set(CPACK_COMPONENT_INFO_GROUP "CoreGroup")
-
-set(CPACK_COMPONENT_FONTS_DISPLAY_NAME "Fonts")
-set(CPACK_COMPONENT_FONTS_REQUIRED ON)
-set(CPACK_COMPONENT_FONTS_DESCRIPTION "Fonts")
-set(CPACK_COMPONENT_FONTS_GROUP "CoreGroup")
 
 set(CPACK_COMPONENT_PORTABLECONFIG_DISPLAY_NAME "Portable Configuration")
 set(CPACK_COMPONENT_PORTABLECONFIG_DESCRIPTION "Portable Configuration")

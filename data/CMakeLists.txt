@@ -86,7 +86,6 @@ COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 		"images"
 		"messages"
 		"misc"
-		"fonts"
 		"script"
 		"sequenceaudio"
 		"shaders"
@@ -100,6 +99,11 @@ COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 	IGNORE_GIT
 	QUIET
 )
+
+add_subdirectory(fonts fonts_staging)
+if(NOT DEFINED wz2100_fonts_FILES)
+	message(FATAL_ERROR "Failed to find font files")
+endif()
 
 COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 	COMPRESSION_LEVEL 0
@@ -156,6 +160,19 @@ if(TARGET glsl_compilation)
 	add_dependencies(data glsl_compilation)
 endif()
 
+# Copy font files to build directory to support IDE build+run (from the build dir) scenarios
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/fonts")
+	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/fonts")
+endif()
+foreach(font_file ${wz2100_fonts_FILES})
+    add_custom_command(
+		TARGET data
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${font_file}" "${CMAKE_CURRENT_BINARY_DIR}/fonts"
+		VERBATIM
+	)
+endforeach()
+
 set(DATA_FILES
 	"${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 	"${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
@@ -166,6 +183,11 @@ endif()
 install(FILES ${DATA_FILES}
 	DESTINATION "${WZ_DATADIR}"
 	COMPONENT Data
+)
+
+install(FILES
+	${wz2100_fonts_FILES}
+	COMPONENT Data DESTINATION "${WZ_DATADIR}/fonts"
 )
 
 file(GLOB DATA_MUSIC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/music/*.opus" "${CMAKE_CURRENT_SOURCE_DIR}/music/albums/*/*.*")
@@ -179,5 +201,6 @@ foreach(_music_file ${DATA_MUSIC_FILES})
 endforeach()
 
 set(DATA_FILES ${DATA_FILES} PARENT_SCOPE)
+set(DATA_FONTS ${wz2100_fonts_FILES} PARENT_SCOPE)
 set(DATA_MUSIC_FILES ${DATA_MUSIC_FILES} PARENT_SCOPE)
 set(DATA_MUSIC_BASE_SOURCEDIR "${CMAKE_CURRENT_SOURCE_DIR}/music" PARENT_SCOPE)
