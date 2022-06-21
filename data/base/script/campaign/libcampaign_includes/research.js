@@ -3,14 +3,14 @@
 // Research related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camEnableRes(researchIds, playerId)
-//;;
-//;; Grants research from the given list to player
-//;;
-//;; @param {string[]} researchIds
-//;; @param {number} playerId
-//;; @returns {void}
-//;;
+/**
+ * ## camEnableRes(researchIds, playerId)
+ *
+ * Grants research from the given list to player
+ * @param {string[]} researchIds
+ * @param {number} playerId
+ * @returns {void}
+ */
 function camEnableRes(researchIds, playerId)
 {
 	for (let i = 0, l = researchIds.length; i < l; ++i)
@@ -21,14 +21,14 @@ function camEnableRes(researchIds, playerId)
 	}
 }
 
-//;; ## camCompleteRequiredResearch(researchIds, playerId)
-//;;
-//;; Grants research from the given list to player and also researches the required research for that item.
-//;;
-//;; @param {string[]} researchIds
-//;; @param {number} playerId
-//;; @returns {void}
-//;;
+/**
+ * ## camCompleteRequiredResearch(researchIds, playerId)
+ *
+ * Grants research from the given list to player and also researches the required research for that item.
+ * @param {string[]} researchIds
+ * @param {number} playerId
+ * @returns {void}
+ */
 function camCompleteRequiredResearch(researchIds, playerId)
 {
 	dump("\n*Player " + playerId + " requesting accelerated research.");

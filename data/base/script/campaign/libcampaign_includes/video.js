@@ -6,19 +6,19 @@
 // Be aware that eventVideoDone will be triggered for each video
 // and will be received by the mission script's eventVideoDone, should it exist.
 
-//;; ## camPlayVideos(data)
-//;;
-//;; Formats for parameter `data`: `{video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}` OR
-//;; `["sound file", {video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}, ...]`
-//;; object property "immediate" is optional since most videos are immediate.
-//;; If videos is an array, queue up all of them for immediate playing.
-//;; This function will play one video sequence should one be provided.
-//;; Also, should a sound file be in a string (`pcvX.ogg`) `__camEnqueueVideos()` will recognize it
-//;; as a sound to play before a video. Of which is only supported when parameter `data` is an array.
-//;;
-//;; @param {Object|Object[]} data
-//;; @returns {void}
-//;;
+/**
+ * ## camPlayVideos(data)
+ *
+ * Formats for parameter `data`: `{video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}` OR
+ * `["sound file", {video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}, ...]`
+ * object property "immediate" is optional since most videos are immediate.
+ * If videos is an array, queue up all of them for immediate playing.
+ * This function will play one video sequence should one be provided.
+ * Also, should a sound file be in a string (`pcvX.ogg`) `__camEnqueueVideos()` will recognize it
+ * as a sound to play before a video. Of which is only supported when parameter `data` is an array.
+ * @param {Object|Object[]} data
+ * @returns {void}
+ */
 function camPlayVideos(data)
 {
 	if (data instanceof Array)

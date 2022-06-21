@@ -36,14 +36,9 @@ Artifact description is a JavaScript object with the following fields:
   in your script, which should be named as follows, where LABEL is the artifact label:
 * `camArtifactPickup_LABEL` Called when the player picks up the artifact.
 
-@param {Object} artifacts
-@returns {void}
-
 ## camAllArtifactsPickedUp()
 
 Returns `true` if all artifacts managed by `libcampaign.js` were picked up.
-
-@returns {boolean}
 
 ## camSetEnemyBases([bases])
 
@@ -70,37 +65,23 @@ is a JavaScript object with the following optional fields:
 * `camEnemyBaseDetected_LABEL` Called when the player sees an object from the enemy base group for the first time.
 * `camEnemyBaseEliminated_LABEL` Called when the base is eliminated, right after leftovers were cleaned up.
 
-@param {Object} [bases]
-@returns {void}
-
 ## camDetectEnemyBase(baseLabel)
 
 Plays the "enemy base detected" message and places a beacon for the enemy base
 defined by the label, as if the base was actually found by the player.
 
-@param {string} baseLabel
-@returns {void}
-
 ## camAllEnemyBasesEliminated()
 
 Returns `true` if all enemy bases managed by `libcampaign.js` are destroyed.
-
-@returns {boolean}
 
 ## camMarkTiles(label|labels)
 
 Mark area on the map by label(s), but only if debug mode is enabled.
 Otherwise, remember what to mark in case it is going to be.
 
-@param {string|string[]} label
-@returns {void}
-
 ## camUnmarkTiles(label|labels)
 
 No longer mark area(s) with given label(s) in debug mode.
-
-@param {string|string[]} label
-@returns {void}
 
 ## camDebug(...args)
 
@@ -111,57 +92,34 @@ because game shouldn't print things when nothing is broken.
 If you want to keep some prints around to make debugging easier
 without distracting the user, use `camTrace()`.
 
-@param {...string} args
-@returns {void}
-
 ## camDebugOnce(...args)
 
 Same as `camDebug()`, but prints each message only once during script lifetime.
-
-@param {...string} args
-@returns {void}
 
 ## camTrace(...args)
 
 Same as `camDebug()`, but only warns in cheat mode.
 Prefixed with `TRACE`. It's safe and natural to keep `camTrace()` calls in your code for easier debugging.
 
-@param {...string} args
-@returns {void}
-
 ## camTraceOnce(...args)
 
 Same as `camTrace()`, but prints each message only once during script lifetime.
-
-@param {...string} args
-@returns {void}
 
 ## camIsCheating()
 
 Check if the player is in cheat mode.
 
-@returns {boolean}
-
 ## camNewGroup()
 
 A saveload safe version of `newGroup()` so as not to create group ID clashes.
-
-@returns {number}
 
 ## camInNeverGroup(droid)
 
 Check if this droid is forced to never group.
 
-@param {Object} droid
-@returns {boolean}
-
 ## camNeverGroupDroid(what[, playerFilter])
 
 A means to not auto group some droids.
-
-@param {string|Object|Object[]} what
-@param {number} [playerFilter]
-@returns {void}
 
 ## camAreaEvent(label, callback(droid))
 
@@ -169,45 +127,25 @@ Implement `eventArea${label}()` in a debugging-friendly way.
 The function marks the area until the event is triggered,
 and traces entering the area in the TRACE log.
 
-@param {string} label
-@param {Function} callback
-@returns {void}
-
 ## camDef(something)
 
 Returns `false` if something is JavaScript-undefined, `true` otherwise.
-
-@param {*} something
-@returns {boolean}
 
 ## camIsString(something)
 
 Returns `true` if something is a string, `false` otherwise.
 
-@param {*} something
-@returns {boolean}
-
 ## camRand(max)
 
 A non-synchronous random integer in range [0, max - 1].
-
-@param {number} max
-@returns {number}
 
 ## camCallOnce(functionName)
 
 Call a function by name, but only if it has not been called yet.
 
-@param {string} functionName
-@returns {void}
-
 ## camSafeRemoveObject(obj[, specialEffects])
 
 Remove a game object (by value or label) if it exists, do nothing otherwise.
-
-@param {string|Object} obj
-@param {boolean} [specialEffects]
-@returns {void}
 
 ## camMakePos(label|object|x[, y])
 
@@ -216,56 +154,29 @@ Often useful for making functions that would accept positions in both `x,y` and 
 Also accepts labels. If label of `AREA` is given, returns the center of the area.
 If an existing object or label of such is given, returns a safe JavaScript object containing its `x`, `y` and `id`.
 
-@param {number|string|Object|undefined} x
-@param {number} [y]
-@returns {Object|undefined}
-
 ## camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)
 
 A wrapper for `distBetweenTwoPoints()`.
-
-@param {number|Object} x1
-@param {number|Object} y1
-@param {number} [x2]
-@param {number} [y2]
-@returns {number}
 
 ## camPlayerMatchesFilter(playerId, playerFilter)
 
 A function to handle player filters in a way similar to how JS API functions (eg. `enumDroid(filter, ...)`) handle them.
 
-@param {number} playerId
-@param {number} playerFilter
-@returns {boolean}
-
 ## camRemoveDuplicates(items)
 
 Remove duplicate items from an array.
-
-@param {*[]} items
-@returns {*[]}
 
 ## camCountStructuresInArea(label[, playerFilter])
 
 Mimics wzscript's `numStructsButNotWallsInArea()`.
 
-@param {string} label
-@param {number} [playerFilter]
-@returns {number}
-
 ## camChangeOnDiff(numericValue)
 
 Change a numeric value based on campaign difficulty.
 
-@param {number} numericValue
-@returns {number}
-
 ## camIsSystemDroid(gameObject)
 
 Determine if the passed in object is a non-weapon based droid.
-
-@param {Object} gameObject
-@returns {boolean}
 
 ## camMakeGroup(what[, playerFilter])
 
@@ -274,15 +185,9 @@ with fuzzy auto-detection of argument type.
 Only droids would be added to the group. `playerFilter` can be one of a
 player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`; defaults to `ENEMIES`.
 
-@param {string|Object|Object[]} what
-@param {number} [playerFilter]
-@returns {number|void}
-
 ## camBreakAlliances()
 
 Break alliances between all players.
-
-@returns {void}
 
 ## camSetFactories(factories)
 
@@ -311,9 +216,6 @@ Factory description is a JavaScript object with the following fields:
   Note that all template components are automatically made available to the factory owner.
 Factories won't start production immediately; call `camEnableFactory()` to turn them on when necessary.
 
-@param {Object} factories
-@returns {void}
-
 ## camSetFactoryData(factoryLabel, factoryData)
 
 Similar to `camSetFactories()`, but one factory at a time.
@@ -321,17 +223,10 @@ If the factory was already managing a group of droids, it keeps managing it.
 If a new group is specified in the description, the old group is merged into it.
 NOTE: This function disables the factory. You would need to call `camEnableFactory()` again.
 
-@param {string} factoryLabel
-@param {Object} factoryData
-@returns {void}
-
 ## camEnableFactory(factoryLabel)
 
 Enable a managed factory by the given label.
 Once the factory is enabled, it starts producing units and executing orders as given.
-
-@param {string} factoryLabel
-@returns {void}
 
 ## camQueueDroidProduction(playerId, template)
 
@@ -339,18 +234,11 @@ Queues up an extra droid template for production.
 It would be produced in the first factory that is capable of producing it,
 at the end of its production loop, first queued first served.
 
-@param {number} playerId
-@param {Object} template
-@returns {void}
-
 ## camSetPropulsionTypeLimit([limit])
 
 On hard and insane the propulsion type can be limited with this.
 For type II pass in `2`, and for type III pass in `3`. Hard defaults to type II and insane defaults to type III.
 If nothing is passed in then the type limit will match what is in templates.json.
-
-@param {number} [limit]
-@returns {void}
 
 ## camUpgradeOnMapTemplates(template1, template2, playerId[, excluded])
 
@@ -358,12 +246,6 @@ Search for `template1`, save its coordinates, remove it, and then replace with i
 Template objects are expected to follow the component properties as used in `templates.js`.
 A fourth parameter can be specified to ignore specific object IDs.
 Useful if a droid is assigned to an object label. It can be either an array or a single ID number.
-
-@param {Object} template1
-@param {Object} template2
-@param {number} playerId
-@param {number|number[]} [excluded]
-@returns {void}
 
 ## camSendReinforcement(playerId, position, templates, kind[, data])
 
@@ -381,13 +263,6 @@ Give a single bunch of droids (template list) for a player at a position label. 
   **NOTE:** the game engine doesn't seem to support two simultaneous incoming transporters for the same player.
   If a transporter is already on map, it will be correctly queued up and sent later.
 
-@param {number} playerId
-@param {string|Object|undefined} position
-@param {Object[]} templates
-@param {number} kind
-@param {Object} [data]
-@returns {void}
-
 ## camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 
 Periodically brings reinforcements to an enemy base, until the base is eliminated.
@@ -396,28 +271,13 @@ Callback is name of a function that returns a list of droid templates to spawn,
 which may be different every time. Kind and data work similarly to `camSendReinforcement()`.
 Use `CAM_REINFORCE_NONE` as kind to disable previously set reinforcements.
 
-@param {string} baseLabel
-@param {number} interval
-@param {string} callbackName
-@param {number} kind
-@param {Object} data
-@returns {void}
-
 ## camEnableRes(researchIds, playerId)
 
 Grants research from the given list to player
 
-@param {string[]} researchIds
-@param {number} playerId
-@returns {void}
-
 ## camCompleteRequiredResearch(researchIds, playerId)
 
 Grants research from the given list to player and also researches the required research for that item.
-
-@param {string[]} researchIds
-@param {number} playerId
-@returns {void}
 
 ## camManageGroup(group, order, data)
 
@@ -472,56 +332,31 @@ different aspects of behavior. The order parameter is one of:
   * `data` Data of the commander's order.
   * `repair` Health percentage to fall back to repair facility, if any.
 
-@param {string} group
-@param {number} order
-@param {Object} data
-@returns {void}
-
 ## camStopManagingGroup(group)
 
 Tell `libcampaign.js` to stop managing a certain group.
-
-@param {string} group
-@returns {void}
 
 ## camOrderToString(order)
 
 Print campaign order as string, useful for debugging.
 
-@param {number} order
-@returns {string}
-
 ## camIsTransporter(gameObject)
 
 Determine if the object is a transporter.
-
-@param {Object} gameObject
-@returns {boolean}
 
 ## camSetupTransporter(placeX, placeY, exitX, exitY)
 
 A convenient function for placing the standard campaign transport for loading in pre-away missions.
 The exit point for the transport is set up as well.
 
-@param {number} placeX
-@param {number} placeY
-@param {number} exitX
-@param {number} exitY
-@returns {void}
-
 ## camRemoveEnemyTransporterBlip()
 
 Removes the last blip that an enemy transporter left behind, if any.
-
-@returns {void}
 
 ## camManageTrucks(playerId)
 
 Manage trucks for an AI player. This assumes recapturing oils and rebuilding destroyed trucks
 in factories, the latter is implemented via `camQueueDroidProduction()` mechanism.
-
-@param {number} playerId
-@returns {void}
 
 ## camQueueBuilding(playerId, stat[, position])
 
@@ -531,17 +366,9 @@ It will not be re-issued in case the truck is destroyed before the building is f
 If position is unspecified, the building would be built near the first available truck.
 Otherwise, position may be a label or a `POSITION`-like object.
 
-@param {number} playerId
-@param {string} stat
-@param {string|Object} [position]
-@returns {void}
-
 ## camNextLevel(nextLevel)
 
 A wrapper around `loadLevel()`. Remembers to give bonus power for completing the mission faster.
-
-@param {string} nextLevel
-@returns {void}
 
 ## camSetStandardWinLossConditions(kind, nextLevel, data)
 
@@ -575,11 +402,6 @@ For offworld victory, some more extra data parameters can be defined:
   * `false` does not require all bases to be destroyed,
   * `true` requires all bases destroyed.
 
-@param {string} kind
-@param {string} nextLevel
-@param {Object} data
-@returns {void}
-
 ## camPlayVideos(data)
 
 Formats for parameter `data`: `{video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}` OR
@@ -589,7 +411,4 @@ If videos is an array, queue up all of them for immediate playing.
 This function will play one video sequence should one be provided.
 Also, should a sound file be in a string (`pcvX.ogg`) `__camEnqueueVideos()` will recognize it
 as a sound to play before a video. Of which is only supported when parameter `data` is an array.
-
-@param {Object|Object[]} data
-@returns {void}
 

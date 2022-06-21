@@ -1,25 +1,26 @@
-//;; # `libcampaign.js` documentation
-//;;
-//;; `libcampaign.js` is a JavaScript library supplied with the game,
-//;; which contains reusable code for campaign scenarios. It is designed to
-//;; make scenario development as high-level and declarative as possible.
-//;; It also contains a few simple convenient wrappers.
-//;; Public API functions of `libcampaign.js` are prefixed with `cam`.
-//;; To use `libcampaign.js`, add the following include into your scenario code:
-//;;
-//;; ```js
-//;; include("script/campaign/libcampaign.js");
-//;; ```
-//;;
-//;; Also, most of the `libcampaign.js` features require some of the game
-//;; events handled by the library. Transparent JavaScript pre-hooks are
-//;; therefore injected into your global event handlers upon include.
-//;; For example, if `camSetArtifacts()` was called to let `libcampaign.js`
-//;; manage scenario artifacts, then `eventPickup()` will be first handled
-//;; by the library, and only then your handler will be called, if any.
-//;; All of this happens automagically and does not normally require
-//;; your attention.
-//;;
+/**
+ * # `libcampaign.js` documentation
+ *
+ * `libcampaign.js` is a JavaScript library supplied with the game,
+ * which contains reusable code for campaign scenarios. It is designed to
+ * make scenario development as high-level and declarative as possible.
+ * It also contains a few simple convenient wrappers.
+ * Public API functions of `libcampaign.js` are prefixed with `cam`.
+ * To use `libcampaign.js`, add the following include into your scenario code:
+ *
+ * ```js
+ * include("script/campaign/libcampaign.js");
+ * ```
+ *
+ * Also, most of the `libcampaign.js` features require some of the game
+ * events handled by the library. Transparent JavaScript pre-hooks are
+ * therefore injected into your global event handlers upon include.
+ * For example, if `camSetArtifacts()` was called to let `libcampaign.js`
+ * manage scenario artifacts, then `eventPickup()` will be first handled
+ * by the library, and only then your handler will be called, if any.
+ * All of this happens automagically and does not normally require
+ * your attention.
+ */
 
 /*
 	Private vars and functions are prefixed with `__cam'.

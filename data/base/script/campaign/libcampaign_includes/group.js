@@ -3,12 +3,12 @@
 // Group functionality
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camNewGroup()
-//;;
-//;; A saveload safe version of `newGroup()` so as not to create group ID clashes.
-//;;
-//;; @returns {number}
-//;;
+/**
+ * ## camNewGroup()
+ *
+ * A saveload safe version of `newGroup()` so as not to create group ID clashes.
+ * @returns {number}
+ */
 function camNewGroup()
 {
 	if (!camDef(__camNewGroupCounter))
@@ -19,13 +19,13 @@ function camNewGroup()
 	return __camNewGroupCounter;
 }
 
-//;; ## camInNeverGroup(droid)
-//;;
-//;; Check if this droid is forced to never group.
-//;;
-//;; @param {Object} droid
-//;; @returns {boolean}
-//;;
+/**
+ * ## camInNeverGroup(droid)
+ *
+ * Check if this droid is forced to never group.
+ * @param {Object} droid
+ * @returns {boolean}
+ */
 function camInNeverGroup(droid)
 {
 	if (droid.type !== DROID)
@@ -45,14 +45,14 @@ function camInNeverGroup(droid)
 	return false;
 }
 
-//;; ## camNeverGroupDroid(what[, playerFilter])
-//;;
-//;; A means to not auto group some droids.
-//;;
-//;; @param {string|Object|Object[]} what
-//;; @param {number} [playerFilter]
-//;; @returns {void}
-//;;
+/**
+ * ## camNeverGroupDroid(what[, playerFilter])
+ *
+ * A means to not auto group some droids.
+ * @param {string|Object|Object[]} what
+ * @param {number} [playerFilter]
+ * @returns {void}
+ */
 function camNeverGroupDroid(what, playerFilter)
 {
 	if (!camDef(playerFilter))

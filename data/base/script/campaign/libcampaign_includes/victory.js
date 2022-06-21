@@ -3,13 +3,13 @@
 // Victory celebration helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camNextLevel(nextLevel)
-//;;
-//;; A wrapper around `loadLevel()`. Remembers to give bonus power for completing the mission faster.
-//;;
-//;; @param {string} nextLevel
-//;; @returns {void}
-//;;
+/**
+ * ## camNextLevel(nextLevel)
+ *
+ * A wrapper around `loadLevel()`. Remembers to give bonus power for completing the mission faster.
+ * @param {string} nextLevel
+ * @returns {void}
+ */
 function camNextLevel(nextLevel)
 {
 	if (__camNeedBonusTime)
@@ -44,43 +44,43 @@ function camNextLevel(nextLevel)
 	loadLevel(nextLevel);
 }
 
-//;; ## camSetStandardWinLossConditions(kind, nextLevel, data)
-//;;
-//;; Set victory and defeat conditions to one of the common options. On victory, load nextLevel.
-//;; The extra data parameter contains extra data required to define some of the victory conditions.
-//;; The following options are available:
-//;; * `CAM_VICTORY_STANDARD` Defeat if all ground factories and construction droids are lost, or on mission timeout.
-//;;   Victory when all enemies are destroyed and all artifacts are recovered.
-//;; * `CAM_VICTORY_PRE_OFFWORLD` Defeat on timeout. Victory on transporter launch, then load the sub-level.
-//;; * `CAM_VICTORY_OFFWORLD` Defeat on timeout or all units lost.
-//;;   Victory when all artifacts are recovered and either all enemies are dead (not just bases) or all droids are at the LZ.
-//;;   Also automatically handles the "LZ compromised" message, which is why it needs to know reinforcement interval to restore.
-//;;   The following data parameter fields are available:
-//;;   * `area` The landing zone to return to.
-//;;   * `message` The "Return to LZ" message ID. Optional.
-//;;   * `reinforcements` Reinforcements interval, in seconds.
-//;; For standard and offworld victory, some extra data parameters can be defined:
-//;; * `callback` A function callback to check for extra win/loss conditions. Return values are interpreted as follows:
-//;;   * `false` means instant defeat ("objective failed"),
-//;;   * `true` means victory as long as other standard victory conditions are met,
-//;;   * `undefined` means suppress other victory checks ("clearly not won yet").
-//;; * `victoryVideo` Pass in the name of a video string here and it will be played before attempting to load the next level.
-//;; For offworld victory, some more extra data parameters can be defined:
-//;; * `retlz` Force the player to return to the LZ area:
-//;;   * `false` mission does not require a LZ return,
-//;;   * `true` mission requires all units to be at LZ to win.
-//;; * `annihilate` Player must destroy every thing on map to win:
-//;;   * `false` mission does not require everything destroyed,
-//;;   * `true` mission requires total map annihilation.
-//;; * `eliminateBases` Instant win when all enemy units and bases are destroyed:
-//;;   * `false` does not require all bases to be destroyed,
-//;;   * `true` requires all bases destroyed.
-//;;
-//;; @param {string} kind
-//;; @param {string} nextLevel
-//;; @param {Object} data
-//;; @returns {void}
-//;;
+/**
+ * ## camSetStandardWinLossConditions(kind, nextLevel, data)
+ *
+ * Set victory and defeat conditions to one of the common options. On victory, load nextLevel.
+ * The extra data parameter contains extra data required to define some of the victory conditions.
+ * The following options are available:
+ * * `CAM_VICTORY_STANDARD` Defeat if all ground factories and construction droids are lost, or on mission timeout.
+ *   Victory when all enemies are destroyed and all artifacts are recovered.
+ * * `CAM_VICTORY_PRE_OFFWORLD` Defeat on timeout. Victory on transporter launch, then load the sub-level.
+ * * `CAM_VICTORY_OFFWORLD` Defeat on timeout or all units lost.
+ *   Victory when all artifacts are recovered and either all enemies are dead (not just bases) or all droids are at the LZ.
+ *   Also automatically handles the "LZ compromised" message, which is why it needs to know reinforcement interval to restore.
+ *   The following data parameter fields are available:
+ *   * `area` The landing zone to return to.
+ *   * `message` The "Return to LZ" message ID. Optional.
+ *   * `reinforcements` Reinforcements interval, in seconds.
+ * For standard and offworld victory, some extra data parameters can be defined:
+ * * `callback` A function callback to check for extra win/loss conditions. Return values are interpreted as follows:
+ *   * `false` means instant defeat ("objective failed"),
+ *   * `true` means victory as long as other standard victory conditions are met,
+ *   * `undefined` means suppress other victory checks ("clearly not won yet").
+ * * `victoryVideo` Pass in the name of a video string here and it will be played before attempting to load the next level.
+ * For offworld victory, some more extra data parameters can be defined:
+ * * `retlz` Force the player to return to the LZ area:
+ *   * `false` mission does not require a LZ return,
+ *   * `true` mission requires all units to be at LZ to win.
+ * * `annihilate` Player must destroy every thing on map to win:
+ *   * `false` mission does not require everything destroyed,
+ *   * `true` mission requires total map annihilation.
+ * * `eliminateBases` Instant win when all enemy units and bases are destroyed:
+ *   * `false` does not require all bases to be destroyed,
+ *   * `true` requires all bases destroyed.
+ * @param {string} kind
+ * @param {string} nextLevel
+ * @param {Object} data
+ * @returns {void}
+ */
 function camSetStandardWinLossConditions(kind, nextLevel, data)
 {
 	switch (kind)

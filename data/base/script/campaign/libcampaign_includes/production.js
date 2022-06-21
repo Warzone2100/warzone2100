@@ -8,36 +8,36 @@
 // Factories won't start production immediately; call camEnableFactory()
 // to turn them on.
 
-//;; ## camSetFactories(factories)
-//;;
-//;; Tell `libcampaign.js` to manage a certain set of enemy factories.
-//;; Management assumes producing droids, packing them into groups and
-//;; executing orders once the group becomes large-enough.
-//;; The argument is a JavaScript map from group labels to factory descriptions.
-//;; Each label points to a factory object.
-//;; Factory description is a JavaScript object with the following fields:
-//;; * `assembly` A rally point position label, where the group would gather.
-//;; * `order` An order to execute for every group produced in the factory. Same as the order parameter for `camManageGroup()`.
-//;; * `data` Order data. Same as the data parameter for `camManageGroup()`.
-//;; * `groupSize` Number of droids to produce before executing the order.
-//;;   Also, if order is `CAM_ORDER_ATTACK`, data.count defaults to this value.
-//;; * `maxSize` Halt production when reaching that many droids in the factory group.
-//;;   Resume when some droids die. Unlimited if unspecified.
-//;; * `throttle` If defined, produce droids only every that many milliseconds, and keep the factory idle between ticks.
-//;; * `group` If defined, make the factory manage this group, otherwise create a new empty group to manage.
-//;;   Droids produced in the factory would automatically be added to the group,
-//;;   and order and data parameters would be applied to this group.
-//;; * `templates` List of droid templates to produce in the factory.
-//;;   Each template is a JavaScript object with the following fields:
-//;;   * `body` Body stat name.
-//;;   * `prop` Propulsion stat name.
-//;;   * `weap` Weapon stat name. Only single-turret droids are currently supported.
-//;;   Note that all template components are automatically made available to the factory owner.
-//;; Factories won't start production immediately; call `camEnableFactory()` to turn them on when necessary.
-//;;
-//;; @param {Object} factories
-//;; @returns {void}
-//;;
+/**
+ * ## camSetFactories(factories)
+ *
+ * Tell `libcampaign.js` to manage a certain set of enemy factories.
+ * Management assumes producing droids, packing them into groups and
+ * executing orders once the group becomes large-enough.
+ * The argument is a JavaScript map from group labels to factory descriptions.
+ * Each label points to a factory object.
+ * Factory description is a JavaScript object with the following fields:
+ * * `assembly` A rally point position label, where the group would gather.
+ * * `order` An order to execute for every group produced in the factory. Same as the order parameter for `camManageGroup()`.
+ * * `data` Order data. Same as the data parameter for `camManageGroup()`.
+ * * `groupSize` Number of droids to produce before executing the order.
+ *   Also, if order is `CAM_ORDER_ATTACK`, data.count defaults to this value.
+ * * `maxSize` Halt production when reaching that many droids in the factory group.
+ *   Resume when some droids die. Unlimited if unspecified.
+ * * `throttle` If defined, produce droids only every that many milliseconds, and keep the factory idle between ticks.
+ * * `group` If defined, make the factory manage this group, otherwise create a new empty group to manage.
+ *   Droids produced in the factory would automatically be added to the group,
+ *   and order and data parameters would be applied to this group.
+ * * `templates` List of droid templates to produce in the factory.
+ *   Each template is a JavaScript object with the following fields:
+ *   * `body` Body stat name.
+ *   * `prop` Propulsion stat name.
+ *   * `weap` Weapon stat name. Only single-turret droids are currently supported.
+ *   Note that all template components are automatically made available to the factory owner.
+ * Factories won't start production immediately; call `camEnableFactory()` to turn them on when necessary.
+ * @param {Object} factories
+ * @returns {void}
+ */
 function camSetFactories(factories)
 {
 	for (const factoryLabel in factories)
@@ -46,17 +46,17 @@ function camSetFactories(factories)
 	}
 }
 
-//;; ## camSetFactoryData(factoryLabel, factoryData)
-//;;
-//;; Similar to `camSetFactories()`, but one factory at a time.
-//;; If the factory was already managing a group of droids, it keeps managing it.
-//;; If a new group is specified in the description, the old group is merged into it.
-//;; NOTE: This function disables the factory. You would need to call `camEnableFactory()` again.
-//;;
-//;; @param {string} factoryLabel
-//;; @param {Object} factoryData
-//;; @returns {void}
-//;;
+/**
+ * ## camSetFactoryData(factoryLabel, factoryData)
+ *
+ * Similar to `camSetFactories()`, but one factory at a time.
+ * If the factory was already managing a group of droids, it keeps managing it.
+ * If a new group is specified in the description, the old group is merged into it.
+ * NOTE: This function disables the factory. You would need to call `camEnableFactory()` again.
+ * @param {string} factoryLabel
+ * @param {Object} factoryData
+ * @returns {void}
+ */
 function camSetFactoryData(factoryLabel, factoryData)
 {
 	var structure = getObject(factoryLabel);
@@ -96,14 +96,14 @@ function camSetFactoryData(factoryLabel, factoryData)
 	}
 }
 
-//;; ## camEnableFactory(factoryLabel)
-//;;
-//;; Enable a managed factory by the given label.
-//;; Once the factory is enabled, it starts producing units and executing orders as given.
-//;;
-//;; @param {string} factoryLabel
-//;; @returns {void}
-//;;
+/**
+ * ## camEnableFactory(factoryLabel)
+ *
+ * Enable a managed factory by the given label.
+ * Once the factory is enabled, it starts producing units and executing orders as given.
+ * @param {string} factoryLabel
+ * @returns {void}
+ */
 function camEnableFactory(factoryLabel)
 {
 	var fi = __camFactoryInfo[factoryLabel];
@@ -130,16 +130,16 @@ function camEnableFactory(factoryLabel)
 	__camFactoryUpdateTactics(factoryLabel);
 }
 
-//;; ## camQueueDroidProduction(playerId, template)
-//;;
-//;; Queues up an extra droid template for production.
-//;; It would be produced in the first factory that is capable of producing it,
-//;; at the end of its production loop, first queued first served.
-//;;
-//;; @param {number} playerId
-//;; @param {Object} template
-//;; @returns {void}
-//;;
+/**
+ * ## camQueueDroidProduction(playerId, template)
+ *
+ * Queues up an extra droid template for production.
+ * It would be produced in the first factory that is capable of producing it,
+ * at the end of its production loop, first queued first served.
+ * @param {number} playerId
+ * @param {Object} template
+ * @returns {void}
+ */
 function camQueueDroidProduction(playerId, template)
 {
 	if (!camDef(__camFactoryQueue[playerId]))
@@ -149,15 +149,15 @@ function camQueueDroidProduction(playerId, template)
 	__camFactoryQueue[playerId][__camFactoryQueue[playerId].length] = template;
 }
 
-//;; ## camSetPropulsionTypeLimit([limit])
-//;;
-//;; On hard and insane the propulsion type can be limited with this.
-//;; For type II pass in `2`, and for type III pass in `3`. Hard defaults to type II and insane defaults to type III.
-//;; If nothing is passed in then the type limit will match what is in templates.json.
-//;;
-//;; @param {number} [limit]
-//;; @returns {void}
-//;;
+/**
+ * ## camSetPropulsionTypeLimit([limit])
+ *
+ * On hard and insane the propulsion type can be limited with this.
+ * For type II pass in `2`, and for type III pass in `3`. Hard defaults to type II and insane defaults to type III.
+ * If nothing is passed in then the type limit will match what is in templates.json.
+ * @param {number} [limit]
+ * @returns {void}
+ */
 function camSetPropulsionTypeLimit(limit)
 {
 	if (!camDef(limit))
@@ -174,19 +174,19 @@ function camSetPropulsionTypeLimit(limit)
 	}
 }
 
-//;; ## camUpgradeOnMapTemplates(template1, template2, playerId[, excluded])
-//;;
-//;; Search for `template1`, save its coordinates, remove it, and then replace with it with `template2`.
-//;; Template objects are expected to follow the component properties as used in `templates.js`.
-//;; A fourth parameter can be specified to ignore specific object IDs.
-//;; Useful if a droid is assigned to an object label. It can be either an array or a single ID number.
-//;;
-//;; @param {Object} template1
-//;; @param {Object} template2
-//;; @param {number} playerId
-//;; @param {number|number[]} [excluded]
-//;; @returns {void}
-//;;
+/**
+ * ## camUpgradeOnMapTemplates(template1, template2, playerId[, excluded])
+ *
+ * Search for `template1`, save its coordinates, remove it, and then replace with it with `template2`.
+ * Template objects are expected to follow the component properties as used in `templates.js`.
+ * A fourth parameter can be specified to ignore specific object IDs.
+ * Useful if a droid is assigned to an object label. It can be either an array or a single ID number.
+ * @param {Object} template1
+ * @param {Object} template2
+ * @param {number} playerId
+ * @param {number|number[]} [excluded]
+ * @returns {void}
+ */
 function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 {
 	if (!camDef(template1) || !camDef(template2) || !camDef(playerId))
