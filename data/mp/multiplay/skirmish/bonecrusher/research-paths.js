@@ -77,18 +77,18 @@ const research_test = [
 ];*/
 
 const research_rich2 = [
-"R-Vehicle-Engine01", 
-"R-Wpn-Cannon1Mk1", 
-"R-Vehicle-Prop-Halftracks", 
-"R-Vehicle-Body05", 
-"R-Vehicle-Body11", 
+"R-Vehicle-Engine01",
+"R-Wpn-Cannon1Mk1",
+"R-Vehicle-Prop-Halftracks",
+"R-Vehicle-Body05",
+"R-Vehicle-Body11",
 "R-Struc-RepairFacility",
 "R-Struc-Research-Upgrade09",
 "R-Wpn-Cannon4AMk1",
-"R-Wpn-RailGun03", 
-"R-Wpn-Cannon6TwinAslt", 
-"R-Vehicle-Metals04", 
-"R-Cyborg-Metals04", 
+"R-Wpn-RailGun03",
+"R-Wpn-Cannon6TwinAslt",
+"R-Vehicle-Metals04",
+"R-Cyborg-Metals04",
 "R-Cyborg-Hvywpn-Mcannon",
 "R-Wpn-MG2Mk1",
 "R-Wpn-Rail-Damage02",
@@ -118,7 +118,7 @@ const research_rockets = [
 "R-Vehicle-Body05",				//Средняя начальная броня
 "R-Struc-Research-Upgrade09",
 "R-Sys-MobileRepairTurretHvy",
-"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал) 
+"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал)
 "R-Sys-Autorepair-General",		//Автопочинка
 //"R-Sys-ECM-Upgrade02",	//Глушилка
 "R-Wpn-MG5",					//Twin Assault Gun

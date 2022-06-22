@@ -3,7 +3,6 @@ debugMsg('Module: chatting.js','init');
 function chatting(type){
 	var chlen = chatting[type].length;		// Забавно, спустя некотое время я только осознал, что за имя я дал этой переменной xDDD
 	return chatting[type][Math.floor(Math.random()*chlen)];
-	
 }
 
 chatting['army'] = [
