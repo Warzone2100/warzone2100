@@ -44,8 +44,8 @@
 #define VERSION_11              11	        // newstyle save game with extending structure checked in 13 Nov.
 #define VERSION_12              12	        // mission and order stuff checked in 20 Nov.
 //#define VERSION_13            13	        // odds and ends to 24 Nov. and hashed scripts
-#define VERSION_14              14	        // 
-#define VERSION_15              15	        // 
+#define VERSION_14              14	        //
+#define VERSION_15              15	        //
 #define VERSION_16              16	        // beta save game
 #define VERSION_17              17	        // objId and new struct stats included
 #define VERSION_18              18	        // droid name savegame validity stamps

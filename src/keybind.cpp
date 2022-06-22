@@ -454,7 +454,7 @@ void kf_MakeMeHero()
 		if (psDroid->selected && psDroid->droidType == DROID_COMMAND)
 		{
 			psDroid->experience = 8 * 65536 * 128;
-		} 
+		}
 		else if (psDroid->selected)
 		{
 			psDroid->experience = 4 * 65536 * 128;
@@ -749,7 +749,7 @@ void kf_ListDroids()
 			debug(LOG_INFO, "droid %i;%s;%i;%i;%i", i, psDroid->aName, psDroid->droidType, x, y);
 		}
 	}
-	
+
 }
 
 

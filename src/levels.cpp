@@ -290,7 +290,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 		return false;
 	}
 	memset(psDataSet, 0, sizeof(LEVEL_DATASET));
-	
+
 	psDataSet->players = 1;
 	psDataSet->game = -1;
 	psDataSet->dataDir = pathMode;

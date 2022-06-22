@@ -508,8 +508,8 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 void sendQueuedDroidInfo()
 {
 	// Given an order type, we bring all other orders of the same type together
-	// WHILE KEEPING their relative order!! This is important because 
-	// sending all MOVE and then all HOLD_POSITION is clearly not the same as 
+	// WHILE KEEPING their relative order!! This is important because
+	// sending all MOVE and then all HOLD_POSITION is clearly not the same as
 	// sending all HOLD_POSITION and then MOVE
 	// yes, we need an ordered map here, not std::sort
 	static std::map<DROID_ORDER, std::vector<QueuedDroidInfo> > orderedMap; // static to avoid allocations
@@ -548,7 +548,7 @@ void sendQueuedDroidInfo()
 			NETend();
 		}
 		qOrders.clear();
-	}	
+	}
 	// Sent the orders. Don't send them again.
 	queuedOrders.clear();
 }

@@ -630,7 +630,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 	pFileData = strchr(pFileData, '\n') + 1;
 	// value initialization sets everything to false.
 	mapDecals = std::unique_ptr<bool[]>(new bool[MAX_TERRAIN_TILES]());
-	
+
 	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;

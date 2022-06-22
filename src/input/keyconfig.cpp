@@ -75,7 +75,7 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_AddGrouping_N(9),                                           "AddGrouping_9",                N_("Add to Group 9"),                               {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LSHIFT,     KEY_CODE::KEY_9,            } }}));
 	// REMOVE FROM GROUP
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_RemoveFromGrouping(),                                       "RemoveFromGrouping",           N_("Remove from current Group"),                    {}));
-	
+
 	// SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectGrouping_N(0),                                        "SelectGrouping_0",             N_("Select Group 0"),                               {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_0                                       } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectGrouping_N(1),                                        "SelectGrouping_1",             N_("Select Group 1"),                               {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_1                                       } }}));

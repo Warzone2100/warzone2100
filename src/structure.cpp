@@ -157,7 +157,7 @@ static int constructorLimit[MAX_PLAYERS];
 // JS compatibility: remembers which module_id maps to which building
 // - why "MAX_PLAYER_SLOTS" instead of "MAX_PLAYERS"?
 // 	 because in Campaign, we have objects with player==12
-//   I don't what's the reason but we definitely need to handle more than MAX_PLAYERS 
+//   I don't what's the reason but we definitely need to handle more than MAX_PLAYERS
 std::unordered_map<UDWORD, UDWORD> moduleToBuilding[MAX_PLAYER_SLOTS];
 
 static std::vector<WzString> favoriteStructs;
@@ -1710,7 +1710,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		// backward compatibility:
 		// JS scripts try to find buildings by their modules ids, which isn't possible anymore
 		// (because SIMPLE_OBJECT.id is const),
-		// so we maintain a map from module_id to buildings, so that qtscripts.cpp::loadLabels 
+		// so we maintain a map from module_id to buildings, so that qtscripts.cpp::loadLabels
 		// can replace module_id with building_id
 		// *Not* doing so will break campaign (no artifacts being spawned from modules)
 		moduleToBuilding[player].emplace(id, psBuilding->id);
@@ -3848,7 +3848,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 			int8_t *counter;
 			if (asStructureStats[inc].type == REF_RESEARCH)
 			{
-				counter = researchLabCurrMax; 
+				counter = researchLabCurrMax;
 			}
 			else if (asStructureStats[inc].type == REF_FACTORY)
 			{
@@ -3923,7 +3923,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 
 				if (psBuilding->type == REF_RESEARCH_MODULE)
 				{
-					//don't add to list if Research Facility not presently built 
+					//don't add to list if Research Facility not presently built
 					//or if all labs already have a module
 					if (!researchLabCurrMax[0] || researchModules >= researchLabCurrMax[1])
 					{
@@ -4218,7 +4218,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 				if (psStruct && (psStruct->pStructureType->type == REF_FACTORY ||
-				                 psStruct->pStructureType->type == REF_VTOL_FACTORY) 
+				                 psStruct->pStructureType->type == REF_VTOL_FACTORY)
 					&& psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player)
 					&& nextModuleToBuild(psStruct, -1) > 0)
 				{
@@ -4230,8 +4230,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			if (TileHasStructure(worldTile(pos)))
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH 
-					&& psStruct->status == SS_BUILT 
+				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH
+					&& psStruct->status == SS_BUILT
 					&& aiCheckAlliances(player, psStruct->player)
 					&& nextModuleToBuild(psStruct, -1) > 0)
 				{
@@ -4243,8 +4243,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			if (TileHasStructure(worldTile(pos)))
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN 
-					&& psStruct->status == SS_BUILT 
+				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN
+					&& psStruct->status == SS_BUILT
 					&& aiCheckAlliances(player, psStruct->player)
 					&& nextModuleToBuild(psStruct, -1) > 0)
 				{

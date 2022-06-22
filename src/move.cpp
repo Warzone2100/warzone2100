@@ -1057,7 +1057,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				// ignore transporters
 				continue;
 			}
-			if ((!isFlying(psDroid) && isFlying(psObjcast) && psObjcast->pos.z > (psDroid->pos.z + droidR)) || 
+			if ((!isFlying(psDroid) && isFlying(psObjcast) && psObjcast->pos.z > (psDroid->pos.z + droidR)) ||
 			    (!isFlying(psObjcast) && isFlying(psDroid) && psDroid->pos.z > (psObjcast->pos.z + objR)))
 			{
 				// ground unit can't bump into a flying saucer..
