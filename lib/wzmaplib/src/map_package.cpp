@@ -299,7 +299,7 @@ optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProv
 			debug(pCustomLogger, LOG_WARNING, "LEV File Parse Error: `Syntax Error`: Received an unexpected token (prior to a `level` token): %s %s", command.c_str(), arg.c_str());
 			return;
 		}
-		
+
 		if (command.compare("players") == 0)
 		{
 			int playersValue = 0;

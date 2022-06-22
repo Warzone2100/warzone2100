@@ -642,7 +642,7 @@ bool WzMapZipIO::enumerateFoldersInternal(const std::string& basePath, bool recu
 	{
 		return false;
 	}
-	
+
 	if (m_cachedDirectoriesList.empty())
 	{
 		// Valid ZIP files may or may not contain dedicated directory entries (which end in "/")
