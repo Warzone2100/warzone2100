@@ -193,8 +193,8 @@ function choosePersonalityWeapon(type)
 				for (let i = lasers.length - 1; i >= 0; --i)
 				{
 					var weapObj = lasers[i];
-	 				weaponList.push(weapObj.stat);
-	 			}
+					weaponList.push(weapObj.stat);
+				}
 			}
 
 			var aa = subPersonalities[personality].antiAir.weapons;
@@ -204,11 +204,11 @@ function choosePersonalityWeapon(type)
 				aa = weaponStats.AA.weapons;
 			}
 
- 			for (let i = aa.length - 1; i >= 0; --i)
+			for (let i = aa.length - 1; i >= 0; --i)
 			{
 				var weapObj = aa[i];
- 				weaponList.push(weapObj.stat);
- 			}
+				weaponList.push(weapObj.stat);
+			}
 		}
 
 		// Allow small chance for Bunker Busters if main weapons lines are rockets.
@@ -218,11 +218,11 @@ function choosePersonalityWeapon(type)
 			skip = true;
 			var bunkerBusters = weaponStats.rockets_AS.weapons;
 
- 			for (let i = bunkerBusters.length - 1; i >= 0; --i)
+			for (let i = bunkerBusters.length - 1; i >= 0; --i)
 			{
 				var weapObj = bunkerBusters[i];
- 				weaponList.push(weapObj.stat);
- 			}
+				weaponList.push(weapObj.stat);
+			}
 		}
 
 		// Maybe choose a machinegun.
@@ -233,11 +233,11 @@ function choosePersonalityWeapon(type)
 			weaponList = [];
 			var generalAntiCyborgWeapons = weaponStats.machineguns.weapons;
 
- 			for (let i = generalAntiCyborgWeapons.length - 1; i >= 0; --i)
+			for (let i = generalAntiCyborgWeapons.length - 1; i >= 0; --i)
 			{
 				var weapObj = generalAntiCyborgWeapons[i];
- 				weaponList.push(weapObj.stat);
- 			}
+				weaponList.push(weapObj.stat);
+			}
 		}
 	}
 	else if (type === "CYBORG")

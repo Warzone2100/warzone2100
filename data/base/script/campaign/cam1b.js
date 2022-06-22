@@ -19,7 +19,7 @@ camAreaEvent("AttackArea1", function(droid)
 	camEnableFactory("base1factory");
 	// sic! hill factory
 	camSetFactoryData("base2factory", {
- 		assembly: "assembly2",
+		assembly: "assembly2",
 		order: CAM_ORDER_ATTACK, // changes
 		data: { pos: "playerBase" }, // changes
 		groupSize: 10, // changes
@@ -150,7 +150,7 @@ function eventStartLevel()
 			assembly: "assembly4",
 			order: CAM_ORDER_ATTACK,
 			data: { pos: "playerBase" },
- 			groupSize: 8,
+			groupSize: 8,
 			maxSize: 8,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 16 : 12)),
 			templates: [ cTempl.trike, cTempl.bloketwin, cTempl.buggytwin, cTempl.bjeeptwin ]

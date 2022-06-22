@@ -22,13 +22,13 @@ function prepeareProduce(){
 				case "Body2SUP":
 				case "Body3MBT":
 					if (getResearch(e[0]).done) light_bodies.unshift(e[1]);
-					   break;
+						break;
 				case "Body5REC":
 				case "Body8MBT":
 				case "Body6SUPP":
 				case "Body7ABT":
 					if (getResearch(e[0]).done) medium_bodies.unshift(e[1]);
-					   break;
+						break;
 				case "Body11ABT":
 				case "Body12SUP":
 				case "Body9REC":
@@ -36,7 +36,7 @@ function prepeareProduce(){
 				case "Body13SUP":
 				case "Body14SUP":
 					if (getResearch(e[0]).done) heavy_bodies.unshift(e[1]);
-					   break;
+						break;
 
 			}
 		});

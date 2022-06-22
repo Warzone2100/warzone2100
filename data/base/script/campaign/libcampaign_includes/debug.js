@@ -66,11 +66,7 @@ function camUnmarkTiles(label)
 //;;
 function camDebug(...args)
 {
-	__camGenericDebug("DEBUG",
-	                  debugGetCallerFuncName(),
-	                  args,
-	                  true,
-	                  __camBacktrace());
+	__camGenericDebug("DEBUG", debugGetCallerFuncName(), args, true, __camBacktrace());
 }
 
 //;; ## camDebugOnce(...args)
@@ -88,11 +84,7 @@ function camDebugOnce(...args)
 		return;
 	}
 	__camDebuggedOnce[str] = true;
-	__camGenericDebug("DEBUG",
-	                  debugGetCallerFuncName(),
-	                  args,
-	                  true,
-	                  __camBacktrace());
+	__camGenericDebug("DEBUG", debugGetCallerFuncName(), args, true, __camBacktrace());
 }
 
 //;; ## camTrace(...args)
@@ -109,9 +101,7 @@ function camTrace(...args)
 	{
 		return;
 	}
-	__camGenericDebug("TRACE",
-	                  debugGetCallerFuncName(),
-	                  args);
+	__camGenericDebug("TRACE", debugGetCallerFuncName(), args);
 }
 
 //;; ## camTraceOnce(...args)
@@ -133,9 +123,7 @@ function camTraceOnce(...args)
 		return;
 	}
 	__camTracedOnce[str] = true;
-	__camGenericDebug("TRACE",
-	                  debugGetCallerFuncName(),
-	                  args);
+	__camGenericDebug("TRACE", debugGetCallerFuncName(), args);
 }
 
 //;; ## camIsCheating()

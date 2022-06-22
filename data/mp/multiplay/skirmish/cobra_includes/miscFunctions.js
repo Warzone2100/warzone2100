@@ -186,7 +186,7 @@ function findLivingEnemies()
 		var alive = [];
 		for (let x = 0; x < maxPlayers; ++x)
 		{
-	 		if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
+			if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
 			{
 				alive.push(x);
 			}
@@ -201,7 +201,7 @@ function findLivingEnemies()
 					grudgeCount[x] = -1; //Dead enemy.
 				}
 			}
-	 	}
+		}
 
 		return alive;
 	}
@@ -233,13 +233,13 @@ function getMostHarmfulPlayer()
 			return 0; //If nothing to attack, then attack player 0 (happens only after winning).
 		}
 
-	 	for (let x = 0, c = enemies.length; x < c; ++x)
+		for (let x = 0, c = enemies.length; x < c; ++x)
 		{
-	 		if ((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
+			if ((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
 			{
 				mostHarmful = enemies[x];
 			}
-	 	}
+		}
 
 		// Don't have an enemy yet, so pick one randomly (likely start of the game or the counters are all the same).
 		if (((me === mostHarmful) || allianceExistsBetween(me, mostHarmful)) && enemies.length > 0)

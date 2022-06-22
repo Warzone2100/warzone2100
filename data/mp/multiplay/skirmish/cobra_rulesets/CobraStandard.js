@@ -543,10 +543,10 @@ const weaponStats =
 		weapons: [],
 		vtols: [],
 		defenses: [
-		  { res: "R-Defense-Super-Cannon", stat: "X-Super-Cannon" },
-		  { res: "R-Defense-Super-Rocket", stat: "X-Super-Rocket" },
-		  { res: "R-Defense-Super-Missile", stat: "X-Super-Missile" },
-		  { res: "R-Defense-MassDriver", stat: "X-Super-MassDriver" },
+			{ res: "R-Defense-Super-Cannon", stat: "X-Super-Cannon" },
+			{ res: "R-Defense-Super-Rocket", stat: "X-Super-Rocket" },
+			{ res: "R-Defense-Super-Missile", stat: "X-Super-Missile" },
+			{ res: "R-Defense-MassDriver", stat: "X-Super-MassDriver" },
 		],
 		templates: [],
 		extras: [],
@@ -560,7 +560,7 @@ const weaponStats =
 		],
 		vtols: [],
 		defenses: [
-		    { res: "R-Defense-PlasmaCannon", stat: "Emplacement-PlasmaCannon" },
+			{ res: "R-Defense-PlasmaCannon", stat: "Emplacement-PlasmaCannon" },
 			{ res: "R-Defense-HeavyPlasmaLauncher", stat: "Emplacement-HeavyPlasmaLauncher" },
 		],
 		templates: [],
@@ -636,13 +636,13 @@ const weaponStats =
 		],
 		vtols: [],
 		defenses: [
-		    { res: "R-Sys-SpyTurret", stat: "Sys-SpyTower" },
-		    { res: "R-Defense-EMPCannon", stat: "WallTower-EMP" },
-		    { res: "R-Defense-EMPMortar", stat: "Emplacement-MortarEMP" },
+			{ res: "R-Sys-SpyTurret", stat: "Sys-SpyTower" },
+			{ res: "R-Defense-EMPCannon", stat: "WallTower-EMP" },
+			{ res: "R-Defense-EMPMortar", stat: "Emplacement-MortarEMP" },
 		],
 		templates: [],
 		extras: [
-		    "R-Sys-Resistance-Circuits",
+			"R-Sys-Resistance-Circuits",
 		],
 	},
 	lasers_AA:
