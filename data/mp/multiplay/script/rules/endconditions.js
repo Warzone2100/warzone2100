@@ -7,7 +7,7 @@ const STATE_loser = "loser";
 const STATE_spectator = "spectator";
 const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which you can continue to play
 
-// Uses global var: ```idleTime```
+// Uses global var: `idleTime`
 // The time that the player's inactivity is allowed. Actions are considered
 // - unit building
 // - completion of the research
