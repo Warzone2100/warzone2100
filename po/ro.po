@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:25\n"
+"PO-Revision-Date: 2022-06-22 17:58\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -5696,7 +5696,7 @@ msgstr "GREU"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "NEBUNESC"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
@@ -15590,7 +15590,7 @@ msgstr "Încarcă Jocul tip Campanie"
 
 #: src/frontend.cpp:368
 msgid "Load Skirmish Game"
-msgstr "Încarcă Jocul tip Ciocnire"
+msgstr "Încarcă un joc individual"
 
 #: src/frontend.cpp:369
 msgid "View Skirmish Replay"
@@ -15617,7 +15617,7 @@ msgstr "Încarcă Jocul tip Campanie Salvat"
 #: src/frontend.cpp:538
 #: src/ingameop.cpp:1028
 msgid "Load Skirmish Saved Game"
-msgstr "Încarcă Jocul tip Ciocnire Salvat"
+msgstr "Încarcă un joc individual salvat anterior"
 
 #: src/frontend.cpp:544
 msgid "Load Skirmish Replay"
@@ -16018,7 +16018,7 @@ msgstr "Dificil"
 #: src/frontend.cpp:1985
 #: src/multiint.cpp:266
 msgid "Insane"
-msgstr ""
+msgstr "Nebunesc"
 
 #: src/frontend.cpp:2016
 #: src/frontend.cpp:2090
@@ -16043,7 +16043,7 @@ msgstr ""
 #: src/frontend.cpp:2058
 #: src/frontend.cpp:2093
 msgid "Skirmish/Multiplayer"
-msgstr "Ciocnire/Multiplayer"
+msgstr "Joc individual/Multiplayer"
 
 #: src/frontend.cpp:2064
 #, c-format
@@ -16357,7 +16357,7 @@ msgstr ""
 
 #: src/ingameop.cpp:1036
 msgid "Save Skirmish Game"
-msgstr "Salvează Jocul tip Ciocnire"
+msgstr "Salvează jocul individual"
 
 #: src/init.cpp:609
 #, c-format
@@ -17245,13 +17245,13 @@ msgstr "Se joacă: Provocare"
 
 #: src/integrations/wzdiscordrpc.cpp:578
 msgid "Playing: Skirmish"
-msgstr "Se joacă: Ciocnire"
+msgstr "Se joacă: Joc individual"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:583
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr "Se joacă: %s Ciocnire"
+msgstr "Se joacă: %s Joc individual"
 
 #: src/integrations/wzdiscordrpc.cpp:586
 #: src/integrations/wzdiscordrpc.cpp:822
@@ -17563,11 +17563,11 @@ msgstr ""
 
 #: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "DIFICULTATE: NORMAL"
 
 #: src/keybind.cpp:1418
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "DIFICULTATE: GREU"
 
 #: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
