@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-06-22 17:58\n"
+"PO-Revision-Date: 2022-06-23 05:56\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -5849,7 +5849,7 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multiplayer"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
@@ -15645,7 +15645,7 @@ msgstr ""
 
 #: src/frontend.cpp:659
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Încarcă o reluare Multiplayer"
 
 #: src/frontend.cpp:713
 msgid "Game Options"
@@ -15682,7 +15682,7 @@ msgstr "Manager Muzică"
 
 #: src/frontend.cpp:720
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Opțiuni Multiplayer"
 
 #: src/frontend.cpp:725
 #: src/multiint.cpp:1382
@@ -16028,7 +16028,7 @@ msgstr "Limbă"
 #: src/frontend.cpp:2020
 #: src/frontend.cpp:2094
 msgid "Campaign Difficulty"
-msgstr ""
+msgstr "Dificultate campanie"
 
 #: src/frontend.cpp:2024
 #: src/frontend.cpp:2095
@@ -16061,11 +16061,11 @@ msgstr "OPȚIUNI DE JOC"
 
 #: src/frontend.cpp:2114
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Dificultate nebunească"
 
 #: src/frontend.cpp:2115
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Acest nivel de dificultate este doar pentru jucătorii foarte experimentați!"
 
 #: src/frontend.cpp:2213
 #, c-format
@@ -16092,7 +16092,7 @@ msgstr ""
 
 #: src/frontend.cpp:2367
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Activează UPnP"
 
 #: src/frontend.cpp:2372
 msgid "Inactivity Timeout"
@@ -16108,7 +16108,7 @@ msgstr ""
 
 #: src/frontend.cpp:2397
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "OPȚIUNI MULTIPLAYER"
 
 #: src/frontend.cpp:2457
 #: src/multiint.cpp:5127
@@ -17559,7 +17559,7 @@ msgstr ""
 
 #: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "DIFICULTATE: UȘOR"
 
 #: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
@@ -17571,7 +17571,7 @@ msgstr "DIFICULTATE: GREU"
 
 #: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "DIFICULTATE: NEBUNESC"
 
 #: src/keybind.cpp:1430
 msgid "CHEATS: ENABLED"
