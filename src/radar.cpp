@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include <string.h>
+#include <cstdlib>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
@@ -222,8 +223,8 @@ bool resizeRadar()
 	{
 		free(radarOverlayBuffer);
 	}
-	radarTexWidth = scrollMaxX - scrollMinX;
-	radarTexHeight = scrollMaxY - scrollMinY;
+	radarTexWidth = static_cast<size_t>(std::abs(scrollMaxX - scrollMinX));
+	radarTexHeight = static_cast<size_t>(std::abs(scrollMaxY - scrollMinY));
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
 	radarBuffer = (uint32_t *)malloc(radarBufferSize);
 	radarOverlayBuffer = (uint32_t*)malloc(radarBufferSize);
