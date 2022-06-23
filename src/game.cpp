@@ -2551,7 +2551,21 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			mission.startTime = saveGameData.missionTime;
 		}
 
-		//set the scroll varaibles
+		//set the scroll variables
+		if (saveGameData.ScrollMinX >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinX) > saveGameData.ScrollMaxX)
+		{
+			debug(LOG_ERROR, "ScrollMinX (%" PRIi32 ") exceeds ScrollMaxX %" PRIu32, saveGameData.ScrollMinX, saveGameData.ScrollMaxX);
+			uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinX);
+			saveGameData.ScrollMinX = static_cast<int32_t>(saveGameData.ScrollMaxX);
+			saveGameData.ScrollMaxX = newMax;
+		}
+		if (saveGameData.ScrollMinY >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinY) > saveGameData.ScrollMaxY)
+		{
+			debug(LOG_ERROR, "ScrollMinY (%" PRIi32 ") exceeds ScrollMaxY %" PRIu32, saveGameData.ScrollMinY, saveGameData.ScrollMaxY);
+			uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinY);
+			saveGameData.ScrollMinY = static_cast<int32_t>(saveGameData.ScrollMaxY);
+			saveGameData.ScrollMaxY = newMax;
+		}
 		startX = saveGameData.ScrollMinX;
 		startY = saveGameData.ScrollMinY;
 		width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
@@ -4045,7 +4059,21 @@ bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json> &gamJs
 
 	savedGameTime = saveGame.gameTime;
 
-	//set the scroll varaibles
+	//set the scroll variables
+	if (saveGame.ScrollMinX >= 0 && static_cast<uint32_t>(saveGame.ScrollMinX) > saveGame.ScrollMaxX)
+	{
+		debug(LOG_ERROR, "ScrollMinX (%" PRIi32 ") exceeds ScrollMaxX %" PRIu32, saveGame.ScrollMinX, saveGame.ScrollMaxX);
+		uint32_t newMax = static_cast<uint32_t>(saveGame.ScrollMinX);
+		saveGame.ScrollMinX = static_cast<int32_t>(saveGame.ScrollMaxX);
+		saveGame.ScrollMaxX = newMax;
+	}
+	if (saveGame.ScrollMinY >= 0 && static_cast<uint32_t>(saveGame.ScrollMinY) > saveGame.ScrollMaxY)
+	{
+		debug(LOG_ERROR, "ScrollMinY (%" PRIi32 ") exceeds ScrollMaxY %" PRIu32, saveGame.ScrollMinY, saveGame.ScrollMaxY);
+		uint32_t newMax = static_cast<uint32_t>(saveGame.ScrollMinY);
+		saveGame.ScrollMinY = static_cast<int32_t>(saveGame.ScrollMaxY);
+		saveGame.ScrollMaxY = newMax;
+	}
 	startX = saveGame.ScrollMinX;
 	startY = saveGame.ScrollMinY;
 	width = saveGame.ScrollMaxX - saveGame.ScrollMinX;
@@ -4334,7 +4362,22 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<n
 	{
 		saveGameOnMission = false;
 	}
-	//set the scroll varaibles
+
+	//set the scroll variables
+	if (saveGameData.ScrollMinX >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinX) > saveGameData.ScrollMaxX)
+	{
+		debug(LOG_ERROR, "ScrollMinX (%" PRIi32 ") exceeds ScrollMaxX %" PRIu32, saveGameData.ScrollMinX, saveGameData.ScrollMaxX);
+		uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinX);
+		saveGameData.ScrollMinX = static_cast<int32_t>(saveGameData.ScrollMaxX);
+		saveGameData.ScrollMaxX = newMax;
+	}
+	if (saveGameData.ScrollMinY >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinY) > saveGameData.ScrollMaxY)
+	{
+		debug(LOG_ERROR, "ScrollMinY (%" PRIi32 ") exceeds ScrollMaxY %" PRIu32, saveGameData.ScrollMinY, saveGameData.ScrollMaxY);
+		uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinY);
+		saveGameData.ScrollMinY = static_cast<int32_t>(saveGameData.ScrollMaxY);
+		saveGameData.ScrollMaxY = newMax;
+	}
 	startX = saveGameData.ScrollMinX;
 	startY = saveGameData.ScrollMinY;
 	width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
