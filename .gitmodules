@@ -52,3 +52,6 @@
 [submodule "data/fonts"]
 	path = data/fonts
 	url = https://github.com/Warzone2100/data-fonts.git
+[submodule "tools/maptools-cli"]
+	path = tools/maptools-cli
+	url = https://github.com/Warzone2100/maptools-cli.git
