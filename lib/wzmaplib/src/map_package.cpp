@@ -28,6 +28,7 @@
 #include <cinttypes>
 #include <unordered_set>
 #include <limits>
+#include <algorithm>
 #include "3rdparty/SDL_endian.h"
 #include "../include/wzmaplib/map_version.h"
 
@@ -569,6 +570,9 @@ optional<LevelDetails> loadLevelDetails_JSON(const std::string& levelJsonFile, I
 //	  "created-date": "YYYY-MM-DD",
 //	  "generator": "wzmaplib 1.0.0",
 
+//	  // (other optional fields for maps)
+//	  "additional-authors": [{"name": "AUTHOR2" }]
+
 //	  // (other optional fields for converted maps)
 //	  "prior-generator": "FlaME 1.28 Windows"
 //	}
@@ -645,6 +649,29 @@ optional<LevelDetails> loadLevelDetails_JSON(const std::string& levelJsonFile, I
 			details.generator = it->get<std::string>();
 		}
 	}
+	it = mRoot.find("additional-authors");
+	if (it != mRoot.end())
+	{
+		if (it->is_array())
+		{
+			for (auto otherAuthorIt = it->begin(); otherAuthorIt != it->end(); ++otherAuthorIt)
+			{
+				if (!otherAuthorIt->is_object()) { continue; }
+				auto nameIt = otherAuthorIt->find("name");
+				if (nameIt != otherAuthorIt->end())
+				{
+					if (nameIt->is_string())
+					{
+						details.additionalAuthors.push_back(nameIt->get<std::string>());
+					}
+				}
+			}
+		}
+		else
+		{
+			debug(pCustomLogger, LOG_WARNING, "JSON document has additional-authors key that is not an array: %s", levelJsonFile.c_str());
+		}
+	}
 	if (output_priorGenerator)
 	{
 		it = mRoot.find("prior-generator");
@@ -679,6 +706,16 @@ bool exportLevelDetails_LEV(const LevelDetails& details, const std::string& outp
 	output = "// Made with FlaME 1.29 - (compatible / " + currentGenerator + ")\n";
 	output += "// Date: " + details.createdDate + "\n";
 	output += "// Author: " + details.author + "\n";
+	if (!details.additionalAuthors.empty())
+	{
+		output += "// Additional Authors: ";
+		output += std::accumulate(std::next(details.additionalAuthors.begin()), details.additionalAuthors.end(), std::string(details.additionalAuthors[0]),
+			[](std::string a, const std::string &b)
+			{
+				return std::move(a) + "," + b;
+			});
+		output += "\n";
+	}
 	if (!details.license.empty())
 	{
 		auto it = SPDXToFlaMELicenseField.find(details.license);
@@ -767,6 +804,17 @@ bool exportLevelDetails_JSON(const LevelDetails& details, const std::string& out
 	else
 	{
 		debug(pCustomLogger, LOG_WARNING, "LevelDetails is missing a created-date");
+	}
+	if (!details.additionalAuthors.empty())
+	{
+		nlohmann::json additionalAuthorsArray = nlohmann::json::array();
+		for (const auto& author : details.additionalAuthors)
+		{
+			nlohmann::ordered_json authorinfo = nlohmann::ordered_json::object();
+			authorinfo["name"] = author;
+			additionalAuthorsArray.push_back(std::move(authorinfo));
+		}
+		output["additional-authors"] = additionalAuthorsArray;
 	}
 	auto currentGenerator = getCurrentWzMapLibGeneratorName();
 	output["generator"] = currentGenerator;
