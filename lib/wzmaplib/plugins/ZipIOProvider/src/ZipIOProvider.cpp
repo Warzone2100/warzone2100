@@ -828,3 +828,13 @@ bool WzMapZipIO::determineIfMalformedWindowsPathSeparatorWorkaround()
 	m_foundMalformedWindowsPathSeparators = false;
 	return false;
 }
+
+std::string WzMapZipIO::getZipLibraryVersionString()
+{
+	const char* verStr = zip_libzip_version();
+	if (!verStr)
+	{
+		return "libzip/unknown";
+	}
+	return std::string("libzip/") + verStr;
+}
