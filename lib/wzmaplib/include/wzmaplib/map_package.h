@@ -46,6 +46,7 @@ struct LevelDetails {
 	std::string createdDate;
 	std::string uploadedDate;
 	std::string author;
+	std::vector<std::string> additionalAuthors;
 	std::string license;
 	optional<std::string> generator;	// the program / script / library used to generate (or export) the map
 
