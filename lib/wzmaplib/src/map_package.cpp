@@ -209,6 +209,24 @@ optional<LevelDetails> loadLevelDetails(const std::string& levelFile, IOProvider
 	return nullopt;
 }
 
+static bool convertDateSlashesToHyphens(std::string& dateString)
+{
+	// YYYY/MM/DD (...) to YYYY-MM-DD (...)
+	if (dateString.size() < 10)
+	{
+		return false;
+	}
+
+	if (dateString[4] == '/' && dateString[7] == '/')
+	{
+		dateString[4] = '-';
+		dateString[7] = '-';
+		return true;
+	}
+
+	return false;
+}
+
 optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	// 1.) Load file
@@ -400,6 +418,9 @@ optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProv
 				}
 				createdDate = comment.substr(6);
 				trim_whitespace(createdDate);
+
+				// Attempt to convert from YYYY/MM/DD HH:MM:SS to YYYY-MM-DD HH:MM:SS format (where HH:MM:SS is optional)
+				convertDateSlashesToHyphens(createdDate);
 				return;
 			}
 			// additional fields handled below
