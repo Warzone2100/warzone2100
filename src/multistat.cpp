@@ -46,7 +46,6 @@
 #include <chrono>
 #include <SQLiteCpp/SQLiteCpp.h>
 
-
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
 // ////////////////////////////////////////////////////////////////////////////
@@ -109,6 +108,12 @@ void lookupRatingAsync(uint32_t playerIndex)
 
 	std::string url = getAutoratingUrl();
 	if (url.empty())
+	{
+		setAutoratingUrl(WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL);
+		url = WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL;
+	}
+
+	if (!getAutoratingEnable())
 	{
 		return;
 	}

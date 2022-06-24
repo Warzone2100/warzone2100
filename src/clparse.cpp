@@ -83,6 +83,7 @@ static bool wz_autogame = false;
 static std::string wz_saveandquit;
 static std::string wz_test;
 static std::string wz_autoratingUrl;
+static bool wz_autoratingEnable = false;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
@@ -1013,6 +1014,15 @@ void setAutoratingUrl(std::string url) {
 
 std::string getAutoratingUrl() {
 	return wz_autoratingUrl;
+}
+
+void setAutoratingEnable(bool e)
+{
+	wz_autoratingEnable = e;
+}
+
+bool getAutoratingEnable() {
+	return wz_autoratingEnable;
 }
 
 bool streamer_spectator_mode()

@@ -33,6 +33,8 @@ const std::string &saveandquit_enabled();
 const std::string &wz_skirmish_test();
 void setAutoratingUrl(std::string url);
 std::string getAutoratingUrl();
+void setAutoratingEnable(bool e);
+bool getAutoratingEnable();
 bool streamer_spectator_mode();
 bool lobby_slashcommands_enabled();
 

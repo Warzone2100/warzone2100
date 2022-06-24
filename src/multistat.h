@@ -33,6 +33,8 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+#define WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL "https://wz2100-autohost.net/rating/"
+
 struct PLAYERSTATS
 {
 	uint32_t played = 0;  /// propagated stats.
