@@ -405,7 +405,7 @@ static const struct poptOption *getOptionsTable()
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
-		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url (containing \"{HASH}\"), when hosting"), N_("autorating") },
+		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url, when hosting"), N_("autorating") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1005,16 +1005,6 @@ const std::string &saveandquit_enabled()
 const std::string &wz_skirmish_test()
 {
 	return wz_test;
-}
-
-std::string autoratingUrl(std::string const &hash) {
-	auto url = wz_autoratingUrl;
-	auto h = wz_autoratingUrl.find_first_of("{HASH}");
-	if (h != std::string::npos)
-	{
-		url.replace(h, 6, hash);
-	}
-	return url;
 }
 
 void setAutoratingUrl(std::string url) {

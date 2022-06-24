@@ -57,6 +57,7 @@ struct PLAYERSTATS
 		uint8_t medal = 0;
 		uint8_t level = 0;
 		std::string elo;
+		std::string details;
 	};
 	Autorating autorating;
 

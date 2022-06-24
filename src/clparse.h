@@ -31,7 +31,6 @@ bool ParseCommandLineEarly(int argc, const char * const *argv);
 bool autogame_enabled();
 const std::string &saveandquit_enabled();
 const std::string &wz_skirmish_test();
-std::string autoratingUrl(std::string const &hash);
 void setAutoratingUrl(std::string url);
 std::string getAutoratingUrl();
 bool streamer_spectator_mode();
