@@ -30,6 +30,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/i18n.h"
 #include "lib/netplay/nettypes.h"
 
 #include "activity.h"
@@ -116,6 +117,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 	req.url = url;
 	req.setRequestHeader("WZ-Player-Hash", hash);
 	req.setRequestHeader("WZ-Player-Key", key);
+	req.setRequestHeader("WZ-Locale", getLanguage());
 	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, NetPlay.players[playerIndex].name, hash.c_str());
 	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
 		long httpStatusCode = response.httpStatusCode();
