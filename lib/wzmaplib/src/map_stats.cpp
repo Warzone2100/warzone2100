@@ -156,12 +156,12 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			{&statsConfig.powerGenerators, {&results.playerBalance.powerGenerators, &results.powerGeneratorsPerPlayer}},
 			{&statsConfig.powerModules, {&results.playerBalance.powerGenerators, nullptr}},
 			// factories
-			{&statsConfig.factories, {&results.playerBalance.factories, &results.regFactoriesPerPlayer}},
-			{&statsConfig.factoryModules, {&results.playerBalance.factories, nullptr}},
+			{&statsConfig.factories, {&results.playerBalance.regFactories, &results.regFactoriesPerPlayer}},
+			{&statsConfig.factoryModules, {&results.playerBalance.regFactories, nullptr}},
 			// vtol factories
-			{&statsConfig.vtolFactories, {&results.playerBalance.factories, &results.vtolFactoriesPerPlayer}},
+			{&statsConfig.vtolFactories, {&results.playerBalance.vtolFactories, &results.vtolFactoriesPerPlayer}},
 			// cyborg factories
-			{&statsConfig.cyborgFactories, {&results.playerBalance.factories, &results.cyborgFactoriesPerPlayer}},
+			{&statsConfig.cyborgFactories, {&results.playerBalance.cyborgFactories, &results.cyborgFactoriesPerPlayer}},
 			// research centers
 			{&statsConfig.researchCenters, {&results.playerBalance.researchCenters, &results.researchCentersPerPlayer}},
 			{&statsConfig.researchModules, {&results.playerBalance.researchCenters, nullptr}}
@@ -215,6 +215,8 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			}
 		}
 	}
+
+	results.playerBalance.factories = results.playerBalance.regFactories && results.playerBalance.vtolFactories && results.playerBalance.cyborgFactories;
 
 	for (auto& feature : *pFeatures)
 	{

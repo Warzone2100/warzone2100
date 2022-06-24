@@ -46,6 +46,10 @@ namespace WzMap {
 			bool powerGenerators = true;
 			// Whether all players have equal starting factories (of all types)
 			bool factories = true;
+			// Whether all players have equal starting factories (of each type)
+			bool regFactories = true;
+			bool vtolFactories = true;
+			bool cyborgFactories = true;
 			// Whether all players have equal starting research centers
 			bool researchCenters = true;
 		};
