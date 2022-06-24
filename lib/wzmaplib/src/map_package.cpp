@@ -228,6 +228,18 @@ static bool convertDateSlashesToHyphens(std::string& dateString)
 	return false;
 }
 
+static char asciiToLower(char c)
+{
+	return (c >= 'A' && c <= 'Z') ? (c - ('Z' - 'z')) : c;
+}
+
+static std::string strAsciiToLower(const std::string& str)
+{
+	std::string result(str);
+	std::transform(result.begin(), result.end(), result.begin(), asciiToLower);
+	return result;
+}
+
 optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	// 1.) Load file
@@ -375,7 +387,7 @@ optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProv
 		trim_whitespace(comment);
 
 		// Detect generator comment
-		if (comment.rfind("Made with FlaME", 0) == 0)
+		if (strAsciiToLower(comment).rfind("made with flame", 0) == 0)
 		{
 			if (!detectedGenerator.has_value())
 			{
