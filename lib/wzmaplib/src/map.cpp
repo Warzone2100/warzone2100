@@ -1551,7 +1551,8 @@ static optional<FileLoadResult<Feature>> loadBJOFeatureInit(const std::string& f
 		// ignore z component
 		feature.direction = DEG(direction);
 		// check player - ONLY POSSIBLY USED FOR CAMPAIGN, but prior code always ignored it??
-		if (player != mapMaxPlayers)
+		auto converted_player = bjoConvertPlayer(player, mapMaxPlayers);
+		if (converted_player != PLAYER_SCAVENGERS && static_cast<uint32_t>(converted_player) != mapMaxPlayers)
 		{
 			// Since the prior code did not actually utilize this value, just check and print a warning (for now) if we are ignoring it
 			debug(pCustomLogger, LOG_WARNING, "%s: Ignoring player(%" PRIi32 ") for feature %" PRIu32 "", path, player, i);
