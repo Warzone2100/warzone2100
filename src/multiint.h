@@ -176,7 +176,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 //Team chooser
 #define MULTIOP_TEAMS_START		102310			//List of teams
 #define MULTIOP_TEAMS_END		102341
-#define MULTIOP_TEAMSWIDTH		29
+#define MULTIOP_TEAMSWIDTH		28
 #define	MULTIOP_TEAMSHEIGHT		38
 
 #define MULTIOP_TEAMCHOOSER_FORM		102800
@@ -284,7 +284,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
 #define MULTIOP_COLOUR_START		10332
 #define MULTIOP_COLOUR_END		(MULTIOP_COLOUR_START + MAX_PLAYERS)
-#define MULTIOP_COLOUR_WIDTH		31
+#define MULTIOP_COLOUR_WIDTH		29
 
 #define MULTIOP_AI_FORM			(MULTIOP_COLOUR_END + 1)
 #define MULTIOP_AI_START		(MULTIOP_AI_FORM + 1)
