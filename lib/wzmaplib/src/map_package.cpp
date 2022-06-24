@@ -1435,7 +1435,16 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	}
 
 	// 5.) Output the level info file
-	if (!exportLevelDetails(m_levelDetails, levelFormat, exportIO->pathJoin(basePath, levelFileOutputFolder), *exportIO, pCustomLogger))
+	std::string fullPathToOutputLevelDetailsFolder = exportIO->pathJoin(basePath, levelFileOutputFolder);
+	if (!fullPathToOutputLevelDetailsFolder.empty())
+	{
+		if (!exportIO->makeDirectory(fullPathToOutputLevelDetailsFolder))
+		{
+			debug(pCustomLogger, LOG_WARNING, "Failed to create / verify destination directory: %s", fullPathToOutputLevelDetailsFolder.c_str());
+			// for now, treat this as non-fatal...
+		}
+	}
+	if (!exportLevelDetails(m_levelDetails, levelFormat, fullPathToOutputLevelDetailsFolder, *exportIO, pCustomLogger))
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to export level details");
 		return false;
