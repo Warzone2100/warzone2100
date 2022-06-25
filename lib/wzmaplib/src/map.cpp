@@ -606,7 +606,7 @@ static inline bool jsonGetBaseMapObjectInfo(T& mapObj, uint32_t jsonFileVersion,
 		mapObj.id = id;
 	}
 	// "position" must contain at least two components [x, y]
-	auto position = jsonGetListOfType<int>(jsonObj, "position", 2, maxComponentsPosition, jsonContext, pCustomLogger);
+	auto position = jsonGetListOfType<uint32_t>(jsonObj, "position", 2, maxComponentsPosition, jsonContext, pCustomLogger);
 	if (position.has_value())
 	{
 		mapObj.position.x = position.value()[0];

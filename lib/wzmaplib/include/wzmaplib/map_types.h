@@ -71,33 +71,30 @@ struct MapData
 
 struct WorldPos
 {
-	int x = 0;
-	int y = 0;
+	uint32_t x = 0;
+	uint32_t y = 0;
 };
 
-struct Structure
+struct Object
 {
-	optional<uint32_t> id;
 	std::string name;
 	WorldPos position;
 	uint16_t direction = 0;
+};
+struct Structure : public Object
+{
+	optional<uint32_t> id;
 	int8_t player = 0;  // -1 = scavs
 	uint8_t modules = 0; // capacity
 };
-struct Droid
+struct Droid : public Object
 {
 	optional<uint32_t> id;
-	std::string name;
-	WorldPos position;
-	uint16_t direction = 0;
 	int8_t player = 0;  // -1 = scavs
 };
-struct Feature
+struct Feature : public Object
 {
 	optional<uint32_t> id; // an explicit feature id# override, used by older formats
-	std::string name;
-	WorldPos position;
-	uint16_t direction = 0;
 	optional<int8_t> player;
 };
 
