@@ -111,38 +111,41 @@ function eventStartLevel()
 	camSetFactories({
 		"NorthFactory": {
 			assembly: "NorthAssembly",
-			order: CAM_ORDER_COMPROMISE,
+			order: CAM_ORDER_PATROL,
+			groupSize: 5,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 18)),
 			data: {
 				pos: [
 					camMakePos("NorthAssembly"),
 					camMakePos("ScavLabPos"),
 					camMakePos("RTLZ"),
 				],
-				radius: 8
+				interval: camSecondsToMilliseconds(20),
+				regroup: false,
+				count: -1,
 			},
-			groupSize: 5,
-			maxSize: 9,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 15)),
 			group: camMakeGroup("NorthTankGroup"),
 			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 		},
 		"WestFactory": {
 			assembly: "WestAssembly",
-			order: CAM_ORDER_COMPROMISE,
+			order: CAM_ORDER_PATROL,
+			groupSize: 5,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 13 : 12)),
 			data: {
 				pos: [
 					camMakePos("WestAssembly"),
 					camMakePos("GatesPos"),
 					camMakePos("ScavLabPos"),
 				],
-				radius: 8
+				interval: camSecondsToMilliseconds(20),
+				regroup: false,
+				count: -1,
 			},
-			groupSize: 5,
-			maxSize: 9,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 13 : 10)),
+
 			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 		},
 	});
 
-	queue("enableWestFactory", camSecondsToMilliseconds(30));
+	queue("enableWestFactory", camChangeOnDiff(camSecondsToMilliseconds(30)));
 }
