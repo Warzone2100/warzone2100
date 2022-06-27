@@ -113,7 +113,7 @@ function eventStartLevel()
 			assembly: "NorthAssembly",
 			order: CAM_ORDER_PATROL,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 18)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 15)),
 			data: {
 				pos: [
 					camMakePos("NorthAssembly"),
@@ -131,7 +131,7 @@ function eventStartLevel()
 			assembly: "WestAssembly",
 			order: CAM_ORDER_PATROL,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 13 : 12)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 13 : 10)),
 			data: {
 				pos: [
 					camMakePos("WestAssembly"),
