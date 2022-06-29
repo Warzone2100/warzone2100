@@ -679,26 +679,70 @@ bool findLastSave()
 static WzString suggestSaveName(const char *saveGamePath)
 {
 	const WzString levelName = getLevelName();
+	const std::string levelNameStr = levelName.toStdString();
 	const std::string cheatedSuffix = Cheated ? _("cheated") : "";
 	char saveNamePartial[64] = "\0";
 
 	if (bLoadSaveMode == SAVE_MISSIONEND || bLoadSaveMode == SAVE_INGAME_MISSION)
 	{
 		std::string campaignName;
+		std::string missionName = levelName.toStdString();
+		std::string endName = "End"; //last mission for one the campaigns
+		std::vector<std::string> levelNames = {};
+
 		if (levelName.startsWith("CAM_1") || levelName.startsWith("SUB_1"))
 		{
 			campaignName = "Alpha";
+			levelNames = {
+				"CAM_1A", "CAM_1B", "SUB_1_1", "SUB_1_2", "SUB_1_3", "CAM_1C",
+				"CAM_1CA", "SUB_1_4A", "SUB_1_5", "CAM_1A-C", "SUB_1_7", "SUB_1_D", "CAM_1END"
+			};
 		}
 		else if (levelName.startsWith("CAM_2") || levelName.startsWith("SUB_2"))
 		{
 			campaignName = "Beta";
+			levelNames = {
+				"CAM_2A", "SUB_2_1", "CAM_2B", "SUB_2_2", "CAM_2C", "SUB_2_5",
+				"SUB_2D", "SUB_2_6", "SUB_2_7", "SUB_2_8", "CAM_2END"
+			};
 		}
-		else if (levelName.startsWith("CAM_3") || levelName.startsWith("SUB_3"))
+		else if (levelName.startsWith("CAM_3") || levelName.startsWith("CAM3") || levelName.startsWith("SUB_3"))
 		{
 			campaignName = "Gamma";
+			levelNames = {
+				"CAM_3A", "SUB_3_1", "CAM_3B", "SUB_3_2", "CAM3A-B",
+				"CAM3C", "CAM3A-D1", "CAM3A-D2", "CAM_3_4"
+			};
 		}
-		ssprintf(saveNamePartial, "%s %s %s", campaignName.c_str(), levelName.toStdString().c_str(),
-				 cheatedSuffix.c_str());
+
+		for (size_t i = 0; i < levelNames.size(); ++i)
+		{
+			std::string fullMapName = levelNames[i];
+			if (levelNameStr.find(fullMapName) != std::string::npos)
+			{
+				bool endsWithS = levelNameStr[levelNameStr.length() - 1] == 'S';
+				if (!endsWithS && (levelNameStr.compare(fullMapName) != 0))
+				{
+					continue;
+				}
+				missionName = std::to_string(i + 1);
+				if ((i + 1) == levelNames.size())
+				{
+					missionName = endName;
+				}
+				if ((missionName.compare(endName) == 0) && !levelName.startsWith("CAM_3")) //Gamma end is an exception
+				{
+					break;
+				}
+				if (endsWithS)
+				{
+					missionName += " Base"; // The Project's base for the campaign map.
+				}
+				break;
+			}
+		}
+
+		ssprintf(saveNamePartial, "%s %s %s", campaignName.c_str(), missionName.c_str(), cheatedSuffix.c_str());
 	}
 	else if (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
 	{
