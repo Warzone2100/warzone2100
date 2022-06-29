@@ -683,7 +683,7 @@ static WzString suggestSaveName(const char *saveGamePath)
 	const std::string cheatedSuffix = Cheated ? _("cheated") : "";
 	char saveNamePartial[64] = "\0";
 
-	if (bLoadSaveMode == SAVE_MISSIONEND || bLoadSaveMode == SAVE_INGAME_MISSION)
+	if (!bMultiPlayer)
 	{
 		std::string campaignName;
 		std::string missionName = levelName.toStdString();
@@ -744,7 +744,7 @@ static WzString suggestSaveName(const char *saveGamePath)
 
 		ssprintf(saveNamePartial, "%s %s %s", campaignName.c_str(), missionName.c_str(), cheatedSuffix.c_str());
 	}
-	else if (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
+	else
 	{
 		int humanPlayers = 0;
 		for (int i = 0; i < MAX_PLAYERS; i++)
@@ -754,7 +754,7 @@ static WzString suggestSaveName(const char *saveGamePath)
 				humanPlayers++;
 			}
 		}
-		ssprintf(saveNamePartial, "%s %dp %s", levelName.toStdString().c_str(), humanPlayers, cheatedSuffix.c_str());
+		ssprintf(saveNamePartial, "%s %dp %s", mapNameWithoutTechlevel(levelNameStr.c_str()).c_str(), humanPlayers, cheatedSuffix.c_str());
 	}
 
 	WzString saveName = WzString(saveNamePartial).trimmed();
@@ -1144,9 +1144,9 @@ bool autoSave()
 	char savedate[PATH_MAX];
 	strftime(savedate, sizeof(savedate), "%F_%H%M%S", &timeinfo);
 
-	std::string withoutTechlevel = mapNameWithoutTechlevel(getLevelName());
+	std::string suggestedName = suggestSaveName(dir).toStdString();
 	char savefile[PATH_MAX];
-	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, withoutTechlevel.c_str(), savedate);
+	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, suggestedName.c_str(), savedate);
 	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
 	{
 		console(_("AutoSave %s"), savegameWithoutExtension(savefile));
