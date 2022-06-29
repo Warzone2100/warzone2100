@@ -746,15 +746,7 @@ static WzString suggestSaveName(const char *saveGamePath)
 	}
 	else
 	{
-		int humanPlayers = 0;
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (isHumanPlayer(i))
-			{
-				humanPlayers++;
-			}
-		}
-		ssprintf(saveNamePartial, "%s %dp %s", mapNameWithoutTechlevel(levelNameStr.c_str()).c_str(), humanPlayers, cheatedSuffix.c_str());
+		ssprintf(saveNamePartial, "%s %s", mapNameWithoutTechlevel(levelNameStr.c_str()).c_str(), cheatedSuffix.c_str());
 	}
 
 	WzString saveName = WzString(saveNamePartial).trimmed();
