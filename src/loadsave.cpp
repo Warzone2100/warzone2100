@@ -751,11 +751,38 @@ static WzString suggestSaveName(const char *saveGamePath)
 
 	WzString saveName = WzString(saveNamePartial).trimmed();
 	int similarSaveGames = 0;
-	WZ_PHYSFS_enumerateFolders(saveGamePath, [&saveName, &similarSaveGames](const char *dirName){
-		if (WzString(dirName).startsWith(saveName))
+	WZ_PHYSFS_enumerateFolders(saveGamePath, [&saveName, &similarSaveGames](const char *dirName) {
+		std::string dirNameStr = WzString(dirName).toStdString();
+		std::string saveNameStr = saveName.toStdString();
+		size_t pos = dirNameStr.find(saveNameStr);
+
+		if (pos == std::string::npos)
 		{
-			similarSaveGames++;
+			return true; //An original save name
 		}
+
+		std::string restOfSaveName = dirNameStr.substr(pos);
+		if (restOfSaveName.compare(saveNameStr) == 0)
+		{
+			++similarSaveGames; //direct match
+			return true;
+		}
+
+		//chop off at the last space+number, if it exists, and compare again
+		size_t lastSpace = restOfSaveName.find_last_of(" ");
+		if (lastSpace != std::string::npos)
+		{
+			if (isdigit(restOfSaveName[lastSpace + 1]))
+			{
+				std::string tempStr = restOfSaveName.substr(0, lastSpace);
+				if (tempStr.compare(saveNameStr) == 0)
+				{
+					++similarSaveGames;
+					return true;
+				}
+			}
+		}
+
 		return true;
 	});
 
@@ -763,6 +790,7 @@ static WzString suggestSaveName(const char *saveGamePath)
 	{
 		saveName += " " + WzString::number(similarSaveGames + 1);
 	}
+
 	return saveName;
 }
 
