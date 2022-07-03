@@ -483,6 +483,24 @@ function __camSetupConsoleForVictoryConditions()
 	queue("__camShowVictoryConditions", camSecondsToMilliseconds(0.5));
 }
 
+function __camShowBetaHint()
+{
+	return ((camDiscoverCampaign() === BETA_CAMPAIGN_NUMBER) && (difficulty === HARD || difficulty === INSANE));
+}
+
+function __camShowBetaHintEarly()
+{
+	if (!camDef(__camWinLossCallback) || (__camWinLossCallback !== CAM_VICTORY_PRE_OFFWORLD))
+	{
+		return;
+	}
+
+	if (__camShowBetaHint())
+	{
+		__camShowVictoryConditions();
+	}
+}
+
 function __camShowVictoryConditions()
 {
 	if (!camDef(__camNextLevel))
@@ -492,7 +510,7 @@ function __camShowVictoryConditions()
 
 	if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
 	{
-		if ((camDiscoverCampaign() === BETA_CAMPAIGN_NUMBER) && (difficulty === HARD || difficulty === INSANE))
+		if (__camShowBetaHint())
 		{
 			console(_("Hard / Insane difficulty hint:"));
 			console(_("Fortify a strong base across the map to protect yourself from the Collective"));
