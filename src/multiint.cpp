@@ -208,7 +208,6 @@ static void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayReadyBoxContainer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-// static void displayFaction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displaySpectatorAddButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -255,8 +254,6 @@ static int difficultyIcon(int difficulty);
 
 void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
 static void sendRoomChatMessage(char const *text);
-
-// static int factionIcon(FactionID faction);
 
 static bool multiplayPlayersReady();
 static bool multiplayIsStartingGame();
@@ -2503,13 +2500,6 @@ void WzMultiplayerOptionsTitleUI::closeTeamChooser()
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 }
 
-void WzMultiplayerOptionsTitleUI::closeFactionChooser()
-{
-	inlineChooserUp = -1;
-	widgDelete(psInlineChooserOverlayScreen, MULTIOP_FACCHOOSER_FORM);
-	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
-}
-
 void WzMultiplayerOptionsTitleUI::closeAiChooser()
 {
 	// AiChooser and DifficultyChooser currently use the same formID
@@ -2529,59 +2519,6 @@ void WzMultiplayerOptionsTitleUI::closePositionChooser()
 	// AiChooser / DifficultyChooser / PositionChooser currently use the same formID
 	// Just call closeAllChoosers() for now
 	closeAllChoosers();
-}
-
-void WzMultiplayerOptionsTitleUI::openFactionChooser(uint32_t player)
-{
-	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player number");
-	initInlineChooser(player);
-
-	// add form.
-	auto psParentForm = (W_FORM *)widgGetFromID(psWScreen, MULTIOP_PLAYERS);
-	auto psInlineChooserForm = addInlineChooserBlueForm(psInlineChooserOverlayScreen, psParentForm, MULTIOP_FACCHOOSER_FORM, "",
-		PLAYERBOX_X0,
-		std::max(playerRowY0(player), 0),
-		MULTIOP_ROW_WIDTH, MULTIOP_PLAYERHEIGHT);
-	ASSERT(psInlineChooserForm != nullptr, "Failed to create form");
-
-	// add the flags
-	int flagW = iV_GetImageWidth(FrontImages, IMAGE_FACTION_NORMAL) + 4;
-	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
-	int space = MULTIOP_ROW_WIDTH - 0 - flagW * NUM_FACTIONS;
-	int spaceDiv = NUM_FACTIONS;
-	space = std::min(space, 5 * spaceDiv);
-
-	auto psWeakTitleUI = std::weak_ptr<WzMultiplayerOptionsTitleUI>(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
-
-	for (unsigned int i = 0; i < NUM_FACTIONS; i++)
-	{
-		auto onClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
-			UDWORD id = button.id;
-			auto pStrongPtr = psWeakTitleUI.lock();
-			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
-
-			STATIC_ASSERT(MULTIOP_FACCHOOSER + NUM_FACTIONS - 1 <= MULTIOP_FACCHOOSER_END);
-			if (id >= MULTIOP_FACCHOOSER && id <= MULTIOP_FACCHOOSER + NUM_FACTIONS -1)
-			{
-				resetReadyStatus(false, true);
-				uint8_t idx = id - MULTIOP_FACCHOOSER;
-				SendFactionRequest(player, idx);
-				widgScheduleTask([pStrongPtr] {
-					pStrongPtr->closeFactionChooser();
-					pStrongPtr->addPlayerBox(true);
-				});
-			}
-		};
-
-		addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_FACCHOOSER + i,
-			i * (flagW * spaceDiv + space) / spaceDiv + PLAYERBOX_X0,  4, // x, y
-			flagW, flagH,  // w, h
-			to_localized_string(static_cast<FactionID>(i)),
-			IMAGE_FACTION_NORMAL+i, IMAGE_FACTION_NORMAL_HI+i, IMAGE_FACTION_NORMAL_HI+i, onClickHandler
-		);
-	}
-
-	inlineChooserUp = player;
 }
 
 static void changeTeam(UBYTE player, UBYTE team)
@@ -4096,26 +4033,6 @@ public:
 			}
 		});
 
-		// add player faction
-		// widget->factionButton = std::make_shared<W_BUTTON>();
-		// widget->factionButton->setGeometry(MULTIOP_TEAMSWIDTH+MULTIOP_COLOUR_WIDTH, 0, MULTIOP_FACTION_WIDTH, MULTIOP_PLAYERHEIGHT);
-		// widget->factionButton->UserData = playerIdx;
-		// widget->factionButton->displayFunction = displayFaction;
-		// widget->attach(widget->factionButton);
-		// widget->factionButton->addOnClickHandler([playerIdx, titleUI](W_BUTTON& button){
-		// 	auto strongTitleUI = titleUI.lock();
-		// 	ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
-		// 	if (playerIdx == selectedPlayer || NetPlay.isHost)
-		// 	{
-		// 		if (!NetPlay.players[playerIdx].isSpectator) // not a spectator
-		// 		{
-		// 			widgScheduleTask([strongTitleUI, playerIdx] {
-		// 				strongTitleUI->openFactionChooser(playerIdx);
-		// 			});
-		// 		}
-		// 	}
-		// });
-
 		// add ready button
 		widget->updateReadyButton();
 
@@ -4243,16 +4160,6 @@ public:
 		{
 			colorButton->setTip(nullptr);
 		}
-
-		// update faction tooltip
-		// if ((selectedPlayer == playerIdx || NetPlay.isHost) && (!NetPlay.players[playerIdx].isSpectator))
-		// {
-		// 	factionButton->setTip(_("Click to change player faction"));
-		// }
-		// else
-		// {
-		// 	factionButton->setTip(nullptr);
-		// }
 
 		// update player info box tooltip
 		std::string playerInfoTooltip;
@@ -4476,7 +4383,6 @@ private:
 	unsigned playerIdx = 0;
 	std::shared_ptr<W_BUTTON> teamButton;
 	std::shared_ptr<W_BUTTON> colorButton;
-	std::shared_ptr<W_BUTTON> factionButton;
 	std::shared_ptr<W_BUTTON> playerInfo;
 	std::shared_ptr<WIDGET> readyButtonContainer;
 	std::shared_ptr<W_BUTTON> difficultyChooserButton;
@@ -7376,17 +7282,6 @@ static int difficultyIcon(int difficulty)
 	}
 }
 
-// static int factionIcon(FactionID faction)
-// {
-// 	switch (faction)
-// 	{
-// 	case 0: return IMAGE_FACTION_NORMAL;
-// 	case 1: return IMAGE_FACTION_NEXUS;
-// 	case 2: return IMAGE_FACTION_COLLECTIVE;
-// 	default: return IMAGE_NO;	/// what??
-// 	}
-// }
-
 static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayDifficulty must have its pUserData initialized to a (DisplayDifficultyCache*)
@@ -7623,24 +7518,8 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
 		iV_DrawImageTc(FrontImages, IMAGE_PLAYERN, IMAGE_PLAYERN_TC, x + 3, y + 9, pal_GetTeamColour(player));
-		// FactionID faction = NetPlay.players[j].faction;
-		// iV_DrawImage(FrontImages, factionIcon(faction), x - 2, y - 3);
 	}
 }
-
-// void displayFaction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-// {
-// 	const int x = xOffset + psWidget->x();
-// 	const int y = yOffset + psWidget->y();
-// 	const int j = psWidget->UserData;
-
-// 	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
-// 	if (!NetPlay.players[j].fileSendInProgress() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
-// 	{
-// 		FactionID faction = NetPlay.players[j].faction;
-// 		iV_DrawImage(FrontImages, factionIcon(faction), x + 5, y + 8);
-// 	}
-// }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display blue box
