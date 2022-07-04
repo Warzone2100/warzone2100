@@ -99,6 +99,10 @@
 		"label": "hoverDefense8",
 		"pos": [1088, 14912]
 	},
+	"position_25": {
+		"label": "hoverDefense9",
+		"pos": [4864, 9856]
+	},
 
 	"area_0": {
 		"label": "RTLZ",

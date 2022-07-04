@@ -205,7 +205,8 @@ function eventStartLevel()
 					camMakePos("hoverDefense5"),
 					camMakePos("hoverDefense6"),
 					camMakePos("hoverDefense7"),
-					camMakePos("hoverDefense8")
+					camMakePos("hoverDefense8"),
+					camMakePos("hoverDefense9")
 				],
 				interval: camSecondsToMilliseconds(45),
 				regroup: false,
