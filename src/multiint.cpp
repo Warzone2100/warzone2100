@@ -1613,7 +1613,6 @@ void WzMultiplayerOptionsTitleUI::closeAllChoosers()
 {
 	closeColourChooser();
 	closeTeamChooser();
-	// closeFactionChooser();
 
 	// AiChooser, DifficultyChooser, and PositionChooser currently use the same form id, so to avoid a double-delete-later, do it once explicitly here
 	widgDelete(psInlineChooserOverlayScreen, MULTIOP_AI_FORM);
@@ -7506,6 +7505,17 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
+static int factionIcon(FactionID faction)
+{
+	switch (faction)
+	{
+	case 0: return IMAGE_FACTION_NORMAL;
+	case 1: return IMAGE_FACTION_NEXUS;
+	case 2: return IMAGE_FACTION_COLLECTIVE;
+	default: return IMAGE_NO;	/// what??
+	}
+}
+
 void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	const int x = xOffset + psWidget->x();
@@ -7518,6 +7528,8 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
 		iV_DrawImageTc(FrontImages, IMAGE_PLAYERN, IMAGE_PLAYERN_TC, x + 3, y + 9, pal_GetTeamColour(player));
+		FactionID faction = NetPlay.players[j].faction;
+		iV_DrawImageFileAnisotropic(FrontImages, factionIcon(faction), x, y, Vector2f(11, 9));
 	}
 }
 
