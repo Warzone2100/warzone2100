@@ -328,6 +328,15 @@ protected:
 		{
 			lvl = getDroidLevel(exp, player, commandBrainComponent);
 		}
+		else if (factory->pFunctionality->factory.psSubject->droidType == DROID_CONSTRUCT
+		|| factory->pFunctionality->factory.psSubject->droidType == DROID_CYBORG_CONSTRUCT
+		|| factory->pFunctionality->factory.psSubject->droidType == DROID_CYBORG_REPAIR
+		|| factory->pFunctionality->factory.psSubject->droidType == DROID_REPAIR
+		|| factory->pFunctionality->factory.psSubject->droidType == DROID_TRANSPORTER
+		|| factory->pFunctionality->factory.psSubject->droidType == DROID_SUPERTRANSPORTER)
+		{
+			lvl = 0;
+		}
 		else 
 		{
 			lvl = getDroidLevel(exp, player, nullBrainComponent);
@@ -335,7 +344,7 @@ protected:
 		const auto expgfx = getDroidRankGraphicFromLevel(lvl);
 		if (expgfx != UDWORD_MAX)
 		{
-			// FIXME: use offsets relative to template positon, not hardcoded values ?
+   		// FIXME: use offsets relative to template positon, not hardcoded values ?
    		iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);	
 		}
 	}
