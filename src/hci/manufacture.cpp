@@ -312,7 +312,7 @@ protected:
 	void drawNextDroidRank(int xOffset, int yOffset)
 	{
 		const auto factory = controller->getObjectAt(objectIndex);
-		if (!factory) 
+		if (!factory)
 		{
 			return;
 		}
@@ -337,15 +337,15 @@ protected:
 		{
 			lvl = 0;
 		}
-		else 
+		else
 		{
 			lvl = getDroidLevel(exp, player, nullBrainComponent);
 		}
 		const auto expgfx = getDroidRankGraphicFromLevel(lvl);
 		if (expgfx != UDWORD_MAX)
 		{
-   		// FIXME: use offsets relative to template positon, not hardcoded values ?
-   		iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);	
+			// FIXME: use offsets relative to template positon, not hardcoded values ?
+			iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);	
 		}
 	}
 
