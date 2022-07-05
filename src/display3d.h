@@ -125,6 +125,7 @@ extern const Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/
 UDWORD  getDroidRankGraphic(DROID *psDroid);
+UDWORD  getDroidRankGraphicFromLevel(unsigned int level);
 
 void setSkyBox(const char *page, float mywind, float myscale);
 
