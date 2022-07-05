@@ -1272,7 +1272,7 @@
 		"effectSize": 25,
 		"explosionWav": "smlexpl.ogg",
 		"facePlayer": 1,
-		"firePause": 36,
+		"firePause": 40,
 		"flags": "ShootAir",
 		"flightGfx": "FXTracer.PIE",
 		"flightSpeed": 2250,
