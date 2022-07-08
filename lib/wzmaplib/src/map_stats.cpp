@@ -38,6 +38,43 @@ static void incrementPlayerEntityCount(std::vector<std::unordered_map<std::strin
 	playerEntityCounts[player][entity]++;
 }
 
+struct TileInfo {
+	Object* psObj = nullptr;
+};
+struct MapTileInfo {
+
+	MapTileInfo(uint32_t mapWidth, uint32_t mapHeight)
+	: tileInfo(mapWidth * mapHeight)
+	, mapWidth(mapWidth)
+	, mapHeight(mapHeight)
+	{ }
+
+	std::vector<TileInfo> tileInfo;
+	uint32_t mapWidth = 0;
+	uint32_t mapHeight = 0;
+};
+
+static bool addObjectToTile(MapTileInfo& mapTiles, Object* obj)
+{
+	int32_t mapPosX = map_coord(obj->position.x);
+	int32_t mapPosY = map_coord(obj->position.y);
+	if (mapPosX < 0 || static_cast<uint32_t>(mapPosX) > mapTiles.mapWidth)
+	{
+		return false;
+	}
+	if (mapPosY < 0 || static_cast<uint32_t>(mapPosY) > mapTiles.mapHeight)
+	{
+		return false;
+	}
+	TileInfo& tileInfo = mapTiles.tileInfo[mapPosX + (mapPosY * mapTiles.mapWidth)];
+	if (tileInfo.psObj != nullptr)
+	{
+		return false;
+	}
+	tileInfo.psObj = obj;
+	return true;
+}
+
 optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfiguration statsConfig)
 {
 	MapStats results;
@@ -53,6 +90,11 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 
 	results.mapWidth = pMapData->width;
 	results.mapHeight = pMapData->height;
+
+	// Used to attempt to de-dupe oil derricks (resource extractor structures) and oil wells (oil resource features)
+	//  - If an oil derrick structure is placed on the map, but there is no oil well feature beneath, it is still converted to an oil well when destroyed - including if starting at no bases.
+	//	- So to get a more accurate count of oilWells on a map (as treated by the game), count tiles that have an oil well feature or resource extractor structure.
+	MapTileInfo oilResourceTileObjects(results.mapWidth, results.mapHeight);
 
 	// Check droids
 	std::vector<std::unordered_map<std::string, uint32_t>> playerUnitCounts(mapMaxPlayers);
@@ -94,7 +136,10 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			results.scavengerStructs++;
 			if (statsConfig.resourceExtractors.count(structure.name) > 0)
 			{
-				results.scavengerResourceExtractors++;
+				if (addObjectToTile(oilResourceTileObjects, &structure))
+				{
+					results.scavengerResourceExtractors++;
+				}
 			}
 			else if ((statsConfig.factories.count(structure.name) > 0) || (statsConfig.vtolFactories.count(structure.name) > 0) || (statsConfig.cyborgFactories.count(structure.name) > 0))
 			{
@@ -108,7 +153,19 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 		}
 		else
 		{
-			incrementPlayerEntityCount(playerStructCounts, structure.player, structure.name);
+			bool countStructure = true;
+			if (statsConfig.resourceExtractors.count(structure.name) > 0)
+			{
+				if (!addObjectToTile(oilResourceTileObjects, &structure))
+				{
+					// Ignore overlapping resource extractor structure
+					countStructure = false;
+				}
+			}
+			if (countStructure)
+			{
+				incrementPlayerEntityCount(playerStructCounts, structure.player, structure.name);
+			}
 			if (structure.modules > 0)
 			{
 				if (statsConfig.powerGenerators.count(structure.name) > 0)
@@ -221,6 +278,18 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 	for (auto& feature : *pFeatures)
 	{
 		if (statsConfig.oilResources.count(feature.name) > 0)
+		{
+			if (!addObjectToTile(oilResourceTileObjects, &feature))
+			{
+				// Ignore oil resource feature that is "on top" of existing resource extractor structure (or another oil resource feature)
+				continue;
+			}
+		}
+	}
+
+	for (auto& tileInfo : oilResourceTileObjects.tileInfo)
+	{
+		if (tileInfo.psObj)
 		{
 			results.oilWellsTotal++;
 		}
