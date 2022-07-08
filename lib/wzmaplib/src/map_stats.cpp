@@ -122,6 +122,17 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 	{
 		results.playerBalance.units = true;
 	}
+	optional<uint32_t> minUnitsCount;
+	for (const auto& unitCounts : playerUnitCounts)
+	{
+		uint32_t playerUnitCount = 0;
+		for (const auto& unitCount : unitCounts)
+		{
+			playerUnitCount += unitCount.second;
+		}
+		minUnitsCount = std::min(minUnitsCount.value_or(playerUnitCount), playerUnitCount);
+	}
+	results.unitsPerPlayer = minUnitsCount.value_or(0);
 
 	std::string factoryModuleName = (!statsConfig.factoryModules.empty()) ? *(statsConfig.factoryModules.begin()) : "<unknown factory module>";
 	std::string researchModuleName = (!statsConfig.researchModules.empty()) ? *(statsConfig.researchModules.begin()) : "<unknown research module>";

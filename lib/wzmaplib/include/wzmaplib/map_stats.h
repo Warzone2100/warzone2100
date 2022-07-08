@@ -67,6 +67,7 @@ namespace WzMap {
 		uint32_t oilWellsTotal = 0;
 		// Per-player counts of various starting droids and structs
 		// NOTE: If the corresponding playerBalance value is false, these are equivalent to the "minimum" of that entity type per player
+		uint32_t unitsPerPlayer = 0;
 		uint32_t resourceExtractorsPerPlayer = 0;
 		uint32_t powerGeneratorsPerPlayer = 0;
 		uint32_t regFactoriesPerPlayer = 0;
