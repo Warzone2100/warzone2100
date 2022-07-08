@@ -2331,7 +2331,7 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 
 	// only in debug/cheat mode do we enable all time compression speeds.
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if (!dbgInputManager.debugMappingsAllowed() && (newMod >= 2 || newMod <= 0))  // 2 = max officially allowed time compression
+	if (!dbgInputManager.debugMappingsAllowed() && (newMod > 2 || newMod <= 0))  // 2 = max officially allowed time compression
 	{
 		return;
 	}
