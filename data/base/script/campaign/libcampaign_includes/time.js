@@ -4,22 +4,50 @@
 // Useful for setting the time values for queue(), setTimer(), or setMissionTime().
 ////////////////////////////////////////////////////////////////////////////////
 
-function camSecondsToMilliseconds(sec)
+//;; ## camSecondsToMilliseconds(seconds)
+//;;
+//;; Returns the amount of milliseconds in `seconds`.
+//;;
+//;; @param {number} seconds
+//;; @returns {number}
+//;;
+function camSecondsToMilliseconds(seconds)
 {
-	return sec * MILLISECONDS_IN_SECOND;
+	return seconds * MILLISECONDS_IN_SECOND;
 }
 
-function camMinutesToMilliseconds(min)
+//;; ## camMinutesToMilliseconds(minutes)
+//;;
+//;; Returns the amount of milliseconds in `minutes`.
+//;;
+//;; @param {number} minutes
+//;; @returns {number}
+//;;
+function camMinutesToMilliseconds(minutes)
 {
-	return min * camSecondsToMilliseconds(SECONDS_IN_MINUTE);
+	return minutes * camSecondsToMilliseconds(SECONDS_IN_MINUTE);
 }
 
-function camMinutesToSeconds(min)
+//;; ## camMinutesToSeconds(minutes)
+//;;
+//;; Returns the amount of seconds in `minutes`.
+//;;
+//;; @param {number} minutes
+//;; @returns {number}
+//;;
+function camMinutesToSeconds(minutes)
 {
-	return min * SECONDS_IN_MINUTE;
+	return minutes * SECONDS_IN_MINUTE;
 }
 
-function camHoursToSeconds(hour)
+//;; ## camHoursToSeconds(hours)
+//;;
+//;; Returns the amount of seconds in `hours`.
+//;;
+//;; @param {number} hours
+//;; @returns {number}
+//;;
+function camHoursToSeconds(hours)
 {
-	return hour * camMinutesToSeconds(MINUTES_IN_HOUR);
+	return hours * camMinutesToSeconds(MINUTES_IN_HOUR);
 }

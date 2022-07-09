@@ -122,7 +122,12 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 	__camNextLevel = nextLevel;
 }
 
-//Checks for extra win conditions defined in level scripts, if any.
+//;; ## camCheckExtraObjective()
+//;;
+//;; Checks for extra win conditions defined in level scripts being met, if any.
+//;;
+//;; @returns {boolean|undefined}
+//;;
 function camCheckExtraObjective()
 {
 	var extraObjMet = true;
@@ -146,14 +151,26 @@ function camCheckExtraObjective()
 	return extraObjMet;
 }
 
-//Message(s) the mission script can set to further explain specific victory conditions.
-//Allows a single string or an array of strings.
+//;; ## camSetExtraObjectiveMessage(message)
+//;;
+//;; Message(s) the mission script can set to further explain specific victory conditions.
+//;; Allows a single string or an array of strings.
+//;;
+//;; @param {string|Object[]} message
+//;; @returns {void}
+//;;
 function camSetExtraObjectiveMessage(message)
 {
 	__camExtraObjectiveMessage = message;
 }
 
-//If the script wants to allow __camSetupConsoleForVictoryConditions() to clear the console.
+//;; ## camClearConsoleOnVictoryMessage(clear)
+//;;
+//;; If the script wants to allow `__camSetupConsoleForVictoryConditions()` to clear the console.
+//;;
+//;; @param {boolean} clear
+//;; @returns {void}
+//;;
 function camClearConsoleOnVictoryMessage(clear)
 {
 	__camAllowVictoryMsgClear = clear;
