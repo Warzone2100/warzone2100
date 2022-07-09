@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-14 20:11\n"
+"PO-Revision-Date: 2022-07-09 22:52\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -19102,7 +19102,7 @@ msgstr "ID %u - Multiplikator: %u"
 #: src/structure.cpp:5423
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "ID %u - Produktionsleistung: %u - BuildPointsRemaining: %u - Widerstand: %d / %d"
 
 #: src/structure.cpp:5432
 #, c-format
