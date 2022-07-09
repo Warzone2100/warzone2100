@@ -3,7 +3,12 @@
 // Nexus related functionality.
 ////////////////////////////////////////////////////////////////////////////////
 
-//Play a random laugh.
+//;; ## camNexusLaugh()
+//;;
+//;; Play a random NEXUS laugh.
+//;;
+//;; @returns {void}
+//;;
 function camNexusLaugh()
 {
 	const LAUGH_CHANCE = 45;
@@ -14,6 +19,15 @@ function camNexusLaugh()
 	}
 }
 
+//;; ## camAbsorbPlayer([who[, to]])
+//;;
+//;; Completely give all of player `who` droids and structures to player `to`.
+//;; Will default to `CAM_HUMAN_PLAYER` and `NEXUS` respectively.
+//;;
+//;; @param {number} [who]
+//;; @param {number} [to]
+//;; @returns {void}
+//;;
 function camAbsorbPlayer(who, to)
 {
 	if (!camDef(who))
@@ -50,7 +64,15 @@ function camAbsorbPlayer(who, to)
 	changePlayerColour(who, to);
 }
 
-//Steal a droid or structure from a player.
+//;; ## camHackIntoPlayer([player[, to]])
+//;;
+//;; Steal a droid or structure from a player if the NEXUS hack state is active.
+//;; Will default to `CAM_HUMAN_PLAYER` and `NEXUS` respectively.
+//;;
+//;; @param {number} [player]
+//;; @param {number} [to]
+//;; @returns {void}
+//;;
 function camHackIntoPlayer(player, to)
 {
 	if (__camNexusActivated === false)
@@ -127,11 +149,24 @@ function camHackIntoPlayer(player, to)
 	}
 }
 
+//;; ## camSetNexusState(flag)
+//;;
+//;; Turn on/off the NEXUS hacking state feature.
+//;;
+//;; @param {boolean} flag
+//;; @returns {void}
+//;;
 function camSetNexusState(flag)
 {
 	__camNexusActivated = flag;
 }
 
+//;; ## camGetNexusState()
+//;;
+//;; Returns the activation state of the NEXUS hacking feature.
+//;;
+//;; @returns {boolean}
+//;;
 function camGetNexusState()
 {
 	return __camNexusActivated;

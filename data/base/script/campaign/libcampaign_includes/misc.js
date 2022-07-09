@@ -399,7 +399,13 @@ function camBreakAlliances()
 	}
 }
 
-// Picks a random coordinate anywhere on the edge of the map.
+//;; ## camGenerateRandomMapEdgeCoordinate(reachPosition)
+//;;
+//;; Returns a random coordinate anywhere on the edge of the map that reachs a position.
+//;;
+//;; @param {Object} reachPosition
+//;; @returns {Object}
+//;;
 function camGenerateRandomMapEdgeCoordinate(reachPosition)
 {
 	let limits = getScrollLimits();
@@ -451,7 +457,13 @@ function camGenerateRandomMapEdgeCoordinate(reachPosition)
 	return loc;
 }
 
-// Picks a random coordinate anywhere on the map.
+//;; ## camGenerateRandomMapCoordinate(reachPosition)
+//;;
+//;; Returns a random coordinate anywhere on the map
+//;;
+//;; @param {Object} reachPosition
+//;; @returns {Object}
+//;;
 function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObjectRadius)
 {
 	if (!camDef(distFromReach))
@@ -498,7 +510,12 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 	return pos;
 }
 
-// Figures out what campaign we are in without reliance on the source at all.
+//;; ## camDiscoverCampaign()
+//;;
+//;; Figures out what campaign we are in without reliance on the source at all.
+//;;
+//;; @returns {number}
+//;;
 function camDiscoverCampaign()
 {
 	for (let i = 0, len = ALPHA_LEVELS.length; i < len; ++i)
