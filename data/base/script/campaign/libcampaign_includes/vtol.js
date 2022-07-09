@@ -5,19 +5,31 @@
 // Vtol rearming is handled in group management.
 ////////////////////////////////////////////////////////////////////////////////
 
-// Setup hit and runner VTOLs. NOTE: Will almost immediately spawn VTOLs upon calling this function.
-// Player: What player number the VTOLs will belong to.
-// StartPos: Starting position object where VTOLs will spawn. Can be an array. Use undefined for random map edge location.
-// ExitPos: Exit position object where VTOLs will despawn at.
-// Templates: An array of templates that the spawn uses.
-// Timer: How much time in milliseconds the VTOLs will wait to spawn again.
-// Obj: A game object that will stop the spawn when it no longer exists. May be undefined for no explicit end condition.
-// Extras: An object with possible members:
-//		limit: Numeric limit of a VTOL design in regards to the parameter Templates. May be an array paired to Templates.
-//		alternate: A boolean to force the spawn to use one of the designs at a time in parameter Templates.
-//		altIdx: Which design index the spawn will first cycle through the list of templates from.
-//		minVTOLs: Minimum amount of VTOLs that will spawn.
-//		maxRandomVTOLs: Random amount of VTOLs that will spawn in addition to minVTOLs.
+//;; ## camSetVtolData(player, startPos, exitPos, templates, timer, [obj[, extras]])
+//;;
+//;; Setup hit and runner VTOLs. NOTE: Will almost immediately spawn VTOLs upon calling this function.
+//;; `Player`: What player number the VTOLs will belong to.
+//;; `StartPos`: Starting position object where VTOLs will spawn. Can be an array. Use undefined for random map edge location.
+//;; `ExitPos`: Exit position object where VTOLs will despawn at.
+//;; `Templates`: An array of templates that the spawn uses.
+//;; `Timer`: How much time in milliseconds the VTOLs will wait to spawn again.
+//;; `Obj`: A game object that will stop the spawn when it no longer exists. May be undefined for no explicit end condition.
+//;; `Extras`: An object with possible members:
+//;;		`limit`: Numeric limit of a VTOL design in regards to the parameter Templates. May be an array paired to Templates.
+//;;		`alternate`: A boolean to force the spawn to use one of the designs at a time in parameter Templates.
+//;;		`altIdx`: Which design index the spawn will first cycle through the list of templates from.
+//;;		`minVTOLs`: Minimum amount of VTOLs that will spawn.
+//;;		`maxRandomVTOLs`: Random amount of VTOLs that will spawn in addition to minVTOLs.
+//;;
+//;; @param {number} player
+//;; @param {Object|Object[]|undefined} startPos
+//;; @param {Object} exitPos
+//;; @param {Object[]} templates
+//;; @param {number} timer
+//;; @param {Object} obj
+//;; @param {Object} extras
+//;; @returns {void}
+//;;
 function camSetVtolData(player, startPos, exitPos, templates, timer, obj, extras)
 {
 	__camVtolDataSystem.push({
@@ -34,8 +46,15 @@ function camSetVtolData(player, startPos, exitPos, templates, timer, obj, extras
 	});
 }
 
-// Sets the active status of a VTOL spawn point. The identifier can either be the
-// the index number or the label of the object that stops the spawn naturally.
+//;; ## camSetVtolSpawnState(state, identifier)
+//;;
+//;; Sets the active status of a VTOL spawn point. The identifier can either be the
+//;; the index number or the label of the object that stops the spawn naturally.
+//;;
+//;; @param {boolean} state
+//;; @param {number|string} identifier
+//;; @returns {void}
+//;;
 function camSetVtolSpawnState(state, identifier)
 {
 	if (typeof identifier === "number")
@@ -59,6 +78,13 @@ function camSetVtolSpawnState(state, identifier)
 	}
 }
 
+//;; ## camSetVtolSpawnStateAll(state)
+//;;
+//;; Sets the active status of all VTOL spawns to `state`.
+//;;
+//;; @param {boolean} state
+//;; @returns {void}
+//;;
 function camSetVtolSpawnStateAll(state)
 {
 	for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
