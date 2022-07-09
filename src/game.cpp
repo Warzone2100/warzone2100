@@ -4649,6 +4649,8 @@ static bool loadMainFileFinal(const std::string &fileName)
 		{
 			add_to_experience_queue(index, json_variant(v).toInt());
 		}
+		setMultiPlayRecentScore(index, save.value("recentScore", 0).toUInt());
+		setMultiPlayUnitsKilled(index, save.value("recentKills", 0).toUInt());
 		save.nextArrayItem();
 	}
 	save.endArray();
@@ -4742,6 +4744,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("ip", NetPlay.players[i].IPtextAddress);
 		save.setValue("name", getPlayerName(i));
 		save.setValue("nameAI", getAIName(i));
+		save.setValue("recentScore", getMultiPlayRecentScore(i));
+		save.setValue("recentKills", getMultiPlayUnitsKilled(i));
 
 		save.nextArrayItem();
 	}

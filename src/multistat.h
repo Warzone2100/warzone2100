@@ -88,6 +88,9 @@ optional<StoredPlayerOptions> getStoredPlayerOptions(std::string const &name, Ec
 void storePlayerMuteOption(std::string const &name, EcKey const &key, bool muted);
 
 uint32_t getMultiPlayUnitsKilled(uint32_t player);
+void setMultiPlayUnitsKilled(uint32_t player, uint32_t kills);
+uint32_t getMultiPlayRecentScore(uint32_t player);
+void setMultiPlayRecentScore(uint32_t player, uint32_t score);
 uint32_t getSelectedPlayerUnitsKilled();
 
 bool saveMultiStatsToJSON(nlohmann::json& json);

@@ -988,25 +988,15 @@ private:
 			char lastString[20] = {0};
 
 			// Let's use the real score for MP games
-			if (NetPlay.bComms)
+			if (Cheated && NetPlay.bComms)
 			{
-				if (Cheated)
-				{
-					sstrcpy(scoreString, "(cheated)");
-				}
-				else
-				{
-					ssprintf(scoreString, "%d", getMultiStats(playerWidget.player).recentScore);
-				}
-
-				ssprintf(killsString, "%d", getMultiStats(playerWidget.player).recentKills);
+				sstrcpy(scoreString, "(cheated)");
 			}
 			else
 			{
-				// estimate of scores and kills for skirmish games
-				ssprintf(scoreString, "%d", ingame.skScores[playerWidget.player][0]);
-				ssprintf(killsString, "%d", ingame.skScores[playerWidget.player][1]);
+				ssprintf(scoreString, "%d", getMultiStats(playerWidget.player).recentScore);
 			}
+			ssprintf(killsString, "%d", getMultiStats(playerWidget.player).recentKills);
 
 			//only show player's and allies' unit counts, and nobody elses.
 			if (isAlly || gInputManager.debugManager().debugMappingsAllowed())
