@@ -363,13 +363,6 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	st->recentScore = 0;
 	st->recentPowerLost = 0;
 
-	// clear any skirmish stats.
-	for (size_t size = 0; size < MAX_PLAYERS; size++)
-	{
-		ingame.skScores[size][0] = 0;
-		ingame.skScores[size][1] = 0;
-	}
-
 	return true;
 }
 
@@ -410,21 +403,16 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 
 	if (NetPlay.bComms)
 	{
-		// killing and getting killed by scavengers does not influence scores in MP games
-		if (attacker != scavengerSlot() && defender != scavengerSlot())
+		if ((attacker == scavengerSlot()) || (defender == scavengerSlot()))
 		{
-			// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-			playerStats[attacker].totalScore  += 2 * inflicted;
-			playerStats[attacker].recentScore += 2 * inflicted;
-			playerStats[defender].totalScore  -= inflicted;
-			playerStats[defender].recentScore -= inflicted;
+			return; // damaging and getting damaged by scavengers does not influence scores in MP games
 		}
+		playerStats[attacker].totalScore  += 2 * inflicted;
+		playerStats[defender].totalScore  -= inflicted;
 	}
-	else
-	{
-		ingame.skScores[attacker][0] += 2 * inflicted;  // increment skirmish players rough score.
-		ingame.skScores[defender][0] -= inflicted;  // increment skirmish players rough score.
-	}
+
+	playerStats[attacker].recentScore += 2 * inflicted;
+	playerStats[defender].recentScore -= inflicted;
 }
 
 // update games played.
@@ -481,27 +469,28 @@ static inline uint32_t calcObjectCost(const BASE_OBJECT *psObj)
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 {
-	if (player < MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
-		if (NetPlay.bComms)
-		{
-			// killing scavengers does not count in MP games
-			if (psKilled != nullptr && psKilled->player != scavengerSlot())
-			{
-				// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-				++playerStats[player].totalKills;
-				++playerStats[player].recentKills;
-				if (psKilled->player < MAX_PLAYERS)
-				{
-					playerStats[psKilled->player].recentPowerLost += static_cast<uint64_t>(calcObjectCost(psKilled));
-				}
-			}
-		}
-		else
-		{
-			ingame.skScores[player][1]++;
-		}
+		return;
 	}
+	if (NetPlay.bComms)
+	{
+		if (psKilled != nullptr)
+		{
+			if (psKilled->player == scavengerSlot())
+			{
+				return; // killing scavengers does not count in MP games
+			}
+			if (psKilled->player < MAX_PLAYERS)
+			{
+				playerStats[psKilled->player].recentPowerLost += static_cast<uint64_t>(calcObjectCost(psKilled));
+			}
+			++playerStats[player].totalKills;
+			++playerStats[player].recentKills;
+		}
+		return;
+	}
+	++playerStats[player].recentKills;
 }
 
 class KnownPlayersDB {
@@ -844,17 +833,22 @@ void storePlayerMuteOption(std::string const &name, EcKey const &key, bool muted
 
 uint32_t getMultiPlayUnitsKilled(uint32_t player)
 {
-	// Let's use the real score for MP games
-	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-	if (NetPlay.bComms)
-	{
-		return getMultiStats(player).recentKills;
-	}
-	else
-	{
-		// estimated kills
-		return static_cast<uint32_t>(ingame.skScores[player][1]);
-	}
+	return getMultiStats(player).recentKills;
+}
+
+void setMultiPlayUnitsKilled(uint32_t player, uint32_t kills)
+{
+	playerStats[player].recentKills = kills;
+}
+
+uint32_t getMultiPlayRecentScore(uint32_t player)
+{
+	return getMultiStats(player).recentScore;
+}
+
+void setMultiPlayRecentScore(uint32_t player, uint32_t score)
+{
+	playerStats[player].recentScore = score;
 }
 
 uint32_t getSelectedPlayerUnitsKilled()
@@ -946,13 +940,6 @@ bool loadMultiStatsFromJSON(const nlohmann::json& json)
 	for (size_t idx = 0; idx < json.size(); idx++)
 	{
 		playerStats[idx] = json.at(idx).get<PLAYERSTATS>();
-	}
-
-	// clear any skirmish stats.
-	for (size_t size = 0; size < MAX_PLAYERS; size++)
-	{
-		ingame.skScores[size][0] = 0;
-		ingame.skScores[size][1] = 0;
 	}
 
 	return true;

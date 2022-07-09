@@ -74,6 +74,7 @@
 #include "template.h"
 #include "multiint.h"
 #include "challenge.h"
+#include "multistat.h"
 
 #include "wzapi.h"
 #include "qtscript.h"
@@ -294,8 +295,8 @@ static nlohmann::ordered_json fillMainModel()
 static nlohmann::ordered_json fillPlayerModel(int i)
 {
 	nlohmann::ordered_json result = nlohmann::ordered_json::object();
-	result["ingame.skScores score"] = ingame.skScores[i][0];
-	result["ingame.skScores kills"] = ingame.skScores[i][1];
+	result["playerStats score"] = getMultiPlayRecentScore(i);
+	result["playerStats kills"] = getMultiPlayUnitsKilled(i);
 	result["NetPlay.players.name"] = NetPlay.players[i].name;
 	result["NetPlay.players.position"] = NetPlay.players[i].position;
 	result["NetPlay.players.colour"] = NetPlay.players[i].colour;
