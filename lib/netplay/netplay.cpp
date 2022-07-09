@@ -641,6 +641,7 @@ void NET_InitPlayers(bool initTeams, bool initSpectator)
 		clearPlayerName(i);
 		NETinitQueue(NETnetQueue(i));
 	}
+	resetRecentScoreData();
 	NETinitQueue(NETbroadcastQueue());
 
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero

@@ -92,6 +92,7 @@ void setMultiPlayUnitsKilled(uint32_t player, uint32_t kills);
 uint32_t getMultiPlayRecentScore(uint32_t player);
 void setMultiPlayRecentScore(uint32_t player, uint32_t score);
 uint32_t getSelectedPlayerUnitsKilled();
+void resetRecentScoreData();
 
 bool saveMultiStatsToJSON(nlohmann::json& json);
 bool loadMultiStatsFromJSON(const nlohmann::json& json);
