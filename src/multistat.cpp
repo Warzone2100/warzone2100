@@ -863,6 +863,16 @@ uint32_t getSelectedPlayerUnitsKilled()
 	}
 }
 
+void resetRecentScoreData()
+{
+	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	{
+		playerStats[i].recentKills = 0;
+		playerStats[i].recentScore = 0;
+		playerStats[i].recentPowerLost = 0;
+	}
+}
+
 // MARK: -
 
 inline void to_json(nlohmann::json& j, const EcKey& k) {

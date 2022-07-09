@@ -7098,21 +7098,6 @@ void WzMultiplayerOptionsTitleUI::start()
 		ingame.localOptionsReceived = false;
 
 		PLAYERSTATS	nullStats;
-		if (!NetPlay.bComms)
-		{
-			// ONLY DO THIS FOR LOCAL SKIRMISH (NOT MULTIPLAY)
-			// This is probably not the right place for this, and breaks multiplayer games (without the bComms check above), but // TODO FIXME: Figure out a better place to put this
-			// See: https://github.com/Warzone2100/warzone2100/pull/2527
-			for (size_t i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-			{
-				if (i == realSelectedPlayer)
-				{
-					continue;
-				}
-
-				setMultiStats(i, nullStats, true);
-			}
-		}
 
 		loadMultiStats((char*)sPlayer, &nullStats);
 		lookupRatingAsync(selectedPlayer);
