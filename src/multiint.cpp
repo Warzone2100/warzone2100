@@ -8397,7 +8397,7 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	size_t replaySpectatorIndex = NetPlay.players.size() - 1;
 	NET_InitPlayer(replaySpectatorIndex, false);  // re-init everything
 	NetPlay.players[replaySpectatorIndex].allocated = true;
-	setPlayerName(replaySpectatorIndex, "Replay Viewer");
+	sstrcpy(NetPlay.players[replaySpectatorIndex].name, "Replay Viewer"); //setPlayerName() asserts cause this index is now equal to MAX_CONNECTED_PLAYERS
 	NetPlay.players[replaySpectatorIndex].isSpectator = true;
 
 	selectedPlayer = replaySpectatorIndex;
