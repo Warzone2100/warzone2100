@@ -779,7 +779,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		return true;
 	}
 	NewSaveGamePath = getNewSaveGamePathFromMode(bLoadSaveMode);
-	if (id == LOADENTRY_START && modeLoad) // [auto] or [..], ignore click for saves
+	if (id == LOADENTRY_START && modeLoad && !modeReplay) // [auto] or [..], ignore click for saves
 	{
 		int iLoadSaveMode = (int)bLoadSaveMode; // for evil integer arithmetics
 		bLoadSaveMode = (enum LOADSAVE_MODE)(iLoadSaveMode ^ 16); // toggle _AUTO bit
