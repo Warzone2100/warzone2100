@@ -258,7 +258,7 @@
 		"sequenceName": "res_struttech.ogg",
 		"text": [
 			"New Base Structure Available",
-			"Enables command turret research",
+			"Must be built to produce commanders",
 			"Directs and collates information for command turrets",
 			"Controls up to ten commanders"
 		]
