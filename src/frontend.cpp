@@ -1983,6 +1983,7 @@ static char const *gameOptionsDifficultyString()
 {
 	switch (getDifficultyLevel())
 	{
+	case DL_SUPER_EASY: return _("Super Easy");
 	case DL_EASY: return _("Easy");
 	case DL_NORMAL: return _("Normal");
 	case DL_HARD: return _("Hard");
@@ -2379,7 +2380,7 @@ bool runGameOptionsMenu()
 
 	case FRONTEND_DIFFICULTY:
 	case FRONTEND_DIFFICULTY_R:
-		setDifficultyLevel(seqCycle(getDifficultyLevel(), DL_EASY, 1, DL_INSANE));
+		setDifficultyLevel(seqCycle(getDifficultyLevel(), DL_SUPER_EASY, 1, DL_INSANE));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		if (getDifficultyLevel() == DL_INSANE)
 		{
@@ -2388,7 +2389,7 @@ bool runGameOptionsMenu()
 			if (!hasNotificationsWithTag(DIFF_TAG))
 			{
 				WZ_Notification notification;
-				notification.duration = 10 * GAME_TICKS_PER_SEC;;
+				notification.duration = 10 * GAME_TICKS_PER_SEC;
 				notification.contentTitle = _("Insane Difficulty");
 				notification.contentText = _("This difficulty is for very experienced players!");
 				notification.tag = DIFF_TAG;

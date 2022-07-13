@@ -1431,6 +1431,9 @@ void	kf_TogglePauseMode()
 
 			switch (lev)
 			{
+				case DL_SUPER_EASY:
+					addConsoleMessage(_("DIFFICULTY: SUPER EASY"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+					break;
 				case DL_EASY:
 					addConsoleMessage(_("DIFFICULTY: EASY"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 					break;

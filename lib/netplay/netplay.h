@@ -249,6 +249,7 @@ public:
 
 enum class AIDifficulty : int8_t
 {
+	SUPEREASY,
 	EASY,
 	MEDIUM,
 	HARD,

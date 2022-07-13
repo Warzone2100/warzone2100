@@ -298,7 +298,7 @@ function __camAddDroidToFactoryGroup(droid, structure)
 
 function __camChangePropulsionOnDiff(propulsion)
 {
-	if (difficulty === EASY || difficulty === MEDIUM)
+	if (difficulty <= MEDIUM)
 	{
 		return propulsion;
 	}
