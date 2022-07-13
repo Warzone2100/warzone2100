@@ -24,7 +24,7 @@ camAreaEvent("AttackArea1", function(droid)
 		data: { pos: "playerBase" }, // changes
 		groupSize: 10, // changes
 		maxSize: 10,
-		throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 15)),
+		throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 20 : 15)),
 		templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin, ] // changes
 	});
 	camEnableFactory("base2factory"); // re-enable
@@ -130,7 +130,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 6,
 			maxSize: 6,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 11 : 8)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 11 : 8)),
 			templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin ]
 		},
 		"base2factory": { // the hill harass factory
@@ -143,7 +143,7 @@ function eventStartLevel()
 			group: camMakeGroup("hillForce"), // will override later
 			groupSize: 4, // will override later
 			maxSize: 10,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 24 : 18)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 24 : 18)),
 			templates: [ cTempl.bloketwin ] // will override later
 		},
 		"base4factory": {
@@ -152,7 +152,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 8,
 			maxSize: 8,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 16 : 12)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 16 : 12)),
 			templates: [ cTempl.trike, cTempl.bloketwin, cTempl.buggytwin, cTempl.bjeeptwin ]
 		},
 	});

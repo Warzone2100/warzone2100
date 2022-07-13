@@ -161,6 +161,7 @@
 		"SAT_UPLINK": "readonly",
 		"GATE": "readonly",
 		"LASSAT": "readonly",
+		"SUPEREASY": "readonly",
 		"EASY": "readonly",
 		"MEDIUM": "readonly",
 		"HARD": "readonly",

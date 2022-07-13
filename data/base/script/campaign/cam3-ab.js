@@ -261,7 +261,7 @@ function eventStartLevel()
 
 	enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);
 	winFlag = false;
-	hackFailChance = 30;
+	hackFailChance = (difficulty <= EASY) ? 40 : 30;
 
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 

@@ -152,7 +152,7 @@ function eventStartLevel()
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 27 : 30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 27 : 30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -164,7 +164,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 50 : 55)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 50 : 55)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -176,7 +176,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 45 : 50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 45 : 50)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -187,7 +187,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 45 : 50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 45 : 50)),
 			data: {
 				regroup: false,
 				count: -1,
@@ -199,8 +199,8 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 
 	queue("setupLandGroups", camSecondsToMilliseconds(60));
-	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 80 : 90)));
-	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 135 : 150)));
+	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 80 : 90)));
+	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 135 : 150)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	truckDefense();
 }

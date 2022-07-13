@@ -310,7 +310,7 @@ function resetPower()
 	var powerProductionRate = 100;
 
 	// set income modifier/power storage for player 0 (human)
-	if (difficulty === EASY)
+	if (difficulty <= EASY)
 	{
 		powerProductionRate = 115;
 	}

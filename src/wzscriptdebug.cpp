@@ -253,7 +253,7 @@ static nlohmann::ordered_json fillMainModel()
 	                               "LDS_EXPAND_LIMBO", "LDS_MKEEP_LIMBO", "LDS_NONE",
 	                               "LDS_MULTI_TYPE_START", "CAMPAIGN", "", "SKIRMISH", "", "", "",
 	                               "MULTI_SKIRMISH2", "MULTI_SKIRMISH3", "MULTI_SKIRMISH4" };
-	const std::vector<std::string> difficulty_type = { "EASY", "NORMAL", "HARD", "INSANE" };
+	const std::vector<std::string> difficulty_type = { "SUPEREASY", "EASY", "NORMAL", "HARD", "INSANE" };
 	nlohmann::ordered_json result = nlohmann::ordered_json::object();
 
 	int8_t gameType = static_cast<int8_t>(game.type);

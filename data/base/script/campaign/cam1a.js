@@ -217,7 +217,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 3,
 			maxSize: 3,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 24 : 18)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 24 : 18)),
 			templates: [ cTempl.trike, cTempl.bloke ]
 		},
 		"base3Factory": {
@@ -226,7 +226,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 20 : 14)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 20 : 14)),
 			templates: [ cTempl.bloke, cTempl.buggy, cTempl.bloke ]
 		},
 		"base4Factory": {
@@ -235,7 +235,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty === EASY || difficulty === MEDIUM) ? 16 : 12)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 16 : 12)),
 			templates: [ cTempl.bjeep, cTempl.bloke, cTempl.trike, cTempl.bloke ]
 		},
 	});

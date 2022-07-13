@@ -133,8 +133,13 @@ function sendTransport()
 
 function startTransporterAttack()
 {
+	let attackTime = camMinutesToMilliseconds(2.2);
+	if (difficulty >= HARD)
+	{
+		attackTime = camChangeOnDiff(camMinutesToMilliseconds(2.2));
+	}
 	sendTransport();
-	setTimer("sendTransport", camChangeOnDiff(camMinutesToMilliseconds(2.2)));
+	setTimer("sendTransport", attackTime);
 }
 
 function eventStartLevel()

@@ -550,7 +550,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 
 	//== * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
-	//== ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
+	//== ```SUPEREASY``` (campaign only), ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
 	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		globalVars["difficulty"] = static_cast<int8_t>(difficulty);

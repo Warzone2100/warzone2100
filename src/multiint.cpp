@@ -260,8 +260,8 @@ static bool multiplayIsStartingGame();
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
-static const char *difficultyList[] = { N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
-static const AIDifficulty difficultyValue[] = { AIDifficulty::EASY, AIDifficulty::MEDIUM, AIDifficulty::HARD, AIDifficulty::INSANE };
+static const char *difficultyList[] = { N_("Super Easy"), N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
+static const AIDifficulty difficultyValue[] = { AIDifficulty::SUPEREASY, AIDifficulty::EASY, AIDifficulty::MEDIUM, AIDifficulty::HARD, AIDifficulty::INSANE };
 static struct
 {
 	bool scavengers;
@@ -283,7 +283,7 @@ struct AIDATA
 	char name[MAX_LEN_AI_NAME];
 	char js[MAX_LEN_AI_NAME];
 	char tip[255 + 128];            ///< may contain optional AI tournament data
-	char difficultyTips[4][255];    ///< optional difficulty level info
+	char difficultyTips[5][255];    ///< optional difficulty level info
 	int assigned;                   ///< How many AIs have we assigned of this type
 };
 static std::vector<AIDATA> aidata;
@@ -796,7 +796,7 @@ void readAIs()
 
 		sstrcpy(ai.js, aiconf.value("js", "").toWzString().toUtf8().c_str());
 
-		const char *difficultyKeys[] = { "easy_tip", "medium_tip", "hard_tip", "insane_tip" };
+		const char *difficultyKeys[] = { "supereasy_dummy_tip", "easy_tip", "medium_tip", "hard_tip", "insane_tip" };
 		for (int i = 0; i < ARRAY_SIZE(difficultyKeys); i++)
 		{
 			if (aiconf.contains(difficultyKeys[i]))
@@ -1699,7 +1699,7 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 
 	auto psWeakTitleUI = std::weak_ptr<WzMultiplayerOptionsTitleUI>(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
 
-	for (int difficultyIdx = 0; difficultyIdx < 4; difficultyIdx++)
+	for (int difficultyIdx = static_cast<int>(AIDifficulty::EASY); difficultyIdx < static_cast<int>(AIDifficulty::INSANE) + 1; ++difficultyIdx)
 	{
 		auto onClickHandler = [psWeakTitleUI, difficultyIdx, player](W_BUTTON& clickedButton) {
 			auto pStrongPtr = psWeakTitleUI.lock();
@@ -1716,14 +1716,14 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 		W_BUTINIT sButInit;
 		auto pDifficultyRow = std::make_shared<W_BUTTON>();
 		pDifficultyRow->id = 0; //MULTIOP_DIFFICULTY_CHOOSE_START + difficultyIdx;
-		pDifficultyRow->setGeometry(7, (MULTIOP_PLAYERHEIGHT + 5) * difficultyIdx + 4, MULTIOP_PLAYERWIDTH + 1, MULTIOP_PLAYERHEIGHT);
+		pDifficultyRow->setGeometry(7, (MULTIOP_PLAYERHEIGHT + 5) * (difficultyIdx - 1) + 4, MULTIOP_PLAYERWIDTH + 1, MULTIOP_PLAYERHEIGHT);
 		std::string tipStr;
 		switch (difficultyIdx)
 		{
-		case 0: tipStr = _("Starts disadvantaged"); break;
-		case 1: tipStr = _("Plays nice"); break;
-		case 2: tipStr = _("No holds barred"); break;
-		case 3: tipStr = _("Starts with advantages"); break;
+		case static_cast<int>(AIDifficulty::EASY): tipStr = _("Starts disadvantaged"); break;
+		case static_cast<int>(AIDifficulty::MEDIUM): tipStr = _("Plays nice"); break;
+		case static_cast<int>(AIDifficulty::HARD): tipStr = _("No holds barred"); break;
+		case static_cast<int>(AIDifficulty::INSANE): tipStr = _("Starts with advantages"); break;
 		}
 		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[difficultyIdx];
 		if (strcmp(difficultyTip, "") != 0)
@@ -4249,7 +4249,7 @@ public:
 			int playerDifficulty = static_cast<int8_t>(NetPlay.players[playerIdx].difficulty);
 			int icon = difficultyIcon(playerDifficulty);
 			char tooltip[128 + 255];
-			if (playerDifficulty >= 0)
+			if (playerDifficulty >= static_cast<int>(AIDifficulty::EASY) && playerDifficulty < static_cast<int>(AIDifficulty::INSANE) + 1)
 			{
 				sstrcpy(tooltip, _(difficultyList[playerDifficulty]));
 				if (NetPlay.players[playerIdx].ai < aidata.size())
@@ -7258,10 +7258,10 @@ static int difficultyIcon(int difficulty)
 {
 	switch (difficulty)
 	{
-	case 0: return IMAGE_EASY;
-	case 1: return IMAGE_MEDIUM;
-	case 2: return IMAGE_HARD;
-	case 3: return IMAGE_INSANE;
+	case static_cast<int>(AIDifficulty::EASY): return IMAGE_EASY;
+	case static_cast<int>(AIDifficulty::MEDIUM): return IMAGE_MEDIUM;
+	case static_cast<int>(AIDifficulty::HARD): return IMAGE_HARD;
+	case static_cast<int>(AIDifficulty::INSANE): return IMAGE_INSANE;
 	default: return IMAGE_NO;	/// what??
 	}
 }
