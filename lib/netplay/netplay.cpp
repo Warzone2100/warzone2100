@@ -50,16 +50,16 @@
 #include "netreplay.h"
 #include "netsocket.h"
 
-#include <miniupnpc/miniwget.h>
+#include <miniwget.h>
 #if (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wpedantic"
 #endif
-#include <miniupnpc/miniupnpc.h>
+#include <miniupnpc.h>
 #if (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER)
 # pragma GCC diagnostic pop
 #endif
-#include <miniupnpc/upnpcommands.h>
+#include <upnpcommands.h>
 
 // Enforce minimum MINIUPNPC_API_VERSION
 #if !defined(MINIUPNPC_API_VERSION) || (MINIUPNPC_API_VERSION < 9)
