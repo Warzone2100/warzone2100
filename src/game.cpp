@@ -5212,20 +5212,6 @@ static inline void setPlayerJSON(nlohmann::json &jsonObj, int player)
 	}
 }
 
-static bool skipForDifficulty(WzConfig &ini, int player)
-{ 
-	if (ini.contains("difficulty")) // optionally skip this object
-	{
-		int difficulty = ini.value("difficulty").toInt();
-		if ((game.type == LEVEL_TYPE::CAMPAIGN && difficulty > (int)getDifficultyLevel())
-		    || (game.type == LEVEL_TYPE::SKIRMISH && difficulty > static_cast<int8_t>(NetPlay.players[player].difficulty)))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentDroidLists)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
@@ -5242,11 +5228,6 @@ static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentD
 		{
 			ini.endGroup();
 			continue; // special hack for campaign missions, cannot have targets
-		}
-		if (skipForDifficulty(ini, player))
-		{
-			ini.endGroup();
-			continue; // another hack for campaign missions, cannot have targets
 		}
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
@@ -5504,12 +5485,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		bool onMission = ini.value("onMission", false).toBool();
 		DROID_TEMPLATE templ;
 		const DROID_TEMPLATE *psTemplate = nullptr;
-
-		if (skipForDifficulty(ini, player))
-		{
-			ini.endGroup();
-			continue;
-		}
 
 		if (ini.contains("template"))
 		{
