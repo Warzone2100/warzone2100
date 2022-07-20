@@ -2899,13 +2899,18 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	//set the droidtype
 	psTempl->droidType = droidTemplateType(psTempl);
 
-	psTempl->enabled = true;
-
 	/* copy name into template */
 	if (newName)
 	{
 		psTempl->name = WzString::fromUtf8(newName);
 	}
+
+	if (!designableTemplate(psTempl, player))
+	{
+		return false;
+	}
+
+	psTempl->enabled = true;
 
 	return true;
 }

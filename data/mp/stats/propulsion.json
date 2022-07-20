@@ -9,6 +9,7 @@
 		"spinSpeed": 450,
 		"turnSpeed": 225,
 		"type": "Legged",
+		"usageClass": "PersonBabas",
 		"weight": 10
 	},
 	"BaBaProp": {
@@ -17,6 +18,7 @@
 		"name": "BaBaProp",
 		"speed": 200,
 		"type": "Wheeled",
+		"usageClass": "Babas",
 		"weight": 10
 	},
 	"CyborgLegs": {
@@ -31,6 +33,7 @@
 		"spinSpeed": 450,
 		"turnSpeed": 225,
 		"type": "Legged",
+		"usageClass": "Cyborgs",
 		"weight": 50
 	},
 	"HalfTrack": {
@@ -44,6 +47,7 @@
 		"skidDeceleration": 500,
 		"speed": 150,
 		"type": "Half-Tracked",
+		"usageClass": "Droids",
 		"weight": 400
 	},
 	"Helicopter": {
@@ -51,7 +55,6 @@
 		"buildPoints": 125,
 		"buildPower": 150,
 		"deceleration": 200,
-		"designable": 1,
 		"hitpointPctOfBody": 100,
 		"id": "Helicopter",
 		"model": "PRLHELI1.PIE",
@@ -60,18 +63,19 @@
 		"spinSpeed": 200,
 		"turnSpeed": 100,
 		"type": "Lift",
+		"usageClass": "Droids",
 		"weight": 50
 	},
 	"Naval": {
 		"buildPoints": 150,
 		"buildPower": 150,
-		"designable": 1,
 		"hitpointPctOfBody": 300,
 		"id": "Naval",
 		"model": "prhnaval1.pie",
 		"name": "Naval",
 		"speed": 300,
 		"type": "Propellor",
+		"usageClass": "Droids",
 		"weight": 300
 	},
 	"V-Tol": {
@@ -88,6 +92,7 @@
 		"spinSpeed": 200,
 		"turnSpeed": 100,
 		"type": "Lift",
+		"usageClass": "Droids",
 		"weight": 50
 	},
 	"ZNULLPROP": {
@@ -107,6 +112,7 @@
 		"skidDeceleration": 120,
 		"speed": 300,
 		"type": "Hover",
+		"usageClass": "Droids",
 		"weight": 200
 	},
 	"tracked01": {
@@ -120,6 +126,7 @@
 		"speed": 125,
 		"spinAngle": 45,
 		"type": "Tracked",
+		"usageClass": "Droids",
 		"weight": 650
 	},
 	"wheeled01": {
@@ -133,6 +140,7 @@
 		"skidDeceleration": 350,
 		"speed": 175,
 		"type": "Wheeled",
+		"usageClass": "Droids",
 		"weight": 300
 	}
 }

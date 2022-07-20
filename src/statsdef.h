@@ -313,6 +313,7 @@ struct COMPONENT_STATS : public BASE_STATS
 	COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
 	DROID_TYPE droidTypeOverride = DROID_ANY;
 	bool designable = false;		///< Flag to indicate whether this component can be used in the design screen
+	WzString usageClass = "";       ///< A string that, so far, is just used to analyze if a template design is legit for multiplayer.
 };
 
 struct PROPULSION_STATS : public COMPONENT_STATS

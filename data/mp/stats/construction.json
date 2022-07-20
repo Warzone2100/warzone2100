@@ -8,6 +8,7 @@
 		"id": "scavCrane1",
 		"name": "Crane1",
 		"sensorModel": "cranearm1.pie",
+		"usageClass": "Babas",
 		"weight": 800
 	},
 	"scavCrane2": {
@@ -19,6 +20,7 @@
 		"id": "scavCrane2",
 		"name": "Crane2",
 		"sensorModel": "cranearm2.pie",
+		"usageClass": "Babas",
 		"weight": 800
 	},
 	"CyborgSpade": {
@@ -31,6 +33,7 @@
 		"mountModel": "cybody.pie",
 		"name": "*Combat Engineer*",
 		"sensorModel": "cy_con.pie",
+		"usageClass": "Cyborgs",
 		"weight": 150
 	},
 	"Spade1Mk1": {
@@ -43,6 +46,7 @@
 		"id": "Spade1Mk1",
 		"name": "Truck",
 		"sensorModel": "TRLCON.PIE",
+		"usageClass": "Droids",
 		"weight": 800
 	},
 	"ZNULLCONSTRUCT": {

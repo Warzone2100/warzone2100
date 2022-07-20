@@ -17,6 +17,7 @@
 		"name": "*Cyborg Mechanic*",
 		"repairPoints": 10,
 		"time": 7,
+		"usageClass": "Cyborgs",
 		"weight": 150
 	},
 	"HeavyRepair": {
@@ -31,6 +32,7 @@
 		"name": "Heavy Repair Turret",
 		"repairPoints": 30,
 		"time": 7,
+		"usageClass": "Droids",
 		"weight": 3000
 	},
 	"LightRepair1": {
@@ -45,6 +47,7 @@
 		"name": "Repair Turret",
 		"repairPoints": 15,
 		"time": 7,
+		"usageClass": "Droids",
 		"weight": 800
 	},
 	"NEXUSrepair": {
