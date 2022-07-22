@@ -25,9 +25,20 @@ import os
 from .shared import getTexAnimGrp
 
 
-def convertStrListToNumList(ls):
+def convertStrListToFloatList(ls):
     return [float(word) for word in ls]
 
+def convertStrListToIntList(ls):
+    return [int(word) for word in ls]
+
+def convertPolygonList(ls):
+    """First 5 elements are definitely int,
+    following elements are actually floats
+    """
+    out = [int(word) for word in ls[:5]]
+    for i in range(5, len(ls)):
+        out.append(float(ls[i]))
+    return out
 
 def newTexAnimGroup(ob, poly):
     ob.pie_tex_anim_grps.add()
@@ -100,23 +111,25 @@ class Importer():
 
                 elif fl == 'ANIMOBJECT':
                     pie_info['LEVELS'][lvl][fl].append(
-                        ([float(ls[1]), float(ls[2])])
+                        ([int(ls[1]), int(ls[2])])
                     )
 
             else:
 
                 if reading in ['POINTS', 'SHADOWPOINTS', 'CONNECTORS']:
-                    li = convertStrListToNumList(ls)
+                    li = convertStrListToFloatList(ls)
 
                     if reading == 'CONNECTORS':
                         result = (li[0] * 0.01, li[1] * 0.01, li[2] * 0.01)
                     else:
                         result = (li[0] * 0.01, li[2] * 0.01, li[1] * 0.01)
+                elif reading == 'POLYGONS':
+                    result = tuple(convertPolygonList(ls))
 
                 elif reading in [
-                    'POLYGONS', 'NORMALS', 'ANIMOBJECT', 'SHADOWPOLYGONS'
+                    'NORMALS', 'ANIMOBJECT', 'SHADOWPOLYGONS'
                 ]:
-                    result = tuple(convertStrListToNumList(ls))
+                    result = tuple(convertStrListToIntList(ls))
 
                 pie_info['LEVELS'][lvl][reading].append(result)
 
@@ -174,7 +187,6 @@ class Importer():
 
             for p in level['POLYGONS']:
                 pie_polygons.append((p[2], p[3], p[4]))
-
             mesh.from_pydata(pie_points, [], pie_polygons)
 
             animatedPolygons = []
@@ -312,7 +324,6 @@ class Importer():
                     self.scene.frame_start = level['ANIMOBJECT'][1][0]
 
                 for key in level['ANIMOBJECT']:
-
                     if len(key) < 10:
                         meshOb.pie_object_prop.animTime = key[0]
                         meshOb.pie_object_prop.animCycle = key[1]
