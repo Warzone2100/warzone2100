@@ -30,6 +30,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/i18n.h"
 #include "lib/netplay/nettypes.h"
 
 #include "activity.h"
@@ -44,7 +45,6 @@
 #include <memory>
 #include <chrono>
 #include <SQLiteCpp/SQLiteCpp.h>
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
@@ -70,6 +70,7 @@ static void NETauto(PLAYERSTATS::Autorating &ar)
 		NETauto(ar.level);
 		NETauto(ar.elo);
 		NETauto(ar.autohoster);
+		NETauto(ar.details);
 	}
 }
 
@@ -84,6 +85,7 @@ PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 		level = json["level"].get<uint8_t>();
 		elo = json["elo"].get<std::string>();
 		autohoster = json["autohoster"].get<bool>();
+		details = json["details"].get<std::string>();
 		valid = true;
 	} catch (const std::exception &e) {
 		debug(LOG_WARNING, "Error parsing rating JSON: %s", e.what());
@@ -98,20 +100,30 @@ void lookupRatingAsync(uint32_t playerIndex)
 	}
 
 	auto hash = playerStats[playerIndex].identity.publicHashString();
-	if (hash.empty())
+	auto key = playerStats[playerIndex].identity.publicKeyHexString();
+	if (hash.empty() || key.empty())
 	{
 		return;
 	}
 
-	std::string url = autoratingUrl(hash);
+	std::string url = getAutoratingUrl();
 	if (url.empty())
+	{
+		setAutoratingUrl(WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL);
+		url = WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL;
+	}
+
+	if (!getAutoratingEnable())
 	{
 		return;
 	}
 
 	URLDataRequest req;
 	req.url = url;
-	debug(LOG_INFO, "Requesting \"%s\"", req.url.c_str());
+	req.setRequestHeader("WZ-Player-Hash", hash);
+	req.setRequestHeader("WZ-Player-Key", key);
+	req.setRequestHeader("WZ-Locale", getLanguage());
+	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, NetPlay.players[playerIndex].name, hash.c_str());
 	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
 		long httpStatusCode = response.httpStatusCode();
 		std::string urlCopy = url;
@@ -135,6 +147,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 				if (playerStats[playerIndex].autorating.valid)
 				{
 					setMultiStats(playerIndex, playerStats[playerIndex], false);
+					netPlayersUpdated = true;
 				}
 			}
 			catch (const std::exception &e) {

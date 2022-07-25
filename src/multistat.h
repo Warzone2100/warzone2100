@@ -33,6 +33,8 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+#define WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL "https://wz2100-autohost.net/rating/"
+
 struct PLAYERSTATS
 {
 	uint32_t played = 0;  /// propagated stats.
@@ -57,6 +59,7 @@ struct PLAYERSTATS
 		uint8_t medal = 0;
 		uint8_t level = 0;
 		std::string elo;
+		std::string details;
 	};
 	Autorating autorating;
 

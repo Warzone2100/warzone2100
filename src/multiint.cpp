@@ -4186,15 +4186,29 @@ public:
 				playerInfoTooltip = aidata[NetPlay.players[playerIdx].ai].tip;
 			}
 		}
-		if (NetPlay.players[playerIdx].allocated && !getMultiStats(playerIdx).identity.empty())
+		if (NetPlay.players[playerIdx].allocated)
 		{
-			if (!playerInfoTooltip.empty())
+			PLAYERSTATS stats = getMultiStats(playerIdx);
+			if (!stats.identity.empty())
 			{
-				playerInfoTooltip += "\n";
+				if (!playerInfoTooltip.empty())
+				{
+					playerInfoTooltip += "\n";
+				}
+				std::string hash = getMultiStats(playerIdx).identity.publicHashString(20);
+				playerInfoTooltip += _("Player ID: ");
+				playerInfoTooltip += hash.empty()? _("(none)") : hash;
 			}
-			std::string hash = getMultiStats(playerIdx).identity.publicHashString(20);
-			playerInfoTooltip += _("Player ID: ");
-			playerInfoTooltip += hash.empty()? _("(none)") : hash;
+			if (stats.autorating.valid && stats.autorating.details != "")
+			{
+				if (!playerInfoTooltip.empty())
+				{
+					playerInfoTooltip += "\n";
+				}
+				playerInfoTooltip += _("Rating information: ");
+				playerInfoTooltip += "\n";
+				playerInfoTooltip += stats.autorating.details;
+			}
 		}
 		playerInfo->setTip(playerInfoTooltip);
 

@@ -81,6 +81,7 @@
 #include "map.h" //for builtInMap
 #include "notifications.h"
 #include "activity.h"
+#include "clparse.h" // for autorating
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -2662,6 +2663,11 @@ void startMultiplayOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeOpenSpectatorSlotsMPDropdown()));
 	row.start++;
 
+	// Enable Autorating lookup
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_AUTORATING, _("Enable Rating"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_AUTORATING_R, getAutoratingEnable()? _("On") : _("Off"), WBUT_SECONDARY)));
+	row.start++;
+
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
@@ -2696,6 +2702,11 @@ bool runMultiplayOptionsMenu()
 	case FRONTEND_UPNP_R:
 		NetPlay.isUPNP = !NetPlay.isUPNP;
 		widgSetString(psWScreen, FRONTEND_UPNP_R, multiplayOptionsUPnPString());
+		break;
+	case FRONTEND_AUTORATING:
+	case FRONTEND_AUTORATING_R:
+		setAutoratingEnable(!getAutoratingEnable());
+		widgSetString(psWScreen, FRONTEND_AUTORATING_R, getAutoratingEnable()? _("On") : _("Off"));
 		break;
 
 	case FRONTEND_QUIT:
