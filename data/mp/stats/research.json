@@ -4800,7 +4800,7 @@
 		"name": "AA HEAP Flak",
 		"requiredResearch": [
 			"R-Wpn-AAGun-Damage03",
-			"R-Wpn-MG-Damage07"
+			"R-Wpn-MG-Damage08"
 		],
 		"researchPoints": 7680,
 		"researchPower": 240,
@@ -4857,8 +4857,7 @@
 		"id": "R-Wpn-AAGun-Damage06",
 		"name": "AA HEAP Flak Mk3",
 		"requiredResearch": [
-			"R-Wpn-AAGun-Damage05",
-			"R-Wpn-MG-Damage08"
+			"R-Wpn-AAGun-Damage05"
 		],
 		"researchPoints": 9600,
 		"researchPower": 300,
@@ -7289,8 +7288,8 @@
 			"R-Wpn-MG-Damage04",
 			"R-Wpn-MG-ROF01"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7311,8 +7310,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage05"
 		],
-		"researchPoints": 9000,
-		"researchPower": 281,
+		"researchPoints": 7800,
+		"researchPower": 243,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7333,8 +7332,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage06"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 8800,
+		"researchPower": 275,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7354,10 +7353,10 @@
 		"name": "Depleted Uranium MG Bullets",
 		"requiredResearch": [
 			"R-Wpn-MG-Damage07",
-			"R-Struc-Research-Upgrade07"
+			"R-Struc-Research-Upgrade06"
 		],
-		"researchPoints": 11000,
-		"researchPower": 343,
+		"researchPoints": 5000,
+		"researchPower": 156,
 		"results": [
 			{
 				"class": "Weapon",
