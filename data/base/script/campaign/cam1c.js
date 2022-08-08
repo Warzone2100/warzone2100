@@ -63,6 +63,11 @@ function enableNPFactory()
 	camEnableFactory("NPCentralFactory");
 }
 
+function enableNorthScavFactory()
+{
+	camEnableFactory("ScavNorthFactory");
+}
+
 camAreaEvent("RemoveBeacon", function()
 {
 	hackRemoveMessage("C1C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -100,7 +105,7 @@ camAreaEvent("ScavCentralFactoryTrigger", function()
 
 camAreaEvent("ScavNorthFactoryTrigger", function()
 {
-	camEnableFactory("ScavNorthFactory");
+	camCallOnce("enableNorthScavFactory");
 });
 
 camAreaEvent("NPNorthFactoryTrigger", function()
@@ -162,6 +167,7 @@ camAreaEvent("NPLZ2Trigger", function()
 {
 	camPlayVideos({video: "MB1C3_MSG", type: MISS_MSG});
 	camDetectEnemyBase("NPLZ2Group");
+	camCallOnce("enableNorthScavFactory");
 
 	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(camMinutesToMilliseconds(5)), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
