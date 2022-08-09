@@ -188,6 +188,9 @@ void checkForPowerGen(STRUCTURE *psPowerGen);
 
 uint16_t countPlayerUnusedDerricks();
 
+// Assign all production from this factory a group number.
+int assignFactoryToGroup(UDWORD player, UBYTE groupNumber);
+
 // Set the command droid that factory production should go to struct _command_droid;
 void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
 

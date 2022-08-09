@@ -112,7 +112,7 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	~BASE_OBJECT();
 
 	SCREEN_DISP_DATA    sDisplay;                   ///< screen coordinate details
-	UBYTE               group = 0;                  ///< Which group selection is the droid currently in?
+	UBYTE               group = UBYTE_MAX;          ///< Which group selection is the droid currently in?
 	UBYTE               selected;                   ///< Whether the object is selected (might want this elsewhere)
 	UBYTE               visible[MAX_PLAYERS];       ///< Whether object is visible to specific player
 	UBYTE               seenThisTick[MAX_PLAYERS];  ///< Whether object has been seen this tick by the specific player.

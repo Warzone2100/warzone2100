@@ -94,7 +94,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &
 static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static UDWORD	getTargettingGfx();
-static void	drawDroidGroupNumber(DROID *psDroid);
+static void	drawDroidGroupNumber(const DROID *psDroid);
 static void	trackHeight(int desiredHeight);
 static void	renderSurroundings(const glm::mat4 &viewMatrix);
 static void	locateMouse();
@@ -3286,12 +3286,12 @@ static void	drawDroidSelections()
 /* ---------------------------------------------------------------------------- */
 /// X offset to display the group number at
 #define GN_X_OFFSET	(8)
-/// Draw the number of the group the droid is in next to the droid
-static void	drawDroidGroupNumber(DROID *psDroid)
+
+UWORD droidGroupNumberToImageId (UDWORD groupNum)
 {
 	UWORD id = UWORD_MAX;
 
-	switch (psDroid->group)
+	switch (groupNum)
 	{
 	case 0:
 		id = IMAGE_GN_0;
@@ -3326,7 +3326,13 @@ static void	drawDroidGroupNumber(DROID *psDroid)
 	default:
 		break;
 	}
+	return id;
+}
 
+/// Draw the number of the group the droid is in next to the droid
+static void	drawDroidGroupNumber(const DROID *psDroid)
+{
+	UWORD id = droidGroupNumberToImageId(psDroid->group);
 	if (id != UWORD_MAX)
 	{
 		int xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
@@ -3974,7 +3980,7 @@ UDWORD  getDroidRankGraphicFromLevel(unsigned int level)
 	return gfxId;
 }
 /// Get the graphic ID for a droid rank
-UDWORD  getDroidRankGraphic(DROID *psDroid)
+UDWORD  getDroidRankGraphic(const DROID *psDroid)
 {
 	/* Establish the numerical value of the droid's rank */
 	return getDroidRankGraphicFromLevel(getDroidLevel(psDroid));

@@ -1997,6 +1997,47 @@ static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType)
 	return true;
 }
 
+// all produced units will be automatically added into "num" group
+int assignFactoryToGroup(UDWORD player, UBYTE groupNumber)
+{
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+	int numSelected = 0;
+	if (groupNumber < UBYTE_MAX)
+	{
+		for (STRUCTURE *psStruct = apsStructLists[player]; psStruct !=  nullptr; psStruct = psStruct->psNext)
+		{
+
+			if (psStruct->pStructureType->type == REF_CYBORG_FACTORY
+			  ||psStruct->pStructureType->type == REF_VTOL_FACTORY 
+			  ||psStruct->pStructureType->type == REF_FACTORY)
+			{
+				/* Only assign the currently selected ones */
+				if (psStruct->selected)
+				{
+					/* Toggle group */
+					if (psStruct->group == groupNumber)
+					{
+						psStruct->group = UBYTE_MAX;
+						numSelected++;
+					}
+					else 
+					{
+						/* Set them to the right group - they can only be a member of one group */
+						psStruct->group = (UBYTE) groupNumber;
+						numSelected++;
+						// there can be only one selected factory at a time.
+						break;
+					}
+				}
+			}
+		}
+	}
+	if (numSelected > 0)
+	{
+		CONPRINTF(ngettext("%u factory assigned to Group %u", "%u factories assigned to Group %u", numSelected), numSelected, groupNumber);
+	}
+	return numSelected;
+}
 
 // Set the command droid that factory production should go to
 void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
@@ -2373,6 +2414,10 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		{
 			assignFactoryCommandDroid(psStructure, nullptr);
 			assignCommander = true;
+		} else if (psStructure->group != UBYTE_MAX)
+		{
+			// assign Droid to a group
+			psNewDroid->group = psStructure->group;
 		}
 
 		if (isVtolDroid(psNewDroid) && !isTransporter(psNewDroid))

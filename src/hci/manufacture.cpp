@@ -196,7 +196,15 @@ public:
 		widget->initialize();
 		return widget;
 	}
-
+	void drawFactoryGroup(int xOffset, int yOffset)
+	{
+		const auto factory = controller->getObjectAt(objectIndex);
+		UWORD groupNumImage = droidGroupNumberToImageId(factory->group);
+		if (groupNumImage != UWORD_MAX)
+		{
+			iV_DrawImage(IntImages, groupNumImage, xOffset , yOffset );
+		}
+	}
 	void jump() override
 	{
 		if (!offWorldKeepLists)
@@ -234,6 +242,7 @@ protected:
 		}
 		displayIMD(AtlasImage(), ImdObject::Structure(factory), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
+		drawFactoryGroup(xOffset+45, yOffset+55);
 	}
 
 	void updateLayout() override
@@ -306,7 +315,6 @@ protected:
 		}
 		drawNextDroidRank(xOffset, yOffset);
 	}
-
 	// show a little icon on the bottom, indicating what rank next unit will be
 	// remember that when it's a commander, same rank will require twice experience
 	void drawNextDroidRank(int xOffset, int yOffset)
