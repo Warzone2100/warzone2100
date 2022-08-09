@@ -199,11 +199,15 @@ public:
 	void drawFactoryGroup(int xOffset, int yOffset)
 	{
 		const auto factory = controller->getObjectAt(objectIndex);
-		UWORD groupNumImage = droidGroupNumberToImageId(factory->group);
-		if (groupNumImage != UWORD_MAX)
+		if (factory)
 		{
-			iV_DrawImage(IntImages, groupNumImage, xOffset , yOffset );
+			UWORD groupNumImage = droidGroupNumberToImageId(factory->group);
+			if (groupNumImage != UWORD_MAX)
+			{
+				iV_DrawImage(IntImages, groupNumImage, xOffset , yOffset );
+			}
 		}
+
 	}
 	void jump() override
 	{
