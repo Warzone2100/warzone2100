@@ -97,15 +97,19 @@ private:
 	void placeLine(FlowLayoutElementDescriptor const &elementDescriptor, size_t begin, size_t end)
 	{
 		auto current = begin;
+		size_t elementDescriptorSize = elementDescriptor.size();
 
 		while (current < end)
 		{
-			long long fragmentFits;
+			size_t fragmentFits = 0;
 
 			if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, end - current) > maxWidth)
 			// fragment doesn't fit completely in the current line
 			{
-				fragmentFits = current - 1;
+				if (current > 0)
+				{
+					fragmentFits = current - 1;
+				}
 				size_t fragmentDoesntFit = end;
 				while (fragmentDoesntFit - fragmentFits > 1)
 				{
@@ -123,8 +127,8 @@ private:
 				fragmentFits = end;
 			}
 
-			auto whitespacePosition = fragmentFits + 1;
-			while (whitespacePosition > elementDescriptor.size() || (whitespacePosition > current && !elementDescriptor.isWhitespace(whitespacePosition - 1)))
+			size_t whitespacePosition = (fragmentFits >= elementDescriptorSize) ? elementDescriptorSize : fragmentFits + 1;
+			while (whitespacePosition > current && !elementDescriptor.isWhitespace(whitespacePosition - 1))
 			{
 				whitespacePosition--;
 			}
