@@ -786,14 +786,14 @@ void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
 		// The app-defined event has not yet been registered with SDL
 		return;
 	}
-	SDL_Event event;
-	SDL_memset(&event, 0, sizeof(event));
-	event.type = _wzSDLAppEvent;
-	event.user.code = wzSDLAppEventCodes::MAINTHREADEXEC;
-	event.user.data1 = exec;
-	assert(event.user.data1 != nullptr);
-	event.user.data2 = 0;
-	SDL_PushEvent(&event);
+	SDL_Event execEvent;
+	SDL_memset(&execEvent, 0, sizeof(execEvent));
+	execEvent.type = _wzSDLAppEvent;
+	execEvent.user.code = wzSDLAppEventCodes::MAINTHREADEXEC;
+	execEvent.user.data1 = exec;
+	assert(execEvent.user.data1 != nullptr);
+	execEvent.user.data2 = 0;
+	SDL_PushEvent(&execEvent);
 	// receiver handles deleting `exec` on the main thread after doExecOnMainThread() has been called
 }
 
