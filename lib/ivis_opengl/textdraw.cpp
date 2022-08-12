@@ -137,6 +137,21 @@ static void clearFontDataCache()
 	m_loadedFontDataCache.clear();
 }
 
+static const char* FallbackGetFTErrorStr(FT_Error error_code)
+{
+	#undef FTERRORS_H_
+	#undef __FTERRORS_H__ // for older FreeType headers
+#if defined(FT_CONFIG_OPTION_USE_MODULE_ERRORS)
+	#define FT_ERROR_START_LIST     switch ( FT_ERROR_BASE(error_code) ) {
+#else
+	#define FT_ERROR_START_LIST     switch ( error_code ) {
+#endif
+	#define FT_ERRORDEF( e, v, s )    case v: return s;
+	#define FT_ERROR_END_LIST       default: return nullptr; }
+	#include FT_ERRORS_H
+	return nullptr; // silence warnings
+}
+
 struct FTFace
 {
 	FTFace(FT_Library &lib, const std::string &fileName, int32_t charSize, uint32_t horizDPI, uint32_t vertDPI, optional<uint16_t> fontWeight = nullopt)
@@ -144,27 +159,39 @@ struct FTFace
 		pFileData = loadFontData(fileName);
 		if (!pFileData)
 		{
-			debug(LOG_FATAL, "Failed to load font file: %s", fileName.c_str());
+			throw std::runtime_error(astringf("Failed to load font file: %s", fileName.c_str()));
 		}
 #if SIZE_MAX > LONG_MAX
 		if (pFileData->size() > static_cast<size_t>(std::numeric_limits<FT_Long>::max()))
 		{
-			debug(LOG_FATAL, "Font file size (%zu) is too big: %s", pFileData->size(), fileName.c_str());
+			throw std::runtime_error(astringf("Font file size (%zu) is too big: %s", pFileData->size(), fileName.c_str()));
 		}
 #endif
 		FT_Error error = FT_New_Memory_Face(lib, (const FT_Byte*)pFileData->data(), static_cast<FT_Long>(pFileData->size()), 0, &m_face);
 		if (error == FT_Err_Unknown_File_Format)
 		{
-			debug(LOG_FATAL, "Unknown font file format for %s", fileName.c_str());
+			throw std::runtime_error(astringf("Unknown font file format for %s", fileName.c_str()));
 		}
 		else if (error != FT_Err_Ok)
 		{
-			debug(LOG_FATAL, "Font file %s not found, or other error", fileName.c_str());
+#if (FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && (FREETYPE_MINOR > 10 || (FREETYPE_MINOR == 10 && FREETYPE_PATCH >= 1) ))) // FreeType 2.10.1+ needed for FT_Error_String
+			const char* pFtErrorStr = FT_Error_String(error); // FT_Error_String only returns a value if FreeType is compiled with the appropriate option(s)
+			if (pFtErrorStr != nullptr)
+			{
+				throw std::runtime_error(astringf("Failed to load font file %s, with error: %s", fileName.c_str(), pFtErrorStr));
+			}
+#endif
+			const char* pFTErrorStrFallback = FallbackGetFTErrorStr(error);
+			if (pFTErrorStrFallback != nullptr)
+			{
+				throw std::runtime_error(astringf("Failed to load font file %s, with error: %s", fileName.c_str(), pFTErrorStrFallback));
+			}
+			throw std::runtime_error(astringf("Failed to load font file %s, with error: %d", fileName.c_str(), static_cast<int>(error)));
 		}
 		error = FT_Set_Char_Size(m_face, 0, charSize, horizDPI, vertDPI);
 		if (error != FT_Err_Ok)
 		{
-			debug(LOG_FATAL, "Could not set character size");
+			throw std::runtime_error("Could not set character size");
 		}
 #if defined(FT_HAS_MULTIPLE_MASTERS) && (FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && (FREETYPE_MINOR >= 7))) // FreeType 2.7+ needed for FT_Get_Var_Design_Coordinates
 		if (fontWeight.has_value() && FT_HAS_MULTIPLE_MASTERS(m_face))
@@ -989,6 +1016,7 @@ public:
 };
 static WZFontCollection baseFonts;
 static std::unique_ptr<WZFontCollection> cjkFonts;
+static bool failedToLoadCJKFonts = false;
 
 struct iVFontsHash
 {
@@ -1002,18 +1030,29 @@ static FontToEllipsisMapType fontToEllipsisMap;
 
 #define CJK_FONT_PATH "fonts/NotoSansCJK-VF.otf.ttc"
 
-static void inline initializeCJKFontsIfNeeded()
+static bool inline initializeCJKFontsIfNeeded()
 {
-	if (cjkFonts) { return; }
+	if (cjkFonts) { return true; }
+	if (failedToLoadCJKFonts) { return false; }
 	cjkFonts = std::unique_ptr<WZFontCollection>(new WZFontCollection());
 	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
-	cjkFonts->regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 400));
-	cjkFonts->regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 700));
-	cjkFonts->bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 21 * 64, horizDPI, vertDPI, 400));
-	cjkFonts->medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 400));
-	cjkFonts->small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 400));
-	cjkFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 700));
+	try {
+		cjkFonts->regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 400));
+		cjkFonts->regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 700));
+		cjkFonts->bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 21 * 64, horizDPI, vertDPI, 400));
+		cjkFonts->medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 400));
+		cjkFonts->small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 400));
+		cjkFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 700));
+	}
+	catch (const std::exception &e) {
+		debug(LOG_ERROR, "Failed to load font:\n%s", e.what());
+		cjkFonts.reset();
+		failedToLoadCJKFonts = true;
+		return false;
+	}
+
+	return true;
 }
 
 static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
@@ -1025,22 +1064,24 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 		case HB_SCRIPT_HANGUL:
 		case HB_SCRIPT_HIRAGANA:
 		case HB_SCRIPT_KATAKANA:
-			initializeCJKFontsIfNeeded();
-			switch (FontID)
+			if (initializeCJKFontsIfNeeded())
 			{
-			default:
-			case font_regular:
-				return *(cjkFonts->regular);
-			case font_regular_bold:
-				return *(cjkFonts->regularBold);
-			case font_large:
-				return *(cjkFonts->bold);
-			case font_medium:
-				return *(cjkFonts->medium);
-			case font_small:
-				return *(cjkFonts->small);
-			case font_bar:
-				return *(cjkFonts->smallBold);
+				switch (FontID)
+				{
+				default:
+				case font_regular:
+					return *(cjkFonts->regular);
+				case font_regular_bold:
+					return *(cjkFonts->regularBold);
+				case font_large:
+					return *(cjkFonts->bold);
+				case font_medium:
+					return *(cjkFonts->medium);
+				case font_small:
+					return *(cjkFonts->small);
+				case font_bar:
+					return *(cjkFonts->smallBold);
+				}
 			}
 			break;
 		default:
@@ -1078,12 +1119,17 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * vertScaleFactor);
 	debug(LOG_WZ, "Text-Rendering Scaling Factor: %f x %f; Internal Font DPI: %" PRIu32 " x %" PRIu32 "", _horizScaleFactor, _vertScaleFactor, horizDPI, vertDPI);
 
-	baseFonts.regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI));
-	baseFonts.regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI));
-	baseFonts.bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI));
-	baseFonts.medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI));
-	baseFonts.small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
-	baseFonts.smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
+	try {
+		baseFonts.regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI));
+		baseFonts.regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI));
+		baseFonts.bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI));
+		baseFonts.medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI));
+		baseFonts.small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
+		baseFonts.smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
+	}
+	catch (const std::exception &e) {
+		debug(LOG_FATAL, "Failed to load base font:\n%s", e.what());
+	}
 
 	// Do a sanity-check here to make sure the CJK font exists
 	// (since it's only loaded on-demand, and thus might fail with a fatal error later if missing)
