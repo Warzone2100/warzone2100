@@ -286,11 +286,13 @@ EcKey::Sig EcKey::sign(void const *data, size_t dataLen) const
 
 	Sig signature(currentSignatureSizeInBytes);
 
+#if SIZE_MAX > ULLONG_MAX
 	if (dataLen > std::numeric_limits<unsigned long long>::max())
 	{
 		debug(LOG_ERROR, "Overflow. Data to sign has a greater length than supported. You should probably be hashing and signing the hash.");
 		return Sig();
 	}
+#endif
 	unsigned long long uLLDataLen = (unsigned long long)dataLen;
 
 	auto privateKey = EC_KEY_CAST(vKey)->privateKey;
