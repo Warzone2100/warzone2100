@@ -94,6 +94,11 @@ function grantStartTech()
 	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
 }
 
+function playFactoryViperBuildVideo()
+{
+	camPlayVideos({video: "FACTORYVIPER", type: CAMP_MSG});
+}
+
 function eventDroidBuilt(droid, structure)
 {
 	if (tutState === 25)
@@ -105,6 +110,7 @@ function eventDroidBuilt(droid, structure)
 		else
 		{
 			producedUnits.tank = true;
+			camCallOnce("playFactoryViperBuildVideo");
 		}
 
 		if (producedUnits.truck === true && producedUnits.tank === true)
