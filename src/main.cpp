@@ -1268,7 +1268,7 @@ void mainLoop()
 #endif
 }
 
-bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ_DECL_UNUSED) // explicitely pass by reference
+bool getUTF8CmdLine(int *const _utfargc WZ_DECL_UNUSED, char *** const _utfargv WZ_DECL_UNUSED) // explicitely pass by reference
 {
 #ifdef WZ_OS_WIN
 	int wargc;
@@ -1289,8 +1289,8 @@ bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ
 		return false;
 	}
 	// the following malloc and UTF16toUTF8 will be cleaned up in realmain().
-	*utfargv = (char **)malloc(sizeof(char *) * wargc);
-	if (!*utfargv)
+	*_utfargv = (char **)malloc(sizeof(char *) * wargc);
+	if (!*_utfargv)
 	{
 		debug(LOG_FATAL, "Out of memory!");
 		abort();
@@ -1299,16 +1299,16 @@ bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ
 	for (int i = 0; i < wargc; ++i)
 	{
 		STATIC_ASSERT(sizeof(wchar_t) == sizeof(utf_16_char)); // Should be true on windows
-		(*utfargv)[i] = UTF16toUTF8((const utf_16_char *)wargv[i], NULL); // only returns null when memory runs out
-		if ((*utfargv)[i] == NULL)
+		(*_utfargv)[i] = UTF16toUTF8((const utf_16_char *)wargv[i], NULL); // only returns null when memory runs out
+		if ((*_utfargv)[i] == NULL)
 		{
-			*utfargc = i;
+			*_utfargc = i;
 			LocalFree(wargv);
 			abort();
 			return false;
 		}
 	}
-	*utfargc = wargc;
+	*_utfargc = wargc;
 	LocalFree(wargv);
 #endif
 	return true;
@@ -1631,10 +1631,51 @@ static void cleanupOldLogFiles()
 // for backend detection
 extern const char *BACKEND;
 
+static int utfargc = 0;
+static char **utfargv = nullptr;
+
+void mainShutdown()
+{
+	ActivityManager::instance().preSystemShutdown();
+
+	switch (GetGameMode())
+	{
+		case GS_NORMAL:
+			// if running a game while quitting, stop the game loop
+			// (currently required for some cleanup) (should modelShutdown() be added to systemShutdown?)
+			stopGameLoop();
+			break;
+		case GS_TITLE_SCREEN:
+			// if showing the title / menus while quitting, stop the title loop
+			// (currently required for some cleanup)
+			stopTitleLoop();
+			break;
+		default:
+			break;
+	}
+	saveConfig();
+#if defined(ENABLE_DISCORD)
+	discordRPCShutdown();
+#endif
+	wzCmdInterfaceShutdown();
+	urlRequestShutdown();
+	cleanupOldLogFiles();
+	systemShutdown();
+#ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
+	for (int i = 0; i < utfargc; i++)
+	{
+		char *** const utfargvF = &utfargv;
+		free((void *)(*utfargvF)[i]);
+	}
+	free(utfargv);
+#endif
+	ActivityManager::instance().shutdown();
+}
+
 int realmain(int argc, char *argv[])
 {
-	int utfargc = argc;
-	char **utfargv = (char **)argv;
+	utfargc = argc;
+	utfargv = (char **)argv;
 
 	osSpecificFirstChanceProcessSetup();
 
@@ -2008,41 +2049,8 @@ int realmain(int argc, char *argv[])
 
 	osSpecificPostInit();
 
-	wzMainEventLoop();
-	ActivityManager::instance().preSystemShutdown();
+	wzMainEventLoop(mainShutdown);
 
-	switch (GetGameMode())
-	{
-		case GS_NORMAL:
-			// if running a game while quitting, stop the game loop
-			// (currently required for some cleanup) (should modelShutdown() be added to systemShutdown?)
-			stopGameLoop();
-			break;
-		case GS_TITLE_SCREEN:
-			// if showing the title / menus while quitting, stop the title loop
-			// (currently required for some cleanup)
-			stopTitleLoop();
-			break;
-		default:
-			break;
-	}
-	saveConfig();
-#if defined(ENABLE_DISCORD)
-	discordRPCShutdown();
-#endif
-	wzCmdInterfaceShutdown();
-	urlRequestShutdown();
-	cleanupOldLogFiles();
-	systemShutdown();
-#ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
-	for (int i = 0; i < argc; i++)
-	{
-		char *** const utfargvF = &utfargv;
-		free((void *)(*utfargvF)[i]);
-	}
-	free(utfargv);
-#endif
-	ActivityManager::instance().shutdown();
 	int exitCode = wzGetQuitExitCode();
 	wzShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");

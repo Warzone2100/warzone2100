@@ -2942,7 +2942,7 @@ void wzEventLoopOneFrame(void* arg)
 }
 
 // Actual mainloop
-void wzMainEventLoop(void)
+void wzMainEventLoop(std::function<void()> onShutdown)
 {
 	event.type = 0;
 
@@ -2950,6 +2950,11 @@ void wzMainEventLoop(void)
 	while (bContinue)
 	{
 		wzEventLoopOneFrame(&bContinue);
+	}
+
+	if (onShutdown)
+	{
+		onShutdown();
 	}
 }
 
