@@ -24,6 +24,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <functional>
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
