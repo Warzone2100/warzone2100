@@ -123,12 +123,6 @@ bool writeMapData(const MapData& map, const std::string &filename, IOProvider& m
 
 // MARK: - High-level interface for loading a map
 
-enum class MapType
-{
-	CAMPAIGN,
-	SAVEGAME,
-	SKIRMISH
-};
 std::string to_string(MapType mapType);
 
 class Map

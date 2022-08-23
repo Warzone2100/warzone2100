@@ -36,6 +36,8 @@ using nonstd::nullopt;
 
 namespace WzMap {
 
+class Map; // forward-declare
+
 struct LevelDetails {
 	std::string name; // the level / map name
 	MapType type;
