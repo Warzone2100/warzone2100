@@ -42,6 +42,15 @@ enum class OutputFormat
 };
 constexpr OutputFormat LatestOutputFormat = OutputFormat::VER3;
 
+// MARK: - Map types
+
+enum class MapType
+{
+	CAMPAIGN,
+	SAVEGAME,
+	SKIRMISH
+};
+
 // MARK: - Handling game.map / MapData files
 
 struct MapData
