@@ -31,6 +31,7 @@ using nonstd::nullopt;
 #include "map_types.h"
 #include "map_debug.h"
 #include "map_io.h"
+#include "map_stats.h"
 
 //
 
