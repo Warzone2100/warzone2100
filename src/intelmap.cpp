@@ -408,8 +408,8 @@ bool intAddMessageView(MESSAGE *psMessage)
 	sFormInit.pUserData = psMessage;
 	auto form3dView = std::make_shared<W_CLICKFORM>(&sFormInit);
 
-	/*Add the Flic box if videos are installed */
-	if (PHYSFS_exists("sequences/devastation.ogg"))
+	/*Add the Flic box if videos are installed, or on-demand video streaming is available */
+	if (seq_hasVideos())
 	{
 		sFormInit = W_FORMINIT();
 		sFormInit.id = IDINTMAP_FLICVIEW;
@@ -608,7 +608,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 					intAddMessageView(psMessage);
 				}
 				// only attempt to show videos if they are installed
-				if (PHYSFS_exists("sequences/devastation.ogg"))
+				if (seq_hasVideos())
 				{
 					StartMessageSequences(psMessage, true);
 				}
@@ -1046,7 +1046,7 @@ void displayImmediateMessage(MESSAGE *psMessage)
 	*/
 
 	// only attempt to show videos if they are installed
-	if (PHYSFS_exists("sequences/devastation.ogg"))
+	if (seq_hasVideos())
 	{
 	    psCurrentMsg = psMessage;
 	    StartMessageSequences(psMessage, true);

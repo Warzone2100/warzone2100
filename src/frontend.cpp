@@ -207,7 +207,7 @@ void startTitleMenu()
 	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
 
 	// check whether video sequences are installed
-	if (PHYSFS_exists("sequences/devastation.ogg"))
+	if (seq_hasVideos())
 	{
 		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
 	}
@@ -376,7 +376,7 @@ void startSinglePlayerMenu()
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	// show this only when the video sequences are not installed
-	if (!PHYSFS_exists("sequences/devastation.ogg"))
+	if (!seq_hasVideos())
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
 		notifyAboutMissingVideos();
@@ -398,7 +398,7 @@ void startCampaignSelector()
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	// show this only when the video sequences are not installed
-	if (!PHYSFS_exists("sequences/devastation.ogg"))
+	if (!seq_hasVideos())
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
 		notifyAboutMissingVideos();
@@ -410,7 +410,7 @@ static void frontEndNewGame(int which)
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
 	sstrcpy(aLevelName, list[which].level.toUtf8().c_str());
 	// show this only when the video sequences are installed
-	if (PHYSFS_exists("sequences/devastation.ogg"))
+	if (seq_hasVideos())
 	{
 		if (!list[which].video.isEmpty())
 		{

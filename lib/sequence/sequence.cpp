@@ -126,7 +126,8 @@ static bool videobuf_ready = false;		// single frame video buffer ready for proc
 static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for processing
 
 // file handle
-static PHYSFS_file *fpInfile = nullptr;
+class VideoProvider;
+static std::shared_ptr<VideoProvider> inVideoProvider;
 
 static uint32_t *RGBAframe = nullptr;					// texture buffer
 static ogg_int16_t *audiobuf = nullptr;			// audio buffer
@@ -157,9 +158,74 @@ static gfx_api::gfxFloat Scrnvidpos[3];
 static SCANLINE_MODE use_scanlines;
 static bool scanlinesDisabled = false;
 
-// Helper; just grab some more compressed bitstream and sync it for page extraction
-static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
+//// Abstraction for handling loading videos from files, or from memory buffer
+class VideoProvider
 {
+public:
+	VideoProvider(const WzString& filename)
+	: m_filename(filename)
+	{ }
+	virtual ~VideoProvider();
+public:
+	virtual const WzString& filename() const { return m_filename; }
+	virtual bool seek_begin() = 0;
+	virtual int buffer_data(ogg_sync_state *oy) = 0;
+	virtual bool end_of_data() const = 0;
+private:
+	WzString m_filename;
+};
+
+class PhysFSVideoProvider : public VideoProvider
+{
+public:
+	// Takes ownership of the PHYSFS_file*
+	PhysFSVideoProvider(PHYSFS_file *in, const WzString& filename);
+	~PhysFSVideoProvider();
+public:
+	virtual bool seek_begin() override;
+	virtual int buffer_data(ogg_sync_state *oy) override;
+	virtual bool end_of_data() const override;
+private:
+	PHYSFS_file *in = nullptr;
+};
+
+class MemoryBufferVideoProvider : public VideoProvider
+{
+public:
+	MemoryBufferVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename);
+public:
+	virtual bool seek_begin() override;
+	virtual int buffer_data(ogg_sync_state *oy) override;
+	virtual bool end_of_data() const override;
+private:
+	std::shared_ptr<const std::vector<char>> memoryBuffer;
+	size_t currPos = 0;
+};
+
+VideoProvider::~VideoProvider()
+{ }
+
+// Takes ownership of the PHYSFS_file*
+PhysFSVideoProvider::PhysFSVideoProvider(PHYSFS_file *in, const WzString& filename)
+: VideoProvider(filename)
+, in(in)
+{ }
+PhysFSVideoProvider::~PhysFSVideoProvider()
+{
+	if (in && PHYSFS_isInit())
+	{
+		PHYSFS_close(in);
+		in = nullptr;
+	}
+}
+bool PhysFSVideoProvider::seek_begin()
+{
+	return PHYSFS_seek(in, 0) != 0;
+}
+int PhysFSVideoProvider::buffer_data(ogg_sync_state *oy)
+{
+	if (!in) return 0;
+
 	// read in 256K chunks
 	const int size = 262144;
 	char *buffer = ogg_sync_buffer(oy, size);
@@ -167,6 +233,54 @@ static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
 
 	ogg_sync_wrote(oy, bytes);
 	return (bytes);
+}
+bool PhysFSVideoProvider::PhysFSVideoProvider::end_of_data() const
+{
+	return PHYSFS_eof(in) != 0;
+}
+
+MemoryBufferVideoProvider::MemoryBufferVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename)
+: VideoProvider(filename)
+, memoryBuffer(memoryBuffer)
+{ }
+bool MemoryBufferVideoProvider::seek_begin()
+{
+	currPos = 0;
+	return true;
+}
+int MemoryBufferVideoProvider::buffer_data(ogg_sync_state *oy)
+{
+	if (!memoryBuffer) return 0;
+	if (memoryBuffer->empty()) return 0;
+	if (currPos >= memoryBuffer->size()) return 0;
+
+	// read in 256K chunks
+	const int size = 262144;
+	char *buffer = ogg_sync_buffer(oy, size);
+
+	size_t bytesToRead = std::min<size_t>(size, memoryBuffer->size() - currPos);
+	memcpy(buffer, memoryBuffer->data() + currPos, size);
+	currPos += bytesToRead;
+
+	int bytes = static_cast<int>(bytesToRead);
+
+	ogg_sync_wrote(oy, bytes);
+	return (bytes);
+}
+bool MemoryBufferVideoProvider::end_of_data() const
+{
+	if (!memoryBuffer) return true;
+	return currPos >= memoryBuffer->size();
+}
+
+std::shared_ptr<VideoProvider> makeVideoProvider(PHYSFS_file *in, const WzString& filename)
+{
+	return std::make_shared<PhysFSVideoProvider>(in, filename);
+}
+
+std::shared_ptr<VideoProvider> makeVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename)
+{
+	return std::make_shared<MemoryBufferVideoProvider>(memoryBuffer, filename);
 }
 
 /** helper: push a page into the appropriate stream
@@ -490,13 +604,13 @@ static void seq_InitOgg(void)
 	Timer_start();
 }
 
-bool seq_Play(const char *filename)
+bool seq_Play(const std::shared_ptr<VideoProvider>& video)
 {
 	int pp_level_max = 0;
 	int pp_level = 0;
 	ogg_packet op;
 
-	debug(LOG_VIDEO, "starting playback of: %s", filename);
+	debug(LOG_VIDEO, "starting playback of: %s", (video) ? video->filename().toUtf8().c_str() : "");
 
 	if (videoplaying)
 	{
@@ -506,17 +620,13 @@ bool seq_Play(const char *filename)
 
 	seq_InitOgg();
 
-	fpInfile = PHYSFS_openRead(filename);
-	if (fpInfile == nullptr)
+	if (!video)
 	{
-		wz_info("unable to open '%s' for playback", filename);
-
-		fpInfile = PHYSFS_openRead("novideo.ogg");
-		if (fpInfile == nullptr)
-		{
-			return false;
-		}
+		return false;
 	}
+
+	inVideoProvider = video;
+	inVideoProvider->seek_begin();
 
 	theora_p = 0;
 	vorbis_p = 0;
@@ -525,7 +635,7 @@ bool seq_Play(const char *filename)
 	/* Only interested in Vorbis/Theora streams */
 	while (!stateflag)
 	{
-		int ret = buffer_data(fpInfile, &videodata.oy);
+		int ret = inVideoProvider->buffer_data(&videodata.oy);
 
 		if (ret == 0)
 		{
@@ -620,7 +730,7 @@ bool seq_Play(const char *filename)
 		}
 		else
 		{
-			ret = buffer_data(fpInfile, &videodata.oy);   /* someone needs more data */
+			ret = inVideoProvider->buffer_data(&videodata.oy);   /* someone needs more data */
 
 			if (ret == 0)
 			{
@@ -848,7 +958,7 @@ bool seq_Update()
 
 	alGetSourcei(audiodata.source, AL_SOURCE_STATE, &sourcestate);
 
-	if (PHYSFS_eof(fpInfile)
+	if (inVideoProvider->end_of_data()
 		&& !videobuf_ready
 		&& ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
 		&& sourcestate != AL_PLAYING)
@@ -862,7 +972,7 @@ bool seq_Update()
 	if (!videobuf_ready || !audiobuf_ready)
 	{
 		/* no data yet for somebody.  Grab another page */
-		ret = buffer_data(fpInfile, &videodata.oy);
+		ret = inVideoProvider->buffer_data(&videodata.oy);
 		while (ogg_sync_pageout(&videodata.oy, &videodata.og) > 0)
 		{
 			queue_page(&videodata.og);
@@ -900,7 +1010,7 @@ bool seq_Update()
 	}
 
 	/* same if we've run out of input */
-	if (PHYSFS_eof(fpInfile))
+	if (inVideoProvider->end_of_data())
 	{
 		stateflag = true;
 	}
@@ -947,10 +1057,7 @@ void seq_Shutdown()
 
 	ogg_sync_clear(&videodata.oy);
 
-	if (fpInfile)
-	{
-		PHYSFS_close(fpInfile);
-	}
+	inVideoProvider.reset();
 
 	videoplaying = false;
 	seq_setScanlinesDisabled(false);
