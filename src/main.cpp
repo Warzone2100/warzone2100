@@ -1136,6 +1136,35 @@ static bool initSaveGameLoad()
  */
 static void runGameLoop()
 {
+	// Run the second half of a queued gameloopstatus change
+	// (This is needed so that the main loop completes once between initializing the loading screen and actually loading)
+	switch (gameLoopStatus)
+	{
+	case GAMECODE_QUITGAME:
+		debug(LOG_MAIN, "GAMECODE_QUITGAME");
+		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
+		cdAudio_SetGameMode(MusicGameMode::MENUS);
+		stopGameLoop();
+		startTitleLoop(); // Restart into titleloop
+		gameLoopStatus = GAMECODE_CONTINUE;
+		return;
+	case GAMECODE_LOADGAME:
+		debug(LOG_MAIN, "GAMECODE_LOADGAME");
+		stopGameLoop();
+		initSaveGameLoad(); // Restart and load a savegame
+		gameLoopStatus = GAMECODE_CONTINUE;
+		return;
+	case GAMECODE_NEWLEVEL:
+		debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
+		stopGameLoop();
+		startGameLoop(); // Restart gameloop
+		gameLoopStatus = GAMECODE_CONTINUE;
+		return;
+	default:
+		// ignore other values, and proceed with gameLoop
+		break;
+	}
+
 	gameLoopStatus = gameLoop();
 	switch (gameLoopStatus)
 	{
@@ -1144,20 +1173,15 @@ static void runGameLoop()
 		break;
 	case GAMECODE_QUITGAME:
 		debug(LOG_MAIN, "GAMECODE_QUITGAME");
-		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
-		cdAudio_SetGameMode(MusicGameMode::MENUS);
-		stopGameLoop();
-		startTitleLoop(); // Restart into titleloop
+		initLoadingScreen(true);
 		break;
 	case GAMECODE_LOADGAME:
 		debug(LOG_MAIN, "GAMECODE_LOADGAME");
-		stopGameLoop();
-		initSaveGameLoad(); // Restart and load a savegame
+		initLoadingScreen(true);
 		break;
 	case GAMECODE_NEWLEVEL:
 		debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
-		stopGameLoop();
-		startGameLoop(); // Restart gameloop
+		initLoadingScreen(true);
 		break;
 	// Never thrown:
 	case GAMECODE_FASTEXIT:
@@ -1170,11 +1194,48 @@ static void runGameLoop()
 }
 
 
+static optional<TITLECODE> queuedTilecodeChange = nullopt;
+
 /*!
  * Run the code inside the titleloop
  */
 static void runTitleLoop()
 {
+	if (queuedTilecodeChange.has_value())
+	{
+		// Run the second half of a queued titlecode change
+		// (This is needed so that the main loop completes once between initializing the loading screen and actually loading)
+		TITLECODE toProcess = queuedTilecodeChange.value();
+		queuedTilecodeChange.reset();
+		switch (toProcess)
+		{
+		case TITLECODE_SAVEGAMELOAD:
+			{
+				debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
+				// Restart into gameloop and load a savegame, ONLY on a good savegame load!
+				stopTitleLoop();
+				if (!initSaveGameLoad())
+				{
+					// we had a error loading savegame (corrupt?), so go back to title screen?
+					stopGameLoop();
+					startTitleLoop();
+					changeTitleMode(TITLE);
+				}
+				closeLoadingScreen();
+				return;
+			}
+		case TITLECODE_STARTGAME:
+			debug(LOG_MAIN, "TITLECODE_STARTGAME");
+			stopTitleLoop();
+			startGameLoop(); // Restart into gameloop
+			closeLoadingScreen();
+			return;
+		default:
+			// ignore unexpected value
+			break;
+		}
+	}
+
 	switch (titleLoop())
 	{
 	case TITLECODE_CONTINUE:
@@ -1188,24 +1249,13 @@ static void runTitleLoop()
 		{
 			debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
 			initLoadingScreen(true);
-			// Restart into gameloop and load a savegame, ONLY on a good savegame load!
-			stopTitleLoop();
-			if (!initSaveGameLoad())
-			{
-				// we had a error loading savegame (corrupt?), so go back to title screen?
-				stopGameLoop();
-				startTitleLoop();
-				changeTitleMode(TITLE);
-			}
-			closeLoadingScreen();
+			queuedTilecodeChange = TITLECODE_SAVEGAMELOAD;
 			break;
 		}
 	case TITLECODE_STARTGAME:
 		debug(LOG_MAIN, "TITLECODE_STARTGAME");
 		initLoadingScreen(true);
-		stopTitleLoop();
-		startGameLoop(); // Restart into gameloop
-		closeLoadingScreen();
+		queuedTilecodeChange = TITLECODE_STARTGAME;
 		break;
 	case TITLECODE_SHOWINTRO:
 		debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
