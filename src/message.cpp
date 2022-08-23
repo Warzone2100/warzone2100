@@ -613,6 +613,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				if (strcmp(audioName, "0"))
 				{
 					//allocate space
+					ASSERT(false, "Unexpected separate audio track provided (%s), for %s in %s - this is deprecated!", audioName, psViewReplay->seqList[dataInc].sequenceName.toUtf8().c_str(), (filename) ? filename->toUtf8().c_str() : "<unknown filename>");
 					psViewReplay->seqList[dataInc].audio = audioName;
 				}
 			}
