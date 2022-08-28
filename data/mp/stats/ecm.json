@@ -16,8 +16,7 @@
 		"id": "RepairCentre",
 		"location": "TURRET",
 		"name": "Repair Center Turret",
-		"sensorModel": "GNHREPAR.PIE",
-		"usageClass": "Structures"
+		"sensorModel": "GNHREPAR.PIE"
 	},
 	"ZNULLECM": {
 		"id": "ZNULLECM",

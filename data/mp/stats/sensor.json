@@ -12,7 +12,6 @@
 		"range": 1536,
 		"sensorModel": "gnlsnsr1.pie",
 		"type": "STANDARD",
-		"usageClass": "Babas",
 		"weight": 100
 	},
 	"BaBaSensor": {
@@ -39,7 +38,6 @@
 		"range": 2304,
 		"sensorModel": "misensor.PIE",
 		"type": "STANDARD",
-		"usageClass": "Structures",
 		"weight": 1
 	},
 	"DefaultSensor1Mk1": {
@@ -110,7 +108,6 @@
 		"range": 2048,
 		"sensorModel": "GNLSNSR1.PIE",
 		"type": "STANDARD",
-		"usageClass": "Structures",
 		"weight": 100
 	},
 	"SensorTurret1Mk1": {
@@ -127,7 +124,6 @@
 		"range": 1536,
 		"sensorModel": "GNLSNSR1.PIE",
 		"type": "STANDARD",
-		"usageClass": "Droids",
 		"weight": 100
 	},
 	"Sys-CBTower01": {
@@ -142,7 +138,6 @@
 		"range": 2048,
 		"sensorModel": "GNMECM2.PIE",
 		"type": "INDIRECT CB",
-		"usageClass": "Structures",
 		"weight": 100
 	},
 	"Sys-CBTurret01": {
@@ -159,7 +154,6 @@
 		"range": 2048,
 		"sensorModel": "GNMECM2.PIE",
 		"type": "INDIRECT CB",
-		"usageClass": "Droids",
 		"weight": 100
 	},
 	"Sys-VTOLCBTower01": {
@@ -174,7 +168,6 @@
 		"range": 2048,
 		"sensorModel": "GNHSNSR3.PIE",
 		"type": "VTOL CB",
-		"usageClass": "Structures",
 		"weight": 100
 	},
 	"Sys-VTOLCBTurret01": {
@@ -191,7 +184,6 @@
 		"range": 2048,
 		"sensorModel": "GNHSNSR3.PIE",
 		"type": "VTOL CB",
-		"usageClass": "Droids",
 		"weight": 100
 	},
 	"Sys-VTOLRadarTower01": {
@@ -206,7 +198,6 @@
 		"range": 2048,
 		"sensorModel": "GNMSNSR2.PIE",
 		"type": "VTOL INTERCEPT",
-		"usageClass": "Structures",
 		"weight": 100
 	},
 	"Sys-VstrikeTurret01": {
@@ -222,7 +213,6 @@
 		"range": 2048,
 		"sensorModel": "GNMSNSR2.PIE",
 		"type": "VTOL INTERCEPT",
-		"usageClass": "Droids",
 		"weight": 100
 	},
 	"TowerSensor": {
@@ -245,7 +235,6 @@
 		"range": 2304,
 		"sensorModel": "miupdish.PIE",
 		"type": "SUPER",
-		"usageClass": "Structures",
 		"weight": 1
 	},
 	"ZNULLSENSOR": {

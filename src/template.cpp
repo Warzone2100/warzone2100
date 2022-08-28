@@ -253,25 +253,25 @@ bool designableTemplate(DROID_TEMPLATE *psTempl, int player)
 		psTempl->droidType == DROID_CYBORG_REPAIR)
 	{
 		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
-						(!designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") && asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].usageClass.toStdString().find("Cyborg") != std::string::npos) ||
+						(!designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") && asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].usageClass == UsageClass::Cyborg) ||
 						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
-		bool isSuperCyborg = strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].usageClass.toStdString().c_str(), "SuperCyborgs") == 0;
+		bool isSuperCyborg = asBodyStats[psTempl->asParts[COMP_BODY]].usageClass == UsageClass::SuperCyborg;
 
 		designable =
 			   !designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")
 			&& (strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Cyborgs") == 0)
 			&& !designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
 			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LEGGED
-			&& strcmp(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass.toStdString().c_str(), "Cyborgs") == 0
+			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass == UsageClass::Cyborg
 			&& repair
-			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(asBrainStats[psTempl->asParts[COMP_BRAIN]], "Brain") && asBrainStats[psTempl->asParts[COMP_BRAIN]].usageClass.toStdString().find("Cyborg") != std::string::npos))
-			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(asECMStats[psTempl->asParts[COMP_ECM]], "ECM") && asECMStats[psTempl->asParts[COMP_ECM]].usageClass.toStdString().find("Cyborg") != std::string::npos))
-			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(asSensorStats[psTempl->asParts[COMP_SENSOR]], "Sensor") && asSensorStats[psTempl->asParts[COMP_SENSOR]].usageClass.toStdString().find("Cyborg") != std::string::npos))
-			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]], "Construction part") && asConstructStats[psTempl->asParts[COMP_CONSTRUCT]].usageClass.toStdString().find("Cyborg") != std::string::npos))
+			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(asBrainStats[psTempl->asParts[COMP_BRAIN]], "Brain") && asBrainStats[psTempl->asParts[COMP_BRAIN]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(asECMStats[psTempl->asParts[COMP_ECM]], "ECM") && asECMStats[psTempl->asParts[COMP_ECM]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(asSensorStats[psTempl->asParts[COMP_SENSOR]], "Sensor") && asSensorStats[psTempl->asParts[COMP_SENSOR]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]], "Construction part") && asConstructStats[psTempl->asParts[COMP_CONSTRUCT]].usageClass == UsageClass::Cyborg))
 			&& ((psTempl->numWeaps <= 0) || (asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]])
-				|| (!designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0") && ((!isSuperCyborg && strcmp(asWeaponStats[psTempl->asWeaps[0]].usageClass.toStdString().c_str(), "Cyborgs") == 0) || (isSuperCyborg && strcmp(asWeaponStats[psTempl->asWeaps[0]].usageClass.toStdString().c_str(), "SuperCyborgs") == 0))))
-			&& ((psTempl->numWeaps <= 1) || (!designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1") && ((!isSuperCyborg && strcmp(asWeaponStats[psTempl->asWeaps[1]].usageClass.toStdString().c_str(), "Cyborgs") == 0) || (isSuperCyborg && strcmp(asWeaponStats[psTempl->asWeaps[1]].usageClass.toStdString().c_str(), "SuperCyborgs") == 0))))
-			&& ((psTempl->numWeaps <= 2) || (!designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2") && ((!isSuperCyborg && strcmp(asWeaponStats[psTempl->asWeaps[2]].usageClass.toStdString().c_str(), "Cyborgs") == 0) || (isSuperCyborg && strcmp(asWeaponStats[psTempl->asWeaps[2]].usageClass.toStdString().c_str(), "SuperCyborgs") == 0))));
+				|| (!designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 1) || (!designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 2) || (!designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::SuperCyborg))));
 	}
 	else
 	{
