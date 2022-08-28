@@ -289,6 +289,14 @@ struct BASE_STATS
 #define getID(_psStats) (_psStats)->id.toUtf8().c_str()
 #define checkIfZNullStat(_psStats) ((_psStats)->id.toUtf8().find("ZNULL") != std::string::npos)
 
+// Classify some components for more detailed template checking in normal multiplayer
+enum class UsageClass
+{
+	Other,
+	Cyborg,
+	SuperCyborg
+};
+
 /* Stats common to all droid components */
 struct COMPONENT_STATS : public BASE_STATS
 {
@@ -313,6 +321,7 @@ struct COMPONENT_STATS : public BASE_STATS
 	COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
 	DROID_TYPE droidTypeOverride = DROID_ANY;
 	bool designable = false;		///< Flag to indicate whether this component can be used in the design screen
+	UsageClass usageClass = UsageClass::Other;       ///< Used to check if certain template designs are legit for multiplayer
 };
 
 struct PROPULSION_STATS : public COMPONENT_STATS

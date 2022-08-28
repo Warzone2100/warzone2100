@@ -17,6 +17,7 @@
 		"name": "*Cyborg Mechanic*",
 		"repairPoints": 10,
 		"time": 7,
+		"usageClass": "Cyborg",
 		"weight": 150
 	},
 	"HeavyRepair": {

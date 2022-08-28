@@ -31,6 +31,7 @@
 		"spinSpeed": 450,
 		"turnSpeed": 225,
 		"type": "Legged",
+		"usageClass": "Cyborg",
 		"weight": 50
 	},
 	"HalfTrack": {
@@ -51,7 +52,6 @@
 		"buildPoints": 125,
 		"buildPower": 150,
 		"deceleration": 200,
-		"designable": 1,
 		"hitpointPctOfBody": 100,
 		"id": "Helicopter",
 		"model": "PRLHELI1.PIE",
@@ -65,7 +65,6 @@
 	"Naval": {
 		"buildPoints": 150,
 		"buildPower": 150,
-		"designable": 1,
 		"hitpointPctOfBody": 300,
 		"id": "Naval",
 		"model": "prhnaval1.pie",

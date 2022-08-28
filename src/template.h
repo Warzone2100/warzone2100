@@ -29,7 +29,7 @@ extern bool allowDesign;
 extern bool includeRedundantDesigns;
 extern bool playerBuiltHQ;
 
-
+bool designableTemplate(DROID_TEMPLATE *psTempl, int player);
 bool initTemplates();
 
 /// Take ownership of template given by pointer.

@@ -38,6 +38,7 @@
 #include "multiplay.h"
 #include "projectile.h"
 #include "main.h"
+#include "research.h"
 
 // Template storage
 std::map<UDWORD, std::unique_ptr<DROID_TEMPLATE>> droidTemplates[MAX_PLAYERS];
@@ -225,6 +226,92 @@ bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 	return true;
 }
 
+// A way to check if a design is something someone could legitimately have in multiplayer
+bool designableTemplate(DROID_TEMPLATE *psTempl, int player)
+{
+	if (!bMultiPlayer || !isHumanPlayer(player))
+	{
+		return true; // Don't care about AIs
+	}
+
+	char const *failPart = nullptr;
+	WzString failPartName;
+	auto designablePart = [&](COMPONENT_STATS const &component, char const *part) {
+		if (!component.designable)
+		{
+			failPart = part;
+			failPartName = component.name;
+		}
+		return component.designable;
+	};
+
+	bool designable = false;
+
+	if (psTempl->droidType == DROID_CYBORG ||
+		psTempl->droidType == DROID_CYBORG_SUPER ||
+		psTempl->droidType == DROID_CYBORG_CONSTRUCT ||
+		psTempl->droidType == DROID_CYBORG_REPAIR)
+	{
+		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
+						(!designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") && asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].usageClass == UsageClass::Cyborg) ||
+						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
+		bool isSuperCyborg = asBodyStats[psTempl->asParts[COMP_BODY]].usageClass == UsageClass::SuperCyborg;
+
+		designable =
+			   !designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")
+			&& (strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Cyborgs") == 0)
+			&& !designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
+			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LEGGED
+			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass == UsageClass::Cyborg
+			&& repair
+			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(asBrainStats[psTempl->asParts[COMP_BRAIN]], "Brain") && asBrainStats[psTempl->asParts[COMP_BRAIN]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(asECMStats[psTempl->asParts[COMP_ECM]], "ECM") && asECMStats[psTempl->asParts[COMP_ECM]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(asSensorStats[psTempl->asParts[COMP_SENSOR]], "Sensor") && asSensorStats[psTempl->asParts[COMP_SENSOR]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]], "Construction part") && asConstructStats[psTempl->asParts[COMP_CONSTRUCT]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->numWeaps <= 0) || (asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]])
+				|| (!designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 1) || (!designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 2) || (!designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::SuperCyborg))));
+	}
+	else
+	{
+		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
+						designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") ||
+						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
+		bool transporter = (psTempl->droidType == DROID_TRANSPORTER) || (psTempl->droidType == DROID_SUPERTRANSPORTER);
+
+		designable =
+			   (transporter || (!transporter && designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")))
+			&& designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
+			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [psTempl->asParts[COMP_BRAIN]],      "Brain"))
+			&& repair
+			&& (psTempl->asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [psTempl->asParts[COMP_ECM]],        "ECM"))
+			&& (psTempl->asParts[COMP_SENSOR]     == 0 || designablePart(asSensorStats   [psTempl->asParts[COMP_SENSOR]],     "Sensor"))
+			&& (psTempl->asParts[COMP_CONSTRUCT]  == 0 || designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]],  "Construction part"))
+			&& (psTempl->numWeaps <= 0 || asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]]
+									 || designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0"))
+			&& (psTempl->numWeaps <= 1 || designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1"))
+			&& (psTempl->numWeaps <= 2 || designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2"));
+
+		if (transporter && designable)
+		{
+			designable = (asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) &&
+						!designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body");
+			if (designable)
+			{
+				designable = strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Transports") == 0;
+			}
+		}
+	}
+
+	if (!designable)
+	{
+		debug(LOG_ERROR, "%s \"%s\" for \"%s\" cannot be designed", failPart, failPartName.toUtf8().c_str(), psTempl->name.toUtf8().c_str());
+	}
+
+	return designable;
+}
+
 bool initTemplates()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return false; }
@@ -251,35 +338,6 @@ bool initTemplates()
 		if (!loadCommonSuccess)
 		{
 			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", design.name.toUtf8().c_str());
-			continue;
-		}
-
-		char const *failPart = nullptr;
-		WzString failPartName;
-		auto designablePart = [&](COMPONENT_STATS const &component, char const *part) {
-			if (!component.designable)
-			{
-				failPart = part;
-				failPartName = component.name;
-			}
-			return component.designable;
-		};
-
-		bool designable =
-			   designablePart(asBodyStats      [design.asParts[COMP_BODY]],       "Body")
-			&& designablePart(asPropulsionStats[design.asParts[COMP_PROPULSION]], "Propulsion")
-			&& (design.asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [design.asParts[COMP_BRAIN]],      "Brain"))
-			&& (design.asParts[COMP_REPAIRUNIT] == 0 || designablePart(asRepairStats   [design.asParts[COMP_REPAIRUNIT]], "Repair unit"))
-			&& (design.asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [design.asParts[COMP_ECM]],        "ECM"))
-			&& (design.asParts[COMP_SENSOR]     == 0 || designablePart(asSensorStats   [design.asParts[COMP_SENSOR]],     "Sensor"))
-			&& (design.asParts[COMP_CONSTRUCT]  == 0 || designablePart(asConstructStats[design.asParts[COMP_CONSTRUCT]],  "Construction part"))
-			&& (design.numWeaps <= 0 || asBrainStats[design.asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[design.asWeaps[0]]
-			                         || designablePart(asWeaponStats[design.asWeaps[0]], "Weapon 0"))
-			&& (design.numWeaps <= 1 || designablePart(asWeaponStats[design.asWeaps[1]], "Weapon 1"))
-			&& (design.numWeaps <= 2 || designablePart(asWeaponStats[design.asWeaps[2]], "Weapon 2"));
-		if (!designable)
-		{
-			debug(LOG_ERROR, "%s \"%s\" for \"%s\" from stored templates cannot be designed", failPart, failPartName.toUtf8().c_str(), design.name.toUtf8().c_str());
 			continue;
 		}
 		bool valid = intValidTemplate(&design, ini.value("name").toWzString().toUtf8().c_str(), false, selectedPlayer);

@@ -2,7 +2,6 @@
 	"ECM1TurretMk1": {
 		"buildPoints": 750,
 		"buildPower": 500,
-		"designable": 1,
 		"droidType": "DROID_ECM",
 		"hitpoints": 200,
 		"id": "ECM1TurretMk1",
