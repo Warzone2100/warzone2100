@@ -2032,7 +2032,7 @@
 		"buildPoints": 300,
 		"buildPower": 60,
 		"height": 3,
-		"hitpoints": 450,
+		"hitpoints": 300,
 		"id": "Sys-SensoTower01",
 		"name": "Sensor Tower",
 		"resistance": 150,
