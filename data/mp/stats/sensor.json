@@ -81,8 +81,8 @@
 		"weight": 100
 	},
 	"Sensor-WideSpec": {
-		"buildPoints": 700,
-		"buildPower": 300,
+		"buildPoints": 1000,
+		"buildPower": 200,
 		"designable": 1,
 		"droidType": "DROID_SENSOR",
 		"hitpoints": 200,
@@ -112,7 +112,7 @@
 	},
 	"SensorTurret1Mk1": {
 		"buildPoints": 500,
-		"buildPower": 150,
+		"buildPower": 50,
 		"designable": 1,
 		"droidType": "DROID_SENSOR",
 		"hitpoints": 200,
