@@ -38,6 +38,7 @@
 
 #if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
+#include <cxxabi.h>
 #endif // defined(WZ_OS_LINUX) && defined(__GLIBC__)
 
 #if defined(WZ_OS_UNIX)
@@ -631,9 +632,33 @@ void _debugBacktrace(code_part part)
 	unsigned num = backtrace(btv, sizeof(btv) / sizeof(*btv));
 	char **btc = backtrace_symbols(btv, num);
 	unsigned i;
-	for (i = 1; i + 2 < num; ++i)  // =1: Don't print "src/warzone2100(syncDebugBacktrace+0x16) [0x6312d1]". +2: Don't print last two lines of backtrace such as "/lib/libc.so.6(__libc_start_main+0xe6) [0x7f91e040ea26]", since the address varies (even with the same binary).
+	auto trim = [](const char *in, char *out) {
+		const char *begin = strchr(in, '_');
+		if (begin)
+		{
+			const char *end = strchr(begin, '+');
+			if (end)
+			{
+				memcpy(out, begin, end - begin);
+				out[end - begin] = '\0';
+			}
+		}
+	};
+	for (i = 1; i + 2 < num; ++i) 
 	{
-		_debug(0, part, "BT", "%s", btc[i]);
+		int status = -1;
+		char buf[1024];
+		const char *p = btc[i];
+		trim(p, buf);
+		char *readableName = abi::__cxa_demangle(buf, NULL, NULL, &status);
+		if (status == 0)
+		{
+			_debug(0, part, "BT", "%s", readableName);
+		}
+		else
+		{
+			_debug(0, part, "BT", "%s [status: %i]", btc[i], status);
+		}
 	}
 	free(btc);
 #else
