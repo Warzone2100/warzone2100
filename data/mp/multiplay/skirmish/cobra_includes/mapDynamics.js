@@ -8,7 +8,7 @@ function checkIfSeaMap()
 {
 	function uncached()
 	{
-		var hoverMap = false;
+		let hoverMap = false;
 		seaMapWithLandEnemy = false;
 
 		for (let i = 0; i < maxPlayers; ++i)
@@ -18,7 +18,7 @@ function checkIfSeaMap()
 
 				//Check if it is a map 'spotter' pit
 				//Cyborgs will turn off in divided maps with a physical barrier still
-				var temp = 0;
+				let temp = 0;
 				for (let t = 0; t < maxPlayers; ++t)
 				{
 					if (!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
@@ -67,7 +67,7 @@ function countAllResources()
 {
 	function uncached()
 	{
-		var amount = enumFeature(ALL_PLAYERS, OIL_RES).length;
+		let amount = enumFeature(ALL_PLAYERS, OIL_RES).length;
 		for (let i = 0; i < maxPlayers; ++i)
 		{
 			amount += enumStruct(i, structures.derrick).length;
@@ -89,11 +89,11 @@ function averageOilPerPlayer()
 {
 	function uncached()
 	{
-		var players = 0;
+		let players = 0;
 		//maxPlayers is useless here in case there are some empty slots.
 		for (let i = 0; i < maxPlayers; ++i)
 		{
-			var data = playerData[i];
+			let data = playerData[i];
 			players += ((data.isHuman || data.isAI) ? 1 : 0);
 		}
 
@@ -108,8 +108,8 @@ function mapOilLevel()
 {
 	function uncached()
 	{
-		var str;
-		var perPlayer = averageOilPerPlayer();
+		let str;
+		let perPlayer = averageOilPerPlayer();
 		if (perPlayer <= 10)
 		{
 			str = "LOW";
@@ -137,7 +137,7 @@ function highOilMap()
 {
 	function uncached()
 	{
-		var oil = mapOilLevel();
+		let oil = mapOilLevel();
 
 		if (oil === "HIGH" || oil === "NTW")
 		{
@@ -156,8 +156,8 @@ function cobraBaseArea()
 	function uncached()
 	{
 		const EXTRA_TILES = 20;
-		var area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
-		var baseStructures = [
+		let area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
+		let baseStructures = [
 			structures.factory,
 			structures.cyborgFactory,
 			structures.vtolFactory,
@@ -171,12 +171,12 @@ function cobraBaseArea()
 
 		for (let i = 0, len = baseStructures.length; i < len; ++i)
 		{
-			var structureType = baseStructures[i];
-			var objects = enumStruct(me, structureType);
+			let structureType = baseStructures[i];
+			let objects = enumStruct(me, structureType);
 
 			for (let j = 0, len2 = objects.length; j < len2; ++j)
 			{
-				var structure = objects[j];
+				let structure = objects[j];
 
 				if (structure.x < area.x1)
 				{

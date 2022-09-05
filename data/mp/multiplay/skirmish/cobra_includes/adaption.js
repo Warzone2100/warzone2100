@@ -2,7 +2,7 @@
 //for anti-cyborg measures.
 function switchOffMG()
 {
-	var cyborgThreat = playerCyborgRatio(getMostHarmfulPlayer()) >= subPersonalities[personality].cyborgThreatPercentage;
+	let cyborgThreat = playerCyborgRatio(getMostHarmfulPlayer()) >= subPersonalities[personality].cyborgThreatPercentage;
 	// Will keep using machineguns until the basic laser is available or if the personality
 	// doesn't have the first of its primary weapon or artillery line available.
 	if ((cyborgThreat || !havePrimaryOrArtilleryWeapon()) && !componentAvailable("Laser3BEAMMk1"))
@@ -44,15 +44,15 @@ function countEnemyVTOL(player)
 {
 	function uncached(player)
 	{
-		var enemies = isDefined(player) ? [player] : findLivingEnemies();
-		var enemyVtolCount = 0;
+		let enemies = isDefined(player) ? [player] : findLivingEnemies();
+		let enemyVtolCount = 0;
 
 		for (let x = 0, e = enemies.length; x < e; ++x)
 		{
-			var playerDroids = enumDroid(enemies[x]);
+			let playerDroids = enumDroid(enemies[x]);
 			for (let c = 0, l = playerDroids.length; c < l; ++c)
 			{
-				var prop = playerDroids[c].propulsion;
+				let prop = playerDroids[c].propulsion;
 				if (prop === "V-Tol" || prop === "Helicopter")
 				{
 					++enemyVtolCount;
@@ -105,13 +105,13 @@ function playerBodySizeRatio(player)
 
 	function uncached(player)
 	{
-		var small = 0;
-		var medium = 0;
-		var heavy = 0;
-		var attackers = enumDroid(player, DROID_WEAPON);
+		let small = 0;
+		let medium = 0;
+		let heavy = 0;
+		let attackers = enumDroid(player, DROID_WEAPON);
 		for (let i = 0, len = attackers.length; i < len; ++i)
 		{
-			var body = attackers[i].body;
+			let body = attackers[i].body;
 
 			if (body === "Body1REC" || body === "Body2SUP" || body === "Body4ABT" || body === "Body3MBT")
 			{
@@ -146,14 +146,14 @@ function playerLandPropRatio(player)
 
 	function uncached(player)
 	{
-		var wheel = 0;
-		var halftrack = 0;
-		var track = 0;
-		var hover = 0;
-		var attackers = enumDroid(player, DROID_WEAPON);
+		let wheel = 0;
+		let halftrack = 0;
+		let track = 0;
+		let hover = 0;
+		let attackers = enumDroid(player, DROID_WEAPON);
 		for (let i = 0, len = attackers.length; i < len; ++i)
 		{
-			var prop = attackers[i].propulsion;
+			let prop = attackers[i].propulsion;
 
 			if (prop === "wheeled01")
 			{
@@ -212,9 +212,9 @@ function adaptToMap()
 {
 	const HIGH_TECH_LEVEL = getMultiTechLevel() >= 2;
 	const FRIEND_COUNT = playerAlliance(true).length;
-	var highOil = highOilMap();
-	var personal;
-	var chosen;
+	let highOil = highOilMap();
+	let personal;
+	let chosen;
 
 	//Map to allow a higher chance for a specific personality to be chosen.
 	if (HIGH_TECH_LEVEL || highOil)

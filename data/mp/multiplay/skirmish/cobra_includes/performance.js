@@ -31,9 +31,9 @@ function cacheThis(func, funcParameters, cachedItem, time)
 		debugGetCallerFuncObject().cachedValues = {};
 	}
 
-	var t = debugGetCallerFuncObject().cachedTimes[cachedItem];
-	var obj = debugGetCallerFuncObject().cachedValues[cachedItem];
-	var def = isDefined(obj);
+	let t = debugGetCallerFuncObject().cachedTimes[cachedItem];
+	let obj = debugGetCallerFuncObject().cachedValues[cachedItem];
+	let def = isDefined(obj);
 	if (!def ||
 		(isDefined(obj.typeInfo) && (getObject(obj.typeInfo, obj.playerInfo, obj.idInfo) === null)) ||
 		((gameTime - t) >= REFRESH_TIME))

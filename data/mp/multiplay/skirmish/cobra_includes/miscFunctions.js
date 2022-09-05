@@ -63,8 +63,8 @@ function personalityIsRocketMain()
 //Distance between an object and the Cobra base.
 function distanceToBase(obj1, obj2)
 {
-	var dist1 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj1.x, obj1.y);
-	var dist2 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj2.x, obj2.y);
+	let dist1 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj1.x, obj1.y);
+	let dist2 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj2.x, obj2.y);
 	return (dist1 - dist2);
 }
 
@@ -93,11 +93,11 @@ function rangeStep(player)
 			player = getMostHarmfulPlayer();
 		}
 
-		var highOil = highOilMap();
-		var targets = [];
-		var derr;
-		var struc = findNearestEnemyStructure(player);
-		var droid = findNearestEnemyDroid(player);
+		let highOil = highOilMap();
+		let targets = [];
+		let derr;
+		let struc = findNearestEnemyStructure(player);
+		let droid = findNearestEnemyDroid(player);
 
 		if (!highOil)
 		{
@@ -119,7 +119,7 @@ function rangeStep(player)
 
 		if (targets.length > 0)
 		{
-			if (!highOil && derr && ((random(100) < 7) || (countStruct(structures.derrick) <= Math.floor(1.5 * averageOilPerPlayer()))))
+			if (!highOil && derr && ((random(100) < 7) || (countStruct(structures.derrick, me) <= Math.floor(1.5 * averageOilPerPlayer()))))
 			{
 				return objectInformation(derr);
 			}
@@ -144,7 +144,7 @@ function playerAlliance(ally)
 		ally = false;
 	}
 
-	var players = [];
+	let players = [];
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
@@ -183,7 +183,7 @@ function findLivingEnemies()
 {
 	function uncached()
 	{
-		var alive = [];
+		let alive = [];
 		for (let x = 0; x < maxPlayers; ++x)
 		{
 			if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
@@ -219,9 +219,9 @@ function getMostHarmfulPlayer()
 
 	function uncached()
 	{
-		var mostHarmful = 0;
-		var enemies = findLivingEnemies();
-		var allEnemies = playerAlliance(false);
+		let mostHarmful = 0;
+		let enemies = findLivingEnemies();
+		let allEnemies = playerAlliance(false);
 
 		if (enemies.length === 0)
 		{
@@ -282,25 +282,43 @@ function donateFromGroup(from, group)
 {
 	if (isDefined(group))
 	{
-		const MIN_HEALTH = 80;
-		var chosenGroup;
+		let chosenGroup;
 
 		switch (group)
 		{
 			case "ATTACK": chosenGroup = enumGroup(attackGroup); break;
 			case "CYBORG": chosenGroup = enumGroup(attackGroup).filter((dr) => (dr.droidType === DROID_CYBORG)); break;
 			case "VTOL": chosenGroup = enumGroup(vtolGroup); break;
+			case "TRUCK": chosenGroup = enumGroup(constructGroup).concat(enumGroup(oilGrabberGroup)).concat(enumGroup(constructGroupNTWExtra)); break;
 			default: chosenGroup = enumGroup(attackGroup); break;
 		}
 
-		var droids = chosenGroup.filter((dr) => (dr.health > MIN_HEALTH));
-		const CACHE_DROIDS = droids.length;
+		const CACHE_DROIDS = chosenGroup.length;
 
-		if (CACHE_DROIDS >= MIN_ATTACK_DROIDS)
+		if ((CACHE_DROIDS >= MIN_ATTACK_DROIDS) || (group === "TRUCK" && CACHE_DROIDS >= MIN_TRUCKS_PER_GROUP))
 		{
-			donateObject(droids[random(CACHE_DROIDS)], from);
+			let idx = 0;
+			let amount;
+			if (group !== "TRUCK")
+			{
+				amount = random(CACHE_DROIDS - (MIN_ATTACK_DROIDS - 2)) + 1;
+			}
+			else
+			{
+				amount = random(CACHE_DROIDS - (MIN_TRUCKS_PER_GROUP - 1)) + 1;
+			}
+
+			while (idx < amount)
+			{
+				donateObject(chosenGroup[idx], from);
+				++idx;
+			}
+
+			return true;
 		}
 	}
+
+	return false;
 }
 
 //Remove timers. May pass a string or an array of strings.
@@ -322,7 +340,7 @@ function removeThisTimer(timer)
 //Check if Cobra is "alive". If not, the script is put in a very low perf impact state.
 function checkIfDead()
 {
-	if (!(countDroid(DROID_ANY) || countStruct(structures.factory) || countStruct(structures.cyborgFactory)))
+	if (!(countDroid(DROID_ANY, me) || countStruct(structures.factory, me) || countStruct(structures.cyborgFactory, me)))
 	{
 		currently_dead = true;
 
@@ -364,10 +382,10 @@ function initCobraGroups()
 	addDroidsToGroup(sensorGroup, enumDroid(me, DROID_SENSOR));
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter((obj) => (obj.isCB)));
 
-	var cons = enumDroid(me, DROID_CONSTRUCT);
+	let cons = enumDroid(me, DROID_CONSTRUCT);
 	for (let i = 0, l = cons.length; i < l; ++i)
 	{
-		var con = cons[i];
+		let con = cons[i];
 
 		eventDroidBuilt(con, null);
 	}
@@ -375,7 +393,7 @@ function initCobraGroups()
 
 function initCobraVars()
 {
-	var isHoverMap = checkIfSeaMap();
+	let isHoverMap = checkIfSeaMap();
 
 	lastMsg = "eventStartLevel";
 	lastMsgThrottle = 0;
@@ -413,8 +431,8 @@ function randomOffsetLocation(location)
 	{
 		const MAP_EDGE = 2;
 		const TILE_OFFSET_MAX = 3;
-		var newValueX = (random(100) < 50) ? location.x + random(TILE_OFFSET_MAX) : location.x - random(TILE_OFFSET_MAX);
-		var newValueY = (random(100) < 50) ? location.y + random(TILE_OFFSET_MAX) : location.y - random(TILE_OFFSET_MAX);
+		let newValueX = (random(100) < 50) ? location.x + random(TILE_OFFSET_MAX) : location.x - random(TILE_OFFSET_MAX);
+		let newValueY = (random(100) < 50) ? location.y + random(TILE_OFFSET_MAX) : location.y - random(TILE_OFFSET_MAX);
 
 		if (newValueX < MAP_EDGE)
 		{
