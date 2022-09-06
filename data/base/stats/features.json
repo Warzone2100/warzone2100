@@ -946,7 +946,7 @@
 		"name": "Wrecked Tanker",
 		"startVisible": 0,
 		"tileDraw": 1,
-		"type": "TANK WRECK",
+		"type": "VEHICLE",
 		"width": 1
 	},
 	"WreckedVertCampVan": {
