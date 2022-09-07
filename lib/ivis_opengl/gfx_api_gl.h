@@ -26,6 +26,7 @@
 #include <cmath>
 #include <functional>
 #include <typeindex>
+#include <array>
 
 namespace gfx_api
 {
@@ -227,7 +228,7 @@ struct gl_context final : public gfx_api::context
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
-	virtual bool texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
+	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
 	void initPixelFormatsSupport();
@@ -241,5 +242,7 @@ private:
 	std::vector<bool> enabledVertexAttribIndexes;
 	size_t frameNum = 0;
 	std::string formattedRendererInfoString;
-	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
+	std::array<std::vector<gfx_api::pixel_format_usage::flags>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> textureFormatsSupport;
+	bool has2DTextureArraySupport = false;
+	int32_t maxArrayTextureLayers = 0;
 };

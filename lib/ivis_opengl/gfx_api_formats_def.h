@@ -101,6 +101,14 @@ namespace gfx_api
 		}
 	}
 
+	enum class pixel_format_target : uint8_t
+	{
+		texture_2d = 0,
+		texture_2d_array = 1,
+	};
+	constexpr pixel_format_target MAX_PIXEL_FORMAT_TARGET = pixel_format_target::texture_2d_array;
+	constexpr size_t PIXEL_FORMAT_TARGET_COUNT = static_cast<size_t>(MAX_PIXEL_FORMAT_TARGET) + 1;
+
 	enum class texture_type
 	{
 		user_interface,

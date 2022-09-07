@@ -235,6 +235,8 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 			return GL_MAX_TEXTURE_SIZE;
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			return GL_MAX_SAMPLES;
+		case gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS:
+			return GL_MAX_ARRAY_TEXTURE_LAYERS;
 		default:
 			debug(LOG_FATAL, "Unrecognised property type");
 	}
@@ -2287,7 +2289,7 @@ bool gl_context::initGLContext()
 	sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
 
 	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
-	GLint glMaxTIUs = 0, glMaxTIUAs = 0, glmaxSamples = 0, glmaxSamplesbuf = 0, glmaxVertexAttribs = 0;
+	GLint glMaxTIUs = 0, glMaxTIUAs = 0, glmaxSamples = 0, glmaxSamplesbuf = 0, glmaxVertexAttribs = 0, glMaxArrayTextureLayers = 0;
 
 	debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -2303,6 +2305,9 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &glmaxVertexAttribs);
 	debug(LOG_3D, "  * (current) Max vertex attribute locations is %d.", (int) glmaxVertexAttribs);
+	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &glMaxArrayTextureLayers);
+	debug(LOG_3D, "  * (current) Max array texture layers is %d.", (int) glMaxArrayTextureLayers);
+	maxArrayTextureLayers = glMaxArrayTextureLayers;
 
 	// IMPORTANT: Reserve enough slots in enabledVertexAttribIndexes based on glmaxVertexAttribs
 	if (glmaxVertexAttribs == 0)
@@ -2367,7 +2372,7 @@ void gl_context::endRenderPass()
 	current_program = nullptr;
 }
 
-static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(gfx_api::pixel_format format, bool gles)
+static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum target, gfx_api::pixel_format format, bool gles)
 {
 	gfx_api::pixel_format_usage::flags retVal = gfx_api::pixel_format_usage::none;
 
@@ -2386,14 +2391,14 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(gfx_api:
 	}
 
 	GLint supported = GL_FALSE;
-	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_INTERNALFORMAT_SUPPORTED, 1, &supported);
+	glGetInternalformativ(target, internal_format, GL_INTERNALFORMAT_SUPPORTED, 1, &supported);
 	if (!supported)
 	{
 		return retVal;
 	}
 
 	supported = GL_NONE;
-	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_FRAGMENT_TEXTURE, 1, &supported);
+	glGetInternalformativ(target, internal_format, GL_FRAGMENT_TEXTURE, 1, &supported);
 	if (supported == GL_FULL_SUPPORT) // ignore caveat support for now
 	{
 		retVal |= gfx_api::pixel_format_usage::sampled_image;
@@ -2401,8 +2406,8 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(gfx_api:
 
 	GLint shader_image_load = GL_NONE;
 	GLint shader_image_store = GL_NONE;
-	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_SHADER_IMAGE_LOAD, 1, &shader_image_load);
-	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_SHADER_IMAGE_STORE, 1, &shader_image_store);
+	glGetInternalformativ(target, internal_format, GL_SHADER_IMAGE_LOAD, 1, &shader_image_load);
+	glGetInternalformativ(target, internal_format, GL_SHADER_IMAGE_STORE, 1, &shader_image_store);
 	if (shader_image_load == GL_FULL_SUPPORT && shader_image_store == GL_FULL_SUPPORT) // ignore caveat support for now
 	{
 		retVal |= gfx_api::pixel_format_usage::storage_image;
@@ -2410,8 +2415,8 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(gfx_api:
 
 	GLint depth_renderable = GL_FALSE;
 	GLint stencil_renderable = GL_FALSE;
-	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_DEPTH_RENDERABLE, 1, &depth_renderable);
-	glGetInternalformativ(GL_TEXTURE_2D, internal_format, GL_STENCIL_RENDERABLE, 1, &stencil_renderable);
+	glGetInternalformativ(target, internal_format, GL_DEPTH_RENDERABLE, 1, &depth_renderable);
+	glGetInternalformativ(target, internal_format, GL_STENCIL_RENDERABLE, 1, &stencil_renderable);
 	if (depth_renderable && stencil_renderable)
 	{
 		retVal |= gfx_api::pixel_format_usage::depth_stencil_attachment;
@@ -2420,41 +2425,66 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(gfx_api:
 	return retVal;
 }
 
-bool gl_context::texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+bool gl_context::textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
 {
 	size_t formatIdx = static_cast<size_t>(format);
-	ASSERT_OR_RETURN(false, formatIdx < texture2DFormatsSupport.size(), "Invalid format index: %zu", formatIdx);
-	return (texture2DFormatsSupport[formatIdx] & usage) == usage;
+	ASSERT_OR_RETURN(false, formatIdx < textureFormatsSupport[static_cast<size_t>(target)].size(), "Invalid format index: %zu", formatIdx);
+	return (textureFormatsSupport[static_cast<size_t>(target)][formatIdx] & usage) == usage;
 }
 
 void gl_context::initPixelFormatsSupport()
 {
 	// set any existing entries to false
-	for (size_t i = 0; i < texture2DFormatsSupport.size(); i++)
+	for (size_t target = 0; target < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target++)
 	{
-		texture2DFormatsSupport[i] = gfx_api::pixel_format_usage::none;
+		for (size_t i = 0; i < textureFormatsSupport[target].size(); i++)
+		{
+			textureFormatsSupport[target][i] = gfx_api::pixel_format_usage::none;
+		}
+		textureFormatsSupport[target].resize(static_cast<size_t>(gfx_api::MAX_PIXEL_FORMAT) + 1, gfx_api::pixel_format_usage::none);
 	}
-	texture2DFormatsSupport.resize(static_cast<size_t>(gfx_api::MAX_PIXEL_FORMAT) + 1, gfx_api::pixel_format_usage::none);
 
-	#define PIXEL_FORMAT_SUPPORT_SET(x) \
-	texture2DFormatsSupport[static_cast<size_t>(x)] = getPixelFormatUsageSupport_gl(x, gles);
+	// check if 2D texture array support is available
+	has2DTextureArraySupport =
+		(!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_EXT_texture_array)) // Texture arrays are supported in core OpenGL 3.0+, and earlier with EXT_texture_array
+		|| (gles && GLAD_GL_ES_VERSION_3_0); // Texture arrays are supported in OpenGL ES 3.0+
+
+	#define PIXEL_2D_FORMAT_SUPPORT_SET(x) \
+	textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d)][static_cast<size_t>(x)] = getPixelFormatUsageSupport_gl(GL_TEXTURE_2D, x, gles);
+
+	#define PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(x) \
+	if (has2DTextureArraySupport) { textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d_array)][static_cast<size_t>(x)] = getPixelFormatUsageSupport_gl(GL_TEXTURE_2D_ARRAY, x, gles); }
 
 	// The following are always guaranteed to be supported
 //	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)] = true;
 //	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)] = true;
 //	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)] = true;
 //	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_R8_UNORM)] = true;
-	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
-	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
-	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
-	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
+
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
 
 	// RG8
 	// Desktop OpenGL: OpenGL 3.0+, or GL_ARB_texture_rg
 	// OpenGL ES: GL_EXT_texture_rg
 	if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_ARB_texture_rg)) || (gles && GLAD_GL_EXT_texture_rg))
 	{
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+		// NOTES:
+		// GL_ARB_texture_rg (and OpenGL 3.0+) supports this format for glTex*Image3D
+		// GL_EXT_texture_rg does *NOT* specify support for glTex*Image3D?
+		bool canSupport2DTextureArrays = (!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_ARB_texture_rg));
+
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+		if (canSupport2DTextureArrays)
+		{
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+		}
 	}
 
 	// S3TC
@@ -2462,23 +2492,33 @@ void gl_context::initPixelFormatsSupport()
 	// OpenGL ES: (May be supported by the same GL_EXT_texture_compression_s3tc, other extensions)
 	if (GLAD_GL_EXT_texture_compression_s3tc)
 	{
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+		// NOTES:
+		// On Desktop OpenGL, the EXT_texture_array extension interacts with the s3tc extension to provide 2d texture array support for these formats
+		// The EXT_texture_compression_s3tc docs appear to say that OpenGL ES 3.0.2(?)+ supports passing these formats to glCompressedTex*Image3D for TEXTURE_2D_ARRAY support
+		if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_EXT_texture_array)) // EXT_texture_array is core in OpenGL 3.0+
+			|| (gles && GLAD_GL_ES_VERSION_3_0))
+		{
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+		}
 	}
 	else if (gles)
 	{
 		if (GLAD_GL_ANGLE_texture_compression_dxt3)
 		{
-			texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
+			textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d)][static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
 		}
 		if (GLAD_GL_ANGLE_texture_compression_dxt5)
 		{
-			texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
+			textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d)][static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
 		}
 		if ((GLAD_GL_ANGLE_texture_compression_dxt3 || GLAD_GL_ANGLE_texture_compression_dxt5) && GLAD_GL_EXT_texture_compression_dxt1)
 		{
-			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
 		}
 	}
 
@@ -2487,8 +2527,9 @@ void gl_context::initPixelFormatsSupport()
 	// OpenGL ES: TODO: Could check for GL_EXT_texture_compression_rgtc, but support seems rare
 	if (!gles && GLAD_GL_ARB_texture_compression_rgtc)
 	{
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
+		// Note: GL_ARB_texture_compression_rgtc does *NOT* support glCompressedTex*Image3D (even for 2d texture arrays)?
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
 	}
 
 	// BPTC
@@ -2499,13 +2540,14 @@ void gl_context::initPixelFormatsSupport()
 		// NOTES:
 		// GL_ARB_texture_compression_bptc claims it is supported in glCompressedTex*Image2DARB, glCompressedTex*Image3DARB // <-- Note *ARB methods!
 		// GL_EXT_texture_compression_bptc claims it is supported in glCompressedTex*Image2D, glCompressedTex*Image3D
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
 	}
 
 	// ETC1
 	if (gles && GLAD_GL_OES_compressed_ETC1_RGB8_texture)
 	{
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC1)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC1)
 	}
 
 	// ETC2
@@ -2521,18 +2563,40 @@ void gl_context::initPixelFormatsSupport()
 	// IMPORTANT: **MUST** come after S3TC/DXT & RGTC is checked !!
 	if ((gles && GLAD_GL_ES_VERSION_3_0) || (!gles && GLAD_GL_ARB_ES3_compatibility))
 	{
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
-		if (gles || !texture2DFormatIsSupported(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		// NOTES:
+		// OpenGL ES 3.0+ claims it is supported for 2d texture arrays
+		// GL_ARB_ES3_compatibility makes no claims about support in glCompressedTex*Image3D?
+		bool canSupport2DTextureArrays = (gles && GLAD_GL_ES_VERSION_3_0);
+
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+		if (canSupport2DTextureArrays)
 		{
-			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
 		}
-		if (gles || !texture2DFormatIsSupported(gfx_api::pixel_format::FORMAT_R_BC4_UNORM, gfx_api::pixel_format_usage::sampled_image))
+
+		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM, gfx_api::pixel_format_usage::sampled_image))
 		{
-			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+			if (canSupport2DTextureArrays)
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+			}
 		}
-		if (gles || !texture2DFormatIsSupported(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_R_BC4_UNORM, gfx_api::pixel_format_usage::sampled_image))
 		{
-			PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+			if (canSupport2DTextureArrays)
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+			}
+		}
+		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RG_BC5_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		{
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+			if (canSupport2DTextureArrays)
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+			}
 		}
 	}
 
@@ -2541,7 +2605,9 @@ void gl_context::initPixelFormatsSupport()
 	// However, for now - until more testing is complete - only enable on OpenGL ES
 	if (gles && GLAD_GL_KHR_texture_compression_astc_ldr)
 	{
-		PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+		// NOTE: GL_KHR_texture_compression_astc_ldr claims it is supported in glCompressedTex*Image3D
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 	}
 }
 

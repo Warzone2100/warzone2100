@@ -33,7 +33,8 @@ namespace gfx_api
 	void initBestRealTimeCompressionFormats();
 
 	// Determine the best available live compressed image format for the current system (+ textureType)
-	optional<gfx_api::pixel_format> bestRealTimeCompressionFormatForImage(const iV_Image& image, gfx_api::texture_type textureType);
+	optional<gfx_api::pixel_format> bestRealTimeCompressionFormatForImage(gfx_api::pixel_format_target target, const iV_Image& image, gfx_api::texture_type textureType);
+	optional<gfx_api::pixel_format> bestRealTimeCompressionFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType);
 
 	// Compresses an iV_Image to the desired compressed image format (if possible)
 	std::unique_ptr<iV_BaseImage> compressImage(const iV_Image& image, gfx_api::pixel_format desiredFormat);
