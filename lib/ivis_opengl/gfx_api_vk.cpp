@@ -3384,7 +3384,7 @@ void VkRoot::unbind_index_buffer(gfx_api::buffer&)
 	// ?
 }
 
-void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_descriptions, const std::vector<gfx_api::texture*>& textures)
+void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(textures.size() <= attribute_descriptions.size(), "Received more textures than expected");

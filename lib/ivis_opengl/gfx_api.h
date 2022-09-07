@@ -82,13 +82,20 @@ namespace gfx_api
 	using gfxUByte = unsigned char;
 #endif
 
-	struct texture
+	struct abstract_texture
 	{
-		virtual ~texture() {};
 		virtual void bind() = 0;
+		virtual bool isArray() const = 0;
+		virtual void flush() {};
+		virtual ~abstract_texture() {};
+	};
+
+	struct texture : abstract_texture
+	{
 		virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) = 0;
 		virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) = 0;
 		virtual unsigned id() = 0;
+		bool isArray() const { return false; }
 
 		texture( const texture& other ) = delete; // non construction-copyable
 		texture& operator=( const texture& ) = delete; // non copyable
@@ -289,7 +296,7 @@ namespace gfx_api
 		virtual void unbind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset) = 0;
 		virtual void disable_all_vertex_buffers() = 0;
 		virtual void bind_streamed_vertex_buffers(const void* data, const std::size_t size) = 0;
-		virtual void bind_textures(const std::vector<texture_input>& attribute_descriptions, const std::vector<texture*>& textures) = 0;
+		virtual void bind_textures(const std::vector<texture_input>& attribute_descriptions, const std::vector<abstract_texture*>& textures) = 0;
 		virtual void set_constants(const void* buffer, const std::size_t& size) = 0;
 		virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) = 0;
 		virtual void draw(const std::size_t& offset, const std::size_t&, const primitive_type&) = 0;

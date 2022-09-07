@@ -542,7 +542,7 @@ public:
 	virtual void bind_index_buffer(gfx_api::buffer& index_buffer, const gfx_api::index_type& index) override;
 	virtual void unbind_index_buffer(gfx_api::buffer&) override;
 
-	virtual void bind_textures(const std::vector<gfx_api::texture_input>& attribute_descriptions, const std::vector<gfx_api::texture*>& textures) override;
+	virtual void bind_textures(const std::vector<gfx_api::texture_input>& attribute_descriptions, const std::vector<gfx_api::abstract_texture*>& textures) override;
 
 public:
 	virtual void set_constants(const void* buffer, const std::size_t& size) override;
