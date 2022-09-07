@@ -7,7 +7,7 @@ COPY get-dependencies_linux.sh /scripts
 RUN chmod +x /scripts/get-dependencies_linux.sh
 
 RUN apt-get -u update \
- && DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config \
+ && DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config ca-certificates \
  && /scripts/get-dependencies_linux.sh ubuntu build-dependencies \
  && rm -rf /var/lib/apt/lists/*
 
