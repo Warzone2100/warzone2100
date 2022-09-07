@@ -120,7 +120,7 @@ iV_CompressedImage& iV_CompressedImage::operator=(iV_CompressedImage&& other)
 }
 
 // Allocate a new iV_CompressedImage buffer
-bool iV_CompressedImage::allocate(gfx_api::pixel_format format, size_t data_size, unsigned int newWidth, unsigned int newHeight, bool zeroMemory)
+bool iV_CompressedImage::allocate(gfx_api::pixel_format format, size_t data_size, unsigned int bufferRowLength, unsigned int bufferImageHeight, unsigned int newWidth, unsigned int newHeight, bool zeroMemory)
 {
 	if (m_data)
 	{
@@ -143,6 +143,8 @@ bool iV_CompressedImage::allocate(gfx_api::pixel_format format, size_t data_size
 	}
 	m_width = newWidth;
 	m_height = newHeight;
+	m_bufferRowLength = bufferRowLength;
+	m_bufferImageHeight = bufferImageHeight;
 	m_format = format;
 	m_data_size = data_size;
 	return true;
@@ -150,7 +152,7 @@ bool iV_CompressedImage::allocate(gfx_api::pixel_format format, size_t data_size
 
 void iV_CompressedImage::clear()
 {
-	allocate(gfx_api::pixel_format::invalid,0,0,0);
+	allocate(gfx_api::pixel_format::invalid,0,0,0,0,0);
 }
 
 unsigned int iV_CompressedImage::width() const { return m_width; }
@@ -171,6 +173,9 @@ size_t iV_CompressedImage::data_size() const
 {
 	return m_data_size;
 }
+
+unsigned int iV_CompressedImage::bufferRowLength() const { return 0; }
+unsigned int iV_CompressedImage::bufferImageHeight() const { return 0; }
 
 // Get a pointer to the bitmap data that can be written to
 unsigned char* iV_CompressedImage::data_w()
@@ -218,7 +223,7 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 	if(desiredFormat == gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC || desiredFormat == gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) outputSize *= 2;
 
 	std::unique_ptr<iV_CompressedImage> compressedOutput = std::unique_ptr<iV_CompressedImage>(new iV_CompressedImage());
-	if (!compressedOutput->allocate(desiredFormat, outputSize, pSourceImage->width(), pSourceImage->height(), false))
+	if (!compressedOutput->allocate(desiredFormat, outputSize, pSourceImage->width(), pSourceImage->height(), pSourceImage->width(), pSourceImage->height(), false))
 	{
 		debug(LOG_ERROR, "Failed to allocate memory for buffer");
 		return nullptr;
