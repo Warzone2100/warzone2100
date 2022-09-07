@@ -172,9 +172,8 @@ unsigned int selNumSelected(unsigned int player)
 	return count;
 }
 
-// Helper function to check whether the component stats of a unit can be found
-// in the combinations vector and, optionally, to add them to it if not
-static bool componentsInCombinations(DROID *psDroid, bool add)
+
+std::vector<uint32_t> buildComponentsFromDroid(DROID* psDroid)
 {
 	std::vector<uint32_t> components;
 	uint32_t stat = 0;
@@ -205,6 +204,13 @@ static bool componentsInCombinations(DROID *psDroid, bool add)
 			components.push_back(stat);
 		}
 	}
+	return components;
+}
+// Helper function to check whether the component stats of a unit can be found
+// in the combinations vector and, optionally, to add them to it if not
+static bool componentsInCombinations(DROID *psDroid, bool add)
+{
+	std::vector<uint32_t> components = buildComponentsFromDroid(psDroid);
 	auto it = std::find(combinations.begin(), combinations.end(), components);
 	if (it != combinations.end())
 	{

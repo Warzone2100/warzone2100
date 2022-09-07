@@ -62,5 +62,6 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump);
 void selNextSpecifiedUnit(DROID_TYPE unitType);
 // select the n'th command droid
 void selCommander(int n);
+std::vector<uint32_t> buildComponentsFromDroid(DROID* psDroid);
 
 #endif // __INCLUDED_SRC_SELECTION_H__
