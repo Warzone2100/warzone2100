@@ -404,7 +404,8 @@ static int socketThreadFunction(void *)
 #endif
 		fd_set fds;
 		FD_ZERO(&fds);
-		for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end(); ++i)
+		size_t descriptorsToWaitOn = 0;
+		for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end();)
 		{
 			if (!i->second.empty())
 			{
@@ -412,14 +413,25 @@ static int socketThreadFunction(void *)
 				maxfd = std::max(maxfd, fd);
 				ASSERT(!FD_ISSET(fd, &fds), "Duplicate file descriptor!");  // Shouldn't be possible, but blocking in send, after select says it won't block, shouldn't be possible either.
 				FD_SET(fd, &fds);
+				++descriptorsToWaitOn;
+				++i;
+			}
+			else
+			{
+				ASSERT(false, "Empty buffer for pending socket writes"); // This shouldn't happen!
+				i = socketThreadWrites.erase(i);
 			}
 		}
 		struct timeval tv = {0, 50 * 1000};
 
 		// Check if we can write to any sockets.
-		wzMutexUnlock(socketThreadMutex);
-		int ret = select(maxfd + 1, nullptr, &fds, nullptr, &tv);
-		wzMutexLock(socketThreadMutex);
+		int ret = -1;
+		if (descriptorsToWaitOn > 0)
+		{
+			wzMutexUnlock(socketThreadMutex);
+			ret = select(maxfd + 1, nullptr, &fds, nullptr, &tv);
+			wzMutexLock(socketThreadMutex);
+		}
 
 		// We can write to some sockets. (Ignore errors from select, we may have deleted the socket after unlocking the mutex, and before calling select.)
 		if (ret > 0)
