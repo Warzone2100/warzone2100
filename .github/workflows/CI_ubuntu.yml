@@ -88,6 +88,10 @@ jobs:
     - name: Init Git Submodules
       working-directory: '${{ github.workspace }}/src'
       run: git submodule update --init --recursive
+    - name: Pull latest base image
+      if: success() && (matrix.docker == 'ubuntu-18.04')
+      run: |
+        docker pull ubuntu:18.04
     - name: Build the Docker image
       working-directory: '${{ github.workspace }}/src'
       run: |
