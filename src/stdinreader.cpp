@@ -66,6 +66,12 @@ int quitSignalPipeFds[2] = {-1, -1};
 #endif
 
 #if defined(WZ_STDIN_READER_SUPPORTED)
+
+static std::vector<char> stdInReadBuffer;
+constexpr size_t readChunkSize = 1024;
+static size_t newlineSearchStart = 0;
+static size_t actualAvailableBytes = 0;
+
 enum class StdInReadyStatus
 {
 	Error,
@@ -138,6 +144,36 @@ static StdInReadyStatus stdInHasDataToBeRead(int quitSignalFd, int msTimeout = 2
 	return StdInReadyStatus::NotReady;
 }
 
+optional<std::string> getNextLineFromBuffer()
+{
+	for (size_t idx = newlineSearchStart; idx < actualAvailableBytes; ++idx)
+	{
+		if (stdInReadBuffer[idx] == '\n')
+		{
+			std::string nextLine(stdInReadBuffer.data(), idx);
+			std::vector<decltype(stdInReadBuffer)::value_type>(stdInReadBuffer.begin()+(idx+1), stdInReadBuffer.end()).swap(stdInReadBuffer);
+			newlineSearchStart = 0;
+			actualAvailableBytes -= (idx + 1);
+			return nextLine;
+		}
+	}
+	newlineSearchStart = actualAvailableBytes;
+	return nullopt;
+}
+
+optional<std::string> getStdInLine()
+{
+	// read more data from STDIN
+	stdInReadBuffer.resize((((stdInReadBuffer.size() + readChunkSize - 1) / readChunkSize) + 1) * readChunkSize);
+	auto bytesRead = read(STDIN_FILENO, stdInReadBuffer.data() + actualAvailableBytes, readChunkSize);
+	if (bytesRead <= 0)
+	{
+		return nullopt;
+	}
+	actualAvailableBytes += static_cast<size_t>(bytesRead);
+	return getNextLineFromBuffer();
+}
+
 int stdinThreadFunc(void *)
 {
 	fseek(stdin, 0, SEEK_END);
@@ -151,7 +187,8 @@ int stdinThreadFunc(void *)
 #endif
 	while (!inexit)
 	{
-		while (true)
+		optional<std::string> nextLine = getNextLineFromBuffer();
+		while (!nextLine.has_value())
 		{
 			auto result = stdInHasDataToBeRead(quitSignalFd);
 			if (result == StdInReadyStatus::Exit)
@@ -169,6 +206,7 @@ int stdinThreadFunc(void *)
 			}
 			else if (result == StdInReadyStatus::Ready)
 			{
+				nextLine = getStdInLine();
 				break;
 			}
 			else
@@ -178,16 +216,12 @@ int stdinThreadFunc(void *)
 			}
 		}
 
-		char *line = NULL;
-		size_t len = 0;
-		ssize_t lineSize = 0;
-		lineSize = getline(&line, &len, stdin);
-		if (lineSize == -1)
+		if (!nextLine.has_value())
 		{
-			errlog("WZCMD error: getline failed!\n");
-			inexit = true;
+			// continue & wait until we read a full line
 			continue;
 		}
+		const char *line = nextLine.value().c_str();
 
 		if(!strncmpl(line, "exit"))
 		{
@@ -319,8 +353,6 @@ int stdinThreadFunc(void *)
 			wzQuit(0);
 			inexit = true;
 		}
-
-		free(line);
 	}
 	return 0;
 }
