@@ -1616,7 +1616,7 @@ void gl_context::unbind_index_buffer(gfx_api::buffer&)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::texture*>& textures)
+void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	ASSERT(textures.size() <= texture_descriptions.size(), "Received more textures than expected");
@@ -1627,51 +1627,53 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 		if (textures[i] == nullptr)
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 			continue;
 		}
+		const auto type = textures[i]->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
 		textures[i]->bind();
 		switch (desc.sampler)
 		{
 			case gfx_api::sampler_type::nearest_clamped:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				break;
 			case gfx_api::sampler_type::bilinear:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				break;
 			case gfx_api::sampler_type::bilinear_repeat:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 				break;
 			case gfx_api::sampler_type::anisotropic_repeat:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 				if (GLAD_GL_EXT_texture_filter_anisotropic)
 				{
 					GLfloat max;
 					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
+					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
 				}
 				break;
 			case gfx_api::sampler_type::anisotropic:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				if (GLAD_GL_EXT_texture_filter_anisotropic)
 				{
 					GLfloat max;
 					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
+					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
 				}
 				break;
 		}

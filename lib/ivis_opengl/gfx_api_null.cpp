@@ -207,7 +207,7 @@ void null_context::unbind_index_buffer(gfx_api::buffer&)
 	// no-op
 }
 
-void null_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::texture*>& textures)
+void null_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	ASSERT(textures.size() <= texture_descriptions.size(), "Received more textures than expected");
