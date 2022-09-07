@@ -79,6 +79,7 @@
 #include "hci/manufacture.h"
 #include "hci/commander.h"
 #include "notifications.h"
+#include "hci/groups.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -1209,6 +1210,7 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 	intMode = INT_NORMAL;
 	//clearSelelection() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
 	IntRefreshPending = false;
+	intLowerGroupsMenu();
 }
 
 void intOpenDebugMenu(OBJECT_TYPE id)
@@ -1473,6 +1475,8 @@ INT_RETVAL intRunWidgets()
 				psCurrentMsg = nullptr;
 			}
 			addIntelScreen();
+			// remove the groups Menu
+			widgDelete(psWScreen, IDOBJ_GROUP);
 			reticuleCallback(RETBUT_INTELMAP);
 			break;
 
@@ -1485,6 +1489,8 @@ INT_RETVAL intRunWidgets()
 			widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
 			/*add the power bar - for looks! */
 			intShowPowerBar();
+			widgDelete(psWScreen, IDOBJ_GROUP);
+			// remove the groups Menu
 			intAddDesign(false);
 			intMode = INT_DESIGN;
 			gInputManager.contexts().pushState();
@@ -1913,6 +1919,16 @@ void intStartStructPosition(BASE_STATS *psStats)
 	init3DBuilding(psStats, nullptr, nullptr);
 }
 
+void intLowerGroupsMenu() {
+	// if it's not already created, create it here
+	GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
+	if (!groupsForum) {
+		intShowGroupSelectionMenu();
+	} else if (groupsForum) {
+		groupsForum->moveLayoutDown();
+	}
+}
+
 
 /* Stop looking for a structure location */
 static void intStopStructPosition()
@@ -2001,6 +2017,13 @@ void intAlliedResearchChanged()
 	{
 		intRefreshScreen();
 	}
+}
+
+bool intShowGroupSelectionMenu()
+{
+	auto groupsForm = GroupsForum::make();
+	psWScreen->psForm->attach(groupsForm);
+	return true;
 }
 
 /* Add the reticule widgets to the widget screen */

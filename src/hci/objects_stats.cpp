@@ -5,6 +5,7 @@
 #include "../qtscript.h"
 #include "../warcam.h"
 #include "../geometry.h"
+#include "groups.h"
 
 void BaseObjectsController::clearSelection()
 {
@@ -217,6 +218,12 @@ void ObjectsForm::goToHighlightedTab()
 
 void ObjectsForm::initialize()
 {
+	// creating an obj stat form
+	GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
+	if (groupsForum) {
+		groupsForum->moveLayoutUp();
+	}
+
 	id = IDOBJ_FORM;
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
