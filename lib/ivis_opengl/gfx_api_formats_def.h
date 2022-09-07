@@ -78,6 +78,7 @@ namespace gfx_api
 
 	const char* format_to_str(gfx_api::pixel_format format);
 	unsigned int format_channels(gfx_api::pixel_format format);
+	size_t format_texel_block_width(gfx_api::pixel_format format);
 	size_t format_memory_size(gfx_api::pixel_format format, size_t width, size_t height);
 
 	namespace pixel_format_usage
