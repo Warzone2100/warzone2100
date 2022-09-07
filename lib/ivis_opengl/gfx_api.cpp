@@ -147,6 +147,28 @@ gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gf
 	}
 }
 
+static inline size_t calcMipmapLevelsForUncompressedImage(const iV_Image& image, gfx_api::texture_type textureType)
+{
+	// 3.) Determine mipmap levels (if needed / desired)
+	bool generateMipMaps = (textureType != gfx_api::texture_type::user_interface);
+	size_t mipmap_levels = 1;
+	if (generateMipMaps)
+	{
+		// Calculate how many mip-map levels (with a target minimum level dimension of 4)
+		mipmap_levels = static_cast<size_t>(floor(log2(std::max(image.width(), image.height()))));
+		if (mipmap_levels > 2)
+		{
+			mipmap_levels = (mipmap_levels - 2) + 1 /* for original level */;
+		}
+		else
+		{
+			// just use the original level, which must be small
+			mipmap_levels = 1;
+		}
+	}
+	return mipmap_levels;
+}
+
 static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api::texture_type textureType, const std::string& filename)
 {
 	// 1.) Convert to expected # of channels based on textureType
@@ -186,28 +208,13 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	// 2.) If maxWidth / maxHeight exceed current image dimensions, resize()
 	image.scale_image_max_size(maxWidth, maxHeight);
 
-	// 3.) Determine mipmap levels (if needed / desired)
-	bool generateMipMaps = (textureType != gfx_api::texture_type::user_interface);
-	size_t mipmap_levels = 1;
-	if (generateMipMaps)
-	{
-		// Calculate how many mip-map levels (with a target minimum level dimension of 4)
-		mipmap_levels = static_cast<size_t>(floor(log2(std::max(image.width(), image.height()))));
-		if (mipmap_levels > 2)
-		{
-			mipmap_levels = (mipmap_levels - 2) + 1 /* for original level */;
-		}
-		else
-		{
-			// just use the original level, which must be small
-			mipmap_levels = 1;
-		}
-	}
+	// 3.) Determine mipmap levels (if needed / desired, based on textureType)
+	size_t mipmap_levels = calcMipmapLevelsForUncompressedImage(image, textureType);
 
 	// 4.) Extend channels, if needed, to a supported uncompressed format
 	auto channels = image.channels();
 	// Verify that the gfx backend supports this format
-	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(channels);
+	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(gfx_api::pixel_format_target::texture_2d, channels);
 	ASSERT_OR_RETURN(nullptr, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
 	for (auto i = image.channels(); i < closestSupportedChannels; ++i)
 	{
@@ -215,7 +222,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	}
 
 	auto uploadFormat = image.pixel_format();
-	auto bestAvailableCompressedFormat = gfx_api::bestRealTimeCompressionFormatForImage(image, textureType);
+	auto bestAvailableCompressedFormat = gfx_api::bestRealTimeCompressionFormatForImage(gfx_api::pixel_format_target::texture_2d, image, textureType);
 	if (bestAvailableCompressedFormat.has_value() && bestAvailableCompressedFormat.value() != gfx_api::pixel_format::invalid)
 	{
 		// For now, check that the minimum mipmap level is 4x4 or greater, otherwise do not run-time compress
@@ -320,12 +327,12 @@ std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *fil
 
 // MARK: - texture
 
-optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFormatChannels(unsigned int channels)
+optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFormatChannels(pixel_format_target target, unsigned int channels)
 {
 	auto format = iV_Image::pixel_format_for_channels(channels);
 
 	// Verify that the gfx backend supports this format
-	while (!gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::flags::sampled_image))
+	while (!gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::flags::sampled_image))
 	{
 		ASSERT_OR_RETURN(nullopt, channels < 4, "Exhausted all possible uncompressed formats??");
 		channels += 1;
@@ -340,7 +347,7 @@ gfx_api::texture* gfx_api::context::createTextureForCompatibleImageUploads(const
 	// Get the channels of this iV_Image
 	auto channels = bitmap.channels();
 	// Verify that the gfx backend supports this format
-	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(channels);
+	auto closestSupportedChannels = getClosestSupportedUncompressedImageFormatChannels(gfx_api::pixel_format_target::texture_2d, channels);
 	ASSERT_OR_RETURN(nullptr, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
 
 	auto target_pixel_format = iV_Image::pixel_format_for_channels(closestSupportedChannels.value());

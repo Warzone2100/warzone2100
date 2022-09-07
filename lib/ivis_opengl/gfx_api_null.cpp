@@ -259,6 +259,8 @@ int32_t null_context::get_context_value(const context_value property)
 			return 4096;
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			return 0;
+		case gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS:
+			return 2048;
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
@@ -388,7 +390,7 @@ gfx_api::context::swap_interval_mode null_context::getSwapInterval() const
 	return backend_impl->getSwapInterval();
 }
 
-bool null_context::texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+bool null_context::textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
 {
 	// no matter what the input is, return true (since this null backend doesn't care and no-ops whatever it gets)
 	return true;

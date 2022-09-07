@@ -43,8 +43,8 @@ static inline bool hasBuiltInRealTimeFormatCompressor(gfx_api::pixel_format desi
 	});
 }
 
-static optional<gfx_api::pixel_format> bestAvailableCompressionFormat_GameTextureRGBA = nullopt;
-static optional<gfx_api::pixel_format> bestAvailableCompressionFormat_GameTextureRGB = nullopt;
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableCompressionFormat_GameTextureRGBA = {nullopt};
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableCompressionFormat_GameTextureRGB = {nullopt};
 
 void gfx_api::initBestRealTimeCompressionFormats()
 {
@@ -54,28 +54,32 @@ void gfx_api::initBestRealTimeCompressionFormats()
 	constexpr std::array<gfx_api::pixel_format, 2> qualityOrderRGBA = { gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC, gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM };
 	constexpr std::array<gfx_api::pixel_format, 3> qualityOrderRGB = { gfx_api::pixel_format::FORMAT_RGB8_ETC2, gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM, gfx_api::pixel_format::FORMAT_RGB8_ETC1 };
 
-	for ( auto format : qualityOrderRGBA )
+	for (size_t target_idx = 0; target_idx < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target_idx++)
 	{
-		if (!hasBuiltInRealTimeFormatCompressor(format))
+		gfx_api::pixel_format_target target = static_cast<gfx_api::pixel_format_target>(target_idx);
+		for ( auto format : qualityOrderRGBA )
 		{
-			continue;
+			if (!hasBuiltInRealTimeFormatCompressor(format))
+			{
+				continue;
+			}
+			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
+			{
+				bestAvailableCompressionFormat_GameTextureRGBA[target_idx] = format;
+				break;
+			}
 		}
-		if (gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::sampled_image))
+		for ( auto format : qualityOrderRGB )
 		{
-			bestAvailableCompressionFormat_GameTextureRGBA = format;
-			break;
-		}
-	}
-	for ( auto format : qualityOrderRGB )
-	{
-		if (!hasBuiltInRealTimeFormatCompressor(format))
-		{
-			continue;
-		}
-		if (gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::sampled_image))
-		{
-			bestAvailableCompressionFormat_GameTextureRGB = format;
-			break;
+			if (!hasBuiltInRealTimeFormatCompressor(format))
+			{
+				continue;
+			}
+			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
+			{
+				bestAvailableCompressionFormat_GameTextureRGB[target_idx] = format;
+				break;
+			}
 		}
 	}
 }
@@ -251,13 +255,15 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 // MARK: - Live compression functions
 
 // Determine the best available live compressed image format for the current system (+ textureType)
-optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormatForImage(const iV_Image& image, gfx_api::texture_type textureType)
+optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormatForImage(gfx_api::pixel_format_target target, const iV_Image& image, gfx_api::texture_type textureType)
 {
 	if (image.width() % 4 != 0 || image.height() % 4 != 0)
 	{
 		// Image width + height should be a multiple of 4 to do runtime compression
 		return nullopt;
 	}
+
+	size_t target_idx = static_cast<size_t>(target);
 
 	// Only certain formats can be computed real-time - much more limited set
 	switch (textureType)
@@ -270,14 +276,39 @@ optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormatForImage(c
 			switch (image.pixel_format())
 			{
 				case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
-					return bestAvailableCompressionFormat_GameTextureRGBA;
+					return bestAvailableCompressionFormat_GameTextureRGBA[target_idx];
 				case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-					return bestAvailableCompressionFormat_GameTextureRGB;
+					return bestAvailableCompressionFormat_GameTextureRGB[target_idx];
 				default:
 					break;
 			}
 		}
 			break;
+		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
+			// Do not run-time compress this - just store in a single-channel uncompressed texture
+			break;
+		default:
+			// unsupported
+			break;
+	}
+
+	return nullopt;
+}
+
+// Determine the best available live compressed image format for the current system (+ textureType)
+optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType)
+{
+	size_t target_idx = static_cast<size_t>(target);
+
+	// Only certain formats can be computed real-time - much more limited set
+	switch (textureType)
+	{
+		case gfx_api::texture_type::user_interface:
+			// POSSIBLE FUTURE TODO: Real-time: FORMAT_RGBA8_ETC2_EAC
+			break;
+		case gfx_api::texture_type::game_texture: // a RGB / RGBA texture, possibly stored in a compressed format
+			// Since we don't have an image, to check whether it's actually RGB (no alpha), we have to err on the side of RGBA
+			return bestAvailableCompressionFormat_GameTextureRGBA[target_idx];
 		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
 			// Do not run-time compress this - just store in a single-channel uncompressed texture
 			break;

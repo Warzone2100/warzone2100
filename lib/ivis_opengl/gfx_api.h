@@ -261,6 +261,7 @@ namespace gfx_api
 			MAX_ELEMENTS_INDICES,
 			MAX_TEXTURE_SIZE,
 			MAX_SAMPLES, // max antialiasing
+			MAX_ARRAY_TEXTURE_LAYERS
 		};
 
 		enum class swap_interval_mode
@@ -317,13 +318,13 @@ namespace gfx_api
 		virtual const size_t& current_FrameNum() const = 0;
 		virtual bool setSwapInterval(swap_interval_mode mode) = 0;
 		virtual swap_interval_mode getSwapInterval() const = 0;
-		virtual bool texture2DFormatIsSupported(pixel_format format, pixel_format_usage::flags usage) = 0;
+		virtual bool textureFormatIsSupported(pixel_format_target target, pixel_format format, pixel_format_usage::flags usage) = 0;
 	public:
 		// High-level API for getting a texture object from file / uncompressed bitmap
 		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
 		gfx_api::texture* loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 
-		optional<unsigned int> getClosestSupportedUncompressedImageFormatChannels(unsigned int channels);
+		optional<unsigned int> getClosestSupportedUncompressedImageFormatChannels(pixel_format_target target, unsigned int channels);
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) = 0;

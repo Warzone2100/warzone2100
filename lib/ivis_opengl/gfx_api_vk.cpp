@@ -3317,7 +3317,7 @@ vk::Format VkRoot::get_format(const gfx_api::pixel_format& format) const
 	throw;
 }
 
-bool VkRoot::texture2DFormatIsSupported(gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+bool VkRoot::textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
 {
 	size_t formatIdx = static_cast<size_t>(format);
 	ASSERT_OR_RETURN(false, formatIdx < texture2DFormatsSupport.size(), "Invalid format index: %zu", formatIdx);
@@ -3711,6 +3711,8 @@ int32_t VkRoot::get_context_value(const gfx_api::context::context_value property
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			// support MSAA: https://vulkan-tutorial.com/Multisampling
 			return static_cast<std::underlying_type<vk::SampleCountFlagBits>::type>(getMaxUsableSampleCount(physDeviceProps));
+		case gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS:
+			return physDeviceProps.limits.maxImageArrayLayers;
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;

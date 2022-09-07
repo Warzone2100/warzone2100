@@ -30,11 +30,11 @@
 
 #if defined(BASIS_ENABLED)
 
-static optional<gfx_api::pixel_format> bestAvailableBasisCompressionFormat_GameTextureRGBA = nullopt;
-static optional<gfx_api::pixel_format> bestAvailableBasisCompressionFormat_GameTextureRGB = nullopt;
-static optional<gfx_api::pixel_format> bestAvailableBasisCompressionFormat_AlphaMask = nullopt;
-static optional<gfx_api::pixel_format> bestAvailableBasisCompressionFormat_NormalMap = nullopt;
-static optional<gfx_api::pixel_format> bestAvailableBasisCompressionFormat_SpecularMap = nullopt;
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_GameTextureRGBA = {nullopt};
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_GameTextureRGB = {nullopt};
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_AlphaMask = {nullopt};
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_NormalMap = {nullopt};
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_SpecularMap = {nullopt};
 
 // MARK: - Basis Universal transcoder implementation
 
@@ -57,6 +57,8 @@ static optional<gfx_api::pixel_format> bestAvailableBasisCompressionFormat_Specu
 #elif defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
+
+#define WZ_BASIS_UNCOMPRESSED_FORMAT gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8
 
 static basist::etc1_global_selector_codebook sel_codebook;
 
@@ -127,11 +129,14 @@ void gfx_api::initBasisTranscoder()
 		basisInitialized = true;
 	}
 
-	bestAvailableBasisCompressionFormat_GameTextureRGBA = nullopt;
-	bestAvailableBasisCompressionFormat_GameTextureRGB = nullopt;
-	bestAvailableBasisCompressionFormat_AlphaMask = nullopt;
-	bestAvailableBasisCompressionFormat_NormalMap = nullopt;
-	bestAvailableBasisCompressionFormat_SpecularMap = nullopt;
+	for (size_t target = 0; target < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target++)
+	{
+		bestAvailableBasisCompressionFormat_GameTextureRGBA[target] = nullopt;
+		bestAvailableBasisCompressionFormat_GameTextureRGB[target] = nullopt;
+		bestAvailableBasisCompressionFormat_AlphaMask[target] = nullopt;
+		bestAvailableBasisCompressionFormat_NormalMap[target] = nullopt;
+		bestAvailableBasisCompressionFormat_SpecularMap[target] = nullopt;
+	}
 
 	// gfx_api::texture_type::game_texture: a RGB / RGBA texture, possibly stored in a compressed format
 	// Overall quality ranking:
@@ -143,83 +148,88 @@ void gfx_api::initBasisTranscoder()
 		gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM };
 	constexpr std::array<gfx_api::pixel_format, 2> qualityOrderRGB = { gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM, gfx_api::pixel_format::FORMAT_RGB8_ETC1 };
 
-	for ( auto format : qualityOrderRGBA )
+	for (size_t target_idx = 0; target_idx < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target_idx++)
 	{
-		if (!basisLibrarySupportsFormat(format))
+		gfx_api::pixel_format_target target = static_cast<gfx_api::pixel_format_target>(target_idx);
+		for ( auto format : qualityOrderRGBA )
 		{
-			continue;
+			if (!basisLibrarySupportsFormat(format))
+			{
+				continue;
+			}
+			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
+			{
+				bestAvailableBasisCompressionFormat_GameTextureRGBA[target_idx] = format;
+				break;
+			}
 		}
-		if (gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::sampled_image))
+		for ( auto format : qualityOrderRGB )
 		{
-			bestAvailableBasisCompressionFormat_GameTextureRGBA = format;
-			break;
+			if (!basisLibrarySupportsFormat(format))
+			{
+				continue;
+			}
+			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
+			{
+				bestAvailableBasisCompressionFormat_GameTextureRGB[target_idx] = format;
+				break;
+			}
 		}
-	}
-	for ( auto format : qualityOrderRGB )
-	{
-		if (!basisLibrarySupportsFormat(format))
-		{
-			continue;
-		}
-		if (gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::sampled_image))
-		{
-			bestAvailableBasisCompressionFormat_GameTextureRGB = format;
-			break;
-		}
-	}
 
-	// gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
-	// gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
-		// Is is expected that for either of the above, the single-channel value is stored in the R (and possibly GB) channels
-	// Overall quality rankings: FORMAT_R11_EAC (4bpp) > FORMAT_R_BC4_UNORM (4bpp)
-	constexpr std::array<gfx_api::pixel_format, 3> qualityOrderR = { gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM, gfx_api::pixel_format::FORMAT_R11_EAC, gfx_api::pixel_format::FORMAT_R_BC4_UNORM };
-	for ( auto format : qualityOrderR )
-	{
-		if (!basisLibrarySupportsFormat(format))
+		// gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
+		// gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
+			// Is is expected that for either of the above, the single-channel value is stored in the R (and possibly GB) channels
+		// Overall quality rankings: FORMAT_R11_EAC (4bpp) > FORMAT_R_BC4_UNORM (4bpp)
+		constexpr std::array<gfx_api::pixel_format, 3> qualityOrderR = { gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM, gfx_api::pixel_format::FORMAT_R11_EAC, gfx_api::pixel_format::FORMAT_R_BC4_UNORM };
+		for ( auto format : qualityOrderR )
 		{
-			continue;
-		}
-		if (gfx_api::context::get().texture2DFormatIsSupported(format, gfx_api::pixel_format_usage::sampled_image))
-		{
-			bestAvailableBasisCompressionFormat_AlphaMask = format;
-			bestAvailableBasisCompressionFormat_SpecularMap = format;
-			break;
+			if (!basisLibrarySupportsFormat(format))
+			{
+				continue;
+			}
+			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
+			{
+				bestAvailableBasisCompressionFormat_AlphaMask[target_idx] = format;
+				bestAvailableBasisCompressionFormat_SpecularMap[target_idx] = format;
+				break;
+			}
 		}
 	}
 }
 
 // Determine the best available live compressed image format for the current system (+ textureType)
-static optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasisFile(const basist::ktx2_df_channel_id channel_id, uint32_t dfd_transfer_func, gfx_api::texture_type textureType)
+static optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasisFile(gfx_api::pixel_format_target target, const basist::ktx2_df_channel_id channel_id, uint32_t dfd_transfer_func, gfx_api::texture_type textureType)
 {
+	auto target_idx = static_cast<size_t>(target);
 	switch (textureType)
 	{
 		case gfx_api::texture_type::user_interface:
 			// FUTURE TODO:
 			break;
 		case gfx_api::texture_type::game_texture: // a RGB / RGBA texture, generally
-			if (bestAvailableBasisCompressionFormat_GameTextureRGBA.has_value())
+			if (bestAvailableBasisCompressionFormat_GameTextureRGBA[target_idx].has_value())
 			{
 				// just use the best available RGBA format (if one is available)
-				return bestAvailableBasisCompressionFormat_GameTextureRGBA;
+				return bestAvailableBasisCompressionFormat_GameTextureRGBA[target_idx];
 			}
-			else if (bestAvailableBasisCompressionFormat_GameTextureRGB.has_value())
+			else if (bestAvailableBasisCompressionFormat_GameTextureRGB[target_idx].has_value())
 			{
 				// verify the input file is RGB
 				switch (channel_id)
 				{
 					case basist::KTX2_DF_CHANNEL_UASTC_RGB:
-						return bestAvailableBasisCompressionFormat_GameTextureRGB;
+						return bestAvailableBasisCompressionFormat_GameTextureRGB[target_idx];
 					default:
 						break;
 				}
 			}
 			break;
 		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
-			return bestAvailableBasisCompressionFormat_AlphaMask;
+			return bestAvailableBasisCompressionFormat_AlphaMask[target_idx];
 		case gfx_api::texture_type::normal_map:
-			return bestAvailableBasisCompressionFormat_NormalMap;
+			return bestAvailableBasisCompressionFormat_NormalMap[target_idx];
 		case gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
-			return bestAvailableBasisCompressionFormat_SpecularMap;
+			return bestAvailableBasisCompressionFormat_SpecularMap[target_idx];
 		default:
 			// unsupported
 			break;
@@ -228,12 +238,53 @@ static optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasisFi
 	return nullopt;
 }
 
+optional<gfx_api::pixel_format> gfx_api::getBestAvailableTranscodeFormatForBasis(gfx_api::pixel_format_target target, gfx_api::texture_type textureType)
+{
+	switch (textureType)
+	{
+		case gfx_api::texture_type::user_interface:
+			// FUTURE TODO:
+			break;
+		case gfx_api::texture_type::game_texture: // a RGB / RGBA texture, generally
+			// just use the best available RGBA format (if one is available)
+			return bestAvailableBasisCompressionFormat_GameTextureRGBA[static_cast<size_t>(target)];
+		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
+			return bestAvailableBasisCompressionFormat_AlphaMask[static_cast<size_t>(target)];
+		case gfx_api::texture_type::normal_map:
+			return bestAvailableBasisCompressionFormat_NormalMap[static_cast<size_t>(target)];
+		case gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
+			return bestAvailableBasisCompressionFormat_SpecularMap[static_cast<size_t>(target)];
+		default:
+			// unsupported
+			break;
+	}
+
+	return nullopt;
+}
+
+static bool iVImage_Basis_Convert_Channels(gfx_api::texture_type textureType, std::unique_ptr<iV_Image>& uncompressedImage)
+{
+	// Convert to expected # (and arrangement) of channels based on textureType
+	switch (textureType)
+	{
+		case gfx_api::texture_type::specular_map:
+		case gfx_api::texture_type::alpha_mask:
+			// extract single channel (should always be in R)
+			return uncompressedImage->convert_to_single_channel(0);
+		// TODO: Normal map
+		default:
+			break;
+	}
+	return false;
+}
+
 // Returns an iV_BaseImage for each mipLevel in a basis file, in the best possible format for the given texture_type (and input file) for the current system
 // - game_texture: A compressed RGBA (or RGB) format, or an uncompressed format
 // - alpha_mask: A compressed single-channel format, or R8 uncompressed
 // - normal_map: TODO
 // - specular_map: A compressed single-channel format, or R8 uncompressed
-static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Data(const void* pData, uint32_t dataSize, const char *filename, optional<gfx_api::texture_type> textureType /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips = nullopt)
+// Pass `nullopt` to desiredFormat to use the "best available" format for the current system
+static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Data(const void* pData, uint32_t dataSize, const char *filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips = nullopt)
 {
 	basist::ktx2_transcoder transcoder(&sel_codebook);
 	if (!transcoder.init(pData, dataSize))
@@ -250,21 +301,21 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 
 	auto format = basist::transcoder_texture_format::cTFRGBA32; // standard full uncompressed format
 	auto internalFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
-	if (textureType.has_value())
+	if (!desiredFormat.has_value())
 	{
-		auto targetInternalFormat = getBestAvailableTranscodeFormatForBasisFile(transcoder.get_dfd_channel_id0(), transcoder.get_dfd_transfer_func(), textureType.value());
-		if (targetInternalFormat.has_value())
+		desiredFormat = getBestAvailableTranscodeFormatForBasisFile(target, transcoder.get_dfd_channel_id0(), transcoder.get_dfd_transfer_func(), textureType);
+	}
+	if (desiredFormat.has_value() && !gfx_api::is_uncompressed_format(desiredFormat.value()))
+	{
+		auto basisFormat = to_basis_format(desiredFormat.value());
+		if (basisFormat.has_value())
 		{
-			auto basisFormat = to_basis_format(targetInternalFormat.value());
-			if (basisFormat.has_value())
-			{
-				format = basisFormat.value();
-				internalFormat = targetInternalFormat.value();
-			}
-			else
-			{
-				ASSERT(basisFormat.has_value(), "Failed to convert target internal format (%u) to basis format", (unsigned)targetInternalFormat.value());
-			}
+			format = basisFormat.value();
+			internalFormat = desiredFormat.value();
+		}
+		else
+		{
+			ASSERT(basisFormat.has_value(), "Failed to convert target internal format (%u) to basis format", (unsigned)desiredFormat.value());
 		}
 	}
 
@@ -339,20 +390,13 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 
 		if (basist::basis_transcoder_format_is_uncompressed(format))
 		{
-			if (textureType.has_value())
+			// Convert to expected # (and arrangement) of channels based on textureType
+			iVImage_Basis_Convert_Channels(textureType, uncompressedOutput);
+			if (desiredFormat.has_value())
 			{
-				// Convert to expected # of channels based on textureType
-				switch (textureType.value())
-				{
-					case gfx_api::texture_type::specular_map:
-					case gfx_api::texture_type::alpha_mask:
-						// extract single channel (should always be in R)
-						uncompressedOutput->convert_to_single_channel(0);
-						break;
-					default:
-						break;
-				}
+				ASSERT(uncompressedOutput->pixel_format() == desiredFormat.value(), "Input desiredFormat (%d) does not match converted output format (%d)", static_cast<int>(desiredFormat.value()), static_cast<int>(uncompressedOutput->pixel_format()));
 			}
+
 			outputImages.push_back(std::move(uncompressedOutput));
 		}
 		else
@@ -372,7 +416,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 }
 
 // Returns an iV_BaseImage for each mipLevel in a basis file, in the desiredFormat (if supported by the basis transcoder)
-static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_internal(const char *filename, optional<gfx_api::texture_type> textureType /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips)
+static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_internal(const char *filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target,  optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips)
 {
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
 	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename), filename);
@@ -389,13 +433,13 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_int
 		return {};
 	}
 	PHYSFS_close(fp);
-	return loadiVImagesFromFile_Basis_Data(buffer.data(), filesize, filename, textureType, maxWidth, maxHeight, maxMips);
+	return loadiVImagesFromFile_Basis_Data(buffer.data(), filesize, filename, textureType, target, desiredFormat, maxWidth, maxHeight, maxMips);
 }
 
 // Returns an iV_BaseImage for each mipLevel in a basis file, in the desiredFormat (if supported by the basis transcoder)
-std::vector<std::unique_ptr<iV_BaseImage>> gfx_api::loadiVImagesFromFile_Basis(const char *filename, optional<gfx_api::texture_type> textureType /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/)
+std::vector<std::unique_ptr<iV_BaseImage>> gfx_api::loadiVImagesFromFile_Basis(const char *filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/)
 {
-	return loadiVImagesFromFile_Basis_internal(filename, textureType, maxWidth, maxHeight, nullopt);
+	return loadiVImagesFromFile_Basis_internal(filename, textureType, target, desiredFormat, maxWidth, maxHeight, nullopt);
 }
 
 gfx_api::texture* gfx_api::loadImageTextureFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
@@ -403,7 +447,7 @@ gfx_api::texture* gfx_api::loadImageTextureFromFile_KTX2(const std::string& file
 	uint32_t maxWidth_u32 = (maxWidth > 0) ? static_cast<uint32_t>(maxWidth) : UINT32_MAX;
 	uint32_t maxHeight_u32 = (maxHeight > 0) ? static_cast<uint32_t>(maxHeight) : UINT32_MAX;
 
-	auto images = gfx_api::loadiVImagesFromFile_Basis(filename.c_str(), textureType, maxWidth_u32, maxHeight_u32);
+	auto images = gfx_api::loadiVImagesFromFile_Basis(filename.c_str(), textureType, gfx_api::pixel_format_target::texture_2d, nullopt /* auto-detect best possible format */, maxWidth_u32, maxHeight_u32);
 	if (images.empty())
 	{
 		// Failed to load
@@ -437,7 +481,7 @@ std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile_KTX2(const std:
 	uint32_t maxWidth_u32 = (maxWidth > 0) ? static_cast<uint32_t>(maxWidth) : UINT32_MAX;
 	uint32_t maxHeight_u32 = (maxHeight > 0) ? static_cast<uint32_t>(maxHeight) : UINT32_MAX;
 
-	auto images = loadiVImagesFromFile_Basis_internal(filename.c_str(), nullopt, maxWidth_u32, maxHeight_u32, 1);
+	auto images = loadiVImagesFromFile_Basis_internal(filename.c_str(), textureType, gfx_api::pixel_format_target::texture_2d /* value doesn't actually matter since we are passing an explicit format */, WZ_BASIS_UNCOMPRESSED_FORMAT, maxWidth_u32, maxHeight_u32, 1);
 	if (images.empty())
 	{
 		// Failed to load
