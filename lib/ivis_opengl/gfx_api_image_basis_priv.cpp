@@ -151,6 +151,7 @@ void gfx_api::initBasisTranscoder()
 	for (size_t target_idx = 0; target_idx < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target_idx++)
 	{
 		gfx_api::pixel_format_target target = static_cast<gfx_api::pixel_format_target>(target_idx);
+		debug(LOG_3D, "Basis target compression formats [%zu]", target_idx);
 		for ( auto format : qualityOrderRGBA )
 		{
 			if (!basisLibrarySupportsFormat(format))
@@ -163,6 +164,7 @@ void gfx_api::initBasisTranscoder()
 				break;
 			}
 		}
+		debug(LOG_3D, "  * GameTextureRGBA: %s", (bestAvailableBasisCompressionFormat_GameTextureRGBA[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_GameTextureRGBA[target_idx].value()) : "<none>");
 		for ( auto format : qualityOrderRGB )
 		{
 			if (!basisLibrarySupportsFormat(format))
@@ -175,6 +177,7 @@ void gfx_api::initBasisTranscoder()
 				break;
 			}
 		}
+		debug(LOG_3D, "  * GameTextureRGB: %s", (bestAvailableBasisCompressionFormat_GameTextureRGB[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_GameTextureRGB[target_idx].value()) : "<none>");
 
 		// gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
 		// gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
@@ -194,6 +197,8 @@ void gfx_api::initBasisTranscoder()
 				break;
 			}
 		}
+		debug(LOG_3D, "  * AlphaMask: %s", (bestAvailableBasisCompressionFormat_AlphaMask[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_AlphaMask[target_idx].value()) : "<none>");
+		debug(LOG_3D, "  * SpecularMap: %s", (bestAvailableBasisCompressionFormat_SpecularMap[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_SpecularMap[target_idx].value()) : "<none>");
 	}
 }
 

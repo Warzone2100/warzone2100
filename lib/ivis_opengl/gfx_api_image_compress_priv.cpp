@@ -57,6 +57,7 @@ void gfx_api::initBestRealTimeCompressionFormats()
 	for (size_t target_idx = 0; target_idx < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target_idx++)
 	{
 		gfx_api::pixel_format_target target = static_cast<gfx_api::pixel_format_target>(target_idx);
+		debug(LOG_3D, "Real-time compression formats [%zu]", target_idx);
 		for ( auto format : qualityOrderRGBA )
 		{
 			if (!hasBuiltInRealTimeFormatCompressor(format))
@@ -69,6 +70,7 @@ void gfx_api::initBestRealTimeCompressionFormats()
 				break;
 			}
 		}
+		debug(LOG_3D, "  * GameTextureRGBA: %s", (bestAvailableCompressionFormat_GameTextureRGBA[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableCompressionFormat_GameTextureRGBA[target_idx].value()) : "<none>");
 		for ( auto format : qualityOrderRGB )
 		{
 			if (!hasBuiltInRealTimeFormatCompressor(format))
@@ -81,6 +83,7 @@ void gfx_api::initBestRealTimeCompressionFormats()
 				break;
 			}
 		}
+		debug(LOG_3D, "  * GameTextureRGB: %s", (bestAvailableCompressionFormat_GameTextureRGB[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableCompressionFormat_GameTextureRGB[target_idx].value()) : "<none>");
 	}
 }
 

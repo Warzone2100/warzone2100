@@ -356,6 +356,36 @@ gfx_api::texture* gfx_api::context::createTextureForCompatibleImageUploads(const
 	return pTexture;
 }
 
+const char* gfx_api::format_to_str(gfx_api::pixel_format format)
+{
+	switch (format)
+	{
+		// UNCOMPRESSED FORMATS
+		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8: return "RGBA8_UNORM";
+		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8: return "BGRA8_UNORM";
+		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8: return "RGB8_UNORM";
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM: return "RG8_UNORM";
+		case gfx_api::pixel_format::FORMAT_R8_UNORM: return "R8_UNORM";
+		// COMPRESSED FORMAT
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM: return "RGB_BC1_UNORM";
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM: return "RGBA_BC2_UNORM";
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM: return "RGBA_BC3_UNORM";
+		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM: return "R_BC4_UNORM";
+		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM: return "RG_BC5_UNORM";
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM: return "RGBA_BPTC_UNORM";
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC1: return "RGB8_ETC1";
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2: return "RGB8_ETC2";
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC: return "RGBA8_ETC2_EAC";
+		case gfx_api::pixel_format::FORMAT_R11_EAC: return "R11_EAC";
+		case gfx_api::pixel_format::FORMAT_RG11_EAC: return "RG11_EAC";
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM: return "ASTC_4x4_UNORM";
+		default:
+			debug(LOG_ERROR, "Unrecognised pixel format: %zu", static_cast<size_t>(format));
+			return "";
+	}
+	return ""; // silence warning
+}
+
 unsigned int gfx_api::format_channels(gfx_api::pixel_format format)
 {
 	switch (format)
