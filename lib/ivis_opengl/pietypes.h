@@ -129,6 +129,8 @@ public:
 	// Get a pointer to the image data that can be read
 	virtual const unsigned char* data() const = 0;
 	virtual size_t data_size() const = 0;
+	virtual unsigned int bufferRowLength() const = 0;
+	virtual unsigned int bufferImageHeight() const = 0;
 };
 
 // An uncompressed bitmap (R, RG, RGB, or RGBA)
@@ -152,6 +154,8 @@ public:
 
 	const unsigned char* data() const override { return bmp(); }
 	size_t data_size() const override { return size_in_bytes(); }
+	unsigned int bufferRowLength() const override { return m_width; }
+	unsigned int bufferImageHeight() const override { return m_height; }
 
 public:
 	static gfx_api::pixel_format pixel_format_for_channels(unsigned int channels);

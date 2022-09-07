@@ -374,7 +374,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 			uint32_t outputSize = numBlocksOrPixels * bytes_per_block_or_pixel;
 
 			compressedOutput = std::unique_ptr<iV_CompressedImage>(new iV_CompressedImage());
-			if (!compressedOutput->allocate(internalFormat, outputSize, level_info.m_orig_width, level_info.m_orig_height, false))
+			if (!compressedOutput->allocate(internalFormat, outputSize, level_info.m_width, level_info.m_height, level_info.m_orig_width, level_info.m_orig_height, false))
 			{
 				debug(LOG_ERROR, "Failed to allocate memory for buffer");
 				return {};

@@ -46,6 +46,7 @@ class iV_CompressedImage final : public iV_BaseImage
 {
 private:
 	unsigned int m_width = 0, m_height = 0;
+	unsigned int m_bufferRowLength = 0, m_bufferImageHeight = 0;
 	gfx_api::pixel_format m_format = gfx_api::pixel_format::invalid;
 	unsigned char *m_data = nullptr;
 	size_t m_data_size = 0;
@@ -61,9 +62,12 @@ public:
 	virtual const unsigned char* data() const override;
 	virtual size_t data_size() const override;
 
+	unsigned int bufferRowLength() const override;
+	unsigned int bufferImageHeight() const override;
+
 public:
 	// Allocate a new iV_CompressedImage buffer
-	bool allocate(gfx_api::pixel_format format, size_t data_size, unsigned int width = 0, unsigned int height = 0, bool zeroMemory = false);
+	bool allocate(gfx_api::pixel_format format, size_t data_size, unsigned int bufferRowLength = 0, unsigned int bufferImageHeight = 0, unsigned int width = 0, unsigned int height = 0, bool zeroMemory = false);
 
 	// Clear (free) the image contents / data
 	void clear();

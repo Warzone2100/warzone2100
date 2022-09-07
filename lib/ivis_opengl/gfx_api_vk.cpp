@@ -1579,8 +1579,8 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
 			.setBufferOffset(stagingMemory.offset)
-			.setBufferImageHeight(static_cast<uint32_t>(height))
-			.setBufferRowLength(static_cast<uint32_t>(width))
+			.setBufferImageHeight(static_cast<uint32_t>(image.bufferImageHeight()))
+			.setBufferRowLength(static_cast<uint32_t>(image.bufferRowLength()))
 			.setImageOffset(vk::Offset3D(static_cast<uint32_t>(offset_x), static_cast<uint32_t>(offset_y), 0))
 			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 0, 1))
 			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
