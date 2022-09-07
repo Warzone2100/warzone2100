@@ -5276,7 +5276,7 @@ static void loadMapChallengeSettings(WzConfig& ini)
 				debug(log_level, "Map %s not found!", game.map);
 				if (bIsAutoHostOrAutoGame)
 				{
-					exit(1);
+					wzQuit(1);
 				}
 			}
 			game.maxPlayers = mapData->players;
