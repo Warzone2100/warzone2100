@@ -976,7 +976,8 @@ bool initTerrain()
 	{
 		// must set alpha channel to opaque
 		auto lightmapWritePtr = lightmapPixmap->bmp_w();
-		for (size_t pixelIndex = 0; pixelIndex < lightmapPixmap->width() * lightmapPixmap->height(); ++pixelIndex)
+		size_t lightmapNumPixels = static_cast<size_t>(lightmapPixmap->width()) * static_cast<size_t>(lightmapPixmap->height());
+		for (size_t pixelIndex = 0; pixelIndex < lightmapNumPixels; ++pixelIndex)
 		{
 			lightmapWritePtr[pixelIndex * 4 + 3] = 255;
 		}
