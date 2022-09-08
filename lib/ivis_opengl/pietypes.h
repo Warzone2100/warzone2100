@@ -203,6 +203,8 @@ public:
 	bool resize(int newWidth, int newHeight);
 	bool scale_image_max_size(int maxWidth, int maxHeight);
 
+	bool pad_image(unsigned int newWidth, unsigned int newHeight, bool useSmearing);
+
 public:
 	// iV_Image is non-copyable
 	iV_Image(const iV_Image&) = delete;

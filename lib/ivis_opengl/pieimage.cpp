@@ -375,3 +375,53 @@ bool iV_Image::convert_to_single_channel(unsigned int channel /*= 0*/)
 
 	return true;
 }
+
+bool iV_Image::pad_image(unsigned int newWidth, unsigned int newHeight, bool useSmearing)
+{
+	if (newWidth == m_width && newHeight == m_height)
+	{
+		// no padding needed
+		return true;
+	}
+	if (newWidth < m_width || newHeight < m_height)
+	{
+		return false;
+	}
+
+	auto originalBmpData = m_bmp;
+	auto originalWidth = m_width;
+	auto originalHeight = m_height;
+	const size_t sizeOfBuffer = sizeof(unsigned char) * newWidth * newHeight * m_channels;
+	m_height = newHeight;
+	m_width = newWidth;
+	m_bmp = (unsigned char *)malloc(sizeOfBuffer);
+	if (originalWidth > 0 && originalHeight > 0)
+	{
+		for (unsigned int y = 0; y < originalHeight; ++y)
+		{
+			// Copy the original image row
+			memcpy(&m_bmp[newWidth * y * m_channels], &originalBmpData[originalWidth * y * m_channels], (m_channels * originalWidth));
+			if (useSmearing)
+			{
+				// Smear extra in x direction
+				for (unsigned int x = originalWidth; x < newWidth; ++x)
+				{
+					memcpy(&m_bmp[(newWidth * y + x) * m_channels], &m_bmp[(newWidth * y + x - 1) * m_channels], m_channels);
+				}
+			}
+		}
+		if (useSmearing)
+		{
+			// Smear extra in y direction
+			for (unsigned int y = originalHeight; y < newHeight; ++y)
+			{
+				// Copy the entire prior row (above) in the y direction
+				memcpy(&m_bmp[newWidth * y * m_channels], &m_bmp[(newWidth * y - 1) * m_channels], (m_channels * newWidth));
+			}
+		}
+	}
+	// free the original bitmap data
+	free(originalBmpData);
+
+	return true;
+}
