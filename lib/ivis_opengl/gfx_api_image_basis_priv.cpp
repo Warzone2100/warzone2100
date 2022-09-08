@@ -60,8 +60,6 @@ static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_
 
 #define WZ_BASIS_UNCOMPRESSED_FORMAT gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8
 
-static basist::etc1_global_selector_codebook sel_codebook;
-
 static optional<basist::transcoder_texture_format> to_basis_format(gfx_api::pixel_format desiredFormat)
 {
 	switch (desiredFormat)
@@ -125,7 +123,6 @@ void gfx_api::initBasisTranscoder()
 	if (!basisInitialized)
 	{
 		basist::basisu_transcoder_init();
-		sel_codebook.init(basist::g_global_selector_cb_size, basist::g_global_selector_cb);
 		basisInitialized = true;
 	}
 
@@ -291,7 +288,7 @@ static bool iVImage_Basis_Convert_Channels(gfx_api::texture_type textureType, st
 // Pass `nullopt` to desiredFormat to use the "best available" format for the current system
 static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Data(const void* pData, uint32_t dataSize, const char *filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips = nullopt)
 {
-	basist::ktx2_transcoder transcoder(&sel_codebook);
+	basist::ktx2_transcoder transcoder;
 	if (!transcoder.init(pData, dataSize))
 	{
 		debug(LOG_ERROR, "Failed to initialize ktx2_transcoder for file: %s", filename);
