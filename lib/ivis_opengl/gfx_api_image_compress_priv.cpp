@@ -251,10 +251,10 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 			CompressEtc1RgbDither(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width());
 			break;
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
-			CompressEtc2Rgb(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width());
+			CompressEtc2Rgb(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width(), true);
 			break;
 		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
-			CompressEtc2Rgba(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width());
+			CompressEtc2Rgba(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width(), true);
 			break;
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 			CompressDxt1Dither(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width());
