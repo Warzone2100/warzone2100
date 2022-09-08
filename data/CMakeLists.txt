@@ -78,8 +78,6 @@ endif()
 #########################################
 # Texture pages basis-universal encoding
 
-set(BASIS_UNIVERSAL_ENABLED TRUE)
-
 # default texpages path
 set(_texpages_PATHS
 	PATHS
@@ -87,9 +85,9 @@ set(_texpages_PATHS
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base"
 )
 
-if(BASIS_UNIVERSAL_ENABLED)
+if(WZ_ENABLE_BASIS_UNIVERSAL)
 	if(NOT DEFINED BASIS_UNIVERSAL_CLI)
-		message(FATAL_ERROR "No basisu tool has been provided - set BASIS_UNIVERSAL_CLI to the path to basisu or disable BASIS_UNIVERSAL_ENABLED!")
+		message(FATAL_ERROR "No basisu tool has been provided - set BASIS_UNIVERSAL_CLI to the path to basisu or disable WZ_ENABLE_BASIS_UNIVERSAL!")
 	endif()
 
 	file(GLOB TEXPAGES_TERRAIN
