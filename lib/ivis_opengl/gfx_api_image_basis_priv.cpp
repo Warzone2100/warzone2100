@@ -27,6 +27,7 @@
 #include <vector>
 #include <array>
 #include <algorithm>
+#include <limits>
 
 #if defined(BASIS_ENABLED)
 
@@ -424,7 +425,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_int
 	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 	ASSERT_OR_RETURN({}, fp != nullptr, "Could not open %s", filename);
 	PHYSFS_sint64 filesize = PHYSFS_fileLength(fp);
-	// TODO: Make sure filesize < uint32_t::max
+	ASSERT_OR_RETURN({}, filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<uint32_t>::max()), "\"%s\" filesize >= std::numeric_limits<uint32_t>::max()", filename);
 	std::vector<unsigned char> buffer;
 	buffer.resize(filesize);
 	PHYSFS_sint64 readSize = WZ_PHYSFS_readBytes(fp, buffer.data(), filesize);
@@ -435,7 +436,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_int
 		return {};
 	}
 	PHYSFS_close(fp);
-	return loadiVImagesFromFile_Basis_Data(buffer.data(), filesize, filename, textureType, target, desiredFormat, maxWidth, maxHeight, maxMips);
+	return loadiVImagesFromFile_Basis_Data(buffer.data(), static_cast<uint32_t>(filesize), filename, textureType, target, desiredFormat, maxWidth, maxHeight, maxMips);
 }
 
 // Returns an iV_BaseImage for each mipLevel in a basis file, in the desiredFormat (if supported by the basis transcoder)
