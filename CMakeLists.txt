@@ -19,6 +19,7 @@ OPTION(ENABLE_NLS "Native Language Support" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 OPTION(WZ_ENABLE_BACKEND_VULKAN "Enable Vulkan backend" ON)
+OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -771,8 +772,8 @@ add_subdirectory(3rdparty)
 
 # Determine distribution license
 set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")
-if(WZ_ENABLE_BACKEND_VULKAN)
-	# If Vulkan is enabled, use the GPL3 license for distribution
+if(WZ_ENABLE_BACKEND_VULKAN OR WZ_ENABLE_BASIS_UNIVERSAL)
+	# If Vulkan or Basis Universal is enabled, use the GPL3 license for distribution
 	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pkg/licenses/COPYING.gpl3" "${WZ_DIST_LICENSE}" COPYONLY)
 else()
 	# GPLv2
