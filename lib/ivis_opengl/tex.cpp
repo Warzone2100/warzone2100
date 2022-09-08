@@ -185,12 +185,6 @@ std::string pie_MakeTexPageTCMaskName(const std::string& filename)
 	return result;
 }
 
-// TODO: Remove this wrapper
-bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
-{
-	return s->scale_image_max_size(maxWidth, maxHeight);
-}
-
 /** Retrieve the texture number for a given texture resource.
  *
  *  @note We keep textures in a separate data structure _TEX_PAGE apart from the

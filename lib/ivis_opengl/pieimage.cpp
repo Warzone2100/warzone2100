@@ -93,7 +93,7 @@ bool iV_Image::allocate(unsigned int newWidth, unsigned int newHeight, unsigned 
 		m_bmp = (unsigned char*)malloc(sizeOfBuffer);
 		if (!m_bmp)
 		{
-			// TODO: ASSERT FAILURE TO ALLOCATE MEMORY!!
+			ASSERT(false, "Failed to allocate memory buffer of size: %zu", sizeOfBuffer);
 			return false;
 		}
 		if (zeroMemory)
