@@ -136,7 +136,7 @@ bool iV_CompressedImage::allocate(gfx_api::pixel_format format, size_t data_size
 		m_data = (unsigned char*)malloc(data_size);
 		if (!m_data)
 		{
-			// TODO: ASSERT FAILURE TO ALLOCATE MEMORY!!
+			ASSERT(false, "Failed to allocate memory buffer of size: %zu", data_size);
 			return false;
 		}
 		if (zeroMemory)
@@ -197,13 +197,6 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 {
 	ASSERT_OR_RETURN(nullptr, image.width() > 0 && image.height() > 0, "Image has 0 width or height (%u x %u)", image.width(), image.height());
 
-	// Check that image width and height are multiple of 4
-	if (image.width() % 4 != 0 || image.height() % 4 != 0)
-	{
-		debug(LOG_ERROR, "Unable to compress image with dimensions: %u x %u", image.width(), image.height());
-		return nullptr;
-	}
-
 	const iV_Image* pSourceImage = &image;
 	iV_Image dupSourceImage;
 
@@ -219,14 +212,34 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 		pSourceImage = &dupSourceImage;
 	}
 
+	auto originalWidth = pSourceImage->width();
+	auto originalHeight = pSourceImage->height();
+	unsigned int alignedWidth = (pSourceImage->width() + 3) & ~3u; // Align to multiple of 4
+	unsigned int alignedHeight = (pSourceImage->height() + 3) & ~3u; // Align to multiple of 4
+
+	if (alignedWidth != originalWidth || alignedHeight != originalHeight)
+	{
+		// Pad input image for compression
+		if (pSourceImage == &image)
+		{
+			dupSourceImage.duplicate(image);
+			pSourceImage = &dupSourceImage;
+		}
+
+		if (!dupSourceImage.pad_image(alignedWidth, alignedHeight, true))
+		{
+			debug(LOG_ERROR, "Failed to pad image dimensions: %u x %u -> %u x %u", originalWidth, originalHeight, alignedWidth, alignedHeight);
+			return nullptr;
+		}
+	}
+
 	uint32_t linesToProcess = pSourceImage->height();
 	uint32_t blocks = pSourceImage->width() * linesToProcess / 16;
 
-	size_t outputSize = pSourceImage->width() * pSourceImage->height() / 2;
-	if(desiredFormat == gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC || desiredFormat == gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) outputSize *= 2;
+	size_t outputSize = gfx_api::format_memory_size(desiredFormat, originalWidth, originalHeight);
 
 	std::unique_ptr<iV_CompressedImage> compressedOutput = std::unique_ptr<iV_CompressedImage>(new iV_CompressedImage());
-	if (!compressedOutput->allocate(desiredFormat, outputSize, pSourceImage->width(), pSourceImage->height(), pSourceImage->width(), pSourceImage->height(), false))
+	if (!compressedOutput->allocate(desiredFormat, outputSize, alignedWidth, alignedHeight, originalWidth, originalHeight, false))
 	{
 		debug(LOG_ERROR, "Failed to allocate memory for buffer");
 		return nullptr;
@@ -265,9 +278,8 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 // Determine the best available live compressed image format for the current system (+ textureType)
 optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormatForImage(gfx_api::pixel_format_target target, const iV_Image& image, gfx_api::texture_type textureType)
 {
-	if (image.width() % 4 != 0 || image.height() % 4 != 0)
+	if (image.width() == 0 || image.height() == 0)
 	{
-		// Image width + height should be a multiple of 4 to do runtime compression
 		return nullopt;
 	}
 
