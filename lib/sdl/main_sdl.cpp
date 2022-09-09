@@ -1771,7 +1771,26 @@ static bool wzGetDisplayDPI(int displayIndex, float* dpi, float* baseDpi)
 unsigned int wzGetDefaultBaseDisplayScale(int displayIndex)
 {
 #if defined(WZ_OS_WIN)
-	// SDL does not yet have built-in "high-DPI display" support on Windows (as of SDL 2.0.14)
+	// SDL 2.24.0+ has DPI scaling support on Windows
+	SDL_version linked_sdl_version;
+	SDL_GetVersion(&linked_sdl_version);
+	if (linked_sdl_version.major > 2 || (linked_sdl_version.major == 2 && linked_sdl_version.minor >= 24))
+	{
+		// Check if the hints have been set to enable it
+		if (SDL_GetHintBoolean(SDL_HINT_WINDOWS_DPI_SCALING, SDL_FALSE) == SDL_TRUE)
+		{
+			// SDL DPI awareness + scaling is enabled
+			// Just return 100%
+			return 100;
+		}
+		else
+		{
+			debug(LOG_INFO, "Can't rely on SDL high-DPI support (not available, or explicitly disabled)");
+			// fall-through
+		}
+	}
+
+	// SDL Windows DPI awareness support is unavailable
 	// Thus, all adjustments must be made using the Display Scale feature in WZ itself
 	// Calculate a good base game Display Scale based on the actual screen display scale
 	if (!win_IsProcessDPIAware())
@@ -2575,6 +2594,22 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	if (SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "1") == SDL_FALSE)
 	{
 		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES");
+	}
+#endif
+#if defined(WZ_OS_WIN)
+	// on Windows, opt-in to SDL 2.24.0+'s DPI scaling support
+	if (linked_sdl_version.major > 2 || (linked_sdl_version.major == 2 && linked_sdl_version.minor >= 24))
+	{
+		// SDL_HINT_WINDOWS_DPI_AWARENESS does not appear to be needed if SDL_HINT_WINDOWS_DPI_SCALING is set
+		// But set it anyway for completeness
+		if (SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2") == SDL_FALSE)
+		{
+			debug(LOG_ERROR, "Failed to set hint: SDL_HINT_WINDOWS_DPI_AWARENESS");
+		}
+		if (SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1") == SDL_FALSE)
+		{
+			debug(LOG_ERROR, "Failed to set hint: SDL_HINT_WINDOWS_DPI_SCALING");
+		}
 	}
 #endif
 
