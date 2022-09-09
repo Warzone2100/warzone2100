@@ -397,7 +397,7 @@ static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
 		return nullptr;
 	}
 
-	gfx_api::texture* pAlbumCoverTexture = gfx_api::context::get().loadTextureFromFile(imagePath.c_str(), gfx_api::texture_type::game_texture);
+	gfx_api::texture* pAlbumCoverTexture = gfx_api::context::get().loadTextureFromFile(imagePath.c_str(), gfx_api::texture_type::user_interface);
 	return pAlbumCoverTexture;
 }
 
