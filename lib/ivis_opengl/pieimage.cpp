@@ -279,28 +279,37 @@ bool iV_Image::convert_rg_to_ra_rgba()
 bool iV_Image::convert_to_luma()
 {
 	if (m_channels == 1) { return true; }
-	// Otherwise, expecting 3 or 4-channel (RGB/RGBA)
-	ASSERT_OR_RETURN(false, m_channels == 3 || m_channels == 4, "Does not have 1, 3 or 4 channels");
+	// Otherwise, expecting 3 or 4-channel (RGB/RGBA) (but handle 2 channels by taking only the first channel)
+	ASSERT_OR_RETURN(false, m_channels <= 4, "Does not have <= 4 channels");
 	auto originalBmpData = m_bmp;
 	const size_t numPixels = static_cast<size_t>(m_height) * static_cast<size_t>(m_width);
 	m_bmp = (unsigned char *)malloc(numPixels);
-	for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
+	if (m_channels >= 3)
 	{
-		uint32_t red = originalBmpData[(pixelIdx * m_channels)];
-		uint32_t green = originalBmpData[(pixelIdx * m_channels) + 1];
-		uint32_t blue = originalBmpData[(pixelIdx * m_channels) + 2];
-		if (red == green && red == blue)
+		for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
 		{
-			// all channels are the same - just use the first channel
-			m_bmp[pixelIdx] = static_cast<unsigned char>(red);
+			uint32_t red = originalBmpData[(pixelIdx * m_channels)];
+			uint32_t green = originalBmpData[(pixelIdx * m_channels) + 1];
+			uint32_t blue = originalBmpData[(pixelIdx * m_channels) + 2];
+			if (red == green && red == blue)
+			{
+				// all channels are the same - just use the first channel
+				m_bmp[pixelIdx] = static_cast<unsigned char>(red);
+			}
+			else
+			{
+				// quick approximation of a weighted RGB -> Luma method
+				// (R+R+B+G+G+G)/6
+				uint32_t lum = (red+red+blue+green+green+green) / 6;
+				m_bmp[pixelIdx] = static_cast<unsigned char>(std::min<uint32_t>(lum, 255));
+			}
 		}
-		else
-		{
-			// quick approximation of a weighted RGB -> Luma method
-			// (R+R+B+G+G+G)/6
-			uint32_t lum = (red+red+blue+green+green+green) / 6;
-			m_bmp[pixelIdx] = static_cast<unsigned char>(std::min<uint32_t>(lum, 255));
-		}
+	}
+	else
+	{
+		ASSERT(m_channels == 2, "Expecting 2 channels??");
+		// For two channels, just take the first, ignore the second
+		internal_convert_image_contents<2, 1, -1>(m_width, m_height, originalBmpData, m_bmp);
 	}
 	m_channels = 1;
 	// free the original bitmap data
