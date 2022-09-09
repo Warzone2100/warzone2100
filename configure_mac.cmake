@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.5)
 ########################################################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "d9e6139cd499cb267699efeafd3efd561e3eb1e7")
+set(VCPKG_COMMIT_SHA "1ddafcb6f62ee3488b6e32621d6aa343038a8ccc")
 
 # WZ minimum supported macOS deployment target (< 10.9 is untested)
 set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.9")
