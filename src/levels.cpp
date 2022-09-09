@@ -1229,7 +1229,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
 	addDumpInfo(buf);
 
-	if (autogame_enabled())
+	if (autogame_enabled() && getHostLaunch() != HostLaunch::LoadReplay)
 	{
 		gameTimeSetMod(Rational(500));
 		if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually

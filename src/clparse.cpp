@@ -782,6 +782,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			{
 				qFatal("Unable to find specified replay");
 			}
+			setHostLaunch(HostLaunch::LoadReplay);
 			sstrcpy(sRequestResult, saveGameName); // hack to avoid crashes
 			SPinit(LEVEL_TYPE::SKIRMISH);
 			bMultiPlayer = true;
