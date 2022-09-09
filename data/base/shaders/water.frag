@@ -30,10 +30,13 @@ out vec4 FragColor;
 void main()
 {
 	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-	vec4 fragColor = texture(tex1, uv1) * texture(tex2, uv2);
+	vec4 fragColor = texture(tex1, uv1);
+	float specColor = texture(tex2, uv2).r;
 	#else
-	vec4 fragColor = texture2D(tex1, uv1) * texture2D(tex2, uv2);
+	vec4 fragColor = texture2D(tex1, uv1);
+	float specColor = texture2D(tex2, uv2).r;
 	#endif
+	fragColor *= vec4(specColor, specColor, specColor, 1.0);
 	
 	if (fogEnabled > 0)
 	{
