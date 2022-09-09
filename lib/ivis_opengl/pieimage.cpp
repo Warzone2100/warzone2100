@@ -266,12 +266,13 @@ bool iV_Image::convert_rg_to_ra_rgba()
 	ASSERT_OR_RETURN(false, m_channels >= 2, "Must have at least 2 channels");
 	ASSERT_OR_RETURN(false, convert_to_rgba(), "Format must be RGBA");
 
-	const size_t numBytes = static_cast<size_t>(m_height) * static_cast<size_t>(m_width) * static_cast<size_t>(m_channels);
-	for (auto pPixelPos = bmp_w(); pPixelPos < (pPixelPos + numBytes); pPixelPos += 4)
+	const size_t numPixels = static_cast<size_t>(m_height) * static_cast<size_t>(m_width);
+	for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
 	{
-		pPixelPos[3] = pPixelPos[1];
-		pPixelPos[2] = 0;
-		pPixelPos[1] = 0;
+		const size_t pixelStartPos = (pixelIdx * m_channels);
+		m_bmp[pixelStartPos + 3] = m_bmp[pixelStartPos + 1];
+		m_bmp[pixelStartPos + 2] = 0;
+		m_bmp[pixelStartPos + 1] = 0;
 	}
 	return true;
 }
