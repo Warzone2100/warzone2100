@@ -41,6 +41,7 @@ enum class HostLaunch
 	Host,
 	Skirmish,
 	Autohost,
+	LoadReplay,
 };
 
 void setHostLaunch(HostLaunch value);

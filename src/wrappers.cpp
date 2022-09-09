@@ -107,7 +107,7 @@ static void setupLoadingScreen()
 
 bool recalculateEffectiveHeadlessValue()
 {
-	if (hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost || autogame_enabled())
+	if (hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost || hostlaunch == HostLaunch::LoadReplay || autogame_enabled())
 	{
 		// only support headless mode if hostlaunch is --skirmish or --autogame
 		return bHeadlessAutoGameModeCLIOption;

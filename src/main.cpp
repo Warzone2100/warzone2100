@@ -1029,8 +1029,16 @@ static void startGameLoop()
 	setMaxFastForwardTicks(WZ_DEFAULT_MAX_FASTFORWARD_TICKS, true); // default value / spectator "catch-up" behavior
 	if (NETisReplay())
 	{
-		// for replays, ensure we don't start off fast-forwarding
-		setMaxFastForwardTicks(0, true);
+		if (!headlessGameMode() && !autogame_enabled())
+		{
+			// for replays, ensure we don't start off fast-forwarding
+			setMaxFastForwardTicks(0, true);
+		}
+		else
+		{
+			// when loading replays in headless / autogame mode, set to fast-forward
+			setMaxFastForwardTicks(10, false);
+		}
 	}
 }
 
