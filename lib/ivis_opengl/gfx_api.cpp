@@ -89,7 +89,8 @@ static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filenam
 	iV_Image loadedUncompressedImage;
 
 	// 1.) Load the PNG into an iV_Image
-	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage))
+	bool forceRGB = (textureType == gfx_api::texture_type::game_texture) || (textureType == gfx_api::texture_type::user_interface);
+	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage, forceRGB))
 	{
 		// Failed to load the image
 		return nullptr;
