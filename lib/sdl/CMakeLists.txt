@@ -17,11 +17,17 @@ set(_sdl2_library)
 set(_sdl2_include_dir)
 set(_sdl2_main_library)
 
-function(test_link_to_sdl_target sdl_target output_var)
+function(test_link_to_sdl_target sdl_target sdl_main output_var)
 
 	set(CMAKE_REQUIRED_LIBRARIES "${sdl_target}")
+	set(_additional_includes "")
+	if (DEFINED sdl_main AND sdl_main AND NOT "${sdl_main}" STREQUAL "")
+		list(APPEND CMAKE_REQUIRED_LIBRARIES ${sdl_main})
+		set(_additional_includes "#include <SDL_main.h>")
+	endif()
 	check_cxx_source_compiles(
 	   "#include <SDL_version.h>
+		${_additional_includes}
 		#include <cstdio>
 
 		void print_sdl_version() {
@@ -30,7 +36,7 @@ function(test_link_to_sdl_target sdl_target output_var)
 		  printf(\"Linked SDL version: %u.%u.%u\", (unsigned int)linked_sdl_version.major, (unsigned int)linked_sdl_version.minor, (unsigned int)linked_sdl_version.patch);
 		}
 
-		int main()
+		int main(int argc, char *argv[])
 		{
 		  print_sdl_version();
 		  return 0;
@@ -52,7 +58,7 @@ if(SDL2_FOUND)
 	if (TARGET SDL2::SDL2-static)
 		# Check for INTERFACE_INCLUDE_DIRECTORIES to ignore the "aliased" target that vcpkg creates
 		get_target_property(_sdl2_include_dir SDL2::SDL2-static INTERFACE_INCLUDE_DIRECTORIES)
-		test_link_to_sdl_target(SDL2::SDL2-static LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
+		test_link_to_sdl_target(SDL2::SDL2-static FALSE LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
 		if (_sdl2_include_dir AND LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
 			set(_sdl2_library SDL2::SDL2-static)
 		endif()
@@ -60,7 +66,7 @@ if(SDL2_FOUND)
 	if (NOT _sdl2_library AND TARGET SDL2::SDL2)
 		# Check for INTERFACE_INCLUDE_DIRECTORIES to ignore the "aliased" target that vcpkg creates
 		get_target_property(_sdl2_include_dir SDL2::SDL2 INTERFACE_INCLUDE_DIRECTORIES)
-		test_link_to_sdl_target(SDL2::SDL2 LINK_SUCCESS_SDL2_SDL2_TARGET)
+		test_link_to_sdl_target(SDL2::SDL2 FALSE LINK_SUCCESS_SDL2_SDL2_TARGET)
 		if (_sdl2_include_dir AND LINK_SUCCESS_SDL2_SDL2_TARGET)
 			set(_sdl2_library SDL2::SDL2)
 		endif()
@@ -68,7 +74,7 @@ if(SDL2_FOUND)
 	if (NOT _sdl2_library)
 		# Fall-back to FindSDL2 module (below)
 	elseif (TARGET SDL2::SDL2main)
-		test_link_to_sdl_target("${_sdl2_library};SDL2::SDL2main" LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
+		test_link_to_sdl_target("${_sdl2_library}" SDL2::SDL2main LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
 		if (LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
 			set(_sdl2_main_library SDL2::SDL2main)
 		endif()
