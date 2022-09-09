@@ -1335,7 +1335,7 @@ void drawWater(const glm::mat4 &viewMatrix)
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
 	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
-	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
+	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
 	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()));
