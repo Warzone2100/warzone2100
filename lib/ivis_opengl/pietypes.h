@@ -137,9 +137,15 @@ public:
 // Not thread-safe
 class iV_Image final : public iV_BaseImage
 {
+public:
+	enum class ColorOrder {
+		RGB,
+		BGR
+	};
 private:
 	unsigned int m_width = 0, m_height = 0, m_channels = 0;
 	unsigned char *m_bmp = nullptr;
+	ColorOrder m_colorOrder = ColorOrder::RGB;
 
 public:
 	// iV_BaseImage
@@ -204,6 +210,8 @@ public:
 	bool scale_image_max_size(int maxWidth, int maxHeight);
 
 	bool pad_image(unsigned int newWidth, unsigned int newHeight, bool useSmearing);
+
+	bool convert_color_order(ColorOrder newOrder);
 
 public:
 	// iV_Image is non-copyable
