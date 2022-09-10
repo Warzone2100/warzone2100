@@ -233,6 +233,35 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 		}
 	}
 
+	switch (desiredFormat)
+	{
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+			// Must convert from RGB -> BGR
+			if (pSourceImage->pixel_format() != gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+			{
+				if (pSourceImage == &image)
+				{
+					dupSourceImage.duplicate(image);
+					pSourceImage = &dupSourceImage;
+				}
+
+				if (!dupSourceImage.convert_color_order(iV_Image::ColorOrder::BGR))
+				{
+					debug(LOG_ERROR, "Failed to convert from RGB -> BGR");
+					return nullptr;
+				}
+			}
+			break;
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+			// EtcPak expects RGB color order - nothing to do
+			break;
+		default:
+			break;
+	}
+
 	uint32_t linesToProcess = pSourceImage->height();
 	uint32_t blocks = pSourceImage->width() * linesToProcess / 16;
 

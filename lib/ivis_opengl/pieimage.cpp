@@ -154,6 +154,17 @@ gfx_api::pixel_format iV_Image::pixel_format_for_channels(unsigned int channels)
 
 gfx_api::pixel_format iV_Image::pixel_format() const
 {
+	if (m_colorOrder == ColorOrder::BGR)
+	{
+		switch (m_channels)
+		{
+		case 4:
+			return gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8;
+		default:
+			ASSERT(false, "BGR color order, but unexpected number of channels: %u", m_channels);
+			// fall-through
+		}
+	}
 	return iV_Image::pixel_format_for_channels(m_channels);
 }
 
@@ -433,5 +444,21 @@ bool iV_Image::pad_image(unsigned int newWidth, unsigned int newHeight, bool use
 	// free the original bitmap data
 	free(originalBmpData);
 
+	return true;
+}
+
+bool iV_Image::convert_color_order(ColorOrder newOrder)
+{
+	if (m_colorOrder == newOrder)
+	{
+		return true;
+	}
+	ASSERT_OR_RETURN(false, m_channels == 4, "Does not have 4 channels - currently only supported for 4 channels");
+	const size_t numPixels = static_cast<size_t>(m_height) * static_cast<size_t>(m_width);
+	for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
+	{
+		std::swap(m_bmp[(pixelIdx * m_channels)], m_bmp[(pixelIdx * m_channels) + 2]);
+	}
+	m_colorOrder = newOrder;
 	return true;
 }
