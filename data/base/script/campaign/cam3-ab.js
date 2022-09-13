@@ -229,8 +229,8 @@ function synapticsSound()
 //winFlag is set in eventResearched.
 function resistanceResearched()
 {
-	const MIN_EDGE_COUNT = 15;
-	if (winFlag && edgeMapCounter >= MIN_EDGE_COUNT)
+	let mapEdgeCount = (difficulty >= MEDIUM) ? 15 : 8;
+	if (winFlag && edgeMapCounter >= mapEdgeCount)
 	{
 		return true;
 	}
