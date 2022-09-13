@@ -640,6 +640,11 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		printSearchPath();
 #endif // DEBUG
 
+		if (mode != mod_clean)
+		{
+			gfx_api::loadTextureCompressionOverrides(); // reload these as mods may have overridden the file!
+		}
+
 		ActivityManager::instance().rebuiltSearchPath();
 	}
 	else if (use_override_mods)

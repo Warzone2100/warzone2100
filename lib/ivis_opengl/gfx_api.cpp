@@ -23,6 +23,8 @@
 #include "gfx_api_image_compress_priv.h"
 #include "gfx_api_image_basis_priv.h"
 #include "lib/framework/physfs_ext.h"
+#include <unordered_map>
+#include <algorithm>
 
 static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
@@ -81,6 +83,133 @@ gfx_api::context& gfx_api::context::get()
 {
 	return *current_backend_context;
 }
+
+// MARK: - Per-texture compression overrides
+
+#include "lib/framework/file.h"
+static std::unordered_map<std::string, gfx_api::max_texture_compression_level> textureCompressionOverrides;
+static optional<std::string> textureCompressionOverrideFileRealDir;
+
+static inline void processTexCompressOverrideLine(const std::string& line)
+{
+	if (line.empty())
+	{
+		return;
+	}
+	if (line.front() == '#')
+	{
+		return; // ignore comment lines
+	}
+	auto delimeterPos = line.rfind('=');
+	if (delimeterPos == std::string::npos)
+	{
+		// line is missing delimeter
+		debug(LOG_WZ, "TexCompressOverride line is incorrectly formatted: %s", line.c_str());
+		return;
+	}
+	if (delimeterPos == 0)
+	{
+		// line is missing filename
+		debug(LOG_WZ, "TexCompressOverride line is incorrectly formatted: %s", line.c_str());
+		return;
+	}
+	if (delimeterPos == line.size() - 1)
+	{
+		// line is missing parameter after delimeter
+		debug(LOG_WZ, "TexCompressOverride line is incorrectly formatted: %s", line.c_str());
+		return;
+	}
+
+	auto maxLevelStr = line.substr(delimeterPos + 1);
+	gfx_api::max_texture_compression_level maxLevel;
+	if (maxLevelStr.compare("0") == 0)
+	{
+		maxLevel = gfx_api::max_texture_compression_level::same_as_source;
+	}
+	else if (maxLevelStr.compare("1") == 0)
+	{
+		maxLevel = gfx_api::max_texture_compression_level::highest_quality;
+	}
+	else
+	{
+		debug(LOG_WZ, "TexCompressOverride line is incorrectly formatted (unknown value): %s", line.c_str());
+		return;
+	}
+
+	textureCompressionOverrides[line.substr(0, delimeterPos)] = maxLevel;
+}
+
+bool gfx_api::loadTextureCompressionOverrides()
+{
+	const std::string fileName = "texpages/compression_overrides.txt";
+
+	optional<std::string> newRealDirPath;
+	if (PHYSFS_exists(fileName.c_str()))
+	{
+		newRealDirPath = WZ_PHYSFS_getRealDir_String(fileName.c_str());
+		if (textureCompressionOverrideFileRealDir.has_value() && newRealDirPath.value() == textureCompressionOverrideFileRealDir.value())
+		{
+			// no need to reload
+			return true;
+		}
+	}
+
+	// load the latest file
+	textureCompressionOverrideFileRealDir = newRealDirPath;
+	textureCompressionOverrides.clear();
+
+	// [FILE FORMAT]
+	// Comments: Line begins with #
+	// Each line is:
+	// <filename>=<max texture compression quality level>
+	// Where <filename> is the path inside the data directory (example: texpages/page-6.png), *case-sensitive*
+	// Where <max texture compression quality level> corresponds to the following table:
+	//   0: same as source (for loading a PNG: no gpu texture compression, for loading a KTX2: ASTC4x4 or uncompressed)
+	//   1: highest quality compressed texture formats only (ASTC4x4, BPTC - for PNGs, this will still currently lead to uncompressed textures in memory)
+	// To get the default behavior, which is to use the best texture compression format available on a particular system, omit listing the texture filename at all.
+	// (This file is intended only for overriding the default behavior.)
+	// NOTE: This is only intended for compatibility with some old manually-created pixel-art texture atlases that are tightly packed, low resolution, and may have "bleed" issues as a result of texture compression.
+	// In general, modern texture files with appropriate format, resolution, and padding (if needed between elements) should not need to be listed here, or should be reformatted to avoid it.
+
+	std::vector<char> loadedTexConfigData;
+	debug(LOG_WZ, "Loading texture compression config overrides: %s", fileName.c_str());
+	if (!loadFileToBufferVector(fileName.c_str(), loadedTexConfigData, false, false))
+	{
+		debug(LOG_WZ, "No texture compression config override file: %s", fileName.c_str());
+		return false;
+	}
+
+	auto it_previous = loadedTexConfigData.begin();
+	auto it = std::find(loadedTexConfigData.begin(), loadedTexConfigData.end(), '\n');
+	auto it_end = loadedTexConfigData.end();
+	std::string tempLine;
+	for (; it != it_end; it = std::find(it, loadedTexConfigData.end(), '\n'))
+	{
+		tempLine.assign(it_previous, it);
+		processTexCompressOverrideLine(tempLine);
+		it_previous = ++it;
+	}
+	if (it != loadedTexConfigData.begin())
+	{
+		tempLine.assign(it_previous, it);
+		processTexCompressOverrideLine(tempLine);
+	}
+
+	debug(LOG_WZ, "Loaded %zu texture compression config overrides", textureCompressionOverrides.size());
+	return true;
+}
+
+optional<gfx_api::max_texture_compression_level> gfx_api::getMaxTextureCompressionLevelOverride(const std::string& filename)
+{
+	auto it = textureCompressionOverrides.find(filename);
+	if (it == textureCompressionOverrides.end())
+	{
+		return nullopt;
+	}
+	return it->second;
+}
+
+// MARK: - Image load helpers
 
 #include "png_util.h"
 
@@ -197,6 +326,22 @@ static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api:
 	return true;
 }
 
+static bool checkFormatVersusMaxCompressionLevel_FromUncompressed(optional<gfx_api::max_texture_compression_level> maxLevel, gfx_api::pixel_format desiredFormat)
+{
+	if (maxLevel.has_value())
+	{
+		switch (maxLevel.value())
+		{
+			case gfx_api::max_texture_compression_level::same_as_source:
+				return gfx_api::is_uncompressed_format(desiredFormat);
+			case gfx_api::max_texture_compression_level::highest_quality:
+				return gfx_api::is_uncompressed_format(desiredFormat) || desiredFormat == gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM || desiredFormat == gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM;
+		}
+	}
+
+	return true;
+}
+
 // Takes an iv_Image and texture_type and loads a texture as appropriate / possible
 gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
@@ -226,12 +371,19 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	auto bestAvailableCompressedFormat = gfx_api::bestRealTimeCompressionFormatForImage(gfx_api::pixel_format_target::texture_2d, image, textureType);
 	if (bestAvailableCompressedFormat.has_value() && bestAvailableCompressedFormat.value() != gfx_api::pixel_format::invalid)
 	{
-		// For now, check that the minimum mipmap level is 4x4 or greater, otherwise do not run-time compress
-		size_t min_mipmap_w = std::max<size_t>(1, image.width() >> (mipmap_levels - 1));
-		size_t min_mipmap_h = std::max<size_t>(1, image.height() >> (mipmap_levels - 1));
-		if (min_mipmap_w >= 4 && min_mipmap_h >= 4)
+		if (checkFormatVersusMaxCompressionLevel_FromUncompressed(gfx_api::getMaxTextureCompressionLevelOverride(filename), bestAvailableCompressedFormat.value()))
 		{
-			uploadFormat = bestAvailableCompressedFormat.value();
+			// For now, check that the minimum mipmap level is 4x4 or greater, otherwise do not run-time compress
+			size_t min_mipmap_w = std::max<size_t>(1, image.width() >> (mipmap_levels - 1));
+			size_t min_mipmap_h = std::max<size_t>(1, image.height() >> (mipmap_levels - 1));
+			if (min_mipmap_w >= 4 && min_mipmap_h >= 4)
+			{
+				uploadFormat = bestAvailableCompressedFormat.value();
+			}
+		}
+		else
+		{
+			debug(LOG_WZ, "Texture compression override prevented compressing to %s for file: %s", format_to_str(bestAvailableCompressedFormat.value()), filename.c_str());
 		}
 	}
 

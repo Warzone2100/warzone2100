@@ -121,4 +121,9 @@ namespace gfx_api
 	};
 	constexpr texture_type MAX_TEXTURE_TYPE = texture_type::specular_map;
 	constexpr size_t TEXTURE_TYPE_COUNT = static_cast<size_t>(MAX_TEXTURE_TYPE) + 1;
+
+	enum class max_texture_compression_level: uint8_t {
+		same_as_source = 0,
+		highest_quality = 1
+	};
 }

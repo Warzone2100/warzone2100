@@ -281,24 +281,40 @@ static bool iVImage_Basis_Convert_Channels(gfx_api::texture_type textureType, st
 	return false;
 }
 
+static bool checkFormatVersusMaxCompressionLevel_Basis(optional<gfx_api::max_texture_compression_level> maxLevel, gfx_api::pixel_format desiredFormat)
+{
+	if (maxLevel.has_value())
+	{
+		switch (maxLevel.value())
+		{
+			case gfx_api::max_texture_compression_level::same_as_source:
+				return gfx_api::is_uncompressed_format(desiredFormat) || desiredFormat == gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM;
+			case gfx_api::max_texture_compression_level::highest_quality:
+				return desiredFormat == gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM || desiredFormat == gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM;
+		}
+	}
+
+	return true;
+}
+
 // Returns an iV_BaseImage for each mipLevel in a basis file, in the best possible format for the given texture_type (and input file) for the current system
 // - game_texture: A compressed RGBA (or RGB) format, or an uncompressed format
 // - alpha_mask: A compressed single-channel format, or R8 uncompressed
 // - normal_map: TODO
 // - specular_map: A compressed single-channel format, or R8 uncompressed
 // Pass `nullopt` to desiredFormat to use the "best available" format for the current system
-static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Data(const void* pData, uint32_t dataSize, const char *filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips = nullopt)
+static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Data(const void* pData, uint32_t dataSize, const std::string& filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips = nullopt)
 {
 	basist::ktx2_transcoder transcoder;
 	if (!transcoder.init(pData, dataSize))
 	{
-		debug(LOG_ERROR, "Failed to initialize ktx2_transcoder for file: %s", filename);
+		debug(LOG_ERROR, "Failed to initialize ktx2_transcoder for file: %s", filename.c_str());
 		return {};
 	}
 
 	if (!transcoder.is_uastc())
 	{
-		debug(LOG_ERROR, "Unsupported: ktx2 file does not use UASTC supercompression format: %s", filename);
+		debug(LOG_ERROR, "Unsupported: ktx2 file does not use UASTC supercompression format: %s", filename.c_str());
 		return {};
 	}
 
@@ -310,22 +326,29 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 	}
 	if (desiredFormat.has_value() && !gfx_api::is_uncompressed_format(desiredFormat.value()))
 	{
-		auto basisFormat = to_basis_format(desiredFormat.value());
-		if (basisFormat.has_value())
+		if (checkFormatVersusMaxCompressionLevel_Basis(gfx_api::getMaxTextureCompressionLevelOverride(filename), desiredFormat.value()))
 		{
-			format = basisFormat.value();
-			internalFormat = desiredFormat.value();
+			auto basisFormat = to_basis_format(desiredFormat.value());
+			if (basisFormat.has_value())
+			{
+				format = basisFormat.value();
+				internalFormat = desiredFormat.value();
+			}
+			else
+			{
+				ASSERT(basisFormat.has_value(), "Failed to convert target internal format (%u) to basis format", (unsigned)desiredFormat.value());
+			}
 		}
 		else
 		{
-			ASSERT(basisFormat.has_value(), "Failed to convert target internal format (%u) to basis format", (unsigned)desiredFormat.value());
+			debug(LOG_WZ, "Texture compression override prevented transcoding to %s for file: %s", format_to_str(desiredFormat.value()), filename.c_str());
 		}
 	}
 
 	if (!basist::basis_is_format_supported(format, transcoder.get_format()))
 	{
 		const char* formatName = basist::basis_get_format_name(format);
-		debug(LOG_ERROR, "Basis transcoder was not compiled with support for format: %s; failed to transcode file: %s", (formatName) ? formatName : "", filename);
+		debug(LOG_ERROR, "Basis transcoder was not compiled with support for format: %s; failed to transcode file: %s", (formatName) ? formatName : "", filename.c_str());
 		return {};
 	}
 
@@ -334,7 +357,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 	uint32_t mipmapLevels = transcoder.get_levels();
 	uint32_t width = transcoder.get_width();
 	uint32_t height = transcoder.get_height();
-	debug(LOG_WZ, "%s: Width x Height: (%u x %u); Mipmap levels: %u", filename, width, height, mipmapLevels);
+	debug(LOG_WZ, "%s: Width x Height: (%u x %u); Mipmap levels: %u", filename.c_str(), width, height, mipmapLevels);
 
 	// for now, these are both zero - if we need support for layers or faces in the future, we'll need some nested loops
 	uint32_t layerIndex = 0;
@@ -345,7 +368,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		basist::ktx2_image_level_info level_info;
 		if (!transcoder.get_image_level_info(level_info, levelIndex, layerIndex, faceIndex))
 		{
-			debug(LOG_ERROR, "Failed retrieving image level info (%u %u %u) for: %s", levelIndex, layerIndex, faceIndex, filename);
+			debug(LOG_ERROR, "Failed retrieving image level info (%u %u %u) for: %s", levelIndex, layerIndex, faceIndex, filename.c_str());
 			return {};
 		}
 
@@ -387,7 +410,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		uint32_t decode_flags = 0;
 		if (!transcoder.transcode_image_level(levelIndex, layerIndex, faceIndex, (uncompressedOutput) ? uncompressedOutput->bmp_w() : compressedOutput->data_w(), numBlocksOrPixels, format, decode_flags))
 		{
-			debug(LOG_ERROR, "Failed transcoding image level (%u %u %u) for: %s", levelIndex, layerIndex, faceIndex, filename);
+			debug(LOG_ERROR, "Failed transcoding image level (%u %u %u) for: %s", levelIndex, layerIndex, faceIndex, filename.c_str());
 			return {};
 		}
 
@@ -419,19 +442,19 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 }
 
 // Returns an iV_BaseImage for each mipLevel in a basis file, in the desiredFormat (if supported by the basis transcoder)
-static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_internal(const char *filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target,  optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips)
+static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_internal(const std::string& filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target,  optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/, optional<size_t> maxMips)
 {
-	PHYSFS_file	*fp = PHYSFS_openRead(filename);
-	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename), filename);
-	ASSERT_OR_RETURN({}, fp != nullptr, "Could not open %s", filename);
+	PHYSFS_file	*fp = PHYSFS_openRead(filename.c_str());
+	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename.c_str()), filename.c_str());
+	ASSERT_OR_RETURN({}, fp != nullptr, "Could not open %s", filename.c_str());
 	PHYSFS_sint64 filesize = PHYSFS_fileLength(fp);
-	ASSERT_OR_RETURN({}, filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<uint32_t>::max()), "\"%s\" filesize >= std::numeric_limits<uint32_t>::max()", filename);
+	ASSERT_OR_RETURN({}, filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<uint32_t>::max()), "\"%s\" filesize >= std::numeric_limits<uint32_t>::max()", filename.c_str());
 	std::vector<unsigned char> buffer;
 	buffer.resize(filesize);
 	PHYSFS_sint64 readSize = WZ_PHYSFS_readBytes(fp, buffer.data(), filesize);
 	if (readSize < filesize)
 	{
-		debug(LOG_FATAL, "WZ_PHYSFS_readBytes(%s) failed with error: %s\n", filename, WZ_PHYSFS_getLastError());
+		debug(LOG_FATAL, "WZ_PHYSFS_readBytes(%s) failed with error: %s\n", filename.c_str(), WZ_PHYSFS_getLastError());
 		PHYSFS_close(fp);
 		return {};
 	}
@@ -440,7 +463,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_int
 }
 
 // Returns an iV_BaseImage for each mipLevel in a basis file, in the desiredFormat (if supported by the basis transcoder)
-std::vector<std::unique_ptr<iV_BaseImage>> gfx_api::loadiVImagesFromFile_Basis(const char *filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/)
+std::vector<std::unique_ptr<iV_BaseImage>> gfx_api::loadiVImagesFromFile_Basis(const std::string& filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, optional<gfx_api::pixel_format> desiredFormat /*= nullopt*/, uint32_t maxWidth /*= UINT32_MAX*/, uint32_t maxHeight /*= UINT32_MAX*/)
 {
 	return loadiVImagesFromFile_Basis_internal(filename, textureType, target, desiredFormat, maxWidth, maxHeight, nullopt);
 }
