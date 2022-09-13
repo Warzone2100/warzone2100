@@ -340,6 +340,10 @@ namespace gfx_api
 	// High-level API for getting an uncompressed image (iV_Image) from a file
 	std::unique_ptr<iV_Image> loadUncompressedImageFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool forceRGBA8 = false);
 
+	// Per-texture compression overrides
+	bool loadTextureCompressionOverrides();
+	optional<max_texture_compression_level> getMaxTextureCompressionLevelOverride(const std::string& filename);
+
 	template<std::size_t id, vertex_attribute_type type, std::size_t offset>
 	struct vertex_attribute_description
 	{
