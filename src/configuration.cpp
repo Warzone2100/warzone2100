@@ -64,6 +64,8 @@
 
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
+#define BASECONFVERSION		1
+#define CURRCONFVERSION		2
 
 static const char *fileName = "config";
 
@@ -240,12 +242,14 @@ bool loadConfig()
 
 	// next, create a structure that will hold data
 	mINI::INIStructure ini;
+	bool createdConfigFile = false;
 
 	// now we can read the file
 	try
 	{
 		if (!file.read(ini))
 		{
+			createdConfigFile = true;
 			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
 			// will just proceed with an empty ini structure
 		}
@@ -370,6 +374,19 @@ bool loadConfig()
 	war_setScanlineMode((SCANLINE_MODE)iniGetInteger("scanlines", SCANLINES_OFF).value());
 	seq_SetSubtitles(iniGetBool("subtitles", true).value());
 	setDifficultyLevel((DIFFICULTY_LEVEL)iniGetInteger("difficulty", DL_NORMAL).value());
+	if (!createdConfigFile && iniGetInteger("configVersion", BASECONFVERSION).value() < CURRCONFVERSION)
+	{
+		int level = (int)getDifficultyLevel() + 1;
+		if (level > static_cast<int>(AIDifficulty::INSANE))
+		{
+			level = static_cast<int>(AIDifficulty::INSANE);
+		}
+		else if (level < static_cast<int>(AIDifficulty::SUPEREASY))
+		{
+			level = static_cast<int>(AIDifficulty::SUPEREASY);
+		}
+		setDifficultyLevel(static_cast<DIFFICULTY_LEVEL>(level));
+	}
 	war_SetSPcolor(iniGetInteger("colour", 0).value());	// default is green (0)
 	war_setMPcolour(iniGetInteger("colourMP", -1).value());  // default is random (-1)
 	sstrcpy(game.name, iniGetString("gameName", _("My Game")).value().c_str());
@@ -644,6 +661,7 @@ bool saveConfig()
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
 	iniSetInteger("fogEnd", war_getFogEnd());
 	iniSetInteger("fogStart", war_getFogStart());
+	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);
