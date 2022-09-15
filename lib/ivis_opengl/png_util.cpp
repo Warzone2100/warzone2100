@@ -230,7 +230,7 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 	png_byte interlace_type = 0;
 	size_t row_bytes = 0;
 
-	png_bytep* row_pointers = nullptr;
+	volatile png_bytepp row_pointers = nullptr;
 
 	// Open file
 	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
@@ -275,10 +275,11 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 	if (setjmp(png_jmpbuf(png_ptr)))
 	{
 		debug(LOG_FATAL, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
-		if (row_pointers != nullptr)
+		png_bytepp rows_tmp_cleanup = row_pointers;
+		if (rows_tmp_cleanup != nullptr)
 		{
-			free(row_pointers);
 			row_pointers = nullptr;
+			free(rows_tmp_cleanup);
 		}
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
@@ -393,18 +394,19 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 
 	// construct row pointers
 	row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
+	png_bytepp rows_tmp = row_pointers; // Avoid volatile overhead, copy row_pointers to local - use row_pointers only in setjmp/longjmp handler above
 	for (png_uint_32 i = 0; i < height; i++)
 	{
-		row_pointers[i] = &(pData[i * row_bytes]);
+		rows_tmp[i] = &(pData[i * row_bytes]);
 	}
 
 	// read image rows
-	png_read_image(png_ptr, row_pointers);
+	png_read_image(png_ptr, rows_tmp);
 
-	if (row_pointers != nullptr)
+	if (rows_tmp != nullptr)
 	{
-		free(row_pointers);
 		row_pointers = nullptr;
+		free(rows_tmp);
 	}
 	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 
