@@ -57,5 +57,5 @@
 	url = https://github.com/Warzone2100/maptools-cli.git
 [submodule "3rdparty/basis_universal"]
 	path = 3rdparty/basis_universal
-	url = https://github.com/BinomialLLC/basis_universal.git
+	url = https://github.com/past-due/basis_universal.git
 	shallow = true
