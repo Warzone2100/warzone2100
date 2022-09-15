@@ -165,6 +165,21 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 		target_compile_definitions(basis_transcoder PRIVATE "-DBASISD_IS_BIG_ENDIAN=1")
 	endif()
 
+	# Must set BASISU_HAVE_STD_TRIVIALLY_COPYABLE if the target supports std::is_trivially_copyable
+	include(CheckCXXSourceCompiles)
+	check_cxx_source_compiles("
+		#include <type_traits>
+		const bool val = std::is_trivially_copyable<bool>::value;
+		int main()
+		{
+			return 0;
+		}"
+		HAVE_STD_IS_TRIVIALLY_COPYABLE
+	)
+	if (HAVE_STD_IS_TRIVIALLY_COPYABLE)
+		target_compile_definitions(basis_transcoder PUBLIC "-DBASISU_HAVE_STD_TRIVIALLY_COPYABLE")
+	endif()
+
 	# Disable certain transcoder formats
 	target_compile_definitions(basis_transcoder PRIVATE "-DBASISD_SUPPORT_ATC=0" "-DBASISD_SUPPORT_PVRTC1=0" "-DBASISD_SUPPORT_PVRTC2=0")
 
