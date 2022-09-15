@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020  Warzone 2100 Project
+	Copyright (C) 2020-2022  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,9 +44,14 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
-static const char* APPID = "505520727521361941";
+#include <wz-discord-config.h>
+#if !defined(WZ_DISCORD_RPC_APPID)
+# define WZ_DISCORD_RPC_APPID ""
+#endif
+
 static const size_t MAX_DISCORD_STR_LEN = 127; // 128 - 1 (for null terminator)
 
+static bool discordRPCEnabled = false;
 static bool presenceUpdatesEnabled = true;
 static std::unordered_map<std::string, std::chrono::system_clock::time_point> lastDismissedJoinRequestByUserId;
 #define WZ_DISCORD_JOIN_SPAM_INTERVAL_SECS 60
@@ -1089,8 +1094,13 @@ static void handleDiscordJoinRequest(const DiscordUser* request)
 
 // MARK: - Initializing sub-system
 
-static void discordInit()
+static bool discordInit()
 {
+	if (strlen(WZ_DISCORD_RPC_APPID) == 0)
+	{
+		debug(LOG_WZ, "Insufficient configuration to enable Discord RPC");
+		return false;
+	}
 	DiscordEventHandlers handlers;
 	memset(&handlers, 0, sizeof(handlers));
 	handlers.ready = handleDiscordReady;
@@ -1099,17 +1109,23 @@ static void discordInit()
 	handlers.joinGame = handleDiscordJoin;
 	handlers.spectateGame = handleDiscordSpectate;
 	handlers.joinRequest = handleDiscordJoinRequest;
-	Discord_Initialize(APPID, &handlers, 1, nullptr);
+	Discord_Initialize(WZ_DISCORD_RPC_APPID, &handlers, 1, nullptr);
+	return true;
 }
 
 void discordRPCInitialize()
 {
-	discordInit();
+	if (!discordInit())
+	{
+		discordRPCEnabled = false;
+		return;
+	}
 	if (!discordSink)
 	{
 		discordSink = std::make_shared<DiscordRPCActivitySink>();
 		ActivityManager::instance().addActivitySink(discordSink);
 	}
+	discordRPCEnabled = true;
 }
 
 static uint32_t framesSinceLastProcessedCallbacks = 0;
@@ -1119,6 +1135,11 @@ static uint32_t remainingInitialFastChecks = 20;
 
 void discordRPCPerFrame()
 {
+	if (!discordRPCEnabled)
+	{
+		return;
+	}
+
 	if (discordSink)
 	{
 		discordSink->processQueuedPresenceUpdate();
@@ -1164,6 +1185,11 @@ void discordRPCPerFrame()
 
 void discordRPCShutdown()
 {
+	if (!discordRPCEnabled)
+	{
+		return;
+	}
+	discordRPCEnabled = false;
 	if (discordSink)
 	{
 		ActivityManager::instance().removeActivitySink(discordSink);
