@@ -53,8 +53,8 @@ if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY)
 	include(FetchContent)
 	FetchContent_Declare(
 		sentrynative
-		URL "https://github.com/getsentry/sentry-native/releases/download/0.4.12/sentry-native.zip"
-		URL_HASH SHA512=15da4407ed5e2c8d5e56e497ccc6006b29235aef6b3a81e034c93443e20a7cfdf95d55e31b88e552c55e824eb15d6f7fafe988c453a5a6f36fe45136d7268b19
+		URL "https://github.com/getsentry/sentry-native/releases/download/0.4.17/sentry-native.zip"
+		URL_HASH SHA512=03ee36f5420b0f3a21b1e4b58fe88b67a883abda27c0c644e3a9916674e1847a91ee2a3815908747738a77e8984b46f92fc776405ee443c71c69e352eeecebe6
 	)
 	FetchContent_GetProperties(sentrynative)
 	set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "Sentry build shared libs" FORCE)
