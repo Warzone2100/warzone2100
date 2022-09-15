@@ -809,19 +809,19 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 {
-	size_t cachedShadowDraws = 0;
-	size_t uncachedShadowDraws = 0;
+//	size_t cachedShadowDraws = 0;
+//	size_t uncachedShadowDraws = 0;
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
-		DrawShadowResult result = pie_DrawShadow(shadowCache, scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].matrix);
-		if (result == DRAW_SUCCESS_CACHED)
-		{
-			++cachedShadowDraws;
-		}
-		else
-		{
-			++uncachedShadowDraws;
-		}
+		/*DrawShadowResult result =*/ pie_DrawShadow(shadowCache, scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].matrix);
+//		if (result == DRAW_SUCCESS_CACHED)
+//		{
+//			++cachedShadowDraws;
+//		}
+//		else
+//		{
+//			++uncachedShadowDraws;
+//		}
 	}
 
 	const auto &premultipliedVertexes = shadowCache.getPremultipliedVertexes();
