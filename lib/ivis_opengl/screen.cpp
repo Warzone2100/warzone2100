@@ -60,7 +60,7 @@
 #include <glm/gtx/transform.hpp>
 
 /* global used to indicate preferred internal OpenGL format */
-bool wz_texture_compression = 0;
+bool wz_texture_compression = true;
 
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];

@@ -328,7 +328,7 @@ bool loadConfig()
 	{
 		setMouseWarp(value.value());
 	}
-	wz_texture_compression = false; // currently unsupported
+	wz_texture_compression = iniGetBool("textureCompression", true).value();
 	showFPS = iniGetBool("showFPS", false).value();
 	showUNITCOUNT = iniGetBool("showUNITCOUNT", false).value();
 	if (auto value = iniGetIntegerOpt("cameraSpeed"))
@@ -566,6 +566,7 @@ bool saveConfig()
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
 	iniSetInteger("MiddleClickRotate", (int)(getMiddleClickRotate()));
+	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
 	iniSetInteger("showFPS", (int)showFPS);
 	iniSetInteger("showUNITCOUNT", (int)showUNITCOUNT);
 	iniSetInteger("shadows", (int)(getDrawShadows()));	// shadows
