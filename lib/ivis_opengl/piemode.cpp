@@ -27,7 +27,6 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
 #include "lib/framework/wzapp.h"
 
 #include "lib/ivis_opengl/piedef.h"
