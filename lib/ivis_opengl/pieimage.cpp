@@ -59,11 +59,13 @@ iV_Image::iV_Image(iV_Image&& other)
 , m_height(0)
 , m_channels(0)
 , m_bmp(nullptr)
+, m_colorOrder(iV_Image::ColorOrder::RGB)
 {
 	std::swap(m_width, other.m_width);
 	std::swap(m_height, other.m_height);
 	std::swap(m_channels, other.m_channels);
 	std::swap(m_bmp, other.m_bmp);
+	std::swap(m_colorOrder, other.m_colorOrder);
 }
 
 iV_Image& iV_Image::operator=(iV_Image&& other)
@@ -75,6 +77,7 @@ iV_Image& iV_Image::operator=(iV_Image&& other)
 		std::swap(m_height, other.m_height);
 		std::swap(m_channels, other.m_channels);
 		std::swap(m_bmp, other.m_bmp);
+		std::swap(m_colorOrder, other.m_colorOrder);
 	}
 	return *this;
 }
