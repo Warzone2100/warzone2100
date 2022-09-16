@@ -419,7 +419,12 @@ static int socketThreadFunction(void *)
 			else
 			{
 				ASSERT(false, "Empty buffer for pending socket writes"); // This shouldn't happen!
+				Socket *sock = i->first;
 				i = socketThreadWrites.erase(i);
+				if (sock->deleteLater)
+				{
+					socketCloseNow(sock);
+				}
 			}
 		}
 		struct timeval tv = {0, 50 * 1000};
