@@ -3759,7 +3759,7 @@ static void NETallowJoining()
 				}
 				else
 				{
-					debug(LOG_ERROR, "Received an invalid version \"%d.%d\".", major, minor);
+					debug(LOG_ERROR, "Received an invalid version \"%" PRIu32 ".%" PRIu32 "\".", major, minor);
 					result = htonl(ERROR_WRONGVERSION);
 					memcpy(&buffer, &result, sizeof(result));
 					writeAll(tmp_socket[i], &buffer, sizeof(result));
