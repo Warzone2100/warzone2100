@@ -346,16 +346,16 @@ struct NETPLAY
 
 struct PLAYER_IP
 {
-	char	pname[40];
-	char	IPAddress[40];
+	char	pname[40] = {};
+	char	IPAddress[40] = {};
 };
-#define MAX_BANS 255
+#define MAX_BANS 1024
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY NetPlay;
 extern SYNC_COUNTER sync_counter;
-extern PLAYER_IP	*IPlist;
+std::vector<PLAYER_IP> NETgetIPBanList();
 // update flags
 extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line

@@ -111,16 +111,20 @@ bool NETstopLogging(void)
 	WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
 	snprintf(buf, sizeof(buf), "banned: %u, cantjoin: %u, rejected: %u\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected);
 	WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
-	if (sync_counter.banned && IPlist)
+	if (sync_counter.banned)
 	{
-		snprintf(buf, sizeof(buf), "Banned list:\n");
-		WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
-		for (i = 0; i < MAX_BANS; i++)
+		auto banList = NETgetIPBanList();
+		if (!banList.empty())
 		{
-			if (IPlist[i].IPAddress[0] != '\0')
+			snprintf(buf, sizeof(buf), "Banned list:\n");
+			WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
+			for (const auto& banDetails : banList)
 			{
-				snprintf(buf, sizeof(buf), "player %s, IP: %s\n", IPlist[i].pname, IPlist[i].IPAddress);
-				WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
+				if (banDetails.IPAddress[0] != '\0')
+				{
+					snprintf(buf, sizeof(buf), "player %s, IP: %s\n", banDetails.pname, banDetails.IPAddress);
+					WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
+				}
 			}
 		}
 
