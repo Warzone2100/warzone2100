@@ -25,7 +25,6 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
 #include "lib/framework/wztime.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/ivis_opengl/png_util.h"
