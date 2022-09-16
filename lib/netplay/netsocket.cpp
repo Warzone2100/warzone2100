@@ -67,7 +67,7 @@ struct Socket
 	bool ready;
 	bool writeError;
 	bool deleteLater;
-	char textAddress[40];
+	char textAddress[40] = {};
 
 	bool isCompressed;
 	bool readDisconnected;  ///< True iff a call to recv() returned 0.

@@ -3697,9 +3697,10 @@ static void NETallowJoining()
 		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 8))
 		    && recv_result != SOCKET_ERROR)
 		{
-			std::string rIP = "Incoming connection from:";
-			rIP.append(getSocketTextAddress(tmp_socket[i]));
-			NETlogEntry(rIP.c_str(), SYNC_FLAG, i);
+			std::string rIP = getSocketTextAddress(tmp_socket[i]);
+			std::string rIPLogEntry = "Incoming connection from:";
+			rIPLogEntry.append(rIP);
+			NETlogEntry(rIPLogEntry.c_str(), SYNC_FLAG, i);
 			// A 2.3.7 client sends a "list" command first, just drop the connection.
 			if (strcmp(buffer, "list") == 0)
 			{
