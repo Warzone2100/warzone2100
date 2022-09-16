@@ -42,6 +42,7 @@
 #include <thread>
 #include <atomic>
 #include <limits>
+#include <deque>
 #include <sodium.h>
 #include <re2/re2.h>
 
@@ -230,8 +231,7 @@ private:
 // Variables
 
 NETPLAY	NetPlay;
-PLAYER_IP	*IPlist = nullptr;
-static int IPlistLast = 0;
+std::deque<PLAYER_IP> IPlist;
 static bool		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
@@ -1551,12 +1551,7 @@ int NETshutdown()
 		NetPlay.isUPNP_ERROR = false;
 	}
 	NETstopLogging();
-	if (IPlist)
-	{
-		free(IPlist);
-	}
-	IPlist = nullptr;
-	IPlistLast = 0;
+	IPlist.clear();
 	if (NetPlay.MOTD)
 	{
 		free(NetPlay.MOTD);
@@ -4090,12 +4085,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 
 	NetPlay.isHost = true;
 	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
-	if (IPlist)
-	{
-		free(IPlist);
-		IPlist = nullptr;
-		IPlistLast = 0;
-	}
+	IPlist.clear();
 	NETloadBanList();
 	playerManagementRecord.clear();
 	sstrcpy(gamestruct.name, SessionName);
@@ -5334,9 +5324,7 @@ static bool isLoopbackIP(const char *ip)
  */
 static bool onBanList(const char *ip)
 {
-	int i;
-
-	if (!IPlist)
+	if (IPlist.empty())
 	{
 		return false;    //if no bans are added, then don't check.
 	}
@@ -5344,9 +5332,9 @@ static bool onBanList(const char *ip)
 	{
 		return false;	// ignore loopback IPs
 	}
-	for (i = 0; i < MAX_BANS ; i++)
+	for (const auto& entry : IPlist)
 	{
-		if (RE2::FullMatch(ip, IPlist[i].IPAddress))
+		if (RE2::FullMatch(ip, entry.IPAddress))
 		{
 			return true;
 		}
@@ -5366,24 +5354,22 @@ static void addToBanList(const char *ip, const char *name)
 	{
 		return;
 	}
-	if (!IPlist)
-	{
-		IPlist = (PLAYER_IP *)malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
-		if (!IPlist)
-		{
-			debug(LOG_FATAL, "Out of memory!");
-			abort();
-		}
-		IPlistLast = 0;
-		memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
-	}
-	sstrcpy(IPlist[IPlistLast].IPAddress, ip);
-	sstrcpy(IPlist[IPlistLast].pname, name);
-	IPlistLast++;
+	PLAYER_IP newIP;
+	sstrcpy(newIP.IPAddress, ip);
+	sstrcpy(newIP.pname, name);
+	IPlist.push_back(newIP);
 	sync_counter.banned++;
-	if (IPlistLast > MAX_BANS)
+	if (IPlist.size() > MAX_BANS)
 	{
-		debug(LOG_INFO, "We have exceeded %d bans, resetting to 0", MAX_BANS);
-		IPlistLast = 0;
+		debug(LOG_INFO, "We have exceeded %d bans, clearing oldest", MAX_BANS);
+		IPlist.pop_front();
 	}
+}
+
+std::vector<PLAYER_IP> NETgetIPBanList()
+{
+	std::vector<PLAYER_IP> vecCopy;
+	vecCopy.reserve(IPlist.size());
+	vecCopy.assign(IPlist.begin(), IPlist.end());
+	return vecCopy;
 }
