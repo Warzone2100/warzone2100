@@ -120,6 +120,7 @@ static size_t pie_AddTexPage_Impl(gfx_api::texture *pTexture, const char *filena
 	if (_TEX_PAGE[page].id)
 		delete _TEX_PAGE[page].id;
 	_TEX_PAGE[page].id = pTexture;
+	_TEX_PAGE[page].textureType = textureType;
 
 	/* Send back the texpage number so we can store it in the IMD */
 	return page;
