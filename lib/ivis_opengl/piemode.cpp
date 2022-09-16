@@ -66,7 +66,7 @@ bool pie_Initialise()
 	pie_TexInit();
 
 	/* Find texture compression extension */
-	if (GLAD_GL_ARB_texture_compression && wz_texture_compression)
+	if (wz_texture_compression)
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
 	}

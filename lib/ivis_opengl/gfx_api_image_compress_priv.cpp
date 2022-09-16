@@ -48,6 +48,19 @@ static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_
 
 void gfx_api::initBestRealTimeCompressionFormats()
 {
+	for (size_t target = 0; target < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target++)
+	{
+		bestAvailableCompressionFormat_GameTextureRGBA[target] = nullopt;
+		bestAvailableCompressionFormat_GameTextureRGB[target] = nullopt;
+	}
+
+	if (!wz_texture_compression)
+	{
+		// Texture compression is disabled - leave all bestAvailableCompressionFormat_* variables as nullopt
+		debug(LOG_3D, "Real-time texture compression formats: disabled");
+		return;
+	}
+
 	// gfx_api::texture_type::game_texture: a RGB / RGBA texture, possibly stored in a compressed format
 	// Overall quality ranking:
 	//   FORMAT_ASTC_4x4_UNORM > FORMAT_RGBA_BPTC_UNORM > FORMAT_RGBA8_ETC2_EAC (/ FORMAT_RGB8_ETC2) > FORMAT_RGBA_BC3_UNORM (DXT5) / FORMAT_RGB_BC1_UNORM (for RGB - 4bpp) > ETC1 (only RGB) > PVRTC (is generally the lowest quality)
