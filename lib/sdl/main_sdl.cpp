@@ -2733,11 +2733,11 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 
 	if (horizScaleFactor != nullptr)
 	{
-		*horizScaleFactor = ((float)drawableWidth / (float)logicalWindowWidth) * current_displayScaleFactor;
+		*horizScaleFactor = ((float)drawableWidth / (float)logicalWindowWidth); // Do **NOT** multiply by current_displayScaleFactor
 	}
 	if (vertScaleFactor != nullptr)
 	{
-		*vertScaleFactor = ((float)drawableHeight / (float)logicalWindowHeight) * current_displayScaleFactor;
+		*vertScaleFactor = ((float)drawableHeight / (float)logicalWindowHeight); // Do **NOT** multiply by current_displayScaleFactor
 	}
 
 	int displayIndex = SDL_GetWindowDisplayIndex(WZwindow);
