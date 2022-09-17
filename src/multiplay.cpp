@@ -1154,6 +1154,7 @@ bool shouldProcessMessage(NETQUEUE& queue, uint8_t type)
 				// kick sender for sending unauthorized message
 				char buf[255];
 				auto senderPlayerIdx = queue.index;
+				debug(LOG_INFO, "Auto kicking player %s, invalid command received: %s", NetPlay.players[senderPlayerIdx].name, messageTypeToString(type));
 				ssprintf(buf, _("Auto kicking player %s, invalid command received: %u"), NetPlay.players[senderPlayerIdx].name, type);
 				sendInGameSystemMessage(buf);
 				kickPlayer(queue.index, _("Unauthorized network command"), ERROR_INVALID);
