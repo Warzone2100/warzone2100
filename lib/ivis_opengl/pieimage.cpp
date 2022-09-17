@@ -334,12 +334,23 @@ bool iV_Image::convert_to_luma()
 
 bool iV_Image::resize(int output_w, int output_h)
 {
+	if (output_w == m_width && output_h == m_height)
+	{
+		return true;
+	}
+
+	stbir_filter filter = STBIR_FILTER_DEFAULT;
+	if (output_w < m_width && output_h < m_height)
+	{
+		filter = STBIR_FILTER_MITCHELL;
+	}
+
 	unsigned char *output_pixels = (unsigned char *)malloc(static_cast<size_t>(output_w) * static_cast<size_t>(output_h) * m_channels);
 	stbir_resize_uint8_generic(m_bmp, m_width, m_height, 0,
 							   output_pixels, output_w, output_h, 0,
 							   m_channels, m_channels == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, 0,
 							   STBIR_EDGE_CLAMP,
-							   STBIR_FILTER_MITCHELL,
+							   filter,
 							   STBIR_COLORSPACE_LINEAR,
 							   nullptr);
 	free(m_bmp);
