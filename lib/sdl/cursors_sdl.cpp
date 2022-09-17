@@ -28,6 +28,7 @@
 #include "cursors_sdl.h"
 #include <SDL_mouse.h>
 #include <SDL_surface.h>
+#include <SDL_hints.h>
 #include "sdl_backend_private.h"
 #include "cursor_sdl_helpers.h"
 
@@ -1264,7 +1265,27 @@ static const struct
 
 static void scaleCursorImageForUpload(iV_Image& cursorImage, int& hot_x, int& hot_y)
 {
+#if defined(WZ_OS_WIN)
+	if (SDL_GetHintBoolean(SDL_HINT_WINDOWS_DPI_SCALING, SDL_FALSE) == SDL_TRUE)
+	{
+		// Must manually scale the cursor image based on the window scale factor (in Windows w/ SDL 2.24.0+)
+		float horizWindowScaleFactor = 0.f, vertWindowScaleFactor = 0.f;
+		wzGetWindowToRendererScaleFactor(&horizWindowScaleFactor, &vertWindowScaleFactor);
+		assert(horizWindowScaleFactor != 0.f);
+		assert(vertWindowScaleFactor != 0.f);
+		unsigned int scaledWidth = static_cast<unsigned int>(cursorImage.width() * horizWindowScaleFactor);
+		unsigned int scaledHeight = static_cast<unsigned int>(cursorImage.height() * vertWindowScaleFactor);
+		if (scaledWidth > cursorImage.width() && scaledHeight > cursorImage.height())
+		{
+			debug(LOG_INFO, "Scaling cursor image from (%u x %u) to (%u x %u)", cursorImage.width(), cursorImage.height(), scaledWidth, scaledHeight);
+			cursorImage.resize(scaledWidth, scaledHeight);
+			hot_x = static_cast<int>(hot_x * horizWindowScaleFactor);
+			hot_y = static_cast<int>(hot_y * vertWindowScaleFactor);
+		}
+	}
+#else
 	// no-op
+#endif
 }
 
 SDL_Cursor* init_cursor_from_image(iV_Image&& sprite, int hot_x, int hot_y)
