@@ -87,6 +87,11 @@ Files: lib/ivis_opengl/3rdparty/vkh_*.*
 Copyright: 2019-2020 past-due
 License: Expat
 
+Files: lib/sdl/cursor_sdl_helpers.cpp
+Copyright: 2022 Warzone 2100 Project
+           1997-2022 Sam Lantinga
+License: Zlib
+
 Files: lib/sequence/sequence.cpp
 Copyright: 2008-2013 Warzone 2100 Project
            2002-2007 Xiph.org Foundation
