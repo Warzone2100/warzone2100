@@ -232,6 +232,7 @@ struct gl_context final : public gfx_api::context
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
 	void initPixelFormatsSupport();
+	void _beginRenderPassImpl();
 private:
 	bool initGLContext();
 	void enableVertexAttribArray(GLuint index);
