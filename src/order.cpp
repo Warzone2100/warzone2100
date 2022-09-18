@@ -324,7 +324,7 @@ void orderUpdateDroid(DROID *psDroid)
 	SDWORD			xdiff, ydiff;
 	bool			bAttack;
 	SDWORD			xoffset, yoffset;
-
+	const WEAPON_STATS *psWeapStats = &asWeaponStats[psDroid->asWeaps[0].nStat];
 	// clear the target if it has died
 	if (psDroid->order.psObj && psDroid->order.psObj->died)
 	{
@@ -741,7 +741,12 @@ void orderUpdateDroid(DROID *psDroid)
 		         && psDroid->order.psObj == psDroid->psActionTarget[0]
 		         && actionInRange(psDroid, psDroid->order.psObj, 0)
 		         && (psWall = visGetBlockingWall(psDroid, psDroid->order.psObj))
-		         && !aiCheckAlliances(psWall->player, psDroid->player))
+		         && !aiCheckAlliances(psWall->player, psDroid->player)
+		         // this is still wrong and should be unified with "action.cpp: actionUpdateDroid: case DACTION_ATTACK",
+		         // because "case DACTION_ATTACK" actualy takes care of checking for all weapons (not only the first one)
+		         // and for direct/indirect weapons.
+		         && psWeapStats && proj_Direct(psWeapStats)
+		         )
 		{
 			// there is a wall in the way - attack that
 			actionDroid(psDroid, DACTION_ATTACK, psWall);
