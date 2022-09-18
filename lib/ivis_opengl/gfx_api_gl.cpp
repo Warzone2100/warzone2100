@@ -2349,12 +2349,21 @@ bool gl_context::initGLContext()
 	return true;
 }
 
-void gl_context::beginRenderPass()
+void gl_context::_beginRenderPassImpl()
 {
 	GLbitfield clearFlags = 0;
 	glDepthMask(GL_TRUE);
 	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
 	glClear(clearFlags);
+}
+
+void gl_context::beginRenderPass()
+{
+#if defined(__EMSCRIPTEN__)
+	_beginRenderPassImpl();
+#else
+	// no-op everywhere else
+#endif
 }
 
 void gl_context::endRenderPass()
@@ -2363,6 +2372,9 @@ void gl_context::endRenderPass()
 	backend_impl->swapWindow();
 	glUseProgram(0);
 	current_program = nullptr;
+#if !defined(__EMSCRIPTEN__)
+	_beginRenderPassImpl();
+#endif
 }
 
 static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum target, gfx_api::pixel_format format, bool gles)
