@@ -125,9 +125,11 @@ $vcpkg_succeeded = -1;
 $vcpkg_attempts = 0;
 Write-Output "vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ --overlay-ports=$($overlay_ports_path) $additional_vcpkg_flags";
 
+$vcpkg_path = (Join-Path (pwd) "vcpkg");
+$vcpkg_executable = (Join-Path "$($vcpkg_path)" "vcpkg.exe");
 While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
 {
-	& .\vcpkg\vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ --overlay-ports=$($overlay_ports_path) $additional_vcpkg_flags;
+	& $($vcpkg_executable) install --vcpkg-root=$($vcpkg_path) --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ --overlay-ports=$($overlay_ports_path) $additional_vcpkg_flags;
 	$vcpkg_succeeded = $LastExitCode;
 	$vcpkg_attempts++;
 }
