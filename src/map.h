@@ -244,10 +244,27 @@ static inline bool TileHasFeature(const MAPTILE *tile)
 /** Check if tile contains a wall structure. Function is NOT thread-safe. */
 static inline bool TileHasWall(const MAPTILE *tile)
 {
+	const auto *psStruct = (STRUCTURE *)tile->psObject;
 	return TileHasStructure(tile)
-	       && (((STRUCTURE *)tile->psObject)->pStructureType->type == REF_WALL
-	           || ((STRUCTURE *)tile->psObject)->pStructureType->type == REF_GATE
-	           || ((STRUCTURE *)tile->psObject)->pStructureType->type == REF_WALLCORNER);
+	       && (psStruct->pStructureType->type == REF_WALL
+	           || psStruct->pStructureType->type == REF_GATE
+	           || psStruct->pStructureType->type == REF_WALLCORNER);
+}
+
+/** Check if tile contains a wall structure. Function is NOT thread-safe.
+ * This function is specifically for raycast callback, because "TileHasWall" is used
+ * to decide wether or not it's possible to place a new defense structure on top of a wall.
+ * We do not want to allow place more defense structures on top of already existing ones.
+*/
+static inline bool TileHasWall_raycast(const MAPTILE *tile)
+{
+	const auto *psStruct = (STRUCTURE *)tile->psObject;
+	return TileHasStructure(tile)
+	       && (psStruct->pStructureType->type == REF_WALL
+	           || psStruct->pStructureType->type == REF_GATE
+	           // hadrcrete towers are technically a WALL + weapon, so count them as walls too
+	           || psStruct->pStructureType->combinesWithWall
+	           || psStruct->pStructureType->type == REF_WALLCORNER);
 }
 
 /** Check if tile is burning. */

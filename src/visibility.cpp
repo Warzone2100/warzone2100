@@ -368,7 +368,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 		if (tile != help->final)
 		{
 			MAPTILE *psTile = mapTile(tile);
-			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
+			if (TileHasWall_raycast(psTile) && !TileHasSmallStructure(psTile))
 			{
 				STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
 				if (psStruct->pStructureType->type != REF_GATE || psStruct->state != SAS_OPEN)
@@ -477,7 +477,7 @@ void revealAll(UBYTE player)
  * psViewer should be an object that has some form of sensor,
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
- * struckBlock controls whether structures block LOS
+ * wallsBlock controls whether structures block LOS
  */
 int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock)
 {
