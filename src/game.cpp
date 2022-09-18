@@ -6038,7 +6038,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap)
 			NumberOfSkippedStructures++;
 		}
 		STRUCTURE *psStructure = nullptr;
-		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", structure.id.value(), player, 
+		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", (structure.id.has_value()) ? structure.id.value() : -1, player, 
 				structure.name.c_str(), map_coord(structure.position.x), map_coord(structure.position.y));
 		if (structure.id.has_value() && structure.id.value() > 0)
 		{
