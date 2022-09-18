@@ -77,7 +77,22 @@ ValueTracker* ValueTracker::update()
 		return this;
 	}
 
-	this->current = (this->initial + this->targetDelta - this->current) * realTimeAdjustedIncrement(this->speed) + this->current;
+	auto deltaRemaining = (this->initial + this->targetDelta - this->current);
+	auto adjustedChange = deltaRemaining * realTimeAdjustedIncrement(this->speed);
+
+	// prevent "over-shooting" / rubber-banding
+	if (deltaRemaining >= 0.f && adjustedChange > deltaRemaining)
+	{
+		adjustedChange = deltaRemaining;
+		this->_reachedTarget = true;
+	}
+	else if (deltaRemaining < 0.f && adjustedChange < deltaRemaining)
+	{
+		adjustedChange = deltaRemaining;
+		this->_reachedTarget = true;
+	}
+
+	this->current = adjustedChange + this->current;
 	return this;
 }
 int ValueTracker::getCurrent()
