@@ -681,6 +681,7 @@ GAMECODE gameLoop()
 
 	unsigned before = wzGetTicks();
 	GAMECODE renderReturn = renderLoop();
+	pie_ScreenFrameRenderEnd(); // must happen here for proper renderBudget calculation
 	unsigned after = wzGetTicks();
 
 	renderBudget += (after - before) * updateFraction.n;

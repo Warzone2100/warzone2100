@@ -1294,22 +1294,23 @@ void mainLoop()
 		if (loop_GetVideoStatus())
 		{
 			videoLoop(); // Display the video if necessary
+			pie_ScreenFrameRenderEnd();
 		}
 		else switch (GetGameMode())
 			{
 			case GS_NORMAL: // Run the gameloop code
 				runGameLoop();
+				// gameLoop handles pie_ScreenFrameRenderEnd()
 				break;
 			case GS_TITLE_SCREEN: // Run the titleloop code
 				runTitleLoop();
+				pie_ScreenFrameRenderEnd();
 				break;
 			default:
 				break;
 			}
 		realTimeUpdate(); // Update realTime.
 	}
-
-	pie_ScreenFrameRenderEnd();
 
 	wzApplyCursor();
 	runNotifications();
