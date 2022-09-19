@@ -9,7 +9,7 @@ const research_lasttech = [
 	"R-Vehicle-Body14",
 	"R-Vehicle-Metals09",
 	"R-Cyborg-Metals09",
-	"R-Struc-Materials09",
+	"R-Struc-Materials03",
 	"R-Vehicle-Armor-Heat09",
 	"R-Cyborg-Armor-Heat09"
 ];
@@ -96,7 +96,7 @@ const research_rich2 = [
 "R-Vehicle-Prop-Tracks",
 "R-Vehicle-Body10",
 "R-Sys-Autorepair-General",
-"R-Struc-Materials09",
+"R-Struc-Materials03",
 "R-Wpn-LasSat",
 "R-Sys-Sensor-UpLink"
 ];

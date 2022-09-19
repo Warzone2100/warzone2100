@@ -125,11 +125,11 @@ const classResearch = {
 		],
 		[ // OBJTYPE.DEFS
 			"R-Defense-WallUpgrade03",
-			"R-Struc-Materials03",
+			"R-Struc-Materials01",
 			"R-Defense-WallUpgrade06",
-			"R-Struc-Materials06",
+			"R-Struc-Materials02",
 			"R-Defense-WallUpgrade12",
-			"R-Struc-Materials09",
+			"R-Struc-Materials03",
 		],
 		[ // OBJTYPE.VTOL
 			"R-Vehicle-Metals09",
@@ -144,11 +144,11 @@ const classResearch = {
 		],
 		[
 			"R-Defense-WallUpgrade03",
-			"R-Struc-Materials03",
+			"R-Struc-Materials01",
 			"R-Defense-WallUpgrade06",
-			"R-Struc-Materials06",
+			"R-Struc-Materials02",
 			"R-Defense-WallUpgrade12",
-			"R-Struc-Materials09",
+			"R-Struc-Materials03",
 		],
 		[
 			"R-Vehicle-Armor-Heat09",

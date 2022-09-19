@@ -172,8 +172,6 @@ function atGenericDefensiveResearchLimit()
 		"R-Vehicle-Body10", "R-Vehicle-Body11", "R-Vehicle-Body12",
 		"R-Vehicle-Body13", "R-Vehicle-Body14",
 		"R-Struc-Materials01", "R-Struc-Materials02", "R-Struc-Materials03",
-		"R-Struc-Materials04", "R-Struc-Materials05", "R-Struc-Materials06",
-		"R-Struc-Materials07", "R-Struc-Materials08", "R-Struc-Materials09",
 		"R-Defense-WallUpgrade01", "R-Defense-WallUpgrade02", "R-Defense-WallUpgrade03",
 		"R-Defense-WallUpgrade04", "R-Defense-WallUpgrade05", "R-Defense-WallUpgrade06",
 		"R-Defense-WallUpgrade07", "R-Defense-WallUpgrade08", "R-Defense-WallUpgrade09",

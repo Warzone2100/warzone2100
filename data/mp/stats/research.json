@@ -2309,34 +2309,6 @@
 		"requiredResearch": [
 			"R-Defense-WallUpgrade01"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
-		"results": [
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "Armour",
-				"value": 35
-			},
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "HitPoints",
-				"value": 30
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
-	},
-	"R-Struc-Materials02": {
-		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials02",
-		"imdName": "icmolql.pie",
-		"name": "Reinforced Base Structure Materials Mk2",
-		"requiredResearch": [
-			"R-Struc-Materials01"
-		],
 		"researchPoints": 2400,
 		"researchPower": 75,
 		"results": [
@@ -2345,57 +2317,27 @@
 				"filterParameter": "Type",
 				"filterValue": "Structure",
 				"parameter": "Armour",
-				"value": 35
+				"value": 120
 			},
 			{
 				"class": "Building",
 				"filterParameter": "Type",
 				"filterValue": "Structure",
 				"parameter": "HitPoints",
-				"value": 30
+				"value": 90
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
-	"R-Struc-Materials03": {
+	"R-Struc-Materials02": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials03",
-		"imdName": "icmolql.pie",
-		"name": "Reinforced Base Structure Materials Mk3",
-		"requiredResearch": [
-			"R-Struc-Materials02"
-		],
-		"researchPoints": 3600,
-		"researchPower": 112,
-		"results": [
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "Armour",
-				"value": 35
-			},
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "HitPoints",
-				"value": 30
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
-	},
-	"R-Struc-Materials04": {
-		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials04",
+		"id": "R-Struc-Materials02",
 		"imdName": "icmolql.pie",
 		"msgName": "RES_ST_MAT4",
 		"name": "Hardened Base Structure Materials",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade04",
-			"R-Struc-Materials03"
+			"R-Struc-Materials01"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -2405,85 +2347,27 @@
 				"filterParameter": "Type",
 				"filterValue": "Structure",
 				"parameter": "Armour",
-				"value": 35
+				"value": 120
 			},
 			{
 				"class": "Building",
 				"filterParameter": "Type",
 				"filterValue": "Structure",
 				"parameter": "HitPoints",
-				"value": 30
+				"value": 90
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
-	"R-Struc-Materials05": {
+	"R-Struc-Materials03": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials05",
-		"imdName": "icmolql.pie",
-		"name": "Hardened Base Structure Materials Mk2",
-		"requiredResearch": [
-			"R-Struc-Materials04"
-		],
-		"researchPoints": 8000,
-		"researchPower": 250,
-		"results": [
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "Armour",
-				"value": 35
-			},
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "HitPoints",
-				"value": 30
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
-	},
-	"R-Struc-Materials06": {
-		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials06",
-		"imdName": "icmolql.pie",
-		"name": "Hardened Base Structure Materials Mk3",
-		"requiredResearch": [
-			"R-Struc-Materials05"
-		],
-		"researchPoints": 10000,
-		"researchPower": 312,
-		"results": [
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "Armour",
-				"value": 35
-			},
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "HitPoints",
-				"value": 30
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
-	},
-	"R-Struc-Materials07": {
-		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials07",
+		"id": "R-Struc-Materials03",
 		"imdName": "icmolql.pie",
 		"msgName": "RES_ST_MAT7",
 		"name": "Advanced Base Structure Materials",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade07",
-			"R-Struc-Materials06"
+			"R-Struc-Materials02"
 		],
 		"researchPoints": 12000,
 		"researchPower": 375,
@@ -2493,75 +2377,17 @@
 				"filterParameter": "Type",
 				"filterValue": "Structure",
 				"parameter": "Armour",
-				"value": 35
+				"value": 120
 			},
 			{
 				"class": "Building",
 				"filterParameter": "Type",
 				"filterValue": "Structure",
 				"parameter": "HitPoints",
-				"value": 30
+				"value": 90
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
-	},
-	"R-Struc-Materials08": {
-		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials08",
-		"imdName": "icmolql.pie",
-		"name": "Advanced Base Structure Materials Mk2",
-		"requiredResearch": [
-			"R-Struc-Materials07"
-		],
-		"researchPoints": 14000,
-		"researchPower": 437,
-		"results": [
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "Armour",
-				"value": 35
-			},
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "HitPoints",
-				"value": 30
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
-	},
-	"R-Struc-Materials09": {
-		"iconID": "IMAGE_RES_STRUCTURETECH",
-		"id": "R-Struc-Materials09",
-		"imdName": "icmolql.pie",
-		"name": "Advanced Base Structure Materials Mk3",
-		"requiredResearch": [
-			"R-Struc-Materials08"
-		],
-		"researchPoints": 16000,
-		"researchPower": 450,
-		"results": [
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "Armour",
-				"value": 35
-			},
-			{
-				"class": "Building",
-				"filterParameter": "Type",
-				"filterValue": "Structure",
-				"parameter": "HitPoints",
-				"value": 30
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
 	},
 	"R-Struc-Power-Upgrade01": {
 		"iconID": "IMAGE_RES_POWERTECH",
