@@ -1277,7 +1277,7 @@ static void scaleCursorImageForUpload(iV_Image& cursorImage, int& hot_x, int& ho
 		unsigned int scaledHeight = static_cast<unsigned int>(cursorImage.height() * vertWindowScaleFactor);
 		if (scaledWidth > cursorImage.width() && scaledHeight > cursorImage.height())
 		{
-			debug(LOG_INFO, "Scaling cursor image from (%u x %u) to (%u x %u)", cursorImage.width(), cursorImage.height(), scaledWidth, scaledHeight);
+			debug(LOG_GUI, "Scaling cursor image from (%u x %u) to (%u x %u)", cursorImage.width(), cursorImage.height(), scaledWidth, scaledHeight);
 			cursorImage.resize(scaledWidth, scaledHeight);
 			hot_x = static_cast<int>(hot_x * horizWindowScaleFactor);
 			hot_y = static_cast<int>(hot_y * vertWindowScaleFactor);
