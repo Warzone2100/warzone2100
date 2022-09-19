@@ -333,7 +333,7 @@ bool recvPing(NETQUEUE queue)
 			// Output to stdinterface, if enabled
 			std::string senderPublicKeyB64 = base64Encode(senderIdentity.toBytes(EcKey::Public));
 			std::string senderIdentityHash = senderIdentity.publicHashString();
-			wz_command_interface_output("WZEVENT: player identity VERIFIED: %" PRIu32 " %s %s\n", sender, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
+			wz_command_interface_output("WZEVENT: player identity VERIFIED: %" PRIu32 " %s %s %s\n", sender, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), NetPlay.players[sender].IPtextAddress);
 		}
 
 		// Note that we have received it
