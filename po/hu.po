@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-13 04:34\n"
+"PO-Revision-Date: 2022-09-19 22:17\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -164,7 +164,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Építsen védelmi létesítményeket addig, amíg a zöld feladatjelző ki nem alszik."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -4064,7 +4064,7 @@ msgstr "Vissza az LZ-re"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Pusztíts el minden ellenséges létesítményt"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
@@ -7204,7 +7204,7 @@ msgstr "Célok: bázis épületek"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Legjobb célpontok: bázis épületek, erődítmények és cyborgok"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7225,7 +7225,7 @@ msgstr "Célok: bunkerek és fegyvertartó talapzatok"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Legjobb célpontok: bunkerek, védelmi létesítmények és bázis építmények"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7258,7 +7258,7 @@ msgstr "Célok: gyalogság, bázis épületek, kerekes járművek"
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Legjobb célpontok: gyalogos, kerekes és légpárnás járművek"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7267,13 +7267,13 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Legjobb célpont: Nincs. Átlagos sebzés minden célpont ellen"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1158
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "Legjobb célpontok: járművek és cyborgok"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -13306,7 +13306,7 @@ msgstr "Gépfegyver torony"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5299
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Gépfegyver torony iker gépfegyverrel"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
@@ -13372,7 +13372,7 @@ msgstr "Sunburst légvédelem"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5340
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Szuper nehézfegyveres cyborg"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-HPV.name
@@ -15189,7 +15189,7 @@ msgstr "(stdin)"
 
 #: src/clparse.cpp:419
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Az automatikus játékkezdéshez szükséges játékosok száma"
 
 #: src/clparse.cpp:419
 msgid "startplayers"
@@ -15590,7 +15590,7 @@ msgstr "Csata indítása"
 
 #: src/frontend.cpp:369
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Csata visszajátszás megtekintése"
 
 #: src/frontend.cpp:371
 msgid "SINGLE PLAYER"
@@ -16341,7 +16341,7 @@ msgstr "Hang beállítás"
 
 #: src/ingameop.cpp:591
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Billentyűkiosztás megtekintése"
 
 #: src/ingameop.cpp:647
 msgid "Shake"
@@ -16757,11 +16757,11 @@ msgstr "Kijelző Csapat Csevegés Előzmény"
 
 #: src/input/keyconfig.cpp:136
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Építmény forgatása jobbra"
 
 #: src/input/keyconfig.cpp:137
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Építmény forgatása balra"
 
 #: src/input/keyconfig.cpp:139
 msgid "Center View on HQ"
@@ -16868,7 +16868,7 @@ msgstr "Be/ki kapcsolja az összes ellenséges radar képét"
 
 #: src/input/keyconfig.cpp:162
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Az összes billentyűkiosztás mutatása"
 
 #: src/input/keyconfig.cpp:164
 #: src/intorder.cpp:169
@@ -17229,19 +17229,19 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:469
 msgid "Discord: Unsupported / Invalid Invite"
-msgstr ""
+msgstr "Discord: a meghívó nem támogatott / érvénytelen"
 
 #: src/integrations/wzdiscordrpc.cpp:535
 msgid "Playing: Campaign"
-msgstr ""
+msgstr "Játékban: küldetés"
 
 #: src/integrations/wzdiscordrpc.cpp:560
 msgid "Playing: Challenge"
-msgstr ""
+msgstr "Játékban: kihívás"
 
 #: src/integrations/wzdiscordrpc.cpp:578
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "Játékban: csata"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:583
@@ -17543,39 +17543,39 @@ msgstr "Rögzített kurzor %s"
 
 #: src/keybind.cpp:1387
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "KÜLDETÉS"
 
 #: src/keybind.cpp:1391
 msgid "CHALLENGE"
-msgstr ""
+msgstr "KIHÍVÁS"
 
 #: src/keybind.cpp:1394
 msgid "SKIRMISH"
-msgstr ""
+msgstr "CSATA"
 
 #: src/keybind.cpp:1412
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "NEHÉZSÉG: KÖNNYŰ"
 
 #: src/keybind.cpp:1415
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "NEHÉZSÉG: NORMÁL"
 
 #: src/keybind.cpp:1418
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "NEHÉZSÉG: NEHÉZ"
 
 #: src/keybind.cpp:1421
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "NEHÉZSÉG: ŐRÜLT"
 
 #: src/keybind.cpp:1430
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "CSALÁSOK: ENGEDÉLYEZVE"
 
 #: src/keybind.cpp:1432
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "CSALÁSOK: LETILTVA"
 
 #: src/keybind.cpp:1491
 msgid "Researched EVERYTHING for you!"
@@ -17668,11 +17668,11 @@ msgstr "Vízszintes forgatás iránya: tükrözve"
 
 #: src/keybind.cpp:2247
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Képernyő rázkódása dolgok elpusztulásakor: kikapcsolva"
 
 #: src/keybind.cpp:2252
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Képernyő rázkódása dolgok elpusztulásakor: bekapcsolva"
 
 #: src/keybind.cpp:2304
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -18118,7 +18118,7 @@ msgstr "Csapat"
 #: src/multiint.cpp:7501
 #: src/titleui/protocol.cpp:187
 msgid "Spectator"
-msgstr ""
+msgstr "Megfigyelő"
 
 #: src/multiint.cpp:2305
 #: src/multiint.cpp:4435
@@ -18250,11 +18250,11 @@ msgstr "Host beàllìtàs"
 
 #: src/multiint.cpp:3932
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Megfigyelő belépésének engedélyezése"
 
 #: src/multiint.cpp:3942
 msgid "Lock Teams"
-msgstr ""
+msgstr "Csapatok zárolása"
 
 #: src/multiint.cpp:4198
 msgid "Choose Team"
@@ -18282,7 +18282,7 @@ msgstr ""
 
 #: src/multiint.cpp:4257
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "Megfigyelő hely lezárása"
 
 #: src/multiint.cpp:4273
 msgid "Player ID: "
@@ -18338,7 +18338,7 @@ msgstr "JÁTÉKOSOK"
 
 #: src/multiint.cpp:4732
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Megfigyelő hely hozzáadása"
 
 #: src/multiint.cpp:4809
 msgid "Kicked from game"
@@ -18346,7 +18346,7 @@ msgstr ""
 
 #: src/multiint.cpp:5034
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Szöveg másolása a vágólapra"
 
 #: src/multiint.cpp:5123
 msgid "CHAT"
@@ -19283,7 +19283,7 @@ msgstr "Jelszó megadása:"
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr ""
+msgstr "Ok"
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:181
@@ -19300,7 +19300,7 @@ msgstr "Előcsarnok"
 
 #: src/titleui/protocol.cpp:85
 msgid "IP"
-msgstr ""
+msgstr "IP cím"
 
 #: src/titleui/protocol.cpp:201
 msgid "IP Address or Machine Name"
@@ -19377,7 +19377,7 @@ msgstr "Verzió: %s,%s Összeállítva: %s%s"
 
 #: src/wrappers.cpp:365
 msgid "GAME OVER"
-msgstr ""
+msgstr "JÁTÉK VÉGE"
 
 #: src/wrappers.cpp:366
 msgid "The battle is over - you can leave the room."
