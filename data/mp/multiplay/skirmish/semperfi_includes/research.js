@@ -74,7 +74,7 @@ const THERMAL_ALLOYS = [
 ];
 const STRUCTURE_DEFENSE_UPGRADES = [
 	"R-Defense-WallUpgrade12",
-	"R-Struc-Materials09",
+	"R-Struc-Materials03",
 ];
 const FLAMER_TECH = [
 	"R-Wpn-Flamer-ROF03",

@@ -572,7 +572,7 @@
 		"width": 2
 	},
 	"A0PowerGenerator": {
-		"armour": 20,
+		"armour": 18,
 		"baseModel": "blbpower.pie",
 		"breadth": 2,
 		"buildPoints": 500,
