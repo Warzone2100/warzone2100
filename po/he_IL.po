@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-09-19 10:17\n"
+"PO-Revision-Date: 2022-09-19 22:17\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -148,139 +148,139 @@ msgstr "משימת מסע: בסיס עוין בתהליך בנייה"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "כוחות אויב מקימים בסיס חוד במיקום הזה."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "השמד את הבסיס ואבטח את האיזור."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "משימת בסיס אלפא: הקם בסיס חוד"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "הקם בסיס חוד על הרמה והדוף את הפרדיגמה החדשה."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "הקם מבני הגנה עד שנקודת האור הירוקה של הבסיס נעלמת."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "משימת בסיס אלפא: מתקפת נגד"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "כוחות אויב מתקרבים מהמזרח ומהצפון."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "החזק את הבסיסים ודחה כל מתקפה."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "משימת בסיס אלפא: שידור נכנס"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "אנו מזהים כוחות אויב במיקומים האלה."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "זו ההזדמנות שלנו להביס את הפרדיגמה החדשה ולהרוס את הבסיס שלהם."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "מזל טוב מפקד."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "כעת יש לנו משימה נוספת עבורך."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "משימת בסיס אלפא: אתר ושחזר ממצאים"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "שני האיזורים הראשונים כעת מאובטחים."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "עדכונים לצוות פרויקט"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "עדכון לצוות בטא"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "שחזרנו מספר ממצאים."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "קיים כוח יותר מצויד הפועל באיזור הזה."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "עדכון לצוות גמא"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "אין על מה לדווח."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "לא גילינו ממצאים ולא נתקלנו באויבים."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "דיווח מודיעין בסיס אלפא: התקפת אויב"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "אנו מזהים כוח מתקפה עוין במיקום הזה."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "מטרה ראשית"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "מבנה זה הוא מטרתך הראשית."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "חפש ושחזר את כל הממצאים כאן."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "איזור נחיתה עוין"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "הרוס את איזור הנחיתה הזה כדי למנוע נחיתות עוינות."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "דיווח מודיעין בסיס אלפא: נקסוס"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "מטרה חדשה."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "זיהינו ובודדנו תוכנית פלישה."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "משלים"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "טכנולוגיית הקשר הסִינָפְּטִי הייתה במיקום הזה אבל הוסרה."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
@@ -495,213 +495,213 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "ואז חזור לאיזור הנחיתה."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr ""
+msgstr "חדשות מטרידות בנוגע לנאסד\"ה."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "משימת מסע: חפש והרוס שיירה"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr ""
+msgstr "המשלוח ששיחזרת היה פתיון."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
-msgstr ""
+msgstr "זיהינו שיירה נוספת מתקדמת לאורך הנהר."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr ""
+msgstr "עליך להפריע לשיירה ולשחזר את המטען שלה."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr ""
+msgstr "יתכן שמטוסי VTOL טסים כליווי צמוד."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "משימת מסע: הצל אזרחים ממחנה בלימה"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "הקבוצה מעבדת ומשמידה אזרחים בבסיס הזה."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "עליך להציל את האזרחים."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "ואז להרוס את המחנה."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "משימת בסיס בטא: הרוס את בסיס האויר העוין ושחזר מטוסי VTOL."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "ניתוח מסלולי טיסה מצביע על כך שמטוסי ה-VTOL של הקבוצה התחילו כאן."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "משימת בסיס בטא: השמד את בסיס האויר העוין ושחזר מטוסי VTOL"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "המיקום של בסיס האויר העוין הוא כאן; זוהי מטרתך הראשית."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "השמד את כל כוחות הקבוצה ושחזר את כל הממצאים."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "משימה משנית: הרוס או גרש את התחבורה העוינת"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "הקבוצה מאספת את כל האזרחים באיזור הזה."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "והם אז מטיסים אותם למיקום לא ידוע."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "הרוס או גרש את תחבורת הקבוצה."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr ""
+msgstr "הצל אזרחים רבים ככל האפשר."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "משימת מסע: הרוס כור"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "הקבוצה מחפשת ידע על כורים אטומיים."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "חייבים לעצור אותם."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "התקדם מאיזור הנחיתה אל עבר הכור והרוס אותו."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "אל תאפשר לקבוצה להפעיל את הכור."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr ""
+msgstr "משימת בסיס בטא: כבוש את מרכזיית נאסד\"ה"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "כבוש את מרכזיית נאסד\"ה לפני שנקסוס והקבוצה יוכלו להשתמש בה."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "משימת מסע: אתר ערוץ לוויני"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr ""
+msgstr "נקסוס מחפשים מאגרי זיכרון שעדיין פועלים."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
+msgstr "חלק מהתודעה שלו הועברה לאתר בקרה מרוחק של נאסד\"ה."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "אנו מזהים שידורים מהאתר הזה שמגיעים למסלול גבוה."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "נקסוס כעת חיברו מחדש את עצמם עם לוויני נאסד\"ה."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr ""
+msgstr "השתמש בתחבורה על מנת להוביל כוח תקיפה לאתר הזה."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr ""
+msgstr "הרוס את האתר וחזור לבסיס שלך."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "משימת מסע: הרוס אתרי טק\"א עוינים"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr ""
+msgstr "אם עליך להימלט, השמד את אתרי טילי הקרקע-אויר מסביב לבסיס שלך."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
+msgstr "טוס לאיזור הנחיתה, ואז עבור ליבשה על מנת להרוס את אתרי הטק\"א."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "משימת מסע: הקם מקלט בטוח"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "אנו יכולים לאשר שטיל נמצא בדרך לבסיס אלפא."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
+msgstr "עליך להקים מקלט בטוח עבור הפינוי של בסיס בטא."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr ""
+msgstr "השמד כל אויב ואבטח את האיזור."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr ""
+msgstr "לאחר שמקלט בטוח מוקם, חזור אל איזור הנחיתה להוראות נוספות."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "משימת בסיס בטא: שרוד ופנה! הבא משאית"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr ""
+msgstr "מפקד, יש לנו חדשות חמורות."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "בסיס אלפא נהרס על ידי מתקפת טיל אטומי."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr ""
+msgstr "הקבוצה לא מודעת למתקפה האטומית ומחזיקים ביחידות אויר הנמצאות בדרך לבסיס שלך."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr ""
+msgstr "הודעה זו יורטה לפני מספר רגעים..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
-msgstr ""
+msgstr "אתה חייב להוביל כמה שיותר מכוחותיך."
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "בהצלחה, מפקד."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
@@ -916,204 +916,204 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr ""
+msgstr "שידור נכנס מצוות רחוק."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr ""
+msgstr "מפקד, אנו מנסים לחזור לבסיס."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
-msgstr ""
+msgstr "זהו מיקומנו הנוכחי."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr ""
+msgstr "קח שליטה על כוחותינו והובל אותנו."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
-msgstr ""
+msgstr "העברת שליטה הצליחה."
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr ""
+msgstr "נכנסים לאיזור חדש."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "שידור נכנס..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr ""
+msgstr "מרכיבים של צוות גמא יצרו איתנו קשר."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
+msgstr "הם טוענים שהם חופשיים מנקסוס, ומציעים את הבסיס שלהם כאתר מבצעים."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr ""
+msgstr "הורדת קואורדינציות בסיס בתהליך."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr ""
+msgstr "משימת גזרה צפונית: לוויני לייזר"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr ""
+msgstr "אנו מזהים נחשולי אנרגיה חזקים מהמסלול."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr ""
+msgstr "לוויני הלייזר טעונים ונעים אל עבר מיקומנו."
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
-msgstr ""
+msgstr "בסיס צוות גמא השני נמצא במיקום הזה."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr ""
+msgstr "יש לנו זמן מוגבל לפנות את הבסיס הזה ולזוז לבסיס גמא."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr ""
+msgstr "לוויני הלייזר אינם פועלים כראוי, הם מחטיאים."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
-msgstr ""
+msgstr "הם מכוונים את האש שלהם אל המיקום הזה."
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
-msgstr ""
+msgstr "אנו נצטרך לפנות את הבסיס הזה בקרוב."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr ""
+msgstr "צוות גמא מדווחים על ממגורת טילים במיקום הזה."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr ""
+msgstr "הם מאמינים שהממגורה מכילה טילים המסוגלים להגיע למסלול גבוה."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr ""
+msgstr "כבוש את הממגורה הזו בכל מחיר."
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
-msgstr ""
+msgstr "ממגורות הטילים נכבשו."
 
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr ""
+msgstr "משימת גזרה צפונית: קודי טילים"
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
-msgstr ""
+msgstr "מפקד, ישנם טילים בממגורות."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr ""
+msgstr "נקסוס מונעים מאיתנו לגשת לקוד הבקרה של הטיל."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
-msgstr ""
+msgstr "נקסוס נוכחים במערכות שלנו."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr ""
+msgstr "על מנת להביס את נקסוס אנו חייבים לחקור את תוכנית הפלישה של נקסוס."
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
-msgstr ""
+msgstr "הקצה מטלה זו למפעל מחקר."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr ""
+msgstr "כוחות נקסוס זוהו במיקומים האלה."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr ""
+msgstr "נקסוס גורשו מכל מערכות הפרויקט."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
-msgstr ""
+msgstr "אנו מנסים לגשת לקודי בקרת הטילים."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr ""
+msgstr "מפעל מחקר נחוץ על מנת לפצח את הקוד. הקצה אחד מיד."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr ""
+msgstr "הגן על ממגורות הטילים ממתקפות של נקסוס."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr ""
+msgstr "עדכון פרויקט: קוד טילים ברמה ראשונה פוצח."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
-msgstr ""
+msgstr "חימוש טילים בתהליך."
 
 #: data/base/messages/strings/cam3strings.txt:168
 msgid "More research is required to proceed further."
-msgstr ""
+msgstr "עוד מחקר נחוץ על מנת להתקדם הלאה."
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr ""
+msgstr "עדכון פרויקט: קוד טילים ברמה שניה פוצח."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
-msgstr ""
+msgstr "תכנות יעד הטיל בתהליך."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr ""
+msgstr "כאשר קודי רמה 3 יפוצחו אנו יוזמים הליכי המראה."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr ""
+msgstr "עדכון פרויקט: קוד טילים ברמה שלישית פוצח."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
-msgstr ""
+msgstr "רצף שיגור הטיל הוחל."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr ""
+msgstr "משימת מסע: תקוף את בסיסו האחרון של נקסוס"
 
 #: data/base/messages/strings/cam3strings.txt:181
 msgid "We have located NEXUS' base at this location."
-msgstr ""
+msgstr "מצאנו את הבסיס של נקסוס במיקום הזה."
 
 #: data/base/messages/strings/cam3strings.txt:184
 msgid "This area contains numerous NEXUS structures."
-msgstr ""
+msgstr "איזור זה מכיל מספר מבנים של נקסוס."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr ""
+msgstr "אנו בטוחים כי מערכות הליבה של נקסוס נמצאים כאן."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr ""
+msgstr "הקם איזור נחיתה."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr ""
+msgstr "התחל את ההתקפות שלך על נקסוס. אתה חייב להרוס את מערכות הליבה שלו."
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr ""
+msgstr "דיווח מודיעין נכנס... צוות גמא"
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "תדרוך מתחיל:"
 
 #: data/base/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
-msgstr ""
+msgstr "מאחז אוכלי נבלות"
 
 #: data/base/messages/strings/genstrings.txt:8
 msgid "Power Resource"
@@ -1409,99 +1409,99 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:332
 msgid "Advanced Cyborg Production Mk3"
-msgstr ""
+msgstr "תוצרת סייבורג מתקדמת סימן 3"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[1]
 #: data/base/messages/strings/names.txt:334
 #: po/custom/fromJson.txt:201
 msgid "Advanced Factory Production"
-msgstr ""
+msgstr "תוצרת מפעל מתקדמת"
 
 #: data/base/messages/strings/names.txt:335
 msgid "Advanced Factory Production Mk2"
-msgstr ""
+msgstr "תוצרת מפעל מתקדמת סימן 2"
 
 #: data/base/messages/strings/names.txt:336
 msgid "Advanced Factory Production Mk3"
-msgstr ""
+msgstr "תוצרת מפעל מתקדמת סימן 3"
 
 #: data/base/messages/strings/names.txt:342
 msgid "Advanced Repair Facility Upgrade"
-msgstr ""
+msgstr "שדרוג מתקדם למפעל תיקון"
 
 #: data/base/messages/strings/names.txt:343
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "שדרוג מתקדם למפעל תיקון סימן 2"
 
 #: data/base/messages/strings/names.txt:344
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "שדרוג מתקדם למפעל תיקון סימן 3"
 
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:442
 msgid "Robotic VTOL Rearming Mk4"
-msgstr ""
+msgstr "חימוש מחדש למטוס VTOL רובוטי סימן 4"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:450
 msgid "Cyborg Self-Repair"
-msgstr ""
+msgstr "תיקון עצמי לסייבורג"
 
 #: data/base/messages/strings/names.txt:350
 #: data/mp/messages/strings/names.txt:451
 msgid "Automated Cyborg Repair Mk2"
-msgstr ""
+msgstr "תיקון אוטומטי לסייבורג סימן 2"
 
 #: data/base/messages/strings/names.txt:351
 #: data/mp/messages/strings/names.txt:452
 msgid "Automated Cyborg Repair Mk3"
-msgstr ""
+msgstr "תיקון אוטומטי לסייבורג סימן 3"
 
 #: data/base/messages/strings/names.txt:353
 #: data/mp/messages/strings/names.txt:454
 msgid "Defenses Self-Repair"
-msgstr ""
+msgstr "תיקון עצמי להגנות"
 
 #: data/base/messages/strings/names.txt:354
 #: data/mp/messages/strings/names.txt:455
 msgid "Automated Defenses Repair Mk2"
-msgstr ""
+msgstr "תיקון אוטומטי להגנות סימן 2"
 
 #: data/base/messages/strings/names.txt:355
 #: data/mp/messages/strings/names.txt:456
 msgid "Automated Defenses Repair Mk3"
-msgstr ""
+msgstr "תיקון אוטומטי להגנות סימן 3"
 
 #: data/base/messages/strings/names.txt:357
 #: data/mp/messages/strings/names.txt:458
 msgid "Base Structure Self-Repair"
-msgstr ""
+msgstr "תיקון אוטומטי למבנה בסיס"
 
 #: data/base/messages/strings/names.txt:358
 #: data/mp/messages/strings/names.txt:459
 msgid "Automated Base Structure Repair Mk2"
-msgstr ""
+msgstr "תיקון אוטומטי למבנה בסיס סימן 2"
 
 #: data/base/messages/strings/names.txt:359
 #: data/mp/messages/strings/names.txt:460
 msgid "Automated Base Structure Repair Mk3"
-msgstr ""
+msgstr "תיקון אוטומטי למבנה בסיס סימן 3"
 
 #: data/base/messages/strings/names.txt:361
 #: data/mp/messages/strings/names.txt:462
 msgid "Vehicle Self-Repair"
-msgstr ""
+msgstr "תיקון עצמי לרכב"
 
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:463
 msgid "Automated Vehicle Repair Mk2"
-msgstr ""
+msgstr "תיקון אוטומטי לרכב סימן 2"
 
 #: data/base/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:464
 msgid "Automated Vehicle Repair Mk3"
-msgstr ""
+msgstr "תיקון אוטומטי לרכב סימן 3"
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
