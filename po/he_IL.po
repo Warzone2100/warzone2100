@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2021-12-12 04:26\n"
+"PO-Revision-Date: 2022-09-19 10:17\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -83,68 +83,68 @@ msgstr "בנחיתה, חקור את ההריסות ושחזר כל ממצא."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "משימת מסע: חקירת מרכז המחקר"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "חקור את האיזור ושחזר את כל הממצאים הנוכַחים."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "תגבורת זמינה."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "משימת מסע: אותות מקודדים זוהו"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "קח צוות גששים על מנת לחקור את האותות."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "השתמש במשאיות שלך על מנת לבנות מגננות באיזור הנחיתה שלך."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "משימת מסע: שידורים עוינים זוהו"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "סרוק את האיזור המסומן עבור מפעלי מחקר עוינים."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "התקדם אל עבר איזור הנחיתה #2. אל תחתור למגע עם האויב בזמן הזה."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "משימת מסע: מיקום קשר סִינָפְּטִי"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "הפרדיגמה החדשה מנתחים טכנולוגיית קשר סִינָפְּטִי במיקום הזה."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "הרכב צוות התקפה ושחזר את טכנולוגיית הקשר הסִינָפְּטִי."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "משימת מסע: מטרות חדשות"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "פרדיגמה חדשה מחפשים ממצאים בסביבה זו."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "הפרע להם. אל תיתן לאויבים להימלט מהאיזור הזה."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr ""
+msgstr "משימת מסע: בסיס עוין בתהליך בנייה"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
