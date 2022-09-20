@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-09-19 22:17\n"
+"PO-Revision-Date: 2022-09-20 23:38\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -160,7 +160,7 @@ msgstr "ALFA BÁZIS KÜLDETÉS: Létesítsen előretolt bázist"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Hozzon létre előretolt bázist a fennsíkon és hárítsa el az Új Paradigma támadásait!"
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
@@ -4020,7 +4020,7 @@ msgstr "Mentse meg a civileket a Kollektívától, mielőtt túl sok embert fogn
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Biztosítsa a Gyújtemény utánpótlásait"
 
 #: data/base/script/campaign/cam2-end.js:182
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
@@ -4044,7 +4044,7 @@ msgstr "A Nexus főhadszállás megsemmisítésével letilthatja a Nexus behatol
 
 #: data/base/script/campaign/cam3-ab.js:245
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Fejlesszen ki ellenállósági áramköröket és élje túl a Nexus támadásait"
 
 #: data/base/script/campaign/cam3-ad1.js:249
 msgid "Secure a missile silo"
@@ -4052,11 +4052,11 @@ msgstr "Biztonságos rakéta siló"
 
 #: data/base/script/campaign/cam3-ad2.js:280
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Védje meg a rakétasilókat és kutasson a rakétakódok után"
 
 #: data/base/script/campaign/cam3-c.js:171
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Egyesítse újra a Béta csapat egy részét a Gamma csapat előőrsével"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -4092,7 +4092,7 @@ msgstr "Pusztìsd el minden ellenséges egységet és bàzist"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Éljen túl, amíg az időmérő el nem éri a nullát"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -5610,16 +5610,16 @@ msgstr "Inaktív / passzív játék miatt elveszett."
 
 #: data/mp/multiplay/script/rules/endconditions.js:384
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "A passzív játék vereséghez vezet. A megfontolandó akciók:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:387
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- egység gyártás - fejlesztések végrehajtása - bázis építmények építése (gyárak, erőművek, kutatóközpontok, modulok és olajkutak) - sebzés okozása"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1463
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Végzetes Fosztogatók"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1460
@@ -5783,11 +5783,11 @@ msgstr "Játék konfigurált port (%s) korrigálva (%s)\n"
 
 #: lib/netplay/netplay.cpp:2130
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "A kliens nem tudta kezelni a játékosindex változását"
 
 #: lib/netplay/netplay.cpp:2141
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Üzenetküldés sikertelen - próbálja újra"
 
 #: lib/netplay/netplay.cpp:2735
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
@@ -5866,11 +5866,11 @@ msgstr "Másolás a Vágólapra"
 
 #: lib/widget/jsontable.cpp:503
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "JSON másolása a vágólapra"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "JSON kiíratása az StdOut-ba"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -5963,20 +5963,20 @@ msgstr "Légvédelmi láncos lőszeradagolás"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "AA Ciklon légelhárító ágyú állás"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "AA Ciklon légelhárító ágyú talapzat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "AA Ciklon légelhárító ágyú Piton Féllánctalp"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
@@ -7153,7 +7153,7 @@ msgstr "Térj vissza az alapokhoz!"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1052
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "az eredeti MI-n alapul, már csak kezdőknek"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -7717,7 +7717,7 @@ msgstr "Kollektív nehéz karosszéria"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1464
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Hadi javító cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -8235,7 +8235,7 @@ msgstr "Szegényített uránmagvas MG lőszer"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1821
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Kutatásra tervezve"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -9541,14 +9541,14 @@ msgstr "Nehéz aknavető - Bombard"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2670
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Nehéz plazma kilövő állás"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2674
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Nehéz plazma kilövő plazmát lő"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
@@ -9793,7 +9793,7 @@ msgstr "Nagy nyomású gáz tároló"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2853
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Nagynomású gáz távolabbra lövi a lángfolyadékot"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
@@ -9996,7 +9996,7 @@ msgstr "Nagysebességű ágyú"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2991
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Hipersebességű páncéltörő stabilizált páncéltörő lövedék"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10203,7 +10203,7 @@ msgstr "Gyújtó tarack"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3129
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Gyújtóakna árok 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -15137,7 +15137,7 @@ msgstr ""
 
 #: src/clparse.cpp:407
 msgid "autohost"
-msgstr ""
+msgstr "autokiszolgáló"
 
 #: src/clparse.cpp:408
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
@@ -15145,7 +15145,7 @@ msgstr ""
 
 #: src/clparse.cpp:408
 msgid "autorating"
-msgstr ""
+msgstr "automatikus forgatás"
 
 #: src/clparse.cpp:410
 msgid "Attach or create a console window and display console output (Windows only)"
@@ -15492,7 +15492,7 @@ msgstr "Beállítások"
 #: src/frontend.cpp:207
 #: src/frontend.cpp:211
 msgid "View Intro"
-msgstr "Intro nézet"
+msgstr "Történet megtekintése"
 
 #: src/frontend.cpp:212
 msgid "Videos are missing, download them from http://wz2100.net"
@@ -15608,12 +15608,12 @@ msgstr "ELSŐ KÜLDETÉS"
 #: src/frontend.cpp:532
 #: src/ingameop.cpp:1024
 msgid "Load Campaign Saved Game"
-msgstr "Mentett játék betöltése"
+msgstr "Mentett küldetés játék betöltése"
 
 #: src/frontend.cpp:538
 #: src/ingameop.cpp:1028
 msgid "Load Skirmish Saved Game"
-msgstr "Mentett játék betöltése"
+msgstr "Mentett csata betöltése"
 
 #: src/frontend.cpp:544
 msgid "Load Skirmish Replay"
@@ -15629,11 +15629,11 @@ msgstr "Host játék"
 
 #: src/frontend.cpp:608
 msgid "Join Game"
-msgstr "Játék folytatás"
+msgstr "Kapcsolódás Játékhoz"
 
 #: src/frontend.cpp:609
 msgid "View Replay"
-msgstr "Nézet visszajátszása"
+msgstr "Visszajátszás megtekintése"
 
 #: src/frontend.cpp:614
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15641,7 +15641,7 @@ msgstr "TCP 2100 port megnyitotta a tűzfalad vagy routered a távoli játékokh
 
 #: src/frontend.cpp:659
 msgid "Load Multiplayer Replay"
-msgstr "Többjátékos betöltésének visszajátszása"
+msgstr "Többjátékos visszajátszás betöltése"
 
 #: src/frontend.cpp:713
 msgid "Game Options"
@@ -16270,7 +16270,7 @@ msgstr "FIGYELEM! Te vagy a játékmester. Amennyiben te kilépsz a játék vég
 #: src/ingameop.cpp:131
 #: src/ingameop.cpp:266
 msgid "Host Quit"
-msgstr ""
+msgstr "A játékmester kilépett"
 
 #: src/ingameop.cpp:176
 #: src/ingameop.cpp:1064
@@ -17518,11 +17518,11 @@ msgstr ""
 
 #: src/keybind.cpp:1226
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Pályaszerkesztő letiltása"
 
 #: src/keybind.cpp:1231
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Pályaszerkesztő engedélyezése"
 
 #: src/keybind.cpp:1315
 msgid "God Mode ON"
@@ -17760,11 +17760,11 @@ msgstr "Alapértelmezett kiválasztása"
 
 #: src/loadsave.cpp:361
 msgid "Parent directory"
-msgstr ""
+msgstr "Szülőkönyvtár"
 
 #: src/loadsave.cpp:366
 msgid "Autosave directory"
-msgstr ""
+msgstr "Automatikus mentés könyvtára"
 
 #: src/loadsave.cpp:366
 msgid "Autosave directory (not allowed for saving)"
@@ -17772,7 +17772,7 @@ msgstr ""
 
 #: src/loadsave.cpp:682
 msgid "cheated"
-msgstr ""
+msgstr "csalt"
 
 #: src/loadsave.cpp:1109
 #, c-format
@@ -17811,7 +17811,7 @@ msgstr "A CÉL SIKERTELEN"
 
 #: src/mission.cpp:2325
 msgid "Continue Game"
-msgstr "Játék folytatás"
+msgstr "Játék folytatása"
 
 #: src/mission.cpp:2335
 #: src/mission.cpp:2371
@@ -19300,7 +19300,7 @@ msgstr "Előcsarnok"
 
 #: src/titleui/protocol.cpp:85
 msgid "IP"
-msgstr "IP cím"
+msgstr "IP cím alapján"
 
 #: src/titleui/protocol.cpp:201
 msgid "IP Address or Machine Name"
