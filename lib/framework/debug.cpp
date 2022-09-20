@@ -54,7 +54,7 @@
 # include <stdio.h>
 #endif
 
-#define MAX_LEN_LOG_LINE 512
+#define MAX_LEN_LOG_LINE 1024
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
 UDWORD traceID = -1;
@@ -571,12 +571,12 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 				wzChangeWindowMode(WINDOW_MODE::windowed);
 			}
 #if defined(WZ_OS_WIN)
-			char wbuf[1024];
+			char wbuf[MAX_LEN_LOG_LINE+512];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
 				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
 			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
 #elif defined(WZ_OS_MAC)
-			char wbuf[1024];
+			char wbuf[MAX_LEN_LOG_LINE+128];
 			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 			int clickedIndex = \
 			                   cocoaShowAlert("Warzone has quit unexpectedly.",
