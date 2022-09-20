@@ -170,7 +170,7 @@ void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer,
  * \param	data			Ignored. Use NULL.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-#if defined WIN32 && defined DEBUG
+#if defined(_WIN32) && defined(DEBUG)
 void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuffer, code_part)
 {
 	char tmpStr[MAX_LEN_LOG_LINE];
@@ -301,7 +301,7 @@ void debugFlushStderr()
 	debug_flush_stderr = true;
 }
 // MSVC specific rotuines to set/clear allocation tracking
-#if defined(WZ_CC_MSVC) && defined(DEBUG)
+#if defined(_MSC_VER) && defined(DEBUG)
 void debug_MEMCHKOFF()
 {
 	// Disable allocation tracking
