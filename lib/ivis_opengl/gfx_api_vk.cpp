@@ -70,7 +70,10 @@ const size_t MAX_FRAMES_IN_FLIGHT = 2;
 // Vulkan version where extension is promoted to core; extension name
 #define VK_NOT_PROMOTED_TO_CORE_YET 0
 const std::vector<std::tuple<uint32_t, const char*>> optionalInstanceExtensions = {
-	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME }	// used for Vulkan info output
+	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME },	// used for Vulkan info output
+#if defined(VK_KHR_portability_enumeration)
+	{ VK_NOT_PROMOTED_TO_CORE_YET , VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME}
+#endif
 };
 
 const std::vector<const char*> deviceExtensions = {
@@ -1943,6 +1946,16 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 		instanceDebugUtilsCallbacksInfo.pfnUserCallback = WZDebugUtilsCallback;
 		instanceCreateInfo.setPNext(&instanceDebugUtilsCallbacksInfo);
 	}
+
+#if defined(VK_KHR_portability_enumeration)
+	bool requesting_portability_enumeration_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0);});
+	if (requesting_portability_enumeration_extension)
+	{
+		// Must set VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR in flags
+		instanceCreateInfo.setFlags(vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR);
+	}
+#endif
 
 	PFN_vkCreateInstance _vkCreateInstance = reinterpret_cast<PFN_vkCreateInstance>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(nullptr, "vkCreateInstance")));
 	if (!_vkCreateInstance)
