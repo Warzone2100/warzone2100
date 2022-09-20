@@ -160,7 +160,7 @@ template<> class StaticAssert<true> {};
  * \param expr Expression to evaluate
  */
 #define STATIC_ASSERT( expr ) \
-	(void)STATIC_ASSERT_EXPR(expr)
+	static_assert(expr, "");
 
 
 /***
