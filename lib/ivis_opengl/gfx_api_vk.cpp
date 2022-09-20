@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2019  Warzone 2100 Project
+	Copyright (C) 2017-2022  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -93,8 +93,13 @@ const std::vector<const char*> validationLayers = {
 };
 
 const std::vector<const char*> debugAdditionalExtensions = {
-	VK_EXT_DEBUG_REPORT_EXTENSION_NAME
+	VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
+	VK_EXT_DEBUG_REPORT_EXTENSION_NAME // old, deprecated extension
 };
+
+// See: https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#fundamentals-validusage-versions
+#define VK_VERSION_GREATER_THAN_OR_EQUAL(a, b) \
+	( ( VK_VERSION_MAJOR(a) > VK_VERSION_MAJOR(b) ) || ( ( VK_VERSION_MAJOR(a) == VK_VERSION_MAJOR(b) ) && ( VK_VERSION_MINOR(a) >= VK_VERSION_MINOR(b) ) ) )
 
 const uint32_t minRequired_DescriptorSetUniformBuffers = 1;
 const uint32_t minRequired_DescriptorSetUniformBuffersDynamic = 1;
@@ -764,7 +769,7 @@ size_t buffering_mechanism::currentFrame;
 
 // MARK: Debug Callback
 
-VKAPI_ATTR VkBool32 VKAPI_CALL messageCallback(
+VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugReportCallback(
 	VkDebugReportFlagsEXT flags,
 	VkDebugReportObjectTypeEXT objType,
 	uint64_t srcObject,
@@ -794,6 +799,54 @@ VKAPI_ATTR VkBool32 VKAPI_CALL messageCallback(
 	buf << "[" << pLayerPrefix << "] Code " << msgCode << " : " << pMsg;
 	debug((logFatal) ? LOG_FATAL : LOG_3D, "%s", buf.str().c_str());
 	return false;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugUtilsCallback(
+	VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
+	VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
+	const VkDebugUtilsMessengerCallbackDataEXT*      pCallbackData,
+	void*                                            pUserData)
+{
+	std::stringstream buf;
+	code_part part = LOG_3D;
+	bool logFatal = false;
+	if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
+		buf << "ERROR: ";
+		part = LOG_ERROR;
+	}
+	else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+		buf << "WARNING: ";
+		part = LOG_INFO; // make sure these are logged for now (since neither LOG_3D nor LOG_WARN are enabled by default)
+	}
+
+	if (messageTypes & VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT) {
+		buf << "[PERF] ";
+	}
+	else if (messageTypes & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT) {
+		buf << "[VALIDATION] ";
+		logFatal = true;
+	}
+
+	buf << "[" << pCallbackData->pMessageIdName << "] Code " << pCallbackData->messageIdNumber << " : " << pCallbackData->pMessage;
+
+	if (pCallbackData->objectCount > 0)
+	{
+		buf << std::endl;
+		for (uint32_t i = 0; i < pCallbackData->objectCount; ++i)
+		{
+			const auto& objectInfo = pCallbackData->pObjects[i];
+			buf << "\t - [" << i << "]: " << vk::to_string(static_cast<vk::ObjectType>(objectInfo.objectType)) << " 0x" << std::hex << objectInfo.objectHandle << std::dec;
+			if (objectInfo.pObjectName)
+			{
+				buf << " : \"" << objectInfo.pObjectName << "\"";
+			}
+			buf << std::endl;
+		}
+	}
+
+	debug((logFatal) ? LOG_FATAL : part, "%s", buf.str().c_str());
+
+	return VK_FALSE;
 }
 
 // MARK: VkPSO
@@ -1615,7 +1668,7 @@ unsigned VkTexture::id() { return 0; }
 
 // MARK: VkRoot
 
-VkRoot::VkRoot(bool _debug) : debugLayer(_debug)
+VkRoot::VkRoot(bool _debug) : validationLayer(_debug)
 {
 	debugInfo.setOutputHandler([&](const std::string& output) {
 		addDumpInfo(output.c_str());
@@ -1745,6 +1798,105 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 	rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
 }
 
+bool VkRoot::setupDebugUtilsCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+{
+	// Verify that the requested extensions included VK_EXT_DEBUG_UTILS_EXTENSION_NAME
+	bool requested_debug_utils_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0);});
+	if (!requested_debug_utils_extension)
+	{
+		return false;
+	}
+
+	CreateDebugUtilsMessenger = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkCreateDebugUtilsMessengerEXT")));
+	if (!CreateDebugUtilsMessenger)
+	{
+		// Failed to obtain vkCreateDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkCreateDebugUtilsMessengerEXT\n");
+		return false;
+	}
+	DestroyDebugUtilsMessenger = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDestroyDebugUtilsMessengerEXT")));
+	if (!DestroyDebugUtilsMessenger)
+	{
+		// Failed to obtain vkDestroyDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkDestroyDebugUtilsMessengerEXT\n");
+		return false;
+	}
+
+	VkDebugUtilsMessengerCreateInfoEXT dbgCreateInfo = {};
+	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+	dbgCreateInfo.flags = 0;
+	dbgCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
+	dbgCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
+	dbgCreateInfo.pfnUserCallback = WZDebugUtilsCallback;
+
+	const VkResult err = CreateDebugUtilsMessenger(
+												   static_cast<VkInstance>(inst),
+												   &dbgCreateInfo,
+												   nullptr,
+												   &debugUtilsCallback);
+	if (err != VK_SUCCESS)
+	{
+		debug(LOG_ERROR, "vkCreateDebugUtilsMessengerEXT failed with error: %d", (int)err);
+		return false;
+	}
+
+	return true;
+}
+
+bool VkRoot::setupDebugReportCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+{
+	// Verify that the requested extensions included VK_EXT_DEBUG_REPORT_EXTENSION_NAME
+	bool requested_debug_report_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_REPORT_EXTENSION_NAME) == 0);});
+	if (!requested_debug_report_extension)
+	{
+		return false;
+	}
+
+	CreateDebugReportCallback = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkCreateDebugReportCallbackEXT")));
+	if (!CreateDebugReportCallback)
+	{
+		// Failed to obtain vkCreateDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkCreateDebugReportCallbackEXT\n");
+		return false;
+	}
+	DestroyDebugReportCallback = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDestroyDebugReportCallbackEXT")));
+	if (!DestroyDebugReportCallback)
+	{
+		// Failed to obtain vkDestroyDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkDestroyDebugReportCallbackEXT\n");
+		return false;
+	}
+	dbgBreakCallback = reinterpret_cast<PFN_vkDebugReportMessageEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDebugReportMessageEXT")));
+	if (!dbgBreakCallback)
+	{
+		// Failed to obtain vkDebugReportMessageEXT
+		debug(LOG_INFO, "Could not find symbol: vkDebugReportMessageEXT\n");
+		return false;
+	}
+
+	VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
+	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+	dbgCreateInfo.pfnCallback = WZDebugReportCallback;
+	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
+	VK_DEBUG_REPORT_WARNING_BIT_EXT; // |
+	//VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+
+	const VkResult err = CreateDebugReportCallback(
+												   static_cast<VkInstance>(inst),
+												   &dbgCreateInfo,
+												   nullptr,
+												   &msgCallback);
+	if (err != VK_SUCCESS)
+	{
+		debug(LOG_ERROR, "vkCreateDebugReportCallbackEXT failed with error: %d", (int)err);
+		return false;
+	}
+
+	return true;
+}
+
 // Attempts to create a Vulkan instance (vk::Instance) with the specified extensions and layers
 // If successful, sets the following variable in VkRoot:
 //	- inst (vk::Instance)
@@ -1765,6 +1917,23 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 	  .setPpEnabledExtensionNames(extensions.data())
 	  .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size())
 	);
+
+	bool requesting_debug_utils_extension = std::any_of(extensions.begin(), extensions.end(),
+				[](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0);});
+	if (requesting_debug_utils_extension)
+	{
+		debugUtilsExtEnabled = true;
+
+		// From the VK_EXT_debug_utils docs:
+		// "To capture events that occur while creating or destroying an instance an application can link a VkDebugUtilsMessengerCreateInfoEXT structure to the pNext element of the VkInstanceCreateInfo structure given to vkCreateInstance."
+		instanceDebugUtilsCallbacksInfo = VkDebugUtilsMessengerCreateInfoEXT{};
+		instanceDebugUtilsCallbacksInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		instanceDebugUtilsCallbacksInfo.flags = 0;
+		instanceDebugUtilsCallbacksInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
+		instanceDebugUtilsCallbacksInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
+		instanceDebugUtilsCallbacksInfo.pfnUserCallback = WZDebugUtilsCallback;
+		instanceCreateInfo.setPNext(&instanceDebugUtilsCallbacksInfo);
+	}
 
 	PFN_vkCreateInstance _vkCreateInstance = reinterpret_cast<PFN_vkCreateInstance>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(nullptr, "vkCreateInstance")));
 	if (!_vkCreateInstance)
@@ -1794,65 +1963,23 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 		return false;
 	}
 
-	// Setup debug layer
-	if (!debugLayer)
+	debugUtilsExtEnabled = requesting_debug_utils_extension;
+
+	// Setup debug callbacks
+	if (!debugCallbacksEnabled)
 		return true;
 
-	// Verify that the requested extensions included VK_EXT_DEBUG_REPORT_EXTENSION_NAME
-	bool requested_debug_report_extension = std::find_if(extensions.begin(), extensions.end(),
-				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_REPORT_EXTENSION_NAME) == 0);}) != extensions.end();
-	if (!requested_debug_report_extension)
+	if (!setupDebugUtilsCallbacks(extensions, _vkGetInstanceProcAddr))
 	{
-		debug(LOG_ERROR, "debugLayer is enabled, but did not request VK_EXT_debug_report - disabling debug report callbacks");
-		return true;
-	}
-
-	CreateDebugReportCallback = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkCreateDebugReportCallbackEXT")));
-	if (!CreateDebugReportCallback)
-	{
-		// Failed to obtain vkCreateDebugReportCallbackEXT
-		debug(LOG_WARNING, "Could not find symbol: vkCreateDebugReportCallbackEXT\n");
-		return true;
-	}
-	DestroyDebugReportCallback = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDestroyDebugReportCallbackEXT")));
-	if (!DestroyDebugReportCallback)
-	{
-		// Failed to obtain vkDestroyDebugReportCallbackEXT
-		debug(LOG_WARNING, "Could not find symbol: vkDestroyDebugReportCallbackEXT\n");
-		return true;
-	}
-	dbgBreakCallback = reinterpret_cast<PFN_vkDebugReportMessageEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDebugReportMessageEXT")));
-	if (!dbgBreakCallback)
-	{
-		// Failed to obtain vkDebugReportMessageEXT
-		debug(LOG_WARNING, "Could not find symbol: vkDebugReportMessageEXT\n");
-		return true;
-	}
-
-	VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
-	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-	dbgCreateInfo.pfnCallback = messageCallback;
-	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
-	VK_DEBUG_REPORT_WARNING_BIT_EXT; // |
-	//VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-
-	const VkResult err = CreateDebugReportCallback(
-												   static_cast<VkInstance>(inst),
-												   &dbgCreateInfo,
-												   nullptr,
-												   &msgCallback);
-	if (err != VK_SUCCESS)
-	{
-		debug(LOG_ERROR, "vkCreateDebugReportCallbackEXT failed with error: %d", (int)err);
-		return false;
+		debug(LOG_3D, "Failed to initialize VK_EXT_debug_utils callbacks");
+		if (!setupDebugReportCallbacks(extensions, _vkGetInstanceProcAddr))
+		{
+			debug(LOG_3D, "Failed to initialize VK_EXT_debug_report callbacks");
+		}
 	}
 
 	return true;
 }
-
-// See: https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#fundamentals-validusage-versions
-#define VK_VERSION_GREATER_THAN_OR_EQUAL(a, b) \
-	( ( VK_VERSION_MAJOR(a) > VK_VERSION_MAJOR(b) ) || ( ( VK_VERSION_MAJOR(a) == VK_VERSION_MAJOR(b) ) && ( VK_VERSION_MINOR(a) >= VK_VERSION_MINOR(b) ) ) )
 
 // WZ-specific functions for rating / determining requirements
 int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const vk::DispatchLoaderDynamic &vkDynLoader)
@@ -2042,6 +2169,11 @@ void VkRoot::shutdown()
 	if (inst)
 	{
 		// destroy debug callback
+		if (debugUtilsCallback)
+		{
+			DestroyDebugUtilsMessenger(static_cast<VkInstance>(inst), debugUtilsCallback, nullptr);
+			debugUtilsCallback = 0;
+		}
 		if (msgCallback)
 		{
 			DestroyDebugReportCallback(static_cast<VkInstance>(inst), msgCallback, nullptr);
@@ -2720,10 +2852,10 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	layers.clear();
 
-// debugLayer handling
-	if (debugLayer)
+// validationLayer handling
+	if (validationLayer)
 	{
-		// determine if debug layers are available
+		// determine if validation layers are available
 		if (checkValidationLayerSupport(_vkGetInstanceProcAddr))
 		{
 			layers = validationLayers;
@@ -2732,22 +2864,26 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		else
 		{
 			debug(LOG_ERROR, "Vulkan: debug/validation layers requested, but not available - disabling");
-			debugLayer = false;
-		}
-
-		if (debugLayer)
-		{
-			// determine if desired debug extensions are available
-			std::vector<const char*> supportedDebugExtensions;
-			if (!findSupportedInstanceExtensions(debugAdditionalExtensions, supportedDebugExtensions, _vkGetInstanceProcAddr))
-			{
-				debug(LOG_ERROR, "Failed to retrieve supported debug extensions");
-				return false;
-			}
-			instanceExtensions.insert(std::end(instanceExtensions), supportedDebugExtensions.begin(), supportedDebugExtensions.end());
+			validationLayer = false;
 		}
 	}
-// end debugLayer handling
+// end validationLayer handling
+
+	if (validationLayer || debugCallbacksEnabled)
+	{
+		// determine if desired debug extensions are available
+		std::vector<const char*> supportedDebugExtensions;
+		if (findSupportedInstanceExtensions(debugAdditionalExtensions, supportedDebugExtensions, _vkGetInstanceProcAddr) && !supportedDebugExtensions.empty())
+		{
+			instanceExtensions.insert(std::end(instanceExtensions), supportedDebugExtensions.begin(), supportedDebugExtensions.end());
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to retrieve any supported debug extensions");
+			validationLayer = false;
+			debugCallbacksEnabled = false;
+		}
+	}
 
 	// add other optional instance extensions
 	std::vector<const char *> optionalInstanceExtensionsToCheck;
