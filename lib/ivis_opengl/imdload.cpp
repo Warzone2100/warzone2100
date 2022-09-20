@@ -727,6 +727,7 @@ void finishTangentsGeneration()
  * \pre ppFileData loaded
  * \post s allocated
  */
+static_assert(PATH_MAX >= 255, "PATH_MAX is insufficient!");
 static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion, int level)
 {
 	const char *pFileData = *ppFileData;
