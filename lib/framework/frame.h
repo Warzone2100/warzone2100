@@ -31,10 +31,6 @@
 # undef Status
 #endif
 
-#ifndef WZ_CXX11
-# define nullptr NULL
-#endif
-
 #include "types.h"
 /**
 * NOTE: the next two #include lines are needed by MSVC to override the default,
