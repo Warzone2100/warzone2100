@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-12-12 00:44+0000\n"
-"PO-Revision-Date: 2022-09-19 22:17\n"
+"PO-Revision-Date: 2022-09-20 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -284,214 +284,214 @@ msgstr "טכנולוגיית הקשר הסִינָפְּטִי הייתה במי
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "הקם בסיס חוד ואז התקדם בחיפוש אחר הקשר הסִינָפְּטִי."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "שידור נכנס"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "פענוח בתהליך....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "מפקד."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "פענחנו את ההודעה הנכנסת לפרדיגמה החדשה..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "הרוס בסיס אויב"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "הרכב כוח מתקפה ועלה על אמצעי התחבורה."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "הרוס את הבסיס ושחזר את כל הממצאים הנוכחים."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "טכנולוגיית הקשר הסִינָפְּטִי שוחזרה!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "מחקר ראשוני מאמת שזה יהיה רווחי ביותר לפרויקט."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "בסיס בטא נמצא תחת אש כבדה, יתכן והם צריכים תמיכה."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "אנו נשלח עדכונים נוספים כאשר הם יגיעו."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "השידור יורט לפני מספר דקות."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr ""
+msgstr "זה נובע מהמזרח."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "ממצא יחידת כוח"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "חקור את ממצא יחידת הכוח."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "ואז השתמש במשאית כדי לשדרג את מחולל הכוח שלך עם היחידה."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "בסיס אוכלי נבלות זוהה"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "הרוס את אוכלי הנבלות ושחזר את כל הממצאים."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
+msgstr "ברכות על הבסת הפרדיגמה החדשה, הגזרה הזו כעת מאובטחת."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr ""
+msgstr "תוכנית הפלישה של נקסוס היתה במערכת הפרדיגמה החדשה."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr ""
+msgstr "הקלטנו שתי שיחות בעזרתו, תמצית בהמשך..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr ""
+msgstr "אנו נעדכן אותך על התפתחויות בהמשך"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "מפקד עליך לעזור לצוות בטא"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "משימת בסיס בטא: גזרה מזרחית"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "בעת הגעתך עליך לתפוס פיקוד על הבסיס."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "אתה חייב להגן עליו ולהחזיק אותו."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "משימת בסיס בטא: הגן ובצר"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
+msgstr "אל תשכח לבצר את ההיקף ולהקים מגננות נגד-מטוסים."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "טכנולוגיות חדשות זמינות."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "כעת זיהינו אותות זרם סיביות מקודדים."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "מפענח..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr ""
+msgstr "משימת מסע: אמצעי תחבורה נפל"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "אמצעי התחבורה שלנו שהוביל יחידות מצוות בסיס אלפא הורד."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
+msgstr "זה תחת אש מהקבוצה במקום הזה."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
+msgstr "הרכב צוות חילוץ כדי לשחזר את אמצעי התחבורה ואת המטען שלו."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr ""
+msgstr "תדרוך טיסה"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "צוות בטא מחפשים טכנולוגיית המראה ונחיתה אנכית (VTOL)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "מאמינים שישנו בסיס אויר טרום-קריסה באיזור הזה."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "צוות בטא תחת אש כבדה"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "משימת צוות בטא: החזק מעמד בכל מחיר"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr ""
+msgstr "אנו מזהים אותות זרם סיביות מקודדים מהקבוצה."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "משימת צוות בטא: החזק מעמד בכל מחיר"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr ""
+msgstr "אנו מזהים כוחות קרקע ואויר מהצפון."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr ""
+msgstr "החזק את מיקומך ודחה את ההתקפות האלה, ואז השמד את הבסיס הצפוני של האויב."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "משימת מסע: יירט שיירה."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr ""
+msgstr "מידע מבסיס הקבוצה מצביע על נוכחותה של תוכנית הפלישה של נקסוס."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "לפני שנקסוס ניתקו את עצמם קיבלנו גישה לדברים הבאים."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "מפקד עוין אוסף משלוח מנקסוס במיקום הזה."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "כאשר תהיה באיזור הנחיתה, השמד את המפקד העוין ושחזר את המשלוח."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -707,156 +707,156 @@ msgstr "בהצלחה, מפקד."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr ""
+msgstr "משימת מסע: גזרה צפונית"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
+msgstr "ברכות על פינויך המוצלח של בסיס בטא."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "נקסוס השיגה גישה לנשק אטומי והם נחושים להרוס את הפרויקט."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr ""
+msgstr "קח את כוחותיך לגזרה הצפונית"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
+msgstr "כאשר תגיע להרים אבטח איזור נחיתה. ואז הקם בסיס חוד."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "צוות גמא תיצור איתך קשר שם."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "משימת מסע: הקם בסיס חוד"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr ""
+msgstr "מפקד, הצלחת הפרויקט תלויה בך."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "אבטח איזור נחיתה, ואז הקם בסיס חוד."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr ""
+msgstr "משימת מסע: קואורדינטות אתר שיגור טילים"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr ""
+msgstr "מצאנו את האתר של שיגורי הטילים."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr ""
+msgstr "היו אחד או יותר טילים באתר הנאסד\"ה הזה."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
+msgstr "אנו משדרים קואורדינטות של איזור נחיתה בקרבת הממגורות."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:1
 msgid "Coordinate Download Completed."
-msgstr ""
+msgstr "הורדת הקואורדינטות הושלמה."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
+msgstr "אבטח את איזור הנחיתה שלך, ואז לך ליבשה להרוס את ממגורת הטילים."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr ""
+msgstr "משימת גזרה צפונית: פיצוץ אטומי"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
+msgstr "כל היחידות חייבות להימלט מהאיזור לפני שראש הנפץ מתפוצץ."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
+msgstr "תחבורה אווירית אינה אפשרית. תצטרך ללכת דרך היבשה."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
+msgstr "רכס ההרים במזרח יוכל להגן עליך מהפיצוץ."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
-msgstr ""
+msgstr "העמק הוא הסיכוי היחידי שלך להימלט."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "עדכון צוות רחוק"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
+msgstr "כל התקשורת עם הצוות הרחוק נאבדה אחרי הפיצוצים האטומיים."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
+msgstr "השידור האחרון שלהם מצביע על כך שהם היו בדרך חזרה לבסיס."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr ""
+msgstr "משימת גזרה צפונית: עזור לצוות גמא"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr ""
+msgstr "עליך לעזור לצוות גמא."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr ""
+msgstr "בעת הגעתך לבסיס גמא, עזור לאבטח את האיזור מתקיפות נוספות של נקסוס."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr ""
+msgstr "נקסוס הובסו"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr ""
+msgstr "מפקד, הבסנו את נקסוס."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr ""
+msgstr "למרבה הצער, ביצועי המערכות שלנו הושפעו על ידי נקסוס. אנו מנסים לתקן את זה."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
-msgstr ""
+msgstr "אנו כרגע מקבלים את השידור הזה."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "משימת מסע: צוות אלפא זוהו"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr ""
+msgstr "קח כוח צופים לקואורדינטות הבאות והערך את המצב."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr ""
+msgstr "החלט האם הם צוות אלפא. אם כן, הצל ולווה אותם בחזרה לאיזור הנחיתה."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
+msgstr "הקבוצה הזאת היא חלק מצוות אלפא, הצל אותם ולווה אותם לאיזור הנחיתה."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr ""
+msgstr "משימת גזרה צפונית: תדרוך צוות אלפא"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr ""
+msgstr "העברת כוח של צוות אלפא בתהליך."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
@@ -1310,15 +1310,15 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
-msgstr ""
+msgstr "שוט זינוק"
 
 #: data/base/messages/strings/names.txt:295
 msgid "Jump Flashlight Gunner"
-msgstr ""
+msgstr "תותחן פנס זינוק"
 
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
-msgstr ""
+msgstr "להקת סייבורג מזנקים"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs02.name
@@ -1327,7 +1327,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:382
 #: po/custom/fromJson.txt:1672
 msgid "Cyborg Propulsion II"
-msgstr ""
+msgstr "הנעת סייבורג II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs03.name
@@ -1335,12 +1335,12 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:383
 #: po/custom/fromJson.txt:1675
 msgid "Cyborg Propulsion III"
-msgstr ""
+msgstr "הנעת סייבורג III"
 
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:386
 msgid "NP-Hardcrete"
-msgstr ""
+msgstr "בטון NP-קשיות"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox01.name
@@ -1351,7 +1351,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:396
 #: po/custom/fromJson.txt:2605
 msgid "Heavy Machinegun Bunker"
-msgstr ""
+msgstr "בונקר מקלע כבד"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PrisLas.name
@@ -1362,7 +1362,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:398
 #: po/custom/fromJson.txt:2128
 msgid "Flashlight Emplacement"
-msgstr ""
+msgstr "מוצב פנס"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower03.name
@@ -1372,7 +1372,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:2627
 msgid "Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "מגדל שמירה מקלע כבד"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower04.name
@@ -1381,11 +1381,11 @@ msgstr ""
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:2092
 msgid "Flamer Guard Tower"
-msgstr ""
+msgstr "מגדל שמירה להביור"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
-msgstr ""
+msgstr "מגדל שמירה נושא רומח"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.WallTower05.name
@@ -1394,18 +1394,18 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:410
 #: po/custom/fromJson.txt:2096
 msgid "Flamer Hardpoint"
-msgstr ""
+msgstr "מתלה חימוש להביור"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
 #: data/base/messages/strings/names.txt:330
 #: po/custom/fromJson.txt:190
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "תוצרת סייבורג מתקדמת"
 
 #: data/base/messages/strings/names.txt:331
 msgid "Advanced Cyborg Production Mk2"
-msgstr ""
+msgstr "תוצרת סייבורג מתקדמת סימן 2"
 
 #: data/base/messages/strings/names.txt:332
 msgid "Advanced Cyborg Production Mk3"
@@ -1505,194 +1505,194 @@ msgstr "תיקון אוטומטי לרכב סימן 3"
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
-msgstr ""
+msgstr "צריח תיקון נע כבד"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/resstrings.txt:450
 #: data/mp/messages/strings/names.txt:471
 #: data/mp/messages/strings/resstrings.txt:217
 msgid "Mobile Repair Upgrade"
-msgstr ""
+msgstr "שדרוג תיקון נע"
 
 #: data/base/messages/strings/names.txt:370
 #: data/mp/messages/strings/names.txt:472
 msgid "Mobile Repair Upgrade Mk2"
-msgstr ""
+msgstr "שדרוג תיקון נע סימן 2"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade"
-msgstr ""
+msgstr "שדרוג חיישן סוללת נגד"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "שדרוג חיישן סוללת נגד סימן 2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:477
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "שדרוג חיישן סוללת נגד סימן 3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade"
-msgstr ""
+msgstr "שדרוג סוללת נגד למטוסי VTOL"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "שדרוג סוללת נגד למטוסי VTOL סימן 2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "שדרוג סוללת נגד למטוסי VTOL סימן 3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:483
 msgid "VTOL Strike Upgrade"
-msgstr ""
+msgstr "שדרוג פגיעת מטוס VTOL"
 
 #: data/base/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:484
 msgid "VTOL Strike Upgrade Mk2"
-msgstr ""
+msgstr "שדרוג פגיעת מטוס VTOL סימן 2"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:485
 msgid "VTOL Strike Upgrade Mk3"
-msgstr ""
+msgstr "שדרוג פגיעת מטוס VTOL סימן 3"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:487
 msgid "Improved Scrambler"
-msgstr ""
+msgstr "משבש משופר"
 
 #: data/base/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:488
 msgid "Scrambler Turret Mk2"
-msgstr ""
+msgstr "צריח משבש סימן 2"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:495
 msgid "Sensor Lock"
-msgstr ""
+msgstr "נעילת חיישן"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:529
 msgid "Improved Laser Focusing Mk2"
-msgstr ""
+msgstr "מיקוד לייזר משופר סימן 2"
 
 #: data/base/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:530
 msgid "Improved Laser Focusing Mk3"
-msgstr ""
+msgstr "מיקוד לייזר משופר סימן 3"
 
 #: data/base/messages/strings/names.txt:429
 #: data/mp/messages/strings/names.txt:542
 msgid "HEAP Missile Warhead"
-msgstr ""
+msgstr "ראש נפץ HEAP לטיל"
 
 #: data/base/messages/strings/names.txt:430
 #: data/mp/messages/strings/names.txt:543
 msgid "HEAP Missile Warhead Mk2"
-msgstr ""
+msgstr "ראש נפץ HEAP לטיל סימן 2"
 
 #: data/base/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:544
 msgid "HEAP Missile Warhead Mk3"
-msgstr ""
+msgstr "ראש נפץ HEAP לטיל סימן 3"
 
 #: data/base/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:545
 msgid "Improved Missile Loading System"
-msgstr ""
+msgstr "מערכת חימוש טילים משופרת"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
 msgid "Rapid Fire Mini-Rockets"
-msgstr ""
+msgstr "מיני-רקטות צרור יריות"
 
 #: data/base/messages/strings/names.txt:441
 #: data/mp/messages/strings/names.txt:554
 msgid "Rapid Fire Mini-Rockets Mk2"
-msgstr ""
+msgstr "מיני-רקטות צרור יריות סימן 2"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:555
 msgid "Rapid Fire Mini-Rockets Mk3"
-msgstr ""
+msgstr "מיני-רקטות צרור יריות סימן 3"
 
 #: data/base/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:579
 msgid "Scavenger Flame Tower End"
-msgstr ""
+msgstr "סוף מגדל להבת אוכלי נבלות"
 
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:590
 msgid "Bridge"
-msgstr ""
+msgstr "גשר"
 
 #: data/base/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:597
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "טנק הרוס"
 
 #: data/base/messages/strings/names.txt:487
 #: data/base/messages/strings/names.txt:503
 #: data/mp/messages/strings/names.txt:615
 #: data/mp/messages/strings/names.txt:631
 msgid "Cyborg Laboratory"
-msgstr ""
+msgstr "מעבדת סייבורג"
 
 #: data/base/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:616
 msgid "Advanced Warfare Laboratory"
-msgstr ""
+msgstr "מעבדת לוחמה מתקדמת"
 
 #: data/base/messages/strings/names.txt:489
 #: data/base/messages/strings/names.txt:505
 #: data/mp/messages/strings/names.txt:617
 #: data/mp/messages/strings/names.txt:633
 msgid "Engineering Laboratory"
-msgstr ""
+msgstr "מעבדת הנדסה"
 
 #: data/base/messages/strings/names.txt:490
 #: data/base/messages/strings/names.txt:506
 #: data/mp/messages/strings/names.txt:618
 #: data/mp/messages/strings/names.txt:634
 msgid "Robotics Laboratory"
-msgstr ""
+msgstr "מעבדת רובוטיקה"
 
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:619
 msgid "Laser Optics Laboratory"
-msgstr ""
+msgstr "מעבדת אופטיקת לייזר"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:620
 #: data/mp/messages/strings/names.txt:632
 msgid "Electronics Laboratory"
-msgstr ""
+msgstr "מעבדת אלקטרוניקה"
 
 #: data/base/messages/strings/names.txt:493
 #: data/base/messages/strings/names.txt:502
 #: data/mp/messages/strings/names.txt:621
 #: data/mp/messages/strings/names.txt:630
 msgid "Chemical Laboratory"
-msgstr ""
+msgstr "מעבדה כימית"
 
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:629
 msgid "Advanced Warfare"
-msgstr ""
+msgstr "לוחמה מתקדמת"
 
 #: data/base/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:705
 msgid "Bunker Blaster"
-msgstr ""
+msgstr "מפוצץ בונקר"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[0]
@@ -2349,7 +2349,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:162
 #: po/custom/fromJson.txt:4734
 msgid "Reinforced concrete tank traps"
-msgstr ""
+msgstr "מלכודות טנק מבטון מחוסן"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[2]
@@ -2358,7 +2358,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:163
 #: po/custom/fromJson.txt:4507
 msgid "Prevents enemy movement"
-msgstr ""
+msgstr "מונע תנועת אויב"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[0]
@@ -2369,7 +2369,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:166
 #: po/custom/fromJson.txt:4750
 msgid "Repair Facility Improved"
-msgstr ""
+msgstr "מפעל תיקון שופר"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RFU4.text[1]
@@ -2378,7 +2378,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:167
 #: po/custom/fromJson.txt:4200
 msgid "New robotic repair techniques"
-msgstr ""
+msgstr "טכניקות תיקון רובוטי חדשות"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[2]
@@ -2388,7 +2388,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:168
 #: po/custom/fromJson.txt:3308
 msgid "Increases Repair Speed"
-msgstr ""
+msgstr "מגדיל מהירות תיקון"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[3]
@@ -2399,7 +2399,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:169
 #: po/custom/fromJson.txt:405
 msgid "All repair facilities upgraded automatically"
-msgstr ""
+msgstr "כל מפעלי התיקון שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[0]
@@ -2412,7 +2412,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:176
 #: po/custom/fromJson.txt:1668
 msgid "Cyborg Production Improved"
-msgstr ""
+msgstr "ייצור סייבורג שופר"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FCY4.text[1]
@@ -2421,7 +2421,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:172
 #: po/custom/fromJson.txt:4885
 msgid "Robotic Cyborg Production"
-msgstr ""
+msgstr "ייצור סייבורג רובוטי"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[2]
@@ -2434,7 +2434,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:178
 #: po/custom/fromJson.txt:3193
 msgid "Increases Cyborg factory output"
-msgstr ""
+msgstr "מגדיל תפוקה למפעל סייבורג"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[3]
@@ -2447,12 +2447,12 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:311
 msgid "All Cyborg factories upgraded automatically"
-msgstr ""
+msgstr "כל מפעלי הסייבורג שודרגו אוטומטית"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
 msgid "Self-Replicating Cyborg Production"
-msgstr ""
+msgstr "ייצור סייבורג משתכפל"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[0]
@@ -2464,7 +2464,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:186
 #: po/custom/fromJson.txt:5856
 msgid "Vehicle Production Improved"
-msgstr ""
+msgstr "ייצור רכב שופר"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[1]
@@ -2473,7 +2473,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:182
 #: po/custom/fromJson.txt:4204
 msgid "New Robotic Techniques improve factory production"
-msgstr ""
+msgstr "טכניקות רובוטיות חדשות משפרות את תוצרת המפעל"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[2]
@@ -2481,7 +2481,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:183
 #: po/custom/fromJson.txt:3206
 msgid "Increases factory production rate"
-msgstr ""
+msgstr "מגדיל שיעור ייצור למפעל"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[3]
@@ -2493,12 +2493,12 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:440
 msgid "All vehicle factories upgraded automatically"
-msgstr ""
+msgstr "כל מפעלי הרכב שודרגו אוטומטית"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
 msgid "Self-Replicating Factory Production"
-msgstr ""
+msgstr "ייצור מפעל משתכפל"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[2]
@@ -2507,7 +2507,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:188
 #: po/custom/fromJson.txt:3203
 msgid "Increases factory output"
-msgstr ""
+msgstr "מגדיל תפוקת מפעל"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[0]
@@ -2518,7 +2518,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:191
 #: po/custom/fromJson.txt:4829
 msgid "Research Improved"
-msgstr ""
+msgstr "מחקר שופר"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RU4.text[1]
@@ -2529,7 +2529,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:1761
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr ""
+msgstr "ניתוח מידע קשר סינפטי ייעודי"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[2]
@@ -2540,7 +2540,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:193
 #: po/custom/fromJson.txt:3314
 msgid "Increases research speed"
-msgstr ""
+msgstr "מגדיל מהירות מחקר"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[3]
@@ -2551,7 +2551,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:194
 #: po/custom/fromJson.txt:411
 msgid "All research facilities upgraded automatically"
-msgstr ""
+msgstr "כל מפעלי המחקר שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[0]
@@ -2562,7 +2562,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:196
 #: po/custom/fromJson.txt:3199
 msgid "Increases Damage Resistance"
-msgstr ""
+msgstr "מגדיל חסינות נזק"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
@@ -2573,7 +2573,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:2320
 msgid "Hardened Base Structure Materials"
-msgstr ""
+msgstr "חומרים מוקשים למבנה הבסיס"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[3]
@@ -2584,7 +2584,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:287
 msgid "All base structures upgraded automatically"
-msgstr ""
+msgstr "כל מבני הבסיס שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[0]
@@ -2595,7 +2595,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:201
 #: po/custom/fromJson.txt:4517
 msgid "Production Improved"
-msgstr ""
+msgstr "ייצור שופר"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[1]
@@ -2604,7 +2604,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:202
 #: po/custom/fromJson.txt:4919
 msgid "Robotic VTOL Production"
-msgstr ""
+msgstr "ייצור מטוסי VTOL רובוטיים"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[2]
@@ -2615,7 +2615,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:203
 #: po/custom/fromJson.txt:3337
 msgid "Increases VTOL factory output"
-msgstr ""
+msgstr "מגדיל תפוקה למפעל מטוסי VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[3]
@@ -2626,7 +2626,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:204
 #: po/custom/fromJson.txt:458
 msgid "All VTOL factories upgraded automatically"
-msgstr ""
+msgstr "כל מפעלי מטוסי ה-VTOL שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[0]
@@ -2637,7 +2637,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:206
 #: po/custom/fromJson.txt:6127
 msgid "VTOL Rearming Times Reduced"
-msgstr ""
+msgstr "זמן חימוש למטוסי VTOL הוקטן"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
@@ -2648,7 +2648,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:981
 msgid "Automated VTOL Rearming"
-msgstr ""
+msgstr "חימוש מחדש אוטומטי למטוסי VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -2657,7 +2657,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:208
 #: po/custom/fromJson.txt:4712
 msgid "Reduces rearming time"
-msgstr ""
+msgstr "מקטין זמן חימוש מחדש"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[3]
@@ -2668,7 +2668,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:399
 msgid "All rearming pads upgraded automatically"
-msgstr ""
+msgstr "כל משטחי החימוש שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
@@ -2681,7 +2681,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:226
 #: po/custom/fromJson.txt:4248
 msgid "New Systems Turret Available"
-msgstr ""
+msgstr "צריח מערכות חדש זמין"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_REPTUHVY.text[1]
@@ -2689,7 +2689,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:212
 #: po/custom/fromJson.txt:2695
 msgid "Heavy repair unit"
-msgstr ""
+msgstr "יחידת תיקון כבד"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[2]
@@ -2699,7 +2699,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:996
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "מתקן אוטומטית יחידות פגועות"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
@@ -2709,22 +2709,22 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:4360
 msgid "Or damaged units may be selected as target"
-msgstr ""
+msgstr "או שיחידות פגועות יכולות להיבחר כמטרות"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Research Breakthrough Improves Repair Speeds"
-msgstr ""
+msgstr "פריצת דרך במחקר משפרת את מהירויות התיקון"
 
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:218
 msgid "Increases repair speed"
-msgstr ""
+msgstr "משפר מהירות תיקון"
 
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
 msgid "All mobile repair units upgraded automatically"
-msgstr ""
+msgstr "כל יחידות התיקון הנע שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[0]
@@ -2733,7 +2733,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:221
 #: po/custom/fromJson.txt:3076
 msgid "Improved Sensor Tower Available"
-msgstr ""
+msgstr "מגדל חיישן משופר זמין"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[1]
@@ -2742,7 +2742,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:222
 #: po/custom/fromJson.txt:4086
 msgid "New construction techniques improve tower"
-msgstr ""
+msgstr "טכניקות בנייה חדשות משפרות את המגדל"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[2]
@@ -2751,7 +2751,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:223
 #: po/custom/fromJson.txt:4796
 msgid "Replaces existing sensor tower"
-msgstr ""
+msgstr "מחליף את מגדל החיישן הקיים"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[3]
@@ -2762,7 +2762,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:224
 #: po/custom/fromJson.txt:3706
 msgid "May be assigned as spotter for indirect fire weapons"
-msgstr ""
+msgstr "רשאי להיות מוקצה כתצפיתן עבור נשקי אש עקיפה"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[1]
@@ -2771,7 +2771,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:227
 #: po/custom/fromJson.txt:5990
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr ""
+msgstr "צריח סוללת נגד למטוסי VTOL מזהה סוללות אש עקיפה עוינות"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[2]
@@ -2782,7 +2782,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:228
 #: po/custom/fromJson.txt:4376
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr ""
+msgstr "הוראות הקצו מטוסי VTOL לתקוף את סוללות האויב"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[3]
@@ -2793,7 +2793,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:229
 #: po/custom/fromJson.txt:6181
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr ""
+msgstr "מטוסי VTOL תוקפים עד שסוללת האויב מדוכאת"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[0]
@@ -2804,7 +2804,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:231
 #: po/custom/fromJson.txt:5968
 msgid "VTOL CB Improved"
-msgstr ""
+msgstr "סוללות נגד למטוסי VTOL שופרו"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[1]
@@ -2815,7 +2815,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:232
 #: po/custom/fromJson.txt:4111
 msgid "New fire detection systems"
-msgstr ""
+msgstr "מערכות זיהוי אש חדשות"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[2]
@@ -2826,7 +2826,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:233
 #: po/custom/fromJson.txt:1956
 msgid "Extends VTOL CB Range"
-msgstr ""
+msgstr "מגדיל את טווח סוללות הנגד למטוסי VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[3]
@@ -2837,7 +2837,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:234
 #: po/custom/fromJson.txt:452
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr ""
+msgstr "כל חיישני סוללת נגד למטוסי VTOL שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[0]
@@ -2848,7 +2848,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:236
 #: po/custom/fromJson.txt:6137
 msgid "VTOL Strike Improved"
-msgstr ""
+msgstr "תקיפת מטוסי VTOL שופרה"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[1]
@@ -2857,7 +2857,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:237
 #: po/custom/fromJson.txt:4252
 msgid "New target recognition systems"
-msgstr ""
+msgstr "מערכות זיהוי מטרה חדשות"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[2]
@@ -2868,7 +2868,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:238
 #: po/custom/fromJson.txt:1962
 msgid "Extends VTOL Strike Range"
-msgstr ""
+msgstr "מגדיל את טווח התקיפות למטוסי VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[3]
@@ -2879,27 +2879,27 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:464
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr ""
+msgstr "כל חיישני התקיפה למטוסי VTOL שודרגו אוטומטית"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
 msgid "Scrambler Improved"
-msgstr ""
+msgstr "משבש שופר"
 
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
 msgid "Improvement in synaptic link technology"
-msgstr ""
+msgstr "שיפור בטכנולוגיית הקשר הסינפטי"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
 msgid "Increases scrambler rate"
-msgstr ""
+msgstr "מגדיל את קצב המשבש"
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr ""
+msgstr "כל המשבשים שודרגו אוטומטית"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[0]
