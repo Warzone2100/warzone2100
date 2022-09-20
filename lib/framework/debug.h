@@ -31,18 +31,15 @@
 # error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#include "wzglobal.h"
-
-#if defined(WZ_OS_WIN)
+#if defined(_WIN32)
 #include <assert.h>
-#endif
-#if !defined(WZ_OS_WIN)
+#else
 #include <signal.h>
 #endif
 #include "macros.h"
 #include "types.h"
 
-#if defined(WZ_CC_MINGW)
+#if defined(__MINGW32__) || defined(__MINGW64__)
 #include <cstdio>		// For __MINGW_PRINTF_FORMAT define
 #endif
 
@@ -62,10 +59,28 @@ extern bool assertEnabled;
 
 
 /* Do the correct assert call for each compiler */
-#if defined(WZ_OS_WIN)
+#if defined(_WIN32)
 #define wz_assert(expr) assert(expr)
 #else
 #define wz_assert(expr) raise(SIGTRAP)
+#endif
+
+
+/*! \def WZ_DEBUG_DECL_FORMAT
+ * GCC: "The format attribute specifies that a function takes printf, scanf, strftime or strfmon
+ *       style arguments which should be type-checked against a format string."
+ */
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+#  define WZ_DEBUG_DECL_FORMAT(archetype, string_index, first_to_check) \
+	__attribute__((__format__(archetype, string_index, first_to_check)))
+#else
+#  define WZ_DEBUG_DECL_FORMAT(archetype, string_index, first_to_check)
+#endif
+
+#ifdef HAVE___BUILTIN_EXPECT
+# define debug_likely(expr)	__builtin_expect(!!(expr),1)
+#else
+# define debug_likely(expr)	(expr)
 #endif
 
 
@@ -96,7 +111,7 @@ extern bool assertEnabled;
  */
 #define ASSERT_HELPER(expr, location_description, function, ...) \
 	( \
-	  likely(expr) ? /* if (expr) */ \
+	  debug_likely(expr) ? /* if (expr) */ \
 	  (void)0 \
 	  : /* else */\
 	  ASSERT_FAILURE(expr, #expr, location_description, function, __VA_ARGS__) \
@@ -118,7 +133,7 @@ extern bool assertEnabled;
  * and also provides asserts and debug output for debugging.
  */
 #define ASSERT_OR_RETURN(retval, expr, ...) \
-	do { bool _wzeval = likely(expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
+	do { bool _wzeval = debug_likely(expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
 
 #define ASSERT_NOT_NULLPTR_OR_RETURN(retval, ptrexpr) \
 	ASSERT_OR_RETURN(retval, (ptrexpr) != nullptr, "%s should not be nullptr", #ptrexpr)
@@ -249,7 +264,7 @@ void debug_callback_file_exit(void **data);
 
 void debug_callback_stderr(void **data, const char *outputBuffer, code_part part);
 
-#if defined WIN32 && defined DEBUG
+#if defined(_WIN32) && defined(DEBUG)
 void debug_callback_win32debug(void **data, const char *outputBuffer, code_part part);
 #endif
 
@@ -267,10 +282,10 @@ bool debug_enable_switch(const char *str);
  * Only outputs if debugging of part was formerly enabled with debug_enable_switch.
  */
 #define debug(part, ...) do { if (enabled_debug[part]) _debug(__LINE__, part, __FUNCTION__, __VA_ARGS__); } while(0)
-#if defined(WZ_CC_MINGW)
-void _debug(int line, code_part part, const char *function, const char *str, ...) WZ_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 4, 5);
+#if defined(__MINGW32__) || defined(__MINGW64__)
+void _debug(int line, code_part part, const char *function, const char *str, ...) WZ_DEBUG_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 4, 5);
 #else
-void _debug(int line, code_part part, const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 4, 5);
+void _debug(int line, code_part part, const char *function, const char *str, ...) WZ_DEBUG_DECL_FORMAT(printf, 4, 5);
 #endif
 
 #include <string>
@@ -290,7 +305,7 @@ extern UDWORD traceID;
  * @see debug
  */
 #define objTrace(id, ...) do { if (id == traceID) _realObjTrace(id, __FUNCTION__, __VA_ARGS__); } while(0)
-void _realObjTrace(int id, const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 3, 4);
+void _realObjTrace(int id, const char *function, const char *str, ...) WZ_DEBUG_DECL_FORMAT(printf, 3, 4);
 static inline void objTraceEnable(UDWORD id)
 {
 	traceID = id;
@@ -301,7 +316,7 @@ static inline void objTraceDisable()
 }
 
 // MSVC specific rotuines to set/clear allocation tracking
-#if defined(WZ_CC_MSVC) && defined(DEBUG)
+#if defined(_MSC_VER) && defined(DEBUG)
 void debug_MEMCHKOFF();
 void debug_MEMCHKON();
 void debug_MEMSTATS();
