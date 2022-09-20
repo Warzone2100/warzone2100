@@ -618,7 +618,7 @@
 #endif
 
 
-#if !defined(WZ_C99) && !defined(va_copy)
+#if !defined(WZ_C99) && !defined(va_copy) && (!defined(_MSC_VER) || (_MSC_VER < 1900))
 /**
  * Implements the interface of the C99 macro va_copy such that we can use it on
  * non-C99 systems as well.
