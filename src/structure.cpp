@@ -2869,6 +2869,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psRepairFac->droidQueue = 0;
 				for (psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
+					// cannot repair VTOL mid-air
+					if (isFlying(psDroid)) continue;
 					BASE_OBJECT *const psTarget = orderStateObj(psDroid, DORDER_RTR);
 
 					// Highest priority:
@@ -2969,7 +2971,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						{
 							for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 							{
-								if (psDroid->body < psDroid->originalBody)
+								if (psDroid->body < psDroid->originalBody && !isFlying(psDroid))
 								{
 									xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 									ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
