@@ -1562,6 +1562,15 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 		vk::throwResultException( result, "vmaCreateImage" );
 	}
 
+	if (root.debugUtilsExtEnabled)
+	{
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eImage);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImage>(object)));
+		objectNameInfo.setPObjectName(filename.c_str());
+		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
+	}
+
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
 		.setViewType(vk::ImageViewType::e2D)
@@ -2930,6 +2939,10 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	// NOTE: From this point on, vkDynLoader *must* be initialized!
 	ASSERT(vkDynLoader.vkGetInstanceProcAddr != nullptr, "vkDynLoader does not appear to be initialized");
+	if (debugUtilsExtEnabled)
+	{
+		ASSERT(vkDynLoader.vkSetDebugUtilsObjectNameEXT != nullptr, "VK_EXT_debug_utils is enabled, but vkSetDebugUtilsObjectNameEXT is null??");
+	}
 
 	debugInfo.Output_PhysicalDevices(inst, appInfo, instanceExtensions, vkDynLoader);
 
