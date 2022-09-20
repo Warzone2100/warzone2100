@@ -308,25 +308,21 @@ Vector2i getPlayerStartPosition(int player)
 	return positions[player];
 }
 
-static nlohmann::json derrickPositions;
 nlohmann::json scripting_engine::constructDerrickPositions()
 {
 	// Static map knowledge about start positions
 	//== * ```derrickPositions``` A set of derrick starting positions on the current map. Each item in the set is an
 	//== object containing the x and y variables for a derrick.
-	if (derrickPositions.size() == 0)
+	nlohmann::json derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
+	for (uint16_t pos: derricks)
 	{
-		derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
-		for (uint16_t pos: derricks)
-		{
-			nlohmann::json vector = nlohmann::json::object();
-			const auto mx = (pos & static_cast<uint16_t>(0xff00)) >> 8;
-			const auto my = pos & (static_cast<uint16_t>(0x00ff));
-			vector["x"] = mx;
-			vector["y"] = my;
-			vector["type"] = SCRIPT_POSITION;
-			derrickPositions.push_back(vector);
-		}
+		nlohmann::json vector = nlohmann::json::object();
+		const auto mx = (pos & static_cast<uint16_t>(0xff00)) >> 8;
+		const auto my = pos & (static_cast<uint16_t>(0x00ff));
+		vector["x"] = mx;
+		vector["y"] = my;
+		vector["type"] = SCRIPT_POSITION;
+		derrickPositions.push_back(std::move(vector));
 	}
 	return derrickPositions;
 }
