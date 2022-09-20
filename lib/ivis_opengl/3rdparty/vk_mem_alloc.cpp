@@ -17,6 +17,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+/* Allow frame header files to be singly included */
+#define FRAME_LIB_INCLUDE
+#include "lib/framework/debug.h"
+
 #if defined(__clang__)
 # pragma clang diagnostic push
 # pragma clang diagnostic ignored "-Wunused-variable"
@@ -53,7 +57,7 @@
 #define VMA_IMPLEMENTATION
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 0
-#define VMA_ASSERT(expr) assert(expr)
+#define VMA_ASSERT(expr) ASSERT(expr, "VMA_ASSERT failed")
 #include "vk_mem_alloc.h"
 
 #if defined(__clang__)
