@@ -282,6 +282,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# C4800: 'type' : forcing value to bool 'true' or 'false' (performance warning)
 		# This warning is no longer generated in Visual Studio 2017+
 		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4800")
+		# C4127: conditional expression is constant
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4127")
 
 		# Disable some warnings for WZ (FIXME)
 		# C4100: unreferenced formal parameter
@@ -294,6 +296,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4245")
 		# C4706: assignment within conditional expression
 		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4706")
+		# C4018: '>' : signed/unsigned mismatch
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4018")
+		# C4389: '==' : signed/unsigned mismatch
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4389")
 
 	elseif(CMAKE_GENERATOR STREQUAL "Xcode")
 		# Set Xcode generator project-level configuration + warning flags
