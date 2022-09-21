@@ -107,7 +107,7 @@ static bool addHostQuitOptions()
 	inGameOp->id = INTINGAMEOP;
 	inGameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
-	}));
+		}));
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
@@ -119,7 +119,7 @@ static bool addHostQuitOptions()
 		WIDGET * inGameOp = widgGetFromID(psWScreen, INTINGAMEOP);
 		assert(inGameOp != nullptr);
 		psWidget->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
-	}));
+		}));
 
 	auto label = std::make_shared<W_LABEL>();
 	inGamePopup->attach(label);
@@ -148,19 +148,19 @@ static bool addAudioOptions()
 	// voice vol
 	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
-	            AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
+		AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
 	row++;
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("FX Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
-	            AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
+		AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
 	row++;
 
 	// music vol
 	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
-	            AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
+		AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
 	row++;
 
 	// Subtitles
@@ -173,24 +173,24 @@ static bool addAudioOptions()
 	if (tuiTargetOrigin)
 	{
 		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W,
-		                _("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
+			_("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
 	}
 	else
 	{
 		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W,
-		                _("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
+			_("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
 	}
 	row++;
 #endif
 
-	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_AUDIO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
 	row++;
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
 	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
-	});
+		});
 
 	return true;
 }
@@ -274,7 +274,7 @@ static bool _intAddInGameOptions()
 	int lines = row;
 	ingameOp->setCalcLayout([lines](WIDGET *psWidget){
 		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(lines), INTINGAMEOP_W, INTINGAMEOPAUTO_H(lines));
-	});
+		});
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.
@@ -326,7 +326,7 @@ static bool startInGameConfirmQuit()
 
 	ingameOp->setCalcLayout([row](WIDGET* psWidget) {
 		psWidget->setGeometry(INTINGAMEOP4_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP4_W, INTINGAMEOPAUTO_H(row));
-	});
+		});
 
 	return true;
 }
@@ -335,15 +335,15 @@ static bool runInGameConfirmQuit(UDWORD id)
 {
 	switch (id)
 	{
-		case INTINGAMEOP_QUIT:
-			return true;
+	case INTINGAMEOP_QUIT:
+		return true;
 
-		case INTINGAMEOP_GO_BACK:
-			intReopenMenuWithoutUnPausing();
-			break;
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 
 	return false;
@@ -380,7 +380,7 @@ void intAddInGamePopup()
 	ingamePopup->id = INTINGAMEPOPUP;
 	ingamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
-	}));
+		}));
 
 	// add the text "buttons" now
 	W_BUTINIT sButInit;
@@ -543,24 +543,6 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	return true;
 }
 
-void intReopenMenuWithoutUnPausing()
-{
-	isGraphicsOptionsUp = false;
-	isVideoOptionsUp = false;
-	isMouseOptionsUp = false;
-	isKeyMapEditorUp = false;
-	isMusicManagerUp = false;
-	isInGameConfirmQuitUp = false;
-
-	if (NetPlay.isHost)
-	{
-		widgDelete(psWScreen, INTINGAMEPOPUP);
-	}
-	widgDelete(psWScreen, INTINGAMEOP);
-	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
-	intAddInGameOptions();
-}
-
 static bool startIGOptionsMenu()
 {
 	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
@@ -606,9 +588,33 @@ static bool startIGOptionsMenu()
 
 	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
-	});
+		});
 
 	return true;
+}
+
+void intReopenMenuWithoutUnPausing(bool toOptionsMenu)
+{
+	if (toOptionsMenu)
+	{
+		startIGOptionsMenu();
+		return;
+	}
+
+	isGraphicsOptionsUp = false;
+	isVideoOptionsUp = false;
+	isMouseOptionsUp = false;
+	isKeyMapEditorUp = false;
+	isMusicManagerUp = false;
+	isInGameConfirmQuitUp = false;
+
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+	widgDelete(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
+	intAddInGameOptions();
 }
 
 // Graphics Options
@@ -660,7 +666,7 @@ static bool startIGGraphicsOptionsMenu()
 
 	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
-	});
+		});
 
 	return true;
 }
@@ -706,7 +712,7 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing();
+		intReopenMenuWithoutUnPausing(true);
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -767,7 +773,7 @@ static bool startIGVideoOptionsMenu()
 
 	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
-	});
+		});
 
 	refreshCurrentIGVideoOptionsValues();
 
@@ -795,7 +801,7 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing();
+		intReopenMenuWithoutUnPausing(true);
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -855,7 +861,7 @@ static bool startIGMouseOptionsMenu()
 
 	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
-	});
+		});
 
 	return true;
 }
@@ -896,7 +902,7 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing();
+		intReopenMenuWithoutUnPausing(true);
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -964,7 +970,7 @@ void intProcessInGameOptions(UDWORD id)
 
 	switch (id)
 	{
-	// NORMAL KEYS
+		// NORMAL KEYS
 	case INTINGAMEOP_HOSTQUIT:				//quit was pressed
 		addHostQuitOptions();
 		break;
@@ -1013,17 +1019,20 @@ void intProcessInGameOptions(UDWORD id)
 	case INTINGAMEOP_GO_BACK:
 		intReopenMenuWithoutUnPausing();
 		break;
+	case INTINGAMEOP_AUDIO_BACK:
+		intReopenMenuWithoutUnPausing(true);
+		break;
 
 
-//	case INTINGAMEOP_REPLAY:
-//		intCloseInGameOptions(true, false);
-//		if(0!=strcmp(getLevelName(),"CAM_1A"))
-//		{
-//			loopMissionState = LMS_LOADGAME;
-//			strcpy(saveGameName, "replay/replay.gam");
-//			addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-//		}
-//		break;
+		//	case INTINGAMEOP_REPLAY:
+		//		intCloseInGameOptions(true, false);
+		//		if(0!=strcmp(getLevelName(),"CAM_1A"))
+		//		{
+		//			loopMissionState = LMS_LOADGAME;
+		//			strcpy(saveGameName, "replay/replay.gam");
+		//			addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		//		}
+		//		break;
 	case INTINGAMEOP_LOAD_MISSION:
 		intCloseInGameOptions(true, false);
 		addLoadSave(LOAD_INGAME_MISSION, _("Load Campaign Saved Game"));	// change mode when loadsave returns
@@ -1040,7 +1049,7 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(true, false);
 		addLoadSave(SAVE_INGAME_SKIRMISH, _("Save Skirmish Game"));
 		break;
-	// GAME OPTIONS KEYS
+		// GAME OPTIONS KEYS
 	case INTINGAMEOP_FXVOL:
 	case INTINGAMEOP_3DFXVOL:
 	case INTINGAMEOP_CDVOL:
