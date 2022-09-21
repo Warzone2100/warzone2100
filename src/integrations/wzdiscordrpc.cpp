@@ -653,6 +653,11 @@ public:
 		updateDiscordPresence();
 	}
 
+	virtual void gameExiting() override
+	{
+		Discord_ClearPresence();
+	}
+
 public:
 
 	void processQueuedPresenceUpdate();
