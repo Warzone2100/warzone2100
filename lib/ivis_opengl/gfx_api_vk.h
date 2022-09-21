@@ -373,6 +373,10 @@ struct VkTexture final : public gfx_api::texture
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
 	size_t mipmap_levels = 0;
 
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+
 
 	static size_t format_size(const gfx_api::pixel_format& format);
 

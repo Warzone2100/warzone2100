@@ -140,6 +140,10 @@ const std::vector<std::pair<_vkl_env_text_type, _vkl_env_text_type>> vulkan_impl
 	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1")}
 };
 
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+static std::unordered_set<const VkTexture*> debugLiveTextures;
+#endif
+
 
 // MARK: General helper functions
 
@@ -1541,6 +1545,10 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
 	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mipmap_count (%zu) exceeds uint32_t max", mipmap_count);
 
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugName = filename;
+#endif
+
 	vk::Format internal_vk_format = root.get_format(_internal_format);
 
 	auto imageCreateInfo = vk::ImageCreateInfo()
@@ -1582,6 +1590,10 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_count), 0, 1));
 
 	view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, root.vkDynLoader);
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.insert(this);
+#endif
 }
 
 VkTexture::~VkTexture()
@@ -1599,6 +1611,10 @@ VkTexture::~VkTexture()
 		// ~VkTexture called too late! - probably after gfx_api::context::shutdown()
 		view.release(); // Can't properly destroy this VK object now, but call release() to ensure that vk::Device::destroy isn't called after the device is no longer available
 	}
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.erase(this);
+#endif
 }
 
 void VkTexture::bind() {}
@@ -2206,6 +2222,18 @@ void VkRoot::shutdown()
 		inst.destroy(nullptr, vkDynLoader);
 		inst = vk::Instance();
 	}
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	if (!debugLiveTextures.empty())
+	{
+		// Some textures were not properly freed before Vulkan context shutdown
+		for (auto texture : debugLiveTextures)
+		{
+			debug(LOG_ERROR, "Texture resource not cleaned up: %p (name: %s)", (const void*)texture, texture->debugName.c_str());
+		}
+		ASSERT(debugLiveTextures.empty(), "There are %zu textures that were not cleaned up.", debugLiveTextures.size());
+	}
+#endif
 }
 
 void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
