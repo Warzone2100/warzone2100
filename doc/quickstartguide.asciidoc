@@ -11,7 +11,7 @@ Introduction
 This guide will help you get started playing Warzone 2100.
 
 The Warzone 2100 Project has its website at image:images/www.png[URL]
-http://wz2100.net.
+https://wz2100.net.
 
 If you want to talk to other Warzone 2100 players, visit the forum at
 image:images/www.png[URL] https://forums.wz2100.net 
@@ -20,11 +20,11 @@ You can also talk with us and other players on our official Discord server
 or IRC rooms here: image:images/www.png[URL] https://wz2100.net/webchat/
 
 If you're interested in developing Warzone 2100, the Project is always looking
-for help. Go to image:images/www.png[URL] http://developer.wz2100.net
+for help. Go to image:images/www.png[URL] https://github.com/Warzone2100/warzone2100
 
 If you want more information about Warzone 2100, including mod information,
 individual component statistics, and more, go to image:images/www.png[URL]
-http://guide.wz2100.net
+https://betaguide.wz2100.net
 
 Enjoy Warzone 2100!
 
