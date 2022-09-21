@@ -46,6 +46,8 @@ jobs:
             publish_artifact: true
       fail-fast: false
     name: '${{ matrix.name }}'
+    permissions:
+      contents: read
     runs-on: '${{ matrix.image }}'
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
@@ -191,7 +193,7 @@ jobs:
 
         echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
         exit 0
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: success() && (matrix.publish_artifact == true)
       with:
         name: "warzone2100_macOS_${{ matrix.artifact_suffix }}"
@@ -200,6 +202,8 @@ jobs:
 
   macos_universal_combine:
     name: 'Package Universal Binary'
+    permissions:
+      contents: write # Needed to upload to releases
     needs: macos-build
     runs-on: macos-latest
     steps:
@@ -223,7 +227,7 @@ jobs:
         
           echo "OUTPUT_DIR=output" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: ./dl-artifacts
       - name: Display structure of downloaded files
@@ -281,7 +285,7 @@ jobs:
 
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
           exit 0
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: "warzone2100_macOS_universal"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
@@ -339,7 +343,7 @@ jobs:
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
 
           exit 0
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: "warzone2100_macOS_universal_novideos"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
@@ -357,6 +361,8 @@ jobs:
 
   upload-debug-symbols:
     name: 'Upload Debug Symbols'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     # Run on push to master branch (development build), or tag release automation build
     if: (github.repository == 'Warzone2100/warzone2100') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
@@ -369,7 +375,7 @@ jobs:
         run: |
           mkdir dl-archive
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: 'warzone2100_macOS_universal_novideos'
           path: ./dl-archive
