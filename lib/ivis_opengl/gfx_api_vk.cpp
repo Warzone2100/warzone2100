@@ -1594,10 +1594,11 @@ VkTexture::~VkTexture()
 		frameResources.image_to_delete.emplace_back(std::move(object));
 		frameResources.vmamemory_to_free.push_back(allocation);
 	}
-//	else
-//	{
-//		// ~VkTexture called too late! - probably after gfx_api::context::shutdown()
-//	}
+	else
+	{
+		// ~VkTexture called too late! - probably after gfx_api::context::shutdown()
+		view.release(); // Can't properly destroy this VK object now, but call release() to ensure that vk::Device::destroy isn't called after the device is no longer available
+	}
 }
 
 void VkTexture::bind() {}
