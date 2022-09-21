@@ -185,6 +185,12 @@ public:
 		debug(LOG_ACTIVITY, "- loadedModsChanged: %s", modListToStr(loadedModHashes).c_str());
 	}
 
+	// game exit
+	virtual void gameExiting() override
+	{
+		debug(LOG_ACTIVITY, "- game exiting");
+	}
+
 private:
 	std::string modListToStr(const std::vector<Sha256>& modHashes) const
 	{
@@ -518,6 +524,8 @@ void ActivityManager::preSystemShutdown()
 		// quitGame was never generated - synthesize it
 		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
 	}
+
+	for (auto sink : activitySinks) { sink->gameExiting(); }
 }
 
 void ActivityManager::navigateToMenu(const std::string& menuName)

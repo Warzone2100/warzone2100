@@ -356,6 +356,12 @@ public:
 		}
 		crashHandlingProviderSetContext_Sentry("wz.mods", modsInfo);
 	}
+
+	// game exit
+	virtual void gameExiting() override
+	{
+		gameStateChange("/shutdown");
+	}
 };
 
 #endif // defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
