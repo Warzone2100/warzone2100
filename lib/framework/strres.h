@@ -23,6 +23,8 @@
 #ifndef _strres_h
 #define _strres_h
 
+#include "wzglobal.h"
+
 // Forward declaration to allow pointers to this type
 struct STR_RES;
 

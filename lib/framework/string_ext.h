@@ -21,6 +21,7 @@
 #define STRING_EXT_H
 
 #define FRAME_LIB_INCLUDE
+#include "wzglobal.h"
 #include "debug.h"
 #include <string.h>
 #include <stddef.h>

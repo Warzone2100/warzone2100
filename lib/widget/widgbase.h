@@ -413,13 +413,8 @@ public:
 	}
 
 private:
-#ifdef WZ_CXX11
 	W_SCREEN(W_SCREEN const &) = delete;
 	W_SCREEN &operator =(W_SCREEN const &) = delete;
-#else
-	W_SCREEN(W_SCREEN const &);  // Non-copyable.
-	W_SCREEN &operator =(W_SCREEN const &);  // Non-copyable.
-#endif
 };
 
 /* Context information to pass into the widget functions */

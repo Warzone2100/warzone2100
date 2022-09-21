@@ -1740,7 +1740,7 @@ int realmain(int argc, char *argv[])
 
 	debug_init();
 	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
-#if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
+#if defined(_WIN32) && defined(DEBUG_INSANE)
 	debug_register_callback(debug_callback_win32debug, NULL, NULL, NULL);
 #endif // WZ_OS_WIN && DEBUG_INSANE
 

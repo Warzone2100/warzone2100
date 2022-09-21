@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2019  Warzone 2100 Project
+	Copyright (C) 2017-2022  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -373,6 +373,10 @@ struct VkTexture final : public gfx_api::texture
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
 	size_t mipmap_levels = 0;
 
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+
 
 	static size_t format_size(const gfx_api::pixel_format& format);
 
@@ -472,6 +476,13 @@ struct VkRoot final : gfx_api::context
 	// default texture
 	VkTexture* pDefaultTexture = nullptr;
 
+	// Debug_Utils
+	PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessenger = nullptr;
+	PFN_vkDestroyDebugUtilsMessengerEXT DestroyDebugUtilsMessenger = nullptr;
+	VkDebugUtilsMessengerEXT debugUtilsCallback = 0;
+	VkDebugUtilsMessengerCreateInfoEXT instanceDebugUtilsCallbacksInfo = {};
+
+	// Debug_Report (old)
 	PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback = nullptr;
 	PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback = nullptr;
 	PFN_vkDebugReportMessageEXT dbgBreakCallback = nullptr;
@@ -480,7 +491,9 @@ struct VkRoot final : gfx_api::context
 	std::vector<std::pair<const gfxapi_PipelineCreateInfo, VkPSO *>> createdPipelines;
 	VkPSO* currentPSO = nullptr;
 
-	bool debugLayer = false;
+	bool validationLayer = false;
+	bool debugCallbacksEnabled = true;
+	bool debugUtilsExtEnabled = false;
 
 	const size_t maxErrorHandlingDepth = 10;
 	std::vector<vk::Result> errorHandlingDepth;
@@ -515,6 +528,8 @@ private:
 	bool getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	bool findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	bool createVulkanInstance(uint32_t apiVersion, const std::vector<const char*>& extensions, const std::vector<const char*>& layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	bool setupDebugUtilsCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	bool setupDebugReportCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	vk::PhysicalDevice pickPhysicalDevice();
 
 	bool createSurface();

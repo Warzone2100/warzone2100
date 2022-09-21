@@ -63,6 +63,9 @@ private:
 	size_t mip_count = 0;
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
 	bool gles = false;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
 
 	gl_texture();
 	virtual ~gl_texture();
