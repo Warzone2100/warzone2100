@@ -45,6 +45,8 @@ jobs:
       UseMultiToolTask: true
       EnforceProcessCountAcrossBuilds: true
     name: '${{ matrix.architecture }} [${{ matrix.compiler }}]'
+    permissions:
+      contents: write # Needed to upload to releases
     runs-on: windows-2019
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -660,6 +662,8 @@ jobs:
     env:
       WZ_TARGET_ARCH: ${{ matrix.architecture }}
     name: 'Upload Debug Symbols (${{ matrix.architecture }})'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     # Run on push to master branch (development build), or tag release automation build
     if: (github.repository == 'Warzone2100/warzone2100') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
@@ -692,7 +696,7 @@ jobs:
           echo "::set-output name=ARCHIVEDIR::${OUTPUTDIR}"
       - name: Download Source Bundle
         continue-on-error: true
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_debug_sourcebundles'
           path: ./dl-sourcebundle
@@ -713,6 +717,8 @@ jobs:
           docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
   trigger-updates-json:
     name: 'Trigger Info Update'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: (github.repository == 'Warzone2100/warzone2100') && (github.ref == 'refs/heads/master')
     needs: windows-build
