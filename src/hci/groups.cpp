@@ -49,22 +49,27 @@ protected:
 		std::map<std::vector<uint32_t>, size_t> unitcounter;
 		size_t most_droids_of_same_type_in_group = 0;
 
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext) {
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+		{
 			// display whatever unit occurs the most in this group
-			if (psDroid->group == groupNumber) {
+			if (psDroid->group == groupNumber)
+			{
 				// find the identifier for this droid
 				std::vector<uint32_t> components = buildComponentsFromDroid(psDroid);
-				if (++unitcounter[components] > most_droids_of_same_type_in_group) {
+				if (++unitcounter[components] > most_droids_of_same_type_in_group)
+				{
 					most_droids_of_same_type_in_group = unitcounter[components];
 					displayDroid = psDroid;
 				}
 				numberInGroup++;
 			}
 		}
-		if (!numberInGroup) {
+		if (!numberInGroup)
+		{
 			groupCountLabel->setString("");
 			displayBlank(xOffset, yOffset);
-		} else {
+		} else
+		{
 			displayIMD(AtlasImage(), ImdObject::Droid(displayDroid), xOffset, yOffset);
 			groupCountLabel->setString(WzString::fromUtf8(astringf("%u", numberInGroup)));
 		}
@@ -104,7 +109,8 @@ void GroupsForum::initialize()
 	moveLayoutDown();
 	addTabList();
 	// create the 11 buttons for each group
-	for (size_t i = 1; i <= 10; i++) {
+	for (size_t i = 1; i <= 10; i++)
+	{
 		// check if the 10th group works
 		auto buttonHolder = std::make_shared<WIDGET>();
 		groupsList->addWidgetToLayout(buttonHolder);
