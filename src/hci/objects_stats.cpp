@@ -220,7 +220,8 @@ void ObjectsForm::initialize()
 {
 	// creating an obj stat form
 	GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
-	if (groupsForum) {
+	if (groupsForum)
+	{
 		groupsForum->moveLayoutUp();
 	}
 

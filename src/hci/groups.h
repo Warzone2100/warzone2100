@@ -10,11 +10,6 @@
 #include "lib/widget/label.h"
 #include "../selection.h"
 
-// class GroupController: public BaseObjectsController
-// {
-// 
-// }
-
 class GroupButton;
 
 class GroupsForum: public IntFormAnimated
