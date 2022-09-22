@@ -671,6 +671,8 @@ bool levReleaseMissionData()
 			return false;
 		}
 
+		resDoResLoadCallback();		// do callback.
+
 		// free up the old data
 		for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
 		{
@@ -704,11 +706,15 @@ bool levReleaseAll()
 	// release old data if any was loaded
 	if (psCurrLevel != nullptr)
 	{
+		resDoResLoadCallback();		// do callback.
+
 		if (!levReleaseMissionData())
 		{
 			debug(LOG_ERROR, "Failed to unload mission data");
 			return false;
 		}
+
+		resDoResLoadCallback();		// do callback.
 
 		// release the game data
 		if (psCurrLevel->psBaseData != nullptr)
