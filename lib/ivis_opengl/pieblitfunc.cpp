@@ -79,7 +79,11 @@ void GFX::loadTexture(const char *filename, gfx_api::texture_type textureType, i
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	const char *extension = strrchr(filename, '.'); // determine the filetype
-	if (!extension || strcmp(extension, ".png") != 0)
+	if (!extension || (strcmp(extension, ".png") != 0
+#if defined(BASIS_ENABLED)
+		&& strcmp(extension, ".ktx2") != 0
+#endif
+		))
 	{
 		debug(LOG_ERROR, "Bad image filename: %s", filename);
 		return;
