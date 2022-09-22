@@ -51,8 +51,6 @@ jobs:
         git commit -m "Update base translations" || { echo "::set-output name=PROCESS_PR::false" && exit 0; }
         echo "Pushing changes to update_base_translations branch"
         git push -f origin master:update_base_translations
-        echo "Fetching updated origin"
-        git fetch origin
         echo "::set-output name=PROCESS_PR::true"
     - name: Create Pull Request to update base files (if needed)
       if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
