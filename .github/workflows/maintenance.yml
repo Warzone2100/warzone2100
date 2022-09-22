@@ -56,5 +56,8 @@ jobs:
       if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
       id: cpr
       working-directory: '${{ github.workspace }}/master'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
       run: |
-        gh pr create --head "update_base_translations" --title "Update base translations" --body "Update base string / translation files in the `master` branch (Auto-generated)" --label "automated pr" || echo "Seems like PR already exists?"
+        gh pr create --head "update_base_translations" --title "Update base translations" --body "Update base string / translation files in the master branch (Auto-generated)" --label "automated pr" || echo "Seems like PR already exists?"
