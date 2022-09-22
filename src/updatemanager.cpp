@@ -661,6 +661,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 	std::vector<std::string> additionalUrls(updateDataUrls.begin() + 1, updateDataUrls.end());
 	pRequest->onSuccess = [additionalUrls, processDataFunc, outputPaths](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
 
+		std::string urlCopy = url;
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
 		{
@@ -679,8 +680,8 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 		}
 		catch (const std::exception& e) {
 			std::string errorStr = e.what();
-			wzAsyncExecOnMainThread([url, errorStr]{
-				debug(LOG_NET, "%s; %s", errorStr.c_str(), url.c_str());
+			wzAsyncExecOnMainThread([urlCopy, errorStr]{
+				debug(LOG_INFO, "Failed to verify signature: %s; %s", errorStr.c_str(), urlCopy.c_str());
 			});
 			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
 			return;
@@ -693,8 +694,8 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 		}
 		catch (const std::exception &e) {
 			std::string errorStr = e.what();
-			wzAsyncExecOnMainThread([url, errorStr]{
-				debug(LOG_NET, "%s; %s", errorStr.c_str(), url.c_str());
+			wzAsyncExecOnMainThread([urlCopy, errorStr]{
+				debug(LOG_INFO, "Failed to parse JSON: %s; %s", errorStr.c_str(), urlCopy.c_str());
 			});
 			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
 			return;
@@ -801,12 +802,12 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				tryNextUrl = true;
 				break;
 			case URLRequestFailureType::CANCELLED:
-				wzAsyncExecOnMainThread([url]{
+				wzAsyncExecOnMainThread([]{
 					debug(LOG_INFO, "Update check was cancelled");
 				});
 				break;
 			case URLRequestFailureType::CANCELLED_BY_SHUTDOWN:
-				wzAsyncExecOnMainThread([url]{
+				wzAsyncExecOnMainThread([]{
 					debug(LOG_WARNING, "Update check was cancelled by application shutdown");
 				});
 				break;
