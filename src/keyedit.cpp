@@ -417,7 +417,7 @@ bool runInGameKeyMapEditor(InputManager& inputManager, const KeyFunctionConfigur
 		bAllowOtherKeyPresses = true;
 		if (id == KM_GO_BACK)
 		{
-			intReopenMenuWithoutUnPausing();
+			intReopenMenuWithoutUnPausing(true);
 			return false;
 		}
 		return true;

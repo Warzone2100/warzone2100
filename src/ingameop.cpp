@@ -183,7 +183,7 @@ static bool addAudioOptions()
 	row++;
 #endif
 
-	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_AUDIO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
 	row++;
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
@@ -543,24 +543,6 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	return true;
 }
 
-void intReopenMenuWithoutUnPausing()
-{
-	isGraphicsOptionsUp = false;
-	isVideoOptionsUp = false;
-	isMouseOptionsUp = false;
-	isKeyMapEditorUp = false;
-	isMusicManagerUp = false;
-	isInGameConfirmQuitUp = false;
-
-	if (NetPlay.isHost)
-	{
-		widgDelete(psWScreen, INTINGAMEPOPUP);
-	}
-	widgDelete(psWScreen, INTINGAMEOP);
-	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
-	intAddInGameOptions();
-}
-
 static bool startIGOptionsMenu()
 {
 	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
@@ -609,6 +591,30 @@ static bool startIGOptionsMenu()
 	});
 
 	return true;
+}
+
+void intReopenMenuWithoutUnPausing(bool toOptionsMenu)
+{
+	if (toOptionsMenu)
+	{
+		startIGOptionsMenu();
+		return;
+	}
+
+	isGraphicsOptionsUp = false;
+	isVideoOptionsUp = false;
+	isMouseOptionsUp = false;
+	isKeyMapEditorUp = false;
+	isMusicManagerUp = false;
+	isInGameConfirmQuitUp = false;
+
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+	widgDelete(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
+	intAddInGameOptions();
 }
 
 // Graphics Options
@@ -706,7 +712,7 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing();
+		intReopenMenuWithoutUnPausing(true);
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -795,7 +801,7 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing();
+		intReopenMenuWithoutUnPausing(true);
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -896,7 +902,7 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing();
+		intReopenMenuWithoutUnPausing(true);
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -1012,6 +1018,9 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 	case INTINGAMEOP_GO_BACK:
 		intReopenMenuWithoutUnPausing();
+		break;
+	case INTINGAMEOP_AUDIO_BACK:
+		intReopenMenuWithoutUnPausing(true);
 		break;
 
 
