@@ -92,8 +92,6 @@ namespace pie_internal
 
 float pie_GetShaderTime();
 void pie_SetShaderTime(uint32_t shaderTime);
-void pie_SetShaderEcmEffect(bool value);
-int pie_GetShaderEcmEffect();
 
 static inline glm::vec4 pal_PIELIGHTtoVec4(PIELIGHT rgba)
 {

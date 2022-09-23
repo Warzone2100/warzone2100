@@ -46,7 +46,6 @@
 
 gfx_api::buffer* pie_internal::rectBuffer = nullptr;
 static RENDER_STATE rendStates;
-static int32_t ecmState = 0;
 static gfx_api::gfxFloat timeState = 0.0f;
 
 const Vector3f defaultSunPosition(225.0f, -600.0f, 450.0f);
@@ -150,16 +149,6 @@ void pie_SetShaderTime(uint32_t shaderTime)
 float pie_GetShaderTime()
 {
 	return timeState;
-}
-
-void pie_SetShaderEcmEffect(bool value)
-{
-	ecmState = (int)value;
-}
-
-int pie_GetShaderEcmEffect()
-{
-	return ecmState;
 }
 
 /// Set the OpenGL fog start and end
