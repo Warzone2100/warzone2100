@@ -345,7 +345,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	}
 }
 
-static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix)
+static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
 {
 	bool light = true;
 
@@ -396,11 +396,11 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 
 	if (light)
 	{
-		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, colour, teamcolour, pie_GetShaderStretchDepth(), pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
 	}
 	else
 	{
-		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, colour, teamcolour, pie_GetShaderStretchDepth(), pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
 	}
 
 	polyCount += shape->polys.size();
@@ -735,7 +735,7 @@ void pie_CleanUp()
 	}
 }
 
-bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth)
 {
 	pieCount++;
 
@@ -756,7 +756,7 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 		tshape.teamcolour = teamcolour;
 		tshape.flag = pieFlag;
 		tshape.flag_data = pieFlagData;
-		tshape.stretch = pie_GetShaderStretchDepth();
+		tshape.stretch = stretchDepth;
 		tshape.matrix = modelView;
 
 		if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -889,8 +889,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	templatedState lastState;
 	for (SHAPE const &shape : shapes)
 	{
-		pie_SetShaderStretchDepth(shape.stretch);
-		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!shapes.empty())
@@ -910,8 +909,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	lastState = templatedState();
 	for (SHAPE const &shape : tshapes)
 	{
-		pie_SetShaderStretchDepth(shape.stretch);
-		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!tshapes.empty())
@@ -919,7 +917,6 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 		// unbind last index buffer bound inside pie_Draw3DShape2
 		gfx_api::context::get().unbind_index_buffer(*((tshapes.back().shape)->buffers[VBO_INDEX]));
 	}
-	pie_SetShaderStretchDepth(0);
 	tshapes.clear();
 	shapes.clear();
 	gfx_api::context::get().debugStringMarker("Remaining passes - done");

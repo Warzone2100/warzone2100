@@ -44,7 +44,6 @@
  *	Global Variables
  */
 
-static gfx_api::gfxFloat shaderStretch = 0;
 gfx_api::buffer* pie_internal::rectBuffer = nullptr;
 static RENDER_STATE rendStates;
 static int32_t ecmState = 0;
@@ -161,16 +160,6 @@ void pie_SetShaderEcmEffect(bool value)
 int pie_GetShaderEcmEffect()
 {
 	return ecmState;
-}
-
-void pie_SetShaderStretchDepth(float stretch)
-{
-	shaderStretch = stretch;
-}
-
-float pie_GetShaderStretchDepth()
-{
-	return shaderStretch;
 }
 
 /// Set the OpenGL fog start and end

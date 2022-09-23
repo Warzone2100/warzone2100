@@ -401,7 +401,7 @@ float interpolateAngleDegrees(int a, int b, float t)
 	return a + d * t;
 }
 
-bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix)
+bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix, float stretchDepth)
 {
 	glm::mat4 modelMatrix(1.f);
 	int animFrame = 0; // for texture animation
@@ -450,7 +450,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		}
 	}
 
-	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);
+	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix, stretchDepth);
 }
 
 static void setScreenDispWithPerspective(SCREEN_DISP_DATA *sDisplay, const glm::mat4 &perspectiveViewModelMatrix)
@@ -2530,12 +2530,12 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 
 	while (strImd)
 	{
+		float stretch = 0.f;
 		if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
 		{
-			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
+			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
-		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix);
-		pie_SetShaderStretchDepth(0);
+		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix, stretch);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
 			renderStructureTurrets(psStructure, getFactionIMD(faction, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewModelMatrix);
@@ -2613,7 +2613,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	psStructure->sDisplay.frameNumber = currentGameFrame;
 
 	brightness = structureBrightness(psStructure);
-	pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
+	float stretch = psStructure->pos.z - psStructure->foundationDepth;
 
 	/* Establish where it is in the world */
 	dv.x = psStructure->pos.x - playerPos.p.x;
@@ -2628,7 +2628,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	if (psStructure->status == SS_BEING_BUILT)
 	{
 		pie_Draw3DShape(getFactionIMD(faction, psStructure->sDisplay.imd), 0, getPlayerColour(psStructure->player),
-		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewMatrix * modelMatrix);
+		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewMatrix * modelMatrix, stretch);
 	}
 	else
 	{
@@ -2646,12 +2646,11 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 		iIMDShape *imd = psStructure->sDisplay.imd;
 		while (imd)
 		{
-			pie_Draw3DShape(getFactionIMD(faction, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix);
+			pie_Draw3DShape(getFactionIMD(faction, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix, stretch);
 			imd = imd->next;
 		}
 	}
 	setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
-	pie_SetShaderStretchDepth(0);
 	return true;
 }
 
