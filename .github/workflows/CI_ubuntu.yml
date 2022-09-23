@@ -67,6 +67,8 @@ jobs:
             deploy_release: false
       fail-fast: false
     name: '${{ matrix.name }}'
+    permissions:
+      contents: write # Needed to upload to releases
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -170,7 +172,7 @@ jobs:
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "WZ_FULL_OUTPUT_DEB_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: success() && (matrix.publish_artifact == true)
       with:
         name: "warzone2100_${{ matrix.output-suffix }}_${{ matrix.arch }}_deb"
@@ -188,6 +190,8 @@ jobs:
 
   package-source:
     name: Package Source (Ubuntu 22.04) [GCC]
+    permissions:
+      contents: write # Needed to upload to releases
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -252,7 +256,7 @@ jobs:
         echo "Generated warzone2100 tarball: \"warzone2100_src.tar.xz\""
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: success()
       with:
         name: warzone2100_src

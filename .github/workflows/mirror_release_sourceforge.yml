@@ -22,6 +22,8 @@ jobs:
       SF_BASE_PATH: 'releases'
       RELEASE_CONTEXT: ${{ toJson(github.event.release) }}
     name: 'Mirror to SourceForge'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - name: Process Release Event

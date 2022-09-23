@@ -13,6 +13,8 @@ concurrency: release_tasks
 jobs:
   trigger-site-update:
     name: 'Trigger Site Update'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: (github.repository == 'Warzone2100/warzone2100')
     environment: update_dispatch
@@ -47,6 +49,8 @@ jobs:
           --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
   sentry-release-commit-info:
     name: 'Upload Release Commit Info'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: ((github.event.action == 'published') || (github.event.action == 'released')) && (github.repository == 'Warzone2100/warzone2100')
     environment: upload_symbols

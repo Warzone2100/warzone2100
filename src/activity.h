@@ -148,6 +148,9 @@ public:
 	// loaded mods changed
 	virtual void loadedModsChanged(const std::vector<Sha256>& loadedModHashes) { }
 
+	// game exit
+	virtual void gameExiting() { }
+
 public:
 	// Helper Functions
 	static std::string getTeamDescription(const ActivitySink::SkirmishGameInfo& info);

@@ -20,6 +20,7 @@ OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 OPTION(WZ_ENABLE_BACKEND_VULKAN "Enable Vulkan backend" ON)
 OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
+OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -282,6 +283,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# C4800: 'type' : forcing value to bool 'true' or 'false' (performance warning)
 		# This warning is no longer generated in Visual Studio 2017+
 		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4800")
+		# C4127: conditional expression is constant
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4127")
 
 		# Disable some warnings for WZ (FIXME)
 		# C4100: unreferenced formal parameter
@@ -294,6 +297,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4245")
 		# C4706: assignment within conditional expression
 		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4706")
+		# C4018: '>' : signed/unsigned mismatch
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4018")
+		# C4389: '==' : signed/unsigned mismatch
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4389")
 
 	elseif(CMAKE_GENERATOR STREQUAL "Xcode")
 		# Set Xcode generator project-level configuration + warning flags

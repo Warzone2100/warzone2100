@@ -23,6 +23,8 @@ jobs:
           - name: "Snapcraft"
             arch: "amd64"
     name: '${{ matrix.name }}'
+    permissions:
+      contents: write # Needed to upload to releases
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -103,7 +105,7 @@ jobs:
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "WZ_FULL_OUTPUT_SNAP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: success()
       with:
         name: 'warzone2100_linux_${{ matrix.arch }}_snap'

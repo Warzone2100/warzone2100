@@ -18,6 +18,8 @@ jobs:
             cxx: '/usr/bin/g++'
       fail-fast: false
     name: '${{ matrix.name }}'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:

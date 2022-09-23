@@ -78,10 +78,11 @@ static size_t newPage(const char *name, int level, int width, int height, int co
 	if (texPage == pie_NumberOfPages())
 	{
 		// We need to create a new texture page; create it and increase texture table to store it
+		std::string textureDebugName = std::string("pageTexture::") + ((name) ? name : "");
 		pie_ReserveTexture(name, width, height);
 		pie_AssignTexture(texPage,
 			gfx_api::context::get().create_texture(mipmap_levels, width, height,
-				gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8));
+				gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, textureDebugName));
 	}
 	terrainPage = texPage;
 	return texPage;

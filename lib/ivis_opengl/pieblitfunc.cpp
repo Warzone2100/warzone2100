@@ -97,14 +97,14 @@ void GFX::loadTexture(iV_Image&& bitmap, gfx_api::texture_type textureType, cons
 	mTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(bitmap), textureType, filename, maxWidth, maxHeight);
 }
 
-void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& format)
+void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& format, const std::string& debugName)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	if (mTexture)
 		delete mTexture;
 	if (width > 0 && height > 0)
 	{
-		mTexture = gfx_api::context::get().create_texture(1, width, height, format);
+		mTexture = gfx_api::context::get().create_texture(1, width, height, format, debugName);
 	}
 }
 
@@ -653,7 +653,7 @@ void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat wi
 {
 	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
 	{
-		radarGfx[i]->makeTexture(twidth, theight);
+		radarGfx[i]->makeTexture(twidth, theight, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, std::string("mem::radarTexture[") + std::to_string(i) + "]");
 		//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter. // TODO: Add a gfx_api::sampler_type to handle this case? bilinear, but nearest for mag?
 		gfx_api::gfxFloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
 		gfx_api::gfxFloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };

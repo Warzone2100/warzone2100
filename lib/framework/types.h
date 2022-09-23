@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2022  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,9 +24,21 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 #define __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 
-#include "wzglobal.h"
+#ifndef __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
+#endif
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif
 
-#ifdef HAVE_INTTYPES_H // defined WZ_C99
+#if defined(HAVE_CONFIG_H)
+#  undef _XOPEN_SOURCE
+#  include "config.h"
+#endif
+
+#include <stddef.h> // for size_t
+
+#ifdef HAVE_INTTYPES_H
 /* Compilers that have support for C99 have all values below defined in stdint.h */
 # include <inttypes.h>
 #else
@@ -42,7 +54,7 @@ typedef signed   int       int32_t;
 typedef signed   long long int64_t;
 //END   Hope this is right.
 
-#ifndef WZ_CC_MINGW
+#if !defined(__MINGW32__) && !defined(__MINGW64__)
 #if defined(_MSC_VER) && (_MSC_VER <= 1500)
 #ifndef INT8_MIN
 # define INT8_MIN               (-128)
@@ -77,14 +89,15 @@ typedef signed   long long int64_t;
 #endif
 #endif
 
-#ifdef WZ_CC_MSVC
+#ifdef _MSC_VER
 # define PRIu32					"u"
 # define PRIu64					"I64u"
 # define PRId64					"I64d"
 #endif
-#endif // WZ_C99
+#endif // HAVE_INTTYPES_H
 
-#ifdef WZ_CC_MSVC
+#ifdef _MSC_VER
+#include <basetsd.h>
 typedef SSIZE_T ssize_t;
 #endif
 

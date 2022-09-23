@@ -51,6 +51,10 @@ OPENGL_DATA opengl;
 static GLuint perfpos[PERF_COUNT];
 static bool perfStarted = false;
 
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+static std::unordered_set<const gl_texture*> debugLiveTextures;
+#endif
+
 static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gles)
 {
 	switch (format)
@@ -248,11 +252,17 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 gl_texture::gl_texture()
 {
 	glGenTextures(1, &_id);
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.insert(this);
+#endif
 }
 
 gl_texture::~gl_texture()
 {
 	glDeleteTextures(1, &_id);
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.erase(this);
+#endif
 }
 
 void gl_texture::bind()
@@ -1462,6 +1472,9 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	new_texture->gles = gles;
 	new_texture->mip_count = mipmap_count;
 	new_texture->internal_format = internal_format;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	new_texture->debugName = filename;
+#endif
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
@@ -2643,6 +2656,18 @@ void gl_context::shutdown()
 	{
 		backend_impl->destroyGLContext();
 	}
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	if (!debugLiveTextures.empty())
+	{
+		// Some textures were not properly freed before OpenGL context shutdown
+		for (auto texture : debugLiveTextures)
+		{
+			debug(LOG_ERROR, "Texture resource not cleaned up: %p (name: %s)", (const void*)texture, texture->debugName.c_str());
+		}
+		ASSERT(debugLiveTextures.empty(), "There are %zu textures that were not cleaned up.", debugLiveTextures.size());
+	}
+#endif
 }
 
 const size_t& gl_context::current_FrameNum() const

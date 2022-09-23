@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+#ifndef __INCLUDED_WZ_GENERATED_CONFIG_H__
+#define __INCLUDED_WZ_GENERATED_CONFIG_H__
+
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #cmakedefine01 ENABLE_NLS
@@ -173,3 +176,4 @@
 #cmakedefine WZ_LOCALEDIR "@WZ_LOCALEDIR@"
 #cmakedefine WZ_LOCALEDIR_ISABSOLUTE
 
+#endif // __INCLUDED_WZ_GENERATED_CONFIG_H__
