@@ -1017,12 +1017,28 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 	GLint status;
 	bool success = true; // Assume overall success
 
+	std::unordered_set<std::size_t> expectedVertexAttribLoc;
+	for (const auto& buffDesc : vertex_buffer_desc)
+	{
+		for (const auto& attrib : buffDesc.attributes)
+		{
+			expectedVertexAttribLoc.insert(attrib.id);
+		}
+	}
+
+	auto bindVertexAttribLocationIfUsed = [&expectedVertexAttribLoc](GLuint prg, GLuint index, const GLchar *name) {
+		if (expectedVertexAttribLoc.count(index) > 0)
+		{
+			glBindAttribLocation(prg, index, name);
+		}
+	};
+
 	program = glCreateProgram();
-	glBindAttribLocation(program, 0, "vertex");
-	glBindAttribLocation(program, 1, "vertexTexCoord");
-	glBindAttribLocation(program, 2, "vertexColor");
-	glBindAttribLocation(program, 3, "vertexNormal");
-	glBindAttribLocation(program, 4, "vertexTangent");
+	bindVertexAttribLocationIfUsed(program, 0, "vertex");
+	bindVertexAttribLocationIfUsed(program, 1, "vertexTexCoord");
+	bindVertexAttribLocationIfUsed(program, 2, "vertexColor");
+	bindVertexAttribLocationIfUsed(program, 3, "vertexNormal");
+	bindVertexAttribLocationIfUsed(program, 4, "vertexTangent");
 	ASSERT_OR_RETURN(, program, "Could not create shader program!");
 
 	char* vertexShaderContents = nullptr;
@@ -1705,7 +1721,7 @@ void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<
 
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
-	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "count (%zu) exceeds GLint max", offset);
+	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	glDrawArrays(to_gl(primitive), static_cast<GLint>(offset), static_cast<GLsizei>(count));
 }
