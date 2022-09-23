@@ -44,6 +44,7 @@ struct iIMDShape;
  */
 /***************************************************************************/
 bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth = 0.f);
+void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix);
 
 void pie_GetResetCounts(size_t *pPieCount, size_t *pPolyCount);
 

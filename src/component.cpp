@@ -164,15 +164,17 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 	return 0;
 }
 
-static void draw_player_3d_shape(uint32_t player_index, iIMDShape *shape, int frame, PIELIGHT colour, int pie_flag, int pie_flag_data, const glm::mat4 &model_view)
+static void draw_player_3d_shape(uint32_t player_index, iIMDShape *shape, const glm::mat4 &model_view)
 {
 	auto faction_shape = getFactionIMD(getPlayerFaction(player_index), shape);
-	pie_Draw3DShape(faction_shape, frame, getPlayerColour(player_index), colour, pie_flag, pie_flag_data, model_view);
+	int team = getPlayerColour(player_index);
+	const PIELIGHT teamcolour = pal_GetTeamColour(team);
+	pie_Draw3DButton(faction_shape, teamcolour, model_view);
 }
 
 void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
-	draw_player_3d_shape(selectedPlayer, IMDShape, 0, WZCOL_WHITE, pie_BUTTON, 0, setMatrix(Position, Rotation, scale));
+	draw_player_3d_shape(selectedPlayer, IMDShape, setMatrix(Position, Rotation, scale));
 }
 
 static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, const Vector3i *Rotation, const Vector3i *Position, int scale)
@@ -194,9 +196,9 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 
 	if (baseImd != nullptr)
 	{
-		draw_player_3d_shape(selectedPlayer, baseImd, 0, WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, baseImd, matrix);
 	}
-	draw_player_3d_shape(selectedPlayer, strImd, 0, WZCOL_WHITE, pie_BUTTON, 0, matrix);
+	draw_player_3d_shape(selectedPlayer, strImd, matrix);
 
 	//and draw the turret
 	if (strImd->nconnectors)
@@ -249,13 +251,13 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 				glm::mat4 localMatrix = glm::translate(glm::vec3(strImd->connectors[i].xzy()));
 				if (mountImd[i] != nullptr)
 				{
-					draw_player_3d_shape(selectedPlayer, mountImd[i], 0, WZCOL_WHITE, pie_BUTTON, 0, matrix * localMatrix);
+					draw_player_3d_shape(selectedPlayer, mountImd[i], matrix * localMatrix);
 					if (mountImd[i]->nconnectors)
 					{
 						localMatrix *= glm::translate(glm::vec3(mountImd[i]->connectors->xzy()));
 					}
 				}
-				draw_player_3d_shape(selectedPlayer, weaponImd[i], 0, WZCOL_WHITE, pie_BUTTON, 0, matrix * localMatrix);
+				draw_player_3d_shape(selectedPlayer, weaponImd[i], matrix * localMatrix);
 				//we have a droid weapon so do we draw a muzzle flash
 			}
 		}
@@ -300,7 +302,7 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 
 	if (MountIMD)
 	{
-		draw_player_3d_shape(selectedPlayer, MountIMD, 0, WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, MountIMD, matrix);
 
 		/* translate for weapon mount point */
 		if (MountIMD->nconnectors)
@@ -310,7 +312,7 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 	}
 	if (ComponentIMD)
 	{
-		draw_player_3d_shape(selectedPlayer, ComponentIMD, 0, WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, ComponentIMD, matrix);
 	}
 }
 
@@ -329,9 +331,9 @@ void displayResearchButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vec
 
 		if (MountIMD)
 		{
-			draw_player_3d_shape(selectedPlayer, MountIMD, 0, WZCOL_WHITE, pie_BUTTON, 0, matrix);
+			draw_player_3d_shape(selectedPlayer, MountIMD, matrix);
 		}
-		draw_player_3d_shape(selectedPlayer, ResearchIMD, 0, WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, ResearchIMD, matrix);
 	}
 }
 
