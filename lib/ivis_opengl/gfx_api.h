@@ -593,7 +593,7 @@ namespace gfx_api
 		glm::vec4 fogColour;
 		float fogEnd;
 		float fogBegin;
-		float timeState;
+		float timeState; // graphicsCycle
 		int fogEnabled;
 	};
 
