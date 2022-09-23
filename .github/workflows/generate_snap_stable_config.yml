@@ -36,6 +36,8 @@ concurrency: 'snap_stable_config_${{ github.event_name }}'
 jobs:
   generate_stable_snap_config:
     name: 'Generate Snap Stable Config'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Generate Config
@@ -177,7 +179,7 @@ jobs:
           echo "snapstablebuild.diff (SHA512: ${DIFF_HASH}):"
           cat "${{ github.workspace }}/diff/snapstablebuild.diff"
       - name: Upload diff artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
         with:
           name: snap_stable_build_diff
@@ -187,6 +189,8 @@ jobs:
     needs: generate_stable_snap_config
     environment: snap_stable_build_deploy
     name: 'Deploy Snap Stable Config'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: (github.event_name == 'release') || (github.event_name == 'workflow_dispatch')
     steps:
@@ -198,7 +202,7 @@ jobs:
           path: snap-stable-build
           ssh-key: '${{ secrets.SNAP_STABLE_BUILD_REPO_GH_DEPLOY_KEY }}'
       - name: Fetch Snap Stable Config Changes
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: snap_stable_build_diff
           path: '${{ github.workspace }}/diff'

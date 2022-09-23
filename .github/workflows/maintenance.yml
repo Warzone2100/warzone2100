@@ -5,9 +5,14 @@ on:
     branches:
       - master
 
+concurrency: master_push_maintenance
+
 jobs:
   update-base-translations:
     name: Update Base Translations
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -35,23 +40,24 @@ jobs:
         temp_dir="${GITHUB_WORKSPACE}/temp/po"
         mkdir -p "${temp_dir}"
         cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
-    - name: Create Pull Request to update base files (if needed)
-      if: (github.repository == 'Warzone2100/warzone2100')
-      id: cpr
-      uses: past-due/create-pull-request@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: 'master'
-        commit-message: Update base translations
-        title: 'Update base translations'
-        body: |
-          Update base string / translation files in the `master` branch
-          - Auto-generated
-        labels: automated pr
-        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-        draft: false
-        branch: update_base_translations
-    - name: Check outputs
-      if: ${{ success() }}
+    - name: Publish any changes to base translation files
+      if: success() && (github.repository == 'Warzone2100/warzone2100')
+      id: pushupdates
+      working-directory: '${{ github.workspace }}/master'
       run: |
-        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        git config user.name "github-actions[bot]"
+        git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
+        git add -A
+        git commit -m "Update base translations" || { echo "::set-output name=PROCESS_PR::false" && exit 0; }
+        echo "Pushing changes to update_base_translations branch"
+        git push -f origin master:update_base_translations
+        echo "::set-output name=PROCESS_PR::true"
+    - name: Create Pull Request to update base files (if needed)
+      if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
+      id: cpr
+      working-directory: '${{ github.workspace }}/master'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+      run: |
+        gh pr create --head "update_base_translations" --title "Update base translations" --body "Update base string / translation files in the master branch (Auto-generated)" --label "automated pr" || echo "Seems like PR already exists?"
