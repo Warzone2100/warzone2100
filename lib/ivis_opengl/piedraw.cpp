@@ -348,6 +348,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
 {
 	bool light = true;
+	int ecmState = 0;
 
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
@@ -378,7 +379,7 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 	if (pieFlag & pie_ECM)
 	{
 		light = true;
-		pie_SetShaderEcmEffect(true);
+		ecmState = 1;
 	}
 
 	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
@@ -396,16 +397,14 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 
 	if (light)
 	{
-		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, ecmState, pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
 	}
 	else
 	{
-		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, ecmState, pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
 	}
 
 	polyCount += shape->polys.size();
-
-	pie_SetShaderEcmEffect(false);
 
 	return currentState;
 }
