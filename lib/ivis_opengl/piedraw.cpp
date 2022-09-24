@@ -243,27 +243,13 @@ private:
 };
 
 template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename PremultipliedPSO, typename OpaquePSO>
-static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const float& timestate, const glm::mat4 & matrix, glm::vec4 &sceneColor, glm::vec4 &ambient, glm::vec4 &diffuse, glm::vec4 &specular, const iIMDShape * shape, int pieFlag, int frame)
+static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & matrix, const iIMDShape * shape, int pieFlag, int frame)
 {
 	templatedState currentState = templatedState(shader, shape, pieFlag);
 
 	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
 	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
 	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
-
-	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	) : glm::vec4(0.f);
-
-	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
-		pie_PerspectiveGet(),
-		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
-		renderState.fogBegin, renderState.fogEnd, timestate, renderState.fogEnabled
-	};
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
@@ -345,7 +331,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	}
 }
 
-static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
+static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
 {
 	bool light = true;
 	int ecmState = 0;
@@ -382,11 +368,6 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 		ecmState = 1;
 	}
 
-	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
-	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
-	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
-	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
-
 	frame %= std::max<int>(1, shape->numFrames);
 
 	templatedState currentState = templatedState((light) ? SHADER_COMPONENT : SHADER_NOLIGHT, shape, pieFlag);
@@ -397,11 +378,11 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 
 	if (light)
 	{
-		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, ecmState, pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
 	}
 	else
 	{
-		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, colour, teamcolour, stretchDepth, ecmState, pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
 	}
 
 	polyCount += shape->polys.size();
@@ -881,6 +862,26 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 {
 	perFrameUniformsShaderOnce.reset();
 
+	// Generate global (per-frame) uniforms
+	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
+	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
+	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
+	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
+
+	const auto &renderState = getCurrentRenderState();
+	const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
+		renderState.fogColour.vector[0] / 255.f,
+		renderState.fogColour.vector[1] / 255.f,
+		renderState.fogColour.vector[2] / 255.f,
+		renderState.fogColour.vector[3] / 255.f
+	) : glm::vec4(0.f);
+
+	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
+		pie_PerspectiveGet(),
+		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
+		renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
+	};
+
 	// Draw models
 	// sort list to reduce state changes
 	std::sort(shapes.begin(), shapes.end(), less_than_shape());
@@ -888,7 +889,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	templatedState lastState;
 	for (SHAPE const &shape : shapes)
 	{
-		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!shapes.empty())
@@ -908,7 +909,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	lastState = templatedState();
 	for (SHAPE const &shape : tshapes)
 	{
-		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!tshapes.empty())
