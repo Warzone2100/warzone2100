@@ -56,6 +56,7 @@ bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;
 static bool 	isGraphicsOptionsUp = false;
 static bool 	isVideoOptionsUp = false;
+static bool		isAudioOptionsUp = false;
 static bool 	isMouseOptionsUp = false;
 static bool		isInGameConfirmQuitUp = false;
 bool	isKeyMapEditorUp = false;
@@ -183,7 +184,7 @@ static bool addAudioOptions()
 	row++;
 #endif
 
-	addIGTextButton(INTINGAMEOP_AUDIO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
 	row++;
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
@@ -466,6 +467,7 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
+	isAudioOptionsUp = false;
 	isMouseOptionsUp = false;
 	isInGameConfirmQuitUp = false;
 
@@ -543,12 +545,32 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	return true;
 }
 
-static bool startIGOptionsMenu()
+void intReopenMenuWithoutUnPausing()
+{
+	isGraphicsOptionsUp = false;
+	isVideoOptionsUp = false;
+	isAudioOptionsUp = false;
+	isMouseOptionsUp = false;
+	isKeyMapEditorUp = false;
+	isMusicManagerUp = false;
+	isInGameConfirmQuitUp = false;
+
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+	widgDelete(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
+	intAddInGameOptions();
+}
+
+bool startIGOptionsMenu()
 {
 	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 	auto const &parent = psWScreen->psForm;
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
+	isAudioOptionsUp = false;
 	isMouseOptionsUp = false;
 	isKeyMapEditorUp = false;
 	isMusicManagerUp = false;
@@ -591,30 +613,6 @@ static bool startIGOptionsMenu()
 	});
 
 	return true;
-}
-
-void intReopenMenuWithoutUnPausing(bool toOptionsMenu)
-{
-	if (toOptionsMenu)
-	{
-		startIGOptionsMenu();
-		return;
-	}
-
-	isGraphicsOptionsUp = false;
-	isVideoOptionsUp = false;
-	isMouseOptionsUp = false;
-	isKeyMapEditorUp = false;
-	isMusicManagerUp = false;
-	isInGameConfirmQuitUp = false;
-
-	if (NetPlay.isHost)
-	{
-		widgDelete(psWScreen, INTINGAMEPOPUP);
-	}
-	widgDelete(psWScreen, INTINGAMEOP);
-	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
-	intAddInGameOptions();
 }
 
 // Graphics Options
@@ -712,7 +710,7 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing(true);
+		startIGOptionsMenu();
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -801,7 +799,7 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing(true);
+		startIGOptionsMenu();
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -902,7 +900,7 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 		break;
 
 	case INTINGAMEOP_GO_BACK:
-		intReopenMenuWithoutUnPausing(true);
+		startIGOptionsMenu();
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -998,6 +996,7 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 	case INTINGAMEOP_AUDIOOPTIONS:
 		addAudioOptions();
+		isAudioOptionsUp = true;
 		break;
 	case INTINGAMEOP_MOUSEOPTIONS:
 		startIGMouseOptionsMenu();
@@ -1017,12 +1016,13 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(false, true);
 		break;
 	case INTINGAMEOP_GO_BACK:
+		if (isAudioOptionsUp)
+		{
+			startIGOptionsMenu();
+			break;
+		}
 		intReopenMenuWithoutUnPausing();
 		break;
-	case INTINGAMEOP_AUDIO_BACK:
-		intReopenMenuWithoutUnPausing(true);
-		break;
-
 
 //	case INTINGAMEOP_REPLAY:
 //		intCloseInGameOptions(true, false);
