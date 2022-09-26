@@ -134,69 +134,6 @@ static bool addHostQuitOptions()
 	return true;
 }
 
-static bool addAudioOptions()
-{
-	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-
-	auto const &parent = psWScreen->psForm;
-
-	// add form
-	auto ingameOp = std::make_shared<IntFormAnimated>();
-	parent->attach(ingameOp);
-	ingameOp->id = INTINGAMEOP;
-
-	int row = 1;
-	// voice vol
-	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
-	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
-	            AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
-	row++;
-
-	// fx vol
-	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("FX Volume"), WBUT_PLAIN);
-	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
-	            AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
-	row++;
-
-	// music vol
-	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Volume"), WBUT_PLAIN);
-	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
-	            AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
-	row++;
-
-	// Subtitles
-	addIGTextButton(INTINGAMEOP_SUBTITLES,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Subtitles"), WBUT_PLAIN);
-	addIGTextButton(INTINGAMEOP_SUBTITLES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsSubtitlesString(), WBUT_PLAIN);
-	row++;
-
-#ifdef DEBUG
-	// Tactical UI: Target Origin
-	if (tuiTargetOrigin)
-	{
-		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W,
-		                _("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
-	}
-	else
-	{
-		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W,
-		                _("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
-	}
-	row++;
-#endif
-
-	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
-	row++;
-
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
-
-	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
-	});
-
-	return true;
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 
 static bool _intAddInGameOptions()
@@ -812,6 +749,121 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 	return false;
 }
 
+static bool startIGAudioOptionsMenu()
+{
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+
+	auto const& parent = psWScreen->psForm;
+
+	// add form
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
+	ingameOp->id = INTINGAMEOP;
+
+	int row = 1;
+	// voice vol
+	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
+	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
+				AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
+	row++;
+
+	// fx vol
+	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("FX Volume"), WBUT_PLAIN);
+	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
+				AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
+	row++;
+
+	// music vol
+	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Volume"), WBUT_PLAIN);
+	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row),
+				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
+	row++;
+
+	// Subtitles
+	addIGTextButton(INTINGAMEOP_SUBTITLES, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Subtitles"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_SUBTITLES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsSubtitlesString(), WBUT_PLAIN);
+	row++;
+
+#ifdef DEBUG
+	// Tactical UI: Target Origin
+	if (tuiTargetOrigin)
+	{
+		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W,
+						_("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
+	}
+	else
+	{
+		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W,
+						_("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
+	}
+	row++;
+#endif
+
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET* psWidget) {
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
+
+	return true;
+}
+
+static bool runIGAudioOptionsMenu(UDWORD id)
+{
+	switch (id)
+	{
+	case INTINGAMEOP_FXVOL:
+	case INTINGAMEOP_3DFXVOL:
+	case INTINGAMEOP_CDVOL:
+		break;
+
+	case INTINGAMEOP_FXVOL_S:
+		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S) / 100.0f);
+		break;
+
+	case INTINGAMEOP_3DFXVOL_S:
+		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S) / 100.0f);
+		break;
+
+	case INTINGAMEOP_CDVOL_S:
+		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0f);
+		break;
+
+	case INTINGAMEOP_SUBTITLES:
+	case INTINGAMEOP_SUBTITLES_R:
+		seq_SetSubtitles(!seq_GetSubtitles());
+		widgSetString(psWScreen, INTINGAMEOP_SUBTITLES_R, graphicsOptionsSubtitlesString());
+		break;
+
+	case INTINGAMEOP_TUI_TARGET_ORIGIN_SW:
+		tuiTargetOrigin = !tuiTargetOrigin;
+		if (tuiTargetOrigin)
+		{
+			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Show"));
+		}
+		else
+		{
+			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Hide"));
+		}
+		break;
+
+	case INTINGAMEOP_GO_BACK:
+		startIGOptionsMenu();
+		break;
+
+	case INTINGAMEOP_RESUME:			//resume was pressed.
+		return true;
+
+	default:
+		break;
+	}
+
+	return false;
+}
+
 // Mouse Options
 static bool startIGMouseOptionsMenu()
 {
@@ -933,6 +985,14 @@ void intProcessInGameOptions(UDWORD id)
 		}
 		return;
 	}
+	else if (isAudioOptionsUp)
+	{
+		if (runIGAudioOptionsMenu(id))
+		{
+			intCloseInGameOptions(true, true);
+		}
+		return;
+	}
 	else if (isMouseOptionsUp)
 	{
 		if (runIGMouseOptionsMenu(id))
@@ -995,7 +1055,7 @@ void intProcessInGameOptions(UDWORD id)
 		isVideoOptionsUp = true;
 		break;
 	case INTINGAMEOP_AUDIOOPTIONS:
-		addAudioOptions();
+		startIGAudioOptionsMenu();
 		isAudioOptionsUp = true;
 		break;
 	case INTINGAMEOP_MOUSEOPTIONS:
@@ -1016,11 +1076,6 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(false, true);
 		break;
 	case INTINGAMEOP_GO_BACK:
-		if (isAudioOptionsUp)
-		{
-			startIGOptionsMenu();
-			break;
-		}
 		intReopenMenuWithoutUnPausing();
 		break;
 
@@ -1049,41 +1104,6 @@ void intProcessInGameOptions(UDWORD id)
 		intCloseInGameOptions(true, false);
 		addLoadSave(SAVE_INGAME_SKIRMISH, _("Save Skirmish Game"));
 		break;
-	// GAME OPTIONS KEYS
-	case INTINGAMEOP_FXVOL:
-	case INTINGAMEOP_3DFXVOL:
-	case INTINGAMEOP_CDVOL:
-		break;
-
-
-	case INTINGAMEOP_FXVOL_S:
-		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S) / 100.0f);
-		break;
-	case INTINGAMEOP_3DFXVOL_S:
-		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S) / 100.0f);
-		break;
-	case INTINGAMEOP_CDVOL_S:
-		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0f);
-		break;
-	case INTINGAMEOP_SUBTITLES:
-	case INTINGAMEOP_SUBTITLES_R:
-		seq_SetSubtitles(!seq_GetSubtitles());
-		widgSetString(psWScreen, INTINGAMEOP_SUBTITLES_R, graphicsOptionsSubtitlesString());
-		break;
-
-	case INTINGAMEOP_TUI_TARGET_ORIGIN_SW:
-		tuiTargetOrigin = !tuiTargetOrigin;
-		if (tuiTargetOrigin)
-		{
-			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Show"));
-		}
-		else
-		{
-			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Hide"));
-		}
-
-		break;
-
 	default:
 		break;
 	}
