@@ -1,6 +1,6 @@
 name: warzone2100 # no spaces, all lower-case
 # summary, description, and icon are parsed from the appdata/metainfo file
-adopt-info: warzone2100
+adopt-info: warzone2100 # specify the *part* name
 confinement: strict
 grade: stable
 base: core20
@@ -41,8 +41,8 @@ apps:
   warzone2100:
     extensions: [gnome-3-38]
     command: usr/bin/warzone2100
-    common-id: warzone2100 # should match the appdata/metainfo file's <id> field
-    desktop: usr/share/applications/warzone2100.desktop
+    common-id: net.wz2100.warzone2100 # should match the appdata/metainfo file's <id> field
+    desktop: usr/share/applications/net.wz2100.warzone2100.desktop
     plugs:
       - audio-playback
       - desktop
@@ -136,7 +136,7 @@ parts:
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
       # and icon. Use the installed path relative to the Snap's root
-      - usr/share/metainfo/warzone2100.appdata.xml
+      - usr/share/metainfo/net.wz2100.warzone2100.appdata.xml
     override-pull: |
       snapcraftctl pull
       SNAP_VERSION_DESC=$(git describe --always | sed 's/[^a-zA-Z0-9\.\:\+\~\-]/~/g')
@@ -158,7 +158,7 @@ parts:
       
       # Include the icon's path in the desktop file, not just the name.
       # This needs to happen post-build or the build versioning will show as "modified locally"
-      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $SNAPCRAFT_PART_INSTALL/usr/share/applications/warzone2100.desktop
+      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $SNAPCRAFT_PART_INSTALL/usr/share/applications/net.wz2100.warzone2100.desktop
     build-packages:
       - asciidoctor
       - g++
