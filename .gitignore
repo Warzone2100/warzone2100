@@ -313,3 +313,12 @@ win32/CodeAnalyst
 /.idea/
 /cmake-build-*/
 /out/
+
+# flatpak
+/.flatpak-builder/
+/_flatpak_build/
+/flatpak_app/
+/.ci/flatpak/flatpak-github-action-modified-*
+/.ci/flatpak/net.wz2100.wz2100.yaml
+/.ci/flatpak/Toolchain-cross-arch.cmake
+/.ci/flatpak/meson-cross-file.txt
