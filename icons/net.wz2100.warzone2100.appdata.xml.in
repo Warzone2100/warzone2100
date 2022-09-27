@@ -4,7 +4,7 @@
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-2.0-or-later</project_license>
 	<name>Warzone 2100@WZ_NAME_SUFFIX@</name>
-	<summary>Command the forces of The Project in a battle to rebuild the world after mankind has almost been destroyed by nuclear missiles.</summary>
+	<summary>Command the forces of The Project in a battle to rebuild the world.</summary>
 	<launchable type="desktop-id">net.wz2100.warzone2100.desktop</launchable>
 	<description>
 		<p>
