@@ -26,6 +26,9 @@
 		<screenshot type="default" width="320" height="240">https://wz2100.net/static/img/wz2100-CAM_3A50.png</screenshot>
 	</screenshots>
 	<developer_name>Warzone 2100 Project</developer_name>
+	<releases>
+	  <release version="@WZ_METAINFO_RELEASE_VERSION@" type="@WZ_METAINFO_RELEASE_TYPE@" date="@WZ_METAINFO_RELEASE_DATE@"></release>
+	</releases>
 	<content_rating type="oars-1.0">
 		<content_attribute id="violence-fantasy">moderate</content_attribute>
 		<content_attribute id="violence-bloodshed">mild</content_attribute>
