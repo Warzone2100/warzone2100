@@ -1,0 +1,24 @@
+# Toolchain for cross-compiling
+
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR "@WZ_CROSS_COMPILE_TARGET_ARCH@")
+
+# Specify the cross compiler
+set(CMAKE_C_COMPILER "@WZ_CROSS_COMPILE_TARGET_ARCH@-unknown-linux-gnu-gcc")
+set(CMAKE_CXX_COMPILER "@WZ_CROSS_COMPILE_TARGET_ARCH@-unknown-linux-gnu-g++")
+
+# Target search paths
+set(CMAKE_FIND_ROOT_PATH "/app;/usr/lib/@WZ_CROSS_COMPILE_TARGET_ARCH@-linux-gnu;/usr/include/@WZ_CROSS_COMPILE_TARGET_ARCH@-linux-gnu" CACHE STRING "Find root path" FORCE)
+
+# Search for programs in the build host directories
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+
+# Search for libraries and headers in the target directories
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+# Point pkgconfig at target arch .pc files first, falling back to regular system .pc files
+if(EXISTS "/usr/lib/@WZ_CROSS_COMPILE_TARGET_ARCH@-linux-gnu/pkgconfig")
+	set(ENV{PKG_CONFIG_LIBDIR} "/usr/lib/@WZ_CROSS_COMPILE_TARGET_ARCH@-linux-gnu/pkgconfig")
+endif()

@@ -1,0 +1,337 @@
+name: Flatpak
+
+on:
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+  pull_request:
+    # Match all pull requests
+  # Support running after "Draft Tag Release" workflow completes, as part of automated release process
+  workflow_run:
+    workflows: ["Draft Tag Release"]
+    push:
+      tags:
+        - '*'
+    types: 
+      - completed
+
+jobs:
+  build-flatpak:
+    strategy:
+      matrix:
+        include:
+          - name: "Flatpak"
+            arch: "x86_64"
+            flatpak-arch: "x86_64"
+          - name: "Flatpak"
+            arch: "arm64"
+            flatpak-arch: "aarch64"
+      fail-fast: false
+    name: '${{ matrix.name }} (${{ matrix.arch }})'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    env:
+      WZ_FLATPAK_BUILD_DIR: flatpak_app
+      WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
+      WZ_FLATPAK_BUILD_ARCH: x86_64
+    container:
+      image: fedora:latest
+      options: --privileged
+    outputs:
+      # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
+      WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
+    steps:
+    - name: Install Dependencies
+      run: |
+        cat /etc/fedora-release
+        
+        echo "::group::dnf update"
+        dnf update -y
+        echo "::endgroup::"
+        echo "::group::dnf install dependencies"
+        dnf install -y cmake git git-lfs dbus-daemon flatpak flatpak-builder python3-aiohttp python3-tenacity python3-gobject ccache zstd curl
+        echo "::endgroup::"
+        
+        echo "::group::flatpak remote-add"
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+        flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
+        echo "::endgroup::"
+        
+        echo "::group::fetch flat-manager-client"
+        curl -Lf https://raw.githubusercontent.com/flatpak/flat-manager/master/flat-manager-client --output /usr/bin/flat-manager-client
+        chmod +x /usr/bin/flat-manager-client
+        echo "::endgroup::"
+    - name: Install QEMU deps
+      if: ${{ matrix.arch != 'x86_64' }}
+      run: |
+        dnf -y install docker
+    - name: Set up QEMU
+      if: ${{ matrix.arch != 'x86_64' }}
+      uses: docker/setup-qemu-action@v1
+      with:
+        platforms: ${{ matrix.arch }}
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        path: 'src'
+        set-safe-directory: true
+    - name: Configure Repo Checkout
+      id: checkout-config
+      working-directory: '${{ github.workspace }}/src'
+      env:
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      run: |
+        . .ci/githubactions/checkout_config.sh
+    - name: Prepare Git Repo for autorevision
+      working-directory: '${{ github.workspace }}/src'
+      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+    - name: Init Git Submodules
+      working-directory: '${{ github.workspace }}/src'
+      run: git submodule update --init --recursive
+    - name: Compute build variables
+      id: settings
+      working-directory: '${{ github.workspace }}/src'
+      env:
+        WZ_TARGET_ARCH: ${{ matrix.arch }}
+      run: |
+        . .ci/githubactions/export_build_output_desc.sh
+        echo "WZ_BUILD_DESC_IS_TAG=${WZ_BUILD_DESC_IS_TAG}" >> $GITHUB_ENV
+        echo "WZ_BUILD_DESC_PREFIX=${WZ_BUILD_DESC_PREFIX}" >> $GITHUB_ENV
+        WZ_OUTPUT_NAME_SUFFIX=""
+        WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX=""
+        WZ_NAME_SUFFIX=""
+        if [ "$WZ_BUILD_DESC_IS_TAG" == "false" ]; then
+          WZ_OUTPUT_NAME_SUFFIX=".dev_$(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9]/_/g')"
+          WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX="_$(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9]/_/g')"
+          WZ_NAME_SUFFIX=" ($(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9\.]/_/g'))"
+        fi
+        echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" >> $GITHUB_ENV
+        echo "::set-output name=WZ_OUTPUT_NAME_SUFFIX::${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX=${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}"
+        echo "::set-output name=WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX::${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}"
+        echo "WZ_NAME_SUFFIX=${WZ_NAME_SUFFIX}" >> $GITHUB_ENV
+
+        WZ_DISTRIBUTOR="UNKNOWN"
+        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+          WZ_DISTRIBUTOR="wz2100.net"
+        fi
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
+        
+        WZ_FLATPAK_BRANCH="${WZ_BUILD_DESC_PREFIX}"
+        if [ "$WZ_BUILD_DESC_IS_TAG" == "true" ]; then
+          # Verify tag format (three-component version + optional trailing qualifier like "-beta1" or "-rc1") if on a tag
+          regex="^([0-9][0-9]*\\.[0-9][0-9]*\\.[0-9][0-9]*)([\-][A-Za-z0-9]+)?$";
+          if [[ ! "${SOURCE_TAG}" =~ $regex ]]; then
+            echo "Invalid tag version format: \"${SOURCE_TAG}\""
+            exit 1
+          fi
+          SOURCE_TAG_VERSION="${BASH_REMATCH[1]}"
+          SOURCE_TAG_QUALIFIER="${BASH_REMATCH[2]:1}"
+          echo "SOURCE_TAG_VERSION=\"${SOURCE_TAG_VERSION}\""
+          echo "SOURCE_TAG_QUALIFIER=\"${SOURCE_TAG_QUALIFIER}\""
+
+          if [ ! -z "${SOURCE_TAG_QUALIFIER}" ]; then
+            WZ_FLATPAK_BRANCH="beta"
+            SOURCE_TAG_IS_PRERELEASE="true"
+          else
+            WZ_FLATPAK_BRANCH="stable"
+            SOURCE_TAG_IS_PRERELEASE="false"
+          fi
+          
+          echo "::set-output name=publish-to-flathub::true"
+          echo "::set-output name=SOURCE_TAG_IS_PRERELEASE::${SOURCE_TAG_IS_PRERELEASE}"
+        else
+          # Verify the "branch" doesn't equal "stable" or "beta" (which are reserved for tag builds)
+          # Otherwise reset it to default ("master")
+          if [[ "$WZ_FLATPAK_BRANCH" =~ ^(stable|beta)$ ]]; then
+            echo "NOTE: Invalid default branch specified for non-release / tag build ($WZ_FLATPAK_BRANCH)... will override"
+            WZ_FLATPAK_BRANCH="master"
+          fi
+          echo "::set-output name=publish-to-flathub::false"
+          echo "::set-output name=SOURCE_TAG_IS_PRERELEASE::false"
+        fi
+        echo "WZ_FLATPAK_BRANCH=${WZ_FLATPAK_BRANCH}"
+        echo "::set-output name=WZ_FLATPAK_BRANCH::${WZ_FLATPAK_BRANCH}"
+        
+        WZ_FLATPAK_APPID="net.wz2100.wz2100${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "WZ_FLATPAK_APPID=${WZ_FLATPAK_APPID}" >> $GITHUB_ENV
+        WZ_FLATPAK_BUNDLE="warzone2100${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}_linux_${WZ_TARGET_ARCH}.flatpak"
+        echo "WZ_FLATPAK_BUNDLE=${WZ_FLATPAK_BUNDLE}" >> $GITHUB_ENV
+        echo "::set-output name=WZ_FLATPAK_BUNDLE::${WZ_FLATPAK_BUNDLE}"
+        WZ_FLATPAK_MIRROR_SCREENSHOTS_URL="https://dl.flathub.org/repo/screenshots"
+        echo "WZ_FLATPAK_MIRROR_SCREENSHOTS_URL=${WZ_FLATPAK_MIRROR_SCREENSHOTS_URL}" >> $GITHUB_ENV
+    - name: Generate Flatpak manifest
+      working-directory: '${{ github.workspace }}/src'
+      shell: bash
+      run: |
+        ADDITIONAL_CONFIG_OPTIONS=""
+        if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
+          # Cross compilation is needed
+          ADDITIONAL_CONFIG_OPTIONS="-DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
+        fi 
+        echo "::group::Generate manifest"
+        cmake "-DTEMPLATE_FILE=.ci/flatpak/net.wz2100.wz2100.yaml.in" "-DOUTPUT_FILE=.ci/flatpak/net.wz2100.wz2100.yaml" "-DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" ${ADDITIONAL_CONFIG_OPTIONS} -P .ci/flatpak/generate_flatpak_config.cmake
+        echo "::endgroup::"
+        
+        echo "::group::Output manifest"
+        cat ".ci/flatpak/net.wz2100.wz2100.yaml"
+        echo "::endgroup::"
+    - name: Install Flatpak manifest deps
+      run: |
+        # Build SDK
+        flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk//22.08
+        # Target runtime
+        flatpak --system install -y --noninteractive flathub org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/22.08
+        
+        if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
+          # Cross compiler
+          flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk.Extension.toolchain-${WZ_FLATPAK_TARGET_ARCH}//22.08
+          # SDK For target runtime
+          flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk.Compat.${WZ_FLATPAK_TARGET_ARCH}//22.08
+        fi
+    - name: Build Flatpak
+      id: build
+      env:
+        WZ_FLATPAK_MANIFEST_PATH: src/.ci/flatpak/net.wz2100.wz2100.yaml
+        WZ_FLATPAK_LOCAL_REPO_NAME: repo
+        WZ_FLATPAK_BRANCH: ${{ steps.settings.outputs.WZ_FLATPAK_BRANCH }}
+        SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
+        DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
+      run: |
+        . src/.ci/flatpak/build.sh
+        echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"
+        echo "::set-output name=WZ_FLATPAK_LOCAL_REPO_NAME::${WZ_FLATPAK_LOCAL_REPO_NAME}"
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
+        path: ${{ steps.settings.outputs.WZ_FLATPAK_BUNDLE }}
+    - name: Output generated files listing
+      shell: bash
+      working-directory: flatpak_app/files
+      run: |
+        find . -type f
+    - name: Upload debug info
+      uses: actions/upload-artifact@v3
+      with:
+        name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
+        path: |
+          flatpak_app/files/lib/debug/bin
+          flatpak_app/files/lib/debug/lib
+        if-no-files-found: 'error'
+    - name: Prep for separate beta branch build
+      if: success() && steps.settings.outputs.publish-to-flathub == 'true' && steps.settings.outputs.WZ_FLATPAK_BRANCH == 'stable'
+      shell: bash
+      env:
+        WZ_FLATPAK_LOCAL_REPO_NAME: ${{ steps.build.outputs.WZ_FLATPAK_LOCAL_REPO_NAME }}
+      run: |
+        # Remove the existing repo(s)
+        if [ ! -d "repo" ]; then
+          echo "::error ::Missing expected repo directory"
+          exit 1
+        fi
+        rm -rf repo
+        if [ -d "${WZ_FLATPAK_LOCAL_REPO_NAME}" ]; then
+          rm -rf ${WZ_FLATPAK_LOCAL_REPO_NAME}
+        fi
+    - name: Build (additional) beta branch for stable versions
+      if: success() && steps.settings.outputs.publish-to-flathub == 'true' && steps.settings.outputs.WZ_FLATPAK_BRANCH == 'stable'
+      continue-on-error: true
+      id: build-beta
+      env:
+        WZ_FLATPAK_MANIFEST_PATH: src/.ci/flatpak/net.wz2100.wz2100.yaml
+        WZ_FLATPAK_LOCAL_REPO_NAME: repo
+        WZ_FLATPAK_BRANCH: beta
+        SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
+        DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
+      run: |
+        . src/.ci/flatpak/build.sh
+        echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"
+        echo "::set-output name=WZ_FLATPAK_LOCAL_REPO_NAME::${WZ_FLATPAK_LOCAL_REPO_NAME}"
+
+  upload-debug-symbols:
+    strategy:
+      matrix:
+        include:
+          - arch: "x86_64"
+          - arch: "arm64"
+    name: 'Upload Debug Symbols (${{ matrix.arch }})'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    # Run on push to master branch (development build), or tag release automation build
+    if: (github.repository == 'Warzone2100/warzone2100') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+    needs: build-flatpak
+    environment: upload_symbols
+    # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
+    # SENTRY_AUTH_TOKEN
+    steps:
+      - name: Prep Environment
+        run: |
+          mkdir dl-debug-symbols
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
+          path: ./dl-debug-symbols
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./dl-debug-symbols
+      - name: 'Upload debug symbols'
+        env:
+          SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
+          WZ_ARCHIVE_DIR: './dl-debug-symbols'
+          WZ_GITHUB_REF: ${{needs.build-flatpak.outputs.WZ_GITHUB_REF}}
+        run: |
+          echo "WZ_GITHUB_REF=${WZ_GITHUB_REF}"
+          if [[ -z "${SENTRY_AUTH_TOKEN}" ]]; then
+            echo "No SENTRY_AUTH_TOKEN - skipping"
+            exit 0
+          fi
+          docker pull getsentry/sentry-cli
+          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+
+  upload-release-builds:
+    strategy:
+      matrix:
+        include:
+          - arch: "x86_64"
+          - arch: "arm64"
+    name: 'Upload Release Build (${{ matrix.arch }})'
+    permissions:
+      contents: write # Needed to upload to releases
+    runs-on: ubuntu-latest
+    # Run on tag release automation build
+    if: (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    needs: build-flatpak
+    steps:
+      - name: Prep Environment
+        run: |
+          mkdir dl-artifacts
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
+          path: ./dl-artifacts
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./dl-artifacts
+      - name: Upload .flatpak to release
+        working-directory: ./dl-artifacts
+        run: |
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+          echo "SOURCE_TAG=${SOURCE_TAG}"
+          for i in warzone2100*.flatpak; do
+            echo "Uploading: ${i}"
+            gh release upload "${SOURCE_TAG}" "${i}"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          WZ_GITHUB_REF: ${{needs.build-flatpak.outputs.WZ_GITHUB_REF}}
