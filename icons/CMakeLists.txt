@@ -29,6 +29,12 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
 	############################
 	# Generate .desktop file
 
+	if (NOT WZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY)
+		set(WZ_OUTPUT_BINARY_SUFFIX "${WZ_OUTPUT_NAME_SUFFIX}")
+	else()
+		unset(WZ_OUTPUT_BINARY_SUFFIX)
+	endif()
+
 	configure_file("net.wz2100.warzone2100.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/net.wz2100.warzone2100${WZ_OUTPUT_NAME_SUFFIX}.desktop" @ONLY)
 
 	############################
