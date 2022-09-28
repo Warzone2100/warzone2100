@@ -49,6 +49,7 @@
 #include "qtscript.h"		// for bInTutorial
 #include "radar.h"
 #include "seqdisp.h"
+#include "hci/groups.h"
 
 bool hostQuitConfirmation = true;
 
@@ -649,6 +650,11 @@ static bool startIGGraphicsOptionsMenu()
 	addIGTextButton(INTINGAMEOP_SCREENSHAKE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsScreenShakeString(), WBUT_PLAIN);
 	row++;
 
+	// Groups Menu
+	addIGTextButton(INTINGAMEOP_GROUPS,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Groups Menu"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_GROUPS_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsGroupsMenuEnabled(), WBUT_PLAIN);
+	row++;
+
 	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
 	row++;
 
@@ -699,6 +705,11 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 	case INTINGAMEOP_SCREENSHAKE_R:
 		setShakeStatus(!getShakeStatus());
 		widgSetString(psWScreen, INTINGAMEOP_SCREENSHAKE_R, graphicsOptionsScreenShakeString());
+		break;
+	case INTINGAMEOP_GROUPS:
+	case INTINGAMEOP_GROUPS_R:
+		setGroupButtonEnabled(!getGroupButtonEnabled());
+		widgSetString(psWScreen, INTINGAMEOP_GROUPS_R, graphicsOptionsGroupsMenuEnabled());
 		break;
 
 	case INTINGAMEOP_GO_BACK:
