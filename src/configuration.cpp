@@ -55,6 +55,7 @@
 #include "loadsave.h" // for autosaveEnabled
 #include "clparse.h" // for autoratingUrl
 #include "terrain.h"
+#include "hci/groups.h"
 
 #include <type_traits>
 
@@ -389,6 +390,7 @@ bool loadConfig()
 		war_SetCameraSpeed((v % CAMERASPEED_STEP != 0) ? CAMERASPEED_DEFAULT : v);
 	}
 	setShakeStatus(iniGetBool("shake", false).value());
+	setGroupButtonEnabled(iniGetBool("groupmenu", true).value());
 	setCameraAccel(iniGetBool("cameraAccel", true).value());
 	setDrawShadows(iniGetBool("shadows", true).value());
 	war_setSoundEnabled(iniGetBool("sound", true).value());
@@ -689,6 +691,7 @@ bool saveConfig()
 	iniSetInteger("lodDistanceBias", war_getLODDistanceBiasPercentage());
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
+	iniSetInteger("groupmenu", (int)getGroupButtonEnabled());		// screenshake
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
