@@ -11,6 +11,7 @@ cmake_minimum_required(VERSION 3.5)
 # And also, passed from the main CMake build:
 # - WZ_OUTPUT_NAME_SUFFIX
 # - WZ_NAME_SUFFIX
+# - WZ_APPSTREAM_ID
 #
 
 if(NOT DEFINED CACHEFILE OR "${CACHEFILE}" STREQUAL "")
@@ -31,6 +32,9 @@ if(NOT DEFINED WZ_OUTPUT_NAME_SUFFIX)
 endif()
 if(NOT DEFINED WZ_NAME_SUFFIX)
 	message( FATAL_ERROR "Missing expected input define: WZ_NAME_SUFFIX" )
+endif()
+if(NOT DEFINED WZ_APPSTREAM_ID)
+	message( FATAL_ERROR "Missing expected input define: WZ_APPSTREAM_ID" )
 endif()
 
 #################################
@@ -71,6 +75,7 @@ set(WZ_METAINFO_RELEASE_DATE "${VCS_MOST_RECENT_COMMIT_DATE}")
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_OUTPUT_NAME_SUFFIX: ${WZ_OUTPUT_NAME_SUFFIX}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_NAME_SUFFIX: ${WZ_NAME_SUFFIX}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_APPSTREAM_ID: ${WZ_APPSTREAM_ID}")
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_METAINFO_RELEASE_VERSION: ${WZ_METAINFO_RELEASE_VERSION}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_METAINFO_RELEASE_TYPE: ${WZ_METAINFO_RELEASE_TYPE}")

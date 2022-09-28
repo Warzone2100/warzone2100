@@ -1,6 +1,10 @@
 if(UNIX AND NOT APPLE AND NOT WIN32)
 	include(GNUInstallDirs)
 
+	if (NOT DEFINED WZ_APPSTREAM_ID)
+		set(WZ_APPSTREAM_ID "net.wz2100.warzone2100")
+	endif()
+
 	############################
 	# Generate appdata.xml (w/ autorevision)
 
@@ -10,10 +14,10 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
 
 	# Generate the appdata.xml info (with version info)
 	set(_appdata_xml_template_file "${CMAKE_CURRENT_SOURCE_DIR}/net.wz2100.warzone2100.appdata.xml.in")
-	set(_appdata_xml_output_file "${CMAKE_CURRENT_BINARY_DIR}/net.wz2100.warzone2100${WZ_OUTPUT_NAME_SUFFIX}.appdata.xml")
+	set(_appdata_xml_output_file "${CMAKE_CURRENT_BINARY_DIR}/${WZ_APPSTREAM_ID}${WZ_OUTPUT_NAME_SUFFIX}.appdata.xml")
 	add_custom_command(
 		OUTPUT "${_appdata_xml_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_appdata_xml_template_file} -DOUTPUT_FILE=${_appdata_xml_output_file} -DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX} -DWZ_NAME_SUFFIX=${WZ_NAME_SUFFIX} -P ${CMAKE_CURRENT_SOURCE_DIR}/autorevision_metainfo.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_appdata_xml_template_file} -DOUTPUT_FILE=${_appdata_xml_output_file} -DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX} -DWZ_NAME_SUFFIX=${WZ_NAME_SUFFIX} -DWZ_APPSTREAM_ID=${WZ_APPSTREAM_ID} -P ${CMAKE_CURRENT_SOURCE_DIR}/autorevision_metainfo.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 		DEPENDS "${_appdata_xml_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_CURRENT_SOURCE_DIR}/autorevision_metainfo.cmake"
 		VERBATIM
@@ -35,22 +39,22 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
 		unset(WZ_OUTPUT_BINARY_SUFFIX)
 	endif()
 
-	configure_file("net.wz2100.warzone2100.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/net.wz2100.warzone2100${WZ_OUTPUT_NAME_SUFFIX}.desktop" @ONLY)
+	configure_file("net.wz2100.warzone2100.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/${WZ_APPSTREAM_ID}${WZ_OUTPUT_NAME_SUFFIX}.desktop" @ONLY)
 
 	############################
 	# Install both
 
-	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/net.wz2100.warzone2100${WZ_OUTPUT_NAME_SUFFIX}.desktop"
+	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${WZ_APPSTREAM_ID}${WZ_OUTPUT_NAME_SUFFIX}.desktop"
 		DESTINATION "${CMAKE_INSTALL_DATADIR}/applications"
 		COMPONENT Core
 	)
-	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/net.wz2100.warzone2100${WZ_OUTPUT_NAME_SUFFIX}.appdata.xml"
+	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${WZ_APPSTREAM_ID}${WZ_OUTPUT_NAME_SUFFIX}.appdata.xml"
 		DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
 		COMPONENT Core
 	)
 	install(FILES warzone2100.png
 		DESTINATION "${CMAKE_INSTALL_DATADIR}/icons"
-		RENAME "net.wz2100.warzone2100${WZ_OUTPUT_NAME_SUFFIX}.png"
+		RENAME "${WZ_APPSTREAM_ID}${WZ_OUTPUT_NAME_SUFFIX}.png"
 		COMPONENT Core
 	)
 endif()
