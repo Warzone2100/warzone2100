@@ -22,8 +22,16 @@
 	<url type="faq">https://wz2100.net/#faq</url>
 	<url type="translate">https://github.com/Warzone2100/warzone2100/blob/master/doc/Translations.md</url>
 	<url type="help">https://betaguide.wz2100.net/</url>
+	<url type="donation">https://opencollective.com/warzone2100</url>
 	<screenshots>
-		<screenshot type="default" width="320" height="240">https://wz2100.net/static/img/wz2100-CAM_3A50.png</screenshot>
+		<screenshot type="default">
+			<caption>Compete in massive battles, with up to 10 players</caption>
+			<image>https://wz2100.net/img/screenshots/multiplayer_massive_battle.png</image>
+		</screenshot>
+		<screenshot>
+			<caption>Seize territory + resources, build extensive bases</caption>
+			<image>https://wz2100.net/img/screenshots/base_build.png</image>
+		</screenshot>
 	</screenshots>
 	<developer_name>Warzone 2100 Project</developer_name>
 	<releases>
