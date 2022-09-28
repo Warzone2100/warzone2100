@@ -82,6 +82,7 @@
 #include "notifications.h"
 #include "activity.h"
 #include "clparse.h" // for autorating
+#include "hci/groups.h"
 
 #include <fmt/core.h>
 
@@ -829,6 +830,11 @@ char const *graphicsOptionsScreenShakeString()
 	return getShakeStatus() ? _("On") : _("Off");
 }
 
+char const *graphicsOptionsGroupsMenuEnabled()
+{
+	return getGroupButtonEnabled() ? _("On") : _("Off");
+}
+
 char const *graphicsOptionsSubtitlesString()
 {
 	return seq_GetSubtitles() ? _("On") : _("Off");
@@ -1163,6 +1169,11 @@ void startGraphicsOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SSHAKE_R, graphicsOptionsScreenShakeString(), WBUT_SECONDARY)));
 	row.start++;
 
+	// groups menu
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_GROUPS, _("Groups Menu"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GROUPS_R, graphicsOptionsGroupsMenuEnabled(), WBUT_SECONDARY)));
+	row.start++;
+
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
@@ -1247,6 +1258,12 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_SSHAKE_R:
 		setShakeStatus(!getShakeStatus());
 		widgSetString(psWScreen, FRONTEND_SSHAKE_R, graphicsOptionsScreenShakeString());
+		break;
+
+	case FRONTEND_GROUPS:
+	case FRONTEND_GROUPS_R:
+		setGroupButtonEnabled(!getGroupButtonEnabled());
+		widgSetString(psWScreen, FRONTEND_GROUPS_R, graphicsOptionsGroupsMenuEnabled());
 		break;
 
 	default:

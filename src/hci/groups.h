@@ -10,6 +10,9 @@
 #include "lib/widget/label.h"
 #include "../selection.h"
 
+void setGroupButtonEnabled(bool bNewState);
+bool getGroupButtonEnabled();
+
 class GroupButton;
 
 class GroupsForum: public IntFormAnimated

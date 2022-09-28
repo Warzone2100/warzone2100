@@ -2,6 +2,19 @@
 #include "groups.h"
 #include "objects_stats.h"
 
+static bool groupButtonEnabled = true;
+
+void setGroupButtonEnabled(bool bNewState)
+{
+	groupButtonEnabled = bNewState;
+}
+
+bool getGroupButtonEnabled()
+{
+	return groupButtonEnabled;
+
+}
+
 class GroupButton : public DynamicIntFancyButton
 {
 private:
