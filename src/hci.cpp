@@ -2012,6 +2012,7 @@ void intAlliedResearchChanged()
 
 bool intShowGroupSelectionMenu()
 {
+	// TODO set if statement, if enabled in options
 	GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
 	if (!groupsForum)
 	{
