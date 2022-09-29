@@ -95,7 +95,7 @@ void GroupsForum::initialize()
 	// the layout should be like this when the build menu is open
 	id = IDOBJ_GROUP;
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY + 40, OBJ_BACKWIDTH, OBJ_BACKHEIGHT - 40);
+		psWidget->setGeometry(GROUP_BACKX, GROUP_BACKY, GROUP_BACKWIDTH, GROUP_BACKHEIGHT);
 	}));
 	addTabList();
 	// create the 11 buttons for each group
