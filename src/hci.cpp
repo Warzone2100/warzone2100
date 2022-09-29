@@ -1210,7 +1210,7 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 	intMode = INT_NORMAL;
 	//clearSelelection() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
 	IntRefreshPending = false;
-	intLowerGroupsMenu();
+	intShowGroupSelectionMenu();
 }
 
 void intOpenDebugMenu(OBJECT_TYPE id)
@@ -1919,16 +1919,6 @@ void intStartStructPosition(BASE_STATS *psStats)
 	init3DBuilding(psStats, nullptr, nullptr);
 }
 
-void intLowerGroupsMenu()
-{
-	// if it's not already created, create it here
-	GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
-	if (!groupsForum) {
-		intShowGroupSelectionMenu();
-	} else if (groupsForum) {
-		groupsForum->moveLayoutDown();
-	}
-}
 
 
 /* Stop looking for a structure location */
@@ -2022,8 +2012,12 @@ void intAlliedResearchChanged()
 
 bool intShowGroupSelectionMenu()
 {
-	auto groupsForm = GroupsForum::make();
-	psWScreen->psForm->attach(groupsForm);
+	GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
+	if (!groupsForum)
+	{
+		auto newGroupsForum = GroupsForum::make();
+		psWScreen->psForm->attach(newGroupsForum);
+	}
 	return true;
 }
 

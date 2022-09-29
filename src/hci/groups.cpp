@@ -90,23 +90,13 @@ void GroupsForum::display(int xOffset, int yOffset)
 	BaseWidget::display(xOffset, yOffset);
 }
 
-void GroupsForum::moveLayoutUp() {
-	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY - 80, OBJ_BACKWIDTH, OBJ_BACKHEIGHT - 40);
-	}));
-}
-
-void GroupsForum::moveLayoutDown() {
-	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
-	}));
-}
-
 void GroupsForum::initialize()
 {
 	// the layout should be like this when the build menu is open
 	id = IDOBJ_GROUP;
-	moveLayoutDown();
+	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY - 80, OBJ_BACKWIDTH, OBJ_BACKHEIGHT - 40);
+	}));
 	addTabList();
 	// create the 11 buttons for each group
 	for (size_t i = 1; i <= 10; i++)
