@@ -220,6 +220,7 @@ void ObjectsForm::initialize()
 {
 	// creating an obj stat form
 	id = IDOBJ_FORM;
+	// TODO set if statement, subtract the 80 if enabled in options
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY - 80, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
 	}));
