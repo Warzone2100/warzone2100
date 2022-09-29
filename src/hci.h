@@ -118,6 +118,11 @@ enum  				  // Reticule button indecies.
 #define OBJ_BACKWIDTH	320	//316		// Width of object screen back form.
 #define OBJ_BACKHEIGHT	115		// Height of object screen back form.
 
+#define GROUP_BACKX OBJ_BACKX
+#define GROUP_BACKY OBJ_BACKY + 40
+#define GROUP_BACKWIDTH OBJ_BACKWIDTH
+#define GROUP_BACKHEIGHT OBJ_BACKHEIGHT - 40
+
 /* Build screen positions */
 #define OBJ_TABY		6	// Y coord of object screen tab form.
 #define OBJ_WIDTH		316	//312//310	// Width of object screen tab form.
