@@ -221,7 +221,7 @@ void ObjectsForm::initialize()
 	// creating an obj stat form
 	id = IDOBJ_FORM;
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
+		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY - 80, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
 	}));
 
 	addCloseButton();
