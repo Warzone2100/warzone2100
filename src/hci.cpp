@@ -2012,12 +2012,14 @@ void intAlliedResearchChanged()
 
 bool intShowGroupSelectionMenu()
 {
-	// TODO set if statement, if enabled in options
-	GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
-	if (!groupsForum)
+	if (getGroupButtonEnabled())
 	{
-		auto newGroupsForum = GroupsForum::make();
-		psWScreen->psForm->attach(newGroupsForum);
+		GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
+		if (!groupsForum)
+		{
+			auto newGroupsForum = GroupsForum::make();
+			psWScreen->psForm->attach(newGroupsForum);
+		}
 	}
 	return true;
 }
