@@ -393,6 +393,5 @@ void intStartStructPosition(BASE_STATS *psStats);
 
 /* Remove the object widgets from the widget screen */
 void intRemoveObject();
-void intLowerGroupsMenu();
 
 #endif // __INCLUDED_SRC_HCI_H__
