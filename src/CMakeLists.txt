@@ -212,10 +212,10 @@ endif()
 
 # Dependencies
 add_dependencies(warzone2100 data)
-if(TARGET wz2100_doc)
+if(ENABLE_DOCS AND TARGET wz2100_doc)
 	add_dependencies(warzone2100 wz2100_doc)
 endif()
-if(TARGET translations)
+if(ENABLE_NLS AND TARGET translations)
 	add_dependencies(warzone2100 translations)
 endif()
 
