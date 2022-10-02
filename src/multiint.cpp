@@ -4214,9 +4214,15 @@ public:
 				{
 					playerInfoTooltip += "\n";
 				}
-				playerInfoTooltip += _("Rating information: ");
-				playerInfoTooltip += "\n";
-				playerInfoTooltip += stats.autorating.details;
+				playerInfoTooltip += std::string(_("Rating information: ")) + "\n" + stats.autorating.details + "\n";
+				if (stats.autoratingFrom == RATING_SOURCE_HOST && !NetPlay.isHost)
+				{
+					playerInfoTooltip += _("(Host provided)");
+				}
+				else
+				{
+					playerInfoTooltip += _("Rating information from: ") + getAutoratingUrl();
+				}
 			}
 		}
 		playerInfo->setTip(playerInfoTooltip);

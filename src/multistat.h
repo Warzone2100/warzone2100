@@ -35,6 +35,11 @@ using nonstd::nullopt;
 
 #define WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL "https://wz2100-autohost.net/rating/"
 
+enum RATING_SOURCE {
+	RATING_SOURCE_LOCAL,
+	RATING_SOURCE_HOST
+};
+
 struct PLAYERSTATS
 {
 	uint32_t played = 0;  /// propagated stats.
@@ -62,6 +67,7 @@ struct PLAYERSTATS
 		std::string details;
 	};
 	Autorating autorating;
+	RATING_SOURCE autoratingFrom = RATING_SOURCE_HOST;
 
 	EcKey identity;
 };

@@ -146,7 +146,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 				playerStats[playerIndex].autorating = nlohmann::json::parse(dataCopy->memory, dataCopy->memory + dataCopy->size);
 				if (playerStats[playerIndex].autorating.valid)
 				{
-					setMultiStats(playerIndex, playerStats[playerIndex], false);
+					setMultiStats(playerIndex, playerStats[playerIndex], !NetPlay.isHost);
 					netPlayersUpdated = true;
 				}
 			}
@@ -285,9 +285,15 @@ void recvMultiStats(NETQUEUE queue)
 	}
 	NETend();
 
-	if (NetPlay.isHost && !playerStats[playerIndex].autorating.valid)
+	if (getAutoratingEnable())
 	{
+		playerStats[playerIndex].autorating.valid = false;
+		playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
 		lookupRatingAsync(playerIndex);
+	}
+	else
+	{
+		playerStats[playerIndex].autoratingFrom = RATING_SOURCE_HOST;
 	}
 }
 
