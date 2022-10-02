@@ -385,7 +385,7 @@ bool loadConfig()
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
-	setAutoratingUrl(iniGetString("autoratingUrl", WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL).value());
+	setAutoratingUrl(iniGetString("autoratingUrlV2", WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL).value());
 	setAutoratingEnable(iniGetBool("autorating", false).value());
 	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
 	mpSetServerName(iniGetString("server_name", "").value().c_str());
@@ -634,7 +634,7 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	iniSetString("autoratingUrl", getAutoratingUrl());
+	iniSetString("autoratingUrlV2", getAutoratingUrl());
 	iniSetBool("autorating", getAutoratingEnable());
 	iniSetString("masterserver_name", NETgetMasterserverName());
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
