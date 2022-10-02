@@ -519,7 +519,7 @@ void ScrollableTableWidget::updateColumnWidths()
 	}
 }
 
-bool ScrollableTableWidget::relayoutColumns(std::vector<size_t> proposedColumnWidths, const std::unordered_set<size_t>& priorityIndexes)
+bool ScrollableTableWidget::relayoutColumns(std::vector<size_t> proposedColumnWidths, std::unordered_set<size_t> priorityIndexes)
 {
 	// respect any minimum column widths (first pass)
 	std::vector<size_t> colIndexesIncreasedToMinimumSize;
@@ -560,7 +560,7 @@ bool ScrollableTableWidget::relayoutColumns(std::vector<size_t> proposedColumnWi
 			size_t currentTotalColumnWidthReduction = 0;
 			std::vector<size_t> stillShrinkableColumnIndexes;
 			// order shrinkableColumnIndexes by maxColumnWidthReduction for associated column
-			std::sort(shrinkableColumnIndexes.begin(), shrinkableColumnIndexes.end(), [this, proposedColumnWidths](size_t colIndexA, size_t coldIndexB) -> bool {
+			std::sort(shrinkableColumnIndexes.begin(), shrinkableColumnIndexes.end(), [this, &proposedColumnWidths](size_t colIndexA, size_t coldIndexB) -> bool {
 				size_t maxColumnWidthReductionA = proposedColumnWidths[colIndexA];
 				if (minColumnWidths.size() > colIndexA)
 				{

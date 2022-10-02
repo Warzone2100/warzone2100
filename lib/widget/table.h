@@ -28,6 +28,7 @@
 #include "button.h"
 #include "scrollablelist.h"
 
+#include <vector>
 #include <unordered_set>
 
 class TableRow: public W_BUTTON
@@ -155,7 +156,7 @@ protected:
 
 private:
 	size_t totalPaddingWidthFor(size_t numColumns) const;
-	bool relayoutColumns(std::vector<size_t> proposedColumnWidths, const std::unordered_set<size_t>& priorityIndexes = {});
+	bool relayoutColumns(std::vector<size_t> proposedColumnWidths, std::unordered_set<size_t> priorityIndexes = {});
 	void updateColumnWidths();
 	std::vector<size_t> getShrinkableColumnIndexes(const std::vector<size_t>& currentColumnWidths);
 	std::vector<size_t> getExpandToFillColumnIndexes();
