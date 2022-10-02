@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.5)
 # Required input defines:
 # - TEMPLATE_FILE: the full filename + path for the input net.wz2100.warzone2100.appdata.xml.in template file
 # - OUTPUT_FILE: the full filename + path for the output net.wz2100.warzone2100.appdata.xml file
+# - PROJECT_ROOT: the path the project root (${PROJECT_SOURCE_DIR})
 #
 # And also, these input defines:
 # - WZ_OUTPUT_NAME_SUFFIX: The desired suffix to apply to the app id in the manifest (should match the main build)
@@ -18,6 +19,9 @@ if(NOT DEFINED TEMPLATE_FILE OR "${TEMPLATE_FILE}" STREQUAL "")
 endif()
 if(NOT DEFINED OUTPUT_FILE OR "${OUTPUT_FILE}" STREQUAL "")
 	message( FATAL_ERROR "Missing required input define: OUTPUT_FILE" )
+endif()
+if(NOT DEFINED PROJECT_ROOT OR "${PROJECT_ROOT}" STREQUAL "")
+	message( FATAL_ERROR "Missing required input define: PROJECT_ROOT" )
 endif()
 
 if(NOT DEFINED WZ_OUTPUT_NAME_SUFFIX)
@@ -90,6 +94,27 @@ else()
 endif()
 
 ##################################
+# Handle sentry-native
+
+# Get the source URL AND SHA512 from a data file
+set(_sentry_dl_data_file "${PROJECT_ROOT}/.sentrynative")
+file(STRINGS "${_sentry_dl_data_file}" _sentry_native_url_info ENCODING UTF-8)
+while(_sentry_native_url_info)
+	list(POP_FRONT _sentry_native_url_info LINE)
+	if (LINE MATCHES "^URL=(.*)")
+		set(WZ_SENTRY_NATIVE_URL "${CMAKE_MATCH_1}")
+	endif()
+	if (LINE MATCHES "^SHA512=(.*)")
+		set(WZ_SENTRY_NATIVE_SHA512 "${CMAKE_MATCH_1}")
+	endif()
+endwhile()
+unset(_sentry_native_url_info)
+if(NOT DEFINED WZ_SENTRY_NATIVE_URL OR NOT DEFINED WZ_SENTRY_NATIVE_SHA512)
+	message(FATAL_ERROR "Failed to load URL and hash from: ${_sentry_dl_data_file}")
+endif()
+unset(_sentry_dl_data_file)
+
+##################################
 # Debug output
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++TEMPLATE_FILE: ${TEMPLATE_FILE}")
@@ -104,6 +129,9 @@ if (DEFINED WZ_CROSS_COMPILE_TARGET_ARCH)
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_AUTOTOOLS_CROSS_CONFIG_OPTIONS: ${WZ_AUTOTOOLS_CROSS_CONFIG_OPTIONS}")
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_CROSS_BUILD_OPTIONS: ${WZ_CROSS_BUILD_OPTIONS}")
 endif()
+
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_SENTRY_NATIVE_URL: ${WZ_SENTRY_NATIVE_URL}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++WZ_SENTRY_NATIVE_SHA512: ${WZ_SENTRY_NATIVE_SHA512}")
 
 ##################################
 # Output configured file based on the template

@@ -176,7 +176,7 @@ jobs:
           ADDITIONAL_CONFIG_OPTIONS="-DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
         fi 
         echo "::group::Generate manifest"
-        cmake "-DTEMPLATE_FILE=.ci/flatpak/net.wz2100.wz2100.yaml.in" "-DOUTPUT_FILE=.ci/flatpak/net.wz2100.wz2100.yaml" "-DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" ${ADDITIONAL_CONFIG_OPTIONS} -P .ci/flatpak/generate_flatpak_config.cmake
+        cmake "-DTEMPLATE_FILE=.ci/flatpak/net.wz2100.wz2100.yaml.in" "-DOUTPUT_FILE=.ci/flatpak/net.wz2100.wz2100.yaml" "-DPROJECT_ROOT=./" "-DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" ${ADDITIONAL_CONFIG_OPTIONS} -P .ci/flatpak/generate_flatpak_config.cmake
         echo "::endgroup::"
         
         echo "::group::Output manifest"

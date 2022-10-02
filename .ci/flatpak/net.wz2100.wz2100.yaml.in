@@ -50,9 +50,22 @@ modules:
     build-commands:
       - gem install --install-dir /files/lib/ruby/gems/temp --bindir /app/bin asciidoctor-2.0.17.gem
     sources:
-        - type: file
-          url: https://rubygems.org/downloads/asciidoctor-2.0.17.gem
-          sha256: ed5b5e399e8d64994cc16f0983f993d6e33990909a8415b6fc8b786cdeb00f3d
+      - type: file
+        url: https://rubygems.org/downloads/asciidoctor-2.0.17.gem
+        sha256: ed5b5e399e8d64994cc16f0983f993d6e33990909a8415b6fc8b786cdeb00f3d
+
+  - name: sentry-native
+    cleanup:
+      - '*'
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/prestaged-dl
+      - cp "sentry-native.zip" /app/prestaged-dl
+    sources:
+      - type: file
+        url: @WZ_SENTRY_NATIVE_URL@
+        sha512: @WZ_SENTRY_NATIVE_SHA512@
+        dest-filename: sentry-native.zip
 
   - name: glslc
     buildsystem: cmake-ninja
@@ -136,11 +149,13 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DWZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY=ON
       - -DWZ_APPSTREAM_ID=net.wz2100.wz2100
-      - -DWZ_BUILD_SENTRY:BOOL=OFF
+      - -DWZ_BUILD_SENTRY:BOOL=ON
+      - -DWZ_SENTRY_PREDOWNLOADED_SENTRY_ARCHIVE=/app/prestaged-dl/sentry-native.zip
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR
       - -DDISCORD_RPC_APPID:STRING=$DISCORD_RPC_APPID
+      - -DSENTRY_IO_DSN:STRING=$SENTRY_IO_DSN
       - -DWZ_OUTPUT_NAME_SUFFIX=$WZ_OUTPUT_NAME_SUFFIX
       - -DWZ_NAME_SUFFIX=$WZ_NAME_SUFFIX
     secret-env:
