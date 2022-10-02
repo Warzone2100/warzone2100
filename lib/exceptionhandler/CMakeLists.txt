@@ -36,39 +36,7 @@ target_link_libraries(exception-handler PRIVATE framework launchinfo)
 #  - SENTRY_IO_DSN (to supply the DSN configuration URL)
 
 if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY)
-	if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-		# Sentry-native requires CMAKE_SYSTEM_VERSION to be properly set
-		if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
-			set(CMAKE_SYSTEM_VERSION "10")
-		else()
-			set(CMAKE_SYSTEM_VERSION "6.0") # Windows Vista+
-		endif()
-	endif()
-	if(MINGW AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
-		# Sentry-native currently requires uasm when compiling via mingw-clang
-		if(NOT DEFINED CMAKE_ASM_MASM_COMPILER)
-			set(CMAKE_ASM_MASM_COMPILER "uasm")
-		endif()
-	endif()
-	include(FetchContent)
-	FetchContent_Declare(
-		sentrynative
-		URL "https://github.com/getsentry/sentry-native/releases/download/0.4.17/sentry-native.zip"
-		URL_HASH SHA512=03ee36f5420b0f3a21b1e4b58fe88b67a883abda27c0c644e3a9916674e1847a91ee2a3815908747738a77e8984b46f92fc776405ee443c71c69e352eeecebe6
-	)
-	FetchContent_GetProperties(sentrynative)
-	set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "Sentry build shared libs" FORCE)
-	set(SENTRY_EXPORT_SYMBOLS OFF CACHE BOOL "Export symbols" FORCE)
-	set(SENTRY_BUILD_RUNTIMESTATIC OFF CACHE BOOL "Build sentry-native with static runtime" FORCE)
-	if(CMAKE_SYSTEM_NAME MATCHES "Darwin|Linux")
-		set(SENTRY_BACKEND "breakpad" CACHE STRING
-  "The sentry backend responsible for reporting crashes, can be either 'none', 'inproc', 'breakpad' or 'crashpad'." FORCE)
-	endif()
-	if(NOT sentrynative_POPULATED)
-		FetchContent_Populate(sentrynative)
-		add_subdirectory("${sentrynative_SOURCE_DIR}" "${sentrynative_BINARY_DIR}")
-	endif()
-	message(STATUS "Enabling crash-handling backend: sentry-native ($CACHE{SENTRY_BACKEND})")
+	include(FetchSentryNative)
 
 	# Piggy-back on the exception-handler target to get these libraries / defines over to the main target # TODO: Refactor later?
 	target_link_libraries(exception-handler INTERFACE sentry)
