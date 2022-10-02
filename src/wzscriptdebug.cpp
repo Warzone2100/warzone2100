@@ -79,6 +79,7 @@
 #include "wzapi.h"
 #include "qtscript.h"
 
+#include <vector>
 #include <numeric>
 #include <algorithm>
 #include <limits>
@@ -112,9 +113,8 @@ struct RowDataModel
 {
 public:
 	RowDataModel(size_t numberOfColumns)
-	{
-		m_currentMaxColumnWidths.resize(numberOfColumns, 0);
-	}
+	: m_currentMaxColumnWidths(numberOfColumns, 0)
+	{ }
 
 	std::shared_ptr<TableRow> newRow(const std::vector<WzString>& columnTexts, int rowHeight = 0, bool skipCalculatingColumnWidth = false)
 	{
