@@ -48,7 +48,7 @@ private:
 	unsigned int m_width = 0, m_height = 0;
 	unsigned int m_bufferRowLength = 0, m_bufferImageHeight = 0;
 	gfx_api::pixel_format m_format = gfx_api::pixel_format::invalid;
-	unsigned char *m_data = nullptr;
+	uint64_t *m_data = nullptr;
 	size_t m_data_size = 0;
 
 public:
@@ -73,7 +73,7 @@ public:
 	void clear();
 
 	// Get a pointer to the image data that can be written to
-	unsigned char* data_w();
+	uint64_t* uint64_w();
 
 public:
 	// iV_Image is non-copyable

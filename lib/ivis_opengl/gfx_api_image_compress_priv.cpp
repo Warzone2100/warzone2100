@@ -146,7 +146,8 @@ bool iV_CompressedImage::allocate(gfx_api::pixel_format format, size_t data_size
 	}
 	if (format != gfx_api::pixel_format::invalid && data_size > 0 && newWidth > 0 && newHeight > 0)
 	{
-		m_data = (unsigned char*)malloc(data_size);
+		size_t malloc_size = ((data_size + (sizeof(uint64_t) - 1)) / sizeof(uint64_t)) * sizeof(uint64_t);
+		m_data = (uint64_t*)malloc(malloc_size);
 		if (!m_data)
 		{
 			ASSERT(false, "Failed to allocate memory buffer of size: %zu", data_size);
@@ -182,7 +183,7 @@ gfx_api::pixel_format iV_CompressedImage::pixel_format() const
 // Get a pointer to the bitmap data that can be read
 const unsigned char* iV_CompressedImage::data() const
 {
-	return m_data;
+	return reinterpret_cast<unsigned char*>(m_data);
 }
 
 size_t iV_CompressedImage::data_size() const
@@ -194,7 +195,7 @@ unsigned int iV_CompressedImage::bufferRowLength() const { return 0; }
 unsigned int iV_CompressedImage::bufferImageHeight() const { return 0; }
 
 // Get a pointer to the bitmap data that can be written to
-unsigned char* iV_CompressedImage::data_w()
+uint64_t* iV_CompressedImage::uint64_w()
 {
 	return m_data;
 }
@@ -275,6 +276,11 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 			break;
 	}
 
+	// Avoid alignment or strict-aliasing issues - not ideal
+	ASSERT_OR_RETURN(nullptr, pSourceImage->data_size() % sizeof(uint32_t) == 0, "Invalid input size?? (%zu)", pSourceImage->data_size());
+	std::vector<uint32_t> srcUint32Buffer(pSourceImage->data_size() / sizeof(uint32_t), 0);
+	memcpy(srcUint32Buffer.data(), pSourceImage->bmp(), pSourceImage->data_size());
+
 	uint32_t linesToProcess = pSourceImage->height();
 	uint32_t blocks = pSourceImage->width() * linesToProcess / 16;
 
@@ -290,19 +296,19 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 	switch (desiredFormat)
 	{
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
-			CompressEtc1RgbDither(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width());
+			CompressEtc1RgbDither(srcUint32Buffer.data(), compressedOutput->uint64_w(), blocks, pSourceImage->width());
 			break;
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
-			CompressEtc2Rgb(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width(), true);
+			CompressEtc2Rgb(srcUint32Buffer.data(), compressedOutput->uint64_w(), blocks, pSourceImage->width(), true);
 			break;
 		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
-			CompressEtc2Rgba(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width(), true);
+			CompressEtc2Rgba(srcUint32Buffer.data(), compressedOutput->uint64_w(), blocks, pSourceImage->width(), true);
 			break;
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
-			CompressDxt1Dither(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width());
+			CompressDxt1Dither(srcUint32Buffer.data(), compressedOutput->uint64_w(), blocks, pSourceImage->width());
 			break;
 		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
-			CompressDxt5(reinterpret_cast<const uint32_t*>(pSourceImage->bmp()), reinterpret_cast<uint64_t*>(compressedOutput->data_w()), blocks, pSourceImage->width());
+			CompressDxt5(srcUint32Buffer.data(), compressedOutput->uint64_w(), blocks, pSourceImage->width());
 			break;
 		default:
 			compressedOutput->clear();
