@@ -415,7 +415,16 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		}
 
 		uint32_t decode_flags = 0;
-		if (!transcoder.transcode_image_level(levelIndex, layerIndex, faceIndex, (uncompressedOutput) ? uncompressedOutput->bmp_w() : compressedOutput->data_w(), numBlocksOrPixels, format, decode_flags))
+		void* pOutput_blocks = nullptr;
+		if (uncompressedOutput)
+		{
+			pOutput_blocks = uncompressedOutput->bmp_w();
+		}
+		else
+		{
+			pOutput_blocks = compressedOutput->uint64_w();
+		}
+		if (!transcoder.transcode_image_level(levelIndex, layerIndex, faceIndex, pOutput_blocks, numBlocksOrPixels, format, decode_flags))
 		{
 			debug(LOG_ERROR, "Failed transcoding image level (%u %u %u) for: %s", levelIndex, layerIndex, faceIndex, filename.c_str());
 			return {};
