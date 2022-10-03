@@ -47,8 +47,15 @@ using json = nlohmann::json;
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wmaybe-uninitialized" // Ignore on GCC 4.7+
 #endif
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (12 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wstringop-overflow" // Ignore on GCC 12+`
+#endif
 #define ONLY_C_LOCALE 1
 #include <date/date.h>
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (12 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && ((4 < __GNUC__) || ((4 == __GNUC__) && (7 <= __GNUC_MINOR__)))
 # pragma GCC diagnostic pop
 #endif
