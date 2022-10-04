@@ -451,6 +451,8 @@ std::vector<locale_info> getLocales()
 
 std::string wzBindTextDomain(const char *domainname, const char *dirname)
 {
+	debug(LOG_WZ, "bindTextDomain(%s, %s)", (domainname) ? domainname : "NULL", (dirname) ? dirname : "NULL");
+
 #if (LIBINTL_VERSION >= 0x001500) && defined(_WIN32) && !defined(__CYGWIN__)
 	// gettext 0.21+ provides a wbindtextdomain function on native Windows platforms
 	// that properly supports Unicode paths
@@ -516,6 +518,8 @@ static bool checkSupportsLANGUAGEenvVarOverride()
 	// GNU Gettext permits overriding with the "LANGUAGE" environment variable to specify the language for messages
 	// As long as the current locale does not equal the "plain" C locale (i.e. just "C")
 
+	debug(LOG_WZ, "Checking for support of LANGUAGE env var override");
+
 	optional<std::string> prevLocale;
 	const char *actualLocale = setlocale(LC_MESSAGES, NULL);
 	if (actualLocale != NULL)
@@ -540,8 +544,10 @@ static bool checkSupportsLANGUAGEenvVarOverride()
 		setlocale(LC_MESSAGES, prevLocale.value().c_str());
 	}
 
+	debug(LOG_WZ, "Supports LANGUAGE env var override: %s", (result) ? "YES" : "no");
 	return result;
 #else
+	debug(LOG_WZ, "No support for LANGUAGE env var override (not GNU gettext?)");
 	return false;
 #endif
 }
@@ -549,6 +555,13 @@ static bool checkSupportsLANGUAGEenvVarOverride()
 void initI18n()
 {
 	std::string textdomainDirectory;
+
+#if defined(_LIBINTL_H) && defined(LIBINTL_VERSION)
+	int wz_libintl_maj = LIBINTL_VERSION >> 16;
+	int wz_libintl_min = (LIBINTL_VERSION >> 8) & 0xFF;
+	int wz_libintl_rev = LIBINTL_VERSION & 0xFF;
+	debug(LOG_WZ, "libintl version: %d.%d.%d", wz_libintl_maj, wz_libintl_min, wz_libintl_rev);
+#endif
 
 	canUseLANGUAGEEnvVar = checkSupportsLANGUAGEenvVarOverride();
 
@@ -584,6 +597,7 @@ void initI18n()
 	#ifndef WZ_LOCALEDIR_ISABSOLUTE
 	// Treat WZ_LOCALEDIR as a relative path - append to the install PREFIX
 	const std::string prefixDir = getWZInstallPrefix();
+	debug(LOG_WZ, "Install prefix: %s", prefixDir.c_str());
 	const std::string dirSeparator(PHYSFS_getDirSeparator());
 	std::string localeDir = prefixDir + dirSeparator + WZ_LOCALEDIR;
 	textdomainDirectory = wzBindTextDomain(PACKAGE, localeDir.c_str());
@@ -603,6 +617,7 @@ void initI18n()
 
 	(void)bind_textdomain_codeset(PACKAGE, "UTF-8");
 	(void)textdomain(PACKAGE);
+	debug(LOG_WZ, "textdomain: %s", PACKAGE);
 }
 
 // convert macro __DATE__ to ISO 8601 format
