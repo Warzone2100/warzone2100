@@ -536,6 +536,8 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 		resetMissionWidgets();
 	}
 
+	// the setting for group menu display may have been modified
+	intShowGroupSelectionMenu();
 	return true;
 }
 
