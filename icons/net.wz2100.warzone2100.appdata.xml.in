@@ -23,6 +23,20 @@
 	<url type="translate">https://github.com/Warzone2100/warzone2100/blob/master/doc/Translations.md</url>
 	<url type="help">https://betaguide.wz2100.net/</url>
 	<url type="donation">https://opencollective.com/warzone2100</url>
+	<recommends>
+		<control>keyboard</control>
+		<control>pointing</control>
+		<memory>2048</memory>
+		<display_length compare="ge" side="longest">1024</display_length>
+		<display_length compare="ge" side="shortest">768</display_length>
+	</recommends>
+	<supports>
+		<control>touch</control>
+	</supports>
+	<kudos>
+		<kudo>HiDpiIcon</kudo>
+		<kudo>UserDocs</kudo>
+	</kudos>
 	<screenshots>
 		<screenshot type="default">
 			<caption>Compete in massive battles, with up to 10 players</caption>
@@ -37,7 +51,7 @@
 	<releases>
 	  <release version="@WZ_METAINFO_RELEASE_VERSION@" type="@WZ_METAINFO_RELEASE_TYPE@" date="@WZ_METAINFO_RELEASE_DATE@"></release>
 	</releases>
-	<content_rating type="oars-1.0">
+	<content_rating type="oars-1.1">
 		<content_attribute id="violence-fantasy">moderate</content_attribute>
 		<content_attribute id="violence-bloodshed">mild</content_attribute>
 		<content_attribute id="social-chat">intense</content_attribute>
