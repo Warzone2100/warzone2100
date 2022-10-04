@@ -2020,6 +2020,9 @@ bool intShowGroupSelectionMenu()
 			auto newGroupsForum = GroupsForum::make();
 			psWScreen->psForm->attach(newGroupsForum);
 		}
+	} else
+	{
+		widgDelete(psWScreen, IDOBJ_GROUP);
 	}
 	return true;
 }
