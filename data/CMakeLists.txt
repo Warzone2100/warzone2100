@@ -45,6 +45,7 @@ file(GLOB VK_SHADERS
 
 set(SHADER_LIST "")
 if(GLSLC)
+	message(STATUS "Found glslc: ${GLSLC}")
 	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/shaders/vk")
 	file(MAKE_DIRECTORY "${_output_dir}")
 	foreach(SHADER ${VK_SHADERS})
