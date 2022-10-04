@@ -4214,7 +4214,12 @@ public:
 				{
 					playerInfoTooltip += "\n";
 				}
-				playerInfoTooltip += std::string(_("Rating information: ")) + "\n" + stats.autorating.details + "\n";
+				std::string detailsstr = stats.autorating.details;
+				if (detailsstr.size() > 512)
+				{
+					detailsstr = detailsstr.substr(0, 512);
+				}
+				playerInfoTooltip += std::string(_("Rating information: ")) + "\n" + detailsstr + "\n";
 				if (stats.autoratingFrom == RATING_SOURCE_HOST && !NetPlay.isHost)
 				{
 					playerInfoTooltip += _("(Host provided)");
