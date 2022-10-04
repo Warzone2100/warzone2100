@@ -6,7 +6,8 @@ sdk: org.freedesktop.Sdk
 command: warzone2100
 @WZ_CROSS_COMPILE_SDK_EXTENSIONS@
 separate-locales: false
-finish-args: 
+finish-args:
+  - --require-version=0.10.3
   - --socket=wayland
   - --share=ipc
   - --socket=x11
