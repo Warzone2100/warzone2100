@@ -114,7 +114,12 @@ struct RtrBestResult
 	BASE_OBJECT *psObj;
 	RtrBestResult(RTR_DATA_TYPE type, BASE_OBJECT *psObj): type(type), psObj(psObj) {}
 	RtrBestResult(): type(RTR_TYPE_NO_RESULT), psObj(nullptr) {}
-	RtrBestResult(DROID_ORDER_DATA *psOrder): type(psOrder->rtrType), psObj(psOrder->psObj) {}
+	RtrBestResult(DROID_ORDER_DATA *psOrder): type(psOrder->rtrType), psObj(psOrder->psObj) 
+	{
+		if (psObj->type == OBJ_STRUCTURE && ((STRUCTURE*)psObj)->pStructureType->type == REF_REPAIR_FACILITY) type = RTR_TYPE_REPAIR_FACILITY;
+		else if (psObj->type == OBJ_STRUCTURE) type = RTR_TYPE_HQ;
+		else type = RTR_TYPE_DROID;
+	}
 };
 
 static RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid);
@@ -163,47 +168,100 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 	}
 }
 
-
-/** This function checks if there are any damaged droids within a defined range.
- * It returns the damaged droid if there is any, or nullptr if none was found.
- */
-DROID *checkForRepairRange(DROID *psDroid)
+struct RSComparator
 {
-	DROID *psFailedTarget = nullptr;
-	if (psDroid->action == DACTION_SULK)
-	{
-		psFailedTarget = (DROID *)psDroid->psActionTarget[0];
-	}
+	RSComparator(const STRUCTURE *self) : selfPosX(self->pos.x), selfPosY(self->pos.y), selfPlayer(self->player) {}
+	RSComparator(const DROID *self) : selfPosX(self->pos.x), selfPosY(self->pos.y), selfPlayer(self->player) {}
+	// "less" comparator for our priority queue
+	bool operator() (const DROID* l, const DROID* r) const 
+	{ 
+		// Here, we know that both left and right Droids are:
+		// - either our own, or one of our allies
+		// - already within repair radius
+		// - not dead
+		// - don't have full HP
 
-	ASSERT(psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR, "Invalid droid type");
+		// always prefer our own units
+		const bool lown = l->player == selfPlayer;
+		const bool rown = r->player == selfPlayer;
+		if (lown && !rown) return true;
+		if (!lown && rown) return false;
 
-	unsigned radius = ((psDroid->order.type == DORDER_HOLD) || (psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)) ? REPAIR_RANGE : REPAIR_MAXDIST;
+		// Next highest priority:
+		// Take any droid with orders to Return to Repair (DORDER_RTR),
+		// or that have been ordered to a specific repair facility (DORDER_RTR_SPECIFIED)
+		BASE_OBJECT *const lTarget = orderStateObj(l, DORDER_RTR);
+		BASE_OBJECT *const rTarget = orderStateObj(r, DORDER_RTR);
+		const bool lhighest = ((l->order.type == DORDER_RTR || l->order.type == DORDER_RTR_SPECIFIED));
+		const bool rhighest = ((r->order.type == DORDER_RTR || r->order.type == DORDER_RTR_SPECIFIED));
 
-	unsigned bestDistanceSq = radius * radius;
-	DROID *best = nullptr;
-
-	for (BASE_OBJECT *object : gridStartIterate(psDroid->pos.x, psDroid->pos.y, radius))
-	{
-		unsigned distanceSq = droidSqDist(psDroid, object);  // droidSqDist returns -1 if unreachable, (unsigned)-1 is a big number.
-		if (object == orderStateObj(psDroid, DORDER_GUARD))
+		if (lhighest && !rhighest) return true;
+		if (!lhighest && rhighest) return false;
+		if (lhighest && rhighest)
 		{
-			distanceSq = 0;  // If guarding a unit — always do that first.
+			// break the tie with distance check
+			const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY);
+			const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY);
+			return (ldist < rdist);
 		}
 
-		DROID *droid = castDroid(object);
-		if (droid != nullptr &&  // Must be a droid.
-		    droid != psFailedTarget &&   // Must not have just failed to reach it.
-		    distanceSq <= bestDistanceSq &&  // Must be as close as possible.
-		    aiCheckAlliances(psDroid->player, droid->player) &&  // Must be a friendly droid.
-		    droidIsDamaged(droid) &&  // Must need repairing.
-		    visibleObject(psDroid, droid, false))  // Must be able to sense it.
+		// Second highest priority:
+		// Help out another nearby repair facility
+		const bool lsecond = l->action == DACTION_WAITFORREPAIR && lTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)lTarget)->pStructureType->type == REF_REPAIR_FACILITY;
+		const bool rsecond = r->action == DACTION_WAITFORREPAIR && rTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)rTarget)->pStructureType->type == REF_REPAIR_FACILITY;
+		if (lsecond && !rsecond) return true;
+		if (!lsecond && rsecond) return false;
+
+		// at this point we don't really have a preference
+		// just repair closest (maybe should repair the most damaged?..)
+		const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY);
+		const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY);
+		return ldist < rdist;
+	}
+	private:
+	const int selfPosX;
+	const int selfPosY;
+	const int selfPlayer;
+};
+
+/// @return return top priority droid to repair, or nullptr
+static DROID* _findSomeoneToRepair(REPAIR_FACILITY *psRepairFac,
+				std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue, 
+				int x, int y, int radius, int player)
+{
+	GridList gridList;
+	gridList = gridStartIterateRepairCandidates(x, y, radius, player);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		DROID *psDroid = (DROID*) *gi;
+		if (droidIsDamaged(psDroid))
 		{
-			bestDistanceSq = distanceSq;
-			best = droid;
+			queue.push(psDroid);
+		}
+		else if (psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED)
+		{
+			// we intentionally iterate over fully healthy droids too, in order to clear RTR order
+			psDroid->body = MIN(psDroid->originalBody, psDroid->body);
+			droidWasFullyRepaired(psDroid, psRepairFac);
 		}
 	}
+	if (!queue.empty()) return queue.top();
+	return nullptr;
+}
 
-	return best;
+DROID *findSomeoneToRepair(const STRUCTURE *psStructure, int radius)
+{
+	REPAIR_FACILITY *psRepairFac = &psStructure->pFunctionality->repairFacility;
+	RSComparator cmpr(psStructure);
+	std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue(cmpr);
+	return _findSomeoneToRepair(psRepairFac, queue, psStructure->pos.x, psStructure->pos.y, radius, psStructure->player);
+}
+
+DROID *findSomeoneToRepair(const DROID *psTurret, int radius)
+{
+	RSComparator cmpr(psTurret);
+	std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue(cmpr);
+	return _findSomeoneToRepair(nullptr, queue, psTurret->pos.x, psTurret->pos.y, radius, psTurret->player);
 }
 
 /** This function checks if there are any structures to repair or help build in a given radius near the droid defined by REPAIR_RANGE if it is on hold, and REPAIR_MAXDIST if not on hold.
@@ -281,13 +339,22 @@ static bool tryDoRepairlikeAction(DROID *psDroid)
 	{
 		return true;  // Already doing something.
 	}
-
+	unsigned radius;
 	switch (psDroid->droidType)
 	{
 		case DROID_REPAIR:
 		case DROID_CYBORG_REPAIR:
+			if (((psDroid->order.type == DORDER_HOLD) ||
+					(psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)))
+			{
+				radius = REPAIR_RANGE;
+			}
+			else
+			{
+				radius =  REPAIR_MAXDIST;
+			}
 			//repair droids default to repairing droids within a given range
-			if (DROID *repairTarget = checkForRepairRange(psDroid))
+			if (DROID *repairTarget = findSomeoneToRepair(psDroid, radius))
 			{
 				actionDroid(psDroid, DACTION_DROIDREPAIR, repairTarget);
 			}
@@ -861,6 +928,9 @@ void orderUpdateDroid(DROID *psDroid)
 		break;
 	case DORDER_RTR:
 	case DORDER_RTR_SPECIFIED:
+		// send them back to commander, no need to repair
+		if (!droidIsDamaged(psDroid)) droidWasFullyRepaired(psDroid, nullptr);
+
 		if (psDroid->order.psObj == nullptr)
 		{
 			// Our target got lost. Let's try again.
@@ -871,11 +941,9 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			/* get repair facility pointer */
 			psStruct = (STRUCTURE *)psDroid->order.psObj;
-			ASSERT(psStruct != nullptr,
-			       "orderUpdateUnit: invalid structure pointer");
+			ASSERT(psStruct != nullptr, "orderUpdateUnit: invalid structure pointer");
 
-
-			if (objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) < (TILE_UNITS * 8) * (TILE_UNITS * 8))
+			if (objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) < REPAIR_RANGE * REPAIR_RANGE)
 			{
 				/* action droid to wait */
 				actionDroid(psDroid, DACTION_WAITFORREPAIR);
@@ -886,6 +954,11 @@ void orderUpdateDroid(DROID *psDroid)
 				// setting target to null will trigger search for nearest repair point: we might have a better option after all
 				psDroid->order.psObj = nullptr;
 			}
+		}
+		if ((psDroid->action == DACTION_WAITFORREPAIR || psDroid->action == DACTION_WAITDURINGREPAIR) && 
+				objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) > REPAIR_RANGE * REPAIR_RANGE)
+		{ // was being repaired, but somehow got lost. recalculate reparing point
+			psDroid->order.psObj = nullptr;
 		}
 		break;
 	case DORDER_LINEBUILD:
@@ -1594,7 +1667,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				break;
 			}
 			RtrBestResult rtrData;
-			if (psOrder->rtrType == RTR_TYPE_NO_RESULT || psOrder->psObj == nullptr)
+			if (psOrder->type == DORDER_RTR && (psOrder->rtrType == RTR_TYPE_NO_RESULT || psOrder->psObj == nullptr))
 			{
 				rtrData = decideWhereToRepairAndBalance(psDroid);
 			}
@@ -1893,7 +1966,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
  * @todo the first switch can be removed and substituted by orderState() function.
  * @todo the use of this function is somewhat superfluous on some cases. Investigate.
  */
-BASE_OBJECT *orderStateObj(DROID *psDroid, DROID_ORDER order)
+BASE_OBJECT *orderStateObj(const DROID *psDroid, DROID_ORDER order)
 {
 	bool	match = false;
 

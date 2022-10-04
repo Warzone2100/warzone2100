@@ -29,6 +29,14 @@
 
 #include "orderdef.h"
 
+/** Find some droid to repair, starting at (x, y) within some radius, given a player, or return nullptr.
+ * Droids having full HP with order = DORDER_RTR or RTR_SPECIFIED will automatically
+ * be sent to delivery point, or back to commander 
+ */
+
+DROID *findSomeoneToRepair(const STRUCTURE *obj, int radius);
+DROID *findSomeoneToRepair(const DROID *psTurret, int radius);
+
 /** \brief Gives the droid an order. */
 void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 
@@ -60,7 +68,7 @@ bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
 void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_MODE mode);
 
 /** \brief Gets the state of a droid's order with an object. */
-BASE_OBJECT *orderStateObj(DROID *psDroid, DROID_ORDER order);
+BASE_OBJECT *orderStateObj(const DROID *psDroid, DROID_ORDER order);
 
 /** \brief Sends an order with a location and a stat to a droid. */
 void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode);

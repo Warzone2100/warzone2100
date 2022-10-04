@@ -782,56 +782,8 @@ void droidUpdate(DROID *psDroid)
 		}
 	}
 	// ------------------------
-	// if we are a repair turret, then manage incoming damaged droids, (just like repair facility)
-	// unlike a repair facility
-	// 	- we don't really need to move droids to us, we can come ourselves
-	//	- we don't steal work from other repair turrets/ repair facilities
-	DROID *psOther;
-	if (psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
-	{
-		for (psOther = apsDroidLists[psDroid->player]; psOther; psOther = psOther->psNext)
-		{
-			// unlike repair facility, no droid  can have DORDER_RTR_SPECIFIED with another droid as target, so skip that check
-			if (psOther->order.type == DORDER_RTR && 
-					psOther->order.rtrType == RTR_TYPE_DROID &&
-					psOther->action != DACTION_WAITFORREPAIR &&
-					psOther->action != DACTION_MOVETOREPAIRPOINT &&
-					psOther->action != DACTION_WAITDURINGREPAIR)
-			{
-				if (psOther->body >= psOther->originalBody)
-				{
-					// set droid points to max
-					psOther->body = psOther->originalBody;
-					// if completely repaired reset order
-					secondarySetState(psOther, DSO_RETURN_TO_LOC, DSS_NONE);
-
-					if (hasCommander(psOther))
-					{
-						// return a droid to it's command group
-						DROID	*psCommander = psOther->psGroup->psCommander;
-						orderDroidObj(psOther, DORDER_GUARD, psCommander, ModeImmediate);
-					}
-					continue;
-				}
-			}
-
-			else if (psOther->order.rtrType == RTR_TYPE_DROID 
-					//is being, or waiting for repairs..
-					&& (psOther->action == DACTION_WAITFORREPAIR || psOther->action == DACTION_WAITDURINGREPAIR)
-					// don't steal work from others
-					&& psOther->order.psObj == psDroid)
-			{
-				if (!actionReachedDroid(psDroid, psOther))
-				{
-					actionDroid(psOther, DACTION_MOVE, psDroid, psDroid->pos.x, psDroid->pos.y);
-				}
-				
-			}
-		}
-	}
-	// ------------------------
 	// See if we can and need to self repair.
-	if (!isVtolDroid(psDroid) && psDroid->body < psDroid->originalBody && psDroid->asBits[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(psDroid->player))
+	if (!isVtolDroid(psDroid) && droidIsDamaged(psDroid) && psDroid->asBits[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(psDroid->player))
 	{
 		droidUpdateDroidSelfRepair(psDroid);
 	}
@@ -1188,6 +1140,21 @@ int getRecoil(WEAPON const &weapon)
 	return 0;
 }
 
+void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
+{
+	if (hasCommander(psDroid))
+	{
+		objTrace(psDroid->id, "Repair complete - move to commander");
+		orderDroidObj(psDroid, DORDER_GUARD, psDroid->psGroup->psCommander, ModeImmediate);
+	}
+	else if (psRepairFac && psRepairFac->psDeliveryPoint != nullptr)
+	{
+		const FLAG_POSITION *dp = psRepairFac->psDeliveryPoint;
+		objTrace(psDroid->id, "Repair complete - move to delivery point");
+		// ModeQueue because delivery points are not yet synchronised!
+		orderDroidLoc(psDroid, DORDER_MOVE, dp->coords.x, dp->coords.y, ModeQueue);
+	}
+} 
 
 bool droidUpdateRepair(DROID *psDroid)
 {
@@ -2894,7 +2861,7 @@ bool vtolHappy(const DROID *psDroid)
 
 	ASSERT_OR_RETURN(false, isVtolDroid(psDroid), "not a VTOL droid");
 
-	if (psDroid->body < psDroid->originalBody)
+	if (droidIsDamaged(psDroid))
 	{
 		// VTOLs with less health than their original aren't happy
 		return false;

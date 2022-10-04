@@ -227,13 +227,29 @@ struct POWER_GEN
 
 class DROID_GROUP;
 
+enum class RepairEvents
+{
+	NoEvents,
+	RepairTargetFound,
+	UnitReachedMaxHP,
+	UnitDied,
+	UnitMovedAway
+};
+
+enum class RepairState 
+{
+	Invalid = -1,
+	Idle,
+	Repairing
+};
+
 struct REPAIR_FACILITY
 {
 	BASE_OBJECT *psObj;                /* Object being repaired */
 	FLAG_POSITION *psDeliveryPoint;    /* Place for the repaired droids to assemble at */
 	// The group the droids to be repaired by this facility belong to
 	DROID_GROUP *psGroup;
-	int droidQueue;                    ///< Last count of droid queue for this facility
+	RepairState state;
 };
 
 struct REARM_PAD
