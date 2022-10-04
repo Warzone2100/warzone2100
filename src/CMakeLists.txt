@@ -154,7 +154,7 @@ if (DEFINED CURL_OPENSSL_REQUIRES_CALLBACKS)
 	set(_curl_has_thread_safe_backend FALSE)
 	foreach(_backend ${CURL_SUPPORTED_SSL_BACKENDS})
 		# determine if there are any non-OpenSSL, thread-safe backends enabled
-		if (NOT _backend STREQUAL "OpenSSL")
+		if (NOT _backend MATCHES "^OpenSSL.*")
 			if (_backend STREQUAL "GnuTLS" AND _curl_gnutls_thread_safe_fix)
 				set(_curl_has_thread_safe_backend TRUE)
 			else()
