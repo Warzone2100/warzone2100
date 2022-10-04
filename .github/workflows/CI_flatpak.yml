@@ -51,7 +51,7 @@ jobs:
         dnf update -y
         echo "::endgroup::"
         echo "::group::dnf install dependencies"
-        dnf install -y cmake git git-lfs dbus-daemon flatpak flatpak-builder python3-aiohttp python3-tenacity python3-gobject ccache zstd curl
+        dnf install -y cmake git git-lfs dbus-daemon flatpak flatpak-builder python3-aiohttp python3-tenacity python3-gobject ccache zstd curl appstream
         echo "::endgroup::"
         
         echo "::group::flatpak remote-add"
