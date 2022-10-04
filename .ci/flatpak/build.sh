@@ -37,7 +37,14 @@ echo "  -> Size (bytes): $(stat -c %s "${WZ_FLATPAK_BUNDLE}")"
 WZ_FLATPAK_BUILD_PATH="${WZ_FLATPAK_BUILD_DIR}/files/share"
 
 echo "::group::Validating: appdata/${WZ_FLATPAK_APPID}.appdata.xml"
-appstream-util validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml
+if [ -x "$(command -v appstreamcli)" ]; then
+  echo "appstreamcli validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml"
+  appstreamcli validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml
+else
+  # Older utility fallback
+  echo "appstream-util validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml"
+  appstream-util validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml
+fi
 echo "::endgroup::"
 
 echo "::group::Verify icon and metadata in app-info"
