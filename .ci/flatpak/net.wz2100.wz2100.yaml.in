@@ -145,6 +145,34 @@ modules:
         url: https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz
         sha256: 6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1
 
+  - name: gettext-libintl
+    @WZ_CROSS_BUILD_OPTIONS@
+    buildsystem: autotools
+    subdir: gettext-runtime
+    config-opts:
+    - --enable-relocatable
+    - --enable-c++
+    - --disable-acl
+    - --disable-csharp
+    - --disable-curses
+    - --disable-java
+    - --disable-openmp
+    - --config-cache
+    - --with-included-gettext # force gnu gettext
+    - --disable-libasprintf
+    - --prefix=/app
+    @WZ_AUTOTOOLS_CROSS_CONFIG_OPTIONS@
+    make-args: ['-C', 'intl', 'all']
+    make-install-args: ['-C', 'intl', 'install']
+    cleanup:
+      - /share/gettext
+    sources:
+      - type: archive
+        url: https://ftp.gnu.org/pub/gnu/gettext/gettext-0.21.tar.gz
+        mirror-urls:
+          - https://www.mirrorservice.org/sites/ftp.gnu.org/gnu/gettext/gettext-0.21.tar.gz
+        sha512: bbe590c5dd3580c75bf30ff768da99a88eb8d466ec1ac9eea20be4cab4357ecf72448e6b81b47425e39d50fa6320ba426632914d7898dfebb4f159abc39c31d1
+
   - name: warzone2100
     buildsystem: cmake-ninja
     builddir: true
