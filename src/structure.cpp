@@ -1968,7 +1968,6 @@ static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType)
 			REPAIR_FACILITY *psRepairFac = &psBuilding->pFunctionality->repairFacility;
 
 			psRepairFac->psObj = nullptr;
-			psRepairFac->droidQueue = 0;
 			psRepairFac->psGroup = grpCreate();
 
 			// Add NULL droid to the group
@@ -2604,20 +2603,160 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 	return isLimit;
 }
 
+void aiUpdateRepair_handleState(STRUCTURE &station)
+{
+	STRUCTURE *psStructure = &station;
+	const REPAIR_FACILITY	*psRepairFac = &station.pFunctionality->repairFacility;
+	DROID *psDroid = (DROID*) psRepairFac->psObj;
+	// apply logic for current state
+	switch (psRepairFac->state)
+	{
+	case RepairState::Idle: 
+	{
+		actionAlignTurret(psStructure, 0);
+		return;
+	}
+	case RepairState::Repairing:
+	{
+		ASSERT_OR_RETURN(, psDroid != nullptr, "invalid droid pointer");
+		psDroid->body += gameTimeAdjustedAverage(getBuildingRepairPoints(psStructure));
+		psDroid->body = MIN(psDroid->originalBody, psDroid->body);
+		actionTargetTurret(psStructure, (BASE_OBJECT*) psDroid, &psStructure->asWeaps[0]);
+		if (psStructure->visibleForLocalDisplay() && psDroid->visibleForLocalDisplay()) // display only - does not impact simulation state
+		{
+			Vector3i iVecEffect;
+			// add plasma repair effect whilst being repaired
+			iVecEffect.x = psDroid->pos.x + (10 - rand() % 20);
+			iVecEffect.y = psDroid->pos.z + (10 - rand() % 20);
+			iVecEffect.z = psDroid->pos.y + (10 - rand() % 20);
+			effectSetSize(100);
+			addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime + 1);
+		}
+		return;
+	};
+	case RepairState::Invalid:
+	{
+		debug(LOG_ERROR, "repair state is invalid");
+		return;
+	}
+	}
+}
+
+RepairEvents aiUpdateRepair_obtainEvents(const STRUCTURE &station, DROID **psDroidOut)
+{
+	const STRUCTURE *psStructure = &station;
+	const REPAIR_FACILITY	*psRepairFac = &station.pFunctionality->repairFacility;
+	SDWORD	xdiff, ydiff;
+	switch (psRepairFac->state)
+	{
+	case RepairState::Idle:
+	{	
+		DROID *psDroid = findSomeoneToRepair(psStructure, (TILE_UNITS * 5 / 2));
+		*psDroidOut = psDroid;
+		return psDroid? RepairEvents::RepairTargetFound : RepairEvents::NoEvents;
+	}
+	case RepairState::Repairing:
+	{
+		const DROID *psDroid = (DROID *) psRepairFac->psObj;
+		ASSERT(psDroid, "repairing a null object??");
+		if (psDroid->died) return RepairEvents::UnitDied;
+
+		xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
+		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
+		if (xdiff * xdiff + ydiff * ydiff > (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
+		{
+			return RepairEvents::UnitMovedAway;
+		}
+		if (psDroid->body >= psDroid->originalBody) 
+		{
+			return RepairEvents::UnitReachedMaxHP;
+		}
+		return RepairEvents::NoEvents;
+	}
+	case RepairState::Invalid:
+	{
+		debug(LOG_ERROR, "Inavlid repair station (id=%i player=%i) state", station.id, station.player);
+		return RepairEvents::NoEvents;
+	}
+	default:
+	{
+		debug(LOG_ERROR, "Unknown repair station (id=%i player=%i) state", station.id, station.player);
+		return RepairEvents::NoEvents;
+	}
+	};
+}
+
+RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DROID *found)
+{
+	REPAIR_FACILITY	*psRepairFac = &station.pFunctionality->repairFacility;
+	const STRUCTURE *psStructure = &station;
+	//don't do anything if the resistance is low in multiplayer
+	if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
+	{
+		objTrace(psStructure->id, "Resistance too low for repair");
+		return RepairState::Idle;
+	}
+	switch (ev)
+	{
+	case RepairEvents::NoEvents:
+	{ 
+		return psRepairFac->state;
+	};
+	case RepairEvents::RepairTargetFound:
+	{
+		ASSERT(found != nullptr, "Bug! found droid, but it was null?");
+		psRepairFac->psObj = found;
+		return RepairState::Repairing;
+	};
+	case RepairEvents::UnitReachedMaxHP:
+	{
+		DROID *psDroid = (DROID*) psRepairFac->psObj;
+		psRepairFac->psObj = nullptr;
+		objTrace(psStructure->id, "Repair complete of droid %d", (int)psDroid->id);
+		psDroid->body = psDroid->originalBody;
+		// if completely repaired reset order
+		secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+		droidWasFullyRepaired(psDroid, psRepairFac);
+		return RepairState::Idle;
+	};
+	case RepairEvents::UnitDied:
+	{
+		DROID *psDroid = (DROID*) psRepairFac->psObj;
+		syncDebugDroid(psDroid, '-');
+		psRepairFac->psObj = nullptr;
+		return RepairState::Idle;
+	};
+	case RepairEvents::UnitMovedAway:
+	{
+		psRepairFac->psObj = nullptr;
+		return RepairState::Idle;
+	};
+	}
+	debug(LOG_ERROR, "Unknown event passed");
+	return RepairState::Invalid;
+}
+
+void aiUpdateRepairStation(STRUCTURE &station)
+{
+	DROID *found = nullptr;
+	RepairEvents topEvent = aiUpdateRepair_obtainEvents(station, &found);
+	RepairState nextState = aiUpdateRepair_handleEvents(station, topEvent, found);
+	ASSERT(nextState != RepairState::Invalid, "Bug! invalid state received.");
+	station.pFunctionality->repairFacility.state = nextState;
+	aiUpdateRepair_handleState(station);
+	
+}
 
 static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 {
-	UDWORD				structureMode = 0;
-	DROID				*psDroid;
-	BASE_OBJECT			*psChosenObjs[MAX_WEAPONS] = {nullptr};
-	BASE_OBJECT			*psChosenObj = nullptr;
-	FACTORY				*psFactory;
-	REPAIR_FACILITY		*psRepairFac = nullptr;
-	Vector3i iVecEffect;
-	bool				bDroidPlaced = false;
-	WEAPON_STATS		*psWStats;
-	bool				bDirect = false;
-	SDWORD				xdiff, ydiff, mindist, currdist;
+	UDWORD structureMode = 0;
+	DROID *psDroid;
+	BASE_OBJECT *psChosenObjs[MAX_WEAPONS] = {nullptr};
+	BASE_OBJECT *psChosenObj = nullptr;
+	FACTORY *psFactory;
+	bool bDroidPlaced = false;
+	WEAPON_STATS *psWStats;
+	bool bDirect = false;
 	TARGET_ORIGIN tmpOrigin = ORIGIN_UNKNOWN;
 
 	CHECK_STRUCTURE(psStructure);
@@ -2815,224 +2954,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			}
 			break;
 		}
-	case REF_REPAIR_FACILITY: // FIXME FIXME FIXME: Magic numbers in this section
+	case REF_REPAIR_FACILITY:
 		{
-			psRepairFac = &psStructure->pFunctionality->repairFacility;
-			psChosenObj = psRepairFac->psObj;
-			structureMode = REF_REPAIR_FACILITY;
-			psDroid = (DROID *)psChosenObj;
-
-			// If the droid we're repairing just died, find a new one
-			if (psDroid && psDroid->died)
-			{
-				syncDebugDroid(psDroid, '-');
-				psDroid = nullptr;
-				psChosenObj = nullptr;
-				psRepairFac->psObj = nullptr;
-			}
-
-			// skip droids that are trying to get to other repair factories
-			if (psDroid != nullptr
-			    && (!orderState(psDroid, DORDER_RTR)
-			        || psDroid->order.psObj != psStructure))
-			{
-				psDroid = (DROID *)psChosenObj;
-				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
-				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-				// unless it has orders to repair here, forget about it when it gets out of range
-				if (xdiff * xdiff + ydiff * ydiff > (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
-				{
-					psChosenObj = nullptr;
-					psDroid = nullptr;
-					psRepairFac->psObj = nullptr;
-				}
-			}
-
-			// select next droid if none being repaired,
-			// or look for a better droid if not repairing one with repair orders
-			if (psChosenObj == nullptr ||
-			    (((DROID *)psChosenObj)->order.type != DORDER_RTR && ((DROID *)psChosenObj)->order.type != DORDER_RTR_SPECIFIED))
-			{
-				//FIX ME: (doesn't look like we need this?)
-				ASSERT(psRepairFac->psGroup != nullptr, "invalid repair facility group pointer");
-
-				// Tries to find most important droid to repair
-				// Lower dist = more important
-				// mindist contains lowest dist found so far
-				mindist = (TILE_UNITS * 8) * (TILE_UNITS * 8) * 3;
-				if (psChosenObj)
-				{
-					// We already have a valid droid to repair, no need to look at
-					// droids without a repair order.
-					mindist = (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2;
-				}
-				psRepairFac->droidQueue = 0;
-				for (psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
-				{
-					BASE_OBJECT *const psTarget = orderStateObj(psDroid, DORDER_RTR);
-
-					// Highest priority:
-					// Take any droid with orders to Return to Repair (DORDER_RTR),
-					// or that have been ordered to this repair facility (DORDER_RTR_SPECIFIED),
-					// or any "lost" unit with one of those two orders.
-					if (((psDroid->order.type == DORDER_RTR || (psDroid->order.type == DORDER_RTR_SPECIFIED
-					                                            && (!psTarget || psTarget == psStructure)))
-					     && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
-					     && psDroid->action != DACTION_WAITDURINGREPAIR)
-					    || (psTarget && psTarget == psStructure))
-					{
-						if (psDroid->body >= psDroid->originalBody)
-						{
-							objTrace(psStructure->id, "Repair not needed of droid %d", (int)psDroid->id);
-
-							/* set droid points to max */
-							psDroid->body = psDroid->originalBody;
-
-							// if completely repaired reset order
-							secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
-
-							if (hasCommander(psDroid))
-							{
-								// return a droid to it's command group
-								DROID	*psCommander = psDroid->psGroup->psCommander;
-
-								orderDroidObj(psDroid, DORDER_GUARD, psCommander, ModeImmediate);
-							}
-							else if (psRepairFac->psDeliveryPoint != nullptr)
-							{
-								// move the droid out the way
-								objTrace(psDroid->id, "Repair not needed - move to delivery point");
-								orderDroidLoc(psDroid, DORDER_MOVE,
-								              psRepairFac->psDeliveryPoint->coords.x,
-								              psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
-							}
-							continue;
-						}
-						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
-						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff * xdiff + ydiff * ydiff;
-						if (currdist < mindist && currdist < (TILE_UNITS * 8) * (TILE_UNITS * 8))
-						{
-							mindist = currdist;
-							psChosenObj = psDroid;
-						}
-						if (psTarget && psTarget == psStructure)
-						{
-							psRepairFac->droidQueue++;
-						}
-					}
-					// Second highest priority:
-					// Help out another nearby repair facility
-					else if (psTarget && mindist > (TILE_UNITS * 8) * (TILE_UNITS * 8)
-					         && psTarget != psStructure && psDroid->action == DACTION_WAITFORREPAIR)
-					{
-						int distLimit = mindist;
-						if (psTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)psTarget)->pStructureType->type == REF_REPAIR_FACILITY)  // Is a repair facility (not the HQ).
-						{
-							REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
-							// make a wild guess about what is a good distance
-							distLimit = world_coord(stealFrom->droidQueue) * world_coord(stealFrom->droidQueue) * 10;
-						}
-
-						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
-						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS * 8) * (TILE_UNITS * 8); // lower priority
-						if (currdist < mindist && currdist - (TILE_UNITS * 8) * (TILE_UNITS * 8) < distLimit)
-						{
-							mindist = currdist;
-							psChosenObj = psDroid;
-							psRepairFac->droidQueue++;	// shared queue
-							objTrace(psChosenObj->id, "Stolen by another repair facility, currdist=%d, mindist=%d, distLimit=%d", (int)currdist, (int)mindist, distLimit);
-						}
-					}
-					// Lowest priority:
-					// Just repair whatever is nearby and needs repairing.
-					else if (mindist > (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2 && psDroid->body < psDroid->originalBody)
-					{
-						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
-						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2; // even lower priority
-						if (currdist < mindist && currdist < (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2) + (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2)
-						{
-							mindist = currdist;
-							psChosenObj = psDroid;
-						}
-					}
-				}
-				if (!psChosenObj) // Nothing to repair? Repair allied units!
-				{
-					mindist = (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2);
-
-					for (uint8_t i = 0; i < MAX_PLAYERS; i++)
-					{
-						if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
-						{
-							for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
-							{
-								if (psDroid->body < psDroid->originalBody)
-								{
-									xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
-									ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-									currdist = xdiff * xdiff + ydiff * ydiff;
-									if (currdist < mindist)
-									{
-										mindist = currdist;
-										psChosenObj = psDroid;
-									}
-								}
-							}
-						}
-					}
-				}
-				psDroid = (DROID *)psChosenObj;
-				if (psDroid)
-				{
-					if (psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED)
-					{
-						// Hey, droid, it's your turn! Stop what you're doing and get ready to get repaired!
-						psDroid->action = DACTION_WAITFORREPAIR;
-						psDroid->order.psObj = psStructure;
-					}
-					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
-					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
-				}
-			}
-
-			// send the droid to be repaired
-			if (psDroid)
-			{
-				/* set chosen object */
-				psChosenObj = psDroid;
-
-				/* move droid to repair point at rear of facility */
-				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
-				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-				if (psDroid->action == DACTION_WAITFORREPAIR ||
-				    (psDroid->action == DACTION_WAITDURINGREPAIR
-				     && xdiff * xdiff + ydiff * ydiff > (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2)))
-				{
-					objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
-					actionDroid(psDroid, DACTION_MOVETOREPAIRPOINT,
-					            psStructure, psStructure->pos.x, psStructure->pos.y);
-				}
-				/* reset repair started if we were previously repairing something else */
-				if (psRepairFac->psObj != psDroid)
-				{
-					psRepairFac->psObj = psDroid;
-				}
-			}
-
-			// update repair arm position
-			if (psChosenObj)
-			{
-				actionTargetTurret(psStructure, psChosenObj, &psStructure->asWeaps[0]);
-			}
-			else if ((psStructure->asWeaps[0].rot.direction % DEG(90)) != 0 || psStructure->asWeaps[0].rot.pitch != 0)
-			{
-				// realign the turret
-				actionAlignTurret(psStructure, 0);
-			}
-
+			aiUpdateRepairStation(*psStructure);
 			break;
 		}
 	case REF_REARM_PAD:
@@ -3313,91 +3237,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		}
 	}
 
-	/* check base object (for repair / rearm) */
+	// check base object (for rearm)
 	if (psChosenObj != nullptr)
 	{
-		if (structureMode == REF_REPAIR_FACILITY)
+		if (structureMode == REF_REARM_PAD)
 		{
-			psDroid = (DROID *) psChosenObj;
-			ASSERT_OR_RETURN(, psDroid != nullptr, "invalid droid pointer");
-			psRepairFac = &psStructure->pFunctionality->repairFacility;
-
-			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
-			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-			if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
-			{
-				//check droid is not healthy
-				if (psDroid->body < psDroid->originalBody)
-				{
-					//if in multiPlayer, and a Transporter - make sure its on the ground before repairing
-					if (bMultiPlayer && isTransporter(psDroid))
-					{
-						if (!(psDroid->sMove.Status == MOVEINACTIVE &&
-						      psDroid->sMove.iVertSpeed == 0))
-						{
-							objTrace(psStructure->id, "Waiting for transporter to land");
-							return;
-						}
-					}
-
-					//don't do anything if the resistance is low in multiplayer
-					if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
-					{
-						objTrace(psStructure->id, "Resistance too low for repair");
-						return;
-					}
-
-					psDroid->body += gameTimeAdjustedAverage(getBuildingRepairPoints(psStructure));
-				}
-
-				if (psDroid->body >= psDroid->originalBody)
-				{
-					objTrace(psStructure->id, "Repair complete of droid %d", (int)psDroid->id);
-
-					psRepairFac->psObj = nullptr;
-
-					/* set droid points to max */
-					psDroid->body = psDroid->originalBody;
-
-					if ((psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED)
-					    && psDroid->order.psObj == psStructure)
-					{
-						// if completely repaired reset order
-						secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
-
-						if (hasCommander(psDroid))
-						{
-							// return a droid to it's command group
-							DROID	*psCommander = psDroid->psGroup->psCommander;
-
-							objTrace(psDroid->id, "Repair complete - move to commander");
-							orderDroidObj(psDroid, DORDER_GUARD, psCommander, ModeImmediate);
-						}
-						else if (psRepairFac->psDeliveryPoint != nullptr)
-						{
-							// move the droid out the way
-							objTrace(psDroid->id, "Repair complete - move to delivery point");
-							orderDroidLoc(psDroid, DORDER_MOVE,
-							              psRepairFac->psDeliveryPoint->coords.x,
-							              psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
-						}
-					}
-				}
-
-				if (psStructure->visibleForLocalDisplay() && psDroid->visibleForLocalDisplay()) // display only - does not impact simulation state
-				{
-					/* add plasma repair effect whilst being repaired */
-					iVecEffect.x = psDroid->pos.x + (10 - rand() % 20);
-					iVecEffect.y = psDroid->pos.z + (10 - rand() % 20);
-					iVecEffect.z = psDroid->pos.y + (10 - rand() % 20);
-					effectSetSize(100);
-					addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime + 1);
-				}
-			}
-		}
-		//check for rearming
-		else if (structureMode == REF_REARM_PAD)
-		{
+			//check for rearming
 			REARM_PAD	*psReArmPad = &psStructure->pFunctionality->rearmPad;
 			UDWORD pointsAlreadyAdded;
 
@@ -3459,7 +3304,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						}
 					}
 				}
-				if (psDroid->body < psDroid->originalBody) // do repairs
+				if (droidIsDamaged(psDroid)) // do repairs
 				{
 					psDroid->body += gameTimeAdjustedAverage(getBuildingRepairPoints(psStructure));
 					if (psDroid->body >= psDroid->originalBody)
@@ -5407,7 +5252,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
-			console(_("ID %d - Queue %d"), psStructure->id, psStructure->pFunctionality->repairFacility.droidQueue);
+			console(_("ID %d - State %d"), psStructure->id, psStructure->pFunctionality->repairFacility.state);
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:

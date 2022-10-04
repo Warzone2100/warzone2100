@@ -481,5 +481,9 @@ static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
 	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)nullptr;
 }
 
+/** \brief sends droid to delivery point, or back to commander. psRepairFac maybe nullptr when
+ * repairs were made by a mobile repair turret
+ */
+void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac);
 
 #endif // __INCLUDED_SRC_DROID_H__
