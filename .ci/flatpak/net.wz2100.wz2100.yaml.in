@@ -23,6 +23,9 @@ cleanup:
   - /share/pkgconfig
   - '*.a'
   - '*.la'
+build-options:
+  env:
+    GEM_PATH: /app/lib/ruby/gems/build-dep
 
 x-compat-aarch64-build-options: &compat-aarch64-build-options
   # Add the cross compiler to the PATH
@@ -49,7 +52,7 @@ modules:
       - '*'
     buildsystem: simple
     build-commands:
-      - gem install --install-dir /files/lib/ruby/gems/temp --bindir /app/bin asciidoctor-2.0.17.gem
+      - gem install --ignore-dependencies --no-user-install --verbose --local --install-dir /app/lib/ruby/gems/build-dep --bindir /app/bin asciidoctor-2.0.17.gem
     sources:
       - type: file
         url: https://rubygems.org/downloads/asciidoctor-2.0.17.gem
