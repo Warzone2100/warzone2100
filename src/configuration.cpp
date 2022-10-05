@@ -25,6 +25,7 @@
 
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/input.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/sound/sounddefs.h"
@@ -118,6 +119,24 @@ public:
 			return false;
 		}
 		return PHYSFS_exists(utf8Path.c_str());
+	}
+	optional<uint64_t> fileSize() const
+	{
+#if defined(WZ_PHYSFS_2_1_OR_GREATER)
+		PHYSFS_Stat metaData;
+		if (PHYSFS_stat(utf8Path.c_str(), &metaData) == 0)
+		{
+			return nullopt; // failed to get file info
+		}
+		if (metaData.filesize < 0)
+		{
+			// unknown filesize
+			return nullopt;
+		}
+		return static_cast<uint64_t>(metaData.filesize);
+#else
+		return nullopt; // unknown
+#endif
 	}
 	std::string realPath() const
 	{
@@ -233,6 +252,8 @@ bool saveIniFile(mINI::INIFile &file, mINI::INIStructure &ini)
 	return true;
 }
 
+constexpr uint64_t MAX_CONFIG_FILE_SIZE = 1024 * 1024 * 2; // 2 MB seems like enough...
+
 // ////////////////////////////////////////////////////////////////////////////
 bool loadConfig()
 {
@@ -247,7 +268,14 @@ bool loadConfig()
 	// now we can read the file
 	try
 	{
-		if (!file.read(ini))
+		uint64_t fileSize = fileStreamGenerator->fileSize().value_or(0);
+		if (fileSize > MAX_CONFIG_FILE_SIZE)
+		{
+			createdConfigFile = true;
+			debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", fileName, fileSize);
+			// will just proceed with an empty ini structure
+		}
+		if (!createdConfigFile && !file.read(ini))
 		{
 			createdConfigFile = true;
 			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
@@ -256,8 +284,10 @@ bool loadConfig()
 	}
 	catch (const std::exception& e)
 	{
+		createdConfigFile = true;
 		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		return false;
+		ini.clear();
+		// will just proceed with an empty ini structure
 	}
 
 	auto& iniGeneral = ini["General"];
