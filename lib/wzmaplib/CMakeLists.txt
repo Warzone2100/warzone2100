@@ -78,7 +78,7 @@ if(NOT TARGET nlohmann_json)
 	FetchContent_Declare(
 		nlohmannjson
 		GIT_REPOSITORY https://github.com/nlohmann/json.git
-		GIT_TAG        v3.10.5
+		GIT_TAG        v3.11.2
 		GIT_SHALLOW    TRUE
 	)
 	FetchContent_GetProperties(nlohmannjson)
