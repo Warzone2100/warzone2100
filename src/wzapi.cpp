@@ -1855,7 +1855,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 		DROID_TEMPLATE *psAddedTemplate = addTemplate(player, std::move(psTemplate));
 		if (!structSetManufacture(psStruct, psAddedTemplate, ModeQueue))
 		{
-			debug(LOG_ERROR, "Could not produce template %s in %s", getStatsName(psTemplate), objInfo(psStruct));
+			debug(LOG_ERROR, "Could not produce template %s in %s", getStatsName(psAddedTemplate), objInfo(psStruct));
 			return false;
 		}
 		return true;

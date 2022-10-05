@@ -335,7 +335,7 @@ void W_BUTTON::drawProgressBorder(int xOffset, int yOffset)
 	}
 
 	// Get length of progress
-	int progressLength = static_cast<int>(factor * (float)totalLength) % totalLength;
+	int progressLength = (totalLength > 0) ? (static_cast<int>(factor * (float)totalLength) % totalLength) : 0;
 
 	if (!config.factor().has_value() && !config.repeated() && timeElapsed >= config.interval())
 	{
