@@ -27,6 +27,7 @@
 // parse the commandline
 bool ParseCommandLine(int argc, const char * const *argv);
 bool ParseCommandLineEarly(int argc, const char * const *argv);
+bool ParseCommandLineDebugFlags(int argc, const char * const *argv);
 
 bool autogame_enabled();
 const std::string &saveandquit_enabled();

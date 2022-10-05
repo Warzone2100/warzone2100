@@ -1752,6 +1752,12 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	// find debugging flags extra early
+	if (!ParseCommandLineDebugFlags(utfargc, utfargv))
+	{
+		return EXIT_FAILURE;
+	}
+
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);
 

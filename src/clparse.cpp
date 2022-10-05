@@ -452,16 +452,7 @@ static const struct poptOption *getOptionsTable()
 	return TranslatedOptionsTable;
 }
 
-//! Early parsing of the commandline
-/**
- * First half of the command line parsing. Also see ParseCommandLine()
- * below. The parameters here are needed early in the boot process,
- * while the ones in ParseCommandLine can benefit from debugging being
- * set up first.
- * \param argc number of arguments given
- * \param argv string array of the arguments
- * \return Returns true on success, false on error */
-bool ParseCommandLineEarly(int argc, const char * const *argv)
+bool ParseCommandLineDebugFlags(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
 	int iOption;
@@ -516,6 +507,46 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 			// Tell the debug stderr output callback to always flush its output
 			debugFlushStderr();
 			break;
+
+		default:
+			break;
+		};
+	}
+
+	return true;
+}
+
+//! Early parsing of the commandline
+/**
+ * First half of the command line parsing. Also see ParseCommandLine()
+ * below. The parameters here are needed early in the boot process,
+ * while the ones in ParseCommandLine can benefit from debugging being
+ * set up first.
+ * \param argc number of arguments given
+ * \param argv string array of the arguments
+ * \return Returns true on success, false on error */
+bool ParseCommandLineEarly(int argc, const char * const *argv)
+{
+	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
+	int iOption;
+
+#if defined(WZ_OS_MAC) && defined(DEBUG)
+	debug_enable_switch("all");
+#endif /* WZ_OS_MAC && DEBUG */
+
+	/* loop through command line */
+	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
+	{
+		CLI_OPTIONS option = (CLI_OPTIONS)iOption;
+		const char *token;
+
+		if (iOption == POPT_ERROR_BADOPT)
+		{
+			qFatal("Unrecognized option: %s", poptBadOption(poptCon, 0));
+		}
+
+		switch (option)
+		{
 
 		case CLI_CONFIGDIR:
 			// retrieve the configuration directory
