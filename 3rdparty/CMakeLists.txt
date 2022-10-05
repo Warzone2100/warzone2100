@@ -62,6 +62,8 @@ target_include_directories(glad PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/glad/include
 set(JSON_ImplicitConversions OFF CACHE BOOL "Enable implicit conversions." FORCE)
 set(JSON_SystemInclude ON CACHE BOOL "Include as system headers (skip for clang-tidy)." FORCE)
 add_subdirectory(json EXCLUDE_FROM_ALL)
+# Temporary workaround until we use the new NLOHMANN_JSON_NAMESPACE (etc) macros
+target_compile_definitions(nlohmann_json INTERFACE "NLOHMANN_JSON_NAMESPACE=nlohmann;NLOHMANN_JSON_NAMESPACE_BEGIN=namespace nlohmann {;NLOHMANN_JSON_NAMESPACE_END=}")
 
 add_subdirectory(optional-lite EXCLUDE_FROM_ALL)
 

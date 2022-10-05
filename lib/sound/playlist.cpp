@@ -66,14 +66,14 @@ inline void from_json(const nlohmann::json& j, WZ_TRACK_SETTINGS& p)
 {
 	if (!j.is_object())
 	{
-		throw nlohmann::json::type_error::create(302, "type must be an object, but is " + std::string(j.type_name()), j);
+		throw nlohmann::json::type_error::create(302, "type must be an object, but is " + std::string(j.type_name()), &j);
 	}
 	auto it = j.find("music_modes");
 	if (it != j.end())
 	{
 		if (!it.value().is_array())
 		{
-			throw nlohmann::json::type_error::create(302, "music_modes type must be an array, but is " + std::string(j.type_name()), j);
+			throw nlohmann::json::type_error::create(302, "music_modes type must be an array, but is " + std::string(j.type_name()), &j);
 		}
 		size_t i = 0;
 		for (const auto& v : it.value())
