@@ -288,6 +288,7 @@ std::string wzapi::translate(WZAPI_PARAMS(std::string str))
 //--
 int32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 {
+	if (limit == 0) return 0;
 	return gameRand(limit);
 }
 
