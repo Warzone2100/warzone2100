@@ -52,8 +52,8 @@ endif()
 target_compile_definitions(
     ${NLOHMANN_JSON_TARGET_NAME}
     INTERFACE
-    JSON_USE_IMPLICIT_CONVERSIONS=$<BOOL:${JSON_ImplicitConversions}>
-    JSON_DIAGNOSTICS=$<BOOL:${JSON_Diagnostics}>
+    $<$<NOT:$<BOOL:${JSON_ImplicitConversions}>>:JSON_USE_IMPLICIT_CONVERSIONS=0>
+    $<$<BOOL:${JSON_Diagnostics}>:JSON_DIAGNOSTICS=1>
 )
 
 target_include_directories(

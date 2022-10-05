@@ -86,6 +86,8 @@ if(NOT TARGET nlohmann_json)
 		FetchContent_Populate(nlohmannjson)
 	endif()
 	add_subdirectory("${nlohmannjson_SOURCE_DIR}" "${nlohmannjson_BINARY_DIR}" EXCLUDE_FROM_ALL)
+	# Temporary workaround until we use the new NLOHMANN_JSON_NAMESPACE (etc) macros
+	target_compile_definitions(nlohmann_json INTERFACE "NLOHMANN_JSON_NAMESPACE=nlohmann;NLOHMANN_JSON_NAMESPACE_BEGIN=namespace nlohmann {;NLOHMANN_JSON_NAMESPACE_END=}")
 	# Manually copy json_fwd.hpp to the single_include directory (from the include directory)
 	file(COPY "${nlohmannjson_SOURCE_DIR}/include/nlohmann/json_fwd.hpp" DESTINATION "${nlohmannjson_SOURCE_DIR}/single_include/nlohmann")
 endif()
