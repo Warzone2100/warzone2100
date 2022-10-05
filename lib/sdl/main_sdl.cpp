@@ -2726,7 +2726,7 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 	SDL_WZBackend_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
 
 	// Obtain the logical window size (in points)
-	int logicalWindowWidth, logicalWindowHeight = 0;
+	int logicalWindowWidth = 0, logicalWindowHeight = 0;
 	SDL_GetWindowSize(WZwindow, &logicalWindowWidth, &logicalWindowHeight);
 
 	debug(LOG_WZ, "Window Logical Size (%d, %d) vs Drawable Size in Pixels (%d, %d)", logicalWindowWidth, logicalWindowHeight, drawableWidth, drawableHeight);

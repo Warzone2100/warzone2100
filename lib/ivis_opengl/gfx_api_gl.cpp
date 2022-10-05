@@ -941,6 +941,12 @@ void gl_pipeline_state_object::getLocs()
 
 static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
 {
+	if (shaderContents == nullptr)
+	{
+		debug(LOG_INFO, "shaderContents is null");
+		return {};
+	}
+
 	std::unordered_set<std::string> uniformNames;
 
 	// White space: the space character, horizontal tab, vertical tab, form feed, carriage-return, and line-feed.
