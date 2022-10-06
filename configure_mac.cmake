@@ -326,7 +326,7 @@ set(_vcpkgInstallResult -1)
 set(_vcpkgAttempts 0)
 while(NOT _vcpkgInstallResult EQUAL 0 AND _vcpkgAttempts LESS 3)
 	execute_process(
-		COMMAND ./vcpkg/vcpkg install --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ --overlay-ports=${_overlay_ports_path} ${_additional_vcpkg_flags}
+		COMMAND ./vcpkg/vcpkg install --vcpkg-root=./vcpkg/ --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ --overlay-ports=${_overlay_ports_path} ${_additional_vcpkg_flags}
 		RESULT_VARIABLE _vcpkgInstallResult
 	)
 	MATH(EXPR _vcpkgAttempts "${_vcpkgAttempts}+1")
