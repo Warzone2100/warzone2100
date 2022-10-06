@@ -3981,6 +3981,28 @@ void WzPlayerBoxTabs::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psPar
 // ////////////////////////////////////////////////////////////////////////////
 // player row widgets
 
+static size_t nthOccurrenceOfChar(const std::string& str, const char c, size_t n)
+{
+	size_t pos = 0;
+	size_t count = 0;
+
+	while (count < n)
+	{
+		pos = str.find(c, (count > 0) ? pos + 1 : pos);
+		if (pos == std::string::npos)
+		{
+			return std::string::npos;
+		}
+		++count;
+		if (pos == str.length() - 1)
+		{
+			return std::string::npos;
+		}
+	}
+
+	return pos;
+}
+
 class WzPlayerRow : public WIDGET
 {
 protected:
@@ -4218,6 +4240,11 @@ public:
 				if (detailsstr.size() > 512)
 				{
 					detailsstr = detailsstr.substr(0, 512);
+				}
+				size_t maxLinePos = nthOccurrenceOfChar(detailsstr, '\n', 10);
+				if (maxLinePos != std::string::npos)
+				{
+					detailsstr = detailsstr.substr(0, maxLinePos);
 				}
 				playerInfoTooltip += std::string(_("Player rating:")) + "\n";
 				if (stats.autoratingFrom == RATING_SOURCE_HOST && !NetPlay.isHost)
