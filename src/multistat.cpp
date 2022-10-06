@@ -235,8 +235,8 @@ void recvMultiStats(NETQUEUE queue)
 		return;
 	}
 
-	PLAYERSTATS dummyVariable;
-	NETauto(dummyVariable.autorating);
+	PLAYERSTATS::Autorating receivedAutorating;
+	NETauto(receivedAutorating);
 
 	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 	if (!myResponsibility(playerIndex))
@@ -291,7 +291,7 @@ void recvMultiStats(NETQUEUE queue)
 			}
 			else
 			{
-				playerStats[playerIndex].autorating = dummyVariable.autorating;
+				playerStats[playerIndex].autorating = receivedAutorating;
 				playerStats[playerIndex].autoratingFrom = RATING_SOURCE_HOST;
 			}
 		}
