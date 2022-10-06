@@ -4212,22 +4212,23 @@ public:
 			{
 				if (!playerInfoTooltip.empty())
 				{
-					playerInfoTooltip += "\n";
+					playerInfoTooltip += "\n\n";
 				}
 				std::string detailsstr = stats.autorating.details;
 				if (detailsstr.size() > 512)
 				{
 					detailsstr = detailsstr.substr(0, 512);
 				}
-				playerInfoTooltip += std::string(_("Rating information: ")) + "\n" + detailsstr + "\n";
+				playerInfoTooltip += std::string(_("Player rating:")) + "\n";
 				if (stats.autoratingFrom == RATING_SOURCE_HOST && !NetPlay.isHost)
 				{
-					playerInfoTooltip += _("(Host provided)");
+					playerInfoTooltip += std::string("(") + _("Host provided") + ")";
 				}
 				else
 				{
-					playerInfoTooltip += _("Rating information from: ") + getAutoratingUrl();
+					playerInfoTooltip += std::string("(") + astringf(_("From: %s"), getAutoratingUrl().c_str()) + ")";
 				}
+				playerInfoTooltip += "\n" + detailsstr;
 			}
 		}
 		playerInfo->setTip(playerInfoTooltip);
