@@ -4230,7 +4230,8 @@ public:
 				playerInfoTooltip += _("Player ID: ");
 				playerInfoTooltip += hash.empty()? _("(none)") : hash;
 			}
-			if (stats.autorating.valid && stats.autorating.details != "")
+			if (stats.autorating.valid && !stats.autorating.details.empty()
+				&& !(stats.autoratingFrom == RATING_SOURCE_HOST && !NetPlay.isHost)) // do not display host-provided details (for now)
 			{
 				if (!playerInfoTooltip.empty())
 				{
