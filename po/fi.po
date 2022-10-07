@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 09:31\n"
+"PO-Revision-Date: 2022-10-07 21:54\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -15508,7 +15508,7 @@ msgstr ""
 
 #: src/frontend.cpp:183
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Kampanjan videot puuttuvat"
 
 #: src/frontend.cpp:184
 msgid "See our FAQ on how to install videos"
@@ -15625,7 +15625,7 @@ msgstr "Haasteet"
 
 #: src/frontend.cpp:372
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "Lataa kampanjapeli"
 
 #: src/frontend.cpp:373
 msgid "Load Skirmish Game"
