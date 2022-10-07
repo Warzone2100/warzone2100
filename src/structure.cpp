@@ -5219,6 +5219,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			        getStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 			if (dbgInputManager.debugMappingsAllowed())
 			{
+				// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 				console(_("ID %d - sensor range %d - ECM %d"), psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
 			}
 			break;
@@ -5243,6 +5244,9 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
+			// "born": Time the game object was born
+			// "depth": Depth of structure's foundation
 			console(_("ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"),
 			        psStructure->id, objArmour(psStructure, WC_KINETIC), objArmour(psStructure, WC_HEAT),
 			        structSensorRange(psStructure), structJammerPower(psStructure), psStructure->born, psStructure->foundationDepth);
@@ -5252,6 +5256,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
+			// "state": The "RepairState" (printed as an integer, Idle = 0, Repairing = 1)
 			console(_("ID %d - State %d"), psStructure->id, psStructure->pFunctionality->repairFacility.state);
 		}
 		break;
@@ -5276,6 +5282,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		        NUM_POWER_MODULES, psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 			console(_("ID %u - Multiplier: %u"), psStructure->id, getBuildingPowerPoints(psStructure));
 		}
 		break;
@@ -5285,6 +5292,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 			console(_("ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"), psStructure->id,
 			        getBuildingProductionPoints(psStructure), psStructure->pFunctionality->factory.buildPointsRemaining,
 			        psStructure->resistance, structureResistance(psStructure->pStructureType, psStructure->player));
@@ -5294,6 +5302,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 			console(_("ID %u - Research Points: %u"), psStructure->id, getBuildingResearchPoints(psStructure));
 		}
 		break;
@@ -5301,6 +5310,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 			console(_("tile %d,%d - target %s"), psStructure->pos.x / TILE_UNITS, psStructure->pos.y / TILE_UNITS,
 			        objInfo(psStructure->pFunctionality->rearmPad.psObj));
 		}
@@ -5309,6 +5319,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 			console(_("ID %u - sensor range %d - ECM %d"), psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
 		}
 		break;
