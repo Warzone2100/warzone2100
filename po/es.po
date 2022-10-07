@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 09:30\n"
+"PO-Revision-Date: 2022-10-07 21:54\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -16060,7 +16060,7 @@ msgstr "OPCIONES DE RATÓN"
 #: src/frontend.cpp:1987
 #: src/multiint.cpp:263
 msgid "Super Easy"
-msgstr ""
+msgstr "Súper fácil"
 
 #: src/frontend.cpp:1988
 #: src/multiint.cpp:263
@@ -18374,7 +18374,7 @@ msgstr ""
 #: src/multiint.cpp:4257
 #, c-format
 msgid "From: %s"
-msgstr ""
+msgstr "De: %s"
 
 #: src/multiint.cpp:4330
 msgid "Click to change difficulty"
@@ -18435,12 +18435,12 @@ msgstr "Copiar texto al portapapeles"
 #: src/multiint.cpp:5045
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "Silenciar jugador: %s"
 
 #: src/multiint.cpp:5049
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "Dejar de silenciar al jugador: %s"
 
 #: src/multiint.cpp:5143
 msgid "CHAT"
@@ -18478,7 +18478,7 @@ msgstr "Anfitrión Comenzando Partida"
 #: src/multiint.cpp:6331
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "¡Moviendo %s a espectadores!"
 
 #: src/multiint.cpp:6459
 msgid "Host supplied invalid options"
@@ -18760,7 +18760,7 @@ msgstr ""
 #: src/multiopt.cpp:292
 #, c-format
 msgid "[%d] Limit [%s]: %d (default: %d)"
-msgstr ""
+msgstr "[%d] Límite [%s]: %d (por defecto: %d)"
 
 #: src/multiopt.cpp:298
 #, c-format
@@ -19110,7 +19110,7 @@ msgstr ""
 
 #: src/seqdisp.cpp:561
 msgid "Loading video"
-msgstr ""
+msgstr "Cargando vídeo"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
@@ -19198,7 +19198,7 @@ msgstr ""
 #: src/structure.cpp:5255
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "ID %d - Estado %d"
 
 #: src/structure.cpp:5262
 #, c-format
