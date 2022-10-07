@@ -583,7 +583,8 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 		*chosen = ((W_BUTTON *)widgGetFromID(psRScreen, id))->pText;
 
 		DisplayRequestOptionData * pData = static_cast<DisplayRequestOptionData *>(((W_BUTTON *)widgGetFromID(psRScreen, id))->pUserData);
-		assert(pData != nullptr);
+		ASSERT_OR_RETURN(false, pData != nullptr, "Unable to get map data pointer for: %s", chosen->toUtf8().c_str());
+		ASSERT_OR_RETURN(false, pData->pMapData != nullptr, "Unable to get map data: %s", chosen->toUtf8().c_str());
 		*chosenValue = (LEVEL_DATASET *)pData->pMapData;
 		*mode = current_context;
 		*isHoverPreview = hoverPreview;
