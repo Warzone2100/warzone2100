@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 09:30\n"
+"PO-Revision-Date: 2022-10-07 21:54\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -4029,7 +4029,7 @@ msgstr "Starte mindestens einen Transporter mit einem Lkw an Bord und überlebe 
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Starte so viele Transporter wie möglich und lade mindestens einen LKW in einen der Transporter"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4069,11 +4069,11 @@ msgstr "Rückkehr zur Landezone"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:532
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Schwere / Sauschwere Schwierigkeit Tipp:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Errichte eine starke Basis über die Karte, um Dich vor dem Kollektiv zu schützen"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:538
 msgid "Destroy all enemy units and structures"
@@ -5711,7 +5711,7 @@ msgstr "SCHWIERIG"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr "VERRÜCKT"
+msgstr "SAUSCHWER"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
@@ -6062,7 +6062,7 @@ msgstr "Flaknachladezeit -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:131
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Flugabwehrstellung mit Stormbringer Laser"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6557,7 +6557,7 @@ msgstr "Bewaffnet mit Hochgeschwindigkeitskanone"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:602
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Bewaffnet mit vierläufiger Hochgeschwindigkeitsautomatikkanone"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
@@ -6622,7 +6622,7 @@ msgstr "Bewaffnet mit Tank-Killer-Raketen"
 #: po/custom/fromJson.txt:644
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Panzerung +120%, Rumpfpunkte +90%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -11400,7 +11400,7 @@ msgstr "Mehrläufiges Schnellfeuermaschinengewehr"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3998
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Muss gebaut werden, um Commande produzieren zu können"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -13320,7 +13320,7 @@ msgstr "Stiehlt Technologie von Gebäuden und übernimmt Waffensysteme"
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5301
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Stahlwachturm mit Schwerem Maschinengewehr"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -15180,7 +15180,7 @@ msgstr "Automatischer Spielstart"
 
 #: src/clparse.cpp:409
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "Bei Spielleitung, Bewertungen von der angegebenen Server-URL abfragen"
 
 #: src/clparse.cpp:409
 msgid "autorating"
@@ -15402,7 +15402,7 @@ msgstr "%s - Hitpoints %d/%d - Erfahrung %.1f, %s, Abschüsse %d"
 #: src/display.cpp:1618
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Trefferpunkte %d/%d - ID %d - %s"
 
 #: src/display.cpp:1634
 #, c-format
@@ -16064,7 +16064,7 @@ msgstr "MAUSEINSTELLUNGEN"
 #: src/frontend.cpp:1987
 #: src/multiint.cpp:263
 msgid "Super Easy"
-msgstr ""
+msgstr "Sauleicht"
 
 #: src/frontend.cpp:1988
 #: src/multiint.cpp:263
@@ -16079,7 +16079,7 @@ msgstr "Schwer"
 #: src/frontend.cpp:1991
 #: src/multiint.cpp:263
 msgid "Insane"
-msgstr "Verrückt"
+msgstr "Sauschwer"
 
 #: src/frontend.cpp:2171
 #: src/init.cpp:1216
@@ -16135,7 +16135,7 @@ msgstr "Internetseite öffnen."
 
 #: src/frontend.cpp:2394
 msgid "Insane Difficulty"
-msgstr "Schwierigkeit: Verrückt"
+msgstr "Schwierigkeit: Sauschwer"
 
 #: src/frontend.cpp:2395
 msgid "This difficulty is for very experienced players!"
@@ -16182,7 +16182,7 @@ msgstr "Zuschauerplätze"
 
 #: src/frontend.cpp:2667
 msgid "Enable Rating"
-msgstr ""
+msgstr "Bewertungen erlauben"
 
 #: src/frontend.cpp:2682
 msgid "MULTIPLAY OPTIONS"
@@ -17628,7 +17628,7 @@ msgstr "SCHARMÜTZEL"
 
 #: src/keybind.cpp:1435
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "SCHWIERIGKEIT: SAULEICHT"
 
 #: src/keybind.cpp:1438
 msgid "DIFFICULTY: EASY"
@@ -17644,7 +17644,7 @@ msgstr "SCHWIERIGKEIT: SCHWER"
 
 #: src/keybind.cpp:1447
 msgid "DIFFICULTY: INSANE"
-msgstr "SCHWIERIGKEIT: VERRÜCKT"
+msgstr "SCHWIERIGKEIT: SAUSCHWER"
 
 #: src/keybind.cpp:1456
 msgid "CHEATS: ENABLED"
@@ -18369,16 +18369,16 @@ msgstr "(keine)"
 
 #: src/multiint.cpp:4250
 msgid "Player rating:"
-msgstr ""
+msgstr "Spielerbewertung:"
 
 #: src/multiint.cpp:4253
 msgid "Host provided"
-msgstr ""
+msgstr "Spielleitung zur Verfügung gestellt"
 
 #: src/multiint.cpp:4257
 #, c-format
 msgid "From: %s"
-msgstr ""
+msgstr "Von: %s"
 
 #: src/multiint.cpp:4330
 msgid "Click to change difficulty"
@@ -18439,12 +18439,12 @@ msgstr "Text in die Zwischenablage kopieren"
 #: src/multiint.cpp:5045
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "Spieler stummschalten: %s"
 
 #: src/multiint.cpp:5049
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "Spieler laut schalten: %s"
 
 #: src/multiint.cpp:5143
 msgid "CHAT"
@@ -18482,7 +18482,7 @@ msgstr "Der Spielleiter startet das Spiel"
 #: src/multiint.cpp:6331
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "Verschiebe %s zu den Zuschauern!"
 
 #: src/multiint.cpp:6459
 msgid "Host supplied invalid options"
@@ -18494,7 +18494,7 @@ msgstr "Du wurdest hinausgeworfen: "
 
 #: src/multiint.cpp:6707
 msgid "No connection to host."
-msgstr "Keine Verbindung zum Host."
+msgstr "Keine Verbindung zum Spielleiter."
 
 #: src/multiint.cpp:6763
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
@@ -18726,7 +18726,7 @@ msgstr "Energie übertragen"
 
 #: src/multimenu.cpp:936
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Chat Stummschaltung umschalten"
 
 #: src/multimenu.cpp:1131
 msgid "Sent/Received per sec —"
@@ -18759,26 +18759,26 @@ msgstr "%s : %s aus dem Spiel geworfen und zur Bannliste hinzugefügt!"
 #: src/multiopt.cpp:283
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "Geänderte Gebäudebeschränkungen [%d]:"
 
 #: src/multiopt.cpp:292
 #, c-format
 msgid "[%d] Limit [%s]: %d (default: %d)"
-msgstr ""
+msgstr "[%d] Limit [%s]: %d (Standard: %d)"
 
 #: src/multiopt.cpp:298
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%d): %d"
-msgstr ""
+msgstr "[%d] Limit, das größer ist als numStructureStats (%d): %d"
 
 #: src/multiopt.cpp:304
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "Limits wurden auf Standard zurückgesetzt."
 
 #: src/multiopt.cpp:312
 #, c-format
 msgid "Host initialized %d limits, unable to show them due to mods"
-msgstr ""
+msgstr "Der Spielleiter initialisierte %d Limits, konnte aufgrund von Mods nicht angezeigt werden"
 
 #: src/multiopt.cpp:392
 msgid "MAP REQUESTED!"
@@ -19114,7 +19114,7 @@ msgstr "Kann das benötigte Gebäude nicht finden!"
 
 #: src/seqdisp.cpp:561
 msgid "Loading video"
-msgstr ""
+msgstr "Video wird geladen"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
@@ -19227,12 +19227,12 @@ msgstr "ID %u - Produktionsleistung: %u - BuildPointsRemaining: %u - Widerstand:
 #: src/structure.cpp:5297
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - Forschungspunkte: %u"
 
 #: src/structure.cpp:5304
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "Tile %d,%d - Ziel %s"
 
 #: src/structure.cpp:5312
 #, c-format
