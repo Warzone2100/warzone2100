@@ -4839,6 +4839,17 @@ void ChatBoxWidget::initialize()
 	sEdInit.pBoxDisplay = displayChatEdit;
 	editBox = std::make_shared<W_EDITBOX>(&sEdInit);
 	attach(editBox);
+	editBox->setOnReturnHandler([](W_EDITBOX& widg) {
+		// don't send empty lines to other players in the lobby
+		auto str = widg.getString();
+		if (str.isEmpty())
+		{
+			return;
+		}
+
+		sendRoomChatMessage(str.toUtf8().c_str());
+		widg.setString("");
+	});
 
 	consoleAddMessageListener(handleConsoleMessage);
 }
@@ -6066,15 +6077,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_CHATEDIT:
-
-		// don't send empty lines to other players in the lobby
-		if (!strcmp(widgGetString(psWScreen, MULTIOP_CHATEDIT), ""))
-		{
-			break;
-		}
-
-		sendRoomChatMessage(widgGetString(psWScreen, MULTIOP_CHATEDIT));
-		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");
+		// now handled in setOnReturnHandler
 		break;
 
 	case CON_CANCEL:
