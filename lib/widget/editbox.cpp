@@ -442,6 +442,10 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case KEY_KPENTER:					// either normal return key || keypad enter
 			/* Finish editing */
 			StopTextInput(this);
+			if (onRetHandler)
+			{
+				onRetHandler(*this);
+			}
 			if (auto lockedScreen = screenPointer.lock())
 			{
 				lockedScreen->setFocus(nullptr);
@@ -740,4 +744,9 @@ void W_EDITBOX::setState(unsigned newState)
 {
 	unsigned mask = WEDBS_DISABLE;
 	state = (state & ~mask) | (newState & mask);
+}
+
+void W_EDITBOX::setOnReturnHandler(const OnReturnHandler& func)
+{
+	onRetHandler = func;
 }

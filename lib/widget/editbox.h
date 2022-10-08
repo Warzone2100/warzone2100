@@ -27,6 +27,7 @@
 #include "widget.h"
 #include "widgbase.h"
 #include "lib/framework/wzstring.h"
+#include <functional>
 
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
@@ -66,6 +67,9 @@ public:
 
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
 
+	typedef std::function<void (W_EDITBOX&)> OnReturnHandler;
+	void setOnReturnHandler(const OnReturnHandler& func);
+
 	UDWORD		state;						// The current edit box state
 	WzString	aText;						// The text in the edit box
 	WzString	placeholderText;
@@ -95,6 +99,7 @@ private:
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
 	EditBoxDisplayCache displayCache;
 	bool suppressAudioCallback = false;
+	OnReturnHandler	onRetHandler = nullptr;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__
