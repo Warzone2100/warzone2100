@@ -52,6 +52,9 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 #include FT_MULTIPLE_MASTERS_H
 #endif
 #include FT_GLYPH_H
+#if defined(FT_LCD_FILTER_H)
+#include FT_LCD_FILTER_H
+#endif
 #include <unordered_map>
 #include <memory>
 #include <limits>
@@ -153,6 +156,19 @@ static const char* FallbackGetFTErrorStr(FT_Error error_code)
 	return nullptr; // silence warnings
 }
 
+static const char* WZGetFTErrorStr(FT_Error error)
+{
+#if (FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && (FREETYPE_MINOR > 10 || (FREETYPE_MINOR == 10 && FREETYPE_PATCH >= 1) ))) // FreeType 2.10.1+ needed for FT_Error_String
+	const char* pFtErrorStr = FT_Error_String(error); // FT_Error_String only returns a value if FreeType is compiled with the appropriate option(s)
+	if (pFtErrorStr != nullptr)
+	{
+		return pFtErrorStr;
+	}
+#endif
+	const char* pFTErrorStrFallback = FallbackGetFTErrorStr(error);
+	return pFTErrorStrFallback;
+}
+
 struct FTFace
 {
 	FTFace(FT_Library &lib, const std::string &fileName, int32_t charSize, uint32_t horizDPI, uint32_t vertDPI, optional<uint16_t> fontWeight = nullopt)
@@ -175,17 +191,10 @@ struct FTFace
 		}
 		else if (error != FT_Err_Ok)
 		{
-#if (FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && (FREETYPE_MINOR > 10 || (FREETYPE_MINOR == 10 && FREETYPE_PATCH >= 1) ))) // FreeType 2.10.1+ needed for FT_Error_String
-			const char* pFtErrorStr = FT_Error_String(error); // FT_Error_String only returns a value if FreeType is compiled with the appropriate option(s)
+			const char* pFtErrorStr = WZGetFTErrorStr(error);
 			if (pFtErrorStr != nullptr)
 			{
 				throw std::runtime_error(astringf("Failed to load font file %s, with error: %s", fileName.c_str(), pFtErrorStr));
-			}
-#endif
-			const char* pFTErrorStrFallback = FallbackGetFTErrorStr(error);
-			if (pFTErrorStrFallback != nullptr)
-			{
-				throw std::runtime_error(astringf("Failed to load font file %s, with error: %s", fileName.c_str(), pFTErrorStrFallback));
 			}
 			throw std::runtime_error(astringf("Failed to load font file %s, with error: %d", fileName.c_str(), static_cast<int>(error)));
 		}
@@ -312,6 +321,18 @@ struct FTlib
 	FTlib()
 	{
 		FT_Init_FreeType(&lib);
+#if defined(FT_LCD_FILTER_H)
+		FT_Error error = FT_Library_SetLcdFilter(lib, FT_LCD_FILTER_DEFAULT);
+		if (error == 0)
+		{
+			debug(LOG_WZ, "Enabled FT_LCD_FILTER_DEFAULT");
+		}
+		else
+		{
+			const char* pFtErrorStr = WZGetFTErrorStr(error);
+			debug(LOG_WZ, "Could not enable FT_LCD_FILTER_DEFAULT: %s", (pFtErrorStr) ? pFtErrorStr : "unknown");
+		}
+#endif
 	}
 
 	~FTlib()
