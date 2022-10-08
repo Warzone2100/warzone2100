@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 21:54\n"
+"PO-Revision-Date: 2022-10-08 09:53\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15446,7 +15446,7 @@ msgstr "Setze Zoom auf %.0f"
 #: src/droid.cpp:253
 #, c-format
 msgid "%s Lost!"
-msgstr "%s verloren!"
+msgstr "%s Verloren!"
 
 #: src/droid.cpp:1118
 msgid "Structure Restored"
@@ -15646,7 +15646,7 @@ msgstr "Scharmützel Aufzeichnung ansehen"
 
 #: src/frontend.cpp:376
 msgid "SINGLE PLAYER"
-msgstr "Einzelspieler"
+msgstr "EINZELSPIELER"
 
 #: src/frontend.cpp:381
 #: src/frontend.cpp:403
@@ -19197,12 +19197,12 @@ msgstr "%s - Trefferpunkte %d/%d"
 #: src/structure.cpp:5246
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr "ID %d - Panzerung %d|%d - Sensorreichweite %d - ECM %d - born %u - depth %.02f"
+msgstr "ID %d - Panzerung %d|%d - Sensorreichweite %d - ECM %d - Bauzeitpunkt %u - Tiefe %.02f"
 
 #: src/structure.cpp:5255
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "ID %d - Status %d"
 
 #: src/structure.cpp:5262
 #, c-format
@@ -19222,7 +19222,7 @@ msgstr "ID %u - Multiplikator: %u"
 #: src/structure.cpp:5288
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr "ID %u - Produktionsleistung: %u - BuildPointsRemaining: %u - Widerstand: %d / %d"
+msgstr "ID %u - Produktionsleistung: %u - verbleibende Konstruktionspunkte: %u - Widerstand: %d / %d"
 
 #: src/structure.cpp:5297
 #, c-format
