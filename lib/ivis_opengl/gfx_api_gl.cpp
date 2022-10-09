@@ -2042,7 +2042,15 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	(void)userParam; // we pass in NULL here
 	(void)length; // length of message, buggy on some drivers, don't use
 	(void)id; // message id
-	debug(LOG_ERROR, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
+	code_part log_level = LOG_INFO;
+	if (type == GL_DEBUG_TYPE_ERROR)
+	{
+		if (severity == GL_DEBUG_SEVERITY_HIGH)
+		{
+			log_level = LOG_ERROR;
+		}
+	}
+	debug(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
 }
 
 bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode)
