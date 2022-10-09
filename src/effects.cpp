@@ -1386,7 +1386,7 @@ static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
 	               * glm::scale(glm::vec3(psEffect->size / 100.f));
 
-	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY, viewMatrix * modelMatrix);
+	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_BLOOD_TRANSPARENCY, viewMatrix * modelMatrix);
 }
 
 static void renderDestructionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
@@ -1512,7 +1512,7 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_KICKUP)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, 128, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, 128, viewMatrix * modelMatrix);
 	}
 	else
 	{
@@ -1582,7 +1582,7 @@ static void renderConstructionEffect(const EFFECT *psEffect, const glm::mat4 &vi
 	size = MIN(2.f * translucency / 100.f, .90f);
 	modelMatrix *= glm::scale(glm::vec3(size));
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, translucency, viewMatrix * modelMatrix);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, translucency, viewMatrix * modelMatrix);
 }
 
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
@@ -1635,17 +1635,17 @@ static void renderSmokeEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 	/* Make imds be transparent on 3dfx */
 	if (psEffect->type == SMOKE_TYPE_STEAM)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, EFFECT_STEAM_TRANSPARENCY / 2, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_STEAM_TRANSPARENCY / 2, viewMatrix * modelMatrix);
 	}
 	else
 	{
 		if (psEffect->type == SMOKE_TYPE_TRAIL)
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, (2 * transparency) / 3, viewMatrix * modelMatrix);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, (2 * transparency) / 3, viewMatrix * modelMatrix);
 		}
 		else
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, transparency / 2, viewMatrix * modelMatrix);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, transparency / 2, viewMatrix * modelMatrix);
 		}
 	}
 }
