@@ -33,6 +33,10 @@
 #include "lib/framework/vector.h"
 #include "gfx_api_formats_def.h"
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 /***************************************************************************/
 /*
  *	Global Definitions (CONSTANTS)
@@ -207,12 +211,16 @@ public:
 	// Converts an image to a single-component image of the selected component/channel
 	bool convert_to_single_channel(unsigned int channel = 0);
 
-	bool resize(int newWidth, int newHeight);
+	bool resize(int newWidth, int newHeight, optional<int> alphaChannelOverride = nullopt);
+	bool resizedFromOther(const iV_Image& other, int output_w, int output_h, optional<int> alphaChannelOverride = nullopt);
 	bool scale_image_max_size(int maxWidth, int maxHeight);
 
 	bool pad_image(unsigned int newWidth, unsigned int newHeight, bool useSmearing);
 
 	bool convert_color_order(ColorOrder newOrder);
+
+private:
+	bool resizeInternal(const iV_Image& source, int output_w, int output_h, optional<int> alphaChannelOverride = nullopt);
 
 public:
 	// iV_Image is non-copyable

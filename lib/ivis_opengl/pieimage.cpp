@@ -332,33 +332,57 @@ bool iV_Image::convert_to_luma()
 	return true;
 }
 
-bool iV_Image::resize(int output_w, int output_h)
+bool iV_Image::resizeInternal(const iV_Image& source, int output_w, int output_h, optional<int> alphaChannelOverride /*= nullopt*/)
+{
+	stbir_filter filter = STBIR_FILTER_DEFAULT;
+	if (output_w < source.m_width && output_h < source.m_height)
+	{
+		filter = STBIR_FILTER_MITCHELL;
+	}
+
+	int alphaChannel = source.m_channels == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE;
+	int flags = STBIR_FLAG_ALPHA_PREMULTIPLIED;
+	if (alphaChannelOverride.has_value())
+	{
+		alphaChannel = alphaChannelOverride.value();
+	}
+
+	unsigned char *output_pixels = (unsigned char *)malloc(static_cast<size_t>(output_w) * static_cast<size_t>(output_h) * source.m_channels);
+	stbir_resize_uint8_generic(source.m_bmp, source.m_width, source.m_height, 0,
+							   output_pixels, output_w, output_h, 0,
+							   source.m_channels, alphaChannel, flags,
+							   STBIR_EDGE_CLAMP,
+							   filter,
+							   STBIR_COLORSPACE_LINEAR,
+							   nullptr);
+
+	if (m_bmp)
+	{
+		free(m_bmp);
+	}
+	m_width = output_w;
+	m_height = output_h;
+	m_bmp = output_pixels;
+	m_channels = source.m_channels;
+	m_colorOrder = source.m_colorOrder;
+
+	return true;
+}
+
+bool iV_Image::resize(int output_w, int output_h, optional<int> alphaChannelOverride /*= nullopt*/)
 {
 	if (output_w == m_width && output_h == m_height)
 	{
 		return true;
 	}
 
-	stbir_filter filter = STBIR_FILTER_DEFAULT;
-	if (output_w < m_width && output_h < m_height)
-	{
-		filter = STBIR_FILTER_MITCHELL;
-	}
+	return resizeInternal(*this, output_w, output_h, alphaChannelOverride);
+}
 
-	unsigned char *output_pixels = (unsigned char *)malloc(static_cast<size_t>(output_w) * static_cast<size_t>(output_h) * m_channels);
-	stbir_resize_uint8_generic(m_bmp, m_width, m_height, 0,
-							   output_pixels, output_w, output_h, 0,
-							   m_channels, m_channels == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, 0,
-							   STBIR_EDGE_CLAMP,
-							   filter,
-							   STBIR_COLORSPACE_LINEAR,
-							   nullptr);
-	free(m_bmp);
-	m_width = output_w;
-	m_height = output_h;
-	m_bmp = output_pixels;
-
-	return true;
+bool iV_Image::resizedFromOther(const iV_Image& other, int output_w, int output_h, optional<int> alphaChannelOverride /*= nullopt*/)
+{
+	ASSERT_OR_RETURN(false, &other != this, "Other is this");
+	return resizeInternal(other, output_w, output_h, alphaChannelOverride);
 }
 
 bool iV_Image::scale_image_max_size(int maxWidth, int maxHeight)
