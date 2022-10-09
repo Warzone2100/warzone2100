@@ -765,7 +765,7 @@ gfx_api::texture* WZ_Notification_Image::loadImageToTexture() const
 	gfx_api::texture* pTexture = nullptr;
 	if (!image.imagePath().empty())
 	{
-		pTexture = gfx_api::context::get().loadTextureFromFile(image.imagePath().c_str(), gfx_api::texture_type::game_texture);
+		pTexture = gfx_api::context::get().loadTextureFromFile(image.imagePath().c_str(), gfx_api::texture_type::user_interface);
 	}
 	else if (!image.memoryBuffer().empty())
 	{
@@ -776,7 +776,7 @@ gfx_api::texture* WZ_Notification_Image::loadImageToTexture() const
 			debug(LOG_ERROR, "Failed to load image from memory buffer: %s", result.text.c_str());
 			return nullptr;
 		}
-		pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(ivImage), gfx_api::texture_type::game_texture, "mem::notify_image");
+		pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(ivImage), gfx_api::texture_type::user_interface, "mem::notify_image");
 	}
 	else
 	{
