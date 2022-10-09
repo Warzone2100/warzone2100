@@ -342,10 +342,10 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 	{
 		/* More transformations to ensure we end up with 32bpp, 4 channel RGBA */
 		png_set_gray_to_rgb(png_ptr);
-	}
 
-	// Fill alpha with 0xFF (if needed)
-	png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
+		// Fill alpha with 0xFF (if needed)
+		png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
+	}
 
 	png_read_update_info(png_ptr, info_ptr);
 
