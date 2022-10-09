@@ -244,7 +244,7 @@ private:
 	std::unordered_set<std::type_index> performed_once;
 };
 
-template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename PremultipliedPSO, typename OpaquePSO>
+template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
 static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & matrix, const iIMDShape * shape, int pieFlag, int frame)
 {
 	templatedState currentState = templatedState(shader, shape, pieFlag);
@@ -285,19 +285,38 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
-		AlphaPSO::get().bind();
-		globalsOnce.perform_once<AlphaPSO>([&globalUniforms]{
-			AlphaPSO::get().set_uniforms_at(0, globalUniforms);
-		});
-		if (currentState != lastState)
+		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			AlphaPSO::get().set_uniforms_at(1, meshUniforms);
-			AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
-			AlphaPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			AlphaPSO::get().bind();
+			globalsOnce.perform_once<AlphaPSO>([&globalUniforms]{
+				AlphaPSO::get().set_uniforms_at(0, globalUniforms);
+			});
+			if (currentState != lastState)
+			{
+				AlphaPSO::get().set_uniforms_at(1, meshUniforms);
+				AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+				AlphaPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			}
+			AlphaPSO::get().set_uniforms_at(2, instanceUniforms);
+			AlphaPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+	//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 		}
-		AlphaPSO::get().set_uniforms_at(2, instanceUniforms);
-		AlphaPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
-//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+		else
+		{
+			AlphaNoDepthWRTPSO::get().bind();
+			globalsOnce.perform_once<AlphaNoDepthWRTPSO>([&globalUniforms]{
+				AlphaNoDepthWRTPSO::get().set_uniforms_at(0, globalUniforms);
+			});
+			if (currentState != lastState)
+			{
+				AlphaNoDepthWRTPSO::get().set_uniforms_at(1, meshUniforms);
+				AlphaNoDepthWRTPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+				AlphaNoDepthWRTPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			}
+			AlphaNoDepthWRTPSO::get().set_uniforms_at(2, instanceUniforms);
+			AlphaNoDepthWRTPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+	//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+		}
 	}
 	else if (pieFlag & pie_PREMULTIPLIED)
 	{
@@ -380,11 +399,11 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 
 	if (light)
 	{
-		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapeAlphaNoDepthWRT, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
 	}
 	else
 	{
-		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
 	}
 
 	polyCount += shape->polys.size();
