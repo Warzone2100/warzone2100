@@ -246,7 +246,7 @@ static void cdAudio_TrackFinished(const std::shared_ptr<const WZ_TRACK> &track)
 	{
 		if (!stopping)
 		{
-			debug(LOG_ERROR, "Out of playlist?! was playing %s", track->filename.c_str());
+			debug(LOG_SOUND, "Out of playlist - was playing %s", track->filename.c_str());
 			NOTIFY_MUSIC_EVENT(musicStopped);
 		}
 		return;
