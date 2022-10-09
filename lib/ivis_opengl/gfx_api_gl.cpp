@@ -1487,6 +1487,7 @@ gl_context::~gl_context()
 
 gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename)
 {
+	ASSERT(mipmap_count > 0, "mipmap_count must be > 0");
 	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "mipmap_count (%zu) exceeds GLint max", mipmap_count);
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);

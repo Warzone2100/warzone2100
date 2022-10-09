@@ -285,16 +285,7 @@ static inline size_t calcMipmapLevelsForUncompressedImage(const iV_Image& image,
 	if (generateMipMaps)
 	{
 		// Calculate how many mip-map levels (with a target minimum level dimension of 4)
-		mipmap_levels = static_cast<size_t>(floor(log2(std::max(image.width(), image.height()))));
-		if (mipmap_levels > 2)
-		{
-			mipmap_levels = (mipmap_levels - 2) + 1 /* for original level */;
-		}
-		else
-		{
-			// just use the original level, which must be small
-			mipmap_levels = 1;
-		}
+		mipmap_levels = 1 + static_cast<size_t>(floor(log2(std::max(image.width(), image.height()))));
 	}
 	return mipmap_levels;
 }
@@ -373,13 +364,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	{
 		if (checkFormatVersusMaxCompressionLevel_FromUncompressed(gfx_api::getMaxTextureCompressionLevelOverride(filename), bestAvailableCompressedFormat.value()))
 		{
-			// For now, check that the minimum mipmap level is 4x4 or greater, otherwise do not run-time compress
-			size_t min_mipmap_w = std::max<size_t>(1, image.width() >> (mipmap_levels - 1));
-			size_t min_mipmap_h = std::max<size_t>(1, image.height() >> (mipmap_levels - 1));
-			if (min_mipmap_w >= 4 && min_mipmap_h >= 4)
-			{
-				uploadFormat = bestAvailableCompressedFormat.value();
-			}
+			uploadFormat = bestAvailableCompressedFormat.value();
 		}
 		else
 		{
