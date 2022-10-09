@@ -393,10 +393,16 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	// 7.) Generate and upload mipmaps (if needed)
 	for (size_t i = 1; i < mipmap_levels; i++)
 	{
+		optional<int> alphaChannelOverride;
+		if (textureType == gfx_api::texture_type::alpha_mask)
+		{
+			alphaChannelOverride = 0;
+		}
+
 		unsigned int output_w = std::max<unsigned int>(1, image.width() >> 1);
 		unsigned int output_h = std::max<unsigned int>(1, image.height() >> 1);
 
-		image.resize(output_w, output_h);
+		image.resize(output_w, output_h, alphaChannelOverride);
 
 		if (uploadFormat == image.pixel_format())
 		{
