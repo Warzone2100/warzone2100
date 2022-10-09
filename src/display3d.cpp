@@ -1501,7 +1501,7 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 			    psObj->psWStats->weaponSubClass == WSC_ENERGY ||
 			    psObj->psWStats->weaponSubClass == WSC_EMP)
 			{
-				bucketAddTypeToList(RENDER_PROJECTILE, psObj, viewMatrix);
+				bucketAddTypeToList(RENDER_PROJECTILE, psObj, perspectiveViewMatrix);
 			}
 			else
 			{
