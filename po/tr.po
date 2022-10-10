@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 09:29\n"
+"PO-Revision-Date: 2022-10-10 01:31\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -4029,7 +4029,7 @@ msgstr "Bir kamyon ile beraber bir taşıyıcı gönder ve Kollektif saldırı b
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Mümkün olduğu kadar çok nakliyeci gönder ve en az bir kamyon getir"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4069,11 +4069,11 @@ msgstr "İniş Bölgesine Geri Dön"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:532
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Zor / Çılgın zorluk ipucu:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Kendini Kolektif'ten korumak için harita boyunca güçlü bir üssü güçlendir"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:538
 msgid "Destroy all enemy units and structures"
@@ -6063,7 +6063,7 @@ msgstr "AA yeniden yükleme süresi -%15"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:131
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Stormbringer Taret ile AA Alanı"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6558,7 +6558,7 @@ msgstr "Yüksek Hız Topu"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:602
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Hiper hızlı dört namlulu otomatik top ile donanmış"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
@@ -6623,7 +6623,7 @@ msgstr "Tank Katili Roketli"
 #: po/custom/fromJson.txt:644
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Zırh +%120, Gövde Puanı +%90"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -11401,7 +11401,7 @@ msgstr "Çok namlulu, hızlı ateşlenebilir makineli"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3998
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Komutanlar üretmek için inşa edilmelidir"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -13321,7 +13321,7 @@ msgstr "Binalardan teknolojileri çalar ve silah kontrolünü ele geçirir"
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5301
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Çelik Ağır Makineli Savunma Kulesi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -15181,7 +15181,7 @@ msgstr "otomatik-barındır"
 
 #: src/clparse.cpp:409
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "Barındırma sırasında verilen sunucu url'sinde derecelendirmeleri sorgula"
 
 #: src/clparse.cpp:409
 msgid "autorating"
@@ -15403,7 +15403,7 @@ msgstr "%s - Sağlık %d/%d - Tecrübe %.1f, %s, Öldürme %d"
 #: src/display.cpp:1618
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Sağlık %d/%d - ID %d - %s"
 
 #: src/display.cpp:1634
 #, c-format
@@ -16063,7 +16063,7 @@ msgstr "FARE AYARLARI"
 #: src/frontend.cpp:1987
 #: src/multiint.cpp:263
 msgid "Super Easy"
-msgstr ""
+msgstr "Çok Kolay"
 
 #: src/frontend.cpp:1988
 #: src/multiint.cpp:263
@@ -16181,7 +16181,7 @@ msgstr "Gözlemci Slotları"
 
 #: src/frontend.cpp:2667
 msgid "Enable Rating"
-msgstr ""
+msgstr "Derecelendirmeyi Etkinleştir"
 
 #: src/frontend.cpp:2682
 msgid "MULTIPLAY OPTIONS"
@@ -17627,7 +17627,7 @@ msgstr "ÇARPIŞMA"
 
 #: src/keybind.cpp:1435
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "ZORLUK: ÇOK KOLAY"
 
 #: src/keybind.cpp:1438
 msgid "DIFFICULTY: EASY"
@@ -18368,16 +18368,16 @@ msgstr "(hiçbiri)"
 
 #: src/multiint.cpp:4250
 msgid "Player rating:"
-msgstr ""
+msgstr "Oyuncu puanı:"
 
 #: src/multiint.cpp:4253
 msgid "Host provided"
-msgstr ""
+msgstr "Sağlanan sunucu"
 
 #: src/multiint.cpp:4257
 #, c-format
 msgid "From: %s"
-msgstr ""
+msgstr "Kimden: %s"
 
 #: src/multiint.cpp:4330
 msgid "Click to change difficulty"
@@ -18438,12 +18438,12 @@ msgstr "Metni panoya kopyala"
 #: src/multiint.cpp:5045
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "Oyuncuyu Sustur: %s"
 
 #: src/multiint.cpp:5049
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "Oyuncuyu Susturma: %s"
 
 #: src/multiint.cpp:5143
 msgid "CHAT"
@@ -18481,7 +18481,7 @@ msgstr "Kurucu Oyunu Başlatıyor"
 #: src/multiint.cpp:6331
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "%s Gözlemcilere Taşınıyor!"
 
 #: src/multiint.cpp:6459
 msgid "Host supplied invalid options"
@@ -18725,7 +18725,7 @@ msgstr "Oyuncuya güç ver"
 
 #: src/multimenu.cpp:936
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Sohbet Sesini Aç/Kapat"
 
 #: src/multimenu.cpp:1131
 msgid "Sent/Received per sec —"
@@ -18758,26 +18758,26 @@ msgstr "%s atıldı: oyundan %s ve engelli listesine kaydedildi!"
 #: src/multiopt.cpp:283
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "Yapı sınırları değiştirildi [%d]:"
 
 #: src/multiopt.cpp:292
 #, c-format
 msgid "[%d] Limit [%s]: %d (default: %d)"
-msgstr ""
+msgstr "[%d] Sınır [%s]: %d (varsayılan: %d)"
 
 #: src/multiopt.cpp:298
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%d): %d"
-msgstr ""
+msgstr "[%d] Sınır numStructureStats (%d) değerinden daha fazla: %d"
 
 #: src/multiopt.cpp:304
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "Sınırlar varsayılana sıfırlandı."
 
 #: src/multiopt.cpp:312
 #, c-format
 msgid "Host initialized %d limits, unable to show them due to mods"
-msgstr ""
+msgstr "Sunucu %d sınırlarını başlattı, modlar sebebiyle gösterilemiyor"
 
 #: src/multiopt.cpp:392
 msgid "MAP REQUESTED!"
@@ -19113,7 +19113,7 @@ msgstr "Gerekli yapı bulunamadı!"
 
 #: src/seqdisp.cpp:561
 msgid "Loading video"
-msgstr ""
+msgstr "Video yükleniyor"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
@@ -19201,7 +19201,7 @@ msgstr "ID %d - zırh %d|%d - sensör menzili %d - ECM %d - doğum %u - derinlik
 #: src/structure.cpp:5255
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "ID %d - Durum %d"
 
 #: src/structure.cpp:5262
 #, c-format
