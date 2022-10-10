@@ -1057,7 +1057,7 @@ bool buildMapList()
 // ////////////////////////////////////////////////////////////////////////////
 // Called once on program startup.
 //
-bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
+bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScalePercentage)
 {
 	if (!widgInitialise())
 	{
@@ -1098,7 +1098,7 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 
 	// Initialize the iVis text rendering module
 	wzSceneBegin("Main menu loop");
-	iV_TextInit(horizScaleFactor, vertScaleFactor);
+	iV_TextInit(horizScalePercentage, vertScalePercentage);
 
 	pie_InitRadar();
 

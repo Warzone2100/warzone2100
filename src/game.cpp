@@ -138,8 +138,8 @@ void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor)
 {
 	// The text subsystem requires the game -> renderer scale factor, which potentially differs from
 	// the display scale factor.
-	float horizGameToRendererScaleFactor = 0.f, vertGameToRendererScaleFactor = 0.f;
-	wzGetGameToRendererScaleFactor(&horizGameToRendererScaleFactor, &vertGameToRendererScaleFactor);
+	unsigned int horizGameToRendererScaleFactor = 0, vertGameToRendererScaleFactor = 0;
+	wzGetGameToRendererScaleFactorInt(&horizGameToRendererScaleFactor, &vertGameToRendererScaleFactor);
 	iV_TextUpdateScaleFactor(horizGameToRendererScaleFactor, vertGameToRendererScaleFactor);
 }
 

@@ -2016,9 +2016,9 @@ int realmain(int argc, char *argv[])
 	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, to_display_string(war_getWindowMode()).c_str());
 	addDumpInfo(buf);
 
-	float horizScaleFactor, vertScaleFactor;
-	wzGetGameToRendererScaleFactor(&horizScaleFactor, &vertScaleFactor);
-	debug(LOG_WZ, "Game to Renderer Scale Factor (w x h): %f x %f", horizScaleFactor, vertScaleFactor);
+	unsigned int horizScaleFactor, vertScaleFactor;
+	wzGetGameToRendererScaleFactorInt(&horizScaleFactor, &vertScaleFactor);
+	debug(LOG_WZ, "Game to Renderer Scale Factor (w x h): %u%% x %u%%", horizScaleFactor, vertScaleFactor);
 
 	debug(LOG_MAIN, "Final initialization");
 	if (!frameInitialise())
