@@ -105,10 +105,10 @@ public:
  The scale factors are used to scale the rendering / rasterization of the text to a higher DPI.
  It is expected that they will be >= 1.0.
 
- @param horizScaleFactor The horizontal DPI scale factor.
- @param vertScaleFactor The vertical DPI scale factor.
+ @param horizScalePercentage The new horizontal DPI scale percentage (100, 125, 150, 200, etc).
+ @param vertScalePercentage The new vertical DPI scale percentage (100, 125, 150, 200, etc).
  */
-void iV_TextInit(float horizScaleFactor, float vertScaleFactor);
+void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercentage);
 
 /**
  Reinitializes the text rendering subsystem with a new horizontal & vertical scale factor.
@@ -122,10 +122,10 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor);
  to re-render that text once the text subsystem has reinitialized.
  (WzText instances handle run-time changes of the text rendering scale factor automatically.)
 
- @param horizScaleFactor The new horizontal DPI scale factor.
- @param vertScaleFactor The new vertical DPI scale factor.
+ @param horizScalePercentage The new horizontal DPI scale percentage (100, 125, 150, 200, etc).
+ @param vertScalePercentage The new vertical DPI scale percentage (100, 125, 150, 200, etc).
  */
-void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor);
+void iV_TextUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int vertScalePercentage);
 void iV_TextShutdown();
 void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
 

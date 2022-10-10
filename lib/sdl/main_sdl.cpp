@@ -2790,6 +2790,22 @@ void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFac
 		*vertScaleFactor = vertWindowScaleFactor * current_displayScaleFactor;
 	}
 }
+void wzGetGameToRendererScaleFactorInt(unsigned int *horizScalePercentage, unsigned int *vertScalePercentage)
+{
+	float horizWindowScaleFactor = 0.f, vertWindowScaleFactor = 0.f;
+	wzGetWindowToRendererScaleFactor(&horizWindowScaleFactor, &vertWindowScaleFactor);
+	assert(horizWindowScaleFactor != 0.f);
+	assert(vertWindowScaleFactor != 0.f);
+
+	if (horizScalePercentage != nullptr)
+	{
+		*horizScalePercentage = static_cast<unsigned int>(ceil(horizWindowScaleFactor * current_displayScale));
+	}
+	if (vertScalePercentage != nullptr)
+	{
+		*vertScalePercentage = static_cast<unsigned int>(ceil(vertWindowScaleFactor * current_displayScale));
+	}
+}
 
 void wzSetWindowIsResizable(bool resizable)
 {

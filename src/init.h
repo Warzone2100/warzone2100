@@ -33,7 +33,7 @@ struct IMAGEFILE;
 #define FILE_LOAD_BUFFER_SIZE (1024*1024*4)
 extern char fileLoadBuffer[];
 
-bool systemInitialise(float horizScaleFactor, float vertScaleFactor);
+bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScalePercentage);
 void systemShutdown();
 bool frontendInitialise(const char *ResourceFile);
 bool frontendShutdown();

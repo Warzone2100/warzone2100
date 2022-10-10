@@ -1127,8 +1127,18 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 
 static gfx_api::texture* textureID = nullptr;
 
-void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
+void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercentage)
 {
+	if (horizScalePercentage > 100 && horizScalePercentage < 200)
+	{
+		horizScalePercentage *= 2;
+	}
+	if (vertScalePercentage > 100 && vertScalePercentage < 200)
+	{
+		vertScalePercentage *= 2;
+	}
+	float horizScaleFactor = horizScalePercentage / 100.f;
+	float vertScaleFactor = vertScalePercentage / 100.f;
 	assert(horizScaleFactor >= 1.0f);
 	assert(vertScaleFactor >= 1.0f);
 
@@ -1175,10 +1185,10 @@ void iV_TextShutdown()
 	clearFontDataCache();
 }
 
-void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor)
+void iV_TextUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int vertScalePercentage)
 {
 	iV_TextShutdown();
-	iV_TextInit(horizScaleFactor, vertScaleFactor);
+	iV_TextInit(horizScalePercentage, vertScalePercentage);
 }
 
 static WzText& iV_Internal_GetEllipsis(iV_fonts fontID)
