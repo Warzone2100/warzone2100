@@ -520,6 +520,13 @@ static bool checkSupportsLANGUAGEenvVarOverride()
 
 	debug(LOG_WZ, "Checking for support of LANGUAGE env var override");
 
+# if defined(WZ_OS_WIN)
+	// NOTE: Not currently supported on Windows because we take advantage of GNU Gettext's gl_locale_name fall-back to GetThreadLocale()
+	//		 But if we call setlocale and set values, it won't fall-back.
+	return false;
+
+# else // !defined(WZ_OS_WIN)
+
 	optional<std::string> prevLocale;
 	const char *actualLocale = setlocale(LC_MESSAGES, NULL);
 	if (actualLocale != NULL)
@@ -546,10 +553,11 @@ static bool checkSupportsLANGUAGEenvVarOverride()
 
 	debug(LOG_WZ, "Supports LANGUAGE env var override: %s", (result) ? "YES" : "no");
 	return result;
+# endif // defined(WZ_OS_WIN)
 #else
 	debug(LOG_WZ, "No support for LANGUAGE env var override (not GNU gettext?)");
 	return false;
-#endif
+#endif // defined(_LIBINTL_H) && defined(LIBINTL_VERSION)
 }
 
 void initI18n()
