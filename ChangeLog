@@ -11,12 +11,13 @@
    * Add: Go Back functions better by backing out 1 in-game menu instead of going back to the initial ESC options menu (commit:14d3139d2b1bf5496908ae0115f950b09c98873b, #2834)
    * Change: Make save name suggestion easy to understand (commit:7e66a34746f3a2947d5de5b5e9f0897c6d7ac00c, commit:2e9d8447a968da7cb9562197cadde95720648ac8, commit:2c74538adf5949e409ea729c5829208bf6cdb1f8, commit:782b8b8989e476c6ec675b0a74ad41e942873889, #2761)
    * Change: Various Vulkan improvements (too many commits, #2824)
-   * Fix: Various potential crashes (too many commits, #2424, #2665)
+   * Fix: Various potential crashes (too many commits, #2424, #2665, #2842)
    * Fix: Disable the auto button in the replay load menus (commit:995ae684df3c1cc24870a27813ac4c4f3fa9da21, #2772)
    * Fix: Fix longstanding save related research state issue where incomplete research topics could disappear (commit:61d937123b0b2375c7a38ccc136a77e082a7d2ea, #2782)
    * Fix: Speed up headless replay loading (commit:4fb265ae26a884d907a73ba87481e4c0105a26f2, #2816)
    * Fix: Make artillery fire over walls (commit:46446c9736ff2c97b9c47d0feb0656a841c43ed2, #2819)
    * Fix: Direct weapon: Don't fire when blocked by defense hardpoint (commit:c44de5fc0f1e97d6c4defd8a69aa40e3723c430e, #2822)
+   * Fix: Simplify repairs logic, prevent "stuck" repair stations (commit:1c812bdb52fef29263a9f9f0b105617a5fd5d322, #2840)
  * Graphics:
    * Change: Make sliders a bit slim to look better (commit:05ae22acc976c2cb1438ecd5cd9868a75a51555c, #2748)
    * Change: Fix team chooser being off by 1 pixel, and merge factions into the color chooser (commit:21046e5e4c2e869a79663d9269bf0c9ee49742ca, #2747)
@@ -29,6 +30,8 @@
    * Fix: Prevent Howitzer/Mortar mount model causing glitchy rendering on the back of the tray (commit:5092bda811700078e7c58a78d05ec27b90628804, #2806)
    * Fix: Overhaul all mortar models. Fixes missing backside of Pepperpot, missing top section of EMP mortar, centered hole texture location, smaller mount model (commit:af9eebe058ae270a82e13d2c2cd13b987d2eb0e9, #2811)
    * Fix: Change Cyborg and Super Cyborg model to fix shadow issues (commit:180ab46a28b8d78d3d49f9bf3a4f97d698acf94e, commit:53c91ba9a7451ce23ff9d2572c16193c66eb097d, #2817)
+   * Fix: Improve a bottleneck in shadow calculations (too many commits, #1633)
+   * Fix: Rendering improvements for text and translucent effects (too many commits, #2860)
  * Campaign:
    * Add: New Super Easy difficulty for campaign (commit:31cf33ea85397a3c8665bf0f4639502c9638644a, #2776)
    * Change: Increase difficulty of later Beta missions (commit:0b6d08c6e037a8c41ba980099e5eb32635efe0ec, #2681)
@@ -49,6 +52,7 @@
    * Fix: Merge skirmish/multiplayer score/kill structure; Save/load recent score/kills for skirmish saves, and prevent this skirmish data showing for players in multiplayer too (commit:c23d0437e2baceabec3af4cd45b73e2eb08470bb, commit:56f41e5ec64fc51febd42e8e00cff91f034fa3b9, #2769)
    * Fix: Prevent 32-bit builds from appearing to freeze if a really long chat message is entered (commit:ebb8363ae979b8c28583344e8f385c88a982585a, #2791)
    * Fix: Check human player designs to be legal during MP and desync the modded client player if they try to circumvent this check further (commit:1f9ba68d9d600d4009928a0e8429e765c259f680, #2788)
+   * Fix: Chat message is sent upon clicking anywhere outside of chat widget (commit:6283f6a1bbda5e179ecf63ac24454e1902c52ae5, commit:004444abd4d47c073c3f414eca36dc96849de61e, #2855)
  * AI:
    * Change: Improve Cobra AI yet again, balances against defensive/system research when 1v1 on high oil maps (commit:01e03323a449db3d7eee92380500a05ad77c1fda, #2801)
  * Scripting:
@@ -63,9 +67,12 @@
    * Change: Increase Heavy Cannon long range by 0.5 tiles making it reach 9 tiles (commit:6417812ca6f1bf4454cdbfe66ba709987fc7780d, #2820)
    * Change: Condense Reinforced Base Structure Materials upgrades into 3 upgrades (commit:5f615440fd67debaf40c4c77aa6fc21da4442e85, #2835)
  * Other:
+   * Add: Flatpak builds (too many commits, #2839)
+   * Add: Add difficulty selector to debug menu AI attach option (commit:c1cb494d171add05d98feab5df664092affac4c7, #2170)
    * Change: Chop off the ".gam" extension when showing saves in the console area (commit:b11da1ea2d4a607aa8cb1834aa89bc7e4966f001, #2738)
    * Change: Allow game speed modifier of 2x outside of debug mode (commit:b9351222991628f099327e4f710e1cbecdcecbb7, #2767)
    * Change: Make use of sequence factory.ogg in the tutorial when a Viper Machinegun Wheels is first manufactured (commit:9584ad4bf442bde738b700c8d9bb44bce7a9cf9d, #2795)
+   * Change: Improve metainfo / appstream data (too many commits, #2836, #2839)
    * Fix: Fixed hotkey doesn't count selected units correctly (commit:1b0e4654a04d292acb5466005a9713df35cc9b7d, #2670)
    * Fix: Disable ground retexture after destroying skyscrapers on non-Urban maps (commit:3d50d518c87ec4a4c23c6d424b946df085cbab12, #2692)
    * Fix: Tweak autorating level field behaviour to show a correct image (commit:00152b0e2699b59feaa4554b7b986446c6cbdd34, commit:7cb2cf95d836a55527ac6950e6faa667e449ddcb, #2703, #2711)
@@ -76,6 +83,7 @@
    * Fix: Improve autorating requesting and attempt to put data into tooltip (commit:3cc487708c6eb41e3729bccd355ba22accd197a1, #2750)
    * Fix: Make Blender PIE plugin work on Blender 3.2 (commit:2fd0140f2a9d4da22c115fae59a7f60b56cf80e8, #2781)
    * Fix: Prevent (potentially endless) "over-shooting" in ValueTracker on low-perf system affecting blueprints, rotation of camera, etc. (commit:e418aa6040adffd049921fcb7d423990443b2d2d, #2821)
+   * Fix: Improve autorating request policy (too many commits, #2838)
 
 2022-03-07: Version 4.2.7:
  * General:
