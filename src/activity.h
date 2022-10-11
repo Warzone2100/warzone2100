@@ -225,6 +225,7 @@ public:
 	inline std::shared_ptr<ActivityDBProtocol> getRecord() { return activityDatabase; }
 private:
 	ActivityManager();
+	void _initializeDB();
 	void _endedMission(ActivitySink::GameEndReason result, END_GAME_STATS_DATA stats, bool cheatsUsed);
 private:
 	std::vector<std::shared_ptr<ActivitySink>> activitySinks;
