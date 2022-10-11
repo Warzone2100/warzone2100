@@ -79,9 +79,4 @@ WZ_DECL_NONNULL(3) int wz_snprintf(char *str, size_t size, const char *format, .
 #endif
 
 
-/// Equivalent to vasprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
-WZ_DECL_NONNULL(1, 2) int vasprintfNull(char **strp, const char *format, va_list ap);
-/// Equivalent to asprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
-WZ_DECL_NONNULL(1, 2) int asprintfNull(char **strp, const char *format, ...);
-
 #endif // STDIO_EXT_H
