@@ -228,7 +228,7 @@ static const struct
 static unsigned int selectedLanguage = 0;
 static bool canUseLANGUAGEEnvVar = false;
 
-static char *compileDate = nullptr;
+static std::string compileDate;
 
 /*!
  * Return the language part of the selected locale
@@ -633,7 +633,7 @@ void initI18n()
 // convert macro __DATE__ to ISO 8601 format
 const char *getCompileDate()
 {
-	if (compileDate == nullptr)
+	if (compileDate.empty())
 	{
 		std::istringstream date(__DATE__);
 		std::string monthName;
@@ -653,7 +653,7 @@ const char *getCompileDate()
 				break;
 			}
 		}
-		asprintfNull(&compileDate, "%04d-%02d-%02d", year, month, day);
+		compileDate = astringf("%04d-%02d-%02d", year, month, day);
 	}
-	return compileDate;
+	return compileDate.c_str();
 }
