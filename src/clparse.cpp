@@ -278,7 +278,6 @@ static int poptGetNextOpt(poptContext ctx)
 		}
 	}
 	ctx->bad = match;
-	ctx->current++;
 	return POPT_ERROR_BADOPT;
 }
 
@@ -351,6 +350,14 @@ typedef enum
 	CLI_COMMAND_INTERFACE,
 	CLI_STARTPLAYERS,
 } CLI_OPTIONS;
+
+// Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
+static const struct poptOption debugOptionsTable[] =
+{
+	{ "debug", POPT_ARG_STRING, CLI_DEBUG, nullptr, nullptr },
+	{ "debugfile", POPT_ARG_STRING, CLI_DEBUGFILE, nullptr, nullptr },
+	{ "flush-debug-stderr", POPT_ARG_NONE, CLI_FLUSHDEBUGSTDERR, nullptr, nullptr },
+};
 
 static const struct poptOption *getOptionsTable()
 {
@@ -452,9 +459,10 @@ static const struct poptOption *getOptionsTable()
 	return TranslatedOptionsTable;
 }
 
+// Must not trigger or call any gettext / libintl routines!
 bool ParseCommandLineDebugFlags(int argc, const char * const *argv)
 {
-	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
+	poptContext poptCon = poptGetContext(nullptr, argc, argv, debugOptionsTable, 0);
 	int iOption;
 
 #if defined(WZ_OS_MAC) && defined(DEBUG)
@@ -469,7 +477,7 @@ bool ParseCommandLineDebugFlags(int argc, const char * const *argv)
 
 		if (iOption == POPT_ERROR_BADOPT)
 		{
-			qFatal("Unrecognized option: %s", poptBadOption(poptCon, 0));
+			continue;
 		}
 
 		switch (option)
