@@ -6,8 +6,16 @@ vcpkg_from_github(
     HEAD_REF master
 )
 
+set(_additional_options)
+if (NOT VCPKG_TARGET_ARCH MATCHES "^([xX]86|[xX]64)$")
+    list(APPEND _additional_options "-DSSE=OFF")
+endif()
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
+    OPTIONS
+        -DZSTD=ON
+        ${_additional_options}
 )
 
 vcpkg_cmake_install()
