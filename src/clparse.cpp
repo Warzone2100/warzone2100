@@ -343,6 +343,7 @@ typedef enum
 #endif
 	CLI_GAMEPORT,
 	CLI_WZ_CRASH_RPT,
+	CLI_WZ_DEBUG_CRASH_HANDLER,
 	CLI_STREAMER_SPECTATOR,
 	CLI_LOBBY_SLASHCOMMANDS,
 	CLI_ADD_LOBBY_ADMINHASH,
@@ -419,6 +420,7 @@ static const struct poptOption *getOptionsTable()
 #endif
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
 		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
+		{ "wz-debug-crash-handler", POPT_ARG_NONE, CLI_WZ_DEBUG_CRASH_HANDLER, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
 		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
 		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
@@ -584,6 +586,7 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 			break;
 #endif
 		case CLI_WZ_CRASH_RPT:
+		case CLI_WZ_DEBUG_CRASH_HANDLER:
 			// this is currently a no-op because it must be parsed even earlier than ParseCommandLineEarly
 			break;
 		default:
@@ -624,6 +627,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_WIN_ENABLE_CONSOLE:
 #endif
 		case CLI_WZ_CRASH_RPT:
+		case CLI_WZ_DEBUG_CRASH_HANDLER:
 			// These options are parsed in ParseCommandLineEarly() already, so ignore them
 			break;
 
