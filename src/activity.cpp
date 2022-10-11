@@ -338,6 +338,12 @@ private:
 ActivityManager::ActivityManager()
 {
 	ASSERT_OR_RETURN(, PHYSFS_isInit() != 0, "PHYSFS must be initialized before the ActivityManager is created");
+}
+
+void ActivityManager::_initializeDB()
+{
+	ASSERT_OR_RETURN(, activityDatabase == nullptr, "DB already initialized?");
+	ASSERT_OR_RETURN(, PHYSFS_isInit() != 0, "PHYSFS must be initialized before the ActivityManager is created");
 	// init ActivityDatabase
 	const char *pWriteDir = PHYSFS_getWriteDir();
 	ASSERT(pWriteDir != nullptr, "PHYSFS_getWriteDir returned null");
@@ -362,6 +368,7 @@ ActivityManager& ActivityManager::instance()
 
 bool ActivityManager::initialize()
 {
+	_initializeDB();
 	addActivitySink(std::make_shared<LoggingActivitySink>());
 	return true;
 }
