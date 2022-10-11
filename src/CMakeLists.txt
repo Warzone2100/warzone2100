@@ -184,7 +184,7 @@ if (NOT DEFINED CURL_SUPPORTED_SSL_BACKENDS)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-    target_link_libraries(warzone2100 ws2_32 iphlpapi shlwapi ole32)
+    target_link_libraries(warzone2100 ws2_32 iphlpapi shlwapi ole32 psapi)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
