@@ -1763,10 +1763,11 @@ int realmain(int argc, char *argv[])
 
 	/** Initialize crash-handling provider, if configured */
 	/** NOTE: Should come as early as possible in process init, but needs to be after initialize_PhysicsFS because we need the platform pref dir for storing temporary crash files... */
-	bool bCrashHandlingProvider = useCrashHandlingProvider(utfargc, utfargv);
+	bool debugCrashHandler = false;
+	bool bCrashHandlingProvider = useCrashHandlingProvider(utfargc, utfargv, debugCrashHandler);
 	if (bCrashHandlingProvider)
 	{
-		bCrashHandlingProvider = initCrashHandlingProvider(getWzPlatformPrefDir(), getDefaultLogFilePath(PHYSFS_getDirSeparator()));
+		bCrashHandlingProvider = initCrashHandlingProvider(getWzPlatformPrefDir(), getDefaultLogFilePath(PHYSFS_getDirSeparator()), debugCrashHandler);
 	}
 	auto shutdown_crash_handling_provider_on_return = gsl::finally([bCrashHandlingProvider] { if (bCrashHandlingProvider) { shutdownCrashHandlingProvider(); } });
 

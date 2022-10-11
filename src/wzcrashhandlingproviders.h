@@ -22,8 +22,8 @@
 #include <string>
 #include <nlohmann/json_fwd.hpp>
 
-bool useCrashHandlingProvider(int argc, const char * const *argv);
-bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::string& defaultLogFilePath);
+bool useCrashHandlingProvider(int argc, const char * const *argv, bool& out_debugCrashHandler);
+bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::string& defaultLogFilePath, bool debugCrashHandler);
 bool shutdownCrashHandlingProvider();
 
 bool crashHandlingProviderSetTag(const std::string& key, const std::string& value);

@@ -53,7 +53,7 @@ const size_t tagKeyMaxLength = 32;
 const size_t tagValueMaxLength = 200;
 
 #if defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
-static bool initCrashHandlingProvider_Sentry(const std::string& platformPrefDir_Input, const std::string& defaultLogFilePath)
+static bool initCrashHandlingProvider_Sentry(const std::string& platformPrefDir_Input, const std::string& defaultLogFilePath, bool debugCrashHandler)
 {
 	ASSERT_OR_RETURN(false, !platformPrefDir_Input.empty(), "platformPrefDir must not be empty");
 	ASSERT_OR_RETURN(false, !defaultLogFilePath.empty(), "defaultLogFilePath must not be empty");
@@ -72,6 +72,10 @@ static bool initCrashHandlingProvider_Sentry(const std::string& platformPrefDir_
 	sentry_options_set_dsn(options, WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN);
 	sentry_options_set_release(options, releaseString.c_str());
 	sentry_options_set_environment(options, environmentString.c_str());
+	if (debugCrashHandler)
+	{
+		sentry_options_set_debug(options, 1);
+	}
 	// for the temp path, always use a subdirectory of the default platform pref dir
 	// Make sure that we have a directory separator at the end of the string
 	std::string platformPrefDir = platformPrefDir_Input;
@@ -366,14 +370,14 @@ public:
 
 #endif // defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
 
-bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::string& defaultLogFilePath)
+bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::string& defaultLogFilePath, bool debugCrashHandler)
 {
 #if !defined(WZ_CRASHHANDLING_PROVIDER)
 	return false;
 #elif defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
 	// Sentry crash-handling provider
 	ASSERT_OR_RETURN(true, !enabledSentryProvider, "Called more than once");
-	enabledSentryProvider = initCrashHandlingProvider_Sentry(platformPrefDir, defaultLogFilePath);
+	enabledSentryProvider = initCrashHandlingProvider_Sentry(platformPrefDir, defaultLogFilePath, debugCrashHandler);
 	if (enabledSentryProvider)
 	{
 		ActivityManager::instance().addActivitySink(std::make_shared<SentryCrashHandlerActivitySink>());
@@ -431,23 +435,28 @@ bool crashHandlingProviderSetContext(const std::string& key, const nlohmann::jso
 #endif
 }
 
-bool useCrashHandlingProvider(int argc, const char * const *argv)
+bool useCrashHandlingProvider(int argc, const char * const *argv, bool& out_debugCrashHandler)
 {
 #if !defined(WZ_CRASHHANDLING_PROVIDER)
 	return false; // use native crash-handling exception handler
 #else
 	// if compiled with a crash-handling provider, search for "--wz-crash-rpt"
+	bool useProvider = true;
 	if (argv)
 	{
 		for (int i = 0; i < argc; ++i)
 		{
 			if (argv[i] && !strcasecmp(argv[i], "--wz-crash-rpt"))
 			{
-				return false;
+				useProvider = false;
+			}
+			else if (argv[i] && !strcasecmp(argv[i], "--wz-debug-crash-handler"))
+			{
+				out_debugCrashHandler = true;
 			}
 		}
 	}
-	return true;
+	return useProvider;
 #endif
 }
 
