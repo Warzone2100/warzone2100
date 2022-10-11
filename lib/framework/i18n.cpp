@@ -571,13 +571,6 @@ void initI18n()
 	debug(LOG_WZ, "libintl version: %d.%d.%d", wz_libintl_maj, wz_libintl_min, wz_libintl_rev);
 #endif
 
-	canUseLANGUAGEEnvVar = checkSupportsLANGUAGEenvVarOverride();
-
-	if (!setLanguage("")) // set to system default
-	{
-		// no system default?
-		debug(LOG_ERROR, "initI18n: No system language found");
-	}
 #ifdef WZ_OS_MAC
 	{
 		char resourcePath[PATH_MAX];
@@ -626,6 +619,15 @@ void initI18n()
 	(void)bind_textdomain_codeset(PACKAGE, "UTF-8");
 	(void)textdomain(PACKAGE);
 	debug(LOG_WZ, "textdomain: %s", PACKAGE);
+
+	// Should come *after* bindTextDomain
+	canUseLANGUAGEEnvVar = checkSupportsLANGUAGEenvVarOverride();
+
+	if (!setLanguage("")) // set to system default
+	{
+		// no system default?
+		debug(LOG_ERROR, "initI18n: No system language found");
+	}
 }
 
 // convert macro __DATE__ to ISO 8601 format
