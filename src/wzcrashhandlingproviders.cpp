@@ -72,10 +72,12 @@ static bool initCrashHandlingProvider_Sentry(const std::string& platformPrefDir_
 	sentry_options_set_dsn(options, WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN);
 	sentry_options_set_release(options, releaseString.c_str());
 	sentry_options_set_environment(options, environmentString.c_str());
+#ifdef DEBUG
 	if (debugCrashHandler)
 	{
 		sentry_options_set_debug(options, 1);
 	}
+#endif
 	// for the temp path, always use a subdirectory of the default platform pref dir
 	// Make sure that we have a directory separator at the end of the string
 	std::string platformPrefDir = platformPrefDir_Input;
@@ -450,10 +452,12 @@ bool useCrashHandlingProvider(int argc, const char * const *argv, bool& out_debu
 			{
 				useProvider = false;
 			}
+#if defined(DEBUG)
 			else if (argv[i] && !strcasecmp(argv[i], "--wz-debug-crash-handler"))
 			{
 				out_debugCrashHandler = true;
 			}
+#endif
 		}
 	}
 	return useProvider;
