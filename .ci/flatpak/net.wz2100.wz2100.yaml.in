@@ -155,7 +155,8 @@ modules:
       - -DWZ_APPSTREAM_ID=net.wz2100.wz2100
       - -DWZ_BUILD_SENTRY:BOOL=ON
       - -DWZ_SENTRY_PREDOWNLOADED_SENTRY_ARCHIVE=/app/prestaged-dl/sentry-native.zip
-      - -DSENTRY_BACKEND=crashpad
+      # Have to use inproc for now - breakpad / crashpad do not work in the Flatpak sandbox
+      - -DSENTRY_BACKEND=inproc
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR
