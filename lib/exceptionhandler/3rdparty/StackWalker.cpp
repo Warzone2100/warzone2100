@@ -1138,7 +1138,11 @@ BOOL StackWalker::ShowCallstack(HANDLE                    hThread,
   s.AddrPC.Offset = c.Pc;
   s.AddrPC.Mode = AddrModeFlat;
 #if defined(_M_ARM64)
+#  if defined (NONAMELESSUNION)
+  s.AddrFrame.Offset = c.DUMMYUNIONNAME.DUMMYSTRUCTNAME.Fp;
+#  else
   s.AddrFrame.Offset = c.Fp;
+#  endif
 #elif defined(_M_ARM)
   s.AddrFrame.Offset = c.R11;
 #endif
