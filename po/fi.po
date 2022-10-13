@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 09:31\n"
+"PO-Revision-Date: 2022-10-08 09:53\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -15508,7 +15508,7 @@ msgstr ""
 
 #: src/frontend.cpp:183
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Kampanjan videot puuttuvat"
 
 #: src/frontend.cpp:184
 msgid "See our FAQ on how to install videos"
@@ -15625,7 +15625,7 @@ msgstr "Haasteet"
 
 #: src/frontend.cpp:372
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "Lataa kampanjapeli"
 
 #: src/frontend.cpp:373
 msgid "Load Skirmish Game"
@@ -15693,12 +15693,12 @@ msgstr "Peliasetukset"
 #: src/frontend.cpp:719
 #: src/ingameop.cpp:523
 msgid "Graphics Options"
-msgstr ""
+msgstr "Grafiikka-asetukset"
 
 #: src/frontend.cpp:720
 #: src/ingameop.cpp:526
 msgid "Video Options"
-msgstr ""
+msgstr "Videoasetukset"
 
 #: src/frontend.cpp:721
 msgid "Audio / Zoom Options"
@@ -15707,21 +15707,21 @@ msgstr ""
 #: src/frontend.cpp:722
 #: src/ingameop.cpp:533
 msgid "Mouse Options"
-msgstr ""
+msgstr "Hiiren asetukset"
 
 #: src/frontend.cpp:723
 #: src/ingameop.cpp:537
 msgid "Key Mappings"
-msgstr ""
+msgstr "Näppäin kartoitukset"
 
 #: src/frontend.cpp:724
 #: src/ingameop.cpp:540
 msgid "Music Manager"
-msgstr ""
+msgstr "Musiikinhallinta"
 
 #: src/frontend.cpp:725
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Monipelin asetukset"
 
 #: src/frontend.cpp:730
 #: src/multiint.cpp:1372
@@ -15871,21 +15871,21 @@ msgstr ""
 
 #: src/frontend.cpp:1018
 msgid "Disabled"
-msgstr ""
+msgstr "Pois käytöstä"
 
 #: src/frontend.cpp:1021
 msgid "Enabled"
-msgstr ""
+msgstr "Käytössä"
 
 #: src/frontend.cpp:1025
 #: src/frontend.cpp:1031
 msgid "Auto"
-msgstr ""
+msgstr "Automaattinen"
 
 #: src/frontend.cpp:1076
 #: src/ingameop.cpp:765
 msgid "Voice Volume"
-msgstr ""
+msgstr "Äänenvoimakkuus"
 
 #: src/frontend.cpp:1081
 #: src/ingameop.cpp:771
@@ -15895,7 +15895,7 @@ msgstr ""
 #: src/frontend.cpp:1086
 #: src/ingameop.cpp:777
 msgid "Music Volume"
-msgstr ""
+msgstr "Musiikin äänenvoimakkuus"
 
 #: src/frontend.cpp:1092
 #: src/ingameop.cpp:783

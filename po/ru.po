@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 09:30\n"
+"PO-Revision-Date: 2022-10-07 21:54\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -4029,7 +4029,7 @@ msgstr "Отправьте хотя бы одного транспортера �
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Отправьте столько транспортеров сколько возможно, и принесите хотя бы один грузовик"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4073,7 +4073,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Постройте защитные сооружения по всей карте, что бы защитить себя от атак Коллектива"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:538
 msgid "Destroy all enemy units and structures"
@@ -6063,7 +6063,7 @@ msgstr "Перезарядка ПВО -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:131
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Зенитка Предвестник Бури"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6558,7 +6558,7 @@ msgstr "Вооружён Гиперскоростной Пушкой"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:602
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Вооружён четырех-ствольной автоматической гиперскоростной пушкой"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
@@ -6623,7 +6623,7 @@ msgstr "Вооружён противотанковыми ракетами"
 #: po/custom/fromJson.txt:644
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Броня +120% прочность корпуса +90%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -11401,7 +11401,7 @@ msgstr "Многоствольный скорострельный пулемёт
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3998
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Должно быть построено для создания командиров"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -12925,7 +12925,7 @@ msgstr "Бункер Мусорщиков"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5056
 msgid "Scavenger Chopper Factory"
-msgstr "Завод вертушек Мусорщиков"
+msgstr "Завод Вертолетов Мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -13321,7 +13321,7 @@ msgstr "Технология кражи из зданий даёт контро�
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5301
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Стальная башня с тяжелым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -15181,7 +15181,7 @@ msgstr "автосервер"
 
 #: src/clparse.cpp:409
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "Запрашивать рейтинги с заданного адреса сервера, при хостинге"
 
 #: src/clparse.cpp:409
 msgid "autorating"
@@ -15403,7 +15403,7 @@ msgstr "%s - Целостность %d/%d - Опыт %.1f, %s, Убийства 
 #: src/display.cpp:1618
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Жизнь %d/%d - ID %d - %s"
 
 #: src/display.cpp:1634
 #, c-format
@@ -16076,7 +16076,7 @@ msgstr "Настройки мыши"
 #: src/frontend.cpp:1987
 #: src/multiint.cpp:263
 msgid "Super Easy"
-msgstr ""
+msgstr "Очень легко"
 
 #: src/frontend.cpp:1988
 #: src/multiint.cpp:263
@@ -16194,7 +16194,7 @@ msgstr "Слоты наблюдателей"
 
 #: src/frontend.cpp:2667
 msgid "Enable Rating"
-msgstr ""
+msgstr "Включить рейтинг"
 
 #: src/frontend.cpp:2682
 msgid "MULTIPLAY OPTIONS"
@@ -17640,7 +17640,7 @@ msgstr "СРАЖЕНИЕ"
 
 #: src/keybind.cpp:1435
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "СЛОЖНОСТЬ: ОЧЕНЬ ЛЕГКО"
 
 #: src/keybind.cpp:1438
 msgid "DIFFICULTY: EASY"
@@ -18381,16 +18381,16 @@ msgstr "(нет)"
 
 #: src/multiint.cpp:4250
 msgid "Player rating:"
-msgstr ""
+msgstr "Рейтинг игрока:"
 
 #: src/multiint.cpp:4253
 msgid "Host provided"
-msgstr ""
+msgstr "Хост предоставлен"
 
 #: src/multiint.cpp:4257
 #, c-format
 msgid "From: %s"
-msgstr ""
+msgstr "От: %s"
 
 #: src/multiint.cpp:4330
 msgid "Click to change difficulty"
@@ -18451,12 +18451,12 @@ msgstr "Копировать текст в буфер обмена"
 #: src/multiint.cpp:5045
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "Заглушить игрока: %s"
 
 #: src/multiint.cpp:5049
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "Наделить голосом: %s"
 
 #: src/multiint.cpp:5143
 msgid "CHAT"
@@ -18494,7 +18494,7 @@ msgstr "Хост стартует"
 #: src/multiint.cpp:6331
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "Передвигаем %s в Наблюдатели!"
 
 #: src/multiint.cpp:6459
 msgid "Host supplied invalid options"
@@ -18740,7 +18740,7 @@ msgstr "Передать энергию  игроку"
 
 #: src/multimenu.cpp:936
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Вкл/выкл Звук чата"
 
 #: src/multimenu.cpp:1131
 msgid "Sent/Received per sec —"
@@ -18773,26 +18773,26 @@ msgstr "Выкинули %s : %s из игр, и добавлены в бан-л
 #: src/multiopt.cpp:283
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "Лимиты структур изменились: [%d]:"
 
 #: src/multiopt.cpp:292
 #, c-format
 msgid "[%d] Limit [%s]: %d (default: %d)"
-msgstr ""
+msgstr "[%d] Лимит [%s]: %d (по умолчанию: %d)"
 
 #: src/multiopt.cpp:298
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%d): %d"
-msgstr ""
+msgstr "[%d] Лимит, который больше чем numStructureStats (%d): %d"
 
 #: src/multiopt.cpp:304
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "Значения лимитов вернулись к по-умолчанию."
 
 #: src/multiopt.cpp:312
 #, c-format
 msgid "Host initialized %d limits, unable to show them due to mods"
-msgstr ""
+msgstr "Хост поставил %d ограничений, невозможно показать их из-за модов"
 
 #: src/multiopt.cpp:392
 msgid "MAP REQUESTED!"
@@ -19128,7 +19128,7 @@ msgstr "Не удается найти нужное здание!"
 
 #: src/seqdisp.cpp:561
 msgid "Loading video"
-msgstr ""
+msgstr "Загрузка видео"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
@@ -19220,7 +19220,7 @@ msgstr "ID %d - броня %d|%d - диапазон датчиков %d - ECM %d
 #: src/structure.cpp:5255
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "ID %d - Состояние %d"
 
 #: src/structure.cpp:5262
 #, c-format
