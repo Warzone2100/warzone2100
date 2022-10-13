@@ -70,7 +70,7 @@ jobs:
         dnf -y install docker
     - name: Set up QEMU
       if: ${{ matrix.arch != 'x86_64' }}
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
       with:
         platforms: ${{ matrix.arch }}
     - uses: actions/checkout@v3
