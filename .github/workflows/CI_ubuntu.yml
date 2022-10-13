@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
         path: 'src'
@@ -199,7 +199,7 @@ jobs:
       run: |
         echo "GITHUB_REF=${GITHUB_REF}"
         echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
         path: 'src'
@@ -278,7 +278,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
   #   steps:
-  #   - uses: actions/checkout@v2
+  #   - uses: actions/checkout@v3
   #     with:
   #       fetch-depth: 0
   #   - name: Prepare Git Repo for autorevision
