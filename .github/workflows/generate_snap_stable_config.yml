@@ -50,7 +50,7 @@ jobs:
           if [[ "${GH_EVENT_NAME}" == "release" ]] || [[ "${GH_EVENT_NAME}" == "workflow_dispatch" ]]; then
             PUBLISH_CONFIG="true"
           fi
-          echo "::set-output name=PUBLISH_CONFIG::${PUBLISH_CONFIG}"
+          echo "PUBLISH_CONFIG=${PUBLISH_CONFIG}" >> $GITHUB_OUTPUT
           echo "PUBLISH_CONFIG=${PUBLISH_CONFIG}" >> $GITHUB_ENV
       - name: Install Prereqs
         run: |
@@ -59,9 +59,9 @@ jobs:
         id: preparefolders
         run: |
           mkdir -p "$HOME/data/github_releases_info"
-          echo "::set-output name=RELEASES_DATA::$HOME/data/github_releases_info"
+          echo "RELEASES_DATA=$HOME/data/github_releases_info" >> $GITHUB_OUTPUT
           mkdir -p "$HOME/temp/github_releases_info"
-          echo "::set-output name=RELEASES_TEMP::$HOME/temp/github_releases_info"
+          echo "RELEASES_TEMP=$HOME/temp/github_releases_info" >> $GITHUB_OUTPUT
           mkdir -p "${{ github.workspace }}/diff"
       - name: Fetch latest GitHub Release info
         uses: past-due/fetch-release-info@master
@@ -139,12 +139,12 @@ jobs:
           git config user.email "actions@github.com"
           git add -A
           timestamp=$(date -u)
-          git commit -m "Snap stable build config for ${LATEST_GITHUB_RELEASE_TAG}" || { echo "::set-output name=PROCESS_DEPLOYMENT::false" && exit 0; }
-          echo "::set-output name=PROCESS_DEPLOYMENT::true"
+          git commit -m "Snap stable build config for ${LATEST_GITHUB_RELEASE_TAG}" || { echo "PROCESS_DEPLOYMENT=false" >> $GITHUB_OUTPUT && exit 0; }
+          echo "PROCESS_DEPLOYMENT=true" >> $GITHUB_OUTPUT
           # Get the new commit's SHA
           NEW_COMMIT_SHA=$(git rev-parse --verify HEAD)
           echo "NEW_COMMIT_SHA=${NEW_COMMIT_SHA}"
-          echo "::set-output name=GH_SNAPSTABLEBUILD_COMMIT_SHA::${NEW_COMMIT_SHA}"
+          echo "GH_SNAPSTABLEBUILD_COMMIT_SHA=${NEW_COMMIT_SHA}" >> $GITHUB_OUTPUT
           exit 0
       - name: Snap build stable config (w/ most recent stable version)
         id: build-stable
@@ -175,7 +175,7 @@ jobs:
         run: |
           git format-patch -k -1 --stdout "${GH_SNAPSTABLEBUILD_COMMIT_SHA}" > "${{ github.workspace }}/diff/snapstablebuild.diff"
           DIFF_HASH="$(sha512sum "${{ github.workspace }}/diff/snapstablebuild.diff")"
-          echo "::set-output name=DIFF_HASH::${DIFF_HASH}"
+          echo "DIFF_HASH=${DIFF_HASH}" >> $GITHUB_OUTPUT
           echo "snapstablebuild.diff (SHA512: ${DIFF_HASH}):"
           cat "${{ github.workspace }}/diff/snapstablebuild.diff"
       - name: Upload diff artifact

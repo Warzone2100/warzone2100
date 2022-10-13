@@ -42,8 +42,8 @@ jobs:
             SOURCE_TAG_IS_PRERELEASE="false"
           fi
           
-          echo "::set-output name=SOURCE_TAG::${SOURCE_TAG}"
-          echo "::set-output name=SOURCE_TAG_IS_PRERELEASE::${SOURCE_TAG_IS_PRERELEASE}"
+          echo "SOURCE_TAG=${SOURCE_TAG}" >> $GITHUB_OUTPUT
+          echo "SOURCE_TAG_IS_PRERELEASE=${SOURCE_TAG_IS_PRERELEASE}" >> $GITHUB_OUTPUT
       - name: Create Draft Release
         run: |
           ADDITIONAL_GH_OPTIONS=""

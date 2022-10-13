@@ -48,10 +48,10 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
         git add -A
-        git commit -m "Update base translations" || { echo "::set-output name=PROCESS_PR::false" && exit 0; }
+        git commit -m "Update base translations" || { echo "PROCESS_PR=false" >> $GITHUB_OUTPUT && exit 0; }
         echo "Pushing changes to update_base_translations branch"
         git push -f origin master:update_base_translations
-        echo "::set-output name=PROCESS_PR::true"
+        echo "PROCESS_PR=true" >> $GITHUB_OUTPUT
     - name: Create Pull Request to update base files (if needed)
       if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
       id: cpr

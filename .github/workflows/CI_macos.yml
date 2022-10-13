@@ -385,7 +385,7 @@ jobs:
           OUTPUTDIR="wz-macOS"
           ZIPFILE="./dl-archive/warzone2100_macOS_universal_novideos.zip"
           unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
-          echo "::set-output name=ARCHIVEDIR::${OUTPUTDIR}"
+          echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
       - name: 'Upload debug symbols'
         env:
           SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'

@@ -111,9 +111,9 @@ jobs:
         fi
         echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}"
         echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" >> $GITHUB_ENV
-        echo "::set-output name=WZ_OUTPUT_NAME_SUFFIX::${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" >> $GITHUB_OUTPUT
         echo "WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX=${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}"
-        echo "::set-output name=WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX::${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}"
+        echo "WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX=${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}" >> $GITHUB_OUTPUT
         echo "WZ_NAME_SUFFIX=${WZ_NAME_SUFFIX}" >> $GITHUB_ENV
 
         WZ_DISTRIBUTOR="UNKNOWN"
@@ -144,8 +144,8 @@ jobs:
             SOURCE_TAG_IS_PRERELEASE="false"
           fi
           
-          echo "::set-output name=publish-to-flathub::true"
-          echo "::set-output name=SOURCE_TAG_IS_PRERELEASE::${SOURCE_TAG_IS_PRERELEASE}"
+          echo "publish-to-flathub=true" >> $GITHUB_OUTPUT
+          echo "SOURCE_TAG_IS_PRERELEASE=${SOURCE_TAG_IS_PRERELEASE}" >> $GITHUB_OUTPUT
         else
           # Verify the "branch" doesn't equal "stable" or "beta" (which are reserved for tag builds)
           # Otherwise reset it to default ("master")
@@ -153,17 +153,17 @@ jobs:
             echo "NOTE: Invalid default branch specified for non-release / tag build ($WZ_FLATPAK_BRANCH)... will override"
             WZ_FLATPAK_BRANCH="master"
           fi
-          echo "::set-output name=publish-to-flathub::false"
-          echo "::set-output name=SOURCE_TAG_IS_PRERELEASE::false"
+          echo "publish-to-flathub=false" >> $GITHUB_OUTPUT
+          echo "SOURCE_TAG_IS_PRERELEASE=false" >> $GITHUB_OUTPUT
         fi
         echo "WZ_FLATPAK_BRANCH=${WZ_FLATPAK_BRANCH}"
-        echo "::set-output name=WZ_FLATPAK_BRANCH::${WZ_FLATPAK_BRANCH}"
+        echo "WZ_FLATPAK_BRANCH=${WZ_FLATPAK_BRANCH}" >> $GITHUB_OUTPUT
         
         WZ_FLATPAK_APPID="net.wz2100.wz2100${WZ_OUTPUT_NAME_SUFFIX}"
         echo "WZ_FLATPAK_APPID=${WZ_FLATPAK_APPID}" >> $GITHUB_ENV
         WZ_FLATPAK_BUNDLE="warzone2100${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}_linux_${WZ_TARGET_ARCH}.flatpak"
         echo "WZ_FLATPAK_BUNDLE=${WZ_FLATPAK_BUNDLE}" >> $GITHUB_ENV
-        echo "::set-output name=WZ_FLATPAK_BUNDLE::${WZ_FLATPAK_BUNDLE}"
+        echo "WZ_FLATPAK_BUNDLE=${WZ_FLATPAK_BUNDLE}" >> $GITHUB_OUTPUT
         WZ_FLATPAK_MIRROR_SCREENSHOTS_URL="https://dl.flathub.org/repo/screenshots"
         echo "WZ_FLATPAK_MIRROR_SCREENSHOTS_URL=${WZ_FLATPAK_MIRROR_SCREENSHOTS_URL}" >> $GITHUB_ENV
     - name: Generate Flatpak manifest
@@ -206,7 +206,7 @@ jobs:
       run: |
         . src/.ci/flatpak/build.sh
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"
-        echo "::set-output name=WZ_FLATPAK_LOCAL_REPO_NAME::${WZ_FLATPAK_LOCAL_REPO_NAME}"
+        echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}" >> $GITHUB_OUTPUT
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
@@ -253,7 +253,7 @@ jobs:
       run: |
         . src/.ci/flatpak/build.sh
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"
-        echo "::set-output name=WZ_FLATPAK_LOCAL_REPO_NAME::${WZ_FLATPAK_LOCAL_REPO_NAME}"
+        echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}" >> $GITHUB_OUTPUT
 
   upload-debug-symbols:
     strategy:
