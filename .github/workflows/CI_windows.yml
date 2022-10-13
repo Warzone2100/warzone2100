@@ -148,6 +148,11 @@ jobs:
         echo "WZ_FULL_GIT_PATH=${WZ_FULL_GIT_PATH}"
         $WZ_FULL_CMAKE_PATH = Split-Path -Path ((Get-Command cmake.exe).Path)
         echo "WZ_FULL_CMAKE_PATH=${WZ_FULL_CMAKE_PATH}"
+        
+        $WZ_FULL_MSGMERGE_PATH = Split-Path -Path ((Get-Command msgmerge.exe).Path)
+        echo "WZ_FULL_MSGMERGE_PATH=${WZ_FULL_MSGMERGE_PATH}"
+        $WZ_FULL_MSGFMT_PATH = Split-Path -Path ((Get-Command msgfmt.exe).Path)
+        echo "WZ_FULL_MSGFMT_PATH=${WZ_FULL_MSGFMT_PATH}"
 
         # ------------------------------
         # MSVC version / generator info
@@ -243,6 +248,8 @@ jobs:
         echo "WZ_FULL_POWERSHELL_PATH=${WZ_FULL_POWERSHELL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_FULL_GIT_PATH=${WZ_FULL_GIT_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_FULL_CMAKE_PATH=${WZ_FULL_CMAKE_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_FULL_MSGMERGE_PATH=${WZ_FULL_MSGMERGE_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_FULL_MSGFMT_PATH=${WZ_FULL_MSGFMT_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_REPO_PATH=${WZ_REPO_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_ENABLE_SENTRY=${WZ_ENABLE_SENTRY}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_REPO_PATH=${WZ_REPO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -400,6 +407,8 @@ jobs:
         NINJA_INSTALL_PATH: ${{ steps.ninja-dl.outputs.NINJA_INSTALL_PATH }}
         ASCIIDOCTOR_PATH: ${{ steps.asciidoctor-dl.outputs.ASCIIDOCTOR_PATH }}
         WZ_FULL_POWERSHELL_PATH: ${{ steps.settings.outputs.WZ_FULL_POWERSHELL_PATH }}
+        WZ_FULL_MSGMERGE_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGMERGE_PATH }}
+        WZ_FULL_MSGFMT_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGFMT_PATH }}
         WZ_MINGW_PKG_PREFIX: '${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}'
       run: |
         echo "PATH=${env:PATH}"
@@ -409,7 +418,10 @@ jobs:
         $POWERSHELL_FOLDER = Split-Path -Path "${env:WZ_FULL_POWERSHELL_PATH}"
         $WZ_MINGW_DIST_PATH = "${env:LLVM_MINGW_INSTALL_PATH}\${env:WZ_MINGW_PKG_PREFIX}\bin"
         echo "WZ_MINGW_DIST_PATH=\"${WZ_MINGW_DIST_PATH}\""
-        $WZ_MINGW_ENV_PATH = "${env:LLVM_MINGW_INSTALL_PATH}\bin;${env:WZ_FULL_GIT_PATH};${POWERSHELL_FOLDER};C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;${env:NINJA_INSTALL_PATH};${env:ASCIIDOCTOR_PATH}"
+        $WZ_MINGW_ENV_PATH = "${env:LLVM_MINGW_INSTALL_PATH}\bin;${env:WZ_FULL_GIT_PATH};${POWERSHELL_FOLDER};C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;${env:NINJA_INSTALL_PATH};${env:ASCIIDOCTOR_PATH};${env:WZ_FULL_MSGMERGE_PATH}"
+        if ("${env:WZ_FULL_MSGMERGE_PATH}" -ne "${env:WZ_FULL_MSGFMT_PATH}") {
+          $WZ_MINGW_ENV_PATH = "${WZ_MINGW_ENV_PATH};${env:WZ_FULL_MSGFMT_PATH}"
+        }
         echo "WZ_MINGW_ENV_PATH=\"${WZ_MINGW_ENV_PATH}\""
         echo "WZ_MINGW_ENV_PATH=${WZ_MINGW_ENV_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_MINGW_ENV_PATH=${WZ_MINGW_ENV_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
