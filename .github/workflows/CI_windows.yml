@@ -90,7 +90,7 @@ jobs:
         echo "Asciidoctor.bat: ${AsciidoctorBat}"
         $AsciidoctorBatPath = Split-Path -Path "${AsciidoctorBat}"
         echo "Asciidoctor.bat path: ${AsciidoctorBatPath}"
-        echo "::set-output name=ASCIIDOCTOR_PATH::${AsciidoctorBatPath}"
+        echo "ASCIIDOCTOR_PATH=${AsciidoctorBatPath}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
     - name: Install NSIS
       run: choco install nsis -y
     - name: Generate Settings for Run [${{ matrix.compiler }}:${{ matrix.architecture }}]
@@ -237,29 +237,29 @@ jobs:
         $WZ_REPO_PATH = "${{ github.workspace }}\src"
 
         # Export everything important to environment variables (for future steps)
-        echo "::set-output name=WZ_USING_MINGW::${WZ_USING_MINGW}"
-        echo "::set-output name=WZ_MINGW_PKG_PREFIX::${WZ_MINGW_PKG_PREFIX}"
-        echo "::set-output name=WZ_ASM_MASM_COMPILER::${WZ_ASM_MASM_COMPILER}"
-        echo "::set-output name=WZ_FULL_POWERSHELL_PATH::${WZ_FULL_POWERSHELL_PATH}"
-        echo "::set-output name=WZ_FULL_GIT_PATH::${WZ_FULL_GIT_PATH}"
-        echo "::set-output name=WZ_FULL_CMAKE_PATH::${WZ_FULL_CMAKE_PATH}"
-        echo "::set-output name=WZ_REPO_PATH::${WZ_REPO_PATH}"
-        echo "::set-output name=WZ_ENABLE_SENTRY::${WZ_ENABLE_SENTRY}"
+        echo "WZ_USING_MINGW=${WZ_USING_MINGW}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_MINGW_PKG_PREFIX=${WZ_MINGW_PKG_PREFIX}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_ASM_MASM_COMPILER=${WZ_ASM_MASM_COMPILER}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_FULL_POWERSHELL_PATH=${WZ_FULL_POWERSHELL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_FULL_GIT_PATH=${WZ_FULL_GIT_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_FULL_CMAKE_PATH=${WZ_FULL_CMAKE_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_REPO_PATH=${WZ_REPO_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        echo "WZ_ENABLE_SENTRY=${WZ_ENABLE_SENTRY}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_REPO_PATH=${WZ_REPO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "VCPKG_DEFAULT_HOST_TRIPLET=${VCPKG_DEFAULT_HOST_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_TARGET_PLATFORMNAME=${WZ_VC_TARGET_PLATFORMNAME}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=WZ_BUILD_DESC::${WZ_BUILD_DESC}"
+        echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_GENERATOR=${WZ_VC_GENERATOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         #echo "WZ_VC_TOOLCHAIN=${WZ_VC_TOOLCHAIN}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VISUAL_STUDIO_INSTALL_PATH=${WZ_VISUAL_STUDIO_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=WZ_VISUAL_STUDIO_INSTALL_VERSION::${WZ_VISUAL_STUDIO_INSTALL_VERSION}"
+        echo "WZ_VISUAL_STUDIO_INSTALL_VERSION=${WZ_VISUAL_STUDIO_INSTALL_VERSION}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "VCPKG_VISUAL_STUDIO_PATH=${VCPKG_VISUAL_STUDIO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=VCPKG_BINARYCACHE_DIR::${VCPKG_BINARYCACHE_DIR}"
+        echo "VCPKG_BINARYCACHE_DIR=${VCPKG_BINARYCACHE_DIR}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=VCPKG_BINARY_SOURCES::${VCPKG_BINARY_SOURCES}"
+        echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
     #####################################################
     - name: 'Download & Install Vulkan SDK'
       run: |
@@ -350,7 +350,7 @@ jobs:
         Expand-Archive -LiteralPath "${NINJA_DL_PATH}" -DestinationPath "${NINJA_INSTALL_PATH}"
 
         # Export the NINJA executable path
-        echo "::set-output name=NINJA_INSTALL_PATH::${NINJA_INSTALL_PATH}"
+        echo "NINJA_INSTALL_PATH=${NINJA_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "NINJA_INSTALL_PATH=${NINJA_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Setup LLVM-MINGW
       if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
@@ -385,7 +385,7 @@ jobs:
 
         # Export the LLVM-mingw install path
         $LLVM_MINGW_INSTALL_PATH = "${LLVM_MINGW_INSTALL_PATH}\${LLVM_MINGW_PKG}"
-        echo "::set-output name=LLVM_MINGW_INSTALL_PATH::${LLVM_MINGW_INSTALL_PATH}"
+        echo "LLVM_MINGW_INSTALL_PATH=${LLVM_MINGW_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "LLVM_MINGW_INSTALL_PATH=${LLVM_MINGW_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
         # Prepend bin path to the system PATH
@@ -412,9 +412,9 @@ jobs:
         $WZ_MINGW_ENV_PATH = "${env:LLVM_MINGW_INSTALL_PATH}\bin;${env:WZ_FULL_GIT_PATH};${POWERSHELL_FOLDER};C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;${env:NINJA_INSTALL_PATH};${env:ASCIIDOCTOR_PATH}"
         echo "WZ_MINGW_ENV_PATH=\"${WZ_MINGW_ENV_PATH}\""
         echo "WZ_MINGW_ENV_PATH=${WZ_MINGW_ENV_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=WZ_MINGW_ENV_PATH::${WZ_MINGW_ENV_PATH}"
+        echo "WZ_MINGW_ENV_PATH=${WZ_MINGW_ENV_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "WZ_MINGW_DIST_PATH=${WZ_MINGW_DIST_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=WZ_MINGW_DIST_PATH::${WZ_MINGW_DIST_PATH}"
+        echo "WZ_MINGW_DIST_PATH=${WZ_MINGW_DIST_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
     - name: Cache vcpkg dependencies
       id: vcpkg-cache
       if: success() && !(github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
@@ -715,7 +715,7 @@ jobs:
             echo "Removing breakpad .sym"
             rm "${BREAKPAD_SYM}"
           fi
-          echo "::set-output name=ARCHIVEDIR::${OUTPUTDIR}"
+          echo "ARCHIVEDIR=${OUTPUTDIR}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Download Source Bundle
         continue-on-error: true
         uses: actions/download-artifact@v3

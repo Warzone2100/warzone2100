@@ -53,7 +53,7 @@ jobs:
         # Get information for this tagged release
         tagged_release_id="${{ github.event.release.id }}"
         echo "tagged_release_id=${tagged_release_id}"
-        echo "::set-output name=tagged_release_id::${tagged_release_id}"
+        echo "tagged_release_id=${tagged_release_id}" >> $GITHUB_OUTPUT
 
         SF_FILE_PATH=""
         if [ ! -z "${SF_BASE_PATH}" ]; then
@@ -61,7 +61,7 @@ jobs:
         fi
         SF_FILE_PATH="${SF_FILE_PATH}${RELEASE_TAG}"
         echo "SF_FILE_PATH=${SF_FILE_PATH}"
-        echo "::set-output name=SF_FILE_PATH::${SF_FILE_PATH}"
+        echo "SF_FILE_PATH=${SF_FILE_PATH}" >> $GITHUB_OUTPUT
 
         # Prepare release_assets directory
         mkdir -p "release_assets/${SF_FILE_PATH}"
@@ -86,7 +86,7 @@ jobs:
         echo "Get Latest Release info for repo: ${GITHUB_REPOSITORY}"
         latest_release_id="$(curl -H "Accept: application/vnd.github.v3.raw" -H "Authorization: token ${GITHUB_TOKEN}" -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | jq '.id')"
         echo "latest_release_id=${latest_release_id}"
-        echo "::set-output name=latest_release_id::${latest_release_id}"
+        echo "latest_release_id=${latest_release_id}" >> $GITHUB_OUTPUT
     - name: Set up SourceForge known_hosts
       run: |
         mkdir -p ~/.ssh/
