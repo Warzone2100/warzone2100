@@ -663,7 +663,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			if(MINGW)
 				set(_additional_lookup_options)
 				if(DEFINED WZ_MINGW_DIST_PATH)
-					message(STATUS "WZ_MINGW_DIST_PATH: "${WZ_MINGW_DIST_PATH}"")
+					message(STATUS "WZ_MINGW_DIST_PATH: \"${WZ_MINGW_DIST_PATH}\"")
 					set(_additional_lookup_options HINTS "${WZ_MINGW_DIST_PATH}")
 				endif()
 				# Find path to C++ stdlib, and preserve for later fixup_bundle use
