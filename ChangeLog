@@ -1,4 +1,4 @@
-2022-1X-XX: Version 4.3.0-beta1:
+2022-10-13: Version 4.3.0-beta1:
  * General:
    * Add: Add console message when limits change (commit:33087b712596d913a6265b204a982f0b7999ac88, #2600)
    * Add: Convert language selector to dropdown with flags (too many commits, #2079)
