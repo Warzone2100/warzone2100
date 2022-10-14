@@ -13,7 +13,7 @@ play. Install them as root with "dpkg -i warzone*.deb".
 
 
 For the videos, download the sequences.wz you want from
-http://wz2100.net/download, put it into pkg/dpkg/video, then run
+https://wz2100.net/download, put it into pkg/dpkg/video, then run
 "dpkg-buildpackage -uc -b" from that folder.
 
 

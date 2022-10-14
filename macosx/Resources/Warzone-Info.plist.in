@@ -63,7 +63,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>net.wz2100.wz</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://developer.wz2100.net/wiki/ModsAndMaps</string>
+			<string>https://developer.wz2100.net/wiki/ModsAndMaps</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -82,7 +82,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>net.wz2100.wz.mod</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://developer.wz2100.net/wiki/ModsAndMaps</string>
+			<string>https://developer.wz2100.net/wiki/ModsAndMaps</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -101,7 +101,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>net.wz2100.wz.cam</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://developer.wz2100.net/wiki/ModsAndMaps</string>
+			<string>https://developer.wz2100.net/wiki/ModsAndMaps</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -120,7 +120,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>net.wz2100.wz.gmod</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://developer.wz2100.net/wiki/ModsAndMaps</string>
+			<string>https://developer.wz2100.net/wiki/ModsAndMaps</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -139,7 +139,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>net.wz2100.wz.music</string>
 			<key>UTTypeReferenceURL</key>
-			<string>http://developer.wz2100.net/wiki/ModsAndMaps</string>
+			<string>https://developer.wz2100.net/wiki/ModsAndMaps</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # Convert subtitle timings from frames to seconds.
-# Original author: Beliar (http://developer.wz2100.net/ticket/748)
+# Original author: Beliar (https://developer.wz2100.net/ticket/748)
 # Changed to use subsecond precision.
 
 def parseLine(line):

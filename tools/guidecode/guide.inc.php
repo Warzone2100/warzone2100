@@ -29,7 +29,7 @@ Some random statistics: There are 428 technologies. Stormbringer Emplacement tak
 <p>Of course, we need a better, more dynamic approach before we can actually put this page in use. For example using PHP or the wiki. This version is only an example of how it COULD look, and meant primarly for getting as much feedback as possible, so we can use the maximum potential.</p>
 <p>For now, this page contains some random suggestions. These are all scraped from the warzone forums without mentioning who suggested them. If any content on this page is your property, and you would like to see it removed, please post in the appropriate forum thread.</p>
 <p><strong>For more \'about\'-information, look below the list!</strong></p>
-<p class="msg"><strong>All discussion about this page can be found here: <a href="http://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212">http://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212</a>. Please help us improve this page by giving your opinion! </strong></p>
+<p class="msg"><strong>All discussion about this page can be found here: <a href="https://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212">https://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212</a>. Please help us improve this page by giving your opinion! </strong></p>
 
 <h3><a name="features">Features List</a></h3>
 <h4><a name="gui">GUI</a></h4>
@@ -132,7 +132,7 @@ Some random statistics: There are 428 technologies. Stormbringer Emplacement tak
  <tr>
   <td width="221">Gates</td>
   <td width="119" bgcolor="#FFFF00"><div align="center"><strong>Mod</strong></div></td>
-  <td width="110" bgcolor="#00FF00"><div align="center"><strong><a href="http://forums.wz2100.net/viewtopic.php?f=10&amp;t=2186">Topic</a></strong></div></td>
+  <td width="110" bgcolor="#00FF00"><div align="center"><strong><a href="https://forums.wz2100.net/viewtopic.php?f=10&amp;t=2186">Topic</a></strong></div></td>
   <td width="193">Optional, requires ctrl + click </td>
 
  </tr>
@@ -255,10 +255,10 @@ Some random statistics: There are 428 technologies. Stormbringer Emplacement tak
 <p>The wishlist topics can be found here:</p>
 <ol>
  <li>
-  <a href="http://forums.wz2100.net/viewtopic.php?f=6&amp;t=771">Wishlist 1</a></li>
+  <a href="https://forums.wz2100.net/viewtopic.php?f=6&amp;t=771">Wishlist 1</a></li>
 
- <li><a href="http://forums.wz2100.net/viewtopic.php?f=6&amp;t=1267">Wishlist 2</a></li>
- <li><a href="http://forums.wz2100.net/viewtopic.php?f=6&amp;t=2224">Wishlist 3</a></li>
+ <li><a href="https://forums.wz2100.net/viewtopic.php?f=6&amp;t=1267">Wishlist 2</a></li>
+ <li><a href="https://forums.wz2100.net/viewtopic.php?f=6&amp;t=2224">Wishlist 3</a></li>
 </ol>
 <h3><a name="why">Why this list?</a></h3>
 <ul>
@@ -277,12 +277,12 @@ Some random statistics: There are 428 technologies. Stormbringer Emplacement tak
  <li>Look for topics discussing certain existing features and add them to this list. </li>
  <li>Do useful feature requests the right way!</li>
  <li>Update the progress in this list (<strong>not available yet, since you can not edit it</strong>). </li>
- <li><a href="http://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212">Discuss </a>everything about this page. Colors, categories,... Everything is welcome!</li>
+ <li><a href="https://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212">Discuss </a>everything about this page. Colors, categories,... Everything is welcome!</li>
  <li>Especially, discuss the best way to put this page in use, <strong>technically</strong>. </li>
 
  <li>Always keep looking for ways to do things the best way. </li>
 </ul>
-<p class="msg"> <strong>All discussion about this page can be found here: <a href="http://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212">http://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212</a>. Please help us improve this page by giving your opinion!</strong></p>',
+<p class="msg"> <strong>All discussion about this page can be found here: <a href="https://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212">https://forums.wz2100.net/viewtopic.php?f=2&amp;t=2212</a>. Please help us improve this page by giving your opinion!</strong></p>',
 		'cachedsb' => '<li><a href="#intro">Introduction</a></li><li><a href="#features">Features List</a><ul><li><a href="#gui">GUI</a></li><li><a href="#terrain">Terrain &amp; World</a></li><li><a href="#units">Units</a></li><li><a href="#building">Building</a></li><li><a href="#other">Other</a></li></ul></li><li><a href="#about">About this page</a><ul><li><a href="#putwhat">What can be put here?</a></li><li><a href="#statuses">Statuses and their explanation:</a></li><li><a href="#aboutmoreinfo">About \'More Info\'</a></li></ul></li><li><a href="#wishlist">Wishlist</a></li><li><a href="#why">Why this list?</a></li><li><a href="#howhelp">How to help?</a>'
 	),
 	'b' => array(
@@ -381,7 +381,7 @@ The Command Relay Center is required to make <a href="../commanders">Commanders<
 
 <p class="backforward"><a href="story">Larger size &raquo;</a></p>
 <ul class="nav">
-<li><a href="http://wz2100.net/download">Download game</a></li>
+<li><a href="https://wz2100.net/download">Download game</a></li>
 </ul>
 </div>
 <div style="margin-right:340px;">
@@ -464,13 +464,13 @@ Compared to other RTS\'s, Warzone 2100 has:
 <p>
 Warzone can be downloaded from:
 </p>
-<ul class="nav"><li><p><a href="http://wz2100.net/download"><em>Download</em> Warzone 2100</a></p></li></ul>
+<ul class="nav"><li><p><a href="https://wz2100.net/download"><em>Download</em> Warzone 2100</a></p></li></ul>
 <p>
 On most distributions of Linux, Warzone should be available in your repositories. However, these are often outdated, and you are encouraged to compile Warzone yourself, which is the usual:
 </p>
 <blockquote><p><code>./configure && make</code></p></blockquote>
 <p>
-For compiling tips on other platforms, or if the above fails, see the <a href="http://developer.wz2100.net/wiki/CompileGuide">Compile Guide</a>.
+For compiling tips on other platforms, or if the above fails, see the <a href="https://developer.wz2100.net/wiki/CompileGuide">Compile Guide</a>.
 </p>
 
 <h3 id="playing">Playing Warzone</h3>
@@ -1389,11 +1389,11 @@ Rebalance Mod for 2.1:
 <s><code>C:/Program Files/Warzone 2100/mods/multiplay/<span class="grey">rebalance_0.5.1.wz</span></code></s>
 </p>
 <p>
-Refer to the <a href="http://wz2100.net/faq">FAQ</a> for installation information.
+Refer to the <a href="https://wz2100.net/faq">FAQ</a> for installation information.
 
 </p>
 <p>
-In other platforms, mods must be enabled with <a href="http://developer.wz2100.net/wiki/CommandLineOptions">command-line options</a>.
+In other platforms, mods must be enabled with <a href="https://developer.wz2100.net/wiki/CommandLineOptions">command-line options</a>.
 </p>
 <h3><a name="chglog">Changelog</a></h3>
 <ul>
@@ -2245,11 +2245,11 @@ Cyborg Transports have no weapons, and so are sitting ducks for AA turrets and h
 		'autogen' => TRUE,
 		'text' => '<p><strong style="color:red">The walkthrough is incomplete.</strong></p>
 <p>
-For a more complete walkthrough, see <a href="http://forums.wz2100.net/viewtopic.php?f=3&t=3051">New Walkthrough</a> by themousemaster1, which is the walkthrough which I will eventually adapt into the current Warzone Guide.
+For a more complete walkthrough, see <a href="https://forums.wz2100.net/viewtopic.php?f=3&t=3051">New Walkthrough</a> by themousemaster1, which is the walkthrough which I will eventually adapt into the current Warzone Guide.
 
 </p>
 
-<ul class="nav"><li><a href="http://forums.wz2100.net/viewtopic.php?f=3&t=3051">New Walkthrough</a></li>
+<ul class="nav"><li><a href="https://forums.wz2100.net/viewtopic.php?f=3&t=3051">New Walkthrough</a></li>
 <li><a href="http://docs.wz2100.net/walk%20through/index.html">Old Walkthrough</a></a></ul>
 
 <br /><br /><br /><br /><br /><br />
@@ -2610,7 +2610,7 @@ Please note that while the Intelligence Display pauses the game in Campaign mode
 <p>
 As may be expected, the first stage of this game is fairly easy. Wouldn\'t want to get people to quit playing before they begin. ;)
 </p>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3801&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3801&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3801&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3801&t=1" alt="" /></a></p>
 <p>
 You should start with three Trucks and four Machinegun Viper Wheels tanks.
 </p>
@@ -2624,7 +2624,7 @@ Once you move a truck to the east to build an oil derrick, however, small groups
 <p>
 Once you have dealt with the scavengers right outside your base, it\'s time to start exploring. Manufacture eight MG Viper Wheels, then send them north and east of your current position to attack the nearest scavenger settlement.
 </p>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3802&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3802&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3802&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3802&t=1" alt="" /></a></p>
 <p>
 Once you have defeated this settlement (which shouldn\'t be very difficult), you\'ll find an artifact. Pick it up (click on it) and research it at your Research Facility. When the oil resource cools down, build an oil derrick there, too; it\'ll give you more money.
 </p>
@@ -2638,7 +2638,7 @@ You will want to recycle and rebuild any tanks that are in red or yellow health 
 <p>
 Once your 8 tanks are battle ready again, head north.
 </p>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3803&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3803&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3803&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3803&t=1" alt="" /></a></p>
 <p>
 Another small base; you should be able to destroy it easily. Upon demolition of this base, you will get the artifact for the <a href="w/flamer">Flamer turret</a>. Using it or not is your preference; it will work <em>very</em> well in upcoming stages against almost anything, but its short range means it will also get most of the enemy fire centered on it, and its low HP means it will die quickly. By the time you find heavier bodies and armor to supply it with, you will also have other weapons you might like more, so.... as I said, use it or don\'t.
 </p>
@@ -2649,7 +2649,7 @@ Another small base; you should be able to destroy it easily. Upon demolition of 
 <p>
 Again, recycle and rebuild your units, and get ready to move west.
 </p>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3804&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3804&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3804&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3804&t=1" alt="" /></a></p>
 <p>
 This is the first time your units face a credible danger of being lost; be sure they are set to retreat at some level of damage (for now, Retreat at Low Damage is enough).
 </p>
@@ -2663,7 +2663,7 @@ Once the base goes down, you will get a very useful artifact: the MG guard tower
 <p>
 And now, it\'s time for the last base.
 </p>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3805&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3805&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3805&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3805&t=1" alt="" /></a></p>
 <p>
 You\'ll want to avoid those flamer towers &ndash; they do high damage if you get close, but are harmless as long as you shoot them from far away.
 </p>
@@ -2969,7 +2969,7 @@ If you\'re having trouble, retreat to the MG towers you built earlier (you <em>d
 Once the two bunkers are down, press south to the first enemy base.
 </p>
 <h4 id="destroy">Destroy more outposts</h4>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3808&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3808&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3808&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3808&t=1" alt="" /></a></p>
 <p>
 If you have flame tanks leading the charge, then just head straight into the base. If not, then have your tanks skirt southeast from the small chokepoint, and then have them head west, shooting up the towers and base buildings with your whole force, rather than one tank at a time. The base holds upgrades for your flamers.
 </p>
@@ -2996,7 +2996,7 @@ If you feel like it, have your trucks put a couple MG towers in the area at the 
 <p>
 When the sensor tech is retrieved, and the MG towers are up, (and your tanks are suitably repaired), head west and north to the next scavenger base.
 </p>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3809&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3809&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3809&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3809&t=1" alt="" /></a></p>
 <p>
 This base is outright nasty. Flamers (including one on a fire truck), a number of units, guard towers, bunkers... The best way to handle all this is with an all-MG force, <a href="orderingunits">set to maximum-range firing</a>. Make sure to destroy the flamers before they get in range of you.
 </p>
@@ -3015,7 +3015,7 @@ Destroying this base yields the <a href="w/twinmachinegun">Twin Machinegun</a>. 
 <p>
 Regroup, and it\'s time to head south to the next base.
 </p>
-<p><a href="http://forums.wz2100.net/download/file.php?id=3811&mode=view"><img src="http://forums.wz2100.net/download/file.php?id=3811&t=1" alt="" /></a></p>
+<p><a href="https://forums.wz2100.net/download/file.php?id=3811&mode=view"><img src="https://forums.wz2100.net/download/file.php?id=3811&t=1" alt="" /></a></p>
 <p>
 This base may look less nasty than the previous one, but they have a <em>lot</em> of units that will attack you as you approach it.
 </p>

@@ -167,7 +167,7 @@ static void runHyperlink()
 
 static void rundonatelink()
 {
-	openURLInBrowser("http://donations.wz2100.net/");
+	openURLInBrowser("https://donations.wz2100.net/");
 }
 
 static void runchatlink()

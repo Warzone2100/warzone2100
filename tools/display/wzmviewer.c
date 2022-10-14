@@ -33,7 +33,7 @@
 #endif
 
 // The WZM format is a proposed successor to the PIE format used by Warzone.
-// For an explanation of the WZM format, see http://developer.wz2100.net/wiki/WZM_format
+// For an explanation of the WZM format, see https://developer.wz2100.net/wiki/WZM_format
 
 // To compile: gcc -o wzmviewer wzmviewer.c wzmutils.c -Wall -g -O0 -Wshadow -lpng `sdl-config --libs --cflags` -lGL -lGLU
 

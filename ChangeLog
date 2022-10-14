@@ -1411,7 +1411,7 @@
    * Fix: Still/moving helicopter/VTOL animations were reversed (commit:fb9bea5e0adc24a1a0de14ebdc883168380e5576, ticket:4489)
    * Fix: Prevent structure turret stretching again (commit:f79286dc13562e8b1277be0ab120a79f7d2d2fa7, ticket:4537)
  * Campaign:
-   * Change: Lots of initial campaign ported to Javascript. Discuss these changes in our new porting forum here: http://forums.wz2100.net/viewforum.php?f=51
+   * Change: Lots of initial campaign ported to Javascript. Discuss these changes in our new porting forum here: https://forums.wz2100.net/viewforum.php?f=51
  * Scripting:
    * Change: Function donateObject() works on structures. Function findResearch() works on other players (commit:839e0b0f5c0ec3a2b5b6018d1c82697db0804d22)
    * Add: New function hackDoNotSave(global name) to prevent variable from being put in savegames (commit:ff57dc5733b69123b76a8f5dc469c4555f7b49f1)
@@ -3592,7 +3592,7 @@ master_20110320qt and before:
    * New: Units and structures will constantly look for a better target taking into consideration
           targets of the friendly units nearby - won't lock on one target forever anymore.
  * Skirmish/Multiplayer AI:
-   * New: Enabled basic level of Human-AI cooperation, for more information visit: http://wz2100.net/wiki/gameplay:cooperative_ai
+   * New: Enabled basic level of Human-AI cooperation, for more information visit: https://wz2100.net/wiki/gameplay:cooperative_ai
    * New: AI units now return to defend its own base when it's in trouble.
    * Improved: AI is faster at producing units, upgrading structures and oil capturing.
    * Several other improvements.
