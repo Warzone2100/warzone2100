@@ -125,6 +125,7 @@ jobs:
         
         WZ_FLATPAK_BRANCH="${WZ_BUILD_DESC_PREFIX}"
         if [ "$WZ_BUILD_DESC_IS_TAG" == "true" ]; then
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
           # Verify tag format (three-component version + optional trailing qualifier like "-beta1" or "-rc1") if on a tag
           regex="^([0-9][0-9]*\\.[0-9][0-9]*\\.[0-9][0-9]*)([\-][A-Za-z0-9]+)?$";
           if [[ ! "${SOURCE_TAG}" =~ $regex ]]; then
