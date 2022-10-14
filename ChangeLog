@@ -1,3 +1,8 @@
+2022-10-14: Version 4.3.0-beta2:
+ * Other:
+   * Fix: Release automation issues
+   * (See 4.3.0-beta1 for everything else)
+
 2022-10-13: Version 4.3.0-beta1:
  * General:
    * Add: Add console message when limits change (commit:33087b712596d913a6265b204a982f0b7999ac88, #2600)
