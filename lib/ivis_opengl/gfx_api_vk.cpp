@@ -860,18 +860,19 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugUtilsCallback(
 
 struct shader_infos
 {
-	std::string vertex;
-	std::string fragment;
+	std::string vertexSpv;
+	std::string fragmentSpv;
+	bool specializationConstant_0_mipLoadBias = false;
 };
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
 {
-	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv" }),
-	std::make_pair(SHADER_BUTTON, shader_infos{ "shaders/vk/button.vert.spv", "shaders/vk/button.frag.spv" }),
-	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN, shader_infos{ "shaders/vk/terrain.vert.spv", "shaders/vk/terrain.frag.spv" }),
+	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
+	std::make_pair(SHADER_BUTTON, shader_infos{ "shaders/vk/button.vert.spv", "shaders/vk/button.frag.spv", true }),
+	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
+	std::make_pair(SHADER_TERRAIN, shader_infos{ "shaders/vk/terrain.vert.spv", "shaders/vk/terrain.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
-	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv" }),
+	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv", true }),
 	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv" }),
 	std::make_pair(SHADER_RECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_TEXRECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/texturedrect.frag.spv" }),
@@ -1168,7 +1169,8 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type)
 			.setAddressModeV(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeW(vk::SamplerAddressMode::eRepeat);
 	case gfx_api::sampler_type::anisotropic:
-		return vk::SamplerCreateInfo()
+	{
+		vk::SamplerCreateInfo result = vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eLinear)
 			.setMagFilter(vk::Filter::eLinear)
 			.setMipmapMode(vk::SamplerMipmapMode::eLinear)
@@ -1179,8 +1181,15 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type)
 			.setAddressModeU(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeV(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeW(vk::SamplerAddressMode::eClampToEdge);
+		if (root->lodBiasMethod == VkRoot::LodBiasMethod::SamplerMipLodBias)
+		{
+			result.setMipLodBias(root->mipLodBias.value_or(0.f));
+		}
+		return result;
+	}
 	case gfx_api::sampler_type::anisotropic_repeat:
-		return vk::SamplerCreateInfo()
+	{
+		vk::SamplerCreateInfo result = vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eLinear)
 			.setMagFilter(vk::Filter::eLinear)
 			.setMipmapMode(vk::SamplerMipmapMode::eLinear)
@@ -1191,6 +1200,12 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type)
 			.setAddressModeU(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeV(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeW(vk::SamplerAddressMode::eRepeat);
+		if (root->lodBiasMethod == VkRoot::LodBiasMethod::SamplerMipLodBias)
+		{
+			result.setMipLodBias(root->mipLodBias.value_or(0.f));
+		}
+		return result;
+	}
 	case gfx_api::sampler_type::nearest_clamped:
 		return vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eNearest)
@@ -1233,8 +1248,9 @@ VkPSO::VkPSO(vk::Device _dev,
 	vk::RenderPass rp,
 	const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 	vk::SampleCountFlagBits rasterizationSamples,
-	const vk::DispatchLoaderDynamic& _vkDynLoader
-	) : dev(_dev), pVkDynLoader(&_vkDynLoader), renderpass_compat(renderpass_compat)
+	const vk::DispatchLoaderDynamic& _vkDynLoader,
+	const VkRoot& _root
+	) : dev(_dev), pVkDynLoader(&_vkDynLoader), renderpass_compat(renderpass_compat), root(&_root)
 {
 	const gfx_api::state_description& state_desc = createInfo.state_desc;
 	const SHADER_MODE& shader_mode = createInfo.shader_mode;
@@ -1348,9 +1364,24 @@ VkPSO::VkPSO(vk::Device _dev,
 
 	const auto depthStencilState = to_vk(state_desc.depth_mode, state_desc.stencil);
 	const auto rasterizationState = to_vk(state_desc.offset, state_desc.cull);
-	vertexShader = get_module(spv_files.at(shader_mode).vertex, *pVkDynLoader);
-	fragmentShader = get_module(spv_files.at(shader_mode).fragment, *pVkDynLoader);
-	const auto pipelineStages = get_stages(vertexShader, fragmentShader);
+	const auto& shaderInfo = spv_files.at(shader_mode);
+	vertexShader = get_module(shaderInfo.vertexSpv, *pVkDynLoader);
+	fragmentShader = get_module(shaderInfo.fragmentSpv, *pVkDynLoader);
+	auto pipelineStages = get_stages(vertexShader, fragmentShader);
+
+	float cpyMipLodBias = root->mipLodBias.value_or(0.f);
+	vk::SpecializationMapEntry entry ( 0, 0, sizeof(float) );
+	vk::SpecializationInfo spec_info = vk::SpecializationInfo()
+		.setMapEntryCount(1)
+		.setPMapEntries(&entry)
+		.setDataSize(sizeof(float))
+		.setPData(&cpyMipLodBias)
+	;
+	if (root->lodBiasMethod == VkRoot::LodBiasMethod::SpecializationConstant && shaderInfo.specializationConstant_0_mipLoadBias)
+	{
+		ASSERT(pipelineStages[1].pSpecializationInfo == nullptr, "get_stages unexpectedly set pSpecializationInfo - this will overwrite!");
+		pipelineStages[1].setPSpecializationInfo(&spec_info);
+	}
 
 	const auto pso = vk::GraphicsPipelineCreateInfo()
 		.setPColorBlendState(&color_blend_state)
@@ -1721,7 +1752,7 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(const gfx_api::state_des
 {
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
 	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, uniform_blocks, texture_desc, attribute_descriptions);
-	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader);
+	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
 	createdPipelines.emplace_back(createInfo, pipeline);
 	return new VkPSOId(createdPipelines.size() - 1);
 }
@@ -1736,7 +1767,7 @@ void VkRoot::rebuildPipelinesIfNecessary()
 		if (!rp_compat_info->isCompatibleWith(*pipeline.second->renderpass_compat))
 		{
 			delete pipeline.second;
-			pipeline.second = new VkPSO(dev, physDeviceProps.limits, pipeline.first, rp, rp_compat_info, msaaSamples, vkDynLoader);
+			pipeline.second = new VkPSO(dev, physDeviceProps.limits, pipeline.first, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
 		}
 	}
 }
@@ -2025,7 +2056,7 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const vk::DispatchLoaderDynamic &vkDynLoader)
 {
 	const auto deviceProperties = device.getProperties(vkDynLoader);
-	const auto deviceFeatures = device.getFeatures(vkDynLoader);
+	vk::PhysicalDeviceFeatures deviceFeatures = device.getFeatures(vkDynLoader);
 
 	int score = 0;
 
@@ -2841,12 +2872,13 @@ bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion) && VK_VERSION_GREATER_THAN_OR_EQUAL(physDeviceProps.apiVersion, minVulkanAPICoreVersion);
 }
 
-bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode)
+bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> _mipLodBias)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 
 	frameNum = 1;
 	swapMode = requestedSwapMode;
+	mipLodBias = _mipLodBias;
 
 	SetVKImplicitLayerEnvironmentVariables();
 
@@ -3016,6 +3048,37 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	formattedRendererInfoString = calculateFormattedRendererInfoString(); // must be called after physDeviceProps is populated
 	physDeviceFeatures = physicalDevice.getFeatures(vkDynLoader);
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
+
+	hasPortabilitySubset = checkDeviceExtensionSupport(physicalDevice, {"VK_KHR_portability_subset"}, vkDynLoader);
+#if 0 // this is not a "stable" extension yet
+	if (hasPortabilitySubset && canUseVulkanDeviceAPI((uint32_t)VK_MAKE_VERSION(1, 1, 0))) // vkGetPhysicalDeviceFeatures2 is core Vulkan 1.1+
+	{
+		vk::StructureChain<vk::PhysicalDeviceFeatures2, vk::PhysicalDevicePortabilitySubsetFeaturesKHR> features2;
+		physicalDevice.getFeatures2(&features2.get(), vkDynLoader);
+		physDevicePortabilitySubsetFeatures = features2.get<vk::PhysicalDevicePortabilitySubsetFeaturesKHR>();
+		debug(LOG_3D, "- samplerMipLodBias: %s", (physDevicePortabilitySubsetFeatures.samplerMipLodBias) ? "true" : "false");
+	}
+	else
+	{
+		physDevicePortabilitySubsetFeatures = vk::PhysicalDevicePortabilitySubsetFeaturesKHR();
+	}
+#endif
+
+	if (!hasPortabilitySubset
+#if 0 // this is not a "stable" extension yet
+		|| physDevicePortabilitySubsetFeatures.samplerMipLodBias
+#endif
+		)
+	{
+		// Use setMipLodBias in vk::SamplerCreateInfo
+		lodBiasMethod = LodBiasMethod::SamplerMipLodBias;
+	}
+	else
+	{
+		// Otherwise, use specialization constants to provide the bias to do it in-shader
+		lodBiasMethod = LodBiasMethod::SpecializationConstant;
+	}
+
 	initPixelFormatsSupport();
 
 	// convert antialiasing to vk::SampleCountFlagBits
@@ -4005,6 +4068,11 @@ bool VkRoot::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callb
 const size_t& VkRoot::current_FrameNum() const
 {
 	return frameNum;
+}
+
+bool VkRoot::supportsMipLodBias() const
+{
+	return lodBiasMethod != LodBiasMethod::Unsupported;
 }
 
 #endif // defined(WZ_VULKAN_ENABLED)

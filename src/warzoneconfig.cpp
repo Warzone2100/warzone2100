@@ -75,6 +75,7 @@ struct WARZONE_GLOBALS
 	uint8_t MPopenSpectatorSlots = 0;
 	int fogStart = 4000;
 	int fogEnd = 8000;
+	int lodDistanceBiasPercentage = -40;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -381,6 +382,18 @@ void war_SetRadarJump(bool radarJump)
 {
 	warGlobs.radarJump = radarJump;
 	ActivityManager::instance().changedSetting("radarJump", std::to_string(radarJump));
+}
+
+int war_getLODDistanceBiasPercentage()
+{
+	return warGlobs.lodDistanceBiasPercentage;
+}
+
+void war_setLODDistanceBiasPercentage(int bias)
+{
+	if (bias > 200) { bias = 200; }
+	if (bias < -200) { bias = -200; }
+	warGlobs.lodDistanceBiasPercentage = bias;
 }
 
 video_backend war_getGfxBackend()

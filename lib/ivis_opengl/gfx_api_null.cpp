@@ -330,7 +330,7 @@ bool null_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)>
 	return false;
 }
 
-bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode)
+bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias)
 {
 	// obtain backend_Null_Impl from impl
 	backend_impl = impl.createNullBackendImpl();
@@ -395,3 +395,9 @@ bool null_context::textureFormatIsSupported(gfx_api::pixel_format_target target,
 	// no matter what the input is, return true (since this null backend doesn't care and no-ops whatever it gets)
 	return true;
 }
+
+bool null_context::supportsMipLodBias() const
+{
+	return true;
+}
+

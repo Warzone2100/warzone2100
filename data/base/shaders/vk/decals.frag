@@ -1,5 +1,7 @@
 #version 450
 
+layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+
 layout(set = 1, binding = 0) uniform sampler2D tex;
 layout(set = 1, binding = 1) uniform sampler2D lightmap_tex;
 
@@ -22,7 +24,7 @@ layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	vec4 fragColor = texture(tex, uv_tex) * texture(lightmap_tex, uv_lightmap);
+	vec4 fragColor = texture(tex, uv_tex, WZ_MIP_LOAD_BIAS) * texture(lightmap_tex, uv_lightmap, 0.f);
 	
 	if (fogEnabled > 0)
 	{

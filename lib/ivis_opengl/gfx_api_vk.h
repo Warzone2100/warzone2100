@@ -280,6 +280,8 @@ struct gfxapi_PipelineCreateInfo
 	{}
 };
 
+struct VkRoot; // forward-declare
+
 struct VkPSO final
 {
 	vk::Pipeline object;
@@ -311,7 +313,7 @@ private:
 
 	static vk::Format to_vk(const gfx_api::vertex_attribute_type& type);
 
-	static vk::SamplerCreateInfo to_vk(const gfx_api::sampler_type& type);
+	vk::SamplerCreateInfo to_vk(const gfx_api::sampler_type& type);
 
 	static vk::PrimitiveTopology to_vk(const gfx_api::primitive_type& primitive);
 
@@ -322,7 +324,8 @@ public:
 		  vk::RenderPass rp,
 		  const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 		  vk::SampleCountFlagBits rasterizationSamples,
-		  const vk::DispatchLoaderDynamic& _vkDynLoader
+		  const vk::DispatchLoaderDynamic& _vkDynLoader,
+		  const VkRoot& root
 		  );
 
 	~VkPSO();
@@ -331,9 +334,9 @@ public:
 	VkPSO(VkPSO&&) = default;
 	VkPSO& operator=(VkPSO&&) = default;
 
+private:
+	const VkRoot* root;
 };
-
-struct VkRoot; // forward-declare
 
 struct VkBuf final : public gfx_api::buffer
 {
@@ -425,6 +428,7 @@ struct VkRoot final : gfx_api::context
 	std::unique_ptr<gfx_api::backend_Vulkan_Impl> backend_impl;
 	VkhInfo debugInfo;
 	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
+	optional<float> mipLodBias;
 
 	std::vector<VkExtensionProperties> supportedInstanceExtensionProperties;
 	std::vector<const char*> instanceExtensions;
@@ -439,6 +443,18 @@ struct VkRoot final : gfx_api::context
 	vk::PhysicalDeviceProperties physDeviceProps;
 	vk::PhysicalDeviceFeatures physDeviceFeatures;
 	vk::PhysicalDeviceMemoryProperties memprops;
+#if 0 // this is not a "stable" extension yet
+	vk::PhysicalDevicePortabilitySubsetFeaturesKHR physDevicePortabilitySubsetFeatures;
+#endif
+	bool hasPortabilitySubset = false;
+
+	enum class LodBiasMethod
+	{
+		Unsupported,
+		SpecializationConstant,
+		SamplerMipLodBias
+	};
+	LodBiasMethod lodBiasMethod = LodBiasMethod::Unsupported;
 
 	QueueFamilyIndices queueFamilyIndices;
 	std::vector<const char*> enabledDeviceExtensions;
@@ -604,8 +620,9 @@ public:
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
+	virtual bool supportsMipLodBias() const override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
 	void initPixelFormatsSupport();
 	gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport(gfx_api::pixel_format format) const;
 	std::string calculateFormattedRendererInfoString() const;

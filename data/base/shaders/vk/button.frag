@@ -1,6 +1,8 @@
 #version 450
 //#pragma debug(on)
 
+layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+
 layout(set = 3, binding = 0) uniform sampler2D Texture;
 layout(set = 3, binding = 1) uniform sampler2D TextureTcmask;
 layout(std140, set = 0, binding = 0) uniform globaluniforms
@@ -44,13 +46,13 @@ layout(location = 0) out vec4 FragColor;
 void main()
 {
 	// Get color from texture unit 0
-	vec4 texColour = texture(Texture, texCoord);
+	vec4 texColour = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	vec4 fragColour;
 	if (tcmask == 1)
 	{
 		// Get tcmask information from texture unit 1
-		float maskAlpha = texture(TextureTcmask, texCoord).r;
+		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply colour using grain merge with tcmask
 		fragColour = (texColour + (teamcolour - 0.5) * maskAlpha) * colour;
