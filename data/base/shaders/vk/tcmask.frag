@@ -1,6 +1,8 @@
 #version 450
 //#pragma debug(on)
 
+layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+
 layout(set = 3, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 3, binding = 1) uniform sampler2D TextureTcmask; // tcmask
 layout(set = 3, binding = 2) uniform sampler2D TextureNormal; // normal map
@@ -50,7 +52,7 @@ layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	vec4 diffuseMap = texture(Texture, texCoord);
+	vec4 diffuseMap = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	if ((alphaTest != 0) && (diffuseMap.a <= 0.5))
 	{
@@ -61,7 +63,7 @@ void main()
 	vec3 N = normal;
 	if (normalmap != 0)
 	{
-		vec3 normalFromMap = texture(TextureNormal, texCoord).xyz;
+		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
 		// Complete replace normal with new value
 		N = normalFromMap.xzy * 2.0 - 1.0;
@@ -86,7 +88,7 @@ void main()
 
 		if (specularmap != 0)
 		{
-			float specularMapValue = texture(TextureSpecular, texCoord).r;
+			float specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
 			vec4 specularFromMap = vec4(specularMapValue, specularMapValue, specularMapValue, 1.0);
 
 			// Gaussian specular term computation
@@ -108,7 +110,7 @@ void main()
 	if (tcmask != 0)
 	{
 		// Get mask for team colors from texture
-		float maskAlpha = texture(TextureTcmask, texCoord).r;
+		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
 		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;

@@ -132,8 +132,9 @@ public:
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
+	virtual bool supportsMipLodBias() const override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
 private:
 
 	size_t frameNum = 0;

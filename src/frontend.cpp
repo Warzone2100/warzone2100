@@ -849,6 +849,53 @@ char const *graphicsOptionsRadarJumpString()
 	return war_GetRadarJump() ? _("Instant") : _("Tracked");
 }
 
+static std::shared_ptr<WIDGET> makeLODDistanceDropdown()
+{
+	std::vector<std::tuple<WzString, int>> dropDownChoices = {
+		{_("High"), -40},
+		{_("Default"), 0}
+	};
+
+	// If current value (from config) is not one of the presets in dropDownChoices, add a "Custom" entry
+	size_t currentSettingIdx = 0;
+	int currValue = war_getLODDistanceBiasPercentage();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, int>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+	else
+	{
+		dropDownChoices.push_back({WzString::fromUtf8(astringf("(%d)", currValue)), currValue});
+		currentSettingIdx = dropDownChoices.size() - 1;
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_LOD_DISTANCE_R;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setOnChange([dropDownChoices](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			ASSERT_OR_RETURN(, selectedIndex.value() < dropDownChoices.size(), "Invalid index");
+			war_setLODDistanceBiasPercentage(std::get<1>(dropDownChoices.at(selectedIndex.value())));
+		}
+	});
+
+	return Margin(0, 10).wrap(dropdown);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
 void startGraphicsOptionsMenu()
@@ -858,6 +905,13 @@ void startGraphicsOptionsMenu()
 	addBottomForm();
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	auto label = std::make_shared<W_LABEL>();
+	parent->attach(label);
+	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y - 14, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
+	label->setFontColour(WZCOL_TEXT_BRIGHT);
+	label->setString(_("* Takes effect on game restart"));
+	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	auto grid = std::make_shared<GridLayout>();
 	grid_allocation::slot row(0);
@@ -892,6 +946,14 @@ void startGraphicsOptionsMenu()
 	// RadarJump
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_RADAR_JUMP, _("Radar Jump"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_RADAR_JUMP_R, graphicsOptionsRadarJumpString(), WBUT_SECONDARY)));
+	row.start++;
+
+	// LOD Distance
+	// TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
+	std::string lodDistanceString = _("LOD Distance");
+	lodDistanceString += "*"; // takes effect on game restart
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_LOD_DISTANCE, lodDistanceString.c_str(), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, makeLODDistanceDropdown());
 	row.start++;
 
 	// screenshake

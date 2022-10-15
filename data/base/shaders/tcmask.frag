@@ -3,6 +3,10 @@
 
 //#pragma debug(on)
 
+// constants overridden by WZ when loading shaders (do not modify here in the shader source!)
+#define WZ_MIP_LOAD_BIAS 0.f
+//
+
 uniform sampler2D Texture; // diffuse map
 uniform sampler2D TextureTcmask; // tcmask
 uniform sampler2D TextureNormal; // normal map
@@ -29,6 +33,12 @@ uniform float fogStart;
 uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#define NEWGL
+#else
+#define texture(tex,uv,bias) texture2D(tex,uv,bias)
+#endif
+
+#ifdef NEWGL
 in float vertexDistance;
 in vec3 normal;
 in vec3 lightDir;
@@ -42,7 +52,7 @@ varying vec3 halfVec;
 varying vec2 texCoord;
 #endif
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#ifdef NEWGL
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
@@ -50,11 +60,7 @@ out vec4 FragColor;
 
 void main()
 {
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-	vec4 diffuseMap = texture(Texture, texCoord);
-	#else
-	vec4 diffuseMap = texture2D(Texture, texCoord);
-	#endif
+	vec4 diffuseMap = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	if (alphaTest && (diffuseMap.a <= 0.5))
 	{
@@ -65,11 +71,7 @@ void main()
 	vec3 N = normal;
 	if (normalmap != 0)
 	{
-		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-		vec3 normalFromMap = texture(TextureNormal, texCoord).xyz;
-		#else
-		vec3 normalFromMap = texture2D(TextureNormal, texCoord).xyz;
-		#endif
+		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
 		// Complete replace normal with new value
 		N = normalFromMap.xzy * 2.0 - 1.0;
@@ -94,11 +96,7 @@ void main()
 
 		if (specularmap != 0)
 		{
-			#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-			float specularMapValue = texture(TextureSpecular, texCoord).r;
-			#else
-			float specularMapValue = texture2D(TextureSpecular, texCoord).r;
-			#endif
+			float specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
 			vec4 specularFromMap = vec4(specularMapValue, specularMapValue, specularMapValue, 1.0);
 
 			// Gaussian specular term computation
@@ -120,11 +118,7 @@ void main()
 	if (tcmask != 0)
 	{
 		// Get mask for team colors from texture
-		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-		float maskAlpha = texture(TextureTcmask, texCoord).r;
-		#else
-		float maskAlpha = texture2D(TextureTcmask, texCoord).r;
-		#endif
+		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
 		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
@@ -153,7 +147,7 @@ void main()
 		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
 	}
 
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+	#ifdef NEWGL
 	FragColor = fragColour;
 	#else
 	gl_FragColor = fragColour;

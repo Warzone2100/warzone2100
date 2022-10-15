@@ -305,7 +305,7 @@ namespace gfx_api
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
-		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, gfx_api::backend_type backend);
+		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, gfx_api::backend_type backend);
 		virtual void beginRenderPass() = 0;
 		virtual void endRenderPass() = 0;
 		virtual void debugStringMarker(const char *str) = 0;
@@ -326,6 +326,7 @@ namespace gfx_api
 		virtual bool setSwapInterval(swap_interval_mode mode) = 0;
 		virtual swap_interval_mode getSwapInterval() const = 0;
 		virtual bool textureFormatIsSupported(pixel_format_target target, pixel_format format, pixel_format_usage::flags usage) = 0;
+		virtual bool supportsMipLodBias() const = 0;
 	public:
 		// High-level API for getting a texture object from file / uncompressed bitmap
 		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
@@ -334,7 +335,7 @@ namespace gfx_api
 		optional<unsigned int> getClosestSupportedUncompressedImageFormatChannels(pixel_format_target target, unsigned int channels);
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
-		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) = 0;
+		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) = 0;
 	};
 
 	// High-level API for getting an uncompressed image (iV_Image) from a file

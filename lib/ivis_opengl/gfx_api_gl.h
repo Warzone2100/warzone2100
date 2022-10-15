@@ -113,7 +113,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc);
+	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc, optional<float> mipLodBias);
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
 
@@ -131,11 +131,11 @@ private:
 
 	void getLocs();
 
-	void build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+	void build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias,
 					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
 					   const char * fragment_header, const std::string& fragmentPath,
-					   const std::vector<std::string> &uniformNames);
+					   const std::vector<std::string> &uniformNames, optional<float> mipLodBias);
 
 	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms);
 
@@ -179,6 +179,7 @@ struct gl_context final : public gfx_api::context
 	GLuint scratchbuffer = 0;
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
+	optional<float> mipLodBias;
 
 	bool gles = false;
 	bool fragmentHighpFloatAvailable = true;
@@ -232,8 +233,9 @@ struct gl_context final : public gfx_api::context
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
+	virtual bool supportsMipLodBias() const override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
 	void initPixelFormatsSupport();
 	void _beginRenderPassImpl();
 private:

@@ -1,6 +1,10 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
+// constants overridden by WZ when loading shaders (do not modify here in the shader source!)
+#define WZ_MIP_LOAD_BIAS 0.f
+//
+
 uniform sampler2D tex;
 uniform sampler2D lightmap_tex;
 
@@ -10,6 +14,12 @@ uniform float fogStart;
 uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#define NEWGL
+#else
+#define texture(tex,uv,bias) texture2D(tex,uv,bias)
+#endif
+
+#ifdef NEWGL
 in vec4 color;
 in vec2 uv1;
 in vec2 uv2;
@@ -21,7 +31,7 @@ varying vec2 uv2;
 varying float vertexDistance;
 #endif
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#ifdef NEWGL
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
@@ -29,11 +39,7 @@ out vec4 FragColor;
 
 void main()
 {
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-	vec4 fragColor = color * texture(tex, uv1) * texture(lightmap_tex, uv2);
-	#else
-	vec4 fragColor = color * texture2D(tex, uv1) * texture2D(lightmap_tex, uv2);
-	#endif
+	vec4 fragColor = color * texture(tex, uv1, WZ_MIP_LOAD_BIAS) * texture(lightmap_tex, uv2, 0.f);
 	
 	if (fogEnabled > 0)
 	{
@@ -49,7 +55,7 @@ void main()
 		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), clamp(fogFactor, 0.0, 1.0));
 	}
 
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+	#ifdef NEWGL
 	FragColor = fragColor;
 	#else
 	gl_FragColor = fragColor;

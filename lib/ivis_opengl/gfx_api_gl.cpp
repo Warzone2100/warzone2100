@@ -32,6 +32,7 @@
 #include <regex>
 #include <limits>
 #include <typeindex>
+#include <sstream>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -654,7 +655,7 @@ typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_
 	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc, optional<float> mipLodBias) :
 desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 {
 	std::string vertexShaderHeader;
@@ -686,13 +687,14 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		fragmentShaderHeader = std::string(shaderVersionStr) + "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\nprecision highp int;\n#else\nprecision mediump float;\n#endif\n";
 	}
 
-	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable,
+	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
 				  shader_to_file_table.at(shader).friendly_name,
 				  vertexShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).vertex_file,
 				  fragmentShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).fragment_file,
-				  shader_to_file_table.at(shader).uniform_names);
+				  shader_to_file_table.at(shader).uniform_names,
+				  mipLodBias);
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
@@ -1008,11 +1010,35 @@ static std::tuple<std::string, std::unordered_map<std::string, std::string>> ren
 	return std::tuple<std::string, std::unordered_map<std::string, std::string>>(modifiedFragmentShaderSource, duplicateFragmentUniformNameMap);
 }
 
+static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, float mipLodBias)
+{
+	// Look for:
+	// #define WZ_MIP_LOAD_BIAS 0.f
+	const auto re = std::regex("#define WZ_MIP_LOAD_BIAS .*", std::regex_constants::ECMAScript);
+
+	std::string floatAsString = astringf("%f", mipLodBias);
+	size_t lastNon0Pos = floatAsString.find_last_not_of('0');
+	if (lastNon0Pos != std::string::npos)
+	{
+		floatAsString = floatAsString.substr(0, lastNon0Pos + 1);
+	}
+	else
+	{
+		// only 0?
+		return;
+	}
+	ASSERT(floatAsString.find_last_not_of("0123456789.-") == std::string::npos, "Found unexpected / invalid character in: %s", floatAsString.c_str());
+
+	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
+}
+
 void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+											 bool patchFragmentShaderMipLodBias,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
 											 const char * fragment_header, const std::string& fragmentPath,
-											 const std::vector<std::string> &uniformNames)
+											 const std::vector<std::string> &uniformNames,
+											 optional<float> mipLodBias)
 {
 	GLint status;
 	bool success = true; // Assume overall success
@@ -1116,6 +1142,11 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 						debug(LOG_3D, "  - Renaming \"%s\" -> \"%s\" in fragment shader", originalUniformName.c_str(), replacementUniformName.c_str());
 					}
 				}
+			}
+
+			if (patchFragmentShaderMipLodBias && mipLodBias.has_value())
+			{
+				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
 			}
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
@@ -1534,7 +1565,8 @@ gfx_api::pipeline_state_object * gl_context::build_pipeline(const gfx_api::state
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
-	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, state_desc, shader_mode, uniform_blocks, attribute_descriptions);
+	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
+	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, state_desc, shader_mode, uniform_blocks, attribute_descriptions, mipLodBias);
 }
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
@@ -2054,7 +2086,7 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	debug(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
 }
 
-bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode)
+bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias)
 {
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();
@@ -2092,6 +2124,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		debug(LOG_3D, "Failed to set swap interval: %d; defaulting to vsync on", to_int(mode));
 		setSwapInterval(gfx_api::context::swap_interval_mode::vsync);
 	}
+
+	mipLodBias = _mipLodBias;
 
 	return true;
 }
@@ -2716,3 +2750,26 @@ gfx_api::context::swap_interval_mode gl_context::getSwapInterval() const
 	return backend_impl->getSwapInterval();
 }
 
+bool gl_context::supportsMipLodBias() const
+{
+	if (!gles)
+	{
+		if (GLAD_GL_VERSION_2_1)
+		{
+			// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, ...) should be available in OpenGL 3.0+ (OpenGL 3.3+?)
+			// But also can be supported by providing bias to texture() / texture2d() sampling call in shader (so just do that)
+			return true;
+		}
+		return false;
+	}
+	else
+	{
+		if (GLAD_GL_ES_VERSION_2_0)
+		{
+			// Can support on OpenGL ES 2.0+
+			// By providing bias to texture() (OpenGL ES 3.0+) or texture2d() (OpenGL ES 2.0) sampling call in shader
+			return true;
+		}
+		return false;
+	}
+}
