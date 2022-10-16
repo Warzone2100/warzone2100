@@ -956,6 +956,7 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 		}
 		if ((psDroid->action == DACTION_WAITFORREPAIR || psDroid->action == DACTION_WAITDURINGREPAIR) && 
+				psDroid->order.psObj && 
 				objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) > REPAIR_RANGE * REPAIR_RANGE)
 		{ // was being repaired, but somehow got lost. recalculate reparing point
 			psDroid->order.psObj = nullptr;
