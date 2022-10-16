@@ -1154,6 +1154,12 @@ void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 		// ModeQueue because delivery points are not yet synchronised!
 		orderDroidLoc(psDroid, DORDER_MOVE, dp->coords.x, dp->coords.y, ModeQueue);
 	}
+	else
+	{ // nothing to do, no commander, no repair point to go to. Stop, and guard this place.
+		psDroid->order.psObj = nullptr;
+		objTrace(psDroid->id, "Repair complete - guarding the place at x=%i y=%i", psDroid->pos.x, psDroid->pos.y);
+		orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
+	}
 } 
 
 bool droidUpdateRepair(DROID *psDroid)
