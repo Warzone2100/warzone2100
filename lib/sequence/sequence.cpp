@@ -152,7 +152,7 @@ static int dropped = 0;
 
 // Screen dimensions
 #define NUM_VERTICES 4
-static GFX *videoGfx = nullptr;
+static std::unique_ptr<GFX> videoGfx = nullptr;
 static gfx_api::gfxFloat vertices[NUM_VERTICES][2];
 static gfx_api::gfxFloat Scrnvidpos[3];
 
@@ -598,7 +598,22 @@ static void seq_InitOgg(void)
 	Timer_start();
 }
 
-bool seq_Play(const std::shared_ptr<VideoProvider>& video)
+void update_buffers()
+{
+	if (videoGfx == nullptr)
+	{
+		return;
+	}
+
+	// when using scanlines we need to double the height
+	const uint32_t height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
+	const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / (float)texture_width;
+	const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / (float)texture_height;
+	gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = {0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight};
+	videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
+}
+
+bool seq_Play(const std::shared_ptr<VideoProvider> &video)
 {
 	int pp_level_max = 0;
 	int pp_level = 0;
@@ -780,21 +795,19 @@ bool seq_Play(const std::shared_ptr<VideoProvider>& video)
 	}
 
 	/* open video */
-	videoGfx = new GFX(GFX_TEXTURE, 2);
+	videoGfx = std::make_unique<GFX>(GFX_TEXTURE, 2);
 	if (theora_p)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
 			debug(LOG_ERROR, "Video size too large, must be below %zu x %zu!",
 			      texture_width, texture_height);
-			delete videoGfx;
 			videoGfx = nullptr;
 			return false;
 		}
 		if (videodata.ti.pixelformat != OC_PF_420)
 		{
 			debug(LOG_ERROR, "Video not in YUV420 format!");
-			delete videoGfx;
 			videoGfx = nullptr;
 			return false;
 		}
@@ -811,12 +824,7 @@ bool seq_Play(const std::shared_ptr<VideoProvider>& video)
 		videoGfx->makeCompatibleTexture(&blackFrame, "mem::blackframe");
 		blackFrame.clear();
 
-		// when using scanlines we need to double the height
-		const uint32_t height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
-		const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / (float)texture_width;
-		const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / (float)texture_height;
-		gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
-		videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
+		update_buffers();
 	}
 
 	/* on to the main decode loop.  We assume in this example that audio
@@ -1023,7 +1031,6 @@ void seq_Shutdown()
 		debug(LOG_VIDEO, "movie is not playing");
 		return;
 	}
-	delete videoGfx;
 	videoGfx = nullptr;
 
 	if (vorbis_p)
@@ -1087,31 +1094,11 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 	vertices[3][0] = sizeX;
 	vertices[3][1] = sizeY;
 
-	if (sizeX > 640 || sizeY > 480)
-	{
-		const float aspect = screenWidth / (float)screenHeight, videoAspect = 4 / (float)3;
-
-		if (aspect > videoAspect) // x offset
-		{
-			int offset = static_cast<int>((screenWidth - screenHeight * videoAspect) / 2);
-			vertices[1][0] += offset;
-			vertices[3][0] += offset;
-			vertices[0][0] -= offset;
-			vertices[2][0] -= offset;
-		}
-		else // y offset
-		{
-			int offset = static_cast<int>((screenHeight - screenWidth / videoAspect) / 2);
-			vertices[0][1] += offset;
-			vertices[1][1] += offset;
-			vertices[2][1] -= offset;
-			vertices[3][1] -= offset;
-		}
-	}
-
 	Scrnvidpos[0] = posX;
 	Scrnvidpos[1] = posY;
 	Scrnvidpos[2] = 0.0f;
+
+	update_buffers();
 }
 
 void seq_setScanlinesDisabled(bool flag)

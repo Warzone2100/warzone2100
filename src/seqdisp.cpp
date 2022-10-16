@@ -413,32 +413,35 @@ bool seq_RenderVideoToBuffer(const WzString &sequenceName, int seqCommand)
 
 static void seq_SetUserResolution()
 {
+	glm::uvec2 video_size;
+
 	switch (war_GetFMVmode())
 	{
 	case FMV_1X:
-		{
-			// Native (1x)
-			const int x = (screenWidth - 320) / 2;
-			const int y = (screenHeight - 240) / 2;
-			seq_SetDisplaySize(320, 240, x, y);
-			break;
-		}
-	case FMV_2X:
-		{
-			// Double (2x)
-			const int x = (screenWidth - 640) / 2;
-			const int y = (screenHeight - 480) / 2;
-			seq_SetDisplaySize(640, 480, x, y);
-			break;
-		}
-	case FMV_FULLSCREEN:
-		seq_SetDisplaySize(screenWidth, screenHeight, 0, 0);
+		// Native (1x)
+		video_size = {320, 240};
 		break;
+
+	case FMV_2X:
+		// Double (2x)
+		video_size = {640, 480};
+		break;
+
+	case FMV_FULLSCREEN:
+	{
+		const auto scaled_width = std::min(screenWidth / 4.0f, screenHeight / 3.0f) * 4.0f;
+		video_size = {static_cast<int>(scaled_width), static_cast<int>(scaled_width * 3 / 4.0f)};
+		break;
+	}
 
 	default:
 		ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
-		break;
+		return;
 	}
+
+	const int x = (screenWidth - video_size.x) / 2;
+	const int y = (screenHeight - video_size.y) / 2;
+	seq_SetDisplaySize(video_size.x, video_size.y, x, y);
 }
 
 static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audioName)
@@ -539,8 +542,20 @@ static bool seq_StartFullScreenVideo(const WzString& videoName, const WzString& 
 	return seqPlayOrQueueFetch(videoName, audioName);
 }
 
+void update_user_resolution()
+{
+	static glm::uvec2 previousScreenResolution = {0, 0};
+	if (previousScreenResolution.x != screenWidth || previousScreenResolution.y != screenHeight)
+	{
+		seq_SetUserResolution();
+		previousScreenResolution = {screenWidth, screenHeight};
+	}
+}
+
 bool seq_UpdateFullScreenVideo()
 {
+	update_user_resolution();
+
 	if (!aVideoProvider)
 	{
 		// request has been queued
