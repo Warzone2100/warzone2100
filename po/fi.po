@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-16 06:10\n"
+"PO-Revision-Date: 2022-10-16 18:20\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -34,40 +34,40 @@ msgstr "Tämä rakenne sisältää teknologiaa joka on välttämätöntä hankke
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "ALPHA-TUKIKOHTATEHTÄVÄ: Haaskanmetsästäjät"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Haaskanmetsästäjät lähestyvät tukikohtaamme."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Puolusta tukikohtaa ja tuhoa sen jälkeen haaskantajien leirit."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "ALPHA-TUKIKOHTATEHTÄVÄ: Voimavirran nousu havaittu"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "Voimavirran nousu on havaittu sijainnistamme etelään."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Tutki ja turvaa alue."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "ALPHA-TUKIKOHTATEHTÄVÄ: Uusi maailmankatsomuksellisuus"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "Uusi maailmankatsomus hallinnoi ylivoimaista aseteknologiaa."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "Heillä saattaa olla hallussaan synaptista linkkitekniikkaa, on ensisijaisen tärkeätä saada se haltuumme."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -75,11 +75,11 @@ msgstr "KULJETUSTEHTÄVÄ: Paikanna ja tuo esineet"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Lastaa hyökkäysosasto kuljetusalukseen."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "Laskeutuessa, tutki rauniot ja ota haltuun mikäli muinaisia arvoesineitä löytyy."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
@@ -87,12 +87,12 @@ msgstr "KULJETUSTEHTÄVÄ: Ota selvää tutkimuskeskuksesta"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Tutki alue ja haltuunota muinaisesineet."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Lisävahvistuksia on saatavissa."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -100,11 +100,11 @@ msgstr "KULJETUSTEHTÄVÄ: Koodattuja signaaleja havaittu"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "Laita lähettijoukko asialle tutkimaan näitä signaaleja."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "Käytä rekkoja rakentaaksesi puolustusrakenteita LZ:llesi."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -112,11 +112,11 @@ msgstr "KULJETUSTEHTÄVÄ: Vihollisten kuljetus havaittu"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "Partioi määritelty alue josko siellä olisi vihollisen rakennuksia."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "Jatka LZ#2:een. Älä tee hyökkäystä vihollista kohtaan tässä vaiheessa."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
@@ -124,11 +124,11 @@ msgstr "KULJETUSTEHTÄVÄ: Synaptisen linkin sijainti"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "Uusi maailmankatsomus kartoittaa synaptista linkkiteknologiaa tässä kohteessa."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "Kokoa hyökkäysjoukkue ja ota haltuun synaptinen linkkiteknologia."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -136,11 +136,11 @@ msgstr "KULJETUSTEHTÄVÄ: Uudet tavoitteet"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "Uusi maailmankatsomus etsii muinaisesineitä tässä näköpiirissä."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "Pudota heidät. Älä anna yhdenkään vihollisen poistua tältä alueelta."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
@@ -148,35 +148,35 @@ msgstr "KULJETUSTEHTÄVÄ: Vihollisten tukikohtaa rakennetaan"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "Vihollisjoukot kokoavat etutukikohtaa tässä sijainnissa."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "Tuhoa tukikohta ja turvaa alue."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "ALPHA-TUKIKOHTATEHTÄVÄ: Perusta edustatukikohta"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Perusta tasangolle edustatukikohta ja aja Uusi maailmankatsomus pois."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Rakenna puolustusrakenteita kunnes vihreä tavoitemääritin katoaa."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "ALPHA-TUKIKOHTATEHTÄVÄ: Vastahyökkäys"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "Vihollisjoukot lähestyvät idästä sekä pohjoisesta."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Puolusta ja pidä tukikohdat hallussa torjuen kaikki hyökkäykset."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
