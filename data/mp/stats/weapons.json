@@ -2109,7 +2109,7 @@
 	},
 	"Howitzer03-Rot": {
 		"buildPoints": 1600,
-		"buildPower": 450,
+		"buildPower": 400,
 		"damage": 200,
 		"designable": 1,
 		"effectSize": 225,
@@ -2146,7 +2146,7 @@
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "HOWITZERS",
 		"weaponWav": "lrgcan.ogg",
-		"weight": 20000
+		"weight": 10000
 	},
 	"Howitzer105Mk1": {
 		"buildPoints": 1000,
@@ -3422,8 +3422,8 @@
 		"weight": 5000
 	},
 	"Mortar3ROTARYMk1": {
-		"buildPoints": 900,
-		"buildPower": 200,
+		"buildPoints": 800,
+		"buildPower": 175,
 		"damage": 60,
 		"designable": 1,
 		"effectSize": 100,
