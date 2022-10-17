@@ -18,7 +18,7 @@
 		"SOFT": 75
 	},
 	"ARTILLERY ROUND": {
-		"BUNKER": 40,
+		"BUNKER": 20,
 		"HARD": 100,
 		"MEDIUM": 120,
 		"SOFT": 200
