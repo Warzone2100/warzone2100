@@ -3791,6 +3791,10 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 
 void VkRoot::beginRenderPass()
 {
+	if (startedRenderPass)
+	{
+		return; // don't double-start the render pass
+	}
 	startRenderPass();
 }
 
@@ -3801,6 +3805,8 @@ void VkRoot::endRenderPass()
 	currentPSO = nullptr;
 	buffering_mechanism::get_current_resources().cmdDraw.endRenderPass(vkDynLoader);
 	buffering_mechanism::get_current_resources().cmdDraw.end(vkDynLoader);
+
+	startedRenderPass = false;
 
 	// Add memory barrier at end of cmdCopy
 	const auto memoryBarriers = std::array<vk::MemoryBarrier, 1> {
@@ -3938,6 +3944,8 @@ void VkRoot::startRenderPass()
 		vk::Rect2D().setExtent(swapchainSize)
 	};
 	buffering_mechanism::get_current_resources().cmdDraw.setScissor(0, scissors, vkDynLoader);
+
+	startedRenderPass = true;
 }
 
 void VkRoot::set_polygon_offset(const float& offset, const float& slope)

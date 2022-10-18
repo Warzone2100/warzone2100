@@ -511,6 +511,7 @@ struct VkRoot final : gfx_api::context
 	bool debugCallbacksEnabled = true;
 	bool debugUtilsExtEnabled = false;
 
+	bool startedRenderPass = false;
 	const size_t maxErrorHandlingDepth = 10;
 	std::vector<vk::Result> errorHandlingDepth;
 
