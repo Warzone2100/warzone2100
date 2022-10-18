@@ -832,13 +832,13 @@
 				"moving": "fxvtl5to8.pie"
 			},
 			"hover01": {
-				"left": "prmhov1.pie"
+				"left": "prmhov2.pie"
 			},
 			"hover02": {
-				"left": "prmhov1.pie"
+				"left": "prmhov2.pie"
 			},
 			"hover03": {
-				"left": "prmhov1.pie"
+				"left": "prmhov2.pie"
 			},
 			"tracked01": {
 				"left": "prmltrk2.pie",
