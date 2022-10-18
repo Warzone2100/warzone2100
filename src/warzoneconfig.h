@@ -36,6 +36,8 @@
 
 #define MIN_MPINACTIVITY_MINUTES 4
 
+#define WZ_LODDISTANCEPERCENTAGE_HIGH -50
+
 /***************************************************************************/
 /*
  *	Global Definitions

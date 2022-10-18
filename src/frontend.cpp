@@ -852,8 +852,8 @@ char const *graphicsOptionsRadarJumpString()
 static std::shared_ptr<WIDGET> makeLODDistanceDropdown()
 {
 	std::vector<std::tuple<WzString, int>> dropDownChoices = {
-		{_("High"), -40},
-		{_("Default"), 0}
+		{_("High"), WZ_LODDISTANCEPERCENTAGE_HIGH},
+		{_("Default"), 0} // the *system* default (no supplied bias)
 	};
 
 	// If current value (from config) is not one of the presets in dropDownChoices, add a "Custom" entry

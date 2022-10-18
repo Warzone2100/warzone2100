@@ -75,7 +75,7 @@ struct WARZONE_GLOBALS
 	uint8_t MPopenSpectatorSlots = 0;
 	int fogStart = 4000;
 	int fogEnd = 8000;
-	int lodDistanceBiasPercentage = -40;
+	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
 };
 
 static WARZONE_GLOBALS warGlobs;
