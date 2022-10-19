@@ -970,7 +970,8 @@ static void startGameLoop()
 	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
 	{
 		debug(LOG_FATAL, "Shutting down after failure");
-		exit(EXIT_FAILURE);
+		wzQuit(EXIT_FAILURE);
+		return;
 	}
 
 	screen_StopBackDrop();
