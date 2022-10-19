@@ -198,6 +198,7 @@ COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base"
 	${_glsl_generatedfiles_PATHS}
 	${_texpages_PATHS}
+	BUILD_ALWAYS_TARGET data_base
 	IGNORE_GIT
 	QUIET
 )
@@ -223,6 +224,7 @@ COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 		"structs"
 		"wrf"
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/mp"
+	BUILD_ALWAYS_TARGET data_mp
 	IGNORE_GIT
 	QUIET
 )
@@ -257,15 +259,15 @@ if(WZ_INCLUDE_VIDEOS)
 endif()
 
 ADD_CUSTOM_TARGET(data ALL
-	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/base.wz" "${CMAKE_CURRENT_BINARY_DIR}/mp.wz")
+	DEPENDS data_base data_mp)
 if(TARGET glsl_compilation)
-	add_dependencies(data glsl_compilation)
+	add_dependencies(data_base glsl_compilation)
 endif()
 if(TARGET texture_encoding)
-	add_dependencies(data texture_encoding)
+	add_dependencies(data_base texture_encoding)
 endif()
 if(TARGET texture_staging)
-	add_dependencies(data texture_staging)
+	add_dependencies(data_base texture_staging)
 endif()
 
 # Copy font files to build directory to support IDE build+run (from the build dir) scenarios

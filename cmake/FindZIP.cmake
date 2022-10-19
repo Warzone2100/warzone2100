@@ -67,6 +67,7 @@ MARK_AS_ADVANCED(ZIP_EXECUTABLE)
 #			   PATHS [files...] [WORKING_DIRECTORY dir]
 #			   [PATHS [files...] [WORKING_DIRECTORY dir]]
 #			   [DEPENDS [depends...]]
+#			   [BUILD_ALWAYS_TARGET [target name]]
 #			   [IGNORE_GIT]
 #			   [QUIET])
 #
@@ -84,6 +85,8 @@ MARK_AS_ADVANCED(ZIP_EXECUTABLE)
 # DEPENDS may be used to specify additional dependencies, which are appended to the
 # auto-generated list of dependencies used for the internal call to `add_custom_command`.
 #
+# If BUILD_ALWAYS_TARGET is specified, uses add_custom_target to create a target that is always built.
+#
 # QUIET attempts to suppress (most) output from the ZIP_EXECUTABLE that is used.
 # (This option may have no effect, if unsupported by the ZIP_EXECUTABLE.)
 #
@@ -94,7 +97,7 @@ function(COMPRESS_ZIP)
 	endif()
 
 	set(_options ALL IGNORE_GIT QUIET)
-	set(_oneValueArgs OUTPUT COMPRESSION_LEVEL) #WORKING_DIRECTORY)
+	set(_oneValueArgs OUTPUT COMPRESSION_LEVEL BUILD_ALWAYS_TARGET) #WORKING_DIRECTORY)
 	set(_multiValueArgs DEPENDS)
 
 	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
@@ -220,12 +223,22 @@ function(COMPRESS_ZIP)
 		list(APPEND _depends_PATHS ${_parsedArguments_DEPENDS})
 	endif()
 
-	add_custom_command(
-		OUTPUT "${_parsedArguments_OUTPUT}"
-		${_COMMAND_LIST}
-		DEPENDS ${_depends_PATHS}
-		WORKING_DIRECTORY "${_workingDirectory}"
-		VERBATIM
-	)
+	if(NOT _parsedArguments_BUILD_ALWAYS_TARGET)
+		add_custom_command(
+			OUTPUT "${_parsedArguments_OUTPUT}"
+			${_COMMAND_LIST}
+			DEPENDS ${_depends_PATHS}
+			WORKING_DIRECTORY "${_workingDirectory}"
+			VERBATIM
+		)
+	else()
+		add_custom_target(
+			${_parsedArguments_BUILD_ALWAYS_TARGET} ALL
+			${_COMMAND_LIST}
+			DEPENDS ${_depends_PATHS}
+			WORKING_DIRECTORY "${_workingDirectory}"
+			VERBATIM
+		)
+	endif()
 
 endfunction()
