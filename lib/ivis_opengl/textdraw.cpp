@@ -1031,6 +1031,7 @@ public:
 	std::unique_ptr<FTFace> regularBold;
 	std::unique_ptr<FTFace> bold;
 	std::unique_ptr<FTFace> medium;
+	std::unique_ptr<FTFace> mediumBold;
 	std::unique_ptr<FTFace> small;
 	std::unique_ptr<FTFace> smallBold;
 };
@@ -1062,6 +1063,7 @@ static bool inline initializeCJKFontsIfNeeded()
 		cjkFonts->regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 700));
 		cjkFonts->bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 21 * 64, horizDPI, vertDPI, 400));
 		cjkFonts->medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 400));
+		cjkFonts->mediumBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 700));
 		cjkFonts->small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 400));
 		cjkFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 700));
 	}
@@ -1097,6 +1099,8 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 					return *(cjkFonts->bold);
 				case font_medium:
 					return *(cjkFonts->medium);
+				case font_medium_bold:
+					return *(cjkFonts->mediumBold);
 				case font_small:
 					return *(cjkFonts->small);
 				case font_bar:
@@ -1118,6 +1122,8 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 		return *(baseFonts.bold);
 	case font_medium:
 		return *(baseFonts.medium);
+	case font_medium_bold:
+		return *(baseFonts.mediumBold);
 	case font_small:
 		return *(baseFonts.small);
 	case font_bar:
@@ -1154,6 +1160,7 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 		baseFonts.regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI));
 		baseFonts.bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI));
 		baseFonts.medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI));
+		baseFonts.mediumBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 16 * 64, horizDPI, vertDPI));
 		baseFonts.small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
 		baseFonts.smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
 	}
