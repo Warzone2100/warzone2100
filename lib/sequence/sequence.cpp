@@ -822,6 +822,7 @@ bool seq_Play(const std::shared_ptr<VideoProvider> &video)
 
 		Allocate_videoFrame();
 		videoGfx->makeCompatibleTexture(&blackFrame, "mem::blackframe");
+		videoGfx->updateTexture(blackFrame);
 		blackFrame.clear();
 
 		update_buffers();
