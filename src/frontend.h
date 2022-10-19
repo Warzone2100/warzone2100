@@ -131,6 +131,13 @@ void seqScrollEvent();
 
 struct DisplayTextOptionCache
 {
+	enum class OverflowBehavior
+	{
+		None,
+		ShrinkFont
+	};
+	OverflowBehavior overflowBehavior = OverflowBehavior::None;
+	int lastWidgetWidth = 0;
 	WzText wzText;
 };
 
