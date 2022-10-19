@@ -38,6 +38,7 @@ enum iV_fonts
 	font_bar,
 	font_scaled,
 	font_regular_bold,
+	font_medium_bold,
 	font_count
 };
 
