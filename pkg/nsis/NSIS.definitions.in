@@ -49,6 +49,7 @@
 !endif
 !if "@WZ_VS_PLATFORM_NAME@" == "arm64"
   !define WIN64 1
+  !define WINARM64 1
 !endif
 
 !if "@WZ_VS_PLATFORM_NAME@" == ""

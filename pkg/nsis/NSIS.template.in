@@ -670,6 +670,16 @@ Function .onInit
     Quit
   !endif
   ${EndIf}
+  
+  !ifdef WINARM64
+    ;Add a warning for the common case (when accidentally downloading the ARM64 build on an x86/x64 machine)
+    ${If} ${IsNativeAMD64}
+    ${OrIf} ${IsNativeIA32}
+      MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 '$(WZ_ARM64_INSTALL_NON_ARM64)' IDYES installarm64anyway
+      Quit
+    installarm64anyway:
+    ${EndIf}
+  !endif
 
   !ifndef PORTABLE
     ${If} $INSTDIR == "" ; Don't override setup.exe /D=c:\custom_dir
