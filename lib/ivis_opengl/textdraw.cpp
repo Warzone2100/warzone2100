@@ -1286,6 +1286,36 @@ void iV_SetTextColour(PIELIGHT colour)
 	font_colour[3] = colour.byte.a / 255.0f;
 }
 
+optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID)
+{
+	switch (fontID)
+	{
+		// bold fonts
+		case font_large: // is actually bold
+			return font_medium_bold;
+		case font_medium_bold:
+			return font_regular_bold;
+		case font_regular_bold:
+			return font_bar; // small_bold
+		case font_bar:	// small_bold
+			return nullopt;
+
+		// regular fonts
+		case font_medium:
+			return font_regular;
+		case font_scaled: // treated the same as font_regular
+		case font_regular:
+			return font_small;
+		case font_small:
+			return nullopt;
+
+		case font_count:
+			return nullopt;
+	}
+
+	return nullopt; // silence compiler warning
+}
+
 static bool breaksLine(char const c)
 {
 	return c == ASCII_NEWLINE || c == '\n';
