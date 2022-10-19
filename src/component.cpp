@@ -271,6 +271,10 @@ void displayStructureButton(STRUCTURE *psStructure, const Vector3i *rotation, co
 
 void displayStructureStatButton(STRUCTURE_STATS *Stats, const Vector3i *rotation, const Vector3i *Position, int scale)
 {
+	if (Stats->pIMD.empty() || Stats->pIMD[0] == nullptr)
+	{
+		return; // error with loaded stats/models - probably due to a mod
+	}
 	sharedStructureButton(Stats, Stats->pIMD[0], rotation, Position, scale);
 }
 
