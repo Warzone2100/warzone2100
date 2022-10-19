@@ -99,7 +99,7 @@ static std::shared_ptr<IMAGEFILE> pFlagsImages;
 // Forward definitions
 
 static W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
-static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style);
+static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style, optional<unsigned int> minimumWidth = nullopt);
 static std::shared_ptr<W_SLIDER> makeFESlider(UDWORD id, UDWORD parent, UDWORD stops, UDWORD pos);
 static std::shared_ptr<WIDGET> addMargin(std::shared_ptr<WIDGET> widget);
 
@@ -2333,26 +2333,29 @@ void startGameOptionsMenu()
 	auto grid = std::make_shared<GridLayout>();
 	SettingsGridBuilder gridBuilder(grid);
 
+#define MINIMUM_GAME_OPTIONS_BUTTON_WIDTH (280)
+#define MINIMUM_GAME_OPTIONS_RIGHT_BUTTON_WIDTH (240)
+
 	// language
 	gridBuilder.addRow(
-		makeTextButton(FRONTEND_LANGUAGE, _("Language"), WBUT_SECONDARY),
+		makeTextButton(FRONTEND_LANGUAGE, _("Language"), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH),
 		makeLanguageDropdown()
 	);
 
 	// Difficulty
 	gridBuilder.addRow(
-		makeTextButton(FRONTEND_DIFFICULTY, _("Campaign Difficulty"), WBUT_SECONDARY),
-		makeTextButton(FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString(), WBUT_SECONDARY)
+		makeTextButton(FRONTEND_DIFFICULTY, _("Campaign Difficulty"), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH),
+		makeTextButton(FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString(), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_RIGHT_BUTTON_WIDTH)
 	);
 
 	// Camera speed
 	gridBuilder.addRow(
-		makeTextButton(FRONTEND_CAMERASPEED, _("Camera Speed"), WBUT_SECONDARY),
-		makeTextButton(FRONTEND_CAMERASPEED_R, gameOptionsCameraSpeedString(), WBUT_SECONDARY)
+		makeTextButton(FRONTEND_CAMERASPEED, _("Camera Speed"), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH),
+		makeTextButton(FRONTEND_CAMERASPEED_R, gameOptionsCameraSpeedString(), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_RIGHT_BUTTON_WIDTH)
 	);
 
 	// Colour stuff
-	gridBuilder.addRow(makeTextButton(FRONTEND_COLOUR, _("Unit Colour:"), 0));
+	gridBuilder.addRow(makeTextButton(FRONTEND_COLOUR, _("Unit Colour:"), 0, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH));
 
 	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
 	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
@@ -2384,7 +2387,7 @@ void startGameOptionsMenu()
 	gridBuilder.addRow(
 		colorsMargin.wrap(
 			Alignment(Alignment::Vertical::Top, Alignment::Horizontal::Left).wrap(
-				makeTextButton(FRONTEND_COLOUR_CAM, _("Campaign"), 0)
+				makeTextButton(FRONTEND_COLOUR_CAM, _("Campaign"), 0, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH - colorsMargin.left)
 			)
 		),
 		campaignColor
@@ -2405,7 +2408,7 @@ void startGameOptionsMenu()
 	gridBuilder.addRow(
 		colorsMargin.wrap(
 			Alignment(Alignment::Vertical::Top, Alignment::Horizontal::Left).wrap(
-				makeTextButton(FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"), 0)
+				makeTextButton(FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"), 0, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH - colorsMargin.left)
 			)
 		),
 		multiplayerColor
@@ -2894,7 +2897,38 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
 
-	cache.wzText.setText(psBut->pText, psBut->FontID);
+	iV_fonts fontID = cache.wzText.getFontID();
+	if (fontID == font_count || cache.lastWidgetWidth != psBut->width() || cache.wzText.getText() != psBut->pText)
+	{
+		fontID = psBut->FontID;
+	}
+	cache.wzText.setText(psBut->pText, fontID);
+
+	if (cache.wzText.width() > psBut->width())
+	{
+		// text would exceed the bounds of the button area
+		switch (cache.overflowBehavior)
+		{
+			case DisplayTextOptionCache::OverflowBehavior::ShrinkFont:
+				do {
+					if (fontID == font_small || fontID == font_bar || fontID == font_regular || fontID == font_regular_bold)
+					{
+						break;
+					}
+					auto result = iV_ShrinkFont(fontID);
+					if (!result.has_value())
+					{
+						break;
+					}
+					fontID = result.value();
+					cache.wzText.setText(psBut->pText, fontID);
+				} while (cache.wzText.width() > psBut->width());
+				break;
+			default:
+				break;
+		}
+	}
+	cache.lastWidgetWidth = psBut->width();
 
 	if (psBut->isMouseOverWidget()) // if mouse is over text then hilight.
 	{
@@ -3092,7 +3126,7 @@ W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style)
+static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style, optional<unsigned int> minimumWidth)
 {
 	W_BUTINIT sButInit;
 
@@ -3103,7 +3137,8 @@ static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &tx
 	sButInit.FontID = font_large;
 	if (!(style & WBUT_TXTCENTRE))
 	{
-		sButInit.width = (short)iV_GetTextWidth(txt.c_str(), sButInit.FontID);
+		auto textWidth = iV_GetTextWidth(txt.c_str(), sButInit.FontID);
+		sButInit.width = (short)std::max<unsigned int>(minimumWidth.value_or(0), textWidth);
 	}
 	else
 	{
@@ -3117,7 +3152,9 @@ static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &tx
 	}
 
 	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
-	sButInit.pUserData = new DisplayTextOptionCache();
+	auto pUserData = new DisplayTextOptionCache();
+	pUserData->overflowBehavior = DisplayTextOptionCache::OverflowBehavior::ShrinkFont;
+	sButInit.pUserData = pUserData;
 	sButInit.onDelete = [](WIDGET *psWidget) {
 		assert(psWidget->pUserData != nullptr);
 		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
