@@ -29,6 +29,10 @@
 #include "gfx_api.h"
 #include "pietypes.h"
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 enum iV_fonts
 {
 	font_regular,
@@ -67,7 +71,7 @@ public:
 	WzText(WzText&& other);
 
 public:
-	const std::string& getText() const { return mText.toUtf8(); }
+	const WzString& getText() const { return mText; }
 	iV_fonts getFontID() const { return mFontID; }
 
 private:
@@ -142,6 +146,8 @@ unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID);
 
 unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID);
 void iV_SetTextColour(PIELIGHT colour);
+
+optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID);
 
 /// Valid values for "Justify" argument of iV_FormatText().
 enum
