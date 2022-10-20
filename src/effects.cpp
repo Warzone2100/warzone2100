@@ -2180,12 +2180,12 @@ static void effectStructureUpdates()
 					We're a factory, so better puff out a bit of steam
 					Complete hack with the magic numbers - just for IAN demo
 				*/
-				if (psStructure->sDisplay.imd->nconnectors == 1)
+				for (unsigned int idx = 0; idx < psStructure->sDisplay.imd->nconnectors; ++idx)
 				{
 					Vector3i eventPos = psStructure->pos.xzy() + Affine3F().RotY(psStructure->rot.direction)*Vector3i(
-					                        psStructure->sDisplay.imd->connectors->x,
-					                        psStructure->sDisplay.imd->connectors->z,
-					                        -psStructure->sDisplay.imd->connectors->y
+					                        psStructure->sDisplay.imd->connectors[idx].x,
+					                        psStructure->sDisplay.imd->connectors[idx].z,
+					                        -psStructure->sDisplay.imd->connectors[idx].y
 					                    );
 
 					addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, nullptr, 0);
