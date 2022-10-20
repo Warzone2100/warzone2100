@@ -2512,10 +2512,16 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		if (psStructure->prebuiltImd != nullptr)
 		{
 			// strImd is a module, so render the already-built part at full height.
-			pie_Draw3DShape(getFactionIMD(faction, psStructure->prebuiltImd), 0, colour, buildingBrightness, pie_SHADOW, 0,
-				viewModelMatrix);
+			for (iIMDShape *imd = psStructure->prebuiltImd; imd != nullptr; imd = imd->next)
+			{
+				pie_Draw3DShape(getFactionIMD(faction, imd), 0, colour, buildingBrightness, pie_SHADOW, 0,
+					viewModelMatrix);
+			}
 		}
-		pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewModelMatrix);
+		for (iIMDShape *imd = strImd; imd != nullptr; imd = imd->next)
+		{
+			pie_Draw3DShape(getFactionIMD(faction, imd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewModelMatrix);
+		}
 		setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
 		return;
 	}
