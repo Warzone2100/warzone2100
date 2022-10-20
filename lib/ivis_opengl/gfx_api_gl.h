@@ -251,4 +251,5 @@ private:
 	std::array<std::vector<gfx_api::pixel_format_usage::flags>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> textureFormatsSupport;
 	bool has2DTextureArraySupport = false;
 	int32_t maxArrayTextureLayers = 0;
+	GLfloat maxTextureAnisotropy = 0.f;
 };
