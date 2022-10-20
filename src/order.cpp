@@ -207,8 +207,8 @@ struct RSComparator
 
 		// Second highest priority:
 		// Help out another nearby repair facility
-		const bool lsecond = l->action == DACTION_WAITFORREPAIR && lTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)lTarget)->pStructureType->type == REF_REPAIR_FACILITY;
-		const bool rsecond = r->action == DACTION_WAITFORREPAIR && rTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)rTarget)->pStructureType->type == REF_REPAIR_FACILITY;
+		const bool lsecond = l->action == DACTION_WAITFORREPAIR && lTarget && lTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)lTarget)->pStructureType && ((STRUCTURE *)lTarget)->pStructureType->type == REF_REPAIR_FACILITY;
+		const bool rsecond = r->action == DACTION_WAITFORREPAIR && rTarget && rTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)rTarget)->pStructureType && ((STRUCTURE *)rTarget)->pStructureType->type == REF_REPAIR_FACILITY;
 		if (lsecond && !rsecond) return true;
 		if (!lsecond && rsecond) return false;
 
