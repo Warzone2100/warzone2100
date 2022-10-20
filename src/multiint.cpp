@@ -1734,11 +1734,18 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 		case static_cast<int>(AIDifficulty::HARD): tipStr = _("No holds barred"); break;
 		case static_cast<int>(AIDifficulty::INSANE): tipStr = _("Starts with advantages"); break;
 		}
-		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[difficultyIdx];
-		if (strcmp(difficultyTip, "") != 0)
+		if (NetPlay.players[player].ai < aidata.size())
 		{
-			tipStr += "\n";
-			tipStr += difficultyTip;
+			const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[difficultyIdx];
+			if (strcmp(difficultyTip, "") != 0)
+			{
+				tipStr += "\n";
+				tipStr += difficultyTip;
+			}
+		}
+		else
+		{
+			ASSERT(false, "Invalid AI (index: %" PRIi8 ", num AIs: %zu)", NetPlay.players[player].ai, aidata.size());
 		}
 		pDifficultyRow->setTip(tipStr);
 		pDifficultyRow->displayFunction = displayDifficulty;
