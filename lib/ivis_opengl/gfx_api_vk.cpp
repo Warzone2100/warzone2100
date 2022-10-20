@@ -726,6 +726,7 @@ perFrameResources_t::~perFrameResources_t()
 
 perFrameResources_t& buffering_mechanism::get_current_resources()
 {
+	ASSERT(!perFrameResources.empty(), "perFrameResources are not initialized??");
 	return *perFrameResources[currentFrame];
 }
 
