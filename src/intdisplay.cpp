@@ -973,6 +973,7 @@ void IntFancyButton::displayIMD(AtlasImage image, ImdObject imdObject, int xOffs
 
 	ImdType IMDType = imdObject.type;
 	void *Object = imdObject.ptr;
+	ASSERT_OR_RETURN(, Object != nullptr, "imdObject.ptr is null?");
 	if (IMDType == IMDTYPE_DROID || IMDType == IMDTYPE_DROIDTEMPLATE)
 	{
 		// The case where we have to render a composite droid.
