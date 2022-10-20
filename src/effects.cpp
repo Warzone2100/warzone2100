@@ -2142,7 +2142,8 @@ void	effectGiveAuxVarSec(UDWORD var)
 /** Runs all the structure effect stuff - steam puffing out etc */
 static void effectStructureUpdates()
 {
-	unsigned curPartition = frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION;
+	auto frameNumber = frameGetFrameNumber();
+	unsigned curPartition = frameNumber % EFFECT_STRUCTURE_DIVISION;
 	// Is it the right time?
 	if (graphicsTime <= lastUpdateStructures[curPartition] + STRUCTURE_UPDATE_INTERVAL)
 	{
@@ -2180,16 +2181,24 @@ static void effectStructureUpdates()
 					We're a factory, so better puff out a bit of steam
 					Complete hack with the magic numbers - just for IAN demo
 				*/
-				for (unsigned int idx = 0; idx < psStructure->sDisplay.imd->nconnectors; ++idx)
 				{
-					Vector3i eventPos = psStructure->pos.xzy() + Affine3F().RotY(psStructure->rot.direction)*Vector3i(
-					                        psStructure->sDisplay.imd->connectors[idx].x,
-					                        psStructure->sDisplay.imd->connectors[idx].z,
-					                        -psStructure->sDisplay.imd->connectors[idx].y
-					                    );
+					unsigned int orderAdjustment = frameNumber % psStructure->sDisplay.imd->nconnectors;
+					for (unsigned int idx = 0; idx < psStructure->sDisplay.imd->nconnectors; ++idx)
+					{
+						Vector3i eventPos = psStructure->pos.xzy() + Affine3F().RotY(psStructure->rot.direction)*Vector3i(
+												psStructure->sDisplay.imd->connectors[idx].x,
+												psStructure->sDisplay.imd->connectors[idx].z,
+												-psStructure->sDisplay.imd->connectors[idx].y
+											);
 
-					addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, nullptr, 0);
-
+						unsigned int orderIdx = idx + orderAdjustment;
+						if (orderIdx >= psStructure->sDisplay.imd->nconnectors)
+						{
+							orderIdx = orderIdx - psStructure->sDisplay.imd->nconnectors;
+						}
+						unsigned effectStartTime = graphicsTime + static_cast<UDWORD>(150 * orderIdx);
+						addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, nullptr, 0, effectStartTime);
+					}
 					audio_PlayObjStaticTrack(psStructure, ID_SOUND_STEAM);
 				}
 				break;
