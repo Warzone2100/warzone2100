@@ -2394,12 +2394,22 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 		// if there is an unused connector, but not the first connector, add a light to it
 		else if (psStructure->sDisplay.imd->nconnectors > 1)
 		{
-			for (i = 0; i < psStructure->sDisplay.imd->nconnectors; i++)
+			switch (psStructure->pStructureType->type)
 			{
-				iIMDShape *lImd;
-				lImd = getImdFromIndex(MI_LANDING);
-				pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0,
-				                modelViewMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->connectors->xzy())));
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				// don't do this
+				break;
+			default:
+				for (unsigned int cIdx = 1; cIdx < psStructure->sDisplay.imd->nconnectors; cIdx++)
+				{
+					iIMDShape *lImd;
+					lImd = getImdFromIndex(MI_LANDING);
+					pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0,
+									modelViewMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->connectors[cIdx].xzy())));
+				}
+				break;
 			}
 		}
 	}
