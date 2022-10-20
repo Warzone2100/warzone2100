@@ -744,6 +744,11 @@ struct TextShaper
 		const uint32_t x_advance = (shapingResult.x_advance / 64);
 		const uint32_t y_advance = (shapingResult.y_advance / 64);
 
+		if (texture_width == 0 || texture_height == 0)
+		{
+			return DrawTextResult(RenderedText(), TextLayoutMetrics(x_advance, y_advance));
+		}
+
 		std::unique_ptr<iV_Image> stringBitmap(new iV_Image());
 		stringBitmap->allocate(texture_width, texture_height, 4, true);
 		unsigned char* stringTexture = stringBitmap->bmp_w();
