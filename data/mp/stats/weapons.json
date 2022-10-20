@@ -3320,7 +3320,7 @@
 		"muzzleGfx": "FxCan75m.PIE",
 		"name": "Incendiary Mortar",
 		"numExplosions": 10,
-		"periodicalDamage": 26,
+		"periodicalDamage": 24,
 		"periodicalDamageRadius": 128,
 		"periodicalDamageTime": 60,
 		"periodicalDamageWeaponClass": "HEAT",
