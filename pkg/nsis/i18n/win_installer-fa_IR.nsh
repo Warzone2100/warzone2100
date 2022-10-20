@@ -8,6 +8,8 @@ ${LangFileString} WZ_64BIT_AVAILABLE "یک نسخه‌ی ۶۴بیت از وار�
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "این نسخه‌ی ۶۴بیت وارزون ۲۱۰۰ است.$\r$\nلطفاً نسخه‌ی ۳۲بیت را از https://wz2100.net/ دانلود کنید. $\r$\nبرای خروج روی «تأیید» کلید کنید."
 
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+
 ${LangFileString} WZ_GPL_NEXT "بعدی"
 
 ${LangFileString} TEXT_SecBase "پرونده‌های بخش اصلی"
