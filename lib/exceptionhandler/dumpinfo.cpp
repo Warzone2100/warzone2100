@@ -173,91 +173,6 @@ void dbgDumpLog(DumpFileHandle file)
 	dumpEOL(file);
 }
 
-static std::string getProgramPath(const char *programCommand)
-{
-	std::vector<char> buf(PATH_MAX);
-
-#if defined(WZ_OS_WIN)
-	std::vector<wchar_t> wbuff(PATH_MAX + 1, 0);
-	DWORD moduleFileNameLen = 0;
-	DWORD bufferLen = static_cast<DWORD>(std::min<size_t>(wbuff.size(), std::numeric_limits<DWORD>::max()));
-	while ((moduleFileNameLen = GetModuleFileNameW(nullptr, &wbuff[0], bufferLen - 1)) == (bufferLen - 1))
-	{
-		bufferLen = bufferLen * 2;
-		wbuff.resize(bufferLen);
-	}
-	// Because Windows XP's GetModuleFileName does not guarantee null-termination,
-	// always append a null-terminator
-	wbuff[moduleFileNameLen] = 0;
-	wbuff.resize(moduleFileNameLen + 1);
-
-	// Convert the UTF-16 to UTF-8
-	int outputLength = WideCharToMultiByte(CP_UTF8, 0, wbuff.data(), -1, NULL, 0, NULL, NULL);
-	if (outputLength <= 0)
-	{
-		debug(LOG_ERROR, "Encoding conversion error.");
-		return std::string();
-	}
-	buf.resize(outputLength, 0);
-	if (WideCharToMultiByte(CP_UTF8, 0, wbuff.data(), -1, &buf[0], outputLength, NULL, NULL) == 0)
-	{
-		debug(LOG_ERROR, "Encoding conversion error.");
-		return std::string();
-	}
-
-#elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
-	{
-		FILE *whichProgramStream;
-		std::string whichProgramCommand;
-
-		whichProgramCommand = std::string("which ") + programCommand;
-		whichProgramStream = popen(whichProgramCommand.c_str(), "r");
-		if (whichProgramStream == nullptr)
-		{
-			debug(LOG_WARNING, "Failed to run \"%s\", will not create extended backtrace", whichProgramCommand.c_str());
-			return std::string();
-		}
-
-		size_t read = 0;
-		while (!feof(whichProgramStream))
-		{
-			if (read == buf.size())
-			{
-				buf.resize(buf.size() * 2);
-			}
-
-			read += fread(&buf[read], 1, buf.size() - read, whichProgramStream);
-		}
-		pclose(whichProgramStream);
-	}
-#endif
-
-	std::string programPath(buf.begin(), buf.end());
-
-	if (!programPath.empty())
-	{
-		// `which' adds a \n which confuses exec()
-		std::string::size_type eol = programPath.find('\n');
-		if (eol != std::string::npos)
-		{
-			programPath.erase(eol);
-		}
-		// Strip any NUL chars
-		std::string::size_type nul = programPath.find('\0');
-		if (nul != std::string::npos)
-		{
-			programPath.erase(nul);
-		}
-		debug(LOG_WZ, "Found us at %s", programPath.c_str());
-	}
-	else
-	{
-		debug(LOG_INFO, "Could not retrieve full path to %s, will not create extended backtrace", programCommand);
-	}
-
-	return programPath;
-}
-
 #if defined(WZ_OS_WIN)
 
 #include <ntverp.h>				// Windows SDK - include for access to VER_PRODUCTBUILD
@@ -484,7 +399,7 @@ static void createHeader(int const argc, const char * const *argv, const char *p
 {
 	std::ostringstream os;
 
-	os << "Program: "     << getProgramPath(argv[0]) << " (" PACKAGE ")" << endl
+	os << "Program: "     << LaunchInfo::getCurrentProcessDetails().imageFileName.fullPath() << " (" PACKAGE ")" << endl
 	   << "Command line: ";
 
 	/* Dump all command line arguments surrounded by double quotes and
