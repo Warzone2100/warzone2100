@@ -2181,6 +2181,7 @@ static void effectStructureUpdates()
 					We're a factory, so better puff out a bit of steam
 					Complete hack with the magic numbers - just for IAN demo
 				*/
+				if (psStructure->sDisplay.imd->nconnectors > 0)
 				{
 					unsigned int orderAdjustment = frameNumber % psStructure->sDisplay.imd->nconnectors;
 					for (unsigned int idx = 0; idx < psStructure->sDisplay.imd->nconnectors; ++idx)
