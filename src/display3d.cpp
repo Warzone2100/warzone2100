@@ -2397,6 +2397,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			switch (psStructure->pStructureType->type)
 			{
 			case REF_FACTORY:
+			case REF_FACTORY_MODULE:
 			case REF_CYBORG_FACTORY:
 			case REF_VTOL_FACTORY:
 				// don't do this
