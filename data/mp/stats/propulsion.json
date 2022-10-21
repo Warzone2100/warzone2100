@@ -97,7 +97,7 @@
 	},
 	"hover01": {
 		"buildPoints": 100,
-		"buildPower": 150,
+		"buildPower": 125,
 		"designable": 1,
 		"hitpointPctOfBody": 100,
 		"id": "hover01",
