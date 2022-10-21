@@ -1430,6 +1430,7 @@ bool stageOneShutDown()
 	pie_TexInit(); // restart it
 
 	initMiscVars();
+	reinitFactionsMapping();
 	wzSceneEnd("Main game loop");
 	wzSceneBegin("Main menu loop");
 
