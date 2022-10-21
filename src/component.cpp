@@ -166,10 +166,13 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 
 static void draw_player_3d_shape(uint32_t player_index, iIMDShape *shape, const glm::mat4 &model_view)
 {
-	auto faction_shape = getFactionIMD(getPlayerFaction(player_index), shape);
-	int team = getPlayerColour(player_index);
-	const PIELIGHT teamcolour = pal_GetTeamColour(team);
-	pie_Draw3DButton(faction_shape, teamcolour, model_view);
+	for (iIMDShape *imd = shape; imd != nullptr; imd = imd->next)
+	{
+		auto faction_shape = getFactionIMD(getPlayerFaction(player_index), imd);
+		int team = getPlayerColour(player_index);
+		const PIELIGHT teamcolour = pal_GetTeamColour(team);
+		pie_Draw3DButton(faction_shape, teamcolour, model_view);
+	}
 }
 
 void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vector3i *Position, int scale)
