@@ -749,6 +749,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
 	iIMDShape &s = models[key]; // create entry and return reference
 	s.modelName = key;
+	s.modelLevel = level;
 	s.pShadowPoints = &s.points;
 	s.pShadowPolys = &s.polys;
 
