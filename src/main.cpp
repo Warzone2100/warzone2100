@@ -100,6 +100,7 @@
 #include "map.h"
 #include "keybind.h"
 #include "random.h"
+#include "urlhelpers.h"
 #include "urlrequest.h"
 #include <time.h>
 #include <LaunchInfo.h>
@@ -1476,57 +1477,94 @@ static bool winCheckIfRunningUnderWine(std::string* output_wineinfostr = nullptr
 	typedef const char* (CDECL *WineGetVersionFunction)(void);
 	typedef void (CDECL *WineGetHostVersionFunction)(const char **sysname, const char **release);
 
-	HMODULE hntdll = GetModuleHandleW(L"ntdll.dll");
-	if (!hntdll)
-	{
-		return false;
-	}
-
-	WineGetVersionFunction pWineGetVersion = reinterpret_cast<WineGetVersionFunction>(reinterpret_cast<void*>(GetProcAddress(hntdll, "wine_get_version")));
-	WineGetHostVersionFunction pWineGetHostVersion = reinterpret_cast<WineGetHostVersionFunction>(reinterpret_cast<void*>(GetProcAddress(hntdll, "wine_get_host_version")));
-
-	if (pWineGetVersion == nullptr)
-	{
-		return false;
-	}
-
+	bool bResult = false;
 	std::string resultWineVersionInfo = "Wine";
-	const char* pWineVer = pWineGetVersion();
-	if (pWineVer != nullptr)
-	{
-		resultWineVersionInfo += std::string(" ") + pWineVer;
-	}
 
-	const char* pSysname = nullptr;
-	const char* pSysversion = nullptr;
-	if (pWineGetHostVersion != nullptr)
+	HMODULE hntdll = GetModuleHandleW(L"ntdll.dll");
+	if (hntdll != NULL)
 	{
-		pWineGetHostVersion(&pSysname, &pSysversion);
-	}
-	if (pSysname != nullptr)
-	{
-		if (output_platform)
+		WineGetVersionFunction pWineGetVersion = reinterpret_cast<WineGetVersionFunction>(reinterpret_cast<void*>(GetProcAddress(hntdll, "wine_get_version")));
+		WineGetHostVersionFunction pWineGetHostVersion = reinterpret_cast<WineGetHostVersionFunction>(reinterpret_cast<void*>(GetProcAddress(hntdll, "wine_get_host_version")));
+
+		if (pWineGetVersion == nullptr && pWineGetHostVersion == nullptr && !bResult)
 		{
-			(*output_platform) = pSysname;
+			auto ptrWineSetUnixEnv = GetProcAddress(hntdll, "__wine_set_unix_env");
+			if (ptrWineSetUnixEnv != NULL)
+			{
+				bResult = true;
+			}
 		}
-		resultWineVersionInfo += std::string(" (under ") + pSysname;
-		if (pSysversion != nullptr)
+
+		if (pWineGetVersion != nullptr)
 		{
-			resultWineVersionInfo += std::string(" ") + pSysversion;
+			bResult = true;
+			const char* pWineVer = pWineGetVersion();
+			if (pWineVer != nullptr)
+			{
+				resultWineVersionInfo += std::string(" ") + pWineVer;
+			}
 		}
-		resultWineVersionInfo += ")";
+
+		const char* pSysname = nullptr;
+		const char* pSysversion = nullptr;
+		if (pWineGetHostVersion != nullptr)
+		{
+			bResult = true;
+			pWineGetHostVersion(&pSysname, &pSysversion);
+		}
+		if (pSysname != nullptr)
+		{
+			if (output_platform)
+			{
+				(*output_platform) = pSysname;
+			}
+			resultWineVersionInfo += std::string(" (under ") + pSysname;
+			if (pSysversion != nullptr)
+			{
+				resultWineVersionInfo += std::string(" ") + pSysversion;
+			}
+			resultWineVersionInfo += ")";
+		}
 	}
 
-	if (output_wineinfostr)
+	if (!bResult)
 	{
-		(*output_wineinfostr) = resultWineVersionInfo;
+		HMODULE hKernel32 = GetModuleHandleW(L"kernel32.dll");
+		if (hKernel32 != NULL)
+		{
+			auto wineUnixFileNameFuncPt = GetProcAddress(hKernel32, "wine_get_unix_file_name");
+			if (wineUnixFileNameFuncPt != NULL)
+			{
+				bResult = true;
+			}
+			else
+			{
+				auto wineDosFileNameFuncPt = GetProcAddress(hKernel32, "wine_get_dos_file_name");
+				if (wineDosFileNameFuncPt != NULL)
+				{
+					bResult = true;
+				}
+			}
+		}
 	}
 
-	return true;
+	if (bResult)
+	{
+		if (output_wineinfostr)
+		{
+			(*output_wineinfostr) = resultWineVersionInfo;
+		}
+	}
+
+	return bResult;
 #else
 	return false;
 #endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
 }
+
+#define WINEOPENURLWRAPPER(url, cl) \
+openURLInBrowser(url); \
+if (cl) { wzQuit(0); }
 
 void osSpecificPostInit_Win()
 {
@@ -1535,22 +1573,45 @@ void osSpecificPostInit_Win()
 	if (winCheckIfRunningUnderWine(&wineInfoStr, &wineHostPlatform))
 	{
 		const char* pWineNativeAvailableMsg = "You are running the Windows version of Warzone 2100 under Wine.\n\nA native version for your platform is likely available (and will perform better).\n\nPlease visit: https://wz2100.net";
+		std::string platformSimple;
 		// Display a messagebox that a native version is available for this platform
 		if (!wineHostPlatform.empty())
 		{
 			if (strncasecmp(wineHostPlatform.c_str(), "Darwin", std::min<size_t>(wineHostPlatform.size(), strlen("Darwin"))) == 0)
 			{
 				// macOS
+				platformSimple = "macOS";
 				pWineNativeAvailableMsg = "You are running the Windows version of Warzone 2100 under Wine.\n\nA native version for macOS is available.\n\nPlease visit: https://wz2100.net";
 			}
 			if (strncasecmp(wineHostPlatform.c_str(), "Linux", std::min<size_t>(wineHostPlatform.size(), strlen("Linux"))) == 0)
 			{
 				// Linux
+				platformSimple = "Linux";
 				pWineNativeAvailableMsg = "You are running the Windows version of Warzone 2100 under Wine.\n\nNative builds for Linux are available.\n\nPlease visit: https://wz2100.net";
 			}
 		}
 
 		wzDisplayDialog(Dialog_Information, "Warzone 2100 under Wine", pWineNativeAvailableMsg);
+
+		std::string url = "https://warzone2100.github.io/update-data/redirect/wine.html";
+		std::string queryString;
+		if (!platformSimple.empty())
+		{
+			queryString += (queryString.empty()) ? "?" : "&";
+			queryString += std::string("platform=") + platformSimple;
+		}
+		std::string variant;
+		if ((GetEnvironmentVariableW(L"STEAM_COMPAT_APP_ID", NULL, 0) > 0) || (GetEnvironmentVariableW(L"SteamAppId", NULL, 0) > 0))
+		{
+			variant = "Proton";
+		}
+		if (!variant.empty())
+		{
+			queryString += (queryString.empty()) ? "?" : "&";
+			queryString += std::string("variant=") + variant;
+		}
+		url += queryString;
+		WINEOPENURLWRAPPER(url.c_str(), !variant.empty())
 	}
 }
 #endif /* defined(WZ_OS_WIN) */
