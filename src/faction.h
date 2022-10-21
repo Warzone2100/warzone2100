@@ -37,8 +37,11 @@ using nonstd::nullopt;
 
 struct FACTION {
 	WzString name;
-	std::map<WzString, WzString> replaceIMD;
+	typedef std::map<WzString, WzString> ReplaceIMDMap;
+	ReplaceIMDMap replaceIMD;
 };
+
+void reinitFactionsMapping();
 
 optional<WzString> getFactionModelName(const FactionID faction, const WzString& normalFactionName);
 iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd);
@@ -50,5 +53,8 @@ std::unordered_set<FactionID> getEnabledFactions(bool ignoreNormalFaction = fals
 
 const char* to_string(FactionID faction);
 const char* to_localized_string(FactionID faction);
+
+void addFactionModelNameMapping(FACTION *faction, const WzString& normalFactionName, const WzString& mappedName);
+void addFactionModelNameMapping(FactionID faction, const WzString& normalFactionName, const WzString& mappedName);
 
 #endif
