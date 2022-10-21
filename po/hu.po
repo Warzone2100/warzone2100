@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-07 09:31\n"
+"PO-Revision-Date: 2022-10-21 09:21\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -5480,7 +5480,7 @@ msgstr "Féllánctalpas hajtómű II"
 #: data/mp/messages/strings/names.txt:509
 #: po/custom/fromJson.txt:5654
 msgid "Tracked Propulsion II"
-msgstr "lánctalpas hajtómű II"
+msgstr "Lánctalpas hajtómű II"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-VTOL02.name
@@ -5735,7 +5735,7 @@ msgstr "Alapvető technológia kutatása."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr "Kutat"
+msgstr "Kutatás alatt: "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5751,15 +5751,15 @@ msgstr "Használhatja ezt."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr "Sajnos droid átvitel sikertelen."
+msgstr "Sajnos a droidátvitel sikertelen."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr "Teljesítmény átvitel"
+msgstr "Energia átvíve."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr "Egy jeladó kihelyezése"
+msgstr "Helyezzen ki egy jeladót!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
@@ -5786,8 +5786,8 @@ msgstr "A szükséges port (%s) nem nyitható ki ezen: (%s)"
 #: lib/netplay/netplay.cpp:1433
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
-msgstr "Kézzel konfigurálhatod a routered & tűzfalad \n"
-"nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
+msgstr "Kézzel kell beállítania a routerét és tűzfalát, hogy\n"
+" kinyissa a 2100-as portot mielőtt elindítaná a játékot."
 
 #: lib/netplay/netplay.cpp:1443
 #, c-format
