@@ -64,21 +64,18 @@
 	},
 	"area_6": {
 		"label": "ambush1Trigger",
-		"subscriber": 0,
 		"pos1": [2816, 6272],
 		"pos2": [5504, 6600],
 		"subscriber": 0
 	},
 	"area_7": {
 		"label": "ambush2Trigger",
-		"subscriber": 0,
 		"pos1": [1024, 7680],
 		"pos2": [1408, 8320],
 		"subscriber": 0
 	},
 	"area_8": {
 		"label": "scavBaseTrigger",
-		"subscriber": 0,
 		"pos1": [2048, 3000],
 		"pos2": [2944, 3300],
 		"subscriber": 0
