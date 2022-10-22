@@ -76,6 +76,9 @@ jobs:
       contents: write # Needed to upload to releases
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    outputs:
+      # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
+      WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -302,6 +305,50 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
         WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
+
+  upload-debug-symbols:
+    strategy:
+      matrix:
+        include:
+          - output-suffix: "ubuntu18.04"
+            arch: "amd64"
+          - output-suffix: "ubuntu20.04"
+            arch: "amd64"
+    name: 'Upload Debug Symbols (${{ matrix.matrix }})'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    # Run on push to master branch (development build), or tag release automation build
+    if: (github.repository == 'Warzone2100/warzone2100') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+    needs: ubuntu-build
+    environment: upload_symbols
+    # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
+    # SENTRY_AUTH_TOKEN
+    steps:
+      - name: Prep Environment
+        run: |
+          mkdir dl-debug-symbols
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: 'debugsymbols_${{ matrix.output-suffix }}_${{ matrix.arch }}'
+          path: ./dl-debug-symbols
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./dl-debug-symbols
+      - name: 'Upload debug symbols'
+        env:
+          SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
+          WZ_ARCHIVE_DIR: './dl-debug-symbols'
+          WZ_GITHUB_REF: ${{needs.ubuntu-build.outputs.WZ_GITHUB_REF}}
+        run: |
+          echo "WZ_GITHUB_REF=${WZ_GITHUB_REF}"
+          if [[ -z "${SENTRY_AUTH_TOKEN}" ]]; then
+            echo "No SENTRY_AUTH_TOKEN - skipping"
+            exit 0
+          fi
+          docker pull getsentry/sentry-cli
+          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
 
   # # NOTE: This uses qemu, and is much slower than a native ARM64 build
   # ubuntu-20-04-gcc-arm64:
