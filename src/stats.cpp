@@ -201,6 +201,69 @@ bool statsAllocConstruct(UDWORD	numStats)
 *		Load stats functions
 *******************************************************************************/
 
+static optional<WzString> deprecatedModelUpgrade(WzString& filename)
+{
+	static const std::unordered_map<WzString, WzString> deprecatedModelNames = {
+		// base
+		{"mibnkdrl.pie", "mibnkdr.pie"},
+		{"mibnkdrr.pie", ""},
+		{"prhlhtr3.pie", "prhhtr3.pie"},
+		{"prhrhtr3.pie", ""},
+		{"prhltrk3.pie", "prhtrk3.pie"},
+		{"prhrtrk3.pie", ""},
+		{"prhlvtl1.pie", "prhvtl1.pie"},
+		{"prhrvtl1.pie", ""},
+		{"prhlvtl1.pie", "prhvtl1.pie"},
+		{"prhrvtl1.pie", ""},
+		{"prhlvtl2.pie", "prhvtl2.pie"},
+		{"prhrvtl2.pie", ""},
+		{"prhlvtl3.pie", "prhvtl3.pie"},
+		{"prhrvtl3.pie", ""},
+		{"prhlvtl4.pie", "prhvtl4.pie"},
+		{"prhrvtl4.pie", ""},
+		{"prhlwhl1.pie", "prhwhl1.pie"},
+		{"prhrwhl1.pie", ""},
+		{"prllhtr1.pie", "prlhtr1.pie"},
+		{"prlrhtr1.pie", ""},
+		{"prlltrk1.pie", "prltrk1.pie"},
+		{"prlrtrk1.pie", ""},
+		{"prllvtl1.pie", "prlvtl1.pie"},
+		{"prlrvtl1.pie", ""},
+		{"prllvtl2.pie", "prlvtl2.pie"},
+		{"prlrvtl2.pie", ""},
+		{"prllvtl3.pie", "prlvtl3.pie"},
+		{"prlrvtl3.pie", ""},
+		{"prllwhl1.pie", "prlwhl1.pie"},
+		{"prlrwhl1.pie", ""},
+		{"prmlhtr2.pie", "prmhtr2.pie"},
+		{"prmrhtr2.pie", ""},
+		{"prmltrk2.pie", "prmtrk2.pie"},
+		{"prmrtrk2.pie", ""},
+		{"prmlvtl1.pie", "prmvtl1.pie"},
+		{"prmrvtl1.pie", ""},
+		{"prmlwhl1.pie", "prmwhl1.pie"},
+		{"prmrwhl1.pie", ""},
+		// mp
+		{"prslwhl1.pie", "prswhl1.pie"},
+		{"prsrwhl1.pie", ""},
+		{"prslvtl1.pie", "prsvtl1.pie"},
+		{"prsrvtl1.pie", ""},
+		{"prsltrk4.pie", "prstrk4.pie"},
+		{"prsrtrk4.pie", ""},
+		{"prslhtr4.pie", "prshtr4.pie"},
+		{"prsrhtr4.pie", ""},
+	};
+
+	WzString name(filename.toLower());
+	auto it = deprecatedModelNames.find(name);
+	if (it != deprecatedModelNames.end())
+	{
+		debug(LOG_INFO, "Deprecation notice: The model \"%s\" is referenced in a mod's stats JSON file, and is deprecated. Please check the latest base stats models for how to update this mod for future compatibility.", name.toUtf8().c_str());
+		return it->second;
+	}
+	return nullopt;
+}
+
 static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzString& key, const WzString& key2 = WzString())
 {
 	iIMDShape *retval = nullptr;
@@ -218,6 +281,7 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 			value = obj[key2.toUtf8()];
 		}
 		WzString filename = json_variant(value).toWzString();
+		deprecatedModelUpgrade(filename); // FUTURE TODO: Use output of this to auto-upgrade old model references? (Check for empty string)
 		retval = modelGet(filename);
 		ASSERT(retval != nullptr, "Cannot find the PIE model %s for stat %s in %s",
 		       filename.toUtf8().c_str(), getStatsName(psStats), json.fileName().toUtf8().c_str());
@@ -637,6 +701,8 @@ bool loadBodyStats(WzConfig &ini)
 				return false;
 			}
 			//allocate the left and right propulsion IMDs + movement and standing still animations
+			// NOTE: New base stats files + IMDs use a single combined model (in the "left" key) for both sides...
+			//       however, older mods / stats files may still rely on having both left + right
 			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], WzString::fromUtf8("left"));
 			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], WzString::fromUtf8("right"));
 			psBodyStat->ppMoveIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], WzString::fromUtf8("moving"));
