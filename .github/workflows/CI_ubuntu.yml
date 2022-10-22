@@ -142,6 +142,7 @@ jobs:
     - name: Prep Directories
       run: |
         mkdir -p "${{ github.workspace }}/build"
+        mkdir -p "${{ github.workspace }}/debug"
     - name: CMake Configure
       working-directory: '${{ github.workspace }}/build'
       env:
@@ -182,6 +183,21 @@ jobs:
       with:
         name: "warzone2100_${{ matrix.output-suffix }}_${{ matrix.arch }}_deb"
         path: ${{ env.OUTPUT_DIR }}
+        if-no-files-found: 'error'
+    - name: Create debug files
+      working-directory: '${{ github.workspace }}/debug'
+      env:
+        WZ_BUILD_DIR: '${{ github.workspace }}/build'
+      run: |
+        WZ_EXECUTABLE_PATH="${WZ_BUILD_DIR}/src/warzone2100${WZ_OUTPUT_NAME_SUFFIX}"
+        objcopy --only-keep-debug "${WZ_EXECUTABLE_PATH}" "warzone2100${WZ_OUTPUT_NAME_SUFFIX}.debug"
+    - name: Upload debug info
+      uses: actions/upload-artifact@v3
+      if: success() && (matrix.publish_artifact == true)
+      with:
+        name: 'debugsymbols_${{ matrix.output-suffix }}_${{ matrix.arch }}'
+        path: |
+          ${{ github.workspace }}/debug
         if-no-files-found: 'error'
     - name: Upload artifact to release
       if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true)
