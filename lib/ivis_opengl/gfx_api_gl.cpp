@@ -2719,11 +2719,6 @@ void gl_context::shutdown()
 		scratchbuffer = 0;
 	}
 
-	if (backend_impl)
-	{
-		backend_impl->destroyGLContext();
-	}
-
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	if (!debugLiveTextures.empty())
 	{
@@ -2735,6 +2730,11 @@ void gl_context::shutdown()
 		ASSERT(debugLiveTextures.empty(), "There are %zu textures that were not cleaned up.", debugLiveTextures.size());
 	}
 #endif
+
+	if (backend_impl)
+	{
+		backend_impl->destroyGLContext();
+	}
 }
 
 const size_t& gl_context::current_FrameNum() const

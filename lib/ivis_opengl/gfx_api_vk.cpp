@@ -2237,6 +2237,18 @@ void VkRoot::shutdown()
 		surface = vk::SurfaceKHR();
 	}
 
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	if (!debugLiveTextures.empty())
+	{
+		// Some textures were not properly freed before Vulkan context shutdown
+		for (auto texture : debugLiveTextures)
+		{
+			debug(LOG_ERROR, "Texture resource not cleaned up: %p (name: %s)", (const void*)texture, texture->debugName.c_str());
+		}
+		ASSERT(debugLiveTextures.empty(), "There are %zu textures that were not cleaned up.", debugLiveTextures.size());
+	}
+#endif
+
 	// destroy instance
 	if (inst)
 	{
@@ -2255,18 +2267,6 @@ void VkRoot::shutdown()
 		inst.destroy(nullptr, vkDynLoader);
 		inst = vk::Instance();
 	}
-
-#if defined(WZ_DEBUG_GFX_API_LEAKS)
-	if (!debugLiveTextures.empty())
-	{
-		// Some textures were not properly freed before Vulkan context shutdown
-		for (auto texture : debugLiveTextures)
-		{
-			debug(LOG_ERROR, "Texture resource not cleaned up: %p (name: %s)", (const void*)texture, texture->debugName.c_str());
-		}
-		ASSERT(debugLiveTextures.empty(), "There are %zu textures that were not cleaned up.", debugLiveTextures.size());
-	}
-#endif
 }
 
 void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
