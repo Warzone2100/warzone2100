@@ -8,6 +8,8 @@ ${LangFileString} WZ_64BIT_AVAILABLE "ל Warzone 2100 קיימת גרסת 64 ב�
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "זוהי גירסת 64 ביט של Warzone 2100.$\r$\nאנא הורד את גירסת 32 ביט מ- https://wz2100.net/$\r$\n לחץ על אישור כדי לסיים את ההתקנה."
 
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+
 ${LangFileString} WZ_GPL_NEXT "הבא"
 
 ${LangFileString} TEXT_SecBase "קבצי בסיס"
@@ -35,7 +37,7 @@ ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
 ${LangFileString} DESC_SecNLS_WinFonts "כלול את תיקיית גופני Windows בנתיב החיפוש. אפשר זאת אם ברצונך להשתמש בגופנים מותאמים אישית בקובץ התצורה או אם אתה נתקל בבעיות בגופן רגיל. יכול להיות איטי ב- Vista ובגרסאות וינדוס מאוחרות יותר!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "קובצי DLL חשובים של Microsoft Runtime"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} DESC_SecMSSysLibraries "הורד והתקן (או עדכן) את הפצת ספריות המערכת של Microsoft Visual C++, הנדרשת על ידי מספר רכיבים."
 
 ${LangFileString} DLTEXT_Downloading "מוריד"
 ${LangFileString} DLTEXT_SysLibDLFailed "הורדת ספריית המערכת נכשלה"

@@ -8,6 +8,8 @@ ${LangFileString} WZ_64BIT_AVAILABLE "64-bittinen versio Warzone 2100:sta on saa
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Tämä on 64-bittinen versio Warzone 2100.$\r$\nLataa 32-bittinen versio osoitteesta https://wz2100. et/ $\r$\nNapsauta OK lopettaaksesi asennus."
 
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+
 ${LangFileString} WZ_GPL_NEXT "Seuraava"
 
 ${LangFileString} TEXT_SecBase "Ydintiedostot"

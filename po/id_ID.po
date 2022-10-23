@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-09 13:12\n"
+"PO-Revision-Date: 2022-10-21 09:21\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -4073,7 +4073,7 @@ msgstr "Petunjuk kesulitan Berat / Gila:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Perkuat markas di seluruh peta untuk melindungi diri dari Kolektif"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:538
 msgid "Destroy all enemy units and structures"
@@ -5830,20 +5830,20 @@ msgstr "Gagal mendapatkan respons dari lobi!"
 
 #: lib/netplay/netreplay.cpp:323
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Format file tayangan ulang ini lebih terbaru dan tidak didukung Warzone 2100 versi ini."
 
 #: lib/netplay/netreplay.cpp:325
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Format Tayangan Ulang Versi: %u"
 
 #: lib/netplay/netreplay.cpp:326
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Format Tayangan Ulang Tidak Didukung"
 
 #: lib/netplay/nettypes.cpp:889
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Tidak dapat memuat tayangan ulang: File tayangan ulang tidak lengkap atau rusak."
 
 #: lib/sound/cdaudio.cpp:59
 msgid "Menu"
@@ -6062,7 +6062,7 @@ msgstr "Waktu isi senjata anti-pesawat -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:131
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Situs AA dengan Turet Stormbringer"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6557,7 +6557,7 @@ msgstr "Dipersenjatai dengan meriam velositas hiper"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:602
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Dipersenjatai dengan meriam otomatis laras 4 velositas hiper"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
@@ -6622,7 +6622,7 @@ msgstr "Dipersenjatai dengan Roket Pembunuh Tank"
 #: po/custom/fromJson.txt:644
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Armor +120%, Body Point +90%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -7909,7 +7909,7 @@ msgstr "Riset Komputer Selesai"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1565
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "Kini sistem komputer 'dipagari' untuk melindungi dari NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]

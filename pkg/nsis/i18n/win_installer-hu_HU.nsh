@@ -8,6 +8,8 @@ ${LangFileString} WZ_64BIT_AVAILABLE "Elérhető a Warzone 2100 64 bites verzió
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Ez a Warzone 2100 64 bites verziója.$\r$\nTöltse le a 32 bites verziót a https://wz2100.net/ oldalról.$\r$\nA telepítésből történő kilépéshez kattintson az OK gombra."
 
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Ez a Warzone 2001 ARM64-hez készült változata, és az eszköznek nincs ARM64 processzora.$\r$\nKeresse fel a https://wz2100.net/ oldalt, és töltse le a rendszerének megfelelő verziót (például: x64).$\r$\nMégis folytatja az ARM64-es telepítést?"
+
 ${LangFileString} WZ_GPL_NEXT "Következő"
 
 ${LangFileString} TEXT_SecBase "Központi fájlok"

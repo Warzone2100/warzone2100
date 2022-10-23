@@ -8,6 +8,8 @@ ${LangFileString} WZ_64BIT_AVAILABLE "Warzone 2100 64-bit sürümü mevcut.$\r$\
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Bu Warzone 2100 64-bit sürümüdür.$\r$\nLütfen 32-bit sürümünü https://wz2100.net/ adresinden indirin.$\r$\nTamam'a basıp kurulumdan çıkın."
 
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+
 ${LangFileString} WZ_GPL_NEXT "Devam"
 
 ${LangFileString} TEXT_SecBase "Çekirdek dosyalar"
