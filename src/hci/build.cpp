@@ -63,17 +63,10 @@ STRUCTURE_STATS *BuildController::getObjectStatsAt(size_t objectIndex) const
 		return builderStats;
 	}
 
-	if (builder->order.type == DORDER_BUILD && orderStateObj(builder, DORDER_BUILD)) // Is building
+	auto structure = DroidGetBuildStructure(builder);
+	if (structure != nullptr) // Is building
 	{
-		return builder->order.psStats;
-	}
-
-	if (builder->order.type == DORDER_HELPBUILD || builder->order.type == DORDER_LINEBUILD) // Is helping
-	{
-		if (auto structure = orderStateObj(builder, DORDER_HELPBUILD))
-		{
-			return ((STRUCTURE *)structure)->pStructureType;
-		}
+		return structure->pStructureType;
 	}
 
 	if (orderState(builder, DORDER_DEMOLISH))
@@ -290,11 +283,6 @@ private:
 		progressBar->hide();
 
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
-		if (!DroidIsBuilding(droid))
-		{
-			return;
-		}
-
 		ASSERT(droid->asBits[COMP_CONSTRUCT], "Invalid droid type");
 
 		if (auto structure = DroidGetBuildStructure(droid))
