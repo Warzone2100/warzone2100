@@ -1,3 +1,27 @@
+2022-10-23: Version 4.3.0-beta3:
+ * General:
+   * Add: "LOD Distance" Graphics option, to adjust texture sharpness at distance - set default to "High" (too many commits, #2897)
+   * Fix: Nickname selection in lobby (commit:3b6895150af9ee7cd12cd5a346e315f598d81eaa, #2900)
+   * Fix: Cancel RTR when fully repaired, and there are no repair stations (commit:969eb3cf048c623c8ce39cd4502ea485ab6b611e, #2891)
+   * Fix: Build status for trucks in helping mode (commit:cbd84aceb6455182a6bb89790a8d734c73f588db, #2929)
+   * Fix: Various potential crashes (too many commits, #2890, #2899, #2907)
+ * Graphics:
+   * Fix: Keep aspect ratio for sequences in full screen (commit:8123696900228fafafb76466ff14ec365890747f, #2888)
+   * Fix: Garbage first frame of video (commit:b5ea1149d13114824e62449a1184b6f7fadd94bc, #2902)
+   * Fix: Auto-adjust menu item font size to better fit long strings (too many commits, #2905)
+   * Fix: Properly render multi-level structure models (too many commits, #2911)
+   * Fix: Faction model lookup for multi-level models (commit:3f6574c78b64a165460b032b78883f07766b4f03, #2911)
+   * Fix: Retribution body clipping into Hover propulsion (commit:41576b8f415d1cf2a0d32b4e052cadebe0809d31, #2898)
+   * Fix: Flicker with VTOL Assault Gun (commit:32e54c7b3b62f1ceb5658f9cef46b7a7c3d11d23, #2898)
+   * Fix: Returned and redesigned classic models for wheeled propulsion, light and medium half-tracks (commit:0737083a93f4657c3c103725d175e676a06b9b39, #2910)
+   * Fix: Update VTOL rearming pad model (commit:c8318809e291868a0fab0df03d3ad1622e2f098a, #2912)
+   * Fix: Tank factory model fixes (commit:6de3063bb19e8852a3b744995393f91b0136010c, #2911)
+   * Fix: Combine propulsion models (commit:b45bf836f8af7d73351c38f0cba041ff30861879, #2918)
+   * Fix: Add warning for outdated propulsion models in stats files (commit:82f202e39cf7569a08a094ec40da6fe50f8bb594, #2918)
+ * Other:
+   * Fix: Always update the base.wz and mp.wz when building (commit:19e926077ebab5e485fea4182b2d5d28a82162e0, #2901)
+   * Fix: NSIS installer: Add warning when running ARM64 installer on x86/x64 (commit:e8db52a82c9668f7a69b9ee3f5be360455ed6b7b, #2903)
+
 2022-10-14: Version 4.3.0-beta2:
  * Other:
    * Fix: Release automation issues
