@@ -252,4 +252,5 @@ private:
 	bool has2DTextureArraySupport = false;
 	int32_t maxArrayTextureLayers = 0;
 	GLfloat maxTextureAnisotropy = 0.f;
+	GLuint vaoId = 0;
 };

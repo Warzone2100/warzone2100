@@ -49,7 +49,7 @@ struct OPENGL_DATA
 };
 OPENGL_DATA opengl;
 
-static GLuint perfpos[PERF_COUNT];
+static GLuint perfpos[PERF_COUNT] = {};
 static bool perfStarted = false;
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -2403,7 +2403,7 @@ bool gl_context::initGLContext()
 	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
 	{
 		// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
-		static GLuint vaoId = 0;
+		vaoId = 0;
 		if (glGenVertexArrays == nullptr)
 		{
 			debug(LOG_FATAL, "glGenVertexArrays is not available, but context is OpenGL 3.0+");
@@ -2717,6 +2717,24 @@ void gl_context::shutdown()
 	{
 		glDeleteBuffers(1, &scratchbuffer);
 		scratchbuffer = 0;
+	}
+
+	if (GLAD_GL_ARB_timer_query && glDeleteQueries)
+	{
+		glDeleteQueries(PERF_COUNT, perfpos);
+	}
+
+	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
+	{
+		// Cleanup from very simple VAO code (just bind a single global VAO)
+		if (vaoId != 0)
+		{
+			if (glDeleteVertexArrays != nullptr)
+			{
+				glDeleteVertexArrays(1, &vaoId);
+			}
+			vaoId = 0;
+		}
 	}
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
