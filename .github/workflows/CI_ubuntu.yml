@@ -154,10 +154,10 @@ jobs:
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
       run: |
         ADDITIONAL_CMAKE_PARAMS=""
-        WZ_BUILD_SENTRY_VALUE="OFF"
+        # Always build Sentry anyway, even if we don't pass the configuration to actually enable it
+        WZ_BUILD_SENTRY_VALUE="ON"
         if [[ ! -z "${SENTRY_IO_DSN}" ]]; then
           # Pass the configuration to enable it
-          WZ_BUILD_SENTRY_VALUE="ON"
           ADDITIONAL_CMAKE_PARAMS="-DSENTRY_IO_DSN:STRING=${SENTRY_IO_DSN}"
         fi
         
@@ -310,8 +310,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - output-suffix: "ubuntu18.04"
-            arch: "amd64"
           - output-suffix: "ubuntu20.04"
             arch: "amd64"
     name: 'Upload Debug Symbols (${{ matrix.matrix }})'
