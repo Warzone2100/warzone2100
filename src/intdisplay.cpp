@@ -1331,14 +1331,21 @@ bool DroidGoingToBuild(DROID *Droid)
 //
 STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 {
-	BASE_OBJECT *Structure = nullptr;
-
 	if (orderStateObj(Droid, DORDER_BUILD))
 	{
-		Structure = orderStateObj(Droid, DORDER_HELPBUILD);
+		return (STRUCTURE *)orderStateObj(Droid, DORDER_HELPBUILD);
 	}
 
-	return (STRUCTURE *)Structure;
+	if (Droid->action == DACTION_BUILD)
+	{
+		auto actionTarget = Droid->psActionTarget[0];
+		if (actionTarget != nullptr && actionTarget->type == OBJ_STRUCTURE)
+		{
+			return (STRUCTURE *)actionTarget;
+		}
+	}
+
+	return nullptr;
 }
 
 // Get the first factory assigned to a command droid
