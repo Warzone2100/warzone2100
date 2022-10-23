@@ -6,8 +6,10 @@ on:
       - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
   pull_request:
     # Match all pull requests...
-    # Except those that only include changes to stats
     paths-ignore:
+      # Except some text-only files / documentation
+      - 'ChangeLog'
+      # Except those that only include changes to stats
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
