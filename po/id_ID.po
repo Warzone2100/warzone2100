@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-21 09:21\n"
+"PO-Revision-Date: 2022-10-24 03:52\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -5715,7 +5715,7 @@ msgstr "GILA"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
-msgstr "Penggantian kepribadian berhasil."
+msgstr "Perubahan kepribadian berhasil."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
@@ -8336,7 +8336,7 @@ msgstr "Menyerang struktur musuh secara elektronik"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1882
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Unit berpangkat Elit dan Veteran serta pabrik dilindungi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
@@ -9640,7 +9640,7 @@ msgstr "Hellstorm"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2730
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Unit berpangkat Heroik dan Spesial dilindungi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -11400,7 +11400,7 @@ msgstr "Senapan mesin multilaras dengan rata-rata tembak tinggi"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3998
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Harus dibangun untuk memproduksi komandan"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -11737,7 +11737,7 @@ msgstr "Badan Berat NEXUS"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4288
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "Sistem Imunisasi NEXUS"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -12139,7 +12139,7 @@ msgstr "Memproduksi Cyborg"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4534
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Unit berpangkat Profesional dan Reguler dilindungi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -13320,7 +13320,7 @@ msgstr "Mencuri teknologi dari struktur dan mengambil alih senjata"
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5301
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Menara Senapan Mesin Berat Baja"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -13351,7 +13351,7 @@ msgstr "Menara baja dengan senapan mesin ganda"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5317
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "Menghentikan pengambilan alih oleh NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13550,7 +13550,7 @@ msgstr "Rudal Anti-pesawat"
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text[1]
 #: po/custom/fromJson.txt:5472
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr "Tautan Sinapsis memampukan manusia untuk berintegrasi langsung dengan komputer"
+msgstr "Tautan Sinapsis memampukan manusia untuk berinteraksi langsung dengan komputer"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade02.name
@@ -14835,7 +14835,7 @@ msgstr "Sedikit Pengalaman"
 #: po/custom/fromJson.txt:6281
 msgctxt "rank"
 msgid "Hero"
-msgstr "Hero"
+msgstr "Heroik"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14851,7 +14851,7 @@ msgstr "Profesional"
 #: po/custom/fromJson.txt:6289
 msgctxt "rank"
 msgid "Regular"
-msgstr "Regular"
+msgstr "Reguler"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -15067,11 +15067,11 @@ msgstr "Muat permainan kampanye yang tersimpan"
 
 #: src/clparse.cpp:374
 msgid "Load a replay"
-msgstr ""
+msgstr "Muat tayangan ulang"
 
 #: src/clparse.cpp:374
 msgid "replay file"
-msgstr ""
+msgstr "file tayangan ulang"
 
 #: src/clparse.cpp:375
 msgid "Play in windowed mode"
@@ -15220,7 +15220,7 @@ msgstr ""
 
 #: src/clparse.cpp:419
 msgid "Enable command interface"
-msgstr ""
+msgstr "Nyalakan interface komando"
 
 #: src/clparse.cpp:419
 msgid "(stdin)"
@@ -15228,7 +15228,7 @@ msgstr ""
 
 #: src/clparse.cpp:420
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "Jumlah pemain minimum untuk memulai permainan secara otomatis"
 
 #: src/clparse.cpp:420
 msgid "startplayers"
@@ -15511,11 +15511,11 @@ msgstr "Para Kolektif"
 
 #: src/frontend.cpp:183
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "Video kampanye hilang"
 
 #: src/frontend.cpp:184
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Lihat FAQ kami tentang cara memasang video"
 
 #: src/frontend.cpp:204
 msgid "Single Player"
@@ -15724,7 +15724,7 @@ msgstr "Manajer Musik"
 
 #: src/frontend.cpp:725
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Pengaturan Multipemain"
 
 #: src/frontend.cpp:730
 #: src/multiint.cpp:1372
@@ -16057,7 +16057,7 @@ msgstr "OPSI TETIKUS"
 #: src/frontend.cpp:1987
 #: src/multiint.cpp:263
 msgid "Super Easy"
-msgstr ""
+msgstr "Super Mudah"
 
 #: src/frontend.cpp:1988
 #: src/multiint.cpp:263
@@ -16079,13 +16079,13 @@ msgstr "Gila"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Tidak dapat memuat: %s."
 
 #: src/frontend.cpp:2175
 #: src/init.cpp:1220
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Silakan mencopot mod yang tidak kompatibel."
 
 #: src/frontend.cpp:2223
 #: src/frontend.cpp:2368
@@ -16137,29 +16137,29 @@ msgstr "Tingkat kesulitan ini diperuntukkan untuk pemain yang sudah berpengalama
 #: src/frontend.cpp:2493
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u menit"
 
 #: src/frontend.cpp:2548
 #: src/frontend.cpp:2556
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u detik"
 
 #: src/frontend.cpp:2587
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: src/frontend.cpp:2638
 msgid "Hosting Options:"
-msgstr ""
+msgstr "Pengaturan Penyelenggaraan:"
 
 #: src/frontend.cpp:2642
 msgid "Game Port"
-msgstr ""
+msgstr "Port Permainan"
 
 #: src/frontend.cpp:2647
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Nyalakan UPnP"
 
 #: src/frontend.cpp:2652
 msgid "Inactivity Timeout"
@@ -16179,7 +16179,7 @@ msgstr ""
 
 #: src/frontend.cpp:2682
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "PENGATURAN MULTIPEMAIN"
 
 #: src/frontend.cpp:2747
 #: src/multiint.cpp:5147
@@ -16278,7 +16278,7 @@ msgstr "Menampilkan Teknologi Lawas"
 #: src/hci.cpp:2289
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Harga: %u"
 
 #: src/hci.cpp:2933
 msgid "Chat: All"
@@ -16819,7 +16819,7 @@ msgstr "Atur Nyala/Mati Sejarah Konsol "
 
 #: src/input/keyconfig.cpp:135
 msgid "Toggle Team Chat History"
-msgstr "Atur Nyala/Mati Tampilan Obrolan Tim"
+msgstr "Atur Nyala/Mati Tampilan Sejarah Obrolan Tim"
 
 #: src/input/keyconfig.cpp:136
 msgid "Rotate Building Clockwise"
@@ -16966,7 +16966,7 @@ msgstr "Pilih Semua Unit Rusak Berat"
 #: src/input/keyconfig.cpp:172
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Pilih semua unit tempur darat dengan kesehatan >50% dan tanpa Grup."
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks"
@@ -17201,7 +17201,7 @@ msgstr "Daya"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "Daya Per Detik"
 
 #: src/intdisplay.cpp:286
 #, c-format
@@ -17446,7 +17446,7 @@ msgstr ""
 #: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "Pemain %d: %d daya"
 
 #: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
@@ -17621,7 +17621,7 @@ msgstr "SKIRMISH"
 
 #: src/keybind.cpp:1435
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "KESULITAN: SUPER MUDAH"
 
 #: src/keybind.cpp:1438
 msgid "DIFFICULTY: EASY"
@@ -17793,19 +17793,19 @@ msgstr ""
 
 #: src/keybind.cpp:2570
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "SimpanCepat tidak diperbolehkan untuk permainan multipemain atau tutorial"
 
 #: src/keybind.cpp:2590
 msgid "QuickSave failed"
-msgstr ""
+msgstr "SimpanCepat gagal"
 
 #: src/keybind.cpp:2599
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "MuatCepat tidak diperbolehkan untuk permainan multipemain atau tutorial"
 
 #: src/keybind.cpp:2626
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "File SimpanCepat belum ada"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -17847,12 +17847,12 @@ msgstr "curang"
 #: src/loadsave.cpp:1172
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "Simpan Otomatis %s"
 
 #: src/loadsave.cpp:1177
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "Simpan Otomatis %s gagal"
 
 #: src/loop.cpp:259
 #: src/loop.cpp:275
@@ -18164,7 +18164,7 @@ msgstr "Klik untuk mengganti slot ini"
 #: src/multiint.cpp:1972
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "Klik untuk mengambil slot pemain %u"
 
 #: src/multiint.cpp:2009
 msgid "Click to swap player to this slot"
@@ -18318,7 +18318,7 @@ msgstr "Pemain"
 
 #: src/multiint.cpp:3613
 msgid "Host Options"
-msgstr ""
+msgstr "Pengaturan Penyelenggara"
 
 #: src/multiint.cpp:3894
 msgid "Enable Spectator Join"
@@ -18326,7 +18326,7 @@ msgstr ""
 
 #: src/multiint.cpp:3904
 msgid "Lock Teams"
-msgstr ""
+msgstr "Kunci Tim"
 
 #: src/multiint.cpp:4162
 msgid "Choose Team"
@@ -18403,11 +18403,11 @@ msgstr "SIAP?"
 
 #: src/multiint.cpp:4524
 msgid "For Spectator:"
-msgstr ""
+msgstr "Untuk Penonton:"
 
 #: src/multiint.cpp:4524
 msgid "For Player:"
-msgstr ""
+msgstr "Untuk Pemain:"
 
 #: src/multiint.cpp:4542
 msgid "Choose Player Slot"
@@ -18432,7 +18432,7 @@ msgstr ""
 #: src/multiint.cpp:5045
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "Bisukan Pemain: %s"
 
 #: src/multiint.cpp:5049
 #, c-format
@@ -18441,7 +18441,7 @@ msgstr ""
 
 #: src/multiint.cpp:5143
 msgid "CHAT"
-msgstr "CHAT"
+msgstr "OBROLAN"
 
 #: src/multiint.cpp:5801
 msgid "Sorry! Failed to host the game."
@@ -18475,7 +18475,7 @@ msgstr "Penyelenggara Memulai Permainan"
 #: src/multiint.cpp:6331
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "Memindahkan %s ke Penonton!"
 
 #: src/multiint.cpp:6459
 msgid "Host supplied invalid options"
@@ -18491,11 +18491,11 @@ msgstr "Tidak ada sambungan ke penyelenggara."
 
 #: src/multiint.cpp:6763
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "Penyelenggara memindahkan saya ke Pemain, tapi saya tidak memberikan izin untuk ini. Selamat tinggal!"
 
 #: src/multiint.cpp:6765
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "Penyelenggara mencoba memindahkan kami ke Pemain, tapi kami tidak pernah memberikan izin."
 
 #: src/multiint.cpp:6914
 msgid "Cannot change to a map with too few slots for all players."
@@ -18564,29 +18564,29 @@ msgstr "Ping"
 
 #: src/multiint.cpp:8302
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "Versi Warzone 2100 yang digunakan untuk menyimpan file tayangan ulang ini tidak sama dengan versi yang berjalan saat ini."
 
 #: src/multiint.cpp:8304
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "File Tayangan Ulang Disimpan Dengan: \"%s\""
 
 #: src/multiint.cpp:8308
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "Versi Warzone 2100: \"%s\""
 
 #: src/multiint.cpp:8318
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "Tayangan ulang sebaiknya diputar dengan versi yang digunakan untuk merekamnya."
 
 #: src/multiint.cpp:8320
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "Tayangan ulang mungkin tidak berjalan dengan benar, atau mungkin muncul perbedaan dalam simulasi."
 
 #: src/multiint.cpp:8321
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "Ketidakcocokan Versi Tayangan Ulang"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18718,7 +18718,7 @@ msgstr "Berikan Daya Ke Pemain"
 
 #: src/multimenu.cpp:936
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Atur Nyala/Mati Pembisuan Obrolan"
 
 #: src/multimenu.cpp:1131
 msgid "Sent/Received per sec —"
@@ -18774,11 +18774,11 @@ msgstr ""
 
 #: src/multiopt.cpp:392
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "PETA DIMINTA!"
 
 #: src/multiopt.cpp:417
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "MOD DIMINTA!"
 
 #: src/multiopt.cpp:435
 #: src/multiplay.cpp:2093
@@ -18810,7 +18810,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1260
 msgid "REPLAY HAS ENDED"
-msgstr "PEMUTARAN ULANG TELAH BERAKHIR"
+msgstr "TAYANGAN ULANG TELAH BERAKHIR"
 
 #: src/multiplay.cpp:1261
 msgid "(Press ESC to quit.)"
@@ -18835,7 +18835,7 @@ msgstr "FILE TERKIRIM!"
 
 #: src/multiplay.cpp:2073
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "PETA DIUNDUH!"
 
 #: src/multiplay.cpp:2129
 #, c-format
@@ -18950,12 +18950,12 @@ msgstr "Kita tidak dapat melakukan itu! Kami harus berupa Cyborg untuk menggunak
 
 #: src/qtscript.cpp:900
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "Gagal memuat AI yang dipilih! Cek log Anda untuk informasi lebih lanjut."
 
 #: src/qtscript.cpp:903
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "Memuat script AI %s untuk pemain saat ini!"
 
 #: src/research.cpp:1018
 #, c-format
@@ -19050,7 +19050,7 @@ msgstr "Istimewa: %u"
 #: src/scores.cpp:119
 #, c-format
 msgid "Hero: %u"
-msgstr "Pahlawan: %u"
+msgstr "Heroik: %u"
 
 #: src/scores.cpp:316
 msgid "Unit Losses"
@@ -19102,19 +19102,19 @@ msgstr "Tidak dapat menemukan unit Komandan!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "Tidak dapat menemukan bangunan yang diperlukan!"
 
 #: src/seqdisp.cpp:561
 msgid "Loading video"
-msgstr ""
+msgstr "Memuat video"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Tunjukkan Stat Pemain"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Kelas Senjata"
 
 #: src/spectatorwidgets.cpp:804
 msgid "Power/Rate"
@@ -19122,11 +19122,11 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:805
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Daya Sekarang / Daya Per Detik"
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
-msgstr ""
+msgstr "DayaHilang"
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
