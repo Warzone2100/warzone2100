@@ -1,6 +1,6 @@
-${LangFileString} WZWelcomeText "Selamat datang di penginstal Warzone 2100!\r\n\r\nWizard ini akan memandu Anda sepanjang instalasi dari Warzone 2100.\r\n\r\nDisarankan agar Anda menutup semua aplikasi lainnya sebelum melanjutkan instalasi ini. Hal ini akan memungkinkan untuk memperbarui file sistem yang terkait tanpa harus me-reboot komputer Anda.\r\n\r\nWarzone 2100 ini adalah program yang sepenuhnya sumber terbuka dan 100% gratis! \r\n\r\nKlik Berikutnya untuk melanjutkan.\r\n."
+${LangFileString} WZWelcomeText "Selamat datang di penginstal Warzone 2100!\r\n\r\nWizard ini akan memandu Anda sepanjang instalasi Warzone 2100.\r\n\r\nAnda disarankan untuk menutup semua aplikasi lainnya sebelum melanjutkan instalasi ini. Hal ini akan memungkinkan untuk memperbarui file sistem yang terkait tanpa harus me-reboot komputer Anda.\r\n\r\nWarzone 2100 adalah program yang sepenuhnya sumber terbuka dan 100% gratis! \r\n\r\nKlik Berikutnya untuk melanjutkan.\r\n."
 
-${LangFileString} WZWelcomeText_Portable "Selamat datang di penginstal portabel Warzone 2100!\r\n\r\nWizard ini akan memandu Anda sepanjang instalasi dari Warzone 2100 versi portabel.\r\n\r\nHasil instalasi ini sepenuhnya berdiri sendiri dan Anda dapat mencopot instalasi program ini kapan pun dengan menghapus folder direktori.\r\n\r\nWarzone 2100 ini adalah program yang sepenuhnya sumber terbuka dan 100% gratis! \r\n\r\nKlik Berikutnya untuk melanjutkan."
+${LangFileString} WZWelcomeText_Portable "Selamat datang di penginstal portabel Warzone 2100!\r\n\r\nWizard ini akan memandu Anda sepanjang instalasi Warzone 2100 versi portabel.\r\n\r\nHasil instalasi ini sepenuhnya berdiri sendiri dan Anda dapat mencopot instalasi program ini kapan pun dengan menghapus folder direktori.\r\n\r\nWarzone 2100 adalah program yang sepenuhnya sumber terbuka dan 100% gratis! \r\n\r\nKlik Berikutnya untuk melanjutkan."
 
 ${LangFileString} WZWelcomeHomepageLink "Kunjungi laman resmi kami di https://wz2100.net untuk mendapatkan versi terbaru."
 
@@ -8,7 +8,7 @@ ${LangFileString} WZ_64BIT_AVAILABLE "Versi Warzone 2100 64-bit tersedia. $\r$\n
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Ini adalah versi 64-bit Warzone 2100. $\r$\nSilakan unduh versi 32-bit dari https://wz2100.net/ $\r$\n Klik OK untuk keluar dari setup."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Ini adalah Warzone 2100 versi ARM64 dan perangkat ini tidak memiliki prosesor ARM64. $\r$\nKunjungi https://wz2100.net/ untuk mengunduh versi yang sesuai dengan sistem Anda (contoh: x64).$\r$\nTetap lanjutkan dengan ARM64?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Ini adalah Warzone 2100 versi ARM64 dan perangkat ini tidak memiliki prosesor ARM64. $\r$\nKunjungi https://wz2100.net/ untuk mengunduh versi yang sesuai dengan sistem Anda (contoh: x64).$\r$\nTetap lanjutkan dengan instalasi versi ARM64?"
 
 ${LangFileString} WZ_GPL_NEXT "Berikutnya"
 
