@@ -791,6 +791,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 						install(FILES
 							"${_libEGL_dll}"
 							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+							RENAME "libEGL.dll" # Make sure it has the proper name (which SDL2 expects)
 						)
 					else()
 						message( WARNING "Missing expected libEGL DLL at: ${_libEGL_dll}" )
@@ -800,6 +801,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 						install(FILES
 							"${_libGLESv2_dll}"
 							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+							RENAME "libGLESv2.dll" # Make sure it has the proper name (which SDL2 expects)
 						)
 					else()
 						message( WARNING "Missing expected libGLESv2 DLL at: ${_libGLESv2_dll}" )
