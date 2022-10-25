@@ -1888,6 +1888,99 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 	return true;
 }
 
+bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int height) // TODO: Take refresh rate as well...
+{
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeFullscreenDisplayMode called when window is not available");
+		return false;
+	}
+	debug(LOG_WZ, "Attempt to change fullscreen mode to [%d] %dx%d", screen, width, height);
+
+	bool hasPrior = true;
+	SDL_DisplayMode prior = { 0, 0, 0, 0, 0 };
+	if (SDL_GetWindowDisplayMode(WZwindow, &prior) != 0)
+	{
+		// Failed to get current fullscreen display mode for window?
+		debug(LOG_WZ, "Failed to get current WindowDisplayMode: %s", SDL_GetError());
+		// Proceed with defaults...
+		hasPrior = false;
+	}
+
+	SDL_DisplayMode	closest;
+	closest.format = closest.w = closest.h = closest.refresh_rate = 0;
+	closest.driverdata = 0;
+
+	// Find closest available display mode
+	SDL_DisplayMode desired;
+	desired.format = 0;
+	desired.w = width;
+	desired.h = height;
+	desired.refresh_rate = 0;
+	desired.driverdata = 0;
+
+	if (SDL_GetClosestDisplayMode(screen, &desired, &closest) == NULL)
+	{
+		// no match was found
+		debug(LOG_INFO, "No closest DisplayMode found ([%d] [%u x %u]); error: %s", screen, width, height, SDL_GetError());
+		return false;
+	}
+
+	int result = SDL_SetWindowDisplayMode(WZwindow, &closest);
+	if (result != 0)
+	{
+		// SDL_SetWindowDisplayMode failed
+		debug(LOG_INFO, "SDL_SetWindowDisplayMode ([%d] [%u x %u]) failed: %s", screen, width, height, SDL_GetError());
+		return false;
+	}
+
+	if (wzGetCurrentWindowMode() == WINDOW_MODE::fullscreen)
+	{
+		// If we are already in fullscreen mode, *also* trigger a SetWindowSize
+		// to ensure everything (including drawable size) gets properly updated
+		int currWidth = 0, currHeight = 0;
+		SDL_GetWindowSize(WZwindow, &currWidth, &currHeight);
+
+		// Check that logical window size isn't < minimum required
+		if ((currWidth < MIN_WZ_GAMESCREEN_WIDTH) || (currHeight < MIN_WZ_GAMESCREEN_HEIGHT))
+		{
+			// Revert to prior display mode
+			result = SDL_SetWindowDisplayMode(WZwindow, (hasPrior) ? &prior : nullptr);
+			if (result != 0)
+			{
+				// SDL_SetWindowDisplayMode failed - unable to revert??
+				debug(LOG_ERROR, "Failed to revert to prior WindowDisplayMode: %s", SDL_GetError());
+			}
+			return false;
+		}
+
+		SDL_SetWindowSize(WZwindow, currWidth, currHeight);
+
+		// Check whether the desired window size is smaller than the minimum required for the current Display Scale
+		if (wzWindowSizeIsSmallerThanMinimumRequired(currWidth, currHeight))
+		{
+			// The new window size is smaller than the minimum required size for the current display scale level.
+
+			unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(currWidth, currHeight);
+			if (maxDisplayScale < 100)
+			{
+				// Cannot adjust display scale factor below 1. Desired window size is below the minimum supported.
+				debug(LOG_WZ, "Unable to change window size to (%d x %d) because it is smaller than the minimum supported at a 100%% display scale", width, height);
+				return false;
+			}
+
+			// Adjust the current display scale level to the nearest supported level.
+			debug(LOG_WZ, "The current Display Scale (%d%%) is too high for the desired window size. Reducing the current Display Scale to the maximum possible for the desired window size: %d%%.", current_displayScale, maxDisplayScale);
+			wzChangeDisplayScale(maxDisplayScale);
+
+			// Store the new display scale
+			war_SetDisplayScale(maxDisplayScale);
+		}
+	}
+
+	return true;
+}
+
 bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height)
 {
 	if (WZwindow == nullptr)
