@@ -491,8 +491,8 @@ static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
 	return psStruct->pStructureType->upgrade[psStruct->player].rearm;
 }
 
-WzString getFavoriteStructs();
-void setFavoriteStructs(WzString list);
+bool loadFavoriteStructsFile(const char* path);
+bool writeFavoriteStructsFile(const char* path);
 
 struct LineBuild
 {

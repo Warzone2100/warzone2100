@@ -506,7 +506,6 @@ bool loadConfig()
 	{
 		war_SetVideoBufferDepth(value.value());
 	}
-	setFavoriteStructs(WzString::fromUtf8(iniGetString("favoriteStructs", "").value()));
 
 	video_backend gfxBackend;
 	if (iniGeneral.has("gfxbackend"))
@@ -706,7 +705,6 @@ bool saveConfig()
 	iniSetInteger("colourMP", war_getMPcolour());
 	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
 	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
-	iniSetString("favoriteStructs", getFavoriteStructs().toUtf8());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetInteger("minimizeOnFocusLoss", war_getMinimizeOnFocusLoss());
 	iniSetInteger("altEnterToggleMode", war_getToggleFullscreenMode());

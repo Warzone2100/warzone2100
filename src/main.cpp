@@ -184,6 +184,7 @@ char	ScreenDumpPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
+char	FavoriteStructuresPath[PATH_MAX];
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
@@ -1775,6 +1776,7 @@ void mainShutdown()
 			break;
 	}
 	saveConfig();
+	writeFavoriteStructsFile(FavoriteStructuresPath);
 #if defined(ENABLE_DISCORD)
 	discordRPCShutdown();
 #endif
@@ -1941,6 +1943,7 @@ int realmain(int argc, char *argv[])
 
 	/* Put in the writedir root */
 	sstrcpy(KeyMapPath, "keymap.json");
+	sstrcpy(FavoriteStructuresPath, "favoriteStructures.json");
 
 	// initialise all the command line states
 	war_SetDefaultStates();
@@ -1948,6 +1951,7 @@ int realmain(int argc, char *argv[])
 	debug(LOG_MAIN, "initializing");
 
 	loadConfig();
+	loadFavoriteStructsFile(FavoriteStructuresPath);
 
 	// parse the command line
 	if (!ParseCommandLine(utfargc, utfargv))
