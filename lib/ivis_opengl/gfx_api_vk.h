@@ -188,12 +188,44 @@ private:
 };
 
 struct VkPSO; // forward-declare
+struct buffering_mechanism;
 
 struct perFrameResources_t
 {
 	vk::Device dev;
 	VmaAllocator allocator;
-	vk::DescriptorPool descriptorPool;
+	struct DescriptorPoolDetails
+	{
+		vk::DescriptorPool poolHandle;
+		vk::DescriptorPoolSize size;
+		size_t maxSets = 0;
+		size_t requestedDescriptors = 0;
+		size_t requestedSets = 0;
+
+		DescriptorPoolDetails(vk::DescriptorPool poolHandle,
+							  vk::DescriptorPoolSize size,
+							  size_t maxSets)
+		: poolHandle(poolHandle)
+		, size(size)
+		, maxSets(maxSets)
+		{ }
+	};
+	struct DescriptorPoolsContainer
+	{
+	public:
+		inline void push_back(const DescriptorPoolDetails& pool)
+		{
+			pools.push_back(pool);
+		}
+		void reset(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
+		inline DescriptorPoolDetails& current() { return pools.at(currPool); }
+		bool nextPool() { if (!pools.empty() && (currPool < (pools.size() - 1))) { ++currPool; return true; } else { return false; } }
+	public:
+		std::vector<DescriptorPoolDetails> pools;
+		size_t currPool = 0;
+	};
+	DescriptorPoolsContainer combinedImageSamplerDescriptorPools;
+	DescriptorPoolsContainer uniformDynamicDescriptorPools;
 	uint32_t numalloc = 0;
 	vk::CommandPool pool;
 	vk::CommandBuffer cmdDraw;
@@ -219,8 +251,18 @@ struct perFrameResources_t
 	perFrameResources_t& operator=( const perFrameResources_t& ) = delete; // non copyable
 
 	perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueIndex, const vk::DispatchLoaderDynamic& vkDynLoader);
-	void clean();
 	~perFrameResources_t();
+
+protected:
+	friend struct buffering_mechanism;
+	void resetDescriptorPools();
+	void clean();
+
+public:
+	vk::DescriptorPool getDescriptorPool(uint32_t numSets, vk::DescriptorType descriptorType, uint32_t numDescriptors);
+
+private:
+	DescriptorPoolDetails createNewDescriptorPool(vk::DescriptorType type, uint32_t maxSets, uint32_t descriptorCount);
 
 private:
 	const vk::DispatchLoaderDynamic *pVkDynLoader;
@@ -539,8 +581,8 @@ public:
 
 private:
 
-	std::vector<vk::DescriptorSet> allocateDescriptorSet(vk::DescriptorSetLayout arg);
-	std::vector<vk::DescriptorSet> allocateDescriptorSets(std::vector<vk::DescriptorSetLayout> args);
+	std::vector<vk::DescriptorSet> allocateDescriptorSet(vk::DescriptorSetLayout arg, vk::DescriptorType descriptorType, uint32_t numDescriptors);
+	std::vector<vk::DescriptorSet> allocateDescriptorSets(std::vector<vk::DescriptorSetLayout> args, vk::DescriptorType descriptorType, uint32_t numDescriptors);
 
 	bool getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	bool findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);

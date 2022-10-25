@@ -644,6 +644,9 @@ void BlockBufferAllocator::clean()
 
 // MARK: perFrameResources_t
 
+constexpr uint32_t descriptorPoolMaxSetsDefault = 10000;
+constexpr uint32_t descriptorPoolSizeDescriptorCountDefault = 10000;
+
 perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader)
 	: dev(_dev)
 	, allocator(allocator)
@@ -652,18 +655,9 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 	, uniformBufferAllocator(allocator, 1024 * 1024, vk::BufferUsageFlagBits::eUniformBuffer, VMA_MEMORY_USAGE_CPU_TO_GPU, true)
 	, pVkDynLoader(&vkDynLoader)
 {
-	const auto descriptorSize =
-		std::array<vk::DescriptorPoolSize, 2> {
-		vk::DescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, 10000),
-		vk::DescriptorPoolSize(vk::DescriptorType::eUniformBufferDynamic, 10000)
-	};
-	descriptorPool = dev.createDescriptorPool(
-		vk::DescriptorPoolCreateInfo()
-		.setMaxSets(10000)
-		.setPPoolSizes(descriptorSize.data())
-		.setPoolSizeCount(static_cast<uint32_t>(descriptorSize.size()))
-		, nullptr, *pVkDynLoader
-	);
+	combinedImageSamplerDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eCombinedImageSampler, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
+	uniformDynamicDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eUniformBufferDynamic, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
+
 	pool = dev.createCommandPool(
 		vk::CommandPoolCreateInfo()
 		.setQueueFamilyIndex(graphicsQueueFamilyIndex)
@@ -687,6 +681,56 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 
 	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 	renderFinishedSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
+}
+
+perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescriptorPool(vk::DescriptorType type, uint32_t maxSets, uint32_t descriptorCount)
+{
+	vk::DescriptorPoolSize poolSize(type, descriptorCount);
+
+	return DescriptorPoolDetails(dev.createDescriptorPool(vk::DescriptorPoolCreateInfo()
+			.setMaxSets(maxSets)
+			.setPPoolSizes(&poolSize)
+			.setPoolSizeCount(1)
+			, nullptr, *pVkDynLoader
+		), poolSize, maxSets);
+}
+
+vk::DescriptorPool perFrameResources_t::getDescriptorPool(uint32_t numSets, vk::DescriptorType descriptorType, uint32_t numDescriptors)
+{
+	// Take into account numSets, descriptorType and numDescriptors to return a descriptorPool (allocating a new one if needed)
+	DescriptorPoolsContainer* pPools = nullptr;
+	switch (descriptorType)
+	{
+		case vk::DescriptorType::eCombinedImageSampler:
+			pPools = &combinedImageSamplerDescriptorPools;
+			break;
+		case vk::DescriptorType::eUniformBufferDynamic:
+			pPools = &uniformDynamicDescriptorPools;
+			break;
+		default:
+			debug(LOG_FATAL, "Invalid descriptor type: %s", vk::to_string(descriptorType).c_str());
+			return vk::DescriptorPool();
+	}
+
+	DescriptorPoolDetails* pCurrPool = &pPools->current();
+	if ((pCurrPool->maxSets - pCurrPool->requestedSets < numSets)
+		|| (pCurrPool->size.descriptorCount - pCurrPool->requestedDescriptors < numDescriptors))
+	{
+		// not enough room in the current descriptor pool for this request
+		if (!pPools->nextPool())
+		{
+			// No more existing pools - need to create a new one
+			debug(LOG_INFO, "[%p] Creating new [%zu] descriptor pool of type: %s", (void*)this, pPools->currPool + 1, vk::to_string(descriptorType).c_str());
+			pPools->push_back(createNewDescriptorPool(descriptorType, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
+			pPools->nextPool();
+		}
+		pCurrPool = &pPools->current();
+	}
+
+	pCurrPool->requestedSets += numSets;
+	pCurrPool->requestedDescriptors += numDescriptors;
+
+	return pCurrPool->poolHandle;
 }
 
 void perFrameResources_t::clean()
@@ -717,11 +761,35 @@ void perFrameResources_t::clean()
 perFrameResources_t::~perFrameResources_t()
 {
 	dev.destroyCommandPool(pool, nullptr, *pVkDynLoader);
-	dev.destroyDescriptorPool(descriptorPool, nullptr, *pVkDynLoader);
+	for (const auto& descriptorPoolDetails : combinedImageSamplerDescriptorPools.pools)
+	{
+		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
+	}
+	for (const auto& descriptorPoolDetails : uniformDynamicDescriptorPools.pools)
+	{
+		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
+	}
 	dev.destroyFence(previousSubmission, nullptr, *pVkDynLoader);
 	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
 	dev.destroySemaphore(renderFinishedSemaphore, nullptr, *pVkDynLoader);
 	clean();
+}
+
+void perFrameResources_t::DescriptorPoolsContainer::reset(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	for (auto& descriptorPool : pools)
+	{
+		dev.resetDescriptorPool(descriptorPool.poolHandle, vk::DescriptorPoolResetFlags(), vkDynLoader);
+		descriptorPool.requestedSets = 0;
+		descriptorPool.requestedDescriptors = 0;
+	}
+	currPool = 0;
+}
+
+void perFrameResources_t::resetDescriptorPools()
+{
+	combinedImageSamplerDescriptorPools.reset(dev, *pVkDynLoader);
+	uniformDynamicDescriptorPools.reset(dev, *pVkDynLoader);
 }
 
 perFrameResources_t& buffering_mechanism::get_current_resources()
@@ -763,7 +831,7 @@ void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
 	dev.waitForFences(fences, true, -1, vkDynLoader);
 	dev.resetFences(fences, vkDynLoader);
-	dev.resetDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool, vk::DescriptorPoolResetFlags(), vkDynLoader);
+	buffering_mechanism::get_current_resources().resetDescriptorPools();
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
 
 	buffering_mechanism::get_current_resources().clean();
@@ -3591,24 +3659,24 @@ gfx_api::buffer* VkRoot::create_buffer_object(const gfx_api::buffer::usage &usag
 	return new VkBuf(dev, usage, *this);
 }
 
-std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSet(vk::DescriptorSetLayout arg)
+std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSet(vk::DescriptorSetLayout arg, vk::DescriptorType descriptorType, uint32_t numDescriptors)
 {
 	const auto descriptorSet = std::array<vk::DescriptorSetLayout, 1>{ arg };
 	buffering_mechanism::get_current_resources().numalloc++;
 	return dev.allocateDescriptorSets(
 		vk::DescriptorSetAllocateInfo()
-			.setDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool)
+			.setDescriptorPool(buffering_mechanism::get_current_resources().getDescriptorPool(1, descriptorType, numDescriptors))
 			.setPSetLayouts(descriptorSet.data())
 			.setDescriptorSetCount(static_cast<uint32_t>(descriptorSet.size()))
 	, vkDynLoader);
 }
 
-std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(std::vector<vk::DescriptorSetLayout> args)
+std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(std::vector<vk::DescriptorSetLayout> args, vk::DescriptorType descriptorType, uint32_t numDescriptors)
 {
 	buffering_mechanism::get_current_resources().numalloc++;
 	return dev.allocateDescriptorSets(
 		vk::DescriptorSetAllocateInfo()
-			.setDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool)
+			.setDescriptorPool(buffering_mechanism::get_current_resources().getDescriptorPool(static_cast<uint32_t>(args.size()), descriptorType, numDescriptors))
 			.setPSetLayouts(args.data())
 			.setDescriptorSetCount(static_cast<uint32_t>(args.size()))
 	, vkDynLoader);
@@ -3644,8 +3712,9 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 {
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(textures.size() <= attribute_descriptions.size(), "Received more textures than expected");
+	ASSERT(textures.size() <= std::numeric_limits<uint32_t>::max(), "Too many textures: %zu", textures.size());
 
-	const auto set = allocateDescriptorSet(currentPSO->textures_set_layout);
+	const auto set = allocateDescriptorSet(currentPSO->textures_set_layout, vk::DescriptorType::eCombinedImageSampler, static_cast<uint32_t>(textures.size()));
 
 	auto image_descriptor = std::vector<vk::DescriptorImageInfo>{};
 	for (auto* texture : textures)
@@ -3702,7 +3771,7 @@ void VkRoot::set_uniforms_set(const size_t& uniform_set, const void* buffer, siz
 
 	if (!descSet)
 	{
-		auto sets = allocateDescriptorSet(currentPSO->cbuffer_set_layout[uniform_set]);
+		auto sets = allocateDescriptorSet(currentPSO->cbuffer_set_layout[uniform_set], vk::DescriptorType::eUniformBufferDynamic, 1);
 		descSet = sets[0];
 		const auto descriptorWrite = std::array<vk::WriteDescriptorSet, 1>{
 			vk::WriteDescriptorSet()
