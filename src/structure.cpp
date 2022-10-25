@@ -158,7 +158,7 @@ static int constructorLimit[MAX_PLAYERS];
 //   I don't what's the reason but we definitely need to handle more than MAX_PLAYERS 
 std::unordered_map<UDWORD, UDWORD> moduleToBuilding[MAX_PLAYER_SLOTS];
 
-static WzString favoriteStructs;
+static std::vector<WzString> favoriteStructs;
 
 #define MAX_UNIT_MESSAGE_PAUSE 40000
 
@@ -6855,11 +6855,62 @@ void checkStructure(const STRUCTURE *psStructure, const char *const location_des
 	}
 }
 
+bool loadFavoriteStructsFile(const char* path)
+{
+	WzConfig ini(path, WzConfig::ReadOnly);
+	if (!ini.status())
+	{
+		debug(LOG_WZ, "%s not found", path);
+		return false;
+	}
+
+	for (ini.beginArray("favoriteStructures"); ini.remainingArrayItems(); ini.nextArrayItem())
+	{
+		WzString name = WzString::fromUtf8(std::string("structure"));
+		WzString value = ini.value(name, "").toWzString();
+		if (value.length() > 0)
+		{
+			favoriteStructs.push_back(value);
+		}
+	}
+	ini.endArray();
+
+	return true;
+}
+
+bool writeFavoriteStructsFile(const char* path)
+{
+	WzConfig ini(path, WzConfig::ReadAndWrite);
+	if (!ini.status() || !ini.isWritable())
+	{
+		debug(LOG_ERROR, "Could not open or write to %s", ini.fileName().toUtf8().c_str());
+		return false;
+	}
+
+	ini.setValue("version", 1);
+	ini.beginArray("favoriteStructures");
+	for (size_t index = 0; index < favoriteStructs.size(); ++index)
+	{
+		WzString name = WzString::fromUtf8(std::string("structure"));
+		ini.setValue(name, favoriteStructs[index].toUtf8());
+		ini.nextArrayItem();
+	}
+	ini.endArray();
+
+	return true;
+}
+
 static void parseFavoriteStructs()
 {
+	if (asStructureStats == nullptr)
+	{
+		debug(LOG_WARNING, "asStructureStats was null?");
+		return;
+	}
+
 	for (unsigned i = 0; i < numStructureStats; ++i)
 	{
-		if (favoriteStructs.contains(asStructureStats[i].id))
+		if (std::find(favoriteStructs.begin(), favoriteStructs.end(), asStructureStats[i].id) != favoriteStructs.end())
 		{
 			asStructureStats[i].isFavorite = true;
 		}
@@ -6872,8 +6923,13 @@ static void parseFavoriteStructs()
 
 static void packFavoriteStructs()
 {
-	favoriteStructs = "";
-	bool first = true;
+	if (asStructureStats == nullptr)
+	{
+		debug(LOG_WARNING, "asStructureStats was null?");
+		return;
+	}
+
+	favoriteStructs.clear();
 
 	for (unsigned i = 0; i < numStructureStats; ++i)
 	{
@@ -6884,27 +6940,9 @@ static void packFavoriteStructs()
 				ASSERT(false, "Invalid struct stats - empty id");
 				continue;
 			}
-			if (first)
-			{
-				first = false;
-			}
-			else
-			{
-				favoriteStructs += ",";
-			}
-			favoriteStructs += asStructureStats[i].id;
+			favoriteStructs.push_back(asStructureStats[i].id);
 		}
 	}
-}
-
-WzString getFavoriteStructs()
-{
-	return favoriteStructs;
-}
-
-void setFavoriteStructs(WzString list)
-{
-	favoriteStructs = list;
 }
 
 // This follows the logic in droid.cpp nextModuleToBuild()
