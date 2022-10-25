@@ -1476,7 +1476,7 @@ public:
 
 		auto currentResolution = getCurrentResolution();
 		// Attempt to change the resolution
-		if (!wzChangeWindowResolution(selectedResolution.screen, selectedResolution.width, selectedResolution.height))
+		if (!wzChangeFullscreenDisplayMode(selectedResolution.screen, selectedResolution.width, selectedResolution.height))
 		{
 			debug(
 				LOG_WARNING,
