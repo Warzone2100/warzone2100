@@ -490,6 +490,18 @@ bool loadConfig()
 	war_SetHeight(height);
 	war_SetScreen(screen);
 
+	int fullscreenWidth = iniGetInteger("fullscreenWidth", war_GetFullscreenModeWidth()).value();
+	int fullscreenHeight = iniGetInteger("fullscreenHeight", war_GetFullscreenModeHeight()).value();
+	int fullscreenScreen = iniGetInteger("fullscreenScreen", 0).value();
+	if (fullscreenWidth < 640 || fullscreenHeight < 480)	// sanity check
+	{
+		fullscreenWidth = 640;
+		fullscreenHeight = 480;
+	}
+	war_SetFullscreenModeWidth(fullscreenWidth);
+	war_SetFullscreenModeHeight(fullscreenHeight);
+	war_SetFullscreenModeScreen(fullscreenScreen);
+
 	if (auto value = iniGetIntegerOpt("bpp"))
 	{
 		war_SetVideoBufferDepth(value.value());
@@ -604,6 +616,9 @@ bool saveConfig()
 	iniSetInteger("width", war_GetWidth());
 	iniSetInteger("height", war_GetHeight());
 	iniSetInteger("screen", war_GetScreen());
+	iniSetInteger("fullscreenWidth", war_GetFullscreenModeWidth());
+	iniSetInteger("fullscreenHeight", war_GetFullscreenModeHeight());
+	iniSetInteger("fullscreenScreen", war_GetFullscreenModeScreen());
 	iniSetInteger("bpp", war_GetVideoBufferDepth());
 	iniSetInteger("fullscreen", static_cast<typename std::underlying_type<WINDOW_MODE>::type>(war_getWindowMode()));
 	iniSetString("language", getLanguage());

@@ -76,6 +76,10 @@ struct WARZONE_GLOBALS
 	int fogStart = 4000;
 	int fogEnd = 8000;
 	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
+	// fullscreen mode settings
+	UDWORD fullscreenModeWidth = 0; // current display default
+	UDWORD fullscreenModeHeight = 0; // current display default
+	int fullscreenModeScreen = -1;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -514,4 +518,33 @@ void war_setFogEnd(int end)
 void war_setFogStart(int start)
 {
 	 warGlobs.fogStart = start;
+}
+
+void war_SetFullscreenModeWidth(UDWORD width)
+{
+	warGlobs.fullscreenModeWidth = width;
+}
+
+UDWORD war_GetFullscreenModeWidth()
+{
+	return warGlobs.fullscreenModeWidth;
+}
+
+void war_SetFullscreenModeHeight(UDWORD height)
+{
+	warGlobs.fullscreenModeHeight = height;
+}
+
+UDWORD war_GetFullscreenModeHeight()
+{
+	return warGlobs.fullscreenModeHeight;
+}
+void war_SetFullscreenModeScreen(int screen)
+{
+	warGlobs.fullscreenModeScreen = screen;
+}
+
+int war_GetFullscreenModeScreen()
+{
+	return warGlobs.fullscreenModeScreen;
 }
