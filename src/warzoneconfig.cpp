@@ -76,6 +76,7 @@ struct WARZONE_GLOBALS
 	int fogStart = 4000;
 	int fogEnd = 8000;
 	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
+	int minimizeOnFocusLoss = -1; // see enum class MinimizeOnFocusLossBehavior
 	// fullscreen mode settings
 	UDWORD fullscreenModeWidth = 0; // current display default
 	UDWORD fullscreenModeHeight = 0; // current display default
@@ -398,6 +399,16 @@ void war_setLODDistanceBiasPercentage(int bias)
 	if (bias > 200) { bias = 200; }
 	if (bias < -200) { bias = -200; }
 	warGlobs.lodDistanceBiasPercentage = bias;
+}
+
+int war_getMinimizeOnFocusLoss()
+{
+	return warGlobs.minimizeOnFocusLoss;
+}
+
+void war_setMinimizeOnFocusLoss(int val)
+{
+	warGlobs.minimizeOnFocusLoss = val;
 }
 
 video_backend war_getGfxBackend()

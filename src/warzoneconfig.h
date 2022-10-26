@@ -144,6 +144,8 @@ void war_setFogEnd(int end);
 void war_setFogStart(int start);
 int war_getLODDistanceBiasPercentage();
 void war_setLODDistanceBiasPercentage(int bias);
+int war_getMinimizeOnFocusLoss();
+void war_setMinimizeOnFocusLoss(int val);
 
 /**
  * Enable or disable sound initialization

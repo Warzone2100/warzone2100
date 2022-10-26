@@ -90,6 +90,14 @@ bool wzIsWindowResizable();
 bool wzChangeDisplayScale(unsigned int displayScale);
 bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int height);
 bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height);
+enum class MinimizeOnFocusLossBehavior
+{
+	Auto = -1,
+	Off = 0,
+	On_Fullscreen = 1
+};
+MinimizeOnFocusLossBehavior wzGetCurrentMinimizeOnFocusLossBehavior();
+void wzSetMinimizeOnFocusLoss(MinimizeOnFocusLossBehavior behavior);
 unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight);
 unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize();
 unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension);

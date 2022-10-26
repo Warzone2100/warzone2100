@@ -2178,6 +2178,41 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 	return true;
 }
 
+MinimizeOnFocusLossBehavior wzGetCurrentMinimizeOnFocusLossBehavior()
+{
+	const char* hint = SDL_GetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS);
+	if (!hint || !*hint || SDL_strcasecmp(hint, "auto") == 0)
+	{
+		return MinimizeOnFocusLossBehavior::Auto;
+	}
+	bool bValue = SDL_GetHintBoolean(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, SDL_FALSE);
+	return (bValue) ? MinimizeOnFocusLossBehavior::On_Fullscreen : MinimizeOnFocusLossBehavior::Off;
+}
+
+void wzSetMinimizeOnFocusLoss(MinimizeOnFocusLossBehavior behavior)
+{
+#if !defined(__EMSCRIPTEN__)
+	const char* value = "auto";
+	switch (behavior)
+	{
+		case MinimizeOnFocusLossBehavior::Off:
+			value = "0";
+			break;
+		case MinimizeOnFocusLossBehavior::On_Fullscreen:
+			value = "1";
+			break;
+		case MinimizeOnFocusLossBehavior::Auto:
+			value = "auto";
+			break;
+		default:
+			return;
+	}
+	SDL_SetHintWithPriority(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, value, SDL_HINT_OVERRIDE);
+#else
+	// no-op on Emscripten
+#endif
+}
+
 // Returns the current window screen, width, and height
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height)
 {
@@ -2833,6 +2868,16 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		}
 	}
 #endif
+	int minOnFocusLossSettingVal = war_getMinimizeOnFocusLoss();
+	if (minOnFocusLossSettingVal < -1 || minOnFocusLossSettingVal > 1)
+	{
+		minOnFocusLossSettingVal = -1;
+	}
+	const char* hint = SDL_GetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS);
+	if (!hint || !*hint || SDL_strcasecmp(hint, "auto") == 0)
+	{
+		wzSetMinimizeOnFocusLoss(static_cast<MinimizeOnFocusLossBehavior>(minOnFocusLossSettingVal));
+	}
 
 	WZbackend = backend;
 
