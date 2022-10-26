@@ -208,6 +208,17 @@
 			"Defensive Strength: Medium"
 		]
 	},
+	"RES_DF_HCW2": {
+		"id": "RES_DF_HCW2",
+		"imdName": "MICAPSUL.pie",
+		"sequenceName": "res_struttech.ogg",
+		"text": [
+			"New Construction Options Available",
+			"Titanium-reinforced concrete gate",
+			"Enables Hardcrete gates",
+			"Defensive Strength: Medium"
+		]
+	},
 	"RES_EMP_CAN": {
 		"id": "RES_EMP_CAN",
 		"imdName": "MICAPSUL.pie",

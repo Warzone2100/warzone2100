@@ -853,7 +853,7 @@
 	"R-Defense-HardcreteGate": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HardcreteGate",
-		"msgName": "RES_DF_HCW1",
+		"msgName": "RES_DF_HCW2",
 		"name": "Hardcrete Gate",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall"
