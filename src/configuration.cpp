@@ -523,6 +523,10 @@ bool loadConfig()
 		gfxBackend = wzGetDefaultGfxBackendForCurrentSystem();
 	}
 	war_setGfxBackend(gfxBackend);
+	if (auto value = iniGetIntegerOpt("minimizeOnFocusLoss"))
+	{
+		war_setMinimizeOnFocusLoss(value.value());
+	}
 	auto js_backend = war_getJSBackend();
 	if (iniGeneral.has("jsbackend"))
 	{
@@ -700,6 +704,7 @@ bool saveConfig()
 	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
 	iniSetString("favoriteStructs", getFavoriteStructs().toUtf8());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
+	iniSetInteger("minimizeOnFocusLoss", war_getMinimizeOnFocusLoss());
 	iniSetString("jsbackend", to_string(war_getJSBackend()));
 	iniSetInteger("BlueprintTrackAnimationSpeed", BlueprintTrackAnimationSpeed);
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);

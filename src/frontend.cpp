@@ -1638,6 +1638,50 @@ static std::shared_ptr<WIDGET> makeResolutionDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeMinimizeOnFocusLossDropdown()
+{
+	std::vector<std::tuple<WzString, MinimizeOnFocusLossBehavior>> dropDownChoices = {
+		{_("Auto"), MinimizeOnFocusLossBehavior::Auto},
+		{_("Off"), MinimizeOnFocusLossBehavior::Off},
+		{_("On (Fullscreen)"), MinimizeOnFocusLossBehavior::On_Fullscreen},
+	};
+
+	size_t currentSettingIdx = 0;
+	auto currValue = wzGetCurrentMinimizeOnFocusLossBehavior();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, MinimizeOnFocusLossBehavior>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_MINIMIZE_ON_FOCUS_LOSS_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const int paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setOnChange([dropDownChoices](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			ASSERT_OR_RETURN(, selectedIndex.value() < dropDownChoices.size(), "Invalid index");
+			auto behavior = std::get<1>(dropDownChoices.at(selectedIndex.value()));
+			wzSetMinimizeOnFocusLoss(behavior);
+			war_setMinimizeOnFocusLoss(static_cast<int>(behavior));
+		}
+	});
+
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
 void startVideoOptionsMenu()
 {
 	addBackdrop();
@@ -1718,6 +1762,17 @@ void startVideoOptionsMenu()
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_GFXBACKEND, _("Graphics Backend*"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GFXBACKEND_R, videoOptionsGfxBackendString(), WBUT_SECONDARY)));
 	row.start++;
+
+#if !defined(__EMSCRIPTEN__)
+	// Minimize on Focus Loss
+	// TRANSLATORS: Shortened form of "Minimize on Focus Loss"
+	// An option describing when / whether WZ will auto-minimize the window when it loses focus.
+	auto minimizeOnFocusLossLabel = makeTextButton(FRONTEND_MINIMIZE_ON_FOCUS_LOSS, _("Min on Focus Loss"), WBUT_SECONDARY);
+	minimizeOnFocusLossLabel->setTip(_("Whether the window should auto-minimize on focus loss"));
+	grid->place({0}, row, addMargin(minimizeOnFocusLossLabel));
+	grid->place({1, 1, false}, row, addMargin(makeMinimizeOnFocusLossDropdown()));
+	row.start++;
+#endif
 
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
