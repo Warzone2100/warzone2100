@@ -82,12 +82,20 @@ void war_SetVsync(int value);
 int war_GetVsync();
 void war_SetDisplayScale(unsigned int scale);
 unsigned int war_GetDisplayScale();
+// non-fullscreen window sizes / screen
 void war_SetWidth(UDWORD width);
 UDWORD war_GetWidth();
 void war_SetScreen(int screen);
 int war_GetScreen();
 void war_SetHeight(UDWORD height);
 UDWORD war_GetHeight();
+// fullscreen display mode + screen
+void war_SetFullscreenModeWidth(UDWORD width);
+UDWORD war_GetFullscreenModeWidth();
+void war_SetFullscreenModeScreen(int screen);
+int war_GetFullscreenModeScreen();
+void war_SetFullscreenModeHeight(UDWORD height);
+UDWORD war_GetFullscreenModeHeight();
 void war_SetVideoBufferDepth(UDWORD videoBufferDepth);
 UDWORD war_GetVideoBufferDepth();
 void war_SetPauseOnFocusLoss(bool enabled);

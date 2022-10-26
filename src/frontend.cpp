@@ -1487,9 +1487,9 @@ public:
 		}
 
 		// Store the new width and height
-		war_SetScreen(selectedResolution.screen);
-		war_SetWidth(selectedResolution.width);
-		war_SetHeight(selectedResolution.height);
+		war_SetFullscreenModeScreen(selectedResolution.screen);
+		war_SetFullscreenModeWidth(selectedResolution.width);
+		war_SetFullscreenModeHeight(selectedResolution.height);
 
 		// Update the widget(s)
 		refreshCurrentVideoOptionsValues();
@@ -1508,14 +1508,22 @@ public:
 private:
 	const std::vector<screeninfo> modes;
 
-	static screeninfo getCurrentResolution()
+	static screeninfo getCurrentWindowedResolution()
 	{
+		int screen = 0;
+		unsigned int windowWidth = 0, windowHeight = 0;
+		wzGetWindowResolution(&screen, &windowWidth, &windowHeight);
 		screeninfo info;
-		info.screen = war_GetScreen();
-		info.width = war_GetWidth();
-		info.height = war_GetHeight();
+		info.screen = screen;
+		info.width = windowWidth;
+		info.height = windowHeight;
 		info.refresh_rate = -1;  // Unused.
 		return info;
+	}
+
+	static screeninfo getCurrentResolution(optional<WINDOW_MODE> modeOverride = nullopt)
+	{
+		return (modeOverride.value_or(wzGetCurrentWindowMode()) == WINDOW_MODE::fullscreen) ? wzGetCurrentFullscreenDisplayMode() : getCurrentWindowedResolution();
 	}
 
 	static std::vector<screeninfo> loadModes()
@@ -1544,6 +1552,50 @@ private:
 	}
 };
 
+class ResolutionDropdown : public DropdownWidget
+{
+public:
+	static std::shared_ptr<ResolutionDropdown> make(UDWORD widgId = 0, int32_t paddingSize = 10)
+	{
+		auto dropdown = std::make_shared<ResolutionDropdown>();
+		dropdown->id = widgId;
+		dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
+
+		ScreenResolutionsModel screenResolutionsModel;
+		for (auto resolution: screenResolutionsModel)
+		{
+			auto item = makeTextButton(0, ScreenResolutionsModel::resolutionString(resolution), 0);
+			dropdown->addItem(Margin(0, paddingSize).wrap(item));
+		}
+
+		auto closestResolution = screenResolutionsModel.findResolutionClosestToCurrent();
+		if (closestResolution != screenResolutionsModel.end())
+		{
+			dropdown->setSelectedIndex(closestResolution - screenResolutionsModel.begin());
+		}
+
+		dropdown->setOnChange([screenResolutionsModel](DropdownWidget& dropdown) {
+			if (auto selectedIndex = dropdown.getSelectedIndex())
+			{
+				screenResolutionsModel.selectAt(selectedIndex.value());
+			}
+		});
+
+		return dropdown;
+	};
+
+	void updateSelectedIndex()
+	{
+		auto closestResolution = screenResolutionsModel.findResolutionClosestToCurrent();
+		if (closestResolution != screenResolutionsModel.end())
+		{
+			setSelectedIndex(closestResolution - screenResolutionsModel.begin());
+		}
+	}
+private:
+	ScreenResolutionsModel screenResolutionsModel;
+};
+
 void refreshCurrentVideoOptionsValues()
 {
 	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
@@ -1560,6 +1612,15 @@ void refreshCurrentVideoOptionsValues()
 		else
 		{
 			videoOptionsEnableResolutionButtons();
+			WIDGET *psDropdownWidg = widgGetFromID(psWScreen, FRONTEND_RESOLUTION_DROPDOWN);
+			if (psDropdownWidg)
+			{
+				auto pResolutionDropdown = std::dynamic_pointer_cast<ResolutionDropdown>(psDropdownWidg->shared_from_this());
+				if (pResolutionDropdown)
+				{
+					pResolutionDropdown->updateSelectedIndex();
+				}
+			}
 		}
 	}
 	widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString().c_str());
@@ -1572,31 +1633,8 @@ void refreshCurrentVideoOptionsValues()
 
 static std::shared_ptr<WIDGET> makeResolutionDropdown()
 {
-	auto dropdown = std::make_shared<DropdownWidget>();
-	dropdown->id = FRONTEND_RESOLUTION_DROPDOWN;
-	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
 	const auto paddingSize = 10;
-
-	ScreenResolutionsModel screenResolutionsModel;
-	for (auto resolution: screenResolutionsModel)
-	{
-		auto item = makeTextButton(0, ScreenResolutionsModel::resolutionString(resolution), 0);
-		dropdown->addItem(Margin(0, paddingSize).wrap(item));
-	}
-
-	auto closestResolution = screenResolutionsModel.findResolutionClosestToCurrent();
-	if (closestResolution != screenResolutionsModel.end())
-	{
-		dropdown->setSelectedIndex(closestResolution - screenResolutionsModel.begin());
-	}
-
-	dropdown->setOnChange([screenResolutionsModel](DropdownWidget& dropdown) {
-		if (auto selectedIndex = dropdown.getSelectedIndex())
-		{
-			screenResolutionsModel.selectAt(selectedIndex.value());
-		}
-	});
-
+	auto dropdown = ResolutionDropdown::make(FRONTEND_RESOLUTION_DROPDOWN);
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 

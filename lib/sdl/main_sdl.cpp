@@ -112,6 +112,14 @@ unsigned int windowHeight = 0;
 unsigned int current_displayScale = 100;
 float current_displayScaleFactor = 1.f;
 
+struct QueuedWindowDimensions
+{
+	int width;
+	int height;
+	bool recenter;
+};
+optional<QueuedWindowDimensions> deferredDimensionReset = nullopt;
+
 static std::vector<screeninfo> displaylist;	// holds all our possible display lists
 
 std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
@@ -305,6 +313,34 @@ WzString wzGetSelection()
 std::vector<screeninfo> wzAvailableResolutions()
 {
 	return displaylist;
+}
+
+screeninfo wzGetCurrentFullscreenDisplayMode()
+{
+	screeninfo result = {};
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzGetCurrentFullscreenDisplayMode called when window is not available");
+		return {};
+	}
+	SDL_DisplayMode current = { 0, 0, 0, 0, 0 };
+	int currScreen = SDL_GetWindowDisplayIndex(WZwindow);
+	if (currScreen < 0)
+	{
+		debug(LOG_WZ, "Failed to get current screen index: %s", SDL_GetError());
+		currScreen = 0;
+	}
+	if (SDL_GetWindowDisplayMode(WZwindow, &current) != 0)
+	{
+		// Failed to get current fullscreen display mode for window?
+		debug(LOG_WZ, "Failed to get current WindowDisplayMode: %s", SDL_GetError());
+		return {};
+	}
+	result.screen = currScreen;
+	result.width = current.w;
+	result.height = current.h;
+	result.refresh_rate = current.refresh_rate;
+	return result;
 }
 
 std::vector<unsigned int> wzAvailableDisplayScales()
@@ -597,10 +633,25 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 			wzSetWindowIsResizable(false);
 			break;
 		case WINDOW_MODE::windowed:
+		{
+			int currDisplayIndex = SDL_GetWindowDisplayIndex(WZwindow);
+			if (currDisplayIndex < 0)
+			{
+				currDisplayIndex = screenIndex;
+			}
+			// disable fullscreen mode
 			sdl_result = SDL_SetWindowFullscreen(WZwindow, 0);
 			if (sdl_result != 0) { return false; }
 			wzSetWindowIsResizable(true);
+			// restore the old windowed size
+			int desiredWidth = war_GetWidth(), desiredHeight = war_GetHeight();
+			SDL_SetWindowSize(WZwindow, desiredWidth, desiredHeight);
+			// Position the window (centered) on the screen (for its new size)
+			SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(currDisplayIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(currDisplayIndex));
+			// Workaround for issues properly restoring window dimensions when changing from fullscreen -> windowed (on some platforms)
+			deferredDimensionReset = QueuedWindowDimensions {desiredWidth, desiredHeight, true};
 			break;
+		}
 		case WINDOW_MODE::fullscreen:
 			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN);
 			if (sdl_result != 0) { return false; }
@@ -1898,6 +1949,12 @@ bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int 
 	debug(LOG_WZ, "Attempt to change fullscreen mode to [%d] %dx%d", screen, width, height);
 
 	bool hasPrior = true;
+	int priorScreen = SDL_GetWindowDisplayIndex(WZwindow);
+	if (priorScreen < 0)
+	{
+		debug(LOG_WZ, "Failed to get current screen index: %s", SDL_GetError());
+		priorScreen = screenIndex;
+	}
 	SDL_DisplayMode prior = { 0, 0, 0, 0, 0 };
 	if (SDL_GetWindowDisplayMode(WZwindow, &prior) != 0)
 	{
@@ -1905,6 +1962,12 @@ bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int 
 		debug(LOG_WZ, "Failed to get current WindowDisplayMode: %s", SDL_GetError());
 		// Proceed with defaults...
 		hasPrior = false;
+	}
+
+	if (screen != priorScreen)
+	{
+		debug(LOG_ERROR, "Currently, switching to a fullscreen display mode on a different screen is unsupported. Move the window to the desired display first and try again.");
+		return false;
 	}
 
 	SDL_DisplayMode	closest;
@@ -1919,11 +1982,24 @@ bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int 
 	desired.refresh_rate = 0;
 	desired.driverdata = 0;
 
-	if (SDL_GetClosestDisplayMode(screen, &desired, &closest) == NULL)
+
+	if (width == 0 || height == 0)
 	{
-		// no match was found
-		debug(LOG_INFO, "No closest DisplayMode found ([%d] [%u x %u]); error: %s", screen, width, height, SDL_GetError());
-		return false;
+		debug(LOG_INFO, "Getting desktop display mode");
+		if (SDL_GetDesktopDisplayMode(screen, &closest) != 0)
+		{
+			debug(LOG_INFO, "Unable to get desktop DisplayMode?: %s", SDL_GetError());
+			return false;
+		}
+	}
+	else
+	{
+		if (SDL_GetClosestDisplayMode(screen, &desired, &closest) == NULL)
+		{
+			// no match was found
+			debug(LOG_INFO, "No closest DisplayMode found ([%d] [%u x %u]); error: %s", screen, width, height, SDL_GetError());
+			return false;
+		}
 	}
 
 	int result = SDL_SetWindowDisplayMode(WZwindow, &closest);
@@ -1976,7 +2052,14 @@ bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int 
 			// Store the new display scale
 			war_SetDisplayScale(maxDisplayScale);
 		}
+
+		// Store the updated screenIndex
+		screenIndex = screen;
 	}
+
+	war_SetFullscreenModeScreen(screen);
+	war_SetFullscreenModeWidth(closest.w);
+	war_SetFullscreenModeHeight(closest.h);
 
 	return true;
 }
@@ -2314,19 +2397,21 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	;
 	const bool usesSDLBackend_OpenGL = useOpenGLES || (backend == video_backend::opengl);
 
-	// populate with the saved configuration values (if we had any)
-	int width = war_GetWidth();
-	int height = war_GetHeight();
-	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
-	// (i.e. not taking into account the game display scale). This function later sets the display system
-	// to the *game screen* width and height (taking into account the display scale).
-
 	// Initialize video subsystem (if not yet initialized)
 	if (!wzSDLOneTimeInitSubsystem(SDL_INIT_VIDEO))
 	{
 		debug(LOG_FATAL, "Error: Could not initialise SDL video subsystem (%s).", SDL_GetError());
 		SDL_Quit();
 		exit(EXIT_FAILURE);
+	}
+
+	// ensure "fullscreen" is in the supported fullscreen modes for the current system
+	auto supportedFullscreenModes = wzSupportedWindowModes();
+	if (std::find(supportedFullscreenModes.begin(), supportedFullscreenModes.end(), fullscreen) == supportedFullscreenModes.end())
+	{
+		debug(LOG_ERROR, "Unsupported fullscreen mode specified: %d; using default", static_cast<int>(fullscreen));
+		fullscreen = WINDOW_MODE::windowed;
+		war_setWindowMode(fullscreen); // persist the change
 	}
 
 	if (usesSDLBackend_OpenGL)
@@ -2389,15 +2474,23 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 		debug(LOG_WZ, "Monitor [%d] %dx%d %d", i, current.w, current.h, current.refresh_rate);
 	}
 
-	if (width == 0 || height == 0)
+	// populate with the saved configuration values (if we had any)
+	int desiredWindowWidth = (fullscreen == WINDOW_MODE::fullscreen) ? war_GetFullscreenModeWidth() : war_GetWidth();
+	int desiredWindowHeight = (fullscreen == WINDOW_MODE::fullscreen) ? war_GetFullscreenModeHeight() : war_GetHeight();
+
+	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
+	// (i.e. not taking into account the game display scale). This function later sets the display system
+	// to the *game screen* width and height (taking into account the display scale).
+
+	if (desiredWindowWidth == 0 || desiredWindowHeight == 0)
 	{
-		width = windowWidth = current.w;
-		height = windowHeight = current.h;
+		windowWidth = current.w;
+		windowHeight = current.h;
 	}
 	else
 	{
-		windowWidth = width;
-		windowHeight = height;
+		windowWidth = desiredWindowWidth;
+		windowHeight = desiredWindowHeight;
 	}
 
 	setDisplayScale(war_GetDisplayScale());
@@ -2408,7 +2501,6 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 		SDL_GetDisplayBounds(i, &bounds);
 		debug(LOG_WZ, "Monitor %d: pos %d x %d : res %d x %d", i, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
 	}
-	screenIndex = war_GetScreen();
 	const int currentNumDisplays = SDL_GetNumVideoDisplays();
 	if (currentNumDisplays < 1)
 	{
@@ -2416,68 +2508,71 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 		SDL_Quit();
 		exit(EXIT_FAILURE);
 	}
-	if (screenIndex > currentNumDisplays)
+
+	// Check desired screen index values versus current system
+	if (war_GetScreen() > currentNumDisplays)
 	{
-		debug(LOG_WARNING, "Invalid screen [%d] defined in configuration; there are only %d displays; falling back to display 0", screenIndex, currentNumDisplays);
-		screenIndex = 0;
+		debug(LOG_WARNING, "Invalid screen [%d] defined in configuration; there are only %d displays; falling back to display 0", war_GetScreen(), currentNumDisplays);
 		war_SetScreen(0);
 	}
-
-	if (war_getAutoAdjustDisplayScale())
+	if (war_GetFullscreenModeScreen() > currentNumDisplays || war_GetFullscreenModeScreen() < 0)
 	{
-		// Since SDL (at least <= 2.0.14) does not provide built-in support for high-DPI displays on *some* platforms
-		// (example: Windows), do our best to bump up the game's Display Scale setting to be a better match if the screen
-		// on which the game starts has a higher effective Display Scale than the game's starting Display Scale setting.
-		unsigned int screenBaseDisplayScale = wzGetDefaultBaseDisplayScale(screenIndex);
-		if (screenBaseDisplayScale > wzGetCurrentDisplayScale())
-		{
-			// When bumping up the display scale, also increase the target window size proportionally
-			debug(LOG_WZ, "Increasing game Display Scale to better match calculated default base display scale: %u%% -> %u%%", wzGetCurrentDisplayScale(), screenBaseDisplayScale);
-			unsigned int priorDisplayScale = wzGetCurrentDisplayScale();
-			setDisplayScale(screenBaseDisplayScale);
-			float displayScaleDiff = (float)screenBaseDisplayScale / (float)priorDisplayScale;
-			windowWidth = static_cast<unsigned int>(ceil((float)windowWidth * displayScaleDiff));
-			windowHeight = static_cast<unsigned int>(ceil((float)windowHeight * displayScaleDiff));
-			war_SetDisplayScale(screenBaseDisplayScale); // save the new display scale configuration
-		}
+		debug(LOG_WARNING, "Invalid fullscreen screen [%d] defined in configuration; there are only %d displays; falling back to display 0", war_GetFullscreenModeScreen(), currentNumDisplays);
+		war_SetFullscreenModeScreen(0);
 	}
 
-	// Calculate the minimum window size given the current display scale
+	screenIndex = (fullscreen == WINDOW_MODE::fullscreen) ? war_GetFullscreenModeScreen() : war_GetScreen();
+
+	// Calculate the minimum window size (in *logical* points) given the current display scale
 	unsigned int minWindowWidth = 0, minWindowHeight = 0;
 	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
 
-	if ((windowWidth < minWindowWidth) || (windowHeight < minWindowHeight))
+	if (fullscreen != WINDOW_MODE::fullscreen)
 	{
-		// The desired window width and/or height is lower than the required minimum for the current display scale.
-		// Reduce the display scale to the maximum supported (for the desired window size), and recalculate the required minimum window size.
-		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(windowWidth, windowHeight);
-		maxDisplayScale = std::max(100u, maxDisplayScale); // if wzGetMaximumDisplayScaleForWindowSize fails, it returns < 100
-		setDisplayScale(maxDisplayScale);
-		war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
-		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
-	}
-
-	windowWidth = std::max(windowWidth, minWindowWidth);
-	windowHeight = std::max(windowHeight, minWindowHeight);
-
-	auto supportedFullscreenModes = wzSupportedWindowModes();
-	if (std::find(supportedFullscreenModes.begin(), supportedFullscreenModes.end(), fullscreen) == supportedFullscreenModes.end())
-	{
-		debug(LOG_ERROR, "Unsupported fullscreen mode specified: %d; using default", static_cast<int>(fullscreen));
-		fullscreen = WINDOW_MODE::windowed;
-		war_setWindowMode(fullscreen); // persist the change
-	}
-
-	if (fullscreen == WINDOW_MODE::windowed)
-	{
-		// Determine the maximum usable windowed size for this display/screen
-		SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
-		if (SDL_GetDisplayUsableBounds(screenIndex, &displayUsableBounds) == 0)
+		if (war_getAutoAdjustDisplayScale())
 		{
-			if (displayUsableBounds.w > 0 && displayUsableBounds.h > 0)
+			// Since SDL (at least <= 2.0.14) does not provide built-in support for high-DPI displays on *some* platforms
+			// (example: Windows), do our best to bump up the game's Display Scale setting to be a better match if the screen
+			// on which the game starts has a higher effective Display Scale than the game's starting Display Scale setting.
+			unsigned int screenBaseDisplayScale = wzGetDefaultBaseDisplayScale(screenIndex);
+			if (screenBaseDisplayScale > wzGetCurrentDisplayScale())
 			{
-				windowWidth = std::min((unsigned int)displayUsableBounds.w, windowWidth);
-				windowHeight = std::min((unsigned int)displayUsableBounds.h, windowHeight);
+				// When bumping up the display scale, also increase the target window size proportionally
+				debug(LOG_WZ, "Increasing game Display Scale to better match calculated default base display scale: %u%% -> %u%%", wzGetCurrentDisplayScale(), screenBaseDisplayScale);
+				unsigned int priorDisplayScale = wzGetCurrentDisplayScale();
+				setDisplayScale(screenBaseDisplayScale);
+				float displayScaleDiff = (float)screenBaseDisplayScale / (float)priorDisplayScale;
+				windowWidth = static_cast<unsigned int>(ceil((float)windowWidth * displayScaleDiff));
+				windowHeight = static_cast<unsigned int>(ceil((float)windowHeight * displayScaleDiff));
+				war_SetDisplayScale(screenBaseDisplayScale); // save the new display scale configuration
+			}
+		}
+
+		if ((windowWidth < minWindowWidth) || (windowHeight < minWindowHeight))
+		{
+			// The desired window width and/or height is lower than the required minimum for the current display scale.
+			// Reduce the display scale to the maximum supported (for the desired window size), and recalculate the required minimum window size.
+			unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(windowWidth, windowHeight);
+			maxDisplayScale = std::max(100u, maxDisplayScale); // if wzGetMaximumDisplayScaleForWindowSize fails, it returns < 100
+			setDisplayScale(maxDisplayScale);
+			war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
+			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
+		}
+
+		windowWidth = std::max(windowWidth, minWindowWidth);
+		windowHeight = std::max(windowHeight, minWindowHeight);
+
+		if (fullscreen == WINDOW_MODE::windowed)
+		{
+			// Determine the maximum usable windowed size for this display/screen
+			SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
+			if (SDL_GetDisplayUsableBounds(screenIndex, &displayUsableBounds) == 0)
+			{
+				if (displayUsableBounds.w > 0 && displayUsableBounds.h > 0)
+				{
+					windowWidth = std::min((unsigned int)displayUsableBounds.w, windowWidth);
+					windowHeight = std::min((unsigned int)displayUsableBounds.h, windowHeight);
+				}
 			}
 		}
 	}
@@ -2526,10 +2621,23 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 		exit(EXIT_FAILURE);
 	}
 
-	// Check that the actual window size matches the desired window size
+	// Always set the fullscreen mode (so switching works to the desired mode, even if we don't start in fullscreen mode)
+	if (!wzChangeFullscreenDisplayMode(screenIndex, war_GetFullscreenModeWidth(), war_GetFullscreenModeHeight()))
+	{
+		if (fullscreen == WINDOW_MODE::fullscreen)
+		{
+			debug(LOG_ERROR, "Failed to initialize at fullscreen mode ([%d] [%u x %u]); reverting to windowed mode", screenIndex, war_GetFullscreenModeWidth(), war_GetFullscreenModeHeight());
+			wzChangeWindowMode(WINDOW_MODE::windowed);
+			fullscreen = WINDOW_MODE::windowed;
+		}
+	}
+
+	// Get resulting logical window size
 	int resultingWidth, resultingHeight = 0;
 	SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
-	if (resultingWidth < minWindowWidth || resultingHeight < minWindowHeight)
+
+	// Check that the actual window size matches the desired window size (but not for classic fullscreen mode)
+	if ((wzGetCurrentWindowMode() != WINDOW_MODE::fullscreen) && (resultingWidth < minWindowWidth || resultingHeight < minWindowHeight))
 	{
 		// The created window size (that the system returned) is less than the minimum required window size (for this display scale)
 		debug(LOG_WARNING, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; which is below the required minimum size of %d x %d for the current display scale level", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
@@ -2985,8 +3093,25 @@ static void handleActiveEvent(SDL_Event *event)
 				handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
 
 				// Store the new values (in case the user manually resized the window bounds)
-				war_SetWidth(newWindowWidth);
-				war_SetHeight(newWindowHeight);
+				if (wzGetCurrentWindowMode() == WINDOW_MODE::windowed)
+				{
+					war_SetWidth(newWindowWidth);
+					war_SetHeight(newWindowHeight);
+				}
+
+				// Handle deferred size reset
+				if (deferredDimensionReset.has_value())
+				{
+					if (WZwindow != nullptr)
+					{
+						SDL_SetWindowSize(WZwindow, deferredDimensionReset.value().width, deferredDimensionReset.value().height);
+						if (deferredDimensionReset.value().recenter)
+						{
+							SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
+						}
+					}
+					deferredDimensionReset.reset();
+				}
 			}
 			break;
 		case SDL_WINDOWEVENT_MINIMIZED:

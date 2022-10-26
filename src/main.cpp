@@ -2097,14 +2097,6 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (!headlessGameMode())
-	{
-		unsigned int windowWidth = 0, windowHeight = 0;
-		wzGetWindowResolution(nullptr, &windowWidth, &windowHeight);
-		war_SetWidth(windowWidth);
-		war_SetHeight(windowHeight);
-	}
-
 	bool fogConfigOption = pie_GetFogEnabled();
 	pie_SetFogStatus(false);
 

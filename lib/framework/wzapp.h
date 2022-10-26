@@ -111,6 +111,7 @@ WZ_DECL_NONNULL(2, 3) void wzDisplayDialog(DialogType type, const char *title, c
 
 WzString wzGetPlatform();
 std::vector<screeninfo> wzAvailableResolutions();
+screeninfo wzGetCurrentFullscreenDisplayMode();
 std::vector<unsigned int> wzAvailableDisplayScales();
 std::vector<video_backend> wzAvailableGfxBackends();
 WzString wzGetSelection();
