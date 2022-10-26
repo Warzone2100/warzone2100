@@ -2428,6 +2428,19 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	struct screeninfo screenlist;
 	for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i)		// How many monitors we got
 	{
+		optional<float> dpiAdjustmentFactor = nullopt;
+#if defined(WZ_OS_WIN) // currently only used on Windows
+		// get DPI for this display (DPI-aware Windows returns pixel values, so we must use this to convert to logical values for minimum checks!)
+		float dpi, baseDpi;
+		if (wzGetDisplayDPI(i, &dpi, &baseDpi))
+		{
+			if (dpi != baseDpi)
+			{
+				dpiAdjustmentFactor = ceil(dpi / baseDpi);
+			}
+		}
+#endif
+
 		int numdisplaymodes = SDL_GetNumDisplayModes(i);	// Get the number of display modes on this monitor
 		for (int j = 0; j < numdisplaymodes; j++)
 		{
@@ -2441,9 +2454,16 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 			}
 
 			debug(LOG_WZ, "Monitor [%d] %dx%d %d %s", i, displaymode.w, displaymode.h, displaymode.refresh_rate, SDL_GetPixelFormatName(displaymode.format));
-			if ((displaymode.w < MIN_WZ_GAMESCREEN_WIDTH) || (displaymode.h < MIN_WZ_GAMESCREEN_HEIGHT))
+			int logicalWidth = displaymode.w;
+			int logicalHeight = displaymode.h;
+			if (dpiAdjustmentFactor.has_value())
 			{
-				debug(LOG_WZ, "Monitor mode resolution < %d x %d -- discarding entry", MIN_WZ_GAMESCREEN_WIDTH, MIN_WZ_GAMESCREEN_HEIGHT);
+				logicalWidth = static_cast<int>(ceil(static_cast<float>(logicalWidth) / dpiAdjustmentFactor.value()));
+				logicalHeight = static_cast<int>(ceil(static_cast<float>(logicalHeight) / dpiAdjustmentFactor.value()));
+			}
+			if ((logicalWidth < MIN_WZ_GAMESCREEN_WIDTH) || (logicalHeight < MIN_WZ_GAMESCREEN_HEIGHT))
+			{
+				debug(LOG_WZ, "Monitor mode logical resolution < %d x %d -- discarding entry", MIN_WZ_GAMESCREEN_WIDTH, MIN_WZ_GAMESCREEN_HEIGHT);
 			}
 			else if (displaymode.refresh_rate < 59)
 			{
