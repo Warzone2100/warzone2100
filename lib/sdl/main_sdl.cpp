@@ -98,7 +98,7 @@ const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::desktop_fullscre
 #else
 const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::fullscreen;
 #endif
-static WINDOW_MODE lastFullscreenMode = WZ_SDL_DEFAULT_FULLSCREEN_MODE;
+static WINDOW_MODE altEnterToggleFullscreenMode = WZ_SDL_DEFAULT_FULLSCREEN_MODE;
 
 // The screen that the game window is on.
 int screenIndex = 0;
@@ -599,21 +599,49 @@ WINDOW_MODE wzAltEnterToggleFullscreen()
 		case WINDOW_MODE::desktop_fullscreen:
 			// fall-through
 		case WINDOW_MODE::fullscreen:
-			lastFullscreenMode = mode;
+			altEnterToggleFullscreenMode = mode;
 			if (wzChangeWindowMode(WINDOW_MODE::windowed))
 			{
 				mode = WINDOW_MODE::windowed;
 			}
 			break;
 		case WINDOW_MODE::windowed:
-			// use lastFullscreenMode
-			if (wzChangeWindowMode(lastFullscreenMode))
+			// use altEnterToggleFullscreenMode
+			if (wzChangeWindowMode(altEnterToggleFullscreenMode))
 			{
-				mode = lastFullscreenMode;
+				mode = altEnterToggleFullscreenMode;
 			}
 			break;
 	}
 	return mode;
+}
+
+bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode)
+{
+	switch (fullscreenMode)
+	{
+		case WINDOW_MODE::fullscreen:
+		case WINDOW_MODE::desktop_fullscreen:
+		{
+			auto supportedModes = wzSupportedWindowModes();
+			if (!std::any_of(supportedModes.begin(), supportedModes.end(), [fullscreenMode](WINDOW_MODE mode) -> bool {
+				return mode == fullscreenMode;
+			}))
+			{
+				// not a supported mode on this system!
+				return false;
+			}
+			altEnterToggleFullscreenMode = fullscreenMode;
+			return true;
+		}
+		default:
+			return false;
+	}
+}
+
+WINDOW_MODE wzGetToggleFullscreenMode()
+{
+	return altEnterToggleFullscreenMode;
 }
 
 bool wzChangeWindowMode(WINDOW_MODE mode)
@@ -2877,6 +2905,20 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	if (!hint || !*hint || SDL_strcasecmp(hint, "auto") == 0)
 	{
 		wzSetMinimizeOnFocusLoss(static_cast<MinimizeOnFocusLossBehavior>(minOnFocusLossSettingVal));
+	}
+	int toggleFullscreenModeVal = war_getToggleFullscreenMode();
+	switch (toggleFullscreenModeVal)
+	{
+		case -1:
+			wzSetToggleFullscreenMode(WINDOW_MODE::desktop_fullscreen);
+			break;
+		case 1:
+			wzSetToggleFullscreenMode(WINDOW_MODE::fullscreen);
+			break;
+		case 0:
+		default:
+			altEnterToggleFullscreenMode = WZ_SDL_DEFAULT_FULLSCREEN_MODE;
+			break;
 	}
 
 	WZbackend = backend;

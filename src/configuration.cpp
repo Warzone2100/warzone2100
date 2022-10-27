@@ -527,6 +527,10 @@ bool loadConfig()
 	{
 		war_setMinimizeOnFocusLoss(value.value());
 	}
+	if (auto value = iniGetIntegerOpt("altEnterToggleMode"))
+	{
+		war_setToggleFullscreenMode(value.value());
+	}
 	auto js_backend = war_getJSBackend();
 	if (iniGeneral.has("jsbackend"))
 	{
@@ -705,6 +709,7 @@ bool saveConfig()
 	iniSetString("favoriteStructs", getFavoriteStructs().toUtf8());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetInteger("minimizeOnFocusLoss", war_getMinimizeOnFocusLoss());
+	iniSetInteger("altEnterToggleMode", war_getToggleFullscreenMode());
 	iniSetString("jsbackend", to_string(war_getJSBackend()));
 	iniSetInteger("BlueprintTrackAnimationSpeed", BlueprintTrackAnimationSpeed);
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
