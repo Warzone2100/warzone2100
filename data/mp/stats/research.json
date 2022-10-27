@@ -6591,6 +6591,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -6613,6 +6627,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -6633,6 +6661,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -6655,6 +6697,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -6679,6 +6735,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -6700,6 +6770,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -6723,6 +6807,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -6745,6 +6843,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -6777,6 +6889,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
 				"value": -20
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "FirePause",
+				"value": -20
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "ReloadTime",
+				"value": -20
 			}
 		],
 		"statID": "MG1Mk1",
@@ -6804,6 +6930,20 @@
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
+				"parameter": "ReloadTime",
+				"value": -18
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "FirePause",
+				"value": -18
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
 				"parameter": "ReloadTime",
 				"value": -18
 			}
@@ -6834,6 +6974,20 @@
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
+				"parameter": "ReloadTime",
+				"value": -8
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "FirePause",
+				"value": -8
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
 				"parameter": "ReloadTime",
 				"value": -8
 			}
