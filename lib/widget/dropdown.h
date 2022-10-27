@@ -30,20 +30,21 @@
 
 class DropdownItemWrapper;
 typedef std::function<void(std::shared_ptr<DropdownItemWrapper> item)> DropdownOnSelectHandler;
+class DropdownWidget;
 
 class DropdownItemWrapper: public WIDGET
 {
 protected:
 	DropdownItemWrapper() {}
 
-	void initialize(const std::shared_ptr<WIDGET> &newItem, DropdownOnSelectHandler newOnSelect);
+	void initialize(const std::shared_ptr<DropdownWidget>& parent, const std::shared_ptr<WIDGET> &newItem, DropdownOnSelectHandler newOnSelect);
 
 public:
-	static std::shared_ptr<DropdownItemWrapper> make(const std::shared_ptr<WIDGET> &item, DropdownOnSelectHandler onSelect)
+	static std::shared_ptr<DropdownItemWrapper> make(const std::shared_ptr<DropdownWidget>& parent, const std::shared_ptr<WIDGET> &item, DropdownOnSelectHandler onSelect)
 	{
 		class make_shared_enabler: public DropdownItemWrapper {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(item, onSelect);
+		widget->initialize(parent, item, onSelect);
 		return widget;
 	}
 
@@ -73,10 +74,16 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override;
 
+protected:
+	friend class DropdownWidget;
+	void clearMouseDownState();
+
 private:
 	std::shared_ptr<WIDGET> item;
 	DropdownOnSelectHandler onSelect;
+	std::weak_ptr<DropdownWidget> parent;
 	bool selected = false;
+	bool mouseDownOnWrapper = false;
 };
 
 class DropdownWidget : public WIDGET
@@ -156,6 +163,10 @@ public:
 		return max;
 	}
 
+protected:
+	friend class DropdownItemWrapper;
+	void setMouseClickOnItem(std::shared_ptr<DropdownItemWrapper> item, WIDGET_KEY key, bool wasPressed);
+
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
 	std::shared_ptr<ScrollableListWidget> itemsList;
@@ -163,6 +174,8 @@ private:
 	std::shared_ptr<DropdownItemWrapper> selectedItem;
 	std::function<bool(DropdownWidget&, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget)> canChange;
 	std::function<void(DropdownWidget&)> onChange;
+	std::shared_ptr<DropdownItemWrapper> mouseOverItem;
+	std::shared_ptr<DropdownItemWrapper> mouseDownItem;
 
 	bool select(const std::shared_ptr<DropdownItemWrapper> &selected, size_t selectedIndex)
 	{
