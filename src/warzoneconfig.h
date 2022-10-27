@@ -96,6 +96,8 @@ void war_SetFullscreenModeScreen(int screen);
 int war_GetFullscreenModeScreen();
 void war_SetFullscreenModeHeight(UDWORD height);
 UDWORD war_GetFullscreenModeHeight();
+void war_setToggleFullscreenMode(int mode);
+int war_getToggleFullscreenMode();
 void war_SetVideoBufferDepth(UDWORD videoBufferDepth);
 UDWORD war_GetVideoBufferDepth();
 void war_SetPauseOnFocusLoss(bool enabled);

@@ -82,6 +82,8 @@ void wzShutdown();
 std::vector<WINDOW_MODE> wzSupportedWindowModes();
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
+bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode);
+WINDOW_MODE wzGetToggleFullscreenMode();
 bool wzChangeWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetCurrentWindowMode();
 bool wzIsFullscreen();

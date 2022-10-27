@@ -1682,6 +1682,65 @@ static std::shared_ptr<WIDGET> makeMinimizeOnFocusLossDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeFullscreenToggleModeDropdown()
+{
+	std::vector<std::tuple<WzString, WINDOW_MODE>> dropDownChoices = {
+		{_("Desktop Full"), WINDOW_MODE::desktop_fullscreen},
+		{_("Fullscreen"), WINDOW_MODE::fullscreen},
+	};
+
+	auto supportedWindowModes = wzSupportedWindowModes();
+	dropDownChoices.erase(std::remove_if(dropDownChoices.begin(), dropDownChoices.end(), [supportedWindowModes](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
+		return !std::any_of(supportedWindowModes.begin(), supportedWindowModes.end(), [item](WINDOW_MODE mode) { return mode == std::get<1>(item); });
+	}), dropDownChoices.end());
+
+	if (dropDownChoices.size() <= 1)
+	{
+		// Don't bother making this dropdown if there is only 1 (or zero) fullscreen modes available
+		return nullptr;
+	}
+
+	size_t currentSettingIdx = 0;
+	auto currValue = wzGetToggleFullscreenMode();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_MINIMIZE_ON_FOCUS_LOSS_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const int paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+		auto toggleFullscreenMode = std::get<1>(dropDownChoices.at(newIndex));
+		bool success = wzSetToggleFullscreenMode(toggleFullscreenMode);
+		if (success)
+		{
+			war_setToggleFullscreenMode(static_cast<int>(toggleFullscreenMode));
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to set toggle fullscreen mode");
+		}
+		return success;
+	});
+
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
 void startVideoOptionsMenu()
 {
 	addBackdrop();
@@ -1773,6 +1832,17 @@ void startVideoOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeMinimizeOnFocusLossDropdown()));
 	row.start++;
 #endif
+
+	auto fullscreenToggleModeDropdown = makeFullscreenToggleModeDropdown();
+	if (fullscreenToggleModeDropdown)
+	{
+		// TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
+		auto altEnterToggleLabel = makeTextButton(FRONTEND_ALTENTER_TOGGLE_MODE, _("Alt+Enter Toggle"), WBUT_SECONDARY);
+		altEnterToggleLabel->setTip(_("The fullscreen mode used when toggling with keys: Alt + Enter"));
+		grid->place({0}, row, addMargin(altEnterToggleLabel));
+		grid->place({1, 1, false}, row, addMargin(fullscreenToggleModeDropdown));
+		row.start++;
+	}
 
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 

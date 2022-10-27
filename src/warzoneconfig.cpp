@@ -81,6 +81,7 @@ struct WARZONE_GLOBALS
 	UDWORD fullscreenModeWidth = 0; // current display default
 	UDWORD fullscreenModeHeight = 0; // current display default
 	int fullscreenModeScreen = -1;
+	int toggleFullscreenMode = 0; // 0 = the backend default
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -558,4 +559,14 @@ void war_SetFullscreenModeScreen(int screen)
 int war_GetFullscreenModeScreen()
 {
 	return warGlobs.fullscreenModeScreen;
+}
+
+void war_setToggleFullscreenMode(int mode)
+{
+	warGlobs.toggleFullscreenMode = mode;
+}
+
+int war_getToggleFullscreenMode()
+{
+	return warGlobs.toggleFullscreenMode;
 }
