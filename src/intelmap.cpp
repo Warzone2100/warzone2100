@@ -653,7 +653,12 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 
 					if (audio != nullptr)
 					{
-						playing = audio_PlayStream(audio, sound_GetUIVolume(), [](const void *) { playing = nullptr; }, nullptr);
+						playing = audio_PlayStream(audio, sound_GetUIVolume(), [](const AUDIO_STREAM *stream, const void *) {
+							if (stream == playing)
+							{
+								playing = nullptr;
+							}
+						}, nullptr);
 					}
 				}
 
