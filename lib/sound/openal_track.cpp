@@ -1225,22 +1225,33 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
 	alSourceUnqueueBuffers(stream->source, buffers_processed_count, alBuffersIds);
 	if (sound_GetError() != AL_NO_ERROR) { return false; }
 
+	auto freeUnusedALBuffers = [alBuffersIds, buffers_processed_count](ALint startingIdx) {
+		if (startingIdx < buffers_processed_count)
+		{
+			alDeleteBuffers(buffers_processed_count - startingIdx, &alBuffersIds[startingIdx]);
+		}
+	};
+
 	const auto res = sound_fillNBuffers(alBuffersIds, stream->decoder, buffers_processed_count, bufferSize);
 	if (res == 0)
 	{
-		// end of stream, will be deleted with sound_DestroyStream
+		// nothing more to read and queue - will be deleted with sound_DestroyStream (later, when done playing)
 		sound_GetError();
+		freeUnusedALBuffers(0);
 		free(alBuffersIds);
-		return false;
+		return true; // must return true here - don't shortcut playing the remaining buffers!
 	}
 	if (res < 0)
 	{
 		debug(LOG_ERROR, "bailing out");
+		freeUnusedALBuffers(0);
 		free(alBuffersIds);
 		return false;
 	}
-	// Reattach the buffer to the source
+	// Reattach the filled buffers to the source
 	alSourceQueueBuffers(stream->source, res, alBuffersIds);
+	// Delete any unused unqueued buffers
+	freeUnusedALBuffers(res);
 	sound_GetError();
 	free(alBuffersIds);
 	return true;
