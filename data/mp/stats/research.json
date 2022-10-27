@@ -6958,7 +6958,7 @@
 		"msgName": "RES_W_MG_ROF3",
 		"name": "Hyper Fire Chaingun Upgrade",
 		"requiredResearch": [
-			"R-Wpn-MG-ROF02"
+			"R-Wpn-MG4"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -7065,10 +7065,10 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG3Mk1",
-			"R-Wpn-MG-ROF03"
+			"R-Wpn-MG-ROF02"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"resultComponents": [
 			"CyborgRotMG",
 			"MG4ROTARY-VTOL",
