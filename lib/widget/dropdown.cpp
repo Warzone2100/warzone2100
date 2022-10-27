@@ -48,23 +48,46 @@ public:
 	std::function<void ()> onClickedFunc;
 };
 
-void DropdownItemWrapper::initialize(const std::shared_ptr<WIDGET> &newItem, DropdownOnSelectHandler newOnSelect)
+void DropdownItemWrapper::initialize(const std::shared_ptr<DropdownWidget>& newParent, const std::shared_ptr<WIDGET> &newItem, DropdownOnSelectHandler newOnSelect)
 {
 	item = newItem;
 	attach(item);
 	onSelect = newOnSelect;
+	parent = newParent;
 }
 
 bool DropdownItemWrapper::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	auto result = WIDGET::processClickRecursive(psContext, key, wasPressed);
 
-	if (key != WKEY_NONE && wasPressed && this->hitTest(psContext->mx, psContext->my))
+	if (key != WKEY_NONE && this->hitTest(psContext->mx, psContext->my))
 	{
-		onSelect(std::static_pointer_cast<DropdownItemWrapper>(shared_from_this()));
+		if (auto psStrongParent = parent.lock())
+		{
+			psStrongParent->setMouseClickOnItem(std::dynamic_pointer_cast<DropdownItemWrapper>(shared_from_this()), key, wasPressed);
+		}
+
+		if (wasPressed)
+		{
+			mouseDownOnWrapper = true;
+		}
+		else
+		{
+			// if mouse down + mouse up on the item
+			if (mouseDownOnWrapper)
+			{
+				mouseDownOnWrapper = false;
+				onSelect(std::static_pointer_cast<DropdownItemWrapper>(shared_from_this()));
+			}
+		}
 	}
 
 	return result;
+}
+
+void DropdownItemWrapper::clearMouseDownState()
+{
+	mouseDownOnWrapper = false;
 }
 
 void DropdownItemWrapper::geometryChanged()
@@ -137,6 +160,7 @@ int DropdownWidget::calculateDropdownListScreenPosY() const
 void DropdownWidget::open()
 {
 	if (overlayScreen != nullptr) { return; }
+	mouseDownItem.reset();
 	std::weak_ptr<DropdownWidget> pWeakThis(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()));
 	widgScheduleTask([pWeakThis]() {
 		if (auto dropdownWidget = pWeakThis.lock())
@@ -152,6 +176,7 @@ void DropdownWidget::open()
 
 void DropdownWidget::close()
 {
+	mouseDownItem.reset();
 	std::weak_ptr<DropdownWidget> pWeakThis(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()));
 	widgScheduleTask([pWeakThis]() {
 		if (auto dropdownWidget = pWeakThis.lock())
@@ -205,7 +230,7 @@ void DropdownWidget::addItem(const std::shared_ptr<WIDGET> &item)
 		}
 	};
 
-	auto wrapper = DropdownItemWrapper::make(item, itemOnSelect);
+	auto wrapper = DropdownItemWrapper::make(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()), item, itemOnSelect);
 
 	items.push_back(wrapper);
 	itemsList->addItem(wrapper);
@@ -226,4 +251,23 @@ bool DropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key,
 	}
 
 	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+}
+
+void DropdownWidget::setMouseClickOnItem(std::shared_ptr<DropdownItemWrapper> item, WIDGET_KEY key, bool wasPressed)
+{
+	if (item == mouseDownItem) { return; }
+
+	if (mouseDownItem)
+	{
+		mouseDownItem->clearMouseDownState();
+	}
+
+	if (wasPressed)
+	{
+		mouseDownItem = item;
+	}
+	else
+	{
+		mouseDownItem.reset();
+	}
 }
