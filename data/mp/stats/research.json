@@ -4505,7 +4505,7 @@
 			"QuadMg1AAGun"
 		],
 		"requiredResearch": [
-			"R-Wpn-MG4",
+			"R-Wpn-MG-ROF03",
 			"R-Wpn-AAGun03"
 		],
 		"researchPoints": 7200,
