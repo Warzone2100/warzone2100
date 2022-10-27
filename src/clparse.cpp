@@ -358,6 +358,8 @@ static const struct poptOption debugOptionsTable[] =
 	{ "debug", POPT_ARG_STRING, CLI_DEBUG, nullptr, nullptr },
 	{ "debugfile", POPT_ARG_STRING, CLI_DEBUGFILE, nullptr, nullptr },
 	{ "flush-debug-stderr", POPT_ARG_NONE, CLI_FLUSHDEBUGSTDERR, nullptr, nullptr },
+	// Terminating entry
+	{ nullptr, 0, 0,              nullptr,                                    nullptr },
 };
 
 static const struct poptOption *getOptionsTable()
