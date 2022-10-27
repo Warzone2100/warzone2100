@@ -63,7 +63,7 @@ struct AUDIO_STREAM
 	float                   volume = 0.f;
 
 	// Callbacks
-	std::function<void (const void *)> onFinished;
+	std::function<void (const AUDIO_STREAM *, const void *)> onFinished;
 	const void              *user_data = nullptr;
 
 	// Linked list pointer
@@ -963,7 +963,7 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
  */
 AUDIO_STREAM *sound_PlayStream(const char* fileName, 
 																			float volume, 
-																			const std::function<void (const void *)>& onFinished, 
+																			const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished,
 																			const void *user_data)
 {
 	if (!openal_initialized)
@@ -1312,7 +1312,7 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
 	if (stream->onFinished)
 	{
 		ASSERT(stream->user_data == nullptr, "user_data was not null!");
-		stream->onFinished(stream->user_data);
+		stream->onFinished(stream, stream->user_data);
 	}
 
 	// Free the memory used by this stream

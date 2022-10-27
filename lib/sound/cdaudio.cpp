@@ -197,7 +197,7 @@ static bool cdAudio_OpenTrack(std::shared_ptr<const WZ_TRACK> track)
 	PlayList_SetCurrentSong(track);
 
 	cdStream = sound_PlayStream(filename.c_str(), cdAudio_CalculateTrackVolume(track), 
-						[track](const void*) { cdAudio_TrackFinished(track);}, nullptr);
+						[track](const AUDIO_STREAM*, const void*) { cdAudio_TrackFinished(track);}, nullptr);
 	if (cdStream == nullptr)
 	{
 		debug(LOG_ERROR, "Failed creating audio stream for %s", filename.c_str());
