@@ -80,6 +80,7 @@ void wzQuit(int exitCode);              ///< Quit game
 int wzGetQuitExitCode();
 void wzShutdown();
 std::vector<WINDOW_MODE> wzSupportedWindowModes();
+bool wzIsSupportedWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
 bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode);

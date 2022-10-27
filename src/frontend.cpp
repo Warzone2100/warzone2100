@@ -1617,9 +1617,8 @@ private:
 			{_("Fullscreen"), WINDOW_MODE::fullscreen},
 		};
 
-		auto supportedWindowModes = wzSupportedWindowModes();
-		dropDownChoices.erase(std::remove_if(dropDownChoices.begin(), dropDownChoices.end(), [supportedWindowModes](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
-			return !std::any_of(supportedWindowModes.begin(), supportedWindowModes.end(), [item](WINDOW_MODE mode) { return mode == std::get<1>(item); });
+		dropDownChoices.erase(std::remove_if(dropDownChoices.begin(), dropDownChoices.end(), [](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
+			return !wzIsSupportedWindowMode(std::get<1>(item));
 		}), dropDownChoices.end());
 
 		return dropDownChoices;
@@ -1774,9 +1773,8 @@ static std::shared_ptr<WIDGET> makeFullscreenToggleModeDropdown()
 		{_("Fullscreen"), WINDOW_MODE::fullscreen},
 	};
 
-	auto supportedWindowModes = wzSupportedWindowModes();
-	dropDownChoices.erase(std::remove_if(dropDownChoices.begin(), dropDownChoices.end(), [supportedWindowModes](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
-		return !std::any_of(supportedWindowModes.begin(), supportedWindowModes.end(), [item](WINDOW_MODE mode) { return mode == std::get<1>(item); });
+	dropDownChoices.erase(std::remove_if(dropDownChoices.begin(), dropDownChoices.end(), [](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
+		return !wzIsSupportedWindowMode(std::get<1>(item));
 	}), dropDownChoices.end());
 
 	if (dropDownChoices.size() <= 1)
