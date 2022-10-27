@@ -1336,20 +1336,6 @@ static void videoOptionsEnableResolutionButtons()
 	widgReveal(psWScreen, FRONTEND_RESOLUTION_DROPDOWN);
 }
 
-static char const *videoOptionsWindowModeString()
-{
-	switch (war_getWindowMode())
-	{
-		case WINDOW_MODE::desktop_fullscreen:
-			return _("Desktop Full");
-		case WINDOW_MODE::windowed:
-			return _("Windowed");
-		case WINDOW_MODE::fullscreen:
-			return _("Fullscreen");
-	}
-	return "n/a"; // silence warning
-}
-
 static std::string videoOptionsAntialiasingString()
 {
 	if (war_getAntialiasing() == 0)
@@ -1552,6 +1538,97 @@ private:
 	}
 };
 
+class WindowModeDropdown : public DropdownWidget
+{
+public:
+	static std::shared_ptr<WindowModeDropdown> make(UDWORD widgId = 0, int32_t paddingSize = 10)
+	{
+		auto dropdown = std::make_shared<WindowModeDropdown>();
+		dropdown->id = widgId;
+
+		dropdown->windowModeModel = WindowModeDropdown::getSupportedWindowModesModel();
+
+		dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropdown->windowModeModel.size()));
+
+		for (const auto& option : dropdown->windowModeModel)
+		{
+			auto item = makeTextButton(0, std::get<0>(option).toUtf8(), 0);
+			dropdown->addItem(Margin(0, paddingSize).wrap(item));
+		}
+
+		dropdown->updateSelectedIndex();
+
+		dropdown->setCanChange([](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			auto psDropdown = std::dynamic_pointer_cast<WindowModeDropdown>(widget.shared_from_this());
+			ASSERT_OR_RETURN(false, psDropdown != nullptr, "Invalid widget");
+			ASSERT_OR_RETURN(false, newIndex < psDropdown->windowModeModel.size(), "Invalid index");
+			auto newMode = std::get<1>(psDropdown->windowModeModel.at(newIndex));
+			if (newMode == wzGetCurrentWindowMode())
+			{
+				return true;
+			}
+			bool success = wzChangeWindowMode(newMode);
+			if (success)
+			{
+				war_setWindowMode(newMode);
+				// Update the widget(s)
+				refreshCurrentVideoOptionsValues();
+			}
+			else
+			{
+				// unable to change to this fullscreen mode, so disable the widget
+				debug(LOG_ERROR, "Failed to set fullscreen mode: %s", to_display_string(newMode).c_str());
+				auto pTextButtonWrapper = std::dynamic_pointer_cast<MarginWidget>(newSelectedWidget);
+				if (pTextButtonWrapper && !pTextButtonWrapper->children().empty())
+				{
+					auto pTextButton = std::dynamic_pointer_cast<W_BUTTON>(pTextButtonWrapper->children().front());
+					if (pTextButton)
+					{
+						pTextButton->setState(WBUT_DISABLE);
+					}
+				}
+			}
+			return success;
+		});
+
+		return dropdown;
+	};
+
+	void updateSelectedIndex()
+	{
+		size_t currentSettingIdx = 0;
+		auto currValue = war_getWindowMode();
+		auto it = std::find_if(windowModeModel.begin(), windowModeModel.end(), [currValue](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != windowModeModel.end())
+		{
+			currentSettingIdx = it - windowModeModel.begin();
+			setSelectedIndex(currentSettingIdx);
+		}
+	}
+
+private:
+	static std::vector<std::tuple<WzString, WINDOW_MODE>> getSupportedWindowModesModel()
+	{
+		std::vector<std::tuple<WzString, WINDOW_MODE>> dropDownChoices = {
+			{_("Windowed"), WINDOW_MODE::windowed},
+			{_("Desktop Full"), WINDOW_MODE::desktop_fullscreen},
+			{_("Fullscreen"), WINDOW_MODE::fullscreen},
+		};
+
+		auto supportedWindowModes = wzSupportedWindowModes();
+		dropDownChoices.erase(std::remove_if(dropDownChoices.begin(), dropDownChoices.end(), [supportedWindowModes](const std::tuple<WzString, WINDOW_MODE>& item) -> bool {
+			return !std::any_of(supportedWindowModes.begin(), supportedWindowModes.end(), [item](WINDOW_MODE mode) { return mode == std::get<1>(item); });
+		}), dropDownChoices.end());
+
+		return dropDownChoices;
+	}
+
+private:
+	std::vector<std::tuple<WzString, WINDOW_MODE>> windowModeModel;
+};
+
 class ResolutionDropdown : public DropdownWidget
 {
 public:
@@ -1598,7 +1675,15 @@ private:
 
 void refreshCurrentVideoOptionsValues()
 {
-	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
+	WIDGET *psWindowModeDropdownWidg = widgGetFromID(psWScreen, FRONTEND_WINDOWMODE_R);
+	if (psWindowModeDropdownWidg)
+	{
+		auto windowModeWidg = std::dynamic_pointer_cast<WindowModeDropdown>(psWindowModeDropdownWidg->shared_from_this());
+		if (windowModeWidg)
+		{
+			windowModeWidg->updateSelectedIndex();
+		}
+	}
 	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
 	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_READONLY)) // Resolution option may not be available
 	{
@@ -1741,6 +1826,13 @@ static std::shared_ptr<WIDGET> makeFullscreenToggleModeDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeWindowModeDropdown()
+{
+	const int paddingSize = 10;
+	auto dropdown = WindowModeDropdown::make(FRONTEND_WINDOWMODE_R, paddingSize);
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
 void startVideoOptionsMenu()
 {
 	addBackdrop();
@@ -1762,7 +1854,7 @@ void startVideoOptionsMenu()
 
 	// Fullscreen/windowed
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_WINDOWMODE, videoOptionsWindowModeLabel(), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString(), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeWindowModeDropdown()));
 	row.start++;
 
 	// Resolution
@@ -1867,43 +1959,6 @@ std::vector<unsigned int> availableDisplayScalesSorted()
 	return displayScales;
 }
 
-void seqWindowMode()
-{
-	auto currentFullscreenMode = war_getWindowMode();
-	bool success = false;
-
-	auto supportedFullscreenModes = wzSupportedWindowModes();
-	if (supportedFullscreenModes.empty()) { return; }
-	size_t currentFullscreenModePos = 0;
-	for (size_t i = 0; i < supportedFullscreenModes.size(); i++)
-	{
-		if (supportedFullscreenModes[i] == currentFullscreenMode)
-		{
-			currentFullscreenModePos = i;
-			break;
-		}
-	}
-	auto startingFullscreenModePos = currentFullscreenModePos;
-
-	do
-	{
-		currentFullscreenModePos = seqCycle(currentFullscreenModePos, static_cast<size_t>(0), 1, supportedFullscreenModes.size() - 1);
-		success = wzChangeWindowMode(supportedFullscreenModes[currentFullscreenModePos]);
-
-	} while ((!success) && (currentFullscreenModePos != startingFullscreenModePos));
-
-	if (currentFullscreenModePos == startingFullscreenModePos)
-	{
-		// Failed to change window mode - display messagebox
-		wzDisplayDialog(Dialog_Warning, _("Unable to change Window Mode"), _("Warzone failed to change the Window mode.\nYour system / drivers may not support other modes."));
-	}
-	else if (success)
-	{
-		// succeeded changing vsync mode
-		war_setWindowMode(supportedFullscreenModes[currentFullscreenModePos]);
-	}
-}
-
 void seqVsyncMode()
 {
 	gfx_api::context::swap_interval_mode currentVsyncMode = getCurrentSwapMode();
@@ -1982,16 +2037,6 @@ bool runVideoOptionsMenu()
 
 	switch (id)
 	{
-	case FRONTEND_WINDOWMODE:
-	case FRONTEND_WINDOWMODE_R:
-		{
-			seqWindowMode();
-
-			// Update the widget(s)
-			refreshCurrentVideoOptionsValues();
-		}
-		break;
-
 	case FRONTEND_FSAA:
 	case FRONTEND_FSAA_R:
 		{

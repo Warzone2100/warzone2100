@@ -575,6 +575,14 @@ std::vector<WINDOW_MODE> wzSupportedWindowModes()
 #endif
 }
 
+bool wzIsSupportedWindowMode(WINDOW_MODE mode)
+{
+	auto supportedModes = wzSupportedWindowModes();
+	return std::any_of(supportedModes.begin(), supportedModes.end(), [mode](WINDOW_MODE i) -> bool {
+		return i == mode;
+	});
+}
+
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode)
 {
 	auto supportedModes = wzSupportedWindowModes();
@@ -623,10 +631,7 @@ bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode)
 		case WINDOW_MODE::fullscreen:
 		case WINDOW_MODE::desktop_fullscreen:
 		{
-			auto supportedModes = wzSupportedWindowModes();
-			if (!std::any_of(supportedModes.begin(), supportedModes.end(), [fullscreenMode](WINDOW_MODE mode) -> bool {
-				return mode == fullscreenMode;
-			}))
+			if (!wzIsSupportedWindowMode(fullscreenMode))
 			{
 				// not a supported mode on this system!
 				return false;
@@ -650,6 +655,12 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 	{
 		// already in this mode
 		return true;
+	}
+
+	if (!wzIsSupportedWindowMode(mode))
+	{
+		// not a supported mode on this system
+		return false;
 	}
 
 	int sdl_result = -1;
