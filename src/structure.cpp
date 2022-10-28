@@ -6925,6 +6925,11 @@ bool loadFavoriteStructsFile(const char* path)
 		{
 			version = it_version->get<uint32_t>();
 		}
+		if (version > 1)
+		{
+			debug(LOG_ERROR, "%s: \"version\" (%" PRIu32 ") is newer than this version of WZ supports - ignoring file", path, version);
+			return false;
+		}
 		auto it_structures = rootObj.find("favoriteStructures");
 		if (it_structures == rootObj.end())
 		{
