@@ -18,20 +18,20 @@ ${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
 ${LangFileString} TEXT_SecFMVs "Videos"
 ${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
 
-${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
+${LangFileString} TEXT_SecFMVs_EngHi "Engleski (HQ)"
 ${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_Eng "English"
 ${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
 
-${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
-${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngLo "Engleski (LQ)"
+${LangFileString} DESC_SecFMVs_EngLo "Skini i instaliraj nisko-kvalitetnu verziju kratkih videa na engleskom."
 
-${LangFileString} TEXT_SecFMVs_Ger "German"
-${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Ger "Njemački"
+${LangFileString} DESC_SecFMVs_Ger "Skini i instaliraj kratke video zapise na engleskom."
 
-${LangFileString} TEXT_SecNLS "Language files"
-${LangFileString} DESC_SecNLS "Support for languages other than English."
+${LangFileString} TEXT_SecNLS "Jezične datoteke"
+${LangFileString} DESC_SecNLS "Potpora za jezike osim engleskog."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
 ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
