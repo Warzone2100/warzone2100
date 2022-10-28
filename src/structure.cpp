@@ -30,6 +30,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/geometry.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/imd.h"
 #include "objects.h"
 #include "ai.h"
@@ -6855,49 +6856,79 @@ void checkStructure(const STRUCTURE *psStructure, const char *const location_des
 	}
 }
 
+constexpr PHYSFS_sint64 MAX_FAVORITE_STRUCTS_FILE_SIZE = 1024 * 1024 * 2; // 2 MB seems like enough...
+
 bool loadFavoriteStructsFile(const char* path)
 {
-	WzConfig ini(path, WzConfig::ReadOnly);
-	if (!ini.status())
+	favoriteStructs.clear();
+
+	// file size sanity check
+#if defined(WZ_PHYSFS_2_1_OR_GREATER)
+	PHYSFS_Stat metaData;
+	if (PHYSFS_stat(path, &metaData) != 0)
 	{
-		debug(LOG_WZ, "%s not found", path);
+		if (metaData.filesize > MAX_FAVORITE_STRUCTS_FILE_SIZE)
+		{
+			debug(LOG_ERROR, "%s: has too large a file size (%" PRIu64 ") - skipping load", path, static_cast<uint64_t>(metaData.filesize));
+			return false;
+		}
+	}
+#endif
+
+	auto jsonObj = parseJsonFile(path);
+	if (!jsonObj.has_value())
+	{
+		debug(LOG_WZ, "%s not found (or loadable)", path);
 		return false;
 	}
 
-	for (ini.beginArray("favoriteStructures"); ini.remainingArrayItems(); ini.nextArrayItem())
-	{
-		WzString name = WzString::fromUtf8(std::string("structure"));
-		WzString value = ini.value(name, "").toWzString();
-		if (value.length() > 0)
+	auto& rootObj = jsonObj.value();
+
+	try {
+		uint32_t version = 0;
+		auto it_version = rootObj.find("version");
+		if (it_version != rootObj.end())
 		{
-			favoriteStructs.push_back(value);
+			version = it_version->get<uint32_t>();
+		}
+		auto it_structures = rootObj.find("favoriteStructures");
+		if (it_structures == rootObj.end())
+		{
+			debug(LOG_ERROR, "%s: Missing expected \"favoriteStructures\" key", path);
+			return false;
+		}
+		if (!it_structures->is_array())
+		{
+			debug(LOG_ERROR, "%s: \"favoriteStructures\" is not an array", path);
+			return false;
+		}
+		for (size_t idx = 0; idx < it_structures->size(); idx++)
+		{
+			favoriteStructs.push_back(it_structures->at(idx).get<WzString>());
 		}
 	}
-	ini.endArray();
+	catch (const std::exception &e) {
+		debug(LOG_ERROR, "%s: Failed to parse JSON; error: %s", path, e.what());
+		favoriteStructs.clear();
+		return false;
+	}
 
 	return true;
 }
 
 bool writeFavoriteStructsFile(const char* path)
 {
-	WzConfig ini(path, WzConfig::ReadAndWrite);
-	if (!ini.status() || !ini.isWritable())
-	{
-		debug(LOG_ERROR, "Could not open or write to %s", ini.fileName().toUtf8().c_str());
-		return false;
-	}
+	nlohmann::json root = nlohmann::json::object();
+	root["version"] = 1;
 
-	ini.setValue("version", 1);
-	ini.beginArray("favoriteStructures");
+	auto structsArray = nlohmann::json::array();
 	for (size_t index = 0; index < favoriteStructs.size(); ++index)
 	{
-		WzString name = WzString::fromUtf8(std::string("structure"));
-		ini.setValue(name, favoriteStructs[index].toUtf8());
-		ini.nextArrayItem();
+		structsArray.push_back(favoriteStructs[index]);
 	}
-	ini.endArray();
+	root["favoriteStructures"] = std::move(structsArray);
 
-	return true;
+	return saveJSONToFile(root, path);
 }
 
 static void parseFavoriteStructs()
