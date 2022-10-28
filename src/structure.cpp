@@ -447,23 +447,28 @@ bool loadStructureStats(WzConfig &ini)
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
-	numStructureStats = list.size();
-	for (size_t inc = 0; inc < list.size(); ++inc)
+	numStructureStats = 0;
+	size_t statWriteIdx = 0;
+	for (size_t readIdx = 0; readIdx < list.size(); ++readIdx)
 	{
-		ini.beginGroup(list[inc]);
-		STRUCTURE_STATS *psStats = &asStructureStats[inc];
-		loadStructureStats_BaseStats(ini, psStats, inc);
-		lookupStructStatPtr.insert(std::make_pair(psStats->id, psStats));
-
-		psStats->ref = STAT_STRUCTURE + inc;
+		ini.beginGroup(list[readIdx]);
+		STRUCTURE_STATS *psStats = &asStructureStats[statWriteIdx];
+		loadStructureStats_BaseStats(ini, psStats, statWriteIdx);
+		psStats->ref = STAT_STRUCTURE + statWriteIdx;
 
 		// set structure type
 		WzString type = ini.value("type", "").toWzString();
-		ASSERT_OR_RETURN(false, structType.find(type) != structType.end(), "Invalid type '%s' of structure '%s'", type.toUtf8().c_str(), getID(psStats));
+		if (structType.find(type) == structType.end())
+		{
+			ASSERT(false, "Invalid type '%s' of structure '%s'", type.toUtf8().c_str(), getID(psStats));
+			// nothing we can really do here except skip this stat
+			ini.endGroup();
+			continue;
+		}
 		psStats->type = structType[type];
 
 		// save indexes of special structures for futher use
-		initModuleStats(inc, psStats->type);  // This function looks like a hack. But slightly less hacky than before.
+		initModuleStats(statWriteIdx, psStats->type);  // This function looks like a hack. But slightly less hacky than before.
 
 		if (ini.contains("userLimits"))
 		{
@@ -519,16 +524,28 @@ bool loadStructureStats(WzConfig &ini)
 
 		// set structure strength
 		WzString strength = ini.value("strength", "").toWzString();
-		ASSERT_OR_RETURN(false, structStrength.find(strength) != structStrength.end(), "Invalid strength '%s' of structure '%s'", strength.toUtf8().c_str(), getID(psStats));
+		if (structStrength.find(strength) == structStrength.end())
+		{
+			ASSERT(false, "Invalid strength '%s' of structure '%s'", strength.toUtf8().c_str(), getID(psStats));
+			strength = map_STRUCT_STRENGTH[0].string; // just default to the first strength - stat file creator needs to fix the json!
+		}
 		psStats->strength = structStrength[strength];
 
 		// set baseWidth
 		psStats->baseWidth = ini.value("width", 0).toUInt();
-		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid width '%d' for structure '%s'", psStats->baseWidth, getID(psStats));
+		if (psStats->baseWidth > 100)
+		{
+			ASSERT(false, "Invalid width '%d' for structure '%s'", psStats->baseWidth, getID(psStats));
+			psStats->baseWidth = 100;
+		}
 
 		// set baseBreadth
 		psStats->baseBreadth = ini.value("breadth", 0).toUInt();
-		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid breadth '%d' for structure '%s'", psStats->baseBreadth, getID(psStats));
+		if (psStats->baseBreadth >= 100)
+		{
+			ASSERT(false, "Invalid breadth '%d' for structure '%s'", psStats->baseBreadth, getID(psStats));
+			psStats->baseBreadth = 99;
+		}
 
 		psStats->height = ini.value("height").toUInt();
 		psStats->powerToBuild = ini.value("buildPower").toUInt();
@@ -563,15 +580,28 @@ bool loadStructureStats(WzConfig &ini)
 		// set list of weapons
 		std::fill_n(psStats->psWeapStat, MAX_WEAPONS, (WEAPON_STATS *)nullptr);
 		std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
-		ASSERT_OR_RETURN(false, weapons.size() <= MAX_WEAPONS, "Too many weapons are attached to structure '%s'. Maximum is %d", getID(psStats), MAX_WEAPONS);
+		if (weapons.size() > MAX_WEAPONS)
+		{
+			ASSERT(false, "Too many weapons are attached to structure '%s'. Maximum is %d", getID(psStats), MAX_WEAPONS);
+			weapons.resize(MAX_WEAPONS);
+		}
 		psStats->numWeaps = weapons.size();
 		for (unsigned j = 0; j < psStats->numWeaps; ++j)
 		{
 			WzString weaponsID = weapons[j].trimmed();
 			int weapon = getCompFromName(COMP_WEAPON, weaponsID);
-			ASSERT_OR_RETURN(false, weapon >= 0, "Invalid item '%s' in list of weapons of structure '%s' ", weaponsID.toUtf8().c_str(), getID(psStats));
-			WEAPON_STATS *pWeap = asWeaponStats + weapon;
-			psStats->psWeapStat[j] = pWeap;
+			if (weapon >= 0)
+			{
+				WEAPON_STATS *pWeap = asWeaponStats + weapon;
+				psStats->psWeapStat[j] = pWeap;
+			}
+			else
+			{
+				// couldn't find the weapon - truncate weapons at this item
+				ASSERT(false, "Invalid item '%s' in list of weapons of structure '%s' ", weaponsID.toUtf8().c_str(), getID(psStats));
+				psStats->numWeaps = j;
+				break;
+			}
 		}
 
 		// check used structure turrets
@@ -584,7 +614,11 @@ bool loadStructureStats(WzConfig &ini)
 		psStats->combinesWithWall = ini.value("combinesWithWall", false).toBool();
 
 		ini.endGroup();
+
+		lookupStructStatPtr.insert(std::make_pair(psStats->id, psStats));
+		++statWriteIdx;
 	}
+	numStructureStats = statWriteIdx;
 	parseFavoriteStructs();
 
 	/* get global dummy stat pointer - GJ */
