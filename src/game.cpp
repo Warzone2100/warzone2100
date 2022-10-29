@@ -7101,6 +7101,16 @@ static bool writeTerrainTypeMapFile(char *pFileName)
 	return WzMap::writeTerrainTypes(ttypeData, pFileName, mapIO, WzMap::LatestOutputFormat, &debugLoggerInstance);
 }
 
+bool isComponentStateValid(int state)
+{
+    return state == UNAVAILABLE 
+        || state == AVAILABLE 
+        || state == FOUND 
+        || state == REDUNDANT
+        || state == REDUNDANT_FOUND
+        || state == REDUNDANT_UNAVAILABLE;
+}
+
 // -----------------------------------------------------------------------------------------
 bool loadSaveCompList(const char *pFileName)
 {
@@ -7117,8 +7127,7 @@ bool loadSaveCompList(const char *pFileName)
 			COMPONENT_STATS *psComp = getCompStatsFromName(name);
 			ASSERT_OR_RETURN(false, psComp, "Bad component %s", name.toUtf8().c_str());
 			ASSERT_OR_RETURN(false, psComp->compType >= 0 && psComp->compType != COMP_NUMCOMPONENTS, "Bad type %d", psComp->compType);
-			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
-			                 "Bad state %d for %s", state, name.toUtf8().c_str());
+			ASSERT_OR_RETURN(false, isComponentStateValid(state), "Bad state %d for %s", state, name.toUtf8().c_str());
 			apCompLists[player][psComp->compType][psComp->index] = state;
 		}
 		ini.endGroup();
@@ -7229,8 +7238,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 			int state = ini.value(name, UNAVAILABLE).toInt();
 			int statInc;
 
-			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
-			                 "Bad state %d for %s", state, name.toUtf8().c_str());
+			ASSERT_OR_RETURN(false, isComponentStateValid(state), "Bad state %d for %s", state, name.toUtf8().c_str());
 			for (statInc = 0; statInc < numStructureStats; statInc++) // loop until find the same name
 			{
 				STRUCTURE_STATS *psStats = asStructureStats + statInc;

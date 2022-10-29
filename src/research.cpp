@@ -910,6 +910,37 @@ static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRU
 	}
 }
 
+static void makeComponentRedundant(UBYTE &state)
+{
+	switch (state)
+	{
+	case AVAILABLE:
+		state = REDUNDANT;
+		break;
+	case UNAVAILABLE:
+		state = REDUNDANT_UNAVAILABLE;
+		break;
+	case FOUND:
+		state = REDUNDANT_FOUND;
+		break;
+	}
+}
+
+static void makeComponentAvailable(UBYTE &state)
+{
+	switch (state)
+	{
+	case UNAVAILABLE:
+	case FOUND:
+		state = AVAILABLE;
+		break;
+	case REDUNDANT_UNAVAILABLE:
+	case REDUNDANT_FOUND:
+		state = REDUNDANT;
+		break;
+	}
+}
+
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
@@ -928,16 +959,13 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	//check for structures to be made available
 	for (unsigned short pStructureResult : pResearch->pStructureResults)
 	{
-		if (apStructTypeLists[player][pStructureResult] != REDUNDANT)
-		{
-			apStructTypeLists[player][pStructureResult] = AVAILABLE;
-		}
+		makeComponentAvailable(apStructTypeLists[player][pStructureResult]);
 	}
 
 	//check for structures to be made redundant
 	for (unsigned short pRedStruct : pResearch->pRedStructs)
 	{
-		apStructTypeLists[player][pRedStruct] = REDUNDANT;
+		makeComponentRedundant(apStructTypeLists[player][pRedStruct]);
 	}
 
 	//check for component replacement
@@ -947,7 +975,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		{
 			COMPONENT_STATS *pOldComp = ri.pOldComponent;
 			replaceComponent(ri.pNewComponent, pOldComp, player);
-			apCompLists[player][pOldComp->compType][pOldComp->index] = REDUNDANT;
+			makeComponentRedundant(apCompLists[player][pOldComp->compType][pOldComp->index]);
 		}
 	}
 
@@ -958,10 +986,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		COMPONENT_TYPE type = componentResult->compType;
 		//set the component state to AVAILABLE
 		int compInc = componentResult->index;
-		if (apCompLists[player][type][compInc] != REDUNDANT)
-		{
-			apCompLists[player][type][compInc] = AVAILABLE;
-		}
+		makeComponentAvailable(apCompLists[player][type][compInc]);
 		//check for default sensor
 		if (type == COMP_SENSOR && (asSensorStats + compInc)->location == LOC_DEFAULT)
 		{
@@ -984,7 +1009,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	for (auto &pRedArtefact : pResearch->pRedArtefacts)
 	{
 		COMPONENT_TYPE type = pRedArtefact->compType;
-		apCompLists[player][type][pRedArtefact->index] = REDUNDANT;
+		makeComponentRedundant(apCompLists[player][type][pRedArtefact->index]);
 	}
 
 	//Add message to player's list if Major Topic
