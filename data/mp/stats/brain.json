@@ -1,0 +1,21 @@
+{
+	"CommandBrain01": {
+		"designable": 1,
+		"droidType": "DROID_COMMAND",
+		"hitpoints": 500,
+		"id": "CommandBrain01",
+		"maxDroids": 6,
+		"maxDroidsMult": 2,
+		"name": "Command Turret",
+		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
+		"thresholds": [ 0, 12, 24, 36, 48, 60, 72, 84, 96 ],
+		"turret": "CommandTurret1"
+	},
+	"ZNULLBRAIN": {
+		"id": "ZNULLBRAIN",
+		"name": "Z NULL BRAIN",
+		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
+		"thresholds": [ 0, 2, 4, 6, 8, 10, 12, 14, 16 ],
+		"turret": "ZNULLWEAPON"
+	}
+}
