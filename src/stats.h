@@ -69,10 +69,12 @@ extern UBYTE		*apStructTypeLists[MAX_PLAYERS];
 //Values to fill apCompLists and apStructTypeLists. Not a bitfield, values are in case that helps with savegame compatibility.
 enum ItemAvailability
 {
-	AVAILABLE = 1,    // This item can be used to design droids.
-	UNAVAILABLE = 2,  // The player does not know about this item.
-	FOUND = 4,        // This item has been found, but is unresearched.
-	REDUNDANT = 10,   // The player no longer needs this item.
+	AVAILABLE = 1,              // This item can be used to design droids.
+	UNAVAILABLE = 2,            // The player does not know about this item.
+	FOUND = 4,                  // This item has been found, but is unresearched.
+	REDUNDANT = 10,             // The player no longer needs this item.
+	REDUNDANT_UNAVAILABLE = 11, // The player no longer needs this item.
+	REDUNDANT_FOUND = 12,       // The player no longer needs this item.
 };
 
 /*******************************************************************************
