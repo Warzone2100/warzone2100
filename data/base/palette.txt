@@ -26,7 +26,7 @@ ff,ff,ff,10	// unit select box
 ff,ff,ff,ff	// map outline ok
 ff,0,0,ff	// map outline bad
 0,80,0,ff	// keymap active
-80,0,0,ff	// keymap fixed
+55,55,55,ff	// keymap fixed
 ff,23,0,ff	// menu score loss
 37,ef,6f,ff	// menu score destroyed
 27,31,b9,ff	// menu score built
