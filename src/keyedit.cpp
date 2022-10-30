@@ -165,6 +165,11 @@ static std::string getNotBoundLabel()
 	return _("<not bound>");
 }
 
+static std::string getFixedKeyLabel()
+{
+	return _("<Fixed Key>");
+}
+
 static KeyMappingSelection keyMapSelection;
 static bool maxKeyMapNameWidthDirty = true;
 
@@ -266,7 +271,8 @@ public:
 		}
 		else if (info.type != KeyMappingType::ASSIGNABLE)
 		{
-			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_FIXED);
+			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_MENU_BORDER);
+			pie_BoxFill(xPos + 1, yPos + 1, xPos + w - 1, yPos + h - 1, WZCOL_KEYMAP_FIXED);
 		}
 		else
 		{
@@ -290,7 +296,7 @@ public:
 		}
 		else
 		{
-			sstrcpy(sPrimaryKey, info.type == KeyMappingType::ASSIGNABLE ? getNotBoundLabel().c_str() : "\0");
+			sstrcpy(sPrimaryKey, info.type == KeyMappingType::ASSIGNABLE ? getNotBoundLabel().c_str() : getFixedKeyLabel().c_str());
 		}
 
 		wzBindingText.setText(sPrimaryKey, iV_fonts::font_regular);
