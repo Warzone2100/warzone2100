@@ -200,9 +200,10 @@ struct RSComparator
 		if (lhighest && rhighest)
 		{
 			// break the tie with distance check
-			const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY);
-			const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY);
-			return (ldist < rdist);
+			const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
+			const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
+			debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
+			return (ldist >= rdist);
 		}
 
 		// Second highest priority:
@@ -214,9 +215,11 @@ struct RSComparator
 
 		// at this point we don't really have a preference
 		// just repair closest (maybe should repair the most damaged?..)
-		const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY);
-		const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY);
-		return ldist < rdist;
+		const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
+		const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
+		debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
+		return ldist >= rdist;
+
 	}
 	private:
 	const int selfPosX;
@@ -245,7 +248,11 @@ static DROID* _findSomeoneToRepair(REPAIR_FACILITY *psRepairFac,
 			droidWasFullyRepaired(psDroid, psRepairFac);
 		}
 	}
-	if (!queue.empty()) return queue.top();
+	if (!queue.empty()) 
+	{
+		debug(LOG_REPAIRS, "top was %i", queue.top()->id);
+		return queue.top();
+	}
 	return nullptr;
 }
 
