@@ -401,16 +401,6 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-instance uniforms
 			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
 		} }),
-
-	std::make_pair(SHADER_BUTTON, program_data{ "Button program", "shaders/button.vert", "shaders/button.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
-			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
-		} }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{
 			// per-frame global uniforms
