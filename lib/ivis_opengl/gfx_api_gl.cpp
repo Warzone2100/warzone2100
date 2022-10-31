@@ -399,7 +399,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest"
 		} }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{
@@ -408,7 +408,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest"
 		} }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
@@ -1330,8 +1330,9 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstan
 	setUniforms(17, cbuf.colour);
 	setUniforms(18, cbuf.teamcolour);
 	setUniforms(19, cbuf.shaderStretch);
-	setUniforms(20, cbuf.ecmState);
-	setUniforms(21, cbuf.alphaTest);
+	setUniforms(20, cbuf.animFrameNumber);
+	setUniforms(21, cbuf.ecmState);
+	setUniforms(22, cbuf.alphaTest);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)

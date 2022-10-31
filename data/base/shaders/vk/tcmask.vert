@@ -31,13 +31,14 @@ layout(std140, set = 2, binding = 0) uniform instanceuniforms
 	vec4 colour;
 	vec4 teamcolour;
 	float stretch;
+	float animFrameNumber;
 	int ecmEffect;
 	int alphaTest;
 };
 
 layout(location = 0) in vec4 vertex;
 layout(location = 3) in vec3 vertexNormal;
-layout(location = 1) in vec2 vertexTexCoord;
+layout(location = 1) in vec4 vertexTexCoordAndTexAnim;
 layout(location = 4) in vec4 vertexTangent;
 
 layout(location = 0) out float vertexDistance;
@@ -49,7 +50,12 @@ layout(location = 4) out vec2 texCoord;
 void main()
 {
 	// Pass texture coordinates to fragment shader
-	texCoord = vertexTexCoord;
+	texCoord = vertexTexCoordAndTexAnim.xy;
+	int framesPerLine = int(1.f / min(vertexTexCoordAndTexAnim.z, 1.f)); // texAnim.x
+	int frame = int(animFrameNumber);
+	float uFrame = float(frame % framesPerLine) * vertexTexCoordAndTexAnim.z; // texAnim.x
+	float vFrame = float(frame / framesPerLine) * vertexTexCoordAndTexAnim.w; // texAnim.y
+	texCoord = vec2(texCoord.x + uFrame, texCoord.y + vFrame);
 
 	// Lighting we pass to the fragment shader
 	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME

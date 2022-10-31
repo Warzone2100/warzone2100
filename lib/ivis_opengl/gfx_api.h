@@ -591,6 +591,7 @@ namespace gfx_api
 		glm::vec4 colour;
 		glm::vec4 teamcolour;
 		float shaderStretch;
+		float animFrameNumber;
 		int ecmState;
 		int alphaTest;
 	};
@@ -605,7 +606,7 @@ namespace gfx_api
 	std::tuple<
 	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
 	vertex_buffer_description<12, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,
-	vertex_buffer_description<8, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, 0>>,
+	vertex_buffer_description<16, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float4, 0>>,
 	vertex_buffer_description<16, vertex_attribute_description<tangent, gfx_api::vertex_attribute_type::float4, 0>>
 	>,
 	std::tuple<
