@@ -79,6 +79,8 @@ bool pie_Initialise()
 	pie_SetDefaultStates();
 	debug(LOG_3D, "xcentre %d; ycentre %d", rendSurface.xcentre, rendSurface.ycentre);
 
+	pie_InitializeInstancedRenderer();
+
 	return true;
 }
 

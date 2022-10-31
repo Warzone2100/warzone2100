@@ -1376,7 +1376,7 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
 	               * glm::scale(glm::vec3(psEffect->size / 100.f));
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
 }
 
 /** drawing func for blood. */
@@ -1508,7 +1508,7 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_PLASMA_ADDITIVE, viewMatrix * modelMatrix);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_KICKUP)
 	{
@@ -1516,7 +1516,7 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 	}
 	else
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
 	}
 }
 
