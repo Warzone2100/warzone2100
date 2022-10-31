@@ -111,6 +111,7 @@ static const char *code_part_names[] =
 	"activity",
 	"research",
 	"savegame",
+	"repairs",
 	"last"
 };
 
