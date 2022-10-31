@@ -231,7 +231,17 @@ void null_context::draw(const size_t& offset, const size_t &count, const gfx_api
 	// no-op
 }
 
+void null_context::draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count)
+{
+	// no-op
+}
+
 void null_context::draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index)
+{
+	// no-op
+}
+
+void null_context::draw_elements_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index, std::size_t instance_count)
 {
 	// no-op
 }
@@ -261,6 +271,10 @@ int32_t null_context::get_context_value(const context_value property)
 			return 0;
 		case gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS:
 			return 2048;
+		case gfx_api::context::context_value::MAX_VERTEX_ATTRIBS:
+			return 16;
+		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
+			return 64;
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
@@ -411,3 +425,12 @@ bool null_context::supportsMipLodBias() const
 	return true;
 }
 
+size_t null_context::maxFramesInFlight() const
+{
+	return 1;
+}
+
+bool null_context::supportsInstancedRendering()
+{
+	return false;
+}

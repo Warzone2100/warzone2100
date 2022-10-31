@@ -63,6 +63,7 @@
 
 static size_t pieCount = 0;
 static size_t polyCount = 0;
+static size_t drawCallsCount = 0;
 static bool shadows = false;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 static gfx_api::gfxFloat lightingDefault[LIGHT_MAX][4];
@@ -135,8 +136,6 @@ struct SHAPE
 };
 
 static std::vector<ShadowcastingShape> scshapes;
-static std::vector<SHAPE> tshapes;
-static std::vector<SHAPE> shapes;
 static gfx_api::buffer* pZeroedVertexBuffer = nullptr;
 
 static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
@@ -200,6 +199,19 @@ void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &ma
 	gfx_api::context::get().unbind_index_buffer(*shape->buffers[VBO_INDEX]);
 }
 
+inline void hash_combine(std::size_t& seed) { }
+
+template <typename T, typename... Rest>
+inline void hash_combine(std::size_t& seed, const T& v, Rest... rest) {
+	std::hash<T> hasher;
+#if SIZE_MAX >= UINT64_MAX
+	seed ^= hasher(v) + 0x9e3779b97f4a7c15L + (seed<<6) + (seed>>2);
+#else
+	seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+#endif
+	hash_combine(seed, rest...);
+}
+
 struct templatedState
 {
 	SHADER_MODE shader = SHADER_NONE;
@@ -225,6 +237,18 @@ struct templatedState
 		return !operator==(rhs);
 	}
 };
+
+namespace std {
+	template <> struct hash<templatedState>
+	{
+		size_t operator()(const templatedState & x) const
+		{
+			std::size_t h = 0;
+			hash_combine(h, static_cast<size_t>(x.shader), x.shape, x.pieFlag);
+			return h;
+		}
+	};
+}
 
 // Ensure the uniforms are set for a shader once until reset
 struct ShaderOnce
@@ -359,10 +383,33 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	}
 }
 
+static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceData(int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
+{
+	int ecmState = (pieFlag & pie_ECM) ? 1 : 0;
+
+	/* Set translucency */
+	if (pieFlag & pie_ADDITIVE)
+	{
+		colour.byte.a = (UBYTE)pieFlagData;
+	}
+	else if (pieFlag & pie_TRANSLUCENT)
+	{
+		colour.byte.a = (UBYTE)pieFlagData;
+	}
+
+	return gfx_api::Draw3DShapePerInstanceInterleavedData {
+		matrix,
+		glm::vec4(stretchDepth, ecmState, !(pieFlag & pie_PREMULTIPLIED), float(frame)),
+		colour.rgba, teamcolour.rgba
+	};
+}
+
 static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
 {
 	bool light = true;
 	int ecmState = 0;
+
+	++drawCallsCount;
 
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
@@ -454,19 +501,6 @@ static inline float scale_y(float y, int flag, int flag_data)
 		}
 	}
 	return tempY;
-}
-
-inline void hash_combine(std::size_t& seed) { }
-
-template <typename T, typename... Rest>
-inline void hash_combine(std::size_t& seed, const T& v, Rest... rest) {
-	std::hash<T> hasher;
-#if SIZE_MAX >= UINT64_MAX
-	seed ^= hasher(v) + 0x9e3779b97f4a7c15L + (seed<<6) + (seed>>2);
-#else
-	seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-#endif
-	hash_combine(seed, rest...);
 }
 
 std::size_t hash_vec4(const glm::vec4& vec)
@@ -741,10 +775,201 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 	return result;
 }
 
-void pie_CleanUp()
+class InstancedMeshRenderer
 {
+public:
+	bool Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth);
+	bool DrawAll(uint64_t currentGameFrame);
+public:
+	// New, instanced rendering
+	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms);
+	// Old, non-instanced rendering
+	void Draw3DShapes_Old(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms);
+	templatedState Draw3DShapeInstance_Old(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth);
+public:
+	bool initialize();
+	void clear();
+	void reset();
+private:
+	bool useInstancedRendering = true;
+
+	typedef templatedState MeshInstanceKey;
+	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceMeshes;
+	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshes;
+	size_t instancesCount = 0;
+	size_t translucentInstancesCount = 0;
+
+	std::vector<SHAPE> tshapes;
+	std::vector<SHAPE> shapes;
+
+	std::vector<gfx_api::buffer*> instanceDataBuffers;
+	size_t currInstanceBufferIdx = 0;
+};
+
+bool InstancedMeshRenderer::initialize()
+{
+	if (!gfx_api::context::get().supportsInstancedRendering())
+	{
+		useInstancedRendering = false;
+		return true;
+	}
+
+	// check for minimum required vertex attributes (and vertex outputs) for the instanced shaders
+	int32_t max_vertex_attribs = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_VERTEX_ATTRIBS);
+	int32_t max_vertex_output_components = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS);
+	size_t maxInstancedMeshShaderVertexAttribs = std::max({gfx_api::instance_modelMatrix, gfx_api::instance_packedValues, gfx_api::instance_Colour, gfx_api::instance_TeamColour}) + 1;
+	constexpr size_t min_required_vertex_output_components = 11 * 4; // from the shaders - see tcmask_instanced.vert / nolight_instanced.vert
+	if (max_vertex_attribs < maxInstancedMeshShaderVertexAttribs)
+	{
+		debug(LOG_INFO, "Disabling instanced rendering - Insufficient MAX_VERTEX_ATTRIBS (%" PRIi32 "; need: %zu)", max_vertex_attribs, maxInstancedMeshShaderVertexAttribs);
+		useInstancedRendering = false;
+		return true;
+	}
+	if (max_vertex_output_components < min_required_vertex_output_components)
+	{
+		debug(LOG_INFO, "Disabling instanced rendering - Insufficient MAX_VERTEX_OUTPUT_COMPONENTS (%" PRIi32 "; need: %zu)", max_vertex_output_components, min_required_vertex_output_components);
+		useInstancedRendering = false;
+		return true;
+	}
+
+	instanceDataBuffers.resize(gfx_api::context::get().maxFramesInFlight() + 1);
+	for (size_t i = 0; i < instanceDataBuffers.size(); ++i)
+	{
+		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
+	}
+	return true;
+}
+
+void InstancedMeshRenderer::clear()
+{
+	instanceMeshes.clear();
+	instanceTranslucentMeshes.clear();
+	instancesCount = 0;
+	translucentInstancesCount = 0;
 	tshapes.clear();
 	shapes.clear();
+}
+
+void InstancedMeshRenderer::reset()
+{
+	clear();
+	for (auto buffer : instanceDataBuffers)
+	{
+		delete buffer;
+	}
+	instanceDataBuffers.clear();
+}
+
+bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth)
+{
+	bool light = true;
+
+	if (pieFlag & pie_ADDITIVE)
+	{
+		light = false;
+	}
+	else if (pieFlag & pie_TRANSLUCENT)
+	{
+		light = false;
+	}
+	else if (pieFlag & pie_PREMULTIPLIED)
+	{
+		light = false;
+	}
+
+	if (pieFlag & pie_ECM)
+	{
+		light = true;
+	}
+
+	frame %= std::max<int>(1, shape->numFrames);
+
+	templatedState currentState = templatedState((light) ? ((useInstancedRendering) ? SHADER_COMPONENT_INSTANCED : SHADER_COMPONENT) : ((useInstancedRendering) ? SHADER_NOLIGHT_INSTANCED : SHADER_NOLIGHT), shape, pieFlag);
+
+	SHAPE tshape;
+	tshape.shape = shape;
+	tshape.frame = frame;
+	tshape.colour = colour;
+	tshape.teamcolour = teamcolour;
+	tshape.flag = pieFlag;
+	tshape.flag_data = pieFlagData;
+	tshape.stretch = stretchDepth;
+	tshape.matrix = modelView;
+
+	if (pieFlag & pie_HEIGHT_SCALED)	// construct
+	{
+		tshape.matrix = glm::scale(tshape.matrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
+	}
+	if (pieFlag & pie_RAISE)		// collapse
+	{
+		tshape.matrix = glm::translate(tshape.matrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
+	}
+
+	if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED))
+	{
+		if (useInstancedRendering)
+		{
+			instanceTranslucentMeshes[currentState].push_back(tshape);
+		}
+		else
+		{
+			tshapes.push_back(tshape);
+		}
+		++translucentInstancesCount;
+	}
+	else
+	{
+		if (shadows && (pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW))
+		{
+			float distance;
+
+			// draw a shadow
+			ShadowcastingShape scshape;
+			scshape.matrix = modelView;
+			distance = scshape.matrix[3][0] * scshape.matrix[3][0];
+			distance += scshape.matrix[3][1] * scshape.matrix[3][1];
+			distance += scshape.matrix[3][2] * scshape.matrix[3][2];
+
+			// if object is too far in the fog don't generate a shadow.
+			if (distance < SHADOW_END_DISTANCE)
+			{
+				// Calculate the light position relative to the object
+				glm::vec4 pos_light0 = glm::vec4(currentSunPosition, 0.f);
+				glm::mat4 invmat = glm::inverse(scshape.matrix);
+
+				scshape.light = invmat * pos_light0;
+				scshape.shape = shape;
+				scshape.flag = pieFlag;
+				scshape.flag_data = pieFlagData;
+
+				scshapes.push_back(scshape);
+			}
+		}
+		if (useInstancedRendering)
+		{
+			instanceMeshes[currentState].push_back(tshape);
+		}
+		else
+		{
+			shapes.push_back(tshape);
+		}
+
+		++instancesCount;
+	}
+
+	return true;
+}
+
+static InstancedMeshRenderer instancedMeshRenderer;
+
+void pie_InitializeInstancedRenderer()
+{
+	instancedMeshRenderer.initialize();
+}
+
+void pie_CleanUp()
+{
+	instancedMeshRenderer.reset();
 	scshapes.clear();
 	if (pZeroedVertexBuffer)
 	{
@@ -764,65 +989,10 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	if (pieFlag & pie_BUTTON)
 	{
 		pie_Draw3DButton(shape, teamcolour, modelView);
-	}
-	else
-	{
-		SHAPE tshape;
-		tshape.shape = shape;
-		tshape.frame = frame;
-		tshape.colour = colour;
-		tshape.teamcolour = teamcolour;
-		tshape.flag = pieFlag;
-		tshape.flag_data = pieFlagData;
-		tshape.stretch = stretchDepth;
-		tshape.matrix = modelView;
-
-		if (pieFlag & pie_HEIGHT_SCALED)	// construct
-		{
-			tshape.matrix = glm::scale(tshape.matrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
-		}
-		if (pieFlag & pie_RAISE)		// collapse
-		{
-			tshape.matrix = glm::translate(tshape.matrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
-		}
-
-		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED))
-		{
-			tshapes.push_back(tshape);
-		}
-		else
-		{
-			if (shadows && (pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW))
-			{
-				float distance;
-
-				// draw a shadow
-				ShadowcastingShape scshape;
-				scshape.matrix = modelView;
-				distance = scshape.matrix[3][0] * scshape.matrix[3][0];
-				distance += scshape.matrix[3][1] * scshape.matrix[3][1];
-				distance += scshape.matrix[3][2] * scshape.matrix[3][2];
-
-				// if object is too far in the fog don't generate a shadow.
-				if (distance < SHADOW_END_DISTANCE)
-				{
-					// Calculate the light position relative to the object
-					glm::vec4 pos_light0 = glm::vec4(currentSunPosition, 0.f);
-					glm::mat4 invmat = glm::inverse(scshape.matrix);
-
-					scshape.light = invmat * pos_light0;
-					scshape.shape = shape;
-					scshape.flag = pieFlag;
-					scshape.flag_data = pieFlagData;
-
-					scshapes.push_back(scshape);
-				}
-			}
-			shapes.push_back(tshape);
-		}
+		return true;
 	}
 
-	return true;
+	return instancedMeshRenderer.Draw3DShape(shape, frame, teamcolour, colour, pieFlag, pieFlagData, modelView, stretchDepth);
 }
 
 static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
@@ -898,6 +1068,12 @@ static ShaderOnce perFrameUniformsShaderOnce;
 
 void pie_RemainingPasses(uint64_t currentGameFrame)
 {
+	instancedMeshRenderer.DrawAll(currentGameFrame);
+	instancedMeshRenderer.clear();
+}
+
+bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame)
+{
 	perFrameUniformsShaderOnce.reset();
 
 	// Generate global (per-frame) uniforms
@@ -920,6 +1096,233 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 		renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
 	};
 
+	if (useInstancedRendering)
+	{
+		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms);
+	}
+	else
+	{
+		Draw3DShapes_Old(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms);
+	}
+
+	return true;
+}
+
+template<SHADER_MODE shader, typename Draw3DInstancedPSO>
+static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+{
+	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
+	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
+	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
+
+	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
+	};
+
+	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
+
+	Draw3DInstancedPSO::get().bind();
+	globalsOnce.perform_once<Draw3DInstancedPSO>([&globalUniforms]{
+		Draw3DInstancedPSO::get().set_uniforms_at(0, globalUniforms);
+	});
+
+	Draw3DInstancedPSO::get().set_uniforms_at(1, meshUniforms);
+	gfx_api::context::get().bind_vertex_buffers(0, {
+		std::make_tuple(shape->buffers[VBO_VERTEX], 0),
+		std::make_tuple(shape->buffers[VBO_NORMAL], 0),
+		std::make_tuple(shape->buffers[VBO_TEXCOORD], 0),
+		std::make_tuple(pTangentBuffer, 0),
+		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
+	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+
+	Draw3DInstancedPSO::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
+//	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+}
+
+template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
+static void drawInstanced3dShapeTemplated(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+{
+	/* Set tranlucency */
+	if (pieFlag & pie_ADDITIVE)
+	{
+		if (!(pieFlag & pie_NODEPTHWRITE))
+		{
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditivePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count);
+		}
+		else
+		{
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditiveNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count);
+		}
+	}
+	else if (pieFlag & pie_TRANSLUCENT)
+	{
+		if (!(pieFlag & pie_NODEPTHWRITE))
+		{
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count);
+		}
+		else
+		{
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count);
+		}
+	}
+	else if (pieFlag & pie_PREMULTIPLIED)
+	{
+		return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count);
+	}
+	else
+	{
+		return drawInstanced3dShapeTemplated_Inner<shader, OpaquePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count);
+	}
+}
+
+static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+{
+	bool light = true;
+
+	++drawCallsCount;
+
+	/* Set fog status */
+	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
+	{
+		pie_SetFogStatus(false);
+	}
+	else
+	{
+		pie_SetFogStatus(true);
+	}
+
+	/* Set translucency */
+	if (pieFlag & pie_ADDITIVE)
+	{
+		light = false;
+	}
+	else if (pieFlag & pie_TRANSLUCENT)
+	{
+		light = false;
+	}
+	else if (pieFlag & pie_PREMULTIPLIED)
+	{
+		light = false;
+	}
+
+	if (pieFlag & pie_ECM)
+	{
+		light = true;
+	}
+
+	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
+
+	if (light)
+	{
+		drawInstanced3dShapeTemplated<SHADER_COMPONENT_INSTANCED, gfx_api::Draw3DShapeAdditive_Instanced, gfx_api::Draw3DShapeAdditiveNoDepthWRT_Instanced, gfx_api::Draw3DShapeAlpha_Instanced, gfx_api::Draw3DShapeAlphaNoDepthWRT_Instanced, gfx_api::Draw3DShapePremul_Instanced, gfx_api::Draw3DShapeOpaque_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+	}
+	else
+	{
+		drawInstanced3dShapeTemplated<SHADER_NOLIGHT_INSTANCED, gfx_api::Draw3DShapeNoLightAdditive_Instanced, gfx_api::Draw3DShapeNoLightAdditiveNoDepthWRT_Instanced, gfx_api::Draw3DShapeNoLightAlpha_Instanced, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT_Instanced, gfx_api::Draw3DShapeNoLightPremul_Instanced, gfx_api::Draw3DShapeNoLightOpaque_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+	}
+
+	polyCount += shape->polys.size();
+}
+
+void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms)
+{
+	if (instancesCount + translucentInstancesCount == 0)
+	{
+		return;
+	}
+
+	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData> instancesData;
+	instancesData.reserve(instancesCount + translucentInstancesCount);
+
+	struct InstancedDrawCall
+	{
+		templatedState state;
+		size_t instance_count;
+		size_t startingIdxInInstancesBuffer = 0;
+
+		InstancedDrawCall(const templatedState& state, size_t instance_count, size_t startingIdxInInstancesBuffer)
+		:	state(state),
+			instance_count(instance_count),
+			startingIdxInInstancesBuffer(startingIdxInInstancesBuffer)
+		{ }
+	};
+	std::vector<InstancedDrawCall> drawCalls;
+
+	for (const auto& mesh : instanceMeshes)
+	{
+		const auto& meshInstances = mesh.second;
+		size_t startingIdxInInstancesBuffer = instancesData.size();
+		for (const auto& instance : meshInstances)
+		{
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.matrix, instance.stretch));
+		}
+		drawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+	}
+
+	size_t startIdxTranslucentDrawCalls = drawCalls.size();
+
+	for (const auto& mesh : instanceTranslucentMeshes)
+	{
+		const auto& meshInstances = mesh.second;
+		size_t startingIdxInInstancesBuffer = instancesData.size();
+		for (const auto& instance : meshInstances)
+		{
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.matrix, instance.stretch));
+		}
+		drawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+	}
+
+	// Upload buffer
+	++currInstanceBufferIdx;
+	if (currInstanceBufferIdx >= instanceDataBuffers.size())
+	{
+		currInstanceBufferIdx = 0;
+	}
+	instanceDataBuffers[currInstanceBufferIdx]->upload(instancesData.size() * sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData), instancesData.data());
+
+	// Draw opaque models
+	gfx_api::context::get().debugStringMarker("Remaining passes - opaque models");
+	for (size_t i = 0; i < startIdxTranslucentDrawCalls; ++i)
+	{
+		const auto& call = drawCalls[i];
+		const iIMDShape * shape = call.state.shape;
+		size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
+		pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count);
+	}
+	if (startIdxTranslucentDrawCalls > 0)
+	{
+		// unbind last index buffer bound inside pie_Draw3DShape2
+		gfx_api::context::get().unbind_index_buffer(*((drawCalls[startIdxTranslucentDrawCalls-1].state.shape)->buffers[VBO_INDEX]));
+	}
+
+	// Draw shadows
+	gfx_api::context::get().debugStringMarker("Remaining passes - shadows");
+	if (shadows)
+	{
+		pie_DrawShadows(currentGameFrame);
+	}
+
+	// Draw translucent models last
+	gfx_api::context::get().debugStringMarker("Remaining passes - translucent models");
+	for (size_t i = startIdxTranslucentDrawCalls; i < drawCalls.size(); ++i)
+	{
+		const auto& call = drawCalls[i];
+		const iIMDShape * shape = call.state.shape;
+		size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
+		pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count);
+	}
+	gfx_api::context::get().disable_all_vertex_buffers();
+	if (startIdxTranslucentDrawCalls < drawCalls.size())
+	{
+		// unbind last index buffer bound inside pie_Draw3DShape2
+		gfx_api::context::get().unbind_index_buffer(*((drawCalls.back().state.shape)->buffers[VBO_INDEX]));
+	}
+
+	gfx_api::context::get().debugStringMarker("Remaining passes - done");
+}
+
+void InstancedMeshRenderer::Draw3DShapes_Old(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms)
+{
 	// Draw models
 	// sort list to reduce state changes
 	std::sort(shapes.begin(), shapes.end(), less_than_shape());
@@ -955,8 +1358,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 		// unbind last index buffer bound inside pie_Draw3DShape2
 		gfx_api::context::get().unbind_index_buffer(*((tshapes.back().shape)->buffers[VBO_INDEX]));
 	}
-	tshapes.clear();
-	shapes.clear();
+
 	gfx_api::context::get().debugStringMarker("Remaining passes - done");
 }
 
@@ -967,4 +1369,5 @@ void pie_GetResetCounts(size_t *pPieCount, size_t *pPolyCount)
 
 	pieCount = 0;
 	polyCount = 0;
+	drawCallsCount = 0;
 }

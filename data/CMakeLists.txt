@@ -26,7 +26,9 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_water.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/decals.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/texturedrect.frag"
@@ -37,7 +39,9 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/water.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/decals.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight_instanced.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.frag"
 )
 
