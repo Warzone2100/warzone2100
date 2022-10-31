@@ -207,7 +207,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 		// texture coord routine
 		if (poly->flags & iV_IMD_TEX)
 		{
-			int nFrames, framesPerLine, frame, pbRate;
+			int nFrames, pbRate;
 			float tWidth, tHeight;
 
 			if (poly->flags & iV_IMD_TEXANIM)
@@ -248,12 +248,10 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 					poly->texAnim.x /= OLD_TEXTURE_SIZE_FIX;
 					poly->texAnim.y /= OLD_TEXTURE_SIZE_FIX;
 				}
-				framesPerLine = static_cast<int>(1 / poly->texAnim.x);
 			}
 			else
 			{
 				nFrames = 1;
-				framesPerLine = 1;
 				pbRate = 1;
 				tWidth = 0.f;
 				tHeight = 0.f;
@@ -261,7 +259,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 				poly->texAnim.y = 0;
 			}
 
-			poly->texCoord.resize(nFrames * 3);
+			poly->texCoord.resize(3);
 			for (unsigned j = 0; j < 3; j++)
 			{
 				float VertexU, VertexV;
@@ -279,15 +277,9 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 					VertexV /= OLD_TEXTURE_SIZE_FIX;
 				}
 
-				for (frame = 0; frame < nFrames; frame++)
-				{
-					const float uFrame = (frame % framesPerLine) * poly->texAnim.x;
-					const float vFrame = (frame / framesPerLine) * poly->texAnim.y;
-					Vector2f *c = &poly->texCoord[frame * 3 + j];
-
-					c->x = VertexU + uFrame;
-					c->y = VertexV + vFrame;
-				}
+				Vector2f *c = &poly->texCoord[j];
+				c->x = VertexU;
+				c->y = VertexV;
 			}
 		}
 		else
@@ -557,7 +549,7 @@ bool _imd_load_connectors(const char **ppFileData, iIMDShape &s)
 // performance hack
 static std::vector<gfx_api::gfxFloat> vertices;
 static std::vector<gfx_api::gfxFloat> normals;
-static std::vector<gfx_api::gfxFloat> texcoords;
+static std::vector<gfx_api::gfxFloat> texcoords; // texcoords + texAnim
 static std::vector<gfx_api::gfxFloat> tangents;
 static std::vector<gfx_api::gfxFloat> bitangents;
 static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
@@ -597,12 +589,8 @@ static bool _imd_load_normals(const char **ppFileData, std::vector<Vector3f> &pi
    return true;
 }
 
-static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int frameidx, size_t polyIdx, std::vector<Vector3f> &pie_level_normals)
+static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, size_t polyIdx, std::vector<Vector3f> &pie_level_normals)
 {
-	// if texture animation flag is present, fetch animation coordinates for this polygon
-	// otherwise just show the first set of texel coordinates
-	int frame = (p->flags & iV_IMD_TEXANIM) ? frameidx : 0;
-
 	const Vector3f* normal;
 
  	// Do not weld for for models with normals, those are presumed to be correct. Otherwise, it will break tangents
@@ -612,8 +600,10 @@ static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int 
 		// See if we already have this defined, if so, return reference to it.
 		for (uint16_t j = 0; j < vertexCount; j++)
 		{
-			if (texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
- 			    && texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
+			if (texcoords[j * 4 + 0] == p->texCoord[i].x
+ 			    && texcoords[j * 4 + 1] == p->texCoord[i].y
+				&& texcoords[j * 4 + 2] == p->texAnim.x
+				&& texcoords[j * 4 + 3] == p->texAnim.y
  			    && vertices[j * 3 + 0] == s.points[p->pindex[i]].x
  			    && vertices[j * 3 + 1] == s.points[p->pindex[i]].y
  			    && vertices[j * 3 + 2] == s.points[p->pindex[i]].z
@@ -634,8 +624,10 @@ static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int 
 	normals.emplace_back(normal->x);
  	normals.emplace_back(normal->y);
  	normals.emplace_back(normal->z);
-	texcoords.emplace_back(p->texCoord[frame * 3 + i].x);
-	texcoords.emplace_back(p->texCoord[frame * 3 + i].y);
+	texcoords.emplace_back(p->texCoord[i].x);
+	texcoords.emplace_back(p->texCoord[i].y);
+	texcoords.emplace_back(p->texAnim.x);
+	texcoords.emplace_back(p->texAnim.y);
 	vertices.emplace_back(s.points[p->pindex[i]].x);
 	vertices.emplace_back(s.points[p->pindex[i]].y);
 	vertices.emplace_back(s.points[p->pindex[i]].z);
@@ -648,7 +640,7 @@ void calculateTangentsForTriangle(const uint16_t ia, const uint16_t ib, const ui
 {
    // This will work as long as vecs are packed (which is default in glm)
    const Vector3f* verticesAsVec3 = reinterpret_cast<const Vector3f*>(vertices.data());
-   const Vector2f* texcoordsAsVec2 = reinterpret_cast<const Vector2f*>(texcoords.data());
+   const Vector4f* texcoordsAsVec4 = reinterpret_cast<const Vector4f*>(texcoords.data());
    Vector4f* tangentsAsVec4 = reinterpret_cast<Vector4f*>(tangents.data());
    Vector3f* bitangentsAsVec3 = reinterpret_cast<Vector3f*>(bitangents.data());
 
@@ -658,9 +650,9 @@ void calculateTangentsForTriangle(const uint16_t ia, const uint16_t ib, const ui
    const Vector3f& vc(verticesAsVec3[ic]);
 
    // Shortcuts for UVs
-   const Vector2f& uva(texcoordsAsVec2[ia]);
-   const Vector2f& uvb(texcoordsAsVec2[ib]);
-   const Vector2f& uvc(texcoordsAsVec2[ic]);
+   const Vector2f uva(texcoordsAsVec4[ia].xy());
+   const Vector2f uvb(texcoordsAsVec4[ib].xy());
+   const Vector2f uvc(texcoordsAsVec4[ic].xy());
 
    // Edges of the triangle : postion delta
    const Vector3f deltaPos1 = vb - va;
@@ -953,17 +945,14 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	// FINALLY, massage the data into what can stream directly to OpenGL
 	vertexCount = 0;
-	for (int k = 0; k < MAX(1, s.numFrames); k++)
+	// Go through all polygons for each frame
+	for (size_t npol = 0; npol < s.polys.size(); ++npol)
 	{
-		// Go through all polygons for each frame
-		for (size_t npol = 0; npol < s.polys.size(); ++npol)
-		{
-			const iIMDPoly& p = s.polys[npol];
-			// Do we already have the vertex data for this polygon?
-			indices.emplace_back(addVertex(s, 0, &p, k, npol, pie_level_normals));
- 			indices.emplace_back(addVertex(s, 1, &p, k, npol, pie_level_normals));
- 			indices.emplace_back(addVertex(s, 2, &p, k, npol, pie_level_normals));
-		}
+		const iIMDPoly& p = s.polys[npol];
+		// Do we already have the vertex data for this polygon?
+		indices.emplace_back(addVertex(s, 0, &p, npol, pie_level_normals));
+		indices.emplace_back(addVertex(s, 1, &p, npol, pie_level_normals));
+		indices.emplace_back(addVertex(s, 2, &p, npol, pie_level_normals));
 	}
 
 	s.vertexCount = vertexCount;
