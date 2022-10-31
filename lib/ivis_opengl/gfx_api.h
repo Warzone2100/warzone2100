@@ -503,32 +503,6 @@ namespace gfx_api
 
 	// NOTE: Be very careful changing these constant_buffer_type structs;
 	//		 they must match std140 layout rules (see: the Vulkan shaders)
-	template<>
-	struct constant_buffer_type<SHADER_BUTTON>
-	{
-		glm::vec4 colour;
-		glm::vec4 teamcolour;
-		float shaderStretch;
-		int tcmask;
-		int fogEnabled;
-		int normalMap;
-		int specularMap;
-		int ecmState;
-		int alphaTest;
-		float timeState;
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 NormalMatrix;
-		glm::vec4 sunPos;
-		glm::vec4 sceneColor;
-		glm::vec4 ambient;
-		glm::vec4 diffuse;
-		glm::vec4 specular;
-		glm::vec4 fogColour;
-		float fogEnd;
-		float fogBegin;
-		int hasTangents;
-	};
 
 	template<>
 	struct constant_buffer_type<SHADER_COMPONENT>
@@ -641,7 +615,6 @@ namespace gfx_api
 	texture_description<3, sampler_type::anisotropic> // specular map
 	>, shader>;
 
-	using Draw3DButtonPSO = Draw3DShape<REND_OPAQUE, SHADER_BUTTON, DEPTH_CMP_LEQ_WRT_ON>;
 	using Draw3DShapeOpaque = Draw3DShape<REND_OPAQUE, SHADER_COMPONENT, DEPTH_CMP_LEQ_WRT_ON>;
 	using Draw3DShapeAlpha = Draw3DShape<REND_ALPHA, SHADER_COMPONENT, DEPTH_CMP_LEQ_WRT_ON>;
 	using Draw3DShapePremul = Draw3DShape<REND_PREMULTIPLIED, SHADER_COMPONENT, DEPTH_CMP_LEQ_WRT_ON>;
