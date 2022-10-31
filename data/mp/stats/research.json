@@ -22,6 +22,7 @@
 		"name": "Command Turret Upgrade",
 		"requiredResearch": [
 			"R-Comp-CommandTurret01",
+			"R-Sys-Sensor-Upgrade02",
 			"R-Struc-Research-Upgrade07"
 		],
 		"researchPoints": 5000,
@@ -3165,10 +3166,10 @@
 		"msgName": "RES_SY_RC",
 		"name": "Nexus Resistance Circuits",
 		"requiredResearch": [
-			"R-Sys-Sensor-Upgrade03",
+			"R-Sys-SpyTurret",
 			"R-Struc-Research-Upgrade09"
 		],
-		"researchPoints": 28800,
+		"researchPoints": 18000,
 		"researchPower": 450,
 		"results": [
 			{
@@ -3389,10 +3390,10 @@
 		"name": "Nexus Link Turret",
 		"requiredResearch": [
 			"R-Sys-Sensor-Upgrade03",
-			"R-Struc-Research-Upgrade09"
+			"R-Comp-CommandTurret02"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 12000,
+		"researchPower": 375,
 		"resultComponents": [
 			"SpyTurret01"
 		],
@@ -4736,11 +4737,11 @@
 		"msgName": "RES_W_BMB6",
 		"name": "EMP Missile Launcher",
 		"requiredResearch": [
-			"R-Wpn-EMPCannon",
-			"R-Wpn-Bomb04"
+			"R-Comp-CommandTurret02",
+			"R-Wpn-Bomb-Damage03"
 		],
-		"researchPoints": 25000,
-		"researchPower": 450,
+		"researchPoints": 8000,
+		"researchPower": 250,
 		"resultComponents": [
 			"Bomb6-VTOL-EMP"
 		],
@@ -5364,7 +5365,7 @@
 		"msgName": "RES_EMP_CANT",
 		"name": "EMP Cannon",
 		"requiredResearch": [
-			"R-Sys-Sensor-Upgrade03",
+			"R-Comp-CommandTurret02",
 			"R-Struc-Research-Upgrade08"
 		],
 		"researchPoints": 14400,
@@ -7909,7 +7910,9 @@
 		"msgName": "RES_W_M2",
 		"name": "EMP Mortar",
 		"requiredResearch": [
-			"R-Wpn-EMPCannon"
+			"R-Comp-CommandTurret02",
+			"R-Sys-Sensor-Upgrade03",
+			"R-Struc-Research-Upgrade09"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
