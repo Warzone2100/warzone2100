@@ -238,6 +238,7 @@ void recvMultiStats(NETQUEUE queue)
 
 	PLAYERSTATS::Autorating receivedAutorating;
 	NETauto(receivedAutorating);
+	bool processAutoratingData = false;
 
 	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 	if (!myResponsibility(playerIndex))
@@ -283,19 +284,28 @@ void recvMultiStats(NETQUEUE queue)
 			std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
 			std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
 			wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
-		}
-	}
 
-	if (getAutoratingEnable())
-	{
-		playerStats[playerIndex].autorating.valid = false;
-		playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
-		lookupRatingAsync(playerIndex);
+			processAutoratingData = true;
+		}
 	}
 	else
 	{
-		playerStats[playerIndex].autorating = receivedAutorating;
-		playerStats[playerIndex].autoratingFrom = RATING_SOURCE_HOST;
+		processAutoratingData = true;
+	}
+
+	if (processAutoratingData)
+	{
+		if (getAutoratingEnable())
+		{
+			playerStats[playerIndex].autorating.valid = false;
+			playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
+			lookupRatingAsync(playerIndex);
+		}
+		else
+		{
+			playerStats[playerIndex].autorating = receivedAutorating;
+			playerStats[playerIndex].autoratingFrom = RATING_SOURCE_HOST;
+		}
 	}
 
 	NETend();
