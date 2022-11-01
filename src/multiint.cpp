@@ -4238,7 +4238,7 @@ public:
 				playerInfoTooltip += hash.empty()? _("(none)") : hash;
 			}
 			if (stats.autorating.valid && !stats.autorating.details.empty()
-				&& !(stats.autoratingFrom == RATING_SOURCE_HOST && !NetPlay.isHost)) // do not display host-provided details (for now)
+				&& stats.autoratingFrom == RATING_SOURCE_LOCAL) // do not display host-provided details (for now)
 			{
 				if (!playerInfoTooltip.empty())
 				{
@@ -4255,7 +4255,7 @@ public:
 					detailsstr = detailsstr.substr(0, maxLinePos);
 				}
 				playerInfoTooltip += std::string(_("Player rating:")) + "\n";
-				if (stats.autoratingFrom == RATING_SOURCE_HOST && !NetPlay.isHost)
+				if (stats.autoratingFrom == RATING_SOURCE_HOST)
 				{
 					playerInfoTooltip += std::string("(") + _("Host provided") + ")";
 				}
