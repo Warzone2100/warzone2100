@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-29 14:59\n"
+"PO-Revision-Date: 2022-11-01 15:45\n"
 "Last-Translator: \n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
@@ -19158,8 +19158,8 @@ msgstr "Nemožeš napraviti više \"%s\", granica građevinska jedinica je doseg
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Jedinica dodjeljena - Hitpointovi %d/%d"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "%s - %u Jedinica dodjeljena - Hitpointovi %d/%d"
+msgstr[2] "%s - %u Jedinica dodjeljena - Hitpointovi %d/%d"
 
 #: src/structure.cpp:5222
 #, c-format
@@ -19171,8 +19171,8 @@ msgstr "ID %d - Domet senzora %d - ECM %d"
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Jedinica dodjeljena - Šteta %d/%d"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "%s - %u Jedinica dodjeljena - Šteta %d/%d"
+msgstr[2] "%s - %u Jedinica dodjeljena - Šteta %d/%d"
 
 #: src/structure.cpp:5242
 #: src/structure.cpp:5252
