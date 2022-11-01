@@ -144,6 +144,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 			}
 			try {
 				playerStats[playerIndex].autorating = nlohmann::json::parse(dataCopy->memory, dataCopy->memory + dataCopy->size);
+				playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
 				if (playerStats[playerIndex].autorating.valid)
 				{
 					setMultiStats(playerIndex, playerStats[playerIndex], !NetPlay.isHost);
