@@ -903,6 +903,8 @@ void resetRecentScoreData()
 		playerStats[i].recentKills = 0;
 		playerStats[i].recentScore = 0;
 		playerStats[i].recentPowerLost = 0;
+		playerStats[i].identity.clear();
+		playerStats[i].autorating = PLAYERSTATS::Autorating();
 	}
 }
 
