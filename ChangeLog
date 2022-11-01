@@ -1,3 +1,15 @@
+2022-11-02: Version 4.3.0:
+ * General:
+   * Fix: Improve classic ("exclusive") fullscreen mode switching, additional Video Options (too many commits, #2936)
+   * Fix: Give Hardcrete Gate a research message (commit:7e1599fcb1b640ee6e4f90a5d622f3b5cb4ddffd, #2940)
+   * Fix: Add missing terminating entry (commit:55fb14b73486700ca8437f67527e36ccc7e16643, #2944)
+   * Fix: Truncating audio streams, buffer leaks (commit:25f1944c7ad0c1ff9c6017f88fce0d974ecb1502, commit:bc82e2cd1c5fcf02b1266911a8cdd7f446a593e8, #2943)
+   * Fix: Move favorite structures to a JSON file (too many commits, #2935)
+   * Fix: Mobile repair turrets prioritize distant heal targets over closer ones (commit:87a729e5d0396ba6bc55dbe32e580656cafaaa12, #2954)
+   * Fix: Improve fixed hotkey display (commit:6025f4b5f78230d8ffa61320b8c3a02d7bef8bba, #2952)
+   * Fix: Redundant components becoming available (commit:4663d22b589c65f53daab33e4625cca1cfcbce47, #2950)
+   * Fix: Autorating tooltip requests (too many commits, #2955)
+
 2022-10-23: Version 4.3.0-beta3:
  * General:
    * Add: "LOD Distance" Graphics option, to adjust texture sharpness at distance - set default to "High" (too many commits, #2897)
