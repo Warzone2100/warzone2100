@@ -202,7 +202,7 @@ struct RSComparator
 			// break the tie with distance check
 			const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
 			const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
-			debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
+			// debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
 			return (ldist >= rdist);
 		}
 
@@ -217,7 +217,7 @@ struct RSComparator
 		// just repair closest (maybe should repair the most damaged?..)
 		const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
 		const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
-		debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
+		// debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
 		return ldist >= rdist;
 
 	}
