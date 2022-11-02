@@ -382,6 +382,7 @@ static const int BLUEPRINT_OPACITY = 120;
 
 void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
+	if (psWScreen == nullptr) return;
 	resizeRadar(); // recalculate radar position
 }
 
