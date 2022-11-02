@@ -657,6 +657,10 @@ void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat wi
 {
 	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
 	{
+		if (radarGfx[i] == nullptr)
+		{
+			continue;
+		}
 		radarGfx[i]->makeTexture(twidth, theight, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, std::string("mem::radarTexture[") + std::to_string(i) + "]");
 		//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter. // TODO: Add a gfx_api::sampler_type to handle this case? bilinear, but nearest for mag?
 		gfx_api::gfxFloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
