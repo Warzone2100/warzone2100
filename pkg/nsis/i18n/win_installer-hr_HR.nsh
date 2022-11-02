@@ -37,7 +37,7 @@ ${LangFileString} TEXT_SecNLS_WinFonts "Windows fontovi"
 ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "Važni Microsoft runtime DDL-ovi"
-${LangFileString} DESC_SecMSSysLibraries "Skini i instaliraj (ili ažuriraj) Microsoftov Visual C++ djeljive sistemske "knjižnice" (libraries), što neke komponente možda trebaju da bi pravilno radile."
+${LangFileString} DESC_SecMSSysLibraries "Skini i instaliraj (ili ažuriraj) Microsoftov Visual C++ djeljive sistemske knjižnice (libraries), što neke komponente možda trebaju da bi pravilno radile."
 
 ${LangFileString} DLTEXT_Downloading "Instaliranje"
 ${LangFileString} DLTEXT_SysLibDLFailed "Instalacija systemskog library-a nije uspjela"
