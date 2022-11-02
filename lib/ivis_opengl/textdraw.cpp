@@ -116,6 +116,7 @@ struct GlyphMetrics
 	int32_t bearing_y;
 };
 
+static bool bLoadedTextSystem = false;
 static std::unordered_map<std::string, std::shared_ptr<std::vector<char>>> m_loadedFontDataCache;
 
 static std::shared_ptr<std::vector<char>> loadFontData(const std::string &fileName)
@@ -1184,6 +1185,8 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 
 	// hb_language_get_default: "To avoid problems, call this function once before multiple threads can call it."
 	hb_language_get_default();
+
+	bLoadedTextSystem = true;
 }
 
 void iV_TextShutdown()
@@ -1195,10 +1198,15 @@ void iV_TextShutdown()
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
 	clearFontDataCache();
+	bLoadedTextSystem = false;
 }
 
 void iV_TextUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int vertScalePercentage)
 {
+	if (!bLoadedTextSystem)
+	{
+		return;
+	}
 	iV_TextShutdown();
 	iV_TextInit(horizScalePercentage, vertScalePercentage);
 }
