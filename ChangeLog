@@ -1,3 +1,7 @@
+2022-11-02: Version 4.3.1:
+ * General:
+   * Fix: Crashes caused by certain old config file settings (too many commits, #2960)
+
 2022-11-02: Version 4.3.0:
  * General:
    * Fix: Improve classic ("exclusive") fullscreen mode switching, additional Video Options (too many commits, #2936)
