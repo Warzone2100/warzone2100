@@ -65,6 +65,7 @@ struct iTexPage
 		std::swap(name, input.name);
 		id = input.id;
 		input.id = nullptr;
+		std::swap(textureType, input.textureType);
 	}
 
 	~iTexPage()
