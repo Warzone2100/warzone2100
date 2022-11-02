@@ -1651,7 +1651,16 @@ public:
 		}
 
 		dropdown->setOnChange([screenResolutionsModel](DropdownWidget& dropdown) {
-			if (auto selectedIndex = dropdown.getSelectedIndex())
+			auto pResolutionDropdown = std::dynamic_pointer_cast<ResolutionDropdown>(dropdown.shared_from_this());
+			if (!pResolutionDropdown)
+			{
+				return;
+			}
+			if (pResolutionDropdown->skipActualResolutionChange)
+			{
+				return;
+			}
+			if (auto selectedIndex = pResolutionDropdown->getSelectedIndex())
 			{
 				screenResolutionsModel.selectAt(selectedIndex.value());
 			}
@@ -1665,11 +1674,14 @@ public:
 		auto closestResolution = screenResolutionsModel.findResolutionClosestToCurrent();
 		if (closestResolution != screenResolutionsModel.end())
 		{
+			skipActualResolutionChange = true;
 			setSelectedIndex(closestResolution - screenResolutionsModel.begin());
+			skipActualResolutionChange = false;
 		}
 	}
 private:
 	ScreenResolutionsModel screenResolutionsModel;
+	bool skipActualResolutionChange = false;
 };
 
 void refreshCurrentVideoOptionsValues()
