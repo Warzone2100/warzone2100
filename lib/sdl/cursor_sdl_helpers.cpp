@@ -30,7 +30,7 @@
 // Implement the same algorithm from: https://github.com/libsdl-org/SDL/blob/main/src/events/SDL_mouse.c
 bool ivImageFromMonoCursorDataSDLCompat(const uint8_t* data, const uint8_t* mask, unsigned int w, unsigned int h, iV_Image& image)
 {
-	uint32_t* pixel = nullptr;
+	unsigned char* pWritePtr = nullptr;
 	uint8_t datab = 0, maskb = 0;
 	const uint32_t black = 0xFF000000;
 	const uint32_t white = 0xFFFFFFFF;
@@ -41,19 +41,26 @@ bool ivImageFromMonoCursorDataSDLCompat(const uint8_t* data, const uint8_t* mask
 		return false;
 	}
 
-	uint32_t* pBmpData = reinterpret_cast<uint32_t*>(image.bmp_w());
+	auto pBmpData = image.bmp_w();
 	for (unsigned int y = 0; y < h; ++y) {
-		pixel = pBmpData + y * w;
+		pWritePtr = pBmpData + (y * w * 4);
 		for (unsigned int x = 0; x < w; ++x) {
 			if ((x % 8) == 0) {
 				datab = *data++;
 				maskb = *mask++;
 			}
+			const uint32_t* pColor = &black;
 			if (maskb & 0x80) {
-				*pixel++ = (datab & 0x80) ? black : white;
+				pColor = (datab & 0x80) ? &black : &white;
 			} else {
-				*pixel++ = (datab & 0x80) ? black : transparent;
+				pColor = (datab & 0x80) ? &black : &transparent;
 			}
+			pWritePtr[0] = reinterpret_cast<const unsigned char*>(pColor)[0];
+			pWritePtr[1] = reinterpret_cast<const unsigned char*>(pColor)[1];
+			pWritePtr[2] = reinterpret_cast<const unsigned char*>(pColor)[2];
+			pWritePtr[3] = reinterpret_cast<const unsigned char*>(pColor)[3];
+			pWritePtr += 4;
+
 			datab <<= 1;
 			maskb <<= 1;
 		}
