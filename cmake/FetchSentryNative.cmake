@@ -63,6 +63,7 @@ FetchContent_Declare(
 	sentrynative
 	${_sentrynative_fetch_download_options}
 	SOURCE_DIR "${_sentrynative_source_dir}"
+	PATCH_COMMAND ${CMAKE_COMMAND} "-DSOURCE_DIR=<SOURCE_DIR>" -P "${CMAKE_SOURCE_DIR}/lib/exceptionhandler/3rdparty/sentry/PatchSentryNative.cmake"
 )
 FetchContent_GetProperties(sentrynative)
 set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "Sentry build shared libs" FORCE)
