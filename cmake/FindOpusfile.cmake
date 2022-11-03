@@ -10,11 +10,11 @@
 
 include (CheckLibraryExists)
 
-find_path(OPUSFILE_INCLUDE_DIR opusfile.h PATH_SUFFIX opus)
+find_path(OPUSFILE_INCLUDE_DIR opusfile.h PATH_SUFFIXES opus)
 
 # opusfile.h includes "opus_multistream.h" instead of "opus/opus_multistream.h"
 # so we must include the path to opus_multistream.h
-find_path(OPUS_MULTISTREAM_DIR opus_multistream.h PATH_SUFFIX opus)
+find_path(OPUS_MULTISTREAM_DIR opus_multistream.h PATH_SUFFIXES opus)
 
 find_library(OPUSFILE_LIBRARY NAMES opusfile)
 if (NOT TARGET Ogg::ogg)
