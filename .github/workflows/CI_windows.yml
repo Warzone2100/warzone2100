@@ -45,6 +45,7 @@ jobs:
             architecture: "x86"
             deploy_release: true
             support_sentry : true
+            sentry_backend: breakpad
           - compiler: "LLVM_MINGW"
             architecture: "x64"
             deploy_release: true
@@ -503,22 +504,27 @@ jobs:
         BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
         WZ_ENABLE_SENTRY: ${{ steps.settings.outputs.WZ_ENABLE_SENTRY }}
         SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
+        SENTRY_BACKEND_OVERRIDE: '${{ matrix.sentry_backend }}'
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
         WZ_FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
         WZ_MINGW_PKG_PREFIX: '${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}'
         WZ_ASM_MASM_COMPILER: '${{ steps.settings.outputs.WZ_ASM_MASM_COMPILER }}'
       run: |
-        $ADDITIONAL_CMAKE_PARAMS = ""
+        $SENTRY_DSN_PARAM = ""
         $WZ_BUILD_SENTRY_VALUE = "OFF"
         if ("${env:BUILD_SENTRY_SUPPORT}" -eq "true") {
           $WZ_BUILD_SENTRY_VALUE = "ON"
           if (("${env:WZ_ENABLE_SENTRY}" -eq "true") -and (-not ([string]::IsNullOrEmpty("${env:SENTRY_IO_DSN}")))) {
-            $ADDITIONAL_CMAKE_PARAMS = "-DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
+            $SENTRY_DSN_PARAM = "-DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
           }
+        }
+        $SENTRY_BACKEND_PARAM = ""
+        if (-not ([string]::IsNullOrEmpty("${env:SENTRY_BACKEND_OVERRIDE}"))) {
+          $SENTRY_BACKEND_PARAM = "-DSENTRY_BACKEND:STRING=${env:SENTRY_BACKEND_OVERRIDE}"
         }
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
-        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_C_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-gcc" -DCMAKE_CXX_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-g++" -DCMAKE_RC_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-windres" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${ADDITIONAL_CMAKE_PARAMS} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_C_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-gcc" -DCMAKE_CXX_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-g++" -DCMAKE_RC_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-windres" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
       uses: actions/upload-artifact@v3
