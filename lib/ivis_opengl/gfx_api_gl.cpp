@@ -2426,6 +2426,8 @@ bool gl_context::initGLContext()
 
 	glGenBuffers(1, &scratchbuffer);
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 	return true;
 }
 
