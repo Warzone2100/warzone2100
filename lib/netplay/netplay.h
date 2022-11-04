@@ -273,7 +273,7 @@ enum class NET_LOBBY_OPT_FIELD
 // currently controlled player.
 struct PLAYER
 {
-	char                name[StringSize];   ///< Player name
+	char                name[StringSize] = {};   ///< Player name
 	int32_t             position;           ///< Map starting position
 	int32_t             colour;             ///< Which colour slot this player is using
 	bool                allocated;          ///< Allocated as a human player
