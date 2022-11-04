@@ -289,13 +289,15 @@ bool recvOptions(NETQUEUE queue)
 						if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
 						{
 							WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
-							addConsoleMessage(astringf(_("[%d] Limit [%s]: %d (default: %d)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit, asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							std::string tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: %u)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit, asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit);
+							addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 							changedNum++;
 						}
 					}
 					else
 					{
-						addConsoleMessage(astringf(_("[%d] Limit that is bigger than numStructureStats (%d): %d"), i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+						std::string tmpConsoleMsgStr = astringf(_("[%d] Limit that is bigger than numStructureStats (%u): %u"), i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit);
+						addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 					}
 				}
 			}
@@ -309,7 +311,8 @@ bool recvOptions(NETQUEUE queue)
 	{
 		if (numStructureLimits)
 		{
-			addConsoleMessage(astringf(_("Host initialized %d limits, unable to show them due to mods"), numStructureLimits).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			std::string tmpConsoleMsgStr = astringf(_("Host initialized %u limits, unable to show them due to mods"), numStructureLimits);
+			addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 	}
 
