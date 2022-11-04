@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-11-01 15:45\n"
+"PO-Revision-Date: 2022-11-04 04:04\n"
 "Last-Translator: \n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
@@ -71,76 +71,76 @@ msgstr "Oni možda imaju tehnologiju sinaptičke veze, važno je da je se domogn
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: Locirajte i dovezite nazad artifakte"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Ukrcajte napadački tim u transporter."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "Odmah nakon slijetanja istražite ruševine i uzmite bilo koje artifakte ukoliko ih nađete."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: Istražite centar za istraživanje"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Izvidite područje i uzmite sve prisutne artifakte."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Pojačanje je dostupno za koristiti."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: Kodirani signali detektirani"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "Izvidite ove signale sa izviđačkim timom."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "Iskoristite svoje građevinarske kamione da sagradite obranu na slijetištu."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: neprijateljske komunikacije detektirane"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "Izvidite označeno područje za neprijateljskim istražnim objektima."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "Nastavite na slijetište br. 2. Ne ulazite u borbu sa neprijateljem u ovom trenutku."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: mjesto sinaptičke spojnice"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "New Paradigm analiziraju novu tehnologiju sinaptičkih poveznica."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "Sastavi tim za napad i vrati tehnologiju u naše ruke."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "TRANSPORNTA MISIJA: novi ciljevi"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "Novi Paradigm traže artifakte u ovom području."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "Presretni ih. Nemoj dozvoliti niti jedmon neprijatelju da pobijegne."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
@@ -3328,7 +3328,7 @@ msgstr "Povećava štetu AA Flak-a"
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:276
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Svi AA flak oružja su automatski nadograđeni"
+msgstr "Sva AA flak oružja su automatski nadograđena"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[1]
@@ -3346,7 +3346,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:323
 #: po/custom/fromJson.txt:3160
 msgid "Increases AA ROF"
-msgstr "Povećava ROF AA"
+msgstr "Povećava brzinu pucanja AA oružja"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[0]
@@ -3381,7 +3381,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:333
 #: po/custom/fromJson.txt:1091
 msgid "Best Targets: Base Structures and Defenses"
-msgstr "Najbolje Mete: Građevine Baze i Obrambene"
+msgstr "Najbolje mete: građevine baze i obrambene strukture"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB2.text[1]
@@ -3420,7 +3420,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:338
 #: po/custom/fromJson.txt:1094
 msgid "Best Targets: Base Structures"
-msgstr "Najbolje Mete: Građevine Baze"
+msgstr "Najbolje mete: građevine baze"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[3]
@@ -3441,7 +3441,7 @@ msgstr "Najbolje Mete: Građevine Baze"
 #: data/mp/messages/strings/resstrings.txt:384
 #: po/custom/fromJson.txt:1209
 msgid "Body Points: Low"
-msgstr "Bodovi Tijela: Mala"
+msgstr "Bodovi tijela: mali"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB2.text[1]
@@ -3458,7 +3458,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:343
 #: po/custom/fromJson.txt:1144
 msgid "Best Targets: Defenses"
-msgstr "Najbolje Mete: Obrambene"
+msgstr "Najbolje mete: obrambene strukture"
 
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346
@@ -3473,7 +3473,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:348
 msgid "Increases Bombing accuracy"
-msgstr "Povećava preciznost Bombe"
+msgstr "Povećava preciznost bombardiranja"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[3]
@@ -3521,7 +3521,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:358
 #: po/custom/fromJson.txt:1177
 msgid "Best Targets: Vehicles"
-msgstr "Najbolje Mete: Vozila"
+msgstr "Najbolje Mete: vozila"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
@@ -3529,7 +3529,7 @@ msgstr "Najbolje Mete: Vozila"
 #: data/mp/messages/strings/resstrings.txt:354
 #: po/custom/fromJson.txt:4811
 msgid "Replaces Medium Cannon"
-msgstr "Zamjenjuje Srednji Top"
+msgstr "Zamjenjuje srednji top"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN5.text[1]
@@ -3549,7 +3549,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:359
 #: po/custom/fromJson.txt:1203
 msgid "Body Points: High"
-msgstr "Bodovi TIjela: Visoki"
+msgstr "Bodovi tIjela: visoki"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_FLAME2.text[1]
@@ -3569,7 +3569,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1135
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Najbolje Mete: Bunker, vozila sa kotačima ili hover pogonom"
+msgstr "Najbolje mete: bunkeri, vozila sa kotačima ili hover pogonom"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3649,7 +3649,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1117
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Najbolje Mete: Građevine Base, pješaštvo, vozila sa kotačima"
+msgstr "Najbolje mete: građevine baze, pješaštvo, vozila sa kotačima"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3676,7 +3676,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:383
 #: po/custom/fromJson.txt:1101
 msgid "Best Targets: Base Structures, bunkers"
-msgstr "Najbolje Mete: Građevine Baze, Bunker"
+msgstr "Najbolje mete: građevine baze, bunkeri"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[0]
@@ -3691,7 +3691,7 @@ msgstr "Najbolje Mete: Građevine Baze, Bunker"
 #: data/mp/messages/strings/resstrings.txt:396
 #: po/custom/fromJson.txt:2929
 msgid "Howitzer Upgrade"
-msgstr "Nadogradnja Haubice"
+msgstr "Nadogradnja haubice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[1]
@@ -3702,7 +3702,7 @@ msgstr "Nadogradnja Haubice"
 #: data/mp/messages/strings/resstrings.txt:387
 #: po/custom/fromJson.txt:5171
 msgid "Self-guided rocket powered shells"
-msgstr "Samo-Navođeni Raketni Pogon Čahure"
+msgstr "Samo-Navođeni raketni pogon čahura"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
@@ -3737,7 +3737,7 @@ msgstr "Sve Haubice su automatski nadograđene"
 #: data/mp/messages/strings/resstrings.txt:392
 #: po/custom/fromJson.txt:2809
 msgid "High Explosive shells"
-msgstr "Visoko Eksplozivne Čahure"
+msgstr "Visoko eksplozivne čahure"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
