@@ -6332,13 +6332,14 @@ public:
 			debug(LOG_INFO, "Unable to move player: %" PRIu32 " - not a connected human player", player);
 			return false;
 		}
-		std::string playerName = getPlayerName(player);
+		const char *pPlayerName = getPlayerName(player);
 		if (!NETmovePlayerToSpectatorOnlySlot(player, true))
 		{
 			// failure is already logged by NETmovePlayerToSpectatorOnlySlot
 			return false;
 		}
-		std::string msg = astringf(_("Moving %s to Spectators!"), playerName.c_str());
+		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(player) + "]");
+		std::string msg = astringf(_("Moving %s to Spectators!"), playerNameStr.c_str());
 		sendRoomSystemMessage(msg.c_str());
 		resetReadyStatus(true);		//reset and send notification to all clients
 		return true;
