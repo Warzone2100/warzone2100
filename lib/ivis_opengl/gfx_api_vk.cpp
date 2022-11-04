@@ -903,21 +903,40 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugUtilsCallback(
 		logFatal = true;
 	}
 
-	buf << "[" << pCallbackData->pMessageIdName << "] Code " << pCallbackData->messageIdNumber << " : " << pCallbackData->pMessage;
-
-	if (pCallbackData->objectCount > 0)
+	if (pCallbackData)
 	{
-		buf << std::endl;
-		for (uint32_t i = 0; i < pCallbackData->objectCount; ++i)
+		if (pCallbackData->pMessageIdName != nullptr)
 		{
-			const auto& objectInfo = pCallbackData->pObjects[i];
-			buf << "\t - [" << i << "]: " << vk::to_string(static_cast<vk::ObjectType>(objectInfo.objectType)) << " 0x" << std::hex << objectInfo.objectHandle << std::dec;
-			if (objectInfo.pObjectName)
-			{
-				buf << " : \"" << objectInfo.pObjectName << "\"";
-			}
-			buf << std::endl;
+			buf << "[" << pCallbackData->pMessageIdName << "] ";
 		}
+		buf << "Code " << pCallbackData->messageIdNumber << " : ";
+		if (pCallbackData->pMessage != nullptr)
+		{
+			buf << pCallbackData->pMessage;
+		}
+		else
+		{
+			buf << "< NULL MESSAGE? >";
+		}
+
+		if (pCallbackData->objectCount > 0)
+		{
+			buf << std::endl;
+			for (uint32_t i = 0; i < pCallbackData->objectCount; ++i)
+			{
+				const auto& objectInfo = pCallbackData->pObjects[i];
+				buf << "\t - [" << i << "]: " << vk::to_string(static_cast<vk::ObjectType>(objectInfo.objectType)) << " 0x" << std::hex << objectInfo.objectHandle << std::dec;
+				if (objectInfo.pObjectName)
+				{
+					buf << " : \"" << objectInfo.pObjectName << "\"";
+				}
+				buf << std::endl;
+			}
+		}
+	}
+	else
+	{
+		buf << "< no callback data? >";
 	}
 
 	debug((logFatal) ? LOG_FATAL : part, "%s", buf.str().c_str());
