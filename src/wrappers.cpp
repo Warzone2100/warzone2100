@@ -242,8 +242,6 @@ void loadingScreenCallback()
 		return;
 	}
 
-	pie_ScreenFrameRenderBegin();
-
 	lastTick = currTick;
 
 	/* Draw the black rectangle at the bottom, with a two pixel border */
@@ -267,7 +265,9 @@ void loadingScreenCallback()
 		}
 	}
 
-	pie_ScreenFrameRenderEnd();//loading callback
+	pie_ScreenFrameRenderEnd();
+	pie_ScreenFrameRenderBegin();
+
 	audio_Update();
 
 	wzPumpEventsWhileLoading();
@@ -276,6 +276,7 @@ void loadingScreenCallback()
 // fill buffers with the static screen
 void initLoadingScreen(bool drawbdrop)
 {
+	pie_ScreenFrameRenderBegin(); // start a frame *if one isn't yet started*
 	setupLoadingScreen();
 	wzShowMouse(false);
 	pie_SetFogStatus(false);
