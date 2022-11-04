@@ -475,7 +475,7 @@ bool iV_Image::pad_image(unsigned int newWidth, unsigned int newHeight, bool use
 			for (unsigned int y = originalHeight; y < newHeight; ++y)
 			{
 				// Copy the entire prior row (above) in the y direction
-				memcpy(&m_bmp[newWidth * y * m_channels], &m_bmp[(newWidth * y - 1) * m_channels], (m_channels * newWidth));
+				memcpy(&m_bmp[newWidth * y * m_channels], &m_bmp[(newWidth * (y - 1)) * m_channels], (m_channels * newWidth));
 			}
 		}
 	}
