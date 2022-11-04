@@ -2530,8 +2530,6 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	W_FORMINIT sBFormInit;
 	sBFormInit.formID = 0;
 	sBFormInit.id = IDPROX_START + inc;
-	//store the ID so we can detect which one has been clicked on
-	psProxDisp->buttonID = sBFormInit.id;
 
 	// loop back and find a free one!
 	if (sBFormInit.id >= IDPROX_END)
@@ -2565,6 +2563,10 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	{
 		return false;
 	}
+
+	//store the ID so we can detect which one has been clicked on
+	psProxDisp->buttonID = sBFormInit.id;
+
 	return true;
 }
 
