@@ -657,13 +657,8 @@ const weaponStats =
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-AAGun-ROF01",
-			"R-Wpn-AAGun-Damage03",
-			"R-Wpn-AAGun-Accuracy01",
-			"R-Wpn-AAGun-ROF03",
-			"R-Wpn-AAGun-Accuracy03",
-			"R-Wpn-AAGun-Damage06",
-			"R-Wpn-AAGun-ROF06",
+			"R-Wpn-MG-ROF03",
+			"R-Wpn-MG-Damage08",
 		],
 	},
 	nexusTech:

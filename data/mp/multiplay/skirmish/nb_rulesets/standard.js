@@ -586,9 +586,8 @@ const weaponStats = {
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-AAGun-ROF06",
-			"R-Wpn-AAGun-Damage06",
-			"R-Wpn-AAGun-Accuracy03",
+			"R-Wpn-MG-ROF03",
+			"R-Wpn-MG-Damage08",
 		],
 	},
 	energy: {
