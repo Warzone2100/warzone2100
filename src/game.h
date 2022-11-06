@@ -66,6 +66,8 @@ GAME_TYPE getSaveGameType();
 // Removes .gam from a save for display purposes
 const char *savegameWithoutExtension(const char *name);
 
+void gameAddToLastRenderCost(unsigned int additionalRenderTicks);
+
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor);
 nonstd::optional<nlohmann::json> parseJsonFile(const char *filename);

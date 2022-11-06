@@ -1289,7 +1289,10 @@ void mainLoop()
 {
 	frameUpdate(); // General housekeeping
 
+	unsigned before = wzGetTicks();
 	pie_ScreenFrameRenderBegin();
+	unsigned after = wzGetTicks();
+	gameAddToLastRenderCost(after - before);
 
 	// Screenshot key is now available globally
 	if (keyPressed(KEY_F10))
