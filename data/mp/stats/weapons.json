@@ -1887,7 +1887,7 @@
 		"muzzleGfx": "FXHBLas.PIE",
 		"name": "EMP Cannon",
 		"numExplosions": 1,
-		"radius": 256,
+		"radius": 192,
 		"recoilValue": 150,
 		"rotate": 180,
 		"shortHit": 70,
