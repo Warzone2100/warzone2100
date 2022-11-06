@@ -497,7 +497,7 @@ void wzShowMouse(bool visible)
 	SDL_ShowCursor(visible ? SDL_ENABLE : SDL_DISABLE);
 }
 
-int wzGetTicks()
+unsigned int wzGetTicks()
 {
 	return SDL_GetTicks();
 }
