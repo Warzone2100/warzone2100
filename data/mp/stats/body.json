@@ -1029,8 +1029,13 @@
 	},
 	"ZNULLBODY": {
 		"id": "ZNULLBODY",
-		"model": "mibnkbod.pie",
+		"model": "znullbody.pie",
 		"name": "*Z NULL BODY*",
+		"propulsionExtraModels": {
+			"ZNULLPROP": {
+				"left": "znullfull.pie"
+			}
+		},
 		"size": "LIGHT",
 		"weaponSlots": 1
 	}

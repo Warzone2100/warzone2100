@@ -1151,11 +1151,11 @@
 	},
 	"ZNULLBODY": {
 		"id": "ZNULLBODY",
-		"model": "mibnkbod.pie",
+		"model": "znullbody.pie",
 		"name": "*Z NULL BODY*",
 		"propulsionExtraModels": {
 			"ZNULLPROP": {
-				"left": "mibnkdr.pie"
+				"left": "znullfull.pie"
 			}
 		},
 		"size": "LIGHT",
