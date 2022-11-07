@@ -3240,6 +3240,24 @@ static void handleActiveEvent(SDL_Event *event)
 			break;
 		case SDL_WINDOWEVENT_RESTORED:
 			debug(LOG_WZ, "Window %d restored", event->window.windowID);
+			{
+				unsigned int oldWindowWidth = windowWidth;
+				unsigned int oldWindowHeight = windowHeight;
+
+				int newWindowWidth = 0, newWindowHeight = 0;
+				SDL_GetWindowSize(WZwindow, &newWindowWidth, &newWindowHeight);
+
+				int newDrawableWidth = 0, newDrawableHeight = 0;
+				SDL_WZBackend_GetDrawableSize(WZwindow, &newDrawableWidth, &newDrawableHeight);
+				auto oldDrawableDimensions = gfx_api::context::get().getDrawableDimensions();
+
+				if (oldWindowWidth != newWindowWidth || oldWindowHeight != newWindowHeight
+					|| oldDrawableDimensions.first != newDrawableWidth || oldDrawableDimensions.second != newDrawableHeight)
+				{
+					debug(LOG_WZ, "Triggering handleWindowSizeChange from window restore event");
+					handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+				}
+			}
 			break;
 		case SDL_WINDOWEVENT_ENTER:
 			debug(LOG_WZ, "Mouse entered window %d", event->window.windowID);
