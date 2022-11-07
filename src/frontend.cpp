@@ -3031,6 +3031,12 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 		sstrcat(modListText, getModList().c_str());
 	}
 
+	if (pie_GetVideoBufferWidth() <= 0 || pie_GetVideoBufferHeight() <= 0)
+	{
+		// don't bother drawing when the dimensions are <= 0,0
+		return;
+	}
+
 	assert(psWidget->pUserData != nullptr);
 	TitleBitmapCache& cache = *static_cast<TitleBitmapCache*>(psWidget->pUserData);
 
