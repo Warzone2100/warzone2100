@@ -140,6 +140,12 @@ static GAMECODE renderLoop()
 		intAddInGamePopup();
 	}
 
+	bool skipDrawing = false;
+	if (gfx_api::context::get().getDrawableDimensions() == std::pair<uint32_t,uint32_t>(0,0))
+	{
+		skipDrawing = true;
+	}
+
 	audio_Update();
 
 	wzShowMouse(true);
@@ -298,7 +304,7 @@ static GAMECODE renderLoop()
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
 	}
-	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode())
+	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode() && !skipDrawing)
 	{
 		if (!gameUpdatePaused())
 		{
