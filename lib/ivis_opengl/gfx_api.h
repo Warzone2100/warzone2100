@@ -321,6 +321,7 @@ namespace gfx_api
 		virtual const std::string& getFormattedRendererInfoString() const = 0;
 		virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) = 0;
 		virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) = 0;
+		virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
 		virtual bool setSwapInterval(swap_interval_mode mode) = 0;

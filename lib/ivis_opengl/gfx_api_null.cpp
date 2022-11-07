@@ -370,6 +370,11 @@ void null_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int ol
 	// no-op
 }
 
+std::pair<uint32_t, uint32_t> null_context::getDrawableDimensions()
+{
+	return {0,0};
+}
+
 void null_context::shutdown()
 {
 	// no-op
