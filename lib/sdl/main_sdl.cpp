@@ -682,8 +682,18 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 			sdl_result = SDL_SetWindowFullscreen(WZwindow, 0);
 			if (sdl_result != 0) { return false; }
 			wzSetWindowIsResizable(true);
-			// restore the old windowed size
+			// Determine the maximum usable windowed size for this display/screen, and cap the desired window size at that
 			int desiredWidth = war_GetWidth(), desiredHeight = war_GetHeight();
+			SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
+			if (SDL_GetDisplayUsableBounds(currDisplayIndex, &displayUsableBounds) == 0)
+			{
+				if (displayUsableBounds.w > 0 && displayUsableBounds.h > 0)
+				{
+					desiredWidth = std::min(displayUsableBounds.w, desiredWidth);
+					desiredHeight = std::min(displayUsableBounds.h, desiredHeight);
+				}
+			}
+			// restore the old windowed size
 			SDL_SetWindowSize(WZwindow, desiredWidth, desiredHeight);
 			// Position the window (centered) on the screen (for its new size)
 			SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(currDisplayIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(currDisplayIndex));
