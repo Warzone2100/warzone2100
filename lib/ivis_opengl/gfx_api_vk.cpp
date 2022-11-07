@@ -41,6 +41,7 @@
 
 #include "gfx_api_vk.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wzapp.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
 #include <algorithm>
@@ -48,6 +49,8 @@
 #include <unordered_set>
 #include <map>
 #include <limits>
+#include <chrono>
+#include <thread>
 
 // Fix #define MemoryBarrier coming from winnt.h
 #undef MemoryBarrier
@@ -678,9 +681,6 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 		vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled),
 		nullptr, *pVkDynLoader
 	);
-
-	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
-	renderFinishedSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 }
 
 perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescriptorPool(vk::DescriptorType type, uint32_t maxSets, uint32_t descriptorCount)
@@ -770,8 +770,6 @@ perFrameResources_t::~perFrameResources_t()
 		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
 	}
 	dev.destroyFence(previousSubmission, nullptr, *pVkDynLoader);
-	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
-	dev.destroySemaphore(renderFinishedSemaphore, nullptr, *pVkDynLoader);
 	clean();
 }
 
@@ -798,9 +796,29 @@ perFrameResources_t& buffering_mechanism::get_current_resources()
 	return *perFrameResources[currentFrame];
 }
 
+perSwapchainImageResources_t& buffering_mechanism::get_current_swapchain_resources()
+{
+	ASSERT(!perFrameResources.empty(), "perSwapchainImageResources are not initialized??");
+	return *perSwapchainImageResources[currentSwapchainImageResourcesFrame];
+}
+
 bool buffering_mechanism::isInitialized()
 {
 	return !perFrameResources.empty();
+}
+
+perSwapchainImageResources_t::perSwapchainImageResources_t(vk::Device& _dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+	: dev(_dev)
+	, pVkDynLoader(&vkDynLoader)
+{
+	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
+	renderFinishedSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
+}
+
+perSwapchainImageResources_t::~perSwapchainImageResources_t()
+{
+	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
+	dev.destroySemaphore(renderFinishedSemaphore, nullptr, *pVkDynLoader);
 }
 
 // MARK: buffering_mechanism
@@ -808,10 +826,12 @@ bool buffering_mechanism::isInitialized()
 void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, size_t swapChainImageCount, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	currentFrame = 0;
+	currentSwapchainImageResourcesFrame = 0;
 
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
 	{
 		perFrameResources.emplace_back(new perFrameResources_t(dev, allocator, graphicsQueueFamilyIndex, vkDynLoader));
+		perSwapchainImageResources.emplace_back(new perSwapchainImageResources_t(dev, vkDynLoader));
 	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
@@ -821,12 +841,18 @@ void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, si
 void buffering_mechanism::destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	perFrameResources.clear();
+	perSwapchainImageResources.clear();
 	currentFrame = 0;
+	currentSwapchainImageResourcesFrame = 0;
 }
 
-void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage)
 {
 	currentFrame = (currentFrame < (perFrameResources.size() - 1)) ? currentFrame + 1 : 0;
+	if (!skipAcquireNewSwapchainImage)
+	{
+		currentSwapchainImageResourcesFrame = (currentSwapchainImageResourcesFrame < (perSwapchainImageResources.size() - 1)) ? currentSwapchainImageResourcesFrame + 1 : 0;
+	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
 	dev.waitForFences(fences, true, -1, vkDynLoader);
@@ -841,7 +867,9 @@ void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& 
 // MARK: Definitions of statics
 
 std::vector<std::unique_ptr<perFrameResources_t>> buffering_mechanism::perFrameResources;
+std::vector<std::unique_ptr<perSwapchainImageResources_t>> buffering_mechanism::perSwapchainImageResources;
 size_t buffering_mechanism::currentFrame;
+size_t buffering_mechanism::currentSwapchainImageResourcesFrame;
 
 // MARK: Debug Callback
 
@@ -3854,7 +3882,7 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 {
 	vk::ResultValue<uint32_t> acquireNextImageResult = vk::ResultValue<uint32_t>(vk::Result::eNotReady, 0);
 	try {
-		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
+		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
 	}
 	catch (vk::OutOfDateKHRError&)
 	{
@@ -3926,45 +3954,56 @@ void VkRoot::endRenderPass()
 	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.flushAutomappedMemory();
 	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.unmapAutomappedMemory();
 
+	bool mustSkipDrawing = !shouldDraw();
 	bool mustRecreateSwapchain = false;
 	int w, h;
 	backend_impl->getDrawableSize(&w, &h);
 	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
 	{
-		// Must re-create swapchain
-		debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - must re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
 		// Ignore graphics instructions this time around (as there are issues on certain drivers like MoltenVK)
 		// but *must* still submit the cmdCopy CommandBuffer
-		mustRecreateSwapchain = true;
+		mustSkipDrawing = true;
+
+		if (w > 0 || h > 0 || swapchainSize.width > 1 || swapchainSize.height > 1)
+		{
+			// Must re-create swapchain
+			debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - must re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
+			mustRecreateSwapchain = true;
+		}
 	}
 
 	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 2>{buffering_mechanism::get_current_resources().cmdCopy, buffering_mechanism::get_current_resources().cmdDraw}; // copy before render
 	const vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; //vk::PipelineStageFlagBits::eAllCommands;
 
 	auto submitInfo = vk::SubmitInfo()
-		.setWaitSemaphoreCount(1)
-		.setPWaitSemaphores(&buffering_mechanism::get_current_resources().imageAcquireSemaphore)
-		.setPWaitDstStageMask(&waitStage)
-		// if mustRecreateSwapchain, only submit the cmdCopy buffer
-		.setCommandBufferCount((!mustRecreateSwapchain) ? static_cast<uint32_t>(executableCmdBuffer.size()) : 1)
+		// if mustSkipDrawing, only submit the cmdCopy buffer
+		.setCommandBufferCount((!mustSkipDrawing) ? static_cast<uint32_t>(executableCmdBuffer.size()) : 1)
 		.setPCommandBuffers(executableCmdBuffer.data());
+
+	if (!mustSkipDrawing)
+	{
+		submitInfo
+			.setWaitSemaphoreCount(1)
+			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore)
+			.setPWaitDstStageMask(&waitStage);
+	}
 
 	auto presentInfo = vk::PresentInfoKHR()
 		.setPSwapchains(&swapchain)
 		.setSwapchainCount(1)
 		.setPImageIndices(&currentSwapchainIndex);
 
-	if (graphicsQueue != presentQueue)
+	if ((graphicsQueue != presentQueue) && !mustSkipDrawing)
 	{
 		// for handling separate graphics and presentation queues
 		submitInfo
 			.setSignalSemaphoreCount(1)
-			.setPSignalSemaphores(&buffering_mechanism::get_current_resources().renderFinishedSemaphore);
+			.setPSignalSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
 
 		// for handling separate graphics and presentation queues
 		presentInfo
 			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_current_resources().renderFinishedSemaphore);
+			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
 	}
 
 	graphicsQueue.submit(submitInfo, buffering_mechanism::get_current_resources().previousSubmission, vkDynLoader);
@@ -3975,46 +4014,70 @@ void VkRoot::endRenderPass()
 		return; // end processing this flip
 	}
 
-	vk::Result presentResult;
-	try {
-		presentResult = presentQueue.presentKHR(presentInfo, vkDynLoader);
-	}
-	catch (vk::OutOfDateKHRError&)
+	if (!mustSkipDrawing)
 	{
-		debug(LOG_3D, "vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
-		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-		return; // end processing this flip
-	}
-	catch (vk::SurfaceLostKHRError&)
-	{
-		debug(LOG_3D, "vk::Queue::presentKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
-		// recreate surface + swapchain
-		handleSurfaceLost();
-		return; // end processing this flip
-	}
-	catch (vk::SystemError& e)
-	{
-		debug(LOG_FATAL, "vk::Queue::presentKHR: unhandled error: %s", e.what());
-		presentResult = vk::Result::eErrorUnknown;
-	}
-	if(presentResult == vk::Result::eSuboptimalKHR)
-	{
-		debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - should probably recreate swapchain (in the future)", (int)presentResult);
-	}
-
-	buffering_mechanism::swap(dev, vkDynLoader); // must be called *before* acquireNextSwapchainImage()
-	if (acquireNextSwapchainImage() != AcquireNextSwapchainImageResult::eSuccess)
-	{
-		return; // end processing this flip
+		vk::Result presentResult;
+		try {
+			presentResult = presentQueue.presentKHR(presentInfo, vkDynLoader);
+		}
+		catch (vk::OutOfDateKHRError&)
+		{
+			debug(LOG_3D, "vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
+			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+			return; // end processing this flip
+		}
+		catch (vk::SurfaceLostKHRError&)
+		{
+			debug(LOG_3D, "vk::Queue::presentKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
+			// recreate surface + swapchain
+			handleSurfaceLost();
+			return; // end processing this flip
+		}
+		catch (vk::SystemError& e)
+		{
+			debug(LOG_FATAL, "vk::Queue::presentKHR: unhandled error: %s", e.what());
+			presentResult = vk::Result::eErrorUnknown;
+		}
+		if(presentResult == vk::Result::eSuboptimalKHR)
+		{
+			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - should probably recreate swapchain (in the future)", (int)presentResult);
+		}
 	}
 
-	backend_impl->getDrawableSize(&w, &h);
-	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
+	buffering_mechanism::swap(dev, vkDynLoader, mustSkipDrawing); // must be called *before* acquireNextSwapchainImage()
+
+	if (!mustSkipDrawing)
 	{
-		// Must re-create swapchain
-		debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-		return; // end processing this flip
+		if (acquireNextSwapchainImage() != AcquireNextSwapchainImageResult::eSuccess)
+		{
+			return; // end processing this flip
+		}
+
+		backend_impl->getDrawableSize(&w, &h);
+		if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
+		{
+			if (w > 0 || h > 0 || swapchainSize.width > 1 || swapchainSize.height > 1)
+			{
+				// Must re-create swapchain
+				debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
+				createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+				return; // end processing this flip
+			}
+		}
+	}
+	else
+	{
+		// since we skipped drawing, don't bother acquiring a new swapchain image
+		// however, to avoid endless CPU drain, add a delay in here
+		const uint32_t minFrameInterval = 1000 / 120; // limit to approx 120 FPS
+		uint32_t renderPassEndTime = wzGetTicks();
+		const uint32_t frameTime = renderPassEndTime - lastRenderPassEndTime;
+		if (frameTime < minFrameInterval)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(minFrameInterval - frameTime));
+			renderPassEndTime = wzGetTicks();
+		}
+		lastRenderPassEndTime = renderPassEndTime;
 	}
 
 	buffering_mechanism::get_current_resources().cmdCopy.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);

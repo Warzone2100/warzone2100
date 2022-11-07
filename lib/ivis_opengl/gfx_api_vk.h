@@ -237,9 +237,6 @@ struct perFrameResources_t
 	std::vector<WZ_vk::UniqueImageView> image_view_to_delete;
 	std::vector<VmaAllocation> vmamemory_to_free;
 
-	vk::Semaphore imageAcquireSemaphore;
-	vk::Semaphore renderFinishedSemaphore;
-
 	BlockBufferAllocator stagingBufferAllocator;
 	BlockBufferAllocator streamedVertexBufferAllocator;
 	BlockBufferAllocator uniformBufferAllocator;
@@ -269,16 +266,39 @@ private:
 	const vk::DispatchLoaderDynamic *pVkDynLoader;
 };
 
+struct perSwapchainImageResources_t
+{
+	vk::Device dev;
+	vk::Semaphore imageAcquireSemaphore;
+	vk::Semaphore renderFinishedSemaphore;
+
+	perSwapchainImageResources_t( const perSwapchainImageResources_t& other ) = delete; // non construction-copyable
+	perSwapchainImageResources_t& operator=( const perSwapchainImageResources_t& ) = delete; // non copyable
+
+	perSwapchainImageResources_t(vk::Device& _dev, const vk::DispatchLoaderDynamic& vkDynLoader);
+	~perSwapchainImageResources_t();
+
+protected:
+	friend struct buffering_mechanism;
+	void clean();
+
+private:
+	const vk::DispatchLoaderDynamic *pVkDynLoader;
+};
+
 struct buffering_mechanism
 {
 	static std::vector<std::unique_ptr<perFrameResources_t>> perFrameResources;
+	static std::vector<std::unique_ptr<perSwapchainImageResources_t>> perSwapchainImageResources;
 
 	static size_t currentFrame;
+	static size_t currentSwapchainImageResourcesFrame;
 
 	static perFrameResources_t& get_current_resources();
+	static perSwapchainImageResources_t& get_current_swapchain_resources();
 	static void init(vk::Device dev, const VmaAllocator& allocator, size_t swapchainImageCount, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader);
 	static void destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
-	static void swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
+	static void swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage);
 	static bool isInitialized();
 };
 
@@ -676,6 +696,7 @@ private:
 private:
 	std::string formattedRendererInfoString;
 	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
+	uint32_t lastRenderPassEndTime = 0;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED)
