@@ -1411,6 +1411,12 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	debugLoc = debugLoc[1] == -1 ? debugSequence : debugLoc[0] == debugCode ? debugLoc : debugLoc[1] == debugCode ? debugLoc + 1 : debugSequence;
 	debugBoundingBoxes = debugBoundingBoxes ^ (debugLoc[1] == -1);
 
+	bool skipDrawing = false;
+	if (gfx_api::context::get().getDrawableDimensions() == std::pair<uint32_t,uint32_t>(0,0))
+	{
+		skipDrawing = true;
+	}
+
 	cleanupDeletedOverlays();
 
 	/* Process any user callback functions */
@@ -1419,23 +1425,32 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	sContext.my = mouseY();
 	psScreen->psForm->processCallbacksRecursive(&sContext);
 
-	// Display the widgets.
-	psScreen->psForm->displayRecursive();
+	if (!skipDrawing)
+	{
+		// Display the widgets.
+		psScreen->psForm->displayRecursive();
+	}
 
 	// Always overlays on-top (i.e. draw them last)
-	forEachOverlayScreenBottomUp([&sContext](const OverlayScreen& overlay) -> bool
+	forEachOverlayScreenBottomUp([&sContext, skipDrawing](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->psForm->processCallbacksRecursive(&sContext);
-		overlay.psScreen->psForm->displayRecursive();
+		if (!skipDrawing)
+		{
+			overlay.psScreen->psForm->displayRecursive();
+		}
 		return true;
 	}); // <- enumerate in *increasing* z-order for drawing
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being displayed.
 
-	/* Display the tool tip if there is one */
-	tipDisplay();
+	if (!skipDrawing)
+	{
+		/* Display the tool tip if there is one */
+		tipDisplay();
+	}
 
-	if (debugBoundingBoxes)
+	if (debugBoundingBoxes && !skipDrawing)
 	{
 		debugBoundingBoxesOnly = true;
 		psScreen->psForm->displayRecursive();
