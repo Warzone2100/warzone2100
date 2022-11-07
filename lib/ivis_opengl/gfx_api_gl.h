@@ -228,6 +228,7 @@ struct gl_context final : public gfx_api::context
 	virtual const std::string& getFormattedRendererInfoString() const override;
 	virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
+	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
@@ -245,6 +246,8 @@ private:
 	std::string calculateFormattedRendererInfoString() const;
 	bool isBlocklistedGraphicsDriver() const;
 
+	uint32_t viewportWidth = 0;
+	uint32_t viewportHeight = 0;
 	std::vector<bool> enabledVertexAttribIndexes;
 	size_t frameNum = 0;
 	std::string formattedRendererInfoString;

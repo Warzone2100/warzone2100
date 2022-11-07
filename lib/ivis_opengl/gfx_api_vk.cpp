@@ -2294,6 +2294,11 @@ void VkRoot::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeigh
 	}
 }
 
+std::pair<uint32_t, uint32_t> VkRoot::getDrawableDimensions()
+{
+	return {swapchainSize.width, swapchainSize.height};
+}
+
 void VkRoot::shutdown()
 {
 	destroySwapchainAndSwapchainSpecificStuff(true);

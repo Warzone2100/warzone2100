@@ -2111,6 +2111,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	debug(LOG_WZ, "Drawable Size: %d x %d", width, height);
 
 	glViewport(0, 0, width, height);
+	viewportWidth = static_cast<uint32_t>(width);
+	viewportHeight = static_cast<uint32_t>(height);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
 
@@ -2707,8 +2709,15 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
 
 	glViewport(0, 0, drawableWidth, drawableHeight);
+	viewportWidth = static_cast<uint32_t>(drawableWidth);
+	viewportHeight = static_cast<uint32_t>(drawableHeight);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
+}
+
+std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
+{
+	return {viewportWidth, viewportHeight};
 }
 
 void gl_context::shutdown()
