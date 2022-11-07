@@ -375,6 +375,11 @@ std::pair<uint32_t, uint32_t> null_context::getDrawableDimensions()
 	return {0,0};
 }
 
+bool null_context::shouldDraw()
+{
+	return false;
+}
+
 void null_context::shutdown()
 {
 	// no-op

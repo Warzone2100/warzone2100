@@ -128,6 +128,7 @@ public:
 	virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
+	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;

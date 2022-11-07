@@ -140,11 +140,7 @@ static GAMECODE renderLoop()
 		intAddInGamePopup();
 	}
 
-	bool skipDrawing = false;
-	if (gfx_api::context::get().getDrawableDimensions() == std::pair<uint32_t,uint32_t>(0,0))
-	{
-		skipDrawing = true;
-	}
+	bool skipDrawing = !gfx_api::context::get().shouldDraw();
 
 	audio_Update();
 

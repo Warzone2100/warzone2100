@@ -2299,6 +2299,12 @@ std::pair<uint32_t, uint32_t> VkRoot::getDrawableDimensions()
 	return {swapchainSize.width, swapchainSize.height};
 }
 
+bool VkRoot::shouldDraw()
+{
+	return swapchainSize.width > 1 && swapchainSize.height > 1; // check for > 1 here because we use 1,1 in place of a 0,0 swapchain size to avoid other issues
+}
+
+
 void VkRoot::shutdown()
 {
 	destroySwapchainAndSwapchainSpecificStuff(true);
