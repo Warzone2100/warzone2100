@@ -2720,6 +2720,11 @@ std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
 	return {viewportWidth, viewportHeight};
 }
 
+bool gl_context::shouldDraw()
+{
+	return viewportWidth > 0 && viewportHeight > 0;
+}
+
 void gl_context::shutdown()
 {
 	if(glClear) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
