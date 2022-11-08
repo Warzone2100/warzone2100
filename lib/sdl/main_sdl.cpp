@@ -211,6 +211,8 @@ void* GetTextEventsOwner = nullptr;
 
 static optional<int> wzQuitExitCode;
 
+bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight);
+
 /**************************/
 /***     Misc support   ***/
 /**************************/
@@ -702,10 +704,15 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 			break;
 		}
 		case WINDOW_MODE::fullscreen:
+		{
 			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN);
 			if (sdl_result != 0) { return false; }
 			wzSetWindowIsResizable(false);
+			int currWidth = 0, currHeight = 0;
+			SDL_GetWindowSize(WZwindow, &currWidth, &currHeight);
+			wzReduceDisplayScalingIfNeeded(currWidth, currHeight);
 			break;
+		}
 	}
 
 	return sdl_result == 0;
@@ -1988,6 +1995,32 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 	return true;
 }
 
+bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight)
+{
+	// Check whether the desired window size is smaller than the minimum required for the current Display Scale
+	if (wzWindowSizeIsSmallerThanMinimumRequired(currWidth, currHeight))
+	{
+		// The new window size is smaller than the minimum required size for the current display scale level.
+
+		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(currWidth, currHeight);
+		if (maxDisplayScale < 100)
+		{
+			// Cannot adjust display scale factor below 1. Desired window size is below the minimum supported.
+			debug(LOG_WZ, "Size (%d x %d) is smaller than the minimum supported at a 100%% display scale", currWidth, currHeight);
+			return false;
+		}
+
+		// Adjust the current display scale level to the nearest supported level.
+		debug(LOG_WZ, "The current Display Scale (%d%%) is too high for the desired window size. Reducing the current Display Scale to the maximum possible for the desired window size: %d%%.", current_displayScale, maxDisplayScale);
+		wzChangeDisplayScale(maxDisplayScale);
+
+		// Store the new display scale
+		war_SetDisplayScale(maxDisplayScale);
+	}
+
+	return true;
+}
+
 bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int height) // TODO: Take refresh rate as well...
 {
 	if (WZwindow == nullptr)
@@ -2081,25 +2114,18 @@ bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int 
 
 		SDL_SetWindowSize(WZwindow, currWidth, currHeight);
 
-		// Check whether the desired window size is smaller than the minimum required for the current Display Scale
-		if (wzWindowSizeIsSmallerThanMinimumRequired(currWidth, currHeight))
+		// Reduce display scaling if needed
+		if (!wzReduceDisplayScalingIfNeeded(currWidth, currHeight))
 		{
-			// The new window size is smaller than the minimum required size for the current display scale level.
-
-			unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(currWidth, currHeight);
-			if (maxDisplayScale < 100)
+			// Desired window size is below the minimum supported
+			// Revert to prior display mode
+			result = SDL_SetWindowDisplayMode(WZwindow, (hasPrior) ? &prior : nullptr);
+			if (result != 0)
 			{
-				// Cannot adjust display scale factor below 1. Desired window size is below the minimum supported.
-				debug(LOG_WZ, "Unable to change window size to (%d x %d) because it is smaller than the minimum supported at a 100%% display scale", width, height);
-				return false;
+				// SDL_SetWindowDisplayMode failed - unable to revert??
+				debug(LOG_ERROR, "Failed to revert to prior WindowDisplayMode: %s", SDL_GetError());
 			}
-
-			// Adjust the current display scale level to the nearest supported level.
-			debug(LOG_WZ, "The current Display Scale (%d%%) is too high for the desired window size. Reducing the current Display Scale to the maximum possible for the desired window size: %d%%.", current_displayScale, maxDisplayScale);
-			wzChangeDisplayScale(maxDisplayScale);
-
-			// Store the new display scale
-			war_SetDisplayScale(maxDisplayScale);
+			return false;
 		}
 
 		// Store the updated screenIndex
@@ -3237,6 +3263,7 @@ static void handleActiveEvent(SDL_Event *event)
 						{
 							SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
 						}
+						wzReduceDisplayScalingIfNeeded(deferredDimensionReset.value().width, deferredDimensionReset.value().height);
 					}
 					deferredDimensionReset.reset();
 				}
