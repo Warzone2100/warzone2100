@@ -4440,450 +4440,6 @@
 		],
 		"statID": "wheeled01"
 	},
-	"R-Wpn-AAGun-Accuracy01": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Accuracy01",
-		"msgName": "RES_W_AAAC1",
-		"name": "AA Thermal Imaging Sensor",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Damage02",
-			"R-Struc-Research-Upgrade03"
-		],
-		"researchPoints": 4500,
-		"researchPower": 140,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "HitChance",
-				"value": 10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ShortHitChance",
-				"value": 10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
-	},
-	"R-Wpn-AAGun-Accuracy02": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Accuracy02",
-		"msgName": "RES_W_AAAC2",
-		"name": "AA Target Acquisition Shells",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Accuracy01",
-			"R-Struc-Research-Upgrade05"
-		],
-		"researchPoints": 5400,
-		"researchPower": 168,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "HitChance",
-				"value": 10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ShortHitChance",
-				"value": 10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
-	},
-	"R-Wpn-AAGun-Accuracy03": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Accuracy03",
-		"msgName": "RES_W_AAAC3",
-		"name": "AA Target Prediction Computer",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Accuracy02",
-			"R-Struc-Research-Upgrade07",
-			"R-Wpn-AAGun04"
-		],
-		"researchPoints": 6300,
-		"researchPower": 196,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "HitChance",
-				"value": 40
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ShortHitChance",
-				"value": 40
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
-	},
-	"R-Wpn-AAGun-Damage01": {
-		"disabledWhen": 4,
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Damage01",
-		"msgName": "RES_W_AAD1",
-		"name": "AA HE Flak",
-		"requiredResearch": [
-			"R-Wpn-AAGun03"
-		],
-		"researchPoints": 4200,
-		"researchPower": 131,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "Damage",
-				"value": 25
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "RadiusDamage",
-				"value": 25
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
-	},
-	"R-Wpn-AAGun-Damage02": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Damage02",
-		"name": "AA HE Flak Mk2",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Damage01"
-		],
-		"researchPoints": 5040,
-		"researchPower": 157,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "Damage",
-				"value": 25
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "RadiusDamage",
-				"value": 25
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
-	},
-	"R-Wpn-AAGun-Damage03": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Damage03",
-		"name": "AA HE Flak Mk3",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Damage02"
-		],
-		"researchPoints": 5880,
-		"researchPower": 183,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "Damage",
-				"value": 25
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "RadiusDamage",
-				"value": 25
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
-	},
-	"R-Wpn-AAGun-Damage04": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Damage04",
-		"msgName": "RES_W_AAD4",
-		"name": "AA HEAP Flak",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Damage03",
-			"R-Wpn-MG-Damage08"
-		],
-		"researchPoints": 7680,
-		"researchPower": 240,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "Damage",
-				"value": 25
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "RadiusDamage",
-				"value": 25
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
-	},
-	"R-Wpn-AAGun-Damage05": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Damage05",
-		"name": "AA HEAP Flak Mk2",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Damage04"
-		],
-		"researchPoints": 8640,
-		"researchPower": 270,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "Damage",
-				"value": 25
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "RadiusDamage",
-				"value": 25
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
-	},
-	"R-Wpn-AAGun-Damage06": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-Damage06",
-		"name": "AA HEAP Flak Mk3",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Damage05"
-		],
-		"researchPoints": 9600,
-		"researchPower": 300,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "Damage",
-				"value": 25
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "RadiusDamage",
-				"value": 25
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
-	},
-	"R-Wpn-AAGun-ROF01": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-ROF01",
-		"msgName": "RES_W_AAROF1",
-		"name": "AA Ammunition Hopper",
-		"requiredResearch": [
-			"R-Wpn-AAGun-Damage01",
-			"R-Wpn-MG-ROF01"
-		],
-		"researchPoints": 3240,
-		"researchPower": 101,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "FirePause",
-				"value": -10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ReloadTime",
-				"value": -10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
-	},
-	"R-Wpn-AAGun-ROF02": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-ROF02",
-		"name": "AA Ammunition Hopper Mk2",
-		"requiredResearch": [
-			"R-Wpn-AAGun-ROF01"
-		],
-		"researchPoints": 4320,
-		"researchPower": 135,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "FirePause",
-				"value": -10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ReloadTime",
-				"value": -10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
-	},
-	"R-Wpn-AAGun-ROF03": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-ROF03",
-		"name": "AA Ammunition Hopper Mk3",
-		"requiredResearch": [
-			"R-Wpn-AAGun-ROF02"
-		],
-		"researchPoints": 5400,
-		"researchPower": 168,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "FirePause",
-				"value": -10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ReloadTime",
-				"value": -10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
-	},
-	"R-Wpn-AAGun-ROF04": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-ROF04",
-		"msgName": "RES_W_AAROF4",
-		"name": "AA Chainfeed Loader",
-		"requiredResearch": [
-			"R-Wpn-AAGun04",
-			"R-Wpn-AAGun-ROF03"
-		],
-		"researchPoints": 6400,
-		"researchPower": 200,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "FirePause",
-				"value": -10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ReloadTime",
-				"value": -10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
-	},
-	"R-Wpn-AAGun-ROF05": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-ROF05",
-		"name": "AA Chainfeed Loader Mk2",
-		"requiredResearch": [
-			"R-Wpn-AAGun-ROF04",
-			"R-Wpn-MG5"
-		],
-		"researchPoints": 8000,
-		"researchPower": 250,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "FirePause",
-				"value": -10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ReloadTime",
-				"value": -10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
-	},
-	"R-Wpn-AAGun-ROF06": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-AAGun-ROF06",
-		"name": "AA Chainfeed Loader Mk3",
-		"requiredResearch": [
-			"R-Wpn-AAGun-ROF05"
-		],
-		"researchPoints": 9600,
-		"researchPower": 300,
-		"results": [
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "FirePause",
-				"value": -10
-			},
-			{
-				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "A-A GUN",
-				"parameter": "ReloadTime",
-				"value": -10
-			}
-		],
-		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
-	},
 	"R-Wpn-AAGun01": {
 		"disabledWhen": 4,
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4931,7 +4487,7 @@
 		"msgName": "RES_W_AA3",
 		"name": "Hurricane AA Turret",
 		"requiredResearch": [
-			"R-Wpn-MG2Mk1"
+			"R-Wpn-MG-ROF02"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -4949,11 +4505,11 @@
 			"QuadMg1AAGun"
 		],
 		"requiredResearch": [
-			"R-Wpn-MG4",
-			"R-Wpn-AAGun-Damage02"
+			"R-Wpn-MG-ROF03",
+			"R-Wpn-AAGun03"
 		],
-		"researchPoints": 9700,
-		"researchPower": 303,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultComponents": [
 			"QuadRotAAGun"
 		],
@@ -7035,6 +6591,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7057,6 +6627,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7077,6 +6661,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -7099,6 +6697,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -7123,6 +6735,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7144,6 +6770,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -7167,6 +6807,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 25
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7189,6 +6843,20 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
 				"value": 25
 			}
 		],
@@ -7221,6 +6889,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
 				"value": -20
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "FirePause",
+				"value": -20
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "ReloadTime",
+				"value": -20
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7250,6 +6932,20 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
 				"value": -18
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "FirePause",
+				"value": -18
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "ReloadTime",
+				"value": -18
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7262,7 +6958,7 @@
 		"msgName": "RES_W_MG_ROF3",
 		"name": "Hyper Fire Chaingun Upgrade",
 		"requiredResearch": [
-			"R-Wpn-MG-ROF02"
+			"R-Wpn-MG4"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -7278,6 +6974,20 @@
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
+				"parameter": "ReloadTime",
+				"value": -8
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "FirePause",
+				"value": -8
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
 				"parameter": "ReloadTime",
 				"value": -8
 			}
@@ -7355,10 +7065,10 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG3Mk1",
-			"R-Wpn-MG-ROF03"
+			"R-Wpn-MG-ROF02"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"resultComponents": [
 			"CyborgRotMG",
 			"MG4ROTARY-VTOL",
