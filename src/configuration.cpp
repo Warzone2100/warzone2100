@@ -493,10 +493,11 @@ bool loadConfig()
 	int fullscreenWidth = iniGetInteger("fullscreenWidth", war_GetFullscreenModeWidth()).value();
 	int fullscreenHeight = iniGetInteger("fullscreenHeight", war_GetFullscreenModeHeight()).value();
 	int fullscreenScreen = iniGetInteger("fullscreenScreen", 0).value();
-	if (fullscreenWidth < 640 || fullscreenHeight < 480)	// sanity check
+	if ((fullscreenWidth != 0 && fullscreenWidth < 640) || (fullscreenHeight != 0 && fullscreenHeight < 480))	// sanity check
 	{
-		fullscreenWidth = 640;
-		fullscreenHeight = 480;
+		// set to special value (0x0) that reverts to the default for this display
+		fullscreenWidth = 0;
+		fullscreenHeight = 0;
 	}
 	war_SetFullscreenModeWidth(fullscreenWidth);
 	war_SetFullscreenModeHeight(fullscreenHeight);
