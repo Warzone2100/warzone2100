@@ -179,6 +179,9 @@ bool gfx_api::loadTextureCompressionOverrides()
 		return false;
 	}
 
+	// Remove all \r from the string
+	loadedTexConfigData.erase(std::remove(loadedTexConfigData.begin(), loadedTexConfigData.end(), '\r'), loadedTexConfigData.end());
+
 	auto it_previous = loadedTexConfigData.begin();
 	auto it = std::find(loadedTexConfigData.begin(), loadedTexConfigData.end(), '\n');
 	auto it_end = loadedTexConfigData.end();
