@@ -238,14 +238,21 @@ static std::string imageLoadFilenameFromInputFilename(const WzString& filename)
 	// For backwards-compatibility support, filenames that end in ".png" are used as "keys" and we first check for a .ktx2 file with the same filename
 	if (filename.endsWith(wz_png_extension))
 	{
+		// First, check if the .png file exists
+		// (.png files take precedence, so that existing mods work - and only have to include png files)
+		if (PHYSFS_exists(filename))
+		{
+			return filename.toUtf8();
+		}
+
+		// Check for presence of .ktx2 file
 		WzString ktx2Filename = filename.substr(0, filename.size() - wz_png_extension.length());
 		ktx2Filename.append(".ktx2");
-		// Check for presence of .ktx2 file
 		if (PHYSFS_exists(ktx2Filename))
 		{
 			return ktx2Filename.toUtf8();
 		}
-		// Fall-back to .png file
+		// Fall-back to the .png file (which presumably doesn't exist because of the first check above, but this will cause it to be named as such in the later error message)
 	}
 #endif
 	return filename.toUtf8();
