@@ -389,7 +389,7 @@ void ActivityManager::addActivitySink(std::shared_ptr<ActivitySink> sink)
 
 void ActivityManager::removeActivitySink(const std::shared_ptr<ActivitySink>& sink)
 {
-	activitySinks.erase(std::remove(activitySinks.begin(), activitySinks.end(), sink));
+	activitySinks.erase(std::remove(activitySinks.begin(), activitySinks.end(), sink), activitySinks.end());
 }
 
 ActivitySink::GameMode ActivityManager::getCurrentGameMode() const
