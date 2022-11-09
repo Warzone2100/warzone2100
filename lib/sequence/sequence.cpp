@@ -417,8 +417,12 @@ static void video_write(bool update)
 	unsigned int x = 0, y = 0;
 	const int video_width = videodata.ti.frame_width;
 	const int video_height = videodata.ti.frame_height;
-	uint32_t* RGBAframe = reinterpret_cast<uint32_t*>(VideoFrameBitmap.bmp_w());
+	unsigned char* pRGBABitmapData = VideoFrameBitmap.bmp_w();
 	yuv_buffer yuv;
+
+	auto setRGBAFramePixel = [pRGBABitmapData](int pixelOffset, uint32_t rgbaValue) {
+		memcpy(&pRGBABitmapData[(pixelOffset * 4)], &rgbaValue, sizeof(uint32_t));
+	};
 
 	if (update)
 	{
@@ -450,15 +454,15 @@ static void video_write(bool update)
 
 				uint32_t rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 
-				RGBAframe[rgb_offset] = rgba;
+				setRGBAFramePixel(rgb_offset, rgba);
 				if (scanMode == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
+					setRGBAFramePixel(rgb_offset + video_width, (rgba >> 1 & RGBmask) | Amask);
 				}
 				else if (scanMode == SCANLINES_BLACK)
 				{
-					RGBAframe[rgb_offset + video_width] = Amask;
+					setRGBAFramePixel(rgb_offset + video_width, Amask);
 				}
 				rgb_offset++;
 
@@ -471,15 +475,15 @@ static void video_write(bool update)
 				B = Vclip((A + 516 * U + 128) >> 8);
 
 				rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
-				RGBAframe[rgb_offset] = rgba;
+				setRGBAFramePixel(rgb_offset, rgba);
 				if (scanMode == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
+					setRGBAFramePixel(rgb_offset + video_width, (rgba >> 1 & RGBmask) | Amask);
 				}
 				else if (scanMode == SCANLINES_BLACK)
 				{
-					RGBAframe[rgb_offset + video_width] = Amask;
+					setRGBAFramePixel(rgb_offset + video_width, Amask);
 				}
 				rgb_offset++;
 			}
