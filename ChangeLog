@@ -1,3 +1,21 @@
+2022-11-09: Version 4.3.2:
+ * General:
+   * Fix: Various potential crashes (too many commits, #2973)
+   * Fix: Restoring window sometimes shows black screen in OpenGL mode (commit:24eacb55a39abb0a9540a4dbc9e046b769c3a6ef, #2981)
+   * Fix: Possible high CPU usage when minimizing window in Vulkan mode (too many commits, #2981)
+   * Fix: Default fullscreen dimensions should match the current resolution (commit:09fd7ee9400b5935854271f691a63df2448aa3b6, #2981)
+   * Fix: PNG files should take precedence over KTX2 files, to support mods (commit:380c0fe645562ad3e82d9e3c4ca6e5a8375dbd05, #2981)
+ * Graphics:
+   * Fix: Missing top section on cyborg repair turret (commit:2157a83881212c0710c5796d75e3cbf0893dc40b, #2977)
+   * Fix: Update generic design tank (commit:1fb78f9571d8fe48fa23ae0182803fa4baeec2c5, #2980)
+ * Balance MP:
+   * Change: Buff Flashlight for tanks, increase HP 100->180 and add 1 tile of range 12->13 (commit:faf8d361f18297dad37066dcd0fd4d6f05d01333, #2889)
+   * Change: Reduce periodical damage on Incendiary Mortar 26-24 (commit:fe7924177444f967e664a7d8acc31b60b3f314b9, #2908)
+   * Change: Remove MGAA specific research, Whirlwind requires all MG ROF upgrades and Hurricane, AG and Hurricane need MG ROF2, MG ROF3 require Assault Gun (commit:ebdf66ec4ec448191052f5a81451209239f3f021, #2922)
+   * Change: Reduce price of Hellstorm from 450->400 and weight from 20000->10000, Pepperpot price reduced from 200->175 and build time from 900->800 (commit:ee0ea7fac774e54676f29fb43c5dc840f83e13ce, #2893)
+ * Other:
+   * Fix: 32-bit (x86) Windows build doesn't run on Windows 7
+
 2022-11-02: Version 4.3.1:
  * General:
    * Fix: Crashes caused by certain old config file settings (too many commits, #2960)
