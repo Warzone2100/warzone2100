@@ -32,7 +32,7 @@ jobs:
     name: '${{ matrix.name }}'
     permissions:
       contents: write # Needed to upload to releases
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04 # Use instead of ubuntu-latest until https://github.com/snapcore/action-build/issues/42 is resolved
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v3
