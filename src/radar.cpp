@@ -452,22 +452,29 @@ static void DrawRadarTiles()
 {
 	SDWORD	x, y;
 	size_t radarBufferSize2 = radarBitmap.size_in_bytes();
-	uint32_t* radarBuffer = reinterpret_cast<uint32_t*>(radarBitmap.bmp_w());
+	unsigned char* pRaderBuffer = radarBitmap.bmp_w();
 
 	for (x = scrollMinX; x < scrollMaxX; x++)
 	{
 		for (y = scrollMinY; y < scrollMaxY; y++)
 		{
 			MAPTILE	*psTile = mapTile(x, y);
-			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
+			size_t pixelStartPos = (radarTexWidth * (y - scrollMinY) + (x - scrollMinX)) * 4;
 
-			ASSERT(pos * sizeof(UDWORD) < radarBufferSize2, "Buffer overrun");
+			ASSERT(pixelStartPos < radarBufferSize2, "Buffer overrun");
 			if (y == scrollMinY || x == scrollMinX || y == scrollMaxY - 1 || x == scrollMaxX - 1)
 			{
-				radarBuffer[pos] = WZCOL_BLACK.rgba;
+				pRaderBuffer[pixelStartPos] = WZCOL_BLACK.byte.r;
+				pRaderBuffer[pixelStartPos + 1] = WZCOL_BLACK.byte.g;
+				pRaderBuffer[pixelStartPos + 2] = WZCOL_BLACK.byte.b;
+				pRaderBuffer[pixelStartPos + 3] = WZCOL_BLACK.byte.a;
 				continue;
 			}
-			radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
+			auto radarColor = appliedRadarColour(radarDrawMode, psTile);
+			pRaderBuffer[pixelStartPos] = radarColor.byte.r;
+			pRaderBuffer[pixelStartPos + 1] = radarColor.byte.g;
+			pRaderBuffer[pixelStartPos + 2] = radarColor.byte.b;
+			pRaderBuffer[pixelStartPos + 3] = radarColor.byte.a;
 		}
 	}
 }
@@ -608,17 +615,21 @@ static void applyMinimapOverlay()
 {
 	size_t radarTexCount = radarTexWidth * radarTexHeight;
 	size_t radarBufferSize2 = radarBitmap.size_in_bytes();
-	uint32_t* radarBuffer = reinterpret_cast<uint32_t*>(radarBitmap.bmp_w());
-	ASSERT(radarTexCount * sizeof(*radarBuffer) <= radarBufferSize2, "Buffer overrun");
-	ASSERT(radarTexCount * sizeof(*radarOverlayBuffer) <= radarBufferSize, "Buffer overrun");
+	unsigned char* pRaderBuffer = radarBitmap.bmp_w();
+	ASSERT(radarTexCount * static_cast<size_t>(radarBitmap.channels()) <= radarBufferSize2, "Buffer overrun");
+	ASSERT(radarTexCount * static_cast<size_t>(radarBitmap.channels()) <= radarBufferSize, "Buffer overrun");
 	for (size_t i = 0; i < radarTexCount; i++)
 	{
 		if (radarOverlayBuffer[i] == 0)
 			continue;
-		PIELIGHT baseColor = PLfromUDWORD(radarBuffer[i]);
+		size_t pixelStartPos = (i * 4);
+		PIELIGHT baseColor = pal_RGBA(pRaderBuffer[pixelStartPos], pRaderBuffer[pixelStartPos + 1], pRaderBuffer[pixelStartPos + 2], pRaderBuffer[pixelStartPos + 3]);
 		PIELIGHT overColor = PLfromUDWORD(radarOverlayBuffer[i]);
 		PIELIGHT mixedColor = mix(overColor, baseColor);
-		radarBuffer[i] = mixedColor.rgba;
+		pRaderBuffer[pixelStartPos] = mixedColor.byte.r;
+		pRaderBuffer[pixelStartPos + 1] = mixedColor.byte.g;
+		pRaderBuffer[pixelStartPos + 2] = mixedColor.byte.b;
+		pRaderBuffer[pixelStartPos + 3] = mixedColor.byte.a;
 	}
 }
 
