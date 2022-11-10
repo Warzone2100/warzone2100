@@ -558,7 +558,10 @@ static bool gameInit()
 	for (player = 1; player < MAX_CONNECTED_PLAYERS; player++)
 	{
 		// we want to remove disabled AI & all the other players that don't belong
-		if ((NetPlay.players[player].difficulty == AIDifficulty::DISABLED || player >= game.maxPlayers) && player != scavengerPlayer() && !(NetPlay.players[player].isSpectator && NetPlay.players[player].allocated))
+		if ((NetPlay.players[player].difficulty == AIDifficulty::DISABLED || player >= game.maxPlayers)
+			&& player != scavengerPlayer()
+			&& !(NetPlay.players[player].isSpectator && NetPlay.players[player].allocated)
+			&& !(player < game.maxPlayers && NetPlay.players[player].allocated))
 		{
 			clearPlayer(player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
