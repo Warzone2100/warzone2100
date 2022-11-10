@@ -471,7 +471,10 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	{
 		for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 		{
-			NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
+			if (!(i == selectedPlayer && i < MAX_PLAYERS))
+			{
+				NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
+			}
 		}
 	}
 
@@ -532,6 +535,25 @@ bool multiShutdown()
 static bool gameInit()
 {
 	UDWORD			player;
+
+	// Various sanity checks
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
+	{
+		if (player < MAX_PLAYERS)
+		{
+			if (NetPlay.players[player].allocated)
+			{
+				ASSERT(NetPlay.players[player].difficulty == AIDifficulty::HUMAN, "Found an allocated (human) player (%u) with mis-matched difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
+
+			}
+		}
+
+		if (!NetPlay.players[player].allocated)
+		{
+			ASSERT(NetPlay.players[player].difficulty != AIDifficulty::HUMAN, "Found a non-human slot (%u) with mis-matched (human) difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
+			ASSERT(NetPlay.players[player].ai < 0 || NetPlay.players[player].difficulty != AIDifficulty::DISABLED, "Slot (%u) has AI, but disabled difficulty?", player);
+		}
+	}
 
 	for (player = 1; player < MAX_CONNECTED_PLAYERS; player++)
 	{
