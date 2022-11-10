@@ -141,6 +141,7 @@ void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
 const std::vector<std::pair<_vkl_env_text_type, _vkl_env_text_type>> vulkan_implicit_layer_environment_variables = {
 	{_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_overlay_1"), _vkl_env_text("1")}
 	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1")}
+	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1")} // avoid crashes caused by this layer
 };
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
