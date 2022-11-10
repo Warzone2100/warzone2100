@@ -794,6 +794,7 @@ static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowes
 	NETlogEntry(buf, SYNC_FLAG, index.value());
 	NET_InitPlayer(index.value(), false);  // re-init everything
 	NetPlay.players[index.value()].allocated = true;
+	NetPlay.players[index.value()].difficulty = AIDifficulty::HUMAN;
 	setPlayerName(index.value(), name);
 	if (!NetPlay.players[index.value()].isSpectator)
 	{
@@ -1929,6 +1930,20 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 			NetPlay.players[playerIndex].ai = AI_OPEN;
 			clearPlayerName(playerIndex);
 		}
+		if (!NetPlay.players[playerIndex].allocated && NetPlay.players[playerIndex].ai < 0)
+		{
+			ASSERT(NetPlay.players[playerIndex].difficulty == AIDifficulty::DISABLED, "Unexpected difficulty (%d) for player (%d)", (int)NetPlay.players[playerIndex].difficulty, playerIndex);
+		}
+
+		if (NetPlay.players[playerIndex].allocated
+			&& playerIndex < MAX_PLAYERS)
+		{
+			if (NetPlay.players[playerIndex].difficulty != AIDifficulty::HUMAN)
+			{
+				debug(LOG_INFO, "Fixing up human difficulty for player: %d", playerIndex);
+				NetPlay.players[playerIndex].difficulty = AIDifficulty::HUMAN;
+			}
+		}
 	}
 
 	if (!NetPlay.players[playerIndexA].allocated || !NetPlay.players[playerIndexB].allocated)
@@ -2074,11 +2089,6 @@ SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, opt
 			return SpectatorToPlayerMoveResult::NEEDS_SLOT_SELECTION;
 		}
 	}
-
-	// Since a spectator could be moved into a Closed or AI slot, clear the closed or AI status on the target slot.
-	// (If swapping with a player slot, these should already be set as such.)
-	NetPlay.players[newPlayerIdx.value()].ai = AI_OPEN;
-	NetPlay.players[newPlayerIdx.value()].difficulty = AIDifficulty::DISABLED;
 
 	// Backup the spectator's identity for later recording
 	auto spectatorPublicKeyIdentity = getMultiStats(playerIdx).identity.toBytes(EcKey::Privacy::Public);

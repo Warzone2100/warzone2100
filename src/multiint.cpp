@@ -7523,8 +7523,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			cache.wzEloText.setText(WzString::fromUtf8(ar.elo), font_small);
 			cache.wzEloText.render(x + nameX, y + 28 + H*!subText.isEmpty(), WZCOL_TEXT_BRIGHT);
 		}
-
-		NetPlay.players[j].difficulty = AIDifficulty::HUMAN;
 	}
 	else	// AI
 	{
@@ -7582,7 +7580,7 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int j = psWidget->UserData;
 
 	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
-	if (!NetPlay.players[j].fileSendInProgress() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED && !NetPlay.players[j].isSpectator)
+	if (!NetPlay.players[j].fileSendInProgress() && (isHumanPlayer(j) || NetPlay.players[j].difficulty != AIDifficulty::DISABLED) && !NetPlay.players[j].isSpectator)
 	{
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
