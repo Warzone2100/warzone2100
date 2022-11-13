@@ -895,7 +895,7 @@ bool runInGameMusicManager(unsigned id, InputManager& inputManager)
 	{
 		inputManager.contexts().popState();
 		widgDelete(psWScreen, MM_FORM);
-		startIGOptionsMenu();
+		intReopenMenuWithoutUnPausing();
 	}
 
 	perFrameCleanup();
