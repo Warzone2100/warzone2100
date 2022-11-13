@@ -2970,6 +2970,36 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 
 	WZbackend = backend;
 
+#if defined(WZ_OS_WIN)
+	// Windows: Workaround for Nvidia "threaded optimization"
+	// Set the process affinity mask to 1 before creating the window and initializing OpenGL
+	// This disables Nvidia's "threaded optimization" feature, which can cause issues with WZ in OpenGL mode
+	// NOTE: Must restore the affinity mask afterwards! (See below)
+	DWORD_PTR originalProcessAffinityMask = 0;
+	DWORD_PTR systemAffinityMask = 0;
+	bool restoreAffinityMask = false;
+
+	if (backend.has_value() && (backend.value() == video_backend::opengl)) // only do this for OpenGL mode, for now
+	{
+		if (::GetProcessAffinityMask(::GetCurrentProcess(), &originalProcessAffinityMask, &systemAffinityMask) != 0)
+		{
+			if (::SetProcessAffinityMask(::GetCurrentProcess(), 1) != 0)
+			{
+				restoreAffinityMask = true;
+			}
+			else
+			{
+				debug(LOG_INFO, "Failed to set process affinity mask");
+			}
+		}
+		else
+		{
+			// Failed to get the current process affinity mask
+			debug(LOG_INFO, "Failed to get current process affinity mask");
+		}
+	}
+#endif
+
 	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
 
 	if (backend.has_value())
@@ -3051,6 +3081,21 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	{
 		wzMainScreenSetup_VerifyWindow();
 	}
+
+#if defined(WZ_OS_WIN)
+	if (restoreAffinityMask)
+	{
+		// restore process affinity mask
+		if (::SetProcessAffinityMask(::GetCurrentProcess(), originalProcessAffinityMask) != 0)
+		{
+			debug(LOG_WZ, "Restored process affinity mask");
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to restore process affinity mask");
+		}
+	}
+#endif
 
 	return true;
 }
