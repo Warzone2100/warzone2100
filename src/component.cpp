@@ -274,6 +274,7 @@ void displayStructureButton(STRUCTURE *psStructure, const Vector3i *rotation, co
 
 void displayStructureStatButton(STRUCTURE_STATS *Stats, const Vector3i *rotation, const Vector3i *Position, int scale)
 {
+	ASSERT_OR_RETURN(, Stats != nullptr, "Stats is NULL");
 	if (Stats->pIMD.empty() || Stats->pIMD[0] == nullptr)
 	{
 		return; // error with loaded stats/models - probably due to a mod
@@ -328,6 +329,7 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 //
 void displayResearchButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
+	ASSERT_OR_RETURN(, Stat != nullptr, "Stat is NULL");
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
 
