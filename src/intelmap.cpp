@@ -908,13 +908,20 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		//render an object
 		psResearch = getResearchForMsg(psCurrentMsg->pViewData);
-		renderResearchToBuffer(psResearch, x0 + width / 2, y0 + height / 2);
+		if (psResearch)
+		{
+			renderResearchToBuffer(psResearch, x0 + width / 2, y0 + height / 2);
+		}
 
 		//draw image icon in top left of window
-		image = (SWORD)getResearchForMsg(psMessage->pViewData)->iconID;
-		if (image > 0)
+		psResearch = getResearchForMsg(psMessage->pViewData);
+		if (psResearch)
 		{
-			iV_DrawImage(IntImages, image, x0 + 3, y0 + 3);
+			image = (SWORD)(psResearch->iconID);
+			if (image > 0)
+			{
+				iV_DrawImage(IntImages, image, x0 + 3, y0 + 3);
+			}
 		}
 	}
 }
