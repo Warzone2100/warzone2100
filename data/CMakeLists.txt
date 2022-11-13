@@ -131,7 +131,7 @@ if(WZ_ENABLE_BASIS_UNIVERSAL)
 		set(_output_name "${TEXTURE_FILE_NAME_WE}.ktx2")
 		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
 			COMMAND "${BASIS_UNIVERSAL_CLI}"
-			ARGS -ktx2 -uastc -uastc_level 2 -uastc_rdo_l 1.0 -mipmap -resample ${_terrain_max_size} ${_terrain_max_size} -output_file "${_output_dir}/${_output_name}" -file "${TEXTURE}"
+			ARGS -ktx2 -uastc -uastc_level 2 -uastc_rdo_l 1.0 -uastc_rdo_m -mipmap -resample ${_terrain_max_size} ${_terrain_max_size} -output_file "${_output_dir}/${_output_name}" -file "${TEXTURE}"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages"
 			DEPENDS "${TEXTURE}"
 			VERBATIM
