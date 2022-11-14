@@ -5351,7 +5351,7 @@
 			"R-Wpn-Cannon5",
 			"R-Struc-Research-Upgrade06"
 		],
-		"researchPoints": 7200,
+		"researchPoints": 7050,
 		"researchPower": 225,
 		"resultComponents": [
 			"Cannon6TwinAslt"
