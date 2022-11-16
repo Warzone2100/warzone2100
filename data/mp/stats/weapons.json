@@ -1466,7 +1466,7 @@
 	},
 	"Cyb-Wpn-Atmiss": {
 		"buildPoints": 1000,
-		"buildPower": 250,
+		"buildPower": 233,
 		"damage": 460,
 		"effectSize": 50,
 		"explosionWav": "smlexpl.ogg",
@@ -1479,7 +1479,7 @@
 		"hitpoints": 60,
 		"id": "Cyb-Wpn-Atmiss",
 		"lightWorld": 1,
-		"longRange": 1536,
+		"longRange": 1664,
 		"longHit": 80,
 		"maxElevation": 90,
 		"minElevation": -60,
