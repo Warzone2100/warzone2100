@@ -384,6 +384,26 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	return true;
 }
 
+std::vector<std::string> motd_lines;
+
+void LoadRoomMOTD(std::string path) {
+	motd_lines.clear();
+	char RoomMOTDPath[4096] = {0};
+	strncpy(RoomMOTDPath, PHYSFS_getWriteDir(), 4095);
+	size_t RoomMOTDAppendFname = strlen(RoomMOTDPath);
+	strncpy(RoomMOTDPath+RoomMOTDAppendFname, "/motd.txt", 4095-RoomMOTDAppendFname);
+	FILE* f = fopen(RoomMOTDPath, "r");
+	if(f == NULL) {
+		return;
+	}
+	debug(LOG_INFO, "Reading room MOTD file: [%s]\n", RoomMOTDPath);
+	char LineStringBuf[2048] = {0};
+	while(fgets(LineStringBuf, sizeof(LineStringBuf)-1, f)) {
+		motd_lines.push_back(std::string(LineStringBuf));
+	}
+	return;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
 bool MultiPlayerJoin(UDWORD playerIndex)
@@ -435,6 +455,14 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 		{
 			// Inform the new player that this lobby has slash commands enabled.
 			sendRoomSystemMessageToSingleReceiver("Lobby slash commands enabled. Type " LOBBY_COMMAND_PREFIX "help to see details.", playerIndex);
+		}
+		if (motd_lines.size() > 0)
+		{
+			int i;
+			for (i = 0; i < motd_lines.size(); i++)
+			{
+				sendRoomSystemMessageToSingleReceiver(motd_lines[i].c_str(), playerIndex);
+			}
 		}
 	}
 	return true;
