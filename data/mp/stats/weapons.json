@@ -1505,7 +1505,7 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Grenade": {
-		"buildPoints": 260,
+		"buildPoints": 270,
 		"buildPower": 80,
 		"damage": 60,
 		"effectSize": 75,
@@ -3308,7 +3308,7 @@
 		"hitpoints": 5,
 		"id": "Mortar-Incendiary",
 		"lightWorld": 1,
-		"longHit": 70,
+		"longHit": 60,
 		"longRange": 2304,
 		"maxElevation": 90,
 		"minRange": 128,
@@ -3330,14 +3330,14 @@
 		"radiusDamage": 50,
 		"radiusLife": 10,
 		"recoilValue": 150,
-		"shortHit": 60,
+		"shortHit": 50,
 		"shortRange": 1152,
 		"waterGfx": "FXLSplsh.PIE",
 		"weaponClass": "HEAT",
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "MORTARS",
 		"weaponWav": "mortar.ogg",
-		"weight": 2000
+		"weight": 1000
 	},
 	"Mortar1Mk1": {
 		"buildPoints": 500,
@@ -3355,7 +3355,7 @@
 		"hitpoints": 5,
 		"id": "Mortar1Mk1",
 		"lightWorld": 1,
-		"longHit": 70,
+		"longHit": 60,
 		"longRange": 2304,
 		"maxElevation": 90,
 		"minRange": 128,
@@ -3371,14 +3371,14 @@
 		"radiusDamage": 40,
 		"radiusLife": 10,
 		"recoilValue": 150,
-		"shortHit": 60,
+		"shortHit": 50,
 		"shortRange": 1152,
 		"waterGfx": "FXLSplsh.PIE",
 		"weaponClass": "KINETIC",
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "MORTARS",
 		"weaponWav": "mortar.ogg",
-		"weight": 2000
+		"weight": 600
 	},
 	"Mortar2Mk1": {
 		"buildPoints": 1000,
@@ -3396,7 +3396,7 @@
 		"hitpoints": 5,
 		"id": "Mortar2Mk1",
 		"lightWorld": 1,
-		"longHit": 70,
+		"longHit": 60,
 		"longRange": 2304,
 		"maxElevation": 90,
 		"minRange": 128,
@@ -3412,14 +3412,14 @@
 		"radiusDamage": 80,
 		"radiusLife": 10,
 		"recoilValue": 150,
-		"shortHit": 60,
+		"shortHit": 50,
 		"shortRange": 1152,
 		"waterGfx": "FXMNExp.PIE",
 		"weaponClass": "KINETIC",
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "MORTARS",
 		"weaponWav": "mortar.ogg",
-		"weight": 5000
+		"weight": 3000
 	},
 	"Mortar3ROTARYMk1": {
 		"buildPoints": 800,
@@ -3437,7 +3437,7 @@
 		"hitpoints": 5,
 		"id": "Mortar3ROTARYMk1",
 		"lightWorld": 1,
-		"longHit": 70,
+		"longHit": 60,
 		"longRange": 2304,
 		"maxElevation": 90,
 		"minRange": 128,
@@ -3453,14 +3453,14 @@
 		"radiusDamage": 40,
 		"radiusLife": 10,
 		"recoilValue": 150,
-		"shortHit": 60,
+		"shortHit": 50,
 		"shortRange": 1152,
 		"waterGfx": "FXLSplsh.PIE",
 		"weaponClass": "KINETIC",
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "MORTARS",
 		"weaponWav": "mortar.ogg",
-		"weight": 2000
+		"weight": 1000
 	},
 	"MortarEMP": {
 		"buildPoints": 1000,
@@ -3500,7 +3500,7 @@
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "EMP",
 		"weaponWav": "emp.ogg",
-		"weight": 5000
+		"weight": 3000
 	},
 	"PlasmaHeavy": {
 		"buildPoints": 2000,
