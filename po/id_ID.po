@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-10-24 03:52\n"
+"PO-Revision-Date: 2022-11-16 12:51\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -15180,7 +15180,7 @@ msgstr "autohost"
 
 #: src/clparse.cpp:409
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "Rating kueri dari url server yang diberikan, saat menyelenggarakan"
 
 #: src/clparse.cpp:409
 msgid "autorating"
