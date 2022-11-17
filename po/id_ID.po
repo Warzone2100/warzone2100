@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-10-07 04:36+0000\n"
-"PO-Revision-Date: 2022-11-16 12:51\n"
+"PO-Revision-Date: 2022-11-17 00:46\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -15208,7 +15208,7 @@ msgstr "Tambahkan hash identitas admin lobi (untuk perintah garis miring)"
 
 #: src/clparse.cpp:417
 msgid "hash string"
-msgstr ""
+msgstr "hash string"
 
 #: src/clparse.cpp:418
 msgid "Add a lobby admin public key (for slash commands)"
@@ -15216,7 +15216,7 @@ msgstr "Tambahkan kunci publik admin lobi (untuk perintah garis miring)"
 
 #: src/clparse.cpp:418
 msgid "b64-pub-key"
-msgstr ""
+msgstr "b64-pub-key"
 
 #: src/clparse.cpp:419
 msgid "Enable command interface"
@@ -15224,7 +15224,7 @@ msgstr "Nyalakan interface komando"
 
 #: src/clparse.cpp:419
 msgid "(stdin)"
-msgstr ""
+msgstr "(stdin)"
 
 #: src/clparse.cpp:420
 msgid "Minimum required players to auto-start game"
@@ -15232,7 +15232,7 @@ msgstr "Jumlah pemain minimum untuk memulai permainan secara otomatis"
 
 #: src/clparse.cpp:420
 msgid "startplayers"
-msgstr ""
+msgstr "startplayers"
 
 #: src/cmddroid.cpp:118
 msgid "Commander needs a higher level to command more units"
@@ -15402,12 +15402,12 @@ msgstr "%s - Body Point %d/%d - Pengalaman %.1f, %s, Jumlah Pembunuhan %d"
 #: src/display.cpp:1618
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Body Point %d/%d - ID %d - %s"
 
 #: src/display.cpp:1634
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Musuh!) %s - Body Point %d/%d - ID %d - pengalaman %f, %s - perintah %s - aksi %s - jarak sensor %d - ECM %d - kemiringan %.0f"
 
 #: src/display.cpp:1778
 #, c-format
@@ -15418,7 +15418,7 @@ msgstr "%s - Dalam Aliansi - Body Point %d/%d - Pengalaman %d, %s"
 #: src/display.cpp:1802
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Musuh!) %s, ref: %d, ID: %d Body Point: %d/%d"
 
 #: src/display3d.cpp:750
 msgid "Player left"
@@ -16163,7 +16163,7 @@ msgstr "Nyalakan UPnP"
 
 #: src/frontend.cpp:2652
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Batas Waktu Tidak Aktif"
 
 #: src/frontend.cpp:2657
 msgid "Lag Kick"
@@ -16171,11 +16171,11 @@ msgstr ""
 
 #: src/frontend.cpp:2662
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Slot Penonton"
 
 #: src/frontend.cpp:2667
 msgid "Enable Rating"
-msgstr ""
+msgstr "Aktifkan Rating"
 
 #: src/frontend.cpp:2682
 msgid "MULTIPLAY OPTIONS"
