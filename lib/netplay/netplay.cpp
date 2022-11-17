@@ -3967,9 +3967,9 @@ static void NETallowJoining()
 								NETbeginEncode(NETnetQueue(index), NET_PLAYER_JOINED);
 								NETuint8_t(&j);
 								NETend();
-								char buf[256];
-								ssprintf(buf, _("%s has Joined the Game"), name);
-								NetworkTextMessage(SYSTEM_MESSAGE, buf).enqueue(NETnetQueue(index));
+								char joinmsgbuf[256];
+								ssprintf(joinmsgbuf, _("%s has Joined the Game"), name);
+								NetworkTextMessage(SYSTEM_MESSAGE, joinmsgbuf).enqueue(NETnetQueue(index));
 							}
 						}
 					}
