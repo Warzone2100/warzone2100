@@ -4979,15 +4979,17 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	const std::string saveInfoJsonFilename = pathToThisSaveDir + "save-info.json";
 	const std::string jsonFileName = pathToThisSaveDir + "gam.json";
 	auto gamJson = nlohmann::json::object();
-	
-	if (!PHYSFS_exists(saveInfoJsonFilename.c_str()))
-	{
-		// save empty {} into save-info.jsons
-		saveFile(saveInfoJsonFilename.c_str(), "{}", 2);
-	}
 
-	auto saveInfoJsonOpt = parseJsonFile(saveInfoJsonFilename.c_str());
-	ASSERT(saveInfoJsonOpt.has_value() && saveInfoJsonOpt.value().is_object(), "save-info.json looks broken, wanted an object");
+	nonstd::optional<nlohmann::json> saveInfoJsonOpt = nullopt;
+	if (PHYSFS_exists(saveInfoJsonFilename.c_str()))
+	{
+		saveInfoJsonOpt = parseJsonFile(saveInfoJsonFilename.c_str());
+		ASSERT(saveInfoJsonOpt.has_value() && saveInfoJsonOpt.value().is_object(), "save-info.json looks broken, wanted an object");
+	}
+	if (!saveInfoJsonOpt.has_value() || !saveInfoJsonOpt.value().is_object())
+	{
+		saveInfoJsonOpt = nlohmann::json::object();
+	}
 	auto saveInfoJson = saveInfoJsonOpt.value();
 	// new .json format
 	serializeSaveGameData_json(gamJson, saveInfoJson, gameName.c_str(), &saveGame);
