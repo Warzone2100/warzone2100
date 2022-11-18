@@ -725,6 +725,7 @@ bool loadBrainStats(WzConfig &ini)
 	auto nullbrain = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLBRAIN"));
 	ASSERT_OR_RETURN(false, nullbrain != list.end(), "ZNULLBRAIN is mandatory");
 	std::iter_swap(nullbrain, list.begin());
+	bool retVal = true;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		BRAIN_STATS *psStats = &asBrainStats[i];
@@ -759,13 +760,20 @@ bool loadBrainStats(WzConfig &ini)
 		if (ini.contains("turret"))
 		{
 			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toWzString());
-			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getStatsName(psStats));
-			psStats->psWeaponStat = asWeaponStats + weapon;
+			if (weapon >= 0)
+			{
+				psStats->psWeaponStat = asWeaponStats + weapon;
+			}
+			else
+			{
+				ASSERT(weapon >= 0, "Unable to find weapon for brain %s", getStatsName(psStats));
+				retVal = false;
+			}
 		}
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
 	}
-	return true;
+	return retVal;
 }
 
 
@@ -821,6 +829,7 @@ bool loadPropulsionStats(WzConfig &ini)
 	auto nullprop = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLPROP"));
 	ASSERT_OR_RETURN(false, nullprop != list.end(), "ZNULLPROP is mandatory");
 	std::iter_swap(nullprop, list.begin());
+	bool retVal = true;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_STATS *psStats = &asPropulsionStats[i];
@@ -847,12 +856,12 @@ bool loadPropulsionStats(WzConfig &ini)
 		if (!getPropulsionType(ini.value("type").toWzString().toUtf8().c_str(), &psStats->propulsionType))
 		{
 			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getStatsName(psStats));
-			return false;
+			retVal = false;
 		}
 		ini.endGroup();
 	}
 
-	return true;
+	return retVal;
 }
 
 /*Load the Sensor stats from the file exported from Access*/
@@ -992,6 +1001,7 @@ bool loadRepairStats(WzConfig &ini)
 	auto nullrepair = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLREPAIR"));
 	ASSERT_OR_RETURN(false, nullrepair != list.end(), "ZNULLREPAIR is mandatory");
 	std::iter_swap(nullrepair, list.begin());
+	bool retVal = true;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		REPAIR_STATS *psStats = &asRepairStats[i];
@@ -1024,7 +1034,12 @@ bool loadRepairStats(WzConfig &ini)
 		}
 
 		//check its not 0 since we will be dividing by it at a later stage
-		ASSERT_OR_RETURN(false, psStats->time > 0, "Repair delay cannot be zero for %s", getStatsName(psStats));
+		if (!(psStats->time > 0))
+		{
+			ASSERT(psStats->time > 0, "Repair delay cannot be zero for %s", getStatsName(psStats));
+			psStats->time = 1;
+			retVal = false;
+		}
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
@@ -1032,7 +1047,7 @@ bool loadRepairStats(WzConfig &ini)
 
 		ini.endGroup();
 	}
-	return true;
+	return retVal;
 }
 
 /*Load the Construct stats from the file exported from Access*/
