@@ -61,6 +61,7 @@ struct AUDIO_STREAM
 	WZDecoder       		*decoder = nullptr;
 	PHYSFS_file				*fileHandle = nullptr;
 	float                   volume = 0.f;
+	bool					queuedStop = false;	// when sound_StopStream has been called on the stream
 
 	// Callbacks
 	std::function<void (const AUDIO_STREAM *, const void *)> onFinished;
@@ -1111,6 +1112,7 @@ void sound_StopStream(AUDIO_STREAM *stream)
 	assert(stream != nullptr);
 
 	alGetError();	// clear error codes
+	stream->queuedStop = true;
 	// Tell OpenAL to stop playing on the given source
 	alSourceStop(stream->source);
 	sound_GetError();
@@ -1210,7 +1212,7 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
 	alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
 	sound_GetError();
 
-	if (state != AL_PLAYING && state != AL_PAUSED)
+	if (state != AL_PLAYING && state != AL_PAUSED && (state != AL_STOPPED || stream->queuedStop))
 	{
 		return false;
 	}
@@ -1239,7 +1241,15 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
 		sound_GetError();
 		freeUnusedALBuffers(0);
 		free(alBuffersIds);
-		return true; // must return true here - don't shortcut playing the remaining buffers!
+		if (state != AL_STOPPED)
+		{
+			return true; // must return true here - don't shortcut playing the remaining buffers!
+		}
+		else
+		{
+			// no more buffers to read, and the existing audio has stopped
+			return false;
+		}
 	}
 	if (res < 0)
 	{
@@ -1254,6 +1264,15 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
 	freeUnusedALBuffers(res);
 	sound_GetError();
 	free(alBuffersIds);
+
+	if (state == AL_STOPPED && !stream->queuedStop)
+	{
+		// Resume playing of this OpenAL source
+		debug(LOG_SOUND, "Auto-resuming play of stream");
+		alSourcePlay(stream->source);
+		if (sound_GetError() != AL_NO_ERROR) { return false; }
+	}
+
 	return true;
 }
 
