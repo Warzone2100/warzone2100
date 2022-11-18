@@ -52,7 +52,7 @@ static ALuint current_queue_sample = -1;
 
 static bool openal_initialized = false;
 static const size_t bufferSize = 16 * 1024;
-static const unsigned int buffer_count = 16;
+static const unsigned int buffer_count = 32;
 
 /** Source of music */
 struct AUDIO_STREAM
