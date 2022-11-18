@@ -44,7 +44,11 @@ public:
 	int64_t totalSamples()                         const { return ov_pcm_total(m_ovfile.get(), -1);}
 	virtual ~WZVorbisDecoder()
 	{
-		ov_clear(m_ovfile.get());
+		if (m_ovfile)
+		{
+			ov_clear(m_ovfile.get());
+			m_ovfile.reset();
+		}
 		PHYSFS_close(m_file);
 	}
 private:

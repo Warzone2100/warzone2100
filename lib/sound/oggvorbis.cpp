@@ -148,30 +148,30 @@ WZVorbisDecoder* WZVorbisDecoder::fromFilename(const char* fileName)
 	std::unique_ptr<OggVorbis_File> ovf = std::unique_ptr<OggVorbis_File>(new OggVorbis_File());
 	// https://xiph.org/vorbis/doc/vorbisfile/ov_open_callbacks.html
 	const int error = ov_open_callbacks(fileHandle, ovf.get(), nullptr, 0, wz_oggVorbis_callbacks);
-	switch (error)
+	if (error != 0)
 	{
-	case OV_EREAD:
-		debug(LOG_ERROR, "A read from media returned an error.");
+		switch (error)
+		{
+		case OV_EREAD:
+			debug(LOG_ERROR, "A read from media returned an error.");
+			break;
+		case OV_ENOTVORBIS:
+			debug(LOG_ERROR, "Bitstream does not contain any Vorbis data.");
+			break;
+		case OV_EVERSION:
+			debug(LOG_ERROR, "Vorbis version mismatch.");
+			break;
+		case OV_EBADHEADER:
+			debug(LOG_ERROR, "Invalid Vorbis bitstream header.");
+			break;
+		case OV_EFAULT:
+			debug(LOG_ERROR, "Internal logic fault; indicates a bug or heap/stack corruption.");
+			break;
+		default:
+			break;
+		}
 		PHYSFS_close(fileHandle);
 		return nullptr;
-	case OV_ENOTVORBIS:
-		debug(LOG_ERROR, "Bitstream does not contain any Vorbis data.");
-		PHYSFS_close(fileHandle);
-		return nullptr;
-	case OV_EVERSION:
-		debug(LOG_ERROR, "Vorbis version mismatch.");
-		PHYSFS_close(fileHandle);
-		return nullptr;
-	case OV_EBADHEADER:
-		debug(LOG_ERROR, "Invalid Vorbis bitstream header.");
-		PHYSFS_close(fileHandle);
-		return nullptr;
-	case OV_EFAULT:
-		debug(LOG_ERROR, "Internal logic fault; indicates a bug or heap/stack corruption.");
-		PHYSFS_close(fileHandle);
-		return nullptr;
-	default:
-		break;
 	}
 	ASSERT(ovf, "doesn't make sense");
 	vorbis_info* info = ov_info(ovf.get(), -1);
