@@ -1100,6 +1100,7 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 	try
 	{
 		WZ_PHYSFS_enumerateFolders(path, [path, &oldestKey, &oldestEpoch, &count](const char* dirName){
+			if (!dirName) { return true; }
 			if (strcmp(dirName, "auto") == 0)
 			{
 				return true; // continue
@@ -1107,12 +1108,19 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 			count++;
 			const auto saveInfoFilename = std::string(path) + "/" + dirName + "/save-info.json";
 			auto saveInfoDataOpt = parseJsonFile(saveInfoFilename.c_str());
-			if (!saveInfoDataOpt.has_value() && !PHYSFS_exists(saveInfoFilename.c_str()))
+			if (!saveInfoDataOpt.has_value() || !PHYSFS_exists(saveInfoFilename.c_str()))
 			{
 				// nothing to do, this has been handled by old routine
-				return true; 
+				return true;
 			}
 			const auto saveInfoData = saveInfoDataOpt.value();
+			if (!saveInfoData.is_object())
+			{
+				// just overwrite this (apparently) corrupt autosave
+				oldestEpoch = 0;
+				oldestKey = std::string(dirName);
+				return true;
+			}
 			const auto epoch = saveInfoData.at("epoch").get<int64_t>();
 			if (epoch < oldestEpoch)
 			{
@@ -1131,7 +1139,7 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 	{
 		return;
 	}
-	ASSERT(oldestKey.size() > 0, "Bug: oldestKey can't be empty here");
+	ASSERT_OR_RETURN(, oldestKey.size() > 0, "Bug: oldestKey can't be empty here");
 	char savefile[PATH_MAX];
 	snprintf(savefile, sizeof(savefile), "%s/%s.gam", path, oldestKey.c_str());
 	debug(LOG_SAVEGAME, "deleting the oldest autosave file %s", savefile);
