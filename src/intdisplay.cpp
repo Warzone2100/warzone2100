@@ -599,7 +599,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 			}
 			else if (StatIsResearch(Stat))
 			{
-				iIMDShape *shape;
+				iIMDShape *shape = nullptr;
 				StatGetResearchImage(Stat, &image, &shape, &psResGraphic, true);
 				if (psResGraphic)
 				{
