@@ -462,6 +462,7 @@ bool loadStructureStats(WzConfig &ini)
 		{
 			ASSERT(false, "Invalid type '%s' of structure '%s'", type.toUtf8().c_str(), getID(psStats));
 			// nothing we can really do here except skip this stat
+			unloadStructureStats_BaseStats(*psStats); // must be called to properly clear from lookup tables (that loadStructureStats_BaseStats adds it to)
 			ini.endGroup();
 			continue;
 		}
@@ -570,12 +571,24 @@ bool loadStructureStats(WzConfig &ini)
 		}
 
 		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toWzString());
-		ASSERT(ecm >= 0, "Invalid ECM found for '%s'", getID(psStats));
-		psStats->pECM = asECMStats + ecm;
+		if (ecm >= 0)
+		{
+			psStats->pECM = asECMStats + ecm;
+		}
+		else
+		{
+			ASSERT(ecm >= 0, "Invalid ECM found for '%s'", getID(psStats));
+		}
 
 		int sensor = getCompFromName(COMP_SENSOR, ini.value("sensorID", "ZNULLSENSOR").toWzString());
-		ASSERT(sensor >= 0, "Invalid sensor found for structure '%s'", getID(psStats));
-		psStats->pSensor = asSensorStats + sensor;
+		if (sensor >= 0)
+		{
+			psStats->pSensor = asSensorStats + sensor;
+		}
+		else
+		{
+			ASSERT(sensor >= 0, "Invalid sensor found for structure '%s'", getID(psStats));
+		}
 
 		// set list of weapons
 		std::fill_n(psStats->psWeapStat, MAX_WEAPONS, (WEAPON_STATS *)nullptr);
