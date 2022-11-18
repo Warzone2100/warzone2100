@@ -2579,7 +2579,7 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 	dv.y = psPosition->coords.z;
 
 	//quick check for invalid data
-	ASSERT_OR_RETURN(, psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
+	ASSERT_OR_RETURN(, psPosition && psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
 
 	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::scale(glm::vec3(.5f)) * glm::rotate(-UNDEG(playerPos.r.y), glm::vec3(0,1,0));
 
@@ -2600,7 +2600,11 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 			colour = selectionBrightness();
 		}
 	}
-	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, pieFlag, pieFlagData, viewMatrix * modelMatrix);
+	iIMDShape *psIMD = pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc];
+	if (psIMD != nullptr)
+	{
+		pie_Draw3DShape(psIMD, 0, 0, colour, pieFlag, pieFlagData, viewMatrix * modelMatrix);
+	}
 
 	//get the screen coords for the DP
 	calcFlagPosScreenCoords(&x, &y, &r, perspectiveViewMatrix * modelMatrix);
