@@ -72,7 +72,6 @@ function artifactVideoSetup()
 {
 	camPlayVideos({video: "SB1_7_MSG3", type: MISS_MSG});
 	camCallOnce("removeCanyonBlip");
-	artiMovePos = "NPWayPoint";
 }
 
 //Remove nearby droids. Make sure the player loses if the NP still has the artifact
@@ -244,6 +243,7 @@ function eventStartLevel()
 
 	enemyHasArtifact = false;
 	enemyStoleArtifact = false;
+	artiMovePos = "NPWayPoint";
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone"); //player lz
 	var tent = getObject("transporterEntry");
