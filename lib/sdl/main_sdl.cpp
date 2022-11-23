@@ -1995,6 +1995,24 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 	return true;
 }
 
+bool wzChangeCursorScale(unsigned int cursorScale)
+{
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeCursorScale called when window is not available");
+		return false;
+	}
+
+	if (cursorScale == war_getCursorScale())
+	{
+		return true;
+	}
+
+	war_setCursorScale(cursorScale); // must be set before cursors are reinit
+	wzSDLReinitCursors();
+	return true;
+}
+
 bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight)
 {
 	// Check whether the desired window size is smaller than the minimum required for the current Display Scale

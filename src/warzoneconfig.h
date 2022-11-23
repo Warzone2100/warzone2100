@@ -148,6 +148,8 @@ int war_getLODDistanceBiasPercentage();
 void war_setLODDistanceBiasPercentage(int bias);
 int war_getMinimizeOnFocusLoss();
 void war_setMinimizeOnFocusLoss(int val);
+void war_setCursorScale(unsigned int scale);
+unsigned int war_getCursorScale();
 
 /**
  * Enable or disable sound initialization
