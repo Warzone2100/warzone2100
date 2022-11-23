@@ -121,6 +121,7 @@ bool texLoad(const char *fileName)
 		       (int)max_texture_size);
 		if (mipmap_levels == 0)
 		{
+			debug(LOG_FATAL, "Supported texture size %d is too low to load any mipmap levels!: %s", (int)max_texture_size, fileName);
 			exit(1);
 		}
 	}
