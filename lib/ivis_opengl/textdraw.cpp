@@ -1041,8 +1041,8 @@ public:
 	std::unique_ptr<FTFace> small;
 	std::unique_ptr<FTFace> smallBold;
 };
-static WZFontCollection baseFonts;
-static std::unique_ptr<WZFontCollection> cjkFonts;
+static WZFontCollection* baseFonts = nullptr;
+static WZFontCollection* cjkFonts = nullptr;
 static bool failedToLoadCJKFonts = false;
 
 struct iVFontsHash
@@ -1061,7 +1061,7 @@ static bool inline initializeCJKFontsIfNeeded()
 {
 	if (cjkFonts) { return true; }
 	if (failedToLoadCJKFonts) { return false; }
-	cjkFonts = std::unique_ptr<WZFontCollection>(new WZFontCollection());
+	cjkFonts = new WZFontCollection();
 	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
 	try {
@@ -1075,7 +1075,8 @@ static bool inline initializeCJKFontsIfNeeded()
 	}
 	catch (const std::exception &e) {
 		debug(LOG_ERROR, "Failed to load font:\n%s", e.what());
-		cjkFonts.reset();
+		delete cjkFonts;
+		cjkFonts = nullptr;
 		failedToLoadCJKFonts = true;
 		return false;
 	}
@@ -1121,19 +1122,19 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 	{
 	default:
 	case font_regular:
-		return *(baseFonts.regular);
+		return *(baseFonts->regular);
 	case font_regular_bold:
-		return *(baseFonts.regularBold);
+		return *(baseFonts->regularBold);
 	case font_large:
-		return *(baseFonts.bold);
+		return *(baseFonts->bold);
 	case font_medium:
-		return *(baseFonts.medium);
+		return *(baseFonts->medium);
 	case font_medium_bold:
-		return *(baseFonts.mediumBold);
+		return *(baseFonts->mediumBold);
 	case font_small:
-		return *(baseFonts.small);
+		return *(baseFonts->small);
 	case font_bar:
-		return *(baseFonts.smallBold);
+		return *(baseFonts->smallBold);
 	}
 }
 
@@ -1161,14 +1162,19 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * vertScaleFactor);
 	debug(LOG_WZ, "Text-Rendering Scaling Factor: %f x %f; Internal Font DPI: %" PRIu32 " x %" PRIu32 "", _horizScaleFactor, _vertScaleFactor, horizDPI, vertDPI);
 
+	if (baseFonts == nullptr)
+	{
+		baseFonts = new WZFontCollection();
+	}
+
 	try {
-		baseFonts.regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI));
-		baseFonts.regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI));
-		baseFonts.bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI));
-		baseFonts.medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI));
-		baseFonts.mediumBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 16 * 64, horizDPI, vertDPI));
-		baseFonts.small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
-		baseFonts.smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
+		baseFonts->regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI));
+		baseFonts->regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI));
+		baseFonts->bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI));
+		baseFonts->medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI));
+		baseFonts->mediumBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 16 * 64, horizDPI, vertDPI));
+		baseFonts->small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
+		baseFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
 	}
 	catch (const std::exception &e) {
 		debug(LOG_FATAL, "Failed to load base font:\n%s", e.what());
@@ -1192,8 +1198,10 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 void iV_TextShutdown()
 {
 	glyphCache.clear();
-	baseFonts = WZFontCollection();
-	cjkFonts.reset();
+	delete baseFonts;
+	baseFonts = nullptr;
+	delete cjkFonts;
+	cjkFonts = nullptr;
 	delete textureID;
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
