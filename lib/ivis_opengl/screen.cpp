@@ -294,9 +294,11 @@ void screen_StopBackDrop()
 	bBackDrop = false;	//checking [movie]
 }
 
-void screen_RestartBackDrop()
+bool screen_RestartBackDrop()
 {
+	bool changedValue = !bBackDrop;
 	bBackDrop = true;
+	return changedValue;
 }
 
 bool screen_GetBackDrop()

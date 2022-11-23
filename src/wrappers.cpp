@@ -155,7 +155,12 @@ TITLECODE titleLoop()
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetFogStatus(false);
-	screen_RestartBackDrop();
+	if (screen_RestartBackDrop())
+	{
+		// changed value - draw the backdrop
+		// otherwise, pie_ScreenFrameRenderBegin handles drawing it
+		screen_Display();
+	}
 	wzShowMouse(true);
 
 	// When we first init the game, firstcall is true.
