@@ -32,6 +32,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/gamelib/gtime.h"
+#include "src/configuration.h"
 #include "src/warzoneconfig.h"
 #include "src/game.h"
 #include "gfx_api_sdl.h"
@@ -2354,7 +2355,7 @@ static SDL_WindowFlags SDL_backend(const video_backend& backend)
 	return SDL_WindowFlags{};
 }
 
-bool shouldResetGfxBackendPrompt(video_backend currentBackend, video_backend newBackend, std::string failedToInitializeObject = "graphics", std::string additionalErrorDetails = "")
+bool shouldResetGfxBackendPrompt_internal(video_backend currentBackend, video_backend newBackend, std::string failureVerb = "initialize", std::string failedToInitializeObject = "graphics", std::string additionalErrorDetails = "")
 {
 	// Offer to reset to the specified gfx backend
 	std::string resetString = std::string("Reset to ") + to_display_string(newBackend) + "";
@@ -2362,8 +2363,8 @@ bool shouldResetGfxBackendPrompt(video_backend currentBackend, video_backend new
 	   { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, resetString.c_str() },
 	   { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Not Now" },
 	};
-	std::string titleString = std::string("Warzone: Failed to initialize ") + failedToInitializeObject;
-	std::string messageString = std::string("Failed to initialize ") + failedToInitializeObject + " for backend: " + to_display_string(currentBackend) + ".\n\n";
+	std::string titleString = std::string("Warzone: Failed to ") + failureVerb + " " + failedToInitializeObject;
+	std::string messageString = std::string("Failed to ") + failureVerb + " " + failedToInitializeObject + " for backend: " + to_display_string(currentBackend) + ".\n\n";
 	if (!additionalErrorDetails.empty())
 	{
 		messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
@@ -2391,6 +2392,11 @@ bool shouldResetGfxBackendPrompt(video_backend currentBackend, video_backend new
 	return false;
 }
 
+bool shouldResetGfxBackendPrompt(video_backend currentBackend, video_backend newBackend, std::string failedToInitializeObject = "graphics", std::string additionalErrorDetails = "")
+{
+	return shouldResetGfxBackendPrompt_internal(currentBackend, newBackend, "initialize", failedToInitializeObject, additionalErrorDetails);
+}
+
 void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true)
 {
 	war_setGfxBackend(newBackend);
@@ -2399,6 +2405,38 @@ void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true
 		std::string title = std::string("Backend reset to: ") + to_display_string(newBackend);
 		wzDisplayDialog(Dialog_Information, title.c_str(), "(Note: Do not specify a --gfxbackend option, or it will override this new setting.)\n\nPlease restart Warzone 2100 to use the new graphics setting.");
 	}
+}
+
+bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails /*= ""*/)
+{
+	if (!WZbackend.has_value())
+	{
+		ASSERT(false, "Can't reset gfx backend when there is no gfx backend.");
+		return false;
+	}
+	video_backend defaultBackend = wzGetNextFallbackGfxBackendForCurrentSystem(WZbackend.value());
+	if (WZbackend.value() != defaultBackend)
+	{
+		if (shouldResetGfxBackendPrompt_internal(WZbackend.value(), defaultBackend, "draw", "graphics", additionalErrorDetails))
+		{
+			resetGfxBackend(defaultBackend);
+			saveGfxConfig(); // must force-persist the new value before returning!
+			return true;
+		}
+	}
+	else
+	{
+		// Display message that there was a failure with the gfx backend (but there's no other backend to offer changing it to?)
+		std::string title = std::string("Graphics Error: ") + to_display_string(WZbackend.value());
+		std::string messageString = std::string("An error occured with graphics backend: ") + to_display_string(WZbackend.value()) + ".\n\n";
+		if (!additionalErrorDetails.empty())
+		{
+			messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
+		}
+		messageString += "Warzone 2100 will now close.";
+		wzDisplayDialog(Dialog_Error, title.c_str(), messageString.c_str());
+	}
+	return false;
 }
 
 bool wzSDLOneTimeInit()
