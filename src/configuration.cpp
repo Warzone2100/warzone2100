@@ -727,6 +727,52 @@ bool saveConfig()
 	return result;
 }
 
+bool saveGfxConfig()
+{
+	// first, create a file instance
+	mINI::INIFile file(std::make_shared<PhysFSFileStreamGenerator>(fileName));
+
+	// next, create a structure that will hold data
+	mINI::INIStructure ini;
+
+	// read in the current file
+	try
+	{
+		if (!file.read(ini))
+		{
+			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
+			// will just proceed with an empty ini structure
+		}
+	}
+	catch (const std::exception& e)
+	{
+		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
+		return false;
+	}
+
+	std::string fullConfigFilePath;
+	if (PHYSFS_getWriteDir())
+	{
+		fullConfigFilePath += PHYSFS_getWriteDir();
+		fullConfigFilePath += "/";
+	}
+	fullConfigFilePath += fileName;
+	debug(LOG_WZ, "Writing gfx configuration to: \"%s\"", fullConfigFilePath.c_str());
+
+	auto& iniGeneral = ini["General"];
+
+	auto iniSetString = [&iniGeneral](const std::string& key, const std::string& value) {
+		iniGeneral[key] = value;
+	};
+
+	// only change the gfx entry
+	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
+
+	// write out ini file changes
+	bool result = saveIniFile(file, ini);
+	return result;
+}
+
 // Saves and loads the relevant part of the config files for MP games
 // Ensures that others' games don't change our own configuration settings
 bool reloadMPConfig()

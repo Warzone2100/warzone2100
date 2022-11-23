@@ -26,6 +26,8 @@
 
 bool loadConfig();
 bool saveConfig();
+
+bool saveGfxConfig();
 bool reloadMPConfig();
 
 /// Default map for Skirmish
