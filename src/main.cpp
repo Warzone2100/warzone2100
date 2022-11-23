@@ -904,17 +904,23 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
  * Preparations before entering the title (mainmenu) loop
  * Would start the timer in an event based mainloop
  */
-static void startTitleLoop()
+static void startTitleLoop(bool onInitialStartup = false)
 {
 	SetGameMode(GS_TITLE_SCREEN);
 
-	initLoadingScreen(true);
+	if (!onInitialStartup)
+	{
+		initLoadingScreen(true);
+	}
 	if (!frontendInitialise("wrf/frontend.wrf"))
 	{
 		debug(LOG_FATAL, "Shutting down after failure");
 		exit(EXIT_FAILURE);
 	}
-	closeLoadingScreen();
+	if (!onInitialStartup)
+	{
+		closeLoadingScreen();
+	}
 }
 
 
@@ -2137,7 +2143,7 @@ int realmain(int argc, char *argv[])
 	switch (GetGameMode())
 	{
 	case GS_TITLE_SCREEN:
-		startTitleLoop();
+		startTitleLoop(true);
 		break;
 	case GS_SAVEGAMELOAD:
 		if (headlessGameMode())
