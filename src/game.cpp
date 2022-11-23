@@ -116,7 +116,13 @@
 bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName)
 {
 	std::ostringstream stream;
-	stream << obj.dump(4) << std::endl;
+	try {
+		stream << obj.dump(4) << std::endl;
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Failed to save JSON to %s with error: %s", pFileName, e.what());
+		return false;
+	}
 	std::string jsonString = stream.str();
 	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
 	return saveFile(pFileName, jsonString.c_str(), jsonString.size());
@@ -5817,9 +5823,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 	}
 
-	saveJSONToFile(mRoot, pFileName);
-
-	return true;
+	return saveJSONToFile(mRoot, pFileName);
 }
 
 
@@ -6962,8 +6966,7 @@ bool writeTemplateFile(const char *pFileName)
 	}
 	mRoot["localTemplates"] = std::move(localtemplates_array);
 
-	saveJSONToFile(mRoot, pFileName);
-	return true;
+	return saveJSONToFile(mRoot, pFileName);
 }
 
 // -----------------------------------------------------------------------------------------
