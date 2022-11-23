@@ -1265,6 +1265,10 @@ static const struct
 
 static void scaleCursorImageForUpload(iV_Image& cursorImage, int& hot_x, int& hot_y)
 {
+	unsigned int horizontalScalePercentage;
+	unsigned int verticalScalePercentage;
+	horizontalScalePercentage = verticalScalePercentage = war_getCursorScale();
+
 #if defined(WZ_OS_WIN)
 	if (SDL_GetHintBoolean(SDL_HINT_WINDOWS_DPI_SCALING, SDL_FALSE) == SDL_TRUE)
 	{
@@ -1273,19 +1277,26 @@ static void scaleCursorImageForUpload(iV_Image& cursorImage, int& hot_x, int& ho
 		wzGetWindowToRendererScaleFactor(&horizWindowScaleFactor, &vertWindowScaleFactor);
 		assert(horizWindowScaleFactor != 0.f);
 		assert(vertWindowScaleFactor != 0.f);
-		unsigned int scaledWidth = static_cast<unsigned int>(cursorImage.width() * horizWindowScaleFactor);
-		unsigned int scaledHeight = static_cast<unsigned int>(cursorImage.height() * vertWindowScaleFactor);
-		if (scaledWidth > cursorImage.width() && scaledHeight > cursorImage.height())
-		{
-			debug(LOG_GUI, "Scaling cursor image from (%u x %u) to (%u x %u)", cursorImage.width(), cursorImage.height(), scaledWidth, scaledHeight);
-			cursorImage.resize(scaledWidth, scaledHeight);
-			hot_x = static_cast<int>(hot_x * horizWindowScaleFactor);
-			hot_y = static_cast<int>(hot_y * vertWindowScaleFactor);
-		}
+		horizontalScalePercentage = static_cast<unsigned int>(horizontalScalePercentage * horizWindowScaleFactor);
+		verticalScalePercentage = static_cast<unsigned int>(verticalScalePercentage * vertWindowScaleFactor);
 	}
-#else
-	// no-op
 #endif
+
+	if (horizontalScalePercentage == 100 && verticalScalePercentage == 100)
+	{
+		return;
+	}
+	float horizontalScaleFactor = horizontalScalePercentage / 100.f;
+	float verticalScaleFactor = verticalScalePercentage / 100.f;
+	unsigned int scaledWidth = static_cast<unsigned int>(cursorImage.width() * horizontalScaleFactor);
+	unsigned int scaledHeight = static_cast<unsigned int>(cursorImage.height() * verticalScaleFactor);
+	if (scaledWidth > cursorImage.width() && scaledHeight > cursorImage.height())
+	{
+		debug(LOG_GUI, "Scaling cursor image from (%u x %u) to (%u x %u)", cursorImage.width(), cursorImage.height(), scaledWidth, scaledHeight);
+		cursorImage.resize(scaledWidth, scaledHeight);
+		hot_x = static_cast<int>(hot_x * horizontalScaleFactor);
+		hot_y = static_cast<int>(hot_y * verticalScaleFactor);
+	}
 }
 
 SDL_Cursor* init_cursor_from_image(iV_Image&& sprite, int hot_x, int hot_y)
@@ -1411,6 +1422,13 @@ void wzSetCursor(CURSOR cur)
 	currentCursor = cur;
 }
 
+void wzSDLReinitCursors()
+{
+	sdlFreeCursors();
+	war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();
+	SDL_SetCursor(aCursors[currentCursor]);
+}
+
 void wzApplyCursor()
 {
 	if (!cursorsEnabled) return;
@@ -1418,9 +1436,7 @@ void wzApplyCursor()
 	// If mouse cursor options change, change cursors (used to only work on mouse options screen for some reason)
 	if (!(war_GetColouredCursor() ^ monoCursor))
 	{
-		sdlFreeCursors();
-		war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();
-		SDL_SetCursor(aCursors[currentCursor]);
+		wzSDLReinitCursors();
 		lastAppliedCursor = currentCursor;
 		return;
 	}
@@ -1511,6 +1527,7 @@ void sdlInitCursors()
 
 void sdlFreeCursors()
 {
+	SDL_SetCursor(SDL_GetDefaultCursor());
 	unsigned int i;
 	for (i = 0 ; i < ARRAY_SIZE(aCursors); ++i)
 	{

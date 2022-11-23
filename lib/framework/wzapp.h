@@ -91,6 +91,7 @@ bool wzIsFullscreen();
 void wzSetWindowIsResizable(bool resizable);
 bool wzIsWindowResizable();
 bool wzChangeDisplayScale(unsigned int displayScale);
+bool wzChangeCursorScale(unsigned int cursorScale);
 bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int height);
 bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height);
 enum class MinimizeOnFocusLossBehavior

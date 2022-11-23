@@ -82,6 +82,7 @@ struct WARZONE_GLOBALS
 	UDWORD fullscreenModeHeight = 0; // current display default
 	int fullscreenModeScreen = -1;
 	int toggleFullscreenMode = 0; // 0 = the backend default
+	unsigned int cursorScale = 100;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -204,6 +205,16 @@ void war_SetDisplayScale(unsigned int scale)
 {
 	warGlobs.displayScale = scale;
 	ActivityManager::instance().changedSetting("displayScale", std::to_string(scale));
+}
+
+void war_setCursorScale(unsigned int scale)
+{
+	warGlobs.cursorScale = std::max<unsigned int>(scale, 100);
+}
+
+unsigned int war_getCursorScale()
+{
+	return warGlobs.cursorScale;
 }
 
 void war_SetWidth(UDWORD width)
