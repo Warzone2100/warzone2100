@@ -2125,6 +2125,10 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 
 	mipLodBias = _mipLodBias;
 
+#if !defined(__EMSCRIPTEN__)
+	_beginRenderPassImpl();
+#endif
+
 	return true;
 }
 
