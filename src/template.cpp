@@ -404,31 +404,39 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	case DROID_DEFAULT: templateObj["type"] = "DROID"; break;
 	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().c_str());
 	}
+	ASSERT(psCurr->asParts[COMP_BODY] < numBodyStats, "asParts[COMP_BODY] (%d) exceeds numBodyStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BODY], numBodyStats);
 	templateObj["body"] = (asBodyStats + psCurr->asParts[COMP_BODY])->id;
+	ASSERT(psCurr->asParts[COMP_PROPULSION] < numPropulsionStats, "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_PROPULSION], numPropulsionStats);
 	templateObj["propulsion"] = (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
+		ASSERT(psCurr->asParts[COMP_BRAIN] < numBrainStats, "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BRAIN], numBrainStats);
 		templateObj["brain"] = (asBrainStats + psCurr->asParts[COMP_BRAIN])->id;
 	}
 	if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
 	{
+		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < numRepairStats, "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_REPAIRUNIT], numRepairStats);
 		templateObj["repair"] = (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id;
 	}
 	if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
 	{
+		ASSERT(psCurr->asParts[COMP_ECM] < numECMStats, "asParts[COMP_ECM] (%d) exceeds numECMStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_ECM], numECMStats);
 		templateObj["ecm"] = (asECMStats + psCurr->asParts[COMP_ECM])->id;
 	}
 	if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
 	{
+		ASSERT(psCurr->asParts[COMP_SENSOR] < numSensorStats, "asParts[COMP_SENSOR] (%d) exceeds numSensorStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_SENSOR], numSensorStats);
 		templateObj["sensor"] = (asSensorStats + psCurr->asParts[COMP_SENSOR])->id;
 	}
 	if (psCurr->asParts[COMP_CONSTRUCT] != 0)
 	{
+		ASSERT(psCurr->asParts[COMP_CONSTRUCT] < numConstructStats, "asParts[COMP_CONSTRUCT] (%d) exceeds numConstructStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_CONSTRUCT], numConstructStats);
 		templateObj["construct"] = (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id;
 	}
 	nlohmann::json weapons = nlohmann::json::array();
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
+		ASSERT(psCurr->asWeaps[j] < numWeaponStats, "psCurr->asWeaps[%d] (%d) exceeds numWeaponStats (%" PRIu32 ")", j, (int)psCurr->asWeaps[j], numWeaponStats);
 		weapons.push_back((asWeaponStats + psCurr->asWeaps[j])->id);
 	}
 	if (!weapons.empty())
