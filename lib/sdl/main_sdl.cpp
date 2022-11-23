@@ -688,7 +688,12 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 			// Determine the maximum usable windowed size for this display/screen, and cap the desired window size at that
 			int desiredWidth = war_GetWidth(), desiredHeight = war_GetHeight();
 			SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
+#if defined(WZ_OS_MAC)
+			// SDL currently triggers an internal assert when calling SDL_GetDisplayUsableBounds here on macOS - so use SDL_GetDisplayBounds for now
+			if (SDL_GetDisplayBounds(currDisplayIndex, &displayUsableBounds) == 0)
+#else
 			if (SDL_GetDisplayUsableBounds(currDisplayIndex, &displayUsableBounds) == 0)
+#endif
 			{
 				if (displayUsableBounds.w > 0 && displayUsableBounds.h > 0)
 				{
