@@ -272,7 +272,7 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 		auto value = json.json(key);
 		if (value.is_object())
 		{
-			ASSERT(!key2.isEmpty(), "Cannot look up a JSON object with an empty key!");
+			ASSERT_OR_RETURN(nullptr, !key2.isEmpty(), "Cannot look up a JSON object with an empty key!");
 			auto obj = value;
 			if (obj.find(key2.toUtf8()) == obj.end())
 			{
