@@ -799,15 +799,6 @@ static void scanDataDirs()
 					tmpstr = prefix + dirSeparator + "share" + dirSeparator + "warzone2100" + dirSeparator;
 					registerSearchPath(tmpstr.c_str(), 6);
 					rebuildSearchPath(mod_multiplay, true);
-
-					if (!PHYSFS_exists("gamedesc.lev"))
-					{
-						// Guessed fallback default datadir on Unix
-						// TEMPORARY: Fallback to ensure old WZ_DATADIR behavior as a last-resort
-						//			  This is only present for the benefit of the automake build toolchain.
-						registerSearchPath(WZ_DATADIR, 7);
-						rebuildSearchPath(mod_multiplay, true);
-					}
 				}
 			}
 		}
