@@ -400,6 +400,13 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 		case LTK_MKEEP_LIMBO:
 			if (state == LP_START || state == LP_WAITDATA)
 			{
+				if (psDataSet)
+				{
+					// push the previous level onto the level list
+					psLevels.push_back(psDataSet);
+					psDataSet = nullptr;
+				}
+
 				// start a new level data set
 				psDataSet = (LEVEL_DATASET *)malloc(sizeof(LEVEL_DATASET));
 				if (!psDataSet)
@@ -414,7 +421,6 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				psDataSet->dataDir = pathMode;
 				psDataSet->realFileName = realFileName != nullptr ? strdup(realFileName) : nullptr;
 				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
-				psLevels.push_back(psDataSet);
 				currData = 0;
 
 				// set the dataset type
@@ -458,6 +464,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			state = LP_LEVEL;
@@ -471,6 +478,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -482,6 +490,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -495,6 +504,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				if (levVal < LEVEL_TYPE::LDS_MULTI_TYPE_START)
 				{
 					lev_error("invalid type number");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 
@@ -503,6 +513,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			state = LP_LEVELDONE;
@@ -515,6 +526,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -535,6 +547,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				   )
 				{
 					lev_error("Missing dataset command");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 				state = LP_DATA;
@@ -542,6 +555,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -554,6 +568,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -568,12 +583,14 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 					if (psFoundData == nullptr)
 					{
 						lev_error("Cannot find full data set for camchange");
+						if (psDataSet) { free(psDataSet); }
 						return false;
 					}
 
 					if (psFoundData->type != LEVEL_TYPE::LDS_CAMSTART)
 					{
 						lev_error("Invalid data set name for cam change");
+						if (psDataSet) { free(psDataSet); }
 						return false;
 					}
 					psFoundData->psChange = psDataSet;
@@ -597,6 +614,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				if (psDataSet->psBaseData == nullptr)
 				{
 					lev_error("Unknown dataset");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 				state = LP_WAITDATA;
@@ -604,6 +622,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -613,6 +632,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				if (currData >= LEVEL_MAXFILES)
 				{
 					lev_error("Too many data files");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 
@@ -638,6 +658,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -654,6 +675,12 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 	{
 		lev_error("Unexpected end of file");
 		return false;
+	}
+
+	if (psDataSet)
+	{
+		psLevels.push_back(psDataSet);
+		psDataSet = nullptr;
 	}
 
 	return true;
