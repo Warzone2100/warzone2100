@@ -51,14 +51,14 @@ bool saveGameReset();
 
 struct wzSearchPath
 {
-	char path[PATH_MAX];
-	unsigned int priority;
-	wzSearchPath *higherPriority, * lowerPriority;
+	std::string path;
+	unsigned int priority = 0;
 };
 
 enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
-void registerSearchPath(const char path[], unsigned int priority);
+void registerSearchPath(const std::string& path, unsigned int priority);
+void unregisterSearchPath(const std::string& path);
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
 
 bool buildMapList();
