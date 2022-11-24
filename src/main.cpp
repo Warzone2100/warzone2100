@@ -771,39 +771,28 @@ static void scanDataDirs()
 
 		if (!PHYSFS_exists("gamedesc.lev"))
 		{
-			// Program dir
-			const char* pBaseDir = PHYSFS_getBaseDir();
-			if (pBaseDir)
+			// Guessed fallback default datadir on Unix
+			std::string wzDataDir = WZ_DATADIR;
+			if(!wzDataDir.empty())
 			{
-				registerSearchPath(pBaseDir, 4);
+			#ifndef WZ_DATADIR_ISABSOLUTE
+				// Treat WZ_DATADIR as a relative path - append to the install PREFIX
+				tmpstr = prefix + dirSeparator + wzDataDir;
+				registerSearchPath(tmpstr, 4);
 				rebuildSearchPath(mod_multiplay, true);
+			#else
+				// Treat WZ_DATADIR as an absolute path, and use directly
+				registerSearchPath(wzDataDir, 4);
+				rebuildSearchPath(mod_multiplay, true);
+			#endif
 			}
 
 			if (!PHYSFS_exists("gamedesc.lev"))
 			{
-				// Guessed fallback default datadir on Unix
-				std::string wzDataDir = WZ_DATADIR;
-				if(!wzDataDir.empty())
-				{
-				#ifndef WZ_DATADIR_ISABSOLUTE
-					// Treat WZ_DATADIR as a relative path - append to the install PREFIX
-					tmpstr = prefix + dirSeparator + wzDataDir;
-					registerSearchPath(tmpstr, 5);
-					rebuildSearchPath(mod_multiplay, true);
-				#else
-					// Treat WZ_DATADIR as an absolute path, and use directly
-					registerSearchPath(wzDataDir, 5);
-					rebuildSearchPath(mod_multiplay, true);
-				#endif
-				}
-
-				if (!PHYSFS_exists("gamedesc.lev"))
-				{
-					// Relocation for AutoPackage (<prefix>/share/warzone2100/)
-					tmpstr = prefix + dirSeparator + "share" + dirSeparator + "warzone2100" + dirSeparator;
-					registerSearchPath(tmpstr, 6);
-					rebuildSearchPath(mod_multiplay, true);
-				}
+				// Relocation for AutoPackage (<prefix>/share/warzone2100/)
+				tmpstr = prefix + dirSeparator + "share" + dirSeparator + "warzone2100" + dirSeparator;
+				registerSearchPath(tmpstr, 5);
+				rebuildSearchPath(mod_multiplay, true);
 			}
 		}
 	}
