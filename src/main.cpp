@@ -754,11 +754,6 @@ static void check_Physfs()
  */
 static void scanDataDirs()
 {
-#if defined(WZ_OS_MAC)
-	// version-independent location for video files
-	registerSearchPath("/Library/Application Support/Warzone 2100/", 1);
-#endif
-
 #if !defined(WZ_OS_MAC)
 	// Check PREFIX-based paths
 	std::string tmpstr;
