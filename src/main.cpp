@@ -766,14 +766,18 @@ static void scanDataDirs()
 	{
 		// Data in source tree (<prefix>/data/)
 		tmpstr = prefix + dirSeparator + "data" + dirSeparator;
-		registerSearchPath(tmpstr.c_str(), 3);
+		registerSearchPath(tmpstr, 3);
 		rebuildSearchPath(mod_multiplay, true);
 
 		if (!PHYSFS_exists("gamedesc.lev"))
 		{
 			// Program dir
-			registerSearchPath(PHYSFS_getBaseDir(), 4);
-			rebuildSearchPath(mod_multiplay, true);
+			const char* pBaseDir = PHYSFS_getBaseDir();
+			if (pBaseDir)
+			{
+				registerSearchPath(pBaseDir, 4);
+				rebuildSearchPath(mod_multiplay, true);
+			}
 
 			if (!PHYSFS_exists("gamedesc.lev"))
 			{
@@ -784,11 +788,11 @@ static void scanDataDirs()
 				#ifndef WZ_DATADIR_ISABSOLUTE
 					// Treat WZ_DATADIR as a relative path - append to the install PREFIX
 					tmpstr = prefix + dirSeparator + wzDataDir;
-					registerSearchPath(tmpstr.c_str(), 5);
+					registerSearchPath(tmpstr, 5);
 					rebuildSearchPath(mod_multiplay, true);
 				#else
 					// Treat WZ_DATADIR as an absolute path, and use directly
-					registerSearchPath(wzDataDir.c_str(), 5);
+					registerSearchPath(wzDataDir, 5);
 					rebuildSearchPath(mod_multiplay, true);
 				#endif
 				}
@@ -797,7 +801,7 @@ static void scanDataDirs()
 				{
 					// Relocation for AutoPackage (<prefix>/share/warzone2100/)
 					tmpstr = prefix + dirSeparator + "share" + dirSeparator + "warzone2100" + dirSeparator;
-					registerSearchPath(tmpstr.c_str(), 6);
+					registerSearchPath(tmpstr, 6);
 					rebuildSearchPath(mod_multiplay, true);
 				}
 			}
@@ -816,7 +820,7 @@ static void scanDataDirs()
 		{
 			WzString resourceDataPath(resourcePath);
 			resourceDataPath += "/data";
-			registerSearchPath(resourceDataPath.toUtf8().c_str(), 3);
+			registerSearchPath(resourceDataPath.toUtf8(), 3);
 			rebuildSearchPath(mod_multiplay, true);
 		}
 		else
@@ -838,7 +842,15 @@ static void scanDataDirs()
 	}
 
 	// User's home dir
-	registerSearchPath(PHYSFS_getWriteDir(), 2);
+	const char *pCurrWriteDir = PHYSFS_getWriteDir();
+	if (pCurrWriteDir)
+	{
+		registerSearchPath(pCurrWriteDir, 2);
+	}
+	else
+	{
+		debug(LOG_FATAL, "No write dir set?");
+	}
 	rebuildSearchPath(mod_multiplay, true);
 
 	/** Debugging and sanity checks **/
