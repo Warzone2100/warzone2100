@@ -2649,10 +2649,22 @@ bool recvReadyRequest(NETQUEUE queue)
 		return false;
 	}
 
-	// do not allow players to select 'ready' if we are sending a map too them!
+	// do not allow players to select 'ready' if we are sending a map to them!
 	// TODO: make a new icon to show this state?
 	if (NetPlay.players[player].fileSendInProgress())
 	{
+		return false;
+	}
+
+	// Sanity-check: players should always have an identity
+	const PLAYERSTATS& stats = getMultiStats(player);
+	if (stats.identity.empty())
+	{
+		// log this!
+		debug(LOG_INFO, "Player has empty identity: (player: %u, name: \"%s\", IP: %s)", (unsigned)player, NetPlay.players[player].name, NetPlay.players[player].IPtextAddress);
+
+		// kick the player
+		HandleBadParam("NET_READY_REQUEST failed due to player empty identity.", player, queue.index);
 		return false;
 	}
 
