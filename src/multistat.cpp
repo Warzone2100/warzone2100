@@ -265,7 +265,11 @@ void recvMultiStats(NETQUEUE queue)
 		{
 			playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public);
 		}
-		if (identity != prevIdentity)
+		else
+		{
+			debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+		}
+		if ((identity != prevIdentity) || identity.empty())
 		{
 			ingame.PingTimes[playerIndex] = PING_LIMIT;
 			ingame.VerifiedIdentity[playerIndex] = false;
@@ -281,9 +285,16 @@ void recvMultiStats(NETQUEUE queue)
 			}
 
 			// Output to stdinterface, if enabled
-			std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
-			std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
-			wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
+			if (!identity.empty())
+			{
+				std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
+				std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
+				wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
+			}
+			else
+			{
+				wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
+			}
 
 			processAutoratingData = true;
 		}
