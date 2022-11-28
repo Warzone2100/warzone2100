@@ -4238,14 +4238,14 @@ public:
 		}
 		if (NetPlay.players[playerIdx].allocated)
 		{
-			PLAYERSTATS stats = getMultiStats(playerIdx);
+			const PLAYERSTATS& stats = getMultiStats(playerIdx);
 			if (!stats.identity.empty())
 			{
 				if (!playerInfoTooltip.empty())
 				{
 					playerInfoTooltip += "\n";
 				}
-				std::string hash = getMultiStats(playerIdx).identity.publicHashString(20);
+				std::string hash = stats.identity.publicHashString(20);
 				playerInfoTooltip += _("Player ID: ");
 				playerInfoTooltip += hash.empty()? _("(none)") : hash;
 			}
@@ -7465,7 +7465,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			subText += buf;
 		}
 
-		PLAYERSTATS stat = getMultiStats(j);
+		const PLAYERSTATS& stat = getMultiStats(j);
 		auto ar = stat.autorating;
 		if (!ar.valid)
 		{
