@@ -195,6 +195,71 @@ static bool isValidExpiry(const json& updateData)
 	}
 }
 
+static void applyBaseNotificationInfo(WZ_Notification& notification, const json& notificationInfo, size_t maxMinShown = 10)
+{
+	if (!notificationInfo.is_object())
+	{
+		return;
+	}
+
+	try
+	{
+		json notificationBase;
+		json notificationId;
+		json minTimesShown;
+		if (notificationInfo.contains("base"))
+		{
+			notificationBase = notificationInfo["base"];
+		}
+		if (notificationInfo.contains("id"))
+		{
+			notificationId = notificationInfo["id"];
+		}
+		if (notificationInfo.contains("minShown"))
+		{
+			minTimesShown = notificationInfo["minShown"];
+		}
+
+		if (notificationBase.is_string() && notificationId.is_string())
+		{
+			const std::string notificationIdentifierPrefix = notificationBase.get<std::string>() + "::";
+			const std::string notificationIdentifier = notificationIdentifierPrefix + notificationId.get<std::string>();
+			removeNotificationPreferencesIf([&notificationIdentifierPrefix, &notificationIdentifier](const std::string &uniqueNotificationIdentifier) -> bool {
+				bool hasPrefix = (strncmp(uniqueNotificationIdentifier.c_str(), notificationIdentifierPrefix.c_str(), notificationIdentifierPrefix.size()) == 0);
+				return hasPrefix && (notificationIdentifier != uniqueNotificationIdentifier);
+			});
+			uint8_t minTimesShownValue = 3;
+			if (minTimesShown.is_number_integer())
+			{
+				auto intValue = minTimesShown.get<json::number_integer_t>();
+				if (intValue >= 0)
+				{
+					minTimesShownValue = static_cast<uint8_t>(std::min<json::number_integer_t>(intValue, maxMinShown));
+				}
+			}
+			notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable(notificationIdentifier, minTimesShownValue);
+		}
+	}
+	catch (const std::exception&)
+	{
+		// Parsing notificationInfo failed
+		// no-op - just ignore
+	}
+
+	try
+	{
+		if (notificationInfo.contains("modal"))
+		{
+			notification.isModal = notificationInfo["modal"].get<bool>();
+		}
+	}
+	catch (const std::exception&)
+	{
+		// Parsing notificationInfo "modal" failed
+		// no-op - just ignore
+	}
+}
+
 // May be called from a background thread
 ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, bool validSignature, bool validExpiry)
 {
@@ -209,7 +274,8 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 		wzAsyncExecOnMainThread([]{ debug(LOG_WARNING, "Channels should be an array"); });
 		return ProcessResult::INVALID_JSON;
 	}
-	BuildPropertyProvider buildPropProvider;
+	auto buildPropProvider = std::make_shared<BuildPropertyProvider>();
+	CombinedPropertyProvider propProvider({buildPropProvider, std::make_shared<EnvironmentPropertyProvider>()});
 	for (const auto& channel : channels)
 	{
 		try
@@ -220,7 +286,7 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 			std::string channelNameStr = channelName.get<std::string>();
 			const auto& channelConditional = channel.at("channelConditional");
 			if (!channelConditional.is_string()) continue;
-			if (!PropertyMatcher::evaluateConditionString(channelConditional.get<std::string>(), buildPropProvider))
+			if (!PropertyMatcher::evaluateConditionString(channelConditional.get<std::string>(), propProvider))
 			{
 				// non-matching channel conditional
 				continue;
@@ -233,7 +299,7 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 				{
 					const auto& buildPropertyMatch = release.at("buildPropertyMatch");
 					if (!buildPropertyMatch.is_string()) continue;
-					if (!PropertyMatcher::evaluateConditionString(buildPropertyMatch.get<std::string>(), buildPropProvider))
+					if (!PropertyMatcher::evaluateConditionString(buildPropertyMatch.get<std::string>(), propProvider))
 					{
 						// non-matching release buildPropertyMatch
 						continue;
@@ -248,11 +314,23 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 					}
 					std::string releaseVersionStr = releaseVersion.get<std::string>();
 					json notificationInfo;
+					bool importantUpdate = false;
 					if (release.contains("notification"))
 					{
 						notificationInfo = release["notification"];
 					}
-					if (!notificationInfo.is_object())
+					if (notificationInfo.is_object())
+					{
+						if (notificationInfo.contains("important"))
+						{
+							const auto& importantVal = notificationInfo["important"];
+							if (importantVal.is_boolean())
+							{
+								importantUpdate = notificationInfo["important"].get<bool>();
+							}
+						}
+					}
+					else
 					{
 						// TODO: Handle lack of notification info?
 					}
@@ -271,9 +349,9 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 						// use default update link
 						updateLink = WZ_DEFAULT_UPDATE_LINK;
 					}
-					updateLink = configureLinkURL(updateLink, buildPropProvider);
+					updateLink = configureLinkURL(updateLink, (*buildPropProvider.get()));
 					// submit notification (on main thread)
-					wzAsyncExecOnMainThread([validSignature, channelNameStr, releaseVersionStr, notificationInfo, updateLink]{
+					wzAsyncExecOnMainThread([validSignature, channelNameStr, releaseVersionStr, notificationInfo, updateLink, importantUpdate]{
 						debug(LOG_INFO, "Found an available update (%s) in channel (%s)", releaseVersionStr.c_str(), channelNameStr.c_str());
 						WZ_Notification notification;
 						notification.duration = 0;
@@ -281,6 +359,11 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 						if (validSignature)
 						{
 							notification.contentText = astringf(_("A new build of Warzone 2100 (%s) is available!"), releaseVersionStr.c_str());
+							if (importantUpdate)
+							{
+								notification.contentText += "\n\n";
+								notification.contentText += _("This new version includes important bug fixes and updates, and it is recommended that you update now.");
+							}
 						}
 						else
 						{
@@ -298,18 +381,7 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 						notification.largeIcon = WZ_Notification_Image("images/warzone2100.png");
 						if (notificationInfo.is_object())
 						{
-							const auto& notificationBase = notificationInfo["base"];
-							const auto& notificationId = notificationInfo["id"];
-							if (notificationBase.is_string() && notificationId.is_string())
-							{
-								const std::string notificationIdentifierPrefix = notificationBase.get<std::string>() + "::";
-								const std::string notificationIdentifier = notificationIdentifierPrefix + notificationId.get<std::string>();
-								removeNotificationPreferencesIf([&notificationIdentifierPrefix, &notificationIdentifier](const std::string &uniqueNotificationIdentifier) -> bool {
-									bool hasPrefix = (strncmp(uniqueNotificationIdentifier.c_str(), notificationIdentifierPrefix.c_str(), notificationIdentifierPrefix.size()) == 0);
-									return hasPrefix && (notificationIdentifier != uniqueNotificationIdentifier);
-								});
-								notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable(notificationIdentifier, 3);
-							}
+							applyBaseNotificationInfo(notification, notificationInfo, 10);
 						}
 						addNotification(notification, WZ_Notification_Trigger::Immediate());
 					});
@@ -443,28 +515,7 @@ ProcessResult WzCompatCheckManager::processCompatCheckJSONFile(const json& updat
 						notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
 						if (notificationInfo.is_object())
 						{
-							const auto& notificationBase = notificationInfo["base"];
-							const auto& notificationId = notificationInfo["id"];
-							const auto& minTimesShown = notificationInfo["minShown"];
-							if (notificationBase.is_string() && notificationId.is_string())
-							{
-								const std::string notificationIdentifierPrefix = notificationBase.get<std::string>() + "::";
-								const std::string notificationIdentifier = notificationIdentifierPrefix + notificationId.get<std::string>();
-								removeNotificationPreferencesIf([&notificationIdentifierPrefix, &notificationIdentifier](const std::string &uniqueNotificationIdentifier) -> bool {
-									bool hasPrefix = (strncmp(uniqueNotificationIdentifier.c_str(), notificationIdentifierPrefix.c_str(), notificationIdentifierPrefix.size()) == 0);
-									return hasPrefix && (notificationIdentifier != uniqueNotificationIdentifier);
-								});
-								uint8_t minTimesShownValue = 3;
-								if (minTimesShown.is_number_integer())
-								{
-									auto intValue = minTimesShown.get<json::number_integer_t>();
-									if (intValue >= 0)
-									{
-										minTimesShownValue = static_cast<uint8_t>(std::min<json::number_integer_t>(intValue, 10));
-									}
-								}
-								notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable(notificationIdentifier, minTimesShownValue);
-							}
+							applyBaseNotificationInfo(notification, notificationInfo, 10);
 						}
 						addNotification(notification, WZ_Notification_Trigger::Immediate());
 					});
