@@ -654,7 +654,8 @@ WINDOW_MODE wzGetToggleFullscreenMode()
 
 bool wzChangeWindowMode(WINDOW_MODE mode)
 {
-	if (wzGetCurrentWindowMode() == mode)
+	auto currMode = wzGetCurrentWindowMode();
+	if (currMode == mode)
 	{
 		// already in this mode
 		return true;
@@ -665,6 +666,8 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 		// not a supported mode on this system
 		return false;
 	}
+
+	debug(LOG_INFO, "Changing window mode: %s -> %s", to_display_string(currMode).c_str(), to_display_string(mode).c_str());
 
 	int sdl_result = -1;
 	switch (mode)
@@ -2052,7 +2055,7 @@ bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int 
 		debug(LOG_WARNING, "wzChangeFullscreenDisplayMode called when window is not available");
 		return false;
 	}
-	debug(LOG_WZ, "Attempt to change fullscreen mode to [%d] %dx%d", screen, width, height);
+	debug(LOG_INFO, "Changing fullscreen mode to [%d] %dx%d", screen, width, height);
 
 	bool hasPrior = true;
 	int priorScreen = SDL_GetWindowDisplayIndex(WZwindow);
