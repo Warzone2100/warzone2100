@@ -248,7 +248,9 @@ static const std::unordered_map<std::string, EnvironmentPropertyProvider::Enviro
 	{"INSTALLED_PATH", EnvironmentPropertyProvider::EnvironmentProperty::INSTALLED_PATH},
 	{"WIN_INSTALLED_BINARIES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_INSTALLED_BINARIES},
 	{"WIN_LOADEDMODULES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULES},
-	{"WIN_LOADEDMODULENAMES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULENAMES}
+	{"WIN_LOADEDMODULENAMES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULENAMES},
+	{"ENV_VAR_NAMES", EnvironmentPropertyProvider::EnvironmentProperty::ENV_VAR_NAMES},
+	{"SYSTEM_RAM", EnvironmentPropertyProvider::EnvironmentProperty::SYSTEM_RAM},
 };
 
 #if defined(WZ_OS_WIN)
@@ -393,6 +395,99 @@ static std::vector<std::string> Get_WinProcessModules(bool filenamesOnly = false
 }
 #endif // defined(WZ_OS_WIN)
 
+#if defined(WZ_OS_WIN)
+
+std::unordered_map<std::string, std::string> GetEnvironmentVariables()
+{
+	std::unordered_map<std::string, std::string> results;
+	auto free_envStringsW = [](wchar_t* p) { if (p) { FreeEnvironmentStringsW(p); } };
+	auto envStringsW = std::unique_ptr<wchar_t, decltype(free_envStringsW)>{GetEnvironmentStringsW(), free_envStringsW};
+	if (!envStringsW)
+	{
+		return {};
+	}
+	std::vector<char> u8_buffer(WIN_MAX_EXTENDED_PATH, 0);
+	const wchar_t* pEnvStart = envStringsW.get();
+	while (*pEnvStart != '\0')
+	{
+		size_t envEntryLen = wcslen(pEnvStart);
+		// convert UTF-16 to UTF-8
+		if (win_Utf16toUtf8(pEnvStart, u8_buffer))
+		{
+			const char* pEnvStr = u8_buffer.data();
+			const char* separatorPos = strchr(pEnvStr, '=');
+			if (separatorPos)
+			{
+				std::string envVarName = std::string(pEnvStr, separatorPos - pEnvStr);
+				std::string envVarValue = std::string(++separatorPos);
+				if (!envVarName.empty())
+				{
+					results[envVarName] = envVarValue;
+				}
+			}
+		}
+		pEnvStart += envEntryLen + 1;
+	}
+	return results;
+}
+
+#elif defined(WZ_OS_UNIX)
+
+# include <unistd.h>
+# if !defined(HAVE_ENVIRON_DECL)
+  extern char **environ;
+# endif
+
+std::unordered_map<std::string, std::string> GetEnvironmentVariables()
+{
+	std::unordered_map<std::string, std::string> results;
+	if (!environ)
+	{
+		return {};
+	}
+	for (char ** env = environ; *env; ++env)
+	{
+		const char* separatorPos = strchr(*env, '=');
+		if (!separatorPos) { continue; }
+		std::string envVarName = std::string(*env, separatorPos - *env);
+		std::string envVarValue = std::string(++separatorPos);
+		if (envVarName.empty()) { continue; }
+		results[envVarName] = envVarValue;
+	}
+	return results;
+}
+
+#else
+
+std::unordered_map<std::string, std::string> GetEnvironmentVariables()
+{
+	// not implemented
+	return {};
+}
+
+#endif
+
+
+std::string GetEnvironmentVariableNames()
+{
+	auto envVariables = GetEnvironmentVariables();
+	const std::string separator = "="; // "=" should not occur in an env var name on Windows, Linux, etc
+	std::string result;
+	for (const auto& it : envVariables)
+	{
+		if (it.first.empty())
+		{
+			continue;
+		}
+		if (!result.empty())
+		{
+			result += separator;
+		}
+		result += it.first;
+	}
+	return result;
+}
+
 std::string EnvironmentPropertyProvider::GetCurrentEnvironmentPropertyValue(const EnvironmentProperty& property)
 {
 	using EP = EnvironmentProperty;
@@ -463,6 +558,10 @@ std::string EnvironmentPropertyProvider::GetCurrentEnvironmentPropertyValue(cons
 #endif
 			return processModuleNamesStr;
 		}
+		case EP::ENV_VAR_NAMES:
+			return GetEnvironmentVariableNames();
+		case EP::SYSTEM_RAM:
+			return std::to_string(wzGetCurrentSystemRAM());
 	}
 	return ""; // silence warning
 }

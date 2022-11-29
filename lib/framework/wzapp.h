@@ -138,6 +138,9 @@ bool isInTextInputMode();
 // NOTE: wzBackendAttemptOpenURL should *not* be called directly - instead, call openURLInBrowser() from urlhelpers.h
 bool wzBackendAttemptOpenURL(const char *url);
 
+// System information related
+uint64_t wzGetCurrentSystemRAM(); // gets the system RAM in MiB
+
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
 unsigned long wzThreadID(WZ_THREAD *thread);
