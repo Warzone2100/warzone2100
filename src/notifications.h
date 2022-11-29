@@ -180,6 +180,9 @@ public:
 	// (Suggestion: Make sure the PNG is *at least* 72x72 pixels to ensure sharper display on higher resolution screens.)
 	WZ_Notification_Image largeIcon;
 
+	// Whether the notification should be displayed as a modal overlay
+	bool isModal = false;
+
 	// Displays an Action button on the notification which calls the handler when clicked.
 	WZ_Notification_Action action;
 	// See: WZ_Notification_Display_Options
