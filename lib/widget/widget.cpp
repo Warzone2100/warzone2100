@@ -642,7 +642,7 @@ void W_SCREEN::initialize(const std::shared_ptr<W_FORM>& customRootForm)
 void W_SCREEN::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	// resize the top-level form
-	psForm->setGeometry(0, 0, screenWidth - 1, screenHeight - 1);
+	psForm->setGeometry(0, 0, screenWidth, screenHeight);
 
 	// inform the top-level form of the event
 	psForm->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);

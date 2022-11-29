@@ -449,7 +449,7 @@ std::shared_ptr<W_FULLSCREENOVERLAY_CLICKFORM> W_FULLSCREENOVERLAY_CLICKFORM::ma
 	sInit.width = screenWidth - 1;
 	sInit.height = screenHeight - 1;
 	sInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(0, 0, screenWidth - 1, screenHeight - 1);
+		psWidget->setGeometry(0, 0, screenWidth, screenHeight);
 	});
 
 	class make_shared_enabler: public W_FULLSCREENOVERLAY_CLICKFORM
