@@ -781,7 +781,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	uint32_t npoints = 0;
 	if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npoints, &cnt) != 2)
 	{
-		debug(LOG_ERROR, "_imd_load_level(2): file corrupt");
+		debug(LOG_ERROR, "_imd_load_level(2): file corrupt: %s", filename.toUtf8().c_str());
 		return nullptr;
 	}
 	pFileData += cnt;
@@ -790,12 +790,16 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POINTS") == 0, "Expecting 'POINTS' directive, got: %s", buffer);
 
-	_imd_load_points(&pFileData, s, npoints);
+	if (!_imd_load_points(&pFileData, s, npoints))
+	{
+		debug(LOG_ERROR, "_imd_load_level(2a): file corrupt: %s", filename.toUtf8().c_str());
+		return nullptr;
+	}
 
 	uint32_t npolys = 0;
 	if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npolys, &cnt) != 2)
 	{
-		debug(LOG_ERROR, "_imd_load_level(3): file corrupt");
+		debug(LOG_ERROR, "_imd_load_level(3): file corrupt: %s", filename.toUtf8().c_str());
 		return nullptr;
 	}
 	pFileData += cnt;
@@ -810,7 +814,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  		// Attemps to read polys again
  		if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npolys, &cnt) != 2)
  		{
- 			debug(LOG_ERROR, "_imd_load_level(3a): file corrupt");
+ 			debug(LOG_ERROR, "_imd_load_level(3a): file corrupt: %s", filename.toUtf8().c_str());
  			return nullptr;
  		}
 		debug(LOG_3D, "imd[_load_level] = normals %d", static_cast<int>(pie_level_normals.size()));
@@ -821,7 +825,11 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 
-	_imd_load_polys(filename, &pFileData, &s, pieVersion, npoints);
+	if (!_imd_load_polys(filename, &pFileData, &s, pieVersion, npoints))
+	{
+		debug(LOG_ERROR, "_imd_load_level(3b): file corrupt - invalid polys: %s", filename.toUtf8().c_str());
+		return nullptr;
+	}
 
 	// optional stuff : levels, object animations, connectors, shadow points + polys
 	s.objanimframes = 0;
@@ -843,7 +851,11 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		{
 			//load connector stuff
 			s.nconnectors = n;
-			_imd_load_connectors(&pFileData, s);
+			if (!_imd_load_connectors(&pFileData, s))
+			{
+				debug(LOG_ERROR, "_imd_load_level(5): file corrupt - invalid shadowpoints: %s", filename.toUtf8().c_str());
+				return nullptr;
+			}
 		}
 		else if (strcmp(buffer, "ANIMOBJECT") == 0)
 		{
@@ -882,7 +894,11 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 			uint32_t nShadowPoints = static_cast<uint32_t>(n);
 
 			iIMDShape tmpShadowShape;
-			_imd_load_points(&pFileData, tmpShadowShape, nShadowPoints);
+			if (!_imd_load_points(&pFileData, tmpShadowShape, nShadowPoints))
+			{
+				debug(LOG_ERROR, "_imd_load_level(7): file corrupt - invalid shadowpoints: %s", filename.toUtf8().c_str());
+				return nullptr;
+			}
 
 			s.altShadowPoints = std::move(tmpShadowShape.points);
 			s.pShadowPoints = &s.altShadowPoints;
@@ -895,7 +911,11 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 			iIMDShape tmpShadowShape;
 			tmpShadowShape.polys.resize(nShadowPolys);
-			_imd_load_polys(filename, &pFileData, &tmpShadowShape, PIE_FLOAT_VER, static_cast<uint32_t>(s.altShadowPoints.size()));
+			if (!_imd_load_polys(filename, &pFileData, &tmpShadowShape, PIE_FLOAT_VER, static_cast<uint32_t>(s.altShadowPoints.size())))
+			{
+				debug(LOG_ERROR, "_imd_load_level(8): file corrupt - invalid shadowpolygons: %s", filename.toUtf8().c_str());
+				return nullptr;
+			}
 
 			s.altShadowPolys = std::move(tmpShadowShape.polys);
 			s.pShadowPolys = &s.altShadowPolys;
