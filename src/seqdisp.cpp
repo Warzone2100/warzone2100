@@ -747,7 +747,7 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 
 	//check the string is shortenough to print
 	//if not take a word of the end and try again
-	while (iV_GetTextWidth(currentText, font_scaled) > buffer_width)
+	while ((currentLength > 0) && iV_GetTextWidth(currentText, font_scaled) > buffer_width)
 	{
 		currentLength--;
 		while ((pText[currentLength] != ' ') && (currentLength > 0))
