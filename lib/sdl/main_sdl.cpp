@@ -3555,3 +3555,11 @@ bool wzBackendAttemptOpenURL(const char *url)
 	// SDL_OpenURL requires SDL >= 2.0.14
 	return false;
 }
+
+// Gets the system RAM in MiB
+uint64_t wzGetCurrentSystemRAM()
+{
+	int value = SDL_GetSystemRAM();
+	if (value <= 0) { return 0; }
+	return static_cast<uint64_t>(value);
+}

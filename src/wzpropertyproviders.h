@@ -40,6 +40,9 @@ public:
 		WIN_INSTALLED_BINARIES,
 		WIN_LOADEDMODULES,
 		WIN_LOADEDMODULENAMES,
+		// WZ 4.3.3+
+		ENV_VAR_NAMES,
+		SYSTEM_RAM, // system RAM in MiB
 	};
 private:
 	std::string GetCurrentEnvironmentPropertyValue(const EnvironmentProperty& property);
