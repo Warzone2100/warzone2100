@@ -339,6 +339,7 @@ void removeInGameNotificationForm(WZ_Queued_Notification* request);
 #define WZ_NOTIFICATION_CONTENTS_LINE_SPACING	0
 #define WZ_NOTIFICATION_CONTENTS_TOP_PADDING	5
 #define WZ_NOTIFICATION_BUTTON_HEIGHT 20
+#define WZ_NOTIFICATION_MODAL_BUTTON_HEIGHT 25
 #define WZ_NOTIFICATION_BETWEEN_BUTTON_PADDING	10
 
 #define WZ_NOTIFY_DONOTSHOWAGAINCB_ID 5
@@ -387,6 +388,7 @@ public:
 public:
 	// to be called from the larger In-Game Notifications System
 	bool dismissNotification(float animationSpeed = 1.0f);
+	void deleteThisNotificationWidget();
 private:
 	bool calculateNotificationWidgetPos();
 	gfx_api::texture* loadImage(const WZ_Notification_Image& image);
@@ -395,6 +397,7 @@ public:
 	std::shared_ptr<WzCheckboxButton> pOnDoNotShowAgainCheckbox = nullptr;
 private:
 	WZ_Queued_Notification* request;
+	bool isModal = false;
 	bool isInDragMode = false;
 	Vector2i dragOffset = {0, 0};
 	Vector2i dragStartMousePos = {0, 0};
@@ -402,6 +405,7 @@ private:
 	uint32_t dragStartedTime = 0;
 	uint32_t dragEndedTime = 0;
 	gfx_api::texture* pImageTexture = nullptr;
+	std::weak_ptr<W_FORM> psModalParent;
 };
 
 struct DisplayNotificationButtonCache
@@ -547,6 +551,19 @@ bool W_NOTIFICATION::dismissNotification(float animationSpeed /*= 1.0f*/)
 	return false;
 }
 
+void W_NOTIFICATION::deleteThisNotificationWidget()
+{
+	if (auto psStrongModalParent = psModalParent.lock())
+	{
+		// if modal and has a modal parent, actually submit the *parent* for removal
+		psStrongModalParent->deleteLater();
+	}
+	else
+	{
+		deleteLater();
+	}
+}
+
 void W_NOTIFICATION::internalDismissNotification(float animationSpeed /*= 1.0f*/)
 {
 	// if notification is the one being displayed, animate it away by setting its state to closing
@@ -571,16 +588,34 @@ void W_NOTIFICATION::internalDismissNotification(float animationSpeed /*= 1.0f*/
 W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init /*= MakeNotificationFormInit()*/)
 : W_FORM(&init)
 , request(request)
-{ }
+{
+	if (request)
+	{
+		isModal = request->notification.isModal;
+	}
+}
 
 std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* request, W_FORMINIT init /*= MakeNotificationFormInit()*/)
 {
+	ASSERT(request != nullptr, "Request is null");
+
 	class make_shared_enabler : public W_NOTIFICATION {
 	public:
 		make_shared_enabler(WZ_Queued_Notification* request, W_FORMINIT init): W_NOTIFICATION(request, init) {}
 	};
 	auto psNewNotificationForm = std::make_shared<make_shared_enabler>(request, init);
-	psNotificationOverlayScreen->psForm->attach(psNewNotificationForm);
+
+	bool isModal = request->notification.isModal;
+	std::shared_ptr<W_FORM> psRootFrm = psNotificationOverlayScreen->psForm;
+	if (isModal)
+	{
+		auto modalRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+		psRootFrm->attach(modalRootFrm);
+		psRootFrm = modalRootFrm;
+		psNewNotificationForm->psModalParent = modalRootFrm;
+	}
+
+	psRootFrm->attach(psNewNotificationForm);
 
 	// Load the image, if specified
 	if (!request->notification.largeIcon.empty())
@@ -608,28 +643,55 @@ std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* req
 //		}));
 
 	// Calculate dimensions for text area
-	int imageSize = (psNewNotificationForm->pImageTexture) ? WZ_NOTIFICATION_IMAGE_SIZE : 0;
+	const int imageSize = (psNewNotificationForm->pImageTexture) ? WZ_NOTIFICATION_IMAGE_SIZE : 0;
 	int maxTextWidth = notificationWidth - (WZ_NOTIFICATION_PADDING * 2) - imageSize - ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : 0);
+	int maxTitleWidth = maxTextWidth;
+	int maxContentsWidth = maxTextWidth;
+	if (isModal)
+	{
+		maxContentsWidth = notificationWidth - (WZ_NOTIFICATION_PADDING * 2);
+	}
 
 	// Add title
 	auto label_title = std::make_shared<W_LABEL>();
 	psNewNotificationForm->attach(label_title);
-	label_title->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING, maxTextWidth, 12);
+	int titleStartXPos = WZ_NOTIFICATION_PADDING;
+	int titleStartYPos = WZ_NOTIFICATION_PADDING;
+	if (isModal)
+	{
+		titleStartXPos = WZ_NOTIFICATION_PADDING + imageSize + ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : 0);
+	}
+	label_title->setGeometry(titleStartXPos, titleStartYPos, maxTitleWidth, 12);
 	label_title->setFontColour(WZCOL_TEXT_BRIGHT);
-	int heightOfTitleLabel = label_title->setFormattedString(WzString::fromUtf8(request->notification.contentTitle), maxTextWidth, font_regular_bold, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
-	label_title->setGeometry(label_title->x(), label_title->y(), maxTextWidth, heightOfTitleLabel);
+	int heightOfTitleLabel = label_title->setFormattedString(WzString::fromUtf8(request->notification.contentTitle), maxTitleWidth, (isModal) ? font_medium_bold : font_regular_bold, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
+	if (isModal && (heightOfTitleLabel < imageSize))
+	{
+		// vertically center title text in available space
+		titleStartYPos += ((imageSize - heightOfTitleLabel) / 2);
+	}
+	label_title->setGeometry(titleStartXPos, titleStartYPos, maxTitleWidth, heightOfTitleLabel);
 	label_title->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	// set a custom hit-testing function that ignores all mouse input / clicks
 	label_title->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	int titleBottom = label_title->y() + label_title->height();
+	if (isModal)
+	{
+		titleBottom = label_title->y() + std::max<int>(label_title->height(), imageSize);
+	}
 
 	// Add contents
 	auto label_contents = std::make_shared<W_LABEL>();
 	psNewNotificationForm->attach(label_contents);
 //	debug(LOG_GUI, "label_title.height=%d", label_title->height());
-	label_contents->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING + label_title->height() + WZ_NOTIFICATION_CONTENTS_TOP_PADDING, maxTextWidth, 12);
+	int contentsStartYPos = titleBottom + WZ_NOTIFICATION_CONTENTS_TOP_PADDING;
+	if (isModal)
+	{
+		contentsStartYPos = titleBottom + ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : (WZ_NOTIFICATION_CONTENTS_TOP_PADDING + 3));
+	}
+	label_contents->setGeometry(WZ_NOTIFICATION_PADDING, contentsStartYPos, maxContentsWidth, 12);
 	label_contents->setFontColour(WZCOL_TEXT_BRIGHT);
-	int heightOfContentsLabel = label_contents->setFormattedString(WzString::fromUtf8(request->notification.contentText), maxTextWidth, font_regular, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
-	label_contents->setGeometry(label_contents->x(), label_contents->y(), maxTextWidth, heightOfContentsLabel);
+	int heightOfContentsLabel = label_contents->setFormattedString(WzString::fromUtf8(request->notification.contentText), maxContentsWidth, font_regular, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
+	label_contents->setGeometry(label_contents->x(), label_contents->y(), maxContentsWidth, heightOfContentsLabel);
 	label_contents->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	// set a custom hit-testing function that ignores all mouse input / clicks
 	label_contents->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
@@ -643,10 +705,14 @@ std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* req
 
 	// Position the buttons below the text contents area
 	int buttonsTop = label_contents->y() + label_contents->height() + WZ_NOTIFICATION_PADDING;
+	if (isModal)
+	{
+		buttonsTop += (WZ_NOTIFICATION_PADDING / 2);
+	}
 
 	W_BUTINIT sButInit;
 	sButInit.formID = 0;
-	sButInit.height = WZ_NOTIFICATION_BUTTON_HEIGHT;
+	sButInit.height = (isModal) ? WZ_NOTIFICATION_MODAL_BUTTON_HEIGHT : WZ_NOTIFICATION_BUTTON_HEIGHT;
 	sButInit.y = buttonsTop;
 	sButInit.style |= WBUT_TXTCENTRE;
 	sButInit.UserData = 0; // store whether "Action" button or not
@@ -719,7 +785,7 @@ std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* req
 			pDoNotShowAgainButton->pText = _("Do not show again");
 			pDoNotShowAgainButton->FontID = font_small;
 			Vector2i minimumDimensions = pDoNotShowAgainButton->calculateDesiredDimensions();
-			pDoNotShowAgainButton->setGeometry(WZ_NOTIFICATION_PADDING, buttonsTop, minimumDimensions.x, std::max(minimumDimensions.y, WZ_NOTIFICATION_BUTTON_HEIGHT));
+			pDoNotShowAgainButton->setGeometry(WZ_NOTIFICATION_PADDING, buttonsTop, minimumDimensions.x, std::max(minimumDimensions.y, (isModal) ? WZ_NOTIFICATION_MODAL_BUTTON_HEIGHT : WZ_NOTIFICATION_BUTTON_HEIGHT));
 			psNewNotificationForm->pOnDoNotShowAgainCheckbox = pDoNotShowAgainButton;
 		}
 	}
@@ -809,6 +875,7 @@ float EaseInCubic(float p)
 #define WZ_NOTIFICATION_OPEN_DURATION (GAME_TICKS_PER_SEC*1) // Time duration for notification open animation, in game ticks
 #define WZ_NOTIFICATION_CLOSE_DURATION (WZ_NOTIFICATION_OPEN_DURATION / 2)
 #define WZ_NOTIFICATION_TOP_PADDING 5
+#define WZ_NOTIFICATION_TOP_MODAL_PADDING 20
 #define WZ_NOTIFICATION_MIN_DELAY_BETWEEN (GAME_TICKS_PER_SEC*1) // Minimum delay between display of notifications, in game ticks
 
 bool W_NOTIFICATION::calculateNotificationWidgetPos()
@@ -821,7 +888,7 @@ bool W_NOTIFICATION::calculateNotificationWidgetPos()
 	// center horizontally in window
 	int x = std::max<int>((screenWidth - width()) / 2, 0);
 	int y = 0; // set below
-	const int endingYPosition = WZ_NOTIFICATION_TOP_PADDING;
+	const int endingYPosition = (!isModal) ? WZ_NOTIFICATION_TOP_PADDING : (WZ_NOTIFICATION_TOP_MODAL_PADDING);
 
 	// calculate positioning based on state and time
 	switch (request->status.state)
@@ -1037,6 +1104,11 @@ void W_NOTIFICATION::display(int xOffset, int yOffset)
 	// Display the image, if present
 	int imageLeft = x1 - WZ_NOTIFICATION_PADDING - WZ_NOTIFICATION_IMAGE_SIZE;
 	int imageTop = (y() + yOffset) + WZ_NOTIFICATION_PADDING;
+	if (isModal)
+	{
+		// Place the icon on the left side, before the title
+		imageLeft = x0 + WZ_NOTIFICATION_PADDING;
+	}
 
 	if (pImageTexture)
 	{
@@ -1184,7 +1256,7 @@ void removeInGameNotificationForm(WZ_Queued_Notification* request)
 	if (!request) return;
 
 	// right now we only support a single concurrent notification
-	currentInGameNotification->deleteLater();
+	currentInGameNotification->deleteThisNotificationWidget();
 	currentInGameNotification = nullptr;
 }
 
