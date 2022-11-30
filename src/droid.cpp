@@ -1142,19 +1142,20 @@ int getRecoil(WEAPON const &weapon)
 
 void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 {
-	if (hasCommander(psDroid))
+	const bool prevWasRTR = psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED;
+	if (prevWasRTR && hasCommander(psDroid))
 	{
 		objTrace(psDroid->id, "Repair complete - move to commander");
 		orderDroidObj(psDroid, DORDER_GUARD, psDroid->psGroup->psCommander, ModeImmediate);
 	}
-	else if (psRepairFac && psRepairFac->psDeliveryPoint != nullptr)
+	else if (prevWasRTR && psRepairFac && psRepairFac->psDeliveryPoint != nullptr)
 	{
 		const FLAG_POSITION *dp = psRepairFac->psDeliveryPoint;
 		objTrace(psDroid->id, "Repair complete - move to delivery point");
 		// ModeQueue because delivery points are not yet synchronised!
 		orderDroidLoc(psDroid, DORDER_MOVE, dp->coords.x, dp->coords.y, ModeQueue);
 	}
-	else
+	else if (prevWasRTR)
 	{ // nothing to do, no commander, no repair point to go to. Stop, and guard this place.
 		psDroid->order.psObj = nullptr;
 		objTrace(psDroid->id, "Repair complete - guarding the place at x=%i y=%i", psDroid->pos.x, psDroid->pos.y);
