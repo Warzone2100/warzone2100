@@ -550,13 +550,14 @@ void kf_ToggleTeamChat()
 // --------------------------------------------------------------------------
 void	kf_BifferBaker()
 {
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
-
+#endif
 	// player deals far more damage, and the enemy far less
 	setDamageModifiers(999, 1);
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
@@ -566,13 +567,14 @@ void	kf_BifferBaker()
 // --------------------------------------------------------------------------
 void	kf_SetEasyLevel()
 {
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
-
+#endif
 	setDifficultyLevel(DL_EASY);
 	addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
@@ -580,12 +582,14 @@ void	kf_SetEasyLevel()
 // --------------------------------------------------------------------------
 void	kf_UpThePower()
 {
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
+#endif
 	addPower(selectedPlayer, 1000);
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("1000 big ones!!!"));
@@ -595,12 +599,14 @@ void	kf_UpThePower()
 // --------------------------------------------------------------------------
 void	kf_MaxPower()
 {
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
+#endif
 	setPower(selectedPlayer, 100000);
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Power overwhelming"));
@@ -610,38 +616,42 @@ void	kf_MaxPower()
 // --------------------------------------------------------------------------
 void	kf_SetNormalLevel()
 {
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
-
+#endif
 	setDifficultyLevel(DL_NORMAL);
 	addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
 void	kf_SetHardLevel()
 {
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
-
+#endif
 	setDifficultyLevel(DL_HARD);
 	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
 void	kf_DoubleUp()
 {
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
+#endif
 	setDamageModifiers(100, 50); // enemy damage halved
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Twice as nice!"));
@@ -716,14 +726,14 @@ void	kf_FrameRate()
 void kf_ShowNumObjects()
 {
 	int droids, structures, features;
-
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
 		noMPCheatMsg();
 		return;
 	}
-
+#endif
 	objCount(&droids, &structures, &features);
 	std::string cmsg = astringf(_("(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"),
 	          selectedPlayer, droids, structures, features);
@@ -907,11 +917,12 @@ void kf_MapCheck()
 /* Raises the tile under the mouse */
 void	kf_RaiseTile()
 {
+#ifndef DEBUG
 	if (runningMultiplayer())
 	{
 		return;  // Don't desynch if pressing 'W'...
 	}
-
+#endif
 	raiseTile(mouseTileX, mouseTileY);
 }
 
@@ -920,11 +931,12 @@ void	kf_RaiseTile()
 /* Lowers the tile under the mouse */
 void	kf_LowerTile()
 {
+#ifndef DEBUG
 	if (runningMultiplayer())
 	{
 		return;  // Don't desynch if pressing 'A'...
 	}
-
+#endif
 	lowerTile(mouseTileX, mouseTileY);
 }
 
@@ -1240,14 +1252,14 @@ void enableGodMode()
 	{
 		return;
 	}
-
+#ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game and we aren't a spectator (to prevent MP cheating)
 	if (runningMultiplayer() && !NetPlay.players[selectedPlayer].isSpectator)
 	{
 		noMPCheatMsg();
 		return;
 	}
-
+#endif
 	godMode = true; // view all structures and droids
 	revealAll(selectedPlayer);
 	setRevealStatus(true); // view the entire map
