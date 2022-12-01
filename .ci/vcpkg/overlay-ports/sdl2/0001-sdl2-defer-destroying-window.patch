@@ -1,0 +1,73 @@
+From aed980526c1c9e794cc4b839072dace087ad3b95 Mon Sep 17 00:00:00 2001
+From: Steven Noonan <steven@valvesoftware.com>
+Date: Thu, 25 Aug 2022 20:22:52 -0700
+Subject: [PATCH] SDL_video: defer destroying window until GL/EGL/Vulkan
+ unloaded
+
+---
+ src/video/SDL_video.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/src/video/SDL_video.c b/src/video/SDL_video.c
+--- a/src/video/SDL_video.c
++++ b/src/video/SDL_video.c
+@@ -1904,16 +1904,6 @@ SDL_RecreateWindow(SDL_Window * window, Uint32 flags)
+         window->surface_valid = SDL_FALSE;
+     }
+ 
+-    if (_this->checked_texture_framebuffer) { /* never checked? No framebuffer to destroy. Don't risk calling the wrong implementation. */
+-        if (_this->DestroyWindowFramebuffer) {
+-            _this->DestroyWindowFramebuffer(_this, window);
+-        }
+-    }
+-
+-    if (_this->DestroyWindow && !(flags & SDL_WINDOW_FOREIGN)) {
+-        _this->DestroyWindow(_this, window);
+-    }
+-
+     if ((window->flags & SDL_WINDOW_OPENGL) != (flags & SDL_WINDOW_OPENGL)) {
+         if (flags & SDL_WINDOW_OPENGL) {
+             need_gl_load = SDL_TRUE;
+@@ -1956,6 +1946,16 @@ SDL_RecreateWindow(SDL_Window * window, Uint32 flags)
+         SDL_Vulkan_UnloadLibrary();
+     }
+ 
++    if (_this->checked_texture_framebuffer) { /* never checked? No framebuffer to destroy. Don't risk calling the wrong implementation. */
++        if (_this->DestroyWindowFramebuffer) {
++            _this->DestroyWindowFramebuffer(_this, window);
++        }
++    }
++
++    if (_this->DestroyWindow && !(flags & SDL_WINDOW_FOREIGN)) {
++        _this->DestroyWindow(_this, window);
++    }
++
+     if (need_gl_load) {
+         if (SDL_GL_LoadLibrary(NULL) < 0) {
+             return -1;
+@@ -3297,6 +3297,12 @@ SDL_DestroyWindow(SDL_Window * window)
+         window->surface = NULL;
+         window->surface_valid = SDL_FALSE;
+     }
++    if (window->flags & SDL_WINDOW_OPENGL) {
++        SDL_GL_UnloadLibrary();
++    }
++    if (window->flags & SDL_WINDOW_VULKAN) {
++        SDL_Vulkan_UnloadLibrary();
++    }
+     if (_this->checked_texture_framebuffer) { /* never checked? No framebuffer to destroy. Don't risk calling the wrong implementation. */
+         if (_this->DestroyWindowFramebuffer) {
+             _this->DestroyWindowFramebuffer(_this, window);
+@@ -3305,12 +3311,6 @@ SDL_DestroyWindow(SDL_Window * window)
+     if (_this->DestroyWindow) {
+         _this->DestroyWindow(_this, window);
+     }
+-    if (window->flags & SDL_WINDOW_OPENGL) {
+-        SDL_GL_UnloadLibrary();
+-    }
+-    if (window->flags & SDL_WINDOW_VULKAN) {
+-        SDL_Vulkan_UnloadLibrary();
+-    }
+ 
+     display = SDL_GetDisplayForWindow(window);
+     if (display->fullscreen_window == window) {
