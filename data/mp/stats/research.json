@@ -5331,8 +5331,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon-ROF01"
 		],
-		"researchPoints": 8000,
-		"researchPower": 250,
+		"researchPoints": 4800,
+		"researchPower": 150,
 		"resultComponents": [
 			"Cannon5VulcanMk1",
 			"Cannon5Vulcan-VTOL"
@@ -5350,10 +5350,10 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-Cannon5",
-			"R-Struc-Research-Upgrade05"
+			"R-Struc-Research-Upgrade06"
 		],
-		"researchPoints": 9600,
-		"researchPower": 300,
+		"researchPoints": 7050,
+		"researchPower": 225,
 		"resultComponents": [
 			"Cannon6TwinAslt"
 		],
