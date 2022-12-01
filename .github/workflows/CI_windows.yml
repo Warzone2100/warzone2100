@@ -348,8 +348,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $NINJA_DL_URL = "https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-win.zip"
-        $NINJA_DL_SHA512 = "6004140d92e86afbb17b49c49037ccd0786ce238f340f7d0e62b4b0c29ed0d6ad0bab11feda2094ae849c387d70d63504393714ed0a1f4d3a1f155af7a4f1ba3"
+        $NINJA_DL_URL = "https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip"
+        $NINJA_DL_SHA512 = "a700e794c32eb67b9f87040db7f1ba3a8e891636696fc54d416b01661c2421ff46fa517c97fd904adacdf8e621df3e68ea380105b909ae8b6651a78ae7eb3199"
 
         $NINJA_DL_BASEDIR = "${{ github.workspace }}\dl"
         $NINJA_DL_PATH = "${NINJA_DL_BASEDIR}\ninja-win.zip"
