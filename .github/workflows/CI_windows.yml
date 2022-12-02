@@ -611,7 +611,7 @@ jobs:
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
         # Run CPack
-        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_debugsymbols" -D CPACK_COMPONENTS_ALL=DebugSymbols -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -G 7Z -C "Release"
+        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_debugsymbols" -D CPACK_COMPONENTS_ALL="DebugSymbols;AdditionalDebugSymbols" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -G 7Z -C "Release"
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_debugsymbols.7z" -Destination "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
     - name: Compare Build Outputs
@@ -725,27 +725,41 @@ jobs:
     # SENTRY_AUTH_TOKEN
     steps:
       - name: Prep Environment
+        id: settings
         run: |
           mkdir dl-archive
           mkdir dl-sourcebundle
+          OUTPUTDIR="wz-${WZ_TARGET_ARCH}"
+          echo "OUTPUTDIR=${OUTPUTDIR}" >> $GITHUB_ENV
+          echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
       - name: Download Archive Artifact
         uses: actions/download-artifact@v3
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_archive'
           path: ./dl-archive
       - name: Extract archive
-        id: extract
         run: |
-          OUTPUTDIR="wz-${WZ_TARGET_ARCH}"
           ZIPFILE="./dl-archive/warzone2100_win_${WZ_TARGET_ARCH}_archive.zip"
           unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
+      - name: Download Debug Symbols Artifact
+        continue-on-error: true
+        uses: actions/download-artifact@v3
+        with:
+          name: 'warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS'
+          path: ./dl-archive
+      - name: Extract Debug Symbols
+        continue-on-error: true
+        run: |
+          ZIPFILE="./dl-archive/warzone2100_win_${WZ_TARGET_ARCH}.DEBUGSYMBOLS.7z"
+          7z x "${ZIPFILE}" -o "${OUTPUTDIR}" -aos && rm "${ZIPFILE}"
+      - name: Cleanup breakpad symbols
+        run: |
           # Remove the breakpad symbols (so they are never selected instead of the PDB)
           BREAKPAD_SYM="${OUTPUTDIR}/bin/warzone2100.sym"
           if [[ -f "${BREAKPAD_SYM}" ]]; then
             echo "Removing breakpad .sym"
             rm "${BREAKPAD_SYM}"
           fi
-          echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
       - name: Download Source Bundle
         continue-on-error: true
         uses: actions/download-artifact@v3
@@ -755,7 +769,7 @@ jobs:
       - name: 'Upload debug symbols'
         env:
           SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
-          WZ_ARCHIVE_DIR: '${{ steps.extract.outputs.ARCHIVEDIR }}'
+          WZ_ARCHIVE_DIR: '${{ steps.settings.outputs.ARCHIVEDIR }}'
           WZ_SOURCEBUNDLES_DIR: './dl-sourcebundle'
         run: |
           if [[ -z "${SENTRY_AUTH_TOKEN}" ]]; then
