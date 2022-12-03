@@ -118,6 +118,11 @@ If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD
 	$env:VCPKG_OVERLAY_TRIPLETS = "$tripletOverlayFolder"
 }
 
+# Patch vcpkg_copy_pdbs for mingw support
+$vcpkg_copy_pdbs_patch = (Join-Path "$($ScriptRoot)" ".ci\vcpkg\patches\scripts\cmake\vcpkg_copy_pdbs.cmake");
+$vcpkg_copy_pdbs_dest = (Join-Path (pwd) "scripts\cmake");
+Copy-Item "$vcpkg_copy_pdbs_patch" -Destination "$vcpkg_copy_pdbs_dest"
+
 popd;
 
 $overlay_ports_path = (Join-Path "$($ScriptRoot)" ".ci\vcpkg\overlay-ports");
