@@ -751,7 +751,7 @@ jobs:
         continue-on-error: true
         run: |
           ZIPFILE="./dl-archive/warzone2100_win_${WZ_TARGET_ARCH}.DEBUGSYMBOLS.7z"
-          7z x "${ZIPFILE}" -o "${OUTPUTDIR}" -aos && rm "${ZIPFILE}"
+          7z x "${ZIPFILE}" -o${OUTPUTDIR} -aos && rm "${ZIPFILE}"
       - name: Cleanup breakpad symbols
         run: |
           # Remove the breakpad symbols (so they are never selected instead of the PDB)
