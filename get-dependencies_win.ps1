@@ -106,6 +106,9 @@ If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD
 	{
 		# A fix for libtool issues with mingw-clang
 		Add-Content -Path $overlayTripletFile -Value "`r`nlist(APPEND VCPKG_CONFIGURE_MAKE_OPTIONS `"lt_cv_deplibs_check_method=pass_all`")";
+
+		# Build with pdb debug symbols (mingw-clang)
+		Add-Content -Path $overlayTripletFile -Value "`r`nstring(APPEND VCPKG_CXX_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_C_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_LINKER_FLAGS `" -Wl,-pdb= `")";
 	}
 	If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
 	{
