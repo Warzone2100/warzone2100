@@ -424,39 +424,42 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		// continue, because still may find old .gam to load
 	}
 
-	char const *extension = bReplay? sSaveReplayExtension : sSaveGameExtension;
-	size_t extensionLen = strlen(extension);
-	// Note: this is left for backward compatibility reasons.
-	// we want to be able to load .gam but only when no save-info was found
-	WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension, extensionLen](const char *i) -> bool {
-		char savefile[256];
-		time_t savetime;
+	if (bReplay)
+	{
+		char const *extension = sSaveReplayExtension;
+		size_t extensionLen = strlen(extension);
+		// Note: this is left for backward compatibility reasons.
+		// Previously added old .gam saves. Now it exists to look for replay files.
+		WZ_PHYSFS_enumerateFiles(NewSaveGamePath.c_str(), [NewSaveGamePath, &saveGameNamesAndTimes, extension, extensionLen](const char *i) -> bool {
+			char savefile[256];
+			time_t savetime;
 
-		if (!isASavedGamefile(i, extension))
-		{
-			// If it doesn't, move on to the next filename
-			return true;
-		}
-
-		debug(LOG_SAVE, "We found [%s]", i);
-
-		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath.c_str(), i);
-		savetime = WZ_PHYSFS_getLastModTime(savefile);
-
-		size_t lenIWithoutExtension = strlen(i) - extensionLen;
-		std::string fileNameWithoutExtension(i, lenIWithoutExtension);
-		for(auto &el: saveGameNamesAndTimes)
-		{
-			// only add if doesn't exist yet
-			if (el.name.compare(fileNameWithoutExtension) == 0)
+			if (!isASavedGamefile(i, extension))
 			{
-				return true; // move to next
+				// If it doesn't, move on to the next filename
+				return true;
 			}
-		}
-		saveGameNamesAndTimes.emplace_back(std::move(fileNameWithoutExtension), savetime);
-		return true;
-	});
+
+			debug(LOG_SAVE, "We found [%s]", i);
+
+			/* Figure save-time */
+			snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath.c_str(), i);
+			savetime = WZ_PHYSFS_getLastModTime(savefile);
+
+			size_t lenIWithoutExtension = strlen(i) - extensionLen;
+			std::string fileNameWithoutExtension(i, lenIWithoutExtension);
+			for(auto &el: saveGameNamesAndTimes)
+			{
+				// only add if doesn't exist yet
+				if (el.name.compare(fileNameWithoutExtension) == 0)
+				{
+					return true; // move to next
+				}
+			}
+			saveGameNamesAndTimes.emplace_back(std::move(fileNameWithoutExtension), savetime);
+			return true;
+		});
+	}
 
 	// Sort the save games so that the most recent one appears first
 	std::sort(saveGameNamesAndTimes.begin(),
@@ -633,34 +636,6 @@ static bool findLastSaveFrom(SAVEGAME_LOC loc)
 		return false;
 	}
 
-
-	// Note: this is left for backward compatibility with old .gam files
-	// Remove it later
-	WZ_PHYSFS_enumerateFiles(path, [&path, &found, loc](const char *i) -> bool {
-		char savefile[PATH_MAX];
-		time_t savetime;
-
-		if (!isASavedGamefile(i, sSaveGameExtension))
-		{
-			// If it doesn't, move on to the next filename
-			return true;
-		}
-		char tmp[PATH_MAX] = {0};
-		strncpy(tmp, i, PATH_MAX - 1);
-		// strip .gam extension
-		tmp[strlen(i) - 4] = '\0';
-		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", path, i);
-		savetime = WZ_PHYSFS_getLastModTime(savefile);
-		if (difftime(savetime, lastSaveTime) > 0.0)
-		{
-			lastSaveTime = savetime;
-			lastSavePath.loc = loc;
-			lastSavePath.gameName = std::string(tmp);
-			found = true;
-		}
-		return true;
-	});
 	return found;
 }
 
