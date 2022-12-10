@@ -426,7 +426,7 @@ function eventResearched(research, structure, player)
 var lastHitTime = 0;
 function eventAttacked(victim, attacker)
 {
-	if ((victim.player === selectedPlayer) && gameTime > lastHitTime + 5000)
+	if ((victim.player === selectedPlayer) && (attacker.player !== selectedPlayer) && (gameTime > (lastHitTime + 5000)))
 	{
 		lastHitTime = gameTime;
 		if (victim.type === STRUCTURE)
