@@ -107,7 +107,7 @@ function sendTransport()
 			],
 			radius: 8,
 			interval: camMinutesToMilliseconds(1),
-			regroup: true,
+			regroup: false,
 			count: -1,
 		}
 	});
