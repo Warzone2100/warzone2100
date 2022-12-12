@@ -169,6 +169,16 @@ void lookupRatingAsync(uint32_t playerIndex)
 	urlRequestData(req);
 }
 
+bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
+{
+	if (playerIndexA >= MAX_CONNECTED_PLAYERS || playerIndexB >= MAX_CONNECTED_PLAYERS)
+	{
+		return false;
+	}
+	std::swap(playerStats[playerIndexA], playerStats[playerIndexB]);
+	return true;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Set Player's stats
 // send stats to all players when bLocal is false
