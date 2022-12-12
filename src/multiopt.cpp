@@ -289,7 +289,15 @@ bool recvOptions(NETQUEUE queue)
 						if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
 						{
 							WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
-							std::string tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: %u)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit, asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit);
+							std::string tmpConsoleMsgStr;
+							if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != LOTS_OF)
+							{
+								tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: %u)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit, asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit);
+							}
+							else
+							{
+								tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: no limit)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit);
+							}
 							addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 							changedNum++;
 						}
