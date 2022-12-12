@@ -1878,13 +1878,15 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 		NetPlay.playerReferences[playerIndex]->disconnect();
 		NetPlay.playerReferences[playerIndex] = std::make_shared<PlayerReference>(playerIndex);
 
-		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only - we will await this to be sent again by each player
 		//
 //		if (playerIndex < MAX_PLAYERS)
 //		{
 //			playerVotes[playerIndex] = 0;
 //		}
 	}
+
+	// Swap the player multistats / identity info
+	swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
 
 	// Swap the NetPlay PLAYER entries
 	NetPlay.players[playerIndexB] = std::move(playersData[0]);

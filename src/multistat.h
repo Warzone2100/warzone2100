@@ -84,6 +84,8 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);
 
+bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);
+
 void initKnownPlayers();
 void shutdownKnownPlayers();
 bool isLocallyKnownPlayer(std::string const &name, EcKey const &key);
