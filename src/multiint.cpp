@@ -3238,7 +3238,6 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		NetPlay.playerReferences[playerIndex]->disconnect();
 		NetPlay.playerReferences[playerIndex] = std::make_shared<PlayerReference>(playerIndex);
 
-		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
 //		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 		//
 		NET_InitPlayer(playerIndex, false);
@@ -3248,6 +3247,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 			playerVotes[playerIndex] = 0;
 		}
 	}
+	swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 
 	if (playerIndexA == selectedPlayer || playerIndexB == selectedPlayer)
