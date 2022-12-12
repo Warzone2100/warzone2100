@@ -2656,9 +2656,9 @@ bool recvReadyRequest(NETQUEUE queue)
 		return false;
 	}
 
-	// Sanity-check: players should always have an identity
+	// Sanity-check: players should always have an identity to check "ready"
 	const PLAYERSTATS& stats = getMultiStats(player);
-	if (stats.identity.empty())
+	if (stats.identity.empty() && bReady && !NetPlay.players[player].isSpectator)
 	{
 		// log this!
 		debug(LOG_INFO, "Player has empty identity: (player: %u, name: \"%s\", IP: %s)", (unsigned)player, NetPlay.players[player].name, NetPlay.players[player].IPtextAddress);
