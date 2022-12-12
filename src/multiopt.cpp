@@ -536,22 +536,25 @@ static bool gameInit()
 {
 	UDWORD			player;
 
-	// Various sanity checks
-	for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
+	// Various sanity checks (for *true* multiplayer)
+	if (bMultiPlayer && NetPlay.bComms)
 	{
-		if (player < MAX_PLAYERS)
+		for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 		{
-			if (NetPlay.players[player].allocated)
+			if (player < MAX_PLAYERS)
 			{
-				ASSERT(NetPlay.players[player].difficulty == AIDifficulty::HUMAN, "Found an allocated (human) player (%u) with mis-matched difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
+				if (NetPlay.players[player].allocated)
+				{
+					ASSERT(NetPlay.players[player].difficulty == AIDifficulty::HUMAN, "Found an allocated (human) player (%u) with mis-matched difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
 
+				}
 			}
-		}
 
-		if (!NetPlay.players[player].allocated)
-		{
-			ASSERT(NetPlay.players[player].difficulty != AIDifficulty::HUMAN, "Found a non-human slot (%u) with mis-matched (human) difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
-			ASSERT(NetPlay.players[player].ai < 0 || NetPlay.players[player].difficulty != AIDifficulty::DISABLED, "Slot (%u) has AI, but disabled difficulty?", player);
+			if (!NetPlay.players[player].allocated)
+			{
+				ASSERT(NetPlay.players[player].difficulty != AIDifficulty::HUMAN, "Found a non-human slot (%u) with mis-matched (human) difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
+				ASSERT(NetPlay.players[player].ai < 0 || NetPlay.players[player].difficulty != AIDifficulty::DISABLED, "Slot (%u) has AI, but disabled difficulty?", player);
+			}
 		}
 	}
 
