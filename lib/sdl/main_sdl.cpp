@@ -3379,13 +3379,13 @@ static void handleActiveEvent(SDL_Event *event)
 			}
 			break;
 		case SDL_WINDOWEVENT_MINIMIZED:
-			debug(LOG_WZ, "Window %d minimized", event->window.windowID);
+			debug(LOG_INFO, "Window %d minimized", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_MAXIMIZED:
 			debug(LOG_WZ, "Window %d maximized", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_RESTORED:
-			debug(LOG_WZ, "Window %d restored", event->window.windowID);
+			debug(LOG_INFO, "Window %d restored", event->window.windowID);
 			{
 				unsigned int oldWindowWidth = windowWidth;
 				unsigned int oldWindowHeight = windowHeight;
