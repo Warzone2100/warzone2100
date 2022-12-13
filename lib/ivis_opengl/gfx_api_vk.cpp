@@ -4286,7 +4286,30 @@ void VkRoot::endRenderPass()
 		}
 	}
 
-	buffering_mechanism::swap(dev, vkDynLoader, mustSkipDrawing); // must be called *before* acquireNextSwapchainImage()
+	try {
+		buffering_mechanism::swap(dev, vkDynLoader, mustSkipDrawing); // must be called *before* acquireNextSwapchainImage()
+	}
+	catch (const vk::OutOfHostMemoryError& e)
+	{
+		debug(LOG_ERROR, "buffering swap: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e)
+	{
+		debug(LOG_ERROR, "buffering swap: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+	catch (const vk::DeviceLostError& e)
+	{
+		debug(LOG_ERROR, "buffering swap: DeviceLostError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+	}
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_FATAL, "buffering swap: unhandled error: %s", e.what());
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		handleUnrecoverableError(resultErr);
+	}
 
 	if (!mustSkipDrawing)
 	{
