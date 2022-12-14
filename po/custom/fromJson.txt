@@ -41,27 +41,21 @@ _("76mm twin-barrel automatic-cannon")
 _("AA accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-ROF02.name
 _("AA Ammunition Hopper Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF03.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-ROF03.name
 _("AA Ammunition Hopper Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF01.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-ROF01.name
 _("AA Ammunition Hopper")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF05.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-ROF05.name
 _("AA Chainfeed Loader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF06.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-ROF06.name
 _("AA Chainfeed Loader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF04.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-ROF04.name
 _("AA Chainfeed Loader")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-AASite-QuadBof.name
@@ -91,27 +85,21 @@ _("AA Flak damage +25%")
 _("AA Flak Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Damage02.name
 _("AA HE Flak Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage03.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Damage03.name
 _("AA HE Flak Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage01.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Damage01.name
 _("AA HE Flak")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage05.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Damage05.name
 _("AA HEAP Flak Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage06.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Damage06.name
 _("AA HEAP Flak Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage04.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Damage04.name
 _("AA HEAP Flak")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
@@ -139,15 +127,12 @@ _("AA Site with Tornado Flak Turret")
 _("AA Site with Whirlwind Gun Turret")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
 _("AA Target Acquisition Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
 _("AA Target Prediction Computer")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
-// data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
 _("AA Thermal Imaging Sensor")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-AASite-QuadBof02.name
@@ -552,13 +537,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-_("Armed with Cyborg Assault Gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 _("Armed with Cyborg assault gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+_("Armed with Cyborg Assault Gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -601,14 +586,12 @@ _("Armed with hyper velocity cannon")
 // data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 _("Armed with hyper velocity quad-barrel automatic-cannon")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
-_("Armed with Lance Anti-Tank rocket")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
 _("Armed with Lancer anti-tank missile")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
+// data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 _("Armed with Lancer Anti-Tank rocket")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -1090,11 +1073,11 @@ _("Best Targets: Base structures and cyborgs")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB2.text[2]
 _("Best Targets: Base Structures and Defenses")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
-_("Best Targets: Base Structures")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 _("Best Targets: Base structures")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
+_("Best Targets: Base Structures")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -1104,17 +1087,17 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-// ... + 7 refs
-_("Best Targets: Base structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
 // data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
 // ... + 4 refs
 _("Best Targets: Base Structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+// ... + 7 refs
+_("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -1522,7 +1505,7 @@ _("Command Turret Viper Tracks")
 // data/base/stats/brain.json: $.CommandBrain01.name
 // data/base/stats/research.json: $.R-Comp-CommandTurret01.name
 // data/base/stats/weapons.json: $.CommandTurret1.name
-// ... + 2 refs
+// ... + 3 refs
 _("Command Turret")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[2]
@@ -1799,7 +1782,7 @@ _("Defensive Strength: Low")
 // data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[3]
 // data/base/messages/resmessages1.json: $.RES_TTRAP1.text[3]
 // data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[3]
-// ... + 58 refs
+// ... + 59 refs
 _("Defensive Strength: Medium")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0ADemolishStructure.name
@@ -1899,6 +1882,9 @@ _("EMP Mortar Pit")
 // data/mp/stats/research.json: $.R-Wpn-MortarEMP.name
 // data/mp/stats/weapons.json: $.MortarEMP.name
 _("EMP Mortar")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[2]
+_("Enables Hardcrete gates")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
@@ -4090,6 +4076,7 @@ _("New Bomb Bay Available")
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[0]
 // data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[0]
 _("New Construction Options Available")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_STW2.text[1]
@@ -5580,14 +5567,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
@@ -5642,6 +5629,9 @@ _("Third Level Missile Firing Codes")
 // data/base/stats/body.json: $.Body9REC.name
 // data/mp/stats/body.json: $.Body9REC.name
 _("Tiger")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[1]
+_("Titanium-reinforced concrete gate")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
 // data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -6270,36 +6260,54 @@ _("Wyvern")
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[6]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[6]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[6]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[6]
 NP_("rank", "Elite")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[1]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[1]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[1]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[1]
 NP_("rank", "Green")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[8]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[8]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[8]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[8]
 NP_("rank", "Hero")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[4]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[4]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[4]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[4]
 NP_("rank", "Professional")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[3]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[3]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[3]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[3]
 NP_("rank", "Regular")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[0]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[0]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[0]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[0]
 NP_("rank", "Rookie")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[7]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[7]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[7]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[7]
 NP_("rank", "Special")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[2]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[2]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[2]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[2]
 NP_("rank", "Trained")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[5]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[5]
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[5]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[5]
 NP_("rank", "Veteran")  
