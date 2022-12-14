@@ -338,8 +338,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, unsigned id, int startX, in
 	{
 		objTrace(id, "Checking if we have a path yet");
 
-		auto const &I = pathResults.find(id);
-		ASSERT(I != pathResults.end(), "Missing path result promise");
+		auto const I = pathResults.find(id);
+		ASSERT_OR_RETURN(FPR_FAILED, I != pathResults.end(), "Missing path result promise");
 		PATHRESULT result = I->second.get();
 		ASSERT(result.retval != FPR_OK || result.sMove.asPath.size() > 0, "Ok result but no path in list");
 
