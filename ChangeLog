@@ -1,3 +1,36 @@
+2023-01-01: Version 4.3.3:
+ * General:
+   * Add: Cursor scaling implemented (commit:41f1cc5329d483e659b6b1c345ba8913692336a2, #3016)
+   * Change: Prevent loading old ~pre-4.x series saves to curb strange and invalid bug reports (commit:b199936986337e9d043bcb4d5a793ca33e49d5fb, #3038)
+   * Fix: Various potential crashes (too many commits, #2996, #2999, #3009, #3017, #3019, #3025, #3047)
+   * Fix: [Audio] Improve stream buffer exhaustion handling to hopefully avoid occasional music resets (commit:88349c6665af2e0c7845798995efe393f4c6e70d, commit:01655ee90c558a6a149365e94192b795a6f1aab0, #3010)
+   * Fix: Don't override orders with guard behavior when done repairing unless explicitly ordered to repair (commit:42cceb79ae99a0b876df022a1c2d79dbb08f6c5d, #3030)
+   * Fix: Load structure and droid limits before loading droids and structures (commit:8dd23535c3118ea02ccca9effc2e4baa73cea3ea, #3064)
+   * Remove: "Go Back buttons in options menu" due to causing keymapping instability (commit:40ae5a753b5fb3bba2faa3afbc8e8b1c17ec1ab4, #2998)
+ * Graphics:
+   * Change: Make light/medium half-tracks a bit more distinct (commit:7df11d7121c312bb51039fe7c9c7e938b1ff28a7, #2992)
+   * Change: [SDL backend] Windows: Workaround for Nvidia threaded optimization (commit:4ac78c353d2f61320d81630428664db640c4dc97, #3001)
+ * Campaign:
+   * Change: Rebalance FastPlay to better fit the new campaign balance (commit:3dbd1ac1c7b5465d18e487d4766b459253905b20, #3057)
+   * Fix: Default initialize the NP artifact group waypoint on Alpha 11 so grabbing the artifact first won't interfere with their movement (commit:2a6cd3f2c318d7847de2b381378cebb5a5972904, #3012)
+   * Fix: Fix config file not storing the correct color variable when selecting a flag color in the options menu, thus reverting to green after level exit (commit:74511d2de80d387902cdcb375b87c0fb1233bd02, #3037)
+ * Multiplayer:
+   * Change: Allow setting up to 20 research labs in the limits menu (commit:f3a182db2ac6709fb8350915c77c4ef4f84cbd0a, #3064)
+   * Fix: Attempt to improve slot/identity behavior (too many commits, #2993, #3023, #3043, #3044, #3068)
+ * Balance MP:
+   * Change: Use a new set of experience thresholds for unit and commander ranks; Make EMP/Electronic weapon research depend on Command Turret Upgrade (commit:f4e8da794584cf71265dd203b9422e46471b2fb0, commit:3a1a066cbe438c52bfbc55c73340b37b4884cb56, #2958)
+   * Change: Reduce splash radius of the EMP Cannon to 1.5 tiles from 2 tiles (commit:e10289c37a30b7cc33031d85a8af4ed705d681a9, #2975)
+   * Change: Reduce build power of the little scourge cyborg to 233 from 250 and increase range by 1 tile (commit:a12aab815f46a42abe4d573e5818e32901b1bfb4, #3004)
+   * Change: Reduce Assault Cannon research time by about 1 minute, Twin Assault Cannon still appears at the same time (commit:0487d72ac323fbe311fbdb1967f144288dc81a19, #3000)
+   * Change: Make Twin Assault Gun come earlier by about 1 minute so to appear before Twin Assault Cannon (commit:45f75861a0f16e7debfadbc1047d82112087aa09, #3029)
+   * Change: Push Whirlwind further back into the tech tree and depend on Dedicated Synaptic Link Data Analysis Mk3 / move Depleted Uranium Bullets after Dense Composite Alloys Mk3 (commit:9550bff61b047628a55c238bab3b9d0eaae50207, #3066)
+ * Other:
+   * Add: [GitHub Actions] Flatpak: Initial publishing support (commit:92fc8bb3ebeb300eba603c8718896918ce9f7129, #3006)
+   * Add: Attempt to create an overview document on micro-AI behavior (commit:c3a35955b2b3bdded07462750d5f567cb37a4b0a, commit:4dc1dfff0bc157f62e3e651cff4a002e4e35b27a, #3024)
+   * Change: [CMake] Add -uastc_rdo_m to basis universal to improve reproducible builds (commit:27218d78258d852a2ea2604c7aefa41b202124cc, #2997)
+   * Fix: Improve notifications and exception handling for them (too many commits, #3026)
+   * Fix: Do not play attacked sounds from friendly fire (commit:d81a9ad2a3c931b18f4c310186a9941f21e33915, #3039)
+
 2022-11-09: Version 4.3.2:
  * General:
    * Fix: Various potential crashes (too many commits, #2973)
