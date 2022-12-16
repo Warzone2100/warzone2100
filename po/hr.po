@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:13\n"
+"PO-Revision-Date: 2022-12-16 08:20\n"
 "Last-Translator: \n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
@@ -176,19 +176,19 @@ msgstr "Neprijateljske sile napadaju sa istoka i sjevera."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Obrani baze i odbij sve napade."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "MISIJA ALFA BAZE: dolazeća poruka"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Detektiramo neprijateljske sile na ovim lokacijama."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "Ovo je naša šansa da unuštimo Novi Paradigm i njihove baze."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
