@@ -3655,10 +3655,10 @@
 		"msgName": "RES_V_B02",
 		"name": "Light Body - Leopard",
 		"requiredResearch": [
-			"R-Vehicle-Metals04"
+			"R-Vehicle-Metals03"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultComponents": [
 			"Body2SUP"
 		],
@@ -3717,10 +3717,11 @@
 		"name": "Medium Body - Panther",
 		"requiredResearch": [
 			"R-Vehicle-Body02",
-			"R-Vehicle-Body05"
+			"R-Vehicle-Body05",
+			"R-Vehicle-Metals04"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultComponents": [
 			"Body6SUPP"
 		],
@@ -3766,10 +3767,11 @@
 		"name": "Heavy Body - Tiger",
 		"requiredResearch": [
 			"R-Vehicle-Body11",
-			"R-Vehicle-Body06"
+			"R-Vehicle-Body06",
+			"R-Vehicle-Metals05"
 		],
-		"researchPoints": 8400,
-		"researchPower": 262,
+		"researchPoints": 9600,
+		"researchPower": 300,
 		"resultComponents": [
 			"Body9REC"
 		],
