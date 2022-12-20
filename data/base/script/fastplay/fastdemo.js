@@ -18,9 +18,19 @@ camAreaEvent("factory2Trigger", function()
 	camEnableFactory("base2Factory");
 });
 
-camAreaEvent("factory3Trigger", function()
+function enableLastBase()
 {
 	camEnableFactory("base3Factory");
+}
+
+function enabledBase3()
+{
+	camCallOnce("enableLastBase");
+}
+
+camAreaEvent("factory3Trigger", function()
+{
+	queue("enabledBase3", camChangeOnDiff(camMinutesToMilliseconds(5)));
 	camManageGroup(camMakeGroup("scavBase3"), CAM_ORDER_DEFEND, {
 		pos: [
 			camMakePos("hillGroupPos1")
@@ -28,6 +38,11 @@ camAreaEvent("factory3Trigger", function()
 		regroup: false,
 		count: -1
 	});
+});
+
+camAreaEvent("factory3TriggerInstant", function()
+{
+	enabledBase3();
 });
 
 function grantStartTech()
@@ -46,10 +61,7 @@ function grantStartTech()
 		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
 	}
 
-	//NOTE: To prevent extra research from being exposed from the MG damage
-	//we are going to give the player the third damage upgrade.
-	enableResearch("R-Wpn-MG-Damage03", CAM_HUMAN_PLAYER);
-	completeResearch("R-Wpn-MG-Damage03", CAM_HUMAN_PLAYER);
+	enableResearch("R-Wpn-MG-Damage01", CAM_HUMAN_PLAYER);
 }
 
 function sendAttackGroup1()
@@ -134,7 +146,7 @@ function eventStartLevel()
 	setMissionTime(-1);
 	grantStartTech();
 
-	setPower(1000, CAM_HUMAN_PLAYER);
+	setPower(1500, CAM_HUMAN_PLAYER);
 
 	camSetEnemyBases({
 		"northBase": {
@@ -165,11 +177,11 @@ function eventStartLevel()
 
 	camSafeRemoveObject("flamerArti", false);
 	camSetArtifacts({
-		"base1Factory": { tech: "R-Defense-Tower01" },
+		"base1Factory": { tech: ["R-Defense-Tower01", "R-Wpn-MG-Damage02"] },
 		"base1PowerGenerator": { tech: "R-Struc-PowerModuleMk1" },
 		"artifactPos": { tech: "R-Wpn-Flamer01Mk1" },
 		"radarTower": { tech: "R-Sys-Sensor-Turret01" },
-		"base2Factory": { tech: "R-Vehicle-Prop-Halftracks" },
+		"base2Factory": { tech: ["R-Vehicle-Prop-Halftracks", "R-Wpn-Flamer-Damage01"] },
 		"bunkerArti": { tech: ["R-Sys-Engineering01", "R-Sys-MobileRepairTurret01" ]},
 	});
 
@@ -193,7 +205,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [cTempl.rbjeep, cTempl.trike, cTempl.buggy, cTempl.rbjeep, cTempl.bjeep]
+			templates: [cTempl.rbjeep, cTempl.trike, cTempl.buggy, cTempl.bloke, cTempl.bjeep]
 		}
 	});
 
