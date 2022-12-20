@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2022-12-20 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -8357,7 +8357,7 @@ msgstr "EMP Havan"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[2]
 #: po/custom/fromJson.txt:1887
 msgid "Enables Hardcrete gates"
-msgstr ""
+msgstr "Sert kapıları etkinleştirir"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
@@ -13830,7 +13830,7 @@ msgstr "Kaplan"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[1]
 #: po/custom/fromJson.txt:5634
 msgid "Titanium-reinforced concrete gate"
-msgstr ""
+msgstr "Titanyum destekli beton kapı"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -15856,11 +15856,11 @@ msgstr "İzleniyor"
 
 #: src/frontend.cpp:855
 msgid "High"
-msgstr ""
+msgstr "Yüksek"
 
 #: src/frontend.cpp:856
 msgid "Default"
-msgstr ""
+msgstr "Varsayılan"
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:1859
@@ -15900,7 +15900,7 @@ msgstr "Radar Zıplaması"
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 #: src/frontend.cpp:953
 msgid "LOD Distance"
-msgstr ""
+msgstr "Detay Uzaklığı"
 
 #: src/frontend.cpp:960
 msgid "Screen Shake"
@@ -16009,7 +16009,7 @@ msgstr "Penceresiz Tam Ekran"
 
 #: src/frontend.cpp:1742
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "Açık (Tam Ekran)"
 
 #: src/frontend.cpp:1892
 msgid "Texture size"
@@ -16036,20 +16036,20 @@ msgstr "Grafik Altyapısı*"
 #. An option describing when / whether WZ will auto-minimize the window when it loses focus.
 #: src/frontend.cpp:1931
 msgid "Min on Focus Loss"
-msgstr ""
+msgstr "Odak Kaybında Küçült"
 
 #: src/frontend.cpp:1932
 msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
+msgstr "Odak kaybı durumunda pencerenin otomatik olarak simge durumuna küçültülmesi gerekip gerekmediği"
 
 #. TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
 #: src/frontend.cpp:1942
 msgid "Alt+Enter Toggle"
-msgstr ""
+msgstr "Alt+Enter Değişimi"
 
 #: src/frontend.cpp:1943
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
+msgstr "Tuşlarla tam ekran modu geçişi yapmak için: Alt + Enter"
 
 #: src/frontend.cpp:1957
 msgid "VIDEO OPTIONS"
@@ -16100,7 +16100,7 @@ msgstr "Renkli İmleçler"
 
 #: src/frontend.cpp:2245
 msgid "Cursor Size"
-msgstr ""
+msgstr "İmleç Boyutu"
 
 #: src/frontend.cpp:2257
 msgid "MOUSE OPTIONS"
@@ -18813,17 +18813,17 @@ msgstr "Yapı sınırları değiştirildi [%d]:"
 #: src/multiopt.cpp:295
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
+msgstr "[%d] Sınır [%s]: %u (varsayılan: %u)"
 
 #: src/multiopt.cpp:299
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
+msgstr "[%d] Sınır [%s]: %u (varsayılan: sınırsız)"
 
 #: src/multiopt.cpp:307
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%d] Sınır numStructureStats (%u) değerinden daha fazla: %u"
 
 #: src/multiopt.cpp:314
 msgid "Limits were reset to default."
@@ -18832,7 +18832,7 @@ msgstr "Sınırlar varsayılana sıfırlandı."
 #: src/multiopt.cpp:322
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
-msgstr ""
+msgstr "Sunucu %u sınırlarını başlattı, modlar sebebiyle gösterilemiyor"
 
 #: src/multiopt.cpp:403
 msgid "MAP REQUESTED!"
@@ -19523,7 +19523,7 @@ msgstr "Yeni bir Warzone 2100 (%s) derlemesi var!"
 
 #: src/updatemanager.cpp:365
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Bu yeni sürüm, önemli hata düzeltmeleri ve güncellemeler içerir ve şimdi güncellemeniz önerilir."
 
 #: src/updatemanager.cpp:370
 msgid "A new build of Warzone 2100 is available!"
