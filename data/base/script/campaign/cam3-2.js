@@ -50,7 +50,7 @@ camAreaEvent("rescueTrigger", function(droid)
 	setAlliance(ALPHA, NEXUS, false);
 	camAbsorbPlayer(ALPHA, CAM_HUMAN_PLAYER);
 
-	queue("getAlphaUnitIDs", camSecondsToMilliseconds(2));
+	queue("getAlphaUnitIDs", camSecondsToMilliseconds(0.5));
 	setTimer("phantomFactorySE", camChangeOnDiff(camMinutesToMilliseconds(4)));
 
 	camPlayVideos({video: "MB3_2_MSG4", type: MISS_MSG});
