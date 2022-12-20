@@ -114,6 +114,12 @@
 		"pos1": [2432, 1536],
 		"pos2": [3712, 3584]
 	},
+	"area_14": {
+		"label": "factory3TriggerInstant",
+		"subscriber": 0,
+		"pos1": [5632, 4608],
+		"pos2": [6912, 4992]
+	},
 
 	"object_0": {
 		"label": "base1Factory",
