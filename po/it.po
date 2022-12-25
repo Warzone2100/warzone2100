@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2022-12-25 14:43\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -16100,7 +16100,7 @@ msgstr "Cursori colorati"
 
 #: src/frontend.cpp:2245
 msgid "Cursor Size"
-msgstr ""
+msgstr "Dimensione del puntatore"
 
 #: src/frontend.cpp:2257
 msgid "MOUSE OPTIONS"
@@ -16109,7 +16109,7 @@ msgstr "OPZIONI DEL MOUSE"
 #: src/frontend.cpp:2322
 #: src/multiint.cpp:263
 msgid "Super Easy"
-msgstr ""
+msgstr "Super facile"
 
 #: src/frontend.cpp:2323
 #: src/multiint.cpp:263
@@ -17673,7 +17673,7 @@ msgstr "SCHERMAGLIA"
 
 #: src/keybind.cpp:1435
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "DIFFICOLTÀ: SUPER FACILE"
 
 #: src/keybind.cpp:1438
 msgid "DIFFICULTY: EASY"
@@ -17903,12 +17903,12 @@ msgstr "barato"
 #: src/loadsave.cpp:1155
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "Salvataggio automatico %s"
 
 #: src/loadsave.cpp:1160
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "Salvataggio automatico %s non riuscito"
 
 #: src/loop.cpp:261
 #: src/loop.cpp:277
@@ -18422,12 +18422,12 @@ msgstr ""
 
 #: src/multiint.cpp:4272
 msgid "Host provided"
-msgstr ""
+msgstr "Host fornito"
 
 #: src/multiint.cpp:4276
 #, c-format
 msgid "From: %s"
-msgstr ""
+msgstr "Da: %s"
 
 #: src/multiint.cpp:4349
 msgid "Click to change difficulty"
@@ -18488,7 +18488,7 @@ msgstr "Copia Testo negli Appunti"
 #: src/multiint.cpp:5075
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "Silenzia il giocatore: %s"
 
 #: src/multiint.cpp:5079
 #, c-format
@@ -18531,7 +18531,7 @@ msgstr "L'host sta avviando la partita"
 #: src/multiint.cpp:6354
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "Spostamento di %s a spettatore!"
 
 #: src/multiint.cpp:6482
 msgid "Host supplied invalid options"
@@ -18827,7 +18827,7 @@ msgstr ""
 
 #: src/multiopt.cpp:314
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "I limiti sono stati ripristinati ai predefiniti."
 
 #: src/multiopt.cpp:322
 #, c-format
@@ -19012,7 +19012,7 @@ msgstr "Non possiamo farlo! Dovremmo essere un'unità Cyborg per usare un traspo
 
 #: src/qtscript.cpp:900
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "Impossibile caricare l'AI selezionata! Controlla i registri per scoprire il perché."
 
 #: src/qtscript.cpp:903
 #, c-format
