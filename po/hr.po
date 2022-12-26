@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-16 08:20\n"
+"PO-Revision-Date: 2022-12-26 14:44\n"
 "Last-Translator: \n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
@@ -192,19 +192,19 @@ msgstr "Ovo je naša šansa da unuštimo Novi Paradigm i njihove baze."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Čestitamo komandere."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Imamo sljedeći zadatak za vas:"
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISIJA ALFA BAZE: Locirajte i dovezite nazad artifakte"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "Prve dvije zone su sada osigurane."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
@@ -236,43 +236,43 @@ msgstr "Mi nismo otkrili artefakte ni naišli na neprijatelje."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "IZVJEŠĆE ALFA BAZE: Neprijateljski napad"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "Detektiramo neprijateljske sile na ovoj lokaciji."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "PRIMARNI CILJ"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Ova struktura je tvoj primarni objektiv."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Traži i vrati nazad sve artefakte ovdje."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "NEPRIJATELJSKA ZONA SLJIETANJA"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "Uništo ovi slijetnu zonu da je neprijatelji nemogu koristiti."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "IZVJEŠĆE ALFA BAZE: NEXUS"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "Novi cilj."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "Detektirali i izolirali smo uljezni program."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
@@ -280,226 +280,226 @@ msgstr "Dodatak"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "Tehnologija sinaptičke veze je bila ovdje ali su je maknuli."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Etabliraj napadnu bazu i onda potraži tehnologiju sinaptičke veze."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "DOLAZNI PRIJENOS"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "Dekodiranje u tijeku....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "Kapetane."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "Dekodirali smo dolazeću poruku novog paradigma..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "Uništiti neprijateljsku bazu"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "Sastavi napadnu silu i ukrcaj ju na transport."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "Izvidite područje i uzmite sve prisutne artifakte."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "Tehnologija sinaptičke veze je sada naša!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "Izvorno istraživanje potvrdilo je da će ovo biti veliki benefit Projektu."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "Baza Beta je pod teškom paljbom, možda će im trebati pomoć."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "Čim dobimo novosti, poslati ćemo vam ih."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "Ovu poruku smo presreli prije par minuta."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr ""
+msgstr "Dolazi sa istoka."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "ARTEFAKT MODULA NAPAJANJA"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "Istraži artefakt modula napajanja."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "Sada iskoristi kamion da poboljšate generator sa modulom."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "DETEKTIRANA JE BAZA STRVINARA"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "Porazi strvinare i uzmi artifakte."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
+msgstr "Čestitamo na pobjedi nad Novim Paradigmom, ovaj sektor je sada siguran."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr ""
+msgstr "Nexus uljezni program je bio u sistemu Novog Paradigma."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr ""
+msgstr "Snimili smo dva razgovora, slijede isječci..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr ""
+msgstr "Obavještavat ćemo vas o daljnjem razvoju događaja"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "Zapovjedniče, ti ćeš pomagati timu Beta"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "MISIJA BETA BAZE: Istočni sektor"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "Po dolasku preuzimate zapovjedništvo nad bazom."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "Morate ju braniti i držati."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "MISIJA BETA BAZE: Obrani i pojačaj bazu"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
+msgstr "Obavezno utvrdite perimetar i uspostavite protuzračnu obranu."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "Dostupne su nove tehnologije."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "Trenutno otkrivamo kodirane bitstream signale."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Dekodiranje..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: Transport onemogućen"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "Naše transportne jedinice iz tima Alfa Base su oborene."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
+msgstr "Ova je lokacija pod napadom Kolektiva."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
+msgstr "Okupite spasilački tim da izvučete transport i njegov teret."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr ""
+msgstr "BRIEFING USRED LETA"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "Tim Beta traži tehnologiju vertikalnog polijetanja i slijetanja (VTOL)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "Vjeruje se da je u zračnoj bazi prije Kolapsa u ovom području."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "Tim Beta je pod teškim napadom"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "MISIJA BETA BAZE: Obrani pod svaku cijenu"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr ""
+msgstr "Otkrivamo kodirane bitstream signale iz Kolektiva."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "MISIJA BETA BAZE: Obrani pod svaku cijenu"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr ""
+msgstr "Otkrivamo kopnene i zračne snage sa sjevera."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr ""
+msgstr "Zadržite svoj položaj i odbijte ove napade, zatim iskorijenite neprijateljsku sjevernu bazu."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: Presretanje konvoja."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr ""
+msgstr "Podaci iz baze Kolektiva ukazuju na prisutnost uljeznog programa NEXUS."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "Prije nego što se NEXUS isključio iz mreže, pristupili smo sljedećem."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "Neprijateljski zapovjednik preuzima pošiljku od NEXUS-a na ovoj lokaciji."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "Kad stignete na LZ, iskorijenite neprijateljskog zapovjednika i vratite pošiljku."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "Zatim se vratite u LZ."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr ""
+msgstr "Uznemirujuće vijesti vezane uz NASDA-u."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -717,210 +717,210 @@ msgstr ""
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "NEXUS je dobio pristup nuklearnom oružju i odlučan je uništiti Projekt."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr ""
+msgstr "Odvedite svoje snage u Sjeverni sektor"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
+msgstr "Kad ste u planinama osigurajte LZ. Zatim uspostavite napadnu bazu."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "Tim Gamma će vas tamo kontaktirati."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "MISIJA ALFA BAZE: Etabliraj napadnu bazu"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:5
 msgid "Commander, the success of the Project lies with you."
-msgstr ""
+msgstr "Zapovjedniče, uspjeh projekta leži na vama."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "Osigurajte LZ, zatim uspostavite napadnu bazu."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: Koordinate mjesta za lansiranje projektila"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr ""
+msgstr "Locirali smo mjesto ispaljivanja projektila."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr ""
+msgstr "Bila je jedna ili više raketa na ovom mjestu NASDA-e."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
+msgstr "Prenosimo koordinate LZ u blizini silosa."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:1
 msgid "Coordinate Download Completed."
-msgstr ""
+msgstr "Preuzimanje koordinata dovršeno."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
+msgstr "Osigurajte svoj LZ, a zatim krenite kopnom da uništite silos za projektile."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr ""
+msgstr "MISIJA SJEVERNOG SEKTORA: Nuklearna eksplozija"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
+msgstr "Sve jedinice moraju pobjeći iz područja prije nego što bojna glava detonira."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
+msgstr "Zračni prijevoz transportom nije moguć. Morat ćete krenuti kopnom."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
+msgstr "Planinski lanac na istoku trebao bi vas zaštititi od eksplozije."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
-msgstr ""
+msgstr "Dolina je tvoja jedina šansa za bijeg."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "AŽURIRANJE NAPADNOG TIMA"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
+msgstr "Nakon nuklearnih eksplozija izgubljena je sva komunikacija s napadnim timom."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
+msgstr "Njihov posljednji prijenos je pokazao da se vraćaju u bazu."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr ""
+msgstr "MISIJA SJEVERNOG SEKTORA: Pomozi timu gamma"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr ""
+msgstr "Vi trebate pomoći timu Gamma."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr ""
+msgstr "Kada stignete do baze Gamma, pomozite osigurajte područje od daljnjih NEXUS napada."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr ""
+msgstr "NEXUS PORAŽEN"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr ""
+msgstr "Zapovjedniče, porazili smo NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr ""
+msgstr "Nažalost, na rad naših sustava utjecao je NEXUS. Pokušavamo to ispraviti."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
-msgstr ""
+msgstr "Trenutno primamo ovaj prijenos."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "TRANSPORTNA MISIJA: Tim Alfa otkriven"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr ""
+msgstr "Odvedite izviđačke snage na ove koordinate i procijenite situaciju."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr ""
+msgstr "Odredite jesu li tim Alpha. Ako je tako, spasite ih i otpratite ih natrag u LZ."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
+msgstr "Ova grupa je dio tima Alpha, spasite ih i otpratite do LZ."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr ""
+msgstr "MISIJA SJEVERNOG SEKTORA: obavijest tima Alpha"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr ""
+msgstr "Tim Alpha prijenos snage je u tijeku."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
+msgstr "Zapovjedniče, nakon što ste napustili zapadni sektor, vratili smo ovaj artefakt."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
-msgstr ""
+msgstr "Koristi od istraživanja mogle bi biti ogromne."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr ""
+msgstr "Neprijateljske snage su ....... od ovih koordinata."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr ""
+msgstr "Obranite bazu i ........ ......."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr ""
+msgstr "Traži i uništi...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr ""
+msgstr "PRIJEVOZNA MISIJA: Napravite zasjedu NEXUS snagama"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr ""
+msgstr "Zapovjedniče, vaše odlučne akcije zaustavile su širenje NEXUS-a."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr ""
+msgstr "Prije nego što je NEXUS izbačen, presreli smo ovu poruku - Dekodiranje dovršeno."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr ""
+msgstr "Radna grupa NEXUS-a ide prema ovim koordinatama."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr ""
+msgstr "Imate priliku uništiti NEXUS prije nego oni stignu tamo."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr ""
+msgstr "Uzmite napadnu jedinicu i postavite zasjedu NEXUS radnoj grupi na ....... na ......."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr ""
+msgstr "TRANSPORNTA MISIJA: Napadni tim"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
-msgstr ""
+msgstr "Zapovjedniče, vaš napad na ...."
 
 #: data/base/messages/strings/cam3strings.txt:98
 msgid "NEXUS exiting system."
-msgstr ""
+msgstr "NEXUS napušta sustav."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr ""
+msgstr "Dolazni prijenos od napadnog tima."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr ""
+msgstr "Zapovjedniče, pokušavamo se vratiti u bazu."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
@@ -1134,15 +1134,15 @@ msgstr "Slijetalište"
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
 msgid "Mission Target"
-msgstr ""
+msgstr "Cilj misije"
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
-msgstr ""
+msgstr "Istraživački centar prije kolapsa"
 
 #: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
-msgstr ""
+msgstr "Na putu do mjesta misije"
 
 #: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
@@ -1259,12 +1259,12 @@ msgstr "Uporište minobacača"
 #: data/base/messages/strings/names.txt:229
 #: data/mp/messages/strings/names.txt:265
 msgid "Bombard Emplacement"
-msgstr ""
+msgstr "Uporište minobacača"
 
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
 msgid "Pepperpot Emplacement"
-msgstr ""
+msgstr "Pepperpot uporište"
 
 #: data/base/messages/strings/names.txt:237
 #: data/base/messages/strings/names.txt:405
@@ -1290,35 +1290,35 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:289
 msgid "Jump Bunker Blaster"
-msgstr ""
+msgstr "Jump Bunker Blaster"
 
 #: data/base/messages/strings/names.txt:290
 msgid "Jump Heavy Gunner"
-msgstr ""
+msgstr "Jump kiborg sa teškom strojnicom"
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
-msgstr ""
+msgstr "Jump Lancer"
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
-msgstr ""
+msgstr "Jump Strojničar"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
-msgstr ""
+msgstr "Jump kiborg sa Needle-om"
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
-msgstr ""
+msgstr "Jump Scourge"
 
 #: data/base/messages/strings/names.txt:295
 msgid "Jump Flashlight Gunner"
-msgstr ""
+msgstr "Jump Flashlight Gunner"
 
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
-msgstr ""
+msgstr "Cyborg Jump Pack"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs02.name
@@ -1340,7 +1340,7 @@ msgstr "Robotske noge 3"
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:386
 msgid "NP-Hardcrete"
-msgstr ""
+msgstr "NP-Hardcrete"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox01.name
@@ -1362,7 +1362,7 @@ msgstr "Bunker"
 #: data/mp/messages/strings/names.txt:398
 #: po/custom/fromJson.txt:2122
 msgid "Flashlight Emplacement"
-msgstr ""
+msgstr "Flashlight Uporište"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower03.name
@@ -1401,47 +1401,47 @@ msgstr "Teško uporište sa bacačem plamena"
 #: data/base/messages/strings/names.txt:330
 #: po/custom/fromJson.txt:176
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "Napredna proizvodnja kiborga"
 
 #: data/base/messages/strings/names.txt:331
 msgid "Advanced Cyborg Production Mk2"
-msgstr ""
+msgstr "Napredna proizvodnja kiborga Mk2"
 
 #: data/base/messages/strings/names.txt:332
 msgid "Advanced Cyborg Production Mk3"
-msgstr ""
+msgstr "Napredna proizvodnja kiborga Mk3"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[1]
 #: data/base/messages/strings/names.txt:334
 #: po/custom/fromJson.txt:187
 msgid "Advanced Factory Production"
-msgstr ""
+msgstr "Napredna proizvodnja tvornice"
 
 #: data/base/messages/strings/names.txt:335
 msgid "Advanced Factory Production Mk2"
-msgstr ""
+msgstr "Napredna proizvodnja tvornice Mk2"
 
 #: data/base/messages/strings/names.txt:336
 msgid "Advanced Factory Production Mk3"
-msgstr ""
+msgstr "Napredna proizvodnja tvornice Mk3"
 
 #: data/base/messages/strings/names.txt:342
 msgid "Advanced Repair Facility Upgrade"
-msgstr ""
+msgstr "Unaprijeđenje naprednog objekta za popravak"
 
 #: data/base/messages/strings/names.txt:343
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr ""
+msgstr "Unaprijeđenje naprednog objekta za popravak Mk2"
 
 #: data/base/messages/strings/names.txt:344
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr ""
+msgstr "Unaprijeđenje naprednog objekta za popravak Mk3"
 
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:442
 msgid "Robotic VTOL Rearming Mk4"
-msgstr ""
+msgstr "Robotski VTOL ponovo naoružanje MK4"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:450
@@ -1505,7 +1505,7 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
-msgstr ""
+msgstr "Teška Kupola za Popravak"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/resstrings.txt:450
@@ -1522,32 +1522,32 @@ msgstr ""
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade"
-msgstr ""
+msgstr "Nadogradnja CB Senzora"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "Nadogradnja CB Senzora Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:477
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "Nadogradnja CB Senzora Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade"
-msgstr ""
+msgstr "Nadogradnja VTOL CB"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "Nadogradnja VTOL CB Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "Nadogradnja VTOL CB Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:483
@@ -2574,7 +2574,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:2312
 msgid "Hardened Base Structure Materials"
-msgstr ""
+msgstr "Pojačanje strukture materijala baze"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[3]
@@ -2638,7 +2638,7 @@ msgstr "Sve VTOL tvornice su automatski nadograđene"
 #: data/mp/messages/strings/resstrings.txt:206
 #: po/custom/fromJson.txt:6132
 msgid "VTOL Rearming Times Reduced"
-msgstr ""
+msgstr "VTOL smanjeno vrijeme ponovnog naoružavanja"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
@@ -2649,7 +2649,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:973
 msgid "Automated VTOL Rearming"
-msgstr ""
+msgstr "Automatsko VTOL ponovno naoružavanje"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -2658,7 +2658,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:208
 #: po/custom/fromJson.txt:4713
 msgid "Reduces rearming time"
-msgstr ""
+msgstr "Smanjuje vrijeme ponovnog naoružavanja"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[3]
@@ -2669,7 +2669,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:385
 msgid "All rearming pads upgraded automatically"
-msgstr ""
+msgstr "Sve platforme za ponovno naoružavanje nadograđene su automatski"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
@@ -2690,7 +2690,7 @@ msgstr "Novi sistemi kupole su dostupni"
 #: data/mp/messages/strings/resstrings.txt:212
 #: po/custom/fromJson.txt:2687
 msgid "Heavy repair unit"
-msgstr ""
+msgstr "Teška jedinica za popravak"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[2]
@@ -2700,7 +2700,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:988
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "Automatski popravlja oštećene jedinice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
@@ -2710,22 +2710,22 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:4361
 msgid "Or damaged units may be selected as target"
-msgstr ""
+msgstr "Ili se oštećene jedinice mogu odabrati kao meta"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Research Breakthrough Improves Repair Speeds"
-msgstr ""
+msgstr "Proboj u istraživanju poboljšava brzinu popravka"
 
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:218
 msgid "Increases repair speed"
-msgstr ""
+msgstr "Povećava brzinu popravka"
 
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
 msgid "All mobile repair units upgraded automatically"
-msgstr ""
+msgstr "Sve mobilnje jedinice za popravak su automatski nadograđene"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[0]
@@ -2743,7 +2743,7 @@ msgstr "Bolji senzorski tornjevi su dostupni"
 #: data/mp/messages/strings/resstrings.txt:222
 #: po/custom/fromJson.txt:4084
 msgid "New construction techniques improve tower"
-msgstr ""
+msgstr "Nove građevinske tehnike poboljšavaju toranj"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[2]
@@ -2752,7 +2752,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:223
 #: po/custom/fromJson.txt:4795
 msgid "Replaces existing sensor tower"
-msgstr ""
+msgstr "Zamjenjuje postojeće toranj senzore"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[3]
@@ -2763,7 +2763,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:224
 #: po/custom/fromJson.txt:3698
 msgid "May be assigned as spotter for indirect fire weapons"
-msgstr ""
+msgstr "Može se dodijeliti kao promatrač za oružja za neizravnu paljbu"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[1]
@@ -2772,7 +2772,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:227
 #: po/custom/fromJson.txt:5995
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr ""
+msgstr "VTOL CB kupola otkriva neprijateljske neizravne vatrene baterije"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[2]
@@ -2783,7 +2783,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:228
 #: po/custom/fromJson.txt:4377
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr ""
+msgstr "Naređuje dodijeljene VTOL-ove za napad na neprijateljske baterije"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[3]
@@ -2794,7 +2794,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:229
 #: po/custom/fromJson.txt:6186
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr ""
+msgstr "VTOL-i napadaju dok neprijateljska baterija ne bude potisnuta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[0]
@@ -2838,7 +2838,7 @@ msgstr "Produljuje VTOL CB domet"
 #: data/mp/messages/strings/resstrings.txt:234
 #: po/custom/fromJson.txt:438
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr ""
+msgstr "Svi VTOL CB senzori nadograđeni su automatski"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[0]
@@ -2885,22 +2885,22 @@ msgstr "Svi VTOL udar senzori su automatski poboljšani"
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
 msgid "Scrambler Improved"
-msgstr ""
+msgstr "Scrambler poboljšan"
 
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
 msgid "Improvement in synaptic link technology"
-msgstr ""
+msgstr "Poboljšanje tehnologije sinaptičke veze"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
 msgid "Increases scrambler rate"
-msgstr ""
+msgstr "Povećava brzinu Scramblera"
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr ""
+msgstr "Svi scrambleri nadograđeni su automatski"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[0]
@@ -2920,7 +2920,7 @@ msgstr "\"Collective\" lagani trup"
 #: data/mp/messages/strings/resstrings.txt:247
 #: po/custom/fromJson.txt:5450
 msgid "Superior armor and body points to Viper"
-msgstr ""
+msgstr "Superiorni oklop i bodovi tijela kod Vipera"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[2]
@@ -2938,7 +2938,7 @@ msgstr "Sporiji od Vipera"
 #: data/mp/messages/strings/resstrings.txt:249
 #: po/custom/fromJson.txt:2823
 msgid "High power costs and slower to produce than Viper"
-msgstr ""
+msgstr "Visoki troškovi energije i sporiji za proizvodnju od Vipera"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[0]
@@ -2958,7 +2958,7 @@ msgstr "\"Collective\" srednje tijelo"
 #: data/mp/messages/strings/resstrings.txt:252
 #: po/custom/fromJson.txt:5444
 msgid "Superior armor and body points to Cobra"
-msgstr ""
+msgstr "Superiorni oklop i bodovi tijela nego kod Kobre"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[2]
@@ -2976,7 +2976,7 @@ msgstr "Sporiji od Cobre"
 #: data/mp/messages/strings/resstrings.txt:254
 #: po/custom/fromJson.txt:2819
 msgid "High power costs and slower to produce than Cobra"
-msgstr ""
+msgstr "Visoki troškovi energije i sporija proizvodnja od Cobre"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[0]
@@ -3068,7 +3068,7 @@ msgstr "Poboljšan je termalni oklop vozila"
 #: data/mp/messages/strings/resstrings.txt:267
 #: po/custom/fromJson.txt:2487
 msgid "Heat-resistant armored layers"
-msgstr ""
+msgstr "Oklopni slojevi otporni na toplinu"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[2]
@@ -3139,7 +3139,7 @@ msgstr "Povećava bodove tijela"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:325
 msgid "All half-tracks upgraded automatically"
-msgstr ""
+msgstr "Sve Half-trackovi nadograđeni su automatski"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_H2.text[3]
@@ -3150,7 +3150,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:279
 #: po/custom/fromJson.txt:331
 msgid "All hovers upgraded automatically"
-msgstr ""
+msgstr "Svi Hoveri automatski su nadograđeni"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_TRACK2.text[3]
