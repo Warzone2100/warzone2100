@@ -2250,7 +2250,7 @@ static bool writeResearchFile(char *pFileName);
 static bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType);
 static bool writeMessageFile(const char *pFileName);
 
-static bool loadSaveStructLimits(const char *pFileName);
+static bool loadSaveLimits(const char *pFileName);
 static bool writeStructLimitsFile(const char *pFileName);
 
 static bool readFiresupportDesignators(const char *pFileName);
@@ -2775,6 +2775,19 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 	}
 
+	if ((saveGameVersion >= VERSION_15) && UserSaveGame)
+	{
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "limits.json");
+
+		//load the data into apsStructLists
+		if (!loadSaveLimits(aFileName))
+		{
+			debug(LOG_ERROR, "failed to load %s", aFileName);
+			goto error;
+		}
+	}
+
 	if (saveGameOnMission && UserSaveGame)
 	{
 		//the scroll limits for the mission map have already been written
@@ -3204,23 +3217,10 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	if ((saveGameVersion >= VERSION_15) && UserSaveGame)
 	{
-		//load in the mission structures
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "limits.json");
-
-		//load the data into apsStructLists
-		if (!loadSaveStructLimits(aFileName))
-		{
-			debug(LOG_ERROR, "failed to load %s", aFileName);
-			goto error;
-		}
-
-		//set up the structure Limits
 		setCurrentStructQuantity(false);
 	}
 	else
 	{
-		//set up the structure Limits
 		setCurrentStructQuantity(true);
 	}
 
@@ -7588,7 +7588,7 @@ static bool writeMessageFile(const char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveStructLimits(const char *pFileName)
+bool loadSaveLimits(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 
