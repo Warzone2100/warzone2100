@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-25 14:43\n"
+"PO-Revision-Date: 2022-12-26 02:45\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -4029,7 +4029,7 @@ msgstr "Invia almeno un trasportatore con un camion e sopravvivi all'assalto del
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Invia più trasportatori che puoi, e porta almeno un camion"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4069,11 +4069,11 @@ msgstr "Ritorna alla zona di atterraggio"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:532
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Suggerimento per la difficoltà Difficile / Insana:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Fortifica una base forte sulla mappa per proteggerti dal Collettivo"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:538
 msgid "Destroy all enemy units and structures"
@@ -6602,7 +6602,7 @@ msgstr "Armato con missili Tank Killer"
 #: po/custom/fromJson.txt:627
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Armatura +120%, punti corazza +90%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -11386,7 +11386,7 @@ msgstr "Mitragliatrice multi-canna a fuoco rapido"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3984
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Deve essere costruito per produrre dei comandanti"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -15855,11 +15855,11 @@ msgstr "Tracciato"
 
 #: src/frontend.cpp:855
 msgid "High"
-msgstr ""
+msgstr "Alta"
 
 #: src/frontend.cpp:856
 msgid "Default"
-msgstr ""
+msgstr "Predefinita"
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:1859
@@ -16009,7 +16009,7 @@ msgstr "Desktop pieno"
 
 #: src/frontend.cpp:1742
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "Attivo (schermo intero)"
 
 #: src/frontend.cpp:1892
 msgid "Texture size"
@@ -16040,7 +16040,7 @@ msgstr ""
 
 #: src/frontend.cpp:1932
 msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
+msgstr "Se la finestra dovrebbe minimizzarsi automaticamente alla perdita del fuoco"
 
 #. TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
 #: src/frontend.cpp:1942
@@ -16227,7 +16227,7 @@ msgstr "Slot Spettatore"
 
 #: src/frontend.cpp:3005
 msgid "Enable Rating"
-msgstr ""
+msgstr "Abilita valutazioni"
 
 #: src/frontend.cpp:3020
 msgid "MULTIPLAY OPTIONS"
@@ -17498,7 +17498,7 @@ msgstr ""
 #: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "Giocatore %d: %d potenza"
 
 #: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
@@ -18418,7 +18418,7 @@ msgstr "(nessuno)"
 
 #: src/multiint.cpp:4269
 msgid "Player rating:"
-msgstr ""
+msgstr "Valutazione del giocatore:"
 
 #: src/multiint.cpp:4272
 msgid "Host provided"
@@ -18813,7 +18813,7 @@ msgstr ""
 #: src/multiopt.cpp:295
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
+msgstr "[%d] Limite [%s]: %u (predefinito: %u)"
 
 #: src/multiopt.cpp:299
 #, c-format
@@ -19017,7 +19017,7 @@ msgstr "Impossibile caricare l'AI selezionata! Controlla i registri per scoprire
 #: src/qtscript.cpp:903
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "Script AI %s per il giocatore corrente caricato!"
 
 #: src/research.cpp:1043
 #, c-format
@@ -19164,15 +19164,15 @@ msgstr "Impossibile localizzare alcun Comandante!"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "Impossibile trovare l'edificio richiesto!"
 
 #: src/seqdisp.cpp:576
 msgid "Loading video"
-msgstr ""
+msgstr "Caricamento del video"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Mostra statistiche del giocatore"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
@@ -19523,7 +19523,7 @@ msgstr "È disponibile una nuova versione di Warzone (%s)!"
 
 #: src/updatemanager.cpp:365
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Questa nuova versione include importanti delle correzioni di bug e degli aggiornamenti, ed è consigliabile aggiornare adesso."
 
 #: src/updatemanager.cpp:370
 msgid "A new build of Warzone 2100 is available!"
