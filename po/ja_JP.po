@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-26 02:45\n"
+"PO-Revision-Date: 2022-12-26 14:44\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -20,29 +20,29 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "目的: 神経シナプス技術の位置を特定し、回収せよ"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "ベースを確立し、崩壊前のストラクチャーを検索せよ。"
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "このストラクチャーはプロジェクトの成功に不可欠な技術を含んでいます。"
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "アルファベースミッション：スカベンジャー・レイダーズ"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "スカベンジャー・レイダースがベースに接近しています。"
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "ベースを防衛し、スカベンジャーキャンプを破壊せよ。"
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
