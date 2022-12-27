@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-26 02:45\n"
+"PO-Revision-Date: 2022-12-27 15:52\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -18818,7 +18818,7 @@ msgstr "[%d] Limite [%s]: %u (predefinito: %u)"
 #: src/multiopt.cpp:299
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
+msgstr "[%d] Limite [%s]: %u (predefinito: nessun limite)"
 
 #: src/multiopt.cpp:307
 #, c-format
@@ -19255,19 +19255,19 @@ msgstr "%s - Punti vita %d/%d"
 #: src/structure.cpp:5298
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr ""
+msgstr "ID %d - armatura %d|%d - intervallo del sensore %d - ECM %d - nato %u - profondità %.02f"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #. "state": The "RepairState" (printed as an integer, Idle = 0, Repairing = 1)
 #: src/structure.cpp:5309
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "ID %d - stato %d"
 
 #: src/structure.cpp:5316
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "ID %d - %s"
 
 #: src/structure.cpp:5329
 #, c-format
@@ -19278,7 +19278,7 @@ msgstr "%s - Connesso %u di %u - Punti vita %d/%d"
 #: src/structure.cpp:5334
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "ID %u - Moltiplicatore: %u"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5344
