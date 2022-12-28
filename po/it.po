@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-27 15:52\n"
+"PO-Revision-Date: 2022-12-28 03:50\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -16045,7 +16045,7 @@ msgstr "Se la finestra dovrebbe minimizzarsi automaticamente alla perdita del fu
 #. TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
 #: src/frontend.cpp:1942
 msgid "Alt+Enter Toggle"
-msgstr ""
+msgstr "Alt+Invio attiva/disattiva"
 
 #: src/frontend.cpp:1943
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
@@ -18808,7 +18808,7 @@ msgstr "espulso %s: %s dal gioco e aggiunto alla lista dei bannati!"
 #: src/multiopt.cpp:283
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "Limiti della struttura modificati [%d]:"
 
 #: src/multiopt.cpp:295
 #, c-format
@@ -19229,7 +19229,7 @@ msgstr[1] "%s - %u Unità assegnate - Punti vita %d/%d"
 #: src/structure.cpp:5271
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %d - intervallo del sensore %d - ECM %d"
 
 #: src/structure.cpp:5286
 #, c-format
