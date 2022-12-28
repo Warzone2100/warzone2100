@@ -614,11 +614,3 @@ function __camAiPowerReset()
 		setPower(AI_POWER, i);
 	}
 }
-
-function __camSetOffworldLimits()
-{
-	// These are the only structures that do not get
-	// auto-disabled by the engine in off-world missions.
-	setStructureLimits("A0CommandCentre", 0, CAM_HUMAN_PLAYER);
-	setStructureLimits("A0ComDroidControl", 0, CAM_HUMAN_PLAYER);
-}

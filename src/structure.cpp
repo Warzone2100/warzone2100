@@ -3896,6 +3896,8 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 				if (missionIsOffworld())
 				{
 					if (psBuilding->type == REF_FACTORY ||
+					    psBuilding->type == REF_COMMAND_CONTROL ||
+					    psBuilding->type == REF_HQ ||
 					    psBuilding->type == REF_POWER_GEN ||
 					    psBuilding->type == REF_RESOURCE_EXTRACTOR ||
 					    psBuilding->type == REF_RESEARCH ||
