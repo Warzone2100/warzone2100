@@ -545,19 +545,19 @@ static bool gameInit()
 	UDWORD			player;
 
 	// Various sanity checks (for *true* multiplayer)
-	if (bMultiPlayer && NetPlay.bComms)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 	{
-		for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
+		if (player < MAX_PLAYERS)
 		{
-			if (player < MAX_PLAYERS)
+			if (NetPlay.players[player].allocated)
 			{
-				if (NetPlay.players[player].allocated)
-				{
-					ASSERT(NetPlay.players[player].difficulty == AIDifficulty::HUMAN, "Found an allocated (human) player (%u) with mis-matched difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
+				ASSERT(NetPlay.players[player].difficulty == AIDifficulty::HUMAN, "Found an allocated (human) player (%u) with mis-matched difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
 
-				}
 			}
+		}
 
+		if (bMultiPlayer && NetPlay.bComms)
+		{
 			if (!NetPlay.players[player].allocated)
 			{
 				ASSERT(NetPlay.players[player].difficulty != AIDifficulty::HUMAN, "Found a non-human slot (%u) with mis-matched (human) difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
