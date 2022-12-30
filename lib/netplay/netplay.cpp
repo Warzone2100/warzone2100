@@ -4057,6 +4057,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		NetPlay.isHost			= true;
 		NetPlay.hostPlayer 		= selectedPlayer;
 		NetPlay.players[0].allocated	= true;
+		NetPlay.players[0].difficulty	= AIDifficulty::HUMAN;
 		NetPlay.playercount		= 1;
 		debug(LOG_NET, "Hosting but no comms");
 		// Now switch player color of the host to what they normally use for MP games
