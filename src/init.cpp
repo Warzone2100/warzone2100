@@ -404,7 +404,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 			for (const auto& curSearchPath : searchPathRegistry)
 			{
 #ifdef DEBUG
-				debug(LOG_WZ, "Removing [%s] from search path", curSearchPath->path);
+				debug(LOG_WZ, "Removing [%s] from search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Remove maps and mods
 				removeSubdirs(curSearchPath->path.c_str(), "maps");
@@ -453,7 +453,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 			for (const auto& curSearchPath : searchPathRegistry)
 			{
 #ifdef DEBUG
-				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path);
+				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Add global and campaign mods
 				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
@@ -513,7 +513,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 			for (const auto& curSearchPath : searchPathRegistry)
 			{
 #ifdef DEBUG
-				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path);
+				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Add global and multiplay mods
 				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
