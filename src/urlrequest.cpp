@@ -530,7 +530,10 @@ public:
 		}
 		curl_easy_setopt(handle, CURLOPT_HEADERFUNCTION, header_callback);
 		curl_easy_setopt(handle, CURLOPT_HEADERDATA, (void *)this);
-	#if LIBCURL_VERSION_NUM >= 0x071304	// cURL 7.19.4+
+	#if LIBCURL_VERSION_NUM >= 0x075500		// cURL 7.85.0+
+		/* only allow HTTP and HTTPS */
+		curl_easy_setopt(handle, CURLOPT_PROTOCOLS_STR, "http,https");
+	#elif LIBCURL_VERSION_NUM >= 0x071304	// cURL 7.19.4+
 		/* only allow HTTP and HTTPS */
 		curl_easy_setopt(handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 	#endif
