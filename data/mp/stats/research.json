@@ -4507,10 +4507,11 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG-ROF03",
-			"R-Wpn-AAGun03"
+			"R-Wpn-AAGun03",
+			"R-Struc-Research-Upgrade06"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 10800,
+		"researchPower": 337,
 		"resultComponents": [
 			"QuadRotAAGun"
 		],
@@ -6836,8 +6837,8 @@
 			"R-Wpn-MG-Damage07",
 			"R-Struc-Research-Upgrade06"
 		],
-		"researchPoints": 5000,
-		"researchPower": 156,
+		"researchPoints": 10800,
+		"researchPower": 337,
 		"results": [
 			{
 				"class": "Weapon",
