@@ -7072,42 +7072,32 @@ void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, uns
 static void printHostHelpMessagesToConsole()
 {
 	char buf[512] = { '\0' };
-	if (NetPlay.bComms)
-	{
-		if (NetPlay.isUPNP)
-		{
-			if (NetPlay.isUPNP_CONFIGURED)
-			{
-				ssprintf(buf, "%s", _("UPnP has been enabled."));
-			}
-			else
-			{
-				if (NetPlay.isUPNP_ERROR)
-				{
-					ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
-				}
-				else
-				{
-					ssprintf(buf, "%s", _("UPnP detection is in progress..."));
-				}
-			}
-			displayRoomNotifyMessage(buf);
-		}
-		else
-		{
-			ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
-			displayRoomNotifyMessage(buf);
-		}
-	}
-	if (challengeActive)
-	{
+	if (challengeActive){
 		ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
-	}
-	else if (!NetPlay.isHost)
-	{
+		displayRoomNotifyMessage(buf);
+		return;
+		}
+	if (!NetPlay.isHost){
 		ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
+		displayRoomNotifyMessage(buf);
+		return;}
+	if (!NetPlay.bComms)
+		return;
+	if (!NetPlay.isUPNP){
+		ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
+		displayRoomNotifyMessage(buf);
+		return;}
+	if (NetPlay.isUPNP_CONFIGURED){
+		ssprintf(buf, "%s", _("UPnP has been enabled."));
+		displayRoomNotifyMessage(buf);
+		return;
 	}
+	if (NetPlay.isUPNP_ERROR){
+		ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
+	}
+	ssprintf(buf, "%s", _("UPnP detection is in progress..."));
 	displayRoomNotifyMessage(buf);
+
 }
 
 void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget)
