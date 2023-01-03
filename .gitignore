@@ -308,6 +308,8 @@ win32/CodeAnalyst
 !.ci/vcpkg/overlay-ports/*/*.patch
 # Do not ignore patches in quickjs patches folder
 !3rdparty/quickjs/patches/*.patch
+# Do not ignore patches in sentry folder
+!lib/exceptionhandler/3rdparty/sentry/**/*.patch
 
 # JetBrains IDEs like CLion
 /.idea/
