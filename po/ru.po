@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2023-01-04 14:55\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -19542,7 +19542,7 @@ msgstr "Доступна новая версия (%s) Warzone 2100!"
 
 #: src/updatemanager.cpp:365
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Это новая версия включает в себя обновления и исправление ошибок. Рекомендуем обновиться сейчас."
 
 #: src/updatemanager.cpp:370
 msgid "A new build of Warzone 2100 is available!"
