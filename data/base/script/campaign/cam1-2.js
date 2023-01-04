@@ -2,10 +2,16 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const SCAVENGER_RES = [
+	"R-Wpn-Flamer-Damage02", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage02", "R-Wpn-MG-ROF01", "R-Wpn-Mortar-Damage02",
+	"R-Wpn-Mortar-ROF01", "R-Wpn-Rocket-ROF03",
+];
+
 function exposeNorthBase()
 {
 	camDetectEnemyBase("NorthGroup"); // no problem if already detected
-	camPlayVideos("SB1_2_MSG2");
+	camPlayVideos({video: "SB1_2_MSG2", type: MISS_MSG});
 }
 
 function camArtifactPickup_ScavLab()
@@ -24,8 +30,8 @@ function camArtifactPickup_ScavLab()
 		},
 		groupSize: 5,
 		maxSize: 9,
-		throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
-		templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
+		throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 13 : 10)),
+		templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 	});
 	camEnableFactory("WestFactory");
 }
@@ -69,6 +75,13 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+
+	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.trike, cTempl.triketwin, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggytwin, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeeptwin, SCAV_7);
+
 	camSetEnemyBases({
 		"NorthGroup": {
 			cleanup: "NorthBase",
@@ -91,45 +104,48 @@ function eventStartLevel()
 	camDetectEnemyBase("ScavLabGroup");
 
 	camSetArtifacts({
-		"ScavLab": { tech: "R-Wpn-Mortar01Lt" },
-		"NorthFactory": { tech: "R-Vehicle-Prop-Halftracks" },
+		"ScavLab": { tech: ["R-Wpn-Mortar01Lt", "R-Wpn-Flamer-Damage02"] },
+		"NorthFactory": { tech: ["R-Vehicle-Prop-Halftracks", "R-Wpn-Cannon1Mk1"] },
 	});
 
 	camSetFactories({
 		"NorthFactory": {
 			assembly: "NorthAssembly",
-			order: CAM_ORDER_COMPROMISE,
+			order: CAM_ORDER_PATROL,
+			groupSize: 5,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 20 : 15)),
 			data: {
 				pos: [
 					camMakePos("NorthAssembly"),
 					camMakePos("ScavLabPos"),
 					camMakePos("RTLZ"),
 				],
-				radius: 8
+				interval: camSecondsToMilliseconds(20),
+				regroup: false,
+				count: -1,
 			},
-			groupSize: 5,
-			maxSize: 9,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			group: camMakeGroup("NorthTankGroup"),
-			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
+			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 		},
 		"WestFactory": {
 			assembly: "WestAssembly",
-			order: CAM_ORDER_COMPROMISE,
+			order: CAM_ORDER_PATROL,
+			groupSize: 5,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 13 : 10)),
 			data: {
 				pos: [
 					camMakePos("WestAssembly"),
 					camMakePos("GatesPos"),
 					camMakePos("ScavLabPos"),
 				],
-				radius: 8
+				interval: camSecondsToMilliseconds(20),
+				regroup: false,
+				count: -1,
 			},
-			groupSize: 5,
-			maxSize: 9,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
-			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
+
+			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
 		},
 	});
 
-	queue("enableWestFactory", camSecondsToMilliseconds(30));
+	queue("enableWestFactory", camChangeOnDiff(camSecondsToMilliseconds(30)));
 }

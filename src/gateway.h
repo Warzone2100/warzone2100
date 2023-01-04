@@ -41,7 +41,7 @@ void gwShutDown();
 bool gwNewGateway(int x1, int y1, int x2, int y2);
 
 /// Get number of gateways.
-int gwNumGateways();
+size_t gwNumGateways();
 
 /// Get the gateway list.
 GATEWAY_LIST &gwGetGateways();

@@ -20,7 +20,7 @@
 
 #ifndef __INCLUDED_SRC_LOADSAVE_H__
 #define __INCLUDED_SRC_LOADSAVE_H__
-
+#include "main.h"
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -37,11 +37,13 @@ enum LOADSAVE_MODE
 	SAVE_MISSIONEND,
 	SAVE_INGAME_MISSION,
 	SAVE_INGAME_SKIRMISH,
+	LOADREPLAY_FRONTEND_SKIRMISH,
+	LOADREPLAY_FRONTEND_MULTI,
 	LOAD_FRONTEND_MISSION_AUTO = 16,// internal use only
 	LOAD_MISSIONEND_AUTO,		// internal use only
 	LOAD_INGAME_MISSION_AUTO,	// internal use only
 	LOAD_FRONTEND_SKIRMISH_AUTO,	// internal use only
-	LOAD_INGAME_SKIRMISH_AUTO	// internal use only
+	LOAD_INGAME_SKIRMISH_AUTO,      // internal use only
 };
 
 /***************************************************************************/
@@ -50,13 +52,15 @@ enum LOADSAVE_MODE
  */
 /***************************************************************************/
 
-extern bool		bLoadSaveUp;							// true when interface is up and should be run.
+extern bool bLoadSaveUp;							// true when interface is up and should be run.
 //the name of the save game to load from the front end
 extern char saveGameName[256];
-extern char lastSavePath[PATH_MAX];
+extern SaveGamePath_t lastSavePath;
 extern bool lastSaveMP;
-extern char	sRequestResult[PATH_MAX];
-extern bool		bRequestLoad;
+extern char sRequestResult[PATH_MAX];
+extern bool bRequestLoad;
+extern bool autosaveEnabled;
+extern bool bRequestLoadReplay;
 
 /***************************************************************************/
 /*
@@ -68,7 +72,8 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 void drawBlueBoxInset(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 
 bool addLoadSave(LOADSAVE_MODE mode, const char *title);
-bool closeLoadSave();
+bool closeLoadSave(bool goBack = false);
+bool closeLoadSaveOnShutdown();
 bool runLoadSave(bool bResetMissionWidgets);
 bool displayLoadSave();
 
@@ -80,7 +85,8 @@ bool saveInMissionRes();
 // return whether the save screen was displayed in the middle of a mission
 bool saveMidMission();
 
-void deleteSaveGame(char *saveGameName);
+void deleteSaveGame_classic(const char *fileName);
+void deleteSaveGame(std::string saveGameFolderPath);
 
 void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 

@@ -15,11 +15,11 @@ var prefix = '!nb';
 // key: name in chat, value: function that will be executed
 // function gets two params: sender and argument
 var commandMap = {
-    set: chatSet,
-    res: chatRes,
-    truck: chatTruck,
-    power: chatMoney,
-    money: chatMoney, // alias for "power"
+	set: chatSet,
+	res: chatRes,
+	truck: chatTruck,
+	power: chatMoney,
+	money: chatMoney, // alias for "power"
 	help: chatHelp,
 	go: chatHelp, // alias for "help"
 	tx: chatUnhelp,
@@ -40,7 +40,7 @@ _global.unnoticeBeacon = function(from) {
 }
 
 _global.findBeaconPlayer = function(x, y) {
-	for (var i = 0; i < beaconInfo.length; ++i)
+	for (let i = 0; i < beaconInfo.length; ++i)
 		if (defined(beaconInfo[i]) && beaconInfo[i].x === x && beaconInfo[i].y === y)
 			return i;
 }
@@ -68,7 +68,7 @@ _global.handleChatMessage = function(sender, receiver, message) {
 
 function chatWho(sender, argument) {
 	var str = "NullBot3 (" + scriptName + ") ";
-	switch(difficulty) {
+	switch (difficulty) {
 		case EASY: str += _("EASY"); break;
 		case MEDIUM: str=str + _("MEDIUM"); break;
 		case HARD: str=str + _("HARD"); break;
@@ -81,7 +81,7 @@ function chatWho(sender, argument) {
 
 function chatSet(sender, argument) {
 	var str = "";
-	for (var i in subpersonalities) {
+	for (const i in subpersonalities) {
 		if (subpersonalities[i].chatalias === argument) {
 			personality = subpersonalities[i];
 			return _("Personality change successful.");
@@ -105,7 +105,7 @@ function chatRes(sender, argument) {
 		return _("Researching fundamental technology.");
 	}
 	var str = " cl no fn";
-	for (var i in weaponStats) {
+	for (const i in weaponStats) {
 		if (weaponStats[i].chatalias === argument) {
 			setForcedResearch(weaponStatsToResList(weaponStats[i]));
 			return _("Researching ") + weaponStats[i].chatalias;

@@ -46,6 +46,7 @@ enum tMode
 	MOUSE_OPTIONS,          // 16 mouse options menu
 	CAMPAIGNS,              // 17 campaign selector
 	MUSIC_MANAGER,			// 18 music manager
+	MULTIPLAY_OPTIONS,		// 19 multiplay options menu
 };
 
 #define MAX_LEVEL_NAME_SIZE	(256)
@@ -61,6 +62,7 @@ bool runSinglePlayerMenu();
 bool runCampaignSelector();
 bool runMultiPlayerMenu();
 bool runGameOptionsMenu();
+bool runMultiplayOptionsMenu();
 bool runOptionsMenu();
 bool runGraphicsOptionsMenu();
 bool runAudioAndZoomOptionsMenu();
@@ -68,12 +70,28 @@ bool runVideoOptionsMenu();
 bool runMouseOptionsMenu();
 bool runTutorialMenu();
 void runContinue();
+void startTitleMenu();
+void startTutorialMenu();
+void startSinglePlayerMenu();
+void startCampaignSelector();
+void startMultiPlayerMenu();
+void startOptionsMenu();
+void startGraphicsOptionsMenu();
+void startAudioAndZoomOptionsMenu();
+void startVideoOptionsMenu();
+void startMouseOptionsMenu();
+void startGameOptionsMenu();
+void startMultiplayOptionsMenu();
+void refreshCurrentVideoOptionsValues();
+void frontendIsShuttingDown();
 
 void addTopForm(bool wide);
-void addBottomForm();
-void addBackdrop();
+void addBottomForm(bool wide = false);
+W_FORM *addBackdrop();
+W_FORM *addBackdrop(const std::shared_ptr<W_SCREEN> &screen);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
-void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
+W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
+W_LABEL *addSideText(const std::shared_ptr<W_SCREEN> &screen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
 void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -90,6 +108,7 @@ char const *graphicsOptionsSubtitlesString();
 char const *graphicsOptionsShadowsString();
 char const *graphicsOptionsRadarString();
 char const *graphicsOptionsRadarJumpString();
+char const *graphicsOptionsScreenShakeString();
 void seqFMVmode();
 void seqScanlineMode();
 
@@ -112,6 +131,13 @@ void seqScrollEvent();
 
 struct DisplayTextOptionCache
 {
+	enum class OverflowBehavior
+	{
+		None,
+		ShrinkFont
+	};
+	OverflowBehavior overflowBehavior = OverflowBehavior::None;
+	int lastWidgetWidth = 0;
 	WzText wzText;
 };
 
@@ -137,8 +163,17 @@ struct DisplayTextOptionCache
 #define FRONTEND_BOTFORMH		305				// keep Y+H < 480 (minimum display height)
 
 
+#define FRONTEND_BOTFORM_WIDEX		30
+#define FRONTEND_BOTFORM_WIDEY		FRONTEND_BOTFORMY
+#define FRONTEND_BOTFORM_WIDEW		580
+#define FRONTEND_BOTFORM_WIDEH		FRONTEND_BOTFORMH	// keep Y+H < 480 (minimum display height)
+
+
 #define FRONTEND_BUTWIDTH		FRONTEND_BOTFORMW-40 // text button sizes.
 #define FRONTEND_BUTHEIGHT		35
+
+#define FRONTEND_BUTWIDTH_WIDE	FRONTEND_BOTFORM_WIDEW-40 // text button sizes.
+#define FRONTEND_BUTHEIGHT_WIDE	FRONTEND_BUTHEIGHT
 
 #define FRONTEND_POS1X			20				// button positions
 #define FRONTEND_POS1Y			(0*FRONTEND_BUTHEIGHT)
@@ -208,6 +243,7 @@ enum
 	FRONTEND_NEWGAME		= 20200,	// single player (menu)
 	FRONTEND_LOADGAME_MISSION,
 	FRONTEND_LOADGAME_SKIRMISH,
+	FRONTEND_REPLAY,
 	FRONTEND_SKIRMISH,
 	FRONTEND_CHALLENGES,
 	FRONTEND_HOST			= 20300,	//multiplayer menu options
@@ -246,19 +282,25 @@ enum
 	FRONTEND_FMVMODE_R,
 	FRONTEND_SCANLINES,
 	FRONTEND_SCANLINES_R,
-	FRONTEND_SUBTITLES,
-	FRONTEND_SUBTITLES_R,
 	FRONTEND_SHADOWS,
 	FRONTEND_SHADOWS_R,
+	FRONTEND_FOG,
+	FRONTEND_FOG_R,
 	FRONTEND_RADAR,
 	FRONTEND_RADAR_R,
 	FRONTEND_RADAR_JUMP,
 	FRONTEND_RADAR_JUMP_R,
+	FRONTEND_LOD_DISTANCE,
+	FRONTEND_LOD_DISTANCE_R,
+	FRONTEND_SSHAKE,
+	FRONTEND_SSHAKE_R,
 
 	FRONTEND_AUDIO_AND_ZOOMOPTIONS = 23000,                 // Audio and Zoom Options Menu
 	FRONTEND_3D_FX,						// 3d sound volume
 	FRONTEND_FX,						// 2d (voice) sound volume
 	FRONTEND_MUSIC,						// music volume
+	FRONTEND_SUBTITLES,
+	FRONTEND_SUBTITLES_R,
 	FRONTEND_SOUND_HRTF,				// HRTF mode
 	FRONTEND_MAP_ZOOM,					// map zoom
 	FRONTEND_MAP_ZOOM_RATE,					// map zoom rate
@@ -274,8 +316,13 @@ enum
 	FRONTEND_VIDEOOPTIONS = 24000,          // video Options Menu
 	FRONTEND_WINDOWMODE,
 	FRONTEND_WINDOWMODE_R,
-	FRONTEND_RESOLUTION,
-	FRONTEND_RESOLUTION_R,
+	FRONTEND_RESOLUTION_READONLY_LABEL_CONTAINER,
+	FRONTEND_RESOLUTION_READONLY_LABEL,
+	FRONTEND_RESOLUTION_READONLY_CONTAINER,
+	FRONTEND_RESOLUTION_READONLY,
+	FRONTEND_RESOLUTION_DROPDOWN_LABEL_CONTAINER,
+	FRONTEND_RESOLUTION_DROPDOWN_LABEL,
+	FRONTEND_RESOLUTION_DROPDOWN,
 	FRONTEND_TEXTURESZ,
 	FRONTEND_TEXTURESZ_R,
 	FRONTEND_VSYNC,
@@ -286,6 +333,10 @@ enum
 	FRONTEND_DISPLAYSCALE_R,
 	FRONTEND_GFXBACKEND,
 	FRONTEND_GFXBACKEND_R,
+	FRONTEND_MINIMIZE_ON_FOCUS_LOSS,
+	FRONTEND_MINIMIZE_ON_FOCUS_LOSS_DROPDOWN,
+	FRONTEND_ALTENTER_TOGGLE_MODE,
+	FRONTEND_ALTENTER_TOGGLE_MODE_DROPDOWN,
 
 	FRONTEND_MOUSEOPTIONS = 25000,          // Mouse Options Menu
 	FRONTEND_CURSORMODE,
@@ -300,10 +351,26 @@ enum
 	FRONTEND_MMROTATE_R,
 	FRONTEND_SCROLLEVENT,
 	FRONTEND_SCROLLEVENT_R,
+	FRONTEND_CURSORSCALE,
+	FRONTEND_CURSORSCALE_DROPDOWN,
 
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
 
 	FRONTEND_MUSICMANAGER   = 27000,	// Music manager menu
+
+	FRONTEND_MULTIPLAYOPTIONS = 28000,	// Multiplayer Options Menu
+	FRONTEND_GAME_PORT,
+	FRONTEND_GAME_PORT_R,
+	FRONTEND_UPNP,
+	FRONTEND_UPNP_R,
+	FRONTEND_INACTIVITY_TIMEOUT,
+	FRONTEND_INACTIVITY_TIMEOUT_DROPDOWN,
+	FRONTEND_LAG_KICK,
+	FRONTEND_LAG_KICK_DROPDOWN,
+	FRONTEND_SPECTATOR_SLOTS,
+	FRONTEND_SPECTATOR_SLOTS_DROPDOWN,
+	FRONTEND_AUTORATING,
+	FRONTEND_AUTORATING_R,
 
 	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 

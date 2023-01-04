@@ -181,7 +181,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 	{
 		BASE_OBJECT	*psTemp = nullptr;
 		bool		isCB = false;
-		bool		isRD = false;
+		//bool		isRD = false;
 
 		if (!aiCheckAlliances(psSensor->player, psObj->player))
 		{
@@ -192,14 +192,21 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			DROID		*psDroid = (DROID *)psSensor;
 
 			ASSERT_OR_RETURN(nullptr, psDroid->droidType == DROID_SENSOR, "A non-sensor droid in a sensor list is non-sense");
-			// Skip non-observing droids.
+			// Skip non-observing droids. This includes Radar Detectors at the moment since they never observe anything.
 			if (psDroid->action != DACTION_OBSERVE)
 			{
 				continue;
 			}
+			// Artillery should not fire at objects observed by VTOL CB/Strike sensors.
+			if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_CB_SENSOR ||
+				asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_INTERCEPT_SENSOR ||
+				objRadarDetector((BASE_OBJECT *)psDroid))
+			{
+				continue;
+			}
 			psTemp = psDroid->psActionTarget[0];
-			isCB = cbSensorDroid(psDroid);
-			isRD = objRadarDetector((BASE_OBJECT *)psDroid);
+			isCB = asSensorStats[psDroid->asBits[COMP_SENSOR]].type == INDIRECT_CB_SENSOR;
+			//isRD = objRadarDetector((BASE_OBJECT *)psDroid);
 		}
 		else if (psSensor->type == OBJ_STRUCTURE)
 		{
@@ -210,9 +217,16 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			{
 				continue;
 			}
+			// Artillery should not fire at objects observed by VTOL CB/Strike sensors.
+			if (psCStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR ||
+				psCStruct->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR ||
+				objRadarDetector((BASE_OBJECT *)psCStruct))
+			{
+				continue;
+			}
 			psTemp = psCStruct->psTarget[0];
 			isCB = structCBSensor(psCStruct);
-			isRD = objRadarDetector((BASE_OBJECT *)psCStruct);
+			//isRD = objRadarDetector((BASE_OBJECT *)psCStruct);
 		}
 		if (!psTemp || psTemp->died || aiObjectIsProbablyDoomed(psTemp, false) || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
 		{
@@ -239,6 +253,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 					}
 					foundCB = true;  // got CB target, drop everything and shoot!
 				}
+				/*
 				else if (isRD)
 				{
 					if (targetOrigin)
@@ -246,6 +261,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 						*targetOrigin = ORIGIN_RADAR_DETECTOR;
 					}
 				}
+				*/
 			}
 		}
 	}
@@ -487,7 +503,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		 * and give a different unit a chance to get in range, too. */
 		if (weaponROF(attackerWeapon, psAttacker->player) < TARGET_DOOMED_SLOW_RELOAD_T)
 		{
-			debug(LOG_NEVER, "Not killing unit - doomed. My ROF: %i (%s)", weaponROF(attackerWeapon, psAttacker->player), getName(attackerWeapon));
+			debug(LOG_NEVER, "Not killing unit - doomed. My ROF: %i (%s)", weaponROF(attackerWeapon, psAttacker->player), getStatsName(attackerWeapon));
 			return noTarget;
 		}
 		attackWeight /= TARGET_DOOMED_PENALTY_F;
@@ -815,11 +831,6 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
 
-	if (psObj->type == OBJ_DROID && secondaryGetState((DROID *)psObj, DSO_HALTTYPE) == DSS_HALT_HOLD)
-	{
-		return false;	// Not sure why we check this here...
-	}
-
 	ASSERT_OR_RETURN(false, (unsigned)weapon_slot < psObj->numWeaps, "Invalid weapon selected");
 
 	/* See if there is a something in range */
@@ -1132,7 +1143,9 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	// don't allow units to start attacking if they will switch to guarding the commander
-	if (hasCommander(psDroid))
+	// except for sensors: they still look for targets themselves, because
+	// they have wider view
+	if (hasCommander(psDroid) && psDroid->droidType != DROID_SENSOR)
 	{
 		lookForTarget = false;
 		updateTarget = false;

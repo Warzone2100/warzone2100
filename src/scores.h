@@ -115,11 +115,12 @@ struct ScoreDataToScreenCache {
 
 bool scoreInitSystem();
 void scoreUpdateVar(DATA_INDEX var);
-void scoreDataToConsole();
 END_GAME_STATS_DATA	collectEndGameStatsData();
 void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache);
 void getAsciiTime(char *psText, unsigned time);
 bool readScoreData(const char *fileName);
 bool writeScoreData(const char *fileName);
+
+void stdOutGameSummary(UDWORD realTimeThrottleSeconds = 5, bool flush_output = true);
 
 #endif // __INCLUDED_SRC_SCORES_H__

@@ -67,8 +67,8 @@
 #define WZCOL_MENU_SHADOW							psPalette[41]
 #define WZCOL_DBLUE									psPalette[42]
 #define WZCOL_LBLUE									psPalette[43]
-#define WZCOL_BLUEPRINT_VALID						psPalette[44]
-#define WZCOL_BLUEPRINT_INVALID						psPalette[45]
+#define WZCOL_LGREEN                                psPalette[44]
+#define WZCOL_LRED                                  psPalette[45]
 #define WZCOL_BLUEPRINT_PLANNED						psPalette[46]
 #define WZCOL_HEALTH_HIGH_SHADOW					psPalette[47]
 #define WZCOL_HEALTH_MEDIUM_SHADOW					psPalette[48]
@@ -121,8 +121,11 @@
 #define WZCOL_TRANSPARENT_BOX						psPalette[95]
 #define WZCOL_CONS_TEXT_INFO						psPalette[96]
 #define WZCOL_NOTIFICATION_BOX						psPalette[97]
+#define WZCOL_FOG_ARIZONA							psPalette[98]
+#define WZCOL_FOG_URBAN								psPalette[99]
+#define WZCOL_FOG_ROCKIE							psPalette[100]
 
-#define WZCOL_MAX									98
+#define WZCOL_MAX									101
 
 //*************************************************************************
 

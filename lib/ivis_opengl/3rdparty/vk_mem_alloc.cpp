@@ -17,13 +17,17 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+/* Allow frame header files to be singly included */
+#define FRAME_LIB_INCLUDE
+#include "lib/framework/debug.h"
+
 #if defined(__clang__)
 # pragma clang diagnostic push
 # pragma clang diagnostic ignored "-Wunused-variable"
 # pragma clang diagnostic ignored "-Wmissing-field-initializers"
 # pragma clang diagnostic ignored "-Wunused-private-field"
+# pragma clang diagnostic ignored "-Wcast-align"
 #  if defined(__APPLE__)
-#    pragma clang diagnostic ignored "-Wcast-align" // Warning triggered on Xcode 8.x
 #    pragma clang diagnostic ignored "-Wnullability-completeness" // Warning triggered on newer Xcode
 #  endif
 #  if defined(__has_warning)
@@ -39,16 +43,21 @@
 # pragma GCC diagnostic ignored "-Wtype-limits"
 # pragma GCC diagnostic ignored "-Wunused-variable"
 # pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+# pragma GCC diagnostic ignored "-Wmissing-noreturn"
+#  if (defined(__arm__) || defined(__thumb__)) && !defined(__aarch64__)
+#    pragma GCC diagnostic ignored "-Wcast-align"
+#  endif
 #elif defined(_MSC_VER)
 # pragma warning( push )
 # pragma warning( disable : 4189 ) // warning C4189: 'identifier' : local variable is initialized but not referenced
 # pragma warning( disable : 4324 ) // warning C4324: 'struct_name' : structure was padded due to alignment specifier
+# pragma warning( disable : 4127 ) // warning C4127: conditional expression is constant
 #endif
 
 #define VMA_IMPLEMENTATION
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 0
-#define VMA_ASSERT(expr) assert(expr)
+#define VMA_ASSERT(expr) ASSERT(expr, "VMA_ASSERT failed")
 #include "vk_mem_alloc.h"
 
 #if defined(__clang__)

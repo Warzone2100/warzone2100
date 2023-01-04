@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 include(GNUInstallDirs)
 
 ############################
@@ -70,26 +68,27 @@ if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
 
-file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h")
-file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp")
-qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
+file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h" "hci/*.h" "input/*.h")
+file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp" "hci/*.cpp" "input/*.cpp")
 
 set(_additionalSourceFiles)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_additionalSourceFiles "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 endif()
 
-add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
-if(WZ_TARGET_ADDITIONAL_PROPERTIES)
-	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
-endif()
+add_executable(warzone2100 ${HEADERS} ${SRC} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
+include(WZTargetConfiguration)
+WZ_TARGET_CONFIGURATION(warzone2100)
 target_compile_definitions(warzone2100 PRIVATE "YY_NO_UNISTD_H")
-target_compile_definitions(warzone2100 PRIVATE "JSON_USE_IMPLICIT_CONVERSIONS=0")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
-SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100${WZ_OUTPUT_NAME_SUFFIX}")
+set(WZ_OUTPUT_BINARY_SUFFIX "${WZ_OUTPUT_NAME_SUFFIX}")
+if (WZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY)
+	unset(WZ_OUTPUT_BINARY_SUFFIX)
+endif()
+SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100${WZ_OUTPUT_BINARY_SUFFIX}")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Build warzone exe as a Windows app (not a console app)
@@ -105,23 +104,24 @@ if(MSVC)
 	target_compile_options(warzone2100 PRIVATE "/wd4267")
 endif()
 
-target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay sdl-backend framework sequence sound widget)
-target_link_libraries(warzone2100
-	Qt5::Core
-	Qt5::Script
-	Qt5::Gui
-	Qt5::Widgets
-)
+target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
+target_link_libraries(warzone2100 fmt::fmt)
 if(ENABLE_NLS)
-	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
+	target_link_libraries(warzone2100 ${Intl_LIBRARIES})
 endif()
 
+target_link_libraries(warzone2100 nlohmann_json)
+target_link_libraries(warzone2100 optional-lite)
 target_link_libraries(warzone2100 quickjs)
 
 include(IncludeFindCurl)
 target_link_libraries(warzone2100 CURL::libcurl)
 target_link_libraries(warzone2100 re2::re2)
+
+find_package(SQLite3 3.14 REQUIRED)
+target_link_libraries(warzone2100 SQLite::SQLite3)
+target_link_libraries(warzone2100 SQLiteCpp)
 
 set(_curl_gnutls_thread_safe_fix FALSE)
 if (DEFINED CURL_GNUTLS_REQUIRES_CALLBACKS)
@@ -153,7 +153,7 @@ if (DEFINED CURL_OPENSSL_REQUIRES_CALLBACKS)
 	set(_curl_has_thread_safe_backend FALSE)
 	foreach(_backend ${CURL_SUPPORTED_SSL_BACKENDS})
 		# determine if there are any non-OpenSSL, thread-safe backends enabled
-		if (NOT _backend STREQUAL "OpenSSL")
+		if (NOT _backend MATCHES "^OpenSSL.*")
 			if (_backend STREQUAL "GnuTLS" AND _curl_gnutls_thread_safe_fix)
 				set(_curl_has_thread_safe_backend TRUE)
 			else()
@@ -184,36 +184,37 @@ if (NOT DEFINED CURL_SUPPORTED_SSL_BACKENDS)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-    target_link_libraries(warzone2100 ws2_32 iphlpapi shlwapi ole32)
+    target_link_libraries(warzone2100 ws2_32 iphlpapi shlwapi ole32 psapi)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group,-subsystem,windows")
-    target_link_libraries(warzone2100 ${QT5ALL_LIBRARIES} ${QT5ALL_LDFLAGS_OTHER})
-    target_link_libraries(warzone2100 version Qt5::QWindowsIntegrationPlugin Qt5ThemeSupport Qt5FontDatabaseSupport Qt5EventDispatcherSupport)
-  else()
-    set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group")
+    set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--end-group")
   endif()
 endif()
 
+add_subdirectory(integrations)
+
 if(ENABLE_DISCORD)
-	if (TARGET discord-rpc)
-		target_include_directories(warzone2100 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/discord-rpc/include")
-		target_link_libraries(warzone2100 discord-rpc)
-		target_sources(warzone2100 PRIVATE "integrations/wzdiscordrpc.h" "integrations/wzdiscordrpc.cpp")
-		target_compile_definitions(warzone2100 PRIVATE "ENABLE_DISCORD")
+	if (TARGET discord-rpc AND TARGET wz-discord-integration)
+		target_link_libraries(warzone2100 wz-discord-integration)
 	else()
-		message(WARNING "Missing target: discord-rpc")
+		if (NOT TARGET discord-rpc)
+			message(WARNING "Missing target: discord-rpc")
+		endif()
+		if (NOT TARGET wz-discord-integration)
+			message(WARNING "Missing target: wz-discord-integration")
+		endif()
 	endif()
 endif()
 
 # Dependencies
 add_dependencies(warzone2100 data)
-if(TARGET wz2100_doc)
+if(ENABLE_DOCS AND TARGET wz2100_doc)
 	add_dependencies(warzone2100 wz2100_doc)
 endif()
-if(TARGET translations)
+if(ENABLE_NLS AND TARGET translations)
 	add_dependencies(warzone2100 translations)
 endif()
 
@@ -304,6 +305,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	target_sources(warzone2100 PRIVATE ${_wz_entitlements_file})
 	set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${_wz_entitlements_file}")
 
+	# Enable Hardened Runtime
+	set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME "YES")
+
 	# To properly bundle the resources, they must be built before the app
 	add_dependencies(warzone2100 data)
 	if(ENABLE_DOCS)
@@ -317,6 +321,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set_property(
 		SOURCE ${DATA_FILES}
 		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data")
+	set_property(
+		SOURCE ${DATA_FONTS}
+		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/fonts")
 	foreach(_music_file ${DATA_MUSIC_FILES})
 		file(RELATIVE_PATH _music_file_relative_path "${DATA_MUSIC_BASE_SOURCEDIR}" "${_music_file}")
 		get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
@@ -325,11 +332,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/music/${_music_file_subdir_path}")
 	endforeach()
 	set_source_files_properties(
-		${DATA_FILES} ${DATA_MUSIC_FILES} PROPERTIES
+		${DATA_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} PROPERTIES
 		GENERATED TRUE
 		XCODE_LAST_KNOWN_FILE_TYPE "file"
 	)
-	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_MUSIC_FILES})
+	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES})
 
 	# Add the icon
 	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../macosx/Resources/Warzone.icns")
@@ -340,17 +347,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	)
 	target_sources(warzone2100 PRIVATE ${_macos_app_icon})
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_ICON_FILE "Warzone.icns")
-
-	# Bundle the fonts
-	set_property(
-		SOURCE ${wz2100_fonts_FILES}
-		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/Fonts")
-	set_source_files_properties(
-		${wz2100_fonts_FILES} PROPERTIES
-		GENERATED TRUE
-		XCODE_LAST_KNOWN_FILE_TYPE "file"
-	)
-	target_sources(warzone2100 PRIVATE ${wz2100_fonts_FILES})
 
 	# Bundle the translations
 	if(ENABLE_NLS)
@@ -396,9 +392,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		message( WARNING "wz2100_ROOT_FILES is not defined. Needed to bundle root COPYING, README, etc files." )
 	endif()
 
-	# Set Apple link flags
-	set_property(TARGET warzone2100 APPEND_STRING PROPERTY LINK_FLAGS " -framework Security -framework Cocoa")
-
 	# Embed the dSYM file in the app bundle
 	set_target_properties(warzone2100 PROPERTIES
 		XCODE_ATTRIBUTE_DWARF_DSYM_FOLDER_PATH "\$(CONFIGURATION_BUILD_DIR)/\$(EXECUTABLE_FOLDER_PATH)"
@@ -410,73 +403,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING[variant=MinSizeRel] YES
 		XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING[variant=Release] YES
 	)
-
-	# Frameworks
-	macro(copy_imported_framework _qt_framework_target)
-		get_target_property(_framework_target_imported "${_qt_framework_target}" IMPORTED)
-		if(_framework_target_imported)
-			get_target_property(_framework_target_type "${_qt_framework_target}" TYPE)
-			if(_framework_target_type STREQUAL "INTERFACE_LIBRARY")
-				get_target_property(_qt_framework_location "${_qt_framework_target}" INTERFACE_LINK_LIBRARIES)
-			elseif (_framework_target_type STREQUAL "SHARED")
-				get_target_property(_qt_framework_location "${_qt_framework_target}" LOCATION)
-			endif()
-			if(EXISTS "${_qt_framework_location}")
-				# Copy framework to bundle *now* (don't wait for CMake install)
-				set_source_files_properties(
-					${_qt_framework_location} PROPERTIES
-					MACOSX_PACKAGE_LOCATION "Frameworks"
-					XCODE_LAST_KNOWN_FILE_TYPE "wrapper.framework"
-					XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
-				)
-				if(NOT CMAKE_GENERATOR STREQUAL "Xcode")
-					# Other generators will need a custom-command equivalent of setting the "Code Sign on Copy" Xcode attribute to ON
-					message( WARNING "The generator \"${CMAKE_GENERATOR}\" does not currently handle code-signing: \"${_qt_framework_location}\"" )
-				endif()
-				target_sources(warzone2100 PRIVATE ${_qt_framework_location})
-			else()
-				message(FATAL_ERROR "Imported framework ${_qt_framework_target} not found at: ${_qt_framework_location}")
-			endif()
-		else()
-			message(FATAL_ERROR "Framework ${_qt_framework_target} is not an IMPORTED CMake target")
-		endif()
-	endmacro()
-
-	# Qt5
-	copy_imported_framework(Qt5::Core)
-	copy_imported_framework(Qt5::Gui)
-	copy_imported_framework(Qt5::PrintSupport)	# required by QCocoaIntegrationPlugin
-	copy_imported_framework(Qt5::Script)
-	copy_imported_framework(Qt5::Widgets)
-
-	# Qt5 plugins
-	# based on code from CMake's QtDialog/CMakeLists.txt
-	macro(copy_qt5_plugin _qt_plugin_name)
-		get_target_property(_qt_plugin_path "${_qt_plugin_name}" LOCATION)
-		if(EXISTS "${_qt_plugin_path}")
-			get_filename_component(_qt_plugin_file "${_qt_plugin_path}" NAME)
-			get_filename_component(_qt_plugin_type "${_qt_plugin_path}" PATH)
-			get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
-			set(_qt_plugin_dest "PlugIns/${_qt_plugin_type}")
-			# Copy plugin to bundle *now* (don't wait for CMake install)
-			set_source_files_properties(
-				${_qt_plugin_path} PROPERTIES
-				MACOSX_PACKAGE_LOCATION "${_qt_plugin_dest}"
-				XCODE_LAST_KNOWN_FILE_TYPE "compiled.mach-o.dylib"
-				XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
-			)
-			if(NOT CMAKE_GENERATOR STREQUAL "Xcode")
-				# Other generators will need a custom-command equivalent of setting the "Code Sign on Copy" Xcode attribute to ON
-				message( WARNING "The generator \"${CMAKE_GENERATOR}\" does not currently handle code-signing: \"${_qt_plugin_dest}\"" )
-			endif()
-			target_sources(warzone2100 PRIVATE ${_qt_plugin_path})
-		else()
-			message(FATAL_ERROR "QT plugin ${_qt_plugin_name} not found at: ${_qt_plugin_path}")
-		endif()
-	endmacro()
-
-	copy_qt5_plugin("Qt5::QCocoaIntegrationPlugin")
-	copy_qt5_plugin("Qt5::QCocoaPrinterSupportPlugin")
 
 	if(WZ_ENABLE_BACKEND_VULKAN)
 		# Vulkan / MoltenVK
@@ -558,8 +484,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		endif(Vulkan_FOUND)
 	endif(WZ_ENABLE_BACKEND_VULKAN)
 
-	# Set install RPATH for WZ app bundle
-	set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
+	if (BUILD_SHARED_LIBS)
+		# Set install RPATH for WZ app bundle
+		set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
+	endif()
 
 	# Since the dependencies are bundled as part of the build stages (and not at install-time), build with the install rpath
 	set_target_properties(warzone2100 PROPERTIES BUILD_WITH_INSTALL_RPATH True)
@@ -583,6 +511,8 @@ set_target_properties(warzone2100 PROPERTIES
 set_target_properties(warzone2100 PROPERTIES
 	XCODE_GENERATE_SCHEME TRUE
 	XCODE_SCHEME_ARGUMENTS "--gfxdebug"
+	# Disable NSDocumentRevisionsDebugMode
+	XCODE_SCHEME_DEBUG_DOCUMENT_VERSIONING "NO"
 )
 
 #######################
@@ -591,48 +521,112 @@ set_target_properties(warzone2100 PROPERTIES
 INCLUDE(AddTargetLinkFlagsIfSupported)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-    # Enable Data Execution Prevention and Address Space Layout Randomization
+	# Enable Data Execution Prevention and Address Space Layout Randomization
 
-	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/NXCOMPAT" CACHED_RESULT_NAME LINK_FLAG_SLASH_NXCOMPAT_SUPPORTED)
-	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--nxcompat" CACHED_RESULT_NAME LINK_FLAG_WL_NXCOMPAT_SUPPORTED)
-	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/DYNAMICBASE" CACHED_RESULT_NAME LINK_FLAG_SLASH_DYNAMICBASE_SUPPORTED)
-	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--dynamicbase" CACHED_RESULT_NAME LINK_FLAG_WL_DYNAMICBASE_SUPPORTED)
+	if(MSVC)
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/NXCOMPAT" CACHED_RESULT_NAME LINK_FLAG_SLASH_NXCOMPAT_SUPPORTED)
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/DYNAMICBASE" CACHED_RESULT_NAME LINK_FLAG_SLASH_DYNAMICBASE_SUPPORTED)
+	endif()
+
+	if(NOT MSVC)
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--nxcompat" CACHED_RESULT_NAME LINK_FLAG_WL_NXCOMPAT_SUPPORTED)
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--dynamicbase" CACHED_RESULT_NAME LINK_FLAG_WL_DYNAMICBASE_SUPPORTED)
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8 OR CMAKE_SIZEOF_VOID_P GREATER 8)
+			ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--high-entropy-va" CACHED_RESULT_NAME LINK_FLAG_WL_HIGHENTROPYVA_SUPPORTED)
+		endif()
+	endif()
+
+	if(MINGW)
+		# Fix: Allow DATA imports from a DLL with a non-zero offset
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--enable-runtime-pseudo-reloc" CACHED_RESULT_NAME LINK_FLAG_WL_RUNTIME_PSEUDO_RELOC_SUPPORTED)
+		# Fix: Disable automatic image base calculation (not needed because of ASLR)
+		# See: https://lists.ffmpeg.org/pipermail/ffmpeg-cvslog/2015-September/094018.html
+		# See: https://sourceware.org/bugzilla/show_bug.cgi?id=19011
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--disable-auto-image-base" CACHED_RESULT_NAME LINK_FLAG_WL_DISABLE_AUTO_IMAGE_BASE_SUPPORTED)
+		# Workaround a weird bug with relocation information by enabling --pic-executable
+		# See: https://sourceforge.net/p/mingw-w64/mailman/message/31035280/
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--pic-executable" CACHED_RESULT_NAME LINK_FLAG_WL_PICEXECUTABLE_SUPPORTED)
+		# Fix: MinGW's LD forgets the entry point when used with pic-executable.
+		# See: https://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=91b668a
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8 OR CMAKE_SIZEOF_VOID_P GREATER 8)
+			set_property(TARGET warzone2100 APPEND_STRING PROPERTY "LINK_FLAGS" " -Wl,-e,mainCRTStartup")
+		else()
+			set_property(TARGET warzone2100 APPEND_STRING PROPERTY "LINK_FLAGS" " -Wl,-e,_mainCRTStartup")
+		endif()
+		# Fix: Opt-in to extra entropy when using High-Entropy ASLR by setting the image base > 4GB
+		# See: https://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=a58c22d
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8 OR CMAKE_SIZEOF_VOID_P GREATER 8)
+			# Note: The image base should be:
+			#	0x140000000 - for exes
+			#	0x180000000 - for DLLs
+			set_property(TARGET warzone2100 APPEND_STRING PROPERTY "LINK_FLAGS" " -Wl,--image-base,0x140000000")
+		endif()
+	endif()
 endif()
 
-if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
+if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin" AND NOT MSVC)
+	# Ensure noexecstack
+	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,noexecstack" CACHED_RESULT_NAME LINK_FLAG_WL_Z_NOEXECSTACK_SUPPORTED)
 	# Enable RELRO (if supported)
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,relro" CACHED_RESULT_NAME LINK_FLAG_WL_Z_RELRO_SUPPORTED)
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,now" CACHED_RESULT_NAME LINK_FLAG_WL_Z_NOW_SUPPORTED)
 endif()
 
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	if (NOT BUILD_SHARED_LIBS)
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-sectcreate,__RESTRICT,__restrict,/dev/null" CONFIG RELEASE CACHED_RESULT_NAME LINK_FLAG_WL_SECTCREATE_RESTRICT_SUPPORTED)
+	endif()
+endif()
+
 #######################
 # Supporting google-breakpad tools for processing minidumps
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
-	# Find dump_syms.exe
-	find_program(DUMP_SYMS dump_syms HINTS "${CMAKE_BINARY_DIR}" "${PROJECT_SOURCE_DIR}")
-	if(DUMP_SYMS)
-		# Generate the .sym file from the .pdb
-		get_target_property(_mainexename warzone2100 OUTPUT_NAME)
-		add_custom_command(TARGET warzone2100 POST_BUILD
-			COMMAND ${DUMP_SYMS} "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" > "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym"
-			DEPENDS "${DUMP_SYMS}" "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb"
-		)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows" AND WZ_WIN_HAS_PDB)
+	get_target_property(_mainexename warzone2100 OUTPUT_NAME)
+	if(_mainexename)
+		# Find dump_syms.exe
+		find_program(DUMP_SYMS dump_syms HINTS "${CMAKE_BINARY_DIR}" "${PROJECT_SOURCE_DIR}")
+		if(DUMP_SYMS)
+			# Generate a Breakpad .sym file
+			install(CODE "
+				set(DUMP_SYMS \"${DUMP_SYMS}\")
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Running dump_syms: \${DUMP_SYMS}\")
 
-		# Install the .sym file (to ensure it's always with the .exe)
-		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+				# Generate the .sym file from the .pdb
+				set(_outputDirectory \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}\")
+				set(_outputFilepath \"\${_outputDirectory}/${_mainexename}.sym\")
+				execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \"\${_outputDirectory}\")
+				execute_process(COMMAND \"\${DUMP_SYMS}\" \"${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb\"
+								OUTPUT_FILE \"\${_outputFilepath}\"
+								RESULT_VARIABLE _dumpsyms_result)
+				if(_dumpsyms_result EQUAL 0 AND EXISTS \"\${_outputFilepath}\")
+					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Generated a Breakpad .sym file from .pdb\")
+				else()
+					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: WARNING: Failed to generate a Breakpad .sym file from .pdb (exit code: \${_dumpsyms_result})\")
+				endif()
+			" COMPONENT DebugSymbols)
+		else()
+			message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
+		endif()
 	else()
-		message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
+		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )
 	endif()
+endif()
+
+# Support crashpad sentry backend - requires installation of helper binary to handle crashes
+if(TARGET crashpad_handler)
+	if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		message(FATAL_ERROR "crashpad_handler is not currently supported for macOS builds")
+	endif()
+	install(TARGETS crashpad_handler COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 endif()
 
 #######################
 # Install
 install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 
-if(WZ_PORTABLE)
-	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable")
-endif()
+# For Portable packages only, copy the ".portable" file that triggers portable mode (Windows-only)
+install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT PortableConfig DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable" EXCLUDE_FROM_ALL)
 
 #####################
 # Installing Required Runtime Dependencies
@@ -659,18 +653,57 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 					list(APPEND _wz_fixup_bundle_ignored_filenames "${lib_name}")
 					list(APPEND _wz_fixup_bundle_nocopy_libraries "${lib_name}")
 				endforeach()
-				if(_wz_fixup_bundle_ignored_filenames)
-					message( STATUS "fixup_bundle: IGNORE_ITEM ${_wz_fixup_bundle_ignored_filenames}" )
-				else()
+				if(NOT _wz_fixup_bundle_ignored_filenames)
 					message( WARNING "InstallRequiredSystemLibraries returned no libraries? (CMake: ${CMAKE_VERSION}; MSVC: ${MSVC_VERSION})" )
 				endif()
 			endif()
-			install(CODE "
-				if(\"\${CMAKE_INSTALL_CONFIG_NAME}\" MATCHES \"^([Dd][Ee][Bb][Uu][Gg])$\")
-					set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/debug/bin/\")
-				else()
-					set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/bin/\")
+			# - Always ignore dbghelp.dll
+			list(APPEND _wz_fixup_bundle_ignored_filenames "dbghelp.dll")
+			list(APPEND _wz_fixup_bundle_nocopy_libraries "dbghelp.dll")
+			if(MINGW)
+				set(_additional_lookup_options)
+				if(DEFINED WZ_MINGW_DIST_PATH)
+					message(STATUS "WZ_MINGW_DIST_PATH: \"${WZ_MINGW_DIST_PATH}\"")
+					set(_additional_lookup_options HINTS "${WZ_MINGW_DIST_PATH}")
 				endif()
+				# Find path to C++ stdlib, and preserve for later fixup_bundle use
+				find_file(WZ_STDCXXDLL NAMES "libc++.dll" "libstdc++-6.dll" ${_additional_lookup_options})
+				if(WZ_STDCXXDLL)
+					message(STATUS "Detected C++ stdlib DLL: ${WZ_STDCXXDLL}")
+					get_filename_component(WZ_STDCXXDLL_PATH "${WZ_STDCXXDLL}" DIRECTORY)
+				else()
+					message(WARNING "Did not find a path to the C++ stdlib DLL. Packaged binary may not run on other systems.")
+				endif()
+			endif()
+			if(_wz_fixup_bundle_ignored_filenames)
+				message( STATUS "fixup_bundle: IGNORE_ITEM ${_wz_fixup_bundle_ignored_filenames}" )
+			endif()
+			set(_wz_cmake_module_path "${PROJECT_SOURCE_DIR}/cmake")
+			install(CODE "
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: CMAKE_INSTALL_CONFIG_NAME: \${CMAKE_INSTALL_CONFIG_NAME}\")
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}\")
+				# vcpkg's vcpkg.cmake adds both the release and debug prefix paths to the CMAKE_PREFIX_PATH:
+				# - ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug # (debug prefix)
+				# - ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET} # (release prefix)
+				# the debug path is a subdirectory of the main / release path
+				# remove the debug path, leaving just the base prefix
+				set(wz_vcpkg_installed_prefix_path \"${CMAKE_PREFIX_PATH}\")
+				list(FILTER wz_vcpkg_installed_prefix_path EXCLUDE REGEX \"/debug$\")
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: vcpkg_installed_prefix_path: \${wz_vcpkg_installed_prefix_path}\")
+				if(\"\${CMAKE_INSTALL_CONFIG_NAME}\" MATCHES \"^([Dd][Ee][Bb][Uu][Gg])$\")
+					set(dll_source_dir_vcpkg \"\${wz_vcpkg_installed_prefix_path}/debug/bin/\")
+				else()
+					set(dll_source_dir_vcpkg \"\${wz_vcpkg_installed_prefix_path}/bin/\")
+				endif()
+				set(dll_source_dirs \"\${dll_source_dir_vcpkg}\")
+				# MINGW may require distributing the C++ stdlib DLLs
+				set(_WZ_STDCXXDLL_PATH \"${WZ_STDCXXDLL_PATH}\")
+				if(_WZ_STDCXXDLL_PATH AND EXISTS \"\${_WZ_STDCXXDLL_PATH}\")
+					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: C++ stdlib path: \${_WZ_STDCXXDLL_PATH}\")
+					# Add second, to ensure that vcpkg-built dependencies are always selected first
+					list(APPEND dll_source_dirs \"\${_WZ_STDCXXDLL_PATH}\")
+				endif()
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: dll_source_dirs: \${dll_source_dirs}\")
 				set(_ignored_filenames \"${_wz_fixup_bundle_ignored_filenames}\")
 				if(_ignored_filenames)
 					set(_wz_fixup_bundle_ignore_item \"IGNORE_ITEM \\\"\${_ignored_filenames}\\\"\")
@@ -690,19 +723,90 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 						file(REMOVE \"\${_lib_fullpath}\")
 					endif()
 				endforeach()
+				# Sanity-check to ensure that the C++ stdlib, for mingw, actually came from mingw (i.e. is the expected version + architecture)
+				set(_WZ_STDCXXDLL \"${WZ_STDCXXDLL}\")
+				if(_WZ_STDCXXDLL AND EXISTS \"\${_WZ_STDCXXDLL}\")
+					file(SHA512 \"\${_WZ_STDCXXDLL}\" _std_cxx_expected_hash)
+					get_filename_component(_WZ_STDCXXDLL_FILENAME \"\${_WZ_STDCXXDLL}\" NAME)
+					set(_copied_cxx_stdlib \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${_WZ_STDCXXDLL_FILENAME}\")
+					file(SHA512 \"\${_copied_cxx_stdlib}\" _std_cxx_actual_hash)
+					if(\"\${_std_cxx_expected_hash}\" STREQUAL \"\${_std_cxx_actual_hash}\")
+						execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++Verified expected C++ stdlib: \${_WZ_STDCXXDLL_FILENAME}\")
+					else()
+						message(FATAL_ERROR \"Copied C++ stdlib does not match expected C++ stdlib\")
+					endif()
+					include(\"${_wz_cmake_module_path}/GetPEFileArch.cmake\")
+					get_pe_file_machine_raw_bytes(\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/${_mainexename}.exe\" _wz_exe_machine_bytes_hex)
+					get_pe_file_machine_raw_bytes(\"\${_copied_cxx_stdlib}\" _cxx_stdlib_machine_bytes_hex)
+					pe_file_machine_raw_bytes_to_arch(\"\${_wz_exe_machine_bytes_hex}\" _wz_exe_arch)
+					if(_wz_exe_machine_bytes_hex STREQUAL _cxx_stdlib_machine_bytes_hex)
+						execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++Verified expected C++ stdlib architecture matches WZ (\${_wz_exe_arch}): \${_WZ_STDCXXDLL_FILENAME}\")
+					else()
+						message(FATAL_ERROR \"Copied C++ stdlib architecture mismatch (WZ: \${_wz_exe_machine_bytes_hex}; \${_copied_cxx_stdlib}: \${_cxx_stdlib_machine_bytes_hex}\")
+					endif()
+					if(NOT CMAKE_VERSION VERSION_LESS 3.16) # file(GET_RUNTIME_DEPENDENCIES ...) requires CMake 3.16+
+						file(GET_RUNTIME_DEPENDENCIES
+							RESOLVED_DEPENDENCIES_VAR _WZ_STDCXXDLL_DEPENDENCIES
+							UNRESOLVED_DEPENDENCIES_VAR _WZ_STDCXXDLL_UNRESOLVED_DEPENDENCIES
+							LIBRARIES \"\${_WZ_STDCXXDLL}\"
+							DIRECTORIES \"\${_WZ_STDCXXDLL_PATH}\"
+							PRE_EXCLUDE_REGEXES \"^api-ms-win-*.dll$\" \"^ucrtbase.dll$\" \"^kernelbase.dll$\" \"^kernel32.dll$\"
+							POST_EXCLUDE_REGEXES \"[\\\\/][Ww][Ii][Nn][Dd][Oo][Ww][Ss][\\\\/][Ss][Yy][Ss][Tt][Ee][Mm]32[\\\\/].*\.dll$\"
+						)
+						foreach(_stdcxx_dependency IN LISTS _WZ_STDCXXDLL_DEPENDENCIES)
+							get_filename_component(_stdcxx_dependency_filename \"\${_stdcxx_dependency}\" NAME)
+							if(EXISTS \"\${_WZ_STDCXXDLL_PATH}/\${_stdcxx_dependency_filename}\")
+								file(SHA512 \"\${_WZ_STDCXXDLL_PATH}/\${_stdcxx_dependency_filename}\" _stdcxx_dependency_expected_hash)
+								if(EXISTS \"\${_WZ_STDCXXDLL_PATH}/\${_stdcxx_dependency_filename}\")
+									file(SHA512 \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${_stdcxx_dependency_filename}\" _stdcxx_dependency_actual_hash)
+									if(\"\${_stdcxx_dependency_expected_hash}\" STREQUAL \"\${_stdcxx_dependency_actual_hash}\")
+										execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++Verified expected C++ stdlib dependency: \${_stdcxx_dependency_filename}\")
+									else()
+										message(FATAL_ERROR \"Copied C++ stdlib dependency does not match expected: \${_stdcxx_dependency_filename}\")
+									endif()
+									get_pe_file_machine_raw_bytes(\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${_stdcxx_dependency_filename}\" _stdcxx_dependency_machine_bytes_hex)
+									if(NOT _wz_exe_machine_bytes_hex STREQUAL _stdcxx_dependency_machine_bytes_hex)
+										message(FATAL_ERROR \"Copied C++ library architecture mismatch (WZ: \${_wz_exe_machine_bytes_hex}; \${_stdcxx_dependency_filename}: \${_stdcxx_dependency_machine_bytes_hex}\")
+									endif()
+								endif()
+							endif()
+						endforeach()
+					endif()
+				endif()
 			" COMPONENT Core)
 
-			# Run windeployqt to pick up all Qt dependencies
-			find_program(TOOL_WINDEPLOYQT NAMES windeployqt)
-			if(TOOL_WINDEPLOYQT)
-				install(CODE "
-					execute_process(
-						COMMAND ${TOOL_WINDEPLOYQT} \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/${_mainexename}.exe\" --no-compiler-runtime --no-angle --no-svg
-					)
-				" COMPONENT Core)
-			else()
-				message( WARNING "Unable to find windeployqt; installation may not included all required Qt libraries" )
-			endif()
+			# Install additional PDBs (from vcpkg-built dependencies)
+			install(CODE "
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: CMAKE_INSTALL_CONFIG_NAME: \${CMAKE_INSTALL_CONFIG_NAME}\")
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}\")
+				# vcpkg's vcpkg.cmake adds both the release and debug prefix paths to the CMAKE_PREFIX_PATH:
+				# - ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug # (debug prefix)
+				# - ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET} # (release prefix)
+				# the debug path is a subdirectory of the main / release path
+				# remove the debug path, leaving just the base prefix
+				set(wz_vcpkg_installed_prefix_path \"${CMAKE_PREFIX_PATH}\")
+				list(FILTER wz_vcpkg_installed_prefix_path EXCLUDE REGEX \"/debug$\")
+				list(GET wz_vcpkg_installed_prefix_path 0 wz_vcpkg_installed_prefix_path)
+				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: vcpkg_installed_prefix_path: \${wz_vcpkg_installed_prefix_path}\")
+				if(\"\${CMAKE_INSTALL_CONFIG_NAME}\" MATCHES \"^([Dd][Ee][Bb][Uu][Gg])$\")
+					set(dll_source_dir_vcpkg \"\${wz_vcpkg_installed_prefix_path}/debug/bin/\")
+				else()
+					set(dll_source_dir_vcpkg \"\${wz_vcpkg_installed_prefix_path}/bin/\")
+				endif()
+				file(MAKE_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\")
+				# Try to copy .PDB files for each of the DLLs (from vcpkg) as well
+				file(GLOB _vcpkg_pdbs LIST_DIRECTORIES false \"\${dll_source_dir_vcpkg}/*.pdb\")
+				list(LENGTH _vcpkg_pdbs _num_vcpkg_pdbs)
+				if (_num_vcpkg_pdbs GREATER 0)
+					foreach(_vcpkg_pdb IN LISTS _vcpkg_pdbs)
+						get_filename_component(_vcpkg_pdb_filename \"\${_vcpkg_pdb}\" NAME)
+						execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Copying PDB file: \${_vcpkg_pdb_filename}\")
+						file(COPY_FILE \"\${_vcpkg_pdb}\" \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${_vcpkg_pdb_filename}\")
+					endforeach()
+				else()
+					message(WARNING \"Did not find any .pdb files in: \${dll_source_dir_vcpkg}\")
+				endif()
+			" COMPONENT AdditionalDebugSymbols)
 
 			# Install LibANGLE DLLs (if available, from vcpkg)
 			find_package(unofficial-angle CONFIG)
@@ -721,6 +825,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 						install(FILES
 							"${_libEGL_dll}"
 							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+							RENAME "libEGL.dll" # Make sure it has the proper name (which SDL2 expects)
 						)
 					else()
 						message( WARNING "Missing expected libEGL DLL at: ${_libEGL_dll}" )
@@ -730,6 +835,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 						install(FILES
 							"${_libGLESv2_dll}"
 							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+							RENAME "libGLESv2.dll" # Make sure it has the proper name (which SDL2 expects)
 						)
 					else()
 						message( WARNING "Missing expected libGLESv2 DLL at: ${_libGLESv2_dll}" )
@@ -745,9 +851,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			message( STATUS "CMAKE_CROSSCOMPILING is defined - skipping BundleUtilities" )
 		endif()
 
-		if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+		if(WZ_WIN_HAS_PDB)
 			# Must install the PDB file or crash dumps won't be as useful
-			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT DebugSymbols DESTINATION "${WZ_APP_INSTALL_DEST}")
 		endif()
 	else()
 		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )

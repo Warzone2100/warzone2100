@@ -25,6 +25,9 @@
 #include "wzstring.h"
 #include <vector>
 #include <functional>
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 struct WZ_THREAD;
 struct WZ_MUTEX;
@@ -67,29 +70,50 @@ struct screeninfo
 };
 
 void wzMain(int &argc, char **argv);
-bool wzMainScreenSetup(const video_backend& backend, int antialiasing = 0, bool fullscreen = false, int vsync = 1, bool highDPI = true);
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, WINDOW_MODE fullscreen = WINDOW_MODE::windowed, int vsync = 1, int lodDistanceBiasPercentage = 0, bool highDPI = true);
 video_backend wzGetDefaultGfxBackendForCurrentSystem();
+bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails = "");
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
-void wzMainEventLoop();
+void wzGetGameToRendererScaleFactorInt(unsigned int *horizScalePercentage, unsigned int *vertScalePercentage);
+void wzMainEventLoop(std::function<void()> onShutdown);
 void wzPumpEventsWhileLoading();
-void wzQuit();              ///< Quit game
+void wzQuit(int exitCode);              ///< Quit game
+int wzGetQuitExitCode();
 void wzShutdown();
-void wzToggleFullscreen();
+std::vector<WINDOW_MODE> wzSupportedWindowModes();
+bool wzIsSupportedWindowMode(WINDOW_MODE mode);
+WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
+WINDOW_MODE wzAltEnterToggleFullscreen();
+bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode);
+WINDOW_MODE wzGetToggleFullscreenMode();
+bool wzChangeWindowMode(WINDOW_MODE mode);
+WINDOW_MODE wzGetCurrentWindowMode();
 bool wzIsFullscreen();
 void wzSetWindowIsResizable(bool resizable);
 bool wzIsWindowResizable();
-bool wzSupportsLiveResolutionChanges();
 bool wzChangeDisplayScale(unsigned int displayScale);
+bool wzChangeCursorScale(unsigned int cursorScale);
+bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int height);
 bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height);
+enum class MinimizeOnFocusLossBehavior
+{
+	Auto = -1,
+	Off = 0,
+	On_Fullscreen = 1
+};
+MinimizeOnFocusLossBehavior wzGetCurrentMinimizeOnFocusLossBehavior();
+void wzSetMinimizeOnFocusLoss(MinimizeOnFocusLossBehavior behavior);
 unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight);
+unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize();
+unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension);
 unsigned int wzGetCurrentDisplayScale();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
+bool wzSetClipboardText(const char *text);
 void wzSetCursor(CURSOR index);
 void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse();		///< Trap mouse cursor in application window
 void wzReleaseMouse();	///< Undo the wzGrabMouse operation
-bool wzActiveWindow();	///< Whether application currently has the mouse pointer over it
 int wzGetTicks();		///< Milliseconds since start of game
 enum DialogType {
 	Dialog_Error,
@@ -100,14 +124,23 @@ WZ_DECL_NONNULL(2, 3) void wzDisplayDialog(DialogType type, const char *title, c
 
 WzString wzGetPlatform();
 std::vector<screeninfo> wzAvailableResolutions();
+screeninfo wzGetCurrentFullscreenDisplayMode();
 std::vector<unsigned int> wzAvailableDisplayScales();
 std::vector<video_backend> wzAvailableGfxBackends();
 WzString wzGetSelection();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support
-void StartTextInput();
-void StopTextInput();
+void StartTextInput(void* pTextInputRequester);
+void StopTextInput(void* pTextInputResigner);
+bool isInTextInputMode();
+
+// NOTE: wzBackendAttemptOpenURL should *not* be called directly - instead, call openURLInBrowser() from urlhelpers.h
+bool wzBackendAttemptOpenURL(const char *url);
+
+// System information related
+uint64_t wzGetCurrentSystemRAM(); // gets the system RAM in MiB
+
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
 unsigned long wzThreadID(WZ_THREAD *thread);
@@ -137,7 +170,11 @@ inline void wzAsyncExecOnMainThread(const std::function<void ()> &execFunc)
 	// receiver handles deleting the parameter on the main thread after doExecOnMainThread() has been called
 }
 
-#if !defined(WZ_CC_MINGW)
+#if !defined(HAVE_STD_THREAD)
+# define HAVE_STD_THREAD 0
+#endif
+
+#if !defined(WZ_CC_MINGW) || HAVE_STD_THREAD
 
 #include <mutex>
 #include <future>

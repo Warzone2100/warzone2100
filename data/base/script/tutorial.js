@@ -1,5 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
+
 var consoleVar;
 var tutState;
 var didTheyHelpBuildGen;
@@ -81,7 +82,7 @@ function setUpConsoleAndAudioVar()
 
 function increaseTutorialState()
 {
-	tutState = tutState + 1;
+	tutState += 1;
 }
 
 function grantStartTech()
@@ -91,6 +92,11 @@ function grantStartTech()
 	];
 
 	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
+}
+
+function playFactoryViperBuildVideo()
+{
+	camPlayVideos({video: "FACTORYVIPER", type: CAMP_MSG});
 }
 
 function eventDroidBuilt(droid, structure)
@@ -104,6 +110,7 @@ function eventDroidBuilt(droid, structure)
 		else
 		{
 			producedUnits.tank = true;
+			camCallOnce("playFactoryViperBuildVideo");
 		}
 
 		if (producedUnits.truck === true && producedUnits.tank === true)
@@ -279,7 +286,7 @@ function checkForPowGen()
 
 			//Get the truck that is building the generator and store its ID.
 			var trucks = enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT);
-			for (var i = 0, len = trucks.length; i < len; ++i)
+			for (let i = 0, len = trucks.length; i < len; ++i)
 			{
 				var truck = trucks[i];
 				if (truck.order === DORDER_BUILD)
@@ -322,7 +329,7 @@ function checkHelpBuild()
 	if (tutState === 6)
 	{
 		var objects = enumDroid(CAM_HUMAN_PLAYER);
-		for (var i = 0, l = objects.length; i < l; ++i)
+		for (let i = 0, l = objects.length; i < l; ++i)
 		{
 			var obj = objects[i];
 			if (obj.type === DROID &&
@@ -410,7 +417,7 @@ function eventSelectionChanged(objects)
 	if (tut0 || tut5)
 	{
 		//Check if they selected a truck.
-		for (var i = 0, l = objects.length; i < l; ++i)
+		for (let i = 0, l = objects.length; i < l; ++i)
 		{
 			var obj = objects[i];
 			if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
@@ -507,6 +514,7 @@ function eventStartLevel()
 	setMiniMap(true);
 	setDesign(false);
 
+	showInterface(); // init buttons. This MUST come before setting the reticule button data
 	setReticuleButton(CLOSE_BUTTON, _("Close"), "", "");
 	setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
 	setReticuleButton(RESEARCH_BUTTON, _("Research - build research facility first"), "", "");
@@ -514,7 +522,6 @@ function eventStartLevel()
 	setReticuleButton(DESIGN_BUTTON, _("Design - construct HQ first"), "", "");
 	setReticuleButton(INTEL_BUTTON, _("Intelligence Display (F5)"), "", "");
 	setReticuleButton(COMMAND_BUTTON, _("Commanders - manufacture commanders first"), "", "");
-	showInterface();
 
 	queue("addToConsole", camSecondsToMilliseconds(2));
 }

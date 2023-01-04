@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 # Optional input defines:
 #  - VCPKG_BUILD_TYPE : This will be used to modify the current triplet (once vcpkg is downloaded)
 #  - WZ_DISTRIBUTOR : Passed to the main WZ CMake configure command
+#  - ADDITIONAL_VCPKG_FLAGS : Additional arguments to be passed to vcpkg
 #  - ADDITIONAL_CMAKE_ARGUMENTS : Additional arguments to be passed to CMake configure
 #  - ONLY_BUILD_VCPKG : Only proceed through the steps to build vcpkg
 #  - SKIP_VCPKG_BUILD : Skip building vcpkg itself, proceed with remaining steps
@@ -10,20 +11,16 @@ cmake_minimum_required(VERSION 3.5)
 ########################################################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "fdcfd8e5d79a9551249b60251edb81733fd227db")
+set(VCPKG_COMMIT_SHA "251741475900c9a57549d80f1b5a5e30e63d1887")
 
-# WZ macOS dependencies (for vcpkg install)
-# NOTE: This is missing SDL, which is added to the list later (either with Vulkan enabled or disabled)
-set(VCPKG_INSTALL_DEPENDENCIES physfs harfbuzz libogg libtheora libvorbis libpng freetype gettext zlib openal-soft curl[sectransp] libsodium)
-
-# WZ minimum supported macOS deployment target (this is 10.10 because of Qt 5.9.x)
-set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.10")
+# WZ minimum supported macOS deployment target (< 10.9 is untested)
+set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.9")
 
 # Vulkan SDK
-set(VULKAN_SDK_VERSION "1.2.148.1")
+set(VULKAN_SDK_VERSION "1.3.231.1")
 set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.dmg")
 set(VULKAN_SDK_DL_URL "https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/mac/${VULKAN_SDK_DL_FILENAME}?Human=true")
-set(VULKAN_SDK_DL_SHA256 "b76c58d086486b803405522183a46a16928356449db229afadecb995b624ffa0")
+set(VULKAN_SDK_DL_SHA256 "ee63c647eb5108dfb663b701fd3d5e976e9826f991cbe4aaaf43b5bb01971db5")
 
 ########################################################
 
@@ -59,12 +56,16 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ CMAKE_HOST_SYSTEM_NAME (${C
 # 1.) Download & extract Vulkan SDK
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+set(_HAS_VULKAN_SDK FALSE)
 
 if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREATER_EQUAL "18.0"))
 
+	if(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "::group::Download Vulkan SDK")
+	endif()
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Download Vulkan SDK...")
 
-	set(_vulkan_sdk_out_dir "vulkansdk-macos")
+	set(_vulkan_sdk_out_dir "vulkansdk-macos-dl")
 
 	execute_process(
 		COMMAND ${CMAKE_COMMAND}
@@ -79,24 +80,63 @@ if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREAT
 	if(NOT _exstatus EQUAL 0)
 		message(FATAL_ERROR "Failed to download Vulkan SDK")
 	endif()
+	set(_full_vulkan_dl_path "${CMAKE_CURRENT_SOURCE_DIR}/macosx/external/${_vulkan_sdk_out_dir}")
 
+	if(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "::endgroup::")
+	endif()
+
+	if(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "::group::Extract Vulkan SDK")
+	endif()
+	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Extract Vulkan SDK...")
+
+	set(_full_vulkan_install_path "${CMAKE_CURRENT_SOURCE_DIR}/macosx/external/vulkansdk-macos")
+	if(EXISTS "${_full_vulkan_install_path}/.SHA256SumLoc")
+		file(READ "${_full_vulkan_install_path}/.SHA256SumLoc" _strings_existing_sha256 ENCODING UTF-8)
+	endif()
+
+	if(NOT DEFINED _strings_existing_sha256 OR NOT _strings_existing_sha256 STREQUAL VULKAN_SDK_DL_SHA256)
+		# Not the expected version / content, or not yet extracted
+		if(EXISTS "${_full_vulkan_install_path}")
+			file(REMOVE_RECURSE "${_full_vulkan_install_path}")
+		endif()
+	endif()
+	unset(_strings_existing_sha256)
+
+	# ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ${_full_vulkan_install_path} --accept-licenses --default-answer --confirm-command install --copy_only=1
+	execute_process(
+		COMMAND ./InstallVulkan.app/Contents/MacOS/InstallVulkan
+				--root ${_full_vulkan_install_path}
+				--accept-licenses
+				--default-answer
+				--confirm-command install
+				copy_only=1
+		WORKING_DIRECTORY "${_full_vulkan_dl_path}"
+		RESULT_VARIABLE _exstatus
+	)
+	if(NOT _exstatus EQUAL 0)
+		message(FATAL_ERROR "Failed to extract Vulkan SDK (exit code: ${_exstatus})")
+	endif()
+
+	file(WRITE "${_full_vulkan_install_path}/.SHA256SumLoc" "${VULKAN_SDK_DL_SHA256}")
+
+	if(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "::endgroup::")
+	endif()
 
 	# Set VULKAN_SDK environment variable, so vcpkg and CMake pick up the appropriate location
-	set(ENV{VULKAN_SDK} "${CMAKE_CURRENT_SOURCE_DIR}/macosx/external/${_vulkan_sdk_out_dir}/macOS")
+	set(ENV{VULKAN_SDK} "${_full_vulkan_install_path}/macOS")
 	message(STATUS "VULKAN_SDK=$ENV{VULKAN_SDK}")
 	if(NOT IS_DIRECTORY "$ENV{VULKAN_SDK}")
 		message(FATAL_ERROR "Something went wrong - expected Vulkan SDK output directory does not exist: $ENV{VULKAN_SDK}")
 	endif()
 
-	# Add SDL (with Vulkan component enabled)
-	list(APPEND VCPKG_INSTALL_DEPENDENCIES sdl2[vulkan])
+	set(_HAS_VULKAN_SDK TRUE)
 
 else()
 
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "-- Skipping Vulkan SDK download (compilation tools require macOS 10.14+)...")
-
-	# Add SDL (without Vulkan component)
-	list(APPEND VCPKG_INSTALL_DEPENDENCIES sdl2)
 
 endif()
 
@@ -134,11 +174,6 @@ else()
 	if(NOT _exstatus EQUAL 0)
 		message(FATAL_ERROR "Failed to fetch vcpkg updates")
 	endif()
-endif()
-
-if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_LESS "17.0"))
-	# Workaround an issue with vcpkg's updated ninja on older versions of macOS
-	set(VCPKG_COMMIT_SHA "5c415ff8a0aad831ee90ee4327f26992d5fe3fb3")
 endif()
 
 execute_process(
@@ -243,12 +278,18 @@ if(DEFINED VCPKG_BUILD_TYPE)
 		message(STATUS "Using VCPKG_DEFAULT_TRIPLET=$ENV{VCPKG_DEFAULT_TRIPLET}")
 		set(triplet "$ENV{VCPKG_DEFAULT_TRIPLET}")
 	endif()
-	set(tripletFile "triplets/${triplet}.cmake")
+	set(tripletFile "vcpkg/triplets/${triplet}.cmake")
+	if (NOT EXISTS "${tripletFile}")
+		set(tripletFile "vcpkg/triplets/community/${triplet}.cmake")
+		if (NOT EXISTS "${tripletFile}")
+			message(FATAL_ERROR "Unable to find VCPKG_DEFAULT_TRIPLET: ${VCPKG_DEFAULT_TRIPLET}")
+		endif()
+	endif()
 	set(tripletCommand "set(VCPKG_BUILD_TYPE \"${VCPKG_BUILD_TYPE}\")")
-	file(READ "vcpkg/${tripletFile}" _strings_tripletFile ENCODING UTF-8)
+	file(READ "${tripletFile}" _strings_tripletFile ENCODING UTF-8)
 	string(FIND "${_strings_tripletFile}" "${tripletCommand}" _tripletCommandPos)
 	if(_tripletCommandPos EQUAL -1)
-		file(APPEND "vcpkg/${tripletFile}" "\n${tripletCommand}\n")
+		file(APPEND "${tripletFile}" "\n${tripletCommand}\n")
 	else()
 		message(STATUS "Already modified triplet (${triplet}) to use VCPKG_BUILD_TYPE: \"${VCPKG_BUILD_TYPE}\"")
 	endif()
@@ -271,12 +312,21 @@ endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ vcpkg install dependencies...")
+
+set(_additional_vcpkg_flags)
+if(_HAS_VULKAN_SDK)
+	set(_additional_vcpkg_flags ${ADDITIONAL_VCPKG_FLAGS} --x-no-default-features --x-feature=vulkan)
+else()
+	set(_additional_vcpkg_flags ${ADDITIONAL_VCPKG_FLAGS} --x-no-default-features)
+endif()
+
+set(_overlay_ports_path "${_repoBase}/.ci/vcpkg/overlay-ports")
+
 set(_vcpkgInstallResult -1)
 set(_vcpkgAttempts 0)
 while(NOT _vcpkgInstallResult EQUAL 0 AND _vcpkgAttempts LESS 3)
 	execute_process(
-		COMMAND ./vcpkg install ${VCPKG_INSTALL_DEPENDENCIES}
-		WORKING_DIRECTORY "vcpkg"
+		COMMAND ./vcpkg/vcpkg install --vcpkg-root=./vcpkg/ --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ --overlay-ports=${_overlay_ports_path} ${_additional_vcpkg_flags}
 		RESULT_VARIABLE _vcpkgInstallResult
 	)
 	MATH(EXPR _vcpkgAttempts "${_vcpkgAttempts}+1")
@@ -288,13 +338,6 @@ endif()
 
 unset(_vcpkgAttempts)
 unset(_vcpkgInstallResult)
-
-# Ensure dependencies are always the desired version (in case of prior runs with different vcpkg commit / version)
-execute_process(
-	COMMAND ./vcpkg upgrade --no-dry-run
-	WORKING_DIRECTORY "vcpkg"
-	RESULT_VARIABLE _exstatus
-)
 
 execute_process(COMMAND "${CMAKE_COMMAND}" -E sleep "1")
 

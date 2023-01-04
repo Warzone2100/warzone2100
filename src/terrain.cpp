@@ -55,6 +55,13 @@
 #include "hci.h"
 #include "loop.h"
 
+// TODO: Fix and remove after merging terrain rendering changes
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wfloat-conversion"
+#elif defined(__GNUC__)
+	#pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif
+
 /**
  * A sector contains all information to draw a square piece of the map.
  * The actual geometry and texture data is not stored in here but in large VBO's.
@@ -70,10 +77,10 @@ struct Sector
 	int waterSize;           ///< The size of the water geometry
 	int waterIndexOffset;    ///< The point in the water index VBO where the water triangles start
 	int waterIndexSize;      ///< The size of our water triangles
-	int *textureOffset;      ///< An array containing the offsets into the texture VBO for each terrain layer
-	int *textureSize;        ///< The size of the geometry for this layer for each layer
-	int *textureIndexOffset; ///< The offset into the index VBO for the texture for each layer
-	int *textureIndexSize;   ///< The size of the indices for each layer
+	std::unique_ptr<int[]> textureOffset;      ///< An array containing the offsets into the texture VBO for each terrain layer
+	std::unique_ptr<int[]> textureSize;        ///< The size of the geometry for this layer for each layer
+	std::unique_ptr<int[]> textureIndexOffset; ///< The offset into the index VBO for the texture for each layer
+	std::unique_ptr<int[]> textureIndexSize;   ///< The size of the indices for each layer
 	int decalOffset;         ///< Index into the decal VBO
 	int decalSize;           ///< Size of the part of the decal VBO we are going to use
 	bool draw;               ///< Do we draw this sector this frame?
@@ -90,14 +97,14 @@ struct DecalVertex
 };
 
 /// The lightmap texture
-static gfx_api::texture* lightmap_tex_num = nullptr;
+static gfx_api::texture* lightmap_texture = nullptr;
 /// When are we going to update the lightmap next?
 static unsigned int lightmapLastUpdate;
 /// How big is the lightmap?
-static int lightmapWidth;
-static int lightmapHeight;
+static size_t lightmapWidth;
+static size_t lightmapHeight;
 /// Lightmap image
-static gfx_api::gfxUByte *lightmapPixmap;
+static std::unique_ptr<iV_Image> lightmapPixmap;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
 
@@ -112,7 +119,7 @@ static float waterOffset;
 static int32_t GLmaxElementsVertices, GLmaxElementsIndices;
 
 /// The sectors are stored here
-static Sector *sectors;
+static std::unique_ptr<Sector[]> sectors;
 /// The default sector size (a sector is sectorSize x sectorSize)
 static int sectorSize = 15;
 /// What is the distance we can see
@@ -233,7 +240,7 @@ static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 		texsize = MAX_TILE_TEXTURE_SIZE;
 	}
 	const float centertile = 0.5f / texsize;	// compute center of tile
-	const float shiftamount = (texsize - 1.0) / texsize;	// 1 pixel border
+	const float shiftamount = (texsize - 1.0f) / texsize;	// 1 pixel border
 	// bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
 	const float one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize) + centertile * shiftamount;
 
@@ -519,9 +526,21 @@ static void updateSectorGeometry(int x, int y)
 	setSectorDecals(x, y, decaldata, &decalSize);
 	ASSERT(decalSize == sectors[x * ySectors + y].decalSize   , "the amount of decals has changed");
 
-	decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
-	                 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata,
-					 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
+	if (decalSize > 0)
+	{
+		if (decalVBO)
+		{
+			decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
+							 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata,
+							 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
+		}
+		else
+		{
+			// didn't have decals, but now we do??
+			// code needs a refactoring if this is the case
+			ASSERT(false, "Didn't have decals, but now we do. Unsupported.");
+		}
+	}
 
 	free(decaldata);
 }
@@ -572,7 +591,7 @@ void markTileDirty(int i, int j)
 
 void loadTerrainTextures()
 {
-	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
+	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -581,7 +600,7 @@ void loadTerrainTextures()
 	for (int layer = 0; layer < numGroundTypes; layer++)
 	{
 		// pre-load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
+		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", psGroundTypes[layer].textureName);
 	}
 }
@@ -662,7 +681,7 @@ bool initTerrain()
 	// Create the sectors
 	xSectors = (mapWidth + sectorSize - 1) / sectorSize;
 	ySectors = (mapHeight + sectorSize - 1) / sectorSize;
-	sectors = (Sector *)malloc(sizeof(Sector) * xSectors * ySectors);
+	sectors = std::unique_ptr<Sector[]> (new Sector[xSectors * ySectors]());
 
 	////////////////////
 	// fill the geometry part of the sectors
@@ -804,10 +823,10 @@ bool initTerrain()
 			{
 				if (layer == 0)
 				{
-					sectors[x * ySectors + y].textureOffset = (int *)malloc(sizeof(int) * numGroundTypes);
-					sectors[x * ySectors + y].textureSize = (int *)malloc(sizeof(int) * numGroundTypes);
-					sectors[x * ySectors + y].textureIndexOffset = (int *)malloc(sizeof(int) * numGroundTypes);
-					sectors[x * ySectors + y].textureIndexSize = (int *)malloc(sizeof(int) * numGroundTypes);
+					sectors[x * ySectors + y].textureOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
+					sectors[x * ySectors + y].textureSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
+					sectors[x * ySectors + y].textureIndexOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
+					sectors[x * ySectors + y].textureIndexSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
 				}
 
 				sectors[x * ySectors + y].textureOffset[layer] = textureSize;
@@ -920,11 +939,17 @@ bool initTerrain()
 	debug(LOG_TERRAIN, "%i decals found", decalSize / 12);
 	if (decalVBO)
 		delete decalVBO;
-	decalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
-	decalVBO->upload(sizeof(DecalVertex)*decalSize, decaldata);
+	if (decalSize > 0)
+	{
+		decalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
+		decalVBO->upload(sizeof(DecalVertex)*decalSize, decaldata);
+	}
+	else
+	{
+		decalVBO = nullptr;
+	}
 	free(decaldata);
 
-	lightmap_tex_num = 0;
 	lightmapLastUpdate = 0;
 	lightmapWidth = 1;
 	lightmapHeight = 1;
@@ -932,22 +957,36 @@ bool initTerrain()
 	while (mapWidth > (lightmapWidth <<= 1)) {}
 	while (mapHeight > (lightmapHeight <<= 1)) {}
 	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
-	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapWidth, lightmapHeight);
+	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
 	// Prepare the lightmap pixmap and texture
-	lightmapPixmap = (gfx_api::gfxUByte *)calloc(lightmapWidth * lightmapHeight, 3 * sizeof(gfx_api::gfxUByte));
-	if (lightmapPixmap == nullptr)
+	lightmapPixmap = std::unique_ptr<iV_Image>(new iV_Image());
+
+	// not every system may have RGB texture support, so may need to expand to 4-channel (RGBA)
+	auto lightmapChannels = gfx_api::context::get().getClosestSupportedUncompressedImageFormatChannels(gfx_api::pixel_format_target::texture_2d, 3); // ideal is RGB, but check if supported
+	ASSERT_OR_RETURN(false, lightmapChannels.has_value(), "Exhausted all possible uncompressed formats for lightmap texture??");
+
+	if (lightmapPixmap == nullptr || !lightmapPixmap->allocate(lightmapWidth, lightmapHeight, lightmapChannels.value(), true))
 	{
 		debug(LOG_FATAL, "Out of memory!");
 		abort();
 		return false;
 	}
-	if (lightmap_tex_num)
-		delete lightmap_tex_num;
-	lightmap_tex_num = gfx_api::context::get().create_texture(1, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8);
+	if (lightmapPixmap->channels() == 4)
+	{
+		// must set alpha channel to opaque
+		auto lightmapWritePtr = lightmapPixmap->bmp_w();
+		size_t lightmapNumPixels = static_cast<size_t>(lightmapPixmap->width()) * static_cast<size_t>(lightmapPixmap->height());
+		for (size_t pixelIndex = 0; pixelIndex < lightmapNumPixels; ++pixelIndex)
+		{
+			lightmapWritePtr[pixelIndex * 4 + 3] = 255;
+		}
+	}
+	if (lightmap_texture)
+		delete lightmap_texture;
+	lightmap_texture = gfx_api::context::get().create_texture(1, lightmapPixmap->width(), lightmapPixmap->height(), lightmapPixmap->pixel_format(), "mem::lightmap");
 
-	lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap);
-
+	lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	terrainInitialised = true;
 
 	return true;
@@ -981,17 +1020,15 @@ void shutdownTerrain()
 	{
 		for (int y = 0; y < ySectors; y++)
 		{
-			free(sectors[x * ySectors + y].textureOffset);
-			free(sectors[x * ySectors + y].textureSize);
-			free(sectors[x * ySectors + y].textureIndexOffset);
-			free(sectors[x * ySectors + y].textureIndexSize);
+			sectors[x * ySectors + y].textureOffset = nullptr;
+			sectors[x * ySectors + y].textureSize = nullptr;
+			sectors[x * ySectors + y].textureIndexOffset = nullptr;
+			sectors[x * ySectors + y].textureIndexSize = nullptr;
 		}
 	}
-	free(sectors);
 	sectors = nullptr;
-	delete lightmap_tex_num;
-	lightmap_tex_num = nullptr;
-	free(lightmapPixmap);
+	delete lightmap_texture;
+	lightmap_texture = nullptr;
 	lightmapPixmap = nullptr;
 
 	terrainInitialised = false;
@@ -999,6 +1036,8 @@ void shutdownTerrain()
 
 static void updateLightMap()
 {
+	size_t lightmapChannels = lightmapPixmap->channels();
+	unsigned char* lightMapWritePtr = lightmapPixmap->bmp_w();
 	for (int j = 0; j < mapHeight; ++j)
 	{
 		for (int i = 0; i < mapWidth; ++i)
@@ -1016,15 +1055,15 @@ static void updateLightMap()
 				colour.byte.r = MAX(m, 255 - m);
 			}
 
-			lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
-			lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
-			lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = colour.byte.b;
+			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 0] = colour.byte.r;
+			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 1] = colour.byte.g;
+			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 2] = colour.byte.b;
 
 			if (!pie_GetFogStatus())
 			{
 				// fade to black at the edges of the visible terrain area
-				const float playerX = map_coordf(player.p.x);
-				const float playerY = map_coordf(player.p.z);
+				const float playerX = map_coordf(playerPos.p.x);
+				const float playerY = map_coordf(playerPos.p.z);
 
 				const float distA = i - (playerX - visibleTiles.x / 2);
 				const float distB = (playerX + visibleTiles.x / 2) - i;
@@ -1051,15 +1090,15 @@ static void updateLightMap()
 				darken = (distToEdge) / 2.0f;
 				if (darken <= 0)
 				{
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = 0;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = 0;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 0] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 1] = 0;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 2] = 0;
 				}
 				else if (darken < 1)
 				{
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] *= darken;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] *= darken;
-					lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 0] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 1] *= darken;
+					lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 2] *= darken;
 				}
 			}
 		}
@@ -1074,7 +1113,7 @@ static void cullTerrain()
 		{
 			float xPos = world_coord(x * sectorSize + sectorSize / 2);
 			float yPos = world_coord(y * sectorSize + sectorSize / 2);
-			float distance = pow(player.p.x - xPos, 2) + pow(player.p.z - yPos, 2);
+			float distance = pow(playerPos.p.x - xPos, 2) + pow(playerPos.p.z - yPos, 2);
 
 			if (distance > pow((double)world_coord(terrainDistance), 2))
 			{
@@ -1095,10 +1134,14 @@ static void cullTerrain()
 
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight)
 {
+	const auto &renderState = getCurrentRenderState();
+	
 	// bind the vertex buffer
 	gfx_api::TerrainDepth::get().bind();
+	gfx_api::TerrainDepth::get().bind_textures(lightmap_texture);
 	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), glm::vec4(0.f), 0, 0.f, 0.f, 0, 0 });
+	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), 
+	glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 0 });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 	// draw slightly higher distance than it actually is so it will not
@@ -1139,7 +1182,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	gfx_api::TerrainLayer::get().bind();
 	gfx_api::TerrainLayer::get().bind_vertex_buffers(geometryVBO, textureVBO);
 	gfx_api::context::get().bind_index_buffer(*textureIndexVBO, gfx_api::index_type::u32);
-	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
+	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -1153,9 +1196,9 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 		// load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
+		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", psGroundTypes[layer].textureName);
-		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_tex_num);
+		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_texture);
 
 		// load the color buffer
 		gfx_api::context::get().bind_vertex_buffers(1, { std::make_tuple(textureVBO, static_cast<size_t>(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer)) });
@@ -1182,6 +1225,11 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 
 static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
 {
+	if (!decalVBO)
+	{
+		return; // no decals
+	}
+
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
 		renderState.fogColour.vector[0] / 255.f,
@@ -1190,9 +1238,9 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 		renderState.fogColour.vector[3] / 255.f
 	);
 	gfx_api::TerrainDecals::get().bind();
-	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num);
+	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_texture);
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
-	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, textureMatrix,
+	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, textureMatrix, paramsXLight, paramsYLight,
 		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 	int size = 0;
@@ -1231,8 +1279,8 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
  */
 void drawTerrain(const glm::mat4 &mvp)
 {
-	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / lightmapWidth), 0, 0, 0);
-	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / lightmapHeight), 0);
+	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
+	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
 
 	///////////////////////////////////
 	// set up the lightmap texture
@@ -1243,7 +1291,7 @@ void drawTerrain(const glm::mat4 &mvp)
 		lightmapLastUpdate = realTime;
 		updateLightMap();
 
-		lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap);
+		lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	}
 
 	///////////////////////////////////
@@ -1251,7 +1299,7 @@ void drawTerrain(const glm::mat4 &mvp)
 	cullTerrain();
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f));
+	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
 
 	//////////////////////////////////////
 	// canvas to draw on
@@ -1283,8 +1331,11 @@ void drawWater(const glm::mat4 &viewMatrix)
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
 	const auto &renderState = getCurrentRenderState();
 
-	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png");
-	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png");
+	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
+	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
+
+	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
+	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
 	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()));

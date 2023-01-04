@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+#ifndef __INCLUDED_WZ_GENERATED_CONFIG_H__
+#define __INCLUDED_WZ_GENERATED_CONFIG_H__
+
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
 #cmakedefine01 ENABLE_NLS
@@ -41,6 +44,9 @@
 /* Define to 1 if you have the `environ' declaration. */
 #cmakedefine HAVE_ENVIRON_DECL @HAVE_ENVIRON_DECL@
 
+/* Define to 1 if you have `std::thread'. */
+#cmakedefine HAVE_STD_THREAD @HAVE_STD_THREAD@
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H @HAVE_STDINT_H@
 
@@ -70,6 +76,18 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #cmakedefine HAVE_UNISTD_H @HAVE_UNISTD_H@
+
+/* Define to 1 if you have the <sys/eventfd.h> header file. */
+#cmakedefine HAVE_SYS_EVENTFD_H @HAVE_SYS_EVENTFD_H@
+
+/* Define to 1 if you have the <sys/poll.h> header file. */
+#cmakedefine HAVE_SYS_POLL_H @HAVE_SYS_POLL_H@
+
+/* Define to 1 if you have the <poll.h> header file. */
+#cmakedefine HAVE_POLL_H @HAVE_POLL_H@
+
+/* The system provides a pipe2() we can use */
+#cmakedefine HAVE_PIPE2 @HAVE_PIPE2@
 
 /* The system provides a strlcat we can use */
 #cmakedefine HAVE_VALID_STRLCAT
@@ -158,3 +176,4 @@
 #cmakedefine WZ_LOCALEDIR "@WZ_LOCALEDIR@"
 #cmakedefine WZ_LOCALEDIR_ISABSOLUTE
 
+#endif // __INCLUDED_WZ_GENERATED_CONFIG_H__

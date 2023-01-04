@@ -41,7 +41,6 @@ struct PROXIMITY_DISPLAY;
 struct STRUCTURE;
 struct W_SCREEN;
 struct iIMDShape;
-class QScriptEngine;
 
 enum  				  // Reticule button indecies.
 {
@@ -78,29 +77,8 @@ enum  				  // Reticule button indecies.
 /* Object screen IDs */
 
 #define IDOBJ_FORM			3000		// The object back form for build/manufacture/research
-#define IDOBJ_CLOSE			3001		// The form for the close button
-#define IDOBJ_OBJSTART		3002		// The first ID for droids/factories/research
-#define IDOBJ_OBJEND            3099            // The last ID for droids/factories/research
-#define IDOBJ_STATSTART		3100		// The first ID for stats
-#define IDOBJ_STATEND		3199		// The last ID for stats
-#define IDOBJ_PROGBARSTART  3200		// The first ID for stats progress bars.
-#define IDOBJ_PROGBAREND	3299		// The last ID for stats progress bars.
-#define IDOBJ_POWERBARSTART 3300		// The first ID for power bars.
-#define IDOBJ_POWERBAREND	3399		// The first ID for power bars.
-#define IDOBJ_COUNTSTART	3400		// The first ID for progress number labels.
-#define IDOBJ_COUNTEND		3499		// The last ID for progress number labels.
+#define IDOBJ_CLOSE 		3001        // The form for the close button
 #define IDOBJ_TABFORM		3500		// The object tab form for build/manufacture/research
-#define IDOBJ_FACTORYSTART	3600		// The first ID for factory number labels
-#define IDOBJ_FACTORYEND	3699		// The last ID for factory number labels
-#define IDOBJ_CMDEXPSTART	3700		// The first ID for factory number labels
-#define IDOBJ_CMDEXPEND		3749		// The last ID for factory number labels
-#define IDOBJ_CMDFACSTART	3750		// The first ID for factory number labels
-#define IDOBJ_CMDFACEND		3799		// The last ID for factory number labels
-#define IDOBJ_CMDVTOLFACSTART	3800	// The first ID for VTOL factory number labels
-#define IDOBJ_CMDVTOLFACEND		3849	// The last ID for VTOL factory number labels
-#define IDOBJ_ALLYRESEARCHSTART 2637000         // The first ID for ally research labels
-#define IDOBJ_ALLYRESEARCHEND   2637099         // The last ID for ally research labels
-
 
 #define IDSTAT_FORM				14000		// The stats form for structure/droid/research type
 #define IDSTAT_CLOSE			14003		// The stats close box
@@ -109,19 +87,9 @@ enum  				  // Reticule button indecies.
 #define IDSTAT_END				14999		// The last stats ID enough for 899 things
 #define IDSTAT_TIMEBARSTART             16205000
 #define IDSTAT_TIMEBAREND               16205999
-#define IDSTAT_SLIDER			4400
-#define IDSTAT_LOOP_BUTTON		4403
-#define IDSTAT_LOOP_LABEL		4404
-#define IDSTAT_DP_BUTTON		4405
 #define IDSTAT_OBSOLETE_BUTTON          4406
-#define IDSTAT_FAVORITE_BUTTON          4407
-#define IDSTAT_RESICONSTART		4500
-#define IDSTAT_RESICONEND		4599
 #define IDSTAT_PRODSTART		4600
 #define IDSTAT_PRODEND			4699
-
-#define IDSTAT_ALLYSTART		4800
-#define IDSTAT_ALLYEND			5100
 
 // Reticule position.
 #define RET_X				6
@@ -150,7 +118,6 @@ enum  				  // Reticule button indecies.
 #define OBJ_BACKHEIGHT	115		// Height of object screen back form.
 
 /* Build screen positions */
-#define OBJ_TABX		2	// X coord of object screen tab form.
 #define OBJ_TABY		6	// Y coord of object screen tab form.
 #define OBJ_WIDTH		316	//312//310	// Width of object screen tab form.
 #define OBJ_HEIGHT		112	// Height of object screen tab form.
@@ -255,14 +222,30 @@ enum INTMODE
 
 extern INTMODE intMode;
 
+/* Which type of object screen is being displayed. Starting value is where the intMode left off*/
+enum OBJECT_MODE
+{
+	IOBJ_NONE = INT_MAXMODE,	// Nothing doing.
+	IOBJ_BUILD,			        // The build screen
+	IOBJ_BUILDSEL,		        // Selecting a position for a new structure
+	IOBJ_DEMOLISHSEL,	        // Selecting a structure to demolish
+	IOBJ_MANUFACTURE,	        // The manufacture screen
+	IOBJ_RESEARCH,		        // The research screen
+	IOBJ_COMMAND,		        // the command droid screen
+
+	IOBJ_DEBUG_STRUCTURE,
+	IOBJ_DEBUG_DROID,
+
+	IOBJ_MAX,			        // maximum object mode,
+};
+
+extern OBJECT_MODE objMode;
+
 /* The widget screen */
-extern W_SCREEN		*psWScreen;
+extern std::shared_ptr<W_SCREEN> psWScreen;
 
 // The last widget ID from widgRunScreen
 extern UDWORD			intLastWidget;
-
-/* The button ID of the objects stat when the stat screen is displayed */
-extern UDWORD			objStatID;
 
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
@@ -288,7 +271,7 @@ enum INT_RETVAL
 	INT_QUIT,		// The game should quit
 };
 
-void hciUpdate();
+void intDoScreenRefresh();
 
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets();
@@ -301,6 +284,7 @@ bool intAddReticule();
 bool intAddPower();
 void intRemoveReticule();
 void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), const playerCallbackFunc& callbackFunc = nullptr);
+void setReticulesEnabled(bool enabled);
 void setReticuleFlash(int ButId, bool flash);
 
 /* Set the map view point to the world coordinates x,y */
@@ -309,36 +293,21 @@ void intSetMapPos(UDWORD x, UDWORD y);
 /* Set the map view point to the world coordinates x,y */
 void intSetMapPos(UDWORD x, UDWORD y);
 
-/* Tell the interface when an object is created
- * - it may have to be added to a screen
- */
-void intNewObj(BASE_OBJECT *psObj);
-
-/* Tell the interface a construction droid has finished building */
-void intBuildFinished(DROID *psDroid);
-/* Tell the interface a construction droid has started building*/
-void intBuildStarted(DROID *psDroid);
 /* Tell the interface a research facility has completed a topic */
 void intResearchFinished(STRUCTURE *psBuilding);
 void intAlliedResearchChanged();
-/* Tell the interface a factory has completed building ALL droids */
-void intManufactureFinished(STRUCTURE *psBuilding);
-void intUpdateManufacture(STRUCTURE *psBuilding);
 
 /* Sync the interface to an object */
 void intObjectSelected(BASE_OBJECT *psObj);
 
-// add the construction interface if a constructor droid is selected
-void intConstructorSelected(DROID *psDroid);
 bool intBuildSelectMode();
 bool intDemolishSelectMode();
-bool intBuildMode();
 
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen();
 
 /* Reset the widget screen to just the reticule */
-void intResetScreen(bool NoAnim);
+void intResetScreen(bool NoAnim, bool skipMissionResultScreen = false);
 
 void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
@@ -350,6 +319,8 @@ void intRemoveStats();
 
 /* Remove the stats widgets from the widget screen */
 void intRemoveStatsNoAnim();
+
+void intRemoveObjectNoAnim();
 
 /*sets which list of structures to use for the interface*/
 STRUCTURE *interfaceStructList();
@@ -371,7 +342,7 @@ void intHidePowerBar();
 void intShowWidget(int buttonID);
 
 //hides the power bar from the display - regardless of what player requested!
-void forceHidePowerBar();
+void forceHidePowerBar(bool forceSetPowerBarUpState = false);
 
 /* Add the Proximity message buttons */
 bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc);
@@ -398,19 +369,27 @@ bool intCheckReticuleButEnabled(UDWORD id);
 //access function for selected object in the interface
 BASE_OBJECT *getCurrentSelected();
 
-//initialise all the previous obj - particularly useful for when go Off world!
-void intResetPreviousObj();
-
 bool intIsRefreshing();
 
 void intDemolishCancel();
 
-MultipleChoiceButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
+void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent);  ///< Makes a button to toggle showing obsolete items.
 
 void chatDialog(int mode);
 bool isChatUp();
 bool isSecondaryWindowUp();
+void setSecondaryWindowUp(bool value);
 
 void intOpenDebugMenu(OBJECT_TYPE id);
+
+void intStartConstructionPosition(DROID *builder, STRUCTURE_STATS *structure);
+void intSetShouldShowRedundantDesign(bool value);
+bool intGetShouldShowRedundantDesign();
+
+/* Start looking for a structure location */
+void intStartStructPosition(BASE_STATS *psStats);
+
+/* Remove the object widgets from the widget screen */
+void intRemoveObject();
 
 #endif // __INCLUDED_SRC_HCI_H__

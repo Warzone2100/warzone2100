@@ -27,18 +27,19 @@
 
 static const auto SCROLLBAR_WIDTH = 15;
 
-ScrollableListWidget::ScrollableListWidget(WIDGET *parent) : WIDGET(parent)
+void ScrollableListWidget::initialize()
 {
-	scrollBar = new ScrollBarWidget(this);
-	listView = new ClipRectWidget(this);
+	attach(scrollBar = ScrollBarWidget::make());
+	attach(listView = std::make_shared<ClipRectWidget>());
 	scrollBar->show(false);
+	scrollbarWidth = SCROLLBAR_WIDTH;
 	backgroundColor.rgba = 0;
 }
 
 void ScrollableListWidget::geometryChanged()
 {
-	scrollBar->setGeometry(width() - SCROLLBAR_WIDTH, 0, SCROLLBAR_WIDTH, height());
-	scrollBar->setViewSize(calculateListViewHeight());
+	scrollBar->setGeometry(width() - scrollbarWidth, 0, scrollbarWidth, height());
+	scrollBar->setViewSize(height());
 	layoutDirty = true;
 }
 
@@ -53,23 +54,41 @@ void ScrollableListWidget::run(W_CONTEXT *psContext)
  *
  * This wouldn't be necessary if it were possible to clip the rendering.
  */
-uint16_t ScrollableListWidget::snappedOffset()
+uint32_t ScrollableListWidget::snappedOffset()
 {
 	for (auto child : listView->children())
 	{
-		if (child->y() + child->height() / 2 > scrollBar->position())
+		if (child->geometry().bottom() < scrollBar->position())
 		{
-			return child->y();
+			continue;
+		}
+
+		const auto childOffsets = child->getScrollSnapOffsets().value_or(std::vector<uint32_t>{0});
+		for (const auto childOffset: childOffsets)
+		{
+			const auto y = child->y() + childOffset;
+			if (y >= scrollBar->position())
+			{
+				return y;
+			}
 		}
 	}
 
 	return 0;
 }
 
-void ScrollableListWidget::addItem(WIDGET *item)
+void ScrollableListWidget::addItem(const std::shared_ptr<WIDGET> &item)
 {
 	listView->attach(item);
 	layoutDirty = true;
+}
+
+void ScrollableListWidget::clear()
+{
+	listView->removeAllChildren();
+	layoutDirty = true;
+	updateLayout();
+	listView->setTopOffset(0);
 }
 
 void ScrollableListWidget::updateLayout()
@@ -95,16 +114,18 @@ void ScrollableListWidget::updateLayout()
 		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
 	}
 
-	scrollBar->setScrollableSize(scrollableHeight);
+	scrollBar->setScrollableSize(scrollableHeight + padding.top + padding.bottom);
 }
 
 void ScrollableListWidget::resizeChildren(uint32_t width)
 {
 	scrollableHeight = 0;
-	for (auto child : listView->children())
+	auto nextOffset = 0;
+	for (auto& child : listView->children())
 	{
-		child->setGeometry(0, scrollableHeight, width, child->height());
-		scrollableHeight += child->height();
+		child->setGeometry(0, nextOffset, width, child->height());
+		scrollableHeight = nextOffset + child->height();
+		nextOffset = scrollableHeight + itemSpacing;
 	}
 }
 
@@ -155,6 +176,11 @@ void ScrollableListWidget::setSnapOffset(bool value)
 	snapOffset = value;
 }
 
+void ScrollableListWidget::setItemSpacing(uint32_t value)
+{
+	itemSpacing = value;
+}
+
 void ScrollableListWidget::display(int xOffset, int yOffset)
 {
 	if (backgroundColor.rgba != 0)
@@ -169,4 +195,46 @@ void ScrollableListWidget::displayRecursive(WidgetGraphicsContext const& context
 {
 	updateLayout();
 	WIDGET::displayRecursive(context);
+}
+
+int ScrollableListWidget::getScrollbarWidth() const
+{
+	return scrollbarWidth;
+}
+
+void ScrollableListWidget::setScrollbarWidth(int newWidth)
+{
+	scrollbarWidth = newWidth;
+	geometryChanged();
+	layoutDirty = true;
+	updateLayout();
+}
+
+uint16_t ScrollableListWidget::getScrollPosition() const
+{
+	return scrollBar->position();
+}
+
+void ScrollableListWidget::setScrollPosition(uint16_t newPosition)
+{
+	updateLayout();
+	scrollBar->setPosition(newPosition);
+	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
+}
+
+int32_t ScrollableListWidget::idealWidth()
+{
+	auto maxItemIdealWidth = 0;
+	for (auto &item: listView->children())
+	{
+		maxItemIdealWidth = std::max(maxItemIdealWidth, item->idealWidth());
+	}
+
+	return maxItemIdealWidth + padding.left + padding.right + scrollbarWidth;
+}
+
+int32_t ScrollableListWidget::idealHeight()
+{
+	updateLayout();
+	return scrollableHeight + padding.top + padding.bottom;
 }

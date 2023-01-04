@@ -23,6 +23,7 @@
 #include <cctype>
 #include <sstream>
 #include <iomanip>
+#include <limits>
 #include <utfcpp/source/utf8.h>
 #include <utf8proc/utf8proc.h>
 
@@ -93,9 +94,9 @@ WzString::WzString(const char * str, int size /*= -1*/)
 		ASSERT_OR_RETURN(, strLen <= static_cast<size_t>(std::numeric_limits<int>::max()), "String length (%zu) exceeds maximum support length: %d", strLen, std::numeric_limits<int>::max());
 		size = static_cast<int>(strLen);
 	}
-	ASSERT(utf8::is_valid(str, str + size), "Input text is not valid UTF-8");
+	ASSERT(utf8::is_valid(str, str + size), "Input text is not valid UTF-8 (size: %d): %s", size, str);
 	try {
-		utf8::replace_invalid(str, str + size, back_inserter(_utf8String), '?');
+		utf8::replace_invalid(str, str + size, std::back_inserter(_utf8String), '?');
 	}
 	catch (const std::exception &e) {
 		// Likely passed an incomplete UTF-8 sequence
@@ -143,14 +144,14 @@ const std::string& WzString::toStdString() const
 	return toUtf8();
 }
 
-const std::vector<uint16_t> WzString::toUtf16() const
+std::vector<uint16_t> WzString::toUtf16() const
 {
 	std::vector<uint16_t> utf16result;
 	utf8::utf8to16(_utf8String.begin(), _utf8String.end(), back_inserter(utf16result));
 	return utf16result;
 }
 
-const std::vector<uint32_t> WzString::toUtf32() const
+std::vector<uint32_t> WzString::toUtf32() const
 {
 	std::vector<uint32_t> utf32result;
 	utf8::utf8to32(_utf8String.begin(), _utf8String.end(), back_inserter(utf32result));
@@ -193,7 +194,17 @@ int WzString::length() const
 	return (int)len_distance;
 }
 
-const WzUniCodepoint WzString::at(int position) const
+WzString WzString::substr(size_t start, size_t length) const
+{
+	auto begin = _utf8String.begin();
+	_utf8_advance(begin, start, _utf8String.end());
+
+	auto end = begin;
+	_utf8_advance(end, length, _utf8String.end());
+	return WzString(std::string(begin, end));
+}
+
+WzUniCodepoint WzString::at(int position) const
 {
 	auto it = _utf8String.begin();
 	_utf8_advance(it, position, _utf8String.end());
@@ -332,6 +343,19 @@ void WzString::truncate(int position)
 	}
 }
 
+bool WzString::pop_back()
+{
+	if (_utf8String.empty()) { return false; }
+	auto it = _utf8String.end();
+	_utf8_advance(it, -1, _utf8String.begin());
+	if (it != _utf8String.end())
+	{
+		_utf8String.erase(it, _utf8String.end());
+		return true;
+	}
+	return false; // something went wrong?
+}
+
 void WzString::clear()
 {
 	_utf8String.clear();
@@ -382,7 +406,7 @@ std::vector<WzString> WzString::split(const WzString & delimiter) const
 	auto it = _utf8String.begin();
 	auto it_currenttokenstart = _utf8String.begin();
 	bool lastCodepointWasDelimiterEnd = false;
-	uint32_t codepoint = 0;
+	uint32_t codepoint;
 	while (it != _utf8String.end())
 	{
 		codepoint = utf8::next(it, _utf8String.end());
@@ -416,7 +440,7 @@ std::vector<WzString> WzString::split(const WzString & delimiter) const
 	{
 		// string ends with delimiter (and delimiter is not an empty string)
 		// append an empty string to the end of the list
-		tokens.push_back(WzString());
+		tokens.emplace_back();
 	}
 	return tokens;
 }
@@ -536,7 +560,7 @@ WzString& WzString::operator+=(const char* str)
 	return *this;
 }
 
-const WzString WzString::operator+(const WzString &other) const
+WzString WzString::operator+(const WzString &other) const
 {
 	WzString newString = *this;
 	newString.append(other);
@@ -544,7 +568,7 @@ const WzString WzString::operator+(const WzString &other) const
 }
 
 // NOTE: The char * should be valid UTF-8.
-const WzString WzString::operator+(const char* other) const
+WzString WzString::operator+(const char* other) const
 {
 	WzString newString = *this;
 	newString.append(other);
@@ -564,7 +588,7 @@ WzString& WzString::operator=(const WzUniCodepoint& ch)
 	return *this;
 }
 
-WzString& WzString::operator=(WzString&& other)
+WzString& WzString::operator=(WzString&& other) noexcept
 {
 	if (this != &other)
 	{

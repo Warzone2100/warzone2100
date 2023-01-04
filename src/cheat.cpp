@@ -28,9 +28,10 @@
 #include "lib/netplay/netplay.h"
 #include "lib/framework/string_ext.h"
 
+#include "input/debugmappings.h"
+#include "display.h"
 #include "cheat.h"
 #include "keybind.h"
-#include "keymap.h"
 #include "multiplay.h"
 #include "qtscript.h"
 #include "template.h"
@@ -46,9 +47,9 @@ bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
 	{"templates", listTemplates}, // print templates
-	{"jsload", jsAutogame}, // load an AI script for selectedPlayer
 	{"jsdebug", jsShowDebug}, // show scripting states
 	{"teach us", kf_TeachSelected}, // give experience to selected units
+	{"makemehero", kf_MakeMeHero}, // make selected units Heros
 	{"untouchable", kf_Unselectable}, // make selected droids unselectable
 	{"clone wars", []{ kf_CloneSelected(10); }}, // clone selected units
 	{"clone wars!", []{ kf_CloneSelected(40); }}, // clone selected units
@@ -88,6 +89,8 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"damage me", kf_DamageMe},
 	{"autogame on", kf_AutoGame},
 	{"autogame off", kf_AutoGame},
+	{"shakey", kf_ToggleShakeStatus}, //shakey
+	{"list droids", kf_ListDroids},
 
 };
 
@@ -107,21 +110,27 @@ bool _attemptCheatCode(const char *cheat_name)
 		kf_ToggleUnitCount();
 		return true;
 	}
+	if (!strcasecmp("specstats", cheat_name))
+	{
+		kf_ToggleSpecOverlays();
+		return true;
+	}
 
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{
-		if (!getDebugMappingStatus())
+		if (!dbgInputManager.debugMappingsAllowed())
 		{
 			kf_ToggleDebugMappings();
 		}
 		return true;
 	}
-	if (strcmp(cheat_name, "cheat off") == 0 && getDebugMappingStatus())
+	if (strcmp(cheat_name, "cheat off") == 0 && dbgInputManager.debugMappingsAllowed())
 	{
 		kf_ToggleDebugMappings();
 		return true;
 	}
-	if (!getDebugMappingStatus())
+	if (!dbgInputManager.debugMappingsAllowed())
 	{
 		return false;
 	}
@@ -160,10 +169,43 @@ bool attemptCheatCode(const char *cheat_name)
 
 void sendProcessDebugMappings(bool val)
 {
+	if (NETisReplay())
+	{
+		return;
+	}
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return;
+	}
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
 	NETbool(&val);
 	NETend();
 }
+
+#if !defined(__clang__) && defined(__GNUC__) && (12 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
+
+static std::string getWantedDebugMappingStatuses(const DebugInputManager& dbgInputManager, bool bStatus)
+{
+	char ret[MAX_PLAYERS + 1] = "\0";
+	char* p = ret;
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		if (NetPlay.players[n].allocated && !NetPlay.players[n].isSpectator && (dbgInputManager.getPlayerWantsDebugMappings(n) == bStatus))
+		{
+			*p++ = '0' + NetPlay.players[n].position;
+		}
+	}
+	std::sort(ret, p);
+	*p++ = '\0';
+	return ret;
+}
+
+#if !defined(__clang__) && defined(__GNUC__) && (12 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 
 void recvProcessDebugMappings(NETQUEUE queue)
 {
@@ -172,18 +214,29 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	NETbool(&val);
 	NETend();
 
-	bool oldDebugMode = getDebugMappingStatus();
-	processDebugMappings(queue.index, val);
-	bool newDebugMode = getDebugMappingStatus();
+	DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	bool oldDebugMode = dbgInputManager.debugMappingsAllowed();
+	dbgInputManager.setPlayerWantsDebugMappings(queue.index, val);
+	bool newDebugMode = dbgInputManager.debugMappingsAllowed();
 
 	std::string cmsg;
 	if (val)
 	{
-		cmsg = astringf(_("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		cmsg = astringf(
+			_("%s wants to enable debug mode. Enabled: %s, Disabled: %s."),
+			getPlayerName(queue.index),
+			getWantedDebugMappingStatuses(dbgInputManager, true).c_str(),
+			getWantedDebugMappingStatuses(dbgInputManager, false).c_str()
+		);
 	}
 	else
 	{
-		cmsg = astringf(_("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		cmsg = astringf(
+			_("%s wants to disable debug mode. Enabled: %s, Disabled: %s."),
+			getPlayerName(queue.index),
+			getWantedDebugMappingStatuses(dbgInputManager, true).c_str(),
+			getWantedDebugMappingStatuses(dbgInputManager, false).c_str()
+		);
 	}
 	addConsoleMessage(cmsg.c_str(), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 
@@ -191,11 +244,16 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	{
 		addConsoleMessage(_("Debug mode now enabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 		Cheated = true;
+		gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::ACTIVE);
 		triggerEventCheatMode(true);
 	}
 	else if (oldDebugMode && !newDebugMode)
 	{
 		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		if (!NETisReplay())
+		{
+			gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::INACTIVE);
+		}
 		triggerEventCheatMode(false);
 	}
 }

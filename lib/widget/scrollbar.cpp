@@ -24,6 +24,7 @@
 #include <memory>
 #include "scrollbar.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "src/intimage.h"
 
 static void displayScrollBar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -32,21 +33,21 @@ static void displayScrollBar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	int x0 = slider->x() + xOffset;
 	int y0 = slider->y() + yOffset;
 
-	pie_UniTransBoxFill(x0, y0, x0 + slider->width(), y0 + slider->height(), WZCOL_DBLUE);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, slider->width(), slider->height());
+	// pie_UniTransBoxFill(x0, y0, x0 + slider->width(), y0 + slider->height(), WZCOL_DBLUE);
 
 	auto sliderY = slider->numStops > 0 ? (slider->height() - slider->barSize) * slider->pos / slider->numStops: 0;
-	pie_UniTransBoxFill(x0, y0 + sliderY, x0 + slider->width(), y0 + sliderY + slider->barSize, slider->isEnabled() ? WZCOL_LBLUE : WZCOL_FORM_DISABLE);
+	pie_UniTransBoxFill(x0+2, y0 + sliderY+2, x0 + slider->width()-2, y0 + sliderY + slider->barSize-2, slider->isEnabled() ? WZCOL_LBLUE : WZCOL_FORM_DISABLE);
 }
 
-ScrollBarWidget::ScrollBarWidget(WIDGET *parent) : WIDGET(parent)
+void ScrollBarWidget::initialize()
 {
 	W_SLDINIT sliderInit;
-	slider = new W_SLIDER(&sliderInit);
+	attach(slider = std::make_shared<W_SLIDER>(&sliderInit));
 	slider->numStops = 0;
 	slider->barSize = 0;
 	slider->orientation = WSLD_TOP;
 	slider->displayFunction = displayScrollBar;
-	attach(slider);
 }
 
 void ScrollBarWidget::geometryChanged()
@@ -57,6 +58,11 @@ void ScrollBarWidget::geometryChanged()
 uint16_t ScrollBarWidget::position() const
 {
 	return slider->pos;
+}
+
+void ScrollBarWidget::setPosition(uint16_t newPosition)
+{
+	slider->pos = std::min(newPosition, slider->numStops);
 }
 
 void ScrollBarWidget::incrementPosition(int32_t amount)

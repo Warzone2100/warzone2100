@@ -29,6 +29,7 @@
 #include "gamedef.h"
 
 #include <list>
+#include <string>
 
 /// maximum number of data files
 #define LEVEL_MAXFILES	9
@@ -71,6 +72,7 @@ struct LEVEL_DATASET
 
 	char           *realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
 	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
+	char           *customMountPoint;               ///< A custom mount point (to be used for "flattened" map packages, or NULL for the default.
 };
 
 typedef std::vector<LEVEL_DATASET *> LEVEL_LIST;
@@ -79,6 +81,8 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 
 // parse a level description data file
 bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
+
+bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName);
 
 // shutdown the level system
 void levShutDown();
@@ -94,6 +98,11 @@ LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = nullptr);
 Sha256 levGetFileHash(LEVEL_DATASET *level);
 Sha256 levGetMapNameHash(char const *name);
 
+// should only be used for special cases
+LEVEL_DATASET *levFindDataSetByRealFileName(char const *realFileName, Sha256 const *hash);
+bool levRemoveDataSetByRealFileName(char const *realFileName, Sha256 const *hash);
+bool levSetFileHashByRealFileName(char const *realFileName, Sha256 const &hash);
+
 // free the currently loaded dataset
 bool levReleaseAll();
 
@@ -104,8 +113,6 @@ bool levReleaseMissionData();
 SDWORD getLevelLoadType();
 
 const char *getLevelName();
-
-void levTest();
 
 std::string mapNameWithoutTechlevel(const char *mapName);
 

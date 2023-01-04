@@ -30,6 +30,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
+#include "3rdparty/physfs_memoryio.h"
 #include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -44,6 +45,7 @@
 
 #include "init.h"
 
+#include "input/manager.h"
 #include "advvis.h"
 #include "atmos.h"
 #include "challenge.h"
@@ -64,9 +66,9 @@
 #include "gateway.h"
 #include "hci.h"
 #include "intdisplay.h"
-#include "keymap.h"
 #include "levels.h"
 #include "lighting.h"
+#include "loadsave.h"
 #include "loop.h"
 #include "mapgrid.h"
 #include "mechanics.h"
@@ -76,6 +78,7 @@
 #include "multiint.h"
 #include "multigifts.h"
 #include "multiplay.h"
+#include "multistat.h"
 #include "notifications.h"
 #include "projectile.h"
 #include "order.h"
@@ -92,8 +95,13 @@
 #include "qtscript.h"
 #include "template.h"
 #include "activity.h"
+#include "spectatorwidgets.h"
+#include "seqdisp.h"
+#include "version.h"
 
 #include <algorithm>
+#include <unordered_map>
+#include <array>
 
 static void initMiscVars();
 
@@ -104,7 +112,73 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 
 IMAGEFILE *FrontImages;
 
-static wzSearchPath *searchPathRegistry = nullptr;
+static std::vector<std::unique_ptr<wzSearchPath>> searchPathRegistry;
+
+static std::string inMemoryMapVirtualFilenameUID;
+static std::vector<uint8_t> inMemoryMapArchiveData;
+static size_t inMemoryMapArchiveMounted = 0;
+
+struct WZmapInfo
+{
+public:
+	WZmapInfo(bool isMapMod, bool isRandom)
+	: isMapMod(isMapMod)
+	, isRandom(isRandom)
+	{ }
+public:
+	bool isMapMod;
+	bool isRandom;
+};
+
+typedef std::string MapName;
+typedef std::unordered_map<MapName, WZmapInfo> WZMapInfo_Map;
+WZMapInfo_Map WZ_Maps;
+
+enum MODS_PATHS: size_t
+{
+	MODS_MUSIC,
+	MODS_GLOBAL,
+	MODS_AUTOLOAD,
+	MODS_CAMPAIGN,
+	MODS_MULTIPLAY,
+	MODS_PATHS_MAX
+};
+
+static std::string getFullModPath(MODS_PATHS type)
+{
+	switch (type)
+	{
+		case MODS_MUSIC:
+			return version_getVersionedModsFolderPath("music");
+		case MODS_GLOBAL:
+			return version_getVersionedModsFolderPath("global");
+		case MODS_AUTOLOAD:
+			return version_getVersionedModsFolderPath("autoload");
+		case MODS_CAMPAIGN:
+			return version_getVersionedModsFolderPath("campaign");
+		case MODS_MULTIPLAY:
+			return version_getVersionedModsFolderPath("multiplay");
+		case MODS_PATHS_MAX:
+			break;
+	}
+	return version_getVersionedModsFolderPath();
+}
+
+static std::array<std::string, MODS_PATHS_MAX> buildFullModsPaths()
+{
+	std::array<std::string, MODS_PATHS_MAX> result;
+	for (size_t i = 0; i < MODS_PATHS_MAX; ++i)
+	{
+		result[i] = getFullModPath(static_cast<MODS_PATHS>(i));
+	}
+	return result;
+}
+
+static const char* versionedModsPath(MODS_PATHS type)
+{
+	static std::array<std::string, MODS_PATHS_MAX> cachedFullModsPaths = buildFullModsPaths();
+	return cachedFullModsPaths[type].c_str();
+}
 
 // Each module in the game should have a call from here to initialise
 // any globals and statics to there default values each time the game
@@ -131,28 +205,28 @@ static bool InitialiseGlobals()
 }
 
 
-bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
+bool loadLevFile(const std::string& filename, searchPathMode pathMode, bool ignoreWrf, char const *realFileName)
 {
 	char *pBuffer;
 	UDWORD size;
 
 	if (realFileName == nullptr)
 	{
-		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename);
+		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename.c_str());
 	}
 	else
 	{
-		debug(LOG_WZ, "Loading lev file: \"%s\" from \"%s\"\n", filename, realFileName);
+		debug(LOG_WZ, "Loading lev file: \"%s\" from \"%s\"\n", filename.c_str(), realFileName);
 	}
 
-	if (!PHYSFS_exists(filename) || !loadFile(filename, &pBuffer, &size))
+	if (!PHYSFS_exists(filename.c_str()) || !loadFile(filename.c_str(), &pBuffer, &size))
 	{
-		debug(LOG_ERROR, "File not found: %s\n", filename);
+		debug(LOG_ERROR, "File not found: %s\n", filename.c_str());
 		return false; // only in NDEBUG case
 	}
-	if (!levParse(pBuffer, size, datadir, ignoreWrf, realFileName))
+	if (!levParse(pBuffer, size, pathMode, ignoreWrf, realFileName))
 	{
-		debug(LOG_ERROR, "Parse error in %s\n", filename);
+		debug(LOG_ERROR, "Parse error in %s\n", filename.c_str());
 		free(pBuffer);
 		return false;
 	}
@@ -161,24 +235,30 @@ bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, c
 	return true;
 }
 
+bool loadLevFile_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName)
+{
+	if (realFileName == nullptr)
+	{
+		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename.c_str());
+	}
+	else
+	{
+		debug(LOG_WZ, "Loading lev file: \"%s\" from \"%s\"\n", filename.c_str(), realFileName);
+	}
+
+	if (!levParse_JSON(mountPoint, filename, pathMode, realFileName))
+	{
+		debug(LOG_ERROR, "Failed to load: %s\n", filename.c_str());
+		return false;
+	}
+
+	return true;
+}
+
 
 static void cleanSearchPath()
 {
-	wzSearchPath *curSearchPath = searchPathRegistry, * tmpSearchPath = nullptr;
-
-	// Start at the lowest priority
-	while (curSearchPath->lowerPriority)
-	{
-		curSearchPath = curSearchPath->lowerPriority;
-	}
-
-	while (curSearchPath)
-	{
-		tmpSearchPath = curSearchPath->higherPriority;
-		free(curSearchPath);
-		curSearchPath = tmpSearchPath;
-	}
-	searchPathRegistry = nullptr;
+	searchPathRegistry.clear();
 }
 
 
@@ -186,57 +266,112 @@ static void cleanSearchPath()
  * Register searchPath above the path with next lower priority
  * For information about what can be a search path, refer to PhysFS documentation
  */
-void registerSearchPath(const char path[], unsigned int priority)
+void registerSearchPath(const std::string& newPath, unsigned int priority)
 {
-	wzSearchPath *curSearchPath = searchPathRegistry, * tmpSearchPath = nullptr;
-
-	tmpSearchPath = (wzSearchPath *)malloc(sizeof(*tmpSearchPath));
-	sstrcpy(tmpSearchPath->path, path);
-	if (path[strlen(path) - 1] != *PHYSFS_getDirSeparator())
+	ASSERT_OR_RETURN(, !newPath.empty(), "Calling registerSearchPath with empty path, priority %u", priority);
+	std::unique_ptr<wzSearchPath> tmpSearchPath = std::unique_ptr<wzSearchPath>(new wzSearchPath());
+	tmpSearchPath->path = newPath;
+	if (!strEndsWith(tmpSearchPath->path, PHYSFS_getDirSeparator()))
 	{
-		sstrcat(tmpSearchPath->path, PHYSFS_getDirSeparator());
+		tmpSearchPath->path += PHYSFS_getDirSeparator();
 	}
 	tmpSearchPath->priority = priority;
 
-	debug(LOG_WZ, "registerSearchPath: Registering %s at priority %i", path, priority);
-	if (!curSearchPath)
-	{
-		searchPathRegistry = tmpSearchPath;
-		searchPathRegistry->lowerPriority = nullptr;
-		searchPathRegistry->higherPriority = nullptr;
-		return;
-	}
+	debug(LOG_WZ, "registerSearchPath: Registering %s at priority %i", newPath.c_str(), priority);
 
-	while (curSearchPath->higherPriority && priority > curSearchPath->priority)
-	{
-		curSearchPath = curSearchPath->higherPriority;
-	}
-	while (curSearchPath->lowerPriority && priority < curSearchPath->priority)
-	{
-		curSearchPath = curSearchPath->lowerPriority;
-	}
+	// insert in sorted order
+	auto insert_pos = std::upper_bound(searchPathRegistry.begin(), searchPathRegistry.end(), tmpSearchPath, [](const std::unique_ptr<wzSearchPath>& a, const std::unique_ptr<wzSearchPath>& b) {
+		return a->priority < b->priority;
+	});
+	searchPathRegistry.insert(insert_pos, std::move(tmpSearchPath));
+}
 
-	if (priority < curSearchPath->priority)
+void unregisterSearchPath(const std::string& path)
+{
+	for (auto it = searchPathRegistry.begin(); it != searchPathRegistry.end(); )
 	{
-		tmpSearchPath->lowerPriority = curSearchPath->lowerPriority;
-		tmpSearchPath->higherPriority = curSearchPath;
-	}
-	else
-	{
-		tmpSearchPath->lowerPriority = curSearchPath;
-		tmpSearchPath->higherPriority = curSearchPath->higherPriority;
-	}
+		const auto& curSearchPath = *it;
+		if (curSearchPath && (curSearchPath->path.compare(path) == 0))
+		{
+			// ignore this notification - remove from the list
+			it = searchPathRegistry.erase(it);
+			continue;
+		}
 
-	if (tmpSearchPath->lowerPriority)
-	{
-		tmpSearchPath->lowerPriority->higherPriority = tmpSearchPath;
-	}
-	if (tmpSearchPath->higherPriority)
-	{
-		tmpSearchPath->higherPriority->lowerPriority = tmpSearchPath;
+		++it;
 	}
 }
 
+std::list<std::string> getPhysFSSearchPathsAsStr()
+{
+	std::list<std::string> results;
+	char **list = PHYSFS_getSearchPath();
+	if (list == NULL)
+	{
+		return {};
+	}
+	for (char **i = list; *i != NULL; i++)
+	{
+		results.push_back(*i);
+	}
+	PHYSFS_freeList(list);
+	return results;
+}
+
+static void clearAllPhysFSSearchPaths()
+{
+	auto searchPaths = getPhysFSSearchPathsAsStr();
+	if (searchPaths.empty())
+	{
+		return;
+	}
+
+	std::unordered_map<std::string, std::string> mountPathToErrorUnmounting;
+	size_t searchPathsRemoved = 0;
+	do
+	{
+		searchPathsRemoved = 0;
+		mountPathToErrorUnmounting.clear();
+		for (auto i = searchPaths.begin(); i != searchPaths.end();)
+		{
+			if (WZ_PHYSFS_unmount(i->c_str()) != 0)
+			{
+				++searchPathsRemoved;
+				i = searchPaths.erase(i);
+			}
+			else
+			{
+				const char* pErrorStr = WZ_PHYSFS_getLastError();
+				mountPathToErrorUnmounting[*i] = (pErrorStr) ? pErrorStr : "<unknown>";
+				++i;
+			}
+		}
+	} while (!searchPaths.empty() && searchPathsRemoved > 0);
+
+
+	for (auto i = searchPaths.begin(); i != searchPaths.end(); i++)
+	{
+		auto it_error = mountPathToErrorUnmounting.find(*i);
+		debug(LOG_WZ, "Unable to unmount search path: %s; (Reason: %s)", i->c_str(), (it_error != mountPathToErrorUnmounting.end()) ? it_error->second.c_str() : "");
+	}
+}
+
+static void clearInMemoryMapFile(void *pData)
+{
+	ASSERT_OR_RETURN(, !inMemoryMapArchiveData.empty(), "Already freed??");
+	ASSERT_OR_RETURN(, inMemoryMapArchiveData.data() == pData, "Unexpected pointer received?");
+	if (!inMemoryMapVirtualFilenameUID.empty())
+	{
+		levRemoveDataSetByRealFileName(inMemoryMapVirtualFilenameUID.c_str(), nullptr);
+		WZ_Maps.erase(inMemoryMapVirtualFilenameUID);
+	}
+	inMemoryMapVirtualFilenameUID.clear();
+	inMemoryMapArchiveData.clear();
+	if (inMemoryMapArchiveMounted > 0)
+	{
+		--inMemoryMapArchiveMounted;
+	}
+}
 
 /*!
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
@@ -244,12 +379,11 @@ void registerSearchPath(const char path[], unsigned int priority)
  * Priority:
  * maps > mods > base > base.wz
  */
-bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map, const char* current_map_mount_point)
 {
 	static searchPathMode current_mode = mod_clean;
 	static std::string current_current_map;
-	wzSearchPath *curSearchPath = searchPathRegistry;
-	char tmpstr[PATH_MAX] = "\0";
+	std::string tmpstr;
 
 	if (mode != current_mode || (current_map != nullptr ? current_map : "") != current_current_map || force ||
 	    (use_override_mods && override_mod_list != getModList()))
@@ -262,148 +396,136 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 		current_mode = mode;
 		current_current_map = current_map != nullptr ? current_map : "";
 
-		// Start at the lowest priority
-		while (curSearchPath->lowerPriority)
-		{
-			curSearchPath = curSearchPath->lowerPriority;
-		}
-
 		switch (mode)
 		{
 		case mod_clean:
 			debug(LOG_WZ, "Cleaning up");
 			clearLoadedMods();
 
-			while (curSearchPath)
+			for (const auto& curSearchPath : searchPathRegistry)
 			{
 #ifdef DEBUG
-				debug(LOG_WZ, "Removing [%s] from search path", curSearchPath->path);
+				debug(LOG_WZ, "Removing [%s] from search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Remove maps and mods
-				removeSubdirs(curSearchPath->path, "maps");
-				removeSubdirs(curSearchPath->path, "mods/music");
-				removeSubdirs(curSearchPath->path, "mods/global");
-				removeSubdirs(curSearchPath->path, "mods");
-				removeSubdirs(curSearchPath->path, "mods/autoload");
-				removeSubdirs(curSearchPath->path, "mods/campaign");
-				removeSubdirs(curSearchPath->path, "mods/multiplay");
-				removeSubdirs(curSearchPath->path, "mods/downloads");
+				removeSubdirs(curSearchPath->path.c_str(), "maps");
+				removeSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_MUSIC));
+				removeSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_GLOBAL));
+				removeSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_AUTOLOAD));
+				removeSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_CAMPAIGN));
+				removeSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_MULTIPLAY));
+				removeSubdirs(curSearchPath->path.c_str(), "mods/downloads"); // not versioned
 
 				// Remove multiplay patches
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "mp");
-				WZ_PHYSFS_unmount(tmpstr);
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "mp.wz");
-				WZ_PHYSFS_unmount(tmpstr);
+				tmpstr = curSearchPath->path + "mp";
+				WZ_PHYSFS_unmount(tmpstr.c_str());
+				tmpstr = curSearchPath->path + "mp.wz";
+				WZ_PHYSFS_unmount(tmpstr.c_str());
 
 				// Remove plain dir
-				WZ_PHYSFS_unmount(curSearchPath->path);
+				WZ_PHYSFS_unmount(curSearchPath->path.c_str());
 
 				// Remove base files
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "base");
-				WZ_PHYSFS_unmount(tmpstr);
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "base.wz");
-				WZ_PHYSFS_unmount(tmpstr);
+				tmpstr = curSearchPath->path + "base";
+				WZ_PHYSFS_unmount(tmpstr.c_str());
+				tmpstr = curSearchPath->path + "base.wz";
+				WZ_PHYSFS_unmount(tmpstr.c_str());
 
 				// remove video search path as well
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "sequences.wz");
-				WZ_PHYSFS_unmount(tmpstr);
-				curSearchPath = curSearchPath->higherPriority;
+				tmpstr = curSearchPath->path + "sequences.wz";
+				WZ_PHYSFS_unmount(tmpstr.c_str());
 			}
+
+			// This should properly remove all paths, but testing is needed to ensure that all supported versions of PhysFS behave as expected
+			// For now, keep the old code above as well as this new method
+			clearAllPhysFSSearchPaths();
 			break;
 		case mod_campaign:
 			debug(LOG_WZ, "*** Switching to campaign mods ***");
 			clearLoadedMods();
 
-			while (curSearchPath)
+			for (const auto& curSearchPath : searchPathRegistry)
 			{
 				// make sure videos override included files
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "sequences.wz");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
-				curSearchPath = curSearchPath->higherPriority;
+				tmpstr = curSearchPath->path + "sequences.wz";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
-			curSearchPath = searchPathRegistry;
-			while (curSearchPath->lowerPriority)
-			{
-				curSearchPath = curSearchPath->lowerPriority;
-			}
-			while (curSearchPath)
+
+			for (const auto& curSearchPath : searchPathRegistry)
 			{
 #ifdef DEBUG
-				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path);
+				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Add global and campaign mods
-				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
+				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
-				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
-				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-				addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-				addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
-				addSubdirs(curSearchPath->path, "mods/campaign", PHYSFS_APPEND, use_override_mods ? &override_mods : &campaign_mods, true);
-				if (!WZ_PHYSFS_unmount(curSearchPath->path))
+				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_MUSIC), PHYSFS_APPEND, nullptr, false);
+				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_GLOBAL), PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_AUTOLOAD), PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
+				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_CAMPAIGN), PHYSFS_APPEND, use_override_mods ? &override_mods : &campaign_mods, true);
+				if (!WZ_PHYSFS_unmount(curSearchPath->path.c_str()))
 				{
-					debug(LOG_WZ, "* Failed to remove path %s again", curSearchPath->path);
+					debug(LOG_WZ, "* Failed to remove path %s again", curSearchPath->path.c_str());
 				}
 
 				// Add plain dir
-				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
+				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
 				// Add base files
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "base");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "base.wz");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
-
-				curSearchPath = curSearchPath->higherPriority;
+				tmpstr = curSearchPath->path + "base";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				tmpstr = curSearchPath->path + "base.wz";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
 			break;
 		case mod_multiplay:
 			debug(LOG_WZ, "*** Switching to multiplay mods ***");
 			clearLoadedMods();
 
-			while (curSearchPath)
+			for (const auto& curSearchPath : searchPathRegistry)
 			{
 				// make sure videos override included files
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "sequences.wz");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
-				curSearchPath = curSearchPath->higherPriority;
+				tmpstr = curSearchPath->path + "sequences.wz";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
 			// Add the selected map first, for mapmod support
 			if (current_map != nullptr)
 			{
-				WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
-				realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
-				PHYSFS_mount(realPathAndDir.toUtf8().c_str(), NULL, PHYSFS_APPEND);
+				if (inMemoryMapVirtualFilenameUID.empty() || current_map != inMemoryMapVirtualFilenameUID)
+				{
+					// mount it as a normal physical map path
+					WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
+					realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
+					PHYSFS_mount(realPathAndDir.toUtf8().c_str(), current_map_mount_point, PHYSFS_APPEND);
+				}
+				else if (!inMemoryMapArchiveData.empty())
+				{
+					// mount the in-memory map archive as a virtual file
+					if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), clearInMemoryMapFile, inMemoryMapVirtualFilenameUID.c_str(), current_map_mount_point, PHYSFS_APPEND) != 0)
+					{
+						inMemoryMapArchiveMounted++;
+					}
+				}
+				else
+				{
+					debug(LOG_ERROR, "Specified virtual map file, but no data?");
+				}
 			}
-			curSearchPath = searchPathRegistry;
-			while (curSearchPath->lowerPriority)
-			{
-				curSearchPath = curSearchPath->lowerPriority;
-			}
-			while (curSearchPath)
+			for (const auto& curSearchPath : searchPathRegistry)
 			{
 #ifdef DEBUG
-				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path);
+				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Add global and multiplay mods
-				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
-				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
+				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
+				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_MUSIC), PHYSFS_APPEND, nullptr, false);
 
 				// Only load if we are host or singleplayer (Initial mod load relies on this, too)
 				if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER || !NetPlay.bComms)
 				{
-					addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-					addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-					addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
-					addSubdirs(curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods ? &override_mods : &multiplay_mods, true);
+					addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_GLOBAL), PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+					addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_AUTOLOAD), PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
+					addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_MULTIPLAY), PHYSFS_APPEND, use_override_mods ? &override_mods : &multiplay_mods, true);
 				}
 				else
 				{
@@ -411,31 +533,25 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 					for (Sha256 &hash : game.modHashes)
 					{
 						hashList = {hash.toString()};
-						addSubdirs(curSearchPath->path, "mods/downloads", PHYSFS_APPEND, &hashList, true);
+						addSubdirs(curSearchPath->path.c_str(), "mods/downloads", PHYSFS_APPEND, &hashList, true); // not versioned
 					}
 				}
-				WZ_PHYSFS_unmount(curSearchPath->path);
+				WZ_PHYSFS_unmount(curSearchPath->path.c_str());
 
 				// Add multiplay patches
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "mp");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "mp.wz");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
+				tmpstr = curSearchPath->path + "mp";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				tmpstr = curSearchPath->path + "mp.wz";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 
 				// Add plain dir
-				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
+				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
 				// Add base files
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "base");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
-				sstrcpy(tmpstr, curSearchPath->path);
-				sstrcat(tmpstr, "base.wz");
-				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
-
-				curSearchPath = curSearchPath->higherPriority;
+				tmpstr = curSearchPath->path + "base";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				tmpstr = curSearchPath->path + "base.wz";
+				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
 			break;
 		default:
@@ -459,6 +575,13 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 #ifdef DEBUG
 		printSearchPath();
 #endif // DEBUG
+
+		if (mode != mod_clean)
+		{
+			gfx_api::loadTextureCompressionOverrides(); // reload these as mods may have overridden the file!
+		}
+
+		ActivityManager::instance().rebuiltSearchPath();
 	}
 	else if (use_override_mods)
 	{
@@ -484,21 +607,19 @@ static MapFileList listMapFiles()
 	MapFileList ret, filtered;
 	std::vector<std::string> oldSearchPath;
 
-	char **subdirlist = PHYSFS_enumerateFiles("maps");
-
-	for (char **i = subdirlist; *i != nullptr; ++i)
-	{
-		std::string wzfile = *i;
-		if (*i[0] == '.' || wzfile.substr(wzfile.find_last_of('.') + 1) != "wz")
+	WZ_PHYSFS_enumerateFiles("maps", [&](const char *i) -> bool {
+		std::string wzfile = i;
+		if (i[0] == '.' || wzfile.substr(wzfile.find_last_of('.') + 1) != "wz")
 		{
-			continue;
+			return true; // continue;
 		}
 
-		std::string realFileName_platformIndependent = std::string("maps") + "/" + *i;
-		std::string realFileName_platformDependent = std::string("maps") + PHYSFS_getDirSeparator() + *i;
+		std::string realFileName_platformIndependent = std::string("maps") + "/" + i;
+		std::string realFileName_platformDependent = std::string("maps") + PHYSFS_getDirSeparator() + i;
 		ret.push_back(MapFileListPath(realFileName_platformIndependent, realFileName_platformDependent));
-	}
-	PHYSFS_freeList(subdirlist);
+		return true; // continue
+	});
+
 	// save our current search path(s)
 	debug(LOG_WZ, "Map search paths:");
 	char **searchPath = PHYSFS_getSearchPath();
@@ -515,29 +636,39 @@ static MapFileList listMapFiles()
 		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName.platformDependent;
 		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND))
 		{
-			int unsafe = 0;
-			char **filelist = PHYSFS_enumerateFiles("multiplay/maps");
-
-			for (char **file = filelist; *file != nullptr; ++file)
-			{
-				std::string isDir = std::string("multiplay/maps/") + *file;
+			size_t numMapGamFiles = 0;
+			size_t numMapFolders = 0;
+			bool enumSuccess = WZ_PHYSFS_enumerateFiles("multiplay/maps", [&numMapGamFiles, &numMapFolders, &realFilePathAndName](const char *file) -> bool {
+				std::string isDir = std::string("multiplay/maps/") + file;
 				if (WZ_PHYSFS_isDirectory(isDir.c_str()))
 				{
-					continue;
-				}
-				std::string checkfile = *file;
-				debug(LOG_WZ, "checking ... %s", *file);
-				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
-				{
-					if (unsafe++ > 1)
+					if (numMapFolders++ > 1)
 					{
 						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
-						break;
+						return false; // break;
+					}
+					return true; // continue;
+				}
+				std::string checkfile = file;
+				debug(LOG_WZ, "checking ... %s", file);
+				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
+				{
+					if (numMapGamFiles++ > 1)
+					{
+						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
+						return false; // break;
 					}
 				}
+				return true; // continue
+			});
+			if (!enumSuccess)
+			{
+				// Failed to enumerate contents - corrupt map archive (ignore it)
+				debug(LOG_ERROR, "Failed to enumerate - ignoring corrupt map file: %s", realFilePathAndName.c_str());
+				numMapGamFiles = std::numeric_limits<size_t>::max() - 1;
+				numMapFolders = std::numeric_limits<size_t>::max() - 1;
 			}
-			PHYSFS_freeList(filelist);
-			if (unsafe < 2)
+			if (numMapGamFiles < 2 && numMapFolders < 2)
 			{
 				filtered.push_back(realFileName);
 			}
@@ -561,18 +692,10 @@ static MapFileList listMapFiles()
 }
 
 // Map processing
-struct WZmaps
-{
-	std::string MapName;
-	bool isMapMod;
-	bool isRandom;
-};
 
-std::vector<struct WZmaps> WZ_Maps;
-
-static std::vector<WZmaps>::iterator findMap(char const *name)
+static inline WZMapInfo_Map::iterator findMap(char const *name)
 {
-	return name != nullptr? std::find_if(WZ_Maps.begin(), WZ_Maps.end(), [name](WZmaps const &map) { return map.MapName == name; }) : WZ_Maps.end();
+	return name != nullptr? WZ_Maps.find(name) : WZ_Maps.end();
 }
 
 bool CheckForMod(char const *mapFile)
@@ -580,7 +703,7 @@ bool CheckForMod(char const *mapFile)
 	auto it = findMap(mapFile);
 	if (it != WZ_Maps.end())
 	{
-		return it->isMapMod;
+		return it->second.isMapMod;
 	}
 	if (mapFile != nullptr)
 	{
@@ -595,7 +718,7 @@ bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
 	auto it = findMap(mapFile);
 	if (it != WZ_Maps.end())
 	{
-		return it->isRandom;
+		return it->second.isRandom;
 	}
 
 	if (mapFile != nullptr) {
@@ -613,60 +736,213 @@ bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
 }
 
 // Mount the archive under the mountpoint, and enumerate the archive according to lookin
-static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpoint, const char *lookin)
+static inline optional<WZmapInfo> CheckInMap(const char *archive, const std::string& mountpoint, const std::vector<std::string>& lookin_list)
 {
 	bool mapmod = false;
 	bool isRandom = false;
 
-	if (!PHYSFS_mount(archive, mountpoint, PHYSFS_APPEND))
+	for (auto lookin_subdir : lookin_list)
 	{
-		// We already checked to see if this was valid before, and now, something went seriously wrong.
-		debug(LOG_FATAL, "Could not mount %s, because: %s. Please delete the file, and run the game again. Game will now exit.", archive, WZ_PHYSFS_getLastError());
-		exit(-1);
+		std::string lookin = mountpoint;
+		if (!lookin_subdir.empty())
+		{
+			lookin.append("/");
+			lookin.append(lookin_subdir);
+		}
+		bool enumResult = WZ_PHYSFS_enumerateFiles(lookin.c_str(), [&](const char *file) -> bool {
+			std::string checkfile = file;
+			if (WZ_PHYSFS_isDirectory((lookin + "/" + checkfile).c_str()))
+			{
+				if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
+					|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
+					|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
+					|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
+					|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
+					|| checkfile.compare("skirmish") == 0 || checkfile.compare("shaders") == 0 || checkfile.compare("fonts") == 0
+					|| checkfile.compare("icons") == 0)
+				{
+					debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
+					mapmod = true;
+					return false; // break;
+				}
+			}
+			return true; // continue
+		});
+		if (!enumResult)
+		{
+			// failed to enumerate - just exit out
+			return nullopt;
+		}
+
+		std::string maps = lookin + "/multiplay/maps";
+		enumResult = WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
+			if (WZ_PHYSFS_isDirectory((maps + "/" + file).c_str()) && PHYSFS_exists((maps + "/" + file + "/game.js").c_str()))
+			{
+				isRandom = true;
+				return false; // break;
+			}
+			return true; // continue
+		});
+		if (!enumResult)
+		{
+			// failed to enumerate - just exit out
+			return nullopt;
+		}
 	}
 
-	std::string checkpath = lookin;
-	checkpath.append("/");
-	char **filelist = PHYSFS_enumerateFiles(lookin);
-	for (char **file = filelist; *file != nullptr; ++file)
+	return WZmapInfo(mapmod, isRandom);
+}
+
+static std::vector<std::string> map_lookin_list = { "", "multiplay" };
+
+// Process a map that has been mounted in the PhysFS virtual filesystem
+//
+// Verifies the index data, determines attributes, and adds to the level loading system so it can be loaded
+//
+// - archive: Directory or archive added to the path, in platform-dependent notation
+// - realFileName_platformIndependent:
+//     For actual map archives, this is the platform independent unique filename + parent path for the map
+//     For "virtual" map archives this is basically a lookup key that should be unique
+// - mountPoint: Location in the interpolated PhysFS tree that this archive was "mounted" (in platform-independent notation)
+bool processMap(const char* archive, const char* realFileName_platformIndependent, const std::string& mountPoint, bool rejectMapMods = false)
+{
+	auto WZmapInfoResult = CheckInMap(archive, mountPoint, map_lookin_list);
+	if (!WZmapInfoResult.has_value())
 	{
-		std::string checkfile = *file;
-		if (WZ_PHYSFS_isDirectory((checkpath + checkfile).c_str()))
+		// failed to enumerate contents
+		return false;
+	}
+	if (rejectMapMods && WZmapInfoResult.value().isMapMod)
+	{
+		debug(LOG_WZ, "Rejecting map mod: %s", archive);
+		return false;
+	}
+
+	WzMapPhysFSIO mapIO;
+
+	bool containsMap = false;
+
+	// First pass: Look for new level.json (which are in multiplay/maps/<map name>)
+	std::string mapsDirPath = mapIO.pathJoin(mountPoint.c_str(), "multiplay/maps");
+	bool enumSuccess = WZ_PHYSFS_enumerateFolders(mapsDirPath, [&](const char *folder) -> bool {
+		if (!folder) { return true; }
+		if (*folder == '\0') { return true; }
+
+		std::string levelJSONPath = std::string("multiplay/maps/") + folder + "/level.json";
+		if (PHYSFS_exists(WzString::fromUtf8(mountPoint + "/" + levelJSONPath)) && loadLevFile_JSON(mountPoint, levelJSONPath, mod_multiplay, realFileName_platformIndependent))
 		{
-			if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
-			    || checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
-			    || checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
-			    || checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
-			    || checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
-			    || checkfile.compare("skirmish") == 0)
+			containsMap = true;
+			return false; // stop enumerating
+		}
+		return true;
+	});
+	if (!enumSuccess)
+	{
+		// Failed to enumerate contents - corrupt map archive
+		return false;
+	}
+
+	// Or "flattened" self-contained maps (where level.json is in the root)
+	if (!containsMap)
+	{
+		if (PHYSFS_exists(WzString::fromUtf8(mountPoint + "/" + "level.json")) && loadLevFile_JSON(mountPoint, "level.json", mod_multiplay, realFileName_platformIndependent))
+		{
+			containsMap = true;
+		}
+	}
+
+	if (containsMap)
+	{
+		std::string MapName = realFileName_platformIndependent;
+		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
+		return true;
+	}
+
+	// Second pass: Look for older / classic maps (with *.addon.lev / *.xplayers.lev in the root)
+	enumSuccess = WZ_PHYSFS_enumerateFiles(mountPoint.c_str(), [&](const char *file) -> bool {
+		size_t len = strlen(file);
+		if ((len > 10 && !strcasecmp(file + (len - 10), ".addon.lev"))  // Do not add addon.lev again // <--- Err, what? The code has loaded .addon.lev for a while...
+			|| (len > 13 && !strcasecmp(file + (len - 13), ".xplayers.lev"))) // add support for X player maps using a new name to prevent conflicts.
+		{
+			std::string fullPath = mountPoint + "/" + file;
+			if (loadLevFile(mountPoint + "/" + file, mod_multiplay, true, realFileName_platformIndependent))
 			{
-				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
-				mapmod = true;
-				break;
+				containsMap = true;
+				return false; // stop enumerating
 			}
 		}
-	}
-	PHYSFS_freeList(filelist);
+		return true; // continue
+	});
 
-	std::string maps = checkpath + "/multiplay/maps";
-	filelist = PHYSFS_enumerateFiles(maps.c_str());
-	maps += '/';
-	for (char **file = filelist; *file != nullptr; ++file)
+	if (!enumSuccess)
 	{
-		if (WZ_PHYSFS_isDirectory((maps + *file).c_str()) && PHYSFS_exists((maps + *file + "/game.js").c_str()))
-		{
-			isRandom = true;
-			break;
-		}
+		// Failed to enumerate contents - corrupt map archive
+		return false;
 	}
-	PHYSFS_freeList(filelist);
 
-	if (!WZ_PHYSFS_unmount(archive))
+	if (containsMap)
 	{
-		debug(LOG_ERROR, "Could not unmount %s, %s", archive, WZ_PHYSFS_getLastError());
+		std::string MapName = realFileName_platformIndependent;
+		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
+		return true;
 	}
-	return {mapmod, isRandom};
+
+	return false;
 }
+
+#if defined(HAS_PHYSFS_IO_SUPPORT)
+bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
+{
+	ASSERT_OR_RETURN(false, !mapArchiveData.empty(), "Null map archive data passed?");
+	ASSERT_OR_RETURN(false, inMemoryMapArchiveMounted == 0, "In-memory map archive already mounted");
+
+	// calculate a hash for the map data
+	Sha256 mapHash = sha256Sum(mapArchiveData.data(), mapArchiveData.size());
+
+	// generate a new unique filename UID for the in-memory map
+	inMemoryMapVirtualFilenameUID = "<in-memory>::mapArchive::" + mapHash.toString();
+
+	// store the map archive data
+	inMemoryMapArchiveData = std::move(mapArchiveData);
+
+	// try to mount the in-memory archive
+	if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), nullptr, inMemoryMapVirtualFilenameUID.c_str(), "WZMap", PHYSFS_APPEND) == 0)
+	{
+		// Failed to mount data - corrupt map archive
+		debug(LOG_ERROR, "Failed to mount - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
+		inMemoryMapVirtualFilenameUID.clear();
+		inMemoryMapArchiveData.clear();
+		return false;
+	}
+
+	// load it into the level-loading system
+	if (!processMap(inMemoryMapVirtualFilenameUID.c_str(), inMemoryMapVirtualFilenameUID.c_str(), "WZMap", true))
+	{
+		// Failed to enumerate contents - corrupt map archive
+		debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
+		inMemoryMapVirtualFilenameUID.clear();
+		inMemoryMapArchiveData.clear();
+		return false;
+	}
+
+	if (WZ_PHYSFS_unmount(inMemoryMapVirtualFilenameUID.c_str()) == 0)
+	{
+		debug(LOG_ERROR, "Could not unmount %s, %s", inMemoryMapVirtualFilenameUID.c_str(), WZ_PHYSFS_getLastError());
+	}
+
+	// fix-up level hash
+	levSetFileHashByRealFileName(inMemoryMapVirtualFilenameUID.c_str(), mapHash);
+
+	return true;
+}
+#else
+bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
+{
+	// Sadly, the version of PhysFS used for compilation is too old
+	debug(LOG_INFO, "The version of PhysFS used for compilation is too old, and does not support PHYSFS_Io");
+	return false;
+}
+#endif
 
 bool buildMapList()
 {
@@ -676,10 +952,14 @@ bool buildMapList()
 	}
 	loadLevFile("addon.lev", mod_multiplay, false, nullptr);
 	WZ_Maps.clear();
+	if (!inMemoryMapArchiveMounted && !inMemoryMapArchiveData.empty())
+	{
+		debug(LOG_INFO, "Clearing in-memory map archive (since it isn't currently loaded)");
+		clearInMemoryMapFile(inMemoryMapArchiveData.data());
+	}
 	MapFileList realFileNames = listMapFiles();
 	for (auto &realFileName : realFileNames)
 	{
-		struct WZmaps CurrentMap;
 		const char * pRealDirStr = PHYSFS_getRealDir(realFileName.platformIndependent.c_str());
 		if (!pRealDirStr)
 		{
@@ -688,37 +968,22 @@ bool buildMapList()
 		}
 		std::string realFilePathAndName = pRealDirStr + realFileName.platformDependent;
 
-		PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND);
-
-		char **filelist = PHYSFS_enumerateFiles("");
-		for (char **file = filelist; *file != nullptr; ++file)
+		if (PHYSFS_mount(realFilePathAndName.c_str(), "WZMap", PHYSFS_APPEND) == 0)
 		{
-			std::string checkfile = *file;
-			size_t len = strlen(*file);
-			if (len > 10 && !strcasecmp(*file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
-			{
-				loadLevFile(*file, mod_multiplay, true, realFileName.platformIndependent.c_str());
-			}
-			// add support for X player maps using a new name to prevent conflicts.
-			if (len > 13 && !strcasecmp(*file + (len - 13), ".xplayers.lev"))
-			{
-				loadLevFile(*file, mod_multiplay, true, realFileName.platformIndependent.c_str());
-			}
+			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
+			continue; // skip
 		}
-		PHYSFS_freeList(filelist);
+
+		if (!processMap(realFilePathAndName.c_str(), realFileName.platformIndependent.c_str(), "WZMap"))
+		{
+			// Failed to enumerate contents - corrupt map archive
+			debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", realFilePathAndName.c_str());
+		}
 
 		if (WZ_PHYSFS_unmount(realFilePathAndName.c_str()) == 0)
 		{
 			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
 		}
-
-		auto chk = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap");
-		auto chk2 = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
-
-		CurrentMap.MapName = realFileName.platformIndependent;
-		CurrentMap.isMapMod = chk.first || chk2.first;
-		CurrentMap.isRandom = chk.second || chk2.second;
-		WZ_Maps.push_back(CurrentMap);
 	}
 
 	return true;
@@ -728,7 +993,7 @@ bool buildMapList()
 // ////////////////////////////////////////////////////////////////////////////
 // Called once on program startup.
 //
-bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
+bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScalePercentage)
 {
 	if (!widgInitialise())
 	{
@@ -769,7 +1034,7 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 
 	// Initialize the iVis text rendering module
 	wzSceneBegin("Main menu loop");
-	iV_TextInit(horizScaleFactor, vertScaleFactor);
+	iV_TextInit(horizScalePercentage, vertScalePercentage);
 
 	pie_InitRadar();
 
@@ -784,13 +1049,20 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 //
 void systemShutdown()
 {
+	if (bLoadSaveUp)
+	{
+		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
+	}
+
+	seqReleaseAll();
+
 	pie_ShutdownRadar();
 	clearLoadedMods();
-	flushConsoleMessages();
+	shutdownConsoleMessages();
 
 	shutdownEffectsSystem();
 	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".
-	keyMappings.clear();
+	gInputManager.shutdown();
 
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();
@@ -800,6 +1072,9 @@ void systemShutdown()
 		debug(LOG_FATAL, "Unable to multiShutdown() cleanly!");
 		abort();
 	}
+
+	// shut down various databases
+	shutdownKnownPlayers();
 
 	debug(LOG_MAIN, "shutting down audio subsystems");
 
@@ -820,6 +1095,7 @@ void systemShutdown()
 	ffpathShutdown();
 	flowfieldDestroy();
 	mapShutdown();
+	modelShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
@@ -874,6 +1150,18 @@ bool frontendInitialise(const char *ResourceFile)
 	}
 
 	FrontImages = (IMAGEFILE *)resGetData("IMG", "frontend.img");
+	if (FrontImages == nullptr)
+	{
+		std::string errorMessage = astringf(_("Unable to load: %s."), "frontend.img");
+		if (!getLoadedMods().empty())
+		{
+			errorMessage += " ";
+			errorMessage += _("Please remove all incompatible mods.");
+		}
+		debug(LOG_FATAL, "%s", errorMessage.c_str());
+		return false;
+	}
+
 	/* Shift the interface initialisation here temporarily so that it
 		can pick up the stats after they have been loaded */
 	if (!intInitialise())
@@ -882,7 +1170,7 @@ bool frontendInitialise(const char *ResourceFile)
 	}
 
 	// reinitialise key mappings
-	keyInitMappings(false);
+	gInputManager.resetMappings(false, gKeyFuncConfig);
 
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.
@@ -912,10 +1200,20 @@ bool frontendShutdown()
 		return false;
 	}
 
+	changeTitleUI(nullptr);
+	if (challengesUp)
+	{
+		closeChallenges(); // TODO: Ideally this would not be required here (refactor challenge.cpp / frontend.cpp?)
+	}
+	if (bLoadSaveUp)
+	{
+		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
+	}
 	interfaceShutDown();
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
+	frontendIsShuttingDown();
 
 	if (!objShutdown())
 	{
@@ -1071,6 +1369,7 @@ bool stageOneShutDown()
 	pie_TexInit(); // restart it
 
 	initMiscVars();
+	reinitFactionsMapping();
 	wzSceneEnd("Main game loop");
 	wzSceneBegin("Main menu loop");
 
@@ -1138,7 +1437,13 @@ bool stageTwoInitialise()
 	}
 
 	// reinitialise key mappings
-	keyInitMappings(false);
+	gInputManager.resetMappings(false, gKeyFuncConfig);
+
+	if (NETisReplay())
+	{
+		// Debug keybinds start enabled for replays
+		gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::ACTIVE);
+	}
 
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.
@@ -1150,13 +1455,16 @@ bool stageTwoInitialise()
 	// Don't ask why this doesn't go in stage three. In fact, don't even ask me what stage one/two/three is supposed to mean, it seems about as descriptive as stage doStuff, stage doMoreStuff and stage doEvenMoreStuff...
 	debug(LOG_MAIN, "Init game queues, I am %d.", selectedPlayer);
 	sendQueuedDroidInfo();  // Discard any pending orders which could later get flushed into the game queue.
-	for (i = 0; i < MAX_PLAYERS; ++i)
+	if (!NETisReplay())
 	{
-		NETinitQueue(NETgameQueue(i));
-
-		if (!myResponsibility(i))
+		for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
-			NETsetNoSendOverNetwork(NETgameQueue(i));
+			NETinitQueue(NETgameQueue(i));
+
+			if (!myResponsibility(i))
+			{
+				NETsetNoSendOverNetwork(NETgameQueue(i));
+			}
 		}
 	}
 
@@ -1233,9 +1541,6 @@ bool stageTwoShutDown()
 
 bool stageThreeInitialise()
 {
-	STRUCTURE *psStr;
-	UDWORD i;
-	DROID *psDroid;
 	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
 
 	debug(LOG_WZ, "== stageThreeInitialise ==");
@@ -1311,37 +1616,6 @@ bool stageThreeInitialise()
 
 	setAllPauseStates(false);
 
-	/* decide if we have to create teams, ONLY in multiplayer mode!*/
-	if (bMultiPlayer && alliancesSharedVision(game.alliance))
-	{
-		createTeamAlliances();
-
-		/* Update ally vision for pre-placed structures and droids */
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (i != selectedPlayer)
-			{
-				/* Structures */
-				for (psStr = apsStructLists[i]; psStr; psStr = psStr->psNext)
-				{
-					if (aiCheckAlliances(psStr->player, selectedPlayer))
-					{
-						visTilesUpdate((BASE_OBJECT *)psStr);
-					}
-				}
-
-				/* Droids */
-				for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
-				{
-					if (aiCheckAlliances(psDroid->player, selectedPlayer))
-					{
-						visTilesUpdate((BASE_OBJECT *)psDroid);
-					}
-				}
-			}
-		}
-	}
-
 	countUpdate();
 
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START)
@@ -1350,7 +1624,8 @@ bool stageThreeInitialise()
 	}
 	else
 	{
-		if (getDebugMappingStatus())
+		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			triggerEventCheatMode(true);
 		}
@@ -1371,7 +1646,7 @@ bool stageThreeShutDown()
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
-	hostlaunch = HostLaunch::Normal;
+	setHostLaunch(HostLaunch::Normal);
 
 	removeSpotters();
 
@@ -1382,9 +1657,12 @@ bool stageThreeShutDown()
 		return false;
 	}
 
+	specStatsViewShutdown();
+
 	challengesUp = false;
 	challengeActive = false;
 	isInGamePopupUp = false;
+	InGameOpUp = false;
 	bInTutorial = false;
 
 	shutdownTemplates();
@@ -1441,7 +1719,6 @@ bool saveGameReset()
 	//free up the gateway stuff?
 	gwShutDown();
 	intResetScreen(true);
-	intResetPreviousObj();
 
 	if (!mapShutdown())
 	{
@@ -1466,8 +1743,9 @@ static void initMiscVars()
 	includeRedundantDesigns = false;
 	enableConsoleDisplay(true);
 
+	DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
-		processDebugMappings(n, false);
+		dbgInputManager.setPlayerWantsDebugMappings(n, false);
 	}
 }

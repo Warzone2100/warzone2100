@@ -29,9 +29,10 @@
 
 // requester
 void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD id, UBYTE numPlayers, std::string const &searchString = std::string());
+void closeMultiRequester();
 
 extern bool multiRequestUp;
-extern W_SCREEN *psRScreen;			// requester stuff.
+extern std::shared_ptr<W_SCREEN> psRScreen; // requester stuff.
 
 bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview);
 void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

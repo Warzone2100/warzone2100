@@ -51,6 +51,8 @@ struct IMGSaveError
  */
 bool iV_loadImage_PNG(const char *fileName, iV_Image *image);
 
+bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 = false);
+
 /*!
  * Load a PNG from a memory buffer into an image
  *

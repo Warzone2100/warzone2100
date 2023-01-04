@@ -22,26 +22,14 @@
  * New scripting system -- script functions
  */
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtCore/QFileInfo>
-
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/wzpaths.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/string_ext.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
-#include "qtscriptfuncs.h"
 #include "lib/ivis_opengl/tex.h"
 
 #include "action.h"
@@ -83,11 +71,15 @@
 #include "advvis.h"
 #include "loadsave.h"
 #include "wzapi.h"
+#include "qtscript.h"
+#include "featuredef.h"
+#include "data.h"
 
 
 #include <unordered_set>
 #include "lib/framework/file.h"
 #include <unordered_map>
+#include <limits>
 
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 8
 #pragma GCC diagnostic push
@@ -137,6 +129,7 @@ static inline JSCFunctionListEntry QJS_CGETSET_DEF(const char *name, JSCFunction
 struct JSContextValue {
 	JSContext *ctx;
 	JSValue value;
+	bool skip_constructors;
 };
 void to_json(nlohmann::json& j, const JSContextValue& value); // forward-declare
 
@@ -145,14 +138,21 @@ bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::f
 class quickjs_scripting_instance;
 static std::map<JSContext*, quickjs_scripting_instance *> engineToInstanceMap;
 
+static void QJSRuntimeFree_LeakHandler_Error(const char* msg)
+{
+	debug(LOG_ERROR, "QuickJS FreeRuntime leak: %s", msg);
+}
+
 class quickjs_scripting_instance : public wzapi::scripting_instance
 {
 public:
-	quickjs_scripting_instance(int player, const std::string& scriptName)
-	: scripting_instance(player, scriptName)
+	quickjs_scripting_instance(int player, const std::string& scriptName, const std::string& scriptPath)
+	: scripting_instance(player, scriptName, scriptPath)
 	{
 		rt = JS_NewRuntime();
+		ASSERT(rt != nullptr, "JS_NewRuntime failed?");
 		ctx = JS_NewContext(rt);
+		ASSERT(ctx != nullptr, "JS_NewContext failed?");
 		global_obj = JS_GetGlobalObject(ctx);
 
 		engineToInstanceMap.insert(std::pair<JSContext*, quickjs_scripting_instance*>(ctx, this));
@@ -161,11 +161,25 @@ public:
 	{
 		engineToInstanceMap.erase(ctx);
 
+		if (!(JS_IsUninitialized(compiledScriptObj)))
+		{
+			JS_FreeValue(ctx, compiledScriptObj);
+			compiledScriptObj = JS_UNINITIALIZED;
+		}
+
 		JS_FreeValue(ctx, global_obj);
-		JS_FreeContext(ctx);
-		ctx = nullptr;
-		JS_FreeRuntime(rt);
-		rt = nullptr;
+		ASSERT(ctx != nullptr, "context is null??");
+		if (ctx)
+		{
+			JS_FreeContext(ctx);
+			ctx = nullptr;
+		}
+		ASSERT(rt != nullptr, "runtime is null??");
+		if (rt)
+		{
+			JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Error);
+			rt = nullptr;
+		}
 	}
 	bool loadScript(const WzString& path, int player, int difficulty);
 	bool readyInstanceForExecution() override;
@@ -178,14 +192,15 @@ public:
 	virtual bool saveScriptGlobals(nlohmann::json &result) override;
 	virtual bool loadScriptGlobals(const nlohmann::json &result) override;
 
-	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam) override;
+	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
 
 	// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
-	virtual std::tuple<TimerFunc, timerAdditionalData *> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
+	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
 
 public:
 	// get state for debugging
 	nlohmann::json debugGetAllScriptGlobals() override;
+	std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> debugGetScriptGlobalSpecialStringValues() override;
 
 	bool debugEvaluateCommand(const std::string &text) override;
 
@@ -279,7 +294,6 @@ public:
 public:
 	// MARK: Transporter events
 
-	//__
 	//__ ## eventTransporterLaunch(transport)
 	//__
 	//__ An event that is run when the mission transporter has been ordered to fly off.
@@ -329,61 +343,61 @@ public:
 
 	//__ ## eventDesignBody()
 	//__
-	//__An event that is run when current user picks a body in the design menu.
+	//__ An event that is run when current user picks a body in the design menu.
 	//__
 	virtual bool handle_eventDesignBody() override;
 
 	//__ ## eventDesignPropulsion()
 	//__
-	//__An event that is run when current user picks a propulsion in the design menu.
+	//__ An event that is run when current user picks a propulsion in the design menu.
 	//__
 	virtual bool handle_eventDesignPropulsion() override;
 
 	//__ ## eventDesignWeapon()
 	//__
-	//__An event that is run when current user picks a weapon in the design menu.
+	//__ An event that is run when current user picks a weapon in the design menu.
 	//__
 	virtual bool handle_eventDesignWeapon() override;
 
 	//__ ## eventDesignCommand()
 	//__
-	//__An event that is run when current user picks a command turret in the design menu.
+	//__ An event that is run when current user picks a command turret in the design menu.
 	//__
 	virtual bool handle_eventDesignCommand() override;
 
 	//__ ## eventDesignSystem()
 	//__
-	//__An event that is run when current user picks a system other than command turret in the design menu.
+	//__ An event that is run when current user picks a system other than command turret in the design menu.
 	//__
 	virtual bool handle_eventDesignSystem() override;
 
 	//__ ## eventDesignQuit()
 	//__
-	//__An event that is run when current user leaves the design menu.
+	//__ An event that is run when current user leaves the design menu.
 	//__
 	virtual bool handle_eventDesignQuit() override;
 
 	//__ ## eventMenuBuildSelected()
 	//__
-	//__An event that is run when current user picks something new in the build menu.
+	//__ An event that is run when current user picks something new in the build menu.
 	//__
 	virtual bool handle_eventMenuBuildSelected(/*BASE_OBJECT *psObj*/) override;
 
 	//__ ## eventMenuResearchSelected()
 	//__
-	//__An event that is run when current user picks something new in the research menu.
+	//__ An event that is run when current user picks something new in the research menu.
 	//__
 	virtual bool handle_eventMenuResearchSelected(/*BASE_OBJECT *psObj*/) override;
 
 	//__ ## eventMenuBuild()
 	//__
-	//__An event that is run when current user opens the build menu.
+	//__ An event that is run when current user opens the build menu.
 	//__
 	virtual bool handle_eventMenuBuild() override;
 
 	//__ ## eventMenuResearch()
 	//__
-	//__An event that is run when current user opens the research menu.
+	//__ An event that is run when current user opens the research menu.
 	//__
 	virtual bool handle_eventMenuResearch() override;
 
@@ -391,7 +405,8 @@ public:
 	virtual bool handle_eventMenuDesign() override;
 
 	//__ ## eventMenuManufacture()
-	//__An event that is run when current user opens the manufacture menu.
+	//__
+	//__ An event that is run when current user opens the manufacture menu.
 	//__
 	virtual bool handle_eventMenuManufacture() override;
 
@@ -416,11 +431,11 @@ public:
 	//__
 	virtual bool handle_eventObjectRecycled(const BASE_OBJECT *psObj) override;
 
-	//__ ## eventPlayerLeft(player index)
+	//__ ## eventPlayerLeft(player)
 	//__
 	//__ An event that is run after a player has left the game.
 	//__
-	virtual bool handle_eventPlayerLeft(int id) override;
+	virtual bool handle_eventPlayerLeft(int player) override;
 
 	//__ ## eventCheatMode(entered)
 	//__
@@ -441,7 +456,7 @@ public:
 	//__ if the droid was produced in a factory. It is not triggered for droid theft or
 	//__ gift (check ```eventObjectTransfer``` for that).
 	//__
-	virtual bool handle_eventDroidBuilt(const DROID *psDroid, const STRUCTURE *psFactory) override;
+	virtual bool handle_eventDroidBuilt(const DROID *psDroid, optional<const STRUCTURE *> psFactory) override;
 
 	//__ ## eventStructureBuilt(structure[, droid])
 	//__
@@ -449,14 +464,14 @@ public:
 	//__ if the structure was built by a droid. It is not triggered for building theft
 	//__ (check ```eventObjectTransfer``` for that).
 	//__
-	virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, const DROID *psDroid) override;
+	virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, optional<const DROID *> psDroid) override;
 
 	//__ ## eventStructureDemolish(structure[, droid])
 	//__
 	//__ An event that is run every time a structure begins to be demolished. This does
 	//__ not trigger again if the structure is partially demolished.
 	//__
-	virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, const DROID *psDroid) override;
+	virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, optional<const DROID *> psDroid) override;
 
 	//__ ## eventStructureReady(structure)
 	//__
@@ -465,6 +480,12 @@ public:
 	//__ register your own timer to keep checking.
 	//__
 	virtual bool handle_eventStructureReady(const STRUCTURE *psStruct) override;
+
+	//__ ## eventStructureUpgradeStarted(structure)
+	//__
+	//__ An event that is run every time a structure starts to be upgraded.
+	//__
+	virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) override;
 
 	//__ ## eventAttacked(victim, attacker)
 	//__
@@ -480,7 +501,7 @@ public:
 	//__ current player. If an ally does the research, the structure parameter will
 	//__ be set to null. The player parameter gives the player it is called for.
 	//__
-	virtual bool handle_eventResearched(const wzapi::researchResult& research, const STRUCTURE *psStruct, int player) override;
+	virtual bool handle_eventResearched(const wzapi::researchResult& research, wzapi::event_nullable_ptr<const STRUCTURE> psStruct, int player) override;
 
 	//__ ## eventDestroyed(object)
 	//__
@@ -539,7 +560,7 @@ public:
 	//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
 	//__ Message may be undefined.
 	//__
-	virtual bool handle_eventBeacon(int x, int y, int from, int to, const char *message) override;
+	virtual bool handle_eventBeacon(int x, int y, int from, int to, optional<const char *> message) override;
 
 	//__ ## eventBeaconRemoved(from, to)
 	//__
@@ -548,7 +569,7 @@ public:
 	//__
 	virtual bool handle_eventBeaconRemoved(int from, int to) override;
 
-	//__ ## eventGroupLoss(object, group id, new size)
+	//__ ## eventGroupLoss(object, groupId, newSize)
 	//__
 	//__ An event that is run whenever a group becomes empty. Input parameter
 	//__ is the about to be killed object, the group's id, and the new group size.
@@ -560,7 +581,7 @@ public:
 	//__
 	//__ An event that is run whenever a droid enters an area label. The area is then
 	//__ deactived. Call resetArea() to reactivate it. The name of the event is
-	//__ eventArea + the name of the label.
+	//__ `eventArea${label}`.
 	//__
 	virtual bool handle_eventArea(const std::string& label, const DROID *psDroid) override;
 
@@ -615,15 +636,6 @@ public:
 		if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
 			JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
 			return JS_NULL; } } while (0)
-
-#define SCRIPT_ASSERT_AND_RETURNERROR(context, expr, ...) \
-	do { bool _wzeval = (expr); \
-		if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
-			return JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
-			} } while (0)
-
-#define SCRIPT_ASSERT_PLAYER(_context, _player) \
-	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
 
 // ----------------------------------------------------------------------------------------
@@ -722,8 +734,8 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 		return JS_NULL;
 	}
 	JSValue value = JS_NewObject(ctx);
-	QuickJS_DefinePropertyValue(ctx, value, "power", JS_NewInt32(ctx, (int)psResearch->researchPower), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "points", JS_NewInt32(ctx, (int)psResearch->researchPoints), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "power", JS_NewInt32(ctx, (int)psResearch->researchPower), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "points", JS_NewInt32(ctx, (int)psResearch->researchPoints), JS_PROP_ENUMERABLE);
 	bool started = false;
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -733,13 +745,13 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 			started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING) || (bits & RESBITS_PENDING_ONLY);
 		}
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "started", JS_NewBool(ctx, started), 0); // including whether an ally has started it
-	QuickJS_DefinePropertyValue(ctx, value, "done", JS_NewBool(ctx, IsResearchCompleted(&asPlayerResList[player][psResearch->index])), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "fullname", JS_NewString(ctx, psResearch->name.toUtf8().c_str()), 0); // temporary
-	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), 0); // will be changed to contain fullname
-	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, SCRIPT_RESEARCH), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "results", mapJsonToQuickJSValue(ctx, psResearch->results, 0), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "started", JS_NewBool(ctx, started), JS_PROP_ENUMERABLE); // including whether an ally has started it
+	QuickJS_DefinePropertyValue(ctx, value, "done", JS_NewBool(ctx, IsResearchCompleted(&asPlayerResList[player][psResearch->index])), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "fullname", JS_NewString(ctx, psResearch->name.toUtf8().c_str()), JS_PROP_ENUMERABLE); // temporary
+	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain fullname
+	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewString(ctx, psResearch->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, SCRIPT_RESEARCH), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "results", mapJsonToQuickJSValue(ctx, psResearch->results, 0), JS_PROP_ENUMERABLE);
 	return value;
 }
 
@@ -782,16 +794,16 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 		}
 	}
 	JSValue value = convObj(psStruct, ctx);
-	QuickJS_DefinePropertyValue(ctx, value, "isCB", JS_NewBool(ctx, structCBSensor(psStruct)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "isSensor", JS_NewBool(ctx, structStandardSensor(psStruct)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "hasIndirect", JS_NewBool(ctx, indirect), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "isRadarDetector", JS_NewBool(ctx, objRadarDetector(psStruct)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "range", JS_NewInt32(ctx, range), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "status", JS_NewInt32(ctx, (int)psStruct->status), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, structureBody(psStruct))), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewInt32(ctx, psStruct->pStructureType->powerToBuild), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "isCB", JS_NewBool(ctx, structCBSensor(psStruct)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isSensor", JS_NewBool(ctx, structStandardSensor(psStruct)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "hasIndirect", JS_NewBool(ctx, indirect), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isRadarDetector", JS_NewBool(ctx, objRadarDetector(psStruct)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "range", JS_NewInt32(ctx, range), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "status", JS_NewInt32(ctx, (int)psStruct->status), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, structureBody(psStruct))), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewInt32(ctx, psStruct->pStructureType->powerToBuild), JS_PROP_ENUMERABLE);
 	int stattype = 0;
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
@@ -808,30 +820,30 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 		stattype = (int)psStruct->pStructureType->type;
 		break;
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, stattype), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, stattype), JS_PROP_ENUMERABLE);
 	if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
 	    || psStruct->pStructureType->type == REF_VTOL_FACTORY
 	    || psStruct->pStructureType->type == REF_RESEARCH
 	    || psStruct->pStructureType->type == REF_POWER_GEN)
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NewUint32(ctx, psStruct->capacity), 0);
+		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NewUint32(ctx, psStruct->capacity), JS_PROP_ENUMERABLE);
 	}
 	else
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NULL, 0);
+		QuickJS_DefinePropertyValue(ctx, value, "modules", JS_NULL, JS_PROP_ENUMERABLE);
 	}
 	JSValue weaponlist = JS_NewArray(ctx);
 	for (int j = 0; j < psStruct->numWeaps; j++)
 	{
 		JSValue weapon = JS_NewObject(ctx);
 		const WEAPON_STATS *psStats = asWeaponStats + psStruct->asWeaps[j].nStat;
-		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), 0);
-		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), 0); // will be changed to contain full name
-		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), 0);
-		QuickJS_DefinePropertyValue(ctx, weapon, "lastFired", JS_NewUint32(ctx, psStruct->asWeaps[j].lastFired), 0);
-		JS_DefinePropertyValueUint32(ctx, weaponlist, j, weapon, 0);
+		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
+		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, weapon, "lastFired", JS_NewUint32(ctx, psStruct->asWeaps[j].lastFired), JS_PROP_ENUMERABLE);
+		JS_DefinePropertyValueUint32(ctx, weaponlist, j, weapon, JS_PROP_ENUMERABLE);
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, 0);
+	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, JS_PROP_ENUMERABLE);
 	return value;
 }
 
@@ -847,9 +859,9 @@ JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 {
 	JSValue value = convObj(psFeature, ctx);
 	const FEATURE_STATS *psStats = psFeature->psStats;
-	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewUint32(ctx, 100 * psStats->body / MAX(1, psFeature->body)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "damageable", JS_NewBool(ctx, psStats->damageable), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, psStats->subType), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewUint32(ctx, 100 * psStats->body / MAX(1, psFeature->body)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "damageable", JS_NewBool(ctx, psStats->damageable), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "stattype", JS_NewInt32(ctx, psStats->subType), JS_PROP_ENUMERABLE);
 	return value;
 }
 
@@ -927,6 +939,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	{
 		if (psDroid->asWeaps[i].nStat)
 		{
+			ASSERT(psDroid->asWeaps[i].nStat < numWeaponStats, "Invalid nStat (%d) referenced for asWeaps[%d]; numWeaponStats (%d); droid: \"%s\" (numWeaps: %u)", psDroid->asWeaps[i].nStat, i, numWeaponStats, psDroid->aName, psDroid->numWeaps);
 			WEAPON_STATS *psWeap = &asWeaponStats[psDroid->asWeaps[i].nStat];
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
@@ -936,18 +949,18 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	}
 	DROID_TYPE type = psDroid->droidType;
 	JSValue value = convObj(psDroid, ctx);
-	QuickJS_DefinePropertyValue(ctx, value, "action", JS_NewInt32(ctx, (int)psDroid->action), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "action", JS_NewInt32(ctx, (int)psDroid->action), JS_PROP_ENUMERABLE);
 	if (range >= 0)
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "range", JS_NewInt32(ctx, range), 0);
+		QuickJS_DefinePropertyValue(ctx, value, "range", JS_NewInt32(ctx, range), JS_PROP_ENUMERABLE);
 	}
 	else
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "range", JS_NULL, 0);
+		QuickJS_DefinePropertyValue(ctx, value, "range", JS_NULL, JS_PROP_ENUMERABLE);
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "order", JS_NewInt32(ctx, (int)psDroid->order.type), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewUint32(ctx, calcDroidPower(psDroid)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "hasIndirect", JS_NewBool(ctx, indirect), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "order", JS_NewInt32(ctx, (int)psDroid->order.type), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewUint32(ctx, calcDroidPower(psDroid)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "hasIndirect", JS_NewBool(ctx, indirect), JS_PROP_ENUMERABLE);
 	switch (psDroid->droidType) // hide some engine craziness
 	{
 	case DROID_CYBORG_CONSTRUCT:
@@ -961,26 +974,26 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	default:
 		break;
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "bodySize", JS_NewInt32(ctx, psBodyStats->size), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "bodySize", JS_NewInt32(ctx, psBodyStats->size), JS_PROP_ENUMERABLE);
 	if (isTransporter(psDroid))
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "cargoCapacity", JS_NewInt32(ctx, TRANSPORTER_CAPACITY), 0);
-		QuickJS_DefinePropertyValue(ctx, value, "cargoLeft", JS_NewInt32(ctx, calcRemainingCapacity(psDroid)), 0);
-		QuickJS_DefinePropertyValue(ctx, value, "cargoCount", JS_NewUint32(ctx, psDroid->psGroup != nullptr? psDroid->psGroup->getNumMembers() : 0), 0);
+		QuickJS_DefinePropertyValue(ctx, value, "cargoCapacity", JS_NewInt32(ctx, TRANSPORTER_CAPACITY), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, value, "cargoLeft", JS_NewInt32(ctx, calcRemainingCapacity(psDroid)), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, value, "cargoCount", JS_NewUint32(ctx, psDroid->psGroup != nullptr? psDroid->psGroup->getNumMembers() : 0), JS_PROP_ENUMERABLE);
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "isRadarDetector", JS_NewBool(ctx, objRadarDetector(psDroid)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "isCB", JS_NewBool(ctx, cbSensorDroid(psDroid)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "isSensor", JS_NewBool(ctx, standardSensorDroid(psDroid)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "isVTOL", JS_NewBool(ctx, isVtolDroid(psDroid)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "droidType", JS_NewInt32(ctx, (int)type), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "experience", JS_NewFloat64(ctx, (double)psDroid->experience / 65536.0), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewFloat64(ctx, 100.0 / (double)psDroid->originalBody * (double)psDroid->body), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "isRadarDetector", JS_NewBool(ctx, objRadarDetector(psDroid)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isCB", JS_NewBool(ctx, cbSensorDroid(psDroid)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isSensor", JS_NewBool(ctx, standardSensorDroid(psDroid)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isVTOL", JS_NewBool(ctx, isVtolDroid(psDroid)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "droidType", JS_NewInt32(ctx, (int)type), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "experience", JS_NewFloat64(ctx, (double)psDroid->experience / 65536.0), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewFloat64(ctx, 100.0 / (double)psDroid->originalBody * (double)psDroid->body), JS_PROP_ENUMERABLE);
 
-	QuickJS_DefinePropertyValue(ctx, value, "body", JS_NewString(ctx, asBodyStats[psDroid->asBits[COMP_BODY]].id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "propulsion", JS_NewString(ctx, asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "armed", JS_NewFloat64(ctx, 0.0), 0); // deprecated!
+	QuickJS_DefinePropertyValue(ctx, value, "body", JS_NewString(ctx, asBodyStats[psDroid->asBits[COMP_BODY]].id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "propulsion", JS_NewString(ctx, asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "armed", JS_NewFloat64(ctx, 0.0), JS_PROP_ENUMERABLE); // deprecated!
 
 	JSValue weaponlist = JS_NewArray(ctx);
 	for (int j = 0; j < psDroid->numWeaps; j++)
@@ -988,15 +1001,15 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 		int armed = droidReloadBar(psDroid, &psDroid->asWeaps[j], j);
 		JSValue weapon = JS_NewObject(ctx);
 		const WEAPON_STATS *psStats = asWeaponStats + psDroid->asWeaps[j].nStat;
-		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), 0);
-		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), 0); // will be changed to contain full name
-		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), 0);
-		QuickJS_DefinePropertyValue(ctx, weapon, "lastFired", JS_NewUint32(ctx, psDroid->asWeaps[j].lastFired), 0);
-		QuickJS_DefinePropertyValue(ctx, weapon, "armed", JS_NewInt32(ctx, armed), 0);
-		JS_DefinePropertyValueUint32(ctx, weaponlist, j, weapon, 0);
+		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
+		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, weapon, "lastFired", JS_NewUint32(ctx, psDroid->asWeaps[j].lastFired), JS_PROP_ENUMERABLE);
+		QuickJS_DefinePropertyValue(ctx, weapon, "armed", JS_NewInt32(ctx, armed), JS_PROP_ENUMERABLE);
+		JS_DefinePropertyValueUint32(ctx, weaponlist, j, weapon, JS_PROP_ENUMERABLE);
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, 0);
-	QuickJS_DefinePropertyValue(ctx, value, "cargoSize", JS_NewInt32(ctx, transporterSpaceRequired(psDroid)), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "cargoSize", JS_NewInt32(ctx, transporterSpaceRequired(psDroid)), JS_PROP_ENUMERABLE);
 	return value;
 }
 
@@ -1025,25 +1038,25 @@ JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx)
 	JSValue value = JS_NewObject(ctx);
 	ASSERT_OR_RETURN(value, psObj, "No object for conversion");
 	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewUint32(ctx, psObj->id), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "x", JS_NewInt32(ctx, map_coord(psObj->pos.x)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "y", JS_NewInt32(ctx, map_coord(psObj->pos.y)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "z", JS_NewInt32(ctx, map_coord(psObj->pos.z)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "player", JS_NewUint32(ctx, psObj->player), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "armour", JS_NewInt32(ctx, objArmour(psObj, WC_KINETIC)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "thermal", JS_NewInt32(ctx, objArmour(psObj, WC_HEAT)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, psObj->type), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "selected", JS_NewUint32(ctx, psObj->selected), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, objInfo(psObj)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "born", JS_NewUint32(ctx, psObj->born), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "x", JS_NewInt32(ctx, map_coord(psObj->pos.x)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "y", JS_NewInt32(ctx, map_coord(psObj->pos.y)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "z", JS_NewInt32(ctx, map_coord(psObj->pos.z)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "player", JS_NewUint32(ctx, psObj->player), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "armour", JS_NewInt32(ctx, objArmour(psObj, WC_KINETIC)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "thermal", JS_NewInt32(ctx, objArmour(psObj, WC_HEAT)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "type", JS_NewInt32(ctx, psObj->type), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "selected", JS_NewUint32(ctx, psObj->selected), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, objInfo(psObj)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "born", JS_NewUint32(ctx, psObj->born), JS_PROP_ENUMERABLE);
 	scripting_engine::GROUPMAP *psMap = scripting_engine::instance().getGroupMap(engineToInstanceMap.at(ctx));
 	if (psMap != nullptr && psMap->map().count(psObj) > 0) // FIXME:
 	{
 		int group = psMap->map().at(psObj); // FIXME:
-		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NewInt32(ctx, group), 0);
+		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NewInt32(ctx, group), JS_PROP_ENUMERABLE);
 	}
 	else
 	{
-		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NULL, 0);
+		QuickJS_DefinePropertyValue(ctx, value, "group", JS_NULL, JS_PROP_ENUMERABLE);
 	}
 	return value;
 }
@@ -1068,26 +1081,26 @@ JSValue convTemplate(const DROID_TEMPLATE *psTempl, JSContext *ctx)
 {
 	JSValue value = JS_NewObject(ctx);
 	ASSERT_OR_RETURN(value, psTempl, "No object for conversion");
-	QuickJS_DefinePropertyValue(ctx, value, "fullname", JS_NewString(ctx, psTempl->name.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, psTempl->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewString(ctx, psTempl->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "points", JS_NewUint32(ctx, calcTemplateBuild(psTempl)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "power", JS_NewUint32(ctx, calcTemplatePower(psTempl)), 0); // deprecated, use cost below
-	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewUint32(ctx, calcTemplatePower(psTempl)), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "droidType", JS_NewInt32(ctx, psTempl->droidType), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "body", JS_NewString(ctx, (asBodyStats + psTempl->asParts[COMP_BODY])->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "propulsion", JS_NewString(ctx, (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "brain", JS_NewString(ctx, (asBrainStats + psTempl->asParts[COMP_BRAIN])->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "repair", JS_NewString(ctx, (asRepairStats + psTempl->asParts[COMP_REPAIRUNIT])->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "ecm", JS_NewString(ctx, (asECMStats + psTempl->asParts[COMP_ECM])->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "sensor", JS_NewString(ctx, (asSensorStats + psTempl->asParts[COMP_SENSOR])->id.toUtf8().c_str()), 0);
-	QuickJS_DefinePropertyValue(ctx, value, "construct", JS_NewString(ctx, (asConstructStats + psTempl->asParts[COMP_CONSTRUCT])->id.toUtf8().c_str()), 0);
+	QuickJS_DefinePropertyValue(ctx, value, "fullname", JS_NewString(ctx, psTempl->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "name", JS_NewString(ctx, psTempl->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "id", JS_NewString(ctx, psTempl->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "points", JS_NewUint32(ctx, calcTemplateBuild(psTempl)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "power", JS_NewUint32(ctx, calcTemplatePower(psTempl)), JS_PROP_ENUMERABLE); // deprecated, use cost below
+	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewUint32(ctx, calcTemplatePower(psTempl)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "droidType", JS_NewInt32(ctx, psTempl->droidType), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "body", JS_NewString(ctx, (asBodyStats + psTempl->asParts[COMP_BODY])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "propulsion", JS_NewString(ctx, (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "brain", JS_NewString(ctx, (asBrainStats + psTempl->asParts[COMP_BRAIN])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "repair", JS_NewString(ctx, (asRepairStats + psTempl->asParts[COMP_REPAIRUNIT])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "ecm", JS_NewString(ctx, (asECMStats + psTempl->asParts[COMP_ECM])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "sensor", JS_NewString(ctx, (asSensorStats + psTempl->asParts[COMP_SENSOR])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "construct", JS_NewString(ctx, (asConstructStats + psTempl->asParts[COMP_CONSTRUCT])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	JSValue weaponlist = JS_NewArray(ctx);
 	for (int j = 0; j < psTempl->numWeaps; j++)
 	{
-		JS_DefinePropertyValueUint32(ctx, weaponlist, j, JS_NewString(ctx, (asWeaponStats + psTempl->asWeaps[j])->id.toUtf8().c_str()), 0);
+		JS_DefinePropertyValueUint32(ctx, weaponlist, j, JS_NewString(ctx, (asWeaponStats + psTempl->asWeaps[j])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	}
-	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, 0);
+	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, JS_PROP_ENUMERABLE);
 	return value;
 }
 
@@ -1102,7 +1115,7 @@ JSValue convMax(const BASE_OBJECT *psObj, JSContext *ctx)
 	case OBJ_DROID: return convDroid((const DROID *)psObj, ctx);
 	case OBJ_STRUCTURE: return convStructure((const STRUCTURE *)psObj, ctx);
 	case OBJ_FEATURE: return convFeature((const FEATURE *)psObj, ctx);
-	default: ASSERT(false, "No such supported object type"); return convObj(psObj, ctx);
+	default: ASSERT(false, "No such supported object type: %d", static_cast<int>(psObj->type)); return convObj(psObj, ctx);
 	}
 }
 
@@ -1320,7 +1333,6 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				// failed
 				ASSERT(false, "Failed"); // TODO:
 			}
-			JS_FreeValue(ctx, value);
 			return intVal;
 		}
 
@@ -1340,7 +1352,6 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				// failed
 				ASSERT(false, "Failed"); // TODO:
 			}
-			JS_FreeValue(ctx, value);
 			return uintVal;
 		}
 
@@ -1599,9 +1610,15 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				if (argc <= idx)
 					return {};
 				wzapi::va_list<ContainedType> result;
-				for (; idx < argc; idx++)
+				size_t before_idx = idx;
+				for (; idx < argc; )
 				{
+					before_idx = idx;
 					result.va_list.push_back(unbox<ContainedType>()(idx, ctx, argc, argv, function));
+					if (before_idx == idx)
+					{
+						idx++;
+					}
 				}
 				return result;
 			}
@@ -1936,8 +1953,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			JSValue result = JS_NewArray(ctx);
 			for (uint32_t i = 0; i < value.size(); i++)
 			{
-				VectorType item = value.at(i);
-				JS_DefinePropertyValueUint32(ctx, result, i, box(item, ctx), JS_PROP_C_W_E); // TODO: Check return value?
+				int ret = JS_DefinePropertyValueUint32(ctx, result, i, box(value.at(i), ctx), JS_PROP_C_W_E);
+				if (ret != 1)
+				{
+					// Failed to define property value??
+					debug(LOG_ERROR, "Failed to define property value vector[%" PRIu32 "]", i);
+				}
 			}
 			return result;
 		}
@@ -1949,7 +1970,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			uint32_t i = 0;
 			for (auto item : value)
 			{
-				JS_DefinePropertyValueUint32(ctx, result, i, box(item, ctx), JS_PROP_C_W_E); // TODO: Check return value?
+				int ret = JS_DefinePropertyValueUint32(ctx, result, i, box(item, ctx), JS_PROP_C_W_E);
+				if (ret != 1)
+				{
+					// Failed to define property value??
+					debug(LOG_ERROR, "Failed to define property value list[%" PRIu32 "]", i);
+				}
 				i++;
 			}
 			return result;
@@ -1985,6 +2011,32 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			else
 			{
 				return JS_UNDEFINED;
+			}
+		}
+
+		template<typename PtrType>
+		JSValue box(wzapi::event_nullable_ptr<PtrType> result, JSContext* ctx)
+		{
+			if (result)
+			{
+				return box<PtrType *>(result, ctx);
+			}
+			else
+			{
+				return JS_NULL;
+			}
+		}
+
+		template<typename PtrType>
+		JSValue box(wzapi::returned_nullable_ptr<PtrType> result, JSContext* ctx)
+		{
+			if (result)
+			{
+				return box<PtrType *>(result, ctx);
+			}
+			else
+			{
+				return JS_NULL;
 			}
 		}
 
@@ -2193,7 +2245,8 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 
 // Wraps a QuickJS instance
 
-//-- ## profile(function[, arguments])
+//-- ## profile(functionName[, arguments])
+//--
 //-- Calls a function with given arguments, measures time it took to evaluate the function,
 //-- and adds this time to performance monitor statistics. Transparently returns the
 //-- function's return value. The function to run is the first parameter, and it
@@ -2203,13 +2256,13 @@ static JSValue js_profile(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 {
 	SCRIPT_ASSERT(ctx, argc >= 1, "Must have at least one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Profiled functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	std::vector<JSValue> args;
 	for (int i = 1; i < argc; ++i)
 	{
 		args.push_back(argv[i]);
 	}
-	return callFunction(ctx, funcName, args);
+	return callFunction(ctx, functionName, args);
 }
 
 static std::string QuickJS_DumpObject(JSContext *ctx, JSValue obj)
@@ -2247,45 +2300,34 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 	return result;
 }
 
-//-- ## include(file)
+//-- ## include(filePath)
+//--
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
 static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
-	JSValue global_obj = JS_GetGlobalObject(ctx);
-	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
-	std::string basePath = QuickJS_GetStdString(ctx, global_obj, "scriptPath");
-	std::string basenameStr = JSValueToStdString(ctx, argv[0]);
-	QFileInfo basename(basenameStr.c_str());
-	std::string path = basePath + "/" + basename.fileName().toStdString();
-	// allow users to use subdirectories too
-	if (PHYSFS_exists(basename.filePath().toUtf8().constData()))
-	{
-		path = basename.filePath().toStdString(); // use this path instead (from read-only dir)
-	}
-	else if (PHYSFS_exists(QString("scripts/" + basename.filePath()).toUtf8().constData()))
-	{
-		path = "scripts/" + basename.filePath().toStdString(); // use this path instead (in user write dir)
-	}
+	std::string filePath = JSValueToStdString(ctx, argv[0]);
+	SCRIPT_ASSERT(ctx, strEndsWith(filePath, ".js"), "Include file must end in .js");
+	const auto instance = engineToInstanceMap.at(ctx);
 	UDWORD size;
 	char *bytes = nullptr;
-	if (!loadFile(path.c_str(), &bytes, &size))
+	std::string loadedFilePath;
+	if (!instance->loadFileForInclude(filePath.c_str(), loadedFilePath, &bytes, &size, wzapi::scripting_instance::LoadFileSearchOptions::All_BackwardsCompat))
 	{
-		debug(LOG_ERROR, "Failed to read include file \"%s\" (path=%s, name=%s)",
-		      path.c_str(), basePath.c_str(), basename.filePath().toUtf8().constData());
-		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\" (path=%s, name=%s)", path.c_str(), basePath.c_str(), basename.filePath().toUtf8().constData());
+		debug(LOG_ERROR, "Failed to read include file \"%s\"", filePath.c_str());
+		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
 		return JS_FALSE;
 	}
-	JSValue compiledFuncObj = JS_Eval(ctx, bytes, size, path.c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
+	JSValue compiledFuncObj = JS_Eval(ctx, bytes, size, loadedFilePath.c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
 	free(bytes);
 	if (JS_IsException(compiledFuncObj))
 	{
 		// compilation error / syntax error
 		std::string errorAsString = QuickJS_DumpError(ctx);
-		debug(LOG_ERROR, "Syntax error in include file %s: %s",
-			  path.c_str(), errorAsString.c_str());
+		debug(LOG_ERROR, "Syntax error in include file %s: %s", loadedFilePath.c_str(), errorAsString.c_str());
 		JS_FreeValue(ctx, compiledFuncObj);
 		compiledFuncObj = JS_UNINITIALIZED;
 		return JS_FALSE;
@@ -2295,14 +2337,39 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	if (JS_IsException(result))
 	{
 		std::string errorAsString = QuickJS_DumpError(ctx);
-		debug(LOG_ERROR, "Uncaught exception in include file %s: %s",
-		      path.c_str(), errorAsString.c_str());
+		debug(LOG_ERROR, "Uncaught exception in include file %s: %s", loadedFilePath.c_str(), errorAsString.c_str());
 		JS_FreeValue(ctx, result);
 		return JS_FALSE;
     }
     JS_FreeValue(ctx, result);
-	debug(LOG_SCRIPT, "Included new script file %s", path.c_str());
+	debug(LOG_SCRIPT, "Included new script file %s", loadedFilePath.c_str());
 	return JS_TRUE;
+}
+
+//-- ## includeJSON(filePath)
+//--
+//-- Reads a JSON file and returns an object. You should generally only specify the filename,
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+//--
+static JSValue js_includeJSON(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
+	std::string filePath = JSValueToStdString(ctx, argv[0]);
+	SCRIPT_ASSERT(ctx, strEndsWith(filePath, ".json"), "Include file must end in .json");
+	const auto instance = engineToInstanceMap.at(ctx);
+	UDWORD size;
+	char *bytes = nullptr;
+	std::string loadedFilePath;
+	if (!instance->loadFileForInclude(filePath.c_str(), loadedFilePath, &bytes, &size, wzapi::scripting_instance::LoadFileSearchOptions::ScriptPath))
+	{
+		debug(LOG_ERROR, "Failed to read include file \"%s\"", filePath.c_str());
+		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
+		return JS_FALSE;
+	}
+	JSValue r = JS_ParseJSON(ctx, bytes, size, loadedFilePath.c_str());
+	free(bytes);
+	debug(LOG_SCRIPT, "Included new JSON file %s", loadedFilePath.c_str());
+	return r;
 }
 
 class quickjs_timer_additionaldata : public timerAdditionalData
@@ -2334,10 +2401,10 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 	}
 	, player, ms, funcName, psObj, type
 	// additionalParams
-	, new quickjs_timer_additionaldata(stringArg));
+	, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg)));
 }
 
-//-- ## setTimer(function, milliseconds[, object])
+//-- ## setTimer(functionName, milliseconds[, object])
 //--
 //-- Set a function to run repeated at some given time interval. The function to run
 //-- is the first parameter, and it _must be quoted_, otherwise the function will
@@ -2346,28 +2413,28 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 //-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
-//-- ```javascript
-//--   function conDroids()
-//--   {
-//--      ... do stuff ...
-//--   }
-//--   // call conDroids every 4 seconds
-//--   setTimer("conDroids", 4000);
+//-- ```js
+//-- function conDroids()
+//-- {
+//--   ... do stuff ...
+//-- }
+//-- // call conDroids every 4 seconds
+//-- setTimer("conDroids", 4000);
 //-- ```
 //--
 static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	SCRIPT_ASSERT(ctx, argc >= 2, "Must have at least two parameters");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	int32_t ms = JSValueToInt32(ctx, argv[1]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 	int player = QuickJS_GetInt32(ctx, global_obj, "me");
 
-	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, funcName.c_str()); // check existence
-	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", funcName.c_str());
+	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
 	JS_FreeValue(ctx, funcObj);
 
 	std::string stringArg;
@@ -2387,12 +2454,12 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 		}
 	}
 
-	SetQuickJSTimer(ctx, player, funcName, ms, stringArg, psObj, TIMER_REPEAT);
+	SetQuickJSTimer(ctx, player, functionName, ms, stringArg, psObj, TIMER_REPEAT);
 
 	return JS_TRUE;
 }
 
-//-- ## removeTimer(function)
+//-- ## removeTimer(functionName)
 //--
 //-- Removes an existing timer. The first parameter is the function timer to remove,
 //-- and its name _must be quoted_.
@@ -2401,7 +2468,7 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 {
 	SCRIPT_ASSERT(ctx, argc == 1, "Must have one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
-	std::string function = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
@@ -2409,21 +2476,21 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 
 	wzapi::scripting_instance* instance = engineToInstanceMap.at(ctx);
 	std::vector<uniqueTimerID> removedTimerIDs = scripting_engine::instance().removeTimersIf(
-		[instance, function, player](const scripting_engine::timerNode& node)
+		[instance, functionName, player](const scripting_engine::timerNode& node)
 	{
-		return (node.instance == instance) && (node.timerName == function) && (node.player == player);
+		return node.instance == instance && node.timerName == functionName && node.player == player;
 	});
 	if (removedTimerIDs.empty())
 	{
 		// Friendly warning
-		std::string warnName = function;
+		std::string warnName = functionName;
 		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.c_str());
 		return JS_FALSE;
 	}
 	return JS_TRUE;
 }
 
-//-- ## queue(function[, milliseconds[, object]])
+//-- ## queue(functionName[, milliseconds[, object]])
 //--
 //-- Queues up a function to run at a later game frame. This is useful to prevent
 //-- stuttering during the game, which can happen if too much script processing is
@@ -2440,13 +2507,13 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 {
 	SCRIPT_ASSERT(ctx, argc >= 1, "Must have at least one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Queued functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 
-	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, funcName.c_str()); // check existence
-	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", funcName.c_str());
+	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
 	JS_FreeValue(ctx, funcObj);
 
 	int32_t ms = 0;
@@ -2473,12 +2540,13 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 		}
 	}
 
-	SetQuickJSTimer(ctx, player, funcName, ms, stringArg, psObj, TIMER_ONESHOT_READY);
+	SetQuickJSTimer(ctx, player, functionName, ms, stringArg, psObj, TIMER_ONESHOT_READY);
 
 	return JS_TRUE;
 }
 
 //-- ## namespace(prefix)
+//--
 //-- Registers a new event namespace. All events can now have this prefix. This is useful for
 //-- code libraries, to implement event that do not conflict with events in main code. This
 //-- function should be called from global; do not (for hopefully obvious reasons) put it
@@ -2500,19 +2568,20 @@ static JSValue debugGetCallerFuncObject(JSContext *ctx, JSValueConst this_val, i
 }
 
 //-- ## debugGetCallerFuncName()
+//--
 //-- Returns the function name of the caller of the current context as a string (if available).
 //-- ex.
-//-- ```javascript
-//--   function FuncA() {
-//--     var callerFuncName = debugGetCallerFuncName();
-//--     debug(callerFuncName);
-//--   }
-//--   function FuncB() {
-//--     FuncA();
-//--   }
-//--   FuncB();
+//-- ```js
+//-- function funcA() {
+//--   const callerFuncName = debugGetCallerFuncName();
+//--   debug(callerFuncName);
+//-- }
+//-- function funcB() {
+//--   funcA();
+//-- }
+//-- funcB();
 //-- ```
-//-- Will output: "FuncB"
+//-- Will output: "funcB"
 //-- Useful for debug logging.
 //--
 static JSValue debugGetCallerFuncName(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -2525,287 +2594,10 @@ static JSValue debugGetBacktrace(JSContext *ctx, JSValueConst this_val, int argc
 	return js_debugger_build_backtrace(ctx, nullptr);
 }
 
-//MAP-- ## gameRand([mod])
-//MAP--
-//MAP-- Generates a random number in a "safe" way, that will ensure that randomly-generated
-//MAP-- maps are the same for all connected players.
-//MAP--
-static JSValue runMap_gameRand(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
-{
-	void* pOpaque = JS_GetContextOpaque(ctx);
-	if (!pOpaque)
-	{
-		return JS_ThrowInternalError(ctx, "Unable to acquire context information");
-	}
-	auto &data = *static_cast<ScriptMapData*>(pOpaque);
-	uint32_t num = data.mt.u32();
-	uint32_t mod = (argc >= 1) ? JSValueToUint32(ctx, argv[0]) : 0;
-	uint32_t result = mod? num%mod : num;
-	return JS_NewUint32(ctx, result);
-}
-
-//MAP-- ## log(string)
-//MAP--
-//MAP-- Outputs to the game's debug log a string (or object that can be converted to string)
-//MAP--
-static JSValue runMap_log(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
-{
-	SCRIPT_ASSERT(ctx, argc == 1, "Must have one parameter");
-	std::string str = JSValueToStdString(ctx, argv[0]);
-	debug(LOG_INFO, "game.js: \"%s\"", str.c_str());
-	return JS_UNDEFINED;
-}
-
-//MAP-- ## setMapData(mapWidth, mapHeight, texture, height, structures, droids, features)
-//MAP--
-//MAP-- Sets map data from that generated by the script.
-//MAP--
-//MAP-- (NOTE: Documentation incomplete. Look at the example mapScript maps: 6c-Entropy/game.js, 10c-WaterLoop/game.js)
-//MAP--
-//MAP-- `structures` is an array of structure data objects. Example:
-//MAP--    {name: "A0CommandCentre", position: [x, y], direction: 0x4000*gameRand(4), modules: 0, player: 1}
-//MAP-- `droids` is an array of droid data objects. Example:
-//MAP--    {name: "ConstructionDroid", position: [x, y], direction: gameRand(0x10000), player: 1}
-//MAP-- `features` is an array of feature data objects. Example:
-//MAP--    {name: "Tree1", position: [x, y], direction: gameRand(0x10000)}
-//MAP--
-static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
-{
-	void* pOpaque = JS_GetContextOpaque(ctx);
-	if (!pOpaque)
-	{
-		return JS_ThrowInternalError(ctx, "Unable to acquire context information");
-	}
-	auto &data = *static_cast<ScriptMapData*>(pOpaque);
-	data.valid = false;
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, argc == 7, "Must have 7 parameters");
-	auto mapWidth = argv[0];
-	auto mapHeight = argv[1];
-	auto texture = argv[2];
-	auto height = argv[3];
-	auto structures = argv[4];
-	auto droids = argv[5];
-	auto features = argv[6];
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(mapWidth), "mapWidth must be number");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(mapHeight), "mapHeight must be number");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, texture), "texture must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, height), "height must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, structures), "structures must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, droids), "droids must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, features), "features must be array");
-	data.mapWidth = JSValueToInt32(ctx, mapWidth);
-	data.mapHeight = JSValueToInt32(ctx, mapHeight);
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, data.mapWidth > 1 && data.mapHeight > 1 && (uint64_t)data.mapWidth*data.mapHeight <= 65536, "Map size out of bounds");
-	size_t N = (size_t)data.mapWidth*data.mapHeight;
-	data.texture.resize(N);
-	data.height.resize(N);
-	uint64_t arrayLen = 0;
-	bool bGotArrayLength = QuickJS_GetArrayLength(ctx, texture, arrayLen);
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == ((uint64_t)data.mapWidth * (uint64_t)data.mapHeight)), "texture array length must equal (mapWidth * mapHeight); actual length is: %" PRIu64"", arrayLen);
-	bGotArrayLength = QuickJS_GetArrayLength(ctx, height, arrayLen);
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == ((uint64_t)data.mapWidth * (uint64_t)data.mapHeight)), "height array length must equal (mapWidth * mapHeight); actual length is: %" PRIu64"", arrayLen);
-	for (uint32_t n = 0; n < N; ++n)
-	{
-		JSValue textureVal = JS_GetPropertyUint32(ctx, texture, n);
-		auto free_texture_ref = gsl::finally([ctx, textureVal] { JS_FreeValue(ctx, textureVal); });
-		JSValue heightVal = JS_GetPropertyUint32(ctx, height, n);
-		auto free_height_ref = gsl::finally([ctx, heightVal] { JS_FreeValue(ctx, heightVal); });
-		uint32_t textureUint32 = JSValueToUint32(ctx, textureVal);
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, textureUint32 <= (uint32_t)std::numeric_limits<uint16_t>::max(), "texture value exceeds uint16::max: %" PRIu32 "", textureUint32);
-		data.texture[n] = static_cast<uint16_t>(textureUint32);
-		data.height[n] = JSValueToUint32(ctx, heightVal);
-	}
-	bGotArrayLength = QuickJS_GetArrayLength(ctx, structures, arrayLen);
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen <= (uint64_t)std::numeric_limits<uint16_t>::max()), "structures array length be <= uint16::max; actual length is: %" PRIu64"", arrayLen);
-	uint16_t structureCount = static_cast<uint16_t>(arrayLen);
-	for (uint16_t i = 0; i < structureCount; ++i)
-	{
-		JSValue structure = JS_GetPropertyUint32(ctx, structures, i);
-		auto free_structure_ref = gsl::finally([ctx, structure] { JS_FreeValue(ctx, structure); });
-		ScriptMapData::Structure sd;
-		sd.name = WzString::fromUtf8(QuickJS_GetStdString(ctx, structure, "name"));
-		JSValue position = JS_GetPropertyStr(ctx, structure, "position");
-		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
-		{
-			// [x, y]
-			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == 2), "position array length must equal 2; actual length is: %" PRIu64"", arrayLen);
-			JSValue xVal = JS_GetPropertyUint32(ctx, position, 0);
-			JSValue yVal = JS_GetPropertyUint32(ctx, position, 1);
-			sd.position = {JSValueToInt32(ctx, xVal), JSValueToInt32(ctx, yVal)};
-			JS_FreeValue(ctx, xVal);
-			JS_FreeValue(ctx, yVal);
-		}
-		sd.direction = QuickJS_GetInt32(ctx, structure, "direction");
-		sd.modules = QuickJS_GetUint32(ctx, structure, "modules");
-		sd.player = QuickJS_GetInt32(ctx, structure, "player");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, sd.player >= 0 && sd.player < MAX_PLAYERS, "Invalid player (%d) for structure", (int)sd.player);
-		data.structures.push_back(std::move(sd));
-	}
-	bGotArrayLength = QuickJS_GetArrayLength(ctx, droids, arrayLen);
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen <= (uint64_t)std::numeric_limits<uint16_t>::max()), "droids array length be <= uint16::max; actual length is: %" PRIu64"", arrayLen);
-	uint16_t droidCount = static_cast<uint16_t>(arrayLen);
-	for (uint16_t i = 0; i < droidCount; ++i)
-	{
-		JSValue droid = JS_GetPropertyUint32(ctx, droids, i);
-		auto free_droid_ref = gsl::finally([ctx, droid] { JS_FreeValue(ctx, droid); });
-		ScriptMapData::Droid sd;
-		sd.name = WzString::fromUtf8(QuickJS_GetStdString(ctx, droid, "name"));
-		JSValue position = JS_GetPropertyStr(ctx, droid, "position");
-		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
-		{
-			// [x, y]
-			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == 2), "position array length must equal 2; actual length is: %" PRIu64"", arrayLen);
-			JSValue xVal = JS_GetPropertyUint32(ctx, position, 0);
-			JSValue yVal = JS_GetPropertyUint32(ctx, position, 1);
-			sd.position = {JSValueToInt32(ctx, xVal), JSValueToInt32(ctx, yVal)};
-			JS_FreeValue(ctx, xVal);
-			JS_FreeValue(ctx, yVal);
-		}
-		sd.direction = QuickJS_GetInt32(ctx, droid, "direction");
-		sd.player = QuickJS_GetInt32(ctx, droid, "player");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, sd.player >= 0 && sd.player < MAX_PLAYERS, "Invalid player (%d) for droid", (int)sd.player);
-		data.droids.push_back(std::move(sd));
-	}
-	bGotArrayLength = QuickJS_GetArrayLength(ctx, features, arrayLen);
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen <= (uint64_t)std::numeric_limits<uint16_t>::max()), "features array length be <= uint16::max; actual length is: %" PRIu64"", arrayLen);
-	uint16_t featureCount = static_cast<uint16_t>(arrayLen);
-	for (unsigned i = 0; i < featureCount; ++i)
-	{
-		JSValue feature = JS_GetPropertyUint32(ctx, features, i);
-		auto free_feature_ref = gsl::finally([ctx, feature] { JS_FreeValue(ctx, feature); });
-		ScriptMapData::Feature sd;
-		sd.name = WzString::fromUtf8(QuickJS_GetStdString(ctx, feature, "name"));
-		JSValue position = JS_GetPropertyStr(ctx, feature, "position");
-		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
-		{
-			// [x, y]
-			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == 2), "position array length must equal 2; actual length is: %" PRIu64"", arrayLen);
-			JSValue xVal = JS_GetPropertyUint32(ctx, position, 0);
-			JSValue yVal = JS_GetPropertyUint32(ctx, position, 1);
-			sd.position = {JSValueToInt32(ctx, xVal), JSValueToInt32(ctx, yVal)};
-			JS_FreeValue(ctx, xVal);
-			JS_FreeValue(ctx, yVal);
-		}
-		sd.direction = QuickJS_GetInt32(ctx, feature, "direction");
-		data.features.push_back(std::move(sd));
-	}
-	data.valid = true;
-	return JS_TRUE;
-}
-
-struct MapScriptRuntimeInfo {
-	std::chrono::system_clock::time_point startTime;
-};
-
-#define MAX_MAPSCRIPT_RUNTIME_SECONDS 30
-
-/* return != 0 if the JS code needs to be interrupted */
-static int runMapScript_InterruptHandler(JSRuntime *rt, void *opaque)
-{
-	ASSERT(opaque, "Null opaque pointer?");
-	const MapScriptRuntimeInfo* pInfo = static_cast<const MapScriptRuntimeInfo*>(opaque);
-	auto secondsElapsed = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - pInfo->startTime).count();
-	return (secondsElapsed >= MAX_MAPSCRIPT_RUNTIME_SECONDS);
-}
-
-ScriptMapData runMapScript_QuickJS(WzString const &path, uint64_t seed, bool preview)
-{
-	ScriptMapData data;
-	data.valid = false;
-	data.mt = MersenneTwister(seed);
-
-	JSRuntime *rt = JS_NewRuntime();
-	auto free_runtime_ref = gsl::finally([rt] { JS_FreeRuntime(rt); });
-	JSLimitedContextOptions ctxOptions;
-	ctxOptions.baseObjects = true;
-	ctxOptions.dateObject = false;
-	ctxOptions.eval = true; // required for JS_Eval to work
-	ctxOptions.stringNormalize = false;
-	ctxOptions.regExp = false;
-	ctxOptions.json = false;
-	ctxOptions.proxy = false;
-	ctxOptions.mapSet = true;
-	ctxOptions.typedArrays = false;
-	ctxOptions.promise = false;
-	JSContext *ctx = JS_NewLimitedContext(rt, &ctxOptions);
-	auto free_context_ref = gsl::finally([ctx] { JS_FreeContext(ctx); });
-	JSValue global_obj = JS_GetGlobalObject(ctx);
-	auto free_globalobj_ref = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });
-
-	UDWORD size;
-	char *bytes = nullptr;
-	if (!loadFile(path.toUtf8().c_str(), &bytes, &size))
-	{
-		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
-		return data;
-	}
-	JSValue compiledScriptObj = JS_Eval(ctx, bytes, size, path.toUtf8().c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
-	free(bytes);
-	if (JS_IsException(compiledScriptObj))
-	{
-		// compilation error / syntax error
-		std::string errorAsString = QuickJS_DumpError(ctx);
-		debug(LOG_ERROR, "Syntax / compilation error in %s: %s",
-			  path.toUtf8().c_str(), errorAsString.c_str());
-		JS_FreeValue(ctx, compiledScriptObj);
-		compiledScriptObj = JS_UNINITIALIZED;
-		return data;
-	}
-
-	JS_DefinePropertyValueStr(ctx, global_obj, "preview", JS_NewBool(ctx, preview), 0);
-	JS_DefinePropertyValueStr(ctx, global_obj, "XFLIP", JS_NewInt32(ctx, TILE_XFLIP), 0);
-	JS_DefinePropertyValueStr(ctx, global_obj, "YFLIP", JS_NewInt32(ctx, TILE_YFLIP), 0);
-	JS_DefinePropertyValueStr(ctx, global_obj, "ROTMASK", JS_NewInt32(ctx, TILE_ROTMASK), 0);
-	JS_DefinePropertyValueStr(ctx, global_obj, "ROTSHIFT", JS_NewInt32(ctx, TILE_ROTSHIFT), 0);
-	JS_DefinePropertyValueStr(ctx, global_obj, "TRIFLIP", JS_NewInt32(ctx, TILE_TRIFLIP), 0);
-	JS_SetContextOpaque(ctx, &data);
-
-	// Special mapScript functions
-	static const JSCFunctionListEntry js_builtin_mapFuncs[] = {
-		QJS_CFUNC_DEF("gameRand", 0, runMap_gameRand ),
-		QJS_CFUNC_DEF("log", 1, runMap_log ),
-		QJS_CFUNC_DEF("setMapData", 7, runMap_setMapData )
-	};
-	JS_SetPropertyFunctionList(ctx, global_obj, js_builtin_mapFuncs, sizeof(js_builtin_mapFuncs) / sizeof(js_builtin_mapFuncs[0]));
-
-	// configure limitations on runtime
-	JS_SetMaxStackSize(rt, 512*1024);
-	JS_SetMemoryLimit(rt, 100*1024*1024); // 100MiB better be enough...
-
-	// install interrupt handler to prevent endless script execution (due to bugs or otherwise)
-	MapScriptRuntimeInfo mapScriptRuntimeInfo;
-	mapScriptRuntimeInfo.startTime = std::chrono::system_clock::now();
-	JS_SetInterruptHandler(rt, runMapScript_InterruptHandler, &mapScriptRuntimeInfo);
-
-	// run the map script
-	JSValue result = JS_EvalFunction(ctx, compiledScriptObj);
-	compiledScriptObj = JS_UNINITIALIZED;
-	JS_SetInterruptHandler(rt, nullptr, nullptr);
-
-	if (JS_IsException(result))
-	{
-		// compilation error / syntax error / runtime error
-		std::string errorAsString = QuickJS_DumpError(ctx);
-		debug(LOG_ERROR, "Uncaught exception in %s: %s",
-			  path.toUtf8().c_str(), errorAsString.c_str());
-		JS_FreeValue(ctx, result);
-		data.valid = false;
-		return data;
-	}
-
-	return data;
-}
-
 wzapi::scripting_instance* createQuickJSScriptInstance(const WzString& path, int player, int difficulty)
 {
-	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
-	quickjs_scripting_instance* pNewInstance = new quickjs_scripting_instance(player, basename.baseName().toStdString());
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
+	quickjs_scripting_instance* pNewInstance = new quickjs_scripting_instance(player, basename.baseName(), basename.path());
 	if (!pNewInstance->loadScript(path, player, difficulty))
 	{
 		delete pNewInstance;
@@ -2855,6 +2647,7 @@ static const JSCFunctionListEntry js_builtin_funcs[] = {
 	QJS_CFUNC_DEF("removeTimer", 1, js_removeTimer ), // JS-specific implementation
 	QJS_CFUNC_DEF("profile", 1, js_profile ), // JS-specific implementation
 	QJS_CFUNC_DEF("include", 1, js_include ), // backend-specific (a scripting_instance can't directly include a different type of script)
+	QJS_CFUNC_DEF("includeJSON", 1, js_includeJSON ), // JS-specific JSON loading
 	QJS_CFUNC_DEF("namespace", 1, js_namespace ), // JS-specific implementation
 	QJS_CFUNC_DEF("debugGetCallerFuncObject", 0, debugGetCallerFuncObject ), // backend-specific
 	QJS_CFUNC_DEF("debugGetCallerFuncName", 0, debugGetCallerFuncName ), // backend-specific
@@ -2869,6 +2662,10 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 	{
 		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
 		return false;
+	}
+	if (!isHostAI())
+	{
+		calcDataHash(reinterpret_cast<const uint8_t *>(bytes), size, DATA_SCRIPT);
 	}
 	m_path = path.toUtf8();
 	compiledScriptObj = JS_Eval(ctx, bytes, size, path.toUtf8().c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
@@ -2888,8 +2685,8 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 	JS_SetPropertyFunctionList(ctx, global_obj, js_builtin_funcs, sizeof(js_builtin_funcs) / sizeof(js_builtin_funcs[0]));
 
 	// Regular functions
-	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
-	registerFunctions(basename.baseName().toStdString());
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
+	registerFunctions(basename.baseName());
 	// Remember internal, reserved names
 	std::unordered_set<std::string>& internalNamespaceRef = internalNamespace;
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [&internalNamespaceRef](const char *key, JSAtom &) {
@@ -2901,6 +2698,7 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 
 bool quickjs_scripting_instance::readyInstanceForExecution()
 {
+	ASSERT_OR_RETURN(false, !JS_IsUninitialized(compiledScriptObj), "compiledScriptObj is uninitialized");
 	JSValue result = JS_EvalFunction(ctx, compiledScriptObj);
 	compiledScriptObj = JS_UNINITIALIZED;
 	if (JS_IsException(result))
@@ -2913,6 +2711,7 @@ bool quickjs_scripting_instance::readyInstanceForExecution()
 		return false;
 	}
 
+	JS_FreeValue(ctx, result);
 	return true;
 }
 
@@ -2923,9 +2722,10 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
 		if (internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
+			&& !JS_IsConstructor(ctx, jsVal)
 			)//&& !it.value().equals(engine->globalObject()))
 		{
-			result[nameStr] = JSContextValue{ctx, jsVal};
+			result[nameStr] = JSContextValue{ctx, jsVal, true};
 		}
         JS_FreeValue(ctx, jsVal);
 	});
@@ -2961,11 +2761,11 @@ bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result)
 	return true;
 }
 
-nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam)
+nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)
 {
 	nlohmann::json result = nlohmann::json::object();
 	result["function"] = timerName;
-	quickjs_timer_additionaldata* pData = static_cast<quickjs_timer_additionaldata*>(additionalParam);
+	const quickjs_timer_additionaldata* pData = static_cast<const quickjs_timer_additionaldata*>(additionalParam);
 	if (pData)
 	{
 		result["stringArg"] = pData->stringArg;
@@ -2974,7 +2774,7 @@ nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timer
 }
 
 // recreates timer functions (and additional userdata) based on the information saved by the saveTimer() method
-std::tuple<TimerFunc, timerAdditionalData *> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
+std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
 {
 	std::string funcName = json_getValue(savedTimerFuncData, WzString::fromUtf8("function")).toWzString().toStdString();
 	if (funcName.empty())
@@ -2985,7 +2785,7 @@ std::tuple<TimerFunc, timerAdditionalData *> quickjs_scripting_instance::restore
 
 	JSContext* pContext = ctx;
 
-	return std::tuple<TimerFunc, timerAdditionalData *>{
+	return std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>>{
 		// timerFunc
 		[pContext, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
 			quickjs_timer_additionaldata* pData = static_cast<quickjs_timer_additionaldata*>(additionalParams);
@@ -3002,7 +2802,7 @@ std::tuple<TimerFunc, timerAdditionalData *> quickjs_scripting_instance::restore
 			std::for_each(args.begin(), args.end(), [pContext](JSValue& val) { JS_FreeValue(pContext, val); });
 		}
 		// additionalParams
-		, new quickjs_timer_additionaldata(stringArg)
+		, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg))
 	};
 }
 
@@ -3013,15 +2813,22 @@ nlohmann::json quickjs_scripting_instance::debugGetAllScriptGlobals()
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
-		if (((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
-			/*&& !it.value().equals(engine->globalObject()*/))
+		if ((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
+			/*&& !it.value().equals(engine->globalObject())*/)
 			|| nameStr == "Upgrades" || nameStr == "Stats")
 		{
-			globals[nameStr] = JSContextValue{ctx, jsVal}; // uses to_json JSContextValue implementation
+			globals[nameStr] = JSContextValue{ctx, jsVal, false}; // uses to_json JSContextValue implementation
 		}
         JS_FreeValue(ctx, jsVal);
 	});
 	return globals;
+}
+
+std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> quickjs_scripting_instance::debugGetScriptGlobalSpecialStringValues()
+{
+	std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> result;
+	result["<constructor>"] = wzapi::scripting_instance::DebugSpecialStringType::TYPE_DESCRIPTION;
+	return result;
 }
 
 bool quickjs_scripting_instance::debugEvaluateCommand(const std::string &text)
@@ -3054,9 +2861,9 @@ bool quickjs_scripting_instance::debugEvaluateCommand(const std::string &text)
 	return true;
 }
 
-void quickjs_scripting_instance::updateGameTime(uint32_t gameTime)
+void quickjs_scripting_instance::updateGameTime(uint32_t newGameTime)
 {
-	int ret = JS_DefinePropertyValueStr(ctx, global_obj, "gameTime", JS_NewUint32(ctx, gameTime), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
+	int ret = JS_DefinePropertyValueStr(ctx, global_obj, "gameTime", JS_NewUint32(ctx, newGameTime), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 	ASSERT(ret >= 1, "Failed to update gameTime");
 }
 
@@ -3144,19 +2951,20 @@ IMPL_EVENT_HANDLER(eventObjectRecycled, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventPlayerLeft, int)
 IMPL_EVENT_HANDLER(eventCheatMode, bool)
 IMPL_EVENT_HANDLER(eventDroidIdle, const DROID *)
-IMPL_EVENT_HANDLER(eventDroidBuilt, const DROID *, const STRUCTURE *)
-IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, const DROID *)
-IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, const DROID *)
+IMPL_EVENT_HANDLER(eventDroidBuilt, const DROID *, optional<const STRUCTURE *>)
+IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, optional<const DROID *>)
+IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, optional<const DROID *>)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
+IMPL_EVENT_HANDLER(eventStructureUpgradeStarted, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
-IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, const STRUCTURE *, int)
+IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, wzapi::event_nullable_ptr<const STRUCTURE>, int)
 IMPL_EVENT_HANDLER(eventDestroyed, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventPickup, const FEATURE *, const DROID *)
 IMPL_EVENT_HANDLER(eventObjectSeen, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventGroupSeen, const BASE_OBJECT *, int)
 IMPL_EVENT_HANDLER(eventObjectTransfer, const BASE_OBJECT *, int)
 IMPL_EVENT_HANDLER(eventChat, int, int, const char *)
-IMPL_EVENT_HANDLER(eventBeacon, int, int, int, int, const char *)
+IMPL_EVENT_HANDLER(eventBeacon, int, int, int, int, optional<const char *>)
 IMPL_EVENT_HANDLER(eventBeaconRemoved, int, int)
 IMPL_EVENT_HANDLER(eventGroupLoss, const BASE_OBJECT *, int, int)
 bool quickjs_scripting_instance::handle_eventArea(const std::string& label, const DROID *psDroid)
@@ -3207,11 +3015,11 @@ static JSValue js_enumTemplates(JSContext *ctx, JSValueConst this_val, int argc,
 
 	JSValue result = JS_NewArray(ctx); //engine->newArray(droidTemplates[player].size());
 	uint32_t count = 0;
-	for (auto &keyvaluepair : droidTemplates[player])
-	{
-		JS_DefinePropertyValueUint32(ctx, result, count, convTemplate(keyvaluepair.second, ctx), 0); // TODO: Check return value?
+	enumerateTemplates(player, [ctx, &result, &count](DROID_TEMPLATE* psTemplate) {
+		JS_DefinePropertyValueUint32(ctx, result, count, convTemplate(psTemplate, ctx), 0); // TODO: Check return value?
 		count++;
-	}
+		return true;
+	});
 	return result;
 }
 
@@ -3250,6 +3058,7 @@ IMPL_JS_FUNC(distBetweenTwoPoints, wzapi::distBetweenTwoPoints)
 IMPL_JS_FUNC(droidCanReach, wzapi::droidCanReach)
 IMPL_JS_FUNC(propulsionCanReach, wzapi::propulsionCanReach)
 IMPL_JS_FUNC(terrainType, wzapi::terrainType)
+IMPL_JS_FUNC(tileIsBurning, wzapi::tileIsBurning)
 IMPL_JS_FUNC(orderDroid, wzapi::orderDroid)
 IMPL_JS_FUNC(orderDroidObj, wzapi::orderDroidObj)
 IMPL_JS_FUNC(orderDroidBuild, wzapi::orderDroidBuild)
@@ -3286,7 +3095,7 @@ IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
 
-//-- ## removeReticuleButton(button type)
+//-- ## removeReticuleButton(buttonId)
 //--
 //-- Remove reticule button. DO NOT USE FOR ANYTHING.
 //--
@@ -3324,7 +3133,7 @@ IMPL_JS_FUNC(enumRange, wzapi::enumRange)
 IMPL_JS_FUNC(enumArea, scripting_engine::enumAreaJS)
 IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
-//-- ## removeBeacon(target player)
+//-- ## removeBeacon(playerFilter)
 //--
 //-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
 //-- Returns a boolean that is true on success. (3.2+ only)
@@ -3356,6 +3165,7 @@ IMPL_JS_FUNC_DEBUGMSGUPDATE(hackAddMessage, wzapi::hackAddMessage)
 IMPL_JS_FUNC_DEBUGMSGUPDATE(hackRemoveMessage, wzapi::hackRemoveMessage)
 IMPL_JS_FUNC(setSunPosition, wzapi::setSunPosition)
 IMPL_JS_FUNC(setSunIntensity, wzapi::setSunIntensity)
+IMPL_JS_FUNC(setFogColour, wzapi::setFogColour)
 IMPL_JS_FUNC(setWeather, wzapi::setWeather)
 IMPL_JS_FUNC(setSky, wzapi::setSky)
 IMPL_JS_FUNC(hackDoNotSave, wzapi::hackDoNotSave)
@@ -3372,6 +3182,8 @@ IMPL_JS_FUNC(syncRequest, wzapi::syncRequest)
 IMPL_JS_FUNC(replaceTexture, wzapi::replaceTexture)
 IMPL_JS_FUNC(fireWeaponAtLoc, wzapi::fireWeaponAtLoc)
 IMPL_JS_FUNC(fireWeaponAtObj, wzapi::fireWeaponAtObj)
+IMPL_JS_FUNC(transformPlayerToSpectator, wzapi::transformPlayerToSpectator)
+IMPL_JS_FUNC(isSpectator, wzapi::isSpectator)
 IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
 IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
 IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
@@ -3401,7 +3213,7 @@ static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst 
 	std::string name = QuickJS_GetStdString(ctx, currentFuncObj, "name");
 	JS_FreeValue(ctx, currentFuncObj);
 	quickjs_execution_context execution_context(ctx);
-	wzapi::setUpgradeStats(execution_context, player, name, type, index, JSContextValue{ctx, val});
+	wzapi::setUpgradeStats(execution_context, player, name, type, index, JSContextValue{ctx, val, true});
 	// Now read value and return it
 	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
@@ -3526,6 +3338,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(setAssemblyPoint, 3); // WZAPI
 	JS_REGISTER_FUNC(setSunPosition, 3); // WZAPI
 	JS_REGISTER_FUNC(setSunIntensity, 9); // WZAPI
+	JS_REGISTER_FUNC(setFogColour, 3); // WZAPI
 	JS_REGISTER_FUNC(setWeather, 1); // WZAPI
 	JS_REGISTER_FUNC(setSky, 3); // WZAPI
 	JS_REGISTER_FUNC(cameraSlide, 2); // WZAPI
@@ -3593,6 +3406,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(droidCanReach, 3); // WZAPI
 	JS_REGISTER_FUNC(propulsionCanReach, 5); // WZAPI
 	JS_REGISTER_FUNC(terrainType, 2); // WZAPI
+	JS_REGISTER_FUNC(tileIsBurning, 2); // WZAPI
 	JS_REGISTER_FUNC2(orderDroidBuild, 5, 6); // WZAPI
 	JS_REGISTER_FUNC(orderDroidObj, 3); // WZAPI
 	JS_REGISTER_FUNC(orderDroid, 2); // WZAPI
@@ -3670,6 +3484,8 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(setObjectFlag, 3); // WZAPI
 	JS_REGISTER_FUNC2(fireWeaponAtLoc, 3, 4); // WZAPI
 	JS_REGISTER_FUNC2(fireWeaponAtObj, 2, 3); // WZAPI
+	JS_REGISTER_FUNC(transformPlayerToSpectator, 1); // WZAPI
+	JS_REGISTER_FUNC(isSpectator, 1); // WZAPI
 
 	return true;
 }
@@ -3703,7 +3519,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 			{
 				JSValue jsVal = JS_GetPropertyUint32(v.ctx, v.value, k);
 				nlohmann::json jsonValue;
-				to_json(jsonValue, JSContextValue{v.ctx, jsVal});
+				to_json(jsonValue, JSContextValue{v.ctx, jsVal, v.skip_constructors});
 				j.push_back(jsonValue);
 				JS_FreeValue(v.ctx, jsVal);
 			}
@@ -3712,11 +3528,23 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 	}
 	if (JS_IsObject(v.value))
 	{
+		if (JS_IsConstructor(v.ctx, v.value))
+		{
+			j = (!v.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
+			return;
+		}
 		j = nlohmann::json::object();
 		QuickJS_EnumerateObjectProperties(v.ctx, v.value, [v, &j](const char *key, JSAtom &atom) {
 			JSValue jsVal = JS_GetProperty(v.ctx, v.value, atom);
 			std::string nameStr = key;
-			j[nameStr] = JSContextValue{v.ctx, jsVal};
+			if (!JS_IsConstructor(v.ctx, jsVal))
+			{
+				j[nameStr] = JSContextValue{v.ctx, jsVal, v.skip_constructors};
+			}
+			else if (!v.skip_constructors)
+			{
+				j[nameStr] = "<constructor>";
+			}
 			JS_FreeValue(v.ctx, jsVal);
 		}, false);
 		return;
@@ -3726,7 +3554,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 	switch (tag)
 	{
 		case JS_TAG_BOOL:
-			j = JS_ToBool(v.ctx, v.value);
+			j = static_cast<bool>(JS_ToBool(v.ctx, v.value) != 0);
 			break;
 		case JS_TAG_INT:
 		{
@@ -3756,7 +3584,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		case JS_TAG_STRING:
 		{
 			const char* pStr = JS_ToCString(v.ctx, v.value);
-			j = json((pStr) ? pStr : "");
+			j = json(pStr ? pStr : "");
 			JS_FreeCString(v.ctx, pStr);
 			break;
 		}
@@ -3785,4 +3613,3 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		}
 	}
 }
-

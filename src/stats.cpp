@@ -71,20 +71,6 @@ UDWORD		numRepairStats;
 UDWORD		numWeaponStats;
 UDWORD		numConstructStats;
 
-//the max values of the stats used in the design screen
-static UDWORD	maxComponentWeight;
-static UDWORD	maxBodyArmour;
-static UDWORD	maxBodyPower;
-static UDWORD	maxBodyPoints;
-static UDWORD	maxSensorRange;
-static UDWORD	maxECMRange;
-static UDWORD	maxConstPoints;
-static UDWORD	maxRepairPoints;
-static UDWORD	maxWeaponRange;
-static UDWORD	maxWeaponDamage;
-static UDWORD	maxWeaponROF;
-static UDWORD	maxPropulsionSpeed;
-
 //stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
 UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 
@@ -92,31 +78,10 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static std::unordered_map<WzString, BASE_STATS *> lookupStatPtr;
+static std::unordered_map<WzString, COMPONENT_STATS *> lookupCompStatPtr;
 
 static bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model);
 static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString &szWavName, int *piWavID);
-
-//Access functions for the max values to be used in the Design Screen
-static void setMaxComponentWeight(UDWORD weight);
-static void setMaxBodyArmour(UDWORD armour);
-static void setMaxBodyPower(UDWORD power);
-static void setMaxBodyPoints(UDWORD points);
-static void setMaxSensorRange(UDWORD range);
-static void setMaxECMRange(UDWORD power);
-static void setMaxConstPoints(UDWORD points);
-static void setMaxRepairPoints(UDWORD repair);
-static void setMaxWeaponRange(UDWORD range);
-static void setMaxWeaponDamage(UDWORD damage);
-static void setMaxWeaponROF(UDWORD rof);
-static void setMaxPropulsionSpeed(UDWORD speed);
-
-//determine the effect this upgrade would have on the max values
-static void updateMaxWeaponStats(UWORD maxValue);
-static void updateMaxSensorStats(UWORD maxRange);
-static void updateMaxRepairStats(UWORD maxValue);
-static void updateMaxECMStats(UWORD maxValue);
-static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
-static void updateMaxConstStats(UWORD maxValue);
 
 /***********************************************************************************
 *	Dealloc the extra storage tables
@@ -163,18 +128,13 @@ void statsInitVars()
 	numRepairStats = 0;
 	numWeaponStats = 0;
 	numConstructStats = 0;
-
-	// init the max values
-	maxComponentWeight = maxBodyArmour = maxBodyPower =
-	        maxBodyPoints = maxSensorRange = maxECMRange =
-	                            maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
-	                                        maxPropulsionSpeed = 0;
 }
 
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown()
 {
 	lookupStatPtr.clear();
+	lookupCompStatPtr.clear();
 
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
 	STATS_DEALLOC(asBrainStats, numBrainStats);
@@ -241,6 +201,69 @@ bool statsAllocConstruct(UDWORD	numStats)
 *		Load stats functions
 *******************************************************************************/
 
+static optional<WzString> deprecatedModelUpgrade(WzString& filename)
+{
+	static const std::unordered_map<WzString, WzString> deprecatedModelNames = {
+		// base
+		{"mibnkdrl.pie", "mibnkdr.pie"},
+		{"mibnkdrr.pie", ""},
+		{"prhlhtr3.pie", "prhhtr3.pie"},
+		{"prhrhtr3.pie", ""},
+		{"prhltrk3.pie", "prhtrk3.pie"},
+		{"prhrtrk3.pie", ""},
+		{"prhlvtl1.pie", "prhvtl1.pie"},
+		{"prhrvtl1.pie", ""},
+		{"prhlvtl1.pie", "prhvtl1.pie"},
+		{"prhrvtl1.pie", ""},
+		{"prhlvtl2.pie", "prhvtl2.pie"},
+		{"prhrvtl2.pie", ""},
+		{"prhlvtl3.pie", "prhvtl3.pie"},
+		{"prhrvtl3.pie", ""},
+		{"prhlvtl4.pie", "prhvtl4.pie"},
+		{"prhrvtl4.pie", ""},
+		{"prhlwhl1.pie", "prhwhl1.pie"},
+		{"prhrwhl1.pie", ""},
+		{"prllhtr1.pie", "prlhtr1.pie"},
+		{"prlrhtr1.pie", ""},
+		{"prlltrk1.pie", "prltrk1.pie"},
+		{"prlrtrk1.pie", ""},
+		{"prllvtl1.pie", "prlvtl1.pie"},
+		{"prlrvtl1.pie", ""},
+		{"prllvtl2.pie", "prlvtl2.pie"},
+		{"prlrvtl2.pie", ""},
+		{"prllvtl3.pie", "prlvtl3.pie"},
+		{"prlrvtl3.pie", ""},
+		{"prllwhl1.pie", "prlwhl1.pie"},
+		{"prlrwhl1.pie", ""},
+		{"prmlhtr2.pie", "prmhtr2.pie"},
+		{"prmrhtr2.pie", ""},
+		{"prmltrk2.pie", "prmtrk2.pie"},
+		{"prmrtrk2.pie", ""},
+		{"prmlvtl1.pie", "prmvtl1.pie"},
+		{"prmrvtl1.pie", ""},
+		{"prmlwhl1.pie", "prmwhl1.pie"},
+		{"prmrwhl1.pie", ""},
+		// mp
+		{"prslwhl1.pie", "prswhl1.pie"},
+		{"prsrwhl1.pie", ""},
+		{"prslvtl1.pie", "prsvtl1.pie"},
+		{"prsrvtl1.pie", ""},
+		{"prsltrk4.pie", "prstrk4.pie"},
+		{"prsrtrk4.pie", ""},
+		{"prslhtr4.pie", "prshtr4.pie"},
+		{"prsrhtr4.pie", ""},
+	};
+
+	WzString name(filename.toLower());
+	auto it = deprecatedModelNames.find(name);
+	if (it != deprecatedModelNames.end())
+	{
+		debug(LOG_INFO, "Deprecation notice: The model \"%s\" is referenced in a mod's stats JSON file, and is deprecated. Please check the latest base stats models for how to update this mod for future compatibility.", name.toUtf8().c_str());
+		return it->second;
+	}
+	return nullopt;
+}
+
 static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzString& key, const WzString& key2 = WzString())
 {
 	iIMDShape *retval = nullptr;
@@ -249,7 +272,7 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 		auto value = json.json(key);
 		if (value.is_object())
 		{
-			ASSERT(!key2.isEmpty(), "Cannot look up a JSON object with an empty key!");
+			ASSERT_OR_RETURN(nullptr, !key2.isEmpty(), "Cannot look up a JSON object with an empty key!");
 			auto obj = value;
 			if (obj.find(key2.toUtf8()) == obj.end())
 			{
@@ -258,14 +281,15 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 			value = obj[key2.toUtf8()];
 		}
 		WzString filename = json_variant(value).toWzString();
+		deprecatedModelUpgrade(filename); // FUTURE TODO: Use output of this to auto-upgrade old model references? (Check for empty string)
 		retval = modelGet(filename);
 		ASSERT(retval != nullptr, "Cannot find the PIE model %s for stat %s in %s",
-		       filename.toUtf8().c_str(), getName(psStats), json.fileName().toUtf8().c_str());
+		       filename.toUtf8().c_str(), getStatsName(psStats), json.fileName().toUtf8().c_str());
 	}
 	return retval;
 }
 
-void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
+static void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
 {
 	psStats->id = json.group();
 	psStats->name = json.string("name");
@@ -274,13 +298,33 @@ void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
 	lookupStatPtr.insert(std::make_pair(psStats->id, psStats));
 }
 
+void loadStructureStats_BaseStats(WzConfig &json, STRUCTURE_STATS *psStats, size_t index)
+{
+	loadStats(json, psStats, index);
+}
+
+void unloadStructureStats_BaseStats(const STRUCTURE_STATS &psStats)
+{
+	lookupStatPtr.erase(psStats.id);
+}
+
 static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index)
 {
 	loadStats(json, psStats, index);
+	lookupCompStatPtr.insert(std::make_pair(psStats->id, psStats));
 	psStats->buildPower = json.value("buildPower", 0).toUInt();
 	psStats->buildPoints = json.value("buildPoints", 0).toUInt();
 	psStats->designable = json.value("designable", false).toBool();
 	psStats->weight = json.value("weight", 0).toUInt();
+	WzString useType = json.value("usageClass", "").toWzString();
+	if (useType.toStdString().find("SuperCyborg") != std::string::npos)
+	{
+		psStats->usageClass = UsageClass::SuperCyborg;
+	}
+	else if (useType.toStdString().find("Cyborg") != std::string::npos)
+	{
+		psStats->usageClass = UsageClass::Cyborg;
+	}
 	psStats->getBase().hitpoints = json.value("hitpoints", 0).toUInt();
 	psStats->getBase().hitpointPct = json.value("hitpointPct", 100).toUInt();
 
@@ -293,6 +337,10 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index
 	else if (dtype.compare("TRANSPORTER") == 0)
 	{
 		psStats->droidTypeOverride = DROID_TRANSPORTER;
+	}
+	else if (dtype.compare("SUPERTRANSPORTER") == 0)
+	{
+		psStats->droidTypeOverride = DROID_SUPERTRANSPORTER;
 	}
 	else if (dtype.compare("CYBORG") == 0)
 	{
@@ -426,7 +474,7 @@ bool loadWeaponStats(WzConfig &ini)
 		//set the weapon class
 		if (!getWeaponClass(ini.value("weaponClass").toWzString(), &psStats->weaponClass))
 		{
-			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getName(psStats));
+			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getStatsName(psStats));
 			psStats->weaponClass = WC_KINETIC;
 		}
 
@@ -453,7 +501,7 @@ bool loadWeaponStats(WzConfig &ini)
 		//set the weapon effect
 		if (!getWeaponEffect(ini.value("weaponEffect").toWzString(), &psStats->weaponEffect))
 		{
-			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getName(psStats));
+			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatsName(psStats));
 			return false;
 		}
 
@@ -466,7 +514,7 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 		else if (!getWeaponClass(periodicalDamageWeaponClass, &psStats->periodicalDamageWeaponClass))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getStatsName(psStats));
 			psStats->periodicalDamageWeaponClass = psStats->weaponClass;
 		}
 
@@ -479,7 +527,7 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 		else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().c_str(), &psStats->periodicalDamageWeaponSubClass))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getStatsName(psStats));
 			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
 		}
 
@@ -492,7 +540,7 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 		else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().c_str(), &psStats->periodicalDamageWeaponEffect))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getStatsName(psStats));
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
 		}
 
@@ -508,11 +556,11 @@ bool loadWeaponStats(WzConfig &ini)
 		unsigned int longHit = psStats->upgrade[0].hitChance;
 		if (shortRange > longRange)
 		{
-			debug(LOG_ERROR, "%s, Short range (%d) is greater than long range (%d)", getName(psStats), shortRange, longRange);
+			debug(LOG_ERROR, "%s, Short range (%d) is greater than long range (%d)", getStatsName(psStats), shortRange, longRange);
 		}
 		if (shortRange == longRange && shortHit != longHit)
 		{
-			debug(LOG_ERROR, "%s, shortHit and longHit should be equal if the ranges are the same", getName(psStats));
+			debug(LOG_ERROR, "%s, shortHit and longHit should be equal if the ranges are the same", getStatsName(psStats));
 		}
 
 		// set the face Player value
@@ -548,20 +596,11 @@ bool loadWeaponStats(WzConfig &ini)
 		WzString szWeaponWav = ini.value("weaponWav", "-1").toWzString();
 		WzString szExplosionWav = ini.value("explosionWav", "-1").toWzString();
 		bool result = statsGetAudioIDFromString(list[i], szWeaponWav, &weaponSoundID);
-		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().c_str(), getName(psStats));
+		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().c_str(), getStatsName(psStats));
 		result = statsGetAudioIDFromString(list[i], szExplosionWav, &explosionSoundID);
-		ASSERT_OR_RETURN(false, result, "Explosion sound %s not found for %s", szExplosionWav.toUtf8().c_str(), getName(psStats));
+		ASSERT_OR_RETURN(false, result, "Explosion sound %s not found for %s", szExplosionWav.toUtf8().c_str(), getStatsName(psStats));
 		psStats->iAudioFireID = weaponSoundID;
 		psStats->iAudioImpactID = explosionSoundID;
-
-		// Set the max stat values for the design screen
-		if (psStats->designable)
-		{
-			setMaxWeaponRange(psStats->base.maxRange);
-			setMaxWeaponDamage(psStats->base.damage);
-			setMaxWeaponROF(weaponROF(psStats, 0));
-			setMaxComponentWeight(psStats->weight);
-		}
 
 		ini.endGroup();
 	}
@@ -599,22 +638,12 @@ bool loadBodyStats(WzConfig &ini)
 		psStats->ref = STAT_BODY + i;
 		if (!getBodySize(ini.value("size").toWzString(), &psStats->size))
 		{
-			ASSERT(false, "Unknown body size for %s", getName(psStats));
+			ASSERT(false, "Unknown body size for %s", getStatsName(psStats));
 			return false;
 		}
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
 
 		ini.endGroup();
-
-		//set the max stat values for the design screen
-		if (psStats->designable)
-		{
-			setMaxBodyArmour(psStats->base.armour);
-			setMaxBodyArmour(psStats->base.thermal);
-			setMaxBodyPower(psStats->base.power);
-			setMaxBodyPoints(psStats->base.hitpoints);
-			setMaxComponentWeight(psStats->weight);
-		}
 	}
 
 	// now get the extra stuff ... hack it together with above later, moved here from
@@ -672,6 +701,8 @@ bool loadBodyStats(WzConfig &ini)
 				return false;
 			}
 			//allocate the left and right propulsion IMDs + movement and standing still animations
+			// NOTE: New base stats files + IMDs use a single combined model (in the "left" key) for both sides...
+			//       however, older mods / stats files may still rely on having both left + right
 			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], WzString::fromUtf8("left"));
 			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], WzString::fromUtf8("right"));
 			psBodyStat->ppMoveIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], WzString::fromUtf8("moving"));
@@ -694,6 +725,7 @@ bool loadBrainStats(WzConfig &ini)
 	auto nullbrain = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLBRAIN"));
 	ASSERT_OR_RETURN(false, nullbrain != list.end(), "ZNULLBRAIN is mandatory");
 	std::iter_swap(nullbrain, list.begin());
+	bool retVal = true;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		BRAIN_STATS *psStats = &asBrainStats[i];
@@ -728,13 +760,20 @@ bool loadBrainStats(WzConfig &ini)
 		if (ini.contains("turret"))
 		{
 			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toWzString());
-			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getName(psStats));
-			psStats->psWeaponStat = asWeaponStats + weapon;
+			if (weapon >= 0)
+			{
+				psStats->psWeaponStat = asWeaponStats + weapon;
+			}
+			else
+			{
+				ASSERT(weapon >= 0, "Unable to find weapon for brain %s", getStatsName(psStats));
+				retVal = false;
+			}
 		}
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
 	}
-	return true;
+	return retVal;
 }
 
 
@@ -790,6 +829,7 @@ bool loadPropulsionStats(WzConfig &ini)
 	auto nullprop = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLPROP"));
 	ASSERT_OR_RETURN(false, nullprop != list.end(), "ZNULLPROP is mandatory");
 	std::iter_swap(nullprop, list.begin());
+	bool retVal = true;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_STATS *psStats = &asPropulsionStats[i];
@@ -815,41 +855,13 @@ bool loadPropulsionStats(WzConfig &ini)
 		}
 		if (!getPropulsionType(ini.value("type").toWzString().toUtf8().c_str(), &psStats->propulsionType))
 		{
-			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getName(psStats));
-			return false;
+			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getStatsName(psStats));
+			retVal = false;
 		}
 		ini.endGroup();
-
-		// set the max stat values for the design screen
-		if (psStats->designable)
-		{
-			setMaxPropulsionSpeed(psStats->maxSpeed);
-		}
 	}
 
-	/* since propulsion weight is a multiple of body weight we may need to adjust the max component weight value */
-	if (asBodyStats && asPropulsionStats)	// check we've loaded them both in
-	{
-		//check against each body stat
-		for (int i = 0; i < numBodyStats; ++i)
-		{
-			//check stat is designable
-			if (asBodyStats[i].designable)
-			{
-				//check against each propulsion stat
-				for (int j = 0; j < numPropulsionStats; ++j)
-				{
-					//check stat is designable
-					if (asPropulsionStats[j].designable)
-					{
-						setMaxComponentWeight(asPropulsionStats[j].weight * asBodyStats[i].weight / 100);
-					}
-				}
-			}
-		}
-	}
-
-	return true;
+	return retVal;
 }
 
 /*Load the Sensor stats from the file exported from Access*/
@@ -926,14 +938,6 @@ bool loadSensorStats(WzConfig &ini)
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-
-		// set the max stat values for the design screen
-		if (psStats->designable)
-		{
-			setMaxSensorRange(psStats->base.range);
-			setMaxComponentWeight(psStats->weight);
-		}
-
 	}
 	return true;
 }
@@ -983,13 +987,6 @@ bool loadECMStats(WzConfig &ini)
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-
-		// Set the max stat values for the design screen
-		if (psStats->designable)
-		{
-			setMaxECMRange(psStats->base.range);
-			setMaxComponentWeight(psStats->weight);
-		}
 	}
 	return true;
 }
@@ -1004,6 +1001,7 @@ bool loadRepairStats(WzConfig &ini)
 	auto nullrepair = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLREPAIR"));
 	ASSERT_OR_RETURN(false, nullrepair != list.end(), "ZNULLREPAIR is mandatory");
 	std::iter_swap(nullrepair, list.begin());
+	bool retVal = true;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		REPAIR_STATS *psStats = &asRepairStats[i];
@@ -1036,22 +1034,20 @@ bool loadRepairStats(WzConfig &ini)
 		}
 
 		//check its not 0 since we will be dividing by it at a later stage
-		ASSERT_OR_RETURN(false, psStats->time > 0, "Repair delay cannot be zero for %s", getName(psStats));
+		if (!(psStats->time > 0))
+		{
+			ASSERT(psStats->time > 0, "Repair delay cannot be zero for %s", getStatsName(psStats));
+			psStats->time = 1;
+			retVal = false;
+		}
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-
-		//set the max stat values for the design screen
-		if (psStats->designable)
-		{
-			setMaxRepairPoints(psStats->base.repairPoints);
-			setMaxComponentWeight(psStats->weight);
-		}
 	}
-	return true;
+	return retVal;
 }
 
 /*Load the Construct stats from the file exported from Access*/
@@ -1084,13 +1080,6 @@ bool loadConstructStats(WzConfig &ini)
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-
-		// Set the max stat values for the design screen
-		if (psStats->designable)
-		{
-			setMaxConstPoints(psStats->base.constructPoints);
-			setMaxComponentWeight(psStats->weight);
-		}
 	}
 	return true;
 }
@@ -1326,10 +1315,10 @@ int getCompFromName(COMPONENT_TYPE compType, const WzString &name)
 int getCompFromID(COMPONENT_TYPE compType, const WzString &name)
 {
 	COMPONENT_STATS *psComp = nullptr;
-	auto it = lookupStatPtr.find(WzString::fromUtf8(name.toUtf8().c_str()));
-	if (it != lookupStatPtr.end())
+	auto it = lookupCompStatPtr.find(WzString::fromUtf8(name.toUtf8().c_str()));
+	if (it != lookupCompStatPtr.end())
 	{
-		psComp = (COMPONENT_STATS *)it->second;
+		psComp = it->second;
 	}
 	ASSERT_OR_RETURN(-1, psComp, "No such component ID [%s] found", name.toUtf8().c_str());
 	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for ID %s", name.toUtf8().c_str());
@@ -1342,20 +1331,31 @@ int getCompFromID(COMPONENT_TYPE compType, const WzString &name)
 COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 {
 	COMPONENT_STATS *psComp = nullptr;
-	auto it = lookupStatPtr.find(name);
-	if (it != lookupStatPtr.end())
+	auto it = lookupCompStatPtr.find(name);
+	if (it != lookupCompStatPtr.end())
 	{
-		psComp = (COMPONENT_STATS *)it->second;
+		psComp = it->second;
 	}
 	/*if (!psComp)
 	{
-		debug(LOG_ERROR, "Not found: %s", name.toUtf8().constData());
-		foreach(BASE_STATS *psStat, lookupStatPtr)
+		debug(LOG_ERROR, "Not found: %s", name.toUtf8().c_str());
+		for (auto& it2 : lookupCompStatPtr)
 		{
-			debug(LOG_ERROR, "    %s", psStat->name.toUtf8().constData());
+			debug(LOG_ERROR, "    %s", it2.second->id.toUtf8().c_str());
 		}
 	}*/
 	return psComp;
+}
+
+BASE_STATS *getBaseStatsFromName(const WzString &name)
+{
+	BASE_STATS *psStat = nullptr;
+	auto it = lookupStatPtr.find(name);
+	if (it != lookupStatPtr.end())
+	{
+		psStat = it->second;
+	}
+	return psStat;
 }
 
 /*sets the store to the body size based on the name passed in - returns false
@@ -1571,6 +1571,23 @@ bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect)
 	return true;
 }
 
+/*returns the weapon effect string based on the enum passed in */
+const char *getWeaponEffect(WEAPON_EFFECT effect)
+{
+	switch (effect)
+	{
+	case WE_ANTI_PERSONNEL: return "ANTI PERSONNEL";
+	case WE_ANTI_TANK: return "ANTI TANK";
+	case WE_BUNKER_BUSTER: return "BUNKER BUSTER";
+	case WE_ARTILLERY_ROUND: return "ARTILLERY ROUND";
+	case WE_FLAMER: return "FLAMER";
+	case WE_ANTI_AIRCRAFT: return "ANTI AIRCRAFT";
+	case WE_NUMEFFECTS: break;
+	}
+	ASSERT(false, "No such weapon effect");
+	return "Bad weapon effect";
+}
+
 bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass)
 {
 	if (weaponClassStr.compare("KINETIC") == 0)
@@ -1589,70 +1606,86 @@ bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass)
 	return true;
 }
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 /*Access functions for the upgradeable stats of a weapon*/
 int weaponFirePause(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].firePause;
 }
 
 /* Reload time is reduced for weapons with salvo fire */
 int weaponReloadTime(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].reloadTime;
 }
 
 int weaponLongHit(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].hitChance;
 }
 
 int weaponShortHit(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].shortHitChance;
 }
 
 int weaponDamage(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].damage;
 }
 
 int weaponRadDamage(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].radiusDamage;
 }
 
 int weaponPeriodicalDamage(const WEAPON_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].periodicalDamage;
 }
 
 int sensorRange(const SENSOR_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].range;
 }
 
 int ecmRange(const ECM_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].range;
 }
 
 int repairPoints(const REPAIR_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].repairPoints;
 }
 
 int constructorPoints(const CONSTRUCT_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].constructPoints;
 }
 
 int bodyPower(const BODY_STATS *psStats, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	return psStats->upgrade[player].power;
 }
 
 int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	switch (weaponClass)
 	{
 	case WC_KINETIC:
@@ -1669,6 +1702,7 @@ int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass)
 //calculates the weapons ROF based on the fire pause and the salvos
 int weaponROF(const WEAPON_STATS *psStat, int player)
 {
+	ASSERT_PLAYER_OR_RETURN(0, player);
 	int rof = 0;
 	// if there are salvos
 	if (player >= 0
@@ -1689,288 +1723,6 @@ int weaponROF(const WEAPON_STATS *psStat, int player)
 		//else leave it at 0
 	}
 	return rof;
-}
-
-//Access functions for the max values to be used in the Design Screen
-void setMaxComponentWeight(UDWORD weight)
-{
-	if (weight > maxComponentWeight)
-	{
-		maxComponentWeight = weight;
-	}
-}
-UDWORD getMaxComponentWeight()
-{
-	return maxComponentWeight;
-}
-
-void setMaxBodyArmour(UDWORD armour)
-{
-	if (armour > maxBodyArmour)
-	{
-		maxBodyArmour = armour;
-	}
-}
-UDWORD getMaxBodyArmour()
-{
-	return maxBodyArmour;
-}
-
-void setMaxBodyPower(UDWORD power)
-{
-	if (power > maxBodyPower)
-	{
-		maxBodyPower = power;
-	}
-}
-UDWORD getMaxBodyPower()
-{
-	return maxBodyPower;
-}
-
-void setMaxBodyPoints(UDWORD points)
-{
-	if (points > maxBodyPoints)
-	{
-		maxBodyPoints = points;
-	}
-}
-UDWORD getMaxBodyPoints()
-{
-	return maxBodyPoints;
-}
-
-void setMaxSensorRange(UDWORD range)
-{
-	if (range > maxSensorRange)
-	{
-		maxSensorRange = range;
-	}
-}
-
-UDWORD getMaxSensorRange()
-{
-	return maxSensorRange;
-}
-
-void setMaxECMRange(UDWORD range)
-{
-	if (range > maxECMRange)
-	{
-		maxECMRange = range;
-	}
-}
-
-UDWORD getMaxECMRange()
-{
-	return maxECMRange;
-}
-
-void setMaxConstPoints(UDWORD points)
-{
-	if (points > maxConstPoints)
-	{
-		maxConstPoints = points;
-	}
-}
-UDWORD getMaxConstPoints()
-{
-	return maxConstPoints;
-}
-
-void setMaxRepairPoints(UDWORD repair)
-{
-	if (repair > maxRepairPoints)
-	{
-		maxRepairPoints = repair;
-	}
-}
-UDWORD getMaxRepairPoints()
-{
-	return maxRepairPoints;
-}
-
-void setMaxWeaponRange(UDWORD range)
-{
-	if (range > maxWeaponRange)
-	{
-		maxWeaponRange = range;
-	}
-}
-UDWORD getMaxWeaponRange()
-{
-	return maxWeaponRange;
-}
-
-void setMaxWeaponDamage(UDWORD damage)
-{
-	if (damage > maxWeaponDamage)
-	{
-		maxWeaponDamage = damage;
-	}
-}
-UDWORD getMaxWeaponDamage()
-{
-	return maxWeaponDamage;
-}
-
-void setMaxWeaponROF(UDWORD rof)
-{
-	if (rof > maxWeaponROF)
-	{
-		maxWeaponROF = rof;
-	}
-}
-UDWORD getMaxWeaponROF()
-{
-	return maxWeaponROF;
-}
-
-void setMaxPropulsionSpeed(UDWORD speed)
-{
-	if (speed > maxPropulsionSpeed)
-	{
-		maxPropulsionSpeed = speed;
-	}
-}
-UDWORD getMaxPropulsionSpeed()
-{
-	return maxPropulsionSpeed;
-}
-
-//determine the effect this upgrade would have on the max values
-void updateMaxWeaponStats(UWORD maxValue)
-{
-	UDWORD currentMaxValue = getMaxWeaponDamage();
-
-	if (currentMaxValue < (currentMaxValue + maxValue / 100))
-	{
-		currentMaxValue += currentMaxValue * maxValue / 100;
-		setMaxWeaponDamage(currentMaxValue);
-	}
-
-	//the fire pause is dealt with differently
-}
-
-void updateMaxSensorStats(UWORD maxRange)
-{
-	UDWORD currentMaxValue = getMaxSensorRange();
-
-	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxRange / 100))
-	{
-		currentMaxValue += currentMaxValue * maxRange / 100;
-		setMaxSensorRange(currentMaxValue);
-	}
-}
-
-void updateMaxRepairStats(UWORD maxValue)
-{
-	UDWORD currentMaxValue = getMaxRepairPoints();
-
-	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
-	{
-		currentMaxValue += currentMaxValue * maxValue / 100;
-		setMaxRepairPoints(currentMaxValue);
-	}
-}
-
-void updateMaxECMStats(UWORD maxValue)
-{
-	UDWORD currentMaxValue = getMaxECMRange();
-
-	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
-	{
-		currentMaxValue += currentMaxValue * maxValue / 100;
-		setMaxECMRange(currentMaxValue);
-	}
-}
-
-void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour)
-{
-	UDWORD currentMaxValue = getMaxBodyPoints();
-
-	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxBody / 100))
-	{
-		currentMaxValue += currentMaxValue * maxBody / 100;
-		setMaxBodyPoints(currentMaxValue);
-	}
-
-	currentMaxValue = getMaxBodyPower();
-	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxPower / 100))
-	{
-		currentMaxValue += currentMaxValue * maxPower / 100;
-		setMaxBodyPower(currentMaxValue);
-	}
-
-	currentMaxValue = getMaxBodyArmour();
-	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxArmour / 100))
-	{
-		currentMaxValue += currentMaxValue * maxArmour / 100;
-		setMaxBodyArmour(currentMaxValue);
-	}
-}
-
-void updateMaxConstStats(UWORD maxValue)
-{
-	UDWORD currentMaxValue = getMaxConstPoints();
-
-	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
-	{
-		currentMaxValue += currentMaxValue * maxValue / 100;
-		setMaxConstPoints(currentMaxValue);
-	}
-}
-
-void adjustMaxDesignStats()
-{
-	UWORD       weaponDamage, sensorRange, repairPoints,
-	            ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour;
-
-	// init all the values
-	weaponDamage = sensorRange = repairPoints = ecmRange = constPoints = bodyPoints = bodyPower = bodyArmour = 0;
-
-	//go thru' all the functions getting the max upgrade values for the stats
-
-	for (int j = 0; j < numBodyStats; j++)
-	{
-		BODY_STATS *psStats = asBodyStats + j;
-		bodyPoints = MAX(bodyPoints, psStats->upgrade[selectedPlayer].hitpoints);
-		bodyArmour = MAX(bodyArmour, psStats->upgrade[selectedPlayer].armour);
-		bodyPower = MAX(bodyPower, psStats->upgrade[selectedPlayer].power);
-	}
-	for (int j = 0; j < numSensorStats; j++)
-	{
-		SENSOR_STATS *psStats = asSensorStats + j;
-		sensorRange = MAX(sensorRange, psStats->upgrade[selectedPlayer].range);
-	}
-	for (int j = 0; j < numECMStats; j++)
-	{
-		ECM_STATS *psStats = asECMStats + j;
-		ecmRange = MAX(ecmRange, psStats->upgrade[selectedPlayer].range);
-	}
-	for (int j = 0; j < numRepairStats; j++)
-	{
-		REPAIR_STATS *psStats = asRepairStats + j;
-		repairPoints = MAX(repairPoints, psStats->upgrade[selectedPlayer].repairPoints);
-	}
-	for (int j = 0; j < numConstructStats; j++)
-	{
-		CONSTRUCT_STATS *psStats = asConstructStats + j;
-		constPoints = MAX(constPoints, psStats->upgrade[selectedPlayer].constructPoints);
-	}
-	for (int j = 0; j < numWeaponStats; j++)
-	{
-		WEAPON_STATS *psStats = asWeaponStats + j;
-		weaponDamage = MAX(weaponDamage, psStats->upgrade[selectedPlayer].damage);
-	}
-
-	//determine the effect on the max values for the stats
-	updateMaxWeaponStats(weaponDamage);
-	updateMaxSensorStats(sensorRange);
-	updateMaxRepairStats(repairPoints);
-	updateMaxECMStats(ecmRange);
-	updateMaxBodyStats(bodyPoints, bodyPower, bodyArmour);
-	updateMaxConstStats(constPoints);
 }
 
 /* Check if an object has a weapon */

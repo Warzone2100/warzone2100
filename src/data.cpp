@@ -92,7 +92,7 @@ static UDWORD	hashBuffer(const uint8_t *pData, uint32_t size)
 
 // create the hash for that data block.
 // Data should be converted to Network byte order
-static void calcDataHash(const uint8_t *pBuffer, uint32_t size, uint32_t index)
+void calcDataHash(const uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
 	const uint32_t oldHash = DataHash[index];
 
@@ -502,7 +502,7 @@ static void dataSMSGRelease(void *pData)
  */
 static bool dataImageLoad(const char *fileName, void **ppData)
 {
-	iV_Image *psSprite = (iV_Image *)malloc(sizeof(iV_Image));
+	iV_Image *psSprite = new iV_Image();
 	if (!psSprite)
 	{
 		return false;
@@ -511,7 +511,7 @@ static bool dataImageLoad(const char *fileName, void **ppData)
 	if (!iV_loadImage_PNG(fileName, psSprite))
 	{
 		debug(LOG_ERROR, "IMGPAGE load failed");
-		free(psSprite);
+		delete psSprite;
 		return false;
 	}
 
@@ -561,7 +561,7 @@ static void dataImageRelease(void *pData)
 
 	if (psSprite)
 	{
-		free(psSprite);
+		delete psSprite;
 	}
 }
 

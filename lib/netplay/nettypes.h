@@ -58,6 +58,11 @@ struct NETQUEUE
 
 #define NET_NO_EXCLUDE 255
 
+#define MAX_SPECTATOR_SLOTS		10
+#define MAX_CONNECTED_PLAYERS   (MAX_PLAYER_SLOTS + MAX_SPECTATOR_SLOTS)
+#define MAX_GAMEQUEUE_SLOTS		(MAX_CONNECTED_PLAYERS + 1) /// < +1 for the replay spectator slot
+#define MAX_TMP_SOCKETS         16
+
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
 NETQUEUE NETnetQueue(unsigned player, unsigned excludePlayer = NET_NO_EXCLUDE);  ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
 NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See comments on gameQueues in nettypes.cpp.)
@@ -72,6 +77,7 @@ NetMessage const *NETgetMessage(NETQUEUE queue);///< Returns the current message
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
 void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game queue should not be sent over the network (for example, if it is being sent to us, instead).
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue to a netQueue, once a newly-connected client is assigned a player number.
+void NETswapQueues(NETQUEUE src, NETQUEUE dst); ///< Used for swapping two netQueues, when swapping a player index (i.e. player <-> spectator-only slot). Dangerous and rare.
 void NETdeleteQueue();					///< Delete queues for cleanup
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
@@ -85,6 +91,7 @@ void NETint16_t(int16_t *ip);
 void NETuint16_t(uint16_t *ip);
 void NETint32_t(int32_t *ip);         ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
 void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
+void NETuint32_t(const uint32_t *ip);
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETbool(bool *bp);
@@ -194,5 +201,31 @@ static inline void NETauto(T (&ar)[N])
 }
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
+
+#include <nlohmann/json_fwd.hpp>
+
+class ReplayOptionsHandler
+{
+public:
+	struct EmbeddedMapData
+	{
+		uint32_t dataVersion = 0;
+		std::vector<uint8_t> mapBinaryData;
+	};
+public:
+	virtual ~ReplayOptionsHandler();
+public:
+	virtual bool saveOptions(nlohmann::json& object) const = 0;
+	virtual bool saveMap(EmbeddedMapData& mapData) const = 0;
+	virtual bool restoreOptions(const nlohmann::json& object, EmbeddedMapData&& embeddedMapData, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor) = 0;
+	virtual size_t desiredBufferSize() const = 0;
+	virtual size_t maximumEmbeddedMapBufferSize() const = 0;
+};
+
+bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler);
+bool NETisReplay();
+void NETshutdownReplay();
+
+bool NETgameIsBehindPlayersByAtLeast(size_t numGameTimeUpdates = 2);
 
 #endif

@@ -12,14 +12,14 @@ const cyborgPatrolList = [
 	"1aCybPos2", "1aCybPos3",
 ];
 const NEW_PARADIGM_RES = [
-	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
-	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
-	"R-Struc-Factory-Cyborg-Upgrade02", "R-Vehicle-Engine02",
-	"R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Accuracy01",
-	"R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
-	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-Acc01", "R-Wpn-Rocket-Accuracy01",
-	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF02", "R-Wpn-RocketSlow-Accuracy01",
-	"R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
+	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
+	"R-Sys-Engineering01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Cannon-Damage03",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Defense-WallUpgrade03","R-Struc-Materials03", "R-Vehicle-Engine03",
+	"R-Struc-RprFac-Upgrade03", "R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF03",
+	"R-Vehicle-Metals03", "R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy02",
+	"R-Wpn-RocketSlow-Damage03", "R-Wpn-Mortar-ROF01", "R-Cyborg-Metals03",
+	"R-Wpn-Mortar-Acc01", "R-Wpn-RocketSlow-Accuracy01", "R-Wpn-Cannon-Accuracy01",
 ];
 var index; //Current LZ (SE, N, canyon, south hill, road north of base)
 var switchLZ; //Counter for incrementing index every third landing
@@ -28,7 +28,7 @@ var switchLZ; //Counter for incrementing index every third landing
 function extraVictoryCondition()
 {
 	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
-	if(index === 5 && enemies.length === 0)
+	if (index === 5 && enemies.length === 0)
 	{
 		return true;
 	}
@@ -47,7 +47,7 @@ function checkForGroundForces()
 		var droidGroup2 = []; //Sensor and heavy mortar units
 		var templates = [ cTempl.nphct, cTempl.npmsens, cTempl.npmorb ];
 
-		for (var i = 0; i <= maxTanks; ++i)
+		for (let i = 0; i <= maxTanks; ++i)
 		{
 			if (i <= firstAmount)
 			{
@@ -86,14 +86,13 @@ function sendTransport()
 	var templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
 
 	var droids = [];
-	for (var i = 0; i < count; ++i)
+	for (let i = 0; i < count; ++i)
 	{
 		var t = templates[camRand(templates.length)];
 		// two droids of each template
 		droids[droids.length] = t;
 		droids[droids.length] = t;
 	}
-
 
 	camSendReinforcement(NEW_PARADIGM, position, droids, CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 126, y: 36 },
@@ -102,13 +101,13 @@ function sendTransport()
 		order: CAM_ORDER_PATROL,
 		data: {
 			pos:[
-				camMakePos( cyborgPatrolList[(3 * index)] ),
-				camMakePos( cyborgPatrolList[(3 * index) + 1] ),
-				camMakePos( cyborgPatrolList[(3 * index) + 2] ),
+				camMakePos(cyborgPatrolList[(3 * index)]),
+				camMakePos(cyborgPatrolList[(3 * index) + 1]),
+				camMakePos(cyborgPatrolList[(3 * index) + 2]),
 			],
 			radius: 8,
 			interval: camMinutesToMilliseconds(1),
-			regroup: true,
+			regroup: false,
 			count: -1,
 		}
 	});
@@ -125,7 +124,6 @@ function sendTransport()
 	if (index === 5)
 	{
 		removeTimer("sendTransport");
-		return;
 	}
 }
 
@@ -151,14 +149,14 @@ function eventStartLevel()
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
 	// make sure player doesn't build on enemy LZs
-	for (var i = 6; i <= 10; ++i)
+	for (let i = 6; i <= 10; ++i)
 	{
 		var ph = getObject("NPLZ" + i);
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, NEW_PARADIGM);
+		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i - 4);
 	}
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camPlayVideos(["MB1A-C_MSG", "MB1A-C_MSG2"]);
+	camPlayVideos([{video: "MB1A-C_MSG", type: CAMP_MSG}, {video: "MB1A-C_MSG2", type: MISS_MSG}]);
 
 	index = 0;
 	switchLZ = 0;

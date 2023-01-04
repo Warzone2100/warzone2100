@@ -26,6 +26,8 @@
 
 #include "basedef.h"
 #include "structure.h"
+#include "input/manager.h"
+#include "input/keyconfig.h"
 #include <glm/fwd.hpp>
 
 /* Initialise the display system */
@@ -34,6 +36,9 @@ bool dispInitialise();
 /* Initialize fade-in transition */
 bool transitionInit();
 
+extern InputManager gInputManager;
+extern KeyFunctionConfiguration gKeyFuncConfig;
+
 void ProcessRadarInput();
 
 void processInput();
@@ -41,7 +46,6 @@ void processInput();
 void processMouseClickInput();
 
 void resetScroll();
-void setMouseScroll(bool);
 
 bool DrawnInLastFrame(SDWORD Frame);
 
@@ -170,40 +174,39 @@ enum MOUSE_TARGET
 
 extern bool		gameStats;
 extern bool		godMode;
+extern bool		lockCameraScrollWhileRotating;
+
+extern bool getShakeStatus();
+extern void setShakeStatus(bool val);
+extern void shakeStart(unsigned int length);
+extern void shakeStop();
 
 // reset the input state
 void resetInput();
 
 bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos);
 bool CheckScrollLimits();
-extern bool	rotActive;
 
 BASE_OBJECT	*mouseTarget();
-
-bool StartObjectOrbit(BASE_OBJECT *psObj);
-void CancelObjectOrbit();
 
 void cancelDeliveryRepos();
 void startDeliveryPosition(FLAG_POSITION *psFlag);
 bool deliveryReposValid();
 void processDeliveryRepos();
-void renderDeliveryRepos(const glm::mat4 &viewMatrix);
+void renderDeliveryRepos(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 bool deliveryReposFinished(FLAG_POSITION *psFlag = nullptr);
 
-void StartTacticalScrollObj(bool driveActive, BASE_OBJECT *psObj);
-void CancelTacticalScroll();
-void MoveTacticalScroll(SDWORD xVel, SDWORD yVel);
 bool	getRotActive();
-SDWORD	getDesiredPitch();
-void	setDesiredPitch(SDWORD pitch);
 
 #define MAX_PLAYER_X_ANGLE	(-1)
-#define MIN_PLAYER_X_ANGLE	(-90)
+#define MIN_PLAYER_X_ANGLE	(-89) // -90 breaks some things on Vulkan...
 
+#define MAXDISTANCE_REPLAY	(7000)
 #define MAXDISTANCE	(5000)
 #define MINDISTANCE	(0)
 #define MINDISTANCE_CONFIG (1600)
-#define STARTDISTANCE	(2500)
+#define MAP_ZOOM_CONFIG_STEP (200)
+#define STARTDISTANCE	(2600)
 #define OLD_START_HEIGHT (1500) // only used in savegames <= 10
 
 #define CAMERA_PIVOT_HEIGHT (500)
@@ -222,14 +225,12 @@ void AddDerrickBurningMessage();
 // check whether the queue order keys are pressed
 bool ctrlShiftDown();
 
-UDWORD getTargetType();
-
 #define	DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED (5000)
 
 void animateToViewDistance(float target, float speed = DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED);
 void incrementViewDistance(float amount);
 void displayRenderLoop();
-bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
-bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
+bool clipXYZ(int x, int y, int z, const glm::mat4 &perspectiveViewMatrix);
+bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &perspectiveViewMatrix);
 
 #endif // __INCLUDED_SRC_DISPLAY_H__

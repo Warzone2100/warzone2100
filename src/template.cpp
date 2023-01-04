@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,9 +38,14 @@
 #include "multiplay.h"
 #include "projectile.h"
 #include "main.h"
+#include "research.h"
 
 // Template storage
-std::map<int, DROID_TEMPLATE *> droidTemplates[MAX_PLAYERS];
+std::map<UDWORD, std::unique_ptr<DROID_TEMPLATE>> droidTemplates[MAX_PLAYERS];
+std::vector<std::unique_ptr<DROID_TEMPLATE>> replacedDroidTemplates[MAX_PLAYERS];
+
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
 bool allowDesign = true;
 bool includeRedundantDesigns = false;
@@ -49,6 +54,7 @@ bool playerBuiltHQ = false;
 
 static bool researchedItem(const DROID_TEMPLATE* /*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
+	ASSERT_PLAYER_OR_RETURN(false, player);
 	if (allowZero && part <= 0)
 	{
 		return true;
@@ -64,6 +70,7 @@ static bool researchedPart(const DROID_TEMPLATE *psCurr, int player, COMPONENT_T
 
 static bool researchedWeap(const DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
 {
+	ASSERT_PLAYER_OR_RETURN(false, player);
 	int availability = apCompLists[player][COMP_WEAPON][psCurr->asWeaps[weapIndex]];
 	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
 }
@@ -71,6 +78,7 @@ static bool researchedWeap(const DROID_TEMPLATE *psCurr, int player, int weapInd
 bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedundant, bool verbose)
 {
 	ASSERT_OR_RETURN(false, psCurr, "Given a null template");
+	ASSERT_PLAYER_OR_RETURN(false, player);
 	bool resBody = researchedPart(psCurr, player, COMP_BODY, false, allowRedundant);
 	bool resBrain = researchedPart(psCurr, player, COMP_BRAIN, true, allowRedundant);
 	bool resProp = researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant);
@@ -81,7 +89,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 	bool researchedEverything = resBody && resBrain && resProp && resSensor && resEcm && resRepair && resConstruct;
 	if (verbose && !researchedEverything)
 	{
-		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", getName(psCurr),
+		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", getStatsName(psCurr),
 		      (int)resBody, (int)resBrain, (int)resProp, (int)resSensor, (int)resEcm, (int)resRepair, (int)resConstruct);
 	}
 	for (int weapIndex = 0; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
@@ -89,7 +97,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
 		if (!researchedEverything && verbose)
 		{
-			debug(LOG_ERROR, "%s : not researched weapon %u", getName(psCurr), weapIndex);
+			debug(LOG_ERROR, "%s : not researched weapon %u", getStatsName(psCurr), weapIndex);
 		}
 	}
 	return researchedEverything;
@@ -218,8 +226,96 @@ bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 	return true;
 }
 
+// A way to check if a design is something someone could legitimately have in multiplayer
+bool designableTemplate(DROID_TEMPLATE *psTempl, int player)
+{
+	if (!bMultiPlayer || !isHumanPlayer(player))
+	{
+		return true; // Don't care about AIs
+	}
+
+	char const *failPart = nullptr;
+	WzString failPartName;
+	auto designablePart = [&](COMPONENT_STATS const &component, char const *part) {
+		if (!component.designable)
+		{
+			failPart = part;
+			failPartName = component.name;
+		}
+		return component.designable;
+	};
+
+	bool designable = false;
+
+	if (psTempl->droidType == DROID_CYBORG ||
+		psTempl->droidType == DROID_CYBORG_SUPER ||
+		psTempl->droidType == DROID_CYBORG_CONSTRUCT ||
+		psTempl->droidType == DROID_CYBORG_REPAIR)
+	{
+		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
+						(!designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") && asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].usageClass == UsageClass::Cyborg) ||
+						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
+		bool isSuperCyborg = asBodyStats[psTempl->asParts[COMP_BODY]].usageClass == UsageClass::SuperCyborg;
+
+		designable =
+			   !designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")
+			&& (strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Cyborgs") == 0)
+			&& !designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
+			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LEGGED
+			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass == UsageClass::Cyborg
+			&& repair
+			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(asBrainStats[psTempl->asParts[COMP_BRAIN]], "Brain") && asBrainStats[psTempl->asParts[COMP_BRAIN]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(asECMStats[psTempl->asParts[COMP_ECM]], "ECM") && asECMStats[psTempl->asParts[COMP_ECM]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(asSensorStats[psTempl->asParts[COMP_SENSOR]], "Sensor") && asSensorStats[psTempl->asParts[COMP_SENSOR]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]], "Construction part") && asConstructStats[psTempl->asParts[COMP_CONSTRUCT]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->numWeaps <= 0) || (asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]])
+				|| (!designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 1) || (!designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 2) || (!designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::SuperCyborg))));
+	}
+	else
+	{
+		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
+						designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") ||
+						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
+		bool transporter = (psTempl->droidType == DROID_TRANSPORTER) || (psTempl->droidType == DROID_SUPERTRANSPORTER);
+
+		designable =
+			   (transporter || (!transporter && designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")))
+			&& designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
+			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [psTempl->asParts[COMP_BRAIN]],      "Brain"))
+			&& repair
+			&& (psTempl->asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [psTempl->asParts[COMP_ECM]],        "ECM"))
+			&& (psTempl->asParts[COMP_SENSOR]     == 0 || designablePart(asSensorStats   [psTempl->asParts[COMP_SENSOR]],     "Sensor"))
+			&& (psTempl->asParts[COMP_CONSTRUCT]  == 0 || designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]],  "Construction part"))
+			&& (psTempl->numWeaps <= 0 || asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]]
+									 || designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0"))
+			&& (psTempl->numWeaps <= 1 || designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1"))
+			&& (psTempl->numWeaps <= 2 || designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2"));
+
+		if (transporter && designable)
+		{
+			designable = (asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) &&
+						!designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body");
+			if (designable)
+			{
+				designable = strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Transports") == 0;
+			}
+		}
+	}
+
+	if (!designable)
+	{
+		debug(LOG_ERROR, "%s \"%s\" for \"%s\" cannot be designed", failPart, failPartName.toUtf8().c_str(), psTempl->name.toUtf8().c_str());
+	}
+
+	return designable;
+}
+
 bool initTemplates()
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return false; }
+
 	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
 	if (!ini.status())
 	{
@@ -244,35 +340,6 @@ bool initTemplates()
 			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", design.name.toUtf8().c_str());
 			continue;
 		}
-
-		char const *failPart = nullptr;
-		WzString failPartName;
-		auto designablePart = [&](COMPONENT_STATS const &component, char const *part) {
-			if (!component.designable)
-			{
-				failPart = part;
-				failPartName = component.name;
-			}
-			return component.designable;
-		};
-
-		bool designable =
-			   designablePart(asBodyStats      [design.asParts[COMP_BODY]],       "Body")
-			&& designablePart(asPropulsionStats[design.asParts[COMP_PROPULSION]], "Propulsion")
-			&& (design.asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [design.asParts[COMP_BRAIN]],      "Brain"))
-			&& (design.asParts[COMP_REPAIRUNIT] == 0 || designablePart(asRepairStats   [design.asParts[COMP_REPAIRUNIT]], "Repair unit"))
-			&& (design.asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [design.asParts[COMP_ECM]],        "ECM"))
-			&& (design.asParts[COMP_SENSOR]     == 0 || designablePart(asSensorStats   [design.asParts[COMP_SENSOR]],     "Sensor"))
-			&& (design.asParts[COMP_CONSTRUCT]  == 0 || designablePart(asConstructStats[design.asParts[COMP_CONSTRUCT]],  "Construction part"))
-			&& (design.numWeaps <= 0 || asBrainStats[design.asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[design.asWeaps[0]]
-			                         || designablePart(asWeaponStats[design.asWeaps[0]], "Weapon 0"))
-			&& (design.numWeaps <= 1 || designablePart(asWeaponStats[design.asWeaps[1]], "Weapon 1"))
-			&& (design.numWeaps <= 2 || designablePart(asWeaponStats[design.asWeaps[2]], "Weapon 2"));
-		if (!designable)
-		{
-			debug(LOG_ERROR, "%s \"%s\" for \"%s\" from stored templates cannot be designed", failPart, failPartName.toUtf8().c_str(), design.name.toUtf8().c_str());
-			continue;
-		}
 		bool valid = intValidTemplate(&design, ini.value("name").toWzString().toUtf8().c_str(), false, selectedPlayer);
 		if (!valid)
 		{
@@ -282,7 +349,7 @@ bool initTemplates()
 		DROID_TEMPLATE *psDestTemplate = nullptr;
 		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 		{
-			psDestTemplate = keyvaluepair.second;
+			psDestTemplate = keyvaluepair.second.get();
 			// Check if template is identical to a loaded template
 			if (psDestTemplate->droidType == design.droidType
 			    && psDestTemplate->name.compare(design.name) == 0
@@ -315,62 +382,74 @@ bool initTemplates()
 	return true;
 }
 
-void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
+nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 {
-	ini.setValue("name", psCurr->name);
+	nlohmann::json templateObj = nlohmann::json::object();
+	templateObj["name"] = psCurr->name;
 	switch (psCurr->droidType)
 	{
-	case DROID_ECM: ini.setValue("type", "ECM"); break;
-	case DROID_SENSOR: ini.setValue("type", "SENSOR"); break;
-	case DROID_CONSTRUCT: ini.setValue("type", "CONSTRUCT"); break;
-	case DROID_WEAPON: ini.setValue("type", "WEAPON"); break;
-	case DROID_PERSON: ini.setValue("type", "PERSON"); break;
-	case DROID_CYBORG: ini.setValue("type", "CYBORG"); break;
-	case DROID_CYBORG_SUPER: ini.setValue("type", "CYBORG_SUPER"); break;
-	case DROID_CYBORG_CONSTRUCT: ini.setValue("type", "CYBORG_CONSTRUCT"); break;
-	case DROID_CYBORG_REPAIR: ini.setValue("type", "CYBORG_REPAIR"); break;
-	case DROID_TRANSPORTER: ini.setValue("type", "TRANSPORTER"); break;
-	case DROID_SUPERTRANSPORTER: ini.setValue("type", "SUPERTRANSPORTER"); break;
-	case DROID_COMMAND: ini.setValue("type", "DROID_COMMAND"); break;
-	case DROID_REPAIR: ini.setValue("type", "REPAIR"); break;
-	case DROID_DEFAULT: ini.setValue("type", "DROID"); break;
+	case DROID_ECM: templateObj["type"] = "ECM"; break;
+	case DROID_SENSOR: templateObj["type"] = "SENSOR"; break;
+	case DROID_CONSTRUCT: templateObj["type"] = "CONSTRUCT"; break;
+	case DROID_WEAPON: templateObj["type"] = "WEAPON"; break;
+	case DROID_PERSON: templateObj["type"] = "PERSON"; break;
+	case DROID_CYBORG: templateObj["type"] = "CYBORG"; break;
+	case DROID_CYBORG_SUPER: templateObj["type"] = "CYBORG_SUPER"; break;
+	case DROID_CYBORG_CONSTRUCT: templateObj["type"] = "CYBORG_CONSTRUCT"; break;
+	case DROID_CYBORG_REPAIR: templateObj["type"] = "CYBORG_REPAIR"; break;
+	case DROID_TRANSPORTER: templateObj["type"] = "TRANSPORTER"; break;
+	case DROID_SUPERTRANSPORTER: templateObj["type"] = "SUPERTRANSPORTER"; break;
+	case DROID_COMMAND: templateObj["type"] = "DROID_COMMAND"; break;
+	case DROID_REPAIR: templateObj["type"] = "REPAIR"; break;
+	case DROID_DEFAULT: templateObj["type"] = "DROID"; break;
 	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().c_str());
 	}
-	ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
-	ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
+	ASSERT(psCurr->asParts[COMP_BODY] < numBodyStats, "asParts[COMP_BODY] (%d) exceeds numBodyStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BODY], numBodyStats);
+	templateObj["body"] = (asBodyStats + psCurr->asParts[COMP_BODY])->id;
+	ASSERT(psCurr->asParts[COMP_PROPULSION] < numPropulsionStats, "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_PROPULSION], numPropulsionStats);
+	templateObj["propulsion"] = (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
-		ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
+		ASSERT(psCurr->asParts[COMP_BRAIN] < numBrainStats, "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BRAIN], numBrainStats);
+		templateObj["brain"] = (asBrainStats + psCurr->asParts[COMP_BRAIN])->id;
 	}
 	if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
 	{
-		ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
+		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < numRepairStats, "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_REPAIRUNIT], numRepairStats);
+		templateObj["repair"] = (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id;
 	}
 	if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
 	{
-		ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
+		ASSERT(psCurr->asParts[COMP_ECM] < numECMStats, "asParts[COMP_ECM] (%d) exceeds numECMStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_ECM], numECMStats);
+		templateObj["ecm"] = (asECMStats + psCurr->asParts[COMP_ECM])->id;
 	}
 	if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
 	{
-		ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
+		ASSERT(psCurr->asParts[COMP_SENSOR] < numSensorStats, "asParts[COMP_SENSOR] (%d) exceeds numSensorStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_SENSOR], numSensorStats);
+		templateObj["sensor"] = (asSensorStats + psCurr->asParts[COMP_SENSOR])->id;
 	}
 	if (psCurr->asParts[COMP_CONSTRUCT] != 0)
 	{
-		ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
+		ASSERT(psCurr->asParts[COMP_CONSTRUCT] < numConstructStats, "asParts[COMP_CONSTRUCT] (%d) exceeds numConstructStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_CONSTRUCT], numConstructStats);
+		templateObj["construct"] = (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id;
 	}
-	std::vector<WzString> weapons;
+	nlohmann::json weapons = nlohmann::json::array();
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
+		ASSERT(psCurr->asWeaps[j] < numWeaponStats, "psCurr->asWeaps[%d] (%d) exceeds numWeaponStats (%" PRIu32 ")", j, (int)psCurr->asWeaps[j], numWeaponStats);
 		weapons.push_back((asWeaponStats + psCurr->asWeaps[j])->id);
 	}
 	if (!weapons.empty())
 	{
-		ini.setValue("weapons", weapons);
+		templateObj["weapons"] = std::move(weapons);
 	}
+	return templateObj;
 }
 
 bool storeTemplates()
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return false; }
+
 	// Write stored templates (back) to file
 	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadAndWrite);
 	if (!ini.status() || !ini.isWritable())
@@ -382,10 +461,10 @@ bool storeTemplates()
 	ini.beginArray("templates");
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		DROID_TEMPLATE *psCurr = keyvaluepair.second;
+		const DROID_TEMPLATE *psCurr = keyvaluepair.second.get();
 		if (psCurr->stored)
 		{
-			saveTemplateCommon(ini, psCurr);
+			ini.currentJsonValue() = saveTemplateCommon(psCurr);
 			ini.nextArrayItem();
 		}
 	}
@@ -437,13 +516,13 @@ bool loadDroidTemplates(const char *filename)
 		design.name = WzString::fromUtf8(droidResourceName != nullptr ? droidResourceName : GetDefaultTemplateName(&design));
 		ini.endGroup();
 
-		for (int i = 0; i < MAX_PLAYERS; ++i)
+		for (int playerIdx = 0; playerIdx < MAX_PLAYERS; ++playerIdx)
 		{
 			// Give those meant for humans to all human players.
-			if (NetPlay.players[i].allocated && available)
+			if (NetPlay.players[playerIdx].allocated && available)
 			{
 				design.prefab = false;
-				copyTemplate(i, &design);
+				copyTemplate(playerIdx, &design);
 
 				// This sets up the UI templates for display purposes ONLY--we still only use droidTemplates for making them.
 				// FIXME: Why are we doing this here, and not on demand ?
@@ -454,24 +533,24 @@ bool loadDroidTemplates(const char *filename)
 					DROID_TEMPLATE *psCurr = &*it;
 					if (psCurr->multiPlayerID == design.multiPlayerID)
 					{
-						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getName(&design), i);
+						debug(LOG_WARNING, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getStatsName(&design), playerIdx);
 						break;
 					}
 				}
 				if (it == localTemplates.end())
 				{
-					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getName(&design), i);
+					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getStatsName(&design), playerIdx);
 					localTemplates.push_back(design);
 				}
 			}
-			else if (!NetPlay.players[i].allocated)	// AI template
+			else if (!NetPlay.players[playerIdx].allocated)	// AI template
 			{
 				design.prefab = true;  // prefabricated templates referenced from VLOs
-				copyTemplate(i, &design);
+				copyTemplate(playerIdx, &design);
 			}
 		}
 		debug(LOG_NEVER, "Droid template found, Name: %s, MP ID: %d, ref: %u, ID: %s, prefab: %s, type:%d (loading)",
-		      getName(&design), design.multiPlayerID, design.ref, getID(&design), design.prefab ? "yes" : "no", design.droidType);
+		      getStatsName(&design), design.multiPlayerID, design.ref, getID(&design), design.prefab ? "yes" : "no", design.droidType);
 	}
 
 	return true;
@@ -479,23 +558,64 @@ bool loadDroidTemplates(const char *filename)
 
 DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate)
 {
-	DROID_TEMPLATE *dup = new DROID_TEMPLATE(*psTemplate);
-	droidTemplates[player][psTemplate->multiPlayerID] = dup;
-	return dup;
+	auto dup = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE(*psTemplate));
+	return addTemplate(player, std::move(dup));
 }
 
-void addTemplate(int player, DROID_TEMPLATE *psTemplate)
+DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate)
 {
-	droidTemplates[player][psTemplate->multiPlayerID] = psTemplate;
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
+	UDWORD multiPlayerID = psTemplate->multiPlayerID;
+	auto it = droidTemplates[player].find(multiPlayerID);
+	if (it != droidTemplates[player].end())
+	{
+		// replacing existing template
+		it->second.swap(psTemplate);
+		replacedDroidTemplates[player].push_back(std::move(psTemplate));
+		return it->second.get();
+	}
+	else
+	{
+		// new template
+		auto result = droidTemplates[player].insert(std::pair<UDWORD, std::unique_ptr<DROID_TEMPLATE>>(multiPlayerID, std::move(psTemplate)));
+		return result.first->second.get();
+	}
+}
+
+void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func)
+{
+	ASSERT_PLAYER_OR_RETURN(, player);
+	for (auto &keyvaluepair : droidTemplates[player])
+	{
+		if (!func(keyvaluepair.second.get()))
+		{
+			break;
+		}
+	}
+}
+
+DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId)
+{
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
+	auto it = droidTemplates[player].find(templateId);
+	if (it != droidTemplates[player].end())
+	{
+		return it->second.get();
+	}
+	return nullptr;
+}
+
+size_t templateCount(int player)
+{
+	ASSERT_PLAYER_OR_RETURN(0, player);
+	return droidTemplates[player].size();
 }
 
 void clearTemplates(int player)
 {
-	for (auto &keyvaluepair : droidTemplates[player])
-	{
-		delete keyvaluepair.second;
-	}
+	ASSERT_PLAYER_OR_RETURN(, player);
 	droidTemplates[player].clear();
+	replacedDroidTemplates[player].clear();
 }
 
 //free the storage for the droid templates
@@ -515,7 +635,7 @@ bool droidTemplateShutDown()
  * \param pName Template name
  * \pre pName has to be the unique, untranslated name!
  */
-DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
+const DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 {
 	for (auto &droidTemplate : droidTemplates)
 	{
@@ -523,7 +643,7 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 		{
 			if (keyvaluepair.second->id.compare(pName) == 0)
 			{
-				return keyvaluepair.second;
+				return keyvaluepair.second.get();
 			}
 		}
 	}
@@ -537,7 +657,7 @@ DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 	{
 		if (droidTemplate.count(multiPlayerID) > 0)
 		{
-			return droidTemplate[multiPlayerID];
+			return droidTemplate[multiPlayerID].get();
 		}
 	}
 	return nullptr;
@@ -548,6 +668,9 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 {
 	STRUCTURE   *psStruct;
 	STRUCTURE	*psList;
+
+	ASSERT_OR_RETURN(, psTemplate != nullptr, "Null psTemplate");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", player);
 
 	//see if any factory is currently using the template
 	for (unsigned i = 0; i < 2; ++i)
@@ -566,14 +689,19 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 		{
 			if (StructIsFactory(psStruct))
 			{
-				FACTORY             *psFactory = &psStruct->pFunctionality->factory;
+				if (psStruct->pFunctionality == nullptr)
+				{
+					continue;
+				}
+				FACTORY *psFactory = &psStruct->pFunctionality->factory;
 
-				if (psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+				if (psFactory->psAssemblyPoint && psFactory->psAssemblyPoint->factoryType < NUM_FACTORY_TYPES
+					&& psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
 				{
 					ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 					for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 					{
-						if (productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
+						if (productionRun[inc].psTemplate && productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
 						{
 							//just need to erase this production run entry
 							productionRun.erase(productionRun.begin() + inc);
@@ -597,9 +725,6 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 					cancelProduction(psStruct, ModeImmediate, false);
 					// Check to see if anything left to produce. (Also calls cancelProduction again, if nothing left to produce, which is a no-op. But if other things are left to produce, doesn't call cancelProduction, so wouldn't return power without the explicit cancelProduction call above.)
 					doNextProduction(psStruct, nullptr, ModeImmediate);
-
-					//tell the interface
-					intManufactureFinished(psStruct);
 
 					syncDebugStructure(psStruct, '>');
 				}
@@ -627,10 +752,11 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 
 void listTemplates()
 {
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer (%" PRIu32 ") >= MAX_PLAYERS", selectedPlayer);
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		DROID_TEMPLATE *t = keyvaluepair.second;
-		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
+		DROID_TEMPLATE *t = keyvaluepair.second.get();
+		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getStatsName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
 	}
 }
 
@@ -639,10 +765,10 @@ fills the list with Templates that can be manufactured
 in the Factory - based on size. There is a limit on how many can be manufactured
 at any one time.
 */
-void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory)
+std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory)
 {
+	std::vector<DROID_TEMPLATE *> pList;
 	const int player = psFactory->player;
-	pList.clear();
 
 	BODY_SIZE	iCapacity = (BODY_SIZE)psFactory->capacity;
 
@@ -685,6 +811,8 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 			}
 		}
 	}
+
+	return pList;
 }
 
 void checkPlayerBuiltHQ(const STRUCTURE *psStruct)

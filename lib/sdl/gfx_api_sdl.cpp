@@ -18,27 +18,33 @@
 */
 
 #include "gfx_api_sdl.h"
+#include "gfx_api_null_sdl.h"
 #include "gfx_api_gl_sdl.h"
 #include "gfx_api_vk_sdl.h"
 #include <SDL_version.h>
 #include <SDL_messagebox.h>
 
-SDL_gfx_api_Impl_Factory::SDL_gfx_api_Impl_Factory(SDL_Window* _window, bool _useOpenGLES, bool _useOpenGLESLibrary)
+SDL_gfx_api_Impl_Factory::SDL_gfx_api_Impl_Factory(SDL_Window* _window, SDL_gfx_api_Impl_Factory::Configuration _config)
 {
-	ASSERT(_window != nullptr, "Invalid SDL_Window*");
 	window = _window;
-	useOpenGLES = _useOpenGLES;
-	useOpenGLESLibrary = _useOpenGLESLibrary;
+	config = _config;
+}
+
+std::unique_ptr<gfx_api::backend_Null_Impl> SDL_gfx_api_Impl_Factory::createNullBackendImpl() const
+{
+	return std::unique_ptr<gfx_api::backend_Null_Impl>(new sdl_Null_Impl());
 }
 
 std::unique_ptr<gfx_api::backend_OpenGL_Impl> SDL_gfx_api_Impl_Factory::createOpenGLBackendImpl() const
 {
-	return std::unique_ptr<gfx_api::backend_OpenGL_Impl>(new sdl_OpenGL_Impl(window, useOpenGLES, useOpenGLESLibrary));
+	ASSERT_OR_RETURN(nullptr, window != nullptr, "Invalid SDL_Window*");
+	return std::unique_ptr<gfx_api::backend_OpenGL_Impl>(new sdl_OpenGL_Impl(window, config.useOpenGLES, config.useOpenGLESLibrary));
 }
 
 #if defined(WZ_VULKAN_ENABLED)
 std::unique_ptr<gfx_api::backend_Vulkan_Impl> SDL_gfx_api_Impl_Factory::createVulkanBackendImpl() const
 {
+	ASSERT_OR_RETURN(nullptr, window != nullptr, "Invalid SDL_Window*");
 #if defined(HAVE_SDL_VULKAN_H)
 	return std::unique_ptr<gfx_api::backend_Vulkan_Impl>(new sdl_Vulkan_Impl(window));
 #else // !defined(HAVE_SDL_VULKAN_H)

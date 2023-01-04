@@ -99,12 +99,10 @@ void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
 void removeFlagPosition(FLAG_POSITION *psDel);
 // free all flag positions
 void freeAllFlagPositions();
-void freeAllAssemblyPoints();
 
 // Find a base object from it's id
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);
 BASE_OBJECT *getBaseObjFromId(UDWORD id);
-bool checkValidId(UDWORD id);
 
 UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag);
 

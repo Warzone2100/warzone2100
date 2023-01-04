@@ -62,7 +62,14 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	, pTip(init->pTip)
 {
 	ASSERT((init->style & ~(WBAR_PLAIN | WIDG_HIDDEN)) == 0, "Unknown style");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wlogical-op" // Older GCC (at least GCC 5.4) triggers a warning on this
+#endif
 	ASSERT(init->orientation >= WSLD_LEFT || init->orientation <= WSLD_BOTTOM, "Unknown orientation");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic pop
+#endif
 	bool horizontal = init->orientation == WSLD_LEFT || init->orientation == WSLD_RIGHT;
 	bool vertical = init->orientation == WSLD_TOP || init->orientation == WSLD_BOTTOM;
 	ASSERT((!horizontal || init->numStops <= init->width  - init->barSize) &&
@@ -73,8 +80,9 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 }
 
 /* Get the current position of a slider bar */
-UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
+UDWORD widgGetSliderPos(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 {
+	ASSERT_OR_RETURN(0, psScreen != nullptr, "Invalid screen pointer");
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
@@ -86,34 +94,16 @@ UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
 	return 0;
 }
 
-/* Set the current position of a slider bar */
-void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos)
-{
-	WIDGET	*psWidget;
-
-	psWidget = widgGetFromID(psScreen, id);
-	ASSERT(psWidget != nullptr, "Could not find widget from id %u", id);
-	if (psWidget && pos != ((W_SLIDER *)psWidget)->pos)
-	{
-		psWidget->dirty = true;
-		if (pos > ((W_SLIDER *)psWidget)->numStops)
-		{
-			((W_SLIDER *)psWidget)->pos = ((W_SLIDER *)psWidget)->numStops;
-		}
-		else
-		{
-			((W_SLIDER *)psWidget)->pos = pos;
-		}
-	}
-}
-
 /* Run a slider widget */
 void W_SLIDER::run(W_CONTEXT *psContext)
 {
 	if ((state & SLD_DRAG) && !mouseDown(MOUSE_LMB))
 	{
 		state &= ~SLD_DRAG;
-		screenPointer->setReturn(this);
+		if (auto lockedScreen = screenPointer.lock())
+		{
+			lockedScreen->setReturn(shared_from_this());
+		}
 		dirty = true;
 	}
 	else if (!(state & SLD_DRAG) && mouseDown(MOUSE_LMB))
@@ -140,10 +130,10 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (width() - barSize) / numStops;
+				stopSize = (width() - barSize) / std::max<int>(numStops, 1);
 				pos = (mx + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (width() - barSize);
+				      / std::max<int>((width() - barSize), 1);
 			}
 			break;
 		case WSLD_RIGHT:
@@ -158,11 +148,11 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (width() - barSize) / numStops;
+				stopSize = (width() - barSize) / std::max<int>(numStops, 1);
 				pos = numStops
 				      - (mx + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (width() - barSize);
+				      / std::max<int>((width() - barSize), 1);
 			}
 			break;
 		case WSLD_TOP:
@@ -177,10 +167,10 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (height() - barSize) / numStops;
+				stopSize = (height() - barSize) / std::max<int>(numStops, 1);
 				pos = (my + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (height() - barSize);
+				      / std::max<int>((height() - barSize), 1);
 			}
 			break;
 		case WSLD_BOTTOM:
@@ -195,11 +185,11 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 			else
 			{
 				/* Mouse is in the middle of the slider, calculate which stop */
-				stopSize = (height() - barSize) / numStops;
+				stopSize = (height() - barSize) / std::max<int>(numStops, 1);
 				pos = numStops
 				      - (my + stopSize / 2 - barSize / 2)
 				      * numStops
-				      / (height() - barSize);
+				      / std::max<int>((height() - barSize), 1);
 			}
 			break;
 		}

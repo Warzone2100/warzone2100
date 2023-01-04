@@ -8,20 +8,11 @@ on:
       - deleted
       - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
 
+concurrency: sourceforge_deploy
+
 jobs:
-  # Wait for up to 10 minutes for previous workflow run to complete, abort if not done by then
-  pre-ci:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: 'Block Concurrent Executions'
-        uses: past-due/turnstyle@v1
-        with:
-          poll-interval-seconds: 30
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   mirror-to-sourceforge:
-    needs: pre-ci
+    environment: sourceforge_deploy
     # For this job to work, the following secrets must be set:
     # SF_SSH_KEY
     # SF_FRS_USERNAME
@@ -31,6 +22,8 @@ jobs:
       SF_BASE_PATH: 'releases'
       RELEASE_CONTEXT: ${{ toJson(github.event.release) }}
     name: 'Mirror to SourceForge'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - name: Process Release Event
@@ -60,7 +53,7 @@ jobs:
         # Get information for this tagged release
         tagged_release_id="${{ github.event.release.id }}"
         echo "tagged_release_id=${tagged_release_id}"
-        echo "::set-output name=tagged_release_id::${tagged_release_id}"
+        echo "tagged_release_id=${tagged_release_id}" >> $GITHUB_OUTPUT
 
         SF_FILE_PATH=""
         if [ ! -z "${SF_BASE_PATH}" ]; then
@@ -68,7 +61,7 @@ jobs:
         fi
         SF_FILE_PATH="${SF_FILE_PATH}${RELEASE_TAG}"
         echo "SF_FILE_PATH=${SF_FILE_PATH}"
-        echo "::set-output name=SF_FILE_PATH::${SF_FILE_PATH}"
+        echo "SF_FILE_PATH=${SF_FILE_PATH}" >> $GITHUB_OUTPUT
 
         # Prepare release_assets directory
         mkdir -p "release_assets/${SF_FILE_PATH}"
@@ -93,7 +86,7 @@ jobs:
         echo "Get Latest Release info for repo: ${GITHUB_REPOSITORY}"
         latest_release_id="$(curl -H "Accept: application/vnd.github.v3.raw" -H "Authorization: token ${GITHUB_TOKEN}" -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | jq '.id')"
         echo "latest_release_id=${latest_release_id}"
-        echo "::set-output name=latest_release_id::${latest_release_id}"
+        echo "latest_release_id=${latest_release_id}" >> $GITHUB_OUTPUT
     - name: Set up SourceForge known_hosts
       run: |
         mkdir -p ~/.ssh/
@@ -161,8 +154,8 @@ jobs:
         }
 
         # Set default platform downloads for SourceForge
-        set_sf_default_if_present "warzone2100_win_x86_portable.exe" "default=windows"
-        set_sf_default_if_present "warzone2100_macOS.zip" "default=mac"
+        set_sf_default_if_present "warzone2100_win_x64_installer.exe" "default=windows"
+        set_sf_default_if_present "warzone2100_macOS_universal.zip" "default=mac"
         set_sf_default_if_present "warzone2100_src.tar.xz" "default=linux&default=bsd&default=solaris&default=others"
 
         echo "Done."

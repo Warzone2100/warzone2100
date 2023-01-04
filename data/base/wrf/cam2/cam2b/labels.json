@@ -196,6 +196,12 @@
 		"player": 2,
 		"type": 1
 	},
+	"object_8": {
+		"label": "COBombardPit",
+		"id": 4518,
+		"player": 2,
+		"type": 1
+	},
 
 	"radius_0": {
 		"label": "vtolRemoveZone",

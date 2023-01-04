@@ -2,19 +2,23 @@
 SUB_2_1 Script
 Authors: Cristian Odorico (Alpha93) / KJeff01
  */
-include ("script/campaign/libcampaign.js");
-include ("script/campaign/templates.js");
-include ("script/campaign/transitionTech.js");
+include("script/campaign/libcampaign.js");
+include("script/campaign/templates.js");
+include("script/campaign/transitionTech.js");
+
 var victoryFlag;
 
 const TRANSPORT_TEAM = 1;
 const COLLECTIVE_RES = [
-	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Vehicle-Engine04",
-	"R-Vehicle-Metals04", "R-Cyborg-Metals04", "R-Wpn-Cannon-Accuracy02",
-	"R-Wpn-Cannon-Damage04", "R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage04", "R-Wpn-Flamer-ROF01",
-	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Sys-Sensor-Upgrade01",
-	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01", "R-Wpn-RocketSlow-Accuracy03",
-	"R-Wpn-RocketSlow-Damage03",
+	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
+	"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage05", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
+	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage04",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage04", "R-Sys-Sensor-Upgrade01"
 ];
 
 //trigger event when droid reaches the downed transport.
@@ -33,7 +37,7 @@ camAreaEvent("crashSite", function(droid)
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	var droids = enumDroid(TRANSPORT_TEAM);
-	for (var i = 0; i < droids.length; ++i)
+	for (let i = 0; i < droids.length; ++i)
 	{
 		donateObject(droids[i], CAM_HUMAN_PLAYER);
 	}
@@ -48,7 +52,7 @@ function preDamageUnits()
 {
 	setHealth(getObject("transporter"), 40);
 	var droids = enumDroid(TRANSPORT_TEAM);
-	for (var j = 0; j < droids.length; ++j)
+	for (let j = 0; j < droids.length; ++j)
 	{
 		setHealth(droids[j], 40 + camRand(20));
 	}
@@ -67,14 +71,8 @@ function setupCyborgGroups()
 		regroup: false
 	});
 
-	//East cyborg group patrols around the bombard pits
-	camManageGroup(camMakeGroup("cyborgPositionEast"), CAM_ORDER_PATROL, {
-		pos: [
-			camMakePos ("cybEastPatrol1"),
-			camMakePos ("cybEastPatrol2"),
-			camMakePos ("cybEastPatrol3"),
-		],
-		interval: camSecondsToMilliseconds(20),
+	//create group of cyborgs and send them on war path
+	camManageGroup(camMakeGroup("cyborgPositionEast"), CAM_ORDER_ATTACK, {
 		regroup: false
 	});
 }
@@ -82,11 +80,11 @@ function setupCyborgGroups()
 function setCrashedTeamExp()
 {
 	const DROID_EXP = 32;
-	var droids = enumDroid(TRANSPORT_TEAM).filter(function(dr) {
-		return !camIsSystemDroid(dr) && !camIsTransporter(dr);
-	});
+	var droids = enumDroid(TRANSPORT_TEAM).filter((dr) => (
+		!camIsSystemDroid(dr) && !camIsTransporter(dr)
+	));
 
-	for (var i = 0; i < droids.length; ++i)
+	for (let i = 0; i < droids.length; ++i)
 	{
 		var droid = droids[i];
 		setDroidExperience(droid, DROID_EXP);
@@ -125,7 +123,7 @@ function eventStartLevel()
 	var tent = getObject("transporterEntry");
 	var text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
-	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2);
+	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
@@ -133,15 +131,20 @@ function eventStartLevel()
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	//Add crash site blip and from an alliance with the crashed team.
-	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
 
 	//set downed transport team colour to be Project Green.
 	changePlayerColour(TRANSPORT_TEAM, 0);
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	camCompleteRequiredResearch(ALPHA_RESEARCH, TRANSPORT_TEAM);
+	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, TRANSPORT_TEAM);
 	camCompleteRequiredResearch(PLAYER_RES_BETA, TRANSPORT_TEAM);
+
+	if (difficulty >= HARD)
+	{
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+	}
 
 	camSetEnemyBases({
 		"COHardpointBase": {

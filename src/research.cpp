@@ -46,9 +46,12 @@
 #include "template.h"
 #include "qtscript.h"
 #include "stats.h"
+#include "wzapi.h"
 
 // The stores for the research stats
 std::vector<RESEARCH> asResearch;
+nlohmann::json cachedStatsObject = nlohmann::json(nullptr);
+std::vector<wzapi::PerPlayerUpgrades> cachedPerPlayerUpgrades;
 
 //used for Callbacks to say which topic was last researched
 RESEARCH                *psCBLastResearch;
@@ -62,6 +65,20 @@ std::vector<PLAYER_RESEARCH> asPlayerResList[MAX_PLAYERS];
 UDWORD					aDefaultSensor[MAX_PLAYERS];
 UDWORD					aDefaultECM[MAX_PLAYERS];
 UDWORD					aDefaultRepair[MAX_PLAYERS];
+
+// Per-player statistics about research upgrades
+struct PlayerUpgradeCounts
+{
+	std::unordered_map<std::string, uint32_t> numBodyClassArmourUpgrades;
+	std::unordered_map<std::string, uint32_t> numBodyClassThermalUpgrades;
+	std::unordered_map<std::string, uint32_t> numWeaponImpactClassUpgrades;
+
+	// helper functions
+	uint32_t getNumWeaponImpactClassUpgrades(WEAPON_SUBCLASS subClass);
+	uint32_t getNumBodyClassArmourUpgrades(BodyClass bodyClass);
+	uint32_t getNumBodyClassThermalArmourUpgrades(BodyClass bodyClass);
+};
+std::vector<PlayerUpgradeCounts> playerUpgradeCounts;
 
 //set the iconID based on the name read in in the stats
 static UWORD setIconID(const char *pIconName, const char *pName);
@@ -77,6 +94,7 @@ static void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD o
                                       UDWORD newCompInc, UBYTE player);
 static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
                             UDWORD newCompInc);
+
 static void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                         UDWORD oldCompInc, UDWORD newCompInc);
 
@@ -87,6 +105,9 @@ bool researchInitVars()
 	psCBLastResStructure = nullptr;
 	CBResFacilityOwner = -1;
 	asResearch.clear();
+	cachedStatsObject = nlohmann::json(nullptr);
+	cachedPerPlayerUpgrades.clear();
+	playerUpgradeCounts = std::vector<PlayerUpgradeCounts>(MAX_PLAYERS);
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -98,6 +119,126 @@ bool researchInitVars()
 
 	return true;
 }
+
+uint32_t PlayerUpgradeCounts::getNumWeaponImpactClassUpgrades(WEAPON_SUBCLASS subClass)
+{
+	auto subClassStr = getWeaponSubClass(subClass);
+	auto it = numWeaponImpactClassUpgrades.find(subClassStr);
+	if (it == numWeaponImpactClassUpgrades.end())
+	{
+		return 0;
+	}
+	return it->second;
+}
+
+static inline const char* bodyClassToStr(BodyClass bodyClass)
+{
+	const char* bodyClassStr = nullptr;
+	switch (bodyClass)
+	{
+		case BodyClass::Tank:
+			bodyClassStr = "Droids";
+			break;
+		case BodyClass::Cyborg:
+			bodyClassStr = "Cyborgs";
+			break;
+	}
+	return bodyClassStr;
+}
+
+uint32_t PlayerUpgradeCounts::getNumBodyClassArmourUpgrades(BodyClass bodyClass)
+{
+	const char* bodyClassStr = bodyClassToStr(bodyClass);
+	auto it = numBodyClassArmourUpgrades.find(bodyClassStr);
+	if (it == numBodyClassArmourUpgrades.end())
+	{
+		return 0;
+	}
+	return it->second;
+}
+
+uint32_t PlayerUpgradeCounts::getNumBodyClassThermalArmourUpgrades(BodyClass bodyClass)
+{
+	const char* bodyClassStr = bodyClassToStr(bodyClass);
+	auto it = numBodyClassThermalUpgrades.find(bodyClassStr);
+	if (it == numBodyClassThermalUpgrades.end())
+	{
+		return 0;
+	}
+	return it->second;
+}
+
+uint32_t getNumWeaponImpactClassUpgrades(uint32_t player, WEAPON_SUBCLASS subClass)
+{
+	ASSERT_OR_RETURN(0, player < playerUpgradeCounts.size(), "Out of bounds player: %" PRIu32 "", player);
+	return playerUpgradeCounts[player].getNumWeaponImpactClassUpgrades(subClass);
+}
+
+uint32_t getNumBodyClassArmourUpgrades(uint32_t player, BodyClass bodyClass)
+{
+	ASSERT_OR_RETURN(0, player < playerUpgradeCounts.size(), "Out of bounds player: %" PRIu32 "", player);
+	return playerUpgradeCounts[player].getNumBodyClassArmourUpgrades(bodyClass);
+}
+
+uint32_t getNumBodyClassThermalArmourUpgrades(uint32_t player, BodyClass bodyClass)
+{
+	ASSERT_OR_RETURN(0, player < playerUpgradeCounts.size(), "Out of bounds player: %" PRIu32 "", player);
+	return playerUpgradeCounts[player].getNumBodyClassThermalArmourUpgrades(bodyClass);
+}
+
+class CycleDetection
+{
+private:
+	CycleDetection() {}
+
+	std::unordered_set<RESEARCH *> visited;
+	std::unordered_set<RESEARCH *> exploring;
+
+	nonstd::optional<std::deque<RESEARCH *>> explore(RESEARCH *research)
+	{
+		if (visited.find(research) != visited.end())
+		{
+			return nonstd::nullopt;
+		}
+
+		if (exploring.find(research) != exploring.end())
+		{
+			return {{research}};
+		}
+
+		exploring.insert(research);
+
+		for (auto requirementIndex: research->pPRList)
+		{
+			auto requirement = &asResearch[requirementIndex];
+			if (auto cycle = explore(requirement))
+			{
+				cycle->push_front(research);
+				return cycle;
+			}
+		}
+
+		exploring.erase(exploring.find(research));
+		visited.insert(research);
+		return nonstd::nullopt;
+	}
+
+public:
+	static nonstd::optional<std::deque<RESEARCH *>> detectCycle()
+	{
+		CycleDetection detection;
+
+		for (auto &research: asResearch)
+		{
+			if (auto cycle = detection.explore(&research))
+			{
+				return cycle;
+			}
+		}
+
+		return nonstd::nullopt;
+	}
+};
 
 /** Load the research stats */
 bool loadResearch(WzConfig &ini)
@@ -123,7 +264,7 @@ bool loadResearch(WzConfig &ini)
 		research.id = list[inc];
 
 		//check the name hasn't been used already
-		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getName(&research));
+		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getStatsName(&research));
 
 		research.ref = STAT_RESEARCH + inc;
 
@@ -133,7 +274,7 @@ bool loadResearch(WzConfig &ini)
 		WzString subGroup = ini.value("subgroupIconID", "").toWzString();
 		if (subGroup.compare("") != 0)
 		{
-			research.subGroup = setIconID(subGroup.toUtf8().c_str(), getName(&research));
+			research.subGroup = setIconID(subGroup.toUtf8().c_str(), getStatsName(&research));
 		}
 		else
 		{
@@ -142,7 +283,7 @@ bool loadResearch(WzConfig &ini)
 
 		//set key topic
 		unsigned int keyTopic = ini.value("keyTopic", 0).toUInt();
-		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getName(&research));
+		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getStatsName(&research));
 		if (keyTopic <= 1)
 		{
 			research.keyTopic = ini.value("keyTopic", 0).toUInt();
@@ -154,7 +295,7 @@ bool loadResearch(WzConfig &ini)
 
 		//set tech code
 		UBYTE techCode = ini.value("techCode", 0).toUInt();
-		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getName(&research));
+		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getStatsName(&research));
 		if (techCode == 0)
 		{
 			research.techCode = TC_MAJOR;
@@ -166,14 +307,14 @@ bool loadResearch(WzConfig &ini)
 
 		//get flags when to disable tech
 		UBYTE disabledWhen = ini.value("disabledWhen", 0).toUInt();
-		ASSERT(disabledWhen <= MPFLAGS_MAX, "Invalid disabled tech flag for research topic - '%s' ", getName(&research));
+		ASSERT(disabledWhen <= MPFLAGS_MAX, "Invalid disabled tech flag for research topic - '%s' ", getStatsName(&research));
 		research.disabledWhen = disabledWhen;
 
 		//set the iconID
 		WzString iconID = ini.value("iconID", "").toWzString();
 		if (iconID.compare("") != 0)
 		{
-			research.iconID = setIconID(iconID.toUtf8().c_str(), getName(&research));
+			research.iconID = setIconID(iconID.toUtf8().c_str(), getStatsName(&research));
 		}
 		else
 		{
@@ -185,30 +326,30 @@ bool loadResearch(WzConfig &ini)
 		research.psStat = nullptr;
 		if (statID.compare("") != 0)
 		{
-			//try find the structure stat with given name
-			research.psStat = getCompStatsFromName(statID);
-			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getName(&research));
+			//try find the stat with given name
+			research.psStat = getBaseStatsFromName(statID);
+			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getStatsName(&research));
 		}
 
 		WzString imdName = ini.value("imdName", "").toWzString();
 		if (imdName.compare("") != 0)
 		{
 			research.pIMD = modelGet(imdName);
-			ASSERT(research.pIMD != nullptr, "Cannot find the research PIE '%s' for record '%s'", imdName.toUtf8().data(), getName(&research));
+			ASSERT(research.pIMD != nullptr, "Cannot find the research PIE '%s' for record '%s'", imdName.toUtf8().data(), getStatsName(&research));
 		}
 
 		WzString imdName2 = ini.value("imdName2", "").toWzString();
 		if (imdName2.compare("") != 0)
 		{
 			research.pIMD2 = modelGet(imdName2);
-			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getName(&research));
+			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getStatsName(&research));
 		}
 
 		WzString msgName = ini.value("msgName", "").toWzString();
 		if (msgName.compare("") != 0)
 		{
 			//check its a major tech code
-			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getName(&research));
+			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getStatsName(&research));
 			if (research.techCode == TC_MAJOR)
 			{
 				research.pViewData = getViewData(msgName);
@@ -217,12 +358,12 @@ bool loadResearch(WzConfig &ini)
 
 		//set the researchPoints
 		unsigned int resPoints = ini.value("researchPoints", 0).toUInt();
-		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - '%s' ", getName(&research));
+		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - '%s' ", getStatsName(&research));
 		research.researchPoints = resPoints;
 
 		//set the research power
 		unsigned int resPower = ini.value("researchPower", 0).toUInt();
-		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getName(&research));
+		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getStatsName(&research));
 		research.researchPower = resPower;
 
 		//remember research pre-requisites for futher checking
@@ -240,7 +381,7 @@ bool loadResearch(WzConfig &ini)
 			}
 			else
 			{
-				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().c_str(), getStatsName(&research));
 			}
 		}
 
@@ -250,7 +391,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			//read pair of components oldComponent:newComponent
 			std::vector<WzString> pair = replacedComp[j].split(":");
-			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().c_str(), getName(&research));
+			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().c_str(), getStatsName(&research));
 			if (pair.size() != 2)
 			{
 				continue; //skip invalid entries
@@ -260,13 +401,13 @@ bool loadResearch(WzConfig &ini)
 			COMPONENT_STATS *oldComp = getCompStatsFromName(oldCompID);
 			if (oldComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().c_str(), getStatsName(&research));
 				continue;
 			}
 			COMPONENT_STATS *newComp = getCompStatsFromName(newCompID);
 			if (newComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().c_str(), getStatsName(&research));
 				continue;
 			}
 			RES_COMP_REPLACEMENT replItem;
@@ -283,7 +424,7 @@ bool loadResearch(WzConfig &ini)
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().c_str(), getStatsName(&research));
 			}
 			else
 			{
@@ -297,7 +438,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString strucID = resStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID);
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
 			if (structIndex >= 0)
 			{
 				research.pStructureResults.push_back(structIndex);
@@ -310,7 +451,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString strucID = reqStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
 			if (structIndex >= 0)
 			{
 				research.pStructList.push_back(structIndex);
@@ -323,7 +464,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString strucID = redStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
 			if (structIndex >= 0)
 			{
 				research.pRedStructs.push_back(structIndex);
@@ -342,7 +483,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString resID = preRes[j].trimmed();
 			RESEARCH *preResItem = getResearch(resID.toUtf8().c_str());
-			ASSERT(preResItem != nullptr, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().c_str(), getName(&asResearch[inc]));
+			ASSERT(preResItem != nullptr, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().c_str(), getStatsName(&asResearch[inc]));
 			if (preResItem != nullptr)
 			{
 				asResearch[inc].pPRList.push_back(preResItem->index);
@@ -350,11 +491,26 @@ bool loadResearch(WzConfig &ini)
 		}
 	}
 
+	if (auto cycle = CycleDetection::detectCycle())
+	{
+		debug(LOG_ERROR, "A cycle was detected in the research dependency graph:");
+		for (auto research: cycle.value())
+		{
+			debug(LOG_ERROR, "\t-> %s", research->id.toUtf8().c_str());
+		}
+		return false;
+	}
+
 	return true;
 }
 
-bool researchAvailable(int inc, int playerID, QUEUE_MODE mode)
+bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode)
 {
+	if (playerID >= MAX_PLAYERS)
+	{
+		return false;
+	}
+
 	// Decide whether to use IsResearchCancelledPending/IsResearchStartedPending or IsResearchCancelled/IsResearchStarted.
 	bool (*IsResearchCancelledFunc)(PLAYER_RESEARCH const *) = IsResearchCancelledPending;
 	bool (*IsResearchStartedFunc)(PLAYER_RESEARCH const *) = IsResearchStartedPending;
@@ -468,35 +624,333 @@ There can only be 'limit' number of entries
 'topic' is the currently researched topic
 */
 // NOTE by AJL may 99 - skirmish now has it's own version of this, skTopicAvail.
-UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
+std::vector<uint16_t> fillResearchList(UDWORD playerID, nonstd::optional<UWORD> topic, UWORD limit)
 {
-	UWORD				inc, count = 0;
+	std::vector<uint16_t> list;
 
-	for (inc = 0; inc < asResearch.size(); inc++)
+	for (auto inc = 0; inc < asResearch.size(); inc++)
 	{
 		// if the inc matches the 'topic' - automatically add to the list
-		if (inc == topic || researchAvailable(inc, playerID, ModeQueue))
+		if ((topic.has_value() && inc == topic.value()) || researchAvailable(inc, playerID, ModeQueue))
 		{
-			*plist++ = inc;
-			count++;
-			if (count == limit)
+			list.push_back(inc);
+			if (list.size() == limit)
 			{
-				return count;
+				return list;
 			}
 		}
 	}
-	return count;
+
+	return list;
+}
+
+class internal_execution_context_base : public wzapi::execution_context_base
+{
+public:
+	virtual ~internal_execution_context_base() { }
+public:
+	virtual void throwError(const char *expr, int line, const char *function) const override
+	{
+		// do nothing, since the error was already logged and we're not actually running a script
+	}
+};
+
+static inline int64_t iDivCeil(int64_t dividend, int64_t divisor)
+{
+	ASSERT_OR_RETURN(0, divisor != 0, "Divide by 0");
+	bool hasPosQuotient = (dividend >= 0) == (divisor >= 0);
+	// C++11 defines the behavior of % to be truncated
+	return (dividend / divisor) + static_cast<int64_t>((dividend % divisor != 0 && hasPosQuotient));
+}
+
+static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRUCTURE *psStruct, int player)
+{
+	if (cachedStatsObject.is_null()) { cachedStatsObject = wzapi::constructStatsObject(); }
+	if (cachedPerPlayerUpgrades.empty()) { cachedPerPlayerUpgrades = wzapi::getUpgradesObject(); }
+	internal_execution_context_base temp_no_throw_context;
+
+	debug(LOG_RESEARCH, "RESEARCH : %s(%s) for %d", psResearch->name.toUtf8().c_str(), psResearch->id.toUtf8().c_str(), player);
+
+	ASSERT_OR_RETURN(, player >= 0 && player < cachedPerPlayerUpgrades.size(), "Player %d does not exist in per-player upgrades?", player);
+
+	PlayerUpgradeCounts tempStats;
+
+	// iterate over all research results
+	for (size_t i = 0; i < psResearch->results.size(); i++)
+	{
+		auto& v = psResearch->results[i];
+		// Required members of research upgrades: "class", "parameter", "value"
+#define RS_GET_REQUIRED_RESULT_PROPERTY(resultVar, name, typecheckFuncName) \
+	auto resultVar = v.find(name); \
+	if (resultVar == v.end()) \
+	{ \
+		ASSERT(false, "Research(\"%s\").results[%zu]: Missing required parameter: \"%s\"", psResearch->id.toUtf8().c_str(), i, name); \
+		continue; \
+	} \
+	if (!resultVar->typecheckFuncName()) \
+	{ \
+		ASSERT(false, "Research(\"%s\").results[%zu][\"%s\"]: Unexpected value type: \"%s\"", psResearch->id.toUtf8().c_str(), i, name, resultVar->type_name()); \
+		continue; \
+	}
+		RS_GET_REQUIRED_RESULT_PROPERTY(it_ctype, "class", is_string)
+		RS_GET_REQUIRED_RESULT_PROPERTY(it_parameter, "parameter", is_string)
+		RS_GET_REQUIRED_RESULT_PROPERTY(it_value, "value", is_number_integer)
+		std::string ctype = it_ctype->get<std::string>();
+		std::string parameter = it_parameter->get<std::string>();
+		int64_t value = it_value->get<int64_t>();
+		auto it_filterparam = v.find("filterParameter"); // optional
+		auto it_filtervalue = v.find("filterValue"); // required if "filterParameter" is specified
+		if (it_filterparam != v.end())
+		{
+			if (!it_filterparam->is_string())
+			{
+				ASSERT(false, "Research(\"%s\").results[%zu][\"%s\"]: Unexpected value type: \"%s\"", psResearch->id.toUtf8().c_str(), i, "filterParameter", it_parameter->type_name());
+				continue;
+			}
+			if (it_filtervalue == v.end())
+			{
+				// ERROR: Supplied a filterParameter but not a filterValue
+				ASSERT(false, "Research(\"%s\").results[%zu]: Missing \"%s\" property (required when \"filterParameter\" is specified)", psResearch->id.toUtf8().c_str(), i, "filterParameter");
+				continue;
+			}
+		}
+		debug(LOG_RESEARCH, "    RESULT : class=\"%s\" parameter=\"%s\" value=%" PRIi64 " filter=\"%s\" filterval=%s", ctype.c_str(), parameter.c_str(), value, (it_filterparam != v.end()) ? it_filterparam->get<std::string>().c_str() : "", (it_filtervalue != v.end()) ? it_filtervalue->dump().c_str() : "");
+
+		auto pPlayerEntityClass = cachedPerPlayerUpgrades[player].find(ctype);
+		if (!pPlayerEntityClass)
+		{
+			ASSERT(pPlayerEntityClass, "Unknown entity class: %s", ctype.c_str());
+			continue;
+		}
+		bool isBodyClass = ctype == "Body";
+		bool isWeaponClass = ctype == "Weapon";
+		for (auto cname : *pPlayerEntityClass) // iterate over all components of this type
+		{
+			const auto statsEntityClassObj = cachedStatsObject.find(ctype);
+			if (statsEntityClassObj == cachedStatsObject.end())
+			{
+				ASSERT(false, "Parameter \"%s\" does not exist in Stats[%s][%s] ?", parameter.c_str(), ctype.c_str(), cname.first.c_str());
+				continue;
+			}
+			const auto statsEntityObj = statsEntityClassObj->find(cname.first);
+			if (statsEntityObj == statsEntityClassObj->end())
+			{
+				ASSERT(false, "Parameter \"%s\" does not exist in Stats[%s][%s] ?", parameter.c_str(), ctype.c_str(), cname.first.c_str());
+				continue;
+			}
+
+			if (it_filterparam != v.end())
+			{
+				// more specific filter
+				std::string filterparam = it_filterparam.value().get<std::string>();
+				const auto pStatsFilterParameterValue = statsEntityObj->find(filterparam);
+				if (pStatsFilterParameterValue == statsEntityObj->end())
+				{
+					// Did not find filter parameter
+					continue;
+				}
+				if (!((*pStatsFilterParameterValue) == it_filtervalue.value()))
+				{
+					// Non-matching filter parameter
+					continue;
+				}
+			}
+
+			const auto pStatsParameterValue = statsEntityObj->find(parameter);
+			if (pStatsParameterValue == statsEntityObj->end())
+			{
+				// Did not find it??
+				ASSERT(false, "Parameter \"%s\" does not exist in Stats[%s][%s] ?", parameter.c_str(), ctype.c_str(), cname.first.c_str());
+				continue;
+			}
+
+			if (pStatsParameterValue->is_array()) // (ex. modifying "RankThresholds")
+			{
+				nlohmann::json dst = cname.second.getPropertyValue(temp_no_throw_context, parameter);
+				if (!dst.is_array() || (dst.size() != pStatsParameterValue->size()))
+				{
+					// The Upgrades parameter unexpectedly is not an array, or not the same array size
+					ASSERT(false, "Upgrades parameter \"%s\" value (type %s) does not match Stats[%s][%s] value type (%s) or size (%zu)", parameter.c_str(), dst.type_name(), ctype.c_str(), cname.first.c_str(), pStatsParameterValue->type_name(), pStatsParameterValue->size());
+					continue;
+				}
+				for (size_t x = 0; x < dst.size(); x++)
+				{
+					const auto& statsOriginalValueX = pStatsParameterValue->at(x);
+					if (!statsOriginalValueX.is_number_integer())
+					{
+						ASSERT(false, "Unexpected parameter \"%s[%zu]\" value type (%s) in Stats[%s][%s]", parameter.c_str(), x, pStatsParameterValue->type_name(), ctype.c_str(), cname.first.c_str());
+						continue;
+					}
+					const auto& currentUpgradesValue_json = dst[x];
+					if (!currentUpgradesValue_json.is_number_integer())
+					{
+						// The Upgrades parameter unexpectedly is not an integer
+						ASSERT(false, "Upgrades parameter \"%s[%zu]\" value type (%s) does not match Stats[%s][%s] value type (%s)", parameter.c_str(), x, currentUpgradesValue_json.type_name(), ctype.c_str(), cname.first.c_str(), pStatsParameterValue->type_name());
+						continue;
+					}
+					int64_t currentUpgradesValue = currentUpgradesValue_json.get<int64_t>();
+					int64_t newUpgradesChange = iDivCeil((statsOriginalValueX.get<int64_t>() * value), 100);
+					int64_t newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
+					if (currentUpgradesValue_json.is_number_unsigned())
+					{
+						// original was unsigned integer - round anything less than 0 up to 0
+						newUpgradesValue = std::max<int64_t>(newUpgradesValue, 0);
+						dst[x] = static_cast<uint64_t>(newUpgradesValue);
+					}
+					else
+					{
+						dst[x] = newUpgradesValue;
+					}
+				}
+				cname.second.setPropertyValue(temp_no_throw_context, parameter, dst);
+				debug(LOG_RESEARCH, "    upgraded to : %s", dst.dump().c_str());
+			}
+			else if (pStatsParameterValue->is_number_integer())
+			{
+				const int64_t statsOriginalValue = pStatsParameterValue->get<int64_t>();
+				if (statsOriginalValue <= 0) // only applies if stat has above zero value already
+				{
+					continue;
+				}
+				nlohmann::json currentUpgradesValue_json = cname.second.getPropertyValue(temp_no_throw_context, parameter);
+				if (!currentUpgradesValue_json.is_number_integer())
+				{
+					// The Upgrades parameter unexpectedly is not an integer
+					ASSERT(false, "Upgrades parameter \"%s\" value type (%s) does not match Stats[%s][%s] value type (%s)", parameter.c_str(), currentUpgradesValue_json.type_name(), ctype.c_str(), cname.first.c_str(), pStatsParameterValue->type_name());
+					continue;
+				}
+				int64_t currentUpgradesValue = currentUpgradesValue_json.get<int64_t>();
+				int64_t newUpgradesChange = iDivCeil((statsOriginalValue * value), 100);
+				int64_t newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
+				if (currentUpgradesValue_json.is_number_unsigned())
+				{
+					// original was unsigned integer - round anything less than 0 up to 0
+					newUpgradesValue = std::max<int64_t>(newUpgradesValue, 0);
+					cname.second.setPropertyValue(temp_no_throw_context, parameter, static_cast<uint64_t>(newUpgradesValue));
+				}
+				else
+				{
+					cname.second.setPropertyValue(temp_no_throw_context, parameter, newUpgradesValue);
+				}
+				debug(LOG_RESEARCH, "      upgraded \"%s\" to %" PRIi64 " by %" PRIi64 "", cname.first.c_str(), newUpgradesValue, newUpgradesChange);
+				if (isWeaponClass)
+				{
+					auto impactClass = statsEntityObj->find("ImpactClass");
+					if (impactClass != statsEntityObj->end())
+					{
+						tempStats.numWeaponImpactClassUpgrades[impactClass->get<std::string>()]++;
+					}
+					else
+					{
+						ASSERT(false, "Did not find expected \"ImpactClass\" member in Stats[%s][%s]", ctype.c_str(), cname.first.c_str());
+					}
+				}
+				else if (isBodyClass && parameter == "Armour")
+				{
+					auto bodyClass = statsEntityObj->find("BodyClass");
+					if (bodyClass != statsEntityObj->end())
+					{
+						tempStats.numBodyClassArmourUpgrades[bodyClass->get<std::string>()]++;
+					}
+					else
+					{
+						ASSERT(false, "Did not find expected \"BodyClass\" member in Stats[%s][%s]", ctype.c_str(), cname.first.c_str());
+					}
+				}
+				else if (isBodyClass && parameter == "Thermal")
+				{
+					auto bodyClass = statsEntityObj->find("BodyClass");
+					if (bodyClass != statsEntityObj->end())
+					{
+						tempStats.numBodyClassThermalUpgrades[bodyClass->get<std::string>()]++;
+					}
+					else
+					{
+						ASSERT(false, "Did not find expected \"BodyClass\" member in Stats[%s][%s]", ctype.c_str(), cname.first.c_str());
+					}
+				}
+			}
+			else
+			{
+				// unexpected type
+				// Research stats / upgrades are not supposed to expose non-integer types, as the core stats / game state calculations must use integer arithmetic
+				ASSERT(false, "Unexpected parameter \"%s\" value type (%s) in Stats[%s][%s]", parameter.c_str(), pStatsParameterValue->type_name(), ctype.c_str(), cname.first.c_str());
+				continue;
+			}
+		}
+	}
+
+	// accumulate stats
+	for (auto& bodyClassUpgrades : tempStats.numBodyClassArmourUpgrades)
+	{
+		const auto& bodyClass = bodyClassUpgrades.first;
+		if (bodyClassUpgrades.second > 0)
+		{
+			playerUpgradeCounts[player].numBodyClassArmourUpgrades[bodyClass]++;
+			debug(LOG_RESEARCH, "  Player[%d], Armour[%s] grade: %" PRIu32 "", player, bodyClass.c_str(), playerUpgradeCounts[player].numBodyClassArmourUpgrades[bodyClass]);
+		}
+	}
+	for (auto& bodyClassUpgrades : tempStats.numBodyClassThermalUpgrades)
+	{
+		const auto& bodyClass = bodyClassUpgrades.first;
+		if (bodyClassUpgrades.second > 0)
+		{
+			playerUpgradeCounts[player].numBodyClassThermalUpgrades[bodyClass]++;
+			debug(LOG_RESEARCH, "  Player[%d], Thermal[%s] grade: %" PRIu32 "", player, bodyClass.c_str(), playerUpgradeCounts[player].numBodyClassThermalUpgrades[bodyClass]);
+		}
+	}
+	for (auto& weaponUpgrades : tempStats.numWeaponImpactClassUpgrades)
+	{
+		const auto& impactClass = weaponUpgrades.first;
+		if (weaponUpgrades.second > 0)
+		{
+			playerUpgradeCounts[player].numWeaponImpactClassUpgrades[impactClass]++;
+			debug(LOG_RESEARCH, "  Player[%d], Weapon[%s] grade: %" PRIu32 "", player, impactClass.c_str(), playerUpgradeCounts[player].numWeaponImpactClassUpgrades[impactClass]);
+		}
+	}
+}
+
+static void makeComponentRedundant(UBYTE &state)
+{
+	switch (state)
+	{
+	case AVAILABLE:
+		state = REDUNDANT;
+		break;
+	case UNAVAILABLE:
+		state = REDUNDANT_UNAVAILABLE;
+		break;
+	case FOUND:
+		state = REDUNDANT_FOUND;
+		break;
+	}
+}
+
+static void makeComponentAvailable(UBYTE &state)
+{
+	switch (state)
+	{
+	case UNAVAILABLE:
+	case FOUND:
+		state = AVAILABLE;
+		break;
+	case REDUNDANT_UNAVAILABLE:
+	case REDUNDANT_FOUND:
+		state = REDUNDANT;
+		break;
+	}
 }
 
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
-	RESEARCH                                       *pResearch = &asResearch[researchIndex];
+	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
+
+	RESEARCH                    *pResearch = &asResearch[researchIndex];
 	MESSAGE						*pMessage;
 	//the message gets sent to console
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
-
-	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
 
 	syncDebug("researchResult(%u, %u, …)", researchIndex, player);
 
@@ -505,16 +959,13 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	//check for structures to be made available
 	for (unsigned short pStructureResult : pResearch->pStructureResults)
 	{
-		if (apStructTypeLists[player][pStructureResult] != REDUNDANT)
-		{
-			apStructTypeLists[player][pStructureResult] = AVAILABLE;
-		}
+		makeComponentAvailable(apStructTypeLists[player][pStructureResult]);
 	}
 
 	//check for structures to be made redundant
 	for (unsigned short pRedStruct : pResearch->pRedStructs)
 	{
-		apStructTypeLists[player][pRedStruct] = REDUNDANT;
+		makeComponentRedundant(apStructTypeLists[player][pRedStruct]);
 	}
 
 	//check for component replacement
@@ -524,7 +975,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		{
 			COMPONENT_STATS *pOldComp = ri.pOldComponent;
 			replaceComponent(ri.pNewComponent, pOldComp, player);
-			apCompLists[player][pOldComp->compType][pOldComp->index] = REDUNDANT;
+			makeComponentRedundant(apCompLists[player][pOldComp->compType][pOldComp->index]);
 		}
 	}
 
@@ -535,10 +986,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		COMPONENT_TYPE type = componentResult->compType;
 		//set the component state to AVAILABLE
 		int compInc = componentResult->index;
-		if (apCompLists[player][type][compInc] != REDUNDANT)
-		{
-			apCompLists[player][type][compInc] = AVAILABLE;
-		}
+		makeComponentAvailable(apCompLists[player][type][compInc]);
 		//check for default sensor
 		if (type == COMP_SENSOR && (asSensorStats + compInc)->location == LOC_DEFAULT)
 		{
@@ -561,7 +1009,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	for (auto &pRedArtefact : pResearch->pRedArtefacts)
 	{
 		COMPONENT_TYPE type = pRedArtefact->compType;
-		apCompLists[player][type][pRedArtefact->index] = REDUNDANT;
+		makeComponentRedundant(apCompLists[player][type][pRedArtefact->index]);
 	}
 
 	//Add message to player's list if Major Topic
@@ -592,21 +1040,17 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	if (player == selectedPlayer && bDisplay)
 	{
 		//add console text message
-		if (pResearch->pViewData != nullptr)
-		{
-			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(pResearch->pViewData->textMsg[0].toUtf8().c_str()));
-			addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		else
-		{
-			addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		}
+		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(getStatsName(pResearch)));
+		addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 	if (psResearchFacility)
 	{
 		psResearchFacility->pFunctionality->researchFacility.psSubject = nullptr;		// Make sure topic is cleared
 	}
+
+	eventResearchedHandleUpgrades(pResearch, psResearchFacility, player);
+
 	triggerEventResearched(pResearch, psResearchFacility, player);
 }
 
@@ -625,6 +1069,9 @@ void ResearchRelease()
 	{
 		i.clear();
 	}
+	cachedStatsObject = nlohmann::json(nullptr);
+	cachedPerPlayerUpgrades.clear();
+	playerUpgradeCounts = std::vector<PlayerUpgradeCounts>(MAX_PLAYERS);
 }
 
 /*puts research facility on hold*/
@@ -685,6 +1132,7 @@ void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 void CancelAllResearch(UDWORD pl)
 {
 	STRUCTURE	*psCurr;
+	if (pl >= MAX_PLAYERS) { return; }
 
 	for (psCurr = apsStructLists[pl]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
@@ -709,7 +1157,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	UDWORD              topicInc;
 	PLAYER_RESEARCH	    *pPlayerRes;
 
-	ASSERT_OR_RETURN(, psBuilding->pStructureType->type == REF_RESEARCH, "Structure not a research facility");
+	ASSERT_OR_RETURN(, psBuilding->pStructureType && psBuilding->pStructureType->type == REF_RESEARCH, "Structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 	if (!(RESEARCH *)psResFac->psSubject)
@@ -869,79 +1317,6 @@ static UWORD setIconID(const char *pIconName, const char *pName)
 	return NO_RESEARCH_ICON;	// Should never get here.
 }
 
-
-SDWORD	mapRIDToIcon(UDWORD rid)
-{
-	switch (rid)
-	{
-	case RID_ROCKET:
-		return (IMAGE_ROCKET);
-		break;
-	case RID_CANNON:
-		return (IMAGE_CANNON);
-		break;
-	case RID_HOVERCRAFT:
-		return (IMAGE_HOVERCRAFT);
-		break;
-	case RID_ECM:
-		return (IMAGE_ECM);
-		break;
-	case RID_PLASCRETE:
-		return (IMAGE_PLASCRETE);
-		break;
-	case RID_TRACKS:
-		return (IMAGE_TRACKS);
-		break;
-	case RID_DROIDTECH:
-		return (IMAGE_RES_DROIDTECH);
-		break;
-	case RID_WEAPONTECH:
-		return (IMAGE_RES_WEAPONTECH);
-		break;
-	case RID_COMPUTERTECH:
-		return (IMAGE_RES_COMPUTERTECH);
-		break;
-	case RID_POWERTECH:
-		return (IMAGE_RES_POWERTECH);
-		break;
-	case RID_SYSTEMTECH:
-		return (IMAGE_RES_SYSTEMTECH);
-		break;
-	case RID_STRUCTURETECH:
-		return (IMAGE_RES_STRUCTURETECH);
-		break;
-	case RID_CYBORGTECH:
-		return (IMAGE_RES_CYBORGTECH);
-		break;
-	case RID_DEFENCE:
-		return (IMAGE_RES_DEFENCE);
-		break;
-	case RID_QUESTIONMARK:
-		return (IMAGE_RES_QUESTIONMARK);
-		break;
-	case RID_GRPACC:
-		return (IMAGE_RES_GRPACC);
-		break;
-	case RID_GRPUPG:
-		return (IMAGE_RES_GRPUPG);
-		break;
-	case RID_GRPREP:
-		return (IMAGE_RES_GRPREP);
-		break;
-	case RID_GRPROF:
-		return (IMAGE_RES_GRPROF);
-		break;
-	case RID_GRPDAM:
-		return (IMAGE_RES_GRPDAM);
-		break;
-
-	default:
-		ASSERT(false, "Weirdy mapping request for RID to icon");
-		return (-1); //pass back a value that can never have been set up
-		break;
-	}
-}
-
 SDWORD	mapIconToRID(UDWORD iconID)
 {
 	switch (iconID)
@@ -1031,6 +1406,8 @@ RESEARCH *getResearch(const char *pName)
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
                              UBYTE player)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
+
 	COMPONENT_TYPE oldType = pOldComponent->compType;
 	int oldCompInc = pOldComponent->index;
 	COMPONENT_TYPE newType = pNewComponent->compType;
@@ -1045,11 +1422,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	replaceDroidComponent(apsDroidLists[player], oldType, oldCompInc, newCompInc);
 	replaceDroidComponent(mission.apsDroidLists[player], oldType, oldCompInc, newCompInc);
 	replaceDroidComponent(apsLimboDroids[player], oldType, oldCompInc, newCompInc);
-
-	//check thru the templates
-	for (auto &keyvaluepair : droidTemplates[player])
-	{
-		DROID_TEMPLATE *psTemplates = keyvaluepair.second;
+	const auto replaceComponentInTemplate = [oldType, oldCompInc, newCompInc](DROID_TEMPLATE* psTemplates) {
 		switch (oldType)
 		{
 		case COMP_BODY:
@@ -1076,10 +1449,26 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 		default:
 			//unknown comp type
 			debug(LOG_ERROR, "Unknown component type - invalid Template");
-			return;
+			return true;
+		}
+		return true;
+	};
+	//check thru the templates
+	enumerateTemplates(player, replaceComponentInTemplate);
+	// also check build queues
+	STRUCTURE *psNBuilding = nullptr;
+	for (STRUCTURE *psCBuilding = apsStructLists[player]; psCBuilding != nullptr; psCBuilding = psNBuilding)
+	{
+		/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
+		psNBuilding = psCBuilding->psNext;
+		if ((psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_FACTORY ||
+			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_CYBORG_FACTORY ||
+			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_VTOL_FACTORY) &&
+			psCBuilding->pFunctionality->factory.psSubject != nullptr)
+		{
+			replaceComponentInTemplate(psCBuilding->pFunctionality->factory.psSubject);
 		}
 	}
-
 	replaceStructureComponent(apsStructLists[player], oldType, oldCompInc, newCompInc, player);
 	replaceStructureComponent(mission.apsStructLists[player], oldType, oldCompInc, newCompInc, player);
 }
@@ -1092,7 +1481,7 @@ static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 	{
 
 		ASSERT_OR_RETURN(false, asResearch[inc].id.compare(psResearch->id) != 0,
-		                 "Research name has already been used - %s", getName(psResearch));
+		                 "Research name has already been used - %s", getStatsName(psResearch));
 	}
 	return true;
 }
@@ -1104,11 +1493,12 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 	UDWORD				inc;
 
 	ASSERT_OR_RETURN(false, psResearch, "No such research topic");
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu32 "", player);
 
 	inc = psResearch->index;
 	if (inc > asResearch.size())
 	{
-		ASSERT(false, "enableResearch: Invalid research topic - %s", getName(psResearch));
+		ASSERT(false, "enableResearch: Invalid research topic - %s", getStatsName(psResearch));
 		return false;
 	}
 
@@ -1141,7 +1531,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			if (psFacility->psBestTopic)
 			{
 				topicIndex = ((RESEARCH *)psFacility->psBestTopic)->ref - STAT_RESEARCH;
-				if (topicIndex)
+				if (topicIndex && !IsResearchCompleted(&asPlayerResList[rewardPlayer][topicIndex]))
 				{
 					//if it cost more - it is better (or should be)
 					if (researchPoints < asResearch[topicIndex].researchPoints)
@@ -1164,7 +1554,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			//name the actual reward
 			CONPRINTF("%s :- %s",
 			                          _("Research Award"),
-			                          getName(&asResearch[rewardID]));
+			                          getStatsName(&asResearch[rewardID]));
 		}
 	}
 }
@@ -1172,27 +1562,15 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 /*flag self repair so droids can start when idle*/
 void enableSelfRepair(UBYTE player)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
 	bSelfRepair[player] = true;
 }
 
 /*check to see if any research has been completed that enables self repair*/
 bool selfRepairEnabled(UBYTE player)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
 	if (bSelfRepair[player])
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-/*checks the stat to see if its of type wall or defence*/
-bool wallDefenceStruct(STRUCTURE_STATS *psStats)
-{
-	if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_GATE
-	    || psStats->type == REF_WALLCORNER || psStats->type == REF_GENERIC)
 	{
 		return true;
 	}
@@ -1338,6 +1716,11 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 	static uint32_t lastGameTime = ~0;
 	static std::map<unsigned, std::vector<AllyResearch>> researches;
 	static const std::vector<AllyResearch> noAllyResearch;
+
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return noAllyResearch;
+	}
 
 	if (gameTime != lastGameTime)
 	{

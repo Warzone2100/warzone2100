@@ -142,7 +142,7 @@ struct DROID : public BASE_OBJECT
 	/* Action data */
 	DROID_ACTION    action;
 	Vector2i        actionPos;
-	BASE_OBJECT    *psActionTarget[MAX_WEAPONS]; ///< Action target object
+	BASE_OBJECT    *psActionTarget[MAX_WEAPONS] = {}; ///< Action target object
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
 	UDWORD          expectedDamageDirect;                 ///< Expected damage to be caused by all currently incoming direct projectiles. This info is shared between all players,

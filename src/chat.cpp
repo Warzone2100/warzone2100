@@ -35,14 +35,18 @@ bool InGameChatMessage::isGlobal() const
 
 bool InGameChatMessage::shouldReceive(uint32_t playerIndex) const
 {
-	return isGlobal() || toPlayers.find(playerIndex) != toPlayers.end() || (toAllies && aiCheckAlliances(sender, playerIndex));
+	if ((playerIndex >= game.maxPlayers) && ((playerIndex >= NetPlay.players.size()) || (!NetPlay.players[playerIndex].allocated)))
+	{
+		return false;
+	}
+	return isGlobal() || toPlayers.find(playerIndex) != toPlayers.end() || (toAllies && sender < MAX_PLAYERS && playerIndex < MAX_PLAYERS && aiCheckAlliances(sender, playerIndex));
 }
 
 std::vector<uint32_t> InGameChatMessage::getReceivers() const
 {
 	std::vector<uint32_t> receivers;
 
-	for (auto playerIndex = 0; playerIndex < game.maxPlayers; playerIndex++)
+	for (auto playerIndex = 0; playerIndex < MAX_CONNECTED_PLAYERS; playerIndex++)
 	{
 		if (shouldReceive(playerIndex) && openchannels[playerIndex])
 		{
@@ -75,6 +79,10 @@ std::string InGameChatMessage::formatReceivers() const
 	while (directs != toPlayers.end())
 	{
 		auto nextName = getPlayerName(*directs++);
+		if (!nextName)
+		{
+			continue;
+		}
 		ss << (directs == toPlayers.end() ? _(" and ") : ", ");
 		ss << nextName;
 	}
@@ -117,7 +125,7 @@ void InGameChatMessage::sendToAiPlayer(uint32_t receiver)
 
 	uint32_t responsiblePlayer = whosResponsible(receiver);
 
-	if (responsiblePlayer >= MAX_PLAYERS)
+	if (responsiblePlayer >= MAX_PLAYERS && responsiblePlayer != NetPlay.hostPlayer)
 	{
 		debug(LOG_ERROR, "sendToAiPlayer() - responsiblePlayer >= MAX_PLAYERS");
 		return;
@@ -154,14 +162,69 @@ void InGameChatMessage::sendToAiPlayers()
 	}
 }
 
-void InGameChatMessage::addPlayerByPosition(uint32_t position)
+void InGameChatMessage::sendToSpectators()
 {
-	toPlayers.insert(findPlayerIndexByPosition(position));
+	if (!ingame.localOptionsReceived)
+	{
+		return;
+	}
+
+	char formatted[MAX_CONSOLE_STRING_LENGTH];
+	ssprintf(formatted, "%s (%s): %s", getPlayerName(sender), _("Spectators"), text);
+
+	if ((sender == selectedPlayer || shouldReceive(selectedPlayer)) && NetPlay.players[selectedPlayer].isSpectator) {
+		auto message = NetworkTextMessage(SPECTATOR_MESSAGE, formatted);
+		printInGameTextMessage(message);
+	}
+
+	for (auto receiver: getReceivers())
+	{
+		if (isHumanPlayer(receiver) && NetPlay.players[receiver].isSpectator && receiver != selectedPlayer)
+		{
+			ASSERT(!myResponsibility(receiver), "Should not be my responsibility...");
+			enqueueSpectatorMessage(NETnetQueue(receiver), formatted);
+		}
+	}
+}
+
+void InGameChatMessage::enqueueSpectatorMessage(NETQUEUE queue, char const* formattedMsg)
+{
+	NETbeginEncode(queue, NET_SPECTEXTMSG);
+	NETuint32_t(&sender);
+	NETstring(formattedMsg, MAX_CONSOLE_STRING_LENGTH);
+	NETend();
+}
+
+void InGameChatMessage::addReceiverByPosition(uint32_t playerPosition)
+{
+	int32_t playerIndex = findPlayerIndexByPosition(playerPosition);
+	if (playerIndex >= 0)
+	{
+		toPlayers.insert(playerIndex);
+	}
+}
+
+void InGameChatMessage::addReceiverByIndex(uint32_t playerIndex)
+{
+	toPlayers.insert(playerIndex);
 }
 
 void InGameChatMessage::send()
 {
-	sendToHumanPlayers();
-	sendToAiPlayers();
-	triggerEventChat(sender, sender, text);
+	if (NetPlay.players[selectedPlayer].isSpectator && !NetPlay.isHost)
+	{
+		sendToSpectators();
+	}
+	else
+	{
+		sendToHumanPlayers();
+		if (NetPlay.isHost && NetPlay.players[selectedPlayer].isSpectator)
+		{
+			// spectator hosts do get to send messages visible to all players,
+			// but not AI / scripts
+			return;
+		}
+		sendToAiPlayers();
+		triggerEventChat(sender, sender, text);
+	}
 }

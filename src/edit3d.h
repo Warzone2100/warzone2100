@@ -25,8 +25,6 @@
 
 #define TILE_RAISE	1
 #define TILE_LOWER	-1
-#define MAX_TILE_HEIGHT 255
-#define MIN_TILE_HEIGHT	0
 
 typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos, void *UserData);
 
@@ -42,7 +40,6 @@ uint16_t getBuildingDirection();
 void adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
 void raiseTile(int tile3dX, int tile3dY);
 void lowerTile(int tile3dX, int tile3dY);
-bool inHighlight(UDWORD realX, UDWORD realY);
 
 enum BuildState
 {
@@ -77,6 +74,7 @@ extern BUILDDETAILS	sBuildDetails;
 // May only call if sBuildDetails.psStats points to a STRUCTURE_STATS.
 static inline bool canLineBuild()
 {
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "selectedPlayer definitely can't line-build: %" PRIu32 "", selectedPlayer);
 	return ((STRUCTURE_STATS *)sBuildDetails.psStats)->upgrade[selectedPlayer].limit > 1;
 }
 

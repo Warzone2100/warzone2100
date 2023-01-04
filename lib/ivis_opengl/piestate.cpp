@@ -44,11 +44,11 @@
  *	Global Variables
  */
 
-static gfx_api::gfxFloat shaderStretch = 0;
 gfx_api::buffer* pie_internal::rectBuffer = nullptr;
 static RENDER_STATE rendStates;
-static int32_t ecmState = 0;
 static gfx_api::gfxFloat timeState = 0.0f;
+
+const Vector3f defaultSunPosition(225.0f, -600.0f, 450.0f);
 
 void rendStatesRendModeHack()
 {
@@ -87,14 +87,6 @@ void pie_EnableFog(bool val)
 	{
 		debug(LOG_FOG, "pie_EnableFog: Setting fog to %s", val ? "ON" : "OFF");
 		rendStates.fogEnabled = val;
-		if (val)
-		{
-			pie_SetFogColour(WZCOL_FOG);
-		}
-		else
-		{
-			pie_SetFogColour(WZCOL_BLACK); // clear background to black
-		}
 	}
 }
 
@@ -159,26 +151,6 @@ float pie_GetShaderTime()
 	return timeState;
 }
 
-void pie_SetShaderEcmEffect(bool value)
-{
-	ecmState = (int)value;
-}
-
-int pie_GetShaderEcmEffect()
-{
-	return ecmState;
-}
-
-void pie_SetShaderStretchDepth(float stretch)
-{
-	shaderStretch = stretch;
-}
-
-float pie_GetShaderStretchDepth()
-{
-	return shaderStretch;
-}
-
 /// Set the OpenGL fog start and end
 void pie_UpdateFogDistance(float begin, float end)
 {
@@ -208,4 +180,9 @@ int pie_GetMaxAntialiasing()
 {
 	int32_t maxSamples = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_SAMPLES);
 	return maxSamples;
+}
+
+const Vector3f& getDefaultSunPosition()
+{
+	return defaultSunPosition;
 }

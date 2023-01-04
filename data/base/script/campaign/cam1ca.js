@@ -2,6 +2,15 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const NEW_PARADIGM_RES = [
+	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
+	"R-Sys-Engineering01", "R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Cannon-Damage02",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Defense-WallUpgrade03","R-Struc-Materials03", "R-Vehicle-Engine02",
+	"R-Struc-RprFac-Upgrade02", "R-Wpn-Rocket-Damage01", "R-Wpn-Rocket-ROF03",
+	"R-Vehicle-Metals01", "R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-RocketSlow-Damage01", "R-Wpn-Mortar-ROF01",
+];
 const landingZoneList = [ "NPLZ1", "NPLZ2", "NPLZ3", "NPLZ4", "NPLZ5" ];
 const landingZoneMessages = [ "C1CA_LZ1", "C1CA_LZ2", "C1CA_LZ3", "C1CA_LZ4", "C1CA_LZ5" ];
 var blipActive;
@@ -13,7 +22,12 @@ var totalTransportLoads;
 function baseEstablished()
 {
 	//Now we check if there is stuff built here already from cam1-C.
-	if (camCountStructuresInArea("buildArea") >= 7)
+	var total = camCountStructuresInArea("buildArea") +
+				camCountStructuresInArea("buildArea2") +
+				camCountStructuresInArea("buildArea3") +
+				camCountStructuresInArea("buildArea4") +
+				camCountStructuresInArea("buildArea5");
+	if (total >= 7)
 	{
 		if (blipActive)
 		{
@@ -54,18 +68,21 @@ function sendTransport()
 	{
 		lastHeavy = true;
 	}
-	// find an LZ that is not compromised
 	var list = [];
 	var i = 0;
-	for (i = 0; i < landingZoneList.length; ++i)
+	// Randomly find an LZ that is not compromised
+	if (camRand(100) < 10)
 	{
-		var lz = landingZoneList[i];
-		if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
+		for (i = 0; i < landingZoneList.length; ++i)
 		{
-			list.push({ idx: i, label: lz });
+			var lz = landingZoneList[i];
+			if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
+			{
+				list.push({ idx: i, label: lz });
+			}
 		}
 	}
-	//If all are compromised then choose the LZ randomly
+	//If all are compromised (or not checking for compromised LZs) then choose the LZ randomly
 	if (list.length === 0)
 	{
 		for (i = 0; i < 2; ++i)
@@ -86,12 +103,12 @@ function sendTransport()
 	if (lastHeavy)
 	{
 		lastHeavy = false;
-		templates = [ cTempl.nppod, cTempl.nphmg, cTempl.npmrl, cTempl.npsmc ];
+		templates = [ cTempl.nppod, cTempl.nphmg, cTempl.npmrl, cTempl.npsmc, cTempl.npltat ];
 	}
 	else
 	{
 		lastHeavy = true;
-		templates = [ cTempl.npsmct, cTempl.npmor, cTempl.npsmc, cTempl.npmmct, cTempl.npmrl, cTempl.nphmg, cTempl.npsbb ];
+		templates = [ cTempl.npsmct, cTempl.npmor, cTempl.npsmc, cTempl.npmmct, cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npltat ];
 	}
 
 	var droids = [];
@@ -111,18 +128,23 @@ function sendTransport()
 		data: { regroup: true, count: -1, pos: "buildArea" }
 	});
 
-	totalTransportLoads = totalTransportLoads + 1;
+	totalTransportLoads += 1;
 }
 
 function startTransporterAttack()
 {
+	let attackTime = camMinutesToMilliseconds(2.2);
+	if (difficulty >= HARD)
+	{
+		attackTime = camChangeOnDiff(camMinutesToMilliseconds(2.2));
+	}
 	sendTransport();
-	setTimer("sendTransport", camChangeOnDiff(camMinutesToMilliseconds(2.2)));
+	setTimer("sendTransport", attackTime);
 }
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"));
+	camSetExtraObjectiveMessage(_("Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"));
 
 	totalTransportLoads = 0;
 	blipActive = false;
@@ -136,16 +158,16 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// make sure player doesn't build on enemy LZs
-	for (var i = 1; i <= 5; ++i)
+	for (let i = 1; i <= 5; ++i)
 	{
 		var ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,
 		// note: player 1 is NP
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
+		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 2);
 	}
 
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
-	camPlayVideos("MB1CA_MSG");
+	camPlayVideos({video: "MB1CA_MSG", type: CAMP_MSG});
 
 	// first transport after 10 seconds
 	queue("startTransporterAttack", camSecondsToMilliseconds(10));

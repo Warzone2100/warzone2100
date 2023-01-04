@@ -3,12 +3,12 @@
 
 //#pragma debug(on)
 
-uniform float stretch;
+uniform mat4 ProjectionMatrix;
 uniform mat4 ModelViewMatrix;
-uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 NormalMatrix;
 uniform int hasTangents; // whether tangents were calculated for model
 uniform vec4 lightPosition;
+uniform float stretch;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
@@ -34,16 +34,14 @@ varying vec2 texCoord;
 
 void main()
 {
-	vec3 vVertex = normalize((ModelViewMatrix * vertex).xyz);
-	vec4 position = vertex;
-
 	// Pass texture coordinates to fragment shader
 	texCoord = vertexTexCoord;
 
-	// Lighting -- we pass these to the fragment shader
+	// Lighting we pass to the fragment shader
+	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME
+	vec3 eyeVec = normalize(-viewVertex.xyz);
 	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	vec3 eyeVec = -vVertex;
-	lightDir = normalize(lightPosition.xyz - vVertex);
+	lightDir = normalize(lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
@@ -52,24 +50,23 @@ void main()
 		vec3 b = cross (n, t) * vertexTangent.w;
 		mat3 TangentSpaceMatrix = mat3(t, n, b);
 
-		// Transform calculated normals for vanilla models by tangent basis
-		n = n * TangentSpaceMatrix;
-
 		// Transform light and eye direction vectors by tangent basis
 		lightDir *= TangentSpaceMatrix;
 		eyeVec *= TangentSpaceMatrix;
 	}
 
 	normal = n;
-	halfVec = normalize(lightDir - eyeVec);
+	halfVec = lightDir + eyeVec;
 
 	// Implement building stretching to accommodate terrain
+	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
 		position.y -= stretch;
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * position;
 	gl_Position = gposition;
 

@@ -78,10 +78,11 @@ static size_t newPage(const char *name, int level, int width, int height, int co
 	if (texPage == pie_NumberOfPages())
 	{
 		// We need to create a new texture page; create it and increase texture table to store it
+		std::string textureDebugName = std::string("pageTexture::") + ((name) ? name : "");
 		pie_ReserveTexture(name, width, height);
 		pie_AssignTexture(texPage,
 			gfx_api::context::get().create_texture(mipmap_levels, width, height,
-				gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8));
+				gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, textureDebugName));
 	}
 	terrainPage = texPage;
 	return texPage;
@@ -120,6 +121,7 @@ bool texLoad(const char *fileName)
 		       (int)max_texture_size);
 		if (mipmap_levels == 0)
 		{
+			debug(LOG_FATAL, "Supported texture size %d is too low to load any mipmap levels!: %s", (int)max_texture_size, fileName);
 			exit(1);
 		}
 	}
@@ -179,13 +181,13 @@ bool texLoad(const char *fileName)
 		// Load until we cannot find anymore of them
 		for (k = 0; k < MAX_TILES; k++)
 		{
-			iV_Image tile;
+			std::unique_ptr<iV_Image> tile;
 
 			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d.png", partialPath, k);
 			if (PHYSFS_exists(fullPath)) // avoid dire warning
 			{
-				bool retval = iV_loadImage_PNG(fullPath, &tile);
-				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
+				tile = gfx_api::loadUncompressedImageFromFile(fullPath, gfx_api::texture_type::game_texture, -1, -1, true);
+				ASSERT_OR_RETURN(false, tile != nullptr, "Could not load %s!", fullPath);
 			}
 			else
 			{
@@ -194,8 +196,9 @@ bool texLoad(const char *fileName)
 				break;
 			}
 			// Insert into texture page
-			pie_Texture(texPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
-			free(tile.bmp);
+			pie_Texture(texPage).upload_sub(j, xOffset, yOffset, *tile);
+			tile->clear();
+			tile.reset();
 			if (i == mipmap_max) // dealing with main texture page; so register coordinates
 			{
 				tileTexInfo[k].uOffset = (float)xOffset / (float)xSize;

@@ -25,6 +25,7 @@
  */
 
 #include "frame.h"
+#include "wztime.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -33,9 +34,11 @@
 #include "wzapp.h"
 #include <map>
 #include <string>
+#include <regex>
 
 #if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
+#include <cxxabi.h>
 #endif // defined(WZ_OS_LINUX) && defined(__GLIBC__)
 
 #if defined(WZ_OS_UNIX)
@@ -52,7 +55,7 @@
 # include <stdio.h>
 #endif
 
-#define MAX_LEN_LOG_LINE 512
+#define MAX_LEN_LOG_LINE 1024
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
 UDWORD traceID = -1;
@@ -106,6 +109,9 @@ static const char *code_part_names[] =
 	"popup",
 	"console",
 	"activity",
+	"research",
+	"savegame",
+	"repairs",
 	"last"
 };
 
@@ -141,7 +147,7 @@ static code_part code_part_from_str(const char *str)
  * \param	data			Ignored. Use NULL.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer)
+void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer, code_part)
 {
 	if (outputBuffer[strlen(outputBuffer) - 1] != '\n')
 	{
@@ -166,8 +172,8 @@ void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer)
  * \param	data			Ignored. Use NULL.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-#if defined WIN32 && defined DEBUG
-void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuffer)
+#if defined(_WIN32) && defined(DEBUG)
+void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuffer, code_part)
 {
 	char tmpStr[MAX_LEN_LOG_LINE];
 
@@ -188,7 +194,7 @@ void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuf
  * \param	data			Filehandle to output to.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-void debug_callback_file(void **data, const char *outputBuffer)
+void debug_callback_file(void **data, const char *outputBuffer, code_part)
 {
 	FILE *logfile = (FILE *)*data;
 
@@ -200,6 +206,24 @@ void debug_callback_file(void **data, const char *outputBuffer)
 	{
 		fprintf(logfile, "%s", outputBuffer);
 	}
+}
+
+static WzString replaceUsernameInPath(WzString path)
+{
+	// Some common forms:
+	// C:\Users\<USERNAME>\... (Windows Vista+)
+	// C:\Documents and Settings\<USERNAME>\... (Windows XP)
+	// /Users/<USERNAME>/... (macOS)
+	// /home/<USERNAME>/... (Linux)
+
+	// First pass, do a simple string regex replacement
+	const auto win_re = std::regex("^[A-Za-z]:\\\\(Users|Documents and Settings)\\\\[^\\\\]+", std::regex_constants::ECMAScript);
+	auto result = std::regex_replace(path.toUtf8(), win_re, "[WIN_USER_FOLDER]");
+	const auto unix_re = std::regex("^\\/(Users|home)\\/[^\\/]+", std::regex_constants::ECMAScript);
+	result = std::regex_replace(result, unix_re, "[USER_HOME]");
+
+	// POSSIBLE FUTURE TODO: Do OS-specific handling where we query the "home"/user folder?
+	return WzString::fromUtf8(result);
 }
 
 char WZ_DBGFile[PATH_MAX] = {0};	//Used to save path of the created log file
@@ -225,13 +249,13 @@ bool debug_callback_file_init(void **data)
 	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, WZDebugfilename.toUtf8().c_str(), -1, NULL, 0);
 	if (wstr_len <= 0)
 	{
-		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
+		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %lu: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
 		return false;
 	}
 	std::vector<wchar_t> wstr_filename(wstr_len, 0);
 	if (MultiByteToWideChar(CP_UTF8, 0, WZDebugfilename.toUtf8().c_str(), -1, &wstr_filename[0], wstr_len) == 0)
 	{
-		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
+		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %lu: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
 		return false;
 	}
 	FILE *const logfile = _wfopen(&wstr_filename[0], L"w");
@@ -252,7 +276,8 @@ bool debug_callback_file_init(void **data)
 #endif
 	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename.toUtf8().c_str());
 	setbuf(logfile, nullptr);
-	fprintf(logfile, "--- Starting log [%s]---\n", WZDebugfilename.toUtf8().c_str());
+	WzString fileNameStripped = replaceUsernameInPath(WZDebugfilename);
+	fprintf(logfile, "--- Starting log [%s]---\n", fileNameStripped.toUtf8().c_str());
 	*data = logfile;
 
 	return true;
@@ -278,7 +303,7 @@ void debugFlushStderr()
 	debug_flush_stderr = true;
 }
 // MSVC specific rotuines to set/clear allocation tracking
-#if defined(WZ_CC_MSVC) && defined(DEBUG)
+#if defined(_MSC_VER) && defined(DEBUG)
 void debug_MEMCHKOFF()
 {
 	// Disable allocation tracking
@@ -405,14 +430,14 @@ bool debug_enable_switch(const char *str)
  *
  *  @param str The string to send to debug callbacks.
  */
-static void printToDebugCallbacks(const char *const str)
+static void printToDebugCallbacks(const char *const str, code_part part)
 {
 	debug_callback *curCallback;
 
 	// Loop over all callbacks, invoking them with the given data string
 	for (curCallback = callbackRegistry; curCallback != nullptr; curCallback = curCallback->next)
 	{
-		curCallback->callback(&curCallback->data, str);
+		curCallback->callback(&curCallback->data, str, part);
 	}
 }
 
@@ -427,7 +452,7 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	va_end(ap);
 
 	ssprintf(outputBuffer, "[%6d]: [%s] %s", id, function, vaBuffer);
-	printToDebugCallbacks(outputBuffer);
+	printToDebugCallbacks(outputBuffer, LOG_INFO);
 }
 
 // Thread local to prevent a race condition on read and write to this buffer if multiple
@@ -492,7 +517,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			{
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer);
+			printToDebugCallbacks(outputBuffer, part);
 			prev = repeated;
 			next *= 2;
 		}
@@ -511,7 +536,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			{
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer);
+			printToDebugCallbacks(outputBuffer, part);
 		}
 		repeated = 0;
 		next = 2;
@@ -525,17 +550,13 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		char ourtime[15];		//HH:MM:SS
 
 		time(&rawtime);
-#if defined(WZ_OS_WIN)
-		localtime_s(&timeinfo, &rawtime);
-#else
-		localtime_r(&rawtime, &timeinfo);
-#endif
+		timeinfo = getLocalTime(rawtime);
 		strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
 
 		// Assemble the outputBuffer:
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 
-		printToDebugCallbacks(outputBuffer);
+		printToDebugCallbacks(outputBuffer, part);
 
 		if (part == LOG_ERROR)
 		{
@@ -549,15 +570,15 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		{
 			if (wzIsFullscreen())
 			{
-				wzToggleFullscreen();
+				wzChangeWindowMode(WINDOW_MODE::windowed);
 			}
 #if defined(WZ_OS_WIN)
-			char wbuf[1024];
+			char wbuf[MAX_LEN_LOG_LINE+512];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
 				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
 			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
 #elif defined(WZ_OS_MAC)
-			char wbuf[1024];
+			char wbuf[MAX_LEN_LOG_LINE+128];
 			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 			int clickedIndex = \
 			                   cocoaShowAlert("Warzone has quit unexpectedly.",
@@ -612,9 +633,33 @@ void _debugBacktrace(code_part part)
 	unsigned num = backtrace(btv, sizeof(btv) / sizeof(*btv));
 	char **btc = backtrace_symbols(btv, num);
 	unsigned i;
-	for (i = 1; i + 2 < num; ++i)  // =1: Don't print "src/warzone2100(syncDebugBacktrace+0x16) [0x6312d1]". +2: Don't print last two lines of backtrace such as "/lib/libc.so.6(__libc_start_main+0xe6) [0x7f91e040ea26]", since the address varies (even with the same binary).
+	auto trim = [](const char *in, char *out) {
+		const char *begin = strchr(in, '_');
+		if (begin)
+		{
+			const char *end = strchr(begin, '+');
+			if (end)
+			{
+				memcpy(out, begin, end - begin);
+				out[end - begin] = '\0';
+			}
+		}
+	};
+	for (i = 1; i + 2 < num; ++i) 
 	{
-		_debug(0, part, "BT", "%s", btc[i]);
+		int status = -1;
+		char buf[1024];
+		const char *p = btc[i];
+		trim(p, buf);
+		char *readableName = abi::__cxa_demangle(buf, NULL, NULL, &status);
+		if (status == 0)
+		{
+			_debug(0, part, "BT", "%s", readableName);
+		}
+		else
+		{
+			_debug(0, part, "BT", "%s [status: %i]", btc[i], status);
+		}
 	}
 	free(btc);
 #else

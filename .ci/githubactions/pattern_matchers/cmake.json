@@ -1,0 +1,19 @@
+{
+	"problemMatcher": [
+		{
+			"owner": "cmake",
+			"pattern": [
+				{
+					"regexp": "^\\s*CMake (Error|Warning) at (.+):(\\d+)\\s*(.*)?:",
+					"severity": 1,
+					"file": 2,
+					"line": 3
+				},
+				{
+					"regexp": "^\\s+(.*)$",
+					"message": 1
+				}
+			]
+		}
+	]
+}

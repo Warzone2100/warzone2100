@@ -52,6 +52,11 @@
 #include "qtscript.h"
 #include "wrappers.h"
 #include "activity.h"
+#include <wzmaplib/map_package.h>
+
+#include <unordered_set>
+
+#include "3rdparty/gsl_finally.h"
 
 extern int lev_get_lineno();
 extern char *lev_get_text();
@@ -72,7 +77,7 @@ static LEVEL_DATASET	*psBaseData = nullptr;
 static LEVEL_DATASET	*psCurrLevel = nullptr;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = { LEVEL_TYPE::LDS_COMPLETE, 0, 0, nullptr, mod_clean, {nullptr}, nullptr, nullptr, nullptr, {{0}}};
+static LEVEL_DATASET	sSingleWRF = { LEVEL_TYPE::LDS_COMPLETE, 0, 0, nullptr, mod_clean, {nullptr}, nullptr, nullptr, nullptr, {{0}}, nullptr};
 
 // return values from the lexer
 char *pLevToken;
@@ -109,22 +114,28 @@ SDWORD getLevelLoadType()
 	return levelLoadType;
 }
 
+static inline void freeLevel(LEVEL_DATASET* toDelete)
+{
+	for (auto &apDataFile : toDelete->apDataFiles)
+	{
+		if (apDataFile != nullptr)
+		{
+			free(apDataFile);
+		}
+	}
+
+	free(toDelete->pName);
+	free(toDelete->realFileName);
+	free(toDelete->customMountPoint);
+	free(toDelete);
+}
+
 // shutdown the level system
 void levShutDown()
 {
 	for (auto toDelete : psLevels)
 	{
-		for (auto &apDataFile : toDelete->apDataFiles)
-		{
-			if (apDataFile != nullptr)
-			{
-				free(apDataFile);
-			}
-		}
-
-		free(toDelete->pName);
-		free(toDelete->realFileName);
-		free(toDelete);
+		freeLevel(toDelete);
 	}
 	psLevels.clear();
 }
@@ -161,6 +172,61 @@ LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 	return nullptr;
 }
 
+LEVEL_DATASET *levFindDataSetByRealFileName(char const *realFileName, Sha256 const *hash)
+{
+	if (hash != nullptr && hash->isZero())
+	{
+		hash = nullptr;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
+	}
+
+	for (auto psNewLevel : psLevels)
+	{
+		if (psNewLevel->realFileName && strcmp(psNewLevel->realFileName, realFileName) == 0)
+		{
+			if (hash == nullptr || levGetFileHash(psNewLevel) == *hash)
+			{
+				return psNewLevel;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+bool levRemoveDataSetByRealFileName(char const *realFileName, Sha256 const *hash)
+{
+	if (hash != nullptr && hash->isZero())
+	{
+		hash = nullptr;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
+	}
+
+	size_t numRemoved = 0;
+	for (auto it = psLevels.begin(); it != psLevels.end();)
+	{
+		LEVEL_DATASET *level = *it;
+		if (level && level->realFileName && strcmp(level->realFileName, realFileName) == 0)
+		{
+			if (hash == nullptr || levGetFileHash(level) == *hash)
+			{
+				if (psCurrLevel == *it)
+				{
+					ASSERT(false, "Trying to remove what is still the current level");
+					continue;
+				}
+
+				LEVEL_DATASET* toDelete = *it;
+				it = psLevels.erase(it);
+				freeLevel(toDelete);
+				++numRemoved;
+				continue;
+			}
+		}
+		++it;
+	}
+
+	return numRemoved > 0;
+}
+
 Sha256 levGetFileHash(LEVEL_DATASET *level)
 {
 	if (level->realFileName != nullptr && level->realFileHash.isZero())
@@ -169,6 +235,21 @@ Sha256 levGetFileHash(LEVEL_DATASET *level)
 		debug(LOG_WZ, "Hash of file \"%s\" is %s.", level->realFileName, level->realFileHash.toString().c_str());
 	}
 	return level->realFileHash;
+}
+
+bool levSetFileHashByRealFileName(char const *realFileName, Sha256 const &hash)
+{
+	size_t numAffected = 0;
+	for (auto psNewLevel : psLevels)
+	{
+		if (psNewLevel && psNewLevel->realFileName && strcmp(psNewLevel->realFileName, realFileName) == 0)
+		{
+			ASSERT(psNewLevel->realFileHash.isZero(), "Level already has a hash??");
+			psNewLevel->realFileHash = hash;
+			++numAffected;
+		}
+	}
+	return numAffected > 0;
 }
 
 Sha256 levGetMapNameHash(char const *mapName)
@@ -184,10 +265,110 @@ Sha256 levGetMapNameHash(char const *mapName)
 	return levGetFileHash(level);
 }
 
+LEVEL_DATASET* levFindBaseTileset(MAP_TILESET tileset)
+{
+	switch (tileset)
+	{
+		case MAP_TILESET::ARIZONA:
+			return levFindDataSet("MULTI_CAM_1");
+		case MAP_TILESET::URBAN:
+			return levFindDataSet("MULTI_CAM_2");
+		case MAP_TILESET::ROCKIES:
+			return levFindDataSet("MULTI_CAM_3");
+	}
+	return nullptr;
+}
+
+bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName)
+{
+	// start a new level data set
+	LEVEL_DATASET *psDataSet = (LEVEL_DATASET *)malloc(sizeof(LEVEL_DATASET));
+	if (!psDataSet)
+	{
+		debug(LOG_FATAL, "Out of memory");
+		abort();
+		return false;
+	}
+	memset(psDataSet, 0, sizeof(LEVEL_DATASET));
+	
+	psDataSet->players = 1;
+	psDataSet->game = -1;
+	psDataSet->dataDir = pathMode;
+	psDataSet->realFileName = realFileName != nullptr ? strdup(realFileName) : nullptr;
+	psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
+
+	WzMapPhysFSIO mapIO(mountPoint);
+	auto levelDetails = WzMap::loadLevelDetails_JSON(filename, mapIO);
+	if (!levelDetails.has_value())
+	{
+		debug(LOG_ERROR, "Level File JSON load error: Failed to load JSON: %s", filename.c_str());
+		free(psDataSet);
+		return false;
+	}
+
+	const auto& mapFolderPath = levelDetails.value().mapFolderPath;
+	std::string customMountPoint;
+	if (mapFolderPath.empty())
+	{
+		// support "flattened" plain maps
+		// must be mounted within the virtual filesystem at the appropriate location (not at the root)
+		if (levelDetails.value().name.empty())
+		{
+			debug(LOG_ERROR, "Level File JSON load error: Map has empty name??: %s", filename.c_str());
+			free(psDataSet);
+			return false;
+		}
+		switch (levelDetails.value().type)
+		{
+			case WzMap::MapType::CAMPAIGN:
+			case WzMap::MapType::SAVEGAME:
+				// FUTURE TODO: Support other map types
+				debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+				free(psDataSet);
+				return false;
+			case WzMap::MapType::SKIRMISH:
+				customMountPoint = std::string("multiplay/maps/") + levelDetails.value().name;
+				break;
+		}
+	}
+
+	switch (levelDetails.value().type)
+	{
+		case WzMap::MapType::CAMPAIGN:
+		case WzMap::MapType::SAVEGAME:
+			// FUTURE TODO: Support other map types
+			debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+			free(psDataSet);
+			return false;
+		case WzMap::MapType::SKIRMISH:
+			psDataSet->type = LEVEL_TYPE::SKIRMISH;
+			break;
+	}
+	psDataSet->players = static_cast<SWORD>(levelDetails.value().players);
+	psDataSet->pName = strdup(levelDetails.value().name.c_str());
+	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.value().gamFilePath());
+	psDataSet->apDataFiles[0] = strdup(gamFilePath.c_str());
+	psDataSet->game = 0;
+	psDataSet->psBaseData = levFindBaseTileset(levelDetails.value().tileset);
+	if (psDataSet->psBaseData == nullptr)
+	{
+		debug(LOG_ERROR, "Level File JSON load error: Failed to find base tileset for: %d", (int)levelDetails.value().tileset);
+		free(psDataSet);
+		return false;
+	}
+	if (!customMountPoint.empty())
+	{
+		psDataSet->customMountPoint = strdup(customMountPoint.c_str());
+	}
+
+	psLevels.push_back(psDataSet);
+	return true;
+}
+
 // parse a level description data file
 // the ignoreWrf hack is for compatibility with old maps that try to link in various
 // data files that we have removed
-bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
+bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ignoreWrf, char const *realFileName)
 {
 	lexerinput_t input;
 	LEVELPARSER_STATE state;
@@ -201,6 +382,8 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 	lev_set_extra(&input);
 
 	state = LP_START;
+	auto always_destroy_on_return = gsl::finally([] { lev_lex_destroy(); });
+
 	for (token = lev_lex(); token != 0; token = lev_lex())
 	{
 		switch (token)
@@ -217,6 +400,13 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 		case LTK_MKEEP_LIMBO:
 			if (state == LP_START || state == LP_WAITDATA)
 			{
+				if (psDataSet)
+				{
+					// push the previous level onto the level list
+					psLevels.push_back(psDataSet);
+					psDataSet = nullptr;
+				}
+
 				// start a new level data set
 				psDataSet = (LEVEL_DATASET *)malloc(sizeof(LEVEL_DATASET));
 				if (!psDataSet)
@@ -228,10 +418,9 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				memset(psDataSet, 0, sizeof(LEVEL_DATASET));
 				psDataSet->players = 1;
 				psDataSet->game = -1;
-				psDataSet->dataDir = datadir;
+				psDataSet->dataDir = pathMode;
 				psDataSet->realFileName = realFileName != nullptr ? strdup(realFileName) : nullptr;
 				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
-				psLevels.push_back(psDataSet);
 				currData = 0;
 
 				// set the dataset type
@@ -275,6 +464,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			state = LP_LEVEL;
@@ -288,6 +478,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -299,6 +490,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -312,6 +504,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				if (levVal < LEVEL_TYPE::LDS_MULTI_TYPE_START)
 				{
 					lev_error("invalid type number");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 
@@ -320,6 +513,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			state = LP_LEVELDONE;
@@ -332,6 +526,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -352,6 +547,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				   )
 				{
 					lev_error("Missing dataset command");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 				state = LP_DATA;
@@ -359,6 +555,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -371,6 +568,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -385,12 +583,14 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 					if (psFoundData == nullptr)
 					{
 						lev_error("Cannot find full data set for camchange");
+						if (psDataSet) { free(psDataSet); }
 						return false;
 					}
 
 					if (psFoundData->type != LEVEL_TYPE::LDS_CAMSTART)
 					{
 						lev_error("Invalid data set name for cam change");
+						if (psDataSet) { free(psDataSet); }
 						return false;
 					}
 					psFoundData->psChange = psDataSet;
@@ -414,6 +614,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				if (psDataSet->psBaseData == nullptr)
 				{
 					lev_error("Unknown dataset");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 				state = LP_WAITDATA;
@@ -421,6 +622,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -430,6 +632,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				if (currData >= LEVEL_MAXFILES)
 				{
 					lev_error("Too many data files");
+					if (psDataSet) { free(psDataSet); }
 					return false;
 				}
 
@@ -455,6 +658,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 			else
 			{
 				lev_error("Syntax Error");
+				if (psDataSet) { free(psDataSet); }
 				return false;
 			}
 			break;
@@ -464,8 +668,6 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 		}
 	}
 
-	lev_lex_destroy();
-
 	// Accept empty files when parsing (indicated by currData < 0)
 	if (currData >= 0
 	    && (state != LP_WAITDATA
@@ -473,6 +675,12 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 	{
 		lev_error("Unexpected end of file");
 		return false;
+	}
+
+	if (psDataSet)
+	{
+		psLevels.push_back(psDataSet);
+		psDataSet = nullptr;
 	}
 
 	return true;
@@ -489,6 +697,8 @@ bool levReleaseMissionData()
 		{
 			return false;
 		}
+
+		resDoResLoadCallback();		// do callback.
 
 		// free up the old data
 		for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
@@ -509,6 +719,7 @@ bool levReleaseMissionData()
 			}
 		}
 	}
+	releaseObjectives = true; // allow releasing mission objectives after quitting / saveload
 	return true;
 }
 
@@ -522,11 +733,15 @@ bool levReleaseAll()
 	// release old data if any was loaded
 	if (psCurrLevel != nullptr)
 	{
+		resDoResLoadCallback();		// do callback.
+
 		if (!levReleaseMissionData())
 		{
 			debug(LOG_ERROR, "Failed to unload mission data");
 			return false;
 		}
+
+		resDoResLoadCallback();		// do callback.
 
 		// release the game data
 		if (psCurrLevel->psBaseData != nullptr)
@@ -550,14 +765,14 @@ bool levReleaseAll()
 			}
 		}
 
+		psCurrLevel = nullptr;
+
 		if (!stageOneShutDown())
 		{
 			debug(LOG_ERROR, "Failed stage one shutdown");
 			return false;
 		}
 	}
-
-	psCurrLevel = nullptr;
 
 	return true;
 }
@@ -699,7 +914,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName))
+	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName, psNewLevel->customMountPoint))
 	{
 		debug(LOG_ERROR, "Failed to rebuild search path");
 		return false;
@@ -708,7 +923,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	// reset the old mission data if necessary
 	if (psCurrLevel != nullptr)
 	{
-		debug(LOG_WZ, "Reseting old mission data");
+		debug(LOG_WZ, "Resetting old mission data");
 		if (!levReleaseMissionData())
 		{
 			debug(LOG_ERROR, "Failed to unload old mission data");
@@ -755,6 +970,38 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 		}
 	}
+	// preload faction IMDs
+	std::unordered_set<FactionID> enabledNonNormalFactions = getEnabledFactions(true);
+	if (!enabledNonNormalFactions.empty())
+	{
+		enumerateLoadedModels([enabledNonNormalFactions](const std::string &modelName, iIMDShape &s){
+			if (s.modelLevel != 0)
+			{
+				return; // skip
+			}
+			for (const auto& faction : enabledNonNormalFactions)
+			{
+				auto factionModel = getFactionModelName(faction, WzString::fromUtf8(modelName));
+				if (factionModel.has_value())
+				{
+					iIMDShape *retval = modelGet(factionModel.value());
+					ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
+						   factionModel.value().toUtf8().c_str(), modelName.c_str());
+					for (const iIMDShape *pIMD = retval, *pNormalIMD = &s; pIMD != nullptr && pNormalIMD != nullptr; pIMD = pIMD->next, pNormalIMD = pNormalIMD->next)
+					{
+						if (pIMD->modelLevel <= 0)
+						{
+							continue;
+						}
+						// Must add mapping to faction IMD lookup table for all additional level modelNames (these have _<level> appended)
+						addFactionModelNameMapping(faction, WzString::fromUtf8(pNormalIMD->modelName), WzString::fromUtf8(pIMD->modelName));
+					}
+				}
+			}
+		});
+		resDoResLoadCallback();		// do callback.
+	}
+
 	if (psNewLevel->type == LEVEL_TYPE::LDS_CAMCHANGE)
 	{
 		if (!campaignReset())
@@ -1003,7 +1250,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			return false;
 		}
 	}
-
+	// this will trigger upgrades
 	if (!stageThreeInitialise())
 	{
 		debug(LOG_ERROR, "Failed stageThreeInitialise()!");
@@ -1028,12 +1275,19 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
 	addDumpInfo(buf);
 
-	if (autogame_enabled())
+	if (autogame_enabled() && getHostLaunch() != HostLaunch::LoadReplay)
 	{
 		gameTimeSetMod(Rational(500));
-		if (hostlaunch != HostLaunch::Skirmish) // tests will specify the AI manually
+		if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
 		{
-			jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+			if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
+			{
+				jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer, AIDifficulty::DEFAULT);
+			}
+			else
+			{
+				debug(LOG_INFO, "Skipping autogame auto-AI for selectedPlayer %" PRIu32 "", selectedPlayer);
+			}
 		}
 	}
 
@@ -1046,11 +1300,7 @@ std::string mapNameWithoutTechlevel(const char *mapName)
 {
 	ASSERT_OR_RETURN("", mapName != nullptr, "null mapName provided");
 	std::string result(mapName);
-	size_t len = result.length();
-	if (len > 2 && result[len - 3] == '-' && result[len - 2] == 'T' && isdigit(result[len - 1]))
-	{
-		result.resize(len - 3);
-	}
+	WzMap::trimTechLevelFromMapName(result);
 	return result;
 }
 

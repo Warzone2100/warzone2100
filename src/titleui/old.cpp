@@ -31,9 +31,9 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "../intdisplay.h"
+#include "../frontend.h"
 #include "../hci.h"
 #include "../keyedit.h"
-#include "../keymap.h"
 #include "../mission.h"
 #include "../multiint.h"
 #include "../multilimit.h"
@@ -41,20 +41,7 @@
 #include "../musicmanager.h"
 #include "../warzoneconfig.h"
 #include "../frend.h"
-
-// frontend.cpp
-void startTitleMenu();
-void startTutorialMenu();
-void startSinglePlayerMenu();
-void startCampaignSelector();
-void startMultiPlayerMenu();
-void startOptionsMenu();
-void startGraphicsOptionsMenu();
-void startAudioAndZoomOptionsMenu();
-void startVideoOptionsMenu();
-void startMouseOptionsMenu();
-void startGameOptionsMenu();
-void refreshCurrentVideoOptionsValues();
+#include "../activity.h"
 
 WzOldTitleUI::WzOldTitleUI(tMode mode) : mode(mode)
 {
@@ -66,49 +53,68 @@ void WzOldTitleUI::start()
 	switch (mode)
 	{
 	case CAMPAIGNS:
+		ActivityManager::instance().navigateToMenu("Campaign");
 		startCampaignSelector();
 		break;
 	case SINGLE:
+		ActivityManager::instance().navigateToMenu("Single Player");
 		startSinglePlayerMenu();
 		break;
 	case GAME:
+		ActivityManager::instance().navigateToMenu("Game Options");
 		startGameOptionsMenu();
 		break;
 	case GRAPHICS_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Graphics Options");
 		startGraphicsOptionsMenu();
 		break;
 	case AUDIO_AND_ZOOM_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Audio + Zoom Options");
 		startAudioAndZoomOptionsMenu();
 		break;
 	case VIDEO_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Video Options");
 		startVideoOptionsMenu();
 		break;
 	case MOUSE_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Mouse Options");
 		startMouseOptionsMenu();
 		break;
 	case TUTORIAL:
+		ActivityManager::instance().navigateToMenu("Tutorial");
 		startTutorialMenu();
 		break;
 	case OPTIONS:
+		ActivityManager::instance().navigateToMenu("Options");
 		startOptionsMenu();
 		break;
 	case TITLE:
+		ActivityManager::instance().navigateToMenu("Main");
 		startTitleMenu();
 		break;
 	case MULTI:
+		ActivityManager::instance().navigateToMenu("Multiplayer");
 		startMultiPlayerMenu();		// goto multiplayer menu
 		break;
 	case KEYMAP:
-		startKeyMapEditor(true);
+		ActivityManager::instance().navigateToMenu("KeyMap Editor");
+		startKeyMapEditor(gInputManager, gKeyFuncConfig, true);
 		break;
 	case MUSIC_MANAGER:
+		ActivityManager::instance().navigateToMenu("Music Manager");
 		startMusicManager();
+		break;
+	case MULTIPLAY_OPTIONS:
+		ActivityManager::instance().navigateToMenu("Multiplay Options");
+		startMultiplayOptionsMenu();
 		break;
 	case STARTGAME:
 	case QUIT:
 	case LOADSAVEGAME:
 		bLimiterLoaded = false;
+		break;
 	case SHOWINTRO:
+		ActivityManager::instance().navigateToMenu("Show Intro");
 		break;
 	default:
 		debug(LOG_FATAL, "Unknown title mode requested");
@@ -133,7 +139,7 @@ TITLECODE WzOldTitleUI::run()
 		runMultiPlayerMenu();
 		break;
 	case KEYMAP:
-		runKeyMapEditor();
+		runKeyMapEditor(gInputManager, gKeyFuncConfig);
 		break;
 
 	case MUSIC_MANAGER:
@@ -180,6 +186,10 @@ TITLECODE WzOldTitleUI::run()
 		runMouseOptionsMenu();
 		break;
 
+	case MULTIPLAY_OPTIONS:
+		runMultiplayOptionsMenu();
+		break;
+
 	case QUIT:
 		return TITLECODE_QUITGAME;
 
@@ -191,7 +201,8 @@ TITLECODE WzOldTitleUI::run()
 
 	case SHOWINTRO:
 		pie_SetFogStatus(false);
-		pie_ScreenFlip(CLEAR_BLACK);
+		pie_ScreenFrameRenderEnd();
+		pie_ScreenFrameRenderBegin();
 		changeTitleMode(TITLE);
 		return TITLECODE_SHOWINTRO;
 

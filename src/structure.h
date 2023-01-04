@@ -50,6 +50,7 @@
 #define ACTION_START_TIME	0
 
 extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
+extern std::unordered_map<UDWORD, UDWORD> moduleToBuilding[MAX_PLAYER_SLOTS];
 
 //Value is stored for easy access to this structure stat
 extern UDWORD	factoryModuleStat;
@@ -71,12 +72,12 @@ extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRU
 
 void handleAbandonedStructures();
 
-int getMaxDroids(int player);
-int getMaxCommanders(int player);
-int getMaxConstructors(int player);
-void setMaxDroids(int player, int value);
-void setMaxCommanders(int player, int value);
-void setMaxConstructors(int player, int value);
+int getMaxDroids(UDWORD player);
+int getMaxCommanders(UDWORD player);
+int getMaxConstructors(UDWORD player);
+void setMaxDroids(UDWORD player, int value);
+void setMaxCommanders(UDWORD player, int value);
+void setMaxConstructors(UDWORD player, int value);
 
 bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission);
 
@@ -100,16 +101,14 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 uint32_t structureBuildPointsToCompletion(const STRUCTURE & structure);
 float structureCompletionProgress(const STRUCTURE & structure);
 
-//temp test function for creating structures at the start of the game
-void createTestStructures();
-
 //builds a specified structure at a given location
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
+STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state);
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding, bool mission);
+void structureUpdate(STRUCTURE *psBuilding, bool bMission);
 
 /* Remove a structure and free it's memory */
 bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
@@ -120,7 +119,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
 bool removeStruct(STRUCTURE *psDel, bool bDestroy);
 
 //fills the list with Structures that can be built
-UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD limit, bool showFavorites);
+std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD selectedPlayer, UDWORD limit, bool showFavorites);
 
 /// Checks if the two structures would be too close to build together.
 bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t dir1, STRUCTURE_STATS const *stats2, Vector2i pos2, uint16_t dir2);
@@ -132,19 +131,6 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 bool isWall(STRUCTURE_TYPE type);                                    ///< Structure is a wall. Not completely sure it handles all cases.
 bool isBuildableOnWalls(STRUCTURE_TYPE type);                        ///< Structure can be built on walls. Not completely sure it handles all cases.
 
-/* for a new structure, find a location along an edge which the droid can get
-to and return this as the destination for the droid */
-
-/* for a structure or feature, find a location along an edge which the droid can get
-to and return this as the destination for the droid*/
-bool getDroidDestination(BASE_STATS *psPositionStats, UDWORD structX, UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY);
-
-/* check along the width of a structure for an empty space */
-bool checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
-
-/* check along the length of a structure for an empty space */
-bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
-
 void alignStructure(STRUCTURE *psBuilding);
 
 /* set the current number of structures of each type built */
@@ -153,8 +139,6 @@ void setCurrentStructQuantity(bool displayError);
 int32_t getStructStatFromName(const WzString &name);
 /*check to see if the structure is 'doing' anything  - return true if idle*/
 bool  structureIdle(const STRUCTURE *psBuilding);
-/*checks to see if any structure exists of a specified type with a specified status */
-bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
 /*sets the point new droids go to - x/y in world coords for a Factory*/
 void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y, UDWORD player, bool bCheck);
 
@@ -190,9 +174,6 @@ bool getSatUplinkExists(UDWORD player);
 
 /*sets the flag to indicate a Las Sat Exists - ONLY EVER WANT ONE*/
 void setLasSatExists(bool state, UDWORD player);
-
-/*returns the status of the flag*/
-bool getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
 bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
@@ -247,7 +228,6 @@ int32_t getStructureDamage(const STRUCTURE *psStructure);
 
 unsigned structureBodyBuilt(const STRUCTURE *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
 UDWORD structureBody(const STRUCTURE *psStruct);
-UDWORD structureArmour(const STRUCTURE_STATS *psStats, UBYTE player);
 UDWORD structureResistance(const STRUCTURE_STATS *psStats, UBYTE player);
 
 void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
@@ -295,10 +275,6 @@ void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /// Does the next item in the production list.
 void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode);
-
-/*This function is called after a game is loaded so that any resource extractors
-that are active are initialised for when to start*/
-void checkResExtractorsActive();
 
 // Count number of factories assignable to a command droid.
 UWORD countAssignableFactories(UBYTE player, UWORD FactoryType);
@@ -515,8 +491,8 @@ static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
 	return psStruct->pStructureType->upgrade[psStruct->player].rearm;
 }
 
-WzString getFavoriteStructs();
-void setFavoriteStructs(WzString list);
+bool loadFavoriteStructsFile(const char* path);
+bool writeFavoriteStructsFile(const char* path);
 
 struct LineBuild
 {

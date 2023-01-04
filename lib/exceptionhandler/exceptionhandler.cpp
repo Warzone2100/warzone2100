@@ -712,7 +712,7 @@ static void posixExceptionHandler(int signum)
 #endif // WZ_OS_*
 
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
-static bool fetchProgramPath(char *const programPath, size_t const bufSize, const char *const programCommand)
+static bool fetchProgramPath(char *const output_programPath, size_t const bufSize, const char *const programCommand)
 {
 	FILE *whichProgramStream;
 	size_t bytesRead;
@@ -724,13 +724,13 @@ static bool fetchProgramPath(char *const programPath, size_t const bufSize, cons
 	/* Fill the output buffer with zeroes so that we can rely on the output
 	 * string being NUL-terminated.
 	 */
-	memset(programPath, 0, bufSize);
+	memset(output_programPath, 0, bufSize);
 
 	/* Execute the "which" command (constructed above) and collect its
-	 * output in programPath.
+	 * output in output_programPath.
 	 */
 	whichProgramStream = popen(whichProgramCommand, "r");
-	bytesRead = fread(programPath, 1, bufSize, whichProgramStream);
+	bytesRead = fread(output_programPath, 1, bufSize, whichProgramStream);
 	pclose(whichProgramStream);
 
 	// Check whether our buffer is too small, indicate failure if it is
@@ -740,22 +740,22 @@ static bool fetchProgramPath(char *const programPath, size_t const bufSize, cons
 		return false;
 	}
 
-	programPath[bytesRead] = 0;
+	output_programPath[bytesRead] = 0;
 	// Cut of the linefeed (and everything following it) if it's present.
-	linefeed = strchr(programPath, '\n');
+	linefeed = strchr(output_programPath, '\n');
 	if (linefeed)
 	{
 		*linefeed = '\0';
 	}
 
 	// Check to see whether we retrieved any meaning ful result
-	if (strlen(programPath) == 0)
+	if (strlen(output_programPath) == 0)
 	{
 		debug(LOG_WARNING, "Could not retrieve full path to \"%s\". This may prevent creation of an extended backtrace.", programCommand);
 		return false;
 	}
 
-	debug(LOG_WZ, "Found program \"%s\" at path \"%s\"", programCommand, programPath);
+	debug(LOG_WZ, "Found program \"%s\" at path \"%s\"", programCommand, output_programPath);
 	return true;
 }
 #endif
@@ -821,8 +821,8 @@ bool OverrideRPTDirectory(const char *newPath)
 		    (LPTSTR) &lpMsgBuf,
 		    0, NULL);
 
-		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %d: %s\n"), dw, lpMsgBuf);
-		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK);
+		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %lu: %s\n"), dw, lpMsgBuf);
+		MessageBox(NULL, szBuffer, _T("Error"), MB_OK | MB_ICONEXCLAMATION);
 
 		LocalFree(lpMsgBuf);
 

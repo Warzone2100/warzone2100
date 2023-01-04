@@ -26,23 +26,23 @@
 #include "cliprect.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
-void ClipRectWidget::run(W_CONTEXT *psContext)
+void ClipRectWidget::runRecursive(W_CONTEXT *psContext)
 {
-	W_CONTEXT newContext;
+	W_CONTEXT newContext(psContext);
 	newContext.xOffset = psContext->xOffset + x();
 	newContext.yOffset = psContext->yOffset + y();
 	newContext.mx = psContext->mx - x();
 	newContext.my = psContext->my - y() + offset.y;
 
-	runRecursive(&newContext);
+	WIDGET::runRecursive(&newContext);
 }
 
 bool ClipRectWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	W_CONTEXT newContext;
-	newContext.xOffset = psContext->xOffset;
-	newContext.yOffset = psContext->yOffset;
-	newContext.mx = psContext->mx;
+	W_CONTEXT newContext(psContext);
+	newContext.xOffset = psContext->xOffset - offset.x;
+	newContext.yOffset = psContext->yOffset - offset.y;
+	newContext.mx = psContext->mx + offset.x;
 	newContext.my = psContext->my + offset.y;
 	return WIDGET::processClickRecursive(&newContext, key, wasPressed);
 }
@@ -75,4 +75,14 @@ void ClipRectWidget::setTopOffset(uint16_t value)
 void ClipRectWidget::setLeftOffset(uint16_t value)
 {
 	offset.x = value;
+}
+
+int ClipRectWidget::parentRelativeXOffset(int coord) const
+{
+	return x() - offset.x + coord;
+}
+
+int ClipRectWidget::parentRelativeYOffset(int coord) const
+{
+	return y() - offset.y + coord;
 }

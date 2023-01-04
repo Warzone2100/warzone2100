@@ -3,9 +3,8 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const TRANSPORT_LIMIT = 4;
-var index; //Number of transport loads sent into the level
+var transporterIndex; //Number of transport loads sent into the level
 var startedFromMenu;
-
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
@@ -16,7 +15,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Attack and destroy all those who resist the Machine! -The Collective
 function secondVideo()
 {
-	camPlayVideos("MB2A_MSG2");
+	camPlayVideos({video: "MB2A_MSG2", type: CAMP_MSG});
 }
 
 //Damage the base and droids for the player
@@ -56,11 +55,11 @@ function getDroidsForCOLZ()
 	}
 	else
 	{
-		templates = [cTempl.cohct, cTempl.comct, cTempl.comorb];
+		templates = [cTempl.cohct, cTempl.commrl, cTempl.comorb];
 		usingHeavy = true;
 	}
 
-	for (var i = 0; i < count; ++i)
+	for (let i = 0; i < count; ++i)
 	{
 		if (!i && usingHeavy)
 		{
@@ -101,12 +100,12 @@ function sendCOTransporter()
 //from the main menu. Otherwise a player can just bring in there Alpha units
 function sendPlayerTransporter()
 {
-	if (!camDef(index))
+	if (!camDef(transporterIndex))
 	{
-		index = 0;
+		transporterIndex = 0;
 	}
 
-	if (index === TRANSPORT_LIMIT)
+	if (transporterIndex === TRANSPORT_LIMIT)
 	{
 		downTransporter();
 		return;
@@ -115,7 +114,7 @@ function sendPlayerTransporter()
 	var droids = [];
 	var list = [cTempl.prhct, cTempl.prhct, cTempl.prhct, cTempl.prltat, cTempl.prltat, cTempl.npcybr, cTempl.prrept];
 
-	for (var i = 0; i < 10; ++i)
+	for (let i = 0; i < 10; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -132,10 +131,10 @@ function sendPlayerTransporter()
 function mapEdgeDroids()
 {
 	var TankNum = 8 + camRand(6);
-	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.comct, cTempl.cohct];
+	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.commrp, cTempl.cohct];
 
 	var droids = [];
-	for (var i = 0; i < TankNum; ++i)
+	for (let i = 0; i < TankNum; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -180,61 +179,70 @@ function truckDefense()
 		return;
 	}
 
-	const DEFENSES = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
+	const DEFENSES = ["CO-Tower-LtATRkt", "PillBox1", "CO-WallTower-HvCan"];
 	camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
 }
 
 //Gives starting tech and research.
 function cam2Setup()
 {
-	var x = 0;
 	const COLLECTIVE_RES = [
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering02",
-		"R-Defense-WallUpgrade03", "R-Struc-Materials03",
-		"R-Struc-Factory-Upgrade03", "R-Struc-Factory-Cyborg-Upgrade03",
+		"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 		"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
-		"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon-Damage03",
+		"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 		"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
-		"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
+		"R-Wpn-MG-Damage05", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
 		"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage03",
+		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage04",
 		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-		"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01"
+		"R-Wpn-RocketSlow-Damage04", "R-Sys-Sensor-Upgrade01"
 	];
 
-	for (x = 0; x < ALPHA_TECH.length; ++x)
-	{
-		makeComponentAvailable(ALPHA_TECH[x], CAM_HUMAN_PLAYER);
-	}
-
-	for (x = 0; x < STRUCTS_ALPHA.length; ++x)
+	for (let x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
 	{
 		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}
 
 	camCompleteRequiredResearch(PLAYER_RES_BETA, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	camCompleteRequiredResearch(ALPHA_RESEARCH, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, CAM_HUMAN_PLAYER);
+
+	if (difficulty >= HARD)
+	{
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+	}
+
 	enableResearch("R-Wpn-Cannon-Damage04", CAM_HUMAN_PLAYER);
 	enableResearch("R-Wpn-Rocket-Damage04", CAM_HUMAN_PLAYER);
 	preDamageStuff();
 }
 
-//Get some higher rank droids at start and first Transport drop.
-function setUnitRank()
+//Get some higher rank droids.
+function setUnitRank(transport)
 {
-	const DROID_EXP = 32;
-	const MIN_TO_AWARD = 16;
-	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
-		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
-	});
+	const DROID_EXP = [128, 64, 32, 16];
+	var droids;
+	var mapRun = false;
 
-	for (var j = 0, i = droids.length; j < i; ++j)
+	if (transport)
 	{
-		var droid = droids[j];
-		if (Math.floor(droid.experience) < MIN_TO_AWARD)
+		droids = enumCargo(transport);
+	}
+	else
+	{
+		mapRun = true;
+		//These are the units in the base already at the start.
+		droids = enumDroid(CAM_HUMAN_PLAYER).filter((dr) => (!camIsTransporter(dr)));
+	}
+
+	for (let i = 0, len = droids.length; i < len; ++i)
+	{
+		var droid = droids[i];
+		if (!camIsSystemDroid(droid))
 		{
-			setDroidExperience(droids[j], DROID_EXP);
+			setDroidExperience(droid, DROID_EXP[mapRun ? 0 : (transporterIndex - 1)]);
 		}
 	}
 }
@@ -244,18 +252,19 @@ function eventTransporterLanded(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
+		if (!camDef(transporterIndex))
+		{
+			transporterIndex = 0;
+		}
+
+		transporterIndex += 1;
+
 		if (startedFromMenu)
 		{
-			camCallOnce("setUnitRank");
+			setUnitRank(transport);
 		}
 
-		if (!camDef(index))
-		{
-			index = 0;
-		}
-
-		index = index + 1;
-		if (index >= TRANSPORT_LIMIT)
+		if (transporterIndex >= TRANSPORT_LIMIT)
 		{
 			queue("downTransporter", camMinutesToMilliseconds(1));
 		}
@@ -280,7 +289,7 @@ function downTransporter()
 
 function eventTransporterLaunch(transport)
 {
-	if (index >= TRANSPORT_LIMIT)
+	if (transporterIndex >= TRANSPORT_LIMIT)
 	{
 		queue("downTransporter", camMinutesToMilliseconds(1));
 	}
@@ -288,7 +297,7 @@ function eventTransporterLaunch(transport)
 
 function eventGameLoaded()
 {
-	if (index >= TRANSPORT_LIMIT)
+	if (transporterIndex >= TRANSPORT_LIMIT)
 	{
 		setReinforcementTime(LZ_COMPROMISED_TIME);
 	}
@@ -308,7 +317,7 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, 5);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
@@ -339,13 +348,12 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 	setUnitRank(); //All pre-placed player droids are ranked.
-	camPlayVideos("MB2A_MSG");
+	camPlayVideos({video: "MB2A_MSG", type: MISS_MSG});
 	startedFromMenu = false;
 
 	//Only if starting Beta directly rather than going through Alpha
-	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)
+	if (enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER).length === 0)
 	{
 		startedFromMenu = true;
 		sendPlayerTransporter();
@@ -359,7 +367,9 @@ function eventStartLevel()
 	queue("secondVideo", camSecondsToMilliseconds(12));
 	queue("groupPatrol", camChangeOnDiff(camMinutesToMilliseconds(1)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
+
+	truckDefense();
 }

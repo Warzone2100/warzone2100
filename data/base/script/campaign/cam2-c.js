@@ -7,20 +7,17 @@ var civilianPosIndex; //Current location of civilian groups.
 var shepardGroup; //Enemy group that protects civilians.
 var lastSoundTime; //Only play the "civilian rescued" sound every so often.
 const COLLECTIVE_RES = [
-	"R-Defense-WallUpgrade03", "R-Struc-Materials04",
-	"R-Struc-Factory-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
-	"R-Struc-VTOLPad-Upgrade01", "R-Struc-Factory-Cyborg-Upgrade04",
+	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
-	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
-	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
-	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-	"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
-	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
-	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-	"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
-	"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
-	"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy02",
-	"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF02",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05","R-Wpn-Cannon-ROF01",
+	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage06",
+	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage05",
+	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage05",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
+	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF01", "R-Wpn-Howitzer-ROF01",
+	"R-Wpn-Howitzer-Damage07", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
+	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF02",
+	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade01"
 ];
 
 //Play video about civilians being captured by the Collective. Triggered
@@ -34,8 +31,8 @@ function videoTrigger()
 	setTimer("captureCivilians", camChangeOnDiff(camSecondsToMilliseconds(10)));
 
 	hackRemoveMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	camPlayVideos("MB2_C_MSG2");
-	hackAddMessage("C2C_OBJ2", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos({video: "MB2_C_MSG2", type: MISS_MSG});
+	hackAddMessage("C2C_OBJ2", PROX_MSG, CAM_HUMAN_PLAYER, false);
 }
 
 //Enable heavy factories and make groups do what they need to.
@@ -53,9 +50,9 @@ camAreaEvent("base3Trigger", function(droid)
 //Send idle droids in this base to attack when the player spots the base
 function camEnemyBaseDetected_COAirBase()
 {
-	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter(function(obj) {
-		return obj.type === DROID && obj.group === null;
-	});
+	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.group === null
+	));
 
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		count: -1,
@@ -69,7 +66,6 @@ function camEnemyBaseEliminated_COAirBase()
 {
 	camCallOnce("videoTrigger");
 }
-
 
 function enableFactories()
 {
@@ -129,7 +125,7 @@ function truckDefense()
 		return;
 	}
 
-	const LIST = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
+	const LIST = ["CO-Tower-LtATRkt", "PillBox1", "CO-WallTower-HvCan"];
 	camQueueBuilding(THE_COLLECTIVE, LIST[camRand(LIST.length)]);
 }
 
@@ -194,10 +190,10 @@ function civilianOrders()
 	var rescued = false;
 
 	//Check if a civilian is close to a player droid.
-	for (var i = 0; i < civs.length; ++i)
+	for (let i = 0; i < civs.length; ++i)
 	{
 		var objs = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
-		for (var j = 0; j < objs.length; ++j)
+		for (let j = 0; j < objs.length; ++j)
 		{
 			if (objs[j].type === DROID)
 			{
@@ -227,7 +223,7 @@ function eventTransporterLanded(transport)
 	{
 		playSound(escaping);
 		capturedCivCount += civs.length - 1;
-		for (var i = 0; i < civs.length; ++i)
+		for (let i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
 		}
@@ -267,7 +263,7 @@ function extraVictoryCondition()
 		var lz = getObject("startPosition");
 		var civs = enumRange(lz.x, lz.y, 30, SCAV_7, false);
 
-		for (var i = 0; i < civs.length; ++i)
+		for (let i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
 		}
@@ -289,13 +285,13 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	var enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, 5);
 
 	camSetArtifacts({
 		"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },
 		"quadbof": { tech: "R-Wpn-AAGun02" },
 		"howitzer": { tech: "R-Wpn-HowitzerMk1" },
-		"COHeavyFac-Leopard": { tech: "R-Vehicle-Body02" }, //leopard
+		"COHeavyFac-Leopard": { tech: "R-Vehicle-Body06" }, //Panther
 		"COHeavyFac-Upgrade": { tech: "R-Struc-Factory-Upgrade04" },
 		"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
 		"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
@@ -306,6 +302,11 @@ function eventStartLevel()
 	setAlliance(THE_COLLECTIVE, SCAV_7, true);
 	setAlliance(CAM_HUMAN_PLAYER, SCAV_7, true);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+
+	if (difficulty >= MEDIUM)
+	{
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+	}
 
 	camSetEnemyBases({
 		"COAirBase": {
@@ -400,16 +401,17 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 	capturedCivCount = 0;
 	civilianPosIndex = 0;
 	lastSoundTime = 0;
 	shepardGroup = camMakeGroup("heavyGroup2");
 	enableFactories();
 
-	camPlayVideos("MB2_C_MSG");
-	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos({video: "MB2_C_MSG", type: MISS_MSG});
+	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+
+	truckDefense();
 }

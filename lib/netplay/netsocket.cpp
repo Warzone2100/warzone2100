@@ -36,6 +36,10 @@
 #endif
 #include <zlib.h>
 
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wshorten-64-to-32" // FIXME!!
+#endif
+
 enum
 {
 	SOCK_CONNECTION,
@@ -63,7 +67,7 @@ struct Socket
 	bool ready;
 	bool writeError;
 	bool deleteLater;
-	char textAddress[40];
+	char textAddress[40] = {};
 
 	bool isCompressed;
 	bool readDisconnected;  ///< True iff a call to recv() returned 0.
@@ -400,7 +404,8 @@ static int socketThreadFunction(void *)
 #endif
 		fd_set fds;
 		FD_ZERO(&fds);
-		for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end(); ++i)
+		size_t descriptorsToWaitOn = 0;
+		for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end();)
 		{
 			if (!i->second.empty())
 			{
@@ -408,14 +413,30 @@ static int socketThreadFunction(void *)
 				maxfd = std::max(maxfd, fd);
 				ASSERT(!FD_ISSET(fd, &fds), "Duplicate file descriptor!");  // Shouldn't be possible, but blocking in send, after select says it won't block, shouldn't be possible either.
 				FD_SET(fd, &fds);
+				++descriptorsToWaitOn;
+				++i;
+			}
+			else
+			{
+				ASSERT(false, "Empty buffer for pending socket writes"); // This shouldn't happen!
+				Socket *sock = i->first;
+				i = socketThreadWrites.erase(i);
+				if (sock->deleteLater)
+				{
+					socketCloseNow(sock);
+				}
 			}
 		}
 		struct timeval tv = {0, 50 * 1000};
 
 		// Check if we can write to any sockets.
-		wzMutexUnlock(socketThreadMutex);
-		int ret = select(maxfd + 1, nullptr, &fds, nullptr, &tv);
-		wzMutexLock(socketThreadMutex);
+		int ret = -1;
+		if (descriptorsToWaitOn > 0)
+		{
+			wzMutexUnlock(socketThreadMutex);
+			ret = select(maxfd + 1, nullptr, &fds, nullptr, &tv);
+			wzMutexLock(socketThreadMutex);
+		}
 
 		// We can write to some sockets. (Ignore errors from select, we may have deleted the socket after unlocking the mutex, and before calling select.)
 		if (ret > 0)
@@ -436,11 +457,11 @@ static int socketThreadFunction(void *)
 
 				// Write data.
 				// FIXME SOMEHOW AAARGH This send() call can't block, but unless the socket is not set to blocking (setting the socket to nonblocking had better work, or else), does anyway (at least sometimes, when someone quits). Not reproducible except in public releases.
-				ssize_t ret = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
-				if (ret != SOCKET_ERROR)
+				ssize_t retSent = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
+				if (retSent != SOCKET_ERROR)
 				{
 					// Erase as much data as written.
-					writeQueue.erase(writeQueue.begin(), writeQueue.begin() + ret);
+					writeQueue.erase(writeQueue.begin(), writeQueue.begin() + retSent);
 					if (writeQueue.empty())
 					{
 						socketThreadWrites.erase(w);  // Nothing left to write, delete from pending list.
@@ -688,7 +709,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 	return size;
 }
 
-void socketFlush(Socket *sock, size_t *rawByteCount)
+void socketFlush(Socket *sock, uint8_t player, size_t *rawByteCount)
 {
 	size_t ignored;
 	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
@@ -698,6 +719,8 @@ void socketFlush(Socket *sock, size_t *rawByteCount)
 	{
 		return;  // Not compressed, so don't mess with zlib.
 	}
+
+	ASSERT(!sock->writeError, "Socket write error?? (Player: %" PRIu8 "", player);
 
 	// Flush data out of zlib compression state.
 	do
@@ -1014,7 +1037,7 @@ ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", static_cast<void *>(sock), sock->fd[SOCK_CONNECTION]);
+		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%" PRIuPTR"x  (error: EBADF)", static_cast<void *>(sock), static_cast<uintptr_t>(sock->fd[SOCK_CONNECTION]));
 		setSockErr(EBADF);
 		return SOCKET_ERROR;
 	}
@@ -1044,7 +1067,7 @@ ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 		sock->ready = false;
 		if (ret == 0)
 		{
-			debug(LOG_NET, "Socket %x disconnected.", sock->fd[SOCK_CONNECTION]);
+			debug(LOG_NET, "Socket %" PRIuPTR"x disconnected.", static_cast<uintptr_t>(sock->fd[SOCK_CONNECTION]));
 			sock->readDisconnected = true;
 			setSockErr(ECONNRESET);
 			return received;

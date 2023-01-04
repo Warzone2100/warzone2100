@@ -17,6 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+#include <nlohmann/json.hpp> // Must come before WZ includes
+
 #include "lib/framework/frame.h"
 #include "lib/framework/file.h"
 #include "lib/framework/string_ext.h"
@@ -26,12 +29,12 @@
 #include "playlist.h"
 #include "cdaudio.h"
 
-#include <3rdparty/json/json.hpp>
 #include <algorithm>
 #include <unordered_map>
 #include <sstream>
+#include <limits>
 
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
 
@@ -63,14 +66,14 @@ inline void from_json(const nlohmann::json& j, WZ_TRACK_SETTINGS& p)
 {
 	if (!j.is_object())
 	{
-		throw nlohmann::json::type_error::create(302, "type must be an object, but is " + std::string(j.type_name()));
+		throw nlohmann::json::type_error::create(302, "type must be an object, but is " + std::string(j.type_name()), &j);
 	}
 	auto it = j.find("music_modes");
 	if (it != j.end())
 	{
 		if (!it.value().is_array())
 		{
-			throw nlohmann::json::type_error::create(302, "music_modes type must be an array, but is " + std::string(j.type_name()));
+			throw nlohmann::json::type_error::create(302, "music_modes type must be an array, but is " + std::string(j.type_name()), &j);
 		}
 		size_t i = 0;
 		for (const auto& v : it.value())
@@ -510,19 +513,17 @@ bool PlayList_Read(const char *path)
 	char *data = nullptr;
 	std::string albumsPath = astringf("%s/albums", path);
 
-	char **pAlbumFolderList = PHYSFS_enumerateFiles(albumsPath.c_str());
-	for (char **i = pAlbumFolderList; *i != nullptr; i++)
-	{
-		std::string albumDir = albumsPath + "/" + *i;
+	WZ_PHYSFS_enumerateFiles(albumsPath.c_str(), [&](const char *i) -> bool {
+		std::string albumDir = albumsPath + "/" + i;
 		std::string str = albumDir + "/album.json";
 		if (!PHYSFS_exists(str.c_str()))
 		{
-			continue;
+			return true; // continue;
 		}
 		if (!loadFile(str.c_str(), &data, &size))
 		{
 			debug(LOG_ERROR, "album JSON file \"%s\" could not be opened!", str.c_str());
-			continue;
+			return true; // continue;
 		}
 		nlohmann::json tmpJson;
 		try {
@@ -530,7 +531,7 @@ bool PlayList_Read(const char *path)
 		}
 		catch (const std::exception &e) {
 			debug(LOG_ERROR, "album JSON file %s is invalid: %s", str.c_str(), e.what());
-			continue;
+			return true; // continue;
 		}
 		catch (...) {
 			debug(LOG_FATAL, "Unexpected exception parsing album JSON from %s", str.c_str());
@@ -544,11 +545,11 @@ bool PlayList_Read(const char *path)
 		if (!album)
 		{
 			debug(LOG_ERROR, "Failed to load album JSON: %s", str.c_str());
-			continue;
+			return true; // continue;
 		}
 		albumList.push_back(std::move(album));
-	}
-	PHYSFS_freeList(pAlbumFolderList);
+		return true; // continue
+	});
 
 	// Ensure that "Warzone 2100 OST" is always the first album in the list
 	std::stable_sort(albumList.begin(), albumList.end(), [](const std::shared_ptr<WZ_ALBUM>& a, const std::shared_ptr<WZ_ALBUM>& b) -> bool {

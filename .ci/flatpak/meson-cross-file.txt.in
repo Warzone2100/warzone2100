@@ -1,0 +1,12 @@
+[binaries]
+c = '@WZ_CROSS_COMPILE_TARGET_ARCH@-unknown-linux-gnu-gcc'
+cpp = '@WZ_CROSS_COMPILE_TARGET_ARCH@-unknown-linux-gnu-g++'
+ar = '@WZ_CROSS_COMPILE_TARGET_ARCH@-unknown-linux-gnu-ar'
+pkgconfig = 'pkg-config'
+strip = '@WZ_CROSS_COMPILE_TARGET_ARCH@-unknown-linux-gnu-strip'
+
+[host_machine]
+system = 'linux'
+cpu_family = '@WZ_CROSS_COMPILE_TARGET_ARCH@'
+cpu = '@WZ_CROSS_COMPILE_TARGET_ARCH@'
+endian = 'little'

@@ -97,7 +97,6 @@ void swapMissionPointers();
 // status of the mission result screens.
 extern bool MissionResUp;
 
-void intRemoveMissionResult();
 void intRemoveMissionResultNoAnim();
 void intProcessMissionResult(UDWORD id);
 void intRunMissionResult();
@@ -150,9 +149,6 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter);
 
 /** Move transporter offworld. */
 void missionMoveTransporterOffWorld(DROID *psTransporter);
-
-/** Pick nearest map edge to point. */
-void missionGetNearestCorner(UWORD iX, UWORD iY, UWORD *piOffX, UWORD *piOffY);
 
 void missionSetReinforcementTime(UDWORD iTime);
 UDWORD  missionGetReinforcementTime();

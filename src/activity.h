@@ -20,6 +20,7 @@
 #ifndef __INCLUDED_SRC_ACTIVITY_H__
 #define __INCLUDED_SRC_ACTIVITY_H__
 
+#include "lib/framework/crc.h"
 #include "scores.h"
 #include "multiplay.h"
 #include "levels.h"
@@ -27,7 +28,7 @@
 #include <vector>
 #include <string>
 
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
 
@@ -55,6 +56,9 @@ public:
 public:
 	virtual ~ActivitySink() { }
 public:
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) { }
+
 	// campaign games
 	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) { }
 	virtual void endedCampaignMission(const std::string& campaign, const std::string& levelName, GameEndReason result, END_GAME_STATS_DATA stats, bool cheatsUsed) { }
@@ -90,6 +94,9 @@ public:
 		};
 		AllianceOption alliances;
 
+		// is this a loaded replay?
+		bool isReplay = false;
+
 	public:
 		virtual ~SkirmishGameInfo() { }
 		// some convenience functions to get data
@@ -116,11 +123,14 @@ public:
 		unsigned int lobbyPort;
 		uint32_t lobbyGameId = 0;
 
+		uint32_t hostPlayer = 0;
 		bool isHost;	// whether the current client is the game host
 		bool privateGame;			// whether game is password-protected
 		uint8_t maxPlayers = 0;
 		uint8_t numHumanPlayers = 0;
 		uint8_t numAvailableSlots = 0;
+		uint8_t numSpectators = 0;
+		uint8_t numOpenSpectatorSlots = 0;
 	};
 	virtual void hostingMultiplayerGame(const MultiplayerGameInfo& info) { }
 	virtual void joinedMultiplayerGame(const MultiplayerGameInfo& info) { }
@@ -135,6 +145,12 @@ public:
 	// cheats used
 	virtual void cheatUsed(const std::string& cheatName) { }
 
+	// loaded mods changed
+	virtual void loadedModsChanged(const std::vector<Sha256>& loadedModHashes) { }
+
+	// game exit
+	virtual void gameExiting() { }
+
 public:
 	// Helper Functions
 	static std::string getTeamDescription(const ActivitySink::SkirmishGameInfo& info);
@@ -142,6 +158,15 @@ public:
 
 std::string to_string(const ActivitySink::GameEndReason& reason);
 std::string to_string(const END_GAME_STATS_DATA& stats);
+
+// Thread-safe class for retrieving and setting ActivityRecord data
+class ActivityDBProtocol
+{
+public:
+	virtual ~ActivityDBProtocol();
+public:
+	virtual std::string getFirstLaunchDate() const = 0;
+};
 
 // ActivityManager accepts numerous event callbacks from the core game and synthesizes
 // a (more) sensible stream of higher-level event callbacks to subscribed ActivitySinks.
@@ -158,6 +183,9 @@ public:
 	void quitGame(END_GAME_STATS_DATA stats, bool cheatsUsed);
 	void preSystemShutdown();
 
+	// navigating main menus
+	void navigateToMenu(const std::string& menuName);
+
 	// changing settings
 	void beginLoadingSettings();
 	void changedSetting(const std::string& settingKey, const std::string& settingValue);
@@ -165,6 +193,9 @@ public:
 
 	// cheats used
 	void cheatUsed(const std::string& cheatName);
+
+	// mods reloaded / possibly changed
+	void rebuiltSearchPath();
 
 	// called when a joinable multiplayer game is hosted
 	// lobbyGameId is 0 if the lobby can't be contacted / the game is not registered with the lobby
@@ -191,10 +222,14 @@ public:
 	void addActivitySink(std::shared_ptr<ActivitySink> sink);
 	void removeActivitySink(const std::shared_ptr<ActivitySink>& sink);
 	ActivitySink::GameMode getCurrentGameMode() const;
+	inline std::shared_ptr<ActivityDBProtocol> getRecord() { return activityDatabase; }
 private:
+	ActivityManager();
+	void _initializeDB();
 	void _endedMission(ActivitySink::GameEndReason result, END_GAME_STATS_DATA stats, bool cheatsUsed);
 private:
 	std::vector<std::shared_ptr<ActivitySink>> activitySinks;
+	std::shared_ptr<ActivityDBProtocol> activityDatabase;
 
 	// storing current game state, to aide in synthesizing events
 	bool bIsLoadingConfiguration = false;
@@ -226,6 +261,8 @@ private:
 		}
 	};
 	FoundLobbyGameDetails lastLobbyGameJoinAttempt;
+
+	optional<std::vector<Sha256>> lastLoadedMods;
 };
 
 #endif // __INCLUDED_SRC_ACTIVITY_H__

@@ -19,6 +19,7 @@
 
 #if defined(__clang__)
 	#pragma clang diagnostic ignored "-Wunneeded-internal-declaration" // warning: function 'yyinput' is not needed and will not be emitted
+	#pragma clang diagnostic ignored "-Wshorten-64-to-32"
 #elif defined(__GNUC__)
 	#if 7 <= __GNUC__
 		#pragma GCC diagnostic ignored "-Wnull-dereference"

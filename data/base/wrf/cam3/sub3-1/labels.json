@@ -87,6 +87,38 @@
 		"label": "NXMediumFacAssembly",
 		"pos": [1600, 7488]
 	},
+	"position_22": {
+		"label": "patrolPos1",
+		"pos": [1280, 4992]
+	},
+	"position_23": {
+		"label": "patrolPos2",
+		"pos": [3072, 5120]
+	},
+	"position_24": {
+		"label": "patrolPos3",
+		"pos": [2944, 7168]
+	},
+	"position_25": {
+		"label": "patrolPos4",
+		"pos": [1024, 7424]
+	},
+	"position_26": {
+		"label": "patrolPos5",
+		"pos": [4864, 4992]
+	},
+	"position_27": {
+		"label": "patrolPos6",
+		"pos": [4864, 7168]
+	},
+	"position_28": {
+		"label": "patrolPos7",
+		"pos": [6784, 6144]
+	},
+	"position_29": {
+		"label": "patrolPos8",
+		"pos": [6272, 7552]
+	},
 
 	"area_0": {
 		"label": "landingZone",

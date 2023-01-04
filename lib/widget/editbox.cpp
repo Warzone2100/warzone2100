@@ -39,9 +39,6 @@
 /* Size of the overwrite cursor */
 #define WEDB_CURSORSIZE		8
 
-/* Whether the cursor blinks or not */
-#define CURSOR_BLINK		1
-
 /* The time the cursor blinks for */
 #define WEDB_BLINKRATE		800
 
@@ -88,8 +85,8 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
 }
 
-W_EDITBOX::W_EDITBOX(WIDGET *parent)
-	: WIDGET(parent)
+W_EDITBOX::W_EDITBOX()
+	: WIDGET()
 	, state(WEDBS_FIXED)
 	, FontID(font_regular)
 	, blinkOffset(wzGetTicks())
@@ -107,6 +104,23 @@ W_EDITBOX::W_EDITBOX(WIDGET *parent)
 	, boxColourSecond(WZCOL_FORM_LIGHT)
 	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {}
+
+W_EDITBOX::~W_EDITBOX()
+{
+	/* Note the edit state */
+	unsigned editState = state & WEDBS_MASK;
+
+	/* Only have anything to do if the widget is being edited */
+	if ((editState & WEDBS_MASK) == WEDBS_FIXED)
+	{
+		return;
+	}
+
+	// If the edit box still somehow has focus, and is editable, need to StopTextInput()
+	// (May be able to remove this once more refactoring of the game menus / in-game UI occurs)
+	debug(LOG_INFO, "Editbox seems to still have focus, and is editable, as it's being destroyed.");
+	StopTextInput(this); // force-stop text input if this EditBox somehow still has the input
+}
 
 void W_EDITBOX::initialise()
 {
@@ -197,6 +211,20 @@ void W_EDITBOX::delCharLeft()
 }
 
 
+void W_EDITBOX::geometryChanged()
+{
+	/* Note the edit state */
+	unsigned editState = state & WEDBS_MASK;
+
+	/* For now, only handle fit recalculation if not being edited */
+	if (!((editState & WEDBS_MASK) == WEDBS_FIXED))
+	{
+		return;
+	}
+	fitStringStart();
+}
+
+
 /* Calculate how much of the start of a string can fit into the edit box */
 void W_EDITBOX::fitStringStart()
 {
@@ -209,7 +237,7 @@ void W_EDITBOX::fitStringStart()
 
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp, FontID);
 
 		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
@@ -235,7 +263,7 @@ void W_EDITBOX::fitStringEnd()
 
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp, FontID);
 
 		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
@@ -262,7 +290,7 @@ void W_EDITBOX::setCursorPosPixels(int xPos)
 	int prevPos = printStart + tmp.length();
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp, FontID);
 		int delta = pixelWidth - (xPos - (WEDB_XGAP + WEDB_CURSORSIZE / 2));
 		int pos = printStart + tmp.length();
 
@@ -293,14 +321,17 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		return;
 	}
 	dirty = true;
-	StartTextInput();
+	StartTextInput(this);
 	/* If there is a mouse click outside of the edit box - stop editing */
 	int mx = psContext->mx;
 	int my = psContext->my;
 	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
-		StopTextInput();
-		screenPointer->setFocus(nullptr);
+		StopTextInput(this);
+		if (auto lockedScreen = screenPointer.lock())
+		{
+			lockedScreen->setFocus(nullptr);
+		}
 		return;
 	}
 
@@ -410,8 +441,15 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case INPBUF_CR :
 		case KEY_KPENTER:					// either normal return key || keypad enter
 			/* Finish editing */
-			StopTextInput();
-			screenPointer->setFocus(nullptr);
+			StopTextInput(this);
+			if (onRetHandler)
+			{
+				onRetHandler(*this);
+			}
+			if (auto lockedScreen = screenPointer.lock())
+			{
+				lockedScreen->setFocus(nullptr);
+			}
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
 			break;
@@ -429,8 +467,12 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			else
 			{
 				// hitting ESC while the editbox is empty ends editing mode
-				StopTextInput();
-				screenPointer->setFocus(nullptr);
+				StopTextInput(this);
+				if (auto lockedScreen = screenPointer.lock())
+				{
+					lockedScreen->setFocus(nullptr);
+				}
+				inputLoseFocus();	// clear the input buffer.
 				return;
 			}
 			break;
@@ -508,6 +550,12 @@ void W_EDITBOX::setString(WzString string)
 	dirty = true;
 }
 
+void W_EDITBOX::setPlaceholder(WzString value)
+{
+	placeholderText = value;
+	dirty = true;
+}
+
 void W_EDITBOX::simulateClick(W_CONTEXT *psContext, bool silenceClickAudio /*= false*/, WIDGET_KEY key /*= WKEY_PRIMARY*/)
 {
 	if (silenceClickAudio)
@@ -552,7 +600,10 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		inputClearBuffer();
 
 		/* Tell the form that the edit box has focus */
-		screenPointer->setFocus(this);
+		if (auto lockedScreen = screenPointer.lock())
+		{
+			lockedScreen->setFocus(shared_from_this());
+		}
 	}
 	dirty = true;
 }
@@ -567,8 +618,12 @@ void W_EDITBOX::focusLost()
 	state = WEDBS_FIXED;
 	printStart = 0;
 	fitStringStart();
+	StopTextInput(this);
 
-	screenPointer->setReturn(this);
+	if (auto lockedScreen = screenPointer.lock())
+	{
+		lockedScreen->setReturn(shared_from_this());
+	}
 	dirty = true;
 }
 
@@ -626,53 +681,48 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 		iV_ShadowBox(x0, y0, x1, y1, 0, boxColourFirst, boxColourSecond, boxColourBackground);
 	}
 
-	int fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
-
-	int fy = y0 + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
-
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
 	WzString displayedText = aText;
 	displayedText.remove(0, printStart);  // Erase anything there isn't room to display.
 	displayedText.remove(printChars, displayedText.length());
 
-	displayCache.wzDisplayedText.setText(displayedText.toUtf8(), FontID);
+	PIELIGHT displayedTextColor = WZCOL_FORM_TEXT;
+	if (aText.isEmpty() && !placeholderText.isEmpty())
+	{
+		displayCache.wzDisplayedText.setText(placeholderText, FontID);
+		displayedTextColor = (state & WEDBS_MASK) == WEDBS_FIXED ? WZCOL_FORM_TEXT : WZCOL_GREY;
+	}
+	else
+	{
+		displayCache.wzDisplayedText.setText(displayedText, FontID);
+	}
+
+	int lineSize = displayCache.wzDisplayedText.lineSize();
+	int aboveBase = displayCache.wzDisplayedText.aboveBase();
+	int belowBase = displayCache.wzDisplayedText.belowBase();
+
+	int fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
+	int fy = y0 + (height() - lineSize) / 2 - aboveBase;
+
 	displayCache.wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
 
 	// Display the cursor if editing
-#if CURSOR_BLINK
-	bool blink = !(((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2);
-	if ((state & WEDBS_MASK) == WEDBS_INSERT && blink)
-#else
-	if ((state & WEDBS_MASK) == WEDBS_INSERT)
-#endif
+	if (((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2 == 0)
 	{
-		// insert mode
-		WzString tmp = aText;
-		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, printStart);
+		auto visibleTextBeforeCursor = aText.substr(printStart, insPos - printStart);
+		displayCache.modeText.setText(visibleTextBeforeCursor, FontID);
+		int cursorX = x0 + WEDB_XGAP + displayCache.modeText.width();
+		int cursorY = fy;
 
-		displayCache.modeText.setText(tmp.toUtf8(), FontID);
-
-		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
-		int cy = fy;
-		iV_Line(cx, cy + iV_GetTextAboveBase(FontID), cx, cy - iV_GetTextBelowBase(FontID), WZCOL_FORM_CURSOR);
-	}
-#if CURSOR_BLINK
-	else if ((state & WEDBS_MASK) == WEDBS_OVER && blink)
-#else
-	else if ((state & WEDBS_MASK) == WEDBS_OVER)
-#endif
-	{
-		// overwrite mode
-		WzString tmp = aText;
-		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, printStart);
-
-		displayCache.modeText.setText(tmp.toUtf8(), FontID);
-
-		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
-		int cy = fy;
-		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, WZCOL_FORM_CURSOR);
+		if ((state & WEDBS_MASK) == WEDBS_INSERT)
+		{
+			// insert mode
+			iV_Line(cursorX, cursorY + aboveBase, cursorX, cursorY - belowBase, WZCOL_FORM_CURSOR);
+		}
+		else if ((state & WEDBS_MASK) == WEDBS_OVER)
+		{
+			iV_Line(cursorX, cursorY, cursorX + WEDB_CURSORSIZE, cursorY, WZCOL_FORM_CURSOR);
+		}
 	}
 
 	if (pBoxDisplay == nullptr)
@@ -694,4 +744,9 @@ void W_EDITBOX::setState(unsigned newState)
 {
 	unsigned mask = WEDBS_DISABLE;
 	state = (state & ~mask) | (newState & mask);
+}
+
+void W_EDITBOX::setOnReturnHandler(const OnReturnHandler& func)
+{
+	onRetHandler = func;
 }

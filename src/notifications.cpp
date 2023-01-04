@@ -23,6 +23,9 @@
  *
  */
 
+#include <nlohmann/json.hpp> // Must come before WZ includes
+using json = nlohmann::json;
+
 #include "lib/framework/frame.h"
 #include "notifications.h"
 #include "lib/gamelib/gtime.h"
@@ -35,11 +38,9 @@
 #include "init.h"
 #include "frend.h"
 #include <algorithm>
+#include <limits>
 
 // MARK: - Notification Ignore List
-
-#include <3rdparty/json/json.hpp>
-using json = nlohmann::json;
 
 #include <typeinfo>
 #include <physfs.h>
@@ -278,10 +279,12 @@ public:
 
 public:
 	void setState(WZ_Notification_Status::NotificationState newState);
-	bool wasProgrammaticallyDismissed() const { return bWasProgrammaticallyDismissed; }
+	bool wasProgrammaticallyDismissed() const { return dismissalCause == WZ_Notification_Dismissal_Reason::ACTION_BUTTON_CLICK || dismissalCause == WZ_Notification_Dismissal_Reason::PROGRAMMATIC; }
+	WZ_Notification_Dismissal_Reason dismissReason() const { return dismissalCause; }
 
 protected:
-	void setWasProgrammaticallyDismissed() { bWasProgrammaticallyDismissed = true; }
+	void setWasProgrammaticallyDismissed() { dismissalCause = WZ_Notification_Dismissal_Reason::PROGRAMMATIC; }
+	void setWasDismissedByActionButton() { dismissalCause = WZ_Notification_Dismissal_Reason::ACTION_BUTTON_CLICK; }
 
 public:
 	WZ_Notification notification;
@@ -290,7 +293,7 @@ public:
 private:
 	bool bWasInitiallyShown = false;
 	bool bWasFullyShown = false;
-	bool bWasProgrammaticallyDismissed = false;
+	WZ_Notification_Dismissal_Reason dismissalCause = WZ_Notification_Dismissal_Reason::USER_DISMISSED;
 	friend class W_NOTIFICATION;
 };
 
@@ -301,7 +304,7 @@ void WZ_Queued_Notification::setState(WZ_Notification_Status::NotificationState 
 
 	if (newState == WZ_Notification_Status::NotificationState::closed)
 	{
-		if (notification.isIgnorable() && !bWasFullyShown && !bWasProgrammaticallyDismissed)
+		if (notification.isIgnorable() && !bWasFullyShown && (dismissalCause != WZ_Notification_Dismissal_Reason::PROGRAMMATIC))
 		{
 			notificationPrefs->incrementNotificationRuns(notification.displayOptions.uniqueNotificationIdentifier());
 		}
@@ -336,6 +339,7 @@ void removeInGameNotificationForm(WZ_Queued_Notification* request);
 #define WZ_NOTIFICATION_CONTENTS_LINE_SPACING	0
 #define WZ_NOTIFICATION_CONTENTS_TOP_PADDING	5
 #define WZ_NOTIFICATION_BUTTON_HEIGHT 20
+#define WZ_NOTIFICATION_MODAL_BUTTON_HEIGHT 25
 #define WZ_NOTIFICATION_BETWEEN_BUTTON_PADDING	10
 
 #define WZ_NOTIFY_DONOTSHOWAGAINCB_ID 5
@@ -349,33 +353,7 @@ void removeInGameNotificationForm(WZ_Queued_Notification* request);
 #endif
 #include <glm/gtx/transform.hpp>
 #include "lib/ivis_opengl/pieblitfunc.h"
-
-struct WzCheckboxButton : public W_BUTTON
-{
-public:
-	WzCheckboxButton(WIDGET *parent) : W_BUTTON(parent)
-	{
-		addOnClickHandler([](W_BUTTON& button) {
-			WzCheckboxButton& self = static_cast<WzCheckboxButton&>(button);
-			self.isChecked = !self.isChecked;
-		});
-	}
-
-	void display(int xOffset, int yOffset);
-
-	Vector2i calculateDesiredDimensions();
-
-	bool getIsChecked() const { return isChecked; }
-private:
-	int checkboxSize()
-	{
-		wzText.setText(pText.toUtf8(), FontID);
-		return wzText.lineSize() - 2;
-	}
-private:
-	WzText wzText;
-	bool isChecked = false;
-};
+#include "lib/widget/checkbox.h"
 
 static W_FORMINIT MakeNotificationFormInit()
 {
@@ -391,9 +369,11 @@ static W_FORMINIT MakeNotificationFormInit()
 
 class W_NOTIFICATION : public W_FORM
 {
-public:
+protected:
 	W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init = MakeNotificationFormInit());
+public:
 	~W_NOTIFICATION();
+	static std::shared_ptr<W_NOTIFICATION> make(WZ_Queued_Notification* request, W_FORMINIT init = MakeNotificationFormInit());
 	void run(W_CONTEXT *psContext) override;
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
@@ -408,14 +388,16 @@ public:
 public:
 	// to be called from the larger In-Game Notifications System
 	bool dismissNotification(float animationSpeed = 1.0f);
+	void deleteThisNotificationWidget();
 private:
 	bool calculateNotificationWidgetPos();
 	gfx_api::texture* loadImage(const WZ_Notification_Image& image);
 	void internalDismissNotification(float animationSpeed = 1.0f);
 public:
-	WzCheckboxButton *pOnDoNotShowAgainCheckbox = nullptr;
+	std::shared_ptr<WzCheckboxButton> pOnDoNotShowAgainCheckbox = nullptr;
 private:
 	WZ_Queued_Notification* request;
+	bool isModal = false;
 	bool isInDragMode = false;
 	Vector2i dragOffset = {0, 0};
 	Vector2i dragStartMousePos = {0, 0};
@@ -423,6 +405,7 @@ private:
 	uint32_t dragStartedTime = 0;
 	uint32_t dragEndedTime = 0;
 	gfx_api::texture* pImageTexture = nullptr;
+	std::weak_ptr<W_FORM> psModalParent;
 };
 
 struct DisplayNotificationButtonCache
@@ -433,9 +416,9 @@ struct DisplayNotificationButtonCache
 // MARK: - In-game Notification Display
 
 static std::list<std::unique_ptr<WZ_Queued_Notification>> notificationQueue;
-static W_SCREEN* psNotificationOverlayScreen = nullptr;
+static std::shared_ptr<W_SCREEN> psNotificationOverlayScreen = nullptr;
 static std::unique_ptr<WZ_Queued_Notification> currentNotification;
-static W_NOTIFICATION* currentInGameNotification = nullptr;
+static std::shared_ptr<W_NOTIFICATION> currentInGameNotification = nullptr;
 static uint32_t lastNotificationClosed = 0;
 static Vector2i lastDragOnNotificationStartPos(-1,-1);
 
@@ -472,68 +455,6 @@ std::unique_ptr<WZ_Queued_Notification> popNextQueuedNotification()
 	return nullptr;
 }
 
-// MARK: - WzCheckboxButton
-
-Vector2i WzCheckboxButton::calculateDesiredDimensions()
-{
-	int cbSize = checkboxSize();
-	Vector2i checkboxPos{x(), y()};
-	int textLeftPos = checkboxPos.x + cbSize + 7;
-
-	// TODO: Incorporate padding?
-	return Vector2i(textLeftPos + wzText.width(), std::max(wzText.lineSize(), cbSize));
-}
-
-void WzCheckboxButton::display(int xOffset, int yOffset)
-{
-	wzText.setText(pText.toUtf8(), FontID);
-
-	int x0 = xOffset + x();
-	int y0 = yOffset + y();
-
-	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool grey = (getState() & WBUT_DISABLE) != 0;
-
-	// calculate checkbox dimensions
-	int cbSize = checkboxSize();
-	Vector2i checkboxOffset{0, (height() - cbSize) / 2}; // left-align, center vertically
-	Vector2i checkboxPos{x0 + checkboxOffset.x, y0 + checkboxOffset.y};
-
-	// draw checkbox border
-	PIELIGHT notifyBoxAddColor = WZCOL_NOTIFICATION_BOX;
-	notifyBoxAddColor.byte.a = uint8_t(float(notifyBoxAddColor.byte.a) * 0.7f);
-	pie_UniTransBoxFill(checkboxPos.x, checkboxPos.y, checkboxPos.x + cbSize, checkboxPos.y + cbSize, notifyBoxAddColor);
-	iV_Box2(checkboxPos.x, checkboxPos.y, checkboxPos.x + cbSize, checkboxPos.y + cbSize, WZCOL_TEXT_MEDIUM, WZCOL_TEXT_MEDIUM);
-
-	if (down || isChecked)
-	{
-		// draw checkbox "checked" inside
-		#define CB_INNER_INSET 2
-		PIELIGHT checkBoxInsideColor = WZCOL_TEXT_MEDIUM;
-		checkBoxInsideColor.byte.a = 200;
-		pie_UniTransBoxFill(checkboxPos.x + CB_INNER_INSET, checkboxPos.y + CB_INNER_INSET, checkboxPos.x + cbSize - (CB_INNER_INSET), checkboxPos.y + cbSize - (CB_INNER_INSET), checkBoxInsideColor);
-	}
-
-	if (grey)
-	{
-		// disabled, render something over it!
-		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
-	}
-
-	// Display text to the right of the checkbox image
-	int textLeftPos = checkboxPos.x + cbSize + 7;
-	int fx = textLeftPos;
-	int fw = wzText.width();
-	int fy = yOffset + y() + (height() - wzText.lineSize()) / 2 - wzText.aboveBase();
-
-	if (style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
-	{
-		fx = textLeftPos + ((width() - fw) / 2);
-	}
-
-	wzText.render(fx, fy, WZCOL_TEXT_MEDIUM);
-}
-
 // MARK: - W_NOTIFICATION
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -550,7 +471,7 @@ void displayNotificationAction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayNotificationButtonCache& cache = *static_cast<DisplayNotificationButtonCache*>(psWidget->pUserData);
 
-	cache.wzText.setText(psBut->pText.toUtf8(), psBut->FontID);
+	cache.wzText.setText(psBut->pText, psBut->FontID);
 
 	if (psBut->isHighlighted())					// if mouse is over text then hilight.
 	{
@@ -630,6 +551,19 @@ bool W_NOTIFICATION::dismissNotification(float animationSpeed /*= 1.0f*/)
 	return false;
 }
 
+void W_NOTIFICATION::deleteThisNotificationWidget()
+{
+	if (auto psStrongModalParent = psModalParent.lock())
+	{
+		// if modal and has a modal parent, actually submit the *parent* for removal
+		psStrongModalParent->deleteLater();
+	}
+	else
+	{
+		deleteLater();
+	}
+}
+
 void W_NOTIFICATION::internalDismissNotification(float animationSpeed /*= 1.0f*/)
 {
 	// if notification is the one being displayed, animate it away by setting its state to closing
@@ -655,16 +589,41 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 : W_FORM(&init)
 , request(request)
 {
-	W_NOTIFICATION* psNewNotificationForm = this;
-	psNotificationOverlayScreen->psForm->attach(psNewNotificationForm);
+	if (request)
+	{
+		isModal = request->notification.isModal;
+	}
+}
+
+std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* request, W_FORMINIT init /*= MakeNotificationFormInit()*/)
+{
+	ASSERT(request != nullptr, "Request is null");
+
+	class make_shared_enabler : public W_NOTIFICATION {
+	public:
+		make_shared_enabler(WZ_Queued_Notification* request, W_FORMINIT init): W_NOTIFICATION(request, init) {}
+	};
+	auto psNewNotificationForm = std::make_shared<make_shared_enabler>(request, init);
+
+	bool isModal = request->notification.isModal;
+	std::shared_ptr<W_FORM> psRootFrm = psNotificationOverlayScreen->psForm;
+	if (isModal)
+	{
+		auto modalRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+		psRootFrm->attach(modalRootFrm);
+		psRootFrm = modalRootFrm;
+		psNewNotificationForm->psModalParent = modalRootFrm;
+	}
+
+	psRootFrm->attach(psNewNotificationForm);
 
 	// Load the image, if specified
 	if (!request->notification.largeIcon.empty())
 	{
-		pImageTexture = loadImage(request->notification.largeIcon);
+		psNewNotificationForm->pImageTexture = psNewNotificationForm->loadImage(request->notification.largeIcon);
 	}
 
-	const int notificationWidth = width();
+	const int notificationWidth = psNewNotificationForm->width();
 
 //		/* Add the close button */
 //		W_BUTINIT sCloseButInit;
@@ -684,26 +643,55 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 //		}));
 
 	// Calculate dimensions for text area
-	int imageSize = (pImageTexture) ? WZ_NOTIFICATION_IMAGE_SIZE : 0;
+	const int imageSize = (psNewNotificationForm->pImageTexture) ? WZ_NOTIFICATION_IMAGE_SIZE : 0;
 	int maxTextWidth = notificationWidth - (WZ_NOTIFICATION_PADDING * 2) - imageSize - ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : 0);
+	int maxTitleWidth = maxTextWidth;
+	int maxContentsWidth = maxTextWidth;
+	if (isModal)
+	{
+		maxContentsWidth = notificationWidth - (WZ_NOTIFICATION_PADDING * 2);
+	}
 
 	// Add title
-	W_LABEL *label_title = new W_LABEL(psNewNotificationForm);
-	label_title->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING, maxTextWidth, 12);
+	auto label_title = std::make_shared<W_LABEL>();
+	psNewNotificationForm->attach(label_title);
+	int titleStartXPos = WZ_NOTIFICATION_PADDING;
+	int titleStartYPos = WZ_NOTIFICATION_PADDING;
+	if (isModal)
+	{
+		titleStartXPos = WZ_NOTIFICATION_PADDING + imageSize + ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : 0);
+	}
+	label_title->setGeometry(titleStartXPos, titleStartYPos, maxTitleWidth, 12);
 	label_title->setFontColour(WZCOL_TEXT_BRIGHT);
-	int heightOfTitleLabel = label_title->setFormattedString(WzString::fromUtf8(request->notification.contentTitle), maxTextWidth, font_regular_bold, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
-	label_title->setGeometry(label_title->x(), label_title->y(), maxTextWidth, heightOfTitleLabel);
+	int heightOfTitleLabel = label_title->setFormattedString(WzString::fromUtf8(request->notification.contentTitle), maxTitleWidth, (isModal) ? font_medium_bold : font_regular_bold, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
+	if (isModal && (heightOfTitleLabel < imageSize))
+	{
+		// vertically center title text in available space
+		titleStartYPos += ((imageSize - heightOfTitleLabel) / 2);
+	}
+	label_title->setGeometry(titleStartXPos, titleStartYPos, maxTitleWidth, heightOfTitleLabel);
 	label_title->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	// set a custom hit-testing function that ignores all mouse input / clicks
 	label_title->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	int titleBottom = label_title->y() + label_title->height();
+	if (isModal)
+	{
+		titleBottom = label_title->y() + std::max<int>(label_title->height(), imageSize);
+	}
 
 	// Add contents
-	W_LABEL *label_contents = new W_LABEL(psNewNotificationForm);
+	auto label_contents = std::make_shared<W_LABEL>();
+	psNewNotificationForm->attach(label_contents);
 //	debug(LOG_GUI, "label_title.height=%d", label_title->height());
-	label_contents->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING + label_title->height() + WZ_NOTIFICATION_CONTENTS_TOP_PADDING, maxTextWidth, 12);
+	int contentsStartYPos = titleBottom + WZ_NOTIFICATION_CONTENTS_TOP_PADDING;
+	if (isModal)
+	{
+		contentsStartYPos = titleBottom + ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : (WZ_NOTIFICATION_CONTENTS_TOP_PADDING + 3));
+	}
+	label_contents->setGeometry(WZ_NOTIFICATION_PADDING, contentsStartYPos, maxContentsWidth, 12);
 	label_contents->setFontColour(WZCOL_TEXT_BRIGHT);
-	int heightOfContentsLabel = label_contents->setFormattedString(WzString::fromUtf8(request->notification.contentText), maxTextWidth, font_regular, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
-	label_contents->setGeometry(label_contents->x(), label_contents->y(), maxTextWidth, heightOfContentsLabel);
+	int heightOfContentsLabel = label_contents->setFormattedString(WzString::fromUtf8(request->notification.contentText), maxContentsWidth, font_regular, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
+	label_contents->setGeometry(label_contents->x(), label_contents->y(), maxContentsWidth, heightOfContentsLabel);
 	label_contents->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	// set a custom hit-testing function that ignores all mouse input / clicks
 	label_contents->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
@@ -712,15 +700,19 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	std::string dismissLabel = _("Dismiss");
 	std::string actionLabel = request->notification.action.title;
 
-	W_BUTTON *psActionButton = nullptr;
-	W_BUTTON *psDismissButton = nullptr;
+	std::shared_ptr<W_BUTTON> psActionButton = nullptr;
+	std::shared_ptr<W_BUTTON> psDismissButton = nullptr;
 
 	// Position the buttons below the text contents area
 	int buttonsTop = label_contents->y() + label_contents->height() + WZ_NOTIFICATION_PADDING;
+	if (isModal)
+	{
+		buttonsTop += (WZ_NOTIFICATION_PADDING / 2);
+	}
 
 	W_BUTINIT sButInit;
 	sButInit.formID = 0;
-	sButInit.height = WZ_NOTIFICATION_BUTTON_HEIGHT;
+	sButInit.height = (isModal) ? WZ_NOTIFICATION_MODAL_BUTTON_HEIGHT : WZ_NOTIFICATION_BUTTON_HEIGHT;
 	sButInit.y = buttonsTop;
 	sButInit.style |= WBUT_TXTCENTRE;
 	sButInit.UserData = 0; // store whether "Action" button or not
@@ -739,12 +731,15 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		// 1.) "Action" button
 		sButInit.id = 2;
 		sButInit.width = iV_GetTextWidth(actionLabel.c_str(), font_regular_bold) + 18;
-		sButInit.x = (short)(width() - WZ_NOTIFICATION_PADDING - sButInit.width);
+		sButInit.x = (short)(psNewNotificationForm->width() - WZ_NOTIFICATION_PADDING - sButInit.width);
 		sButInit.UserData = 1; // store "Action" state
 		sButInit.FontID = font_regular_bold;
 		sButInit.pText = actionLabel.c_str();
-		psActionButton = new W_BUTTON(&sButInit);
-		psActionButton->addOnClickHandler([psNewNotificationForm](W_BUTTON& button) {
+		psActionButton = std::make_shared<W_BUTTON>(&sButInit);
+		psNewNotificationForm->attach(psActionButton);
+		psActionButton->addOnClickHandler([](W_BUTTON& button) {
+			auto psNewNotificationForm = std::dynamic_pointer_cast<W_NOTIFICATION>(button.parent());
+			ASSERT_OR_RETURN(, psNewNotificationForm != nullptr, "null parent");
 			if (psNewNotificationForm->request->notification.action.onAction)
 			{
 				psNewNotificationForm->request->notification.action.onAction(psNewNotificationForm->request->notification);
@@ -753,9 +748,9 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 			{
 				debug(LOG_ERROR, "Action defined (\"%s\"), but no action handler!", psNewNotificationForm->request->notification.action.title.c_str());
 			}
+			psNewNotificationForm->request->setWasDismissedByActionButton();
 			psNewNotificationForm->internalDismissNotification();
 		});
-		attach(psActionButton);
 	}
 
 	if (psActionButton != nullptr || request->notification.duration == 0)
@@ -765,14 +760,16 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		sButInit.id = 3;
 		sButInit.FontID = font_regular;
 		sButInit.width = iV_GetTextWidth(dismissLabel.c_str(), font_regular) + 18;
-		sButInit.x = (short)(((psActionButton) ? (psActionButton->x()) - WZ_NOTIFICATION_BETWEEN_BUTTON_PADDING : width() - WZ_NOTIFICATION_PADDING) - sButInit.width);
+		sButInit.x = (short)(((psActionButton) ? (psActionButton->x()) - WZ_NOTIFICATION_BETWEEN_BUTTON_PADDING : psNewNotificationForm->width() - WZ_NOTIFICATION_PADDING) - sButInit.width);
 		sButInit.pText = dismissLabel.c_str();
 		sButInit.UserData = 0; // store regular state
-		psDismissButton = new W_BUTTON(&sButInit);
-		psDismissButton->addOnClickHandler([psNewNotificationForm](W_BUTTON& button) {
+		psDismissButton = std::make_shared<W_BUTTON>(&sButInit);
+		psDismissButton->addOnClickHandler([](W_BUTTON& button) {
+			auto psNewNotificationForm = std::dynamic_pointer_cast<W_NOTIFICATION>(button.parent());
+			ASSERT_OR_RETURN(, psNewNotificationForm != nullptr, "null parent");
 			psNewNotificationForm->internalDismissNotification();
 		});
-		attach(psDismissButton);
+		psNewNotificationForm->attach(psDismissButton);
 	}
 
 	if (request->notification.isIgnorable() && !request->notification.displayOptions.isOneTimeNotification())
@@ -782,13 +779,14 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		if (numTimesShown >= request->notification.displayOptions.numTimesSeenBeforeDoNotShowAgainOption())
 		{
 			// Display "do not show again" button with checkbox
-			WzCheckboxButton *pDoNotShowAgainButton = new WzCheckboxButton(psNewNotificationForm);
+			auto pDoNotShowAgainButton = std::make_shared<WzCheckboxButton>();
+			psNewNotificationForm->attach(pDoNotShowAgainButton);
 			pDoNotShowAgainButton->id = WZ_NOTIFY_DONOTSHOWAGAINCB_ID;
 			pDoNotShowAgainButton->pText = _("Do not show again");
 			pDoNotShowAgainButton->FontID = font_small;
 			Vector2i minimumDimensions = pDoNotShowAgainButton->calculateDesiredDimensions();
-			pDoNotShowAgainButton->setGeometry(WZ_NOTIFICATION_PADDING, buttonsTop, minimumDimensions.x, std::max(minimumDimensions.y, WZ_NOTIFICATION_BUTTON_HEIGHT));
-			pOnDoNotShowAgainCheckbox = pDoNotShowAgainButton;
+			pDoNotShowAgainButton->setGeometry(WZ_NOTIFICATION_PADDING, buttonsTop, minimumDimensions.x, std::max(minimumDimensions.y, (isModal) ? WZ_NOTIFICATION_MODAL_BUTTON_HEIGHT : WZ_NOTIFICATION_BUTTON_HEIGHT));
+			psNewNotificationForm->pOnDoNotShowAgainCheckbox = pDoNotShowAgainButton;
 		}
 	}
 
@@ -805,7 +803,9 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	{
 		calculatedHeight = std::max<int>(calculatedHeight, imageSize + (WZ_NOTIFICATION_PADDING * 2));
 	}
-	setGeometry(x(), y(), width(), calculatedHeight);
+	psNewNotificationForm->setGeometry(psNewNotificationForm->x(), psNewNotificationForm->y(), psNewNotificationForm->width(), calculatedHeight);
+
+	return psNewNotificationForm;
 }
 
 W_NOTIFICATION::~W_NOTIFICATION()
@@ -819,51 +819,36 @@ W_NOTIFICATION::~W_NOTIFICATION()
 
 #include "lib/ivis_opengl/piestate.h"
 
-gfx_api::texture* makeTexture(unsigned int width, unsigned int height, const gfx_api::pixel_format& format, const void *image)
-{
-	size_t mip_count = floor(log(std::max(width, height))) + 1;
-	gfx_api::texture* mTexture = gfx_api::context::get().create_texture(mip_count, width, height, format);
-	if (image != nullptr)
-		mTexture->upload_and_generate_mipmaps(0u, 0u, width, height, format, image);
-
-	return mTexture;
-}
-
 gfx_api::texture* W_NOTIFICATION::loadImage(const WZ_Notification_Image& image)
 {
+	return image.loadImageToTexture();
+}
+
+gfx_api::texture* WZ_Notification_Image::loadImageToTexture() const
+{
+	const WZ_Notification_Image& image = *this;
+
 	gfx_api::texture* pTexture = nullptr;
-	iV_Image ivImage;
 	if (!image.imagePath().empty())
 	{
-		const std::string& filename = image.imagePath();
-		const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
-
-		if (!extension || strcmp(extension, ".png") != 0)
-		{
-			debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
-			return nullptr;
-		}
-		if (!iV_loadImage_PNG(filename.c_str(), &ivImage))
-		{
-			return nullptr;
-		}
+		pTexture = gfx_api::context::get().loadTextureFromFile(image.imagePath().c_str(), gfx_api::texture_type::user_interface);
 	}
 	else if (!image.memoryBuffer().empty())
 	{
+		iV_Image ivImage;
 		auto result = iV_loadImage_PNG(image.memoryBuffer(), &ivImage);
 		if (!result.noError())
 		{
 			debug(LOG_ERROR, "Failed to load image from memory buffer: %s", result.text.c_str());
 			return nullptr;
 		}
+		pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(ivImage), gfx_api::texture_type::user_interface, "mem::notify_image");
 	}
 	else
 	{
 		// empty or unhandled case
 		return nullptr;
 	}
-	pTexture = makeTexture(ivImage.width, ivImage.height, iV_getPixelFormat(&ivImage), ivImage.bmp);
-	iV_unloadImage(&ivImage);
 	return pTexture;
 }
 
@@ -873,7 +858,7 @@ gfx_api::texture* W_NOTIFICATION::loadImage(const WZ_Notification_Image& image)
 
 float EaseOutElastic(float p)
 {
-	return sin(-13 * M_PI_2 * (p + 1)) * pow(2, -10 * p) + 1;
+	return static_cast<float>(sin(-13 * M_PI_2 * (p + 1)) * pow(2, -10 * p) + 1);
 }
 
 float EaseOutQuint(float p)
@@ -890,14 +875,20 @@ float EaseInCubic(float p)
 #define WZ_NOTIFICATION_OPEN_DURATION (GAME_TICKS_PER_SEC*1) // Time duration for notification open animation, in game ticks
 #define WZ_NOTIFICATION_CLOSE_DURATION (WZ_NOTIFICATION_OPEN_DURATION / 2)
 #define WZ_NOTIFICATION_TOP_PADDING 5
+#define WZ_NOTIFICATION_TOP_MODAL_PADDING 20
 #define WZ_NOTIFICATION_MIN_DELAY_BETWEEN (GAME_TICKS_PER_SEC*1) // Minimum delay between display of notifications, in game ticks
 
 bool W_NOTIFICATION::calculateNotificationWidgetPos()
 {
+	if (request == nullptr)
+	{
+		return false;
+	}
+
 	// center horizontally in window
 	int x = std::max<int>((screenWidth - width()) / 2, 0);
 	int y = 0; // set below
-	const int endingYPosition = WZ_NOTIFICATION_TOP_PADDING;
+	const int endingYPosition = (!isModal) ? WZ_NOTIFICATION_TOP_PADDING : (WZ_NOTIFICATION_TOP_MODAL_PADDING);
 
 	// calculate positioning based on state and time
 	switch (request->status.state)
@@ -914,7 +905,7 @@ bool W_NOTIFICATION::calculateNotificationWidgetPos()
 			uint32_t endTime = startTime + uint32_t(openAnimationDuration);
 			if (realTime < endTime)
 			{
-				y = (-height()) + (EaseOutQuint((float(realTime) - float(startTime)) / float(openAnimationDuration)) * (endingYPosition + height())) + 1;
+				y = static_cast<int>((-height()) + (EaseOutQuint((float(realTime) - float(startTime)) / float(openAnimationDuration)) * (endingYPosition + height())) + 1);
 				if (!(y + getDragOffset().y >= endingYPosition))
 				{
 					break;
@@ -963,7 +954,7 @@ bool W_NOTIFICATION::calculateNotificationWidgetPos()
 				{
 					percentComplete = EaseInCubic(percentComplete);
 				}
-				y = endingYPosition - (percentComplete * (endingYPosition + height()));
+				y = static_cast<int>(endingYPosition - (percentComplete * (endingYPosition + height())));
 				if ((y + getDragOffset().y) > -height())
 				{
 					break;
@@ -1020,7 +1011,7 @@ void W_NOTIFICATION::run(W_CONTEXT *psContext)
 			// dragging down
 			const int verticalLimit = 10;
 			int distanceY = currMouseY - dragStartY;
-			dragOffset.y = verticalLimit * (1 + log10(float(distanceY) / float(verticalLimit)));
+			dragOffset.y = static_cast<int>(verticalLimit * (1 + log10(float(distanceY) / float(verticalLimit))));
 //			debug(LOG_GUI, "dragging down, dragOffset.y: (%d)", dragOffset.y);
 		}
 		else
@@ -1038,7 +1029,7 @@ void W_NOTIFICATION::run(W_CONTEXT *psContext)
 			dragOffsetEnded = dragOffset;
 			notificationDidStopDragOnNotification();
 		}
-		if (request->status.state != WZ_Notification_Status::NotificationState::closing)
+		if (request && (request->status.state != WZ_Notification_Status::NotificationState::closing))
 		{
 			// decay drag offset
 			const uint32_t dragDecayDuration = GAME_TICKS_PER_SEC * 1;
@@ -1054,6 +1045,8 @@ void W_NOTIFICATION::run(W_CONTEXT *psContext)
 
 void W_NOTIFICATION::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 {
+	ASSERT_OR_RETURN(, request != nullptr, "request is null");
+
 	if (request->status.state == WZ_Notification_Status::NotificationState::closing)
 	{
 		// if clicked while closing, set state to shown
@@ -1111,6 +1104,11 @@ void W_NOTIFICATION::display(int xOffset, int yOffset)
 	// Display the image, if present
 	int imageLeft = x1 - WZ_NOTIFICATION_PADDING - WZ_NOTIFICATION_IMAGE_SIZE;
 	int imageTop = (y() + yOffset) + WZ_NOTIFICATION_PADDING;
+	if (isModal)
+	{
+		// Place the icon on the left side, before the title
+		imageLeft = x0 + WZ_NOTIFICATION_PADDING;
+	}
 
 	if (pImageTexture)
 	{
@@ -1138,7 +1136,7 @@ bool notificationsInitialize()
 	notificationPrefs = new WZ_Notification_Preferences("notifications.json");
 
 	// Initialize the notifications overlay screen
-	psNotificationOverlayScreen = new W_SCREEN();
+	psNotificationOverlayScreen = W_SCREEN::make();
 	psNotificationOverlayScreen->psForm->hide(); // hiding the root form does not stop display of children, but *does* prevent it from accepting mouse over itself - i.e. basically makes it transparent
 	widgRegisterOverlayScreen(psNotificationOverlayScreen, std::numeric_limits<uint16_t>::max());
 
@@ -1154,10 +1152,15 @@ void notificationsShutDown()
 		notificationPrefs = nullptr;
 	}
 
+	if (currentInGameNotification)
+	{
+		widgDelete(currentInGameNotification.get());
+		currentInGameNotification = nullptr;
+	}
+
 	if (psNotificationOverlayScreen)
 	{
 		widgRemoveOverlayScreen(psNotificationOverlayScreen);
-		delete psNotificationOverlayScreen;
 		psNotificationOverlayScreen = nullptr;
 	}
 }
@@ -1179,14 +1182,14 @@ bool isDraggingInGameNotification()
 	return (lastDragOnNotificationStartPos.x >= 0 && lastDragOnNotificationStartPos.y >= 0);
 }
 
-W_NOTIFICATION* getOrCreateInGameNotificationForm(WZ_Queued_Notification* request)
+std::shared_ptr<W_NOTIFICATION> getOrCreateInGameNotificationForm(WZ_Queued_Notification* request)
 {
 	if (!request) return nullptr;
 
 	// right now we only support a single concurrent notification
 	if (!currentInGameNotification)
 	{
-		currentInGameNotification = new W_NOTIFICATION(request);
+		currentInGameNotification = W_NOTIFICATION::make(request);
 	}
 	return currentInGameNotification;
 }
@@ -1253,7 +1256,7 @@ void removeInGameNotificationForm(WZ_Queued_Notification* request)
 	if (!request) return;
 
 	// right now we only support a single concurrent notification
-	currentInGameNotification->deleteLater();
+	currentInGameNotification->deleteThisNotificationWidget();
 	currentInGameNotification = nullptr;
 }
 
@@ -1270,7 +1273,7 @@ void finishedProcessingNotificationRequest(WZ_Queued_Notification* request, bool
 
 	if (request->notification.onDismissed)
 	{
-		request->notification.onDismissed(request->notification, request->wasProgrammaticallyDismissed());
+		request->notification.onDismissed(request->notification, request->dismissReason());
 	}
 
 	// finished with this notification

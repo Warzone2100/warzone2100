@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,6 +30,10 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/frameresource.h"
+#include "lib/framework/wztime.h"
+
+#include <wzmaplib/map_terrain_types.h>
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/ivisdef.h"
@@ -84,10 +88,12 @@
 #include "template.h"
 #include "version.h"
 #include "lib/ivis_opengl/screen.h"
-#include "keymap.h"
 #include <ctime>
 #include "multimenu.h"
 #include "console.h"
+#include "multigifts.h"
+#include "wzscriptdebug.h"
+#include "build_tools/autorevision.h"
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
@@ -95,6 +101,32 @@
 #pragma GCC diagnostic ignored "-Wcast-align"	// TODO: FIXME!
 #endif
 
+#define UNUSED(x) (void)(x)
+
+// Ignore unused functions for now (until full cleanup of old binary savegame .gam writing)
+#if defined( _MSC_VER )
+# pragma warning( disable : 4505 ) // warning C4505: unreferenced function with internal linkage has been removed
+#endif
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wunused-function"
+#elif defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
+bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName)
+{
+	std::ostringstream stream;
+	try {
+		stream << obj.dump(4) << std::endl;
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Failed to save JSON to %s with error: %s", pFileName, e.what());
+		return false;
+	}
+	std::string jsonString = stream.str();
+	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
+	return saveFile(pFileName, jsonString.c_str(), jsonString.size());
+}
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
@@ -105,29 +137,28 @@ void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsi
 	display3dScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	consoleScreenDidChangeSize(oldWidth, oldHeight, newWidth, newHeight);
 	frontendScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	widgOverlaysScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight); // must be last!
 }
 
 void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor)
 {
 	// The text subsystem requires the game -> renderer scale factor, which potentially differs from
 	// the display scale factor.
-	float horizGameToRendererScaleFactor = 0.f, vertGameToRendererScaleFactor = 0.f;
-	wzGetGameToRendererScaleFactor(&horizGameToRendererScaleFactor, &vertGameToRendererScaleFactor);
+	unsigned int horizGameToRendererScaleFactor = 0, vertGameToRendererScaleFactor = 0;
+	wzGetGameToRendererScaleFactorInt(&horizGameToRendererScaleFactor, &vertGameToRendererScaleFactor);
 	iV_TextUpdateScaleFactor(horizGameToRendererScaleFactor, vertGameToRendererScaleFactor);
 }
 
+static unsigned int currentGameVersion = 410;
 
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
 
 static const UDWORD NULL_ID = UDWORD_MAX;
 #define SAVEKEY_ONMISSION	0x100
-
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
-static void plotScriptFeature(ScriptMapData const &data, char *backDropSprite);
-static void plotFeature(char *backDropSprite);
 bool writeGameInfo(const char *pFileName);
-
+static nonstd::optional<nlohmann::json> readGamJson(const char*);
 /** struct used to store the data for retreating. */
 struct RUN_DATA
 {
@@ -257,24 +288,44 @@ struct SAVE_POWER
 	uint32_t    currentPower;
 	uint32_t    extractedPower; // used for hacks
 };
-
+static void serializeSavePowerData_json(nlohmann::json &o, const SAVE_POWER *serializePower)
+{
+	o["currentPower"] = serializePower->currentPower;
+	o["extractedPower"] = serializePower->extractedPower;
+}
 static bool serializeSavePowerData(PHYSFS_file *fileHandle, const SAVE_POWER *serializePower)
 {
 	return (PHYSFS_writeUBE32(fileHandle, serializePower->currentPower)
 	        && PHYSFS_writeUBE32(fileHandle, serializePower->extractedPower));
 }
-
+static void deserializeSavePowerData_json(const nlohmann::json &o, SAVE_POWER *serializePower)
+{
+	serializePower->currentPower = o.at("currentPower").get<uint32_t>();
+	serializePower->extractedPower = o.at("extractedPower").get<uint32_t>();
+}
 static bool deserializeSavePowerData(PHYSFS_file *fileHandle, SAVE_POWER *serializePower)
 {
 	return (PHYSFS_readUBE32(fileHandle, &serializePower->currentPower)
 	        && PHYSFS_readUBE32(fileHandle, &serializePower->extractedPower));
 }
-
+static void serializeVector3i_json(nlohmann::json &o, const Vector3i *serializeVector)
+{
+	o["x"] = serializeVector->x;
+	o["y"] = serializeVector->y;
+	o["z"] = serializeVector->z;
+}
 static bool serializeVector3i(PHYSFS_file *fileHandle, const Vector3i *serializeVector)
 {
 	return (PHYSFS_writeSBE32(fileHandle, serializeVector->x)
 	        && PHYSFS_writeSBE32(fileHandle, serializeVector->y)
 	        && PHYSFS_writeSBE32(fileHandle, serializeVector->z));
+}
+
+static void deserializeVector3i_json(const nlohmann::json &o, Vector3i *serializeVector)
+{
+	serializeVector->x = o.at("x").get<int32_t>();
+	serializeVector->y = o.at("y").get<int32_t>();
+	serializeVector->z = o.at("z").get<int32_t>();
 }
 
 static bool deserializeVector3i(PHYSFS_file *fileHandle, Vector3i *serializeVector)
@@ -294,11 +345,22 @@ static bool deserializeVector3i(PHYSFS_file *fileHandle, Vector3i *serializeVect
 
 	return true;
 }
+static void serializeVector2i_json(nlohmann::json &o,  const Vector2i *serializeVector)
+{
+	o["x"] = serializeVector->x;
+	o["y"] = serializeVector->y;
+}
 
 static bool serializeVector2i(PHYSFS_file *fileHandle, const Vector2i *serializeVector)
 {
 	return (PHYSFS_writeSBE32(fileHandle, serializeVector->x)
 	        && PHYSFS_writeSBE32(fileHandle, serializeVector->y));
+}
+
+static void deserializeVector2i_json(const nlohmann::json &o, Vector2i *serializeVector)
+{
+	serializeVector->x = o.at("x").get<int32_t>();
+	serializeVector->y = o.at("y").get<int32_t>();
 }
 
 static bool deserializeVector2i(PHYSFS_file *fileHandle, Vector2i *serializeVector)
@@ -316,6 +378,15 @@ static bool deserializeVector2i(PHYSFS_file *fileHandle, Vector2i *serializeVect
 
 	return true;
 }
+static void serializeiViewData_json(nlohmann::json &o, const iView *serializeView)
+{
+	auto viewP = nlohmann::json::object();
+	serializeVector3i_json(viewP, &serializeView->p);
+	o["viewDataP"] = viewP;
+	auto viewR = nlohmann::json::object();
+	serializeVector3i_json(viewR, &serializeView->r);
+	o["viewDataR"] = viewR;
+}
 
 static bool serializeiViewData(PHYSFS_file *fileHandle, const iView *serializeView)
 {
@@ -323,12 +394,24 @@ static bool serializeiViewData(PHYSFS_file *fileHandle, const iView *serializeVi
 	        && serializeVector3i(fileHandle, &serializeView->r));
 }
 
+static void deserializeiViewData_json(const nlohmann::json &o, iView *serializeView)
+{
+	deserializeVector3i_json(o.at("viewDataP"), &serializeView->p);
+	deserializeVector3i_json(o.at("viewDataR"), &serializeView->r);
+}
+
 static bool deserializeiViewData(PHYSFS_file *fileHandle, iView *serializeView)
 {
 	return (deserializeVector3i(fileHandle, &serializeView->p)
 	        && deserializeVector3i(fileHandle, &serializeView->r));
 }
-
+static void serializeRunData_json(nlohmann::json &o, const RUN_DATA *serializeRun)
+{
+	serializeVector2i_json(o, &serializeRun->sPos);
+	o["forceLevel"] = serializeRun->forceLevel;
+	o["healthLevel"] = serializeRun->healthLevel;
+	o["leadership"] = serializeRun->leadership;
+}
 static bool serializeRunData(PHYSFS_file *fileHandle, const RUN_DATA *serializeRun)
 {
 	return (serializeVector2i(fileHandle, &serializeRun->sPos)
@@ -336,7 +419,13 @@ static bool serializeRunData(PHYSFS_file *fileHandle, const RUN_DATA *serializeR
 	        && PHYSFS_writeUBE8(fileHandle, serializeRun->healthLevel)
 	        && PHYSFS_writeUBE8(fileHandle, serializeRun->leadership));
 }
-
+static void deserializeRunData_json(const nlohmann::json &o, RUN_DATA *serializeRun)
+{
+	deserializeVector2i_json(o, &serializeRun->sPos);
+	serializeRun->forceLevel = o.at("forceLevel").get<uint8_t>();
+	serializeRun->healthLevel = o.at("healthLevel").get<uint8_t>();
+	serializeRun->leadership = o.at("leadership").get<uint8_t>();
+}
 static bool deserializeRunData(PHYSFS_file *fileHandle, RUN_DATA *serializeRun)
 {
 	return (deserializeVector2i(fileHandle, &serializeRun->sPos)
@@ -344,13 +433,27 @@ static bool deserializeRunData(PHYSFS_file *fileHandle, RUN_DATA *serializeRun)
 	        && PHYSFS_readUBE8(fileHandle, &serializeRun->healthLevel)
 	        && PHYSFS_readUBE8(fileHandle, &serializeRun->leadership));
 }
-
+static void serializeLandingZoneData_json(nlohmann::json &o, const LANDING_ZONE *serializeLandZone)
+{
+	o["x1"] = serializeLandZone->x1;
+	o["y1"] = serializeLandZone->y1;
+	o["x2"] = serializeLandZone->x2;
+	o["y2"] = serializeLandZone->y2;
+}
 static bool serializeLandingZoneData(PHYSFS_file *fileHandle, const LANDING_ZONE *serializeLandZone)
 {
-	return (PHYSFS_writeUBE8(fileHandle, serializeLandZone->x1)
+	return (PHYSFS_writeUBE8(fileHandle,    serializeLandZone->x1)
 	        && PHYSFS_writeUBE8(fileHandle, serializeLandZone->y1)
 	        && PHYSFS_writeUBE8(fileHandle, serializeLandZone->x2)
 	        && PHYSFS_writeUBE8(fileHandle, serializeLandZone->y2));
+}
+
+static void deserializeLandingZoneData_json(const nlohmann::json &o, LANDING_ZONE *serializeLandZone)
+{
+	serializeLandZone->x1 = o.at("x1").get<uint8_t>();
+	serializeLandZone->y1 = o.at("y1").get<uint8_t>();
+	serializeLandZone->x2 = o.at("x2").get<uint8_t>();
+	serializeLandZone->y2 = o.at("y2").get<uint8_t>();
 }
 
 static bool deserializeLandingZoneData(PHYSFS_file *fileHandle, LANDING_ZONE *serializeLandZone)
@@ -360,7 +463,20 @@ static bool deserializeLandingZoneData(PHYSFS_file *fileHandle, LANDING_ZONE *se
 	        && PHYSFS_readUBE8(fileHandle, &serializeLandZone->x2)
 	        && PHYSFS_readUBE8(fileHandle, &serializeLandZone->y2));
 }
+static void serializeMultiplayerGame_json(nlohmann::json &o, const MULTIPLAYERGAME *serializeMulti)
+{
+	o["multiType"] = serializeMulti->type;
+	o["multiMapName"] = serializeMulti->map;
+	o["multiMaxPlayers"] = serializeMulti->maxPlayers;
+	o["multiGameName"] = serializeMulti->name;
+	o["multiPower"] = serializeMulti->power;
+	o["multiBase"] = serializeMulti->base;
+	o["multiAlliance"] = serializeMulti->alliance;
+	o["multiHashBytes"] = 32; // serializeMulti->hash.Bytes
+	o["multiHash"] = serializeMulti->hash.toString();
+	// skip more dummy
 
+}
 static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERGAME *serializeMulti)
 {
 	const char *dummy8c = "DUMMYSTRING";
@@ -383,9 +499,30 @@ static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERG
 		return false;
 	}
 
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		// dummy, was `skDiff` for each player
+		if (!PHYSFS_writeUBE8(fileHandle, 0))
+		{
+			return false;
+		}
+	}
+
 	return true;
 }
-
+static void deserializeMultiplayerGame_json(const nlohmann::json &o, MULTIPLAYERGAME *serializeMulti)
+{
+	serializeMulti->type = static_cast<LEVEL_TYPE>(o.at("multiType").get<uint8_t>());
+	sstrcpy(serializeMulti->map,  o.at("multiMapName").get<std::string>().c_str());
+	serializeMulti->maxPlayers = o.at("multiMaxPlayers").get<uint8_t>();
+	sstrcpy(serializeMulti->name, o.at("multiGameName").get<std::string>().c_str());
+	serializeMulti->power = o.at("multiPower").get<uint32_t>();
+	serializeMulti->base = o.at("multiBase").get<uint8_t>();
+	serializeMulti->alliance = o.at("multiAlliance").get<uint8_t>();
+	Sha256 sha256;
+	sha256.fromString(o.at("multiHash").get<std::string>());
+	serializeMulti->hash = sha256;
+}
 static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME *serializeMulti)
 {
 	int32_t boolFog;
@@ -415,7 +552,26 @@ static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME 
 	}
 	challengeActive = dummy8;	// hack
 
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		// dummy, was `skDiff` for each player
+		if (!PHYSFS_readUBE8(fileHandle, &dummy8))
+		{
+			return false;
+		}
+	}
+
 	return true;
+}
+static void serializePlayer_json(nlohmann::json &o, const PLAYER *serializePlayer, int player)
+{
+	o["position"] = serializePlayer->position;
+	o["name"] = serializePlayer->name;
+	o["aiName"] = getAIName(player);
+	o["difficulty"] = static_cast<int8_t>(serializePlayer->difficulty);
+	o["allocated"] = (uint8_t)serializePlayer->allocated;
+	o["colour"] = serializePlayer->colour;
+	o["team"] = serializePlayer->team;
 }
 
 static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlayer, int player)
@@ -428,7 +584,24 @@ static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlay
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
 }
-
+static void deserializePlayer_json(const nlohmann::json &o, PLAYER *serializePlayer, int player)
+{
+	char aiName[MAX_LEN_AI_NAME] = { "THEREISNOAI" };
+	ASSERT(o.is_object(), "unexpected type, wanted object");
+	sstrcpy(serializePlayer->name, o.at("name").get<std::string>().c_str());
+	sstrcpy(aiName, o.at("aiName").get<std::string>().c_str());
+	serializePlayer->difficulty = static_cast<AIDifficulty>(o.at("difficulty").get<int8_t>());
+	serializePlayer->allocated = o.at("allocated").get<uint8_t>();
+	if (player < game.maxPlayers)
+	{
+		serializePlayer->ai = matchAIbyName(aiName);
+		ASSERT(serializePlayer->ai != AI_NOT_FOUND, "AI \"%s\" not found -- script loading will fail (player %d / %d)",
+				aiName, player, game.maxPlayers);
+	}
+	serializePlayer->position = o.at("position").get<uint32_t>();
+	serializePlayer->colour = o.at("colour").get<uint32_t>();
+	serializePlayer->team = o.at("team").get<uint32_t>();
+}
 static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, int player)
 {
 	char aiName[MAX_LEN_AI_NAME] = { "THEREISNOAI" };
@@ -456,12 +629,26 @@ static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, 
 	serializePlayer->team = team;
 	return retval;
 }
-
+static void serializeNetPlay_json(nlohmann::json &o, const NETPLAY *serializeNetPlay)
+{
+	auto arr = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		auto tmp = nlohmann::json::object();
+		serializePlayer_json(tmp, &serializeNetPlay->players[i], i);
+		arr.insert(arr.end(), tmp);
+	}
+	o["netbComms"] = serializeNetPlay->bComms;
+	o["netPlayerCount"] = serializeNetPlay->playercount;
+	o["netHostPlayer"] = serializeNetPlay->hostPlayer;
+	o["netSelectedPlayer"] = selectedPlayer;
+	o["netScavengers"] = game.scavengers;
+	// skip dummy
+	o["netPlayers"] = arr;
+}
 static bool serializeNetPlay(PHYSFS_file *fileHandle, const NETPLAY *serializeNetPlay)
 {
-	unsigned int i;
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (!serializePlayer(fileHandle, &serializeNetPlay->players[i], i))
 		{
@@ -469,7 +656,7 @@ static bool serializeNetPlay(PHYSFS_file *fileHandle, const NETPLAY *serializeNe
 		}
 	}
 
-	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
+	return (PHYSFS_writeUBE32(fileHandle, (uint32_t)serializeNetPlay->bComms)
 	        && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->playercount)
 	        && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->hostPlayer)
 	        && PHYSFS_writeUBE32(fileHandle, selectedPlayer)
@@ -478,10 +665,23 @@ static bool serializeNetPlay(PHYSFS_file *fileHandle, const NETPLAY *serializeNe
 	        && PHYSFS_writeUBE32(fileHandle, 0));
 }
 
+static void deserializeNetPlay_json(const nlohmann::json &o, NETPLAY *serializeNetPlay)
+{
+	const auto players = o.at("netPlayers");
+	ASSERT_OR_RETURN(, players.is_array(), "unexpected type, wanted array");
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		deserializePlayer_json(players.at(i), &serializeNetPlay->players[i], i);
+	}
+	serializeNetPlay->isHost = true; // only host can load
+	serializeNetPlay->playercount = o.at("netPlayerCount").get<uint32_t>();
+	serializeNetPlay->bComms = o.at("netbComms").get<bool>();
+	selectedPlayer = o.at("netSelectedPlayer").get<uint32_t>();
+	game.scavengers = o.at("netScavengers").get<uint8_t>();
+}
 static bool deserializeNetPlay(PHYSFS_file *fileHandle, NETPLAY *serializeNetPlay)
 {
 	unsigned int i;
-	uint32_t dummy, scavs = game.scavengers;
 	bool retv;
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
@@ -492,14 +692,17 @@ static bool deserializeNetPlay(PHYSFS_file *fileHandle, NETPLAY *serializeNetPla
 		}
 	}
 
+	uint32_t dummy, bComms = serializeNetPlay->bComms, scavs = game.scavengers;
+
 	serializeNetPlay->isHost = true;	// only host can load
-	retv = (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
+	retv = (PHYSFS_readUBE32(fileHandle, &bComms)
 	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->playercount)
 	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->hostPlayer)
 	        && PHYSFS_readUBE32(fileHandle, &selectedPlayer)
 	        && PHYSFS_readUBE32(fileHandle, &scavs)
 	        && PHYSFS_readUBE32(fileHandle, &dummy)
 	        && PHYSFS_readUBE32(fileHandle, &dummy));
+	serializeNetPlay->bComms = bComms;
 	game.scavengers = scavs;
 	return retv;
 }
@@ -515,6 +718,17 @@ struct SAVE_GAME_V7
 	char        levelName[MAX_LEVEL_SIZE];  //name of the level to load up when mid game
 };
 
+static void serializeSaveGameV7Data_json(nlohmann::json &o, const SAVE_GAME_V7 *serializeGame)
+{
+	o["gameTime"] = serializeGame->gameTime;
+	o["GameType"] = serializeGame->GameType;
+	o["ScrollMinX"] = serializeGame->ScrollMinX;
+	o["ScrollMinY"] = serializeGame->ScrollMinY;
+	o["ScrollMaxX"] = serializeGame->ScrollMaxX;
+	o["ScrollMaxY"] = serializeGame->ScrollMaxY;
+	o["levelName"] = serializeGame->levelName;
+}
+
 static bool serializeSaveGameV7Data(PHYSFS_file *fileHandle, const SAVE_GAME_V7 *serializeGame)
 {
 	return (PHYSFS_writeUBE32(fileHandle, serializeGame->gameTime)
@@ -524,6 +738,16 @@ static bool serializeSaveGameV7Data(PHYSFS_file *fileHandle, const SAVE_GAME_V7 
 	        && PHYSFS_writeUBE32(fileHandle, serializeGame->ScrollMaxX)
 	        && PHYSFS_writeUBE32(fileHandle, serializeGame->ScrollMaxY)
 	        && WZ_PHYSFS_writeBytes(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE) == MAX_LEVEL_SIZE);
+}
+static void deserializeSaveGameV7Data_json(const nlohmann::json &o, SAVE_GAME_V7 *serializeGame)
+{
+	serializeGame->gameTime = o.at("gameTime").get<uint32_t>();
+	serializeGame->GameType = o.at("GameType").get<uint32_t>();
+	serializeGame->ScrollMinX = o.at("ScrollMinX").get<int32_t>();
+	serializeGame->ScrollMinY = o.at("ScrollMinY").get<int32_t>();
+	serializeGame->ScrollMaxX = o.at("ScrollMaxX").get<uint32_t>();
+	serializeGame->ScrollMaxY = o.at("ScrollMaxY").get<uint32_t>();
+	sstrcpy(serializeGame->levelName, o.at("levelName").get<std::string>().c_str());
 }
 
 static bool deserializeSaveGameV7Data(PHYSFS_file *fileHandle, SAVE_GAME_V7 *serializeGame)
@@ -542,6 +766,18 @@ struct SAVE_GAME_V10 : public SAVE_GAME_V7
 	SAVE_POWER  power[MAX_PLAYERS];
 };
 
+static void serializeSaveGameV10Data_json(nlohmann::json &o, const SAVE_GAME_V10 *serializeGame)
+{
+	serializeSaveGameV7Data_json(o, (const SAVE_GAME_V7 *) serializeGame);
+	auto arr = nlohmann::json::array();
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		auto tmp = nlohmann::json::object();
+		serializeSavePowerData_json(tmp, &serializeGame->power[i]);
+		arr.insert(arr.end(), tmp);
+	}
+	o["power"] = arr;
+}
 static bool serializeSaveGameV10Data(PHYSFS_file *fileHandle, const SAVE_GAME_V10 *serializeGame)
 {
 	unsigned int i;
@@ -561,7 +797,16 @@ static bool serializeSaveGameV10Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 
 	return true;
 }
-
+static void deserializeSaveGameV10Data_json(const nlohmann::json &o, SAVE_GAME_V10 *serializeGame)
+{
+	deserializeSaveGameV7Data_json(o,  (SAVE_GAME_V7 *) serializeGame);
+	nlohmann::json power= o.at("power");
+	ASSERT(power.is_array(), "unexpected type");
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		deserializeSavePowerData_json(power.at(i), &serializeGame->power[i]);
+	}
+}
 static bool deserializeSaveGameV10Data(PHYSFS_file *fileHandle, SAVE_GAME_V10 *serializeGame)
 {
 	unsigned int i;
@@ -587,12 +832,23 @@ struct SAVE_GAME_V11 : public SAVE_GAME_V10
 	iView currentPlayerPos;
 };
 
+static void serializeSaveGameV11Data_json(nlohmann::json &o, const SAVE_GAME_V11 *serializeGame)
+{
+	serializeSaveGameV10Data_json(o, (const SAVE_GAME_V10 *) serializeGame);
+	serializeiViewData_json(o, &serializeGame->currentPlayerPos);
+
+}
+
 static bool serializeSaveGameV11Data(PHYSFS_file *fileHandle, const SAVE_GAME_V11 *serializeGame)
 {
 	return (serializeSaveGameV10Data(fileHandle, (const SAVE_GAME_V10 *) serializeGame)
 	        && serializeiViewData(fileHandle, &serializeGame->currentPlayerPos));
 }
-
+static void deserializeSaveGameV11Data_json(const nlohmann::json &o, SAVE_GAME_V11 *serializeGame)
+{
+	deserializeSaveGameV10Data_json(o, (SAVE_GAME_V10 *) serializeGame);
+	deserializeiViewData_json(o, &serializeGame->currentPlayerPos);
+}
 static bool deserializeSaveGameV11Data(PHYSFS_file *fileHandle, SAVE_GAME_V11 *serializeGame)
 {
 	return (deserializeSaveGameV10Data(fileHandle, (SAVE_GAME_V10 *) serializeGame)
@@ -604,12 +860,24 @@ struct SAVE_GAME_V12 : public SAVE_GAME_V11
 	uint32_t    missionTime;
 	uint32_t    saveKey;
 };
-
+static void serializeSaveGameV12Data_json(nlohmann::json &o, const SAVE_GAME_V12 *serializeGame)
+{
+	serializeSaveGameV11Data_json(o,  (const SAVE_GAME_V11 *) serializeGame);
+	o["missionTime"] = serializeGame->missionTime;
+	o["saveKey"] = serializeGame->saveKey;
+}
 static bool serializeSaveGameV12Data(PHYSFS_file *fileHandle, const SAVE_GAME_V12 *serializeGame)
 {
 	return (serializeSaveGameV11Data(fileHandle, (const SAVE_GAME_V11 *) serializeGame)
 	        && PHYSFS_writeUBE32(fileHandle, serializeGame->missionTime)
 	        && PHYSFS_writeUBE32(fileHandle, serializeGame->saveKey));
+}
+
+static void deserializeSaveGameV12Data_json(const nlohmann::json &o, SAVE_GAME_V12 *serializeGame)
+{
+	deserializeSaveGameV11Data_json(o, (SAVE_GAME_V11 *) serializeGame);
+	serializeGame->missionTime = o.at("missionTime").get<uint32_t>();
+	serializeGame->saveKey = o.at("saveKey").get<uint32_t>();
 }
 
 static bool deserializeSaveGameV12Data(PHYSFS_file *fileHandle, SAVE_GAME_V12 *serializeGame)
@@ -635,7 +903,30 @@ struct SAVE_GAME_V14 : public SAVE_GAME_V12
 	uint32_t    aDefaultECM[MAX_PLAYERS];
 	uint32_t    aDefaultRepair[MAX_PLAYERS];
 };
-
+static void serializeSaveGameV14Data_json(nlohmann::json &o, const SAVE_GAME_V14 *serializeGame)
+{
+	serializeSaveGameV12Data_json(o, (const SAVE_GAME_V12 *) serializeGame);
+	o["missionOffTime"] = serializeGame->missionOffTime;
+	o["missionETA"] = serializeGame->missionETA;
+	o["missionHomeLZ_X"] = serializeGame->missionHomeLZ_X;
+	o["missionHomeLZ_Y"] = serializeGame->missionHomeLZ_Y;
+	o["missionPlayerX"] = serializeGame->missionPlayerX;
+	o["missionPlayerY"] = serializeGame->missionPlayerY;
+	auto arr = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		auto tmp = nlohmann::json::object();
+		tmp["iTranspEntryTileX"] =  serializeGame->iTranspEntryTileX[i];
+		tmp["iTranspEntryTileY"] =  serializeGame->iTranspEntryTileY[i];
+		tmp["iTranspExitTileX"] = serializeGame->iTranspExitTileX[i];
+		tmp["iTranspExitTileY"] = serializeGame->iTranspExitTileY[i];
+		tmp["aDefaultSensor"] = serializeGame->aDefaultSensor[i];
+		tmp["aDefaultECM"] = serializeGame->aDefaultECM[i];
+		tmp["aDefaultRepair"] = serializeGame->aDefaultRepair[i];
+		arr.insert(arr.end(), tmp);
+	}
+	o["data"] = arr;
+}
 static bool serializeSaveGameV14Data(PHYSFS_file *fileHandle, const SAVE_GAME_V14 *serializeGame)
 {
 	unsigned int i;
@@ -709,7 +1000,28 @@ static bool serializeSaveGameV14Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 
 	return true;
 }
-
+static void deserializeSaveGameV14Data_json(const nlohmann::json &o, SAVE_GAME_V14 *serializeGame)
+{
+	deserializeSaveGameV12Data_json(o, (SAVE_GAME_V12 *) serializeGame);
+	 serializeGame->missionOffTime = o.at("missionOffTime").get<int32_t>();
+	 serializeGame->missionETA = o.at("missionETA").get<int32_t>();
+	 serializeGame->missionHomeLZ_X = o.at("missionHomeLZ_X").get<uint32_t>();
+	 serializeGame->missionHomeLZ_Y = o.at("missionHomeLZ_Y").get<uint32_t>();
+	 serializeGame->missionPlayerX = o.at("missionPlayerX").get<int32_t>();
+	 serializeGame->missionPlayerY = o.at("missionPlayerY").get<int32_t>();
+	nlohmann::json arr = o.at("data");
+	ASSERT_OR_RETURN(, arr.is_array(), "unexpected type, wanted array");
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		serializeGame->iTranspEntryTileX[i] = o.at("data").at(i).at("iTranspEntryTileX").get<uint16_t>();
+		serializeGame->iTranspEntryTileY[i] = o.at("data").at(i).at("iTranspEntryTileY").get<uint16_t>();
+		serializeGame->iTranspExitTileX[i] = o.at("data").at(i).at("iTranspExitTileX").get<uint16_t>();
+		serializeGame->iTranspExitTileY[i] = o.at("data").at(i).at("iTranspExitTileY").get<uint16_t>();
+		serializeGame->aDefaultSensor[i] = o.at("data").at(i).at("aDefaultSensor").get<uint32_t>();
+		serializeGame->aDefaultECM[i] = o.at("data").at(i).at("aDefaultECM").get<uint32_t>();
+		serializeGame->aDefaultRepair[i] = o.at("data").at(i).at("aDefaultRepair").get<uint32_t>();
+	}
+}
 static bool deserializeSaveGameV14Data(PHYSFS_file *fileHandle, SAVE_GAME_V14 *serializeGame)
 {
 	unsigned int i;
@@ -794,6 +1106,14 @@ struct SAVE_GAME_V15 : public SAVE_GAME_V14
 	uint32_t    fogState;
 };
 
+static void serializeSaveGameV15Data_json(nlohmann::json &o, const SAVE_GAME_V15 *serializeGame)
+{
+	serializeSaveGameV14Data_json(o, (const SAVE_GAME_V14 *) serializeGame);
+	o["offWorldKeepLists"] = serializeGame->offWorldKeepLists;
+	o["RubbleTile"] = serializeGame->RubbleTile;
+	o["WaterTile"] = serializeGame->WaterTile;
+
+}
 static bool serializeSaveGameV15Data(PHYSFS_file *fileHandle, const SAVE_GAME_V15 *serializeGame)
 {
 	unsigned int i, j;
@@ -820,7 +1140,15 @@ static bool serializeSaveGameV15Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 	        && PHYSFS_writeUBE32(fileHandle, 0)
 	        && PHYSFS_writeUBE32(fileHandle, 0));
 }
-
+static void deserializeSaveGameV15Data_json(const nlohmann::json &o, SAVE_GAME_V15 *serializeGame)
+{
+	deserializeSaveGameV14Data_json(o, (SAVE_GAME_V14 *) serializeGame);
+	serializeGame->offWorldKeepLists = o.at("offWorldKeepLists").get<int32_t>();
+	serializeGame->RubbleTile = o.at("RubbleTile").get<uint32_t>();
+	serializeGame->WaterTile = o.at("WaterTile").get<uint32_t>();
+	serializeGame->fogColour = 0;
+	serializeGame->fogState = 0;
+}
 static bool deserializeSaveGameV15Data(PHYSFS_file *fileHandle, SAVE_GAME_V15 *serializeGame)
 {
 	unsigned int i, j;
@@ -861,6 +1189,19 @@ struct SAVE_GAME_V16 : public SAVE_GAME_V15
 	LANDING_ZONE   sLandingZone[MAX_NOGO_AREAS];
 };
 
+static void serializeSaveGameV16Data_json(nlohmann::json &o, const SAVE_GAME_V16 *serializeGame)
+{
+	serializeSaveGameV15Data_json(o, (const SAVE_GAME_V15 *) serializeGame);
+	auto arr = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_NOGO_AREAS; ++i)
+	{
+		auto tmp = nlohmann::json::object();
+		serializeLandingZoneData_json(tmp, &serializeGame->sLandingZone[i]);
+		arr.insert(arr.end(), tmp);
+	}
+	o["landingZones"] = arr;
+}
+
 static bool serializeSaveGameV16Data(PHYSFS_file *fileHandle, const SAVE_GAME_V16 *serializeGame)
 {
 	unsigned int i;
@@ -879,6 +1220,15 @@ static bool serializeSaveGameV16Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 	}
 
 	return true;
+}
+
+static void deserializeSaveGameV16Data_json(const nlohmann::json &o, SAVE_GAME_V16 *serializeGame)
+{
+	deserializeSaveGameV15Data_json(o, (SAVE_GAME_V15 *) serializeGame);
+	for (unsigned i = 0; i < MAX_NOGO_AREAS; ++i)
+	{		
+		deserializeLandingZoneData_json(o.at("landingZones").at(i), &serializeGame->sLandingZone[i]);
+	}
 }
 
 static bool deserializeSaveGameV16Data(PHYSFS_file *fileHandle, SAVE_GAME_V16 *serializeGame)
@@ -906,10 +1256,22 @@ struct SAVE_GAME_V17 : public SAVE_GAME_V16
 	uint32_t    objId;
 };
 
+static void serializeSaveGameV17Data_json(nlohmann::json &o, const SAVE_GAME_V17 *serializeGame)
+{
+	serializeSaveGameV16Data_json(o, (const SAVE_GAME_V16 *) serializeGame);
+	o["objId"] = serializeGame->objId;
+}
+
 static bool serializeSaveGameV17Data(PHYSFS_file *fileHandle, const SAVE_GAME_V17 *serializeGame)
 {
 	return (serializeSaveGameV16Data(fileHandle, (const SAVE_GAME_V16 *) serializeGame)
 	        && PHYSFS_writeUBE32(fileHandle, serializeGame->objId));
+}
+
+static void deserializeSaveGameV17Data_json(const nlohmann::json &o, SAVE_GAME_V17 *serializeGame)
+{
+	deserializeSaveGameV16Data_json(o, (SAVE_GAME_V16 *) serializeGame);
+	serializeGame->objId = o.at("objId").get<uint32_t>();
 }
 
 static bool deserializeSaveGameV17Data(PHYSFS_file *fileHandle, SAVE_GAME_V17 *serializeGame)
@@ -924,13 +1286,27 @@ struct SAVE_GAME_V18 : public SAVE_GAME_V17
 	uint32_t    oldestVersion;
 	uint32_t    validityKey;
 };
-
+static void serializeSaveGameV18Data_json(nlohmann::json &o, const SAVE_GAME_V18 *serializeGame)
+{
+	serializeSaveGameV17Data_json(o, (const SAVE_GAME_V17 *) serializeGame);
+	o["buildDate"] = serializeGame->buildDate;
+	o["oldestVersion"] = serializeGame->oldestVersion;
+	o["validityKey"] = serializeGame->validityKey;
+}
 static bool serializeSaveGameV18Data(PHYSFS_file *fileHandle, const SAVE_GAME_V18 *serializeGame)
 {
 	return (serializeSaveGameV17Data(fileHandle, (const SAVE_GAME_V17 *) serializeGame)
 	        && WZ_PHYSFS_writeBytes(fileHandle, serializeGame->buildDate, MAX_STR_LENGTH) == MAX_STR_LENGTH
 	        && PHYSFS_writeUBE32(fileHandle, serializeGame->oldestVersion)
 	        && PHYSFS_writeUBE32(fileHandle, serializeGame->validityKey));
+}
+
+static void deserializeSaveGameV18Data_json(const nlohmann::json &o, SAVE_GAME_V18 *serializeGame)
+{
+	deserializeSaveGameV17Data_json(o, (SAVE_GAME_V17 *) serializeGame);
+	sstrcpy(serializeGame->buildDate, o.at("buildDate").get<std::string>().c_str());
+	serializeGame->oldestVersion = o.at("oldestVersion").get<uint32_t>();
+	serializeGame->validityKey = o.at("validityKey").get<uint32_t>();
 }
 
 static bool deserializeSaveGameV18Data(PHYSFS_file *fileHandle, SAVE_GAME_V18 *serializeGame)
@@ -947,6 +1323,28 @@ struct SAVE_GAME_V19 : public SAVE_GAME_V18
 	uint8_t     playerColour[MAX_PLAYERS];
 	uint8_t     radarZoom;
 };
+
+static void serializeSaveGameV19Data_json(nlohmann::json &o, const SAVE_GAME_V19 *serializeGame)
+{
+	serializeSaveGameV18Data_json(o, (const SAVE_GAME_V18 *) serializeGame);
+	auto alliancesArray = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (unsigned j = 0; j < MAX_PLAYERS; ++j)
+		{
+			alliancesArray.insert(alliancesArray.end(), serializeGame->alliances[i][j]);
+		}
+	}
+	o["alliances"] = alliancesArray;
+
+	auto colours = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		colours.insert(colours.end(), serializeGame->playerColour[i]);
+	}
+	o["colours"] = colours;
+	o["radarZoom"] = serializeGame->radarZoom;
+}
 
 static bool serializeSaveGameV19Data(PHYSFS_file *fileHandle, const SAVE_GAME_V19 *serializeGame)
 {
@@ -977,6 +1375,20 @@ static bool serializeSaveGameV19Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 	}
 
 	return PHYSFS_writeUBE8(fileHandle, serializeGame->radarZoom);
+}
+
+static void deserializeSaveGameV19Data_json(const nlohmann::json &o, SAVE_GAME_V19 *serializeGame)
+{
+	deserializeSaveGameV18Data_json(o, (SAVE_GAME_V18 *) serializeGame);
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (unsigned j = 0; j < MAX_PLAYERS; ++j)
+		{
+			serializeGame->alliances[i][j] = o.at("alliances").at(i * MAX_PLAYERS + j).get<uint8_t>();
+		}
+		serializeGame->playerColour[i] = o.at("colours").at(i).get<uint8_t>();
+	}
+	serializeGame->radarZoom = o.at("radarZoom").get<uint8_t>();
 }
 
 static bool deserializeSaveGameV19Data(PHYSFS_file *fileHandle, SAVE_GAME_V19 *serializeGame)
@@ -1015,7 +1427,19 @@ struct SAVE_GAME_V20 : public SAVE_GAME_V19
 	uint8_t     bDroidsToSafetyFlag;
 	Vector2i    asVTOLReturnPos[MAX_PLAYERS];
 };
-
+static void serializeSaveGameV20Data_json(nlohmann::json &o, const SAVE_GAME_V20 *serializeGame)
+{
+	serializeSaveGameV19Data_json(o, (const SAVE_GAME_V19 *) serializeGame);
+	o["bDroidsToSafetyFlag"] = serializeGame->bDroidsToSafetyFlag;
+	auto arr = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		auto tmp = nlohmann::json::object();
+		serializeVector2i_json(tmp, &serializeGame->asVTOLReturnPos[i]);
+		arr.insert(arr.end(), tmp);
+	}
+	o["VTOLReturnPos"] = arr;
+}
 static bool serializeSaveGameV20Data(PHYSFS_file *fileHandle, const SAVE_GAME_V20 *serializeGame)
 {
 	unsigned int i;
@@ -1035,6 +1459,17 @@ static bool serializeSaveGameV20Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 	}
 
 	return true;
+}
+
+static void deserializeSaveGameV20Data_json(const nlohmann::json &o, SAVE_GAME_V20 *serializeGame)
+{
+	deserializeSaveGameV19Data_json(o, (SAVE_GAME_V19 *) serializeGame);
+	serializeGame->bDroidsToSafetyFlag = o.at("bDroidsToSafetyFlag").get<uint8_t>();
+
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		deserializeVector2i_json(o.at("VTOLReturnPos").at(i), &serializeGame->asVTOLReturnPos[i]);
+	}
 }
 
 static bool deserializeSaveGameV20Data(PHYSFS_file *fileHandle, SAVE_GAME_V20 *serializeGame)
@@ -1062,7 +1497,18 @@ struct SAVE_GAME_V22 : public SAVE_GAME_V20
 {
 	RUN_DATA asRunData[MAX_PLAYERS];
 };
-
+static void serializeSaveGameV22Data_json(nlohmann::json &o, const SAVE_GAME_V22 *serializeGame)
+{
+	serializeSaveGameV20Data_json(o, (const SAVE_GAME_V20 *) serializeGame);
+	auto arr = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		auto tmp = nlohmann::json::object();
+		serializeRunData_json(tmp, &serializeGame->asRunData[i]);
+		arr.insert(arr.end(), tmp);
+	}
+	o["runData"] = arr;
+}
 static bool serializeSaveGameV22Data(PHYSFS_file *fileHandle, const SAVE_GAME_V22 *serializeGame)
 {
 	unsigned int i;
@@ -1081,6 +1527,19 @@ static bool serializeSaveGameV22Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 	}
 
 	return true;
+}
+
+static void deserializeSaveGameV22Data_json(const nlohmann::json &o, SAVE_GAME_V22 *serializeGame)
+{
+	deserializeSaveGameV20Data_json(o, (SAVE_GAME_V20 *) serializeGame);
+	ASSERT_OR_RETURN(, o.at("runData").is_array(), "unexpected type, wanted array");
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		const nlohmann::json runData = o.at("runData");
+		ASSERT_OR_RETURN(, runData.is_array(), "unexpected type, wanted array");
+		deserializeRunData_json(runData.at(i), &serializeGame->asRunData[i]);
+		
+	}
 }
 
 static bool deserializeSaveGameV22Data(PHYSFS_file *fileHandle, SAVE_GAME_V22 *serializeGame)
@@ -1112,6 +1571,14 @@ struct SAVE_GAME_V24 : public SAVE_GAME_V22
 	uint8_t     dummy3;
 };
 
+static void serializeSaveGameV24Data_json(nlohmann::json &o, const SAVE_GAME_V24 *serializeGame)
+{
+	serializeSaveGameV22Data_json(o, (const SAVE_GAME_V22 *) serializeGame);
+	o["reinforceTime"] = serializeGame->reinforceTime;
+	o["bPlayCountDown"] = serializeGame->bPlayCountDown;
+	o["bPlayerHasWon"] = serializeGame->bPlayerHasWon;
+	o["bPlayerHasLost"] = serializeGame->bPlayerHasLost;
+}
 static bool serializeSaveGameV24Data(PHYSFS_file *fileHandle, const SAVE_GAME_V24 *serializeGame)
 {
 	return (serializeSaveGameV22Data(fileHandle, (const SAVE_GAME_V22 *) serializeGame)
@@ -1121,7 +1588,14 @@ static bool serializeSaveGameV24Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bPlayerHasLost)
 	        && PHYSFS_writeUBE8(fileHandle, serializeGame->dummy3));
 }
-
+static void deserializeSaveGameV24Data_json(const nlohmann::json &o, SAVE_GAME_V24 *serializeGame)
+{
+	deserializeSaveGameV22Data_json(o, (SAVE_GAME_V22 *) serializeGame);
+	serializeGame->reinforceTime = o.at("reinforceTime").get<uint32_t>();
+	serializeGame->bPlayCountDown = o.at("bPlayCountDown").get<uint8_t>();
+	serializeGame->bPlayerHasWon = o.at("bPlayerHasWon").get<uint8_t>();
+	serializeGame->bPlayerHasLost = o.at("bPlayerHasLost").get<uint8_t>();
+}
 static bool deserializeSaveGameV24Data(PHYSFS_file *fileHandle, SAVE_GAME_V24 *serializeGame)
 {
 	return (deserializeSaveGameV22Data(fileHandle, (SAVE_GAME_V22 *) serializeGame)
@@ -1137,6 +1611,10 @@ struct SAVE_GAME_V27 : public SAVE_GAME_V24
 	uint16_t    awDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 };
 
+static void serializeSaveGameV27Data_json(nlohmann::json &o,const SAVE_GAME_V27 *serializeGame)
+{
+	serializeSaveGameV24Data_json(o, (const SAVE_GAME_V24 *) serializeGame);
+}
 static bool serializeSaveGameV27Data(PHYSFS_file *fileHandle, const SAVE_GAME_V27 *serializeGame)
 {
 	unsigned int i, j;
@@ -1159,7 +1637,10 @@ static bool serializeSaveGameV27Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 
 	return true;
 }
-
+static void deserializeSaveGameV27Data_json(const nlohmann::json &o, SAVE_GAME_V27 *serializeGame)
+{
+	deserializeSaveGameV24Data_json(o, (SAVE_GAME_V24 *) serializeGame);
+}
 static bool deserializeSaveGameV27Data(PHYSFS_file *fileHandle, SAVE_GAME_V27 *serializeGame)
 {
 	unsigned int i, j;
@@ -1195,7 +1676,14 @@ struct SAVE_GAME_V29 : public SAVE_GAME_V27
 	uint16_t    missionScrollMaxX;
 	uint16_t    missionScrollMaxY;
 };
-
+static void serializeSaveGameV29Data_json(nlohmann::json &o, const SAVE_GAME_V29 *serializeGame)
+{
+	serializeSaveGameV27Data_json(o, (const SAVE_GAME_V27 *) serializeGame);
+	o["missionScrollMinX"] = serializeGame->missionScrollMinX;
+	o["missionScrollMinY"] = serializeGame->missionScrollMinY;
+	o["missionScrollMaxX"] = serializeGame->missionScrollMaxX;
+	o["missionScrollMaxY"] = serializeGame->missionScrollMaxY;
+}
 static bool serializeSaveGameV29Data(PHYSFS_file *fileHandle, const SAVE_GAME_V29 *serializeGame)
 {
 	return (serializeSaveGameV27Data(fileHandle, (const SAVE_GAME_V27 *) serializeGame)
@@ -1203,6 +1691,15 @@ static bool serializeSaveGameV29Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 	        && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMinY)
 	        && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMaxX)
 	        && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMaxY));
+}
+
+static void deserializeSaveGameV29Data_json(const nlohmann::json &o, SAVE_GAME_V29 *serializeGame)
+{
+	deserializeSaveGameV27Data_json(o, (SAVE_GAME_V27 *) serializeGame);
+	serializeGame->missionScrollMinX = o.at("missionScrollMinX").get<uint16_t>();
+	serializeGame->missionScrollMinY = o.at("missionScrollMinY").get<uint16_t>();
+	serializeGame->missionScrollMaxX = o.at("missionScrollMaxX").get<uint16_t>();
+	serializeGame->missionScrollMaxY = o.at("missionScrollMaxY").get<uint16_t>();
 }
 
 static bool deserializeSaveGameV29Data(PHYSFS_file *fileHandle, SAVE_GAME_V29 *serializeGame)
@@ -1221,7 +1718,14 @@ struct SAVE_GAME_V30 : public SAVE_GAME_V29
 	uint8_t     bExtraFailFlag;
 	uint8_t     bTrackTransporter;
 };
-
+static void serializeSaveGameV30Data_json(nlohmann::json &o, const SAVE_GAME_V30 *serializeGame)
+{
+	serializeSaveGameV29Data_json(o, (const SAVE_GAME_V29 *) serializeGame);
+	o["scrGameLevel"] = serializeGame->scrGameLevel;
+	o["bExtraVictoryFlag"] = serializeGame->bExtraVictoryFlag;
+	o["bExtraFailFlag"] = serializeGame->bExtraFailFlag;
+	o["bTrackTransporter"] = serializeGame->bTrackTransporter;
+}
 static bool serializeSaveGameV30Data(PHYSFS_file *fileHandle, const SAVE_GAME_V30 *serializeGame)
 {
 	return (serializeSaveGameV29Data(fileHandle, (const SAVE_GAME_V29 *) serializeGame)
@@ -1230,7 +1734,14 @@ static bool serializeSaveGameV30Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bExtraFailFlag)
 	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bTrackTransporter));
 }
-
+static void deserializeSaveGameV30Data_json(const nlohmann::json &o, SAVE_GAME_V30 *serializeGame)
+{
+	deserializeSaveGameV29Data_json(o, (SAVE_GAME_V29 *) serializeGame);
+	serializeGame->scrGameLevel = o.at("scrGameLevel").get<int32_t>();
+	serializeGame->bExtraVictoryFlag = o.at("bExtraVictoryFlag").get<uint8_t>();
+	serializeGame->bExtraFailFlag = o.at("bExtraFailFlag").get<uint8_t>();
+	serializeGame->bTrackTransporter = o.at("bTrackTransporter").get<uint8_t>();
+}
 static bool deserializeSaveGameV30Data(PHYSFS_file *fileHandle, SAVE_GAME_V30 *serializeGame)
 {
 	return (deserializeSaveGameV29Data(fileHandle, (SAVE_GAME_V29 *) serializeGame)
@@ -1246,13 +1757,21 @@ struct SAVE_GAME_V31 : public SAVE_GAME_V30
 	int32_t     missionCheatTime;
 };
 
-
+static void serializeSaveGameV31Data_json(nlohmann::json &o, const SAVE_GAME_V31 *serializeGame)
+{
+	serializeSaveGameV30Data_json(o, (const SAVE_GAME_V30 *) serializeGame);
+	o["missionCheatTime"] = serializeGame->missionCheatTime;
+}
 static bool serializeSaveGameV31Data(PHYSFS_file *fileHandle, const SAVE_GAME_V31 *serializeGame)
 {
 	return (serializeSaveGameV30Data(fileHandle, (const SAVE_GAME_V30 *) serializeGame)
 	        && PHYSFS_writeSBE32(fileHandle, serializeGame->missionCheatTime));
 }
-
+static void deserializeSaveGameV31Data_json(const nlohmann::json &o, SAVE_GAME_V31 *serializeGame)
+{
+	deserializeSaveGameV30Data_json(o, (SAVE_GAME_V30 *) serializeGame);
+	serializeGame->missionCheatTime = o.at("missionCheatTime").get<int32_t>();
+}
 static bool deserializeSaveGameV31Data(PHYSFS_file *fileHandle, SAVE_GAME_V31 *serializeGame)
 {
 	return (deserializeSaveGameV30Data(fileHandle, (SAVE_GAME_V30 *) serializeGame)
@@ -1269,11 +1788,23 @@ struct SAVE_GAME_V33 : public SAVE_GAME_V31
 	int32_t         multiPlayer;	// was BOOL (int) ** see warning about conversion
 	uint32_t        sPlayerIndex[MAX_PLAYERS];
 };
-
+static void serializeSaveGameV33Data_json(nlohmann::json &o, const SAVE_GAME_V33 *serializeGame)
+{
+	serializeSaveGameV31Data_json(o, (const SAVE_GAME_V31 *) serializeGame);
+	serializeMultiplayerGame_json(o, &serializeGame->sGame);
+	serializeNetPlay_json(o, &serializeGame->sNetPlay);
+	o["sPname"] = serializeGame->sPName;
+	o["multiPlayer"] = serializeGame->multiPlayer;
+	o["savePlayer"] = serializeGame->savePlayer;
+	auto arr = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		arr.insert(arr.end(), serializeGame->sPlayerIndex[i]);
+	}
+	o["sPlayerIndices"] = arr;
+}
 static bool serializeSaveGameV33Data(PHYSFS_file *fileHandle, const SAVE_GAME_V33 *serializeGame)
 {
-	unsigned int i;
-
 	if (!serializeSaveGameV31Data(fileHandle, (const SAVE_GAME_V31 *) serializeGame)
 	    || !serializeMultiplayerGame(fileHandle, &serializeGame->sGame)
 	    || !serializeNetPlay(fileHandle, &serializeGame->sNetPlay)
@@ -1284,7 +1815,7 @@ static bool serializeSaveGameV33Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 		return false;
 	}
 
-	for (i = 0; i < MAX_PLAYERS; ++i)
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayerIndex[i]))
 		{
@@ -1293,6 +1824,22 @@ static bool serializeSaveGameV33Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 	}
 
 	return true;
+}
+
+static void deserializeSaveGameV33Data_json(const nlohmann::json &o, SAVE_GAME_V33 *serializeGame)
+{
+	deserializeSaveGameV31Data_json(o, (SAVE_GAME_V31 *) serializeGame);
+	deserializeMultiplayerGame_json(o, &serializeGame->sGame);
+	serializeGame->savePlayer = o.at("savePlayer").get<uint32_t>();
+	deserializeNetPlay_json(o, &serializeGame->sNetPlay);
+	sstrcpy(serializeGame->sPName, o.at("sPname").get<std::string>().c_str());
+	serializeGame->multiPlayer = o.at("multiPlayer").get<int32_t>();
+	const auto playerIndices = o.at("sPlayerIndices");
+	ASSERT_OR_RETURN(, playerIndices.is_array(), "unexpected type, wanted array");
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		serializeGame->sPlayerIndex[i] = playerIndices.at(i).get<uint32_t>();
+	}
 }
 
 static bool deserializeSaveGameV33Data(PHYSFS_file *fileHandle, SAVE_GAME_V33 *serializeGame)
@@ -1329,7 +1876,16 @@ struct SAVE_GAME_V34 : public SAVE_GAME_V33
 	char sPlayerName[MAX_PLAYERS][StringSize];
 };
 
-
+static void serializeSaveGameV34Data_json(nlohmann::json &o, const SAVE_GAME_V34 *serializeGame)
+{
+	serializeSaveGameV33Data_json(o, (const SAVE_GAME_V33 *) serializeGame);
+	auto arr = nlohmann::json::array();
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		arr.insert(arr.end(), std::string(serializeGame->sPlayerName[i]));
+	}
+	o["playerNames"] = arr;
+}
 static bool serializeSaveGameV34Data(PHYSFS_file *fileHandle, const SAVE_GAME_V34 *serializeGame)
 {
 	unsigned int i;
@@ -1347,6 +1903,15 @@ static bool serializeSaveGameV34Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 	}
 
 	return true;
+}
+
+static void deserializeSaveGameV34Data_json(const nlohmann::json &o, SAVE_GAME_V34 *serializeGame)
+{
+	deserializeSaveGameV33Data_json(o, (SAVE_GAME_V33 *) serializeGame);
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		sstrcpy(serializeGame->sPlayerName[i], o.at("playerNames").at(i).get<std::string>().c_str());
+	}
 }
 
 static bool deserializeSaveGameV34Data(PHYSFS_file *fileHandle, SAVE_GAME_V34 *serializeGame)
@@ -1372,12 +1937,18 @@ static bool deserializeSaveGameV34Data(PHYSFS_file *fileHandle, SAVE_GAME_V34 *s
 struct SAVE_GAME_V35 : public SAVE_GAME_V34
 {
 };
-
+static void serializeSaveGameV35Data_json(nlohmann::json &o, const SAVE_GAME_V35 *serializeGame)
+{
+	return serializeSaveGameV34Data_json(o, (const SAVE_GAME_V34 *) serializeGame);
+}
 static bool serializeSaveGameV35Data(PHYSFS_file *fileHandle, const SAVE_GAME_V35 *serializeGame)
 {
 	return serializeSaveGameV34Data(fileHandle, (const SAVE_GAME_V34 *) serializeGame);
 }
-
+static void deserializeSaveGameV35Data_json(const nlohmann::json &o, SAVE_GAME_V35 *serializeGame)
+{
+	return deserializeSaveGameV34Data_json(o, (SAVE_GAME_V34 *) serializeGame);
+}
 static bool deserializeSaveGameV35Data(PHYSFS_file *fileHandle, SAVE_GAME_V35 *serializeGame)
 {
 	return deserializeSaveGameV34Data(fileHandle, (SAVE_GAME_V34 *) serializeGame);
@@ -1389,19 +1960,31 @@ struct SAVE_GAME_V38 : public SAVE_GAME_V35
 	char modList[modlist_string_size];
 };
 
+static void serializeSaveGameV38Data_json(nlohmann::json &o, const SAVE_GAME_V38 *serializeGame)
+{
+	serializeSaveGameV35Data_json(o, (const SAVE_GAME_V35 *) serializeGame);
+	o["modList"] = std::string(serializeGame->modList);
+}
+
 static bool serializeSaveGameV38Data(PHYSFS_file *fileHandle, const SAVE_GAME_V38 *serializeGame)
 {
 	if (!serializeSaveGameV35Data(fileHandle, (const SAVE_GAME_V35 *) serializeGame))
 	{
 		return false;
 	}
-
+	
 	if (WZ_PHYSFS_writeBytes(fileHandle, serializeGame->modList, modlist_string_size) != modlist_string_size)
 	{
 		return false;
 	}
 
 	return true;
+}
+
+static void deserializeSaveGameV38Data_json(const nlohmann::json &o, SAVE_GAME_V38 *serializeGame)
+{
+	deserializeSaveGameV35Data_json(o, (SAVE_GAME_V35 *) serializeGame);
+	sstrcpy(serializeGame->modList, o.at("modList").get<std::string>().c_str());
 }
 
 static bool deserializeSaveGameV38Data(PHYSFS_file *fileHandle, SAVE_GAME_V38 *serializeGame)
@@ -1421,12 +2004,46 @@ static bool deserializeSaveGameV38Data(PHYSFS_file *fileHandle, SAVE_GAME_V38 *s
 
 // Current save game version
 typedef SAVE_GAME_V38 SAVE_GAME;
-
+static void serializeSaveGameData_json(nlohmann::json &o, nlohmann::json &saveinfo, const char *saveName, const SAVE_GAME *serializeGame)
+{
+	serializeSaveGameV38Data_json(o, (const SAVE_GAME_V38 *) serializeGame);
+	// not sure whether its 38, 39 or 40... different .cpp files are using different numbers
+	o["version"] = VERSION_39;
+	
+	// This file lists saved games, and their build info
+	// one per savegame directory
+	const auto tag = version_extractVersionNumberFromTag(version_getLatestTag());
+	saveinfo["latestTagArray"] = nlohmann::json::array({tag.value().version[0], tag.value().version[1], tag.value().version[2]});
+	const auto epoch  = std::chrono::system_clock::now().time_since_epoch();
+	saveinfo["epoch"] = std::chrono::duration_cast<std::chrono::seconds>(epoch).count();
+	if (saveinfo.contains(saveName))
+	{
+		saveinfo.erase(saveName);
+	}	
+	char ourtime[20];
+	const time_t curtime = time(nullptr);
+	struct tm timeinfo = getLocalTime(curtime);
+	// "YYYY-MM-DD HH:MM:SS"
+	strftime(ourtime, sizeof(ourtime), "%F %T", &timeinfo);
+	saveinfo["time"] = ourtime;
+}
 static bool serializeSaveGameData(PHYSFS_file *fileHandle, const SAVE_GAME *serializeGame)
 {
 	return serializeSaveGameV38Data(fileHandle, (const SAVE_GAME_V38 *) serializeGame);
 }
-
+static bool deserializeSaveGameData_json(const nlohmann::json &o, SAVE_GAME *serializeGame)
+{
+	try
+	{
+		deserializeSaveGameV38Data_json(o, (SAVE_GAME_V38 *) serializeGame);
+		return true;
+	} catch (nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "%s", e.what());
+		return false;
+	}
+	
+}
 static bool deserializeSaveGameData(PHYSFS_file *fileHandle, SAVE_GAME *serializeGame)
 {
 	return deserializeSaveGameV38Data(fileHandle, (SAVE_GAME_V38 *) serializeGame);
@@ -1591,23 +2208,23 @@ static bool IsScenario;
  *	Local ProtoTypes
  */
 /***************************************************************************/
-static bool gameLoadV7(PHYSFS_file *fileHandle);
-static bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version);
+static bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json>&);
+static bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<nlohmann::json>&);
 static bool loadMainFile(const std::string &fileName);
+static bool loadMainFileFinal(const std::string &fileName);
 static bool writeMainFile(const std::string &fileName, SDWORD saveType);
 static bool writeGameFile(const char *fileName, SDWORD saveType);
 static bool writeMapFile(const char *fileName);
 
-static bool loadSaveDroidInit(char *pFileData, UDWORD filesize);
+static bool loadWzMapDroidInit(WzMap::Map &wzMap);
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists);
-static bool loadScriptDroid(ScriptMapData const &data);
 static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentDroidLists);
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
-static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList);
-static bool loadScriptStructure(ScriptMapData const &data);
+static bool loadSaveStructure2(const char *pFileName);
+static bool loadWzMapStructure(WzMap::Map& wzMap);
 static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
 
@@ -1617,7 +2234,7 @@ static bool writeTemplateFile(const char *pFileName);
 static bool loadSaveFeature(char *pFileData, UDWORD filesize);
 static bool writeFeatureFile(const char *pFileName);
 static bool loadSaveFeature2(const char *pFileName);
-static bool loadScriptFeature(ScriptMapData const &data);
+static bool loadWzMapFeature(WzMap::Map &wzMap);
 
 static bool writeTerrainTypeMapFile(char *pFileName);
 
@@ -1633,7 +2250,7 @@ static bool writeResearchFile(char *pFileName);
 static bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType);
 static bool writeMessageFile(const char *pFileName);
 
-static bool loadSaveStructLimits(const char *pFileName);
+static bool loadSaveLimits(const char *pFileName);
 static bool writeStructLimitsFile(const char *pFileName);
 
 static bool readFiresupportDesignators(const char *pFileName);
@@ -1657,7 +2274,24 @@ so can be called in levLoadData when starting a game from a load save game*/
 // -----------------------------------------------------------------------------------------
 bool loadGameInit(const char *fileName)
 {
-	if (!gameLoad(fileName))
+	ASSERT_OR_RETURN(false, fileName != nullptr, "fileName is null??");
+
+	if (strEndsWith(fileName, ".wzrp"))
+	{
+		SetGameMode(GS_TITLE_SCREEN); // hack - the caller sets this to GS_NORMAL but we actually want to proceed with normal startGameLoop
+
+		// if it ends in .wzrp, try to load the replay!
+		WZGameReplayOptionsHandler optionsHandler;
+		if (!NETloadReplay(fileName, optionsHandler))
+		{
+			return false;
+		}
+
+		bMultiPlayer = true;
+		bMultiMessages = true;
+		changeTitleMode(STARTGAME);
+	}
+	else if (!gameLoad(fileName))
 	{
 		debug(LOG_ERROR, "Corrupted / unsupported savegame file %s, Unable to load!", fileName);
 		// NOTE: why do we start the game clock on a *failed* load?
@@ -1790,16 +2424,20 @@ static inline void setIniDroidOrder(nlohmann::json &jsonObj, WzString const &key
 
 static void allocatePlayers()
 {
+	DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
+		NetPlay.players[i].team = saveGameData.sNetPlay.players[i].team;
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
-		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
+//		NetPlay.players[i].faction; // read and initialized by loadMainFile
+		setPlayerName(i, saveGameData.sNetPlay.players[i].name);
+		NetPlay.players[i].position = saveGameData.sNetPlay.players[i].position;
 		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && i == 0))
 		{
 			NetPlay.players[i].allocated = true;
 			//processDebugMappings ensures game does not start in DEBUG mode
-			processDebugMappings(i, false);
+			dbgInputManager.setPlayerWantsDebugMappings(i, false);
 		}
 		else
 		{
@@ -1820,11 +2458,23 @@ static void getPlayerNames()
 	}
 }
 
+static WzMap::MapType getWzMapType(bool UserSaveGame)
+{
+	if (UserSaveGame)
+	{
+		return WzMap::MapType::SAVEGAME;
+	}
+	else
+	{
+		return (game.type == LEVEL_TYPE::CAMPAIGN) ? WzMap::MapType::CAMPAIGN : WzMap::MapType::SKIRMISH;
+	}
+}
+
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
 {
-	ScriptMapData data;  // Only valid if generating from 'game.js'.
+	std::shared_ptr<WzMap::Map> data;
 	std::map<WzString, DROID **> droidMap;
 	std::map<WzString, STRUCTURE **> structMap;
 	char			aFileName[256];
@@ -1835,6 +2485,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	DROID           *psCurr;
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
 	                missionScrollMaxX = 0, missionScrollMaxY = 0;
+	uint32_t        mapSeed = 0;
 
 	/* Stop the game clock */
 	gameTimeStop();
@@ -1906,7 +2557,21 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			mission.startTime = saveGameData.missionTime;
 		}
 
-		//set the scroll varaibles
+		//set the scroll variables
+		if (saveGameData.ScrollMinX >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinX) > saveGameData.ScrollMaxX)
+		{
+			debug(LOG_ERROR, "ScrollMinX (%" PRIi32 ") exceeds ScrollMaxX %" PRIu32, saveGameData.ScrollMinX, saveGameData.ScrollMaxX);
+			uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinX);
+			saveGameData.ScrollMinX = static_cast<int32_t>(saveGameData.ScrollMaxX);
+			saveGameData.ScrollMaxX = newMax;
+		}
+		if (saveGameData.ScrollMinY >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinY) > saveGameData.ScrollMaxY)
+		{
+			debug(LOG_ERROR, "ScrollMinY (%" PRIi32 ") exceeds ScrollMaxY %" PRIu32, saveGameData.ScrollMinY, saveGameData.ScrollMaxY);
+			uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinY);
+			saveGameData.ScrollMinY = static_cast<int32_t>(saveGameData.ScrollMaxY);
+			saveGameData.ScrollMaxY = newMax;
+		}
 		startX = saveGameData.ScrollMinX;
 		startY = saveGameData.ScrollMinY;
 		width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
@@ -2005,14 +2670,14 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		if (saveGameVersion >= VERSION_33)
 		{
 			PLAYERSTATS		playerStats;
-			bool scav = game.scavengers;
+			uint32_t scav = game.scavengers;
 
 			game			= saveGameData.sGame;
 			game.scavengers = scav;	// ok, so this is butt ugly. but i'm just getting inspiration from the rest of the code around here. ok? - per
 			productionPlayer = selectedPlayer;
 			bMultiMessages	= bMultiPlayer;
 
-			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			NetPlay.bComms = saveGameData.sNetPlay.bComms;
 
 			allocatePlayers();
 
@@ -2049,22 +2714,41 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//load in the terrain type map
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "ttypes.ttp");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		//load the terrain type data
+		if (!loadTerrainTypeMap(aFileName))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
+	}
 
+	/* decide if we have to create teams, ONLY in multiplayer mode!*/
+	if (bMultiPlayer && alliancesSharedVision(game.alliance))
+	{
+		createTeamAlliances();
 
-		//load the terrain type data
-		if (pFileData)
+		/* Update ally vision for pre-placed structures and droids */
+		for (unsigned int pl = 0; pl < MAX_PLAYERS; pl++)
 		{
-			if (!loadTerrainTypeMap(pFileData, fileSize))
+			if (pl != selectedPlayer)
 			{
-				debug(LOG_ERROR, "Failed with: %s", aFileName);
-				goto error;
+				/* Structures */
+				for (STRUCTURE *psStr = apsStructLists[pl]; psStr; psStr = psStr->psNext)
+				{
+					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psStr->player, selectedPlayer))
+					{
+						visTilesUpdate((BASE_OBJECT *)psStr);
+					}
+				}
+
+				/* Droids */
+				for (DROID *psDroid = apsDroidLists[pl]; psDroid; psDroid = psDroid->psNext)
+				{
+					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psDroid->player, selectedPlayer))
+					{
+						visTilesUpdate((BASE_OBJECT *)psDroid);
+					}
+				}
 			}
 		}
 	}
@@ -2091,6 +2775,19 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 	}
 
+	if ((saveGameVersion >= VERSION_15) && UserSaveGame)
+	{
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "limits.json");
+
+		//load the data into apsStructLists
+		if (!loadSaveLimits(aFileName))
+		{
+			debug(LOG_ERROR, "failed to load %s", aFileName);
+			goto error;
+		}
+	}
+
 	if (saveGameOnMission && UserSaveGame)
 	{
 		//the scroll limits for the mission map have already been written
@@ -2107,7 +2804,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
-		if (!mapLoad(aFileName, false))
+		if (!mapLoad(aFileName))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			return false;
@@ -2153,7 +2850,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "mstruct.json");
 
 		//load in the mission structures
-		if (!loadSaveStructure2(aFileName, apsStructLists))
+		if (!loadSaveStructure2(aFileName))
 		{
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "mstruct.bjo");
@@ -2215,31 +2912,44 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 	}
 
+	// construct the WzMap object for loading map data
+	aFileName[fileExten] = '\0';
+	mapSeed = gameRandU32();
+	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
+
+	if (data && data->wasScriptGenerated())
+	{
+		// Log the random seed used to generate this instance of the map
+		debug(LOG_INFO, "Loaded script-generated map \"%s\" with random seed: %" PRIu32, aFileName, mapSeed);
+	}
+
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
 	{
 		psMapTiles = nullptr;
-		//load in the map file
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "game.js");
-		bool haveScript = PHYSFS_exists(aFileName);
-		if (haveScript) {
-			data = runMapScript(aFileName, gameRandU32(), true);
-			syncDebug("mapSize = [%d, %d]", data.mapWidth, data.mapHeight);
-			syncDebug("crc(texture) = 0x%08x", crcSumU16(0, data.texture.data(), data.texture.size()));
-			syncDebug("crc(height) = 0x%08x", crcSumI16(0, data.height.data(), data.height.size()));
-			syncDebug("crc(structures) = 0x%08x", data.crcSumStructures(0));
-			syncDebug("crc(droids) = 0x%08x", data.crcSumDroids(0));
-			syncDebug("crc(features) = 0x%08x", data.crcSumFeatures(0));
-		}
-		else
+		// load in the map file
+		if (!data)
 		{
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "game.map");
+			debug(LOG_ERROR, "Failed to load map from path: %s", aFileName);
+			return false;
 		}
-		if (haveScript? !mapLoadFromScriptData(data, false) : !mapLoad(aFileName, false))
+		auto mapData = data->mapData();
+		if (!mapData)
 		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
+			debug(LOG_ERROR, "Failed to load map data from path: %s", aFileName);
+			return false;
+		}
+		if (data->wasScriptGenerated())
+		{
+			syncDebug("mapSize = [%d, %d]", mapData->width, mapData->height);
+			syncDebug("crc(maptiles) = 0x%08x", mapData->crcSumMapTiles(0));
+			syncDebug("crc(structures) = 0x%08x", data->crcSumStructures(0));
+			syncDebug("crc(droids) = 0x%08x", data->crcSumDroids(0));
+			syncDebug("crc(features) = 0x%08x", data->crcSumFeatures(0));
+		}
+		if (!mapLoadFromWzMapData(mapData))
+		{
+			debug(LOG_ERROR, "Failed to process map data from path: %s", aFileName);
 			return false;
 		}
 	}
@@ -2298,33 +3008,28 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "droid.json");
 
 		//load the data into apsDroidLists
-		if (data.valid && loadScriptDroid(data))
+		if (!UserSaveGame)
 		{
-			// Nothing to do here.
-		}
-		else if (loadSaveDroid(aFileName, apsDroidLists))
-		{
-			debug(LOG_SAVE, "Loaded new style droids");
-			droidMap[aFileName] = apsDroidLists;	// load pointers later
+			ASSERT(data != nullptr, "Expecting WzMap::Map instance");
+			if (loadWzMapDroidInit(*(data.get())))
+			{
+				debug(LOG_SAVE, "Loaded new style droids");
+				droidMap[aFileName] = apsDroidLists;	// load pointers later
+			}
+			else
+			{
+				aFileName[fileExten] = '\0';
+				debug(LOG_ERROR, "Failed to load map droid init from map directory: %s", aFileName);
+				goto error;
+			}
 		}
 		else
 		{
-			// load in the old style droid initialisation file
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "dinit.bjo");
-			/* Load in the chosen file data */
-			pFileData = fileLoadBuffer;
-			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			if (loadSaveDroid(aFileName, apsDroidLists))
 			{
-				debug(LOG_ERROR, "Failed with: %s", aFileName);
-				goto error;
+				debug(LOG_SAVE, "Loaded new style droids");
+				droidMap[aFileName] = apsDroidLists;	// load pointers later
 			}
-			if (!loadSaveDroidInit(pFileData, fileSize))
-			{
-				debug(LOG_ERROR, "Failed with: %s", aFileName);
-				goto error;
-			}
-			debug(LOG_SAVE, "Loaded old style droids");
 		}
 	}
 	else
@@ -2385,25 +3090,20 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	//load in the features -do before the structures
 	aFileName[fileExten] = '\0';
-	strcat(aFileName, "feature.json");
-	if (data.valid && loadScriptFeature(data))
+	if (!UserSaveGame)
 	{
-		// Nothing to do here.
-	}
-	else if (!loadSaveFeature2(aFileName))
-	{
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "feat.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		ASSERT(data != nullptr, "Expecting WzMap::Map instance");
+		if (!loadWzMapFeature(*(data.get())))
 		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
+			debug(LOG_ERROR, "Failed to load map feature init from map directory: %s", aFileName);
 			goto error;
 		}
-
-		//load the data into apsFeatureLists
-		if (!loadSaveFeature(pFileData, fileSize))
+	}
+	else
+	{
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "feature.json");
+		if (!loadSaveFeature2(aFileName))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
@@ -2414,32 +3114,30 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.json");
-	if (data.valid && loadScriptStructure(data))
+	if (!UserSaveGame)
 	{
-		// Nothing to do here.
-	}
-	else if (!loadSaveStructure2(aFileName, apsStructLists))
-	{
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "struct.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		ASSERT(data != nullptr, "Expecting WzMap::Map instance");
+		if (game.type != LEVEL_TYPE::CAMPAIGN)
 		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
+			freeAllFlagPositions();		//clear any flags put in during level loads
+		}
+		if (!loadWzMapStructure(*(data.get())))
+		{
+			aFileName[fileExten] = '\0';
+			debug(LOG_ERROR, "Failed to load map structure init from map directory: %s", aFileName);
 			goto error;
 		}
-		//load the data into apsStructLists
-		if (!loadSaveStructure(pFileData, fileSize))
+		if (game.type != LEVEL_TYPE::CAMPAIGN)
 		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
-			goto error;
+			resetFactoryNumFlag();	//reset flags into the masks
 		}
 	}
-	else
+	else if (!loadSaveStructure2(aFileName))
 	{
-		structMap[aFileName] = apsStructLists;
+		debug(LOG_ERROR, "Failed with: %s", aFileName);
+		goto error;
 	}
+	structMap[aFileName] = apsStructLists;
 
 	//if user save game then load up the current level for structs and components
 	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
@@ -2519,23 +3217,10 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	if ((saveGameVersion >= VERSION_15) && UserSaveGame)
 	{
-		//load in the mission structures
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "limits.json");
-
-		//load the data into apsStructLists
-		if (!loadSaveStructLimits(aFileName))
-		{
-			debug(LOG_ERROR, "failed to load %s", aFileName);
-			goto error;
-		}
-
-		//set up the structure Limits
 		setCurrentStructQuantity(false);
 	}
 	else
 	{
-		//set up the structure Limits
 		setCurrentStructQuantity(true);
 	}
 
@@ -2586,6 +3271,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			//The droids lists are "reversed" as they are loaded in loadSaveDroid().
 			//Which later causes issues in saveCampaignData() which tries to extract
 			//the first transporter group sent off at Beta-end by reversing this very list.
+			ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
 			reverseObjectList(&mission.apsDroidLists[selectedPlayer]);
 		}
 	}
@@ -2610,6 +3296,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		 * been another flag to indicate this state has changed but its late in
 		 * the day excuses...excuses...excuses
 		 */
+		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
 		if (mission.apsDroidLists[selectedPlayer] == nullptr)
 		{
 			//set the mission type
@@ -2863,6 +3550,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 	//clear the list
 	if (saveGameVersion < VERSION_25)
 	{
+		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
 		for (psDroid = apsLimboDroids[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
 		{
 			psNext = psDroid->psNext;
@@ -2952,22 +3640,20 @@ error:
 // -----------------------------------------------------------------------------------------
 static bool writeMapFile(const char *fileName)
 {
-	char *pFileData = nullptr;
-	UDWORD fileSize;
+	ASSERT_OR_RETURN(false, fileName != nullptr, "filename is null");
 
 	/* Get the save data */
-	bool status = mapSave(&pFileData, &fileSize);
-
-	if (status)
+	WzMap::MapData mapData;
+	bool status = mapSaveToWzMapData(mapData);
+	if (!status)
 	{
-		/* Write the data to the file */
-		status = saveFile(fileName, pFileData, fileSize);
+		return false;
 	}
 
-	if (pFileData != nullptr)
-	{
-		free(pFileData);
-	}
+	/* Write out the map data */
+	WzMapPhysFSIO mapIO;
+	WzMapDebugLogger debugLoggerInstance;
+	status = WzMap::writeMapData(mapData, fileName, mapIO, WzMap::LatestOutputFormat, &debugLoggerInstance);
 
 	return status;
 }
@@ -2977,29 +3663,40 @@ static bool gameLoad(const char *fileName)
 {
 	char CurrentFileName[PATH_MAX];
 	strcpy(CurrentFileName, fileName);
-	GAME_SAVEHEADER fileHeader;
-
-	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
-	if (!fileHandle)
+	GAME_SAVEHEADER fileHeader = {};
+	auto gamJsonSave = readGamJson(fileName);
+	debug(LOG_INFO, "loading: %s", fileName);
+	PHYSFS_file *fileHandle = openLoadFile(fileName, false);
+	if (!gamJsonSave.has_value() && fileHandle)
+	{
+		// haven't converted .gam to .json yet!
+		// Read the header from the file
+		if (!deserializeSaveGameHeader(fileHandle, &fileHeader))
+		{
+			debug(LOG_ERROR, "gameLoad: error while reading header from file (%s): %s", fileName, WZ_PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+			return false;
+		}
+	}
+	else if (gamJsonSave.has_value())
+	{
+		// be compatible with .gam logic
+		fileHeader.version = gamJsonSave.value().at("version").get<uint32_t>();
+		fileHeader.aFileType[0] = 'g';
+		fileHeader.aFileType[1] = 'a';
+		fileHeader.aFileType[2] = 'm';
+		fileHeader.aFileType[3] = 'e';
+	}
+	// exit if no .gam neither .json was found
+	if (!fileHandle && !gamJsonSave.has_value())
 	{
 		// Failure to open the file is a failure to load the specified savegame
-		return true;
+		return false;
 	}
 	debug(LOG_WZ, "gameLoad");
 
-	// Read the header from the file
-	if (!deserializeSaveGameHeader(fileHandle, &fileHeader))
-	{
-		debug(LOG_ERROR, "gameLoad: error while reading header from file (%s): %s", fileName, WZ_PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
-
 	// Check the header to see if we've been given a file of the right type
-	if (fileHeader.aFileType[0] != 'g'
-	    || fileHeader.aFileType[1] != 'a'
-	    || fileHeader.aFileType[2] != 'm'
-	    || fileHeader.aFileType[3] != 'e')
+	if (!(fileHeader.aFileType[0] == 'g' && fileHeader.aFileType[1] == 'a' && fileHeader.aFileType[2] == 'm' && fileHeader.aFileType[3] == 'e'))
 	{
 		debug(LOG_ERROR, "gameLoad: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'g' 'a' 'm' 'e')",
 		      fileHeader.aFileType[0],
@@ -3051,17 +3748,30 @@ static bool gameLoad(const char *fileName)
 	}
 	else if (fileHeader.version < VERSION_9)
 	{
-		bool retVal = gameLoadV7(fileHandle);
+		bool retVal = gameLoadV7(fileHandle, gamJsonSave);
 		PHYSFS_close(fileHandle);
 		return retVal;
 	}
 	else if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
-		bool retVal = gameLoadV(fileHandle, fileHeader.version);
-		PHYSFS_close(fileHandle);
+		//The in-game load menu was clearing level data AFTER loading in some savegame data.
+		//Hacking this in here so things make a little more sense and so that data loaded
+		//in from main.json is somewhat safe from being reset by mistake.
+		if (!levReleaseAll())
+		{
+			debug(LOG_ERROR, "Failed to unload old data. Attempting to load anyway");
+		}
+
 		//remove the file extension
 		CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
 		loadMainFile(std::string(CurrentFileName) + "/main.json");
+
+		bool retVal = gameLoadV(fileHandle, fileHeader.version, gamJsonSave);
+		PHYSFS_close(fileHandle);
+
+		loadMainFileFinal(std::string(CurrentFileName) + "/main.json");
+
+		challengeFileName = "";
 		return retVal;
 	}
 	else
@@ -3196,7 +3906,7 @@ static void endian_SaveGameV(SAVE_GAME *psSaveGame, UDWORD version)
 
 // -----------------------------------------------------------------------------------------
 // Get campaign number stuff is not needed in this form on the PSX (thank you very much)
-static UDWORD getCampaignV(PHYSFS_file *fileHandle, unsigned int version)
+static UDWORD getCampaignV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<nlohmann::json> &gamJson)
 {
 	SAVE_GAME_V14 saveGame;
 
@@ -3219,13 +3929,22 @@ static UDWORD getCampaignV(PHYSFS_file *fileHandle, unsigned int version)
 		// Convert from little-endian to native byte-order
 		endian_SaveGameV((SAVE_GAME *)&saveGame, VERSION_14);
 	}
-	else if (version <= CURRENT_VERSION_NUM)
+	else
+ 	if (version <= CURRENT_VERSION_NUM)
 	{
-		if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
+		if (gamJson.has_value())
 		{
-			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", WZ_PHYSFS_getLastError());
+			debug(LOG_SAVEGAME, "loading campaign from gam json");
+			deserializeSaveGameV14Data_json(gamJson.value(), &saveGame);
+		}
+		else
+		{
+			if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
+			{
+				debug(LOG_ERROR, "getCampaignV: error while reading file: %s", WZ_PHYSFS_getLastError());
 
-			return 0;
+				return 0;
+			}
 		}
 	}
 	else
@@ -3240,14 +3959,16 @@ static UDWORD getCampaignV(PHYSFS_file *fileHandle, unsigned int version)
 // -----------------------------------------------------------------------------------------
 // Returns the campaign number  --- apparently this is does alot less than it look like
 /// it now does even less than it looks like on the psx ... cause its pc only
+/// 2021-11: This appears to be useless, as scripts set the campaign number... Probably can & should remove this completely?
 UDWORD getCampaign(const char *fileName)
 {
 	GAME_SAVEHEADER fileHeader;
-
-	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
+	auto gamJson = readGamJson(fileName);
+	PHYSFS_file *fileHandle = openLoadFile(fileName, false);
 	if (!fileHandle)
 	{
-		// Failure to open the file is a failure to load the specified savegame
+		// Failure to open the file *may NOT be* a failure to load the specified savegame
+		// TODO: If this really is needed, we need to add the new JSON format parsing here... but this whole function appears to be useless??
 		return false;
 	}
 
@@ -3260,6 +3981,7 @@ UDWORD getCampaign(const char *fileName)
 		PHYSFS_close(fileHandle);
 		return false;
 	}
+
 
 	// Check the header to see if we've been given a file of the right type
 	if (fileHeader.aFileType[0] != 'g'
@@ -3279,7 +4001,7 @@ UDWORD getCampaign(const char *fileName)
 	}
 
 	debug(LOG_NEVER, "gl .gam file is version %d\n", fileHeader.version);
-
+	
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;
 
@@ -3290,6 +4012,7 @@ UDWORD getCampaign(const char *fileName)
 		PHYSFS_close(fileHandle);
 		return 0;
 	}
+	
 
 	// what the arse bollocks is this
 	// the campaign number is fine prior to saving
@@ -3299,7 +4022,7 @@ UDWORD getCampaign(const char *fileName)
 	// don't check skirmish saves.
 	if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
-		UDWORD retVal = getCampaignV(fileHandle, fileHeader.version);
+		UDWORD retVal = getCampaignV(fileHandle, fileHeader.version, gamJson);
 		PHYSFS_close(fileHandle);
 		return retVal;
 	}
@@ -3314,28 +4037,49 @@ UDWORD getCampaign(const char *fileName)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save game */
-bool gameLoadV7(PHYSFS_file *fileHandle)
+bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json> &gamJson)
 {
 	SAVE_GAME_V7 saveGame;
-
-	if (WZ_PHYSFS_readBytes(fileHandle, &saveGame, sizeof(saveGame)) != sizeof(saveGame))
+	if (gamJson.has_value())
 	{
-		debug(LOG_ERROR, "gameLoadV7: error while reading file: %s", WZ_PHYSFS_getLastError());
-
-		return false;
+		// this seems to be still used by maps/mission loading routines
+		deserializeSaveGameV7Data_json(gamJson.value(), &saveGame);
 	}
+	else
+	{
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGame, sizeof(saveGame)) != sizeof(saveGame))
+		{
+			debug(LOG_ERROR, "gameLoadV7: error while reading file: %s", WZ_PHYSFS_getLastError());
 
-	/* GAME_SAVE_V7 */
-	endian_udword(&saveGame.gameTime);
-	endian_udword(&saveGame.GameType);
-	endian_sdword(&saveGame.ScrollMinX);
-	endian_sdword(&saveGame.ScrollMinY);
-	endian_udword(&saveGame.ScrollMaxX);
-	endian_udword(&saveGame.ScrollMaxY);
+			return false;
+		}
+
+		/* GAME_SAVE_V7 */
+		endian_udword(&saveGame.gameTime);
+		endian_udword(&saveGame.GameType);
+		endian_sdword(&saveGame.ScrollMinX);
+		endian_sdword(&saveGame.ScrollMinY);
+		endian_udword(&saveGame.ScrollMaxX);
+		endian_udword(&saveGame.ScrollMaxY);
+	}
 
 	savedGameTime = saveGame.gameTime;
 
-	//set the scroll varaibles
+	//set the scroll variables
+	if (saveGame.ScrollMinX >= 0 && static_cast<uint32_t>(saveGame.ScrollMinX) > saveGame.ScrollMaxX)
+	{
+		debug(LOG_ERROR, "ScrollMinX (%" PRIi32 ") exceeds ScrollMaxX %" PRIu32, saveGame.ScrollMinX, saveGame.ScrollMaxX);
+		uint32_t newMax = static_cast<uint32_t>(saveGame.ScrollMinX);
+		saveGame.ScrollMinX = static_cast<int32_t>(saveGame.ScrollMaxX);
+		saveGame.ScrollMaxX = newMax;
+	}
+	if (saveGame.ScrollMinY >= 0 && static_cast<uint32_t>(saveGame.ScrollMinY) > saveGame.ScrollMaxY)
+	{
+		debug(LOG_ERROR, "ScrollMinY (%" PRIi32 ") exceeds ScrollMaxY %" PRIu32, saveGame.ScrollMinY, saveGame.ScrollMaxY);
+		uint32_t newMax = static_cast<uint32_t>(saveGame.ScrollMinY);
+		saveGame.ScrollMinY = static_cast<int32_t>(saveGame.ScrollMaxY);
+		saveGame.ScrollMaxY = newMax;
+	}
 	startX = saveGame.ScrollMinX;
 	startY = saveGame.ScrollMinY;
 	width = saveGame.ScrollMaxX - saveGame.ScrollMinX;
@@ -3383,7 +4127,7 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 
 // -----------------------------------------------------------------------------------------
 /* non specific version of a save game */
-bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
+bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<nlohmann::json> &gamJson)
 {
 	unsigned int i, j;
 	static	SAVE_POWER	powerSaved[MAX_PLAYERS];
@@ -3563,11 +4307,23 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= CURRENT_VERSION_NUM)
 	{
-		if (!deserializeSaveGameData(fileHandle, &saveGameData))
+		if (gamJson.has_value())
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading data from file for deserialization (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
+			debug(LOG_SAVEGAME, "gam json found, loading that.");
+			if (!deserializeSaveGameData_json(gamJson.value(), &saveGameData))
+			{
+				debug(LOG_ERROR, "failed to load gamjson");
+				return false;
+			}
+		} 
+		else
+		{
+			debug(LOG_SAVEGAME, "no gam json found, falling back to .gam");
+			if (!deserializeSaveGameData(fileHandle, &saveGameData))
+			{
+				debug(LOG_ERROR, "gameLoadV: error while reading data from file for deserialization (with version number %u): %s", version, WZ_PHYSFS_getLastError());
+				return false;
+			}
 		}
 	}
 	else
@@ -3612,7 +4368,22 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	{
 		saveGameOnMission = false;
 	}
-	//set the scroll varaibles
+
+	//set the scroll variables
+	if (saveGameData.ScrollMinX >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinX) > saveGameData.ScrollMaxX)
+	{
+		debug(LOG_ERROR, "ScrollMinX (%" PRIi32 ") exceeds ScrollMaxX %" PRIu32, saveGameData.ScrollMinX, saveGameData.ScrollMaxX);
+		uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinX);
+		saveGameData.ScrollMinX = static_cast<int32_t>(saveGameData.ScrollMaxX);
+		saveGameData.ScrollMaxX = newMax;
+	}
+	if (saveGameData.ScrollMinY >= 0 && static_cast<uint32_t>(saveGameData.ScrollMinY) > saveGameData.ScrollMaxY)
+	{
+		debug(LOG_ERROR, "ScrollMinY (%" PRIi32 ") exceeds ScrollMaxY %" PRIu32, saveGameData.ScrollMinY, saveGameData.ScrollMaxY);
+		uint32_t newMax = static_cast<uint32_t>(saveGameData.ScrollMinY);
+		saveGameData.ScrollMinY = static_cast<int32_t>(saveGameData.ScrollMaxY);
+		saveGameData.ScrollMaxY = newMax;
+	}
 	startX = saveGameData.ScrollMinX;
 	startY = saveGameData.ScrollMinY;
 	width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
@@ -3746,14 +4517,14 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		if (saveGameVersion >= VERSION_33)
 		{
 			PLAYERSTATS		playerStats;
-			bool scav = game.scavengers; // loaded earlier, keep it over struct copy below
+			uint32_t scav = game.scavengers; // loaded earlier, keep it over struct copy below
 
 			bMultiPlayer	= saveGameData.multiPlayer;
 			bMultiMessages	= bMultiPlayer;
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;  // why do this again????
 			game.scavengers = scav;
-			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			NetPlay.bComms = saveGameData.sNetPlay.bComms;
 			if (bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName, &playerStats);				// stats stuff
@@ -3796,10 +4567,74 @@ static bool loadMainFile(const std::string &fileName)
 {
 	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
 
+	if (save.contains("gameType"))
+	{
+		game.type = static_cast<LEVEL_TYPE>(save.value("gameType").toInt());
+	}
+	if (save.contains("scavengers"))
+	{
+		auto saveScavValue = save.value("scavengers").toUInt();
+		if (saveScavValue <= ULTIMATE_SCAVENGERS)
+		{
+			game.scavengers = static_cast<uint8_t>(saveScavValue);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Invalid scavengers value: %u", saveScavValue);
+		}
+	}
+	if (save.contains("maxPlayers"))
+	{
+		game.maxPlayers = save.value("maxPlayers").toUInt();
+	}
+	if (save.contains("mapHasScavengers"))
+	{
+		game.mapHasScavengers = save.value("mapHasScavengers").toBool();
+	}
 	if (save.contains("playerBuiltHQ"))
 	{
 		playerBuiltHQ = save.value("playerBuiltHQ").toBool();
 	}
+	if (save.contains("challengeFileName"))
+	{
+		challengeFileName = save.string("challengeFileName");
+	}
+	if (save.contains("challengeActive"))
+	{
+		challengeActive = save.value("challengeActive").toBool();
+	}
+	if (save.contains("builtInMap"))
+	{
+		builtInMap = save.value("builtInMap").toBool();
+	}
+	if (save.contains("inactivityMinutes"))
+	{
+		game.inactivityMinutes = save.value("inactivityMinutes").toUInt();
+	}
+
+	save.beginArray("players");
+	while (save.remainingArrayItems() > 0)
+	{
+		int index = save.value("index").toInt();
+		if (!(index >= 0 && index < MAX_PLAYERS))
+		{
+			debug(LOG_ERROR, "Invalid player index: %d", index);
+			save.nextArrayItem();
+			continue;
+		}
+		unsigned int FactionValue = save.value("faction", static_cast<uint8_t>(FACTION_NORMAL)).toUInt();
+		NetPlay.players[index].faction = static_cast<FactionID>(FactionValue);
+		save.nextArrayItem();
+	}
+	save.endArray();
+
+	return true;
+}
+
+static bool loadMainFileFinal(const std::string &fileName)
+{
+	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
+
 	if (save.contains("techLevel"))
 	{
 		game.techLevel = save.value("techLevel").toInt();
@@ -3809,14 +4644,23 @@ static bool loadMainFile(const std::string &fileName)
 	while (save.remainingArrayItems() > 0)
 	{
 		int index = save.value("index").toInt();
+		if (!(index >= 0 && index < MAX_PLAYERS))
+		{
+			debug(LOG_ERROR, "Invalid player index: %d", index);
+			save.nextArrayItem();
+			continue;
+		}
 		auto value = save.value("recycled_droids").jsonValue();
 		for (const auto &v : value)
 		{
 			add_to_experience_queue(index, json_variant(v).toInt());
 		}
+		setMultiPlayRecentScore(index, save.value("recentScore", 0).toUInt());
+		setMultiPlayUnitsKilled(index, save.value("recentKills", 0).toUInt());
 		save.nextArrayItem();
 	}
 	save.endArray();
+
 	return true;
 }
 
@@ -3841,13 +4685,15 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	}
 
 	/* Put the save game data into the buffer */
-	save.setValue("version", 1); // version of this file
+	save.setValue("version", currentGameVersion); // game version save was made on
+	save.setValue("versionFile", 2); // version of this file. Bump for significant changes
 	save.setValue("saveKey", saveKey);
 	save.setValue("gameTime", gameTime);
 	save.setValue("missionTime", mission.startTime);
 	save.setVector2i("scrollMin", Vector2i(scrollMinX, scrollMinY));
 	save.setVector2i("scrollMax", Vector2i(scrollMaxX, scrollMaxY));
 	save.setValue("saveType", saveType);
+	ASSERT_OR_RETURN(false, strlen(aLevelName) < MAX_LEVEL_SIZE, "Unable to save level name - too long (max %d) - %s", (int)MAX_LEVEL_SIZE, aLevelName);
 	save.setValue("levelName", aLevelName);
 	save.setValue("radarPermitted", radarPermitted);
 	save.setValue("allowDesign", allowDesign);
@@ -3877,7 +4723,6 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("aDefaultSensor", aDefaultSensor[i]);
 		save.setValue("aDefaultECM", aDefaultECM[i]);
 		save.setValue("aDefaultRepair", aDefaultRepair[i]);
-		save.setValue("colour", getPlayerColour(i));
 
 		std::priority_queue<int> experience = copy_experience_queue(i);
 		nlohmann::json recycled_droids = nlohmann::json::array();
@@ -3895,40 +4740,40 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		}
 		save.set("alliances", allies);
 		save.setValue("difficulty", NetPlay.players[i].difficulty);
-
 		save.setValue("position", NetPlay.players[i].position);
-		save.setValue("colour", NetPlay.players[i].colour);
+		save.setValue("colour", getPlayerColour(i));
 		save.setValue("allocated", NetPlay.players[i].allocated);
+		save.setValue("faction", NetPlay.players[i].faction);
 		save.setValue("team", NetPlay.players[i].team);
 		save.setValue("ai", NetPlay.players[i].ai);
 		save.setValue("autoGame", NetPlay.players[i].autoGame);
 		save.setValue("ip", NetPlay.players[i].IPtextAddress);
-		save.setValue("name", getPlayerName(selectedPlayer));
+		save.setValue("name", getPlayerName(i));
+		save.setValue("nameAI", getAIName(i));
+		save.setValue("recentScore", getMultiPlayRecentScore(i));
+		save.setValue("recentKills", getMultiPlayUnitsKilled(i));
 
 		save.nextArrayItem();
 	}
 	save.endArray();
 
-	iView playerPos;
-	disp3d_getView(&playerPos);
-	save.setVector3i("camera_position", playerPos.p);
-	save.setVector3i("camera_rotation", playerPos.r);
+	iView currPlayerPos;
+	disp3d_getView(&currPlayerPos);
+	save.setVector3i("camera_position", currPlayerPos.p);
+	save.setVector3i("camera_rotation", currPlayerPos.r);
 
 	save.beginArray("landing_zones");
 	for (int i = 0; i < MAX_NOGO_AREAS; ++i)
 	{
 		LANDING_ZONE *psLandingZone = getLandingZone(i);
-		save.setVector2i("start", Vector2i(psLandingZone->x1, psLandingZone->x2));
-		save.setVector2i("end", Vector2i(psLandingZone->y1, psLandingZone->y2));
+		save.setVector2i("start", Vector2i(psLandingZone->x1, psLandingZone->y1));
+		save.setVector2i("end", Vector2i(psLandingZone->x2, psLandingZone->y2));
 		save.nextArrayItem();
 	}
 	save.endArray();
 
 	save.setValue("playerHasWon", testPlayerHasWon());
 	save.setValue("playerHasLost", testPlayerHasLost());
-	save.setValue("gameLevel", 0);
-	save.setValue("failFlag", 0);
-	save.setValue("trackTransporter", 0);
 	save.setValue("gameType", game.type);
 	save.setValue("scavengers", game.scavengers);
 	save.setValue("mapName", game.map);
@@ -3939,6 +4784,9 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("allianceSetting", game.alliance);
 	save.setValue("mapHasScavengers", game.mapHasScavengers);
 	save.setValue("mapMod", game.isMapMod);
+	save.setValue("mapRandom", game.isRandom);
+	save.setValue("techLevel", game.techLevel);
+	save.setValue("gameHash", game.hash.toString());
 	save.setValue("selectedPlayer", selectedPlayer);
 	save.setValue("multiplayer", bMultiPlayer);
 	save.setValue("playerCount", NetPlay.playercount);
@@ -3946,26 +4794,21 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("bComms", NetPlay.bComms);
 	save.setValue("modList", getModList().c_str());
 	save.setValue("playerBuiltHQ", playerBuiltHQ);
-	save.setValue("techLevel", game.techLevel);
+	save.setValue("challengeFileName", challengeFileName.toUtf8().c_str());
+	save.setValue("challengeActive", challengeActive);
+	save.setValue("builtInMap", builtInMap);
+	save.setValue("inactivityMinutes", game.inactivityMinutes);
 
 	return true;
 }
 
+//-- Write gam.json
+//--
 static bool writeGameFile(const char *fileName, SDWORD saveType)
 {
 	GAME_SAVEHEADER fileHeader;
 	SAVE_GAME       saveGame;
-	bool            status;
 	unsigned int    i, j;
-
-	PHYSFS_file *fileHandle = openSaveFile(fileName);
-	if (!fileHandle)
-	{
-		debug(LOG_ERROR, "openSaveFile(\"%s\") failed", fileName);
-		return false;
-	}
-
-	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
 
 	fileHeader.aFileType[0] = 'g';
 	fileHeader.aFileType[1] = 'a';
@@ -3975,13 +4818,6 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	fileHeader.version = CURRENT_VERSION_NUM;
 
 	debug(LOG_SAVE, "fileversion is %u, (%s) ", fileHeader.version, fileName);
-
-	if (!serializeSaveGameHeader(fileHandle, &fileHeader))
-	{
-		debug(LOG_ERROR, "could not write header to %s; PHYSFS error: %s", fileName, WZ_PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
 
 	ASSERT(saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type");
 	saveGame.saveKey = getCampaignNumber();
@@ -4112,7 +4948,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	//version 34
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		sstrcpy(saveGame.sPlayerName[i], getPlayerName(i));
+		sstrcpy(saveGame.sPlayerName[i], (!challengeActive && NetPlay.players[i].ai >= 0 && !NetPlay.players[i].allocated) ? getAIName(i) : getPlayerName(i));
 	}
 
 	//version 38
@@ -4121,7 +4957,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	if (saveGame.sGame.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		// player 0 is always a human in campaign games
-		for (int i = 1; i < MAX_PLAYERS; i++)
+		for (i = 1; i < MAX_PLAYERS; i++)
 		{
 			if (saveGame.sNetPlay.players[i].difficulty == AIDifficulty::HUMAN)
 			{
@@ -4132,101 +4968,181 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 			}
 		}
 	}
-
-	status = serializeSaveGameData(fileHandle, &saveGame);
-
-	// Close the file
-	PHYSFS_close(fileHandle);
-
-	// Return our success status with writing out the file!
-	return status;
-}
-
-// -----------------------------------------------------------------------------------------
-// Process the droid initialisation file (dinit.bjo). Creates droids for
-// the scenario being loaded. This is *NEVER* called for a user save game
-//
-bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
-{
-	DROIDINIT_SAVEHEADER		*psHeader;
-	SAVE_DROIDINIT *pDroidInit;
-	DROID_TEMPLATE *psTemplate;
-	DROID *psDroid;
-	UDWORD i;
-	UDWORD NumberOfSkippedDroids = 0;
-
-	/* Check the file type */
-	psHeader = (DROIDINIT_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'd' || psHeader->aFileType[1] != 'i' || psHeader->aFileType[2] != 'n' || psHeader->aFileType[3] != 't')
+	const std::string fileNameStr(fileName);
+	const auto len = fileNameStr.size();
+	ASSERT(strcmp(fileName + (len - 4), ".gam") == 0, "hmm... not .gam?");
+	
+	const auto lastSep = fileNameStr.rfind("/");
+	// TODO: convert argument "const char* filename" to a manageable struct with path/filename/extension
+	//		 and remove this mess...
+	const std::string pathToCommonSaveDir(fileNameStr, 0, lastSep + 1);
+	const std::string gameName(fileNameStr, lastSep + 1, len - pathToCommonSaveDir.size() - 4);
+	const std::string pathToThisSaveDir = pathToCommonSaveDir + gameName + "/";
+	if (!PHYSFS_exists(pathToThisSaveDir.c_str()))
 	{
-		debug(LOG_ERROR, "Incorrect file type");
+		PHYSFS_mkdir(pathToThisSaveDir.c_str());
+	}
+	const std::string saveInfoJsonFilename = pathToThisSaveDir + "save-info.json";
+	const std::string jsonFileName = pathToThisSaveDir + "gam.json";
+	auto gamJson = nlohmann::json::object();
+
+	nonstd::optional<nlohmann::json> saveInfoJsonOpt = nullopt;
+	if (PHYSFS_exists(saveInfoJsonFilename.c_str()))
+	{
+		saveInfoJsonOpt = parseJsonFile(saveInfoJsonFilename.c_str());
+		ASSERT(saveInfoJsonOpt.has_value() && saveInfoJsonOpt.value().is_object(), "save-info.json looks broken, wanted an object");
+	}
+	if (!saveInfoJsonOpt.has_value() || !saveInfoJsonOpt.value().is_object())
+	{
+		saveInfoJsonOpt = nlohmann::json::object();
+	}
+	auto saveInfoJson = saveInfoJsonOpt.value();
+	// new .json format
+	serializeSaveGameData_json(gamJson, saveInfoJson, gameName.c_str(), &saveGame);
+	if (!saveJSONToFile(gamJson, jsonFileName.c_str()))
+	{
+		debug(LOG_ERROR, "Failed to save: %s", jsonFileName.c_str());
 		return false;
 	}
-
-	/* DROIDINIT_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	//increment to the start of the data
-	pFileData += DROIDINIT_HEADER_SIZE;
-
-	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
-
-	pDroidInit = (SAVE_DROIDINIT *)pFileData;
-
-	for (i = 0; i < psHeader->quantity; i++)
+	if (!saveJSONToFile(saveInfoJson, saveInfoJsonFilename.c_str()))
 	{
-		/* SAVE_DROIDINIT is OBJECT_SAVE_V19 */
-		/* OBJECT_SAVE_V19 */
-		endian_udword(&pDroidInit->id);
-		endian_udword(&pDroidInit->x);
-		endian_udword(&pDroidInit->y);
-		endian_udword(&pDroidInit->z);
-		endian_udword(&pDroidInit->direction);
-		endian_udword(&pDroidInit->player);
-		endian_udword(&pDroidInit->periodicalDamageStart);
-		endian_udword(&pDroidInit->periodicalDamage);
+		debug(LOG_ERROR, "Failed to save: %s", saveInfoJsonFilename.c_str());
+		return false;
+	}
+	debug(LOG_SAVEGAME, "saved game into %s", jsonFileName.c_str());
 
-		pDroidInit->player = RemapPlayerNumber(pDroidInit->player);
-		if (pDroidInit->player >= MAX_PLAYERS)
+	// Return our success status with writing out the file!
+	return true;
+}
+
+static nonstd::optional<nlohmann::json> readGamJson(const char* filenameWithGamExtension)
+{
+	// TODO: use SaveGamePath_t instead of char* ...
+	// but that's a lot of change, so not doing it now
+	unsigned len = strlen(filenameWithGamExtension);
+	ASSERT(strcmp(filenameWithGamExtension + (len - 4), ".gam") == 0, "hmm... not .gam?");
+	const std::string filenameWithGamExtensionStr(filenameWithGamExtension);
+	const auto lastSep = filenameWithGamExtensionStr.rfind("/");
+	ASSERT(lastSep > 0, "unexpected filename format: '%s'", filenameWithGamExtension);
+	const std::string lastSegment(filenameWithGamExtension, lastSep + 1, filenameWithGamExtensionStr.size() - lastSep - 5);
+	const std::string commonPath(filenameWithGamExtension, 0, filenameWithGamExtensionStr.size() - lastSegment.size() - 4);
+	const std::string containingFolder = commonPath + lastSegment + "/";
+	// "gam.json" in the containingFolder
+	const std::string gamJson = containingFolder + "gam.json";
+	auto result = parseJsonFile(gamJson.c_str());
+	if (result.has_value())
+	{
+		debug(LOG_SAVEGAME, "last segment was %s, common path %s, save-info %s", lastSegment.c_str(), commonPath.c_str(), gamJson.c_str());
+	}
+	else
+	{
+		// FALLBACK for older saves: prior behavior was to save "<lastSegment>.json" in the containingFolder
+		const std::string oldGamJsonPath = containingFolder + lastSegment + ".json";
+		debug(LOG_SAVEGAME, "last segment was %s, common path %s, save-info %s", lastSegment.c_str(), commonPath.c_str(), oldGamJsonPath.c_str());
+		result = parseJsonFile(oldGamJsonPath.c_str());
+	}
+	return result;
+}
+
+nonstd::optional<nlohmann::json> parseJsonFile(const char *filename)
+{
+	UDWORD pFileSize;
+	char *ppFileData = nullptr;
+	debug(LOG_SAVEGAME, "starting deserialize %s", filename);
+	if (!loadFile(filename, &ppFileData, &pFileSize, false))
+	{
+		debug(LOG_SAVE, "No %s found, sad", filename);
+		return nullopt;
+	}
+	nonstd::optional<nlohmann::json> result;
+	try {
+		result = nlohmann::json::parse(ppFileData);
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "JSON document from %s is invalid: %s", filename, e.what());
+		result = nullopt;
+	}
+	free(ppFileData);
+	return result;
+}
+
+static uint32_t RemapWzMapPlayerNumber(int8_t oldNumber)
+{
+	if (oldNumber < 0)
+	{
+		game.mapHasScavengers = true;
+		return static_cast<uint32_t>(scavengerSlot());
+	}
+
+	if (game.type == LEVEL_TYPE::CAMPAIGN)		// don't remap for SP games
+	{
+		return oldNumber;
+	}
+
+	for (uint32_t i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (oldNumber == NetPlay.players[i].position)
 		{
-			pDroidInit->player = MAX_PLAYERS - 1;	// now don't lose any droids ... force them to be the last player
+			game.mapHasScavengers = game.mapHasScavengers || i == scavengerSlot();
+			return i;
+		}
+	}
+	ASSERT(false, "Found no player position for player %d", (int)oldNumber);
+	return 0;
+}
+
+static bool loadWzMapDroidInit(WzMap::Map &wzMap)
+{
+	uint32_t NumberOfSkippedDroids = 0;
+	auto pDroids = wzMap.mapDroids();
+	ASSERT_OR_RETURN(false, pDroids.get() != nullptr, "No data.");
+
+	for (auto &droid : *pDroids)
+	{
+		unsigned player = RemapWzMapPlayerNumber(droid.player);
+		if (player >= MAX_PLAYERS)
+		{
+			player = MAX_PLAYERS - 1;	// now don't lose any droids ... force them to be the last player
 			NumberOfSkippedDroids++;
 		}
-
-		psTemplate = getTemplateFromTranslatedNameNoPlayer(pDroidInit->name);
+		auto psTemplate = getTemplateFromTranslatedNameNoPlayer(droid.name.c_str());
 		if (psTemplate == nullptr)
 		{
-			debug(LOG_ERROR, "Unable to find template for %s for player %d", pDroidInit->name, pDroidInit->player);
+			debug(LOG_ERROR, "Unable to find template for %s for player %d -- unit skipped", droid.name.c_str(), player);
+			continue;
 		}
-		else
+		turnOffMultiMsg(true);
+		DROID *psDroid = nullptr;
+		if (droid.id.has_value() && droid.id.value() > 0)
 		{
-			psDroid = reallyBuildDroid(psTemplate, Position((pDroidInit->x & ~TILE_MASK) + TILE_UNITS / 2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS / 2, 0), pDroidInit->player, false);
-			if (psDroid)
-			{
-				Vector2i startpos = getPlayerStartPosition(psDroid->player);
-
-				psDroid->id = pDroidInit->id > 0 ? pDroidInit->id : 0xFEDBCA98;	// hack to remove droid id zero
-				psDroid->rot.direction = DEG(pDroidInit->direction);
-				addDroid(psDroid, apsDroidLists);
-				if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
-				{
-					scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
-				}
-			}
-			else
-			{
-				debug(LOG_ERROR, "This droid cannot be built - %s", pDroidInit->name);
-				return false;
-			}
+			psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0}, droid.id.value());
+		} else
+		{
+			psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0});
 		}
-		pDroidInit++;
+		turnOffMultiMsg(false);
+		if (psDroid == nullptr)
+		{
+			debug(LOG_ERROR, "Failed to build unit %s", droid.name.c_str());
+			continue;
+		}
+		ASSERT(psDroid->id != 0, "Droid ID should never be zero here");
+
+		// HACK!!
+		Vector2i startpos = getPlayerStartPosition(player);
+		if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+		{
+			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
+		}
+
+		addDroid(psDroid, apsDroidLists);
 	}
 	if (NumberOfSkippedDroids)
 	{
 		debug(LOG_ERROR, "Bad Player number in %d unit(s)... assigned to the last player!", NumberOfSkippedDroids);
 		return false;
 	}
+
 	return true;
 }
 
@@ -4304,20 +5220,6 @@ static inline void setPlayerJSON(nlohmann::json &jsonObj, int player)
 	}
 }
 
-static bool skipForDifficulty(WzConfig &ini, int player)
-{
-	if (ini.contains("difficulty")) // optionally skip this object
-	{
-		int difficulty = ini.value("difficulty").toInt();
-		if ((game.type == LEVEL_TYPE::CAMPAIGN && difficulty > (int)getDifficultyLevel())
-		    || (game.type == LEVEL_TYPE::SKIRMISH && difficulty > static_cast<int8_t>(NetPlay.players[player].difficulty)))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentDroidLists)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
@@ -4334,11 +5236,6 @@ static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentD
 		{
 			ini.endGroup();
 			continue; // special hack for campaign missions, cannot have targets
-		}
-		if (skipForDifficulty(ini, player))
-		{
-			ini.endGroup();
-			continue; // another hack for campaign missions, cannot have targets
 		}
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
@@ -4366,13 +5263,11 @@ foundDroid:
 			}
 		}
 		ASSERT_OR_RETURN(false, psDroid, "Droid %d not found", id);
-
-		getIniDroidOrder(ini, "order", psDroid->order);
 		psDroid->listSize = clip(ini.value("orderList/size", 0).toInt(), 0, 10000);
 		psDroid->asOrderList.resize(psDroid->listSize);  // Must resize before setting any orders, and must set in-place, since pointers are updated later.
-		for (int i = 0; i < psDroid->listSize; ++i)
+		for (int droidIdx = 0; droidIdx < psDroid->listSize; ++droidIdx)
 		{
-			getIniDroidOrder(ini, "orderList/" + WzString::number(i), psDroid->asOrderList[i]);
+			getIniDroidOrder(ini, "orderList/" + WzString::number(droidIdx), psDroid->asOrderList[droidIdx]);
 		}
 		psDroid->listPendingBegin = 0;
 		for (int j = 0; j < MAX_WEAPONS; j++)
@@ -4388,7 +5283,7 @@ foundDroid:
 			ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
 			BASE_OBJECT *psObj = getBaseObjFromData(tid, tplayer, ttype);
 			ASSERT(psObj, "Failed to find droid base structure");
-			ASSERT(psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
+			ASSERT(!psObj || psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
 			setSaveDroidBase(psDroid, (STRUCTURE *)psObj);
 		}
 		if (ini.contains("commander"))
@@ -4398,6 +5293,7 @@ foundDroid:
 			ASSERT(psCommander, "Failed to find droid commander");
 			cmdDroidAddDroid(psCommander, psDroid);
 		}
+		getIniDroidOrder(ini, "order", psDroid->order);
 		ini.endGroup();
 	}
 	return true;
@@ -4539,31 +5435,11 @@ static void writeSaveObjectJSON(nlohmann::json &jsonObj, BASE_OBJECT *psObj)
 	}
 }
 
-static bool loadScriptDroid(ScriptMapData const &data)
+template<typename T>
+inline T getCompFromName_NullCompOnFail(COMPONENT_TYPE compType, const WzString &name)
 {
-	ASSERT_OR_RETURN(false, data.valid, "No data.");
-
-	for (auto &droid : data.droids)
-	{
-		unsigned player = droid.player == -1? scavengerPlayer() : droid.player;
-		auto psTemplate = getTemplateFromTranslatedNameNoPlayer(droid.name.toUtf8().c_str());
-		if (psTemplate == nullptr)
-		{
-			debug(LOG_ERROR, "Unable to find template for %s for player %d -- unit skipped", droid.name.toUtf8().c_str(), player);
-			continue;
-		}
-		turnOffMultiMsg(true);
-		auto psDroid = reallyBuildDroid(psTemplate, {droid.position, 0}, player, false, {droid.direction, 0, 0});
-		turnOffMultiMsg(false);
-		if (psDroid == nullptr)
-		{
-			debug(LOG_ERROR, "Failed to build unit %s", droid.name.toUtf8().c_str());
-			continue;
-		}
-		addDroid(psDroid, apsDroidLists);
-	}
-
-	return true;
+	int index = getCompFromName(compType, name);
+	return (index >= 0) ? static_cast<T>(index) : 0; // 0 to reference the null weapon / body / etc
 }
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
@@ -4615,13 +5491,8 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
 		bool onMission = ini.value("onMission", false).toBool();
-		DROID_TEMPLATE templ, *psTemplate = &templ;
-
-		if (skipForDifficulty(ini, player))
-		{
-			ini.endGroup();
-			continue;
-		}
+		DROID_TEMPLATE templ;
+		const DROID_TEMPLATE *psTemplate = nullptr;
 
 		if (ini.contains("template"))
 		{
@@ -4639,20 +5510,21 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		{
 			// Create fake template
 			templ.name = ini.string("name", "UNKNOWN");
-			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
-			psTemplate->numWeaps = ini.value("weapons", 0).toInt();
+			templ.droidType = (DROID_TYPE)ini.value("droidType").toInt();
+			templ.numWeaps = ini.value("weapons", 0).toInt();
 			ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
-			psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toWzString());
-			psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toWzString());
-			psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toWzString());
-			psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toWzString());
-			psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toWzString());
-			psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toWzString());
-			psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toWzString());
-			psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toWzString());
-			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toWzString());
-			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toWzString());
+			templ.asParts[COMP_BODY] = getCompFromName_NullCompOnFail<uint8_t>(COMP_BODY, ini.value("body", "ZNULLBODY").toWzString());
+			templ.asParts[COMP_BRAIN] = getCompFromName_NullCompOnFail<uint8_t>(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toWzString());
+			templ.asParts[COMP_PROPULSION] = getCompFromName_NullCompOnFail<uint8_t>(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toWzString());
+			templ.asParts[COMP_REPAIRUNIT] = getCompFromName_NullCompOnFail<uint8_t>(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toWzString());
+			templ.asParts[COMP_ECM] = getCompFromName_NullCompOnFail<uint8_t>(COMP_ECM, ini.value("ecm", "ZNULLECM").toWzString());
+			templ.asParts[COMP_SENSOR] = getCompFromName_NullCompOnFail<uint8_t>(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toWzString());
+			templ.asParts[COMP_CONSTRUCT] = getCompFromName_NullCompOnFail<uint8_t>(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toWzString());
+			templ.asWeaps[0] = getCompFromName_NullCompOnFail<uint32_t>(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toWzString());
+			templ.asWeaps[1] = getCompFromName_NullCompOnFail<uint32_t>(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toWzString());
+			templ.asWeaps[2] = getCompFromName_NullCompOnFail<uint32_t>(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toWzString());
 			ini.endGroup();
+			psTemplate = &templ;
 		}
 
 		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
@@ -4664,16 +5536,25 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 
 		/* Create the Droid */
 		turnOffMultiMsg(true);
-		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
-		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().c_str());
-		turnOffMultiMsg(false);
-
-		// Copy the values across
 		if (id > 0)
 		{
-			psDroid->id = id; // force correct ID, unless ID is set to eg -1, in which case we should keep new ID (useful for starting units in campaign)
+			psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot, id);
+		} else
+		{
+			// will generate a new id
+			psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
 		}
+		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().c_str());
+		turnOffMultiMsg(false);
 		ASSERT(id != 0, "Droid ID should never be zero here");
+		// conditional check so that existing saved games don't break
+		if (ini.contains("originalBody"))
+		{
+			// we need to set "originalBody" before setting "body", otherwise CHECK_DROID throws assertion errors
+			// we cannot use droidUpgradeBody here to calculate "originalBody", because upgrades aren't loaded yet
+			// so it's much simplier just store/retrieve originalBody value
+			psDroid->originalBody = ini.value("originalBody").toInt();
+		}
 		psDroid->body = healthValue(ini, psDroid->originalBody);
 		ASSERT(psDroid->body != 0, "%s : %d has zero hp!", pFileName, i);
 		psDroid->experience = ini.value("experience", 0).toInt();
@@ -4800,22 +5681,23 @@ static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
 {
 	nlohmann::json droidObj = nlohmann::json::object();
 	droidObj["name"] = psCurr->aName;
-
+	droidObj["originalBody"] = psCurr->originalBody;
 	// write common BASE_OBJECT info
 	writeSaveObjectJSON(droidObj, psCurr);
 
-	for (int i = 0; i < psCurr->numWeaps; i++)
+	for (unsigned i = 0; i < psCurr->numWeaps; i++)
 	{
 		if (psCurr->asWeaps[i].nStat > 0)
 		{
-			const std::string& numStr = WzString::number(i).toStdString();
+			auto numberWzStr = WzString::number(i);
+			const std::string& numStr = numberWzStr.toStdString();
 			droidObj["ammo/" + numStr] = psCurr->asWeaps[i].ammo;
 			droidObj["lastFired/" + numStr] = psCurr->asWeaps[i].lastFired;
 			droidObj["shotsFired/" + numStr] = psCurr->asWeaps[i].shotsFired;
 			droidObj["rotation/" + numStr] = toVector(psCurr->asWeaps[i].rot);
 		}
 	}
-	for (int i = 0; i < MAX_WEAPONS; i++)
+	for (unsigned i = 0; i < MAX_WEAPONS; i++)
 	{
 		setIniBaseObject(droidObj, "actionTarget/" + WzString::number(i), psCurr->psActionTarget[i]);
 	}
@@ -4941,13 +5823,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 	}
 
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
-	saveFile(pFileName, jsonString.c_str(), jsonString.size());
-	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
-
-	return true;
+	return saveJSONToFile(mRoot, pFileName);
 }
 
 
@@ -5085,9 +5961,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		{
 			continue;
 		}
-		// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
-		// the scripts -so in ALL CASES overwrite the ID!
-		psStructure->id = psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98; // hack to remove struct id zero
+
 		psStructure->periodicalDamage = psSaveStructure->periodicalDamage;
 		periodicalDamageTime = psSaveStructure->periodicalDamageStart;
 		psStructure->periodicalDamageStart = periodicalDamageTime;
@@ -5130,20 +6004,20 @@ static UDWORD getResearchIdFromName(const WzString &name)
 	return NULL_ID;
 }
 
-bool loadScriptStructure(ScriptMapData const &data)
+static bool loadWzMapStructure(WzMap::Map& wzMap)
 {
-	if (!data.valid)
+	uint32_t NumberOfSkippedStructures = 0;
+	auto pStructures = wzMap.mapStructures();
+	if (!pStructures)
 	{
 		return false;
 	}
 
-	freeAllFlagPositions();  // clear any flags put in during level loads
-
-	for (auto &structure : data.structures) {
-		auto psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats, [&](STRUCTURE_STATS &stat) { return stat.id == structure.name; });
+	for (auto &structure : *pStructures) {
+		auto psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats, [&](STRUCTURE_STATS &stat) { return stat.id.compare(structure.name.c_str()) == 0; });
 		if (psStats == asStructureStats + numStructureStats)
 		{
-			debug(LOG_ERROR, "Structure type \"%s\" unknown", structure.name.toStdString().c_str());
+			debug(LOG_ERROR, "Structure type \"%s\" unknown", structure.name.c_str());
 			continue;  // ignore this
 		}
 		//for modules - need to check the base structure exists
@@ -5152,7 +6026,7 @@ bool loadScriptStructure(ScriptMapData const &data)
 			STRUCTURE *psStructure = getTileStructure(map_coord(structure.position.x), map_coord(structure.position.y));
 			if (psStructure == nullptr)
 			{
-				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", structure.name.toStdString().c_str(), structure.player);
+				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", structure.name.c_str(), structure.player);
 				continue; // ignore this module
 			}
 		}
@@ -5160,27 +6034,41 @@ bool loadScriptStructure(ScriptMapData const &data)
 		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > mapWidth - TOO_NEAR_EDGE
 		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > mapHeight - TOO_NEAR_EDGE)
 		{
-			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.toStdString().c_str());
+			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.c_str());
 			continue; // skip it
 		}
-		int player = structure.player;
-		if (player < 0)
+		auto player = RemapWzMapPlayerNumber(structure.player);
+		if (player >= MAX_PLAYERS)
 		{
-			game.mapHasScavengers = true;
-			player = scavengerPlayer();
+			player = MAX_PLAYERS - 1;
+			NumberOfSkippedStructures++;
 		}
-		STRUCTURE *psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
+		STRUCTURE *psStructure = nullptr;
+		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", (structure.id.has_value()) ? structure.id.value() : -1, player, 
+				structure.name.c_str(), map_coord(structure.position.x), map_coord(structure.position.y));
+		if (structure.id.has_value() && structure.id.value() > 0)
+		{
+			psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true, structure.id.value());
+		} else
+		{
+			// generate new synchronised id
+			psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
+		}
+		
 		if (psStructure == nullptr)
 		{
-			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.toStdString().c_str());
+			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.c_str());
 			continue;
 		}
+		// Previously, we would override building's ID with module's ID
+		// now, "id" is const, we can't do that. 
+		// this may break some mods which look up structures by theirs module id.
 		if (structure.modules > 0)
 		{
 			auto moduleStat = getModuleStat(psStructure);
 			if (moduleStat == nullptr)
 			{
-				debug(LOG_ERROR, "Structure %s can't have modules.", structure.name.toStdString().c_str());
+				debug(LOG_ERROR, "Structure %s can't have modules.", structure.name.c_str());
 				continue;
 			}
 			for (int i = 0; i < structure.modules; ++i)
@@ -5199,12 +6087,18 @@ bool loadScriptStructure(ScriptMapData const &data)
 		}
 	}
 
+	if (NumberOfSkippedStructures > 0)
+	{
+		debug(LOG_ERROR, "structureLoad: invalid player number in %d structures ... assigned to the last player!\n\n", NumberOfSkippedStructures);
+		return false;
+	}
+
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 /* code for versions after version 20 of a save structure */
-static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
+static bool loadSaveStructure2(const char *pFileName)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
@@ -5246,8 +6140,8 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			STRUCTURE *psStructure = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-			if (psStructure == nullptr)
+			STRUCTURE *psTileStructure = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+			if (psTileStructure == nullptr)
 			{
 				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", name.toUtf8().c_str(), player);
 				ini.endGroup();
@@ -5262,18 +6156,18 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			ini.endGroup();
 			continue; // skip it
 		}
-		psStructure = buildStructureDir(psStats, pos.x, pos.y, rot.direction, player, true);
+		if (id <= 0)
+		{
+			id = generateSynchronisedObjectId();
+		}
+		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", id, player, psStats->name.toUtf8().c_str(), map_coord(pos.y), map_coord(pos.y));
+		psStructure = buildStructureDir(psStats, pos.x, pos.y, rot.direction, player, true, id);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure)
 		{
 			ini.endGroup();
 			continue;
 		}
-		if (id > 0)
-		{
-			psStructure->id = id;	// force correct ID
-		}
-
 		// common BASE_OBJECT info
 		loadSaveObject(ini, psStructure);
 
@@ -5303,9 +6197,10 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			{
 				psModule = getModuleStat(psStructure);
 				//build the appropriate number of modules
-				for (int i = 0; i < capacity; i++)
+				for (int moduleIdx = 0; moduleIdx < capacity; moduleIdx++)
 				{
 					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
+					
 				}
 			}
 			if (ini.contains("Factory/template"))
@@ -5453,6 +6348,8 @@ Writes some version info
 */
 bool writeGameInfo(const char *pFileName)
 {
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
 	char ourtime[100] = {'\0'};
 	const time_t currentTime = time(nullptr);
@@ -5469,7 +6366,7 @@ bool writeGameInfo(const char *pFileName)
 	ini.setValue("version", version_getVersionString());
 	ini.setValue("full_version", version_getFormattedVersionString());
 	ini.setValue("cheated", Cheated);
-	ini.setValue("debug", getDebugMappingStatus());
+	ini.setValue("debug", dbgInputManager.debugMappingsAllowed());
 	ini.setValue("level/map", getLevelName());
 	ini.setValue("mods", !getModList().empty() ? getModList().c_str() : "None");
 	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
@@ -5493,6 +6390,11 @@ bool writeStructFile(const char *pFileName)
 	{
 		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
+			if (!psCurr->pStructureType)
+			{
+				ASSERT(psCurr->pStructureType, "Structure has null pStructureType??");
+				continue;
+			}
 			ini.beginGroup("structure_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
 			ini.setValue("name", psCurr->pStructureType->id);
 
@@ -5672,8 +6574,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				setStructureTarget(psStruct, getBaseObjFromData(tid, tplayer, ttype), j, ORIGIN_UNKNOWN);
 				ASSERT(psStruct->psTarget[j], "Failed to find target");
 			}
-			if (ini.contains("Factory/commander/id"))
-			{
+		}
+		if (ini.contains("Factory/commander/id")) {
 				ASSERT(psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
 				       || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Bad type");
 				FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
@@ -5691,9 +6593,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				{
 					assignFactoryCommandDroid(psStruct, psCommander);
 				}
-			}
-			if (ini.contains("Repair/target/id"))
-			{
+		}
+		if (ini.contains("Repair/target/id")){
 				ASSERT(psStruct->pStructureType->type == REF_REPAIR_FACILITY, "Bad type");
 				REPAIR_FACILITY *psRepair = ((REPAIR_FACILITY *)psStruct->pFunctionality);
 				OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("Repair/target/type", OBJ_DROID).toInt();
@@ -5702,9 +6603,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				ASSERT(tid >= 0 && tplayer >= 0, "Bad repair ID %d for player %d for building %d", tid, tplayer, id);
 				psRepair->psObj = getBaseObjFromData(tid, tplayer, ttype);
 				ASSERT(psRepair->psObj, "Repair target %d not found for building %d", tid, id);
-			}
-			if (ini.contains("Rearm/target/id"))
-			{
+		}
+		if (ini.contains("Rearm/target/id")) {
 				ASSERT(psStruct->pStructureType->type == REF_REARM_PAD, "Bad type");
 				REARM_PAD *psReArmPad = ((REARM_PAD *)psStruct->pFunctionality);
 				OBJECT_TYPE ttype = OBJ_DROID; // always, for now
@@ -5713,8 +6613,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				ASSERT(tid >= 0 && tplayer >= 0, "Bad rearm ID %d for player %d for building %d", tid, tplayer, id);
 				psReArmPad->psObj = getBaseObjFromData(tid, tplayer, ttype);
 				ASSERT(psReArmPad->psObj, "Rearm target %d not found for building %d", tid, id);
-			}
 		}
+
 		ini.endGroup();
 	}
 	return true;
@@ -5802,12 +6702,12 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 		//if haven't found the feature - ignore this record!
 		if (!found)
 		{
-			debug(LOG_ERROR, "This feature no longer exists - %s", psSaveFeature->name);
+			debug(LOG_ERROR, "This feature no longer exists - %s;%i", psSaveFeature->name, psSaveFeature->id);
 			//ignore this
 			continue;
 		}
 		//create the Feature
-		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y, true);
+		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y, true, psSaveFeature->id);
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
@@ -5818,7 +6718,6 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		pFeature->id = psSaveFeature->id;
 		pFeature->rot.direction = DEG(psSaveFeature->direction);
 		pFeature->periodicalDamage = psSaveFeature->periodicalDamage;
 		if (psHeader->version >= VERSION_14)
@@ -5833,35 +6732,44 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 	return true;
 }
 
-static bool loadScriptFeature(ScriptMapData const &data)
+static bool loadWzMapFeature(WzMap::Map &wzMap)
 {
-	if (!data.valid)
+	auto pFeatures = wzMap.mapFeatures();
+	if (!pFeatures)
 	{
 		return false;
 	}
 
-	for (auto &feature : data.features)
+	for (auto &feature : *pFeatures)
 	{
-		auto psStats = std::find_if(asFeatureStats, asFeatureStats + numFeatureStats, [&](FEATURE_STATS &stat) { return stat.id == feature.name; });
+		auto psStats = std::find_if(asFeatureStats, asFeatureStats + numFeatureStats, [&](FEATURE_STATS &stat) { return stat.id.compare(feature.name.c_str()) == 0; });
 		if (psStats == asFeatureStats + numFeatureStats)
 		{
-			debug(LOG_ERROR, "Feature type \"%s\" unknown", feature.name.toStdString().c_str());
+			debug(LOG_ERROR, "Feature type \"%s\" unknown", feature.name.c_str());
 			continue;  // ignore this
 		}
 		// Create the Feature
-		auto pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true);
+		FEATURE *pFeature = nullptr;
+		//restore values && create Feature
+		if (feature.id.has_value())
+		{
+			pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true, feature.id.value());
+		} else
+		{
+			pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true);
+		}
 		if (!pFeature)
 		{
-			debug(LOG_ERROR, "Unable to create feature %s", feature.name.toStdString().c_str());
+			debug(LOG_ERROR, "Unable to create feature %s", feature.name.c_str());
 			continue;
 		}
 		if (pFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
-		//restore values
-		pFeature->id = generateSynchronisedObjectId();
+
 		pFeature->rot.direction = feature.direction;
+		pFeature->player = (feature.player.has_value()) ? feature.player.value() : PLAYER_FEATURE;
 	}
 
 	return true;
@@ -5907,7 +6815,15 @@ bool loadSaveFeature2(const char *pFileName)
 			continue;
 		}
 		//create the Feature
-		pFeature = buildFeature(psStats, pos.x, pos.y, true);
+		int id = ini.value("id", -1).toInt();
+		if (id > 0)
+		{
+			pFeature = buildFeature(psStats, pos.x, pos.y, true, id);
+		}
+		else
+		{
+			pFeature = buildFeature(psStats, pos.x, pos.y, true);
+		}
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", name.toUtf8().c_str());
@@ -5918,15 +6834,6 @@ bool loadSaveFeature2(const char *pFileName)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		int id = ini.value("id", -1).toInt();
-		if (id > 0)
-		{
-			pFeature->id = id;
-		}
-		else
-		{
-			pFeature->id = generateSynchronisedObjectId();
-		}
 		pFeature->rot = ini.vector3i("rotation");
 		pFeature->player = ini.value("player", PLAYER_FEATURE).toInt();
 
@@ -5992,7 +6899,7 @@ bool loadSaveTemplate(const char *pFileName)
 		ini.beginArray("templates");
 		while (ini.remainingArrayItems() > 0)
 		{
-			addTemplate(player, new DROID_TEMPLATE(loadTemplate()));
+			addTemplate(player, std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE(loadTemplate())));
 		}
 		ini.endArray();
 		ini.endGroup();
@@ -6010,108 +6917,167 @@ bool loadSaveTemplate(const char *pFileName)
 	else
 	{
 		// Old savegame compatibility, should remove this branch sometime.
-		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
-		{
-			localTemplates.push_back(*keyvaluepair.second);
-		}
+		enumerateTemplates(selectedPlayer, [](DROID_TEMPLATE * psTempl) {
+			localTemplates.push_back(*psTempl);
+			return true;
+		});
 	}
 
 	return true;
 }
 
+static nlohmann::json convGameTemplateToJSON(DROID_TEMPLATE *psCurr)
+{
+	nlohmann::json templateObj = saveTemplateCommon(psCurr);
+	templateObj["ref"] = psCurr->ref;
+	templateObj["multiPlayerID"] = psCurr->multiPlayerID;
+	templateObj["enabled"] = psCurr->enabled;
+	templateObj["stored"] = psCurr->stored;
+	templateObj["prefab"] = psCurr->prefab;
+	return templateObj;
+}
+
 bool writeTemplateFile(const char *pFileName)
 {
-	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
+	nlohmann::json mRoot = nlohmann::json::object();
 
-	auto writeTemplate = [&](DROID_TEMPLATE *psCurr) {
-		saveTemplateCommon(ini, psCurr);
-		ini.setValue("ref", psCurr->ref);
-		ini.setValue("multiPlayerID", psCurr->multiPlayerID);
-		ini.setValue("enabled", psCurr->enabled);
-		ini.setValue("stored", psCurr->stored);
-		ini.setValue("prefab", psCurr->prefab);
-		ini.nextArrayItem();
-	};
-
-	ini.setValue("version", 1);
+	mRoot["version"] = 1;
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		if (!apsDroidLists[player] && !apsStructLists[player])	// only write out templates of players that are still 'alive'
 		{
 			continue;
 		}
-		ini.beginGroup("player_" + WzString::number(player));
-		setPlayer(ini, player);
-		ini.beginArray("templates");
-		for (auto &keyvaluepair : droidTemplates[player])
-		{
-			writeTemplate(keyvaluepair.second);
-		}
-		ini.endArray();
-		ini.endGroup();
+		nlohmann::json playerTemplatesObj = nlohmann::json::object();
+		setPlayerJSON(playerTemplatesObj, player);
+		nlohmann::json templates_array = nlohmann::json::array();
+		enumerateTemplates(player, [&templates_array](DROID_TEMPLATE* psTemplate) {
+			templates_array.push_back(convGameTemplateToJSON(psTemplate));
+			return true;
+		});
+		playerTemplatesObj["templates"] = std::move(templates_array);
+		auto playerKey = "player_" + WzString::number(player);
+		mRoot[playerKey.toUtf8()] = std::move(playerTemplatesObj);
 	}
-	ini.beginArray("localTemplates");
+	nlohmann::json localtemplates_array = nlohmann::json::array();
 	for (auto &psCurr : localTemplates)
 	{
-		writeTemplate(&psCurr);
+		localtemplates_array.push_back(convGameTemplateToJSON(&psCurr));
 	}
-	ini.endArray();
-	return true;
+	mRoot["localTemplates"] = std::move(localtemplates_array);
+
+	return saveJSONToFile(mRoot, pFileName);
 }
 
 // -----------------------------------------------------------------------------------------
 // load up a terrain tile type map file
-// note: This function modifies pFileData directly while loading! (FIXME?)
-bool loadTerrainTypeMap(char *pFileData, UDWORD filesize)
+bool loadTerrainTypeMap(const char *pFilePath)
 {
-	TILETYPE_SAVEHEADER	*psHeader;
-	UDWORD				i;
-	UWORD				*pType;
-
-	if (filesize < TILETYPE_HEADER_SIZE)
+	ASSERT_OR_RETURN(false, pFilePath, "Null pFilePath");
+	WzMapDebugLogger logger;
+	WzMapPhysFSIO mapIO;
+	auto result = WzMap::loadTerrainTypes(pFilePath, mapIO, &logger);
+	if (!result)
 	{
-		debug(LOG_ERROR, "loadTerrainTypeMap: file too small");
+		// Failed to load terrain type map data
 		return false;
 	}
-
-	// Check the header
-	psHeader = (TILETYPE_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 't' || psHeader->aFileType[1] != 't' ||
-	    psHeader->aFileType[2] != 'y' || psHeader->aFileType[3] != 'p')
-	{
-		debug(LOG_ERROR, "loadTerrainTypeMap: Incorrect file type");
-
-		return false;
-	}
-
-	/* TILETYPE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
 
 	// reset the terrain table
 	memset(terrainTypes, 0, sizeof(terrainTypes));
 
-	// Load the terrain type mapping
-	pType = (UWORD *)(pFileData + TILETYPE_HEADER_SIZE);
-	endian_uword(pType);
-	if (psHeader->quantity >= MAX_TILE_TEXTURES)
+	size_t quantity = result->terrainTypes.size();
+	if (quantity >= MAX_TILE_TEXTURES)
 	{
 		// Workaround for fugly map editor bug, since we can't fix the map editor
-		psHeader->quantity = MAX_TILE_TEXTURES - 1;
+		quantity = MAX_TILE_TEXTURES - 1;
 	}
-	for (i = 0; i < psHeader->quantity; i++)
+	for (size_t i = 0; i < quantity; i++)
 	{
-		if (*pType > TER_MAX)
+		auto& type = result->terrainTypes[i];
+		if (type > TER_MAX)
 		{
 			debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
-
 			return false;
 		}
 
-		terrainTypes[i] = (UBYTE) * pType;
-		pType++;
-		endian_uword(pType);
+		terrainTypes[i] = static_cast<UBYTE>(type);
 	}
+
+	return true;
+}
+
+bool loadTerrainTypeMapOverride(MAP_TILESET tileSet)
+{
+	resForceBaseDir("/data/base/");
+	WzString iniName = "tileset/tileTypes.json";
+	if (!PHYSFS_exists(iniName.toUtf8().c_str()))
+	{
+		return false;
+	}
+
+	WzConfig ini(iniName, WzConfig::ReadOnly);
+	WzString tileTypeKey;
+
+	switch (tileSet)
+	{
+		case MAP_TILESET::ARIZONA:
+			tileTypeKey = "Arizona";
+			break;
+		case MAP_TILESET::URBAN:
+			tileTypeKey = "Urban";
+			break;
+		case MAP_TILESET::ROCKIES:
+			tileTypeKey = "Rockies";
+			break;
+//		default:
+//			debug(LOG_ERROR, "Unknown tile type");
+//			resForceBaseDir("");
+//			return false;
+	}
+
+	std::vector<WzString> list = ini.childGroups();
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		if (list[i].compare(tileTypeKey) == 0)
+		{
+			ini.beginGroup(list[i]);
+
+			debug(LOG_TERRAIN, "Looking at tileset type: %s", tileTypeKey.toUtf8().c_str());
+			unsigned int counter = 0;
+
+			std::vector<WzString> keys = ini.childKeys();
+			for (size_t j = 0; j < keys.size(); ++j)
+			{
+				unsigned int tileType = ini.value(keys.at(j)).toUInt();
+
+				if (tileType > TER_MAX)
+				{
+					debug(LOG_ERROR, "loadTerrainTypeMapOverride: terrain type out of range");
+					resForceBaseDir("");
+					return false;
+				}
+				// Workaround for fugly map editor bug, since we can't fix the map editor
+				if (counter > (MAX_TILE_TEXTURES - 1))
+				{
+					debug(LOG_ERROR, "loadTerrainTypeMapOverride: too many textures!");
+					resForceBaseDir("");
+					return false;
+				}
+				// Log the output for the override value.
+				if (terrainTypes[counter] != tileType)
+				{
+					debug(LOG_TERRAIN, "Upgrading map tile %d (type %d) to type %d", counter, terrainTypes[counter], tileType);
+				}
+				terrainTypes[counter] = tileType;
+				++counter;
+				debug(LOG_TERRAIN, "Tile %d at value: %d", counter - 1, tileType);
+			}
+			ini.endGroup();
+		}
+	}
+
+	resForceBaseDir("");
 
 	return true;
 }
@@ -6120,49 +7086,34 @@ bool loadTerrainTypeMap(char *pFileData, UDWORD filesize)
 // Write out the terrain type map
 static bool writeTerrainTypeMapFile(char *pFileName)
 {
-	TILETYPE_SAVEHEADER		*psHeader;
-	char *pFileData;
-	UDWORD					fileSize, i;
-	UWORD					*pType;
+	ASSERT_OR_RETURN(false, pFileName != nullptr, "pFileName is null");
 
-	// Calculate the file size
-	fileSize = TILETYPE_HEADER_SIZE + sizeof(UWORD) * MAX_TILE_TEXTURES;
-	pFileData = (char *)malloc(fileSize);
-	if (!pFileData)
+	WzMap::TerrainTypeData ttypeData;
+	ttypeData.terrainTypes.reserve(MAX_TILE_TEXTURES);
+	for (size_t i = 0; i < MAX_TILE_TEXTURES; i++)
 	{
-		debug(LOG_FATAL, "writeTerrainTypeMapFile: Out of memory");
-		abort();
-		return false;
+		UBYTE &tType = terrainTypes[i];
+		if (tType > TER_MAX)
+		{
+			debug(LOG_ERROR, "Terrain type exceeds TER_MAX: %" PRIu8 "", tType);
+		}
+		ttypeData.terrainTypes.push_back(static_cast<TYPE_OF_TERRAIN>(tType));
 	}
 
-	// Put the file header on the file
-	psHeader = (TILETYPE_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 't';
-	psHeader->aFileType[1] = 't';
-	psHeader->aFileType[2] = 'y';
-	psHeader->aFileType[3] = 'p';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = MAX_TILE_TEXTURES;
+	/* Write out the map data */
+	WzMapPhysFSIO mapIO;
+	WzMapDebugLogger debugLoggerInstance;
+	return WzMap::writeTerrainTypes(ttypeData, pFileName, mapIO, WzMap::LatestOutputFormat, &debugLoggerInstance);
+}
 
-	pType = (UWORD *)(pFileData + TILETYPE_HEADER_SIZE);
-	for (i = 0; i < MAX_TILE_TEXTURES; i++)
-	{
-		*pType = terrainTypes[i];
-		endian_uword(pType);
-		pType += 1;
-	}
-
-	/* TILETYPE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	if (!saveFile(pFileName, pFileData, fileSize))
-	{
-		return false;
-	}
-	free(pFileData);
-
-	return true;
+bool isComponentStateValid(int state)
+{
+    return state == UNAVAILABLE 
+        || state == AVAILABLE 
+        || state == FOUND 
+        || state == REDUNDANT
+        || state == REDUNDANT_FOUND
+        || state == REDUNDANT_UNAVAILABLE;
 }
 
 // -----------------------------------------------------------------------------------------
@@ -6181,8 +7132,7 @@ bool loadSaveCompList(const char *pFileName)
 			COMPONENT_STATS *psComp = getCompStatsFromName(name);
 			ASSERT_OR_RETURN(false, psComp, "Bad component %s", name.toUtf8().c_str());
 			ASSERT_OR_RETURN(false, psComp->compType >= 0 && psComp->compType != COMP_NUMCOMPONENTS, "Bad type %d", psComp->compType);
-			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
-			                 "Bad state %d for %s", state, name.toUtf8().c_str());
+			ASSERT_OR_RETURN(false, isComponentStateValid(state), "Bad state %d for %s", state, name.toUtf8().c_str());
 			apCompLists[player][psComp->compType][psComp->index] = state;
 		}
 		ini.endGroup();
@@ -6293,8 +7243,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 			int state = ini.value(name, UNAVAILABLE).toInt();
 			int statInc;
 
-			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
-			                 "Bad state %d for %s", state, name.toUtf8().c_str());
+			ASSERT_OR_RETURN(false, isComponentStateValid(state), "Bad state %d for %s", state, name.toUtf8().c_str());
 			for (statInc = 0; statInc < numStructureStats; statInc++) // loop until find the same name
 			{
 				STRUCTURE_STATS *psStats = asStructureStats + statInc;
@@ -6362,6 +7311,8 @@ bool loadSaveResearch(const char *pFileName)
 		if (!found)
 		{
 			//ignore this record
+			debug(LOG_SAVE, "Skipping unknown research named '%s'", name.toStdString().c_str());
+			ini.endGroup();
 			continue;
 		}
 		auto researchedList = ini.value("researched").jsonValue();
@@ -6382,7 +7333,7 @@ bool loadSaveResearch(const char *pFileName)
 
 			psPlRes = &asPlayerResList[plr][statInc];
 			// Copy the research status
-			psPlRes->ResearchStatus = (researched & RESBITS);
+			psPlRes->ResearchStatus = (researched & RESBITS_ALL);
 			SetResearchPossible(psPlRes, possible);
 			psPlRes->currentPoints = points;
 			//for any research that has been completed - perform so that upgrade values are set up
@@ -6410,9 +7361,9 @@ static bool writeResearchFile(char *pFileName)
 		for (int player = 0; player < game.maxPlayers; player++)
 		{
 			possibles.push_back(WzString::number(GetResearchPossible(&asPlayerResList[player][i])));
-			researched.push_back(WzString::number(asPlayerResList[player][i].ResearchStatus & RESBITS));
+			researched.push_back(WzString::number(asPlayerResList[player][i].ResearchStatus & RESBITS_ALL));
 			points.push_back(WzString::number(asPlayerResList[player][i].currentPoints));
-			if (IsResearchPossible(&asPlayerResList[player][i]) || (asPlayerResList[player][i].ResearchStatus & RESBITS) || asPlayerResList[player][i].currentPoints)
+			if (IsResearchPossible(&asPlayerResList[player][i]) || (asPlayerResList[player][i].ResearchStatus & RESBITS_ALL) || asPlayerResList[player][i].currentPoints)
 			{
 				valid = true;	// write this entry
 			}
@@ -6529,10 +7480,10 @@ bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType)
 
 						psMessage->pViewData = psViewData;
 						// Check the z value is at least the height of the terrain
-						const int height = map_Height(((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
-						if (((VIEW_PROXIMITY*)psViewData->pData)->z < height)
+						const int terrainHeight = map_Height(((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
+						if (((VIEW_PROXIMITY*)psViewData->pData)->z < terrainHeight)
 						{
-							((VIEW_PROXIMITY*)psViewData->pData)->z = height;
+							((VIEW_PROXIMITY*)psViewData->pData)->z = terrainHeight;
 						}
 					}
 					else
@@ -6572,6 +7523,7 @@ static bool writeMessageFile(const char *pFileName)
 	// save each type of research
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
+		ASSERT(player < MAX_PLAYERS, "player out of bounds: %d", player);
 		for (MESSAGE *psMessage = apsMessages[player]; psMessage != nullptr; psMessage = psMessage->psNext)
 		{
 			ini.beginGroup("message_" + WzString::number(numMessages++));
@@ -6636,7 +7588,7 @@ static bool writeMessageFile(const char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveStructLimits(const char *pFileName)
+bool loadSaveLimits(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 
@@ -6825,407 +7777,11 @@ GAME_TYPE getSaveGameType()
 	return gameType;
 }
 
-static void plotBackdropPixel(char *backDropSprite, int xx, int yy, PIELIGHT const &colour)
+const char *savegameWithoutExtension(const char *name)
 {
-	xx = clip(xx, 0, BACKDROP_HACK_WIDTH - 1);
-	yy = clip(yy, 0, BACKDROP_HACK_HEIGHT - 1);
-	char *pixel = backDropSprite + (yy * BACKDROP_HACK_WIDTH + xx) * 3;
-	pixel[0] = colour.byte.r;
-	pixel[1] = colour.byte.g;
-	pixel[2] = colour.byte.b;
-}
+	static char displaySavegameName[256] = {'\0'};
+	sstrcpy(displaySavegameName, name);
+	displaySavegameName[std::max<size_t>(strlen(displaySavegameName), 4) - 4] = '\0'; //axe the .gam
 
-bool plotStructurePreviewScript(ScriptMapData const &data, char *backDropSprite, Vector2i playeridpos[])
-{
-	ASSERT_OR_RETURN(false, data.valid, "Missing map data");
-
-	for (auto &structure : data.structures)
-	{
-		unsigned player = structure.player == -1? scavengerSlot() : structure.player;
-		if (player >= MAX_PLAYERS)
-		{
-			debug(LOG_ERROR, "Bad player");
-			continue;
-		}
-		bool HQ = structure.name.startsWith("A0CommandCentre");
-		Vector2i pos = map_coord(structure.position);
-		if (HQ)
-		{
-			playeridpos[player] = pos;
-		}
-		unsigned playerid = getPlayerColour(RemapPlayerNumber(player));
-		// kludge to fix black, so you can see it on some maps.
-		PIELIGHT color = playerid == 3? WZCOL_GREY : clanColours[playerid];
-		if (HQ)
-		{
-			// This shows where the HQ is on the map in a special color.
-			// We could do the same for anything else (oil/whatever) also.
-			// Possible future enhancement?
-			color = WZCOL_MAP_PREVIEW_HQ;
-		}
-		// and now we blit the color to the texture
-		plotBackdropPixel(backDropSprite, pos.x, pos.y, color);
-	}
-
-	plotScriptFeature(data, backDropSprite);
-
-	return true;
-}
-
-/**
- * \param[out] backDropSprite The premade map texture.
- * \param scale               Scale of the map texture.
- * \param[out] playeridpos    Will contain the position on the map where the player's HQ are located.
- *
- * Reads the current map and colours the map preview for any structures
- * present. Additionally we load the player's HQ location into playeridpos so
- * we know the player's starting location.
- */
-bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
-{
-	union
-	{
-		SAVE_STRUCTURE_V2 v2;
-		SAVE_STRUCTURE_V20 v20;
-	} sSave;  // close eyes now.
-	SAVE_STRUCTURE_V2 *psSaveStructure2   = &sSave.v2;
-	SAVE_STRUCTURE_V20 *psSaveStructure20 = &sSave.v20;
-	// ok you can open them again..
-
-	STRUCT_SAVEHEADER *psHeader;
-	char aFileName[256];
-	UDWORD xx, yy, count, fileSize, sizeOfSaveStructure = sizeof(SAVE_STRUCTURE);
-	UDWORD playerid = 0;
-	char *pFileData = nullptr;
-	LEVEL_DATASET *psLevel;
-	PIELIGHT color = WZCOL_BLACK ;
-	bool HQ = false;
-
-	psLevel = levFindDataSet(game.map, &game.hash);
-	ASSERT_OR_RETURN(false, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[0]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	strcat(aFileName, "/struct.bjo");
-
-	if (!PHYSFS_exists(aFileName))	// use new version of structure data
-	{
-		sstrcpy(aFileName, psLevel->apDataFiles[0]);
-		aFileName[strlen(aFileName) - 4] = '\0';
-		strcat(aFileName, "/struct.json");
-		WzConfig ini(aFileName, WzConfig::ReadOnly);
-		std::vector<WzString> list = ini.childGroups();
-		for (size_t i = 0; i < list.size(); ++i)
-		{
-			ini.beginGroup(list[i]);
-			WzString name = ini.value("name").toWzString();
-			Position pos = ini.vector3i("position");
-			playerid = ini.value("startpos", scavengerSlot()).toInt();  // No conversion should be going on, this is the map makers position when player X should be.
-			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
-			if (name.startsWith("A0CommandCentre"))
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x = map_coord(pos.x);
-				yy = playeridpos[playerid].y = map_coord(pos.y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(pos.x);
-				yy = map_coord(pos.y);
-			}
-			playerid = getPlayerColour(RemapPlayerNumber(playerid));
-			// kludge to fix black, so you can see it on some maps.
-			if (playerid == 3)	// in this case 3 = palette entry for black.
-			{
-				color = WZCOL_GREY;
-			}
-			else
-			{
-				color.rgba = clanColours[playerid].rgba;
-			}
-			if (HQ)
-			{
-				// This shows where the HQ is on the map in a special color.
-				// We could do the same for anything else (oil/whatever) also.
-				// Possible future enhancement?
-				color = WZCOL_MAP_PREVIEW_HQ;
-			}
-			// and now we blit the color to the texture
-			plotBackdropPixel(backDropSprite, xx, yy, color);
-			ini.endGroup();
-		}
-		// And now we need to show features.
-		plotFeature(backDropSprite);
-
-		return true;
-	}
-
-
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug(LOG_NEVER, "Failed to load file to buffer.");
-	}
-
-	/* Check the file type */
-	psHeader = (STRUCT_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' ||
-	    psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
-	{
-		debug(LOG_ERROR, "Invalid file type.");
-		return false;
-	}
-
-	/* STRUCT_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	//increment to the start of the data
-	pFileData += STRUCT_HEADER_SIZE;
-
-	if (psHeader->version < VERSION_12)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V2);
-	}
-	else if (psHeader->version < VERSION_14)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V12);
-	}
-	else if (psHeader->version <= VERSION_14)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V14);
-	}
-	else if (psHeader->version <= VERSION_16)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V15);
-	}
-	else if (psHeader->version <= VERSION_19)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V17);
-	}
-	else if (psHeader->version <= VERSION_20)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V20);
-	}
-
-	/* Load in the structure data */
-	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveStructure)
-	{
-		// we are specifically looking for the HQ, and it seems this is the only way to
-		// find it via parsing map.
-		// We store the coordinates of the structure, into a array for as many players as are on the map.
-
-		if (psHeader->version <= VERSION_19)
-		{
-			// All versions up to 19 are compatible with V2.
-			memcpy(psSaveStructure2, pFileData, sizeof(SAVE_STRUCTURE_V2));
-
-			endian_udword(&psSaveStructure2->x);
-			endian_udword(&psSaveStructure2->y);
-			endian_udword(&psSaveStructure2->player);
-			playerid = psSaveStructure2->player;
-			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
-			if (strncmp(psSaveStructure2->name, "A0CommandCentre", 15) == 0)
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x = map_coord(psSaveStructure2->x);
-				yy = playeridpos[playerid].y = map_coord(psSaveStructure2->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure2->x);
-				yy = map_coord(psSaveStructure2->y);
-			}
-		}
-		else
-		{
-			// All newer versions are compatible with V20.
-			memcpy(psSaveStructure20, pFileData, sizeof(SAVE_STRUCTURE_V20));
-
-			endian_udword(&psSaveStructure20->x);
-			endian_udword(&psSaveStructure20->y);
-			endian_udword(&psSaveStructure20->player);
-			playerid = psSaveStructure20->player;
-			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
-			if (strncmp(psSaveStructure20->name, "A0CommandCentre", 15) == 0)
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x = map_coord(psSaveStructure20->x);
-				yy = playeridpos[playerid].y = map_coord(psSaveStructure20->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure20->x);
-				yy = map_coord(psSaveStructure20->y);
-			}
-		}
-		playerid = getPlayerColour(RemapPlayerNumber(playerid));
-		// kludge to fix black, so you can see it on some maps.
-		if (playerid == 3)	// in this case 3 = palette entry for black.
-		{
-			color = WZCOL_GREY;
-		}
-		else
-		{
-			color.rgba = clanColours[playerid].rgba;
-		}
-
-		if (HQ)
-		{
-			// This shows where the HQ is on the map in a special color.
-			// We could do the same for anything else (oil/whatever) also.
-			// Possible future enhancement?
-			color = WZCOL_MAP_PREVIEW_HQ;
-		}
-
-		// and now we blit the color to the texture
-		plotBackdropPixel(backDropSprite, xx, yy, color);
-	}
-
-	// And now we need to show features.
-	plotFeature(backDropSprite);
-	return true;
-}
-
-static void plotScriptFeature(ScriptMapData const &data, char *backDropSprite) {
-	ASSERT_OR_RETURN(, data.valid, "Missing map data");
-
-	for (auto &feature : data.features)
-	{
-		PIELIGHT colour;
-		if (feature.name.startsWith("OilResource"))
-		{
-			colour = WZCOL_MAP_PREVIEW_OIL;
-		}
-		else if (feature.name.startsWith("OilDrum"))
-		{
-			colour = WZCOL_MAP_PREVIEW_BARREL;
-		}
-		else
-		{
-			continue;
-		}
-		// and now we blit the color to the texture
-		auto pos = map_coord(feature.position);
-		plotBackdropPixel(backDropSprite, pos.x, pos.y, colour);
-	}
-}
-
-// Show location of (at this time) oil on the map preview
-static void plotFeature(char *backDropSprite)
-{
-	FEATURE_SAVEHEADER	*psHeader;
-	SAVE_FEATURE_V2	*psSaveFeature;
-	LEVEL_DATASET *psLevel;
-	UDWORD xx, yy, count, fileSize;
-	UDWORD sizeOfSaveFeature = 0;
-	char *pFileData = nullptr;
-	char aFileName[256];
-	const PIELIGHT colourOil = WZCOL_MAP_PREVIEW_OIL;
-	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
-
-	psLevel = levFindDataSet(game.map, &game.hash);
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[0]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	strcat(aFileName, "/feat.bjo");
-	if (!PHYSFS_exists(aFileName))	// use new version of feature data
-	{
-		sstrcpy(aFileName, psLevel->apDataFiles[0]);
-		aFileName[strlen(aFileName) - 4] = '\0';
-		strcat(aFileName, "/feature.json");
-		WzConfig ini(aFileName, WzConfig::ReadOnly);
-		if (!ini.status())
-		{
-			debug(LOG_ERROR, "Could not open %s", aFileName);
-			return;
-		}
-		std::vector<WzString> list = ini.childGroups();
-		for (size_t i = 0; i < list.size(); ++i)
-		{
-			ini.beginGroup(list[i]);
-			WzString name = ini.value("name").toWzString();
-			Position pos = ini.vector3i("position");
-
-			// we only care about oil
-			PIELIGHT const *colour = nullptr;
-			if (name.startsWith("OilResource"))
-			{
-				colour = &colourOil;
-			}
-			else if (name.startsWith("OilDrum"))
-			{
-				colour = &colourBarrel;
-			}
-			if (colour != nullptr)
-			{
-				// and now we blit the color to the texture
-				xx = map_coord(pos.x);
-				yy = map_coord(pos.y);
-				plotBackdropPixel(backDropSprite, xx, yy, *colour);
-			}
-			ini.endGroup();
-		}
-		return;
-	}
-
-	// Load in the chosen file data/
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug(LOG_ERROR, "Unable to load file %s?", aFileName);
-		return;
-	}
-
-	// Check the file type
-	psHeader = (FEATURE_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'e' || psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 't')
-	{
-		debug(LOG_ERROR, "Incorrect file type, looking at %s", aFileName);
-		return;
-	}
-
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	//increment to the start of the data
-	pFileData += FEATURE_HEADER_SIZE;
-
-	sizeOfSaveFeature = sizeof(SAVE_FEATURE_V2);
-
-	if ((sizeOfSaveFeature * psHeader->quantity + FEATURE_HEADER_SIZE) > fileSize)
-	{
-		debug(LOG_ERROR, "Unexpected end of file ?");
-		return;
-	}
-
-	// Load in the feature data
-	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveFeature)
-	{
-		// All versions up to 19 are compatible with V2.
-		psSaveFeature = (SAVE_FEATURE_V2 *) pFileData;
-
-		// we only care about oil
-		PIELIGHT const *colour = nullptr;
-		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
-		{
-			colour = &colourOil;
-		}
-		else if (strncmp(psSaveFeature->name, "OilDrum", 7) == 0)
-		{
-			colour = &colourBarrel;
-		}
-		else
-		{
-			continue;
-		}
-		endian_udword(&psSaveFeature->x);
-		endian_udword(&psSaveFeature->y);
-		xx = map_coord(psSaveFeature->x);
-		yy = map_coord(psSaveFeature->y);
-		// and now we blit the color to the texture
-		plotBackdropPixel(backDropSprite, xx, yy, *colour);
-	}
+	return displaySavegameName;
 }

@@ -5,18 +5,17 @@ param([string]$VCPKG_BUILD_TYPE = "")
 ############################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-$VCPKG_COMMIT_SHA = "fdcfd8e5d79a9551249b60251edb81733fd227db";
+$VCPKG_COMMIT_SHA = "251741475900c9a57549d80f1b5a5e30e63d1887";
 
-# WZ Windows dependencies (for vcpkg install)
-$VCPKG_INSTALL_DEPENDENCIES = @("physfs", "harfbuzz", "libiconv", "libogg", "libtheora", "libvorbis", "libpng", "openal-soft", "freetype", "gettext", "zlib", "curl[winssl]", "libsodium", "angle")
+# WZ Windows features (for vcpkg install)
+$VCPKG_INSTALL_FEATURES = @()
 If ((-not ([string]::IsNullOrEmpty($env:VULKAN_SDK))) -and (Test-Path $env:VULKAN_SDK -PathType Container))
 {
-	Write-Output "VULKAN_SDK environment variable detected - using SDL2 with Vulkan support";
-	$VCPKG_INSTALL_DEPENDENCIES += "sdl2[vulkan]"
+	Write-Output "VULKAN_SDK environment variable detected - configuring WZ with Vulkan support";
+	$VCPKG_INSTALL_FEATURES += "vulkan"
 }
 Else {
-	Write-Output "VULKAN_SDK not detected - using SDL2 *without* Vulkan support";
-	$VCPKG_INSTALL_DEPENDENCIES += "sdl2"
+	Write-Output "VULKAN_SDK not detected - configuring WZ *without* Vulkan support";
 }
 
 # To ensure the proper dump_syms.exe is downloaded, specify the commit + hash
@@ -58,6 +57,10 @@ If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "launch.vs.json") ) )
 	Copy-Item (Join-Path "$($ScriptRoot)" "win32\launch.vs.json") -Destination "$($ScriptRoot)"
 }
 
+# Create build-dir vcpkg overlay folders
+$tripletOverlayFolder = (Join-Path (pwd) vcpkg_overlay_triplets)
+if (!(Test-Path -path $tripletOverlayFolder)) {New-Item $tripletOverlayFolder -Type Directory}
+
 # Download & build vcpkg (+ dependencies)
 If ( -not (Test-Path (Join-Path (pwd) vcpkg\.git) -PathType Container) )
 {
@@ -68,41 +71,81 @@ If ( -not (Test-Path (Join-Path (pwd) vcpkg\.git) -PathType Container) )
 Else
 {
 	# On CI (for example), the vcpkg directory may have been cached and restored
-	Write-Output "Skipping git clone for vcpkg (local copy already exists)";
+	# Fetch origin updates
+	Write-Output "Fetching origin updates for vcpkg (local copy already exists)";
+	pushd vcpkg;
+	git fetch origin;
+	popd;
 }
 pushd vcpkg;
 git reset --hard $VCPKG_COMMIT_SHA;
 .\bootstrap-vcpkg.bat;
 
-If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
+$triplet = "x86-windows"; # vcpkg default
+If (-not ([string]::IsNullOrEmpty($env:VCPKG_DEFAULT_TRIPLET)))
 {
-	# Add VCPKG_BUILD_TYPE to the specified triplet
-	$triplet = "x86-windows"; # vcpkg default
-	If (-not ([string]::IsNullOrEmpty($env:VCPKG_DEFAULT_TRIPLET)))
-	{
-		$triplet = "$env:VCPKG_DEFAULT_TRIPLET";
-	}
-	$tripletFile = "triplets\$($triplet).cmake";
-	$setString = Select-String -Quiet -Pattern "set(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")" -SimpleMatch -Path $tripletFile;
-	if (-not $setString)
-	{
-		Add-Content -Path $tripletFile -Value "`r`nset(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")";
-	}
+	$triplet = "$env:VCPKG_DEFAULT_TRIPLET";
 }
+
+If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE))))
+{
+	# Need to create a copy of the triplet and modify it
+	$tripletFile = "triplets\$($triplet).cmake";
+	If (!(Test-Path $tripletFile -PathType Leaf))
+	{
+		$tripletFile = "triplets\community\$($triplet).cmake";
+		If (!(Test-Path $tripletFile -PathType Leaf))
+		{
+			Write-Error "Unable to find VCPKG_DEFAULT_TRIPLET: $env:VCPKG_DEFAULT_TRIPLET"
+		}
+	}
+	Copy-Item "$tripletFile" -Destination "$tripletOverlayFolder"
+	$tripletFileName = Split-Path -Leaf "$tripletFile"
+	$overlayTripletFile = "$tripletOverlayFolder\$tripletFileName"
+	If ($triplet.Contains("mingw"))
+	{
+		# A fix for libtool issues with mingw-clang
+		Add-Content -Path $overlayTripletFile -Value "`r`nlist(APPEND VCPKG_CONFIGURE_MAKE_OPTIONS `"lt_cv_deplibs_check_method=pass_all`")";
+
+		# Build with pdb debug symbols (mingw-clang)
+		Add-Content -Path $overlayTripletFile -Value "`r`nstring(APPEND VCPKG_CXX_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_C_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_LINKER_FLAGS `" -Wl,-pdb= `")";
+	}
+	If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
+	{
+		Add-Content -Path $overlayTripletFile -Value "`r`nset(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")";
+	}
+	# Setup environment variable so vcpkg uses the overlay triplets folder
+	$env:VCPKG_OVERLAY_TRIPLETS = "$tripletOverlayFolder"
+}
+
+# Patch vcpkg_copy_pdbs for mingw support
+$vcpkg_copy_pdbs_patch = (Join-Path "$($ScriptRoot)" ".ci\vcpkg\patches\scripts\cmake\vcpkg_copy_pdbs.cmake");
+$vcpkg_copy_pdbs_dest = (Join-Path (pwd) "scripts\cmake");
+Copy-Item "$vcpkg_copy_pdbs_patch" -Destination "$vcpkg_copy_pdbs_dest"
+
+popd;
+
+$overlay_ports_path = (Join-Path "$($ScriptRoot)" ".ci\vcpkg\overlay-ports");
+$additional_vcpkg_flags = @("--x-no-default-features");
+$VCPKG_INSTALL_FEATURES | ForEach-Object { $additional_vcpkg_flags += "--x-feature=${PSItem}" };
 
 $vcpkg_succeeded = -1;
 $vcpkg_attempts = 0;
+Write-Output "vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ --overlay-ports=$($overlay_ports_path) $additional_vcpkg_flags";
+
+$vcpkg_path = (Join-Path (pwd) "vcpkg");
+$vcpkg_executable = (Join-Path "$($vcpkg_path)" "vcpkg.exe");
 While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
 {
-	& .\vcpkg install $VCPKG_INSTALL_DEPENDENCIES;
+	& $($vcpkg_executable) install --vcpkg-root=$($vcpkg_path) --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ --overlay-ports=$($overlay_ports_path) $additional_vcpkg_flags;
 	$vcpkg_succeeded = $LastExitCode;
 	$vcpkg_attempts++;
 }
 If ($vcpkg_succeeded -ne 0)
 {
 	Write-Error "vcpkg install failed ($vcpkg_attempts attempts)";
+	exit 1
 }
-popd;
 
 # Download google-breakpad's dump_syms.exe (if necessary)
 $dump_syms_path = $(Join-Path (pwd) dump_syms.exe);

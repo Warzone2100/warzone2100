@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_INIT_H__
 #define __INCLUDED_SRC_INIT_H__
 
+#include <vector>
+
 struct IMAGEFILE;
 
 // the size of the file loading buffer
@@ -31,7 +33,7 @@ struct IMAGEFILE;
 #define FILE_LOAD_BUFFER_SIZE (1024*1024*4)
 extern char fileLoadBuffer[];
 
-bool systemInitialise(float horizScaleFactor, float vertScaleFactor);
+bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScalePercentage);
 void systemShutdown();
 bool frontendInitialise(const char *ResourceFile);
 bool frontendShutdown();
@@ -49,21 +51,22 @@ bool saveGameReset();
 
 struct wzSearchPath
 {
-	char path[PATH_MAX];
-	unsigned int priority;
-	wzSearchPath *higherPriority, * lowerPriority;
+	std::string path;
+	unsigned int priority = 0;
 };
 
 enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
-void registerSearchPath(const char path[], unsigned int priority);
-bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL);
+void registerSearchPath(const std::string& path, unsigned int priority);
+void unregisterSearchPath(const std::string& path);
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
 
 bool buildMapList();
 bool CheckForMod(char const *mapFile);
 bool CheckForRandom(char const *mapFile, char const *mapDataFile0);
+bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData);
 
-bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
+bool loadLevFile(const std::string& filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
 extern IMAGEFILE	*FrontImages;
 

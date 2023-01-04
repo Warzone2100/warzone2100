@@ -5,6 +5,7 @@
 
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
+file		SMSG		"brieftut.txt"
 file		SMSG		"proxtut.txt"
 
 /* Directory for javascript files*/

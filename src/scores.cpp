@@ -54,6 +54,10 @@
 #include "lib/sound/audio_id.h"
 #include "intimage.h"
 
+#include "activity.h"
+#include "multistat.h"
+#include "clparse.h"
+
 #include <algorithm>
 
 #define	BAR_CRAWL_TIME	(GAME_TICKS_PER_SEC*3)
@@ -279,12 +283,15 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 
 	for (size_t i = 0; i < DROID_LEVELS; i++)
 	{
-		fullStats.numDroidsPerLevel.push_back(getNumDroidsForLevel(i));
+		fullStats.numDroidsPerLevel.push_back(getNumDroidsForLevel(selectedPlayer, i));
 	}
 
 	fullStats.numUnits = 0;
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
-	for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
+	if (selectedPlayer < MAX_PLAYERS)
+	{
+		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
+		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
+	}
 
 	return fullStats;
 }
@@ -349,9 +356,9 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 				                  (float)(realTime - dispST) / (float)BAR_CRAWL_TIME
 				                  : 1.f;
 
-				const float length = (float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul;
+				const int length = static_cast<int>((float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul);
 
-				if ((int)length > 4)
+				if (length > 4)
 				{
 
 					/* Black shadow */
@@ -439,7 +446,7 @@ void	fillUpStats(const END_GAME_STATS_DATA& stats)
 	/* Scale for percent */
 	for (i = 0; i < DROID_LEVELS; i++)
 	{
-		length = scaleFactor * stats.numDroidsPerLevel[i];
+		length = static_cast<UDWORD>(scaleFactor * stats.numDroidsPerLevel[i]);
 		infoBars[STAT_ROOKIE + i].percent = PERCENT(length, RANK_BAR_WIDTH);
 		infoBars[STAT_ROOKIE + i].number = stats.numDroidsPerLevel[i];
 	}
@@ -456,9 +463,9 @@ void	fillUpStats(const END_GAME_STATS_DATA& stats)
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = scaleFactor * stats.missionData.unitsLost;
+	length = static_cast<UDWORD>(scaleFactor * stats.missionData.unitsLost);
 	infoBars[STAT_UNIT_LOST].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * stats.missionData.unitsKilled;
+	length = static_cast<UDWORD>(scaleFactor * stats.missionData.unitsKilled);
 	infoBars[STAT_UNIT_KILLED].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Now do the structure losses */
@@ -472,9 +479,9 @@ void	fillUpStats(const END_GAME_STATS_DATA& stats)
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = scaleFactor * stats.missionData.strLost;
+	length = static_cast<UDWORD>(scaleFactor * stats.missionData.strLost);
 	infoBars[STAT_STR_LOST].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * stats.missionData.strKilled;
+	length = static_cast<UDWORD>(scaleFactor * stats.missionData.strKilled);
 	infoBars[STAT_STR_BLOWN_UP].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Finally the force information - need amount of droids as well*/
@@ -491,11 +498,11 @@ void	fillUpStats(const END_GAME_STATS_DATA& stats)
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = scaleFactor * stats.missionData.unitsBuilt;
+	length = static_cast<UDWORD>(scaleFactor * stats.missionData.unitsBuilt);
 	infoBars[STAT_UNITS_BUILT].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * stats.numUnits;
+	length = static_cast<UDWORD>(scaleFactor * stats.numUnits);
 	infoBars[STAT_UNITS_NOW].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * stats.missionData.strBuilt;
+	length = static_cast<UDWORD>(scaleFactor * stats.missionData.strBuilt);
 	infoBars[STAT_STR_BUILT].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Finally the numbers themselves */
@@ -552,4 +559,66 @@ bool readScoreData(const char *fileName)
 
 	/* Hopefully everything's just fine by now */
 	return true;
+}
+
+void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = true */)
+{
+	static UDWORD lastOutputRealTime = 0;
+	if (realTimeThrottleSeconds > 0 && (realTime - lastOutputRealTime < (realTimeThrottleSeconds * GAME_TICKS_PER_SEC)))
+	{
+		return;
+	}
+	fprintf(stdout, "Game State [gameTime: %" PRIu32 "]\n", gameTime);
+	fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+	if (ActivityManager::instance().getCurrentGameMode() != ActivitySink::GameMode::CAMPAIGN)
+	{
+		fprintf(stdout, " # | Player Name | Extrct Pwr | Units Killed | Structs (F/R) | Units Alive |  Power  |\n");
+		fprintf(stdout, "-- | ----------- | ---------- | ------------ | ------------- | ----------- | ------- |\n");
+		for (unsigned n = 0; n < std::min<unsigned>(MAX_PLAYERS, (unsigned)game.maxPlayers); ++n)
+		{
+			if (NetPlay.players[n].ai < 0)
+			{
+				// skip closed slots / open / empty slots
+				continue;
+			}
+			uint32_t unitsKilled = getMultiPlayUnitsKilled(n);
+			uint32_t numUnits = 0;
+			for (DROID *psDroid = apsDroidLists[n]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
+			uint32_t numStructs = 0;
+			uint32_t numFactories = 0;
+			uint32_t numResearch = 0;
+			uint32_t numFactoriesThatCanProduceConstructionUnits = 0;
+			for (STRUCTURE *psStruct = apsStructLists[n]; psStruct; psStruct = psStruct->psNext, numStructs++)
+			{
+				if (psStruct->status != SS_BUILT || psStruct->died != 0)
+				{
+					continue; // ignore structures that aren't completely built, or are "dead"
+				}
+				if (StructIsFactory(psStruct))
+				{
+					numFactories++;
+					if (psStruct->pStructureType->type == REF_FACTORY ||
+						psStruct->pStructureType->type == REF_CYBORG_FACTORY)
+					{
+						numFactoriesThatCanProduceConstructionUnits++;
+					}
+				}
+				else if (psStruct->pStructureType->type == REF_RESEARCH)
+				{
+					numResearch++;
+				}
+			}
+			std::string structInfoString = std::to_string(numStructs) + " (" + std::to_string(numFactories) + "/" + std::to_string(numResearch) + ")";
+			// NOTE: This duplicates the logic in rules.js - checkEndConditions()
+			const bool playerCantDoAnything = (numFactoriesThatCanProduceConstructionUnits == 0) && (numUnits == 0);
+			const char * deadStatus = playerCantDoAnything ? "x" : "";
+			fprintf(stdout, "%2u | %11.11s | %10" PRIi64 " | %12" PRIi32 " | %13.13s | %11" PRIi32 " | %7" PRIi32 " | %s\n", n, NetPlay.players[n].name, getExtractedPower(n), unitsKilled, structInfoString.c_str(), numUnits, getPower(n), deadStatus);
+		}
+	}
+	fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+	if (flush_output)
+	{
+		fflush(stdout);
+	}
+	lastOutputRealTime = realTime;
 }

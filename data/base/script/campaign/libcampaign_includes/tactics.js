@@ -2,86 +2,63 @@
 ////////////////////////////////////////////////////////////////////////////////
 // AI droid movement automation.
 ////////////////////////////////////////////////////////////////////////////////
-
 //;; ## camManageGroup(group, order, data)
 //;;
-//;; Tell ```libcampaign.js``` to manage a certain group. The group
-//;; would be permanently managed depending on the high-level orders given.
+//;; Tell `libcampaign.js` to manage a certain group. The group would
+//;; be permanently managed depending on the high-level orders given.
 //;; For each order, data parameter is a JavaScript object that controls
 //;; different aspects of behavior. The order parameter is one of:
+//;; * `CAM_ORDER_ATTACK` Pursue human player, preferably around the given position.
+//;;   The following optional data object fields are available, none of which is required:
+//;;   * `pos` Position or list of positions to attack. If pos is a list, first positions in the list will be attacked first.
+//;;   * `radius` Circle radius around `pos` to scan for targets.
+//;;   * `fallback` Position to retreat.
+//;;   * `morale` An integer from `1` to `100`. If that high percentage of the original group dies,
+//;;     fall back to the fallback position. If new droids are added to the group, it can recover and attack again.
+//;;   * `count` Override size of the original group. If unspecified, number of droids in the group at call time.
+//;;     Retreat on low morale and regroup is calculated against this value.
+//;;   * `repair` Health percentage to fall back to repair facility, if any.
+//;;   * `regroup` If set to `true`, the group will not move forward unless it has at least `count` droids in its biggest cluster.
+//;;     If `count` is set to `-1`, at least ⅔ of group's droids should be in the biggest cluster.
+//;; * `CAM_ORDER_DEFEND` Protect the given position. If too far, retreat back there ignoring fire.
+//;;   The following data object fields are available:
+//;;   * `pos` Position to defend.
+//;;   * `radius` Circle radius around `pos` to scan for targets.
+//;;   * `count` Override size of the original group. If unspecified, number of droids in the group at call time.
+//;;     Regroup is calculated against this value.
+//;;   * `repair` Health percentage to fall back to repair facility, if any.
+//;;   * `regroup` If set to `true`, the group will not move forward unless it has at least `count` droids in its biggest cluster.
+//;;     If `count` is set to `-1`, at least ⅔ of group's droids should be in the biggest cluster.
+//;; * `CAM_ORDER_PATROL` Move droids randomly between a given list of positions. The following data object fields are available:
+//;;   * `pos` An array of positions to patrol between.
+//;;   * `interval` Change positions every this many milliseconds.
+//;;   * `count` Override size of the original group. If unspecified, number of droids in the group at call time.
+//;;     Regroup is calculated against this value.
+//;;   * `repair` Health percentage to fall back to repair facility, if any.
+//;;   * `regroup` If set to `true`, the group will not move forward unless it has at least `count` droids in its biggest cluster.
+//;;     If `count` is set to `-1`, at least ⅔ of group's droids should be in the biggest cluster.
+//;; * `CAM_ORDER_COMPROMISE` Same as `CAM_ORDER_ATTACK`, just stay near the last (or only)
+//;;   attack position instead of looking for the player around the whole map. Useful for offworld missions,
+//;;   with player's LZ as the final position. The following data object fields are available:
+//;;   * `pos` Position or list of positions to compromise.
+//;;     If pos is a list, first positions in the list will be compromised first.
+//;;   * `radius` Circle radius around `pos` to scan for targets.
+//;;   * `count` Override size of the original group. If unspecified, number of droids in the group at call time.
+//;;     Regroup is calculated against this value.
+//;;   * `repair` Health percentage to fall back to repair facility, if any.
+//;;   * `regroup` If set to `true`, the group will not move forward unless it has at least `count` droids in its biggest cluster.
+//;;     If `count` is set to `-1`, at least ⅔ of group's droids should be in the biggest cluster.
+//;; * `CAM_ORDER_FOLLOW` Assign the group to commander. The sub-order is defined to be given to the commander.
+//;;   When commander dies, the group continues to execute the sub-order. The following data object fields are available:
+//;;   * `droid` Commander droid label.
+//;;   * `order` The order to give to the commander.
+//;;   * `data` Data of the commander's order.
+//;;   * `repair` Health percentage to fall back to repair facility, if any.
 //;;
-//;; * ```CAM_ORDER_ATTACK``` Pursue human player, preferably around
-//;; 	the given position. The following optional data object fields are
-//;; 	available, none of which is required:
-//;;   * ```pos``` Position or list of positions to attack. If pos is a list,
-//;; 		first positions in the list will be attacked first.
-//;;   * ```radius``` Circle radius around ```pos``` to scan for targets.
-//;;   * ```fallback``` Position to retreat.
-//;;   * ```morale``` An integer from 1 to 100. If that high percentage
-//;; 		of the original group dies, fall back to the fallback position.
-//;; 		If new droids are added to the group, it can recover and attack
-//;; 		again.
-//;;   * ```count``` Override size of the original group. If unspecified,
-//;; 		number of droids in the group at call time. Retreat on low morale
-//;; 		and regroup is calculated against this value.
-//;;   * ```repair``` Health percentage to fall back to repair facility,
-//;; 		if any.
-//;;   * ```regroup``` If set to true, the group will not move forward unless
-//;; 		it has at least ```count``` droids in its biggest cluster.
-//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
-//;; 		the biggest cluster.
-//;; * ```CAM_ORDER_DEFEND``` Protect the given position. If too far, retreat
-//;; 	back there ignoring fire. The following data object fields are
-//;; 	available:
-//;;   * ```pos``` Position to defend.
-//;;   * ```radius``` Circle radius around ```pos``` to scan for targets.
-//;;   * ```count``` Override size of the original group. If unspecified,
-//;; 		number of droids in the group at call time. Regroup is calculated
-//;; 		against this value.
-//;;   * ```repair``` Health percentage to fall back to repair facility,
-//;; 		if any.
-//;;   * ```regroup``` If set to true, the group will not move forward unless
-//;; 		it has at least ```count``` droids in its biggest cluster.
-//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
-//;; 		the biggest cluster.
-//;; * ```CAM_ORDER_PATROL``` Move droids randomly between a given list of
-//;; 	positions. The following data object fields are available:
-//;;   * ```pos``` An array of positions to patrol between.
-//;;   * ```interval``` Change positions every this many milliseconds.
-//;;   * ```count``` Override size of the original group. If unspecified,
-//;; 		number of droids in the group at call time. Regroup is calculated
-//;; 		against this value.
-//;;   * ```repair``` Health percentage to fall back to repair facility,
-//;; 		if any.
-//;;   * ```regroup``` If set to true, the group will not move forward unless
-//;; 		it has at least ```count``` droids in its biggest cluster.
-//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
-//;; 		the biggest cluster.
-//;; * ```CAM_ORDER_COMPROMISE``` Same as CAM_ORDER_ATTACK, just stay near the
-//;; 	last (or only) attack position instead of looking for the player
-//;; 	around the whole map. Useful for offworld missions,
-//;; 	with player's LZ as the final position. The following data object fields
-//;; 	are available:
-//;;   * ```pos``` Position or list of positions to compromise. If pos is a list,
-//;; 		first positions in the list will be compromised first.
-//;;   * ```radius``` Circle radius around ```pos``` to scan for targets.
-//;;   * ```count``` Override size of the original group. If unspecified,
-//;; 		number of droids in the group at call time. Regroup is calculated
-//;; 		against this value.
-//;;   * ```repair``` Health percentage to fall back to repair facility,
-//;; 		if any.
-//;;   * ```regroup``` If set to true, the group will not move forward unless
-//;; 		it has at least ```count``` droids in its biggest cluster.
-//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
-//;; 		the biggest cluster.
-//;; * ```CAM_ORDER_FOLLOW``` Assign the group to commander. The sub-order
-//;; 	is defined to be given to the commander. When commander dies,
-//;; 	the group continues to execute the sub-order. The following data object
-//;; 	fields are available:
-//;;   * ```droid``` Commander droid label.
-//;;   * ```order``` The order to give to the commander.
-//;;   * ```data``` Data of the commander's order.
-//;;   * ```repair``` Health percentage to fall back to repair facility, if any.
+//;; @param {string} group
+//;; @param {number} order
+//;; @param {Object} data
+//;; @returns {void}
 //;;
 function camManageGroup(group, order, data)
 {
@@ -100,7 +77,7 @@ function camManageGroup(group, order, data)
 		{
 			saneData.pos = [ saneData.pos ];
 		}
-		for (var i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
+		for (let i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
 		{
 			saneData.pos[i] = camMakePos(saneData.pos[i]);
 		}
@@ -126,7 +103,10 @@ function camManageGroup(group, order, data)
 
 //;; ## camStopManagingGroup(group)
 //;;
-//;; Tell ```libcampaign.js``` to stop managing a certain group.
+//;; Tell `libcampaign.js` to stop managing a certain group.
+//;;
+//;; @param {string} group
+//;; @returns {void}
 //;;
 function camStopManagingGroup(group)
 {
@@ -143,10 +123,13 @@ function camStopManagingGroup(group)
 //;;
 //;; Print campaign order as string, useful for debugging.
 //;;
+//;; @param {number} order
+//;; @returns {string}
+//;;
 function camOrderToString(order)
 {
 	var orderString;
-	switch(order)
+	switch (order)
 	{
 		case CAM_ORDER_ATTACK:
 			orderString = "ATTACK";
@@ -170,26 +153,56 @@ function camOrderToString(order)
 }
 
 //////////// privates
+function __camFindGroupAvgCoordinate(groupID)
+{
+	var droids = enumGroup(groupID);
+	var len = droids.length;
+	var avgCoord = {x: 0, y: 0};
+
+	if (droids.length === 0)
+	{
+		return null;
+	}
+
+	for (let i = 0; i < len; ++i)
+	{
+		var droid = droids[i];
+		avgCoord.x += droid.x;
+		avgCoord.y += droid.y;
+	}
+
+	// This global is constantly changing for the tactics code per group
+	__camGroupAvgCoord.x = Math.floor(avgCoord.x / len);
+	__camGroupAvgCoord.y = Math.floor(avgCoord.y / len);
+}
+
+function __camDistToGroupAverage(obj1, obj2)
+{
+	var dist1 = distBetweenTwoPoints(__camGroupAvgCoord.x, __camGroupAvgCoord.y, obj1.x, obj1.y);
+	var dist2 = distBetweenTwoPoints(__camGroupAvgCoord.x, __camGroupAvgCoord.y, obj2.x, obj2.y);
+	return (dist1 - dist2);
+}
 
 function __camPickTarget(group)
 {
 	var targets = [];
 	var gi = __camGroupInfo[group];
 	var droids = enumGroup(group);
-	switch(gi.order)
+	__camFindGroupAvgCoordinate(group);
+	switch (gi.order)
 	{
 		case CAM_ORDER_ATTACK:
 			if (camDef(gi.target))
 			{
-				targets = enumRange(gi.target.x, gi.target.y,
-				                    __CAM_TARGET_TRACKING_RADIUS,
-				                    CAM_HUMAN_PLAYER, false);
+				targets = enumRange(gi.target.x, gi.target.y,__CAM_TARGET_TRACKING_RADIUS, CAM_HUMAN_PLAYER, false).filter((obj) => (
+					obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj))
+				));
 			}
 			// fall-through! we just don't track targets on COMPROMISE
 		case CAM_ORDER_COMPROMISE:
 			if (camDef(gi.data.pos))
 			{
-				for (var i = 0; i < gi.data.pos.length; ++i)
+				for (let i = 0; i < gi.data.pos.length; ++i)
 				{
 					var compromisePos = gi.data.pos[i];
 					if (targets.length > 0)
@@ -201,10 +214,7 @@ function __camPickTarget(group)
 					{
 						radius = __CAM_PLAYER_BASE_RADIUS;
 					}
-					targets = enumRange(compromisePos.x,
-					                    compromisePos.y,
-					                    radius,
-					                    CAM_HUMAN_PLAYER, false);
+					targets = enumRange(compromisePos.x, compromisePos.y, radius, CAM_HUMAN_PLAYER, false);
 				}
 			}
 			if (gi.order === CAM_ORDER_COMPROMISE && targets.length === 0)
@@ -220,19 +230,26 @@ function __camPickTarget(group)
 				}
 			}
 			var dr = droids[0];
-			targets = targets.filter(function(obj) {
-				return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-			});
+			targets = targets.filter((obj) => (
+				propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+			));
 			if (targets.length === 0)
 			{
-				targets = enumStruct(CAM_HUMAN_PLAYER).filter(function(obj) {
-					return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-				});
+				targets = enumStruct(CAM_HUMAN_PLAYER).filter((obj) => (
+					propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+				));
 				if (targets.length === 0)
 				{
-					targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
-						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
-					});
+					targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => (
+						propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y) &&
+							(obj.type === STRUCTURE || (obj.type === DROID && !isVTOL(obj)))
+					));
+					if (targets.length === 0)
+					{
+						targets = enumDroid(CAM_HUMAN_PLAYER).filter((obj) => (
+							propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y)
+						));
+					}
 				}
 			}
 			break;
@@ -271,6 +288,7 @@ function __camPickTarget(group)
 	{
 		return undefined;
 	}
+	targets.sort(__camDistToGroupAverage);
 	var target = targets[0];
 	if (camDef(target) && camDef(target.type) && target.type === DROID && camIsTransporter(target))
 	{
@@ -283,7 +301,7 @@ function __camPickTarget(group)
 function __camTacticsTick()
 {
 	var dt = CAM_TICKS_PER_FRAME;
-	for (var group in __camGroupInfo)
+	for (const group in __camGroupInfo)
 	{
 		//Remove groups with no droids.
 		if (groupSize(group) === 0)
@@ -362,7 +380,7 @@ function __camTacticsTickForGroup(group)
 	//repair
 	if (repair.hasFacility || camDef(repair.pos))
 	{
-		for (var i = 0, len = rawDroids.length; i < len; ++i)
+		for (let i = 0, len = rawDroids.length; i < len; ++i)
 		{
 			var droid = rawDroids[i];
 			var repairLikeAction = false;
@@ -410,11 +428,11 @@ function __camTacticsTickForGroup(group)
 		var groupY = ret.yav[ret.maxIdx];
 		var droids = ret.clusters[ret.maxIdx];
 
-		for (var i = 0, len = ret.clusters.length; i < len; ++i)
+		for (let i = 0, len = ret.clusters.length; i < len; ++i)
 		{
 			if (i !== ret.maxIdx) // move other droids towards main cluster
 			{
-				for (var j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
+				for (let j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
 				{
 					var droid = ret.clusters[i][j];
 					if (droid.order !== DORDER_RTR)
@@ -429,7 +447,7 @@ function __camTacticsTickForGroup(group)
 		// not enough droids grouped?
 		if (gi.count < 0 ? (ret.maxCount < groupSize(group) * 0.66) : (ret.maxCount < gi.count))
 		{
-			for (var i = 0, len = droids.length; i < len; ++i)
+			for (let i = 0, len = droids.length; i < len; ++i)
 			{
 				var droid = droids[i];
 				if (droid.order === DORDER_RTR)
@@ -480,7 +498,7 @@ function __camTacticsTickForGroup(group)
 	var defending = (gi.order === CAM_ORDER_DEFEND);
 	var track = (gi.order === CAM_ORDER_COMPROMISE);
 
-	for (var i = 0, len = healthyDroids.length; i < len; ++i)
+	for (let i = 0, len = healthyDroids.length; i < len; ++i)
 	{
 		var droid = healthyDroids[i];
 		var vtolUnit = (droid.type === DROID && isVTOL(droid));
@@ -557,7 +575,7 @@ function __camTacticsTickForGroup(group)
 				{
 					// find random new position to visit
 					var list = [];
-					for (var j = 0, len2 = gi.data.pos.length; j < len2; ++j)
+					for (let j = 0, len2 = gi.data.pos.length; j < len2; ++j)
 					{
 						if (j !== gi.lastspot)
 						{
@@ -585,6 +603,8 @@ function __camTacticsTickForGroup(group)
 
 			if (closeBy.length > 0)
 			{
+				__camFindGroupAvgCoordinate(group);
+				closeBy.sort(__camDistToGroupAverage);
 				closeByObj = closeBy[0];
 			}
 
@@ -597,6 +617,11 @@ function __camTacticsTickForGroup(group)
 				{
 					closeByObj = undefined;
 				}
+			}
+
+			if (closeByObj && ((closeByObj.type === DROID) && isVTOL(closeByObj) && (isVTOL(droid) || !droid.canHitAir)))
+			{
+				closeByObj = undefined;
 			}
 
 			if (!defending && closeByObj)

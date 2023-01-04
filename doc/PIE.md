@@ -31,16 +31,22 @@ The first line specifies the version number -- either 2 or 3.
 This indicates the type of the file through a hexadecimal combination of the flags 0x200, 0x10 and 0x1.
 The following flags are available:
 
-* 0x00001 -- Disables additive rendering
-* 0x00002 -- Enables additive rendering
-* 0x00004 -- Enables premultiplied rendering
+* `0x00001` -- Disables additive rendering
+* `0x00002` -- Enables additive rendering
+* `0x00004` -- Enables premultiplied rendering
 
-* 0x00010 -- Rolls object to face the camera. Used for projectiles shaped like a cylinder.
-* 0x00020 -- Pitches object to completely face the camera. Used for projectiles shaped like a sphere.
+* `0x00010` -- Rolls object to face the camera. Used for projectiles shaped like a cylinder.
+* `0x00020` -- Pitches object to completely face the camera. Used for projectiles shaped like a sphere.
 
-* 0x00200 -- Reserved for backward compatibility.
-* 0x01000 -- Specifies that the model should not be stretched to fit terrain. For defensive buildings that have a deep foundation.
-* 0x10000 -- Specifies the usage of the TCMask feature, for which a texture named 'page-N_tcmask.png' (*N* being a number) should be used together with the model's ordinary texture. This flag replaced old team coloration methods (read ticket #851).
+* `0x00200` -- Reserved for backward compatibility.
+* `0x01000` -- Specifies that the model should not be stretched to fit terrain. For defensive buildings that have a deep foundation.
+* `0x10000` -- Specifies the usage of the TCMask feature, for which a texture named 'page-N_tcmask.png' (*N* being a number) should be used together with the model's ordinary texture. This flag replaced old team coloration methods (read ticket #851).
+
+### INTERPOLATE
+
+> INTERPOLATE 0
+
+Optional. Specifies if the model wants to have interpolated frames. Default is set to interpolate.
 
 ### TEXTURE
 
@@ -62,13 +68,13 @@ You may fill them out with the correct values for backward compatibility.
 
 ### NORMALMAP
 
-> NORMALMAP 0 page-7-barbarians-arizona_normal.png 0 0
+> NORMALMAP 0 page-7-barbarians-arizona_normal.png
 
 Optional. As above, but this sets the normal map texture page for the model.
 
 ### SPECULARMAP
 
-> SPECULARMAP 0 page-7-barbarians-arizona.png 0 0
+> SPECULARMAP 0 page-7-barbarians-arizona.png
 
 Optional. As above, but this sets the specular map texture page for the model.
 
@@ -208,12 +214,55 @@ where zero is infinitely many, and finally the number of animation frames that f
 
 #### Animation frame lines
 
-> 	frame xpos ypos zpos xrot yrot zrot xscale yscale zscale
+> 	frame xpos zpos ypos xrot zrot yrot xscale yscale zscale
+
+(note order x,z,y order here! but not for scale where its x,y,z!)
 
 Each animation line starts with a tab followed by
 
 * the serially increasing frame number
-* three (x, y, z) vectors, one for position, one for rotation, and one for scaling.
+* three 3-dimensional vectors, one for position, one for rotation, and one for scaling.
+
+NOTE: For position and rotation - but not scaling - Y and Z are swapped.
 
 If the scaling values are negative, they indicate that the animation is a legacy
 keyframe animation sequence. Do not use this in future content.
+
+### SHADOWPOINTS _(optional)_
+
+> SHADOWPOINTS n
+
+This starts a list of vertex coordinates (points) with the number of lines *n*. This is followed by the list of points. This (along with `SHADOWPOLYGONS`) is used to provide an alternate (simplified) shadow mesh to improve performance (recommended if the normal mesh is complex / high-poly-count). If unspecified, the normal mesh is used for shadows.
+
+#### Point lines
+
+> 	-4.0 4.0 8.0
+
+Each point *must* be on a separate line and *must* be indented with a tab. It *must* contain exactly 3 floating-point values in the order *x y z*. Y denotes "up".
+
+### SHADOWPOLYGONS _(optional)_
+
+> POLYGONS n
+
+This starts a list of polygon faces with the number of lines *n*. This (along with `SHADOWPOINTS`) is used to provide an alternate (simplified) shadow mesh to improve performance (recommended if the normal mesh is complex / high-poly-count). If unspecified, the normal mesh is used for shadows.
+
+#### Polygon lines
+
+> 	0 3 3 2 1
+
+Each polygon *must* be on a separate line and *must* be indented with a tab.
+
+> 	Flags Number\_of\_points Point\_order
+
+##### Flags
+
+* 0 means the polygon is untextured. Each entry in SHADOWPOLYGONS must have this flag.
+* No other flags are supported. Note that if you want a surface to display something on both sides, make two polygons, one for each side.
+
+##### Number of points
+
+* The first number is the number of points for this polygon. Only triangles are supported, so each entry *must* use 3 points.
+
+##### Point order
+
+* This is a list of indexes to the list of points given in the POINTS section.

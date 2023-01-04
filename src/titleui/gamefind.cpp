@@ -25,11 +25,14 @@
  */
 
 #include "titleui.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/widget/scrollablelist.h"
+#include "lib/widget/label.h"
 #include "../intdisplay.h"
 #include "../hci.h"
 #include "../mission.h"
@@ -42,13 +45,6 @@
 #include "../loadsave.h"			// for blueboxes.
 #include "../activity.h"
 
-struct DisplayRemoteGameHeaderCache
-{
-	WzText wzHeaderText_GameName;
-	WzText wzHeaderText_MapName;
-	WzText wzHeaderText_Players;
-	WzText wzHeaderText_Status;
-};
 struct DisplayRemoteGameCache
 {
 	WzText wzText_CurrentVsMaxNumPlayers;
@@ -58,10 +54,7 @@ struct DisplayRemoteGameCache
 	WidthLimitedWzText wzText_VersionString;
 };
 
-static DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
-
 // find games
-static void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static std::vector<GAMESTRUCT> gamesList;
 
 WzGameFindTitleUI::WzGameFindTitleUI() {
@@ -78,7 +71,8 @@ void WzGameFindTitleUI::start()
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
 	// draws the background of the games listed
-	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	auto botForm = std::make_shared<IntFormAnimated>();
+	parent->attach(botForm);
 	botForm->id = FRONTEND_BOTFORM;
 	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
@@ -104,7 +98,7 @@ void WzGameFindTitleUI::start()
 	}
 
 	addConsoleBox();
-	if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))
+	if (!NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))
 	{
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
@@ -131,7 +125,8 @@ TITLECODE WzGameFindTitleUI::run()
 		addConsoleBox();
 		if (safeSearch || handleUserRefreshRequest)
 		{
-			if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))	// find games synchronously
+			setLobbyError(ERROR_NOERROR); // clear lobby error first
+			if (!NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))	// find games synchronously
 			{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			}
@@ -169,24 +164,6 @@ TITLECODE WzGameFindTitleUI::run()
 			addConsoleMessage(_("Refreshing..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			queuedRefreshOfGamesList = true;
 		}
-	}
-
-	// below is when they hit a game box to connect to--ideally this would be where
-	// we would want a modal password entry box.
-	if (id >= GAMES_GAMESTART && id <= GAMES_GAMEEND)
-	{
-		UDWORD gameNumber = id - GAMES_GAMESTART;
-
-		std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, 0)};
-		ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
-
-		clearActiveConsole();
-
-		// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
-		ingame.localOptionsReceived = false;					// note, we are awaiting options
-		sstrcpy(game.name, gamesList[gameNumber].name);		// store name
-		joinGame(connectionDesc);
-		return TITLECODE_CONTINUE;
 	}
 
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
@@ -229,7 +206,8 @@ void WzGameFindTitleUI::addConsoleBox()
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *consoleBox = new IntFormAnimated(parent);
+	auto consoleBox = std::make_shared<IntFormAnimated>();
+	parent->attach(consoleBox);
 	consoleBox->id = MULTIOP_CONSOLEBOX;
 	consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_CONSOLEBOXX, MULTIOP_CONSOLEBOXY, MULTIOP_CONSOLEBOXW, MULTIOP_CONSOLEBOXH);
@@ -253,31 +231,379 @@ void WzGameFindTitleUI::addConsoleBox()
 // ////////////////////////////////////////////////////////////////////////////
 // Game Chooser Screen.
 
+class GameListHeader : public WIDGET
+{
+protected:
+	GameListHeader()
+	{ }
+
+public:
+	static std::shared_ptr<GameListHeader> make() {
+		class make_shared_enabler : public GameListHeader
+		{
+		public:
+			make_shared_enabler()
+				: GameListHeader()
+			{
+			}
+		};
+		return std::make_shared<make_shared_enabler>();
+	}
+
+public:
+	virtual void display(int xOffset, int yOffset) override
+	{
+		const int xPos = xOffset + x();
+		const int yPos = yOffset + y();
+		const int w = width();
+		const int h = height();
+
+		// draw the 'header' for the table...
+		drawBlueBox(xPos, yPos, w, h);
+
+		remoteGameListHeaderCache.wzHeaderText_GameName.setText(_("Game Name"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_GameName.render(xPos - 2 + GAMES_GAMENAME_START + 48, yPos + 9, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_MapName.setText(_("Map Name"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_MapName.render(xPos - 2 + GAMES_MAPNAME_START + 48, yPos + 9, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_Players.setText(_("Players"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_Players.render(xPos - 2 + GAMES_PLAYERS_START, yPos + 9, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_Status.setText(_("Status"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_Status.render(xPos - 2 + GAMES_STATUS_START + 48, yPos + 9, WZCOL_YELLOW);
+	}
+
+private:
+	struct DisplayRemoteGameHeaderCache
+	{
+		WzText wzHeaderText_GameName;
+		WzText wzHeaderText_MapName;
+		WzText wzHeaderText_Players;
+		WzText wzHeaderText_Status;
+	};
+	DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
+};
+
+static bool joinLobbyGame(uint32_t gameNumber, bool asSpectator = false)
+{
+	ASSERT_OR_RETURN(false, gameNumber < gamesList.size(), "Invalid gameNumber: %" PRIu32, gameNumber);
+
+	std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, gamesList[gameNumber].hostPort)};
+	ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
+
+	clearActiveConsole();
+
+	// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
+	ingame.localOptionsReceived = false;					// note, we are awaiting options
+	sstrcpy(game.name, gamesList[gameNumber].name);			// store name
+	return joinGame(connectionDesc, asSpectator) != JoinGameResult::FAILED;
+}
+
+class WzLobbyGameDetails: public W_BUTTON
+{
+protected:
+	WzLobbyGameDetails(UDWORD gameIdx)
+	: W_BUTTON()
+	, gameIdx(gameIdx)
+	{ }
+public:
+	static std::shared_ptr<WzLobbyGameDetails> make(UDWORD gameIdx)
+	{
+		class make_shared_enabler: public WzLobbyGameDetails {
+		public:
+			make_shared_enabler(UDWORD gameIdx)
+			: WzLobbyGameDetails(gameIdx) { }
+		};
+		return std::make_shared<make_shared_enabler>(gameIdx);
+	}
+
+	virtual void display(int xOffset, int yOffset) override
+	{
+		int x0 = xOffset + x();
+		int y0 = yOffset + y();
+		char tmp[80], name[StringSize];
+
+		if (getLobbyError() != ERROR_NOERROR && bMultiPlayer && !NetPlay.bComms)
+		{
+			addConsoleMessage(_("Can't connect to lobby server!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			return;
+		}
+
+		// Draw blue boxes for games (buttons) & headers
+		drawBlueBox(x0, y0, width(), height());
+		drawBlueBox(x0, y0, GAMES_STATUS_START - 4 , height());
+		drawBlueBox(x0, y0, GAMES_PLAYERS_START - 4 , height());
+		drawBlueBox(x0, y0, GAMES_MAPNAME_START - 4, height());
+
+		int statusStart = IMAGE_NOJOIN;
+		bool disableButton = true;
+		PIELIGHT textColor = WZCOL_TEXT_DARK;
+
+		// As long as they got room, and mods are the same then we process the button(s)
+		if (NETisCorrectVersion(gamesList[gameIdx].game_version_major, gamesList[gameIdx].game_version_minor))
+		{
+			if (gamesList[gameIdx].desc.dwCurrentPlayers >= gamesList[gameIdx].desc.dwMaxPlayers)
+			{
+				// If game is full.
+				statusStart = IMAGE_NOJOIN_FULL;
+			}
+			else
+			{
+				// Game is ok to join!
+				textColor = WZCOL_FORM_TEXT;
+				statusStart = IMAGE_SKIRMISH_OVER;
+				disableButton = false;
+
+				if (gamesList[gameIdx].privateGame)  // check to see if it is a private game
+				{
+					statusStart = IMAGE_LOCKED_NOBG;
+				}
+				else if (gamesList[gameIdx].modlist[0] != '\0')
+				{
+					statusStart = IMAGE_MOD_OVER;
+				}
+			}
+
+			ssprintf(tmp, "%d/%d", gamesList[gameIdx].desc.dwCurrentPlayers, gamesList[gameIdx].desc.dwMaxPlayers);
+			wzText_CurrentVsMaxNumPlayers.setText(tmp, font_regular);
+			int playersWidth = GAMES_STATUS_START - 8 - GAMES_PLAYERS_START;
+			int playersPadding = (playersWidth - wzText_CurrentVsMaxNumPlayers.width()) / 2;
+			wzText_CurrentVsMaxNumPlayers.render(x0 + GAMES_PLAYERS_START + playersPadding, y0 + 18, textColor);
+
+			// see what host limits are... then draw them.
+			if (gamesList[gameIdx].limits)
+			{
+				if (gamesList[gameIdx].limits & NO_TANKS)
+				{
+					iV_DrawImage(FrontImages, IMAGE_NO_TANK, x0 + GAMES_STATUS_START + 37, y0 + 2);
+				}
+				if (gamesList[gameIdx].limits & NO_BORGS)
+				{
+					iV_DrawImage(FrontImages, IMAGE_NO_CYBORG, x0 + GAMES_STATUS_START + (37 * 2), y0 + 2);
+				}
+				if (gamesList[gameIdx].limits & NO_VTOLS)
+				{
+					iV_DrawImage(FrontImages, IMAGE_NO_VTOL, x0 + GAMES_STATUS_START + (37 * 3) , y0 + 2);
+				}
+			}
+		}
+		// Draw type overlay.
+		iV_DrawImage(FrontImages, statusStart, x0 + GAMES_STATUS_START, y0 + 3);
+		if (disableButton)
+		{
+			setState(WBUT_DISABLE);
+		}
+
+		//draw game name, chop when we get a too long name
+		sstrcpy(name, gamesList[gameIdx].name);
+		wzText_GameName.setTruncatableText(name, font_regular, (GAMES_MAPNAME_START - GAMES_GAMENAME_START - 4));
+		wzText_GameName.render(x0 + GAMES_GAMENAME_START, y0 + 12, textColor);
+
+		if (gamesList[gameIdx].pureMap)
+		{
+			textColor = WZCOL_RED;
+		}
+		else
+		{
+			textColor = WZCOL_FORM_TEXT;
+		}
+		// draw map name, chop when we get a too long name
+		sstrcpy(name, gamesList[gameIdx].mapname);
+		wzText_MapName.setTruncatableText(name, font_regular, (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4));
+		wzText_MapName.render(x0 + GAMES_MAPNAME_START, y0 + 12, textColor);
+
+		textColor = WZCOL_FORM_TEXT;
+		// draw mod name (if any)
+		if (strlen(gamesList[gameIdx].modlist))
+		{
+			// FIXME: we really don't have enough space to list all mods
+			char tmpMods[300];
+			ssprintf(tmpMods, _("Mods: %s"), gamesList[gameIdx].modlist);
+			tmpMods[StringSize] = '\0';
+			sstrcpy(name, tmpMods);
+		}
+		else
+		{
+			sstrcpy(name, _("Mods: None!"));
+		}
+		wzText_ModNames.setTruncatableText(name, font_small, (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 8));
+		wzText_ModNames.render(x0 + GAMES_MODNAME_START, y0 + 24, textColor);
+
+		// draw version string
+		ssprintf(name, _("Version: %s"), gamesList[gameIdx].versionstring);
+		wzText_VersionString.setTruncatableText(name, font_small, (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4));
+		wzText_VersionString.render(x0 + GAMES_GAMENAME_START + 6, y0 + 24, textColor);
+	}
+private:
+	UDWORD gameIdx = 0;
+	WzText wzText_CurrentVsMaxNumPlayers;
+	WidthLimitedWzText wzText_GameName;
+	WidthLimitedWzText wzText_MapName;
+	WidthLimitedWzText wzText_ModNames;
+	WidthLimitedWzText wzText_VersionString;
+};
+
+class WzLobbyGameSpectateButton: public W_BUTTON
+{
+protected:
+	WzLobbyGameSpectateButton()
+	: W_BUTTON()
+	{ }
+public:
+	static std::shared_ptr<WzLobbyGameSpectateButton> make()
+	{
+		class make_shared_enabler: public WzLobbyGameSpectateButton {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		ASSERT_OR_RETURN(nullptr, widget != nullptr, "Failed to create WzLobbyGameSpectateButton");
+		widget->setTip(_("Join as spectator"));
+		return widget;
+	}
+
+	virtual void display(int xOffset, int yOffset) override
+	{
+		int x0 = xOffset + x();
+		int y0 = yOffset + y();
+
+		iV_DrawImage(FrontImages, IMAGE_SPECTATE_SM, x0, y0 + 5);
+	}
+
+	virtual int32_t idealWidth() override
+	{
+		return iV_GetImageWidth(FrontImages, IMAGE_SPECTATE_SM);
+	}
+};
+
+class WzLobbyGameWidget: public WIDGET
+{
+public:
+	static std::shared_ptr<WzLobbyGameWidget> make(UDWORD gameIdx)
+	{
+		static const char *wrongVersionTip = _("Your version of Warzone is incompatible with this game.");
+
+		class make_shared_enabler: public WzLobbyGameWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->gameIdx = gameIdx;
+
+		// Create WzLobbyGameDetails button
+		int gameDetailsX0 = 20;
+		auto gameDetailsRowContents = WzLobbyGameDetails::make(gameIdx);
+		ASSERT_OR_RETURN(nullptr, gameDetailsRowContents != nullptr, "Failed to create WzLobbyGameDetails");
+		widget->attach(gameDetailsRowContents);
+		gameDetailsRowContents->setGeometry(gameDetailsX0, 0, GAMES_GAMEWIDTH, GAMES_GAMEHEIGHT);
+		gameDetailsRowContents->addOnClickHandler([gameIdx](W_BUTTON& button){
+			widgScheduleTask([gameIdx](){
+				joinLobbyGame(gameIdx, false);
+			});
+		});
+
+		// display the correct tooltip message.
+		std::string toolTip;
+		if (!NETisCorrectVersion(gamesList[gameIdx].game_version_major, gamesList[gameIdx].game_version_minor))
+		{
+			toolTip = wrongVersionTip;
+		}
+		else
+		{
+			std::string flags;
+			if (gamesList[gameIdx].privateGame)
+			{
+				flags += " "; flags += _("[Password required]");
+			}
+			if (gamesList[gameIdx].limits & NO_TANKS)
+			{
+				flags += " "; flags += _("[No Tanks]");
+			}
+			if (gamesList[gameIdx].limits & NO_BORGS)
+			{
+				flags += " "; flags += _("[No Cyborgs]");
+			}
+			if (gamesList[gameIdx].limits & NO_VTOLS)
+			{
+				flags += " "; flags += _("[No VTOLs]");
+			}
+			if (flags.empty())
+			{
+				toolTip = astringf(_("Hosted by %s"), gamesList[gameIdx].hostname);
+			}
+			else
+			{
+				toolTip = astringf(_("Hosted by %s —%s"), gamesList[gameIdx].hostname, flags.c_str());
+			}
+		}
+		gameDetailsRowContents->setTip(toolTip);
+
+		int gameDetailsX1 = gameDetailsX0 + GAMES_GAMEWIDTH;
+
+		// Create WzLobbyGameSpectateButton button (if needed)
+		if (NETisCorrectVersion(gamesList[gameIdx].game_version_major, gamesList[gameIdx].game_version_minor))
+		{
+			auto spectatorInfo = SpectatorInfo::fromUint32(gamesList[gameIdx].desc.dwUserFlags[1]);
+			if (spectatorInfo.availableSpectatorSlots() > 0)
+			{
+				// has spectator slots - add button
+				widget->spectateButton = WzLobbyGameSpectateButton::make();
+				ASSERT_OR_RETURN(nullptr, widget->spectateButton != nullptr, "Failed to create WzLobbyGameSpectateButton");
+				widget->attach(widget->spectateButton);
+				widget->spectateButton->setGeometry(gameDetailsX1 + 2, 0, widget->spectateButton->idealWidth(), GAMES_GAMEHEIGHT);
+				widget->spectateButton->addOnClickHandler([gameIdx](W_BUTTON& button){
+					widgScheduleTask([gameIdx](){
+						joinLobbyGame(gameIdx, true);
+					});
+				});
+			}
+		}
+
+		return widget;
+	}
+
+	virtual void display(int xOffset, int yOffset) override
+	{
+		int x0 = xOffset + x();
+		int y0 = yOffset + y();
+
+		// Only needs to draw the lamp, otherwise the rest is handled by embedded child widgets
+		int lamp = IMAGE_LAMP_RED;
+		if (NETisCorrectVersion(gamesList[gameIdx].game_version_major, gamesList[gameIdx].game_version_minor))
+		{
+			if (gamesList[gameIdx].desc.dwCurrentPlayers < gamesList[gameIdx].desc.dwMaxPlayers)
+			{
+				// Game is ok to join!
+				lamp = IMAGE_LAMP_GREEN;
+
+				if (gamesList[gameIdx].privateGame)  // check to see if it is a private game
+				{
+					lamp = IMAGE_LAMP_AMBER;
+				}
+			}
+		}
+		// Draw lamp
+		iV_DrawImage(FrontImages, lamp, x0 + 5, y0 + 8);
+	}
+
+	virtual int32_t idealWidth() override
+	{
+		return 20 + GAMES_GAMEWIDTH + ((spectateButton) ? (2 + spectateButton->idealWidth()) : 0);
+	}
+	virtual int32_t idealHeight() override
+	{
+		return GAMES_GAMEHEIGHT;
+	}
+private:
+	UDWORD gameIdx = 0;
+	std::shared_ptr<WzLobbyGameSpectateButton> spectateButton;
+};
+
 void WzGameFindTitleUI::addGames()
 {
 	size_t added = 0;
-	static const char *wrongVersionTip = _("Your version of Warzone is incompatible with this game.");
 
 	//count games to see if need two columns.
 	size_t gcount = gamesList.size();
 
-	W_BUTINIT sButInit;
-	sButInit.formID = FRONTEND_BOTFORM;
-	sButInit.width = GAMES_GAMEWIDTH;
-	sButInit.height = GAMES_GAMEHEIGHT;
-	sButInit.pDisplay = displayRemoteGame;
-	sButInit.initPUserDataFunc = []() -> void * { return new DisplayRemoteGameCache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayRemoteGameCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
-
 	// we want the old games deleted, and only list games when we should
-	for (size_t i = 0; i < MaxGames; i++)
-	{
-		widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old widget
-	}
+	widgDelete(psWScreen, GAMES_GAMEHEADER);
+	widgDelete(psWScreen, GAMES_GAMELIST);
 	if (getLobbyError() || !gcount)
 	{
 		gcount = 0;
@@ -288,59 +614,36 @@ void WzGameFindTitleUI::addGames()
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
 	{
+		// add header
+		auto headerWidget = GameListHeader::make();
+		headerWidget->setGeometry(20, 50 - 12, GAMES_GAMEWIDTH, 12);
+		headerWidget->id = GAMES_GAMEHEADER;
+
+		WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+		ASSERT_OR_RETURN(, parent != nullptr && parent->type == WIDG_FORM, "Could not find parent form from formID");
+		if (parent)
+		{
+			parent->attach(headerWidget);
+		}
+
+		auto scrollableGamesList = ScrollableListWidget::make();
+		scrollableGamesList->id = GAMES_GAMELIST;
+		scrollableGamesList->setGeometry(0, 50, parent->width(), GAMES_GAMEHEIGHT * 12);
+		scrollableGamesList->setScrollbarWidth(12);
+		parent->attach(scrollableGamesList);
 		for (size_t i = 0; i < gamesList.size(); i++)				// draw games
 		{
 			if (gamesList[i].desc.dwSize != 0)
 			{
+				auto psRow = WzLobbyGameWidget::make(i);
+				psRow->setGeometry(0, 0, parent->width(), GAMES_GAMEHEIGHT);
+				scrollableGamesList->addItem(psRow);
 				added++;
-				sButInit.id = GAMES_GAMESTART + i;
-				sButInit.x = 20;
-				sButInit.y = (UWORD)(45 + ((5 + GAMES_GAMEHEIGHT) * i));
-
-				// display the correct tooltip message.
-				if (!NETisCorrectVersion(gamesList[i].game_version_major, gamesList[i].game_version_minor))
-				{
-					sButInit.pTip = wrongVersionTip;
-				}
-				else
-				{
-					WzString flags;
-					if (gamesList[i].privateGame)
-					{
-						flags += " "; flags += _("[Password required]");
-					}
-					if (gamesList[i].limits & NO_TANKS)
-					{
-						flags += " "; flags += _("[No Tanks]");
-					}
-					if (gamesList[i].limits & NO_BORGS)
-					{
-						flags += " "; flags += _("[No Cyborgs]");
-					}
-					if (gamesList[i].limits & NO_VTOLS)
-					{
-						flags += " "; flags += _("[No VTOLs]");
-					}
-					char tooltipbuffer[256];
-					if (flags.isEmpty())
-					{
-						ssprintf(tooltipbuffer, _("Hosted by %s"), gamesList[i].hostname);
-					}
-					else
-					{
-						ssprintf(tooltipbuffer, _("Hosted by %s —%s"), gamesList[i].hostname, flags.toUtf8().c_str());
-					}
-					// this is an std::string
-					sButInit.pTip = tooltipbuffer;
-				}
-				sButInit.UserData = i;
-
-				widgAddButton(psWScreen, &sButInit);
 			}
 		}
 		if (!added)
 		{
-			sButInit = W_BUTINIT();
+			W_BUTINIT sButInit;
 			sButInit.formID = FRONTEND_BOTFORM;
 			sButInit.id = FRONTEND_NOGAMESAVAILABLE;
 			sButInit.x = 70;
@@ -367,7 +670,6 @@ void WzGameFindTitleUI::addGames()
 		// display lobby message based on results.
 		// This is a 'button', not text so it can be hilighted/centered.
 		const char *txt;
-		W_BUTINIT sButInit;
 
 		switch (getLobbyError())
 		{
@@ -414,7 +716,7 @@ void WzGameFindTitleUI::addGames()
 		// delete old widget if necessary
 		widgDelete(psWScreen, FRONTEND_NOGAMESAVAILABLE);
 
-		sButInit = W_BUTINIT();
+		W_BUTINIT sButInit;
 		sButInit.formID = FRONTEND_BOTFORM;
 		sButInit.id = FRONTEND_NOGAMESAVAILABLE;
 		sButInit.x = 70;
@@ -435,7 +737,7 @@ void WzGameFindTitleUI::addGames()
 
 		widgAddButton(psWScreen, &sButInit);
 	}
-	if (strlen(NetPlay.MOTD))
+	if (NetPlay.MOTD && strlen(NetPlay.MOTD))
 	{
 		permitNewConsoleMessages(true);
 		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
@@ -444,148 +746,3 @@ void WzGameFindTitleUI::addGames()
 	updateConsoleMessages();
 	displayConsoleMessages();
 }
-
-void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	UDWORD	gameID = psWidget->UserData;
-	char tmp[80], name[StringSize];
-
-	// Any widget using displayRemoteGame must have its pUserData initialized to a (DisplayRemoteGameCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayRemoteGameCache& cache = *static_cast<DisplayRemoteGameCache*>(psWidget->pUserData);
-
-	if ((getLobbyError() != ERROR_NOERROR) && (bMultiPlayer && !NetPlay.bComms))
-	{
-		addConsoleMessage(_("Can't connect to lobby server!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		return;
-	}
-
-	// Draw blue boxes for games (buttons) & headers
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	drawBlueBox(x, y, GAMES_STATUS_START - 4 , psWidget->height());
-	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 , psWidget->height());
-	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height());
-
-	int lamp = IMAGE_LAMP_RED;
-	int statusStart = IMAGE_NOJOIN;
-	bool disableButton = true;
-	PIELIGHT textColor = WZCOL_TEXT_DARK;
-
-	// As long as they got room, and mods are the same then we process the button(s)
-	if (NETisCorrectVersion(gamesList[gameID].game_version_major, gamesList[gameID].game_version_minor))
-	{
-		if (gamesList[gameID].desc.dwCurrentPlayers >= gamesList[gameID].desc.dwMaxPlayers)
-		{
-			// If game is full.
-			statusStart = IMAGE_NOJOIN_FULL;
-		}
-		else
-		{
-			// Game is ok to join!
-			textColor = WZCOL_FORM_TEXT;
-			statusStart = IMAGE_SKIRMISH_OVER;
-			lamp = IMAGE_LAMP_GREEN;
-			disableButton = false;
-
-			if (gamesList[gameID].privateGame)  // check to see if it is a private game
-			{
-				statusStart = IMAGE_LOCKED_NOBG;
-				lamp = IMAGE_LAMP_AMBER;
-			}
-			else if (gamesList[gameID].modlist[0] != '\0')
-			{
-				statusStart = IMAGE_MOD_OVER;
-			}
-		}
-
-		ssprintf(tmp, "%d/%d", gamesList[gameID].desc.dwCurrentPlayers, gamesList[gameID].desc.dwMaxPlayers);
-		cache.wzText_CurrentVsMaxNumPlayers.setText(tmp, font_regular);
-		cache.wzText_CurrentVsMaxNumPlayers.render(x + GAMES_PLAYERS_START + 4 , y + 18, textColor);
-
-		// see what host limits are... then draw them.
-		if (gamesList[gameID].limits)
-		{
-			if (gamesList[gameID].limits & NO_TANKS)
-			{
-				iV_DrawImage(FrontImages, IMAGE_NO_TANK, x + GAMES_STATUS_START + 37, y + 2);
-			}
-			if (gamesList[gameID].limits & NO_BORGS)
-			{
-				iV_DrawImage(FrontImages, IMAGE_NO_CYBORG, x + GAMES_STATUS_START + (37 * 2), y + 2);
-			}
-			if (gamesList[gameID].limits & NO_VTOLS)
-			{
-				iV_DrawImage(FrontImages, IMAGE_NO_VTOL, x + GAMES_STATUS_START + (37 * 3) , y + 2);
-			}
-		}
-	}
-	// Draw type overlay.
-	iV_DrawImage(FrontImages, statusStart, x + GAMES_STATUS_START, y + 3);
-	iV_DrawImage(FrontImages, lamp, x - 14, y + 8);
-	if (disableButton)
-	{
-		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
-	}
-
-	//draw game name, chop when we get a too long name
-	sstrcpy(name, gamesList[gameID].name);
-	cache.wzText_GameName.setTruncatableText(name, font_regular, (GAMES_MAPNAME_START - GAMES_GAMENAME_START - 4));
-	cache.wzText_GameName.render(x + GAMES_GAMENAME_START, y + 12, textColor);
-
-	if (gamesList[gameID].pureMap)
-	{
-		textColor = WZCOL_RED;
-	}
-	else
-	{
-		textColor = WZCOL_FORM_TEXT;
-	}
-	// draw map name, chop when we get a too long name
-	sstrcpy(name, gamesList[gameID].mapname);
-	cache.wzText_MapName.setTruncatableText(name, font_regular, (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4));
-	cache.wzText_MapName.render(x + GAMES_MAPNAME_START, y + 12, textColor);
-
-	textColor = WZCOL_FORM_TEXT;
-	// draw mod name (if any)
-	if (strlen(gamesList[gameID].modlist))
-	{
-		// FIXME: we really don't have enough space to list all mods
-		char tmp[300];
-		ssprintf(tmp, _("Mods: %s"), gamesList[gameID].modlist);
-		tmp[StringSize] = '\0';
-		sstrcpy(name, tmp);
-	}
-	else
-	{
-		sstrcpy(name, _("Mods: None!"));
-	}
-	cache.wzText_ModNames.setTruncatableText(name, font_small, (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 8));
-	cache.wzText_ModNames.render(x + GAMES_MODNAME_START, y + 24, textColor);
-
-	// draw version string
-	ssprintf(name, _("Version: %s"), gamesList[gameID].versionstring);
-	cache.wzText_VersionString.setTruncatableText(name, font_small, (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4));
-	cache.wzText_VersionString.render(x + GAMES_GAMENAME_START + 6, y + 24, textColor);
-
-	// crappy hack to only draw this once for the header.  TODO fix GUI
-	if (gameID == 0)
-	{
-		// make the 'header' for the table...
-		drawBlueBox(x , y - 12 , GAMES_GAMEWIDTH, 12);
-
-		remoteGameListHeaderCache.wzHeaderText_GameName.setText(_("Game Name"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_GameName.render(x - 2 + GAMES_GAMENAME_START + 48, y - 3, WZCOL_YELLOW);
-
-		remoteGameListHeaderCache.wzHeaderText_MapName.setText(_("Map Name"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_MapName.render(x - 2 + GAMES_MAPNAME_START + 48, y - 3, WZCOL_YELLOW);
-
-		remoteGameListHeaderCache.wzHeaderText_Players.setText(_("Players"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_Players.render(x - 2 + GAMES_PLAYERS_START, y - 3, WZCOL_YELLOW);
-
-		remoteGameListHeaderCache.wzHeaderText_Status.setText(_("Status"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_Status.render(x - 2 + GAMES_STATUS_START + 48, y - 3, WZCOL_YELLOW);
-	}
-}
-

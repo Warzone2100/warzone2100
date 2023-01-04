@@ -94,27 +94,12 @@ void lowerTile(int tile3dX, int tile3dY)
 /* Ensures any adjustment to tile elevation is within allowed ranges */
 void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 {
-	int32_t newHeight = psTile->height + adjust * ELEVATION_SCALE;
+	int32_t newHeight = psTile->height + adjust;
 
-	if (newHeight >= MIN_TILE_HEIGHT * ELEVATION_SCALE && newHeight <= MAX_TILE_HEIGHT * ELEVATION_SCALE)
+	if (newHeight >= TILE_MIN_HEIGHT && newHeight <= TILE_MAX_HEIGHT)
 	{
 		psTile->height = newHeight;
 	}
-}
-
-bool	inHighlight(UDWORD realX, UDWORD realY)
-{
-	bool	retVal = false;
-
-	if (realX >= buildSite.xTL && realX <= buildSite.xBR)
-	{
-		if (realY >= buildSite.yTL && realY <= buildSite.yBR)
-		{
-			retVal = true;
-		}
-	}
-
-	return (retVal);
 }
 
 void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData)
@@ -237,7 +222,7 @@ void incrementBuildingDirection(uint16_t amount)
 
 uint16_t getBuildingDirection()
 {
-	return snapDirection(player.r.y + sBuildDetails.directionShift);
+	return snapDirection(playerPos.r.y + sBuildDetails.directionShift);
 }
 
 /* See if a structure location has been found */

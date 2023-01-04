@@ -37,16 +37,11 @@
 #include "../multiint.h"
 #include "../warzoneconfig.h"
 #include "../frend.h"
+#include "lib/widget/checkbox.h"
 
 WzProtocolTitleUI::WzProtocolTitleUI()
 {
 
-}
-
-WzProtocolTitleUI::~WzProtocolTitleUI()
-{
-	if (psSettingsScreen)
-		delete psSettingsScreen;
 }
 
 /*!
@@ -99,7 +94,7 @@ TITLECODE WzProtocolTitleUI::run()
 {
 	screen_disableMapPreview();
 
-	W_SCREEN *curScreen = psSettingsScreen ? psSettingsScreen : psWScreen;
+	auto const &curScreen = psSettingsScreen ? psSettingsScreen : psWScreen;
 	WidgetTriggers const &triggers = widgRunScreen(curScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
@@ -121,15 +116,23 @@ TITLECODE WzProtocolTitleUI::run()
 		openIPDialog();
 		break;
 	case CON_OK:
+	{
 		sstrcpy(serverName, widgGetString(curScreen, CON_IP));
 		if (serverName[0] == '\0')
 		{
 			sstrcpy(serverName, "127.0.0.1");  // Default to localhost.
 		}
+		bool asSpectator = false;
+		auto pSpectatorCheckbox = dynamic_cast<WzCheckboxButton*>(widgGetFromID(psSettingsScreen, CON_SPECTATOR_BOX));
+		if (pSpectatorCheckbox && pSpectatorCheckbox->getIsChecked())
+		{
+			asSpectator = true;
+		}
 		hasWaitingIP = true;
 		closeIPDialog();
-		joinGame(serverName);
+		joinGame(serverName, asSpectator);
 		break;
+	}
 	case CON_IP_CANCEL:
 		closeIPDialog();
 		break;
@@ -159,7 +162,7 @@ void WzProtocolTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int 
 
 void WzProtocolTitleUI::openIPDialog()			//internet options
 {
-	psSettingsScreen = new W_SCREEN;
+	psSettingsScreen = W_SCREEN::make();
 
 	W_FORMINIT sFormInit;           //Connection Settings
 	sFormInit.formID = 0;
@@ -169,12 +172,22 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 		psWidget->setGeometry(CON_SETTINGSX, CON_SETTINGSY, CON_SETTINGSWIDTH, CON_SETTINGSHEIGHT);
 	});
 	sFormInit.pDisplay = intDisplayFeBox;
-	widgAddForm(psSettingsScreen, &sFormInit);
+	W_FORM *psConnectionForm = widgAddForm(psSettingsScreen, &sFormInit);
 
+	// Buttons
 	addMultiBut(psSettingsScreen, CON_SETTINGS, CON_OK, CON_OKX, CON_OKY, MULTIOP_OKW, MULTIOP_OKH,
 	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
 	addMultiBut(psSettingsScreen, CON_SETTINGS, CON_IP_CANCEL, CON_OKX + MULTIOP_OKW + 10, CON_OKY, MULTIOP_OKW, MULTIOP_OKH,
 	            _("Cancel"), IMAGE_NO, IMAGE_NO, true);
+
+	// Checkbox for spectator join
+	auto pSpectatorCheckbox = std::make_shared<WzCheckboxButton>();
+	psConnectionForm->attach(pSpectatorCheckbox);
+	pSpectatorCheckbox->id = CON_SPECTATOR_BOX;
+	pSpectatorCheckbox->pText = _("Spectator");
+	pSpectatorCheckbox->FontID = font_small;
+	Vector2i minimumDimensions = pSpectatorCheckbox->calculateDesiredDimensions();
+	pSpectatorCheckbox->setGeometry(8, CON_OKY, minimumDimensions.x, std::max(minimumDimensions.y, MULTIOP_OKH));
 
 	//label.
 	W_LABINIT sLabInit;
@@ -205,9 +218,7 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 	}
 	widgSetString(psSettingsScreen, CON_IP, sEdInit.pText);
 	// auto click in the text box
-	W_CONTEXT sContext;
-	sContext.xOffset	= 0;
-	sContext.yOffset	= 0;
+	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	sContext.mx			= CON_NAMEBOXWIDTH;
 	sContext.my			= 0;
 	widgGetFromID(psSettingsScreen, CON_IP)->clicked(&sContext);
@@ -215,9 +226,5 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 
 void WzProtocolTitleUI::closeIPDialog()
 {
-	if (psSettingsScreen)
-	{
-		delete psSettingsScreen;
-		psSettingsScreen = nullptr;
-	}
+	psSettingsScreen = nullptr;
 }

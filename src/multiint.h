@@ -28,10 +28,12 @@
 #include "lib/netplay/netplay.h"
 #include "lib/widget/widgbase.h"
 #include "lib/widget/form.h"
+#include "lib/widget/button.h"
 #include <functional>
 #include <vector>
 #include "lib/framework/wzstring.h"
 #include "titleui/multiplayer.h"
+#include "faction.h"
 
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
@@ -39,67 +41,30 @@
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
 
-
-class MultibuttonWidget : public W_FORM
-{
-
-public:
-	MultibuttonWidget(WIDGET *parent, int value = -1);
-
-	virtual void display(int xOffset, int yOffset);
-	virtual void geometryChanged();
-
-	void setLabel(char const *text);
-	void addButton(int value, Image image, Image imageHighlight, char const *tip);
-	void setButtonMinClickInterval(UDWORD interval);
-	void enable(bool enabled = true);
-	void disable()
-	{
-		enable(false);
-	}
-	void setGap(int gap);
-	int currentValue() const
-	{
-		return currentValue_;
-	}
-
-	/* The optional "onChoose" callback function */
-	typedef std::function<void (MultibuttonWidget& widget, int newValue)> W_ON_CHOOSE_FUNC;
-
-	void addOnChooseHandler(const W_ON_CHOOSE_FUNC& onChooseFunc);
-
-public:
-	void choose(int value);
-
-private:
-	void stateChanged();
-
-protected:
-	W_LABEL *label;
-	std::vector<std::pair<W_BUTTON *, int>> buttons;
-	int currentValue_;
-	bool disabled;
-	int gap_;
-	bool lockCurrent;
-	std::vector<W_ON_CHOOSE_FUNC> onChooseHandlers;
-};
-
-class MultichoiceWidget : public MultibuttonWidget
-{
-
-public:
-	MultichoiceWidget(WIDGET *parent, int value = -1);
-};
-
 // WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
+struct WzMultiButton : public W_BUTTON
+{
+	WzMultiButton() : W_BUTTON() {}
+
+	void display(int xOffset, int yOffset) override;
+
+	AtlasImage imNormal;
+	AtlasImage imDown;
+	unsigned doHighlight;
+	unsigned tc;
+	uint8_t alpha = 255;
+	unsigned downStateMask = WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK;
+	unsigned greyStateMask = WBUT_DISABLE;
+	optional<bool> drawBlueBorder;
+};
+
+void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget);
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
 const std::vector<WzString> getAINames();
 int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called
-int matchAIbyPath(const char *path);	///< only run this -after- readAIs() is called
-int getNextAIAssignment(const char *name);
 
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
@@ -110,23 +75,37 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type);
 void updateStructureDisabledFlags();
 
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayFeBox_Spectator(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
-Image mpwidgetGetFrontHighlightImage(Image image);
+std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS, uint8_t alpha = 255);
+/**
+ * @deprecated use `addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS, uint8_t alpha = 255)` instead
+ **/
+std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS, uint8_t alpha = 255);
+std::shared_ptr<WzMultiButton> makeMultiBut(UDWORD id, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha = 255);
+
+AtlasImage mpwidgetGetFrontHighlightImage(AtlasImage image);
 bool changeColour(unsigned player, int col, bool isHost);
 
 extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
+void displayKickReasonPopup(const std::string &reason);
 void loadMapPreview(bool hideInterface);
 
 bool changeReadyStatus(UBYTE player, bool bReady);
 WzString formatGameName(WzString name);
 void resetVoteData();
 void sendRoomSystemMessage(char const *text);
+void sendRoomNotifyMessage(char const *text);
+void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
 void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
+
+void handleAutoReadyRequest();
+
+void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
@@ -156,6 +135,8 @@ void displayRoomNotifyMessage(char const *text);
 
 #define CON_IP_CANCEL		10134
 
+#define CON_SPECTATOR_BOX	10135
+
 //for clients
 #define CON_PASSWORD		10139
 #define CON_PASSWORDYES		10141
@@ -165,56 +146,62 @@ void displayRoomNotifyMessage(char const *text);
 // ////////////////////////////////////////////////////////////////
 // GAME FIND SCREEN
 
-#define GAMES_GAMESTART		10201
-#define GAMES_GAMEEND		GAMES_GAMESTART+20
-#define GAMES_GAMEWIDTH		540
+#define GAMES_GAMEHEADER	10200
+#define GAMES_GAMELIST		10201
+#define GAMES_MAX           100
+#define GAMES_GAMEWIDTH		525
 #define GAMES_GAMEHEIGHT	28
 // We can have a max of 4 icons for status, current icon size if 36x25.
-#define GAMES_STATUS_START 393
+#define GAMES_STATUS_START 378
 #define GAMES_GAMENAME_START 2
-#define GAMES_MAPNAME_START 173
-#define GAMES_MODNAME_START 173 + 6		// indent a bit
-#define GAMES_PLAYERS_START 360
+#define GAMES_MAPNAME_START 168
+#define GAMES_MODNAME_START 168 + 6		// indent a bit
+#define GAMES_PLAYERS_START 342
 
 // ////////////////////////////////////////////////////////////////
 // GAME OPTIONS SCREEN
 
 #define MULTIOP_PLAYERS			10231
-#define MULTIOP_PLAYERSX		360
+#define MULTIOP_PLAYERSX		323
 #define MULTIOP_PLAYERSY		1
-#define MULTIOP_PLAYER_START	10232		//list of players
-#define MULTIOP_PLAYER_END		10249
-#define MULTIOP_PLAYERSW		263
-#define MULTIOP_PLAYERSH		380
+#define MULTIOP_PLAYER_START	102350		//list of players
+#define MULTIOP_PLAYER_END		102381
+#define MULTIOP_PLAYERSW		298
+#define MULTIOP_PLAYERS_TABS	10232
+#define MULTIOP_PLAYERS_TABS_H	24
+#define MULTIOP_PLAYERSH		(380 + MULTIOP_PLAYERS_TABS_H + 1)
 
-#define MULTIOP_ROW_WIDTH		246
+#define MULTIOP_ROW_WIDTH		298
 
 //Team chooser
 #define MULTIOP_TEAMS_START		102310			//List of teams
 #define MULTIOP_TEAMS_END		102341
-#define MULTIOP_TEAMSWIDTH		29
+#define MULTIOP_TEAMSWIDTH		28
 #define	MULTIOP_TEAMSHEIGHT		38
 
-#define MULTIOP_TEAMCHOOSER_FORM	102800
-#define MULTIOP_TEAMCHOOSER			102810
-#define MULTIOP_TEAMCHOOSER_END     102841
-#define MULTIOP_TEAMCHOOSER_KICK	10289
+#define MULTIOP_TEAMCHOOSER_FORM		102800
+#define MULTIOP_TEAMCHOOSER				102810
+#define MULTIOP_TEAMCHOOSER_END     	102841
+#define MULTIOP_TEAMCHOOSER_KICK		10289
+#define MULTIOP_TEAMCHOOSER_SPECTATOR	10288
+
+#define MULTIOP_INLINE_OVERLAY_ROOT_FRM	10287
 
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
-#define MULTIOP_READY_START         (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
-#define	MULTIOP_READY_END           (MULTIOP_READY_START + MAX_PLAYERS - 1)
+#define MULTIOP_READY_START         (MULTIOP_READY_FORM_ID + MAX_CONNECTED_PLAYERS + 1)
+#define	MULTIOP_READY_END           (MULTIOP_READY_START + MAX_CONNECTED_PLAYERS - 1)
 #define MULTIOP_READY_WIDTH			41
 #define MULTIOP_READY_HEIGHT		38
 
-#define MULTIOP_PLAYERWIDTH		245
+#define MULTIOP_PLAYERWIDTH		282
 #define	MULTIOP_PLAYERHEIGHT	38
 
 #define MULTIOP_OPTIONS			10250
 #define MULTIOP_OPTIONSX		40
 #define MULTIOP_OPTIONSY		1
 #define MULTIOP_OPTIONSW		284
-#define MULTIOP_OPTIONSH		380
+#define MULTIOP_OPTIONSH		MULTIOP_PLAYERSH
 
 #define MULTIOP_EDITBOXW		196
 #define	MULTIOP_EDITBOXH		30
@@ -257,7 +244,7 @@ void displayRoomNotifyMessage(char const *text);
 
 #define MULTIOP_CHATBOX			10278
 #define MULTIOP_CHATBOXX		MULTIOP_OPTIONSX
-#define MULTIOP_CHATBOXY		380
+#define MULTIOP_CHATBOXY		MULTIOP_PLAYERSH
 #define MULTIOP_CHATBOXW		((MULTIOP_PLAYERSX+MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
 
 #define MULTIOP_CONSOLEBOX		0x1A001		// TODO: these should be enums!
@@ -297,19 +284,29 @@ void displayRoomNotifyMessage(char const *text);
 
 #define MULTIOP_COLOUR_START		10332
 #define MULTIOP_COLOUR_END		(MULTIOP_COLOUR_START + MAX_PLAYERS)
-#define MULTIOP_COLOUR_WIDTH		31
+#define MULTIOP_COLOUR_WIDTH		29
 
 #define MULTIOP_AI_FORM			(MULTIOP_COLOUR_END + 1)
 #define MULTIOP_AI_START		(MULTIOP_AI_FORM + 1)
 #define MULTIOP_AI_END			(MULTIOP_AI_START * MAX_PLAYERS)
 #define MULTIOP_AI_OPEN			(MULTIOP_AI_END + 1)
 #define MULTIOP_AI_CLOSED		(MULTIOP_AI_END + 2)
+#define MULTIOP_AI_SPECTATOR	(MULTIOP_AI_END + 3)
 
-#define MULTIOP_DIFFICULTY_INIT_START	(MULTIOP_AI_END + 3)
+#define MULTIOP_DIFFICULTY_INIT_START	(MULTIOP_AI_END + 4)
 #define	MULTIOP_DIFFICULTY_INIT_END	(MULTIOP_DIFFICULTY_INIT_START + MAX_PLAYERS)
 
 #define MULTIOP_DIFFICULTY_CHOOSE_START	(MULTIOP_DIFFICULTY_INIT_END + 1)
 #define MULTIOP_DIFFICULTY_CHOOSE_END	(MULTIOP_DIFFICULTY_CHOOSE_START + MAX_PLAYERS)
+
+#define MULTIOP_ADD_SPECTATOR_SLOTS	(MULTIOP_DIFFICULTY_CHOOSE_END + 1)
+
+#define MULTIOP_FACTION_START		(MULTIOP_ADD_SPECTATOR_SLOTS + 100000)
+#define MULTIOP_FACTION_END		(MULTIOP_FACTION_START + MAX_PLAYERS)
+#define MULTIOP_FACTION_WIDTH		31
+#define MULTIOP_FACCHOOSER		(MULTIOP_FACTION_END + 1)
+#define MULTIOP_FACCHOOSER_END		(MULTIOP_FACCHOOSER + NUM_FACTIONS)
+#define MULTIOP_FACCHOOSER_FORM		(MULTIOP_FACCHOOSER_END+1)
 
 
 // ///////////////////////////////

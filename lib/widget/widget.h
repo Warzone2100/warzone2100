@@ -106,6 +106,14 @@ enum WzTextAlignment
 /* (Useful if re-using a W_*INIT structure for multiple widget instances) */
 typedef std::function<void* ()> WIDGET_INITIALIZE_PUSERDATA_FUNC;
 
+struct Padding
+{
+	uint32_t top;
+	uint32_t right;
+	uint32_t bottom;
+	uint32_t left;
+};
+
 /** The basic initialisation structure */
 struct W_INIT
 {
@@ -228,86 +236,95 @@ void widgReset();
 void widgShutDown();
 
 /** Used by the notifications system to register forms that are "over the top", and may consume click / mouse-over events */
-void widgRegisterOverlayScreen(W_SCREEN* psScreen, uint16_t zOrder);
-void widgRemoveOverlayScreen(W_SCREEN* psScreen);
+void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder);
+void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psScreen, const std::shared_ptr<W_SCREEN> &priorScreen);
+void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
+void widgForEachOverlayScreen(const std::function<bool (const std::shared_ptr<W_SCREEN>& psScreen, uint16_t zOrder)>& func);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
+bool isMouseClickDownOnScreenOverlayChild();
+bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen);
+void widgScheduleTask(std::function<void ()> f);
+
+void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
 /** Add a form to the widget screen */
-WZ_DECL_NONNULL(1, 2) W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
+WZ_DECL_NONNULL(2) W_FORM *widgAddForm(const std::shared_ptr<W_SCREEN> &psScreen, const W_FORMINIT *psInit);
 
 /** Add a label to the widget screen */
-WZ_DECL_NONNULL(1, 2) W_LABEL *widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit);
+WZ_DECL_NONNULL(2) W_LABEL *widgAddLabel(const std::shared_ptr<W_SCREEN> &psScreen, const W_LABINIT *psInit);
 
 /** Add a button to a form */
-WZ_DECL_NONNULL(1, 2) W_BUTTON *widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit);
+WZ_DECL_NONNULL(2) W_BUTTON *widgAddButton(const std::shared_ptr<W_SCREEN> &psScreen, const W_BUTINIT *psInit);
 
 /** Add an edit box to a form */
-WZ_DECL_NONNULL(1, 2) W_EDITBOX *widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit);
+WZ_DECL_NONNULL(2) W_EDITBOX *widgAddEditBox(const std::shared_ptr<W_SCREEN> &psScreen, const W_EDBINIT *psInit);
 
 /** Add a bar graph to a form */
-WZ_DECL_NONNULL(1, 2) W_BARGRAPH *widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit);
+WZ_DECL_NONNULL(2) W_BARGRAPH *widgAddBarGraph(const std::shared_ptr<W_SCREEN> &psScreen, const W_BARINIT *psInit);
 
 /** Add a slider to a form */
-WZ_DECL_NONNULL(1, 2) W_SLIDER *widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit);
+WZ_DECL_NONNULL(2) W_SLIDER *widgAddSlider(const std::shared_ptr<W_SCREEN> &psScreen, const W_SLDINIT *psInit);
 
 /** Delete a widget from the screen */
-WZ_DECL_NONNULL(1) void widgDelete(W_SCREEN *psScreen, UDWORD id);
+void widgDelete(WIDGET *widget);
+void widgDelete(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
+void widgDeleteLater(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Hide a widget */
-WZ_DECL_NONNULL(1) void widgHide(W_SCREEN *psScreen, UDWORD id);
+void widgHide(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Reveal a widget */
-WZ_DECL_NONNULL(1) void widgReveal(W_SCREEN *psScreen, UDWORD id);
+void widgReveal(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Return a pointer to a buffer containing the current string of a widget if any.
  * This will always return a valid string pointer.
  * NOTE: The string must be copied out of the buffer
  */
-WZ_DECL_NONNULL(1) const char *widgGetString(W_SCREEN *psScreen, UDWORD id);
+const char *widgGetString(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Return the current string of a widget, if any.
  * This will always return a string. If the widget doesn't have a string, it will return an empty WzString.
  */
-WZ_DECL_NONNULL(1) const WzString& widgGetWzString(W_SCREEN *psScreen, UDWORD id);
+const WzString& widgGetWzString(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Set the text in a widget */
-WZ_DECL_NONNULL(1) void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
-
-/** Get the current position of a widget */
-WZ_DECL_NONNULL(1, 3, 4) void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY);
+void widgSetString(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, const char *pText);
 
 /** Get the current position of a slider bar */
-WZ_DECL_NONNULL(1) UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id);
-
-/** Set the current position of a slider bar */
-WZ_DECL_NONNULL(1) void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos);
+UDWORD widgGetSliderPos(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Set the current size of a bar graph */
-WZ_DECL_NONNULL(1) void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD size);
+void widgSetBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD size);
 
 /** Set the current size of a minor bar on a double graph */
-WZ_DECL_NONNULL(1) void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD size);
+void widgSetMinorBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD size);
+
+/** Set the range on a double graph */
+void widgSetBarRange(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue);
 
 /** Return the ID of the widget the mouse was over this frame */
-WZ_DECL_NONNULL(1) UDWORD widgGetMouseOver(W_SCREEN *psScreen);
+UDWORD widgGetMouseOver(const std::shared_ptr<W_SCREEN> &psScreen);
 
 /** Return the user data for a widget */
-WZ_DECL_NONNULL(1) void *widgGetUserData(W_SCREEN *psScreen, UDWORD id);
+void *widgGetUserData(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Set the user data for a widget */
-WZ_DECL_NONNULL(1) void widgSetUserData(W_SCREEN *psScreen, UDWORD id, void *UserData);
+void widgSetUserData(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, void *UserData);
 
 /** Return the user data for a widget */
-WZ_DECL_NONNULL(1) UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
+UDWORD widgGetUserData2(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Set the user data for a widget */
-WZ_DECL_NONNULL(1) void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData);
+void widgSetUserData2(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD UserData);
 
 /** Get widget structure */
-WZ_DECL_NONNULL(1) WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
+WIDGET *widgGetFromID(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
+
+/* Find a widget on a form from its id number */
+std::shared_ptr<WIDGET> widgFormGetFromID(const std::shared_ptr<WIDGET>& widget, UDWORD id);
 
 /** Set tip string for a widget */
-WZ_DECL_NONNULL(1) void widgSetTip(W_SCREEN *psScreen, UDWORD id, std::string pTip);
+void widgSetTip(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, std::string pTip);
 
 /** Colour numbers */
 enum _w_colour
@@ -327,29 +344,29 @@ enum _w_colour
 /** Set the global toop tip text colour. */
 void widgSetTipColour(PIELIGHT colour);
 
-WZ_DECL_NONNULL(1) void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id);
-WZ_DECL_NONNULL(1) void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id);
+void widgSetButtonFlash(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
+void widgClearButtonFlash(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Get a button or clickable form's state */
-WZ_DECL_NONNULL(1) UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id);
+UDWORD widgGetButtonState(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Set a button or clickable form's state */
-WZ_DECL_NONNULL(1) void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state);
+void widgSetButtonState(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD state);
 
 
 /** Return which key was used to press the last returned widget */
-WZ_DECL_NONNULL(1) UDWORD widgGetButtonKey_DEPRECATED(W_SCREEN *psScreen);
+UDWORD widgGetButtonKey_DEPRECATED(const std::shared_ptr<W_SCREEN> &psScreen);
 
 /** Execute a set of widgets for one cycle.
  * Return the id of the widget that was activated, or 0 for none.
  */
-WZ_DECL_NONNULL(1) WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen);
+WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen);
 
 /** Display the screen's widgets in their current state
  * (Call after calling widgRunScreen, this allows the input
  *  processing to be separated from the display of the widgets).
  */
-WZ_DECL_NONNULL(1) void widgDisplayScreen(W_SCREEN *psScreen);
+void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
 
 
 /** Set the current audio callback function and audio id's. */
@@ -372,6 +389,8 @@ void sliderEnableDrag(bool Enable);
 
 void setWidgetsStatus(bool var);
 bool getWidgetsStatus();
+
+std::weak_ptr<WIDGET> getMouseOverWidget();
 
 /** @} */
 

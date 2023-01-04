@@ -5,10 +5,14 @@ const PLAYER_RES = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 ];
 
+const SCAVENGER_RES = [
+	"R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01",
+];
+
 // Player zero's droid enters area next to first oil patch.
 camAreaEvent("launchScavAttack", function(droid)
 {
-	camPlayVideos(["pcv456.ogg", "MB1A_MSG"]);
+	camPlayVideos(["pcv456.ogg", {video: "MB1A_MSG", type: MISS_MSG}]);
 	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	// Send scavengers on war path if triggered above.
 	camManageGroup(camMakeGroup("scavAttack1", ENEMIES), CAM_ORDER_ATTACK, {
@@ -60,7 +64,7 @@ camAreaEvent("roadblockArea", function(droid)
 // Scavengers hiding in the split canyon area between base two and three.
 function raidAttack()
 {
-	camManageGroup( camMakeGroup("raidTrigger", ENEMIES), CAM_ORDER_ATTACK, {
+	camManageGroup(camMakeGroup("raidTrigger", ENEMIES), CAM_ORDER_ATTACK, {
 		pos: camMakePos("scavBase3Cleanup")
 	});
 	camManageGroup(camMakeGroup("raidGroup", ENEMIES), CAM_ORDER_ATTACK, {
@@ -85,7 +89,7 @@ function eventStructureBuilt(structure, droid)
 	{
 		// Is it in the base two area?
 		var objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
-		for (var i = 0, l = objs.length; i < l; ++i)
+		for (let i = 0, l = objs.length; i < l; ++i)
 		{
 			var obj = objs[i];
 			if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
@@ -97,7 +101,7 @@ function eventStructureBuilt(structure, droid)
 	}
 }
 
-camAreaEvent("scavBase3Cleanup", function(droid)
+camAreaEvent("factoryTrigger", function(droid)
 {
 	camEnableFactory("base4Factory");
 });
@@ -119,7 +123,7 @@ function enableBaseStructures()
 		"A0ResearchFacility", "A0LightFactory",
 	];
 
-	for (var i = 0; i < STRUCTS.length; ++i)
+	for (let i = 0; i < STRUCTS.length; ++i)
 	{
 		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
 	}
@@ -153,9 +157,11 @@ function eventStartLevel()
 
 	enableBaseStructures();
 	camCompleteRequiredResearch(PLAYER_RES, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(SCAVENGER_RES, 6);
+	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 
 	// Give player briefing.
-	hackAddMessage("CMB1_MSG", CAMP_MSG, CAM_HUMAN_PLAYER, false);
+	camPlayVideos({video: "CMB1_MSG", type: CAMP_MSG, immediate: false});
 	if (difficulty === HARD)
 	{
 		setMissionTime(camMinutesToSeconds(40));
@@ -198,10 +204,10 @@ function eventStartLevel()
 	});
 
 	camSetArtifacts({
-		"base1ArtifactPos": { tech: "R-Wpn-MG-Damage01" },
-		"base2Factory": { tech: "R-Wpn-Flamer01Mk1" },
-		"base3Factory": { tech: "R-Defense-Tower01" },
-		"base4Factory": { tech: "R-Sys-Engineering01" },
+		"base1ArtifactPos": { tech: "R-Sys-Engineering01" },
+		"base2Factory": { tech: ["R-Wpn-Flamer01Mk1", "R-Sys-MobileRepairTurret01"] },
+		"base3Factory": { tech: "R-Wpn-MG-Damage01" },
+		"base4Factory": { tech: "R-Wpn-MG-ROF01" },
 	});
 
 	camSetFactories({
@@ -211,7 +217,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 3,
 			maxSize: 3,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 24 : 18)),
 			templates: [ cTempl.trike, cTempl.bloke ]
 		},
 		"base3Factory": {
@@ -220,7 +226,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(16)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 20 : 14)),
 			templates: [ cTempl.bloke, cTempl.buggy, cTempl.bloke ]
 		},
 		"base4Factory": {
@@ -229,7 +235,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(13)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 16 : 12)),
 			templates: [ cTempl.bjeep, cTempl.bloke, cTempl.trike, cTempl.bloke ]
 		},
 	});

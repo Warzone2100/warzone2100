@@ -26,58 +26,16 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/debug.h"
+#include <wzmaplib/map.h>
+#include <wzmaplib/terrain_type.h>
 #include "objects.h"
 #include "terrain.h"
 #include "multiplay.h"
 #include "display.h"
 #include "ai.h"
 
-/* The different types of terrain as far as the game is concerned */
-enum TYPE_OF_TERRAIN
-{
-	TER_SAND,
-	TER_SANDYBRUSH,
-	TER_BAKEDEARTH,
-	TER_GREENMUD,
-	TER_REDBRUSH,
-	TER_PINKROCK,
-	TER_ROAD,
-	TER_WATER,
-	TER_CLIFFFACE,
-	TER_RUBBLE,
-	TER_SHEETICE,
-	TER_SLUSH,
-
-	TER_MAX,
-};
-
-enum MAP_TILESET_TYPE
-{
-	TILESET_ARIZONA = 0,
-	TILESET_URBAN = 1,
-	TILESET_ROCKIES = 2
-};
-
 #define TALLOBJECT_YMAX		(200)
 #define TALLOBJECT_ADJUST	(300)
-
-/* Flags for whether texture tiles are flipped in X and Y or rotated */
-#define TILE_XFLIP		0x8000
-#define TILE_YFLIP		0x4000
-#define TILE_ROTMASK	0x3000
-#define TILE_ROTSHIFT	12
-#define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
-#define TILE_NUMMASK	0x01ff
-
-static inline unsigned short TileNumber_tile(unsigned short tilenumber)
-{
-	return tilenumber & TILE_NUMMASK;
-}
-
-static inline unsigned short TileNumber_texture(unsigned short tilenumber)
-{
-	return tilenumber & ~TILE_NUMMASK;
-}
 
 #define BITS_MARKED             0x01    ///< Is this tile marked?
 #define BITS_DECAL              0x02    ///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
@@ -116,9 +74,10 @@ struct MAPTILE
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
-extern MAPTILE *psMapTiles;
+
+extern std::unique_ptr<MAPTILE[]> psMapTiles;
 extern float waterLevel;
-extern GROUND_TYPE *psGroundTypes;
+extern std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
 extern int numGroundTypes;
 extern char *tilesetDir;
 
@@ -142,12 +101,13 @@ extern char *tilesetDir;
 #define AUX_DANGERMAP	2
 #define AUX_MAX		3
 
-extern uint8_t *psBlockMap[AUX_MAX];
-extern uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];	// yes, we waste one element... eyes wide open... makes API nicer
+extern std::unique_ptr<uint8_t[]> psBlockMap[AUX_MAX];
+extern std::unique_ptr<uint8_t[]> psAuxMap[MAX_PLAYERS + AUX_MAX];	// yes, we waste one element... eyes wide open... makes API nicer
 
 /// Find aux bitfield for a given tile
 WZ_DECL_ALWAYS_INLINE static inline uint8_t auxTile(int x, int y, int player)
 {
+	ASSERT_OR_RETURN(AUXBITS_ALL, player >= 0 && player < MAX_PLAYERS + AUX_MAX, "invalid player: %d", player);
 	return psAuxMap[player][x + y * mapWidth];
 }
 
@@ -160,8 +120,8 @@ WZ_DECL_ALWAYS_INLINE static inline uint8_t blockTile(int x, int y, int slot)
 /// Store a shadow copy of a player's aux map for use in threaded calculations
 static inline void auxMapStore(int player, int slot)
 {
-	memcpy(psBlockMap[slot], psBlockMap[0], sizeof(*psBlockMap[player]) * mapWidth * mapHeight);
-	memcpy(psAuxMap[MAX_PLAYERS + slot], psAuxMap[player], sizeof(*psAuxMap[player]) * mapWidth * mapHeight);
+	memcpy(psBlockMap[slot].get(), psBlockMap[0].get(), sizeof(uint8_t) * mapWidth * mapHeight);
+	memcpy(psAuxMap[MAX_PLAYERS + slot].get(), psAuxMap[player].get(), sizeof(uint8_t) * mapWidth * mapHeight);
 }
 
 /// Restore selected fields from the shadow copy of a player's aux map (ignoring the block map)
@@ -256,7 +216,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxClearBlocking(int x, int y, int stat
  * Check if tile contains a structure or feature. Function is thread-safe,
  * but do not rely on the result if you mean to alter the object pointer.
  */
-static inline bool TileIsOccupied(const MAPTILE *tile)
+WZ_DECL_ALWAYS_INLINE static inline bool TileIsOccupied(const MAPTILE *tile)
 {
 	return tile->psObject != nullptr;
 }
@@ -284,9 +244,27 @@ static inline bool TileHasFeature(const MAPTILE *tile)
 /** Check if tile contains a wall structure. Function is NOT thread-safe. */
 static inline bool TileHasWall(const MAPTILE *tile)
 {
+	const auto *psStruct = (STRUCTURE *)tile->psObject;
 	return TileHasStructure(tile)
-	       && (((STRUCTURE *)tile->psObject)->pStructureType->type == REF_WALL
-	           || ((STRUCTURE *)tile->psObject)->pStructureType->type == REF_WALLCORNER);
+	       && (psStruct->pStructureType->type == REF_WALL
+	           || psStruct->pStructureType->type == REF_GATE
+	           || psStruct->pStructureType->type == REF_WALLCORNER);
+}
+
+/** Check if tile contains a wall structure. Function is NOT thread-safe.
+ * This function is specifically for raycast callback, because "TileHasWall" is used
+ * to decide wether or not it's possible to place a new defense structure on top of a wall.
+ * We do not want to allow place more defense structures on top of already existing ones.
+*/
+static inline bool TileHasWall_raycast(const MAPTILE *tile)
+{
+	const auto *psStruct = (STRUCTURE *)tile->psObject;
+	return TileHasStructure(tile)
+	       && (psStruct->pStructureType->type == REF_WALL
+	           || psStruct->pStructureType->type == REF_GATE
+	           // hadrcrete towers are technically a WALL + weapon, so count them as walls too
+	           || psStruct->pStructureType->combinesWithWall
+	           || psStruct->pStructureType->type == REF_WALLCORNER);
 }
 
 /** Check if tile is burning. */
@@ -298,7 +276,20 @@ static inline bool TileIsBurning(const MAPTILE *tile)
 /** Check if tile has been explored. */
 static inline bool tileIsExplored(const MAPTILE *psTile)
 {
+	if (selectedPlayer >= MAX_PLAYERS) { return true; }
 	return psTile->tileExploredBits & (1 << selectedPlayer);
+}
+
+/** Is the tile ACTUALLY, 100% visible? -- (For DISPLAY-ONLY purposes - *NOT* game-state calculations!)
+ * This is not the same as for ex. psStructure->visible[selectedPlayer],
+ * because that would only mean the psStructure is in *explored Tile*
+ * psDroid->visible on the other hand, works correctly,
+ * because its visibility fades away in fog of war
+*/
+static inline bool tileIsClearlyVisible(const MAPTILE *psTile)
+{
+	if (selectedPlayer >= MAX_PLAYERS || godMode) { return true; }
+	return psTile->sensorBits & (1 << selectedPlayer);
 }
 
 /** Check if tile contains a small structure. Function is NOT thread-safe. */
@@ -312,9 +303,6 @@ static inline bool TileHasSmallStructure(const MAPTILE *tile)
 #define CLEAR_TILE_DECAL(x)	((x)->tileInfoBits &= ~BITS_DECAL)
 #define TILE_HAS_DECAL(x)	((x)->tileInfoBits & BITS_DECAL)
 
-// Multiplier for the tile height
-#define	ELEVATION_SCALE	2
-
 /* Allows us to do if(TRI_FLIPPED(psTile)) */
 #define TRI_FLIPPED(x)		((x)->texture & TILE_TRIFLIP)
 /* Flips the triangle partition on a tile pointer */
@@ -322,6 +310,22 @@ static inline bool TileHasSmallStructure(const MAPTILE *tile)
 
 /* Can player number p has explored tile t? */
 #define TEST_TILE_VISIBLE(p,t)	((t)->tileExploredBits & (1<<(p)))
+
+/* Can selectedPlayer see tile t? */
+/* To be used for *DISPLAY* purposes only (*not* game-state/calculation related) */
+static inline bool TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(MAPTILE *pTile)
+{
+	if (godMode)
+	{
+		// always visible
+		return true;
+	}
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	return TEST_TILE_VISIBLE(selectedPlayer, pTile);
+}
 
 /* Set a tile to be visible for a player */
 #define SET_TILE_VISIBLE(p,t) ((t)->tileExploredBits |= alliancebits[p])
@@ -337,52 +341,12 @@ static inline unsigned char terrainType(const MAPTILE *tile)
 }
 
 
-/* The maximum map size */
-
-#define MAP_MAXWIDTH	256
-#define MAP_MAXHEIGHT	256
-#define MAP_MAXAREA		(256*256)
-
-#define TILE_MAX_HEIGHT (255 * ELEVATION_SCALE)
-#define TILE_MIN_HEIGHT 0
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
-extern MAPTILE *psMapTiles;
-
-extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
 
-/*
- * Usage-Example:
- * tile_coordinate = (world_coordinate / TILE_UNITS) = (world_coordinate >> TILE_SHIFT)
- * world_coordinate = (tile_coordinate * TILE_UNITS) = (tile_coordinate << TILE_SHIFT)
- */
-
-/* The shift on a world coordinate to get the tile coordinate */
-#define TILE_SHIFT 7
-
-/* The mask to get internal tile coords from a full coordinate */
-#define TILE_MASK 0x7f
-
-/* The number of units accross a tile */
-#define TILE_UNITS (1<<TILE_SHIFT)
-
-static inline int32_t world_coord(int32_t mapCoord)
-{
-	return (uint32_t)mapCoord << TILE_SHIFT;  // Cast because -1 << 7 is undefined, but (unsigned)-1 << 7 gives -128 as desired.
-}
-
-static inline int32_t map_coord(int32_t worldCoord)
-{
-	return worldCoord >> TILE_SHIFT;
-}
-
-/// Only for graphics!
-static inline float map_coordf(int32_t worldCoord)
-{
-	return (float)worldCoord / TILE_UNITS;
-}
+/* Additional tile <-> world coordinate overloads */
 
 static inline Vector2i world_coord(Vector2i const &mapCoord)
 {
@@ -392,11 +356,6 @@ static inline Vector2i world_coord(Vector2i const &mapCoord)
 static inline Vector2i map_coord(Vector2i const &worldCoord)
 {
 	return {map_coord(worldCoord.x), map_coord(worldCoord.y)};
-}
-
-static inline int32_t round_to_nearest_tile(int32_t worldCoord)
-{
-	return (worldCoord + TILE_UNITS/2) & ~TILE_MASK;
 }
 
 static inline Vector2i round_to_nearest_tile(Vector2i const &worldCoord)
@@ -420,19 +379,43 @@ static inline void clip_world_offmap(int *worldX, int *worldY)
 	*worldY = MIN(world_coord(mapHeight) - 1, *worldY);
 }
 
-/* maps a position down to the corner of a tile */
-#define map_round(coord) ((coord) & (TILE_UNITS - 1))
-
 /* Shutdown the map module */
 bool mapShutdown();
 
 /* Load the map data */
-bool mapLoad(char const *filename, bool preview);
+bool mapLoad(char const *filename);
 struct ScriptMapData;
-bool mapLoadFromScriptData(ScriptMapData const &, bool preview);
+bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
+
+class WzMapPhysFSIO : public WzMap::IOProvider
+{
+public:
+	WzMapPhysFSIO() { }
+	WzMapPhysFSIO(const std::string& baseMountPath)
+	: m_basePath(baseMountPath)
+	{ }
+public:
+	virtual std::unique_ptr<WzMap::BinaryIOStream> openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode) override;
+	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
+	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
+	virtual bool makeDirectory(const std::string& directoryPath) override;
+	virtual const char* pathSeparator() const override;
+
+	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
+	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
+private:
+	std::string m_basePath;
+};
+
+class WzMapDebugLogger : public WzMap::LoggingProtocol
+{
+public:
+	virtual ~WzMapDebugLogger();
+	virtual void printLog(WzMap::LoggingProtocol::LogLevel level, const char *function, int line, const char *str) override;
+};
 
 /* Save the map data */
-bool mapSave(char **ppFileData, UDWORD *pFileSize);
+bool mapSaveToWzMapData(WzMap::MapData& output);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
@@ -567,8 +550,6 @@ extern SDWORD scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
 void mapFloodFillContinents();
 
-void mapTest();
-
 void tileSetFire(int32_t x, int32_t y, uint32_t duration);
 bool fireOnLocation(unsigned int x, unsigned int y);
 
@@ -578,10 +559,17 @@ bool fireOnLocation(unsigned int x, unsigned int y);
  */
 WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
-	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
+	return ((player == selectedPlayer && godMode) ||
+			((player < MAX_PLAYER_SLOTS) && (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)))
+			);
 }
 
 void mapInit();
 void mapUpdate();
+
+bool loadTerrainTypeMapOverride(MAP_TILESET tileSet);
+
+//For saves to determine if loading the terrain type override should occur
+extern bool builtInMap;
 
 #endif // __INCLUDED_SRC_MAP_H__

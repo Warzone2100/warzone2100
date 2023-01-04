@@ -28,6 +28,7 @@
 #import <Availability.h>
 #import "cocoa_sdl_helpers.h"
 #include "SDL_syswm.h"
+#include <mach-o/dyld.h>
 
 bool cocoaIsNSWindowFullscreened(NSWindow __unsafe_unretained *window)
 {
@@ -54,4 +55,61 @@ bool cocoaIsSDLWindowFullscreened(SDL_Window *window)
 	}
 	assert(info.info.cocoa.window != nil);
 	return cocoaIsNSWindowFullscreened(info.info.cocoa.window);
+}
+
+std::string cocoaGetCurrentExecutablePath()
+{
+	std::string result;
+	char path[MAXPATHLEN] = {};
+	uint32_t size = MAXPATHLEN;
+	int ret = _NSGetExecutablePath(path, &size);
+	if (ret == 0)
+	{
+		result = path;
+	}
+	else
+	{
+		// allocate larger buffer
+		char* larger_path = (char*)malloc(size);
+		ret =_NSGetExecutablePath(larger_path, &size);
+		if (ret == 0)
+		{
+			result = larger_path;
+		}
+		free(larger_path);
+	}
+
+	return result;
+}
+
+std::string cocoaGetFrameworksPath(const char* resourceName)
+{
+	std::string path = cocoaGetCurrentExecutablePath();
+	if (path.empty())
+	{
+		return "";
+	}
+	// Executable path will end with "/MacOS/<executable name>"
+	// Remove last two path components
+	for (size_t i = 0; i < 2; i++)
+	{
+		size_t lastSlashPos = path.rfind("/");
+		if (lastSlashPos == std::string::npos)
+		{
+			break;
+		}
+		path = path.substr(0, lastSlashPos);
+	}
+	if (path.empty())
+	{
+		return "";
+	}
+	// Append "Frameworks" folder name
+	path += "/Frameworks/";
+	// Append resourceName (if provided)
+	if (resourceName != nullptr)
+	{
+		path += resourceName;
+	}
+	return path;
 }

@@ -23,9 +23,11 @@
 
 #include "lib/widget/widget.h"
 #include "lib/widget/form.h"
+#include "lib/widget/bar.h"
 #include "intimage.h"
 #include "droid.h"
 #include "template.h"
+#include "research.h"
 
 
 /* Power levels are divided by this for power bar display. The extra factor has
@@ -97,47 +99,37 @@ private:
 void SetFormAudioIDs(int OpenID, int CloseID);
 
 // Initialise interface graphics.
-void intInitialiseGraphics();
+bool intInitialiseGraphics();
 
-// callback to update the command droid size label
-void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext);
-
-// callback to update the command droid experience
-void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext);
-
-// callback to update the command droid factories
-void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext);
-
-void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext);
-
-void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
-//callback to display the factory number
-void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext);
-//callback to display the production quantity number for a template
-void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
-
-/* Holds the cached rendered text for the power bar */
-struct DisplayPowerBarCache
+class PowerBar: public W_BARGRAPH
 {
-	WzText wzText;
-	WzText wzNeedText;
+	public:
+		PowerBar(W_BARINIT* init): W_BARGRAPH(init) {}
+
+		std::string getTip() override;
+		void display(int xOffset, int yOffset) override;
+
+	private:
+		struct DisplayPowerBarCache
+		{
+			WzText wzText;
+			WzText wzNeedText;
+		} cache;
 };
-void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 class IntFancyButton : public W_CLICKFORM
 {
 public:
-	IntFancyButton(WIDGET *parent);
+	IntFancyButton();
 
 protected:
 	//the two types of button used in the object display (bottom bar)
 	enum ButtonType {TOPBUTTON = 0, BTMBUTTON = 1};
 
 	void initDisplay();
-	void doneDisplay();
 	void displayClear(int xOffset, int yOffset);
-	void displayIMD(Image image, ImdObject imdObject, int xOffset, int yOffset);
-	void displayImage(Image image, int xOffset, int yOffset);
+	void displayIMD(AtlasImage image, ImdObject imdObject, int xOffset, int yOffset);
+	void displayImage(AtlasImage image, int xOffset, int yOffset);
 	void displayBlank(int xOffset, int yOffset);
 	void displayIfHighlight(int xOffset, int yOffset);
 
@@ -154,7 +146,7 @@ protected:
 class IntObjectButton : public IntFancyButton
 {
 public:
-	IntObjectButton(WIDGET *parent);
+	IntObjectButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -176,7 +168,7 @@ protected:
 class IntStatusButton : public IntObjectButton
 {
 public:
-	IntStatusButton(WIDGET *parent);
+	IntStatusButton();
 
 	void setObject(BASE_OBJECT *object)
 	{
@@ -198,7 +190,7 @@ protected:
 class IntStatsButton : public IntFancyButton
 {
 public:
-	IntStatsButton(WIDGET *parent);
+	IntStatsButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -209,7 +201,7 @@ public:
 	void setStatsAndTip(BASE_STATS *stats)
 	{
 		setStats(stats);
-		setTip(getName(stats));
+		setTip(getStatsName(stats));
 	}
 
 protected:
@@ -220,7 +212,7 @@ protected:
 class IntFormTransparent : public W_FORM
 {
 public:
-	IntFormTransparent(WIDGET *parent);
+	IntFormTransparent();
 
 	virtual void display(int xOffset, int yOffset);
 };
@@ -229,11 +221,12 @@ public:
 class IntFormAnimated : public W_FORM
 {
 public:
-	IntFormAnimated(WIDGET *parent, bool openAnimate = true);
+	IntFormAnimated(bool openAnimate = true);
 
 	virtual void display(int xOffset, int yOffset);
 
 	void closeAnimateDelete();              ///< Animates the form closing, and deletes itself when done.
+	bool isClosing() const;
 
 private:
 	unsigned        startTime;              ///< Animation start time
@@ -248,9 +241,10 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
-
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip);
+void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild);
 
 bool DroidIsBuilding(DROID *Droid);
 STRUCTURE *DroidGetBuildStructure(DROID *Droid);
@@ -276,25 +270,13 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 
 bool StatIsResearch(BASE_STATS *Stat);
 
-/* The cache (pUserData) expected by both intDisplayStatsBar and intDisplayDesignPowerBar */
-struct DisplayBarCache {
-	WzText wzCheckWidthText;
-	WzText wzText;
-};
-
-/* Draws a stats bar for the design screen */
-void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-/* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
 // Widget callback function to play an audio track.
 void WidgetAudioCallback(int AudioID);
 
-//void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 class IntTransportButton : public IntFancyButton
 {
 public:
-	IntTransportButton(WIDGET *parent);
+	IntTransportButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -315,12 +297,10 @@ void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
 void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayUpdateAllyBar(W_BARGRAPH *psBar, const RESEARCH &research, const std::vector<AllyResearch> &researches);
+STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 
 void intSetShadowPower(int quantity);
 

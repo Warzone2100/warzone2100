@@ -3,41 +3,51 @@
 // Transporter management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camIsTransporter(game object)
+//;; ## camIsTransporter(gameObject)
 //;;
 //;; Determine if the object is a transporter.
 //;;
-function camIsTransporter(object)
+//;; @param {Object} gameObject
+//;; @returns {boolean}
+//;;
+function camIsTransporter(gameObject)
 {
-	if (!camDef(object) || !object)
+	if (!camDef(gameObject) || !gameObject)
 	{
 		return false;
 	}
 
-	if (object.type !== DROID)
+	if (gameObject.type !== DROID)
 	{
 		camTrace("Attempted to check if a non-droid object is a transporter.");
 		return false;
 	}
 
-	return ((object.droidType === DROID_TRANSPORTER) || (object.droidType === DROID_SUPERTRANSPORTER));
+	return gameObject.droidType === DROID_SUPERTRANSPORTER;
 }
 
-//;; ## camSetupTransport(place x, place y, exit x, exit y)
+//;; ## camSetupTransporter(placeX, placeY, exitX, exitY)
 //;;
-//;; A convenient function for placing the standard campaign transport
-//;; for loading in pre-away missions. The exit point for the transport
-//;; is set up as well.
+//;; A convenient function for placing the standard campaign transport for loading in pre-away missions.
+//;; The exit point for the transport is set up as well.
 //;;
-function camSetupTransporter(x, y, x1, y1)
+//;; @param {number} placeX
+//;; @param {number} placeY
+//;; @param {number} exitX
+//;; @param {number} exitY
+//;; @returns {void}
+//;;
+function camSetupTransporter(placeX, placeY, exitX, exitY)
 {
-	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
-	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
+	addDroid(CAM_HUMAN_PLAYER, placeX, placeY, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
+	setTransporterExit(exitX, exitY, CAM_HUMAN_PLAYER);
 }
 
 //;; ## camRemoveEnemyTransporterBlip()
 //;;
 //;; Removes the last blip that an enemy transporter left behind, if any.
+//;;
+//;; @returns {void}
 //;;
 function camRemoveEnemyTransporterBlip()
 {
@@ -60,7 +70,7 @@ function __camDispatchTransporterUnsafe()
 		camDebug("Transporter queue empty!");
 		return false;
 	}
-	const OFFSET = 2; //Increaze LZ "no go" zone area a bit
+	const OFFSET = 1; //Increaze LZ "no go" zone area a bit
 	var args = __camTransporterQueue[0];
 	var player = args.player;
 	var pos = args.position;
@@ -83,7 +93,7 @@ function __camDispatchTransporterUnsafe()
 	}
 	var trans = __camPlayerTransports[player];
 	var droids = [];
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (let i = 0, l = list.length; i < l; ++i)
 	{
 		var template = list[i];
 		var prop = __camChangePropulsionOnDiff(template.prop);
@@ -109,7 +119,7 @@ function __camDispatchTransporterUnsafe()
 		camRemoveEnemyTransporterBlip();
 	}
 
-	if(player !== CAM_HUMAN_PLAYER)
+	if (player !== CAM_HUMAN_PLAYER)
 	{
 		playSound("pcv381.ogg"); //Enemy transport detected.
 	}
@@ -148,4 +158,13 @@ function __camLandTransporter(player, pos)
 	camTrace("Landing transport for player", player);
 	playSound("pcv395.ogg", pos.x, pos.y, 0); //Incoming enemy transport.
 	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
+}
+
+function __camRemoveIncomingTransporter(player)
+{
+	// allow the next transporter to enter
+	if (camDef(__camIncomingTransports[player]))
+	{
+		delete __camIncomingTransports[player];
+	}
 }

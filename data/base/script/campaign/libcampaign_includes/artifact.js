@@ -5,28 +5,27 @@
 
 //;; ## camSetArtifacts(artifacts)
 //;;
-//;; Tell ```libcampaign.js``` to manage a certain set of artifacts.
-//;; The argument is a JavaScript map from object labels to artifact
-//;; description. If the label points to a game object, artifact will be
-//;; placed when this object is destroyed; if the label is a position, the
-//;; artifact will be placed instantly. Artifact description is a JavaScript
-//;; object with the following fields:
+//;; Tell `libcampaign.js` to manage a certain set of artifacts.
+//;; The argument is a JavaScript map from object labels to artifact description.
+//;; If the label points to a game object, artifact will be placed when this object
+//;; is destroyed; if the label is a position, the artifact will be placed instantly.
+//;; Artifact description is a JavaScript object with the following fields:
+//;; * `tech` The technology to grant when the artifact is recovered.
+//;;   Note that this can be made into an array to make artifacts give out
+//;;   more than one technology, if desired.
+//;;   On `let me win` cheat, all technologies stored in the artifacts
+//;;   managed by this function are automatically granted.
+//;;   Additionally, this function would call special event callbacks if they are defined
+//;;   in your script, which should be named as follows, where LABEL is the artifact label:
+//;; * `camArtifactPickup_LABEL` Called when the player picks up the artifact.
 //;;
-//;; * ```tech``` The technology to grant when the artifact is recovered.
-//;; Note that this can be made into an array to make artifacts give out
-//;; more than one technology, if desired.
-//;; On __let me win__ cheat, all technologies stored in the artifacts
-//;; managed by this function are automatically granted.
-//;; Additionally, this function would call special event callbacks if they are
-//;; defined in your script, which should be named as follows,
-//;; where LABEL is the artifact label:
-//;; * ```camArtifactPickup_LABEL``` Called when the player picks up
-//;; 	the artifact.
+//;; @param {Object} artifacts
+//;; @returns {void}
 //;;
 function camSetArtifacts(artifacts)
 {
 	__camArtifacts = artifacts;
-	for (var alabel in __camArtifacts)
+	for (const alabel in __camArtifacts)
 	{
 		var ai = __camArtifacts[alabel];
 		var pos = camMakePos(alabel);
@@ -48,8 +47,9 @@ function camSetArtifacts(artifacts)
 
 //;; ## camAllArtifactsPickedUp()
 //;;
-//;; Returns true if all artifacts managed by ```libcampaign.js```
-//;; were picked up.
+//;; Returns `true` if all artifacts managed by `libcampaign.js` were picked up.
+//;;
+//;; @returns {boolean}
 //;;
 function camAllArtifactsPickedUp()
 {
@@ -57,11 +57,16 @@ function camAllArtifactsPickedUp()
 	return __camNumArtifacts === Object.keys(__camArtifacts).length;
 }
 
-//Returns the labels of all existing artifacts.
+//;; ## camGetArtifacts()
+//;;
+//;; Returns the labels of all existing artifacts.
+//;;
+//;; @returns {Object[]}
+//;;
 function camGetArtifacts()
 {
 	var camArti = [];
-	for (var alabel in __camArtifacts)
+	for (const alabel in __camArtifacts)
 	{
 		var artifact = __camArtifacts[alabel];
 		var libLabel = __camGetArtifactLabel(alabel);
@@ -109,13 +114,13 @@ function __camCheckPlaceArtifact(obj)
 	}
 	if (ai.placed)
 	{
-		camDebug("Object to which artifact", alabel, "is bound has died twice");
+		camDebug("Object to which artifact", alabel, "is bound, has died twice");
 		return;
 	}
 	if (ai.tech instanceof Array)
 	{
 		camTrace("Placing multi-tech granting artifact");
-		for (var i = 0; i < ai.tech.length; ++i)
+		for (let i = 0; i < ai.tech.length; ++i)
 		{
 			var techString = ai.tech[i];
 			camTrace(i, ":", techString);
@@ -152,7 +157,7 @@ function __camPickupArtifact(artifact)
 	camSafeRemoveObject(artifact);
 	if (ai.tech instanceof Array)
 	{
-		for (var i = 0; i < ai.tech.length; ++i)
+		for (let i = 0; i < ai.tech.length; ++i)
 		{
 			var techString = ai.tech[i];
 			enableResearch(techString);
@@ -171,12 +176,12 @@ function __camPickupArtifact(artifact)
 		callback();
 	}
 
-	queue("__camShowVictoryConditions", camSecondsToMilliseconds(1));
+	__camSetupConsoleForVictoryConditions();
 }
 
 function __camLetMeWinArtifacts()
 {
-	for (var alabel in __camArtifacts)
+	for (const alabel in __camArtifacts)
 	{
 		var ai = __camArtifacts[alabel];
 		if (ai.placed)
@@ -193,7 +198,7 @@ function __camLetMeWinArtifacts()
 		{
 			if (ai.tech instanceof Array)
 			{
-				for (var i = 0; i < ai.tech.length; ++i)
+				for (let i = 0; i < ai.tech.length; ++i)
 				{
 					var techString = ai.tech[i];
 					enableResearch(techString);

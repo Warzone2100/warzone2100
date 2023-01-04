@@ -25,7 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
+#include "lib/framework/wztime.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/ivis_opengl/tex.h"
@@ -39,6 +39,7 @@
 #include "lib/framework/physfs_ext.h"
 
 #include "screen.h"
+#include "bitimage.h"
 #include "src/console.h"
 #include "src/levels.h"
 #include "lib/framework/wzapp.h"
@@ -51,13 +52,14 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <limits>
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/transform.hpp>
 
 /* global used to indicate preferred internal OpenGL format */
-bool wz_texture_compression = 0;
+bool wz_texture_compression = true;
 
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
@@ -78,6 +80,8 @@ static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
 static WzText player_Text[MAX_PLAYERS];
 static bool mappreview = false;
+
+static void screen_GenerateCoordinatesAndVBOs();
 
 /* Initialise the double buffered display */
 bool screenInitialise()
@@ -103,7 +107,7 @@ void wzPerfStart()
 	perfStarted = gfx_api::context::get().debugPerfStart(perfList.size());
 }
 
-void wzPerfWriteOut(const std::vector<PERF_STORE> &perfList, const WzString &outfile)
+void wzPerfWriteOut(const std::vector<PERF_STORE> &list, const WzString &outfile)
 {
 	PHYSFS_file *fileHandle = PHYSFS_openWrite(outfile.toUtf8().c_str());
 	if (fileHandle)
@@ -116,13 +120,13 @@ void wzPerfWriteOut(const std::vector<PERF_STORE> &perfList, const WzString &out
 			PHYSFS_close(fileHandle);
 			return;
 		}
-		for (size_t i = 0; i < perfList.size(); i++)
+		for (size_t i = 0; i < list.size(); i++)
 		{
 			WzString line;
-			line += WzString::number(perfList[i].counters[PERF_START_FRAME]);
+			line += WzString::number(list[i].counters[PERF_START_FRAME]);
 			for (int j = 1; j < PERF_COUNT; j++)
 			{
-				line += ", " + WzString::number(perfList[i].counters[j]);
+				line += ", " + WzString::number(list[i].counters[j]);
 			}
 			line += "\n";
 			ASSERT(line.toUtf8().length() <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "Line length exceeds PHYSFS_uint32::max");
@@ -177,13 +181,13 @@ void wzPerfFrame()
 
 	// Make a screenshot to document sample content
 	time_t aclock;
-	struct tm *t;
+	struct tm t;
 
 	time(&aclock);           /* Get time in seconds */
-	t = localtime(&aclock);  /* Convert time to struct */
+	t = getLocalTime(aclock);  /* Convert time to struct */
 
 	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1,
-	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
+	         t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
 	screendump_required = true;
 	gfx_api::context::get().debugStringMarker("Performance sample complete");
 }
@@ -235,26 +239,27 @@ void screenShutDown()
 	{
 		player_Text[i] = WzText();
 	}
+
+	iV_ImageFileShutdown();
 }
 
 /// Display a random backdrop from files in dirname starting with basename.
 /// dirname must have a trailing slash.
 void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 {
+	ASSERT_OR_RETURN(, dirname != nullptr, "dirname is null");
 	std::vector<std::string> names;  // vector to hold the strings we want
-	char **rc = PHYSFS_enumerateFiles(dirname); // all the files in dirname
-
+	// all the files in dirname
 	// Walk thru the files in our dir, adding the ones that start with basename to our vector of strings
 	size_t len = strlen(basename);
-	for (char **i = rc; *i != nullptr; i++)
-	{
+	WZ_PHYSFS_enumerateFiles(dirname, [&names, basename, len](const char *i) -> bool {
 		// does our filename start with basename?
-		if (!strncmp(*i, basename, len))
+		if (!strncmp(i, basename, len))
 		{
-			names.push_back(*i);
+			names.push_back(i);
 		}
-	}
-	PHYSFS_freeList(rc);
+		return true; // continue
+	});
 
 	if (names.empty())
 	{
@@ -278,8 +283,10 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 void screen_SetBackDropFromFile(const char *filename)
 {
 	int maxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
-	backdropGfx->loadTexture(filename, maxTextureSize, maxTextureSize);
-	screen_Upload(nullptr);
+	backdropGfx->loadTexture(filename, gfx_api::texture_type::user_interface, maxTextureSize, maxTextureSize);
+	backdropIsMapPreview = false;
+	// Generate coordinates and put them into VBOs
+	screen_GenerateCoordinatesAndVBOs();
 }
 
 void screen_StopBackDrop()
@@ -287,9 +294,11 @@ void screen_StopBackDrop()
 	bBackDrop = false;	//checking [movie]
 }
 
-void screen_RestartBackDrop()
+bool screen_RestartBackDrop()
 {
+	bool changedValue = !bBackDrop;
 	bBackDrop = true;
+	return changedValue;
 }
 
 bool screen_GetBackDrop()
@@ -312,12 +321,12 @@ void screen_Display()
 		int scale = MIN(s1, s2);
 		int w = preview_width * scale;
 		int h = preview_height * scale;
+		WzString text;
 
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			int x = player_pos[i].x;
 			int y = player_pos[i].y;
-			char text[5];
 
 			if (x == 0x77777777)
 			{
@@ -326,7 +335,7 @@ void screen_Display()
 
 			x = screenWidth / 2 - w / 2 + x * scale;
 			y = screenHeight / 2 - h / 2 + y * scale;
-			ssprintf(text, "%d", i);
+			text = WzString::number(i);
 			player_Text[i].setText(text, font_large);
 			player_Text[i].render(x - 1, y - 1, WZCOL_BLACK);
 			player_Text[i].render(x + 1, y - 1, WZCOL_BLACK);
@@ -340,7 +349,7 @@ void screen_Display()
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_GenerateCoordinatesAndVBOs()
+static void screen_GenerateCoordinatesAndVBOs()
 {
 	assert(backdropGfx != nullptr);
 
@@ -351,13 +360,13 @@ void screen_GenerateCoordinatesAndVBOs()
 
 	if (aspect < backdropAspect)
 	{
-		int offset = (screenWidth - screenHeight * backdropAspect) / 2;
+		int offset = static_cast<int>((screenWidth - screenHeight * backdropAspect) / 2);
 		x1 += offset;
 		x2 -= offset;
 	}
 	else
 	{
-		int offset = (screenHeight - screenWidth / backdropAspect) / 2;
+		int offset = static_cast<int>((screenHeight - screenWidth / backdropAspect) / 2);
 		y1 += offset;
 		y2 -= offset;
 	}
@@ -385,17 +394,12 @@ void screen_GenerateCoordinatesAndVBOs()
 	backdropGfx->buffers(4, vertices, texcoords);
 }
 
-void screen_Upload(const char *newBackDropBmp)
+void screen_Upload(iV_Image&& newBackdropImage)
 {
-	backdropIsMapPreview = false;
-
-	if (newBackDropBmp) // preview
-	{
-		// Slight hack to display maps previews in background.
-		// Bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, newBackDropBmp);
-		backdropIsMapPreview = true;
-	}
+	// Slight hack to display maps previews in background.
+	// Bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
+	backdropGfx->loadTexture(std::move(newBackdropImage), gfx_api::texture_type::user_interface, "mem::generated_map_preview");
+	backdropIsMapPreview = true;
 
 	// Generate coordinates and put them into VBOs
 	screen_GenerateCoordinatesAndVBOs();
@@ -525,9 +529,9 @@ void screenDoDumpToDiskIfRequired()
 				std::move(image),
 				[](const ScreenshotSaveRequest& request)
 				{
-					if (request.image->bmp)
+					if (request.image)
 					{
-						free(request.image->bmp);
+						request.image->clear();
 					}
 				}
 			);
@@ -563,16 +567,27 @@ void screenDumpToDisk(const char *path, const char *level)
 {
 	unsigned int screendump_num = 0;
 	time_t aclock;
-	struct tm *t;
+	struct tm t;
 
 	time(&aclock);           /* Get time in seconds */
-	t = localtime(&aclock);  /* Convert time to struct */
+	t = getLocalTime(aclock);  /* Convert time to struct */
 
-	ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level);
+	ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, level);
 
 	while (PHYSFS_exists(screendump_filename))
 	{
-		ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level, ++screendump_num);
+		ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, level, ++screendump_num);
 	}
 	screendump_required = true;
+}
+
+void screen_FlipIfBackDropTransition()
+{
+	static auto hadBackDrop = false;
+	if (hadBackDrop != screen_GetBackDrop())
+	{
+		pie_ScreenFrameRenderEnd();
+		pie_ScreenFrameRenderBegin();
+		hadBackDrop = screen_GetBackDrop();
+	}
 }

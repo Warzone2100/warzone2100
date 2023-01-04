@@ -29,10 +29,21 @@
 
 class ScrollBarWidget : public WIDGET
 {
+protected:
+	ScrollBarWidget(): WIDGET() {}
+	virtual void initialize();
+
 public:
-	ScrollBarWidget(WIDGET *parent);
+	static std::shared_ptr<ScrollBarWidget> make()
+	{
+		class make_shared_enabler: public ScrollBarWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize();
+		return widget;
+	}
 
 	uint16_t position() const;
+	void setPosition(uint16_t newPosition);
 	void setScrollableSize(uint16_t value);
 	void setViewSize(uint16_t value);
 	void setStickToBottom(bool value);
@@ -45,7 +56,7 @@ protected:
 	void geometryChanged() override;
 
 private:
-	W_SLIDER *slider;
+	std::shared_ptr<W_SLIDER> slider;
 	uint16_t scrollableSize = 1;
 	uint16_t viewSize = 1;
 	bool stickToBottom = false;

@@ -530,7 +530,10 @@ public:
 		}
 		curl_easy_setopt(handle, CURLOPT_HEADERFUNCTION, header_callback);
 		curl_easy_setopt(handle, CURLOPT_HEADERDATA, (void *)this);
-	#if LIBCURL_VERSION_NUM >= 0x071304	// cURL 7.19.4+
+	#if LIBCURL_VERSION_NUM >= 0x075500		// cURL 7.85.0+
+		/* only allow HTTP and HTTPS */
+		curl_easy_setopt(handle, CURLOPT_PROTOCOLS_STR, "http,https");
+	#elif LIBCURL_VERSION_NUM >= 0x071304	// cURL 7.19.4+
 		/* only allow HTTP and HTTPS */
 		curl_easy_setopt(handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 	#endif
@@ -675,7 +678,7 @@ static size_t header_callback(char *buffer, size_t size,
 {
 	/* received header is nitems * size long in 'buffer' NOT ZERO TERMINATED */
 	/* 'userdata' is set with CURLOPT_HEADERDATA */
-	if (userdata != nullptr)
+	if (userdata != nullptr && buffer != nullptr)
 	{
 		URLTransferRequest* pRequest = static_cast<URLTransferRequest*>(userdata);
 		std::string header_line = std::string(buffer, size * nitems);

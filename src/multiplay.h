@@ -37,6 +37,13 @@
 #include "multirecv.h"
 #include <vector>
 #include <string>
+#include <chrono>
+
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
+#include <nlohmann/json_fwd.hpp>
 
 class DROID_GROUP;
 struct BASE_OBJECT;
@@ -52,7 +59,7 @@ struct STRUCTURE;
 struct MULTIPLAYERGAME
 {
 	LEVEL_TYPE	type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
-	bool		scavengers;					// whether scavengers are on or off
+	uint8_t		scavengers;					// ultimate scavengers, scavengers, no scavengers
 	char		map[128];					// name of multiplayer map being used.
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
@@ -65,12 +72,21 @@ struct MULTIPLAYERGAME
 	bool		isMapMod;					// if a map has mods
 	bool        isRandom;                   // If a map is non-static.
 	uint32_t	techLevel;					// what technology level is being used
+	uint32_t	inactivityMinutes;			// The number of minutes without active play before a player should be considered "inactive". (0 = disable activity alerts)
+
+	// NOTE: If adding to this struct, a lot of things probably require changing
+	// (send/recvOptions? to/from_json in multiint.h.cpp?)
 };
 
 struct MULTISTRUCTLIMITS
 {
 	uint32_t        id;
 	uint32_t        limit;
+
+	inline bool operator==(const MULTISTRUCTLIMITS& a) const
+	{
+		return (id == a.id && limit == a.limit);
+	}
 };
 
 // The side we are *configured* as. Used to indicate whether we are the server or the client. Note that when
@@ -84,15 +100,22 @@ enum class InGameSide : bool {
 // info used inside games.
 struct MULTIPLAYERINGAME
 {
-	UDWORD				PingTimes[MAX_PLAYERS];				// store for pings.
-	bool				localOptionsReceived;				// used to show if we have game options yet..
-	bool				localJoiningInProgress;				// used before we know our player number.
-	bool				JoiningInProgress[MAX_PLAYERS];
-	bool				DataIntegrity[MAX_PLAYERS];
+	UDWORD				PingTimes[MAX_CONNECTED_PLAYERS];				// store for pings.
+	int 				LagCounter[MAX_CONNECTED_PLAYERS];
+	bool				VerifiedIdentity[MAX_CONNECTED_PLAYERS];		// if the multistats identity has been verified.
+	bool				localOptionsReceived;							// used to show if we have game options yet..
+	bool				localJoiningInProgress;							// used before we know our player number.
+	bool				JoiningInProgress[MAX_CONNECTED_PLAYERS];
+	bool				DataIntegrity[MAX_CONNECTED_PLAYERS];
 	InGameSide			side;
-	int32_t				TimeEveryoneIsInGame;
+	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
-	UDWORD				startTime;
+	std::chrono::steady_clock::time_point startTime;
+	optional<std::chrono::steady_clock::time_point> endTime;
+	std::chrono::steady_clock::time_point lastLagCheck;
+	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
+	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
+	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
@@ -102,7 +125,7 @@ struct MULTIPLAYERINGAME
 #define MPFLAGS_NO_LASSAT	0x10  		///< Flag for Laser Satellite Command Post disabled
 #define MPFLAGS_FORCELIMITS	0x20  		///< Flag to force structure limits
 #define MPFLAGS_MAX		0x3f
-	SDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
+	std::vector<MULTISTRUCTLIMITS> lastAppliedStructureLimits;	// a bit of a hack to retain the structureLimits used when loading / starting a game
 };
 
 struct NetworkTextMessage
@@ -137,7 +160,7 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern bool bMultiPlayer;				// true when more than 1 player.
 extern bool bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
-extern bool openchannels[MAX_PLAYERS];
+extern bool openchannels[MAX_CONNECTED_PLAYERS]; // outgoing message channels (i.e. who you are willing to send messages to)
 extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define RUN_ONLY_ON_SIDE(_side) \
@@ -159,6 +182,10 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define ANYPLAYER				99
 
+#define NO_SCAVENGERS			0
+#define SCAVENGERS				1
+#define ULTIMATE_SCAVENGERS		2
+
 #define CAMP_CLEAN				0			// campaign subtypes
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
@@ -175,6 +202,8 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define TECH_4					4
 
 #define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
+
+#define CLEAR_ALL_NAMES         -1
 // functions
 
 WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
@@ -184,8 +213,9 @@ WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
-const char *getPlayerName(int player);
+const char *getPlayerName(int player, bool storedName = false);
 bool setPlayerName(int player, const char *sName);
+void clearPlayerName(unsigned int player);
 const char *getPlayerColourName(int player);
 bool isHumanPlayer(int player);				//to tell if the player is a computer or not.
 bool myResponsibility(int player);
@@ -198,9 +228,17 @@ Vector3i cameraToHome(UDWORD player, bool scroll);
 
 bool multiPlayerLoop();							// for loop.c
 
+
+enum class HandleMessageAction
+{
+	Process_Message,
+	Silently_Ignore,
+	Disallow_And_Kick_Sender
+};
+HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type);
+bool shouldProcessMessage(NETQUEUE& queue, uint8_t type);
 bool recvMessage();
 bool SendResearch(uint8_t player, uint32_t index, bool trigger);
-bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
 void printInGameTextMessage(NetworkTextMessage const &message);
 void sendInGameSystemMessage(const char *text);
 int32_t findPlayerIndexByPosition(uint32_t position);
@@ -225,7 +263,6 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
-bool SendCmdGroup(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 
 bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
 bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
@@ -234,7 +271,7 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 bool multiShutdown();
 bool sendLeavingMsg();
 
-bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs);
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs);
 struct JoinConnectionDescription
 {
 public:
@@ -253,26 +290,25 @@ enum class JoinGameResult {
 	JOINED,
 	PENDING_PASSWORD
 };
-JoinGameResult joinGame(const char *connectionString);
-JoinGameResult joinGame(const char *host, uint32_t port);
-JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list);
+JoinGameResult joinGame(const char *connectionString, bool asSpectator = false);
+JoinGameResult joinGame(const char *host, uint32_t port, bool asSpectator = false);
+JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator = false);
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();
 
 // syncing.
 bool sendScoreCheck();							//score check only(frontend)
+void multiSyncResetAllChallenges();
+void multiSyncResetPlayerChallenge(uint32_t playerIdx);
+void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB);
 bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
 bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
 
-void displayAIMessage(char *pStr, SDWORD from, SDWORD to);  //make AI process a message
-
-
 bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
 
-bool multiplayPlayersReady(bool bNotifyStatus);
 void startMultiplayerGame();
 void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset = false);
 
@@ -284,5 +320,19 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *ps
 bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
+
+void setPlayerMuted(uint32_t playerIdx, bool muted);
+bool isPlayerMuted(uint32_t sender);
+
+bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool quietly = false);
+
+class WZGameReplayOptionsHandler : public ReplayOptionsHandler
+{
+	virtual bool saveOptions(nlohmann::json& object) const override;
+	virtual bool saveMap(EmbeddedMapData& mapData) const override;
+	virtual bool restoreOptions(const nlohmann::json& object, EmbeddedMapData&& embeddedMapData, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor) override;
+	virtual size_t desiredBufferSize() const override;
+	virtual size_t maximumEmbeddedMapBufferSize() const override;
+};
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

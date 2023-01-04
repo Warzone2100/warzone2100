@@ -1,5 +1,3 @@
-cmake_minimum_required (VERSION 3.5)
-
 ############################
 # Versioning (autorevision)
 
@@ -32,14 +30,14 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 find_package (Threads REQUIRED)
+find_package (ZLIB REQUIRED)
 
 add_library(netplay STATIC ${HEADERS} ${SRC} "${_netplay_config_output_file}")
 add_dependencies(netplay autorevision_netcodeversion)
 set_property(TARGET netplay PROPERTY FOLDER "lib")
-if(WZ_TARGET_ADDITIONAL_PROPERTIES)
-	SET_TARGET_PROPERTIES(netplay PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
-endif()
-target_link_libraries(netplay PRIVATE framework)
+include(WZTargetConfiguration)
+WZ_TARGET_CONFIGURATION(netplay)
+target_link_libraries(netplay PRIVATE framework re2::re2 nlohmann_json)
 if(WZ_USE_IMPORTED_MINIUPNPC)
 	target_link_libraries(netplay PRIVATE imported-miniupnpc)
 else()
@@ -47,10 +45,7 @@ else()
 	target_link_libraries(netplay PRIVATE libminiupnpc-static)
 	target_include_directories(netplay PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/miniupnp")
 endif()
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-	target_link_libraries(netplay PRIVATE pthread)
-endif()
-target_link_libraries(netplay PRIVATE Threads::Threads)
+target_link_libraries(netplay PRIVATE Threads::Threads ZLIB::ZLIB)
 if(MSVC)
 	# C4267: 'conversion': conversion from 'type1' to 'type2', possible loss of data // FIXME!!
 	target_compile_options(netplay PRIVATE "/wd4267")

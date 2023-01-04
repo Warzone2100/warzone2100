@@ -59,6 +59,14 @@
 		"label": "uplinkBaseCorner",
 		"pos": [1472, 1856]
 	},
+	"position_15": {
+		"label": "buildPos1",
+		"pos": [3456, 3456]
+	},
+	"position_16": {
+		"label": "buildPos2",
+		"pos": [5804, 512]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -67,8 +75,8 @@
 	},
 	"area_1": {
 		"label": "RTLZ",
-		"pos1": [1344, 6592],
-		"pos2": [3904, 8128]
+		"pos1": [1344, 6848],
+		"pos2": [3456, 8128]
 	},
 	"area_2": {
 		"label": "uplinkBaseCleanup",
@@ -116,6 +124,18 @@
 		"pos1": [7040, 1664],
 		"pos2": [7296, 1920]
 	},
+	"area_11": {
+		"label": "factoryTriggerWest",
+		"subscriber": 0,
+		"pos1": [0, 5248],
+		"pos2": [2688, 5632]
+	},
+	"area_12": {
+		"label": "factoryTriggerEast",
+		"subscriber": 0,
+		"pos1": [2560, 5504],
+		"pos2": [8064, 6400]
+	},
 
 	"object_0": {
 		"label": "COCommandCenter",
@@ -130,8 +150,8 @@
 		"type": 1
 	},
 	"object_2": {
-		"label": "aaGunEmplacement",
-		"id": 487,
+		"label": "COWhirlwindSite",
+		"id": 562,
 		"player": 2,
 		"type": 1
 	},

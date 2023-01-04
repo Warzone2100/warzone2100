@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2020  Warzone 2100 Project
+;  Copyright (C) 2006-2021  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -46,8 +46,18 @@ Unicode true
 
   !define ADDITIONAL_PLUGINS_DIR "${TOP_SRCDIR}\pkg\nsis\plugins"
 
+  !ifdef NSIS_IX86
   !addplugindir /x86-ansi "${ADDITIONAL_PLUGINS_DIR}\x86-ansi"
   !addplugindir /x86-unicode "${ADDITIONAL_PLUGINS_DIR}\x86-unicode"
+  !endif
+
+  !ifdef NSIS_AMD64
+  !addplugindir /amd64-unicode "${ADDITIONAL_PLUGINS_DIR}\amd64-unicode"
+  !endif
+
+  !ifdef NSIS_ARM64
+  !addplugindir /arm64-unicode "${ADDITIONAL_PLUGINS_DIR}\arm64-unicode"
+  !endif
 
 ;--------------------------------
 ;General
@@ -69,8 +79,6 @@ Unicode true
   ManifestDPIAware true
 
 !ifndef PORTABLE
-  ;Default installation folder
-  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}-${PACKAGE_VERSION}"
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}" ""
   ;Request application privileges for Windows Vista
@@ -82,12 +90,14 @@ Unicode true
 ;--------------------------------
 ;Versioninfo
 
+!define /date BuildYEAR "%Y"
+
 VIProductVersion "${VERSIONNUM}"
 VIAddVersionKey "CompanyName"      "Warzone 2100 Project"
 VIAddVersionKey "FileDescription"  "${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"      "${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"     "${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"   "Copyright (c) 2006-2020 Warzone 2100 Project"
+VIAddVersionKey "LegalCopyright"   "Copyright (c) 2006-${BuildYEAR} Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename" "${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"      "${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
@@ -185,6 +195,8 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
   !insertmacro MUI_LANGUAGE "English" # first language is the default language
   !insertmacro LANGFILE_SPECIFIC_INCLUDE "English" "win_installer_base.nsh"
 
+  !insertmacro MUI_LANGUAGE "Croatian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Croatian" "win_installer-hr_HR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Dutch"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Dutch" "win_installer-nl_NL.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "French"
@@ -195,14 +207,20 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Greek" "win_installer-el_GR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Hungarian"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Hungarian" "win_installer-hu_HU.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Indonesian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Indonesian" "win_installer-id_ID.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Italian"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Italian" "win_installer-it_IT.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Korean"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Korean" "win_installer-ko_KR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Polish"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Polish" "win_installer-pl_PL.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Portuguese"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Portuguese" "win_installer-pt_PT.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "PortugueseBR"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "PortugueseBR" "win_installer-pt_BR.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Romanian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Romanian" "win_installer-ro_RO.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Russian"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Russian" "win_installer-ru_RU.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Slovenian"
@@ -228,8 +246,8 @@ Function WelcomePageSetupLinkPre
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 3" "Bottom" "142" ; limit size of the upper label
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Settings" "Numfields" "4" ; increase counter
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Type" "Link"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Text" "Visit our Official Homepage http://wz2100.net for the latest version."
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "State" "http://wz2100.net/"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Text" "$(WZWelcomeHomepageLink)"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "State" "https://wz2100.net/"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Left" "120"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Right" "300"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Top" "154"
@@ -413,8 +431,9 @@ ${EndIf}
     Section "" SecMSSysLibraries
       SetOutPath "$INSTDIR"
 
-      ${If} $MSVCRT16_x86_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x86.exe" "Downloading vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
+      ${If} "${VS_PLATFORM_NAME}" == "Win32"
+      ${AndIf} $MSVCRT16_x86_NotPresent == 1
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/17/release/vc_redist.x86.exe" "$(DLTEXT_Downloading) vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2022 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x86.exe ..."
@@ -424,12 +443,12 @@ ${EndIf}
           ${EndIf}
           DetailPrint "vc_redist.x86.exe returned: $0"
         ${Else}
-          MessageBox MB_OK|MB_ICONSTOP "Download of system library (x86) failed: $Result_MSVCDownload"
+          MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (x86): $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
-      ${If} ${RunningX64}
+      ${If} "${VS_PLATFORM_NAME}" == "x64"
       ${AndIf} $MSVCRT16_x64_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x64.exe" "Downloading vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/17/release/vc_redist.x64.exe" "$(DLTEXT_Downloading) vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2022 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x64.exe ..."
@@ -439,12 +458,12 @@ ${EndIf}
           ${EndIf}
           DetailPrint "vc_redist.x64.exe returned: $0"
         ${Else}
-          MessageBox MB_OK|MB_ICONSTOP "Download of system library (x64) failed: $Result_MSVCDownload"
+          MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (x64): $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
-      ${If} ${IsNativeARM64}
+      ${If} "${VS_PLATFORM_NAME}" == "arm64"
       ${AndIf} $MSVCRT16_ARM64_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/VC_redist.arm64.exe" "Downloading VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/17/release/vc_redist.arm64.exe" "$(DLTEXT_Downloading) VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2022 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "VC_redist.arm64.exe ..."
@@ -454,7 +473,7 @@ ${EndIf}
           ${EndIf}
           DetailPrint "VC_redist.arm64.exe returned: $0"
         ${Else}
-          MessageBox MB_OK|MB_ICONSTOP "Download of system library (ARM64) failed: $Result_MSVCDownload"
+          MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (ARM64): $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
     SectionEnd
@@ -473,7 +492,7 @@ ${EndIf}
           DetailPrint "$0" ; print error message to log
         ${EndIf}
       ${Else}
-        MessageBox MB_OK|MB_ICONSTOP "Download of applocal system library failed: $Result_MSVCDownload"
+        MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (applocal): $Result_MSVCDownload"
       ${EndIf}
 
     SectionEnd
@@ -489,7 +508,7 @@ Section $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 SectionEnd
 
 Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
@@ -498,7 +517,7 @@ Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 SectionEnd
 
 Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
@@ -507,7 +526,7 @@ Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/low-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 SectionEnd
 
 ;Section /o $(TEXT_SecFMVs_Ger) SecFMVs_Ger
@@ -516,7 +535,7 @@ SectionEnd
 ;    NSISdl::download "http://download.gna.org/warzone/videos/2.2/warzone2100-sequences-ger-hi-2.2.wz"               "sequences.wz"
 ;    Pop $R0 ; Get the return value
 ;    StrCmp $R0 "success" +2
-;      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+;      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 ;
 ;SectionEnd
 
@@ -566,6 +585,7 @@ Function .onInit
   !insertmacro UnSelectSection ${SecFMVs_Eng}
   !insertmacro UnSelectSection ${SecFMVs_EngLo}
 ;    !insertmacro UnSelectSection ${SecFMVs_Ger}
+!endif
 
   ; Determine whether Microsoft system libraries are installed
   !ifdef MSVCRUNTIME
@@ -576,14 +596,15 @@ Function .onInit
 
     !ifndef PORTABLE
 
-      ; Check for presence of MSVC++ 14 System Runtime (VC2019, works with 2015/2017)
-      ; NOTE: Because VC 15/16 is ABI compatible with VC 14, the version # used is still 14.
+      ; Check for presence of MSVC++ 14 System Runtime (VC2022, works with 2015/2017/2019)
+      ; NOTE: Because VC 15/16/17 is ABI compatible with VC 14, the version # used is still 14.
       ; The VCRuntime includes the Universal C Runtime system component (the UCRT does not have to be detected / handled separately)
       !ifndef MSVCRT14_BLD_MINIMUM
         !error "MSVCRT14_BLD_MINIMUM is not defined"
       !endif
 
-      ${If} ${RunningX64}
+      ${If} "${VS_PLATFORM_NAME}" == "x64"
+      ${AndIf} ${RunningX64}
         SetRegView 64
         ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Bld"
         SetRegView lastused
@@ -593,22 +614,25 @@ Function .onInit
         ${EndIf}
       ${EndIf}
       StrCpy $R1 ""
-      ${If} ${IsNativeARM64}
+      ${If} "${VS_PLATFORM_NAME}" == "arm64"
+      ${AndIf} ${RunningX64}
         SetRegView 64
-        ;ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\ARM64" "Bld" ; is this the right registry key to check for ARM64?
+        ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\ARM64" "Bld" ; is this the right registry key to check for ARM64?
         SetRegView lastused
         ;MessageBox MB_OK|MB_ICONSTOP "ARM64 VC14 Runtime Bld: $R1"
-        ;${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
+        ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
           StrCpy $MSVCRT16_ARM64_NotPresent 1
-        ;${EndIf}
+        ${EndIf}
       ${EndIf}
-      StrCpy $R1 ""
-      SetRegView 32
-      ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Bld"
-      ; MessageBox MB_OK|MB_ICONSTOP "x86 VC14 Runtime Bld: $R1"
-      SetRegView lastused
-      ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
-        StrCpy $MSVCRT16_x86_NotPresent 1
+      ${If} "${VS_PLATFORM_NAME}" == "Win32"
+        StrCpy $R1 ""
+        SetRegView 32
+        ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Bld"
+        ; MessageBox MB_OK|MB_ICONSTOP "x86 VC14 Runtime Bld: $R1"
+        SetRegView lastused
+        ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
+          StrCpy $MSVCRT16_x86_NotPresent 1
+        ${EndIf}
       ${EndIf}
 
       ${If} $MSVCRT16_x64_NotPresent = 1
@@ -632,13 +656,46 @@ Function .onInit
     !endif
   !endif
 
-!endif
+  ${If} ${RunningX64}
+  !ifdef WIN64
+    SetRegView 64
+  !else
+    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 '$(WZ_64BIT_AVAILABLE)' IDYES installanyway
+    Quit
+  installanyway:
+  !endif
+  ${Else}
+  !ifdef WIN64
+    MessageBox MB_OK|MB_ICONSTOP '$(WZ_64BIT_INSTALL_32BIT_AVAILABLE)'
+    Quit
+  !endif
+  ${EndIf}
+  
+  !ifdef WINARM64
+    ;Add a warning for the common case (when accidentally downloading the ARM64 build on an x86/x64 machine)
+    ${If} ${IsNativeAMD64}
+    ${OrIf} ${IsNativeIA32}
+      MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 '$(WZ_ARM64_INSTALL_NON_ARM64)' IDYES installarm64anyway
+      Quit
+    installarm64anyway:
+    ${EndIf}
+  !endif
 
-!ifdef PORTABLE
- System::Call "kernel32::GetCurrentDirectory(i ${NSIS_MAX_STRLEN}, t .r0)"
- GetFullPathName $0 "$0\"
- StrCpy $INSTDIR "$0${PACKAGE_NAME}-${PACKAGE_VERSION}\"
-!endif
+  !ifndef PORTABLE
+    ${If} $INSTDIR == "" ; Don't override setup.exe /D=c:\custom_dir
+    ;manually set $INSTDIR for 64-bit builds
+    !ifdef WIN64
+      StrCpy $INSTDIR "$PROGRAMFILES64\${PACKAGE_NAME}-${PACKAGE_VERSION}"
+    !else
+      StrCpy $INSTDIR "$PROGRAMFILES\${PACKAGE_NAME}-${PACKAGE_VERSION}"
+    !endif
+    ${EndIf}
+  !else
+    ;PORTABLE build
+    System::Call "kernel32::GetCurrentDirectory(i ${NSIS_MAX_STRLEN}, t .r0)"
+    GetFullPathName $0 "$0\"
+    StrCpy $INSTDIR "$0${PACKAGE_NAME}-${PACKAGE_VERSION}\"
+  !endif
 FunctionEnd
 
 !ifndef INSTALLVIDS
@@ -672,15 +729,16 @@ Function .onInstSuccess
   !ifdef MSVCRUNTIME
     ${If} $MSVCRT16_NeedsReboot <> 0
       ; Needs a reboot
-      MessageBox MB_YESNO|MB_ICONQUESTION "A reboot is needed to finish the installation. Do you wish to reboot the system now?" IDNO NoReboot
+      MessageBox MB_YESNO|MB_ICONQUESTION "$(TEXT_PromptRebootNeeded)" IDNO NoReboot
       Reboot
       NoReboot:
     ${EndIf}
   !endif
+  ExecShell "open" "https://warzone2100.github.io/update-data/redirect/afterinstall.html"
 FunctionEnd
 
 Function .onRebootFailed
-  MessageBox MB_OK|MB_ICONSTOP "Reboot failed. Please reboot manually." /SD IDOK
+  MessageBox MB_OK|MB_ICONSTOP "$(TEXT_MsgRebootFailed)" /SD IDOK
 FunctionEnd
 
 ;--------------------------------
@@ -769,5 +827,13 @@ Function un.onInit
   !verbose push
   !verbose push
   !insertmacro MUI_UNGETLANGUAGE
+
+  !ifdef WIN64
+    SetRegView 64
+  !else
+    ${If} ${RunningX64}
+    SetRegView 32
+    ${EndIf}
+  !endif
 FunctionEnd
 !endif

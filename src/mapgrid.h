@@ -46,6 +46,9 @@ GridList const &gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t
 /// Find all objects within radius where object->type == OBJ_DROID && object->player == player.
 GridList const &gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player);
 
+/// Find all objects within radius where (object->type == OBJ_DROID && !object->died)
+GridList const &gridStartIterateRepairCandidates(int32_t x, int32_t y, uint32_t radius, int player);
+
 // Used for visibility.
 /// Find all objects within radius where object->seenThisTick[player] != 255.
 GridList const &gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player);

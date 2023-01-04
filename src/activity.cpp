@@ -24,7 +24,11 @@
 #include "multiint.h"
 #include "mission.h"
 #include "challenge.h"
+#include "modding.h"
 #include <algorithm>
+#include <mutex>
+
+#include <SQLiteCpp/SQLiteCpp.h>
 
 std::string ActivitySink::getTeamDescription(const ActivitySink::SkirmishGameInfo& info)
 {
@@ -43,7 +47,12 @@ std::string ActivitySink::getTeamDescription(const ActivitySink::SkirmishGameInf
 		}
 		else if (p.ai == AI_OPEN)
 		{
-			if (!p.allocated)
+			if (p.isSpectator)
+			{
+				// spectator slot - skip
+				continue;
+			}
+			else if (!p.allocated)
 			{
 				// available slot - count team association
 				// (since available slots can have assigned teams)
@@ -99,6 +108,12 @@ std::string to_string(const END_GAME_STATS_DATA& stats)
 
 class LoggingActivitySink : public ActivitySink {
 public:
+	// navigating main menus
+	virtual void navigatedToMenu(const std::string& menuName) override
+	{
+		debug(LOG_ACTIVITY, "- navigatedToMenu: %s", menuName.c_str());
+	}
+
 	// campaign games
 	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) override
 	{
@@ -163,7 +178,187 @@ public:
 	{
 		debug(LOG_ACTIVITY, "- cheatUsed: %s", cheatName.c_str());
 	}
+
+	// loaded mods changed
+	virtual void loadedModsChanged(const std::vector<Sha256>& loadedModHashes) override
+	{
+		debug(LOG_ACTIVITY, "- loadedModsChanged: %s", modListToStr(loadedModHashes).c_str());
+	}
+
+	// game exit
+	virtual void gameExiting() override
+	{
+		debug(LOG_ACTIVITY, "- game exiting");
+	}
+
+private:
+	std::string modListToStr(const std::vector<Sha256>& modHashes) const
+	{
+		if (modHashes.empty())
+		{
+			return "[no mods]";
+		}
+		std::string result = "[" + std::to_string(modHashes.size()) + " mods]:";
+		for (auto& modHash : modHashes)
+		{
+			result += std::string(" ") + modHash.toString();
+		}
+		return result;
+	}
 };
+
+ActivityDBProtocol::~ActivityDBProtocol()
+{ }
+
+// Should be thread-safe
+class ActivityDatabase : public ActivityDBProtocol
+{
+private:
+	#define FIRST_LAUNCH_DATE_KEY "first_launch"
+public:
+	// Caller is expected to handle thrown exceptions
+	ActivityDatabase(const std::string& activityDatabasePath)
+	{
+		db = std::unique_ptr<SQLite::Database>(new SQLite::Database(activityDatabasePath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE));
+		db->exec("PRAGMA journal_mode=WAL");
+		createTables();
+		query_findValueByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT value FROM general_kv_storage WHERE name = ?"));
+		query_insertValueForName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO general_kv_storage(name, value) VALUES(?, ?)"));
+		query_updateValueForName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE general_kv_storage SET value = ? WHERE name = ?"));
+	}
+public:
+	// Must be thread-safe
+	virtual std::string getFirstLaunchDate() const override
+	{
+		auto result = getValue(FIRST_LAUNCH_DATE_KEY);
+		ASSERT_OR_RETURN("", result.has_value(), "Should always be initialized");
+		return result.value();
+	}
+
+private:
+	// Must be thread-safe
+	optional<std::string> getValue(const std::string& name) const
+	{
+		if (name.empty())
+		{
+			return nullopt;
+		}
+
+		std::lock_guard<std::mutex> guard(db_mutex);
+
+		optional<std::string> result;
+		try {
+			query_findValueByName->bind(1, name);
+			if (query_findValueByName->executeStep())
+			{
+				result = query_findValueByName->getColumn(0).getString();
+			}
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failure to query database for key; error: %s", e.what());
+			result = nullopt;
+		}
+		try {
+			query_findValueByName->reset();
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failed to reset prepared statement; error: %s", e.what());
+		}
+		return result;
+	}
+
+	// Must be thread-safe
+	bool setValue(std::string const &name, std::string const& value)
+	{
+		if (name.empty())
+		{
+			return false;
+		}
+
+		std::lock_guard<std::mutex> guard(db_mutex);
+
+		try {
+			// Begin transaction
+			SQLite::Transaction transaction(*db);
+
+			query_insertValueForName->bind(1, name);
+			query_insertValueForName->bind(2, value);
+			if (query_insertValueForName->exec() == 0)
+			{
+				query_updateValueForName->bind(1, value);
+				query_updateValueForName->bind(2, name);
+				if (query_updateValueForName->exec() == 0)
+				{
+					debug(LOG_WARNING, "Failed to update value for key (%s)", name.c_str());
+				}
+				query_updateValueForName->reset();
+			}
+			query_insertValueForName->reset();
+
+			// Commit transaction
+			transaction.commit();
+			return true;
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Update / insert failed; error: %s", e.what());
+			// continue on to try to reset prepared statements
+		}
+
+		try {
+			query_updateValueForName->reset();
+			query_insertValueForName->reset();
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failed to reset prepared statement; error: %s", e.what());
+		}
+		return false;
+	}
+
+private:
+	void createTables()
+	{
+		SQLite::Transaction transaction(*db);
+		if (!db->tableExists("general_kv_storage"))
+		{
+			db->exec("CREATE TABLE general_kv_storage (local_id INTEGER PRIMARY KEY, name TEXT UNIQUE, value TEXT)");
+		}
+		// initialize first launch date if it doesn't exist
+		db->exec("INSERT OR IGNORE INTO general_kv_storage(name, value) VALUES(\"" FIRST_LAUNCH_DATE_KEY "\", date('now'))");
+		transaction.commit();
+	}
+
+private:
+	mutable std::mutex db_mutex;
+	std::unique_ptr<SQLite::Database> db; // Must be the first-listed SQLite member variable so it is destructed last
+	std::unique_ptr<SQLite::Statement> query_findValueByName;
+	std::unique_ptr<SQLite::Statement> query_insertValueForName;
+	std::unique_ptr<SQLite::Statement> query_updateValueForName;
+};
+
+ActivityManager::ActivityManager()
+{
+	ASSERT_OR_RETURN(, PHYSFS_isInit() != 0, "PHYSFS must be initialized before the ActivityManager is created");
+}
+
+void ActivityManager::_initializeDB()
+{
+	ASSERT_OR_RETURN(, activityDatabase == nullptr, "DB already initialized?");
+	ASSERT_OR_RETURN(, PHYSFS_isInit() != 0, "PHYSFS must be initialized before the ActivityManager is created");
+	// init ActivityDatabase
+	const char *pWriteDir = PHYSFS_getWriteDir();
+	ASSERT(pWriteDir != nullptr, "PHYSFS_getWriteDir returned null");
+	if (pWriteDir)
+	{
+		std::string statsDBPath = std::string(pWriteDir) + "/" + "stats.db";
+		try {
+			activityDatabase = std::make_shared<ActivityDatabase>(statsDBPath);
+		}
+		catch (std::exception& e) {
+			// error loading SQLite database
+			debug(LOG_ERROR, "Unable to load or initialize SQLite3 database (%s); error: %s", statsDBPath.c_str(), e.what());
+		}
+	}
+}
 
 ActivityManager& ActivityManager::instance()
 {
@@ -173,6 +368,7 @@ ActivityManager& ActivityManager::instance()
 
 bool ActivityManager::initialize()
 {
+	_initializeDB();
 	addActivitySink(std::make_shared<LoggingActivitySink>());
 	return true;
 }
@@ -181,6 +377,9 @@ void ActivityManager::shutdown()
 {
 	// Free up the activity sinks
 	activitySinks.clear();
+
+	// Close activityDatabase
+	activityDatabase.reset();
 }
 
 void ActivityManager::addActivitySink(std::shared_ptr<ActivitySink> sink)
@@ -190,7 +389,7 @@ void ActivityManager::addActivitySink(std::shared_ptr<ActivitySink> sink)
 
 void ActivityManager::removeActivitySink(const std::shared_ptr<ActivitySink>& sink)
 {
-	activitySinks.erase(std::remove(activitySinks.begin(), activitySinks.end(), sink));
+	activitySinks.erase(std::remove(activitySinks.begin(), activitySinks.end(), sink), activitySinks.end());
 }
 
 ActivitySink::GameMode ActivityManager::getCurrentGameMode() const
@@ -229,9 +428,9 @@ void ActivityManager::startingSavedGame()
 	ActivitySink::GameMode mode = currentGameTypeToMode();
 	bEndedCurrentMission = false;
 
-	if (mode == ActivitySink::GameMode::SKIRMISH)
+	if (mode == ActivitySink::GameMode::SKIRMISH || (mode == ActivitySink::GameMode::MULTIPLAYER && NETisReplay()))
 	{
-		// synthesize an "update multiplay game data" call on skirmish save game load
+		// synthesize an "update multiplay game data" call on skirmish save game load (or loading MP replay)
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, false);
 	}
 
@@ -332,6 +531,13 @@ void ActivityManager::preSystemShutdown()
 		// quitGame was never generated - synthesize it
 		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
 	}
+
+	for (auto sink : activitySinks) { sink->gameExiting(); }
+}
+
+void ActivityManager::navigateToMenu(const std::string& menuName)
+{
+	for (auto sink : activitySinks) { sink->navigatedToMenu(menuName); }
 }
 
 void ActivityManager::beginLoadingSettings()
@@ -355,6 +561,18 @@ void ActivityManager::endLoadingSettings()
 void ActivityManager::cheatUsed(const std::string& cheatName)
 {
 	for (auto sink : activitySinks) { sink->cheatUsed(cheatName); }
+}
+
+// mods reloaded / possibly changed
+void ActivityManager::rebuiltSearchPath()
+{
+	auto newLoadedModHashes = getModHashList();
+	if (!lastLoadedMods.has_value() || newLoadedModHashes != lastLoadedMods.value())
+	{
+		// list of loaded mods changed!
+		for (auto sink : activitySinks) { sink->loadedModsChanged(newLoadedModHashes); }
+		lastLoadedMods = newLoadedModHashes;
+	}
 }
 
 // called when a joinable multiplayer game is hosted
@@ -474,17 +692,23 @@ void ActivityManager::joinedLobbyQuit()
 }
 
 // for skirmish / multiplayer, provide additional data / state
-void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const MULTIPLAYERINGAME& ingame, optional<bool> privateGame)
+void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, const MULTIPLAYERINGAME& multiInGame, optional<bool> privateGame)
 {
-	uint8_t maxPlayers = game.maxPlayers;
+	uint8_t maxPlayers = multiGame.maxPlayers;
 	uint8_t numAIBotPlayers = 0;
 	uint8_t numHumanPlayers = 0;
 	uint8_t numAvailableSlots = 0;
+	uint8_t numSpectators = 0;
+	uint8_t numOpenSpectatorSlots = 0;
 
-	for (size_t index = 0; index < std::min<size_t>(MAX_PLAYERS, (size_t)game.maxPlayers); ++index)
+	for (size_t index = 0; index < std::min<size_t>(MAX_PLAYERS, (size_t)multiGame.maxPlayers); ++index)
 	{
 		PLAYER const &p = NetPlay.players[index];
 		if (p.ai == AI_CLOSED)
+		{
+			--maxPlayers;
+		}
+		else if (p.isSpectator)
 		{
 			--maxPlayers;
 		}
@@ -512,24 +736,41 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const
 		}
 	}
 
-	ActivitySink::MultiplayerGameInfo::AllianceOption alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::NO_ALLIANCES;
-	if (game.alliance == ::AllianceType::ALLIANCES)
+	for (const auto& slot : NetPlay.players)
 	{
-		alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES;
+		if (slot.isSpectator)
+		{
+			if (!slot.allocated)
+			{
+				++numOpenSpectatorSlots;
+			}
+			else
+			{
+				++numSpectators;
+			}
+		}
 	}
-	else if (game.alliance == ::AllianceType::ALLIANCES_TEAMS)
+
+	ActivitySink::MultiplayerGameInfo::AllianceOption alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::NO_ALLIANCES;
+	if (multiGame.alliance == ::AllianceType::ALLIANCES)
 	{
-		alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_TEAMS;
+		alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES;
 	}
-	else if (game.alliance == ::AllianceType::ALLIANCES_UNSHARED)
+	else if (multiGame.alliance == ::AllianceType::ALLIANCES_TEAMS)
 	{
-		alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_UNSHARED;
+		alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_TEAMS;
 	}
-	currentMultiplayGameInfo.alliances = alliances;
+	else if (multiGame.alliance == ::AllianceType::ALLIANCES_UNSHARED)
+	{
+		alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_UNSHARED;
+	}
+	currentMultiplayGameInfo.alliances = alliancesOpt;
 
 	currentMultiplayGameInfo.maxPlayers = maxPlayers; // accounts for closed slots
 	currentMultiplayGameInfo.numHumanPlayers = numHumanPlayers;
 	currentMultiplayGameInfo.numAvailableSlots = numAvailableSlots;
+	currentMultiplayGameInfo.numSpectators = numSpectators;
+	currentMultiplayGameInfo.numOpenSpectatorSlots = numOpenSpectatorSlots;
 	// NOTE: privateGame will currently only be up-to-date for the host
 	// for a joined client, it will reflect the passworded state at the time of join
 	if (privateGame.has_value())
@@ -537,24 +778,30 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const
 		currentMultiplayGameInfo.privateGame = privateGame.value();
 	}
 
-	currentMultiplayGameInfo.game = game;
+	currentMultiplayGameInfo.game = multiGame;
 	currentMultiplayGameInfo.numAIBotPlayers = numAIBotPlayers;
 	currentMultiplayGameInfo.currentPlayerIdx = selectedPlayer;
 	currentMultiplayGameInfo.players = NetPlay.players;
-	currentMultiplayGameInfo.players.resize(game.maxPlayers);
+	currentMultiplayGameInfo.players.resize(multiGame.maxPlayers);
+	currentMultiplayGameInfo.hostPlayer = NetPlay.hostPlayer;
 
-	currentMultiplayGameInfo.limit_no_tanks = (ingame.flags & MPFLAGS_NO_TANKS) != 0;
-	currentMultiplayGameInfo.limit_no_cyborgs = (ingame.flags & MPFLAGS_NO_CYBORGS) != 0;
-	currentMultiplayGameInfo.limit_no_vtols = (ingame.flags & MPFLAGS_NO_VTOLS) != 0;
-	currentMultiplayGameInfo.limit_no_uplink = (ingame.flags & MPFLAGS_NO_UPLINK) != 0;
-	currentMultiplayGameInfo.limit_no_lassat = (ingame.flags & MPFLAGS_NO_LASSAT) != 0;
-	currentMultiplayGameInfo.force_structure_limits = (ingame.flags & MPFLAGS_FORCELIMITS) != 0;
+	currentMultiplayGameInfo.limit_no_tanks = (multiInGame.flags & MPFLAGS_NO_TANKS) != 0;
+	currentMultiplayGameInfo.limit_no_cyborgs = (multiInGame.flags & MPFLAGS_NO_CYBORGS) != 0;
+	currentMultiplayGameInfo.limit_no_vtols = (multiInGame.flags & MPFLAGS_NO_VTOLS) != 0;
+	currentMultiplayGameInfo.limit_no_uplink = (multiInGame.flags & MPFLAGS_NO_UPLINK) != 0;
+	currentMultiplayGameInfo.limit_no_lassat = (multiInGame.flags & MPFLAGS_NO_LASSAT) != 0;
+	currentMultiplayGameInfo.force_structure_limits = (multiInGame.flags & MPFLAGS_FORCELIMITS) != 0;
 
-	currentMultiplayGameInfo.structureLimits = ingame.structureLimits;
+	currentMultiplayGameInfo.structureLimits = multiInGame.structureLimits;
+
+	currentMultiplayGameInfo.isReplay = NETisReplay();
 
 	if (currentMode == ActivitySink::GameMode::JOINING_IN_PROGRESS || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
-		currentMultiplayGameInfo.hostName = currentMultiplayGameInfo.players[0].name; // host is always player index 0?
+		if (currentMultiplayGameInfo.hostPlayer < currentMultiplayGameInfo.players.size())
+		{
+			currentMultiplayGameInfo.hostName = currentMultiplayGameInfo.players[currentMultiplayGameInfo.hostPlayer].name;
+		}
 	}
 
 	if (currentMode == ActivitySink::GameMode::HOSTING_IN_LOBBY || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)

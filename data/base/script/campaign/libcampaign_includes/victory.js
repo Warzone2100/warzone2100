@@ -3,17 +3,19 @@
 // Victory celebration helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camNextLevel(next level)
+//;; ## camNextLevel(nextLevel)
 //;;
-//;; A wrapper around ```loadLevel()```. Remembers to give bonus power
-//;; for completing the mission faster.
+//;; A wrapper around `loadLevel()`. Remembers to give bonus power for completing the mission faster.
+//;;
+//;; @param {string} nextLevel
+//;; @returns {void}
 //;;
 function camNextLevel(nextLevel)
 {
 	if (__camNeedBonusTime)
 	{
 		var bonusTime = getMissionTime();
-		if (difficulty === EASY || difficulty === MEDIUM)
+		if (difficulty <= MEDIUM)
 		{
 			bonusTime = Math.floor(bonusTime * 0.75);
 		}
@@ -44,50 +46,44 @@ function camNextLevel(nextLevel)
 
 //;; ## camSetStandardWinLossConditions(kind, nextLevel, data)
 //;;
-//;; Set victory and defeat conditions to one of the common
-//;; options. On victory, load nextLevel. The extra data parameter
-//;; contains extra data required to define some of the victory
-//;; conditions. The following options are available:
-//;;
-//;; * ```CAM_VICTORY_STANDARD``` Defeat if all ground factories
-//;; 	and construction droids are lost, or on mission timeout.
-//;; 	Victory when all enemies are destroyed and all artifacts
-//;; 	are recovered.
-//;; * ```CAM_VICTORY_PRE_OFFWORLD``` Defeat on timeout. Victory on
-//;; 	transporter launch, then load the sub-level.
-//;; * ```CAM_VICTORY_OFFWORLD``` Defeat on timeout or all units lost.
-//;; 	Victory when all artifacts are recovered and either all enemies
-//;; 	are dead (not just bases) or all droids are at the LZ.
-//;; 	Also automatically handles the "LZ compromised" message,
-//;; 	which is why it needs to know reinforcement interval to restore.
-//;; 	The following data parameter fields are available:
-//;;   * ```area``` The landing zone to return to.
-//;;   * ```message``` The "Return to LZ" message ID. Optional.
-//;;   * ```reinforcements``` Reinforcements interval, in seconds.
+//;; Set victory and defeat conditions to one of the common options. On victory, load nextLevel.
+//;; The extra data parameter contains extra data required to define some of the victory conditions.
+//;; The following options are available:
+//;; * `CAM_VICTORY_STANDARD` Defeat if all ground factories and construction droids are lost, or on mission timeout.
+//;;   Victory when all enemies are destroyed and all artifacts are recovered.
+//;; * `CAM_VICTORY_PRE_OFFWORLD` Defeat on timeout. Victory on transporter launch, then load the sub-level.
+//;; * `CAM_VICTORY_OFFWORLD` Defeat on timeout or all units lost.
+//;;   Victory when all artifacts are recovered and either all enemies are dead (not just bases) or all droids are at the LZ.
+//;;   Also automatically handles the "LZ compromised" message, which is why it needs to know reinforcement interval to restore.
+//;;   The following data parameter fields are available:
+//;;   * `area` The landing zone to return to.
+//;;   * `message` The "Return to LZ" message ID. Optional.
+//;;   * `reinforcements` Reinforcements interval, in seconds.
 //;; For standard and offworld victory, some extra data parameters can be defined:
-//;; * ```callback``` A function callback to check for extra win/loss
-//;; 		conditions. Return values are interpreted as follows:
-//;;   * __false__ means instant defeat ("objective failed"),
-//;;   * __true__ means victory as long as other standard victory
-//;; 		conditions are met,
-//;;   * __undefined__ means suppress
-//;; 		other victory checks ("clearly not won yet").
-//;; * ```victoryVideo``` Pass in the name of a video string here
-//;;			and it will be played before attempting to load the next level.
+//;; * `callback` A function callback to check for extra win/loss conditions. Return values are interpreted as follows:
+//;;   * `false` means instant defeat ("objective failed"),
+//;;   * `true` means victory as long as other standard victory conditions are met,
+//;;   * `undefined` means suppress other victory checks ("clearly not won yet").
+//;; * `victoryVideo` Pass in the name of a video string here and it will be played before attempting to load the next level.
 //;; For offworld victory, some more extra data parameters can be defined:
-//;; * ```retlz``` Force the player to return to the LZ area:
-//;;   * __false__ mission does not require a LZ return,
-//;;   * __true__ mission requires all units to be at LZ to win.
-//;; * ```annihilate``` Player must destroy every thing on map to win:
-//;;   * __false__ mission does not require everything destroyed,
-//;;   * __true__ mission requires total map annihilation.
-//;; * ```eliminateBases``` Instant win when all enemy units and bases are destroyed:
-//;;   * __false__ does not require all bases to be destroyed,
-//;;   * __true__ requires all bases destroyed.
+//;; * `retlz` Force the player to return to the LZ area:
+//;;   * `false` mission does not require a LZ return,
+//;;   * `true` mission requires all units to be at LZ to win.
+//;; * `annihilate` Player must destroy every thing on map to win:
+//;;   * `false` mission does not require everything destroyed,
+//;;   * `true` mission requires total map annihilation.
+//;; * `eliminateBases` Instant win when all enemy units and bases are destroyed:
+//;;   * `false` does not require all bases to be destroyed,
+//;;   * `true` requires all bases destroyed.
+//;;
+//;; @param {string} kind
+//;; @param {string} nextLevel
+//;; @param {Object} data
+//;; @returns {void}
 //;;
 function camSetStandardWinLossConditions(kind, nextLevel, data)
 {
-	switch(kind)
+	switch (kind)
 	{
 		case CAM_VICTORY_STANDARD:
 			__camWinLossCallback = CAM_VICTORY_STANDARD;
@@ -108,7 +104,6 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
 			setReinforcementTime(__camVictoryData.reinforcements);
-			__camSetOffworldLimits();
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_TIMEOUT:
@@ -126,7 +121,12 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 	__camNextLevel = nextLevel;
 }
 
-//Checks for extra win conditions defined in level scripts, if any.
+//;; ## camCheckExtraObjective()
+//;;
+//;; Checks for extra win conditions defined in level scripts being met, if any.
+//;;
+//;; @returns {boolean|undefined}
+//;;
 function camCheckExtraObjective()
 {
 	var extraObjMet = true;
@@ -150,11 +150,29 @@ function camCheckExtraObjective()
 	return extraObjMet;
 }
 
-//Message(s) the mission script can set to further explain specific victory conditions.
-//Allows a single string or an array of strings.
+//;; ## camSetExtraObjectiveMessage(message)
+//;;
+//;; Message(s) the mission script can set to further explain specific victory conditions.
+//;; Allows a single string or an array of strings.
+//;;
+//;; @param {string|Object[]} message
+//;; @returns {void}
+//;;
 function camSetExtraObjectiveMessage(message)
 {
 	__camExtraObjectiveMessage = message;
+}
+
+//;; ## camClearConsoleOnVictoryMessage(clear)
+//;;
+//;; If the script wants to allow `__camSetupConsoleForVictoryConditions()` to clear the console.
+//;;
+//;; @param {boolean} clear
+//;; @returns {void}
+//;;
+function camClearConsoleOnVictoryMessage(clear)
+{
+	__camAllowVictoryMsgClear = clear;
 }
 
 //////////// privates
@@ -180,7 +198,7 @@ function __camGameWon()
 	if (camDef(__camNextLevel))
 	{
 		camTrace(__camNextLevel);
-		if (__camNextLevel === "GAMMA_OUT")
+		if (__camNextLevel === CAM_GAMMA_OUT)
 		{
 			gameOverMessage(true, false, true);
 			return;
@@ -200,9 +218,9 @@ function __camGameWon()
 function __camPlayerDead()
 {
 	var dead = true;
-	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter(function(obj) {
-		return obj.status === BUILT;
-	}).length > 0;
+	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter((obj) => (
+		obj.status === BUILT
+	)).length > 0;
 
 	if (haveFactories)
 	{
@@ -237,11 +255,11 @@ function __camPlayerDead()
 	else
 	{
 		//Check the transporter.
-		var transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER);
+		var transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER);
 		if (transporter.length > 0)
 		{
 			var cargoDroids = enumCargo(transporter[0]);
-			for (var i = 0, len = cargoDroids.length; i < len; ++i)
+			for (let i = 0, len = cargoDroids.length; i < len; ++i)
 			{
 				var virDroid = cargoDroids[i];
 				if (camDef(virDroid) && virDroid && virDroid.droidType === DROID_CONSTRUCT)
@@ -257,14 +275,27 @@ function __camPlayerDead()
 	{
 		//Make the mission fail if no units are alive on map while having no factories.
 		var droidCount = 0;
-		enumDroid(CAM_HUMAN_PLAYER).forEach(function(obj) {
-			droidCount += 1;
-			if (obj.droidType === DROID_TRANSPORTER)
+		enumDroid(CAM_HUMAN_PLAYER).forEach((obj) => {
+			if (obj.droidType === DROID_SUPERTRANSPORTER)
 			{
+				//Don't count the transporter itself. This is for the case where
+				//they have no units and no factories and have the transporter
+				//sitting at base unable to launch.
 				droidCount += enumCargo(obj).length;
+			}
+			else
+			{
+				droidCount += 1;
 			}
 		});
 		dead = droidCount <= 0 && !haveFactories;
+
+		//Finish Beta-end early if they have no units and factories on Easy/Normal.
+		if (dead && (difficulty <= MEDIUM) && (__camNextLevel === "CAM_3A"))
+		{
+			cam_eventMissionTimeout(); //Early victory trigger
+			return false;
+		}
 	}
 
 	return dead;
@@ -276,9 +307,9 @@ function __camTriggerLastAttack()
 	{
 		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 		// Do not order systems (sensor/trucks/repairs) to attack stuff.
-		enemies = enemies.filter(function(obj) {
-			return ((obj.type === DROID) && !camIsTransporter(obj) && !camIsSystemDroid(obj));
-		});
+		enemies = enemies.filter((obj) => (
+			obj.type === DROID && !camIsTransporter(obj) && !camIsSystemDroid(obj)
+		));
 		camTrace(enemies.length, "enemy droids remaining");
 		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
 		__camLastAttackTriggered = true;
@@ -300,7 +331,6 @@ function __camVictoryStandard()
 		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
 		{
 			__camGameWon();
-			return;
 		}
 		else
 		{
@@ -314,7 +344,6 @@ function __camVictoryPreOffworld()
 	if (__camPlayerDead())
 	{
 		__camGameLost();
-		return;
 	}
 	// victory hooked from eventTransporterExit
 }
@@ -324,7 +353,6 @@ function __camVictoryTimeout()
 	if (__camPlayerDead())
 	{
 		__camGameLost();
-		return;
 	}
 	// victory hooked from eventMissionTimeout
 }
@@ -353,10 +381,9 @@ function __camVictoryOffworld()
 		{
 			if (camAllEnemyBasesEliminated())
 			{
-				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
-					return obj.type === DROID;
-				}).length;
-
+				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter((obj) => (
+					obj.type === DROID
+				)).length;
 
 				if (!enemyDroids)
 				{
@@ -389,9 +416,9 @@ function __camVictoryOffworld()
 			}
 
 			//Make sure to only count droids here.
-			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-				return (obj.type === DROID && !camIsTransporter(obj));
-			}).length;
+			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter((obj) => (
+				obj.type === DROID && !camIsTransporter(obj)
+			)).length;
 			if (((!forceLZ && !destroyAll) || (forceLZ && destroyAll && !enemyLen) || (forceLZ && !destroyAll)) && (atlz === total))
 			{
 				__camGameWon();
@@ -427,6 +454,11 @@ function __camVictoryOffworld()
 	if (enumArea(lz, ENEMIES, false).length > 0)
 	{
 		const REMIND_COMPROMISED = 30; // every X seconds
+		//Protect against early access to reinforcements GUI if it shouldn't be available yet
+		if (__camVictoryData.reinforcements >= 0)
+		{
+			setReinforcementTime(LZ_COMPROMISED_TIME);
+		}
 		if (__camLZCompromisedTicker === 0)
 		{
 			camTrace("LZ compromised");
@@ -435,7 +467,6 @@ function __camVictoryOffworld()
 		{
 			var pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);
-			setReinforcementTime(LZ_COMPROMISED_TIME);
 		}
 		++__camLZCompromisedTicker;
 		if (__camRTLZTicker === 0)
@@ -457,22 +488,50 @@ function __camVictoryOffworld()
 	}
 }
 
-function __camShowVictoryConditions(forceMessage)
+function __camSetupConsoleForVictoryConditions()
 {
-	if (!camDef(forceMessage))
+	// Console clears are only done when collecting artifacts or destroying bases.
+	if (__camAllowVictoryMsgClear)
 	{
-		if (__camVictoryMessageThrottle + camSecondsToMilliseconds(10) > gameTime)
+		clearConsole();
+	}
+
+	queue("__camShowVictoryConditions", camSecondsToMilliseconds(0.5));
+}
+
+function __camShowBetaHint()
+{
+	return ((camDiscoverCampaign() === BETA_CAMPAIGN_NUMBER) && (difficulty === HARD || difficulty === INSANE));
+}
+
+function __camShowBetaHintEarly()
+{
+	if (!camDef(__camWinLossCallback) || (__camWinLossCallback !== CAM_VICTORY_PRE_OFFWORLD))
+	{
+		return;
+	}
+
+	if (__camShowBetaHint())
+	{
+		__camShowVictoryConditions();
+	}
+}
+
+function __camShowVictoryConditions()
+{
+	if (!camDef(__camNextLevel))
+	{
+		return; // fastplay / tutorial. Should be a better identifier for this.
+	}
+
+	if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
+	{
+		if (__camShowBetaHint())
 		{
-			return;
+			console(_("Hard / Insane difficulty hint:"));
+			console(_("Fortify a strong base across the map to protect yourself from the Collective"));
 		}
-		if (!camDef(__camNextLevel))
-		{
-			return; // fastplay / tutorial. Should be a better identifier for this.
-		}
-		if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
-		{
-			return; // do not need this on these missions.
-		}
+		return; // do not need this on these missions.
 	}
 
 	const ANNIHILATE_MESSAGE = _("Destroy all enemy units and structures");
@@ -480,7 +539,7 @@ function __camShowVictoryConditions(forceMessage)
 	var unitsOnMap = 0;
 	var structuresOnMap = 0;
 
-	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach(function(obj) {
+	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach((obj) => {
 		if (obj.type === DROID)
 		{
 			++unitsOnMap;
@@ -527,7 +586,7 @@ function __camShowVictoryConditions(forceMessage)
 	{
 		if (__camExtraObjectiveMessage instanceof Array)
 		{
-			for (var i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
+			for (let i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
 			{
 				var mes = __camExtraObjectiveMessage[i];
 				console(mes);
@@ -538,6 +597,4 @@ function __camShowVictoryConditions(forceMessage)
 			console(__camExtraObjectiveMessage);
 		}
 	}
-
-	__camVictoryMessageThrottle = gameTime;
 }

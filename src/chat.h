@@ -33,7 +33,8 @@ struct InGameChatMessage
 
 	InGameChatMessage(uint32_t messageSender, char const *messageText);
 	void send();
-	void addPlayerByPosition(uint32_t position);
+	void addReceiverByPosition(uint32_t playerPosition);
+	void addReceiverByIndex(uint32_t playerIndex);
 
 private:
 	std::set<uint32_t> toPlayers;
@@ -45,6 +46,8 @@ private:
 	void sendToHumanPlayers();
 	void sendToAiPlayers();
 	void sendToAiPlayer(uint32_t receiver);
+	void sendToSpectators();
+	void enqueueSpectatorMessage(NETQUEUE queue, char const* formattedMsg);
 };
 
 #endif // __INCLUDED_SRC_CHAT_H__

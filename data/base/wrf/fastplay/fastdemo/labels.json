@@ -114,6 +114,12 @@
 		"pos1": [2432, 1536],
 		"pos2": [3712, 3584]
 	},
+	"area_14": {
+		"label": "factory3TriggerInstant",
+		"subscriber": 0,
+		"pos1": [5632, 4608],
+		"pos2": [6912, 4992]
+	},
 
 	"object_0": {
 		"label": "base1Factory",
@@ -150,6 +156,12 @@
 		"id": 649,
 		"player": 0,
 		"type": 2
+	},
+	"object_6": {
+		"label": "base1PowerGenerator",
+		"id": 229,
+		"player": 7,
+		"type": 1
 	},
 
 	"radius_0": {

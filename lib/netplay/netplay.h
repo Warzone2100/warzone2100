@@ -27,10 +27,12 @@
 #define _netplay_h
 
 #include "lib/framework/crc.h"
+#include "src/factionid.h"
 #include "nettypes.h"
 #include <physfs.h>
 #include <vector>
 #include <functional>
+#include <memory>
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -69,6 +71,7 @@ enum MESSAGE_TYPES
 	NET_KICK,                       ///< kick a player .
 	NET_FIREUP,                     ///< campaign game has started, we can go too.. Shortcut message, not to be used in dmatch.
 	NET_COLOURREQUEST,              ///< player requests a colour change.
+	NET_FACTIONREQUEST,             ///< player requests a colour change.
 	NET_AITEXTMSG,                  ///< chat between AIs
 	NET_BEACONMSG,                  ///< place beacon
 	NET_TEAMREQUEST,                ///< request team membership
@@ -92,6 +95,12 @@ enum MESSAGE_TYPES
 	NET_DEBUG_SYNC,                 ///< Synch error messages, so people don't have to use pastebin.
 	NET_VOTE,                       ///< player vote
 	NET_VOTE_REQUEST,               ///< Setup a vote popup
+	NET_SPECTEXTMSG,                ///< chat between spectators
+	NET_PLAYERNAME_CHANGEREQUEST,	///< non-host human player is changing their name.
+	NET_PLAYER_SLOTTYPE_REQUEST,	///< non-host human player is requesting a slot type change, or a host is asking a spectator if they want to play
+	NET_PLAYER_SWAP_INDEX,			///< a host-only message to move a player to another index
+	NET_PLAYER_SWAP_INDEX_ACK,		///< an acknowledgement message from a player whose index is being swapped
+	NET_DATA_CHECK2,				///< Data2 integrity check
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.
@@ -118,7 +127,11 @@ enum MESSAGE_TYPES
 	GAME_DEBUG_REMOVE_FEATURE,      ///< Remove feature.
 	GAME_DEBUG_FINISH_RESEARCH,     ///< Research has been completed.
 	// End of debug messages.
-	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
+	GAME_MAX_TYPE,                  ///< Maximum+1 valid GAME_ type, *MUST* be last.
+
+	// The following messages are used for playing back replays.
+	REPLAY_ENDED					///< A special message for signifying the end of the replay
+	// End of replay messages.
 };
 
 #define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
@@ -126,21 +139,16 @@ enum MESSAGE_TYPES
 #define WZ_SERVER_DISCONNECT 0
 #define WZ_SERVER_CONNECT    1
 #define WZ_SERVER_UPDATE     3
-#define WZ_SERVER_KEEPALIVE  4
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
-#define MaxGames		11			// max number of concurrently playable games to allow.
-#define extra_string_size	159		// extra 199 char for future use
+#define extra_string_size	157		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40
 #define modlist_string_size	255		// For a concatenated list of mods
 #define password_string_size 64		// longer passwords slow down the join code
-
-#define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
-#define MAX_TMP_SOCKETS         16
 
 #define MAX_NET_TRANSFERRABLE_FILE_SIZE	0x8000000
 
@@ -151,7 +159,7 @@ struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
-	int32_t dwUserFlags[4];
+	uint32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, unused, unused)
 };
 
 /**
@@ -171,6 +179,7 @@ struct GAMESTRUCT
 	// NOTE: do NOT save the following items in game.c--it will break savegames.
 	char		secondaryHosts[2][40];
 	char		extra[extra_string_size];		// extra string (future use)
+	uint16_t	hostPort;						// server port
 	char		mapname[map_string_size];		// map server is hosting
 	char		hostname[hostname_string_size];	// ...
 	char		versionstring[StringSize];		//
@@ -204,20 +213,43 @@ struct SYNC_COUNTER
 	uint16_t	rejected;
 };
 
+void physfs_file_safe_close(PHYSFS_file* f);
+
 struct WZFile
 {
-	//WZFile() : handle(nullptr), size(0), pos(0) { hash.setZero(); }
-	WZFile(PHYSFS_file *handle, const std::string &filename, Sha256 hash, uint32_t size = 0) : handle(handle), filename(filename), hash(hash), size(size), pos(0) {}
+public:
+//	WZFile() : handle_(nullptr, physfs_file_safe_close), size(0), pos(0) { hash.setZero(); }
+	WZFile(PHYSFS_file *handle, const std::string &filename, Sha256 hash, uint32_t size = 0) : handle_(handle, physfs_file_safe_close), filename(filename), hash(hash), size(size), pos(0) {}
 
-	PHYSFS_file *handle;
+	~WZFile();
+
+	// Prevent copies
+	WZFile(const WZFile&) = delete;
+	void operator=(const WZFile&) = delete;
+
+	// Allow move semantics
+	WZFile(WZFile&& other) = default;
+	WZFile& operator=(WZFile&& other) = default;
+
+public:
+	bool closeFile();
+	inline PHYSFS_file* handle() const
+	{
+		return handle_.get();
+	}
+
+private:
+	std::unique_ptr<PHYSFS_file, void(*)(PHYSFS_file*)> handle_;
+public:
 	std::string filename;
 	Sha256 hash;
-	uint32_t size;
-	uint32_t pos;  // Current position, the range [0; currPos[ has been sent or received already.
+	uint32_t size = 0;
+	uint32_t pos = 0;  // Current position, the range [0; currPos[ has been sent or received already.
 };
 
 enum class AIDifficulty : int8_t
 {
+	SUPEREASY,
 	EASY,
 	MEDIUM,
 	HARD,
@@ -241,22 +273,51 @@ enum class NET_LOBBY_OPT_FIELD
 // currently controlled player.
 struct PLAYER
 {
-	char                name[StringSize];   ///< Player name
+	char                name[StringSize] = {};   ///< Player name
 	int32_t             position;           ///< Map starting position
 	int32_t             colour;             ///< Which colour slot this player is using
 	bool                allocated;          ///< Allocated as a human player
 	uint32_t            heartattacktime;    ///< Time cardiac arrest started
 	bool                heartbeat;          ///< If we are still alive or not
 	bool                kick;               ///< If we should kick them
-	int32_t             connection;         ///< Index into connection list
-	int32_t             team;               ///< Which team we are on
+	int32_t             team;               ///< Which team we are on (int32_t::max for spectator team)
 	bool                ready;              ///< player ready to start?
 	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
 	AIDifficulty        difficulty;         ///< difficulty level of AI
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
-	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
+	FactionID			faction;			///< which faction the player has
+	bool				isSpectator;		///< whether this slot is a spectator slot
+
+	// used on host-ONLY (not transmitted to other clients):
+	std::shared_ptr<std::vector<WZFile>> wzFiles = std::make_shared<std::vector<WZFile>>();            ///< for each player, we keep track of map/mod download progress
 	char                IPtextAddress[40];  ///< IP of this player
+	bool fileSendInProgress() const
+	{
+		ASSERT_OR_RETURN(false, wzFiles != nullptr, "Null wzFiles");
+		return !wzFiles->empty();
+	}
+
+	void resetAll()
+	{
+		name[0] = '\0';
+		position = -1;
+		colour = 0;
+		allocated = false;
+		heartattacktime = 0;
+		heartbeat = false;
+		kick = false;
+		team = -1;
+		ready = false;
+		ai = 0;
+		difficulty = AIDifficulty::DISABLED;
+		autoGame = false;
+		IPtextAddress[0] = '\0';
+		faction = FACTION_NORMAL;
+		isSpectator = false;
+	}
 };
+
+struct PlayerReference;
 
 // ////////////////////////////////////////////////////////////////////////
 // all the luvly Netplay info....
@@ -265,41 +326,41 @@ struct NETPLAY
 	std::vector<PLAYER>	players;	///< The array of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
-	uint32_t	bComms;			///< Actually do the comms?
+	bool		bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
 	bool		isUPNP;				// if we want the UPnP detection routines to run
 	bool		isUPNP_CONFIGURED;	// if UPnP was successful
 	bool		isUPNP_ERROR;		//If we had a error during detection/config process
 	bool		isHostAlive;	/// if the host is still alive
-	std::vector<WZFile> wzFiles;      ///< Only non-empty during map/mod download.
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
 	bool HaveUpgrade;					// game updates available
 	char MOTDbuffer[255];				// buffer for MOTD
-	char *MOTD;
+	char *MOTD = nullptr;
 
-	NETPLAY()
-	{
-		players.resize(MAX_PLAYERS);
-	}
+	std::vector<std::shared_ptr<PlayerReference>> playerReferences;
+
+	NETPLAY();
 };
 
 struct PLAYER_IP
 {
-	char	pname[40];
-	char	IPAddress[40];
+	char	pname[40] = {};
+	char	IPAddress[40] = {};
 };
-#define MAX_BANS 255
+#define MAX_BANS 1024
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY NetPlay;
 extern SYNC_COUNTER sync_counter;
-extern PLAYER_IP	*IPlist;
+std::vector<PLAYER_IP> NETgetIPBanList();
 // update flags
 extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
+extern bool cliConnectToIpAsSpectator; // = false; (for cli option)
+extern bool netGameserverPortOverride; // = false; (for cli override)
 
 #define ASSERT_HOST_ONLY(failAction) \
 	if (!NetPlay.isHost) \
@@ -333,17 +394,70 @@ size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false); 
 
 void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
+bool NETcanOpenNewSpectatorSlot();
+bool NETopenNewSpectatorSlot();
+bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride = false);
+enum class SpectatorToPlayerMoveResult
+{
+	SUCCESS,
+	NEEDS_SLOT_SELECTION,
+	FAILED
+};
+SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, optional<uint32_t> newPlayerIdx, bool hostOverride = false);
+
+struct SpectatorInfo
+{
+	uint16_t spectatorsJoined = 0;
+	uint16_t totalSpectatorSlots = 0;
+
+	inline uint16_t availableSpectatorSlots() const
+	{
+		if (spectatorsJoined > totalSpectatorSlots)
+		{
+			return 0;
+		}
+		return totalSpectatorSlots - spectatorsJoined;
+	}
+
+	static inline SpectatorInfo fromUint32(uint32_t data)
+	{
+		SpectatorInfo info;
+		info.spectatorsJoined = static_cast<uint16_t>(data >> 16);
+		info.totalSpectatorSlots = static_cast<uint16_t>(data & 0xFFFF);
+		return info;
+	}
+
+	static SpectatorInfo currentNetPlayState();
+
+	inline uint32_t toUint32() const
+	{
+		return static_cast<uint32_t>(spectatorsJoined << 16) | static_cast<uint32_t>(totalSpectatorSlots);
+	}
+
+	inline bool operator==(const SpectatorInfo& other)
+	{
+		return totalSpectatorSlots == other.totalSpectatorSlots
+		&& spectatorsJoined == other.spectatorsJoined;
+	}
+	inline bool operator!=(const SpectatorInfo& other)
+	{
+		return !(*this == other);
+	}
+};
+
+SpectatorInfo NETGameGetSpectatorInfo();
+
 // from netjoin.c
 SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
-int32_t NETgetGameFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
+uint32_t NETgetGameUserFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 bool NEThaltJoining();				// stop new players joining this game
 bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
 bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
-bool NETjoinGame(const char *host, uint32_t port, const char *playername); // join game given with playername
-bool NEThostGame(const char *SessionName, const char *PlayerName,// host a game
-                 SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
+bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool asSpectator = false); // join game given with playername
+bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost, // host a game
+                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
 
@@ -363,14 +477,18 @@ void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
-int NETGetMajorVersion();
-int NETGetMinorVersion();
-void NET_InitPlayer(int i, bool initPosition, bool initTeams = false);
-void NET_InitPlayers(bool initTeams = false);
+uint32_t NETGetMajorVersion();
+uint32_t NETGetMinorVersion();
+void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams = false, bool initSpectator = false);
+void NET_InitPlayers(bool initTeams = false, bool initSpectator = false);
 
 uint8_t NET_numHumanPlayers(void);
 void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
 std::vector<uint8_t> NET_getHumanPlayers(void);
+
+const std::vector<WZFile>& NET_getDownloadingWzFiles();
+void NET_addDownloadingWZFile(WZFile&& newFile);
+void NET_clearDownloadingWZFiles();
 
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);
@@ -401,5 +519,49 @@ typedef uint16_t GameCrcType;  // Truncate CRC of game state to 16 bits, to save
 void resetSyncDebug();                                              ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
 GameCrcType nextDebugSync();                                        ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
 bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
+
+/**
+ * This structure provides read-only access to a player, and can be used to identify players uniquely.
+ *
+ * It holds the player data after the player has disconnected, and it is released automatically by reference counting.
+ **/
+struct PlayerReference
+{
+	PlayerReference(uint32_t index): index(index)
+	{
+	}
+
+	void disconnect()
+	{
+		detached = std::unique_ptr<PLAYER>(new PLAYER(NetPlay.players[index]));
+		detached->wzFiles = std::make_shared<std::vector<WZFile>>();
+	}
+
+	PLAYER const *operator ->() const
+	{
+		return detached? detached.get(): &NetPlay.players[index];
+	}
+
+	bool isHost() const
+	{
+		return index == NetPlay.hostPlayer;
+	}
+
+	bool isDetached() const
+	{
+		return detached != nullptr;
+	}
+
+	// Generally prefer to use the -> operator!
+	// (This is only safe if isDetached() == false !!)
+	uint32_t originalIndex() const
+	{
+		return index;
+	}
+
+private:
+	std::unique_ptr<PLAYER> detached = nullptr;
+	uint32_t index;
+};
 
 #endif

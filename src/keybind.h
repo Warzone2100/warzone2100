@@ -22,6 +22,8 @@
 #define __INCLUDED_SRC_KEYBIND_H__
 
 #include "console.h"
+#include "selection.h"
+#include "orderdef.h"
 #include "lib/framework/fixedpoint.h"
 
 #define	MAP_ZOOM_RATE_MAX	(1000)
@@ -44,25 +46,20 @@ void kf_ToggleSamples();		// Displays # of sound samples in Queue/list.
 void kf_ToggleOrders();		//displays unit's Order/action state.
 void kf_FrameRate();
 void kf_ShowNumObjects();
+void kf_ListDroids();
 void kf_ToggleRadar();
 void kf_TogglePower();
 void kf_RecalcLighting();
 void kf_ScreenDump();
 void kf_AllAvailable();
 void kf_TriFlip();
-void kf_ToggleBackgroundFog();
-void kf_ToggleDistanceFog();
-void kf_ToggleMistFog();
 void kf_ToggleFog();
 void kf_ToggleShadows();
 void kf_ToggleCamera();
 void kf_RaiseTile();
 void kf_LowerTile();
 void kf_MapCheck();
-void kf_ZoomOut();
-void kf_ZoomIn();
-void kf_ShrinkScreen();
-void kf_ExpandScreen();
+MappableFunction kf_Zoom(const int multiplier);
 void kf_RotateLeft();
 void kf_RotateRight();
 void kf_RotateBuildingCW();
@@ -70,59 +67,26 @@ void kf_RotateBuildingACW();
 void kf_PitchBack();
 void kf_PitchForward();
 void kf_ResetPitch();
-void kf_ToggleDimension();
 void kf_ShowMappings();
 void kf_SelectGrouping(UDWORD groupNumber);
-void kf_SelectGrouping_0();
-void kf_SelectGrouping_1();
-void kf_SelectGrouping_2();
-void kf_SelectGrouping_3();
-void kf_SelectGrouping_4();
-void kf_SelectGrouping_5();
-void kf_SelectGrouping_6();
-void kf_SelectGrouping_7();
-void kf_SelectGrouping_8();
-void kf_SelectGrouping_9();
-void kf_AssignGrouping_0();
-void kf_AssignGrouping_1();
-void kf_AssignGrouping_2();
-void kf_AssignGrouping_3();
-void kf_AssignGrouping_4();
-void kf_AssignGrouping_5();
-void kf_AssignGrouping_6();
-void kf_AssignGrouping_7();
-void kf_AssignGrouping_8();
-void kf_AssignGrouping_9();
-void kf_AddGrouping_0();
-void kf_AddGrouping_1();
-void kf_AddGrouping_2();
-void kf_AddGrouping_3();
-void kf_AddGrouping_4();
-void kf_AddGrouping_5();
-void kf_AddGrouping_6();
-void kf_AddGrouping_7();
-void kf_AddGrouping_8();
-void kf_AddGrouping_9();
-void kf_SelectMoveGrouping();
+MappableFunction kf_SelectGrouping_N(const unsigned int n);
+MappableFunction kf_AssignGrouping_N(const unsigned int n);
+MappableFunction kf_AddGrouping_N(const unsigned int n);
+MappableFunction kf_RemoveFromGrouping();
 void kf_ToggleDroidInfo();
 void kf_addInGameOptions();
-void kf_NewPlayerPower();
 void kf_addMultiMenu();
-void kf_JumpToMapMarker();
+MappableFunction kf_JumpToMapMarker(const unsigned int x, const unsigned int z, const int yaw);
 void kf_TogglePowerBar();
 void kf_ToggleDebugMappings();
+void kf_PrioritizeDebugMappings();
+void kf_ToggleLevelEditor();
 void kf_ToggleGodMode();
-void kf_CameraUp();
-void kf_CameraDown();
-void kf_CameraLeft();
-void kf_CameraRight();
+MappableFunction kf_ScrollCamera(const int horizontal, const int vertical);
 void kf_SeekNorth();
 void kf_MaxScrollLimits();
-void kf_LevelSea();
-void kf_TestWater();
 void kf_toggleTrapCursor();
 void kf_TogglePauseMode();
-void kf_ToggleRadarAlign();
 
 void kf_ToggleEnergyBars();
 void kf_FinishAllResearch();
@@ -138,90 +102,38 @@ void kf_ChooseIntelligence();
 void kf_ChooseCancel();
 void kf_ToggleWeather();
 void kf_KillSelected();
-void kf_ShowGridInfo();
 void kf_SendGlobalMessage();
 void kf_SendTeamMessage();
-void kf_SelectPlayer();
 void kf_ToggleConsole();
 void kf_ToggleTeamChat();
-void kf_SelectAllOnScreenUnits();
-void kf_SelectAllUnits();
-void kf_SelectAllVTOLs();
-void kf_SelectAllArmedVTOLs();
-void kf_SelectAllHovers();
-void kf_SelectAllWheeled();
-void kf_SelectAllTracked();
-void kf_SelectAllHalfTracked();
-void kf_SelectAllCyborgs();
-void kf_SelectAllEngineers();
-void kf_SelectAllMechanics();
-void kf_SelectAllTransporters();
-void kf_SelectAllRepairTanks();
-void kf_SelectAllSensorUnits();
-void kf_SelectAllTrucks();
-void kf_SelectAllCombatUnits();
-void kf_SelectAllLandCombatUnits();
-void kf_SelectAllCombatCyborgs();
-void kf_SelectAllSameType();
+MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass = SELECTION_CLASS::DS_BY_TYPE, const bool bOnScreen = false);
+MappableFunction kf_SelectNoGroupUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass = SELECTION_CLASS::DS_BY_TYPE, const bool bOnScreen = false);
+MappableFunction kf_SetDroid(const SECONDARY_ORDER order, const SECONDARY_STATE state);
+MappableFunction kf_OrderDroid(const DroidOrderType order);
 
-void kf_SetDroidRangeShort();
-void kf_SetDroidRangeOptimum();
-void kf_SetDroidRangeLong();
-
-void kf_SetDroidRetreatMedium();
-void kf_SetDroidRetreatHeavy();
-void kf_SetDroidRetreatNever();
-
-void kf_SetDroidAttackAtWill();
-void kf_SetDroidAttackReturn();
-void kf_SetDroidAttackCease();
-
-void kf_SetDroidOrderHold();
-void kf_SetDroidOrderStop();
-
-void kf_SetDroidMoveGuard();
-void kf_SetDroidMovePursue();   //not there?
-void kf_SetDroidMovePatrol();   // not there?
-
-void kf_SetDroidReturnToBase();
-void kf_SetDroidGoToTransport();
-void kf_SetDroidGoForRepair();
-void kf_SetDroidRecycle();
 void kf_CentreOnBase();
 void kf_ToggleFog();
 void kf_MoveToLastMessagePos();
-void kf_SelectAllDamaged();
 void kf_RightOrderMenu();
 
 extern bool bAllowOtherKeyPresses;
 
 void kf_TriggerRayCast();
 void kf_ToggleFormationSpeedLimiting();
-void kf_ToggleSensorDisplay();		//Was commented out.  Re-enabled --Q 5/10/05
+void kf_ToggleSensorDisplay();
 void kf_JumpToResourceExtractor();
-void kf_JumpToRepairUnits();
-void kf_JumpToConstructorUnits();
-void kf_JumpToCommandUnits();
-void kf_JumpToSensorUnits();
-void kf_AddHelpBlip();				//Add a beacon
+MappableFunction kf_JumpToUnits(const DROID_TYPE droidType);
+void kf_AddHelpBlip();
 void kf_ToggleProximitys();
 
 void kf_JumpToUnassignedUnits();
-void kf_TriggerShockWave();
 void kf_ToggleVisibility();
-void kf_RadarZoomIn();
-void kf_RadarZoomOut();
-void kf_SelectNextFactory();
-void kf_SelectNextCyborgFactory();
-void kf_SelectNextVTOLFactory();
-void kf_SelectNextPowerStation();
-void kf_SelectNextResearch();
-void kf_JumpNextFactory();
-void kf_JumpNextCyborgFactory();
-void kf_JumpNextVTOLFactory();
-void kf_JumpNextPowerStation();
-void kf_JumpNextResearch();
+MappableFunction kf_RadarZoom(const int multiplier);
+MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bool bJumpToSelected = false);
+MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected = false);
+MappableFunction kf_SelectNextResearch(const bool bJumpToSelected = false);
 void kf_ToggleConsoleDrop();
+void kf_ToggleShakeStatus();
 void kf_ToggleMouseInvert();
 void kf_BifferBaker();
 void kf_SetEasyLevel();
@@ -234,17 +146,7 @@ void kf_ToggleMissionTimer();
 void kf_TraceObject();
 
 void kf_SetHardLevel();
-void kf_SelectCommander_0();
-void kf_SelectCommander_1();
-void kf_SelectCommander_2();
-void kf_SelectCommander_3();
-void kf_SelectCommander_4();
-void kf_SelectCommander_5();
-void kf_SelectCommander_6();
-void kf_SelectCommander_7();
-void kf_SelectCommander_8();
-void kf_SelectCommander_9();
-void kf_ToggleReopenBuildMenu();
+MappableFunction kf_SelectCommander_N(const unsigned int n);
 
 void kf_ToggleShowGateways();
 void kf_ToggleShowPath();
@@ -261,6 +163,7 @@ void kf_SlowDown();
 void kf_NormalSpeed();
 
 void kf_TeachSelected();
+void kf_MakeMeHero();
 void kf_Unselectable();
 void kf_CloneSelected(int);
 void kf_Reload();
@@ -292,4 +195,11 @@ void kf_PerformanceSample();
 void kf_QuickSave();
 void kf_QuickLoad();
 
+void kf_ToggleFullscreen();
+
+void kf_ToggleSpecOverlays();
+
+void enableGodMode();
+
+void keybindShutdown();
 #endif // __INCLUDED_SRC_KEYBIND_H__

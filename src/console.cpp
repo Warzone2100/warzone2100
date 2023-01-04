@@ -36,8 +36,9 @@
 #include "main.h"
 #include "radar.h"
 #include "hci.h"
+#include "mission.h" //for TIMER_Y
+#include "challenge.h" //for challengeActive
 #include <string>
-#include <istream>
 #include <sstream>
 #include <deque>
 #include <chrono>
@@ -45,7 +46,8 @@
 
 // FIXME: When we switch over to full JS, use class version of this file
 
-#define	DEFAULT_MESSAGE_DURATION	GAME_TICKS_PER_SEC * 4
+#define	DEFAULT_MESSAGE_DURATION			GAME_TICKS_PER_SEC * 5
+#define	DEFAULT_MESSAGE_DURATION_CAMPAIGN	GAME_TICKS_PER_SEC * 12
 // Chat/history "window"
 #define CON_BORDER_WIDTH			4
 #define CON_BORDER_HEIGHT			4
@@ -70,9 +72,9 @@ struct CONSOLE_MESSAGE
 	CONSOLE_TEXT_JUSTIFICATION JustifyType;	// text justification
 	int		player;			// Player who sent this message or SYSTEM_MESSAGE
 	CONSOLE_MESSAGE(const std::string &text, iV_fonts fontID, UDWORD time, UDWORD duration, CONSOLE_TEXT_JUSTIFICATION justify, int plr)
-	                : display(text, fontID), timeAdded(time), duration(duration), JustifyType(justify), player(plr) {}
+	                : display(WzString::fromUtf8(text), fontID), timeAdded(time), duration(duration), JustifyType(justify), player(plr) {}
 
-	CONSOLE_MESSAGE& operator =(CONSOLE_MESSAGE&& input)
+	CONSOLE_MESSAGE& operator =(CONSOLE_MESSAGE&& input) noexcept
 	{
 		display = std::move(input.display);
 		timeAdded = input.timeAdded;
@@ -104,12 +106,12 @@ static std::set<std::shared_ptr<CONSOLE_MESSAGE_LISTENER>> messageListeners;
 
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];	/// Globally available string for new console messages.
 
-void consoleAddMessageListener(std::shared_ptr<CONSOLE_MESSAGE_LISTENER> listener)
+void consoleAddMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER>& listener)
 {
 	messageListeners.insert(listener);
 }
 
-void consoleRemoveMessageListener(std::shared_ptr<CONSOLE_MESSAGE_LISTENER> listener)
+void consoleRemoveMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER>& listener)
 {
 	messageListeners.erase(listener);
 }
@@ -136,15 +138,16 @@ void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc)
 /** Sets the system up */
 void	initConsoleMessages()
 {
+	unsigned int duration = (game.type == LEVEL_TYPE::SKIRMISH) ? DEFAULT_MESSAGE_DURATION : DEFAULT_MESSAGE_DURATION_CAMPAIGN;
 	linePitch = iV_GetTextLineSize(font_regular);
 	bConsoleDropped = false;
-	setConsoleMessageDuration(DEFAULT_MESSAGE_DURATION);	// Setup how long messages are displayed for
+	setConsoleMessageDuration(duration);					// Setup how long messages are displayed for
 	setConsoleBackdropStatus(true);							// No box under the text
 	enableConsoleDisplay(true);								// Turn on the console display
 
 	//	Set up the main console size and position x,y,width
 	setConsoleCalcLayout([]() {
-		setConsoleSizePos(16, 32, pie_GetVideoBufferWidth() - 32);
+		setConsoleSizePos(16, (!challengeActive && (game.type == LEVEL_TYPE::SKIRMISH)) ? 32 : (32 + TIMER_Y), pie_GetVideoBufferWidth() - 32);
 	});
 	historyConsole.topX = HISTORYBOX_X;
 	historyConsole.topY = HISTORYBOX_Y;
@@ -152,6 +155,13 @@ void	initConsoleMessages()
 	setConsoleLineInfo(MAX_CONSOLE_MESSAGES / 4 + 4);
 	setConsolePermanence(false, true);						// We're not initially having permanent messages
 	permitNewConsoleMessages(true);							// Allow new messages
+}
+
+void shutdownConsoleMessages()
+{
+	permitNewConsoleMessages(false);
+	flushConsoleMessages();
+	clearInfoMessages();
 }
 
 void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
@@ -207,7 +217,7 @@ bool addConsoleMessageDebounced(const char * Text, CONSOLE_TEXT_JUSTIFICATION ju
 bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team, UDWORD duration)
 {
 	ConsoleMessage message = { Text, jusType, player, team, duration };
-	for (auto listener: messageListeners)
+	for (const auto &listener: messageListeners)
 	{
 		(*listener)(message);
 	}
@@ -228,7 +238,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		std::string FitText(lines);
 		while (!FitText.empty())
 		{
-			int pixelWidth = iV_GetTextWidth(FitText.c_str(), font_regular);
+			unsigned pixelWidth = iV_GetTextWidth(FitText.c_str(), font_regular);
 			if (pixelWidth <= mainConsole.width)
 			{
 				break;
@@ -343,22 +353,30 @@ static PIELIGHT getConsoleTextColor(int player)
 	{
 		return WZCOL_CONS_TEXT_INFO;
 	}
+	else if (player == SPECTATOR_MESSAGE)
+	{
+		return WZCOL_TEXT_MEDIUM;
+	}
 	else
 	{
-		// Don't use friend-foe colors in the lobby
-		if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
+		// Only use friend-foe colors if we are (potentially) a player
+		if (selectedPlayer < MAX_PLAYERS)
 		{
-			if (aiCheckAlliances(player, selectedPlayer))
+			// Don't use friend-foe colors in the lobby
+			if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
 			{
-				if (selectedPlayer == player)
+				if (aiCheckAlliances(player, selectedPlayer))
 				{
-					return WZCOL_TEXT_BRIGHT;
+					if (selectedPlayer == player)
+					{
+						return WZCOL_TEXT_BRIGHT;
+					}
+					return WZCOL_CONS_TEXT_USER_ALLY;
 				}
-				return WZCOL_CONS_TEXT_USER_ALLY;
-			}
-			else
-			{
-				return WZCOL_CONS_TEXT_USER_ENEMY;
+				else
+				{
+					return WZCOL_CONS_TEXT_USER_ENEMY;
+				}
 			}
 		}
 
@@ -448,7 +466,7 @@ void displayOldMessages(bool mode)
 void	displayConsoleMessages()
 {
 	// Check if we have any messages we want to show
-	if (!getNumberConsoleMessages() && !bConsoleDropped && InfoMessages.empty())
+	if (ActiveMessages.empty() && !bConsoleDropped && InfoMessages.empty())
 	{
 		return;
 	}
@@ -474,17 +492,24 @@ void	displayConsoleMessages()
 		tmp -= i->display.width();
 		console_drawtext(i->display, getConsoleTextColor(i->player), tmp - 6, linePitch - 2, i->JustifyType, i->display.width());
 	}
-	int TextYpos = mainConsole.topY;
-	// Draw the blue background for the text (only in game, not lobby)
-	if (bTextBoxActive && GetGameMode() == GS_NORMAL)
+
+	if (!ActiveMessages.empty())
 	{
-		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH, mainConsole.topY - mainConsole.textDepth - CON_BORDER_HEIGHT,
-						mainConsole.topX + mainConsole.width, mainConsole.topY + (getNumberConsoleMessages() * linePitch) + CON_BORDER_HEIGHT - linePitch);
-	}
-	for (auto & ActiveMessage : ActiveMessages)
-	{
-		console_drawtext(ActiveMessage.display, getConsoleTextColor(ActiveMessage.player), mainConsole.topX, TextYpos, ActiveMessage.JustifyType, mainConsole.width);
-		TextYpos += ActiveMessage.display.lineSize();
+		int TextYpos = mainConsole.topY;
+		// Draw the blue background for the text (only in game, not lobby)
+		if (bTextBoxActive && GetGameMode() == GS_NORMAL)
+		{
+			iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,
+							mainConsole.topY - mainConsole.textDepth - CON_BORDER_HEIGHT,
+							mainConsole.topX + mainConsole.width,
+							mainConsole.topY + (getNumberConsoleMessages() * linePitch) + CON_BORDER_HEIGHT - linePitch);
+		}
+		for (auto &ActiveMessage : ActiveMessages)
+		{
+			console_drawtext(ActiveMessage.display, getConsoleTextColor(ActiveMessage.player), mainConsole.topX,
+							 TextYpos, ActiveMessage.JustifyType, mainConsole.width);
+			TextYpos += ActiveMessage.display.lineSize();
+		}
 	}
 }
 

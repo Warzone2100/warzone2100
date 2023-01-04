@@ -61,7 +61,6 @@ bool getRadarTrackingStatus();
 void camInformOfRotation(Vector3i *rotation);
 DROID *camFindDroidTarget();
 DROID *getTrackingDroid();
-SDWORD getPresAngle();
 UDWORD getNumDroidsSelected();
 void camAlignWithTarget(DROID *psDroid);
 

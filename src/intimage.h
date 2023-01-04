@@ -45,8 +45,18 @@ struct TABDEF
 
 class IntListTabWidget : public ListTabWidget
 {
+protected:
+	IntListTabWidget(): ListTabWidget() {}
+	virtual void initialize() override;
+
 public:
-	IntListTabWidget(WIDGET *parent);
+	static std::shared_ptr<IntListTabWidget> make()
+	{
+		class make_shared_enabler: public IntListTabWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize();
+		return widget;
+	}
 };
 
 extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.

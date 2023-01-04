@@ -249,7 +249,7 @@ macosx/configs/CS-ID.xcconfig
 *.manifest
 *.res
 *.idb
-*.pdb
+>*.pdb
 *.diff
 *.dep
 *.user
@@ -262,7 +262,6 @@ data/*config*/*
 data/config/*
 data/etc/*
 data/std*.txt
-data/fonts/
 devpkg/*
 [Dd]ebug/
 *.opensdf
@@ -292,6 +291,10 @@ win32/CodeAnalyst
 
 # vcpkg
 /vcpkg/
+/vcpkg_installed/
+
+# ctags file
+/tags
 
 # Exclusions
 # Do not ignore the *.manifest* files that are used under the /win32 folder
@@ -301,7 +304,28 @@ win32/CodeAnalyst
 # Do not ignore the in-repo template file used for translation integration
 !/po/warzone2100_en.pot
 !/po/warzone2100.pot
-# Do not ignore patches in vcpkg override-ports folder
-!.ci/vcpkg/override-ports/*/*.patch
+# Do not ignore patches in vcpkg overlay-ports folder
+!.ci/vcpkg/overlay-ports/*/*.patch
 # Do not ignore patches in quickjs patches folder
 !3rdparty/quickjs/patches/*.patch
+
+# JetBrains IDEs like CLion
+/.idea/
+/cmake-build-*/
+/out/
+
+# flatpak
+/.flatpak-builder/
+/_flatpak_build/
+/flatpak_app/
+/.ci/flatpak/flatpak-github-action-modified-*
+/.ci/flatpak/net.wz2100.wz2100.yaml
+/.ci/flatpak/Toolchain-cross-arch.cmake
+/.ci/flatpak/meson-cross-file.txt
+
+#
+tags
+*.log
+*.txt
+
+comments*

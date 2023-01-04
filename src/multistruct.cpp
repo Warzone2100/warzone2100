@@ -51,7 +51,6 @@
 #include "lib/sound/audio.h"
 #include "research.h"
 #include "qtscript.h"
-#include "keymap.h"
 #include "combat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -62,7 +61,7 @@
 bool SendBuildFinished(STRUCTURE *psStruct)
 {
 	uint8_t player = psStruct->player;
-	ASSERT(player < MAX_PLAYERS, "invalid player %u", player);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
 	NETuint32_t(&psStruct->id);		// ID of building
@@ -92,7 +91,8 @@ bool recvBuildFinished(NETQUEUE queue)
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
-	if (!getDebugMappingStatus() && bMultiPlayer)
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to add structure for player %u.", NetPlay.players[queue.index].position);
 		return false;
@@ -120,30 +120,10 @@ bool recvBuildFinished(NETQUEUE queue)
 	// Find the structures stats
 	for (typeindex = 0; typeindex < numStructureStats && asStructureStats[typeindex].ref != type; typeindex++) {}	// Find structure target
 
-	// Check for similar buildings, to avoid overlaps
-	if (TileHasStructure(mapTile(map_coord(pos.x), map_coord(pos.y))))
-	{
-		// Get the current structure
-		psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-		if (asStructureStats[typeindex].type == psStruct->pStructureType->type)
-		{
-			// Correct type, correct location, just rename the id's to sync it.. (urgh)
-			psStruct->id = structId;
-			psStruct->status = SS_BUILT;
-			buildingComplete(psStruct);
-			debug(LOG_SYNC, "Created modified building %u for player %u", psStruct->id, player);
-#if defined (DEBUG)
-			NETlogEntry("structure id modified", SYNC_FLAG, player);
-#endif
-			return true;
-		}
-	}
 	// Build the structure
-	psStruct = buildStructure(&(asStructureStats[typeindex]), pos.x, pos.y, player, true);
-
+	psStruct = buildStructureDir(&(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId);
 	if (psStruct)
 	{
-		psStruct->id		= structId;
 		psStruct->status	= SS_BUILT;
 		buildingComplete(psStruct);
 		debug(LOG_SYNC, "Huge synch error, forced to create building %u for player %u", psStruct->id, player);
@@ -186,7 +166,8 @@ bool recvDestroyStructure(NETQUEUE queue)
 	NETuint32_t(&structID);
 	NETend();
 
-	if (!getDebugMappingStatus() && bMultiPlayer)
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to remove structure for player %u.", NetPlay.players[queue.index].position);
 		return false;

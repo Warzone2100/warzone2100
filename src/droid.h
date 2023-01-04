@@ -30,6 +30,7 @@
 #include "objectdef.h"
 #include "stats.h"
 #include "visibility.h"
+#include "selection.h"
 
 #include <queue>
 
@@ -61,6 +62,7 @@ enum PICKTILE
 extern DROID	*psLastDroidHit;
 
 std::priority_queue<int> copy_experience_queue(int player);
+int getTopExperience(int player);
 void add_to_experience_queue(int player, int value);
 
 // initialise droid module
@@ -79,7 +81,8 @@ struct INITIAL_DROID_ORDERS
 /// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
 DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders, Rotation rot = Rotation());
 /// Creates a droid locally, instead of sending a message, even if the bMultiMessages HACK is set to true.
-DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
+DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
+DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot, uint32_t id);
 
 /* Set the asBits in a DROID structure given it's template. */
 void droidSetBits(const DROID_TEMPLATE *pTemplate, DROID *psDroid);
@@ -165,10 +168,13 @@ DROID_TYPE droidType(DROID *psDroid);
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
 void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
+void removeDroidsFromGroup(UDWORD playerNumber);
+
+bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen);
 
 bool activateGroup(UDWORD playerNumber, UDWORD groupNumber);
 
-UDWORD getNumDroidsForLevel(UDWORD level);
+UDWORD getNumDroidsForLevel(uint32_t player, UDWORD level);
 
 bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
@@ -176,11 +182,9 @@ bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_
 /* calculate muzzle base location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
-// finds a droid for the player and sets it to be the current selected droid
-bool selectDroidByID(UDWORD id, UDWORD player);
-
 /* Droid experience stuff */
 unsigned int getDroidLevel(const DROID *psDroid);
+unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
 UDWORD getDroidEffectiveLevel(const DROID *psDroid);
 const char *getDroidLevelName(const DROID *psDroid);
 
@@ -477,5 +481,9 @@ static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
 	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)nullptr;
 }
 
+/** \brief sends droid to delivery point, or back to commander. psRepairFac maybe nullptr when
+ * repairs were made by a mobile repair turret
+ */
+void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac);
 
 #endif // __INCLUDED_SRC_DROID_H__

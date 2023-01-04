@@ -30,13 +30,16 @@ WZ_DECL_NONNULL(1) PHYSFS_file *openLoadFile(const char *fileName, bool hard_fai
 WZ_DECL_NONNULL(1) PHYSFS_file *openSaveFile(const char *fileName);
 
 /** Load the file with name pointed to by pFileName into a memory buffer. */
-WZ_DECL_NONNULL(1) bool loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize);
+WZ_DECL_NONNULL(1) bool loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize, bool hard_fail = true);
 
 /** Save the data in the buffer into the given file */
 WZ_DECL_NONNULL(1) bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
 
 /** Load a file from disk into a fixed memory buffer. */
 WZ_DECL_NONNULL(1, 2) bool loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
+
+/** Load a file from disk into a vector buffer. */
+bool loadFileToBufferVector(const char *pFileName, std::vector<char>& outputBuffer, bool hard_fail, bool appendNullCharacter = true);
 
 /** Load a file from disk, but returns quietly if no file found. */
 WZ_DECL_NONNULL(1, 2) bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);

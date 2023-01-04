@@ -2,27 +2,35 @@ ${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nT
 
 ${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
 
+${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+
+${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+
 ${LangFileString} WZ_GPL_NEXT "Next"
 
 ${LangFileString} TEXT_SecBase "Core files"
 ${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
 
-${LangFileString} TEXT_SecFMVs "Videos"
+${LangFileString} TEXT_SecFMVs "Pelliculae"
 ${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
 ${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
 
-${LangFileString} TEXT_SecFMVs_Eng "English"
+${LangFileString} TEXT_SecFMVs_Eng "Anglice"
 ${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
 ${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
 
-${LangFileString} TEXT_SecFMVs_Ger "German"
+${LangFileString} TEXT_SecFMVs_Ger "Germanice"
 ${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
 
-${LangFileString} TEXT_SecNLS "Language files"
+${LangFileString} TEXT_SecNLS "Linguae tabularia"
 ${LangFileString} DESC_SecNLS "Support for languages other than English."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
@@ -30,3 +38,10 @@ ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the se
 
 ${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
 ${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+
+${LangFileString} DLTEXT_Downloading "Carricatur"
+${LangFileString} DLTEXT_SysLibDLFailed "Systematis bibliothecam carricari casum est"
+${LangFileString} DLTEXT_VideosDLFailed "Pelliculas carricari casum est"
+
+${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
+${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."

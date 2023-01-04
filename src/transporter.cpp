@@ -103,7 +103,7 @@
 #define MAX_TRANSPORT_FULL_MESSAGE_PAUSE 20000
 
 /* the widget screen */
-extern W_SCREEN		*psWScreen;
+extern std::shared_ptr<W_SCREEN> psWScreen;
 
 /* Static variables */
 static DROID *psCurrTransporter = nullptr;
@@ -182,9 +182,10 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 		Animate = false;
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
-	IntFormAnimated *transForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto transForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	parent->attach(transForm);
 	transForm->id = IDTRANS_FORM;
 	transForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(TRANS_X, TRANS_Y, TRANS_WIDTH, TRANS_HEIGHT);
@@ -243,9 +244,10 @@ bool intAddTransporterContents()
 		Animate = false;
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
-	IntFormAnimated *transContentForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto transContentForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	parent->attach(transContentForm);
 	transContentForm->id = IDTRANS_CONTENTFORM;
 	transContentForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(TRANSCONT_X, TRANSCONT_Y, TRANSCONT_WIDTH, TRANSCONT_HEIGHT);
@@ -402,7 +404,8 @@ bool intAddTransButtonForm()
 	WIDGET *transForm = widgGetFromID(psWScreen, IDTRANS_FORM);
 
 	/* Add the button form */
-	IntListTabWidget *transList = new IntListTabWidget(transForm);
+	auto transList = IntListTabWidget::make();
+	transForm->attach(transList);
 	transList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	transList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int objListWidth = OBJ_BUTWIDTH * 5 + OBJ_GAP * 4;
@@ -422,14 +425,17 @@ bool intAddTransButtonForm()
 			continue;
 		}
 
-		WIDGET *buttonHolder = new WIDGET(transList);
+		auto buttonHolder = std::make_shared<WIDGET>();
+		transList->attach(buttonHolder);
 		transList->addWidgetToLayout(buttonHolder);
 
-		IntStatusButton *statButton = new IntStatusButton(buttonHolder);
+		auto statButton = std::make_shared<IntStatusButton>();
+		buttonHolder->attach(statButton);
 		statButton->id = nextStatButtonId;
 		statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
-		IntObjectButton *objButton = new IntObjectButton(buttonHolder);
+		auto objButton = std::make_shared<IntObjectButton>();
+		buttonHolder->attach(objButton);
 		objButton->id = nextObjButtonId;
 		objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
@@ -469,7 +475,8 @@ bool intAddTransContentsForm()
 	WIDGET *contForm = widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
 
 	/* Add the contents form */
-	IntListTabWidget *contList = new IntListTabWidget(contForm);
+	auto contList = IntListTabWidget::make();
+	contForm->attach(contList);
 	contList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	contList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int contListWidth = OBJ_BUTWIDTH * 2 + OBJ_GAP;
@@ -492,7 +499,8 @@ bool intAddTransContentsForm()
 		}
 
 		/* Set the tip and add the button */
-		IntTransportButton *button = new IntTransportButton(contList);
+		auto button = std::make_shared<IntTransportButton>();
+		contList->attach(button);
 		button->id = nextButtonId;
 		button->setTip(droidGetName(psDroid));
 		button->setObject(psDroid);
@@ -521,10 +529,13 @@ bool intAddDroidsAvailForm()
 		Animate = false;
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
+
+	auto const &parent = psWScreen->psForm;
 
 	/* Add the droids available form */
-	IntFormAnimated *transDroids = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto transDroids = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	parent->attach(transDroids);
 	transDroids->id = IDTRANS_DROIDS;
 	transDroids->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(TRANSDROID_X, TRANSDROID_Y, TRANSDROID_WIDTH, TRANSDROID_HEIGHT);
@@ -546,7 +557,8 @@ bool intAddDroidsAvailForm()
 	}
 
 	//now add the tabbed droids available form
-	IntListTabWidget *droidList = new IntListTabWidget(transDroids);
+	auto droidList = IntListTabWidget::make();
+	transDroids->attach(droidList);
 	droidList->id = IDTRANS_DROIDTAB;
 	droidList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *droidList = static_cast<IntListTabWidget *>(psWidget);
@@ -583,7 +595,8 @@ bool intAddDroidsAvailForm()
 		if (!isTransporter(psDroid))
 		{
 			/* Set the tip and add the button */
-			IntTransportButton *button = new IntTransportButton(droidList);
+			auto button = std::make_shared<IntTransportButton>();
+			droidList->attach(button);
 			button->id = nextButtonId;
 			button->setTip(droidGetName(psDroid));
 			button->setObject(psDroid);
@@ -627,6 +640,12 @@ int calcRemainingCapacity(const DROID *psTransporter)
 
 	// If it's dead then just return 0.
 	if (isDead((const BASE_OBJECT *)psTransporter))
+	{
+		return 0;
+	}
+
+	// If for some reason it doesn't have an associated psGroup (is it being recycled?), just return 0.
+	if (!psTransporter->psGroup)
 	{
 		return 0;
 	}
@@ -750,7 +769,7 @@ void intProcessTransporter(UDWORD id)
 }
 
 /* Remove the Transporter widgets from the screen */
-void intRemoveTrans()
+void intRemoveTrans(bool skipIntModeReset /*= false*/)
 {
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_FORM);
@@ -761,17 +780,23 @@ void intRemoveTrans()
 
 	intRemoveTransContent();
 	intRemoveTransDroidsAvail();
-	intMode = INT_NORMAL;
+	if (!skipIntModeReset)
+	{
+		intMode = INT_NORMAL;
+	}
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
-void intRemoveTransNoAnim()
+void intRemoveTransNoAnim(bool skipIntModeReset /*= false*/)
 {
 	//remove main screen
 	widgDelete(psWScreen, IDTRANS_FORM);
 	intRemoveTransContentNoAnim();
 	intRemoveTransDroidsAvailNoAnim();
-	intMode = INT_NORMAL;
+	if (!skipIntModeReset)
+	{
+		intMode = INT_NORMAL;
+	}
 }
 
 /* Remove the Transporter Content widgets from the screen */
@@ -817,7 +842,7 @@ void intRemoveTransDroidsAvailNoAnim()
 		objMajor = droidList->currentPage();
 
 		//remove main screen
-		delete form;
+		widgDelete(form);
 	}
 }
 
@@ -976,7 +1001,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		if (psTransporter->player == selectedPlayer)
 		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			audio_PlayBuildFailedOnce();
 			if (lastTransportIsFullMsgTime + MAX_TRANSPORT_FULL_MESSAGE_PAUSE < gameTime)
 			{
 				addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
@@ -1064,6 +1089,7 @@ int transporterSpaceRequired(const DROID *psDroid)
 /*sets which list of droids to use for the transporter interface*/
 DROID *transInterfaceDroidList()
 {
+	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
 	if (onMission)
 	{
 		return mission.apsDroidLists[selectedPlayer];

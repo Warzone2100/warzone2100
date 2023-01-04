@@ -1,0 +1,1 @@
+#cmakedefine WZ_DISCORD_RPC_APPID "@WZ_DISCORD_RPC_APPID@"

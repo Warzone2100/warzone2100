@@ -26,9 +26,10 @@
 #include "wzapi.h"
 #include <chrono>
 #include <memory>
+#include <unordered_set>
+#include <unordered_map>
 
 class QString;
-class QStandardItemModel;
 class WzString;
 struct BASE_OBJECT;
 struct DROID;
@@ -116,11 +117,8 @@ void scriptRemoveObject(const BASE_OBJECT *psObj);
 /// Open debug GUI
 void jsShowDebug();
 
-/// Choose autogame AI with GUI
-void jsAutogame();
-
 /// Choose a specific autogame AI
-void jsAutogameSpecific(const WzString &name, int player);
+void jsAutogameSpecific(const WzString &name, int player, AIDifficulty difficulty);
 
 // ----------------------------------------------
 // Event functions
@@ -137,6 +135,7 @@ bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 bool triggerEventStructureReady(STRUCTURE *psStruct);
+bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
@@ -148,7 +147,7 @@ bool triggerEventGroupLoss(const BASE_OBJECT *psObj, int group, int size, wzapi:
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
 bool triggerEventArea(const std::string& label, DROID *psDroid);
 bool triggerEventSelected();
-bool triggerEventPlayerLeft(int id);
+bool triggerEventPlayerLeft(int player);
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate);
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
 bool triggerEventKeyPressed(int meta, int key);
@@ -161,55 +160,13 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to);
 
 void jsDebugSelected(const BASE_OBJECT *psObj);
 void jsDebugMessageUpdate();
-void jsDebugUpdate();
 
-struct ScriptMapData
-{
-	struct Structure
-	{
-		WzString name;
-		Vector2i position;
-		uint16_t direction;
-		uint8_t modules;
-		int8_t player;  // -1 = scavs
-	};
-	struct Droid
-	{
-		WzString name;
-		Vector2i position;
-		uint16_t direction;
-		int8_t player;  // -1 = scavs
-	};
-	struct Feature
-	{
-		WzString name;
-		Vector2i position;
-		uint16_t direction;
-	};
-
-	uint32_t crcSumStructures(uint32_t crc) const;
-	uint32_t crcSumDroids(uint32_t crc) const;
-	uint32_t crcSumFeatures(uint32_t crc) const;
-
-	bool valid = false;
-	int mapWidth;
-	int mapHeight;
-	//int maxPlayers;
-	std::vector<uint16_t> texture;
-	std::vector<int16_t> height;
-	std::vector<Structure> structures;
-	std::vector<Droid> droids;
-	std::vector<Feature> features;
-
-	MersenneTwister mt;
-};
-
-ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
 //
 
 struct LABEL
 {
-	Vector2i p1, p2;	// world coordinates
+	Vector2i p1 = Vector2i(0, 0);	// world coordinates
+	Vector2i p2 = Vector2i(0, 0);	// world coordinates
 	int id;
 	int type;
 	int player;
@@ -258,10 +215,10 @@ public:
 	LABEL toNewLabel() const;
 };
 
-/// Load map labels (implemented in qtscriptfuncs.cpp)
+/// Load map labels
 bool loadLabels(const char *filename);
 
-/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+/// Write map labels to savegame
 bool writeLabels(const char *filename);
 
 class scripting_engine
@@ -270,15 +227,23 @@ public:
 	struct GROUPMAP
 	{
 		typedef int groupID;
-		typedef std::map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
+		typedef std::unordered_map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
 	private:
 		ObjectToGroupMap m_map;
-		std::map<groupID, size_t> m_groupCount;
+		typedef std::unordered_set<const BASE_OBJECT *> GroupSet;
+		std::unordered_map<groupID, GroupSet> m_groups;
+		int lastNewGroupId = 0;
+	protected:
+		friend class scripting_engine;
+		int getLastNewGroupId() const { return lastNewGroupId; }
+		void saveLoadSetLastNewGroupId(int value);
 	public:
+		groupID newGroupID();
 		void insertObjectIntoGroup(const BASE_OBJECT *psObj, groupID groupId);
 		inline const ObjectToGroupMap& map() const { return m_map; }
 		size_t groupSize(groupID groupId) const;
 		optional<groupID> removeObjectFromGroup(const BASE_OBJECT *psObj);
+		std::vector<const BASE_OBJECT *> getGroupObjects(groupID groupId) const;
 	};
 
 	struct timerNode
@@ -289,14 +254,14 @@ public:
 		wzapi::scripting_instance* instance;
 		int baseobj;
 		OBJECT_TYPE baseobjtype;
-		timerAdditionalData* additionalTimerFuncParam;
+		std::unique_ptr<timerAdditionalData> additionalTimerFuncParam;
 		int frameTime;
 		int ms;
 		int player;
 		int calls;
 		timerType type;
 		timerNode() : instance(nullptr), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(nullptr) {}
-		timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, timerAdditionalData* additionalParam = nullptr);
+		timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, std::unique_ptr<timerAdditionalData> additionalParam = nullptr);
 		~timerNode();
 		inline bool operator== (const timerNode &t)
 		{
@@ -336,7 +301,6 @@ public:
 	bool updateScripts();
 	bool shutdownScripts();
 
-	ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
 	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
 
 	// Set/write variables in the script's global context, run after loading script,
@@ -349,10 +313,10 @@ public:
 
 // MARK: LABELS
 public:
-	/// Load map labels (implemented in qtscriptfuncs.cpp)
+	/// Load map labels
 	bool loadLabels(const char *filename);
 
-	/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+	/// Write map labels to savegame
 	bool writeLabels(const char *filename);
 
 // MARK: GROUPS
@@ -364,7 +328,7 @@ public:
 
 // MARK: TIMERS
 public:
-	uniqueTimerID setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName = "", const BASE_OBJECT * obj = nullptr, timerType type = TIMER_REPEAT, timerAdditionalData* additionalParam = nullptr);
+	uniqueTimerID setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName = "", const BASE_OBJECT * obj = nullptr, timerType type = TIMER_REPEAT, std::unique_ptr<timerAdditionalData> additionalParam = nullptr);
 
 	// removes any timer(s) that satisfy _pred
 	template< class UnaryPredicate >
@@ -386,7 +350,7 @@ public:
 		}
 		return removedTimerIDs;
 	}
-	
+
 	bool removeTimer(uniqueTimerID timerID);
 public:
 	// Monitoring performance of function calls
@@ -417,7 +381,7 @@ public:
 	nlohmann::json constructStartPositions();
 public:
 	// Label functions
-	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string label, optional<int> filter));
+	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter));
 	static std::vector<std::string> enumLabels(WZAPI_PARAMS(optional<int> filterLabelType));
 
 	static wzapi::no_return_value addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered));
@@ -433,10 +397,10 @@ private:
 public:
 
 	static generic_script_object getObject(WZAPI_PARAMS(wzapi::object_request request));
-	static std::vector<const BASE_OBJECT *> enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> filter, optional<bool> seen));
-	static std::vector<const BASE_OBJECT *> enumArea(WZAPI_PARAMS(scr_area area, optional<int> filter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> playerFilter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> enumArea(WZAPI_PARAMS(scr_area area, optional<int> playerFilter, optional<bool> seen));
 private:
-	static std::vector<const BASE_OBJECT *> _enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> filter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> _enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> playerFilter, optional<bool> seen));
 public:
 
 	// A special function for Javascript backends that accept either a label or a series of integers describing an area
@@ -458,7 +422,7 @@ public:
 		int x2 = -1;
 		int y2 = -1;
 	};
-	static std::vector<const BASE_OBJECT *> enumAreaJS(WZAPI_PARAMS(area_by_values_or_area_label_lookup area_lookup, optional<int> filter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> enumAreaJS(WZAPI_PARAMS(area_by_values_or_area_label_lookup area_lookup, optional<int> playerFilter, optional<bool> seen));
 
 	// Group functions
 	static std::vector<const BASE_OBJECT *> enumGroup(WZAPI_PARAMS(int groupId));
@@ -469,13 +433,73 @@ public:
 	static int groupSize(WZAPI_PARAMS(int groupId));
 private:
 	wzapi::scripting_instance* findInstanceForPlayer(int match, const WzString& scriptName);
+
+public:
+	// debug APIs
+
+	struct timerNodeSnapshot
+	{
+		uniqueTimerID timerID = 0;
+		std::string timerName;
+		wzapi::scripting_instance* instance = nullptr;
+		int baseobj = -1;
+		OBJECT_TYPE baseobjtype = OBJ_NUM_TYPES;
+		int frameTime = -1;
+		int ms = -1;
+		int player = -1;
+		int calls = 0;
+		timerType type = TIMER_REMOVED;
+		nlohmann::json instanceTimerRestoreData;
+
+		timerNodeSnapshot() { }
+		timerNodeSnapshot(const std::shared_ptr<timerNode>& node)
+		{
+			ASSERT_OR_RETURN(, node != nullptr, "null timerNode");
+			timerID = node->timerID;
+			timerName = node->timerName;
+			instance = node->instance;
+			baseobj = node->baseobj;
+			baseobjtype = node->baseobjtype;
+			frameTime = node->frameTime;
+			ms = node->ms;
+			player = node->player;
+			calls = node->calls;
+			type = node->type;
+			instanceTimerRestoreData = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam.get());
+		}
+	};
+
+	struct LabelInfo
+	{
+		WzString label;
+		WzString type;
+		WzString trigger;
+		WzString owner;
+		WzString subscriber;
+	};
+
+	class DebugInterface
+	{
+	protected:
+		friend class scripting_engine;
+		DebugInterface() {}
+	public:
+		std::unordered_map<wzapi::scripting_instance *, nlohmann::json> debug_GetGlobalsSnapshot() const;
+		std::vector<scripting_engine::timerNodeSnapshot> debug_GetTimersSnapshot() const;
+		std::vector<scripting_engine::LabelInfo> debug_GetLabelInfo() const;
+		/// Show all labels or all currently active labels
+		void markAllLabels(bool only_active);
+		/// Mark and show label
+		void showLabel(const std::string &key, bool clear_old = true, bool jump_to = true);
+	};
+
 protected:
 	friend void jsShowDebug();
-	friend class ScriptDebugger;
-	void updateLabelModel();
-	/// Create model for labels for js debug dialog
-	QStandardItemModel *createLabelModel();
-	
+
+	std::unordered_map<wzapi::scripting_instance *, nlohmann::json> debug_GetGlobalsSnapshot() const;
+	std::vector<scripting_engine::timerNodeSnapshot> debug_GetTimersSnapshot() const;
+	std::vector<scripting_engine::LabelInfo> debug_GetLabelInfo() const;
+
 	/// Show all labels or all currently active labels
 	void markAllLabels(bool only_active);
 	/// Mark and show label
@@ -491,10 +515,9 @@ private:
 	std::pair<bool, int> seenLabelCheck(wzapi::scripting_instance *instance, const BASE_OBJECT *seen, const BASE_OBJECT *viewer);
 	void removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, const BASE_OBJECT *psObj);
 	bool groupAddObject(const BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
-	void updateGlobalModels();
 };
 
-#define QStringToWzString(_qstring) \
-WzString::fromUtf8((_qstring).toUtf8().constData())
+/// Clear all map markers (used by label marking, for instance)
+void clearMarks();
 
 #endif

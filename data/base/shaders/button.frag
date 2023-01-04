@@ -3,6 +3,10 @@
 
 //#pragma debug(on)
 
+// constants overridden by WZ when loading shaders (do not modify here in the shader source!)
+#define WZ_MIP_LOAD_BIAS 0.f
+//
+
 uniform sampler2D Texture;
 uniform sampler2D TextureTcmask;
 uniform vec4 colour;
@@ -11,12 +15,18 @@ uniform int tcmask;
 uniform bool alphaTest;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#define NEWGL
+#else
+#define texture(tex,uv,bias) texture2D(tex,uv,bias)
+#endif
+
+#ifdef NEWGL
 in vec2 texCoord;
 #else
 varying vec2 texCoord;
 #endif
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#ifdef NEWGL
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
@@ -25,24 +35,16 @@ out vec4 FragColor;
 void main()
 {
 	// Get color from texture unit 0
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-	vec4 texColour = texture(Texture, texCoord);
-	#else
-	vec4 texColour = texture2D(Texture, texCoord);
-	#endif
+	vec4 texColour = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	vec4 fragColour;
 	if (tcmask == 1)
 	{
 		// Get tcmask information from texture unit 1
-		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-		vec4 mask = texture(TextureTcmask, texCoord);
-		#else
-		vec4 mask = texture2D(TextureTcmask, texCoord);
-		#endif
+		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply colour using grain merge with tcmask
-		fragColour = (texColour + (teamcolour - 0.5) * mask.a) * colour;
+		fragColour = (texColour + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{
@@ -54,7 +56,7 @@ void main()
 		discard;
 	}
 
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+	#ifdef NEWGL
 	FragColor = fragColour;
 	#else
 	gl_FragColor = fragColour;

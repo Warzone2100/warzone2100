@@ -511,7 +511,7 @@ void killStruct(STRUCTURE *psBuilding)
 	ASSERT(psBuilding->type == OBJ_STRUCTURE,
 	       "killStruct: pointer is not a droid");
 	ASSERT(psBuilding->player < MAX_PLAYERS,
-	       "killStruct: invalid player for stucture");
+	       "killStruct: invalid player for structure");
 
 	if (psBuilding->pStructureType->pSensor
 	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)
@@ -645,11 +645,27 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 	return true;
 }
 
+static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd)
+{
+	ASSERT_OR_RETURN(false, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
+	ASSERT_OR_RETURN(false, psFlagPosToAdd->player < MAX_PLAYERS, "Invalid FlagPosition player: %u", psFlagPosToAdd->player);
+	for (FLAG_POSITION* psCurr = apsFlagPosLists[psFlagPosToAdd->player]; (psCurr != nullptr); psCurr = psCurr->psNext)
+	{
+		if (psCurr == psFlagPosToAdd)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 /* add the Flag Position to the Flag Position Lists */
 void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
 {
 	ASSERT_OR_RETURN(, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
+	ASSERT_OR_RETURN(, psFlagPosToAdd->player < MAX_PLAYERS, "Invalid FlagPosition player: %u", psFlagPosToAdd->player);
+	ASSERT_OR_RETURN(, !isFlagPositionInList(psFlagPosToAdd), "FlagPosition is already in the list!");
 
 	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player];
 	apsFlagPosLists[psFlagPosToAdd->player] = psFlagPosToAdd;
@@ -937,14 +953,6 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 	return UDWORD_MAX;
 }
 
-
-// check a base object exists for an ID
-bool checkValidId(UDWORD id)
-{
-	return getBaseObjFromId(id) != nullptr;
-}
-
-
 // integrity check the lists
 #ifdef DEBUG
 static void objListIntegCheck()
@@ -969,7 +977,7 @@ static void objListIntegCheck()
 			ASSERT(psCurr->type == OBJ_STRUCTURE &&
 			       (SDWORD)psCurr->player == player,
 			       "objListIntegCheck: misplaced %s(%p) in the structure list for player %d, is owned by %d",
-			       objInfo(psCurr), psCurr, player, (int)psCurr->player);
+			       objInfo(psCurr), (void*) psCurr, player, (int)psCurr->player);
 		}
 	}
 	for (psCurr = (BASE_OBJECT *)apsFeatureLists[0]; psCurr; psCurr = psCurr->psNext)

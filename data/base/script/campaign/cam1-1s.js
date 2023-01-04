@@ -15,20 +15,20 @@ function eventChat(from, to, message)
 function resPowModVideo()
 {
 	powModVideoPlayed = true;
-	camPlayVideos("MB1_B2_MSG");
+	camPlayVideos({video: "MB1_B2_MSG", type: MISS_MSG});
 }
 
 //Sector clear commander!
 function secondVideo()
 {
-	camPlayVideos("SB1_1_MSG");
+	camPlayVideos({video: "SB1_1_MSG", type: MISS_MSG});
 }
 
 //Has player built the power module?
 function powerModuleBuilt()
 {
 	var gens = enumStruct(CAM_HUMAN_PLAYER, POWER_GEN, false);
-	for (var x = 0, l = gens.length; x < l; ++x)
+	for (let x = 0, l = gens.length; x < l; ++x)
 	{
 		if ((gens[x].modules > 0) && (gens[x].status === BUILT))
 		{
@@ -44,7 +44,7 @@ function checkForPowerModule()
 	if (cheat || powerModuleBuilt())
 	{
 		camSetupTransporter(11, 52, 1, 32);
-		setMissionTime(camChangeOnDiff(camMinutesToSeconds(15))); // 15 min for offworld
+		setMissionTime(camChangeOnDiff(camMinutesToSeconds(25))); // 25 min for offworld
 		secondVideo();
 
 		if (powModVideoPlayed)

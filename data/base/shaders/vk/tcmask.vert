@@ -1,21 +1,9 @@
 #version 450
 //#pragma debug(on)
 
-layout(std140, set = 0, binding = 0) uniform cbuffer
+layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
-	vec4 colour;
-	vec4 teamcolour; // the team colour of the model
-	float stretch;
-	int tcmask; // whether a tcmask texture exists for the model
-	int fogEnabled; // whether fog is enabled
-	int normalmap; // whether a normal map exists for the model
-	int specularmap; // whether a specular map exists for the model
-	int ecmEffect; // whether ECM special effect is enabled
-	int alphaTest;
-	float graphicsCycle; // a periodically cycling value for special effects
-	mat4 ModelViewMatrix;
-	mat4 ModelViewProjectionMatrix;
-	mat4 NormalMatrix;
+	mat4 ProjectionMatrix;
 	vec4 lightPosition;
 	vec4 sceneColor;
 	vec4 ambient;
@@ -24,7 +12,27 @@ layout(std140, set = 0, binding = 0) uniform cbuffer
 	vec4 fogColor;
 	float fogEnd;
 	float fogStart;
+	float graphicsCycle;
+	int fogEnabled;
+};
+
+layout(std140, set = 1, binding = 0) uniform meshuniforms
+{
+	int tcmask;
+	int normalmap;
+	int specularmap;
 	int hasTangents;
+};
+
+layout(std140, set = 2, binding = 0) uniform instanceuniforms
+{
+	mat4 ModelViewMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	int ecmEffect;
+	int alphaTest;
 };
 
 layout(location = 0) in vec4 vertex;
@@ -40,16 +48,14 @@ layout(location = 4) out vec2 texCoord;
 
 void main()
 {
-	vec3 vVertex = normalize((ModelViewMatrix * vertex).xyz);
-	vec4 position = vertex;
-
 	// Pass texture coordinates to fragment shader
 	texCoord = vertexTexCoord;
 
-	// Lighting -- we pass these to the fragment shader
+	// Lighting we pass to the fragment shader
+	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME
+	vec3 eyeVec = normalize(-viewVertex.xyz);
 	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	vec3 eyeVec = -vVertex;
-	lightDir = normalize(lightPosition.xyz - vVertex);
+	lightDir = normalize(lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
@@ -58,24 +64,23 @@ void main()
 		vec3 b = cross (n, t) * vertexTangent.w;
 		mat3 TangentSpaceMatrix = mat3(t, n, b);
 
-		// Transform calculated normals for vanilla models by tangent basis
-		n = n * TangentSpaceMatrix;
-
 		// Transform light and eye direction vectors by tangent basis
 		lightDir *= TangentSpaceMatrix;
 		eyeVec *= TangentSpaceMatrix;
 	}
 
 	normal = n;
-	halfVec = normalize(lightDir - eyeVec);
+	halfVec = lightDir + eyeVec;
 
 	// Implement building stretching to accommodate terrain
+	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
 		position.y -= stretch;
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * position;
 	gl_Position = gposition;
 

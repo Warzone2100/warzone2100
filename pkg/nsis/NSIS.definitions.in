@@ -1,14 +1,12 @@
 !define PACKAGE "@PACKAGE@"
-!if "@WZ_PORTABLE@" == "ON"
-  !define PORTABLE "ON"
-!endif
-!define PACKAGE_NAME "@PACKAGE_NAME@"
 !define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
 !define TOP_SRCDIR "@SOURCE_DIR@"
 !define TOP_BUILDDIR "@BUILD_DIR@"
 !define WZ_DATADIR_APPEND "@NSIS_WZ_DATADIR_APPEND@"
 !if "@NSIS_MSVCRUNTIME@" == "ON"
   !define MSVCRUNTIME "ON"
+  !define VS_PLATFORM_NAME "@WZ_VS_PLATFORM_NAME@"
+
   !if "@NSIS_CALCULATED_MSVCRT_BLD_MINIMUM@" == ""
     # default minimum if one couldn't be determined at build time - last updated 2020-11-18
     !define MSVCRT14_BLD_MINIMUM 29325 ; (14.28.29325.2)
@@ -16,23 +14,46 @@
     !define MSVCRT14_BLD_MINIMUM @NSIS_CALCULATED_MSVCRT_BLD_MINIMUM@
   !endif
 
-  !if "@CMAKE_VS_PLATFORM_NAME@" == "Win32"
+  !if "@WZ_VS_PLATFORM_NAME@" == "Win32"
     ; AppLocal (for portable version)
-    !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x86.zip"
-    !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x86.zip"
-    !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-x86.zip"
     !define MSVCRT_PORTABLE_DL_SHA512 "@NSIS_APPLOCALCONFIG_SHA512_X86@"
-    !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2022-x86.zip"
   !else
-    !if "@CMAKE_VS_PLATFORM_NAME@" == "x64"
+    !if "@WZ_VS_PLATFORM_NAME@" == "x64"
       ; AppLocal (for portable version)
-      !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x64.zip"
-      !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x64.zip"
-      !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-x64.zip"
       !define MSVCRT_PORTABLE_DL_SHA512 "@NSIS_APPLOCALCONFIG_SHA512_X64@"
-      !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2022-x64.zip"
     !else
-      !warning "Missing defines for platform: (@CMAKE_VS_PLATFORM_NAME@) in NSIS.definitions.in"
+      !if "@WZ_VS_PLATFORM_NAME@" == "arm64"
+        ; AppLocal (for portable version)
+        !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-arm64.zip"
+        !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-arm64.zip"
+        !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2022-arm64.zip"
+        !define MSVCRT_PORTABLE_DL_SHA512 "@NSIS_APPLOCALCONFIG_SHA512_ARM64@"
+        !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2022-arm64.zip"
+      !else
+        !warning "Missing defines for platform: (@WZ_VS_PLATFORM_NAME@) in NSIS.definitions.in"
+      !endif
     !endif
+  !endif
+!endif
+
+!if "@WZ_VS_PLATFORM_NAME@" == "x64"
+  !define WIN64 1
+!endif
+!if "@WZ_VS_PLATFORM_NAME@" == "arm64"
+  !define WIN64 1
+  !define WINARM64 1
+!endif
+
+!if "@WZ_VS_PLATFORM_NAME@" == ""
+  !if "@CMAKE_SIZEOF_VOID_P@" == "8"
+    !define WIN64 1
   !endif
 !endif

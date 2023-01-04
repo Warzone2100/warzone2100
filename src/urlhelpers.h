@@ -21,11 +21,16 @@
 #define __INCLUDED_SRC_URL_HELPERS_H__
 
 #include <string>
+#include <vector>
 
 bool openURLInBrowser(char const *url);
 std::string urlEncode(const char* urlFragment);
-bool urlHasHTTPorHTTPSPrefix(char const *url);
+bool urlHasAcceptableProtocol(char const *url);
 
 bool openFolderInDefaultFileManager(const char* path);
+
+#if defined(WZ_OS_WIN)
+bool win_utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr);
+#endif
 
 #endif // __INCLUDED_SRC_URL_HELPERS_H__

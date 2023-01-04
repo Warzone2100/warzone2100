@@ -34,11 +34,15 @@ class W_BARGRAPH : public WIDGET
 public:
 	W_BARGRAPH(W_BARINIT const *init);
 
-	void highlight(W_CONTEXT *psContext) override;
-	void highlightLost() override;
+	void run(W_CONTEXT *) override;
 	void display(int xOffset, int yOffset) override;
 
 	void setTip(std::string string) override;
+
+	std::string getTip() override
+	{
+		return pTip;
+	}
 
 	void setBackgroundColour(PIELIGHT colour)
 	{
@@ -49,19 +53,21 @@ public:
 	UWORD		majorSize;			// Percentage of the main bar that is filled
 	UWORD		minorSize;			// Percentage of the minor bar if there is one
 	UWORD		iRange;				// Maximum range
-	UWORD		iValue;				// Current value
-	UWORD		iOriginal;			// hack to keep uncapped value around
+	UWORD		majorValue;			// Untransformed major value
+	UWORD		minorValue;			// Untransformed minor value
 	int             denominator;                    // Denominator, 1 by default.
 	int             precision;                      // Number of places after the decimal point to display, 0 by default.
 	PIELIGHT	majorCol;			// Colour for the major bar
 	PIELIGHT	minorCol;			// Colour for the minor bar
 	PIELIGHT        textCol;                        // Colour for the text on the bar.
 	std::string         pTip;                           // The tool tip for the graph
-	std::string         text;                           // Text on the bar.
+	WzString            text;                           // Text on the bar.
 
 //private:
 	PIELIGHT backgroundColour;
 	WzText	 wzCachedText;
+
+	bool sizesDirty = false;
 };
 
 /* The trough bar graph display function */

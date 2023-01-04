@@ -5,150 +5,253 @@
 // Vtol rearming is handled in group management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//Setup hit and runner VTOLs. Passing in obj is optional and will automatically
-//disable the vtol spawner once that object is dead.
+//;; ## camSetVtolData(player, startPos, exitPos, templates, timer, [obj[, extras]])
+//;;
+//;; Setup hit and runner VTOLs. NOTE: Will almost immediately spawn VTOLs upon calling this function.
+//;; `Player`: What player number the VTOLs will belong to.
+//;; `StartPos`: Starting position object where VTOLs will spawn. Can be an array. Use undefined for random map edge location.
+//;; `ExitPos`: Exit position object where VTOLs will despawn at.
+//;; `Templates`: An array of templates that the spawn uses.
+//;; `Timer`: How much time in milliseconds the VTOLs will wait to spawn again.
+//;; `Obj`: A game object that will stop the spawn when it no longer exists. May be undefined for no explicit end condition.
+//;; `Extras`: An object with possible members:
+//;;		`limit`: Numeric limit of a VTOL design in regards to the parameter Templates. May be an array paired to Templates.
+//;;		`alternate`: A boolean to force the spawn to use one of the designs at a time in parameter Templates.
+//;;		`altIdx`: Which design index the spawn will first cycle through the list of templates from.
+//;;		`minVTOLs`: Minimum amount of VTOLs that will spawn.
+//;;		`maxRandomVTOLs`: Random amount of VTOLs that will spawn in addition to minVTOLs.
+//;;
+//;; @param {number} player
+//;; @param {Object|Object[]|undefined} startPos
+//;; @param {Object} exitPos
+//;; @param {Object[]} templates
+//;; @param {number} timer
+//;; @param {Object} obj
+//;; @param {Object} extras
+//;; @returns {void}
+//;;
 function camSetVtolData(player, startPos, exitPos, templates, timer, obj, extras)
 {
-	__camVtolPlayer = player;
-	__camVtolStartPosition = startPos;
-	__camVtolExitPosition = camMakePos(exitPos);
-	__camVtolTemplates = templates;
-	__camVtolSpawnStopObject = obj;
-	__camVtolExtras = extras;
-
-	camSetVtolSpawn(true);
-	setTimer("__camRetreatVtols", camSecondsToMilliseconds(0.8));
-	setTimer("__checkVtolSpawnObject", camSecondsToMilliseconds(5));
-	setTimer("__camSpawnVtols", timer);
+	__camVtolDataSystem.push({
+		player: player,
+		startPosition: startPos,
+		exitPosition: camMakePos(exitPos),
+		templates: templates,
+		spawnStopObject: obj,
+		extras: extras,
+		timer: timer,
+		nextSpawnTime: timer + gameTime,
+		isFirstSpawn: true,
+		active: true
+	});
 }
 
-function camSetVtolSpawn(value)
+//;; ## camSetVtolSpawnState(state, identifier)
+//;;
+//;; Sets the active status of a VTOL spawn point. The identifier can either be the
+//;; the index number or the label of the object that stops the spawn naturally.
+//;;
+//;; @param {boolean} state
+//;; @param {number|string} identifier
+//;; @returns {void}
+//;;
+function camSetVtolSpawnState(state, identifier)
 {
-	__camVtolSpawnActive = value;
+	if (typeof identifier === "number")
+	{
+		__camVtolDataSystem[identifier].active = state;
+	}
+	else if (typeof identifier === "string")
+	{
+		for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+		{
+			if (__camVtolDataSystem[idx].spawnStopObject === identifier)
+			{
+				__camVtolDataSystem[idx].active = state;
+				break;
+			}
+		}
+	}
+	else
+	{
+		camDebug("camSetVtolSpawn() expected a number or game object label string");
+	}
+}
+
+//;; ## camSetVtolSpawnStateAll(state)
+//;;
+//;; Sets the active status of all VTOL spawns to `state`.
+//;;
+//;; @param {boolean} state
+//;; @returns {void}
+//;;
+function camSetVtolSpawnStateAll(state)
+{
+	for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
+	{
+		camSetVtolSpawnState(state, idx);
+	}
 }
 
 //////////// privates
 
 function __checkVtolSpawnObject()
 {
-	if (camDef(__camVtolSpawnStopObject))
+	for (let idx = 0, len = __camVtolDataSystem.length; idx < len; ++idx)
 	{
-		if (getObject(__camVtolSpawnStopObject) === null)
+		if (__camVtolDataSystem[idx].active && camDef(__camVtolDataSystem[idx].spawnStopObject))
 		{
-			camSetVtolSpawn(false); //Deactive hit and runner VTOLs.
-			removeTimer("__checkVtolSpawnObject");
+			if (getObject(__camVtolDataSystem[idx].spawnStopObject) === null)
+			{
+				camSetVtolSpawnState(false, idx); //Deactivate hit and runner VTOLs.
+			}
 		}
 	}
 }
 
 function __camSpawnVtols()
 {
-	if (__camVtolSpawnActive === false)
+	for (let idx = 0; idx < __camVtolDataSystem.length; ++idx)
 	{
-		removeTimer("__camSpawnVtols");
-		return;
-	}
-
-	const MIN_VTOL_AMOUNT = 5;
-	const MAX_RANDOM_VTOL_ADDITIONS = 2;
-
-	var amount = MIN_VTOL_AMOUNT + camRand(MAX_RANDOM_VTOL_ADDITIONS + 1);
-	var droids = [];
-	var pos;
-
-	//Make sure to catch multiple start positions also.
-	if(__camVtolStartPosition instanceof Array)
-	{
-		pos = __camVtolStartPosition[camRand(__camVtolStartPosition.length)];
-	}
-	else
-	{
-		pos = __camVtolStartPosition;
-	}
-
-	if (!camDef(__camVtolExtras))
-	{
-		//Pick some droids randomly.
-		for (var i = 0; i < amount; ++i)
+		if (!__camVtolDataSystem[idx].active)
 		{
-			droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
+			continue;
 		}
-	}
-	else
-	{
-		var lim = amount;
-		var alternate = false;
-		if (camDef(__camVtolExtras.alternate))
+		if (gameTime < __camVtolDataSystem[idx].nextSpawnTime)
 		{
-			alternate = __camVtolExtras.alternate; //Only use one template type
-		}
-		if (!camDef(__camVtolExtras.altIdx))
-		{
-			__camVtolExtras.altIdx = 0;
-		}
-		if (camDef(__camVtolExtras.limit))
-		{
-			//support an array of limits for each template
-			if (__camVtolExtras.limit instanceof Array)
+			if (__camVtolDataSystem[idx].isFirstSpawn)
 			{
-				lim = __camVtolExtras.limit[__camVtolExtras.altIdx]; //max templates to use
+				__camVtolDataSystem[idx].isFirstSpawn = false;
 			}
 			else
 			{
-				lim = __camVtolExtras.limit;
+				continue;
 			}
-		}
-
-		for (var i = 0; i < lim; ++i)
-		{
-			if (!alternate)
-			{
-				droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
-			}
-			else
-			{
-				droids.push(__camVtolTemplates[__camVtolExtras.altIdx]);
-			}
-		}
-
-		if (__camVtolExtras.altIdx < __camVtolTemplates.length)
-		{
-			++__camVtolExtras.altIdx;
 		}
 		else
 		{
-			__camVtolExtras.altIdx = 0;
+			__camVtolDataSystem[idx].nextSpawnTime = gameTime + __camVtolDataSystem[idx].timer;
 		}
-	}
 
-	//...And send them.
-	camSendReinforcement(__camVtolPlayer, camMakePos(pos), droids, CAM_REINFORCE_GROUND, {
-		order: CAM_ORDER_ATTACK,
-		data: { regroup: false, count: -1 }
-	});
+		// Default VTOL amounts
+		let minVtolAmount = 5;
+		let maxRandomAdditions = 2;
+
+		if (camDef(__camVtolDataSystem[idx].extras))
+		{
+			if (camDef(__camVtolDataSystem[idx].extras.minVTOLs))
+			{
+				minVtolAmount = __camVtolDataSystem[idx].extras.minVTOLs;
+			}
+			if (camDef(__camVtolDataSystem[idx].extras.maxRandomVTOLs))
+			{
+				maxRandomAdditions = __camVtolDataSystem[idx].extras.maxRandomVTOLs;
+			}
+		}
+
+		let amount = minVtolAmount + camRand(maxRandomAdditions + 1);
+		let droids = [];
+		let pos;
+
+		//Make sure to catch multiple start positions also.
+		if (__camVtolDataSystem[idx].startPosition instanceof Array)
+		{
+			pos = __camVtolDataSystem[idx].startPosition[camRand(__camVtolDataSystem[idx].startPosition.length)];
+		}
+		else if (camDef(__camVtolDataSystem[idx].startPosition) && __camVtolDataSystem[idx].startPosition)
+		{
+			pos = __camVtolDataSystem[idx].startPosition;
+		}
+		else
+		{
+			pos = camGenerateRandomMapEdgeCoordinate();
+		}
+
+		if (!camDef(__camVtolDataSystem[idx].extras))
+		{
+			//Pick some droids randomly.
+			for (let i = 0; i < amount; ++i)
+			{
+				droids.push(__camVtolDataSystem[idx].templates[camRand(__camVtolDataSystem[idx].templates.length)]);
+			}
+		}
+		else
+		{
+			var lim = amount;
+			var alternate = false;
+			if (camDef(__camVtolDataSystem[idx].extras.alternate))
+			{
+				alternate = __camVtolDataSystem[idx].extras.alternate; //Only use one template type
+			}
+			if (!camDef(__camVtolDataSystem[idx].extras.altIdx))
+			{
+				__camVtolDataSystem[idx].extras.altIdx = 0;
+			}
+			if (camDef(__camVtolDataSystem[idx].extras.limit))
+			{
+				//support an array of limits for each template
+				if (__camVtolDataSystem[idx].extras.limit instanceof Array)
+				{
+					lim = __camVtolDataSystem[idx].extras.limit[__camVtolDataSystem[idx].extras.altIdx]; //max templates to use
+				}
+				else
+				{
+					lim = __camVtolDataSystem[idx].extras.limit;
+				}
+			}
+
+			for (let i = 0; i < lim; ++i)
+			{
+				if (!alternate)
+				{
+					droids.push(__camVtolDataSystem[idx].templates[camRand(__camVtolDataSystem[idx].templates.length)]);
+				}
+				else
+				{
+					droids.push(__camVtolDataSystem[idx].templates[__camVtolDataSystem[idx].extras.altIdx]);
+				}
+			}
+
+			if (__camVtolDataSystem[idx].extras.altIdx < (__camVtolDataSystem[idx].templates.length - 1))
+			{
+				++__camVtolDataSystem[idx].extras.altIdx;
+			}
+			else
+			{
+				__camVtolDataSystem[idx].extras.altIdx = 0;
+			}
+		}
+
+		//...And send them.
+		camSendReinforcement(__camVtolDataSystem[idx].player, camMakePos(pos), droids, CAM_REINFORCE_GROUND, {
+			order: CAM_ORDER_ATTACK,
+			data: { regroup: false, count: -1 }
+		});
+	}
 }
 
 function __camRetreatVtols()
 {
-	if (camDef(__camVtolExitPosition.x) &&
-		camDef(__camVtolExitPosition.y) &&
-		enumStruct(__camVtolPlayer, REARM_PAD).length === 0)
+	for (let idx = 0; idx < __camVtolDataSystem.length; ++idx)
 	{
-		const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
-		const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
-		var vtols = enumDroid(__camVtolPlayer).filter(function(obj) {
-			return isVTOL(obj);
-		});
-
-		for (var i = 0, len = vtols.length; i < len; ++i)
+		if (camDef(__camVtolDataSystem[idx].exitPosition.x) &&
+			camDef(__camVtolDataSystem[idx].exitPosition.y) &&
+			enumStruct(__camVtolDataSystem[idx].player, REARM_PAD).length === 0)
 		{
-			var vt = vtols[i];
-			for (var c = 0, len2 = vt.weapons.length; c < len2; ++c)
+			const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
+			const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
+			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => (isVTOL(obj)));
+
+			for (let i = 0, len = vtols.length; i < len; ++i)
 			{
-				if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
+				let vt = vtols[i];
+				for (let c = 0, len2 = vt.weapons.length; c < len2; ++c)
 				{
-					orderDroidLoc(vt, DORDER_MOVE, __camVtolExitPosition.x, __camVtolExitPosition.y);
-					break;
+					if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
+					{
+						orderDroidLoc(vt, DORDER_MOVE, __camVtolDataSystem[idx].exitPosition.x, __camVtolDataSystem[idx].exitPosition.y);
+						break;
+					}
 				}
 			}
 		}

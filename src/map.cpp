@@ -24,6 +24,7 @@
  *
  */
 #include <time.h>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/endian_hack.h"
@@ -31,6 +32,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/netplay/netplay.h"  // For syncDebug
+#include <wzmaplib/map.h>
 
 #include "map.h"
 #include "hci.h"
@@ -69,6 +71,9 @@ static int lastDangerPlayer = -1;
 //scroll min and max values
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
+//For saves to determine if loading the terrain type override should occur
+bool builtInMap;
+
 /* Structure definitions for loading and saving map data */
 struct MAP_SAVEHEADER  // : public GAME_SAVEHEADER
 {
@@ -104,9 +109,9 @@ struct GATEWAY_SAVE
 
 /* The size and contents of the map */
 SDWORD	mapWidth = 0, mapHeight = 0;
-MAPTILE	*psMapTiles = nullptr;
-uint8_t *psBlockMap[AUX_MAX];
-uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
+std::unique_ptr<MAPTILE[]> psMapTiles;
+std::unique_ptr<uint8_t[]> psBlockMap[AUX_MAX];
+std::unique_ptr<uint8_t[]> psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
 
 #define WATER_MIN_DEPTH 500
 #define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 400)
@@ -115,26 +120,23 @@ static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
 static bool hasDecals(int i, int j);
 static void SetDecals(const char *filename, const char *decal_type);
-static void init_tileNames(int type);
+static void init_tileNames(MAP_TILESET type);
 
 /// The different ground types
-GROUND_TYPE *psGroundTypes;
+std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
 int numGroundTypes;
 char *tilesetDir = nullptr;
 static int numTile_names;
-static char *Tile_names = nullptr;
-#define ARIZONA 1
-#define URBAN 2
-#define ROCKIE 3
-
-static int *map;			// 3D array pointer that holds the texturetype
-static bool *mapDecals;           // array that tells us what tile is a decal
+static std::unique_ptr<char[]> Tile_names = nullptr;
+	
+static std::unique_ptr<int[]> map; // 3D array pointer that holds the texturetype
+static std::unique_ptr<bool[]> mapDecals;           // array that tells us what tile is a decal
 #define MAX_TERRAIN_TILES 0x0200  // max that we support (for now), see TILE_NUMMASK
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
-static void init_tileNames(int type)
+static void init_tileNames(MAP_TILESET type)
 {
 	char	*pFileData = nullptr;
 	char	name[MAX_STR_LENGTH] = {'\0'};
@@ -145,7 +147,7 @@ static void init_tileNames(int type)
 
 	switch (type)
 	{
-	case ARIZONA:
+	case MAP_TILESET::ARIZONA:
 		{
 			if (!loadFileToBuffer("tileset/arizona_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -163,7 +165,7 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-	case URBAN:
+	case MAP_TILESET::URBAN:
 		{
 			if (!loadFileToBuffer("tileset/urban_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -181,7 +183,7 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-	case ROCKIE:
+	case MAP_TILESET::ROCKIES:
 		{
 			if (!loadFileToBuffer("tileset/rockie_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -199,9 +201,6 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-	default:
-		debug(LOG_FATAL, "Unknown type (%d) given.  Aborting.", type);
-		abort();
 	}
 
 	debug(LOG_TERRAIN, "name: %s, with %d entries", name, numlines);
@@ -214,9 +213,7 @@ static void init_tileNames(int type)
 	numTile_names = numlines;
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
-
-	Tile_names = (char *)malloc(numlines * sizeof(char[MAX_STR_LENGTH]));
-	memset(Tile_names, 0x0, (numlines * sizeof(char[MAX_STR_LENGTH])));
+	Tile_names = std::unique_ptr<char[]>(new char[numlines * MAX_STR_LENGTH]());
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -230,7 +227,7 @@ static void init_tileNames(int type)
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
-static bool mapLoadGroundTypes()
+static bool mapLoadGroundTypes(bool preview)
 {
 	char	*pFileData = nullptr;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
@@ -248,7 +245,12 @@ static bool mapLoadGroundTypes()
 	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
 fallback:
-		init_tileNames(ARIZONA);
+		// load the override terrain types
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::ARIZONA))
+		{
+			debug(LOG_POPUP, "Failed to load terrain type override");
+		}
+		init_tileNames(MAP_TILESET::ARIZONA);
 		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_FATAL, "tileset/tertilesc1hwGtype.txt not found, aborting.");
@@ -268,7 +270,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -278,7 +280,7 @@ fallback:
 			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = textureSize ;
+			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
 		}
 
 		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
@@ -287,7 +289,12 @@ fallback:
 	// for Urban
 	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
 	{
-		init_tileNames(URBAN);
+		// load the override terrain types
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::URBAN))
+		{
+			debug(LOG_POPUP, "Failed to load terrain type override");
+		}
+		init_tileNames(MAP_TILESET::URBAN);
 		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_POPUP, "tileset/tertilesc2hwGtype.txt not found, using default terrain ground types.");
@@ -307,7 +314,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -317,7 +324,7 @@ fallback:
 			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
+			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
 		}
 
 		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
@@ -326,7 +333,12 @@ fallback:
 	// for Rockie
 	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
 	{
-		init_tileNames(ROCKIE);
+		// load the override terrain types
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::ROCKIES))
+		{
+			debug(LOG_POPUP, "Failed to load terrain type override");
+		}
+		init_tileNames(MAP_TILESET::ROCKIES);
 		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_POPUP, "tileset/tertilesc3hwGtype.txt not found, using default terrain ground types.");
@@ -346,7 +358,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -356,7 +368,7 @@ fallback:
 			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
+			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
 		}
 
 		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
@@ -403,7 +415,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 
-	map = (int *)malloc(sizeof(int) * numlines * 2 * 2);	// this is a 3D array map[numlines][2][2]
+	map = std::unique_ptr<int[]> (new int[numlines * 2 * 2]());
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -450,7 +462,7 @@ static void rotFlip(int tile, int *i, int *j)
 {
 	int texture = TileNumber_texture(tile);
 	int rot;
-	int map[2][2], invmap[4][2];
+	int tmpMap[2][2], invmap[4][2];
 
 	if (texture & TILE_XFLIP)
 	{
@@ -461,11 +473,11 @@ static void rotFlip(int tile, int *i, int *j)
 		*j = 1 - *j;
 	}
 
-	map[0][0] = 0; invmap[0][0] = 0; invmap[0][1] = 0;
-	map[1][0] = 1; invmap[1][0] = 1; invmap[1][1] = 0;
-	map[1][1] = 2; invmap[2][0] = 1; invmap[2][1] = 1;
-	map[0][1] = 3; invmap[3][0] = 0; invmap[3][1] = 1;
-	rot = map[*i][*j];
+	tmpMap[0][0] = 0; invmap[0][0] = 0; invmap[0][1] = 0;
+	tmpMap[1][0] = 1; invmap[1][0] = 1; invmap[1][1] = 0;
+	tmpMap[1][1] = 2; invmap[2][0] = 1; invmap[2][1] = 1;
+	tmpMap[0][1] = 3; invmap[3][0] = 0; invmap[3][1] = 1;
+	rot = tmpMap[*i][*j];
 	rot -= (texture & TILE_ROTMASK) >> TILE_ROTSHIFT;
 	while (rot < 0)
 	{
@@ -595,9 +607,9 @@ static void SetDecals(const char *filename, const char *decal_type)
 	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
-	mapDecals = new bool[MAX_TERRAIN_TILES];
-	std::fill_n(mapDecals, MAX_TERRAIN_TILES, false);  // set everything to false.
-
+	// value initialization sets everything to false.
+	mapDecals = std::unique_ptr<bool[]>(new bool[MAX_TERRAIN_TILES]());
+	
 	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;
@@ -734,57 +746,193 @@ static void generateRiverbed()
 
 static bool afterMapLoad();
 
-/* Initialise the map structure */
-bool mapLoad(char const *filename, bool preview)
+class WzMapBinaryPhysFSStream : public WzMap::BinaryIOStream
 {
-	UDWORD		numGw, width, height;
-	char		aFileType[4];
-	UDWORD		version;
-	PHYSFS_file	*fp = PHYSFS_openRead(filename);
-
-	if (!fp)
+public:
+	WzMapBinaryPhysFSStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode)
 	{
-		debug(LOG_ERROR, "%s not found", filename);
+		switch (mode)
+		{
+			case WzMap::BinaryIOStream::OpenMode::READ:
+				pFile = PHYSFS_openRead(filename.c_str());
+				break;
+			case WzMap::BinaryIOStream::OpenMode::WRITE:
+				pFile = PHYSFS_openWrite(filename.c_str());
+				break;
+		}
+		if (pFile)
+		{
+			WZ_PHYSFS_SETBUFFER(pFile, 4096)//;
+		}
+	}
+	virtual ~WzMapBinaryPhysFSStream()
+	{
+		close();
+	};
+
+	bool openedFile() const { return pFile != nullptr; }
+
+	virtual optional<size_t> readBytes(void *buffer, size_t len) override
+	{
+		if (!pFile) { return nullopt; }
+		PHYSFS_sint64 result = WZ_PHYSFS_readBytes(pFile, buffer, static_cast<uint32_t>(len));
+		if (result < 0)
+		{
+			// failed
+			return nullopt;
+		}
+		return static_cast<size_t>(result);
+	}
+
+	virtual optional<size_t> writeBytes(const void *buffer, size_t len) override
+	{
+		if (!pFile) { return nullopt; }
+		PHYSFS_sint64 result = WZ_PHYSFS_writeBytes(pFile, buffer, static_cast<uint32_t>(len));
+		if (result < 0)
+		{
+			// failed
+			return nullopt;
+		}
+		return static_cast<size_t>(result);
+	}
+
+	virtual bool close() override
+	{
+		if (pFile == nullptr)
+		{
+			return false;
+		}
+
+		PHYSFS_close(pFile);
+		pFile = nullptr;
+		return true;
+	}
+
+	virtual bool endOfStream() override
+	{
+		if (!pFile) { return false; }
+		return PHYSFS_eof(pFile);
+	}
+private:
+	PHYSFS_File *pFile = nullptr;
+};
+
+std::unique_ptr<WzMap::BinaryIOStream> WzMapPhysFSIO::openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode)
+{
+	WzMapBinaryPhysFSStream* pStream = new WzMapBinaryPhysFSStream((m_basePath.empty()) ? filename : pathJoin(m_basePath, filename), mode);
+	if (!pStream->openedFile())
+	{
+		delete pStream;
+		return nullptr;
+	}
+	return std::unique_ptr<WzMap::BinaryIOStream>(pStream);
+}
+
+bool WzMapPhysFSIO::loadFullFile(const std::string& filename, std::vector<char>& fileData)
+{
+	std::string filenameFull = (m_basePath.empty()) ? filename : pathJoin(m_basePath, filename);
+	if (!PHYSFS_exists(filenameFull.c_str()))
+	{
 		return false;
 	}
-	else if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
-	         || !PHYSFS_readULE32(fp, &version)
-	         || !PHYSFS_readULE32(fp, &width)
-	         || !PHYSFS_readULE32(fp, &height)
-	         || aFileType[0] != 'm'
-	         || aFileType[1] != 'a'
-	         || aFileType[2] != 'p')
-	{
-		debug(LOG_ERROR, "Bad header in %s", filename);
-		goto failure;
-	}
-	else if (version <= VERSION_9)
-	{
-		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, version);
-		goto failure;
-	}
-	else if (version > CURRENT_VERSION_NUM)
-	{
-		debug(LOG_ERROR, "%s: Undefined save format version %u", filename, version);
-		goto failure;
-	}
-	else if ((uint64_t)width * height > MAP_MAXAREA)
-	{
-		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
-		goto failure;
-	}
+	return loadFileToBufferVector(filenameFull.c_str(), fileData, true, true);
+}
 
-	if (width <= 1 || height <= 1)
+bool WzMapPhysFSIO::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)
+{
+	std::string filenameFull = (m_basePath.empty()) ? filename : pathJoin(m_basePath, filename);
+	return saveFile(filenameFull.c_str(), ppFileData, fileSize);
+}
+
+bool WzMapPhysFSIO::makeDirectory(const std::string& directoryPath)
+{
+	std::string directoryPathFull = (m_basePath.empty()) ? directoryPath : pathJoin(m_basePath, directoryPath);
+	return PHYSFS_mkdir(directoryPath.c_str()) != 0;
+}
+
+const char* WzMapPhysFSIO::pathSeparator() const
+{
+	return "/"; // the platform-independent PhysFS path separator
+}
+
+bool WzMapPhysFSIO::enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	std::string basePathFull = (m_basePath.empty()) ? basePath : pathJoin(m_basePath, basePath);
+	return WZ_PHYSFS_enumerateFiles(basePathFull.c_str(), [basePathFull, enumFunc](const char* file) -> bool {
+		if (file == nullptr) { return true; }
+		if (*file == '\0') { return true; }
+		std::string fullPath = basePathFull + "/" + file;
+		if (WZ_PHYSFS_isDirectory(fullPath.c_str()))
+		{
+			return true; // skip and continue
+		}
+		return enumFunc(file);
+	});
+}
+
+bool WzMapPhysFSIO::enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
+{
+	std::string basePathFull = (m_basePath.empty()) ? basePath : pathJoin(m_basePath, basePath);
+	return WZ_PHYSFS_enumerateFolders(basePathFull.c_str(), enumFunc);
+}
+
+WzMapDebugLogger::~WzMapDebugLogger()
+{ }
+
+void WzMapDebugLogger::printLog(WzMap::LoggingProtocol::LogLevel level, const char *function, int line, const char *str)
+{
+	code_part logPart = LOG_INFO;
+	switch (level)
 	{
-		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
-		goto failure;
+		case WzMap::LoggingProtocol::LogLevel::Info_Verbose:
+			logPart = LOG_NEVER;
+			break;
+		case WzMap::LoggingProtocol::LogLevel::Info:
+			logPart = LOG_MAP;
+			break;
+		case WzMap::LoggingProtocol::LogLevel::Warning:
+			logPart = LOG_WARNING;
+			break;
+		case WzMap::LoggingProtocol::LogLevel::Error:
+			logPart = LOG_ERROR;
+			break;
 	}
+	if (enabled_debug[logPart])
+	{
+		_debug(line, logPart, function, "%s", str);
+	}
+}
+
+/* Initialise the map structure */
+bool mapLoad(char const *filename)
+{
+	WzMapPhysFSIO mapIO;
+	WzMapDebugLogger debugLoggerInstance;
+
+	std::shared_ptr<WzMap::MapData> loadedMap = loadMapData(filename, mapIO, &debugLoggerInstance);
+	if (!loadedMap)
+	{
+		// loadMapData call handles logging errors
+		return false;
+	}
+	return mapLoadFromWzMapData(loadedMap);
+
+}
+
+///* Initialise the map structure */
+bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
+{
+	uint32_t		width, height;
+	const bool		preview = false;
+
+	width = loadedMap->width;
+	height = loadedMap->height;
 
 	/* See if this is the first time a map has been loaded */
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = (MAPTILE *)calloc((size_t)width * height, sizeof(MAPTILE));
+	psMapTiles = std::unique_ptr<MAPTILE[]>(new MAPTILE[width * height]());
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
@@ -797,111 +945,7 @@ bool mapLoad(char const *filename, bool preview)
 	}
 
 	// load the ground types
-	if (!mapLoadGroundTypes())
-	{
-		goto failure;
-	}
-
-	if (!preview)
-	{
-		//preload the terrain textures
-		loadTerrainTextures();
-	}
-
-	//load in the map data itself
-
-	/* Load in the map data */
-	for (int i = 0; i < mapWidth * mapHeight; ++i)
-	{
-		UWORD	texture;
-		UBYTE	height;
-
-		if (!PHYSFS_readULE16(fp, &texture) || !PHYSFS_readULE8(fp, &height))
-		{
-			debug(LOG_ERROR, "%s: Error during savegame load", filename);
-			goto failure;
-		}
-
-		psMapTiles[i].texture = texture;
-		psMapTiles[i].height = height * ELEVATION_SCALE;
-
-		// Visibility stuff
-		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
-		memset(psMapTiles[i].sensors, 0, sizeof(psMapTiles[i].sensors));
-		memset(psMapTiles[i].jammers, 0, sizeof(psMapTiles[i].jammers));
-		psMapTiles[i].sensorBits = 0;
-		psMapTiles[i].jammerBits = 0;
-		psMapTiles[i].tileExploredBits = 0;
-	}
-
-	if (preview)
-	{
-		// no need to do anything else for the map preview
-		goto ok;
-	}
-
-	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
-	{
-		debug(LOG_ERROR, "Bad gateway in %s", filename);
-		goto failure;
-	}
-
-	for (unsigned i = 0; i < numGw; i++)
-	{
-		UBYTE	x0, y0, x1, y1;
-
-		if (!PHYSFS_readULE8(fp, &x0) || !PHYSFS_readULE8(fp, &y0) || !PHYSFS_readULE8(fp, &x1) || !PHYSFS_readULE8(fp, &y1))
-		{
-			debug(LOG_ERROR, "%s: Failed to read gateway info", filename);
-			goto failure;
-		}
-		if (!gwNewGateway(x0, y0, x1, y1))
-		{
-			debug(LOG_ERROR, "%s: Unable to add gateway %d - dropping it", filename, i);
-		}
-	}
-
-	if (!afterMapLoad())
-	{
-		goto failure;
-	}
-
-ok:
-	PHYSFS_close(fp);
-	return true;
-
-failure:
-	PHYSFS_close(fp);
-	return false;
-}
-
-/* Initialise the map structure */
-bool mapLoadFromScriptData(ScriptMapData const &data, bool preview)
-{
-	if (!data.valid)
-	{
-		debug(LOG_ERROR, "Data not found");
-		return false;
-	}
-
-	/* See if this is the first time a map has been loaded */
-	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoadFromScriptData()!");
-
-	/* Allocate the memory for the map */
-	psMapTiles = (MAPTILE *)calloc((size_t)data.mapWidth * data.mapHeight, sizeof(MAPTILE));
-	ASSERT(psMapTiles != nullptr, "Out of memory");
-
-	mapWidth = data.mapWidth;
-	mapHeight = data.mapHeight;
-
-	// FIXME: the map preview code loads the map without setting the tileset
-	if (!tilesetDir)
-	{
-		tilesetDir = strdup("texpages/tertilesc1hw");
-	}
-
-	// load the ground types
-	if (!mapLoadGroundTypes())
+	if (!mapLoadGroundTypes(preview))
 	{
 		return false;
 	}
@@ -917,8 +961,9 @@ bool mapLoadFromScriptData(ScriptMapData const &data, bool preview)
 	/* Load in the map data */
 	for (int i = 0; i < mapWidth * mapHeight; ++i)
 	{
-		psMapTiles[i].texture = data.texture[i];
-		psMapTiles[i].height = data.height[i];
+		ASSERT(loadedMap->mMapTiles[i].height <= TILE_MAX_HEIGHT, "Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", loadedMap->mMapTiles[i].height, static_cast<size_t>(TILE_MAX_HEIGHT));
+		psMapTiles[i].texture = loadedMap->mMapTiles[i].texture;
+		psMapTiles[i].height = loadedMap->mMapTiles[i].height;
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
@@ -935,9 +980,22 @@ bool mapLoadFromScriptData(ScriptMapData const &data, bool preview)
 		return true;
 	}
 
-	// Skip gateways, not adding any.
+	size_t gwIdx = 0;
+	for (const auto gateway : loadedMap->mGateways)
+	{
+		if (!gwNewGateway(gateway.x1, gateway.y1, gateway.x2, gateway.y2))
+		{
+			debug(LOG_ERROR, "Unable to add gateway %zu - dropping it", gwIdx);
+		}
+		gwIdx++;
+	}
 
-	return afterMapLoad();
+	if (!afterMapLoad())
+	{
+		return false;
+	}
+
+	return true;
 }
 
 static bool afterMapLoad()
@@ -963,12 +1021,14 @@ static bool afterMapLoad()
 	scrollMaxY = mapHeight;
 
 	/* Allocate aux maps */
-	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
-	psBlockMap[AUX_ASTARMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
-	psBlockMap[AUX_DANGERMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
+	ASSERT(mapWidth >= 0 && mapHeight >= 0, "Invalid mapWidth or mapHeight (%d x %d)", mapWidth, mapHeight);
+	const size_t mapSize = static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight);
+	psBlockMap[AUX_MAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
+	psBlockMap[AUX_ASTARMAP] =  std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
+	psBlockMap[AUX_DANGERMAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
 	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
-		psAuxMap[x] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
+		psAuxMap[x] = std::unique_ptr<uint8_t[]> (new uint8_t[mapSize]());
 	}
 
 	// Set our blocking bits
@@ -1008,96 +1068,45 @@ static bool afterMapLoad()
 }
 
 /* Save the map data */
-bool mapSave(char **ppFileData, UDWORD *pFileSize)
+bool mapSaveToWzMapData(WzMap::MapData& output)
 {
-	UDWORD	numGateways = gwNumGateways();
+	output.width = mapWidth;
+	output.height = mapHeight;
 
-	/* Allocate the data buffer */
-	static_assert(SAVE_HEADER_SIZE == (sizeof(char) * 4) + (sizeof(UDWORD) * 3), "SAVE_HEADER_SIZE doesn't match?");
-	static_assert(SAVE_TILE_SIZE == sizeof(UWORD) + sizeof(UBYTE), "SAVE_TILE_SIZE doesn't match?");
-	*pFileSize = SAVE_HEADER_SIZE + mapWidth * mapHeight * SAVE_TILE_SIZE;
-	// Add on the size of the gateway data.
-	*pFileSize += (sizeof(UDWORD) * 2) + ((sizeof(UBYTE) * 4) * numGateways);
-
-	*ppFileData = (char *)malloc(*pFileSize);
-	if (*ppFileData == nullptr)
+	// Write out the map tile data
+	uint32_t numMapTiles = output.width * output.height;
+	output.mMapTiles.clear();
+	output.mMapTiles.reserve(numMapTiles);
+	for (uint32_t i = 0; i < numMapTiles; i++)
 	{
-		debug(LOG_FATAL, "Out of memory");
-		abort();
-		return false;
-	}
-	char *pCurrFileData = *ppFileData;
-
-	auto push_uword = [&](UWORD value) {
-		endian_uword(&value);
-		memcpy(pCurrFileData, &value, sizeof(value));
-		pCurrFileData += sizeof(value);
-		ASSERT(pCurrFileData - *ppFileData <= *pFileSize, "Buffer overrun (buffer size: %" PRIu32") (writing to: %" PRIu32")", *pFileSize, static_cast<uint32_t>(pCurrFileData - *ppFileData));
-	};
-	auto push_udword = [&](UDWORD value) {
-		endian_udword(&value);
-		memcpy(pCurrFileData, &value, sizeof(value));
-		pCurrFileData += sizeof(value);
-		ASSERT(pCurrFileData - *ppFileData <= *pFileSize, "Buffer overrun (buffer size: %" PRIu32") (writing to: %" PRIu32")", *pFileSize, static_cast<uint32_t>(pCurrFileData - *ppFileData));
-	};
-
-	/* Put the file header on the file */
-	char aFileType[4];
-	aFileType[0] = 'm';
-	aFileType[1] = 'a';
-	aFileType[2] = 'p';
-	aFileType[3] = ' ';
-	memcpy(pCurrFileData, aFileType, sizeof(aFileType));
-	pCurrFileData += sizeof(aFileType);
-
-	push_udword(CURRENT_VERSION_NUM);
-	push_udword(mapWidth);
-	push_udword(mapHeight);
-
-	/* Put the map data into the buffer */
-	MAPTILE	*psTile = psMapTiles;
-	for (int i = 0; i < mapWidth * mapHeight; i++)
-	{
-		UWORD	texture;
-		UBYTE	height;
-
-		texture = psTile->texture;
-		if (terrainType(psTile) == TER_WATER)
+		WzMap::MapData::MapTile mapDataTile = {};
+		mapDataTile.texture = psMapTiles[i].texture;
+		if (terrainType(&psMapTiles[i]) == TER_WATER)
 		{
-			height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
+			mapDataTile.height = (psMapTiles[i].waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
 		}
 		else
 		{
-			height = psTile->height / ELEVATION_SCALE;
+			mapDataTile.height = psMapTiles[i].height;
 		}
-
-		push_uword(texture);
-		memcpy(pCurrFileData, &height, sizeof(height)); pCurrFileData += sizeof(height);
-
-		psTile++;
+		output.mMapTiles.push_back(std::move(mapDataTile));
 	}
 
-	// Put the gateway header.
-	UDWORD version = 1;
-	push_udword(version);
-	push_udword(numGateways);
-
-	// Put the gateway data.
-	UBYTE	x0, y0, x1, y1;
+	// Write out the gateway data
+	output.mGateways.clear();
+	output.mGateways.reserve(gwNumGateways());
 	for (auto psCurrGate : gwGetGateways())
 	{
-		x0 = psCurrGate->x1;
-		y0 = psCurrGate->y1;
-		x1 = psCurrGate->x2;
-		y1 = psCurrGate->y2;
-		ASSERT(x0 == x1 || y0 == y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
-		       x0, y0, x1, y1);
-		ASSERT(x0 < mapWidth && y0 < mapHeight && x1 < mapWidth && y1 < mapHeight,
-		       "Bad gateway dimensions for savegame");
-		memcpy(pCurrFileData, &x0, sizeof(x0)); pCurrFileData += sizeof(x0);
-		memcpy(pCurrFileData, &y0, sizeof(y0)); pCurrFileData += sizeof(y0);
-		memcpy(pCurrFileData, &x1, sizeof(x1)); pCurrFileData += sizeof(x1);
-		memcpy(pCurrFileData, &y1, sizeof(y1)); pCurrFileData += sizeof(y1);
+		WzMap::MapData::Gateway gw = {};
+		gw.x1 = psCurrGate->x1;
+		gw.y1 = psCurrGate->y1;
+		gw.x2 = psCurrGate->x2;
+		gw.y2 = psCurrGate->y2;
+		ASSERT(gw.x1 == gw.x2 || gw.y1 == gw.y2, "Invalid gateway coordinates (%d, %d, %d, %d)",
+			   gw.x1, gw.y1, gw.x2, gw.y2);
+		ASSERT(gw.x1 < mapWidth && gw.y1 < mapHeight && gw.x2 < mapWidth && gw.y2 < mapHeight,
+			   "Bad gateway dimensions for savegame");
+		output.mGateways.push_back(std::move(gw));
 	}
 
 	return true;
@@ -1121,22 +1130,14 @@ bool mapShutdown()
 		dangerDoneSemaphore = nullptr;
 	}
 
-	free(psMapTiles);
-	delete[] mapDecals;
-	free(psGroundTypes);
-	free(map);
-	free(Tile_names);
-	free(psBlockMap[AUX_MAP]);
+	mapDecals = nullptr;
 	psBlockMap[AUX_MAP] = nullptr;
-	free(psBlockMap[AUX_ASTARMAP]);
 	psBlockMap[AUX_ASTARMAP] = nullptr;
-	free(psBlockMap[AUX_DANGERMAP]);
 	free(floodbucket);
 	psBlockMap[AUX_DANGERMAP] = nullptr;
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
-		free(psAuxMap[x]);
-		psAuxMap[x] = nullptr;
+		psAuxMap[x].reset();
 	}
 
 	map = nullptr;

@@ -1,8 +1,8 @@
 //
 // VkhInfo
-// Version: 1.3.1
+// Version: 1.3.2
 //
-// Copyright (c) 2019-2020 past-due
+// Copyright (c) 2019-2021 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
@@ -20,9 +20,15 @@
 #ifndef NOMINMAX
     #define NOMINMAX // For windows.h
 #endif
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshadow"
+#endif
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wcast-align"
 #endif
 #include <vulkan/vulkan.hpp>
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9

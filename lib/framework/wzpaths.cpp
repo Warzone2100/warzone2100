@@ -75,3 +75,63 @@ std::string getWZInstallPrefix()
 
 	return prefixDir;
 }
+
+// MARK: - WzPathInfo
+
+WzPathInfo::WzPathInfo(const std::string &file)
+: file(file)
+{ }
+
+WzPathInfo WzPathInfo::fromPlatformIndependentPath(const std::string& file)
+{
+	return WzPathInfo(file);
+}
+
+// Returns the name of the file (excluding the path).
+std::string WzPathInfo::fileName() const
+{
+	auto lastSlashPos = file.rfind('/');
+	if (std::string::npos == lastSlashPos)
+	{
+		// no slash - treat the entire string as the filename
+		return file;
+	}
+	return file.substr(lastSlashPos + 1);
+}
+
+// Returns the file name, including the path.
+std::string WzPathInfo::filePath() const
+{
+	return file;
+}
+
+// Returns the base name of the file (without the path).
+// The base name = all characters in the file up to (but not including) the first '.' character.
+// ex.
+// ```cpp
+//   WzPathInfo info("/autohost/example.js");
+//   auto result = info.baseName(); // result == "example"
+// ```
+std::string WzPathInfo::baseName() const
+{
+	auto result = fileName();
+	auto firstPeriodPos = result.find('.');
+	if (std::string::npos == firstPeriodPos)
+	{
+		// no period
+		return result;
+	}
+	return result.substr(0, firstPeriodPos);
+}
+
+// Returns the file's path. Does *not* include the file name.
+std::string WzPathInfo::path() const
+{
+	auto lastSlashPos = file.rfind('/');
+	if (std::string::npos == lastSlashPos)
+	{
+		// no slash - return "." as the path
+		return ".";
+	}
+	return file.substr(0, std::max<size_t>(lastSlashPos, (size_t)1));
+}

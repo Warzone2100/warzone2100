@@ -25,8 +25,13 @@
 #include <vector>
 
 #include "lib/framework/vector.h"
+#include "lib/framework/wzstring.h"
 #include "gfx_api.h"
 #include "pietypes.h"
+
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 enum iV_fonts
 {
@@ -37,6 +42,7 @@ enum iV_fonts
 	font_bar,
 	font_scaled,
 	font_regular_bold,
+	font_medium_bold,
 	font_count
 };
 
@@ -44,15 +50,16 @@ class WzText
 {
 public:
 	WzText() {}
-	WzText(const std::string &text, iV_fonts fontID);
-	void setText(const std::string &text, iV_fonts fontID/*, bool delayRender = false*/);
+	WzText(const WzString &text, iV_fonts fontID);
+	void setText(const WzString &text, iV_fonts fontID/*, bool delayRender = false*/);
 	~WzText();
 	// Width (in points)
 	int width();
 	// Height (in points)
 	int height();
-	void render(Vector2i position, PIELIGHT colour, float rotation = 0.0f);
-	void render(int x, int y, PIELIGHT colour, float rotation = 0.0f) { render(Vector2i{x,y}, colour, rotation); }
+	void render(Vector2f position, PIELIGHT colour, float rotation = 0.0f, int maxWidth = -1, int maxHeight = -1);
+	void render(float x, float y, PIELIGHT colour, float rotation = 0.0f, int maxWidth = -1, int maxHeight = -1) { render(Vector2f{x,y}, colour, rotation, maxWidth, maxHeight); }
+	void renderOutlined(int x, int y, PIELIGHT colour, PIELIGHT outlineColour);
 	int aboveBase(); // (in points)
 	int belowBase(); // (in points)
 	int lineSize(); // (in points)
@@ -64,15 +71,15 @@ public:
 	WzText(WzText&& other);
 
 public:
-	const std::string& getText() const { return mText; }
+	const WzString& getText() const { return mText; }
 	iV_fonts getFontID() const { return mFontID; }
 
 private:
-	void drawAndCacheText(const std::string &text, iV_fonts fontID);
+	void drawAndCacheText(const WzString &text, iV_fonts fontID);
 	void redrawAndCacheText();
 	void updateCacheIfNecessary();
 private:
-	std::string mText;
+	WzString mText;
 	gfx_api::texture* texture = nullptr;
 	int mPtsAboveBase = 0;
 	int mPtsBelowBase = 0;
@@ -88,13 +95,13 @@ private:
 class WidthLimitedWzText: public WzText
 {
 private:
-	std::string mFullText;
+	WzString mFullText;
 	size_t mLimitWidthPts = 0;
 
 public:
 	// Sets the text, truncating to a desired width limit (in *points*) if needed
 	// returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
-	size_t setTruncatableText(const std::string &text, iV_fonts fontID, size_t limitWidthInPoints);
+	size_t setTruncatableText(const WzString &text, iV_fonts fontID, size_t limitWidthInPoints);
 };
 
 /**
@@ -103,10 +110,10 @@ public:
  The scale factors are used to scale the rendering / rasterization of the text to a higher DPI.
  It is expected that they will be >= 1.0.
 
- @param horizScaleFactor The horizontal DPI scale factor.
- @param vertScaleFactor The vertical DPI scale factor.
+ @param horizScalePercentage The new horizontal DPI scale percentage (100, 125, 150, 200, etc).
+ @param vertScalePercentage The new vertical DPI scale percentage (100, 125, 150, 200, etc).
  */
-void iV_TextInit(float horizScaleFactor, float vertScaleFactor);
+void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercentage);
 
 /**
  Reinitializes the text rendering subsystem with a new horizontal & vertical scale factor.
@@ -120,24 +127,29 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor);
  to re-render that text once the text subsystem has reinitialized.
  (WzText instances handle run-time changes of the text rendering scale factor automatically.)
 
- @param horizScaleFactor The new horizontal DPI scale factor.
- @param vertScaleFactor The new vertical DPI scale factor.
+ @param horizScalePercentage The new horizontal DPI scale percentage (100, 125, 150, 200, etc).
+ @param vertScalePercentage The new vertical DPI scale percentage (100, 125, 150, 200, etc).
  */
-void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor);
+void iV_TextUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int vertScalePercentage);
 void iV_TextShutdown();
 void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
+
+int iV_GetEllipsisWidth(iV_fonts fontID);
+void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour);
 
 int iV_GetTextAboveBase(iV_fonts fontID);
 int iV_GetTextBelowBase(iV_fonts fontID);
 int iV_GetTextLineSize(iV_fonts fontID);
-unsigned int iV_GetTextWidth(const char *String, iV_fonts fontID);
+unsigned int iV_GetTextWidth(const WzString& String, iV_fonts fontID);
 unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV_fonts fontID);
 unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID);
 
 unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID);
 void iV_SetTextColour(PIELIGHT colour);
 
-/// Valid values for "Justify" argument of iV_DrawFormattedText().
+optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID);
+
+/// Valid values for "Justify" argument of iV_FormatText().
 enum
 {
 	FTEXT_LEFTJUSTIFY,			// Left justify.
@@ -151,8 +163,7 @@ struct TextLine
 	Vector2i dimensions;
 	Vector2i offset;
 };
-std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines = false);
-int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, iV_fonts fontID);
+std::vector<TextLine> iV_FormatText(const WzString& String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines = false);
 void iV_DrawTextRotated(const char *string, float x, float y, float rotation, iV_fonts fontID);
 
 /// Draws text with a printf syntax to the screen.

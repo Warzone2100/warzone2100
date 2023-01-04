@@ -48,7 +48,7 @@ CAM2_2_MSG			_("TRANSPORT MISSION: Intercept convoy.")
 CAM2_2_MSG2			_("Data from the Collective's base indicates the presence of the NEXUS intruder program.")
 CAM2_2_MSG3			_("Before NEXUS switched itself off-line we accessed the following.")
 
-CAM2_2_MSG4			_("An enemy commander is collecting a shipment from NEXUS at this location.")		
+CAM2_2_MSG4			_("An enemy commander is collecting a shipment from NEXUS at this location.")
 CAM2_2_MSG5			_("Once at the LZ, eradicate the enemy commander and recover the shipment.")
 CAM2_2_MSG6			_("Then return to the LZ.")
 
@@ -138,16 +138,16 @@ CAM2_8_MSG5			_("Eradicate any enemy and secure the area.")
 CAM2_8_MSG6			_("Once a safe haven is established, return to the LZ for further orders.")
 
 /* Cam2DII - Air Raid & Evac - player ident */
-CAM2_DII_MSG1			_("BETA BASE MISSION: Evacuate!")
+CAM2_DII_MSG1			_("BETA BASE MISSION: Survive and evacuate! Bring a truck")
 CAM2_DII_MSG2			_("Commander, we have grave news.")
 CAM2_DII_MSG9			_("Alpha base has been destroyed by nuclear missile attack.")
 
 /* Cam2DII - Air Raid & Evac - mission brief */
-CAM2_DII_MSG3			_("BETA BASE MISSION: Evacuate!")
+CAM2_DII_MSG3			_("BETA BASE MISSION: Survive and evacuate! Bring a truck")
 CAM2_DII_MSG4			_("The Collective are unaware of the nuclear attack and have air units heading for your base.")
 CAM2_DII_MSG5			_("This message was intercepted a few moments ago...")
 
 /* Cam2DII - Air Raid & Evac - player ident part 2 */
-CAM2_DII_MSG6			_("BETA BASE MISSION: Evacuate!")
+CAM2_DII_MSG6			_("BETA BASE MISSION: Survive and evacuate! Bring a truck")
 CAM2_DII_MSG7			_("You must transport as many of your forces as possible.")
 CAM2_DII_MSG8			_("Good luck, Commander.")

@@ -21,6 +21,7 @@
 #define STRING_EXT_H
 
 #define FRAME_LIB_INCLUDE
+#include "wzglobal.h"
 #include "debug.h"
 #include <string.h>
 #include <stddef.h>
@@ -229,6 +230,11 @@ static inline void sstringf(std::string &str, char const *format, P &&... params
 		snprintf(&str[0], len + 1, format, std::forward<P>(params)...);
 	}
 	str.resize(len);
+}
+
+static inline bool strEndsWith(const std::string &str, const std::string &suffix)
+{
+	return (str.size() >= suffix.size()) && (str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0);
 }
 
 #endif // STRING_EXT_H

@@ -30,6 +30,8 @@
 #include "lib/sound/audio_id.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
+#include <limits>
+
 #include "visibility.h"
 
 #include "objects.h"
@@ -132,6 +134,7 @@ static inline void updateTileVis(MAPTILE *psTile)
 
 uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry)
 {
+	ASSERT_OR_RETURN(0, player >= 0 && player < MAX_PLAYERS, "invalid player: %d", player);
 	SPOTTER *psSpot = new SPOTTER(x, y, player, radius, (int)radar, expiry);
 	size_t size;
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
@@ -365,11 +368,15 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 		if (tile != help->final)
 		{
 			MAPTILE *psTile = mapTile(tile);
-			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
+			if (TileHasWall_raycast(psTile) && !TileHasSmallStructure(psTile))
 			{
-				help->lastHeight = 2 * UBYTE_MAX * ELEVATION_SCALE;
-				help->wall = pos.xy();
-				help->numWalls++;
+				STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
+				if (psStruct->pStructureType->type != REF_GATE || psStruct->state != SAS_OPEN)
+				{
+					help->lastHeight = 2 * TILE_MAX_HEIGHT;
+					help->wall = pos.xy();
+					help->numWalls++;
+				}
 			}
 		}
 	}
@@ -448,6 +455,11 @@ void revealAll(UBYTE player)
 	SDWORD   i, j;
 	MAPTILE	*psTile;
 
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
 	//reveal all tiles
 	for (i = 0; i < mapWidth; i++)
 	{
@@ -465,7 +477,7 @@ void revealAll(UBYTE player)
  * psViewer should be an object that has some form of sensor,
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
- * struckBlock controls whether structures block LOS
+ * wallsBlock controls whether structures block LOS
  */
 int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock)
 {
@@ -636,13 +648,16 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 
 bool hasSharedVision(unsigned viewer, unsigned ally)
 {
-	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
+	if (viewer >= MAX_PLAYERS) { return false; }
+	ASSERT_OR_RETURN(false, ally < MAX_PLAYERS, "Bad ally %u (viewer: %u)", ally, viewer);
 
 	return viewer == ally || (bMultiPlayer && alliancesSharedVision(game.alliance) && aiCheckAlliances(viewer, ally));
 }
 
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
+	if (viewer >= MAX_PLAYERS) { return; }
+
 	//forward out vision to our allies
 	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
@@ -655,6 +670,8 @@ static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX
 
 static void setSeenByInstantly(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
+	if (viewer >= MAX_PLAYERS) { return; }
+
 	//forward out vision to our allies
 	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
@@ -692,7 +709,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 	// you can always see anything that a CB sensor is targetting
 	// Anyone commenting this out again will get a knee capping from John.
 	// You have been warned!!
-	if (psStruct != nullptr && (structCBSensor(psStruct) || structVTOLCBSensor(psStruct)) && psStruct->psTarget[0] != nullptr)
+	if (psStruct != nullptr && psStruct->status == SS_BUILT && (structCBSensor(psStruct) || structVTOLCBSensor(psStruct)) && psStruct->psTarget[0] != nullptr)
 	{
 		setSeenByInstantly(psStruct->psTarget[0], psObj->player, UBYTE_MAX);
 	}
@@ -737,7 +754,7 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 
 /* Find out what can see this object */
 // Fade in/out of view. Must be called after calculation of which objects are seen.
-static void processVisibilityLevel(BASE_OBJECT *psObj)
+static void processVisibilityLevel(BASE_OBJECT *psObj, bool& addedMessage)
 {
 	// update the visibility levels
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
@@ -801,6 +818,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj)
 					{
 						psMessage->psObj = psObj;
 						debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", static_cast<void *>(psMessage->pViewData));
+						addedMessage = true;
 					}
 					if (!bInTutorial && player == selectedPlayer)
 					{
@@ -855,6 +873,7 @@ void processVisibility()
 			}
 		}
 	}
+	bool addedMessage = false;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
 		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
@@ -863,9 +882,13 @@ void processVisibility()
 		{
 			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
 			{
-				processVisibilityLevel(psObj);
+				processVisibilityLevel(psObj, addedMessage);
 			}
 		}
+	}
+	if (addedMessage)
+	{
+		jsDebugMessageUpdate();
 	}
 }
 
@@ -877,6 +900,11 @@ void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player)
 	STRUCTURE	*psStructure;
 	FEATURE_STATS const *psStats;
 	MAPTILE		*psTile;
+
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
 
 	if (psObj->type == OBJ_FEATURE)
 	{

@@ -27,6 +27,10 @@
 #include "lib/framework/frame.h"
 #include "levels.h"
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 enum GAMECODE
 {
 	GAMECODE_CONTINUE,
@@ -64,13 +68,16 @@ bool loop_GetVideoStatus();
 SDWORD loop_GetVideoMode();
 bool	gamePaused();
 void	setGamePauseStatus(bool val);
-void loopFastExit();
 
 bool gameUpdatePaused();
 bool audioPaused();
 bool scriptPaused();
 bool scrollPaused();
 bool consolePaused();
+
+constexpr size_t WZ_DEFAULT_MAX_FASTFORWARD_TICKS = 1;
+size_t getMaxFastForwardTicks();
+void setMaxFastForwardTicks(optional<size_t> value = nullopt, bool fixedToNormalTickRate = true);
 
 void setGameUpdatePause(bool state);
 void setAudioPause(bool state);

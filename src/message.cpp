@@ -37,6 +37,7 @@
 #include "hci.h"
 #include "stats.h"
 #include "text.h"
+#include "qtscript.h"
 
 static std::map<WzString, VIEWDATA *> apsViewData;
 
@@ -54,6 +55,8 @@ PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 
 /* The IMD to use for the proximity messages */
 iIMDShape	*pProximityMsgIMD;
+
+bool releaseObjectives = true;
 
 
 /* Creating a new message
@@ -397,6 +400,7 @@ void freeMessages()
 {
 	releaseAllProxDisp();
 	releaseAllMessages(apsMessages);
+	jsDebugMessageUpdate();
 }
 
 /* removes all the proximity displays */
@@ -404,6 +408,7 @@ void releaseAllProxDisp()
 {
 	UDWORD				player;
 	PROXIMITY_DISPLAY	*psCurr, *psNext;
+	bool removedAMessage = false;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -412,11 +417,16 @@ void releaseAllProxDisp()
 			psNext = psCurr->psNext;
 			//remove message associated with this display
 			removeMessage(psCurr->psMessage, player);
+			removedAMessage = true;
 		}
 		apsProxDisp[player] = nullptr;
 	}
 	//re-initialise variables
 	currentNumProxDisplays = 0;
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
+	}
 }
 
 /* Initialise the message heaps */
@@ -561,7 +571,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			//read in the data for the sequences
 			for (unsigned dataInc = 0; dataInc < psViewReplay->seqList.size(); dataInc++)
 			{
-				int numText = 0;
+				int numSeqText = 0;
 
 				name[0] = '\0';
 				//load extradat for extended type only
@@ -571,7 +581,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					pViewMsgData += cnt;
 					//set the flag to default
 					psViewReplay->seqList[dataInc].flag = 0;
-					numText = count;
+					numSeqText = count;
 				}
 				else //extended type
 				{
@@ -579,12 +589,12 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					sscanf(pViewMsgData, ",%255[^,'\r\n],%u,%d%n", name, &count, &count2, &cnt);
 					pViewMsgData += cnt;
 					psViewReplay->seqList[dataInc].flag = (UBYTE)count;
-					numText = count2;
+					numSeqText = count2;
 				}
 				psViewReplay->seqList[dataInc].sequenceName = name;
 
 				//get the text strings for this sequence - if any
-				for (unsigned seqInc = 0; seqInc < numText; seqInc++)
+				for (unsigned seqInc = 0; seqInc < numSeqText; seqInc++)
 				{
 					name[0] = '\0';
 					sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt);
@@ -603,6 +613,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				if (strcmp(audioName, "0"))
 				{
 					//allocate space
+					ASSERT(false, "Unexpected separate audio track provided (%s), for %s in %s - this is deprecated!", audioName, psViewReplay->seqList[dataInc].sequenceName.toUtf8().c_str(), (filename) ? filename->toUtf8().c_str() : "<unknown filename>");
 					psViewReplay->seqList[dataInc].audio = audioName;
 				}
 			}
@@ -775,12 +786,38 @@ static void checkMessages(VIEWDATA *psViewData)
 {
 	MESSAGE			*psCurr, *psNext;
 
+	bool removedAMessage = false;
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (psCurr = apsMessages[i]; psCurr != nullptr; psCurr = psNext)
 		{
 			psNext = psCurr->psNext;
 			if (psCurr->pViewData == psViewData)
+			{
+				removeMessage(psCurr, i);
+				removedAMessage = true;
+			}
+		}
+	}
+
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
+	}
+}
+
+void releaseAllFlicMessages(MESSAGE *list[])
+{
+	MESSAGE	*psCurr, *psNext;
+
+	// Iterate through all players' message lists
+	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+	{
+		// Iterate through all messages in list
+		for (psCurr = list[i]; psCurr != nullptr; psCurr = psNext)
+		{
+			psNext = psCurr->psNext;
+			if (psCurr->type == MSG_MISSION || psCurr->type == MSG_CAMPAIGN)
 			{
 				removeMessage(psCurr, i);
 			}
@@ -801,6 +838,11 @@ void viewDataShutDown(const char *fileName)
 		{
 			++iter;
 			continue; // do not delete this now
+		}
+		if (!releaseObjectives && (psViewData->type == VIEW_RPL || psViewData->type == VIEW_RPLX))
+		{
+			++iter;
+			continue;
 		}
 
 		// check for any messages using this viewdata

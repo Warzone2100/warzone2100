@@ -1,4 +1,4 @@
-
+debugMsg('Module: chatting.js','init');
 
 function chatting(type){
 	var chlen = chatting[type].length;		// Забавно, спустя некотое время я только осознал, что за имя я дал этой переменной xDDD
@@ -113,7 +113,9 @@ chatting['loose'] = [
 	'How dare you!',
 	'wtf?.. lol, gg',
 	'nice cheat man.. bye'
+
 ];
+
 
 chatting['berserk'] = [
 'Time to kick someone\'s ..',
@@ -142,5 +144,6 @@ chatting['no'] = [
 'I would love to, but no.',
 'Well, whatever you say.. but.. wait, no!'
 ];
+
 
 chatting['dev'] = ['This is dev version, dont use it! Данная версия бота не является релизом и может содержать баги! Не используйте её!'];

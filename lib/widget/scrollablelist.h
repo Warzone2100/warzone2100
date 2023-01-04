@@ -28,22 +28,24 @@
 #include "scrollbar.h"
 #include "cliprect.h"
 
-struct Padding
-{
-	uint32_t top;
-	uint32_t right;
-	uint32_t bottom;
-	uint32_t left;
-};
-
 class ScrollableListWidget : public WIDGET
 {
-public:
-	ScrollableListWidget(WIDGET *parent);
+protected:
+	ScrollableListWidget(): WIDGET() {}
+	virtual void initialize();
 
-	void initializeLayout();
+public:
+	static std::shared_ptr<ScrollableListWidget> make()
+	{
+		class make_shared_enabler: public ScrollableListWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize();
+		return widget;
+	}
+
 	void run(W_CONTEXT *psContext) override;
-	void addItem(WIDGET *widget);
+	void addItem(const std::shared_ptr<WIDGET> &widget);
+	void clear();
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void enableScroll();
 	void disableScroll();
@@ -51,24 +53,33 @@ public:
 	void setPadding(Padding const &rect);
 	void setSnapOffset(bool value);
 	void setBackgroundColor(PIELIGHT const &color);
+	void setItemSpacing(uint32_t value);
 	uint32_t calculateListViewHeight() const;
 	uint32_t calculateListViewWidth() const;
 	void display(int xOffset, int yOffset) override;
 	void displayRecursive(WidgetGraphicsContext const& context) override;
+	int getScrollbarWidth() const;
+	void setScrollbarWidth(int newWidth);
+	uint16_t getScrollPosition() const;
+	void setScrollPosition(uint16_t newPosition);
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
 
 protected:
 	void geometryChanged() override;
 
 private:
-	ScrollBarWidget *scrollBar;
-	ClipRectWidget *listView;
-	uint16_t scrollableHeight = 0;
+	std::shared_ptr<ScrollBarWidget> scrollBar;
+	std::shared_ptr<ClipRectWidget> listView;
+	uint32_t scrollableHeight = 0;
 	bool snapOffset = true;
 	bool layoutDirty = false;
 	Padding padding = {0, 0, 0, 0};
 	PIELIGHT backgroundColor;
+	uint32_t itemSpacing = 0;
+	int scrollbarWidth = 0;
 
-	uint16_t snappedOffset();
+	uint32_t snappedOffset();
 	void updateLayout();
 	void resizeChildren(uint32_t width);
 };

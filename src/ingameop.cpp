@@ -23,17 +23,12 @@
  * Pumpkin Studios. 98
  */
 
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
-#include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/label.h"
 #include "lib/netplay/netplay.h"
-#include "lib/ivis_opengl/piestate.h"		// for getrendertype
 #include "lib/sound/audio.h"					// for sound.
-#include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
 
 #include "display3d.h"
@@ -50,21 +45,19 @@
 #include "musicmanager.h"
 #include "ingameop.h"
 #include "mission.h"
-#include "transporter.h"
-#include "main.h"
 #include "warzoneconfig.h"
 #include "qtscript.h"		// for bInTutorial
 #include "radar.h"
 #include "seqdisp.h"
-#include "texture.h"
 
-bool hostQuitConfirmation;
+bool hostQuitConfirmation = true;
 
 bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;
 static bool 	isGraphicsOptionsUp = false;
 static bool 	isVideoOptionsUp = false;
 static bool 	isMouseOptionsUp = false;
+static bool		isInGameConfirmQuitUp = false;
 bool	isKeyMapEditorUp = false;
 bool	isMusicManagerUp = false;
 // ////////////////////////////////////////////////////////////////////////////
@@ -103,13 +96,14 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 static bool addHostQuitOptions()
 {
 	// get rid of the old stuff.
-	delete widgGetFromID(psWScreen, INTINGAMEPOPUP);
-	delete widgGetFromID(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, INTINGAMEPOPUP);
+	widgDelete(psWScreen, INTINGAMEOP);
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	auto inGameOp = new IntFormAnimated(parent);
+	auto inGameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(inGameOp);
 	inGameOp->id = INTINGAMEOP;
 	inGameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
@@ -117,7 +111,8 @@ static bool addHostQuitOptions()
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
-	auto inGamePopup = new IntFormAnimated(parent);
+	auto inGamePopup = std::make_shared<IntFormAnimated>();
+	parent->attach(inGamePopup);
 	inGamePopup->id = INTINGAMEPOPUP;
 	inGamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		assert(psWScreen != nullptr);
@@ -126,7 +121,8 @@ static bool addHostQuitOptions()
 		psWidget->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
 	}));
 
-	auto label = new W_LABEL(inGamePopup);
+	auto label = std::make_shared<W_LABEL>();
+	inGamePopup->attach(label);
 	label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
 	label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
 	label->setTextAlignment(WLAB_ALIGNCENTRE);
@@ -139,22 +135,14 @@ static bool addHostQuitOptions()
 
 static bool addAudioOptions()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-#ifdef DEBUG
-#define ROWS 5
-#else
-#define ROWS 4
-#endif
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(ROWS), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(ROWS));
-	}));
-#undef ROWS
 
 	int row = 1;
 	// voice vol
@@ -175,6 +163,11 @@ static bool addAudioOptions()
 	            AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
 	row++;
 
+	// Subtitles
+	addIGTextButton(INTINGAMEOP_SUBTITLES,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Subtitles"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_SUBTITLES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsSubtitlesString(), WBUT_PLAIN);
+	row++;
+
 #ifdef DEBUG
 	// Tactical UI: Target Origin
 	if (tuiTargetOrigin)
@@ -190,7 +183,14 @@ static bool addAudioOptions()
 	row++;
 #endif
 
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	return true;
 }
@@ -205,18 +205,16 @@ static bool _intAddInGameOptions()
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
 
-
 	setWidgetsStatus(true);
 
 	//if already open, then close!
-	if (widgGetFromID(psWScreen, INTINGAMEOP))
+	if (widgGetFromID(psWScreen, INTINGAMEOP) || isMusicManagerUp)
 	{
 		intCloseInGameOptions(false, true);
 		return true;
 	}
 
-	intResetScreen(false);
-
+	setReticulesEnabled(false);
 
 	// Pause the game.
 	if (!gamePaused())
@@ -224,17 +222,12 @@ static bool _intAddInGameOptions()
 		kf_TogglePauseMode();
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
-	bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(s? 3 : 5), INTINGAMEOP_W, INTINGAMEOPAUTO_H(s? 3 : 5));
-	}));
 
 	int row = 1;
 	// add 'resume'
@@ -245,24 +238,24 @@ static bool _intAddInGameOptions()
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Options"), OPALIGN);
 	row++;
 
-	if (!s)
+	if (!((bMultiPlayer && NetPlay.bComms) || bInTutorial || NETisReplay()))
 	{
-		if (!bMultiPlayer)
-		{
-			// add 'load'
-			addIGTextButton(INTINGAMEOP_LOAD_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
-			row++;
-			// add 'save'
-			addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
-			row++;
-		}
-		else
+		if (bMultiPlayer)
 		{
 			// add 'load'
 			addIGTextButton(INTINGAMEOP_LOAD_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
 			row++;
 			// add 'save'
 			addIGTextButton(INTINGAMEOP_SAVE_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+			row++;
+		}
+		else
+		{
+			// add 'load'
+			addIGTextButton(INTINGAMEOP_LOAD_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
+			row++;
+			// add 'save'
+			addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
 			row++;
 		}
 	}
@@ -274,8 +267,14 @@ static bool _intAddInGameOptions()
 	}
 	else
 	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_CONFIRM_QUIT, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
+
+	// calculate layout
+	int lines = row;
+	ingameOp->setCalcLayout([lines](WIDGET *psWidget){
+		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(lines), INTINGAMEOP_W, INTINGAMEOPAUTO_H(lines));
+	});
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.
@@ -290,6 +289,64 @@ bool intAddInGameOptions()
 {
 	sliderEnableDrag(true);
 	return _intAddInGameOptions();
+}
+
+static bool startInGameConfirmQuit()
+{
+	widgDelete(psWScreen, INTINGAMEOP); // get rid of the old stuff.
+	auto const& parent = psWScreen->psForm;
+
+	// add form
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
+	ingameOp->id = INTINGAMEOP;
+
+	int row = 1;
+
+	auto label = std::make_shared<W_LABEL>();
+	ingameOp->attach(label);
+	label->setGeometry(INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, 0);
+	if (bMultiPlayer && (NetPlay.bComms || NETisReplay()))
+	{
+		label->setString(_("Warning: Are you sure?")); //Do not mention saving in real multiplayer matches
+	}
+	else
+	{
+		label->setString(_("Warning: Are you sure? Any unsaved progress will be lost."));
+	}
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_medium, WZCOL_YELLOW);
+
+	row++;
+
+	// add quit confirmation text
+	addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, _("Confirm"), OPALIGN);
+	row++;
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, _("Back"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET* psWidget) {
+		psWidget->setGeometry(INTINGAMEOP4_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP4_W, INTINGAMEOPAUTO_H(row));
+	});
+
+	return true;
+}
+
+static bool runInGameConfirmQuit(UDWORD id)
+{
+	switch (id)
+	{
+		case INTINGAMEOP_QUIT:
+			return true;
+
+		case INTINGAMEOP_GO_BACK:
+			intReopenMenuWithoutUnPausing();
+			break;
+
+		default:
+			break;
+	}
+
+	return false;
 }
 
 //
@@ -307,6 +364,8 @@ void intAddInGamePopup()
 		return;
 	}
 
+	intCloseInGameOptions(false, false); //clear out option-like menus
+
 	audio_StopAll();
 
 	if (!gamePaused())
@@ -314,9 +373,10 @@ void intAddInGamePopup()
 		kf_TogglePauseMode();	// Pause the game.
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
-	IntFormAnimated *ingamePopup = new IntFormAnimated(parent);
+	auto ingamePopup = std::make_shared<IntFormAnimated>();
+	parent->attach(ingamePopup);
 	ingamePopup->id = INTINGAMEPOPUP;
 	ingamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
@@ -367,19 +427,27 @@ static void ProcessOptionFinished()
 {
 	intMode		= INT_NORMAL;
 
-
-
-	//unpause.
 	if (gamePaused())
 	{
 		kf_TogglePauseMode();
 	}
 
-
+	setReticulesEnabled(true);
 }
 
-void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets)
+void intCloseInGameOptionsNoAnim()
 {
+	if (isKeyMapEditorUp)
+	{
+		runInGameKeyMapEditor(gInputManager, gKeyFuncConfig, KM_RETURN);
+	}
+	isKeyMapEditorUp = false;
+	if (isMusicManagerUp)
+	{
+		runInGameMusicManager(MM_RETURN, gInputManager);
+	}
+	isMusicManagerUp = false;
+
 	if (NetPlay.isHost)
 	{
 		widgDelete(psWScreen, INTINGAMEPOPUP);
@@ -388,15 +456,8 @@ void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets)
 	InGameOpUp = false;
 
 	ProcessOptionFinished();
-
-	//don't add the widgets if the load/save screen is put up or exiting to front end
-	if (bResetMissionWidgets)
-	{
-		//put any widgets back on for the missions
-		resetMissionWidgets();
-	}
+	resetMissionWidgets();
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
@@ -406,20 +467,27 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
 	isMouseOptionsUp = false;
+	isInGameConfirmQuitUp = false;
+
 	if (isKeyMapEditorUp)
 	{
-		runInGameKeyMapEditor(KM_RETURN);
+		runInGameKeyMapEditor(gInputManager, gKeyFuncConfig, KM_RETURN);
 	}
 	isKeyMapEditorUp = false;
 	if (isMusicManagerUp)
 	{
-		runInGameMusicManager(MM_RETURN);
+		runInGameMusicManager(MM_RETURN, gInputManager);
 	}
 	isMusicManagerUp = false;
 
 	if (NetPlay.isHost)
 	{
 		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+
+	if (!bPutUpLoadSave && !bResetMissionWidgets)
+	{
+		clearPlayerName(CLEAR_ALL_NAMES);
 	}
 
 	if (bPutUpLoadSave || keymapWasUp)
@@ -436,21 +504,30 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	{
 		// close the form.
 		// Start the window close animation.
-		IntFormAnimated *form;
-		if (isInGamePopupUp)	// FIXME: we hijack this routine for the popup close.
+		IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEPOPUP);
+		if (form)	// FIXME: we hijack this routine for the popup close.
 		{
-			form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEPOPUP);
+			form->closeAnimateDelete();
 			isInGamePopupUp = false;
 		}
-		else
-		{
-			form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP);
-		}
-
+		form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP_POPUP_QUIT);
 		if (form)
 		{
 			form->closeAnimateDelete();
-			InGameOpUp			 = false;
+			isInGamePopupUp = false;
+		}
+
+		form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP);
+		if (form)
+		{
+			form->closeAnimateDelete();
+			InGameOpUp = false;
+		}
+		form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP_QUIT);
+		if (form)
+		{
+			form->closeAnimateDelete();
+			InGameOpUp = false;
 		}
 	}
 
@@ -466,18 +543,39 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	return true;
 }
 
-static bool startIGOptionsMenu()
+void intReopenMenuWithoutUnPausing()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
 	isMouseOptionsUp = false;
 	isKeyMapEditorUp = false;
 	isMusicManagerUp = false;
+	isInGameConfirmQuitUp = false;
+
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+	widgDelete(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
+	intAddInGameOptions();
+}
+
+static bool startIGOptionsMenu()
+{
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
+	isGraphicsOptionsUp = false;
+	isVideoOptionsUp = false;
+	isMouseOptionsUp = false;
+	isKeyMapEditorUp = false;
+	isMusicManagerUp = false;
+	widgDelete(psWScreen, MM_FORM); // hack: There's a soft-lock somewhere with the music manager UI. Ensure it gets closed here since we're setting isMusicManagerUp = false above
+	isInGameConfirmQuitUp = false;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	int row = 1;
 	// Game Options can't be changed during game
@@ -494,19 +592,21 @@ static bool startIGOptionsMenu()
 	addIGTextButton(INTINGAMEOP_MOUSEOPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Mouse Options"), OPALIGN);
 	row++;
 
-	bool s = bMultiPlayer && NetPlay.bComms != 0;
 	// Key map editor does not allow editing for true multiplayer
-	addIGTextButton(INTINGAMEOP_KEYMAP, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, s? _("View Key Mappings") : _("Key Mappings"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_KEYMAP, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, (bMultiPlayer && NetPlay.bComms) ? _("View Key Mappings") : _("Key Mappings"), OPALIGN);
 	row++;
 
 	addIGTextButton(INTINGAMEOP_MUSICMANAGER, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Manager"), OPALIGN);
 	row++;
 
-	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
-	});
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Go Back"), OPALIGN);
+	row++;
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
+		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	return true;
 }
@@ -514,15 +614,13 @@ static bool startIGOptionsMenu()
 // Graphics Options
 static bool startIGGraphicsOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(7));
-	}));
 
 	int row = 1;
 	// FMV mode.
@@ -533,11 +631,6 @@ static bool startIGGraphicsOptionsMenu()
 	// Scanlines
 	addIGTextButton(INTINGAMEOP_SCANLINES,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Scanlines"), WBUT_PLAIN);
 	addIGTextButton(INTINGAMEOP_SCANLINES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsScanlinesString(), WBUT_PLAIN);
-	row++;
-
-	// Subtitles
-	addIGTextButton(INTINGAMEOP_SUBTITLES,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Subtitles"), WBUT_PLAIN);
-	addIGTextButton(INTINGAMEOP_SUBTITLES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsSubtitlesString(), WBUT_PLAIN);
 	row++;
 
 	// Shadows
@@ -555,7 +648,19 @@ static bool startIGGraphicsOptionsMenu()
 	addIGTextButton(INTINGAMEOP_RADAR_JUMP_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsRadarJumpString(), WBUT_PLAIN);
 	row++;
 
+	// Screen shake
+	addIGTextButton(INTINGAMEOP_SCREENSHAKE,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Shake"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_SCREENSHAKE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsScreenShakeString(), WBUT_PLAIN);
+	row++;
+
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	return true;
 }
@@ -564,12 +669,6 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 {
 	switch (id)
 	{
-	case INTINGAMEOP_SUBTITLES:
-	case INTINGAMEOP_SUBTITLES_R:
-		seq_SetSubtitles(!seq_GetSubtitles());
-		widgSetString(psWScreen, INTINGAMEOP_SUBTITLES_R, graphicsOptionsSubtitlesString());
-		break;
-
 	case INTINGAMEOP_SHADOWS:
 	case INTINGAMEOP_SHADOWS_R:
 		setDrawShadows(!getDrawShadows());
@@ -600,6 +699,16 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 		widgSetString(psWScreen, INTINGAMEOP_RADAR_JUMP_R, graphicsOptionsRadarJumpString());
 		break;
 
+	case INTINGAMEOP_SCREENSHAKE:
+	case INTINGAMEOP_SCREENSHAKE_R:
+		setShakeStatus(!getShakeStatus());
+		widgSetString(psWScreen, INTINGAMEOP_SCREENSHAKE_R, graphicsOptionsScreenShakeString());
+		break;
+
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
+		break;
+
 	case INTINGAMEOP_RESUME:			//resume was pressed.
 		return true;
 
@@ -622,16 +731,13 @@ static void refreshCurrentIGVideoOptionsValues()
 
 static bool startIGVideoOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		bool showDisplayScales = wzAvailableDisplayScales().size() > 1;
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(showDisplayScales? 3 : 2), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(showDisplayScales? 3 : 2));
-	}));
 
 	int row = 1;
 	// Fullscreen/windowed can't be changed during game
@@ -653,8 +759,15 @@ static bool startIGVideoOptionsMenu()
 		row++;
 	}
 
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
 	// Quit/return
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	refreshCurrentIGVideoOptionsValues();
 
@@ -681,6 +794,10 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 		refreshCurrentIGVideoOptionsValues();
 		break;
 
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
+		break;
+
 	case INTINGAMEOP_RESUME:			//resume was pressed.
 		return true;
 
@@ -694,16 +811,13 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 // Mouse Options
 static bool startIGMouseOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		bool s = bMultiPlayer && NetPlay.bComms != 0;
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(s ? 6 : 7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(s ? 6 : 7));
-	}));
 
 	int row = 1;
 	// mouseflip
@@ -711,8 +825,7 @@ static bool startIGMouseOptionsMenu()
 	addIGTextButton(INTINGAMEOP_MFLIP_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsMflipString(), WBUT_PLAIN);
 	row++;
 
-	bool s = bMultiPlayer && NetPlay.bComms != 0;
-	if (!s) // Cursor trapping does not work for true multiplayer
+	if (!bMultiPlayer || !NetPlay.bComms) // Cursor trapping does not work for true multiplayer
 	{
 		addIGTextButton(INTINGAMEOP_TRAP,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Trap Cursor"), WBUT_PLAIN);
 		addIGTextButton(INTINGAMEOP_TRAP_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsTrapString(), WBUT_PLAIN);
@@ -734,13 +847,15 @@ static bool startIGMouseOptionsMenu()
 	addIGTextButton(INTINGAMEOP_CURSORMODE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsCursorModeString(), WBUT_PLAIN);
 	row++;
 
-	// Function of the scroll wheel
-	addIGTextButton(INTINGAMEOP_SCROLLEVENT,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Scroll Event"), WBUT_PLAIN);
-	addIGTextButton(INTINGAMEOP_SCROLLEVENT_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsScrollEventString(), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
 	row++;
 
 	// Quit/return
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	return true;
 }
@@ -780,10 +895,8 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 		wzSetCursor(CURSOR_DEFAULT);
 		break;
 
-	case INTINGAMEOP_SCROLLEVENT:
-	case INTINGAMEOP_SCROLLEVENT_R:
-		seqScrollEvent();
-		widgSetString(psWScreen, INTINGAMEOP_SCROLLEVENT_R, mouseOptionsScrollEventString());
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -826,7 +939,7 @@ void intProcessInGameOptions(UDWORD id)
 	}
 	else if (isKeyMapEditorUp)
 	{
-		if (runInGameKeyMapEditor(id))
+		if (runInGameKeyMapEditor(gInputManager, gKeyFuncConfig, id))
 		{
 			intCloseInGameOptions(true, true);
 		}
@@ -834,7 +947,15 @@ void intProcessInGameOptions(UDWORD id)
 	}
 	else if (isMusicManagerUp)
 	{
-		if (runInGameMusicManager(id))
+		if (runInGameMusicManager(id, gInputManager))
+		{
+			intCloseInGameOptions(true, true);
+		}
+		return;
+	}
+	else if (isInGameConfirmQuitUp)
+	{
+		if (runInGameConfirmQuit(id))
 		{
 			intCloseInGameOptions(true, true);
 		}
@@ -846,6 +967,11 @@ void intProcessInGameOptions(UDWORD id)
 	// NORMAL KEYS
 	case INTINGAMEOP_HOSTQUIT:				//quit was pressed
 		addHostQuitOptions();
+		break;
+
+	case INTINGAMEOP_CONFIRM_QUIT:
+		startInGameConfirmQuit();
+		isInGameConfirmQuitUp = true;
 		break;
 
 	case INTINGAMEOP_POPUP_QUIT:
@@ -872,17 +998,20 @@ void intProcessInGameOptions(UDWORD id)
 		isMouseOptionsUp = true;
 		break;
 	case INTINGAMEOP_KEYMAP:			//keymap was pressed
-		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-		startInGameKeyMapEditor(false);
+		widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+		startInGameKeyMapEditor(gInputManager, gKeyFuncConfig, false);
 		isKeyMapEditorUp = true;
 		break;
 	case INTINGAMEOP_MUSICMANAGER:
-		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-		startInGameMusicManager();
+		widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+		startInGameMusicManager(gInputManager);
 		isMusicManagerUp = true;
 		break;
 	case INTINGAMEOP_RESUME:			//resume was pressed.
 		intCloseInGameOptions(false, true);
+		break;
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
 		break;
 
 
@@ -919,13 +1048,18 @@ void intProcessInGameOptions(UDWORD id)
 
 
 	case INTINGAMEOP_FXVOL_S:
-		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S) / 100.0);
+		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S) / 100.0f);
 		break;
 	case INTINGAMEOP_3DFXVOL_S:
-		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S) / 100.0);
+		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S) / 100.0f);
 		break;
 	case INTINGAMEOP_CDVOL_S:
-		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0);
+		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0f);
+		break;
+	case INTINGAMEOP_SUBTITLES:
+	case INTINGAMEOP_SUBTITLES_R:
+		seq_SetSubtitles(!seq_GetSubtitles());
+		widgSetString(psWScreen, INTINGAMEOP_SUBTITLES_R, graphicsOptionsSubtitlesString());
 		break;
 
 	case INTINGAMEOP_TUI_TARGET_ORIGIN_SW:

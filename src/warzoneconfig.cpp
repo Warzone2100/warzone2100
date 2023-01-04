@@ -35,6 +35,9 @@
 #include "radar.h"
 #include "activity.h"
 
+#define MAX_REPLAY_FILES 36
+constexpr int MAX_OLD_LOGS = 50;
+
 /***************************************************************************/
 
 struct WARZONE_GLOBALS
@@ -48,11 +51,11 @@ struct WARZONE_GLOBALS
 	int8_t SPcolor = 0;
 	int MPcolour = -1;
 	int antialiasing = 0;
-	bool Fullscreen = false;
+	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
 	bool trapCursor = false;
 	int vsync = 1;
-	bool pauseOnFocusLoss = true;
+	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
 	bool MusicEnabled = true;
 	HRTFMode hrtfMode = HRTFMode::Auto;
@@ -60,10 +63,26 @@ struct WARZONE_GLOBALS
 	int mapZoomRate = MAP_ZOOM_RATE_DEFAULT;
 	int radarZoom = DEFAULT_RADARZOOM;
 	int cameraSpeed = CAMERASPEED_DEFAULT;
-	int scrollEvent = 0; // map/radar zoom
 	bool radarJump = false;
 	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
+	bool autoAdjustDisplayScale = true;
+	int autoLagKickSeconds = 60;
+	bool disableReplayRecording = false;
+	int maxReplaysSaved = MAX_REPLAY_FILES;
+	int oldLogsLimit = MAX_OLD_LOGS;
+	uint32_t MPinactivityMinutes = 5;
+	uint8_t MPopenSpectatorSlots = 0;
+	int fogStart = 4000;
+	int fogEnd = 8000;
+	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
+	int minimizeOnFocusLoss = -1; // see enum class MinimizeOnFocusLossBehavior
+	// fullscreen mode settings
+	UDWORD fullscreenModeWidth = 0; // current display default
+	UDWORD fullscreenModeHeight = 0; // current display default
+	int fullscreenModeScreen = -1;
+	int toggleFullscreenMode = 0; // 0 = the backend default
+	unsigned int cursorScale = 100;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -73,7 +92,6 @@ static WARZONE_GLOBALS warGlobs;
 std::string js_backend_names[] =
 {
 	"quickjs",
-	"qtscript",
 	"invalid" // Must be last!
 };
 
@@ -132,12 +150,12 @@ int war_getMPcolour()
 	return warGlobs.MPcolour;
 }
 
-void war_setFullscreen(bool b)
+void war_setWindowMode(WINDOW_MODE b)
 {
 	warGlobs.Fullscreen = b;
 }
 
-bool war_getFullscreen()
+WINDOW_MODE war_getWindowMode()
 {
 	return warGlobs.Fullscreen;
 }
@@ -187,6 +205,16 @@ void war_SetDisplayScale(unsigned int scale)
 {
 	warGlobs.displayScale = scale;
 	ActivityManager::instance().changedSetting("displayScale", std::to_string(scale));
+}
+
+void war_setCursorScale(unsigned int scale)
+{
+	warGlobs.cursorScale = std::max<unsigned int>(scale, 100);
+}
+
+unsigned int war_getCursorScale()
+{
+	return warGlobs.cursorScale;
 }
 
 void war_SetWidth(UDWORD width)
@@ -313,7 +341,7 @@ int war_GetMapZoom()
 
 void war_SetMapZoom(int mapZoom)
 {
-	if (mapZoom % MAP_ZOOM_RATE_MIN == 0 && ! (mapZoom < MINDISTANCE_CONFIG || mapZoom > MAXDISTANCE))
+	if (mapZoom % MAP_ZOOM_CONFIG_STEP == 0 && ! (mapZoom < MINDISTANCE_CONFIG || mapZoom > MAXDISTANCE))
 	{
 		warGlobs.mapZoom = mapZoom;
 		ActivityManager::instance().changedSetting("mapZoom", std::to_string(mapZoom));
@@ -362,16 +390,6 @@ void war_SetCameraSpeed(int cameraSpeed)
 	}
 }
 
-int war_GetScrollEvent()
-{
-	return warGlobs.scrollEvent;
-}
-
-void war_SetScrollEvent(int scrollEvent)
-{
-	warGlobs.scrollEvent = scrollEvent;
-}
-
 bool war_GetRadarJump()
 {
 	return warGlobs.radarJump;
@@ -381,6 +399,28 @@ void war_SetRadarJump(bool radarJump)
 {
 	warGlobs.radarJump = radarJump;
 	ActivityManager::instance().changedSetting("radarJump", std::to_string(radarJump));
+}
+
+int war_getLODDistanceBiasPercentage()
+{
+	return warGlobs.lodDistanceBiasPercentage;
+}
+
+void war_setLODDistanceBiasPercentage(int bias)
+{
+	if (bias > 200) { bias = 200; }
+	if (bias < -200) { bias = -200; }
+	warGlobs.lodDistanceBiasPercentage = bias;
+}
+
+int war_getMinimizeOnFocusLoss()
+{
+	return warGlobs.minimizeOnFocusLoss;
+}
+
+void war_setMinimizeOnFocusLoss(int val)
+{
+	warGlobs.minimizeOnFocusLoss = val;
 }
 
 video_backend war_getGfxBackend()
@@ -401,4 +441,143 @@ JS_BACKEND war_getJSBackend()
 void war_setJSBackend(JS_BACKEND backend)
 {
 	warGlobs.jsBackend = backend;
+}
+
+bool war_getAutoAdjustDisplayScale()
+{
+	return warGlobs.autoAdjustDisplayScale;
+}
+
+void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale)
+{
+	warGlobs.autoAdjustDisplayScale = autoAdjustDisplayScale;
+}
+
+int war_getAutoLagKickSeconds()
+{
+	return warGlobs.autoLagKickSeconds;
+}
+
+void war_setAutoLagKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 60);
+	}
+	warGlobs.autoLagKickSeconds = seconds;
+}
+
+bool war_getDisableReplayRecording()
+{
+	return warGlobs.disableReplayRecording;
+}
+
+void war_setDisableReplayRecording(bool disable)
+{
+	warGlobs.disableReplayRecording = disable;
+}
+
+int war_getMaxReplaysSaved()
+{
+	return warGlobs.maxReplaysSaved;
+}
+
+void war_setMaxReplaysSaved(int maxReplaysSaved)
+{
+	warGlobs.maxReplaysSaved = maxReplaysSaved;
+}
+
+int war_getOldLogsLimit()
+{
+	return warGlobs.oldLogsLimit;
+}
+
+void war_setOldLogsLimit(int oldLogsLimit)
+{
+	warGlobs.oldLogsLimit = oldLogsLimit;
+}
+
+uint32_t war_getMPInactivityMinutes()
+{
+	return warGlobs.MPinactivityMinutes;
+}
+
+void war_setMPInactivityMinutes(uint32_t minutes)
+{
+	if (minutes > 0 && minutes < MIN_MPINACTIVITY_MINUTES)
+	{
+		minutes = MIN_MPINACTIVITY_MINUTES;
+	}
+	warGlobs.MPinactivityMinutes = minutes;
+}
+
+uint16_t war_getMPopenSpectatorSlots()
+{
+	return warGlobs.MPopenSpectatorSlots;
+}
+
+void war_setMPopenSpectatorSlots(uint16_t spectatorSlots)
+{
+	spectatorSlots = std::min<uint16_t>(spectatorSlots, MAX_SPECTATOR_SLOTS);
+	warGlobs.MPopenSpectatorSlots = spectatorSlots;
+}
+
+int war_getFogEnd()
+{
+	return warGlobs.fogEnd;
+}
+
+int war_getFogStart()
+{
+	return warGlobs.fogStart;
+}
+
+void war_setFogEnd(int end)
+{
+	 warGlobs.fogEnd = end;
+}
+
+void war_setFogStart(int start)
+{
+	 warGlobs.fogStart = start;
+}
+
+void war_SetFullscreenModeWidth(UDWORD width)
+{
+	warGlobs.fullscreenModeWidth = width;
+}
+
+UDWORD war_GetFullscreenModeWidth()
+{
+	return warGlobs.fullscreenModeWidth;
+}
+
+void war_SetFullscreenModeHeight(UDWORD height)
+{
+	warGlobs.fullscreenModeHeight = height;
+}
+
+UDWORD war_GetFullscreenModeHeight()
+{
+	return warGlobs.fullscreenModeHeight;
+}
+void war_SetFullscreenModeScreen(int screen)
+{
+	warGlobs.fullscreenModeScreen = screen;
+}
+
+int war_GetFullscreenModeScreen()
+{
+	return warGlobs.fullscreenModeScreen;
+}
+
+void war_setToggleFullscreenMode(int mode)
+{
+	warGlobs.toggleFullscreenMode = mode;
+}
+
+int war_getToggleFullscreenMode()
+{
+	return warGlobs.toggleFullscreenMode;
 }

@@ -30,7 +30,6 @@
 #include <unordered_map>
 #include <vector>
 
-static std::unordered_map<WzString, ImageDef *> images;
 static std::vector<IMAGEFILE *> files;
 
 struct ImageMergeRectangle
@@ -64,15 +63,18 @@ struct ImageMerge
 	std::vector<int> pages;  // List of page sizes, normally all pageSize, unless an image is too large for a normal page.
 };
 
-ImageDef *iV_GetImage(const WzString &filename)
+AtlasImageDef *iV_GetImage(const WzString &filename)
 {
-	auto it = images.find(filename);
-	if (it == images.end())
+	for (const auto& file : files)
 	{
-		debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().c_str());
-		return nullptr;
+		auto pImageDef = file->find(filename);
+		if (pImageDef != nullptr)
+		{
+			return pImageDef;
+		}
 	}
-	return it->second;
+	debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().c_str());
+	return nullptr;
 }
 
 // Used to provide empty space between sprites arranged on the page, to avoid display glitches when scaling + drawing
@@ -187,7 +189,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	}
 	IMAGEFILE *imageFile = new IMAGEFILE;
 	imageFile->imageDefs.resize(numImages);
-	imageFile->imageNames.resize(numImages);
+	imageFile->imageNamesMap.reserve(numImages);
 	ImageMerge pageLayout;
 	pageLayout.images.resize(numImages);
 	ptr = pFileData;
@@ -195,10 +197,10 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	while (ptr < pFileData + pFileSize)
 	{
 		int temp, retval;
-		ImageDef *ImageDef = &imageFile->imageDefs[numImages];
+		AtlasImageDef *AtlasImageDef = &imageFile->imageDefs[numImages];
 
 		char tmpName[256];
-		retval = sscanf(ptr, "%d,%d,%255[^\r\n\",]%n", &ImageDef->XOffset, &ImageDef->YOffset, tmpName, &temp);
+		retval = sscanf(ptr, "%d,%d,%255[^\r\n\",]%n", &AtlasImageDef->XOffset, &AtlasImageDef->YOffset, tmpName, &temp);
 		if (retval != 3)
 		{
 			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
@@ -206,30 +208,25 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 			free(pFileData);
 			return nullptr;
 		}
-		imageFile->imageNames[numImages].first = tmpName;
-		imageFile->imageNames[numImages].second = numImages;
+		imageFile->imageNamesMap.insert(std::make_pair(WzString::fromUtf8(tmpName), AtlasImageDef));
 		std::string spriteName = imageDir + tmpName;
 
 		ImageMergeRectangle *imageRect = &pageLayout.images[numImages];
 		imageRect->index = numImages;
 		imageRect->data = new iV_Image;
-		if (!iV_loadImage_PNG(spriteName.c_str(), imageRect->data))
+		if (!iV_loadImage_PNG2(spriteName.c_str(), *imageRect->data, true))
 		{
 			debug(LOG_ERROR, "Failed to find image \"%s\" listed in \"%s\".", spriteName.c_str(), fileName);
 			delete imageFile;
 			free(pFileData);
 			return nullptr;
 		}
-		imageRect->siz = Vector2i(imageRect->data->width, imageRect->data->height);
+		imageRect->siz = Vector2i(imageRect->data->width(), imageRect->data->height());
 		numImages++;
 		ptr += temp;
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
-
-		images.insert(std::make_pair(WzString::fromUtf8(tmpName), ImageDef));
 	}
 	free(pFileData);
-
-	std::sort(imageFile->imageNames.begin(), imageFile->imageNames.end());
 
 	pageLayout.arrange();  // Arrange all the images onto texture pages (attempt to do so with as few pages as possible).
 	imageFile->pages.resize(pageLayout.pages.size());
@@ -239,11 +236,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	for (unsigned p = 0; p < pageLayout.pages.size(); ++p)
 	{
 		int size = pageLayout.pages[p];
-		ivImages[p].depth = 4;
-		ivImages[p].width = size;
-		ivImages[p].height = size;
-		ivImages[p].bmp = (unsigned char *)malloc(size * size * 4); // MUST be malloc, since this is free()d later by pie_AddTexPage().
-		memset(ivImages[p].bmp, 0x00, size * size * 4);
+		ivImages[p].allocate(size, size, 4, true);
 		imageFile->pages[p].size = size;
 		// Must set imageFile->pages[p].id later, after filling out ivImages[p].bmp.
 	}
@@ -258,24 +251,24 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 
 		// Copy image data onto texture page.
 		iV_Image *srcImage = r->data;
-		int srcDepth = srcImage->depth;
-		int srcStride = srcImage->width * srcDepth; // Not sure whether to pad in the case that srcDepth ≠ 4, however this apparently cannot happen.
-		unsigned char *srcBytes = srcImage->bmp + 0 * srcDepth + 0 * srcStride;
+		int srcChannels = srcImage->channels();
+		int srcStride = srcImage->width() * srcChannels; // Not sure whether to pad in the case that srcDepth ≠ 4, however this apparently cannot happen.
+		const unsigned char *srcBytes = srcImage->bmp() + 0 * srcChannels + 0 * srcStride;
 		iV_Image *dstImage = &ivImages[r->page];
-		int dstDepth = dstImage->depth;
-		int dstStride = dstImage->width * dstDepth;
-		unsigned char *dstBytes = dstImage->bmp + r->loc.x * dstDepth + r->loc.y * dstStride;
+		int dstChannels = dstImage->channels();
+		int dstStride = dstImage->width() * dstChannels;
+		unsigned char *dstBytes = dstImage->bmp_w() + r->loc.x * dstChannels + r->loc.y * dstStride;
 		Vector2i size = r->siz;
 		unsigned char rgba[4] = {0x00, 0x00, 0x00, 0xFF};
 		for (int y = 0; y < size.y; ++y)
 			for (int x = 0; x < size.x; ++x)
 			{
-				memcpy(rgba, srcBytes + x * srcDepth + y * srcStride, srcDepth);
-				memcpy(dstBytes + x * dstDepth + y * dstStride, rgba, dstDepth);
+				memcpy(rgba, srcBytes + x * srcChannels + y * srcStride, srcChannels);
+				memcpy(dstBytes + x * dstChannels + y * dstStride, rgba, dstChannels);
 			}
 
 		// Finished reading the image data and copying it to the texture page, delete it.
-		free(r->data->bmp);
+		r->data->clear();
 		delete r->data;
 	}
 
@@ -300,8 +293,10 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		char arbitraryName[256];
 		ssprintf(arbitraryName, "%s-%03u", fileName, p);
 		// Now we can set imageFile->pages[p].id. This free()s the ivImages[p].bmp array!
-		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, false);
+		gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(ivImages[p]), gfx_api::texture_type::user_interface, arbitraryName);
+		imageFile->pages[p].id = pie_AddTexPage(pTexture, arbitraryName, gfx_api::texture_type::user_interface);
 	}
+	ivImages.clear();
 
 	// duplicate some data, since we want another access point to these data structures now, FIXME
 	for (unsigned i = 0; i < imageFile->imageDefs.size(); i++)
@@ -317,19 +312,37 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 
 void iV_FreeImageFile(IMAGEFILE *imageFile)
 {
-	// so when we get here, it is time to redo everything. will clean this up later. TODO.
-	files.clear();
-	images.clear();
 	delete imageFile;
 }
 
-Image IMAGEFILE::find(std::string const &name)
+IMAGEFILE::~IMAGEFILE()
 {
-	std::pair<std::string, int> val(name, 0);
-	std::vector<std::pair<std::string, int>>::const_iterator i = std::lower_bound(imageNames.begin(), imageNames.end(), val);
-	if (i != imageNames.end() && i->first == name)
+	auto it = std::find(files.begin(), files.end(), this);
+	ASSERT(it != files.end(), "Calling iV_FreeImageFile for IMAGEFILE that wasn't loaded??");
+	if (it != files.end())
 	{
-		return Image(this, i->second);
+		files.erase(it);
 	}
-	return Image(this, 0);  // Error, image not found.
+}
+
+AtlasImageDef* IMAGEFILE::find(WzString const &filename)
+{
+	auto it = imageNamesMap.find(filename);
+	if (it != imageNamesMap.end())
+	{
+		return it->second;
+
+	}
+//	debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().c_str());
+	return nullptr; // Error, image not found.
+}
+
+void iV_ImageFileShutdown()
+{
+	ASSERT(files.empty(), "%zu IMAGEFILEs were not properly unloaded", files.size());
+	for (auto file : files)
+	{
+		delete file;
+	}
+	files.clear();
 }

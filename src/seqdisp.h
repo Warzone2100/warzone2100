@@ -35,6 +35,8 @@
 #define  SEQUENCE_KILL 3//stop
 #define  SEQUENCE_HOLD 4//play once and hold last frame
 
+#define  SEQUENCE_MIN_SKIP_DELAY 75 //amount of loops before skipping is allowed
+
 enum SEQ_TEXT_POSITIONING
 {
 	/**
@@ -59,10 +61,14 @@ enum SEQ_TEXT_POSITIONING
  *	Global ProtoTypes
  */
 /***************************************************************************/
+
+bool seq_hasVideos();
+void seq_setOnDemandVideoURL(const WzString& videoBaseURL);
+
 //buffer render
 bool seq_RenderVideoToBuffer(const WzString &sequenceName, int seqCommand);
 
-bool seq_UpdateFullScreenVideo(int *bClear);
+bool seq_UpdateFullScreenVideo();
 
 bool seq_StopFullScreenVideo();
 //control
@@ -82,5 +88,7 @@ bool seq_GetSubtitles();
 
 /*returns the next sequence in the list to play*/
 void seq_StartNextFullScreenVideo();
+
+void seqReleaseAll();
 
 #endif	// __INCLUDED_SRC_SEQDISP_H__

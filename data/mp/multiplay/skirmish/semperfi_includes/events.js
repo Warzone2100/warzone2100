@@ -85,7 +85,7 @@ function eventAttacked(victim, attacker)
 		var defLen = defenders.length;
 		if (defLen > MIN_GROUND_UNITS)
 		{
-			for (var i = 0; i < defLen; ++i)
+			for (let i = 0; i < defLen; ++i)
 			{
 				var dr = defenders[i];
 				if (dr.order !== DORDER_RECYCLE && !droidNeedsRepair(dr.id) && dr.id !== victim.id)
@@ -99,7 +99,7 @@ function eventAttacked(victim, attacker)
 		var vtolLen = vtols.length;
 		if (vtolLen > MIN_VTOL_UNITS)
 		{
-			for (var j = 0; j < vtolLen; ++j)
+			for (let j = 0; j < vtolLen; ++j)
 			{
 				var vt = vtols[j];
 				if (vtolReady(vt.id))
@@ -122,7 +122,7 @@ function eventStartLevel()
 	baseBuilders = newGroup();
 	oilBuilders = newGroup();
 	truckRoleSwapped = false;
-	enumDroid(me).forEach(function(droid) {
+	enumDroid(me).forEach((droid) => {
 		if (droid.droidType !== DROID_CONSTRUCT)
 		{
 			eventDroidBuilt(droid, null);
@@ -183,7 +183,7 @@ function eventBeacon(x, y, from, to, message)
 		var enemyObjects = enumRange(x, y, BEACON_SCAN_RADIUS, ENEMIES, false);
 		if (enemyObjects.length > 0)
 		{
-			for (var i = 0, l = enemyObjects.length; i < l; ++i)
+			for (let i = 0, l = enemyObjects.length; i < l; ++i)
 			{
 				var obj = enemyObjects[i];
 				if (obj)

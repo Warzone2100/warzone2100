@@ -1,3 +1,4 @@
+add_subdirectory(wzmaplib)
 add_subdirectory(exceptionhandler)
 add_subdirectory(framework)
 add_subdirectory(gamelib)

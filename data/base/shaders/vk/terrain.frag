@@ -1,5 +1,7 @@
 #version 450
 
+layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+
 layout(set = 1, binding = 0) uniform sampler2D tex;
 layout(set = 1, binding = 1) uniform sampler2D lightmap_tex;
 
@@ -26,15 +28,21 @@ layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	vec4 fragColor = color * texture(tex, uv1) * texture(lightmap_tex, uv2);
+	vec4 fragColor = color * texture(tex, uv1, WZ_MIP_LOAD_BIAS) * texture(lightmap_tex, uv2, 0.f);
+	
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+		if(fogFactor > 1.0)
+		{
+			discard;
+		}
 
 		// Return fragment color
-		fragColor = mix(fogColor, fragColor, fogFactor);
+		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), clamp(fogFactor, 0.0, 1.0));
 	}
+	
 	FragColor = fragColor;
 }

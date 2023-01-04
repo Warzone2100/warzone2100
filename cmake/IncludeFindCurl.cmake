@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 # This file finds CURL
 #
 # Attempts to determine its linked / available SSL backend(s):
@@ -59,10 +57,15 @@ if(CURL_CONFIG_EXECUTABLE)
 	if ((CURL_VERSION_STRING VERSION_EQUAL "${_min_curl_version_for_ssl_backends}") OR (CURL_VERSION_STRING VERSION_GREATER "${_min_curl_version_for_ssl_backends}"))
 
 		execute_process(COMMAND ${CURL_CONFIG_EXECUTABLE} --ssl-backends
+						RESULT_VARIABLE _result_ssl_backends
 						OUTPUT_VARIABLE CURL_CONFIG_SSL_BACKENDS_STRING
 						ERROR_QUIET
 						OUTPUT_STRIP_TRAILING_WHITESPACE)
-		string(REPLACE "," ";" CURL_SUPPORTED_SSL_BACKENDS "${CURL_CONFIG_SSL_BACKENDS_STRING}")
+		if (_result_ssl_backends EQUAL 0)
+			string(REPLACE "," ";" CURL_SUPPORTED_SSL_BACKENDS "${CURL_CONFIG_SSL_BACKENDS_STRING}")
+		else()
+			message(STATUS "curl-config (\"${CURL_CONFIG_EXECUTABLE}\") doesn't seem to support --ssl-backends - it may be a different version than the detected libcurl")
+		endif()
 
 	else()
 
@@ -140,8 +143,17 @@ if(CURL_CONFIG_EXECUTABLE)
 			# cURL is linked to GnuTLS, but GnuTLS was not found
 			set(CURL_GNUTLS_REQUIRES_CALLBACKS "UNKNOWN")
 		endif()
+		message(STATUS "GnuTLS requires explicit thread-safety callback init: ${CURL_GNUTLS_REQUIRES_CALLBACKS}")
 	endif()
-	if ("OpenSSL" IN_LIST CURL_SUPPORTED_SSL_BACKENDS)
+	# NOTE: cURL may list OpenSSL as "OpenSSL", "OpenSSL v3+" (but this is not guaranteed for all build configurations, even *if* OpenSSL is >= 3), etc
+	# So instead of exact matches, look for any list entry that begins with OpenSSL
+	set(_curl_hasOpenSSLBackend FALSE)
+	foreach (backend IN LISTS CURL_SUPPORTED_SSL_BACKENDS)
+		if (backend MATCHES "^OpenSSL.*")
+			set(_curl_hasOpenSSLBackend TRUE)
+		endif()
+	endforeach()
+	if (_curl_hasOpenSSLBackend)
 		# OpenSSL found
 		find_package(OpenSSL QUIET)
 		if(OPENSSL_FOUND)
@@ -158,6 +170,7 @@ if(CURL_CONFIG_EXECUTABLE)
 			# cURL is linked to OpenSSL, but OpenSSL was not found
 			set(CURL_OPENSSL_REQUIRES_CALLBACKS "UNKNOWN")
 		endif()
+		message(STATUS "OpenSSL requires explicit thread-safety callback init: ${CURL_OPENSSL_REQUIRES_CALLBACKS}")
 	endif()
 else()
 	# curl-config was not found; if curl is built with ssl backend(s) OpenSSL or GnuTLS, this may result in thread-safety issues

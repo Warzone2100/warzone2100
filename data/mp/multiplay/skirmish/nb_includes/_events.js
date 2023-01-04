@@ -10,19 +10,16 @@ function eventStartLevel() {
 		// initialize subpersonality pseudo-randomly here
 		// to make sure teammates have the same personality
 		var j = 1, s = 0;
-		for (var i = 0; i < maxPlayers; ++i) {
+		for (let i = 0; i < maxPlayers; ++i) {
 			if (allianceExistsBetween(me, i))
 				s += j;
 			j *= 2;
 		}
 		// the random "s" number obtained here is the same for all players in any team
 		var s = s + (new Date()).getMinutes();
+		s = s % Object.keys(subpersonalities).length;
 		j = 0;
-		for (var i in subpersonalities) // count the amount of subpersonalities
-			++j;
-		s = s % j;
-		j = 0;
-		for (var i in subpersonalities) {
+		for (const i in subpersonalities) {
 			if (j === s)
 				personality = subpersonalities[i];
 			++j;
@@ -32,7 +29,7 @@ function eventStartLevel() {
 		// initialize the subpersonality randomly and don't care
 		personality = randomItem(subpersonalities);
 	}
-	enumDroid(me).forEach(function(droid) {
+	enumDroid(me).forEach((droid) => {
 		if (droid.droidType === DROID_CONSTRUCT)
 		{
 			// the following code is necessary to avoid some strange game bug when droids that
@@ -58,7 +55,7 @@ function eventStructureBuilt(structure) {
 function eventAttacked(victim, attacker) {
 	if (attacker === null || victim === null)
 		return; // no idea why it happens sometimes
-	if (victim.player != me)
+	if (victim.player !== me)
 		return;
 	if (isAlly(attacker.player))
 		return; // don't respond to accidental friendly fire
@@ -80,7 +77,7 @@ function eventAttacked(victim, attacker) {
 		if (throttled(5000))
 			return;
 		if (inPanic())
-			for (var i = 0; i < MAX_GROUPS; ++i)
+			for (let i = 0; i < MAX_GROUPS; ++i)
 				if (groupSize(i) > 0)
 					setTarget(attacker, i);
 		setTarget(attacker, miscGroup);
@@ -95,7 +92,7 @@ function eventStructureReady(structure) {
 function eventChat(from, to, message) {
 	// we are not case-sensitive
 	message = message.toLowerCase();
-    handleChatMessage(from, to, message)
+	handleChatMessage(from, to, message)
 }
 
 function eventObjectTransfer(object, from) {

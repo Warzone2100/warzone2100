@@ -87,13 +87,13 @@ const char *objInfo(const BASE_OBJECT *psObj)
 	case OBJ_STRUCTURE:
 		{
 			const STRUCTURE *psStruct = (const STRUCTURE *)psObj;
-			sstrcpy(info, getName(psStruct->pStructureType));
+			sstrcpy(info, getStatsName(psStruct->pStructureType));
 			break;
 		}
 	case OBJ_FEATURE:
 		{
 			const FEATURE *psFeat = (const FEATURE *)psObj;
-			sstrcpy(info, getName(psFeat->psStats));
+			sstrcpy(info, getStatsName(psFeat->psStats));
 			break;
 		}
 	case OBJ_PROJECTILE:

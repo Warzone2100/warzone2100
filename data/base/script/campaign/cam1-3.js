@@ -2,18 +2,21 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+//New base blip, new base area, new factory data
+
 const NEW_PARADIGM_RES = [
-	"R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade01",
-	"R-Struc-Materials01", "R-Struc-Factory-Upgrade01",
-	"R-Struc-Factory-Cyborg-Upgrade01", "R-Vehicle-Engine01",
-	"R-Vehicle-Metals01", "R-Cyborg-Metals01", "R-Wpn-Cannon-Damage01",
-	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
-	"R-Wpn-Mortar-Damage01", "R-Wpn-Rocket-Accuracy01",
-	"R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF01",
-	"R-Wpn-RocketSlow-Damage01", "R-Struc-RprFac-Upgrade03",
+	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
+	"R-Sys-Engineering01", "R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Cannon-Damage01",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Defense-WallUpgrade02","R-Struc-Materials02", "R-Vehicle-Engine01",
+	"R-Struc-RprFac-Upgrade01", "R-Wpn-Rocket-Damage01", "R-Wpn-Rocket-ROF02",
+	"R-Wpn-Mortar-Damage02", "R-Wpn-Mortar-ROF01",
 ];
 const SCAVENGER_RES = [
-	"R-Wpn-MG-Damage02", "R-Wpn-Rocket-Damage01", "R-Wpn-Cannon-Damage01",
+	"R-Wpn-Flamer-Damage02", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Cannon-Damage01",
+	"R-Wpn-Mortar-Damage02", "R-Wpn-Mortar-ROF01", "R-Wpn-Rocket-ROF03",
+	"R-Defense-WallUpgrade02","R-Struc-Materials02",
 ];
 var NPDefenseGroup, NPScoutGroup, NPFactory;
 
@@ -31,11 +34,6 @@ camAreaEvent("NorthConvoyTrigger", function(droid)
 
 camAreaEvent("SouthConvoyTrigger", function(droid)
 {
-	camEnableFactory("ScavFactory");
-	camManageGroup(camMakeGroup("SouthConvoyForce"), CAM_ORDER_DEFEND, {
-		pos: camMakePos("SouthConvoyLoc"),
-		radius: 6,
-	});
 	var scout = getObject("ScoutDroid");
 	if (camDef(scout) && scout)
 	{
@@ -56,7 +54,13 @@ camAreaEvent("WestConvoyTrigger", function(droid)
 function enableNP(args)
 {
 	camEnableFactory("ScavFactory");
+	camEnableFactory("ScavFactorySouth");
 	camEnableFactory("NPFactory");
+
+	if (difficulty === INSANE)
+	{
+		queue("NPReinforce", camSecondsToMilliseconds(10));
+	}
 
 	camManageGroup(NPScoutGroup, CAM_ORDER_COMPROMISE, {
 		pos: camMakePos("RTLZ"),
@@ -75,7 +79,30 @@ function enableNP(args)
 		repair: 66,
 	});
 
-	camPlayVideos(["pcv455.ogg", "SB1_3_MSG4"]);
+	camPlayVideos(["pcv455.ogg", {video: "SB1_3_MSG4", type: MISS_MSG}]);
+}
+
+function NPReinforce()
+{
+	if (getObject("NPHQ") !== null)
+	{
+		var list = [];
+		var count = 5 + camRand(5);
+		var scouts = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
+
+		for (let i = 0; i < count; ++i)
+		{
+			list.push(scouts[camRand(scouts.length)]);
+		}
+		camSendReinforcement(NEW_PARADIGM, camMakePos("NPReinforcementPos"), list, CAM_REINFORCE_GROUND, {
+			data: {
+				regroup: false,
+				repair: 66,
+				count: -1,
+			},
+		});
+		queue("NPReinforce", camSecondsToMilliseconds(180));
+	}
 }
 
 function sendScouts()
@@ -128,6 +155,17 @@ function camEnemyBaseDetected_ScavBaseGroup()
 	queue("camCallOnce", camSecondsToMilliseconds(1), "enableReinforcements");
 }
 
+function camEnemyBaseDetected_ScavBaseGroupSouth()
+{
+	camEnableFactory("ScavFactory");
+	camEnableFactory("ScavFactorySouth");
+	camManageGroup(camMakeGroup("SouthConvoyForce"), CAM_ORDER_COMPROMISE, {
+		pos: camMakePos("SouthConvoyLoc"),
+		regroup: false, //true when movement gets better. Very big group this one is.
+	});
+	queue("camCallOnce", camSecondsToMilliseconds(1), "enableReinforcements");
+}
+
 function camEnemyBaseEliminated_ScavBaseGroup()
 {
 	//make enemy easier to find if all his buildings destroyed
@@ -139,7 +177,7 @@ function camEnemyBaseEliminated_ScavBaseGroup()
 
 function playNPWarningMessage()
 {
-	camPlayVideos(["pcv455.ogg", "SB1_3_MSG3"]);
+	camPlayVideos(["pcv455.ogg", {video: "SB1_3_MSG3", type: CAMP_MSG}]);
 }
 
 function eventDroidBuilt(droid, structure)
@@ -185,6 +223,12 @@ function eventStartLevel()
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
+	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, 7);
+	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, 7);
+	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, 7);
+	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, 7);
+	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, 7);
+
 	camSetEnemyBases({
 		"ScavBaseGroup": {
 			cleanup: "ScavBase",
@@ -198,14 +242,20 @@ function eventStartLevel()
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg"
 		},
+		"ScavBaseGroupSouth": {
+			cleanup: "SouthScavBase",
+			detectMsg: "C1-3_OBJ2",
+			detectSnd: "pcv374.ogg",
+			eliminateSnd: "pcv392.ogg"
+		},
 	});
 
 	hackAddMessage("C1-3_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); // south-west beacon
 
 	camSetArtifacts({
-		"ScavFactory": { tech: "R-Wpn-Cannon1Mk1" },
-		"NPFactory": { tech: "R-Struc-Factory-Module" },
-		"NPHQ": { tech: "R-Defense-HardcreteWall" },
+		"ScavFactory": { tech: "R-Wpn-Flamer-Damage03" },
+		"NPFactory": { tech: ["R-Struc-Factory-Module", "R-Vehicle-Body04"] },
+		"NPLab": { tech: "R-Defense-HardcreteWall" },
 		"NPCRC": { tech: "R-Struc-CommandRelay" },
 	});
 
@@ -220,7 +270,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 10,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.rbuggy, cTempl.bloke, cTempl.rbjeep, cTempl.buggy ]
+			templates: [ cTempl.buggyheavy, cTempl.blokeheavy, cTempl.bjeepheavy, cTempl.trikeheavy ]
 		},
 		"NPFactory": {
 			assembly: "NPAssembly",
@@ -233,6 +283,18 @@ function eventStartLevel()
 			maxSize: 20,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			templates: [ cTempl.nppod, cTempl.nphmg, cTempl.npsmc, cTempl.npsmc ]
+		},
+		"ScavFactorySouth": {
+			assembly: "ScavAssemblySouth",
+			order: CAM_ORDER_ATTACK,
+			data: {
+				regroup: false,
+				count: -1,
+			},
+			groupSize: 4,
+			maxSize: 10,
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
+			templates: [ cTempl.rbjeep8, cTempl.buscan, cTempl.rbuggy, cTempl.firecan ]
 		},
 	});
 

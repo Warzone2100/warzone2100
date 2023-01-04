@@ -60,7 +60,7 @@ static void printComponentInfo(const COMPONENT_STATS *psStats)
 {
 	CONPRINTF("%s ref %d\n"
 	                          "   bPwr %d bPnts %d wt %d bdy %d imd %p\n",
-	                          getName(psStats), psStats->ref, psStats->buildPower,
+	                          getStatsName(psStats), psStats->ref, psStats->buildPower,
 	                          psStats->buildPoints, psStats->weight, psStats->getBase().hitpoints,
 	                          static_cast<void *>(psStats->pIMD));
 }
@@ -168,10 +168,13 @@ static void printWeaponInfo(const WEAPON_STATS *psStats)
 	                          proj_Direct(psStats) ? "direct" : "indirect",
 	                          weaponShortHit(psStats, selectedPlayer), weaponLongHit(psStats, selectedPlayer), weaponFirePause(psStats, selectedPlayer),
 	                          weaponDamage(psStats, selectedPlayer));
-	CONPRINTF("   rad %d radDam %d\n"
-	                          "   inTime %d inDam %d inRad %d\n",
-	                          psStats->upgrade[selectedPlayer].radius, psStats->upgrade[selectedPlayer].radiusDamage,
-	                          psStats->upgrade[selectedPlayer].periodicalDamageTime, psStats->upgrade[selectedPlayer].periodicalDamage, psStats->upgrade[selectedPlayer].periodicalDamageRadius);
+	if (selectedPlayer < MAX_PLAYERS)
+	{
+		CONPRINTF("   rad %d radDam %d\n"
+								  "   inTime %d inDam %d inRad %d\n",
+								  psStats->upgrade[selectedPlayer].radius, psStats->upgrade[selectedPlayer].radiusDamage,
+								  psStats->upgrade[selectedPlayer].periodicalDamageTime, psStats->upgrade[selectedPlayer].periodicalDamage, psStats->upgrade[selectedPlayer].periodicalDamageRadius);
+	}
 	CONPRINTF("   flSpd %d %s\n",
 	                          psStats->flightSpeed, psStats->fireOnMove ? "fireOnMove" : "not fireOnMove");
 	CONPRINTF("   %s %s %s\n", pWC, pWSC, pMM);

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 if(NOT ENABLE_DOCS)
 	message(STATUS "Skipping documentation generation")
 	return()
@@ -235,7 +233,7 @@ if(wz2100_doc_IMAGES_FILES)
 endif()
 install(FILES ${wz2100_doc_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}" COMPONENT Docs)
 
-if(UNIX)
+if(UNIX AND NOT SKIPPED_DOC_GENERATION)
 	# Man-page gzip and installation
 
 	find_program(GZIP_BIN NAMES gzip PATHS /bin /usr/bin /usr/local/bin)

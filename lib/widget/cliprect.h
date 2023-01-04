@@ -31,13 +31,15 @@
 class ClipRectWidget : public WIDGET
 {
 public:
-	ClipRectWidget(WIDGET *parent) : WIDGET(parent) {}
+	ClipRectWidget() : WIDGET() {}
 
-	void run(W_CONTEXT *psContext) override;
+	void runRecursive(W_CONTEXT *psContext) override;
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 	void setTopOffset(uint16_t value);
 	void setLeftOffset(uint16_t value);
+	int parentRelativeXOffset(int coord) const override;
+	int parentRelativeYOffset(int coord) const override;
 
 private:
 	glm::ivec2 offset = {0, 0};

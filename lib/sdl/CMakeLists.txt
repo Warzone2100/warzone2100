@@ -1,6 +1,3 @@
-cmake_minimum_required (VERSION 3.5)
-project (sdl-backend CXX)
-
 if(NOT (CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin"))
 	# Temporary workaround for systems with broken SDL2 CMake config (ex. imported target does not exist in "SDL2Targets.cmake")
 	# Can be manually set to "ON" to avoid using the CONFIG mode
@@ -20,11 +17,17 @@ set(_sdl2_library)
 set(_sdl2_include_dir)
 set(_sdl2_main_library)
 
-function(test_link_to_sdl_target sdl_target output_var)
+function(test_link_to_sdl_target sdl_target sdl_main output_var)
 
 	set(CMAKE_REQUIRED_LIBRARIES "${sdl_target}")
+	set(_additional_includes "")
+	if (DEFINED sdl_main AND sdl_main AND NOT "${sdl_main}" STREQUAL "")
+		list(APPEND CMAKE_REQUIRED_LIBRARIES ${sdl_main})
+		set(_additional_includes "#include <SDL_main.h>")
+	endif()
 	check_cxx_source_compiles(
 	   "#include <SDL_version.h>
+		${_additional_includes}
 		#include <cstdio>
 
 		void print_sdl_version() {
@@ -33,7 +36,7 @@ function(test_link_to_sdl_target sdl_target output_var)
 		  printf(\"Linked SDL version: %u.%u.%u\", (unsigned int)linked_sdl_version.major, (unsigned int)linked_sdl_version.minor, (unsigned int)linked_sdl_version.patch);
 		}
 
-		int main()
+		int main(int argc, char *argv[])
 		{
 		  print_sdl_version();
 		  return 0;
@@ -55,7 +58,7 @@ if(SDL2_FOUND)
 	if (TARGET SDL2::SDL2-static)
 		# Check for INTERFACE_INCLUDE_DIRECTORIES to ignore the "aliased" target that vcpkg creates
 		get_target_property(_sdl2_include_dir SDL2::SDL2-static INTERFACE_INCLUDE_DIRECTORIES)
-		test_link_to_sdl_target(SDL2::SDL2-static LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
+		test_link_to_sdl_target(SDL2::SDL2-static FALSE LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
 		if (_sdl2_include_dir AND LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
 			set(_sdl2_library SDL2::SDL2-static)
 		endif()
@@ -63,7 +66,7 @@ if(SDL2_FOUND)
 	if (NOT _sdl2_library AND TARGET SDL2::SDL2)
 		# Check for INTERFACE_INCLUDE_DIRECTORIES to ignore the "aliased" target that vcpkg creates
 		get_target_property(_sdl2_include_dir SDL2::SDL2 INTERFACE_INCLUDE_DIRECTORIES)
-		test_link_to_sdl_target(SDL2::SDL2 LINK_SUCCESS_SDL2_SDL2_TARGET)
+		test_link_to_sdl_target(SDL2::SDL2 FALSE LINK_SUCCESS_SDL2_SDL2_TARGET)
 		if (_sdl2_include_dir AND LINK_SUCCESS_SDL2_SDL2_TARGET)
 			set(_sdl2_library SDL2::SDL2)
 		endif()
@@ -71,7 +74,7 @@ if(SDL2_FOUND)
 	if (NOT _sdl2_library)
 		# Fall-back to FindSDL2 module (below)
 	elseif (TARGET SDL2::SDL2main)
-		test_link_to_sdl_target("${_sdl2_library};SDL2::SDL2main" LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
+		test_link_to_sdl_target("${_sdl2_library}" SDL2::SDL2main LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
 		if (LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
 			set(_sdl2_main_library SDL2::SDL2main)
 		endif()
@@ -124,12 +127,11 @@ set(CMAKE_REQUIRED_INCLUDES "${_sdl2_include_dir}")
 CHECK_INCLUDE_FILE_CXX("SDL_vulkan.h" HAVE_SDL_VULKAN_H)
 set(CMAKE_REQUIRED_INCLUDES "${_prior_CMAKE_REQUIRED_INCLUDES}")
 
-add_library(sdl-backend ${HEADERS} ${SRC})
-if(WZ_TARGET_ADDITIONAL_PROPERTIES)
-	SET_TARGET_PROPERTIES(sdl-backend PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
-endif()
+add_library(sdl-backend STATIC ${HEADERS} ${SRC})
+include(WZTargetConfiguration)
+WZ_TARGET_CONFIGURATION(sdl-backend)
 
-target_link_libraries(sdl-backend PRIVATE framework ivis-opengl)
+target_link_libraries(sdl-backend PRIVATE framework ivis-opengl optional-lite)
 set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 message( STATUS "Linking to SDL2 library: ${_sdl2_library}" )
 target_link_libraries(sdl-backend PRIVATE ${_sdl2_library})
@@ -148,10 +150,4 @@ if(_sdl2_main_library)
 	target_link_libraries(sdl-backend INTERFACE ${_sdl2_main_library})
 else()
 	message( STATUS "Not linking to SDL2Main" )
-endif()
-
-target_link_libraries(sdl-backend PRIVATE Qt5::Core Qt5::Widgets)
-
-if((CMAKE_SYSTEM_NAME MATCHES "Windows") AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU") AND ${CMAKE_CROSSCOMPILING})
-    target_compile_definitions(sdl-backend PRIVATE "QT_STATICPLUGIN")
 endif()

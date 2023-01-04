@@ -55,13 +55,19 @@
 # endif
 #endif
 
+#include "lib/framework/wzapp.h"
+
 #include <vector>
 
+#if defined(WZ_OS_WIN)
+static const std::vector<std::string> validLinkPrefixes = { "http://", "https://", "ms-windows-store://" };
+#else
 static const std::vector<std::string> validLinkPrefixes = { "http://", "https://" };
+#endif
 
-bool urlHasHTTPorHTTPSPrefix(char const *url)
+bool urlHasAcceptableProtocol(char const *url)
 {
-	// Verify URL starts with http:// or https://
+	// Verify URL starts with a validLinkPrefixes (examples: http:// or https:// )
 	bool bValidLinkPrefix = false;
 	for (const auto& validLinkPrefix : validLinkPrefixes)
 	{
@@ -75,20 +81,20 @@ bool urlHasHTTPorHTTPSPrefix(char const *url)
 }
 
 #if defined(WZ_OS_WIN)
-bool utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr)
+bool win_utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr)
 {
 	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
 	if (wstr_len <= 0)
 	{
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", dwError, str);
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %lu: %s\n", dwError, str);
 		return false;
 	}
 	outputWStr = std::vector<wchar_t>(wstr_len, L'\0');
 	if (MultiByteToWideChar(CP_UTF8, 0, str, -1, &outputWStr[0], wstr_len) == 0)
 	{
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", dwError, str);
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %lu: %s\n", dwError, str);
 		return false;
 	}
 	return true;
@@ -125,18 +131,20 @@ bool openURLInBrowser(char const *url)
 {
 	if (!url || !*url) return false;
 
-	// Verify URL starts with http:// or https://
-	if (!urlHasHTTPorHTTPSPrefix(url))
+	// Verify URL starts with an acceptable protocol - ex: http:// or https://
+	if (!urlHasAcceptableProtocol(url))
 	{
 		debug(LOG_ERROR, "Rejecting attempt to open link with URL: %s", url);
 		return false;
 	}
 
+	bool succeededOpeningUrl = false;
+
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
 
-#if defined(WZ_OS_WIN)
+#if defined(WZ_OS_WIN) // Desktop Windows
 	std::vector<wchar_t> wUrl;
-	if (!utf8ToUtf16(url, wUrl))
+	if (!win_utf8ToUtf16(url, wUrl))
 	{
 		return false;
 	}
@@ -166,7 +174,7 @@ bool openURLInBrowser(char const *url)
 		return false;
 	}
 	HRESULT coInitResult = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-	SHELLEXECUTEINFOW ShExecInfo = {0};
+	SHELLEXECUTEINFOW ShExecInfo = {};
 	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
 	ShExecInfo.fMask = SEE_MASK_NOASYNC;
 	ShExecInfo.lpVerb = L"open";
@@ -176,20 +184,26 @@ bool openURLInBrowser(char const *url)
 	if (!::ShellExecuteExW(&ShExecInfo))
 	{
 		DWORD dwError = ::GetLastError();
-		debug(LOG_ERROR, "ShellExecuteEx failed with error: %d", dwError);
+		debug(LOG_ERROR, "ShellExecuteEx failed with error: %lu", dwError);
 		bShellExecuteFailure = true;
 	}
 	if (coInitResult == S_OK || coInitResult == S_FALSE)
 	{
 		::CoUninitialize();
 	}
-	return !bShellExecuteFailure;
-#elif defined (WZ_OS_MAC)
-	return cocoaOpenURL(url);
-#else
-	// for linux
-	return xdg_open(url);
+	succeededOpeningUrl = !bShellExecuteFailure;
 #endif
+#if defined(WZ_OS_MAC) // macOS
+	succeededOpeningUrl = cocoaOpenURL(url);
+#endif
+	// Attempt using backend "open URL" support (if available)
+	if (succeededOpeningUrl) { return succeededOpeningUrl; }
+	succeededOpeningUrl = wzBackendAttemptOpenURL(url);
+#if defined(WZ_OS_UNIX) && !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC) // *nix
+	if (succeededOpeningUrl) { return succeededOpeningUrl; }
+	succeededOpeningUrl = xdg_open(url);
+#endif
+	return succeededOpeningUrl;
 }
 
 #include <curl/curl.h>
@@ -229,13 +243,13 @@ bool openFolderInDefaultFileManager(const char* path)
 {
 #if defined(WZ_OS_WIN)
 	std::vector<wchar_t> wPath;
-	if (!utf8ToUtf16(path, wPath))
+	if (!win_utf8ToUtf16(path, wPath))
 	{
 		return false;
 	}
 
 	HRESULT coInitResult = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-	SHELLEXECUTEINFOW ShExecInfo = {0};
+	SHELLEXECUTEINFOW ShExecInfo = {};
 	ShExecInfo.cbSize = sizeof(ShExecInfo);
 	ShExecInfo.fMask = SEE_MASK_NOASYNC;
 	ShExecInfo.hwnd = nullptr;
@@ -246,7 +260,7 @@ bool openFolderInDefaultFileManager(const char* path)
 	if (!::ShellExecuteExW(&ShExecInfo))
 	{
 		DWORD dwError = ::GetLastError();
-		debug(LOG_ERROR, "ShellExecuteEx failed with error: %d", dwError);
+		debug(LOG_ERROR, "ShellExecuteEx failed with error: %lu", dwError);
 		bShellExecuteFailure = true;
 	}
 	if (coInitResult == S_OK || coInitResult == S_FALSE)

@@ -6,7 +6,7 @@ The Warzone 2100 Project team
 
 * Christian Ohm (cybersphinx/the_cybersphinx): Programming
 * (Cyp): Programming
-* (pastdue/past-due): Programming with focus on build systems
+* (pastdue/past-due): Programming, build systems, web development
 * Per Inge Mathisen (perim/per/sendai): Programming
 * Stephen Swaney (stiv): Programming, web development
 * (vexed): Programming
@@ -16,6 +16,7 @@ Current or former contributors to the GPL version
 
 ### Programming
 
+* (20kdc): TitleUI refactor
 * Adam Holland (coppercore): Programming
 * Adam Olsen (Rhamphoryncus): Target prediction fixes, bug fixes
 * (Ai_Tak): Pointer bug fixes, bug reports
@@ -25,8 +26,11 @@ Current or former contributors to the GPL version
 * Anthony Berent (aberent): Bug fix for fullscreen resolution on Linux
 * (Beliar): Improved subtitle timing
 * Ben Dibell (Subsentient): Bug fixes, WZBlue lobby monitor, forks
+* Bennett Somerville (bdsomer): Fix weird cyborg names
 * Bernhard M. Wiedemann (bmwiedemann): Programming
+* Bers (berserkingyadis): Fix reticule buttons when game paused, improve .gitignore
 * (Berserk Cyborg/KJeff01): JavaScript campaign and tutorials, AI, Programming
+* Björn Ali Göransson (bjorn-ali-goransson): Programming, QoL and smoothness fixes
 * Björn Bredthauer: Optimization of sinus and consinus functions
 * (Blacksabbath): Programming, TWZ fork
 * (bornemix): Mouse dragging bug fixes
@@ -34,7 +38,9 @@ Current or former contributors to the GPL version
 * (Buginator): Keyboard shortcuts F1-F6, commandline options, MSVC support
 * (Calculus/MIH-XTC): Nexus AI improvements, EB mod
 * Carl Hee (Watermelon): Support for multiturrets, bug fixes
+* Colin MacDonald: Sort games by date, bug fixes
 * (CorvusCorax): Fix artillery pieces travelling through terrain
+* (cpdef): Support for Factions, bug fixes
 * (crabster/Reg312): CSV conversion to INI, search path bug fix, bug report
 * Cristoph Korn (c-korn,ckorn): Enhanced snprintf(), linker error fix
 * (Crymson): Bug fix for pointer error
@@ -47,6 +53,7 @@ Current or former contributors to the GPL version
 * (DrZimmerman): Fix for improperly set variable
 * (DylanDog): DyDo AI
 * (enki): Unit formation bug fix
+* Enrico Fasoli (fazo96): Keybindings for camera pan
 * Enrico Weigelt (metux): File permission bug fix
 * (epilef/felipe/felippico): CSV conversion to INI, script functions, bug fixes
 * (EuPhobos/Prot): BoneCrusher! AI, AI tournament, Russian translation
@@ -65,28 +72,34 @@ Current or former contributors to the GPL version
 * Henri Valta: Network variable bug fixes
 * (Hikaru/Hikaru-orly): Repair units bug fix, segfault fix, bug reporting
 * (Hironaru): Consistent naming for scavenger equipment
+* Ilari Tommiska (Kailari): Streamlined map config loading, bug fixes
 * Ilario Gelmetti (ilario): Support for 59Hz monitors
 * (Iluvalar): Balancing, NRS mod, bug reports, bug fixes
 * (i-nod/iNoD/iNoDlite): PIE format enhancements, bug fixes, bug reports
 * (JDW): Keyboard shortcuts for unit selection
 * Josh Martin (skiz): Refactoring
 * (jovie1024): Audio track bug fix
+* (karamel59): Add "Add to group #" keyboard shortcuts
 * Kevin Gillette (kage): Python script tools
 * (klasskill): Skewed video sequence bug fix
 * (Kosh): More reliable overwriting of old savegames
+* (lakebeans): Add pause screen info
 * Linus Lüssing (T-X): Bug fixes, patch to enable DSCP support, bug reporting
 * (LuckyLuke/Germanium): Balancing
 * Marcus Rast (charon): Segfault fix
 * Martijn Dekker (Dekker3D): Fullscreen resolution bug fix
 * Martin Koller (mkoller): Encoding fixes, internationalization, bug fixes
 * (mastersharp): Savegame loading commander bug fix
+* Maxim Zhuchkov (maxsupermanhd): Programming, host/autohost improvements, bug fixes
 * (MegabytePhreak): Prevent division by zero for object hitpoints, refactoring
 * (mfreire): Improved search for VTOL landing sites
 * Mike Gilmore (Chojun): Programming, custom music
 * N. Devillard: INI parser
+* (Next67): Bug fixes
 * (NoQ/hao/haoNoQ): Campaign bug fixes, Ultimate Scavenger mod, NullBot AI, maps
 * (nux): Improved building selection keyboard shortcuts
 * (Pallas): Bug fix
+* Paweł Perłakowski (Perl99): Savegame name suggestion, In-game menu "Go back", bug fixes
 * (Rawler): Tooltip with file modification time in savegame loading screens
 * (raycast): Improved targeting system
 * Rodolphe Suescun (rodzilla): Programming
@@ -98,13 +111,17 @@ Current or former contributors to the GPL version
 * Scott Balneaves (sbalneav): Bug fixes
 * (Seismo): Fixes for return values of various functions
 * (ShadowWolfTJC): Multiple HQ support
+* (Solstice245): Blender 2.9x ".pie" addon
 * (stratadrake): PIE Slicer, WZ Customizing Kit, bug reporting
 * (Suprano): Commandline option to toggle shadows
+* Thiago Romão Barcala (thiagorb): Programming, widgets refactor, bug fixes
 * Thomas Frauendorfer (caotic): Fixes for unit assignment and design screen bugs
 * Thomas Rast: Sensor targeting bug fix, bug fixes, German translation
 * Thomas Rösner: PO file encoding fix
+* (Tipchik87): Explosion effect fix
 * (tmp500): Balancing, bug reporting
 * (tnmurphy): Memory bug fix
+* Topi Miettinen (topimiettinen): T4, quicksave/autosave, randomize options, bug fixes
 * Tuomas Salomäki (hwl): Units not following commander bug fix
 * (Vermithrax): Mist fog in campaign games, MacOSX fix
 * Victor Qamly (qamly): FPS counter
@@ -129,6 +146,7 @@ Current or former contributors to the GPL version
 * (clueless): Missing bison/flex files fix
 * Corentin Nöel (tintou): FreeDesktop AppData update
 * (cypr): MacOSX support
+* Daniel Llewellyn (diddledan): Snapcraft config
 * Denis Dupeyron (charun): Release preparation
 * Dennis Schridde (devurandom): Linux and Windows Packaging, bug fixes
 * Dion Mendel (noid): Original Linux port, filename conversion to lowercase
@@ -177,6 +195,7 @@ Current or former contributors to the GPL version
 * Bruce V. Edwards (cathuria): Backdrops
 * Christian Scholz (cnceo): Textures
 * (CinC): VTOL toggle icon
+* (cpdef): Faction textures
 * (Dark Project): Broken tileset decals fix
 * Don Edwards: Texture for backdrop of Hatsjoe
 * (duda): Forum header, maps
@@ -184,6 +203,7 @@ Current or former contributors to the GPL version
 * Garrett Wiens-Kind (Neuralize): Game logo, icons
 * (Hatsjoe): Backdrops
 * (Jorzi): Models, textures, kicking icon
+* (Lupus-Mechanicus): Faction textures
 * (MaNGusT): Terrain textures, Art Revolution models
 * Mr Marney (Berg): Models, textures, forum theme, bug reporting
 * (n2large0shirt): Cyborg toggle icon
@@ -201,6 +221,10 @@ Current or former contributors to the GPL version
 * (Flail13): Map editor flaME
 * René Jürgens (Delphinio): NTW mod
 * (zydonk): Maps, bug reports
+
+### Music
+
+* (Lupus-Mechanicus): Legacy Soundtrack
 
 ### Translation
 

@@ -30,14 +30,6 @@
 #include <vector>
 #include <algorithm>
 
-namespace {
-	struct LoadedMod
-	{
-		std::string name;
-		std::string filename;
-	};
-}
-
 std::vector<std::string> global_mods;
 std::vector<std::string> campaign_mods;
 std::vector<std::string> multiplay_mods;
@@ -46,7 +38,7 @@ std::vector<std::string> override_mods;
 std::string override_mod_list;
 bool use_override_mods = false;
 
-static std::vector<LoadedMod> loaded_mods;
+static std::vector<WzMods::LoadedMod> loaded_mods;
 static std::string mod_list;
 static std::vector<Sha256> mod_hash_list;
 
@@ -113,47 +105,42 @@ static WzString convertToPlatformDependentPath(const char *platformIndependentPa
 void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, std::vector<std::string> const *checkList, bool addToModList)
 {
 	const WzString subdir_platformDependent = convertToPlatformDependentPath(subdir);
-	char **subdirlist = PHYSFS_enumerateFiles(subdir);
-	char **i = subdirlist;
-	while (*i != nullptr)
-	{
+	WZ_PHYSFS_enumerateFiles(subdir, [&](const char *i) -> bool {
 #ifdef DEBUG
-		debug(LOG_NEVER, "Examining subdir: [%s]", *i);
+		debug(LOG_NEVER, "Examining subdir: [%s]", i);
 #endif // DEBUG
-		if (*i[0] != '.' && (!checkList || std::find(checkList->begin(), checkList->end(), *i) != checkList->end()))
+		if (i[0] != '.' && (!checkList || std::find(checkList->begin(), checkList->end(), i) != checkList->end()))
 		{
 			char tmpstr[PATH_MAX];
-			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir_platformDependent.toUtf8().c_str(), PHYSFS_getDirSeparator(), *i);
+			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir_platformDependent.toUtf8().c_str(), PHYSFS_getDirSeparator(), i);
 #ifdef DEBUG
 			debug(LOG_NEVER, "Adding [%s] to search path", tmpstr);
 #endif // DEBUG
 			if (addToModList)
 			{
-				std::string filename = astringf("%s/%s", subdir, *i); // platform-independent notation
-				addLoadedMod(*i, std::move(filename));
+				std::string filename = astringf("%s/%s", subdir, i); // platform-independent notation
+				addLoadedMod(i, std::move(filename));
 				char buf[256];
-				snprintf(buf, sizeof(buf), "mod: %s", *i);
+				snprintf(buf, sizeof(buf), "mod: %s", i);
 				addDumpInfo(buf);
 			}
 			PHYSFS_mount(tmpstr, NULL, appendToPath); // platform-dependent notation
 		}
-		i++;
-	}
-	PHYSFS_freeList(subdirlist);
+		return true; // continue
+	});
 }
 
 void removeSubdirs(const char *basedir, const char *subdir)
 {
+	ASSERT(basedir, "basedir is null");
+	ASSERT(subdir, "subdir is null");
 	const WzString subdir_platformDependent = convertToPlatformDependentPath(subdir);
 	char tmpstr[PATH_MAX];
-	char **subdirlist = PHYSFS_enumerateFiles(subdir);
-	char **i = subdirlist;
-	while (*i != nullptr)
-	{
+	WZ_PHYSFS_enumerateFiles(subdir, [&](const char *i) -> bool {
 #ifdef DEBUG
-		debug(LOG_NEVER, "Examining subdir: [%s]", *i);
+		debug(LOG_NEVER, "Examining subdir: [%s]", i);
 #endif // DEBUG
-		snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir_platformDependent.toUtf8().c_str(), PHYSFS_getDirSeparator(), *i);
+		snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir_platformDependent.toUtf8().c_str(), PHYSFS_getDirSeparator(), i);
 #ifdef DEBUG
 		debug(LOG_NEVER, "Removing [%s] from search path", tmpstr);
 #endif // DEBUG
@@ -163,9 +150,8 @@ void removeSubdirs(const char *basedir, const char *subdir)
 			debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, WZ_PHYSFS_getLastError());
 #endif // DEBUG
 		}
-		i++;
-	}
-	PHYSFS_freeList(subdirlist);
+		return true; // continue
+	});
 }
 
 void printSearchPath()
@@ -203,6 +189,12 @@ void clearLoadedMods()
 {
 	loaded_mods.clear();
 	mod_list.clear();
+	mod_hash_list.clear();
+}
+
+std::vector<WzMods::LoadedMod> const &getLoadedMods()
+{
+	return loaded_mods;
 }
 
 std::string const &getModList()

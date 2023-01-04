@@ -30,18 +30,16 @@
 bool recvDroid(NETQUEUE queue);
 bool recvDroidInfo(NETQUEUE queue);
 bool recvDestroyDroid(NETQUEUE queue);
-bool recvDroidMove(NETQUEUE queue);
 bool recvDestroyStructure(NETQUEUE queue);
 bool recvBuildFinished(NETQUEUE queue);
-bool recvTemplate(NETQUEUE queue);
 bool recvDestroyFeature(NETQUEUE queue);
 bool recvPing(NETQUEUE queue);
-bool recvRequestDroid(NETQUEUE queue);
 bool receiveInGameTextMessage(NETQUEUE queue);
 bool recvDroidDisEmbark(NETQUEUE queue);
 bool recvColourRequest(NETQUEUE queue);
+bool recvFactionRequest(NETQUEUE queue);
 bool recvPositionRequest(NETQUEUE queue);
-void recvOptions(NETQUEUE queue);
+bool recvOptions(NETQUEUE queue);
 void sendOptions();
 
 bool recvResearchStatus(NETQUEUE queue);
@@ -53,5 +51,7 @@ bool recvMapFileRequested(NETQUEUE queue);
 bool recvTextMessageAI(NETQUEUE queue);         //AI multiplayer message
 bool recvTeamRequest(NETQUEUE queue);
 bool recvReadyRequest(NETQUEUE queue);
+
+bool recvSpecInGameTextMessage(NETQUEUE queue);
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

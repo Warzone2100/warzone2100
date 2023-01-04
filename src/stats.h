@@ -69,10 +69,12 @@ extern UBYTE		*apStructTypeLists[MAX_PLAYERS];
 //Values to fill apCompLists and apStructTypeLists. Not a bitfield, values are in case that helps with savegame compatibility.
 enum ItemAvailability
 {
-	AVAILABLE = 1,    // This item can be used to design droids.
-	UNAVAILABLE = 2,  // The player does not know about this item.
-	FOUND = 4,        // This item has been found, but is unresearched.
-	REDUNDANT = 10,   // The player no longer needs this item.
+	AVAILABLE = 1,              // This item can be used to design droids.
+	UNAVAILABLE = 2,            // The player does not know about this item.
+	FOUND = 4,                  // This item has been found, but is unresearched.
+	REDUNDANT = 10,             // The player no longer needs this item.
+	REDUNDANT_UNAVAILABLE = 11, // The player no longer needs this item.
+	REDUNDANT_FOUND = 12,       // The player no longer needs this item.
 };
 
 /*******************************************************************************
@@ -105,7 +107,9 @@ bool statsAllocConstruct(UDWORD numEntries);
 /*******************************************************************************
 *		Load stats functions
 *******************************************************************************/
-void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index);
+// Used from structure.cpp
+void loadStructureStats_BaseStats(WzConfig &json, STRUCTURE_STATS *psStats, size_t index);
+void unloadStructureStats_BaseStats(const STRUCTURE_STATS &psStats);
 
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(WzConfig &ini);
@@ -162,6 +166,12 @@ int getCompFromID(COMPONENT_TYPE compType, const WzString &name);
 /// Get the component pointer for a component based on the name
 COMPONENT_STATS *getCompStatsFromName(const WzString &name);
 
+/// Get the structure pointer for a structure based on the name
+STRUCTURE_STATS *getStructStatsFromName(const WzString &name);
+
+/// Get the base stat pointer for a stat based on the name
+BASE_STATS *getBaseStatsFromName(const WzString &name);
+
 /*returns the weapon sub class based on the string name passed in */
 bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
@@ -216,27 +226,14 @@ WZ_DECL_PURE int constructorPoints(const CONSTRUCT_STATS *psStats, int player);
 WZ_DECL_PURE int bodyPower(const BODY_STATS *psStats, int player);
 WZ_DECL_PURE int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass);
 
-void adjustMaxDesignStats();
-
-//Access functions for the max values to be used in the Design Screen
-UDWORD getMaxComponentWeight();
-UDWORD getMaxBodyArmour();
-UDWORD getMaxBodyPower();
-UDWORD getMaxBodyPoints();
-UDWORD getMaxSensorRange();
-UDWORD getMaxECMRange();
-UDWORD getMaxConstPoints();
-UDWORD getMaxRepairPoints();
-UDWORD getMaxWeaponRange();
-UDWORD getMaxWeaponDamage();
-UDWORD getMaxWeaponROF();
-UDWORD getMaxPropulsionSpeed();
-
 WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 
 void statsInitVars();
 
 bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect);
+/*returns the weapon effect string based on the enum passed in */
+const char *getWeaponEffect(WEAPON_EFFECT effect);
+
 bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass);
 
 /* Wrappers */

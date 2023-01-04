@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 if(NOT ENABLE_NLS)
 	message(STATUS "Skipping translations generation / native language support")
 	return()
@@ -153,10 +151,6 @@ ADD_CUSTOM_COMMAND(
 	COMMENT "Extract translatable messages to ${_potFile}"
 	VERBATIM
 )
-
-ADD_CUSTOM_TARGET(pot_file ALL
-	DEPENDS ${_potFile})
-set_property(TARGET pot_file PROPERTY FOLDER "po")
 
 # Update the in-source warzone2100.pot (Should only run when explicitly built, ex. by CI)
 set(_potFile_inRepo "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.pot")

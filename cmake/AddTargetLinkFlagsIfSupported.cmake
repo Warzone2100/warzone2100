@@ -1,13 +1,14 @@
 #
-# Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2021 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2018-02-19a
+# Script Version: 2021-05-21a
 #
 
 # ADD_TARGET_LINK_FLAGS_IF_SUPPORTED( TARGET <target>
 #									  [COMPILER_TYPE <C | CXX> = CXX]
 #									  LINK_FLAGS <link_flags>
+#									  [CONFIG <DEBUG | RELEASE | ...>]
 #									  [CACHED_RESULT_NAME <cached_result_name>]
 #									  [QUIET <ALL | FAILURES | OFF> = FAILURES] )
 #
@@ -33,7 +34,7 @@
 #
 function(ADD_TARGET_LINK_FLAGS_IF_SUPPORTED)
 	set(_options)
-	set(_oneValueArgs TARGET COMPILER_TYPE LINK_FLAGS CACHED_RESULT_NAME QUIET)
+	set(_oneValueArgs TARGET COMPILER_TYPE LINK_FLAGS CONFIG CACHED_RESULT_NAME QUIET)
 	set(_multiValueArgs)
 
 	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
@@ -56,6 +57,11 @@ function(ADD_TARGET_LINK_FLAGS_IF_SUPPORTED)
 
 	if(NOT DEFINED _parsedArguments_COMPILER_TYPE)
 		set(_parsedArguments_COMPILER_TYPE "CXX")
+	endif()
+
+	set(_link_flags_config_suffix)
+	if(DEFINED _parsedArguments_CONFIG)
+		set(_link_flags_config_suffix "_${_parsedArguments_CONFIG}")
 	endif()
 
 	set(_check_cached_status)
@@ -85,12 +91,12 @@ function(ADD_TARGET_LINK_FLAGS_IF_SUPPORTED)
 
 	if(${_cached_result_variable_name})
 		if(NOT _parsedArguments_QUIET OR _parsedArguments_QUIET MATCHES "FAILURES")
-			message( STATUS "Set TARGET ${_parsedArguments_TARGET} LINK_FLAG: ${_parsedArguments_LINK_FLAGS} ... YES${_check_cached_status}" )
+			message( STATUS "Set TARGET ${_parsedArguments_TARGET} LINK_FLAG${_link_flags_config_suffix}: ${_parsedArguments_LINK_FLAGS} ... YES${_check_cached_status}" )
 		endif()
-		set_property(TARGET ${_parsedArguments_TARGET} APPEND_STRING PROPERTY LINK_FLAGS " ${_parsedArguments_LINK_FLAGS}")
+		set_property(TARGET ${_parsedArguments_TARGET} APPEND_STRING PROPERTY "LINK_FLAGS${_link_flags_config_suffix}" " ${_parsedArguments_LINK_FLAGS}")
 	else()
 		if(NOT _parsedArguments_QUIET)
-			message( STATUS "Set TARGET ${_parsedArguments_TARGET} LINK_FLAG: ${_parsedArguments_LINK_FLAGS} ... no${_check_cached_status}" )
+			message( STATUS "Set TARGET ${_parsedArguments_TARGET} LINK_FLAG${_link_flags_config_suffix}: ${_parsedArguments_LINK_FLAGS} ... no${_check_cached_status}" )
 		endif()
 	endif()
 
@@ -110,12 +116,17 @@ function(CHECK_C_LINKER_FLAGS _FLAGS _RESULT)
 	set(_multiValueArgs)
 	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
 
-	set(CMAKE_REQUIRED_FLAGS "${_FLAGS}")
+	set(_cmake_required_link_options_varname "CMAKE_REQUIRED_LINK_OPTIONS")
+	if (CMAKE_VERSION VERSION_LESS 3.14)
+		# CMake < 3.14 does not support CMAKE_REQUIRED_LINK_OPTIONS, so use CMAKE_REQUIRED_FLAGS (but this may fail in some cases)
+		set(_cmake_required_link_options_varname "CMAKE_REQUIRED_FLAGS")
+	endif()
+	set(${_cmake_required_link_options_varname} "${_FLAGS}")
 	if(_parsedArguments_QUIET)
 		set(CMAKE_REQUIRED_QUIET ON)
 	endif()
 	set(_test_source "int main() { return 0; }")
-	if(NOT CMAKE_CROSSCOMPILING)
+	if(NOT CMAKE_CROSSCOMPILING AND NOT CMAKE_GENERATOR_PLATFORM)
 		CHECK_C_SOURCE_RUNS("${_test_source}" ${_RESULT})
 	else()
 		CHECK_C_SOURCE_COMPILES("${_test_source}" ${_RESULT})
@@ -123,7 +134,7 @@ function(CHECK_C_LINKER_FLAGS _FLAGS _RESULT)
 	if(_parsedArguments_QUIET)
 		unset(CMAKE_REQUIRED_QUIET)
 	endif()
-	set(CMAKE_REQUIRED_FLAGS "")
+	set(${_cmake_required_link_options_varname} "")
 endfunction(CHECK_C_LINKER_FLAGS)
 
 INCLUDE(CheckCXXSourceRuns)
@@ -136,12 +147,17 @@ function(CHECK_CXX_LINKER_FLAGS _FLAGS _RESULT)
 	set(_multiValueArgs)
 	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
 
-	set(CMAKE_REQUIRED_FLAGS "${_FLAGS}")
+	set(_cmake_required_link_options_varname "CMAKE_REQUIRED_LINK_OPTIONS")
+	if (CMAKE_VERSION VERSION_LESS 3.14)
+		# CMake < 3.14 does not support CMAKE_REQUIRED_LINK_OPTIONS, so use CMAKE_REQUIRED_FLAGS (but this may fail in some cases)
+		set(_cmake_required_link_options_varname "CMAKE_REQUIRED_FLAGS")
+	endif()
+	set(${_cmake_required_link_options_varname} "${_FLAGS}")
 	if(_parsedArguments_QUIET)
 		set(CMAKE_REQUIRED_QUIET ON)
 	endif()
 	set(_test_source "int main() { return 0; }")
-	if(NOT CMAKE_CROSSCOMPILING)
+	if(NOT CMAKE_CROSSCOMPILING AND NOT CMAKE_GENERATOR_PLATFORM)
 		CHECK_CXX_SOURCE_RUNS("${_test_source}" ${_RESULT})
 	else()
 		CHECK_CXX_SOURCE_COMPILES("${_test_source}" ${_RESULT})
@@ -149,5 +165,5 @@ function(CHECK_CXX_LINKER_FLAGS _FLAGS _RESULT)
 	if(_parsedArguments_QUIET)
 		unset(CMAKE_REQUIRED_QUIET)
 	endif()
-	set(CMAKE_REQUIRED_FLAGS "")
+	set(${_cmake_required_link_options_varname} "")
 endfunction(CHECK_CXX_LINKER_FLAGS)

@@ -66,6 +66,14 @@ void modelShutdown()
 	models.clear();
 }
 
+void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDShape& model)>& func)
+{
+	for (auto& keyvaluepair : models)
+	{
+		func(keyvaluepair.first, keyvaluepair.second);
+	}
+}
+
 static bool tryLoad(const WzString &path, const WzString &filename)
 {
 	if (PHYSFS_exists(path + filename))
@@ -88,14 +96,12 @@ static bool tryLoad(const WzString &path, const WzString &filename)
 
 const std::string &modelName(iIMDShape *model)
 {
-	for (const auto &pair : models)
+	if (model != nullptr)
 	{
-		if (&pair.second == model)
-		{
-			return pair.first;
-		}
+		ASSERT(!model->modelName.empty(), "An IMD pointer could not be backtraced to a filename!");
+		return model->modelName;
 	}
-	ASSERT(false, "An IMD pointer could not be backtraced to a filename!");
+	ASSERT(false, "Null IMD pointer??");
 	static std::string error;
 	return error;
 }
@@ -103,9 +109,10 @@ const std::string &modelName(iIMDShape *model)
 iIMDShape *modelGet(const WzString &filename)
 {
 	WzString name(filename.toLower());
-	if (models.count(name.toStdString()) > 0)
+	auto it = models.find(name.toStdString());
+	if (it != models.end())
 	{
-		return &models.at(name.toStdString()); // cached
+		return &it->second; // cached
 	}
 	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
 	         || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
@@ -143,7 +150,7 @@ static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
  * \param s Pointer to shape level
  * \return false on error (memory allocation failure/bad file format), true otherwise
  */
-static bool _imd_load_polys(const WzString &filename, const char **ppFileData, iIMDShape *s, int pieVersion)
+static bool _imd_load_polys(const WzString &filename, const char **ppFileData, iIMDShape *s, int pieVersion, const uint32_t npoints)
 {
 	const char *pFileData = *ppFileData;
 
@@ -164,12 +171,18 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 
 		poly->flags = flags;
 		ASSERT_OR_RETURN(false, npnts == 3, "Invalid polygon size (%d)", npnts);
-		if (sscanf(pFileData, "%d %d %d%n", &poly->pindex[0], &poly->pindex[1], &poly->pindex[2], &cnt) != 3)
+		if (sscanf(pFileData, "%" PRIu32 "%" PRIu32 "%" PRIu32 "%n", &poly->pindex[0], &poly->pindex[1], &poly->pindex[2], &cnt) != 3)
 		{
 			debug(LOG_ERROR, "failed reading triangle, point %d", i);
 			return false;
 		}
 		pFileData += cnt;
+
+		// sanity check
+		for (size_t pIdx = 0; pIdx < 3; pIdx++)
+		{
+			ASSERT_OR_RETURN(false, (poly->pindex[pIdx] < npoints), "Point index (%" PRIu32 ") exceeds max index (%" PRIu32 ")", poly->pindex[pIdx], (npoints - 1));
+		}
 
 		// calc poly normal
 		{
@@ -235,7 +248,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 					poly->texAnim.x /= OLD_TEXTURE_SIZE_FIX;
 					poly->texAnim.y /= OLD_TEXTURE_SIZE_FIX;
 				}
-				framesPerLine = 1 / poly->texAnim.x;
+				framesPerLine = static_cast<int>(1 / poly->texAnim.x);
 			}
 			else
 			{
@@ -330,29 +343,29 @@ static void _imd_calc_bounds(iIMDShape &s)
 	{
 		if (p.x > s.max.x)
 		{
-			s.max.x = p.x;
+			s.max.x = static_cast<int>(p.x);
 		}
 		if (p.x < s.min.x)
 		{
-			s.min.x = p.x;
+			s.min.x = static_cast<int>(p.x);
 		}
 
 		if (p.y > s.max.y)
 		{
-			s.max.y = p.y;
+			s.max.y = static_cast<int>(p.y);
 		}
 		if (p.y < s.min.y)
 		{
-			s.min.y = p.y;
+			s.min.y = static_cast<int>(p.y);
 		}
 
 		if (p.z > s.max.z)
 		{
-			s.max.z = p.z;
+			s.max.z = static_cast<int>(p.z);
 		}
 		if (p.z < s.min.z)
 		{
-			s.min.z = p.z;
+			s.min.z = static_cast<int>(p.z);
 		}
 
 		// for tight sphere calculations
@@ -405,7 +418,7 @@ static void _imd_calc_bounds(iIMDShape &s)
 	zmax = MAX(s.max.z, -s.min.z);
 
 	s.radius = MAX(xmax, MAX(ymax, zmax));
-	s.sradius = sqrtf(xmax * xmax + ymax * ymax + zmax * zmax);
+	s.sradius = static_cast<int>(sqrtf(xmax * xmax + ymax * ymax + zmax * zmax));
 
 // START: tight bounding sphere
 
@@ -447,9 +460,9 @@ static void _imd_calc_bounds(iIMDShape &s)
 	}
 
 	// dia1, dia2 diameter of initial sphere
-	cen.x = (dia1.x + dia2.x) / 2.;
-	cen.y = (dia1.y + dia2.y) / 2.;
-	cen.z = (dia1.z + dia2.z) / 2.;
+	cen.x = (dia1.x + dia2.x) / 2.f;
+	cen.y = (dia1.y + dia2.y) / 2.f;
+	cen.z = (dia1.z + dia2.z) / 2.f;
 
 	// calc initial radius
 	dx = dia2.x - cen.x;
@@ -478,9 +491,9 @@ static void _imd_calc_bounds(iIMDShape &s)
 			rad_sq = rad * rad;
 			old_to_new = old_to_p - rad;
 			// centre of new sphere
-			cen.x = (rad * cen.x + old_to_new * p.x) / old_to_p;
-			cen.y = (rad * cen.y + old_to_new * p.y) / old_to_p;
-			cen.z = (rad * cen.z + old_to_new * p.z) / old_to_p;
+			cen.x = static_cast<float>((rad * cen.x + old_to_new * p.x) / old_to_p);
+			cen.y = static_cast<float>((rad * cen.y + old_to_new * p.y) / old_to_p);
+			cen.z = static_cast<float>((rad * cen.z + old_to_new * p.z) / old_to_p);
 		}
 	}
 
@@ -489,7 +502,7 @@ static void _imd_calc_bounds(iIMDShape &s)
 // END: tight bounding sphere
 }
 
-static bool _imd_load_points(const char **ppFileData, iIMDShape &s, int npoints)
+static bool _imd_load_points(const char **ppFileData, iIMDShape &s, uint32_t npoints)
 {
 	//load the points then pass through a second time to setup bounding datavalues
 	s.points.resize(npoints);
@@ -570,7 +583,7 @@ static bool ReadNormals(const char **ppFileData, std::vector<Vector3f> &pie_leve
    return true;
 }
 
-static bool _imd_load_normals(const char **ppFileData, std::vector<Vector3f> &pie_level_normals, int num_normal_lines)
+static bool _imd_load_normals(const char **ppFileData, std::vector<Vector3f> &pie_level_normals, uint32_t num_normal_lines)
 {
    // We only support triangles!
    pie_level_normals.resize(static_cast<size_t>(num_normal_lines * 3));
@@ -714,11 +727,12 @@ void finishTangentsGeneration()
  * \pre ppFileData loaded
  * \post s allocated
  */
+static_assert(PATH_MAX >= 255, "PATH_MAX is insufficient!");
 static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion, int level)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
-	int cnt = 0, n = 0, i;
+	int cnt = 0, n = 0, scanResult = 0;
 	float dummy;
 
 	if (nlevels == 0)
@@ -734,16 +748,20 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	}
 	ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
 	iIMDShape &s = models[key]; // create entry and return reference
+	s.modelName = key;
+	s.modelLevel = level;
+	s.pShadowPoints = &s.points;
+	s.pShadowPolys = &s.polys;
 
-	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
-	ASSERT_OR_RETURN(nullptr, i == 1, "Bad directive following LEVEL");
+	scanResult = sscanf(pFileData, "%255s %n", buffer, &cnt);
+	ASSERT_OR_RETURN(nullptr, scanResult == 1, "Bad directive following LEVEL");
 
 	// Optionally load and ignore deprecated MATERIALS directive
 	if (strcmp(buffer, "MATERIALS") == 0)
 	{
-		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer, &dummy, &dummy, &dummy, &dummy,
+		scanResult = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer, &dummy, &dummy, &dummy, &dummy,
 		           &dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &cnt);
-		ASSERT_OR_RETURN(nullptr, i == 11, "Bad MATERIALS directive");
+		ASSERT_OR_RETURN(nullptr, scanResult == 11, "Bad MATERIALS directive");
 		debug(LOG_WARNING, "MATERIALS directive no longer supported!");
 		pFileData += cnt;
 	}
@@ -760,10 +778,10 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		pFileData += cnt;
 	}
 
-	int npoints = 0;
-	if (sscanf(pFileData, "%255s %d%n", buffer, &npoints, &cnt) != 2)
+	uint32_t npoints = 0;
+	if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npoints, &cnt) != 2)
 	{
-		debug(LOG_ERROR, "_imd_load_level(2): file corrupt");
+		debug(LOG_ERROR, "_imd_load_level(2): file corrupt: %s", filename.toUtf8().c_str());
 		return nullptr;
 	}
 	pFileData += cnt;
@@ -772,12 +790,16 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POINTS") == 0, "Expecting 'POINTS' directive, got: %s", buffer);
 
-	_imd_load_points(&pFileData, s, npoints);
-
-	int npolys = 0;
-	if (sscanf(pFileData, "%255s %d%n", buffer, &npolys, &cnt) != 2)
+	if (!_imd_load_points(&pFileData, s, npoints))
 	{
-		debug(LOG_ERROR, "_imd_load_level(3): file corrupt");
+		debug(LOG_ERROR, "_imd_load_level(2a): file corrupt: %s", filename.toUtf8().c_str());
+		return nullptr;
+	}
+
+	uint32_t npolys = 0;
+	if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npolys, &cnt) != 2)
+	{
+		debug(LOG_ERROR, "_imd_load_level(3): file corrupt: %s", filename.toUtf8().c_str());
 		return nullptr;
 	}
 	pFileData += cnt;
@@ -790,9 +812,9 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  		_imd_load_normals(&pFileData, pie_level_normals, npolys);
 
  		// Attemps to read polys again
- 		if (sscanf(pFileData, "%255s %d%n", buffer, &npolys, &cnt) != 2)
+ 		if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npolys, &cnt) != 2)
  		{
- 			debug(LOG_ERROR, "_imd_load_level(3a): file corrupt");
+ 			debug(LOG_ERROR, "_imd_load_level(3a): file corrupt: %s", filename.toUtf8().c_str());
  			return nullptr;
  		}
 		debug(LOG_3D, "imd[_load_level] = normals %d", static_cast<int>(pie_level_normals.size()));
@@ -803,9 +825,13 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 
-	_imd_load_polys(filename, &pFileData, &s, pieVersion);
+	if (!_imd_load_polys(filename, &pFileData, &s, pieVersion, npoints))
+	{
+		debug(LOG_ERROR, "_imd_load_level(3b): file corrupt - invalid polys: %s", filename.toUtf8().c_str());
+		return nullptr;
+	}
 
-	// optional stuff : levels, object animations, connectors
+	// optional stuff : levels, object animations, connectors, shadow points + polys
 	s.objanimframes = 0;
 	while (!AtEndOfFile(pFileData, FileDataEnd)) // check for end of file (give or take white space)
 	{
@@ -818,14 +844,18 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 		if (strcmp(buffer, "LEVEL") == 0)	// check for next level
 		{
-			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", npoints, npolys);
+			debug(LOG_3D, "imd[_load_level] = npoints %" PRIu32 ", npolys %" PRIu32 "", npoints, npolys);
 			s.next = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels - 1, pieVersion, level + 1);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)
 		{
 			//load connector stuff
 			s.nconnectors = n;
-			_imd_load_connectors(&pFileData, s);
+			if (!_imd_load_connectors(&pFileData, s))
+			{
+				debug(LOG_ERROR, "_imd_load_level(5): file corrupt - invalid shadowpoints: %s", filename.toUtf8().c_str());
+				return nullptr;
+			}
 		}
 		else if (strcmp(buffer, "ANIMOBJECT") == 0)
 		{
@@ -852,11 +882,43 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 				s.objanimdata[i].pos.x = pos.x / INT_SCALE;
 				s.objanimdata[i].pos.y = pos.z / INT_SCALE;
 				s.objanimdata[i].pos.z = pos.y / INT_SCALE;
-				s.objanimdata[i].rot.pitch = -(rot.x * DEG_1 / INT_SCALE);
-				s.objanimdata[i].rot.direction = -(rot.z * DEG_1 / INT_SCALE);
-				s.objanimdata[i].rot.roll = -(rot.y * DEG_1 / INT_SCALE);
+				s.objanimdata[i].rot.pitch = static_cast<uint16_t>(static_cast<int32_t>(-(rot.x * DEG_1 / INT_SCALE)));
+				s.objanimdata[i].rot.direction = static_cast<uint16_t>(static_cast<int32_t>(-(rot.z * DEG_1 / INT_SCALE)));
+				s.objanimdata[i].rot.roll = static_cast<uint16_t>(static_cast<int32_t>(-(rot.y * DEG_1 / INT_SCALE)));
 				pFileData += cnt;
 			}
+		}
+		else if (strcmp(buffer, "SHADOWPOINTS") == 0)
+		{
+			ASSERT_OR_RETURN(nullptr, n > 0, "Invalid 'SHADOW_POINTS' count, got: %d", n);
+			uint32_t nShadowPoints = static_cast<uint32_t>(n);
+
+			iIMDShape tmpShadowShape;
+			if (!_imd_load_points(&pFileData, tmpShadowShape, nShadowPoints))
+			{
+				debug(LOG_ERROR, "_imd_load_level(7): file corrupt - invalid shadowpoints: %s", filename.toUtf8().c_str());
+				return nullptr;
+			}
+
+			s.altShadowPoints = std::move(tmpShadowShape.points);
+			s.pShadowPoints = &s.altShadowPoints;
+		}
+		else if (strcmp(buffer, "SHADOWPOLYGONS") == 0)
+		{
+			ASSERT_OR_RETURN(nullptr, s.altShadowPoints.size() > 0, "'SHADOW_POLYGONS' must follow a non-empty SHADOW_POINTS section");
+			ASSERT_OR_RETURN(nullptr, n > 0, "Invalid 'SHADOW_POLYGONS' count, got: %d", n);
+			uint32_t nShadowPolys = static_cast<uint32_t>(n);
+
+			iIMDShape tmpShadowShape;
+			tmpShadowShape.polys.resize(nShadowPolys);
+			if (!_imd_load_polys(filename, &pFileData, &tmpShadowShape, PIE_FLOAT_VER, static_cast<uint32_t>(s.altShadowPoints.size())))
+			{
+				debug(LOG_ERROR, "_imd_load_level(8): file corrupt - invalid shadowpolygons: %s", filename.toUtf8().c_str());
+				return nullptr;
+			}
+
+			s.altShadowPolys = std::move(tmpShadowShape.polys);
+			s.pShadowPolys = &s.altShadowPolys;
 		}
 		else
 		{
@@ -865,17 +927,29 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		}
 	}
 
-	// Sanity check
+	// Sanity checks
  	if (!pie_level_normals.empty())
  	{
  		if (s.polys.size() * 3 != pie_level_normals.size())
  		{
- 			debug(LOG_ERROR, "imd[_load_level] = got %d npolys, but there are only %d normals! Discarding normals...",
- 			      npolys, static_cast<int>(pie_level_normals.size()));
+ 			debug(LOG_ERROR, "imd[_load_level] = got %" PRIu32 " npolys, but there are only %zu normals! Discarding normals...",
+ 			      npolys, pie_level_normals.size());
  			// This will force usage of calculated normals in addVertex
  			pie_level_normals.clear();
  		}
  	}
+	if (!s.altShadowPoints.empty())
+	{
+		if (s.altShadowPolys.empty())
+		{
+			debug(LOG_ERROR, "imd[_load_level] = %zu SHADOWPOINTS specified, but there are no SHADOWPOLYGONS! Discarding shadow points...",
+				  s.altShadowPoints.size());
+			s.altShadowPoints.clear();
+			s.altShadowPolys.clear();
+			s.pShadowPoints = &s.points;
+			s.pShadowPolys = &s.polys;
+		}
+	}
 
 	// FINALLY, massage the data into what can stream directly to OpenGL
 	vertexCount = 0;
@@ -951,11 +1025,12 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX], specfile[PATH_MAX];
-	int cnt, nlevels;
+	int cnt, nlevels, interpolate;
 	UDWORD level;
 	int32_t imd_version;
 	uint32_t imd_flags;
 	bool bTextured = false;
+	bool readInterpolate = false;
 	iIMDShape *objanimpie[ANIM_EVENT_COUNT];
 
 	memset(normalfile, 0, sizeof(normalfile));
@@ -989,6 +1064,18 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		return;
 	}
 	pFileData += cnt;
+
+	// Read interpolation -- optional
+	if (sscanf(pFileData, "%255s %d%n", buffer, &interpolate, &cnt) != 2)
+	{
+		debug(LOG_ERROR, "%s: Expecting INTERPOLATE: %s", filename.toUtf8().c_str(), buffer);
+		return;
+	}
+	if (strncmp(buffer, "INTERPOLATE", 11) == 0)
+	{
+		readInterpolate = true;
+		pFileData += cnt;
+	}
 
 	/* This can be either texture or levels */
 	if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
@@ -1183,7 +1270,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	// load texture page if specified
 	if (bTextured)
 	{
-		optional<size_t> texpage = iV_GetTexture(texfile);
+		optional<size_t> texpage = iV_GetTexture(texfile, gfx_api::texture_type::game_texture);
 		optional<size_t> normalpage;
 		optional<size_t> specpage;
 
@@ -1192,14 +1279,14 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (normalfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, filename.toUtf8().c_str());
-			normalpage = iV_GetTexture(normalfile, false);
+			normalpage = iV_GetTexture(normalfile, gfx_api::texture_type::normal_map);
 			ASSERT_OR_RETURN(, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), normalfile);
 		}
 
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, filename.toUtf8().c_str());
-			specpage = iV_GetTexture(specfile, false);
+			specpage = iV_GetTexture(specfile, gfx_api::texture_type::specular_map);
 			ASSERT_OR_RETURN(, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
 		}
 
@@ -1210,6 +1297,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 			psShape->normalpage = (normalpage.has_value()) ? normalpage.value() : iV_TEX_INVALID;
 			psShape->specularpage = (specpage.has_value()) ? specpage.value() : iV_TEX_INVALID;
 			psShape->flags = imd_flags;
+			psShape->interpolate = (readInterpolate) ? interpolate : 1;
 		}
 
 		// check if model should use team colour mask
@@ -1217,7 +1305,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		{
 			std::string tcmask_name = pie_MakeTexPageTCMaskName(texfile);
 			tcmask_name += ".png";
-			optional<size_t> texpage_mask = iV_GetTexture(tcmask_name.c_str());
+			optional<size_t> texpage_mask = iV_GetTexture(tcmask_name.c_str(), gfx_api::texture_type::alpha_mask);
 
 			ASSERT_OR_RETURN(, texpage_mask.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
 

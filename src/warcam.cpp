@@ -175,6 +175,12 @@ static void processLeaderSelection()
 	bSuccess = false;
 	bestSoFar = UDWORD_MAX;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return;
+	}
+
 	switch (leaderClass)
 	{
 	case	LEADER_LEFT:
@@ -375,6 +381,12 @@ DROID *camFindDroidTarget()
 {
 	DROID	*psDroid;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return nullptr;
+	}
+
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
@@ -398,14 +410,20 @@ void	camAlignWithTarget(DROID *psDroid)
 	trackingCamera.target = psDroid;
 
 	/* Save away all the view angles */
-	trackingCamera.oldView.r.x = trackingCamera.rotation.x = (float)player.r.x;
-	trackingCamera.oldView.r.y = trackingCamera.rotation.y = (float)player.r.y;
-	trackingCamera.oldView.r.z = trackingCamera.rotation.z = (float)player.r.z;
+	trackingCamera.rotation.x = (float)playerPos.r.x;
+	trackingCamera.rotation.y = (float)playerPos.r.y;
+	trackingCamera.rotation.z = (float)playerPos.r.z;
+	trackingCamera.oldView.r.x = playerPos.r.x;
+	trackingCamera.oldView.r.y = playerPos.r.y;
+	trackingCamera.oldView.r.z = playerPos.r.z;
 
 	/* Store away the old positions and set the start position too */
-	trackingCamera.oldView.p.x = trackingCamera.position.x = (float)player.p.x;
-	trackingCamera.oldView.p.y = trackingCamera.position.y = (float)player.p.y;
-	trackingCamera.oldView.p.z = trackingCamera.position.z = (float)player.p.z;
+	trackingCamera.position.x = (float)playerPos.p.x;
+	trackingCamera.position.y = (float)playerPos.p.y;
+	trackingCamera.position.z = (float)playerPos.p.z;
+	trackingCamera.oldView.p.x = playerPos.p.x;
+	trackingCamera.oldView.p.y = playerPos.p.y;
+	trackingCamera.oldView.p.z = playerPos.p.z;
 
 	//	trackingCamera.rotation.x = player.r.x = DEG(-90);
 	/* No initial velocity for moving */
@@ -432,13 +450,19 @@ static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 	DROID *psDroid;
 	int32_t xTotal = 0, yTotal = 0;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return 0;
+	}
+
 	/* Got thru' all droids */
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		/* Is he worth selecting? */
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
-			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
+			if (bCheckOnScreen ? objectOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
 			{
 				xTotal += iSin(psDroid->rot.direction);
 				yTotal += iCos(psDroid->rot.direction);
@@ -457,11 +481,17 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 	DROID *psDroid;
 	UDWORD count;
 
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		// Not currently supported when selectedPlayer >= MAX_PLAYERS
+		return;
+	}
+
 	for (count = 0, psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
-			if (!bOnScreen || droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
+			if (!bOnScreen || objectOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
 			{
 				count++;
 				xTotals += psDroid->pos.x;
@@ -536,7 +566,7 @@ static void updateCameraAcceleration(UBYTE update)
 		that we need to find an offset point from it relative to it's present
 		direction
 	*/
-	const int angle = 90 - abs((player.r.x / 182) % 90);
+	const int angle = 90 - abs((playerPos.r.x / 182) % 90);
 
 	const PROPULSION_STATS *psPropStats = &asPropulsionStats[trackingCamera.target->asBits[COMP_PROPULSION]];
 
@@ -686,7 +716,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 		}
 
 		/* Which way are we facing? */
-		worldAngle = trackingCamera.rotation.y;
+		worldAngle = static_cast<SDWORD>(trackingCamera.rotation.y);
 		separation = angleDelta(yConcern - worldAngle);
 
 		/* Make new acceleration */
@@ -713,7 +743,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 		{
 			trackingCamera.rotation.x += DEG(360);
 		}
-		worldAngle =  trackingCamera.rotation.x;
+		worldAngle = static_cast<SDWORD>(trackingCamera.rotation.x);
 		separation = angleDelta(xConcern - worldAngle);
 
 		/* Make new acceleration */
@@ -737,7 +767,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 		{
 			trackingCamera.rotation.z += DEG(360);
 		}
-		worldAngle =  trackingCamera.rotation.z;
+		worldAngle = static_cast<SDWORD>(trackingCamera.rotation.z);
 		separation = (float)((zConcern - worldAngle));
 		if (separation < DEG(-180))
 		{
@@ -840,19 +870,19 @@ static bool camTrackCamera()
 	}
 
 	/* Update the position that's now stored in trackingCamera.position */
-	player.p.x = trackingCamera.position.x;
-	player.p.y = trackingCamera.position.y;
-	player.p.z = trackingCamera.position.z;
+	playerPos.p.x = static_cast<int>(trackingCamera.position.x);
+	playerPos.p.y = static_cast<int>(trackingCamera.position.y);
+	playerPos.p.z = static_cast<int>(trackingCamera.position.z);
 
 	/* Update the rotations that're now stored in trackingCamera.rotation */
-	player.r.x = trackingCamera.rotation.x;
-	player.r.y = trackingCamera.rotation.y;
-	player.r.z = trackingCamera.rotation.z;
+	playerPos.r.x = static_cast<int>(trackingCamera.rotation.x);
+	playerPos.r.y = static_cast<int>(trackingCamera.rotation.y);
+	playerPos.r.z = static_cast<int>(trackingCamera.rotation.z);
 
 	/* There's a minimum for this - especially when John's VTOL code lets them land vertically on cliffs */
-	if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+	if (playerPos.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
 	{
-		player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+		playerPos.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
 	}
 
 	/* Clip the position to the edge of the map */
@@ -874,8 +904,8 @@ static void camRadarJump()
 {
 	radarJumpAnimation.position.update();
 	radarJumpAnimation.rotation.update();
-	player.p = radarJumpAnimation.position.getCurrent();
-	player.r = radarJumpAnimation.rotation.getCurrent();
+	playerPos.p = radarJumpAnimation.position.getCurrent();
+	playerPos.r = radarJumpAnimation.rotation.getCurrent();
 
 	if (!radarJumpAnimation.position.isActive() && !radarJumpAnimation.rotation.isActive())
 	{
@@ -896,14 +926,6 @@ DROID *getTrackingDroid()
 	}
 	return trackingCamera.target;
 }
-
-//-----------------------------------------------------------------------------------
-SDWORD	getPresAngle()
-{
-	return (presAvAngle);
-}
-//-----------------------------------------------------------------------------------
-
 
 //-----------------------------------------------------------------------------------
 UDWORD	getNumDroidsSelected()
@@ -957,10 +979,10 @@ void	camToggleInfo()
 /* Informs the tracking camera that we want to start tracking to a new radar target */
 void requestRadarTrack(SDWORD x, SDWORD y)
 {
-	auto initialPosition = Vector3f(player.p);
+	auto initialPosition = Vector3f(playerPos.p);
 	auto targetPosition = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
-	auto animationDuration = glm::log(glm::length(targetPosition - initialPosition)) * 100;
-	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : player.r;
+	auto animationDuration = static_cast<uint32_t>(glm::log(glm::length(targetPosition - initialPosition)) * 100);
+	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : playerPos.r;
 	finalRotation.z = 0;
 
 	radarJumpAnimation.position
@@ -970,7 +992,7 @@ void requestRadarTrack(SDWORD x, SDWORD y)
 		.start();
 
 	radarJumpAnimation.rotation
-		.setInitialData(player.r)
+		.setInitialData(playerPos.r)
 		.setFinalData(finalRotation)
 		.setDuration(animationDuration)
 		.start();

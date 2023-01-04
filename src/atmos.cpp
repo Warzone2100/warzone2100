@@ -85,25 +85,25 @@ void atmosInitSystem()
 static void testParticleWrap(ATPART *psPart)
 {
 	/* Gone off left side */
-	if (psPart->position.x < player.p.x - world_coord(visibleTiles.x) / 2)
+	if (psPart->position.x < playerPos.p.x - world_coord(visibleTiles.x) / 2)
 	{
 		psPart->position.x += world_coord(visibleTiles.x);
 	}
 
 	/* Gone off right side */
-	else if (psPart->position.x > (player.p.x + world_coord(visibleTiles.x) / 2))
+	else if (psPart->position.x > (playerPos.p.x + world_coord(visibleTiles.x) / 2))
 	{
 		psPart->position.x -= world_coord(visibleTiles.x);
 	}
 
 	/* Gone off top */
-	if (psPart->position.z < player.p.z - world_coord(visibleTiles.y) / 2)
+	if (psPart->position.z < playerPos.p.z - world_coord(visibleTiles.y) / 2)
 	{
 		psPart->position.z += world_coord(visibleTiles.y);
 	}
 
 	/* Gone off bottom */
-	else if (psPart->position.z > (player.p.z + world_coord(visibleTiles.y) / 2))
+	else if (psPart->position.z > (playerPos.p.z + world_coord(visibleTiles.y) / 2))
 	{
 		psPart->position.z -= world_coord(visibleTiles.y);
 	}
@@ -139,10 +139,10 @@ static void processParticle(ATPART *psPart)
 		}
 
 		/* What height is the ground under it? Only do if low enough...*/
-		if (psPart->position.y < 255 * ELEVATION_SCALE)
+		if (psPart->position.y < TILE_MAX_HEIGHT)
 		{
 			/* Get ground height */
-			groundHeight = map_Height(psPart->position.x, psPart->position.z);
+			groundHeight = map_Height(static_cast<int>(psPart->position.x), static_cast<int>(psPart->position.z));
 
 			/* Are we below ground? */
 			if ((int)psPart->position.y < groundHeight
@@ -152,13 +152,13 @@ static void processParticle(ATPART *psPart)
 				psPart->status = APS_INACTIVE;
 				if (psPart->type == AP_RAIN)
 				{
-					x = map_coord(psPart->position.x);
-					y = map_coord(psPart->position.z);
+					x = map_coord(static_cast<int32_t>(psPart->position.x));
+					y = map_coord(static_cast<int32_t>(psPart->position.z));
 					psTile = mapTile(x, y);
-					if (terrainType(psTile) == TER_WATER && TEST_TILE_VISIBLE(selectedPlayer, psTile))
+					if (terrainType(psTile) == TER_WATER && TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile)) // display-only check for adding effect
 					{
-						pos.x = psPart->position.x;
-						pos.z = psPart->position.z;
+						pos.x = static_cast<int>(psPart->position.x);
+						pos.z = static_cast<int>(psPart->position.z);
 						pos.y = groundHeight;
 						effectSetSize(60);
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_SPLASH), 0);
@@ -273,14 +273,14 @@ void atmosUpdateSystem()
 			accumulatedParticlesToAdd += ((weather == WT_SNOWING) ? 2.0 : 4.0) * gameTimeModVal;
 		}
 
-		numberToAdd = accumulatedParticlesToAdd;
+		numberToAdd = static_cast<UDWORD>(accumulatedParticlesToAdd);
 		accumulatedParticlesToAdd -= numberToAdd;
 
 		/* Temporary stuff - just adds a few particles! */
 		for (i = 0; i < numberToAdd; i++)
 		{
-			pos.x = player.p.x;
-			pos.z = player.p.z;
+			pos.x = playerPos.p.x;
+			pos.z = playerPos.p.z;
 			pos.x += world_coord(rand() % visibleTiles.x - visibleTiles.x / 2);
 			pos.z += world_coord(rand() % visibleTiles.x - visibleTiles.y / 2);
 			pos.y = 1000;
@@ -307,7 +307,7 @@ void atmosUpdateSystem()
 	}
 }
 
-void atmosDrawParticles(const glm::mat4 &viewMatrix)
+void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	UDWORD	i;
 
@@ -323,7 +323,7 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix)
 		if (asAtmosParts[i].status == APS_ACTIVE)
 		{
 			/* Is it visible on the screen? */
-			if (clipXYZ(asAtmosParts[i].position.x, asAtmosParts[i].position.z, asAtmosParts[i].position.y, viewMatrix))
+			if (clipXYZ(static_cast<int>(asAtmosParts[i].position.x), static_cast<int>(asAtmosParts[i].position.z), static_cast<int>(asAtmosParts[i].position.y), perspectiveViewMatrix))
 			{
 				renderParticle(&asAtmosParts[i], viewMatrix);
 			}
@@ -333,17 +333,17 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix)
 
 void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 {
-	Vector3i dv;
+	glm::vec3 dv;
 
 	/* Transform it */
-	dv.x = psPart->position.x - player.p.x;
+	dv.x = psPart->position.x - playerPos.p.x;
 	dv.y = psPart->position.y;
-	dv.z = -(psPart->position.z - player.p.z);
+	dv.z = -(psPart->position.z - playerPos.p.z);
 	/* Make it face camera */
 	/* Scale it... */
-	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) *
-		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::rotate(UNDEG(-player.r.x), glm::vec3(0.f, 1.f, 0.f)) *
+	const glm::mat4 modelMatrix = glm::translate(dv) *
+		glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::scale(glm::vec3(psPart->size / 100.f));
 	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
 	/* Draw it... */

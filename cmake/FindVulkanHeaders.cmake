@@ -13,7 +13,16 @@
 
 set(VK_HEADER_VERSION_STRING "")
 
-find_package(Vulkan)
+find_package(Vulkan QUIET)
+if(NOT Vulkan_FOUND)
+	# Try to find *just* the headers
+	find_path(Vulkan_INCLUDE_DIRS
+		NAMES vulkan/vulkan.h
+		HINTS "$ENV{VULKAN_SDK}/include")
+	if(Vulkan_INCLUDE_DIRS)
+		set(Vulkan_FOUND TRUE)
+	endif()
+endif()
 if(Vulkan_FOUND)
 	# Check to ensure that the headers are at least the minimum supported version
 	if(Vulkan_INCLUDE_DIRS AND EXISTS "${Vulkan_INCLUDE_DIRS}/vulkan/vulkan_core.h")

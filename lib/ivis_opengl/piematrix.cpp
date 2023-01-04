@@ -56,17 +56,18 @@ static PerspectiveCache perspectiveCache;
  * 3D vector perspective projection
  * Projects 3D vector into 2D screen space
  * \param v3d       3D vector to project
+ * \param perspectiveViewMatrix		precomputed perspective multipled by view matrix
  * \param[out] v2d  resulting 2D vector
  * \return projected z component of v2d
  */
-int32_t pie_RotateProject(const Vector3i *v3d, const glm::mat4& matrix, Vector2i *v2d)
+int32_t pie_RotateProjectWithPerspective(const Vector3i *v3d, const glm::mat4 &perspectiveViewMatrix, Vector2i *v2d)
 {
 	float hackScaleFactor = 1.0f / (3 * 330);  // HACK: This seems to work by experimentation, not sure why.
 
 	/*
 	 * v = curMatrix . v3d
 	 */
-	glm::vec4 v(pie_PerspectiveGet() * matrix * glm::vec4(*v3d, 1.f));
+	glm::vec4 v(perspectiveViewMatrix * glm::vec4(*v3d, 1.f));
 
 	const float xx = v.x / v.w;
 	const float yy = v.y / v.w;
@@ -78,11 +79,11 @@ int32_t pie_RotateProject(const Vector3i *v3d, const glm::mat4& matrix, Vector2i
 	}
 	else
 	{
-		v2d->x = (.5 + .5 * xx) * pie_GetVideoBufferWidth();
-		v2d->y = (.5 - .5 * yy) * pie_GetVideoBufferHeight();
+		v2d->x = static_cast<int>((.5 + .5 * xx) * pie_GetVideoBufferWidth());
+		v2d->y = static_cast<int>((.5 - .5 * yy) * pie_GetVideoBufferHeight());
 	}
 
-	return v.w;
+	return static_cast<int32_t>(v.w);
 }
 
 const glm::mat4& pie_PerspectiveGet()

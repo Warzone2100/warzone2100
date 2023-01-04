@@ -31,10 +31,6 @@
 # undef Status
 #endif
 
-#ifndef WZ_CXX11
-# define nullptr NULL
-#endif
-
 #include "types.h"
 /**
 * NOTE: the next two #include lines are needed by MSVC to override the default,
@@ -97,20 +93,6 @@ bool frameInitialise();
  */
 void frameShutDown();
 
-/*!
- * Set the framerate limit
- *
- * \param fpsLimit Desired framerate
- */
-void setFramerateLimit(int fpsLimit);
-
-/*!
- * Get the framerate limit
- *
- * \return Desired framerate
- */
-int getFramerateLimit();
-
 /** Call this each cycle to allow the framework to deal with
  * windows messages, and do general house keeping.
  */
@@ -143,5 +125,20 @@ bool video_backend_from_str(const char *str, video_backend &output_backend);
 std::string to_string(video_backend backend);
 std::string to_display_string(const video_backend& backend);
 // video_backend - end
+
+// fullscreen_mode - begin
+
+enum class WINDOW_MODE : int
+{
+	desktop_fullscreen = -1,
+	windowed = 0,
+	fullscreen = 1
+};
+std::string to_display_string(const WINDOW_MODE& mode);
+
+#define MIN_VALID_WINDOW_MODE WINDOW_MODE::desktop_fullscreen
+#define MAX_VALID_WINDOW_MODE WINDOW_MODE::fullscreen
+
+// fullscreen_mode - end
 
 #endif

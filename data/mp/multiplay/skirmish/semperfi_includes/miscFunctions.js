@@ -14,7 +14,7 @@ function logObj(obj, message)
 // Returns true if something is defined
 function defined(data)
 {
-	return typeof(data) !== "undefined";
+	return typeof data !== "undefined";
 }
 
 //Return a number in the range of 0 to (max - 1).
@@ -62,7 +62,7 @@ function isDerrick(obj)
 function setupTruckGroups()
 {
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
+	for (let i = 0, l = cons.length; i < l; ++i)
 	{
 		var droid = cons[i];
 		if (l < MIN_BASE_TRUCKS)

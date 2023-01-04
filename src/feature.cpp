@@ -45,6 +45,7 @@
 #include "scores.h"
 #include "combat.h"
 #include "multiplay.h"
+#include "qtscript.h"
 
 #include "mapgrid.h"
 #include "display3d.h"
@@ -178,12 +179,17 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	}
 }
 
-
-/* Create a feature on the map */
 FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 {
+	const auto id = generateSynchronisedObjectId();
+	return buildFeature(psStats, x, y, FromSave, id);
+}
+
+/* Create a feature on the map */
+FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
+{
 	//try and create the Feature
-	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
+	FEATURE *psFeature = new FEATURE(id, psStats);
 
 	if (psFeature == nullptr)
 	{
@@ -258,8 +264,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 			MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(nullptr, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats), psFeature->id);
-			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -268,8 +274,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 					FEATURE *psBlock = (FEATURE *)psTile->psObject;
 
 					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
-					      getName(psBlock->psStats), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
-					      psBlock->psStats->baseBreadth, getName(psFeature->psStats), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
+					      getStatsName(psBlock->psStats), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
+					      psBlock->psStats->baseBreadth, getStatsName(psFeature->psStats), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
 
 					removeFeature(psBlock);
 				}
@@ -392,6 +398,7 @@ bool removeFeature(FEATURE *psDel)
 		}
 	}
 
+	bool removedAMessage = false;
 	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
 		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
@@ -400,9 +407,14 @@ bool removeFeature(FEATURE *psDel)
 			while (psMessage)
 			{
 				removeMessage(psMessage, player);
+				removedAMessage = true;
 				psMessage = findMessage(psDel, MSG_PROXIMITY, player);
 			}
 		}
+	}
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
 	}
 
 	debug(LOG_DEATH, "Killing off feature %s id %d (%p)", objInfo(psDel), psDel->id, static_cast<void *>(psDel));
@@ -422,7 +434,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 	ASSERT(gameTime - deltaGameTime < impactTime, "Expected %u < %u, gameTime = %u, bad impactTime", gameTime - deltaGameTime, impactTime, gameTime);
 
 	/* Only add if visible and damageable*/
-	if (psDel->visible[selectedPlayer] && psDel->psStats->damageable)
+	if (psDel->visibleForLocalDisplay() && psDel->psStats->damageable)
 	{
 		/* Set off a destruction effect */
 		/* First Explosions */
@@ -457,6 +469,8 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			pos.y = psDel->pos.z;
 			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_SKYSCRAPER, true, psDel->sDisplay.imd, 0, impactTime);
 			initPerimeterSmoke(psDel->sDisplay.imd, pos);
+
+			shakeStart(250); // small shake
 		}
 
 		/* Then a sequence of effects */
@@ -482,6 +496,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		// ----- Flip all the tiles under the skyscraper to a rubble tile
 		// smoke effect should disguise this happening
 		StructureBounds b = getStructureBounds(psDel);
+		bool isUrban = tilesetDir && strcmp(tilesetDir, "texpages/tertilesc2hw") == 0;
 		for (int breadth = 0; breadth < b.size.y; ++breadth)
 		{
 			for (int width = 0; width < b.size.x; ++width)
@@ -493,7 +508,10 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 					if (terrainType(psTile) != TER_CLIFFFACE)
 					{
 						/* Clear feature bits */
-						psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+						if (isUrban)
+						{
+							psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+						}
 						auxClearBlocking(b.map.x + width, b.map.y + breadth, AUXBITS_ALL);
 					}
 					else
@@ -501,7 +519,10 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						/* This remains a blocking tile */
 						psTile->psObject = nullptr;
 						auxClearBlocking(b.map.x + width, b.map.y + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
-						psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
+						if (isUrban)
+						{
+							psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
+						}
 					}
 				}
 			}

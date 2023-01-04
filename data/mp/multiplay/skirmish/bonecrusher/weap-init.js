@@ -1,3 +1,5 @@
+debugMsg('Module: weap-init.js','init');
+
 var guns=[
 //	===== Пулемёты
 ["R-Wpn-MG1Mk1", "MG1Mk1"],						//Лёгкий пулемёт
@@ -30,14 +32,14 @@ var guns=[
 ["R-Wpn-HvArtMissile", "Missile-HvyArt"],			//Улучшенная дальнобойная артиллерийская ракетная баттарея Archangel
 //	===== Мортиры
 ["R-Wpn-Mortar01Lt", "Mortar1Mk1"],					//Mortar
-["R-Wpn-Mortar-Incenediary", "Mortar-Incenediary"],	//Incendiary Mortar
+["R-Wpn-Mortar-Incendiary", "Mortar-Incendiary"],	//Incendiary Mortar
 ["R-Wpn-Mortar02Hvy", "Mortar2Mk1"],				//Heavy Mortar - Bombard
 ["R-Wpn-Mortar3", "Mortar3ROTARYMk1"],				//Rotary Mortar - Pepperpot
 //	===== Гаубицы
 ["R-Wpn-HowitzerMk1", "Howitzer105Mk1"],				//Howitzer
 ["R-Wpn-HvyHowitzer", "Howitzer150Mk1"],				//Heavy Howitzer - Ground Shaker
 ["R-Wpn-Howitzer03-Rot", "Howitzer03-Rot"],				//Rotary Howitzer - Hellstorm
-["R-Wpn-Howitzer-Incenediary", "Howitzer-Incenediary"],	//Incendiary Howitzer
+["R-Wpn-Howitzer-Incendiary", "Howitzer-Incendiary"],	//Incendiary Howitzer
 //	===== Лазеры
 ["R-Wpn-HvyLaser", "HeavyLaser"],					//Heavy Laser
 ["R-Wpn-Laser02", "Laser2PULSEMk1"],				//Pulse Laser
@@ -51,7 +53,7 @@ var guns=[
 
 
 //Типы пушек, по приоритету
-var guns_type = [];
+var guns_type = {};
 
 
 //Пулемёты
@@ -101,14 +103,14 @@ guns_type['ra'] = [
 //Мортиры
 guns_type['mr'] = [
 ["R-Wpn-Mortar3", "Mortar3ROTARYMk1"],				//Rotary Mortar - Pepperpot
-["R-Wpn-Mortar-Incenediary", "Mortar-Incenediary"],	//Incendiary Mortar
+["R-Wpn-Mortar-Incendiary", "Mortar-Incendiary"],	//Incendiary Mortar
 ["R-Wpn-Mortar02Hvy", "Mortar2Mk1"],				//Heavy Mortar - Bombard
 ["R-Wpn-Mortar01Lt", "Mortar1Mk1"],					//Mortar
 ];
 
 //Гаубицы
 guns_type['hw'] = [
-["R-Wpn-Howitzer-Incenediary", "Howitzer-Incenediary"],	//Incendiary Howitzer
+["R-Wpn-Howitzer-Incendiary", "Howitzer-Incendiary"],	//Incendiary Howitzer
 ["R-Wpn-Howitzer03-Rot", "Howitzer03-Rot"],				//Rotary Howitzer - Hellstorm
 ["R-Wpn-HvyHowitzer", "Howitzer150Mk1"],				//Heavy Howitzer - Ground Shaker
 ["R-Wpn-HowitzerMk1", "Howitzer105Mk1"],				//Howitzer
@@ -128,7 +130,7 @@ guns_type['rl'] = [
 ["R-Wpn-RailGun03", "RailGun3Mk1"],					//Gauss Cannon
 ];
 
-var guns_pts = [];
+var guns_pts = {};
 guns_pts['mg'] = [
 'R-Wpn-MG3Mk1',
 'R-Wpn-MG4',

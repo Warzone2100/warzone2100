@@ -34,6 +34,10 @@
 #define	CAMERASPEED_DEFAULT	(2500)
 #define	CAMERASPEED_STEP	(100)
 
+#define MIN_MPINACTIVITY_MINUTES 4
+
+#define WZ_LODDISTANCEPERCENTAGE_HIGH -50
+
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -50,7 +54,6 @@ enum FMV_MODE
 enum class JS_BACKEND
 {
 	quickjs,
-	qtscript,
 	num_backends // Must be last!
 };
 
@@ -67,8 +70,8 @@ void war_SetFMVmode(FMV_MODE mode);
 FMV_MODE war_GetFMVmode();
 void war_SetAllowSubtitles(bool);
 bool war_GetAllowSubtitles();
-void war_setFullscreen(bool);
-bool war_getFullscreen();
+void war_setWindowMode(WINDOW_MODE);
+WINDOW_MODE war_getWindowMode();
 void war_setAntialiasing(int);
 int war_getAntialiasing();
 void war_SetTrapCursor(bool b);
@@ -79,12 +82,22 @@ void war_SetVsync(int value);
 int war_GetVsync();
 void war_SetDisplayScale(unsigned int scale);
 unsigned int war_GetDisplayScale();
+// non-fullscreen window sizes / screen
 void war_SetWidth(UDWORD width);
 UDWORD war_GetWidth();
 void war_SetScreen(int screen);
 int war_GetScreen();
 void war_SetHeight(UDWORD height);
 UDWORD war_GetHeight();
+// fullscreen display mode + screen
+void war_SetFullscreenModeWidth(UDWORD width);
+UDWORD war_GetFullscreenModeWidth();
+void war_SetFullscreenModeScreen(int screen);
+int war_GetFullscreenModeScreen();
+void war_SetFullscreenModeHeight(UDWORD height);
+UDWORD war_GetFullscreenModeHeight();
+void war_setToggleFullscreenMode(int mode);
+int war_getToggleFullscreenMode();
 void war_SetVideoBufferDepth(UDWORD videoBufferDepth);
 UDWORD war_GetVideoBufferDepth();
 void war_SetPauseOnFocusLoss(bool enabled);
@@ -103,8 +116,6 @@ bool war_GetRadarJump();
 void war_SetRadarJump(bool radarJump);
 int war_GetCameraSpeed();
 void war_SetCameraSpeed(int cameraSpeed);
-int war_GetScrollEvent();
-void war_SetScrollEvent(int scrollEvent);
 int8_t war_GetSPcolor();
 void war_SetSPcolor(int color);
 void war_setMPcolour(int colour);
@@ -115,10 +126,33 @@ video_backend war_getGfxBackend();
 void war_setGfxBackend(video_backend backend);
 JS_BACKEND war_getJSBackend();
 void war_setJSBackend(JS_BACKEND backend);
+bool war_getAutoAdjustDisplayScale();
+void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
+int war_getAutoLagKickSeconds();
+void war_setAutoLagKickSeconds(int seconds);
+bool war_getDisableReplayRecording();
+void war_setDisableReplayRecording(bool disable);
+int war_getMaxReplaysSaved();
+void war_setMaxReplaysSaved(int maxReplaysSaved);
+int war_getOldLogsLimit();
+void war_setOldLogsLimit(int oldLogsLimit);
+uint32_t war_getMPInactivityMinutes();
+void war_setMPInactivityMinutes(uint32_t minutes);
+uint16_t war_getMPopenSpectatorSlots();
+void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
+int war_getFogEnd();
+int war_getFogStart();
+void war_setFogEnd(int end);
+void war_setFogStart(int start);
+int war_getLODDistanceBiasPercentage();
+void war_setLODDistanceBiasPercentage(int bias);
+int war_getMinimizeOnFocusLoss();
+void war_setMinimizeOnFocusLoss(int val);
+void war_setCursorScale(unsigned int scale);
+unsigned int war_getCursorScale();
 
 /**
  * Enable or disable sound initialization
- * Has no effect after systemInitialize()!
  *
  * \param	soundEnabled	enable sound (or not)
  */

@@ -47,6 +47,7 @@
 #include "cmddroid.h"
 #include "move.h"
 #include "multiplay.h"  //ajl
+#include "random.h" // to balance the damaged units flow to repairs
 
 #include "mission.h"
 #include "hci.h"
@@ -103,7 +104,25 @@ static bool bOrderEffectDisplayed = false;
 extern char DROIDDOING[512];
 //////////////////////////////////////////////////////////////////
 
+#define ASSERT_PLAYER_OR_RETURN(retVal, player) \
+	ASSERT_OR_RETURN(retVal, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
+
 //////////////////////////////////////////////////////////////////
+struct RtrBestResult
+{
+	RTR_DATA_TYPE type;
+	BASE_OBJECT *psObj;
+	RtrBestResult(RTR_DATA_TYPE type, BASE_OBJECT *psObj): type(type), psObj(psObj) {}
+	RtrBestResult(): type(RTR_TYPE_NO_RESULT), psObj(nullptr) {}
+	RtrBestResult(DROID_ORDER_DATA *psOrder): type(psOrder->rtrType), psObj(psOrder->psObj) 
+	{
+		if (psObj->type == OBJ_STRUCTURE && ((STRUCTURE*)psObj)->pStructureType->type == REF_REPAIR_FACILITY) type = RTR_TYPE_REPAIR_FACILITY;
+		else if (psObj->type == OBJ_STRUCTURE) type = RTR_TYPE_HQ;
+		else type = RTR_TYPE_DROID;
+	}
+};
+
+static RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid);
 
 /** This function checks if the droid is off range. If yes, it uses actionDroid() to make the droid to move to its target if its target is on range, or to move to its order position if not.
  * @todo droid doesn't shoot while returning to the guard position.
@@ -149,49 +168,108 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 	}
 }
 
-
-/** This function checks if there are any damaged droids within a defined range.
- * It returns the damaged droid if there is any, or nullptr if none was found.
- */
-DROID *checkForRepairRange(DROID *psDroid)
+struct RSComparator
 {
-	DROID *psFailedTarget = nullptr;
-	if (psDroid->action == DACTION_SULK)
-	{
-		psFailedTarget = (DROID *)psDroid->psActionTarget[0];
-	}
+	RSComparator(const STRUCTURE *self) : selfPosX(self->pos.x), selfPosY(self->pos.y), selfPlayer(self->player) {}
+	RSComparator(const DROID *self) : selfPosX(self->pos.x), selfPosY(self->pos.y), selfPlayer(self->player) {}
+	// "less" comparator for our priority queue
+	bool operator() (const DROID* l, const DROID* r) const 
+	{ 
+		// Here, we know that both left and right Droids are:
+		// - either our own, or one of our allies
+		// - already within repair radius
+		// - not dead
+		// - don't have full HP
 
-	ASSERT(psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR, "Invalid droid type");
+		// always prefer our own units
+		const bool lown = l->player == selfPlayer;
+		const bool rown = r->player == selfPlayer;
+		if (lown && !rown) return true;
+		if (!lown && rown) return false;
 
-	unsigned radius = ((psDroid->order.type == DORDER_HOLD) || (psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)) ? REPAIR_RANGE : REPAIR_MAXDIST;
+		// Next highest priority:
+		// Take any droid with orders to Return to Repair (DORDER_RTR),
+		// or that have been ordered to a specific repair facility (DORDER_RTR_SPECIFIED)
+		BASE_OBJECT *const lTarget = orderStateObj(l, DORDER_RTR);
+		BASE_OBJECT *const rTarget = orderStateObj(r, DORDER_RTR);
+		const bool lhighest = ((l->order.type == DORDER_RTR || l->order.type == DORDER_RTR_SPECIFIED));
+		const bool rhighest = ((r->order.type == DORDER_RTR || r->order.type == DORDER_RTR_SPECIFIED));
 
-	unsigned bestDistanceSq = radius * radius;
-	DROID *best = nullptr;
-
-	for (BASE_OBJECT *object : gridStartIterate(psDroid->pos.x, psDroid->pos.y, radius))
-	{
-		unsigned distanceSq = droidSqDist(psDroid, object);  // droidSqDist returns -1 if unreachable, (unsigned)-1 is a big number.
-		if (object == orderStateObj(psDroid, DORDER_GUARD))
+		if (lhighest && !rhighest) return true;
+		if (!lhighest && rhighest) return false;
+		if (lhighest && rhighest)
 		{
-			distanceSq = 0;  // If guarding a unit — always do that first.
+			// break the tie with distance check
+			const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
+			const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
+			// debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
+			return (ldist >= rdist);
 		}
 
-		DROID *droid = castDroid(object);
-		if (droid != nullptr &&  // Must be a droid.
-		    droid != psFailedTarget &&   // Must not have just failed to reach it.
-		    distanceSq <= bestDistanceSq &&  // Must be as close as possible.
-		    aiCheckAlliances(psDroid->player, droid->player) &&  // Must be a friendly droid.
-		    droidIsDamaged(droid) &&  // Must need repairing.
-		    visibleObject(psDroid, droid, false))  // Must be able to sense it.
+		// Second highest priority:
+		// Help out another nearby repair facility
+		const bool lsecond = l->action == DACTION_WAITFORREPAIR && lTarget && lTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)lTarget)->pStructureType && ((STRUCTURE *)lTarget)->pStructureType->type == REF_REPAIR_FACILITY;
+		const bool rsecond = r->action == DACTION_WAITFORREPAIR && rTarget && rTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)rTarget)->pStructureType && ((STRUCTURE *)rTarget)->pStructureType->type == REF_REPAIR_FACILITY;
+		if (lsecond && !rsecond) return true;
+		if (!lsecond && rsecond) return false;
+
+		// at this point we don't really have a preference
+		// just repair closest (maybe should repair the most damaged?..)
+		const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
+		const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
+		// debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
+		return ldist >= rdist;
+
+	}
+	private:
+	const int selfPosX;
+	const int selfPosY;
+	const int selfPlayer;
+};
+
+/// @return return top priority droid to repair, or nullptr
+static DROID* _findSomeoneToRepair(REPAIR_FACILITY *psRepairFac,
+				std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue, 
+				int x, int y, int radius, int player)
+{
+	GridList gridList;
+	gridList = gridStartIterateRepairCandidates(x, y, radius, player);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		DROID *psDroid = (DROID*) *gi;
+		if (droidIsDamaged(psDroid))
 		{
-			bestDistanceSq = distanceSq;
-			best = droid;
+			queue.push(psDroid);
+		}
+		else if (psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED)
+		{
+			// we intentionally iterate over fully healthy droids too, in order to clear RTR order
+			psDroid->body = MIN(psDroid->originalBody, psDroid->body);
+			droidWasFullyRepaired(psDroid, psRepairFac);
 		}
 	}
-
-	return best;
+	if (!queue.empty()) 
+	{
+		debug(LOG_REPAIRS, "top was %i", queue.top()->id);
+		return queue.top();
+	}
+	return nullptr;
 }
 
+DROID *findSomeoneToRepair(const STRUCTURE *psStructure, int radius)
+{
+	REPAIR_FACILITY *psRepairFac = &psStructure->pFunctionality->repairFacility;
+	RSComparator cmpr(psStructure);
+	std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue(cmpr);
+	return _findSomeoneToRepair(psRepairFac, queue, psStructure->pos.x, psStructure->pos.y, radius, psStructure->player);
+}
+
+DROID *findSomeoneToRepair(const DROID *psTurret, int radius)
+{
+	RSComparator cmpr(psTurret);
+	std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue(cmpr);
+	return _findSomeoneToRepair(nullptr, queue, psTurret->pos.x, psTurret->pos.y, radius, psTurret->player);
+}
 
 /** This function checks if there are any structures to repair or help build in a given radius near the droid defined by REPAIR_RANGE if it is on hold, and REPAIR_MAXDIST if not on hold.
  * It returns a damaged or incomplete structure if any was found or nullptr if none was found.
@@ -268,13 +346,22 @@ static bool tryDoRepairlikeAction(DROID *psDroid)
 	{
 		return true;  // Already doing something.
 	}
-
+	unsigned radius;
 	switch (psDroid->droidType)
 	{
 		case DROID_REPAIR:
 		case DROID_CYBORG_REPAIR:
+			if (((psDroid->order.type == DORDER_HOLD) ||
+					(psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)))
+			{
+				radius = REPAIR_RANGE;
+			}
+			else
+			{
+				radius =  REPAIR_MAXDIST;
+			}
 			//repair droids default to repairing droids within a given range
-			if (DROID *repairTarget = checkForRepairRange(psDroid))
+			if (DROID *repairTarget = findSomeoneToRepair(psDroid, radius))
 			{
 				actionDroid(psDroid, DACTION_DROIDREPAIR, repairTarget);
 			}
@@ -311,7 +398,7 @@ void orderUpdateDroid(DROID *psDroid)
 	SDWORD			xdiff, ydiff;
 	bool			bAttack;
 	SDWORD			xoffset, yoffset;
-
+	const WEAPON_STATS *psWeapStats = &asWeaponStats[psDroid->asWeaps[0].nStat];
 	// clear the target if it has died
 	if (psDroid->order.psObj && psDroid->order.psObj->died)
 	{
@@ -402,6 +489,8 @@ void orderUpdateDroid(DROID *psDroid)
 					/* clear order */
 					psDroid->order = DroidOrder(DORDER_NONE);
 				}
+
+				psDroid->sMove.speed = 0; // Prevent radical movement vector when adjusting from home to away map exit and entry coordinates.
 			}
 		}
 		break;
@@ -715,7 +804,8 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		else if ((psDroid->action == DACTION_MOVETOATTACK) &&
 		         !isVtolDroid(psDroid) &&
-		         !actionVisibleTarget(psDroid, psDroid->order.psObj, 0))
+		         !actionVisibleTarget(psDroid, psDroid->order.psObj, 0) &&
+				 secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD)
 		{
 			// lost sight of the target while chasing it - change to a move action so
 			// that the unit will fire on other things while moving
@@ -725,7 +815,12 @@ void orderUpdateDroid(DROID *psDroid)
 		         && psDroid->order.psObj == psDroid->psActionTarget[0]
 		         && actionInRange(psDroid, psDroid->order.psObj, 0)
 		         && (psWall = visGetBlockingWall(psDroid, psDroid->order.psObj))
-		         && !aiCheckAlliances(psWall->player, psDroid->player))
+		         && !aiCheckAlliances(psWall->player, psDroid->player)
+		         // this is still wrong and should be unified with "action.cpp: actionUpdateDroid: case DACTION_ATTACK",
+		         // because "case DACTION_ATTACK" actualy takes care of checking for all weapons (not only the first one)
+		         // and for direct/indirect weapons.
+		         && psWeapStats && proj_Direct(psWeapStats)
+		         )
 		{
 			// there is a wall in the way - attack that
 			actionDroid(psDroid, DACTION_ATTACK, psWall);
@@ -733,11 +828,11 @@ void orderUpdateDroid(DROID *psDroid)
 		else if ((psDroid->action == DACTION_NONE) ||
 		         (psDroid->action == DACTION_CLEARREARMPAD))
 		{
-			if (psDroid->order.type == DORDER_ATTACKTARGET
+			if ((psDroid->order.type == DORDER_ATTACKTARGET || psDroid->order.type == DORDER_ATTACK)
 				&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD
 				&& !actionInRange(psDroid, psDroid->order.psObj, 0))
 			{
-				// on hold orders give up
+				// target is not in range and DSS_HALT_HOLD: give up, don't move
 				psDroid->order = DroidOrder(DORDER_NONE);
 			}
 			else if (!isVtolDroid(psDroid) || allVtolsRearmed(psDroid))
@@ -765,14 +860,13 @@ void orderUpdateDroid(DROID *psDroid)
 			// only place it can be trapped - in multiPlayer can only put cyborgs onto a Cyborg Transporter
 			DROID *temp = (DROID *)psDroid->order.psObj;	// NOTE: It is possible to have a NULL here
 
-			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
-			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != LEVEL_TYPE::CAMPAIGN && bMultiPlayer)
+			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid))
 			{
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
 				if (psDroid->player == selectedPlayer)
 				{
-					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+					audio_PlayBuildFailedOnce();
 					addConsoleMessage(_("We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
 				}
 			}
@@ -841,6 +935,9 @@ void orderUpdateDroid(DROID *psDroid)
 		break;
 	case DORDER_RTR:
 	case DORDER_RTR_SPECIFIED:
+		// send them back to commander, no need to repair
+		if (!droidIsDamaged(psDroid)) droidWasFullyRepaired(psDroid, nullptr);
+
 		if (psDroid->order.psObj == nullptr)
 		{
 			// Our target got lost. Let's try again.
@@ -851,27 +948,25 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			/* get repair facility pointer */
 			psStruct = (STRUCTURE *)psDroid->order.psObj;
-			ASSERT(psStruct != nullptr,
-			       "orderUpdateUnit: invalid structure pointer");
+			ASSERT(psStruct != nullptr, "orderUpdateUnit: invalid structure pointer");
 
-			if (objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) < (TILE_UNITS * 8) * (TILE_UNITS * 8))
+			if (objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) < REPAIR_RANGE * REPAIR_RANGE)
 			{
 				/* action droid to wait */
 				actionDroid(psDroid, DACTION_WAITFORREPAIR);
 			}
 			else
 			{
-				// move the droid closer to the repair facility
-				actionDroid(psDroid, DACTION_MOVE, psDroid->order.psObj->pos.x, psDroid->order.psObj->pos.y);
+				// move the droid closer to the repair point
+				// setting target to null will trigger search for nearest repair point: we might have a better option after all
+				psDroid->order.psObj = nullptr;
 			}
 		}
-		else if (psDroid->order.type == DORDER_RTR &&
-		         (psDroid->action == DACTION_MOVE ||
-		          psDroid->action == DACTION_MOVEFIRE) &&
-		         ((psDroid->id + gameTime) / GAME_TICKS_PER_SEC != (psDroid->id + gameTime - deltaGameTime) / GAME_TICKS_PER_SEC))
-		{
-			// see if there is a repair facility nearer than the one currently selected
-			orderDroid(psDroid, DORDER_RTR, ModeImmediate);
+		if ((psDroid->action == DACTION_WAITFORREPAIR || psDroid->action == DACTION_WAITDURINGREPAIR) && 
+				psDroid->order.psObj && 
+				objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) > REPAIR_RANGE * REPAIR_RANGE)
+		{ // was being repaired, but somehow got lost. recalculate reparing point
+			psDroid->order.psObj = nullptr;
 		}
 		break;
 	case DORDER_LINEBUILD:
@@ -900,7 +995,7 @@ void orderUpdateDroid(DROID *psDroid)
 		if (psDroid->order.psObj == nullptr)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			if (isVtolDroid(psDroid))
+			if (isVtolDroid(psDroid) && !vtolFull(psDroid))
 			{
 				moveToRearm(psDroid);
 			}
@@ -970,6 +1065,7 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 			}
 			else if (isVtolDroid(psDroid) &&
+			        !vtolFull(psDroid) &&
 			         (psDroid->action != DACTION_NONE) &&
 			         (psDroid->action != DACTION_FIRESUPPORT))
 			{
@@ -1124,6 +1220,11 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 		int mindist = SDWORD_MAX;
 		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
+			if (psCurr->order.type == DORDER_RTR || psCurr->order.type == DORDER_RTB || psCurr->order.type == DORDER_RTR_SPECIFIED)
+			{
+				// don't touch units returning for repairs
+				continue;
+			}
 			int currdist = objPosDiffSq(psCurr->pos, psData->psObj->pos);
 			if (currdist < mindist)
 			{
@@ -1139,12 +1240,37 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	}
 	else
 	{
+		const bool isAttackOrder = psData->type == DORDER_ATTACKTARGET || psData->type == DORDER_ATTACK;
 		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			syncDebug("command %d", psCurr->id);
 			if (!orderState(psCurr, DORDER_RTR))		// if you change this, youll need to change sendcmdgroup()
 			{
-				orderDroidBase(psCurr, psData);
+				if (!isAttackOrder)
+				{
+					orderDroidBase(psCurr, psData);
+					continue;
+				}
+				if (psCurr->droidType == DROID_SENSOR && psData->psObj)
+				{
+					// sensors must observe, not attack
+					auto observeOrder = DroidOrder(DORDER_OBSERVE, psData->psObj);
+					orderDroidBase(psCurr, &observeOrder);
+				}
+				else
+				{
+					// for non-sensors, check that the designated target is actually valid
+					// there is no point in ordering AA gun to attack ground units
+					for (int i = 0; i < MAX_WEAPONS; i++)
+					{
+
+						if (validTarget(psCurr, psData->psObj, i))
+						{
+							orderDroidBase(psCurr, psData);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1209,14 +1335,12 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	UDWORD		iFactoryDistSq;
-	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
+	STRUCTURE	*psStruct, *psFactory;
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	const Vector3i rPos(psOrder->pos, 0);
-
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->type));
 	objTrace(psDroid->id, "base set order to %s (was %s)", getDroidOrderName(psOrder->type), getDroidOrderName(psDroid->order.type));
-
 	if (psOrder->type != DORDER_TRANSPORTIN         // transporters special
 	    && psOrder->psObj == nullptr			// location-type order
 	    && (validOrderForLoc(psOrder->type) || psOrder->type == DORDER_BUILD)
@@ -1252,8 +1376,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	    (psDroid->psGroup->type == GT_COMMAND) &&
 	    (psOrder->type != DORDER_GUARD) &&  //(psOrder->psObj == NULL)) &&
 	    (psOrder->type != DORDER_RTR) &&
-	    (psOrder->type != DORDER_RECYCLE) &&
-	    (psOrder->type != DORDER_MOVE))
+	    (psOrder->type != DORDER_RECYCLE))
 	{
 		if (psOrder->type == DORDER_ATTACK)
 		{
@@ -1374,8 +1497,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 			if (isVtolDroid(psDroid)
 				|| actionInRange(psDroid, psOrder->psObj, 0)
-				|| (psOrder->type == DORDER_ATTACKTARGET && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
+				|| ((psOrder->type == DORDER_ATTACKTARGET || psOrder->type == DORDER_ATTACK)  && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 			{
+				// when DSS_HALT_HOLD, don't move to attack
 				actionDroid(psDroid, DACTION_ATTACK, psOrder->psObj);
 			}
 			else
@@ -1392,7 +1516,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->order = *psOrder;
 		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->pos.x, psOrder->pos.y);
-		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getName(psOrder->psStats) : "NULL");
+		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_BUILDMODULE:
 		//build a module onto the structure
@@ -1404,18 +1528,28 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT_OR_RETURN(, psDroid->order.psStats != nullptr, "should have found a module stats");
 		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
-		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getName(psOrder->psStats) : "NULL");
+		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Help to build a NULL pointer?");
+		if (psDroid->action == DACTION_BUILD && psOrder->psObj == psDroid->psActionTarget[0] 
+			// skip DORDER_LINEBUILD -> we still want to drop pending structure blueprints
+			// this isn't a perfect solution, because ordering a LINEBUILD with negative energy, and then clicking
+			// on first structure being built, will remove it, as we change order from DORDR_LINEBUILD to DORDER_BUILD
+			&& (psDroid->order.type != DORDER_LINEBUILD))
+		{
+			// we are already building it, nothing to do
+			objTrace(psDroid->id, "Ignoring DORDER_HELPBUILD because already buildig object %i", psOrder->psObj->id);
+			break;
+		}
 		psDroid->order = *psOrder;
 		psDroid->order.pos = psOrder->psObj->pos.xy();
 		psDroid->order.psStats = ((STRUCTURE *)psOrder->psObj)->pStructureType;
 		ASSERT_OR_RETURN(,!psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psDroid->order.pos.x, psDroid->order.pos.y);
-		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? getName(psDroid->order.psStats) : "NULL");
+		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? getStatsName(psDroid->order.psStats) : "NULL");
 		break;
 	case DORDER_DEMOLISH:
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
@@ -1479,11 +1613,14 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Can't command a NULL");
-		if (psDroid->player == selectedPlayer)
+		if (cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid) && psDroid->player == selectedPlayer)
 		{
 			orderPlayFireSupportAudio(psOrder->psObj);
 		}
-		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
+		else if (psDroid->player == selectedPlayer)
+		{
+			audio_PlayBuildFailedOnce();
+		}
 		break;
 	case DORDER_RTB:
 		for (psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
@@ -1524,81 +1661,68 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_RTR:
 	case DORDER_RTR_SPECIFIED:
-		if (isVtolDroid(psDroid))
 		{
-			moveToRearm(psDroid);
-			break;
-		}
-		if (psOrder->psObj == nullptr)
-		{
-			int iRepairFacDistSq = 0;
-
-			psRepairFac = nullptr;
-			for (psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
+			if (isVtolDroid(psDroid))
 			{
-				if ((psStruct->pStructureType->type == REF_REPAIR_FACILITY) ||
-				    ((psStruct->pStructureType->type == REF_HQ) && (psRepairFac == nullptr)))
-				{
-					int iStructDistSq = droidSqDist(psDroid, psStruct);
-
-					if (iStructDistSq <= 0)
-					{
-						continue;	// cannot reach position
-					}
-
-					/* Choose current structure if first repair facility found or nearer than previously chosen facility, or is built */
-					if (psRepairFac == nullptr || psRepairFac->pStructureType->type == REF_HQ || iRepairFacDistSq > iStructDistSq
-					    || (psRepairFac->status != SS_BUILT && psStruct->status == SS_BUILT))
-					{
-						psRepairFac = psStruct;
-						iRepairFacDistSq = iStructDistSq;
-					}
-				}
+				moveToRearm(psDroid);
+				break;
 			}
-		}
-		else
-		{
-			psRepairFac = (STRUCTURE *)psOrder->psObj;
-		}
-
-		// droids doing a DORDER_RTR periodically give themselves a DORDER_RTR so that
-		// they always go to the nearest repair facility
-		// this stops the unit doing anything more if the same repair facility gets chosen
-		if (psDroid->order.type == DORDER_RTR && psDroid->order.psObj == psRepairFac)
-		{
-			objTrace(psDroid->id, "DONE FOR NOW");
-			break;
-		}
-
-		/* give repair order if repair facility found */
-		if (psRepairFac != nullptr)
-		{
-			/* move to front of structure */
-			psDroid->order = DroidOrder(psOrder->type, psRepairFac);
-			psDroid->order.pos = psRepairFac->pos.xy();
-			/* If in multiPlayer, and the Transporter has been sent to be
-				* repaired, need to find a suitable location to drop down. */
-			if (game.type == LEVEL_TYPE::SKIRMISH && isTransporter(psDroid))
+			// if already has a target repair, don't override it: it might be different
+			// and we don't want come back and forth between 2 repair points
+			if (psDroid->order.type == DORDER_RTR && psOrder->psObj != nullptr && !psOrder->psObj->died)
 			{
-				Vector2i pos = psDroid->order.pos;
-
-				objTrace(psDroid->id, "Repair transport");
-				actionVTOLLandingPos(psDroid, &pos);
-				actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
+				objTrace(psDroid->id, "DONE FOR NOW");
+				break;
+			}
+			RtrBestResult rtrData;
+			if (psOrder->type == DORDER_RTR && (psOrder->rtrType == RTR_TYPE_NO_RESULT || psOrder->psObj == nullptr))
+			{
+				rtrData = decideWhereToRepairAndBalance(psDroid);
 			}
 			else
 			{
-				objTrace(psDroid->id, "Go to repair facility at (%d, %d) using (%d, %d)!", psRepairFac->pos.x, psRepairFac->pos.y, psDroid->order.pos.x, psDroid->order.pos.y);
-				actionDroid(psDroid, DACTION_MOVE, psRepairFac, psDroid->order.pos.x, psDroid->order.pos.y);
+				rtrData = RtrBestResult(psOrder);
 			}
-		}
-		else
-		{
-			// no repair facility or HQ go to the landing zone
-			if (!bMultiPlayer && selectedPlayer == 0)
+
+			/* give repair order if repair facility found */
+			if (rtrData.type == RTR_TYPE_REPAIR_FACILITY)
 			{
-				objTrace(psDroid->id, "could not RTR, doing RTL instead");
-				orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+				/* move to front of structure */
+				psDroid->order = DroidOrder(psOrder->type, rtrData.psObj, RTR_TYPE_REPAIR_FACILITY);
+				psDroid->order.pos = rtrData.psObj->pos.xy();
+				/* If in multiPlayer, and the Transporter has been sent to be
+					* repaired, need to find a suitable location to drop down. */
+				if (game.type == LEVEL_TYPE::SKIRMISH && isTransporter(psDroid))
+				{
+					Vector2i pos = psDroid->order.pos;
+
+					objTrace(psDroid->id, "Repair transport");
+					actionVTOLLandingPos(psDroid, &pos);
+					actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
+				}
+				else
+				{
+					objTrace(psDroid->id, "Go to repair facility at (%d, %d) using (%d, %d)!", rtrData.psObj->pos.x, rtrData.psObj->pos.y, psDroid->order.pos.x, psDroid->order.pos.y);
+					actionDroid(psDroid, DACTION_MOVE, rtrData.psObj, psDroid->order.pos.x, psDroid->order.pos.y);
+				}
+			}
+			/* give repair order if repair droid found */
+			else if (rtrData.type == RTR_TYPE_DROID && !isTransporter(psDroid))
+			{
+				psDroid->order = DroidOrder(psOrder->type, Vector2i(rtrData.psObj->pos.x, rtrData.psObj->pos.y), RTR_TYPE_DROID);
+				psDroid->order.pos = rtrData.psObj->pos.xy();
+				psDroid->order.psObj = rtrData.psObj;
+				objTrace(psDroid->id, "Go to repair at (%d, %d) using (%d, %d), time %i!", rtrData.psObj->pos.x, rtrData.psObj->pos.y, psDroid->order.pos.x, psDroid->order.pos.y, gameTime);
+				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x, psDroid->order.pos.y);
+			}
+			else
+			{
+				// no repair facility or HQ go to the landing zone
+				if (!bMultiPlayer && selectedPlayer == 0)
+				{
+					objTrace(psDroid->id, "could not RTR, doing RTL instead");
+					orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+				}
 			}
 		}
 		break;
@@ -1691,13 +1815,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_REARM:
 		// didn't get executed before
-		if (!isVtolDroid(psDroid))
+		if (!vtolRearming(psDroid))
 		{
-			break;
+			psDroid->order = *psOrder;
+			actionDroid(psDroid, DACTION_MOVETOREARM, psOrder->psObj);
+			assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		}
-		psDroid->order = *psOrder;
-		actionDroid(psDroid, DACTION_MOVETOREARM, psOrder->psObj);
-		assignVTOLPad(psDroid, (STRUCTURE *)psOrder->psObj);
 		break;
 	case DORDER_CIRCLE:
 		if (!isVtolDroid(psDroid))
@@ -1760,11 +1883,9 @@ bool orderState(DROID *psDroid, DROID_ORDER order)
 /** This function returns true if the order is an acceptable order to give for a given location on the map.*/
 bool validOrderForLoc(DROID_ORDER order)
 {
-	return (order == DORDER_NONE ||	order == DORDER_MOVE ||	order == DORDER_GUARD ||
-	        order == DORDER_SCOUT || order == DORDER_PATROL ||
-	        order == DORDER_TRANSPORTOUT || order == DORDER_TRANSPORTIN  ||
-	        order == DORDER_TRANSPORTRETURN || order == DORDER_DISEMBARK ||
-	        order == DORDER_CIRCLE);
+	return order == DORDER_NONE || order == DORDER_MOVE || order == DORDER_DISEMBARK ||
+	       order == DORDER_TRANSPORTOUT || order == DORDER_TRANSPORTIN || order == DORDER_TRANSPORTRETURN ||
+	       order == DORDER_GUARD || order == DORDER_SCOUT || order == DORDER_PATROL || order == DORDER_CIRCLE;
 }
 
 
@@ -1818,12 +1939,12 @@ bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 /** This function returns true if the order is a valid order to give to an object and false if it's not.*/
 bool validOrderForObj(DROID_ORDER order)
 {
-	return (order == DORDER_NONE || order == DORDER_HELPBUILD || order == DORDER_DEMOLISH ||
-	        order == DORDER_REPAIR || order == DORDER_ATTACK || order == DORDER_FIRESUPPORT || order == DORDER_COMMANDERSUPPORT ||
-	        order == DORDER_OBSERVE || order == DORDER_ATTACKTARGET || order == DORDER_RTR ||
-	        order == DORDER_RTR_SPECIFIED || order == DORDER_EMBARK || order == DORDER_GUARD ||
-	        order == DORDER_DROIDREPAIR || order == DORDER_RESTORE || order == DORDER_BUILDMODULE ||
-	        order == DORDER_REARM || order == DORDER_RECOVER);
+	return order == DORDER_NONE || order == DORDER_ATTACK || order == DORDER_HELPBUILD ||
+	       order == DORDER_DEMOLISH || order == DORDER_REPAIR || order == DORDER_OBSERVE ||
+	       order == DORDER_FIRESUPPORT || order == DORDER_RTR || order == DORDER_EMBARK ||
+	       order == DORDER_ATTACKTARGET || order == DORDER_COMMANDERSUPPORT || order == DORDER_BUILDMODULE ||
+	       order == DORDER_GUARD || order == DORDER_DROIDREPAIR || order == DORDER_RESTORE ||
+	       order == DORDER_REARM || order == DORDER_RECOVER || order == DORDER_RTR_SPECIFIED;
 }
 
 
@@ -1853,7 +1974,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
  * @todo the first switch can be removed and substituted by orderState() function.
  * @todo the use of this function is somewhat superfluous on some cases. Investigate.
  */
-BASE_OBJECT *orderStateObj(DROID *psDroid, DROID_ORDER order)
+BASE_OBJECT *orderStateObj(const DROID *psDroid, DROID_ORDER order)
 {
 	bool	match = false;
 
@@ -2007,7 +2128,7 @@ void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, STRUCTURE_ST
 /** This function returns false if droid's order and order don't match or the order is not a location order. Else ppsStats = psDroid->psTarStats, (pX,pY) = psDroid.(orderX,orderY) and it returns true.
  * @todo seems closely related to orderStateLoc()
  */
-bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY)
+bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS **ppsStats)
 {
 	bool	match = false;
 
@@ -2041,8 +2162,6 @@ bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats
 		if (psDroid->action == DACTION_MOVETOBUILD)
 		{
 			*ppsStats = psDroid->order.psStats;
-			*pX = psDroid->order.pos.x;
-			*pY = psDroid->order.pos.y;
 			return true;
 		}
 		break;
@@ -2341,6 +2460,8 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		return;
 	}
 
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
@@ -2349,8 +2470,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		if (psCurr->selected)
 		{
 			// can't use bMultiPlayer since multimsg could be off.
-			// FIXME: Fix this for DROID_SUPERTRANSPORTER when we fix campaign scripts
-			if (psCurr->droidType == DROID_TRANSPORTER && game.type == LEVEL_TYPE::CAMPAIGN)
+			if (psCurr->droidType == DROID_SUPERTRANSPORTER && game.type == LEVEL_TYPE::CAMPAIGN)
 			{
 				// Transport in campaign cannot be controlled by players
 				DeSelectDroid(psCurr);
@@ -2471,9 +2591,13 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         && !aiCheckAlliances(psObj->player, psDroid->player))
 	{
 		// check valid weapon/prop combination
-		if (validTarget(psDroid, psObj, 0))
+		for (int i = 0; i < MAX_WEAPONS; ++i)
 		{
-			order = DroidOrder(DORDER_ATTACK, psObj);
+			if (validTarget(psDroid, psObj, i))
+			{
+				order = DroidOrder(DORDER_ATTACK, psObj);
+				break;
+			}
 		}
 	}
 	else if (psDroid->droidType == DROID_SENSOR
@@ -2639,6 +2763,8 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
  */
 static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	/* loop over selected droids */
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -2670,6 +2796,8 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
  */
 void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
@@ -2718,6 +2846,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 /** This function just calls orderSelectedObjAdd with add = false.*/
 void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
 	orderSelectedObjAdd(player, psObj, false);
 }
 
@@ -2728,6 +2857,8 @@ void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
  */
 void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected && isConstructionDroid(psCurr))
@@ -2750,6 +2881,8 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
  */
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected)
@@ -2770,7 +2903,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 /** This function runs though all player's droids to check if any of then is a transporter. Returns the transporter droid if any was found, and NULL else.*/
 DROID *FindATransporter(DROID const *embarkee)
 {
-	bool isCyborg = cyborgDroid(embarkee) || !bMultiPlayer;  // In campaign, any unit can go on a regular transporter, so consider any unit to be a cyborg.
+	bool isCyborg = cyborgDroid(embarkee);
 
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;
@@ -2799,7 +2932,7 @@ DROID *FindATransporter(DROID const *embarkee)
 /** Given a factory type, this function runs though all player's structures to check if any is of factory type. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
-	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
@@ -2816,6 +2949,8 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 /** This function runs though all player's structures to check if any of then is a repair facility. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindARepairFacility(unsigned player)
 {
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
+
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
@@ -3044,7 +3179,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 	if (psDroid->body * 100 <= repairLevel * psDroid->originalBody)
 	{
 		// Only deselect the droid if there is another droid selected.
-		if (psDroid->selected)
+		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
 		{
 			DROID *psTempDroid;
 			for (psTempDroid = apsDroidLists[selectedPlayer]; psTempDroid; psTempDroid = psTempDroid->psNext)
@@ -3083,12 +3218,158 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 			}
 			else
 			{
-				orderDroid(psDroid, DORDER_RTR, ModeImmediate);
+				RtrBestResult result = decideWhereToRepairAndBalance(psDroid);
+				if (result.type == RTR_TYPE_REPAIR_FACILITY)
+				{
+					ASSERT(result.psObj != nullptr, "RTR_FACILITY but target is null");
+					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeImmediate);
+					return;
+				}
+				else if (result.type == RTR_TYPE_HQ)
+				{
+					ASSERT(result.psObj != nullptr, "RTR_TYPE_HQ but target is null");
+					orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+					return;
+				}
+				else if (result.type == RTR_TYPE_DROID)
+				{
+					ASSERT(result.psObj != nullptr, "RTR_DROID but target is null");
+					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeImmediate);
+				}
+
 			}
 		}
 	}
 }
+// balance the load at random
+// always prefer faster repairs
+static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
+{
+	int bestDistToRepairFac = INT32_MAX, bestDistToRepairDroid = INT32_MAX;
+	int thisDistToRepair = 0;
+	STRUCTURE *psHq = nullptr;
+	Position bestDroidPos, bestFacPos;
+	// static to save allocations
+	static std::vector<Position> vFacilityPos;
+	static std::vector<STRUCTURE *> vFacility;
+	static std::vector<int> vFacilityCloseEnough;
+	static std::vector<Position> vDroidPos;
+	static std::vector<DROID *> vDroid;
+	static std::vector<int> vDroidCloseEnough;
+	// clear vectors from previous invocations
+	vFacilityPos.clear();
+	vFacility.clear();
+	vFacilityCloseEnough.clear();
+	vDroidCloseEnough.clear();
+	vDroidPos.clear();
+	vDroid.clear();
 
+	for (STRUCTURE *psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (psStruct->pStructureType->type == REF_HQ)
+		{
+			psHq = psStruct;
+			continue;
+		}
+		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->status == SS_BUILT)
+		{
+			thisDistToRepair = droidSqDist(psDroid, psStruct);
+			if (thisDistToRepair <= 0)
+			{
+				continue;	// cannot reach position
+			}
+			vFacilityPos.push_back(psStruct->pos);
+			vFacility.push_back(psStruct);
+			if (bestDistToRepairFac > thisDistToRepair)
+			{
+				bestDistToRepairFac = thisDistToRepair;
+				bestFacPos = psStruct->pos;
+			}
+		}
+	}
+	// if we are repair droid ourselves, don't consider other repairs droids
+	// because that causes havoc on front line: RT repairing themselves,
+	// blocking everyone else. And everyone else moving toward RT, also toward front line.s
+	// Ideally, we should just avoid retreating toward "danger", but dangerMap is only for multiplayer
+	if (psDroid->droidType != DROID_REPAIR && psDroid->droidType != DROID_CYBORG_REPAIR)
+	{
+		// one of these lists is empty when on mission
+		DROID *psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
+		for (DROID *psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			if (psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
+			{
+				thisDistToRepair = droidSqDist(psDroid, psCurr);
+				if (thisDistToRepair <= 0)
+				{
+					continue; // unreachable
+				}
+				vDroidPos.push_back(psCurr->pos);
+				vDroid.push_back(psCurr);
+				if (bestDistToRepairDroid > thisDistToRepair)
+				{
+					bestDistToRepairDroid = thisDistToRepair;
+					bestDroidPos = psCurr->pos;
+				}
+			}
+		}
+	}
+
+	ASSERT(bestDistToRepairFac > 0, "Bad distance to repair facility");
+	ASSERT(bestDistToRepairDroid > 0, "Bad distance to repair droid");
+	// debug(LOG_INFO, "found a total of %lu RT, and %lu RF", vDroid.size(), vFacility.size());
+
+	// the center of this area starts at the closest repair droid/facility!
+	#define MAGIC_SUITABLE_REPAIR_AREA ((REPAIR_RANGE*3) * (REPAIR_RANGE*3))
+	Position bestRepairPoint = bestDistToRepairFac < bestDistToRepairDroid ? bestFacPos: bestDroidPos;
+	// find all close enough repairing candidates
+	for (int i=0; i < vFacilityPos.size(); i++)
+	{
+		Vector2i diff = (bestRepairPoint - vFacilityPos[i]).xy();
+		if (dot(diff, diff) < MAGIC_SUITABLE_REPAIR_AREA)
+		{
+			vFacilityCloseEnough.push_back(i);
+		}
+	}
+	for (int i=0; i < vDroidPos.size(); i++)
+	{
+		Vector2i diff = (bestRepairPoint - vDroidPos[i]).xy();
+		if (dot(diff, diff) < MAGIC_SUITABLE_REPAIR_AREA)
+		{
+			vDroidCloseEnough.push_back(i);
+		}
+	}
+
+	// debug(LOG_INFO, "found  %lu RT, and %lu RF in suitable area", vDroidCloseEnough.size(), vFacilityCloseEnough.size());
+	// prefer facilities, they re much more efficient than droids
+	if (vFacilityCloseEnough.size() == 1)
+	{
+		return RtrBestResult(RTR_TYPE_REPAIR_FACILITY, vFacility[vFacilityCloseEnough[0]]);
+
+	} else if (vFacilityCloseEnough.size() > 1)
+	{
+		int32_t which = gameRand(vFacilityCloseEnough.size());
+		return RtrBestResult(RTR_TYPE_REPAIR_FACILITY, vFacility[vFacilityCloseEnough[which]]);
+	}
+
+	// no facilities :( fallback on droids
+	if (vDroidCloseEnough.size() == 1)
+	{
+		return RtrBestResult(RTR_TYPE_DROID, vDroid[vDroidCloseEnough[0]]);
+	} else if (vDroidCloseEnough.size() > 1)
+	{
+		int32_t which = gameRand(vDroidCloseEnough.size());
+		return RtrBestResult(RTR_TYPE_DROID, vDroid[vDroidCloseEnough[which]]);
+	}
+
+	// go to headquarters, if any
+	if (psHq != nullptr)
+	{
+		return RtrBestResult(RTR_TYPE_HQ, psHq);
+	}
+	// screw it
+	return RtrBestResult(RTR_TYPE_NO_RESULT, nullptr);
+}
 
 /** This function assigns a state to a droid. It returns true if it assigned and false if it failed to assign.*/
 bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
@@ -3258,8 +3539,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					moveToRearm(psDroid);
 				}
 			}
-			else if (orderState(psDroid, DORDER_GUARD) &&
-			         droidAttacking(psDroid))
+			else if (droidAttacking(psDroid))
 			{
 				// send the unit back to the guard position
 				actionDroid(psDroid, DACTION_NONE);
@@ -3536,6 +3816,8 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
  */
 static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->group == group &&
@@ -3553,6 +3835,8 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
  */
 static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group, UDWORD mask)
 {
+	ASSERT_PLAYER_OR_RETURN(DSS_NONE, player);
+
 #define MAX_STATES		5
 	struct
 	{
@@ -3605,6 +3889,8 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
  */
 void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	// lookup table for orders and masks
 #define MAX_ORDERS	4
 	struct
@@ -3741,6 +4027,8 @@ bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
  */
 void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
+	ASSERT_PLAYER_OR_RETURN(, player);
+
 	STRUCTURE   *psStruct;
 
 	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)

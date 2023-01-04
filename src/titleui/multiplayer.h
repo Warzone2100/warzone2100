@@ -27,10 +27,17 @@
 #include "../wrappers.h"
 #include "titleui.h"
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
+class IntFormAnimated; // forward-declare
+
 class WzMultiplayerOptionsTitleUI : public WzTitleUI
 {
 public:
 	WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitleUI> parent);
+	virtual ~WzMultiplayerOptionsTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
 	void frontendMultiMessages(bool running);
@@ -38,11 +45,18 @@ public:
 	void openDifficultyChooser(uint32_t playerIndex);
 	void closeDifficultyChooser();
 
+	void openFactionChooser(uint32_t playerIndex);
+	void closeFactionChooser();
+
 	void openAiChooser(uint32_t playerIndex);
 	void closeAiChooser();
 
 	void openPositionChooser(uint32_t playerIndex);
 	void closePositionChooser();
+
+	void openPlayerSlotSwapChooser(uint32_t playerIndex);
+	void closePlayerSlotSwapChooser();
+	optional<uint32_t> playerSlotSwapChooserOpenForPlayer() const;
 
 	void openTeamChooser(uint32_t playerIndex);
 	void closeTeamChooser();
@@ -51,12 +65,27 @@ public:
 	void closeColourChooser();
 
 	void closeAllChoosers();
+
+	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
+
+	void updatePlayers();
+
+	int playerRowY0(uint32_t row) const;
+
+	std::shared_ptr<WzTitleUI> getParentTitleUI();
+
 private:
 	/**
 	 * Initializes a chooser, preparing to add it on a single line on player list. This involves removing
 	 * any widgets that may have been positioned on that player's row.
 	 */
 	void initInlineChooser(uint32_t playerIndex);
+
+	/**
+	 * Initializes a chooser, preparing to replace the "right side". This involves removing
+	 * the player list.
+	 */
+	std::shared_ptr<IntFormAnimated> initRightSideChooser(const char* sideText);
 
 	/**
 	 * Initializes the right side box which usually contains the list of players. Handles opening difficulty
@@ -72,14 +101,15 @@ private:
 
 	void processMultiopWidgets(UDWORD button);
 
+	std::shared_ptr<W_SCREEN> psInlineChooserOverlayScreen = nullptr;
 	std::shared_ptr<WzTitleUI> parent;
+	std::vector<std::shared_ptr<WIDGET>> playerRows;
 	bool performedFirstStart = false;
 
-	int8_t colourChooserUp;
-	int8_t teamChooserUp;
+	int8_t inlineChooserUp;
 	int8_t aiChooserUp;
 	int8_t difficultyChooserUp;
-	int8_t positionChooserUp;
+	optional<uint32_t> playerSlotSwapChooserUp;
 };
 
 #endif

@@ -40,9 +40,19 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <unordered_set>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
+#endif
+#include "3rdparty/ska_sort.hpp"
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
@@ -55,6 +65,7 @@ static size_t pieCount = 0;
 static size_t polyCount = 0;
 static bool shadows = false;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
+static gfx_api::gfxFloat lightingDefault[LIGHT_MAX][4];
 
 /*
  *	Source
@@ -71,6 +82,7 @@ void pie_InitLighting()
 		{1.0f, 1.0f, 1.0f, 1.0f}  // LIGHT_SPECULAR
 	};
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
+	memcpy(lightingDefault, defaultLight, sizeof(lightingDefault));
 }
 
 void pie_Lighting0(LIGHTING_TYPE entry, const float value[4])
@@ -144,7 +156,7 @@ static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
 	return pZeroedVertexBuffer;
 }
 
-static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix)
+void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix)
 {
 	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
 	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
@@ -153,18 +165,38 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
 	const PIELIGHT colour = WZCOL_WHITE;
-	gfx_api::Draw3DButtonPSO::get().bind();
-	gfx_api::constant_buffer_type<SHADER_BUTTON> cbuf{
-		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), 0.f, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, 0, 0, 0.f, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
-		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), 0.f, 0.f, shape->buffers[VBO_TANGENT] != nullptr };
-	gfx_api::Draw3DButtonPSO::get().bind_constants(cbuf);
+	glm::vec4 sceneColor(lightingDefault[LIGHT_EMISSIVE][0], lightingDefault[LIGHT_EMISSIVE][1], lightingDefault[LIGHT_EMISSIVE][2], lightingDefault[LIGHT_EMISSIVE][3]);
+	glm::vec4 ambient(lightingDefault[LIGHT_AMBIENT][0], lightingDefault[LIGHT_AMBIENT][1], lightingDefault[LIGHT_AMBIENT][2], lightingDefault[LIGHT_AMBIENT][3]);
+	glm::vec4 diffuse(lightingDefault[LIGHT_DIFFUSE][0], lightingDefault[LIGHT_DIFFUSE][1], lightingDefault[LIGHT_DIFFUSE][2], lightingDefault[LIGHT_DIFFUSE][3]);
+	glm::vec4 specular(lightingDefault[LIGHT_SPECULAR][0], lightingDefault[LIGHT_SPECULAR][1], lightingDefault[LIGHT_SPECULAR][2], lightingDefault[LIGHT_SPECULAR][3]);
+	gfx_api::Draw3DShapeOpaque::get().bind();
 
-	gfx_api::Draw3DButtonPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
-	gfx_api::Draw3DButtonPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
+		pie_PerspectiveGet(),
+		glm::vec4(getDefaultSunPosition(), 0.f),
+		sceneColor, ambient, diffuse, specular, glm::vec4(0.f),
+		0.f, 0.f, 0.f, 0
+	};
+
+	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
+	};
+
+	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
+		matrix,
+		glm::transpose(glm::inverse(matrix)),
+		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
+		0.f, 0, !(shape->flags & pie_PREMULTIPLIED)
+	};
+
+	gfx_api::Draw3DShapeOpaque::get().set_uniforms(globalUniforms, meshUniforms, instanceUniforms);
+
+	gfx_api::Draw3DShapeOpaque::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+	gfx_api::Draw3DShapeOpaque::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
-	gfx_api::Draw3DButtonPSO::get().draw_elements(shape->polys.size() * 3, 0);
+	gfx_api::Draw3DShapeOpaque::get().draw_elements(shape->polys.size() * 3, 0);
 	polyCount += shape->polys.size();
-	gfx_api::Draw3DButtonPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+	gfx_api::Draw3DShapeOpaque::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().unbind_index_buffer(*shape->buffers[VBO_INDEX]);
 }
 
@@ -194,8 +226,33 @@ struct templatedState
 	}
 };
 
-template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename PremultipliedPSO, typename OpaquePSO>
-static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const float& timestate, const glm::mat4 & matrix, glm::vec4 &sceneColor, glm::vec4 &ambient, glm::vec4 &diffuse, glm::vec4 &specular, const iIMDShape * shape, int pieFlag, int frame)
+// Ensure the uniforms are set for a shader once until reset
+struct ShaderOnce
+{
+public:
+	template<typename T>
+	void perform_once(const std::function<void (void)>& func)
+	{
+		auto type = std::type_index(typeid(T));
+		if (performed_once.count(type) > 0)
+		{
+			return;
+		}
+		func();
+		performed_once.insert(type);
+	}
+
+	void reset()
+	{
+		performed_once.clear();
+	}
+
+private:
+	std::unordered_set<std::type_index> performed_once;
+};
+
+template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
+static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & matrix, const iIMDShape * shape, int pieFlag, int frame)
 {
 	templatedState currentState = templatedState(shader, shape, pieFlag);
 
@@ -203,9 +260,16 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
 	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
 
-	gfx_api::constant_buffer_type<shader> cbuf{
-		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), stretch, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, ecmState, !(pieFlag & pie_PREMULTIPLIED), timestate, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
-		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, glm::vec4(0.f), 0.f, 0.f, shape->buffers[VBO_TANGENT] != nullptr };
+	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
+	};
+
+	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
+		matrix,
+		glm::transpose(glm::inverse(matrix)),
+		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
+		stretch, ecmState, !(pieFlag & pie_PREMULTIPLIED)
+	};
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
@@ -213,56 +277,92 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 	if (pieFlag & pie_ADDITIVE)
 	{
 		AdditivePSO::get().bind();
-		AdditivePSO::get().bind_constants(cbuf);
+		globalsOnce.perform_once<AdditivePSO>([&globalUniforms]{
+			AdditivePSO::get().set_uniforms_at(0, globalUniforms);
+		});
 		if (currentState != lastState)
 		{
+			AdditivePSO::get().set_uniforms_at(1, meshUniforms);
 			AdditivePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			AdditivePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 		}
+		AdditivePSO::get().set_uniforms_at(2, instanceUniforms);
 		AdditivePSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
 //		AdditivePSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
-		AlphaPSO::get().bind();
-		AlphaPSO::get().bind_constants(cbuf);
-		if (currentState != lastState)
+		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
-			AlphaPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			AlphaPSO::get().bind();
+			globalsOnce.perform_once<AlphaPSO>([&globalUniforms]{
+				AlphaPSO::get().set_uniforms_at(0, globalUniforms);
+			});
+			if (currentState != lastState)
+			{
+				AlphaPSO::get().set_uniforms_at(1, meshUniforms);
+				AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+				AlphaPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			}
+			AlphaPSO::get().set_uniforms_at(2, instanceUniforms);
+			AlphaPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+	//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 		}
-		AlphaPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
-//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+		else
+		{
+			AlphaNoDepthWRTPSO::get().bind();
+			globalsOnce.perform_once<AlphaNoDepthWRTPSO>([&globalUniforms]{
+				AlphaNoDepthWRTPSO::get().set_uniforms_at(0, globalUniforms);
+			});
+			if (currentState != lastState)
+			{
+				AlphaNoDepthWRTPSO::get().set_uniforms_at(1, meshUniforms);
+				AlphaNoDepthWRTPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+				AlphaNoDepthWRTPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			}
+			AlphaNoDepthWRTPSO::get().set_uniforms_at(2, instanceUniforms);
+			AlphaNoDepthWRTPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+	//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+		}
 	}
 	else if (pieFlag & pie_PREMULTIPLIED)
 	{
 		PremultipliedPSO::get().bind();
-		PremultipliedPSO::get().bind_constants(cbuf);
+		globalsOnce.perform_once<PremultipliedPSO>([&globalUniforms]{
+			PremultipliedPSO::get().set_uniforms_at(0, globalUniforms);
+		});
 		if (currentState != lastState)
 		{
+			PremultipliedPSO::get().set_uniforms_at(1, meshUniforms);
 			PremultipliedPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			PremultipliedPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 		}
+		PremultipliedPSO::get().set_uniforms_at(2, instanceUniforms);
 		PremultipliedPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
 //		PremultipliedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 	}
 	else
 	{
 		OpaquePSO::get().bind();
-		OpaquePSO::get().bind_constants(cbuf);
+		globalsOnce.perform_once<OpaquePSO>([&globalUniforms]{
+			OpaquePSO::get().set_uniforms_at(0, globalUniforms);
+		});
 		if (currentState != lastState)
 		{
+			OpaquePSO::get().set_uniforms_at(1, meshUniforms);
 			OpaquePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			OpaquePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 		}
+		OpaquePSO::get().set_uniforms_at(2, instanceUniforms);
 		OpaquePSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
 //		OpaquePSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 	}
 }
 
-static templatedState pie_Draw3DShape2(const templatedState &lastState, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix)
+static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
 {
 	bool light = true;
+	int ecmState = 0;
 
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
@@ -293,13 +393,8 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, const iI
 	if (pieFlag & pie_ECM)
 	{
 		light = true;
-		pie_SetShaderEcmEffect(true);
+		ecmState = 1;
 	}
-
-	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
-	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
-	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
-	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 
 	frame %= std::max<int>(1, shape->numFrames);
 
@@ -311,32 +406,32 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, const iI
 
 	if (light)
 	{
-		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, colour, teamcolour, pie_GetShaderStretchDepth(), pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapeAlphaNoDepthWRT, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
 	}
 	else
 	{
-		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, colour, teamcolour, pie_GetShaderStretchDepth(), pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
 	}
 
 	polyCount += shape->polys.size();
-
-	pie_SetShaderEcmEffect(false);
 
 	return currentState;
 }
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
 {
-	if (e1.from != e2.from)
-	{
-		return e1.from < e2.from;
-	}
-	return e1.to < e2.to;
+	return e1.sort_key < e2.sort_key;
+}
+
+static inline uint64_t edgeSortKey(uint32_t from, uint32_t to)
+{
+	return static_cast<uint64_t>(from) << 32 | to;
 }
 
 static inline void flipEdge(EDGE &e)
 {
 	std::swap(e.from, e.to);
+	e.sort_key = edgeSortKey(e.from, e.to);
 }
 
 /// scale the height according to the flags
@@ -448,9 +543,27 @@ struct ShadowCache {
 
 	void addPremultipliedVertexes(const CachedShadowData& cachedData, const glm::mat4 &modelViewMatrix)
 	{
+		float mat_a = modelViewMatrix[0].x;
+		float mat_b = modelViewMatrix[1].x;
+		float mat_c = modelViewMatrix[2].x;
+		float mat_d = modelViewMatrix[3].x;
+		float mat_e = modelViewMatrix[0].y;
+		float mat_f = modelViewMatrix[1].y;
+		float mat_g = modelViewMatrix[2].y;
+		float mat_h = modelViewMatrix[3].y;
+		float mat_i = modelViewMatrix[0].z;
+		float mat_j = modelViewMatrix[1].z;
+		float mat_k = modelViewMatrix[2].z;
+		float mat_l = modelViewMatrix[3].z;
+		float premult_x;
+		float premult_y;
+		float premult_z;
 		for (auto &vertex : cachedData.vertexes)
 		{
-			vertexes.emplace_back(modelViewMatrix * glm::vec4(vertex, 1.0));
+			premult_x = vertex.x*mat_a + vertex.y*mat_b + vertex.z*mat_c + mat_d;
+			premult_y = vertex.x*mat_e + vertex.y*mat_f + vertex.z*mat_g + mat_h;
+			premult_z = vertex.x*mat_i + vertex.y*mat_j + vertex.z*mat_k + mat_l;
+			vertexes.push_back(Vector3f(premult_x, premult_y, premult_z));
 		}
 	}
 
@@ -535,7 +648,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 	const ShadowCache::CachedShadowData *pCached = shadowCache.findCacheForShadowDraw(shape, flag, flag_data, light);
 	if (pCached == nullptr)
 	{
-		const Vector3f *pVertices = shape->points.data();
+		const Vector3f *pVertices = shape->pShadowPoints->data();
 		if (flag & pie_STATIC_SHADOW && shape->shadowEdgeList)
 		{
 			drawlist = shape->shadowEdgeList;
@@ -545,11 +658,11 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 		{
 			edgelist.clear();
 			glm::vec3 p[3];
-			for (const iIMDPoly &poly : shape->polys)
+			for (const iIMDPoly &poly : *(shape->pShadowPolys))
 			{
 				for (int j = 0; j < 3; ++j)
 				{
-					int current = poly.pindex[j];
+					uint32_t current = poly.pindex[j];
 					p[j] = glm::vec3(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 				}
 				if (glm::dot(glm::cross(p[2] - p[0], p[1] - p[0]), glm::vec3(light)) > 0.0f)
@@ -557,7 +670,9 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 					for (int n = 0; n < 3; ++n)
 					{
 						// Add the edges
-						edgelist.push_back({poly.pindex[n], poly.pindex[(n + 1)%3]});
+						uint32_t from = poly.pindex[n];
+						uint32_t to = poly.pindex[(n + 1)%3];
+						edgelist.push_back({from, to, edgeSortKey(from, to)});
 					}
 				}
 			}
@@ -565,26 +680,34 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 			// Remove duplicate pairs from the edge list. For example, in the list ((1 2), (2 6), (6 2), (3, 4)), remove (2 6) and (6 2).
 			edgelistFlipped = edgelist;
 			std::for_each(edgelistFlipped.begin(), edgelistFlipped.end(), flipEdge);
-			std::sort(edgelist.begin(), edgelist.end(), edgeLessThan);
-			std::sort(edgelistFlipped.begin(), edgelistFlipped.end(), edgeLessThan);
+			ska_sort(edgelist.begin(), edgelist.end(), [](const EDGE & edge)
+			{
+				return edge.sort_key;
+			});
+			ska_sort(edgelistFlipped.begin(), edgelistFlipped.end(), [](const EDGE & edge)
+			{
+				return edge.sort_key;
+			});
 			edgelistFiltered.resize(edgelist.size());
 			edgelistFiltered.erase(std::set_difference(edgelist.begin(), edgelist.end(), edgelistFlipped.begin(), edgelistFlipped.end(), edgelistFiltered.begin(), edgeLessThan), edgelistFiltered.end());
 
-			drawlist = &edgelistFiltered[0];
 			edge_count = edgelistFiltered.size();
+			drawlist = edgelistFiltered.data();
 			//debug(LOG_WARNING, "we have %i edges", edge_count);
 
 			if (flag & pie_STATIC_SHADOW)
 			{
 				// then store it in the imd
 				shape->nShadowEdges = edge_count;
-				shape->shadowEdgeList = (EDGE *)realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
-				std::copy(drawlist, drawlist + edge_count, shape->shadowEdgeList);
+				if (edge_count > 0)
+				{
+					shape->shadowEdgeList = (EDGE *)realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
+					std::copy(drawlist, drawlist + edge_count, shape->shadowEdgeList);
+				}
 			}
 		}
 
-		static std::vector<Vector3f> vertexes;
-		vertexes.clear();
+		std::vector<Vector3f> vertexes;
 		vertexes.reserve(edge_count * 6);
 		for (size_t i = 0; i < edge_count; i++)
 		{
@@ -603,7 +726,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 		}
 
 		ShadowCache::CachedShadowData& cache = shadowCache.createCacheForShadowDraw(shape, flag, flag_data, light);
-		cache.vertexes = vertexes;
+		cache.vertexes = std::move(vertexes);
 		result = DRAW_SUCCESS_UNCACHED;
 		pCached = &cache;
 	}
@@ -630,7 +753,7 @@ void pie_CleanUp()
 	}
 }
 
-bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth)
 {
 	pieCount++;
 
@@ -651,7 +774,7 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 		tshape.teamcolour = teamcolour;
 		tshape.flag = pieFlag;
 		tshape.flag_data = pieFlagData;
-		tshape.stretch = pie_GetShaderStretchDepth();
+		tshape.stretch = stretchDepth;
 		tshape.matrix = modelView;
 
 		if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -704,19 +827,19 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 {
-	size_t cachedShadowDraws = 0;
-	size_t uncachedShadowDraws = 0;
+//	size_t cachedShadowDraws = 0;
+//	size_t uncachedShadowDraws = 0;
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
-		DrawShadowResult result = pie_DrawShadow(shadowCache, scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].matrix);
-		if (result == DRAW_SUCCESS_CACHED)
-		{
-			++cachedShadowDraws;
-		}
-		else
-		{
-			++uncachedShadowDraws;
-		}
+		/*DrawShadowResult result =*/ pie_DrawShadow(shadowCache, scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].matrix);
+//		if (result == DRAW_SUCCESS_CACHED)
+//		{
+//			++cachedShadowDraws;
+//		}
+//		else
+//		{
+//			++uncachedShadowDraws;
+//		}
 	}
 
 	const auto &premultipliedVertexes = shadowCache.getPremultipliedVertexes();
@@ -749,8 +872,8 @@ static ShadowCache shadowCache;
 
 static void pie_DrawShadows(uint64_t currentGameFrame)
 {
-	const float width = pie_GetVideoBufferWidth();
-	const float height = pie_GetVideoBufferHeight();
+	const int width = pie_GetVideoBufferWidth();
+	const int height = pie_GetVideoBufferHeight();
 	shadowCache.setCurrentFrame(currentGameFrame);
 
 	pie_ShadowDrawLoop(shadowCache);
@@ -771,8 +894,32 @@ struct less_than_shape
 	}
 };
 
+static ShaderOnce perFrameUniformsShaderOnce;
+
 void pie_RemainingPasses(uint64_t currentGameFrame)
 {
+	perFrameUniformsShaderOnce.reset();
+
+	// Generate global (per-frame) uniforms
+	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
+	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
+	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
+	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
+
+	const auto &renderState = getCurrentRenderState();
+	const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
+		renderState.fogColour.vector[0] / 255.f,
+		renderState.fogColour.vector[1] / 255.f,
+		renderState.fogColour.vector[2] / 255.f,
+		renderState.fogColour.vector[3] / 255.f
+	) : glm::vec4(0.f);
+
+	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
+		pie_PerspectiveGet(),
+		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
+		renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
+	};
+
 	// Draw models
 	// sort list to reduce state changes
 	std::sort(shapes.begin(), shapes.end(), less_than_shape());
@@ -780,8 +927,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	templatedState lastState;
 	for (SHAPE const &shape : shapes)
 	{
-		pie_SetShaderStretchDepth(shape.stretch);
-		lastState = pie_Draw3DShape2(lastState, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!shapes.empty())
@@ -801,8 +947,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	lastState = templatedState();
 	for (SHAPE const &shape : tshapes)
 	{
-		pie_SetShaderStretchDepth(shape.stretch);
-		lastState = pie_Draw3DShape2(lastState, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!tshapes.empty())
@@ -810,7 +955,6 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 		// unbind last index buffer bound inside pie_Draw3DShape2
 		gfx_api::context::get().unbind_index_buffer(*((tshapes.back().shape)->buffers[VBO_INDEX]));
 	}
-	pie_SetShaderStretchDepth(0);
 	tshapes.clear();
 	shapes.clear();
 	gfx_api::context::get().debugStringMarker("Remaining passes - done");

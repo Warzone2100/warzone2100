@@ -21,6 +21,9 @@
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0501
 #endif
+#if !defined(NOCRYPT)
+#define NOCRYPT
+#endif
 #include "lib/framework/frame.h"
 #include "dumpinfo.h"
 #include "exchndl.h"
@@ -42,6 +45,13 @@ static wchar_t szLogFileName[MAX_PATH] = L"";
 static wchar_t szMinidumpFileName[MAX_PATH] = L"";
 static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionFilter = NULL;
 static char *formattedVersionString = NULL;
+
+// Provide this wrapper explicitly, as mingw headers do not provide the appropriate wcsncat_s wrapper
+template <size_t size> inline
+errno_t wcsncat_s_wrapper(wchar_t(&strDest)[size], const wchar_t* strSource, size_t count)
+{
+	return wcsncat_s(strDest, size, strSource, count);
+}
 
 static void MyStrCpy(char* szDest, size_t nMaxDestSize, const char* szSrc)
 {
@@ -132,8 +142,8 @@ class WzExceptionStackWalker : public WzFormattedStackWalker
 {
 public:
 	WzExceptionStackWalker(HANDLE outputFile)
-		: hOutputFile(outputFile)
-		, WzFormattedStackWalker()
+		: WzFormattedStackWalker()
+		, hOutputFile(outputFile)
 	{}
 protected:
 	virtual void OnOutput(LPCSTR szText)
@@ -185,7 +195,7 @@ static bool OutputMiniDump(LPCWSTR miniDumpPath, PEXCEPTION_POINTERS pExceptionI
 	{
 		size_t package_version_len = strlen(PACKAGE_VERSION);
 		ULONG package_version_len_ulong = (package_version_len <= ULONG_MAX) ? (ULONG)package_version_len : 0;
-		MINIDUMP_USER_STREAM uStream = { LastReservedStream + 1, package_version_len_ulong, PACKAGE_VERSION };
+		MINIDUMP_USER_STREAM uStream = { LastReservedStream + 1, package_version_len_ulong, (PVOID)PACKAGE_VERSION };
 		MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
 		MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, false };
 
@@ -569,12 +579,12 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			{
 				wsprintfW(szBuffer, L"Warzone has crashed.\r\nSee %s for more details\r\n", szLogFileName);
 			}
-			err = MessageBoxW((HWND)MB_ICONERROR, szBuffer, L"Warzone Crashed!", MB_OK | MB_ICONERROR);
+			err = MessageBoxW(NULL, szBuffer, L"Warzone Crashed!", MB_OK | MB_ICONERROR);
 			if (err == 0)
 			{
 				LPVOID lpMsgBuf;
 				DWORD dw = GetLastError();
-				wchar_t szBuffer[4196];
+				wchar_t szFailureBuffer[4196];
 
 				FormatMessageW(
 				    FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -586,11 +596,11 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 				    (LPWSTR) &lpMsgBuf,
 				    0, NULL);
 
-				wsprintfW(szBuffer, L"Exception handler failed with error %d: %s\n", dw, lpMsgBuf);
-				MessageBoxW((HWND)MB_ICONEXCLAMATION, szBuffer, L"Error", MB_OK);
+				wsprintfW(szFailureBuffer, L"Failed to display message box with error %d: %s\n", dw, lpMsgBuf);
+				MessageBoxW(NULL, szFailureBuffer, L"Error", MB_OK | MB_ICONEXCLAMATION);
 
 				LocalFree(lpMsgBuf);
-				debug(LOG_ERROR, "Exception handler failed to create file!");
+				debug(LOG_ERROR, "Failed to display crash message box: %lu", dw);
 			}
 			hReportFile = 0;
 		}
@@ -679,26 +689,26 @@ void ExchndlSetup(const char *packageVersion, const std::string &writeDir, bool 
 	wcsncpy_s(szMinidumpFileName, L"Warzone2100.latest.mdmp", _TRUNCATE);
 
 	wchar_t tmpPath[PATH_MAX] = {'\0'};
-	if (wcsncpy_s(tmpPath, miniDumpPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (B-1).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncat_s(tmpPath, L"\\Warzone2100.RPT", _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (C-1).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncpy_s(szLogFileName, tmpPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (D-1).  Exiting."), _T("Error"), MB_OK); exit(1); }
+	if (wcsncpy_s(tmpPath, miniDumpPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (B-1).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncat_s_wrapper(tmpPath, L"\\Warzone2100.RPT", _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (C-1).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncpy_s(szLogFileName, tmpPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (D-1).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
 
-	if (wcsncpy_s(tmpPath, miniDumpPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (B-2).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncat_s(tmpPath, L"\\Warzone2100.latest.mdmp", _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (C-2).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncpy_s(szMinidumpFileName, tmpPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (D-2).  Exiting."), _T("Error"), MB_OK); exit(1); }
+	if (wcsncpy_s(tmpPath, miniDumpPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (B-2).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncat_s_wrapper(tmpPath, L"\\Warzone2100.latest.mdmp", _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (C-2).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncpy_s(szMinidumpFileName, tmpPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (D-2).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
 
 	atexit(ExchndlShutdown);
 }
 void ResetRPTDirectory(wchar_t *newPath)
 {
 	wchar_t miniDumpPath[PATH_MAX] = { '\0' };
-	if (wcsncpy_s(miniDumpPath, newPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (E).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncat_s(miniDumpPath, L"\\logs\\Warzone2100.RPT", _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (F).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncpy_s(szLogFileName, miniDumpPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (G).  Exiting."), _T("Error"), MB_OK); exit(1); }
+	if (wcsncpy_s(miniDumpPath, newPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (E).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncat_s_wrapper(miniDumpPath, L"\\logs\\Warzone2100.RPT", _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (F).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncpy_s(szLogFileName, miniDumpPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (G).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
 
-	if (wcsncpy_s(miniDumpPath, newPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (H).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncat_s(miniDumpPath, L"\\logs\\Warzone2100.latest.mdmp", _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (I).  Exiting."), _T("Error"), MB_OK); exit(1); }
-	if (wcsncpy_s(szMinidumpFileName, miniDumpPath, _TRUNCATE) != 0) { MessageBox((HWND)MB_ICONEXCLAMATION, _T("Buffer exceeds maximum path length (J).  Exiting."), _T("Error"), MB_OK); exit(1); }
+	if (wcsncpy_s(miniDumpPath, newPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (H).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncat_s_wrapper(miniDumpPath, L"\\logs\\Warzone2100.latest.mdmp", _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (I).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
+	if (wcsncpy_s(szMinidumpFileName, miniDumpPath, _TRUNCATE) != 0) { MessageBox(NULL, _T("Buffer exceeds maximum path length (J).  Exiting."), _T("Error"), MB_OK | MB_ICONEXCLAMATION); exit(1); }
 }
 void ExchndlShutdown(void)
 {

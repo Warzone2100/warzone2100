@@ -153,7 +153,7 @@ void	effectGiveAuxVarSec(UDWORD var);	// and so's this
 
 void	initEffectsSystem();
 void	shutdownEffectsSystem();
-void	processEffects(const glm::mat4 &viewMatrix);
+void	processEffects(const glm::mat4 &perspectiveViewMatrix);
 void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit);
 void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime);
 void    addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime);

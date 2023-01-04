@@ -78,6 +78,7 @@ PIELIGHT pie_GetFogColour() WZ_DECL_PURE;
 void pie_UpdateFogDistance(float begin, float end);
 //render states
 RENDER_STATE getCurrentRenderState();
+const Vector3f& getDefaultSunPosition();
 
 int pie_GetMaxAntialiasing();
 
@@ -89,12 +90,8 @@ namespace pie_internal
 	extern gfx_api::buffer* rectBuffer;
 }
 
-void pie_SetShaderStretchDepth(float stretch);
 float pie_GetShaderTime();
-float pie_GetShaderStretchDepth();
 void pie_SetShaderTime(uint32_t shaderTime);
-void pie_SetShaderEcmEffect(bool value);
-int pie_GetShaderEcmEffect();
 
 static inline glm::vec4 pal_PIELIGHTtoVec4(PIELIGHT rgba)
 {

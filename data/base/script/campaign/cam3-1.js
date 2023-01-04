@@ -2,15 +2,17 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NEXUS_RES = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade07",
-	"R-Struc-Materials07", "R-Struc-Factory-Upgrade06",
-	"R-Struc-Factory-Cyborg-Upgrade06", "R-Struc-VTOLFactory-Upgrade06",
-	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals06",
-	"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade07", "R-Struc-Materials07",
+	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
-	"R-Wpn-Bomb-Accuracy03", "R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01",
-	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
-	"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
+	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
+	"R-Vehicle-Engine07", "R-Vehicle-Metals07", "R-Vehicle-Armor-Heat04",
+	"R-Cyborg-Metals07", "R-Cyborg-Armor-Heat04", "R-Wpn-RocketSlow-ROF05",
+	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF05", "R-Wpn-Howitzer-Damage09",
+	"R-Wpn-Howitzer-ROF04", "R-Wpn-Cannon-Damage08", "R-Wpn-Cannon-ROF04",
+	"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
+	"R-Wpn-Rail-Damage01", "R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01",
+	"R-Wpn-Energy-Damage02", "R-Wpn-Energy-ROF01", "R-Wpn-Energy-Accuracy01",
 ];
 var launchInfo;
 var detonateInfo;
@@ -105,7 +107,7 @@ function missileSilosDestroyed()
 	const SILO_ALIAS = "NXMissileSilo";
 	var destroyed = 0;
 
-	for (var i = 0; i < SILO_COUNT; ++i)
+	for (let i = 0; i < SILO_COUNT; ++i)
 	{
 		destroyed += (getObject(SILO_ALIAS + (i + 1)) === null) ? 1 : 0;
 	}
@@ -117,20 +119,20 @@ function missileSilosDestroyed()
 function nukeAndCountSurvivors()
 {
 	//Avoid destroying the one base if the player opted not to destroy it themselves.
-	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter(function(obj) {
-		return obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null);
-	});
+	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter((obj) => (
+		obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null)
+	));
 	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
 	var foundUnit = false;
 
 	//Make em' explode!
-	for (var i = 0, len = nuked.length; i < len; ++i)
+	for (let i = 0, len = nuked.length; i < len; ++i)
 	{
 		var nukeIt = true;
 		var obj1 = nuked[i];
 
 		//Check if it's in the safe area.
-		for (var j = 0, len2 = safeZone.length; j < len2; ++j)
+		for (let j = 0, len2 = safeZone.length; j < len2; ++j)
 		{
 			var obj2 = safeZone[j];
 
@@ -162,7 +164,7 @@ function setupNextMission()
 	{
 		camSetExtraObjectiveMessage(_("Move all units into the valley"));
 
-		camPlayVideos(["labort.ogg", "MB3_1B_MSG", "MB3_1B_MSG2"]);
+		camPlayVideos(["labort.ogg", {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
 		setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
@@ -175,20 +177,20 @@ function setupNextMission()
 	}
 }
 
-
 //Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {
+	const ACCEPTABLE_TIME_DIFF = 2;
 	var silosDestroyed = missileSilosDestroyed();
 	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
 
-	for (var i = 0, len = countdownObject.length; i < len; ++i)
+	for (let i = 0, len = countdownObject.length; i < len; ++i)
 	{
 		var currentTime = getMissionTime();
 		if (currentTime <= countdownObject[0].time)
 		{
-			if (len > 1 && (currentTime <= countdownObject[1].time))
+			if (currentTime < (countdownObject[0].time - ACCEPTABLE_TIME_DIFF))
 			{
 				skip = true; //Huge time jump?
 			}
@@ -221,12 +223,12 @@ function enableAllFactories()
 //For now just make sure we have all the droids in the canyon.
 function unitsInValley()
 {
-	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID;
-	});
-	var allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID;
-	});
+	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID
+	));
+	var allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+		obj.type === DROID
+	));
 
 	if (safeZone.length === allDroids.length)
 	{
@@ -302,6 +304,10 @@ function eventStartLevel()
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
+	camSetArtifacts({
+		"NXMediumFac": { tech: "R-Wpn-MG-Damage09" },
+	});
+
 	camSetEnemyBases({
 		"NX-SWBase": {
 			cleanup: "baseCleanupArea",
@@ -338,17 +344,22 @@ function eventStartLevel()
 		},
 		"NXMediumFac": {
 			assembly: "NXMediumFacAssembly",
-			order: CAM_ORDER_DEFEND,
+			order: CAM_ORDER_PATROL,
 			data: {
 				pos: [
-					camMakePos("defenderPos1"),
-					camMakePos("defenderPos2"),
-					camMakePos("defenderPos3"),
+					camMakePos("patrolPos1"),
+					camMakePos("patrolPos2"),
+					camMakePos("patrolPos3"),
+					camMakePos("patrolPos4"),
+					camMakePos("patrolPos5"),
+					camMakePos("patrolPos6"),
+					camMakePos("patrolPos7"),
+					camMakePos("patrolPos8"),
 				],
+				interval: camSecondsToMilliseconds(30),
 				regroup: false,
 				repair: 45,
 				count: -1,
-				radius: 15,
 			},
 			group: camMakeGroup("baseDefenderGroup"),
 			groupSize: 5,

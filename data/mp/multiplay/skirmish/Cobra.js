@@ -24,10 +24,14 @@ const BEACON_VTOL_ALARM = "vtolSpotted";
 //Research constants
 const TANK_ARMOR = [
 	"R-Vehicle-Metals09",
-	"R-Vehicle-Armor-Heat09",
 ];
 const CYBORG_ARMOR = [
 	"R-Cyborg-Metals09",
+];
+const TANK_ARMOR_THERMAL = [
+	"R-Vehicle-Armor-Heat09",
+];
+const CYBORG_ARMOR_THERMAL = [
 	"R-Cyborg-Armor-Heat09",
 ];
 const MODULE_RESEARCH = [
@@ -35,10 +39,12 @@ const MODULE_RESEARCH = [
 	"R-Struc-Factory-Module",
 	"R-Struc-PowerModuleMk1",
 ];
-const ESSENTIALS = [
+const MOST_ESSENTIAL = [
 	"R-Wpn-MG-Damage01",
 	"R-Sys-Engineering01",
 	"R-Defense-Tower01",
+];
+const ESSENTIALS = [
 	"R-Wpn-MG2Mk1",
 	"R-Wpn-MG-Damage02",
 	"R-Struc-PowerModuleMk1",
@@ -50,19 +56,18 @@ const ESSENTIALS = [
 const ESSENTIALS_2 = [
 	"R-Vehicle-Metals02",
 	"R-Cyborg-Metals02",
-	"R-Struc-RprFac-Upgrade01",
 	"R-Wpn-MG3Mk1",
+	"R-Struc-RprFac-Upgrade01",
 	"R-Sys-Autorepair-General",
-	"R-Struc-Research-Upgrade09",
 	"R-Struc-Power-Upgrade03a",
-	"R-Struc-Factory-Upgrade09",
+	"R-Struc-Research-Upgrade09",
 ];
 const ESSENTIALS_3 = [
+	"R-Vehicle-Body04",
 	"R-Vehicle-Prop-Hover",
-	"R-Sys-Sensor-Upgrade01",
+	"R-Struc-Factory-Upgrade09",
 ];
 const SYSTEM_UPGRADES = [
-	"R-Sys-MobileRepairTurretHvy",
 	"R-Vehicle-Prop-Tracks",
 	"R-Struc-RprFac-Upgrade06",
 	"R-Sys-Sensor-Upgrade03",
@@ -80,14 +85,12 @@ const SENSOR_TECH = [
 	"R-Sys-Resistance-Circuits",
 ];
 const DEFENSE_UPGRADES = [
-	"R-Struc-Materials09",
+	"R-Struc-Materials03",
 	"R-Defense-WallUpgrade12",
 ];
-const BODY_RESEARCH_1 = [
+const BODY_RESEARCH = [
 	"R-Vehicle-Body08",
 	"R-Vehicle-Body12",
-];
-const BODY_RESEARCH_2 = [
 	"R-Vehicle-Body09",
 	"R-Vehicle-Body10",
 	"R-Vehicle-Engine09",
@@ -97,7 +100,7 @@ const VTOL_RES = [
 	"R-Struc-VTOLPad-Upgrade01",
 	"R-Wpn-Bomb02",
 	"R-Struc-VTOLPad-Upgrade03",
-	"R-Wpn-Bomb-Accuracy03",
+	"R-Wpn-Bomb-Damage03",
 	"R-Struc-VTOLPad-Upgrade06",
 	"R-Wpn-Bomb04",
 	"R-Wpn-Bomb05",
@@ -109,12 +112,8 @@ const TANK_BODY = [
 	"Body14SUP", // Dragon
 	"Body13SUP", // Wyvern
 	"Body10MBT", // Vengeance
-	"Body7ABT",  // Retribution
 	"Body9REC",  // Tiger
-	"Body12SUP", // Mantis
-	"Body6SUPP", // Panther
 	"Body11ABT", // Python
-	"Body8MBT",  // Scorpion
 	"Body5REC",  // Cobra
 	"Body1REC",  // Viper
 ];
@@ -131,13 +130,10 @@ const SYSTEM_PROPULSION = [
 const VTOL_BODY = [
 	"Body7ABT",  // Retribution
 	"Body6SUPP", // Panther
+	"Body12SUP", // Mantis
 	"Body8MBT",  // Scorpion
 	"Body5REC",  // Cobra
 	"Body1REC",  // Viper
-];
-const REPAIR_TURRETS = [
-	"HeavyRepair",
-	"LightRepair1",
 ];
 const ARTILLERY_SENSORS = [
 	"Sensor-WideSpec",
@@ -153,9 +149,9 @@ var subPersonalities =
 		"primaryWeapon": weaponStats.cannons,
 		"secondaryWeapon": weaponStats.gauss,
 		"artillery": weaponStats.mortars,
-		"antiAir": weaponStats.AA,
+		"antiAir": weaponStats.cannons_AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 5,
+		"defensePriority": 15,
 		"vtolPriority": 40,
 		"alloyPriority": 33,
 		"useLasers": true,
@@ -178,7 +174,7 @@ var subPersonalities =
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 5,
+		"defensePriority": 15,
 		"vtolPriority": 50,
 		"alloyPriority": 35,
 		"useLasers": true,
@@ -201,7 +197,7 @@ var subPersonalities =
 		"artillery": weaponStats.rockets_Arty,
 		"antiAir": weaponStats.rockets_AA,
 		"factoryOrder": [structures.vtolFactory, structures.factory, structures.cyborgFactory],
-		"defensePriority": 7,
+		"defensePriority": 20,
 		"vtolPriority": 50,
 		"alloyPriority": 25,
 		"useLasers": true,
@@ -223,7 +219,7 @@ var subPersonalities =
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 5,
+		"defensePriority": 15,
 		"vtolPriority": 80,
 		"alloyPriority": 35,
 		"useLasers": true,
@@ -243,9 +239,9 @@ var subPersonalities =
 		"primaryWeapon": weaponStats.mortars,
 		"secondaryWeapon": weaponStats.AS,
 		"artillery": weaponStats.fireMortars,
-		"antiAir": weaponStats.AA,
+		"antiAir": weaponStats.cannons_AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 15,
+		"defensePriority": 45,
 		"vtolPriority": 66,
 		"alloyPriority": 10,
 		"useLasers": true,
@@ -269,7 +265,6 @@ var subPersonalities =
 var attackGroup;
 var vtolGroup;
 var sensorGroup;
-var repairGroup;
 var artilleryGroup;
 var constructGroup;
 var constructGroupNTWExtra;
@@ -279,6 +274,7 @@ var retreatGroup;
 var grudgeCount; //See who bullies this bot the most and act on it. DO NOT let this use the scavenger player number.
 var personality; //What personality is this instance of Cobra using.
 var lastMsg; //The last Cobra chat message.
+var lastMsgThrottle; //Last game time a chat messge was sent - throttles Cobra AIs from talking to eachother too much.
 var forceHover; //Use hover propulsion only.
 var seaMapWithLandEnemy; //Hover map with an enemy sharing land with Cobra.
 var turnOffCyborgs; //Turn of cyborgs (hover maps/chat).
@@ -293,6 +289,8 @@ var enemyUsedElectronicWarfare; //Detect if an enemy used a Nexus Link against u
 var startAttacking;
 var lastShuffleTime;
 var forceDerrickBuildDefense;
+var randomResearchLabStart;
+var cyborgOnlyGame;
 
 // -- Weapon research list (initializeResearchLists).
 var techlist;
@@ -306,6 +304,7 @@ var cyborgWeaps;
 var antiAirTech;
 var antiAirExtras;
 var extremeLaserTech;
+var extremeLaserExtra;
 var secondaryWeaponTech;
 var secondaryWeaponExtra;
 var defenseTech;

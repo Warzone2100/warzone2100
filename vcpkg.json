@@ -1,0 +1,72 @@
+{
+	"name": "warzone2100",
+	"version-string": "master-branch",
+	"dependencies": [
+		"sdl2",
+		"physfs",
+		"harfbuzz",
+		"fribidi",
+		"libogg",
+		"libtheora",
+		"libvorbis",
+		"opus",
+		"libpng",
+		"freetype",
+		"gettext",
+		"openal-soft",
+		"zlib",
+		"sqlite3",
+		"libsodium",
+		{
+			"name": "curl",
+			"default-features": false,
+			"features": [
+				"winssl",
+				"ssl"
+			],
+			"platform": "windows | mingw"
+		},
+		{
+			"name": "curl",
+			"default-features": false,
+			"features": [
+				"sectransp",
+				"ssl"
+			],
+			"platform": "osx"
+		},
+		{
+			"name": "curl",
+			"default-features": false,
+			"features": [
+				"ssl"
+			],
+			"platform": "!windows & !mingw & !osx"
+		},
+		{
+			"name": "angle",
+			"platform": "windows | mingw"
+		},
+		{
+			"name": "basisu",
+			"host": true
+		}
+	],
+	"default-features": [
+		"vulkan"
+	],
+	"features": {
+		"vulkan": {
+			"description": "The Vulkan backend",
+			"dependencies": [
+				{
+					"name": "sdl2",
+					"default-features": true,
+					"features": [
+						"vulkan"
+					]
+				}
+			]
+		}
+	}
+}

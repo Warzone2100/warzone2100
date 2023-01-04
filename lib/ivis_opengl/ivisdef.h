@@ -36,6 +36,7 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 
 //*************************************************************************
@@ -67,7 +68,8 @@ struct iSurface
 /// Stores the from and to verticles from an edge
 struct EDGE
 {
-	int from, to;
+	uint32_t from, to;
+	uint64_t sort_key;
 };
 
 struct ANIMFRAME
@@ -84,7 +86,7 @@ struct iIMDPoly
 	uint32_t flags = 0;
 	int32_t zcentre = 0;
 	Vector3f normal = Vector3f(0.f, 0.f, 0.f);
-	int pindex[3] = { 0 };
+	uint32_t pindex[3] = { 0 };
 };
 
 enum VBO_TYPE
@@ -135,6 +137,12 @@ struct iIMDShape
 	std::vector<Vector3f> points;
 	std::vector<iIMDPoly> polys;
 
+	// Data used for stencil shadows
+	std::vector<Vector3f> altShadowPoints;
+	std::vector<iIMDPoly> altShadowPolys;
+	std::vector<Vector3f> *pShadowPoints = nullptr;
+	std::vector<iIMDPoly> *pShadowPolys = nullptr;
+
 	// The new rendering data
 	gfx_api::buffer* buffers[VBO_COUNT] = { nullptr };
 	SHADER_MODE shaderProgram = SHADER_NONE; // if using specialized shader for this model
@@ -149,6 +157,11 @@ struct iIMDShape
 	int objanimcycles = 0; ///< Number of cycles to render, zero means infinitely many
 	iIMDShape *objanimpie[ANIM_EVENT_COUNT] = { nullptr };
 
+	int interpolate = 1; // if the model wants to be interpolated
+
+	std::string modelName;
+	int modelLevel = 0;
+
 	iIMDShape *next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 };
 
@@ -159,7 +172,7 @@ struct iIMDShape
 //
 //*************************************************************************
 
-struct ImageDef
+struct AtlasImageDef
 {
 	size_t TPageID;   /**< Which associated file to read our info from */
 	unsigned int Tu;        /**< First vertex coordinate */
@@ -173,7 +186,7 @@ struct ImageDef
 	gfx_api::gfxFloat invTextureSize;
 };
 
-struct Image;
+struct AtlasImage;
 
 struct IMAGEFILE
 {
@@ -183,16 +196,17 @@ struct IMAGEFILE
 		int size;  /// Size of texture in pixels. (Should be square.)
 	};
 
-	Image find(std::string const &name);  // Defined in bitimage.cpp.
+	~IMAGEFILE(); // Defined in bitimage.cpp.
+	AtlasImageDef* find(WzString const &name);  // Defined in bitimage.cpp.
 
 	std::vector<Page> pages;          /// Texture pages.
-	std::vector<ImageDef> imageDefs;  /// Stored images.
-	std::vector<std::pair<std::string, int>> imageNames;  ///< Names of images, sorted by name. Can lookup indices from name.
+	std::vector<AtlasImageDef> imageDefs;  /// Stored images.
+	std::unordered_map<WzString, AtlasImageDef *> imageNamesMap; // Names of images -> AtlasImageDef
 };
 
-struct Image
+struct AtlasImage
 {
-	Image(IMAGEFILE const *images = nullptr, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
+	AtlasImage(IMAGEFILE const *images = nullptr, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
 
 	bool isNull() const
 	{

@@ -1,12 +1,27 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.24)
+
+set(_OLD_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}")
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(WZVcpkgInit) # Must come before project() command
+set(CMAKE_MODULE_PATH "${_OLD_CMAKE_MODULE_PATH}")
+unset(_OLD_CMAKE_MODULE_PATH)
+
 project(warzone2100)
+
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
+
+include(CMakeDependentOption)
 
 OPTION(ENABLE_DOCS "Enable documentation generation" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)
-OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 OPTION(WZ_ENABLE_BACKEND_VULKAN "Enable Vulkan backend" ON)
+OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
+OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
+OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
 	# Only supported on Windows, macOS, and Linux
@@ -16,12 +31,6 @@ endif()
 set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-# Handle options
-if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
-	message( WARNING "Portable build is only supported on Windows; Ignoring WZ_PORTABLE option" )
-	unset(WZ_PORTABLE CACHE)
-endif()
 
 # Disallow in-source builds
 include(DisallowInSourceBuilds)
@@ -36,14 +45,7 @@ else()
 endif()
 
 # CXX Standard
-if(MSVC)
-	# MSVC doesn't support enforcing c++11 - the minimum it will allow is c++14
-	# See https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version
-	# However, avoid using any features not supported by c++11 or the build will fail on other platforms.
-	set(CMAKE_CXX_STANDARD 14)
-else()
-	set(CMAKE_CXX_STANDARD 11)
-endif()
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # Disable compiler-specific extensions
 
@@ -119,38 +121,52 @@ if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
 	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/gettext")
 endif()
 
-set(_wz_additional_qt_components)
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	# Workaround: Qt5's Cocoa platform integration plugin requires Qt5::PrintSupport
-	set(_wz_additional_qt_components "PrintSupport")
-endif()
-find_package(Qt5 COMPONENTS Core Widgets Script Gui ${_wz_additional_qt_components} REQUIRED)
-
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-  find_package(PkgConfig)
-  if(${CMAKE_CROSSCOMPILING})
-    pkg_check_modules(QT5ALL REQUIRED Qt5Widgets Qt5Core Qt5Script)
-    link_directories(${QT5ALL_LIBRARY_DIRS})
-  endif()
-endif()
+INCLUDE(AddTargetLinkFlagsIfSupported)
 
 # Use "-fPIC" / "-fPIE" for all targets by default, including static libs
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# CMake doesn't add "-pie" by default for executables (CMake issue #14983)
-INCLUDE(AddTargetLinkFlagsIfSupported)
-CHECK_CXX_LINKER_FLAGS("${CMAKE_EXE_LINKER_FLAGS} -pie" LINK_FLAG_PIE_SUPPORTED)
-if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
+if (CMAKE_VERSION VERSION_LESS 3.14)
+	# CMake < 3.14 doesn't add "-pie" by default for executables (CMake issue #14983)
+	CHECK_CXX_LINKER_FLAGS("${CMAKE_EXE_LINKER_FLAGS} -pie" LINK_FLAG_PIE_SUPPORTED)
+	if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
+	endif()
+elseif(POLICY CMP0083)
+	cmake_policy(SET CMP0083 NEW) # Apply -pie link flag if supported
 endif()
 
+set(WZ_WIN_HAS_PDB FALSE)
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-	# Ensure all builds always have debug info built (MSVC)
+	# Set better-than-default optimization flags
+	add_compile_options("$<$<CONFIG:RELWITHDEBINFO>:/Ob2>")
+	add_compile_options("$<$<CONFIG:RELWITHDEBINFO>:/GL>")
+	add_link_options("$<$<CONFIG:RELWITHDEBINFO>:/INCREMENTAL:NO>")
+	add_link_options("$<$<CONFIG:RELWITHDEBINFO>:/LTCG>")
+
+	# Ensure all builds always have debug info built
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
 	set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Flags used by the linker (Release builds)" FORCE)
+	set(WZ_WIN_HAS_PDB TRUE)
 
 	# Default stack size is 1MB - increase to better match other platforms
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:8000000")
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU|Clang" AND NOT APPLE)
+	# Ensure all builds always have debug info built (Xcode is handled separately below)
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
+	# Ensure symbols can be demangled on Linux Debug builds
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -rdynamic")
+endif()
+if(MINGW AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
+	# Ensure LLVM/Clang-based MINGW produces debug info in codeview format (for PDB)
+	add_compile_options("-gcodeview")
+	# Ensure a PDB file is created in the same location as the module
+	add_link_options("-Wl,-pdb=")
+	set(WZ_WIN_HAS_PDB TRUE)
+endif()
+if(MINGW)
+	# Set default stack size to better match other platforms
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,8000000")
 endif()
 
 # Treat source files as UTF-8 (unless they have a BOM) (MSVC)
@@ -191,10 +207,21 @@ else()
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
 	endif()
 endif()
+# Enable -fstack-clash-protection if available
+check_c_compiler_flag(-fstack-clash-protection HAS_CFLAG_FSTACK_CLASH_PROTECTION)
+if (HAS_CFLAG_FSTACK_CLASH_PROTECTION AND NOT (MINGW OR APPLE))
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-clash-protection")
+endif()
+check_cxx_compiler_flag(-fstack-clash-protection HAS_CXXFLAG_FSTACK_CLASH_PROTECTION)
+if (HAS_CXXFLAG_FSTACK_CLASH_PROTECTION AND NOT (MINGW OR APPLE))
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-clash-protection")
+endif()
 
 include(CheckCompilerFlagsOutput)
 
 set(WZ_TARGET_ADDITIONAL_PROPERTIES) # Set below to any additional properties that should be added to Warzone targets (src/, lib/*/)
+set(WZ_TARGET_ADDITIONAL_C_BUILD_FLAGS) # Set below to any additional C build flags that should be added to Warzone targets (src/, lib/*/)
+set(WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS) # Set below to any additional CXX build flags that should be added to Warzone targets (src/, lib/*/)
 
 # Configure compiler warnings for WZ
 # NOTE: This should be called after the 3rdparty/ libs are added, so it only affects WZ code & frameworks
@@ -204,46 +231,45 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 		# Enable /W4
 		# NOTE: Do not use /Wall, as it enables *many* warnings that are off by default. MS recommends /W4 (max)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/W4")
 
 		# Enable some additional MSVC warnings (if compiling at warning level 3+)
 		# C4204: nonstandard extension used : non-constant aggregate initializer
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34204")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34204")
 		# C4512: 'class' : assignment operator could not be generated
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34512")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34512")
 
 		# Enable some additional MSVC warnings (that are off by default)
 		# C4005: 'identifier' : macro redefinition
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /we4005")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/we4005")
 		# C4191: unsafe conversion from 'type of expression' to 'type required'
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34191")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34191")
 		# C4263: 'function': member function does not override any base class virtual member function
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34263")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34263")
 		# C4264: 'virtual_function': no override available for virtual member function from base 'class'; function is hidden
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34264")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34264")
 		# C4265: 'class': class has virtual functions, but destructor is not virtual
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34265")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34265")
 		# C4266: 'function' : no override available for virtual member function from base 'type'; function is hidden
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34266")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34266")
 		# C4905: wide string literal cast to 'LPSTR'
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14905")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14905")
 		# C4906: string literal cast to 'LPWSTR'
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14906")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14906")
 		# C4928: illegal copy-initialization; more than one user-defined conversion has been implicitly applied
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14928")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14928")
 
 		# C4289: nonstandard extension used : 'var' : loop control variable declared in the for-loop is used outside the for-loop scope
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44289")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w44289")
 		# C4836: nonstandard extension used : 'type' : local types or unnamed types cannot be used as template arguments
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14836")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14836")
 
-#		# NOTE: The following cannot currently be enabled because of Qt headers (at least Qt 5.6.x)
-#		# C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
-#		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14946")
+		# C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14946")
 
 		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
 			# Enable /WX
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
+			list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/WX")
 		else()
 			message( STATUS "WZ will *NOT* enable /WX" )
 		endif()
@@ -251,29 +277,25 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Disable some warnings for WZ (permanently)
 		# C4800: 'type' : forcing value to bool 'true' or 'false' (performance warning)
 		# This warning is no longer generated in Visual Studio 2017+
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4800")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4800")
+		# C4127: conditional expression is constant
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4127")
 
 		# Disable some warnings for WZ (FIXME)
 		# C4100: unreferenced formal parameter
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4100")
 		# C4244: 'conversion' conversion from 'type1' to 'type2', possible loss of data // FIXME!!
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244")
-		# C4456: declaration of 'identifier' hides previous local declaration
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4456")
-		# C4459: declaration of 'identifier' hides global declaration
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4459")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4244")
 		# C4702: unreachable code
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4702")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4702")
 		# C4245: 'conversion' : conversion from 'type1' to 'type2', signed/unsigned mismatch
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4245")
-		# C4701: Potentially uninitialized local variable 'name' used
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4701")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4245")
 		# C4706: assignment within conditional expression
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4706")
-
-		# Qt headers (at least 5.6.x) necessitate disabling some warnings
-		# C4127: conditional expression is constant
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4127")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4706")
+		# C4018: '>' : signed/unsigned mismatch
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4018")
+		# C4389: '==' : signed/unsigned mismatch
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4389")
 
 	elseif(CMAKE_GENERATOR STREQUAL "Xcode")
 		# Set Xcode generator project-level configuration + warning flags
@@ -331,11 +353,19 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Custom Warning Flags - No Error Tweaks
 		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-error=deprecated-declarations")
 
+		set(_supported_cxx_compiler_flags "")
+
+		# -Wno-shadow-field-in-constructor (Clang 3.9+)
+		check_compiler_flags_output("-Werror -Wno-shadow-field-in-constructor -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-shadow-field-in-constructor" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		message( STATUS "Supported additional CXX compiler_flags=${_supported_cxx_compiler_flags}" )
+		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} ${_supported_cxx_compiler_flags}")
+
 		# Apple Clang - Preprocessing
 		set(CMAKE_XCODE_ATTRIBUTE_ENABLE_STRICT_OBJC_MSGSEND YES)
 
 		# Apple Clang - Warning Policies
-#		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_PEDANTIC YES)	# Cannot currently enable in Xcode because of Qt headers
+		list(APPEND WZ_TARGET_ADDITIONAL_PROPERTIES XCODE_ATTRIBUTE_GCC_WARN_PEDANTIC YES)
 		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
 			# Enable GCC_TREAT_WARNINGS_AS_ERRORS for WZ targets only
 			list(APPEND WZ_TARGET_ADDITIONAL_PROPERTIES XCODE_ATTRIBUTE_GCC_TREAT_WARNINGS_AS_ERRORS YES)
@@ -350,7 +380,7 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_DOCUMENTATION_COMMENTS NO)				# -Wdocumentation		[DISABLED]
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_EMPTY_BODY YES)						# -Wempty-body
 		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_FOUR_CHARACTER_CONSTANTS YES)			# -Wfour-char-constants
-		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_SHADOW NO)								# -Wshadow				[DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_SHADOW YES)								# -Wshadow
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_BOOL_CONVERSION YES)					# -Wbool-conversion
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_CONSTANT_CONVERSION YES)				# -Wconstant-conversion
 		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_64_TO_32_BIT_CONVERSION NO)				# -Wshorten-64-to-32	[DISABLED] - FIXME
@@ -502,10 +532,20 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# -Wnon-virtual-dtor		(GCC 3.4+, Clang 3.2+) [C++ only]
 		check_compiler_flags_output("-Werror -Wnon-virtual-dtor -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wnon-virtual-dtor" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
-#		# FUTURE-TODO: Enable -Wshadow (lots of warnings to fix, some due to 3rdparty dependencies?)
-#		# -Wshadow					(GCC 3.4+, Clang 3.2+)
-#		check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-#		check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		# -Wshadow					(GCC 3.4+, Clang 3.2+)
+		# NOTE: -Wshadow on GCC is currently too noisy, but Clang 3.9+ is much more selective
+		if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.9))
+			check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+
+			# -Wno-shadow-field-in-constructor (Clang 3.9+)
+			check_compiler_flags_output("-Werror -Wno-shadow-field-in-constructor -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-shadow-field-in-constructor" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		endif()
+		if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.9))
+			check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+			# -Wno-shadow-field-in-constructor (Clang 3.9+)
+			check_compiler_flags_output("-Werror -Wno-shadow-field-in-constructor -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-shadow-field-in-constructor" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		endif()
 
 #		# FUTURE-TODO: Enable -Wuseless-cast (large number of warnings to fix)
 #		# -Wuseless-cast			(GCC 4.8+)
@@ -513,8 +553,11 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 #		check_compiler_flags_output("-Werror -Wuseless-cast -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wuseless-cast" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# -Wnull-dereference		(GCC 6.0+, Clang 3.2+)
+		# Temporary: Do not enable for GCC 12+ (issues with nlohmann::json + GCC 12.1 + Wnull-dereference)
+		if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 12.0)
 		check_compiler_flags_output("-Werror -Wnull-dereference -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wnull-dereference" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wnull-dereference -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wnull-dereference" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		endif()
 
 		# -Wduplicated-cond			(GCC 6.0+)
 		check_compiler_flags_output("-Werror -Wduplicated-cond -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wduplicated-cond" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
@@ -555,6 +598,14 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wstringop-truncation" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wstringop-truncation" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
+		# Enable -Wlogical-op (GCC 4.3+)
+		check_compiler_flags_output("-Werror -Wlogical-op -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wlogical-op" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -Wlogical-op -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wlogical-op" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# Enable -Wuninitialized (GCC, Clang)
+		check_compiler_flags_output("-Werror -Wuninitialized -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wuninitialized" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -Wuninitialized -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wuninitialized" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
 		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
 			# Enable -Werror (if supported)
 			check_compiler_flags_output("-Werror" COMPILER_TYPE C   OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
@@ -563,17 +614,17 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 			message( STATUS "WZ will *NOT* enable -Werror" )
 		endif()
 
-		# Enable -Wlogical-op (if supported) (warning-only for now)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}logical-op -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}logical-op" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}logical-op -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}logical-op" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
-
 		# Handle -Wfloat-conversion	(warning-only for now)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}float-conversion -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}float-conversion" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}float-conversion -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}float-conversion" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
-		# Handle "sign-compare" (warning-only for now)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}sign-compare -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}sign-compare" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}sign-compare -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}sign-compare" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		# Handle -Wunused-but-set-variable (warning-only for now)
+		check_compiler_flags_output("-Werror ${WZ_Wno_}unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}unused-but-set-variable" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror ${WZ_Wno_}unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}unused-but-set-variable" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# Disable -Wsign-compare (FIXME)
+		check_compiler_flags_output("-Werror -Wno-sign-compare -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-sign-compare" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -Wno-sign-compare -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-sign-compare" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# Disable -Wunused-parameter (FIXME)
 		check_compiler_flags_output("-Werror -Wno-unused-parameter -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-unused-parameter" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
@@ -586,8 +637,11 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		message( STATUS "Supported C compiler_flags=${_supported_c_compiler_flags}" )
 		message( STATUS "Supported CXX compiler_flags=${_supported_cxx_compiler_flags}" )
 
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_supported_c_compiler_flags}")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_supported_cxx_compiler_flags}")
+		string(REPLACE " " ";" _supported_c_compiler_flags "${_supported_c_compiler_flags}")
+		string(REPLACE " " ";" _supported_cxx_compiler_flags "${_supported_cxx_compiler_flags}")
+
+		list(APPEND WZ_TARGET_ADDITIONAL_C_BUILD_FLAGS ${_supported_c_compiler_flags})
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS ${_supported_cxx_compiler_flags})
 
 	endif()
 endmacro(CONFIGURE_WZ_COMPILER_WARNINGS)
@@ -601,7 +655,7 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories(".")
 include_directories("3rdparty")
 include_directories(SYSTEM "3rdparty/glm")
-include_directories("3rdparty/date/include")
+include_directories(SYSTEM "3rdparty/date/include")
 
 SET(STDC_HEADERS ON)
 
@@ -622,7 +676,7 @@ SET(_DARWIN_C_SOURCE 1)
 SET(_MINIX OFF)
 SET(_POSIX_1_SOURCE OFF)
 SET(_POSIX_SOURCE OFF)
-if(NOT CMAKE_SYSTEM_NAME MATCHES "BSD") # Do not set _XOPEN_SOURCE on FreeBSD (etc)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "BSD|DragonFly") # Do not set _XOPEN_SOURCE on FreeBSD (etc)
 	SET(_XOPEN_SOURCE 700) # Enable POSIX extensions if present
 endif()
 
@@ -638,10 +692,14 @@ CHECK_INCLUDE_FILES("sys/stat.h" HAVE_SYS_STAT_H)
 CHECK_INCLUDE_FILES("sys/types.h" HAVE_SYS_TYPES_H)
 CHECK_INCLUDE_FILES("sys/ucontext.h" HAVE_SYS_UCONTEXT_H)
 CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD_H)
+CHECK_INCLUDE_FILES("sys/eventfd.h" HAVE_SYS_EVENTFD_H)
+CHECK_INCLUDE_FILES("sys/poll.h" HAVE_SYS_POLL_H)
+CHECK_INCLUDE_FILES("poll.h" HAVE_POLL_H)
 
 INCLUDE (CheckFunctionExists)
 INCLUDE (CMakePushCheckState)
 INCLUDE (CheckCXXSymbolExists)
+INCLUDE (CheckCXXSourceCompiles)
 cmake_reset_check_state()
 list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_ALL_SOURCE=${_ALL_SOURCE}")
 list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE=${_GNU_SOURCE}")
@@ -666,6 +724,15 @@ CHECK_CXX_SYMBOL_EXISTS(setenv "stdlib.h" HAVE_SETENV)
 CHECK_CXX_SYMBOL_EXISTS(posix_spawn "spawn.h" HAVE_POSIX_SPAWN)
 CHECK_CXX_SYMBOL_EXISTS(posix_spawnp "spawn.h" HAVE_POSIX_SPAWNP)
 CHECK_CXX_SYMBOL_EXISTS(environ "unistd.h" HAVE_ENVIRON_DECL)
+CHECK_CXX_SOURCE_COMPILES("
+	#include <unistd.h>
+	int main(void) {
+		int fd[2];
+		return pipe2(fd, 0);
+	}" HAVE_PIPE2)
+cmake_reset_check_state()
+include(CheckCXXStdThread)
+CHECK_CXX_STD_THREAD(HAVE_STD_THREAD)
 cmake_reset_check_state()
 
 set(WZ_BINDIR "${CMAKE_INSTALL_BINDIR}")
@@ -698,14 +765,17 @@ else()
 	SET(UPNPC_NO_INSTALL TRUE CACHE BOOL "miniupnpc - Disable installation" FORCE)
 	add_subdirectory(3rdparty/miniupnp/miniupnpc)
 	set_property(TARGET libminiupnpc-static PROPERTY FOLDER "3rdparty")
+	if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND (MINGW OR ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND NOT MSVC)))
+		target_compile_options(miniupnpc-private INTERFACE -Wno-macro-redefined)
+	endif()
 endif()
 
 add_subdirectory(3rdparty)
 
 # Determine distribution license
 set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")
-if(WZ_ENABLE_BACKEND_VULKAN)
-	# If Vulkan is enabled, use the GPL3 license for distribution
+if(WZ_ENABLE_BACKEND_VULKAN OR WZ_ENABLE_BASIS_UNIVERSAL)
+	# If Vulkan or Basis Universal is enabled, use the GPL3 license for distribution
 	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pkg/licenses/COPYING.gpl3" "${WZ_DIST_LICENSE}" COPYONLY)
 else()
 	# GPLv2

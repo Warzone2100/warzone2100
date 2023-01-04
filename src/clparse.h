@@ -27,10 +27,25 @@
 // parse the commandline
 bool ParseCommandLine(int argc, const char * const *argv);
 bool ParseCommandLineEarly(int argc, const char * const *argv);
+bool ParseCommandLineDebugFlags(int argc, const char * const *argv);
 
 bool autogame_enabled();
 const std::string &saveandquit_enabled();
 const std::string &wz_skirmish_test();
-std::string autoratingUrl(std::string const &hash);
+void setAutoratingUrl(std::string url);
+std::string getAutoratingUrl();
+void setAutoratingEnable(bool e);
+bool getAutoratingEnable();
+bool streamer_spectator_mode();
+bool lobby_slashcommands_enabled();
+
+enum class WZ_Command_Interface
+{
+	None,
+	StdIn_Interface,
+};
+WZ_Command_Interface wz_command_interface();
+
+int min_autostart_player_count();
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

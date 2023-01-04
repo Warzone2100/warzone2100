@@ -359,3 +359,27 @@ players 10
 type    14
 dataset MULTI_CAM_1
 game    "multiplay/maps/10c-WaterLoop.gam"
+
+level   DustyMaze
+players 2
+type    14
+dataset MULTI_CAM_2
+game    "multiplay/maps/2c-DustyMaze.gam"
+
+level   DustyMaze-2v2
+players 4
+type    14
+dataset MULTI_CAM_2
+game    "multiplay/maps/4c-DustyMaze-2v2.gam"
+
+level   DustyMaze-FFA
+players 4
+type    14
+dataset MULTI_CAM_2
+game    "multiplay/maps/4c-DustyMaze-FFA.gam"
+
+level   Thales
+players 7
+type    14
+dataset MULTI_CAM_1
+game    "multiplay/maps/7c-Thales.gam"

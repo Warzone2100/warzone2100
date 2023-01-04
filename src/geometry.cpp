@@ -50,6 +50,8 @@ DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 	DROID *psBestUnit = nullptr;
 	unsigned bestSoFar = UDWORD_MAX;
 
+	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
+
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -135,12 +137,12 @@ Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
 }
 
 //-----------------------------------------------------------------------------------
-bool	droidOnScreen(DROID *psDroid, SDWORD tolerance)
+bool objectOnScreen(BASE_OBJECT *object, SDWORD tolerance)
 {
-	if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) == true)
+	if (DrawnInLastFrame(object->sDisplay.frameNumber) == true)
 	{
-		const int dX = psDroid->sDisplay.screenX;
-		const int dY = psDroid->sDisplay.screenY;
+		const int dX = object->sDisplay.screenX;
+		const int dY = object->sDisplay.screenY;
 		/* Is it on screen */
 		if (dX > (0 - tolerance) && dY > (0 - tolerance)
 		    && dX < (SDWORD)(pie_GetVideoBufferWidth() + tolerance)

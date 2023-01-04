@@ -49,8 +49,8 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, majorSize(init->size)
 	, minorSize(init->minorSize)
 	, iRange(init->iRange)
-	, iValue(0)
-	, iOriginal(0)
+	, majorValue(majorSize * iRange / WBAR_SCALE)
+	, minorValue(minorSize * iRange / WBAR_SCALE)
 	, denominator(MAX(init->denominator, 1))
 	, precision(init->precision)
 	, majorCol(init->sCol)
@@ -67,64 +67,73 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	}
 
 	ASSERT((init->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN)) == 0, "Unknown bar graph style");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wlogical-op" // Older GCC (at least GCC 5.4) triggers a warning on this
+#endif
 	ASSERT(init->orientation >= WBAR_LEFT || init->orientation <= WBAR_BOTTOM, "Unknown orientation");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic pop
+#endif
 	ASSERT(init->size <= WBAR_SCALE, "Bar size out of range");
 	ASSERT((init->style & WBAR_DOUBLE) == 0 || init->minorSize <= WBAR_SCALE, "Minor bar size out of range");
 }
 
-/* Set the current size of a bar graph */
-void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
+static W_BARGRAPH *getBarGraph(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 {
+	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
 	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
-	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
+	ASSERT_OR_RETURN(nullptr, psBGraph != nullptr, "Could not find widget from ID");
+	ASSERT_OR_RETURN(nullptr, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
 
-	psBGraph->iOriginal = iValue;
-	if (iValue < psBGraph->iRange)
-	{
-		psBGraph->iValue = iValue;
-	}
-	else
-	{
-		psBGraph->iValue = psBGraph->iRange;
-	}
+	return psBGraph;
+}
 
-	psBGraph->majorSize = WBAR_SCALE * psBGraph->iValue / MAX(psBGraph->iRange, 1);
-	psBGraph->dirty = true;
+/* Set the current size of a bar graph */
+void widgSetBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
+{
+	if (auto psBGraph = getBarGraph(psScreen, id))
+	{
+		psBGraph->majorValue = iValue;
+		psBGraph->sizesDirty = true;
+	}
 }
 
 
 /* Set the current size of a minor bar on a double graph */
-void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
+void widgSetMinorBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
 {
-	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
-	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
-	psBGraph->minorSize = MIN(WBAR_SCALE * iValue / MAX(psBGraph->iRange, 1), WBAR_SCALE);
-	psBGraph->dirty = true;
-}
-
-
-/* Respond to a mouse moving over a barGraph */
-void W_BARGRAPH::highlight(W_CONTEXT *psContext)
-{
-	if (!pTip.empty())
+	if (auto psBGraph = getBarGraph(psScreen, id))
 	{
-		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		psBGraph->minorValue = iValue;
+		psBGraph->sizesDirty = true;
 	}
 }
 
 
-/* Respond to the mouse moving off a barGraph */
-void W_BARGRAPH::highlightLost()
+/** Set the range on a double graph */
+void widgSetBarRange(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
 {
-	tipStop(this);
+	if (auto psBGraph = getBarGraph(psScreen, id))
+	{
+		psBGraph->iRange = iValue;
+		psBGraph->sizesDirty = true;
+	}
 }
 
+void W_BARGRAPH::run(W_CONTEXT *context)
+{
+	if (sizesDirty)
+	{
+		majorSize = WBAR_SCALE * MIN(majorValue, iRange) / MAX(iRange, 1);
+		minorSize = MIN(WBAR_SCALE * minorValue / MAX(iRange, 1), WBAR_SCALE);
+		sizesDirty = false;
+	}
+}
 
 static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 {
-	if (!barGraph->text.empty())
+	if (!barGraph->text.isEmpty())
 	{
 		barGraph->wzCachedText.setText(barGraph->text, font_bar);
 		int textWidth = barGraph->wzCachedText.width();

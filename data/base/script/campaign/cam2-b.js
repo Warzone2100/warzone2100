@@ -2,15 +2,15 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const COLLECTIVE_RES = [
-	"R-Defense-WallUpgrade03", "R-Struc-Materials04", "R-Struc-Factory-Upgrade04",
-	"R-Struc-Factory-Cyborg-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
-	"R-Struc-VTOLPad-Upgrade01", "R-Vehicle-Engine04", "R-Vehicle-Metals04",
-	"R-Cyborg-Metals04", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04", "R-Wpn-Cannon-ROF02",
-	"R-Wpn-Flamer-Damage05", "R-Wpn-Flamer-ROF02", "R-Wpn-MG-Damage05",
-	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage04",
-	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage05",
+	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Vehicle-Engine04", "R-Vehicle-Metals04", "R-Cyborg-Metals04",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
+	"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage06", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc01",
+	"R-Wpn-Mortar-Damage04", "R-Wpn-Mortar-ROF01",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage05",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-	"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01",
+	"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF01"
 ];
 
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -19,7 +19,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 	{
 		camSafeRemoveObject(droid, false);
 	}
-	resetLabel("vtolRemoveZone");
+	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
 });
 
 camAreaEvent("factoryTrigger", function(droid)
@@ -34,9 +34,9 @@ function camEnemyBaseDetected_COMiddleBase()
 {
 	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter(function(obj) {
-		return obj.type === DROID && obj.group === null;
-	});
+	var droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.group === null
+	));
 
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		count: -1,
@@ -101,15 +101,15 @@ function truckDefense()
 		return;
 	}
 
-	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-Tower-MdCan", "CO-Tower-LtATRkt"];
+	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-WallTower-HvCan", "CO-Tower-LtATRkt"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
 function transferPower()
 {
 	//increase player power level and play sound
-     setPower(playerPower(CAM_HUMAN_PLAYER) + 4000);
-     playSound("power-transferred.ogg");
+	setPower(playerPower(CAM_HUMAN_PLAYER) + 4000);
+	playSound("power-transferred.ogg");
 }
 
 function eventStartLevel()
@@ -125,16 +125,28 @@ function eventStartLevel()
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
-	camPlayVideos(["MB2_B_MSG", "MB2_B_MSG2"]);
+	camPlayVideos([{video: "MB2_B_MSG", type: CAMP_MSG}, {video: "MB2_B_MSG2", type: MISS_MSG}]);
 
 	camSetArtifacts({
 		"COResearchLab": { tech: "R-Wpn-Flame2" },
 		"COHeavyFac-b4": { tech: "R-Wpn-RocketSlow-ROF01" },
 		"COHeavyFacL-b1": { tech: "R-Wpn-MG-ROF03" },
-		"COCommandCenter": { tech: "R-Vehicle-Body06" }, //Panther
+		"COCommandCenter": { tech: "R-Vehicle-Body02" }, //Leopard
+		"COCybFac-b4": { tech: "R-Wpn-Cannon-ROF01" },
+		"COBombardPit": { tech: "R-Wpn-Mortar-Damage04" },
 	});
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+
+	if (difficulty >= MEDIUM)
+	{
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+	}
+
+	// New HMG Tiger Tracks units in first attack group
+	addDroid(THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
+	addDroid(THE_COLLECTIVE, 96, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
+	addDroid(THE_COLLECTIVE, 97, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
 
 	camSetEnemyBases({
 		"CONorthBase": {
@@ -168,7 +180,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.comatt, cTempl.cohct, cTempl.comct]
+			templates: [cTempl.comatt, cTempl.cohct, cTempl.commrp]
 		},
 		"COHeavyFacR-b1": {
 			assembly: "COHeavyFacR-b1Assembly",
@@ -180,7 +192,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.comatt, cTempl.cohct, cTempl.comct]
+			templates: [cTempl.comatt, cTempl.cohct, cTempl.commrp]
 		},
 		"COCybFacL-b2": {
 			assembly: "COCybFacL-b2Assembly",
@@ -233,8 +245,7 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
-	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	camEnableFactory("COHeavyFac-b4");
 	camEnableFactory("COCybFac-b4");
@@ -244,5 +255,7 @@ function eventStartLevel()
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	queue("activateBase1Defenders2", camChangeOnDiff(camMinutesToMilliseconds(20)));
 	queue("activateBase1Defenders", camChangeOnDiff(camMinutesToMilliseconds(30)));
-	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+
+	truckDefense();
 }

@@ -4,17 +4,20 @@ include("script/campaign/transitionTech.js");
 
 var trapActive;
 var gammaAttackCount;
+var truckLocCounter;
 const GAMMA = 1; // Player 1 is Gamma team.
 const NEXUS_RES = [
-	"R-Defense-WallUpgrade08", "R-Struc-Materials08", "R-Struc-Factory-Upgrade06",
-	"R-Struc-Factory-Cyborg-Upgrade06", "R-Struc-VTOLFactory-Upgrade06",
-	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals06",
-	"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
-	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
-	"R-Wpn-Bomb-Accuracy03", "R-Wpn-Energy-Accuracy01", "R-Wpn-Energy-Damage01",
-	"R-Wpn-Energy-ROF01", "R-Wpn-Missile-Accuracy01", "R-Wpn-Missile-Damage01",
-	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
-	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade08", "R-Struc-Materials08",
+	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
+	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
+	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
+	"R-Vehicle-Engine07", "R-Vehicle-Metals07", "R-Vehicle-Armor-Heat04",
+	"R-Cyborg-Metals07", "R-Cyborg-Armor-Heat04", "R-Wpn-RocketSlow-ROF05",
+	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF06", "R-Wpn-Howitzer-Damage09",
+	"R-Wpn-Howitzer-ROF04", "R-Wpn-Cannon-Damage09", "R-Wpn-Cannon-ROF06",
+	"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
+	"R-Wpn-Rail-Damage01", "R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01",
+	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 ];
 
 //Remove Nexus VTOL droids.
@@ -83,7 +86,7 @@ function getDroidsForNXLZ(isTransport)
 	var units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmlinkh, cTempl.nxmrailh, cTempl.nxmsamh];
 
 	var droids = [];
-	for (var i = 0; i < COUNT; ++i)
+	for (let i = 0; i < COUNT; ++i)
 	{
 		droids.push(units[camRand(units.length)]);
 	}
@@ -149,10 +152,10 @@ function sendNXlandReinforcements()
 
 function transferPower()
 {
-    const AWARD = 5000;
-    var powerTransferSound = "power-transferred.ogg";
-    setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
-    playSound(powerTransferSound);
+	const AWARD = 5000;
+	var powerTransferSound = "power-transferred.ogg";
+	setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
+	playSound(powerTransferSound);
 }
 
 function activateNexusGroups()
@@ -195,12 +198,37 @@ function activateNexusGroups()
 	});
 }
 
+function truckDefense()
+{
+	if (enumDroid(GAMMA, DROID_CONSTRUCT).length === 0)
+	{
+		removeTimer("truckDefense");
+		return;
+	}
+
+	var list = ["Emplacement-Howitzer105", "Emplacement-MdART-pit", "Emplacement-RotHow"];
+	var position;
+
+	if (truckLocCounter === 0)
+	{
+		position = camMakePos("buildPos1");
+		truckLocCounter += 1;
+	}
+	else
+	{
+		position = camMakePos("buildPos2");
+		truckLocCounter = 0;
+	}
+
+	camQueueBuilding(GAMMA, list[camRand(list.length)], position);
+}
+
 //Take everything Gamma has and donate to Nexus.
 function trapSprung()
 {
 	setAlliance(GAMMA, NEXUS, true);
 	setAlliance(GAMMA, CAM_HUMAN_PLAYER, false);
-	camPlayVideos("MB3_B_MSG3");
+	camPlayVideos({video: "MB3_B_MSG3", type: CAMP_MSG});
 	hackRemoveMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
@@ -213,6 +241,7 @@ function trapSprung()
 
 	setTimer("sendNXTransporter", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendNXlandReinforcements", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 }
 
 function setupCapture()
@@ -233,7 +262,7 @@ function eventAttacked(victim, attacker)
 
 	if (victim.player === GAMMA && attacker.player === NEXUS)
 	{
-		gammaAttackCount = gammaAttackCount + 1;
+		gammaAttackCount += 1;
 	}
 }
 
@@ -241,10 +270,11 @@ function eventStartLevel()
 {
 	trapActive = false;
 	gammaAttackCount = 0;
+	truckLocCounter = 0;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
-     camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startpos.x, startpos.y);
@@ -319,9 +349,16 @@ function eventStartLevel()
 		}
 	});
 
+	if (difficulty >= HARD)
+	{
+		addDroid(GAMMA, 28, 5, "Truck Python Tracks", "Body11ABT", "tracked01", "", "", "Spade1Mk1");
+
+		camManageTrucks(GAMMA);
+	}
+
 	setAlliance(GAMMA, CAM_HUMAN_PLAYER, true);
-	hackAddMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	camPlayVideos(["MB3_B_MSG", "MB3_B_MSG2"]);
+	hackAddMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, false);
+	camPlayVideos([{video: "MB3_B_MSG", type: CAMP_MSG}, {video: "MB3_B_MSG2", type: MISS_MSG}]);
 
 	changePlayerColour(GAMMA, 0);
 	setAlliance(GAMMA, CAM_HUMAN_PLAYER, true);

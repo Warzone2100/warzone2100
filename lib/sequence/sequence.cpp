@@ -126,9 +126,11 @@ static bool videobuf_ready = false;		// single frame video buffer ready for proc
 static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for processing
 
 // file handle
-static PHYSFS_file *fpInfile = nullptr;
+class VideoProvider;
+static std::shared_ptr<VideoProvider> inVideoProvider;
 
-static uint32_t *RGBAframe = nullptr;					// texture buffer
+static iV_Image VideoFrameBitmap;				// texture buffer
+static SCANLINE_MODE scanMode = SCANLINES_OFF;
 static ogg_int16_t *audiobuf = nullptr;			// audio buffer
 
 // For timing
@@ -150,23 +152,136 @@ static int dropped = 0;
 
 // Screen dimensions
 #define NUM_VERTICES 4
-static GFX *videoGfx = nullptr;
+static std::unique_ptr<GFX> videoGfx = nullptr;
 static gfx_api::gfxFloat vertices[NUM_VERTICES][2];
 static gfx_api::gfxFloat Scrnvidpos[3];
 
 static SCANLINE_MODE use_scanlines;
 static bool scanlinesDisabled = false;
 
-// Helper; just grab some more compressed bitstream and sync it for page extraction
-static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
+//// Abstraction for handling loading videos from files, or from memory buffer
+class VideoProvider
 {
+public:
+	VideoProvider(const WzString& filename)
+	: m_filename(filename)
+	{ }
+	virtual ~VideoProvider();
+public:
+	virtual const WzString& filename() const { return m_filename; }
+	virtual bool seek_begin() = 0;
+	virtual int buffer_data(ogg_sync_state *oy) = 0;
+	virtual bool end_of_data() const = 0;
+private:
+	WzString m_filename;
+};
+
+class PhysFSVideoProvider : public VideoProvider
+{
+public:
+	// Takes ownership of the PHYSFS_file*
+	PhysFSVideoProvider(PHYSFS_file *in, const WzString& filename);
+	~PhysFSVideoProvider();
+public:
+	virtual bool seek_begin() override;
+	virtual int buffer_data(ogg_sync_state *oy) override;
+	virtual bool end_of_data() const override;
+private:
+	PHYSFS_file *in = nullptr;
+};
+
+class MemoryBufferVideoProvider : public VideoProvider
+{
+public:
+	MemoryBufferVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename);
+public:
+	virtual bool seek_begin() override;
+	virtual int buffer_data(ogg_sync_state *oy) override;
+	virtual bool end_of_data() const override;
+private:
+	std::shared_ptr<const std::vector<char>> memoryBuffer;
+	size_t currPos = 0;
+};
+
+VideoProvider::~VideoProvider()
+{ }
+
+// Takes ownership of the PHYSFS_file*
+PhysFSVideoProvider::PhysFSVideoProvider(PHYSFS_file *in, const WzString& filename)
+: VideoProvider(filename)
+, in(in)
+{ }
+PhysFSVideoProvider::~PhysFSVideoProvider()
+{
+	if (in && PHYSFS_isInit())
+	{
+		PHYSFS_close(in);
+		in = nullptr;
+	}
+}
+bool PhysFSVideoProvider::seek_begin()
+{
+	return PHYSFS_seek(in, 0) != 0;
+}
+int PhysFSVideoProvider::buffer_data(ogg_sync_state *oy)
+{
+	if (!in) return 0;
+
 	// read in 256K chunks
 	const int size = 262144;
 	char *buffer = ogg_sync_buffer(oy, size);
-	int bytes = WZ_PHYSFS_readBytes(in, buffer, size);
+	int bytes = static_cast<int>(WZ_PHYSFS_readBytes(in, buffer, size));
 
 	ogg_sync_wrote(oy, bytes);
 	return (bytes);
+}
+bool PhysFSVideoProvider::PhysFSVideoProvider::end_of_data() const
+{
+	return PHYSFS_eof(in) != 0;
+}
+
+MemoryBufferVideoProvider::MemoryBufferVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename)
+: VideoProvider(filename)
+, memoryBuffer(memoryBuffer)
+{ }
+bool MemoryBufferVideoProvider::seek_begin()
+{
+	currPos = 0;
+	return true;
+}
+int MemoryBufferVideoProvider::buffer_data(ogg_sync_state *oy)
+{
+	if (!memoryBuffer) return 0;
+	if (memoryBuffer->empty()) return 0;
+	if (currPos >= memoryBuffer->size()) return 0;
+
+	// read in 256K chunks
+	const int size = 262144;
+	char *buffer = ogg_sync_buffer(oy, size);
+
+	size_t bytesToRead = std::min<size_t>(size, memoryBuffer->size() - currPos);
+	memcpy(buffer, memoryBuffer->data() + currPos, size);
+	currPos += bytesToRead;
+
+	int bytes = static_cast<int>(bytesToRead);
+
+	ogg_sync_wrote(oy, bytes);
+	return (bytes);
+}
+bool MemoryBufferVideoProvider::end_of_data() const
+{
+	if (!memoryBuffer) return true;
+	return currPos >= memoryBuffer->size();
+}
+
+std::shared_ptr<VideoProvider> makeVideoProvider(PHYSFS_file *in, const WzString& filename)
+{
+	return std::make_shared<PhysFSVideoProvider>(in, filename);
+}
+
+std::shared_ptr<VideoProvider> makeVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename)
+{
+	return std::make_shared<MemoryBufferVideoProvider>(memoryBuffer, filename);
 }
 
 /** helper: push a page into the appropriate stream
@@ -199,7 +314,7 @@ static void open_audio(void)
 {
 	float volume = 1.0;
 
-	audiodata.audiofd_fragsize = (((videodata.vi.channels * 16) / 8) * videodata.vi.rate);
+	audiodata.audiofd_fragsize = static_cast<int>((((videodata.vi.channels * 16) / 8) * videodata.vi.rate));
 	audiobuf = (ogg_int16_t *)malloc(audiodata.audiofd_fragsize);
 
 	// FIX ME:  This call will fail, since we have, most likely, already
@@ -259,29 +374,24 @@ static double getRelativeTime(void)
 	return ((getTimeNow() - basetime) * .001);
 }
 
-const gfx_api::gfxFloat texture_width = 1024.0f;
-const gfx_api::gfxFloat texture_height = 1024.0f;
+const size_t texture_width = 1024;
+const size_t texture_height = 1024;
 
 /** Allocates memory to hold the decoded video frame
  */
 static void Allocate_videoFrame(void)
 {
-	int size = videodata.ti.frame_width * videodata.ti.frame_height * 4;
-	if (!seq_getScanlinesDisabled() && seq_getScanlineMode())
-	{
-		size *= 2;
-	}
+	scanMode = seq_getScanlinesDisabled() ? SCANLINES_OFF : seq_getScanlineMode();
+	const ogg_uint32_t height_factor = (scanMode ? 2 : 1);
+	int expected_size = videodata.ti.frame_width * videodata.ti.frame_height * 4 * height_factor;
 
-	RGBAframe = (uint32_t *)malloc(size);
-	memset(RGBAframe, 0, size);
+	VideoFrameBitmap.allocate(videodata.ti.frame_width, videodata.ti.frame_height * height_factor, 4, true);
+	ASSERT(VideoFrameBitmap.data_size() == expected_size, "Allocated size does not match expected size!");
 }
 
 static void deallocateVideoFrame(void)
 {
-	if (RGBAframe)
-	{
-		free(RGBAframe);
-	}
+	VideoFrameBitmap.clear();
 }
 
 #ifndef __BIG_ENDIAN__
@@ -307,10 +417,12 @@ static void video_write(bool update)
 	unsigned int x = 0, y = 0;
 	const int video_width = videodata.ti.frame_width;
 	const int video_height = videodata.ti.frame_height;
-	SCANLINE_MODE scanMode = seq_getScanlinesDisabled() ? SCANLINES_OFF : seq_getScanlineMode();
-	// when using scanlines we need to double the height
-	const int height_factor = (scanMode ? 2 : 1);
+	unsigned char* pRGBABitmapData = VideoFrameBitmap.bmp_w();
 	yuv_buffer yuv;
+
+	auto setRGBAFramePixel = [pRGBABitmapData](int pixelOffset, uint32_t rgbaValue) {
+		memcpy(&pRGBABitmapData[(pixelOffset * 4)], &rgbaValue, sizeof(uint32_t));
+	};
 
 	if (update)
 	{
@@ -342,15 +454,15 @@ static void video_write(bool update)
 
 				uint32_t rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 
-				RGBAframe[rgb_offset] = rgba;
+				setRGBAFramePixel(rgb_offset, rgba);
 				if (scanMode == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
+					setRGBAFramePixel(rgb_offset + video_width, (rgba >> 1 & RGBmask) | Amask);
 				}
 				else if (scanMode == SCANLINES_BLACK)
 				{
-					RGBAframe[rgb_offset + video_width] = Amask;
+					setRGBAFramePixel(rgb_offset + video_width, Amask);
 				}
 				rgb_offset++;
 
@@ -363,15 +475,15 @@ static void video_write(bool update)
 				B = Vclip((A + 516 * U + 128) >> 8);
 
 				rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
-				RGBAframe[rgb_offset] = rgba;
+				setRGBAFramePixel(rgb_offset, rgba);
 				if (scanMode == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
+					setRGBAFramePixel(rgb_offset + video_width, (rgba >> 1 & RGBmask) | Amask);
 				}
 				else if (scanMode == SCANLINES_BLACK)
 				{
-					RGBAframe[rgb_offset + video_width] = Amask;
+					setRGBAFramePixel(rgb_offset + video_width, Amask);
 				}
 				rgb_offset++;
 			}
@@ -381,7 +493,7 @@ static void video_write(bool update)
 			}
 		}
 
-		videoGfx->updateTexture(RGBAframe, video_width, video_height * height_factor);
+		videoGfx->updateTexture(VideoFrameBitmap);
 	}
 
 	const auto& modelViewProjectionMatrix = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f) *
@@ -429,7 +541,7 @@ static void audio_write(void)
 		}
 
 		alBufferData(oldbuffer, (videodata.vi.channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16),
-		             audiobuf, audiodata.audiobuf_fill, videodata.vi.rate);
+		             audiobuf, audiodata.audiobuf_fill, static_cast<ALsizei>(videodata.vi.rate));
 
 		alSourceQueueBuffers(audiodata.source, 1, &oldbuffer);
 		audiodata.totbufstarted++;
@@ -490,13 +602,28 @@ static void seq_InitOgg(void)
 	Timer_start();
 }
 
-bool seq_Play(const char *filename)
+void update_buffers()
+{
+	if (videoGfx == nullptr)
+	{
+		return;
+	}
+
+	// when using scanlines we need to double the height
+	const uint32_t height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
+	const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / (float)texture_width;
+	const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / (float)texture_height;
+	gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = {0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight};
+	videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
+}
+
+bool seq_Play(const std::shared_ptr<VideoProvider> &video)
 {
 	int pp_level_max = 0;
 	int pp_level = 0;
 	ogg_packet op;
 
-	debug(LOG_VIDEO, "starting playback of: %s", filename);
+	debug(LOG_VIDEO, "starting playback of: %s", (video) ? video->filename().toUtf8().c_str() : "");
 
 	if (videoplaying)
 	{
@@ -506,17 +633,13 @@ bool seq_Play(const char *filename)
 
 	seq_InitOgg();
 
-	fpInfile = PHYSFS_openRead(filename);
-	if (fpInfile == nullptr)
+	if (!video)
 	{
-		wz_info("unable to open '%s' for playback", filename);
-
-		fpInfile = PHYSFS_openRead("novideo.ogg");
-		if (fpInfile == nullptr)
-		{
-			return false;
-		}
+		return false;
 	}
+
+	inVideoProvider = video;
+	inVideoProvider->seek_begin();
 
 	theora_p = 0;
 	vorbis_p = 0;
@@ -525,7 +648,7 @@ bool seq_Play(const char *filename)
 	/* Only interested in Vorbis/Theora streams */
 	while (!stateflag)
 	{
-		int ret = buffer_data(fpInfile, &videodata.oy);
+		int ret = inVideoProvider->buffer_data(&videodata.oy);
 
 		if (ret == 0)
 		{
@@ -620,7 +743,7 @@ bool seq_Play(const char *filename)
 		}
 		else
 		{
-			int ret = buffer_data(fpInfile, &videodata.oy);   /* someone needs more data */
+			ret = inVideoProvider->buffer_data(&videodata.oy);   /* someone needs more data */
 
 			if (ret == 0)
 			{
@@ -676,25 +799,24 @@ bool seq_Play(const char *filename)
 	}
 
 	/* open video */
-	videoGfx = new GFX(GFX_TEXTURE, 2);
+	videoGfx = std::make_unique<GFX>(GFX_TEXTURE, 2);
 	if (theora_p)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
-			debug(LOG_ERROR, "Video size too large, must be below %.gx%.g!",
+			debug(LOG_ERROR, "Video size too large, must be below %zu x %zu!",
 			      texture_width, texture_height);
-			delete videoGfx;
 			videoGfx = nullptr;
 			return false;
 		}
 		if (videodata.ti.pixelformat != OC_PF_420)
 		{
 			debug(LOG_ERROR, "Video not in YUV420 format!");
-			delete videoGfx;
 			videoGfx = nullptr;
 			return false;
 		}
-		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
+		iV_Image blackFrame;
+		blackFrame.allocate(texture_width, texture_height, 4, true);
 
 		// disable scanlines temporarily if the video is too large for the texture or shown too small
 		if (videodata.ti.frame_height * 2 > texture_height || vertices[3][1] < videodata.ti.frame_height * 2)
@@ -703,15 +825,11 @@ bool seq_Play(const char *filename)
 		}
 
 		Allocate_videoFrame();
-		videoGfx->makeTexture(texture_width, texture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, blackframe);
-		free(blackframe);
+		videoGfx->makeCompatibleTexture(&blackFrame, "mem::blackframe");
+		videoGfx->updateTexture(blackFrame);
+		blackFrame.clear();
 
-		// when using scanlines we need to double the height
-		const int height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
-		const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / texture_width;
-		const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
-		gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
-		videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
+		update_buffers();
 	}
 
 	/* on to the main decode loop.  We assume in this example that audio
@@ -764,7 +882,7 @@ bool seq_Update()
 			{
 				for (j = 0; j < videodata.vi.channels; j++)
 				{
-					int val = nearbyint(pcm[j][i] * 32767.f);
+					int val = static_cast<int>(nearbyint(pcm[j][i] * 32767.f));
 
 					if (val > 32767)
 					{
@@ -848,7 +966,7 @@ bool seq_Update()
 
 	alGetSourcei(audiodata.source, AL_SOURCE_STATE, &sourcestate);
 
-	if (PHYSFS_eof(fpInfile)
+	if (inVideoProvider->end_of_data()
 		&& !videobuf_ready
 		&& ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
 		&& sourcestate != AL_PLAYING)
@@ -862,7 +980,7 @@ bool seq_Update()
 	if (!videobuf_ready || !audiobuf_ready)
 	{
 		/* no data yet for somebody.  Grab another page */
-		ret = buffer_data(fpInfile, &videodata.oy);
+		ret = inVideoProvider->buffer_data(&videodata.oy);
 		while (ogg_sync_pageout(&videodata.oy, &videodata.og) > 0)
 		{
 			queue_page(&videodata.og);
@@ -900,7 +1018,7 @@ bool seq_Update()
 	}
 
 	/* same if we've run out of input */
-	if (PHYSFS_eof(fpInfile))
+	if (inVideoProvider->end_of_data())
 	{
 		stateflag = true;
 	}
@@ -918,7 +1036,6 @@ void seq_Shutdown()
 		debug(LOG_VIDEO, "movie is not playing");
 		return;
 	}
-	delete videoGfx;
 	videoGfx = nullptr;
 
 	if (vorbis_p)
@@ -947,10 +1064,7 @@ void seq_Shutdown()
 
 	ogg_sync_clear(&videodata.oy);
 
-	if (fpInfile)
-	{
-		PHYSFS_close(fpInfile);
-	}
+	inVideoProvider.reset();
 
 	videoplaying = false;
 	seq_setScanlinesDisabled(false);
@@ -985,31 +1099,11 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 	vertices[3][0] = sizeX;
 	vertices[3][1] = sizeY;
 
-	if (sizeX > 640 || sizeY > 480)
-	{
-		const float aspect = screenWidth / (float)screenHeight, videoAspect = 4 / (float)3;
-
-		if (aspect > videoAspect) // x offset
-		{
-			int offset = (screenWidth - screenHeight * videoAspect) / 2;
-			vertices[1][0] += offset;
-			vertices[3][0] += offset;
-			vertices[0][0] -= offset;
-			vertices[2][0] -= offset;
-		}
-		else // y offset
-		{
-			int offset = (screenHeight - screenWidth / videoAspect) / 2;
-			vertices[0][1] += offset;
-			vertices[1][1] += offset;
-			vertices[2][1] -= offset;
-			vertices[3][1] -= offset;
-		}
-	}
-
 	Scrnvidpos[0] = posX;
 	Scrnvidpos[1] = posY;
 	Scrnvidpos[2] = 0.0f;
+
+	update_buffers();
 }
 
 void seq_setScanlinesDisabled(bool flag)

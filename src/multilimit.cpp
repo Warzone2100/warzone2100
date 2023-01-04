@@ -138,7 +138,8 @@ void WzMultiLimitTitleUI::start()
 	// TRANSLATORS: Sidetext of structure limits screen
 	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, _("LIMITS"));
 
-	IntFormAnimated *limitsForm = new IntFormAnimated(widgGetFromID(psWScreen, FRONTEND_BACKDROP), false);
+	auto limitsForm = std::make_shared<IntFormAnimated>(false);
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(limitsForm);
 	limitsForm->id = IDLIMITS;
 	limitsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
@@ -187,7 +188,8 @@ void WzMultiLimitTitleUI::start()
 	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
 
 	// add tab form..
-	IntListTabWidget *limitsList = new IntListTabWidget(limitsForm);
+	auto limitsList = IntListTabWidget::make();
+	limitsForm->attach(limitsList);
 	limitsList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *limitsList = static_cast<IntListTabWidget *>(psWidget);
 		assert(limitsList != nullptr);
@@ -203,7 +205,8 @@ void WzMultiLimitTitleUI::start()
 	{
 		if (asStructureStats[i].base.limit != LOTS_OF)
 		{
-			W_FORM *button = new W_FORM(limitsList);
+			auto button = std::make_shared<W_FORM>();
+			limitsList->attach(button);
 			button->id = limitsButtonId;
 			button->displayFunction = displayStructureBar;
 			button->UserData = i;
@@ -440,6 +443,15 @@ bool applyLimitSet()
 	{
 		RecursivelyDisableResearchByFlags(MPFLAGS_NO_UPLINK);
 	}
+
+	// A bit of a hack:
+	// - We have to retain the `structureLimits` for saving in the replay, but the process of actually saving the replay init data
+	//   happens *after* the scripts initialize and are sent eventGameInit, which calls applyLimitSet() - this function - which then
+	//   calls `freeLimitSet` below (which clears ingame.structureLimits)
+	// - While this should be refactored at some point... for now, just stash `structureLimits` in `lastAppliedStructureLimits`
+	//   before clearing it, and then the replay init data can save `ingame.lastAppliedStructureLimits`
+	ingame.lastAppliedStructureLimits = ingame.structureLimits;
+
 	freeLimitSet();
 	return true;
 }
@@ -491,7 +503,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	displayStructureStatButton(stat, &rotation, &position, scale);
 
 	// draw name
-	cache.wzNameText.setText(_(getName(stat)), font_regular);
+	cache.wzNameText.setText(_(getStatsName(stat)), font_regular);
 	cache.wzNameText.render(x + 80, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	// draw limit

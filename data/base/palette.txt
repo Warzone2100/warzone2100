@@ -26,7 +26,7 @@ ff,ff,ff,10	// unit select box
 ff,ff,ff,ff	// map outline ok
 ff,0,0,ff	// map outline bad
 0,80,0,ff	// keymap active
-80,0,0,ff	// keymap fixed
+55,55,55,ff	// keymap fixed
 ff,23,0,ff	// menu score loss
 37,ef,6f,ff	// menu score destroyed
 27,31,b9,ff	// menu score built
@@ -42,8 +42,8 @@ ff,0,0,ff	// console text enemy
 1,1,1,ff	// menu shadow
 f,8,56,ff	// dark blue
 1c,9f,fb,ff	// light blue
-50,ff,78,ff	// blueprint valid
-ff,50,50,ff	// blueprint invalid
+50,ff,78,ff	// light green
+ff,50,50,ff	// light red
 32,a0,4b,ff	// blueprint planned
 0,a0,0,ff	// health high shadow
 a0,a0,0,ff	// health medium shadow
@@ -74,7 +74,7 @@ ff,ff,0,ff	// production run text
 0,0,0,18	// game loading bar background
 ff,0,ff,ff	// WZCOL_MAP_PREVIEW_HQ
 ff,ff,00,ff	// WZCOL_MAP_PREVIEW_OIL
-b0,08,5f,ff	// fog colour
+b0,5f,08,ff	// fog colour
 f0,e8,10,ff	// team9 - yellow
 70,00,74,ff	// team10 - purple
 E0,E0,E0,ff	// team11 - white
@@ -96,3 +96,6 @@ b0,b0,ff,ff	// Server knows this player.
 10,10,80,80	// Default filled GUI box colour
 1b,ff,5f,ff // Info messages text color
 10,10,80,bb	// Default notification box colour
+b0,8f,5f,ff	// Arizona fog
+10,10,40,ff	// Urban fog
+b6,e1,ec,ff	// Rockie fog

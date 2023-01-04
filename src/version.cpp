@@ -28,7 +28,9 @@
 #include <algorithm>
 #include <vector>
 #include <regex>
-#include <optional-lite/optional.hpp>
+#include <utility>
+#include <sstream>
+
 using nonstd::optional;
 using nonstd::nullopt;
 
@@ -37,90 +39,66 @@ using nonstd::nullopt;
 static const char vcs_branch_cstr[] = VCS_BRANCH;
 static const char vcs_tag[] = VCS_TAG;
 
-struct TagVer
+optional<TagVer> version_extractVersionNumberFromTag(const std::string& tag)
 {
-	std::string major;
-	std::string minor;
-	std::string revision;
-};
-
-static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
-{
-	std::string tagStr = tag;
-
+    std::istringstream parser(tag);
 	// Remove "v/" or "v" prefix (as in "v3.2.2"), if present
-	const std::vector<std::string> prefixesToRemove = {"v/", "v"};
-	for (const auto& prefix : prefixesToRemove)
-	{
-		if (tagStr.rfind(prefix, 0) == 0) {
-			tagStr = tagStr.substr(prefix.size());
-		}
-	}
-
+    if (parser.peek() == 'v')  parser.get(); // skip
+    if (parser.peek() == '/')  parser.get(); // skip
 	TagVer result;
-	std::smatch base_match;
-	const std::regex semver_regex("^([0-9]+)(.[0-9]+)?(.[0-9]+)?");
-	if (std::regex_match(tagStr, base_match, semver_regex))
-	{
-		// base_match[0] is the whole string
-		const size_t matchCount = base_match.size();
-		switch (matchCount)
+	parser >> result.version[0];
+    if (parser.fail())
+    {
+        return nullopt;
+    }
+	for (int i = 1; i < 3; i++)
+    {
+        parser.get(); // skip any separator
+        parser >> result.version[i];
+        if (parser.fail())
+        {
+            return nullopt;
+        }
+    }
+	if (!parser.eof())
 		{
-			case 4:
-				result.revision = base_match[3].str().substr(1); // remove the "." prefix
-				// fallthrough
-			case 3:
-				result.minor = base_match[2].str().substr(1); // remove the "." prefix
-				result.major = base_match[1].str();
-				break;
-			default:
-				// failure
+			// it has "-rc/beta1.." suffix 
+			if (parser.peek() == '-') parser.get(); // skip
+			parser.read(result.qualifier, TAGVER_MAX_QUALIF_LEN - 1);
+			result.qualifier[TAGVER_MAX_QUALIF_LEN - 1] = 0;
+			if (parser.fail() && !parser.eof())
+			{
 				return nullopt;
-				break;
+			}
+			// must terminate now
+			if (!parser.eof())
+			{
+				return nullopt;
+			}
 		}
-	}
-
 	return result;
 }
 
 /** Obtain the versioned application-data / config writedir folder name
- *  If on a tag, this is "Warzone 2100 <tag>" / "warzone2100-<tag>"
+ *  If on a tag, this is "Warzone 2100" / "warzone2100"
  *  If not on a tag, this is "Warzone 2100 <branch>" / "warzone2100-<branch>"
  *  If no branch is defined, this is "Warzone 2100 <VCS_EXTRA>" / "warzone2100-<VCS_EXTRA>"
  */
 std::string version_getVersionedAppDirFolderName()
 {
 	std::string versionedWriteDirFolderName;
+	std::string versionedWriteDirFolderNameSuffix;
 
 #if defined(WZ_OS_WIN) || defined(WZ_OS_MAC)
-	versionedWriteDirFolderName = "Warzone 2100 ";
+	versionedWriteDirFolderName = "Warzone 2100";
 #else
-	versionedWriteDirFolderName = "warzone2100-";
+	versionedWriteDirFolderName = "warzone2100";
 #endif
 
 	if (strlen(vcs_tag))
 	{
-		optional<TagVer> tagVersion = extractVersionNumberFromTag(vcs_tag);
-		if (tagVersion.has_value())
-		{
-			// If tag is actually a version number (which it should be!)
-			// Use only MAJOR.MINOR (ignoring revision) for the appdir folder name
-			if (tagVersion.value().major == "3" && tagVersion.value().minor == "4")
-			{
-				// EXCEPTION: Use "3.4.0" for any 3.4.x release, for compatibility with 3.4.0 (which did not have this code)
-				versionedWriteDirFolderName += "3.4.0";
-			}
-			else
-			{
-				// Normal case - use only "MAJOR.MINOR"
-				versionedWriteDirFolderName += tagVersion.value().major + "." + tagVersion.value().minor;
-			}
-		}
-		else
-		{
-			// vcs_tag does not resemble a version number - just use it directly
-			versionedWriteDirFolderName += vcs_tag;
-		}
+		// release builds now use a stable config directory name, with no suffix
+		versionedWriteDirFolderNameSuffix.clear();
 	}
 	else if (strlen(vcs_branch_cstr))
 	{
@@ -128,9 +106,9 @@ std::string version_getVersionedAppDirFolderName()
 		// To ease testing new branches with existing files
 		// default to using "master" as the branch name
 		// if WZ_USE_MASTER_BRANCH_APP_DIR is defined
-		versionedWriteDirFolderName += "master";
+		versionedWriteDirFolderNameSuffix = "master";
 #else
-		versionedWriteDirFolderName += vcs_branch_cstr;
+		versionedWriteDirFolderNameSuffix = vcs_branch_cstr;
 #endif
 	}
 	else
@@ -139,10 +117,44 @@ std::string version_getVersionedAppDirFolderName()
 		std::string vcs_extra_str = VCS_EXTRA;
 		// remove any spaces from VCS_EXTRA
 		vcs_extra_str.erase(std::remove(vcs_extra_str.begin(), vcs_extra_str.end(), ' '), vcs_extra_str.end());
-		versionedWriteDirFolderName += vcs_extra_str;
+		versionedWriteDirFolderNameSuffix = vcs_extra_str;
+	}
+
+	if (!versionedWriteDirFolderNameSuffix.empty())
+	{
+#if defined(WZ_OS_WIN) || defined(WZ_OS_MAC)
+		versionedWriteDirFolderName += " ";
+#else
+		versionedWriteDirFolderName += "-";
+#endif
+		versionedWriteDirFolderName += versionedWriteDirFolderNameSuffix;
 	}
 	return versionedWriteDirFolderName;
 }
+
+/** Obtain the versioned application-data / config "mods" folder path
+ *  If on a tag, this is "mods/<tag version>/"
+ *  If not on a tag, this is "mods/" (as non-tagged builds have versioned parent config folders)
+ */
+std::string version_getVersionedModsFolderPath(std::string subFolders /*= ""*/)
+{
+	std::string versionedModsFolderPath;
+	if (strlen(VCS_TAG))
+	{
+		versionedModsFolderPath = "mods/" VCS_TAG;
+	}
+	else
+	{
+		versionedModsFolderPath = "mods";
+	}
+	if (!subFolders.empty())
+	{
+		versionedModsFolderPath += "/";
+		versionedModsFolderPath += subFolders;
+	}
+	return versionedModsFolderPath;
+}
+
 
 /** Composes a nicely formatted version string.
 * Determine if we are on a tag (which will NOT show the hash)
@@ -173,24 +185,81 @@ const char *version_getVersionString()
 	return version_string;
 }
 
+const char *version_getLatestTag()
+{
+	if(strlen(VCS_TAG))
+	{
+		return VCS_TAG;
+	}
+	// this is non empty for sure!
+	return VCS_MOST_RECENT_TAGGED_VERSION;
+}
+
+// Should follow the form:
+// - warzone2100@TAG_NAME (for tagged builds)
+// - warzone2100@FULL_COMMIT_HASH (for other builds)
+std::string version_getBuildIdentifierReleaseString()
+{
+	std::string buildReleaseStr = "warzone2100@";
+	if (strlen(vcs_tag))
+	{
+		// always use the tag directly
+		buildReleaseStr += vcs_tag;
+	}
+	else
+	{
+		// if not a tag, use the full commit hash
+		buildReleaseStr += VCS_FULL_HASH;
+	}
+	return buildReleaseStr;
+}
+
+// For tagged builds this will return either:
+//	- "release" (for release tags)
+//	- "preview" (for tags with a trailing qualifier, like "4.0.0-beta1")
+// For other builds, this will return:
+//	- "development"
+std::string version_getBuildIdentifierReleaseEnvironment()
+{
+	std::string buildReleaseEnvironmentStr;
+	if (strlen(vcs_tag))
+	{
+		optional<TagVer> tagVersion = version_extractVersionNumberFromTag(vcs_tag);
+		if (tagVersion.has_value() && strlen(tagVersion.value().qualifier) != 0)
+		{
+			buildReleaseEnvironmentStr = "preview";
+		}
+		else
+		{
+			buildReleaseEnvironmentStr = "release";
+		}
+	}
+	else
+	{
+		// if not a tag, "development" environment
+		buildReleaseEnvironmentStr = "development";
+	}
+	return buildReleaseEnvironmentStr;
+}
+
 /** Composes a nicely formatted version string.
 *
 */
-const char *version_getFormattedVersionString()
+const char *version_getFormattedVersionString(bool translated /* = true */)
 {
 	static char versionString[MAX_STR_LENGTH] = {'\0'};
 
 	// Compose the working copy state string
 #if (VCS_WC_MODIFIED)
 	// TRANSLATORS: Printed when compiling with uncommitted changes
-	const char *wc_state = _(" (modified locally)");
+	const char *wc_state = (translated) ? _(" (modified locally)") : " (modified locally)";
 #else
 	const char *wc_state = "";
 #endif
 	// Compose the build type string
 #ifdef DEBUG
 	// TRANSLATORS: Printed in Debug builds
-	const char *build_type = _(" - DEBUG");
+	const char *build_type = (translated) ? _(" - DEBUG") : " - DEBUG";
 #else
 	const char *build_type = "";
 #endif
@@ -199,7 +268,7 @@ const char *version_getFormattedVersionString()
 	// TRANSLATORS: This string looks as follows when expanded.
 	// "Version: <version name/number>, <working copy state>,
 	// Built: <BUILD DATE><BUILD TYPE>"
-	snprintf(versionString, MAX_STR_LENGTH, _("Version: %s,%s Built: %s%s"), version_getVersionString(), wc_state, getCompileDate(), build_type);
+	snprintf(versionString, MAX_STR_LENGTH, (translated) ? _("Version: %s,%s Built: %s%s") : "Version: %s,%s Built: %s%s", version_getVersionString(), wc_state, getCompileDate(), build_type);
 
 	return versionString;
 }

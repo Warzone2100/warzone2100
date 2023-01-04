@@ -1,24 +1,22 @@
-//;; # libcampaign.js documentation
+//;; # `libcampaign.js` documentation
 //;;
-//;; ```libcampaign.js``` is a JavaScript library supplied with the game,
+//;; `libcampaign.js` is a JavaScript library supplied with the game,
 //;; which contains reusable code for campaign scenarios. It is designed to
 //;; make scenario development as high-level and declarative as possible.
 //;; It also contains a few simple convenient wrappers.
-//;; Public API functions of ```libcampaign.js``` are prefixed with
-//;; ```cam```. To use ```libcampaign.js```, add the following include
-//;; into your scenario code:
+//;; Public API functions of `libcampaign.js` are prefixed with `cam`.
+//;; To use `libcampaign.js`, add the following include into your scenario code:
 //;;
-//;; ```javascript
+//;; ```js
 //;; include("script/campaign/libcampaign.js");
 //;; ```
 //;;
-//;; Also, most of the ```libcampaign.js``` features require some of the
-//;; game events handled by the library. Transparent JavaScript pre-hooks are
-//;; therefore injected into your global event handlers upon include. For
-//;; example, if ```camSetArtifacts()``` was called to let
-//;; ```libcampaign.js``` manage scenario artifacts, then
-//;; ```eventPickup()``` will be first handled by the library, and only then
-//;; your handler will be called, if any.
+//;; Also, most of the `libcampaign.js` features require some of the game
+//;; events handled by the library. Transparent JavaScript pre-hooks are
+//;; therefore injected into your global event handlers upon include.
+//;; For example, if `camSetArtifacts()` was called to let `libcampaign.js`
+//;; manage scenario artifacts, then `eventPickup()` will be first handled
+//;; by the library, and only then your handler will be called, if any.
 //;; All of this happens automagically and does not normally require
 //;; your attention.
 //;;
@@ -90,6 +88,27 @@ const CAM_TICKS_PER_FRAME = 100;
 const AI_POWER = 999999;
 const INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 
+//level load codes here for reference. Might be useful for later code.
+const ALPHA_CAMPAIGN_NUMBER = 1;
+const BETA_CAMPAIGN_NUMBER = 2;
+const GAMMA_CAMPAIGN_NUMBER = 3;
+const CAM_GAMMA_OUT = "GAMMA_OUT"; //Fake next level for the final Gamma mission.
+const UNKNOWN_CAMPAIGN_NUMBER = 1000;
+const ALPHA_LEVELS = [
+	"CAM_1A", "CAM_1B", "SUB_1_1S", "SUB_1_1", "SUB_1_2S", "SUB_1_2", "SUB_1_3S",
+	"SUB_1_3", "CAM_1C", "CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
+	"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "SUB_1_D", "CAM_1END"
+];
+const BETA_LEVELS = [
+	"CAM_2A", "SUB_2_1S", "SUB_2_1", "CAM_2B", "SUB_2_2S", "SUB_2_2", "CAM_2C",
+	"SUB_2_5S", "SUB_2_5", "SUB_2DS", "SUB_2D", "SUB_2_6S", "SUB_2_6", "SUB_2_7S",
+	"SUB_2_7", "SUB_2_8S", "SUB_2_8", "CAM_2END"
+];
+const GAMMA_LEVELS = [
+	"CAM_3A", "SUB_3_1S", "SUB_3_1", "CAM_3B", "SUB_3_2S", "SUB_3_2", "CAM3A-B",
+	"CAM3C", "CAM3A-D1", "CAM3A-D2", "CAM_3_4S", "CAM_3_4"
+];
+
 //artifact
 var __camArtifacts;
 var __camNumArtifacts;
@@ -110,7 +129,6 @@ var __camDebuggedOnce = {};
 var __camTracedOnce = {};
 
 //events
-var __camLastHitTime = 0;
 var __camSaveLoading;
 
 //group
@@ -157,6 +175,7 @@ const __CAM_DEFENSE_RADIUS = 4;
 const __CAM_CLOSE_RADIUS = 2;
 const __CAM_CLUSTER_SIZE = 4;
 const __CAM_FALLBACK_TIME_ON_REGROUP = 5000;
+var __camGroupAvgCoord = {x: 0, y: 0};
 
 //time
 const MILLISECONDS_IN_SECOND = 1000;
@@ -188,19 +207,13 @@ var __camLZCompromisedTicker;
 var __camLastAttackTriggered;
 var __camLevelEnded;
 var __camExtraObjectiveMessage;
-var __camVictoryMessageThrottle;
+var __camAllowVictoryMsgClear;
 
 //video
 var __camVideoSequences;
 
 //vtol
-var __camVtolPlayer;
-var __camVtolStartPosition;
-var __camVtolTemplates;
-var __camVtolExitPosition;
-var __camVtolSpawnActive;
-var __camVtolSpawnStopObject;
-var __camVtolExtras;
+var __camVtolDataSystem;
 //////////globals vars end
 
 // A hack to make sure we do not put this variable into the savegame. It is

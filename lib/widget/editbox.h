@@ -27,12 +27,13 @@
 #include "widget.h"
 #include "widgbase.h"
 #include "lib/framework/wzstring.h"
+#include <functional>
 
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
 #define WEDBS_INSERT	0x0002		// Insertion editing
 #define WEDBS_OVER		0x0003		// Overwrite editing
-#define WEDBS_MASK		0x000f		// 
+#define WEDBS_MASK		0x000f		//
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
@@ -46,7 +47,8 @@ class W_EDITBOX : public WIDGET
 
 public:
 	W_EDITBOX(W_EDBINIT const *init);
-	W_EDITBOX(WIDGET *parent);
+	W_EDITBOX();
+	~W_EDITBOX();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
 	void simulateClick(W_CONTEXT *psContext, bool silenceClickAudio = false, WIDGET_KEY key = WKEY_PRIMARY);
@@ -55,16 +57,22 @@ public:
 	void focusLost() override;
 	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
+	void geometryChanged() override;
 
 	void setState(unsigned state) override;
 	WzString getString() const override;
 	void setString(WzString string) override;
+	void setPlaceholder(WzString value);
 	void setMaxStringSize(int size);
 
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
 
+	typedef std::function<void (W_EDITBOX&)> OnReturnHandler;
+	void setOnReturnHandler(const OnReturnHandler& func);
+
 	UDWORD		state;						// The current edit box state
 	WzString	aText;						// The text in the edit box
+	WzString	placeholderText;
 	iV_fonts	FontID;
 	int			blinkOffset;				// Cursor should be visible at time blinkOffset.
 	int			maxStringSize;				// max characters string will accept
@@ -91,6 +99,7 @@ private:
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
 	EditBoxDisplayCache displayCache;
 	bool suppressAudioCallback = false;
+	OnReturnHandler	onRetHandler = nullptr;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

@@ -45,7 +45,7 @@ const KINETIC_ALLOYS = [
 const VTOL_WEAPONRY = [
 	"R-Struc-VTOLPad-Upgrade06",
 	"R-Wpn-Bomb05", // plasmite bomb
-	"R-Wpn-Bomb-Accuracy03",
+	"R-Wpn-Bomb-Damage03",
 ];
 const START_COMPONENTS = [
 	"R-Struc-RprFac-Upgrade01",
@@ -74,7 +74,7 @@ const THERMAL_ALLOYS = [
 ];
 const STRUCTURE_DEFENSE_UPGRADES = [
 	"R-Defense-WallUpgrade12",
-	"R-Struc-Materials09",
+	"R-Struc-Materials03",
 ];
 const FLAMER_TECH = [
 	"R-Wpn-Flamer-ROF03",
@@ -99,7 +99,7 @@ function evalResearch(labID, list)
 	{
 		return true;
 	}
-	for (var i = 0, l = list.length; i < l; ++i)
+	for (let i = 0, l = list.length; i < l; ++i)
 	{
 		if (!getResearch(list[i]).done && pursueResearch(lab, list[i]))
 		{
@@ -110,7 +110,7 @@ function evalResearch(labID, list)
 	return false;
 }
 
-function findResearch(tech, labParam)
+function lookForResearch(tech, labParam)
 {
 	if (!countDroid(DROID_CONSTRUCT) || researchDone)
 	{
@@ -125,12 +125,12 @@ function findResearch(tech, labParam)
 	}
 	else
 	{
-		labList = enumStruct(me, RES_LAB_STAT).filter(function(lab) {
-			return (lab.status === BUILT && structureIdle(lab));
-		});
+		labList = enumStruct(me, RES_LAB_STAT).filter((lab) => (
+			lab.status === BUILT && structureIdle(lab)
+		));
 	}
 
-	for (var i = 0, r = labList.length; i < r; ++i)
+	for (let i = 0, r = labList.length; i < r; ++i)
 	{
 		var lab = labList[i];
 		var found = evalResearch(lab.id, FUNDAMENTALS);

@@ -26,8 +26,19 @@
 #define __INCLUDED_SRC_MULTISTATS_H__
 
 #include "lib/netplay/netplay.h"
-#include <3rdparty/json/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 #include <map>
+#include <chrono>
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
+#define WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL "https://wz2100-autohost.net/rating/"
+
+enum RATING_SOURCE {
+	RATING_SOURCE_LOCAL,
+	RATING_SOURCE_HOST
+};
 
 struct PLAYERSTATS
 {
@@ -39,6 +50,7 @@ struct PLAYERSTATS
 
 	uint32_t recentKills = 0;  // score/kills in last game.
 	uint32_t recentScore = 0;
+	uint64_t recentPowerLost = 0;  // power lost in last game (i.e. from droids / structures being killed by other players)
 
 	struct Autorating
 	{
@@ -47,12 +59,15 @@ struct PLAYERSTATS
 
 		bool valid = false;
 		bool dummy = false;
+		bool autohoster = false;
 		uint8_t star[3] = {0, 0, 0};
 		uint8_t medal = 0;
 		uint8_t level = 0;
 		std::string elo;
+		std::string details;
 	};
 	Autorating autorating;
+	RATING_SOURCE autoratingFrom = RATING_SOURCE_HOST;
 
 	EcKey identity;
 };
@@ -67,10 +82,30 @@ void updateMultiStatsWins();
 void updateMultiStatsLoses();
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
+void lookupRatingAsync(uint32_t playerIndex);
 
-std::map<std::string, EcKey::Key> const &getKnownPlayers();
+bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);
+
+void initKnownPlayers();
+void shutdownKnownPlayers();
+bool isLocallyKnownPlayer(std::string const &name, EcKey const &key);
 void addKnownPlayer(std::string const &name, EcKey const &key, bool override = false);
+struct StoredPlayerOptions
+{
+	optional<std::chrono::system_clock::time_point> mutedTime;
+	optional<std::chrono::system_clock::time_point> bannedTime;
+};
+optional<StoredPlayerOptions> getStoredPlayerOptions(std::string const &name, EcKey const &key);
+void storePlayerMuteOption(std::string const &name, EcKey const &key, bool muted);
 
+uint32_t getMultiPlayUnitsKilled(uint32_t player);
+void setMultiPlayUnitsKilled(uint32_t player, uint32_t kills);
+uint32_t getMultiPlayRecentScore(uint32_t player);
+void setMultiPlayRecentScore(uint32_t player, uint32_t score);
 uint32_t getSelectedPlayerUnitsKilled();
+void resetRecentScoreData();
+
+bool saveMultiStatsToJSON(nlohmann::json& json);
+bool loadMultiStatsFromJSON(const nlohmann::json& json);
 
 #endif // __INCLUDED_SRC_MULTISTATS_H__

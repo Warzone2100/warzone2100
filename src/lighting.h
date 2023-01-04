@@ -35,9 +35,9 @@ Vector3f getTheSun();
 
 void processLight(LIGHT *psLight);
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
-void lightValueForTile(UDWORD tileX, UDWORD tileY);
 void doBuildingLights();
-void UpdateFogDistance(float distance);
+void updateFogDistance(float distance);
+void setDefaultFogColour();
 void calcDroidIllumination(DROID *psDroid);
 
 #endif // __INCLUDED_SRC_LIGHTNING_H__

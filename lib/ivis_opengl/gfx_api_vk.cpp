@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2019  Warzone 2100 Project
+	Copyright (C) 2017-2022  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,12 +41,16 @@
 
 #include "gfx_api_vk.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wzapp.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
 #include <algorithm>
 #include <set>
 #include <unordered_set>
 #include <map>
+#include <limits>
+#include <chrono>
+#include <thread>
 
 // Fix #define MemoryBarrier coming from winnt.h
 #undef MemoryBarrier
@@ -55,6 +59,7 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
 #endif
 
+const uint32_t minSupportedVulkanVersion = VK_API_VERSION_1_0;
 #if defined(DEBUG)
 // For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
 const uint32_t maxRequestableInstanceVulkanVersion = VK_API_VERSION_1_0;
@@ -68,7 +73,10 @@ const size_t MAX_FRAMES_IN_FLIGHT = 2;
 // Vulkan version where extension is promoted to core; extension name
 #define VK_NOT_PROMOTED_TO_CORE_YET 0
 const std::vector<std::tuple<uint32_t, const char*>> optionalInstanceExtensions = {
-	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME }	// used for Vulkan info output
+	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME },	// used for Vulkan info output
+#if defined(VK_KHR_portability_enumeration)
+	{ VK_NOT_PROMOTED_TO_CORE_YET , VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME}
+#endif
 };
 
 const std::vector<const char*> deviceExtensions = {
@@ -77,7 +85,8 @@ const std::vector<const char*> deviceExtensions = {
 
 const std::vector<const char*> optionalDeviceExtensions = {
 	VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME,
-	VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME
+	VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
+	"VK_KHR_portability_subset" // According to VUID-VkDeviceCreateInfo-pProperties-04451, if device supports this extension it *must* be enabled
 };
 
 const std::vector<vk::Format> supportedDepthFormats = {
@@ -90,12 +99,17 @@ const std::vector<const char*> validationLayers = {
 };
 
 const std::vector<const char*> debugAdditionalExtensions = {
-	VK_EXT_DEBUG_REPORT_EXTENSION_NAME
+	VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
+	VK_EXT_DEBUG_REPORT_EXTENSION_NAME // old, deprecated extension
 };
+
+// See: https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#fundamentals-validusage-versions
+#define VK_VERSION_GREATER_THAN_OR_EQUAL(a, b) \
+	( ( VK_VERSION_MAJOR(a) > VK_VERSION_MAJOR(b) ) || ( ( VK_VERSION_MAJOR(a) == VK_VERSION_MAJOR(b) ) && ( VK_VERSION_MINOR(a) >= VK_VERSION_MINOR(b) ) ) )
 
 const uint32_t minRequired_DescriptorSetUniformBuffers = 1;
 const uint32_t minRequired_DescriptorSetUniformBuffersDynamic = 1;
-const uint32_t minRequired_BoundDescriptorSets = 2;
+const uint32_t minRequired_BoundDescriptorSets = 4;
 const uint32_t minRequired_Viewports = 1;
 const uint32_t minRequired_ColorAttachments = 1;
 
@@ -108,7 +122,7 @@ void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
 	{
 		// Failed to set environment variable
 		DWORD lastError = GetLastError();
-		debug(LOG_ERROR, "SetEnvironmentVariableW failed with error: %d", lastError);
+		debug(LOG_ERROR, "SetEnvironmentVariableW failed with error: %lu", lastError);
 	}
 }
 #else
@@ -127,7 +141,12 @@ void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
 const std::vector<std::pair<_vkl_env_text_type, _vkl_env_text_type>> vulkan_implicit_layer_environment_variables = {
 	{_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_overlay_1"), _vkl_env_text("1")}
 	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1")}
+	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1")} // avoid crashes caused by this layer
 };
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+static std::unordered_set<const VkTexture*> debugLiveTextures;
+#endif
 
 
 // MARK: General helper functions
@@ -181,17 +200,37 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	return -1;
 }
 
+[[noreturn]] static void handleUnrecoverableError(const vk::Result& reason)
+{
+	if (reason == vk::Result::eErrorDeviceLost)
+	{
+		// FUTURE TODO: Output a bunch more debugging info to the debug log?
+	}
+	// Display a message and prompt the user to try a different graphics backend next time
+	wzPromptToChangeGfxBackendOnFailure("Failed with error: " + vk::to_string(reason));
+	abort();
+}
+
+bool checkFormatSupport(const vk::PhysicalDevice& physicalDevice, vk::Format format, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	vk::FormatProperties props;
+	physicalDevice.getFormatProperties(format, &props, vkDynLoader);
+
+	if (tiling == vk::ImageTiling::eLinear && (props.linearTilingFeatures & features) == features)
+	{
+		return true;
+	}
+	else if (tiling == vk::ImageTiling::eOptimal && (props.optimalTilingFeatures & features) == features)
+	{
+		return true;
+	}
+	return false;
+}
+
 vk::Format findSupportedFormat(const vk::PhysicalDevice& physicalDevice, const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const vk::DispatchLoaderDynamic& vkDynLoader) {
 	for (vk::Format format : candidates)
 	{
-		vk::FormatProperties props;
-		physicalDevice.getFormatProperties(format, &props, vkDynLoader);
-
-		if (tiling == vk::ImageTiling::eLinear && (props.linearTilingFeatures & features) == features)
-		{
-			return format;
-		}
-		else if (tiling == vk::ImageTiling::eOptimal && (props.optimalTilingFeatures & features) == features)
+		if (checkFormatSupport(physicalDevice, format, tiling, features, vkDynLoader))
 		{
 			return format;
 		}
@@ -279,16 +318,23 @@ std::vector<const char*> findSupportedDeviceExtensions(const vk::PhysicalDevice 
 
 bool checkDeviceExtensionSupport(const vk::PhysicalDevice &device, const std::vector<const char*> &desiredExtensions, const vk::DispatchLoaderDynamic &vkDynLoader)
 {
-	const auto availableExtensions = device.enumerateDeviceExtensionProperties(nullptr, vkDynLoader); // TODO: handle thrown error?
+	try {
+		const auto availableExtensions = device.enumerateDeviceExtensionProperties(nullptr, vkDynLoader);
 
-	std::unordered_set<std::string> requiredExtensions(desiredExtensions.begin(), desiredExtensions.end());
+		std::unordered_set<std::string> requiredExtensions(desiredExtensions.begin(), desiredExtensions.end());
 
-	for (const auto& extension : availableExtensions)
-	{
-		requiredExtensions.erase(extension.extensionName);
+		for (const auto& extension : availableExtensions)
+		{
+			requiredExtensions.erase(extension.extensionName);
+		}
+
+		return requiredExtensions.empty();
 	}
-
-	return requiredExtensions.empty();
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_ERROR, "vkEnumerateDeviceExtensionProperties failed with error: %s", e.what());
+	}
+	return false;
 }
 
 bool VkRoot::getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
@@ -475,7 +521,7 @@ void BlockBufferAllocator::allocateNewBlock(uint32_t minimumSize)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		throwResultException( result, "vmaCreateBuffer" );
+		vk::throwResultException( result, "vmaCreateBuffer" );
 	}
 
 	if (autoMap)
@@ -620,6 +666,9 @@ void BlockBufferAllocator::clean()
 
 // MARK: perFrameResources_t
 
+constexpr uint32_t descriptorPoolMaxSetsDefault = 10000;
+constexpr uint32_t descriptorPoolSizeDescriptorCountDefault = 10000;
+
 perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader)
 	: dev(_dev)
 	, allocator(allocator)
@@ -628,18 +677,9 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 	, uniformBufferAllocator(allocator, 1024 * 1024, vk::BufferUsageFlagBits::eUniformBuffer, VMA_MEMORY_USAGE_CPU_TO_GPU, true)
 	, pVkDynLoader(&vkDynLoader)
 {
-	const auto descriptorSize =
-		std::array<vk::DescriptorPoolSize, 2> {
-		vk::DescriptorPoolSize(vk::DescriptorType::eCombinedImageSampler, 10000),
-		vk::DescriptorPoolSize(vk::DescriptorType::eUniformBufferDynamic, 10000)
-	};
-	descriptorPool = dev.createDescriptorPool(
-		vk::DescriptorPoolCreateInfo()
-		.setMaxSets(10000)
-		.setPPoolSizes(descriptorSize.data())
-		.setPoolSizeCount(static_cast<uint32_t>(descriptorSize.size()))
-		, nullptr, *pVkDynLoader
-	);
+	combinedImageSamplerDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eCombinedImageSampler, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
+	uniformDynamicDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eUniformBufferDynamic, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
+
 	pool = dev.createCommandPool(
 		vk::CommandPoolCreateInfo()
 		.setQueueFamilyIndex(graphicsQueueFamilyIndex)
@@ -660,9 +700,56 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 		vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled),
 		nullptr, *pVkDynLoader
 	);
+}
 
-	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
-	renderFinishedSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
+perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescriptorPool(vk::DescriptorType type, uint32_t maxSets, uint32_t descriptorCount)
+{
+	vk::DescriptorPoolSize poolSize(type, descriptorCount);
+
+	return DescriptorPoolDetails(dev.createDescriptorPool(vk::DescriptorPoolCreateInfo()
+			.setMaxSets(maxSets)
+			.setPPoolSizes(&poolSize)
+			.setPoolSizeCount(1)
+			, nullptr, *pVkDynLoader
+		), poolSize, maxSets);
+}
+
+vk::DescriptorPool perFrameResources_t::getDescriptorPool(uint32_t numSets, vk::DescriptorType descriptorType, uint32_t numDescriptors)
+{
+	// Take into account numSets, descriptorType and numDescriptors to return a descriptorPool (allocating a new one if needed)
+	DescriptorPoolsContainer* pPools = nullptr;
+	switch (descriptorType)
+	{
+		case vk::DescriptorType::eCombinedImageSampler:
+			pPools = &combinedImageSamplerDescriptorPools;
+			break;
+		case vk::DescriptorType::eUniformBufferDynamic:
+			pPools = &uniformDynamicDescriptorPools;
+			break;
+		default:
+			debug(LOG_FATAL, "Invalid descriptor type: %s", vk::to_string(descriptorType).c_str());
+			return vk::DescriptorPool();
+	}
+
+	DescriptorPoolDetails* pCurrPool = &pPools->current();
+	if ((pCurrPool->maxSets - pCurrPool->requestedSets < numSets)
+		|| (pCurrPool->size.descriptorCount - pCurrPool->requestedDescriptors < numDescriptors))
+	{
+		// not enough room in the current descriptor pool for this request
+		if (!pPools->nextPool())
+		{
+			// No more existing pools - need to create a new one
+			debug(LOG_INFO, "[%p] Creating new [%zu] descriptor pool of type: %s", (void*)this, pPools->currPool + 1, vk::to_string(descriptorType).c_str());
+			pPools->push_back(createNewDescriptorPool(descriptorType, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
+			pPools->nextPool();
+		}
+		pCurrPool = &pPools->current();
+	}
+
+	pCurrPool->requestedSets += numSets;
+	pCurrPool->requestedDescriptors += numDescriptors;
+
+	return pCurrPool->poolHandle;
 }
 
 void perFrameResources_t::clean()
@@ -693,16 +780,64 @@ void perFrameResources_t::clean()
 perFrameResources_t::~perFrameResources_t()
 {
 	dev.destroyCommandPool(pool, nullptr, *pVkDynLoader);
-	dev.destroyDescriptorPool(descriptorPool, nullptr, *pVkDynLoader);
+	for (const auto& descriptorPoolDetails : combinedImageSamplerDescriptorPools.pools)
+	{
+		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
+	}
+	for (const auto& descriptorPoolDetails : uniformDynamicDescriptorPools.pools)
+	{
+		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
+	}
 	dev.destroyFence(previousSubmission, nullptr, *pVkDynLoader);
-	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
-	dev.destroySemaphore(renderFinishedSemaphore, nullptr, *pVkDynLoader);
 	clean();
+}
+
+void perFrameResources_t::DescriptorPoolsContainer::reset(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	for (auto& descriptorPool : pools)
+	{
+		dev.resetDescriptorPool(descriptorPool.poolHandle, vk::DescriptorPoolResetFlags(), vkDynLoader);
+		descriptorPool.requestedSets = 0;
+		descriptorPool.requestedDescriptors = 0;
+	}
+	currPool = 0;
+}
+
+void perFrameResources_t::resetDescriptorPools()
+{
+	combinedImageSamplerDescriptorPools.reset(dev, *pVkDynLoader);
+	uniformDynamicDescriptorPools.reset(dev, *pVkDynLoader);
 }
 
 perFrameResources_t& buffering_mechanism::get_current_resources()
 {
+	ASSERT(!perFrameResources.empty(), "perFrameResources are not initialized??");
 	return *perFrameResources[currentFrame];
+}
+
+perSwapchainImageResources_t& buffering_mechanism::get_current_swapchain_resources()
+{
+	ASSERT(!perFrameResources.empty(), "perSwapchainImageResources are not initialized??");
+	return *perSwapchainImageResources[currentSwapchainImageResourcesFrame];
+}
+
+bool buffering_mechanism::isInitialized()
+{
+	return !perFrameResources.empty();
+}
+
+perSwapchainImageResources_t::perSwapchainImageResources_t(vk::Device& _dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+	: dev(_dev)
+	, pVkDynLoader(&vkDynLoader)
+{
+	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
+	renderFinishedSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
+}
+
+perSwapchainImageResources_t::~perSwapchainImageResources_t()
+{
+	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
+	dev.destroySemaphore(renderFinishedSemaphore, nullptr, *pVkDynLoader);
 }
 
 // MARK: buffering_mechanism
@@ -710,10 +845,12 @@ perFrameResources_t& buffering_mechanism::get_current_resources()
 void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, size_t swapChainImageCount, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	currentFrame = 0;
+	currentSwapchainImageResourcesFrame = 0;
 
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
 	{
 		perFrameResources.emplace_back(new perFrameResources_t(dev, allocator, graphicsQueueFamilyIndex, vkDynLoader));
+		perSwapchainImageResources.emplace_back(new perSwapchainImageResources_t(dev, vkDynLoader));
 	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
@@ -723,17 +860,23 @@ void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, si
 void buffering_mechanism::destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	perFrameResources.clear();
+	perSwapchainImageResources.clear();
 	currentFrame = 0;
+	currentSwapchainImageResourcesFrame = 0;
 }
 
-void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage)
 {
 	currentFrame = (currentFrame < (perFrameResources.size() - 1)) ? currentFrame + 1 : 0;
+	if (!skipAcquireNewSwapchainImage)
+	{
+		currentSwapchainImageResourcesFrame = (currentSwapchainImageResourcesFrame < (perSwapchainImageResources.size() - 1)) ? currentSwapchainImageResourcesFrame + 1 : 0;
+	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
 	dev.waitForFences(fences, true, -1, vkDynLoader);
 	dev.resetFences(fences, vkDynLoader);
-	dev.resetDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool, vk::DescriptorPoolResetFlags(), vkDynLoader);
+	buffering_mechanism::get_current_resources().resetDescriptorPools();
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
 
 	buffering_mechanism::get_current_resources().clean();
@@ -743,11 +886,13 @@ void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& 
 // MARK: Definitions of statics
 
 std::vector<std::unique_ptr<perFrameResources_t>> buffering_mechanism::perFrameResources;
+std::vector<std::unique_ptr<perSwapchainImageResources_t>> buffering_mechanism::perSwapchainImageResources;
 size_t buffering_mechanism::currentFrame;
+size_t buffering_mechanism::currentSwapchainImageResourcesFrame;
 
 // MARK: Debug Callback
 
-VKAPI_ATTR VkBool32 VKAPI_CALL messageCallback(
+VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugReportCallback(
 	VkDebugReportFlagsEXT flags,
 	VkDebugReportObjectTypeEXT objType,
 	uint64_t srcObject,
@@ -779,27 +924,96 @@ VKAPI_ATTR VkBool32 VKAPI_CALL messageCallback(
 	return false;
 }
 
+VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugUtilsCallback(
+	VkDebugUtilsMessageSeverityFlagBitsEXT           messageSeverity,
+	VkDebugUtilsMessageTypeFlagsEXT                  messageTypes,
+	const VkDebugUtilsMessengerCallbackDataEXT*      pCallbackData,
+	void*                                            pUserData)
+{
+	std::stringstream buf;
+	code_part part = LOG_3D;
+	bool logFatal = false;
+	if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
+		buf << "ERROR: ";
+		part = LOG_ERROR;
+	}
+	else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+		buf << "WARNING: ";
+		part = LOG_INFO; // make sure these are logged for now (since neither LOG_3D nor LOG_WARN are enabled by default)
+	}
+
+	if (messageTypes & VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT) {
+		buf << "[PERF] ";
+	}
+	else if (messageTypes & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT) {
+		buf << "[VALIDATION] ";
+		logFatal = true;
+	}
+
+	if (pCallbackData)
+	{
+		if (pCallbackData->pMessageIdName != nullptr)
+		{
+			buf << "[" << pCallbackData->pMessageIdName << "] ";
+		}
+		buf << "Code " << pCallbackData->messageIdNumber << " : ";
+		if (pCallbackData->pMessage != nullptr)
+		{
+			buf << pCallbackData->pMessage;
+		}
+		else
+		{
+			buf << "< NULL MESSAGE? >";
+		}
+
+		if (pCallbackData->objectCount > 0)
+		{
+			buf << std::endl;
+			for (uint32_t i = 0; i < pCallbackData->objectCount; ++i)
+			{
+				const auto& objectInfo = pCallbackData->pObjects[i];
+				buf << "\t - [" << i << "]: " << vk::to_string(static_cast<vk::ObjectType>(objectInfo.objectType)) << " 0x" << std::hex << objectInfo.objectHandle << std::dec;
+				if (objectInfo.pObjectName)
+				{
+					buf << " : \"" << objectInfo.pObjectName << "\"";
+				}
+				buf << std::endl;
+			}
+		}
+	}
+	else
+	{
+		buf << "< no callback data? >";
+	}
+
+	debug((logFatal) ? LOG_FATAL : part, "%s", buf.str().c_str());
+
+	return VK_FALSE;
+}
+
 // MARK: VkPSO
 
 struct shader_infos
 {
-	std::string vertex;
-	std::string fragment;
+	std::string vertexSpv;
+	std::string fragmentSpv;
+	bool specializationConstant_0_mipLoadBias = false;
 };
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
 {
-	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv" }),
-	std::make_pair(SHADER_BUTTON, shader_infos{ "shaders/vk/button.vert.spv", "shaders/vk/button.frag.spv" }),
-	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN, shader_infos{ "shaders/vk/terrain.vert.spv", "shaders/vk/terrain.frag.spv" }),
+	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
+	std::make_pair(SHADER_BUTTON, shader_infos{ "shaders/vk/button.vert.spv", "shaders/vk/button.frag.spv", true }),
+	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
+	std::make_pair(SHADER_TERRAIN, shader_infos{ "shaders/vk/terrain.vert.spv", "shaders/vk/terrain.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
-	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv" }),
+	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv", true }),
 	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv" }),
 	std::make_pair(SHADER_RECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_TEXRECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/texturedrect.frag.spv" }),
 	std::make_pair(SHADER_GFX_COLOUR, shader_infos{ "shaders/vk/gfx_color.vert.spv", "shaders/vk/gfx.frag.spv" }),
 	std::make_pair(SHADER_GFX_TEXT, shader_infos{ "shaders/vk/gfx_text.vert.spv", "shaders/vk/texturedrect.frag.spv" }),
+	std::make_pair(SHADER_SKYBOX, shader_infos{ "shaders/vk/skybox.vert.spv", "shaders/vk/skybox.frag.spv" }),
 	std::make_pair(SHADER_GENERIC_COLOR, shader_infos{ "shaders/vk/generic.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_LINE, shader_infos{ "shaders/vk/line.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_TEXT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/text.frag.spv" })
@@ -809,7 +1023,7 @@ std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
 {
 	auto fp = PHYSFS_openRead(name.c_str());
 	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name.c_str()), name.c_str());
-	assert(fp != nullptr);
+	ASSERT_OR_RETURN({}, fp != nullptr, "Could not open %s", name.c_str());
 
 	const auto filesize = PHYSFS_fileLength(fp);
 	ASSERT_OR_RETURN(std::vector<uint32_t>(), filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<PHYSFS_sint32>::max()), "\"%s\" filesize >= std::numeric_limits<PHYSFS_sint32>::max()", name.c_str());
@@ -825,6 +1039,7 @@ std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
 vk::ShaderModule VkPSO::get_module(const std::string& name, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	const auto tmp = readShaderBuf(name);
+	ASSERT_OR_RETURN(vk::ShaderModule(), tmp.size() > 0, "Failed to read shader: %s", name.c_str());
 	return dev.createShaderModule(
 		vk::ShaderModuleCreateInfo()
 		.setCodeSize(tmp.size() * 4)
@@ -1089,29 +1304,43 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type)
 			.setAddressModeV(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeW(vk::SamplerAddressMode::eRepeat);
 	case gfx_api::sampler_type::anisotropic:
-		return vk::SamplerCreateInfo()
+	{
+		vk::SamplerCreateInfo result = vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eLinear)
 			.setMagFilter(vk::Filter::eLinear)
 			.setMipmapMode(vk::SamplerMipmapMode::eLinear)
-			.setMaxAnisotropy(16.f)
+			.setMaxAnisotropy(std::min<float>(16.f, root->physDeviceProps.limits.maxSamplerAnisotropy))
 			.setAnisotropyEnable(true)
 			.setMinLod(0.f)
-			.setMaxLod(10.f)
+			.setMaxLod(VK_LOD_CLAMP_NONE)
 			.setAddressModeU(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeV(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeW(vk::SamplerAddressMode::eClampToEdge);
+		if (root->lodBiasMethod == VkRoot::LodBiasMethod::SamplerMipLodBias)
+		{
+			result.setMipLodBias(root->mipLodBias.value_or(0.f));
+		}
+		return result;
+	}
 	case gfx_api::sampler_type::anisotropic_repeat:
-		return vk::SamplerCreateInfo()
+	{
+		vk::SamplerCreateInfo result = vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eLinear)
 			.setMagFilter(vk::Filter::eLinear)
 			.setMipmapMode(vk::SamplerMipmapMode::eLinear)
-			.setMaxAnisotropy(16.f)
+			.setMaxAnisotropy(std::min<float>(16.f, root->physDeviceProps.limits.maxSamplerAnisotropy))
 			.setAnisotropyEnable(true)
 			.setMinLod(0.f)
-			.setMaxLod(10.f)
+			.setMaxLod(VK_LOD_CLAMP_NONE)
 			.setAddressModeU(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeV(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeW(vk::SamplerAddressMode::eRepeat);
+		if (root->lodBiasMethod == VkRoot::LodBiasMethod::SamplerMipLodBias)
+		{
+			result.setMipLodBias(root->mipLodBias.value_or(0.f));
+		}
+		return result;
+	}
 	case gfx_api::sampler_type::nearest_clamped:
 		return vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eNearest)
@@ -1154,28 +1383,36 @@ VkPSO::VkPSO(vk::Device _dev,
 	vk::RenderPass rp,
 	const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 	vk::SampleCountFlagBits rasterizationSamples,
-	const vk::DispatchLoaderDynamic& _vkDynLoader
-	) : dev(_dev), pVkDynLoader(&_vkDynLoader), renderpass_compat(renderpass_compat)
+	const vk::DispatchLoaderDynamic& _vkDynLoader,
+	const VkRoot& _root
+	) : dev(_dev), pVkDynLoader(&_vkDynLoader), renderpass_compat(renderpass_compat), root(&_root)
 {
 	const gfx_api::state_description& state_desc = createInfo.state_desc;
 	const SHADER_MODE& shader_mode = createInfo.shader_mode;
 	const gfx_api::primitive_type& primitive = createInfo.primitive;
+	const std::vector<std::type_index>& uniform_blocks = createInfo.uniform_blocks;
 	const std::vector<gfx_api::texture_input>& texture_desc = createInfo.texture_desc;
 	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions = createInfo.attribute_descriptions;
 
-	const auto cbuffer_layout_desc = std::array<vk::DescriptorSetLayoutBinding, 1>{
-		vk::DescriptorSetLayoutBinding()
-			.setBinding(0)
-			.setDescriptorCount(1)
-			.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
-			.setStageFlags(vk::ShaderStageFlagBits::eAllGraphics)
-	};
-	cbuffer_set_layout = dev.createDescriptorSetLayout(
-		vk::DescriptorSetLayoutCreateInfo()
-			.setBindingCount(1)
-			.setPBindings(cbuffer_layout_desc.data())
-		, nullptr, *pVkDynLoader);
+	auto layout_desc = std::vector<vk::DescriptorSetLayout>();
 
+	for (size_t i = 0; i < uniform_blocks.size(); i++)
+	{
+		const auto cbuffer_layout_desc = std::array<vk::DescriptorSetLayoutBinding, 1>{
+			vk::DescriptorSetLayoutBinding()
+				.setBinding(0)
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
+				.setStageFlags(vk::ShaderStageFlagBits::eAllGraphics)
+		};
+		auto set_layout = dev.createDescriptorSetLayout(
+			vk::DescriptorSetLayoutCreateInfo()
+				.setBindingCount(1)
+				.setPBindings(cbuffer_layout_desc.data())
+			, nullptr, *pVkDynLoader);
+		cbuffer_set_layout.push_back(set_layout);
+		layout_desc.push_back(set_layout);
+	}
 
 	auto textures_layout_desc = std::vector<vk::DescriptorSetLayoutBinding>();
 	samplers.reserve(texture_desc.size());
@@ -1197,14 +1434,15 @@ VkPSO::VkPSO(vk::Device _dev,
 			.setBindingCount(static_cast<uint32_t>(textures_layout_desc.size()))
 			.setPBindings(textures_layout_desc.data())
 		, nullptr, *pVkDynLoader);
+	textures_first_set = static_cast<uint32_t>(layout_desc.size()); // Store descriptor set index for textures
+	layout_desc.push_back(textures_set_layout);
 
-	const auto layout_desc = std::array<vk::DescriptorSetLayout, 2>{cbuffer_set_layout, textures_set_layout};
-	static_assert(minRequired_BoundDescriptorSets >= layout_desc.size(), "minRequired_BoundDescriptorSets must be >= layout_desc.size()");
 
-	layout = dev.createPipelineLayout(vk::PipelineLayoutCreateInfo()
+	const auto layoutCreateInfo = vk::PipelineLayoutCreateInfo()
 		.setPSetLayouts(layout_desc.data())
-		.setSetLayoutCount(static_cast<uint32_t>(layout_desc.size()))
-		, nullptr, *pVkDynLoader);
+		.setSetLayoutCount(static_cast<uint32_t>(layout_desc.size()));
+	ASSERT(layoutCreateInfo.setLayoutCount <= limits.maxBoundDescriptorSets, "Pipeline layout set count (%" PRIu32") exceeds limits.maxBoundDescriptorSets (%" PRIu32")", layoutCreateInfo.setLayoutCount, limits.maxBoundDescriptorSets);
+	layout = dev.createPipelineLayout(layoutCreateInfo, nullptr, *pVkDynLoader);
 
 	const auto dynamicStates = std::array<vk::DynamicState, 3>{vk::DynamicState::eScissor, vk::DynamicState::eViewport, vk::DynamicState::eDepthBias};
 	const auto multisampleState = vk::PipelineMultisampleStateCreateInfo()
@@ -1261,9 +1499,24 @@ VkPSO::VkPSO(vk::Device _dev,
 
 	const auto depthStencilState = to_vk(state_desc.depth_mode, state_desc.stencil);
 	const auto rasterizationState = to_vk(state_desc.offset, state_desc.cull);
-	vertexShader = get_module(spv_files.at(shader_mode).vertex, *pVkDynLoader);
-	fragmentShader = get_module(spv_files.at(shader_mode).fragment, *pVkDynLoader);
-	const auto pipelineStages = get_stages(vertexShader, fragmentShader);
+	const auto& shaderInfo = spv_files.at(shader_mode);
+	vertexShader = get_module(shaderInfo.vertexSpv, *pVkDynLoader);
+	fragmentShader = get_module(shaderInfo.fragmentSpv, *pVkDynLoader);
+	auto pipelineStages = get_stages(vertexShader, fragmentShader);
+
+	float cpyMipLodBias = root->mipLodBias.value_or(0.f);
+	vk::SpecializationMapEntry entry ( 0, 0, sizeof(float) );
+	vk::SpecializationInfo spec_info = vk::SpecializationInfo()
+		.setMapEntryCount(1)
+		.setPMapEntries(&entry)
+		.setDataSize(sizeof(float))
+		.setPData(&cpyMipLodBias)
+	;
+	if (root->lodBiasMethod == VkRoot::LodBiasMethod::SpecializationConstant && shaderInfo.specializationConstant_0_mipLoadBias)
+	{
+		ASSERT(pipelineStages[1].pSpecializationInfo == nullptr, "get_stages unexpectedly set pSpecializationInfo - this will overwrite!");
+		pipelineStages[1].setPSpecializationInfo(&spec_info);
+	}
 
 	const auto pso = vk::GraphicsPipelineCreateInfo()
 		.setPColorBlendState(&color_blend_state)
@@ -1287,7 +1540,7 @@ VkPSO::VkPSO(vk::Device _dev,
 			object = std::move(result.value);
 			break;
 		default:
-			throwResultException(result.result, "createGraphicsPipeline");
+			vk::throwResultException(result.result, "createGraphicsPipeline");
 	}
 }
 
@@ -1303,7 +1556,11 @@ VkPSO::~VkPSO()
 		dev.destroySampler(sampler, nullptr, *pVkDynLoader);
 	}
 	samplers.clear();
-	dev.destroyDescriptorSetLayout(cbuffer_set_layout, nullptr, *pVkDynLoader);
+	for (auto& descSetLayout : cbuffer_set_layout)
+	{
+		dev.destroyDescriptorSetLayout(descSetLayout, nullptr, *pVkDynLoader);
+	}
+	cbuffer_set_layout.clear();
 }
 
 // MARK: VkBuf
@@ -1347,7 +1604,7 @@ void VkBuf::allocateBufferObject(const std::size_t& size)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		throwResultException( result, "vmaCreateBuffer" );
+		vk::throwResultException( result, "vmaCreateBuffer" );
 	}
 
 	buffer_size = size;
@@ -1355,8 +1612,16 @@ void VkBuf::allocateBufferObject(const std::size_t& size)
 
 VkBuf::~VkBuf()
 {
-	buffering_mechanism::get_current_resources().buffer_to_delete.emplace_back(std::move(object));
-	buffering_mechanism::get_current_resources().vmamemory_to_free.push_back(allocation);
+	// All buffers must be properly released before gfx_api::context::shutdown()
+	if (buffering_mechanism::isInitialized())
+	{
+		buffering_mechanism::get_current_resources().buffer_to_delete.emplace_back(std::move(object));
+		buffering_mechanism::get_current_resources().vmamemory_to_free.push_back(allocation);
+	}
+//	else
+//	{
+//		// ~VkBuf called too late! - probably after gfx_api::context::shutdown()
+//	}
 }
 
 void VkBuf::upload(const size_t & size, const void * data)
@@ -1408,16 +1673,27 @@ size_t VkTexture::format_size(const gfx_api::pixel_format& format)
 			return 4;
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			return 3;
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			return 2;
+		case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			return 1;
+		// compressed formats
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+			return 3;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+			return 4;
 		default:
-			debug(LOG_FATAL, "Unrecognized pixel format");
+			return 4;
 	}
-	return 0; // silence warning
+	return 4; // silence warning
 }
 
 size_t VkTexture::format_size(const vk::Format& format)
 {
 	switch (format)
 	{
+	case vk::Format::eR8Unorm: return sizeof(uint8_t);
 	case vk::Format::eR8G8B8Unorm: return 3 * sizeof(uint8_t);
 	case vk::Format::eB8G8R8A8Unorm:
 	case vk::Format::eR8G8B8A8Unorm: return 4 * sizeof(uint8_t);
@@ -1427,13 +1703,20 @@ size_t VkTexture::format_size(const vk::Format& format)
 	throw;
 }
 
-VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const vk::Format& _internal_format, const std::string& filename)
+VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& _internal_format, const std::string& filename)
 	: dev(root.dev), internal_format(_internal_format), mipmap_levels(mipmap_count), root(&root)
 {
 	ASSERT(width > 0 && height > 0, "0 width/height textures are unsupported");
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
 	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mipmap_count (%zu) exceeds uint32_t max", mipmap_count);
+	ASSERT(mipmap_count > 0, "mipmap_count must be > 0");
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugName = filename;
+#endif
+
+	vk::Format internal_vk_format = root.get_format(_internal_format);
 
 	auto imageCreateInfo = vk::ImageCreateInfo()
 	.setArrayLayers(1)
@@ -1441,7 +1724,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	.setImageType(vk::ImageType::e2D)
 	.setMipLevels(static_cast<uint32_t>(mipmap_count))
 	.setTiling(vk::ImageTiling::eOptimal)
-	.setFormat(internal_format)
+	.setFormat(internal_vk_format)
 	.setUsage(vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled)
 	.setInitialLayout(vk::ImageLayout::eUndefined)
 	.setSamples(vk::SampleCountFlagBits::e1)
@@ -1454,32 +1737,61 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		throwResultException( result, "vmaCreateImage" );
+		vk::throwResultException( result, "vmaCreateImage" );
+	}
+
+	if (root.debugUtilsExtEnabled)
+	{
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eImage);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImage>(object)));
+		objectNameInfo.setPObjectName(filename.c_str());
+		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
 		.setViewType(vk::ImageViewType::e2D)
-		.setFormat(internal_format)
+		.setFormat(internal_vk_format)
 		.setComponents(vk::ComponentMapping())
 		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_count), 0, 1));
 
 	view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, root.vkDynLoader);
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.insert(this);
+#endif
 }
 
 VkTexture::~VkTexture()
 {
 	// All textures must be properly released before gfx_api::context::shutdown()
-	auto& frameResources = buffering_mechanism::get_current_resources();
-	frameResources.image_view_to_delete.emplace_back(std::move(view));
-	frameResources.image_to_delete.emplace_back(std::move(object));
-	frameResources.vmamemory_to_free.push_back(allocation);
+	if (buffering_mechanism::isInitialized())
+	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		frameResources.image_view_to_delete.emplace_back(std::move(view));
+		frameResources.image_to_delete.emplace_back(std::move(object));
+		frameResources.vmamemory_to_free.push_back(allocation);
+	}
+	else
+	{
+		// ~VkTexture called too late! - probably after gfx_api::context::shutdown()
+		view.release(); // Can't properly destroy this VK object now, but call release() to ensure that vk::Device::destroy isn't called after the device is no longer available
+	}
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.erase(this);
+#endif
 }
 
 void VkTexture::bind() {}
 
-void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& buffer_format, const void* data)
+bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const iV_BaseImage& image)
 {
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 
 	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mip_level (%zu) exceeds uint32_t max", mip_level);
@@ -1490,38 +1802,14 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 
 	size_t dynamicAlignment = std::max(0x4 * format_size(internal_format), static_cast<size_t>(root->physDeviceProps.limits.optimalBufferCopyOffsetAlignment));
 	auto& frameResources = buffering_mechanism::get_current_resources();
-	const size_t stagingBufferSize = width * height * format_size(internal_format);
+	const size_t stagingBufferSize = image.data_size();
 	ASSERT(stagingBufferSize <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "stagingBufferSize (%zu) exceeds uint32_t max", stagingBufferSize);
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(stagingBufferSize), static_cast<uint32_t>(dynamicAlignment));
 
 	auto* mappedMem = reinterpret_cast<uint8_t*>(frameResources.stagingBufferAllocator.mapMemory(stagingMemory));
 	ASSERT(mappedMem != nullptr, "Failed to map memory");
-	auto* srcMem = reinterpret_cast<const uint8_t*>(data);
 
-	if (format_size(buffer_format) == format_size(internal_format))
-	{
-		// fast-path
-		memcpy(mappedMem, data, (width * height * format_size(buffer_format)));
-	}
-	else
-	{
-		for (unsigned row = 0; row < height; row++)
-		{
-			for (unsigned col = 0; col < width; col++)
-			{
-				unsigned byte = 0;
-				for (; byte < format_size(buffer_format); byte++)
-				{
-					const auto& texel = srcMem[(row * width + col) * format_size(buffer_format) + byte];
-					mappedMem[(row * width + col) * format_size(internal_format) + byte] = texel;
-				}
-				for (; byte < format_size(internal_format); byte++)
-				{
-					mappedMem[(row * width + col) * format_size(internal_format) + byte] = 255;
-				}
-			}
-		}
-	}
+	memcpy(mappedMem, image.data(), image.data_size());
 
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
 
@@ -1540,8 +1828,8 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
 			.setBufferOffset(stagingMemory.offset)
-			.setBufferImageHeight(static_cast<uint32_t>(height))
-			.setBufferRowLength(static_cast<uint32_t>(width))
+			.setBufferImageHeight(static_cast<uint32_t>(image.bufferImageHeight()))
+			.setBufferRowLength(static_cast<uint32_t>(image.bufferRowLength()))
 			.setImageOffset(vk::Offset3D(static_cast<uint32_t>(offset_x), static_cast<uint32_t>(offset_y), 0))
 			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 0, 1))
 			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
@@ -1558,80 +1846,25 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 	};
 	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
+
+	return true;
 }
 
-#if defined(__clang__)
-#  pragma clang diagnostic push
-#  pragma clang diagnostic ignored "-Wcast-align"
-#endif
-#if defined(__GNUC__)
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wcast-qual"
-#endif
-
-#include "3rdparty/stb_image_resize.h"
-
-#if defined(__GNUC__)
-#  pragma GCC diagnostic pop
-#endif
-#if defined(__clang__)
-#  pragma clang diagnostic pop
-#endif
-
-void VkTexture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const gfx_api::pixel_format& buffer_format, const void* data)
+bool VkTexture::upload(const size_t& mip_level, const iV_BaseImage& image)
 {
-	// upload initial (full) level
-	upload(0, offset_x, offset_y, width, height, buffer_format, data);
+	return upload_internal(mip_level, 0, 0, image);
+}
 
-	ASSERT(width <= static_cast<size_t>(std::numeric_limits<int>::max()), "width (%zu) exceeds int max", width);
-	ASSERT(height <= static_cast<size_t>(std::numeric_limits<int>::max()), "height (%zu) exceeds int max", height);
-
-	// generate and upload mipmaps
-	const unsigned char * input_pixels = (const unsigned char*)data;
-	void * prev_input_pixels_malloc = nullptr;
-	size_t components = format_size(buffer_format);
-	int input_w = static_cast<int>(width);
-	int input_h = static_cast<int>(height);
-	for (size_t i = 1; i < mipmap_levels; i++)
-	{
-		int output_w = std::max(1, input_w >> 1);
-		int output_h = std::max(1, input_h >> 1);
-
-		unsigned char *output_pixels = (unsigned char *)malloc(output_w * output_h * components);
-		stbir_resize_uint8(input_pixels, input_w, input_h, 0,
-						   output_pixels, output_w, output_h, 0,
-						   static_cast<int>(components));
-//		stbir_resize_uint8_generic(input_pixels, input_w, input_h, 0,
-//								   output_pixels, output_w, output_h, 0,
-//								   components, components == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, STBIR_FLAG_ALPHA_PREMULTIPLIED,
-//								   STBIR_EDGE_CLAMP,
-//								   STBIR_FILTER_MITCHELL,
-//								   STBIR_COLORSPACE_LINEAR,
-//								   nullptr);
-
-		upload(i, offset_x, offset_y, output_w, output_h, buffer_format, (const void*)output_pixels);
-
-		if (prev_input_pixels_malloc)
-		{
-			free(prev_input_pixels_malloc);
-		}
-		input_pixels = output_pixels;
-		prev_input_pixels_malloc = (void *)output_pixels;
-
-		input_w = output_w;
-		input_h = output_h;
-	}
-	if (prev_input_pixels_malloc)
-	{
-		free(prev_input_pixels_malloc);
-	}
+bool VkTexture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+{
+	return upload_internal(mip_level, offset_x, offset_y, image);
 }
 
 unsigned VkTexture::id() { return 0; }
 
 // MARK: VkRoot
 
-VkRoot::VkRoot(bool _debug) : debugLayer(_debug)
+VkRoot::VkRoot(bool _debug) : validationLayer(_debug)
 {
 	debugInfo.setOutputHandler([&](const std::string& output) {
 		addDumpInfo(output.c_str());
@@ -1648,12 +1881,13 @@ VkRoot::~VkRoot()
 }
 
 gfx_api::pipeline_state_object * VkRoot::build_pipeline(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+	const std::vector<std::type_index>& uniform_blocks,
 	const std::vector<gfx_api::texture_input>& texture_desc,
 	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
-	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, texture_desc, attribute_descriptions);
-	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader);
+	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, uniform_blocks, texture_desc, attribute_descriptions);
+	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
 	createdPipelines.emplace_back(createInfo, pipeline);
 	return new VkPSOId(createdPipelines.size() - 1);
 }
@@ -1668,7 +1902,7 @@ void VkRoot::rebuildPipelinesIfNecessary()
 		if (!rp_compat_info->isCompatibleWith(*pipeline.second->renderpass_compat))
 		{
 			delete pipeline.second;
-			pipeline.second = new VkPSO(dev, physDeviceProps.limits, pipeline.first, rp, rp_compat_info, msaaSamples, vkDynLoader);
+			pipeline.second = new VkPSO(dev, physDeviceProps.limits, pipeline.first, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
 		}
 	}
 }
@@ -1760,6 +1994,105 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 	rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
 }
 
+bool VkRoot::setupDebugUtilsCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+{
+	// Verify that the requested extensions included VK_EXT_DEBUG_UTILS_EXTENSION_NAME
+	bool requested_debug_utils_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0);});
+	if (!requested_debug_utils_extension)
+	{
+		return false;
+	}
+
+	CreateDebugUtilsMessenger = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkCreateDebugUtilsMessengerEXT")));
+	if (!CreateDebugUtilsMessenger)
+	{
+		// Failed to obtain vkCreateDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkCreateDebugUtilsMessengerEXT\n");
+		return false;
+	}
+	DestroyDebugUtilsMessenger = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDestroyDebugUtilsMessengerEXT")));
+	if (!DestroyDebugUtilsMessenger)
+	{
+		// Failed to obtain vkDestroyDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkDestroyDebugUtilsMessengerEXT\n");
+		return false;
+	}
+
+	VkDebugUtilsMessengerCreateInfoEXT dbgCreateInfo = {};
+	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+	dbgCreateInfo.flags = 0;
+	dbgCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
+	dbgCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
+	dbgCreateInfo.pfnUserCallback = WZDebugUtilsCallback;
+
+	const VkResult err = CreateDebugUtilsMessenger(
+												   static_cast<VkInstance>(inst),
+												   &dbgCreateInfo,
+												   nullptr,
+												   &debugUtilsCallback);
+	if (err != VK_SUCCESS)
+	{
+		debug(LOG_ERROR, "vkCreateDebugUtilsMessengerEXT failed with error: %d", (int)err);
+		return false;
+	}
+
+	return true;
+}
+
+bool VkRoot::setupDebugReportCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+{
+	// Verify that the requested extensions included VK_EXT_DEBUG_REPORT_EXTENSION_NAME
+	bool requested_debug_report_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_REPORT_EXTENSION_NAME) == 0);});
+	if (!requested_debug_report_extension)
+	{
+		return false;
+	}
+
+	CreateDebugReportCallback = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkCreateDebugReportCallbackEXT")));
+	if (!CreateDebugReportCallback)
+	{
+		// Failed to obtain vkCreateDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkCreateDebugReportCallbackEXT\n");
+		return false;
+	}
+	DestroyDebugReportCallback = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDestroyDebugReportCallbackEXT")));
+	if (!DestroyDebugReportCallback)
+	{
+		// Failed to obtain vkDestroyDebugReportCallbackEXT
+		debug(LOG_INFO, "Could not find symbol: vkDestroyDebugReportCallbackEXT\n");
+		return false;
+	}
+	dbgBreakCallback = reinterpret_cast<PFN_vkDebugReportMessageEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDebugReportMessageEXT")));
+	if (!dbgBreakCallback)
+	{
+		// Failed to obtain vkDebugReportMessageEXT
+		debug(LOG_INFO, "Could not find symbol: vkDebugReportMessageEXT\n");
+		return false;
+	}
+
+	VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
+	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
+	dbgCreateInfo.pfnCallback = WZDebugReportCallback;
+	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
+	VK_DEBUG_REPORT_WARNING_BIT_EXT; // |
+	//VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+
+	const VkResult err = CreateDebugReportCallback(
+												   static_cast<VkInstance>(inst),
+												   &dbgCreateInfo,
+												   nullptr,
+												   &msgCallback);
+	if (err != VK_SUCCESS)
+	{
+		debug(LOG_ERROR, "vkCreateDebugReportCallbackEXT failed with error: %d", (int)err);
+		return false;
+	}
+
+	return true;
+}
+
 // Attempts to create a Vulkan instance (vk::Instance) with the specified extensions and layers
 // If successful, sets the following variable in VkRoot:
 //	- inst (vk::Instance)
@@ -1780,6 +2113,33 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 	  .setPpEnabledExtensionNames(extensions.data())
 	  .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size())
 	);
+
+	bool requesting_debug_utils_extension = std::any_of(extensions.begin(), extensions.end(),
+				[](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0);});
+	if (requesting_debug_utils_extension)
+	{
+		debugUtilsExtEnabled = true;
+
+		// From the VK_EXT_debug_utils docs:
+		// "To capture events that occur while creating or destroying an instance an application can link a VkDebugUtilsMessengerCreateInfoEXT structure to the pNext element of the VkInstanceCreateInfo structure given to vkCreateInstance."
+		instanceDebugUtilsCallbacksInfo = VkDebugUtilsMessengerCreateInfoEXT{};
+		instanceDebugUtilsCallbacksInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		instanceDebugUtilsCallbacksInfo.flags = 0;
+		instanceDebugUtilsCallbacksInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
+		instanceDebugUtilsCallbacksInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT;
+		instanceDebugUtilsCallbacksInfo.pfnUserCallback = WZDebugUtilsCallback;
+		instanceCreateInfo.setPNext(&instanceDebugUtilsCallbacksInfo);
+	}
+
+#if defined(VK_KHR_portability_enumeration)
+	bool requesting_portability_enumeration_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0);});
+	if (requesting_portability_enumeration_extension)
+	{
+		// Must set VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR in flags
+		instanceCreateInfo.setFlags(vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR);
+	}
+#endif
 
 	PFN_vkCreateInstance _vkCreateInstance = reinterpret_cast<PFN_vkCreateInstance>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(nullptr, "vkCreateInstance")));
 	if (!_vkCreateInstance)
@@ -1809,57 +2169,19 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 		return false;
 	}
 
-	// Setup debug layer
-	if (!debugLayer)
+	debugUtilsExtEnabled = requesting_debug_utils_extension;
+
+	// Setup debug callbacks
+	if (!debugCallbacksEnabled)
 		return true;
 
-	// Verify that the requested extensions included VK_EXT_DEBUG_REPORT_EXTENSION_NAME
-	bool requested_debug_report_extension = std::find_if(extensions.begin(), extensions.end(),
-				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_DEBUG_REPORT_EXTENSION_NAME) == 0);}) != extensions.end();
-	if (!requested_debug_report_extension)
+	if (!setupDebugUtilsCallbacks(extensions, _vkGetInstanceProcAddr))
 	{
-		debug(LOG_ERROR, "debugLayer is enabled, but did not request VK_EXT_debug_report - disabling debug report callbacks");
-		return true;
-	}
-
-	CreateDebugReportCallback = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkCreateDebugReportCallbackEXT")));
-	if (!CreateDebugReportCallback)
-	{
-		// Failed to obtain vkCreateDebugReportCallbackEXT
-		debug(LOG_WARNING, "Could not find symbol: vkCreateDebugReportCallbackEXT\n");
-		return true;
-	}
-	DestroyDebugReportCallback = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDestroyDebugReportCallbackEXT")));
-	if (!DestroyDebugReportCallback)
-	{
-		// Failed to obtain vkDestroyDebugReportCallbackEXT
-		debug(LOG_WARNING, "Could not find symbol: vkDestroyDebugReportCallbackEXT\n");
-		return true;
-	}
-	dbgBreakCallback = reinterpret_cast<PFN_vkDebugReportMessageEXT>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(static_cast<VkInstance>(inst), "vkDebugReportMessageEXT")));
-	if (!dbgBreakCallback)
-	{
-		// Failed to obtain vkDebugReportMessageEXT
-		debug(LOG_WARNING, "Could not find symbol: vkDebugReportMessageEXT\n");
-		return true;
-	}
-
-	VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
-	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
-	dbgCreateInfo.pfnCallback = messageCallback;
-	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
-	VK_DEBUG_REPORT_WARNING_BIT_EXT; // |
-	//VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-
-	const VkResult err = CreateDebugReportCallback(
-												   static_cast<VkInstance>(inst),
-												   &dbgCreateInfo,
-												   nullptr,
-												   &msgCallback);
-	if (err != VK_SUCCESS)
-	{
-		debug(LOG_ERROR, "vkCreateDebugReportCallbackEXT failed with error: %d", (int)err);
-		return false;
+		debug(LOG_3D, "Failed to initialize VK_EXT_debug_utils callbacks");
+		if (!setupDebugReportCallbacks(extensions, _vkGetInstanceProcAddr))
+		{
+			debug(LOG_3D, "Failed to initialize VK_EXT_debug_report callbacks");
+		}
 	}
 
 	return true;
@@ -1869,18 +2191,30 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const vk::DispatchLoaderDynamic &vkDynLoader)
 {
 	const auto deviceProperties = device.getProperties(vkDynLoader);
-	const auto deviceFeatures = device.getFeatures(vkDynLoader);
+	vk::PhysicalDeviceFeatures deviceFeatures = device.getFeatures(vkDynLoader);
 
 	int score = 0;
 
 	// Discrete GPUs have a significant performance advantage
 	if (deviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
 	{
-		score += 100000; // picked a number greater than the max seen maxImageDimension2D value: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxImageDimension2D
+		score += 1000000; // picked a number greater than the max seen maxImageDimension2D value: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxImageDimension2D
+	}
+
+	// Integrated GPUs should still be preferred over CPU types
+	if (deviceProperties.deviceType == vk::PhysicalDeviceType::eIntegratedGpu)
+	{
+		score += 100000; // picked a number greater than the max seen maxImageDimension2D value: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxImageDimension2D (but less than the dedicated gpu number above)
 	}
 
 	// Maximum possible size of textures affects graphics quality
 	score += deviceProperties.limits.maxImageDimension2D;
+
+	// Requires: deviceProperties.apiVersion >= minSupportedVulkanVersion
+	if (!VK_VERSION_GREATER_THAN_OR_EQUAL(deviceProperties.apiVersion, minSupportedVulkanVersion))
+	{
+		return 0;
+	}
 
 	// Requires: limits.maxDescriptorSetUniformBuffers >= minRequired_DescriptorSetUniformBuffers
 	if (deviceProperties.limits.maxDescriptorSetUniformBuffers < minRequired_DescriptorSetUniformBuffers)
@@ -1943,10 +2277,25 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	}
 
 	// Check that swapchain is suitable
-	SwapChainSupportDetails swapChainSupportDetails = querySwapChainSupport(device, surface, vkDynLoader);
-	if (swapChainSupportDetails.formats.empty() || swapChainSupportDetails.presentModes.empty())
+	try {
+		SwapChainSupportDetails swapChainSupportDetails = querySwapChainSupport(device, surface, vkDynLoader);
+		if (swapChainSupportDetails.formats.empty() || swapChainSupportDetails.presentModes.empty())
+		{
+			return 0;
+		}
+	}
+	catch (const vk::SystemError&)
 	{
 		return 0;
+	}
+
+	if (deviceProperties.deviceType == vk::PhysicalDeviceType::eCpu && deviceProperties.vendorID == 0x10005)
+	{
+		if (strncmp("llvmpipe", deviceProperties.deviceName, strlen("llvmpipe")) == 0)
+		{
+			// allow llvmpipe, but prioritize it last
+			score = std::min<int>(1, score);
+		}
 	}
 
 	return score;
@@ -1991,12 +2340,23 @@ void VkRoot::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeigh
 	backend_impl->getDrawableSize(&w, &h);
 	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
 	{
-		// Must re-create swapchain
-		debug(LOG_3D, "[2] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+		// Theoretically, one could recreate swapchain here.
+		// However this currently causes issues in practice / Vulkan validation layer errors in certain circumstances / (on certain menu screens?)
+		// Relying on the DrawableSize versus swapchainSize check in flip() seems to work fine and doesn't have the same issues.
 		return;
 	}
 }
+
+std::pair<uint32_t, uint32_t> VkRoot::getDrawableDimensions()
+{
+	return {swapchainSize.width, swapchainSize.height};
+}
+
+bool VkRoot::shouldDraw()
+{
+	return swapchainSize.width > 1 && swapchainSize.height > 1; // check for > 1 here because we use 1,1 in place of a 0,0 swapchain size to avoid other issues
+}
+
 
 void VkRoot::shutdown()
 {
@@ -2028,10 +2388,27 @@ void VkRoot::shutdown()
 		surface = vk::SurfaceKHR();
 	}
 
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	if (!debugLiveTextures.empty())
+	{
+		// Some textures were not properly freed before Vulkan context shutdown
+		for (auto texture : debugLiveTextures)
+		{
+			debug(LOG_ERROR, "Texture resource not cleaned up: %p (name: %s)", (const void*)texture, texture->debugName.c_str());
+		}
+		ASSERT(debugLiveTextures.empty(), "There are %zu textures that were not cleaned up.", debugLiveTextures.size());
+	}
+#endif
+
 	// destroy instance
 	if (inst)
 	{
 		// destroy debug callback
+		if (debugUtilsCallback)
+		{
+			DestroyDebugUtilsMessenger(static_cast<VkInstance>(inst), debugUtilsCallback, nullptr);
+			debugUtilsCallback = 0;
+		}
 		if (msgCallback)
 		{
 			DestroyDebugReportCallback(static_cast<VkInstance>(inst), msgCallback, nullptr);
@@ -2391,7 +2768,15 @@ bool VkRoot::createSwapchain()
 	debug(LOG_3D, "createSwapchain()");
 
 	currentSwapchainIndex = 0;
-	SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice, surface, vkDynLoader);
+	SwapChainSupportDetails swapChainSupport;
+	try {
+		swapChainSupport = querySwapChainSupport(physicalDevice, surface, vkDynLoader);
+	}
+	catch (const vk::SystemError &e)
+	{
+		debug(LOG_ERROR, "Querying swapchain support failed with error: %s", e.what());
+		return false;
+	}
 
 	if (!findBestAvailablePresentModeForSwapMode(swapChainSupport.presentModes, swapMode, presentMode))
 	{
@@ -2479,7 +2864,20 @@ bool VkRoot::createSwapchain()
 	try {
 		swapchain = dev.createSwapchainKHR(createSwapchainInfo, nullptr, vkDynLoader);
 	}
-	catch (vk::SystemError &e)
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+	catch (const vk::InitializationFailedError& e)
+	{
+		debug(LOG_ERROR, "vk::Device::createSwapchainKHR: InitializationFailedError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorInitializationFailed);
+	}
+	catch (const vk::SystemError &e)
 	{
 		debug(LOG_ERROR, "vk::Device::createSwapchainKHR: failed with error: %s", e.what());
 		return false;
@@ -2493,7 +2891,8 @@ bool VkRoot::createSwapchain()
 	// createSwapchainImageViews
 	std::vector<vk::Image> swapchainImages = dev.getSwapchainImagesKHR(swapchain, vkDynLoader);
 	debug(LOG_3D, "Requested swapchain minImageCount: %" PRIu32", received: %zu", swapchainDesiredImageCount, swapchainImages.size());
-	std::transform(swapchainImages.begin(), swapchainImages.end(), std::back_inserter(swapchainImageView),
+	try {
+		std::transform(swapchainImages.begin(), swapchainImages.end(), std::back_inserter(swapchainImageView),
 				   [&](const vk::Image& img) {
 					   return dev.createImageView(
 												  vk::ImageViewCreateInfo()
@@ -2504,52 +2903,102 @@ bool VkRoot::createSwapchain()
 												  .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1))
 												  , nullptr, vkDynLoader);
 				   });
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 	//
 
-	buffering_mechanism::init(dev, allocator, MAX_FRAMES_IN_FLIGHT, queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
+	try {
+		buffering_mechanism::init(dev, allocator, MAX_FRAMES_IN_FLIGHT, queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "buffering_mechanism init: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "buffering_mechanism init: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 
 	// createColorResources
 	vk::Format colorFormat = surfaceFormat.format;
 
-	colorImage = dev.createImage(
-		vk::ImageCreateInfo()
-			.setFormat(colorFormat)
-			.setArrayLayers(1)
-			.setExtent(vk::Extent3D(swapchainSize.width, swapchainSize.height, 1))
-			.setImageType(vk::ImageType::e2D)
-			.setMipLevels(1)
-			.setSamples(msaaSamples)
-			.setTiling(vk::ImageTiling::eOptimal)
-			.setUsage(vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eColorAttachment)
-			.setSharingMode(vk::SharingMode::eExclusive)
-		, nullptr, vkDynLoader
-	);
+	try {
+		colorImage = dev.createImage(
+			vk::ImageCreateInfo()
+				.setFormat(colorFormat)
+				.setArrayLayers(1)
+				.setExtent(vk::Extent3D(swapchainSize.width, swapchainSize.height, 1))
+				.setImageType(vk::ImageType::e2D)
+				.setMipLevels(1)
+				.setSamples(msaaSamples)
+				.setTiling(vk::ImageTiling::eOptimal)
+				.setUsage(vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eColorAttachment)
+				.setSharingMode(vk::SharingMode::eExclusive)
+			, nullptr, vkDynLoader
+		);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImage (colorImage): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImage (colorImage): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 
 	const auto colorImage_memreq = dev.getImageMemoryRequirements(colorImage, vkDynLoader);
 	ASSERT(colorImage_memreq.size > 0, "Attempting to allocate memory of size 0 will fail");
-	colorImageMemory = dev.allocateMemory(
-		vk::MemoryAllocateInfo()
-			.setAllocationSize(colorImage_memreq.size)
-			.setMemoryTypeIndex(findProperties(memprops, colorImage_memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal))
-		, nullptr, vkDynLoader
-	);
+	try {
+		colorImageMemory = dev.allocateMemory(
+			vk::MemoryAllocateInfo()
+				.setAllocationSize(colorImage_memreq.size)
+				.setMemoryTypeIndex(findProperties(memprops, colorImage_memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal))
+			, nullptr, vkDynLoader
+		);
 
-	dev.bindImageMemory(colorImage, colorImageMemory, 0, vkDynLoader);
+		dev.bindImageMemory(colorImage, colorImageMemory, 0, vkDynLoader);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkAllocateMemory / vkBindImageMemory (colorImage): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkAllocateMemory / vkBindImageMemory (colorImage): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 
-	colorImageView = dev.createImageView(
-	   vk::ImageViewCreateInfo()
-		   .setFormat(colorFormat)
-		   .setImage(colorImage)
-		   .setViewType(vk::ImageViewType::e2D)
-		   .setComponents(vk::ComponentMapping())
-		   .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1))
-		, nullptr, vkDynLoader
-	);
+	try {
+		colorImageView = dev.createImageView(
+		   vk::ImageViewCreateInfo()
+			   .setFormat(colorFormat)
+			   .setImage(colorImage)
+			   .setViewType(vk::ImageViewType::e2D)
+			   .setComponents(vk::ComponentMapping())
+			   .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1))
+			, nullptr, vkDynLoader
+		);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView (colorImage): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView (colorImage): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 
 	// createDepthStencilImage
 	vk::Format depthFormat = findDepthFormat(physicalDevice, vkDynLoader);
 
-	depthStencilImage = dev.createImage(
+	try {
+		depthStencilImage = dev.createImage(
 										vk::ImageCreateInfo()
 										.setFormat(depthFormat)
 										.setArrayLayers(1)
@@ -2561,32 +3010,73 @@ bool VkRoot::createSwapchain()
 										.setUsage(vk::ImageUsageFlagBits::eDepthStencilAttachment)
 										.setSharingMode(vk::SharingMode::eExclusive)
 										, nullptr, vkDynLoader);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImage (depthStencilImage): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImage (depthStencilImage): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 
 	const auto memreq = dev.getImageMemoryRequirements(depthStencilImage, vkDynLoader);
-	depthStencilMemory = dev.allocateMemory(
-											vk::MemoryAllocateInfo()
-											.setAllocationSize(memreq.size)
-											.setMemoryTypeIndex(findProperties(memprops, memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal))
-											, nullptr, vkDynLoader);
-	dev.bindImageMemory(depthStencilImage, depthStencilMemory, 0, vkDynLoader);
 
-	depthStencilView = dev.createImageView(
-										   vk::ImageViewCreateInfo()
-										   .setFormat(depthFormat)
-										   .setImage(depthStencilImage)
-										   .setViewType(vk::ImageViewType::e2D)
-										   .setComponents(vk::ComponentMapping())
-										   .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1))
-										   , nullptr, vkDynLoader);
+	try {
+		depthStencilMemory = dev.allocateMemory(
+												vk::MemoryAllocateInfo()
+												.setAllocationSize(memreq.size)
+												.setMemoryTypeIndex(findProperties(memprops, memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal))
+												, nullptr, vkDynLoader);
+		dev.bindImageMemory(depthStencilImage, depthStencilMemory, 0, vkDynLoader);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkAllocateMemory / vkBindImageMemory (depthStencil): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkAllocateMemory / vkBindImageMemory (depthStencil): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+
+	try {
+		depthStencilView = dev.createImageView(
+											   vk::ImageViewCreateInfo()
+											   .setFormat(depthFormat)
+											   .setImage(depthStencilImage)
+											   .setViewType(vk::ImageViewType::e2D)
+											   .setComponents(vk::ComponentMapping())
+											   .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1))
+											   , nullptr, vkDynLoader);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView (depthStencil): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateImageView (depthStencil): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 	//
 
 	setupSwapchainImages();
 
-	createDefaultRenderpass(surfaceFormat.format, depthFormat);
+	try {
+		createDefaultRenderpass(surfaceFormat.format, depthFormat);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateRenderPass (default): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateRenderPass (default): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 
 	// createFramebuffers()
 	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
-	std::transform(swapchainImageView.begin(), swapchainImageView.end(), std::back_inserter(fbo),
+	try {
+		std::transform(swapchainImageView.begin(), swapchainImageView.end(), std::back_inserter(fbo),
 				   [&](const vk::ImageView& imageView) {
 					   const auto attachments = (msaaEnabled) ? std::vector<vk::ImageView>{colorImageView, depthStencilView, imageView}
 					   											: std::vector<vk::ImageView>{imageView, depthStencilView};
@@ -2600,6 +3090,15 @@ bool VkRoot::createSwapchain()
 													.setRenderPass(rp)
 													, nullptr, vkDynLoader);
 				   });
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
 
 	auto acquireNextResult = acquireNextSwapchainImage();
 	switch (acquireNextResult)
@@ -2621,39 +3120,39 @@ bool VkRoot::createSwapchain()
 	// create defaultTexture (2x2, all initialized to 0)
 	const size_t defaultTexture_width = 2;
 	const size_t defaultTexture_height = 2;
-	pDefaultTexture = new VkTexture(*this, 1, defaultTexture_width, defaultTexture_height, get_format(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8), "<default_texture>");
+	pDefaultTexture = new VkTexture(*this, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>");
 
-	const size_t defaultTexture_dataSize = defaultTexture_width * defaultTexture_height * VkTexture::format_size(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
-	std::vector<uint8_t> defaultTexture_zeroData(defaultTexture_dataSize, 0);
-	pDefaultTexture->upload(0, 0, 0, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, defaultTexture_zeroData.data());
+	iV_Image defaultTexture;
+	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
+	if (!pDefaultTexture->upload(0, defaultTexture))
+	{
+		debug(LOG_ERROR, "Failed to upload default texture??");
+	}
 
 	startRenderPass();
 
 	return true;
 }
 
-// See: https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#fundamentals-validusage-versions
-#define VK_VERSION_GREATER_THAN_OR_EQUAL(a, b) \
-	( ( VK_VERSION_MAJOR(a) > VK_VERSION_MAJOR(b) ) || ( ( VK_VERSION_MAJOR(a) == VK_VERSION_MAJOR(b) ) && ( VK_VERSION_MINOR(a) >= VK_VERSION_MINOR(b) ) ) )
-
-bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion)
+bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion) const
 {
 	ASSERT(inst, "Instance is null");
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion);
 }
 
-bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion)
+bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const
 {
 	ASSERT(physicalDevice, "Physical device is null");
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion) && VK_VERSION_GREATER_THAN_OR_EQUAL(physDeviceProps.apiVersion, minVulkanAPICoreVersion);
 }
 
-bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode)
+bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> _mipLodBias)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 
 	frameNum = 1;
 	swapMode = requestedSwapMode;
+	mipLodBias = _mipLodBias;
 
 	SetVKImplicitLayerEnvironmentVariables();
 
@@ -2697,8 +3196,23 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 			maxRequestableInstanceVulkanVersion
 	); // cap requestedInstanceApiVersion to maxRequestableInstanceVulkanVersion
 
-	debugInfo.Output_GlobalInstanceExtensions(_vkGetInstanceProcAddr);
-	debugInfo.Output_InstanceLayerProperties(_vkGetInstanceProcAddr);
+	try {
+		debugInfo.Output_GlobalInstanceExtensions(_vkGetInstanceProcAddr);
+	}
+	catch (const vk::SystemError& e)
+	{
+		// catch any weird errors that debugInfo didn't handle
+		debug(LOG_ERROR, "Output_GlobalInstanceExtensions failed: %s", e.what());
+	}
+
+	try {
+		debugInfo.Output_InstanceLayerProperties(_vkGetInstanceProcAddr);
+	}
+	catch (const vk::SystemError& e)
+	{
+		// catch any weird errors that debugInfo didn't handle
+		debug(LOG_ERROR, "Output_InstanceLayerProperties failed: %s", e.what());
+	}
 
 	instanceExtensions.clear();
 
@@ -2711,10 +3225,10 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	layers.clear();
 
-// debugLayer handling
-	if (debugLayer)
+// validationLayer handling
+	if (validationLayer)
 	{
-		// determine if debug layers are available
+		// determine if validation layers are available
 		if (checkValidationLayerSupport(_vkGetInstanceProcAddr))
 		{
 			layers = validationLayers;
@@ -2723,22 +3237,26 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		else
 		{
 			debug(LOG_ERROR, "Vulkan: debug/validation layers requested, but not available - disabling");
-			debugLayer = false;
-		}
-
-		if (debugLayer)
-		{
-			// determine if desired debug extensions are available
-			std::vector<const char*> supportedDebugExtensions;
-			if (!findSupportedInstanceExtensions(debugAdditionalExtensions, supportedDebugExtensions, _vkGetInstanceProcAddr))
-			{
-				debug(LOG_ERROR, "Failed to retrieve supported debug extensions");
-				return false;
-			}
-			instanceExtensions.insert(std::end(instanceExtensions), supportedDebugExtensions.begin(), supportedDebugExtensions.end());
+			validationLayer = false;
 		}
 	}
-// end debugLayer handling
+// end validationLayer handling
+
+	if (validationLayer || debugCallbacksEnabled)
+	{
+		// determine if desired debug extensions are available
+		std::vector<const char*> supportedDebugExtensions;
+		if (findSupportedInstanceExtensions(debugAdditionalExtensions, supportedDebugExtensions, _vkGetInstanceProcAddr) && !supportedDebugExtensions.empty())
+		{
+			instanceExtensions.insert(std::end(instanceExtensions), supportedDebugExtensions.begin(), supportedDebugExtensions.end());
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to retrieve any supported debug extensions");
+			validationLayer = false;
+			debugCallbacksEnabled = false;
+		}
+	}
 
 	// add other optional instance extensions
 	std::vector<const char *> optionalInstanceExtensionsToCheck;
@@ -2785,8 +3303,19 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	// NOTE: From this point on, vkDynLoader *must* be initialized!
 	ASSERT(vkDynLoader.vkGetInstanceProcAddr != nullptr, "vkDynLoader does not appear to be initialized");
+	if (debugUtilsExtEnabled)
+	{
+		ASSERT(vkDynLoader.vkSetDebugUtilsObjectNameEXT != nullptr, "VK_EXT_debug_utils is enabled, but vkSetDebugUtilsObjectNameEXT is null??");
+	}
 
-	debugInfo.Output_PhysicalDevices(inst, appInfo, instanceExtensions, vkDynLoader);
+	try {
+		debugInfo.Output_PhysicalDevices(inst, appInfo, instanceExtensions, vkDynLoader);
+	}
+	catch (const vk::SystemError& e)
+	{
+		// catch any weird errors that debugInfo didn't handle
+		debug(LOG_ERROR, "Output_PhysicalDevices failed: %s", e.what());
+	}
 
 	if (!createSurface())
 	{
@@ -2806,11 +3335,47 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		return false;
 	}
 	physDeviceProps = physicalDevice.getProperties(vkDynLoader);
+	debug(LOG_3D, "Picking device: %s", physDeviceProps.deviceName.data());
+	debug(LOG_3D, "- apiVersion: %s", VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion).c_str());
+	debug(LOG_3D, "- driverVersion: %" PRIu32, physDeviceProps.driverVersion);
+	debug(LOG_3D, "- vendorID: %" PRIu32, physDeviceProps.vendorID);
+	debug(LOG_3D, "- deviceID: %" PRIu32, physDeviceProps.deviceID);
+	debug(LOG_3D, "- deviceType: %s", to_string(physDeviceProps.deviceType).c_str());
 	formattedRendererInfoString = calculateFormattedRendererInfoString(); // must be called after physDeviceProps is populated
 	physDeviceFeatures = physicalDevice.getFeatures(vkDynLoader);
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
-	const auto formatSupport = physicalDevice.getFormatProperties(vk::Format::eR8G8B8Unorm, vkDynLoader);
-	supports_rgb = bool(formatSupport.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage);
+
+	hasPortabilitySubset = checkDeviceExtensionSupport(physicalDevice, {"VK_KHR_portability_subset"}, vkDynLoader);
+#if 0 // this is not a "stable" extension yet
+	if (hasPortabilitySubset && canUseVulkanDeviceAPI((uint32_t)VK_MAKE_VERSION(1, 1, 0))) // vkGetPhysicalDeviceFeatures2 is core Vulkan 1.1+
+	{
+		vk::StructureChain<vk::PhysicalDeviceFeatures2, vk::PhysicalDevicePortabilitySubsetFeaturesKHR> features2;
+		physicalDevice.getFeatures2(&features2.get(), vkDynLoader);
+		physDevicePortabilitySubsetFeatures = features2.get<vk::PhysicalDevicePortabilitySubsetFeaturesKHR>();
+		debug(LOG_3D, "- samplerMipLodBias: %s", (physDevicePortabilitySubsetFeatures.samplerMipLodBias) ? "true" : "false");
+	}
+	else
+	{
+		physDevicePortabilitySubsetFeatures = vk::PhysicalDevicePortabilitySubsetFeaturesKHR();
+	}
+#endif
+
+	if (!hasPortabilitySubset
+#if 0 // this is not a "stable" extension yet
+		|| physDevicePortabilitySubsetFeatures.samplerMipLodBias
+#endif
+		)
+	{
+		// Use setMipLodBias in vk::SamplerCreateInfo
+		lodBiasMethod = LodBiasMethod::SamplerMipLodBias;
+	}
+	else
+	{
+		// Otherwise, use specialization constants to provide the bias to do it in-shader
+		lodBiasMethod = LodBiasMethod::SpecializationConstant;
+	}
+
+	initPixelFormatsSupport();
 
 	// convert antialiasing to vk::SampleCountFlagBits
 	if (antialiasing >= 64)
@@ -2848,7 +3413,14 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 	debug(LOG_3D, "Using sample count: %s", to_string(msaaSamples).c_str());
 
-	debugInfo.Output_SurfaceInformation(physicalDevice, surface, vkDynLoader);
+	try {
+		debugInfo.Output_SurfaceInformation(physicalDevice, surface, vkDynLoader);
+	}
+	catch (const vk::SystemError& e)
+	{
+		// catch any weird errors that debugInfo didn't handle
+		debug(LOG_ERROR, "Output_SurfaceInformation failed: %s", e.what());
+	}
 
 	getQueueFamiliesInfo();
 
@@ -2873,6 +3445,98 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 
 	return true;
+}
+
+gfx_api::pixel_format_usage::flags VkRoot::getPixelFormatUsageSupport(gfx_api::pixel_format format) const
+{
+	gfx_api::pixel_format_usage::flags retVal = gfx_api::pixel_format_usage::none;
+	ASSERT_OR_RETURN(retVal, physicalDevice, "Physical device is null");
+
+	vk::Format vulkan_format = get_format(format);
+	// TODO: Handle error getting format?
+
+	bool checkTransferDstBit = canUseVulkanDeviceAPI((uint32_t)VK_MAKE_VERSION(1, 1, 0));
+
+	// [sampled_image support]
+	// NOTE:
+	//	- For WZ, the following feature bits are required for sampled_image usage:
+	//		- VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT (of course)
+	//		- VK_FORMAT_FEATURE_BLIT_SRC_BIT (may not technically be needed yet? but is generally available when the former and latter ones are)
+	//		- VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT (needed for many textures - we don't currently differentiate)
+	//	- And if Vulkan >= 1.1, check VK_FORMAT_FEATURE_TRANSFER_DST_BIT to verify we can actually copy from the staging buffer to the image
+	vk::FormatFeatureFlags sampledImageFormatFlags = vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eBlitSrc | vk::FormatFeatureFlagBits::eSampledImageFilterLinear;
+	if (checkTransferDstBit)
+	{
+		sampledImageFormatFlags |= vk::FormatFeatureFlagBits::eTransferDst;
+	}
+	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eOptimal, sampledImageFormatFlags, vkDynLoader))
+	{
+		retVal |= gfx_api::pixel_format_usage::sampled_image;
+	}
+
+	// [storage_image support]
+	//	- Following feature bits are required:
+	//		- VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT (of course)
+	//		- TODO: Will we need to check any other bits for WZ's use-cases?
+	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eLinear /* ? */, vk::FormatFeatureFlagBits::eStorageImage, vkDynLoader))
+	{
+		retVal |= gfx_api::pixel_format_usage::storage_image;
+	}
+
+	// [depth_stencil_attachment support]
+	//	- Following feature bits are required:
+	//		- VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment, vkDynLoader))
+	{
+		retVal |= gfx_api::pixel_format_usage::depth_stencil_attachment;
+	}
+
+	return retVal;
+}
+
+void VkRoot::initPixelFormatsSupport()
+{
+	ASSERT(backend_impl, "Backend implementation is null");
+	ASSERT(inst, "Instance is null");
+	ASSERT(physicalDevice, "Physical device is null");
+
+	// set any existing entries to false
+	for (size_t i = 0; i < texture2DFormatsSupport.size(); i++)
+	{
+		texture2DFormatsSupport[i] = gfx_api::pixel_format_usage::none;
+	}
+	texture2DFormatsSupport.resize(static_cast<size_t>(gfx_api::MAX_PIXEL_FORMAT) + 1, gfx_api::pixel_format_usage::none);
+
+	#define PIXEL_FORMAT_SUPPORT_SET(x) \
+	texture2DFormatsSupport[static_cast<size_t>(x)] = getPixelFormatUsageSupport(x);
+
+	// these uncompressed formats should be mandatory
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
+
+	// RGB8 is optional
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+
+	// S3TC
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
+
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+
+	// ETC2
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+
+	// ASTC (LDR)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 }
 
 bool VkRoot::createSurface()
@@ -2959,7 +3623,21 @@ bool VkRoot::createLogicalDevice()
 		.setQueueCreateInfoCount(static_cast<uint32_t>(queueCreateInfos.size()))
 		.setPQueueCreateInfos(queueCreateInfos.data());
 
-	dev = physicalDevice.createDevice(deviceCreateInfo, nullptr, vkDynLoader);
+	try {
+		dev = physicalDevice.createDevice(deviceCreateInfo, nullptr, vkDynLoader);
+	}
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_ERROR, "vk::PhysicalDevice::createDevice: failed with error: %s", e.what());
+		// TODO: Any cleanup here?
+		return false;
+	}
+	catch (std::exception& e)
+	{
+		debug(LOG_ERROR, "vk::PhysicalDevice::createDevice: failed with unexpected exception: %s", e.what());
+		// TODO: Any cleanup here?
+		return false;
+	}
 
 	if(!dev)
 	{
@@ -3144,34 +3822,112 @@ void VkRoot::setupSwapchainImages()
 
 	internalCommandBuffer.end(vkDynLoader);
 
-	graphicsQueue.submit(
-		vk::SubmitInfo()
-		.setCommandBufferCount(1)
-		.setPCommandBuffers(&internalCommandBuffer),
-		vk::Fence()
-		, vkDynLoader);
-	graphicsQueue.waitIdle(vkDynLoader);
+	try {
+		graphicsQueue.submit(
+			vk::SubmitInfo()
+			.setCommandBufferCount(1)
+			.setPCommandBuffers(&internalCommandBuffer),
+			vk::Fence()
+			, vkDynLoader);
+	}
+	catch (const vk::OutOfHostMemoryError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::submit: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::submit: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+	catch (const vk::DeviceLostError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::submit: DeviceLostError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+	}
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_FATAL, "vk::Queue::submit: unhandled error: %s", e.what());
+	}
+
+	try {
+		graphicsQueue.waitIdle(vkDynLoader);
+	}
+	catch (const vk::OutOfHostMemoryError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::waitIdle: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::waitIdle: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+	catch (const vk::DeviceLostError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::waitIdle: DeviceLostError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+	}
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_FATAL, "vk::Queue::waitIdle: unhandled error: %s", e.what());
+	}
 }
 
-vk::Format VkRoot::get_format(const gfx_api::pixel_format& format)
+vk::Format VkRoot::get_format(const gfx_api::pixel_format& format) const
 {
 	switch (format)
 	{
-	case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-		return supports_rgb ? vk::Format::eR8G8B8Unorm : vk::Format::eR8G8B8A8Unorm;
 	case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
 		return vk::Format::eR8G8B8A8Unorm;
 	case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
 		return vk::Format::eB8G8R8A8Unorm;
+	case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+		return vk::Format::eR8G8B8Unorm;
+	case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+		return vk::Format::eR8G8Unorm;
+	case gfx_api::pixel_format::FORMAT_R8_UNORM:
+		return vk::Format::eR8Unorm;
+	case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+		return vk::Format::eBc1RgbUnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+		return vk::Format::eBc2UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+		return vk::Format::eBc3UnormBlock;
+	case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
+		return vk::Format::eBc4UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
+		return vk::Format::eBc5UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+		return vk::Format::eBc7UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+		return vk::Format::eEtc2R8G8B8UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+		return vk::Format::eEtc2R8G8B8A8UnormBlock;
+	case gfx_api::pixel_format::FORMAT_R11_EAC:
+		return vk::Format::eEacR11UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RG11_EAC:
+		return vk::Format::eEacR11G11UnormBlock;
+	case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+		return vk::Format::eAstc4x4UnormBlock;
+	case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
+		// Not supported!
 	default:
 		debug(LOG_FATAL, "Unsupported format: %d", (int)format);
 	}
 	throw;
 }
 
+bool VkRoot::textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+{
+	size_t formatIdx = static_cast<size_t>(format);
+	ASSERT_OR_RETURN(false, formatIdx < texture2DFormatsSupport.size(), "Invalid format index: %zu", formatIdx);
+	return (texture2DFormatsSupport[formatIdx] & usage) == usage;
+}
+
 gfx_api::texture* VkRoot::create_texture(const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename)
 {
-	auto result = new VkTexture(*this, mipmap_count, width, height, get_format(internal_format), filename);
+	auto result = new VkTexture(*this, mipmap_count, width, height, internal_format, filename);
 	return result;
 }
 
@@ -3180,15 +3936,26 @@ gfx_api::buffer* VkRoot::create_buffer_object(const gfx_api::buffer::usage &usag
 	return new VkBuf(dev, usage, *this);
 }
 
-std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(vk::DescriptorSetLayout arg)
+std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSet(vk::DescriptorSetLayout arg, vk::DescriptorType descriptorType, uint32_t numDescriptors)
 {
 	const auto descriptorSet = std::array<vk::DescriptorSetLayout, 1>{ arg };
 	buffering_mechanism::get_current_resources().numalloc++;
 	return dev.allocateDescriptorSets(
 		vk::DescriptorSetAllocateInfo()
-			.setDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool)
+			.setDescriptorPool(buffering_mechanism::get_current_resources().getDescriptorPool(1, descriptorType, numDescriptors))
 			.setPSetLayouts(descriptorSet.data())
 			.setDescriptorSetCount(static_cast<uint32_t>(descriptorSet.size()))
+	, vkDynLoader);
+}
+
+std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(std::vector<vk::DescriptorSetLayout> args, vk::DescriptorType descriptorType, uint32_t numDescriptors)
+{
+	buffering_mechanism::get_current_resources().numalloc++;
+	return dev.allocateDescriptorSets(
+		vk::DescriptorSetAllocateInfo()
+			.setDescriptorPool(buffering_mechanism::get_current_resources().getDescriptorPool(static_cast<uint32_t>(args.size()), descriptorType, numDescriptors))
+			.setPSetLayouts(args.data())
+			.setDescriptorSetCount(static_cast<uint32_t>(args.size()))
 	, vkDynLoader);
 }
 
@@ -3218,12 +3985,13 @@ void VkRoot::unbind_index_buffer(gfx_api::buffer&)
 	// ?
 }
 
-void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_descriptions, const std::vector<gfx_api::texture*>& textures)
+void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(textures.size() <= attribute_descriptions.size(), "Received more textures than expected");
+	ASSERT(textures.size() <= std::numeric_limits<uint32_t>::max(), "Too many textures: %zu", textures.size());
 
-	const auto set = allocateDescriptorSets(currentPSO->textures_set_layout);
+	const auto set = allocateDescriptorSet(currentPSO->textures_set_layout, vk::DescriptorType::eCombinedImageSampler, static_cast<uint32_t>(textures.size()));
 
 	auto image_descriptor = std::vector<vk::DescriptorImageInfo>{};
 	for (auto* texture : textures)
@@ -3248,10 +4016,15 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 		i++;
 	}
 	dev.updateDescriptorSets(write_info, nullptr, vkDynLoader);
-	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, 1, set, nullptr, vkDynLoader);
+	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, currentPSO->textures_first_set, set, nullptr, vkDynLoader);
 }
 
 void VkRoot::set_constants(const void* buffer, const std::size_t& size)
+{
+	set_uniforms_set(0, buffer, size);
+}
+
+void VkRoot::set_uniforms_set(const size_t& uniform_set, const void* buffer, size_t size)
 {
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
@@ -3261,33 +4034,55 @@ void VkRoot::set_constants(const void* buffer, const std::size_t& size)
 
 	const auto bufferInfo = vk::DescriptorBufferInfo(stagingMemory.buffer, 0, size);
 
-	std::vector<vk::DescriptorSet> sets;
+	vk::DescriptorSet descSet;
 	auto perFrame_perPSO_dynamicUniformDescriptorSets = buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.find(currentPSO);
-	if (perFrame_perPSO_dynamicUniformDescriptorSets != buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.end())
+	if ((perFrame_perPSO_dynamicUniformDescriptorSets != buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.end())
+		&& (perFrame_perPSO_dynamicUniformDescriptorSets->second.size() > uniform_set))
 	{
-		auto perFrame_perPSO_dynamicUniformDescriptorSet = perFrame_perPSO_dynamicUniformDescriptorSets->second.find(bufferInfo);
-		if (perFrame_perPSO_dynamicUniformDescriptorSet != perFrame_perPSO_dynamicUniformDescriptorSets->second.end())
+		auto &uniformSetDescriptorSets = perFrame_perPSO_dynamicUniformDescriptorSets->second[uniform_set];
+		if (uniformSetDescriptorSets.has_value() && uniformSetDescriptorSets.value().first == bufferInfo)
 		{
-			sets.push_back(perFrame_perPSO_dynamicUniformDescriptorSet->second);
+			descSet = uniformSetDescriptorSets.value().second;
 		}
 	}
 
-	if (sets.empty())
+	if (!descSet)
 	{
-		sets = allocateDescriptorSets(currentPSO->cbuffer_set_layout);
+		auto sets = allocateDescriptorSet(currentPSO->cbuffer_set_layout[uniform_set], vk::DescriptorType::eUniformBufferDynamic, 1);
+		descSet = sets[0];
 		const auto descriptorWrite = std::array<vk::WriteDescriptorSet, 1>{
 			vk::WriteDescriptorSet()
 				.setDescriptorCount(1)
 				.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
 				.setDstBinding(0)
 				.setPBufferInfo(&bufferInfo)
-				.setDstSet(sets[0])
+				.setDstSet(descSet)
 		};
 		dev.updateDescriptorSets(descriptorWrite, nullptr, vkDynLoader);
-		buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets[currentPSO] = perFrameResources_t::DynamicUniformBufferDescriptorSets({{ bufferInfo, sets[0] }});
+		if (perFrame_perPSO_dynamicUniformDescriptorSets == buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.end())
+		{
+			auto result = buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.insert(perFrameResources_t::PerPSODynamicUniformBufferDescriptorSets::value_type(currentPSO, std::vector<optional<perFrameResources_t::DynamicUniformBufferDescriptorSets>>()));
+			perFrame_perPSO_dynamicUniformDescriptorSets = result.first;
+		}
+		perFrame_perPSO_dynamicUniformDescriptorSets->second.resize(currentPSO->cbuffer_set_layout.size());
+		perFrame_perPSO_dynamicUniformDescriptorSets->second[uniform_set] = perFrameResources_t::DynamicUniformBufferDescriptorSets( bufferInfo, descSet);
 	}
 	const auto dynamicOffsets = std::array<uint32_t, 1> { stagingMemory.offset };
-	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, 0, sets, dynamicOffsets, vkDynLoader);
+	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, static_cast<uint32_t>(uniform_set), descSet, dynamicOffsets, vkDynLoader);
+}
+
+void VkRoot::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
+	for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < currentPSO->cbuffer_set_layout.size(); ++i)
+	{
+		auto* buffer = std::get<0>(uniform_blocks[i]);
+		if (buffer == nullptr)
+		{
+			continue;
+		}
+		set_uniforms_set((first + i), buffer, std::get<1>(uniform_blocks[i]));
+	}
 }
 
 void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notextures*/)
@@ -3306,9 +4101,9 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 {
 	vk::ResultValue<uint32_t> acquireNextImageResult = vk::ResultValue<uint32_t>(vk::Result::eNotReady, 0);
 	try {
-		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
+		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
 	}
-	catch (vk::OutOfDateKHRError&)
+	catch (const vk::OutOfDateKHRError&)
 	{
 		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorOutOfDateKHR - must recreate swapchain");
 		if (createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR))
@@ -3317,7 +4112,7 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 		}
 		return AcquireNextSwapchainImageResult::eUnhandledFailure;
 	}
-	catch (vk::SurfaceLostKHRError&)
+	catch (const vk::SurfaceLostKHRError&)
 	{
 		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
 		// recreate surface + swapchain
@@ -3327,32 +4122,38 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 		}
 		return AcquireNextSwapchainImageResult::eUnhandledFailure;
 	}
-	catch (vk::SystemError& e)
+	catch (const vk::SystemError& e)
 	{
 		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: unhandled error: %s", e.what());
 		return AcquireNextSwapchainImageResult::eUnhandledFailure;
 	}
 	if(acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
 	{
-		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - recreate swapchain");
-		if (createNewSwapchainAndSwapchainSpecificStuff(acquireNextImageResult.result))
-		{
-			return AcquireNextSwapchainImageResult::eRecoveredFromError;
-		}
-		return AcquireNextSwapchainImageResult::eUnhandledFailure;
+		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - should probably recreate swapchain (in the future)");
 	}
 
 	currentSwapchainIndex = acquireNextImageResult.value;
 	return AcquireNextSwapchainImageResult::eSuccess;
 }
 
-void VkRoot::flip(int clearMode)
+void VkRoot::beginRenderPass()
+{
+	if (startedRenderPass)
+	{
+		return; // don't double-start the render pass
+	}
+	startRenderPass();
+}
+
+void VkRoot::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
 
 	currentPSO = nullptr;
 	buffering_mechanism::get_current_resources().cmdDraw.endRenderPass(vkDynLoader);
 	buffering_mechanism::get_current_resources().cmdDraw.end(vkDynLoader);
+
+	startedRenderPass = false;
 
 	// Add memory barrier at end of cmdCopy
 	const auto memoryBarriers = std::array<vk::MemoryBarrier, 1> {
@@ -3372,80 +4173,178 @@ void VkRoot::flip(int clearMode)
 	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.flushAutomappedMemory();
 	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.unmapAutomappedMemory();
 
+	bool mustSkipDrawing = !shouldDraw();
+	bool mustRecreateSwapchain = false;
+	int w, h;
+	backend_impl->getDrawableSize(&w, &h);
+	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
+	{
+		// Ignore graphics instructions this time around (as there are issues on certain drivers like MoltenVK)
+		// but *must* still submit the cmdCopy CommandBuffer
+		mustSkipDrawing = true;
+
+		if (w > 0 || h > 0 || swapchainSize.width > 1 || swapchainSize.height > 1)
+		{
+			// Must re-create swapchain
+			debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - must re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
+			mustRecreateSwapchain = true;
+		}
+	}
+
 	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 2>{buffering_mechanism::get_current_resources().cmdCopy, buffering_mechanism::get_current_resources().cmdDraw}; // copy before render
 	const vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; //vk::PipelineStageFlagBits::eAllCommands;
 
 	auto submitInfo = vk::SubmitInfo()
-		.setWaitSemaphoreCount(1)
-		.setPWaitSemaphores(&buffering_mechanism::get_current_resources().imageAcquireSemaphore)
-		.setPWaitDstStageMask(&waitStage)
-		.setCommandBufferCount(static_cast<uint32_t>(executableCmdBuffer.size()))
+		// if mustSkipDrawing, only submit the cmdCopy buffer
+		.setCommandBufferCount((!mustSkipDrawing) ? static_cast<uint32_t>(executableCmdBuffer.size()) : 1)
 		.setPCommandBuffers(executableCmdBuffer.data());
+
+	if (!mustSkipDrawing)
+	{
+		submitInfo
+			.setWaitSemaphoreCount(1)
+			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore)
+			.setPWaitDstStageMask(&waitStage);
+	}
 
 	auto presentInfo = vk::PresentInfoKHR()
 		.setPSwapchains(&swapchain)
 		.setSwapchainCount(1)
 		.setPImageIndices(&currentSwapchainIndex);
 
-	if (graphicsQueue != presentQueue)
+	if ((graphicsQueue != presentQueue) && !mustSkipDrawing)
 	{
 		// for handling separate graphics and presentation queues
 		submitInfo
 			.setSignalSemaphoreCount(1)
-			.setPSignalSemaphores(&buffering_mechanism::get_current_resources().renderFinishedSemaphore);
+			.setPSignalSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
 
 		// for handling separate graphics and presentation queues
 		presentInfo
 			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_current_resources().renderFinishedSemaphore);
+			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
 	}
 
-	graphicsQueue.submit(submitInfo, buffering_mechanism::get_current_resources().previousSubmission, vkDynLoader);
-
-	vk::Result presentResult;
 	try {
-		presentResult = presentQueue.presentKHR(presentInfo, vkDynLoader);
+		graphicsQueue.submit(submitInfo, buffering_mechanism::get_current_resources().previousSubmission, vkDynLoader);
 	}
-	catch (vk::OutOfDateKHRError&)
+	catch (const vk::OutOfHostMemoryError& e)
 	{
-		debug(LOG_3D, "vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
+		debug(LOG_ERROR, "vk::Queue::submit: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::submit: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+	catch (const vk::DeviceLostError& e)
+	{
+		debug(LOG_ERROR, "vk::Queue::submit: DeviceLostError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+	}
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_FATAL, "vk::Queue::submit: unhandled error: %s", e.what());
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		handleUnrecoverableError(resultErr);
+	}
+
+	if (mustRecreateSwapchain)
+	{
 		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
 		return; // end processing this flip
 	}
-	catch (vk::SurfaceLostKHRError&)
+
+	if (!mustSkipDrawing)
 	{
-		debug(LOG_3D, "vk::Queue::presentKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
-		// recreate surface + swapchain
-		handleSurfaceLost();
-		return; // end processing this flip
-	}
-	catch (vk::SystemError& e)
-	{
-		debug(LOG_ERROR, "vk::Queue::presentKHR: unhandled error: %s", e.what());
-	}
-	if(presentResult == vk::Result::eSuboptimalKHR)
-	{
-		debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
-		createNewSwapchainAndSwapchainSpecificStuff(presentResult);
-		return; // end processing this flip
+		vk::Result presentResult;
+		try {
+			presentResult = presentQueue.presentKHR(presentInfo, vkDynLoader);
+		}
+		catch (const vk::OutOfDateKHRError&)
+		{
+			debug(LOG_3D, "vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
+			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+			return; // end processing this flip
+		}
+		catch (const vk::SurfaceLostKHRError&)
+		{
+			debug(LOG_3D, "vk::Queue::presentKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
+			// recreate surface + swapchain
+			handleSurfaceLost();
+			return; // end processing this flip
+		}
+		catch (const vk::SystemError& e)
+		{
+			debug(LOG_FATAL, "vk::Queue::presentKHR: unhandled error: %s", e.what());
+			presentResult = vk::Result::eErrorUnknown;
+		}
+		if(presentResult == vk::Result::eSuboptimalKHR)
+		{
+			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - should probably recreate swapchain (in the future)", (int)presentResult);
+		}
 	}
 
-	buffering_mechanism::swap(dev, vkDynLoader); // must be called *before* acquireNextSwapchainImage()
-	if (acquireNextSwapchainImage() != AcquireNextSwapchainImageResult::eSuccess)
+	try {
+		buffering_mechanism::swap(dev, vkDynLoader, mustSkipDrawing); // must be called *before* acquireNextSwapchainImage()
+	}
+	catch (const vk::OutOfHostMemoryError& e)
 	{
-		return; // end processing this flip
+		debug(LOG_ERROR, "buffering swap: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e)
+	{
+		debug(LOG_ERROR, "buffering swap: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+	catch (const vk::DeviceLostError& e)
+	{
+		debug(LOG_ERROR, "buffering swap: DeviceLostError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+	}
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_FATAL, "buffering swap: unhandled error: %s", e.what());
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		handleUnrecoverableError(resultErr);
 	}
 
-	int w, h;
-	backend_impl->getDrawableSize(&w, &h);
-	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
+	if (!mustSkipDrawing)
 	{
-		// Must re-create swapchain
-		debug(LOG_3D, "Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-		return; // end processing this flip
+		if (acquireNextSwapchainImage() != AcquireNextSwapchainImageResult::eSuccess)
+		{
+			return; // end processing this flip
+		}
+
+		backend_impl->getDrawableSize(&w, &h);
+		if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
+		{
+			if (w > 0 || h > 0 || swapchainSize.width > 1 || swapchainSize.height > 1)
+			{
+				// Must re-create swapchain
+				debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
+				createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+				return; // end processing this flip
+			}
+		}
 	}
-	startRenderPass();
+	else
+	{
+		// since we skipped drawing, don't bother acquiring a new swapchain image
+		// however, to avoid endless CPU drain, add a delay in here
+		const uint32_t minFrameInterval = 1000 / 120; // limit to approx 120 FPS
+		uint32_t renderPassEndTime = wzGetTicks();
+		const uint32_t frameTime = renderPassEndTime - lastRenderPassEndTime;
+		if (frameTime < minFrameInterval)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(minFrameInterval - frameTime));
+			renderPassEndTime = wzGetTicks();
+		}
+		lastRenderPassEndTime = renderPassEndTime;
+	}
+
 	buffering_mechanism::get_current_resources().cmdCopy.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 }
 
@@ -3473,6 +4372,8 @@ void VkRoot::startRenderPass()
 		vk::Rect2D().setExtent(swapchainSize)
 	};
 	buffering_mechanism::get_current_resources().cmdDraw.setScissor(0, scissors, vkDynLoader);
+
+	startedRenderPass = true;
 }
 
 void VkRoot::set_polygon_offset(const float& offset, const float& slope)
@@ -3501,6 +4402,8 @@ int32_t VkRoot::get_context_value(const gfx_api::context::context_value property
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			// support MSAA: https://vulkan-tutorial.com/Multisampling
 			return static_cast<std::underlying_type<vk::SampleCountFlagBits>::type>(getMaxUsableSampleCount(physDeviceProps));
+		case gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS:
+			return physDeviceProps.limits.maxImageArrayLayers;
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
@@ -3601,6 +4504,11 @@ bool VkRoot::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callb
 const size_t& VkRoot::current_FrameNum() const
 {
 	return frameNum;
+}
+
+bool VkRoot::supportsMipLodBias() const
+{
+	return lodBiasMethod != LodBiasMethod::Unsupported;
 }
 
 #endif // defined(WZ_VULKAN_ENABLED)

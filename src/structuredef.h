@@ -122,6 +122,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 	UDWORD numWeaps;                /*Number of weapons for default */
 	struct WEAPON_STATS *psWeapStat[MAX_WEAPONS];
 	uint64_t flags;
+	bool combinesWithWall;			//If the structure will trigger nearby walls to try combining with it
 
 	unsigned minLimit;		///< lowest value user can set limit to (currently unused)
 	unsigned maxLimit;		///< highest value user can set limit to, LOTS_OF = no limit
@@ -143,7 +144,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 		unsigned resistance;	// resist enemy takeover; 0 = immune
 		unsigned limit;		// current max limit for this type, LOTS_OF = no limit
 	} upgrade[MAX_PLAYERS], base;
-	bool isFavorite;		///< on Favorites list
+	bool isFavorite = false;		///< on Favorites list
 
 	inline Vector2i size(uint16_t direction) const
 	{
@@ -226,13 +227,29 @@ struct POWER_GEN
 
 class DROID_GROUP;
 
+enum class RepairEvents
+{
+	NoEvents,
+	RepairTargetFound,
+	UnitReachedMaxHP,
+	UnitDied,
+	UnitMovedAway
+};
+
+enum class RepairState 
+{
+	Invalid = -1,
+	Idle,
+	Repairing
+};
+
 struct REPAIR_FACILITY
 {
 	BASE_OBJECT *psObj;                /* Object being repaired */
 	FLAG_POSITION *psDeliveryPoint;    /* Place for the repaired droids to assemble at */
 	// The group the droids to be repaired by this facility belong to
 	DROID_GROUP *psGroup;
-	int droidQueue;                    ///< Last count of droid queue for this facility
+	RepairState state;
 };
 
 struct REARM_PAD
@@ -272,7 +289,7 @@ struct STRUCTURE : public BASE_OBJECT
 	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */
 	int                 buildRate;                  ///< Rate that this structure is being built, calculated each tick. Only meaningful if status == SS_BEING_BUILT. If construction hasn't started and build rate is 0, remove the structure.
 	int                 lastBuildRate;              ///< Needed if wanting the buildRate between buildRate being reset to 0 each tick and the trucks calculating it.
-	BASE_OBJECT *psTarget[MAX_WEAPONS];
+	BASE_OBJECT *psTarget[MAX_WEAPONS] = {nullptr};
 #ifdef DEBUG
 	// these are to help tracking down dangling pointers
 	char targetFunc[MAX_WEAPONS][MAX_EVENT_NAME_LEN];
@@ -283,7 +300,7 @@ struct STRUCTURE : public BASE_OBJECT
 	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 	uint32_t prevTime;               ///< Time of structure's previous tick.
 	float foundationDepth;           ///< Depth of structure's foundation
-	uint8_t capacity;                ///< Number of module upgrades
+	uint8_t capacity;                ///< Lame name: current number of module upgrades (*not* maximum nb of upgrades)
 	STRUCT_ANIM_STATES	state;
 	UDWORD lastStateTime;
 	iIMDShape *prebuiltImd;

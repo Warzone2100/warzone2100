@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020  Warzone 2100 Project
+	Copyright (C) 2020-2022  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/crc.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/netsocket.h"
@@ -35,38 +36,28 @@
 #include <chrono>
 #include <functional>
 #include <memory>
+#include <limits>
 #include <discord_rpc.h>
 #include <sodium.h>
 #include <EmbeddedJSONSignature.h>
-#include <optional-lite/optional.hpp>
+#include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
 
-static const char* APPID = "505520727521361941";
+#include <wz-discord-config.h>
+#if !defined(WZ_DISCORD_RPC_APPID)
+# define WZ_DISCORD_RPC_APPID ""
+#endif
+
 static const size_t MAX_DISCORD_STR_LEN = 127; // 128 - 1 (for null terminator)
 
+static bool discordRPCEnabled = false;
 static bool presenceUpdatesEnabled = true;
 static std::unordered_map<std::string, std::chrono::system_clock::time_point> lastDismissedJoinRequestByUserId;
 #define WZ_DISCORD_JOIN_SPAM_INTERVAL_SECS 60
 
 #define JOIN_NOTIFICATION_TAG_PREFIX "joinNotify::"
 #define JOIN_FIND_AND_CONNECT_TAG  std::string(JOIN_NOTIFICATION_TAG_PREFIX "findandconnect")
-
-static std::string b64Tob64UrlSafe(const std::string& inputb64)
-{
-	std::string b64urlsafe = inputb64;
-	std::replace(b64urlsafe.begin(), b64urlsafe.end(), '+', '-');
-	std::replace(b64urlsafe.begin(), b64urlsafe.end(), '/', '_');
-	return b64urlsafe;
-}
-
-static std::string b64UrlSafeTob64(const std::string& inputb64urlsafe)
-{
-	std::string b64 = inputb64urlsafe;
-	std::replace(b64.begin(), b64.end(), '-', '+');
-	std::replace(b64.begin(), b64.end(), '_', '/');
-	return b64;
-}
 
 static void asyncGetDiscordDefaultUserAvatar(const std::string& discord_user_discriminator, const std::function<void (optional<std::vector<unsigned char>> memoryBuffer)>& callback)
 {
@@ -662,6 +653,11 @@ public:
 		updateDiscordPresence();
 	}
 
+	virtual void gameExiting() override
+	{
+		Discord_ClearPresence();
+	}
+
 public:
 
 	void processQueuedPresenceUpdate();
@@ -1085,7 +1081,8 @@ static void handleDiscordJoinRequest(const DiscordUser* request)
 				Discord_Respond(userId.c_str(), DISCORD_REPLY_YES);
 				lastDismissedJoinRequestByUserId.erase(userId);
 			});
-			notification.onDismissed = [userId](const WZ_Notification&, bool){
+			notification.onDismissed = [userId](const WZ_Notification&, WZ_Notification_Dismissal_Reason reason){
+				if (reason == WZ_Notification_Dismissal_Reason::ACTION_BUTTON_CLICK) { return; }
 				Discord_Respond(userId.c_str(), DISCORD_REPLY_NO);
 				// store this to prevent join-spamming
 				lastDismissedJoinRequestByUserId[userId] = std::chrono::system_clock::now();
@@ -1102,8 +1099,13 @@ static void handleDiscordJoinRequest(const DiscordUser* request)
 
 // MARK: - Initializing sub-system
 
-static void discordInit()
+static bool discordInit()
 {
+	if (strlen(WZ_DISCORD_RPC_APPID) == 0)
+	{
+		debug(LOG_WZ, "Insufficient configuration to enable Discord RPC");
+		return false;
+	}
 	DiscordEventHandlers handlers;
 	memset(&handlers, 0, sizeof(handlers));
 	handlers.ready = handleDiscordReady;
@@ -1112,17 +1114,23 @@ static void discordInit()
 	handlers.joinGame = handleDiscordJoin;
 	handlers.spectateGame = handleDiscordSpectate;
 	handlers.joinRequest = handleDiscordJoinRequest;
-	Discord_Initialize(APPID, &handlers, 1, nullptr);
+	Discord_Initialize(WZ_DISCORD_RPC_APPID, &handlers, 1, nullptr);
+	return true;
 }
 
 void discordRPCInitialize()
 {
-	discordInit();
+	if (!discordInit())
+	{
+		discordRPCEnabled = false;
+		return;
+	}
 	if (!discordSink)
 	{
 		discordSink = std::make_shared<DiscordRPCActivitySink>();
 		ActivityManager::instance().addActivitySink(discordSink);
 	}
+	discordRPCEnabled = true;
 }
 
 static uint32_t framesSinceLastProcessedCallbacks = 0;
@@ -1132,6 +1140,11 @@ static uint32_t remainingInitialFastChecks = 20;
 
 void discordRPCPerFrame()
 {
+	if (!discordRPCEnabled)
+	{
+		return;
+	}
+
 	if (discordSink)
 	{
 		discordSink->processQueuedPresenceUpdate();
@@ -1177,6 +1190,11 @@ void discordRPCPerFrame()
 
 void discordRPCShutdown()
 {
+	if (!discordRPCEnabled)
+	{
+		return;
+	}
+	discordRPCEnabled = false;
 	if (discordSink)
 	{
 		ActivityManager::instance().removeActivitySink(discordSink);

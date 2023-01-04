@@ -1,6 +1,14 @@
-${LangFileString} WZWelcomeText "Witaj w instalatorze Warzone 2100!\r\n\r\nTen kreator poprowadzi Cię przez instalację Warzone 2100.\r\n\r\nZaleca się zamknięcie wszystkich innych aplikacji przed kontynuowaniem tej instalacji. Umożliwi to aktualizację odpowiednich plików systemowych bez konieczności ponownego uruchamiania komputera.\r\n\r\nWarzone 2100 jest w 100% darmowy, w pełni otwartym program\r\n\r\nKliknij Dalej, aby kontynuować."
+${LangFileString} WZWelcomeText "Witaj w instalatorze Warzone 2100!\r\n\r\nTen kreator poprowadzi Cię przez instalację Warzone 2100.\r\n\r\nZaleca się zamknięcie wszystkich innych aplikacji przed kontynuowaniem tej instalacji. Umożliwi to aktualizację odpowiednich plików systemowych bez konieczności ponownego uruchamiania komputera.\r\n\r\nWarzone 2100 jest w 100% darmowym, w pełni otwartym programem\r\n\r\nKliknij Dalej, aby kontynuować."
 
 ${LangFileString} WZWelcomeText_Portable "Witaj w przenośnym instalatorze Warzone 2100!\r\n\r\nTen kreator poprowadzi Cię przez instalację przenośnej wersji Warzone 2100.\r\n\r\nTa instalacja jest całkowicie niezależna i możesz odinstalować program w dowolnym momencie usuwając katalog.\r\n\r\nWarzone 2100 jest w 100% darmowym programem! \r\n\r\nKliknij Naciśnij Dalej, aby kontynuować."
+
+${LangFileString} WZWelcomeHomepageLink "Odwiedź naszą oficjalną stronę https://wz2100.net aby pobrać najnowszą wersję."
+
+${LangFileString} WZ_64BIT_AVAILABLE "Dostępna jest 64-bitowa wersja Warzone 2100.$\r$\nAby ją pobrać, odwiedź https://wz2100.net/ $\r$\nCzy mimo to zainstalować 32-bitową wersję?"
+
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "To jest 64-bitowa wersja Warzone 2100.$\r$\nPobierz wersję 32-bitową ze strony https://wz2100.net/ $\r$\nNaciśnij OK, aby wyjść z instalatora."
+
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
 
 ${LangFileString} WZ_GPL_NEXT "Dalej"
 
@@ -30,3 +38,10 @@ ${LangFileString} DESC_SecNLS_WinFonts "Uwzględnij folder Windows Fonts do ści
 
 ${LangFileString} TEXT_SecMSSysLibraries "Ważne DLL Microsoft Runtime"
 ${LangFileString} DESC_SecMSSysLibraries "Pobierz i zainstaluj (lub zaktualizuj) biblioteki systemowe Microsoft Visual C++, które mogą wymagać uruchomienia niektórych komponentów."
+
+${LangFileString} DLTEXT_Downloading "Pobieranie"
+${LangFileString} DLTEXT_SysLibDLFailed "Pobieranie biblioteki systemowej nie powiodło się"
+${LangFileString} DLTEXT_VideosDLFailed "Pobieranie przerywników filmowych nie powiodło się"
+
+${LangFileString} TEXT_PromptRebootNeeded "Aby zakończyć instalację, potrzebny jest restart systemu. Czy chcesz zrestartować system?"
+${LangFileString} TEXT_MsgRebootFailed "Ponowne uruchomienie nie powiodło się. Zrestartuj system ręcznie."

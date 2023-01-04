@@ -159,6 +159,7 @@
       Nathan Reed: warning fixes
 
    REVISIONS
+      0.97 (2020-02-02) fixed warning
       0.96 (2019-03-04) fixed warnings
       0.95 (2017-07-23) fixed warnings
       0.94 (2017-03-18) fixed warnings
@@ -1238,7 +1239,7 @@ static float* stbir__get_decode_buffer(stbir__info* stbir_info)
     return &stbir_info->decode_buffer[stbir_info->horizontal_filter_pixel_margin * stbir_info->channels];
 }
 
-#define STBIR__DECODE(type, colorspace) ((type) * (STBIR_MAX_COLORSPACES) + (colorspace))
+#define STBIR__DECODE(type, colorspace) ((int)(type) * (STBIR_MAX_COLORSPACES) + (int)(colorspace))
 
 static void stbir__decode_scanline(stbir__info* stbir_info, int n)
 {

@@ -44,6 +44,11 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	UDWORD          IMDType;
 	SDWORD          scale = 0;
 
+	if (psResearch == nullptr)
+	{
+		return;
+	}
+
 	pie_SetGeometricOffset(OriginX + 10, OriginY + 10);
 
 	// Rotate round

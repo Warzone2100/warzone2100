@@ -6,29 +6,47 @@
 // Be aware that eventVideoDone will be triggered for each video
 // and will be received by the mission script's eventVideoDone, should it exist.
 
-//;; ## camPlayVideos(videos)
+//;; ## camPlayVideos(data)
 //;;
-//;; If videos is an array, queue up all of them for immediate playing. This
-//;; function will play one video sequence should one be provided. Also,
-//;; should a sound file be in a string (pcvX.ogg)  __camEnqueueVideos() will recognize it
-//;; as a sound to play before a video. Of which is only supported when passed as
-//;; an array.
+//;; Formats for parameter `data`: `{video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}` OR
+//;; `["sound file", {video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}, ...]`
+//;; object property "immediate" is optional since most videos are immediate.
+//;; If videos is an array, queue up all of them for immediate playing.
+//;; This function will play one video sequence should one be provided.
+//;; Also, should a sound file be in a string (`pcvX.ogg`) `__camEnqueueVideos()` will recognize it
+//;; as a sound to play before a video. Of which is only supported when parameter `data` is an array.
 //;;
-function camPlayVideos(videos)
+//;; @param {Object|Object[]} data
+//;; @returns {void}
+//;;
+function camPlayVideos(data)
 {
-	if (videos instanceof Array)
+	if (data instanceof Array)
 	{
-		__camVideoSequences = videos;
+		__camVideoSequences = data;
 		__camEnqueueVideos();
+	}
+	else if (data instanceof Object)
+	{
+		if (!camDef(data.video) || !camIsString(data.video))
+		{
+			camDebug("Problem with video property.");
+			return;
+		}
+		if (!camDef(data.type) || (data.type !== MISS_MSG && data.type !== CAMP_MSG))
+		{
+			camDebug("Video message type was NOT specified. Please specify one.");
+			return;
+		}
+		if (!camDef(data.immediate))
+		{
+			data.immediate = true;
+		}
+		hackAddMessage(data.video, data.type, CAM_HUMAN_PLAYER, data.immediate);
 	}
 	else
 	{
-		if (!camIsString(videos))
-		{
-			camDebug("Non string passed in to play a video. Skipping.");
-			return;
-		}
-		hackAddMessage(videos, MISS_MSG, CAM_HUMAN_PLAYER, true);
+		camDebug("Funky camPlayVideos() parameter!");
 	}
 }
 
@@ -46,21 +64,39 @@ function __camEnqueueVideos()
 	const SOUND_IDENTIFER = ".ogg";
 	var what = __camVideoSequences[0];
 
-	if (!camIsString(what))
-	{
-		camDebug("Non string found in __camVideoSequences. Stopping playback.");
-		return;
-	}
-
 	// Check if this is a sound to play before some sequence.
-	if (what.indexOf(SOUND_IDENTIFER) !== -1)
+	if (typeof what === "string" && what.indexOf(SOUND_IDENTIFER) !== -1)
 	{
 		playSound(what);
 		queue("__camEnqueueVideos", camSecondsToMilliseconds(3.2)); //more than enough for most sounds.
 	}
+	else if (typeof what === "object")
+	{
+		var play = true;
+
+		if (!camDef(what.video) || !camIsString(what.video))
+		{
+			camDebug("Problem with video property.");
+			play = false;
+		}
+		if (!camDef(what.type) || (what.type !== MISS_MSG && what.type !== CAMP_MSG))
+		{
+			camDebug("Video message type was NOT specified. Please specify one.")
+			play = false;
+		}
+		if (!camDef(what.immediate))
+		{
+			what.immediate = true;
+		}
+
+		if (play)
+		{
+			hackAddMessage(what.video, what.type, CAM_HUMAN_PLAYER, what.immediate);
+		}
+	}
 	else
 	{
-		hackAddMessage(what, MISS_MSG, CAM_HUMAN_PLAYER, true);
+		camDebug("Funky camPlayVideos() parameter!");
 	}
 
 	__camVideoSequences.shift();

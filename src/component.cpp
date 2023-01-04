@@ -38,6 +38,7 @@
 #include "projectile.h"
 #include "transporter.h"
 #include "mission.h"
+#include "faction.h"
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -57,7 +58,12 @@ static bool		leftFirst;
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
 bool setPlayerColour(UDWORD player, UDWORD col)
 {
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
+	if (player >= MAX_PLAYERS)
+	{
+		NetPlay.players[player].colour = MAX_PLAYERS;
+		return true;
+	}
+	ASSERT_OR_RETURN(false, col < MAX_PLAYERS, "Bad colour setting");
 	NetPlay.players[player].colour = col;
 	return true;
 }
@@ -158,9 +164,20 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 	return 0;
 }
 
+static void draw_player_3d_shape(uint32_t player_index, iIMDShape *shape, const glm::mat4 &model_view)
+{
+	for (iIMDShape *imd = shape; imd != nullptr; imd = imd->next)
+	{
+		auto faction_shape = getFactionIMD(getPlayerFaction(player_index), imd);
+		int team = getPlayerColour(player_index);
+		const PIELIGHT teamcolour = pal_GetTeamColour(team);
+		pie_Draw3DButton(faction_shape, teamcolour, model_view);
+	}
+}
+
 void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
-	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, setMatrix(Position, Rotation, scale));
+	draw_player_3d_shape(selectedPlayer, IMDShape, setMatrix(Position, Rotation, scale));
 }
 
 static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, const Vector3i *Rotation, const Vector3i *Position, int scale)
@@ -182,9 +199,9 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 
 	if (baseImd != nullptr)
 	{
-		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, baseImd, matrix);
 	}
-	pie_Draw3DShape(strImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
+	draw_player_3d_shape(selectedPlayer, strImd, matrix);
 
 	//and draw the turret
 	if (strImd->nconnectors)
@@ -237,13 +254,13 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 				glm::mat4 localMatrix = glm::translate(glm::vec3(strImd->connectors[i].xzy()));
 				if (mountImd[i] != nullptr)
 				{
-					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix * localMatrix);
+					draw_player_3d_shape(selectedPlayer, mountImd[i], matrix * localMatrix);
 					if (mountImd[i]->nconnectors)
 					{
 						localMatrix *= glm::translate(glm::vec3(mountImd[i]->connectors->xzy()));
 					}
 				}
-				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix * localMatrix);
+				draw_player_3d_shape(selectedPlayer, weaponImd[i], matrix * localMatrix);
 				//we have a droid weapon so do we draw a muzzle flash
 			}
 		}
@@ -257,6 +274,11 @@ void displayStructureButton(STRUCTURE *psStructure, const Vector3i *rotation, co
 
 void displayStructureStatButton(STRUCTURE_STATS *Stats, const Vector3i *rotation, const Vector3i *Position, int scale)
 {
+	ASSERT_OR_RETURN(, Stats != nullptr, "Stats is NULL");
+	if (Stats->pIMD.empty() || Stats->pIMD[0] == nullptr)
+	{
+		return; // error with loaded stats/models - probably due to a mod
+	}
 	sharedStructureButton(Stats, Stats->pIMD[0], rotation, Position, scale);
 }
 
@@ -288,7 +310,7 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 
 	if (MountIMD)
 	{
-		pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, MountIMD, matrix);
 
 		/* translate for weapon mount point */
 		if (MountIMD->nconnectors)
@@ -298,7 +320,7 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 	}
 	if (ComponentIMD)
 	{
-		pie_Draw3DShape(ComponentIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, ComponentIMD, matrix);
 	}
 }
 
@@ -307,6 +329,7 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 //
 void displayResearchButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
+	ASSERT_OR_RETURN(, Stat != nullptr, "Stat is NULL");
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
 
@@ -317,9 +340,9 @@ void displayResearchButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vec
 
 		if (MountIMD)
 		{
-			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
+			draw_player_3d_shape(selectedPlayer, MountIMD, matrix);
 		}
-		pie_Draw3DShape(ResearchIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
+		draw_player_3d_shape(selectedPlayer, ResearchIMD, matrix);
 	}
 }
 
@@ -369,7 +392,9 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 	else if (graphicsTime >= sWeap.lastFired)
 	{
 		// animated muzzle
-		int frame = (graphicsTime - sWeap.lastFired) / flashImd->animInterval;
+		const int DEFAULT_ANIM_INTERVAL = 17; // A lot of PIE files specify 1, which is too small, so set something bigger as a fallback
+		int animRate = MAX(flashImd->animInterval, DEFAULT_ANIM_INTERVAL);
+		int frame = (graphicsTime - sWeap.lastFired) / animRate;
 		if (frame < flashImd->numFrames)
 		{
 			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, viewMatrix * modelMatrix);
@@ -380,7 +405,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
-static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMatrix)
+static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewModelMatrix)
 {
 	iIMDShape *psMoveAnim, *psStillAnim;
 	SDWORD				iConnector;
@@ -393,7 +418,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 
 	glm::mat4 modelMatrix(1.f);
 
-	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC / 4 && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
+	if (psDroid->timeLastHit - graphicsTime < ELEC_DAMAGE_DURATION && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
 		colour = getPlayerColour(rand() % MAX_PLAYERS);
 	}
@@ -512,7 +537,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	if (!bButton)
 	{
 		/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
-		calcScreenCoords(psDroid, viewModelMatrix);
+		calcScreenCoords(psDroid, perspectiveViewModelMatrix);
 	}
 
 	/* set default components transparent */
@@ -733,16 +758,16 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 						//rotate Y
 						localModelMatrix *= glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
-						localModelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f));
-						localModelMatrix *= glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
+						localModelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f));
+						localModelMatrix *= glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
 
 						if (pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140, viewMatrix * localModelMatrix))
 						{
 							didDrawSomething = true;
 						}
 
-//						localModelMatrix *= glm::rotate(UNDEG(player.r.x), glm::vec3(1.f, 0.f, 0.f)); // Not used?
-//						localModelMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 1.f, 0.f)); // Not used?
+//						localModelMatrix *= glm::rotate(UNDEG(playerPos.r.x), glm::vec3(1.f, 0.f, 0.f)); // Not used?
+//						localModelMatrix *= glm::rotate(UNDEG(playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)); // Not used?
 					}
 				}
 				break;
@@ -799,7 +824,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, const Vector3i *
 	Droid.rot = Vector3i(0, 0, 0);
 
 	//draw multi component object as a button object
-	displayCompObj(&Droid, true, matrix);
+	displayCompObj(&Droid, true, matrix, pie_PerspectiveGet() * matrix);
 }
 
 
@@ -818,21 +843,21 @@ void displayComponentButtonObject(DROID *psDroid, const Vector3i *Rotation, cons
 
 	// And render the composite object.
 	//draw multi component object as a button object
-	displayCompObj(psDroid, true, matrix);
+	displayCompObj(psDroid, true, matrix, pie_PerspectiveGet() * matrix);
 }
 
 /* Assumes matrix context is already set */
 // multiple turrets display removed the pointless mountRotation
-void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
+void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	Vector3i position, rotation;
 	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 
-	leftFirst = angleDelta(player.r.y - st.rot.direction) <= 0;
+	leftFirst = angleDelta(playerPos.r.y - st.rot.direction) <= 0;
 
 	/* Get the real position */
-	position.x = st.pos.x - player.p.x;
-	position.z = -(st.pos.y - player.p.z);
+	position.x = st.pos.x - playerPos.p.x;
+	position.z = -(st.pos.y - playerPos.p.z);
 	position.y = st.pos.z;
 
 	if (isTransporter(psDroid))
@@ -852,34 +877,34 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 		glm::rotate(UNDEG(rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
 		glm::rotate(UNDEG(rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
-	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC && psDroid->lastHitWeapon == WSC_ELECTRONIC)
+	if (psDroid->timeLastHit - graphicsTime < ELEC_DAMAGE_DURATION && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{
 		modelMatrix *= objectShimmy((BASE_OBJECT *) psDroid);
 	}
 
 	// now check if the projected circle is within the screen boundaries
-	if(!clipDroidOnScreen(psDroid, viewMatrix * modelMatrix))
+	if(!clipDroidOnScreen(psDroid, perspectiveViewMatrix * modelMatrix))
 	{
 		return;
 	}
 
 	if (psDroid->lastHitWeapon == WSC_EMP && graphicsTime - psDroid->timeLastHit < EMP_DISABLE_TIME)
 	{
-		Vector3i position;
+		Vector3i effectPosition;
 
 		//add an effect on the droid
-		position.x = st.pos.x + DROID_EMP_SPREAD;
-		position.y = st.pos.z + rand() % 8;
-		position.z = st.pos.y + DROID_EMP_SPREAD;
+		effectPosition.x = st.pos.x + DROID_EMP_SPREAD;
+		effectPosition.y = st.pos.z + rand() % 8;
+		effectPosition.z = st.pos.y + DROID_EMP_SPREAD;
 		effectGiveAuxVar(90 + rand() % 20);
-		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_PLASMA, false, nullptr, 0);
+		addEffect(&effectPosition, EFFECT_EXPLOSION, EXPLOSION_TYPE_PLASMA, false, nullptr, 0);
 	}
 
-	if (psDroid->visible[selectedPlayer] == UBYTE_MAX)
+	if (psDroid->visibleForLocalDisplay() == UBYTE_MAX)
 	{
 		//ingame not button object
 		//should render 3 mounted weapons now
-		if (displayCompObj(psDroid, false, viewMatrix * modelMatrix))
+		if (displayCompObj(psDroid, false, viewMatrix * modelMatrix, perspectiveViewMatrix * modelMatrix))
 		{
 			// did draw something to the screen - update the framenumber
 			psDroid->sDisplay.frameNumber = frameGetFrameNumber();
@@ -888,7 +913,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 	else
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
-		if (pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2, viewMatrix * modelMatrix))
+		if (pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visibleForLocalDisplay() / 2, viewMatrix * modelMatrix))
 		{
 			psDroid->sDisplay.frameNumber = frameGetFrameNumber();
 		}
@@ -969,7 +994,7 @@ void	compPersonToBits(DROID *psDroid)
 	iIMDShape	*headImd, *legsImd, *armImd, *bodyImd;
 	UDWORD		col;
 
-	if (!psDroid->visible[selectedPlayer])
+	if (!psDroid->visibleForLocalDisplay()) // display only - should not affect game state
 	{
 		/* We can't see the person or cyborg - so get out */
 		return;

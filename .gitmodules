@@ -28,9 +28,34 @@
 	shallow = true
 [submodule "data/music"]
 	path = data/music
-	url = https://github.com/Warzone2100/data-music.git
+	url = https://github.com/Warzone2100/data-music-opus.git
 	shallow = true
 [submodule "3rdparty/discord-rpc"]
 	path = 3rdparty/discord-rpc
 	url = https://github.com/past-due/discord-rpc.git
+	shallow = true
+[submodule "3rdparty/SQLiteCpp"]
+	path = 3rdparty/SQLiteCpp
+	url = https://github.com/SRombauts/SQLiteCpp.git
+[submodule "3rdparty/readerwriterqueue"]
+	path = 3rdparty/readerwriterqueue
+	url = https://github.com/cameron314/readerwriterqueue.git
+[submodule "3rdparty/fmt"]
+	path = 3rdparty/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "lib/sound/3rdparty/opusfile"]
+	path = lib/sound/3rdparty/opusfile
+	url = https://github.com/xiph/opusfile.git
+[submodule "3rdparty/quickjs-wz"]
+	path = 3rdparty/quickjs-wz
+	url = https://github.com/Warzone2100/quickjs-wz.git
+[submodule "data/fonts"]
+	path = data/fonts
+	url = https://github.com/Warzone2100/data-fonts.git
+[submodule "tools/maptools-cli"]
+	path = tools/maptools-cli
+	url = https://github.com/Warzone2100/maptools-cli.git
+[submodule "3rdparty/basis_universal"]
+	path = 3rdparty/basis_universal
+	url = https://github.com/past-due/basis_universal.git
 	shallow = true

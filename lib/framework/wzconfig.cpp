@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
 #include <physfs.h>
 #include "file.h"
 #include <sstream>
+#include <limits>
+#include "physfs_ext.h"
 
 WzConfig::~WzConfig()
 {
@@ -69,8 +71,8 @@ static nlohmann::json jsonMerge(nlohmann::json original, const nlohmann::json& o
 WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 : mArray(nlohmann::json::array())
 {
-	UDWORD size;
-	char *data;
+	UDWORD size = 0;
+	char *data = nullptr;
 
 	mFilename = name;
 	mStatus = true;
@@ -96,8 +98,11 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	}
 	if (!loadFile(name.toUtf8().c_str(), &data, &size))
 	{
+		mStatus = false;
 		debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().c_str());
+		return;
 	}
+	ASSERT_OR_RETURN(, data != nullptr, "Null data?");
 
 	try {
 		mRoot = nlohmann::json::parse(data, data + size);
@@ -112,14 +117,14 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	ASSERT(!mRoot.is_null(), "JSON document from %s is null", name.toUtf8().c_str());
 	ASSERT(mRoot.is_object(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
 	free(data);
-	char **diffList = PHYSFS_enumerateFiles("diffs");
-	for (char **i = diffList; *i != nullptr; i++)
-	{
-		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().c_str());
+	WZ_PHYSFS_enumerateFiles("diffs", [&](const char *i) -> bool {
+		std::string str(std::string("diffs/") + i + std::string("/") + name.toUtf8().c_str());
 		if (!PHYSFS_exists(str.c_str()))
 		{
-			continue;
+			return true; // continue;
 		}
+		UDWORD size = 0;
+		char *data = nullptr;
 		if (!loadFile(str.c_str(), &data, &size))
 		{
 			debug(LOG_FATAL, "jsondiff file \"%s\" could not be opened!", name.toUtf8().c_str());
@@ -139,8 +144,8 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 		mRoot = jsonMerge(mRoot, tmpJson);
 		free(data);
 		debug(LOG_INFO, "jsondiff \"%s\" loaded and merged", str.c_str());
-	}
-	PHYSFS_freeList(diffList);
+		return true; // continue
+	});
 	debug(LOG_SAVE, "Opening %s", name.toUtf8().c_str());
 	pCurrentObj = &mRoot;
 }
@@ -415,6 +420,10 @@ void WzConfig::beginArray(const WzString &name)
 		}
 		ASSERT(it.value().is_array(), "%s: beginArray() on non-array key \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 		mArray = it.value();
+		if (mArray.size() == 0)
+		{
+			return;
+		}
 		ASSERT(mArray.front().is_object(), "%s: beginArray() on non-object array \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 		pCurrentObj = &mArray.front();
 	}
@@ -489,6 +498,12 @@ void WzConfig::endArray()
 		mObjStack.pop_back();
 	}
 	mArray = nlohmann::json::array();
+}
+
+void WzConfig::setValue(const WzString &key, const nlohmann::json &&value)
+{
+	ASSERT(pCurrentObj != nullptr, "pCurrentObj is null");
+	(*pCurrentObj)[key.toUtf8()] = value;
 }
 
 void WzConfig::setValue(const WzString &key, const nlohmann::json &value)

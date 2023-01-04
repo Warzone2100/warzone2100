@@ -1,6 +1,7 @@
 // Modifications for WZ:
 //	2019-03-25 - Added BeforeLoadModules() and BeforeShowCallstack()
 //	2019-03-25 - Disable warning C4191
+//	2021-01-22 - Add ARM / ARM64 STACKFRAME64 support
 
 /**********************************************************************
  *
@@ -419,7 +420,7 @@ public:
   LPSTR   m_szSymPath;
 
 #pragma pack(push, 8)
-  typedef struct IMAGEHLP_MODULE64_V3
+  typedef struct _tagIMAGEHLP_MODULE64_V3
   {
     DWORD    SizeOfStruct;         // set to sizeof(IMAGEHLP_MODULE64)
     DWORD64  BaseOfImage;          // base load address of module
@@ -446,9 +447,9 @@ public:
     // new elements: 17-Dec-2003
     BOOL SourceIndexed; // pdb supports source server
     BOOL Publics;       // contains public symbols
-  };
+  } IMAGEHLP_MODULE64_V3;
 
-  typedef struct IMAGEHLP_MODULE64_V2
+  typedef struct _tagIMAGEHLP_MODULE64_V2
   {
     DWORD    SizeOfStruct;         // set to sizeof(IMAGEHLP_MODULE64)
     DWORD64  BaseOfImage;          // base load address of module
@@ -460,7 +461,7 @@ public:
     CHAR     ModuleName[32];       // module name
     CHAR     ImageName[256];       // image name
     CHAR     LoadedImageName[256]; // symbol file name
-  };
+  } IMAGEHLP_MODULE64_V2;
 #pragma pack(pop)
 
   // SymCleanup()
@@ -1127,6 +1128,26 @@ BOOL StackWalker::ShowCallstack(HANDLE                    hThread,
   s.AddrBStore.Offset = c.RsBSP;
   s.AddrBStore.Mode = AddrModeFlat;
   s.AddrStack.Offset = c.IntSp;
+  s.AddrStack.Mode = AddrModeFlat;
+#elif defined(_M_ARM64) || defined(_M_ARM)
+#if defined(_M_ARM64)
+  imageType = IMAGE_FILE_MACHINE_ARM64;
+#elif defined(_M_ARM)
+  imageType = IMAGE_FILE_MACHINE_ARM;
+#endif
+  s.AddrPC.Offset = c.Pc;
+  s.AddrPC.Mode = AddrModeFlat;
+#if defined(_M_ARM64)
+#  if defined (NONAMELESSUNION)
+  s.AddrFrame.Offset = c.DUMMYUNIONNAME.DUMMYSTRUCTNAME.Fp;
+#  else
+  s.AddrFrame.Offset = c.Fp;
+#  endif
+#elif defined(_M_ARM)
+  s.AddrFrame.Offset = c.R11;
+#endif
+  s.AddrFrame.Mode = AddrModeFlat;
+  s.AddrStack.Offset = c.Sp;
   s.AddrStack.Mode = AddrModeFlat;
 #else
 #error "Platform not supported!"

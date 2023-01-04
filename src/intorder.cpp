@@ -388,9 +388,12 @@ bool OrderUp = false;
 //
 static bool BuildSelectedDroidList()
 {
-	DROID *psDroid;
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
 		{
@@ -588,10 +591,11 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		}
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	/* Create the basic form */
-	IntFormAnimated *orderForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto orderForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	parent->attach(orderForm);
 	orderForm->id = IDORDER_FORM;
 	orderForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);
@@ -810,11 +814,12 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	// Now we know how many orders there are we can resize the form accordingly.
 	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
-	orderForm->setCalcLayout([newHeight](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
+	orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
 		psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
 	});
 
 	OrderUp = true;
+	setSecondaryWindowUp(true);
 
 	return true;
 }
@@ -909,8 +914,6 @@ void intProcessOrder(UDWORD id)
 		}
 		else
 		{
-			/* Unlock the stats button */
-			widgSetButtonState(psWScreen, objStatID, 0);
 			intMode = INT_OBJECT;
 		}
 		return;
@@ -1149,6 +1152,7 @@ bool intRefreshOrder()
 void intRemoveOrder()
 {
 	widgDelete(psWScreen, IDORDER_CLOSE);
+	setSecondaryWindowUp(false);
 
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDORDER_FORM);
@@ -1168,6 +1172,7 @@ void intRemoveOrderNoAnim()
 {
 	widgDelete(psWScreen, IDORDER_CLOSE);
 	widgDelete(psWScreen, IDORDER_FORM);
+	setSecondaryWindowUp(false);
 	OrderUp = false;
 	SelectedDroids.clear();
 	psSelectedFactory = nullptr;

@@ -3,10 +3,13 @@
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camMarkTiles(label | array of labels)
+//;; ## camMarkTiles(label|labels)
 //;;
 //;; Mark area on the map by label(s), but only if debug mode is enabled.
 //;; Otherwise, remember what to mark in case it is going to be.
+//;;
+//;; @param {string|string[]} label
+//;; @returns {void}
 //;;
 function camMarkTiles(label)
 {
@@ -16,7 +19,7 @@ function camMarkTiles(label)
 	}
 	else
 	{
-		for (var i = 0, l = label.length; i < l; ++i)
+		for (let i = 0, l = label.length; i < l; ++i)
 		{
 			__camMarkedTiles[label[i]] = true;
 		}
@@ -25,9 +28,12 @@ function camMarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; ## camUnmarkTiles(label | array of labels)
+//;; ## camUnmarkTiles(label|labels)
 //;;
 //;; No longer mark area(s) with given label(s) in debug mode.
+//;;
+//;; @param {string|string[]} label
+//;; @returns {void}
 //;;
 function camUnmarkTiles(label)
 {
@@ -37,7 +43,7 @@ function camUnmarkTiles(label)
 	}
 	else
 	{
-		for (var i = 0, l = label.length; i < l; ++i)
+		for (let i = 0, l = label.length; i < l; ++i)
 		{
 			delete __camMarkedTiles[label[i]];
 		}
@@ -46,87 +52,85 @@ function camUnmarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; ## camDebug(string...)
+//;; ## camDebug(...args)
 //;;
-//;; Pretty debug prints - a wrapper around ```debug()```.
-//;; Prints a function call stack and the argument message,
-//;; prefixed with "DEBUG". Only use this function to indicate
-//;; actual bugs in the scenario script, because game shouldn't
-//;; print things when nothing is broken. If you want to keep
-//;; some prints around to make debugging easier without distracting
-//;; the user, use ```camTrace()```.
+//;; Pretty debug prints - a wrapper around `debug()`.
+//;; Prints a function call stack and the argument message, prefixed with `DEBUG`.
+//;; Only use this function to indicate actual bugs in the scenario script,
+//;; because game shouldn't print things when nothing is broken.
+//;; If you want to keep some prints around to make debugging easier
+//;; without distracting the user, use `camTrace()`.
 //;;
-function camDebug()
+//;; @param {...string} args
+//;; @returns {void}
+//;;
+function camDebug(...args)
 {
-	__camGenericDebug("DEBUG",
-	                  debugGetCallerFuncName(),
-	                  arguments,
-	                  true,
-	                  __camBacktrace());
+	__camGenericDebug("DEBUG", debugGetCallerFuncName(), args, true, __camBacktrace());
 }
 
-//;; ## camDebugOnce(string...)
+//;; ## camDebugOnce(...args)
 //;;
-//;; Same as ```camDebug()```, but prints each message only once
-//;; during script lifetime.
+//;; Same as `camDebug()`, but prints each message only once during script lifetime.
 //;;
-function camDebugOnce()
+//;; @param {...string} args
+//;; @returns {void}
+//;;
+function camDebugOnce(...args)
 {
-	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
+	var str = debugGetCallerFuncName() + ": " + args.join(" ");
 	if (camDef(__camDebuggedOnce[str]))
 	{
 		return;
 	}
 	__camDebuggedOnce[str] = true;
-	__camGenericDebug("DEBUG",
-	                  debugGetCallerFuncName(),
-	                  arguments,
-	                  true,
-	                  __camBacktrace());
+	__camGenericDebug("DEBUG", debugGetCallerFuncName(), args, true, __camBacktrace());
 }
 
-//;; ## camTrace(string...)
+//;; ## camTrace(...args)
 //;;
-//;; Same as ```camDebug()```, but only warns in cheat mode.
-//;; Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
-//;; calls in your code for easier debugging.
+//;; Same as `camDebug()`, but only warns in cheat mode.
+//;; Prefixed with `TRACE`. It's safe and natural to keep `camTrace()` calls in your code for easier debugging.
 //;;
-function camTrace()
+//;; @param {...string} args
+//;; @returns {void}
+//;;
+function camTrace(...args)
 {
-	if (!__camCheatMode)
+	if (!camIsCheating())
 	{
 		return;
 	}
-	__camGenericDebug("TRACE",
-	                  debugGetCallerFuncName(),
-	                  arguments);
+	__camGenericDebug("TRACE", debugGetCallerFuncName(), args);
 }
 
-//;; ## camTraceOnce(string...)
+//;; ## camTraceOnce(...args)
 //;;
-//;; Same as ```camTrace()```, but prints each message only once
-//;; during script lifetime.
+//;; Same as `camTrace()`, but prints each message only once during script lifetime.
 //;;
-function camTraceOnce()
+//;; @param {...string} args
+//;; @returns {void}
+//;;
+function camTraceOnce(...args)
 {
-	if (!__camCheatMode)
+	if (!camIsCheating())
 	{
 		return;
 	}
-	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
+	var str = debugGetCallerFuncName() + ": " + args.join(" ");
 	if (camDef(__camTracedOnce[str]))
 	{
 		return;
 	}
 	__camTracedOnce[str] = true;
-	__camGenericDebug("TRACE",
-	                  debugGetCallerFuncName(),
-	                  arguments);
+	__camGenericDebug("TRACE", debugGetCallerFuncName(), args);
 }
 
 //;; ## camIsCheating()
 //;;
 //;; Check if the player is in cheat mode.
+//;;
+//;; @returns {boolean}
 //;;
 function camIsCheating()
 {
@@ -138,9 +142,9 @@ function camIsCheating()
 function __camUpdateMarkedTiles()
 {
 	hackMarkTiles();
-	if (__camCheatMode && camDef(__camMarkedTiles))
+	if (camIsCheating() && camDef(__camMarkedTiles))
 	{
-		for (var label in __camMarkedTiles)
+		for (const label in __camMarkedTiles)
 		{
 			hackMarkTiles(label);
 		}
@@ -154,20 +158,20 @@ function __camLetMeWin()
 	__camGameWon();
 }
 
-function __camGenericDebug(flag, func, args, err, bt)
+function __camGenericDebug(flag, functionName, args, err, backtrace)
 {
-	if (camDef(bt) && bt)
+	if (camDef(backtrace) && backtrace)
 	{
-		for (var i = bt.length - 1; i >= 0; --i)
+		for (let i = backtrace.length - 1; i >= 0; --i)
 		{
-			debug("STACK: from", [bt[i]]);
+			debug("STACK: from", [backtrace[i]]);
 		}
 	}
-	if (!func)
+	if (!functionName)
 	{
-		func = "<anonymous>";
+		functionName = "<anonymous>";
 	}
-	var str = flag + ": " + func + ": " + Array.prototype.join.call(args, " ");
+	var str = flag + ": " + functionName + ": " + Array.prototype.join.call(args, " ");
 	debug(str);
 	if (camDef(err) && err)
 	{

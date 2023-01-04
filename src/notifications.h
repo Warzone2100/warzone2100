@@ -28,6 +28,12 @@
 #include <functional>
 #include <vector>
 
+// forward-declare
+namespace gfx_api
+{
+	struct texture;
+}
+
 class WZ_Notification_Display_Options
 {
 public:
@@ -119,6 +125,7 @@ public:
 	const std::string& imagePath() const { return _imagePath; }
 	const std::vector<unsigned char>& memoryBuffer() const { return _memoryBuffer; }
 	ImageType imageType() const { return _type; }
+	gfx_api::texture* loadImageToTexture() const;
 private:
 	std::string _imagePath;
 	std::vector<unsigned char> _memoryBuffer;
@@ -138,6 +145,15 @@ public:
 public:
 	std::string title;
 	std::function<void (WZ_Notification&)> onAction;
+};
+
+enum class WZ_Notification_Dismissal_Reason {
+	// the user pressed the "Dismiss" button (or dragged the notification upwards)
+	USER_DISMISSED,
+	// the notification was dismissed because the "Action" button was pressed
+	ACTION_BUTTON_CLICK,
+	// the notification was cancelled or dismissed by one of the `cancelOrDismissNotification*()` functions (or similar)
+	PROGRAMMATIC
 };
 
 class WZ_Notification
@@ -164,6 +180,9 @@ public:
 	// (Suggestion: Make sure the PNG is *at least* 72x72 pixels to ensure sharper display on higher resolution screens.)
 	WZ_Notification_Image largeIcon;
 
+	// Whether the notification should be displayed as a modal overlay
+	bool isModal = false;
+
 	// Displays an Action button on the notification which calls the handler when clicked.
 	WZ_Notification_Action action;
 	// See: WZ_Notification_Display_Options
@@ -173,9 +192,9 @@ public:
 	std::string tag;
 	// Called when the notification is initially (fully) displayed
 	std::function<void (const WZ_Notification&)> onDisplay;
-	// Called when the notification is dismissed *without* pressing the "Action" button
-	// (i.e. by pressing the "Dismiss" button or dragging it upwards)
-	std::function<void (const WZ_Notification&, bool wasProgrammaticallyDismissed)> onDismissed;
+	// Called when the notification is dismissed / closed
+	// see: `WZ_Notification_Dismissal_Reason`
+	std::function<void (const WZ_Notification&, WZ_Notification_Dismissal_Reason reason)> onDismissed;
 	// Called if an ignorable notification is ignored / not displayed
 	std::function<void (const WZ_Notification&)> onIgnored;
 public:
@@ -240,6 +259,5 @@ bool notificationsInitialize();
 void notificationsShutDown();
 void runNotifications();
 bool isDraggingInGameNotification();
-bool isMouseOverInGameNotification();
 
 #endif // __INCLUDED_SRC_NOTIFICATIONS_H__

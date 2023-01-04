@@ -30,6 +30,9 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <regex>
+#include <limits>
+#include <typeindex>
+#include <sstream>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -39,30 +42,128 @@
 
 struct OPENGL_DATA
 {
-	char vendor[256];
-	char renderer[256];
-	char version[256];
-	char GLSLversion[256];
+	char vendor[256] = {};
+	char renderer[256] = {};
+	char version[256] = {};
+	char GLSLversion[256] = {};
 };
 OPENGL_DATA opengl;
 
-static GLuint perfpos[PERF_COUNT];
+static GLuint perfpos[PERF_COUNT] = {};
 static bool perfStarted = false;
 
-static std::pair<GLenum, GLenum> to_gl(const gfx_api::pixel_format& format)
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+static std::unordered_set<const gl_texture*> debugLiveTextures;
+#endif
+
+static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gles)
 {
 	switch (format)
 	{
+		// UNCOMPRESSED FORMATS
 		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
-			return std::make_pair(GL_RGBA8, GL_RGBA);
+			return GL_RGBA8;
 		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
-			return std::make_pair(GL_RGBA8, GL_BGRA);
+			return GL_RGBA8; // must store as RGBA8
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-			return std::make_pair(GL_RGB8, GL_RGB);
+			return GL_RGB8;
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			if (gles && GLAD_GL_EXT_texture_rg)
+			{
+				// the internal format is GL_RG_EXT
+				return GL_RG_EXT;
+			}
+			else
+			{
+				// for Desktop OpenGL, use GL_RG8 for the internal format
+				return GL_RG8;
+			}
+		case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			if ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0))
+			{
+				// OpenGL 3.0+ or OpenGL ES 3.0+
+				return GL_R8;
+			}
+			else
+			{
+				// older version fallback
+				// use GL_LUMINANCE because:
+				// (a) it's available and
+				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
+				return GL_LUMINANCE;
+			}
+		// COMPRESSED FORMAT
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+			return GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+			return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+			return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
+			return GL_COMPRESSED_RED_RGTC1;
+		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
+			return GL_COMPRESSED_RG_RGTC2;
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+			return GL_COMPRESSED_RGBA_BPTC_UNORM_ARB; // same value as GL_COMPRESSED_RGBA_BPTC_UNORM_EXT
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
+			return GL_ETC1_RGB8_OES;
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+			return GL_COMPRESSED_RGB8_ETC2;
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+			return GL_COMPRESSED_RGBA8_ETC2_EAC;
+		case gfx_api::pixel_format::FORMAT_R11_EAC:
+			return GL_COMPRESSED_R11_EAC;
+		case gfx_api::pixel_format::FORMAT_RG11_EAC:
+			return GL_COMPRESSED_RG11_EAC;
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+			return GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}
-	return std::make_pair(GL_INVALID_ENUM, GL_INVALID_ENUM);
+	return GL_INVALID_ENUM;
+}
+
+static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
+{
+	switch (format)
+	{
+		// UNCOMPRESSED FORMATS
+		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+			return GL_RGBA;
+		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
+			return GL_BGRA;
+		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+			return GL_RGB;
+		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			if (gles && GLAD_GL_EXT_texture_rg)
+			{
+				// the internal format is GL_RG_EXT
+				return GL_RG_EXT;
+			}
+			else
+			{
+				// for Desktop OpenGL, use GL_RG for the format
+				return GL_RG;
+			}
+		case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			if ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0))
+			{
+				// OpenGL 3.0+ or OpenGL ES 3.0+
+				return GL_RED;
+			}
+			else
+			{
+				// older version fallback
+				// use GL_LUMINANCE because:
+				// (a) it's available and
+				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
+				return GL_LUMINANCE;
+			}
+		// COMPRESSED FORMAT
+		default:
+			return to_gl_internalformat(format, gles);
+	}
+	return GL_INVALID_ENUM;
 }
 
 static GLenum to_gl(const gfx_api::context::buffer_storage_hint& hint)
@@ -139,6 +240,8 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 			return GL_MAX_TEXTURE_SIZE;
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			return GL_MAX_SAMPLES;
+		case gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS:
+			return GL_MAX_ARRAY_TEXTURE_LAYERS;
 		default:
 			debug(LOG_FATAL, "Unrecognised property type");
 	}
@@ -150,11 +253,17 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 gl_texture::gl_texture()
 {
 	glGenTextures(1, &_id);
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.insert(this);
+#endif
 }
 
 gl_texture::~gl_texture()
 {
 	glDeleteTextures(1, &_id);
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugLiveTextures.erase(this);
+#endif
 }
 
 void gl_texture::bind()
@@ -167,8 +276,12 @@ void gl_texture::unbind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data)
+bool gl_texture::upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
 {
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 
 	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "mip_level (%zu) exceeds GLint max", mip_level);
@@ -176,33 +289,31 @@ void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const s
 	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_y (%zu) exceeds GLint max", offset_y);
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
+	ASSERT(image.data_size() <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "data_size (%zu) exceeds GLsizei max", image.data_size());
 	bind();
-	glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
+	ASSERT(gfx_api::format_memory_size(image.pixel_format(), width, height) == image.data_size(), "data_size (%zu) does not match expected format_memory_size(%s, %zu, %zu)=%zu", image.data_size(), gfx_api::format_to_str(image.pixel_format()), width, height, gfx_api::format_memory_size(image.pixel_format(), width, height));
+	if (is_uncompressed_format(image.pixel_format()))
+	{
+		glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), to_gl_format(image.pixel_format(), gles), GL_UNSIGNED_BYTE, image.data());
+	}
+	else
+	{
+		ASSERT_OR_RETURN(false, offset_x == 0 && offset_y == 0, "Trying to upload compressed sub texture");
+		GLenum glFormat = to_gl_internalformat(image.pixel_format(), gles);
+		glCompressedTexImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), glFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, static_cast<GLsizei>(image.data_size()), image.data());
+	}
 	unbind();
+	return true;
 }
 
-void gl_texture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const  gfx_api::pixel_format& buffer_format, const void* data)
+bool gl_texture::upload(const size_t& mip_level, const iV_BaseImage& image)
 {
-	ASSERT(offset_x <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_x (%zu) exceeds GLint max", offset_x);
-	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_y (%zu) exceeds GLint max", offset_y);
-	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
-	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
-	bind();
-	if(!glGenerateMipmap)
-	{
-		// fallback for if glGenerateMipmap is unavailable
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	}
-	glTexSubImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
-	if(glGenerateMipmap)
-	{
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	unbind();
+	return upload_internal(mip_level, 0, 0, image);
+}
+
+bool gl_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+{
+	return upload_internal(mip_level, offset_x, offset_y, image);
 }
 
 unsigned gl_texture::id()
@@ -282,24 +393,40 @@ struct program_data
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 {
 	std::make_pair(SHADER_COMPONENT, program_data{ "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			// per-mesh uniforms
+			"tcmask", "normalmap", "specularmap", "hasTangents",
+			// per-instance uniforms
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+		} }),
+
 	std::make_pair(SHADER_BUTTON, program_data{ "Button program", "shaders/button.vert", "shaders/button.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			// per-mesh uniforms
+			"tcmask", "normalmap", "specularmap", "hasTangents",
+			// per-instance uniforms
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+		} }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			// per-mesh uniforms
+			"tcmask", "normalmap", "specularmap", "hasTangents",
+			// per-instance uniforms
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+		} }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
-		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
+		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
-		{ "ModelViewProjectionMatrix", "paramxlight", "paramylight", "lightTextureMatrix",
+		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1", "textureMatrix2",
@@ -312,6 +439,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "posMatrix" } }),
 	std::make_pair(SHADER_GFX_TEXT, program_data{ "gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
 		{ "posMatrix", "color", "texture" } }),
+	std::make_pair(SHADER_SKYBOX, program_data{ "skybox program", "shaders/skybox.vert", "shaders/skybox.frag",
+		{ "posMatrix", "color", "fog_color", "fog_enabled" } }),
 	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
 	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
@@ -380,9 +509,17 @@ const char * shaderVersionString(SHADER_VERSION_ES version)
 GLint wz_GetGLIntegerv(GLenum pname, GLint defaultValue = 0)
 {
 	GLint retVal = defaultValue;
-	while(glGetError() != GL_NO_ERROR) { } // clear the OpenGL error queue
+	ASSERT_OR_RETURN(retVal, glGetIntegerv != nullptr, "glGetIntegerv is null");
+	if (glGetError != nullptr)
+	{
+		while(glGetError() != GL_NO_ERROR) { } // clear the OpenGL error queue
+	}
 	glGetIntegerv(pname, &retVal);
-	GLenum err = glGetError();
+	GLenum err = GL_NO_ERROR;
+	if (glGetError != nullptr)
+	{
+		err = glGetError();
+	}
 	if (err != GL_NO_ERROR)
 	{
 		retVal = defaultValue;
@@ -501,12 +638,24 @@ SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES
 }
 
 template<SHADER_MODE shader>
-typename std::pair<SHADER_MODE, std::function<void(const void*)>> gl_pipeline_state_object::uniform_binding_entry()
+typename std::pair<std::type_index, std::function<void(const void*, size_t)>> gl_pipeline_state_object::uniform_binding_entry()
 {
-	return std::make_pair(shader, [this](const void* buffer) { this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer)); });
+	return std::make_pair(std::type_index(typeid(gfx_api::constant_buffer_type<shader>)), [this](const void* buffer, size_t buflen) {
+		ASSERT_OR_RETURN(, buflen == sizeof(const gfx_api::constant_buffer_type<shader>), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const gfx_api::constant_buffer_type<shader>));
+		this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer));
+	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
+template<typename T>
+typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_pipeline_state_object::uniform_setting_func()
+{
+	return std::make_pair(std::type_index(typeid(T)), [this](const void* buffer, size_t buflen) {
+		ASSERT_OR_RETURN(, buflen == sizeof(const T), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const T));
+		this->set_constants(*reinterpret_cast<const T*>(buffer));
+	});
+}
+
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc, optional<float> mipLodBias) :
 desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 {
 	std::string vertexShaderHeader;
@@ -538,19 +687,20 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		fragmentShaderHeader = std::string(shaderVersionStr) + "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\nprecision highp int;\n#else\nprecision mediump float;\n#endif\n";
 	}
 
-	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable,
+	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
 				  shader_to_file_table.at(shader).friendly_name,
 				  vertexShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).vertex_file,
 				  fragmentShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).fragment_file,
-				  shader_to_file_table.at(shader).uniform_names);
+				  shader_to_file_table.at(shader).uniform_names,
+				  mipLodBias);
 
-	const std::map < SHADER_MODE, std::function<void(const void*)>> uniforms_bind_table =
+	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
-		uniform_binding_entry<SHADER_COMPONENT>(),
-		uniform_binding_entry<SHADER_BUTTON>(),
-		uniform_binding_entry<SHADER_NOLIGHT>(),
+		uniform_setting_func<gfx_api::Draw3DShapeGlobalUniforms>(),
+		uniform_setting_func<gfx_api::Draw3DShapePerMeshUniforms>(),
+		uniform_setting_func<gfx_api::Draw3DShapePerInstanceUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_DECALS>(),
@@ -559,17 +709,42 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_TEXRECT>(),
 		uniform_binding_entry<SHADER_GFX_COLOUR>(),
 		uniform_binding_entry<SHADER_GFX_TEXT>(),
+		uniform_binding_entry<SHADER_SKYBOX>(),
 		uniform_binding_entry<SHADER_GENERIC_COLOR>(),
 		uniform_binding_entry<SHADER_LINE>(),
 		uniform_binding_entry<SHADER_TEXT>()
 	};
 
-	uniform_bind_function = uniforms_bind_table.at(shader);
+	for (auto& uniform_block : uniform_blocks)
+	{
+		auto it = uniforms_bind_table.find(uniform_block);
+		if (it == uniforms_bind_table.end())
+		{
+			ASSERT(false, "Missing mapping for uniform block type: %s", uniform_block.name());
+			uniform_bind_functions.push_back(nullptr);
+			continue;
+		}
+		uniform_bind_functions.push_back(it->second);
+	}
 }
 
-void gl_pipeline_state_object::set_constants(const void* buffer)
+void gl_pipeline_state_object::set_constants(const void* buffer, const size_t& size)
 {
-	uniform_bind_function(buffer);
+	uniform_bind_functions[0](buffer, size);
+}
+
+void gl_pipeline_state_object::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < uniform_bind_functions.size(); ++i)
+	{
+		const auto& uniform_bind_function = uniform_bind_functions[first + i];
+		auto* buffer = std::get<0>(uniform_blocks[i]);
+		if (buffer == nullptr)
+		{
+			continue;
+		}
+		uniform_bind_function(buffer, std::get<1>(uniform_blocks[i]));
+	}
 }
 
 
@@ -768,6 +943,12 @@ void gl_pipeline_state_object::getLocs()
 
 static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
 {
+	if (shaderContents == nullptr)
+	{
+		debug(LOG_INFO, "shaderContents is null");
+		return {};
+	}
+
 	std::unordered_set<std::string> uniformNames;
 
 	// White space: the space character, horizontal tab, vertical tab, form feed, carriage-return, and line-feed.
@@ -829,21 +1010,61 @@ static std::tuple<std::string, std::unordered_map<std::string, std::string>> ren
 	return std::tuple<std::string, std::unordered_map<std::string, std::string>>(modifiedFragmentShaderSource, duplicateFragmentUniformNameMap);
 }
 
+static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, float mipLodBias)
+{
+	// Look for:
+	// #define WZ_MIP_LOAD_BIAS 0.f
+	const auto re = std::regex("#define WZ_MIP_LOAD_BIAS .*", std::regex_constants::ECMAScript);
+
+	std::string floatAsString = astringf("%f", mipLodBias);
+	size_t lastNon0Pos = floatAsString.find_last_not_of('0');
+	if (lastNon0Pos != std::string::npos)
+	{
+		floatAsString = floatAsString.substr(0, lastNon0Pos + 1);
+	}
+	else
+	{
+		// only 0?
+		return;
+	}
+	ASSERT(floatAsString.find_last_not_of("0123456789.-") == std::string::npos, "Found unexpected / invalid character in: %s", floatAsString.c_str());
+
+	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
+}
+
 void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+											 bool patchFragmentShaderMipLodBias,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
 											 const char * fragment_header, const std::string& fragmentPath,
-											 const std::vector<std::string> &uniformNames)
+											 const std::vector<std::string> &uniformNames,
+											 optional<float> mipLodBias)
 {
 	GLint status;
 	bool success = true; // Assume overall success
 
+	std::unordered_set<std::size_t> expectedVertexAttribLoc;
+	for (const auto& buffDesc : vertex_buffer_desc)
+	{
+		for (const auto& attrib : buffDesc.attributes)
+		{
+			expectedVertexAttribLoc.insert(attrib.id);
+		}
+	}
+
+	auto bindVertexAttribLocationIfUsed = [&expectedVertexAttribLoc](GLuint prg, GLuint index, const GLchar *name) {
+		if (expectedVertexAttribLoc.count(index) > 0)
+		{
+			glBindAttribLocation(prg, index, name);
+		}
+	};
+
 	program = glCreateProgram();
-	glBindAttribLocation(program, 0, "vertex");
-	glBindAttribLocation(program, 1, "vertexTexCoord");
-	glBindAttribLocation(program, 2, "vertexColor");
-	glBindAttribLocation(program, 3, "vertexNormal");
-	glBindAttribLocation(program, 4, "vertexTangent");
+	bindVertexAttribLocationIfUsed(program, 0, "vertex");
+	bindVertexAttribLocationIfUsed(program, 1, "vertexTexCoord");
+	bindVertexAttribLocationIfUsed(program, 2, "vertexColor");
+	bindVertexAttribLocationIfUsed(program, 3, "vertexNormal");
+	bindVertexAttribLocationIfUsed(program, 4, "vertexTangent");
 	ASSERT_OR_RETURN(, program, "Could not create shader program!");
 
 	char* vertexShaderContents = nullptr;
@@ -921,6 +1142,11 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 						debug(LOG_3D, "  - Renaming \"%s\" -> \"%s\" in fragment shader", originalUniformName.c_str(), replacementUniformName.c_str());
 					}
 				}
+			}
+
+			if (patchFragmentShaderMipLodBias && mipLodBias.has_value())
+			{
+				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
 			}
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
@@ -1020,7 +1246,7 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 
 	}
 }
 
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2i &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec2 &v)
 {
 	glUniform2i(locations[uniformIdx], v.x, v.y);
 	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
@@ -1029,7 +1255,7 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2i &v)
 	}
 }
 
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2f &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec2 &v)
 {
 	glUniform2f(locations[uniformIdx], v.x, v.y);
 	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
@@ -1084,19 +1310,38 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
 //	setUniforms(obj->locations[20], cbuf.fogColour);
 //}
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_BUTTON>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf)
 {
-	set_constants_for_component(cbuf);
+	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(1, cbuf.sunPos);
+	setUniforms(2, cbuf.sceneColor);
+	setUniforms(3, cbuf.ambient);
+	setUniforms(4, cbuf.diffuse);
+	setUniforms(5, cbuf.specular);
+	setUniforms(6, cbuf.fogColour);
+	setUniforms(7, cbuf.fogEnd);
+	setUniforms(8, cbuf.fogBegin);
+	setUniforms(9, cbuf.timeState);
+	setUniforms(10, cbuf.fogEnabled);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_COMPONENT>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf)
 {
-	set_constants_for_component(cbuf);
+	setUniforms(11, cbuf.tcmask);
+	setUniforms(12, cbuf.normalMap);
+	setUniforms(13, cbuf.specularMap);
+	setUniforms(14, cbuf.hasTangents);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_NOLIGHT>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf)
 {
-	set_constants_for_component(cbuf);
+	setUniforms(15, cbuf.ModelViewMatrix);
+	setUniforms(16, cbuf.NormalMatrix);
+	setUniforms(17, cbuf.colour);
+	setUniforms(18, cbuf.teamcolour);
+	setUniforms(19, cbuf.shaderStretch);
+	setUniforms(20, cbuf.ecmState);
+	setUniforms(21, cbuf.alphaTest);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)
@@ -1124,14 +1369,17 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(3, cbuf.texture0);
 	setUniforms(4, cbuf.paramXLight);
 	setUniforms(5, cbuf.paramYLight);
+	setUniforms(6, cbuf.fog_enabled);
+	setUniforms(7, cbuf.fog_begin);
+	setUniforms(8, cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.param1);
-	setUniforms(2, cbuf.param2);
-	setUniforms(3, cbuf.texture_matrix);
+	setUniforms(1, cbuf.texture_matrix);
+	setUniforms(2, cbuf.param1);
+	setUniforms(3, cbuf.param2);
 	setUniforms(4, cbuf.fog_colour);
 	setUniforms(5, cbuf.fog_enabled);
 	setUniforms(6, cbuf.fog_begin);
@@ -1182,6 +1430,14 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(0, cbuf.transform_matrix);
 	setUniforms(1, cbuf.color);
 	setUniforms(2, cbuf.texture);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf)
+{
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.color);
+	setUniforms(2, cbuf.fog_color);
+	setUniforms(3, cbuf.fog_enabled);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf)
@@ -1262,11 +1518,17 @@ gl_context::~gl_context()
 
 gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename)
 {
+	ASSERT(mipmap_count > 0, "mipmap_count must be > 0");
 	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "mipmap_count (%zu) exceeds GLint max", mipmap_count);
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	auto* new_texture = new gl_texture();
+	new_texture->gles = gles;
 	new_texture->mip_count = mipmap_count;
+	new_texture->internal_format = internal_format;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	new_texture->debugName = filename;
+#endif
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
@@ -1276,7 +1538,17 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	}
 	for (GLint i = 0, e = static_cast<GLint>(mipmap_count); i < e; ++i)
 	{
-		glTexImage2D(GL_TEXTURE_2D, i, std::get<0>(to_gl(internal_format)), static_cast<GLsizei>(width >> i), static_cast<GLsizei>(height >> i), 0, std::get<1>(to_gl(internal_format)), GL_UNSIGNED_BYTE, nullptr);
+		if (is_uncompressed_format(internal_format))
+		{
+			// Allocate an empty buffer of the full size
+			// (As uncompressed textures support the upload_sub() function that permits sub texture uploads)
+			glTexImage2D(GL_TEXTURE_2D, i, to_gl_internalformat(internal_format, gles), static_cast<GLsizei>(width >> i), static_cast<GLsizei>(height >> i), 0, to_gl_format(internal_format, gles), GL_UNSIGNED_BYTE, nullptr);
+		}
+		else
+		{
+			// Can't use glCompressedTexImage2D with a null buffer (it's not permitted by the standard, and will crash depending on the driver)
+			// For now, we don't allocate a buffer and instead: only the upload() function that uploads full images is supported
+		}
 	}
 	return new_texture;
 }
@@ -1289,10 +1561,12 @@ gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage 
 gfx_api::pipeline_state_object * gl_context::build_pipeline(const gfx_api::state_description &state_desc,
 															const SHADER_MODE& shader_mode,
 															const gfx_api::primitive_type& primitive,
+															const std::vector<std::type_index>& uniform_blocks,
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
-	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, state_desc, shader_mode, attribute_descriptions);
+	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
+	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, state_desc, shader_mode, uniform_blocks, attribute_descriptions, mipLodBias);
 }
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
@@ -1402,7 +1676,7 @@ void gl_context::unbind_index_buffer(gfx_api::buffer&)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::texture*>& textures)
+void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	ASSERT(textures.size() <= texture_descriptions.size(), "Received more textures than expected");
@@ -1413,51 +1687,49 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 		if (textures[i] == nullptr)
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 			continue;
 		}
+		const auto type = textures[i]->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
 		textures[i]->bind();
 		switch (desc.sampler)
 		{
 			case gfx_api::sampler_type::nearest_clamped:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				break;
 			case gfx_api::sampler_type::bilinear:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				break;
 			case gfx_api::sampler_type::bilinear_repeat:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 				break;
 			case gfx_api::sampler_type::anisotropic_repeat:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 				if (GLAD_GL_EXT_texture_filter_anisotropic)
 				{
-					GLfloat max;
-					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
+					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
 				}
 				break;
 			case gfx_api::sampler_type::anisotropic:
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 				if (GLAD_GL_EXT_texture_filter_anisotropic)
 				{
-					GLfloat max;
-					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
+					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
 				}
 				break;
 		}
@@ -1467,12 +1739,18 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 void gl_context::set_constants(const void* buffer, const size_t& size)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
-	current_program->set_constants(buffer);
+	current_program->set_constants(buffer, size);
+}
+
+void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
+	current_program->set_uniforms(first, uniform_blocks);
 }
 
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
-	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "count (%zu) exceeds GLint max", offset);
+	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	glDrawArrays(to_gl(primitive), static_cast<GLint>(offset), static_cast<GLsizei>(count));
 }
@@ -1502,7 +1780,7 @@ void gl_context::set_depth_range(const float& min, const float& max)
 
 int32_t gl_context::get_context_value(const context_value property)
 {
-	GLint value;
+	GLint value = 0;
 	glGetIntegerv(to_gl(property), &value);
 	return value;
 }
@@ -1623,6 +1901,7 @@ static std::string getGLExtensions()
 	else
 	{
 		// OpenGL < 3.0
+		ASSERT_OR_RETURN(extensions, glGetString != nullptr, "glGetString is null");
 		const char *pExtensionsStr = (const char *) glGetString(GL_EXTENSIONS);
 		if (pExtensionsStr != nullptr)
 		{
@@ -1716,21 +1995,30 @@ static const unsigned int channelsPerPixel = 3;
 
 bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback)
 {
+	ASSERT_OR_RETURN(false, callback.operator bool(), "Must provide a valid callback");
+
 	// IMPORTANT: Must get the size of the viewport directly from the viewport, to account for
 	//            high-DPI / display scaling factors (or only a sub-rect of the full viewport
 	//            will be captured, as the logical screenWidth/Height may differ from the
 	//            underlying viewport pixel dimensions).
-	GLint m_viewport[4];
+	GLint m_viewport[4] = {0,0,0,0};
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 
+	if (m_viewport[2] == 0 || m_viewport[3] == 0)
+	{
+		// Failed to get useful / non-0 viewport size
+		debug(LOG_3D, "GL_VIEWPORT either failed or returned an invalid size");
+		return false;
+	}
+
 	auto image = std::unique_ptr<iV_Image>(new iV_Image());
-	image->width = m_viewport[2];
-	image->height = m_viewport[3];
-	image->depth = 8;
-	image->bmp = (unsigned char *)malloc((size_t)channelsPerPixel * (size_t)image->width * (size_t)image->height);
+	auto width = m_viewport[2];
+	auto height = m_viewport[3];
+	bool allocateResult = image->allocate(width, height, channelsPerPixel); // RGB
+	ASSERT_OR_RETURN(false, allocateResult, "Failed to allocate buffer");
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(0, 0, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->bmp);
+	glReadPixels(0, 0, image->width(), image->height(), GL_RGB, GL_UNSIGNED_BYTE, image->bmp_w());
 
 	callback(std::move(image));
 
@@ -1783,10 +2071,18 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	(void)userParam; // we pass in NULL here
 	(void)length; // length of message, buggy on some drivers, don't use
 	(void)id; // message id
-	debug(LOG_ERROR, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
+	code_part log_level = LOG_INFO;
+	if (type == GL_DEBUG_TYPE_ERROR)
+	{
+		if (severity == GL_DEBUG_SEVERITY_HIGH)
+		{
+			log_level = LOG_ERROR;
+		}
+	}
+	debug(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
 }
 
-bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode)
+bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias)
 {
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();
@@ -1804,14 +2100,19 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 
 	if (!initGLContext())
 	{
+		backend_impl->destroyGLContext();
 		return false;
 	}
+
+	initPixelFormatsSupport();
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
 	debug(LOG_WZ, "Drawable Size: %d x %d", width, height);
 
 	glViewport(0, 0, width, height);
+	viewportWidth = static_cast<uint32_t>(width);
+	viewportHeight = static_cast<uint32_t>(height);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
 
@@ -1822,7 +2123,76 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		setSwapInterval(gfx_api::context::swap_interval_mode::vsync);
 	}
 
+	mipLodBias = _mipLodBias;
+
+#if !defined(__EMSCRIPTEN__)
+	_beginRenderPassImpl();
+#endif
+
 	return true;
+}
+
+static const GLubyte* wzSafeGlGetString(GLenum name)
+{
+	static const GLubyte emptyString[1] = {0};
+	ASSERT_OR_RETURN(emptyString, glGetString != nullptr, "glGetString is null");
+	auto result = glGetString(name);
+	if (result == nullptr)
+	{
+		return emptyString;
+	}
+	return result;
+}
+
+bool gl_context::isBlocklistedGraphicsDriver() const
+{
+	WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
+	WzString openGL_version = (const char*)wzSafeGlGetString(GL_VERSION);
+
+	debug(LOG_3D, "Checking: Renderer: \"%s\", Version: \"%s\"", openGL_renderer.toUtf8().c_str(), openGL_version.toUtf8().c_str());
+
+#if defined(WZ_OS_WIN)
+	// Renderer: Intel(R) HD Graphics 4000
+	if (openGL_renderer == "Intel(R) HD Graphics 4000")
+	{
+		// Version: 3.1.0 - Build 10.18.10.3304
+		// Version: <opengl version> - Build 10.18.10.3304
+		// This is a problematic old driver on Windows that just crashes after init.
+		if (openGL_version.endsWith("Build 10.18.10.3304"))
+		{
+			return true;
+		}
+
+		// Version: 3.1.0 - Build 9.17.10.2843
+		// Version: <opengl version> - Build 9.17.10.2843
+		// This is a problematic old driver (seen on Windows 8) that likes to crash during gameplay or sometimes at init.
+		if (openGL_version.endsWith("Build 9.17.10.2843"))
+		{
+			return true;
+		}
+	}
+
+	// Renderer: Intel(R) HD Graphics
+	if (openGL_renderer == "Intel(R) HD Graphics")
+	{
+		// Version: 3.1.0 - Build 10.18.10.3277
+		// Version: <opengl version> - Build 10.18.10.3277
+		// This is a problematic old driver on Windows that likes to crash during gameplay (and throw various errors about the shaders).
+		if (openGL_version.endsWith("Build 10.18.10.3277"))
+		{
+			return true;
+		}
+	}
+
+	// Renderer: Intel(R) Graphics Media Accelerator 3600 Series
+	if (openGL_renderer == "Intel(R) Graphics Media Accelerator 3600 Series")
+	{
+		// Does not work with WZ. (No indications that there is a driver version that does not crash.)
+		return true;
+	}
+#endif
+
+	return false;
 }
 
 bool gl_context::initGLContext()
@@ -1833,7 +2203,7 @@ bool gl_context::initGLContext()
 	if (!func_GLGetProcAddress)
 	{
 		debug(LOG_FATAL, "backend_impl->getGLGetProcAddress() returned NULL");
-		exit(1);
+		return false;
 	}
 	gles = backend_impl->isOpenGLES();
 	if (!gles)
@@ -1841,7 +2211,7 @@ bool gl_context::initGLContext()
 		if (!gladLoadGLLoader(func_GLGetProcAddress))
 		{
 			debug(LOG_FATAL, "gladLoadGLLoader failed");
-			exit(1);
+			return false;
 		}
 	}
 	else
@@ -1849,22 +2219,29 @@ bool gl_context::initGLContext()
 		if (!gladLoadGLES2Loader(func_GLGetProcAddress))
 		{
 			debug(LOG_FATAL, "gladLoadGLLoader failed");
-			exit(1);
+			return false;
 		}
 	}
 
 	/* Dump general information about OpenGL implementation to the console and the dump file */
-	ssprintf(opengl.vendor, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
+	ssprintf(opengl.vendor, "OpenGL Vendor: %s", wzSafeGlGetString(GL_VENDOR));
 	addDumpInfo(opengl.vendor);
 	debug(LOG_3D, "%s", opengl.vendor);
-	ssprintf(opengl.renderer, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
+	ssprintf(opengl.renderer, "OpenGL Renderer: %s", wzSafeGlGetString(GL_RENDERER));
 	addDumpInfo(opengl.renderer);
 	debug(LOG_3D, "%s", opengl.renderer);
-	ssprintf(opengl.version, "OpenGL Version: %s", glGetString(GL_VERSION));
+	ssprintf(opengl.version, "OpenGL Version: %s", wzSafeGlGetString(GL_VERSION));
 	addDumpInfo(opengl.version);
 	debug(LOG_3D, "%s", opengl.version);
 
 	formattedRendererInfoString = calculateFormattedRendererInfoString();
+
+	if (isBlocklistedGraphicsDriver())
+	{
+		debug(LOG_INFO, "Warzone's OpenGL backend is not supported on this system. (%s, %s)", opengl.renderer, opengl.version);
+		debug(LOG_INFO, "Please update your graphics drivers or try a different backend.");
+		return false;
+	}
 
 	khr_debug = GLAD_GL_KHR_debug;
 
@@ -1924,7 +2301,6 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
 	#endif
 
-		debug(LOG_3D, "  * Texture compression %s supported.", GLAD_GL_ARB_texture_compression ? "is" : "is NOT");
 		debug(LOG_3D, "  * Two side stencil %s supported.", GLAD_GL_EXT_stencil_two_side ? "is" : "is NOT");
 		debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLAD_GL_ATI_separate_stencil ? "" : " NOT");
 		debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
@@ -1946,9 +2322,9 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
 	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
-	if (!GLAD_GL_VERSION_2_0 && !GLAD_GL_ES_VERSION_2_0)
+	if (!GLAD_GL_VERSION_2_1 && !GLAD_GL_ES_VERSION_2_0)
 	{
-		debug(LOG_FATAL, "OpenGL 2.0 / OpenGL ES 2.0 not supported! Please upgrade your drivers.");
+		debug(LOG_POPUP, "OpenGL 2.1+ / OpenGL ES 2.0+ not supported! Please upgrade your drivers.");
 		return false;
 	}
 
@@ -1986,7 +2362,7 @@ bool gl_context::initGLContext()
 	sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
 
 	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
-	GLint glMaxTIUs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf, glmaxVertexAttribs;
+	GLint glMaxTIUs = 0, glMaxTIUAs = 0, glmaxSamples = 0, glmaxSamplesbuf = 0, glmaxVertexAttribs = 0, glMaxArrayTextureLayers = 0;
 
 	debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -2002,30 +2378,17 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &glmaxVertexAttribs);
 	debug(LOG_3D, "  * (current) Max vertex attribute locations is %d.", (int) glmaxVertexAttribs);
+	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &glMaxArrayTextureLayers);
+	debug(LOG_3D, "  * (current) Max array texture layers is %d.", (int) glMaxArrayTextureLayers);
+	maxArrayTextureLayers = glMaxArrayTextureLayers;
 
 	// IMPORTANT: Reserve enough slots in enabledVertexAttribIndexes based on glmaxVertexAttribs
+	if (glmaxVertexAttribs == 0)
+	{
+		debug(LOG_3D, "GL_MAX_VERTEX_ATTRIBS did not return a value - defaulting to 8");
+		glmaxVertexAttribs = 8;
+	}
 	enabledVertexAttribIndexes.resize(static_cast<size_t>(glmaxVertexAttribs), false);
-
-	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
-	{
-		// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
-		static GLuint vaoId = 0;
-		if (glGenVertexArrays == nullptr)
-		{
-			debug(LOG_FATAL, "glGenVertexArrays is not available, but context is OpenGL 3.0+");
-			exit(1);
-			return false;
-		}
-		glGenVertexArrays(1, &vaoId);
-		glBindVertexArray(vaoId);
-	}
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	if (GLAD_GL_ARB_timer_query)
-	{
-		glGenQueries(PERF_COUNT, perfpos);
-	}
 
 	if (khr_debug)
 	{
@@ -2043,31 +2406,302 @@ bool gl_context::initGLContext()
 		}
 	}
 
+	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
+	{
+		// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
+		vaoId = 0;
+		if (glGenVertexArrays == nullptr)
+		{
+			debug(LOG_FATAL, "glGenVertexArrays is not available, but context is OpenGL 3.0+");
+			return false;
+		}
+		glGenVertexArrays(1, &vaoId);
+		glBindVertexArray(vaoId);
+	}
+
+	if (GLAD_GL_ARB_timer_query)
+	{
+		glGenQueries(PERF_COUNT, perfpos);
+	}
+
+	if (GLAD_GL_EXT_texture_filter_anisotropic)
+	{
+		maxTextureAnisotropy = 0.f;
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxTextureAnisotropy);
+	}
+
 	glGenBuffers(1, &scratchbuffer);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	return true;
 }
 
-void gl_context::flip(int clearMode)
+void gl_context::_beginRenderPassImpl()
+{
+	GLbitfield clearFlags = 0;
+	glDepthMask(GL_TRUE);
+	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
+	glClear(clearFlags);
+}
+
+void gl_context::beginRenderPass()
+{
+#if defined(__EMSCRIPTEN__)
+	_beginRenderPassImpl();
+#else
+	// no-op everywhere else
+#endif
+}
+
+void gl_context::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
 	backend_impl->swapWindow();
 	glUseProgram(0);
 	current_program = nullptr;
+#if !defined(__EMSCRIPTEN__)
+	_beginRenderPassImpl();
+#endif
+}
 
-	if (clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
+static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum target, gfx_api::pixel_format format, bool gles)
+{
+	gfx_api::pixel_format_usage::flags retVal = gfx_api::pixel_format_usage::none;
+
+	auto internal_format = to_gl_internalformat(format, gles);
+	if (internal_format == GL_INVALID_ENUM || internal_format == GL_FALSE)
 	{
-		return;
+		return retVal;
 	}
 
-	GLbitfield clearFlags = 0;
-	glDepthMask(GL_TRUE);
-	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-	if (clearMode & CLEAR_SHADOW)
+	if (gles || !GLAD_GL_ARB_internalformat_query2 || !glGetInternalformativ)
 	{
-		clearFlags |= GL_STENCIL_BUFFER_BIT;
+		// the query function is not available, so just assume that the format is available
+		// for now, mark it as available for sampled_image - TODO: investigate whether we can safely assume it's available for other usages
+		retVal |= gfx_api::pixel_format_usage::sampled_image;
+		return retVal;
 	}
-	glClear(clearFlags);
+
+	GLint supported = GL_FALSE;
+	glGetInternalformativ(target, internal_format, GL_INTERNALFORMAT_SUPPORTED, 1, &supported);
+	if (!supported)
+	{
+		return retVal;
+	}
+
+	supported = GL_NONE;
+	glGetInternalformativ(target, internal_format, GL_FRAGMENT_TEXTURE, 1, &supported);
+	if (supported == GL_FULL_SUPPORT) // ignore caveat support for now
+	{
+		retVal |= gfx_api::pixel_format_usage::sampled_image;
+	}
+
+	GLint shader_image_load = GL_NONE;
+	GLint shader_image_store = GL_NONE;
+	glGetInternalformativ(target, internal_format, GL_SHADER_IMAGE_LOAD, 1, &shader_image_load);
+	glGetInternalformativ(target, internal_format, GL_SHADER_IMAGE_STORE, 1, &shader_image_store);
+	if (shader_image_load == GL_FULL_SUPPORT && shader_image_store == GL_FULL_SUPPORT) // ignore caveat support for now
+	{
+		retVal |= gfx_api::pixel_format_usage::storage_image;
+	}
+
+	GLint depth_renderable = GL_FALSE;
+	GLint stencil_renderable = GL_FALSE;
+	glGetInternalformativ(target, internal_format, GL_DEPTH_RENDERABLE, 1, &depth_renderable);
+	glGetInternalformativ(target, internal_format, GL_STENCIL_RENDERABLE, 1, &stencil_renderable);
+	if (depth_renderable && stencil_renderable)
+	{
+		retVal |= gfx_api::pixel_format_usage::depth_stencil_attachment;
+	}
+
+	return retVal;
+}
+
+bool gl_context::textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage)
+{
+	size_t formatIdx = static_cast<size_t>(format);
+	ASSERT_OR_RETURN(false, formatIdx < textureFormatsSupport[static_cast<size_t>(target)].size(), "Invalid format index: %zu", formatIdx);
+	return (textureFormatsSupport[static_cast<size_t>(target)][formatIdx] & usage) == usage;
+}
+
+void gl_context::initPixelFormatsSupport()
+{
+	// set any existing entries to false
+	for (size_t target = 0; target < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target++)
+	{
+		for (size_t i = 0; i < textureFormatsSupport[target].size(); i++)
+		{
+			textureFormatsSupport[target][i] = gfx_api::pixel_format_usage::none;
+		}
+		textureFormatsSupport[target].resize(static_cast<size_t>(gfx_api::MAX_PIXEL_FORMAT) + 1, gfx_api::pixel_format_usage::none);
+	}
+
+	// check if 2D texture array support is available
+	has2DTextureArraySupport =
+		(!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_EXT_texture_array)) // Texture arrays are supported in core OpenGL 3.0+, and earlier with EXT_texture_array
+		|| (gles && GLAD_GL_ES_VERSION_3_0); // Texture arrays are supported in OpenGL ES 3.0+
+
+	#define PIXEL_2D_FORMAT_SUPPORT_SET(x) \
+	textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d)][static_cast<size_t>(x)] = getPixelFormatUsageSupport_gl(GL_TEXTURE_2D, x, gles);
+
+	#define PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(x) \
+	if (has2DTextureArraySupport) { textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d_array)][static_cast<size_t>(x)] = getPixelFormatUsageSupport_gl(GL_TEXTURE_2D_ARRAY, x, gles); }
+
+	// The following are always guaranteed to be supported
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)] = true;
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)] = true;
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)] = true;
+//	texture2DFormatsSupport[static_cast<size_t>(gfx_api::pixel_format::FORMAT_R8_UNORM)] = true;
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
+
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8)
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
+
+	// RG8
+	// Desktop OpenGL: OpenGL 3.0+, or GL_ARB_texture_rg
+	// OpenGL ES: GL_EXT_texture_rg
+	if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_ARB_texture_rg)) || (gles && GLAD_GL_EXT_texture_rg))
+	{
+		// NOTES:
+		// GL_ARB_texture_rg (and OpenGL 3.0+) supports this format for glTex*Image3D
+		// GL_EXT_texture_rg does *NOT* specify support for glTex*Image3D?
+		bool canSupport2DTextureArrays = (!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_ARB_texture_rg));
+
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+		if (canSupport2DTextureArrays)
+		{
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
+		}
+	}
+
+	// S3TC
+	// Desktop OpenGL: GL_EXT_texture_compression_s3tc
+	// OpenGL ES: (May be supported by the same GL_EXT_texture_compression_s3tc, other extensions)
+	if (GLAD_GL_EXT_texture_compression_s3tc)
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+		// NOTES:
+		// On Desktop OpenGL, the EXT_texture_array extension interacts with the s3tc extension to provide 2d texture array support for these formats
+		// The EXT_texture_compression_s3tc docs appear to say that OpenGL ES 3.0.2(?)+ supports passing these formats to glCompressedTex*Image3D for TEXTURE_2D_ARRAY support
+		if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_EXT_texture_array)) // EXT_texture_array is core in OpenGL 3.0+
+			|| (gles && GLAD_GL_ES_VERSION_3_0))
+		{
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+		}
+	}
+	else if (gles)
+	{
+		if (GLAD_GL_ANGLE_texture_compression_dxt3)
+		{
+			textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d)][static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
+		}
+		if (GLAD_GL_ANGLE_texture_compression_dxt5)
+		{
+			textureFormatsSupport[static_cast<size_t>(gfx_api::pixel_format_target::texture_2d)][static_cast<size_t>(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM)] = gfx_api::pixel_format_usage::sampled_image;
+		}
+		if ((GLAD_GL_ANGLE_texture_compression_dxt3 || GLAD_GL_ANGLE_texture_compression_dxt5) && GLAD_GL_EXT_texture_compression_dxt1)
+		{
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
+		}
+	}
+
+	// RGTC
+	// Desktop OpenGL: GL_ARB_texture_compression_rgtc (or OpenGL 3.0+ Core?)
+	// OpenGL ES: TODO: Could check for GL_EXT_texture_compression_rgtc, but support seems rare
+	if (!gles && GLAD_GL_ARB_texture_compression_rgtc)
+	{
+		// Note: GL_ARB_texture_compression_rgtc does *NOT* support glCompressedTex*Image3D (even for 2d texture arrays)?
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
+	}
+
+	// BPTC
+	// Desktop OpenGL: GL_ARB_texture_compression_bptc
+	// OpenGL ES: GL_EXT_texture_compression_bptc
+	if ((!gles && GLAD_GL_ARB_texture_compression_bptc) || (gles && GLAD_GL_EXT_texture_compression_bptc))
+	{
+		// NOTES:
+		// GL_ARB_texture_compression_bptc claims it is supported in glCompressedTex*Image2DARB, glCompressedTex*Image3DARB, but these were folded into core without the ARB suffix in OpenGL 1.3?)
+		// GL_EXT_texture_compression_bptc claims it is supported in glCompressedTex*Image2D, glCompressedTex*Image3D
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+	}
+
+	// ETC1
+	if (gles && GLAD_GL_OES_compressed_ETC1_RGB8_texture)
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC1)
+	}
+
+	// ETC2
+	// Desktop OpenGL: Mandatory in OpenGL 4.3+, or with GL_ARB_ES3_compatibility
+	//	- NOTES:
+	//		- Desktop OpenGL (especially 4.3+ where it's required) may claim support for ETC2/EAC,
+	//		  but may actually not have hardware support (so it'll just decompress in memory)
+	//		- While theoretically the checks in getPixelFormatUsageSupport_gl should detect this,
+	//		  it seems GL_FULL_SUPPORT is sometimes returned instead of GL_CAVEAT_SUPPORT (even when
+	//		  there is no hardware support and the textures are decompressed by the driver in software)
+	//		- To handle this, really restrict when it's permitted on desktop - only permit if S3TC is *not* supported
+	// OpenGL ES: Mandatory in OpenGL ES 3.0+
+	// IMPORTANT: **MUST** come after S3TC/DXT & RGTC is checked !!
+	if ((gles && GLAD_GL_ES_VERSION_3_0) || (!gles && GLAD_GL_ARB_ES3_compatibility))
+	{
+		// NOTES:
+		// OpenGL ES 3.0+ claims it is supported for 2d texture arrays
+		// GL_ARB_ES3_compatibility makes no claims about support in glCompressedTex*Image3D?
+		bool canSupport2DTextureArrays = (gles && GLAD_GL_ES_VERSION_3_0);
+
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+		if (canSupport2DTextureArrays)
+		{
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+		}
+
+		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		{
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+			if (canSupport2DTextureArrays)
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+			}
+		}
+		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_R_BC4_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		{
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+			if (canSupport2DTextureArrays)
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
+			}
+		}
+		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RG_BC5_UNORM, gfx_api::pixel_format_usage::sampled_image))
+		{
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+			if (canSupport2DTextureArrays)
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+			}
+		}
+	}
+
+	// ASTC (LDR)
+	// Either OpenGL: GL_KHR_texture_compression_astc_ldr
+	// However, for now - until more testing is complete - only enable on OpenGL ES
+	if (gles && GLAD_GL_KHR_texture_compression_astc_ldr)
+	{
+		// NOTE: GL_KHR_texture_compression_astc_ldr claims it is supported in glCompressedTex*Image3D
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+	}
 }
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
@@ -2079,8 +2713,20 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
 
 	glViewport(0, 0, drawableWidth, drawableHeight);
+	viewportWidth = static_cast<uint32_t>(drawableWidth);
+	viewportHeight = static_cast<uint32_t>(drawableHeight);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
+}
+
+std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
+{
+	return {viewportWidth, viewportHeight};
+}
+
+bool gl_context::shouldDraw()
+{
+	return viewportWidth > 0 && viewportHeight > 0;
 }
 
 void gl_context::shutdown()
@@ -2091,6 +2737,41 @@ void gl_context::shutdown()
 	{
 		glDeleteBuffers(1, &scratchbuffer);
 		scratchbuffer = 0;
+	}
+
+	if (GLAD_GL_ARB_timer_query && glDeleteQueries)
+	{
+		glDeleteQueries(PERF_COUNT, perfpos);
+	}
+
+	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
+	{
+		// Cleanup from very simple VAO code (just bind a single global VAO)
+		if (vaoId != 0)
+		{
+			if (glDeleteVertexArrays != nullptr)
+			{
+				glDeleteVertexArrays(1, &vaoId);
+			}
+			vaoId = 0;
+		}
+	}
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	if (!debugLiveTextures.empty())
+	{
+		// Some textures were not properly freed before OpenGL context shutdown
+		for (auto texture : debugLiveTextures)
+		{
+			debug(LOG_ERROR, "Texture resource not cleaned up: %p (name: %s)", (const void*)texture, texture->debugName.c_str());
+		}
+		ASSERT(debugLiveTextures.empty(), "There are %zu textures that were not cleaned up.", debugLiveTextures.size());
+	}
+#endif
+
+	if (backend_impl)
+	{
+		backend_impl->destroyGLContext();
 	}
 }
 
@@ -2109,3 +2790,26 @@ gfx_api::context::swap_interval_mode gl_context::getSwapInterval() const
 	return backend_impl->getSwapInterval();
 }
 
+bool gl_context::supportsMipLodBias() const
+{
+	if (!gles)
+	{
+		if (GLAD_GL_VERSION_2_1)
+		{
+			// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, ...) should be available in OpenGL 3.0+ (OpenGL 3.3+?)
+			// But also can be supported by providing bias to texture() / texture2d() sampling call in shader (so just do that)
+			return true;
+		}
+		return false;
+	}
+	else
+	{
+		if (GLAD_GL_ES_VERSION_2_0)
+		{
+			// Can support on OpenGL ES 2.0+
+			// By providing bias to texture() (OpenGL ES 3.0+) or texture2d() (OpenGL ES 2.0) sampling call in shader
+			return true;
+		}
+		return false;
+	}
+}

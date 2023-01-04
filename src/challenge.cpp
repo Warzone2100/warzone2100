@@ -30,6 +30,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -42,6 +43,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "mission.h"
+#include "lib/framework/wztime.h"
 #include "titleui/titleui.h"
 #include "titleui/multiplayer.h"
 
@@ -70,11 +72,12 @@
 #define CHALLENGE_ENTRY_START			ID_LOADSAVE+10		// each of the buttons.
 #define CHALLENGE_ENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
-static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
+static std::shared_ptr<W_SCREEN> psRequestScreen = nullptr; // Widget screen for requester
 
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
 std::string challengeName;
+WzString challengeFileName;
 
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -98,20 +101,32 @@ const char* currentChallengeName()
 // quite the hack, game name is stored in global sRequestResult
 void updateChallenge(bool gameWon)
 {
-	char sPath[64], *fStr;
+	char *fStr;
 	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 	bool victory = false;
 	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
+	ASSERT_OR_RETURN(, strlen(sRequestResult) > 0, "Empty sRequestResult");
 
 	fStr = strrchr(sRequestResult, '/');
-	fStr++;	// skip slash
+	if (fStr != nullptr)
+	{
+		fStr++;	// skip slash
+	}
+	else
+	{
+		fStr = sRequestResult;
+	}
 	if (*fStr == '\0')
 	{
 		debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
 		return;
 	}
-	sstrcpy(sPath, fStr);
-	sPath[strlen(sPath) - 5] = '\0';	// remove .json
+	WzString sPath = fStr;
+	// remove .json
+	if (sPath.endsWith(".json"))
+	{
+		sPath.truncate(sPath.length() - 5);
+	}
 	scores.beginGroup(sPath);
 	victory = scores.value("victory", false).toBool();
 	seconds = scores.value("seconds", 0).toInt();
@@ -190,15 +205,23 @@ bool addChallenges()
 	static char		sSlotCaps[totalslots][totalslotspace];
 	static char		sSlotTips[totalslots][totalslotspace];
 	static char		sSlotFile[totalslots][totalslotspace];
-	char **i, **files;
 
-	psRequestScreen = new W_SCREEN; // init the screen
+	psRequestScreen = W_SCREEN::make(); // init the screen
 
-	WIDGET *parent = psRequestScreen->psForm;
+	WIDGET *parent = psRequestScreen->psForm.get();
 
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *challengeForm = new IntFormAnimated(parent);
+	auto challengeForm = std::make_shared<IntFormAnimated>();
+
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
 	challengeForm->id = CHALLENGE_FORM;
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
+	parent->attach(challengeForm);
 	challengeForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
 	}));
@@ -290,23 +313,21 @@ bool addChallenges()
 	debug(LOG_SAVE, "Searching \"%s\" for challenges", sPath);
 
 	// add challenges to buttons
-	files = PHYSFS_enumerateFiles(sSearchPath);
-	for (i = files; *i != nullptr; ++i)
-	{
+	WZ_PHYSFS_enumerateFiles(sSearchPath, [&](const char *i) -> bool {
 		W_BUTTON *button;
 		WzString name, map, difficulty, highscore, description;
 		bool victory;
 		int seconds;
 
 		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, ".json"))
+		if (!strstr(i, ".json"))
 		{
 			// If it doesn't, move on to the next filename
-			continue;
+			return true; // continue;
 		}
 
 		/* First grab any high score associated with this challenge */
-		sstrcpy(sPath, *i);
+		sstrcpy(sPath, i);
 		sPath[strlen(sPath) - 5] = '\0';	// remove .json
 		highscore = "no score";
 		WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadOnly);
@@ -317,18 +338,12 @@ bool addChallenges()
 		if (seconds > 0)
 		{
 			char psTimeText[sizeof("HH:MM:SS")] = { 0 };
-			time_t secs = seconds;
-			struct tm tmp;
-#if defined(WZ_OS_WIN)
-			gmtime_s(&tmp, &secs);
-#else
-			gmtime_r(&secs, &tmp);
-#endif
+			struct tm tmp = getUtcTime(static_cast<time_t>(seconds));
 			strftime(psTimeText, sizeof(psTimeText), "%H:%M:%S", &tmp);
 			highscore = WzString::fromUtf8(psTimeText) + " by " + name + " (" + WzString(victory ? "Victory" : "Survived") + ")";
 		}
 		scores.endGroup();
-		ssprintf(sPath, "%s/%s", sSearchPath, *i);
+		ssprintf(sPath, "%s/%s", sSearchPath, i);
 		WzConfig challenge(sPath, WzConfig::ReadOnlyAndRequired);
 		ASSERT(challenge.contains("challenge"), "Invalid challenge file %s - no challenge section!", sPath);
 		challenge.beginGroup("challenge");
@@ -341,7 +356,7 @@ bool addChallenges()
 
 		button = (W_BUTTON *)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
 
-		debug(LOG_SAVE, "We found [%s]", *i);
+		debug(LOG_SAVE, "We found [%s]", i);
 
 		/* Set the button-text */
 		sstrcpy(sSlotCaps[slotCount], name.toUtf8().c_str());		// store it!
@@ -356,11 +371,11 @@ bool addChallenges()
 		slotCount++;		// go to next button...
 		if (slotCount == totalslots)
 		{
-			break;
+			return false; // break;
 		}
 		challenge.endGroup();
-	}
-	PHYSFS_freeList(files);
+		return true; // continue
+	});
 
 	challengesUp = true;
 
@@ -370,7 +385,6 @@ bool addChallenges()
 // ////////////////////////////////////////////////////////////////////////////
 bool closeChallenges()
 {
-	delete psRequestScreen;
 	psRequestScreen = nullptr;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
@@ -385,7 +399,7 @@ bool closeChallenges()
 bool runChallenges()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
-	for (const auto trigger : triggers)
+	for (const auto &trigger : triggers)
 	{
 		unsigned id = trigger.widget->id;
 
@@ -408,6 +422,7 @@ bool runChallenges()
 				assert(data != nullptr);
 				assert(data->filename != nullptr);
 				sstrcpy(sRequestResult, data->filename);
+				challengeFileName = sRequestResult;
 				challengeName = psWidget->pText.toStdString();
 			}
 			else

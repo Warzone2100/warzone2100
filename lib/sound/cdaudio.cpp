@@ -24,7 +24,8 @@
 #include <string.h>
 #include <physfs.h>
 #include "lib/framework/physfs_ext.h"
-
+#include "oggopus.h"
+#include "oggvorbis.h"
 #include "audio.h"
 #include "track.h"
 #include "tracklib.h"
@@ -36,17 +37,14 @@
 
 // MARK: - Globals
 
-static float		music_volume = 0.5;
-
-static const size_t bufferSize = 16 * 1024;
-static const unsigned int buffer_count = 32;
+static float	music_volume = 0.5;
 static bool		music_initialized = false;
 static bool		stopping = true;
 static bool		is_opening_new_track = false;
 static bool		queued_play_track_while_loading = false;
 static AUDIO_STREAM *cdStream = nullptr;
 
-const char MENU_MUSIC[] = "music/menu.ogg";
+const char MENU_MUSIC[] = "music/menu.opus";
 static SONG_CONTEXT currentSongContext = SONG_FRONTEND;
 static std::shared_ptr<const WZ_TRACK> currentTrack;
 static std::vector<std::shared_ptr<CDAudioEventSink>> registeredEventSinks;
@@ -185,12 +183,11 @@ static float cdAudio_CalculateTrackVolume(const std::shared_ptr<const WZ_TRACK>&
 
 static bool cdAudio_OpenTrack(std::shared_ptr<const WZ_TRACK> track)
 {
+	const std::string& filename = track->filename;
 	if (!music_initialized)
 	{
 		return false;
 	}
-
-	const std::string& filename = track->filename;
 
 	debug(LOG_SOUND, "called(%s)", filename.c_str());
 	is_opening_new_track = true;
@@ -199,38 +196,20 @@ static bool cdAudio_OpenTrack(std::shared_ptr<const WZ_TRACK> track)
 
 	PlayList_SetCurrentSong(track);
 
-	if (strncasecmp(filename.c_str() + filename.length() - 4, ".ogg", 4) == 0)
+	cdStream = sound_PlayStream(filename.c_str(), cdAudio_CalculateTrackVolume(track), 
+						[track](const AUDIO_STREAM*, const void*) { cdAudio_TrackFinished(track);}, nullptr);
+	if (cdStream == nullptr)
 	{
-		PHYSFS_file *music_file = PHYSFS_openRead(filename.c_str());
-
-		debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(filename.c_str()).c_str(), filename.c_str());
-		if (music_file == nullptr)
-		{
-			debug(LOG_ERROR, "Failed opening file [directory: %s] %s, with error %s", WZ_PHYSFS_getRealDir_String(filename.c_str()).c_str(), filename.c_str(), WZ_PHYSFS_getLastError());
-			NOTIFY_MUSIC_EVENT(musicStopped);
-			return false;
-		}
-
-		cdStream = sound_PlayStreamWithBuf(music_file, cdAudio_CalculateTrackVolume(track), [track](const void*) {
-			cdAudio_TrackFinished(track);
-		}, nullptr, bufferSize, buffer_count, true);
-		if (cdStream == nullptr)
-		{
-			PHYSFS_close(music_file);
-			debug(LOG_ERROR, "Failed creating audio stream for %s", filename.c_str());
-			NOTIFY_MUSIC_EVENT(musicStopped);
-			return false;
-		}
-		currentTrack = track;
-		NOTIFY_MUSIC_EVENT_TRACK(startedPlayingTrack, track);
-
-		debug(LOG_SOUND, "successful(%s)", filename.c_str());
-		stopping = false;
-		return true;
+		debug(LOG_ERROR, "Failed creating audio stream for %s", filename.c_str());
+		NOTIFY_MUSIC_EVENT(musicStopped);
+		return false;
 	}
+	currentTrack = track;
+	NOTIFY_MUSIC_EVENT_TRACK(startedPlayingTrack, track);
 
-	NOTIFY_MUSIC_EVENT(musicStopped);
-	return false; // unhandled
+	debug(LOG_SOUND, "successful(%s)", filename.c_str());
+	stopping = false;
+	return true;
 }
 
 static std::shared_ptr<const WZ_TRACK> cdAudio_GetNextTrack()
@@ -249,7 +228,7 @@ static std::shared_ptr<const WZ_TRACK> cdAudio_GetNextTrack()
 	return nextTrack;
 }
 
-static void cdAudio_TrackFinished(const std::shared_ptr<const WZ_TRACK>& track)
+static void cdAudio_TrackFinished(const std::shared_ptr<const WZ_TRACK> &track)
 {
 	NOTIFY_MUSIC_EVENT_TRACK(trackEnded, track);
 
@@ -267,7 +246,7 @@ static void cdAudio_TrackFinished(const std::shared_ptr<const WZ_TRACK>& track)
 	{
 		if (!stopping)
 		{
-			debug(LOG_ERROR, "Out of playlist?! was playing %s", track->filename.c_str());
+			debug(LOG_SOUND, "Out of playlist - was playing %s", track->filename.c_str());
 			NOTIFY_MUSIC_EVENT(musicStopped);
 		}
 		return;
@@ -359,7 +338,6 @@ void cdAudio_Stop()
 
 void cdAudio_Pause()
 {
-	debug(LOG_SOUND, "called");
 	if (cdStream)
 	{
 		sound_PauseStream(cdStream);
@@ -369,7 +347,6 @@ void cdAudio_Pause()
 
 void cdAudio_Resume()
 {
-	debug(LOG_SOUND, "called");
 	if (cdStream)
 	{
 		sound_ResumeStream(cdStream);

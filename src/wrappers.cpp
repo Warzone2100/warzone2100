@@ -34,9 +34,9 @@
 #include "lib/sound/audio.h"
 #include "lib/framework/wzapp.h"
 
+#include "clparse.h"
 #include "frontend.h"
 #include "keyedit.h"
-#include "keymap.h"
 #include "mission.h"
 #include "multiint.h"
 #include "multilimit.h"
@@ -57,7 +57,9 @@ static bool		bPlayerHasLost = false;
 static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are hosting a game via command line option.
+static HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are hosting a game via command line option.
+static bool bHeadlessAutoGameModeCLIOption = false;
+static bool bActualHeadlessAutoGameMode = false;
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -67,7 +69,7 @@ static STAR newStar()
 {
 	STAR s;
 	s.xPos = rand() % barRightX;
-	s.speed = (rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0;
+	s.speed = static_cast<int>((rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0);
 	s.colour = pal_SetBrightness(150 + rand() % 100);
 	return s;
 }
@@ -79,9 +81,9 @@ static void setupLoadingScreen()
 	int h = pie_GetVideoBufferHeight();
 	int offset;
 
-	boxHeight = h / 40.0;
+	boxHeight = static_cast<int>(h / 40.0);
 	offset = boxHeight;
-	boxWidth = w - 2.0 * offset;
+	boxWidth = w - 2 * offset;
 
 	barRightX = w - offset;
 	barRightY = h - offset;
@@ -89,8 +91,8 @@ static void setupLoadingScreen()
 	barLeftX = barRightX - boxWidth;
 	barLeftY = barRightY - boxHeight;
 
-	starsNum = boxWidth / boxHeight;
-	starHeight = 2.0 * h / 640.0;
+	starsNum = boxWidth / std::max<int>(boxHeight, 1);
+	starHeight = static_cast<int>(2.0 * h / 640.0);
 
 	if (!stars)
 	{
@@ -101,6 +103,38 @@ static void setupLoadingScreen()
 	{
 		stars[i] = newStar();
 	}
+}
+
+bool recalculateEffectiveHeadlessValue()
+{
+	if (hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost || hostlaunch == HostLaunch::LoadReplay || autogame_enabled())
+	{
+		// only support headless mode if hostlaunch is --skirmish or --autogame
+		return bHeadlessAutoGameModeCLIOption;
+	}
+	return false;
+}
+
+void setHostLaunch(HostLaunch value)
+{
+	hostlaunch = value;
+	bActualHeadlessAutoGameMode = recalculateEffectiveHeadlessValue();
+}
+
+HostLaunch getHostLaunch()
+{
+	return hostlaunch;
+}
+
+void setHeadlessGameMode(bool enabled)
+{
+	bHeadlessAutoGameModeCLIOption = enabled;
+	bActualHeadlessAutoGameMode = recalculateEffectiveHeadlessValue();
+}
+
+bool headlessGameMode()
+{
+	return bActualHeadlessAutoGameMode;
 }
 
 
@@ -121,7 +155,12 @@ TITLECODE titleLoop()
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetFogStatus(false);
-	screen_RestartBackDrop();
+	if (screen_RestartBackDrop())
+	{
+		// changed value - draw the backdrop
+		// otherwise, pie_ScreenFrameRenderBegin handles drawing it
+		screen_Display();
+	}
 	wzShowMouse(true);
 
 	// When we first init the game, firstcall is true.
@@ -158,7 +197,7 @@ TITLECODE titleLoop()
 			NETinit(true);
 			// Ensure the joinGame has a place to return to
 			changeTitleMode(TITLE);
-			joinGame(iptoconnect);
+			joinGame(iptoconnect, cliConnectToIpAsSpectator);
 		}
 		else
 		{
@@ -184,12 +223,10 @@ TITLECODE titleLoop()
 	audio_Update();
 
 	pie_SetFogStatus(false);
-	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 	{
-		war_setFullscreen(!war_getFullscreen());
-		wzToggleFullscreen();
+		war_setWindowMode(wzAltEnterToggleFullscreen());
 	}
 	return RetCode;
 }
@@ -209,6 +246,7 @@ void loadingScreenCallback()
 	{
 		return;
 	}
+
 	lastTick = currTick;
 
 	/* Draw the black rectangle at the bottom, with a two pixel border */
@@ -232,7 +270,9 @@ void loadingScreenCallback()
 		}
 	}
 
-	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// don't clear.
+	pie_ScreenFrameRenderEnd();
+	pie_ScreenFrameRenderBegin();
+
 	audio_Update();
 
 	wzPumpEventsWhileLoading();
@@ -241,6 +281,7 @@ void loadingScreenCallback()
 // fill buffers with the static screen
 void initLoadingScreen(bool drawbdrop)
 {
+	pie_ScreenFrameRenderBegin(); // start a frame *if one isn't yet started*
 	setupLoadingScreen();
 	wzShowMouse(false);
 	pie_SetFogStatus(false);
@@ -260,10 +301,6 @@ void initLoadingScreen(bool drawbdrop)
 	{
 		screen_StopBackDrop();
 	}
-
-	// Start with two cleared buffers as the hacky loading screen code re-uses old buffers to create its effect.
-	pie_ScreenFlip(CLEAR_BLACK);
-	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 // shut down the loading screen
@@ -275,7 +312,6 @@ void closeLoadingScreen()
 		stars = nullptr;
 	}
 	resSetLoadCallback(nullptr);
-	pie_ScreenFlip(CLEAR_BLACK);
 }
 
 
@@ -285,6 +321,19 @@ void closeLoadingScreen()
 
 bool displayGameOver(bool bDidit, bool showBackDrop)
 {
+	bool isFirstCallForThisGame = !testPlayerHasLost() && !testPlayerHasWon();
+	if (bMultiPlayer)
+	{
+		// This is a bit of a hack and partially relies upon the logic in endconditions.js
+		bool isGameFullyOver =
+			NetPlay.players[selectedPlayer].isSpectator	// gameOverMessage is only called for spectators when the game fully ends
+			|| bDidit; // can only win when the game actually ends :)
+		if (isGameFullyOver && !ingame.endTime.has_value())
+		{
+			ingame.endTime = std::chrono::steady_clock::now();
+			debug(LOG_INFO, "Game ended (duration: %lld)", (long long)std::chrono::duration_cast<std::chrono::seconds>(ingame.endTime.value() - ingame.startTime).count());
+		}
+	}
 	if (bDidit)
 	{
 		setPlayerHasWon(true);
@@ -297,12 +346,12 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 	else
 	{
 		setPlayerHasLost(true);
-		if (bMultiPlayer)
+		if (bMultiPlayer && isFirstCallForThisGame) // make sure we only accumulate one loss (even if this is called more than once, for example when losing initially, and then when the game fully ends)
 		{
 			updateMultiStatsLoses();
 		}
 	}
-	if (bMultiPlayer)
+	if (bMultiPlayer && isFirstCallForThisGame)
 	{
 		updateMultiStatsGames(); // update games played.
 
@@ -312,7 +361,18 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
-	intAddMissionResult(bDidit, true, showBackDrop);
+
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator)
+	{
+		// Special message for spectators to inform them that the game is fully over
+		addConsoleMessage(_("GAME OVER"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		addConsoleMessage(_("The battle is over - you can leave the room."), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		// TODO: Display this in a form with a "Quit to Main Menu" button?, or adapt intAddMissionResult to have a separate display for spectators?
+	}
+	else
+	{
+		intAddMissionResult(bDidit, true, showBackDrop);
+	}
 
 	return true;
 }

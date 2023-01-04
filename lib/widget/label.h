@@ -26,11 +26,12 @@
 
 #include "widget.h"
 #include "widgbase.h"
+#include "paragraph.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include <string>
 
 struct LabelDisplayCache {
-	std::vector<WzText> wzText;
+	std::vector<WzCachedText> wzText;
 };
 
 class W_LABEL : public WIDGET
@@ -38,15 +39,16 @@ class W_LABEL : public WIDGET
 
 public:
 	W_LABEL(W_LABINIT const *init);
-	W_LABEL(WIDGET *parent);
+	W_LABEL();
 
-	void highlight(W_CONTEXT *psContext) override;
-	void highlightLost() override;
 	void display(int xOffset, int yOffset) override;
 
 	WzString getString() const override;
 	void setString(WzString string) override;
 	void setTip(std::string string) override;
+	std::string getTip() override;
+
+	void run(W_CONTEXT *) override;
 
 	// Sets a string for the label
 	// - line-wraps at max width
@@ -67,17 +69,43 @@ public:
 		setFontColour(colour);
 	}
 	void setTextAlignment(WzTextAlignment align);
+	void setCanTruncate(bool _canTruncate)
+	{
+		canTruncate = _canTruncate;
+	}
+
+	int getMaxLineWidth();
+
+	void setCacheNeverExpires(bool value)
+	{
+		cacheNeverExpires = value;
+	}
 
 	using WIDGET::setTip;
 
+	int requiredHeight();
+
+	virtual int32_t idealWidth() override
+	{
+		return getMaxLineWidth();
+	}
+
+	virtual int32_t idealHeight() override
+	{
+		return requiredHeight();
+	}
+
 private:
 	std::vector<TextLine> aTextLines;   // text lines on the label
-	int maxLineWidth = 0;
+	int maxLineWidth = -1;
 	iV_fonts FontID;
 	std::string		pTip;          		// The tool tip for the button
 	PIELIGHT fontColour;
 	LabelDisplayCache displayCache;
 	int lineSpacing = 0;
+	bool cacheNeverExpires = false;
+	bool canTruncate = false;
+	bool isTruncated = false;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

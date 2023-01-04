@@ -29,6 +29,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/frameresource.h"
 
 #include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/ivis_opengl/piestate.h"
@@ -63,11 +64,15 @@
 #include "multirecv.h"
 #include "template.h"
 #include "activity.h"
+#include "warzoneconfig.h"
+
+#define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
 
 // send complete game info set!
 void sendOptions()
 {
 	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, GetGameMode() != GS_NORMAL, "sendOptions shouldn't be called after the game has started");
 
 	game.modHashes = getModHashList();
 
@@ -88,9 +93,15 @@ void sendOptions()
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	NETbool(&game.scavengers);
+	NETuint8_t(&game.scavengers);
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
+	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
+	{
+		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32 "; resetting to: %" PRIu32, game.inactivityMinutes, static_cast<uint32_t>(MIN_MPINACTIVITY_MINUTES));
+		game.inactivityMinutes = MIN_MPINACTIVITY_MINUTES;
+	}
+	NETuint32_t(&game.inactivityMinutes);
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -98,7 +109,7 @@ void sendOptions()
 	}
 
 	// Send the list of who is still joining
-	for (unsigned i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
 	}
@@ -114,6 +125,11 @@ void sendOptions()
 
 	// Send the number of structure limits to expect
 	uint32_t numStructureLimits = static_cast<uint32_t>(ingame.structureLimits.size());
+	if (numStructureLimits > MAX_STRUCTURE_LIMITS)
+	{
+		debug(LOG_ERROR, "Number of structure limits (%" PRIu32") exceeds maximum supported - truncating", numStructureLimits);
+		numStructureLimits = MAX_STRUCTURE_LIMITS;
+	}
 	NETuint32_t(&numStructureLimits);
 	debug(LOG_NET, "(Host) Structure limits to process on client is %zu", ingame.structureLimits.size());
 	// Send the structures changed
@@ -130,11 +146,20 @@ void sendOptions()
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
+std::vector<MULTISTRUCTLIMITS> oldStructureLimits;
+
 // ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
-void recvOptions(NETQUEUE queue)
+// returns: false if the options should be considered invalid and the client should disconnect
+bool recvOptions(NETQUEUE queue)
 {
+	ASSERT_OR_RETURN(true /* silently ignore */, queue.index == NetPlay.hostPlayer, "NET_OPTIONS received from unexpected player: %" PRIu8 " - ignoring", queue.index);
+	ASSERT_OR_RETURN(false, GetGameMode() != GS_NORMAL, "NET_OPTIONS received after the game has started??");
+
 	unsigned int i;
+
+	// store prior map / mod info
+	MULTIPLAYERGAME priorGameInfo = game;
 
 	debug(LOG_NET, "Receiving options from host");
 	NETbeginDecode(queue, NET_OPTIONS);
@@ -145,7 +170,7 @@ void recvOptions(NETQUEUE queue)
 	NETbin(game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize;
 	NETuint32_t(&modHashesSize);
-	ASSERT_OR_RETURN(, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
+	ASSERT_OR_RETURN(false, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
 	game.modHashes.resize(modHashesSize);
 	for (auto &hash : game.modHashes)
 	{
@@ -156,9 +181,15 @@ void recvOptions(NETQUEUE queue)
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	NETbool(&game.scavengers);
+	NETuint8_t(&game.scavengers);
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
+	NETuint32_t(&game.inactivityMinutes);
+	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
+	{
+		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32, game.inactivityMinutes);
+		return false;
+	}
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -166,7 +197,7 @@ void recvOptions(NETQUEUE queue)
 	}
 
 	// Send the list of who is still joining
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
 	}
@@ -183,6 +214,9 @@ void recvOptions(NETQUEUE queue)
 	}
 	netPlayersUpdated = true;
 
+	// Make a copy of old structure limits to see what got changed
+	oldStructureLimits = ingame.structureLimits;
+
 	// Free any structure limits we may have in-place
 	ingame.structureLimits.clear();
 
@@ -190,35 +224,129 @@ void recvOptions(NETQUEUE queue)
 	uint32_t numStructureLimits = 0;
 	NETuint32_t(&numStructureLimits);
 	debug(LOG_NET, "Host is sending us %u structure limits", numStructureLimits);
+	if (numStructureLimits > MAX_STRUCTURE_LIMITS)
+	{
+		debug(LOG_POPUP, "Number of structure limits (%" PRIu32") exceeds maximum supported. Incompatible host.", numStructureLimits);
+		NETend();
+		return false;
+	}
 	// If there were any changes allocate memory for them
 	if (numStructureLimits)
 	{
 		ingame.structureLimits.resize(numStructureLimits);
+		// If host have limits changed everyone should load limits too
+		// Do not load limits if mods present because mods are not loaded yet
+		if (!modHashesSize && !bLimiterLoaded)
+		{
+			initLoadingScreen(true);
+			if (!resLoad("wrf/limiter_data.wrf", 503))
+			{
+				debug(LOG_INFO, "Unable to load limiter_data during recvOptions!");
+			}
+			else
+			{
+				bLimiterLoaded = true;
+				closeLoadingScreen();
+			}
+		}
 	}
 
+	int nondefaultlimitsize = 0;
 	for (i = 0; i < numStructureLimits; i++)
 	{
 		NETuint32_t(&ingame.structureLimits[i].id);
 		NETuint32_t(&ingame.structureLimits[i].limit);
+		if (bLimiterLoaded && ingame.structureLimits[i].id < numStructureStats)
+		{
+			ASSERT(asStructureStats != nullptr, "numStructureStats > 0, but asStructureStats is null??");
+			if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
+			{
+				nondefaultlimitsize++;
+			}
+		}
 	}
 	NETuint8_t(&ingame.flags);
 
 	NETend();
 
-	debug(LOG_INFO, "Rebuilding map list");
-	// clear out the old level list.
-	levShutDown();
-	levInitialise();
-	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
-	buildMapList();
+	// Do not print limits information if we don't have them loaded
+	if (bLimiterLoaded)
+	{
+		// Check if those vectors are different
+		bool structurelimitsUpdated = (oldStructureLimits.size() != ingame.structureLimits.size()) || (oldStructureLimits != ingame.structureLimits);
+	
+		// Notify if structure limits were changed
+		if (structurelimitsUpdated)
+		{
+			if (nondefaultlimitsize)
+			{
+				addConsoleMessage(astringf(_("Changed structure limits [%d]:"), nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				int changedNum = 1;
+				for (i = 0; i < numStructureLimits; i++)
+				{
+					if (ingame.structureLimits[i].id < numStructureStats)
+					{
+						if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
+						{
+							WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
+							std::string tmpConsoleMsgStr;
+							if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != LOTS_OF)
+							{
+								tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: %u)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit, asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit);
+							}
+							else
+							{
+								tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: no limit)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit);
+							}
+							addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							changedNum++;
+						}
+					}
+					else
+					{
+						std::string tmpConsoleMsgStr = astringf(_("[%d] Limit that is bigger than numStructureStats (%u): %u"), i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit);
+						addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+					}
+				}
+			}
+			else
+			{
+				addConsoleMessage(_("Limits were reset to default."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+		}
+	}
+	else
+	{
+		if (numStructureLimits)
+		{
+			std::string tmpConsoleMsgStr = astringf(_("Host initialized %u limits, unable to show them due to mods"), numStructureLimits);
+			addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
 
-	bool haveData = true;
-	auto requestFile = [&haveData](Sha256 &hash, char const *filename) {
-		if (std::any_of(NetPlay.wzFiles.begin(), NetPlay.wzFiles.end(), [&hash](WZFile const &file) { return file.hash == hash; }))
+
+	bool bRebuildMapList = strcmp(game.map, priorGameInfo.map) != 0 || game.hash != priorGameInfo.hash || game.modHashes != priorGameInfo.modHashes;
+	if (bRebuildMapList)
+	{
+		debug(LOG_INFO, "Rebuilding map list");
+		// clear out the old level list.
+		levShutDown();
+		levInitialise();
+		rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
+		buildMapList();
+	}
+
+	enum class FileRequestResult {
+		StartingDownload,
+		DownloadInProgress,
+		FileExists,
+		FailedToOpenFileForWriting
+	};
+	auto requestFile = [](Sha256 &hash, char const *filename) -> FileRequestResult {
+		if (std::any_of(NET_getDownloadingWzFiles().begin(), NET_getDownloadingWzFiles().end(), [&hash](WZFile const &file) { return file.hash == hash; }))
 		{
 			debug(LOG_INFO, "Already requested file, continue waiting.");
-			haveData = false;
-			return false;  // Downloading the file already
+			return FileRequestResult::DownloadInProgress;  // Downloading the file already
 		}
 
 		if (!PHYSFS_exists(filename))
@@ -231,26 +359,25 @@ void recvOptions(NETQUEUE queue)
 		}
 		else
 		{
-			pal_Init(); // Palette could be modded.
-			return false;  // Have the file already.
+			pal_Init(); // Palette could be modded. // Why is this here - isn't there a better place for it?
+			return FileRequestResult::FileExists;  // Have the file already.
 		}
 
 		PHYSFS_file *pFileHandle = PHYSFS_openWrite(filename);
 		if (pFileHandle == nullptr)
 		{
 			debug(LOG_ERROR, "Failed to open %s for writing: %s", filename, WZ_PHYSFS_getLastError());
-			return false;
+			return FileRequestResult::FailedToOpenFileForWriting;
 		}
 
-		NetPlay.wzFiles.emplace_back(pFileHandle, filename, hash);
+		NET_addDownloadingWZFile(WZFile(pFileHandle, filename, hash));
 
 		// Request the map/mod from the host
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
+		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_FILE_REQUESTED);
 		NETbin(hash.bytes, hash.Bytes);
 		NETend();
 
-		haveData = false;
-		return true;  // Starting download now.
+		return FileRequestResult::StartingDownload;  // Starting download now.
 	};
 
 	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
@@ -268,15 +395,23 @@ void recvOptions(NETQUEUE queue)
 		char filename[256];
 		ssprintf(filename, "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, game.hash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
 
-		if (requestFile(game.hash, filename))
+		auto requestResult = requestFile(game.hash, filename);
+		switch (requestResult)
 		{
-			debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
-			addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		else
-		{
-			debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
-			abort();
+			case FileRequestResult::StartingDownload:
+				debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
+				addConsoleMessage(_("MAP REQUESTED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				break;
+			case FileRequestResult::DownloadInProgress:
+				// do nothing - just wait
+				break;
+			case FileRequestResult::FileExists:
+				debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
+				return false;
+			case FileRequestResult::FailedToOpenFileForWriting:
+				// TODO: How best to handle? Ideally, message + back out of lobby?
+				debug(LOG_FATAL, "Failed to open file for writing - unable to download file: %s", filename);
+				return false;
 		}
 	}
 
@@ -285,10 +420,23 @@ void recvOptions(NETQUEUE queue)
 		char filename[256];
 		ssprintf(filename, "mods/downloads/%s", hash.toString().c_str());
 
-		if (requestFile(hash, filename))
+		auto requestResult = requestFile(hash, filename);
+		switch (requestResult)
 		{
-			debug(LOG_INFO, "Mod was not found, requesting mod %s from host", hash.toString().c_str());
-			addConsoleMessage("MOD REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			case FileRequestResult::StartingDownload:
+				debug(LOG_INFO, "Mod was not found, requesting mod %s from host", hash.toString().c_str());
+				addConsoleMessage(_("MOD REQUESTED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				break;
+			case FileRequestResult::DownloadInProgress:
+				// do nothing - just wait
+				break;
+			case FileRequestResult::FileExists:
+				// Mod already exists / downloaded
+				break;
+			case FileRequestResult::FailedToOpenFileForWriting:
+				// TODO: How best to handle? Ideally, message + back out of lobby?
+				debug(LOG_FATAL, "Failed to open file for writing - unable to download file: %s", filename);
+				return false;
 		}
 	}
 
@@ -308,18 +456,20 @@ void recvOptions(NETQUEUE queue)
 	}
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+
+	return true;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // Host Campaign.
-bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs)
 {
-	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
+	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", SessionName, hostPlayerName);
 
 	freeMessages();
 
-	if (!NEThostGame(sGame, sPlayer, static_cast<SDWORD>(game.type), 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, 0, 0, game.maxPlayers))
 	{
 		return false;
 	}
@@ -327,14 +477,17 @@ bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 	/* Skip resetting AIs if we are doing autohost */
 	if (NetPlay.bComms && !skipResetAIs)
 	{
-		for (unsigned i = 0; i < MAX_PLAYERS; i++)
+		for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 		{
-			NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
+			if (!(i == selectedPlayer && i < MAX_PLAYERS))
+			{
+				NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
+			}
 		}
 	}
 
 	NetPlay.players[selectedPlayer].ready = false;
-	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
+	setPlayerName(selectedPlayer, hostPlayerName);
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
@@ -342,9 +495,10 @@ bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 	bMultiMessages = true; // enable messages
 
 	PLAYERSTATS playerStats;
-	loadMultiStats(sPlayer, &playerStats);
+	loadMultiStats(hostPlayerName, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
+	lookupRatingAsync(selectedPlayer);
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	return true;
@@ -356,7 +510,7 @@ bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 bool sendLeavingMsg()
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
+	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_PLAYER_LEAVING);
 	{
 		bool host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
@@ -380,6 +534,8 @@ bool multiShutdown()
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
+	clearDisplayMultiJoiningStatusCache();
+
 	return true;
 }
 
@@ -388,13 +544,51 @@ static bool gameInit()
 {
 	UDWORD			player;
 
-	for (player = 1; player < MAX_PLAYERS; player++)
+	// Various sanity checks (for *true* multiplayer)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
+	{
+		if (player < MAX_PLAYERS)
+		{
+			if (NetPlay.players[player].allocated)
+			{
+				ASSERT(NetPlay.players[player].difficulty == AIDifficulty::HUMAN, "Found an allocated (human) player (%u) with mis-matched difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
+
+			}
+		}
+
+		if (bMultiPlayer && NetPlay.bComms)
+		{
+			if (!NetPlay.players[player].allocated)
+			{
+				ASSERT(NetPlay.players[player].difficulty != AIDifficulty::HUMAN, "Found a non-human slot (%u) with mis-matched (human) difficulty (%d)", player, (int)NetPlay.players[player].difficulty);
+				ASSERT(NetPlay.players[player].ai < 0 || NetPlay.players[player].difficulty != AIDifficulty::DISABLED, "Slot (%u) has AI, but disabled difficulty?", player);
+			}
+		}
+	}
+
+	for (player = 1; player < MAX_CONNECTED_PLAYERS; player++)
 	{
 		// we want to remove disabled AI & all the other players that don't belong
-		if ((NetPlay.players[player].difficulty == AIDifficulty::DISABLED || player >= game.maxPlayers) && player != scavengerPlayer())
+		if ((NetPlay.players[player].difficulty == AIDifficulty::DISABLED || player >= game.maxPlayers)
+			&& player != scavengerPlayer()
+			&& !(NetPlay.players[player].isSpectator && NetPlay.players[player].allocated)
+			&& !(player < game.maxPlayers && NetPlay.players[player].allocated))
 		{
 			clearPlayer(player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
+		}
+	}
+
+	for (auto i = 0; i < NetPlay.players.size(); i++)
+	{
+		if (NetPlay.players[i].isSpectator)
+		{
+			// player is starting as a spectator
+			makePlayerSpectator(i, true, true);
+			if (i == selectedPlayer)
+			{
+				setPlayerHasLost(true); // set this flag to true so we don't accumulate loss statistics
+			}
 		}
 	}
 
@@ -403,6 +597,7 @@ static bool gameInit()
 	{
 		playerCount += NetPlay.players[index].ai >= 0 || NetPlay.players[index].allocated;
 	}
+	debug(LOG_NET, "Player count: %u", playerCount);
 
 	playerResponding();			// say howdy!
 
@@ -413,7 +608,7 @@ static bool gameInit()
 // say hi to everyone else....
 void playerResponding()
 {
-	ingame.startTime = gameTime;
+	ingame.startTime = std::chrono::steady_clock::now();
 	ingame.localJoiningInProgress = false; // No longer joining.
 	ingame.JoiningInProgress[selectedPlayer] = false;
 
@@ -432,7 +627,7 @@ bool multiGameInit()
 {
 	UDWORD player;
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 	{
 		openchannels[player] = true;								//open comms to this player.
 	}
@@ -446,19 +641,19 @@ bool multiGameInit()
 // at the end of every game.
 bool multiGameShutdown()
 {
-	PLAYERSTATS	st;
-	uint32_t        time;
-
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
 
 	sendLeavingMsg();							// say goodbye
 
-	st = getMultiStats(selectedPlayer);	// save stats
+	if (selectedPlayer < MAX_CONNECTED_PLAYERS)
+	{
+		PLAYERSTATS st = getMultiStats(selectedPlayer);	// save stats
 
-	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+		saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+	}
 
 	// if we terminate the socket too quickly, then, it is possible not to get the leave message
-	time = wzGetTicks();
+	uint32_t time = wzGetTicks();
 	while (wzGetTicks() - time < 1000)
 	{
 		wzYieldCurrentThread();  // TODO Make a wzDelay() function?
@@ -473,8 +668,11 @@ bool multiGameShutdown()
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
 	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
-	ingame.TimeEveryoneIsInGame = 0;
-	ingame.startTime = 0;
+	ingame.TimeEveryoneIsInGame = nullopt;
+	ingame.startTime = std::chrono::steady_clock::time_point();
+	ingame.endTime = nullopt;
+	ingame.lastLagCheck = std::chrono::steady_clock::time_point();
+	ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::time_point();
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
 	bMultiMessages					= false;

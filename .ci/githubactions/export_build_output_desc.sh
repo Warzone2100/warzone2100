@@ -14,14 +14,17 @@
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
 
-if [ -z "${GITHUB_REF}" ]; then
+if [ -z "${WZ_GITHUB_REF}" ] && [ -z "${GITHUB_REF}" ]; then
 	echo "Missing expected GITHUB_REF environment variable"
 	exit 1
+fi
+if [ -z "${WZ_GITHUB_REF}" ]; then
+  WZ_GITHUB_REF="${GITHUB_REF}"
 fi
 
 # Extract branch / tag from GITHUB_REF
 # (examples: GITHUB_REF=refs/heads/master, GITHUB_REF=refs/tags/v3.3.0, GITHUB_REF=refs/pull/3/merge (for a pull_request event))
-ref_tmp=${GITHUB_REF#*/} ## throw away the first part of the ref
+ref_tmp=${WZ_GITHUB_REF#*/} ## throw away the first part of the ref
 ref_type=${ref_tmp%%/*} ## extract the second element of the ref (heads or tags)
 ref_value=${ref_tmp#*/} ## extract the third+ elements of the ref (master or v3.3.0)
 
@@ -32,7 +35,10 @@ if [ "$ref_type" == "tags" ]; then
 else
 	GIT_BRANCH="${ref_value}"
 
-	if [ -n "${GITHUB_HEAD_REF}" ]; then
+	if [ -n "${WZ_GITHUB_HEAD_REF}" ]; then
+		# Use the head ref's branch name
+		GIT_BRANCH="${WZ_GITHUB_HEAD_REF}"
+	elif [ -n "${GITHUB_HEAD_REF}" ]; then
 		# Use the head ref's branch name
 		GIT_BRANCH="${GITHUB_HEAD_REF}"
 	fi

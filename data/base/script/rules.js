@@ -15,7 +15,7 @@ function reticuleManufactureCheck()
 	var structureComplete = false;
 	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
-	for (var i = 0, len = facs.length; i < len; ++i)
+	for (let i = 0, len = facs.length; i < len; ++i)
 	{
 		var facType = facs[i];
 		var offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
@@ -23,7 +23,7 @@ function reticuleManufactureCheck()
 
 		if (offWorldFacs !== null)
 		{
-			for (var j = 0, len2 = offWorldFacs.length; j < len2; ++j)
+			for (let j = 0, len2 = offWorldFacs.length; j < len2; ++j)
 			{
 				if (offWorldFacs[j].status === BUILT)
 				{
@@ -34,7 +34,7 @@ function reticuleManufactureCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapFacs.length; j < len2; ++j)
+			for (let j = 0, len2 = onMapFacs.length; j < len2; ++j)
 			{
 				if (onMapFacs[j].status === BUILT)
 				{
@@ -65,7 +65,7 @@ function reticuleResearchCheck()
 	var structureComplete = false;
 	var labs = [RESEARCH_LAB,];
 
-	for (var i = 0, len = labs.length; i < len; ++i)
+	for (let i = 0, len = labs.length; i < len; ++i)
 	{
 		var resType = labs[i];
 		var offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
@@ -73,7 +73,7 @@ function reticuleResearchCheck()
 
 		if (offWorldLabs !== null)
 		{
-			for (var j = 0, len2 = offWorldLabs.length; j < len2; ++j)
+			for (let j = 0, len2 = offWorldLabs.length; j < len2; ++j)
 			{
 				if (offWorldLabs[j].status === BUILT)
 				{
@@ -84,7 +84,7 @@ function reticuleResearchCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapLabs.length; j < len2; ++j)
+			for (let j = 0, len2 = onMapLabs.length; j < len2; ++j)
 			{
 				if (onMapLabs[j].status === BUILT)
 				{
@@ -127,7 +127,7 @@ function reticuleDesignCheck()
 	var structureComplete = false;
 	var hqs = [HQ,];
 
-	for (var i = 0, len = hqs.length; i < len; ++i)
+	for (let i = 0, len = hqs.length; i < len; ++i)
 	{
 		var hqType = hqs[i];
 		var offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
@@ -135,7 +135,7 @@ function reticuleDesignCheck()
 
 		if (offWorldHq !== null)
 		{
-			for (var j = 0, len2 = offWorldHq.length; j < len2; ++j)
+			for (let j = 0, len2 = offWorldHq.length; j < len2; ++j)
 			{
 				if (offWorldHq[j].status === BUILT)
 				{
@@ -146,7 +146,7 @@ function reticuleDesignCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapHq.length; j < len2; ++j)
+			for (let j = 0, len2 = onMapHq.length; j < len2; ++j)
 			{
 				if (onMapHq[j].status === BUILT)
 				{
@@ -264,8 +264,8 @@ function setupGame()
 	// Enable all templates
 	setDesign(true);
 
+	showInterface(); // init buttons. This MUST come before setting the reticule button data
 	setMainReticule();
-	showInterface();
 	mainReticule = true;
 	queue("resetPower", 1000);
 }
@@ -283,11 +283,11 @@ function eventGameInit()
 
 function setLimits()
 {
-	setDroidLimit(selectedPlayer, 100, DROID_ANY);
+	setDroidLimit(selectedPlayer, 101, DROID_ANY); //note: the transporter is a unit you own
 	setDroidLimit(selectedPlayer, 10, DROID_COMMAND);
 	setDroidLimit(selectedPlayer, 15, DROID_CONSTRUCT);
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		setStructureLimits("A0PowerGenerator", 5, i);
 		setStructureLimits("A0ResourceExtractor", 200, i);
@@ -310,7 +310,7 @@ function resetPower()
 	var powerProductionRate = 100;
 
 	// set income modifier/power storage for player 0 (human)
-	if (difficulty === EASY)
+	if (difficulty <= EASY)
 	{
 		powerProductionRate = 115;
 	}
@@ -321,11 +321,11 @@ function resetPower()
 
 		if (tilesetType === "URBAN")
 		{
-			powerLimit = powerLimit + 5000;
+			powerLimit += 5000;
 		}
 		else if (tilesetType === "ROCKIES")
 		{
-			powerLimit = powerLimit + 10000;
+			powerLimit += 10000;
 		}
 	}
 	else if (difficulty === INSANE)
@@ -335,11 +335,11 @@ function resetPower()
 
 		if (tilesetType === "URBAN")
 		{
-			powerLimit = powerLimit + 2000;
+			powerLimit += 2000;
 		}
 		else if (tilesetType === "ROCKIES")
 		{
-			powerLimit = powerLimit + 4000;
+			powerLimit += 4000;
 		}
 	}
 
@@ -385,6 +385,14 @@ function eventStructureDemolish(struct, droid)
 	}
 }
 
+function eventStructureUpgradeStarted(struct)
+{
+	if (struct.player === selectedPlayer)
+	{
+		reticuleUpdate(struct, TRANSFER_LIKE_EVENT);
+	}
+}
+
 function eventDestroyed(victim)
 {
 	if (victim.player === selectedPlayer)
@@ -412,34 +420,13 @@ function eventTransporterLanded(transport)
 
 function eventResearched(research, structure, player)
 {
-	//debug("RESEARCH : " + research.fullname + "(" + research.name + ") for " + player);
-	// iterate over all results
-	for (var i = 0; i < research.results.length; i++)
-	{
-		var v = research.results[i];
-		//debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterparam=" + v['filterParameter']);
-		for (var cname in Upgrades[player][v['class']]) // iterate over all components of this type
-		{
-			var parameter = v['parameter'];
-			var ctype = v['class'];
-			var filterparam = v['filterParameter'];
-			if ('filterParameter' in v && Stats[ctype][cname][filterparam] != v['filterValue']) // more specific filter
-			{
-				continue;
-			}
-			if (Stats[ctype][cname][parameter] > 0) // only applies if stat has above zero value already
-			{
-				Upgrades[player][ctype][cname][parameter] += Math.ceil(Stats[ctype][cname][parameter] * v['value'] / 100);
-				//debug("      upgraded " + cname + " to " + Upgrades[player][ctype][cname][parameter] + " by " + Math.ceil(Stats[ctype][cname][parameter] * v['value'] / 100));
-			}
-		}
-	}
+	// NOTE: Research upgrades are handled by the C++ core game engine since 4.1.0
 }
 
 var lastHitTime = 0;
 function eventAttacked(victim, attacker)
 {
-	if ((victim.player === selectedPlayer) && gameTime > lastHitTime + 5000)
+	if ((victim.player === selectedPlayer) && (attacker.player !== selectedPlayer) && (gameTime > (lastHitTime + 5000)))
 	{
 		lastHitTime = gameTime;
 		if (victim.type === STRUCTURE)
