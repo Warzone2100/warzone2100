@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-01-04 14:55\n"
+"PO-Revision-Date: 2023-01-05 11:55\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -16240,7 +16240,7 @@ msgstr "Слоты наблюдателей"
 
 #: src/frontend.cpp:3005
 msgid "Enable Rating"
-msgstr "Включить рейтинг"
+msgstr "Включить рейтинг (вступить в секту)"
 
 #: src/frontend.cpp:3020
 msgid "MULTIPLAY OPTIONS"
