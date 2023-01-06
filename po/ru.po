@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-01-05 11:55\n"
+"PO-Revision-Date: 2023-01-06 00:28\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -5993,7 +5993,7 @@ msgstr "Зенитка Циклон Питон Полугусеницы"
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:74
 msgid "AA Cyclone Flak Cannon"
-msgstr "Зенитка Циклон"
+msgstr "Зенитное орудие Циклон"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6076,21 +6076,21 @@ msgstr "Тепловой сенсор ПВО"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:140
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr "Установка с зениткой Торнадо"
+msgstr "Установка с зенитным орудием Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:144
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr "Укрепточка с зениткой Торнадо"
+msgstr "Укрепточка с зенитным орудием Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:148
 msgid "AA Tornado Flak Cannon"
-msgstr "Зенитка Торнадо"
+msgstr "Зенитное орудие Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -7521,7 +7521,7 @@ msgstr "Автозарядка Пушки Mk3"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF01.name
 #: po/custom/fromJson.txt:1320
 msgid "Cannon Autoloader"
-msgstr "Автозарядка Пушки"
+msgstr "Автоматический досылатель Пушки"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
@@ -16240,7 +16240,7 @@ msgstr "Слоты наблюдателей"
 
 #: src/frontend.cpp:3005
 msgid "Enable Rating"
-msgstr "Включить рейтинг (вступить в секту)"
+msgstr "Рейтинг (вступить в секту)"
 
 #: src/frontend.cpp:3020
 msgid "MULTIPLAY OPTIONS"
