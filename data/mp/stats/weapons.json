@@ -3711,7 +3711,7 @@
 		"weight": 600
 	},
 	"RailGun1Mk1": {
-		"buildPoints": 1000,
+		"buildPoints": 800,
 		"buildPower": 250,
 		"damage": 160,
 		"designable": 1,
