@@ -8238,8 +8238,8 @@
 			"R-Struc-Research-Upgrade01",
 			"R-Wpn-Rocket-Damage02"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"results": [
 			{
 				"class": "Weapon",
@@ -8354,8 +8354,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket-Damage02"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"results": [
 			{
 				"class": "Weapon",
