@@ -1240,8 +1240,10 @@ static void drawTiles(iView *player)
 	gfx_api::context::get().debugStringMarker("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix, perspectiveViewMatrix);
 
-	if(isFlowfieldEnabled()){
-		debugDrawFlowfields(viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
+	if(isFlowfieldEnabled())
+	{
+	
+	debugDrawFlowfields(perspectiveViewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
 	}
 	
 	pie_RemainingPasses(currentGameFrame); // draws shadows and transparent shapes

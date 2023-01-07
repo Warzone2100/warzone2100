@@ -249,7 +249,7 @@ macosx/configs/CS-ID.xcconfig
 *.manifest
 *.res
 *.idb
->*.pdb
+*.pdb
 *.diff
 *.dep
 *.user

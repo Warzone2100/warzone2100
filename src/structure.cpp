@@ -78,6 +78,7 @@
 #include "template.h"
 #include "scores.h"
 #include "gateway.h"
+#include "flowfield.h"
 
 #include "random.h"
 #include <functional>
@@ -1503,7 +1504,11 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				// We now know the previous loop didn't return early, so it is safe to save references to psBuilding now.
 				MAPTILE *psTile = mapTile(tileX, tileY);
 				psTile->psObject = psBuilding;
-
+				if (psBuilding->player == 0)
+				{
+					markTileAsImpassable (tileX, tileY, PROPULSION_TYPE_WHEELED);
+					debug (LOG_FLOWFIELD, "marked tile as impassable %i %i", tileX, tileY);
+				}                                
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
@@ -4535,6 +4540,9 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 				{
 					psTile->illumination /= 2;
 				}
+				markTileAsDefaultCost(b.map.x + width, b.map.y + breadth, PROPULSION_TYPE_WHEELED);
+				if (psDel->player == 0)
+				debug (LOG_FLOWFIELD, "marked tiles as passable: %i %i", b.map.x + width, b.map.y + breadth);
 			}
 		}
 	}

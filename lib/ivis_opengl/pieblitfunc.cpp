@@ -206,7 +206,7 @@ void iV_PolyLine(const std::vector<Vector3i> &points, const glm::mat4 &mvp, PIEL
 
 	for(auto i = 0; i < points.size(); i++){
 		Vector3i source = points[i];
-		pie_RotateProject(&source, mvp, &result);
+		pie_RotateProjectWithPerspective(&source, mvp, &result);
 
 		if(i > 0){
 			lines.push_back({ lastPoint.x, lastPoint.y, result.x, result.y });

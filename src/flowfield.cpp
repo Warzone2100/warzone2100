@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/wzmaplib/include/wzmaplib/map.h"
 
 static bool flowfieldEnabled = false;
 
@@ -39,56 +40,68 @@ bool isFlowfieldEnabled() {
 	return flowfieldEnabled;
 }
 
-//
+inline uint16_t tileTo2Dindex (uint8_t x, uint8_t y)
+{
+	return (x << 8 | y);
+}
 
-/// This type is ONLY needed for adding vectors as key to eg. a map.
-/// because GLM's vector implementation does not include an is-less-than operator overload,
-/// which is required by std::map.
-struct ComparableVector2i : Vector2i {
-	ComparableVector2i(int x, int y) : Vector2i(x, y) {}
-	ComparableVector2i(Vector2i value) : Vector2i(value) {}
+inline uint16_t tileTo2Dindex (Vector2i tile)
+{
+	return (tile.x << 8 | tile.y);
+}
 
-	inline bool operator<(const ComparableVector2i& b) const {
-		if(x < b.x){
-			return true;
-		}
-		if(x > b.x){
-			return false;
-		}
-		if(y < b.y){
-			return true;
-		}
-		return false;
-    }
-};
+inline Vector2i tileFrom2Dindex (uint16_t idx)
+{
+	return Vector2i {(idx) >> 8, (idx & 0x00FF)};
+}
+
+
+inline void tileFrom2Dindex (uint16_t idx, uint8_t &x, uint8_t &y)
+{
+	x = (idx) >> 8;
+	y = (idx & 0x00FF);
+}
+
+inline uint8_t xFrom2Dindex (uint16_t idx)
+{
+	return (idx >> 8);
+}
+
+inline uint8_t yFrom2Dindex (uint16_t idx)
+{
+	return (idx & 0x00FF);
+}
 
 #define FF_MAP_WIDTH 256
 #define FF_MAP_HEIGHT 256
 #define FF_MAP_AREA FF_MAP_WIDTH*FF_MAP_HEIGHT
 #define FF_TILE_SIZE 128
 
-constexpr const unsigned short COST_NOT_PASSABLE = std::numeric_limits<unsigned short>::max();
-constexpr const unsigned short COST_MIN = 1;
+/** Simple cost type*/
+using CostType = uint8_t;
+
+/** Integrated cost type */
+using ICostType = uint16_t;
+
+constexpr const CostType COST_NOT_PASSABLE = std::numeric_limits<uint8_t>::max();
+// constexpr const uint16_t COST_NOT_PASSABLE_
+constexpr const CostType COST_MIN = 1; // default cost 
+constexpr const CostType COST_ZERO = 0; // goal is free
 
 // Decides how much slopes should be avoided
 constexpr const float SLOPE_COST_BASE = 0.01f;
 // Decides when terrain height delta is considered a slope
-constexpr const unsigned short SLOPE_THRESOLD = 4;
+constexpr const uint16_t SLOPE_THRESOLD = 4;
 
-// Propulsion mapping FOR READING DATA ONLY! See below.
-const std::map<PROPULSION_TYPE, int> propulsionToIndex
-{
-	// All these share the same flowfield, because they are different types of ground-only
-	{PROPULSION_TYPE_WHEELED, 0},
-	{PROPULSION_TYPE_TRACKED, 0},
-	{PROPULSION_TYPE_LEGGED, 0},
-	{PROPULSION_TYPE_HALF_TRACKED, 0},
-	//////////////////////////////////
-	{PROPULSION_TYPE_PROPELLOR, 1},
-	{PROPULSION_TYPE_HOVER, 2},
-	{PROPULSION_TYPE_LIFT, 3}
+const int propulsionIdx2[] = {
+	0,//PROPULSION_TYPE_WHEELED,
+	0,//PROPULSION_TYPE_TRACKED,
+	0,//PROPULSION_TYPE_LEGGED,
+	2,//PROPULSION_TYPE_HOVER,
+	3,//PROPULSION_TYPE_LIFT,
+	1,//PROPULSION_TYPE_PROPELLOR,
+	0,//PROPULSION_TYPE_HALF_TRACKED,
 };
-
 // Propulsion used in for-loops FOR WRITING DATA. We don't want to process "0" index multiple times.
 const std::map<PROPULSION_TYPE, int> propulsionToIndexUnique
 {
@@ -104,8 +117,8 @@ void destroyflowfieldCaches();
 
 struct FLOWFIELDREQUEST
 {
-	/// Target position
-	Vector2i goal;
+	/// Target position: 2 bytes, highest byte is X, lowest byte is Y
+	uint16_t goal;
 	PROPULSION_TYPE propulsion;
 };
 
@@ -128,15 +141,6 @@ void flowfieldDestroy() {
 	destroyflowfieldCaches();
 }
 
-std::vector<ComparableVector2i> toComparableVectors(std::vector<Vector2i> values){
-	std::vector<ComparableVector2i> result;
-
-	for(auto value : values){
-		result.push_back(*new ComparableVector2i(value));
-	}
-
-	return result;
-}
 
 // If the path finding system is shutdown or not
 static volatile bool ffpathQuit = false;
@@ -146,19 +150,21 @@ static WZ_THREAD        *ffpathThread = nullptr;
 static WZ_MUTEX         *ffpathMutex = nullptr;
 static WZ_SEMAPHORE     *ffpathSemaphore = nullptr;
 static std::list<FLOWFIELDREQUEST> flowfieldRequests;
-static std::map<std::pair<ComparableVector2i, PROPULSION_TYPE>, bool> flowfieldCurrentlyActiveRequests;
+static std::map<std::pair<uint16_t, PROPULSION_TYPE>, bool> flowfieldCurrentlyActiveRequests;
 std::mutex flowfieldMutex;
 
 void processFlowfield(FLOWFIELDREQUEST request);
 
 void calculateFlowfieldAsync(unsigned int targetX, unsigned int targetY, PROPULSION_TYPE propulsion) {
-	Vector2i goal { map_coord(targetX), map_coord(targetY) };
-
+	uint16_t goal  = tileTo2Dindex ( map_coord(targetX), map_coord(targetY) );
+	debug (LOG_FLOWFIELD, "calculating path to %i %i (=%i)", map_coord(targetX), map_coord(targetY), goal);
 	FLOWFIELDREQUEST request;
 	request.goal = goal;
 	request.propulsion = propulsion;
 	
-	if(flowfieldCurrentlyActiveRequests.count(std::make_pair(ComparableVector2i(goal), propulsion))){
+	if(flowfieldCurrentlyActiveRequests.count(std::make_pair(goal, propulsion)))
+	{
+		debug (LOG_FLOWFIELD, "already requested this exact flowfield.");
 		return; // already requested this exact flowfield. patience is golden.
 	}
 
@@ -196,11 +202,15 @@ static int ffpathThreadFunc(void *)
 			auto request = std::move(flowfieldRequests.front());
 			flowfieldRequests.pop_front();
 
-			flowfieldCurrentlyActiveRequests.insert(std::make_pair(std::make_pair(ComparableVector2i(request.goal), request.propulsion), true));
+			flowfieldCurrentlyActiveRequests.insert(
+				std::make_pair(
+					std::make_pair(request.goal, request.propulsion),
+					true));
 			wzMutexUnlock(ffpathMutex);
+			debug (LOG_FLOWFIELD, "started processing flowfield request %i", request.goal);
 			processFlowfield(request);
 			wzMutexLock(ffpathMutex);
-			flowfieldCurrentlyActiveRequests.erase(std::make_pair(ComparableVector2i(request.goal), request.propulsion));
+			flowfieldCurrentlyActiveRequests.erase(std::make_pair(request.goal, request.propulsion));
 		}
 	}
 	wzMutexUnlock(ffpathMutex);
@@ -244,49 +254,84 @@ void ffpathShutdown()
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-inline unsigned int coordinateToArrayIndex(unsigned short x, unsigned short y) { return y * FF_MAP_WIDTH + x; }
-inline Vector2i arrayIndexToCoordinate(unsigned int index) { return Vector2i { index % FF_MAP_WIDTH, index / FF_MAP_WIDTH }; }
+/** Cost integration field
+ * Highest bit will be used for Line-of-sight flag.
+ * so we have 15bits for actual integrated cost
+*/
+struct IntegrationField
+{
+	ICostType cost[FF_MAP_AREA] = {0};
+	ICostType getCost(uint8_t x, uint8_t y) const
+	{
+		return this->cost[tileTo2Dindex(x, y)] & ~(1 << 15);
+	}
+	ICostType getCost(uint16_t index) const
+	{
+		return this->cost[index] & ~(1 << 15);
+	}
 
-struct IntegrationField {
-	unsigned short cost[FF_MAP_AREA];
-	void setCost(unsigned int x, unsigned int y, unsigned short value){
-		this->cost[coordinateToArrayIndex(x, y)] = value;
+	/** Set cost and overrides flags. */
+	void setCost(uint8_t x, uint8_t y, ICostType value)
+	{
+		ASSERT (value <= 0x7FFF, "cost is too high! Highest bit is reserved for flags");
+		this->cost[tileTo2Dindex(x, y)] = value;
 	}
-	unsigned short getCost(unsigned int x, unsigned int y){
-		return this->cost[coordinateToArrayIndex(x, y)];
-	}
-	void setCost(unsigned int index, unsigned short value){
+	/** Set cost and overrides flags. */
+	void setCost(uint16_t index, ICostType value)
+	{
+		ASSERT (value <= 0x7FFF, "cost is too high! Highest bit is reserved for flags");
 		this->cost[index] = value;
 	}
-	unsigned short getCost(unsigned int index){
-		return this->cost[index];
+
+	void setHasLOS(uint16_t idx)
+	{
+		this->cost[idx] |= (1 << 15);
+	}
+	void clearLOS(uint8_t x, uint8_t y)
+	{
+		this->cost[tileTo2Dindex(x, y)] &= ~(1 << 15);
+	}
+	bool hasLOS(uint16_t idx)
+	{
+		return (this->cost[idx] & (1 << 15)) > 0;
+	}
+	bool hasLOS(uint8_t x, uint8_t y)
+	{
+		return (this->cost[tileTo2Dindex(x, y)]  & (1 << 15)) > 0;
 	}
 };
 
-struct CostField {
-	unsigned short cost[FF_MAP_AREA];
-	void setCost(unsigned int x, unsigned int y, unsigned short value){
-		this->cost[coordinateToArrayIndex(x, y)] = value;
+/** Cost of movement for each map tile */
+struct CostField
+{
+	CostType cost[FF_MAP_AREA];
+	void setCost(uint8_t x, uint8_t y, CostType value)
+	{
+		this->cost[tileTo2Dindex(x, y)] = value;
 	}
-	unsigned short getCost(unsigned int x, unsigned int y){
-		return this->cost[coordinateToArrayIndex(x, y)];
+	CostType getCost(uint8_t x, uint8_t y) const
+	{
+		return this->cost[tileTo2Dindex(x, y)];
 	}
-	void setCost(unsigned int index, unsigned short value){
+	void setCost(uint16_t index, CostType value)
+	{
 		this->cost[index] = value;
 	}
-	unsigned short getCost(unsigned int index){
+	CostType getCost(uint16_t index) const
+	{
 		return this->cost[index];
 	}
 };
 
 // TODO: Remove this in favor of glm.
-struct VectorT {
+struct VectorT
+{
 	float x;
 	float y;
 
-	void normalize() {
+	void normalize()
+	{
 		const float length = std::sqrt(std::pow(x, 2) + std::pow(y, 2));
-
 		if (length != 0) {
 			x /= length;
 			y /= length;
@@ -294,74 +339,89 @@ struct VectorT {
 	}
 };
 
-/// auto increment state for flowfield ids. Used on psDroid->sMove.flowfield. 0 means no flowfield exists for the unit.
+/// auto increment state for flowfield ids. Used on psDroid->sMove.flowfield. 
+// 0 means no flowfield exists for the unit.
 unsigned int flowfieldIdIncrementor = 1;
 
-struct Flowfield {
+/** Contains direction vectors for each map tile */
+struct Flowfield
+{
 	unsigned int id;
-	std::vector<Vector2i> goals;
+	// tile coordinates of movement goal
+	uint16_t goal;
+
+	#ifdef DEBUG
+	// pointless in release builds
 	std::unique_ptr<IntegrationField> integrationField;
+	#endif
+
 	std::array<VectorT, FF_MAP_AREA> vectors;
 
-	void setVector(unsigned short x, unsigned short y, VectorT vector) {
-		vectors[coordinateToArrayIndex(x, y)] = vector;
+	void setVector(uint8_t x, uint8_t y, VectorT vector) {
+		vectors[tileTo2Dindex(x, y)] = vector;
 	}
-	VectorT getVector(unsigned short x, unsigned short y) const {
-		return vectors[coordinateToArrayIndex(x, y)];
+	VectorT getVector(uint8_t x, uint8_t y) const {
+		return vectors[tileTo2Dindex(x, y)];
 	}
 };
 
+using FlowFieldUptr = std::unique_ptr<Flowfield>;
+using CostFieldUptr = std::unique_ptr<CostField>;
+
 // Cost fields for ground, hover and lift movement types
-std::array<std::unique_ptr<CostField>, 4> costFields {
-	std::unique_ptr<CostField>(new CostField()),
-	std::unique_ptr<CostField>(new CostField()),
-	std::unique_ptr<CostField>(new CostField()),
-	std::unique_ptr<CostField>(new CostField()),
+std::array<CostFieldUptr, 4> costFields
+{
+	CostFieldUptr(new CostField()), // PROPULSION_TYPE_WHEELED
+	CostFieldUptr(new CostField()), // PROPULSION_TYPE_PROPELLOR
+	CostFieldUptr(new CostField()), // PROPULSION_TYPE_HOVER
+	CostFieldUptr(new CostField()), // PROPULSION_TYPE_LIFT
 };
 
 // Flow field cache for ground, hover and lift movement types
-std::array<std::unique_ptr<std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>>, 4> flowfieldCaches {
-	std::unique_ptr<std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>>(new std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>()),
-	std::unique_ptr<std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>>(new std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>()),
-	std::unique_ptr<std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>>(new std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>()),
-	std::unique_ptr<std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>>(new std::map<std::vector<ComparableVector2i>, std::unique_ptr<Flowfield>>())
+// key: Map Array index
+std::array<std::unique_ptr<std::map<uint16_t, FlowFieldUptr>>, 4> flowfieldCaches 
+{
+	std::unique_ptr<std::map<uint16_t, FlowFieldUptr>>(new std::map<uint16_t, FlowFieldUptr>()),
+	std::unique_ptr<std::map<uint16_t, FlowFieldUptr>>(new std::map<uint16_t, FlowFieldUptr>()),
+	std::unique_ptr<std::map<uint16_t, FlowFieldUptr>>(new std::map<uint16_t, FlowFieldUptr>()),
+	std::unique_ptr<std::map<uint16_t, FlowFieldUptr>>(new std::map<uint16_t, FlowFieldUptr>())
 };
 
-bool tryGetFlowfieldForTarget(unsigned int targetX, unsigned int targetY, PROPULSION_TYPE propulsion, unsigned int &flowfieldId){
-	const auto flowfieldCache = flowfieldCaches[propulsionToIndex.at(propulsion)].get();
+bool tryGetFlowfieldForTarget(unsigned int targetX,
+                              unsigned int targetY,
+							  PROPULSION_TYPE propulsion,
+							  unsigned int &flowfieldId)
+{
+	// caches needs to be updated each time there a structure built / destroyed
 
-	std::vector<ComparableVector2i> goals { { map_coord(targetX), map_coord(targetY) } };
+	const auto flowfieldCache = flowfieldCaches[propulsionIdx2[propulsion]].get();
+	Vector2i goal { map_coord(targetX), map_coord(targetY) };
 
- 	// this check is already done in fpath.cpp.
+	// this check is already done in fpath.cpp.
 	// TODO: we should perhaps refresh the flowfield instead of just bailing here.
-	if (!flowfieldCache->count(goals)) {
+	if (!flowfieldCache->count(tileTo2Dindex(goal)))
+	{
 		return false;
 	}
-
-	const auto flowfield = flowfieldCache->at(goals).get();
-
+	const auto flowfield = flowfieldCache->at(tileTo2Dindex(goal)).get();
 	flowfieldId = flowfield->id;
-
 	return true;
 }
 
 std::map<unsigned int, Flowfield*> flowfieldById;
-bool tryGetFlowfieldVector(unsigned int flowfieldId, int x, int y, Vector2f& vector){
-	if(!flowfieldById.count(flowfieldId)){
-		return false;
-	}
-
+bool tryGetFlowfieldVector(unsigned int flowfieldId, uint8_t x, uint8_t y, Vector2f& vector)
+{
+	if(!flowfieldById.count(flowfieldId)) return false;
 	auto flowfield = flowfieldById.at(flowfieldId);
-
-	auto v = flowfield->getVector(x, y);
+	VectorT v = flowfield->getVector(x, y);
 	vector = { v.x, v.y };
-
 	return true;
 }
 
-struct Node {
-	unsigned short predecessorCost;
-	unsigned int index;
+struct Node
+{
+	uint16_t predecessorCost;
+	uint16_t index;
 
 	bool operator<(const Node& other) const {
 		// We want top element to have lowest cost
@@ -369,59 +429,62 @@ struct Node {
 	}
 };
 
-void calculateIntegrationField(const std::vector<ComparableVector2i>& points, IntegrationField* integrationField, CostField* costField);
+void calculateIntegrationField(uint16_t goal, IntegrationField* integrationField, const CostField* costField);
 void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField);
 
-void processFlowfield(FLOWFIELDREQUEST request) {
-
+void processFlowfield(FLOWFIELDREQUEST request)
+{
 	// NOTE for us noobs!!!! This function is executed on its own thread!!!!
-
-	const auto flowfieldCache = flowfieldCaches[propulsionToIndex.at(request.propulsion)].get();
-	const auto costField = costFields[propulsionToIndex.at(request.propulsion)].get();
-
-	std::vector<ComparableVector2i> goals { request.goal }; // TODO: multiple goals for formations
-
+	static_assert(PROPULSION_TYPE_NUM == 7, "new propulsions need to handled!!");
+	const auto costField = costFields[propulsionIdx2[request.propulsion]].get();
+	const auto flowfieldCache = flowfieldCaches[propulsionIdx2[request.propulsion]].get();
  	// this check is already done in fpath.cpp.
 	// TODO: we should perhaps refresh the flowfield instead of just bailing here.
-	if (flowfieldCache->count(goals)) {
-		return;
-	}
+	if (flowfieldCache->count(request.goal)) return;
 
 	IntegrationField* integrationField = new IntegrationField();
-	calculateIntegrationField(goals, integrationField, costField);
+	calculateIntegrationField(request.goal, integrationField, costField);
 
 	auto flowfield = new Flowfield();
 	flowfield->id = flowfieldIdIncrementor++;
 	flowfield->integrationField = std::unique_ptr<IntegrationField>(integrationField);
-	flowfield->goals = { request.goal };
+	flowfield->goal = request.goal;
 	flowfieldById.insert(std::make_pair(flowfield->id, flowfield));
 	calculateFlowfield(flowfield, integrationField);
-
+	// store the result, this will be checked by fpath.cpp
 	{
 		std::lock_guard<std::mutex> lock(flowfieldMutex);
-		flowfieldCache->insert(std::make_pair(goals, std::unique_ptr<Flowfield>(flowfield)));
+		flowfieldCache->insert(std::make_pair(request.goal, std::unique_ptr<Flowfield>(flowfield)));
 	}
 }
 
-void integrateFlowfieldPoints(std::priority_queue<Node>& openSet, IntegrationField* integrationField, CostField* costField, std::set<ComparableVector2i>* stationaryDroids);
+void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
+                              IntegrationField* integrationField,
+							  const CostField* costField,
+							  uint16_t goal,
+							  std::set<uint16_t>* stationaryDroids);
 
-void calculateIntegrationField(const std::vector<ComparableVector2i>& points, IntegrationField* integrationField, CostField* costField) {
+void calculateIntegrationField(uint16_t goal,
+                               IntegrationField* integrationField,
+							   const CostField* costField)
+{
 	// TODO: here do checking if given tile contains a building (instead of doing that in cost field)
 	// TODO: split COST_NOT_PASSABLE into a few constants, for terrain, buildings and maybe sth else
-	for (unsigned int x = 0; x < mapWidth; x++) {
-		for (unsigned int y = 0; y < mapHeight; y++) {
+	for (int x = 0; x < mapWidth; x++)
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
 			integrationField->setCost(x, y, COST_NOT_PASSABLE);
 		}
 	}
 
-	std::unique_ptr<std::set<ComparableVector2i>> stationaryDroids = std::unique_ptr<std::set<ComparableVector2i>>(new std::set<ComparableVector2i>());
-
-	for (unsigned i = 0; i < MAX_PLAYERS; i++)
+	std::set<uint16_t> stationaryDroids;
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			if(psCurr->sMove.Status == MOVEINACTIVE){
-				stationaryDroids->insert({ map_coord(psCurr->pos.x), map_coord(psCurr->pos.y) });
+				stationaryDroids.insert(tileTo2Dindex ({ map_coord(psCurr->pos.x), map_coord(psCurr->pos.y) }));
 			}
 		}
 	}
@@ -429,64 +492,129 @@ void calculateIntegrationField(const std::vector<ComparableVector2i>& points, In
 	// Thanks to priority queue, we get the water ripple effect - closest tile first.
 	// First we go where cost is the lowest, so we don't discover better path later.
 	std::priority_queue<Node> openSet;
-
-	for (auto& point : points) {
-		openSet.push({ 0, coordinateToArrayIndex(point.x, point.y) });
-	}
-
-	while (!openSet.empty()) {
-		integrateFlowfieldPoints(openSet, integrationField, costField, stationaryDroids.get());
+	openSet.push(Node { 0, goal });
+	integrationField->setHasLOS(goal);
+	while (!openSet.empty())
+	{
+		integrateFlowfieldPoints(openSet, integrationField, costField, goal, &stationaryDroids);
 		openSet.pop();
 	}
 }
 
-void integrateFlowfieldPoints(std::priority_queue<Node>& openSet, IntegrationField* integrationField, CostField* costField, std::set<ComparableVector2i>* stationaryDroids) {
+/** Sets LOS flag for those cells, from which Goal is visible, from all 8 directions.
+ * Example : https://howtorts.github.io/2014/01/30/Flow-Fields-LOS.html
+ * Without LOS, even in straight line to the goal, flowfield vectors may point in
+ * wierd, from human perspective, directions.
+*/
+void calculateLOS(IntegrationField *integfield, uint16_t at, uint16_t goal)
+{
+	if (at == goal)
+	{
+		integfield->setHasLOS(at);
+		return;
+	}
+	ASSERT (integfield->hasLOS(goal), "invariant failed: goal must have LOS");
+	// we want signed difference
+	int16_t dx, dy;
+	Vector2i at_tile = tileFrom2Dindex (at);
+	dx = static_cast<int16_t>(xFrom2Dindex(goal)) - static_cast<int16_t>(xFrom2Dindex(at));
+	dy = static_cast<int16_t>(yFrom2Dindex(goal)) - static_cast<int16_t>(yFrom2Dindex(at));
+	
+	int16_t dx_one, dy_one;
+	dx_one = dx > 0 ? 1 : -1; // cannot be zero, already checked above
+	dy_one = dy > 0 ? 1 : -1;
+	
+	uint8_t dx_abs, dy_abs;
+	dx_abs = std::abs(dx);
+	dy_abs = std::abs(dy);
+	bool has_los = false;
+
+	// if the cell which 1 closer to goal has LOS, then we *may* have it too
+	if (dx_abs >= dy_abs)
+	{
+		if (integfield->hasLOS(at_tile.x + dx_one, at_tile.y))
+			has_los = true;
+	}
+	if (dy_abs >= dx_abs)
+	{
+		if (integfield->hasLOS(at_tile.x, at_tile.y + dy_one))
+			has_los = true;
+	}
+
+	if (dy_abs > 0 && dx_abs > 0)
+	{
+		// if the diagonal doesn't have LOS, we don't
+		if (!integfield->hasLOS(at_tile.x + dx_one, at_tile.y + dy_one))
+			has_los = false;
+		else if (dx_abs == dy_abs)
+		{
+			if (COST_NOT_PASSABLE == (integfield->getCost(at_tile.x + dx_one, at_tile.y)) ||
+				COST_NOT_PASSABLE == (integfield->getCost(at_tile.x, at_tile.y + dy_one)))
+				has_los = false;
+		}
+	}
+	if (has_los) integfield->setHasLOS(at);
+	// if (has_los) debug (LOG_FLOWFIELD, "has los %i %i", at_tile.x, at_tile.y);
+	return;
+}
+
+void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
+                              IntegrationField* integrationField,
+							  const CostField* costField,
+							  uint16_t goal,
+							  std::set<uint16_t>* stationaryDroids)
+{
 	const Node& node = openSet.top();
 	auto cost = costField->getCost(node.index);
 
-	if (cost == COST_NOT_PASSABLE) {
-		return;
-	}
-
-	auto coordinate = arrayIndexToCoordinate(node.index);
-
-	if(stationaryDroids->count({ coordinate })){
-		return;
-	}
+	if (cost == COST_NOT_PASSABLE) return;
+	if (stationaryDroids->count(node.index)) return;
 
 	// Go to the goal, no matter what
-	if (node.predecessorCost == 0) {
+	if (node.predecessorCost == 0)
+	{
 		cost = COST_MIN;
 	}
 
-	const unsigned short integrationCost = node.predecessorCost + cost;
-	const unsigned short oldIntegrationCost = integrationField->getCost(node.index);
+	const ICostType integrationCost = node.predecessorCost + cost;
+	const ICostType oldIntegrationCost = integrationField->getCost(node.index);
+	uint8_t x, y;
+	tileFrom2Dindex (node.index, x, y);
 
-	if (integrationCost < oldIntegrationCost) {
+	if (integrationCost < oldIntegrationCost)
+	{
 		integrationField->setCost(node.index, integrationCost);
-
+		calculateLOS(integrationField, node.index, goal);
 		// North
-		if(coordinate.y > 0){
-			openSet.push({ integrationCost, coordinateToArrayIndex(coordinate.x, coordinate.y - 1) });
+		if (y > 0)
+		{
+			openSet.push({ integrationCost, tileTo2Dindex(x, y - 1) });
 		}
 		// East
-		if(coordinate.x < mapWidth){
-			openSet.push({ integrationCost, coordinateToArrayIndex(coordinate.x + 1, coordinate.y) });
+		if (x < mapWidth)
+		{
+			openSet.push({ integrationCost, tileTo2Dindex(x + 1, y) });
 		}
 		// South
-		if(coordinate.y < mapHeight){
-			openSet.push({ integrationCost, coordinateToArrayIndex(coordinate.x, coordinate.y + 1) });
+		if (y < mapHeight)
+		{
+			openSet.push({ integrationCost, tileTo2Dindex(x, y + 1) });
 		}
 		// West
-		if(coordinate.x > 0){
-			openSet.push({ integrationCost, coordinateToArrayIndex(coordinate.x - 1, coordinate.y) });
+		if (x > 0) 
+		{
+			openSet.push({ integrationCost, tileTo2Dindex(x - 1, y) });
 		}
 	}
 }
 
-void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField) {
-	for (int y = 0; y < mapHeight; y++) {
-		for (int x = 0; x < mapWidth; x++) {
+void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField)
+{
+	for (int y = 0; y < mapHeight; y++)
+	{
+		for (int x = 0; x < mapWidth; x++)
+		{
+			VectorT vector;
 			const auto cost = integrationField->getCost(x, y);
 			if (cost == COST_NOT_PASSABLE || cost == COST_MIN) {
 				// Skip goal and non-passable
@@ -494,12 +622,27 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 				flowField->setVector(x, y, VectorT { 0.0f, 0.0f });
 				continue;
 			}
+			// if we have LOS, then it's easy: just head straight to the goal
+			if (integrationField->hasLOS(x, y))
+			{
+				uint8_t goalx, goaly; 
+				tileFrom2Dindex(flowField->goal, goalx, goaly);
+				vector.x = goalx - x;
+				vector.y = goaly - y;
+				vector.normalize();
+				flowField->setVector(x, y, vector);
+				continue;
+			}
+			uint16_t leftCost = integrationField->getCost(x - 1, y);
+			uint16_t rightCost = integrationField->getCost(x + 1, y);
+			uint16_t topCost = integrationField->getCost(x, y - 1);
+			uint16_t bottomCost = integrationField->getCost(x, y + 1);
 
-			unsigned short leftCost = integrationField->getCost(x - 1, y);
-			unsigned short rightCost = integrationField->getCost(x + 1, y);
-			unsigned short topCost = integrationField->getCost(x, y - 1);
-			unsigned short bottomCost = integrationField->getCost(x, y + 1);
-
+			// leftCost = leftCost == COST_NOT_PASSABLE ? cost : leftCost;
+			// rightCost = rightCost == COST_NOT_PASSABLE ? cost : rightCost;
+			// topCost = topCost == COST_NOT_PASSABLE ? cost : topCost;
+			// bottomCost = bottomCost == COST_NOT_PASSABLE ? cost : bottomCost;
+			
 			const bool leftImpassable = leftCost == COST_NOT_PASSABLE;
 			const bool rightImpassable = rightCost == COST_NOT_PASSABLE;
 			const bool topImpassable = topCost == COST_NOT_PASSABLE;
@@ -510,20 +653,26 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			/// (this is because impassable tiles have MAX cost.)
 
 			/// the fix here is for the horizontal axis.
-			if(rightImpassable && !leftImpassable){
+			if (rightImpassable && !leftImpassable)
+			{
 				rightCost = std::max(leftCost, cost);
 			}
-			if(leftImpassable && !rightImpassable){
+			if (leftImpassable && !rightImpassable)
+			{
 				leftCost = std::max(rightCost, cost);
 			}
 
 			/// the fix here is for the vertical axis.
-			if(topImpassable && !bottomImpassable){
+			if (topImpassable && !bottomImpassable)
+			{
 				topCost = std::max(bottomCost, cost);
 			}
-			if(bottomImpassable && !topImpassable){
+			if (bottomImpassable && !topImpassable)
+			{
 				bottomCost = std::max(topCost, cost);
 			}
+
+
 
 			// if we are up against a wall, and the two directions along the wall are equally costly,
 			// a tie will happen if the path isn't perpendicular to the wall:
@@ -544,10 +693,14 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			bool topAndBottomIsPassable = !topImpassable && !bottomImpassable;
 			bool topAndBottomHaveEqualCost = topCost == bottomCost;
 
-			if(rightOrLeftIsImpassable && topAndBottomIsPassable && topAndBottomHaveEqualCost && topCost < cost){
-				if(tieBraker) {
+			if (rightOrLeftIsImpassable && topAndBottomIsPassable && topAndBottomHaveEqualCost && topCost < cost)
+			{
+				if (tieBraker)
+				{
 					topCost = 0;
-				} else {
+				}
+				else
+				{
 					bottomCost = 0;
 				}
 			}
@@ -556,19 +709,23 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			bool leftAndRightIsPassable = !leftImpassable && !rightImpassable;
 			bool leftAndRightHaveEqualCost = leftCost == rightCost;
 			
-			if(topOrBottomIsImpassable && leftAndRightIsPassable && leftAndRightHaveEqualCost && leftCost < cost){
-				if(tieBraker) {
+			if (topOrBottomIsImpassable && leftAndRightIsPassable && leftAndRightHaveEqualCost && leftCost < cost)
+			{
+				if (tieBraker)
+				{
 					leftCost = 0;
-				} else {
+				}
+				else
+				{
 					rightCost = 0;
 				}
 			}
 
-			VectorT vector;
+			
 			vector.x = leftCost - rightCost;
 			vector.y = topCost - bottomCost;
 			vector.normalize();
-
+			// glm::normalize(glm::vec2 {0.5, 0.8});
 			// if (std::abs(vector.x) < 0.01f && std::abs(vector.y) < 0.01f) {
 			// 	// Local optima. Tilt the vector in any direction.
 			// 	vector.x = 0.1f;
@@ -580,7 +737,21 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 	}
 }
 
-unsigned short calculateTileCost(unsigned short x, unsigned short y, PROPULSION_TYPE propulsion)
+/** Update a given tile as impossible to cross.
+ * TODO also must invalidate cached flowfields, because they
+ * were all based on obsolete cost/integration fields!
+ */
+void markTileAsImpassable(uint8_t x, uint8_t y, PROPULSION_TYPE prop)
+{
+	costFields[propulsionToIndexUnique.at(prop)]->setCost(x, y, COST_NOT_PASSABLE);
+}
+
+void markTileAsDefaultCost(uint8_t x, uint8_t y, PROPULSION_TYPE prop)
+{
+	costFields[propulsionToIndexUnique.at(prop)]->setCost(x, y, COST_MIN);
+}
+
+CostType calculateTileCost(uint16_t x, uint16_t y, PROPULSION_TYPE propulsion)
 {
 	// TODO: Current impl forbids VTOL from flying over short buildings
 	if (!fpathBlockingTile(x, y, propulsion))
@@ -588,12 +759,12 @@ unsigned short calculateTileCost(unsigned short x, unsigned short y, PROPULSION_
 		int pMax, pMin;
 		getTileMaxMin(x, y, &pMax, &pMin);
 
-		const auto delta = static_cast<unsigned short>(pMax - pMin);
+		const auto delta = static_cast<uint16_t>(pMax - pMin);
 
 		if (propulsion != PROPULSION_TYPE_LIFT && delta > SLOPE_THRESOLD)
 		{
 			// Yes, the cost is integer and we do not care about floating point tail
-			return std::max(COST_MIN, static_cast<unsigned short>(SLOPE_COST_BASE * delta));
+			return std::max(COST_MIN, static_cast<CostType>(SLOPE_COST_BASE * delta));
 		}
 		else
 		{
@@ -610,13 +781,17 @@ void initCostFields()
 	{
 		for (int y = 0; y < mapHeight; y++)
 		{
-			for (auto&& propType : propulsionToIndexUnique)
-			{
-				auto cost = calculateTileCost(x, y, propType.first);
-				costFields[propType.second]->setCost(x, y, cost);
-			}
+			auto cost_0 = calculateTileCost(x, y, PROPULSION_TYPE_WHEELED);
+			auto cost_1 = calculateTileCost(x, y, PROPULSION_TYPE_PROPELLOR);
+			auto cost_2 = calculateTileCost(x, y, PROPULSION_TYPE_HOVER);
+			auto cost_3 = calculateTileCost(x, y, PROPULSION_TYPE_LIFT);
+			costFields[propulsionIdx2[PROPULSION_TYPE_WHEELED]]->setCost(x, y, cost_0);
+			costFields[propulsionIdx2[PROPULSION_TYPE_PROPELLOR]]->setCost(x, y, cost_1);
+			costFields[propulsionIdx2[PROPULSION_TYPE_HOVER]]->setCost(x, y, cost_2);
+			costFields[propulsionIdx2[PROPULSION_TYPE_LIFT]]->setCost(x, y, cost_3);
 		}
 	}
+	debug (LOG_FLOWFIELD, "init cost field done.");
 }
 
 void destroyCostFields()
@@ -624,47 +799,43 @@ void destroyCostFields()
 	// ?
 }
 
-void destroyflowfieldCaches() {
-	for (auto&& pair : propulsionToIndexUnique) {
-		flowfieldCaches[pair.second]->clear();
-	}
+void destroyflowfieldCaches() 
+{
+	// for (auto&& pair : propulsionToIndexUnique) {
+	// 	flowfieldCaches[pair.second]->clear();
+	// }
 }
 
-void debugDrawFlowfield(const glm::mat4 &mvp) {
-	const auto playerXTile = map_coord(player.p.x);
-	const auto playerZTile = map_coord(player.p.z);
+void debugDrawFlowfield(const glm::mat4 &mvp) 
+{
+	const auto playerXTile = map_coord(playerPos.p.x);
+	const auto playerZTile = map_coord(playerPos.p.z);
 	
-	const auto& costField = costFields[propulsionToIndex.at(PROPULSION_TYPE_WHEELED)];
-
+	const auto& costField = costFields[propulsionIdx2[PROPULSION_TYPE_WHEELED]];
 	for (auto deltaX = -6; deltaX <= 6; deltaX++)
 	{
 		const auto x = playerXTile + deltaX;
 
-		if(x < 0){
-			continue;
-		}
+		if(x < 0) continue;
 		
 		for (auto deltaZ = -6; deltaZ <= 6; deltaZ++)
 		{
 			const auto z = playerZTile + deltaZ;
 
-			if(z < 0){
-				continue;
-			}
+			if(z < 0) continue;
 
-			const float XA = world_coord(x);
-			const float XB = world_coord(x + 1);
-			const float ZA = world_coord(z);
-			const float ZB = world_coord(z + 1);
-			const float YAA = map_TileHeight(x, z);
-			const float YBA = map_TileHeight(x + 1, z);
-			const float YAB = map_TileHeight(x, z + 1);
-			const float YBB = map_TileHeight(x + 1, z + 1);
+			const int XA = world_coord(x);
+			const int XB = world_coord(x + 1);
+			const int ZA = world_coord(z);
+			const int ZB = world_coord(z + 1);
+			const int YAA = map_TileHeight(x, z);
+			const int YBA = map_TileHeight(x + 1, z);
+			const int YAB = map_TileHeight(x, z + 1);
+			const int YBB = map_TileHeight(x + 1, z + 1);
 			
-			float height = map_TileHeight(x, z);
+			int height = map_TileHeight(x, z);
 
 			// tile
-
 			iV_PolyLine({
 				{ XA, YAA, -ZA },
 				{ XA, YAB, -ZB },
@@ -678,10 +849,11 @@ void debugDrawFlowfield(const glm::mat4 &mvp) {
 			const Vector3i a = { (XA + 20), height, -(ZA + 20) };
 			Vector2i b;
 
-			pie_RotateProject(&a, mvp, &b);
+			pie_RotateProjectWithPerspective(&a, mvp, &b);
 			auto cost = costField->getCost(x, z);
-			if(cost != COST_NOT_PASSABLE){
-				WzText costText(std::to_string(cost), font_small);
+			if(cost != COST_NOT_PASSABLE)
+			{
+				WzText costText(WzString::fromUtf8(std::to_string(cost)), font_small);
 				costText.render(b.x, b.y, WZCOL_TEXT_BRIGHT);
 			}
 			
@@ -693,17 +865,15 @@ void debugDrawFlowfield(const glm::mat4 &mvp) {
 				const Vector3i positionText3dCoords = { (XA + 20), height, -(ZB - 20) };
 				Vector2i positionText2dCoords;
 
-				pie_RotateProject(&positionText3dCoords, mvp, &positionText2dCoords);
+				pie_RotateProjectWithPerspective(&positionText3dCoords, mvp, &positionText2dCoords);
 				WzText positionText(positionString, font_small);
-				positionText.render(positionText2dCoords.x, positionText2dCoords.y, WZCOL_LBLUE);
+				positionText.render(positionText2dCoords.x, positionText2dCoords.y, WZCOL_RED);
 			}
 	 	}
 	}
-
 	// flowfields
-
-	std::set<Flowfield*> flowfieldsToDraw;
-
+	// std::set<Flowfield*> flowfieldsToDraw;
+	Flowfield* flowfield = nullptr;
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (!psDroid->selected)
@@ -719,93 +889,87 @@ void debugDrawFlowfield(const glm::mat4 &mvp) {
 			continue;
 		}
 
-		flowfieldsToDraw.insert(flowfieldById.at(psDroid->sMove.flowfield));
+		flowfield = flowfieldById.at(psDroid->sMove.flowfield);
+		break;
 	}
+	if (!flowfield) return;
+	
+	for (auto deltaX = -6; deltaX <= 6; deltaX++)
+	{
+		const int x = playerXTile + deltaX;
+		
+		if (x < 0) continue;
 
-	for(auto flowfield : flowfieldsToDraw){
-		for (auto deltaX = -6; deltaX <= 6; deltaX++)
+		for (auto deltaZ = -6; deltaZ <= 6; deltaZ++)
 		{
-			const auto x = playerXTile + deltaX;
+			const int z = playerZTile + deltaZ;
 
-			if(x < 0){
-				continue;
-			}
+			if (z < 0) continue;
 			
-			for (auto deltaZ = -6; deltaZ <= 6; deltaZ++)
+			
+			const float XA = world_coord(x);
+			const float ZA = world_coord(z);
+
+			auto vector = flowfield->getVector(x, z);
+			
+			auto startPointX = XA + FF_TILE_SIZE / 2;
+			auto startPointY = ZA + FF_TILE_SIZE / 2;
+
+			auto height = map_TileHeight(x, z) + 10;
+
+			// origin
+
+			auto cost = costField->getCost(x, z);
+			if (cost != COST_NOT_PASSABLE)
 			{
-				const auto z = playerZTile + deltaZ;
-
-				if(z < 0){
-					continue;
-				}
-				
-				const float XA = world_coord(x);
-				const float ZA = world_coord(z);
-
-				auto vector = flowfield->getVector(x, z);
-				
-				auto startPointX = XA + FF_TILE_SIZE / 2;
-				auto startPointY = ZA + FF_TILE_SIZE / 2;
-
-				auto height = map_TileHeight(x, z) + 10;
-
-				// origin
-
-				auto cost = costField->getCost(x, z);
-				if(cost != COST_NOT_PASSABLE){
-					iV_PolyLine({
-						{ startPointX - 10, height, -startPointY - 10 },
-						{ startPointX - 10, height, -startPointY + 10 },
-						{ startPointX + 10, height, -startPointY + 10 },
-						{ startPointX + 10, height, -startPointY - 10 },
-						{ startPointX - 10, height, -startPointY - 10 },
-					}, mvp, WZCOL_WHITE);
-				}
-				
-				// direction
-
 				iV_PolyLine({
-					{ startPointX, height, -startPointY },
-					{ startPointX + vector.x * 75, height, -startPointY - vector.y * 75 },
+					{ startPointX - 10, height, -startPointY - 10 },
+					{ startPointX - 10, height, -startPointY + 10 },
+					{ startPointX + 10, height, -startPointY + 10 },
+					{ startPointX + 10, height, -startPointY - 10 },
+					{ startPointX - 10, height, -startPointY - 10 },
 				}, mvp, WZCOL_WHITE);
-
-				// integration fields
-
-				const Vector3i integrationFieldText3dCoordinates = { (XA + 20), height, -(ZA + 40) };
-				Vector2i integrationFieldText2dCoordinates;
-
-				pie_RotateProject(&integrationFieldText3dCoordinates, mvp, &integrationFieldText2dCoordinates);
-				auto integrationCost = flowfield->integrationField->getCost(x, z);
-				if(integrationCost != COST_NOT_PASSABLE){
-					WzText costText(std::to_string(integrationCost), font_small);
-					costText.render(integrationFieldText2dCoordinates.x, integrationFieldText2dCoordinates.y, WZCOL_TEXT_BRIGHT);
-				}
 			}
-		}
-
-		// goal
-
-		for(auto goal : flowfield->goals){
-			auto goalX = world_coord(goal.x) + FF_TILE_SIZE / 2;
-			auto goalY = world_coord(goal.y) + FF_TILE_SIZE / 2;
-			auto height = map_TileHeight(goal.x, goal.y) + 10;
+			// direction
+			bool has_los = flowfield->integrationField->hasLOS(x, z);
 			iV_PolyLine({
-				{ goalX - 10 + 3, height, -goalY - 10 + 3 },
-				{ goalX - 10 + 3, height, -goalY + 10 + 3 },
-				{ goalX + 10 + 3, height, -goalY + 10 + 3 },
-				{ goalX + 10 + 3, height, -goalY - 10 + 3 },
-				{ goalX - 10 + 3, height, -goalY - 10 + 3 },
-			}, mvp, WZCOL_RED);
+				{ startPointX, height, -startPointY },
+				{ startPointX + vector.x * 75, height, -startPointY - vector.y * 75 },
+			}, mvp, has_los ? WZCOL_RED : WZCOL_WHITE);
+
+			// integration fields
+
+			const Vector3i integrationFieldText3dCoordinates { (XA + 20), height, -(ZA + 40) };
+			Vector2i integrationFieldText2dCoordinates;
+
+			pie_RotateProjectWithPerspective(&integrationFieldText3dCoordinates, mvp, &integrationFieldText2dCoordinates);
+			auto integrationCost = flowfield->integrationField->getCost(x, z);
+			if (integrationCost != COST_NOT_PASSABLE)
+			{
+				WzText costText(WzString::fromUtf8 (std::to_string(integrationCost)), font_small);
+				costText.render(integrationFieldText2dCoordinates.x, integrationFieldText2dCoordinates.y, WZCOL_TEXT_BRIGHT);
+			}
 		}
 	}
+	
+	// goal
+	uint8_t _goalx, _goaly;
+	tileFrom2Dindex (flowfield->goal, _goalx, _goaly);
+	auto goalX = world_coord(_goalx) + FF_TILE_SIZE / 2;
+	auto goalY = world_coord(_goaly) + FF_TILE_SIZE / 2;
+	auto height = map_TileHeight(_goalx, _goaly) + 10;
+	iV_PolyLine({
+		{ goalX - 10 + 3, height, -goalY - 10 + 3 },
+		{ goalX - 10 + 3, height, -goalY + 10 + 3 },
+		{ goalX + 10 + 3, height, -goalY + 10 + 3 },
+		{ goalX + 10 + 3, height, -goalY - 10 + 3 },
+		{ goalX - 10 + 3, height, -goalY - 10 + 3 },
+	}, mvp, WZCOL_RED);
 }
 
 #define VECTOR_FIELD_DEBUG 1
-
-void debugDrawFlowfields(const glm::mat4 &mvp) {
+void debugDrawFlowfields(const glm::mat4 &mvp)
+{
 	if (!isFlowfieldEnabled()) return;
-
-	if (VECTOR_FIELD_DEBUG) {
-		debugDrawFlowfield(mvp);
-	}
+	if (VECTOR_FIELD_DEBUG) debugDrawFlowfield(mvp);
 }

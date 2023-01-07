@@ -72,12 +72,18 @@ void flowfieldInit();
 /// Deinitialises flowfield pathfinding.
 void flowfieldDestroy();
 
+/// update cost field: mark a tile as impassable
+void markTileAsImpassable(uint8_t x, uint8_t y, PROPULSION_TYPE prop);
+
+/// update cost field: mark as passable again
+void markTileAsDefaultCost(uint8_t x, uint8_t y, PROPULSION_TYPE prop);
+
 /// Returns true and populates flowfieldId if a flowfield exists for the specified target.
 bool tryGetFlowfieldForTarget(unsigned int targetX, unsigned int targetY, PROPULSION_TYPE propulsion, unsigned int &flowfieldId);
 /// Starts to generate a flowfield for the specified target.
 void calculateFlowfieldAsync(unsigned int targetX, unsigned int targetY, PROPULSION_TYPE propulsion);
 /// Returns true and populates vector if a directional vector exists for the specified flowfield and target position.
-bool tryGetFlowfieldVector(unsigned int flowfieldId, int x, int y, Vector2f& vector);
+bool tryGetFlowfieldVector(unsigned int flowfieldId, uint8_t x, uint8_t y, Vector2f& vector);
 
 /// Draw debug data for flowfields.
 void debugDrawFlowfields(const glm::mat4 &mvp);
