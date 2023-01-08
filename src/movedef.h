@@ -46,7 +46,7 @@ struct MOVE_CONTROL
 	MOVE_STATUS Status = MOVEINACTIVE;    ///< Inactive, Navigating or moving point to point status
 	int pathIndex = 0;                    ///< Position in asPath
 	std::vector<Vector2i> asPath;         ///< Pointer to list of block X,Y map coordinates.
-	unsigned int flowfield = 0;           /// ID of designated flowfield
+	unsigned int flowfieldId = 0;           /// ID of designated flowfield
 
 	Vector2i destination = Vector2i(0, 0);                 ///< World coordinates of movement destination
 	Vector2i src = Vector2i(0, 0);

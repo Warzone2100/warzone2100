@@ -56,11 +56,41 @@
 // isDanger = auxTile(x, y, type.owner) & AUXBITS_THREAT;
 
 /////////////////////////////////////////////////////////////////////
-
-
 // TODO: avoiding tiles marked as "threat" (only AI, or anyone? It would be nice if your own droids would prefer to avoid enemy when retreating)
 // TODO: maybe prefer visible tiles, or just discovered tiles (for player)
 // Both things would go into integration field probably. Note that adding visibility stuff would quickly require most integration and flow fields to be thrown away, since visibility changes all the time.
+
+// possible directions
+enum class Directions
+{
+	DIR_NONE,
+	DIR_0,  DIR_1,    DIR_2,
+	DIR_3,  /*O*/     DIR_4,
+	DIR_5,  DIR_6,    DIR_7
+};
+enum class Quadrant { Q1, Q2, Q3, Q4};
+
+// Y grows down, X grows to the right -0.70711
+//  Quad2    | Quad1
+//  -        |       +x
+//  ------------------>
+//   Quad3   |   Quad4
+//           |+y
+
+const Vector2f dirToVec[9] = {
+	// already normalized direction vectors
+	// TODO use integers, not floats (trig.cpp)
+	Vector2f { 0.,              0.}, // NONE
+	Vector2f {-0.707107, -0.707107}, // DIR_0
+	Vector2f { 0.,             -1.}, // DIR_1
+	Vector2f { 0.707107, -0.707107}, // DIR_2
+	Vector2f {-1.,              0.}, // DIR_3
+	Vector2f { 1.,              0.}, // DIR_4
+	Vector2f {-0.707107,        1.}, // DIR_5
+	Vector2f { 0.,              1.}, // DIR_6
+	Vector2f { 0.707107,  0.707107}  // DIR_7
+};
+
 
 /// Enable flowfield pathfinding.
 void flowfieldEnable();
@@ -84,6 +114,9 @@ bool tryGetFlowfieldForTarget(unsigned int targetX, unsigned int targetY, PROPUL
 void calculateFlowfieldAsync(unsigned int targetX, unsigned int targetY, PROPULSION_TYPE propulsion);
 /// Returns true and populates vector if a directional vector exists for the specified flowfield and target position.
 bool tryGetFlowfieldVector(unsigned int flowfieldId, uint8_t x, uint8_t y, Vector2f& vector);
+
+/// is tile (x, y) passable? We don't need propulsion argument, it's implicit for this particular flowfield
+bool flowfieldIsImpassable(unsigned int flowfieldId, uint8_t x, uint8_t y);
 
 /// Draw debug data for flowfields.
 void debugDrawFlowfields(const glm::mat4 &mvp);

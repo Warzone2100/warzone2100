@@ -10,6 +10,7 @@
 #include <typeinfo>
 #include <vector>
 #include <memory>
+#include <chrono>
 
 #include "lib/framework/debug.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -208,7 +209,11 @@ static int ffpathThreadFunc(void *)
 					true));
 			wzMutexUnlock(ffpathMutex);
 			debug (LOG_FLOWFIELD, "started processing flowfield request %i", request.goal);
+			auto start = std::chrono::high_resolution_clock::now();
 			processFlowfield(request);
+			auto end = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+			debug (LOG_FLOWFIELD, "processing took %li", duration.count());
 			wzMutexLock(ffpathMutex);
 			flowfieldCurrentlyActiveRequests.erase(std::make_pair(request.goal, request.propulsion));
 		}
@@ -323,23 +328,7 @@ struct CostField
 	}
 };
 
-// TODO: Remove this in favor of glm.
-struct VectorT
-{
-	float x;
-	float y;
-
-	void normalize()
-	{
-		const float length = std::sqrt(std::pow(x, 2) + std::pow(y, 2));
-		if (length != 0) {
-			x /= length;
-			y /= length;
-		}
-	}
-};
-
-/// auto increment state for flowfield ids. Used on psDroid->sMove.flowfield. 
+/// auto increment state for flowfield ids. Used on psDroid->sMove.flowfieldId. 
 // 0 means no flowfield exists for the unit.
 unsigned int flowfieldIdIncrementor = 1;
 
@@ -347,21 +336,29 @@ unsigned int flowfieldIdIncrementor = 1;
 struct Flowfield
 {
 	unsigned int id;
-	// tile coordinates of movement goal
 	uint16_t goal;
-
 	#ifdef DEBUG
-	// pointless in release builds
+	// pointless in release builds because is only need for "debugDrawFlowfield"
 	std::unique_ptr<IntegrationField> integrationField;
 	#endif
-
-	std::array<VectorT, FF_MAP_AREA> vectors;
-
-	void setVector(uint8_t x, uint8_t y, VectorT vector) {
-		vectors[tileTo2Dindex(x, y)] = vector;
+	std::array<Directions, FF_MAP_AREA> dirs;
+	// TODO use bitfield
+	std::array<bool, FF_MAP_AREA> impassable;
+	void setImpassable (uint8_t x, uint8_t y)
+	{
+		uint16_t tile = tileTo2Dindex(x, y);
+		impassable[tile] = true;
 	}
-	VectorT getVector(uint8_t x, uint8_t y) const {
-		return vectors[tileTo2Dindex(x, y)];
+	bool isImpassable (uint8_t x, uint8_t y) const
+	{
+		return impassable[tileTo2Dindex(x, y)];
+	}
+	void setDir (uint8_t x, uint8_t y, Directions dir)
+	{
+		dirs[tileTo2Dindex(x, y)] = dir;
+	}
+	Vector2f getVector(uint8_t x, uint8_t y) const {
+		return dirToVec[(int) dirs[tileTo2Dindex(x, y)]];
 	}
 };
 
@@ -413,9 +410,15 @@ bool tryGetFlowfieldVector(unsigned int flowfieldId, uint8_t x, uint8_t y, Vecto
 {
 	if(!flowfieldById.count(flowfieldId)) return false;
 	auto flowfield = flowfieldById.at(flowfieldId);
-	VectorT v = flowfield->getVector(x, y);
+	Vector2f v = flowfield->getVector(x, y);
 	vector = { v.x, v.y };
 	return true;
+}
+
+bool flowfieldIsImpassable(unsigned int flowfieldId, uint8_t x, uint8_t y)
+{
+	auto flowfield = flowfieldById.at(flowfieldId);
+	return flowfield->isImpassable(x, y);
 }
 
 struct Node
@@ -558,6 +561,83 @@ void calculateLOS(IntegrationField *integfield, uint16_t at, uint16_t goal)
 	return;
 }
 
+const std::array<Directions, 3> quad1_vecs = {
+	Directions::DIR_4,
+	Directions::DIR_2,
+	Directions::DIR_1
+};
+const std::array<Directions, 3> quad2_vecs = {
+	Directions::DIR_1,
+	Directions::DIR_0,
+	Directions::DIR_3
+};
+const std::array<Directions, 3> quad3_vecs = {
+	Directions::DIR_3,
+	Directions::DIR_5,
+	Directions::DIR_6
+};
+const std::array<Directions, 3> quad4_vecs = {
+	Directions::DIR_6,
+	Directions::DIR_7,
+	Directions::DIR_4
+};
+
+template <typename T>
+uint8_t minIndex (T a, T b, T c)
+{
+	auto min = std::min(a, std::min(b, c));
+	return min == a ? 0 : (min == b ? 1 : 2);
+}
+
+Directions findClosestDirection (Quadrant q, Vector2f real)
+{
+	float lena, lenb, lenc;
+	uint8_t minidx;
+	#define BODY(QUAD_VEC) lena = glm::length(real - dirToVec[(int) QUAD_VEC [0]]); \
+		lenb = glm::length(real - dirToVec[(int) QUAD_VEC [1]]); \
+		lenc = glm::length(real - dirToVec[(int) QUAD_VEC [2]]); \
+		minidx = minIndex(lena, lenb, lenc); \
+		return QUAD_VEC [minidx]
+
+	switch (q)
+	{
+	case Quadrant::Q1:
+		BODY(quad1_vecs);
+	case Quadrant::Q2:
+		BODY(quad2_vecs);
+	case Quadrant::Q3:
+		BODY(quad3_vecs);
+	case Quadrant::Q4:
+		BODY(quad4_vecs);
+	default:
+		ASSERT(false, "stoopid compiler");
+		return Directions::DIR_0;
+	}
+}
+
+/** Find which direction fits more precisely toward the goal.
+ * Returns approximate Direction
+ */
+Directions findClosestDirection (Vector2f real)
+{
+	if (real.x >= 0 && real.y < 0)
+	{
+		return findClosestDirection (Quadrant::Q1, real);
+	}
+	else if (real.x < 0 && real.y  < 0)
+	{
+		return findClosestDirection (Quadrant::Q2, real);
+	}
+	else if (real.x < 0 && real.y >= 0)
+	{
+		return findClosestDirection (Quadrant::Q3, real);
+	}
+	else
+	{
+		return findClosestDirection (Quadrant::Q4, real);
+	}
+}
+
 void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
                               IntegrationField* integrationField,
 							  const CostField* costField,
@@ -614,14 +694,30 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 	{
 		for (int x = 0; x < mapWidth; x++)
 		{
-			VectorT vector;
-			const auto cost = integrationField->getCost(x, y);
-			if (cost == COST_NOT_PASSABLE || cost == COST_MIN) {
+			if (integrationField->getCost(x, y) == COST_NOT_PASSABLE) {
 				// Skip goal and non-passable
 				// TODO: probably 0.0 should be only for actual goals, not intermediate goals when crossing sectors
-				flowField->setVector(x, y, VectorT { 0.0f, 0.0f });
+				flowField->setImpassable(x, y);
+			}
+		}
+	}
+	for (int y = 0; y < mapHeight; y++)
+	{
+		for (int x = 0; x < mapWidth; x++)
+		{
+			Vector2f vector;
+			const auto cost = integrationField->getCost(x, y);
+			if (cost == COST_NOT_PASSABLE) {
+				// Skip goal and non-passable
+				// TODO: probably 0.0 should be only for actual goals, not intermediate goals when crossing sectors
 				continue;
 			}
+			if (tileTo2Dindex(x, y) == flowField->goal)
+			{
+				continue;
+			}
+			// goal?
+			//if ()
 			// if we have LOS, then it's easy: just head straight to the goal
 			if (integrationField->hasLOS(x, y))
 			{
@@ -629,8 +725,7 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 				tileFrom2Dindex(flowField->goal, goalx, goaly);
 				vector.x = goalx - x;
 				vector.y = goaly - y;
-				vector.normalize();
-				flowField->setVector(x, y, vector);
+				flowField->setDir(x, y, findClosestDirection(vector));
 				continue;
 			}
 			uint16_t leftCost = integrationField->getCost(x - 1, y);
@@ -638,11 +733,6 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			uint16_t topCost = integrationField->getCost(x, y - 1);
 			uint16_t bottomCost = integrationField->getCost(x, y + 1);
 
-			// leftCost = leftCost == COST_NOT_PASSABLE ? cost : leftCost;
-			// rightCost = rightCost == COST_NOT_PASSABLE ? cost : rightCost;
-			// topCost = topCost == COST_NOT_PASSABLE ? cost : topCost;
-			// bottomCost = bottomCost == COST_NOT_PASSABLE ? cost : bottomCost;
-			
 			const bool leftImpassable = leftCost == COST_NOT_PASSABLE;
 			const bool rightImpassable = rightCost == COST_NOT_PASSABLE;
 			const bool topImpassable = topCost == COST_NOT_PASSABLE;
@@ -711,28 +801,36 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			
 			if (topOrBottomIsImpassable && leftAndRightIsPassable && leftAndRightHaveEqualCost && leftCost < cost)
 			{
-				if (tieBraker)
-				{
-					leftCost = 0;
-				}
-				else
-				{
-					rightCost = 0;
-				}
+				leftCost = ((int) (!tieBraker)) * leftCost;
+                rightCost = ((int)  tieBraker) * rightCost;
 			}
 
 			
 			vector.x = leftCost - rightCost;
 			vector.y = topCost - bottomCost;
-			vector.normalize();
-			// glm::normalize(glm::vec2 {0.5, 0.8});
-			// if (std::abs(vector.x) < 0.01f && std::abs(vector.y) < 0.01f) {
-			// 	// Local optima. Tilt the vector in any direction.
-			// 	vector.x = 0.1f;
-			// 	vector.y = 0.1f; // 6,56
-			// }
-
-			flowField->setVector(x, y, vector);
+			Directions dir = findClosestDirection(vector);
+			if (x == 40 && y == 103)
+			{
+				debug(LOG_FLOWFIELD, "dir was %i, impassable: %i", (int) dir, flowField->isImpassable(x - 1, y + 1));
+			}
+			// fix diagonal vectors pointing into obstacles
+			if (dir == Directions::DIR_0      && flowField->isImpassable(x - 1, y - 1))
+			{
+				dir = Directions::DIR_1;
+			}
+			else if (dir == Directions::DIR_2 && flowField->isImpassable(x + 1, y - 1))
+			{
+				dir = Directions::DIR_1;
+			}
+			else if (dir == Directions::DIR_5 && flowField->isImpassable(x - 1, y + 1))
+			{
+				dir = Directions::DIR_6;
+			}
+			else if (dir == Directions::DIR_7 && flowField->isImpassable(x + 1, y + 1))
+			{
+				dir = Directions::DIR_6;
+			}
+			flowField->setDir(x, y, dir);
 		}
 	}
 }
@@ -884,12 +982,12 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 		{
 			continue;
 		}
-		if (psDroid->sMove.flowfield == 0)
+		if (psDroid->sMove.flowfieldId == 0)
 		{
 			continue;
 		}
 
-		flowfield = flowfieldById.at(psDroid->sMove.flowfield);
+		flowfield = flowfieldById.at(psDroid->sMove.flowfieldId);
 		break;
 	}
 	if (!flowfield) return;

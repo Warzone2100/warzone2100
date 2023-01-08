@@ -457,9 +457,9 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		{
 			psDroid->sMove.pathIndex = 0;
 			psDroid->sMove.Status = MOVENAVIGATE;
-			psDroid->sMove.flowfield = flowfieldId;
+			psDroid->sMove.flowfieldId = flowfieldId;
 			psDroid->sMove.asPath = { { tX, tY } };
-
+			debug (LOG_FLOWFIELD, "OK path %i to %i %i", flowfieldId, tX, tY);
 			return FPR_OK;
 		} else {
 			calculateFlowfieldAsync(tX, tY, psPropStats->propulsionType);

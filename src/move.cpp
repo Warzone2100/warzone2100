@@ -462,6 +462,7 @@ static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
 	data.src = src;
 	data.dst = dst;
 	rayCast(src, dst, &moveBlockingTileCallback, &data);
+	objTrace (psDroid->id, "moveDirectPathToWaypoint: %i", data.blocking);
 	return data.blocking ? -1 - dist : dist;
 }
 
@@ -498,6 +499,7 @@ static bool moveBestTarget(DROID *psDroid)
 		}
 		if (dist < 0)
 		{
+			objTrace (psDroid->id, "Couldn't find path, and backtracking didn't help");
 			return false;  // Couldn't find path, and backtracking didn't help.
 		}
 	}
@@ -1279,7 +1281,7 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	// Transporters don't need to avoid obstacles, but everyone else should
 	if (!isTransporter(psDroid))
 	{
-		// dest = moveGetObstacleVector(psDroid, dest);
+		dest = moveGetObstacleVector(psDroid, dest);
 	}
 
 	return iAtan2(dest);
@@ -2156,28 +2158,36 @@ void moveUpdateDroid(DROID *psDroid)
 		// fallthrough
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
-		if(isFlowfieldEnabled() &&
-		std::abs(glm::distance(Vector2f(psDroid->sMove.destination), 
+		// assume flowfield enabled 
+		//if(isFlowfieldEnabled() &&
+		if(std::abs(glm::distance(Vector2f(psDroid->sMove.destination), 
 				Vector2f(psDroid->sMove.src))) > (TILE_UNITS))
 		{
-				Vector2f vector;
-				if(tryGetFlowfieldVector(
-						psDroid->sMove.flowfield, 
-						map_coord(psDroid->pos.x), 
-						map_coord(psDroid->pos.y), vector))
-				{
-						psDroid->sMove.src = psDroid->pos.xy();
-						// TODO: This target should be transitioned in. (or?)
-						// this makes the droid to move into flowfield direction
-						// because it's used to calculate moveDir
-						psDroid->sMove.target = psDroid->pos.xy() + Vector2i(vector.x * 512, vector.y * 512); // psDroid->pos.xy() + Vector2i(vector.x * 500, vector.y * 500);
-						// if (psDroid->player == 0)
-						// 	debug (LOG_FLOWFIELD, "droid %i src=%i %i, target=%i %i", psDroid->id,
-						// 	psDroid->sMove.src.x, psDroid->sMove.src.y,
-						// 	psDroid->sMove.target.x, psDroid->sMove.target.y);
-				} else {
-						psDroid->sMove.Status = MOVEINACTIVE;
-				}
+			Vector2f vector;
+			if(tryGetFlowfieldVector(
+					psDroid->sMove.flowfieldId, 
+					map_coord(psDroid->pos.x), 
+					map_coord(psDroid->pos.y), vector))
+			{
+				// if (psDroid->player == 0 &&
+				// 	flowfieldIsImpassable(psDroid->sMove.flowfieldId, map_coord(psDroid->pos.x), map_coord(psDroid->pos.y)))
+				// {
+				// 	debug(LOG_INFO, "droid %i inside impassable tile! x=%i y=%i", psDroid->id,  map_coord(psDroid->pos.x), map_coord(psDroid->pos.y));
+				// 	moveStopDroid(psDroid);
+				// 	break;
+				// }
+				psDroid->sMove.src = psDroid->pos.xy();
+				// TODO: This target should be transitioned in. (or?)
+				// this makes the droid to move into flowfield direction
+				// because it's used to calculate moveDir
+				psDroid->sMove.target = psDroid->pos.xy() + Vector2i(vector.x * 512, vector.y * 512); // psDroid->pos.xy() + Vector2i(vector.x * 500, vector.y * 500);
+				// if (psDroid->player == 0)
+				// 	debug (LOG_FLOWFIELD, "droid %i src=%i %i, target=%i %i", psDroid->id,
+				// 	psDroid->sMove.src.x, psDroid->sMove.src.y,
+				// 	psDroid->sMove.target.x, psDroid->sMove.target.y);
+			} else {
+					psDroid->sMove.Status = MOVEINACTIVE;
+			}
 		}
 		else
 		{
@@ -2188,7 +2198,7 @@ void moveUpdateDroid(DROID *psDroid)
 			}
 
 			// Get the best control point.
-			if (psDroid->sMove.asPath.size() == 0 || !moveBestTarget(psDroid))
+			if (psDroid->sMove.asPath.size() == 0 /*|| !moveBestTarget(psDroid) */)
 			{
 				debug(LOG_FLOWFIELD, "Stuck: path size=%li \n", psDroid->sMove.asPath.size());
 				// Got stuck somewhere, can't find the path.
