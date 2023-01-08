@@ -172,6 +172,8 @@ function eventStartLevel()
 	}
 	else
 	{
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce", SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce", SCAV_7);
 		setMissionTime(-1); // will start mission timer later
 	}
 

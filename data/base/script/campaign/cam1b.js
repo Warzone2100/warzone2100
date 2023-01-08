@@ -4,7 +4,7 @@ include("script/campaign/templates.js");
 
 var NPScout; // Sensor scout
 const SCAVENGER_RES = [
-	"R-Wpn-Flamer-Damage01", "R-Wpn-Flamer-Range01", "R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01",
+	"R-Wpn-Flamer-Damage01", "R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01",
 ];
 
 camAreaEvent("AttackArea1", function(droid)
@@ -85,6 +85,11 @@ function eventStartLevel()
 
 	camCompleteRequiredResearch(SCAVENGER_RES, 6);
 	camCompleteRequiredResearch(SCAVENGER_RES, 7);
+	if (difficulty >= HARD)
+	{
+		completeResearch("R-Wpn-Flamer-Range01", SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01", SCAV_7);
+	}
 
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },

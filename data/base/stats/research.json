@@ -2554,6 +2554,44 @@
 		"statID": "Flame1Mk1",
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
+	"R-Wpn-Flamer-Range01-ScavReduce": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Flamer-Range01-ScavReduce",
+		"keyTopic": 1,
+		"name": "Reduce Scavenger Flamer Range",
+		"researchPoints": 100,
+		"researchPower": 3,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "FLAME",
+				"parameter": "MaxRange",
+				"value": -12
+			}
+		],
+		"statID": "Flame1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
+	},
+	"R-Wpn-Flamer-Range01-ScavReduce-Undo": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Flamer-Range01-ScavReduce-Undo",
+		"keyTopic": 1,
+		"name": "Undo Reduce Scavenger Flamer Range",
+		"researchPoints": 100,
+		"researchPower": 3,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "FLAME",
+				"parameter": "MaxRange",
+				"value": 12
+			}
+		],
+		"statID": "Flame1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
+	},
 	"R-Wpn-Flamer-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Damage01",
