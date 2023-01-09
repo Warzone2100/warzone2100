@@ -63,7 +63,7 @@
 // possible directions
 enum class Directions
 {
-	DIR_NONE,
+//	DIR_NONE,
 	DIR_0,  DIR_1,    DIR_2,
 	DIR_3,  /*O*/     DIR_4,
 	DIR_5,  DIR_6,    DIR_7
@@ -76,11 +76,11 @@ enum class Quadrant { Q1, Q2, Q3, Q4};
 //  ------------------>
 //   Quad3   |   Quad4
 //           |+y
-
-const Vector2f dirToVec[9] = {
+#define DIR_TO_VEC_SIZE 8
+const Vector2f dirToVec[DIR_TO_VEC_SIZE] = {
 	// already normalized direction vectors
 	// TODO use integers, not floats (trig.cpp)
-	Vector2f { 0.,              0.}, // NONE
+	//Vector2f { 0.,              0.}, // NONE
 	Vector2f {-0.707107, -0.707107}, // DIR_0
 	Vector2f { 0.,             -1.}, // DIR_1
 	Vector2f { 0.707107, -0.707107}, // DIR_2

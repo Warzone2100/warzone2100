@@ -73,6 +73,13 @@ inline uint8_t yFrom2Dindex (uint16_t idx)
 	return (idx & 0x00FF);
 }
 
+// 8 neighbours for each cell
+static const int neighbors[8][2] = {
+	{-1, -1}, {0, -1}, {+1, -1},
+	{-1,  0},          {+1,  0},
+	{-1, +1}, {0, +1}, {+1, +1}
+};
+
 #define FF_MAP_WIDTH 256
 #define FF_MAP_HEIGHT 256
 #define FF_MAP_AREA FF_MAP_WIDTH*FF_MAP_HEIGHT
@@ -287,23 +294,6 @@ struct IntegrationField
 		ASSERT (value <= 0x7FFF, "cost is too high! Highest bit is reserved for flags");
 		this->cost[index] = value;
 	}
-
-	void setHasLOS(uint16_t idx)
-	{
-		this->cost[idx] |= (1 << 15);
-	}
-	void clearLOS(uint8_t x, uint8_t y)
-	{
-		this->cost[tileTo2Dindex(x, y)] &= ~(1 << 15);
-	}
-	bool hasLOS(uint16_t idx)
-	{
-		return (this->cost[idx] & (1 << 15)) > 0;
-	}
-	bool hasLOS(uint8_t x, uint8_t y)
-	{
-		return (this->cost[tileTo2Dindex(x, y)]  & (1 << 15)) > 0;
-	}
 };
 
 /** Cost of movement for each map tile */
@@ -357,8 +347,11 @@ struct Flowfield
 	{
 		dirs[tileTo2Dindex(x, y)] = dir;
 	}
-	Vector2f getVector(uint8_t x, uint8_t y) const {
-		return dirToVec[(int) dirs[tileTo2Dindex(x, y)]];
+	Vector2f getVector(uint8_t x, uint8_t y) const
+	{
+		auto idx = tileTo2Dindex(x, y);
+		if (idx == goal) return Vector2f {0., 0.};
+		return dirToVec[(int) dirs[idx]];
 	}
 };
 
@@ -496,69 +489,12 @@ void calculateIntegrationField(uint16_t goal,
 	// First we go where cost is the lowest, so we don't discover better path later.
 	std::priority_queue<Node> openSet;
 	openSet.push(Node { 0, goal });
-	integrationField->setHasLOS(goal);
+	// integrationField->setHasLOS(goal);
 	while (!openSet.empty())
 	{
 		integrateFlowfieldPoints(openSet, integrationField, costField, goal, &stationaryDroids);
 		openSet.pop();
 	}
-}
-
-/** Sets LOS flag for those cells, from which Goal is visible, from all 8 directions.
- * Example : https://howtorts.github.io/2014/01/30/Flow-Fields-LOS.html
- * Without LOS, even in straight line to the goal, flowfield vectors may point in
- * wierd, from human perspective, directions.
-*/
-void calculateLOS(IntegrationField *integfield, uint16_t at, uint16_t goal)
-{
-	if (at == goal)
-	{
-		integfield->setHasLOS(at);
-		return;
-	}
-	ASSERT (integfield->hasLOS(goal), "invariant failed: goal must have LOS");
-	// we want signed difference
-	int16_t dx, dy;
-	Vector2i at_tile = tileFrom2Dindex (at);
-	dx = static_cast<int16_t>(xFrom2Dindex(goal)) - static_cast<int16_t>(xFrom2Dindex(at));
-	dy = static_cast<int16_t>(yFrom2Dindex(goal)) - static_cast<int16_t>(yFrom2Dindex(at));
-	
-	int16_t dx_one, dy_one;
-	dx_one = dx > 0 ? 1 : -1; // cannot be zero, already checked above
-	dy_one = dy > 0 ? 1 : -1;
-	
-	uint8_t dx_abs, dy_abs;
-	dx_abs = std::abs(dx);
-	dy_abs = std::abs(dy);
-	bool has_los = false;
-
-	// if the cell which 1 closer to goal has LOS, then we *may* have it too
-	if (dx_abs >= dy_abs)
-	{
-		if (integfield->hasLOS(at_tile.x + dx_one, at_tile.y))
-			has_los = true;
-	}
-	if (dy_abs >= dx_abs)
-	{
-		if (integfield->hasLOS(at_tile.x, at_tile.y + dy_one))
-			has_los = true;
-	}
-
-	if (dy_abs > 0 && dx_abs > 0)
-	{
-		// if the diagonal doesn't have LOS, we don't
-		if (!integfield->hasLOS(at_tile.x + dx_one, at_tile.y + dy_one))
-			has_los = false;
-		else if (dx_abs == dy_abs)
-		{
-			if (COST_NOT_PASSABLE == (integfield->getCost(at_tile.x + dx_one, at_tile.y)) ||
-				COST_NOT_PASSABLE == (integfield->getCost(at_tile.x, at_tile.y + dy_one)))
-				has_los = false;
-		}
-	}
-	if (has_los) integfield->setHasLOS(at);
-	// if (has_los) debug (LOG_FLOWFIELD, "has los %i %i", at_tile.x, at_tile.y);
-	return;
 }
 
 const std::array<Directions, 3> quad1_vecs = {
@@ -587,6 +523,28 @@ uint8_t minIndex (T a, T b, T c)
 {
 	auto min = std::min(a, std::min(b, c));
 	return min == a ? 0 : (min == b ? 1 : 2);
+}
+
+template <typename T>
+uint8_t minIndex (T a, T b, T c, T d)
+{
+	auto min = std::min(a, std::min(b, std::min(c, d)));
+	return min == a ? 0 : (min == b ? 1 : (min == c ? 2 : 3));
+}
+
+uint8_t minIndex (uint16_t a[], size_t a_len)
+{
+	uint16_t min_so_far = std::numeric_limits<uint16_t>::max();
+	uint8_t min_idx = a_len;
+	for (int i = 0; i < a_len; i++)
+	{
+		if (a[i] < min_so_far)
+		{
+			min_so_far = a[i];
+			min_idx = i;
+		}
+	}
+	return min_idx;
 }
 
 Directions findClosestDirection (Quadrant q, Vector2f real)
@@ -638,6 +596,7 @@ Directions findClosestDirection (Vector2f real)
 	}
 }
 
+/** Wave-front expansion, from a tile to all 8 of its neighbors */
 void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
                               IntegrationField* integrationField,
 							  const CostField* costField,
@@ -664,26 +623,16 @@ void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
 	if (integrationCost < oldIntegrationCost)
 	{
 		integrationField->setCost(node.index, integrationCost);
-		calculateLOS(integrationField, node.index, goal);
-		// North
-		if (y > 0)
+		for (int neighb = 0; neighb < 8; neighb++)
 		{
-			openSet.push({ integrationCost, tileTo2Dindex(x, y - 1) });
-		}
-		// East
-		if (x < mapWidth)
-		{
-			openSet.push({ integrationCost, tileTo2Dindex(x + 1, y) });
-		}
-		// South
-		if (y < mapHeight)
-		{
-			openSet.push({ integrationCost, tileTo2Dindex(x, y + 1) });
-		}
-		// West
-		if (x > 0) 
-		{
-			openSet.push({ integrationCost, tileTo2Dindex(x - 1, y) });
+			uint8_t neighbx, neighby;
+			neighbx = x + neighbors[neighb][0];
+			neighby = y + neighbors[neighb][1];
+			if (neighby > 0 && neighby < mapHeight &&
+			    neighbx > 0 && neighbx < mapWidth)
+			{
+				openSet.push({ integrationCost, tileTo2Dindex(neighbx, neighby) });
+			}
 		}
 	}
 }
@@ -701,135 +650,31 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			}
 		}
 	}
+	static_assert((int) Directions::DIR_0 == 0, "You fool, neighbors and Directions must be synced!");
+	static_assert(DIR_TO_VEC_SIZE == 8, "dirToVec must be sync with Directions!");
+
 	for (int y = 0; y < mapHeight; y++)
 	{
 		for (int x = 0; x < mapWidth; x++)
 		{
-			Vector2f vector;
+			// Vector2f vector;
 			const auto cost = integrationField->getCost(x, y);
-			if (cost == COST_NOT_PASSABLE) {
-				// Skip goal and non-passable
-				// TODO: probably 0.0 should be only for actual goals, not intermediate goals when crossing sectors
+			if (cost == COST_NOT_PASSABLE) 
+			{
 				continue;
 			}
 			if (tileTo2Dindex(x, y) == flowField->goal)
 			{
 				continue;
 			}
-			// goal?
-			//if ()
-			// if we have LOS, then it's easy: just head straight to the goal
-			if (integrationField->hasLOS(x, y))
+			uint16_t costs[8] = {0};
+			for (int neighb = 0; neighb < 8; neighb++)
 			{
-				uint8_t goalx, goaly; 
-				tileFrom2Dindex(flowField->goal, goalx, goaly);
-				vector.x = goalx - x;
-				vector.y = goaly - y;
-				flowField->setDir(x, y, findClosestDirection(vector));
-				continue;
+				costs[neighb] = integrationField->getCost(x + neighbors[neighb][0], y + neighbors[neighb][1]);
 			}
-			uint16_t leftCost = integrationField->getCost(x - 1, y);
-			uint16_t rightCost = integrationField->getCost(x + 1, y);
-			uint16_t topCost = integrationField->getCost(x, y - 1);
-			uint16_t bottomCost = integrationField->getCost(x, y + 1);
-
-			const bool leftImpassable = leftCost == COST_NOT_PASSABLE;
-			const bool rightImpassable = rightCost == COST_NOT_PASSABLE;
-			const bool topImpassable = topCost == COST_NOT_PASSABLE;
-			const bool bottomImpassable = bottomCost == COST_NOT_PASSABLE;
-
-			/// without the two following fixes, tiles next to an impassable tile ALWAYS
-			/// point straight away from the impassable - like an allergic reaction.
-			/// (this is because impassable tiles have MAX cost.)
-
-			/// the fix here is for the horizontal axis.
-			if (rightImpassable && !leftImpassable)
-			{
-				rightCost = std::max(leftCost, cost);
-			}
-			if (leftImpassable && !rightImpassable)
-			{
-				leftCost = std::max(rightCost, cost);
-			}
-
-			/// the fix here is for the vertical axis.
-			if (topImpassable && !bottomImpassable)
-			{
-				topCost = std::max(bottomCost, cost);
-			}
-			if (bottomImpassable && !topImpassable)
-			{
-				bottomCost = std::max(topCost, cost);
-			}
-
-
-
-			// if we are up against a wall, and the two directions along the wall are equally costly,
-			// a tie will happen if the path isn't perpendicular to the wall:
-			//
-			//     x     <--- target
-			//
-			//   OOOOO   <--- wall
-			//     z     <--- tile where a tie will happen (doesn't know whether to go right or left)
-			//
-			//
-			// The tie will be broken by a semi-random number based on whether x+y is odd or even.
-			// Note that breaking the tie will not need to be done if the target is below.
-			// This is detected by checking if the tieing tiles have lower or greater cost than the z tile.
-
-			bool tieBraker = ((x + y) % 1) == 1;
-
-			bool rightOrLeftIsImpassable = rightImpassable || leftImpassable;
-			bool topAndBottomIsPassable = !topImpassable && !bottomImpassable;
-			bool topAndBottomHaveEqualCost = topCost == bottomCost;
-
-			if (rightOrLeftIsImpassable && topAndBottomIsPassable && topAndBottomHaveEqualCost && topCost < cost)
-			{
-				if (tieBraker)
-				{
-					topCost = 0;
-				}
-				else
-				{
-					bottomCost = 0;
-				}
-			}
-
-			bool topOrBottomIsImpassable = topImpassable || bottomImpassable;
-			bool leftAndRightIsPassable = !leftImpassable && !rightImpassable;
-			bool leftAndRightHaveEqualCost = leftCost == rightCost;
-			
-			if (topOrBottomIsImpassable && leftAndRightIsPassable && leftAndRightHaveEqualCost && leftCost < cost)
-			{
-				leftCost = ((int) (!tieBraker)) * leftCost;
-                rightCost = ((int)  tieBraker) * rightCost;
-			}
-
-			
-			vector.x = leftCost - rightCost;
-			vector.y = topCost - bottomCost;
-			Directions dir = findClosestDirection(vector);
-			if (x == 40 && y == 103)
-			{
-				debug(LOG_FLOWFIELD, "dir was %i, impassable: %i", (int) dir, flowField->isImpassable(x - 1, y + 1));
-			}
-			// fix diagonal vectors pointing into obstacles
-			if (dir == Directions::DIR_0      && flowField->isImpassable(x - 1, y - 1))
-			{
-				dir = Directions::DIR_1;
-			}
-			else if (dir == Directions::DIR_2 && flowField->isImpassable(x + 1, y - 1))
-			{
-				dir = Directions::DIR_1;
-			}
-			else if (dir == Directions::DIR_5 && flowField->isImpassable(x - 1, y + 1))
-			{
-				dir = Directions::DIR_6;
-			}
-			else if (dir == Directions::DIR_7 && flowField->isImpassable(x + 1, y + 1))
-			{
-				dir = Directions::DIR_6;
-			}
+			uint8_t minCostIdx = minIndex (costs, 8);
+			ASSERT (minCostIdx >=0 && minCostIdx < 8, "invariant failed");
+			Directions dir = (Directions) minCostIdx;
 			flowField->setDir(x, y, dir);
 		}
 	}
@@ -908,6 +753,26 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 {
 	const auto playerXTile = map_coord(playerPos.p.x);
 	const auto playerZTile = map_coord(playerPos.p.z);
+	Flowfield* flowfield = nullptr;
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (!psDroid->selected)
+		{
+			continue;
+		}
+		if (psDroid->sMove.Status != MOVEPOINTTOPOINT)
+		{
+			continue;
+		}
+		if (psDroid->sMove.flowfieldId == 0)
+		{
+			continue;
+		}
+
+		flowfield = flowfieldById.at(psDroid->sMove.flowfieldId);
+		break;
+	}
+	if (!flowfield) return;
 	
 	const auto& costField = costFields[propulsionIdx2[PROPULSION_TYPE_WHEELED]];
 	for (auto deltaX = -6; deltaX <= 6; deltaX++)
@@ -943,55 +808,30 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 			}, mvp, WZCOL_GREY);
 
 			// cost
-
 			const Vector3i a = { (XA + 20), height, -(ZA + 20) };
 			Vector2i b;
-
 			pie_RotateProjectWithPerspective(&a, mvp, &b);
 			auto cost = costField->getCost(x, z);
-			if(cost != COST_NOT_PASSABLE)
+			if(!flowfield->isImpassable(x, z))
 			{
 				WzText costText(WzString::fromUtf8(std::to_string(cost)), font_small);
 				costText.render(b.x, b.y, WZCOL_TEXT_BRIGHT);
-			}
-			
-			// position
+				// position
+				if(x < 999 && z < 999){
+					char positionString[7];
+					ssprintf(positionString, "%i,%i", x, z);
+					const Vector3i positionText3dCoords = { (XA + 20), height, -(ZB - 20) };
+					Vector2i positionText2dCoords;
 
-			if(x < 999 && z < 999 && cost != COST_NOT_PASSABLE){
-				char positionString[7];
-				ssprintf(positionString, "%i,%i", x, z);
-				const Vector3i positionText3dCoords = { (XA + 20), height, -(ZB - 20) };
-				Vector2i positionText2dCoords;
-
-				pie_RotateProjectWithPerspective(&positionText3dCoords, mvp, &positionText2dCoords);
-				WzText positionText(positionString, font_small);
-				positionText.render(positionText2dCoords.x, positionText2dCoords.y, WZCOL_RED);
+					pie_RotateProjectWithPerspective(&positionText3dCoords, mvp, &positionText2dCoords);
+					WzText positionText(positionString, font_small);
+					positionText.render(positionText2dCoords.x, positionText2dCoords.y, WZCOL_RED);
+				}
 			}
 	 	}
 	}
 	// flowfields
-	// std::set<Flowfield*> flowfieldsToDraw;
-	Flowfield* flowfield = nullptr;
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-	{
-		if (!psDroid->selected)
-		{
-			continue;
-		}
-		if (psDroid->sMove.Status != MOVEPOINTTOPOINT)
-		{
-			continue;
-		}
-		if (psDroid->sMove.flowfieldId == 0)
-		{
-			continue;
-		}
 
-		flowfield = flowfieldById.at(psDroid->sMove.flowfieldId);
-		break;
-	}
-	if (!flowfield) return;
-	
 	for (auto deltaX = -6; deltaX <= 6; deltaX++)
 	{
 		const int x = playerXTile + deltaX;
@@ -1016,9 +856,7 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 			auto height = map_TileHeight(x, z) + 10;
 
 			// origin
-
-			auto cost = costField->getCost(x, z);
-			if (cost != COST_NOT_PASSABLE)
+			if (!flowfield->isImpassable(x, z))
 			{
 				iV_PolyLine({
 					{ startPointX - 10, height, -startPointY - 10 },
@@ -1027,22 +865,21 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 					{ startPointX + 10, height, -startPointY - 10 },
 					{ startPointX - 10, height, -startPointY - 10 },
 				}, mvp, WZCOL_WHITE);
+				
+				// direction
+				iV_PolyLine({
+					{ startPointX, height, -startPointY },
+					{ startPointX + vector.x * 75, height, -startPointY - vector.y * 75 },
+				}, mvp, WZCOL_WHITE);
 			}
-			// direction
-			bool has_los = flowfield->integrationField->hasLOS(x, z);
-			iV_PolyLine({
-				{ startPointX, height, -startPointY },
-				{ startPointX + vector.x * 75, height, -startPointY - vector.y * 75 },
-			}, mvp, has_los ? WZCOL_RED : WZCOL_WHITE);
 
 			// integration fields
-
 			const Vector3i integrationFieldText3dCoordinates { (XA + 20), height, -(ZA + 40) };
 			Vector2i integrationFieldText2dCoordinates;
 
 			pie_RotateProjectWithPerspective(&integrationFieldText3dCoordinates, mvp, &integrationFieldText2dCoordinates);
 			auto integrationCost = flowfield->integrationField->getCost(x, z);
-			if (integrationCost != COST_NOT_PASSABLE)
+			if (!flowfield->isImpassable(x, z))
 			{
 				WzText costText(WzString::fromUtf8 (std::to_string(integrationCost)), font_small);
 				costText.render(integrationFieldText2dCoordinates.x, integrationFieldText2dCoordinates.y, WZCOL_TEXT_BRIGHT);
