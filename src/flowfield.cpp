@@ -32,7 +32,14 @@
 #include "lib/wzmaplib/include/wzmaplib/map.h"
 
 static bool flowfieldEnabled = false;
-
+// just for debug, remove for release builds
+#ifdef DEBUG
+	#define DEFAULT_EXTENT_X 2
+	#define DEFAULT_EXTENT_Y 2
+#else
+	#define DEFAULT_EXTENT_X 1
+	#define DEFAULT_EXTENT_Y 1
+#endif
 void flowfieldEnable() {
 	flowfieldEnabled = true;
 }
@@ -73,8 +80,10 @@ inline uint8_t yFrom2Dindex (uint16_t idx)
 	return (idx & 0x00FF);
 }
 
+// ignore the first one when iterating!
 // 8 neighbours for each cell
-static const int neighbors[8][2] = {
+static const int neighbors[DIR_TO_VEC_SIZE][2] = {
+	{-0xDEAD, -0xDEAD}, // DIR_NONE
 	{-1, -1}, {0, -1}, {+1, -1},
 	{-1,  0},          {+1,  0},
 	{-1, +1}, {0, +1}, {+1, +1}
@@ -94,7 +103,7 @@ using ICostType = uint16_t;
 constexpr const CostType COST_NOT_PASSABLE = std::numeric_limits<uint8_t>::max();
 // constexpr const uint16_t COST_NOT_PASSABLE_
 constexpr const CostType COST_MIN = 1; // default cost 
-constexpr const CostType COST_ZERO = 0; // goal is free
+// constexpr const CostType COST_ZERO = 0; // goal is free
 
 // Decides how much slopes should be avoided
 constexpr const float SLOPE_COST_BASE = 0.01f;
@@ -272,6 +281,11 @@ void ffpathShutdown()
 */
 struct IntegrationField
 {
+	uint16_t goal;
+	uint8_t goalXExtent;
+	uint8_t goalYExtent;
+	IntegrationField (uint16_t goal_, uint8_t goalXExtent_, uint8_t goalYExtent_) :
+		goal(goal_), goalXExtent(goalXExtent_), goalYExtent(goalYExtent_) {}
 	ICostType cost[FF_MAP_AREA] = {0};
 	ICostType getCost(uint8_t x, uint8_t y) const
 	{
@@ -326,7 +340,15 @@ unsigned int flowfieldIdIncrementor = 1;
 struct Flowfield
 {
 	unsigned int id;
+	// top-left corner of the goal area
 	uint16_t goal;
+	// goal can be an area, which starts at "goal",
+	// and of TotalSurface = (goalXExtent) x (goalYExtent)
+	// a simple goal sized 1 tile will have both extents equal to 1
+	// a square goal sized 4 will have both extends equal to 2
+	// vertical line of len = 2 will have goalYExtent equal to 2, and goalXextent equal to 1
+	uint8_t goalXExtent = 1;
+	uint8_t goalYExtent = 1;
 	#ifdef DEBUG
 	// pointless in release builds because is only need for "debugDrawFlowfield"
 	std::unique_ptr<IntegrationField> integrationField;
@@ -350,7 +372,6 @@ struct Flowfield
 	Vector2f getVector(uint8_t x, uint8_t y) const
 	{
 		auto idx = tileTo2Dindex(x, y);
-		if (idx == goal) return Vector2f {0., 0.};
 		return dirToVec[(int) dirs[idx]];
 	}
 };
@@ -425,7 +446,15 @@ struct Node
 	}
 };
 
-void calculateIntegrationField(uint16_t goal, IntegrationField* integrationField, const CostField* costField);
+inline bool isInsideGoal (uint16_t goal, uint8_t x, uint8_t y, uint8_t extentx, uint8_t extenty)
+{
+	return x < xFrom2Dindex(goal) + extentx &&
+				x >= xFrom2Dindex(goal) &&
+			    y < yFrom2Dindex(goal) + extenty &&
+				y >= yFrom2Dindex(goal);
+}
+
+void calculateIntegrationField(IntegrationField* integrationField, const CostField* costField);
 void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField);
 
 void processFlowfield(FLOWFIELDREQUEST request)
@@ -438,14 +467,19 @@ void processFlowfield(FLOWFIELDREQUEST request)
 	// TODO: we should perhaps refresh the flowfield instead of just bailing here.
 	if (flowfieldCache->count(request.goal)) return;
 
-	IntegrationField* integrationField = new IntegrationField();
-	calculateIntegrationField(request.goal, integrationField, costField);
+	IntegrationField* integrationField = new IntegrationField(request.goal, DEFAULT_EXTENT_X, DEFAULT_EXTENT_Y);
+	calculateIntegrationField(integrationField, costField);
 
 	auto flowfield = new Flowfield();
 	flowfield->id = flowfieldIdIncrementor++;
 	flowfield->integrationField = std::unique_ptr<IntegrationField>(integrationField);
 	flowfield->goal = request.goal;
+	flowfield->goalXExtent = integrationField->goalXExtent;
+	flowfield->goalYExtent = integrationField->goalYExtent;
 	flowfieldById.insert(std::make_pair(flowfield->id, flowfield));
+	debug (LOG_FLOWFIELD, "calculating flowfield %i, at x=%i (len %i) y=%i(len %i)", flowfield->id, 
+		xFrom2Dindex(request.goal), flowfield->goalXExtent,
+		yFrom2Dindex(request.goal), flowfield->goalYExtent);
 	calculateFlowfield(flowfield, integrationField);
 	// store the result, this will be checked by fpath.cpp
 	{
@@ -457,15 +491,12 @@ void processFlowfield(FLOWFIELDREQUEST request)
 void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
                               IntegrationField* integrationField,
 							  const CostField* costField,
-							  uint16_t goal,
 							  std::set<uint16_t>* stationaryDroids);
 
-void calculateIntegrationField(uint16_t goal,
-                               IntegrationField* integrationField,
+void calculateIntegrationField(IntegrationField* integrationField,
 							   const CostField* costField)
 {
-	// TODO: here do checking if given tile contains a building (instead of doing that in cost field)
-	// TODO: split COST_NOT_PASSABLE into a few constants, for terrain, buildings and maybe sth else
+	// TODO: ? maybe, split COST_NOT_PASSABLE into a few constants, for terrain, buildings and maybe sth else
 	for (int x = 0; x < mapWidth; x++)
 	{
 		for (int y = 0; y < mapHeight; y++)
@@ -487,12 +518,20 @@ void calculateIntegrationField(uint16_t goal,
 
 	// Thanks to priority queue, we get the water ripple effect - closest tile first.
 	// First we go where cost is the lowest, so we don't discover better path later.
+	uint8_t _goalx, _goaly;
+	tileFrom2Dindex (integrationField->goal, _goalx, _goaly);
 	std::priority_queue<Node> openSet;
-	openSet.push(Node { 0, goal });
-	// integrationField->setHasLOS(goal);
+	for (int dx = 0; dx < integrationField->goalXExtent; dx++)
+	{
+		for (int dy = 0; dy < integrationField->goalYExtent; dy++)
+		{
+			//integrationField->setCost(_goalx + dx, _goaly + dy, COST_MIN);
+			openSet.push(Node { 0, tileTo2Dindex(_goalx + dx, _goaly + dy) });
+		}
+	}
 	while (!openSet.empty())
 	{
-		integrateFlowfieldPoints(openSet, integrationField, costField, goal, &stationaryDroids);
+		integrateFlowfieldPoints(openSet, integrationField, costField, &stationaryDroids);
 		openSet.pop();
 	}
 }
@@ -542,6 +581,20 @@ uint8_t minIndex (uint16_t a[], size_t a_len)
 		{
 			min_so_far = a[i];
 			min_idx = i;
+		}
+	}
+	const int straight_idx[4] = {
+		(int) ((int) Directions::DIR_1 - (int) Directions::DIR_0),
+		(int) ((int) Directions::DIR_4 - (int) Directions::DIR_0),
+		(int) ((int) Directions::DIR_6 - (int) Directions::DIR_0),
+		(int) ((int) Directions::DIR_3 - (int) Directions::DIR_0)
+	};
+	// prefer straight lines over diagonals
+	for (int i = 0; i < 4; i ++)
+	{
+		if (min_so_far == a[straight_idx[i]])
+		{
+			return straight_idx[i];
 		}
 	}
 	return min_idx;
@@ -600,7 +653,6 @@ Directions findClosestDirection (Vector2f real)
 void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
                               IntegrationField* integrationField,
 							  const CostField* costField,
-							  uint16_t goal,
 							  std::set<uint16_t>* stationaryDroids)
 {
 	const Node& node = openSet.top();
@@ -619,11 +671,10 @@ void integrateFlowfieldPoints(std::priority_queue<Node> &openSet,
 	const ICostType oldIntegrationCost = integrationField->getCost(node.index);
 	uint8_t x, y;
 	tileFrom2Dindex (node.index, x, y);
-
 	if (integrationCost < oldIntegrationCost)
 	{
 		integrationField->setCost(node.index, integrationCost);
-		for (int neighb = 0; neighb < 8; neighb++)
+		for (int neighb = (int) Directions::DIR_0; neighb < DIR_TO_VEC_SIZE; neighb++)
 		{
 			uint8_t neighbx, neighby;
 			neighbx = x + neighbors[neighb][0];
@@ -650,31 +701,34 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			}
 		}
 	}
-	static_assert((int) Directions::DIR_0 == 0, "You fool, neighbors and Directions must be synced!");
-	static_assert(DIR_TO_VEC_SIZE == 8, "dirToVec must be sync with Directions!");
+	static_assert((int) Directions::DIR_NONE == 0, "Invariant failed");
+	static_assert(DIR_TO_VEC_SIZE == 9, "dirToVec must be sync with Directions!");
 
 	for (int y = 0; y < mapHeight; y++)
 	{
 		for (int x = 0; x < mapWidth; x++)
 		{
-			// Vector2f vector;
 			const auto cost = integrationField->getCost(x, y);
 			if (cost == COST_NOT_PASSABLE) 
 			{
 				continue;
 			}
-			if (tileTo2Dindex(x, y) == flowField->goal)
+			if (isInsideGoal (flowField->goal, x, y, flowField->goalXExtent, flowField->goalYExtent))
 			{
 				continue;
+				flowField->setDir(x, y, Directions::DIR_NONE);
 			}
 			uint16_t costs[8] = {0};
-			for (int neighb = 0; neighb < 8; neighb++)
+			// we don't care about DIR_NONE
+			for (int neighb = (int) Directions::DIR_0; neighb < DIR_TO_VEC_SIZE; neighb++)
 			{
-				costs[neighb] = integrationField->getCost(x + neighbors[neighb][0], y + neighbors[neighb][1]);
+				// substract 1, because Directions::DIR_0 is 1
+				costs[neighb - 1] = integrationField->getCost(x + neighbors[neighb][0], y + neighbors[neighb][1]);
 			}
 			uint8_t minCostIdx = minIndex (costs, 8);
-			ASSERT (minCostIdx >=0 && minCostIdx < 8, "invariant failed");
-			Directions dir = (Directions) minCostIdx;
+			ASSERT (minCostIdx >= 0 && minCostIdx < 8, "invariant failed");
+			// yes, add one because DIR_NONE == 0 and DIR_0  == 1
+			Directions dir = (Directions) (minCostIdx + (int) Directions::DIR_0);
 			flowField->setDir(x, y, dir);
 		}
 	}
@@ -683,6 +737,7 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 /** Update a given tile as impossible to cross.
  * TODO also must invalidate cached flowfields, because they
  * were all based on obsolete cost/integration fields!
+ * Is there any benefit in updating Integration Field instead of Cost Field?
  */
 void markTileAsImpassable(uint8_t x, uint8_t y, PROPULSION_TYPE prop)
 {
@@ -886,20 +941,26 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 			}
 		}
 	}
-	
-	// goal
-	uint8_t _goalx, _goaly;
-	tileFrom2Dindex (flowfield->goal, _goalx, _goaly);
-	auto goalX = world_coord(_goalx) + FF_TILE_SIZE / 2;
-	auto goalY = world_coord(_goaly) + FF_TILE_SIZE / 2;
-	auto height = map_TileHeight(_goalx, _goaly) + 10;
-	iV_PolyLine({
-		{ goalX - 10 + 3, height, -goalY - 10 + 3 },
-		{ goalX - 10 + 3, height, -goalY + 10 + 3 },
-		{ goalX + 10 + 3, height, -goalY + 10 + 3 },
-		{ goalX + 10 + 3, height, -goalY - 10 + 3 },
-		{ goalX - 10 + 3, height, -goalY - 10 + 3 },
-	}, mvp, WZCOL_RED);
+	for (int dx = 0; dx < flowfield->goalXExtent; dx++)
+	{
+		for (int dy = 0; dy < flowfield->goalYExtent; dy++)
+		{
+			uint8_t _goalx, _goaly;
+			tileFrom2Dindex (flowfield->goal, _goalx, _goaly);
+			_goalx += dx;
+			_goaly += dy;
+			auto goalX = world_coord(_goalx) + FF_TILE_SIZE / 2;
+			auto goalY = world_coord(_goaly) + FF_TILE_SIZE / 2;
+			auto height = map_TileHeight(_goalx, _goaly) + 10;
+			iV_PolyLine({
+				{ goalX - 10 + 3, height, -goalY - 10 + 3 },
+				{ goalX - 10 + 3, height, -goalY + 10 + 3 },
+				{ goalX + 10 + 3, height, -goalY + 10 + 3 },
+				{ goalX + 10 + 3, height, -goalY - 10 + 3 },
+				{ goalX - 10 + 3, height, -goalY - 10 + 3 },
+			}, mvp, WZCOL_RED);
+		}
+	}
 }
 
 #define VECTOR_FIELD_DEBUG 1

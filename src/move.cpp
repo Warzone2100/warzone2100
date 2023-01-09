@@ -1593,10 +1593,10 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
 	moveOpenGates(psDroid);
 	moveCheckSquished(psDroid, dx, dy);
-	// moveCalcDroidSlide(psDroid, &dx, &dy);
+	moveCalcDroidSlide(psDroid, &dx, &dy);
 	bx = dx;
 	by = dy;
-	// moveCalcBlockingSlide(psDroid, &bx, &by, direction, &slideDir);
+	moveCalcBlockingSlide(psDroid, &bx, &by, direction, &slideDir);
 	if (bx != dx || by != dy)
 	{
 		moveUpdateDroidDirection(psDroid, &speed, slideDir, spinAngle, psDroid->baseSpeed * DEG(1), psDroid->baseSpeed * DEG(1) / 3, &iDroidDir);
