@@ -97,6 +97,8 @@ void flowfieldEnable();
 /// Checks if flowfield pathfinding is enabled.
 bool isFlowfieldEnabled();
 
+void flowfieldToggle();
+
 /// Initialises flowfield pathfinding for a map.
 void flowfieldInit();
 /// Deinitialises flowfield pathfinding.
@@ -114,6 +116,8 @@ bool tryGetFlowfieldForTarget(unsigned int targetX, unsigned int targetY, PROPUL
 void calculateFlowfieldAsync(unsigned int targetX, unsigned int targetY, PROPULSION_TYPE propulsion);
 /// Returns true and populates vector if a directional vector exists for the specified flowfield and target position.
 bool tryGetFlowfieldVector(unsigned int flowfieldId, uint8_t x, uint8_t y, Vector2f& vector);
+
+bool tryGetFlowfieldDirection(unsigned int flowfieldId, uint8_t x, uint8_t y, Directions &out);
 
 /// is tile (x, y) passable? We don't need propulsion argument, it's implicit for this particular flowfield
 bool flowfieldIsImpassable(unsigned int flowfieldId, uint8_t x, uint8_t y);

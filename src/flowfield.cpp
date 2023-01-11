@@ -18,6 +18,8 @@
 #include "lib/ivis_opengl/textdraw.h"
 #include "lib/ivis_opengl/piematrix.h"
 
+#include "move.h"
+#include "statsdef.h"
 #include "display3d.h"
 #include "map.h"
 #include "lib/framework/wzapp.h"
@@ -30,8 +32,10 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/wzmaplib/include/wzmaplib/map.h"
-
+#include "lib/framework/trig.h"
+#define DEG(degrees) ((degrees) * 8192 / 45)
 static bool flowfieldEnabled = false;
+
 // just for debug, remove for release builds
 #ifdef DEBUG
 	#define DEFAULT_EXTENT_X 2
@@ -40,12 +44,18 @@ static bool flowfieldEnabled = false;
 	#define DEFAULT_EXTENT_X 1
 	#define DEFAULT_EXTENT_Y 1
 #endif
+
 void flowfieldEnable() {
 	flowfieldEnabled = true;
 }
 
 bool isFlowfieldEnabled() {
 	return flowfieldEnabled;
+}
+
+void flowfieldToggle()
+{
+	flowfieldEnabled = !flowfieldEnabled;
 }
 
 inline uint16_t tileTo2Dindex (uint8_t x, uint8_t y)
@@ -353,7 +363,7 @@ struct Flowfield
 	// pointless in release builds because is only need for "debugDrawFlowfield"
 	std::unique_ptr<IntegrationField> integrationField;
 	#endif
-	std::array<Directions, FF_MAP_AREA> dirs;
+	std::array<Directions, FF_MAP_AREA> dirs = {Directions::DIR_NONE};
 	// TODO use bitfield
 	std::array<bool, FF_MAP_AREA> impassable;
 	void setImpassable (uint8_t x, uint8_t y)
@@ -369,6 +379,12 @@ struct Flowfield
 	{
 		dirs[tileTo2Dindex(x, y)] = dir;
 	}
+
+	Directions getDir (uint8_t x, uint8_t y)
+	{
+		return dirs[tileTo2Dindex(x, y)];
+	}
+
 	Vector2f getVector(uint8_t x, uint8_t y) const
 	{
 		auto idx = tileTo2Dindex(x, y);
@@ -426,6 +442,14 @@ bool tryGetFlowfieldVector(unsigned int flowfieldId, uint8_t x, uint8_t y, Vecto
 	auto flowfield = flowfieldById.at(flowfieldId);
 	Vector2f v = flowfield->getVector(x, y);
 	vector = { v.x, v.y };
+	return true;
+}
+
+bool tryGetFlowfieldDirection(unsigned int flowfieldId, uint8_t x, uint8_t y, Directions &out)
+{
+	if(!flowfieldById.count(flowfieldId)) return false;
+	auto flowfield = flowfieldById.at(flowfieldId);
+	out = flowfield->getDir(x, y);
 	return true;
 }
 
@@ -709,15 +733,9 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 		for (int x = 0; x < mapWidth; x++)
 		{
 			const auto cost = integrationField->getCost(x, y);
-			if (cost == COST_NOT_PASSABLE) 
-			{
-				continue;
-			}
-			if (isInsideGoal (flowField->goal, x, y, flowField->goalXExtent, flowField->goalYExtent))
-			{
-				continue;
-				flowField->setDir(x, y, Directions::DIR_NONE);
-			}
+			if (cost == COST_NOT_PASSABLE) continue;
+			if (isInsideGoal (flowField->goal, x, y, flowField->goalXExtent, flowField->goalYExtent)) continue;
+
 			uint16_t costs[8] = {0};
 			// we don't care about DIR_NONE
 			for (int neighb = (int) Directions::DIR_0; neighb < DIR_TO_VEC_SIZE; neighb++)
@@ -803,30 +821,30 @@ void destroyflowfieldCaches()
 	// 	flowfieldCaches[pair.second]->clear();
 	// }
 }
+static void drawSquare (const glm::mat4 &mvp, int sidelen, int startPointX, int startPointY, int height, PIELIGHT color)
+{
+	iV_PolyLine({
+		{ startPointX - (sidelen / 2), height, -startPointY - (sidelen / 2) },
+		{ startPointX - (sidelen / 2), height, -startPointY + (sidelen / 2) },
+		{ startPointX + (sidelen / 2), height, -startPointY + (sidelen / 2) },
+		{ startPointX + (sidelen / 2), height, -startPointY - (sidelen / 2) },
+		{ startPointX - (sidelen / 2), height, -startPointY - (sidelen / 2) },
+	}, mvp, color);
+}
 
-void debugDrawFlowfield(const glm::mat4 &mvp) 
+static void renderDebugText (const char *txt, int vert_idx)
+{
+	const int TEXT_SPACEMENT = 20;
+	WzText t(WzString (txt), font_regular);
+	t.render(20, 80 + TEXT_SPACEMENT * vert_idx, WZCOL_TEXT_DARK);
+}
+
+void debugDrawFlowfield(const DROID *psDroid, const glm::mat4 &mvp) 
 {
 	const auto playerXTile = map_coord(playerPos.p.x);
 	const auto playerZTile = map_coord(playerPos.p.z);
 	Flowfield* flowfield = nullptr;
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-	{
-		if (!psDroid->selected)
-		{
-			continue;
-		}
-		if (psDroid->sMove.Status != MOVEPOINTTOPOINT)
-		{
-			continue;
-		}
-		if (psDroid->sMove.flowfieldId == 0)
-		{
-			continue;
-		}
-
-		flowfield = flowfieldById.at(psDroid->sMove.flowfieldId);
-		break;
-	}
+	flowfield = flowfieldById.at(psDroid->sMove.flowfieldId);
 	if (!flowfield) return;
 	
 	const auto& costField = costFields[propulsionIdx2[PROPULSION_TYPE_WHEELED]];
@@ -913,14 +931,7 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 			// origin
 			if (!flowfield->isImpassable(x, z))
 			{
-				iV_PolyLine({
-					{ startPointX - 10, height, -startPointY - 10 },
-					{ startPointX - 10, height, -startPointY + 10 },
-					{ startPointX + 10, height, -startPointY + 10 },
-					{ startPointX + 10, height, -startPointY - 10 },
-					{ startPointX - 10, height, -startPointY - 10 },
-				}, mvp, WZCOL_WHITE);
-				
+				drawSquare(mvp, 20, startPointX, startPointY, height, WZCOL_WHITE);
 				// direction
 				iV_PolyLine({
 					{ startPointX, height, -startPointY },
@@ -941,6 +952,7 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 			}
 		}
 	}
+
 	for (int dx = 0; dx < flowfield->goalXExtent; dx++)
 	{
 		for (int dy = 0; dy < flowfield->goalYExtent; dy++)
@@ -952,20 +964,123 @@ void debugDrawFlowfield(const glm::mat4 &mvp)
 			auto goalX = world_coord(_goalx) + FF_TILE_SIZE / 2;
 			auto goalY = world_coord(_goaly) + FF_TILE_SIZE / 2;
 			auto height = map_TileHeight(_goalx, _goaly) + 10;
-			iV_PolyLine({
-				{ goalX - 10 + 3, height, -goalY - 10 + 3 },
-				{ goalX - 10 + 3, height, -goalY + 10 + 3 },
-				{ goalX + 10 + 3, height, -goalY + 10 + 3 },
-				{ goalX + 10 + 3, height, -goalY - 10 + 3 },
-				{ goalX - 10 + 3, height, -goalY - 10 + 3 },
-			}, mvp, WZCOL_RED);
+			drawSquare(mvp, 20, goalX, goalY, height, WZCOL_RED);
 		}
 	}
 }
 
-#define VECTOR_FIELD_DEBUG 1
+// even if flowfield disabled, just for sake of information
+static void drawUnitDebugInfo (const DROID *psDroid, const glm::mat4 &mvp)
+{
+	// some droid sinfo
+	auto startPointX = psDroid->pos.x;
+	auto startPointY = psDroid->pos.y;
+	auto target = (psDroid->pos.xy() - psDroid->sMove.target);
+	auto destination = (psDroid->pos.xy() - psDroid->sMove.destination);
+	auto height = map_TileHeight(map_coord(startPointX), map_coord(startPointY)) + 10;
+	iV_PolyLine({
+		{ startPointX, height, -startPointY },
+		{ startPointX + static_cast<int>(target.x), height, 
+		 -startPointY - static_cast<int>(target.y)},
+		}, mvp, WZCOL_LBLUE);
+	iV_PolyLine({
+		{ startPointX, height, -startPointY },
+		{ startPointX + static_cast<int>(destination.x), height, 
+		 -startPointY - static_cast<int>(destination.y)},
+		}, mvp, WZCOL_DBLUE);
+
+	int idx = 0;
+	char tmpBuff[64] = {0};
+	ssprintf(tmpBuff, "Selected Droid %i", psDroid->id);
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	ssprintf(tmpBuff, "Flowfield is %s", flowfieldEnabled ? "ON" : "OFF");
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	ssprintf(tmpBuff, "Target (light blue): %i %i (%i %i)", 
+		psDroid->sMove.target.x, psDroid->sMove.target.y, 
+		map_coord(psDroid->sMove.target.x), map_coord(psDroid->sMove.target.y));
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	ssprintf(tmpBuff, "Destination (dark blue): %i %i (%i %i)", psDroid->sMove.destination.x, psDroid->sMove.destination.y, 
+		map_coord(psDroid->sMove.destination.x), map_coord(psDroid->sMove.destination.y));
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	ssprintf(tmpBuff, "Src: %i %i (%i %i)", psDroid->sMove.src.x, psDroid->sMove.src.y, 
+		map_coord(psDroid->sMove.src.x), map_coord(psDroid->sMove.src.y));
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "moveDir: %i (%.2f %.2f)", psDroid->sMove.moveDir, 
+		static_cast<float>(iSin(psDroid->sMove.moveDir)) / static_cast<float>((1 << 16)), 
+		static_cast<float>(iCos(psDroid->sMove.moveDir)) / static_cast<float>((1 << 16)));
+	renderDebugText(tmpBuff, idx++);
+
+	PROPULSION_STATS       *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "speed: %i (Prop maxspeed=%i)", psDroid->sMove.speed, psPropStats->maxSpeed);
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	if (psDroid->sMove.pathIndex != (int)psDroid->sMove.asPath.size())
+	{
+		Vector2i next = psDroid->sMove.asPath[psDroid->sMove.pathIndex];
+		sprintf(tmpBuff, "Next path target: %i %i, path len %lu", map_coord(next.x), map_coord(next.y), psDroid->sMove.asPath.size());
+		renderDebugText(tmpBuff, idx++);
+	}
+	else if (psDroid->sMove.asPath.size() == 1)
+	{
+		Vector2i next = psDroid->sMove.asPath[0];
+		sprintf(tmpBuff, "Next path (and only) target: %i %i (%i %i)", next.x, next.y, map_coord(next.x), map_coord(next.y));
+		renderDebugText(tmpBuff, idx++);
+	}
+
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "Prop SpinSpeed (DEG %i): %i", psPropStats->spinSpeed, DEG(psPropStats->spinSpeed));
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "Prop SpinAngle DEG: %i", psPropStats->spinAngle);
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "Prop TurnSpeed: %i", psPropStats->turnSpeed);
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "Prop Acceleration: %i", psPropStats->acceleration);
+	renderDebugText(tmpBuff, idx++);
+
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "Prop Deceleration: %i", psPropStats->deceleration);
+	renderDebugText(tmpBuff, idx++);
+	
+	auto collisionRadius = moveObjRadius(psDroid);
+	drawSquare (mvp, collisionRadius, startPointX, startPointY, height, WZCOL_RED);
+
+	tmpBuff[64] = {0};
+	sprintf(tmpBuff, "Collision radius: %i", collisionRadius);
+	renderDebugText(tmpBuff, idx++);
+}
+
+
+static DROID *lastSelected = nullptr;
 void debugDrawFlowfields(const glm::mat4 &mvp)
 {
-	if (!isFlowfieldEnabled()) return;
-	if (VECTOR_FIELD_DEBUG) debugDrawFlowfield(mvp);
+	// transports cannot be selected?
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (!psDroid->selected) continue;
+		if (isFlowfieldEnabled() && psDroid->sMove.flowfieldId == 0) continue;
+		lastSelected = psDroid;
+		break;
+	}
+	if (!lastSelected) return;
+	drawUnitDebugInfo(lastSelected, mvp);
+	if (isFlowfieldEnabled()) 
+		debugDrawFlowfield(lastSelected, mvp);
 }

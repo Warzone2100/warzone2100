@@ -71,6 +71,7 @@
 #include "combat.h"
 #include "template.h"
 #include "qtscript.h"
+#include "flowfield.h"
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
@@ -728,7 +729,14 @@ void droidUpdate(DROID *psDroid)
 	syncDebugDroid(psDroid, 'M');
 
 	// update the move system
-	moveUpdateDroid(psDroid);
+	if (isFlowfieldEnabled())
+	{
+		moveUpdateDroid(psDroid);
+	}
+	else 
+	{
+		moveUpdateDroid_original(psDroid);
+	}
 
 	/* Only add smoke if they're visible */
 	if (psDroid->visibleForLocalDisplay() && psDroid->droidType != DROID_PERSON)

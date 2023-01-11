@@ -30,7 +30,7 @@
 
 enum MOVE_STATUS
 {
-	MOVEINACTIVE,		// Droid not moves
+	MOVEINACTIVE,		// Droid doesn't move
 	MOVENAVIGATE,		// Droid just started moving: looks for next waypoint in A* path, then continues point-to-point
 	MOVETURN,			// Droid moves point-to-point in next frame if VTOL, or stops moving
 	MOVEPAUSE,

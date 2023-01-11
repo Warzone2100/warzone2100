@@ -537,10 +537,12 @@ static bool moveNextTarget(DROID *psDroid)
 }
 
 // Watermelon:fix these magic number...the collision radius should be based on pie imd radius not some static int's...
-static	int mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
+// note, tile size is 128
+static int mvPersRad = 16, mvCybRad = 32, mvSmRad = 32, mvMedRad = 64, mvLgRad = 64, mvSuperHeavy = 128;
+// static	int mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
 
 // Get the radius of a base object for collision
-static SDWORD moveObjRadius(const BASE_OBJECT *psObj)
+SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 {
 	switch (psObj->type)
 	{
@@ -570,7 +572,7 @@ static SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 					return mvLgRad;
 
 				case SIZE_SUPER_HEAVY:
-					return 130;
+					return mvSuperHeavy;
 
 				default:
 					return psDroid->sDisplay.imd->radius;
@@ -1385,7 +1387,10 @@ static bool moveDroidStopped(DROID *psDroid, SDWORD speed)
 	}
 }
 
-// Direction is target direction.
+// Direction is target direction (= new "moveDir")
+// iSpinAngle = DEG(psPropStats->spinAngle);
+// iSpinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
+// iTurnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
 static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t direction,
                                      uint16_t iSpinAngle, int iSpinSpeed, int iTurnSpeed, uint16_t *pDroidDir)
 {
@@ -2054,10 +2059,9 @@ static void checkLocalFeatures(DROID *psDroid)
 		turnOffMultiMsg(false);
 	}
 }
-
-
-/* Frame update for the movement of a tracked droid */
-void moveUpdateDroid(DROID *psDroid)
+/** For debugging only */
+// ================== moveUpdateDroid_original START ==================
+void moveUpdateDroid_original(DROID *psDroid)
 {
 	UDWORD				oldx, oldy;
 	UBYTE				oldStatus = psDroid->sMove.Status;
@@ -2158,113 +2162,76 @@ void moveUpdateDroid(DROID *psDroid)
 		// fallthrough
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
-		// assume flowfield enabled 
-		//if(isFlowfieldEnabled() &&
-		if(std::abs(glm::distance(Vector2f(psDroid->sMove.destination), 
-				Vector2f(psDroid->sMove.src))) > (TILE_UNITS))
+		// moving between two way points
+		if (psDroid->sMove.asPath.size() == 0)
 		{
-			Vector2f vector;
-			if(tryGetFlowfieldVector(
-					psDroid->sMove.flowfieldId, 
-					map_coord(psDroid->pos.x), 
-					map_coord(psDroid->pos.y), vector))
-			{
-				// if (psDroid->player == 0 &&
-				// 	flowfieldIsImpassable(psDroid->sMove.flowfieldId, map_coord(psDroid->pos.x), map_coord(psDroid->pos.y)))
-				// {
-				// 	debug(LOG_INFO, "droid %i inside impassable tile! x=%i y=%i", psDroid->id,  map_coord(psDroid->pos.x), map_coord(psDroid->pos.y));
-				// 	moveStopDroid(psDroid);
-				// 	break;
-				// }
-				psDroid->sMove.src = psDroid->pos.xy();
-				// TODO: This target should be transitioned in. (or?)
-				// this makes the droid to move into flowfield direction
-				// because it's used to calculate moveDir
-				psDroid->sMove.target = psDroid->pos.xy() + Vector2i(vector.x * 512, vector.y * 512); // psDroid->pos.xy() + Vector2i(vector.x * 500, vector.y * 500);
-				// if (psDroid->player == 0)
-				// 	debug (LOG_FLOWFIELD, "droid %i src=%i %i, target=%i %i", psDroid->id,
-				// 	psDroid->sMove.src.x, psDroid->sMove.src.y,
-				// 	psDroid->sMove.target.x, psDroid->sMove.target.y);
-			} else {
-					psDroid->sMove.Status = MOVEINACTIVE;
-			}
+			debug(LOG_WARNING, "No path to follow, but psDroid->sMove.Status = %d", psDroid->sMove.Status);
 		}
-		else
+
+		// Get the best control point.
+		if (psDroid->sMove.asPath.size() == 0 || !moveBestTarget(psDroid))
 		{
-			// moving between two way points
-			if (psDroid->sMove.asPath.size() == 0)
-			{
-				debug(LOG_WARNING, "No path to follow, but psDroid->sMove.Status = %d", psDroid->sMove.Status);
-			}
+			// Got stuck somewhere, can't find the path.
+			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+		}
 
-			// Get the best control point.
-			if (psDroid->sMove.asPath.size() == 0 /*|| !moveBestTarget(psDroid) */)
+		// See if the target point has been reached
+		if (moveReachedWayPoint(psDroid))
+		{
+			// Got there - move onto the next waypoint
+			if (!moveNextTarget(psDroid))
 			{
-				debug(LOG_FLOWFIELD, "Stuck: path size=%li \n", psDroid->sMove.asPath.size());
-				// Got stuck somewhere, can't find the path.
-				moveStopDroid (psDroid);
-				// moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
-			}
-
-			// See if the target point has been reached
-			if (moveReachedWayPoint(psDroid))
-			{
-				// Got there - move onto the next waypoint
-				if (!moveNextTarget(psDroid))
+				// No more waypoints - finish
+				if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+				{
+					// check the location for vtols
+					Vector2i tar = psDroid->pos.xy();
+					if (psDroid->order.type != DORDER_PATROL && psDroid->order.type != DORDER_CIRCLE  // Not doing an order which means we never land (which means we might want to land).
+					    && psDroid->action != DACTION_MOVETOREARM && psDroid->action != DACTION_MOVETOREARMPOINT
+					    && actionVTOLLandingPos(psDroid, &tar)  // Can find a sensible place to land.
+					    && map_coord(tar) != map_coord(psDroid->sMove.destination))  // We're not at the right place to land.
+					{
+						psDroid->sMove.destination = tar;
+						moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+					}
+					else
+					{
+						psDroid->sMove.Status = MOVEHOVER;
+					}
+				}
+				else
 				{
 					psDroid->sMove.Status = MOVETURN;
-					// No more waypoints - finish
-					if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
-					{
-						// check the location for vtols
-						Vector2i tar = psDroid->pos.xy();
-						if (psDroid->order.type != DORDER_PATROL && psDroid->order.type != DORDER_CIRCLE  // Not doing an order which means we never land (which means we might want to land).
-							&& psDroid->action != DACTION_MOVETOREARM && psDroid->action != DACTION_MOVETOREARMPOINT
-							&& actionVTOLLandingPos(psDroid, &tar)  // Can find a sensible place to land.
-							&& map_coord(tar) != map_coord(psDroid->sMove.destination))  // We're not at the right place to land.
-						{
-							psDroid->sMove.destination = tar;
-							moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
-						}
-						else
-						{
-							psDroid->sMove.Status = MOVEHOVER;
-						}
-					 }
-					 else
-					 {
-						psDroid->sMove.Status = MOVETURN;
-					 }
-					objTrace(psDroid->id, "Arrived at destination!");
-					break;
 				}
+				objTrace(psDroid->id, "Arrived at destination!");
+				break;
 			}
 		}
 
 		moveDir = moveGetDirection(psDroid);
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
-		// if ((psDroid->sMove.bumpTime != 0) &&
-		//     (psDroid->sMove.pauseTime + psDroid->sMove.bumpTime + BLOCK_PAUSETIME < gameTime))
-		// {
-		// 	if (psDroid->sMove.Status == MOVEPOINTTOPOINT)
-		// 	{
-		// 		psDroid->sMove.Status = MOVEPAUSE;
-		// 	}
-		// 	else
-		// 	{
-		// 		psDroid->sMove.Status = MOVEPOINTTOPOINT;
-		// 	}
-		// 	psDroid->sMove.pauseTime = (UWORD)(gameTime - psDroid->sMove.bumpTime);
-		// }
+		if ((psDroid->sMove.bumpTime != 0) &&
+		    (psDroid->sMove.pauseTime + psDroid->sMove.bumpTime + BLOCK_PAUSETIME < gameTime))
+		{
+			if (psDroid->sMove.Status == MOVEPOINTTOPOINT)
+			{
+				psDroid->sMove.Status = MOVEPAUSE;
+			}
+			else
+			{
+				psDroid->sMove.Status = MOVEPOINTTOPOINT;
+			}
+			psDroid->sMove.pauseTime = (UWORD)(gameTime - psDroid->sMove.bumpTime);
+		}
 
-		// if ((psDroid->sMove.Status == MOVEPAUSE) &&
-		//     (psDroid->sMove.bumpTime != 0) &&
-		//     (psDroid->sMove.lastBump > psDroid->sMove.pauseTime) &&
-		//     (psDroid->sMove.lastBump + psDroid->sMove.bumpTime + BLOCK_PAUSERELEASE < gameTime))
-		// {
-		// 	psDroid->sMove.Status = MOVEPOINTTOPOINT;
-		// }
+		if ((psDroid->sMove.Status == MOVEPAUSE) &&
+		    (psDroid->sMove.bumpTime != 0) &&
+		    (psDroid->sMove.lastBump > psDroid->sMove.pauseTime) &&
+		    (psDroid->sMove.lastBump + psDroid->sMove.bumpTime + BLOCK_PAUSERELEASE < gameTime))
+		{
+			psDroid->sMove.Status = MOVEPOINTTOPOINT;
+		}
 
 		break;
 	case MOVETURN:
@@ -2324,14 +2291,9 @@ void moveUpdateDroid(DROID *psDroid)
 		triggerEventDroidMoved(psDroid, oldx, oldy);
 	}
 
-	if(psDroid->sMove.Status != MOVEINACTIVE){
-	  //debug(LOG_FLOWFIELD, "%s\n", moveDescription(psDroid->sMove.Status));
-	}
-
 	// See if it's got blocked
 	if ((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) && moveBlocked(psDroid))
 	{
-		debug(LOG_FLOWFIELD, "MOVETURN\n");
 		objTrace(psDroid->id, "status: id %d blocked", (int)psDroid->id);
 		psDroid->sMove.Status = MOVETURN;
 	}
@@ -2365,7 +2327,252 @@ void moveUpdateDroid(DROID *psDroid)
 		{
 			psDroid->sMove.Status = MOVEINACTIVE;
 		}
-		printf("MOVETURNTOTARGET complete\n");
+		objTrace(psDroid->id, "MOVETURNTOTARGET complete");
+	}
+
+	if (psDroid->periodicalDamageStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visibleForLocalDisplay()) // display-only check for adding effect
+	{
+		pos.x = psDroid->pos.x + (18 - rand() % 36);
+		pos.z = psDroid->pos.y + (18 - rand() % 36);
+		pos.y = psDroid->pos.z + (psDroid->sDisplay.imd->max.y / 3);
+		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	}
+
+	movePlayAudio(psDroid, bStarted, bStopped, moveSpeed);
+	ASSERT(droidOnMap(psDroid), "%s moved off map (%u, %u)->(%u, %u)", droidGetName(psDroid), oldx, oldy, (UDWORD)psDroid->pos.x, (UDWORD)psDroid->pos.y);
+	CHECK_DROID(psDroid);
+}
+
+// ================== moveUpdateDroid_original END ==================
+
+
+static uint16_t directionToUint16(Directions dir)
+{
+	#define HALF_QUADRANT (1 << 13)
+	#define FULL_QUADRANT (1 << 14)
+	switch (dir)
+	{
+	case Directions::DIR_NONE: return 0;                               // down
+	case Directions::DIR_0: return 2 * FULL_QUADRANT + HALF_QUADRANT;  // up-left
+	case Directions::DIR_1: return 2 * FULL_QUADRANT;                  // up
+	case Directions::DIR_2: return FULL_QUADRANT + HALF_QUADRANT;      // up-right
+	case Directions::DIR_3: return 3 * FULL_QUADRANT;                  // left
+	case Directions::DIR_4: return FULL_QUADRANT;                      // right
+	case Directions::DIR_5: return 3 * FULL_QUADRANT + HALF_QUADRANT;  // left-down
+	case Directions::DIR_6: return 0;                                  // down
+	case Directions::DIR_7: return HALF_QUADRANT;
+	}
+	#undef HALF_QUADRANT
+	#undef FULL_QUADRANT
+	debug(LOG_FLOWFIELD, "unhandled direction!! %i", (int) dir);
+	abort();
+}
+
+/* Frame update for the movement of a tracked droid */
+void moveUpdateDroid(DROID *psDroid)
+{
+	UDWORD				oldx, oldy;
+	UBYTE				oldStatus = psDroid->sMove.Status;
+	// moveSpeed + moveDir = velocity
+	SDWORD				moveSpeed; // magnitude of the moveDir vector
+	uint16_t			moveDir; // movemement vector
+	PROPULSION_STATS	*psPropStats;
+	Vector3i 			pos(0, 0, 0);
+	bool				bStarted = false, bStopped;
+
+
+	CHECK_DROID(psDroid);
+
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
+
+	// If the droid has been attacked by an EMP weapon, it is temporarily disabled
+	if (psDroid->lastHitWeapon == WSC_EMP)
+	{
+		if (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME)
+		{
+			// Get out without updating
+			return;
+		}
+	}
+
+	/* save current motion status of droid */
+	bStopped = moveDroidStopped(psDroid, 0);
+	Directions flowDir;
+	moveSpeed = 0;
+	moveDir = psDroid->rot.direction;
+
+	switch (psDroid->sMove.Status)
+	{
+	case MOVEINACTIVE:
+		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
+		{
+			psDroid->timeAnimationStarted = 0;
+			psDroid->animationEvent = ANIM_EVENT_NONE;
+		}
+		break;
+	case MOVESHUFFLE:
+		if (moveReachedWayPoint(psDroid) || (psDroid->sMove.shuffleStart + MOVE_SHUFFLETIME) < gameTime)
+		{
+			if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+			{
+				psDroid->sMove.Status = MOVEHOVER;
+			}
+			else
+			{
+				psDroid->sMove.Status = MOVEINACTIVE;
+			}
+		}
+		else
+		{
+			// Calculate a target vector
+			moveDir = moveGetDirection(psDroid);
+
+			moveSpeed = moveCalcDroidSpeed(psDroid);
+		}
+		break;
+	case MOVEWAITROUTE:
+		moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+		moveSpeed = MAX(0, psDroid->sMove.speed - 1);
+		if (psDroid->sMove.Status != MOVENAVIGATE)
+		{
+			break;
+		}
+		// fallthrough
+	case MOVENAVIGATE:
+		// Get the next control point
+		if (!moveNextTarget(psDroid))
+		{
+			// No more waypoints - finish
+			if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+			{
+				psDroid->sMove.Status = MOVEHOVER;
+			}
+			else
+			{
+				psDroid->sMove.Status = MOVEINACTIVE;
+			}
+			break;
+		}
+
+		if (isVtolDroid(psDroid))
+		{
+			psDroid->rot.pitch = 0;
+		}
+
+		psDroid->sMove.Status = MOVEPOINTTOPOINT;
+		psDroid->sMove.bumpTime = 0;
+		moveSpeed = MAX(0, psDroid->sMove.speed - 1);
+
+		/* save started status for movePlayAudio */
+		if (psDroid->sMove.speed == 0)
+		{
+			bStarted = true;
+		}
+		// fallthrough
+	case MOVEPOINTTOPOINT:
+	case MOVEPAUSE:
+		if(tryGetFlowfieldDirection(psDroid->sMove.flowfieldId, map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), flowDir))
+		{
+			moveDir = directionToUint16(flowDir);
+			if (flowDir == Directions::DIR_NONE)
+			{			
+				// this stops too abruptly, on the edge of the tile
+				// one more argument to calculate flow fields for each unit radius
+				psDroid->sMove.Status = MOVEINACTIVE;
+				moveDir = directionToUint16(Directions::DIR_NONE);
+				moveSpeed = 0;
+			}
+			else
+			{
+				moveSpeed = moveCalcDroidSpeed(psDroid);
+			}
+		}
+		else
+		{
+			// flowfield not found??
+		}		
+		break;
+	case MOVETURN:
+		// Turn the droid to it's final facing
+		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+		{
+			psDroid->sMove.Status = MOVEPOINTTOPOINT;
+		}
+		else
+		{
+			psDroid->sMove.Status = MOVEINACTIVE;
+		}
+		break;
+	case MOVETURNTOTARGET:
+		moveSpeed = 0;
+		moveDir = iAtan2(psDroid->sMove.target - psDroid->pos.xy());
+		break;
+	case MOVEHOVER:
+		moveDescending(psDroid);
+		break;
+
+	default:
+		ASSERT(false, "unknown move state");
+		return;
+		break;
+	}
+
+	// Update the movement model for the droid
+	oldx = psDroid->pos.x;
+	oldy = psDroid->pos.y;
+
+	if (psDroid->droidType == DROID_PERSON)
+	{
+		moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
+	}
+	else if (cyborgDroid(psDroid))
+	{
+		moveUpdateCyborgModel(psDroid, moveSpeed, moveDir, oldStatus);
+	}
+	else if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+	{
+		moveUpdateVtolModel(psDroid, moveSpeed, moveDir);
+	}
+	else
+	{
+		moveUpdateGroundModel(psDroid, moveSpeed, moveDir);
+	}
+
+	if (map_coord(oldx) != map_coord(psDroid->pos.x)
+	    || map_coord(oldy) != map_coord(psDroid->pos.y))
+	{
+		visTilesUpdate((BASE_OBJECT *)psDroid);
+
+		// object moved from one tile to next, check to see if droid is near stuff.(oil)
+		checkLocalFeatures(psDroid);
+
+		triggerEventDroidMoved(psDroid, oldx, oldy);
+	}
+	
+	// See if it's got blocked
+	if ((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) && moveBlocked(psDroid))
+	{
+		objTrace(psDroid->id, "status: id %d blocked", (int)psDroid->id);
+		psDroid->sMove.Status = MOVETURN;
+	}
+
+	/* If it's sitting in water then it's got to go with the flow! */
+	if (worldOnMap(psDroid->pos.x, psDroid->pos.y) && terrainType(mapTile(map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) == TER_WATER)
+	{
+		updateDroidOrientation(psDroid);
+	}
+
+	if (psDroid->sMove.Status == MOVETURNTOTARGET && psDroid->rot.direction == moveDir)
+	{
+		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+		{
+			psDroid->sMove.Status = MOVEPOINTTOPOINT;
+		}
+		else
+		{
+			psDroid->sMove.Status = MOVEINACTIVE;
+		}
 	}
 
 	if (psDroid->periodicalDamageStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visibleForLocalDisplay()) // display-only check for adding effect

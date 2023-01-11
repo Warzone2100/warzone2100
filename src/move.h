@@ -49,7 +49,13 @@ void moveReallyStopDroid(DROID *psDroid);
 /* Get a droid to do a frame's worth of moving */
 void moveUpdateDroid(DROID *psDroid);
 
+/* Master-version for debugging */
+void moveUpdateDroid_original(DROID *psDroid);
+
 SDWORD moveCalcDroidSpeed(DROID *psDroid);
+
+// get collision radius
+SDWORD moveObjRadius(const BASE_OBJECT *psObj);
 
 /* update body and turret to local slope */
 void updateDroidOrientation(DROID *psDroid);
