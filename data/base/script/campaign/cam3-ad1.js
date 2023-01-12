@@ -263,7 +263,7 @@ function eventStartLevel()
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, 5);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS);
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 

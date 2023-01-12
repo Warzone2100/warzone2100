@@ -146,7 +146,7 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+	camSetMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
 	// make sure player doesn't build on enemy LZs
 	for (let i = 6; i <= 10; ++i)

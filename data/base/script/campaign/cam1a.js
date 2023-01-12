@@ -23,7 +23,7 @@ camAreaEvent("launchScavAttack", function(droid)
 	// Activate mission timer, unlike the original campaign.
 	if (difficulty !== HARD && difficulty !== INSANE)
 	{
-		setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+		camSetMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 	}
 });
 
@@ -164,11 +164,11 @@ function eventStartLevel()
 	camPlayVideos({video: "CMB1_MSG", type: CAMP_MSG, immediate: false});
 	if (difficulty === HARD)
 	{
-		setMissionTime(camMinutesToSeconds(40));
+		camSetMissionTime(camMinutesToSeconds(40));
 	}
 	else if (difficulty === INSANE)
 	{
-		setMissionTime(camMinutesToSeconds(30));
+		camSetMissionTime(camMinutesToSeconds(30));
 	}
 	else
 	{

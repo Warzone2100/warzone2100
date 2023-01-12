@@ -166,7 +166,7 @@ function eventStartLevel()
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 2);
 	}
 
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
+	camSetMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 	camPlayVideos({video: "MB1CA_MSG", type: CAMP_MSG});
 
 	// first transport after 10 seconds

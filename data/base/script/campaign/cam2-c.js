@@ -297,7 +297,7 @@ function eventStartLevel()
 		"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
 	});
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(THE_COLLECTIVE, SCAV_7, true);
 	setAlliance(CAM_HUMAN_PLAYER, SCAV_7, true);

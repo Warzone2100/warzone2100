@@ -239,7 +239,7 @@ function eventStartLevel()
 	var text = getObject("transporterExit");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_1S");
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);

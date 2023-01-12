@@ -51,3 +51,31 @@ function camHoursToSeconds(hours)
 {
 	return hours * camMinutesToSeconds(MINUTES_IN_HOUR);
 }
+
+//;; ## camSetMissionTime(time)
+//;;
+//;; Set mission countdown in seconds.
+//;;
+//;; @param {number} seconds
+//;; @returns {boolean}
+//;;
+function camSetMissionTime(time)
+{
+        // revert modifiers on easy and super easy difficulties
+        var modifier = 0;
+
+        switch (difficulty)
+	{
+		case SUPEREASY:
+			modifier = 2;
+			break;
+		case EASY:
+			modifier = 1.5;
+			break;
+                default:
+			modifier = 1;
+			break;
+        }
+
+        return setMissionTime(time / modifier);
+}

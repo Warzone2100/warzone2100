@@ -261,10 +261,10 @@ function camChangeOnDiff(numericValue)
 	switch (difficulty)
 	{
 		case SUPEREASY:
-			modifier = 1;
+			modifier = 2;
 			break;
 		case EASY:
-			modifier = 1;
+			modifier = 1.5;
 			break;
 		case MEDIUM:
 			modifier = 1;

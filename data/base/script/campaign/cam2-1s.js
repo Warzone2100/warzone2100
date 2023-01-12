@@ -16,7 +16,7 @@ function eventStartLevel()
 	setNoGoArea(86, 99, 88, 101, CAM_HUMAN_PLAYER);
 	setNoGoArea(49, 83, 51, 85, THE_COLLECTIVE);
 	//Set Mission Time
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
+	camSetMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 	//Give player briefings
 	camPlayVideos([{video: "MB2_1_MSG", type: CAMP_MSG}, {video: "MB2_1_MSG2", type: MISS_MSG}]);
 }

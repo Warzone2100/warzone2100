@@ -78,7 +78,7 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+	camSetMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 	setAlliance(NEW_PARADIGM, SCAV_6, true);
 	setAlliance(NEW_PARADIGM, SCAV_7, true);
 	setAlliance(SCAV_6, SCAV_7, true);

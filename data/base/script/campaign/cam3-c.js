@@ -183,7 +183,7 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
+	camSetMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
 
 	var enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);

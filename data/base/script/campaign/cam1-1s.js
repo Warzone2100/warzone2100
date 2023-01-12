@@ -44,7 +44,7 @@ function checkForPowerModule()
 	if (cheat || powerModuleBuilt())
 	{
 		camSetupTransporter(11, 52, 1, 32);
-		setMissionTime(camChangeOnDiff(camMinutesToSeconds(25))); // 25 min for offworld
+		camSetMissionTime(camChangeOnDiff(camMinutesToSeconds(25))); // 25 min for offworld
 		secondVideo();
 
 		if (powModVideoPlayed)
@@ -58,7 +58,7 @@ function eventStartLevel()
 {
 	centreView(13, 52);
 	setNoGoArea(10, 51, 12, 53, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10))); // 10 min for building module.
+	camSetMissionTime(camChangeOnDiff(camMinutesToSeconds(10))); // 10 min for building module.
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
 	cheat = false;
 	powModVideoPlayed = false;

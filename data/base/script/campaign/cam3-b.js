@@ -275,7 +275,7 @@ function eventStartLevel()
 	var lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
+	camSetMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);

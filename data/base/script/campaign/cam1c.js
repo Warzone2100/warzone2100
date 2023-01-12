@@ -196,15 +196,15 @@ function eventStartLevel()
 
 	if (difficulty === HARD)
 	{
-		setMissionTime(camMinutesToSeconds(100));
+		camSetMissionTime(camMinutesToSeconds(100));
 	}
 	else if (difficulty === INSANE)
 	{
-		setMissionTime(camMinutesToSeconds(90));
+		camSetMissionTime(camMinutesToSeconds(90));
 	}
 	else
 	{
-		setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+		camSetMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	}
 
 	setReinforcementTime(-1);

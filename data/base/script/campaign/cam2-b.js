@@ -124,7 +124,7 @@ function eventStartLevel()
 	var enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	camPlayVideos([{video: "MB2_B_MSG", type: CAMP_MSG}, {video: "MB2_B_MSG2", type: MISS_MSG}]);
 
 	camSetArtifacts({

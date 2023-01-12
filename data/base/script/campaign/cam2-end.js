@@ -217,7 +217,7 @@ function eventStartLevel()
 	var enemyLz = {x: 49, y: 83, x2: 51, y2: 85};
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
-	setMissionTime(camMinutesToSeconds(30));
+	camSetMissionTime(camMinutesToSeconds(30));
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	allowWin = false;
