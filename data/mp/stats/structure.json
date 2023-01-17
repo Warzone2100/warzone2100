@@ -611,7 +611,7 @@
 		"hitpoints": 1000,
 		"id": "A0RepairCentre3",
 		"name": "Repair Facility",
-		"repairPoints": 40,
+		"repairPoints": 50,
 		"resistance": 150,
 		"sensorID": "DefaultSensor1Mk1",
 		"strength": "MEDIUM",

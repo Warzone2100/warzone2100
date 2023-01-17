@@ -3131,10 +3131,10 @@
 		"name": "Heavy Repair Turret",
 		"requiredResearch": [
 			"R-Sys-MobileRepairTurret01",
-			"R-Struc-Factory-Cyborg"
+			"R-Struc-Factory-Module"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultComponents": [
 			"HeavyRepair"
 		],

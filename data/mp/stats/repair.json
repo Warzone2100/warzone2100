@@ -35,8 +35,8 @@
 		"weight": 3000
 	},
 	"LightRepair1": {
-		"buildPoints": 250,
-		"buildPower": 50,
+		"buildPoints": 125,
+		"buildPower": 40,
 		"designable": 1,
 		"droidType": "DROID_REPAIR",
 		"id": "LightRepair1",
