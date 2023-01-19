@@ -8265,7 +8265,7 @@
 		"name": "Improved Rocket Wire Guidance",
 		"requiredResearch": [
 			"R-Wpn-Rocket-Damage04",
-			"R-Struc-Research-Upgrade02"
+			"R-Wpn-Rocket-Accuracy01"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -8649,8 +8649,7 @@
 			"Rocket-VTOL-Pod"
 		],
 		"requiredResearch": [
-			"R-Wpn-Rocket-Damage03",
-			"R-Wpn-Rocket-Accuracy01"
+			"R-Wpn-Rocket-Damage03"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
