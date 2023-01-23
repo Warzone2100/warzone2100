@@ -4,7 +4,7 @@
 		"deceleration": 450,
 		"id": "BaBaLegs",
 		"name": "BaBaLegs",
-		"speed": 200,
+		"speed": 300,
 		"spinAngle": 45,
 		"spinSpeed": 450,
 		"turnSpeed": 225,
@@ -15,7 +15,7 @@
 		"buildPoints": 15,
 		"id": "BaBaProp",
 		"name": "BaBaProp",
-		"speed": 200,
+		"speed": 300,
 		"type": "Wheeled",
 		"weight": 10
 	},
@@ -26,7 +26,7 @@
 		"hitpointPctOfBody": 50,
 		"id": "CyborgLegs",
 		"name": "Cyborg Propulsion",
-		"speed": 400,
+		"speed": 500,
 		"spinAngle": 45,
 		"spinSpeed": 450,
 		"turnSpeed": 225,
@@ -43,9 +43,9 @@
 		"model": "prlhtr1.pie",
 		"name": "Half-tracks",
 		"skidDeceleration": 500,
-		"speed": 150,
+		"speed": 200,
 		"type": "Half-Tracked",
-		"weight": 400
+		"weight": 700
 	},
 	"Helicopter": {
 		"acceleration": 200,
@@ -56,7 +56,7 @@
 		"id": "Helicopter",
 		"model": "PRLHELI1.PIE",
 		"name": "Helicopter",
-		"speed": 700,
+		"speed": 800,
 		"spinSpeed": 200,
 		"turnSpeed": 100,
 		"type": "Lift",
@@ -83,11 +83,11 @@
 		"id": "V-Tol",
 		"model": "DPVTOL.PIE",
 		"name": "VTOL",
-		"speed": 700,
+		"speed": 1000,
 		"spinSpeed": 200,
 		"turnSpeed": 100,
 		"type": "Lift",
-		"weight": 50
+		"weight": 1500
 	},
 	"ZNULLPROP": {
 		"id": "ZNULLPROP",
@@ -104,9 +104,9 @@
 		"model": "PRLHOV1.PIE",
 		"name": "Hover",
 		"skidDeceleration": 120,
-		"speed": 300,
+		"speed": 375,
 		"type": "Hover",
-		"weight": 200
+		"weight": 600
 	},
 	"tracked01": {
 		"buildPoints": 125,
@@ -116,10 +116,10 @@
 		"id": "tracked01",
 		"model": "prltrk1.pie",
 		"name": "Tracks",
-		"speed": 125,
+		"speed": 175,
 		"spinAngle": 45,
 		"type": "Tracked",
-		"weight": 650
+		"weight": 800
 	},
 	"wheeled01": {
 		"buildPoints": 50,
@@ -130,8 +130,8 @@
 		"model": "prlwhl1.pie",
 		"name": "Wheels",
 		"skidDeceleration": 350,
-		"speed": 175,
+		"speed": 225,
 		"type": "Wheeled",
-		"weight": 300
+		"weight": 700
 	}
 }

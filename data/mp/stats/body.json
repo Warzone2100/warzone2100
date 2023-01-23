@@ -467,7 +467,7 @@
 		},
 		"size": "HEAVY",
 		"weaponSlots": 1,
-		"weight": 2100
+		"weight": 2400
 	},
 	"Body13SUP": {
 		"armourHeat": 28,
@@ -480,7 +480,7 @@
 		"id": "Body13SUP",
 		"model": "drmbod13.pie",
 		"name": "Wyvern",
-		"powerOutput": 25000,
+		"powerOutput": 27000,
 		"propulsionExtraModels": {
 			"HalfTrack": {
 				"left": "prhhtr3.pie"
@@ -509,7 +509,7 @@
 		},
 		"size": "HEAVY",
 		"weaponSlots": 1,
-		"weight": 5000
+		"weight": 4800
 	},
 	"Body14SUP": {
 		"armourHeat": 30,
@@ -606,7 +606,7 @@
 		"id": "Body2SUP",
 		"model": "drlbod02.pie",
 		"name": "Leopard",
-		"powerOutput": 6500,
+		"powerOutput": 7000,
 		"propulsionExtraModels": {
 			"HalfTrack": {
 				"left": "prlhtr1.pie"
@@ -635,7 +635,7 @@
 		},
 		"size": "LIGHT",
 		"weaponSlots": 1,
-		"weight": 750
+		"weight": 700
 	},
 	"Body3MBT": {
 		"armourHeat": 15,
@@ -648,7 +648,7 @@
 		"id": "Body3MBT",
 		"model": "drlbod03.pie",
 		"name": "Retaliation",
-		"powerOutput": 5000,
+		"powerOutput": 6500,
 		"propulsionExtraModels": {
 			"HalfTrack": {
 				"left": "prlhtr1.pie"
@@ -803,7 +803,7 @@
 		},
 		"size": "MEDIUM",
 		"weaponSlots": 1,
-		"weight": 2500
+		"weight": 2200
 	},
 	"Body7ABT": {
 		"armourHeat": 20,
@@ -816,7 +816,7 @@
 		"id": "Body7ABT",
 		"model": "drmbod07.pie",
 		"name": "Retribution",
-		"powerOutput": 15000,
+		"powerOutput": 19000,
 		"propulsionExtraModels": {
 			"HalfTrack": {
 				"left": "prmhtr2.pie"
@@ -845,7 +845,7 @@
 		},
 		"size": "MEDIUM",
 		"weaponSlots": 1,
-		"weight": 1500
+		"weight": 1700
 	},
 	"Body8MBT": {
 		"armourHeat": 12,
@@ -887,7 +887,7 @@
 		},
 		"size": "MEDIUM",
 		"weaponSlots": 1,
-		"weight": 1500
+		"weight": 1600
 	},
 	"Body9REC": {
 		"armourHeat": 15,
@@ -900,7 +900,7 @@
 		"id": "Body9REC",
 		"model": "drhbod09.pie",
 		"name": "Tiger",
-		"powerOutput": 18000,
+		"powerOutput": 22000,
 		"propulsionExtraModels": {
 			"HalfTrack": {
 				"left": "prhhtr3.pie"
@@ -957,7 +957,7 @@
 		"id": "CyborgHeavyBody",
 		"model": "scbd_std.pie",
 		"name": "Cyborg Heavy Body",
-		"powerOutput": 500,
+		"powerOutput": 600,
 		"size": "LIGHT",
 		"usageClass": "SuperCyborg",
 		"weaponSlots": 1,

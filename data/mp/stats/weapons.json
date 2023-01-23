@@ -866,7 +866,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "medcan.ogg",
-		"weight": 5000
+		"weight": 4000
 	},
 	"Cannon375mmMk1": {
 		"buildPoints": 800,
@@ -907,7 +907,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "lrgcan.ogg",
-		"weight": 10000
+		"weight": 5000
 	},
 	"Cannon4AUTO-VTOL": {
 		"buildPoints": 700,
@@ -1068,7 +1068,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "rapdcan.ogg",
-		"weight": 2500
+		"weight": 1800
 	},
 	"Cannon6TwinAslt": {
 		"buildPoints": 800,
@@ -1108,7 +1108,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "rapdcan.ogg",
-		"weight": 5000
+		"weight": 4000
 	},
 	"CannonSuper": {
 		"buildPoints": 2000,
@@ -1184,7 +1184,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "COMMAND",
 		"weaponWav": "rotlsr.ogg",
-		"weight": 1000
+		"weight": 400
 	},
 	"Cyb-Hvywpn-A-T": {
 		"buildPoints": 1000,
@@ -1225,7 +1225,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "MISSILE",
 		"weaponWav": "rocket.ogg",
-		"weight": 120
+		"weight": 150
 	},
 	"Cyb-Hvywpn-Acannon": {
 		"buildPoints": 400,
@@ -1265,7 +1265,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "rapdcan.ogg",
-		"weight": 120
+		"weight": 140
 	},
 	"Cyb-Hvywpn-HPV": {
 		"buildPoints": 450,
@@ -1304,7 +1304,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "hivelcan.ogg",
-		"weight": 120
+		"weight": 160
 	},
 	"Cyb-Hvywpn-Mcannon": {
 		"buildPoints": 300,
@@ -1344,7 +1344,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "medcan.ogg",
-		"weight": 120
+		"weight": 170
 	},
 	"Cyb-Hvywpn-PulseLsr": {
 		"buildPoints": 450,
@@ -1383,7 +1383,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "ENERGY",
 		"weaponWav": "plslsr.ogg",
-		"weight": 120
+		"weight": 140
 	},
 	"Cyb-Hvywpn-RailGunner": {
 		"buildPoints": 750,
@@ -1423,7 +1423,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "GAUSS",
 		"weaponWav": "gaussgun.ogg",
-		"weight": 120
+		"weight": 160
 	},
 	"Cyb-Hvywpn-TK": {
 		"buildPoints": 600,
@@ -1462,7 +1462,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "ROCKET",
 		"weaponWav": "rocket.ogg",
-		"weight": 120
+		"weight": 150
 	},
 	"Cyb-Wpn-Atmiss": {
 		"buildPoints": 1000,
@@ -1543,7 +1543,7 @@
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "MORTARS",
 		"weaponWav": "cybgrnd.ogg",
-		"weight": 120
+		"weight": 130
 	},
 	"Cyb-Wpn-Laser": {
 		"buildPoints": 600,
@@ -1582,7 +1582,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "ENERGY",
 		"weaponWav": "bemlsr.ogg",
-		"weight": 120
+		"weight": 110
 	},
 	"Cyb-Wpn-Rail1": {
 		"buildPoints": 800,
@@ -1663,7 +1663,7 @@
 		"weaponEffect": "FLAMER",
 		"weaponSubClass": "FLAME",
 		"weaponWav": "flmthrow.ogg",
-		"weight": 120
+		"weight": 100
 	},
 	"CyborgCannon": {
 		"buildPoints": 240,
@@ -1703,7 +1703,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "smlcan.ogg",
-		"weight": 120
+		"weight": 130
 	},
 	"CyborgChaingun": {
 		"buildPoints": 160,
@@ -1740,7 +1740,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "MACHINE GUN",
 		"weaponWav": "mgbar2.ogg",
-		"weight": 120
+		"weight": 110
 	},
 	"CyborgFlamer01": {
 		"buildPoints": 200,
@@ -1781,7 +1781,7 @@
 		"weaponEffect": "FLAMER",
 		"weaponSubClass": "FLAME",
 		"weaponWav": "flmthrow.ogg",
-		"weight": 120
+		"weight": 100
 	},
 	"CyborgRocket": {
 		"buildPoints": 500,
@@ -1859,7 +1859,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "MACHINE GUN",
 		"weaponWav": "asltmg.ogg",
-		"weight": 120
+		"weight": 110
 	},
 	"EMP-Cannon": {
 		"buildPoints": 1000,
@@ -1897,7 +1897,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "EMP",
 		"weaponWav": "emp.ogg",
-		"weight": 10000
+		"weight": 8000
 	},
 	"Flame1Mk1": {
 		"buildPoints": 200,
@@ -1938,7 +1938,7 @@
 		"weaponEffect": "FLAMER",
 		"weaponSubClass": "FLAME",
 		"weaponWav": "flmthrow.ogg",
-		"weight": 250
+		"weight": 200
 	},
 	"Flame2": {
 		"buildPoints": 400,
@@ -1979,7 +1979,7 @@
 		"weaponEffect": "FLAMER",
 		"weaponSubClass": "FLAME",
 		"weaponWav": "flmthrow.ogg",
-		"weight": 5000
+		"weight": 4000
 	},
 	"HeavyLaser": {
 		"buildPoints": 600,
@@ -2581,7 +2581,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "MACHINE GUN",
 		"weaponWav": "mgbar2.ogg",
-		"weight": 200
+		"weight": 225
 	},
 	"MG2-Pillbox": {
 		"buildPoints": 125,
@@ -2689,7 +2689,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "MACHINE GUN",
 		"weaponWav": "mgbar3.ogg",
-		"weight": 400
+		"weight": 300
 	},
 	"MG3-Pillbox": {
 		"buildPoints": 250,
@@ -2760,7 +2760,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "MACHINE GUN",
 		"weaponWav": "mgheavy.ogg",
-		"weight": 300
+		"weight": 400
 	},
 	"MG3Mk1": {
 		"buildPoints": 250,
@@ -2905,7 +2905,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "MACHINE GUN",
 		"weaponWav": "asltmg.ogg",
-		"weight": 600
+		"weight": 800
 	},
 	"MG5TWINROTARY": {
 		"buildPoints": 500,
@@ -2942,7 +2942,7 @@
 		"weaponEffect": "ANTI PERSONNEL",
 		"weaponSubClass": "MACHINE GUN",
 		"weaponWav": "asltmg.ogg",
-		"weight": 600
+		"weight": 1000
 	},
 	"MassDriver": {
 		"buildPoints": 2000,
@@ -3023,7 +3023,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "MISSILE",
 		"weaponWav": "rocket.ogg",
-		"weight": 400
+		"weight": 900
 	},
 	"Missile-HvyArt": {
 		"buildPoints": 2000,
@@ -3557,7 +3557,7 @@
 		"flightGfx": "FXLProj.PIE",
 		"flightSpeed": 700,
 		"hitGfx": "FXMETHIT.PIE",
-		"hitpoints": 125,
+		"hitpoints": 100,
 		"id": "PlasmiteFlamer",
 		"lightWorld": 1,
 		"longRange": 512,
@@ -3585,7 +3585,7 @@
 		"weaponEffect": "FLAMER",
 		"weaponSubClass": "FLAME",
 		"weaponWav": "plasflm.ogg",
-		"weight": 1000
+		"weight": 800
 	},
 	"QuadMg1AAGun": {
 		"buildPoints": 400,
@@ -3949,7 +3949,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "ROCKET",
 		"weaponWav": "rocket.ogg",
-		"weight": 300
+		"weight": 800
 	},
 	"Rocket-IDF": {
 		"buildPoints": 1500,
@@ -4032,7 +4032,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "ROCKET",
 		"weaponWav": "rocket.ogg",
-		"weight": 250
+		"weight": 600
 	},
 	"Rocket-MRL": {
 		"buildPoints": 500,
@@ -4118,7 +4118,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "ROCKET",
 		"weaponWav": "rocket.ogg",
-		"weight": 200
+		"weight": 500
 	},
 	"Rocket-Sunburst": {
 		"buildPoints": 500,
@@ -4294,7 +4294,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "ROCKET",
 		"weaponWav": "rocket.ogg",
-		"weight": 250
+		"weight": 400
 	},
 	"Rocket-VTOL-Pod": {
 		"buildPoints": 375,
@@ -4338,7 +4338,7 @@
 		"weaponEffect": "ANTI TANK",
 		"weaponSubClass": "ROCKET",
 		"weaponWav": "rocket.ogg",
-		"weight": 200
+		"weight": 300
 	},
 	"Rocket-VTOL-Sunburst": {
 		"buildPoints": 500,
