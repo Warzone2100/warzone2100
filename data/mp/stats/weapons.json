@@ -3557,7 +3557,7 @@
 		"flightGfx": "FXLProj.PIE",
 		"flightSpeed": 700,
 		"hitGfx": "FXMETHIT.PIE",
-		"hitpoints": 100,
+		"hitpoints": 125,
 		"id": "PlasmiteFlamer",
 		"lightWorld": 1,
 		"longRange": 512,
