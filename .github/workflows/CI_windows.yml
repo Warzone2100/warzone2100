@@ -53,7 +53,8 @@ jobs:
           - compiler: "LLVM_MINGW"
             architecture: "arm64"
             deploy_release: true
-            support_sentry : false
+            support_sentry : true
+            sentry_backend: breakpad
       fail-fast: false
     env:
       WZ_COMPILER_VER: ${{ matrix.compiler }}
