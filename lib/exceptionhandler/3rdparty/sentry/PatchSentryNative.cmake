@@ -40,4 +40,8 @@ execute_process(
    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
  )
 
-
+# Patch for ARM64 support
+execute_process(
+   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/src/unwinder/sentry_unwinder_dbghelp.c" "${SOURCE_DIR}/src/unwinder/sentry_unwinder_dbghelp.c"
+   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+ )
