@@ -50,7 +50,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
 		set(CMAKE_SYSTEM_VERSION "10")
 	else()
-		set(CMAKE_SYSTEM_VERSION "6.0") # Windows Vista+
+		set(CMAKE_SYSTEM_VERSION "6.1") # Windows 7+
 	endif()
 endif()
 if(MINGW AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
