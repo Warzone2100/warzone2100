@@ -57,8 +57,8 @@ apps:
 
 parts:
   sdl:
-    source: https://www.libsdl.org/release/SDL2-2.0.20.tar.gz
-    source-checksum: sha512/4889949eaa674948bdb0a01bb2a842a0943b15b08ff27ec0079b0fd4f79d071ffb32488a5a51c12ad7c74ed5fe73b608cdf6336a44c95dae8a0fb3f47d0f01de
+    source: https://github.com/libsdl-org/SDL/releases/download/release-2.26.2/SDL2-2.26.2.tar.gz
+    source-checksum: sha512/5af6f40790560651a7c6c1f7dae3b97d55c5ab372f02dc6024cb7ad3c996a6fac8a7aba1d510ad994cc5d4ba91efd03010d8678104ed44f55ef948011bc66d28
     plugin: autotools
     autotools-configure-parameters:
     - --prefix=/usr
