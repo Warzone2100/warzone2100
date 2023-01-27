@@ -710,7 +710,7 @@ jobs:
   upload-debug-symbols:
     strategy:
       matrix:
-        architecture: ["x86", "x64"]
+        architecture: ["x86", "x64", "arm64"]
       fail-fast: false
     env:
       WZ_TARGET_ARCH: ${{ matrix.architecture }}
