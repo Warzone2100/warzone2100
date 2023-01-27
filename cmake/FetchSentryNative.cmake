@@ -69,6 +69,10 @@ FetchContent_GetProperties(sentrynative)
 set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "Sentry build shared libs" FORCE)
 set(SENTRY_EXPORT_SYMBOLS OFF CACHE BOOL "Export symbols" FORCE)
 set(SENTRY_BUILD_RUNTIMESTATIC OFF CACHE BOOL "Build sentry-native with static runtime" FORCE)
+if(CMAKE_CXX_STANDARD)
+	set(_old_CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD}")
+	unset(CMAKE_CXX_STANDARD) # Allow sentry-native to set its desired default
+endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin|Linux" AND NOT DEFINED SENTRY_BACKEND)
 	set(SENTRY_BACKEND "breakpad" CACHE STRING
 	"The sentry backend responsible for reporting crashes, can be either 'none', 'inproc', 'breakpad' or 'crashpad'." FORCE)
@@ -78,3 +82,7 @@ if(NOT sentrynative_POPULATED)
 	add_subdirectory("${sentrynative_SOURCE_DIR}" "${sentrynative_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif()
 message(STATUS "Enabling crash-handling backend: sentry-native ($CACHE{SENTRY_BACKEND})")
+
+if(_old_CMAKE_CXX_STANDARD)
+	set(CMAKE_CXX_STANDARD "${_old_CMAKE_CXX_STANDARD}")
+endif()
