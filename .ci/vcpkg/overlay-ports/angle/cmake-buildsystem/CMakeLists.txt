@@ -155,6 +155,8 @@ set(ANGLE_PRIVATE_INCLUDE_DIRECTORIES
     "${CMAKE_CURRENT_SOURCE_DIR}/include/KHR"
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/common/third_party/base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/common/base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/common/third_party/xxhash"
     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib/google"
     "${CMAKE_CURRENT_BINARY_DIR}/include"
 )
@@ -176,6 +178,7 @@ endif()
 
 set(ANGLE_SOURCES
     ${libangle_common_sources}
+    ${libangle_common_shader_state_sources}
     ${angle_preprocessor_sources}
     ${angle_translator_glsl_base_sources}
     ${angle_translator_essl_sources}
@@ -186,7 +189,7 @@ set(ANGLE_SOURCES
     ${angle_system_utils_sources}
     src/common/angle_version_info.cpp
     src/libANGLE/capture/FrameCapture_mock.cpp
-    src/libANGLE/capture/frame_capture_utils_mock.cpp
+    src/libANGLE/capture/serialize_mock.cpp
 )
 
 if (WIN32)
@@ -219,10 +222,10 @@ set(zlib_wrapper_sources
 )
 
 set(angle_gl_enum_utils # VCPKG EDIT: Update paths
-    "src/libANGLE/capture/gl_enum_utils.cpp"
-    "src/libANGLE/capture/gl_enum_utils.h"
-    "src/libANGLE/capture/gl_enum_utils_autogen.cpp"
-    "src/libANGLE/capture/gl_enum_utils_autogen.h"
+    "src/common/gl_enum_utils.cpp"
+    "src/common/gl_enum_utils.h"
+    "src/common/gl_enum_utils_autogen.cpp"
+    "src/common/gl_enum_utils_autogen.h"
 )
 
 set(angle_glslang_wrapper
@@ -276,6 +279,10 @@ if (USE_ANGLE_EGL OR ENABLE_WEBGL)
         target_sources(GLESv2 PRIVATE src/libGLESv2/libGLESv2_autogen.def)
         set_target_properties(GLESv2 PROPERTIES OUTPUT_NAME libGLESv2)
     endif ()
+    # Rename libs to avoid conflict with system OpenGL
+    if(NOT VCPKG_TARGET_IS_WINDOWS)
+        set_target_properties(GLESv2 PROPERTIES OUTPUT_NAME libGLESv2_angle)
+    endif()
 
     add_library(GLESv2Framework INTERFACE)
     target_link_libraries(GLESv2Framework INTERFACE GLESv2)
@@ -302,6 +309,10 @@ if (USE_ANGLE_EGL OR ENABLE_WEBGL)
             target_sources(EGL PRIVATE src/libEGL/libEGL_autogen.def)
             set_target_properties(EGL PROPERTIES OUTPUT_NAME libEGL)
         endif ()
+        # Rename libs to avoid conflict with system OpenGL
+        if(NOT VCPKG_TARGET_IS_WINDOWS)
+            set_target_properties(EGL PROPERTIES OUTPUT_NAME libEGL_angle)
+        endif()
 
         add_library(EGLFramework INTERFACE)
         target_include_directories(EGLFramework INTERFACE ${ANGLE_FRAMEWORK_HEADERS_DIR}/)
@@ -405,7 +416,8 @@ install(TARGETS ${_installableTargets} EXPORT ANGLEExport
     ARCHIVE DESTINATION lib
 )
 
-install(EXPORT ANGLEExport FILE unofficial-angle-config.cmake NAMESPACE unofficial::angle:: DESTINATION share/unofficial-angle)
+install(EXPORT ANGLEExport FILE unofficial-angle-targets.cmake NAMESPACE unofficial::angle:: DESTINATION share/unofficial-angle)
+install(FILES unofficial-angle-config.cmake DESTINATION share/unofficial-angle)
 
 if(NOT DISABLE_INSTALL_HEADERS)
     install(

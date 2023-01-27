@@ -1,0 +1,22 @@
+diff --git a/third_party/wz-mingw-headers/d3d11.h b/third_party/wz-mingw-headers/d3d11.h
+new file mode 100644
+--- /dev/null
++++ b/third_party/wz-mingw-headers/d3d11.h
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: CC0-1.0
++
++#ifndef _MINGW_COMPAT_FIX_HEADERS_D3D11_H_
++#define _MINGW_COMPAT_FIX_HEADERS_D3D11_H_
++
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wgnu-include-next"
++
++#include_next <d3d11.h>
++
++#ifndef D3D11_CLIP_OR_CULL_DISTANCE_COUNT
++#define D3D11_CLIP_OR_CULL_DISTANCE_COUNT ( 8 )
++#endif
++
++#pragma clang diagnostic pop
++
++#endif /* _MINGW_COMPAT_FIX_HEADERS_D3D11_H_ */
