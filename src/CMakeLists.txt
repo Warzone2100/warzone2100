@@ -619,6 +619,10 @@ if(TARGET crashpad_handler)
 		message(FATAL_ERROR "crashpad_handler is not currently supported for macOS builds")
 	endif()
 	install(TARGETS crashpad_handler COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+	if(WIN32 AND TARGET crashpad_wer)
+		# On Windows, also install the crashpad_wer.dll (if built with support)
+		install(TARGETS crashpad_wer COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+	endif()
 endif()
 
 #######################
