@@ -28,11 +28,11 @@ else()
   set(ANGLE_BUILDSYSTEM_PORT "Linux")
 endif()
 
-# chromium/5249
-set(ANGLE_COMMIT b8636b57b8f231994ecb3fb14f181c593c83a3fb)
-set(ANGLE_VERSION 5249)
-set(ANGLE_SHA512 a2d3b6ffa49fa1f6f0b93cba9a079f923b78ebf8294e95be2267bedec92041472588033cce47fd0f0361ee35d9c080dbfb8a611d2761afbd3a13d224ada0f7eb)
-set(ANGLE_THIRDPARTY_ZLIB_COMMIT 8d1d3e341948009ed8dc807a545204e7a1854c33)
+# chromium/5414
+set(ANGLE_COMMIT aa63ea230e0c507e7b4b164a30e502fb17168c17)
+set(ANGLE_VERSION 5414)
+set(ANGLE_SHA512 a3b55d4b484e1e9ece515d60af1d47a80a0576b198d9a2397e4e68b16efd83468dcdfadc98dae57ff17f01d02d74526f8b59fdf00661b70a45b6dd266e5ffe38)
+set(ANGLE_THIRDPARTY_ZLIB_COMMIT 44d9b490c721abdb923d5c6c23ac211e45ffb1a5)
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
@@ -47,6 +47,7 @@ vcpkg_from_github(
         wz-mingw-headers.patch
 #        wz-mingw-headers-2.patch
         wz-mingw-headers-3.patch
+        wz-mingw-headers-4.patch
 )
 
 # Generate angle_commit.h
@@ -56,11 +57,78 @@ set(ANGLE_COMMIT_DATE "invalid-date")
 set(ANGLE_REVISION "${ANGLE_VERSION}")
 configure_file("${CMAKE_CURRENT_LIST_DIR}/angle_commit.h.in" "${SOURCE_PATH}/angle_commit.h" @ONLY)
 configure_file("${CMAKE_CURRENT_LIST_DIR}/angle_commit.h.in" "${SOURCE_PATH}/src/common/angle_commit.h" @ONLY)
+file(COPY "${CMAKE_CURRENT_LIST_DIR}/unofficial-angle-config.cmake" DESTINATION "${SOURCE_PATH}")
 
-# Copy CMake buildsystem into appropriate folders
-file(GLOB MAIN_BUILDSYSTEM "${CMAKE_CURRENT_LIST_DIR}/cmake-buildsystem/CMakeLists.txt" "${CMAKE_CURRENT_LIST_DIR}/cmake-buildsystem/*.cmake" "${CMAKE_CURRENT_LIST_DIR}/cmake-buildsystem/generated/*.cmake")
+set(ANGLE_WEBKIT_BUILDSYSTEM_COMMIT "bb1da00b9ba878d228a5e9834a0767dbca2fee43")
+
+# Download WebKit gni-to-cmake.py conversion script
+vcpkg_download_distfile(GNI_TO_CMAKE_PY
+    URLS "https://github.com/WebKit/WebKit/raw/${ANGLE_WEBKIT_BUILDSYSTEM_COMMIT}/Source/ThirdParty/ANGLE/gni-to-cmake.py"
+    FILENAME "gni-to-cmake.py"
+    SHA512 9da35caf2db2e849d6cc85721ba0b77eee06b6f65a7c5314fb80483db4949b0b6e9bf4b2d4fc63613665629b24e9b052e03fb1451b09313d881297771a4f2736
+)
+
+# Generate CMake files from GN / GNI files
+vcpkg_find_acquire_program(PYTHON3)
+
+set(_root_gni_files_to_convert
+  "compiler.gni Compiler.cmake"
+  "libGLESv2.gni GLESv2.cmake"
+)
+set(_renderer_gn_files_to_convert
+  "libANGLE/renderer/d3d/BUILD.gn D3D.cmake"
+  "libANGLE/renderer/gl/BUILD.gn GL.cmake"
+  "libANGLE/renderer/metal/BUILD.gn Metal.cmake"
+)
+
+foreach(_root_gni_file IN LISTS _root_gni_files_to_convert)
+  separate_arguments(_file_values UNIX_COMMAND "${_root_gni_file}")
+  list(GET _file_values 0 _src_gn_file)
+  list(GET _file_values 1 _dst_file)
+  vcpkg_execute_required_process(
+      COMMAND "${PYTHON3}" "${GNI_TO_CMAKE_PY}" "src/${_src_gn_file}" "${_dst_file}"
+      WORKING_DIRECTORY "${SOURCE_PATH}"
+      LOGNAME "gni-to-cmake-${_dst_file}-${TARGET_TRIPLET}"
+  )
+endforeach()
+
+foreach(_renderer_gn_file IN LISTS _renderer_gn_files_to_convert)
+  separate_arguments(_file_values UNIX_COMMAND "${_renderer_gn_file}")
+  list(GET _file_values 0 _src_gn_file)
+  list(GET _file_values 1 _dst_file)
+  get_filename_component(_src_dir "${_src_gn_file}" DIRECTORY)
+  vcpkg_execute_required_process(
+      COMMAND "${PYTHON3}" "${GNI_TO_CMAKE_PY}" "src/${_src_gn_file}" "${_dst_file}" --prepend "src/${_src_dir}/"
+      WORKING_DIRECTORY "${SOURCE_PATH}"
+      LOGNAME "gni-to-cmake-${_dst_file}-${TARGET_TRIPLET}"
+  )
+endforeach()
+
+# Fetch additional CMake files from WebKit ANGLE buildsystem
+vcpkg_download_distfile(WK_ANGLE_INCLUDE_CMAKELISTS
+    URLS "https://github.com/WebKit/WebKit/raw/${ANGLE_WEBKIT_BUILDSYSTEM_COMMIT}/Source/ThirdParty/ANGLE/include/CMakeLists.txt"
+    FILENAME "include_CMakeLists.txt"
+    SHA512 a7ddf3c6df7565e232f87ec651cc4fd84240b8866609e23e3e6e41d22532fd34c70e0f3b06120fd3d6d930ca29c1d0d470d4c8cb7003a66f8c1a840a42f32949
+)
+configure_file("${WK_ANGLE_INCLUDE_CMAKELISTS}" "${SOURCE_PATH}/include/CMakeLists.txt" COPYONLY)
+
+vcpkg_download_distfile(WK_ANGLE_CMAKE_WEBKITCOMPILERFLAGS
+    URLS "https://github.com/WebKit/WebKit/raw/${ANGLE_WEBKIT_BUILDSYSTEM_COMMIT}/Source/cmake/WebKitCompilerFlags.cmake"
+    FILENAME "WebKitCompilerFlags.cmake"
+    SHA512 63f981694ae37d4c4ca4c34e2bf62b4d4602b6a1a660851304fa7a6ee834fc58fa6730eeb41ef4e075550f3c8b675823d4d00bdcd72ca869c6d5ab11196b33bb
+)
+file(COPY "${WK_ANGLE_CMAKE_WEBKITCOMPILERFLAGS}" DESTINATION "${SOURCE_PATH}/cmake")
+
+vcpkg_download_distfile(WK_ANGLE_CMAKE_WEBKITMACROS
+    URLS "https://github.com/WebKit/WebKit/raw/${ANGLE_WEBKIT_BUILDSYSTEM_COMMIT}/Source/cmake/WebKitMacros.cmake"
+    FILENAME "WebKitMacros.cmake"
+    SHA512 0d126b1d1b0ca995c2ea6e51c73326db363f560f3f07912ce58c7c022d9257d27b963dac56aee0e9604ca7a3d74c5aa9f0451c243fec922fb485dd2253685ab6
+)
+file(COPY "${WK_ANGLE_CMAKE_WEBKITMACROS}" DESTINATION "${SOURCE_PATH}/cmake")
+
+# Copy additional custom CMake buildsystem into appropriate folders
+file(GLOB MAIN_BUILDSYSTEM "${CMAKE_CURRENT_LIST_DIR}/cmake-buildsystem/CMakeLists.txt" "${CMAKE_CURRENT_LIST_DIR}/cmake-buildsystem/*.cmake")
 file(COPY ${MAIN_BUILDSYSTEM} DESTINATION "${SOURCE_PATH}")
-file(COPY "${CMAKE_CURRENT_LIST_DIR}/cmake-buildsystem/include/CMakeLists.txt" DESTINATION "${SOURCE_PATH}/include")
 file(GLOB MODULES "${CMAKE_CURRENT_LIST_DIR}/cmake-buildsystem/cmake/*.cmake")
 file(COPY ${MODULES} DESTINATION "${SOURCE_PATH}/cmake")
 
@@ -68,7 +136,7 @@ function(checkout_in_path PATH URL REF)
     if(EXISTS "${PATH}")
         return()
     endif()
-    
+
     vcpkg_from_git(
         OUT_SOURCE_PATH DEP_SOURCE_PATH
         URL "${URL}"
@@ -88,9 +156,10 @@ vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS_DEBUG -DDISABLE_INSTALL_HEADERS=1
     OPTIONS
-        -D${ANGLE_CPU_BITNESS}=1
-        -DPORT=${ANGLE_BUILDSYSTEM_PORT}
-        -DANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW=${ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW}
+        "-D${ANGLE_CPU_BITNESS}=1"
+        "-DPORT=${ANGLE_BUILDSYSTEM_PORT}"
+        "-DANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW=${ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW}"
+        "-DVCPKG_TARGET_IS_WINDOWS=${VCPKG_TARGET_IS_WINDOWS}"
 )
 
 vcpkg_cmake_install()
@@ -102,26 +171,26 @@ vcpkg_copy_pdbs()
 file(INSTALL "${SOURCE_PATH}/LICENSE" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
 
 # File conflict with opengl-registry! Make sure headers are similar on Update!
-# angle defines some additional entrypoints. 
+# angle defines some additional entrypoints.
 # opengl-registry probably needs an upstream update to account for those
-# Due to that all angle headers get moved to include/angle. 
-# If you want to use those instead of the onces provided by opengl-registry make sure 
+# Due to that all angle headers get moved to include/angle.
+# If you want to use those instead of the onces provided by opengl-registry make sure
 # VCPKG_INSTALLED_DIR/include/angle is before VCPKG_INSTALLED_DIR/include
 file(GLOB_RECURSE angle_includes "${CURRENT_PACKAGES_DIR}/include")
 file(COPY ${angle_includes} DESTINATION "${CURRENT_PACKAGES_DIR}/include/angle")
 
 set(_double_files
-    include/GLES/egl.h
-    include/GLES/gl.h
-    include/GLES/glext.h
-    include/GLES/glplatform.h
-    include/GLES2/gl2.h
-    include/GLES2/gl2ext.h
-    include/GLES2/gl2platform.h
-    include/GLES3/gl3.h
-    include/GLES3/gl31.h
-    include/GLES3/gl32.h
-    include/GLES3/gl3platform.h)
+    "include/GLES/egl.h"
+    "include/GLES/gl.h"
+    "include/GLES/glext.h"
+    "include/GLES/glplatform.h"
+    "include/GLES2/gl2.h"
+    "include/GLES2/gl2ext.h"
+    "include/GLES2/gl2platform.h"
+    "include/GLES3/gl3.h"
+    "include/GLES3/gl31.h"
+    "include/GLES3/gl32.h"
+    "include/GLES3/gl3platform.h")
 foreach(_file ${_double_files})
     if(EXISTS "${CURRENT_PACKAGES_DIR}/${_file}")
         file(REMOVE "${CURRENT_PACKAGES_DIR}/${_file}")
