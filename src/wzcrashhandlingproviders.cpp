@@ -464,3 +464,16 @@ bool useCrashHandlingProvider(int argc, const char * const *argv, bool& out_debu
 #endif
 }
 
+bool crashHandlingProviderTestCrash()
+{
+#if !defined(WZ_CRASHHANDLING_PROVIDER)
+	return false; // caller should handle its own way
+#elif defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
+	// Sentry crash-handling provider
+	if (!enabledSentryProvider) { return false; }
+	abort(); // abort should successfully lead to the crash handler getting called
+#else
+	// No available method for this crash handling provider?
+	return false;
+#endif
+}

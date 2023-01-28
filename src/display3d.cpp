@@ -85,6 +85,7 @@
 #include "multistat.h"
 #include "animation.h"
 #include "faction.h"
+#include "wzcrashhandlingproviders.h"
 
 /********************  Prototypes  ********************/
 
@@ -977,14 +978,17 @@ void draw3DScene()
 		writeGameInfo("WZdebuginfo.txt");		//also test writing out this file.
 		debug(LOG_FATAL, "Forcing a segfault! (crash handler test)");
 		// and here comes the crash
+		if (!crashHandlingProviderTestCrash())
+		{
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wnull-dereference"
 #endif
-		*crash = 0x3; // deliberate null-dereference
+			*crash = 0x3; // deliberate null-dereference
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic pop
 #endif
+		}
 		exit(-1);	// will never reach this, but just in case...
 	}
 	//visualize radius if needed
