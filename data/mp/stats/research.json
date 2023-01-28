@@ -3720,8 +3720,8 @@
 			"R-Vehicle-Body05",
 			"R-Vehicle-Metals04"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 4800,
+		"researchPower": 150,
 		"resultComponents": [
 			"Body6SUPP"
 		],
