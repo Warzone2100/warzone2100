@@ -142,6 +142,7 @@ if(CRASHPAD_WER_ENABLED)
     )
 
     set_property(TARGET crashpad_wer PROPERTY EXPORT_NAME crashpad_wer)
+    set_property(TARGET crashpad_wer PROPERTY PREFIX "") # ensure MINGW doesn't prefix "lib" to dll name
     add_library(crashpad::wer ALIAS crashpad_wer)
 
     install(TARGETS crashpad_wer EXPORT crashpad_export
