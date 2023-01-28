@@ -29,4 +29,6 @@ bool shutdownCrashHandlingProvider();
 bool crashHandlingProviderSetTag(const std::string& key, const std::string& value);
 bool crashHandlingProviderSetContext(const std::string& key, const nlohmann::json& contextDictionary);
 
+bool crashHandlingProviderTestCrash();
+
 #endif //_WZ_CRASHHANDLING_PROVIDERS_H_
