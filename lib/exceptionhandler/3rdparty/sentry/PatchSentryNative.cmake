@@ -45,3 +45,13 @@ execute_process(
    COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/src/unwinder/sentry_unwinder_dbghelp.c" "${SOURCE_DIR}/src/unwinder/sentry_unwinder_dbghelp.c"
    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
  )
+
+# Patch for mingw wer support in crashpad
+execute_process(
+   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/CMakeLists.txt" "${SOURCE_DIR}/external/crashpad/CMakeLists.txt"
+   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+ )
+execute_process(
+   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/handler/CMakeLists.txt" "${SOURCE_DIR}/external/crashpad/handler/CMakeLists.txt"
+   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+ )
