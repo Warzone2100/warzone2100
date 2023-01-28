@@ -53,10 +53,10 @@ void setDifficultyLevel(DIFFICULTY_LEVEL lev)
 	switch (lev)
 	{
 	case DL_SUPER_EASY:
-		setDamageModifiers(150, 70);
+		setDamageModifiers(200, 50);
 		break;
 	case DL_EASY:
-		setDamageModifiers(125, 85);
+		setDamageModifiers(150, 70);
 		break;
 	case DL_NORMAL:
 		setDamageModifiers(100, 100);
