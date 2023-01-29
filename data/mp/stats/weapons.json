@@ -4096,7 +4096,7 @@
 		"id": "Rocket-Pod",
 		"lightWorld": 1,
 		"longRange": 1088,
-		"longHit": 45,
+		"longHit": 50,
 		"maxElevation": 90,
 		"minElevation": -60,
 		"minRange": 128,
