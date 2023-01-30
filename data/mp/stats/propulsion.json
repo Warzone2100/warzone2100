@@ -45,7 +45,7 @@
 		"skidDeceleration": 500,
 		"speed": 200,
 		"type": "Half-Tracked",
-		"weight": 700
+		"weight": 100
 	},
 	"Helicopter": {
 		"acceleration": 200,
@@ -119,7 +119,7 @@
 		"speed": 175,
 		"spinAngle": 45,
 		"type": "Tracked",
-		"weight": 800
+		"weight": 50
 	},
 	"wheeled01": {
 		"buildPoints": 50,
@@ -132,6 +132,6 @@
 		"skidDeceleration": 350,
 		"speed": 225,
 		"type": "Wheeled",
-		"weight": 700
+		"weight": 200
 	}
 }
