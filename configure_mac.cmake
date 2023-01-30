@@ -101,25 +101,25 @@ if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREAT
 		if(EXISTS "${_full_vulkan_install_path}")
 			file(REMOVE_RECURSE "${_full_vulkan_install_path}")
 		endif()
+
+		# ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ${_full_vulkan_install_path} --accept-licenses --default-answer --confirm-command install --copy_only=1
+		execute_process(
+			COMMAND ./InstallVulkan.app/Contents/MacOS/InstallVulkan
+					--root ${_full_vulkan_install_path}
+					--accept-licenses
+					--default-answer
+					--confirm-command install
+					copy_only=1
+			WORKING_DIRECTORY "${_full_vulkan_dl_path}"
+			RESULT_VARIABLE _exstatus
+		)
+		if(NOT _exstatus EQUAL 0)
+			message(FATAL_ERROR "Failed to extract Vulkan SDK (exit code: ${_exstatus})")
+		endif()
+
+		file(WRITE "${_full_vulkan_install_path}/.SHA256SumLoc" "${VULKAN_SDK_DL_SHA256}")
 	endif()
 	unset(_strings_existing_sha256)
-
-	# ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ${_full_vulkan_install_path} --accept-licenses --default-answer --confirm-command install --copy_only=1
-	execute_process(
-		COMMAND ./InstallVulkan.app/Contents/MacOS/InstallVulkan
-				--root ${_full_vulkan_install_path}
-				--accept-licenses
-				--default-answer
-				--confirm-command install
-				copy_only=1
-		WORKING_DIRECTORY "${_full_vulkan_dl_path}"
-		RESULT_VARIABLE _exstatus
-	)
-	if(NOT _exstatus EQUAL 0)
-		message(FATAL_ERROR "Failed to extract Vulkan SDK (exit code: ${_exstatus})")
-	endif()
-
-	file(WRITE "${_full_vulkan_install_path}/.SHA256SumLoc" "${VULKAN_SDK_DL_SHA256}")
 
 	if(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
 		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "::endgroup::")
