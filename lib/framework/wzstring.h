@@ -20,6 +20,7 @@
 #ifndef _LIB_FRAMEWORK_WZSTRING_H
 #define _LIB_FRAMEWORK_WZSTRING_H
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <locale>
