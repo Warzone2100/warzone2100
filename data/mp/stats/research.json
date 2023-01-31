@@ -1064,6 +1064,21 @@
 		],
 		"statID": "Emplacement-MRL-pit"
 	},
+	"R-Defense-MRLHvy": {
+		"iconID": "IMAGE_RES_DEFENCE",
+		"id": "R-Defense-MRLHvy",
+		"name": "Heavy Rocket Battery",
+		"requiredResearch": [
+			"R-Defense-HardcreteWall",
+			"R-Wpn-Rocket02-MRLHvy"
+		],
+		"researchPoints": 1200,
+		"researchPower": 37,
+		"resultStructures": [
+			"Emplacement-MRLHvy-pit"
+		],
+		"statID": "Emplacement-MRLHvy-pit"
+	},
 	"R-Defense-MassDriver": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-MassDriver",
@@ -8676,6 +8691,21 @@
 			"Rocket-MRL"
 		],
 		"statID": "Rocket-MRL"
+	},
+	"R-Wpn-Rocket02-MRLHvy": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Rocket02-MRLHvy",
+		"name": "Heavy Rocket Array",
+		"requiredResearch": [
+			"R-Wpn-Rocket-Damage05",
+			"R-Wpn-Rocket02-MRL"
+		],
+		"researchPoints": 6000,
+		"researchPower": 187,
+		"resultComponents": [
+			"Rocket-MRL-Hvy"
+		],
+		"statID": "Rocket-MRL-Hvy"
 	},
 	"R-Wpn-Rocket03-HvAT": {
 		"iconID": "IMAGE_RES_WEAPONTECH",

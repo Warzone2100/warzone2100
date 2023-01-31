@@ -1366,6 +1366,28 @@
 		],
 		"width": 1
 	},
+	"Emplacement-MRLHvy-pit": {
+		"armour": 10,
+		"breadth": 1,
+		"buildPoints": 450,
+		"buildPower": 150,
+		"height": 1,
+		"hitpoints": 400,
+		"id": "Emplacement-MRLHvy-pit",
+		"name": "Heavy Rocket Battery",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"BLHARDPT.PIE"
+		],
+		"thermal": 10,
+		"type": "DEFENSE",
+		"weapons": [
+			"Rocket-MRL-Hvy"
+		],
+		"width": 1
+	},
 	"Emplacement-MdART-pit": {
 		"armour": 10,
 		"breadth": 1,
