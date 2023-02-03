@@ -8,3 +8,15 @@ paths-ignore:
   - 3rdparty
   - tests
   - tools
+
+queries:
+  - uses: security-extended
+  - uses: security-and-quality
+
+query-filters:
+  - include:
+      precision:
+      - high
+      - very-high
+      tags contain: security
+      security-severity: /([7-9]|10)\.(\d)+/
