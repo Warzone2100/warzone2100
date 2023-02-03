@@ -1094,6 +1094,13 @@ void W_NOTIFICATION::display(int xOffset, int yOffset)
 		y0 += -y();
 	}
 
+	auto videoBuffWidth = pie_GetVideoBufferWidth();
+	auto videoBuffHeight = pie_GetVideoBufferHeight();
+	if (videoBuffWidth == 0 || videoBuffHeight == 0 || screenWidth == 0 || screenHeight == 0)
+	{
+		return;
+	}
+
 	pie_UniTransBoxFill(x0, y0, x1, y1, pal_RGBA(255, 255, 255, 50));
 	pie_UniTransBoxFill(x0, y0, x1, y1, pal_RGBA(0, 0, 0, 50));
 
