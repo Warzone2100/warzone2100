@@ -385,7 +385,9 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	};
 
 	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
-	const TagVer buildTagVer = version_extractVersionNumberFromTag(version_getLatestTag()).value();
+	auto latestTagResult = version_extractVersionNumberFromTag(version_getLatestTag());
+	ASSERT(latestTagResult.has_value(), "No extractable latest tag?? - Please try re-downloading the latest official source bundle");
+	const TagVer buildTagVer = latestTagResult.value_or(TagVer());
 	try
 	{		
 		WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [NewSaveGamePath, &buildTagVer, &saveGameNamesAndTimes](const char* dirName){
