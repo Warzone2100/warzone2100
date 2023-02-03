@@ -6564,8 +6564,7 @@
 			"Laser3BEAMMk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Laser01",
-			"R-Sys-Sensor-Upgrade03"
+			"R-Wpn-Laser01"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -7111,7 +7110,7 @@
 			"R-Wpn-Missile2A-T",
 			"R-Wpn-Rocket02-MRL"
 		],
-		"researchPoints": 22000,
+		"researchPoints": 28800,
 		"researchPower": 450,
 		"resultComponents": [
 			"Missile-MdArt"
