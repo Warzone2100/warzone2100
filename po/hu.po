@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2023-02-03 16:11\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -4029,7 +4029,7 @@ msgstr "Küldjön el legalább egy szállítót egy teherautóval, és az időz�
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Küldj annyi szállítót, amennyit csak tudsz és legalább egy járművet"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4069,11 +4069,11 @@ msgstr "Vissza az LZ-re"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:532
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Segítség a Nehéz/Lehetetlen nehézséghez:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Építs egy erős bázist a pályán, hogy meg tudd védeni magad a Kollektívától"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:538
 msgid "Destroy all enemy units and structures"
@@ -6542,7 +6542,7 @@ msgstr "Nagysebességű ágyúval felszerelt"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:587
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "76mm-es nagy sebességű négycsöves automataágyúval felszerelt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
@@ -6602,7 +6602,7 @@ msgstr "Tank Killer rakétákkal felszerelt"
 #: po/custom/fromJson.txt:627
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Páncélzat +120%, karosszéria pont +90%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -11386,7 +11386,7 @@ msgstr "Többcsöves, gyorstüzelő gépfegyver"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3984
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Megléte szükséges parancsnoki járművek készítéséhez"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -13307,7 +13307,7 @@ msgstr "Ellopja a technológiát az építményekből és átveszi a fegyverek i
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5288
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Acél nehéz gépfegyveres őrtorony"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -13406,7 +13406,7 @@ msgstr "Szuper nehézfegyveres cyborg"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5351
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Szuper HVC Cybrog"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13795,7 +13795,7 @@ msgstr "Termitbomba szekrény"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5612
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Thermitlángszórós Cyborg"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -14077,7 +14077,7 @@ msgstr "Iker többcsöves, gyorstüzelő gépfegyver"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5790
 msgid "Two-faced"
-msgstr ""
+msgstr "Kétarcú"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -15127,7 +15127,7 @@ msgstr "játékmester"
 
 #: src/clparse.cpp:393
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "Csatlakozás közvetlenül IP/gépnév alapján megfigyelőként"
 
 #: src/clparse.cpp:394
 msgid "Go directly to host screen"
@@ -15159,7 +15159,7 @@ msgstr "Játékok futtatása automatikus tesztelésre"
 
 #: src/clparse.cpp:414
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Fejetlen mód (csak az -autogame, -autohost és -skirmish kapcsolók esetén használható)"
 
 #: src/clparse.cpp:415
 msgid "Immediately save game and quit"
@@ -15171,7 +15171,7 @@ msgstr "mentés neve"
 
 #: src/clparse.cpp:416
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "Gyors játék indítása beállítófájlból"
 
 #: src/clparse.cpp:416
 msgid "test"
@@ -15183,7 +15183,7 @@ msgstr "Az utolsó mentett játék folytatása"
 
 #: src/clparse.cpp:418
 msgid "Start host game with given settings file"
-msgstr ""
+msgstr "Játék hostolása beállítófájlból"
 
 #: src/clparse.cpp:418
 msgid "autohost"
@@ -15203,7 +15203,7 @@ msgstr ""
 
 #: src/clparse.cpp:423
 msgid "Set game server port"
-msgstr ""
+msgstr "Játék szerver port beállítása"
 
 #: src/clparse.cpp:423
 msgid "port"
@@ -15211,7 +15211,7 @@ msgstr "port"
 
 #: src/clparse.cpp:427
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Perjeles parancsok engedélyezése (a csatlakozó játékosok számára)"
 
 #: src/clparse.cpp:428
 msgid "Add a lobby admin identity hash (for slash commands)"
@@ -15231,7 +15231,7 @@ msgstr "b64-pub-key"
 
 #: src/clparse.cpp:430
 msgid "Enable command interface"
-msgstr ""
+msgstr "Parancsfelület engedélyezése"
 
 #: src/clparse.cpp:430
 msgid "(stdin)"
@@ -15408,12 +15408,12 @@ msgstr "Nem lehet építeni, amíg az olajmező lángol."
 #: src/display.cpp:1604
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Életerő %d/%d - Tapasztalat %.1f, %s, Elpusztított egységek %d"
 
 #: src/display.cpp:1618
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Életerő %d/%d - Sorszám %d - %s"
 
 #: src/display.cpp:1634
 #, c-format
@@ -16107,7 +16107,7 @@ msgstr "EGÉR BEÁLLÍTÁS"
 #: src/frontend.cpp:2322
 #: src/multiint.cpp:263
 msgid "Super Easy"
-msgstr ""
+msgstr "Szuperkönnyű"
 
 #: src/frontend.cpp:2323
 #: src/multiint.cpp:263
@@ -16225,7 +16225,7 @@ msgstr "Megfigyelők helyeinek száma"
 
 #: src/frontend.cpp:3005
 msgid "Enable Rating"
-msgstr ""
+msgstr "Értékelés engedélyezése"
 
 #: src/frontend.cpp:3020
 msgid "MULTIPLAY OPTIONS"
@@ -16242,16 +16242,16 @@ msgstr "Növeli a játék megjelenítési skáláját?"
 
 #: src/frontend.cpp:3601
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "A jelenlegi felbontásoddal és képernyőskálázási beállításaiddal a játék felhasználói felülete kicsinek tűnhet, a játék perspektívája pedig torzultnak."
 
 #: src/frontend.cpp:3603
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Ezen javíthatsz a játék Képskálázási beállításának növelésével."
 
 #: src/frontend.cpp:3605
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Szeretnéd a játék képét fölskálázni ennyivel: %u%%?"
 
 #: src/frontend.cpp:3607
 msgid "Increase Display Scale"
@@ -16260,16 +16260,16 @@ msgstr "Növeli a játék megjelenítési skáláját"
 #: src/frontend.cpp:3624
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Képskálázás megnövelve erre: %u%%"
 
 #: src/frontend.cpp:3625
 #: src/frontend.cpp:3641
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "A képskálázás mértékét a Videobeállítások menüben tudod megváltoztatni."
 
 #: src/frontend.cpp:3640
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Tipp: Változtasd meg a Képfelskálázási értéket"
 
 #: src/hci.cpp:725
 msgid "Replay"
@@ -16345,12 +16345,14 @@ msgstr "Építési pontok"
 #: src/hci/build.cpp:594
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Az összes technológia látható\n"
+"Jobbkattintással hozzáadhatsz a kedvencekhez"
 
 #: src/hci/build.cpp:596
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Csak a kedvenc technológiák mutatása\n"
+"Jobbkattintással törölheted a kedvenceid közül"
 
 #: src/hci/manufacture.cpp:412
 msgid "Construction Progress"
@@ -16415,7 +16417,7 @@ msgstr "Taktikai UI (Cél ikon létrehozás): Elrejt"
 #: src/keyedit.cpp:598
 #: src/musicmanager.cpp:783
 msgid "Go Back"
-msgstr ""
+msgstr "Vissza"
 
 #: src/ingameop.cpp:246
 #: src/ingameop.cpp:255
@@ -16505,11 +16507,11 @@ msgstr "Hibakeresés"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Hibakereső (pályaszerkesztő)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Hibakereső (kijelölés)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -18533,11 +18535,11 @@ msgstr "A gazda érvénytelen beállításokat adott meg"
 
 #: src/multiint.cpp:6716
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Kirúgtak a szobából: "
 
 #: src/multiint.cpp:6730
 msgid "No connection to host."
-msgstr ""
+msgstr "Nincs kapcsolat a hostoláshoz."
 
 #: src/multiint.cpp:6786
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
@@ -19170,7 +19172,7 @@ msgstr "Játékosstatisztikák megjelenítése"
 
 #: src/spectatorwidgets.cpp:593
 msgid "Weapon Grade"
-msgstr ""
+msgstr "Fegyverosztály"
 
 #: src/spectatorwidgets.cpp:804
 msgid "Power/Rate"
@@ -19186,26 +19188,26 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Kinetikus páncél"
 
 #: src/spectatorwidgets.cpp:808
 #: src/spectatorwidgets.cpp:810
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tankok/Cyborgok)"
 
 #: src/structure.cpp:2617
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Nem tudsz több egységet építeni, elérted a limitet — Gyártás Szüneteltetve"
 
 #: src/structure.cpp:2625
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr ""
+msgstr "Nem tudsz készíteni „%s” egységeket Parancsközvetítő központ nélkül — Gyártás szüneteltetve"
 
 #: src/structure.cpp:2630
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr ""
+msgstr "Nem tudsz több „%s” egységet építeni, elérted a parancsnoki limitet — Gyártás Szüneteltetve"
 
 #: src/structure.cpp:2638
 #, c-format
@@ -19462,7 +19464,7 @@ msgstr "Kapcsolódási hiba."
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Folytatás"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
@@ -19572,7 +19574,7 @@ msgstr "JÁTÉK VÉGE"
 
 #: src/wrappers.cpp:369
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "A csata véget ért - kiléphetsz a szobából."
 
 #: src/wzapi.cpp:2355
 msgid "YOU ARE VICTORIOUS!"
@@ -19584,5 +19586,5 @@ msgstr "VERESÉGET SZENVEDETT!"
 
 #: src/wzscriptdebug.cpp:1947
 msgid "Script Debugger"
-msgstr ""
+msgstr "Szkripthibakereső"
 
