@@ -121,9 +121,8 @@
 #endif
 
 #if defined(WZ_OS_MAC)
-// NOTE: Moving these defines is likely to (and has in the past) break the mac builds
-# include <CoreServices/CoreServices.h>
 # include <unistd.h>
+# include "lib/framework/mac_wrapper.h"
 # include "lib/framework/cocoa_wrapper.h"
 #endif // WZ_OS_MAC
 
@@ -738,7 +737,6 @@ static void check_Physfs()
 	}
 }
 
-
 /*!
  * \brief Adds default data dirs
  *
@@ -801,25 +799,17 @@ static void scanDataDirs()
 #ifdef WZ_OS_MAC
 	if (!PHYSFS_exists("gamedesc.lev"))
 	{
-		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
-		char resourcePath[PATH_MAX];
-		if (CFURLGetFileSystemRepresentation(resourceURL, true,
-		                                     (UInt8 *) resourcePath,
-		                                     PATH_MAX))
+		auto resourceDataPathResult = wzMacAppBundleGetResourceDirectoryPath();
+		if (resourceDataPathResult.has_value())
 		{
-			WzString resourceDataPath(resourcePath);
+			WzString resourceDataPath(resourceDataPathResult.value());
 			resourceDataPath += "/data";
 			registerSearchPath(resourceDataPath.toUtf8(), 3);
 			rebuildSearchPath(mod_multiplay, true);
 		}
 		else
 		{
-			debug(LOG_ERROR, "Could not change to resources directory.");
-		}
-
-		if (resourceURL != NULL)
-		{
-			CFRelease(resourceURL);
+			debug(LOG_FATAL, "Could not obtain resources directory.");
 		}
 	}
 #endif
