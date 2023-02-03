@@ -37,6 +37,8 @@
 #include <numeric>
 #include <array>
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
+#include <LaunchInfo.h>
 
 #define ASCII_SPACE			(32)
 #define ASCII_NEWLINE			('@')
@@ -1182,7 +1184,19 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 		baseFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
 	}
 	catch (const std::exception &e) {
-		debug(LOG_FATAL, "Failed to load base font:\n%s", e.what());
+		// Log lots of details:
+		debugOutputSearchPaths();
+		debug(LOG_INFO, "Virtual filesystem:");
+		WZ_PHYSFS_enumerateFiles("", [&](const char *file) -> bool {
+			if (!file) { return true; }
+			debug(LOG_INFO, " - %s", file);
+			return true; // continue enumeration
+		});
+		debug(LOG_INFO, "Path to executable: %s", LaunchInfo::getCurrentProcessDetails().imageFileName.fullPath().c_str());
+		debugOutputSearchPathMountErrors();
+		// then...
+		debug(LOG_FATAL, "Failed to load base font:\n%s\n", e.what());
+		abort();
 	}
 
 	// Do a sanity-check here to make sure the CJK font exists
