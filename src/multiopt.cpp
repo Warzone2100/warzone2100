@@ -440,6 +440,12 @@ bool recvOptions(NETQUEUE queue)
 		}
 	}
 
+	if (!NetPlay.isHost && !NET_getDownloadingWzFiles().empty())
+	{
+		// spectators should automatically become not-ready when files remain to be downloaded
+		handleAutoReadyRequest();
+	}
+
 	if (mapData && CheckForMod(mapData->realFileName))
 	{
 		char const *str = game.isMapMod ?
