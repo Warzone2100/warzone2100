@@ -4778,6 +4778,8 @@ static void SendFireUp()
 {
 	uint32_t randomSeed = rand();  // Pick a random random seed for the synchronised random number generator.
 
+	debug(LOG_INFO, "Sending NET_FIREUP");
+
 	NETbeginEncode(NETbroadcastQueue(), NET_FIREUP);
 	NETuint32_t(&randomSeed);
 	NETend();
@@ -6137,6 +6139,7 @@ void startMultiplayerGame()
 	ASSERT_HOST_ONLY(return);
 
 	wz_command_interface_output("WZEVENT: startMultiplayerGame\n");
+	debug(LOG_INFO, "startMultiplayerGame");
 
 	cancelOrDismissNotificationIfTag([](const std::string& tag) {
 		return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
@@ -6647,7 +6650,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				HandleBadParam("NET_FIREUP given incorrect params.", 255, queue.index);
 				break;
 			}
-			debug(LOG_NET, "NET_FIREUP was received ...");
+			debug(LOG_INFO, "NET_FIREUP was received ...");
 			if (ingame.localOptionsReceived)
 			{
 				uint32_t randomSeed = 0;
