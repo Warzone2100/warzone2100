@@ -137,8 +137,7 @@ if(CRASHPAD_WER_ENABLED)
     target_link_libraries(crashpad_wer
         PRIVATE
             $<BUILD_INTERFACE:crashpad_interface>
-        PUBLIC
-            crashpad_compat
+            $<BUILD_INTERFACE:crashpad_compat>
     )
 
     set_property(TARGET crashpad_wer PROPERTY EXPORT_NAME crashpad_wer)

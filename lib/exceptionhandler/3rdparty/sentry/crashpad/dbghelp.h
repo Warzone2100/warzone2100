@@ -17,6 +17,7 @@
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu-include-next"
+#pragma clang diagnostic ignored "-Wzero-length-array"
 
 #include_next <dbghelp.h>
 #include <stdint.h>
