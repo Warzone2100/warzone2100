@@ -5306,6 +5306,7 @@ static unsigned int repositionHumanSlots()
 
 static void updateMapWidgets(LEVEL_DATASET *mapData)
 {
+	ASSERT_OR_RETURN(, mapData != nullptr, "Invalid mapData?");
 	sstrcpy(game.map, mapData->pName);
 	game.hash = levGetFileHash(mapData);
 	game.maxPlayers = mapData->players;
