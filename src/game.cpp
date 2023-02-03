@@ -2012,8 +2012,10 @@ static void serializeSaveGameData_json(nlohmann::json &o, nlohmann::json &savein
 	
 	// This file lists saved games, and their build info
 	// one per savegame directory
-	const auto tag = version_extractVersionNumberFromTag(version_getLatestTag());
-	saveinfo["latestTagArray"] = nlohmann::json::array({tag.value().version[0], tag.value().version[1], tag.value().version[2]});
+	const auto tagResult = version_extractVersionNumberFromTag(version_getLatestTag());
+	ASSERT(tagResult.has_value(), "No extractable latest tag?? - Please try re-downloading the latest official source bundle");
+	const TagVer tag = tagResult.value_or(TagVer());
+	saveinfo["latestTagArray"] = nlohmann::json::array({tag.version[0], tag.version[1], tag.version[2]});
 	const auto epoch  = std::chrono::system_clock::now().time_since_epoch();
 	saveinfo["epoch"] = std::chrono::duration_cast<std::chrono::seconds>(epoch).count();
 	if (saveinfo.contains(saveName))
@@ -6570,9 +6572,15 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				int tid = ini.value("target/" + WzString::number(j) + "/id", -1).toInt();
 				int tplayer = ini.value("target/" + WzString::number(j) + "/player", -1).toInt();
 				OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("target/" + WzString::number(j) + "/type", 0).toInt();
-				ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
-				setStructureTarget(psStruct, getBaseObjFromData(tid, tplayer, ttype), j, ORIGIN_UNKNOWN);
-				ASSERT(psStruct->psTarget[j], "Failed to find target");
+				if (tid >= 0 && tplayer >= 0)
+				{
+					setStructureTarget(psStruct, getBaseObjFromData(tid, tplayer, ttype), j, ORIGIN_UNKNOWN);
+					ASSERT(psStruct->psTarget[j], "Failed to find target");
+				}
+				else
+				{
+					ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
+				}
 			}
 		}
 		if (ini.contains("Factory/commander/id")) {
@@ -6582,16 +6590,22 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				OBJECT_TYPE ttype = OBJ_DROID;
 				int tid = ini.value("Factory/commander/id", -1).toInt();
 				int tplayer = ini.value("Factory/commander/player", -1).toInt();
-				ASSERT(tid >= 0 && tplayer >= 0, "Bad commander ID %d for player %d for building %d", tid, tplayer, id);
-				DROID *psCommander = (DROID *)getBaseObjFromData(tid, tplayer, ttype);
-				ASSERT(psCommander, "Commander %d not found for building %d", tid, id);
-				if (ppList == mission.apsStructLists)
+				if (tid >= 0 && tplayer >= 0)
 				{
-					psFactory->psCommander = psCommander;
+					DROID *psCommander = (DROID *)getBaseObjFromData(tid, tplayer, ttype);
+					ASSERT(psCommander, "Commander %d not found for building %d", tid, id);
+					if (ppList == mission.apsStructLists)
+					{
+						psFactory->psCommander = psCommander;
+					}
+					else
+					{
+						assignFactoryCommandDroid(psStruct, psCommander);
+					}
 				}
 				else
 				{
-					assignFactoryCommandDroid(psStruct, psCommander);
+					ASSERT(tid >= 0 && tplayer >= 0, "Bad commander ID %d for player %d for building %d", tid, tplayer, id);
 				}
 		}
 		if (ini.contains("Repair/target/id")){
@@ -6600,9 +6614,16 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("Repair/target/type", OBJ_DROID).toInt();
 				int tid = ini.value("Repair/target/id", -1).toInt();
 				int tplayer = ini.value("Repair/target/player", -1).toInt();
-				ASSERT(tid >= 0 && tplayer >= 0, "Bad repair ID %d for player %d for building %d", tid, tplayer, id);
-				psRepair->psObj = getBaseObjFromData(tid, tplayer, ttype);
-				ASSERT(psRepair->psObj, "Repair target %d not found for building %d", tid, id);
+				if (tid >= 0 && tplayer >= 0)
+				{
+					psRepair->psObj = getBaseObjFromData(tid, tplayer, ttype);
+					ASSERT(psRepair->psObj, "Repair target %d not found for building %d", tid, id);
+				}
+				else
+				{
+					ASSERT(tid >= 0 && tplayer >= 0, "Bad repair ID %d for player %d for building %d", tid, tplayer, id);
+					psRepair->psObj = nullptr;
+				}
 		}
 		if (ini.contains("Rearm/target/id")) {
 				ASSERT(psStruct->pStructureType->type == REF_REARM_PAD, "Bad type");
@@ -6610,9 +6631,16 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				OBJECT_TYPE ttype = OBJ_DROID; // always, for now
 				int tid = ini.value("Rearm/target/id", -1).toInt();
 				int tplayer = ini.value("Rearm/target/player", -1).toInt();
-				ASSERT(tid >= 0 && tplayer >= 0, "Bad rearm ID %d for player %d for building %d", tid, tplayer, id);
-				psReArmPad->psObj = getBaseObjFromData(tid, tplayer, ttype);
-				ASSERT(psReArmPad->psObj, "Rearm target %d not found for building %d", tid, id);
+				if (tid >= 0 && tplayer >= 0)
+				{
+					psReArmPad->psObj = getBaseObjFromData(tid, tplayer, ttype);
+					ASSERT(psReArmPad->psObj, "Rearm target %d not found for building %d", tid, id);
+				}
+				else
+				{
+					ASSERT(tid >= 0 && tplayer >= 0, "Bad rearm ID %d for player %d for building %d", tid, tplayer, id);
+					psReArmPad->psObj = nullptr;
+				}
 		}
 
 		ini.endGroup();
