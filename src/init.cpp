@@ -112,6 +112,7 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 IMAGEFILE *FrontImages;
 
 static std::vector<std::unique_ptr<wzSearchPath>> searchPathRegistry;
+static std::vector<std::string> searchPathMountErrors;
 
 static std::string inMemoryMapVirtualFilenameUID;
 static std::vector<uint8_t> inMemoryMapArchiveData;
@@ -317,6 +318,38 @@ std::list<std::string> getPhysFSSearchPathsAsStr()
 	return results;
 }
 
+void debugOutputSearchPaths()
+{
+	debug(LOG_INFO, "Search path registry:");
+	size_t idx = 0;
+	for (const auto& curSearchPath : searchPathRegistry)
+	{
+		debug(LOG_INFO, "- [%zu] [priority: %u]: %s", idx, curSearchPath->priority, curSearchPath->path.c_str());
+		++idx;
+	}
+	debug(LOG_INFO, "Enumerated search paths:");
+	auto searchPaths = getPhysFSSearchPathsAsStr();
+	idx = 0;
+	for (const auto& curSearchPath : searchPaths)
+	{
+		debug(LOG_INFO, "- [%zu]: %s", idx,  curSearchPath.c_str());
+		++idx;
+	}
+}
+
+void debugOutputSearchPathMountErrors()
+{
+	if (searchPathMountErrors.empty())
+	{
+		return;
+	}
+	debug(LOG_INFO, "Search path mount errors:");
+	for (const auto& errorStr : searchPathMountErrors)
+	{
+		debug(LOG_INFO, "%s", errorStr.c_str());
+	}
+}
+
 static void clearAllPhysFSSearchPaths()
 {
 	auto searchPaths = getPhysFSSearchPathsAsStr();
@@ -369,6 +402,27 @@ static void clearInMemoryMapFile(void *pData)
 	if (inMemoryMapArchiveMounted > 0)
 	{
 		--inMemoryMapArchiveMounted;
+	}
+}
+
+static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mountPoint, int appendToPath)
+{
+	if (PHYSFS_mount(newDir, mountPoint, appendToPath) != 0)
+	{
+		return true;
+	}
+	else
+	{
+		// mount failed
+#if defined(WZ_PHYSFS_2_1_OR_GREATER)
+		auto errorCode = PHYSFS_getLastErrorCode();
+		if (errorCode != PHYSFS_ERR_NOT_FOUND)
+		{
+			const char* errorStr = PHYSFS_getErrorByCode(errorCode);
+			searchPathMountErrors.push_back(astringf("Failed to mount \"%s\" @ \"%s\": %s", newDir, mountPoint, (errorStr) ? errorStr : "<no details available?>"));
+		}
+#endif
+		return false;
 	}
 }
 
@@ -438,6 +492,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 			// This should properly remove all paths, but testing is needed to ensure that all supported versions of PhysFS behave as expected
 			// For now, keep the old code above as well as this new method
 			clearAllPhysFSSearchPaths();
+			searchPathMountErrors.clear();
 			break;
 		case mod_campaign:
 			debug(LOG_WZ, "*** Switching to campaign mods ***");
@@ -447,7 +502,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 			{
 				// make sure videos override included files
 				tmpstr = curSearchPath->path + "sequences.wz";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
 
 			for (const auto& curSearchPath : searchPathRegistry)
@@ -456,7 +511,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Add global and campaign mods
-				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
 				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_MUSIC), PHYSFS_APPEND, nullptr, false);
 				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_GLOBAL), PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
@@ -468,13 +523,13 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				}
 
 				// Add plain dir
-				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
 				// Add base files
 				tmpstr = curSearchPath->path + "base";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 				tmpstr = curSearchPath->path + "base.wz";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
 			break;
 		case mod_multiplay:
@@ -485,7 +540,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 			{
 				// make sure videos override included files
 				tmpstr = curSearchPath->path + "sequences.wz";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
 			// Add the selected map first, for mapmod support
 			if (current_map != nullptr)
@@ -495,7 +550,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 					// mount it as a normal physical map path
 					WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
 					realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
-					PHYSFS_mount(realPathAndDir.toUtf8().c_str(), current_map_mount_point, PHYSFS_APPEND);
+					WZ_PHYSFS_MountSearchPathWrapper(realPathAndDir.toUtf8().c_str(), current_map_mount_point, PHYSFS_APPEND);
 				}
 				else if (!inMemoryMapArchiveData.empty())
 				{
@@ -516,7 +571,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path.c_str());
 #endif // DEBUG
 				// Add global and multiplay mods
-				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 				addSubdirs(curSearchPath->path.c_str(), versionedModsPath(MODS_MUSIC), PHYSFS_APPEND, nullptr, false);
 
 				// Only load if we are host or singleplayer (Initial mod load relies on this, too)
@@ -539,18 +594,18 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 
 				// Add multiplay patches
 				tmpstr = curSearchPath->path + "mp";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 				tmpstr = curSearchPath->path + "mp.wz";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 
 				// Add plain dir
-				PHYSFS_mount(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
 				// Add base files
 				tmpstr = curSearchPath->path + "base";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 				tmpstr = curSearchPath->path + "base.wz";
-				PHYSFS_mount(tmpstr.c_str(), NULL, PHYSFS_APPEND);
+				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
 			}
 			break;
 		default:
@@ -569,7 +624,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 
 		// User's home dir must be first so we always see what we write
 		WZ_PHYSFS_unmount(PHYSFS_getWriteDir());
-		PHYSFS_mount(PHYSFS_getWriteDir(), NULL, PHYSFS_PREPEND);
+		WZ_PHYSFS_MountSearchPathWrapper(PHYSFS_getWriteDir(), NULL, PHYSFS_PREPEND);
 
 #ifdef DEBUG
 		printSearchPath();

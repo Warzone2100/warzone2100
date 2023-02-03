@@ -59,6 +59,8 @@ enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
 void registerSearchPath(const std::string& path, unsigned int priority);
 void unregisterSearchPath(const std::string& path);
+void debugOutputSearchPaths();
+void debugOutputSearchPathMountErrors();
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
 
 bool buildMapList();
