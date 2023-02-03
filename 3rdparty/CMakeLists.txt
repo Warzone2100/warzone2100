@@ -71,7 +71,7 @@ add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
 set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
 
 
-if (WZ_ENABLE_BASIS_UNIVERSAL)
+if (WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 
 	# basis-universal
 	set(_ORIGINAL_CMAKE_PROGRAM_PATH "${CMAKE_PROGRAM_PATH}")
@@ -128,6 +128,10 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 	endif()
 
 	set(BASIS_UNIVERSAL_CLI "${BASIS_UNIVERSAL_CLI}" PARENT_SCOPE)
+
+endif()
+
+if (WZ_ENABLE_BASIS_UNIVERSAL)
 
 	# basis-universal transcoder
 

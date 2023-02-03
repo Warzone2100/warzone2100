@@ -30,6 +30,15 @@ endif()
 
 set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")
 
+if (DEFINED ENV{WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES})
+	# NOTE: Do *NOT* set this when building packages to distribute / install - only intended for select CI runs
+	message(STATUS "WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES: \"$ENV{WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES}\"")
+	set(WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES "$ENV{WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES}")
+endif()
+if (WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
+	message(STATUS "WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES is set, textures will not be compressed as part of build. This should only be used for select CI runs, and *NOT* for building packages to distribute / install.")
+endif()
+
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Disallow in-source builds

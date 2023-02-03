@@ -86,7 +86,7 @@ set(_texpages_PATHS
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base"
 )
 
-if(WZ_ENABLE_BASIS_UNIVERSAL)
+if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	if(NOT DEFINED BASIS_UNIVERSAL_CLI)
 		message(FATAL_ERROR "No basisu tool has been provided - set BASIS_UNIVERSAL_CLI to the path to basisu or disable WZ_ENABLE_BASIS_UNIVERSAL!")
 	endif()
@@ -169,6 +169,10 @@ if(WZ_ENABLE_BASIS_UNIVERSAL)
 		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/base"
 	)
 
+else()
+	if(WZ_ENABLE_BASIS_UNIVERSAL AND WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
+		message(STATUS "WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES is set, textures will not be compressed as part of build. This should only be used for selected CI runs.")
+	endif()
 endif()
 
 #########################
