@@ -509,7 +509,7 @@ private:
 	lru11::Cache<FTGlyphCacheKey, WZOwnedFTGlyph> m_glyphCache;
 };
 
-static FTCache glyphCache;
+static FTCache* glyphCache = nullptr;
 
 struct TextRun
 {
@@ -664,7 +664,7 @@ struct TextShaper
 
 		std::tie(min_x, max_x, min_y, max_y) = std::accumulate(shapingResult.glyphes.begin(), shapingResult.glyphes.end(), std::make_tuple(1000, -1000, 1000, -1000),
 			[] (const std::tuple<int32_t, int32_t, int32_t, int32_t> &bounds, const HarfbuzzPosition &g) {
-			GlyphMetrics glyph = glyphCache.getGlyphMetrics(g.face, g.codepoint, g.penPosition % 64);
+			GlyphMetrics glyph = glyphCache->getGlyphMetrics(g.face, g.codepoint, g.penPosition % 64);
 			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
 			int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
 			return std::make_tuple(
@@ -730,7 +730,7 @@ struct TextShaper
 		std::vector<glyphRaster> glyphs;
 		std::transform(shapingResult.glyphes.begin(), shapingResult.glyphes.end(), std::back_inserter(glyphs),
 			[&] (const HarfbuzzPosition &g) {
-			RasterizedGlyph glyph = glyphCache.get(g.face, g.codepoint, g.penPosition % 64);
+			RasterizedGlyph glyph = glyphCache->get(g.face, g.codepoint, g.penPosition % 64);
 			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
 			int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
 			min_x = std::min(x0, min_x);
@@ -1162,6 +1162,11 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * vertScaleFactor);
 	debug(LOG_WZ, "Text-Rendering Scaling Factor: %f x %f; Internal Font DPI: %" PRIu32 " x %" PRIu32 "", _horizScaleFactor, _vertScaleFactor, horizDPI, vertDPI);
 
+	if (glyphCache == nullptr)
+	{
+		glyphCache = new FTCache();
+	}
+
 	if (baseFonts == nullptr)
 	{
 		baseFonts = new WZFontCollection();
@@ -1197,7 +1202,9 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 
 void iV_TextShutdown()
 {
-	glyphCache.clear();
+	glyphCache->clear();
+	delete glyphCache;
+	glyphCache = nullptr;
 	delete baseFonts;
 	baseFonts = nullptr;
 	delete cjkFonts;
