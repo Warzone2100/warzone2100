@@ -302,6 +302,16 @@ static void addConsolePlayerLeftMessage(unsigned playerIndex)
 	}
 }
 
+static void addConsolePlayerJoinMessage(unsigned playerIndex)
+{
+	if (selectedPlayer != playerIndex)
+	{
+		char buf[256];
+		ssprintf(buf, _("%s joined the Game"), getPlayerName(playerIndex));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+}
+
 void recvPlayerLeft(NETQUEUE queue)
 {
 	uint32_t playerIndex = 0;
@@ -437,6 +447,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 			sendRoomSystemMessageToSingleReceiver("Lobby slash commands enabled. Type " LOBBY_COMMAND_PREFIX "help to see details.", playerIndex);
 		}
 	}
+	addConsolePlayerJoinMessage(playerIndex);
 	return true;
 }
 
