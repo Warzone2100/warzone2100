@@ -3079,7 +3079,8 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 
 	ASSERT_HOST_ONLY(return false);
 
-	std::string playerName = getPlayerName(playerIndex);
+	const char *pPlayerName = getPlayerName(playerIndex);
+	std::string playerName = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(playerIndex) + "]");
 
 	if (desiredIsSpectator)
 	{
@@ -3113,6 +3114,15 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 			}
 			case SpectatorToPlayerMoveResult::NEEDS_SLOT_SELECTION:
 			{
+				if (headlessGameMode())
+				{
+					// displaying a UI won't work
+					// so instead, send a room message about the failure
+					std::string msg = astringf(_("Unable to move %s to Players - no available slot"), playerName.c_str());
+					sendRoomSystemMessage(msg.c_str());
+					return true; // and immediately return
+				}
+
 				// Display a notification that a spectator would like to switch to a player
 				std::string notificationTag = SLOTTYPE_REQUEST_TAG;
 				notificationTag += "::" + std::to_string(playerIndex);
@@ -6356,6 +6366,33 @@ public:
 			return false;
 		}
 		std::string msg = astringf(_("Moving %s to Spectators!"), playerNameStr.c_str());
+		sendRoomSystemMessage(msg.c_str());
+		resetReadyStatus(true);		//reset and send notification to all clients
+		return true;
+	}
+	virtual bool requestMoveSpectatorToPlayers(uint32_t player) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to move the host");
+		ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player id: %" PRIu32, player);
+		if (!isHumanPlayer(player))
+		{
+			debug(LOG_INFO, "Unable to move player: %" PRIu32 " - not a connected human player", player);
+			return false;
+		}
+
+		if (!NetPlay.players[player].isSpectator)
+		{
+			debug(LOG_INFO, "Unable to move to players: %" PRIu32 " (not a spectator)", player);
+			return false;
+		}
+
+		const char *pPlayerName = getPlayerName(player);
+		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(player) + "]");
+		// Ask the spectator if they are okay with a move from spectator -> player?
+		SendPlayerSlotTypeRequest(player, false);
+
+		std::string msg = astringf(_("Asking %s to move to Players..."), playerNameStr.c_str());
 		sendRoomSystemMessage(msg.c_str());
 		resetReadyStatus(true);		//reset and send notification to all clients
 		return true;

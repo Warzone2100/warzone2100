@@ -138,6 +138,7 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	sendRoomSystemMessageToSingleReceiver("Admin-only commands: (All slots count from 0)", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "swap <slot-from> <slot-to> - Swap player/slot positions", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makespec <slot> - Move a player to spectators", receiver);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makeplayer s<slot> - Request to move a spectator to players", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player; (or s<slot> for spectator - ex. s0)", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "team <slot> <team> - Change team for player/slot", receiver);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "base <base level> - Change base level (0, 1, 2)", receiver);
@@ -464,6 +465,31 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			return false;
 		}
 		if (!cmdInterface.movePlayerToSpectators(playerIdx))
+		{
+			std::string msg = astringf("Failed to move player to spectators: %u", playerPos);
+			sendRoomSystemMessage(msg.c_str());
+			return false;
+		}
+	}
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makeplayer", 10) == 0)
+	{
+		ADMIN_REQUIRED_FOR_COMMAND("makeplayer");
+		unsigned int playerPos = MAX_PLAYERS + 1;
+		int r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makeplayer s%u", &playerPos);
+		if (r != 1 || playerPos >= MAX_SPECTATOR_SLOTS)
+		{
+			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "makeplayer s<spectator slot>");
+			return false;
+		}
+		unsigned int playerIdx = MAX_PLAYER_SLOTS + playerPos;
+		ASSERT_OR_RETURN(false, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid index: %u", playerIdx);
+		if (playerIdx == NetPlay.hostPlayer)
+		{
+			// Can't move the host...
+			sendRoomSystemMessage("Can't move the host.");
+			return false;
+		}
+		if (!cmdInterface.requestMoveSpectatorToPlayers(playerIdx))
 		{
 			std::string msg = astringf("Failed to move player to spectators: %u", playerPos);
 			sendRoomSystemMessage(msg.c_str());
