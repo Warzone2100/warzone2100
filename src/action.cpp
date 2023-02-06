@@ -1773,7 +1773,7 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_DEMOLISH:
 	case DACTION_REPAIR:
 	case DACTION_RESTORE:
-		if (!order->psStats)
+		if (!order->psStats || !psDroid->psActionTarget[0])
 		{
 			psDroid->action = DACTION_NONE;
 			break;
