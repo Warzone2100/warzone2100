@@ -257,8 +257,14 @@ proj_GetNext()
  */
 static uint32_t qualityFactor(DROID *psAttacker, DROID *psVictim)
 {
-	uint32_t powerRatio = (uint64_t)65536 * calcDroidPower(psVictim) / calcDroidPower(psAttacker);
-	uint32_t pointsRatio = (uint64_t)65536 * calcDroidPoints(psVictim) / calcDroidPoints(psAttacker);
+	uint32_t attackerPower = calcDroidPower(psAttacker);
+	uint32_t attackerPoints = calcDroidPoints(psAttacker);
+	if (attackerPower == 0 || attackerPoints == 0)
+	{
+		return 65536 / 2;
+	}
+	uint32_t powerRatio = (uint64_t)65536 * calcDroidPower(psVictim) / attackerPower;
+	uint32_t pointsRatio = (uint64_t)65536 * calcDroidPoints(psVictim) / attackerPoints;
 
 	CLIP(powerRatio, 65536 / 2, 65536 * 2);
 	CLIP(pointsRatio, 65536 / 2, 65536 * 2);
