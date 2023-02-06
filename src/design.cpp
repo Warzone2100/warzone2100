@@ -2631,7 +2631,12 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 		return 0;
 	}
 	DROID_TEMPLATE psTempl = sCurrDesign;
-	psTempl.asParts[COMP_PROPULSION] = getCompFromID(COMP_PROPULSION, psProp->id);
+	int compIdx = getCompFromID(COMP_PROPULSION, psProp->id);
+	if (compIdx < 0)
+	{
+		return 0;
+	}
+	psTempl.asParts[COMP_PROPULSION] = compIdx;
 	UDWORD weight = calcDroidWeight(&psTempl);
 	if (weight == 0)
 	{
