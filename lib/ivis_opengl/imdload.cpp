@@ -49,7 +49,7 @@ using Vector4f = glm::vec4;
 
 static std::unordered_map<std::string, iIMDShape> models;
 
-static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd);
+static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd);
 
 iIMDShape::~iIMDShape()
 {
@@ -87,9 +87,9 @@ static bool tryLoad(const WzString &path, const WzString &filename)
 		}
 		fileEnd = pFileData + size;
 		const char *pFileDataPt = pFileData;
-		iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd);
+		bool success = iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd);
 		free(pFileData);
-		return true;
+		return success;
 	}
 	return false;
 }
@@ -1021,7 +1021,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd)
+static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX], specfile[PATH_MAX];
@@ -1040,28 +1040,28 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	{
 		debug(LOG_ERROR, "%s: bad PIE version: (%s)", filename.toUtf8().c_str(), buffer);
 		assert(false);
-		return;
+		return false;
 	}
 	pFileData += cnt;
 
 	if (strcmp(PIE_NAME, buffer) != 0)
 	{
 		debug(LOG_ERROR, "%s: Not an IMD file (%s %d)", filename.toUtf8().c_str(), buffer, imd_version);
-		return;
+		return false;
 	}
 
 	//Now supporting version PIE_VER and PIE_FLOAT_VER files
 	if (imd_version != PIE_VER && imd_version != PIE_FLOAT_VER)
 	{
 		debug(LOG_ERROR, "%s: Version %d not supported", filename.toUtf8().c_str(), imd_version);
-		return;
+		return false;
 	}
 
 	// Read flag
 	if (sscanf(pFileData, "%255s %x%n", buffer, &imd_flags, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "%s: bad flags: %s", filename.toUtf8().c_str(), buffer);
-		return;
+		return false;
 	}
 	pFileData += cnt;
 
@@ -1069,7 +1069,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	if (sscanf(pFileData, "%255s %d%n", buffer, &interpolate, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "%s: Expecting INTERPOLATE: %s", filename.toUtf8().c_str(), buffer);
-		return;
+		return false;
 	}
 	if (strncmp(buffer, "INTERPOLATE", 11) == 0)
 	{
@@ -1081,7 +1081,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "%s: Expecting TEXTURE or LEVELS: %s", filename.toUtf8().c_str(), buffer);
-		return;
+		return false;
 	}
 	pFileData += cnt;
 
@@ -1105,21 +1105,21 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s: Texture info corrupt: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 
 		if (strcmp(texType, "png") != 0)
 		{
 			debug(LOG_ERROR, "%s: Only png textures supported", filename.toUtf8().c_str());
-			return;
+			return false;
 		}
 		sstrcat(texfile, ".png");
 
 		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad texture size: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 
@@ -1127,7 +1127,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 
@@ -1153,14 +1153,14 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s: Normal map info corrupt: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 
 		if (strcmp(texType, "png") != 0)
 		{
 			debug(LOG_ERROR, "%s: Only png normal maps supported", filename.toUtf8().c_str());
-			return;
+			return false;
 		}
 		sstrcat(normalfile, ".png");
 
@@ -1168,7 +1168,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 	}
@@ -1191,14 +1191,14 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s specular map info corrupt: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 
 		if (strcmp(texType, "png") != 0)
 		{
 			debug(LOG_ERROR, "%s: only png specular maps supported", filename.toUtf8().c_str());
-			return;
+			return false;
 		}
 		sstrcat(specfile, ".png");
 
@@ -1206,7 +1206,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 	}
@@ -1224,7 +1224,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s%n", animpie, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s animation model corrupt: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 
@@ -1234,7 +1234,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().c_str(), buffer);
-			return;
+			return false;
 		}
 		pFileData += cnt;
 	}
@@ -1242,14 +1242,14 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	if (strncmp(buffer, "LEVELS", 6) != 0)
 	{
 		debug(LOG_ERROR, "%s: Expecting 'LEVELS' directive (%s)", filename.toUtf8().c_str(), buffer);
-		return;
+		return false;
 	}
 
 	/* Read first LEVEL directive */
 	if (sscanf(pFileData, "%255s %u%n", buffer, &level, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "(_load_level) file corrupt -J");
-		return;
+		return false;
 	}
 	pFileData += cnt;
 	level--; // make zero indexed
@@ -1257,14 +1257,14 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	if (strncmp(buffer, "LEVEL", 5) != 0)
 	{
 		debug(LOG_ERROR, "%s: Expecting 'LEVEL' directive (%s)", filename.toUtf8().c_str(), buffer);
-		return;
+		return false;
 	}
 
 	iIMDShape *shape = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels, imd_version, level);
 	if (shape == nullptr)
 	{
 		debug(LOG_ERROR, "%s: Unsuccessful", filename.toUtf8().c_str());
-		return;
+		return false;
 	}
 
 	// load texture page if specified
@@ -1274,20 +1274,20 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		optional<size_t> normalpage;
 		optional<size_t> specpage;
 
-		ASSERT_OR_RETURN(, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), texfile);
+		ASSERT_OR_RETURN(false, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), texfile);
 
 		if (normalfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, filename.toUtf8().c_str());
 			normalpage = iV_GetTexture(normalfile, gfx_api::texture_type::normal_map);
-			ASSERT_OR_RETURN(, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), normalfile);
+			ASSERT_OR_RETURN(false, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), normalfile);
 		}
 
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, filename.toUtf8().c_str());
 			specpage = iV_GetTexture(specfile, gfx_api::texture_type::specular_map);
-			ASSERT_OR_RETURN(, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
+			ASSERT_OR_RETURN(false, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
 		}
 
 		// assign tex pages and flags to all levels
@@ -1307,7 +1307,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 			tcmask_name += ".png";
 			optional<size_t> texpage_mask = iV_GetTexture(tcmask_name.c_str(), gfx_api::texture_type::alpha_mask);
 
-			ASSERT_OR_RETURN(, texpage_mask.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
+			ASSERT_OR_RETURN(false, texpage_mask.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
 
 			// Propagate settings through levels
 			for (iIMDShape *psShape = shape; psShape != nullptr; psShape = psShape->next)
@@ -1324,4 +1324,5 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	}
 
 	*ppFileData = pFileData;
+	return true;
 }
