@@ -1006,7 +1006,7 @@ void objCount(int *droids, int *structures, int *features)
 		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			(*droids)++;
-			if (isTransporter(psDroid))
+			if (isTransporter(psDroid) && psDroid->psGroup && psDroid->psGroup->psList)
 			{
 				DROID *psTrans = psDroid->psGroup->psList;
 
