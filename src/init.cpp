@@ -692,11 +692,21 @@ static MapFileList listMapFiles()
 		{
 			size_t numMapGamFiles = 0;
 			size_t numMapFolders = 0;
-			bool enumSuccess = WZ_PHYSFS_enumerateFiles("multiplay/maps", [&numMapGamFiles, &numMapFolders, &realFilePathAndName](const char *file) -> bool {
-				std::string isDir = std::string("multiplay/maps/") + file;
+			const std::string baseMapsPath("multiplay/maps/");
+			bool enumSuccess = WZ_PHYSFS_enumerateFiles("multiplay/maps", [&numMapGamFiles, &numMapFolders, &baseMapsPath, &realFilePathAndName](const char *file) -> bool {
+				if (!file)
+				{
+					return true; // continue
+				}
+				std::string isDir = baseMapsPath + file;
 				if (WZ_PHYSFS_isDirectory(isDir.c_str()))
 				{
-					if (numMapFolders++ > 1)
+					if (baseMapsPath.size() == isDir.size())
+					{
+						// for some reason, file is an empty string - just skip
+						return true; // continue;
+					}
+					if (++numMapFolders > 1)
 					{
 						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
 						return false; // break;
@@ -707,7 +717,7 @@ static MapFileList listMapFiles()
 				debug(LOG_WZ, "checking ... %s", file);
 				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
 				{
-					if (numMapGamFiles++ > 1)
+					if (++numMapGamFiles > 1)
 					{
 						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
 						return false; // break;
