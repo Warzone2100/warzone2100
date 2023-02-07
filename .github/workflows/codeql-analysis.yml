@@ -48,8 +48,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-        config-file: ./.github/codeql/codeql-config.yml
-        queries: +security-extended,security-and-quality
+        config-file: ./.github/codeql/codeql-config-${{ matrix.language }}.yml
       # Override language selection by uncommenting this and choosing your languages
       #   languages: go, javascript, csharp, python, cpp, java
 
