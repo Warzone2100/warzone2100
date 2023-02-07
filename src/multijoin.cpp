@@ -296,9 +296,8 @@ static void addConsolePlayerLeftMessage(unsigned playerIndex)
 {
 	if (selectedPlayer != playerIndex)
 	{
-		char buf[256];
-		ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		std::string msg = astringf(_("%s has Left the Game"), getPlayerName(playerIndex));
+		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -306,9 +305,8 @@ static void addConsolePlayerJoinMessage(unsigned playerIndex)
 {
 	if (selectedPlayer != playerIndex)
 	{
-		char buf[256];
-		ssprintf(buf, _("%s joined the Game"), getPlayerName(playerIndex));
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		std::string msg = astringf(_("%s joined the Game"), getPlayerName(playerIndex));
+		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
