@@ -475,6 +475,7 @@ static void serializeMultiplayerGame_json(nlohmann::json &o, const MULTIPLAYERGA
 	o["multiHashBytes"] = 32; // serializeMulti->hash.Bytes
 	o["multiHash"] = serializeMulti->hash.toString();
 	// skip more dummy
+	o["multiMaxPower"] = serializeMulti->maxPower;
 
 }
 static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERGAME *serializeMulti)
