@@ -1,4 +1,4 @@
-name: "WZ CodeQL config"
+name: "WZ CodeQL JS config"
 
 # Interpreted languages scanning configuration (ex. JavaScript/TypeScript)
 paths:
@@ -13,10 +13,3 @@ queries:
   - uses: security-extended
   - uses: security-and-quality
 
-query-filters:
-  - include:
-      precision:
-      - high
-      - very-high
-      tags contain: security
-      security-severity: /([7-9]|10)\.(\d)+/
