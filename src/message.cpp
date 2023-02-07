@@ -234,12 +234,10 @@ static inline void releaseAllMessages(MESSAGE *list[])
 
 bool messageInitVars()
 {
-	int i;
-
 	msgID = 0;
 	currentNumProxDisplays = 0;
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		apsMessages[i] = nullptr;
 		apsProxDisp[i] = nullptr;
