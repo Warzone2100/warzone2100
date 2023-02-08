@@ -6724,8 +6724,7 @@
 		"id": "R-Wpn-MG-Damage05",
 		"name": "Tungsten-Tipped MG Bullets",
 		"requiredResearch": [
-			"R-Wpn-MG-Damage04",
-			"R-Wpn-MG-ROF01"
+			"R-Wpn-MG-Damage04"
 		],
 		"researchPoints": 7200,
 		"researchPower": 287,
