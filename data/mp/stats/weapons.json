@@ -2871,8 +2871,8 @@
 		"weight": 300
 	},
 	"MG4ROTARYMk1": {
-		"buildPoints": 500,
-		"buildPower": 100,
+		"buildPoints": 375,
+		"buildPower": 125,
 		"damage": 19,
 		"designable": 1,
 		"effectSize": 100,
@@ -2908,8 +2908,8 @@
 		"weight": 600
 	},
 	"MG5TWINROTARY": {
-		"buildPoints": 500,
-		"buildPower": 120,
+		"buildPoints": 375,
+		"buildPower": 150,
 		"damage": 28,
 		"designable": 1,
 		"effectSize": 100,
