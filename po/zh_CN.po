@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-02-09 00:52\n"
+"PO-Revision-Date: 2023-02-09 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -5735,7 +5735,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr ""
+msgstr "研究中 "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5747,7 +5747,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "你可以使用这个。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
@@ -5755,15 +5755,15 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "已传输电力。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "请放置信标！"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "马上到!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
@@ -5771,7 +5771,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "随时可以, 老大!"
 
 #: lib/framework/i18n.cpp:110
 #: lib/framework/i18n.cpp:177
@@ -5781,7 +5781,7 @@ msgstr "系统语系"
 #: lib/netplay/netplay.cpp:1430
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr ""
+msgstr "无法在(%s) 上打开所需端口 (%s)"
 
 #: lib/netplay/netplay.cpp:1434
 msgid "You must manually configure your router & firewall to\n"
@@ -5802,11 +5802,11 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2150
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "消息发送失败 - 请重试"
 
 #: lib/netplay/netplay.cpp:2744
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
+msgstr "未找到UPnP设备。配置您的路由器/防火墙开放2100端口！"
 
 #: lib/netplay/netplay.cpp:3357
 #, c-format
@@ -5830,16 +5830,16 @@ msgstr "游戏响应失败!"
 
 #: lib/netplay/netreplay.cpp:323
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "回放文件格式比此版本的 Warzone 2100 能够支持的更新。"
 
 #: lib/netplay/netreplay.cpp:325
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "回放格式版本： %u"
 
 #: lib/netplay/netreplay.cpp:326
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "不支持的回放文件格式"
 
 #: lib/netplay/nettypes.cpp:889
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
@@ -5861,7 +5861,7 @@ msgstr "王者之战"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Skirmish"
-msgstr ""
+msgstr "遭遇战"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Multiplayer"
@@ -5877,15 +5877,15 @@ msgstr ""
 
 #: lib/widget/jsontable.cpp:496
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "复制路径到剪切板"
 
 #: lib/widget/jsontable.cpp:503
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "复制JSON到剪贴板"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "转储JSON到标准输出"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -14956,7 +14956,7 @@ msgstr ""
 #: src/chat.cpp:173
 #: src/multiint.cpp:3616
 msgid "Spectators"
-msgstr ""
+msgstr "旁观者"
 
 #: src/cheat.cpp:226
 #, c-format
@@ -15032,7 +15032,7 @@ msgstr ""
 
 #: src/clparse.cpp:376
 msgid "Show options and exit"
-msgstr ""
+msgstr "显示选项并退出"
 
 #: src/clparse.cpp:377
 msgid "Enable a global mod"
@@ -15062,7 +15062,7 @@ msgstr "引发一个事故去进行一个事故处理程序测试"
 
 #: src/clparse.cpp:382
 msgid "Load a saved skirmish game"
-msgstr ""
+msgstr "载入遭遇战存档"
 
 #: src/clparse.cpp:382
 #: src/clparse.cpp:383
@@ -15075,11 +15075,11 @@ msgstr "加载已存档的剧情战役"
 
 #: src/clparse.cpp:384
 msgid "Load a replay"
-msgstr ""
+msgstr "载入回放"
 
 #: src/clparse.cpp:384
 msgid "replay file"
-msgstr ""
+msgstr "回放文件"
 
 #: src/clparse.cpp:385
 msgid "Play in windowed mode"
@@ -15120,7 +15120,7 @@ msgstr ""
 #: src/clparse.cpp:392
 #: src/clparse.cpp:393
 msgid "host"
-msgstr ""
+msgstr "主机"
 
 #: src/clparse.cpp:393
 msgid "Connect directly to IP/hostname as a spectator"
@@ -15156,7 +15156,7 @@ msgstr ""
 
 #: src/clparse.cpp:414
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "无头模式 (仅当指定 --autogame, --autohost, --skirmish)"
 
 #: src/clparse.cpp:415
 msgid "Immediately save game and quit"
@@ -15168,7 +15168,7 @@ msgstr ""
 
 #: src/clparse.cpp:416
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "使用给定的设置文件启动遭遇战游戏"
 
 #: src/clparse.cpp:416
 msgid "test"
@@ -15180,7 +15180,7 @@ msgstr "载入最近存档"
 
 #: src/clparse.cpp:418
 msgid "Start host game with given settings file"
-msgstr ""
+msgstr "使用给定的设置文件启动主机游戏"
 
 #: src/clparse.cpp:418
 msgid "autohost"
@@ -15200,11 +15200,11 @@ msgstr ""
 
 #: src/clparse.cpp:423
 msgid "Set game server port"
-msgstr ""
+msgstr "设置游戏服务器端口"
 
 #: src/clparse.cpp:423
 msgid "port"
-msgstr ""
+msgstr "端口"
 
 #: src/clparse.cpp:427
 msgid "Enable lobby slash commands (for connecting clients)"
@@ -15216,7 +15216,7 @@ msgstr ""
 
 #: src/clparse.cpp:428
 msgid "hash string"
-msgstr ""
+msgstr "哈希字符串"
 
 #: src/clparse.cpp:429
 msgid "Add a lobby admin public key (for slash commands)"
@@ -15628,7 +15628,7 @@ msgstr "剧情战役"
 
 #: src/frontend.cpp:370
 msgid "Start Skirmish Game"
-msgstr "八方战役"
+msgstr "开始遭遇战游戏"
 
 #: src/frontend.cpp:371
 msgid "Challenges"
@@ -15640,11 +15640,11 @@ msgstr "剧情存档"
 
 #: src/frontend.cpp:373
 msgid "Load Skirmish Game"
-msgstr "八方存档"
+msgstr "载入遭遇战游戏"
 
 #: src/frontend.cpp:374
 msgid "View Skirmish Replay"
-msgstr "八方回放"
+msgstr "播放遭遇战回放"
 
 #: src/frontend.cpp:376
 msgid "SINGLE PLAYER"
@@ -15671,7 +15671,7 @@ msgstr "载入已储存的练习游戏"
 
 #: src/frontend.cpp:549
 msgid "Load Skirmish Replay"
-msgstr "八方回放"
+msgstr "载入遭遇战回放"
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -15945,7 +15945,7 @@ msgstr ""
 
 #: src/frontend.cpp:1171
 msgid "Map Zoom"
-msgstr ""
+msgstr "地图缩放"
 
 #: src/frontend.cpp:1176
 msgid "Map Zoom Rate"
@@ -15953,7 +15953,7 @@ msgstr ""
 
 #: src/frontend.cpp:1181
 msgid "Radar Zoom"
-msgstr ""
+msgstr "雷达缩放"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -16012,7 +16012,7 @@ msgstr "垂直同步*"
 
 #: src/frontend.cpp:1902
 msgid "Antialiasing*"
-msgstr ""
+msgstr "抗锯齿*"
 
 #: src/frontend.cpp:1910
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
@@ -16020,7 +16020,7 @@ msgstr ""
 
 #: src/frontend.cpp:1923
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "图形后端*"
 
 #. TRANSLATORS: Shortened form of "Minimize on Focus Loss"
 #. An option describing when / whether WZ will auto-minimize the window when it loses focus.
@@ -16035,11 +16035,11 @@ msgstr ""
 #. TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
 #: src/frontend.cpp:1942
 msgid "Alt+Enter Toggle"
-msgstr ""
+msgstr "Alt+Enter 切换"
 
 #: src/frontend.cpp:1943
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
+msgstr "使用 Alt + Enter 按键切换时使用的全屏模式"
 
 #: src/frontend.cpp:1957
 msgid "VIDEO OPTIONS"
@@ -16047,12 +16047,13 @@ msgstr "视屏选项"
 
 #: src/frontend.cpp:1989
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "无法更改垂直同步"
 
 #: src/frontend.cpp:1989
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone 更改垂直同步模式失败。\n"
+"您的系统/驱动程序可能不支持其他模式。"
 
 #: src/frontend.cpp:2145
 msgid "Middle Mouse"
@@ -16085,11 +16086,11 @@ msgstr "旋转屏幕"
 #: src/frontend.cpp:2240
 #: src/ingameop.cpp:846
 msgid "Colored Cursors"
-msgstr ""
+msgstr "彩色光标"
 
 #: src/frontend.cpp:2245
 msgid "Cursor Size"
-msgstr ""
+msgstr "光标尺寸"
 
 #: src/frontend.cpp:2257
 msgid "MOUSE OPTIONS"
@@ -16120,13 +16121,13 @@ msgstr "疯狂的"
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "无法载入: %s."
 
 #: src/frontend.cpp:2510
 #: src/init.cpp:1156
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "请移除所有不兼容的模组。"
 
 #: src/frontend.cpp:2558
 #: src/frontend.cpp:2706
@@ -16220,7 +16221,7 @@ msgstr ""
 
 #: src/frontend.cpp:3020
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "多人游戏选项"
 
 #: src/frontend.cpp:3085
 #: src/multiint.cpp:5177
@@ -16480,11 +16481,11 @@ msgstr "这个模块不能加载 %s\n\n"
 
 #: src/input/context.cpp:54
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "全局热键"
 
 #: src/input/context.cpp:55
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "其他热键"
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
@@ -16529,7 +16530,7 @@ msgstr "指挥官"
 #: src/input/keyconfig.cpp:45
 #: src/keybind.cpp:2586
 msgid "QuickSave"
-msgstr ""
+msgstr "快速存档"
 
 #: src/input/keyconfig.cpp:46
 msgid "Toggle Radar"
@@ -16734,19 +16735,19 @@ msgstr "多人游戏选项/联盟对话框"
 
 #: src/input/keyconfig.cpp:104
 msgid "Move Camera Up"
-msgstr ""
+msgstr "镜头上移"
 
 #: src/input/keyconfig.cpp:105
 msgid "Move Camera Down"
-msgstr ""
+msgstr "镜头下移"
 
 #: src/input/keyconfig.cpp:106
 msgid "Move Camera Right"
-msgstr ""
+msgstr "镜头右移"
 
 #: src/input/keyconfig.cpp:107
 msgid "Move Camera Left"
-msgstr ""
+msgstr "镜头左移"
 
 #: src/input/keyconfig.cpp:108
 msgid "Snap View to North"
@@ -17158,7 +17159,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:213
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "切换关卡编辑器"
 
 #: src/input/keyconfig.cpp:214
 msgid "Toggle display of droid path"
@@ -17338,26 +17339,26 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:540
 msgid "Playing: Campaign"
-msgstr ""
+msgstr "正在玩：战役"
 
 #: src/integrations/wzdiscordrpc.cpp:565
 msgid "Playing: Challenge"
-msgstr ""
+msgstr "正在玩：挑战"
 
 #: src/integrations/wzdiscordrpc.cpp:583
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "正在玩：遭遇战"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:588
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "正在玩：%s 遭遇战"
 
 #: src/integrations/wzdiscordrpc.cpp:591
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Map:"
-msgstr ""
+msgstr "地图："
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
@@ -17369,11 +17370,11 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:617
 #: src/integrations/wzdiscordrpc.cpp:812
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "在多人大厅中"
 
 #: src/integrations/wzdiscordrpc.cpp:643
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "在多人游戏中"
 
 #: src/integrations/wzdiscordrpc.cpp:844
 #, c-format
@@ -17648,7 +17649,7 @@ msgstr "捕捉光标%s"
 
 #: src/keybind.cpp:1410
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "战役"
 
 #: src/keybind.cpp:1414
 msgid "CHALLENGE"
@@ -17656,7 +17657,7 @@ msgstr "挑战"
 
 #: src/keybind.cpp:1417
 msgid "SKIRMISH"
-msgstr ""
+msgstr "遭遇战"
 
 #: src/keybind.cpp:1435
 msgid "DIFFICULTY: SUPER EASY"
@@ -18055,15 +18056,15 @@ msgstr ""
 
 #: src/multiint.cpp:1309
 msgid "Vote"
-msgstr ""
+msgstr "投票"
 
 #: src/multiint.cpp:1310
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "允许主机更改地图或随机？"
 
 #: src/multiint.cpp:1341
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "没有足够的选票来随机或更改地图。"
 
 #: src/multiint.cpp:1377
 msgid "Select Game Name"
@@ -18361,7 +18362,7 @@ msgstr "玩家"
 
 #: src/multiint.cpp:3632
 msgid "Host Options"
-msgstr ""
+msgstr "主机选项"
 
 #: src/multiint.cpp:3913
 msgid "Enable Spectator Join"
@@ -18377,7 +18378,7 @@ msgstr "选择盟友"
 
 #: src/multiint.cpp:4185
 msgid "Teams locked"
-msgstr ""
+msgstr "团队已锁定"
 
 #: src/multiint.cpp:4206
 msgid "Click to change player colour"
@@ -18965,20 +18966,20 @@ msgstr ""
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "当前播放"
 
 #: src/musicmanager.cpp:530
 #: src/musicmanager.cpp:684
 msgid "Album"
-msgstr ""
+msgstr "专辑"
 
 #: src/musicmanager.cpp:541
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: src/musicmanager.cpp:675
 msgid "Title"
-msgstr ""
+msgstr "标题"
 
 #: src/musicmanager.cpp:864
 msgid "MUSIC MANAGER"
@@ -18990,7 +18991,7 @@ msgstr ""
 
 #: src/notifications.cpp:785
 msgid "Do not show again"
-msgstr ""
+msgstr "不再显示"
 
 #: src/order.cpp:870
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
