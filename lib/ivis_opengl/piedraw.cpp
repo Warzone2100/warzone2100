@@ -802,6 +802,7 @@ private:
 	std::vector<SHAPE> tshapes;
 	std::vector<SHAPE> shapes;
 
+	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData> instancesData;
 	std::vector<gfx_api::buffer*> instanceDataBuffers;
 	size_t currInstanceBufferIdx = 0;
 };
@@ -1231,7 +1232,7 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 		return;
 	}
 
-	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData> instancesData;
+	instancesData.clear();
 	instancesData.reserve(instancesCount + translucentInstancesCount);
 
 	struct InstancedDrawCall
@@ -1279,6 +1280,8 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 		currInstanceBufferIdx = 0;
 	}
 	instanceDataBuffers[currInstanceBufferIdx]->upload(instancesData.size() * sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData), instancesData.data());
+
+	instancesData.clear();
 
 	// Draw opaque models
 	gfx_api::context::get().debugStringMarker("Remaining passes - opaque models");
