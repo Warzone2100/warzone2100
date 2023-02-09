@@ -44,6 +44,7 @@
 #include "piepalette.h"
 #include "pieclip.h"
 #include <list>
+#include <map>
 
 /***************************************************************************/
 /*
@@ -160,7 +161,62 @@ struct PIERECT_DrawRequest
 	int y1;
 	PIELIGHT color;
 };
+struct PIERECT_DrawRequest_f
+{
+	PIERECT_DrawRequest_f(float x0, float y0, float x1, float y1, PIELIGHT color)
+	: x0(x0)
+	, y0(y0)
+	, x1(x1)
+	, y1(y1)
+	, color(color)
+	{ }
+
+	float x0;
+	float y0;
+	float x1;
+	float y1;
+	PIELIGHT color;
+};
 void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects);
+class BatchedMultiRectRenderer
+{
+public:
+	void resizeRectGroups(size_t count);
+	void addRect(PIERECT_DrawRequest rectRequest, size_t rectGroup = 0);
+	void addRectF(PIERECT_DrawRequest_f rectRequest, size_t rectGroup = 0);
+	void drawAllRects(glm::mat4 projectionMatrix = defaultProjectionMatrix());
+	void drawRects(optional<size_t> rectGroup, glm::mat4 projectionMatrix = defaultProjectionMatrix());
+public:
+	bool initialize();
+	void clear();
+	void reset();
+private:
+	struct UploadedRectsInstanceBufferInfo
+	{
+		gfx_api::buffer* buffer;
+		size_t totalInstances = 0;
+		struct GroupBufferInfo
+		{
+			size_t bufferOffset = 0;
+			size_t instancesCount = 0;
+
+			GroupBufferInfo(size_t bufferOffset, size_t instancesCount)
+			: bufferOffset(bufferOffset), instancesCount(instancesCount)
+			{ }
+		};
+		std::vector<GroupBufferInfo> groupInfo;
+	};
+	UploadedRectsInstanceBufferInfo uploadAllRectInstances();
+private:
+	bool useInstancedRendering = true;
+	std::vector<std::vector<gfx_api::MultiRectPerInstanceInterleavedData>> groupsData;
+	size_t totalAddedRects = 0;
+
+	std::vector<gfx_api::MultiRectPerInstanceInterleavedData> instancesData;
+	std::vector<gfx_api::buffer*> instanceDataBuffers;
+	size_t currInstanceBufferIdx = 0;
+	optional<UploadedRectsInstanceBufferInfo> currentUploadedRectInfo;
+};
 struct PIERECT  ///< Screen rectangle.
 {
 	float x, y, w, h;

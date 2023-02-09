@@ -961,6 +961,40 @@ namespace gfx_api
 	>, notexture, SHADER_RECT>;
 
 	template<>
+	struct constant_buffer_type<SHADER_RECT_INSTANCED>
+	{
+		glm::mat4 ProjectionMatrix;
+	};
+
+	// interleaved vertex data
+	struct alignas(16) MultiRectPerInstanceInterleavedData
+	{
+		alignas(16) glm::mat4 TransformationMatrix; // 16 bytes * 4 = 64 bytes
+		alignas(16) glm::vec4 offset_scale; // 16 bytes (2 vec2)
+		alignas(4) uint32_t colour; // 4 bytes (stored as u8x4_norm)
+		// (+ 12 bytes padding for overall struct)
+	};
+	static_assert(alignof(MultiRectPerInstanceInterleavedData) == 16, "Unexpected alignment");
+	static_assert(sizeof(MultiRectPerInstanceInterleavedData) == 96, "Unexpected size");
+	static_assert(offsetof(MultiRectPerInstanceInterleavedData, offset_scale) == 64, "Unexpected offset");
+	static_assert(offsetof(MultiRectPerInstanceInterleavedData, colour) == 80, "Unexpected offset");
+
+	using BoxFillPSO_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangle_strip, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_RECT_INSTANCED>>,
+	std::tuple<
+	vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>,
+	// instance data
+	vertex_buffer_description<sizeof(MultiRectPerInstanceInterleavedData), gfx_api::vertex_attribute_input_rate::instance,
+		vertex_attribute_description<instance_modelMatrix, gfx_api::vertex_attribute_type::float4, 0>,
+		vertex_attribute_description<instance_modelMatrix + 1, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)>,
+		vertex_attribute_description<instance_modelMatrix + 2, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*2>,
+		vertex_attribute_description<instance_modelMatrix + 3, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*3>,
+		vertex_attribute_description<instance_packedValues, gfx_api::vertex_attribute_type::float4, offsetof(MultiRectPerInstanceInterleavedData, offset_scale)>,
+		vertex_attribute_description<instance_Colour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(MultiRectPerInstanceInterleavedData, colour)>
+		>
+	>, notexture, SHADER_RECT_INSTANCED>;
+
+	template<>
 	struct constant_buffer_type<SHADER_LINE>
 	{
 		glm::mat4 mat;

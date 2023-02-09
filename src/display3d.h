@@ -85,7 +85,6 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 
 void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix);
 ENERGY_BAR toggleEnergyBars();
-void drawDroidSelection(DROID *psDroid, bool drawBox);
 
 bool doWeDrawProximitys();
 void setProximityDraw(bool val);
