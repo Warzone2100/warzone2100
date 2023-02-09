@@ -167,6 +167,7 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_TEXT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT_INSTANCED>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf);
 };

@@ -257,6 +257,220 @@ void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects)
 	gfx_api::BoxFillPSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
 }
 
+void BatchedMultiRectRenderer::resizeRectGroups(size_t count)
+{
+	groupsData.resize(count);
+}
+
+void BatchedMultiRectRenderer::addRect(PIERECT_DrawRequest rect, size_t rectGroup /*= 0*/)
+{
+	if (rect.x0 > rect.x1)
+	{
+		std::swap(rect.x0, rect.x1);
+	}
+	if (rect.y0 > rect.y1)
+	{
+		std::swap(rect.y0, rect.y1);
+	}
+	const auto center = Vector2f(rect.x0, rect.y0);
+	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
+
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData { matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba } );
+	++totalAddedRects;
+}
+
+void BatchedMultiRectRenderer::addRectF(PIERECT_DrawRequest_f rect, size_t rectGroup /*= 0*/)
+{
+	if (rect.x0 > rect.x1)
+	{
+		std::swap(rect.x0, rect.x1);
+	}
+	if (rect.y0 > rect.y1)
+	{
+		std::swap(rect.y0, rect.y1);
+	}
+	const auto center = Vector2f(rect.x0, rect.y0);
+	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
+
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData { matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba } );
+	++totalAddedRects;
+}
+
+void BatchedMultiRectRenderer::drawAllRects(glm::mat4 projectionMatrix /*= defaultProjectionMatrix()*/)
+{
+	drawRects(nullopt, projectionMatrix);
+}
+
+BatchedMultiRectRenderer::UploadedRectsInstanceBufferInfo BatchedMultiRectRenderer::uploadAllRectInstances()
+{
+	UploadedRectsInstanceBufferInfo result;
+
+	instancesData.clear();
+	instancesData.reserve(totalAddedRects);
+	for (size_t i = 0; i < groupsData.size(); ++i)
+	{
+		auto& groupInstanceData = groupsData[i];
+		size_t startIdxOfGroupInstances = instancesData.size();
+		instancesData.insert(instancesData.end(), groupInstanceData.begin(), groupInstanceData.end());
+		result.groupInfo.push_back(UploadedRectsInstanceBufferInfo::GroupBufferInfo(startIdxOfGroupInstances * sizeof(gfx_api::MultiRectPerInstanceInterleavedData), groupInstanceData.size()));
+	}
+
+	ASSERT(totalAddedRects == instancesData.size(), "totalAddedRects not up-to-date!");
+	result.totalInstances = instancesData.size();
+
+	if (result.totalInstances != 0)
+	{
+		// Upload buffer
+		++currInstanceBufferIdx;
+		if (currInstanceBufferIdx >= instanceDataBuffers.size())
+		{
+			currInstanceBufferIdx = 0;
+		}
+		instanceDataBuffers[currInstanceBufferIdx]->upload(instancesData.size() * sizeof(gfx_api::MultiRectPerInstanceInterleavedData), instancesData.data());
+		result.buffer = instanceDataBuffers[currInstanceBufferIdx];
+	}
+	else
+	{
+		result.buffer = nullptr;
+	}
+
+	return result;
+}
+
+void pie_DrawMultiRect_NonInstanced(const std::vector<gfx_api::MultiRectPerInstanceInterleavedData>& instances)
+{
+	if (instances.empty()) { return; }
+
+	const auto projectionMatrix = defaultProjectionMatrix();
+	bool didEnableRect = false;
+	gfx_api::BoxFillPSO::get().bind();
+
+	for (auto it = instances.begin(); it != instances.end(); ++it)
+	{
+		const auto mvp = projectionMatrix * it->TransformationMatrix;
+		gfx_api::BoxFillPSO::get().bind_constants({ mvp, glm::vec2(0.f), glm::vec2(0.f),
+			glm::vec4((it->colour & 0xff) / 255.f, ((it->colour >> 8) & 0xff) / 255.f, ((it->colour >> 16) & 0xff) / 255.f, ((it->colour >> 24) & 0xff) / 255.f) });
+		if (!didEnableRect)
+		{
+			gfx_api::BoxFillPSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
+			didEnableRect = true;
+		}
+
+		gfx_api::BoxFillPSO::get().draw(4, 0);
+	}
+	gfx_api::BoxFillPSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+}
+
+void BatchedMultiRectRenderer::drawRects(optional<size_t> rectGroup, glm::mat4 projectionMatrix /*= defaultProjectionMatrix()*/)
+{
+	if (groupsData.empty()) { return; }
+
+	if (!useInstancedRendering)
+	{
+		for (size_t i = rectGroup.value_or(0); i < groupsData.size(); ++i)
+		{
+			if (rectGroup.has_value() && rectGroup.value() != i) { break; }
+			auto& rectsData = groupsData[i];
+			if (rectsData.empty()) { continue; }
+			pie_DrawMultiRect_NonInstanced(rectsData);
+		}
+
+		return;
+	}
+
+	// otherwise, use instanced rendering
+	if (!currentUploadedRectInfo.has_value())
+	{
+		currentUploadedRectInfo = uploadAllRectInstances();
+	}
+
+	auto& uploadedInfo = currentUploadedRectInfo.value();
+	if (uploadedInfo.totalInstances == 0)
+	{
+		return;
+	}
+	ASSERT_OR_RETURN(, uploadedInfo.totalInstances == totalAddedRects, "Rects were added after instance data was uploaded - make sure to call clear() before adding rects after draw!");
+
+	size_t instanceBufferOffset = 0;
+	size_t instancesCount = uploadedInfo.totalInstances;
+
+	if (rectGroup.has_value())
+	{
+		instanceBufferOffset = uploadedInfo.groupInfo[rectGroup.value()].bufferOffset;
+		instancesCount = uploadedInfo.groupInfo[rectGroup.value()].instancesCount;
+	}
+
+	if (instancesCount == 0)
+	{
+		return;
+	}
+
+	// draw instances
+	gfx_api::BoxFillPSO_Instanced::get().bind();
+	gfx_api::BoxFillPSO_Instanced::get().bind_constants({ projectionMatrix });
+	gfx_api::context::get().bind_vertex_buffers(0, {
+		std::make_tuple(pie_internal::rectBuffer, 0),
+		std::make_tuple(uploadedInfo.buffer, instanceBufferOffset)});
+	gfx_api::BoxFillPSO_Instanced::get().draw_instanced(4, 0, instancesCount);
+	gfx_api::BoxFillPSO_Instanced::get().unbind_vertex_buffers(pie_internal::rectBuffer, instanceDataBuffers[currInstanceBufferIdx]);
+}
+
+bool BatchedMultiRectRenderer::initialize()
+{
+	if (!gfx_api::context::get().supportsInstancedRendering())
+	{
+		useInstancedRendering = false;
+		return true;
+	}
+
+	// check for minimum required vertex attributes (and vertex outputs) for the instanced shaders
+	int32_t max_vertex_attribs = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_VERTEX_ATTRIBS);
+	int32_t max_vertex_output_components = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS);
+	size_t maxInstancedMeshShaderVertexAttribs = std::max({gfx_api::instance_modelMatrix, gfx_api::instance_packedValues, gfx_api::instance_Colour, gfx_api::instance_TeamColour}) + 1;
+	constexpr size_t min_required_vertex_output_components = 11 * 4; // from the shaders - see tcmask_instanced.vert / nolight_instanced.vert
+	if (max_vertex_attribs < maxInstancedMeshShaderVertexAttribs)
+	{
+		debug(LOG_INFO, "Disabling instanced rendering - Insufficient MAX_VERTEX_ATTRIBS (%" PRIi32 "; need: %zu)", max_vertex_attribs, maxInstancedMeshShaderVertexAttribs);
+		useInstancedRendering = false;
+		return true;
+	}
+	if (max_vertex_output_components < min_required_vertex_output_components)
+	{
+		debug(LOG_INFO, "Disabling instanced rendering - Insufficient MAX_VERTEX_OUTPUT_COMPONENTS (%" PRIi32 "; need: %zu)", max_vertex_output_components, min_required_vertex_output_components);
+		useInstancedRendering = false;
+		return true;
+	}
+
+	instanceDataBuffers.resize(gfx_api::context::get().maxFramesInFlight() + 1);
+	for (size_t i = 0; i < instanceDataBuffers.size(); ++i)
+	{
+		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
+	}
+	return true;
+}
+
+void BatchedMultiRectRenderer::clear()
+{
+	for (auto& rects : groupsData)
+	{
+		rects.clear();
+	}
+	totalAddedRects = 0;
+	currentUploadedRectInfo.reset();
+	instancesData.clear();
+}
+
+void BatchedMultiRectRenderer::reset()
+{
+	clear();
+	groupsData.clear();
+	for (auto buffer : instanceDataBuffers)
+	{
+		delete buffer;
+	}
+	instanceDataBuffers.clear();
+}
+
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill)
 {
 	pie_DrawRect<gfx_api::ShadowBox2DPSO>(x0 + pad, y0 + pad, x1 - pad, y1 - pad, fill);
