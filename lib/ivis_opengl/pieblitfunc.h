@@ -208,7 +208,7 @@ private:
 	};
 	UploadedRectsInstanceBufferInfo uploadAllRectInstances();
 private:
-	bool useInstancedRendering = true;
+	bool useInstancedRendering = false;
 	std::vector<std::vector<gfx_api::MultiRectPerInstanceInterleavedData>> groupsData;
 	size_t totalAddedRects = 0;
 

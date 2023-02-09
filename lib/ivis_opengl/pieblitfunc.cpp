@@ -446,6 +446,7 @@ bool BatchedMultiRectRenderer::initialize()
 	{
 		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
 	}
+	useInstancedRendering = true;
 	return true;
 }
 
