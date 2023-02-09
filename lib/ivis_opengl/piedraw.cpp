@@ -791,7 +791,7 @@ public:
 	void clear();
 	void reset();
 private:
-	bool useInstancedRendering = true;
+	bool useInstancedRendering = false;
 
 	typedef templatedState MeshInstanceKey;
 	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceMeshes;
@@ -838,6 +838,7 @@ bool InstancedMeshRenderer::initialize()
 	{
 		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
 	}
+	useInstancedRendering = true;
 	return true;
 }
 
