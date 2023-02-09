@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2023-02-09 00:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -5843,7 +5843,7 @@ msgstr ""
 
 #: lib/netplay/nettypes.cpp:889
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "无法加载回放：回放文件不完整或已损坏。"
 
 #: lib/sound/cdaudio.cpp:59
 msgid "Menu"
