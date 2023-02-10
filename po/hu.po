@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-02-10 05:18\n"
+"PO-Revision-Date: 2023-02-10 17:14\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -6050,7 +6050,7 @@ msgstr "Légvédelmi újratöltési idő -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:119
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Légvédelmi platform Stormbringer lövegtoronnyal"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -15199,7 +15199,7 @@ msgstr "automatikus forgatás"
 
 #: src/clparse.cpp:421
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Parancssori ablak illesztése vagy létrehozása és a kimenet megjelenítése (csak Windowson)"
 
 #: src/clparse.cpp:423
 msgid "Set game server port"
@@ -15223,7 +15223,7 @@ msgstr ""
 
 #: src/clparse.cpp:429
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "Játékmesteri publikus kulcs hozzáadása (a perjeles parancsok használatához)"
 
 #: src/clparse.cpp:429
 msgid "b64-pub-key"
@@ -15754,7 +15754,7 @@ msgstr "Konfiguràciòs könyvtàr nyitàsa"
 
 #: src/frontend.cpp:773
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Nem sikerült megnyitni a beállítási könyvtárat a rendszer alapértelmezett fájlkezelőjében."
 
 #: src/frontend.cpp:775
 msgid "Configuration directory is reported as:"
@@ -15762,7 +15762,7 @@ msgstr ""
 
 #: src/frontend.cpp:779
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Ha egy virtuális konténerben vagy leválasztott környezetben fut, ez különbözhet a valódi elérési útvonaltól a lemezen."
 
 #: src/frontend.cpp:781
 msgid "Please see the documentation for more information on how to locate it manually."
@@ -15770,7 +15770,7 @@ msgstr ""
 
 #: src/frontend.cpp:782
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Beállítási könyvtár megnyitása sikertelen"
 
 #: src/frontend.cpp:804
 msgid "1×"
@@ -15975,7 +15975,8 @@ msgstr "HANG- / NAGYÍTÁSI BEÁLLÍTÁSOK"
 #: src/frontend.cpp:1312
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "Asztali teljes képernyős módban a felbontás megegyezik az asztalod felbontásával\n"
+"(vagy azzal, amit az ablakkezelőd megenged)."
 
 #: src/frontend.cpp:1314
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -16056,7 +16057,7 @@ msgstr "VIDEO BEÁLLÍTÁS"
 
 #: src/frontend.cpp:1989
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "A Vertikális Szinkronizáció megváltoztatása sikertelen"
 
 #: src/frontend.cpp:1989
 msgid "Warzone failed to change the Vertical Sync mode.\n"
@@ -17256,7 +17257,7 @@ msgstr "Energia/másodperc"
 #: src/intdisplay.cpp:286
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d fúrótorony inaktív"
 
 #: src/intdisplay.cpp:291
 msgid "Need more resources!"
@@ -17264,7 +17265,7 @@ msgstr "Forrásanyag szükséges!"
 
 #: src/integrations/wzdiscordrpc.cpp:192
 msgid "Discord: Can't Join Game"
-msgstr ""
+msgstr "Discord: Nem lehet csatlakozni a játékhoz"
 
 #: src/integrations/wzdiscordrpc.cpp:193
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
@@ -17280,11 +17281,11 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:226
 msgid "This may take a moment..."
-msgstr ""
+msgstr "Ez eltarthat egy kis ideig..."
 
 #: src/integrations/wzdiscordrpc.cpp:251
 msgid "Failed to find game in the lobby server: "
-msgstr ""
+msgstr "Nem található játék a játékszoba-kiszolgálón: "
 
 #: src/integrations/wzdiscordrpc.cpp:253
 msgid "The game may have already started, or the host may have disbanded the game lobby."
@@ -17892,7 +17893,7 @@ msgstr "Automatikus mentés könyvtára"
 
 #: src/loadsave.cpp:366
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "Automatikus mentések könyvtára (nem lehet ide manuálisan menteni)"
 
 #: src/loadsave.cpp:658
 msgid "cheated"
@@ -18024,7 +18025,7 @@ msgstr "Hiányzik MI Név"
 
 #: src/multiint.cpp:828
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "HIÁNYZÓ MI LEÍRÁS"
 
 #: src/multiint.cpp:842
 #, c-format
@@ -18057,7 +18058,7 @@ msgstr "Lézerműhold parancsnoki állás"
 
 #: src/multiint.cpp:1167
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Struktúralimitek kényszerítve."
 
 #: src/multiint.cpp:1288
 #, c-format
@@ -18092,7 +18093,8 @@ msgstr "Egyjátékos csata"
 #: src/multiint.cpp:1405
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Tlerkép kiválasztása\n"
+"Blokkolható a játékosok szavazatai által"
 
 #: src/multiint.cpp:1406
 msgid "Map-Mod!"
@@ -18141,7 +18143,7 @@ msgstr "Épületek maximális számának beállítása"
 
 #: src/multiint.cpp:1515
 msgid "Random Game Options"
-msgstr ""
+msgstr "Random játékbeállítások"
 
 #: src/multiint.cpp:1516
 msgid "Random Game Options\n"
