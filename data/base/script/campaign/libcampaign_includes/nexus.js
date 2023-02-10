@@ -106,7 +106,7 @@ function camHackIntoPlayer(player, to)
 	__camLastNexusAttack = gameTime;
 	target = objects[camRand(objects.length)];
 
-	if (camRand(100) < GIFT_CHANCE)
+	if ((camRand(100) < GIFT_CHANCE) && !(target.type === STRUCTURE && target.stattype === WALL))
 	{
 		camTrace("Hacking " + target.name + " at (x,y): " + target.x + " " + target.y);
 		//Gift sounds are done in eventObjectTransfer.
