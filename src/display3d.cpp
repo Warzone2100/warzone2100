@@ -405,21 +405,24 @@ public:
 		// first, for all droids, queue the various rects
 		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 		{
-			/* If it's selected and on screen or it's the one the mouse is over */
-			if (bDrawAll ||
-				eitherSelected(psDroid) ||
-				(bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn) ||
-				droidUnderRepair(psDroid)
-			   )
+			if (psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
-				queueDroidPowerBarsRects(psDroid, psDroid->selected, batchedMultiRectRenderer, 0);
-
-				for (unsigned i = 0; i < psDroid->numWeaps; i++)
+				/* If it's selected and on screen or it's the one the mouse is over */
+				if (bDrawAll ||
+					eitherSelected(psDroid) ||
+					(bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn) ||
+					droidUnderRepair(psDroid)
+					)
 				{
-					queueWeaponReloadBarRects((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i, batchedMultiRectRenderer, 1);
-				}
+					queueDroidPowerBarsRects(psDroid, psDroid->selected, batchedMultiRectRenderer, 0);
 
-				droidsToDraw.push_back(psDroid);
+					for (unsigned i = 0; i < psDroid->numWeaps; i++)
+					{
+						queueWeaponReloadBarRects((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i, batchedMultiRectRenderer, 1);
+					}
+
+					droidsToDraw.push_back(psDroid);
+				}
 			}
 		}
 	}
