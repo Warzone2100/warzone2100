@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-02-03 16:11\n"
+"PO-Revision-Date: 2023-02-10 05:18\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -15489,8 +15489,8 @@ msgstr[1] "%u egységek hozzárendelve a %u csoporthoz"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u egység eltávolítva a csoportból"
+msgstr[1] "%u egység eltávolítva a csoportból"
 
 #: src/droid.cpp:1994
 #, c-format
@@ -19231,8 +19231,8 @@ msgstr "Azonosító: %d – érzékelőtávolság: %d – ECM: %d"
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s - %u Egység hozzárendelve - Sérülés %d/%d"
+msgstr[1] "%s - %u Egység hozzárendelve - Életerő %d/%d"
 
 #: src/structure.cpp:5291
 #: src/structure.cpp:5304
