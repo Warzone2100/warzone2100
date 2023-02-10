@@ -2820,11 +2820,12 @@ bool gl_context::initInstancedFunctions()
 			wz_dyn_glDrawArraysInstanced = glDrawArraysInstanced;
 			wz_dyn_glDrawElementsInstanced = glDrawElementsInstanced;
 		}
-//		else if (GLAD_GL_ARB_draw_instanced)
-//		{
-//			wz_dyn_glDrawArraysInstanced = glDrawArraysInstancedARB;
-//			wz_dyn_glDrawElementsInstanced = glDrawElementsInstancedARB;
-//		}
+		else if (GLAD_GL_ARB_draw_instanced)
+		{
+			wz_dyn_glDrawArraysInstanced = glDrawArraysInstancedARB;
+			wz_dyn_glDrawElementsInstanced = glDrawElementsInstancedARB;
+		}
+
 		if (GLAD_GL_VERSION_3_3)
 		{
 			wz_dyn_glVertexAttribDivisor = glVertexAttribDivisor;
