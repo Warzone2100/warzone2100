@@ -676,8 +676,8 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 	if (!gles)
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL context
-		// (The built-in shaders support (and have been tested with) VERSION_120 and VERSION_150_CORE)
-		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_120, VERSION_150_CORE));
+		// (The built-in shaders support (and have been tested with) VERSION_120, VERSION_150_CORE, VERSION_330_CORE)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_120, VERSION_330_CORE));
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
