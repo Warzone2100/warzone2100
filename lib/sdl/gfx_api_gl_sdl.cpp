@@ -81,23 +81,43 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, b
 {
 	switch (request)
 	{
-		case OpenGLCore_HighestAvailable:
-			// Request an OpenGL 3.0+ Core Profile context
-			// - On macOS, must request at least OpenGL 3.2 Core Profile (with FORWARD_COMPATIBLE_FLAG)
-			//   to get the highest version OpenGL Core Profile context that's supported
-			// - Mesa allegedly requires a request for OpenGL 3.1+ Core Profile to get the highest version
-			//   OpenGL Core Profile context that's supported, so use that as the default otherwise
-			// (Note: There is fallback handling inside sdl_OpenGL_Impl::createGLContext())
+		// NOTES:
+		// Requesting an OpenGL 3.0+ Core Profile context
+		// - On macOS, **MUST** request at least OpenGL 3.2+ Core Profile (with FORWARD_COMPATIBLE_FLAG)
+		//   to get the highest version OpenGL Core Profile context that's supported.
+		// - Mesa allegedly requires a request for OpenGL 3.1+ Core Profile to get the highest version
+		//   OpenGL Core Profile context that's supported.
+		// - Some systems return the highest OpenGL Core Profile version that they support with the below,
+		//   but others only return the exact version requested (even if a higher version is supported).
+		// - Thus, we start by requesting the maximum version of OpenGL that we'd like for WZ functionality,
+		//	 and then try every earlier version (as / if each fails).
+		// (Note: There is fallback handling inside sdl_OpenGL_Impl::createGLContext())
 
-			// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
+		// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
+		case OpenGLCore_3_3:
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-#  if defined(WZ_OS_MAC)
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+			return true;
+		case OpenGLCore_3_2:
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#  else
+			return true;
+		case OpenGLCore_3_1:
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-#  endif
+			return true;
+		case OpenGLCore_3_0:
+			// Specify FORWARD_COMPATIBLE, so 3.0 simulates the 3.1 experience (basically: core profile)
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			return true;
 		case OpenGL21Compat:
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
@@ -136,8 +156,14 @@ std::string sdl_OpenGL_Impl::to_string(const GLContextRequests& request) const\
 {
 	switch (contextRequest)
 	{
-		case OpenGLCore_HighestAvailable:
-			return "OpenGL Core";
+		case OpenGLCore_3_3:
+			return "OpenGL 3.3";
+		case OpenGLCore_3_2:
+			return "OpenGL 3.2";
+		case OpenGLCore_3_1:
+			return "OpenGL 3.1";
+		case OpenGLCore_3_0:
+			return "OpenGL 3.0";
 		case OpenGL21Compat:
 			return "OpenGL 2.1 Compatibility";
 		case OpenGLES30:

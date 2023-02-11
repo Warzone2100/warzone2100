@@ -45,7 +45,10 @@ public:
 
 	enum GLContextRequests {
 		// Desktop OpenGL Context Requests
-		OpenGLCore_HighestAvailable,
+		OpenGLCore_3_3,
+		OpenGLCore_3_2,
+		OpenGLCore_3_1,
+		OpenGLCore_3_0,
 		OpenGL21Compat,
 		// OpenGL ES Context Requests
 		OpenGLES30,
@@ -53,6 +56,7 @@ public:
 		//
 		MAX_CONTEXT_REQUESTS
 	};
+	static constexpr GLContextRequests OpenGLCore_HighestAvailable = OpenGLCore_3_3;
 
 	static bool configureOpenGLContextRequest(GLContextRequests request, bool useOpenGLESLibrary);
 	static GLContextRequests getInitialContextRequest(bool useOpenglES = false);
