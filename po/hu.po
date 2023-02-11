@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-02-10 17:14\n"
+"PO-Revision-Date: 2023-02-11 08:06\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -15215,11 +15215,11 @@ msgstr "Perjeles parancsok engedélyezése (a csatlakozó játékosok számára)
 
 #: src/clparse.cpp:428
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Játékmesteri szeményes hash létrehozása (a perjeles parancsok használatához)"
 
 #: src/clparse.cpp:428
 msgid "hash string"
-msgstr ""
+msgstr "hash kód"
 
 #: src/clparse.cpp:429
 msgid "Add a lobby admin public key (for slash commands)"
@@ -15758,7 +15758,7 @@ msgstr "Nem sikerült megnyitni a beállítási könyvtárat a rendszer alapért
 
 #: src/frontend.cpp:775
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "A beállítókönyvtár jelentve itt:"
 
 #: src/frontend.cpp:779
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
@@ -15766,7 +15766,7 @@ msgstr "Ha egy virtuális konténerben vagy leválasztott környezetben fut, ez 
 
 #: src/frontend.cpp:781
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Kérjük, tekintsd meg a dokumentációt több információért a manuális megkereséséhez."
 
 #: src/frontend.cpp:782
 msgid "Failed to open configuration directory"
@@ -16030,7 +16030,7 @@ msgstr "Figyelmeztetés: Az antialiasing összeomlásokat okozhat, különösen>
 
 #: src/frontend.cpp:1923
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Grafikus Motor*"
 
 #. TRANSLATORS: Shortened form of "Minimize on Focus Loss"
 #. An option describing when / whether WZ will auto-minimize the window when it loses focus.
@@ -16062,7 +16062,8 @@ msgstr "A Vertikális Szinkronizáció megváltoztatása sikertelen"
 #: src/frontend.cpp:1989
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Nem sikerült megváltoztatni a függőleges szinkronizációs módot.\n"
+"A rendszered vagy illesztőprogramjaid lehet hogy nem támogatnak más módokat."
 
 #: src/frontend.cpp:2145
 msgid "Middle Mouse"
@@ -17025,7 +17026,7 @@ msgstr "Kiválaszt minden fél-hernyótalpas járművet"
 
 #: src/input/keyconfig.cpp:174
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "Az összes csoporton kívüli féllánctalpas kiválasztása"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select all Hovers"
@@ -17046,7 +17047,7 @@ msgstr "Kiválaszt minden hernyótalpas járművet"
 
 #: src/input/keyconfig.cpp:179
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "Az összes csoporton kívüli lánctalpas kiválasztása"
 
 #: src/input/keyconfig.cpp:180
 msgid "Select EVERY unit"
@@ -17062,7 +17063,7 @@ msgstr "Kiválaszt minden VTOL járművet"
 
 #: src/input/keyconfig.cpp:183
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "Az összes csoporton kívüli VTOL jármű kiválasztása"
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Wheels"
@@ -17074,7 +17075,7 @@ msgstr "Mutasd a képkockák sebességét"
 
 #: src/input/keyconfig.cpp:186
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Az összes ugyanolyan komponenst tartalmazó egység kiválasztása"
 
 #: src/input/keyconfig.cpp:188
 msgid "Select all Combat Cyborgs"
@@ -17082,7 +17083,7 @@ msgstr "Kiválaszt minden harcoló egységet"
 
 #: src/input/keyconfig.cpp:189
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "Az összes csoporton kívüli Harci Cyborg kiválasztása"
 
 #: src/input/keyconfig.cpp:190
 msgid "Select all Engineers"
@@ -17094,7 +17095,7 @@ msgstr "Kiválaszt minden harcoló egységet"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "Az összes csoporton kívüli Szárazföldi Harci Egység kiválasztása"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Mechanics"
@@ -17114,7 +17115,7 @@ msgstr "Hasonló egységek kijelölése"
 
 #: src/input/keyconfig.cpp:197
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "Az összes csoporton kívüli Érzékelős egység kiválasztása"
 
 #: src/input/keyconfig.cpp:198
 msgid "Select all Trucks"
