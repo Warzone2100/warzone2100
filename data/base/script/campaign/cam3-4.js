@@ -43,7 +43,17 @@ camAreaEvent("factoryTriggerS", function() {
 
 function nexusHackFeature()
 {
-	let hackFailChance = 60;
+	let hackFailChance = 0;
+
+	switch (difficulty)
+	{
+		case SUPEREASY: hackFailChance = 90; break;
+		case EASY: hackFailChance = 80; break;
+		case MEDIUM: hackFailChance = 70; break;
+		case HARD: hackFailChance = 65; break;
+		case INSANE: hackFailChance = 60; break;
+		default: hackFailChance = 70;
+	}
 
 	if (camRand(100) < hackFailChance)
 	{
@@ -54,25 +64,50 @@ function nexusHackFeature()
 }
 
 // A little suprise absorbption attack when discovering the SW base.
-function firstAbsorbAttack()
+function takeoverChanceAttack()
 {
-	var objects = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
-		obj.type !== DROID || (obj.type === DROID && obj.droidType !== DROID_SUPERTRANSPORTER)
+	let chance = (difficulty === INSANE) ? 10 : 5;
+	let objects = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+		(obj.type !== DROID) || (obj.type === DROID && obj.droidType !== DROID_SUPERTRANSPORTER)
 	));
 
 	for (let i = 0, len = objects.length; i < len; ++i)
 	{
-		var obj = objects[i];
-		//Destroy all the VTOLs to prevent a player from instantly defeating the HQ in a rush.
-		if (obj.type === DROID && isVTOL(obj))
+		let obj = objects[i];
+		if (camRand(100) < chance)
 		{
-			camSafeRemoveObject(obj, true);
-			continue;
+			if (obj.type === STRUCTURE && obj.stattype === WALL)
+			{
+				camSafeRemoveObject(obj, true); // Just remove walls and tank traps.
+			}
+			else if (!donateObject(obj, NEXUS))
+			{
+				camSafeRemoveObject(obj, true); // If can't transfer then get rid of it too.
+			}
 		}
-		if ((camRand(100) < 10) && !donateObject(obj, NEXUS))
-		{
-			camSafeRemoveObject(obj, true);
-		}
+	}
+}
+
+//Destroy some VTOLs initially.
+function destroyPlayerVtols()
+{
+	let vtolBlowupAmount = 0;
+	let vtols = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+		(obj.type === DROID) && (obj.droidType !== DROID_SUPERTRANSPORTER) && isVTOL(obj)
+	));
+
+	switch (difficulty)
+	{
+		case MEDIUM: vtolBlowupAmount = 0.5; break;
+		case HARD: vtolBlowupAmount = 0.65; break;
+		case INSANE: vtolBlowupAmount = 0.8; break;
+		default: vtolBlowupAmount = 0.5;
+	}
+
+	for (let i = 0, len = Math.floor(vtolBlowupAmount * vtols.length); i < len; ++i)
+	{
+		let vtol = vtols[i];
+		camSafeRemoveObject(vtol, true);
 	}
 }
 
@@ -87,7 +122,15 @@ function activateNexus()
 function camEnemyBaseDetected_NX_SWBase()
 {
 	camPlayVideos({video: "MB3_4_MSG4", type: MISS_MSG});
-	firstAbsorbAttack(); //before Nexus state activation to prevent sound spam.
+	//Do these before Nexus state activation to prevent sound spam.
+	if (difficulty >= MEDIUM)
+	{
+		queue("destroyPlayerVtols", camSecondsToMilliseconds(0.2));
+	}
+	if (difficulty >= HARD)
+	{
+		queue("takeoverChanceAttack", camSecondsToMilliseconds(0.5));
+	}
 	queue("activateNexus", camSecondsToMilliseconds(1));
 }
 
