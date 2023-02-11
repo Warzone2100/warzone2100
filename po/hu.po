@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-02-11 08:06\n"
+"PO-Revision-Date: 2023-02-11 20:30\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -17167,11 +17167,11 @@ msgstr "Hibakeresés kapcsolása"
 
 #: src/input/keyconfig.cpp:212
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "A Hibakereső Feltérképezések előtérbe helyezése"
 
 #: src/input/keyconfig.cpp:213
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Pályaszerkesztő ki/bekapcsolása"
 
 #: src/input/keyconfig.cpp:214
 msgid "Toggle display of droid path"
@@ -17270,15 +17270,15 @@ msgstr "Discord: Nem lehet csatlakozni a játékhoz"
 
 #: src/integrations/wzdiscordrpc.cpp:193
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr ""
+msgstr "Nem tudsz csatlakozni egy játékhoz, ha már egy másik játékban vagy. Kérjük mentsd el vagy lépj ki a jelenlegi játékodból, lépj ki a főmenübe és próbáld újra."
 
 #: src/integrations/wzdiscordrpc.cpp:223
 msgid "Discord: Finding & Connecting to Game"
-msgstr ""
+msgstr "Discord: Játék keresése és Csatlakozás"
 
 #: src/integrations/wzdiscordrpc.cpp:224
 msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr ""
+msgstr "Kísérlet a Discord meghívás által meghatározott játék megkeresésére és csatlakozásra."
 
 #: src/integrations/wzdiscordrpc.cpp:226
 msgid "This may take a moment..."
@@ -17290,7 +17290,7 @@ msgstr "Nem található játék a játékszoba-kiszolgálón: "
 
 #: src/integrations/wzdiscordrpc.cpp:253
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
+msgstr "A játék már elkezdődött, vagy a játékmester letiltotta a szobába való belépést."
 
 #: src/integrations/wzdiscordrpc.cpp:256
 msgid "Failed to Find Game"
@@ -17314,7 +17314,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:362
 msgid "Discord: Connect to Untrusted Lobby?"
-msgstr ""
+msgstr "Discord: Csatlakozni akarsz megbízhatatlan játékszobához?"
 
 #: src/integrations/wzdiscordrpc.cpp:364
 #: src/integrations/wzdiscordrpc.cpp:438
@@ -17343,7 +17343,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:471
 msgid "A newer version of Warzone 2100 may be required, if available."
-msgstr ""
+msgstr "Lehet, hogy a Warzone 2100 újabb verziója szükséges, amennyiben már elérhető."
 
 #: src/integrations/wzdiscordrpc.cpp:474
 msgid "Discord: Unsupported / Invalid Invite"
@@ -17365,24 +17365,24 @@ msgstr "Játékban: csata"
 #: src/integrations/wzdiscordrpc.cpp:588
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "A %s Csatában játszik"
 
 #: src/integrations/wzdiscordrpc.cpp:591
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Map:"
-msgstr ""
+msgstr "Térkép:"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:594
 #: src/integrations/wzdiscordrpc.cpp:828
 msgid "Bots:"
-msgstr ""
+msgstr "Robotok:"
 
 #: src/integrations/wzdiscordrpc.cpp:617
 #: src/integrations/wzdiscordrpc.cpp:812
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "Többjátékos váróban"
 
 #: src/integrations/wzdiscordrpc.cpp:643
 msgid "In Multiplayer Game"
@@ -17628,11 +17628,11 @@ msgstr "Köd ki"
 #: src/keybind.cpp:974
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "Radar zoom beállítása erre az értékre: %u"
 
 #: src/keybind.cpp:1239
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Hibakeresési feltérképezés prioritásának megváltoztatása: "
 
 #: src/keybind.cpp:1249
 msgid "Disabling level editor"
@@ -17673,7 +17673,7 @@ msgstr "CSATA"
 
 #: src/keybind.cpp:1435
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "NEHÉZSÉG: SZUPERKÖNNYŰ"
 
 #: src/keybind.cpp:1438
 msgid "DIFFICULTY: EASY"
@@ -18153,7 +18153,7 @@ msgstr ""
 
 #: src/multiint.cpp:1527
 msgid "Tech"
-msgstr ""
+msgstr "Technológia"
 
 #: src/multiint.cpp:1528
 msgid "Technology Level 1"
@@ -18210,7 +18210,7 @@ msgstr "Elhagyom ezt a nem használt nyomot"
 
 #: src/multiint.cpp:1868
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Megfigyelők kapcsolódásának engedélyezése erre a helyre"
 
 #: src/multiint.cpp:1952
 msgid "Click to change to this slot"
@@ -18280,12 +18280,12 @@ msgstr ""
 
 #: src/multiint.cpp:2402
 msgid "Ask to Play"
-msgstr ""
+msgstr "Felkérés játékra"
 
 #: src/multiint.cpp:2993
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "A megfigyelő: %s megfigyelő szeretne maradni"
 
 #: src/multiint.cpp:2997
 #, c-format
@@ -18417,7 +18417,7 @@ msgstr "Nincs"
 
 #: src/multiint.cpp:4269
 msgid "Player rating:"
-msgstr ""
+msgstr "Játékos értékelése:"
 
 #: src/multiint.cpp:4272
 msgid "Host provided"
@@ -18487,12 +18487,12 @@ msgstr "Szöveg másolása a vágólapra"
 #: src/multiint.cpp:5075
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "%s Játékos némítása"
 
 #: src/multiint.cpp:5079
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "%s Játékos némításának visszavonása"
 
 #: src/multiint.cpp:5173
 msgid "CHAT"
@@ -18521,7 +18521,7 @@ msgstr "Ez egy térkép-mod, meg tudja változtatni a játékélményt!"
 
 #: src/multiint.cpp:6040
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Ez egy random térkép, meg tudja változtatni a játékélményt!"
 
 #: src/multiint.cpp:6184
 msgid "Host is Starting Game"
@@ -18530,7 +18530,7 @@ msgstr "A játékmester elindította a játékot"
 #: src/multiint.cpp:6354
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "%s Átmozgatása a megfigyelőkhöz!"
 
 #: src/multiint.cpp:6482
 msgid "Host supplied invalid options"
@@ -18690,15 +18690,15 @@ msgstr "Frissítés érhető el a játékhoz, az új verzió letöltéséhez ker
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
 msgid "LIMITS"
-msgstr ""
+msgstr "LIMITEK"
 
 #: src/multilimit.cpp:153
 msgid "Map Can Exceed Limits"
-msgstr ""
+msgstr "A térkép túlhahadhatja a limiteket"
 
 #: src/multilimit.cpp:159
 msgid "Force Limits at Start"
-msgstr ""
+msgstr "Limitek kényszerítése kezdésnél"
 
 #: src/multilimit.cpp:181
 msgid "Apply Defaults and Return To Previous Screen"
@@ -18715,11 +18715,11 @@ msgstr "A határértékek visszaállítása az alapértelmezettekre"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Limitek visszaállítása alapértelmezett értékre"
 
 #: src/multilobbycommands.cpp:313
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "A játékmester kirúgott a játékból."
 
 #: src/multimenu.cpp:520
 msgid "Any number of players"
@@ -18774,7 +18774,7 @@ msgstr "Energiát ad a játékosnak"
 
 #: src/multimenu.cpp:944
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Csevegésnémítás ki/be kapcsolása"
 
 #: src/multimenu.cpp:1139
 msgid "Sent/Received per sec —"
@@ -18807,7 +18807,7 @@ msgstr "%s : %s ki lettek rúgva a játékból, és a tiltó listára kerültek.
 #: src/multiopt.cpp:283
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "Struktúrakorlátok megváltoztatása [%d]:"
 
 #: src/multiopt.cpp:295
 #, c-format
@@ -18817,7 +18817,7 @@ msgstr "[%d] Korlát[%s]: %u (alapértelmezett: %u)"
 #: src/multiopt.cpp:299
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
+msgstr "[%d] Korlát[%s]: %u (alapértelmezett: nincs korlát)"
 
 #: src/multiopt.cpp:307
 #, c-format
@@ -18858,41 +18858,41 @@ msgstr "%s ki lett rúgva, mert megpróbálta kikerülni az adatok ellenőrzés�
 
 #: src/multiplay.cpp:374
 msgid "Invalid data!"
-msgstr ""
+msgstr "Érvénytelen adat!"
 
 #: src/multiplay.cpp:1158
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "%s Játékos automatikus kirúgása, érvénytelen kapott parancs: %u"
 
 #: src/multiplay.cpp:1160
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Nem engedélyezett hálózati parancs"
 
 #: src/multiplay.cpp:1260
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "VISSZAJÁTSZÁS VÉGE"
 
 #: src/multiplay.cpp:1261
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Nyomd meg az ESC-t a kilépéshez.)"
 
 #: src/multiplay.cpp:1415
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "%s Játékos automatikus kirúgása, érvénytelen kapott parancs."
 
 #: src/multiplay.cpp:1966
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "Térkép kérve: TÉRKÉP KÜLDÉSE!"
 
 #: src/multiplay.cpp:1988
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "Mod kérve: MOD KÜLDÉSE!"
 
 #: src/multiplay.cpp:2058
 msgid "FILE SENT!"
-msgstr ""
+msgstr "FÁJL ELKÜLDVE!"
 
 #: src/multiplay.cpp:2073
 msgid "MAP DOWNLOADED!"
@@ -18970,40 +18970,40 @@ msgstr "Barna"
 
 #: src/multiplay.cpp:2471
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Megfigyelő mód"
 
 #: src/multiplay.cpp:2472
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Egy megfigyelő vagy. Élvezd a játékot!"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "JÁTÉKBAN"
 
 #: src/musicmanager.cpp:530
 #: src/musicmanager.cpp:684
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/musicmanager.cpp:541
 msgid "Date"
-msgstr ""
+msgstr "Dátum"
 
 #: src/musicmanager.cpp:675
 msgid "Title"
-msgstr ""
+msgstr "Cím"
 
 #: src/musicmanager.cpp:864
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "ZENEKEZELŐ"
 
 #: src/notifications.cpp:700
 msgid "Dismiss"
-msgstr ""
+msgstr "Elutasítás"
 
 #: src/notifications.cpp:785
 msgid "Do not show again"
-msgstr ""
+msgstr "Ne mutasd mégegyszer"
 
 #: src/order.cpp:870
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -19167,7 +19167,7 @@ msgstr "A kért épület nem található!"
 
 #: src/seqdisp.cpp:576
 msgid "Loading video"
-msgstr ""
+msgstr "Videó betöltése"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
@@ -19183,11 +19183,11 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:805
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "Jelenlegi energia / Energia másodpercenként"
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
-msgstr ""
+msgstr "ElvesztettEnergia"
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
@@ -19215,7 +19215,7 @@ msgstr "Nem tudsz több „%s” egységet építeni, elérted a parancsnoki lim
 #: src/structure.cpp:2638
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Nem tudsz több %s egységet építeni, elérted a limitet — Gyártás Szüneteltetve"
 
 #: src/structure.cpp:5266
 #, c-format
@@ -19261,7 +19261,7 @@ msgstr "Azonosító: %d – páncél: %d|%d – érzékelőtávolság: %d – EC
 #: src/structure.cpp:5309
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "Azonosító %d - Állapot %d"
 
 #: src/structure.cpp:5316
 #, c-format
@@ -19389,11 +19389,11 @@ msgstr "Verzió: %s"
 
 #: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
-msgstr ""
+msgstr "Csatlakozás megfigyelőként"
 
 #: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "A te Warzone verziód nem kompatipilis ezzel a játékkal."
 
 #: src/titleui/gamefind.cpp:511
 msgid "[Password required]"
