@@ -160,7 +160,7 @@ struct iIMDShape
 	int interpolate = 1; // if the model wants to be interpolated
 
 	std::string modelName;
-	int modelLevel = 0;
+	uint32_t modelLevel = 0;
 
 	iIMDShape *next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 };
