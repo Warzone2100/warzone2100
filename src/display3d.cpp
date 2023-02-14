@@ -1735,6 +1735,33 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 	{
 		return; // Projectile is not on the screen (Note: This uses the position point of the projectile, not a full shape clipping check, for speed.)
 	}
+
+	/* Get bullet's x coord */
+	dv.x = st.pos.x - playerPos.p.x;
+
+	/* Get it's y coord (z coord in the 3d world */
+	dv.z = -(st.pos.y - playerPos.p.z);
+
+	/* What's the present height of the bullet? */
+	dv.y = st.pos.z;
+
+	/* Set up the matrix */
+	Vector3i camera_base = actualCameraPosition;
+
+	/* Translate to the correct position */
+	camera_base -= dv;
+
+	/* Rotate it to the direction it's facing */
+	rotateSomething(camera_base.z, camera_base.x, -(-st.rot.direction));
+
+	/* pitch it */
+	rotateSomething(camera_base.y, camera_base.z, -st.rot.pitch);
+
+	const glm::mat4 modelMatrix_base =
+		glm::translate(glm::vec3(dv)) *
+		glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
+
 	for (; pIMD != nullptr; pIMD = pIMD->next)
 	{
 		bool rollToCamera = false;
@@ -1765,30 +1792,8 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 			premultiplied = true;
 		}
 
-		/* Get bullet's x coord */
-		dv.x = st.pos.x - playerPos.p.x;
-
-		/* Get it's y coord (z coord in the 3d world */
-		dv.z = -(st.pos.y - playerPos.p.z);
-
-		/* What's the present height of the bullet? */
-		dv.y = st.pos.z;
-		/* Set up the matrix */
-		Vector3i camera = actualCameraPosition;
-
-		/* Translate to the correct position */
-		camera -= dv;
-
-		/* Rotate it to the direction it's facing */
-		rotateSomething(camera.z, camera.x, -(-st.rot.direction));
-
-		/* pitch it */
-		rotateSomething(camera.y, camera.z, -st.rot.pitch);
-
-		glm::mat4 modelMatrix =
-			glm::translate(glm::vec3(dv)) *
-			glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
+		Vector3i camera = camera_base;
+		glm::mat4 modelMatrix = modelMatrix_base;
 
 		if (pitchToCamera || rollToCamera)
 		{
