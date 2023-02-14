@@ -982,21 +982,35 @@ void pie_CleanUp()
 	}
 }
 
-bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth)
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth, bool onlySingleLevel)
 {
 	pieCount++;
 
 	ASSERT(frame >= 0, "Negative frame %d", frame);
 	ASSERT(team >= 0, "Negative team %d", team);
 
+	bool retVal = false;
+	const bool drawAllLevels = (shape->modelLevel == 0) && !onlySingleLevel;
 	const PIELIGHT teamcolour = pal_GetTeamColour(team);
-	if (pieFlag & pie_BUTTON)
-	{
-		pie_Draw3DButton(shape, teamcolour, modelView);
-		return true;
-	}
 
-	return instancedMeshRenderer.Draw3DShape(shape, frame, teamcolour, colour, pieFlag, pieFlagData, modelView, stretchDepth);
+	iIMDShape *pCurrShape = shape;
+	do
+	{
+		if (pieFlag & pie_BUTTON)
+		{
+			pie_Draw3DButton(pCurrShape, teamcolour, modelView);
+			retVal = true;
+		}
+		else
+		{
+			retVal = instancedMeshRenderer.Draw3DShape(pCurrShape, frame, teamcolour, colour, pieFlag, pieFlagData, modelView, stretchDepth);
+		}
+
+		pCurrShape = pCurrShape->next;
+
+	} while (drawAllLevels && pCurrShape && retVal);
+
+	return retVal;
 }
 
 static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
