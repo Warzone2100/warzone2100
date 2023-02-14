@@ -967,15 +967,19 @@ namespace gfx_api
 	};
 
 	// interleaved vertex data
-	struct alignas(16) MultiRectPerInstanceInterleavedData
+	struct MultiRectPerInstanceInterleavedData
 	{
-		alignas(16) glm::mat4 TransformationMatrix; // 16 bytes * 4 = 64 bytes
-		alignas(16) glm::vec4 offset_scale; // 16 bytes (2 vec2)
-		alignas(4) uint32_t colour; // 4 bytes (stored as u8x4_norm)
+		MultiRectPerInstanceInterleavedData(const glm::mat4 &TransformationMatrix, const glm::vec4 &offset_scale, const uint32_t &colour)
+		: TransformationMatrix(TransformationMatrix), offset_scale(offset_scale), colour(colour)
+		{ }
+
+		glm::mat4 TransformationMatrix; // 16 bytes * 4 = 64 bytes
+		glm::vec4 offset_scale; // 16 bytes (2 vec2)
+		uint32_t colour; // 4 bytes (stored as u8x4_norm)
 		// (+ 12 bytes padding for overall struct)
+		uint32_t _unused_padding[3] = {};
 	};
-	static_assert(alignof(MultiRectPerInstanceInterleavedData) == 16, "Unexpected alignment");
-	static_assert(sizeof(MultiRectPerInstanceInterleavedData) == 96, "Unexpected size");
+	static_assert(sizeof(MultiRectPerInstanceInterleavedData) % 16 == 0, "Size must be a multiple of 16");
 	static_assert(offsetof(MultiRectPerInstanceInterleavedData, offset_scale) == 64, "Unexpected offset");
 	static_assert(offsetof(MultiRectPerInstanceInterleavedData, colour) == 80, "Unexpected offset");
 

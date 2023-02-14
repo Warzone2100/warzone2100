@@ -275,7 +275,7 @@ void BatchedMultiRectRenderer::addRect(PIERECT_DrawRequest rect, size_t rectGrou
 	const auto center = Vector2f(rect.x0, rect.y0);
 	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
 
-	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData { matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba } );
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba });
 	++totalAddedRects;
 }
 
@@ -292,7 +292,7 @@ void BatchedMultiRectRenderer::addRectF(PIERECT_DrawRequest_f rect, size_t rectG
 	const auto center = Vector2f(rect.x0, rect.y0);
 	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
 
-	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData { matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba } );
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba });
 	++totalAddedRects;
 }
 
@@ -464,7 +464,9 @@ void BatchedMultiRectRenderer::clear()
 void BatchedMultiRectRenderer::reset()
 {
 	clear();
+	size_t numGroups = groupsData.size();
 	groupsData.clear();
+	groupsData.resize(numGroups);
 	for (auto buffer : instanceDataBuffers)
 	{
 		delete buffer;
