@@ -1366,18 +1366,19 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 		ASSERT_OR_RETURN(nullptr, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTextures->texfile.c_str());
 
-		if (!pLevelSettingsToUseForTextures->tcmaskfile.empty())
+		const LevelSettings* pLevelSettingsToUseForTCMask = (!levelSettings.tcmaskfile.empty()) ? &levelSettings : &globalLevelSettings;
+		if (!pLevelSettingsToUseForTCMask->tcmaskfile.empty())
 		{
 			// load explicitly specified tcmask file
-			debug(LOG_TEXTURE, "Loading tcmask %s for %s", pLevelSettingsToUseForTextures->tcmaskfile.c_str(), filename.toUtf8().c_str());
-			tcmaskpage = iV_GetTexture(pLevelSettingsToUseForTextures->tcmaskfile.c_str(), gfx_api::texture_type::alpha_mask);
-			ASSERT_OR_RETURN(nullptr, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTextures->tcmaskfile.c_str());
+			debug(LOG_TEXTURE, "Loading tcmask %s for %s", pLevelSettingsToUseForTCMask->tcmaskfile.c_str(), filename.toUtf8().c_str());
+			tcmaskpage = iV_GetTexture(pLevelSettingsToUseForTCMask->tcmaskfile.c_str(), gfx_api::texture_type::alpha_mask);
+			ASSERT_OR_RETURN(nullptr, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTCMask->tcmaskfile.c_str());
 		}
 		else
 		{
 			// BACKWARDS-COMPATIBILITY (PIE 2/3 compatibility)
 			// check if model should use team colour mask
-			if (pLevelSettingsToUseForTextures->imd_flags.value_or(0) & iV_IMD_TCMASK)
+			if (flags & iV_IMD_TCMASK)
 			{
 				std::string tcmask_name = pie_MakeTexPageTCMaskName(pLevelSettingsToUseForTextures->texfile.c_str());
 				tcmask_name += ".png";
@@ -1386,18 +1387,20 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 			}
 		}
 
-		if (!pLevelSettingsToUseForTextures->normalfile.empty())
+		const LevelSettings* pLevelSettingsToUseForNormals = (!levelSettings.normalfile.empty()) ? &levelSettings : &globalLevelSettings;
+		if (!pLevelSettingsToUseForNormals->normalfile.empty())
 		{
-			debug(LOG_TEXTURE, "Loading normal map %s for %s", pLevelSettingsToUseForTextures->normalfile.c_str(), filename.toUtf8().c_str());
-			normalpage = iV_GetTexture(pLevelSettingsToUseForTextures->normalfile.c_str(), gfx_api::texture_type::normal_map);
-			ASSERT_OR_RETURN(nullptr, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTextures->normalfile.c_str());
+			debug(LOG_TEXTURE, "Loading normal map %s for %s", pLevelSettingsToUseForNormals->normalfile.c_str(), filename.toUtf8().c_str());
+			normalpage = iV_GetTexture(pLevelSettingsToUseForNormals->normalfile.c_str(), gfx_api::texture_type::normal_map);
+			ASSERT_OR_RETURN(nullptr, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForNormals->normalfile.c_str());
 		}
 
-		if (!pLevelSettingsToUseForTextures->specfile.empty())
+		const LevelSettings* pLevelSettingsToUseForSpecular = (!levelSettings.specfile.empty()) ? &levelSettings : &globalLevelSettings;
+		if (!pLevelSettingsToUseForSpecular->specfile.empty())
 		{
-			debug(LOG_TEXTURE, "Loading specular map %s for %s", pLevelSettingsToUseForTextures->specfile.c_str(), filename.toUtf8().c_str());
-			specpage = iV_GetTexture(pLevelSettingsToUseForTextures->specfile.c_str(), gfx_api::texture_type::specular_map);
-			ASSERT_OR_RETURN(nullptr, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTextures->specfile.c_str());
+			debug(LOG_TEXTURE, "Loading specular map %s for %s", pLevelSettingsToUseForSpecular->specfile.c_str(), filename.toUtf8().c_str());
+			specpage = iV_GetTexture(pLevelSettingsToUseForSpecular->specfile.c_str(), gfx_api::texture_type::specular_map);
+			ASSERT_OR_RETURN(nullptr, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForSpecular->specfile.c_str());
 		}
 
 		// assign tex pages and flags for this level
