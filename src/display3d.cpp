@@ -585,7 +585,7 @@ float interpolateAngleDegrees(int a, int b, float t)
 	return a + d * t;
 }
 
-bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix, float stretchDepth)
+bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix, float stretchDepth, bool onlySingleLevel)
 {
 	glm::mat4 modelMatrix(1.f);
 	int animFrame = 0; // for texture animation
@@ -634,7 +634,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		}
 	}
 
-	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix, stretchDepth);
+	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix, stretchDepth, onlySingleLevel);
 }
 
 static void setScreenDispWithPerspective(SCREEN_DISP_DATA *sDisplay, const glm::mat4 &perspectiveViewModelMatrix)
@@ -1820,15 +1820,15 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 
 		if (premultiplied)
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_PREMULTIPLIED, 0, viewMatrix * modelMatrix);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_PREMULTIPLIED, 0, viewMatrix * modelMatrix, 0.f, true);
 		}
 		else if (additive)
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_ADDITIVE, 164, viewMatrix * modelMatrix);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_ADDITIVE, 164, viewMatrix * modelMatrix, 0.f, true);
 		}
 		else
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix, 0.f, true);
 		}
 	}
 }
@@ -2282,12 +2282,11 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	}
 	iIMDShape *imd = psFeature->sDisplay.imd;
 	const auto viewModelMatrix = viewMatrix * modelMatrix;
-	while (imd)
+	if (imd)
 	{
 		/* Translate the feature  - N.B. We can also do rotations here should we require
 		buildings to face different ways - Don't know if this is necessary - should be IMO */
 		pie_Draw3DShape(imd, 0, 0, brightness, pieFlags, 0, viewModelMatrix);
-		imd = imd->next;
 	}
 
 	setScreenDispWithPerspective(&psFeature->sDisplay, perspectiveViewMatrix * modelMatrix);
@@ -2704,15 +2703,16 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		if (psStructure->prebuiltImd != nullptr)
 		{
 			// strImd is a module, so render the already-built part at full height.
-			for (iIMDShape *imd = psStructure->prebuiltImd; imd != nullptr; imd = imd->next)
+			iIMDShape *imd = psStructure->prebuiltImd;
+			if (imd)
 			{
 				pie_Draw3DShape(getFactionIMD(faction, imd), 0, colour, buildingBrightness, pie_SHADOW, 0,
 					viewModelMatrix);
 			}
 		}
-		for (iIMDShape *imd = strImd; imd != nullptr; imd = imd->next)
+		if (strImd)
 		{
-			pie_Draw3DShape(getFactionIMD(faction, imd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewModelMatrix);
+			pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewModelMatrix);
 		}
 		setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
 		return;
@@ -2743,7 +2743,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		{
 			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
-		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix, stretch);
+		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix, stretch, true);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
 			renderStructureTurrets(psStructure, getFactionIMD(faction, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewModelMatrix);
@@ -2856,10 +2856,9 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 			pieFlagData = 0;
 		}
 		iIMDShape *imd = psStructure->sDisplay.imd;
-		while (imd)
+		if (imd)
 		{
 			pie_Draw3DShape(getFactionIMD(faction, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix, stretch);
-			imd = imd->next;
 		}
 	}
 	setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
