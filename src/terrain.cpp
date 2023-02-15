@@ -589,7 +589,7 @@ void markTileDirty(int i, int j)
 	}
 }
 
-void loadTerrainTextures()
+void loadTerrainTextures(MAP_TILESET mapTileset)
 {
 	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
 

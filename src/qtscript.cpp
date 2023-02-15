@@ -570,17 +570,17 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["mapName"] = game.map;
 	//== * ```tilesetType``` The area name of the map.
 	std::string tilesetType("CUSTOM");
-	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
+	switch (currentMapTileset)
 	{
-		tilesetType = "ARIZONA";
-	}
-	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
-	{
-		tilesetType = "URBAN";
-	}
-	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
-	{
-		tilesetType = "ROCKIES";
+		case MAP_TILESET::ARIZONA:
+			tilesetType = "ARIZONA";
+			break;
+		case MAP_TILESET::URBAN:
+			tilesetType = "URBAN";
+			break;
+		case MAP_TILESET::ROCKIES:
+			tilesetType = "ROCKIES";
+			break;
 	}
 	globalVars["tilesetType"] = tilesetType;
 	//== * ```baseType``` The type of base that the game starts with. It will be one of ```CAMP_CLEAN```, ```CAMP_BASE``` or ```CAMP_WALLS```.

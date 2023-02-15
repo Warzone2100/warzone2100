@@ -126,6 +126,7 @@ static void init_tileNames(MAP_TILESET type);
 std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
 int numGroundTypes;
 char *tilesetDir = nullptr;
+MAP_TILESET currentMapTileset = MAP_TILESET::ARIZONA;
 static int numTile_names;
 static std::unique_ptr<char[]> Tile_names = nullptr;
 	
@@ -224,6 +225,31 @@ static void init_tileNames(MAP_TILESET type)
 	}
 }
 
+static MAP_TILESET mapTilesetDirToTileset(const char *dir)
+{
+	// For Arizona
+	if (strcmp(dir, "texpages/tertilesc1hw") == 0)
+	{
+		return MAP_TILESET::ARIZONA;
+	}
+	// for Urban
+	else if (strcmp(dir, "texpages/tertilesc2hw") == 0)
+	{
+		return MAP_TILESET::URBAN;
+	}
+	// for Rockie
+	else if (strcmp(dir, "texpages/tertilesc3hw") == 0)
+	{
+		return MAP_TILESET::ROCKIES;
+	}
+	else
+	{
+		debug(LOG_ERROR, "unsupported tileset: %s", dir);
+		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
+	}
+	return MAP_TILESET::ARIZONA; // fallback
+}
+
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
@@ -242,7 +268,7 @@ static bool mapLoadGroundTypes(bool preview)
 
 	debug(LOG_TERRAIN, "tileset: %s", tilesetDir);
 	// For Arizona
-	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
+	if (currentMapTileset == MAP_TILESET::ARIZONA)
 	{
 fallback:
 		// load the override terrain types
@@ -287,7 +313,7 @@ fallback:
 		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
-	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
+	else if (currentMapTileset == MAP_TILESET::URBAN)
 	{
 		// load the override terrain types
 		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::URBAN))
@@ -331,7 +357,7 @@ fallback:
 		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
-	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
+	else if (currentMapTileset == MAP_TILESET::ROCKIES)
 	{
 		// load the override terrain types
 		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::ROCKIES))
@@ -944,6 +970,8 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 		tilesetDir = strdup("texpages/tertilesc1hw");
 	}
 
+	currentMapTileset = mapTilesetDirToTileset(tilesetDir);
+
 	// load the ground types
 	if (!mapLoadGroundTypes(preview))
 	{
@@ -953,7 +981,7 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	if (!preview)
 	{
 		//preload the terrain textures
-		loadTerrainTextures();
+		loadTerrainTextures(currentMapTileset);
 	}
 
 	//load in the map data itself

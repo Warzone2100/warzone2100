@@ -80,6 +80,7 @@ extern float waterLevel;
 extern std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
 extern int numGroundTypes;
 extern char *tilesetDir;
+extern MAP_TILESET currentMapTileset;
 
 #define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
 #define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way

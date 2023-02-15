@@ -310,17 +310,20 @@ void updateFogDistance(float distance)
 void setDefaultFogColour()
 {
 	ASSERT(tilesetDir != nullptr, "Uninitialized tilesetDir");
-	if (tilesetDir && strcmp(tilesetDir, "texpages/tertilesc2hw") == 0) // Urban = 0x101040 (or, 0xc9920f)
+	switch (currentMapTileset)
 	{
-		pie_SetFogColour(WZCOL_FOG_URBAN);
-	}
-	else if (tilesetDir && strcmp(tilesetDir, "texpages/tertilesc3hw") == 0) // Rockies = 0xb6e1ec
-	{
-		pie_SetFogColour(WZCOL_FOG_ROCKIE);
-	}
-	else // Arizona, eg. strcmp(tilesetDir, "texpages/tertilesc1hw") == 0, and default. = b08f5f (or, 0x78684f)
-	{
-		pie_SetFogColour(WZCOL_FOG_ARIZONA);
+		case MAP_TILESET::ARIZONA:
+			// Arizona, and default. = b08f5f (or, 0x78684f)
+			pie_SetFogColour(WZCOL_FOG_ARIZONA);
+			break;
+		case MAP_TILESET::URBAN:
+			// Urban = 0x101040 (or, 0xc9920f)
+			pie_SetFogColour(WZCOL_FOG_URBAN);
+			break;
+		case MAP_TILESET::ROCKIES:
+			// Rockies = 0xb6e1ec
+			pie_SetFogColour(WZCOL_FOG_ROCKIE);
+			break;
 	}
 }
 

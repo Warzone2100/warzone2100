@@ -23,8 +23,9 @@
 
 #include <glm/fwd.hpp>
 #include "lib/ivis_opengl/pietypes.h"
+#include <wzmaplib/terrain_type.h>
 
-void loadTerrainTextures();
+void loadTerrainTextures(MAP_TILESET mapTileset);
 
 bool initTerrain();
 void shutdownTerrain();
