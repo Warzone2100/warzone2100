@@ -376,12 +376,15 @@ static bool _imd_load_level_settings(const WzString &filename, const char **ppFi
 		}
 	}
 
-	// TCMASK (WZ 4.4+ only - earlier versions automatically generated a filename based on the TEXTURE filename)
-	if (_imd_load_texture_command(filename, lineToProcess, buffer, value, cnt, "TCMASK", levelSettings.tcmaskfile))
+	if (pieVersion >= PIE_VER_4)
 	{
-		if (!getNextPossibleLevelSettingLine())
+		// TCMASK (WZ 4.4+ only - earlier versions automatically generated a filename based on the TEXTURE filename)
+		if (_imd_load_texture_command(filename, lineToProcess, buffer, value, cnt, "TCMASK", levelSettings.tcmaskfile))
 		{
-			return true;
+			if (!getNextPossibleLevelSettingLine())
+			{
+				return true;
+			}
 		}
 	}
 
@@ -514,7 +517,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, c
 				poly->texAnim.x = tWidth;
 				poly->texAnim.y = tHeight;
 
-				if (pieVersion != PIE_FLOAT_VER)
+				if (pieVersion < PIE_FLOAT_VER)
 				{
 					poly->texAnim.x /= OLD_TEXTURE_SIZE_FIX;
 					poly->texAnim.y /= OLD_TEXTURE_SIZE_FIX;
@@ -542,7 +545,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, c
 				}
 				pRestOfLine += cnt;
 
-				if (pieVersion != PIE_FLOAT_VER)
+				if (pieVersion < PIE_FLOAT_VER)
 				{
 					VertexU /= OLD_TEXTURE_SIZE_FIX;
 					VertexV /= OLD_TEXTURE_SIZE_FIX;
@@ -1045,11 +1048,14 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	s.pShadowPolys = &s.polys;
 
 	LevelSettings levelSettings;
-	// While level settings are supported at the global level, each level can also specify its own settings overrides (as of WZ 4.4+) which take precedence
-	if (!_imd_load_level_settings(filename, &pFileData, FileDataEnd, pieVersion, false, levelSettings))
+	if (pieVersion >= PIE_VER_4)
 	{
-		debug(LOG_ERROR, "%s: Failed to load level settings (level: %" PRIu32 ")", filename.toUtf8().c_str(), level);
-		return nullptr;
+		// While level settings are supported at the global level, each level can also specify its own settings overrides (as of WZ 4.4+) which take precedence
+		if (!_imd_load_level_settings(filename, &pFileData, FileDataEnd, pieVersion, false, levelSettings))
+		{
+			debug(LOG_ERROR, "%s: Failed to load level settings (level: %" PRIu32 ")", filename.toUtf8().c_str(), level);
+			return nullptr;
+		}
 	}
 
 	IMD_Line lineToProcess;
@@ -1449,7 +1455,7 @@ static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	}
 
 	//Now supporting version PIE_VER and PIE_FLOAT_VER files
-	if (imd_version != PIE_VER && imd_version != PIE_FLOAT_VER)
+	if (imd_version < PIE_MIN_VER || imd_version > PIE_MAX_VER)
 	{
 		debug(LOG_ERROR, "%s: Version %d not supported", filename.toUtf8().c_str(), imd_version);
 		return false;
