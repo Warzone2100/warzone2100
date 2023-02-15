@@ -1,15 +1,12 @@
-PIE 4
+PIE 2/3
 =======
 
 Description
 -----------
 
-The PIE format is a custom model format originally created by Pumpkin.
+The PIE format is a custom model format created by Pumpkin.
 
-It has gone through three iterations since the original commercial release:
-- PIE 2 was used until version 2.3, and is still supported
-- PIE 3 was the standard from version 2.3 through 4.3, and is still supported
-- PIE 4 was introduced in Warzone 2100 version 4.4, and is the recommended format for new models
+It has gone through two iterations since the original commercial release. PIE 2 was used until version 2.3 and is still supported. PIE 3 is the de facto standard now, and newer models should use it.
 
 PIE 2 uses integer coordinate values ranging from 0 to 256, corresponding to 1024 pixels for texture pages.
 For example, the coordinates 128,256 refer to pixel coordinates 512,1024.
@@ -18,18 +15,14 @@ PIE 3 uses floating point UV coordinates which range from 0 to 1, usually with s
 Thus, the coordinates 0.111111,1.000000 represent offset 113.777777,256 for a picture 1024x1024 pixels large.
 For texture repetition, UV coordinates can be negative numbers. Only Helicopter models currently contain those, with a precision of eight digits.
 
-PIE 4 adds level overrides for global directives, the TCMASK directive, support for in-file comments (denoted by #), and removes some old (deprecated) functionality.
-
 Format
 ------
 
-## GLOBAL DIRECTIVES
-
 ### PIE
 
-> PIE 4
+> PIE 3
 
-The first line specifies the version number.
+The first line specifies the version number -- either 2 or 3.
 
 ### TYPE
 
@@ -57,7 +50,7 @@ Optional. Specifies if the model wants to have interpolated frames. Default is s
 
 ### TEXTURE
 
-> TEXTURE 0 page-7-barbarians-arizona.png
+> TEXTURE 0 page-7-barbarians-arizona.png 0 0
 
 This sets the texture page for the model. Each file must contain exactly one such line.
 In theory you could leave out this line, but in practice that makes your models useless.
@@ -70,11 +63,8 @@ The second gives you the filename of the texture page, which
 * should start with "page-NN-" for correct handling of dynamic texture replacement.
 * should end with the letters ".png".
 
-### TCMASK
-
-> TCMASK 0 page-7_tcmask.png
-
-Optional. As above, but this sets the tcmask texture page for this model.
+The third and fourth parameters give the size of the texture, and are also ignored, since we can just read that info from the texture page itself.
+You may fill them out with the correct values for backward compatibility.
 
 ### NORMALMAP
 
@@ -106,25 +96,27 @@ replaced with the specified model for the duration of the event. The following e
 
 This gives the number of meshes that are contained in this model. Each mesh can be animated separately in ANI files.
 
-## LEVEL DIRECTIVES
-
 ### LEVEL
 
 > LEVEL 1
 
 This starts the model description for mesh 1. Repeat the below as necessary while incrementing the value above as needed.
 
-### (OPTIONAL) PER-LEVEL OVERRIDES
+### MATERIALS (disabled)
 
-The following global directives can be specified at the LEVEL scope to override the associated global directive for the level:
-- TYPE
-- INTERPOLATE
-- TEXTURE
-- TCMASK
-- NORMALMAP
-- SPECULARMAP
+This feature was removed in commit 823cf08bb18cf24852bac8595b3899aca12d4f7b.
 
-They should be specified in the order listed above. All are optional and, if omitted, the associated global directive will be used (if set).
+> MATERIALS 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 20
+
+Optional. Specifies the material properties of a mesh. The nine first values give the RGB values for ambient, diffuse and specular lighting, respectively. The last value sets shininess.
+
+### SHADERS (disabled)
+
+This feature is currently unsupported.
+
+> SHADERS 2 vertex.vert fragment.vert
+
+Optional. Create a specific shader program for this mesh. The number 2 is not parsed but should always be 2.
 
 ### POINTS
 
@@ -154,7 +146,8 @@ Each line *must* be indented with a tab. It *must* contain exactly 3 normals (on
 
 > POLYGONS n
 
-This starts a list of polygon faces with the number of lines *n*.
+
+This starts a list of polygon faces with the number of lines *n*, which must be less than or equal to 512.
 
 #### Polygon lines
 
