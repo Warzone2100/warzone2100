@@ -28,6 +28,10 @@ struct iIMDShape;
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define PIE_VER				2
 #define PIE_FLOAT_VER		3
+#define PIE_VER_4			4
+
+#define PIE_MIN_VER			PIE_VER
+#define PIE_MAX_VER			4
 
 //*************************************************************************
 
