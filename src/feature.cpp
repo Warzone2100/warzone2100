@@ -496,7 +496,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		// ----- Flip all the tiles under the skyscraper to a rubble tile
 		// smoke effect should disguise this happening
 		StructureBounds b = getStructureBounds(psDel);
-		bool isUrban = tilesetDir && strcmp(tilesetDir, "texpages/tertilesc2hw") == 0;
+		bool isUrban = (currentMapTileset == MAP_TILESET::URBAN);
 		for (int breadth = 0; breadth < b.size.y; ++breadth)
 		{
 			for (int width = 0; width < b.size.x; ++width)
