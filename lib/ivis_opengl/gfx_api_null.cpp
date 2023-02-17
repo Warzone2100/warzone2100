@@ -65,6 +65,39 @@ unsigned null_texture::id()
 	return 0;
 }
 
+// MARK: null_texture_array
+
+null_texture_array::null_texture_array()
+{
+	// no-op
+}
+
+null_texture_array::~null_texture_array()
+{
+	// no-op
+}
+
+void null_texture_array::bind()
+{
+	// no-op
+}
+
+bool null_texture_array::upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image)
+{
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
+	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
+	// no-op
+	return true;
+}
+
+unsigned null_texture_array::id()
+{
+	return 0;
+}
+
 // MARK: null_buffer
 
 null_buffer::null_buffer(const gfx_api::buffer::usage& usage, const gfx_api::context::buffer_storage_hint& hint)
@@ -133,6 +166,14 @@ null_context::~null_context()
 gfx_api::texture* null_context::create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename)
 {
 	auto* new_texture = new null_texture();
+	new_texture->internal_format = internal_format;
+	return new_texture;
+}
+
+gfx_api::texture_array* null_context::create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename)
+{
+	ASSERT(mipmap_count > 0, "mipmap_count must be > 0");
+	auto* new_texture = new null_texture_array();
 	new_texture->internal_format = internal_format;
 	return new_texture;
 }
@@ -421,6 +462,11 @@ bool null_context::textureFormatIsSupported(gfx_api::pixel_format_target target,
 }
 
 bool null_context::supportsMipLodBias() const
+{
+	return true;
+}
+
+bool null_context::supports2DTextureArrays() const
 {
 	return true;
 }

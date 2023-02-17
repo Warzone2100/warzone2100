@@ -102,6 +102,17 @@ namespace gfx_api
 		texture() {};
 	};
 
+	struct texture_array : abstract_texture
+	{
+		virtual bool upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image) = 0;
+		virtual unsigned id() = 0;
+		bool isArray() const { return true; }
+
+		texture_array( const texture_array& other ) = delete; // non construction-copyable
+		texture_array& operator=( const texture_array& ) = delete; // non copyable
+		texture_array() {};
+	};
+
 	// An abstract base that manages a single gfx buffer
 	struct buffer
 	{
@@ -292,6 +303,7 @@ namespace gfx_api
 
 		virtual ~context() {};
 		virtual texture* create_texture(const size_t& mipmap_count, const size_t& width, const size_t& height, const pixel_format& internal_format, const std::string& filename = "") = 0;
+		virtual texture_array* create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw) = 0;
 		virtual pipeline_state_object* build_pipeline(const state_description&,
 													  const SHADER_MODE&,
@@ -339,6 +351,7 @@ namespace gfx_api
 		virtual swap_interval_mode getSwapInterval() const = 0;
 		virtual bool textureFormatIsSupported(pixel_format_target target, pixel_format format, pixel_format_usage::flags usage) = 0;
 		virtual bool supportsMipLodBias() const = 0;
+		virtual bool supports2DTextureArrays() const = 0;
 		virtual size_t maxFramesInFlight() const = 0;
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
