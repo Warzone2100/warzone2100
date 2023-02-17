@@ -91,6 +91,7 @@ jobs:
         gem install asciidoctor -v 2.0.16 --no-document
 
         #brew update
+        brew install pkg-config
         #if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
         cmake --version
     - name: Prep Environment
