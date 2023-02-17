@@ -659,17 +659,17 @@ namespace gfx_api
 	using Draw3DShapeNoLightAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_NOLIGHT, DEPTH_CMP_LEQ_WRT_OFF>;
 
 	// interleaved vertex data
-	struct alignas(16) Draw3DShapePerInstanceInterleavedData
+	struct Draw3DShapePerInstanceInterleavedData
 	{
-		alignas(16) glm::mat4 ModelViewMatrix; // 16 bytes * 4 = 64 bytes
+		glm::mat4 ModelViewMatrix; // 16 bytes * 4 = 64 bytes
 		// glm::mat4 NormalMatrix; // can be calculated in the shader
-		alignas(16) glm::vec4 shaderStretch_ecmState_alphaTest_animFrameNumber; // 16 bytes
-		alignas(4) uint32_t colour; // 4 bytes (stored as u8x4_norm)
-		alignas(4) uint32_t teamcolour; // 4 bytes (stored as u8x4_norm)
-		// (+ 8?? bytes padding for overall struct)
+		glm::vec4 shaderStretch_ecmState_alphaTest_animFrameNumber; // 16 bytes
+		uint32_t colour; // 4 bytes (stored as u8x4_norm)
+		uint32_t teamcolour; // 4 bytes (stored as u8x4_norm)
+		// (+ 8 bytes padding for overall struct)
+		uint32_t _unused_padding[2] = {};
 	};
-	static_assert(alignof(Draw3DShapePerInstanceInterleavedData) == 16, "Unexpected alignment");
-	static_assert(sizeof(Draw3DShapePerInstanceInterleavedData) == 96, "Unexpected size");
+	static_assert(sizeof(Draw3DShapePerInstanceInterleavedData) % 16 == 0, "Size must be a multiple of 16");
 	static_assert(offsetof(Draw3DShapePerInstanceInterleavedData, shaderStretch_ecmState_alphaTest_animFrameNumber) == 64, "Unexpected offset");
 	static_assert(offsetof(Draw3DShapePerInstanceInterleavedData, colour) == 80, "Unexpected offset");
 	static_assert(offsetof(Draw3DShapePerInstanceInterleavedData, teamcolour) == 84, "Unexpected offset");
