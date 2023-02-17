@@ -79,6 +79,34 @@ private:
 	virtual bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
+struct texture_array_mip_level_buffer; // forward-declare
+
+struct gl_texture_array final : public gfx_api::texture_array
+{
+private:
+	friend struct gl_context;
+	GLuint _id;
+	size_t mip_count = 0;
+	size_t layer_count = 0;
+	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
+	bool gles = false;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+	texture_array_mip_level_buffer *pInternalBuffer = nullptr;
+
+	gl_texture_array();
+	virtual ~gl_texture_array();
+public:
+	virtual void bind() override;
+	void unbind();
+	virtual void flush() override;
+	virtual bool upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image) override;
+	virtual unsigned id() override;
+private:
+	virtual bool upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
+};
+
 struct gl_buffer final : public gfx_api::buffer
 {
 	gfx_api::buffer::usage usage;
@@ -190,6 +218,7 @@ struct gl_context final : public gfx_api::context
 	~gl_context();
 
 	virtual gfx_api::texture* create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename) override;
+	virtual gfx_api::texture_array* create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename) override;
 	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw) override;
 
 	virtual gfx_api::pipeline_state_object * build_pipeline(const gfx_api::state_description &state_desc,
@@ -237,6 +266,7 @@ struct gl_context final : public gfx_api::context
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
+	virtual bool supports2DTextureArrays() const override;
 	virtual size_t maxFramesInFlight() const override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;

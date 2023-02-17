@@ -1864,6 +1864,154 @@ bool VkTexture::upload_sub(const size_t& mip_level, const size_t& offset_x, cons
 
 unsigned VkTexture::id() { return 0; }
 
+// MARK: VkTextureArray
+
+VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t layer_count, size_t width, size_t height, gfx_api::pixel_format internal_pixel_format, const std::string& filename)
+	: dev(root.dev), internal_format(internal_pixel_format), mipmap_levels(mipmap_count), layer_count(layer_count), texWidth(width), texHeight(height), root(&root)
+{
+	ASSERT(layer_count > 0 && width > 0 && height > 0, "0 layers/width/height textures are unsupported");
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
+	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mipmap_count (%zu) exceeds uint32_t max", mipmap_count);
+	ASSERT(mipmap_count > 0, "mipmap_count must be > 0");
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugName = filename;
+#endif
+	vk::Format internal_vk_format = root.get_format(internal_pixel_format);
+
+	auto imageCreateInfo = vk::ImageCreateInfo()
+	.setArrayLayers(layer_count)
+	.setExtent(vk::Extent3D(width, height, 1))
+	.setImageType(vk::ImageType::e2D)
+	.setMipLevels(mipmap_count)
+	.setTiling(vk::ImageTiling::eOptimal)
+	.setFormat(internal_vk_format)
+	.setUsage(vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled)
+	.setInitialLayout(vk::ImageLayout::eUndefined)
+	.setSamples(vk::SampleCountFlagBits::e1)
+	.setSharingMode(vk::SharingMode::eExclusive);
+
+	VmaAllocationCreateInfo allocInfo = {};
+	allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+
+	vk::Result result = static_cast<vk::Result>(vmaCreateImage(root.allocator, reinterpret_cast<const VkImageCreateInfo*>( &imageCreateInfo ), &allocInfo, reinterpret_cast<VkImage*>( &object ), &allocation, nullptr));
+	if (result != vk::Result::eSuccess)
+	{
+		// Failed to allocate memory!
+		vk::throwResultException( result, "vmaCreateImage" );
+	}
+
+	if (root.debugUtilsExtEnabled)
+	{
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eImage);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImage>(object)));
+		objectNameInfo.setPObjectName(filename.c_str());
+		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
+	}
+
+	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
+		.setImage(object)
+		.setViewType(vk::ImageViewType::e2DArray)
+		.setFormat(internal_vk_format)
+		.setComponents(vk::ComponentMapping())
+		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipmap_levels, 0, layer_count));
+
+	view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, this->root->vkDynLoader);
+}
+
+VkTextureArray::~VkTextureArray()
+{
+	// All textures must be properly released before gfx_api::context::shutdown()
+	if (buffering_mechanism::isInitialized())
+	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		frameResources.image_view_to_delete.emplace_back(std::move(view));
+		frameResources.image_to_delete.emplace_back(std::move(object));
+		frameResources.vmamemory_to_free.push_back(allocation);
+	}
+	else
+	{
+		// ~VkTextureArray called too late! - probably after gfx_api::context::shutdown()
+		view.release(); // Can't properly destroy this VK object now, but call release() to ensure that vk::Device::destroy isn't called after the device is no longer available
+	}
+}
+
+bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image)
+{
+	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
+	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	size_t width = image.width();
+	size_t height = image.height();
+	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
+
+	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mip_level (%zu) exceeds uint32_t max", mip_level);
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
+
+	size_t dynamicAlignment = std::max(0x4 * VkTexture::format_size(internal_format), static_cast<size_t>(root->physDeviceProps.limits.optimalBufferCopyOffsetAlignment));
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	const size_t stagingBufferSize = image.data_size();
+	ASSERT(stagingBufferSize <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "stagingBufferSize (%zu) exceeds uint32_t max", stagingBufferSize);
+	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(stagingBufferSize), static_cast<uint32_t>(dynamicAlignment));
+
+	auto* mappedMem = reinterpret_cast<uint8_t*>(frameResources.stagingBufferAllocator.mapMemory(stagingMemory));
+	ASSERT(mappedMem != nullptr, "Failed to map memory");
+
+	memcpy(mappedMem, image.data(), image.data_size());
+
+	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
+
+	if (!transitionedToTransferDstFormat)
+	{
+		const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
+			vk::ImageMemoryBarrier()
+				.setImage(object)
+				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipmap_levels, 0, layer_count))
+				.setOldLayout(vk::ImageLayout::eUndefined)
+				.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
+				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
+		};
+		const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
+		cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy, root->vkDynLoader);
+
+		transitionedToTransferDstFormat = true;
+	}
+
+	const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
+	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
+		vk::BufferImageCopy()
+			.setBufferOffset(stagingMemory.offset)
+			.setBufferImageHeight(static_cast<uint32_t>(image.bufferImageHeight()))
+			.setBufferRowLength(static_cast<uint32_t>(image.bufferRowLength()))
+			.setImageOffset(vk::Offset3D(0, 0, 0))
+			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, mip_level, layer, 1))
+			.setImageExtent(vk::Extent3D(width, height, 1))
+	};
+	cmdBuffer.copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
+
+	return true;
+}
+
+void VkTextureArray::flush()
+{
+	const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
+	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
+		vk::ImageMemoryBarrier()
+			.setImage(object)
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipmap_levels, 0, layer_count))
+			.setOldLayout(vk::ImageLayout::eUndefined)
+			.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
+			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
+			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
+	};
+	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
+	transitionedToTransferDstFormat = false;
+}
+
 // MARK: VkRoot
 
 VkRoot::VkRoot(bool _debug) : validationLayer(_debug)
@@ -3953,6 +4101,12 @@ gfx_api::texture* VkRoot::create_texture(const std::size_t& mipmap_count, const 
 	return result;
 }
 
+gfx_api::texture_array* VkRoot::create_texture_array(const std::size_t& mipmap_count, const std::size_t& layer_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename)
+{
+	auto result = new VkTextureArray(*this, mipmap_count, layer_count, width, height, internal_format, filename);
+	return result;
+}
+
 gfx_api::buffer* VkRoot::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/)
 {
 	return new VkBuf(dev, usage, *this);
@@ -4535,6 +4689,11 @@ const size_t& VkRoot::current_FrameNum() const
 bool VkRoot::supportsMipLodBias() const
 {
 	return lodBiasMethod != LodBiasMethod::Unsupported;
+}
+
+bool VkRoot::supports2DTextureArrays() const
+{
+	return true;
 }
 
 size_t VkRoot::maxFramesInFlight() const
