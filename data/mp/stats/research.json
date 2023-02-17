@@ -6705,7 +6705,7 @@
 		"requiredResearch": [
 			"R-Wpn-MG-Damage03"
 		],
-		"researchPoints": 7200,
+		"researchPoints": 6000,
 		"researchPower": 225,
 		"results": [
 			{
@@ -6739,11 +6739,10 @@
 		"id": "R-Wpn-MG-Damage05",
 		"name": "Tungsten-Tipped MG Bullets",
 		"requiredResearch": [
-			"R-Wpn-MG-Damage04",
-			"R-Wpn-MG-ROF01"
+			"R-Wpn-MG-Damage04"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 7200,
+		"researchPower": 287,
 		"results": [
 			{
 				"class": "Weapon",
@@ -6779,7 +6778,7 @@
 			"R-Wpn-MG-Damage05"
 		],
 		"researchPoints": 7800,
-		"researchPower": 243,
+		"researchPower": 350,
 		"results": [
 			{
 				"class": "Weapon",
@@ -6815,7 +6814,7 @@
 			"R-Wpn-MG-Damage06"
 		],
 		"researchPoints": 8800,
-		"researchPower": 275,
+		"researchPower": 412,
 		"results": [
 			{
 				"class": "Weapon",
@@ -6852,7 +6851,7 @@
 			"R-Struc-Research-Upgrade06"
 		],
 		"researchPoints": 10800,
-		"researchPower": 337,
+		"researchPower": 450,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7105,8 +7104,8 @@
 			"R-Struc-Research-Upgrade06",
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultComponents": [
 			"MG5TWINROTARY"
 		],
