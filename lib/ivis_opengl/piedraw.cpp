@@ -86,6 +86,12 @@ void pie_InitLighting()
 	memcpy(lightingDefault, defaultLight, sizeof(lightingDefault));
 }
 
+glm::vec4 pie_GetLighting0(LIGHTING_TYPE entry)
+{
+	auto c = lighting0[entry];
+	return glm::vec4(c[0], c[1], c[2], c[3]);
+}
+
 void pie_Lighting0(LIGHTING_TYPE entry, const float value[4])
 {
 	lighting0[entry][0] = value[0];

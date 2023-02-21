@@ -139,6 +139,8 @@ GLsizei dreCount;
 /// Are we actually drawing something using the DrawRangeElements functions?
 bool drawRangeElementsStarted = false;
 
+TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::CLASSIC;
+
 #define MIN_TERRAIN_TEXTURE_SIZE 512
 
 /// Pass all remaining triangles to OpenGL
