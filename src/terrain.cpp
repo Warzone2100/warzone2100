@@ -591,17 +591,18 @@ void markTileDirty(int i, int j)
 
 void loadTerrainTextures(MAP_TILESET mapTileset)
 {
-	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
+	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
 	// for each terrain layer
-	for (int layer = 0; layer < numGroundTypes; layer++)
+	for (int layer = 0; layer < getNumGroundTypes(); layer++)
 	{
 		// pre-load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
-		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", psGroundTypes[layer].textureName);
+		const auto groundType = getGroundType(layer);
+		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
+		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", groundType.textureName.c_str());
 	}
 }
 
@@ -811,6 +812,7 @@ bool initTerrain()
 
 	////////////////////
 	// fill the texture part of the sectors
+	const size_t numGroundTypes = getNumGroundTypes();
 	texture = (PIELIGHT *)malloc(sizeof(PIELIGHT) * xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes);
 	textureIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12 * numGroundTypes);
 	textureSize = 0;
@@ -1182,7 +1184,8 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	gfx_api::TerrainLayer::get().bind();
 	gfx_api::TerrainLayer::get().bind_vertex_buffers(geometryVBO, textureVBO);
 	gfx_api::context::get().bind_index_buffer(*textureIndexVBO, gfx_api::index_type::u32);
-	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
+	const size_t numGroundTypes = getNumGroundTypes();
+	ASSERT_OR_RETURN(, numGroundTypes, "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -1190,14 +1193,15 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	// draw each layer separately
 	for (int layer = 0; layer < numGroundTypes; layer++)
 	{
-		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0 );
-		const glm::vec4 paramsY(1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0 );
+		const auto& groundType = getGroundType(layer);
+		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(groundType.textureSize), 0 );
+		const glm::vec4 paramsY(1.0f / world_coord(groundType.textureSize), 0, 0, 0 );
 		gfx_api::TerrainLayer::get().bind_constants({ ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, glm::mat4(1.f), textureMatrix,
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 		// load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
-		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", psGroundTypes[layer].textureName);
+		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
+		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", groundType.textureName.c_str());
 		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_texture);
 
 		// load the color buffer
