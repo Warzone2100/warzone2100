@@ -485,6 +485,40 @@ bool iV_Image::pad_image(unsigned int newWidth, unsigned int newHeight, bool use
 	return true;
 }
 
+bool iV_Image::blit_image(const iV_Image& src, unsigned int xOffset, unsigned int yOffset)
+{
+	ASSERT_OR_RETURN(false, xOffset < m_width, "xOffset (%u) >= destination width (%u)", xOffset, m_width);
+	ASSERT_OR_RETURN(false, yOffset < m_height, "yOffset (%u) >= destination height (%u)", yOffset, m_height);
+
+	// For now, the source and destination images must share the same format / # of channels
+	ASSERT_OR_RETURN(false, src.channels() == channels() && src.pixel_format() == pixel_format(), "Source and destination must share the same number of channels / format");
+
+	auto sourceImageHeight = src.height();
+	auto sourceImageWidth = src.width();
+
+	unsigned int rowWidthToCopy = sourceImageWidth;
+	if (xOffset + sourceImageWidth > m_width)
+	{
+		debug(LOG_ERROR, "Cropping source image, as it would extend beyond the width of the destination image.");
+		rowWidthToCopy = m_width - xOffset;
+	}
+	unsigned int rowsToCopy = sourceImageHeight;
+	if (yOffset + sourceImageHeight > m_height)
+	{
+		debug(LOG_ERROR, "Cropping source image, as it would extend beyond the height of the destination image.");
+		rowsToCopy = m_height - yOffset;
+	}
+
+	for (unsigned int y = 0; y < rowsToCopy; ++y)
+	{
+		// Copy the source image row
+		size_t copyOffset = (((m_width * (yOffset + y)) + xOffset) * 4);
+		memcpy(&m_bmp[copyOffset], &src.m_bmp[sourceImageWidth * y * m_channels], (m_channels * rowWidthToCopy));
+	}
+
+	return true;
+}
+
 bool iV_Image::convert_color_order(ColorOrder newOrder)
 {
 	if (m_colorOrder == newOrder)
