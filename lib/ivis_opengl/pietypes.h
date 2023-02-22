@@ -219,6 +219,8 @@ public:
 
 	bool pad_image(unsigned int newWidth, unsigned int newHeight, bool useSmearing);
 
+	bool blit_image(const iV_Image& other, unsigned int xOffset, unsigned int yOffset);
+
 	bool convert_color_order(ColorOrder newOrder);
 
 private:
