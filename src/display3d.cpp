@@ -585,7 +585,7 @@ float interpolateAngleDegrees(int a, int b, float t)
 	return a + d * t;
 }
 
-bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix, float stretchDepth, bool onlySingleLevel)
+bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix, float stretchDepth)
 {
 	glm::mat4 modelMatrix(1.f);
 	int animFrame = 0; // for texture animation
@@ -634,7 +634,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		}
 	}
 
-	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix, stretchDepth, onlySingleLevel);
+	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix, stretchDepth, true);
 }
 
 static void setScreenDispWithPerspective(SCREEN_DISP_DATA *sDisplay, const glm::mat4 &perspectiveViewModelMatrix)
@@ -2748,7 +2748,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		{
 			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
-		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix, stretch, true);
+		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix, stretch);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
 			renderStructureTurrets(psStructure, getFactionIMD(faction, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewModelMatrix);

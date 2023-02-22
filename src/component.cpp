@@ -504,9 +504,13 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 			strImd = psShapeBody->objanimpie[psDroid->animationEvent];
 		}
 		glm::mat4 viewModelMatrix = viewMatrix * modelMatrix;
-		if (drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData, viewModelMatrix))
+		while (strImd)
 		{
-			didDrawSomething = true;
+			if (drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData, viewModelMatrix))
+			{
+				didDrawSomething = true;
+			}
+			strImd = strImd->next;
 		}
 	}
 
