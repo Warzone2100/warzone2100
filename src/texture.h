@@ -45,4 +45,9 @@ extern size_t terrainPage;
 void setTextureSize(int texSize);
 int getTextureSize();
 
+// decal size
+int getCurrentTileTextureSize();
+
+void reloadTileTextures();
+
 #endif // __INCLUDED_SRC_TEXTURE_H__
