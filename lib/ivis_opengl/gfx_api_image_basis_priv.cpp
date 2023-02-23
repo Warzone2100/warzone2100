@@ -36,6 +36,7 @@ static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_
 static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_AlphaMask = {nullopt};
 static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_NormalMap = {nullopt};
 static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_SpecularMap = {nullopt};
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_HeightMap = {nullopt};
 
 // MARK: - Basis Universal transcoder implementation
 
@@ -58,8 +59,6 @@ static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_
 #elif defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
-
-#define WZ_BASIS_UNCOMPRESSED_FORMAT gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8
 
 static optional<basist::transcoder_texture_format> to_basis_format(gfx_api::pixel_format desiredFormat)
 {
@@ -186,6 +185,7 @@ void gfx_api::initBasisTranscoder()
 
 		// gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
 		// gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
+		// gfx_api::texture_type::height_map:	// a single-channel texture, containing the height value
 			// Is is expected that for either of the above, the single-channel value is stored in the R (and possibly GB) channels
 		// Overall quality rankings: FORMAT_R11_EAC (4bpp) > FORMAT_R_BC4_UNORM (4bpp)
 		constexpr std::array<gfx_api::pixel_format, 3> qualityOrderR = { gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM, gfx_api::pixel_format::FORMAT_R11_EAC, gfx_api::pixel_format::FORMAT_R_BC4_UNORM };
@@ -199,11 +199,13 @@ void gfx_api::initBasisTranscoder()
 			{
 				bestAvailableBasisCompressionFormat_AlphaMask[target_idx] = format;
 				bestAvailableBasisCompressionFormat_SpecularMap[target_idx] = format;
+				bestAvailableBasisCompressionFormat_HeightMap[target_idx] = format;
 				break;
 			}
 		}
 		debug(LOG_3D, "  * AlphaMask: %s", (bestAvailableBasisCompressionFormat_AlphaMask[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_AlphaMask[target_idx].value()) : "<none>");
 		debug(LOG_3D, "  * SpecularMap: %s", (bestAvailableBasisCompressionFormat_SpecularMap[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_SpecularMap[target_idx].value()) : "<none>");
+		debug(LOG_3D, "  * HeightMap: %s", (bestAvailableBasisCompressionFormat_HeightMap[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_HeightMap[target_idx].value()) : "<none>");
 	}
 }
 
@@ -240,6 +242,8 @@ static optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasisFi
 			return bestAvailableBasisCompressionFormat_NormalMap[target_idx];
 		case gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
 			return bestAvailableBasisCompressionFormat_SpecularMap[target_idx];
+		case gfx_api::texture_type::height_map:	// a single-channel texture, containing the height values
+			return bestAvailableBasisCompressionFormat_HeightMap[target_idx];
 		default:
 			// unsupported
 			break;
@@ -264,6 +268,8 @@ optional<gfx_api::pixel_format> gfx_api::getBestAvailableTranscodeFormatForBasis
 			return bestAvailableBasisCompressionFormat_NormalMap[static_cast<size_t>(target)];
 		case gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
 			return bestAvailableBasisCompressionFormat_SpecularMap[static_cast<size_t>(target)];
+		case gfx_api::texture_type::height_map:	// a single-channel texture, containing the height values
+			return bestAvailableBasisCompressionFormat_HeightMap[static_cast<size_t>(target)];
 		default:
 			// unsupported
 			break;
@@ -279,6 +285,7 @@ static bool iVImage_Basis_Convert_Channels(gfx_api::texture_type textureType, st
 	{
 		case gfx_api::texture_type::specular_map:
 		case gfx_api::texture_type::alpha_mask:
+		case gfx_api::texture_type::height_map:
 			// extract single channel (should always be in R)
 			return uncompressedImage->convert_to_single_channel(0);
 		// TODO: Normal map

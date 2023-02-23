@@ -320,6 +320,14 @@ static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api:
 			}
 			break;
 		}
+		case gfx_api::texture_type::height_map:
+		{
+			if (image.channels() > 1)
+			{
+				image.convert_to_single_channel(0); // extract first channel
+			}
+			break;
+		}
 		default:
 			break;
 	}
