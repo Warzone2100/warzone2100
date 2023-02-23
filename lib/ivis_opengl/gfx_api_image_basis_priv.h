@@ -29,6 +29,8 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+#define WZ_BASIS_UNCOMPRESSED_FORMAT gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8
+
 namespace gfx_api
 {
 	struct texture; // forward-declare

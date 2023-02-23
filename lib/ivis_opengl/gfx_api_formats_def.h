@@ -117,7 +117,8 @@ namespace gfx_api
 		game_texture, // a RGB / RGBA texture, possibly stored in a compressed format
 		alpha_mask,	// a single-channel texture, containing the alpha values
 		normal_map,
-		specular_map // a single-channel texture, containing the specular / luma value
+		specular_map, // a single-channel texture, containing the specular / luma value
+		height_map, // a single-channel texture, containing the height values
 	};
 	constexpr texture_type MAX_TEXTURE_TYPE = texture_type::specular_map;
 	constexpr size_t TEXTURE_TYPE_COUNT = static_cast<size_t>(MAX_TEXTURE_TYPE) + 1;
