@@ -760,8 +760,8 @@
 			"R-Defense-WallUpgrade04",
 			"R-Wpn-Cannon6TwinAslt"
 		],
-		"researchPoints": 6400,
-		"researchPower": 200,
+		"researchPoints": 3200,
+		"researchPower": 100,
 		"resultStructures": [
 			"PillBox-Cannon6"
 		],
@@ -775,8 +775,8 @@
 		"requiredResearch": [
 			"R-Wpn-EMPCannon"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"WallTower-EMP"
 		],
@@ -790,8 +790,8 @@
 		"requiredResearch": [
 			"R-Wpn-MortarEMP"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"Emplacement-MortarEMP"
 		],
@@ -808,8 +808,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
 		],
-		"researchPoints": 3200,
-		"researchPower": 100,
+		"researchPoints": 1600,
+		"researchPower": 50,
 		"resultStructures": [
 			"Emplacement-HPVcannon"
 		],
@@ -826,8 +826,8 @@
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"GuardTower-ATMiss"
 		],
@@ -844,8 +844,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"GuardTower-Rail1"
 		],
@@ -859,8 +859,8 @@
 		"requiredResearch": [
 			"R-Defense-HardcreteWall"
 		],
-		"researchPoints": 1800,
-		"researchPower": 56,
+		"researchPoints": 900,
+		"researchPower": 28,
 		"resultStructures": [
 			"A0HardcreteMk1Gate"
 		],
@@ -891,8 +891,8 @@
 		"requiredResearch": [
 			"R-Wpn-HvyLaser"
 		],
-		"researchPoints": 20400,
-		"researchPower": 450,
+		"researchPoints": 10200,
+		"researchPower": 318,
 		"resultStructures": [
 			"Emplacement-HeavyLaser"
 		],
@@ -952,8 +952,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"Emplacement-HvyATrocket"
 		],
@@ -990,8 +990,8 @@
 		"requiredResearch": [
 			"R-Wpn-Flame2"
 		],
-		"researchPoints": 4000,
-		"researchPower": 125,
+		"researchPoints": 2000,
+		"researchPower": 62,
 		"resultStructures": [
 			"Tower-Projector"
 		],
@@ -1025,8 +1025,8 @@
 			"R-Defense-MortarPit",
 			"R-Wpn-Mortar02Hvy"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"Emplacement-MortarPit02"
 		],
@@ -1057,8 +1057,8 @@
 			"R-Wpn-Rocket02-MRL",
 			"R-Defense-HardcreteWall"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"Emplacement-MRL-pit"
 		],
@@ -1107,8 +1107,8 @@
 		"requiredResearch": [
 			"R-Wpn-MdArtMissile"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultStructures": [
 			"Emplacement-MdART-pit"
 		],
@@ -1123,8 +1123,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Mortar01Lt"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"Emplacement-MortarPit01"
 		],
@@ -1139,8 +1139,8 @@
 			"R-Wpn-Mortar-Incendiary",
 			"R-Defense-MortarPit"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"Emplacement-MortarPit-Incendiary"
 		],
@@ -1155,8 +1155,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-MG-Damage01"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"PillBox1"
 		],
@@ -1171,8 +1171,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Cannon1Mk1"
 		],
-		"researchPoints": 1500,
-		"researchPower": 46,
+		"researchPoints": 750,
+		"researchPower": 23,
 		"resultStructures": [
 			"PillBox4"
 		],
@@ -1187,8 +1187,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Flamer01Mk1"
 		],
-		"researchPoints": 1500,
-		"researchPower": 46,
+		"researchPoints": 750,
+		"researchPower": 23,
 		"resultStructures": [
 			"PillBox5"
 		],
@@ -1203,8 +1203,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Rocket01-LtAT"
 		],
-		"researchPoints": 1500,
-		"researchPower": 46,
+		"researchPoints": 750,
+		"researchPower": 23,
 		"resultStructures": [
 			"GuardTower5"
 		],
@@ -1218,8 +1218,8 @@
 		"requiredResearch": [
 			"R-Wpn-PlasmaCannon"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultStructures": [
 			"Emplacement-PlasmaCannon"
 		],
@@ -1237,8 +1237,8 @@
 		"requiredResearch": [
 			"R-Wpn-Plasmite-Flamer"
 		],
-		"researchPoints": 4000,
-		"researchPower": 125,
+		"researchPoints": 2000,
+		"researchPower": 62,
 		"resultStructures": [
 			"Plasmite-flamer-bunker"
 		],
@@ -1252,8 +1252,8 @@
 		"requiredResearch": [
 			"R-Wpn-Laser01"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultStructures": [
 			"Emplacement-PrisLas"
 		],
@@ -1267,8 +1267,8 @@
 		"requiredResearch": [
 			"R-Wpn-Laser02"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultStructures": [
 			"GuardTower-BeamLas"
 		],
@@ -1282,8 +1282,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun02"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 5000,
+		"researchPower": 156,
 		"resultStructures": [
 			"Emplacement-Rail2"
 		],
@@ -1300,8 +1300,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun03"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 5000,
+		"researchPower": 156,
 		"resultStructures": [
 			"Emplacement-Rail3"
 		],
@@ -1337,8 +1337,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1800,
+		"researchPower": 56,
 		"resultStructures": [
 			"Pillbox-RotMG"
 		],
@@ -1356,8 +1356,8 @@
 			"R-Defense-MortarPit",
 			"R-Wpn-Mortar3"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"Emplacement-RotMor"
 		],
@@ -1468,8 +1468,8 @@
 		"requiredResearch": [
 			"R-Sys-Engineering01"
 		],
-		"researchPoints": 600,
-		"researchPower": 18,
+		"researchPoints": 300,
+		"researchPower": 9,
 		"resultStructures": [
 			"A0TankTrap"
 		],
@@ -1503,8 +1503,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Rocket05-MiniPod"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"GuardTower6"
 		],
@@ -1521,8 +1521,8 @@
 		"requiredResearch": [
 			"R-Defense-RotMG"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1800,
+		"researchPower": 56,
 		"resultStructures": [
 			"Wall-RotMg"
 		],
@@ -1539,8 +1539,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon5"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultStructures": [
 			"Wall-VulcanCan"
 		],
@@ -1557,8 +1557,8 @@
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"WallTower-Atmiss"
 		],
@@ -1608,8 +1608,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultStructures": [
 			"WallTower-HPVcannon"
 		],
@@ -1623,8 +1623,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"WallTower-HvATrocket"
 		],
@@ -1638,8 +1638,8 @@
 		"requiredResearch": [
 			"R-Wpn-Laser02"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultStructures": [
 			"WallTower-PulseLas"
 		],
@@ -1668,8 +1668,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun02"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultStructures": [
 			"WallTower-Rail2"
 		],
@@ -1686,8 +1686,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun03"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 7200,
+		"researchPower": 225,
 		"resultStructures": [
 			"WallTower-Rail3"
 		],
@@ -1739,8 +1739,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG5"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"resultStructures": [
 			"WallTower-TwinAssaultGun"
 		],
@@ -1755,8 +1755,8 @@
 			"R-Defense-Pillbox01",
 			"R-Wpn-MG3Mk1"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"WallTower01"
 		],
@@ -1771,8 +1771,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Cannon1Mk1"
 		],
-		"researchPoints": 1500,
-		"researchPower": 46,
+		"researchPoints": 750,
+		"researchPower": 23,
 		"resultStructures": [
 			"WallTower02"
 		],
@@ -1790,8 +1790,8 @@
 			"R-Wpn-Cannon2Mk1",
 			"R-Defense-WallTower02"
 		],
-		"researchPoints": 1800,
-		"researchPower": 56,
+		"researchPoints": 900,
+		"researchPower": 28,
 		"resultStructures": [
 			"WallTower03"
 		],
@@ -1806,8 +1806,8 @@
 			"R-Defense-WallTower03",
 			"R-Wpn-Cannon3Mk1"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"WallTower04"
 		],
@@ -1822,8 +1822,8 @@
 			"R-Wpn-Rocket01-LtAT",
 			"R-Defense-HardcreteWall"
 		],
-		"researchPoints": 1500,
-		"researchPower": 46,
+		"researchPoints": 750,
+		"researchPower": 23,
 		"resultStructures": [
 			"WallTower06"
 		],
@@ -3389,8 +3389,8 @@
 		"requiredResearch": [
 			"R-Sys-SpyTurret"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"Sys-SpyTower"
 		],
