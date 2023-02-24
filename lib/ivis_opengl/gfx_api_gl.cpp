@@ -1672,11 +1672,14 @@ GLint get_size(const gfx_api::vertex_attribute_type& type)
 {
 	switch (type)
 	{
+		case gfx_api::vertex_attribute_type::int1:
+			return 1;
 		case gfx_api::vertex_attribute_type::float2:
 			return 2;
 		case gfx_api::vertex_attribute_type::float3:
 			return 3;
 		case gfx_api::vertex_attribute_type::float4:
+		case gfx_api::vertex_attribute_type::u8x4_uint:
 		case gfx_api::vertex_attribute_type::u8x4_norm:
 			return 4;
 	}
@@ -1692,8 +1695,11 @@ GLenum get_type(const gfx_api::vertex_attribute_type& type)
 		case gfx_api::vertex_attribute_type::float3:
 		case gfx_api::vertex_attribute_type::float4:
 			return GL_FLOAT;
+		case gfx_api::vertex_attribute_type::u8x4_uint:
 		case gfx_api::vertex_attribute_type::u8x4_norm:
 			return GL_UNSIGNED_BYTE;
+		case gfx_api::vertex_attribute_type::int1:
+			return GL_INT;
 	}
 	debug(LOG_FATAL, "get_type(%d) failed", (int)type);
 	return GL_INVALID_ENUM; // silence warning
@@ -1706,6 +1712,8 @@ GLboolean get_normalisation(const gfx_api::vertex_attribute_type& type)
 		case gfx_api::vertex_attribute_type::float2:
 		case gfx_api::vertex_attribute_type::float3:
 		case gfx_api::vertex_attribute_type::float4:
+		case gfx_api::vertex_attribute_type::int1:
+		case gfx_api::vertex_attribute_type::u8x4_uint:
 			return GL_FALSE;
 		case gfx_api::vertex_attribute_type::u8x4_norm:
 			return true;
@@ -1858,7 +1866,18 @@ void gl_context::bind_vertex_buffers(const std::size_t& first, const std::vector
 		for (const auto& attribute : buffer_desc.attributes)
 		{
 			enableVertexAttribArray(static_cast<GLuint>(attribute.id));
-			glVertexAttribPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), static_cast<GLsizei>(buffer_desc.stride), reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
+
+			if (get_type(attribute.type) == GL_INT || attribute.type == gfx_api::vertex_attribute_type::u8x4_uint)
+			{
+				// glVertexAttribIPointer only supported in: OpenGL 3.0+, OpenGL ES 3.0+
+				ASSERT(glVertexAttribIPointer != nullptr, "Missing glVertexAttribIPointer?");
+				glVertexAttribIPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), static_cast<GLsizei>(buffer_desc.stride), reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
+			}
+			else
+			{
+				glVertexAttribPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), static_cast<GLsizei>(buffer_desc.stride), reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
+			}
+
 			if (buffer_desc.rate == gfx_api::vertex_attribute_input_rate::instance)
 			{
 				if (hasInstancedRenderingSupport)
@@ -3199,6 +3218,14 @@ bool gl_context::supportsMipLodBias() const
 bool gl_context::supports2DTextureArrays() const
 {
 	return has2DTextureArraySupport;
+}
+
+bool gl_context::supportsIntVertexAttributes() const
+{
+	// glVertexAttribIPointer requires: OpenGL 3.0+ or OpenGL ES 3.0+
+	bool hasRequiredVersion = (!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0);
+	bool hasRequiredFunction = glVertexAttribIPointer != nullptr;
+	return hasRequiredVersion && hasRequiredFunction;
 }
 
 size_t gl_context::maxFramesInFlight() const

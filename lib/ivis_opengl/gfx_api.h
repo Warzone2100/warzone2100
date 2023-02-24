@@ -220,6 +220,10 @@ namespace gfx_api
 		float4,
 //		mat4,
 		u8x4_norm,
+
+		// not guaranteed to be supported on all systems:
+		u8x4_uint,
+		int1
 	};
 
 	enum class vertex_attribute_input_rate
@@ -354,6 +358,7 @@ namespace gfx_api
 		virtual bool textureFormatIsSupported(pixel_format_target target, pixel_format format, pixel_format_usage::flags usage) = 0;
 		virtual bool supportsMipLodBias() const = 0;
 		virtual bool supports2DTextureArrays() const = 0;
+		virtual bool supportsIntVertexAttributes() const = 0;
 		virtual size_t maxFramesInFlight() const = 0;
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
