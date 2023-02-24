@@ -412,7 +412,9 @@ struct VkBuf final : public gfx_api::buffer
 	size_t buffer_size = 0;
 	size_t lastUploaded_FrameNum = 0;
 
-	VkBuf(vk::Device _dev, const gfx_api::buffer::usage&, const VkRoot& root);
+	std::string debugName;
+
+	VkBuf(vk::Device _dev, const gfx_api::buffer::usage&, const VkRoot& root, const std::string& debugName);
 
 	virtual ~VkBuf() override;
 
@@ -635,7 +637,7 @@ public:
 	virtual gfx_api::texture* create_texture(const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename = "") override;
 	virtual gfx_api::texture_array* create_texture_array(const std::size_t& mipmap_count, const std::size_t& layer_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename = "") override;
 
-	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw) override;
+	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw, const std::string& debugName = "") override;
 
 private:
 

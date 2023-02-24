@@ -1312,13 +1312,13 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  		if (!tangents.empty())
  		{
  			if (!s.buffers[VBO_TANGENT])
- 				s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+				s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "tangent buffer");
  			s.buffers[VBO_TANGENT]->upload(tangents.size() * sizeof(gfx_api::gfxFloat), tangents.data());
  		}
  	}
 
 	if (!s.buffers[VBO_VERTEX])
-		s.buffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		s.buffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "vertex buffer");
 	if (vertices.empty())
 	{
 		debug(LOG_ERROR, "_imd_load_level: file corrupt? - no vertices?: %s (key: %s)", filename.toUtf8().c_str(), key.c_str());
@@ -1326,7 +1326,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	s.buffers[VBO_VERTEX]->upload(vertices.size() * sizeof(gfx_api::gfxFloat), vertices.data());
 
 	if (!s.buffers[VBO_NORMAL])
-		s.buffers[VBO_NORMAL] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		s.buffers[VBO_NORMAL] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "normals buffer");
 	if (normals.empty())
 	{
 		debug(LOG_ERROR, "_imd_load_level: file corrupt? - no normals?: %s (key: %s)", filename.toUtf8().c_str(), key.c_str());
@@ -1334,7 +1334,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	s.buffers[VBO_NORMAL]->upload(normals.size() * sizeof(gfx_api::gfxFloat), normals.data());
 
 	if (!s.buffers[VBO_INDEX])
-		s.buffers[VBO_INDEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
+		s.buffers[VBO_INDEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "index buffer");
 	if (indices.empty())
 	{
 		debug(LOG_ERROR, "_imd_load_level: file corrupt? - no indices?: %s (key: %s)", filename.toUtf8().c_str(), key.c_str());
@@ -1342,7 +1342,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	s.buffers[VBO_INDEX]->upload(indices.size() * sizeof(uint16_t), indices.data());
 
 	if (!s.buffers[VBO_TEXCOORD])
-		s.buffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		s.buffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "tex coords buffer");
 	if (texcoords.empty())
 	{
 		debug(LOG_ERROR, "_imd_load_level: file corrupt? - no texcoords?: %s (key: %s)", filename.toUtf8().c_str(), key.c_str());

@@ -1806,7 +1806,7 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	return new_texture;
 }
 
-gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/)
+gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
 {
 	return new gl_buffer(usage, hint);
 }

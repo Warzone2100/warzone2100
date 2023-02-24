@@ -130,7 +130,7 @@ bool pie_LoadShaders()
 		255, 0, 0, 255
 	};
 	if (!pie_internal::rectBuffer)
-		pie_internal::rectBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		pie_internal::rectBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "rectBuffer");
 	pie_internal::rectBuffer->upload(16 * sizeof(gfx_api::gfxUByte), rect);
 
 	return true;

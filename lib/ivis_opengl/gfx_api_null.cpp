@@ -178,7 +178,7 @@ gfx_api::texture_array* null_context::create_texture_array(const size_t& mipmap_
 	return new_texture;
 }
 
-gfx_api::buffer * null_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/)
+gfx_api::buffer * null_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
 {
 	return new null_buffer(usage, hint);
 }
