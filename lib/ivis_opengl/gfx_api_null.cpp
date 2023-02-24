@@ -471,6 +471,11 @@ bool null_context::supports2DTextureArrays() const
 	return true;
 }
 
+bool null_context::supportsIntVertexAttributes() const
+{
+	return true;
+}
+
 size_t null_context::maxFramesInFlight() const
 {
 	return 1;

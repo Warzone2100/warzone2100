@@ -151,6 +151,7 @@ public:
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
 	virtual bool supports2DTextureArrays() const override;
+	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
