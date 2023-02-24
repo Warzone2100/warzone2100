@@ -261,9 +261,10 @@ namespace gfx_api
 	{
 		const std::size_t id;
 		const sampler_type sampler;
+		const pixel_format_target target;
 
-		constexpr texture_input(std::size_t _id, sampler_type _sampler)
-		: id(_id), sampler(_sampler)
+		constexpr texture_input(std::size_t _id, sampler_type _sampler, pixel_format_target _target)
+		: id(_id), sampler(_sampler), target(_target)
 		{}
 	};
 
@@ -398,12 +399,12 @@ namespace gfx_api
 		}
 	};
 
-	template<std::size_t texture_unit, sampler_type sampler>
+	template<std::size_t texture_unit, sampler_type sampler, pixel_format_target target = pixel_format_target::texture_2d>
 	struct texture_description
 	{
 		static texture_input get_desc()
 		{
-			return texture_input{ texture_unit, sampler };
+			return texture_input{ texture_unit, sampler, target };
 		}
 	};
 
