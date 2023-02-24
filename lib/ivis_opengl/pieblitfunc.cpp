@@ -417,6 +417,8 @@ void BatchedMultiRectRenderer::drawRects(optional<size_t> rectGroup, glm::mat4 p
 
 bool BatchedMultiRectRenderer::initialize()
 {
+	reset();
+
 	if (!gfx_api::context::get().supportsInstancedRendering())
 	{
 		useInstancedRendering = false;
