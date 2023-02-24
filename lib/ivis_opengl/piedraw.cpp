@@ -153,7 +153,7 @@ static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
 		{
 			delete pZeroedVertexBuffer;
 		}
-		pZeroedVertexBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		pZeroedVertexBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "zeroedVertexBuffer");
 		std::vector<UBYTE> tempZeroes(size, 0);
 		pZeroedVertexBuffer->upload(size, tempZeroes.data());
 		currentSize = size;
@@ -844,7 +844,7 @@ bool InstancedMeshRenderer::initialize()
 	instanceDataBuffers.resize(gfx_api::context::get().maxFramesInFlight() + 1);
 	for (size_t i = 0; i < instanceDataBuffers.size(); ++i)
 	{
-		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
+		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw, "InstancedMeshRenderer::instanceDataBuffer[" + std::to_string(i) + "]");
 	}
 	useInstancedRendering = true;
 	return true;

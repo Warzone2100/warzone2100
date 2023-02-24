@@ -134,20 +134,20 @@ void GFX::updateTexture(const iV_Image& image /*= nullptr*/)
 void GFX::buffers(int vertices, const void *vertBuf, const void *auxBuf)
 {
 	if (!mBuffers[VBO_VERTEX])
-		mBuffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		mBuffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "GFX::VBO_VERTEX");
 	mBuffers[VBO_VERTEX]->upload(vertices * mCoordsPerVertex * sizeof(gfx_api::gfxFloat), vertBuf);
 
 	if (mType == GFX_TEXTURE)
 	{
 		if (!mBuffers[VBO_TEXCOORD])
-			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "GFX::VBO_TEXCOORD");
 		mBuffers[VBO_TEXCOORD]->upload(vertices * 2 * sizeof(gfx_api::gfxFloat), auxBuf);
 	}
 	else if (mType == GFX_COLOUR)
 	{
 		// reusing texture buffer for colours for now
 		if (!mBuffers[VBO_TEXCOORD])
-			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "GFX::VBO_TEXCOORD");
 		mBuffers[VBO_TEXCOORD]->upload(vertices * 4 * sizeof(gfx_api::gfxByte), auxBuf);
 	}
 	mSize = vertices;
@@ -448,7 +448,7 @@ bool BatchedMultiRectRenderer::initialize()
 	instanceDataBuffers.resize(gfx_api::context::get().maxFramesInFlight() + 1);
 	for (size_t i = 0; i < instanceDataBuffers.size(); ++i)
 	{
-		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
+		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw, "BatchedMultiRectRenderer::instanceDataBuffer[" + std::to_string(i) + "]");
 	}
 	useInstancedRendering = true;
 	return true;

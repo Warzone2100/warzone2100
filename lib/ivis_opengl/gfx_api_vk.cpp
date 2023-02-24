@@ -1571,8 +1571,8 @@ VkPSO::~VkPSO()
 
 // MARK: VkBuf
 
-VkBuf::VkBuf(vk::Device _dev, const gfx_api::buffer::usage& usage, const VkRoot& root)
-: dev(_dev), usage(usage), buffer_size(0), root(&root)
+VkBuf::VkBuf(vk::Device _dev, const gfx_api::buffer::usage& usage, const VkRoot& root, const std::string& debugName)
+: dev(_dev), usage(usage), buffer_size(0), debugName(debugName), root(&root)
 {
 	// no-op
 }
@@ -1611,6 +1611,15 @@ void VkBuf::allocateBufferObject(const std::size_t& size)
 	{
 		// Failed to allocate memory!
 		vk::throwResultException( result, "vmaCreateBuffer" );
+	}
+
+	if (root->debugUtilsExtEnabled)
+	{
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eBuffer);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkBuffer>(object)));
+		objectNameInfo.setPObjectName(debugName.c_str());
+		root->dev.setDebugUtilsObjectNameEXT(objectNameInfo, root->vkDynLoader);
 	}
 
 	buffer_size = size;
@@ -4122,9 +4131,9 @@ gfx_api::texture_array* VkRoot::create_texture_array(const std::size_t& mipmap_c
 	return result;
 }
 
-gfx_api::buffer* VkRoot::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/)
+gfx_api::buffer* VkRoot::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
 {
-	return new VkBuf(dev, usage, *this);
+	return new VkBuf(dev, usage, *this, debugName);
 }
 
 std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSet(vk::DescriptorSetLayout arg, vk::DescriptorType descriptorType, uint32_t numDescriptors)
