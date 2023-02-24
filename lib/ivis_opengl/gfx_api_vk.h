@@ -589,6 +589,7 @@ struct VkRoot final : gfx_api::context
 
 	// default texture
 	VkTexture* pDefaultTexture = nullptr;
+	VkTextureArray* pDefaultArrayTexture = nullptr;
 
 	// Debug_Utils
 	PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessenger = nullptr;

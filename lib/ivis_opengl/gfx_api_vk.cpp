@@ -2593,6 +2593,11 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 		delete pDefaultTexture;
 		pDefaultTexture = nullptr;
 	}
+	if (pDefaultArrayTexture)
+	{
+		delete pDefaultArrayTexture;
+		pDefaultArrayTexture = nullptr;
+	}
 	buffering_mechanism::destroy(dev, vkDynLoader);
 
 	for (auto f : fbo)
@@ -3271,6 +3276,7 @@ bool VkRoot::createSwapchain()
 	const size_t defaultTexture_width = 2;
 	const size_t defaultTexture_height = 2;
 	pDefaultTexture = new VkTexture(*this, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>");
+	pDefaultArrayTexture = new VkTextureArray(*this, 1, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_array_texture>");
 
 	iV_Image defaultTexture;
 	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
@@ -3278,6 +3284,11 @@ bool VkRoot::createSwapchain()
 	{
 		debug(LOG_ERROR, "Failed to upload default texture??");
 	}
+	if (!pDefaultArrayTexture->upload_layer(0, 0, defaultTexture))
+	{
+		debug(LOG_ERROR, "Failed to upload default array texture??");
+	}
+	pDefaultArrayTexture->flush();
 
 	startRenderPass();
 
@@ -4169,14 +4180,40 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 
 	const auto set = allocateDescriptorSet(currentPSO->textures_set_layout, vk::DescriptorType::eCombinedImageSampler, static_cast<uint32_t>(textures.size()));
 
+	uint32_t i = 0;
 	auto image_descriptor = std::vector<vk::DescriptorImageInfo>{};
 	for (auto* texture : textures)
 	{
+		WZ_vk::UniqueImageView *pView = nullptr;
+		if (texture != nullptr)
+		{
+			if (texture->isArray())
+			{
+				pView = &static_cast<VkTextureArray*>(texture)->view;
+			}
+			else
+			{
+				pView = &static_cast<VkTexture*>(texture)->view;
+			}
+		}
+		else
+		{
+			switch (attribute_descriptions.at(i).target)
+			{
+				case gfx_api::pixel_format_target::texture_2d:
+					pView = &pDefaultTexture->view;
+					break;
+				case gfx_api::pixel_format_target::texture_2d_array:
+					pView = &pDefaultArrayTexture->view;
+					break;
+			}
+		}
 		image_descriptor.emplace_back(vk::DescriptorImageInfo()
-			.setImageView(texture != nullptr ? *static_cast<VkTexture*>(texture)->view : *pDefaultTexture->view)
+			.setImageView(pView->get())
 			.setImageLayout(vk::ImageLayout::eShaderReadOnlyOptimal));
+		i++;
 	}
-	uint32_t i = 0;
+	i = 0;
 	auto write_info = std::vector<vk::WriteDescriptorSet>{};
 	for (auto* texture : textures)
 	{
