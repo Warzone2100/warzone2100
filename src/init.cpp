@@ -1589,8 +1589,6 @@ bool stageTwoShutDown()
 		return false;
 	}
 
-	shutdown3DView();
-
 	return true;
 }
 
@@ -1734,6 +1732,8 @@ bool stageThreeShutDown()
 	}
 
 	setScriptWinLoseVideo(PLAY_NONE);
+
+	shutdown3DView();
 
 	return true;
 }
