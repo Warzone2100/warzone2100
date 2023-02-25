@@ -188,6 +188,7 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DECALS>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf);

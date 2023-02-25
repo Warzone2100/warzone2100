@@ -41,6 +41,10 @@ struct TILE_TEX_INFO
 
 extern TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 extern size_t terrainPage;
+extern gfx_api::texture_array *decalTexArr;
+extern gfx_api::texture_array *decalNormalArr;
+extern gfx_api::texture_array *decalSpecularArr;
+extern gfx_api::texture_array *decalHeightArr;
 
 void setTextureSize(int texSize);
 int getTextureSize();

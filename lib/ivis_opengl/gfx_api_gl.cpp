@@ -610,14 +610,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 		} }),
-	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
+	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
+	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
+	std::make_pair(SHADER_TERRAIN_DECALS, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined.frag",
+			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "groundScale",
+				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"lightmap_tex",
+				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1", "textureMatrix2",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
@@ -896,6 +903,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_DECALS>(),
+		uniform_binding_entry<SHADER_TERRAIN_DECALS>(),
 		uniform_binding_entry<SHADER_WATER>(),
 		uniform_binding_entry<SHADER_RECT>(),
 		uniform_binding_entry<SHADER_TEXRECT>(),
@@ -1265,6 +1273,10 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 	bindVertexAttribLocationIfUsed(program, gfx_api::instance_Colour, "instanceColour");
 	bindVertexAttribLocationIfUsed(program, gfx_api::instance_TeamColour, "instanceTeamColour");
 	ASSERT_OR_RETURN(, program, "Could not create shader program!");
+	// only needed for new terrain renderer
+	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_tileNo, "tileNo");
+	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_grounds, "grounds");
+	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_groundWeights, "groundWeights");
 
 	char* vertexShaderContents = nullptr;
 
@@ -1586,6 +1598,34 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(7, cbuf.fog_end);
 	setUniforms(8, cbuf.texture0);
 	setUniforms(9, cbuf.texture1);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DECALS>& cbuf)
+{
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
+	setUniforms(i++, cbuf.groundScale);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.emissiveLight);
+	setUniforms(i++, cbuf.ambientLight);
+	setUniforms(i++, cbuf.diffuseLight);
+	setUniforms(i++, cbuf.specularLight);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.quality);
+	setUniforms(i++, 0); // lightmap_tex
+	setUniforms(i++, 1); // ground
+	setUniforms(i++, 2); // groundNormal
+	setUniforms(i++, 3); // groundSpecular
+	setUniforms(i++, 4); // groundHeight
+	setUniforms(i++, 5); // decal
+	setUniforms(i++, 6); // decalNormal
+	setUniforms(i++, 7); // decalSpecular
+	setUniforms(i++, 8); // decalHeight
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)

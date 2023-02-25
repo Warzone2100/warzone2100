@@ -1297,6 +1297,11 @@ static void drawTiles(iView *player)
 
 	const glm::mat4 perspectiveViewMatrix = pie_PerspectiveGet() * viewMatrix;
 
+	const glm::mat4 &modelViewMatrix = viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z));
+	const glm::mat4 &mvpMatrix = pie_PerspectiveGet() * modelViewMatrix;
+
+	const glm::vec3 cameraPos = (glm::inverse(modelViewMatrix) * glm::vec4(0,0,0,1)).xyz(); // `actualCameraPosition` is not accurate enough due to int calc
+
 	actualCameraPosition = Vector3i(0, 0, 0);
 
 	/* Set the camera position */
@@ -1381,7 +1386,7 @@ static void drawTiles(iView *player)
 	pie_SetFogStatus(true);
 
 	// draw it
-	drawTerrain(perspectiveViewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
+	drawTerrain(mvpMatrix, cameraPos, -getTheSun());
 
 	wzPerfEnd(PERF_TERRAIN);
 

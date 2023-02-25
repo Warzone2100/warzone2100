@@ -1104,6 +1104,8 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 
 	readAIs();
 
+	initTerrainShaderType();
+
 	return true;
 }
 
