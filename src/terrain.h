@@ -30,7 +30,7 @@ void loadTerrainTextures(MAP_TILESET mapTileset);
 bool initTerrain();
 void shutdownTerrain();
 
-void drawTerrain(const glm::mat4 &ModelViewProjection);
+void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos);
 void drawWater(const glm::mat4 &viewMatrix);
 
 PIELIGHT getTileColour(int x, int y);
@@ -40,11 +40,26 @@ void markTileDirty(int i, int j);
 
 enum TerrainShaderQuality
 {
-	CLASSIC = 0,
-	NORMAL_MAPPING = 1,
-	END = 2
+	CLASSIC = 0, // the mode used by at least WZ 3.2.x - 4.3.x
+	NORMAL_MAPPING = 1	// the highest-quality mode, which adds normal / specular / height maps and advanced lighting
+};
+constexpr TerrainShaderQuality TerrainShaderQuality_MAX = TerrainShaderQuality::NORMAL_MAPPING;
+
+enum TerrainShaderType
+{
+	FALLBACK, // old multi-pass method, which only supports "classic" rendering
+	SINGLE_PASS // new terrain rendering method, supports all TerrainShaderQuality modes
 };
 
 extern TerrainShaderQuality terrainShaderQuality;
+
+TerrainShaderQuality getTerrainShaderQuality();
+TerrainShaderType getTerrainShaderType();
+bool setTerrainShaderQuality(TerrainShaderQuality newValue);
+std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions();
+bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value);
+std::string to_display_string(TerrainShaderQuality value);
+
+void initTerrainShaderType(); // must be called after the graphics context is initialized
 
 #endif

@@ -12,7 +12,7 @@ uniform mat4 textureMatrix1;
 uniform mat4 textureMatrix2;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-in vec4 vertex; // w is depth
+in vec4 vertex;
 in vec4 vertexColor;
 #else
 attribute vec4 vertex;
@@ -34,7 +34,7 @@ varying float vertexDistance;
 void main()
 {
 	color = vertexColor;
-	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1);
+	vec4 position = ModelViewProjectionMatrix * vertex;
 	gl_Position = position;
 	vec4 uv1_tmp = textureMatrix1 * vec4(dot(paramx1, vertex), dot(paramy1, vertex), 0., 1.);
 	uv1 = uv1_tmp.xy / uv1_tmp.w;

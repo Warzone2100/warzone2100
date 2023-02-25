@@ -54,6 +54,7 @@
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
 #include "clparse.h" // for autoratingUrl
+#include "terrain.h"
 
 #include <type_traits>
 
@@ -587,6 +588,18 @@ bool loadConfig()
 	war_setMPopenSpectatorSlots(static_cast<uint16_t>(std::max<int>(0, std::min<int>(openSpecSlotsIntValue, MAX_SPECTATOR_SLOTS))));
 	war_setFogEnd(iniGetInteger("fogEnd", 8000).value());
 	war_setFogStart(iniGetInteger("fogStart", 4000).value());
+	if (auto value = iniGetIntegerOpt("terrainShaderQuality"))
+	{
+		auto intValue = value.value();
+		if (intValue >= 0 && intValue <= TerrainShaderQuality_MAX)
+		{
+			setTerrainShaderQuality(static_cast<TerrainShaderQuality>(intValue));
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainShaderQuality value: %d; defaulting to: %d", intValue, static_cast<int>(terrainShaderQuality));
+		}
+	}
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -760,6 +773,7 @@ bool saveConfig()
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
 	iniSetInteger("fogEnd", war_getFogEnd());
 	iniSetInteger("fogStart", war_getFogStart());
+	iniSetInteger("terrainShaderQuality", getTerrainShaderQuality());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes

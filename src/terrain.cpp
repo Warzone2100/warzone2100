@@ -32,7 +32,9 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/framework/opengl.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -81,13 +83,19 @@ struct Sector
 	std::unique_ptr<int[]> textureSize;        ///< The size of the geometry for this layer for each layer
 	std::unique_ptr<int[]> textureIndexOffset; ///< The offset into the index VBO for the texture for each layer
 	std::unique_ptr<int[]> textureIndexSize;   ///< The size of the indices for each layer
-	int decalOffset;         ///< Index into the decal VBO
-	int decalSize;           ///< Size of the part of the decal VBO we are going to use
+	int decalOffset = 0;         ///< Index into the decal VBO
+	int decalSize = 0;           ///< Size of the part of the decal VBO we are going to use
+	int terrainAndDecalOffset = 0;
+	int terrainAndDecalSize = 0;
 	bool draw;               ///< Do we draw this sector this frame?
 	bool dirty;              ///< Do we need to update the geometry for this sector?
 };
 
-using RenderVertex = Vector3f;
+// VBO for gfx_api::TerrainLayer and TerrainDepth
+struct TerrainVertex
+{
+	Vector3f pos = Vector3f(0.f, 0.f, 0.f);
+};
 
 /// A vertex with a position and texture coordinates
 struct DecalVertex
@@ -95,6 +103,8 @@ struct DecalVertex
 	Vector3f pos = Vector3f(0.f, 0.f, 0.f);
 	Vector2f uv = Vector2f(0.f, 0.f);
 };
+
+using WaterVertex = glm::vec4; // w is depth
 
 /// The lightmap texture
 static gfx_api::texture* lightmap_texture = nullptr;
@@ -108,10 +118,19 @@ static std::unique_ptr<iV_Image> lightmapPixmap;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
 
+// water optional texture names. empty if none
+static std::string waterTexture1_nm;
+static std::string waterTexture2_nm;
+static std::string waterTexture1_sm;
+static std::string waterTexture2_sm;
+static std::string waterTexture1_hm;
+static std::string waterTexture2_hm;
+
 /// VBOs
 static gfx_api::buffer *geometryVBO = nullptr, *geometryIndexVBO = nullptr, *textureVBO = nullptr, *textureIndexVBO = nullptr, *decalVBO = nullptr;
 /// VBOs
 static gfx_api::buffer *waterVBO = nullptr, *waterIndexVBO = nullptr;
+static gfx_api::buffer *terrainDecalVBO = nullptr;
 /// The amount we shift the water textures so the waves appear to be moving
 static float waterOffset;
 
@@ -139,7 +158,9 @@ GLsizei dreCount;
 /// Are we actually drawing something using the DrawRangeElements functions?
 bool drawRangeElementsStarted = false;
 
-TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::CLASSIC;
+TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::NORMAL_MAPPING;
+TerrainShaderType terrainShaderType = TerrainShaderType::SINGLE_PASS;
+bool initializedTerrainShaderType = false;
 
 #define MIN_TERRAIN_TEXTURE_SIZE 512
 
@@ -221,9 +242,11 @@ void setTileColour(int x, int y, PIELIGHT colour)
 	psTile->colour = colour;
 }
 
+static void flipRotateTexCoords(unsigned short texture, Vector2f &sP1, Vector2f &sP2, Vector2f &sP3, Vector2f &sP4);
+
 // NOTE:  The current (max) texture size of a tile is 128x128.  We allow up to a user defined texture size
 // of 2048.  This will cause ugly seams for the decals, if user picks a texture size bigger than the tile!
-#define MAX_TILE_TEXTURE_SIZE 128.0f
+
 /// Set up the texture coordinates for a tile
 static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 {
@@ -237,9 +260,9 @@ static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 	float texsize = (float)getTextureSize();
 
 	// the decals are 128x128 (at this time), we should not go above this value.  See note above
-	if (texsize > MAX_TILE_TEXTURE_SIZE)
+	if (texsize > getCurrentTileTextureSize())
 	{
-		texsize = MAX_TILE_TEXTURE_SIZE;
+		texsize = getCurrentTileTextureSize();
 	}
 	const float centertile = 0.5f / texsize;	// compute center of tile
 	const float shiftamount = (texsize - 1.0f) / texsize;	// 1 pixel border
@@ -254,7 +277,21 @@ static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 	Vector2f sP2 { xMult - one, one };
 	Vector2f sP3 { xMult - one, yMult - one };
 	Vector2f sP4 { one, yMult - one };
+	flipRotateTexCoords(texture, sP1, sP2, sP3, sP4);
 
+	const Vector2f offset { tileTexInfo[tile].uOffset, tileTexInfo[tile].vOffset };
+
+	uv[0 + 0] = offset + sP1;
+	uv[0 + 2] = offset + sP2;
+	uv[1 + 2] = offset + sP3;
+	uv[1 + 0] = offset + sP4;
+
+	/// Calculate the average texture coordinates of 4 points
+	return Vector2f { (uv[0].x + uv[1].x + uv[2].x + uv[3].x) / 4, (uv[0].y + uv[1].y + uv[2].y + uv[3].y) / 4 };
+}
+
+static void flipRotateTexCoords(unsigned short texture, Vector2f &sP1, Vector2f &sP2, Vector2f &sP3, Vector2f &sP4)
+{
 	if (texture & TILE_XFLIP)
 	{
 		std::swap(sP1, sP2);
@@ -292,15 +329,20 @@ static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 		sP4 = sPTemp;
 		break;
 	}
-	const Vector2f offset { tileTexInfo[tile].uOffset, tileTexInfo[tile].vOffset };
+}
 
-	uv[0 + 0] = offset + sP1;
-	uv[0 + 2] = offset + sP2;
-	uv[1 + 2] = offset + sP3;
-	uv[1 + 0] = offset + sP4;
-
-	/// Calculate the average texture coordinates of 4 points
-	return Vector2f { (uv[0].x + uv[1].x + uv[2].x + uv[3].x) / 4, (uv[0].y + uv[1].y + uv[2].y + uv[3].y) / 4 };
+/// set up tile/decal coords for texture arrays. just flip/rotate, without borders and tex atlas stuff.
+static Vector2f getTileTexArrCoords(Vector2f *uv, unsigned int tileNumber)
+{
+	/* unmask proper values from compressed data */
+	const unsigned short texture = TileNumber_texture(tileNumber);
+	Vector2f sP[] = {{ 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 }};
+	flipRotateTexCoords(texture, sP[0], sP[1], sP[2], sP[3]);
+	uv[0 + 0] = sP[0];
+	uv[0 + 2] = sP[1];
+	uv[1 + 2] = sP[2];
+	uv[1 + 0] = sP[3];
+	return Vector2f { 0.5, 0.5 };
 }
 
 /// Average the four positions to get the center
@@ -352,6 +394,37 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 }
 
+static Vector3f getGridPosf(int x, int y, bool center = false, bool water = false)
+{
+	Vector3i r;
+	getGridPos(&r, x, y, center, water);
+	return Vector3f(r);
+}
+
+/// Get normal vector of grid point
+static Vector3f getGridNormal(int x, int y, bool center = false)
+{
+	auto calcNormal = [](const Vector3f &pc, const std::vector<Vector3f> &p) {
+		auto res = Vector3f(0.0);
+		for (int i = 0; i < p.size(); i++) {
+			auto e1 = p[(i+1)%p.size()] - pc, e2 = p[i] - pc;
+			float ang = acos(glm::dot(e1, e2) / glm::length(e1) / glm::length(e2));
+			res += glm::cross(e1, e2) * ang; // += normal * (2*area) * angle
+		}
+		return -glm::normalize(res);
+	};
+	if (center) {
+		return calcNormal(getGridPosf(x, y, true), {
+			getGridPosf(x,y), getGridPosf(x+1, y), getGridPosf(x+1, y+1), getGridPosf(x, y+1)
+		});
+	} else {
+		return calcNormal(getGridPosf(x, y), {
+			getGridPosf(x+1, y), getGridPosf(x, y, true),     getGridPosf(x, y+1), getGridPosf(x-1, y, true),
+			getGridPosf(x-1, y), getGridPosf(x-1, y-1, true), getGridPosf(x, y-1), getGridPosf(x, y-1, true)
+		});
+	}
+}
+
 /// Calculate the average colour of 4 points
 static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
                                  PIELIGHT c, PIELIGHT d)
@@ -365,39 +438,28 @@ static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
 /**
  * Set the terrain and water geometry for the specified sector
  */
-static void setSectorGeometry(int x, int y,
-                              RenderVertex *geometry, RenderVertex *water,
-                              int *geometrySize, int *waterSize)
+static void setSectorGeometry(int sx, int sy,
+							  TerrainVertex *geometry, WaterVertex *water,
+							  int *geometrySize, int *waterSize)
 {
-	Vector3i pos;
-	int i, j;
-	for (i = 0; i < sectorSize + 1; i++)
+	for (int x = sx*sectorSize; x < (sx+1)*sectorSize + 1; x++)
 	{
-		for (j = 0; j < sectorSize + 1; j++)
+		for (int y = sy * sectorSize; y < (sy+1) * sectorSize + 1; y++)
 		{
 			// set up geometry
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, false, false);
-			geometry[*geometrySize].x = pos.x;
-			geometry[*geometrySize].y = pos.y;
-			geometry[*geometrySize].z = pos.z;
+			auto pos = getGridPosf(x, y, false, false);
+			geometry[*geometrySize].pos = pos;
 			(*geometrySize)++;
 
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, true, false);
-			geometry[*geometrySize].x = pos.x;
-			geometry[*geometrySize].y = pos.y;
-			geometry[*geometrySize].z = pos.z;
-			(*geometrySize)++;
-
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, false, true);
-			water[*waterSize].x = pos.x;
-			water[*waterSize].y = pos.y;
-			water[*waterSize].z = pos.z;
+			float waterHeight = map_WaterHeight(x, y);
+			water[*waterSize] = glm::vec4(pos.x, waterHeight, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, true, true);
-			water[*waterSize].x = pos.x;
-			water[*waterSize].y = pos.y;
-			water[*waterSize].z = pos.z;
+			pos = getGridPosf(x, y, true, false);
+			geometry[*geometrySize].pos = pos;
+			(*geometrySize)++;
+
+			water[*waterSize] = glm::vec4(pos.x, waterHeight, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 		}
 	}
@@ -489,62 +551,158 @@ static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize
 	}
 }
 
+static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalVertex *terrainDecalData, int *terrainDecalSize)
+{
+	Vector3i pos;
+	Vector2f uv[2][2], center;
+	int i, j;
+
+	for (i = x * sectorSize; i < x * sectorSize + sectorSize; i++)
+	{
+		for (j = y * sectorSize; j < y * sectorSize + sectorSize; j++)
+		{
+			if (i < 0 || j < 0 || i >= mapWidth || j >= mapHeight)
+			{
+				continue;
+			}
+
+			MAPTILE *tile = mapTile(i, j);
+			center = getTileTexArrCoords(*uv, tile->texture);
+			auto decalNo = TileNumber_tile(tile->texture);
+			if (!TILE_HAS_DECAL(tile)) decalNo = 0;
+
+			int dxdy[4][2] = {{0,0}, {0,1}, {1,1}, {1,0}};
+			PIELIGHT grounds;
+			gfx_api::TerrainDecalVertex vs[5];
+			for (int k = 0; k<4; k++) {
+				int dx = dxdy[k][0], dy = dxdy[k][1];
+				getGridPos(&pos, i + dx, j + dy, false, false);
+				vs[k].pos = pos;
+				vs[k].decalUv = uv[dx][dy];
+				vs[k].normal = getGridNormal(i + dx, j + dy);
+				vs[k].decalNo = decalNo;
+				grounds.vector[k] = mapTile(i + dx, j + dy)->ground;
+				vs[k].groundWeights.rgba = 0;
+				vs[k].groundWeights.vector[k] = 255;
+			}
+			// 4 = center;
+			getGridPos(&pos, i, j, true, false);
+			vs[4].pos = pos;
+			vs[4].decalUv = center;
+			vs[4].normal = getGridNormal(i, j, true);
+			vs[4].decalNo = decalNo;
+			vs[4].groundWeights = {0, 0, 0, 0}; // special value for shader.
+			for (int k = 0; k < 5; k++) vs[k].grounds = grounds.rgba;
+
+			terrainDecalData[(*terrainDecalSize)++] = vs[4];
+			terrainDecalData[(*terrainDecalSize)++] = vs[1];
+			terrainDecalData[(*terrainDecalSize)++] = vs[0];
+
+			terrainDecalData[(*terrainDecalSize)++] = vs[4];
+			terrainDecalData[(*terrainDecalSize)++] = vs[2];
+			terrainDecalData[(*terrainDecalSize)++] = vs[1];
+
+			terrainDecalData[(*terrainDecalSize)++] = vs[4];
+			terrainDecalData[(*terrainDecalSize)++] = vs[3];
+			terrainDecalData[(*terrainDecalSize)++] = vs[2];
+
+			terrainDecalData[(*terrainDecalSize)++] = vs[4];
+			terrainDecalData[(*terrainDecalSize)++] = vs[0];
+			terrainDecalData[(*terrainDecalSize)++] = vs[3];
+
+			// calc tangents
+			for (int idx = *terrainDecalSize - 3*4; idx < *terrainDecalSize; idx+=3) {
+				auto p = terrainDecalData + idx;
+				auto e1 = p[1].pos - p[0].pos;
+				auto e2 = p[2].pos - p[0].pos;
+				auto uv1 = p[1].decalUv - p[0].decalUv;
+				auto uv2 = p[2].decalUv - p[0].decalUv;
+				float r = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
+				Vector3f tangent = glm::normalize(r * (uv2.y * e1 - uv1.y * e2));
+				Vector3f bitangent = glm::normalize(r * (-uv2.x * e1 + uv1.x * e2));
+				for (int k=0; k<3; k++) {
+					auto &n = p[k].normal;
+					const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
+					float w = 1.0f; // not mirrored
+					if (glm::dot(glm::cross(n, t), bitangent) < 0.0f) {
+						w = -1.0f; // we're mirrored
+					}
+					p[k].decalTangent = glm::vec4(t, w);
+				}
+			}
+		}
+	}
+}
+
 /**
  * Update the sector for when the terrain is changed.
  */
 static void updateSectorGeometry(int x, int y)
 {
-	RenderVertex *geometry;
-	RenderVertex *water;
+	TerrainVertex *geometry;
+	WaterVertex *water;
 	DecalVertex *decaldata;
 	int geometrySize = 0;
 	int waterSize = 0;
 	int decalSize = 0;
 
-	geometry  = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].geometrySize);
-	water     = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].waterSize);
+	geometry = new TerrainVertex[sectors[x * ySectors + y].geometrySize];
+	water = (WaterVertex *)malloc(sizeof(WaterVertex) * sectors[x * ySectors + y].waterSize);
 
 	setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
 	ASSERT(geometrySize == sectors[x * ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
 	ASSERT(waterSize    == sectors[x * ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
 
-	geometryVBO->update(sizeof(RenderVertex)*sectors[x * ySectors + y].geometryOffset,
-	                    sizeof(RenderVertex)*sectors[x * ySectors + y].geometrySize, geometry,
-						gfx_api::buffer::update_flag::non_overlapping_updates_promise);
-	waterVBO->update(sizeof(RenderVertex)*sectors[x * ySectors + y].waterOffset,
-	                 sizeof(RenderVertex)*sectors[x * ySectors + y].waterSize, water,
+	geometryVBO->update(sizeof(TerrainVertex)*sectors[x * ySectors + y].geometryOffset,
+							sizeof(TerrainVertex)*sectors[x * ySectors + y].geometrySize, geometry,
+							gfx_api::buffer::update_flag::non_overlapping_updates_promise);
+	waterVBO->update(sizeof(WaterVertex)*sectors[x * ySectors + y].waterOffset,
+					 sizeof(WaterVertex)*sectors[x * ySectors + y].waterSize, water,
 					 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
 
-	free(geometry);
+	delete[] geometry;
 	free(water);
 
-	if (sectors[x * ySectors + y].decalSize <= 0)
+	if (terrainShaderType == TerrainShaderType::FALLBACK)
 	{
-		// Nothing to do here, and glBufferSubData(GL_ARRAY_BUFFER, 0, 0, *) crashes in my graphics driver. Probably shouldn't crash...
-		return;
-	}
-
-	decaldata = (DecalVertex *)malloc(sizeof(DecalVertex) * sectors[x * ySectors + y].decalSize);
-	setSectorDecals(x, y, decaldata, &decalSize);
-	ASSERT(decalSize == sectors[x * ySectors + y].decalSize   , "the amount of decals has changed");
-
-	if (decalSize > 0)
-	{
-		if (decalVBO)
+		if (sectors[x * ySectors + y].decalSize <= 0)
 		{
-			decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
-							 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata,
+			// Nothing to do here, and glBufferSubData(GL_ARRAY_BUFFER, 0, 0, *) crashes in my graphics driver. Probably shouldn't crash...
+			return;
+		}
+
+		decaldata = (DecalVertex *)malloc(sizeof(DecalVertex) * sectors[x * ySectors + y].decalSize);
+		setSectorDecals(x, y, decaldata, &decalSize);
+		ASSERT(decalSize == sectors[x * ySectors + y].decalSize   , "the amount of decals has changed");
+
+		if (decalSize > 0)
+		{
+			if (decalVBO)
+			{
+				decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
+								 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata,
+								 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
+			}
+			else
+			{
+				// didn't have decals, but now we do??
+				// code needs a refactoring if this is the case
+				ASSERT(false, "Didn't have decals, but now we do. Unsupported.");
+			}
+		}
+
+		free(decaldata);
+	}
+	else
+	{
+		gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapWidth * mapHeight * 12);
+		int terrainDecalSize = 0;
+		setSectorDecalVertex_SinglePass(x, y, terrainDecalData, &terrainDecalSize);
+		terrainDecalVBO->update(sizeof(gfx_api::TerrainDecalVertex)*sectors[x * ySectors + y].terrainAndDecalOffset,
+							 sizeof(gfx_api::TerrainDecalVertex)*sectors[x * ySectors + y].terrainAndDecalSize, terrainDecalData,
 							 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
-		}
-		else
-		{
-			// didn't have decals, but now we do??
-			// code needs a refactoring if this is the case
-			ASSERT(false, "Didn't have decals, but now we do. Unsupported.");
-		}
+		free(terrainDecalData);
 	}
-
-	free(decaldata);
 }
 
 /**
@@ -591,7 +749,7 @@ void markTileDirty(int i, int j)
 	}
 }
 
-void loadTerrainTextures(MAP_TILESET mapTileset)
+void loadTerrainTextures_Fallback(MAP_TILESET mapTileset)
 {
 	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
 
@@ -608,6 +766,126 @@ void loadTerrainTextures(MAP_TILESET mapTileset)
 	}
 }
 
+static gfx_api::texture_array* groundTexArr = nullptr;
+static gfx_api::texture_array* groundNormalArr = nullptr;
+static gfx_api::texture_array* groundSpecularArr = nullptr;
+static gfx_api::texture_array* groundHeightArr = nullptr;
+
+void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
+{
+	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
+
+	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
+	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
+
+	delete groundTexArr; groundTexArr = nullptr;
+	delete groundNormalArr; groundNormalArr = nullptr;
+	delete groundSpecularArr; groundSpecularArr = nullptr;
+	delete groundHeightArr; groundHeightArr = nullptr;
+
+	std::vector<WzString> groundTextureFilenames;
+	std::vector<WzString> groundTextureFilenames_nm;
+	std::vector<WzString> groundTextureFilenames_spec;
+	std::vector<WzString> groundTextureFilenames_height;
+
+	auto optTexturenameToPath = [](const std::string& textureFilename) -> WzString {
+		if (textureFilename.empty())
+		{
+			return WzString();
+		}
+		return "texpages/" + WzString::fromUtf8(textureFilename);
+	};
+
+	// for each terrain layer
+	for (int layer = 0; layer < getNumGroundTypes(); layer++)
+	{
+		const auto groundType = getGroundType(layer);
+		groundTextureFilenames.push_back(optTexturenameToPath(groundType.textureName));
+		groundTextureFilenames_nm.push_back(optTexturenameToPath(groundType.normalMapTextureName));
+		groundTextureFilenames_spec.push_back(optTexturenameToPath(groundType.specularMapTextureName));
+		groundTextureFilenames_height.push_back(optTexturenameToPath(groundType.heightMapTextureName));
+	}
+
+	// load the textures into the texture arrays
+	groundTexArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize, nullptr, []() { resDoResLoadCallback(); });
+	ASSERT(groundTexArr != nullptr, "Failed to load terrain textures");
+	if (terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		if (std::any_of(groundTextureFilenames_nm.begin(), groundTextureFilenames_nm.end(), [](const WzString& filename) {
+			return !filename.isEmpty();
+		}))
+		{
+			groundNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				pDefaultNormalMap->allocate(width, height, channels, true);
+				// default normal map: (0,0,1)
+				unsigned char* pBmpWrite = pDefaultNormalMap->bmp_w();
+				memset(pBmpWrite, 0x7f, pDefaultNormalMap->data_size());
+				if (channels >= 3)
+				{
+					for (size_t b = 0; b < pDefaultNormalMap->data_size(); b += 4)
+					{
+						pBmpWrite[b+2] = 0xff; // blue=z
+					}
+				}
+				return pDefaultNormalMap;
+			}, []() { resDoResLoadCallback(); });
+			ASSERT(groundNormalArr != nullptr, "Failed to load terrain normals");
+		}
+		if (std::any_of(groundTextureFilenames_spec.begin(), groundTextureFilenames_spec.end(), [](const WzString& filename) {
+			return !filename.isEmpty();
+		}))
+		{
+			groundSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_spec, gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				// default specular map: 0
+				pDefaultNormalMap->allocate(width, height, channels, true);
+				return pDefaultNormalMap;
+			}, []() { resDoResLoadCallback(); });
+			ASSERT(groundSpecularArr != nullptr, "Failed to load terrain specular maps");
+		}
+		if (std::any_of(groundTextureFilenames_height.begin(), groundTextureFilenames_height.end(), [](const WzString& filename) {
+			return !filename.isEmpty();
+		}))
+		{
+			groundHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_height, gfx_api::texture_type::height_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				// default height map: 0
+				pDefaultNormalMap->allocate(width, height, channels, true);
+				return pDefaultNormalMap;
+			}, []() { resDoResLoadCallback(); });
+			ASSERT(groundHeightArr != nullptr, "Failed to load terrain height maps");
+		}
+	}
+
+	// check water optional textures
+	auto checkTex = [](const std::string &fileName) {
+		std::string fullName = "texpages/"+fileName;
+		return PHYSFS_exists(fullName.c_str()) ? fileName : "";
+	};
+	waterTexture1_nm = checkTex("page-80-water-1_nm.png");
+	waterTexture2_nm = checkTex("page-81-water-2_nm.png");
+	waterTexture1_sm = checkTex("page-80-water-1_sm.png");
+	waterTexture2_sm = checkTex("page-81-water-2_sm.png");
+	waterTexture1_hm = checkTex("page-80-water-1_hm.png");
+	waterTexture2_hm = checkTex("page-81-water-2_hm.png");
+}
+
+void loadTerrainTextures(MAP_TILESET mapTileset)
+{
+	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
+
+	switch (terrainShaderType)
+	{
+	case TerrainShaderType::FALLBACK:
+		loadTerrainTextures_Fallback(mapTileset);
+		break;
+	case TerrainShaderType::SINGLE_PASS:
+		loadTerrainTextures_SinglePass(mapTileset);
+		break;
+	}
+}
+
 /**
  * Check what the videocard + drivers support and divide the loaded map into sectors that can be drawn.
  * It also determines the lightmap size.
@@ -618,17 +896,17 @@ bool initTerrain()
 	PIELIGHT colour[2][2], centerColour;
 	int layer = 0;
 
-	RenderVertex *geometry;
-	RenderVertex *water;
-	DecalVertex *decaldata;
+	TerrainVertex *geometry = nullptr;
+	WaterVertex *water = nullptr;
+	DecalVertex *decaldata = nullptr;
 	int geometrySize, geometryIndexSize;
 	int waterSize, waterIndexSize;
 	int textureSize, textureIndexSize;
-	GLuint *geometryIndex;
-	GLuint *waterIndex;
-	GLuint *textureIndex;
-	PIELIGHT *texture;
-	int decalSize;
+	GLuint *geometryIndex = nullptr;
+	GLuint *waterIndex = nullptr;
+	GLuint *textureIndex = nullptr;
+	PIELIGHT *texture = nullptr;
+	int decalSize = 0;
 	int maxSectorSizeIndices, maxSectorSizeVertices;
 	bool decreasedSize = false;
 
@@ -688,12 +966,13 @@ bool initTerrain()
 
 	////////////////////
 	// fill the geometry part of the sectors
-	geometry = (RenderVertex *)malloc(sizeof(RenderVertex) * xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2);
+	const int vertSize = xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2;
+	geometry = new TerrainVertex[vertSize];
 	geometryIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12);
 	geometrySize = 0;
 	geometryIndexSize = 0;
 
-	water = (RenderVertex *)malloc(sizeof(RenderVertex) * xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2);
+	water = (WaterVertex *)malloc(sizeof(WaterVertex) * vertSize);
 	waterIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12);
 	waterSize = 0;
 	waterIndexSize = 0;
@@ -782,27 +1061,27 @@ bool initTerrain()
 	}
 	if (geometryVBO)
 		delete geometryVBO;
-	geometryVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
-	geometryVBO->upload(sizeof(RenderVertex)*geometrySize, geometry);
-	free(geometry);
+	geometryVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw, "terrain::geometryVBO");
+	geometryVBO->upload(sizeof(TerrainVertex)*geometrySize, geometry);
+	delete[] geometry;
 
 	if (geometryIndexVBO)
 		delete geometryIndexVBO;
-	geometryIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
+	geometryIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::geometryIndexVBO");
 	geometryIndexVBO->upload(sizeof(GLuint)*geometryIndexSize, geometryIndex);
 	free(geometryIndex);
 
 	if (waterVBO)
 		delete waterVBO;
-	waterVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
-	waterVBO->upload(sizeof(RenderVertex)*waterSize, water);
+	waterVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw, "terrain::waterVBO");
+	waterVBO->upload(sizeof(WaterVertex)*waterSize, water);
 	free(water);
 
 	if (waterIndexVBO)
 		delete waterIndexVBO;
 	if (waterIndexSize > 0)
 	{
-		waterIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
+		waterIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::waterIndexVBO");
 		waterIndexVBO->upload(sizeof(GLuint)*waterIndexSize, waterIndex);
 	}
 	else
@@ -917,27 +1196,51 @@ bool initTerrain()
 	}
 	if (textureVBO)
 		delete textureVBO;
-	textureVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+	textureVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::textureVBO");
 	textureVBO->upload(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes, texture);
 	free(texture);
 
 	if (textureIndexVBO)
 		delete textureIndexVBO;
-	textureIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
+	textureIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::textureIndexVBO");
 	textureIndexVBO->upload(sizeof(GLuint)*textureIndexSize, textureIndex);
 	free(textureIndex);
 
 	// and finally the decals
-	decaldata = (DecalVertex *)malloc(sizeof(DecalVertex) * mapWidth * mapHeight * 12);
-	decalSize = 0;
+	gfx_api::TerrainDecalVertex *terrainDecalData = nullptr;
+	int terrainDecalSize = 0;
+
+	switch (terrainShaderType)
+	{
+	case TerrainShaderType::FALLBACK:
+		decaldata = (DecalVertex *)malloc(sizeof(DecalVertex) * mapWidth * mapHeight * 12);
+		decalSize = 0;
+		break;
+	case TerrainShaderType::SINGLE_PASS:
+		terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapWidth * mapHeight * 12);
+		terrainDecalSize = 0;
+		break;
+	}
+
 	for (x = 0; x < xSectors; x++)
 	{
 		for (y = 0; y < ySectors; y++)
 		{
-			sectors[x * ySectors + y].decalOffset = decalSize;
-			sectors[x * ySectors + y].decalSize = 0;
-			setSectorDecals(x, y, decaldata, &decalSize);
-			sectors[x * ySectors + y].decalSize = decalSize - sectors[x * ySectors + y].decalOffset;
+			switch (terrainShaderType)
+			{
+			case TerrainShaderType::FALLBACK:
+				sectors[x * ySectors + y].decalOffset = decalSize;
+				sectors[x * ySectors + y].decalSize = 0;
+				setSectorDecals(x, y, decaldata, &decalSize);
+				sectors[x * ySectors + y].decalSize = decalSize - sectors[x * ySectors + y].decalOffset;
+				break;
+			case TerrainShaderType::SINGLE_PASS:
+				sectors[x * ySectors + y].terrainAndDecalOffset = terrainDecalSize;
+				sectors[x * ySectors + y].terrainAndDecalSize = 0;
+				setSectorDecalVertex_SinglePass(x, y, terrainDecalData, &terrainDecalSize);
+				sectors[x * ySectors + y].terrainAndDecalSize = terrainDecalSize - sectors[x * ySectors + y].terrainAndDecalOffset;
+				break;
+			}
 		}
 	}
 	debug(LOG_TERRAIN, "%i decals found", decalSize / 12);
@@ -945,14 +1248,35 @@ bool initTerrain()
 		delete decalVBO;
 	if (decalSize > 0)
 	{
-		decalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
+		decalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw, "terrain::decalVBO");
 		decalVBO->upload(sizeof(DecalVertex)*decalSize, decaldata);
 	}
 	else
 	{
 		decalVBO = nullptr;
 	}
-	free(decaldata);
+	if (decaldata)
+	{
+		free(decaldata);
+		decaldata = nullptr;
+	}
+
+	if (terrainDecalVBO)
+		delete terrainDecalVBO;
+	if (terrainDecalSize > 0)
+	{
+		terrainDecalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw, "terrain::terrainDecalVBO");
+		terrainDecalVBO->upload(sizeof(gfx_api::TerrainDecalVertex)*terrainDecalSize, terrainDecalData);
+	}
+	else
+	{
+		terrainDecalVBO = nullptr;
+	}
+	if (terrainDecalData)
+	{
+		free(terrainDecalData);
+		terrainDecalData = nullptr;
+	}
 
 	lightmapLastUpdate = 0;
 	lightmapWidth = 1;
@@ -1019,6 +1343,8 @@ void shutdownTerrain()
 	textureIndexVBO = nullptr;
 	delete decalVBO;
 	decalVBO = nullptr;
+	delete terrainDecalVBO;
+	terrainDecalVBO = nullptr;
 
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -1034,6 +1360,16 @@ void shutdownTerrain()
 	delete lightmap_texture;
 	lightmap_texture = nullptr;
 	lightmapPixmap = nullptr;
+
+	delete groundTexArr; groundTexArr = nullptr;
+	delete groundNormalArr; groundNormalArr = nullptr;
+	delete groundSpecularArr; groundSpecularArr = nullptr;
+	delete groundHeightArr; groundHeightArr = nullptr;
+
+	delete decalTexArr; decalTexArr = nullptr;
+	delete decalNormalArr; decalNormalArr = nullptr;
+	delete decalSpecularArr; decalSpecularArr = nullptr;
+	delete decalHeightArr; decalHeightArr = nullptr;
 
 	terrainInitialised = false;
 }
@@ -1172,6 +1508,17 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
+glm::vec4 getFogColorVec4()
+{
+	const auto &renderState = getCurrentRenderState();
+	return glm::vec4(
+		renderState.fogColour.vector[0] / 255.f,
+		renderState.fogColour.vector[1] / 255.f,
+		renderState.fogColour.vector[2] / 255.f,
+		renderState.fogColour.vector[3] / 255.f
+	);
+}
+
 static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
 {
 	const auto &renderState = getCurrentRenderState();
@@ -1277,13 +1624,61 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 	gfx_api::TerrainDecals::get().unbind_vertex_buffers(decalVBO);
 }
 
+static void drawTerrainAndDecals(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
+{
+	const auto &renderState = getCurrentRenderState();
+	gfx_api::TerrainAndDecals::get().bind();
+	gfx_api::TerrainAndDecals::get().bind_textures(
+		lightmap_texture,
+		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
+		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr);
+	gfx_api::TerrainAndDecals::get().bind_vertex_buffers(terrainDecalVBO);
+	glm::mat4 groundScale = glm::mat4(0);
+	for (int i = 0; i < getNumGroundTypes(); i++) {
+		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
+	}
+	gfx_api::constant_buffer_type<SHADER_TERRAIN_DECALS> uniforms = {
+		ModelViewProjection, ModelUVLightmap, groundScale,
+		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
+		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality
+	};
+	gfx_api::TerrainAndDecals::get().bind_constants(uniforms);
+
+	int size = 0;
+	int offset = 0;
+	for (int x = 0; x < xSectors; x++)
+	{
+		for (int y = 0; y < ySectors + 1; y++)
+		{
+			if (y < ySectors && offset + size == sectors[x * ySectors + y].terrainAndDecalOffset && sectors[x * ySectors + y].draw)
+			{
+				// append
+				size += sectors[x * ySectors + y].terrainAndDecalSize;
+				continue;
+			}
+			// can't append, so draw what we have and start anew
+			if (size > 0)
+			{
+				gfx_api::TerrainAndDecals::get().draw(size, offset);
+			}
+			size = 0;
+			if (y < ySectors && sectors[x * ySectors + y].draw)
+			{
+				offset = sectors[x * ySectors + y].terrainAndDecalOffset;
+				size = sectors[x * ySectors + y].terrainAndDecalSize;
+			}
+		}
+	}
+	gfx_api::TerrainAndDecals::get().unbind_vertex_buffers(terrainDecalVBO);
+}
 
 /**
  * Update the lightmap and draw the terrain and decals.
  * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
  * on it one by one. Finally the decals are drawn.
  */
-void drawTerrain(const glm::mat4 &mvp)
+void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
 	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
@@ -1306,18 +1701,29 @@ void drawTerrain(const glm::mat4 &mvp)
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
+	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
 	//////////////////////////////////////
 	// canvas to draw on
 	drawDepthOnly(mvp, paramsXLight, paramsYLight);
 
-	///////////////////////////////////
-	// terrain
-	drawTerrainLayers(mvp, paramsXLight, paramsYLight, lightMatrix);
+	switch (terrainShaderType)
+	{
+	case TerrainShaderType::FALLBACK:
+		///////////////////////////////////
+		// terrain
+		drawTerrainLayers(mvp, paramsXLight, paramsYLight, lightMatrix);
 
-	//////////////////////////////////
-	// decals
-	drawDecals(mvp, paramsXLight, paramsYLight, lightMatrix);
+		//////////////////////////////////
+		// decals
+		drawDecals(mvp, paramsXLight, paramsYLight, lightMatrix);
+		break;
+	case TerrainShaderType::SINGLE_PASS:
+		///////////////////////////////////
+		// terrain + decals
+		drawTerrainAndDecals(mvp, ModelUVLightmap, cameraPos, sunPos);
+		break;
+	}
 }
 
 /**
@@ -1374,4 +1780,112 @@ void drawWater(const glm::mat4 &viewMatrix)
 	{
 		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
 	}
+}
+
+// MARK: Terrain shader type / quality
+
+TerrainShaderType getTerrainShaderType()
+{
+	return terrainShaderType;
+}
+
+TerrainShaderType determineSupportedTerrainShader()
+{
+	if (!gfx_api::context::get().supports2DTextureArrays())
+	{
+		return TerrainShaderType::FALLBACK;
+	}
+	if (!gfx_api::context::get().supportsIntVertexAttributes())
+	{
+		return TerrainShaderType::FALLBACK;
+	}
+	if (gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS) < 256) // "big enough" value
+	{
+		return TerrainShaderType::FALLBACK;
+	}
+
+	return TerrainShaderType::SINGLE_PASS;
+}
+
+TerrainShaderQuality getTerrainShaderQuality()
+{
+	return terrainShaderQuality;
+}
+
+bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force)
+{
+	if (!initializedTerrainShaderType)
+	{
+		// cache the desired value for when terrain shader type is initialized (post graphics context initialization)
+		terrainShaderQuality = newValue;
+		return true;
+	}
+
+	if (!force && newValue == terrainShaderQuality)
+	{
+		return true;
+	}
+
+	bool success = false;
+
+	// Check whether the new shader can be used
+	switch (terrainShaderType)
+	{
+	case TerrainShaderType::FALLBACK:
+		// only "CLASSIC" is supported
+		terrainShaderQuality = TerrainShaderQuality::CLASSIC;
+		success = (newValue == TerrainShaderQuality::CLASSIC);
+		break;
+	case TerrainShaderType::SINGLE_PASS:
+		// all quality modes are supported
+		terrainShaderQuality = newValue;
+		success = true;
+		break;
+	}
+
+	return success;
+}
+
+bool setTerrainShaderQuality(TerrainShaderQuality newValue)
+{
+	return setTerrainShaderQuality(newValue, false);
+}
+
+std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions()
+{
+	return { TerrainShaderQuality::CLASSIC, TerrainShaderQuality::NORMAL_MAPPING };
+}
+
+bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value)
+{
+	ASSERT_OR_RETURN(false, initializedTerrainShaderType, "Should only be called after graphics context initialization");
+	switch (terrainShaderType)
+	{
+	case TerrainShaderType::FALLBACK:
+		// only "CLASSIC" is supported with the fallback shaders
+		return value == TerrainShaderQuality::CLASSIC;
+	case TerrainShaderType::SINGLE_PASS:
+		// all quality modes are supported
+		return true;
+	}
+	return false; // silence compiler warning
+}
+
+void initTerrainShaderType()
+{
+	terrainShaderType = determineSupportedTerrainShader();
+	initializedTerrainShaderType = true;
+	setTerrainShaderQuality(terrainShaderQuality, true); // checks and resets unsupported values
+}
+
+std::string to_display_string(TerrainShaderQuality value)
+{
+	switch (value)
+	{
+		case TerrainShaderQuality::CLASSIC:
+			return _("Normal");
+		case TerrainShaderQuality::NORMAL_MAPPING:
+			return _("High");
+	}
+	return ""; // silence warning
 }

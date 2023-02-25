@@ -14,7 +14,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogStart;
 };
 
-layout(location = 0) in vec4 vertex;
+layout(location = 0) in vec4 vertex; // .w is depth
 //layout(location = 2) in vec4 vertexColor;
 
 //layout(location = 0) out vec4 color;
@@ -25,11 +25,11 @@ layout(location = 3) out float vertexDistance;
 void main()
 {
 //	color = vertexColor;
-	vec4 position = ModelViewProjectionMatrix * vertex;
+	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1);
 	gl_Position = position;
-	vec4 uv1_tmp = textureMatrix1 * vec4(dot(paramx1, vertex), dot(paramy1, vertex), 0., 1.);
+	vec4 uv1_tmp = textureMatrix1 * vec4(dot(paramx1, vec4(vertex.xyz, 1)), dot(paramy1, vec4(vertex.xyz, 1)), 0., 1.);
 	uv1 = uv1_tmp.xy / uv1_tmp.w;
-	vec4 uv2_tmp = textureMatrix2 * vec4(dot(paramx2, vertex), dot(paramy2, vertex), 0., 1.);
+	vec4 uv2_tmp = textureMatrix2 * vec4(dot(paramx2, vec4(vertex.xyz, 1)), dot(paramy2, vec4(vertex.xyz, 1)), 0., 1.);
 	uv2 = uv2_tmp.xy / uv2_tmp.w;
 	vertexDistance = position.z;
 	gl_Position.y *= -1.;

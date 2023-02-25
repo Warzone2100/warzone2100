@@ -900,6 +900,50 @@ static std::shared_ptr<WIDGET> makeLODDistanceDropdown()
 	return Margin(0, 10).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeTerrainQualityDropdown()
+{
+	std::vector<std::tuple<WzString, TerrainShaderQuality>> dropDownChoices = {
+		{_("Default"), TerrainShaderQuality::CLASSIC},
+		{_("High"), TerrainShaderQuality::NORMAL_MAPPING}
+	};
+
+	size_t currentSettingIdx = 0;
+	auto currValue = getTerrainShaderQuality();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, TerrainShaderQuality>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_TERRAIN_QUALITY_R;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), isSupportedTerrainShaderQualityOption(std::get<1>(option)) ? 0 : WBUT_DISABLE);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+		auto newMode = std::get<1>(dropDownChoices.at(newIndex));
+		if (!setTerrainShaderQuality(newMode))
+		{
+			debug(LOG_ERROR, "Failed to set terrain shader quality: %s", to_display_string(newMode).c_str());
+			return false;
+		}
+		return true;
+	});
+
+	return Margin(0, 10).wrap(dropdown);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
 void startGraphicsOptionsMenu()
@@ -919,6 +963,11 @@ void startGraphicsOptionsMenu()
 
 	auto grid = std::make_shared<GridLayout>();
 	grid_allocation::slot row(0);
+
+	// Terrain Quality
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_TERRAIN_QUALITY, _("Terrain Quality"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, makeTerrainQualityDropdown());
+	row.start++;
 
 	////////////
 	//FMV mode.
