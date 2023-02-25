@@ -1728,38 +1728,59 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
 
 /**
  * Draw the water.
+ * sunPos and cameraPos in Model=WorldSpace
  */
-void drawWater(const glm::mat4 &viewMatrix)
+void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	if (!waterIndexVBO)
 	{
 		return; // no water
 	}
 
-	int x, y;
 	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
+	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto &renderState = getCurrentRenderState();
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
 	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
-	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize);
+	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", (terrainShaderQuality == TerrainShaderQuality::CLASSIC) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
-	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()));
+
+	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName, gfx_api::texture_type textureType) -> gfx_api::texture* {
+		if (fileName.empty() || terrainShaderQuality == TerrainShaderQuality::CLASSIC) return nullptr;
+		auto texPage = iV_GetTexture(fileName.c_str(), textureType, maxTerrainTextureSize, maxTerrainTextureSize);
+		if (!texPage.has_value())
+		{
+			return nullptr;
+		}
+		return &pie_Texture(texPage.value());
+	};
+	gfx_api::WaterPSO::get().bind_textures(
+		&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()),
+		getOptTex(waterTexture1_nm, gfx_api::texture_type::normal_map), getOptTex(waterTexture2_nm, gfx_api::texture_type::normal_map),
+		getOptTex(waterTexture1_sm, gfx_api::texture_type::specular_map), getOptTex(waterTexture2_sm, gfx_api::texture_type::specular_map),
+		getOptTex(waterTexture1_hm, gfx_api::texture_type::height_map), getOptTex(waterTexture2_hm, gfx_api::texture_type::height_map));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
-	gfx_api::WaterPSO::get().bind_constants({ viewMatrix, paramsX, paramsY, paramsX2, paramsY2,
-		glm::translate(glm::vec3(waterOffset, 0.f, 0.f)), glm::mat4(1.f), glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1
+	gfx_api::WaterPSO::get().bind_constants({
+		ModelViewProjection, ModelUV1, ModelUV2,
+		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
+		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+		waterOffset*10, terrainShaderQuality
 	});
+
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 
-	for (x = 0; x < xSectors; x++)
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
 			if (sectors[x * ySectors + y].draw)
 			{

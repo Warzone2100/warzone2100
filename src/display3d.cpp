@@ -1421,7 +1421,7 @@ static void drawTiles(iView *player)
 	pie_SetFogStatus(true);
 
 	// also, make sure we can use world coordinates directly
-	drawWater(perspectiveViewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
+	drawWater(mvpMatrix, cameraPos, -getTheSun());
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
