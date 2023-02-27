@@ -276,6 +276,7 @@ namespace gfx_api
 	struct pipeline_state_object
 	{
 		virtual ~pipeline_state_object() {}
+		bool broken = false;
 	};
 
 	struct context
@@ -311,7 +312,8 @@ namespace gfx_api
 		virtual texture* create_texture(const size_t& mipmap_count, const size_t& width, const size_t& height, const pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual texture_array* create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw, const std::string& debugName = "") = 0;
-		virtual pipeline_state_object* build_pipeline(const state_description&,
+		virtual pipeline_state_object* build_pipeline(pipeline_state_object* existing_pso,
+													  const state_description&,
 													  const SHADER_MODE&,
 													  const gfx_api::primitive_type& primitive,
 													  const std::vector<std::type_index>& uniform_blocks,
@@ -445,6 +447,12 @@ namespace gfx_api
 
 		void bind()
 		{
+			if (this->nextpso != nullptr && !this->nextpso->broken)
+			{
+				if (this->pso != nullptr) delete this->pso;
+				this->pso = this->nextpso;
+				this->nextpso = nullptr;
+			}
 			gfx_api::context::get().bind_pipeline(pso, std::tuple_size<texture_inputs>::value == 0);
 		}
 
@@ -510,11 +518,25 @@ namespace gfx_api
 		{
 			context::get().draw_elements_instanced(offset, count, primitive, index, instance_count);
 		}
+
+		bool recompile()
+		{
+			nextpso = gfx_api::context::get().build_pipeline(pso, rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+			return nextpso != nullptr && !nextpso->broken;
+		}
+
+		bool isBroken()
+		{
+			return nextpso ? nextpso->broken : pso->broken;
+		}
+
 	private:
-		pipeline_state_object* pso;
+		pipeline_state_object* pso = nullptr;
+		pipeline_state_object* nextpso = nullptr;
+
 		pipeline_state_helper()
 		{
-			pso = gfx_api::context::get().build_pipeline(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+			recompile();
 		}
 
 //		// Requires C++14 (+)

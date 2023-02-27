@@ -2044,16 +2044,57 @@ VkRoot::~VkRoot()
 	// nothing, currently
 }
 
-gfx_api::pipeline_state_object * VkRoot::build_pipeline(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
+														const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
 	const std::vector<std::type_index>& uniform_blocks,
 	const std::vector<gfx_api::texture_input>& texture_desc,
 	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
+	optional<size_t> psoID;
+	if (existing_pso)
+	{
+		VkPSOId* existingPSOId = static_cast<VkPSOId*>(existing_pso);
+		psoID = existingPSOId->psoID;
+	}
+
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
 	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, uniform_blocks, texture_desc, attribute_descriptions);
-	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
-	createdPipelines.emplace_back(createInfo, pipeline);
-	return new VkPSOId(createdPipelines.size() - 1);
+	VkPSO* pipeline = nullptr;
+	try {
+		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
+	}
+	catch (const std::exception& e)
+	{
+		// Failed to build pipeline!
+		code_part part = LOG_ERROR;
+		if (!psoID.has_value())
+		{
+			// trying to build the pipeline for the first time - no prior build to fall back to!
+			part = LOG_FATAL;
+		}
+		debug(part, "Failed to build pipeline, with error: %s", e.what());
+		if (!psoID.has_value())
+		{
+			abort();
+		}
+		else
+		{
+			// fall back to prior pipeline (construct a new indirect reference, but don't delete the old VkPSO)
+			return new VkPSOId(psoID.value(), true);
+		}
+	}
+	if (!psoID.has_value())
+	{
+		createdPipelines.emplace_back(createInfo, pipeline);
+		psoID = createdPipelines.size() - 1;
+	}
+	else
+	{
+		delete createdPipelines[psoID.value()].second;
+		createdPipelines[psoID.value()].second = pipeline;
+	}
+
+	return new VkPSOId(psoID.value(), false); // always return a new indirect reference
 }
 
 void VkRoot::rebuildPipelinesIfNecessary()

@@ -317,7 +317,10 @@ struct VkPSOId final : public gfx_api::pipeline_state_object
 public:
 	size_t psoID = 0;
 public:
-	VkPSOId(size_t psoID) : psoID(psoID) {}
+	VkPSOId(size_t psoID, bool _isbroken) : psoID(psoID)
+	{
+		broken = _isbroken;
+	}
 	~VkPSOId() {}
 };
 
@@ -622,7 +625,8 @@ public:
 	VkRoot(bool _debug);
 	~VkRoot();
 
-	virtual gfx_api::pipeline_state_object * build_pipeline(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso,
+															const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
 															const std::vector<std::type_index>& uniform_blocks,
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
