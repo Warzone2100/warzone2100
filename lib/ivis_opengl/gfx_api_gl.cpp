@@ -500,7 +500,7 @@ void gl_texture_array::flush()
 				continue;
 			}
 			GLenum glFormat = to_gl_internalformat(internal_format, gles);
-			glCompressedTexImage3D(GL_TEXTURE_2D_ARRAY, static_cast<GLint>(i), glFormat, static_cast<GLsizei>(pLevel->width), static_cast<GLsizei>(pLevel->height), layer_count, 0, static_cast<GLsizei>(pLevel->buffer.size()), pLevel->buffer.data());
+			glCompressedTexImage3D(GL_TEXTURE_2D_ARRAY, static_cast<GLint>(i), glFormat, static_cast<GLsizei>(pLevel->width), static_cast<GLsizei>(pLevel->height), static_cast<GLsizei>(layer_count), 0, static_cast<GLsizei>(pLevel->buffer.size()), pLevel->buffer.data());
 		}
 		unbind();
 		pInternalBuffer->clear();

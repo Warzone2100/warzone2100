@@ -4239,16 +4239,16 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 	auto image_descriptor = std::vector<vk::DescriptorImageInfo>{};
 	for (auto* texture : textures)
 	{
-		WZ_vk::UniqueImageView *pView = nullptr;
+		vk::ImageView imageView;
 		if (texture != nullptr)
 		{
 			if (texture->isArray())
 			{
-				pView = &static_cast<VkTextureArray*>(texture)->view;
+				imageView = static_cast<VkTextureArray*>(texture)->view.get();
 			}
 			else
 			{
-				pView = &static_cast<VkTexture*>(texture)->view;
+				imageView = static_cast<VkTexture*>(texture)->view.get();
 			}
 		}
 		else
@@ -4256,15 +4256,15 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 			switch (attribute_descriptions.at(i).target)
 			{
 				case gfx_api::pixel_format_target::texture_2d:
-					pView = &pDefaultTexture->view;
+					imageView = pDefaultTexture->view.get();
 					break;
 				case gfx_api::pixel_format_target::texture_2d_array:
-					pView = &pDefaultArrayTexture->view;
+					imageView = pDefaultArrayTexture->view.get();
 					break;
 			}
 		}
 		image_descriptor.emplace_back(vk::DescriptorImageInfo()
-			.setImageView(pView->get())
+			.setImageView(imageView)
 			.setImageLayout(vk::ImageLayout::eShaderReadOnlyOptimal));
 		i++;
 	}
