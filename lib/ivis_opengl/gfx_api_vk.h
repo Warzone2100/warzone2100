@@ -236,6 +236,7 @@ struct perFrameResources_t
 	std::vector</*WZ_vk::UniqueImage*/vk::Image> image_to_delete;
 	std::vector<WZ_vk::UniqueImageView> image_view_to_delete;
 	std::vector<VmaAllocation> vmamemory_to_free;
+	std::vector<VkPSO*> pso_to_delete;
 
 	BlockBufferAllocator stagingBufferAllocator;
 	BlockBufferAllocator streamedVertexBufferAllocator;
