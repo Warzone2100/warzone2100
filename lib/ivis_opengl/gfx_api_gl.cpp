@@ -1850,7 +1850,7 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
 	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
-		glObjectLabel(GL_TEXTURE_2D_ARRAY, new_texture->id(), -1, filename.c_str());
+		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 	if (is_uncompressed_format(internal_format))
 	{
