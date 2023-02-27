@@ -1006,7 +1006,10 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 		}
 	}
 
-	texture_array->flush();
+	if (texture_array)
+	{
+		texture_array->flush();
+	}
 
 	return texture_array.release();
 }
