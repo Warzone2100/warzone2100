@@ -50,6 +50,7 @@ struct GROUND_TYPE
 	std::string normalMapTextureName = "";
 	std::string specularMapTextureName = "";
 	std::string heightMapTextureName = "";
+	bool highQualityTextures = false; // whether this ground_type has normal / specular / height maps
 };
 
 /* Information stored with each tile */
