@@ -1290,6 +1290,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		if ((vertexShaderContents = readShaderBuf(vertexPath)))
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+			vertexShader = shader;
 
 			const char* ShaderStrings[2] = { vertex_header, vertexShaderContents };
 
@@ -1326,6 +1327,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		if ((fragmentShaderContents = readShaderBuf(fragmentPath)))
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+			fragmentShader = shader;
 
 			std::string fragmentShaderStr = fragmentShaderContents;
 			free(fragmentShaderContents);
@@ -1417,6 +1419,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 	}
 	fetch_uniforms(uniformNames, duplicateFragmentUniformNames);
 	getLocs();
+	broken |= !success;
 }
 
 void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniformNames)
@@ -1523,6 +1526,13 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
 //	setUniforms(obj->locations[19], cbuf.fogBegin);
 //	setUniforms(obj->locations[20], cbuf.fogColour);
 //}
+
+gl_pipeline_state_object::~gl_pipeline_state_object()
+{
+	if (this->vertexShader) glDeleteShader(this->vertexShader);
+	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
+	glDeleteProgram(this->program);
+}
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf)
 {
@@ -1866,20 +1876,43 @@ gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage 
 	return new gl_buffer(usage, hint);
 }
 
-gfx_api::pipeline_state_object * gl_context::build_pipeline(const gfx_api::state_description &state_desc,
-															const SHADER_MODE& shader_mode,
-															const gfx_api::primitive_type& primitive,
-															const std::vector<std::type_index>& uniform_blocks,
-															const std::vector<gfx_api::texture_input>& texture_desc,
-															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
+								  const gfx_api::state_description &state_desc,
+								  const SHADER_MODE& shader_mode,
+								  const gfx_api::primitive_type& primitive,
+								  const std::vector<std::type_index>& uniform_blocks,
+								  const std::vector<gfx_api::texture_input>& texture_desc,
+								  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
+	optional<size_t> psoID;
+	if (existing_pso)
+	{
+		gl_pipeline_id* existingPSOId = static_cast<gl_pipeline_id*>(existing_pso);
+		psoID = existingPSOId->psoID;
+	}
+
 	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, state_desc, shader_mode, uniform_blocks, attribute_descriptions, mipLodBias);
+	auto pipeline = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, state_desc, shader_mode, uniform_blocks, attribute_descriptions, mipLodBias);
+	if (!psoID.has_value())
+	{
+		createdPipelines.emplace_back(pipeline);
+		psoID = createdPipelines.size() - 1;
+	}
+	else
+	{
+		gl_pipeline_state_object* old_program = createdPipelines[psoID.value()];
+		delete old_program;
+		createdPipelines[psoID.value()] = pipeline;
+	}
+
+	return new gl_pipeline_id(psoID.value(), pipeline->broken); // always return a new indirect reference
 }
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
 {
-	gl_pipeline_state_object* new_program = static_cast<gl_pipeline_state_object*>(pso);
+	gl_pipeline_id* newPSOId = static_cast<gl_pipeline_id*>(pso);
+	// lookup pipeline
+	gl_pipeline_state_object* new_program = createdPipelines[newPSOId->psoID];
 	if (current_program != new_program)
 	{
 		current_program = new_program;
@@ -3212,6 +3245,12 @@ void gl_context::shutdown()
 			vaoId = 0;
 		}
 	}
+
+	for (auto& pipeline : createdPipelines)
+	{
+		delete pipeline;
+	}
+	createdPipelines.clear();
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	if (!debugLiveTextures.empty())

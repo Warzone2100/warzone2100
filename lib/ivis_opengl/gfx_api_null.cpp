@@ -183,7 +183,8 @@ gfx_api::buffer * null_context::create_buffer_object(const gfx_api::buffer::usag
 	return new null_buffer(usage, hint);
 }
 
-gfx_api::pipeline_state_object * null_context::build_pipeline(const gfx_api::state_description &state_desc,
+gfx_api::pipeline_state_object * null_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
+															  const gfx_api::state_description &state_desc,
 															const SHADER_MODE& shader_mode,
 															const gfx_api::primitive_type& primitive,
 															const std::vector<std::type_index>& uniform_blocks,
