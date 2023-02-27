@@ -775,6 +775,12 @@ void perFrameResources_t::clean()
 		vmaFreeMemory(allocator, allocation);
 	}
 	vmamemory_to_free.clear();
+
+	for (auto old_pso : pso_to_delete)
+	{
+		delete old_pso;
+	}
+	pso_to_delete.clear();
 }
 
 perFrameResources_t::~perFrameResources_t()
@@ -2090,7 +2096,7 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	}
 	else
 	{
-		delete createdPipelines[psoID.value()].second;
+		buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(createdPipelines[psoID.value()].second);
 		createdPipelines[psoID.value()].second = pipeline;
 	}
 
