@@ -1901,10 +1901,10 @@ VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t l
 	vk::Format internal_vk_format = root.get_format(internal_pixel_format);
 
 	auto imageCreateInfo = vk::ImageCreateInfo()
-	.setArrayLayers(layer_count)
-	.setExtent(vk::Extent3D(width, height, 1))
+	.setArrayLayers(static_cast<uint32_t>(layer_count))
+	.setExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	.setImageType(vk::ImageType::e2D)
-	.setMipLevels(mipmap_count)
+	.setMipLevels(static_cast<uint32_t>(mipmap_count))
 	.setTiling(vk::ImageTiling::eOptimal)
 	.setFormat(internal_vk_format)
 	.setUsage(vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled)
@@ -1936,7 +1936,7 @@ VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t l
 		.setViewType(vk::ImageViewType::e2DArray)
 		.setFormat(internal_vk_format)
 		.setComponents(vk::ComponentMapping())
-		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipmap_levels, 0, layer_count));
+		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0, static_cast<uint32_t>(layer_count)));
 
 	view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, this->root->vkDynLoader);
 }
