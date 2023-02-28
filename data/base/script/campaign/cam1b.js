@@ -4,7 +4,7 @@ include("script/campaign/templates.js");
 
 var NPScout; // Sensor scout
 const SCAVENGER_RES = [
-	"R-Wpn-Flamer-Damage01", "R-Wpn-Flamer-Range01", "R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01",
+	"R-Wpn-Flamer-Damage01", "R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01","R-Wpn-Flamer-Range01-ScavReduce",
 ];
 
 camAreaEvent("AttackArea1", function(droid)
@@ -85,9 +85,20 @@ function eventStartLevel()
 
 	camCompleteRequiredResearch(SCAVENGER_RES, 6);
 	camCompleteRequiredResearch(SCAVENGER_RES, 7);
-
+	if (difficulty === HARD)
+	{
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_7);
+	}
+	else if (difficulty === INSANE)
+	{
+		completeResearch("R-Wpn-Flamer-Range01", SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01", SCAV_7);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_7);
+	}
 	camSetArtifacts({
-		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
+		"base1factory": { tech: "R-Wpn-Flamer-Damage02" },
 		"base2factory": { tech: "R-Wpn-MG2Mk1" },
 		"base3sensor": { tech: "R-Sys-Sensor-Turret01" },
 		"base4gen": { tech: "R-Struc-PowerModuleMk1" },

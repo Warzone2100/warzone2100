@@ -6,6 +6,7 @@ const SCAVENGER_RES = [
 	"R-Wpn-Flamer-Damage02", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
 	"R-Wpn-MG-Damage02", "R-Wpn-MG-ROF01", "R-Wpn-Mortar-Damage02",
 	"R-Wpn-Mortar-ROF01", "R-Wpn-Rocket-ROF03",
+	"R-Defense-WallUpgrade01","R-Struc-Materials01",
 ];
 
 function exposeNorthBase()
@@ -104,7 +105,7 @@ function eventStartLevel()
 	camDetectEnemyBase("ScavLabGroup");
 
 	camSetArtifacts({
-		"ScavLab": { tech: ["R-Wpn-Mortar01Lt", "R-Wpn-Flamer-Damage02"] },
+		"ScavLab": { tech: "R-Wpn-Mortar01Lt" },
 		"NorthFactory": { tech: ["R-Vehicle-Prop-Halftracks", "R-Wpn-Cannon1Mk1"] },
 	});
 

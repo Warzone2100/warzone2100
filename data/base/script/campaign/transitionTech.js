@@ -4,19 +4,20 @@
 const ALPHA_RESEARCH_NEW = [
 	// 1
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
-	"R-Sys-MobileRepairTurret01", "R-Sys-Engineering01", "R-Wpn-Flamer01Mk1", "R-Wpn-MG-Damage01",
-	"R-Wpn-MG-ROF01", "R-Defense-Tower01", "R-Defense-TankTrap01", "R-Defense-Tower04",
+	"R-Sys-MobileRepairTurret01", "R-Sys-Engineering01", "R-Wpn-Flamer01Mk1", "R-Wpn-Flamer-Damage01",
+	"R-Wpn-MG-Damage01", "R-Wpn-MG-Damage02", "R-Wpn-MG-ROF01", "R-Defense-Tower01",
+	"R-Defense-TankTrap01", "R-Defense-Tower04",
 
 	// 2
-	"R-Wpn-Flamer-Damage01", "R-Wpn-MG2Mk1", "R-Sys-Sensor-Turret01", "R-Struc-PowerModuleMk1",
-	"R-Wpn-MG-Damage02", "R-Sys-Sensor-Tower01", "R-Wpn-Flamer-ROF01", "R-Wpn-Flamer-Range01",
-	"R-Defense-Tower02",
+	"R-Wpn-MG2Mk1", "R-Wpn-MG-Damage03", "R-Sys-Sensor-Turret01", "R-Struc-PowerModuleMk1",
+	"R-Sys-Sensor-Tower01", "R-Wpn-Flamer-Damage02", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-Flamer-Range01",	"R-Defense-Tower02",
 
 	// 3
-	"R-Wpn-MG3Mk1", "R-Defense-Tower03", "R-Wpn-MG-Damage03",
+	"R-Wpn-MG3Mk1", "R-Defense-Tower03",
 
 	// 4
-	"R-Wpn-Flamer-Damage02", "R-Wpn-Mortar01Lt", "R-Vehicle-Prop-Halftracks",
+	"R-Wpn-Mortar01Lt", "R-Vehicle-Prop-Halftracks",
 	"R-Wpn-Cannon1Mk1", "R-Wpn-Mortar-Damage01", "R-Wpn-Mortar-Damage02",
 	"R-Wpn-Mortar-ROF01","R-Wpn-Cannon-Damage01", "R-Wpn-Cannon-Damage02",
 
