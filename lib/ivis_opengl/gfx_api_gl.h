@@ -205,6 +205,7 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf);
 	void set_constants(const gfx_api::TerrainCombinedUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_COLOUR>& cbuf);

@@ -162,6 +162,8 @@ TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::NORMAL_MAPPING
 TerrainShaderType terrainShaderType = TerrainShaderType::SINGLE_PASS;
 bool initializedTerrainShaderType = false;
 
+void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos);
+
 #define MIN_TERRAIN_TEXTURE_SIZE 512
 
 /// Pass all remaining triangles to OpenGL
@@ -797,6 +799,22 @@ static gfx_api::texture_array* groundTexArr = nullptr;
 static gfx_api::texture_array* groundNormalArr = nullptr;
 static gfx_api::texture_array* groundSpecularArr = nullptr;
 static gfx_api::texture_array* groundHeightArr = nullptr;
+static gfx_api::texture* waterClassicTexture = nullptr; // only used for classic mode
+
+gfx_api::texture* getWaterClassicTexture()
+{
+	if (waterClassicTexture)
+	{
+		return waterClassicTexture;
+	}
+
+	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
+	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
+
+	std::string legacyWaterDecalPath = std::string(tilesetDir) + "-" + std::to_string(getCurrentTileTextureSize()) + "/tile-17.png"; // TODO: This is currently hard-coded for legacy tileset textures...
+	waterClassicTexture = gfx_api::context::get().loadTextureFromFile(legacyWaterDecalPath.c_str(), gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);;
+	return waterClassicTexture;
+}
 
 void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 {
@@ -809,6 +827,13 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	delete groundNormalArr; groundNormalArr = nullptr;
 	delete groundSpecularArr; groundSpecularArr = nullptr;
 	delete groundHeightArr; groundHeightArr = nullptr;
+	delete waterClassicTexture; waterClassicTexture = nullptr;
+	waterTexture1_nm.clear();
+	waterTexture2_nm.clear();
+	waterTexture1_sm.clear();
+	waterTexture2_sm.clear();
+	waterTexture1_hm.clear();
+	waterTexture2_hm.clear();
 
 	std::vector<WzString> groundTextureFilenames;
 	std::vector<WzString> groundTextureFilenames_nm;
@@ -1392,6 +1417,7 @@ void shutdownTerrain()
 	delete groundNormalArr; groundNormalArr = nullptr;
 	delete groundSpecularArr; groundSpecularArr = nullptr;
 	delete groundHeightArr; groundHeightArr = nullptr;
+	delete waterClassicTexture; waterClassicTexture = nullptr;
 
 	delete decalTexArr; decalTexArr = nullptr;
 	delete decalNormalArr; decalNormalArr = nullptr;
@@ -1753,6 +1779,12 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
 	// canvas to draw on
 	drawDepthOnly(mvp, paramsXLight, paramsYLight);
 
+	if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+	{
+		// draw water *first*
+		drawWaterClassic(mvp, ModelUVLightmap, cameraPos, sunPos);
+	}
+
 	switch (terrainShaderType)
 	{
 	case TerrainShaderType::FALLBACK:
@@ -1849,8 +1881,70 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 	}
 }
 
+void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
+{
+	if (!waterIndexVBO)
+	{
+		return; // no water
+	}
+
+	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
+	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
+	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
+	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
+	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const auto &renderState = getCurrentRenderState();
+
+	auto pWaterTexture = getWaterClassicTexture();
+	ASSERT(pWaterTexture != nullptr, "Failed to load water legacy texture?");
+
+	gfx_api::WaterClassicPSO::get().bind();
+
+	gfx_api::WaterClassicPSO::get().bind_textures(lightmap_texture, pWaterTexture);
+	gfx_api::WaterClassicPSO::get().bind_vertex_buffers(waterVBO);
+	gfx_api::WaterClassicPSO::get().set_uniforms(gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>{
+		ModelViewProjection, ModelUVLightmap, ModelUV1, ModelUV2,
+		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
+		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+		waterOffset*10
+	});
+
+	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
+
+	for (int x = 0; x < xSectors; x++)
+	{
+		for (int y = 0; y < ySectors; y++)
+		{
+			if (sectors[x * ySectors + y].draw)
+			{
+				addDrawRangeElements<gfx_api::WaterClassicPSO>(
+									 sectors[x * ySectors + y].geometryOffset,
+									 sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+									 sectors[x * ySectors + y].waterIndexSize,
+									 sectors[x * ySectors + y].waterIndexOffset);
+			}
+		}
+	}
+	finishDrawRangeElements<gfx_api::WaterClassicPSO>();
+	gfx_api::WaterClassicPSO::get().unbind_vertex_buffers(waterVBO);
+	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
+
+	// move the water
+	if (!gamePaused())
+	{
+		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
+	}
+}
+
 void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
+	if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+	{
+		// already drawn
+		return;
+	}
+
 	drawWaterImpl(ModelViewProjection, cameraPos, sunPos);
 }
 
