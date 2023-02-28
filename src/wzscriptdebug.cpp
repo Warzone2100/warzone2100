@@ -933,9 +933,20 @@ public:
 			gfx_api::TerrainDecals::get().recompile();
 			debug(LOG_INFO, "Done");
 		}, prevButton);
-		prevButton =panel->createButton(1, "Recompile terrainDecails", [](){
-			debug(LOG_INFO, "Recompiling terrainDecails");
-			gfx_api::TerrainAndDecals::get().recompile();
+		prevButton =panel->createButton(1, "Recompile terrainCombined", [](){
+			debug(LOG_INFO, "Recompiling terrainCombined");
+			switch (getTerrainShaderQuality())
+			{
+				case TerrainShaderQuality::CLASSIC:
+					gfx_api::TerrainCombined_Classic::get().recompile();
+					break;
+				case TerrainShaderQuality::MEDIUM:
+					gfx_api::TerrainCombined_Medium::get().recompile();
+					break;
+				case TerrainShaderQuality::NORMAL_MAPPING:
+					gfx_api::TerrainCombined_High::get().recompile();
+					break;
+			}
 			debug(LOG_INFO, "Done");
 		}, prevButton);
 		prevButton = panel->createButton(1, "Recompile water", [](){

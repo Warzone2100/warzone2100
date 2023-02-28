@@ -903,8 +903,9 @@ static std::shared_ptr<WIDGET> makeLODDistanceDropdown()
 static std::shared_ptr<WIDGET> makeTerrainQualityDropdown()
 {
 	std::vector<std::tuple<WzString, TerrainShaderQuality>> dropDownChoices = {
-		{_("Default"), TerrainShaderQuality::CLASSIC},
-		{_("High"), TerrainShaderQuality::NORMAL_MAPPING}
+		{WzString::fromUtf8(to_display_string(TerrainShaderQuality::CLASSIC)), TerrainShaderQuality::CLASSIC},
+		{WzString::fromUtf8(to_display_string(TerrainShaderQuality::MEDIUM)), TerrainShaderQuality::MEDIUM},
+		{WzString::fromUtf8(to_display_string(TerrainShaderQuality::NORMAL_MAPPING)), TerrainShaderQuality::NORMAL_MAPPING}
 	};
 
 	size_t currentSettingIdx = 0;

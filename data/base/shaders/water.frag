@@ -52,7 +52,7 @@ out vec4 FragColor;
 #define FragColor gl_FragColor
 #endif
 
-vec4 main_classic()
+vec4 main_medium()
 {
 	vec4 fragColor = texture(tex1, uv1);
 	float specColor = texture(tex2, uv2).r;
@@ -91,10 +91,10 @@ vec4 main_bumpMapping()
 void main()
 {
 	vec4 fragColor;
-	if (quality == 0) {
-		fragColor = main_classic();
-	} else {
+	if (quality == 2) {
 		fragColor = main_bumpMapping();
+	} else {
+		fragColor = main_medium();
 	}
 
 	if (fogEnabled > 0)

@@ -51,8 +51,6 @@ uniform float fogEnd;
 uniform float fogStart;
 uniform vec4 fogColor;
 
-uniform int quality; // 0-classic, 1-bumpmapping
-
 in vec2 uvLightmap;
 in vec2 uvDecal;
 in vec2 uvGround;
@@ -78,13 +76,6 @@ vec3 getGroundUv(int i) {
 
 vec3 getGround(int i) {
 	return texture2DArray(groundTex, getGroundUv(i), WZ_MIP_LOAD_BIAS).rgb * fgroundWeights[i];
-}
-
-vec4 main_classic() {
-	vec3 ground = getGround(0) + getGround(1) + getGround(2) + getGround(3);
-	vec4 decal = tile > 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0);
-	vec4 light = texture(lightmap_tex, uvLightmap, 0.f);
-	return light * vec4((1-decal.a) * ground + decal.a * decal.rgb, 1);
 }
 
 struct BumpData {
@@ -152,12 +143,7 @@ vec4 main_bumpMapping() {
 
 void main()
 {
-	vec4 fragColor;
-	if (quality == 1) {
-		fragColor = main_bumpMapping();
-	} else {
-		fragColor = main_classic();
-	}
+	vec4 fragColor = main_bumpMapping();
 
 	if (fogEnabled > 0)
 	{
