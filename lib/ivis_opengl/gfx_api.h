@@ -879,8 +879,7 @@ namespace gfx_api
 		PIELIGHT groundWeights; // weights of corresponding ground textures. encoded as rgba floats
 	};
 
-	template<>
-	struct constant_buffer_type<SHADER_TERRAIN_DECALS>
+	struct TerrainCombinedUniforms
 	{
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
@@ -898,8 +897,9 @@ namespace gfx_api
 		int quality;
 	};
 
-	using TerrainAndDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
-	std::tuple<constant_buffer_type<SHADER_TERRAIN_DECALS>>,
+	template<REND_MODE render_mode, SHADER_MODE shader>
+	using TerrainCombinedTemplate = typename gfx_api::pipeline_state_helper<rasterizer_state<render_mode, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
+	std::tuple<TerrainCombinedUniforms>,
 	std::tuple<
 	vertex_buffer_description<sizeof(TerrainDecalVertex), gfx_api::vertex_attribute_input_rate::vertex, // TerrainDecalVertex struct
 	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
@@ -920,7 +920,11 @@ namespace gfx_api
 	texture_description<6, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal normal
 	texture_description<7, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal specular
 	texture_description<8, sampler_type::anisotropic, pixel_format_target::texture_2d_array>  // decal height
-	>, SHADER_TERRAIN_DECALS>;
+	>, shader>;
+
+	using TerrainCombined_Classic = TerrainCombinedTemplate<REND_ALPHA, SHADER_TERRAIN_COMBINED_CLASSIC>;
+	using TerrainCombined_Medium = TerrainCombinedTemplate<REND_OPAQUE, SHADER_TERRAIN_COMBINED_MEDIUM>;
+	using TerrainCombined_High = TerrainCombinedTemplate<REND_OPAQUE, SHADER_TERRAIN_COMBINED_HIGH>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER>

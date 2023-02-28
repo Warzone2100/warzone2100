@@ -618,7 +618,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
-	std::make_pair(SHADER_TERRAIN_DECALS, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined.frag",
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
+			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "groundScale",
+				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"lightmap_tex",
+				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
+			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "groundScale",
+				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"lightmap_tex",
+				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
 			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
@@ -906,7 +920,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_DECALS>(),
-		uniform_binding_entry<SHADER_TERRAIN_DECALS>(),
+		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
 		uniform_binding_entry<SHADER_RECT>(),
 		uniform_binding_entry<SHADER_TEXRECT>(),
@@ -1613,7 +1627,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(9, cbuf.texture1);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DECALS>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUniforms& cbuf)
 {
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);

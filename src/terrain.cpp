@@ -364,6 +364,17 @@ static bool isWater(int x, int y)
 	return result;
 }
 
+/// Is this position an *actual* water-only tile?
+static bool isOnlyWater(int x, int y)
+{
+	bool result = true;
+	result = result && (tileOnMap(x  , y) && terrainType(mapTile(x  , y)) == TER_WATER);
+	result = result && (tileOnMap(x - 1, y) && terrainType(mapTile(x - 1, y)) == TER_WATER);
+	result = result && (tileOnMap(x  , y - 1) && terrainType(mapTile(x  , y - 1)) == TER_WATER);
+	result = result && (tileOnMap(x - 1, y - 1) && terrainType(mapTile(x - 1, y - 1)) == TER_WATER);
+	return result;
+}
+
 /// Get the position of a grid point
 static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 {
@@ -386,10 +397,17 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 	else
 	{
-		result->y = map_TileHeight(x, y);
-		if (water)
+		if (terrainShaderQuality != TerrainShaderQuality::CLASSIC)
 		{
-			result->y = map_WaterHeight(x, y);
+			result->y = map_TileHeight(x, y);
+			if (water)
+			{
+				result->y = map_WaterHeight(x, y);
+			}
+		}
+		else
+		{
+			result->y = map_TileHeightSurface(x, y);
 		}
 	}
 }
@@ -452,14 +470,14 @@ static void setSectorGeometry(int sx, int sy,
 			(*geometrySize)++;
 
 			float waterHeight = map_WaterHeight(x, y);
-			water[*waterSize] = glm::vec4(pos.x, waterHeight, pos.z, waterHeight - pos.y);
+			water[*waterSize] = glm::vec4(pos.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterHeight : pos.y, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 
 			pos = getGridPosf(x, y, true, false);
 			geometry[*geometrySize].pos = pos;
 			(*geometrySize)++;
 
-			water[*waterSize] = glm::vec4(pos.x, waterHeight, pos.z, waterHeight - pos.y);
+			water[*waterSize] = glm::vec4(pos.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterHeight : pos.y, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 		}
 	}
@@ -568,8 +586,17 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 
 			MAPTILE *tile = mapTile(i, j);
 			center = getTileTexArrCoords(*uv, tile->texture);
-			auto decalNo = TileNumber_tile(tile->texture);
-			if (!TILE_HAS_DECAL(tile)) decalNo = 0;
+			int decalNo = static_cast<int>(TileNumber_tile(tile->texture));
+			bool skipDecalDraw = !TILE_HAS_DECAL(tile);
+			if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+			{
+				// in Classic mode, all tiles are decals, but skip drawing any that are the "water only" decal (water is handled separately as a prior pass)
+				skipDecalDraw = (isOnlyWater(i, j) && decalNo == 17); // Magic number hack, but decal # 17 is always the *water only* tile in the legacy terrain tilesets we ship // TODO: Figure out a better way of determining this from the tileset data?
+			}
+			if (skipDecalDraw)
+			{
+				decalNo = -1;
+			}
 
 			int dxdy[4][2] = {{0,0}, {0,1}, {1,1}, {1,0}};
 			PIELIGHT grounds;
@@ -1624,26 +1651,27 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 	gfx_api::TerrainDecals::get().unbind_vertex_buffers(decalVBO);
 }
 
-static void drawTerrainAndDecals(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
+template<typename PSO>
+static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	const auto &renderState = getCurrentRenderState();
-	gfx_api::TerrainAndDecals::get().bind();
-	gfx_api::TerrainAndDecals::get().bind_textures(
+	PSO::get().bind();
+	PSO::get().bind_textures(
 		lightmap_texture,
 		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr);
-	gfx_api::TerrainAndDecals::get().bind_vertex_buffers(terrainDecalVBO);
+	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	glm::mat4 groundScale = glm::mat4(0);
 	for (int i = 0; i < getNumGroundTypes(); i++) {
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
-	gfx_api::constant_buffer_type<SHADER_TERRAIN_DECALS> uniforms = {
+	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ModelUVLightmap, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality
 	};
-	gfx_api::TerrainAndDecals::get().bind_constants(uniforms);
+	PSO::get().set_uniforms(uniforms);
 
 	int size = 0;
 	int offset = 0;
@@ -1651,7 +1679,8 @@ static void drawTerrainAndDecals(const glm::mat4 &ModelViewProjection, const glm
 	{
 		for (int y = 0; y < ySectors + 1; y++)
 		{
-			if (y < ySectors && offset + size == sectors[x * ySectors + y].terrainAndDecalOffset && sectors[x * ySectors + y].draw)
+			bool drawSector = y < ySectors && sectors[x * ySectors + y].draw;
+			if (drawSector && offset + size == sectors[x * ySectors + y].terrainAndDecalOffset)
 			{
 				// append
 				size += sectors[x * ySectors + y].terrainAndDecalSize;
@@ -1660,17 +1689,34 @@ static void drawTerrainAndDecals(const glm::mat4 &ModelViewProjection, const glm
 			// can't append, so draw what we have and start anew
 			if (size > 0)
 			{
-				gfx_api::TerrainAndDecals::get().draw(size, offset);
+				PSO::get().draw(size, offset);
 			}
 			size = 0;
-			if (y < ySectors && sectors[x * ySectors + y].draw)
+			if (drawSector)
 			{
 				offset = sectors[x * ySectors + y].terrainAndDecalOffset;
 				size = sectors[x * ySectors + y].terrainAndDecalSize;
 			}
 		}
 	}
-	gfx_api::TerrainAndDecals::get().unbind_vertex_buffers(terrainDecalVBO);
+	PSO::get().unbind_vertex_buffers(terrainDecalVBO);
+}
+
+static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
+{
+	switch (terrainShaderQuality)
+	{
+		case TerrainShaderQuality::CLASSIC:
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos);
+			break;
+		case TerrainShaderQuality::MEDIUM:
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos);
+			break;
+		case TerrainShaderQuality::NORMAL_MAPPING:
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos);
+			break;
+	}
+
 }
 
 /**
@@ -1721,7 +1767,7 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
 	case TerrainShaderType::SINGLE_PASS:
 		///////////////////////////////////
 		// terrain + decals
-		drawTerrainAndDecals(mvp, ModelUVLightmap, cameraPos, sunPos);
+		drawTerrainCombined(mvp, ModelUVLightmap, cameraPos, sunPos);
 		break;
 	}
 }
@@ -1730,7 +1776,7 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
  * Draw the water.
  * sunPos and cameraPos in Model=WorldSpace
  */
-void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	if (!waterIndexVBO)
 	{
@@ -1749,12 +1795,12 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
 	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
-	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", (terrainShaderQuality == TerrainShaderQuality::CLASSIC) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
+	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", (terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
 
 	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName, gfx_api::texture_type textureType) -> gfx_api::texture* {
-		if (fileName.empty() || terrainShaderQuality == TerrainShaderQuality::CLASSIC) return nullptr;
+		if (fileName.empty() || terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) return nullptr;
 		auto texPage = iV_GetTexture(fileName.c_str(), textureType, maxTerrainTextureSize, maxTerrainTextureSize);
 		if (!texPage.has_value())
 		{
@@ -1801,6 +1847,11 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 	{
 		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
 	}
+}
+
+void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+{
+	drawWaterImpl(ModelViewProjection, cameraPos, sunPos);
 }
 
 // MARK: Terrain shader type / quality
@@ -1853,15 +1904,28 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force)
 	switch (terrainShaderType)
 	{
 	case TerrainShaderType::FALLBACK:
-		// only "CLASSIC" is supported
-		terrainShaderQuality = TerrainShaderQuality::CLASSIC;
-		success = (newValue == TerrainShaderQuality::CLASSIC);
+		// only "MEDIUM" is supported
+		terrainShaderQuality = TerrainShaderQuality::MEDIUM;
+		success = (newValue == TerrainShaderQuality::MEDIUM);
 		break;
 	case TerrainShaderType::SINGLE_PASS:
 		// all quality modes are supported
 		terrainShaderQuality = newValue;
 		success = true;
 		break;
+	}
+
+	if (success)
+	{
+		if (terrainShaderType == TerrainShaderType::SINGLE_PASS)
+		{
+			// mark all tiles dirty
+			// (when switching between classic and other modes, recalculating tile heights is required due to water)
+			for (size_t i = 0; i < xSectors * ySectors; ++i)
+			{
+				sectors[i].dirty = true;
+			}
+		}
 	}
 
 	return success;
@@ -1874,7 +1938,7 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue)
 
 std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions()
 {
-	return { TerrainShaderQuality::CLASSIC, TerrainShaderQuality::NORMAL_MAPPING };
+	return { TerrainShaderQuality::CLASSIC, TerrainShaderQuality::MEDIUM, TerrainShaderQuality::NORMAL_MAPPING };
 }
 
 bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value)
@@ -1884,7 +1948,7 @@ bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value)
 	{
 	case TerrainShaderType::FALLBACK:
 		// only "CLASSIC" is supported with the fallback shaders
-		return value == TerrainShaderQuality::CLASSIC;
+		return value == TerrainShaderQuality::MEDIUM;
 	case TerrainShaderType::SINGLE_PASS:
 		// all quality modes are supported
 		return true;
@@ -1904,6 +1968,8 @@ std::string to_display_string(TerrainShaderQuality value)
 	switch (value)
 	{
 		case TerrainShaderQuality::CLASSIC:
+			return _("Classic");
+		case TerrainShaderQuality::MEDIUM:
 			return _("Normal");
 		case TerrainShaderQuality::NORMAL_MAPPING:
 			return _("High");
