@@ -645,6 +645,11 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec", "quality",
 			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm", "tex1_hm", "tex2_hm" } }),
+	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
+		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+			"cameraPos", "sunPos",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
+			"lightmap_tex", "tex2"} }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" } }),
 	std::make_pair(SHADER_RECT_INSTANCED, program_data{ "Rect program", "shaders/rect_instanced.vert", "shaders/rect_instanced.frag",
@@ -922,6 +927,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_DECALS>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
+		uniform_binding_entry<SHADER_WATER_CLASSIC>(),
 		uniform_binding_entry<SHADER_RECT>(),
 		uniform_binding_entry<SHADER_TEXRECT>(),
 		uniform_binding_entry<SHADER_GFX_COLOUR>(),
@@ -1682,6 +1688,25 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, 5);
 	setUniforms(i++, 6);
 	setUniforms(i++, 7);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf)
+{
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
+	setUniforms(i++, cbuf.ModelUV1Matrix);
+	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.timeSec);
+	 // textures:
+	setUniforms(i++, 0);
+	setUniforms(i++, 1);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)

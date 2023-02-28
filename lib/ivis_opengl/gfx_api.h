@@ -961,6 +961,31 @@ namespace gfx_api
 		texture_description<7, sampler_type::anisotropic_repeat>  // height map2
 	>, SHADER_WATER>;
 
+	template<>
+	struct constant_buffer_type<SHADER_WATER_CLASSIC>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUVLightmapMatrix; // only used by "legacy" water shader
+		glm::mat4 ModelUV1Matrix;
+		glm::mat4 ModelUV2Matrix;
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
+		glm::vec4 fog_colour;
+		int fog_enabled;
+		float fog_begin;
+		float fog_end;
+		float timeSec;
+	};
+
+	using WaterClassicPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_WATER_CLASSIC>>,
+	std::tuple<
+	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
+	>, std::tuple<
+		texture_description<0, sampler_type::bilinear>, // lightmap
+		texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d> // water decal texture
+	>, SHADER_WATER_CLASSIC>;
+
 	using gfx_tc = vertex_buffer_description<8, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, 0>>;
 	using gfx_colour = vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>;
 	using gfx_vtx2 = vertex_buffer_description<8, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>;
