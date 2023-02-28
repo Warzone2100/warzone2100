@@ -3,7 +3,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const SCAVENGER_RES = [
-	"R-Wpn-Flamer-Damage01", "R-Wpn-Flamer-Range01", "R-Wpn-MG-Damage02", "R-Wpn-MG-ROF01",
+	"R-Wpn-Flamer-Damage01", "R-Wpn-MG-Damage02", "R-Wpn-MG-ROF01",
 ];
 
 //Ambush player from scav base - triggered from middle path
@@ -111,6 +111,10 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+	if (difficulty >= HARD)
+	{
+		completeResearch("R-Wpn-Flamer-Range01", SCAV_7);
+	}
 
 	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, SCAV_7);
 	camUpgradeOnMapTemplates(cTempl.trike, cTempl.triketwin, SCAV_7);

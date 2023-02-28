@@ -2538,7 +2538,7 @@
 		"msgName": "RES_W_FL_R1",
 		"name": "High-Pressure Gas Container",
 		"requiredResearch": [
-			"R-Wpn-Flamer-Damage01"
+			"R-Wpn-Flamer-Damage02"
 		],
 		"researchPoints": 1000,
 		"researchPower": 85,
@@ -2554,10 +2554,47 @@
 		"statID": "Flame1Mk1",
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
+	"R-Wpn-Flamer-Range01-ScavReduce": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Flamer-Range01-ScavReduce",
+		"keyTopic": 1,
+		"name": "Reduce Scavenger Flamer Range",
+		"researchPoints": 100,
+		"researchPower": 3,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "FLAME",
+				"parameter": "MaxRange",
+				"value": -12
+			}
+		],
+		"statID": "Flame1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
+	},
+	"R-Wpn-Flamer-Range01-ScavReduce-Undo": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Flamer-Range01-ScavReduce-Undo",
+		"keyTopic": 1,
+		"name": "Undo Reduce Scavenger Flamer Range",
+		"researchPoints": 100,
+		"researchPower": 3,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "FLAME",
+				"parameter": "MaxRange",
+				"value": 12
+			}
+		],
+		"statID": "Flame1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
+	},
 	"R-Wpn-Flamer-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Damage01",
-		"keyTopic": 1,
 		"msgName": "RES_W_FL_D1",
 		"name": "High Temperature Flamer Gel",
 		"requiredResearch": [
@@ -2650,7 +2687,7 @@
 		"msgName": "RES_W_FL_ROF1",
 		"name": "Flamer Autoloader",
 		"requiredResearch": [
-			"R-Wpn-Flamer-Damage01"
+			"R-Wpn-Flamer-Damage02"
 		],
 		"researchPoints": 1100,
 		"researchPower": 95,
@@ -2712,12 +2749,9 @@
 	"R-Wpn-MG-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-Damage02",
+		"keyTopic": 1,
 		"msgName": "RES_W_MG_D2",
 		"name": "APDSB MG Bullets",
-		"requiredResearch": [
-			"R-Wpn-MG-Damage01",
-			"R-Wpn-MG2Mk1"
-		],
 		"researchPoints": 1200,
 		"researchPower": 37,
 		"results": [
@@ -2738,7 +2772,7 @@
 		"name": "APDSB MG Bullets Mk2",
 		"requiredResearch": [
 			"R-Wpn-MG-Damage02",
-			"R-Wpn-MG3Mk1"
+			"R-Wpn-MG2Mk1"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -2831,7 +2865,7 @@
 			"MG1Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-MG-Damage01"
+			"R-Wpn-MG-Damage02"
 		],
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -2851,7 +2885,7 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG2Mk1",
-			"R-Wpn-MG-Damage02"
+			"R-Wpn-MG-Damage03"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
