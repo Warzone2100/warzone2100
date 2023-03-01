@@ -608,13 +608,9 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 	}
 	else
 	{
-		unsigned int channelsPerPixel = 3;
+		unsigned int channelsPerPixel = image->channels();
 		unsigned int currentRow, row_stride;
 
-		if (color_type == PNG_COLOR_TYPE_GRAY)
-		{
-			channelsPerPixel = 1;
-		}
 		row_stride = image->width() * channelsPerPixel;
 
 		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * image->height());
@@ -679,7 +675,17 @@ MSVC_PRAGMA(warning( pop )) // FIXME?: re-enable MSVC warning C4611: interaction
 // Note: This function must be thread-safe.
 IMGSaveError iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 {
-	return internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_RGB);
+	int color_type = PNG_COLOR_TYPE_RGB;
+	switch (image->channels())
+	{
+		case 4:
+			color_type = PNG_COLOR_TYPE_RGB_ALPHA;
+			break;
+		case 3:
+			color_type = PNG_COLOR_TYPE_RGB;
+			break;
+	}
+	return internal_saveImage_PNG(fileName, image, color_type);
 }
 
 // Note: This function must be thread-safe.
