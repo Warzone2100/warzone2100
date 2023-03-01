@@ -80,7 +80,7 @@ vec3 getGround(int i) {
 
 vec4 main_medium() {
 	vec3 ground = getGround(0) + getGround(1) + getGround(2) + getGround(3);
-	vec4 decal = tile > 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0);
+	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0);
 	vec4 light = texture(lightmap_tex, uvLightmap, 0.f);
 	return light * vec4((1-decal.a) * ground + decal.a * decal.rgb, 1);
 }
