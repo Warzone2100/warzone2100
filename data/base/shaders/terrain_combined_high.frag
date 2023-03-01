@@ -121,7 +121,7 @@ vec4 main_bumpMapping() {
 	getGroundBM(2, bump);
 	getGroundBM(3, bump);
 
-	if (tile > 0) {
+	if (tile >= 0) {
 		vec3 uv = vec3(uvDecal, tile);
 		vec4 decalColor = texture2DArray(decalTex, uv, WZ_MIP_LOAD_BIAS);
 		float a = decalColor.a;

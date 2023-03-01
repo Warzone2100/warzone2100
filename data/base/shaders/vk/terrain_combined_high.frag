@@ -74,7 +74,7 @@ vec4 main_bumpMapping() {
 	getGroundBM(2, bump);
 	getGroundBM(3, bump);
 
-	if (fragf.tileNo > 0) {
+	if (fragf.tileNo >= 0) {
 		vec3 uv = vec3(frag.uvDecal, fragf.tileNo);
 		vec4 decalColor = texture(decalTex, uv, WZ_MIP_LOAD_BIAS);
 		float a = decalColor.a;
