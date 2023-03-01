@@ -889,10 +889,10 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 		}))
 		{
 			groundSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_spec, gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
 				// default specular map: 0
-				pDefaultNormalMap->allocate(width, height, channels, true);
-				return pDefaultNormalMap;
+				pDefaultSpecularMap->allocate(width, height, channels, true);
+				return pDefaultSpecularMap;
 			}, []() { resDoResLoadCallback(); });
 			ASSERT(groundSpecularArr != nullptr, "Failed to load terrain specular maps");
 		}
@@ -901,10 +901,10 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 		}))
 		{
 			groundHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_height, gfx_api::texture_type::height_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				std::unique_ptr<iV_Image> pDefaultHeightMap = std::unique_ptr<iV_Image>(new iV_Image);
 				// default height map: 0
-				pDefaultNormalMap->allocate(width, height, channels, true);
-				return pDefaultNormalMap;
+				pDefaultHeightMap->allocate(width, height, channels, true);
+				return pDefaultHeightMap;
 			}, []() { resDoResLoadCallback(); });
 			ASSERT(groundHeightArr != nullptr, "Failed to load terrain height maps");
 		}
