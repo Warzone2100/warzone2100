@@ -114,7 +114,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 	}
 }
 
-
+// For display purposes only (*NOT* for use in game state calculations)
 static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int quadrant, unsigned int *numNormals, Vector3f normals[])
 {
 	Vector2i tiles[2][2];

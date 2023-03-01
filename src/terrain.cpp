@@ -592,8 +592,8 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 			bool skipDecalDraw = !TILE_HAS_DECAL(tile);
 			if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
 			{
-				// in Classic mode, all tiles are decals, but skip drawing any that are the "water only" decal (water is handled separately as a prior pass)
-				skipDecalDraw = (isOnlyWater(i, j) && decalNo == 17); // Magic number hack, but decal # 17 is always the *water only* tile in the legacy terrain tilesets we ship // TODO: Figure out a better way of determining this from the tileset data?
+				// in Classic mode, skip drawing any that are the "water only" decal (water is handled separately as a prior pass)
+				skipDecalDraw = skipDecalDraw || (isOnlyWater(i, j) && decalNo == 17); // Magic number hack, but decal # 17 is always the *water only* tile in the legacy terrain tilesets we ship // TODO: Figure out a better way of determining this from the tileset data?
 			}
 			if (skipDecalDraw)
 			{
@@ -936,6 +936,16 @@ void loadTerrainTextures(MAP_TILESET mapTileset)
 		loadTerrainTextures_SinglePass(mapTileset);
 		break;
 	}
+}
+
+void reloadTerrainTextures()
+{
+	if (getNumGroundTypes() == 0)
+	{
+		return; // nothing loaded yet
+	}
+
+	loadTerrainTextures(currentMapTileset);
 }
 
 /**
@@ -1993,6 +2003,7 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force)
 	}
 
 	bool success = false;
+	auto priorValue = terrainShaderQuality;
 
 	// Check whether the new shader can be used
 	switch (terrainShaderType)
@@ -2013,11 +2024,30 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force)
 	{
 		if (terrainShaderType == TerrainShaderType::SINGLE_PASS)
 		{
-			// mark all tiles dirty
-			// (when switching between classic and other modes, recalculating tile heights is required due to water)
-			for (size_t i = 0; i < xSectors * ySectors; ++i)
+			if (sectors)
 			{
-				sectors[i].dirty = true;
+				// mark all tiles dirty
+				// (when switching between classic and other modes, recalculating tile heights is required due to water)
+				for (size_t i = 0; i < xSectors * ySectors; ++i)
+				{
+					sectors[i].dirty = true;
+				}
+			}
+
+			// re-load terrain textures
+			if (!rebuildExistingSearchPathWithGraphicsOptionChange())
+			{
+				debug(LOG_INFO, "Failed to swap terrain texture overrides");
+			}
+			if (priorValue == TerrainShaderQuality::NORMAL_MAPPING || terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
+			{
+				// when switching to & from the High / Normal-mapping mode, reload base terrain / ground textures
+				reloadTerrainTextures();
+			}
+			// always re-load the tile textures (these change between all modes)
+			if (reloadTileTextures())
+			{
+				mapReloadDecalTypes();
 			}
 		}
 	}

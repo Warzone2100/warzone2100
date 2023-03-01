@@ -62,6 +62,7 @@ void unregisterSearchPath(const std::string& path);
 void debugOutputSearchPaths();
 void debugOutputSearchPathMountErrors();
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
+bool rebuildExistingSearchPathWithGraphicsOptionChange();
 
 bool buildMapList();
 bool CheckForMod(char const *mapFile);
