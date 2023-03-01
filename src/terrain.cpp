@@ -118,14 +118,6 @@ static std::unique_ptr<iV_Image> lightmapPixmap;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
 
-// water optional texture names. empty if none
-static std::string waterTexture1_nm;
-static std::string waterTexture2_nm;
-static std::string waterTexture1_sm;
-static std::string waterTexture2_sm;
-static std::string waterTexture1_hm;
-static std::string waterTexture2_hm;
-
 /// VBOs
 static gfx_api::buffer *geometryVBO = nullptr, *geometryIndexVBO = nullptr, *textureVBO = nullptr, *textureIndexVBO = nullptr, *decalVBO = nullptr;
 /// VBOs
@@ -799,6 +791,33 @@ static gfx_api::texture_array* groundTexArr = nullptr;
 static gfx_api::texture_array* groundNormalArr = nullptr;
 static gfx_api::texture_array* groundSpecularArr = nullptr;
 static gfx_api::texture_array* groundHeightArr = nullptr;
+
+struct WaterTextures
+{
+	gfx_api::texture* tex1 = nullptr;
+	gfx_api::texture* tex2 = nullptr;
+	// water optional textures. null if none
+	gfx_api::texture* tex1_nm = nullptr;
+	gfx_api::texture* tex2_nm = nullptr;
+	gfx_api::texture* tex1_sm = nullptr;
+	gfx_api::texture* tex2_sm = nullptr;
+	gfx_api::texture* tex1_hm = nullptr;
+	gfx_api::texture* tex2_hm = nullptr;
+
+public:
+	void clear()
+	{
+		delete tex1; tex1 = nullptr;
+		delete tex2; tex2 = nullptr;
+		delete tex1_nm; tex1_nm = nullptr;
+		delete tex2_nm; tex2_nm = nullptr;
+		delete tex1_sm; tex1_sm = nullptr;
+		delete tex2_sm; tex2_sm = nullptr;
+		delete tex1_hm; tex1_hm = nullptr;
+		delete tex2_hm; tex2_hm = nullptr;
+	}
+};
+static WaterTextures waterTextures;
 static gfx_api::texture* waterClassicTexture = nullptr; // only used for classic mode
 
 gfx_api::texture* getWaterClassicTexture()
@@ -812,7 +831,7 @@ gfx_api::texture* getWaterClassicTexture()
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
 	std::string legacyWaterDecalPath = std::string(tilesetDir) + "-" + std::to_string(getCurrentTileTextureSize()) + "/tile-17.png"; // TODO: This is currently hard-coded for legacy tileset textures...
-	waterClassicTexture = gfx_api::context::get().loadTextureFromFile(legacyWaterDecalPath.c_str(), gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);;
+	waterClassicTexture = gfx_api::context::get().loadTextureFromFile(legacyWaterDecalPath.c_str(), gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 	return waterClassicTexture;
 }
 
@@ -828,12 +847,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	delete groundSpecularArr; groundSpecularArr = nullptr;
 	delete groundHeightArr; groundHeightArr = nullptr;
 	delete waterClassicTexture; waterClassicTexture = nullptr;
-	waterTexture1_nm.clear();
-	waterTexture2_nm.clear();
-	waterTexture1_sm.clear();
-	waterTexture2_sm.clear();
-	waterTexture1_hm.clear();
-	waterTexture2_hm.clear();
+	waterTextures.clear();
 
 	std::vector<WzString> groundTextureFilenames;
 	std::vector<WzString> groundTextureFilenames_nm;
@@ -910,17 +924,25 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 		}
 	}
 
-	// check water optional textures
-	auto checkTex = [](const std::string &fileName) {
-		std::string fullName = "texpages/"+fileName;
-		return PHYSFS_exists(fullName.c_str()) ? fileName : "";
+	// load water textures
+	auto checkTex = [maxTerrainTextureSize](const WzString &fileName, gfx_api::texture_type type) -> gfx_api::texture* {
+		WzString fullName = "texpages/" + fileName;
+		auto imageLoadFilename = gfx_api::imageLoadFilenameFromInputFilename(fullName);
+		if (!PHYSFS_exists(imageLoadFilename))
+		{
+			return nullptr;
+		}
+		return gfx_api::context::get().loadTextureFromFile(imageLoadFilename.toUtf8().c_str(), type, maxTerrainTextureSize, maxTerrainTextureSize);
 	};
-	waterTexture1_nm = checkTex("page-80-water-1_nm.png");
-	waterTexture2_nm = checkTex("page-81-water-2_nm.png");
-	waterTexture1_sm = checkTex("page-80-water-1_sm.png");
-	waterTexture2_sm = checkTex("page-81-water-2_sm.png");
-	waterTexture1_hm = checkTex("page-80-water-1_hm.png");
-	waterTexture2_hm = checkTex("page-81-water-2_hm.png");
+	waterTextures.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
+	waterTextures.tex2 = checkTex("page-81-water-2.png", (terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture);
+	// check water optional textures
+	waterTextures.tex1_nm = checkTex("page-80-water-1_nm.png", gfx_api::texture_type::normal_map);
+	waterTextures.tex2_nm = checkTex("page-81-water-2_nm.png", gfx_api::texture_type::normal_map);
+	waterTextures.tex1_sm = checkTex("page-80-water-1_sm.png", gfx_api::texture_type::specular_map);
+	waterTextures.tex2_sm = checkTex("page-81-water-2_sm.png", gfx_api::texture_type::specular_map);
+	waterTextures.tex1_hm = checkTex("page-80-water-1_hm.png", gfx_api::texture_type::height_map);
+	waterTextures.tex2_hm = checkTex("page-81-water-2_hm.png", gfx_api::texture_type::height_map);
 }
 
 void loadTerrainTextures(MAP_TILESET mapTileset)
@@ -1427,6 +1449,8 @@ void shutdownTerrain()
 	delete groundNormalArr; groundNormalArr = nullptr;
 	delete groundSpecularArr; groundSpecularArr = nullptr;
 	delete groundHeightArr; groundHeightArr = nullptr;
+
+	waterTextures.clear();
 	delete waterClassicTexture; waterClassicTexture = nullptr;
 
 	delete decalTexArr; decalTexArr = nullptr;
@@ -1833,35 +1857,21 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto &renderState = getCurrentRenderState();
 
-	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
-	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
-
-	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png", gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
-	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", (terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
-	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
+	ASSERT_OR_RETURN(, waterTextures.tex1 && waterTextures.tex2, "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
 
-	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName, gfx_api::texture_type textureType) -> gfx_api::texture* {
-		if (fileName.empty() || terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) return nullptr;
-		auto texPage = iV_GetTexture(fileName.c_str(), textureType, maxTerrainTextureSize, maxTerrainTextureSize);
-		if (!texPage.has_value())
-		{
-			return nullptr;
-		}
-		return &pie_Texture(texPage.value());
-	};
 	gfx_api::WaterPSO::get().bind_textures(
-		&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()),
-		getOptTex(waterTexture1_nm, gfx_api::texture_type::normal_map), getOptTex(waterTexture2_nm, gfx_api::texture_type::normal_map),
-		getOptTex(waterTexture1_sm, gfx_api::texture_type::specular_map), getOptTex(waterTexture2_sm, gfx_api::texture_type::specular_map),
-		getOptTex(waterTexture1_hm, gfx_api::texture_type::height_map), getOptTex(waterTexture2_hm, gfx_api::texture_type::height_map));
+		waterTextures.tex1, waterTextures.tex2,
+		waterTextures.tex1_nm, waterTextures.tex2_nm,
+		waterTextures.tex1_sm, waterTextures.tex2_sm,
+		waterTextures.tex1_hm, waterTextures.tex2_hm);
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({
 		ModelViewProjection, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
-		waterOffset*10, terrainShaderQuality
+		waterOffset*10, static_cast<int>(terrainShaderQuality)
 	});
 
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
