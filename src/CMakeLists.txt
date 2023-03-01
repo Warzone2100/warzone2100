@@ -322,6 +322,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		SOURCE ${DATA_FILES}
 		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data")
 	set_property(
+		SOURCE ${DATA_TERRAIN_OVERRIDES_FILES}
+		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/terrain_overrides")
+	set_property(
 		SOURCE ${DATA_FONTS}
 		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/fonts")
 	foreach(_music_file ${DATA_MUSIC_FILES})
@@ -332,11 +335,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/music/${_music_file_subdir_path}")
 	endforeach()
 	set_source_files_properties(
-		${DATA_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} PROPERTIES
+		${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} PROPERTIES
 		GENERATED TRUE
 		XCODE_LAST_KNOWN_FILE_TYPE "file"
 	)
-	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES})
+	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES})
 
 	# Add the icon
 	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../macosx/Resources/Warzone.icns")

@@ -185,6 +185,27 @@ else()
 	endif()
 endif()
 
+####################################################
+# Terrain override mod packing (and image encoding)
+
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides")
+	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides")
+endif()
+
+## Classic overrides
+
+COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz"
+	COMPRESSION_LEVEL 0
+	PATHS
+		"texpages"
+		"tileset"
+	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/terrain_overrides/classic"
+	BUILD_ALWAYS_TARGET data_terrain_overrides_classic
+	IGNORE_GIT
+	QUIET
+)
+set_property(TARGET data_terrain_overrides_classic PROPERTY FOLDER "data")
+
 #########################
 # Compress data archives
 
@@ -274,6 +295,9 @@ endif()
 
 ADD_CUSTOM_TARGET(data ALL
 	DEPENDS data_base data_mp)
+if(TARGET data_terrain_overrides_classic)
+	add_dependencies(data_base data_terrain_overrides_classic)
+endif()
 if(TARGET glsl_compilation)
 	add_dependencies(data_base glsl_compilation)
 endif()
@@ -309,6 +333,14 @@ install(FILES ${DATA_FILES}
 	COMPONENT Data
 )
 
+set(DATA_TERRAIN_OVERRIDES_FILES
+	"${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz"
+)
+install(FILES ${DATA_TERRAIN_OVERRIDES_FILES}
+	DESTINATION "${WZ_DATADIR}/terrain_overrides"
+	COMPONENT Data
+)
+
 install(FILES
 	${wz2100_fonts_FILES}
 	COMPONENT Data DESTINATION "${WZ_DATADIR}/fonts"
@@ -325,6 +357,7 @@ foreach(_music_file ${DATA_MUSIC_FILES})
 endforeach()
 
 set(DATA_FILES ${DATA_FILES} PARENT_SCOPE)
+set(DATA_TERRAIN_OVERRIDES_FILES ${DATA_TERRAIN_OVERRIDES_FILES} PARENT_SCOPE)
 set(DATA_FONTS ${wz2100_fonts_FILES} PARENT_SCOPE)
 set(DATA_MUSIC_FILES ${DATA_MUSIC_FILES} PARENT_SCOPE)
 set(DATA_MUSIC_BASE_SOURCEDIR "${CMAKE_CURRENT_SOURCE_DIR}/music" PARENT_SCOPE)
