@@ -426,6 +426,49 @@ static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mou
 	}
 }
 
+struct RebuildSearchPathCommand
+{
+	searchPathMode mode = mod_clean;
+	bool force = false;
+	optional<std::string> current_map;
+	optional<std::string> current_map_mount_point;
+	TerrainShaderQuality lastTerrainShaderQuality = TerrainShaderQuality::MEDIUM;
+};
+
+static RebuildSearchPathCommand lastCommand;
+
+bool rebuildExistingSearchPathWithGraphicsOptionChange()
+{
+	char* current_map = nullptr;
+	char* current_map_mount_point = nullptr;
+	if (lastCommand.current_map.has_value())
+	{
+		current_map = strdup(lastCommand.current_map.value().c_str());
+	}
+	if (lastCommand.current_map_mount_point.has_value())
+	{
+		current_map_mount_point = strdup(lastCommand.current_map_mount_point.value().c_str());
+	}
+	bool result = rebuildSearchPath(lastCommand.mode, false /* do not force */, current_map, current_map_mount_point);
+	free(current_map);
+	free(current_map_mount_point);
+	return result;
+}
+
+optional<std::string> getCurrentTerrainOverrideBaseSourcePath()
+{
+	switch (getTerrainShaderQuality())
+	{
+		case TerrainShaderQuality::CLASSIC:
+			return "terrain_overrides/classic";
+		case TerrainShaderQuality::MEDIUM:
+			return nullopt;
+		case TerrainShaderQuality::NORMAL_MAPPING:
+			return "terrain_overrides/high";
+	}
+	return nullopt; // silence compiler warning
+}
+
 /*!
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
  *
@@ -434,12 +477,15 @@ static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mou
  */
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map, const char* current_map_mount_point)
 {
-	static searchPathMode current_mode = mod_clean;
-	static std::string current_current_map;
 	std::string tmpstr;
+	static searchPathMode current_mode = mod_clean;
+	auto currentTerrainShaderQuality = getTerrainShaderQuality();
 
-	if (mode != current_mode || (current_map != nullptr ? current_map : "") != current_current_map || force ||
-	    (use_override_mods && override_mod_list != getModList()))
+	if (mode != current_mode
+		|| (current_map != nullptr ? current_map : "") != lastCommand.current_map.value_or("")
+		|| force
+		|| lastCommand.lastTerrainShaderQuality != currentTerrainShaderQuality
+		|| (use_override_mods && override_mod_list != getModList()))
 	{
 		if (mode != mod_clean)
 		{
@@ -447,7 +493,22 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		}
 
 		current_mode = mode;
-		current_current_map = current_map != nullptr ? current_map : "";
+		lastCommand.mode = mode; // store this separately, so it doesn't get overridden with mod_override below
+		lastCommand.force = force;
+		lastCommand.current_map.reset();
+		if (current_map != nullptr)
+		{
+			lastCommand.current_map = current_map;
+		}
+		lastCommand.current_map_mount_point.reset();
+		if (current_map_mount_point != nullptr)
+		{
+			lastCommand.current_map_mount_point = current_map_mount_point;
+		}
+		lastCommand.lastTerrainShaderQuality = currentTerrainShaderQuality;
+
+		auto terrainQualityOverrideBasePath = getCurrentTerrainOverrideBaseSourcePath();
+		bool loadedTerrainTextureOverrides = false;
 
 		switch (mode)
 		{
@@ -525,6 +586,15 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
+				if (terrainQualityOverrideBasePath.has_value())
+				{
+					// Add terrain quality override files
+					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					tmpstr += ".wz";
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+				}
+
 				// Add base files
 				tmpstr = curSearchPath->path + "base";
 				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
@@ -601,6 +671,15 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
+				if (terrainQualityOverrideBasePath.has_value())
+				{
+					// Add terrain quality override files
+					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					tmpstr += ".wz";
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+				}
+
 				// Add base files
 				tmpstr = curSearchPath->path + "base";
 				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
@@ -633,6 +712,14 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		if (mode != mod_clean)
 		{
 			gfx_api::loadTextureCompressionOverrides(); // reload these as mods may have overridden the file!
+		}
+
+		if (terrainQualityOverrideBasePath.has_value() && (mode == mod_campaign || mode == mod_multiplay))
+		{
+			if (!loadedTerrainTextureOverrides)
+			{
+				debug(LOG_ERROR, "Failed to load expected terrain quality overrides: %s", (terrainQualityOverrideBasePath.value().c_str()));
+			}
 		}
 
 		ActivityManager::instance().rebuiltSearchPath();

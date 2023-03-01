@@ -37,6 +37,7 @@
 /// for scripts, since campaign may still want total darkness on unexplored tiles.
 static bool bRevealActive = true;
 
+// For display only (*NOT* for use in game state calculations)
 inline float getTileIllumination(const MAPTILE *psTile)
 {
 	switch (terrainShaderQuality) {

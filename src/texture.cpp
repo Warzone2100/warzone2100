@@ -390,8 +390,12 @@ bool texLoad(const char *fileName)
 	return true;
 }
 
-void reloadTileTextures()
+bool reloadTileTextures()
 {
+	if (!tilesetDir)
+	{
+		return false;
+	}
 	auto terrainShaderType = getTerrainShaderType();
 	switch (terrainShaderType)
 	{
@@ -402,6 +406,7 @@ void reloadTileTextures()
 			break;
 	}
 	char *dir = strdup(tilesetDir);
-	texLoad(dir);
+	bool result = texLoad(dir);
 	free(dir);
+	return result;
 }

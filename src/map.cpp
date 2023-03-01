@@ -340,6 +340,32 @@ static void mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* terti
 	}
 }
 
+static void SetDecals(MAP_TILESET tileset)
+{
+	if (tileset == MAP_TILESET::ARIZONA)
+	{
+fallback:
+		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
+	}
+	// for Urban
+	else if (tileset == MAP_TILESET::URBAN)
+	{
+		SetDecals("tileset/urbandecals.txt", "urban_decals");
+	}
+	// for Rockie
+	else if (tileset == MAP_TILESET::ROCKIES)
+	{
+		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
+	}
+	// When a map uses something other than the above, we fallback to Arizona
+	else
+	{
+		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDir);
+		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
+		goto fallback;
+	}
+}
+
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
@@ -352,21 +378,18 @@ static bool mapLoadGroundTypes(bool preview)
 fallback:
 		mapLoadTertiles(preview, MAP_TILESET::ARIZONA, "tileset/tertilesc1hwGtype.txt");
 		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
-		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
 	else if (currentMapTileset == MAP_TILESET::URBAN)
 	{
 		mapLoadTertiles(preview, MAP_TILESET::URBAN, "tileset/tertilesc2hwGtype.txt");
 		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
-		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
 	else if (currentMapTileset == MAP_TILESET::ROCKIES)
 	{
 		mapLoadTertiles(preview, MAP_TILESET::ROCKIES, "tileset/tertilesc3hwGtype.txt");
 		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
-		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
 	}
 	// When a map uses something other than the above, we fallback to Arizona
 	else
@@ -376,6 +399,8 @@ fallback:
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
 		goto fallback;
 	}
+
+	SetDecals(currentMapTileset);
 	return true;
 }
 
@@ -656,6 +681,36 @@ static bool mapSetGroundTypes()
 			}
 		}
 	}
+	return true;
+}
+
+static bool mapUpdateDecalTypes()
+{
+	int i, j;
+
+	for (i = 0; i < mapWidth; i++)
+	{
+		for (j = 0; j < mapHeight; j++)
+		{
+			MAPTILE *psTile = mapTile(i, j);
+
+			if (hasDecals(i, j))
+			{
+				SET_TILE_DECAL(psTile);
+			}
+			else
+			{
+				CLEAR_TILE_DECAL(psTile);
+			}
+		}
+	}
+	return true;
+}
+
+bool mapReloadDecalTypes()
+{
+	SetDecals(currentMapTileset);
+	mapUpdateDecalTypes();
 	return true;
 }
 
@@ -1144,6 +1199,11 @@ bool mapShutdown()
 	mapWidth = mapHeight = 0;
 	numTile_names = 0;
 	Tile_names = nullptr;
+	if (tilesetDir)
+	{
+		free(tilesetDir);
+		tilesetDir = nullptr;
+	}
 	return true;
 }
 

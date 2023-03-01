@@ -65,7 +65,6 @@ struct MAPTILE
 	BASE_OBJECT *   psObject;               // Any object sitting on the location (e.g. building)
 	uint16_t        limitedContinent;       ///< For land or sea limited propulsion types
 	uint16_t        hoverContinent;         ///< For hover type propulsions
-	uint8_t         ground;                 ///< The ground type used for the terrain renderer
 	uint16_t        fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t         waterLevel;             ///< At what height is the water for this tile
 	PlayerMask      jammerBits;             ///< bit per player, who is jamming tile
@@ -73,6 +72,7 @@ struct MAPTILE
 	uint8_t         jammers[MAX_PLAYERS];   ///< player jams the tile with this many objects
 
 	// DISPLAY ONLY (NOT for use in game calculations)
+	uint8_t         ground;                 ///< The ground type used for the terrain renderer
 	uint8_t         illumination;           // How bright is this tile? = diffuseSunLight * ambientOcclusion
 	float			ambientOcclusion;		// ambient occlusion. from 1 (max occlusion) to 254 (no occlusion), similar to illumination.
 	float           level;                  ///< The visibility level of the top left of the tile, for this client. for terrain lightmap
@@ -391,6 +391,9 @@ bool mapShutdown();
 bool mapLoad(char const *filename);
 struct ScriptMapData;
 bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
+
+// used to reload decal types when switching terrain overrides
+bool mapReloadDecalTypes();
 
 class WzMapPhysFSIO : public WzMap::IOProvider
 {
