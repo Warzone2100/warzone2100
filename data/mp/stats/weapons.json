@@ -1388,7 +1388,7 @@
 	"Cyb-Hvywpn-RailGunner": {
 		"buildPoints": 750,
 		"buildPower": 240,
-		"damage": 180,
+		"damage": 160,
 		"effectSize": 100,
 		"explosionWav": "gaussgun.ogg",
 		"facePlayer": 1,
@@ -1399,7 +1399,7 @@
 		"hitpoints": 120,
 		"id": "Cyb-Hvywpn-RailGunner",
 		"lightWorld": 1,
-		"longRange": 1792,
+		"longRange": 1664,
 		"longHit": 70,
 		"maxElevation": 90,
 		"minElevation": -60,
@@ -1412,8 +1412,8 @@
 		"name": "Super Rail-Gunner",
 		"numExplosions": 1,
 		"penetrate": 1,
-		"radius": 128,
-		"radiusDamage": 90,
+		"radius": 96,
+		"radiusDamage": 80,
 		"rotate": 180,
 		"shortHit": 80,
 		"shortRange": 768,
@@ -3698,7 +3698,7 @@
 		"numAttackRuns": 2,
 		"numExplosions": 1,
 		"penetrate": 1,
-		"radius": 160,
+		"radius": 96,
 		"radiusDamage": 160,
 		"rotate": 180,
 		"shortHit": 90,
@@ -3708,10 +3708,10 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "GAUSS",
 		"weaponWav": "gaussgun.ogg",
-		"weight": 600
+		"weight": 2000
 	},
 	"RailGun1Mk1": {
-		"buildPoints": 1000,
+		"buildPoints": 800,
 		"buildPower": 250,
 		"damage": 160,
 		"designable": 1,
@@ -3777,7 +3777,7 @@
 		"numAttackRuns": 2,
 		"numExplosions": 1,
 		"penetrate": 1,
-		"radius": 192,
+		"radius": 160,
 		"radiusDamage": 220,
 		"rotate": 180,
 		"shortHit": 90,
@@ -3787,7 +3787,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "GAUSS",
 		"weaponWav": "gaussgun.ogg",
-		"weight": 1000
+		"weight": 4000
 	},
 	"RailGun2Mk1": {
 		"buildPoints": 1200,
