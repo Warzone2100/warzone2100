@@ -59,3 +59,6 @@
 	path = 3rdparty/basis_universal
 	url = https://github.com/past-due/basis_universal.git
 	shallow = true
+[submodule "data/terrain_overrides/classic"]
+	path = data/terrain_overrides/classic
+	url = https://github.com/Warzone2100/data-terrain-classic.git
