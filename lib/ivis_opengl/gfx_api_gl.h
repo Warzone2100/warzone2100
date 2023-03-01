@@ -315,4 +315,6 @@ private:
 	GLfloat maxTextureAnisotropy = 0.f;
 	GLuint vaoId = 0;
 	std::vector<gl_pipeline_state_object *> createdPipelines;
+	gl_texture *pDefaultTexture = nullptr;
+	gl_texture_array *pDefaultArrayTexture = nullptr;
 };
