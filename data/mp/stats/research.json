@@ -3096,7 +3096,7 @@
 			{
 				"class": "Construct",
 				"parameter": "ConstructorPoints",
-				"value": 20
+				"value": 30
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3118,7 +3118,7 @@
 			{
 				"class": "Construct",
 				"parameter": "ConstructorPoints",
-				"value": 20
+				"value": 30
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
