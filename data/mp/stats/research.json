@@ -8251,8 +8251,8 @@
 			"R-Struc-Research-Upgrade01",
 			"R-Wpn-Rocket-Damage02"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"results": [
 			{
 				"class": "Weapon",
@@ -8278,7 +8278,7 @@
 		"name": "Improved Rocket Wire Guidance",
 		"requiredResearch": [
 			"R-Wpn-Rocket-Damage04",
-			"R-Struc-Research-Upgrade02"
+			"R-Wpn-Rocket-Accuracy01"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -8367,8 +8367,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket-Damage02"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 2400,
+		"researchPower": 75,
 		"results": [
 			{
 				"class": "Weapon",
@@ -8662,8 +8662,7 @@
 			"Rocket-VTOL-Pod"
 		],
 		"requiredResearch": [
-			"R-Wpn-Rocket-Damage03",
-			"R-Wpn-Rocket-Accuracy01"
+			"R-Wpn-Rocket-Damage03"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
