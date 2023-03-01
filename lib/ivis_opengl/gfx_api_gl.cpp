@@ -1155,14 +1155,19 @@ void gl_pipeline_state_object::getLocs()
 	glUseProgram(program);
 
 	// Uniforms, these never change.
-	GLint locTex0 = glGetUniformLocation(program, "Texture");
-	GLint locTex1 = glGetUniformLocation(program, "TextureTcmask");
-	GLint locTex2 = glGetUniformLocation(program, "TextureNormal");
-	GLint locTex3 = glGetUniformLocation(program, "TextureSpecular");
-	glUniform1i(locTex0, 0);
-	glUniform1i(locTex1, 1);
-	glUniform1i(locTex2, 2);
-	glUniform1i(locTex3, 3);
+	GLint locTex[4] = {-1};
+	locTex[0] = glGetUniformLocation(program, "Texture");
+	locTex[1] = glGetUniformLocation(program, "TextureTcmask");
+	locTex[2] = glGetUniformLocation(program, "TextureNormal");
+	locTex[3] = glGetUniformLocation(program, "TextureSpecular");
+
+	for (GLint i = 0; i < 4; ++i)
+	{
+		if (locTex[i] != -1)
+		{
+			glUniform1i(locTex[i], i);
+		}
+	}
 }
 
 static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
@@ -1959,6 +1964,7 @@ void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextu
 		if (notextures)
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 		}
 	}
 }
@@ -2096,15 +2102,30 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 	for (size_t i = 0; i < texture_descriptions.size() && i < textures.size(); ++i)
 	{
 		const auto& desc = texture_descriptions[i];
+		gfx_api::abstract_texture *pTextureToBind = textures[i];
 		glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + desc.id));
+		if (pTextureToBind == nullptr)
+		{
+			switch (desc.target)
+			{
+				case gfx_api::pixel_format_target::texture_2d_array:
+					pTextureToBind = pDefaultArrayTexture;
+					break;
+				case gfx_api::pixel_format_target::texture_2d:
+					pTextureToBind = pDefaultTexture;
+					break;
+			}
+		}
+		ASSERT(pTextureToBind && (pTextureToBind->isArray() == (desc.target == gfx_api::pixel_format_target::texture_2d_array)), "Found a mismatch!");
+		const auto type = pTextureToBind->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
+		const auto unusedtype = pTextureToBind->isArray() ? GL_TEXTURE_2D : GL_TEXTURE_2D_ARRAY;
+		glBindTexture(unusedtype, 0);
+		pTextureToBind->bind();
 		if (textures[i] == nullptr)
 		{
-			glBindTexture(GL_TEXTURE_2D, 0);
-			glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+			// we're using a default texture, so skip changing filters
 			continue;
 		}
-		const auto type = textures[i]->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
-		textures[i]->bind();
 		switch (desc.sampler)
 		{
 			case gfx_api::sampler_type::nearest_clamped:
@@ -2147,6 +2168,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				break;
 		}
 	}
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void gl_context::set_constants(const void* buffer, const size_t& size)
@@ -2579,6 +2601,24 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	viewportHeight = static_cast<uint32_t>(height);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
+
+	// initialize default (0) textures
+	const size_t defaultTexture_width = 2;
+	const size_t defaultTexture_height = 2;
+	pDefaultTexture = dynamic_cast<gl_texture*>(create_texture(1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>"));
+	pDefaultArrayTexture = dynamic_cast<gl_texture_array*>(create_texture_array(1, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_array_texture>"));
+
+	iV_Image defaultTexture;
+	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
+	if (!pDefaultTexture->upload(0, defaultTexture))
+	{
+		debug(LOG_ERROR, "Failed to upload default texture??");
+	}
+	if (!pDefaultArrayTexture->upload_layer(0, 0, defaultTexture))
+	{
+		debug(LOG_ERROR, "Failed to upload default array texture??");
+	}
+	pDefaultArrayTexture->flush();
 
 	if (!setSwapInterval(mode))
 	{
@@ -3260,6 +3300,18 @@ bool gl_context::shouldDraw()
 void gl_context::shutdown()
 {
 	if(glClear) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	if (pDefaultTexture)
+	{
+		delete pDefaultTexture;
+		pDefaultTexture = nullptr;
+	}
+
+	if (pDefaultArrayTexture)
+	{
+		delete pDefaultArrayTexture;
+		pDefaultArrayTexture = nullptr;
+	}
 
 	if (glDeleteBuffers) // glDeleteBuffers might be NULL (if initializing the OpenGL loader library fails)
 	{
