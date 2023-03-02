@@ -889,7 +889,8 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 				memset(pBmpWrite, 0x7f, pDefaultNormalMap->data_size());
 				if (channels >= 3)
 				{
-					for (size_t b = 0; b < pDefaultNormalMap->data_size(); b += 4)
+					size_t pixelIncrement = static_cast<size_t>(channels);
+					for (size_t b = 0; b < pDefaultNormalMap->data_size(); b += pixelIncrement)
 					{
 						pBmpWrite[b+2] = 0xff; // blue=z
 					}
