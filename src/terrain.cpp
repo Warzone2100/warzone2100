@@ -2049,15 +2049,16 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force)
 			{
 				debug(LOG_INFO, "Failed to swap terrain texture overrides");
 			}
-			if (priorValue == TerrainShaderQuality::NORMAL_MAPPING || terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
+			// always re-load the tile textures (these change between all modes)
+			auto priorNumGroundTypes = getNumGroundTypes();
+			reloadTileTextures();
+			mapReloadGroundTypes();
+			if (priorValue == TerrainShaderQuality::NORMAL_MAPPING
+				|| terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING
+				|| priorNumGroundTypes != getNumGroundTypes())
 			{
 				// when switching to & from the High / Normal-mapping mode, reload base terrain / ground textures
 				reloadTerrainTextures();
-			}
-			// always re-load the tile textures (these change between all modes)
-			if (reloadTileTextures())
-			{
-				mapReloadDecalTypes();
 			}
 		}
 	}
