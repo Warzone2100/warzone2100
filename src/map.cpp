@@ -684,33 +684,17 @@ static bool mapSetGroundTypes()
 	return true;
 }
 
-static bool mapUpdateDecalTypes()
+bool mapReloadGroundTypes()
 {
-	int i, j;
-
-	for (i = 0; i < mapWidth; i++)
+	if (!tilesetDir)
 	{
-		for (j = 0; j < mapHeight; j++)
-		{
-			MAPTILE *psTile = mapTile(i, j);
-
-			if (hasDecals(i, j))
-			{
-				SET_TILE_DECAL(psTile);
-			}
-			else
-			{
-				CLEAR_TILE_DECAL(psTile);
-			}
-		}
+		return false;
 	}
-	return true;
-}
-
-bool mapReloadDecalTypes()
-{
-	SetDecals(currentMapTileset);
-	mapUpdateDecalTypes();
+	mapLoadGroundTypes(false);
+	if (!mapSetGroundTypes())
+	{
+		return false;
+	}
 	return true;
 }
 
