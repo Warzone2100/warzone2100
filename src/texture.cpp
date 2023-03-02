@@ -227,19 +227,6 @@ bool texLoad(const char *fileName)
 			delete decalNormalArr; decalNormalArr = nullptr;
 			delete decalSpecularArr; decalSpecularArr = nullptr;
 			delete decalHeightArr; decalHeightArr = nullptr;
-			decalTexArr = gfx_api::context::get().create_texture_array(mipmap_levels, maxTileNo+1, mipmap_max, mipmap_max, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "decal");
-			if (has_nm)
-			{
-				decalNormalArr = gfx_api::context::get().create_texture_array(mipmap_levels, maxTileNo+1, mipmap_max, mipmap_max, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "decalNormal");
-			}
-			if (has_sm)
-			{
-				decalSpecularArr = gfx_api::context::get().create_texture_array(mipmap_levels, maxTileNo+1, mipmap_max, mipmap_max, gfx_api::pixel_format::FORMAT_R8_UNORM, "decalSpecular");
-			}
-			if (has_hm)
-			{
-				decalHeightArr = gfx_api::context::get().create_texture_array(mipmap_levels, maxTileNo+1, mipmap_max, mipmap_max, gfx_api::pixel_format::FORMAT_R8_UNORM, "decalHeight");
-			}
 			break;
 		}
 
@@ -247,32 +234,31 @@ bool texLoad(const char *fileName)
 		WzString fullPath_sm;
 		WzString fullPath_hm;
 
-		// Load until we cannot find anymore of them
-		for (k = 0; k < MAX_TILES; k++)
+		switch (terrainShaderType)
 		{
-			std::unique_ptr<iV_Image> tile;
-
-			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d.png", partialPath, k);
-			if (PHYSFS_exists(fullPath)) // avoid dire warning
+		case TerrainShaderType::FALLBACK:
+			// Load until we cannot find anymore of them
+			for (k = 0; k < MAX_TILES; k++)
 			{
-				tile = gfx_api::loadUncompressedImageFromFile(fullPath, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, true);
-				ASSERT_OR_RETURN(false, tile != nullptr, "Could not load %s!", fullPath);
-			}
-			else
-			{
-				// no more textures in this set
-				ASSERT_OR_RETURN(false, k > 0, "Could not find %s", fullPath);
-				break;
-			}
+				std::unique_ptr<iV_Image> tile;
 
-			tile->resize(mipmap_max, mipmap_max);
-			tile->convert_to_rgba();
+				snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d.png", partialPath, k);
+				if (PHYSFS_exists(fullPath)) // avoid dire warning
+				{
+					tile = gfx_api::loadUncompressedImageFromFile(fullPath, (terrainShaderType != TerrainShaderType::FALLBACK) ? gfx_api::pixel_format_target::texture_2d_array : gfx_api::pixel_format_target::texture_2d, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, true);
+					ASSERT_OR_RETURN(false, tile != nullptr, "Could not load %s!", fullPath);
+				}
+				else
+				{
+					// no more textures in this set
+					ASSERT_OR_RETURN(false, k > 0, "Could not find %s", fullPath);
+					break;
+				}
 
-			ASSERT(tile->width() == mipmap_max && tile->height() == mipmap_max, "Unexpected texture dimensions");
+				tile->resize(mipmap_max, mipmap_max);
+				tile->convert_to_rgba();
 
-			switch (terrainShaderType)
-			{
-			case TerrainShaderType::FALLBACK:
+				ASSERT(tile->width() == mipmap_max && tile->height() == mipmap_max, "Unexpected texture dimensions");
 
 				// Blit this tile onto the parent texture atlas bitmap
 				if (!textureAtlas.blit_image(*tile, xOffset, yOffset))
@@ -307,133 +293,130 @@ bool texLoad(const char *fileName)
 					textureAtlas = iV_Image();
 					textureAtlas.allocate(xSize, ySize, 4, true);
 				}
-				break;
-
-			case TerrainShaderType::SINGLE_PASS:
-
-				gfx_api::context::get().loadTextureArrayLayerFromUncompressedImage(*decalTexArr, k, *tile, gfx_api::texture_type::game_texture, mipmap_levels, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, fullPath);
-
-				if (has_auxillary_texture_info)
-				{
-					fullPath_nm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_nm.png", partialPath, k)));
-					fullPath_sm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_sm.png", partialPath, k)));
-					fullPath_hm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_hm.png", partialPath, k)));
-
-					bool skipLoadingRelatedFiles = false;
-					if (!gfx_api::checkImageFilesWouldLoadFromSameParentMountPath({fullPath, fullPath_nm, fullPath_sm, fullPath_hm}, true))
-					{
-						debug(LOG_INFO, "One of these images would load from a different path / package: %s, %s, %s, %s - defaulting to using base texture only", fullPath, fullPath_nm.toUtf8().c_str(), fullPath_sm.toUtf8().c_str(), fullPath_hm.toUtf8().c_str());
-						skipLoadingRelatedFiles = true;
-					}
-
-					if (has_nm)
-					{ // loading normalmap
-						if (!skipLoadingRelatedFiles && PHYSFS_exists(fullPath_nm))
-						{
-							tile = gfx_api::loadUncompressedImageFromFile(fullPath_nm.toUtf8().c_str(), gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, true);
-							if (tile)
-							{
-								debug(LOG_TEXTURE, "texLoad: Found normal map %s", fullPath_nm.toUtf8().c_str());
-							}
-							else
-							{
-								ASSERT(tile != nullptr, "Could not load %s!", fullPath_nm.toUtf8().c_str());
-							}
-						}
-						else
-						{
-							tile.reset();
-						}
-
-						if (!tile)
-						{	// default normal map: (0,0,1)
-							tile = std::unique_ptr<iV_Image>(new iV_Image());
-							tile->clear();
-							tile->allocate(mipmap_max, mipmap_max, 4, true);
-							unsigned char* pBmpWrite = tile->bmp_w();
-							memset(pBmpWrite, 0x7f, tile->data_size());
-							for (size_t b = 0; b < tile->data_size(); b += 4) pBmpWrite[b+2] = 0xff; // blue=z
-						}
-						tile->resize(mipmap_max, mipmap_max);
-						gfx_api::context::get().loadTextureArrayLayerFromUncompressedImage(*decalNormalArr, k, *tile, gfx_api::texture_type::normal_map, mipmap_levels, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, fullPath_nm.toUtf8());
-					}
-
-					if (has_sm)
-					{ // loading specularmap
-						if (!skipLoadingRelatedFiles && PHYSFS_exists(fullPath_sm))
-						{
-							tile = gfx_api::loadUncompressedImageFromFile(fullPath_sm.toUtf8().c_str(), gfx_api::texture_type::specular_map, mipmap_max, mipmap_max, false);
-							if (tile)
-							{
-								debug(LOG_TEXTURE, "texLoad: Found specular map %s", fullPath_sm.toUtf8().c_str());
-							}
-							else
-							{
-								ASSERT(tile != nullptr, "Could not load %s!", fullPath_sm.toUtf8().c_str());
-							}
-						}
-						else
-						{
-							tile.reset();
-						}
-
-						if (!tile)
-						{	// default specular map: 0
-							tile = std::unique_ptr<iV_Image>(new iV_Image());
-							tile->clear();
-							tile->allocate(mipmap_max, mipmap_max, 1, true);
-						}
-						tile->resize(mipmap_max, mipmap_max);
-						gfx_api::context::get().loadTextureArrayLayerFromUncompressedImage(*decalSpecularArr, k, *tile, gfx_api::texture_type::specular_map, mipmap_levels, gfx_api::pixel_format::FORMAT_R8_UNORM, fullPath_sm.toUtf8());
-					}
-
-					if (has_hm)
-					{ // loading heightmap
-						if (!skipLoadingRelatedFiles && PHYSFS_exists(fullPath_hm))
-						{
-							tile = gfx_api::loadUncompressedImageFromFile(fullPath_hm.toUtf8().c_str(), gfx_api::texture_type::height_map, mipmap_max, mipmap_max, false);
-							if (tile)
-							{
-								debug(LOG_TEXTURE, "texLoad: Found height map %s", fullPath_hm.toUtf8().c_str());
-							}
-							else
-							{
-								ASSERT(tile != nullptr, "Could not load %s!", fullPath_hm.toUtf8().c_str());
-							}
-						}
-						else
-						{
-							tile.reset();
-						}
-
-						if (!tile)
-						{	// default height map: 0
-							tile = std::unique_ptr<iV_Image>(new iV_Image());
-							tile->clear();
-							tile->allocate(mipmap_max, mipmap_max, 1, true);
-						}
-						tile->resize(mipmap_max, mipmap_max);
-						gfx_api::context::get().loadTextureArrayLayerFromUncompressedImage(*decalHeightArr, k, *tile, gfx_api::texture_type::height_map, mipmap_levels, gfx_api::pixel_format::FORMAT_R8_UNORM, fullPath_hm.toUtf8());
-					}
-				}
-				break;
 			}
-		}
-
-		switch (terrainShaderType)
-		{
-		case TerrainShaderType::FALLBACK:
 			/* Upload current working texture page */
 			uploadTextureAtlasPage(std::move(textureAtlas), texPage);
 			debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u",
 				  k, partialPath, mipmap_max, texPage, (unsigned)pie_Texture(texPage).id());
 			break;
 		case TerrainShaderType::SINGLE_PASS:
-			// flush all of the array textures
-			decalTexArr->flush();
-			if (decalNormalArr) { decalNormalArr->flush(); }
-			if (decalSpecularArr) { decalSpecularArr->flush(); }
-			if (decalHeightArr) { decalHeightArr->flush(); }
+			{
+
+				std::vector<WzString> tile_base_filepaths; tile_base_filepaths.reserve(maxTileNo+1);
+				std::vector<WzString> tile_nm_filepaths; tile_nm_filepaths.reserve(maxTileNo+1);
+				std::vector<WzString> tile_sm_filepaths; tile_sm_filepaths.reserve(maxTileNo+1);
+				std::vector<WzString> tile_hm_filepaths; tile_hm_filepaths.reserve(maxTileNo+1);
+
+				std::vector<WzString> usedFilenames_tmp;
+				for (k = 0; k <= maxTileNo; ++k)
+				{
+					auto fullPath_base = WzString::fromUtf8(astringf("%s/tile-%02d.png", partialPath, k));
+					tile_base_filepaths.push_back(fullPath_base);
+					usedFilenames_tmp.push_back(fullPath_base);
+
+					if (has_auxillary_texture_info)
+					{
+						fullPath_nm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_nm.png", partialPath, k)));
+						fullPath_sm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_sm.png", partialPath, k)));
+						fullPath_hm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_hm.png", partialPath, k)));
+
+						if (has_nm)
+						{
+							usedFilenames_tmp.push_back(fullPath_nm);
+						}
+						if (has_sm)
+						{
+							usedFilenames_tmp.push_back(fullPath_sm);
+						}
+						if (has_hm)
+						{
+							usedFilenames_tmp.push_back(fullPath_hm);
+						}
+
+						if (!gfx_api::checkImageFilesWouldLoadFromSameParentMountPath(usedFilenames_tmp, true))
+						{
+							debug(LOG_INFO, "One of these images would load from a different path / package: %s, %s, %s, %s - defaulting to using base texture only", fullPath, fullPath_nm.toUtf8().c_str(), fullPath_sm.toUtf8().c_str(), fullPath_hm.toUtf8().c_str());
+							fullPath_nm.clear();
+							fullPath_sm.clear();
+							fullPath_hm.clear();
+						}
+						if (has_nm)
+						{
+							if (!PHYSFS_exists(fullPath_nm))
+							{
+								fullPath_nm.clear();
+							}
+							tile_nm_filepaths.push_back(fullPath_nm);
+						}
+						if (has_sm)
+						{
+							if (!PHYSFS_exists(fullPath_sm))
+							{
+								fullPath_sm.clear();
+							}
+							tile_sm_filepaths.push_back(fullPath_sm);
+						}
+						if (has_hm)
+						{
+							if (!PHYSFS_exists(fullPath_hm))
+							{
+								fullPath_hm.clear();
+							}
+							tile_hm_filepaths.push_back(fullPath_hm);
+						}
+					}
+				}
+
+				decalTexArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_base_filepaths, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, nullptr, nullptr, "decalTexArr");
+				if (has_auxillary_texture_info)
+				{
+					if (has_nm)
+					{
+						decalNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_nm_filepaths, gfx_api::texture_type::normal_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+							std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+							pDefaultNormalMap->allocate(width, height, channels, true);
+							// default normal map: (0,0,1)
+							unsigned char* pBmpWrite = pDefaultNormalMap->bmp_w();
+							memset(pBmpWrite, 0x7f, pDefaultNormalMap->data_size());
+							if (channels >= 3)
+							{
+								size_t pixelIncrement = static_cast<size_t>(channels);
+								for (size_t b = 0; b < pDefaultNormalMap->data_size(); b += pixelIncrement)
+								{
+									pBmpWrite[b+2] = 0xff; // blue=z
+								}
+							}
+							return pDefaultNormalMap;
+						}, nullptr, "decalNormalArr");
+						ASSERT(decalNormalArr != nullptr, "Failed to load tile normals");
+					}
+					if (has_sm)
+					{
+						decalSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_sm_filepaths, gfx_api::texture_type::specular_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+							std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
+							// default specular map: 0
+							pDefaultSpecularMap->allocate(width, height, channels, true);
+							return pDefaultSpecularMap;
+						}, nullptr, "decalSpecularArr");
+						ASSERT(decalSpecularArr != nullptr, "Failed to load tile specular maps");
+					}
+					if (has_hm)
+					{
+						decalHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_hm_filepaths, gfx_api::texture_type::height_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+							std::unique_ptr<iV_Image> pDefaultHeightMap = std::unique_ptr<iV_Image>(new iV_Image);
+							// default height map: 0
+							pDefaultHeightMap->allocate(width, height, channels, true);
+							return pDefaultHeightMap;
+						}, nullptr, "decalHeightArr");
+						ASSERT(decalHeightArr != nullptr, "Failed to load terrain height maps");
+					}
+				}
+				// flush all of the array textures
+				decalTexArr->flush();
+				if (decalNormalArr) { decalNormalArr->flush(); }
+				if (decalSpecularArr) { decalSpecularArr->flush(); }
+				if (decalHeightArr) { decalHeightArr->flush(); }
+			}
 			break;
 		}
 	}

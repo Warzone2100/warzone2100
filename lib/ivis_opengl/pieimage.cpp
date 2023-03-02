@@ -43,6 +43,8 @@
 #  pragma clang diagnostic pop
 #endif
 
+#include <algorithm>
+
 /***************************************************************************/
 /*
  *	Source
@@ -408,6 +410,31 @@ bool iV_Image::scale_image_max_size(int maxWidth, int maxHeight)
 	int output_h = static_cast<int>(m_height * scalingRatio);
 
 	return resize(output_w, output_h);
+}
+
+bool iV_Image::convert_channels(const std::vector<unsigned int>& channelMap)
+{
+	ASSERT_OR_RETURN(false, !channelMap.empty(), "No channels supplied to extract?");
+	ASSERT_OR_RETURN(false, channelMap.size() <= 4, "iV_Image does not support > 4 channel textures (channelMap has %zu entries)", channelMap.size());
+	auto originalChannels = m_channels;
+	ASSERT_OR_RETURN(false, std::all_of(channelMap.begin(), channelMap.end(), [originalChannels](unsigned int srcChannel){ return srcChannel < originalChannels; }), "Channel swizzle contains channel > originalChannels (%u)", m_channels);
+
+	unsigned int newChannels = static_cast<unsigned int>(channelMap.size());
+
+	auto originalBmpData = m_bmp;
+	const size_t numPixels = static_cast<size_t>(m_height) * static_cast<size_t>(m_width);
+	m_channels = newChannels;
+	m_bmp = (unsigned char *)malloc(static_cast<size_t>(m_height) * static_cast<size_t>(m_width) * static_cast<size_t>(newChannels));
+	for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
+	{
+		for (unsigned int i = 0; i < newChannels; ++i)
+		{
+			m_bmp[(pixelIdx * m_channels) + i] = originalBmpData[(pixelIdx * originalChannels) + channelMap[i]];
+		}
+	}
+	// free the original bitmap data
+	free(originalBmpData);
+	return true;
 }
 
 bool iV_Image::convert_to_single_channel(unsigned int channel /*= 0*/)

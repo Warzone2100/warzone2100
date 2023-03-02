@@ -331,7 +331,7 @@ static inline size_t calcMipmapLevelsForUncompressedImage(const iV_BaseImage& im
 	return mipmap_levels;
 }
 
-static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api::texture_type textureType, const std::string& filename)
+static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api::pixel_format_target target, gfx_api::texture_type textureType, const std::string& filename)
 {
 	// 1.) Convert to expected # of channels based on textureType
 	switch (textureType)
@@ -358,6 +358,16 @@ static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api:
 				image.convert_to_single_channel(0); // extract first channel
 			}
 			break;
+		}
+		case gfx_api::texture_type::normal_map:
+		{
+			if (image.channels() > 3)
+			{
+				if (gfx_api::context::get().textureFormatIsSupported(target, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, gfx_api::pixel_format_usage::flags::sampled_image))
+				{
+					image.convert_channels({0,1,2}); // convert to RGB (which is supported)
+				}
+			}
 		}
 		default:
 			break;
@@ -413,7 +423,7 @@ static std::vector<std::unique_ptr<iV_Image>> generateMipMapsFromUncompressedIma
 gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	// 1.) Convert to expected # of channels based on textureType
-	if (!uncompressedPNGImageConvertChannels(image, textureType, filename))
+	if (!uncompressedPNGImageConvertChannels(image, gfx_api::pixel_format_target::texture_2d, textureType, filename))
 	{
 		return nullptr;
 	}
@@ -498,7 +508,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	return pTexture.release();
 }
 
-std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool forceRGBA8 /*= false*/)
+std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *filename, gfx_api::pixel_format_target target, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool forceRGBA8 /*= false*/)
 {
 	auto imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
 	std::unique_ptr<iV_Image> loadedUncompressedImage;
@@ -506,7 +516,7 @@ std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *fil
 #if defined(BASIS_ENABLED)
 	if (imageLoadFilename.endsWith(".ktx2"))
 	{
-		loadedUncompressedImage = gfx_api::loadUncompressedImageFromFile_KTX2(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight);
+		loadedUncompressedImage = gfx_api::loadUncompressedImageFromFile_KTX2(imageLoadFilename.toUtf8(), textureType, target, maxWidth, maxHeight);
 		if (!loadedUncompressedImage)
 		{
 			// Failed to load the image
@@ -529,7 +539,7 @@ std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *fil
 			return nullptr;
 		}
 		// Convert to expected # of channels based on textureType (if forceRGBA8 is not set)
-		if (!forceRGBA8 && !uncompressedPNGImageConvertChannels(*loadedUncompressedImage, textureType, imageLoadFilename.toUtf8()))
+		if (!forceRGBA8 && !uncompressedPNGImageConvertChannels(*loadedUncompressedImage, target, textureType, imageLoadFilename.toUtf8()))
 		{
 			return nullptr;
 		}
@@ -563,7 +573,7 @@ optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFor
 }
 
 // Determine the best available uncompressed image format for the current system (+ textureType)
-gfx_api::pixel_format bestUncompressedFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType)
+gfx_api::pixel_format gfx_api::context::bestUncompressedPixelFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType)
 {
 	switch (textureType)
 	{
@@ -575,6 +585,16 @@ gfx_api::pixel_format bestUncompressedFormat(gfx_api::pixel_format_target target
 		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
 		case gfx_api::texture_type::height_map:
 			return gfx_api::pixel_format::FORMAT_R8_UNORM;
+		case gfx_api::texture_type::normal_map:
+			// *MUST* check if 3-channel is supported (not guaranteed on all systems)
+			if (gfx_api::context::get().textureFormatIsSupported(target, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, gfx_api::pixel_format_usage::flags::sampled_image))
+			{
+				return gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
+			}
+			else
+			{
+				return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+			}
 		default:
 			break;
 	}
@@ -850,7 +870,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadUncompressedImageWithMips(
 #endif
 	if (strEndsWith(imageLoadFilename, ".png"))
 	{
-		auto pCurrentImage = gfx_api::loadUncompressedImageFromFile(imageLoadFilename.c_str(), textureType, maxWidth, maxHeight, forceRGBA8);
+		auto pCurrentImage = gfx_api::loadUncompressedImageFromFile(imageLoadFilename.c_str(), gfx_api::pixel_format_target::texture_2d_array, textureType, maxWidth, maxHeight, forceRGBA8);
 		if (!pCurrentImage)
 		{
 			debug(LOG_ERROR, "Unable to load image file: %s", imageLoadFilename.c_str());
@@ -896,7 +916,7 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 	}
 #endif
 
-	gfx_api::pixel_format uploadFormat = bestUncompressedFormat(gfx_api::pixel_format_target::texture_2d_array, textureType);
+	gfx_api::pixel_format uploadFormat = bestUncompressedPixelFormat(gfx_api::pixel_format_target::texture_2d_array, textureType);
 	gfx_api::pixel_format desiredImageExtractionFormat = uploadFormat;
 	if (allFilesAreKTX2)
 	{

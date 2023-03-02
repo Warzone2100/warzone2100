@@ -278,7 +278,7 @@ optional<gfx_api::pixel_format> gfx_api::getBestAvailableTranscodeFormatForBasis
 	return nullopt;
 }
 
-static bool iVImage_Basis_Convert_Channels(gfx_api::texture_type textureType, std::unique_ptr<iV_Image>& uncompressedImage)
+static bool iVImage_Basis_Convert_Channels(gfx_api::pixel_format_target target, gfx_api::texture_type textureType, std::unique_ptr<iV_Image>& uncompressedImage)
 {
 	// Convert to expected # (and arrangement) of channels based on textureType
 	switch (textureType)
@@ -288,7 +288,15 @@ static bool iVImage_Basis_Convert_Channels(gfx_api::texture_type textureType, st
 		case gfx_api::texture_type::height_map:
 			// extract single channel (should always be in R)
 			return uncompressedImage->convert_to_single_channel(0);
-		// TODO: Normal map
+		case gfx_api::texture_type::normal_map:
+			// TODO: the following must match how the build process encodes normal maps - currently, this assumes they are just encoded as RGBA (with no swizzling)
+			if (uncompressedImage->channels() > 3)
+			{
+				if (gfx_api::context::get().textureFormatIsSupported(target, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, gfx_api::pixel_format_usage::flags::sampled_image))
+				{
+					return uncompressedImage->convert_channels({0,1,2});
+				}
+			}
 		default:
 			break;
 	}
@@ -440,7 +448,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		if (basist::basis_transcoder_format_is_uncompressed(format))
 		{
 			// Convert to expected # (and arrangement) of channels based on textureType
-			iVImage_Basis_Convert_Channels(textureType, uncompressedOutput);
+			iVImage_Basis_Convert_Channels(target, textureType, uncompressedOutput);
 			if (desiredFormat.has_value())
 			{
 				ASSERT(uncompressedOutput->pixel_format() == desiredFormat.value(), "Input desiredFormat (%d) does not match converted output format (%d)", static_cast<int>(desiredFormat.value()), static_cast<int>(uncompressedOutput->pixel_format()));
@@ -525,12 +533,12 @@ gfx_api::texture* gfx_api::loadImageTextureFromFile_KTX2(const std::string& file
 	return pTexture.release();
 }
 
-std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	uint32_t maxWidth_u32 = (maxWidth > 0) ? static_cast<uint32_t>(maxWidth) : UINT32_MAX;
 	uint32_t maxHeight_u32 = (maxHeight > 0) ? static_cast<uint32_t>(maxHeight) : UINT32_MAX;
 
-	auto images = loadiVImagesFromFile_Basis_internal(filename.c_str(), textureType, gfx_api::pixel_format_target::texture_2d /* value doesn't actually matter since we are passing an explicit format */, WZ_BASIS_UNCOMPRESSED_FORMAT, maxWidth_u32, maxHeight_u32, 1);
+	auto images = loadiVImagesFromFile_Basis_internal(filename.c_str(), textureType, target, WZ_BASIS_UNCOMPRESSED_FORMAT, maxWidth_u32, maxHeight_u32, 1);
 	if (images.empty())
 	{
 		// Failed to load

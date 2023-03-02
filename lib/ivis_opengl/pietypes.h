@@ -214,6 +214,13 @@ public:
 	// Converts a 3 or 4 component (RGB/RGBA) image to a 1-component (luma)
 	bool convert_to_luma();
 
+	// Swizzles existing channels to a new set of channels
+	// Examples:
+	// - convert_channels({0,1,2}) on an RGBA image will convert it to a RGB image
+	// - convert_channels({3}) will extract the third channel of an 3+ channel image into a new single-channel image
+	// - convert_channels({0,0,0}) on an RGB/RGBA image will convert it to an RGB image with all channels containing the first channel (R) from the original image
+	bool convert_channels(const std::vector<unsigned int>& channelMap);
+
 	// Converts an image to a single-component image of the selected component/channel
 	bool convert_to_single_channel(unsigned int channel = 0);
 

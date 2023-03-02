@@ -378,13 +378,15 @@ namespace gfx_api
 		bool loadTextureArrayLayerFromBaseImages(gfx_api::texture_array& array, size_t layer, const std::vector<std::unique_ptr<iV_BaseImage>>& images, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 
 		optional<unsigned int> getClosestSupportedUncompressedImageFormatChannels(pixel_format_target target, unsigned int channels);
+		gfx_api::pixel_format bestUncompressedPixelFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType);
+
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) = 0;
 	};
 
 	// High-level API for getting an uncompressed image (iV_Image) from a file
-	std::unique_ptr<iV_Image> loadUncompressedImageFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool forceRGBA8 = false);
+	std::unique_ptr<iV_Image> loadUncompressedImageFromFile(const char *filename, gfx_api::pixel_format_target target, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool forceRGBA8 = false);
 
 	WzString imageLoadFilenameFromInputFilename(const WzString& filename);
 	bool checkImageFilesWouldLoadFromSameParentMountPath(const std::vector<WzString>& filenames, bool ignoreNotFound);
