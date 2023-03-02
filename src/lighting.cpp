@@ -167,7 +167,7 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 	} // end switch
 }
 
-
+// For display purposes only (*NOT* for use in game state calculations)
 static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 {
 	unsigned int numNormals = 0; // How many normals have we got?
@@ -230,10 +230,11 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 		ao += 1 - maxTangent/sqrtf(maxTangent*maxTangent + 1);
 	}
 	ao *= 1.f/Dirs;
+	ao = clip<float>(ao, 0.25f, 1.f);
 
 	MAPTILE *tile = mapTile(tileX, tileY);
-	tile->illumination = static_cast<uint8_t>(clip<int>(static_cast<int>(abs(dotProduct*ao)), 1, 254));
-	tile->ambientOcclusion = clip<float>(254.f*ao, 1.f, 254.f);
+	tile->illumination = static_cast<uint8_t>(clip<int>(static_cast<int>(abs(dotProduct*ao)), 24, 254));
+	tile->ambientOcclusion = clip<float>(254.f*ao, 60.f, 254.f);
 }
 
 static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)
