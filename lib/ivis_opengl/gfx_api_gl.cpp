@@ -462,16 +462,11 @@ bool gl_texture_array::upload_internal(const size_t& layer, const size_t& mip_le
 	ASSERT(image.data_size() <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "data_size (%zu) exceeds GLsizei max", image.data_size());
 	bind();
 	ASSERT(gfx_api::format_memory_size(image.pixel_format(), width, height) == image.data_size(), "data_size (%zu) does not match expected format_memory_size(%s, %zu, %zu)=%zu", image.data_size(), gfx_api::format_to_str(image.pixel_format()), width, height, gfx_api::format_memory_size(image.pixel_format(), width, height));
-	if (is_uncompressed_format(image.pixel_format()))
-	{
-		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLint>(layer), static_cast<GLsizei>(width), static_cast<GLsizei>(height), 1, to_gl_format(image.pixel_format(), gles), GL_UNSIGNED_BYTE, image.data());
-	}
-	else
-	{
-		// Copy to an internal buffer for upload on flush
-		ASSERT_OR_RETURN(false, offset_x == 0 && offset_y == 0, "Trying to upload compressed sub texture");
-		pInternalBuffer->copy_data_to_buffer(mip_level, layer, image.data(), image.data_size());
-	}
+
+	// Copy to an internal buffer for upload on flush
+	ASSERT_OR_RETURN(false, offset_x == 0 && offset_y == 0, "Trying to upload compressed sub texture");
+	pInternalBuffer->copy_data_to_buffer(mip_level, layer, image.data(), image.data_size());
+
 	unbind();
 	return true;
 }
@@ -499,8 +494,15 @@ void gl_texture_array::flush()
 			{
 				continue;
 			}
-			GLenum glFormat = to_gl_internalformat(internal_format, gles);
-			glCompressedTexImage3D(GL_TEXTURE_2D_ARRAY, static_cast<GLint>(i), glFormat, static_cast<GLsizei>(pLevel->width), static_cast<GLsizei>(pLevel->height), static_cast<GLsizei>(layer_count), 0, static_cast<GLsizei>(pLevel->buffer.size()), pLevel->buffer.data());
+
+			if (is_uncompressed_format(internal_format))
+			{
+				glTexImage3D(GL_TEXTURE_2D_ARRAY, static_cast<GLint>(i), to_gl_internalformat(internal_format, gles), static_cast<GLsizei>(pLevel->width), static_cast<GLsizei>(pLevel->height), static_cast<GLsizei>(layer_count), 0, to_gl_format(internal_format, gles), GL_UNSIGNED_BYTE,  pLevel->buffer.data());
+			}
+			else
+			{
+				glCompressedTexImage3D(GL_TEXTURE_2D_ARRAY, static_cast<GLint>(i), to_gl_internalformat(internal_format, gles), static_cast<GLsizei>(pLevel->width), static_cast<GLsizei>(pLevel->height), static_cast<GLsizei>(layer_count), 0, static_cast<GLsizei>(pLevel->buffer.size()), pLevel->buffer.data());
+			}
 		}
 		unbind();
 		pInternalBuffer->clear();
@@ -1904,21 +1906,8 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
-	if (is_uncompressed_format(internal_format))
-	{
-		for (GLint i = 0, e = static_cast<GLint>(mipmap_count); i < e; ++i)
-		{
-			// Allocate an empty buffer of the full size
-			glTexImage3D(GL_TEXTURE_2D_ARRAY, i, to_gl_internalformat(internal_format, gles), static_cast<GLsizei>(width >> i), static_cast<GLsizei>(height >> i), static_cast<GLsizei>(layer_count), 0, to_gl_format(internal_format, gles), GL_UNSIGNED_BYTE, nullptr);
-		}
-	}
-	else
-	{
-		// Can't use glCompressedTexImage3D with a null buffer (it's not permitted by the standard, and will crash depending on the driver)
-		// For now, we don't allocate a graphics-side buffer and instead: only the upload() function that uploads full images is supported
-		// Allocate a client-side buffer
-		new_texture->pInternalBuffer = new texture_array_mip_level_buffer(mipmap_count, layer_count, width, height, internal_format);
-	}
+	// Allocate a client-side buffer
+	new_texture->pInternalBuffer = new texture_array_mip_level_buffer(mipmap_count, layer_count, width, height, internal_format);
 	new_texture->unbind();
 	return new_texture;
 }
