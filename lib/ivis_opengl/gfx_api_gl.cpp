@@ -645,7 +645,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec", "quality",
 			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm", "tex1_hm", "tex2_hm" } }),
-	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
+	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
@@ -1442,16 +1442,24 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 			glObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 		}
 	}
-	fetch_uniforms(uniformNames, duplicateFragmentUniformNames);
+	fetch_uniforms(uniformNames, duplicateFragmentUniformNames, programName);
 	getLocs();
 	broken |= !success;
 }
 
-void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniformNames)
+void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniformNames, const std::string& programName)
 {
 	std::transform(uniformNames.begin(), uniformNames.end(),
 				   std::back_inserter(locations),
-				   [&](const std::string& name) { return glGetUniformLocation(program, name.data()); });
+				   [&](const std::string& name)
+	{
+		GLint result = glGetUniformLocation(program, name.data());
+		if (result == -1)
+		{
+			debug(LOG_3D, "[%s]: Did not find uniform: %s", programName.c_str(), name.c_str());
+		}
+		return result;
+	});
 	if (!duplicateFragmentUniformNames.empty())
 	{
 		std::transform(duplicateFragmentUniformNames.begin(), duplicateFragmentUniformNames.end(),
