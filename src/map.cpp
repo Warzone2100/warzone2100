@@ -280,7 +280,8 @@ static std::string getTextureVariant(const std::string &origTextureFilename, con
 {
 	std::string variantFileName = appendToFileName(origTextureFilename, variantStr);
 	std::string variantPath = std::string("texpages/") + variantFileName;
-	if (PHYSFS_exists(variantPath.c_str()) != 0)
+	auto variantImageLoadPath = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(variantPath));
+	if (PHYSFS_exists(variantImageLoadPath))
 	{
 		return variantFileName;
 	}
