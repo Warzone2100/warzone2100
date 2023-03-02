@@ -14898,7 +14898,7 @@ msgstr "Veteran"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2020 The Warzone 2100 Project"
+"Copyright © 2005-2023 The Warzone 2100 Project"
 msgstr "Copyright © 1999-2004 Eidos Interaktive.\n"
 "Copyright © 2005-2020 Das Warzone 2100 Projekt"
 

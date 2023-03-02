@@ -9,7 +9,7 @@ CFBundleName = "워존";
 /* Warzone 2100 */ /* Name of the app bundle */
 CFBundleDisplayName = "워존 2100";
 
-/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2020 The Warzone 2100 Project */ /* Copyright string */
+/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2023 The Warzone 2100 Project */ /* Copyright string */
 NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2020 워존 2100 프로젝트";
 
 
