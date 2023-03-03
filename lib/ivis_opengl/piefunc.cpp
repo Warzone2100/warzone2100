@@ -262,9 +262,9 @@ void pie_Skybox_Shutdown()
 	skyboxGfx = nullptr;
 }
 
-void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix)
+void pie_DrawSkybox(float scale, const glm::mat4& projectionMatrix, const glm::mat4 &viewMatrix)
 {
-	const auto& modelViewProjectionMatrix = pie_PerspectiveGet() * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale));
+	const auto& modelViewProjectionMatrix = projectionMatrix * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale));
 
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(

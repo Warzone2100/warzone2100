@@ -234,9 +234,9 @@ static glm::mat4 positionEffect(const EFFECT *psEffect)
 {
 	/* Establish world position */
 	glm::vec3 dv(
-	    psEffect->position.x - playerPos.p.x,
+	    psEffect->position.x,
 	    psEffect->position.y,
-	    -(psEffect->position.z - playerPos.p.z)
+	    -(psEffect->position.z)
 	);
 
 	return glm::translate(dv);

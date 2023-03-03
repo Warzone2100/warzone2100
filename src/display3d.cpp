@@ -97,7 +97,7 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 static UDWORD	getTargettingGfx();
 static void	drawDroidGroupNumber(DROID *psDroid);
 static void	trackHeight(int desiredHeight);
-static void	renderSurroundings(const glm::mat4 &viewMatrix);
+static void	renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix);
 static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static void	drawDragBox();
@@ -1287,7 +1287,8 @@ static void drawTiles(iView *player)
 	/* ---------------------------------------------------------------- */
 
 	/* ---------------------------------------------------------------- */
-	const glm::mat4 &viewMatrix =
+
+	const glm::mat4 baseViewMatrix =
 		glm::translate(glm::vec3(0.f, 0.f, distance)) *
 		glm::scale(glm::vec3(pie_GetResScalingFactor() / 100.f)) *
 		glm::rotate(UNDEG(player->r.z), glm::vec3(0.f, 0.f, 1.f)) *
@@ -1295,12 +1296,13 @@ static void drawTiles(iView *player)
 		glm::rotate(UNDEG(player->r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::translate(glm::vec3(0, -player->p.y, 0));
 
-	const glm::mat4 perspectiveViewMatrix = pie_PerspectiveGet() * viewMatrix;
+	// Incorporate all the view transforms into viewMatrix
+	const glm::mat4 viewMatrix = baseViewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z));
 
-	const glm::mat4 &modelViewMatrix = viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z));
-	const glm::mat4 &mvpMatrix = pie_PerspectiveGet() * modelViewMatrix;
+	const glm::mat4 perspectiveMatrix = pie_PerspectiveGet();
+	const glm::mat4 perspectiveViewMatrix = perspectiveMatrix * viewMatrix;
 
-	const glm::vec3 cameraPos = (glm::inverse(modelViewMatrix) * glm::vec4(0,0,0,1)).xyz(); // `actualCameraPosition` is not accurate enough due to int calc
+	const glm::vec3 cameraPos = (glm::inverse(viewMatrix) * glm::vec4(0,0,0,1)).xyz(); // `actualCameraPosition` is not accurate enough due to int calc
 
 	actualCameraPosition = Vector3i(0, 0, 0);
 
@@ -1323,6 +1325,7 @@ static void drawTiles(iView *player)
 	pie_BeginLighting(theSun);
 
 	// update the fog of war... FIXME: Remove this
+	const glm::mat4 tileCalcPerspectiveViewMatrix = perspectiveMatrix * baseViewMatrix;
 	for (int i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
 	{
 		/* Go through the x's */
@@ -1342,7 +1345,7 @@ static void drawTiles(iView *player)
 				pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness(static_cast<UBYTE>(psTile->level)));
 			}
-			tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, perspectiveViewMatrix, &screen);
+			tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, tileCalcPerspectiveViewMatrix, &screen);
 			tileScreenInfo[idx][jdx].x = screen.x;
 			tileScreenInfo[idx][jdx].y = screen.y;
 		}
@@ -1386,13 +1389,13 @@ static void drawTiles(iView *player)
 	pie_SetFogStatus(true);
 
 	// draw it
-	drawTerrain(mvpMatrix, cameraPos, -getTheSun());
+	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun());
 
 	wzPerfEnd(PERF_TERRAIN);
 
 	// draw skybox
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
-	renderSurroundings(viewMatrix);
+	renderSurroundings(pie_PerspectiveGet(), baseViewMatrix);
 	wzPerfEnd(PERF_SKYBOX);
 
 	// and prepare for rendering the models
@@ -1421,7 +1424,7 @@ static void drawTiles(iView *player)
 	pie_SetFogStatus(true);
 
 	// also, make sure we can use world coordinates directly
-	drawWater(mvpMatrix, cameraPos, -getTheSun());
+	drawWater(perspectiveViewMatrix, cameraPos, -getTheSun());
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
@@ -1430,7 +1433,7 @@ static void drawTiles(iView *player)
 	gfx_api::context::get().debugStringMarker("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix, perspectiveViewMatrix);
 
-	pie_RemainingPasses(currentGameFrame); // draws shadows and transparent shapes
+	pie_RemainingPasses(currentGameFrame, perspectiveMatrix); // draws shadows and transparent shapes
 
 	if (!gamePaused())
 	{
@@ -1589,8 +1592,8 @@ bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &pers
 bool clipXYZ(int x, int y, int z, const glm::mat4 &perspectiveViewMatrix)
 {
 	Vector3i position;
-	position.x = x - playerPos.p.x;
-	position.z = -(y - playerPos.p.z);
+	position.x = x;
+	position.z = -(y);
 	position.y = z;
 
 	return clipXYZNormalized(position, perspectiveViewMatrix);
@@ -1750,10 +1753,10 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 	}
 
 	/* Get bullet's x coord */
-	dv.x = st.pos.x - playerPos.p.x;
+	dv.x = st.pos.x;
 
 	/* Get it's y coord (z coord in the 3d world */
-	dv.z = -(st.pos.y - playerPos.p.z);
+	dv.z = -(st.pos.y);
 
 	/* What's the present height of the bullet? */
 	dv.y = st.pos.z;
@@ -2265,9 +2268,9 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	}
 
 	Vector3i dv = Vector3i(
-	         psFeature->pos.x - playerPos.p.x,
+	         psFeature->pos.x,
 	         psFeature->pos.z, // features sits at the height of the tile it's centre is on
-	         -(psFeature->pos.y - playerPos.p.z)
+	         -(psFeature->pos.y)
 	     );
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psFeature->rot.direction), glm::vec3(0.f, 1.f, 0.f));
@@ -2356,12 +2359,12 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 		return;
 	}
 
-	dv.x = msgX - playerPos.p.x;
+	dv.x = msgX;
 #if defined( _MSC_VER )
 	#pragma warning( push )
 	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
 #endif
-	dv.z = -(msgY - playerPos.p.z);
+	dv.z = -(static_cast<int>(msgY));
 #if defined( _MSC_VER )
 	#pragma warning( pop )
 #endif
@@ -2629,7 +2632,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 {
 	int colour, pieFlagData, ecmFlag = 0, pieFlag = 0;
 	PIELIGHT buildingBrightness;
-	const Vector3i dv = Vector3i(psStructure->pos.x - playerPos.p.x, psStructure->pos.z, -(psStructure->pos.y - playerPos.p.z));
+	const Vector3i dv = Vector3i(psStructure->pos.x, psStructure->pos.z, -(psStructure->pos.y));
 	bool bHitByElectronic = false;
 	bool defensive = false;
 	iIMDShape *strImd = psStructure->sDisplay.imd;
@@ -2782,8 +2785,8 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 	//store the frame number for when deciding what has been clicked on
 	psPosition->frameNumber = currentGameFrame;
 
-	dv.x = psPosition->coords.x - playerPos.p.x;
-	dv.z = -(psPosition->coords.y - playerPos.p.z);
+	dv.x = psPosition->coords.x;
+	dv.z = -(psPosition->coords.y);
 	dv.y = psPosition->coords.z;
 
 	//quick check for invalid data
@@ -2846,8 +2849,8 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	float stretch = psStructure->pos.z - psStructure->foundationDepth;
 
 	/* Establish where it is in the world */
-	dv.x = psStructure->pos.x - playerPos.p.x;
-	dv.z = -(psStructure->pos.y - playerPos.p.z);
+	dv.x = psStructure->pos.x;
+	dv.z = -(psStructure->pos.y);
 	dv.y = psStructure->pos.z;
 
 	dv.y -= gateCurrentOpenHeight(psStructure, graphicsTime, 1);  // Make gate stick out by 1 unit, so that the tops of ┼ gates can safely have heights differing by 1 unit.
@@ -3682,7 +3685,7 @@ static void locateMouse()
 }
 
 /// Render the sky and surroundings
-static void renderSurroundings(const glm::mat4 &viewMatrix)
+static void renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix)
 {
 	// Render skybox relative to ground (i.e. undo player y translation)
 	// then move it somewhat below ground level for the blending effect
@@ -3694,7 +3697,7 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	}
 
 	// TODO: skybox needs to be just below lowest point on map (because we have a bottom cap now). Hardcoding for now.
-	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, -500, 0.f)) * glm::rotate(RADIANS(wind), glm::vec3(0.f, 1.f, 0.f)));
+	pie_DrawSkybox(skybox_scale, projectionMatrix, skyboxViewMatrix * glm::translate(glm::vec3(0.f, -500, 0.f)) * glm::rotate(RADIANS(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
 static int calculateCameraHeight(int _mapHeight)
@@ -4211,7 +4214,7 @@ static uint32_t randHash(std::initializer_list<uint32_t> data) {
 /// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
-	auto deltaPlayer = Vector3f(-playerPos.p.x, 0, playerPos.p.z);
+	auto deltaPlayer = Vector3f(0,0,0);
 	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;
 
 	int constructPoints = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psDroid->player);

@@ -785,7 +785,7 @@ class InstancedMeshRenderer
 {
 public:
 	bool Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth);
-	bool DrawAll(uint64_t currentGameFrame);
+	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix);
 public:
 	// New, instanced rendering
 	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms);
@@ -1019,7 +1019,7 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	return retVal;
 }
 
-static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
+static void pie_ShadowDrawLoop(ShadowCache &shadowCache, const glm::mat4& projectionMatrix)
 {
 //	size_t cachedShadowDraws = 0;
 //	size_t uncachedShadowDraws = 0;
@@ -1043,7 +1043,7 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 		gfx_api::DrawStencilShadow::get().bind();
 		// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
 		// Thus we only need to include the perspective matrix
-		gfx_api::DrawStencilShadow::get().bind_constants({ pie_PerspectiveGet(), glm::vec2(0.f), glm::vec2(0.f), glm::vec4(0.f) });
+		gfx_api::DrawStencilShadow::get().bind_constants({ projectionMatrix, glm::vec2(0.f), glm::vec2(0.f), glm::vec4(0.f) });
 		gfx_api::context::get().bind_streamed_vertex_buffers(premultipliedVertexes.data(), sizeof(Vector3f) * premultipliedVertexes.size());
 
 		// Batch into glDrawArrays calls of <= SHADOW_BATCH_MAX
@@ -1064,13 +1064,13 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 
 static ShadowCache shadowCache;
 
-static void pie_DrawShadows(uint64_t currentGameFrame)
+static void pie_DrawShadows(uint64_t currentGameFrame, const glm::mat4& projectionMatrix)
 {
 	const int width = pie_GetVideoBufferWidth();
 	const int height = pie_GetVideoBufferHeight();
 	shadowCache.setCurrentFrame(currentGameFrame);
 
-	pie_ShadowDrawLoop(shadowCache);
+	pie_ShadowDrawLoop(shadowCache, projectionMatrix);
 
 	PIELIGHT grey;
 	grey.byte = { 0, 0, 0, 128 };
@@ -1090,13 +1090,13 @@ struct less_than_shape
 
 static ShaderOnce perFrameUniformsShaderOnce;
 
-void pie_RemainingPasses(uint64_t currentGameFrame)
+void pie_RemainingPasses(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix)
 {
-	instancedMeshRenderer.DrawAll(currentGameFrame);
+	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix);
 	instancedMeshRenderer.clear();
 }
 
-bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame)
+bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix)
 {
 	perFrameUniformsShaderOnce.reset();
 
@@ -1115,7 +1115,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame)
 	) : glm::vec4(0.f);
 
 	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
-		pie_PerspectiveGet(),
+		projectionMatrix,
 		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
 		renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
 	};
@@ -1325,7 +1325,7 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 	gfx_api::context::get().debugStringMarker("Remaining passes - shadows");
 	if (shadows)
 	{
-		pie_DrawShadows(currentGameFrame);
+		pie_DrawShadows(currentGameFrame, globalUniforms.ProjectionMatrix);
 	}
 
 	// Draw translucent models last
@@ -1368,7 +1368,7 @@ void InstancedMeshRenderer::Draw3DShapes_Old(uint64_t currentGameFrame, ShaderOn
 	// Draw shadows
 	if (shadows)
 	{
-		pie_DrawShadows(currentGameFrame);
+		pie_DrawShadows(currentGameFrame, globalUniforms.ProjectionMatrix);
 	}
 	// Draw translucent models last
 	// TODO, sort list by Z order to do translucency correctly
