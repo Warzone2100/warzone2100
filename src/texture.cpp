@@ -196,9 +196,9 @@ bool texLoad(const char *fileName)
 		bool has_auxillary_texture_info = false;
 		int maxTileNo = 0;
 
-		auto terrainShaderType = getTerrainShaderType();
+		auto currentTerrainShaderType = getTerrainShaderType();
 
-		switch (terrainShaderType)
+		switch (currentTerrainShaderType)
 		{
 		case TerrainShaderType::FALLBACK:
 			// Generate the empty texture buffer in VRAM
@@ -234,7 +234,7 @@ bool texLoad(const char *fileName)
 		WzString fullPath_sm;
 		WzString fullPath_hm;
 
-		switch (terrainShaderType)
+		switch (currentTerrainShaderType)
 		{
 		case TerrainShaderType::FALLBACK:
 			// Load until we cannot find anymore of them
@@ -245,7 +245,7 @@ bool texLoad(const char *fileName)
 				snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d.png", partialPath, k);
 				if (PHYSFS_exists(fullPath)) // avoid dire warning
 				{
-					tile = gfx_api::loadUncompressedImageFromFile(fullPath, (terrainShaderType != TerrainShaderType::FALLBACK) ? gfx_api::pixel_format_target::texture_2d_array : gfx_api::pixel_format_target::texture_2d, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, true);
+					tile = gfx_api::loadUncompressedImageFromFile(fullPath, (currentTerrainShaderType != TerrainShaderType::FALLBACK) ? gfx_api::pixel_format_target::texture_2d_array : gfx_api::pixel_format_target::texture_2d, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, true);
 					ASSERT_OR_RETURN(false, tile != nullptr, "Could not load %s!", fullPath);
 				}
 				else
@@ -429,8 +429,7 @@ bool reloadTileTextures()
 	{
 		return false;
 	}
-	auto terrainShaderType = getTerrainShaderType();
-	switch (terrainShaderType)
+	switch (getTerrainShaderType())
 	{
 		case TerrainShaderType::FALLBACK:
 			pie_AssignTexture(terrainPage, nullptr);

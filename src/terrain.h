@@ -52,7 +52,7 @@ enum TerrainShaderType
 	SINGLE_PASS // new terrain rendering method, supports all TerrainShaderQuality modes
 };
 
-extern TerrainShaderQuality terrainShaderQuality;
+extern TerrainShaderType terrainShaderType;
 
 TerrainShaderQuality getTerrainShaderQuality();
 TerrainShaderType getTerrainShaderType();
