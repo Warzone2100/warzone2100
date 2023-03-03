@@ -1991,7 +1991,7 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 		const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 			vk::ImageMemoryBarrier()
 				.setImage(object)
-				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipmap_levels, 0, layer_count))
+				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0,  static_cast<uint32_t>(layer_count)))
 				.setOldLayout(vk::ImageLayout::eUndefined)
 				.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
@@ -2010,8 +2010,8 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 			.setBufferImageHeight(static_cast<uint32_t>(image.bufferImageHeight()))
 			.setBufferRowLength(static_cast<uint32_t>(image.bufferRowLength()))
 			.setImageOffset(vk::Offset3D(0, 0, 0))
-			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, mip_level, layer, 1))
-			.setImageExtent(vk::Extent3D(width, height, 1))
+			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), static_cast<uint32_t>(layer), 1))
+			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	};
 	cmdBuffer.copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
 
@@ -2024,7 +2024,7 @@ void VkTextureArray::flush()
 	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
-			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipmap_levels, 0, layer_count))
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0, static_cast<uint32_t>(layer_count)))
 			.setOldLayout(vk::ImageLayout::eUndefined)
 			.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
 			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)

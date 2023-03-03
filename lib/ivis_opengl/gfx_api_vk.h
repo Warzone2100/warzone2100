@@ -481,10 +481,10 @@ struct VkTextureArray final : public gfx_api::texture_array
 	WZ_vk::UniqueImageView view;
 	VmaAllocation allocation = VK_NULL_HANDLE;
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
-	const uint32_t mipmap_levels;
-	const uint32_t layer_count;
-	const uint32_t texWidth;
-	const uint32_t texHeight;
+	size_t mipmap_levels;
+	size_t layer_count;
+	size_t texWidth;
+	size_t texHeight;
 	bool transitionedToTransferDstFormat = false;
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
