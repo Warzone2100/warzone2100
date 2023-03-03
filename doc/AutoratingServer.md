@@ -10,11 +10,11 @@ When autorating is not activated or the response is incorrect or empty, the defa
 
 The request is set to the url defined in the configuration file, with the following headers:
 
-* `WZ-Player-Hash` the hash of the player's id that you can partly see in-game. The full hash can be found within WZlogs when a player joins a game.
-* `WZ-Player-Key` the player's public key. It is stored encrypted in known_players.db along the player's hash.
+* `WZ-Player-Hash` the hash of the player's public key.
+* `WZ-Player-Key` the player's public key.
 * `WZ-Locale` the locale of the player to send back translated information.
 
-A player can display their hash and public key in the lobby by issuing the `/me` command.
+See `PlayerKeys.md` for more information about player keys.
 
 ## Autorating response
 

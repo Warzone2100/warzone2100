@@ -1,6 +1,6 @@
 # Autohost configuration
 
-Running the game with the `--autohost` command line argument opens a game automatically. Combined with `--headless` and `--nosound` it allows to run a dedicated server to host a game.
+Running the game with the `--autohost` command line argument opens a game automatically. Combined with `--headless` and `--nosound` it allows to run a dedicated server to host a game. See also `PlayerKeys.md` to add administrators with `--addlobbyadminhash` and `--addlobbyadminpublickey`.
 
 The autohost option requires a configuration file set in your data directory, under the `autohost` directory. For example : `warzone2100 --autohost=my_host` will look for the configuration file `autohost/my_host`.
 
