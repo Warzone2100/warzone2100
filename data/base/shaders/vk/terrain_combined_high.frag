@@ -60,7 +60,7 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	float exponent = acos(dot(H, b.N)) / 0.33;
 	float gaussianTerm = exp(-(exponent * exponent));
 
-	vec4 res = b.color*(ambientLight*0.5 + diffuseLight*lambertTerm) + specularLight*b.gloss*gaussianTerm*lambertTerm;
+	vec4 res = b.color*(ambientLight*0.3 + diffuseLight*lambertTerm) + specularLight*b.gloss*gaussianTerm*lambertTerm;
 	return vec4(res.rgb, b.color.a);
 }
 

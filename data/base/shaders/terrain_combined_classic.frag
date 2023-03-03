@@ -71,7 +71,13 @@ out vec4 FragColor;
 
 vec4 main_classic() {
 	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0);
-	vec4 light = texture(lightmap_tex, uvLightmap, 0.f);
+
+	vec3 L = normalize(groundLightDir);
+	vec3 N = vec3(0,0,1);
+	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
+	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * texture(lightmap_tex, uvLightmap, 0.f);
+	light.a = 1.f;
+
 	return light * decal;
 }
 
