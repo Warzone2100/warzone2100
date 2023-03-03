@@ -39,6 +39,7 @@ The `locked` object sets which game parameters can be changed by the host and ro
 
 Each player slot can be customized, starting from 0. The first slot will be defined in the `player_0` object, second slot in `player_1` and so on. Each can have the following entries:
 
+* `position` move the player to an other slot, starting from 0.
 * `team` holds the team number, starting from 0.
 * `ai` when set, contains the name of the AI to use. This must match the property `js` in the ai `.json` file.
 * `difficulty` sets the difficulty for an AI. It can be one of `Easy`, `Medium`, `Hard` or `Insane`.
