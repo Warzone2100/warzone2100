@@ -57,7 +57,7 @@ void pie_InitLighting();
 void pie_Lighting0(LIGHTING_TYPE entry, const float value[4]);
 glm::vec4 pie_GetLighting0(LIGHTING_TYPE entry);
 
-void pie_RemainingPasses(uint64_t currentGameFrame);
+void pie_RemainingPasses(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix);
 
 void pie_InitializeInstancedRenderer();
 void pie_CleanUp();

@@ -856,8 +856,8 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const g
 	leftFirst = angleDelta(playerPos.r.y - st.rot.direction) <= 0;
 
 	/* Get the real position */
-	position.x = st.pos.x - playerPos.p.x;
-	position.z = -(st.pos.y - playerPos.p.z);
+	position.x = st.pos.x;
+	position.z = -(st.pos.y);
 	position.y = st.pos.z;
 
 	if (isTransporter(psDroid))

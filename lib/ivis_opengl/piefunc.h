@@ -40,7 +40,7 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour);
 void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix);
 void pie_ViewingWindow_Shutdown();
 
-void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix);
+void pie_DrawSkybox(float scale, const glm::mat4& projectionMatrix, const glm::mat4 &viewMatrix);
 void pie_Skybox_Init();
 void pie_Skybox_Shutdown();
 void pie_Skybox_Texture(const char *filename);

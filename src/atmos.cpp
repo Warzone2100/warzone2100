@@ -336,9 +336,9 @@ void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 	glm::vec3 dv;
 
 	/* Transform it */
-	dv.x = psPart->position.x - playerPos.p.x;
+	dv.x = psPart->position.x;
 	dv.y = psPart->position.y;
-	dv.z = -(psPart->position.z - playerPos.p.z);
+	dv.z = -(psPart->position.z);
 	/* Make it face camera */
 	/* Scale it... */
 	const glm::mat4 modelMatrix = glm::translate(dv) *
