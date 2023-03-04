@@ -55,16 +55,6 @@
 		],
 		"statID": "CommandBrain01"
 	},
-	"R-Comp-SynapticLink": {
-		"iconID": "IMAGE_RES_COMPUTERTECH",
-		"id": "R-Comp-SynapticLink",
-		"imdName": "icsynapt.PIE",
-		"keyTopic": 1,
-		"msgName": "RES_C_SL1",
-		"name": "Synaptic Link",
-		"researchPoints": 1200,
-		"researchPower": 37
-	},
 	"R-Cyborg-Armor-Heat01": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Armor-Heat01",
