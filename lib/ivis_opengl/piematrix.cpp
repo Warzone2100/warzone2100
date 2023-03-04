@@ -36,21 +36,32 @@
 
 #include <algorithm>
 
+static float perspectiveZClose = 330.f;
+static float perspectiveZFar = 20000.f;
+
 /***************************************************************************/
 /*
  *	Local Definitions
  */
 /***************************************************************************/
 
+enum class PerspectiveModes
+{
+	Camera,
+	Skybox
+};
+constexpr size_t Num_Perspective_Modes = static_cast<size_t>(PerspectiveModes::Skybox) + 1;
+
 struct PerspectiveCache {
-	glm::mat4 currentPerspectiveMatrix;
-	float _width;
-	float _height;
-	int _rendSurface_xcentre;
-	int _rendSurface_ycentre;
+	glm::mat4 currentPerspectiveMatrix = glm::mat4();
+	float _width = 0.f;
+	float _height = 0.f;
+	int _rendSurface_xcentre = 0;
+	int _rendSurface_ycentre = 0;
+	float _zfar = 0.f;
 };
 // Since computing the perspective matrix is a semi-costly operation, store a cache here
-static PerspectiveCache perspectiveCache;
+static PerspectiveCache perspectiveCaches[Num_Perspective_Modes] = {};
 
 /*!
  * 3D vector perspective projection
@@ -86,25 +97,48 @@ int32_t pie_RotateProjectWithPerspective(const Vector3i *v3d, const glm::mat4 &p
 	return static_cast<int32_t>(v.w);
 }
 
-const glm::mat4& pie_PerspectiveGet()
+glm::mat4 pie_PerspectiveGetConstrained(float zFar)
 {
 	const float width = std::max(pie_GetVideoBufferWidth(), 1);  // Require width > 0 && height > 0, to avoid glScalef(1, 1, -1) crashing in some graphics drivers.
 	const float height = std::max(pie_GetVideoBufferHeight(), 1);
 
-	if (width != perspectiveCache._width || height != perspectiveCache._height || rendSurface.xcentre != perspectiveCache._rendSurface_xcentre || rendSurface.ycentre != perspectiveCache._rendSurface_ycentre)
+	// can be a semi-costly operation
+	const float xangle = width / 6.0f;
+	const float yangle = height / 6.0f;
+	return
+	glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)) *
+	glm::frustum(-xangle, xangle, -yangle, yangle, perspectiveZClose, zFar) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
+}
+
+static const glm::mat4& pie_PerspectiveGetCache(PerspectiveModes mode, float zFar)
+{
+	const float width = std::max(pie_GetVideoBufferWidth(), 1);  // Require width > 0 && height > 0, to avoid glScalef(1, 1, -1) crashing in some graphics drivers.
+	const float height = std::max(pie_GetVideoBufferHeight(), 1);
+
+	PerspectiveCache& perspectiveCache = perspectiveCaches[static_cast<size_t>(mode)];
+
+	if (width != perspectiveCache._width || height != perspectiveCache._height || rendSurface.xcentre != perspectiveCache._rendSurface_xcentre || rendSurface.ycentre != perspectiveCache._rendSurface_ycentre || zFar != perspectiveCache._zfar)
 	{
 		// update the current perspective matrix (can be a semi-costly operation)
-		const float xangle = width / 6.0f;
-		const float yangle = height / 6.0f;
-		perspectiveCache.currentPerspectiveMatrix = glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f))
-		* glm::frustum(-xangle, xangle, -yangle, yangle, 330.f, 100000.f) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
+		perspectiveCache.currentPerspectiveMatrix = pie_PerspectiveGetConstrained(zFar);
 		perspectiveCache._width = width;
 		perspectiveCache._height = height;
 		perspectiveCache._rendSurface_xcentre = rendSurface.xcentre;
 		perspectiveCache._rendSurface_ycentre = rendSurface.ycentre;
+		perspectiveCache._zfar = perspectiveZFar;
 	}
 
 	return perspectiveCache.currentPerspectiveMatrix;
+}
+
+const glm::mat4& pie_SkyboxPerspectiveGet()
+{
+	return pie_PerspectiveGetCache(PerspectiveModes::Skybox, 100000.f);
+}
+
+const glm::mat4& pie_PerspectiveGet()
+{
+	return pie_PerspectiveGetCache(PerspectiveModes::Camera, perspectiveZFar);
 }
 
 

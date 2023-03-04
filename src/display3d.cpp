@@ -1395,7 +1395,7 @@ static void drawTiles(iView *player)
 
 	// draw skybox
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
-	renderSurroundings(pie_PerspectiveGet(), baseViewMatrix);
+	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
 	wzPerfEnd(PERF_SKYBOX);
 
 	// and prepare for rendering the models
