@@ -338,6 +338,7 @@
 		"msgName": "RES_CYW_H_PLAS",
 		"name": "Super Pulse Laser Cyborg",
 		"requiredResearch": [
+			"R-Cyborg-Metals04",
 			"R-Wpn-Laser02"
 		],
 		"researchPoints": 5000,
@@ -358,6 +359,7 @@
 			"Cyb-Hvywpn-Acannon"
 		],
 		"requiredResearch": [
+			"R-Cyborg-Metals04",
 			"R-Wpn-RailGun02"
 		],
 		"researchPoints": 5500,
