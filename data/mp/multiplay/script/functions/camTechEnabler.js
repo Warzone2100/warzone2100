@@ -13,7 +13,6 @@ var allRes = {
 	"R-Vehicle-Prop-Wheels": 0,
 	"R-Sys-Spade1Mk1": 0,
 	"R-Vehicle-Body01": 0,
-	"R-Comp-SynapticLink": 0,
 	"R-Wpn-MG1Mk1": 5,
 	"R-Defense-Tower01": 48,
 	"R-Wpn-MG-Damage01": 48,
