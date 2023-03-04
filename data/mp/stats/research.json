@@ -646,7 +646,6 @@
 		"disabledWhen": 4,
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Transport",
-		"keyTopic": 1,
 		"msgName": "RES_CYTRANS",
 		"name": "Cyborg Transport",
 		"requiredResearch": [
@@ -711,7 +710,6 @@
 	"R-Defense-AASite-QuadMg1": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-AASite-QuadMg1",
-		"keyTopic": 1,
 		"msgName": "RES_EMP_AA2",
 		"name": "Hurricane AA Site",
 		"requiredResearch": [
@@ -861,7 +859,6 @@
 	"R-Defense-HardcreteWall": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HardcreteWall",
-		"keyTopic": 1,
 		"msgName": "RES_DF_HCW1",
 		"name": "Hardcrete",
 		"requiredResearch": [
@@ -1474,7 +1471,6 @@
 	"R-Defense-Tower01": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Tower01",
-		"keyTopic": 1,
 		"msgName": "RES_TOWER1",
 		"name": "Heavy Machinegun Guard Tower",
 		"requiredResearch": [
@@ -2178,7 +2174,6 @@
 	"R-Struc-CommandRelay": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-CommandRelay",
-		"keyTopic": 1,
 		"msgName": "RES_ST_CR1",
 		"name": "Command Relay Post",
 		"requiredResearch": [
@@ -2213,7 +2208,6 @@
 	"R-Struc-Factory-Module": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Module",
-		"keyTopic": 1,
 		"msgName": "RES_ST_FM1",
 		"name": "Factory Module",
 		"requiredResearch": [
@@ -2231,7 +2225,6 @@
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Upgrade01",
 		"imdName": "BLFACT1.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_ST_FU1",
 		"name": "Automated Manufacturing",
 		"requiredResearch": [
@@ -2252,7 +2245,6 @@
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Upgrade04",
 		"imdName": "BLFACT1.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_ST_FU4",
 		"name": "Robotic Manufacturing",
 		"requiredResearch": [
@@ -2274,7 +2266,6 @@
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Upgrade07",
 		"imdName": "BLFACT1.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_ST_FU7",
 		"name": "Advanced Manufacturing",
 		"requiredResearch": [
@@ -2405,7 +2396,6 @@
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade01",
 		"imdName": "blpower4.pie",
-		"keyTopic": 1,
 		"msgName": "RES_POWU1",
 		"name": "Gas Turbine Generator",
 		"requiredResearch": [
@@ -2427,7 +2417,6 @@
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade01b",
 		"imdName": "blpower4.pie",
-		"keyTopic": 1,
 		"name": "Gas Turbine Generator Mk2",
 		"requiredResearch": [
 			"R-Struc-Power-Upgrade01"
@@ -2448,7 +2437,6 @@
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade01c",
 		"imdName": "blpower4.pie",
-		"keyTopic": 1,
 		"name": "Gas Turbine Generator Mk3",
 		"requiredResearch": [
 			"R-Struc-Power-Upgrade01b"
@@ -2469,7 +2457,6 @@
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade02",
 		"imdName": "blpower4.pie",
-		"keyTopic": 1,
 		"msgName": "RES_POWU2",
 		"name": "Vapor Turbine Generator",
 		"requiredResearch": [
@@ -2491,7 +2478,6 @@
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade03",
 		"imdName": "blpower4.pie",
-		"keyTopic": 1,
 		"name": "Vapor Turbine Generator Mk2",
 		"requiredResearch": [
 			"R-Struc-Power-Upgrade02"
@@ -2512,7 +2498,6 @@
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade03a",
 		"imdName": "blpower4.pie",
-		"keyTopic": 1,
 		"name": "Vapor Turbine Generator Mk3",
 		"requiredResearch": [
 			"R-Struc-Power-Upgrade03"
@@ -2532,7 +2517,6 @@
 	"R-Struc-PowerModuleMk1": {
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-PowerModuleMk1",
-		"keyTopic": 1,
 		"msgName": "RES_POWMD1",
 		"name": "Power Module",
 		"requiredResearch": [
@@ -2571,7 +2555,6 @@
 	"R-Struc-Research-Module": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Research-Module",
-		"keyTopic": 1,
 		"msgName": "RES_ST_RM1",
 		"name": "Research Module",
 		"requiredResearch": [
@@ -2588,7 +2571,6 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade01",
 		"imdName": "blresch4.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_ST_RU1",
 		"name": "Synaptic Link Data Analysis",
 		"requiredResearch": [
@@ -2649,7 +2631,6 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade04",
 		"imdName": "blresch4.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_ST_RU4",
 		"name": "Dedicated Synaptic Link Data Analysis",
 		"requiredResearch": [
@@ -2710,7 +2691,6 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade07",
 		"imdName": "blresch4.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_ST_RU7",
 		"name": "Neural Synapse Research Brain",
 		"requiredResearch": [
@@ -2865,7 +2845,6 @@
 	"R-Struc-VTOLPad-Upgrade01": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-VTOLPad-Upgrade01",
-		"keyTopic": 1,
 		"msgName": "RES_ST_VPU1",
 		"name": "Automated VTOL Rearming",
 		"requiredResearch": [
@@ -2989,7 +2968,6 @@
 		"disabledWhen": 4,
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-SuperTransport",
-		"keyTopic": 1,
 		"msgName": "RES_SUPERTRANS",
 		"name": "Super Transport",
 		"requiredResearch": [
@@ -3006,7 +2984,6 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Sys-Autorepair-General",
 		"imdName": "ICCCCONS.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_SY_AR",
 		"name": "Auto-Repair",
 		"replacedComponents": [
@@ -3058,7 +3035,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Engineering01",
 		"imdName": "trlcon.pie",
-		"keyTopic": 1,
 		"msgName": "RES_ENGIN1",
 		"name": "Engineering",
 		"researchPoints": 1200,
@@ -3079,7 +3055,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Engineering02",
 		"imdName": "trlcon.pie",
-		"keyTopic": 1,
 		"msgName": "RES_ENGIN2",
 		"name": "Improved Engineering",
 		"requiredResearch": [
@@ -3101,7 +3076,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Engineering03",
 		"imdName": "trlcon.pie",
-		"keyTopic": 1,
 		"msgName": "RES_ENGIN3",
 		"name": "Advanced Engineering",
 		"requiredResearch": [
@@ -3173,7 +3147,6 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Sys-Resistance-Circuits",
 		"imdName": "ICCCCONS.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_SY_RC",
 		"name": "Nexus Resistance Circuits",
 		"requiredResearch": [
@@ -3218,7 +3191,6 @@
 	"R-Sys-Sensor-Tower02": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Tower02",
-		"keyTopic": 1,
 		"msgName": "RES_SY_STW2",
 		"name": "Hardened Sensor Tower",
 		"redStructures": [
@@ -3251,7 +3223,6 @@
 		"disabledWhen": 8,
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-UpLink",
-		"keyTopic": 1,
 		"msgName": "RES_SY_S_UP",
 		"name": "Satellite Uplink Center",
 		"requiredResearch": [
@@ -3269,7 +3240,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Upgrade01",
 		"imdName": "GNLSNSR1.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_SY_SU1",
 		"name": "Sensor Upgrade",
 		"requiredResearch": [
@@ -3290,7 +3260,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Upgrade02",
 		"imdName": "GNLSNSR1.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_SY_SU2",
 		"name": "Sensor Upgrade Mk2",
 		"requiredResearch": [
@@ -3312,7 +3281,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Upgrade03",
 		"imdName": "GNLSNSR1.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_SY_SU3",
 		"name": "Sensor Upgrade Mk3",
 		"requiredResearch": [
@@ -3333,7 +3301,6 @@
 	"R-Sys-Sensor-WS": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-WS",
-		"keyTopic": 1,
 		"msgName": "RES_SY_S_WST",
 		"name": "Wide Spectrum Sensor",
 		"requiredResearch": [
@@ -3350,7 +3317,6 @@
 	"R-Sys-Sensor-WSTower": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-WSTower",
-		"keyTopic": 1,
 		"msgName": "RES_SY_S_WS",
 		"name": "Wide Spectrum Sensor Tower",
 		"requiredResearch": [
@@ -3367,7 +3333,6 @@
 	"R-Sys-Spade1Mk1": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Spade1Mk1",
-		"keyTopic": 1,
 		"name": "Construction Unit",
 		"researchPoints": 10,
 		"resultComponents": [
@@ -3380,7 +3345,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-SpyTower",
 		"imdName": "icmolql.pie",
-		"keyTopic": 1,
 		"name": "Nexus Link Tower",
 		"requiredResearch": [
 			"R-Sys-SpyTurret"
@@ -3396,7 +3360,6 @@
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-SpyTurret",
 		"imdName": "icmolql.pie",
-		"keyTopic": 1,
 		"msgName": "RES_SY_SPT",
 		"name": "Nexus Link Turret",
 		"requiredResearch": [
@@ -3413,7 +3376,6 @@
 	"R-Sys-VTOLCBS-Tower01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-VTOLCBS-Tower01",
-		"keyTopic": 1,
 		"msgName": "RES_SY_VCBSTW1",
 		"name": "VTOL CB Tower",
 		"requiredResearch": [
@@ -3690,7 +3652,6 @@
 	"R-Vehicle-Body02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body02",
-		"keyTopic": 1,
 		"msgName": "RES_V_B02",
 		"name": "Light Body - Leopard",
 		"requiredResearch": [
@@ -3706,7 +3667,6 @@
 	"R-Vehicle-Body03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body03",
-		"keyTopic": 1,
 		"msgName": "RES_V_B03",
 		"name": "Light Body - Retaliation",
 		"requiredResearch": [
@@ -3723,7 +3683,6 @@
 	"R-Vehicle-Body04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body04",
-		"keyTopic": 1,
 		"msgName": "RES_V_B04",
 		"name": "Light Body - Bug",
 		"requiredResearch": [
@@ -3754,7 +3713,6 @@
 	"R-Vehicle-Body06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body06",
-		"keyTopic": 1,
 		"msgName": "RES_V_B06",
 		"name": "Medium Body - Panther",
 		"requiredResearch": [
@@ -3788,7 +3746,6 @@
 	"R-Vehicle-Body08": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body08",
-		"keyTopic": 1,
 		"msgName": "RES_V_B08",
 		"name": "Medium Body - Scorpion",
 		"requiredResearch": [
@@ -3805,7 +3762,6 @@
 	"R-Vehicle-Body09": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body09",
-		"keyTopic": 1,
 		"msgName": "RES_V_B09",
 		"name": "Heavy Body - Tiger",
 		"requiredResearch": [
@@ -3855,7 +3811,6 @@
 	"R-Vehicle-Body12": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body12",
-		"keyTopic": 1,
 		"msgName": "RES_V_B12",
 		"name": "Heavy Body - Mantis",
 		"requiredResearch": [
@@ -3872,7 +3827,6 @@
 	"R-Vehicle-Body13": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body13",
-		"keyTopic": 1,
 		"msgName": "RES_V_B13",
 		"name": "Heavy Body - Wyvern",
 		"requiredResearch": [
@@ -3889,7 +3843,6 @@
 	"R-Vehicle-Body14": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body14",
-		"keyTopic": 1,
 		"msgName": "RES_V_B14",
 		"name": "Multi Turret Body - Dragon",
 		"requiredResearch": [
@@ -3906,7 +3859,6 @@
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Engine01",
 		"imdName": "iceng.pie",
-		"keyTopic": 1,
 		"msgName": "RES_V_EN1",
 		"name": "Fuel Injection Engine",
 		"requiredResearch": [
@@ -3929,7 +3881,6 @@
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Engine02",
 		"imdName": "iceng.pie",
-		"keyTopic": 1,
 		"name": "Fuel Injection Engine Mk2",
 		"requiredResearch": [
 			"R-Vehicle-Engine01"
@@ -3952,7 +3903,6 @@
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Engine03",
 		"imdName": "iceng.pie",
-		"keyTopic": 1,
 		"name": "Fuel Injection Engine Mk3",
 		"requiredResearch": [
 			"R-Vehicle-Engine02"
@@ -4112,7 +4062,6 @@
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Metals01",
 		"imdName": "icmolql.pie",
-		"keyTopic": 1,
 		"msgName": "RES_V_MET1",
 		"name": "Composite Alloys",
 		"requiredResearch": [
@@ -4172,7 +4121,6 @@
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Metals03",
 		"imdName": "icmolql.pie",
-		"keyTopic": 1,
 		"name": "Composite Alloys Mk3",
 		"requiredResearch": [
 			"R-Vehicle-Metals02"
@@ -4377,7 +4325,6 @@
 	"R-Vehicle-Prop-Halftracks": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Halftracks",
-		"keyTopic": 1,
 		"msgName": "RES_HALFT1",
 		"name": "Half-tracked Propulsion",
 		"requiredResearch": [
@@ -4393,7 +4340,6 @@
 	"R-Vehicle-Prop-Hover": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Hover",
-		"keyTopic": 1,
 		"msgName": "RES_V_P_H1",
 		"name": "Hover Propulsion",
 		"requiredResearch": [
@@ -4410,7 +4356,6 @@
 	"R-Vehicle-Prop-Tracks": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Tracks",
-		"keyTopic": 1,
 		"msgName": "RES_TRACK1",
 		"name": "Tracked Propulsion",
 		"requiredResearch": [
@@ -4428,7 +4373,6 @@
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-VTOL",
 		"imdName": "DPVTOL.PIE",
-		"keyTopic": 1,
 		"msgName": "RES_V_P_V1",
 		"name": "VTOL Propulsion",
 		"requiredResearch": [
@@ -4456,7 +4400,6 @@
 		"disabledWhen": 4,
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun01",
-		"keyTopic": 1,
 		"msgName": "RES_W_AA1",
 		"name": "AA Cyclone Flak Cannon",
 		"requiredResearch": [
@@ -4473,7 +4416,6 @@
 		"disabledWhen": 4,
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun02",
-		"keyTopic": 1,
 		"msgName": "RES_W_AA2",
 		"name": "AA Tornado Flak Cannon",
 		"redComponents": [
@@ -4495,7 +4437,6 @@
 		"disabledWhen": 4,
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun03",
-		"keyTopic": 1,
 		"msgName": "RES_W_AA3",
 		"name": "Hurricane AA Turret",
 		"requiredResearch": [
@@ -4792,7 +4733,6 @@
 	"R-Wpn-Cannon-Accuracy02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-Accuracy02",
-		"keyTopic": 1,
 		"msgName": "RES_W_CNAC2",
 		"name": "Cannon Laser Designator",
 		"requiredResearch": [
@@ -5172,7 +5112,6 @@
 	"R-Wpn-Cannon-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-ROF04",
-		"keyTopic": 1,
 		"msgName": "RES_W_CN_ROF4",
 		"name": "Cannon Rapid Loader",
 		"requiredResearch": [
@@ -5261,7 +5200,6 @@
 	"R-Wpn-Cannon1Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon1Mk1",
-		"keyTopic": 1,
 		"msgName": "RES_CN1MK1",
 		"name": "Light Cannon",
 		"requiredResearch": [
@@ -5295,7 +5233,6 @@
 	"R-Wpn-Cannon3Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon3Mk1",
-		"keyTopic": 1,
 		"msgName": "RES_CN3MK1",
 		"name": "Heavy Cannon",
 		"redComponents": [
@@ -5316,7 +5253,6 @@
 	"R-Wpn-Cannon4AMk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon4AMk1",
-		"keyTopic": 1,
 		"msgName": "RES_W_CN_4A",
 		"name": "Hyper Velocity Cannon",
 		"redComponents": [
@@ -5337,7 +5273,6 @@
 	"R-Wpn-Cannon5": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon5",
-		"keyTopic": 1,
 		"msgName": "RES_W_CN5",
 		"name": "Assault Cannon",
 		"requiredResearch": [
@@ -5354,7 +5289,6 @@
 	"R-Wpn-Cannon6TwinAslt": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon6TwinAslt",
-		"keyTopic": 1,
 		"msgName": "RES_W_CN6_T_A",
 		"name": "Twin Assault Cannon",
 		"redComponents": [
@@ -5593,7 +5527,6 @@
 	"R-Wpn-Flame2": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flame2",
-		"keyTopic": 1,
 		"msgName": "RES_FLAME2",
 		"name": "Heavy Flamer - Inferno",
 		"redComponents": [
@@ -5614,7 +5547,6 @@
 	"R-Wpn-Flamer-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Damage01",
-		"keyTopic": 1,
 		"msgName": "RES_W_FL_D1",
 		"name": "High Temperature Flamer Gel",
 		"requiredResearch": [
@@ -5906,7 +5838,6 @@
 	"R-Wpn-Flamer-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-ROF02",
-		"keyTopic": 1,
 		"name": "Flamer Autoloader Mk2",
 		"requiredResearch": [
 			"R-Wpn-Flame2",
@@ -5966,7 +5897,6 @@
 	"R-Wpn-Flamer01Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer01Mk1",
-		"keyTopic": 1,
 		"msgName": "RES_FLAME1",
 		"name": "Flamer",
 		"requiredResearch": [
@@ -5983,7 +5913,6 @@
 	"R-Wpn-HeavyPlasmaLauncher": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HeavyPlasmaLauncher",
-		"keyTopic": 1,
 		"msgName": "RES_W_PLASLAUNCH",
 		"name": "Heavy Plasma Launcher",
 		"requiredResearch": [
@@ -6000,7 +5929,6 @@
 	"R-Wpn-Howitzer-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Accuracy01",
-		"keyTopic": 1,
 		"msgName": "RES_W_HOWAC1",
 		"name": "Target Acquisition Artillery Shells",
 		"requiredResearch": [
@@ -6305,7 +6233,6 @@
 	"R-Wpn-Howitzer-Incendiary": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Incendiary",
-		"keyTopic": 1,
 		"msgName": "RES_W_INH",
 		"name": "Incendiary Howitzer",
 		"requiredResearch": [
@@ -6438,7 +6365,6 @@
 	"R-Wpn-Howitzer03-Rot": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer03-Rot",
-		"keyTopic": 1,
 		"msgName": "RES_W_RHOW",
 		"name": "Rotary Howitzer - Hellstorm",
 		"redComponents": [
@@ -6458,7 +6384,6 @@
 	"R-Wpn-HowitzerMk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HowitzerMk1",
-		"keyTopic": 1,
 		"msgName": "RES_W_HMK1",
 		"name": "Howitzer",
 		"requiredResearch": [
@@ -6476,7 +6401,6 @@
 	"R-Wpn-HvArtMissile": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HvArtMissile",
-		"keyTopic": 1,
 		"msgName": "RES_W_MS_HART",
 		"name": "Archangel Missile",
 		"redComponents": [
@@ -6497,7 +6421,6 @@
 	"R-Wpn-HvyHowitzer": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HvyHowitzer",
-		"keyTopic": 1,
 		"msgName": "RES_W_HH1",
 		"name": "Heavy Howitzer - Ground Shaker",
 		"requiredResearch": [
@@ -6514,7 +6437,6 @@
 	"R-Wpn-HvyLaser": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HvyLaser",
-		"keyTopic": 1,
 		"msgName": "RES_W_HLAS",
 		"name": "Heavy Laser",
 		"requiredResearch": [
@@ -6532,7 +6454,6 @@
 		"disabledWhen": 16,
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-LasSat",
-		"keyTopic": 1,
 		"msgName": "RES_W_LASSAT",
 		"name": "Laser Satellite Command Post",
 		"requiredResearch": [
@@ -6549,7 +6470,6 @@
 	"R-Wpn-Laser01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Laser01",
-		"keyTopic": 1,
 		"msgName": "RES_W_LAS1",
 		"name": "Laser - Flashlight",
 		"requiredResearch": [
@@ -6568,7 +6488,6 @@
 	"R-Wpn-Laser02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Laser02",
-		"keyTopic": 1,
 		"msgName": "RES_W_LAS2",
 		"name": "Pulse Laser",
 		"redComponents": [
@@ -6589,7 +6508,6 @@
 	"R-Wpn-MG-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-Damage01",
-		"keyTopic": 1,
 		"msgName": "RES_W_MG_D1",
 		"name": "Hardened MG Bullets",
 		"requiredResearch": [
@@ -6966,7 +6884,6 @@
 	"R-Wpn-MG-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-ROF03",
-		"keyTopic": 1,
 		"msgName": "RES_W_MG_ROF3",
 		"name": "Hyper Fire Chaingun Upgrade",
 		"requiredResearch": [
@@ -7010,7 +6927,6 @@
 	"R-Wpn-MG1Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG1Mk1",
-		"keyTopic": 1,
 		"msgName": "RES_MG1MK1",
 		"name": "Machinegun",
 		"researchPoints": 60,
@@ -7025,7 +6941,6 @@
 	"R-Wpn-MG2Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG2Mk1",
-		"keyTopic": 1,
 		"msgName": "RES_MG2MK1",
 		"name": "Twin Machinegun",
 		"requiredResearch": [
@@ -7046,7 +6961,6 @@
 	"R-Wpn-MG3Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG3Mk1",
-		"keyTopic": 1,
 		"msgName": "RES_MG3MK1",
 		"name": "Heavy Machinegun",
 		"requiredResearch": [
@@ -7067,7 +6981,6 @@
 	"R-Wpn-MG4": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG4",
-		"keyTopic": 1,
 		"msgName": "RES_W_MG4",
 		"name": "Assault Gun",
 		"redComponents": [
@@ -7091,7 +7004,6 @@
 	"R-Wpn-MG5": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG5",
-		"keyTopic": 1,
 		"msgName": "RES_WT_TWINAGUN",
 		"name": "Twin Assault Gun",
 		"redComponents": [
@@ -7111,7 +7023,6 @@
 	"R-Wpn-MdArtMissile": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MdArtMissile",
-		"keyTopic": 1,
 		"msgName": "RES_W_MS_MART",
 		"name": "Seraph Missile Array",
 		"redComponents": [
@@ -7297,7 +7208,6 @@
 		"disabledWhen": 4,
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile-LtSAM",
-		"keyTopic": 1,
 		"msgName": "RES_W_MS_LtSAM1",
 		"name": "Avenger SAM",
 		"requiredResearch": [
@@ -7485,7 +7395,6 @@
 	"R-Wpn-Mortar-Acc03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Acc03",
-		"keyTopic": 1,
 		"msgName": "RES_W_M_AC3",
 		"name": "Target Acquisition Mortar Shells",
 		"requiredResearch": [
@@ -7731,7 +7640,6 @@
 	"R-Wpn-Mortar-Incendiary": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Incendiary",
-		"keyTopic": 1,
 		"msgName": "RES_IMORT",
 		"name": "Incendiary Mortar",
 		"requiredResearch": [
@@ -7865,7 +7773,6 @@
 	"R-Wpn-Mortar01Lt": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar01Lt",
-		"keyTopic": 1,
 		"msgName": "RES_MORTA1",
 		"name": "Mortar",
 		"requiredResearch": [
@@ -7898,7 +7805,6 @@
 	"R-Wpn-Mortar3": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar3",
-		"keyTopic": 1,
 		"msgName": "RES_W_M3",
 		"name": "Rotary Mortar - Pepperpot",
 		"redComponents": [
@@ -7935,7 +7841,6 @@
 	"R-Wpn-PlasmaCannon": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-PlasmaCannon",
-		"keyTopic": 1,
 		"msgName": "RES_W_PLASCAN",
 		"name": "Plasma Cannon",
 		"requiredResearch": [
@@ -7953,7 +7858,6 @@
 	"R-Wpn-Plasmite-Flamer": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Plasmite-Flamer",
-		"keyTopic": 1,
 		"msgName": "RES_PLFL",
 		"name": "Plasmite Flamer",
 		"redComponents": [
@@ -8176,7 +8080,6 @@
 	"R-Wpn-RailGun01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RailGun01",
-		"keyTopic": 1,
 		"msgName": "RES_W_RAIL1",
 		"name": "Needle Gun",
 		"redComponents": [
@@ -8202,7 +8105,6 @@
 	"R-Wpn-RailGun02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RailGun02",
-		"keyTopic": 1,
 		"msgName": "RES_W_RAIL2",
 		"name": "Rail Gun",
 		"redComponents": [
@@ -8223,7 +8125,6 @@
 	"R-Wpn-RailGun03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RailGun03",
-		"keyTopic": 1,
 		"msgName": "RES_W_RAIL3",
 		"name": "Gauss Cannon",
 		"redComponents": [
@@ -8673,7 +8574,6 @@
 	"R-Wpn-Rocket02-MRL": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket02-MRL",
-		"keyTopic": 1,
 		"msgName": "RES_W_RK_MRL1",
 		"name": "Mini-Rocket Array",
 		"requiredResearch": [
@@ -8724,7 +8624,6 @@
 	"R-Wpn-Rocket05-MiniPod": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket05-MiniPod",
-		"keyTopic": 1,
 		"msgName": "RES_W_RK_MP1",
 		"name": "Mini-Rocket Pod",
 		"requiredResearch": [
@@ -8741,7 +8640,6 @@
 	"R-Wpn-Rocket06-IDF": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket06-IDF",
-		"keyTopic": 1,
 		"msgName": "RES_W_RK_IDF",
 		"name": "Ripple Rockets",
 		"requiredResearch": [
@@ -8758,7 +8656,6 @@
 	"R-Wpn-Rocket07-Tank-Killer": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket07-Tank-Killer",
-		"keyTopic": 1,
 		"msgName": "RES_W_RK_HvAT",
 		"name": "Tank Killer Rocket",
 		"requiredResearch": [
