@@ -1070,6 +1070,9 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-MRLHvy",
 		"name": "Heavy Rocket Battery",
+		"redStructures": [
+			"Emplacement-MRL-pit"
+		],
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Rocket02-MRLHvy"
@@ -1104,7 +1107,8 @@
 		"msgName": "RES_EMP_MdAM",
 		"name": "Seraph Missile Battery",
 		"redStructures": [
-			"Emplacement-MRL-pit"
+			"Emplacement-MRL-pit",
+			"Emplacement-MRLHvy-pit"
 		],
 		"requiredResearch": [
 			"R-Wpn-MdArtMissile"
@@ -7121,7 +7125,8 @@
 		"msgName": "RES_W_MS_MART",
 		"name": "Seraph Missile Array",
 		"redComponents": [
-			"Rocket-MRL"
+			"Rocket-MRL",
+			"Rocket-MRL-Hvy"
 		],
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T",
@@ -8695,6 +8700,9 @@
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket02-MRLHvy",
 		"name": "Heavy Rocket Array",
+		"redComponents": [
+			"Rocket-MRL"
+		],
 		"requiredResearch": [
 			"R-Wpn-Rocket-Damage05",
 			"R-Wpn-Rocket02-MRL"
