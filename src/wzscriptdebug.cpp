@@ -86,6 +86,7 @@
 #include <numeric>
 #include <algorithm>
 #include <limits>
+#include <tuple>
 
 static std::shared_ptr<W_SCREEN> debugScreen = nullptr;
 static std::shared_ptr<WZScriptDebugger> globalDialog = nullptr;
@@ -960,23 +961,27 @@ public:
 			setTheSun(newSun);
 			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
 		});
-		prevButton = panel->createButton(2, "Change terrain quality", [](){ // TODO: move to config
-			setTerrainShaderQuality(static_cast<TerrainShaderQuality>((static_cast<size_t>(getTerrainShaderQuality()) + 1) % static_cast<size_t>(TerrainShaderQuality_MAX + 1)));
-			debug(LOG_INFO, "terrainShaderQuality=%d", (int)getTerrainShaderQuality());
-		}, prevButton);
 
-		prevButton = panel->createButton(2, "Toggle Old / New Shaders", [](){
+		auto dropdownWidget = panel->makeTerrainQualityDropdown(3);
+
+		auto pWeakTerrainQualityDropdown = std::weak_ptr<DropdownWidget>(dropdownWidget);
+		prevButton = panel->createButton(3, "Toggle Old / New Shaders", [pWeakTerrainQualityDropdown](){
 			if (debugToggleTerrainShaderType())
 			{
 				auto updateMsg = std::string("Switcedh terrain shader type to: ") + ((getTerrainShaderType() == TerrainShaderType::SINGLE_PASS) ? "New Shader (Single-Pass)" : "Old (Fallback) Shader");
 				addConsoleMessage(updateMsg.c_str(), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+
+				if (auto pStrongDropdown = pWeakTerrainQualityDropdown.lock())
+				{
+					pStrongDropdown->setSelectedIndex(static_cast<size_t>(getTerrainShaderQuality()));
+				}
 			}
-		}, prevButton);
+		}, dropdownWidget);
 
 		return panel;
 	}
 private:
-	std::shared_ptr<W_BUTTON> createButton(int row, const std::string &text, const std::function<void ()>& onClickFunc, const std::shared_ptr<W_BUTTON>& previousButton = nullptr)
+	std::shared_ptr<WIDGET> createButton(int row, const std::string &text, const std::function<void ()>& onClickFunc, const std::shared_ptr<WIDGET>& previousButton = nullptr)
 	{
 		auto button = makeDebugButton(text.c_str());
 		button->setGeometry(button->x(), button->y(), button->width() + 10, button->height());
@@ -991,6 +996,65 @@ private:
 		button->move((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, (row * (button->height() + ACTION_BUTTON_ROW_SPACING)));
 
 		return button;
+	}
+
+	std::shared_ptr<DropdownWidget> makeTerrainQualityDropdown(int row, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		std::vector<std::tuple<WzString, TerrainShaderQuality>> dropDownChoices = {
+			{WzString::fromUtf8(to_display_string(TerrainShaderQuality::CLASSIC)), TerrainShaderQuality::CLASSIC},
+			{WzString::fromUtf8(to_display_string(TerrainShaderQuality::MEDIUM)), TerrainShaderQuality::MEDIUM},
+			{WzString::fromUtf8(to_display_string(TerrainShaderQuality::NORMAL_MAPPING)), TerrainShaderQuality::NORMAL_MAPPING}
+		};
+
+		size_t currentSettingIdx = 0;
+		auto currValue = getTerrainShaderQuality();
+		auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, TerrainShaderQuality>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != dropDownChoices.end())
+		{
+			currentSettingIdx = it - dropDownChoices.begin();
+		}
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font_regular_bold, WZCOL_FORM_TEXT);
+		contextLabel->setString("Terrain Quality:");
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() + 10, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		auto dropdown = std::make_shared<DropdownWidget>();
+		dropdown->id = FRONTEND_TERRAIN_QUALITY_R;
+		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+		attach(dropdown);
+		for (const auto& option : dropDownChoices)
+		{
+			WzString buttonLabel = std::get<0>(option);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			dropdown->addItem(button);
+		}
+
+		dropdown->setSelectedIndex(currentSettingIdx);
+
+		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+			auto newMode = std::get<1>(dropDownChoices.at(newIndex));
+			if (!setTerrainShaderQuality(newMode))
+			{
+				debug(LOG_ERROR, "Failed to set terrain shader quality: %s", to_display_string(newMode).c_str());
+				return false;
+			}
+			return true;
+		});
+
+		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
+		dropdown->setGeometry(contextDropdownX0, yPos, dropdown->idealWidth() + ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
+
+		return dropdown;
 	}
 };
 
