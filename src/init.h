@@ -70,6 +70,6 @@ bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData);
 
 bool loadLevFile(const std::string& filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
-extern IMAGEFILE	*FrontImages;
+extern IMAGEFILE	*FrontImages, *CountryFlagImages;
 
 #endif // __INCLUDED_SRC_INIT_H__

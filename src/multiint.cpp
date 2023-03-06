@@ -208,6 +208,7 @@ static void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayReadyBoxContainer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayClientCountry(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displaySpectatorAddButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -4161,6 +4162,13 @@ public:
 			}
 		});
 
+		// client country flag
+		widget->clientCountryFlag = std::make_shared<W_BUTTON>();
+		widget->clientCountryFlag->setGeometry(MULTIOP_COUNTRY_FLAGX, MULTIOP_COUNTRY_FLAGY, MULTIOP_COUNTRY_FLAGW, MULTIOP_COUNTRY_FLAGH);
+		widget->clientCountryFlag->UserData = playerIdx;
+		widget->clientCountryFlag->displayFunction = displayClientCountry;
+		widget->attach(widget->clientCountryFlag);
+
 		// update tooltips and such
 		widget->updateState();
 
@@ -4258,6 +4266,12 @@ public:
 				std::string hash = stats.identity.publicHashString(20);
 				playerInfoTooltip += _("Player ID: ");
 				playerInfoTooltip += hash.empty()? _("(none)") : hash;
+				if (strlen(NetPlay.players[playerIdx].countryCode) > 0)
+				{
+					playerInfoTooltip += "\n";
+					playerInfoTooltip += _("Country: ");
+					playerInfoTooltip += NetPlay.players[playerIdx].countryCode;
+				}
 			}
 			if (stats.autorating.valid && !stats.autorating.details.empty()
 				&& stats.autoratingFrom == RATING_SOURCE_LOCAL) // do not display host-provided details (for now)
@@ -4472,6 +4486,7 @@ public:
 private:
 	std::weak_ptr<WzMultiplayerOptionsTitleUI> parentTitleUI;
 	unsigned playerIdx = 0;
+	std::shared_ptr<W_BUTTON> clientCountryFlag;
 	std::shared_ptr<W_BUTTON> teamButton;
 	std::shared_ptr<W_BUTTON> colorButton;
 	std::shared_ptr<W_BUTTON> playerInfo;
@@ -7296,6 +7311,30 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+
+void displayClientCountry(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	UDWORD		i = psWidget->UserData;
+
+	if (isHumanPlayer(i) && (!NetPlay.isHost || NetPlay.hostPlayer != i) && strlen(NetPlay.players[i].countryCode) > 0)
+	{
+		int x = xOffset + psWidget->x();
+		int y = yOffset + psWidget->y();
+
+		std::string flagFile = NetPlay.players[i].countryCode;
+		flagFile += ".png";
+		auto flag = CountryFlagImages->find(flagFile.c_str());
+
+		if (flag) 
+		{
+			iV_DrawImage2(flag, x, y, psWidget->width(), psWidget->height());
+		}
+		else
+		{
+			debug(LOG_INFO, "Flag image is missing for country %s", NetPlay.players[i].countryCode);
+		}
+	}
+}
 
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {

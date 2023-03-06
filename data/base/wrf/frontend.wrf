@@ -6,6 +6,7 @@
 directory	"images"
 file		IMG	"intfac.img"
 file		IMG	"frontend.img"
+file		IMG	"countryFlags.img"
 directory	"audio/sfx/interfce"
 file		WAV	"beep1.ogg"
 file		WAV	"beep2.ogg"

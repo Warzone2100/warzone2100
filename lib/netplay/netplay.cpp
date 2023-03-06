@@ -77,6 +77,8 @@
 #include "src/activity.h"
 #include "src/stdinreader.h"
 
+#include "3rdparty/GeoIP/GeoIP.h"
+
 #if defined (WZ_OS_MAC)
 # include "lib/framework/cocoa_wrapper.h"
 #endif
@@ -241,6 +243,8 @@ static std::vector<WZFile> DownloadingWzFiles;
 // update flags
 bool netPlayersUpdated;
 
+// geo ip object
+extern GeoIP *gi;
 
 /**
  * Socket used for these purposes:
@@ -677,6 +681,9 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 		NETuint8_t(reinterpret_cast<uint8_t *>(&NetPlay.players[index[n]].faction));
 		NETbool(&NetPlay.players[index[n]].isSpectator);
+		// const char *test = "US";
+		// NETstring(test, sizeof(NetPlay.players[index[n]].country));
+		NETstring(NetPlay.players[index[n]].countryCode, sizeof(NetPlay.players[index[n]].countryCode));
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -2451,6 +2458,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			uint8_t faction = FACTION_NORMAL;
 			bool isSpectator = false;
 			bool error = false;
+			char countryCode[3] = {0};
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 			NETuint32_t(&indexLen);
@@ -2494,6 +2502,21 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETint8_t(&difficulty);
 				NETuint8_t(&faction);
 				NETbool(&isSpectator);
+				NETstring(countryCode, sizeof(NetPlay.players[index].countryCode));
+
+				// The host does not know its IP address, only the client does, so we do not wait for the country code, 
+				// but use the one that was determined at connection to host.
+				if (playerQueue.index != NetPlay.hostPlayer)
+				{
+					if (strlen(countryCode) > 0)
+					{
+						sstrcpy(NetPlay.players[index].countryCode, countryCode);
+					}
+					else
+					{
+						NetPlay.players[index].countryCode[0] = '\0';
+					}
+				}
 
 				auto newFactionId = uintToFactionID(faction);
 				if (!newFactionId.has_value())
@@ -3893,6 +3916,17 @@ static void NETallowJoining()
 					// Copy player's IP address.
 					sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
 
+					// Get country code from client's ip address
+					const char *countryCode = nullptr;
+					if (gi)
+					{
+						countryCode = GeoIP_country_code_by_name(gi, NetPlay.players[index].IPtextAddress);
+					}
+					if (countryCode)
+					{
+						sstrcpy(NetPlay.players[index].countryCode, countryCode);
+					}
+
 					if (onBanList(NetPlay.players[index].IPtextAddress))
 					{
 						char buf[256] = {'\0'};
@@ -4576,6 +4610,20 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, bool a
 			NetPlay.players[index].allocated = true;
 			setPlayerName(index, playername);
 			NetPlay.players[index].heartbeat = true;
+
+			// Copy host IP address.
+			sstrcpy(NetPlay.players[NetPlay.hostPlayer].IPtextAddress, getSocketTextAddress(bsocket));
+
+			// Get country code from host ip address
+			const char *countryCode = nullptr;
+			if (gi)
+			{
+				countryCode = GeoIP_country_code_by_name(gi, NetPlay.players[NetPlay.hostPlayer].IPtextAddress);
+			}
+			if (countryCode)
+			{
+				sstrcpy(NetPlay.players[NetPlay.hostPlayer].countryCode, countryCode);
+			}
 
 			return true;
 		}
