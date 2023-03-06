@@ -539,6 +539,13 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	return std::max<int>(1, attackWeight);
 }
 
+static size_t numDroidNearestTargetChecksThisFrame = 0;
+static UDWORD lastGameTimeCheckedNeartestTargets = 0;
+
+size_t getCountNearestTargetChecks()
+{
+	return numDroidNearestTargetChecksThisFrame;
+}
 
 // Find the best nearest target for a droid.
 // If extraRange is higher than zero, then this is the range it accepts for movement to target.
@@ -565,6 +572,15 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	{
 		return failure;
 	}
+
+	psDroid->lastCheckNearestTarget[weapon_slot] = gameTime;
+	if (lastGameTimeCheckedNeartestTargets != gameTime)
+	{
+		lastGameTimeCheckedNeartestTargets = gameTime;
+		numDroidNearestTargetChecksThisFrame = 0;
+	}
+	++numDroidNearestTargetChecksThisFrame;
+
 	// Check if we have a CB target to begin with
 	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))
 	{
@@ -1199,7 +1215,8 @@ void aiUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true, nullptr))
+			if (IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
+				&& aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true, nullptr))
 			{
 				if (!orderState(psDroid, DORDER_HOLD)
 					&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_PURSUE)

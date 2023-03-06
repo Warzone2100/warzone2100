@@ -111,4 +111,6 @@ static inline bool alliancesCanGiveAnything(int t)
 	return t != NO_ALLIANCES;
 }
 
+size_t getCountNearestTargetChecks();
+
 #endif // __INCLUDED_SRC_AI_H__

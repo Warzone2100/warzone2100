@@ -741,6 +741,10 @@ void actionUpdateDroid(DROID *psDroid)
 					WEAPON_STATS *const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (psDroid->asWeaps[i].nStat > 0
 					    && psWeapStats->rotate
+						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
+						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick
+						// (aiUpdateDroid would have set an attack target if one was available)
+						&& psDroid->lastCheckNearestTarget[i] != gameTime
 					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
@@ -839,6 +843,7 @@ void actionUpdateDroid(DROID *psDroid)
 					    && psDroid->asWeaps[i].nStat > 0
 					    && psWeapStats->rotate
 					    && psWeapStats->fireOnMove
+						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
 					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
@@ -1030,8 +1035,9 @@ void actionUpdateDroid(DROID *psDroid)
 				// If we still don't have a target, try to find one
 				else
 				{
-					if (psDroid->psActionTarget[i] == nullptr &&
-					    aiChooseTarget(psDroid, &psTargets[i], i, false, nullptr))  // Can probably just use psTarget instead of psTargets[i], and delete the psTargets variable.
+					if (psDroid->psActionTarget[i] == nullptr
+						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
+					    && aiChooseTarget(psDroid, &psTargets[i], i, false, nullptr))  // Can probably just use psTarget instead of psTargets[i], and delete the psTargets variable.
 					{
 						setDroidActionTarget(psDroid, psTargets[i], i);
 					}
@@ -2036,6 +2042,7 @@ void actionUpdateDroid(DROID *psDroid)
 						WEAPON_STATS *const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 						if (psDroid->asWeaps[i].nStat > 0 && psWeapStats->rotate
 						    && secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS
+							&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
 						    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0 && psTemp)
 						{
 							psDroid->action = DACTION_ATTACK;
