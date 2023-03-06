@@ -143,6 +143,7 @@ struct DROID : public BASE_OBJECT
 	DROID_ACTION    action;
 	Vector2i        actionPos;
 	BASE_OBJECT    *psActionTarget[MAX_WEAPONS] = {}; ///< Action target object
+	UDWORD			lastCheckNearestTarget[MAX_WEAPONS] = {};	///< Set to the last gameTime that aiBestNearestTarget was called on for each weapon slot for this droid - compare only == / != gameTime
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
 	UDWORD          expectedDamageDirect;                 ///< Expected damage to be caused by all currently incoming direct projectiles. This info is shared between all players,
