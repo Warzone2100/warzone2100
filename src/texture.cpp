@@ -49,7 +49,7 @@
 TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
 static size_t firstPage; // the last used page before we start adding terrain textures
-size_t terrainPage = 0; // texture ID of the terrain page
+optional<size_t> terrainPage; // texture ID of the terrain page
 gfx_api::texture_array *decalTexArr = nullptr;
 gfx_api::texture_array *decalNormalArr = nullptr;
 gfx_api::texture_array *decalSpecularArr = nullptr;
@@ -423,6 +423,11 @@ bool texLoad(const char *fileName)
 	return true;
 }
 
+gfx_api::texture* getFallbackTerrainDecalsPage()
+{
+	return &pie_Texture(terrainPage.value_or(0));
+}
+
 bool reloadTileTextures()
 {
 	if (!tilesetDir)
@@ -432,7 +437,10 @@ bool reloadTileTextures()
 	switch (getTerrainShaderType())
 	{
 		case TerrainShaderType::FALLBACK:
-			pie_AssignTexture(terrainPage, nullptr);
+			if (terrainPage.has_value())
+			{
+				pie_AssignTexture(terrainPage.value(), nullptr);
+			}
 			break;
 		case TerrainShaderType::SINGLE_PASS:
 			break;

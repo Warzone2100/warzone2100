@@ -1679,7 +1679,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 		renderState.fogColour.vector[3] / 255.f
 	);
 	gfx_api::TerrainDecals::get().bind();
-	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_texture);
+	gfx_api::TerrainDecals::get().bind_textures(getFallbackTerrainDecalsPage(), lightmap_texture);
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
 	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, textureMatrix, paramsXLight, paramsYLight,
 		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
@@ -1999,7 +1999,7 @@ TerrainShaderQuality getTerrainShaderQuality()
 	return terrainShaderQuality;
 }
 
-bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force)
+bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force, bool forceReloadTextures = false)
 {
 	if (!initializedTerrainShaderType)
 	{
@@ -2033,34 +2033,32 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force)
 
 	if (success)
 	{
-		if (terrainShaderType == TerrainShaderType::SINGLE_PASS)
+		if (sectors)
 		{
-			if (sectors)
+			// mark all tiles dirty
+			// (when switching between classic and other modes, recalculating tile heights is required due to water)
+			for (size_t i = 0; i < xSectors * ySectors; ++i)
 			{
-				// mark all tiles dirty
-				// (when switching between classic and other modes, recalculating tile heights is required due to water)
-				for (size_t i = 0; i < xSectors * ySectors; ++i)
-				{
-					sectors[i].dirty = true;
-				}
+				sectors[i].dirty = true;
 			}
+		}
 
-			// re-load terrain textures
-			if (!rebuildExistingSearchPathWithGraphicsOptionChange())
-			{
-				debug(LOG_INFO, "Failed to swap terrain texture overrides");
-			}
-			// always re-load the tile textures (these change between all modes)
-			auto priorNumGroundTypes = getNumGroundTypes();
-			reloadTileTextures();
-			mapReloadGroundTypes();
-			if (priorValue == TerrainShaderQuality::NORMAL_MAPPING
-				|| terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING
-				|| priorNumGroundTypes != getNumGroundTypes())
-			{
-				// when switching to & from the High / Normal-mapping mode, reload base terrain / ground textures
-				reloadTerrainTextures();
-			}
+		// re-load terrain textures
+		if (!rebuildExistingSearchPathWithGraphicsOptionChange())
+		{
+			debug(LOG_INFO, "Failed to swap terrain texture overrides");
+		}
+		// always re-load the tile textures (these change between all modes)
+		auto priorNumGroundTypes = getNumGroundTypes();
+		reloadTileTextures();
+		mapReloadGroundTypes();
+		if (priorValue == TerrainShaderQuality::NORMAL_MAPPING
+			|| terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING
+			|| priorNumGroundTypes != getNumGroundTypes()
+			|| forceReloadTextures)
+		{
+			// when switching to & from the High / Normal-mapping mode, reload base terrain / ground textures
+			reloadTerrainTextures();
 		}
 	}
 
@@ -2097,6 +2095,31 @@ void initTerrainShaderType()
 	terrainShaderType = determineSupportedTerrainShader();
 	initializedTerrainShaderType = true;
 	setTerrainShaderQuality(terrainShaderQuality, true); // checks and resets unsupported values
+}
+
+bool debugToggleTerrainShaderType()
+{
+	if (determineSupportedTerrainShader() != TerrainShaderType::SINGLE_PASS)
+	{
+		debug(LOG_ERROR, "This system doesn't support the new single-pass terrain renderer. Unable to toggle.");
+		return false;
+	}
+
+	switch (terrainShaderType)
+	{
+		case TerrainShaderType::FALLBACK:
+			terrainShaderType = TerrainShaderType::SINGLE_PASS;
+			break;
+		case TerrainShaderType::SINGLE_PASS:
+			terrainShaderType = TerrainShaderType::FALLBACK;
+			break;
+	}
+
+	// have to reload many things (currently)
+	shutdownTerrain();
+	setTerrainShaderQuality(terrainShaderQuality, true, true);
+	initTerrain();
+	return true;
 }
 
 std::string to_display_string(TerrainShaderQuality value)

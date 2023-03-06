@@ -964,6 +964,15 @@ public:
 			setTerrainShaderQuality(static_cast<TerrainShaderQuality>((static_cast<size_t>(getTerrainShaderQuality()) + 1) % static_cast<size_t>(TerrainShaderQuality_MAX + 1)));
 			debug(LOG_INFO, "terrainShaderQuality=%d", (int)getTerrainShaderQuality());
 		}, prevButton);
+
+		prevButton = panel->createButton(2, "Toggle Old / New Shaders", [](){
+			if (debugToggleTerrainShaderType())
+			{
+				auto updateMsg = std::string("Switcedh terrain shader type to: ") + ((getTerrainShaderType() == TerrainShaderType::SINGLE_PASS) ? "New Shader (Single-Pass)" : "Old (Fallback) Shader");
+				addConsoleMessage(updateMsg.c_str(), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+		}, prevButton);
+
 		return panel;
 	}
 private:
