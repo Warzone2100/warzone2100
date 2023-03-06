@@ -1792,7 +1792,8 @@ void initGeoIP()
 
 	// Unpacking GeoIP.dat from the archive.
 	// TODO: download the database from the web.
-	if (!PHYSFS_exists(path.c_str())) 
+	std::ifstream check(path.c_str());
+	if (!check.good()) 
 	{
 		debug(LOG_INFO, "Installing default GeoIP database.");
 
@@ -1807,10 +1808,13 @@ void initGeoIP()
 			if (!file.is_open())
 			{
 				debug(LOG_ERROR, "Failed to open GeoIP.dat for writing.");
+				free(fileData);
 				return;
 			}
 			file.write(fileData, fileSize);
 			file.close();
+
+			free(fileData);
 		}
 		else
 		{
