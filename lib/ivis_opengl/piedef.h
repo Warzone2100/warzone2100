@@ -43,8 +43,8 @@ struct iIMDShape;
  *	Global ProtoTypes
  */
 /***************************************************************************/
-bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth = 0.f, bool onlySingleLevel = false);
-void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix);
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth = 0.f, bool onlySingleLevel = false);
+void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix);
 
 void pie_GetResetCounts(size_t *pPieCount, size_t *pPolyCount);
 
@@ -57,7 +57,7 @@ void pie_InitLighting();
 void pie_Lighting0(LIGHTING_TYPE entry, const float value[4]);
 glm::vec4 pie_GetLighting0(LIGHTING_TYPE entry);
 
-void pie_RemainingPasses(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix);
+void pie_RemainingPasses(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
 
 void pie_InitializeInstancedRenderer();
 void pie_CleanUp();

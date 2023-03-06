@@ -12,6 +12,7 @@
 #endif
 
 uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
 uniform int hasTangents; // whether tangents were calculated for model
 uniform vec4 lightPosition;
 
@@ -48,7 +49,7 @@ VERTEX_OUTPUT vec4 packed_ecmState_alphaTest;
 void main()
 {
 	// unpack inputs
-	#define ModelViewMatrix instanceModelMatrix
+	mat4 ModelViewMatrix = ViewMatrix * instanceModelMatrix;
 	float stretch = instancePackedValues.x;
 	float ecmState = instancePackedValues.y;
 	float alphaTest = instancePackedValues.z;

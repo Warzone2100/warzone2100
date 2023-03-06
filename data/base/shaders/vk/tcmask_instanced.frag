@@ -11,6 +11,7 @@ layout(set = 2, binding = 3) uniform sampler2D TextureSpecular; // specular map
 layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
 	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
 	vec4 lightPosition;
 	vec4 sceneColor;
 	vec4 ambient;

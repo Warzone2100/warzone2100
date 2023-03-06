@@ -12,6 +12,7 @@
 #endif
 
 uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
 #define intMod(a, b) a % b
@@ -41,7 +42,7 @@ VERTEX_OUTPUT vec4 packed_ecmState_alphaTest;
 void main()
 {
 	// unpack inputs
-	#define ModelViewMatrix instanceModelMatrix
+	mat4 ModelViewMatrix = ViewMatrix * instanceModelMatrix;
 	float alphaTest = instancePackedValues.z;
 	float animFrameNumber = instancePackedValues.w;
 

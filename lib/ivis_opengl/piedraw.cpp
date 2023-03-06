@@ -122,7 +122,7 @@ void pie_BeginLighting(const Vector3f &light)
 
 struct ShadowcastingShape
 {
-	glm::mat4	matrix;
+	glm::mat4	modelViewMatrix;
 	iIMDShape	*shape;
 	int		flag;
 	int		flag_data;
@@ -131,7 +131,7 @@ struct ShadowcastingShape
 
 struct SHAPE
 {
-	glm::mat4	matrix;
+	glm::mat4	modelMatrix;
 	iIMDShape	*shape;
 	int		frame;
 	PIELIGHT	colour;
@@ -161,7 +161,7 @@ static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
 	return pZeroedVertexBuffer;
 }
 
-void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix)
+void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
 {
 	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
 	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
@@ -177,7 +177,7 @@ void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &ma
 	gfx_api::Draw3DShapeOpaque::get().bind();
 
 	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
-		pie_PerspectiveGet(),
+		pie_PerspectiveGet(), viewMatrix,
 		glm::vec4(getDefaultSunPosition(), 0.f),
 		sceneColor, ambient, diffuse, specular, glm::vec4(0.f),
 		0.f, 0.f, 0.f, 0
@@ -188,8 +188,8 @@ void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &ma
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
-		matrix,
-		glm::transpose(glm::inverse(matrix)),
+		viewMatrix * modelMatrix,
+		glm::transpose(glm::inverse(modelMatrix)),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		0.f, 0.f, 0, !(shape->flags & pie_PREMULTIPLIED)
 	};
@@ -282,7 +282,7 @@ private:
 };
 
 template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
-static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & matrix, const iIMDShape * shape, int pieFlag, int frame)
+static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & modelViewMatrix, const iIMDShape * shape, int pieFlag, int frame)
 {
 	templatedState currentState = templatedState(shader, shape, pieFlag);
 
@@ -295,8 +295,8 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
-		matrix,
-		glm::transpose(glm::inverse(matrix)),
+		modelViewMatrix,
+		glm::transpose(glm::inverse(modelViewMatrix)),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		stretch, float(frame), ecmState, !(pieFlag & pie_PREMULTIPLIED)
 	};
@@ -389,7 +389,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	}
 }
 
-static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceData(int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
+static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceData(int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &modelMatrix, float stretchDepth)
 {
 	int ecmState = (pieFlag & pie_ECM) ? 1 : 0;
 
@@ -404,13 +404,13 @@ static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceDat
 	}
 
 	return gfx_api::Draw3DShapePerInstanceInterleavedData {
-		matrix,
+		modelMatrix,
 		glm::vec4(stretchDepth, ecmState, !(pieFlag & pie_PREMULTIPLIED), float(frame)),
 		colour.rgba, teamcolour.rgba
 	};
 }
 
-static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth)
+static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &modelMatrix, float stretchDepth)
 {
 	bool light = true;
 	int ecmState = 0;
@@ -459,11 +459,11 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 
 	if (light)
 	{
-		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapeAlphaNoDepthWRT, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapeAlphaNoDepthWRT, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, globalUniforms.ViewMatrix * modelMatrix, shape, pieFlag, frame);
 	}
 	else
 	{
-		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, matrix, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, globalUniforms.ViewMatrix * modelMatrix, shape, pieFlag, frame);
 	}
 
 	polyCount += shape->polys.size();
@@ -784,8 +784,8 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 class InstancedMeshRenderer
 {
 public:
-	bool Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth);
-	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix);
+	bool Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth);
+	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
 public:
 	// New, instanced rendering
 	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms);
@@ -870,7 +870,7 @@ void InstancedMeshRenderer::reset()
 	instanceDataBuffers.clear();
 }
 
-bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth)
+bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth)
 {
 	bool light = true;
 
@@ -904,15 +904,15 @@ bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT te
 	tshape.flag = pieFlag;
 	tshape.flag_data = pieFlagData;
 	tshape.stretch = stretchDepth;
-	tshape.matrix = modelView;
+	tshape.modelMatrix = modelMatrix;
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
-		tshape.matrix = glm::scale(tshape.matrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
+		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
 	}
 	if (pieFlag & pie_RAISE)		// collapse
 	{
-		tshape.matrix = glm::translate(tshape.matrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
+		tshape.modelMatrix = glm::translate(tshape.modelMatrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
 	}
 
 	if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED))
@@ -935,17 +935,17 @@ bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT te
 
 			// draw a shadow
 			ShadowcastingShape scshape;
-			scshape.matrix = modelView;
-			distance = scshape.matrix[3][0] * scshape.matrix[3][0];
-			distance += scshape.matrix[3][1] * scshape.matrix[3][1];
-			distance += scshape.matrix[3][2] * scshape.matrix[3][2];
+			scshape.modelViewMatrix = viewMatrix * modelMatrix;
+			distance = scshape.modelViewMatrix[3][0] * scshape.modelViewMatrix[3][0];
+			distance += scshape.modelViewMatrix[3][1] * scshape.modelViewMatrix[3][1];
+			distance += scshape.modelViewMatrix[3][2] * scshape.modelViewMatrix[3][2];
 
 			// if object is too far in the fog don't generate a shadow.
 			if (distance < SHADOW_END_DISTANCE)
 			{
 				// Calculate the light position relative to the object
 				glm::vec4 pos_light0 = glm::vec4(currentSunPosition, 0.f);
-				glm::mat4 invmat = glm::inverse(scshape.matrix);
+				glm::mat4 invmat = glm::inverse(scshape.modelViewMatrix);
 
 				scshape.light = invmat * pos_light0;
 				scshape.shape = shape;
@@ -988,7 +988,7 @@ void pie_CleanUp()
 	}
 }
 
-bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView, float stretchDepth, bool onlySingleLevel)
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth, bool onlySingleLevel)
 {
 	pieCount++;
 
@@ -1004,12 +1004,12 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	{
 		if (pieFlag & pie_BUTTON)
 		{
-			pie_Draw3DButton(pCurrShape, teamcolour, modelView);
+			pie_Draw3DButton(pCurrShape, teamcolour, modelMatrix, viewMatrix);
 			retVal = true;
 		}
 		else
 		{
-			retVal = instancedMeshRenderer.Draw3DShape(pCurrShape, frame, teamcolour, colour, pieFlag, pieFlagData, modelView, stretchDepth);
+			retVal = instancedMeshRenderer.Draw3DShape(pCurrShape, frame, teamcolour, colour, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretchDepth);
 		}
 
 		pCurrShape = pCurrShape->next;
@@ -1025,7 +1025,7 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache, const glm::mat4& projec
 //	size_t uncachedShadowDraws = 0;
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
-		/*DrawShadowResult result =*/ pie_DrawShadow(shadowCache, scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].matrix);
+		/*DrawShadowResult result =*/ pie_DrawShadow(shadowCache, scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].modelViewMatrix);
 //		if (result == DRAW_SUCCESS_CACHED)
 //		{
 //			++cachedShadowDraws;
@@ -1090,13 +1090,13 @@ struct less_than_shape
 
 static ShaderOnce perFrameUniformsShaderOnce;
 
-void pie_RemainingPasses(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix)
+void pie_RemainingPasses(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix)
 {
-	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix);
+	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix);
 	instancedMeshRenderer.clear();
 }
 
-bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix)
+bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
 {
 	perFrameUniformsShaderOnce.reset();
 
@@ -1115,7 +1115,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	) : glm::vec4(0.f);
 
 	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
-		projectionMatrix,
+		projectionMatrix, viewMatrix,
 		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
 		renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
 	};
@@ -1278,7 +1278,7 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 		size_t startingIdxInInstancesBuffer = instancesData.size();
 		for (const auto& instance : meshInstances)
 		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.matrix, instance.stretch));
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
 		}
 		drawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
 	}
@@ -1291,7 +1291,7 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 		size_t startingIdxInInstancesBuffer = instancesData.size();
 		for (const auto& instance : meshInstances)
 		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.matrix, instance.stretch));
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
 		}
 		drawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
 	}
@@ -1356,7 +1356,7 @@ void InstancedMeshRenderer::Draw3DShapes_Old(uint64_t currentGameFrame, ShaderOn
 	templatedState lastState;
 	for (SHAPE const &shape : shapes)
 	{
-		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.modelMatrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!shapes.empty())
@@ -1376,7 +1376,7 @@ void InstancedMeshRenderer::Draw3DShapes_Old(uint64_t currentGameFrame, ShaderOn
 	lastState = templatedState();
 	for (SHAPE const &shape : tshapes)
 	{
-		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix, shape.stretch);
+		lastState = pie_Draw3DShape2(lastState, perFrameUniformsShaderOnce, globalUniforms, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.modelMatrix, shape.stretch);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
 	if (!tshapes.empty())

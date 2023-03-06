@@ -1361,7 +1361,7 @@ void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 /** drawing func for wapypoints */
 static void renderWaypointEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * positionEffect(psEffect));
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, positionEffect(psEffect), viewMatrix);
 }
 
 static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
@@ -1376,7 +1376,7 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
 	               * glm::scale(glm::vec3(psEffect->size / 100.f));
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_EXPLOSION_ADDITIVE, modelMatrix, viewMatrix);
 }
 
 /** drawing func for blood. */
@@ -1386,7 +1386,7 @@ static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
 	               * glm::scale(glm::vec3(psEffect->size / 100.f));
 
-	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_BLOOD_TRANSPARENCY, viewMatrix * modelMatrix);
+	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_BLOOD_TRANSPARENCY, modelMatrix, viewMatrix);
 }
 
 static void renderDestructionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
@@ -1418,7 +1418,7 @@ static void renderDestructionEffect(const EFFECT *psEffect, const glm::mat4 &vie
 			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(0.f, 1.f, 0.f)) *
 			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(0.f, 0.f, 1.f));
 	}
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent, viewMatrix * modelMatrix);
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent, modelMatrix, viewMatrix);
 }
 
 static bool rejectLandLight(LAND_LIGHT_SPEC type)
@@ -1504,19 +1504,19 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 
 	if (premultiplied)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0, modelMatrix, viewMatrix);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_PLASMA_ADDITIVE, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_PLASMA_ADDITIVE, modelMatrix, viewMatrix);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_KICKUP)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, 128, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, 128, modelMatrix, viewMatrix);
 	}
 	else
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_EXPLOSION_ADDITIVE, modelMatrix, viewMatrix);
 	}
 }
 
@@ -1535,7 +1535,7 @@ static void renderGravitonEffect(const EFFECT *psEffect, const glm::mat4 &viewMa
 		modelMatrix *= glm::scale(glm::vec3(psEffect->size / 100.f));
 	}
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
 }
 
 /** Renders the standard construction effect */
@@ -1582,7 +1582,7 @@ static void renderConstructionEffect(const EFFECT *psEffect, const glm::mat4 &vi
 	size = MIN(2.f * translucency / 100.f, .90f);
 	modelMatrix *= glm::scale(glm::vec3(size));
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, translucency, viewMatrix * modelMatrix);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, translucency, modelMatrix, viewMatrix);
 }
 
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
@@ -1635,17 +1635,17 @@ static void renderSmokeEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 	/* Make imds be transparent on 3dfx */
 	if (psEffect->type == SMOKE_TYPE_STEAM)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_STEAM_TRANSPARENCY / 2, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_STEAM_TRANSPARENCY / 2, modelMatrix, viewMatrix);
 	}
 	else
 	{
 		if (psEffect->type == SMOKE_TYPE_TRAIL)
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, (2 * transparency) / 3, viewMatrix * modelMatrix);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, (2 * transparency) / 3, modelMatrix, viewMatrix);
 		}
 		else
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, transparency / 2, viewMatrix * modelMatrix);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT | pie_NODEPTHWRITE, transparency / 2, modelMatrix, viewMatrix);
 		}
 	}
 }

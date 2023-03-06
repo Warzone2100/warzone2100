@@ -4,6 +4,7 @@
 layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
 	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
 	vec4 lightPosition;
 	vec4 sceneColor;
 	vec4 ambient;
@@ -45,7 +46,7 @@ layout(location = 10) out vec4 packed_ecmState_alphaTest;
 void main()
 {
 	// unpack inputs
-	#define ModelViewMatrix instanceModelMatrix
+	mat4 ModelViewMatrix = ViewMatrix * instanceModelMatrix;
 	float stretch = instancePackedValues.x;
 	float ecmState = instancePackedValues.y;
 	float alphaTest = instancePackedValues.z;
