@@ -651,6 +651,7 @@ namespace gfx_api
 	struct Draw3DShapeGlobalUniforms
 	{
 		glm::mat4 ProjectionMatrix;
+		glm::mat4 ViewMatrix;
 		glm::vec4 sunPos;
 		glm::vec4 sceneColor;
 		glm::vec4 ambient;
@@ -675,8 +676,9 @@ namespace gfx_api
 	// Change per instance of mesh
 	struct Draw3DShapePerInstanceUniforms
 	{
+		// instead of passing the modelMatrix, pre-calculate the ModelViewMatrix and NormalMatrix CPU-side
 		glm::mat4 ModelViewMatrix;
-		glm::mat4 NormalMatrix; // can be calculated in the shader
+		glm::mat4 NormalMatrix;
 		glm::vec4 colour;
 		glm::vec4 teamcolour;
 		float shaderStretch;

@@ -345,7 +345,7 @@ void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 		glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::scale(glm::vec3(psPart->size / 100.f));
-	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
+	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
 	/* Draw it... */
 }
 

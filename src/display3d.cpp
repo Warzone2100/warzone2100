@@ -585,9 +585,9 @@ float interpolateAngleDegrees(int a, int b, float t)
 	return a + d * t;
 }
 
-bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix, float stretchDepth)
+bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth)
 {
-	glm::mat4 modelMatrix(1.f);
+	glm::mat4 modifiedModelMatrix = modelMatrix;
 	int animFrame = 0; // for texture animation
 	if (strImd->numFrames > 0)	// Calculate an animation frame
 	{
@@ -617,7 +617,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 			const int nextFrame = (frame + 1) % strImd->objanimframes;
 			const ANIMFRAME &nextState = strImd->objanimdata.at(nextFrame);
 
-			modelMatrix *=
+			modifiedModelMatrix *=
 				glm::interpolate(glm::translate(glm::vec3(state.pos)), glm::translate(glm::vec3(nextState.pos)), frameFraction) *
 				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.pitch / DEG(1), nextState.rot.pitch / DEG(1), frameFraction)), glm::vec3(1.f, 0.f, 0.f)) *
 				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.direction / DEG(1), nextState.rot.direction / DEG(1), frameFraction)), glm::vec3(0.f, 1.f, 0.f)) *
@@ -626,7 +626,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		}
 		else
 		{
-			modelMatrix *= glm::translate(glm::vec3(state.pos)) *
+			modifiedModelMatrix *= glm::translate(glm::vec3(state.pos)) *
 				glm::rotate(UNDEG(state.rot.pitch), glm::vec3(1.f, 0.f, 0.f)) *
 				glm::rotate(UNDEG(state.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 				glm::rotate(UNDEG(state.rot.roll), glm::vec3(0.f, 0.f, 1.f)) *
@@ -634,7 +634,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		}
 	}
 
-	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix, stretchDepth, true);
+	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modifiedModelMatrix, viewMatrix, stretchDepth, true);
 }
 
 static void setScreenDispWithPerspective(SCREEN_DISP_DATA *sDisplay, const glm::mat4 &perspectiveViewModelMatrix)
@@ -1433,7 +1433,7 @@ static void drawTiles(iView *player)
 	gfx_api::context::get().debugStringMarker("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix, perspectiveViewMatrix);
 
-	pie_RemainingPasses(currentGameFrame, perspectiveMatrix); // draws shadows and transparent shapes
+	pie_RemainingPasses(currentGameFrame, perspectiveMatrix, viewMatrix); // draws shadows and transparent shapes
 
 	if (!gamePaused())
 	{
@@ -1845,15 +1845,15 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 
 		if (premultiplied)
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_PREMULTIPLIED, 0, viewMatrix * modelMatrix, 0.f, true);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_PREMULTIPLIED, 0, modelMatrix, viewMatrix, 0.f, true);
 		}
 		else if (additive)
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_ADDITIVE, 164, viewMatrix * modelMatrix, 0.f, true);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_ADDITIVE, 164, modelMatrix, viewMatrix, 0.f, true);
 		}
 		else
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix, 0.f, true);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix, 0.f, true);
 		}
 	}
 }
@@ -2306,12 +2306,11 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 		pieFlags = pie_SHADOW;
 	}
 	iIMDShape *imd = psFeature->sDisplay.imd;
-	const auto viewModelMatrix = viewMatrix * modelMatrix;
 	if (imd)
 	{
 		/* Translate the feature  - N.B. We can also do rotations here should we require
 		buildings to face different ways - Don't know if this is necessary - should be IMO */
-		pie_Draw3DShape(imd, 0, 0, brightness, pieFlags, 0, viewModelMatrix);
+		pie_Draw3DShape(imd, 0, 0, brightness, pieFlags, 0, modelMatrix, viewMatrix);
 	}
 
 	setScreenDispWithPerspective(&psFeature->sDisplay, perspectiveViewMatrix * modelMatrix);
@@ -2417,7 +2416,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 
 	if (proxImd)
 	{
-		pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(proxImd->animInterval, proxImd->numFrames), 0, WZCOL_WHITE, pie_ADDITIVE, 192, viewMatrix * modelMatrix);
+		pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(proxImd->animInterval, proxImd->numFrames), 0, WZCOL_WHITE, pie_ADDITIVE, 192, modelMatrix, viewMatrix);
 	}
 	//get the screen coords for determining when clicked on
 	calcFlagPosScreenCoords(&x, &y, &r, perspectiveViewMatrix * modelMatrix);
@@ -2445,7 +2444,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 }
 
 static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag,
-	const glm::mat4 &modelViewMatrix)
+	const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
 {
 	iIMDShape *mountImd[MAX_WEAPONS] = { nullptr };
 	iIMDShape *weaponImd[MAX_WEAPONS] = { nullptr };
@@ -2514,7 +2513,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				{
 					animFrame = getModularScaledGraphicsTime(mountImd[i]->animInterval, mountImd[i]->numFrames);
 				}
-				pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modelViewMatrix * matrix);
+				pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
 				if (mountImd[i]->nconnectors)
 				{
 					matrix *= glm::translate(glm::vec3(mountImd[i]->connectors->xzy()));
@@ -2523,7 +2522,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			matrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 			matrix *= glm::translate(glm::vec3(0, 0, recoilValue));
 
-			pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, pieFlag, pieFlagData, modelViewMatrix * matrix);
+			pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
 			if (psStructure->status == SS_BUILT && psStructure->visibleForLocalDisplay() > (UBYTE_MAX / 2))
 			{
 				if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
@@ -2547,13 +2546,13 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 								glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
-							pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(pRepImd->animInterval, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192, modelViewMatrix * matrix);
+							pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(pRepImd->animInterval, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192, modelMatrix * matrix, viewMatrix);
 						}
 					}
 				}
 				else // we have a weapon so we draw a muzzle flash
 				{
-					drawMuzzleFlash(psStructure->asWeaps[i], weaponImd[i], flashImd[i], buildingBrightness, pieFlag, pieFlagData, modelViewMatrix * matrix, colour);
+					drawMuzzleFlash(psStructure->asWeaps[i], weaponImd[i], flashImd[i], buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, colour);
 				}
 			}
 		}
@@ -2591,7 +2590,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 							// no anim so display one frame for a fixed time
 							if (graphicsTime >= psStructure->asWeaps[i].lastFired && graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 							{
-								pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0, modelViewMatrix * matrix); //muzzle flash
+								pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0, modelMatrix * matrix, viewMatrix); //muzzle flash
 							}
 						}
 						else
@@ -2599,7 +2598,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 							const int frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
 							if (frame < flashImd[i]->numFrames && frame >= 0)
 							{
-								pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0, modelViewMatrix * matrix); //muzzle flash
+								pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0, modelMatrix * matrix, viewMatrix); //muzzle flash
 							}
 						}
 					}
@@ -2623,7 +2622,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 					iIMDShape *lImd;
 					lImd = getImdFromIndex(MI_LANDING);
 					pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0,
-									modelViewMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->connectors[cIdx].xzy())));
+									modelMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->connectors[cIdx].xzy())), viewMatrix);
 				}
 				break;
 			}
@@ -2657,7 +2656,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
 		pie_Draw3DShape(getFactionIMD(faction, getImdFromIndex(MI_BLIP)), frame, 0, WZCOL_WHITE, pie_ADDITIVE, visibilityAmount / 2,
-			viewMatrix * glm::translate(glm::vec3(dv)));
+			glm::translate(glm::vec3(dv)), viewMatrix);
 		return;
 	}
 	else if (!visibilityAmount)
@@ -2705,7 +2704,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 				pieFlagData = 255;
 			}
 			pie_Draw3DShape(getFactionIMD(faction, psStructure->pStructureType->pBaseIMD), 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
-				viewMatrix * modelMatrix);
+				modelMatrix, viewMatrix);
 		}
 
 		// override
@@ -2720,8 +2719,6 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		modelMatrix *= objectShimmy((BASE_OBJECT *)psStructure);
 	}
 
-	const glm::mat4 viewModelMatrix = viewMatrix * modelMatrix;
-
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT)
 	{
@@ -2732,12 +2729,12 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 			if (imd)
 			{
 				pie_Draw3DShape(getFactionIMD(faction, imd), 0, colour, buildingBrightness, pie_SHADOW, 0,
-					viewModelMatrix);
+					modelMatrix, viewMatrix);
 			}
 		}
 		if (strImd)
 		{
-			pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewModelMatrix);
+			pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), modelMatrix, viewMatrix);
 		}
 		setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
 		return;
@@ -2768,10 +2765,10 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		{
 			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
-		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix, stretch);
+		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
-			renderStructureTurrets(psStructure, getFactionIMD(faction, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewModelMatrix);
+			renderStructureTurrets(psStructure, getFactionIMD(faction, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, modelMatrix, viewMatrix);
 		}
 		strImd = strImd->next;
 	}
@@ -2818,7 +2815,7 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 	iIMDShape *psIMD = pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc];
 	if (psIMD != nullptr)
 	{
-		pie_Draw3DShape(psIMD, 0, 0, colour, pieFlag, pieFlagData, viewMatrix * modelMatrix);
+		pie_Draw3DShape(psIMD, 0, 0, colour, pieFlag, pieFlagData, modelMatrix, viewMatrix);
 	}
 
 	//get the screen coords for the DP
@@ -2865,7 +2862,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	if (psStructure->status == SS_BEING_BUILT)
 	{
 		pie_Draw3DShape(getFactionIMD(faction, psStructure->sDisplay.imd), 0, getPlayerColour(psStructure->player),
-		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewMatrix * modelMatrix, stretch);
+		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), modelMatrix, viewMatrix, stretch);
 	}
 	else
 	{
@@ -2883,7 +2880,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 		iIMDShape *imd = psStructure->sDisplay.imd;
 		if (imd)
 		{
-			pie_Draw3DShape(getFactionIMD(faction, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix, stretch);
+			pie_Draw3DShape(getFactionIMD(faction, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
 		}
 	}
 	setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
