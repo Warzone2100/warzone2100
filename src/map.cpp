@@ -448,8 +448,8 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 		// in case it isn't obvious, this is a 3D array, and using pointer math to access each element.
 		// so map[10][0][1] would be map[10*2*2 + 0 + 1] == map[41]
 		// map[10][1][0] == map[10*2*2 + 2 + 0] == map[42]
-		map[i * 2 * 2 + 0 * 2 + 0] = getTextureType(val2);
-		map[i * 2 * 2 + 0 * 2 + 1] = getTextureType(val4);
+		map[i * 2 * 2 + 0 * 2 + 0] = getTextureType(val4);
+		map[i * 2 * 2 + 0 * 2 + 1] = getTextureType(val2);
 		map[i * 2 * 2 + 1 * 2 + 0] = getTextureType(val3);
 		map[i * 2 * 2 + 1 * 2 + 1] = getTextureType(val1);
 	}
