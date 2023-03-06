@@ -2074,14 +2074,26 @@ void	dealWithLMB()
 		MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 		uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
 
-		console("%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d ao %g col %x %s %s w=%d s=%d j=%d tile#%d",
+		int flipVal = 0;
+		if (TileNumber_texture(psTile->texture) & TILE_XFLIP)
+		{
+			flipVal += 2;
+		}
+		if (TileNumber_texture(psTile->texture) & TILE_YFLIP)
+		{
+			flipVal += 1;
+		}
+
+		console("%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d ao %g col %x %s %s w=%d s=%d j=%d tile#%d (decal=%s, ground [#%d, size=%.3f], f%d r%d)",
 		        tileIsExplored(psTile) ? "Explored" : "Unexplored",
 		        mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 		        (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
 				psTile->ambientOcclusion, psTile->colour.rgba,
 		        aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
 		        (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer],
-				TileNumber_tile(psTile->texture));
+				TileNumber_tile(psTile->texture), (TILE_HAS_DECAL(psTile)) ? "y" : "n",
+				psTile->ground, getGroundType(psTile->ground).textureSize,
+				flipVal, (TileNumber_texture(psTile->texture) & TILE_ROTMASK) >> TILE_ROTSHIFT);
 	}
 }
 
