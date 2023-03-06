@@ -40,7 +40,6 @@ struct TILE_TEX_INFO
 #define MAX_TILES		TILES_IN_PAGE
 
 extern TILE_TEX_INFO	tileTexInfo[MAX_TILES];
-extern size_t terrainPage;
 extern gfx_api::texture_array *decalTexArr;
 extern gfx_api::texture_array *decalNormalArr;
 extern gfx_api::texture_array *decalSpecularArr;
@@ -52,6 +51,7 @@ int getTextureSize();
 // decal size
 int getCurrentTileTextureSize();
 
+gfx_api::texture* getFallbackTerrainDecalsPage();
 bool reloadTileTextures();
 
 #endif // __INCLUDED_SRC_TEXTURE_H__

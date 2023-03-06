@@ -63,4 +63,6 @@ std::string to_display_string(TerrainShaderQuality value);
 
 void initTerrainShaderType(); // must be called after the graphics context is initialized
 
+bool debugToggleTerrainShaderType();
+
 #endif
