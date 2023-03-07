@@ -1377,6 +1377,8 @@ static void drawTiles(iView *player)
 
 	wzPerfEnd(PERF_START_FRAME);
 
+	pie_StartMeshes();
+
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
 	processEffects(perspectiveViewMatrix);
@@ -1384,25 +1386,11 @@ static void drawTiles(iView *player)
 	avUpdateTiles();
 	wzPerfEnd(PERF_EFFECTS);
 
-	// now we are about to draw the terrain
-	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
-	pie_SetFogStatus(true);
-
-	// draw it
-	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun());
-
-	wzPerfEnd(PERF_TERRAIN);
-
-	// draw skybox
-	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
-	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
-	wzPerfEnd(PERF_SKYBOX);
-
 	// and prepare for rendering the models
 	wzPerfBegin(PERF_MODEL_INIT, "Draw 3D scene - model init");
 
 	/* ---------------------------------------------------------------- */
-	/* Now display all the static objects                               */
+	/* Calculate & batch all mesh / object instances to be drawn        */
 	/* ---------------------------------------------------------------- */
 	displayStaticObjects(viewMatrix, perspectiveViewMatrix); // may be bucket render implemented
 	displayFeatures(viewMatrix, perspectiveViewMatrix);
@@ -1419,29 +1407,44 @@ static void drawTiles(iView *player)
 	atmosDrawParticles(viewMatrix, perspectiveViewMatrix);
 	wzPerfEnd(PERF_PARTICLES);
 
-	wzPerfBegin(PERF_WATER, "3D scene - water");
-	// prepare for the water and the lightmap
-	pie_SetFogStatus(true);
-
-	// also, make sure we can use world coordinates directly
-	drawWater(perspectiveViewMatrix, cameraPos, -getTheSun());
-	wzPerfEnd(PERF_WATER);
-
-	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	bucketRenderCurrentList(viewMatrix, perspectiveViewMatrix);
 
 	gfx_api::context::get().debugStringMarker("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix, perspectiveViewMatrix);
 
-	pie_RemainingPasses(currentGameFrame, perspectiveMatrix, viewMatrix); // draws shadows and transparent shapes
+	/* ---------------------------------------------------------------- */
+	/* Actually render / draw everything                                */
+	/* ---------------------------------------------------------------- */
+
+	pie_FinalizeMeshes(currentGameFrame);
+
+	// draw skybox
+	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
+	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
+	wzPerfEnd(PERF_SKYBOX);
+
+	// now we are about to draw the terrain
+	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
+	pie_SetFogStatus(true);
+	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun());
+	wzPerfEnd(PERF_TERRAIN);
+
+	wzPerfBegin(PERF_WATER, "3D scene - water");
+	// prepare for the water and the lightmap
+	pie_SetFogStatus(true);
+	// also, make sure we can use world coordinates directly
+	drawWater(perspectiveViewMatrix, cameraPos, -getTheSun());
+	wzPerfEnd(PERF_WATER);
+
+	wzPerfBegin(PERF_MODELS, "3D scene - models");
+	pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix);
+	wzPerfEnd(PERF_MODELS);
 
 	if (!gamePaused())
 	{
 		doConstructionLines(viewMatrix);
 	}
 	locateMouse();
-
-	wzPerfEnd(PERF_MODELS);
 }
 
 /// Initialise the fog, skybox and some other stuff

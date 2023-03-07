@@ -784,7 +784,14 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 class InstancedMeshRenderer
 {
 public:
+	// Queues a mesh for drawing
 	bool Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth);
+
+	// Finalizes queued meshes, ready for one or more DrawAll calls
+	// (After this is called, Draw3DShape should not be called until the InstancedMeshRenderer is clear()-ed)
+	bool FinalizeInstances();
+
+	// Draws all queued meshes, given a projection + view matrix
 	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix);
 public:
 	// New, instanced rendering
@@ -811,6 +818,22 @@ private:
 	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData> instancesData;
 	std::vector<gfx_api::buffer*> instanceDataBuffers;
 	size_t currInstanceBufferIdx = 0;
+
+private:
+	struct InstancedDrawCall
+	{
+		templatedState state;
+		size_t instance_count;
+		size_t startingIdxInInstancesBuffer = 0;
+
+		InstancedDrawCall(const templatedState& state, size_t instance_count, size_t startingIdxInInstancesBuffer)
+		:	state(state),
+			instance_count(instance_count),
+			startingIdxInInstancesBuffer(startingIdxInInstancesBuffer)
+		{ }
+	};
+	std::vector<InstancedDrawCall> finalizedDrawCalls;
+	size_t startIdxTranslucentDrawCalls = 0;
 };
 
 bool InstancedMeshRenderer::initialize()
@@ -1090,10 +1113,74 @@ struct less_than_shape
 
 static ShaderOnce perFrameUniformsShaderOnce;
 
-void pie_RemainingPasses(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix)
+void pie_StartMeshes()
+{
+	instancedMeshRenderer.clear();
+}
+
+void pie_FinalizeMeshes(uint64_t currentGameFrame)
+{
+	instancedMeshRenderer.FinalizeInstances();
+}
+
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix)
 {
 	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix);
-	instancedMeshRenderer.clear();
+}
+
+bool InstancedMeshRenderer::FinalizeInstances()
+{
+	if (!useInstancedRendering)
+	{
+		// nothing to do - without instanced rendering we just issue *tons* of draw calls...
+		return true;
+	}
+
+	instancesData.clear();
+	finalizedDrawCalls.clear();
+
+	if (instancesCount + translucentInstancesCount == 0)
+	{
+		return true;
+	}
+
+	instancesData.reserve(instancesCount + translucentInstancesCount);
+
+	for (const auto& mesh : instanceMeshes)
+	{
+		const auto& meshInstances = mesh.second;
+		size_t startingIdxInInstancesBuffer = instancesData.size();
+		for (const auto& instance : meshInstances)
+		{
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
+		}
+		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+	}
+
+	startIdxTranslucentDrawCalls = finalizedDrawCalls.size();
+
+	for (const auto& mesh : instanceTranslucentMeshes)
+	{
+		const auto& meshInstances = mesh.second;
+		size_t startingIdxInInstancesBuffer = instancesData.size();
+		for (const auto& instance : meshInstances)
+		{
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
+		}
+		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+	}
+
+	// Upload buffer
+	++currInstanceBufferIdx;
+	if (currInstanceBufferIdx >= instanceDataBuffers.size())
+	{
+		currInstanceBufferIdx = 0;
+	}
+	instanceDataBuffers[currInstanceBufferIdx]->upload(instancesData.size() * sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData), instancesData.data());
+
+	instancesData.clear();
+
+	return true;
 }
 
 bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
@@ -1250,67 +1337,16 @@ static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::D
 
 void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms)
 {
-	if (instancesCount + translucentInstancesCount == 0)
+	if (finalizedDrawCalls.empty())
 	{
 		return;
 	}
-
-	instancesData.clear();
-	instancesData.reserve(instancesCount + translucentInstancesCount);
-
-	struct InstancedDrawCall
-	{
-		templatedState state;
-		size_t instance_count;
-		size_t startingIdxInInstancesBuffer = 0;
-
-		InstancedDrawCall(const templatedState& state, size_t instance_count, size_t startingIdxInInstancesBuffer)
-		:	state(state),
-			instance_count(instance_count),
-			startingIdxInInstancesBuffer(startingIdxInInstancesBuffer)
-		{ }
-	};
-	std::vector<InstancedDrawCall> drawCalls;
-
-	for (const auto& mesh : instanceMeshes)
-	{
-		const auto& meshInstances = mesh.second;
-		size_t startingIdxInInstancesBuffer = instancesData.size();
-		for (const auto& instance : meshInstances)
-		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
-		}
-		drawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
-	}
-
-	size_t startIdxTranslucentDrawCalls = drawCalls.size();
-
-	for (const auto& mesh : instanceTranslucentMeshes)
-	{
-		const auto& meshInstances = mesh.second;
-		size_t startingIdxInInstancesBuffer = instancesData.size();
-		for (const auto& instance : meshInstances)
-		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
-		}
-		drawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
-	}
-
-	// Upload buffer
-	++currInstanceBufferIdx;
-	if (currInstanceBufferIdx >= instanceDataBuffers.size())
-	{
-		currInstanceBufferIdx = 0;
-	}
-	instanceDataBuffers[currInstanceBufferIdx]->upload(instancesData.size() * sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData), instancesData.data());
-
-	instancesData.clear();
 
 	// Draw opaque models
 	gfx_api::context::get().debugStringMarker("Remaining passes - opaque models");
 	for (size_t i = 0; i < startIdxTranslucentDrawCalls; ++i)
 	{
-		const auto& call = drawCalls[i];
+		const auto& call = finalizedDrawCalls[i];
 		const iIMDShape * shape = call.state.shape;
 		size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
 		pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count);
@@ -1318,7 +1354,7 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 	if (startIdxTranslucentDrawCalls > 0)
 	{
 		// unbind last index buffer bound inside pie_Draw3DShape2
-		gfx_api::context::get().unbind_index_buffer(*((drawCalls[startIdxTranslucentDrawCalls-1].state.shape)->buffers[VBO_INDEX]));
+		gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls[startIdxTranslucentDrawCalls-1].state.shape)->buffers[VBO_INDEX]));
 	}
 
 	// Draw shadows
@@ -1330,18 +1366,18 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 
 	// Draw translucent models last
 	gfx_api::context::get().debugStringMarker("Remaining passes - translucent models");
-	for (size_t i = startIdxTranslucentDrawCalls; i < drawCalls.size(); ++i)
+	for (size_t i = startIdxTranslucentDrawCalls; i < finalizedDrawCalls.size(); ++i)
 	{
-		const auto& call = drawCalls[i];
+		const auto& call = finalizedDrawCalls[i];
 		const iIMDShape * shape = call.state.shape;
 		size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
 		pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count);
 	}
 	gfx_api::context::get().disable_all_vertex_buffers();
-	if (startIdxTranslucentDrawCalls < drawCalls.size())
+	if (startIdxTranslucentDrawCalls < finalizedDrawCalls.size())
 	{
 		// unbind last index buffer bound inside pie_Draw3DShape2
-		gfx_api::context::get().unbind_index_buffer(*((drawCalls.back().state.shape)->buffers[VBO_INDEX]));
+		gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls.back().state.shape)->buffers[VBO_INDEX]));
 	}
 
 	gfx_api::context::get().debugStringMarker("Remaining passes - done");
