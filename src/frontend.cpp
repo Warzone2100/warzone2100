@@ -3007,7 +3007,7 @@ void startMultiplayOptionsMenu()
 	row.start++;
 
 	// Enable GeoIP data sending
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SEND_GEOIP_DATA, _("Send GeoIP data"), WBUT_SECONDARY)));
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SEND_GEOIP_DATA, _("Send player countries"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SEND_GEOIP_DATA_R, getSendGeoIPDataEnable()? _("On") : _("Off"), WBUT_SECONDARY)));
 	row.start++;
 
