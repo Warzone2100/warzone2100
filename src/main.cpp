@@ -1785,10 +1785,10 @@ void mainShutdown()
 // geo ip location
 GeoIP *gi = nullptr;
 
-void initGeoIP()
+void initGeoIP(const char *fileName)
 {
 	std::string path = PHYSFS_getWriteDir();
-	path += "GeoIP.dat";
+	path += fileName;
 
 	// Unpacking GeoIP.dat from the archive.
 	// TODO: download the database from the web.
@@ -1799,7 +1799,7 @@ void initGeoIP()
 
 		char *fileData = nullptr;
 		UDWORD fileSize = 0;
-		loadFile("GeoIP.dat", &fileData, &fileSize);
+		loadFile(fileName, &fileData, &fileSize);
 
 		if (fileData)
 		{
@@ -1807,7 +1807,7 @@ void initGeoIP()
 			file.open(path.c_str(), std::ios_base::binary);
 			if (!file.is_open())
 			{
-				debug(LOG_ERROR, "Failed to open GeoIP.dat for writing.");
+				debug(LOG_ERROR, "Failed to open %s for writing.", fileName);
 				free(fileData);
 				return;
 			}
@@ -1818,7 +1818,7 @@ void initGeoIP()
 		}
 		else
 		{
-			debug(LOG_ERROR, "Failed to read GeoIP.dat from WZ archive.");
+			debug(LOG_ERROR, "Failed to read %s from WZ archive.", fileName);
 			return;
 		}
 	}
@@ -1827,7 +1827,7 @@ void initGeoIP()
 
 	if (!gi)
 	{
-		debug(LOG_ERROR, "Failed to open GeoIP.dat file.");
+		debug(LOG_ERROR, "Failed to open %s file.", fileName);
 	}
 }
 
@@ -2209,7 +2209,7 @@ int realmain(int argc, char *argv[])
 
 	osSpecificPostInit();
 
-	initGeoIP();
+	initGeoIP("GeoIP.dat");
 
 	wzMainEventLoop(mainShutdown);
 
