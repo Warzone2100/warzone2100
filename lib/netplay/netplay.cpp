@@ -77,7 +77,7 @@
 #include "src/activity.h"
 #include "src/stdinreader.h"
 
-#include "3rdparty/GeoIP/GeoIP.h"
+#include "3rdparty/GeoIP/libGeoIP/GeoIP.h"
 
 #if defined (WZ_OS_MAC)
 # include "lib/framework/cocoa_wrapper.h"

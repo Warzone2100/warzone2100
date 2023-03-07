@@ -192,16 +192,17 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 # geoip library
 
 set(GEOIP_HEADERS
-	GeoIP/GeoIP.h
-	GeoIP/GeoIP_internal.h
+	GeoIP/libGeoIP/GeoIP.h
+	GeoIP/libGeoIP/GeoIP_internal.h
 )
 
 set(GEOIP_SOURCRS
-	GeoIP/GeoIP.c
-	GeoIP/GeoIP_deprecated.c
+	GeoIP/libGeoIP/GeoIP.c
+	GeoIP/libGeoIP/GeoIP_deprecated.c
 )
 
 add_library(geoip STATIC ${GEOIP_HEADERS} ${GEOIP_SOURCRS})
+target_compile_definitions(geoip PRIVATE GEOIPDATADIR="." PACKAGE_VERSION="")
 set_property(TARGET geoip PROPERTY FOLDER "3rdparty")
 target_link_libraries(geoip PRIVATE ${CMAKE_DL_LIBS})
 target_include_directories(geoip PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/GeoIP")

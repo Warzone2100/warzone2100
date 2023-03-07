@@ -115,7 +115,7 @@
 #include "wzcrashhandlingproviders.h"
 #include "wzpropertyproviders.h"
 #include "3rdparty/gsl_finally.h"
-#include "3rdparty/GeoIP/GeoIP.h"
+#include "3rdparty/GeoIP/libGeoIP/GeoIP.h"
 
 #include <fstream>
 
