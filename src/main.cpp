@@ -1825,7 +1825,11 @@ void initGeoIP(const char *fileName)
 
 	gi = GeoIP_open(path.c_str(), GEOIP_STANDARD | GEOIP_CHECK_CACHE | GEOIP_SILENCE);
 
-	if (!gi)
+	if (gi)
+	{
+		debug(LOG_INFO, "Init GeoIP: %s", GeoIP_database_info(gi));
+	}
+	else
 	{
 		debug(LOG_ERROR, "Failed to open %s file.", fileName);
 	}
