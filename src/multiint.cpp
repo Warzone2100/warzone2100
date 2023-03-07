@@ -7325,7 +7325,7 @@ void displayClientCountryFlag(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		flagFile += ".png";
 		auto flagImage = CountryFlagImages->find(flagFile.c_str());
 
-		if (flag) 
+		if (flagImage) 
 		{
 			iV_DrawImage2(flagImage, x, y, psWidget->width(), psWidget->height());
 		}
