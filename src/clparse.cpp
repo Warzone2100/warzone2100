@@ -84,6 +84,7 @@ static std::string wz_saveandquit;
 static std::string wz_test;
 static std::string wz_autoratingUrl;
 static bool wz_autoratingEnable = false;
+static bool wz_sendgeoipdataEnable = true;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
@@ -1069,6 +1070,14 @@ void setAutoratingEnable(bool e)
 
 bool getAutoratingEnable() {
 	return wz_autoratingEnable;
+}
+
+void setSendGeoIPDataEnable(bool e) {
+	wz_sendgeoipdataEnable = e;
+}
+
+bool getSendGeoIPDataEnable() {
+	return wz_sendgeoipdataEnable;
 }
 
 bool streamer_spectator_mode()

@@ -33,6 +33,7 @@
 #include "src/console.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
+#include "src/clparse.h"
 
 #include <time.h>			// for stats
 #include <physfs.h>
@@ -681,9 +682,8 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 		NETuint8_t(reinterpret_cast<uint8_t *>(&NetPlay.players[index[n]].faction));
 		NETbool(&NetPlay.players[index[n]].isSpectator);
-		// const char *test = "US";
-		// NETstring(test, sizeof(NetPlay.players[index[n]].country));
-		NETstring(NetPlay.players[index[n]].countryCode, sizeof(NetPlay.players[index[n]].countryCode));
+		const char emptyCode[3] = {0};
+		NETstring(getSendGeoIPDataEnable() ? NetPlay.players[index[n]].countryCode : emptyCode, sizeof(NetPlay.players[index[n]].countryCode));
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
