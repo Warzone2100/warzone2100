@@ -576,6 +576,7 @@ struct program_data
 	std::string vertex_file;
 	std::string fragment_file;
 	std::vector<std::string> uniform_names;
+	std::vector<std::tuple<std::string, GLint>> additional_samplers = {};
 };
 
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
@@ -923,6 +924,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 				  fragmentShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).fragment_file,
 				  shader_to_file_table.at(shader).uniform_names,
+				  shader_to_file_table.at(shader).additional_samplers,
 				  mipLodBias);
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
@@ -1158,7 +1160,7 @@ void gl_pipeline_state_object::printProgramInfoLog(code_part part, GLuint progra
 	}
 }
 
-void gl_pipeline_state_object::getLocs()
+void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind)
 {
 	glUseProgram(program);
 
@@ -1176,6 +1178,21 @@ void gl_pipeline_state_object::getLocs()
 			glUniform1i(locTex[i], i);
 		}
 	}
+
+	// additional sampler uniforms
+	for (const auto& uniformSampler : samplersToBind)
+	{
+		GLint loc = glGetUniformLocation(program, std::get<0>(uniformSampler).c_str());
+		if (loc != -1)
+		{
+			glUniform1i(loc, std::get<1>(uniformSampler));
+		}
+		else
+		{
+			debug(LOG_3D, "Missing expected sampler uniform: %s", std::get<0>(uniformSampler).c_str());
+		}
+	}
+	
 }
 
 static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
@@ -1275,6 +1292,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 											 const char * vertex_header, const std::string& vertexPath,
 											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames,
+											 const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
 											 optional<float> mipLodBias)
 {
 	GLint status;
@@ -1451,7 +1469,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		}
 	}
 	fetch_uniforms(uniformNames, duplicateFragmentUniformNames, programName);
-	getLocs();
+	getLocs(samplersToBind);
 	broken |= !success;
 }
 

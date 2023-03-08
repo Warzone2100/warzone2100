@@ -172,13 +172,15 @@ private:
 	// Retrieve shader linkage errors
 	static void printProgramInfoLog(code_part part, GLuint program);
 
-	void getLocs();
+	void getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind);
 
 	void build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias,
 					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
 					   const char * fragment_header, const std::string& fragmentPath,
-					   const std::vector<std::string> &uniformNames, optional<float> mipLodBias);
+					   const std::vector<std::string> &uniformNames,
+					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
+					   optional<float> mipLodBias);
 
 	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms, const std::string& programName);
 
