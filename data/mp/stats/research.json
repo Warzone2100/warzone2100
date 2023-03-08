@@ -665,7 +665,8 @@
 		"msgName": "RES_DEF_AALAS",
 		"name": "Stormbringer Emplacement",
 		"requiredResearch": [
-			"R-Wpn-AALaser"
+			"R-Wpn-AALaser",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -680,7 +681,8 @@
 		"msgName": "RES_EMP_AA1",
 		"name": "AA Cyclone Flak Cannon Emplacement",
 		"requiredResearch": [
-			"R-Wpn-AAGun01"
+			"R-Wpn-AAGun01",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -698,7 +700,8 @@
 			"AASite-QuadBof"
 		],
 		"requiredResearch": [
-			"R-Wpn-AAGun02"
+			"R-Wpn-AAGun02",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -713,7 +716,8 @@
 		"msgName": "RES_EMP_AA2",
 		"name": "Hurricane AA Site",
 		"requiredResearch": [
-			"R-Wpn-AAGun03"
+			"R-Wpn-AAGun03",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -763,7 +767,8 @@
 		"msgName": "RES_DEF_EMP",
 		"name": "EMP Cannon Hardpoint",
 		"requiredResearch": [
-			"R-Wpn-EMPCannon"
+			"R-Wpn-EMPCannon",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -778,7 +783,8 @@
 		"msgName": "RES_DEF_EMPM",
 		"name": "EMP Mortar Pit",
 		"requiredResearch": [
-			"R-Wpn-MortarEMP"
+			"R-Wpn-MortarEMP",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -796,7 +802,8 @@
 			"PillBox4"
 		],
 		"requiredResearch": [
-			"R-Wpn-Cannon4AMk1"
+			"R-Wpn-Cannon4AMk1",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 1600,
 		"researchPower": 50,
@@ -814,7 +821,8 @@
 			"GuardTower5"
 		],
 		"requiredResearch": [
-			"R-Wpn-Missile2A-T"
+			"R-Wpn-Missile2A-T",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -832,7 +840,8 @@
 			"GuardTower1"
 		],
 		"requiredResearch": [
-			"R-Wpn-RailGun01"
+			"R-Wpn-RailGun01",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -878,7 +887,8 @@
 		"msgName": "RES_EMP_HEAVYLAS",
 		"name": "Heavy Laser Emplacement",
 		"requiredResearch": [
-			"R-Wpn-HvyLaser"
+			"R-Wpn-HvyLaser",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 10200,
 		"researchPower": 318,
@@ -893,7 +903,8 @@
 		"msgName": "RES_EMP_PLASLAUNCH",
 		"name": "Heavy Plasma Launcher Emplacement",
 		"requiredResearch": [
-			"R-Wpn-HeavyPlasmaLauncher"
+			"R-Wpn-HeavyPlasmaLauncher",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -908,7 +919,8 @@
 		"msgName": "RES_EMP_HOW",
 		"name": "Howitzer Emplacement",
 		"requiredResearch": [
-			"R-Wpn-HowitzerMk1"
+			"R-Wpn-HowitzerMk1",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -939,7 +951,8 @@
 		"msgName": "RES_EMP_HVATR",
 		"name": "Tank Killer Emplacement",
 		"requiredResearch": [
-			"R-Wpn-Rocket07-Tank-Killer"
+			"R-Wpn-Rocket07-Tank-Killer",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -959,7 +972,8 @@
 			"Emplacement-MortarPit02"
 		],
 		"requiredResearch": [
-			"R-Wpn-HvArtMissile"
+			"R-Wpn-HvArtMissile",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -977,7 +991,8 @@
 			"PillBox5"
 		],
 		"requiredResearch": [
-			"R-Wpn-Flame2"
+			"R-Wpn-Flame2",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2000,
 		"researchPower": 62,
@@ -1098,7 +1113,8 @@
 			"Emplacement-MRLHvy-pit"
 		],
 		"requiredResearch": [
-			"R-Wpn-MdArtMissile"
+			"R-Wpn-MdArtMissile",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1209,7 +1225,8 @@
 		"msgName": "RES_EMP_PLASCAN",
 		"name": "Plasma Cannon Emplacement",
 		"requiredResearch": [
-			"R-Wpn-PlasmaCannon"
+			"R-Wpn-PlasmaCannon",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1228,7 +1245,8 @@
 			"Tower-Projector"
 		],
 		"requiredResearch": [
-			"R-Wpn-Plasmite-Flamer"
+			"R-Wpn-Plasmite-Flamer",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2000,
 		"researchPower": 62,
@@ -1243,7 +1261,8 @@
 		"msgName": "RES_EMP_PrisLas",
 		"name": "Flashlight Emplacement",
 		"requiredResearch": [
-			"R-Wpn-Laser01"
+			"R-Wpn-Laser01",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1258,7 +1277,8 @@
 		"msgName": "RES_EMP_PulseLas",
 		"name": "Pulse Laser Tower",
 		"requiredResearch": [
-			"R-Wpn-Laser02"
+			"R-Wpn-Laser02",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1273,7 +1293,8 @@
 		"msgName": "RES_EMP_Rail2",
 		"name": "Rail Gun Emplacement",
 		"requiredResearch": [
-			"R-Wpn-RailGun02"
+			"R-Wpn-RailGun02",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 5000,
 		"researchPower": 156,
@@ -1291,7 +1312,8 @@
 			"Emplacement-Rail2"
 		],
 		"requiredResearch": [
-			"R-Wpn-RailGun03"
+			"R-Wpn-RailGun03",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 5000,
 		"researchPower": 156,
@@ -1328,7 +1350,8 @@
 			"PillBox1"
 		],
 		"requiredResearch": [
-			"R-Wpn-MG4"
+			"R-Wpn-MG4",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 1800,
 		"researchPower": 56,
@@ -1362,7 +1385,8 @@
 		"msgName": "RES_EMP_SAM1",
 		"name": "Avenger SAM Site",
 		"requiredResearch": [
-			"R-Wpn-Missile-LtSAM"
+			"R-Wpn-Missile-LtSAM",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1380,7 +1404,8 @@
 			"P0-AASite-SAM1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Missile-HvSAM"
+			"R-Wpn-Missile-HvSAM",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -1394,7 +1419,8 @@
 		"id": "R-Defense-Sunburst",
 		"name": "Sunburst AA Site",
 		"requiredResearch": [
-			"R-Wpn-Sunburst"
+			"R-Wpn-Sunburst",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -1529,7 +1555,8 @@
 			"WallTower03"
 		],
 		"requiredResearch": [
-			"R-Wpn-Cannon5"
+			"R-Wpn-Cannon5",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -1547,7 +1574,8 @@
 			"WallTower06"
 		],
 		"requiredResearch": [
-			"R-Wpn-Missile2A-T"
+			"R-Wpn-Missile2A-T",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -1562,7 +1590,8 @@
 		"msgName": "RES_WT_DOUBLEAA",
 		"name": "AA Cyclone Flak Cannon Hardpoint",
 		"requiredResearch": [
-			"R-Wpn-AAGun01"
+			"R-Wpn-AAGun01",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -1580,7 +1609,8 @@
 			"WallTower-DoubleAAGun"
 		],
 		"requiredResearch": [
-			"R-Wpn-AAGun02"
+			"R-Wpn-AAGun02",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1598,7 +1628,8 @@
 			"WallTower02"
 		],
 		"requiredResearch": [
-			"R-Wpn-Cannon4AMk1"
+			"R-Wpn-Cannon4AMk1",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -1613,7 +1644,8 @@
 		"msgName": "RES_WT12_HAT",
 		"name": "Tank Killer Hardpoint",
 		"requiredResearch": [
-			"R-Wpn-Rocket07-Tank-Killer"
+			"R-Wpn-Rocket07-Tank-Killer",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -1628,7 +1660,8 @@
 		"msgName": "RES_WT14_PLS",
 		"name": "Pulse Laser Hardpoint",
 		"requiredResearch": [
-			"R-Wpn-Laser02"
+			"R-Wpn-Laser02",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1658,7 +1691,8 @@
 		"msgName": "RES_WT15_RL2",
 		"name": "Rail Gun Hardpoint",
 		"requiredResearch": [
-			"R-Wpn-RailGun02"
+			"R-Wpn-RailGun02",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1676,7 +1710,8 @@
 			"WallTower-Rail2"
 		],
 		"requiredResearch": [
-			"R-Wpn-RailGun03"
+			"R-Wpn-RailGun03",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -1729,7 +1764,8 @@
 			"Wall-RotMg"
 		],
 		"requiredResearch": [
-			"R-Wpn-MG5"
+			"R-Wpn-MG5",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -3347,7 +3383,8 @@
 		"imdName": "icmolql.pie",
 		"name": "Nexus Link Tower",
 		"requiredResearch": [
-			"R-Sys-SpyTurret"
+			"R-Sys-SpyTurret",
+			"R-Defense-HardcreteWall"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
