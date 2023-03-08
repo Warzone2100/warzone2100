@@ -2,14 +2,14 @@
 This file describes what are primary and secondary states before/after a test.
 It doesn't describe what one *wants* to happen, only facts.
 
-If what you are currently experiencing in the game doesn't not correspond to
+If what you are currently experiencing in the game does not correspond to
 description in this file, then you should either update this file,
 or to file a bug report.
 
-Please do explicitely specify which version has been tested on: unintended changes
-in behaviors between releases makes it impossible to leave the versionning implicit.
+Please do explicitly specify which version has been tested on: unintended changes
+in behaviors between releases makes it impossible to leave the versioning implicit.
 
-Do explicitely specify what is secondary state before/after your test, don't rely on
+Do explicitly specify what is secondary state before/after your test, don't rely on
 your assumptions: de-select then re-select the unit once again, so that UI has no chance
 of being stuck/stale.
 
@@ -83,7 +83,7 @@ When a VTOL is damaged, version 4.2.7:
 When VTOL in FIRESUPPORT mode, attached to VTOL Strike Tower, version 4.2.7:
 * VTOL DORDER_FIRESUPPORT LAG, gets damaged > threshold:
    - does not get detached. 
-   - when there is NO rearm pads, receives RTB order, even if repair stations
+   - when there are NO rearm pads, receives RTB order, even if repair stations
    are available. 
    when reaches QG, lands on the ground with DORDER_NONE, DACTION_NONE
    - when there are rearm pads, but VTOL is full ammo,
@@ -145,13 +145,13 @@ When "Return to repairs" is given to a commander (droid menu), version 4.2.7:
 
 
 When a fighter unit is attached to commander, version 4.2.7:
-* Commander GUARD, MRG or MRH, unit gets damaged > threshold:
+* Commander GUARD, MRG or MRH, unit gets damaged beyond threshold:
    - unit receives RTR, moves to a repair station
    - when gets repaired, moves back to commander.
    however, doesnt stop when reachees commander (DACTION_MOVE). Likely a bug.
    Secondary order is synchronized to commander, primary is DORDER_GUARD
 
-* attached unit gets damaged > threashold
+* attached unit gets damaged beyond threshold:
   - unit goes for repairs, but player orders the squad to move elsewhere
   - unit cancels its movement toward repairs, and moves with the whole squad. 
     (This is likely a bug, we want damaged units to continue moving toward repairs, 

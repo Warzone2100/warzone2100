@@ -1370,7 +1370,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 	}
 
-	// if this is a command droid - all it's units do the same thing
+	// if this is a command droid - all its units do the same thing
 	if ((psDroid->droidType == DROID_COMMAND) &&
 	    (psDroid->psGroup != nullptr) &&
 	    (psDroid->psGroup->type == GT_COMMAND) &&
