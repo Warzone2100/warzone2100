@@ -2099,6 +2099,25 @@ void gl_context::unbind_index_buffer(gfx_api::buffer&)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+static float transparentBlackFloats[] = {0.0, 0.0, 0.0, 0.0};
+static float opaqueBlackFloats[] = {0.0, 0.0, 0.0, 1.0};
+static float opaqueWhiteFloats[] = {1.0, 1.0, 1.0, 1.0};
+static float* to_gl(gfx_api::border_color border)
+{
+	switch (border)
+	{
+		case gfx_api::border_color::none:
+		case gfx_api::border_color::transparent_black:
+			return transparentBlackFloats;
+		case gfx_api::border_color::opaque_black:
+			return opaqueBlackFloats;
+		case gfx_api::border_color::opaque_white:
+			return opaqueWhiteFloats;
+	}
+	debug(LOG_FATAL, "Unsupported border_color");
+	return transparentBlackFloats;
+}
+
 void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
@@ -2116,6 +2135,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 					pTextureToBind = pDefaultArrayTexture;
 					break;
 				case gfx_api::pixel_format_target::texture_2d:
+				case gfx_api::pixel_format_target::texture_2d_shadow:
 					pTextureToBind = pDefaultTexture;
 					break;
 			}
@@ -2137,6 +2157,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				break;
+			case gfx_api::sampler_type::nearest_border:
+				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
 				break;
 			case gfx_api::sampler_type::bilinear:
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

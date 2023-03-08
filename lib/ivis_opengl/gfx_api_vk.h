@@ -380,9 +380,11 @@ private:
 
 	static vk::Format to_vk(const gfx_api::vertex_attribute_type& type);
 
-	vk::SamplerCreateInfo to_vk(const gfx_api::sampler_type& type);
+	vk::SamplerCreateInfo to_vk(const gfx_api::sampler_type& type, const gfx_api::pixel_format_target& target, gfx_api::border_color border);
 
 	static vk::PrimitiveTopology to_vk(const gfx_api::primitive_type& primitive);
+
+	static vk::BorderColor to_vk(gfx_api::border_color border);
 
 public:
 	VkPSO(vk::Device _dev,

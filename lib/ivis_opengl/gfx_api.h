@@ -259,7 +259,16 @@ namespace gfx_api
 		bilinear_repeat,
 		anisotropic,
 		nearest_clamped,
+		nearest_border,
 		anisotropic_repeat,
+	};
+
+	enum class border_color
+	{
+		none,
+		transparent_black,
+		opaque_black,
+		opaque_white
 	};
 
 	struct texture_input
@@ -267,9 +276,10 @@ namespace gfx_api
 		const std::size_t id;
 		const sampler_type sampler;
 		const pixel_format_target target;
+		const border_color border;
 
-		constexpr texture_input(std::size_t _id, sampler_type _sampler, pixel_format_target _target)
-		: id(_id), sampler(_sampler), target(_target)
+		constexpr texture_input(std::size_t _id, sampler_type _sampler, pixel_format_target _target, border_color _border)
+		: id(_id), sampler(_sampler), target(_target), border(_border)
 		{}
 	};
 
@@ -418,12 +428,12 @@ namespace gfx_api
 		}
 	};
 
-	template<std::size_t texture_unit, sampler_type sampler, pixel_format_target target = pixel_format_target::texture_2d>
+	template<std::size_t texture_unit, sampler_type sampler, pixel_format_target target = pixel_format_target::texture_2d, border_color border = border_color::none>
 	struct texture_description
 	{
 		static texture_input get_desc()
 		{
-			return texture_input{ texture_unit, sampler, target };
+			return texture_input{ texture_unit, sampler, target, border };
 		}
 	};
 

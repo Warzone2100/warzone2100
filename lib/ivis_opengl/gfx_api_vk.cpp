@@ -1294,7 +1294,23 @@ vk::Format VkPSO::to_vk(const gfx_api::vertex_attribute_type& type)
 	return vk::Format::eUndefined;
 }
 
-vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type)
+vk::BorderColor VkPSO::to_vk(gfx_api::border_color border)
+{
+	switch (border)
+	{
+		case gfx_api::border_color::none:
+		case gfx_api::border_color::transparent_black:
+			return vk::BorderColor::eFloatTransparentBlack;
+		case gfx_api::border_color::opaque_black:
+			return vk::BorderColor::eFloatOpaqueBlack;
+		case gfx_api::border_color::opaque_white:
+			return vk::BorderColor::eFloatOpaqueWhite;
+	}
+	debug(LOG_FATAL, "Unsupported border_color");
+	return vk::BorderColor::eFloatTransparentBlack;
+}
+
+vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_api::pixel_format_target& target, gfx_api::border_color border)
 {
 	switch (type)
 	{
@@ -1369,6 +1385,30 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type)
 			.setAddressModeU(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeV(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeW(vk::SamplerAddressMode::eClampToEdge);
+	case gfx_api::sampler_type::nearest_border:
+	{
+		vk::SamplerCreateInfo result = vk::SamplerCreateInfo()
+			.setMinFilter(vk::Filter::eNearest)
+			.setMagFilter(vk::Filter::eNearest)
+			.setMipmapMode(vk::SamplerMipmapMode::eNearest)
+			.setMaxAnisotropy(1.f)
+			.setMinLod(0.f)
+			.setMaxLod(0.f)
+			.setAddressModeU(vk::SamplerAddressMode::eClampToBorder)
+			.setAddressModeV(vk::SamplerAddressMode::eClampToBorder)
+			.setAddressModeW(vk::SamplerAddressMode::eClampToBorder)
+			.setBorderColor(to_vk(border))
+		;
+		switch (target)
+		{
+			case gfx_api::pixel_format_target::texture_2d_shadow:
+				result.setCompareOp(vk::CompareOp::eLessOrEqual);
+				result.setCompareEnable(true);
+			default:
+				break;
+		}
+		return result;
+	}
 	}
 	debug(LOG_FATAL, "Unsupported sampler_type");
 	return vk::SamplerCreateInfo();
@@ -1435,7 +1475,7 @@ VkPSO::VkPSO(vk::Device _dev,
 	samplers.reserve(texture_desc.size());
 	for (const auto& texture : texture_desc)
 	{
-		samplers.emplace_back(dev.createSampler(to_vk(texture.sampler), nullptr, *pVkDynLoader));
+		samplers.emplace_back(dev.createSampler(to_vk(texture.sampler, texture.target, texture.border), nullptr, *pVkDynLoader));
 
 		textures_layout_desc.emplace_back(
 			vk::DescriptorSetLayoutBinding()
@@ -4266,6 +4306,7 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 			switch (attribute_descriptions.at(i).target)
 			{
 				case gfx_api::pixel_format_target::texture_2d:
+				case gfx_api::pixel_format_target::texture_2d_shadow:
 					imageView = pDefaultTexture->view.get();
 					break;
 				case gfx_api::pixel_format_target::texture_2d_array:
