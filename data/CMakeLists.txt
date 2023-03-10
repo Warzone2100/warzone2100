@@ -51,6 +51,10 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2d.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2d.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2darray.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2darray.frag"
 )
 
 set(SHADER_LIST "")

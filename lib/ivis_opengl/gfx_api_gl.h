@@ -191,6 +191,7 @@ private:
 	 */
 	void setUniforms(size_t uniformIdx, const ::glm::vec4 &v);
 	void setUniforms(size_t uniformIdx, const ::glm::mat4 &m);
+	void setUniforms(size_t uniformIdx, const ::glm::ivec4 &v);
 	void setUniforms(size_t uniformIdx, const ::glm::ivec2 &v);
 	void setUniforms(size_t uniformIdx, const ::glm::vec2 &v);
 	void setUniforms(size_t uniformIdx, const int32_t &v);
@@ -217,6 +218,8 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT_INSTANCED>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context

@@ -309,4 +309,8 @@ enum SCREENTYPE
 
 void pie_LoadBackDrop(SCREENTYPE screenType);
 
+// Debug: Draw a texture to a screen quad, given a position, offset, size (in screen coordinates), angle, and colour
+// Optionally takes a channelSwizzle - glm::ivec4(0,0,0,3) for example, to just use the red channel (preserving the last channel)
+void iV_DebugDrawTextureToQuad(gfx_api::abstract_texture& texture, size_t layer, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, glm::ivec4 channelSwizzle = glm::ivec4(0,1,2,3), glm::mat4 textureUVTransform = glm::mat4(1.f));
+
 #endif //
