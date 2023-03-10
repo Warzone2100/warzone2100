@@ -1195,6 +1195,41 @@ namespace gfx_api
 	std::tuple<
 	vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
 	>, notexture, SHADER_LINE>;
+
+	template<>
+	struct constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>
+	{
+		glm::mat4 transform_matrix;
+		glm::mat4 uv_transform_matrix;
+		glm::ivec4 swizzle;
+		glm::vec4 color;
+		int texture;
+	};
+
+	using DebugDrawTexture2DToQuad = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_TEXT, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangle_strip, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>>,
+	std::tuple<
+		vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
+	>,
+	std::tuple<texture_description<0, sampler_type::bilinear>>, SHADER_DEBUG_TEXTURE2D_QUAD>;
+
+	template<>
+	struct constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>
+	{
+		glm::mat4 transform_matrix;
+		glm::mat4 uv_transform_matrix;
+		glm::ivec4 swizzle;
+		glm::vec4 color;
+		int layer;
+		int texture;
+	};
+
+	using DebugDrawTexture2DArrayToQuad = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_TEXT, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangle_strip, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>>,
+	std::tuple<
+		vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
+	>,
+	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d_array>>, SHADER_DEBUG_TEXTURE2DARRAY_QUAD>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)

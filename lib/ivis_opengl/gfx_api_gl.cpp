@@ -674,7 +674,11 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
 	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" } })
+		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" } }),
+	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ "Debug texture quad program", "shaders/quad_texture2d.vert", "shaders/quad_texture2d.frag",
+		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "texture" } }),
+	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
+		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } })
 };
 
 enum SHADER_VERSION
@@ -946,7 +950,9 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_GENERIC_COLOR>(),
 		uniform_binding_entry<SHADER_RECT_INSTANCED>(),
 		uniform_binding_entry<SHADER_LINE>(),
-		uniform_binding_entry<SHADER_TEXT>()
+		uniform_binding_entry<SHADER_TEXT>(),
+		uniform_binding_entry<SHADER_DEBUG_TEXTURE2D_QUAD>(),
+		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>()
 	};
 
 	for (auto& uniform_block : uniform_blocks)
@@ -1522,6 +1528,15 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 
 	}
 }
 
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec4 &v)
+{
+	glUniform4i(locations[uniformIdx], v.x, v.y, v.z, v.w);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform4i(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z, v.w);
+	}
+}
+
 void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec2 &v)
 {
 	glUniform2i(locations[uniformIdx], v.x, v.y);
@@ -1810,6 +1825,25 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(2, cbuf.size);
 	setUniforms(3, cbuf.color);
 	setUniforms(4, cbuf.texture);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf)
+{
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.uv_transform_matrix);
+	setUniforms(2, cbuf.swizzle);
+	setUniforms(3, cbuf.color);
+	setUniforms(4, cbuf.texture);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf)
+{
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.uv_transform_matrix);
+	setUniforms(2, cbuf.swizzle);
+	setUniforms(3, cbuf.color);
+	setUniforms(4, cbuf.layer);
+	setUniforms(5, cbuf.texture);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)

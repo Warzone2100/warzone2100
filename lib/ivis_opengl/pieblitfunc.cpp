@@ -945,3 +945,42 @@ bool BatchedImageDrawRequests::draw(bool force /*= false*/)
 	_imageDrawRequests.clear();
 	return true;
 }
+
+void iV_DebugDrawTextureToQuad(gfx_api::abstract_texture& texture, size_t layer, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, glm::ivec4 channelSwizzle, glm::mat4 textureUVTransform)
+{
+	glm::mat4 modelViewProjection = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
+	glm::mat4 mvpFinal = modelViewProjection * glm::translate(glm::vec3(offset.x, offset.y, 0.f)) * glm::scale(glm::vec3(size.x, size.y, 1.f));
+
+	Vector2f TextureUV(0.f, 0.f);
+	Vector2f TextureSize(1.f, 1.f);
+
+	glm::mat4 uvTransformMatrix = glm::mat4(1.f) * glm::scale(glm::vec3(TextureSize, 1.f)) * glm::translate(glm::vec3(TextureUV, 0.f)) * textureUVTransform;
+
+	if (texture.isArray())
+	{
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind();
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_constants({ mvpFinal,
+			uvTransformMatrix,
+			channelSwizzle,
+			glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f),
+			static_cast<int>(layer),
+			0});
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_textures(&texture);
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_vertex_buffers(pie_internal::rectBuffer);
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().draw(4, 0);
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+	}
+	else
+	{
+		gfx_api::DebugDrawTexture2DToQuad::get().bind();
+		gfx_api::DebugDrawTexture2DToQuad::get().bind_constants({ mvpFinal,
+			uvTransformMatrix,
+			channelSwizzle,
+			glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f),
+			0});
+		gfx_api::DebugDrawTexture2DToQuad::get().bind_textures(&texture);
+		gfx_api::DebugDrawTexture2DToQuad::get().bind_vertex_buffers(pie_internal::rectBuffer);
+		gfx_api::DebugDrawTexture2DToQuad::get().draw(4, 0);
+		gfx_api::DebugDrawTexture2DToQuad::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+	}
+}
