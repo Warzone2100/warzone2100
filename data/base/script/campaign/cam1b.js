@@ -1,4 +1,3 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
@@ -98,7 +97,7 @@ function eventStartLevel()
 		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_7);
 	}
 	camSetArtifacts({
-		"base1factory": { tech: "R-Wpn-Flamer-Damage02" },
+		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
 		"base2factory": { tech: "R-Wpn-MG2Mk1" },
 		"base3sensor": { tech: "R-Sys-Sensor-Turret01" },
 		"base4gen": { tech: "R-Struc-PowerModuleMk1" },

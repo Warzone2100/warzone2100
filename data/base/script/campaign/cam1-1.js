@@ -124,7 +124,7 @@ function eventStartLevel()
 	//Get rid of the already existing crate and replace with another
 	camSafeRemoveObject("artifact1", false);
 	camSetArtifacts({
-		"scavFactory1": { tech: "R-Wpn-MG3Mk1" }, //Heavy machine gun
+		"scavFactory1": { tech: ["R-Wpn-MG3Mk1", "R-Wpn-Flamer-Range01"] }, //Heavy machine gun & flamer range upgrade
 	});
 
 	camSetFactories({

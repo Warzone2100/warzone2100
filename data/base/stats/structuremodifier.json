@@ -30,9 +30,9 @@
 		"SOFT": 100
 	},
 	"FLAMER": {
-		"BUNKER": 300,
+		"BUNKER": 250,
 		"HARD": 40,
-		"MEDIUM": 140,
-		"SOFT": 160
+		"MEDIUM": 120,
+		"SOFT": 130
 	}
 }

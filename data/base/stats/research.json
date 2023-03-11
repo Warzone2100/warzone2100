@@ -2535,10 +2535,11 @@
 	"R-Wpn-Flamer-Range01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Range01",
+                "keyTopic": 1,
 		"msgName": "RES_W_FL_R1",
 		"name": "High-Pressure Gas Container",
 		"requiredResearch": [
-			"R-Wpn-Flamer-Damage02"
+			"R-Wpn-Flamer-Damage01"
 		],
 		"researchPoints": 1000,
 		"researchPower": 85,
@@ -2595,6 +2596,7 @@
 	"R-Wpn-Flamer-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Damage01",
+                "keyTopic": 1,
 		"msgName": "RES_W_FL_D1",
 		"name": "High Temperature Flamer Gel",
 		"requiredResearch": [
@@ -2687,7 +2689,7 @@
 		"msgName": "RES_W_FL_ROF1",
 		"name": "Flamer Autoloader",
 		"requiredResearch": [
-			"R-Wpn-Flamer-Damage02"
+			"R-Wpn-Flamer-Damage01"
 		],
 		"researchPoints": 1100,
 		"researchPower": 95,
