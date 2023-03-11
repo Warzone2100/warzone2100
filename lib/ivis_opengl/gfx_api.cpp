@@ -686,6 +686,9 @@ unsigned int gfx_api::format_channels(gfx_api::pixel_format format)
 			return 2;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 			return 4; // just return 4 for now...
+		// DEPTH FORMATS
+		case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
+			return 1;
 	}
 
 	return 1; // silence warning
@@ -727,6 +730,9 @@ size_t gfx_api::format_texel_block_width(gfx_api::pixel_format format)
 			return 4;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 			return 4;
+		// DEPTH FORMATS
+		case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
+			return 1; // just return 1 for now...
 	}
 
 	return 1; // silence warning
@@ -775,6 +781,12 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 		// ASTC
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 			return calculate_astc_size<4, 4>(width, height);
+
+		// [DEPTH FORMATS]
+		case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
+			// this technically depends on the type of underlying format used...
+			// just return 0 for now? (we're not expecting WZ code itself to upload depth buffer data directly...)
+			return 0;
 		// no default case to ensure compiler error if more formats are added
 	}
 	return 0; // silence warning
