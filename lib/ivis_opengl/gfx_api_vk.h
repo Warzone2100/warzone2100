@@ -188,6 +188,7 @@ private:
 	const bool autoMap = false;
 };
 
+struct VkRoot; // forward-declare
 struct VkPSO; // forward-declare
 struct buffering_mechanism;
 
@@ -229,8 +230,6 @@ struct perFrameResources_t
 	DescriptorPoolsContainer uniformDynamicDescriptorPools;
 	uint32_t numalloc = 0;
 	vk::CommandPool pool;
-	vk::CommandBuffer cmdDraw;
-	vk::CommandBuffer cmdCopy;
 	vk::Fence previousSubmission;
 	std::vector</*WZ_vk::UniqueBuffer*/vk::Buffer> buffer_to_delete;
 	std::vector</*WZ_vk::UniqueImage*/vk::Image> image_to_delete;
@@ -252,8 +251,29 @@ struct perFrameResources_t
 	perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueIndex, const vk::DispatchLoaderDynamic& vkDynLoader);
 	~perFrameResources_t();
 
+public:
+	void beginDepthPass();
+	void endCurrentDepthPass();
+
+	vk::CommandBuffer* currentCopyCmdBuffer();
+	vk::CommandBuffer* currentDrawCmdBuffer();
+
+	vk::CommandBuffer copyCmdBuffer();
+	vk::CommandBuffer depthPassDrawCmdBuffer();
+	vk::CommandBuffer renderPassDrawCmdBuffer();
+
 protected:
 	friend struct buffering_mechanism;
+
+	// main command buffer for copying command
+	vk::CommandBuffer cmdCopy;
+
+	// drawing command buffer for depth pass(es)
+	vk::CommandBuffer cmdDrawDepth;
+
+	// main command buffer for drawing (default render pass)
+	vk::CommandBuffer cmdDraw;
+
 	void resetDescriptorPools();
 	void clean();
 
@@ -265,6 +285,7 @@ private:
 
 private:
 	const vk::DispatchLoaderDynamic *pVkDynLoader;
+	vk::CommandBuffer *pCurrentDrawCmdBuffer = nullptr;
 };
 
 struct perSwapchainImageResources_t
@@ -346,8 +367,6 @@ struct gfxapi_PipelineCreateInfo
 	, attribute_descriptions(attribute_descriptions)
 	{}
 };
-
-struct VkRoot; // forward-declare
 
 struct VkPSO final
 {
@@ -511,6 +530,34 @@ private:
 	const VkRoot* root;
 };
 
+struct VkDepthMapImage final : public gfx_api::abstract_texture
+{
+	vk::Device dev;
+//	WZ_vk::UniqueImage object;
+	vk::Image object;
+	WZ_vk::UniqueImageView view;
+//	WZ_vk::UniqueDeviceMemory memory;
+	VmaAllocation allocation = VK_NULL_HANDLE;
+
+	size_t layer_count;
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+
+	VkDepthMapImage(const VkRoot& root, const std::size_t& layer_count, const std::size_t& size, vk::Format depthMapFormat, const std::string& filename);
+
+	virtual ~VkDepthMapImage() override;
+
+	virtual void bind() override;
+	virtual bool isArray() const override;
+
+	void destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader);
+
+	VkDepthMapImage( const VkDepthMapImage& other ) = delete; // non construction-copyable
+	VkDepthMapImage& operator=( const VkDepthMapImage& ) = delete; // non copyable
+};
+
 struct QueueFamilyIndices
 {
 	optional<uint32_t> graphicsFamily;
@@ -590,12 +637,37 @@ struct VkRoot final : gfx_api::context
 	vk::DeviceMemory depthStencilMemory;
 	vk::ImageView depthStencilView;
 
-	// default renderpass
-	vk::RenderPass rp;
-	std::shared_ptr<VkhRenderPassCompat> rp_compat_info;
-	std::vector<vk::Framebuffer> fbo;
+	// render passes
+	const size_t DEFAULT_RENDER_PASS_ID = 0;
+	const size_t DEPTH_RENDER_PASS_ID = 1;
+	const size_t NUM_RENDERPASS_IDS = 2;
 
-	// default texture
+	struct RenderPassDetails
+	{
+		vk::RenderPass rp;
+		std::shared_ptr<VkhRenderPassCompat> rp_compat_info;
+		std::vector<vk::Framebuffer> fbo;
+		size_t identifier;
+
+		RenderPassDetails(size_t _identifier)
+		: identifier(_identifier)
+		{ }
+	};
+
+	// render passes
+	std::vector<RenderPassDetails> renderPasses;
+
+	// default renderpass
+//	RenderPassDetails defaultRenderpass = RenderPassDetails(DEFAULT_RENDER_PASS_ID);
+
+	// depth render passes
+	vk::Format depthBufferFormat = vk::Format::eUndefined;
+	uint32_t depthMapSize = 4096;
+	VkDepthMapImage* pDepthMapImage = nullptr;
+	std::vector<vk::ImageView> depthMapCascadeView;
+//	std::vector<RenderPassDetails> depthRenderPasses;
+
+	// default textures
 	VkTexture* pDefaultTexture = nullptr;
 	VkTextureArray* pDefaultArrayTexture = nullptr;
 
@@ -611,7 +683,19 @@ struct VkRoot final : gfx_api::context
 	PFN_vkDebugReportMessageEXT dbgBreakCallback = nullptr;
 	VkDebugReportCallbackEXT msgCallback = 0;
 
-	std::vector<std::pair<const gfxapi_PipelineCreateInfo, VkPSO *>> createdPipelines;
+	struct BuiltPipelineRegistry
+	{
+		const gfxapi_PipelineCreateInfo createInfo;
+		std::vector<VkPSO *> renderPassPSO;
+
+		BuiltPipelineRegistry(const gfxapi_PipelineCreateInfo& _createInfo, size_t numRenderPasses)
+		: createInfo(_createInfo)
+		{
+			renderPassPSO.resize(numRenderPasses, nullptr);
+		}
+	};
+
+	std::vector<BuiltPipelineRegistry> createdPipelines;
 	VkPSO* currentPSO = nullptr;
 
 	bool validationLayer = false;
@@ -671,6 +755,7 @@ private:
 	void rebuildPipelinesIfNecessary();
 
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
+	void createDepthPasses(vk::Format depthFormat);
 	void setupSwapchainImages();
 
 public:
@@ -691,6 +776,12 @@ public:
 
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 
+	virtual size_t numDepthPasses() override;
+	virtual void beginDepthPass(size_t idx) override;
+	virtual size_t getDepthPassDimensions(size_t idx) override;
+	virtual void endCurrentDepthPass() override;
+	virtual gfx_api::abstract_texture* getDepthTexture() override;
+	
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
 	virtual void set_polygon_offset(const float& offset, const float& slope) override;
@@ -746,10 +837,13 @@ private:
 	gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport(gfx_api::pixel_format format) const;
 	std::string calculateFormattedRendererInfoString() const;
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
+	const RenderPassDetails& currentRenderPass();
+	RenderPassDetails& defaultRenderpass() { return renderPasses[DEFAULT_RENDER_PASS_ID]; }
 private:
 	std::string formattedRendererInfoString;
 	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
 	uint32_t lastRenderPassEndTime = 0;
+	size_t currentRenderPassId = DEFAULT_RENDER_PASS_ID;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED)

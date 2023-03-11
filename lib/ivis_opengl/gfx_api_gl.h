@@ -266,6 +266,11 @@ struct gl_context final : public gfx_api::context
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 
+	virtual size_t numDepthPasses() override;
+	virtual void beginDepthPass(size_t idx) override;
+	virtual size_t getDepthPassDimensions(size_t idx) override;
+	virtual void endCurrentDepthPass() override;
+	virtual gfx_api::abstract_texture* getDepthTexture() override;
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
 	virtual void debugStringMarker(const char *str) override;
@@ -300,6 +305,7 @@ private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
+	size_t initDepthPasses(size_t resolution);
 	void _beginRenderPassImpl();
 private:
 	bool initGLContext();
@@ -322,4 +328,9 @@ private:
 	std::vector<gl_pipeline_state_object *> createdPipelines;
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;
+
+	gl_texture* depthTexture;
+	std::vector<GLuint> depthFBO;
+	size_t depthBufferResolution = 4096;
+	size_t depthPassCount = 1;
 };

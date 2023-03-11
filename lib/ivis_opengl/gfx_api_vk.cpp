@@ -89,7 +89,7 @@ const std::vector<const char*> optionalDeviceExtensions = {
 	"VK_KHR_portability_subset" // According to VUID-VkDeviceCreateInfo-pProperties-04451, if device supports this extension it *must* be enabled
 };
 
-const std::vector<vk::Format> supportedDepthFormats = {
+const std::vector<vk::Format> supportedDepthStencilFormats = {
 	vk::Format::eD32SfloatS8Uint,
 	vk::Format::eD24UnormS8Uint
 };
@@ -392,13 +392,25 @@ vk::SampleCountFlagBits getMaxUsableSampleCount(const vk::PhysicalDeviceProperti
 	return vk::SampleCountFlagBits::e1;
 }
 
-vk::Format findDepthFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
+vk::Format findDepthStencilFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	return findSupportedFormat(
 		physicalDevice,
-		supportedDepthFormats,
+		supportedDepthStencilFormats,
 		vk::ImageTiling::eOptimal,
 		vk::FormatFeatureFlags{vk::FormatFeatureFlagBits::eDepthStencilAttachment},
+		vkDynLoader
+	);
+}
+
+vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	std::vector<vk::Format> depthFormats = { vk::Format::eD32SfloatS8Uint, vk::Format::eD32Sfloat, vk::Format::eD24UnormS8Uint };
+	return findSupportedFormat(
+		physicalDevice,
+		depthFormats,
+		vk::ImageTiling::eOptimal,
+		vk::FormatFeatureFlags{vk::FormatFeatureFlagBits::eDepthStencilAttachment | vk::FormatFeatureFlagBits::eSampledImage},
 		vkDynLoader
 	);
 }
@@ -689,13 +701,16 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 	const auto buffer = dev.allocateCommandBuffers(
 		vk::CommandBufferAllocateInfo()
 		.setCommandPool(pool)
-		.setCommandBufferCount(2)
+		.setCommandBufferCount(3)
 		.setLevel(vk::CommandBufferLevel::ePrimary)
 		, *pVkDynLoader
 	);
 	cmdDraw = buffer[0];
 	cmdCopy = buffer[1];
+	cmdDrawDepth = buffer[2];
+	pCurrentDrawCmdBuffer = &cmdDraw;
 	cmdCopy.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
+	cmdDrawDepth.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 	previousSubmission = dev.createFence(
 		vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled),
 		nullptr, *pVkDynLoader
@@ -712,6 +727,41 @@ perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescrip
 			.setPoolSizeCount(1)
 			, nullptr, *pVkDynLoader
 		), poolSize, maxSets);
+}
+
+void perFrameResources_t::beginDepthPass()
+{
+	pCurrentDrawCmdBuffer = &cmdDrawDepth;
+}
+
+void perFrameResources_t::endCurrentDepthPass()
+{
+	pCurrentDrawCmdBuffer = &cmdDraw;
+}
+
+vk::CommandBuffer* perFrameResources_t::currentCopyCmdBuffer()
+{
+	return &cmdCopy;
+}
+
+vk::CommandBuffer* perFrameResources_t::currentDrawCmdBuffer()
+{
+	return pCurrentDrawCmdBuffer;
+}
+
+vk::CommandBuffer perFrameResources_t::copyCmdBuffer()
+{
+	return cmdCopy;
+}
+
+vk::CommandBuffer perFrameResources_t::depthPassDrawCmdBuffer()
+{
+	return cmdDrawDepth;
+}
+
+vk::CommandBuffer perFrameResources_t::renderPassDrawCmdBuffer()
+{
+	return cmdDraw;
 }
 
 vk::DescriptorPool perFrameResources_t::getDescriptorPool(uint32_t numSets, vk::DescriptorType descriptorType, uint32_t numDescriptors)
@@ -1265,11 +1315,13 @@ vk::PipelineRasterizationStateCreateInfo VkPSO::to_vk(const bool& offset, const 
 		result = result.setCullMode(vk::CullModeFlagBits::eBack)
 			.setFrontFace(vk::FrontFace::eClockwise);
 		break;
+	case gfx_api::cull_mode::front:
+		result = result.setCullMode(vk::CullModeFlagBits::eFront)
+			.setFrontFace(vk::FrontFace::eClockwise);
+		break;
 	case gfx_api::cull_mode::none:
 		result = result.setCullMode(vk::CullModeFlagBits::eNone)
 			.setFrontFace(vk::FrontFace::eClockwise);
-		break;
-	default:
 		break;
 	}
 	return result;
@@ -1403,7 +1455,7 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 		;
 		switch (target)
 		{
-			case gfx_api::pixel_format_target::texture_2d_shadow:
+			case gfx_api::pixel_format_target::depth_map:
 				result.setCompareOp(vk::CompareOp::eLessOrEqual);
 				result.setCompareEnable(true);
 			default:
@@ -1722,9 +1774,9 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 	ASSERT(mappedMem != nullptr, "Failed to map memory");
 	memcpy(mappedMem, data, size);
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
-	const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
+	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto copyRegions = std::array<vk::BufferCopy, 1> { vk::BufferCopy(stagingMemory.offset, start, size) };
-	cmdBuffer.copyBuffer(stagingMemory.buffer, object, copyRegions, root->vkDynLoader);
+	cmdBuffer->copyBuffer(stagingMemory.buffer, object, copyRegions, root->vkDynLoader);
 }
 
 void VkBuf::bind() {}
@@ -1831,6 +1883,111 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 #endif
 }
 
+VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_count, const std::size_t& size, vk::Format depthMapFormat, const std::string& filename)
+	: dev(root.dev), layer_count(_layer_count)
+{
+	ASSERT(size > 0, "0 width/height textures are unsupported");
+	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", size);
+	ASSERT(layer_count == 1, "Currently only support layer count of 1..."); // TODO: FIXME
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugName = filename;
+#endif
+
+	auto imageCreateInfo = vk::ImageCreateInfo()
+		.setFormat(depthMapFormat)
+		.setArrayLayers(static_cast<uint32_t>(layer_count))
+		.setExtent(vk::Extent3D(static_cast<uint32_t>(size), static_cast<uint32_t>(size), 1))
+		.setImageType(vk::ImageType::e2D)
+		.setMipLevels(1)
+		.setSamples(vk::SampleCountFlagBits::e1)
+		.setTiling(vk::ImageTiling::eOptimal)
+		.setUsage(vk::ImageUsageFlagBits::eDepthStencilAttachment | vk::ImageUsageFlagBits::eSampled)
+		.setSharingMode(vk::SharingMode::eExclusive);
+
+	VmaAllocationCreateInfo allocInfo = {};
+	allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+
+	vk::Result result = static_cast<vk::Result>(vmaCreateImage(root.allocator, reinterpret_cast<const VkImageCreateInfo*>( &imageCreateInfo ), &allocInfo, reinterpret_cast<VkImage*>( &object ), &allocation, nullptr));
+	if (result != vk::Result::eSuccess)
+	{
+		// Failed to allocate memory!
+		vk::throwResultException( result, "vmaCreateImage" );
+	}
+
+	if (root.debugUtilsExtEnabled)
+	{
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eImage);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImage>(object)));
+		objectNameInfo.setPObjectName(filename.c_str());
+		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
+	}
+
+	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
+		.setImage(object)
+		.setViewType(vk::ImageViewType::e2D) // TODO: Once layer_count > 1, use e2DArray
+		.setFormat(depthMapFormat)
+		.setComponents(vk::ComponentMapping())
+		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, 0, static_cast<uint32_t>(layer_count)));
+
+	view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, root.vkDynLoader);
+}
+
+VkDepthMapImage::~VkDepthMapImage()
+{
+	// All textures must be properly released before gfx_api::context::shutdown()
+	if (buffering_mechanism::isInitialized())
+	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		if (view)
+		{
+			frameResources.image_view_to_delete.emplace_back(std::move(view));
+		}
+		if (object != vk::Image())
+		{
+			frameResources.image_to_delete.emplace_back(std::move(object));
+		}
+		if (allocation != VK_NULL_HANDLE)
+		{
+			frameResources.vmamemory_to_free.push_back(allocation);
+		}
+	}
+	else
+	{
+		// ~VkTexture called too late! - probably after gfx_api::context::shutdown()
+		view.release(); // Can't properly destroy this VK object now, but call release() to ensure that vk::Device::destroy isn't called after the device is no longer available
+	}
+}
+
+void VkDepthMapImage::destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	if (buffering_mechanism::isInitialized())
+	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		frameResources.image_view_to_delete.emplace_back(std::move(view));
+		frameResources.image_to_delete.emplace_back(std::move(object));
+		object = vk::Image();
+		frameResources.vmamemory_to_free.push_back(allocation);
+		allocation = VK_NULL_HANDLE;
+	}
+	else
+	{
+		view.reset();
+		dev.destroyImage(object, nullptr, vkDynLoader);
+		object = vk::Image();
+		vmaFreeMemory(allocator, allocation);
+		allocation = VK_NULL_HANDLE;
+	}
+}
+
+void VkDepthMapImage::bind() { }
+
+bool VkDepthMapImage::isArray() const
+{
+	return layer_count > 1;
+}
+
 VkTexture::~VkTexture()
 {
 	// All textures must be properly released before gfx_api::context::shutdown()
@@ -1839,7 +1996,9 @@ VkTexture::~VkTexture()
 		auto& frameResources = buffering_mechanism::get_current_resources();
 		frameResources.image_view_to_delete.emplace_back(std::move(view));
 		frameResources.image_to_delete.emplace_back(std::move(object));
+		object = vk::Image();
 		frameResources.vmamemory_to_free.push_back(allocation);
+		allocation = VK_NULL_HANDLE;
 	}
 	else
 	{
@@ -1881,7 +2040,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
 
-	const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
+	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
@@ -1891,7 +2050,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 			.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 	};
 	// TODO: Should this be eBottomOfPipe, eTopOfPipe, or something else? // FIXME
-	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy, root->vkDynLoader);
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
@@ -1902,7 +2061,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 0, 1))
 			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	};
-	cmdBuffer.copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
+	cmdBuffer->copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
 	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
@@ -1912,7 +2071,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 	};
-	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
 
 	return true;
@@ -2039,14 +2198,14 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 				.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 		};
-		const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
-		cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+		const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
+		cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
 			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy, root->vkDynLoader);
 
 		transitionedToTransferDstFormat = true;
 	}
 
-	const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
+	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
 			.setBufferOffset(stagingMemory.offset)
@@ -2056,14 +2215,14 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), static_cast<uint32_t>(layer), 1))
 			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	};
-	cmdBuffer.copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
+	cmdBuffer->copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
 
 	return true;
 }
 
 void VkTextureArray::flush()
 {
-	const auto& cmdBuffer = buffering_mechanism::get_current_resources().cmdCopy;
+	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
@@ -2073,7 +2232,7 @@ void VkTextureArray::flush()
 			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 	};
-	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
 	transitionedToTransferDstFormat = false;
 }
@@ -2096,6 +2255,11 @@ VkRoot::~VkRoot()
 	// nothing, currently
 }
 
+const VkRoot::RenderPassDetails& VkRoot::currentRenderPass()
+{
+	return renderPasses[currentRenderPassId];
+}
+
 gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
 														const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
 	const std::vector<std::type_index>& uniform_blocks,
@@ -2113,7 +2277,7 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, uniform_blocks, texture_desc, attribute_descriptions);
 	VkPSO* pipeline = nullptr;
 	try {
-		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
+		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, msaaSamples, vkDynLoader, *this);
 	}
 	catch (const std::exception& e)
 	{
@@ -2137,13 +2301,18 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	}
 	if (!psoID.has_value())
 	{
-		createdPipelines.emplace_back(createInfo, pipeline);
+		createdPipelines.emplace_back(createInfo, NUM_RENDERPASS_IDS);
 		psoID = createdPipelines.size() - 1;
+		createdPipelines[psoID.value()].renderPassPSO[currentRenderPassId] = pipeline;
 	}
 	else
 	{
-		buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(createdPipelines[psoID.value()].second);
-		createdPipelines[psoID.value()].second = pipeline;
+		auto& builtPipelineRegistry = createdPipelines[psoID.value()];
+		if (builtPipelineRegistry.renderPassPSO[currentRenderPassId] != nullptr)
+		{
+			buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(builtPipelineRegistry.renderPassPSO[currentRenderPassId]);
+		}
+		builtPipelineRegistry.renderPassPSO[currentRenderPassId] = pipeline;
 	}
 
 	return new VkPSOId(psoID.value(), false); // always return a new indirect reference
@@ -2151,15 +2320,26 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 
 void VkRoot::rebuildPipelinesIfNecessary()
 {
-	ASSERT(rp_compat_info, "Called before rendering pass is set up");
+	ASSERT(defaultRenderpass().rp_compat_info, "Called before rendering pass is set up");
 	// rebuild existing pipelines
-	for (auto& pipeline : createdPipelines)
+	for (auto& pipelineInfo : createdPipelines)
 	{
-		ASSERT(pipeline.second->renderpass_compat, "Pipeline has no associated renderpass compat structure");
-		if (!rp_compat_info->isCompatibleWith(*pipeline.second->renderpass_compat))
+		for (size_t renderPassId = 0; renderPassId < pipelineInfo.renderPassPSO.size(); ++renderPassId)
 		{
-			delete pipeline.second;
-			pipeline.second = new VkPSO(dev, physDeviceProps.limits, pipeline.first, rp, rp_compat_info, msaaSamples, vkDynLoader, *this);
+			auto pipeline = pipelineInfo.renderPassPSO[renderPassId];
+			if (pipeline == nullptr)
+			{
+				continue;
+			}
+
+			auto& renderPass = renderPasses[renderPassId];
+
+			ASSERT(pipeline->renderpass_compat, "Pipeline has no associated renderpass compat structure");
+			if (!renderPass.rp_compat_info->isCompatibleWith(*pipeline->renderpass_compat))
+			{
+				delete pipeline;
+				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+			}
 		}
 	}
 }
@@ -2247,8 +2427,157 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 		.setDependencyCount(1)
 		.setPDependencies((vk::SubpassDependency *)&dependency);
 
-	rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
-	rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+	renderPasses[DEFAULT_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
+	renderPasses[DEFAULT_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+
+	// createFramebuffers for default render pass
+	ASSERT(!swapchainImageView.empty(), "No swapchain image views?");
+	try {
+		std::transform(swapchainImageView.begin(), swapchainImageView.end(), std::back_inserter(renderPasses[DEFAULT_RENDER_PASS_ID].fbo),
+				   [&](const vk::ImageView& imageView) {
+					   const auto attachments = (msaaEnabled) ? std::vector<vk::ImageView>{colorImageView, depthStencilView, imageView}
+																: std::vector<vk::ImageView>{imageView, depthStencilView};
+					   return dev.createFramebuffer(
+													vk::FramebufferCreateInfo()
+													.setAttachmentCount(static_cast<uint32_t>(attachments.size()))
+													.setPAttachments(attachments.data())
+													.setLayers(1)
+													.setWidth(swapchainSize.width)
+													.setHeight(swapchainSize.height)
+													.setRenderPass(renderPasses[DEFAULT_RENDER_PASS_ID].rp)
+													, nullptr, vkDynLoader);
+				   });
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+}
+
+void VkRoot::createDepthPasses(vk::Format depthFormat)
+{
+	auto attachments =
+		std::vector<vk::AttachmentDescription>{
+		vk::AttachmentDescription() // depthAttachment
+			.setFormat(depthFormat)
+			.setSamples(vk::SampleCountFlagBits::e1)
+			.setInitialLayout(vk::ImageLayout::eUndefined)
+			.setFinalLayout(vk::ImageLayout::eDepthStencilReadOnlyOptimal)
+			.setLoadOp(vk::AttachmentLoadOp::eClear)
+			.setStoreOp(vk::AttachmentStoreOp::eStore)
+			.setStencilLoadOp(vk::AttachmentLoadOp::eDontCare)
+			.setStencilStoreOp(vk::AttachmentStoreOp::eDontCare)
+	};
+	const auto depthAttachmentRef =
+		vk::AttachmentReference()
+		.setAttachment(0)
+		.setLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal);
+
+	const auto subpasses =
+		std::array<vk::SubpassDescription, 1> {
+		vk::SubpassDescription()
+			.setPipelineBindPoint(vk::PipelineBindPoint::eGraphics)
+			.setColorAttachmentCount(0)
+			.setPDepthStencilAttachment(&depthAttachmentRef)
+	};
+
+	std::array<vk::SubpassDependency, 2> dependencies {
+		vk::SubpassDependency()
+			.setSrcSubpass(VK_SUBPASS_EXTERNAL)
+			.setDstSubpass(0)
+			.setSrcStageMask(vk::PipelineStageFlagBits::eFragmentShader)
+			.setDstStageMask(vk::PipelineStageFlagBits::eEarlyFragmentTests)
+			.setSrcAccessMask(vk::AccessFlagBits::eShaderRead)
+			.setDstAccessMask(vk::AccessFlagBits::eDepthStencilAttachmentWrite)
+			.setDependencyFlags(vk::DependencyFlagBits::eByRegion)
+		, vk::SubpassDependency()
+			.setSrcSubpass(0)
+			.setDstSubpass(VK_SUBPASS_EXTERNAL)
+			.setSrcStageMask(vk::PipelineStageFlagBits::eLateFragmentTests)
+			.setDstStageMask(vk::PipelineStageFlagBits::eFragmentShader)
+			.setSrcAccessMask(vk::AccessFlagBits::eDepthStencilAttachmentWrite)
+			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
+			.setDependencyFlags(vk::DependencyFlagBits::eByRegion)
+	};
+
+	auto createInfo = vk::RenderPassCreateInfo()
+		.setAttachmentCount(static_cast<uint32_t>(attachments.size()))
+		.setPAttachments(attachments.data())
+		.setSubpassCount(static_cast<uint32_t>(subpasses.size()))
+		.setPSubpasses(subpasses.data())
+		.setDependencyCount(static_cast<uint32_t>(dependencies.size()))
+		.setPDependencies(dependencies.data());
+
+	renderPasses[DEPTH_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
+	renderPasses[DEPTH_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+
+	if (debugUtilsExtEnabled)
+	{
+		std::string renderpassName = "<depth map render pass>";
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eRenderPass);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkRenderPass>(renderPasses[DEPTH_RENDER_PASS_ID].rp)));
+		objectNameInfo.setPObjectName(renderpassName.c_str());
+		dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+	}
+
+	// Create depth map image + view
+	// For now, this is just a 2d texture (in the future, for cascades, use a 2d array texture)
+	size_t numCascadeLayers = 1;
+	pDepthMapImage = new VkDepthMapImage(*this, numCascadeLayers, depthMapSize, depthBufferFormat, "<depth map>");
+
+	// For each depth pass (cascade)
+	for (size_t i = 0; i < numCascadeLayers; ++i)
+	{
+		// Image view for just this layer
+		const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
+			.setImage(pDepthMapImage->object)
+			.setViewType(vk::ImageViewType::e2D) // TODO: Once layer_count > 1, use e2DArray
+			.setFormat(depthBufferFormat)
+			.setComponents(vk::ComponentMapping())
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, static_cast<uint32_t>(i), 1));
+
+		auto cascade_view = dev.createImageView(imageViewCreateInfo, nullptr, vkDynLoader);
+
+		if (debugUtilsExtEnabled)
+		{
+			std::string imageViewName = "<depth cascade image view: " + std::to_string(i) + ">";
+			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+			objectNameInfo.setObjectType(vk::ObjectType::eImageView);
+			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImageView>(cascade_view)));
+			objectNameInfo.setPObjectName(imageViewName.c_str());
+			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+		}
+
+		depthMapCascadeView.push_back(cascade_view);
+
+		// FBO for this image view + layer
+		auto cascade_fbo = dev.createFramebuffer(
+			vk::FramebufferCreateInfo()
+			.setAttachmentCount(1)
+			.setPAttachments(&cascade_view)
+			.setLayers(1)
+			.setWidth(depthMapSize)
+			.setHeight(depthMapSize)
+			.setRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp)
+			, nullptr, vkDynLoader);
+
+		if (debugUtilsExtEnabled)
+		{
+			std::string framebufferName = "<depth cascade frame buffer: " + std::to_string(i) + ">";
+			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+			objectNameInfo.setObjectType(vk::ObjectType::eFramebuffer);
+			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkFramebuffer>(cascade_fbo)));
+			objectNameInfo.setPObjectName(framebufferName.c_str());
+			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+		}
+
+		renderPasses[DEPTH_RENDER_PASS_ID].fbo.push_back(cascade_fbo);
+	}
 }
 
 bool VkRoot::setupDebugUtilsCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
@@ -2619,11 +2948,39 @@ void VkRoot::shutdown()
 {
 	destroySwapchainAndSwapchainSpecificStuff(true);
 
-	for (auto& pipeline : createdPipelines)
+	for (auto& pipelineInfo : createdPipelines)
 	{
-		delete pipeline.second;
+		for (auto& pipeline : pipelineInfo.renderPassPSO)
+		{
+			if (pipeline)
+			{
+				delete pipeline;
+			}
+		}
 	}
 	createdPipelines.clear();
+
+	// destroy depth pass objects
+	for (auto f : renderPasses[DEPTH_RENDER_PASS_ID].fbo)
+	{
+		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
+	}
+	renderPasses[DEPTH_RENDER_PASS_ID].fbo.clear();
+	for (auto imageView : depthMapCascadeView)
+	{
+		dev.destroyImageView(imageView, nullptr, vkDynLoader);
+	}
+	depthMapCascadeView.clear();
+	if (pDepthMapImage)
+	{
+		pDepthMapImage->destroy(dev, allocator, vkDynLoader); // because the buffering_mechanism is gone at this point...
+		delete pDepthMapImage;
+	}
+	if (renderPasses[DEPTH_RENDER_PASS_ID].rp)
+	{
+		dev.destroyRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
+		renderPasses[DEPTH_RENDER_PASS_ID].rp = vk::RenderPass();
+	}
 
 	// destroy allocator
 	if (allocator != VK_NULL_HANDLE)
@@ -2707,11 +3064,11 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 	}
 	buffering_mechanism::destroy(dev, vkDynLoader);
 
-	for (auto f : fbo)
+	for (auto f : renderPasses[DEFAULT_RENDER_PASS_ID].fbo)
 	{
 		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
 	}
-	fbo.clear();
+	renderPasses[DEFAULT_RENDER_PASS_ID].fbo.clear();
 
 	if (depthStencilView)
 	{
@@ -2745,10 +3102,10 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 		colorImage = vk::Image();
 	}
 
-	if (rp)
+	if (renderPasses[DEFAULT_RENDER_PASS_ID].rp)
 	{
-		dev.destroyRenderPass(rp, nullptr, vkDynLoader);
-		rp = vk::RenderPass();
+		dev.destroyRenderPass(renderPasses[DEFAULT_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
+		renderPasses[DEFAULT_RENDER_PASS_ID].rp = vk::RenderPass();
 	}
 
 	for (auto& imgview : swapchainImageView)
@@ -3257,7 +3614,7 @@ bool VkRoot::createSwapchain()
 	}
 
 	// createDepthStencilImage
-	vk::Format depthFormat = findDepthFormat(physicalDevice, vkDynLoader);
+	vk::Format depthFormat = findDepthStencilFormat(physicalDevice, vkDynLoader);
 
 	try {
 		depthStencilImage = dev.createImage(
@@ -3323,6 +3680,7 @@ bool VkRoot::createSwapchain()
 
 	setupSwapchainImages();
 
+	// create default render pass
 	try {
 		createDefaultRenderpass(surfaceFormat.format, depthFormat);
 	}
@@ -3332,33 +3690,6 @@ bool VkRoot::createSwapchain()
 	}
 	catch (const vk::OutOfDeviceMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateRenderPass (default): OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
-	}
-
-	// createFramebuffers()
-	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
-	try {
-		std::transform(swapchainImageView.begin(), swapchainImageView.end(), std::back_inserter(fbo),
-				   [&](const vk::ImageView& imageView) {
-					   const auto attachments = (msaaEnabled) ? std::vector<vk::ImageView>{colorImageView, depthStencilView, imageView}
-					   											: std::vector<vk::ImageView>{imageView, depthStencilView};
-					   return dev.createFramebuffer(
-													vk::FramebufferCreateInfo()
-													.setAttachmentCount(static_cast<uint32_t>(attachments.size()))
-													.setPAttachments(attachments.data())
-													.setLayers(1)
-													.setWidth(swapchainSize.width)
-													.setHeight(swapchainSize.height)
-													.setRenderPass(rp)
-													, nullptr, vkDynLoader);
-				   });
-	}
-	catch (const vk::OutOfHostMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
-	}
-	catch (const vk::OutOfDeviceMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfDeviceMemoryError: %s", e.what());
 		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
 	}
 
@@ -3644,6 +3975,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 
 	initPixelFormatsSupport();
+	debug(LOG_3D, "Using depth buffer / shadow map format: %s", to_string(depthBufferFormat).c_str());
 
 	// convert antialiasing to vk::SampleCountFlagBits
 	if (antialiasing >= 64)
@@ -3706,11 +4038,16 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	getQueues();
 
+	ASSERT(renderPasses.empty(), "Non-empty renderPasses vector?");
+	renderPasses = { RenderPassDetails(DEFAULT_RENDER_PASS_ID), RenderPassDetails(DEPTH_RENDER_PASS_ID) };
+
 	if (!createSwapchain())
 	{
 		debug(LOG_ERROR, "createSwapchain() failed");
 		return false;
 	}
+
+	createDepthPasses(depthBufferFormat); // TODO: Handle failures?
 
 	return true;
 }
@@ -3805,6 +4142,16 @@ void VkRoot::initPixelFormatsSupport()
 
 	// ASTC (LDR)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+
+	// DEPTH FORMAT
+	// - find the best available depth format
+	try {
+		depthBufferFormat = findDepthBufferFormat(physicalDevice, vkDynLoader);
+	}
+	catch (const std::exception& e)
+	{
+		debug(LOG_ERROR, "Failed to get a supported depth buffer format: %s", e.what());
+	}
 }
 
 bool VkRoot::createSurface()
@@ -3994,14 +4341,14 @@ void VkRoot::draw(const std::size_t& offset, const std::size_t& count, const gfx
 {
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
-	buffering_mechanism::get_current_resources().cmdDraw.draw(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset), 0, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->draw(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset), 0, vkDynLoader);
 }
 
 void VkRoot::draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count)
 {
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
-	buffering_mechanism::get_current_resources().cmdDraw.draw(static_cast<uint32_t>(count), static_cast<uint32_t>(instance_count), static_cast<uint32_t>(offset), 0, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->draw(static_cast<uint32_t>(count), static_cast<uint32_t>(instance_count), static_cast<uint32_t>(offset), 0, vkDynLoader);
 }
 
 void VkRoot::draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&)
@@ -4009,7 +4356,7 @@ void VkRoot::draw_elements(const std::size_t& offset, const std::size_t& count, 
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
-	buffering_mechanism::get_current_resources().cmdDraw.drawIndexed(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset) >> 2, 0, 0, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->drawIndexed(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset) >> 2, 0, 0, vkDynLoader);
 }
 
 void VkRoot::draw_elements_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index, std::size_t instance_count)
@@ -4017,7 +4364,7 @@ void VkRoot::draw_elements_instanced(const std::size_t& offset, const std::size_
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
-	buffering_mechanism::get_current_resources().cmdDraw.drawIndexed(static_cast<uint32_t>(count), static_cast<uint32_t>(instance_count), static_cast<uint32_t>(offset) >> 2, 0, 0, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->drawIndexed(static_cast<uint32_t>(count), static_cast<uint32_t>(instance_count), static_cast<uint32_t>(offset) >> 2, 0, 0, vkDynLoader);
 }
 
 void VkRoot::bind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset)
@@ -4034,7 +4381,7 @@ void VkRoot::bind_vertex_buffers(const std::size_t& first, const std::vector<std
 		offsets.push_back(std::get<1>(input));
 	}
 	ASSERT(first <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "first (%zu) exceeds uint32_t max", first);
-	buffering_mechanism::get_current_resources().cmdDraw.bindVertexBuffers(static_cast<uint32_t>(first), buffers, offsets, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindVertexBuffers(static_cast<uint32_t>(first), buffers, offsets, vkDynLoader);
 }
 
 void VkRoot::unbind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset)
@@ -4060,7 +4407,7 @@ void VkRoot::bind_streamed_vertex_buffers(const void* data, const std::size_t si
 	frameResources.streamedVertexBufferAllocator.unmapMemory(streamedMemory);
 	const auto buffers = std::array<vk::Buffer, 1> { streamedMemory.buffer };
 	const auto offsets = std::array<vk::DeviceSize, 1> { streamedMemory.offset };
-	buffering_mechanism::get_current_resources().cmdDraw.bindVertexBuffers(0, buffers, offsets, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindVertexBuffers(0, buffers, offsets, vkDynLoader);
 }
 
 void VkRoot::setupSwapchainImages()
@@ -4193,6 +4540,8 @@ vk::Format VkRoot::get_format(const gfx_api::pixel_format& format) const
 		return vk::Format::eEacR11G11UnormBlock;
 	case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 		return vk::Format::eAstc4x4UnormBlock;
+	case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
+		return depthBufferFormat;
 	case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
 		// Not supported!
 	default:
@@ -4271,7 +4620,7 @@ void VkRoot::bind_index_buffer(gfx_api::buffer& index_buffer, const gfx_api::ind
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	auto& casted_buf = static_cast<VkBuf&>(index_buffer);
 	ASSERT(casted_buf.usage == gfx_api::buffer::usage::index_buffer, "Passed gfx_api::buffer is not an index buffer");
-	buffering_mechanism::get_current_resources().cmdDraw.bindIndexBuffer(casted_buf.object, 0, to_vk(index), vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindIndexBuffer(casted_buf.object, 0, to_vk(index), vkDynLoader);
 }
 
 void VkRoot::unbind_index_buffer(gfx_api::buffer&)
@@ -4294,13 +4643,22 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 		vk::ImageView imageView;
 		if (texture != nullptr)
 		{
-			if (texture->isArray())
+			switch (attribute_descriptions.at(i).target)
 			{
-				imageView = static_cast<VkTextureArray*>(texture)->view.get();
-			}
-			else
-			{
-				imageView = static_cast<VkTexture*>(texture)->view.get();
+				case gfx_api::pixel_format_target::texture_2d:
+				case gfx_api::pixel_format_target::texture_2d_array:
+					if (texture->isArray())
+					{
+						imageView = static_cast<VkTextureArray*>(texture)->view.get();
+					}
+					else
+					{
+						imageView = static_cast<VkTexture*>(texture)->view.get();
+					}
+					break;
+				case gfx_api::pixel_format_target::depth_map:
+					imageView = static_cast<VkDepthMapImage*>(texture)->view.get();
+					break;
 			}
 		}
 		else
@@ -4308,7 +4666,7 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 			switch (attribute_descriptions.at(i).target)
 			{
 				case gfx_api::pixel_format_target::texture_2d:
-				case gfx_api::pixel_format_target::texture_2d_shadow:
+				case gfx_api::pixel_format_target::depth_map:
 					imageView = pDefaultTexture->view.get();
 					break;
 				case gfx_api::pixel_format_target::texture_2d_array:
@@ -4316,9 +4674,22 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 					break;
 			}
 		}
+
+		vk::ImageLayout imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+		switch (attribute_descriptions.at(i).target)
+		{
+			case gfx_api::pixel_format_target::texture_2d:
+			case gfx_api::pixel_format_target::texture_2d_array:
+				// use the default: vk::ImageLayout::eShaderReadOnlyOptimal
+				break;
+			case gfx_api::pixel_format_target::depth_map:
+				imageLayout = vk::ImageLayout::eDepthStencilReadOnlyOptimal;
+				break;
+		}
+
 		image_descriptor.emplace_back(vk::DescriptorImageInfo()
 			.setImageView(imageView)
-			.setImageLayout(vk::ImageLayout::eShaderReadOnlyOptimal));
+			.setImageLayout(imageLayout));
 		i++;
 	}
 	i = 0;
@@ -4337,7 +4708,7 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 		i++;
 	}
 	dev.updateDescriptorSets(write_info, nullptr, vkDynLoader);
-	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, currentPSO->textures_first_set, set, nullptr, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, currentPSO->textures_first_set, set, nullptr, vkDynLoader);
 }
 
 void VkRoot::set_constants(const void* buffer, const std::size_t& size)
@@ -4389,7 +4760,7 @@ void VkRoot::set_uniforms_set(const size_t& uniform_set, const void* buffer, siz
 		perFrame_perPSO_dynamicUniformDescriptorSets->second[uniform_set] = perFrameResources_t::DynamicUniformBufferDescriptorSets( bufferInfo, descSet);
 	}
 	const auto dynamicOffsets = std::array<uint32_t, 1> { stagingMemory.offset };
-	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, static_cast<uint32_t>(uniform_set), descSet, dynamicOffsets, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, static_cast<uint32_t>(uniform_set), descSet, dynamicOffsets, vkDynLoader);
 }
 
 void VkRoot::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
@@ -4410,11 +4781,19 @@ void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notexture
 {
 	VkPSOId* newPSOId = static_cast<VkPSOId*>(pso);
 	// lookup PSO
-	VkPSO* newPSO = createdPipelines[newPSOId->psoID].second;
+	auto& pipelineInfo = createdPipelines[newPSOId->psoID];
+	VkPSO* newPSO = pipelineInfo.renderPassPSO[currentRenderPassId];
+	if (!newPSO)
+	{
+		// Must build this pipeline for a different render pass
+		auto& renderPass = renderPasses[currentRenderPassId];
+		newPSO = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+		pipelineInfo.renderPassPSO[currentRenderPassId] = newPSO;
+	}
 	if (currentPSO != newPSO)
 	{
 		currentPSO = newPSO;
-		buffering_mechanism::get_current_resources().cmdDraw.bindPipeline(vk::PipelineBindPoint::eGraphics, currentPSO->object, vkDynLoader);
+		buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindPipeline(vk::PipelineBindPoint::eGraphics, currentPSO->object, vkDynLoader);
 	}
 }
 
@@ -4471,8 +4850,11 @@ void VkRoot::endRenderPass()
 	frameNum = std::max<size_t>(frameNum + 1, 1);
 
 	currentPSO = nullptr;
-	buffering_mechanism::get_current_resources().cmdDraw.endRenderPass(vkDynLoader);
-	buffering_mechanism::get_current_resources().cmdDraw.end(vkDynLoader);
+
+	buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer().end(vkDynLoader);
+
+	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().endRenderPass(vkDynLoader);
+	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().end(vkDynLoader);
 
 	startedRenderPass = false;
 
@@ -4483,11 +4865,11 @@ void VkRoot::endRenderPass()
 			.setDstAccessMask(vk::AccessFlagBits::eIndexRead | vk::AccessFlagBits::eVertexAttributeRead | vk::AccessFlagBits::eUniformRead )
 	};
 
-	buffering_mechanism::get_current_resources().cmdCopy.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer,
-																		 vk::PipelineStageFlagBits::eDrawIndirect | vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eVertexShader,
-																		 vk::DependencyFlagBits(), memoryBarriers, nullptr, nullptr, vkDynLoader);
+	buffering_mechanism::get_current_resources().copyCmdBuffer().pipelineBarrier(vk::PipelineStageFlagBits::eTransfer,
+																				 vk::PipelineStageFlagBits::eDrawIndirect | vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eVertexShader,
+																				 vk::DependencyFlagBits(), memoryBarriers, nullptr, nullptr, vkDynLoader);
 
-	buffering_mechanism::get_current_resources().cmdCopy.end(vkDynLoader);
+	buffering_mechanism::get_current_resources().copyCmdBuffer().end(vkDynLoader);
 
 	buffering_mechanism::get_current_resources().uniformBufferAllocator.flushAutomappedMemory();
 	buffering_mechanism::get_current_resources().uniformBufferAllocator.unmapAutomappedMemory();
@@ -4512,7 +4894,10 @@ void VkRoot::endRenderPass()
 		}
 	}
 
-	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 2>{buffering_mechanism::get_current_resources().cmdCopy, buffering_mechanism::get_current_resources().cmdDraw}; // copy before render
+	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 3>{
+		buffering_mechanism::get_current_resources().copyCmdBuffer(), // copy before render
+		buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer(),
+		buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer()};
 	const vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; //vk::PipelineStageFlagBits::eAllCommands;
 
 	auto submitInfo = vk::SubmitInfo()
@@ -4666,48 +5051,121 @@ void VkRoot::endRenderPass()
 		lastRenderPassEndTime = renderPassEndTime;
 	}
 
-	buffering_mechanism::get_current_resources().cmdCopy.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
+	buffering_mechanism::get_current_resources().copyCmdBuffer().begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
+	buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer().begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 }
 
 void VkRoot::startRenderPass()
 {
-	buffering_mechanism::get_current_resources().cmdDraw.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
+	ASSERT(currentRenderPassId == DEFAULT_RENDER_PASS_ID, "A previous depth pass wasn't properly ended?");
+
+	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 
 	const auto clearValue = std::array<vk::ClearValue, 2> {
 		vk::ClearValue(), vk::ClearValue(vk::ClearDepthStencilValue(1.f, 0u))
 	};
-	buffering_mechanism::get_current_resources().cmdDraw.beginRenderPass(
+	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().beginRenderPass(
 		vk::RenderPassBeginInfo()
-		.setFramebuffer(fbo[currentSwapchainIndex])
+		.setFramebuffer(defaultRenderpass().fbo[currentSwapchainIndex])
 		.setClearValueCount(static_cast<uint32_t>(clearValue.size()))
 		.setPClearValues(clearValue.data())
-		.setRenderPass(rp)
+		.setRenderPass(defaultRenderpass().rp)
 		.setRenderArea(vk::Rect2D(vk::Offset2D(), swapchainSize)),
 		vk::SubpassContents::eInline,
 		vkDynLoader);
 	const auto viewports = std::array<vk::Viewport, 1> {
 		vk::Viewport().setHeight(swapchainSize.height).setWidth(swapchainSize.width).setMinDepth(0.f).setMaxDepth(1.f)
 	};
-	buffering_mechanism::get_current_resources().cmdDraw.setViewport(0, viewports, vkDynLoader);
+	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().setViewport(0, viewports, vkDynLoader);
 	const auto scissors = std::array<vk::Rect2D, 1> {
 		vk::Rect2D().setExtent(swapchainSize)
 	};
-	buffering_mechanism::get_current_resources().cmdDraw.setScissor(0, scissors, vkDynLoader);
+	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().setScissor(0, scissors, vkDynLoader);
 
 	startedRenderPass = true;
+	currentRenderPassId = DEFAULT_RENDER_PASS_ID;
+}
+
+size_t VkRoot::numDepthPasses()
+{
+	return 1;
+}
+
+void VkRoot::beginDepthPass(size_t idx)
+{
+	auto& depthRenderPass = renderPasses[DEPTH_RENDER_PASS_ID];
+	ASSERT_OR_RETURN(, idx < depthRenderPass.fbo.size(), "Invalid depth pass #: %zu (exceeds depthPass FBOs count: %zu)", idx, depthRenderPass.fbo.size());
+
+	// There only needs to be a single RenderPass object for 1 or more depth passes
+	// What actually swaps out is the FBO used in the call to beginRenderPass
+	auto depthPassExtent = vk::Extent2D(depthMapSize, depthMapSize);
+
+	const auto clearValue = std::array<vk::ClearValue, 1> {
+		vk::ClearValue(vk::ClearDepthStencilValue(1.f, 0u))
+	};
+	buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer().beginRenderPass(
+		vk::RenderPassBeginInfo()
+		.setFramebuffer(depthRenderPass.fbo[idx])
+		.setClearValueCount(static_cast<uint32_t>(clearValue.size()))
+		.setPClearValues(clearValue.data())
+		.setRenderPass(depthRenderPass.rp)
+		.setRenderArea(vk::Rect2D(vk::Offset2D(), depthPassExtent)),
+		vk::SubpassContents::eInline,
+		vkDynLoader);
+	const auto viewports = std::array<vk::Viewport, 1> {
+		vk::Viewport().setHeight(depthMapSize).setWidth(depthMapSize).setMinDepth(0.f).setMaxDepth(1.f)
+	};
+	buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer().setViewport(0, viewports, vkDynLoader);
+	const auto scissors = std::array<vk::Rect2D, 1> {
+		vk::Rect2D().setExtent(depthPassExtent)
+	};
+	buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer().setScissor(0, scissors, vkDynLoader);
+
+	// Set up the buffering_mechanism resources state, so subsequent calls to currentDrawCmdBuffer() use the one for the depth pass
+	buffering_mechanism::get_current_resources().beginDepthPass();
+	currentRenderPassId = DEPTH_RENDER_PASS_ID;
+	currentPSO = nullptr;
+}
+
+size_t VkRoot::getDepthPassDimensions(size_t idx)
+{
+	return depthMapSize;
+}
+
+void VkRoot::endCurrentDepthPass()
+{
+	ASSERT_OR_RETURN(, currentRenderPassId == DEPTH_RENDER_PASS_ID, "Current render pass is not a depth pass! (Mismatched beginDepthPass/endCurrentDepthPass calls.)");
+
+	auto depthPassDrawCmdBuffer = buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer();
+	depthPassDrawCmdBuffer.endRenderPass(vkDynLoader);
+
+	// Set up the buffering_mechanism resources state, so subsequent calls to currentDrawCmdBuffer() use the one for the default render pass
+	buffering_mechanism::get_current_resources().endCurrentDepthPass();
+	currentRenderPassId = DEFAULT_RENDER_PASS_ID;
+	currentPSO = nullptr;
+}
+
+gfx_api::abstract_texture* VkRoot::getDepthTexture()
+{
+	return pDepthMapImage;
 }
 
 void VkRoot::set_polygon_offset(const float& offset, const float& slope)
 {
-	buffering_mechanism::get_current_resources().cmdDraw.setDepthBias(offset, (physDeviceFeatures.depthBiasClamp) ? 1.0f : 0.f, slope, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->setDepthBias(offset, (physDeviceFeatures.depthBiasClamp) ? 1.0f : 0.f, slope, vkDynLoader);
 }
 
 void VkRoot::set_depth_range(const float& min, const float& max)
 {
+	vk::Extent2D currentRenderpassExtent = swapchainSize;
+	if (currentRenderPassId == DEPTH_RENDER_PASS_ID)
+	{
+		currentRenderpassExtent = vk::Extent2D(depthMapSize, depthMapSize);
+	}
 	const auto viewports = std::array<vk::Viewport, 1> {
-		vk::Viewport().setHeight(swapchainSize.height).setWidth(swapchainSize.width).setMinDepth(min).setMaxDepth(max)
+		vk::Viewport().setHeight(currentRenderpassExtent.height).setWidth(currentRenderpassExtent.width).setMinDepth(min).setMaxDepth(max)
 	};
-	buffering_mechanism::get_current_resources().cmdDraw.setViewport(0, viewports, vkDynLoader);
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->setViewport(0, viewports, vkDynLoader);
 }
 
 int32_t VkRoot::get_context_value(const gfx_api::context::context_value property)

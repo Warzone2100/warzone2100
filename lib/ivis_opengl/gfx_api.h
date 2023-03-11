@@ -197,6 +197,7 @@ namespace gfx_api
 	enum class cull_mode
 	{
 		back,
+		front,
 		none,
 	};
 
@@ -346,6 +347,11 @@ namespace gfx_api
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
 		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, gfx_api::backend_type backend);
+		virtual size_t numDepthPasses() { return 0; }
+		virtual void beginDepthPass(size_t idx) { }
+		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
+		virtual void endCurrentDepthPass() { }
+		virtual gfx_api::abstract_texture* getDepthTexture() { return nullptr; }
 		virtual void beginRenderPass() = 0;
 		virtual void endRenderPass() = 0;
 		virtual void debugStringMarker(const char *str) = 0;

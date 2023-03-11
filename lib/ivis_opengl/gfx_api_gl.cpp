@@ -121,6 +121,8 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 			return GL_COMPRESSED_RG11_EAC;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 			return GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
+		case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
+			return GL_DEPTH_COMPONENT32F; // TODO: Need to check which one to give
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}
@@ -163,6 +165,9 @@ static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
 				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
 				return GL_LUMINANCE;
 			}
+		// DEPTH FORMAT
+		case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
+			return GL_DEPTH_COMPONENT;
 		// COMPRESSED FORMAT
 		default:
 			return to_gl_internalformat(format, gles);
@@ -1103,6 +1108,11 @@ void gl_pipeline_state_object::bind()
 	{
 		case gfx_api::cull_mode::back:
 			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT);
+			break;
+		case gfx_api::cull_mode::front:
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
 			break;
 		case gfx_api::cull_mode::none:
 			glDisable(GL_CULL_FACE);
@@ -2187,7 +2197,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 					pTextureToBind = pDefaultArrayTexture;
 					break;
 				case gfx_api::pixel_format_target::texture_2d:
-				case gfx_api::pixel_format_target::texture_2d_shadow:
+				case gfx_api::pixel_format_target::depth_map:
 					pTextureToBind = pDefaultTexture;
 					break;
 			}
@@ -2712,6 +2722,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 
 	mipLodBias = _mipLodBias;
 
+	initDepthPasses(depthBufferResolution);
+
 #if !defined(__EMSCRIPTEN__)
 	_beginRenderPassImpl();
 #endif
@@ -3022,8 +3034,40 @@ bool gl_context::initGLContext()
 	return true;
 }
 
+size_t gl_context::numDepthPasses()
+{
+	return depthFBO.size();
+}
+
+void gl_context::beginDepthPass(size_t idx)
+{
+	ASSERT_OR_RETURN(, idx < depthFBO.size(), "Invalid depth pass #: %zu", idx);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO[idx]);
+	glViewport(0, 0, depthBufferResolution, depthBufferResolution);
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+size_t gl_context::getDepthPassDimensions(size_t idx)
+{
+	return depthBufferResolution;
+}
+
+void gl_context::endCurrentDepthPass()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, viewportWidth, viewportHeight);
+	glDepthMask(GL_TRUE);
+}
+
+gfx_api::abstract_texture* gl_context::getDepthTexture()
+{
+	return depthTexture;
+}
+
 void gl_context::_beginRenderPassImpl()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, viewportWidth, viewportHeight);
 	GLbitfield clearFlags = 0;
 	glDepthMask(GL_TRUE);
 	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
@@ -3384,6 +3428,18 @@ void gl_context::shutdown()
 {
 	if(glClear) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+	if (glDeleteFramebuffers && depthFBO.size() > 0)
+	{
+		glDeleteFramebuffers(static_cast<GLsizei>(depthFBO.size()), depthFBO.data());
+		depthFBO.clear();
+	}
+
+	if (depthTexture)
+	{
+		delete depthTexture;
+		depthTexture = nullptr;
+	}
+
 	if (pDefaultTexture)
 	{
 		delete pDefaultTexture;
@@ -3499,4 +3555,68 @@ bool gl_context::supportsIntVertexAttributes() const
 size_t gl_context::maxFramesInFlight() const
 {
 	return 2;
+}
+
+size_t gl_context::initDepthPasses(size_t resolution)
+{
+	if (depthPassCount > 1)
+	{
+		if ((!gles && !GLAD_GL_VERSION_3_0) || (gles && !GLAD_GL_ES_VERSION_3_0))
+		{
+			// glFramebufferTextureLayer requires OpenGL 3.0+ / ES 3.0+
+			debug(LOG_ERROR, "Cannot create depth texture array - requires OpenGL 3.0+ / OpenGL ES 3.0+");
+			// could use  a single depth pass (as a 2d texture) - but only bother if we want to keep support // TODO: decide
+			depthPassCount = 1;
+		}
+	}
+
+	// delete prior depth texture & FBOs (if present)
+	if (glDeleteFramebuffers && depthFBO.size() > 0)
+	{
+		glDeleteFramebuffers(static_cast<GLsizei>(depthFBO.size()), depthFBO.data());
+		depthFBO.clear();
+	}
+	if (depthTexture)
+	{
+		delete depthTexture;
+		depthTexture = nullptr;
+	}
+
+	// for now, create a single 2d depth texture
+	auto pNewDepthTexture = dynamic_cast<gl_texture*>(create_texture(1, resolution, resolution, gfx_api::pixel_format::FORMAT_DEPTH_BUFFER, "<depth map>"));
+	if (!pNewDepthTexture)
+	{
+		debug(LOG_ERROR, "Failed to create depth texture");
+		return 0;
+	}
+	depthTexture = pNewDepthTexture;
+
+	GLenum target = (depthTexture->isArray()) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
+	depthTexture->bind();
+	glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	depthTexture->unbind();
+
+	for (auto i = 0; i < depthPassCount; ++i)
+	{
+		GLuint newFBO = 0;
+		glGenFramebuffers(1, &newFBO);
+		depthFBO.push_back(newFBO);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
+		if (depthTexture->isArray())
+		{
+			ASSERT(glFramebufferTextureLayer != nullptr, "glFramebufferTextureLayer is not available?");
+			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->id(), 0, static_cast<GLint>(i)); // OpenGL 3.0+ / ES 3.0+ only
+		}
+		else
+		{
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->id(), 0);
+		}
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	return depthPassCount;
 }
