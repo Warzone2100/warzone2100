@@ -232,7 +232,7 @@ public:
 	{
 		auto newLabel = std::make_shared<WzThrottledUpdateLabel>(updateFunc, updateInterval);
 		newLabel->setFont(font_regular, WZCOL_FORM_LIGHT);
-		newLabel->setCanTruncate(true);
+		newLabel->setCanTruncate(false);
 		newLabel->setTransparentToClicks(true);
 		if (updateFunc)
 		{
