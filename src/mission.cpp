@@ -2222,6 +2222,7 @@ static void intDestroyMissionResultWidgets()
 static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
 	missionResetInGameState();
+	scoreUpdateVar(WD_MISSION_ENDED); //Store completion time for this mission
 
 	W_FORMINIT sFormInit;
 
