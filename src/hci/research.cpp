@@ -131,6 +131,12 @@ void ResearchController::startResearch(RESEARCH &research)
 		cancelResearch(facility);
 	}
 
+	STRUCTURE *psLab = findResearchingFacilityByResearchIndex(selectedPlayer, research.ref - STAT_RESEARCH);
+	if (psLab != nullptr)
+	{
+		cancelResearch(psLab); //Clear it out of this lab as we are now researching it in another.
+	}
+
 	if (bMultiMessages)
 	{
 		// Say that we want to do research [sic].
