@@ -202,7 +202,8 @@ bool	scoreInitSystem()
 	missionData.strLost			= 0;
 
 	missionData.artefactsFound	= 0;
-	missionData.missionStarted	= gameTime; // total game time is just gameTime
+	scoreUpdateVar(WD_MISSION_STARTED); // total game time is just gameTime
+	missionData.missionEnded	= 0;
 	missionData.shotsOnTarget	= 0;
 	missionData.shotsOffTarget	= 0;
 	missionData.babasMowedDown	= 0;
@@ -241,6 +242,9 @@ void	scoreUpdateVar(DATA_INDEX var)
 	case	WD_MISSION_STARTED:
 		missionData.missionStarted = gameTime;	// Init the mission start time
 		break;									// Should be called once per mission
+	case	WD_MISSION_ENDED:
+		missionData.missionEnded = gameTime - missionData.missionStarted;	// Mission ended
+		break;
 	case	WD_SHOTS_ON_TARGET:
 		missionData.shotsOnTarget++;	// We hit something
 		break;
@@ -398,7 +402,7 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 	cache.wzInfoText_ArtifactsFound.render((pie_GetVideoBufferWidth() - cache.wzInfoText_ArtifactsFound.width()) / 2, 300 + D_H, WZCOL_FORM_TEXT);
 
 	/* Get the mission result time in a string - and write it out */
-	getAsciiTime((char *)&text2, gameTime - missionData.missionStarted);
+	getAsciiTime((char *)&text2, missionData.missionEnded);
 	snprintf(text, sizeof(text), _("Mission Time - %s"), text2);
 	cache.wzInfoText_MissionTime.setText(text, font_regular);
 	cache.wzInfoText_MissionTime.render((pie_GetVideoBufferWidth() - cache.wzInfoText_MissionTime.width()) / 2, 320 + D_H, WZCOL_FORM_TEXT);
@@ -529,6 +533,7 @@ bool writeScoreData(const char *fileName)
 	ini.setValue("strLost", missionData.strLost);
 	ini.setValue("artefactsFound", missionData.artefactsFound);
 	ini.setValue("missionStarted", missionData.missionStarted);
+	ini.setValue("missionEnded", missionData.missionEnded);
 	ini.setValue("shotsOnTarget", missionData.shotsOnTarget);
 	ini.setValue("shotsOffTarget", missionData.shotsOffTarget);
 	ini.setValue("babasMowedDown", missionData.babasMowedDown);
@@ -552,6 +557,7 @@ bool readScoreData(const char *fileName)
 	missionData.strLost = ini.value("strLost").toInt();
 	missionData.artefactsFound = ini.value("artefactsFound").toInt();
 	missionData.missionStarted = ini.value("missionStarted").toInt();
+	missionData.missionEnded = ini.value("missionEnded").toInt();
 	missionData.shotsOnTarget = ini.value("shotsOnTarget").toInt();
 	missionData.shotsOffTarget = ini.value("shotsOffTarget").toInt();
 	missionData.babasMowedDown = ini.value("babasMowedDown").toInt();
