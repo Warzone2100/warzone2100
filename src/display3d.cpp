@@ -934,7 +934,8 @@ void draw3DScene()
 	if (getWidgetsStatus() && !gamePaused())
 	{
 		char buildInfo[255];
-		getAsciiTime(buildInfo, graphicsTime);
+		bool showMs = (gameTimeGetMod() < Rational(1, 4));
+		getAsciiTime(buildInfo, showMs ? graphicsTime : gameTime, showMs);
 		txtLevelName.render(RET_X + 134, 410 + E_H, WZCOL_TEXT_MEDIUM);
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())

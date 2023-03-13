@@ -258,14 +258,13 @@ void	scoreUpdateVar(DATA_INDEX var)
 }
 
 // Builds an ascii string for the passed in components 4:02:23 for example.
-void getAsciiTime(char *psText, unsigned time)
+void getAsciiTime(char *psText, unsigned time, bool showMs /*= false*/)
 {
 	int hours, minutes, seconds, milliseconds;
 	getTimeComponents(time, &hours, &minutes, &seconds, &milliseconds);
 
 	char const *hourColon = hours != 0 ? ":" : "";
 
-	bool showMs = gameTimeGetMod() < Rational(1, 4);
 	if (showMs)
 	{
 		sprintf(psText, "%.0d%s%02d:%02d.%03d", hours, hourColon, minutes, seconds, milliseconds);

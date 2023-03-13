@@ -117,7 +117,7 @@ bool scoreInitSystem();
 void scoreUpdateVar(DATA_INDEX var);
 END_GAME_STATS_DATA	collectEndGameStatsData();
 void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache);
-void getAsciiTime(char *psText, unsigned time);
+void getAsciiTime(char *psText, unsigned time, bool showMs = false);
 bool readScoreData(const char *fileName);
 bool writeScoreData(const char *fileName);
 
