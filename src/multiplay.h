@@ -213,7 +213,7 @@ WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
-const char *getPlayerName(int player, bool storedName = false);
+const char *getPlayerName(int player);
 bool setPlayerName(int player, const char *sName);
 void clearPlayerName(unsigned int player);
 const char *getPlayerColourName(int player);

@@ -97,7 +97,6 @@ MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
-char						playerName[MAX_CONNECTED_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
 #define DATACHECK2_INTERVAL_MS 10000
 
@@ -568,17 +567,11 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // return a players name.
-const char *getPlayerName(int player, bool storedName /*= false*/)
+const char *getPlayerName(int player)
 {
 	ASSERT_OR_RETURN(nullptr, player >= 0, "Wrong player index: %d", player);
 
 	const bool aiPlayer = (static_cast<size_t>(player) < NetPlay.players.size()) && (NetPlay.players[player].ai >= 0) && !NetPlay.players[player].allocated;
-
-	// playerName is created through setPlayerName()
-	if (storedName && !aiPlayer && player < MAX_CONNECTED_PLAYERS && strcmp(playerName[player], "") != 0)
-	{
-		return (char *)&playerName[player];
-	}
 
 	if (aiPlayer && GetGameMode() == GS_NORMAL && !challengeActive)
 	{
@@ -603,7 +596,6 @@ const char *getPlayerName(int player, bool storedName /*= false*/)
 bool setPlayerName(int player, const char *sName)
 {
 	ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS && player >= 0, "Player index (%u) out of range", player);
-	sstrcpy(playerName[player], sName); // Intended for long time storage of player name for Intel menu viewing.
 	sstrcpy(NetPlay.players[player].name, sName);
 	return true;
 }
@@ -626,13 +618,11 @@ void clearPlayerName(unsigned int player)
 	{
 		for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
-			playerName[i][0] = '\0';
 			NetPlay.players[i].name[0] = '\0';
 		}
 	}
 	else
 	{
-		playerName[player][0] = '\0';
 		NetPlay.players[player].name[0] = '\0';
 	}
 }
