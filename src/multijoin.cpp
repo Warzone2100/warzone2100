@@ -198,8 +198,6 @@ void clearPlayer(UDWORD player, bool quietly)
 		return; // no more to do
 	}
 
-	(void)setPlayerName(player, "");				//clear custom player name (will use default instead)
-
 	for (i = 0; i < MAX_PLAYERS; i++)				// remove alliances
 	{
 		// Never remove a player's self-alliance, as the player can be selected and units added via the debug menu
