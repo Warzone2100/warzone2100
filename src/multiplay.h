@@ -203,7 +203,6 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define MAX_KICK_REASON			1024		// max array size for the reason your kicking someone
 
-#define CLEAR_ALL_NAMES         -1
 // functions
 
 WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
