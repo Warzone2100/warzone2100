@@ -614,17 +614,8 @@ bool isHumanPlayer(int player)
 // Clear player name data after game quit.
 void clearPlayerName(unsigned int player)
 {
-	if (player == CLEAR_ALL_NAMES)
-	{
-		for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
-		{
-			NetPlay.players[i].name[0] = '\0';
-		}
-	}
-	else
-	{
-		NetPlay.players[player].name[0] = '\0';
-	}
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Player index (%u) out of range", player);
+	NetPlay.players[player].name[0] = '\0';
 }
 
 // returns player responsible for 'player'
