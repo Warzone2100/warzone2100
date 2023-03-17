@@ -230,12 +230,13 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	const auto& identity = getMultiStats(message.sender).identity;
 	std::string senderhash = identity.publicHashString(64);
 	std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+	std::string senderVerifiedStatus = (ingame.VerifiedIdentity[message.sender]) ? "V" : "?";
 	std::string sendername = NetPlay.players[message.sender].name;
 	std::string sendername64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
 	std::string messagetext = message.text;
 	std::string messagetext64 = base64Encode(std::vector<unsigned char>(messagetext.begin(), messagetext.end()));
 	debug(LOG_INFO, "message [%s] [%s]", senderhash.c_str(), message.text);
-	wz_command_interface_output("WZCHATCMD: %i %s %s %s %s %s\n", message.sender, NetPlay.players[message.sender].IPtextAddress, senderhash.c_str(), senderPublicKeyB64.c_str(), sendername64.c_str(), messagetext64.c_str());
+	wz_command_interface_output("WZCHATCMD: %i %s %s %s %s %s %s\n", message.sender, NetPlay.players[message.sender].IPtextAddress, senderhash.c_str(), senderPublicKeyB64.c_str(), senderVerifiedStatus.c_str(), sendername64.c_str(), messagetext64.c_str());
 	if (strcmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "help") == 0)
 	{
 		lobbyCommand_PrintHelp(static_cast<uint32_t>(message.sender));
