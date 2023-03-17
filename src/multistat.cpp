@@ -373,6 +373,9 @@ static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, boo
 
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 {
+	// preserve current player identity (if loaded)
+	EcKey currentIdentity = (st) ? st->identity : EcKey();
+
 	*st = PLAYERSTATS();  // clear in case we don't get to load
 
 	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
@@ -408,8 +411,16 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 
 	if (st->identity.empty())
 	{
-		st->identity = EcKey::generate();  // Generate new identity.
-		saveMultiStats(sPlayerName, sPlayerName, st);  // Save new identity.
+		if (!currentIdentity.empty())
+		{
+			st->identity = currentIdentity;  	// Preserve existing identity when creating a new profile
+		}
+		else
+		{
+			st->identity = EcKey::generate();	// Generate new identity
+		}
+
+		saveMultiStats(sPlayerName, sPlayerName, st);  // Save new profile
 	}
 
 	// reset recent scores
