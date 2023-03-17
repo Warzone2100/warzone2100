@@ -6044,6 +6044,8 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		}
 	}
 
+	char sPlayer_new[128] = {'\0'};
+
 	// these work all the time.
 	switch (id)
 	{
@@ -6063,30 +6065,39 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_PNAME:
-		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));
+		sstrcpy(sPlayer_new, widgGetString(psWScreen, MULTIOP_PNAME));
 
 		// chop to 15 chars..
-		while (strlen(sPlayer) > 15)	// clip name.
+		while (strlen(sPlayer_new) > 15)	// clip name.
 		{
-			sPlayer[strlen(sPlayer) - 1] = '\0';
+			sPlayer_new[strlen(sPlayer_new) - 1] = '\0';
 		}
-		removeWildcards(sPlayer);
-		// update string.
-		widgSetString(psWScreen, MULTIOP_PNAME, sPlayer);
-		printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
+		removeWildcards(sPlayer_new);
 
-		NETchangePlayerName(selectedPlayer, (char *)sPlayer);			// update if joined.
-		loadMultiStats((char *)sPlayer, &playerStats);
-		setMultiStats(selectedPlayer, playerStats, false);
-		setMultiStats(selectedPlayer, playerStats, true);
-		lookupRatingAsync(selectedPlayer);
-		netPlayersUpdated = true;
-
-		if (NetPlay.isHost && NetPlay.bComms)
+		playerStats = getMultiStats(selectedPlayer); 		// retrieve current identity + stats to pass-in to loadMultiStats on name change
+		if (loadMultiStats((char *)sPlayer_new, &playerStats))
 		{
-			sendOptions();
-			NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
-			NETregisterServer(WZ_SERVER_UPDATE);
+			sstrcpy(sPlayer, sPlayer_new);
+			// update string.
+			widgSetString(psWScreen, MULTIOP_PNAME, sPlayer);
+			printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
+
+			NETchangePlayerName(selectedPlayer, (char *)sPlayer);			// update if joined.
+			setMultiStats(selectedPlayer, playerStats, false);
+			setMultiStats(selectedPlayer, playerStats, true);
+			lookupRatingAsync(selectedPlayer);
+			netPlayersUpdated = true;
+
+			if (NetPlay.isHost && NetPlay.bComms)
+			{
+				sendOptions();
+				NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
+				NETregisterServer(WZ_SERVER_UPDATE);
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to load or create player profile: %s", sPlayer_new);
 		}
 
 		break;
@@ -6926,29 +6937,35 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		LEVEL_DATASET *mapData = nullptr;
 		bool isHoverPreview = false;
 		WzString sTemp;
+		char sPlayer_new[128] = {'\0'};
 		if (runMultiRequester(id, &id, &sTemp, &mapData, &isHoverPreview))
 		{
 			switch (id)
 			{
 			case MULTIOP_PNAME:
-				sstrcpy(sPlayer, sTemp.toUtf8().c_str());
-				widgSetString(psWScreen, MULTIOP_PNAME, sTemp.toUtf8().c_str());
+				sstrcpy(sPlayer_new, sTemp.toUtf8().c_str());
+				removeWildcards((char *)sPlayer_new);
 
-				removeWildcards((char *)sPlayer);
-
-				printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
-
-				NETchangePlayerName(selectedPlayer, (char *)sPlayer);
-				loadMultiStats((char *)sPlayer, &playerStats);
-				setMultiStats(selectedPlayer, playerStats, false);
-				setMultiStats(selectedPlayer, playerStats, true);
-				lookupRatingAsync(selectedPlayer);
-				netPlayersUpdated = true;
-				if (NetPlay.isHost && NetPlay.bComms)
+				if (loadMultiStats((char *)sPlayer_new, &playerStats))
 				{
-					sendOptions();
-					NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
-					NETregisterServer(WZ_SERVER_UPDATE);
+					sstrcpy(sPlayer, sPlayer_new);
+					widgSetString(psWScreen, MULTIOP_PNAME, sTemp.toUtf8().c_str());
+					printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
+					NETchangePlayerName(selectedPlayer, (char *)sPlayer);
+					setMultiStats(selectedPlayer, playerStats, false);
+					setMultiStats(selectedPlayer, playerStats, true);
+					lookupRatingAsync(selectedPlayer);
+					netPlayersUpdated = true;
+					if (NetPlay.isHost && NetPlay.bComms)
+					{
+						sendOptions();
+						NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
+						NETregisterServer(WZ_SERVER_UPDATE);
+					}
+				}
+				else
+				{
+					debug(LOG_ERROR, "Failed to load or create player profile: %s", sPlayer_new);
 				}
 				break;
 			case MULTIOP_MAP:
