@@ -679,6 +679,7 @@ jobs:
       env:
         WZ_REPO_PATH: ${{ steps.settings.outputs.WZ_REPO_PATH }}
         WZ_ARCHIVE_PATH: '${{ github.workspace }}\output\archive\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive.zip'
+        WZ_DEBUGSYMBOLS_PATH: '${{ github.workspace }}\output\debugsymbols\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}.DEBUGSYMBOLS.7z'
         SOURCE_BUNDLE_OUTPUT_DIR: '${{ github.workspace }}\output\sentry_source_bundles'
       run: |
         # Download sentry-cli
@@ -689,9 +690,14 @@ jobs:
         # Extract the WZ archive to a temporary path
         echo "::group::Expanding archive ..."
         Expand-Archive -LiteralPath "${env:WZ_ARCHIVE_PATH}" -DestinationPath "$(pwd)\wz_extracted"
+        echo "Expanding archive ... Done"
+        # Extract the debug symbols to the temporary path's "bin" directory
+        $SYMBOLS_OUTPUT_DIR = "$(pwd)\wz_extracted"
+        echo "Extracting debug symbols ..."
+        Start-Process "7z" -ArgumentList "x","${env:WZ_DEBUGSYMBOLS_PATH}","-o${SYMBOLS_OUTPUT_DIR}","-aos" -Wait
+        echo "Extracting debug symbols ... Done"
         # Remove any .sym files from extracted archive
         Remove-Item "$(pwd)\wz_extracted\bin\*" -Recurse -Include *.sym
-        echo "Expanding archive ... Done"
         Get-ChildItem -Path "$(pwd)\wz_extracted\bin" -Recurse
         echo "::endgroup::"
         # Create the Sentry source bundle
