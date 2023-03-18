@@ -43,6 +43,9 @@ apps:
     command: usr/bin/warzone2100
     common-id: net.wz2100.warzone2100 # should match the appdata/metainfo file's <id> field
     desktop: usr/share/applications/net.wz2100.warzone2100.desktop
+    environment:
+      XDG_DATA_HOME: $SNAP_USER_COMMON
+      XDG_CONFIG_HOME: $SNAP_USER_COMMON
     plugs:
       - audio-playback
       - desktop
