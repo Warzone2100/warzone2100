@@ -40,7 +40,7 @@ plugs:
 apps:
   warzone2100:
     extensions: [gnome-3-38]
-    command: usr/bin/warzone2100
+    command: usr/bin/warzone2100-launcher.sh warzone2100
     common-id: net.wz2100.warzone2100 # should match the appdata/metainfo file's <id> field
     desktop: usr/share/applications/net.wz2100.warzone2100.desktop
     environment:
@@ -132,8 +132,15 @@ parts:
     - libxss1
     - libxxf86vm1
 
+  launcher:
+    plugin: nil
+    source: .
+    override-build: |
+      mkdir -p "${SNAPCRAFT_PART_INSTALL}/usr/bin"
+      cp -av "${SNAPCRAFT_PART_SRC}/pkg/snap/warzone2100-launcher.sh" "${SNAPCRAFT_PART_INSTALL}/usr/bin/"
+
   warzone2100:
-    after: [sdl]
+    after: [sdl, launcher]
     plugin: cmake
     source: .
     parse-info:
