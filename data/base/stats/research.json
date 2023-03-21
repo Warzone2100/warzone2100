@@ -8516,7 +8516,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
-				"value": 10
+				"value": 20
 			}
 		],
 		"statID": "MG1Mk1",
@@ -8538,7 +8538,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
-				"value": 10
+				"value": 20
 			}
 		],
 		"statID": "MG1Mk1",
