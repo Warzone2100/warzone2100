@@ -1660,7 +1660,7 @@
 	"Flame2": {
 		"buildPoints": 400,
 		"buildPower": 80,
-		"damage": 50,
+		"damage": 40,
 		"designable": 1,
 		"effectSize": 100,
 		"facePlayer": 1,
