@@ -279,27 +279,40 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		ADMIN_REQUIRED_FOR_COMMAND("hostexit");
 		cmdInterface.quitGame(5);
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick", 4) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick", 4) == 0 || strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "ban", 3) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("kick");
+		bool isBan = strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "ban", 3) == 0;
+		if (!isBan)
+		{
+			ADMIN_REQUIRED_FOR_COMMAND("kick");
+		}
+		else
+		{
+			ADMIN_REQUIRED_FOR_COMMAND("ban");
+		}
+		std::string command = (!isBan) ? "kick" : "ban";
 		unsigned int playerPos = MAX_PLAYERS + 1;
 		unsigned int playerIdx = MAX_CONNECTED_PLAYERS + 1;
-		int r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick %u", &playerPos);
+		std::string commandParse = command + " %u";
+		int r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], commandParse.c_str(), &playerPos);
 		if (r == 1)
 		{
 			playerIdx = posToNetPlayer(playerPos);
 			if (playerIdx >= MAX_PLAYERS)
 			{
-				sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "kick <slot>");
+				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
+				sendRoomNotifyMessage(msg.c_str());
 				return false;
 			}
 		}
 		else
 		{
-			r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick s%u", &playerPos);
+			commandParse = command + " s%u";
+			r = sscanf(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], commandParse.c_str(), &playerPos);
 			if (r != 1 || playerPos >= MAX_SPECTATOR_SLOTS)
 			{
-				sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "kick <slot>");
+				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
+				sendRoomNotifyMessage(msg.c_str());
 				return false;
 			}
 			playerIdx = MAX_PLAYER_SLOTS + playerPos;
@@ -311,7 +324,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage("Can't kick the host.");
 			return false;
 		}
-		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game.")))
+		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game."), isBan))
 		{
 			std::string msg = astringf("Failed to kick %s: %u", (playerIdx < MAX_PLAYER_SLOTS) ? "player" : "spectator", playerPos);
 			sendRoomSystemMessage(msg.c_str());

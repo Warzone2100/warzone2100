@@ -123,7 +123,6 @@ static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & 
 static void NETallowJoining();
 static void recvDebugSync(NETQUEUE queue);
 static bool onBanList(const char *ip);
-static void addToBanList(const char *ip, const char *name);
 static void NETfixPlayerCount();
 /*
  * Network globals, these are part of the new network API
@@ -950,10 +949,6 @@ void NETplayerKicked(UDWORD index)
 	debug(LOG_INFO, "Player %u was kicked.", index);
 	sync_counter.kicks++;
 	NETlogEntry("Player was kicked.", SYNC_FLAG, index);
-	if (NetPlay.isHost && NetPlay.players[index].allocated)
-	{
-		addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
-	}
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_LEAVING, index);
 }
@@ -2136,7 +2131,7 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 		ssprintf(msg, "Auto-kicking player %u, did not ack player index change within required timeframe.", (unsigned int)sender);
 		sendInGameSystemMessage(msg);
 		debug(LOG_INFO, "Client (player: %u) failed to ack player index swap (ignoring message type: %" PRIu8 ")", sender, type);
-		kickPlayer(sender, _("Client failed to ack player index swap"), ERROR_INVALID);
+		kickPlayer(sender, _("Client failed to ack player index swap"), ERROR_INVALID, false);
 		return true; // filter original message, of course
 	}
 
@@ -2305,7 +2300,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					ssprintf(msg, "Auto-kicking player %u, lacked the required access level for command(%d).", (unsigned int)sender, (int)message->type);
 					sendRoomSystemMessage(msg);
 					NETlogEntry(msg, SYNC_FLAG, sender);
-					addToBanList(NetPlay.players[sender].IPtextAddress, NetPlay.players[sender].name);
+					addIPToBanList(NetPlay.players[sender].IPtextAddress, NetPlay.players[sender].name);
 					NETplayerDropped(sender);
 					connected_bsocket[sender] = nullptr;
 					debug(LOG_ERROR, "%s", msg);
@@ -2716,7 +2711,7 @@ static void NETcheckPlayers()
 		if (NetPlay.players[i].kick)
 		{
 			debug(LOG_NET, "Kicking player %d", i);
-			kickPlayer(i, "you are unwanted by the host.", ERROR_KICKED);
+			kickPlayer(i, "you are unwanted by the host.", ERROR_KICKED, false);
 		}
 	}
 }
@@ -3714,7 +3709,7 @@ static void NETallowJoining()
 				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
 				NETlogEntry("Dropping old client.", SYNC_FLAG, i);
 				NETlogEntry("Invalid (old)game version", SYNC_FLAG, i);
-				addToBanList(rIP.c_str(), "BAD_USER");
+				addIPToBanList(rIP.c_str(), "BAD_USER");
 				connectFailed = true;
 			}
 			else
@@ -3772,7 +3767,7 @@ static void NETallowJoining()
 					memcpy(&buffer, &result, sizeof(result));
 					writeAll(tmp_socket[i], &buffer, sizeof(result));
 					NETlogEntry("Invalid game version", SYNC_FLAG, i);
-					addToBanList(rIP.c_str(), "BAD_USER");
+					addIPToBanList(rIP.c_str(), "BAD_USER");
 					connectFailed = true;
 				}
 				if ((!connectFailed) && (!NET_HasAnyOpenSlots()))
@@ -4031,7 +4026,7 @@ void NETloadBanList() {
 				debug(LOG_ERROR, "Error reading banlist file!\n");
 			}
 		} else {
-			addToBanList(ToBanIP, ToBanName);
+			addIPToBanList(ToBanIP, ToBanName);
 		}
 	}
 	return;
@@ -5361,7 +5356,7 @@ static bool onBanList(const char *ip)
  * \param ip IP address in text format
  * \param name Name of the player we are banning
  */
-static void addToBanList(const char *ip, const char *name)
+void addIPToBanList(const char *ip, const char *name)
 {
 	if (isLoopbackIP(ip))
 	{

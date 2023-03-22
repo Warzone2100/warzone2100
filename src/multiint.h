@@ -90,7 +90,7 @@ bool changeColour(unsigned player, int col, bool isHost);
 extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
 
-void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
+void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer = false);
 void displayKickReasonPopup(const std::string &reason);
 void loadMapPreview(bool hideInterface);
 
@@ -184,8 +184,9 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_TEAMCHOOSER_END     	102841
 #define MULTIOP_TEAMCHOOSER_KICK		10289
 #define MULTIOP_TEAMCHOOSER_SPECTATOR	10288
+#define MULTIOP_TEAMCHOOSER_BAN			10287
 
-#define MULTIOP_INLINE_OVERLAY_ROOT_FRM	10287
+#define MULTIOP_INLINE_OVERLAY_ROOT_FRM	10286
 
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
