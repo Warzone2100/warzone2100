@@ -2290,16 +2290,17 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
   		_("Spectator"), IMAGE_SPECTATOR, IMAGE_SPECTATOR_HI, IMAGE_SPECTATOR_HI);
   	}
 
-	// add a kick button
+	// add kick & ban buttons
 	int kickImageX = MULTIOP_ROW_WIDTH;
 	if (canKickPlayer)
 	{
+		// Add "kick" button
 		auto onClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
 			std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player));
-			kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED);
+			kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
 			sendRoomSystemMessage(msg.c_str());
 			resetReadyStatus(true);		//reset and send notification to all clients
 			widgScheduleTask([pStrongPtr] {
@@ -2312,6 +2313,26 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 		kickImageX = MULTIOP_ROW_WIDTH - imgwidth - 4;
 		addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_KICK, kickImageX, 8, imgwidth, imgheight,
 			("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN, onClickHandler);
+
+		// Add "ban" button
+		auto banOnClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+			auto pStrongPtr = psWeakTitleUI.lock();
+			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+			std::string msg = astringf(_("The host has banned %s from the game!"), getPlayerName(player));
+			kickPlayer(player, _("The host has banned you from the game."), ERROR_KICKED, true);
+			sendRoomSystemMessage(msg.c_str());
+			resetReadyStatus(true);		//reset and send notification to all clients
+			widgScheduleTask([pStrongPtr] {
+				pStrongPtr->closeTeamChooser();
+			});
+		};
+
+		const int imgwidth_ban = iV_GetImageWidth(FrontImages, IMAGE_NOJOIN_FULL);
+		const int imgheight_ban = iV_GetImageHeight(FrontImages, IMAGE_NOJOIN_FULL);
+		kickImageX = kickImageX - imgwidth - 4;
+		addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_BAN, kickImageX, 8, imgwidth_ban, imgheight_ban,
+			("Ban player"), IMAGE_NOJOIN_FULL, IMAGE_NOJOIN_FULL, IMAGE_NOJOIN_FULL, onClickHandler);
 	}
 
 	if (canChangeSpectatorStatus)
@@ -4449,7 +4470,7 @@ public:
 						{
 							std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player));
 							sendRoomSystemMessage(msg.c_str());
-							kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED);
+							kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
 							resetReadyStatus(true);		//reset and send notification to all clients
 						}
 					}
@@ -4798,7 +4819,7 @@ static void SendFireUp()
 }
 
 // host kicks a player from a game.
-void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
+void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer)
 {
 	ASSERT_HOST_ONLY(return);
 
@@ -4814,6 +4835,11 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	wzDelay(300);
 
 	ActivityManager::instance().hostKickPlayer(NetPlay.players[player_id], type, reason);
+
+	if (banPlayer && NetPlay.players[player_id].allocated)
+	{
+		addIPToBanList(NetPlay.players[player_id].IPtextAddress, NetPlay.players[player_id].name);
+	}
 
 	NETplayerKicked(player_id);
 }
@@ -6332,7 +6358,7 @@ public:
 		addGameOptions(); //refresh to see the proper tech level in the map name
 		return true;
 	}
-	virtual bool kickPlayer(uint32_t player, const char *reason) override
+	virtual bool kickPlayer(uint32_t player, const char *reason, bool ban) override
 	{
 		ASSERT_HOST_ONLY(return false);
 		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to kich the host");
@@ -6344,7 +6370,7 @@ public:
 		}
 		std::string slotType = (NetPlay.players[player].isSpectator) ? "spectator" : "player";
 		sendRoomSystemMessage((std::string("Kicking ")+slotType+": "+std::string(NetPlay.players[player].name)).c_str());
-		::kickPlayer(player, reason, ERROR_KICKED);
+		::kickPlayer(player, reason, ERROR_KICKED, ban);
 		resetReadyStatus(false);
 		return true;
 	}

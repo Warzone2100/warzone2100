@@ -176,7 +176,7 @@ static void autoLagKickRoutine()
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendTextMessage(msg.c_str());
 			wz_command_interface_output("WZEVENT: lag-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
-			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION);
+			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION, false);
 			ingame.LagCounter[i] = 0;
 		}
 		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
@@ -371,7 +371,7 @@ bool multiPlayerLoop()
 						NETlogEntry(msg, SYNC_FLAG, index);
 
 #ifndef DEBUG
-						kickPlayer(index, _("Invalid data!"), ERROR_INVALID);
+						kickPlayer(index, _("Invalid data!"), ERROR_INVALID, false);
 #endif
 						debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 					}
@@ -822,7 +822,7 @@ static bool sendDataCheck2()
 				sendInGameSystemMessage(msg.c_str());
 				addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-				kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
+				kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);
 				debug(LOG_INFO, "%s (%u) did not respond with a NET_DATA_CHECK2 within the required timeframe (%s seconds), and has been kicked", getPlayerName(player), player, std::to_string(maxWaitSeconds.count()).c_str());
 				ingame.lastSentPlayerDataCheck2[player].reset();
 				continue;
@@ -1006,7 +1006,7 @@ static bool recvDataCheck2(NETQUEUE queue)
 		sendInGameSystemMessage(msg.c_str());
 		addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-		kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
+		kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);
 		return false;
 	}
 
@@ -1157,7 +1157,7 @@ bool shouldProcessMessage(NETQUEUE& queue, uint8_t type)
 				debug(LOG_INFO, "Auto kicking player %s, invalid command received: %s", NetPlay.players[senderPlayerIdx].name, messageTypeToString(type));
 				ssprintf(buf, _("Auto kicking player %s, invalid command received: %u"), NetPlay.players[senderPlayerIdx].name, type);
 				sendInGameSystemMessage(buf);
-				kickPlayer(queue.index, _("Unauthorized network command"), ERROR_INVALID);
+				kickPlayer(queue.index, _("Unauthorized network command"), ERROR_INVALID, false);
 			}
 			return false;
 		}
@@ -1414,7 +1414,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 	{
 		ssprintf(buf, _("Auto kicking player %s, invalid command received."), NetPlay.players[actual].name);
 		sendInGameSystemMessage(buf);
-		kickPlayer(actual, buf, KICK_TYPE);
+		kickPlayer(actual, buf, KICK_TYPE, false);
 	}
 }
 

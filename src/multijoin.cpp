@@ -425,7 +425,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
 		{
-			kickPlayer(playerIndex, _("The game is already full."), ERROR_FULL);
+			kickPlayer(playerIndex, _("The game is already full."), ERROR_FULL, false);
 		}
 		// send everyone's stats to the new guy
 		{
@@ -510,7 +510,7 @@ bool recvDataCheck(NETQUEUE queue)
 			sendInGameSystemMessage(msg);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
-			kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA);
+			kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);
 			debug(LOG_ERROR, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
 
 			return false;

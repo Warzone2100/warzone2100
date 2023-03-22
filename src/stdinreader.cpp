@@ -318,7 +318,7 @@ int stdinThreadFunc(void *)
 						}
 						if (!strcmp(player.IPtextAddress, banIPStrCopy.c_str()))
 						{
-							kickPlayer(i, "You have been banned from joining by the administrator.", ERROR_INVALID);
+							kickPlayer(i, "You have been banned from joining by the administrator.", ERROR_INVALID, true);
 							auto KickMessage = astringf("Player %s was banned by the administrator.", player.name);
 							sendRoomSystemMessage(KickMessage.c_str());
 						}
