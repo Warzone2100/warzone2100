@@ -440,6 +440,73 @@ int stdinThreadFunc(void *)
 				});
 			}
 		}
+		else if(!strncmpl(line, "chat direct "))
+		{
+			char playeridentitystring[1024] = {0};
+			char chatmsg[1024] = {0};
+			int r = sscanf(line, "chat direct %1023s %1023[^\n]s", playeridentitystring, chatmsg);
+			if (r != 2)
+			{
+				errlog("WZCMD error: Failed to get chat receiver or message!\n");
+			}
+			else
+			{
+				std::string playerIdentityStrCopy(playeridentitystring);
+				std::string chatmsgstr(chatmsg);
+				wzAsyncExecOnMainThread([playerIdentityStrCopy, chatmsgstr] {
+					if (!NetPlay.isHostAlive)
+					{
+						// can't send this message when the host isn't alive
+						errlog("WZCMD error: Failed to send chat direct message because host isn't yet hosting!\n");
+					}
+
+					bool foundActivePlayer = false;
+					for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+					{
+						auto player = NetPlay.players[i];
+						if (!isHumanPlayer(i))
+						{
+							continue;
+						}
+
+						bool msgThisPlayer = false;
+						auto& identity = getMultiStats(i).identity;
+						if (identity.empty())
+						{
+							if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
+							{
+								msgThisPlayer = true;
+							}
+							else
+							{
+								continue;
+							}
+						}
+
+						if (!msgThisPlayer)
+						{
+							// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
+							std::string checkIdentityHash = identity.publicHashString();
+							std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+							if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
+							{
+								msgThisPlayer = true;
+							}
+						}
+
+						if (msgThisPlayer)
+						{
+							sendRoomSystemMessageToSingleReceiver(chatmsgstr.c_str(), i);
+							foundActivePlayer = true;
+						}
+					}
+					if (!foundActivePlayer)
+					{
+						errlog("WZCMD error: Failed to find currently-connected player with matching public key or hash?\n");
+					}
+				});
+			}
+		}
 		else if(!strncmpl(line, "shutdown now"))
 		{
 			errlog("WZCMD info: shutdown now command received - shutting down\n");
