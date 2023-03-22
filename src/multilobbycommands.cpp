@@ -254,7 +254,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 								NetPlay.players[message.sender].name);
 		sendRoomSystemMessageToSingleReceiver(msg.c_str(), message.sender);
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "team", 4) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "team ", 5) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("team");
 		unsigned int s1 = 0, s2 = 0;
@@ -279,7 +279,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		ADMIN_REQUIRED_FOR_COMMAND("hostexit");
 		cmdInterface.quitGame(5);
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick", 4) == 0 || strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "ban", 3) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "kick ", 5) == 0 || strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "ban ", 4) == 0)
 	{
 		bool isBan = strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "ban", 3) == 0;
 		if (!isBan)
@@ -331,7 +331,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			return false;
 		}
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "swap", 4) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "swap ", 5) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("swap");
 		unsigned int s1, s2;
@@ -365,7 +365,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 
 		sendRoomSystemMessage((std::string("Swapping player ")+std::to_string(s1)+" and "+std::to_string(s2)).c_str());
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "base", 4) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "base ", 5) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("base");
 		int s1;
@@ -390,7 +390,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 
 		sendRoomSystemMessage((std::string("Starting base set to ")+std::to_string(s1)).c_str());
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "alliance", 8) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "alliance ", 9) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("alliance");
 		int s1;
@@ -428,7 +428,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage((std::string("Alliance type set to ")+std::to_string(s1)).c_str());
 		}
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "scav", 4) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "scav ", 5) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("scav");
 		int scavsValue;
@@ -454,7 +454,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 
 		sendRoomSystemMessage((std::string("Scavangers set to ")+std::to_string(scavsValue)).c_str());
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makespec", 8) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makespec ", 9) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("makespec");
 		unsigned int playerPos = MAX_PLAYERS + 1;
@@ -484,7 +484,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			return false;
 		}
 	}
-	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makeplayer", 10) == 0)
+	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "makeplayer ", 11) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("makeplayer");
 		unsigned int playerPos = MAX_PLAYERS + 1;
