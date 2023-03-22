@@ -142,6 +142,7 @@ TITLECODE WzGameFindTitleUI::run()
 	if (id == CON_CANCEL)								// ok
 	{
 		clearActiveConsole();
+		setLobbyError(ERROR_NOERROR); // clear any lobby error
 		changeTitleUI(std::make_shared<WzProtocolTitleUI>());
 	}
 
