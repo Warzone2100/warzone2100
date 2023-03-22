@@ -1885,6 +1885,12 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 	}
 
 	auto message = NetworkTextMessage(SPECTATOR_MESSAGE, newmsg);
+
+	if (isPlayerMuted(sender))
+	{
+		return false;
+	}
+
 	printInGameTextMessage(message);
 
 	// make some noise!
