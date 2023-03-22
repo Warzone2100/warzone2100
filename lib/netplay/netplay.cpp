@@ -5374,6 +5374,19 @@ void addIPToBanList(const char *ip, const char *name)
 	}
 }
 
+bool removeIPFromBanList(const char *ip)
+{
+	auto it = std::find_if(IPlist.begin(), IPlist.end(), [ip](const PLAYER_IP& ipInfo) -> bool {
+		return strcmp(ipInfo.IPAddress, ip) == 0;
+	});
+	if (it == IPlist.end())
+	{
+		return false;
+	}
+	IPlist.erase(it);
+	return true;
+}
+
 std::vector<PLAYER_IP> NETgetIPBanList()
 {
 	std::vector<PLAYER_IP> vecCopy;

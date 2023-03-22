@@ -309,6 +309,7 @@ int stdinThreadFunc(void *)
 			{
 				std::string banIPStrCopy(tobanip);
 				wzAsyncExecOnMainThread([banIPStrCopy] {
+					bool foundActivePlayer = false;
 					for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 					{
 						auto player = NetPlay.players[i];
@@ -321,7 +322,32 @@ int stdinThreadFunc(void *)
 							kickPlayer(i, "You have been banned from joining by the administrator.", ERROR_INVALID, true);
 							auto KickMessage = astringf("Player %s was banned by the administrator.", player.name);
 							sendRoomSystemMessage(KickMessage.c_str());
+							foundActivePlayer = true;
 						}
+					}
+					if (!foundActivePlayer)
+					{
+						// add the IP to the ban list anyway
+						addIPToBanList(banIPStrCopy.c_str(), "Banned player");
+					}
+				});
+			}
+		}
+		else if(!strncmpl(line, "unban ip "))
+		{
+			char tounbanip[1024] = {0};
+			int r = sscanf(line, "unban ip %1023[^\n]s", tounbanip);
+			if (r != 1)
+			{
+				errlog("WZCMD error: Failed to get unban ip!\n");
+			}
+			else
+			{
+				std::string unbanIPStrCopy(tounbanip);
+				wzAsyncExecOnMainThread([unbanIPStrCopy] {
+					if (!removeIPFromBanList(unbanIPStrCopy.c_str()))
+					{
+						errlog("WZCMD error: IP was not on the ban list!\n");
 					}
 				});
 			}
