@@ -565,5 +565,6 @@ private:
 };
 
 void addIPToBanList(const char *ip, const char *name);
+bool removeIPFromBanList(const char *ip);
 
 #endif
