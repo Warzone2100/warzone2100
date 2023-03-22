@@ -23,6 +23,7 @@
 #include "lib/framework/wzapp.h"
 #include "lib/netplay/netplay.h"
 #include "multiint.h"
+#include "multistat.h"
 #include "multilobbycommands.h"
 #include "clparse.h"
 
@@ -293,6 +294,72 @@ int stdinThreadFunc(void *)
 					else
 					{
 						errlog("WZCMD info: Failed to remove room admin! (Provided parameter not found as either admin hash or public key)\n");
+					}
+				});
+			}
+		}
+		else if(!strncmpl(line, "kick identity "))
+		{
+			char playeridentitystring[1024] = {0};
+			int r = sscanf(line, "kick identity %1023[^\n]s", playeridentitystring);
+			if (r != 1)
+			{
+				errlog("WZCMD error: Failed to get player public key or hash!\n");
+			}
+			else
+			{
+				std::string playerIdentityStrCopy(playeridentitystring);
+				wzAsyncExecOnMainThread([playerIdentityStrCopy] {
+					bool foundActivePlayer = false;
+					for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+					{
+						auto player = NetPlay.players[i];
+						if (!isHumanPlayer(i))
+						{
+							continue;
+						}
+
+						bool kickThisPlayer = false;
+						auto& identity = getMultiStats(i).identity;
+						if (identity.empty())
+						{
+							if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
+							{
+								kickThisPlayer = true;
+							}
+							else
+							{
+								continue;
+							}
+						}
+
+						if (!kickThisPlayer)
+						{
+							// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
+							std::string checkIdentityHash = identity.publicHashString();
+							std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+							if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
+							{
+								kickThisPlayer = true;
+							}
+						}
+
+						if (kickThisPlayer)
+						{
+							if (i == NetPlay.hostPlayer)
+							{
+								errlog("WZCMD error: Can't kick host!\n");
+								continue;
+							}
+							kickPlayer(i, "You have been kicked by the administrator.", ERROR_INVALID, true);
+							auto KickMessage = astringf("Player %s was kicked by the administrator.", player.name);
+							sendRoomSystemMessage(KickMessage.c_str());
+							foundActivePlayer = true;
+						}
+					}
+					if (!foundActivePlayer)
+					{
+						errlog("WZCMD error: Failed to find currently-connected player with matching public key or hash?\n");
 					}
 				});
 			}
