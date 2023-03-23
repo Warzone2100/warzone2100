@@ -4796,8 +4796,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon-Damage01"
 		],
-		"researchPoints": 2425,
-		"researchPower": 75,
+		"researchPoints": 2450,
+		"researchPower": 76,
 		"results": [
 			{
 				"class": "Weapon",
