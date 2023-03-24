@@ -181,7 +181,14 @@ static void convertEscapedNewlines(std::string& input)
 	size_t index = input.find("\\n");
 	while (index != std::string::npos)
 	{
+#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 12
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
+#endif
 		input.replace(index, 2, "\n");
+#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 12
+#pragma GCC diagnostic pop
+#endif
 		index = input.find("\\n", index + 1);
 	}
 }
