@@ -175,6 +175,17 @@ optional<std::string> getStdInLine()
 	return getNextLineFromBuffer();
 }
 
+static void convertEscapedNewlines(std::string& input)
+{
+	// convert \\n -> \n
+	size_t index = input.find("\\n");
+	while (index != std::string::npos)
+	{
+		input.replace(index, 2, "\n");
+		index = input.find("\\n", index + 1);
+	}
+}
+
 int stdinThreadFunc(void *)
 {
 	fseek(stdin, 0, SEEK_END);
@@ -301,15 +312,18 @@ int stdinThreadFunc(void *)
 		else if(!strncmpl(line, "kick identity "))
 		{
 			char playeridentitystring[1024] = {0};
-			int r = sscanf(line, "kick identity %1023[^\n]s", playeridentitystring);
-			if (r != 1)
+			char kickreasonstr[1024] = {0};
+			int r = sscanf(line, "kick identity %1023s %1023[^\n]s", playeridentitystring, kickreasonstr);
+			if (r != 1 && r != 2)
 			{
 				errlog("WZCMD error: Failed to get player public key or hash!\n");
 			}
 			else
 			{
 				std::string playerIdentityStrCopy(playeridentitystring);
-				wzAsyncExecOnMainThread([playerIdentityStrCopy] {
+				std::string kickReasonStrCopy = (r >= 2) ? kickreasonstr : "You have been kicked by the administrator.";
+				convertEscapedNewlines(kickReasonStrCopy);
+				wzAsyncExecOnMainThread([playerIdentityStrCopy, kickReasonStrCopy] {
 					bool foundActivePlayer = false;
 					for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 					{
@@ -351,7 +365,7 @@ int stdinThreadFunc(void *)
 								errlog("WZCMD error: Can't kick host!\n");
 								continue;
 							}
-							kickPlayer(i, "You have been kicked by the administrator.", ERROR_INVALID, true);
+							kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_INVALID, true);
 							auto KickMessage = astringf("Player %s was kicked by the administrator.", player.name);
 							sendRoomSystemMessage(KickMessage.c_str());
 							foundActivePlayer = true;
@@ -367,15 +381,18 @@ int stdinThreadFunc(void *)
 		else if(!strncmpl(line, "ban ip "))
 		{
 			char tobanip[1024] = {0};
-			int r = sscanf(line, "ban ip %1023[^\n]s", tobanip);
-			if (r != 1)
+			char banreasonstr[1024] = {0};
+			int r = sscanf(line, "ban ip %1023s %1023[^\n]s", tobanip, banreasonstr);
+			if (r != 1 && r != 2)
 			{
 				errlog("WZCMD error: Failed to get ban ip!\n");
 			}
 			else
 			{
 				std::string banIPStrCopy(tobanip);
-				wzAsyncExecOnMainThread([banIPStrCopy] {
+				std::string banReasonStrCopy = (r >= 2) ? banreasonstr : "You have been banned from joining by the administrator.";
+				convertEscapedNewlines(banReasonStrCopy);
+				wzAsyncExecOnMainThread([banIPStrCopy, banReasonStrCopy] {
 					bool foundActivePlayer = false;
 					for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 					{
@@ -386,7 +403,7 @@ int stdinThreadFunc(void *)
 						}
 						if (!strcmp(player.IPtextAddress, banIPStrCopy.c_str()))
 						{
-							kickPlayer(i, "You have been banned from joining by the administrator.", ERROR_INVALID, true);
+							kickPlayer(i, banReasonStrCopy.c_str(), ERROR_INVALID, true);
 							auto KickMessage = astringf("Player %s was banned by the administrator.", player.name);
 							sendRoomSystemMessage(KickMessage.c_str());
 							foundActivePlayer = true;
