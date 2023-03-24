@@ -6763,7 +6763,6 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 					{
 						kickReasonStr = kickReasonStr.substr(0, maxLinePos);
 					}
-					setLobbyError(KICK_TYPE);
 					stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")), WzString::fromUtf8(kickReasonStr), parent));
 					debug(LOG_INFO, "You have been kicked, because %s ", kickReasonStr.c_str());
 					displayKickReasonPopup(kickReasonStr.c_str());
