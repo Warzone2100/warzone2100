@@ -1032,7 +1032,7 @@ static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> co
 
 	// Failed to connect to all IPs / options in list
 	// Change to an error display.
-	changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Error while joining.")), wzTitleUICurrent));
+	changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Unable to join:")), WzString(_("Error while joining.")), wzTitleUICurrent));
 	ActivityManager::instance().joinGameFailed(connection_list);
 	return JoinGameResult::FAILED;
 }
@@ -6524,7 +6524,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			{
 				// supplied NET_OPTIONS are not valid
 				setLobbyError(ERROR_INVALID);
-				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Host supplied invalid options")), parent));
+				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid options")), parent));
 				break;
 			}
 			bInActualHostedLobby = true;
@@ -6757,10 +6757,16 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 				if (selectedPlayer == player_id)	// we've been told to leave.
 				{
+					std::string kickReasonStr = reason;
+					size_t maxLinePos = nthOccurrenceOfChar(kickReasonStr, '\n', 10);
+					if (maxLinePos != std::string::npos)
+					{
+						kickReasonStr = kickReasonStr.substr(0, maxLinePos);
+					}
 					setLobbyError(KICK_TYPE);
-					stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")) + reason, parent));
-					debug(LOG_INFO, "You have been kicked, because %s ", reason);
-					displayKickReasonPopup(reason);
+					stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")), WzString::fromUtf8(kickReasonStr), parent));
+					debug(LOG_INFO, "You have been kicked, because %s ", kickReasonStr.c_str());
+					displayKickReasonPopup(kickReasonStr.c_str());
 					ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
 				}
 				else
@@ -6772,7 +6778,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 		case NET_HOST_DROPPED:
 			NETbeginDecode(queue, NET_HOST_DROPPED);
 			NETend();
-			stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("No connection to host.")), parent));
+			stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("No connection to host.")), parent));
 			debug(LOG_NET, "The host has quit!");
 			setLobbyError(ERROR_HOSTDROPPED);
 			break;
@@ -6830,7 +6836,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 						// Leave the badly behaved (likely modified) host!
 						sendRoomChatMessage(_("The host moved me to Players, but I never gave permission for this change. Bye!"));
 						debug(LOG_INFO, "Leaving game because host moved us to Players, but we never gave permission.");
-						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("The host tried to move us to Players, but we never gave permission.")), parent));
+						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("The host tried to move us to Players, but we never gave permission.")), parent));
 						setLobbyError(ERROR_HOSTDROPPED);
 						return;
 					}
@@ -7085,7 +7091,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		cancelOrDismissNotificationIfTag([](const std::string& tag) {
 			return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
 		});
-		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("The host has quit.")), parent));
+		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("The host has quit.")), parent));
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
 
