@@ -59,10 +59,13 @@ void WzMsgBoxTitleUI::start()
 	if (psBotForm)
 	{
 		auto msgboxTitle = std::make_shared<W_LABEL>();
-		msgboxTitle->setFont(font_medium_bold, WZCOL_TEXT_BRIGHT);
-		msgboxTitle->setString(title);
-		msgboxTitle->setGeometry(MULTIOP_OKW, MULTIOP_OKH, msgboxTitle->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
-		psBotForm->attach(msgboxTitle);
+		if (msgboxTitle) // silence a GCC warning ...
+		{
+			msgboxTitle->setFont(font_medium_bold, WZCOL_TEXT_BRIGHT);
+			msgboxTitle->setString(title);
+			msgboxTitle->setGeometry(MULTIOP_OKW, MULTIOP_OKH, msgboxTitle->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
+			psBotForm->attach(msgboxTitle);
+		}
 
 		auto paragraph = std::make_shared<Paragraph>();
 		const int msgboxTitleContentsPadding = 20;
