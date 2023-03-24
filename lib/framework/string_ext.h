@@ -237,4 +237,26 @@ static inline bool strEndsWith(const std::string &str, const std::string &suffix
 	return (str.size() >= suffix.size()) && (str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0);
 }
 
+static inline size_t nthOccurrenceOfChar(const std::string& str, const char c, size_t n)
+{
+	size_t pos = 0;
+	size_t count = 0;
+
+	while (count < n)
+	{
+		pos = str.find(c, (count > 0) ? pos + 1 : pos);
+		if (pos == std::string::npos)
+		{
+			return std::string::npos;
+		}
+		++count;
+		if (pos == str.length() - 1)
+		{
+			return std::string::npos;
+		}
+	}
+
+	return pos;
+}
+
 #endif // STRING_EXT_H
