@@ -201,7 +201,7 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define TECH_3					3
 #define TECH_4					4
 
-#define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
+#define MAX_KICK_REASON			1024		// max array size for the reason your kicking someone
 
 #define CLEAR_ALL_NAMES         -1
 // functions
