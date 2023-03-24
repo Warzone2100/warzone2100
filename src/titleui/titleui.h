@@ -99,10 +99,11 @@ private:
 class WzMsgBoxTitleUI: public WzTitleUI
 {
 public:
-	WzMsgBoxTitleUI(WzString text, std::shared_ptr<WzTitleUI> next);
+	WzMsgBoxTitleUI(WzString title, WzString text, std::shared_ptr<WzTitleUI> next);
 	virtual void start() override;
 	virtual TITLECODE run() override;
 private:
+	WzString title;
 	WzString text;
 	// Where to go after the user has acknowledged.
 	std::shared_ptr<WzTitleUI> next;
