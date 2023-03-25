@@ -7250,9 +7250,10 @@ void WzMultiplayerOptionsTitleUI::start()
 
 		ingame.localOptionsReceived = false;
 
-		PLAYERSTATS	nullStats;
+		PLAYERSTATS	playerStats;
 
-		loadMultiStats((char*)sPlayer, &nullStats);
+		loadMultiStats((char*)sPlayer, &playerStats);
+		setMultiStats(selectedPlayer, playerStats, true); // just set this locally so that the identity is cached, if changing name
 		lookupRatingAsync(selectedPlayer);
 
 		/* Entering the first time with challenge, immediately start the host */
