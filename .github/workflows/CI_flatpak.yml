@@ -434,6 +434,7 @@ jobs:
         run: ls -R
         working-directory: ./
       - name: Upload Flatpak repo to Flathub
+        continue-on-error: true
         env:
           FLAT_MANAGER_URL: 'https://hub.flathub.org/'
           FH_REPOSITORY: '${{ env.WZ_FLATPAK_BRANCH }}'
