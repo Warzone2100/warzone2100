@@ -236,7 +236,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	std::string messagetext = message.text;
 	std::string messagetext64 = base64Encode(std::vector<unsigned char>(messagetext.begin(), messagetext.end()));
 	debug(LOG_INFO, "message [%s] [%s]", senderhash.c_str(), message.text);
-	wz_command_interface_output("WZCHATCMD: %i %s %s %s %s %s %s\n", message.sender, NetPlay.players[message.sender].IPtextAddress, senderhash.c_str(), senderPublicKeyB64.c_str(), senderVerifiedStatus.c_str(), sendername64.c_str(), messagetext64.c_str());
+	wz_command_interface_output("WZCHATCMD: %i %s %s %s %s %s %s\n", message.sender, NetPlay.players[message.sender].IPtextAddress, senderhash.c_str(), senderPublicKeyB64.c_str(), sendername64.c_str(), messagetext64.c_str(), senderVerifiedStatus.c_str());
 	if (strcmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "help") == 0)
 	{
 		lobbyCommand_PrintHelp(static_cast<uint32_t>(message.sender));
