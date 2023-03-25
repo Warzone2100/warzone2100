@@ -1970,14 +1970,7 @@ void kf_KillSelected()
 		psNDroid = psCDroid->psNext;
 		if (psCDroid->selected)
 		{
-			if (!bMultiMessages)
-			{
-				destroyDroid(psCDroid, gameTime);	// SP game
-			}
-			else
-			{
-				SendDestroyDroid(psCDroid);
-			}
+			SendDestroyDroid(psCDroid);
 		}
 	}
 	for (psCStruct = apsStructLists[selectedPlayer]; psCStruct; psCStruct = psNStruct)
@@ -1985,14 +1978,7 @@ void kf_KillSelected()
 		psNStruct = psCStruct->psNext;
 		if (psCStruct->selected)
 		{
-			if (!bMultiMessages)
-			{
-				destroyStruct(psCStruct, gameTime);	//SP
-			}
-			else
-			{
-				SendDestroyStructure(psCStruct);
-			}
+			SendDestroyStructure(psCStruct);
 		}
 	}
 }
