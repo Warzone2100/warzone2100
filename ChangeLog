@@ -1,3 +1,41 @@
+2023-03-26: Version 4.3.4:
+* General:
+   * Add: A separate Ban/Kick activity, allow removing from ban list while running game, and fixes for spectator mute (too many commits, #3163)
+   * Fix: Various potential crashes (too many commits, #3100, #3101, #3106, #3108)
+   * Fix: Let some older maps show up again in the map lists (commit:444a637345a3578b327d278b7328ebd4d0ff91db, #3109)
+   * Fix: Always cancel research when starting it in another lab (commit:5f7eb0e172fa52c2e443220a5370ed88a7345216, #3150)
+   * Fix: Persist Snap config data by using SNAP_USER_COMMON (commit:6366d7b51ba697351abe430a402c9e5a77a837a7, #3160)
+* Graphics:
+   * Fix: Fix missing sections on Tank Killer super cyborg (commit:3e7b9d5382ab09b24a7793eb2826327f8f1382dc, #3092)
+* Campaign:
+   * Change: Gamma 4: Remove middle tank traps guarding team Alpha and remove the repair units to account for new repair micro-AI (commit:e70f636345f71b02cbed9d25628ef2a260809fa2, #3058)
+   * Change: Always blow up walls and tank traps during Nexus transfers in campaign (commit:8e7e7fdad4ec3ed5059163eeb0f36a699964fa23, #3118)
+   * Change: Improve difficulty differences on Gamma 9 (commit:e396fdf9f45a7d681d1b9b477717f52d1bcec48b, #3118)
+   * Change: Make Alpha 1-3 missions flow a bit more smoothly; Increase player flamer ranges (commit:31f18cc2478dcc1a62f72c171a627088ee059be4, #3132)
+   * Change: Make Gamma 1 easier by activating factories depending on what part of the valley you exit (commit:a4dc62af69db6ebd77ff4f506b7a1c2241828bbe, #3162)
+* Multiplayer:
+   * Add: Add lobby command: makeplayer (commit:64f50bdbb74053c8752197c634ed6642af6f0754, #3107, #3108)
+   * Add: Add a join message (commit:d48073c810ac385449b275132449d1c82fdbab1e, commit:dad97d406c539399d4c1d519b59b8cbad314620d, #3105)
+   * Fix: Do not truncate spectator labels (commit:66fcbeb22decbd06b49252580e8df91d5b1867b6, #3149)
+   * Fix: Stop Mission Time and store it when the results screen pops up (commit:5bad9826b739252b1ffea5b72b7bcb27823aeee1, commit:8a23639e683c4d1fb5696fd23d4c961b4080e66c, #3151)
+   * Fix: Preserve player identity on rename (commit:13a21a13c07983745327b8ee1e1653b516d92e76, #3155)
+* Balance MP:
+   * Add: Add new Heavy Rocket Array weapon which depends on MRA and HEAT Rocket Warhead Mk2 (commit:ca9dc06f0ee3a86f29940a7a15038043292321f5, commit:d9d9d3e54df4b5aeb41fba8bb322ae71c73beeb8, #3103, #3141)
+   * Change: Reduce effectiveness of artillery modifier on bunkers 40% to 20%, Reduce effectiveness of artillery modifiers against Tracked 40% to 30% (commit:46cab7cad2adbdb80150588852480eabac496510, commit:669fb3abf708662cbd5d3dd3be6cae1c94d24605, #2894)
+   * Change: Make Heavy Repair Turret and Repair Facility appear at same time, improve facility repair speed by 10, and make light repair turret cost less and build faster (commit:5ba9b81f4a88546d462f8dc13f35fb3ac0ba6201, #3022)
+   * Change: Buff Plasmite Flamer HP to 125 to match the HP on Twin Assault Gun (commit:bf10dfa807e30f25410a576eb26373a8a0a2864f, #3076)
+   * Change: Move Pulse Laser to around Seraph Missile and drop Sensor Upgrade Mk3 requirement (commit:b3062383eaab33c26fb3c9b08cd8ae04ad9d23c7, #3075)
+   * Change: Increase costs on later MG research and on (Twin) Assault Gun (commit:574b8d65c00080b400d1f9383093fde31bc53de3, #3113)
+   * Change: Pull some Rocket damages in earlier, Reduce Tank Killer reload time to that of Lancer, Improve Rocket Pod long range accuracy to 50% from 45% (commit:06ec3db15164fee44ad3016df52d7951bf9607fb, #3080)
+   * Change: Needle reload time matches the latest cannon weapons, nerf Super Rail gunner damages and range, nerf VTOL Needle/Rail radius and radius damage and increase weights (commit:589b226e512e6e667f481c54bd4e852effc1b378, #3081)
+   * Change: Pull Mortar into Advanced Bases by removing factory module requirement (commit:93cb444ef71260981cae61ded29d146bd1ce5cd3, #3089)
+   * Change: Reduce time and cost for Command Turret research by 50% (commit:e8465be7fc6c044ffd72e7aad9dba0c1f865022a, #3121)
+   * Change: Reduce research topic time and cost for most defenses by 50% (commit:bf408ac0b59c56b51fceda8e9cd54fcd62cdf089, #3122)
+   * Change: Increase reward for some engineering upgrades to 30% (commit:96e6878d33c4e2d13665051e08a7915ecdec6bde, #3134)
+* Other:
+   * Add: Add autohost and autorating documentation (commit:2ab6c37eeb684f6b1936eb49a263f3412a92dfed, #3138)
+   * Fix: Fix building with GCC 13 (commit:e872db579ec2847de29d1e3a96b35902f643b9fb, #3090)
+
 2023-01-01: Version 4.3.3:
  * General:
    * Add: Cursor scaling implemented (commit:41f1cc5329d483e659b6b1c345ba8913692336a2, #3016)
