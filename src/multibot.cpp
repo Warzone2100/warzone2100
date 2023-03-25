@@ -783,11 +783,6 @@ static BASE_OBJECT *processDroidTarget(OBJECT_TYPE desttype, uint32_t destid)
 // Inform other players that a droid has been destroyed
 bool SendDestroyDroid(const DROID *psDroid)
 {
-	if (!bMultiMessages)
-	{
-		return true;
-	}
-
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id = psDroid->id;
