@@ -1576,7 +1576,7 @@ static int getPlayerTeam(int i)
  */
 static int allPlayersOnSameTeam(int except)
 {
-	int minTeam = MAX_PLAYERS, maxTeam = 0, numPlayers = 0;
+	int minTeam = MAX_PLAYERS, maxTeam = 0;
 	for (unsigned i = 0; i < game.maxPlayers; ++i)
 	{
 		if (i != except && (!NetPlay.players[i].isSpectator) && (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0))
@@ -1584,7 +1584,6 @@ static int allPlayersOnSameTeam(int except)
 			int team = getPlayerTeam(i);
 			minTeam = std::min(minTeam, team);
 			maxTeam = std::max(maxTeam, team);
-			++numPlayers;
 		}
 	}
 	if (minTeam == MAX_PLAYERS || minTeam == maxTeam)
