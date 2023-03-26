@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2023-01-09 06:26\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -5986,14 +5986,14 @@ msgstr "Укрепточка с зениткой Циклон"
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:70
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr "Зенитка Циклон Питон Полугусеницы"
+msgstr "ЗСУ Циклон Питон Полугусеницы"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:74
 msgid "AA Cyclone Flak Cannon"
-msgstr "Зенитка Циклон"
+msgstr "ЗСУ Циклон"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6051,7 +6051,7 @@ msgstr "Перезарядка ПВО -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:119
 msgid "AA Site with Stormbringer Turret"
-msgstr "Зенитка Предвестник Бури"
+msgstr "ЗЛУ Предвестник Бури"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6076,21 +6076,21 @@ msgstr "Тепловой сенсор ПВО"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:140
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr "Установка с зениткой Торнадо"
+msgstr "Установка с зенитным орудием Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:144
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr "Укрепточка с зениткой Торнадо"
+msgstr "Укрепточка с зенитным орудием Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:148
 msgid "AA Tornado Flak Cannon"
-msgstr "Зенитка Торнадо"
+msgstr "ЗСУ Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -7521,7 +7521,7 @@ msgstr "Автозарядка Пушки Mk3"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF01.name
 #: po/custom/fromJson.txt:1320
 msgid "Cannon Autoloader"
-msgstr "Автозарядка Пушки"
+msgstr "Автоматический досылатель Пушки"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
@@ -8170,7 +8170,7 @@ msgstr "Зенитка Циклон"
 #. data/base/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:1738
 msgid "Cyclone AA Python Half-tracks"
-msgstr "Зенитка Циклон Питон Полугусеницы"
+msgstr "ЗСУ Циклон Питон Полугусеницы"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade05.name
@@ -12253,7 +12253,7 @@ msgstr "Питон"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4600
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr "Счетверённая 80мм зенитка"
+msgstr "Счетверённая 80мм ЗСУ"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -16240,7 +16240,7 @@ msgstr "Слоты наблюдателей"
 
 #: src/frontend.cpp:3005
 msgid "Enable Rating"
-msgstr "Включить рейтинг"
+msgstr "Рейтинг (вступить в секту)"
 
 #: src/frontend.cpp:3020
 msgid "MULTIPLAY OPTIONS"
@@ -19542,7 +19542,7 @@ msgstr "Доступна новая версия (%s) Warzone 2100!"
 
 #: src/updatemanager.cpp:365
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Это новая версия включает в себя обновления и исправление ошибок. Рекомендуем обновиться сейчас."
 
 #: src/updatemanager.cpp:370
 msgid "A new build of Warzone 2100 is available!"
