@@ -616,7 +616,9 @@ void startMultiPlayerMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// This isn't really a hyperlink for now... perhaps link to the wiki ?
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("TCP port 2100 must be opened in your firewall or router to host games!"), 0);
+	char buf[512]  =  {'\0'};
+	snprintf(buf, sizeof(buf), _("TCP port %d must be opened in your firewall or router to host games!"), NETgetGameserverPort());
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, buf, 0);
 }
 
 bool runMultiPlayerMenu()

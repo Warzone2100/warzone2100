@@ -7161,7 +7161,7 @@ static void printHostHelpMessagesToConsole()
 		}
 		else
 		{
-			ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
+			ssprintf(buf, _("UPnP detection disabled by user. Autoconfig of port %d will not happen."), NETgetGameserverPort());
 			displayRoomNotifyMessage(buf);
 		}
 	}
