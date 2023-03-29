@@ -1426,7 +1426,7 @@ static bool upnp_add_redirect(int port)
 		debug(LOG_NET, "%s", buf);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		// beware of writing a line too long, it screws up console line count. \n is safe for line split
-		ssprintf(buf, "%s", _("You must manually configure your router & firewall to\n open port 2100 before you can host a game."));
+		ssprintf(buf, _("You must manually configure your router & firewall to\n open port %d before you can host a game."), NETgetGameserverPort());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		return false;
 	}
@@ -2723,6 +2723,7 @@ static void NETcheckPlayers()
 bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
 	const int status = upnp_status.load(); // hack fix for clang and c++11 - fixed in standard for c++14
+	char buf[512] = {'\0'};
 	switch (status)
 	{
 	case UPNP_ERROR_CONTROL_NOT_AVAILABLE:
@@ -2736,7 +2737,8 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 			debug(LOG_NET, "controlURL not available, UPnP disabled");
 		}
 		// beware of writing a line too long, it screws up console line count. \n is safe for line split
-		addConsoleMessage(_("No UPnP device found. Configure your router/firewall to open port 2100!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		ssprintf(buf, _("No UPnP device found. Configure your router/firewall to open port %d!"), NETgetGameserverPort());
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		NetPlay.isUPNP_CONFIGURED = false;
 		NetPlay.isUPNP_ERROR = true;
 		upnp_status = 0;
