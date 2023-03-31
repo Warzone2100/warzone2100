@@ -2992,8 +2992,8 @@ bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 
 	//finally check the right droid/sensor combination
 	// check vtol droid with commander
-	if ((isVtolDroid(psDroid) || !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-		psObj->type == OBJ_DROID && ((const DROID *)psObj)->droidType == DROID_COMMAND)
+	if (isVtolDroid(psDroid) && psObj->type == OBJ_DROID
+		&& ((const DROID *)psObj)->droidType == DROID_COMMAND)
 	{
 		return true;
 	}
@@ -3011,7 +3011,8 @@ bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 	// Check indirect weapon droid with standard/CB/radar detector sensor
 	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
 	{
-		if (psStats->type == STANDARD_SENSOR ||	psStats->type == INDIRECT_CB_SENSOR || psStats->type == SUPER_SENSOR /*|| psStats->type == RADAR_DETECTOR_SENSOR*/)
+		if ((psStats->type == STANDARD_SENSOR ||	psStats->type == INDIRECT_CB_SENSOR || psStats->type == SUPER_SENSOR /*|| psStats->type == RADAR_DETECTOR_SENSOR*/)
+			&& !(psObj->type == OBJ_DROID && ((const DROID*)psObj)->droidType == DROID_COMMAND))
 		{
 			return true;
 		}

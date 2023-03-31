@@ -2435,8 +2435,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 				// Transporters can't be assigned to commanders, due to abuse of .psGroup. Try to land on the commander instead. Hopefully the transport is heavy enough to crush the commander.
 				orderDroidLoc(psNewDroid, DORDER_MOVE, psFact->psCommander->pos.x, psFact->psCommander->pos.y, ModeQueue);
 			}
-			else if (idfDroid(psNewDroid) ||
-			         isVtolDroid(psNewDroid))
+			else if (isVtolDroid(psNewDroid))
 			{
 				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, psFact->psCommander, ModeQueue);
 				//moveToRearm(psNewDroid);
