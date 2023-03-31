@@ -392,7 +392,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 	/* Set muzzle pitch if not repairing or outside minimum range */
 	const int minRange = proj_GetMinRange(psWeapStats, psAttacker->player);
-	if (!bRepair && (unsigned)objPosDiffSq(psAttacker, psTarget) > minRange * minRange)
+	if (!bRepair && (unsigned)objPosDiffSq(psAttacker, psTarget) > minRange * minRange && proj_Direct(psWeapStats))
 	{
 		/* get target distance */
 		Vector3i delta = psTarget->pos - attackerMuzzlePos;
