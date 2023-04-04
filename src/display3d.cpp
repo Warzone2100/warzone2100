@@ -2741,7 +2741,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		}
 		if (psDroid->resistance)
 		{
-			mulH = (float)psDroid->resistance / (float)droidResistance(psDroid);
+			mulH = (float)PERCENT(psDroid->resistance, droidResistance(psDroid));
 		}
 		else
 		{
