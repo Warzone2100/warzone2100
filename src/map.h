@@ -163,7 +163,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(int x, int y, int player, 
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (alliancebits[player] & (1 << i))
+		if (aiCheckAlliances(player, i))
 		{
 			psAuxMap[i][x + y * mapWidth] |= state;
 		}
@@ -177,7 +177,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetEnemy(int x, int y, int player, i
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (!(alliancebits[player] & (1 << i)))
+		if (!aiCheckAlliances(player, i))
 		{
 			psAuxMap[i][x + y * mapWidth] |= state;
 		}
