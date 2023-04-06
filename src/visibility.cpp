@@ -692,11 +692,11 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 		setSeenBy(psObj, psObj->player, UBYTE_MAX);
 	}
 
-	// if a player has a SAT_UPLINK structure, or has godMode enabled,
+	// if a player has a SAT_UPLINK structure, or has godMode enabled (and is not a spectator!!),
 	// they can see everything!
 	for (unsigned viewer = 0; viewer < MAX_PLAYERS; viewer++)
 	{
-		if (getSatUplinkExists(viewer) || (viewer == selectedPlayer && godMode))
+		if (getSatUplinkExists(viewer) || (viewer == selectedPlayer && godMode && !NetPlay.players[viewer].isSpectator))
 		{
 			setSeenBy(psObj, viewer, UBYTE_MAX);
 		}
