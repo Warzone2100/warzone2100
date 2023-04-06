@@ -6388,11 +6388,10 @@
 		"name": "Howitzer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage04",
-			"R-Sys-Sensor-Upgrade01",
-			"R-Struc-Research-Upgrade06"
+			"R-Sys-Sensor-Upgrade01"
 		],
-		"researchPoints": 9640,
-		"researchPower": 300,
+		"researchPoints": 9000,
+		"researchPower": 281,
 		"resultComponents": [
 			"Howitzer105Mk1"
 		],
@@ -7776,7 +7775,8 @@
 		"msgName": "RES_MORTA1",
 		"name": "Mortar",
 		"requiredResearch": [
-			"R-Wpn-Cannon-Damage01"
+			"R-Wpn-Cannon-Damage01",
+			"R-Struc-Factory-Module"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
