@@ -38,6 +38,7 @@
 #include "multistat.h"
 #include "notifications.h"
 #include "component.h"
+#include "loop.h" // for getNumDroids
 
 #include <unordered_set>
 #include <unordered_map>
@@ -724,6 +725,16 @@ if ((!NetPlay.players[playerIdx].allocated && NetPlay.players[playerIdx].ai < 0)
 			label.setString(WzString::number(getMultiStats(playerIdx).recentPowerLost));
 			ADJUST_LABEL_COLOR_FOR_PLAYERS();
 		}, INFO_UPDATE_INTERVAL_TICKS));
+		// Kills
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			label.setString(WzString::number(getMultiStats(playerIdx).recentKills));
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
+		// Units (as in F5)
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			label.setString(WzString::number(getNumDroids(playerIdx) + getNumTransporterDroids(playerIdx)));
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
 		// Kinetic Armor (T/C)
 		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
 			WzString armorStr = WzString::number(getNumBodyClassArmourUpgrades(playerIdx, BodyClass::Tank)) + "/" +  WzString::number(getNumBodyClassArmourUpgrades(playerIdx, BodyClass::Cyborg));
@@ -804,6 +815,8 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	auto powerRateLabel = createColHeaderLabel(_("Power/Rate"));
 	powerRateLabel->setTip(_("Current Power / Power Per Second"));
 	auto powerLostLabel = createColHeaderLabel(_("PowerLost"));
+	auto killsLabel = createColHeaderLabel(_("Kills"));
+	auto unitsLabel = createColHeaderLabel(_("Units"));
 	auto armorLabel = createArmorColWidget(false);
 	armorLabel->setTip(std::string(_("Kinetic Armor")) + "\n" + _("(Tanks / Cyborgs)"));
 	auto thermalArmorLabel = createArmorColWidget(true);
@@ -814,6 +827,8 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 		{playerLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{powerRateLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{powerLostLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{killsLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{unitsLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{armorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
 		{thermalArmorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
 		{result->weaponGradesManager, TableColumn::ResizeBehavior::FIXED_WIDTH},
