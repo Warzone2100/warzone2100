@@ -3340,8 +3340,8 @@
 		"weight": 2000
 	},
 	"Mortar1Mk1": {
-		"buildPoints": 400,
-		"buildPower": 100,
+		"buildPoints": 440,
+		"buildPower": 105,
 		"damage": 60,
 		"designable": 1,
 		"effectSize": 100,
