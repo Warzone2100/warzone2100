@@ -474,6 +474,7 @@ void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 {
 	char	tm1[128];
+	STRUCTURE* psStructure;
 
 	if (prop && bMultiMessages)
 	{
@@ -498,11 +499,42 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 	alliances[p2][p1] = ALLIANCE_BROKEN;
 	alliancebits[p1] &= ~(1 << p2);
 	alliancebits[p2] &= ~(1 << p1);
+
+	// Make sure p1's structures are no longer considered "our buildings" to their former allies
+	// For unit pathing
+	for (psStructure = apsStructLists[p1]; psStructure; psStructure = psStructure->psNext)
+	{
+		StructureBounds b = getStructureBounds(psStructure);
+
+		for (int i = 0; i < b.size.x; i++)
+		{
+			for (int j = 0; j < b.size.y; j++)
+			{
+				auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+			}
+		}
+	}
+	// Do the same for p2's stuff
+	for (psStructure = apsStructLists[p2]; psStructure; psStructure = psStructure->psNext)
+	{
+		StructureBounds b = getStructureBounds(psStructure);
+
+		for (int i = 0; i < b.size.x; i++)
+		{
+			for (int j = 0; j < b.size.y; j++)
+			{
+				auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+			}
+		}
+	}
 }
 
 void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allowNotification)
 {
 	DROID	*psDroid;
+	STRUCTURE	*psStructure;
 	char	tm1[128];
 
 	if (bMultiMessages && prop)
@@ -557,6 +589,50 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 		    && psDroid->order.psObj->player == p1)
 		{
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+		}
+	}
+
+	// Properly mark all of p1's structures as allied buildings for unit pathing
+	for (psStructure = apsStructLists[p1]; psStructure; psStructure = psStructure->psNext)
+	{
+		StructureBounds b = getStructureBounds(psStructure);
+
+		for (int i = 0; i < b.size.x; i++)
+		{
+			for (int j = 0; j < b.size.y; j++)
+			{
+				if (!(psStructure->pStructureType->type == REF_GATE))
+				{
+					auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				}
+				else
+				{
+					// Make sure gates aren't set as impassible to our new allies
+					auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+				}
+			}
+		}
+	}
+	// Do the same for p2's stuff
+	for (psStructure = apsStructLists[p2]; psStructure; psStructure = psStructure->psNext)
+	{
+		StructureBounds b = getStructureBounds(psStructure);
+
+		for (int i = 0; i < b.size.x; i++)
+		{
+			for (int j = 0; j < b.size.y; j++)
+			{
+				if (!(psStructure->pStructureType->type == REF_GATE))
+				{
+					auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				}
+				else
+				{
+					auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+				}
+			}
 		}
 	}
 }
