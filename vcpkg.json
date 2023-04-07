@@ -1,6 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
+	"builtin-baseline": "6d16cb553a82eb42548326769f0a16d74fbceec1",
 	"dependencies": [
 		"sdl2",
 		"physfs",
@@ -13,7 +14,15 @@
 		"libpng",
 		"freetype",
 		"gettext",
-		"openal-soft",
+		{
+			"name": "openal-soft",
+			"platform": "windows | mingw"
+		},
+		{
+			"name": "openal-soft",
+			"platform": "!windows & !mingw",
+			"version>=": "1.23.0"
+		},
 		"zlib",
 		"sqlite3",
 		"libsodium",
@@ -51,6 +60,9 @@
 			"name": "basisu",
 			"host": true
 		}
+	],
+	"overrides": [
+		{ "name": "sqlite3", "version": "3.40.1" }
 	],
 	"default-features": [
 		"vulkan"
