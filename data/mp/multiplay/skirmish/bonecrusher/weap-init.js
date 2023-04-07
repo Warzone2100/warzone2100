@@ -27,6 +27,7 @@ var guns=[
 ["R-Wpn-Missile2A-T", "Missile-A-T"],				//Тяжёлая противотанковая пара ракет прямого наведения "scourge"
 //	===== Ракеты артиллерии
 ["R-Wpn-Rocket02-MRL", "Rocket-MRL"],				//Лёгкая артиллерийская ракетная баттарея
+["R-Wpn-Rocket02-MRLHvy", "Rocket-MRL-Hvy"],
 ["R-Wpn-Rocket06-IDF", "Rocket-IDF"],				//Дальнобойная артиллерийская ракетная баттарея Ripple
 ["R-Wpn-MdArtMissile", "Missile-MdArt"],			//Улучшенная артиллерийская ракетная баттарея Seraph
 ["R-Wpn-HvArtMissile", "Missile-HvyArt"],			//Улучшенная дальнобойная артиллерийская ракетная баттарея Archangel
@@ -97,6 +98,7 @@ guns_type['ra'] = [
 ["R-Wpn-HvArtMissile", "Missile-HvyArt"],			//Улучшенная дальнобойная артиллерийская ракетная баттарея Archangel
 ["R-Wpn-MdArtMissile", "Missile-MdArt"],			//Улучшенная артиллерийская ракетная баттарея Seraph
 ["R-Wpn-Rocket06-IDF", "Rocket-IDF"],				//Дальнобойная артиллерийская ракетная баттарея Ripple
+["R-Wpn-Rocket02-MRLHvy", "Rocket-MRL-Hvy"],
 ["R-Wpn-Rocket02-MRL", "Rocket-MRL"],				//Лёгкая артиллерийская ракетная баттарея
 ];
 

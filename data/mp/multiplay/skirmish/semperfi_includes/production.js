@@ -27,6 +27,7 @@ const TANK_BUNKER_BUSTERS = [
 ];
 const TANK_ARTILLERY = [
 	"Missile-MdArt", // Seraph
+	"Rocket-MRL-Hvy", // HRA
 	"Rocket-MRL", // MRL
 ];
 const CYBORG_FLAMERS = [

@@ -24,6 +24,7 @@ const LATE_GAME_TECH = [
 const ROCKET_TECH = [
 	"R-Wpn-Rocket-ROF03",
 	"R-Wpn-Rocket03-HvAT",
+	"R-Defense-MRLHvy",
 	"R-Cyborg-Hvywpn-TK", //tank killer cyborg
 	"R-Defense-WallTower-HvyA-Trocket", //Tank-killer rocket and hardpoint
 	"R-Wpn-Rocket-Damage09",
