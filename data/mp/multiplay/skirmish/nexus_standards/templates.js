@@ -65,16 +65,16 @@ const STANDARD_TEMPLATES = [
 	{ body: "Body9REC", prop: "tracked01", weaps: ["Missile-A-T",] },
 	{ body: "Body9REC", prop: "tracked01", weaps: ["RailGun3Mk1",] },
 	{ body: "Body9REC", prop: "hover01", weaps: ["RailGun3Mk1",] },
-	{ body: "Body7ABT", prop: "tracked01", weaps: ["Laser2PULSEMk1",] },
 	{ body: "Body7ABT", prop: "tracked01", weaps: ["Laser3BEAMMk1",] },
+	{ body: "Body7ABT", prop: "tracked01", weaps: ["Laser2PULSEMk1",] },
 	{ body: "Body7ABT", prop: "tracked01", weaps: ["RailGun2Mk1",] },
 	{ body: "Body10MBT", prop: "tracked01", weaps: ["Missile-A-T",] },
 	{ body: "Body7ABT", prop: "hover01", weaps: ["RailGun2Mk1",] },
 	{ body: "Body7ABT", prop: "tracked01", weaps: ["Missile-A-T",] },
 	{ body: "Body10MBT", prop: "tracked01", weaps: ["RailGun3Mk1",] },
-	{ body: "Body10MBT", prop: "hover01", weaps: ["RailGun3Mk1",] },
-	{ body: "Body10MBT", prop: "tracked01", weaps: ["Laser2PULSEMk1",] },
 	{ body: "Body10MBT", prop: "hover01", weaps: ["Missile-A-T",] },
+	{ body: "Body10MBT", prop: "tracked01", weaps: ["HeavyLaser",] },
+	{ body: "Body10MBT", prop: "hover01", weaps: ["RailGun3Mk1",] },
 	{ body: "Body10MBT", prop: "hover01", weaps: ["Missile-MdArt",] },
 	{ body: "Body14SUP", prop: "hover01", weaps: ["Missile-MdArt", "RailGun3Mk1",] },
 ];
@@ -104,7 +104,8 @@ const STANDARD_LIGHT_CYBORG_TEMPLATES = [
 	{ body: "CyborgLightBody", prop: "CyborgLegs", weaps: ["CyborgCannon",] },
 	{ body: "CyborgLightBody", prop: "CyborgLegs", weaps: ["CyborgFlamer01",] },
 	{ body: "CyborgLightBody", prop: "CyborgLegs", weaps: ["CyborgRocket",] },
-	{ body: "CyborgLightBody", prop: "CyborgLegs", weaps: ["Cyb-Wpn-Rail1",] },
+	{ body: "CyborgLightBody", prop: "CyborgLegs", weaps: ["Cyb-Wpn-Laser",] },
+	{ body: "CyborgLightBody", prop: "CyborgLegs", weaps: ["Cyb-Wpn-Atmiss",] },
 	{ body: "CyborgLightBody", prop: "CyborgLegs", weaps: ["Cyb-Wpn-Rail1",] },
 ];
 
@@ -121,6 +122,9 @@ const STANDARD_SUPER_CYBORG_TEMPLATES = [
 	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-HPV",] },
 	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-Acannon",] },
 	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-TK",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-A-T",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-PulseLsr",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-RailGunner",] },
 ];
 
 const STANDARD_VTOL_TEMPLATES = [
@@ -130,6 +134,8 @@ const STANDARD_VTOL_TEMPLATES = [
 	{ body: "Body8MBT", prop: "V-Tol", weaps: ["Bomb2-VTOL-HvHE",] },
 	{ body: "Body8MBT", prop: "V-Tol", weaps: ["Rocket-VTOL-LtA-T",] },
 	{ body: "Body8MBT", prop: "V-Tol", weaps: ["Rocket-VTOL-BB",] },
-	{ body: "Body8MBT", prop: "V-Tol", weaps: ["Rocket-VTOL-LtA-T",] },
 	{ body: "Body7ABT", prop: "V-Tol", weaps: ["Bomb4-VTOL-HvyINC",] },
+	{ body: "Body3MBT", prop: "V-Tol", weaps: ["Missile-VTOL-AT",] },
+	{ body: "Body7ABT", prop: "V-Tol", weaps: ["RailGun2-VTOL",] },
+	{ body: "Body7ABT", prop: "V-Tol", weaps: ["Bomb5-VTOL-Plasmite",] },
 ];
