@@ -30,7 +30,7 @@ const BASE_DEFENSE_RANGE = 40; //How far away from the farthest base structure w
 const BASE_VTOL_DEFENSE_RANGE = 25; //see above.
 const BASE_THREAT_RANGE = Math.ceil(17 + (mapWidth + mapHeight) / 2 / 35);
 
-const TEMPLATE_BEST_OFFSET = 4; //Choose the best and the previous four to choose from.
+const TEMPLATE_BEST_OFFSET = 5; //Choose the best and the previous five to choose from.
 
 const TICK = 100;
 

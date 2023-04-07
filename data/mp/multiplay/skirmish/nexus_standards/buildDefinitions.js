@@ -55,6 +55,7 @@ const STANDARD_INCENDIARIES = [
 	"Emplacement-Howitzer150",
 	"Emplacement-Howitzer-Incendiary",
 	"Emplacement-RotHow",
+	"Emplacement-HeavyPlasmaLauncher",
 ];
 
 const STANDARD_ANTI_AIR_DEFENSES = [
@@ -62,6 +63,7 @@ const STANDARD_ANTI_AIR_DEFENSES = [
 	"AASite-QuadBof",
 	"AASite-QuadRotMg",
 	"P0-AASite-SAM1",
+	"P0-AASite-Laser",
 	"P0-AASite-SAM2",
 ];
 
@@ -115,9 +117,10 @@ const STANDARD_BASIC_DEFENSES = [
 	"Emplacement-PulseLaser",
 	"Emplacement-Rail2",
 	"WallTower-HvATrocket",
-	"WallTower-Atmiss",
 	"WallTower-PulseLas",
 	"WallTower-Rail2",
+	"WallTower-Atmiss",
+	"Emplacement-HeavyLaser",
 	"WallTower-Rail3"
 ];
 
