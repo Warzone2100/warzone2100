@@ -2763,8 +2763,12 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 		objTrace(psStructure->id, "Repair complete of droid %d", (int)psDroid->id);
 		psDroid->body = psDroid->originalBody;
 		// if completely repaired reset order
-		secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+		objTrace(psDroid->id, "was fully repaired by RF");
 		droidWasFullyRepaired(psDroid, psRepairFac);
+		// only call "secondarySetState" *after* triggering "droidWasFullyRepaired"
+		// because in some cases calling it would modify primary order
+		// thus, loosing information that we actually had a RTR|RTR_SPECIFIED before
+		secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 		return RepairState::Idle;
 	};
 	case RepairEvents::UnitDied:
