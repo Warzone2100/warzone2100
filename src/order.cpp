@@ -936,11 +936,15 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_RTR:
 	case DORDER_RTR_SPECIFIED:
 		// send them back to commander, no need to repair
-		if (!droidIsDamaged(psDroid)) droidWasFullyRepaired(psDroid, nullptr);
+		if (!droidIsDamaged(psDroid))
+		{
+			objTrace(psDroid->id, "was RTR, but we are full health");
+			droidWasFullyRepaired(psDroid, nullptr);
+		}
 
 		if (psDroid->order.psObj == nullptr)
 		{
-			// Our target got lost. Let's try again.
+			objTrace(psDroid->id, "Our RTR target got lost. Let's try again.");
 			psDroid->order = DroidOrder(DORDER_NONE);
 			orderDroid(psDroid, DORDER_RTR, ModeImmediate);
 		}
@@ -1340,7 +1344,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	const Vector3i rPos(psOrder->pos, 0);
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->type));
+	
 	objTrace(psDroid->id, "base set order to %s (was %s)", getDroidOrderName(psOrder->type), getDroidOrderName(psDroid->order.type));
+
 	if (psOrder->type != DORDER_TRANSPORTIN         // transporters special
 	    && psOrder->psObj == nullptr			// location-type order
 	    && (validOrderForLoc(psOrder->type) || psOrder->type == DORDER_BUILD)
@@ -1659,8 +1665,45 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			}
 		}
 		break;
-	case DORDER_RTR:
 	case DORDER_RTR_SPECIFIED:
+		{
+			// DORDER_RTR_SPECIFIED requires special handling, different from RTR
+			// because we don't want the damaged droid to randomly chose a repair station
+			// when User already specified one explicitely
+			if (isVtolDroid(psDroid))
+			{
+				moveToRearm(psDroid);
+				break;
+			}
+			// if already has a target repair, don't override it: it might be different
+			// and we don't want come back and forth between 2 repair points
+			if (psDroid->order.type == DORDER_RTR_SPECIFIED && psOrder->psObj != nullptr && !psOrder->psObj->died)
+			{
+				objTrace(psDroid->id, "DONE FOR NOW");
+				break;
+			}
+			
+			// RTR_SPECIFIED can only ever be given to a repair facility, never a mobile repair turret
+			// move to front of structure
+			psDroid->order = DroidOrder(psOrder->type, psOrder->psObj, RTR_TYPE_REPAIR_FACILITY);
+			psDroid->order.pos = psOrder->psObj->pos.xy();
+			/* If in multiPlayer, and the Transporter has been sent to be
+				* repaired, need to find a suitable location to drop down. */
+			if (game.type == LEVEL_TYPE::SKIRMISH && isTransporter(psDroid))
+			{
+				Vector2i pos = psDroid->order.pos;
+				objTrace(psDroid->id, "Repair transport");
+				actionVTOLLandingPos(psDroid, &pos);
+				actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
+			}
+			else
+			{
+				objTrace(psDroid->id, "RTR_SPECIFIED: Go to repair facility at (%d, %d)!", psDroid->order.pos.x, psDroid->order.pos.y);
+				actionDroid(psDroid, DACTION_MOVE, psOrder->psObj, psDroid->order.pos.x, psDroid->order.pos.y);
+			}
+		}
+		break;
+	case DORDER_RTR:
 		{
 			if (isVtolDroid(psDroid))
 			{
@@ -1702,7 +1745,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				}
 				else
 				{
-					objTrace(psDroid->id, "Go to repair facility at (%d, %d) using (%d, %d)!", rtrData.psObj->pos.x, rtrData.psObj->pos.y, psDroid->order.pos.x, psDroid->order.pos.y);
+					objTrace(psDroid->id, "Go to repair facility at (%d, %d)!", rtrData.psObj->pos.x, rtrData.psObj->pos.y);
 					actionDroid(psDroid, DACTION_MOVE, rtrData.psObj, psDroid->order.pos.x, psDroid->order.pos.y);
 				}
 			}
@@ -3371,7 +3414,8 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	return RtrBestResult(RTR_TYPE_NO_RESULT, nullptr);
 }
 
-/** This function assigns a state to a droid. It returns true if it assigned and false if it failed to assign.*/
+/** This function assigns a state to a droid. It returns true if it assigned and false if it failed to assign.
+    Note that this also modifies primary order in some cases */
 bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
 {
 	UDWORD		CurrState, factType, prodType;
@@ -3391,6 +3435,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	// Why does this have to be so ridiculously complicated?
 	uint32_t secondaryMask = 0;
 	uint32_t secondarySet = 0;
+
 	switch (sec)
 	{
 	case DSO_ATTACK_RANGE:
