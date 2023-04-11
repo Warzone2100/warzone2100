@@ -28,7 +28,7 @@
 		"Hover": 110,
 		"Legged": 130,
 		"Lift": 25,
-		"Tracked": 30,
+		"Tracked": 40,
 		"Wheeled": 90
 	},
 	"BUNKER BUSTER": {
