@@ -81,7 +81,7 @@ function __camEnqueueVideos()
 		}
 		if (!camDef(what.type) || (what.type !== MISS_MSG && what.type !== CAMP_MSG))
 		{
-			camDebug("Video message type was NOT specified. Please specify one.")
+			camDebug("Video message type was NOT specified. Please specify one.");
 			play = false;
 		}
 		if (!camDef(what.immediate))
