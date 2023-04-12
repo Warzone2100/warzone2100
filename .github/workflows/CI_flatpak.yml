@@ -483,10 +483,9 @@ jobs:
         if: success() && (needs.build-flatpak.outputs.WZ_FLATPAK_BRANCH == 'stable')
         env:
           FLAT_MANAGER_URL: 'https://hub.flathub.org/'
-          FH_REPOSITORY: '${{ env.WZ_FLATPAK_BRANCH }}'
+          FH_REPOSITORY: beta
           FH_TOKEN: ${{ secrets.FLATHUB_BETA_TOKEN }}
           WZ_FLATPAK_LOCAL_REPO_NAME: ${{ steps.build-beta.outputs.WZ_FLATPAK_LOCAL_REPO_NAME }}
-          WZ_FLATPAK_BRANCH: beta
         shell: bash --noprofile --norc {0} # no pipefail
         run: |
           . src/.ci/flatpak/publish_to_flathub.sh
