@@ -8644,7 +8644,8 @@
 		"name": "Ripple Rockets",
 		"requiredResearch": [
 			"R-Wpn-Rocket02-MRL",
-			"R-Sys-CBSensor-Turret01"
+			"R-Sys-CBSensor-Turret01",
+			"R-Struc-Research-Upgrade06"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
