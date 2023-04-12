@@ -44,7 +44,7 @@ Once discussion seems to have reached a reasonable point for voting:
 
 A period of at least several days should be allowed for voting, to ensure maximum opportunity to engage.
 
-If there is a greater than 65% consensus among qualified voters, and at least 10 qualified voters voting, a proposal _may_ proceed to Phase 3. (If not, the results should be posted to GitHub and changes should be requested, taking feedback into account - for example: trying a smaller & more incremental change to allow players to better adjust, or providing a more detailed explanation of the change and its impacts / desirability / need.)
+If there is a greater than 65% consensus among qualified voters, and a sufficient number of qualified voters voting, a proposal _may_ proceed to Phase 3. (If not, the results should be posted to GitHub and changes should be requested, taking feedback into account - for example: trying a smaller & more incremental change to allow players to better adjust, or providing a more detailed explanation of the change and its impacts / desirability / need.)
 
 ## Phase 3:
 ### Merging (on GitHub)
@@ -55,6 +55,8 @@ When merging, please post a comment in the corresponding balance PR following th
 
 ```markdown
 This balance proposal has progressed to Phase 3, and will be merged into the master branch.
+<or>
+This balance proposal has been closed without merging.
 
 Phase 2 Discussion occurred at: <link to Discord thread>
 
