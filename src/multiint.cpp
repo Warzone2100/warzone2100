@@ -8016,7 +8016,15 @@ static void sendRoomChatMessage(char const *text)
 			return;
 		}
 	}
-	message.enqueue(NETbroadcastQueue());
+	if (strncmp(message.text, LOBBY_COMMAND_PREFIX "hostmsg", LOBBY_COMMAND_PREFIX_LENGTH + 7) == 0)
+	{
+		// send the message to the host only
+		message.enqueue(NETnetQueue(NetPlay.hostPlayer));
+	}
+	else
+	{
+		message.enqueue(NETbroadcastQueue());
+	}
 }
 
 static int numSlotsToBeDisplayed()
