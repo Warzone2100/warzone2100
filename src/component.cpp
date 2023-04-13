@@ -63,7 +63,7 @@ bool setPlayerColour(UDWORD player, UDWORD col)
 		NetPlay.players[player].colour = MAX_PLAYERS;
 		return true;
 	}
-	ASSERT_OR_RETURN(false, col < MAX_PLAYERS, "Bad colour setting");
+	ASSERT_OR_RETURN(false, col < 16, "Bad colour setting");
 	NetPlay.players[player].colour = col;
 	return true;
 }

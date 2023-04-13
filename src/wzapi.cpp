@@ -567,8 +567,9 @@ bool wzapi::replaceTexture(WZAPI_PARAMS(std::string oldFilename, std::string new
 
 //-- ## changePlayerColour(player, colour)
 //--
-//-- Change a player's colour slot. The current player colour can be read from the ```playerData``` array. There are as many
-//-- colour slots as the maximum number of players. (3.2.3+ only)
+//-- Change a player's colour slot. The current player colour can be read from the ```playerData``` array. Available colours
+//-- are green, orange, gray, black, red, blue, pink, cyan, yellow, purple, white, bright blue, neon green, infrared,
+//-- ultraviolet, and brown, represented by the integers 0 - 15 respectively.
 //--
 bool wzapi::changePlayerColour(WZAPI_PARAMS(int player, int colour))
 {
@@ -2975,20 +2976,22 @@ scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
 	return limits;
 }
 
-//-- ## addStructure(structureName, player, x, y)
+//-- ## addStructure(structureName, player, x, y[, direction])
 //--
 //-- Create a structure on the given position. Returns the structure on success, null otherwise.
 //-- Position uses world coordinates, if you want use position based on Map Tiles, then
 //-- use as addStructure(structureName, players, x*128, y*128)
 //--
-wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y))
+wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y, optional<float> _direction))
 {
 	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
 	SCRIPT_ASSERT(nullptr, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 
+	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
+
 	STRUCTURE_STATS *psStat = &asStructureStats[structureIndex];
-	STRUCTURE *psStruct = buildStructure(psStat, x, y, player, false);
+	STRUCTURE *psStruct = buildStructureDir(psStat, x, y, direction, player, false);
 	if (psStruct)
 	{
 		psStruct->status = SS_BUILT;
