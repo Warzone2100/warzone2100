@@ -3046,16 +3046,20 @@ void moveDroidsToSafety(DROID *psTransporter)
 
 	ASSERT_OR_RETURN(, isTransporter(psTransporter), "unit not a Transporter");
 
-	//move droids out of Transporter into mission list
-	for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr && psDroid != psTransporter; psDroid = psNext)
+	if (psTransporter->psGroup != nullptr)
 	{
-		psNext = psDroid->psGrpNext;
-		psTransporter->psGroup->remove(psDroid);
-		//cam change add droid
-		psDroid->pos.x = INVALID_XY;
-		psDroid->pos.y = INVALID_XY;
-		addDroid(psDroid, mission.apsDroidLists);
+		//move droids out of Transporter into mission list
+		for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr && psDroid != psTransporter; psDroid = psNext)
+		{
+			psNext = psDroid->psGrpNext;
+			psTransporter->psGroup->remove(psDroid);
+			//cam change add droid
+			psDroid->pos.x = INVALID_XY;
+			psDroid->pos.y = INVALID_XY;
+			addDroid(psDroid, mission.apsDroidLists);
+		}
 	}
+
 	//move the transporter into the mission list also
 	if (droidRemove(psTransporter, apsDroidLists))
 	{
