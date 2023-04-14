@@ -36,6 +36,16 @@ To include a greater portion of the player-base and community (and increase visi
 
 Discussion of the proposed balance change should then occur on Discord.
 
+> ### Discussion Rules:
+> - Discussion should be _constructive_, and is intended to:
+>    - Discuss support or opposition to a proposal
+>    - Build towards an understanding of any concerns with a proposal (and ideas to address them)
+>    - Discuss alternatives that might better address the original rationale that led to the proposal
+> - **Name-calling, personal attacks, or other abuse will not be tolerated**, and will result in:
+>    - The agitator's vote **not counting**
+>    - Possible removal of the `@multiplayer-balance-tester` role (and thus the ability to vote on future proposals)
+>    - Other possible moderator actions
+
 Once discussion seems to have reached a reasonable point for voting:
 - A pinned post in the Discord thread should be created requesting reaction votes (thumbs up, thumbs down) (pinging `@multiplayer-balance-tester` again).
    - Change the thread tag to `Step 2: Voting`.
