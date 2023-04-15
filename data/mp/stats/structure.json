@@ -1655,8 +1655,8 @@
 	"Emplacement-Rocket06-IDF": {
 		"armour": 10,
 		"breadth": 1,
-		"buildPoints": 500,
-		"buildPower": 325,
+		"buildPoints": 600,
+		"buildPower": 350,
 		"height": 1,
 		"hitpoints": 400,
 		"id": "Emplacement-Rocket06-IDF",

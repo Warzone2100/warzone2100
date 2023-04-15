@@ -3952,8 +3952,8 @@
 		"weight": 300
 	},
 	"Rocket-IDF": {
-		"buildPoints": 1500,
-		"buildPower": 300,
+		"buildPoints": 1600,
+		"buildPower": 350,
 		"damage": 45,
 		"designable": 1,
 		"effectSize": 100,
