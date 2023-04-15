@@ -372,7 +372,7 @@ int stdinThreadFunc(void *)
 								errlog("WZCMD error: Can't kick host!\n");
 								continue;
 							}
-							kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_INVALID, true);
+							kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, false);
 							auto KickMessage = astringf("Player %s was kicked by the administrator.", player.name);
 							sendRoomSystemMessage(KickMessage.c_str());
 							foundActivePlayer = true;
