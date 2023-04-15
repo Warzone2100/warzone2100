@@ -574,7 +574,8 @@ bool loadConfig()
 bool saveConfig()
 {
 	// first, create a file instance
-	mINI::INIFile file(std::make_shared<PhysFSFileStreamGenerator>(fileName));
+	auto fileStreamGenerator = std::make_shared<PhysFSFileStreamGenerator>(fileName);
+	mINI::INIFile file(fileStreamGenerator);
 
 	// next, create a structure that will hold data
 	mINI::INIStructure ini;
@@ -582,7 +583,15 @@ bool saveConfig()
 	// read in the current file
 	try
 	{
-		if (!file.read(ini))
+		uint64_t fileSize = fileStreamGenerator->fileSize().value_or(0);
+		bool skipLoadExisting = false;
+		if (fileSize > MAX_CONFIG_FILE_SIZE)
+		{
+			skipLoadExisting = true;
+			debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", fileName, fileSize);
+			// will just proceed with an empty ini structure
+		}
+		if (!skipLoadExisting && !file.read(ini))
 		{
 			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
 			// will just proceed with an empty ini structure
@@ -591,7 +600,8 @@ bool saveConfig()
 	catch (const std::exception& e)
 	{
 		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		return false;
+		ini.clear();
+		// will just proceed with an empty ini structure
 	}
 
 	std::string fullConfigFilePath;
