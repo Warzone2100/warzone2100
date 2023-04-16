@@ -21,7 +21,7 @@ Once you have an idea for a proposed balance change, you can open a new PR on Gi
 
 Initial discussion and analysis can then occur on GitHub.
 
-If a proposed balance change PR reaches a stage where it is a candidate for possible inclusion (and isn’t ruled out for some reason, such as overtly breaking the game, being too big of a change, or lacking any explanation), it may move to Phase 2.
+If a proposed balance change PR reaches a stage where it is a candidate for possible inclusion (and isn’t ruled out for some reason, such as overtly breaking the game, being too big of a change, or lacking any explanation), it may continue to Phase 2.
 
 ## Phase 2:
 ### Discussion and Voting (on Discord)
@@ -54,7 +54,7 @@ Once discussion seems to have reached a reasonable point for voting:
 
 A period of at least several days should be allowed for voting, to ensure maximum opportunity to engage.
 
-If there is a greater than 65% consensus among qualified voters, and a sufficient number of qualified voters voting, a proposal _may_ proceed to Phase 3. (If not, the results should be posted to GitHub and changes should be requested, taking feedback into account - for example: trying a smaller & more incremental change to allow players to better adjust, or providing a more detailed explanation of the change and its impacts / desirability / need.)
+If there is a greater than 75% consensus among qualified voters, and a sufficient number of qualified voters voting, a proposal _may_ proceed to Phase 3. (If not, the results should be posted to GitHub and changes should be requested, taking feedback into account - for example: trying a smaller & more incremental change to allow players to better adjust, or providing a more detailed explanation of the change and its impacts / desirability / need.)
 
 ## Phase 3:
 ### Merging (on GitHub)
