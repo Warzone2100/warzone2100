@@ -1,3 +1,24 @@
+2023-04-16: Version 4.3.5:
+* General:
+   * Add: Display kills and units in spectator stats UI (commit:b1c52e8be428e7b239e9e845288e7a968a017551, #3186)
+   * Fix: "Get off my land" and "kill selected" cheats (commit:f51f234ef5902d4033d6b58a93049e03239c8072, #3171)
+   * Fix: Don't assign trucks from factories to commanders (commit:f04e2d3932910213f67f82759b2005c86ff8dd0e, #3179)
+   * Fix: Repairs: Reset secondary only after "go-to-rally-point" was triggered, separate RTR logic from RTR_SPECIFIED (commit:15c6fc7ae57ccc2d4dc8fc205eac14c83fd3eb71, #3194)
+   * Fix: Various potential crashes and corrupt config issues (commit:fe7ebfa2bd406ee73c7363afad3a4e26e9297ce9, commit:d07b94e924ad247aaa27df5305e5aee85552da60, #3208, #3211)
+* Graphics:
+   * Fix: Properly render unit resistance bar (commit:099580bc88e5443ee9f76c043102b97055e11866, #3183)
+* Multiplayer:
+   * Add: /hostmsg lobby chat prefix that sends a message only to the host (commit:c563170c7eae67af799e7b8ba19a66f2241fb26f, #3204)
+   * Change: Add Heavy Rocket Array to all skirmish AIs (commit:7c62ce1ddabe5925c75f5e85722fee54b449118f, #3196)
+   * Change: Improvements to Nexus AI (commit:86ef42d5f8419f88f96d53a2aef69b18eae77cfc, #3196)
+   * Fix: Desync with losing player-turned-spectator when certain defensive structures remain (commit:b15ec308db501988b1f8b0fb5c6e18eb1aa16605, #3189)
+* Balance MP:
+   * Change: Slightly increase the build cost of Mortar1Mk1 (commit:0b4bfc612121d2c5bad91908a54900aeb9323581, #3190)
+   * Change: Return Tank Killer reloadTime from 160 -> 180 (commit:3ce486735df52445042add20897de01679d3d75f, #3203)
+   * Change: Increase HRA production time from 800 -> 900 (commit:d5f5fb28d95f6c285932bc40646bb0fcb3e6d4bd, #3206)
+* Other:
+   * Fix: "kick identity" command should only kick, not ban (commit:da1d8770fc77e34272c4a4b7529f2ea64855b551, #3210)
+
 2023-03-26: Version 4.3.4:
 * General:
    * Add: A separate Ban/Kick activity, allow removing from ban list while running game, and fixes for spectator mute (too many commits, #3163)
