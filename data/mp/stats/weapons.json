@@ -1112,7 +1112,7 @@
 	},
 	"CannonSuper": {
 		"buildPoints": 2000,
-		"buildPower": 800,
+		"buildPower": 1500,
 		"damage": 380,
 		"effectSize": 100,
 		"explosionWav": "lrgexpl.ogg",
@@ -2946,7 +2946,7 @@
 	},
 	"MassDriver": {
 		"buildPoints": 2000,
-		"buildPower": 2000,
+		"buildPower": 2700,
 		"damage": 1200,
 		"effectSize": 150,
 		"explosionWav": "lrgexpl.ogg",
@@ -3250,7 +3250,7 @@
 	},
 	"MissileSuper": {
 		"buildPoints": 1200,
-		"buildPower": 1600,
+		"buildPower": 2400,
 		"damage": 1100,
 		"effectSize": 100,
 		"explosionWav": "lrgexpl.ogg",
@@ -4431,7 +4431,7 @@
 	},
 	"RocketSuper": {
 		"buildPoints": 1250,
-		"buildPower": 1200,
+		"buildPower": 1800,
 		"damage": 280,
 		"effectSize": 100,
 		"explosionWav": "lrgexpl.ogg",
