@@ -2150,7 +2150,7 @@
 	},
 	"Howitzer105Mk1": {
 		"buildPoints": 1000,
-		"buildPower": 300,
+		"buildPower": 275,
 		"damage": 200,
 		"designable": 1,
 		"effectSize": 225,
