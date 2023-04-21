@@ -1765,7 +1765,11 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 	Vector3i camera_base = actualCameraPosition;
 
 	/* Translate to the correct position */
-	camera_base -= dv;
+	Vector3i camera_mod;
+	camera_mod.x = st.pos.x - playerPos.p.x;
+	camera_mod.z = -(st.pos.y - playerPos.p.z);
+	camera_mod.y = st.pos.z;
+	camera_base -= camera_mod;
 
 	/* Rotate it to the direction it's facing */
 	rotateSomething(camera_base.z, camera_base.x, -(-st.rot.direction));
