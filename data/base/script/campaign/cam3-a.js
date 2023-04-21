@@ -25,7 +25,7 @@ camAreaEvent("northFactoryTrigger", function(droid)
 {
 	camEnableFactory("NXcybFac-b3");
 	camEnableFactory("NXcybFac-b4");
-	
+
 	camManageGroup(camMakeGroup("NEAttackerGroup"), CAM_ORDER_ATTACK, {
 		regroup: true,
 		morale: 90,
@@ -137,9 +137,9 @@ function sendPlayerTransporter()
 	}
 
 	var droids = [];
-	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaacnt, cTempl.prtruck];
+	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaawwt, cTempl.prtruck];
 
-	// send 4 Assault Guns, 2 Hyper Velocity Cannons, 2 Cyclone AA Turrets and 2 Trucks
+	// send 4 Assault Guns, 2 Hyper Velocity Cannons, 2 Whirlwind AA Turrets and 2 Trucks
 	for (let i = 0, d = list.length; i < 10; ++i)
 	{
 		droids.push(i < d * 2 ? list[i % 4] : list[0]);
