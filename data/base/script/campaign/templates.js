@@ -129,7 +129,7 @@ nxlscouv: { body: "Body3MBT", prop: "V-Tol02", weap: "Missile-VTOL-AT" },
 nxmtherv: { body: "Body7ABT", prop: "V-Tol02", weap: "Bomb4-VTOL-HvyINC" },
 prhasgnt: { body: "Body11ABT", prop: "tracked01", weap: "MG4ROTARYMk1" },
 prhhpvt: { body: "Body11ABT", prop: "tracked01", weap: "Cannon4AUTOMk1" },
-prhaacnt: { body: "Body11ABT", prop: "tracked01", weap: "AAGun2Mk1" },
+prhaawwt: { body: "Body11ABT", prop: "tracked01", weap: "QuadRotAAGun" },
 prtruck: { body: "Body5REC", prop: "tracked01", weap: "Spade1Mk1" },
 
 // SUB_3_1
