@@ -42,7 +42,7 @@
 
 #define MAX_DISPLAYABLE_ORDERS 11	// Max number of displayable orders.
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
-#define NUM_ORDERS 12			// Number of orders in OrderButtons list.
+#define NUM_ORDERS 13			// Number of orders in OrderButtons list.
 
 #define IDORDER_ATTACK_RANGE				8010
 #define IDORDER_REPAIR_LEVEL				8020
@@ -56,6 +56,7 @@
 #define IDORDER_FIRE_DESIGNATOR				8100
 #define IDORDER_ASSIGN_VTOL_PRODUCTION		8110
 #define IDORDER_CIRCLE						8120
+#define IDORDER_ACCREP						8130
 
 enum ORDBUTTONTYPE
 {
@@ -156,6 +157,7 @@ enum
 	STR_DORD_FIREDES,
 	STR_DORD_VTOL_FACTORY,
 	STR_DORD_CIRCLE,
+	STR_DORD_ACCREP,
 };
 
 // return translated text
@@ -186,6 +188,7 @@ static const char *getDORDDescription(int id)
 	case STR_DORD_FIREDES        : return _("Assign Fire Support");
 	case STR_DORD_VTOL_FACTORY   : return _("Assign VTOL Factory Production");
 	case STR_DORD_CIRCLE         : return _("Circle");
+	case STR_DORD_ACCREP		 : return _("Accept Retreating Units");
 
 	default : return "";  // make compiler shut up
 	}
@@ -249,6 +252,20 @@ static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 		{IMAGE_DES_HILIGHT,	0,	0},
 		{STR_DORD_FIREDES,	0,	0},
 		{DSS_FIREDES_SET,	0,	0}
+	},
+	{
+		ORDBUTCLASS_NORMAL,
+		DSO_ACCEPT_RETREP,
+		DSS_ACCREP_MASK,
+		ORD_BTYPE_BOOLEAN,
+		ORD_JUSTIFY_COMBINE,
+		IDORDER_ACCREP,
+		1, 0,
+		{IMAGE_ORD_ACCREP_UP,	0,	0},
+		{IMAGE_ORD_ACCREP_UP,	0,	0},
+		{IMAGE_DES_HILIGHT,	0,	0},
+		{STR_DORD_ACCREP,	0,	0},
+		{DSS_ACCREP_SET,	0,	0}
 	},
 	{
 		ORDBUTCLASS_NORMAL,
