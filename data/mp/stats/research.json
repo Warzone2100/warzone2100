@@ -7326,8 +7326,6 @@
 		"id": "R-Wpn-Missile2A-T",
 		"name": "Scourge Missile",
 		"redComponents": [
-			"Rocket-LtA-T",
-			"Rocket-VTOL-LtA-T",
 			"CyborgRocket",
 			"Rocket-HvyA-T",
 			"Rocket-VTOL-HvyA-T"
@@ -8674,6 +8672,10 @@
 		"id": "R-Wpn-Rocket07-Tank-Killer",
 		"msgName": "RES_W_RK_HvAT",
 		"name": "Tank Killer Rocket",
+		"redComponents": [
+			"Rocket-LtA-T",
+			"Rocket-VTOL-LtA-T"
+		],
 		"requiredResearch": [
 			"R-Wpn-RocketSlow-Accuracy01",
 			"R-Wpn-Rocket-Damage05"
