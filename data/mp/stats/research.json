@@ -5219,6 +5219,9 @@
 		"id": "R-Wpn-Cannon2Mk1",
 		"msgName": "RES_CN2MK1",
 		"name": "Medium Cannon",
+		"redComponents": [
+			"Cannon1Mk1"
+		],
 		"requiredResearch": [
 			"R-Struc-Factory-Module",
 			"R-Wpn-Cannon-Damage01"
@@ -6235,6 +6238,9 @@
 		"id": "R-Wpn-Howitzer-Incendiary",
 		"msgName": "RES_W_INH",
 		"name": "Incendiary Howitzer",
+		"redComponents": [
+			"Mortar-Incendiary"
+		],
 		"requiredResearch": [
 			"R-Wpn-Mortar-Incendiary",
 			"R-Wpn-HowitzerMk1"
@@ -6368,7 +6374,8 @@
 		"msgName": "RES_W_RHOW",
 		"name": "Rotary Howitzer - Hellstorm",
 		"redComponents": [
-			"Howitzer105Mk1"
+			"Howitzer105Mk1",
+			"Mortar3ROTARYMk1"
 		],
 		"requiredResearch": [
 			"R-Wpn-HowitzerMk1",
@@ -6386,6 +6393,9 @@
 		"id": "R-Wpn-HowitzerMk1",
 		"msgName": "RES_W_HMK1",
 		"name": "Howitzer",
+		"redComponents": [
+			"Mortar2Mk1"
+		],
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage04",
 			"R-Sys-Sensor-Upgrade01",
@@ -7210,6 +7220,9 @@
 		"id": "R-Wpn-Missile-LtSAM",
 		"msgName": "RES_W_MS_LtSAM1",
 		"name": "Avenger SAM",
+		"redComponents": [
+			"Rocket-Sunburst"
+		],
 		"requiredResearch": [
 			"R-Sys-Sensor-Upgrade02",
 			"R-Wpn-Missile2A-T"
@@ -7791,6 +7804,9 @@
 		"id": "R-Wpn-Mortar02Hvy",
 		"msgName": "RES_W_M2",
 		"name": "Heavy Mortar - Bombard",
+		"redComponents": [
+			"Mortar1Mk1"
+		],
 		"requiredResearch": [
 			"R-Vehicle-Metals01",
 			"R-Wpn-Mortar-Damage02"
