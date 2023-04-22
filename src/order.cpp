@@ -3042,6 +3042,13 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 		}
 		break;
 
+	case DSO_ACCEPT_RETREP:
+		if (psDroid->droidType != DROID_REPAIR && psDroid->droidType != DROID_CYBORG_REPAIR)
+		{
+			supported = false;
+		}
+		break;
+
 	case DSO_REPAIR_LEVEL:
 	case DSO_PATROL:
 	case DSO_HALTTYPE:
@@ -3101,6 +3108,9 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MOD
 		break;
 	case DSO_CIRCLE:
 		return (SECONDARY_STATE)(state & DSS_CIRCLE_MASK);
+		break;
+	case DSO_ACCEPT_RETREP:
+		return (SECONDARY_STATE)(state & DSS_ACCREP_MASK);
 		break;
 	case DSO_HALTTYPE:
 		if (psDroid->order.type == DORDER_HOLD)
@@ -3287,30 +3297,26 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 			}
 		}
 	}
-	// if we are repair droid ourselves, don't consider other repairs droids
-	// because that causes havoc on front line: RT repairing themselves,
-	// blocking everyone else. And everyone else moving toward RT, also toward front line.s
-	// Ideally, we should just avoid retreating toward "danger", but dangerMap is only for multiplayer
-	if (psDroid->droidType != DROID_REPAIR && psDroid->droidType != DROID_CYBORG_REPAIR)
+
+	// one of these lists is empty when on mission
+	DROID* psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
+	for (DROID* psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
-		// one of these lists is empty when on mission
-		DROID *psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
-		for (DROID *psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
+		// Accept any repair droids that accept retreating units
+		if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
+			&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
 		{
-			if (psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
+			thisDistToRepair = droidSqDist(psDroid, psCurr);
+			if (thisDistToRepair <= 0)
 			{
-				thisDistToRepair = droidSqDist(psDroid, psCurr);
-				if (thisDistToRepair <= 0)
-				{
-					continue; // unreachable
-				}
-				vDroidPos.push_back(psCurr->pos);
-				vDroid.push_back(psCurr);
-				if (bestDistToRepairDroid > thisDistToRepair)
-				{
-					bestDistToRepairDroid = thisDistToRepair;
-					bestDroidPos = psCurr->pos;
-				}
+				continue; // unreachable
+			}
+			vDroidPos.push_back(psCurr->pos);
+			vDroid.push_back(psCurr);
+			if (bestDistToRepairDroid > thisDistToRepair)
+			{
+				bestDistToRepairDroid = thisDistToRepair;
+				bestDroidPos = psCurr->pos;
 			}
 		}
 	}
@@ -3482,6 +3488,10 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			secondaryMask |= DSS_HALT_MASK;
 			secondarySet |= DSS_HALT_GUARD;
 		}
+		break;
+	case DSO_ACCEPT_RETREP:
+		secondaryMask = DSS_ACCREP_MASK;
+		secondarySet = State;
 		break;
 	case DSO_UNUSED:
 	case DSO_FIRE_DESIGNATOR:
@@ -3684,6 +3694,9 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		{
 			CurrState &= ~DSS_CIRCLE_MASK;
 		}
+		break;
+	case DSO_ACCEPT_RETREP:
+		CurrState = (CurrState & ~DSS_ACCREP_MASK) | State;
 		break;
 	case DSO_PATROL:
 		if (State & DSS_PATROL_SET)
