@@ -3429,7 +3429,7 @@
 	"X-Super-Cannon": {
 		"armour": 15,
 		"breadth": 2,
-		"buildPoints": 1600,
+		"buildPoints": 2000,
 		"buildPower": 1000,
 		"combinesWithWall": true,
 		"height": 2,
@@ -3452,7 +3452,7 @@
 	"X-Super-MassDriver": {
 		"armour": 15,
 		"breadth": 2,
-		"buildPoints": 1600,
+		"buildPoints": 2000,
 		"buildPower": 1800,
 		"combinesWithWall": true,
 		"height": 3,
@@ -3475,7 +3475,7 @@
 	"X-Super-Missile": {
 		"armour": 15,
 		"breadth": 2,
-		"buildPoints": 1600,
+		"buildPoints": 2000,
 		"buildPower": 1600,
 		"combinesWithWall": true,
 		"height": 3,
@@ -3498,7 +3498,7 @@
 	"X-Super-Rocket": {
 		"armour": 15,
 		"breadth": 2,
-		"buildPoints": 1600,
+		"buildPoints": 2000,
 		"buildPower": 1250,
 		"combinesWithWall": true,
 		"height": 3,
