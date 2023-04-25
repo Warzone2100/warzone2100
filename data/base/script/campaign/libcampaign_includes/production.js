@@ -237,8 +237,9 @@ function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 			//Replace it
 			let droidInfo = {x: dr.x, y: dr.y, name: dr.name};
 			camSafeRemoveObject(dr, false);
-			addDroid(playerId, droidInfo.x, droidInfo.y, droidInfo.name, template2.body,
+			let droid = addDroid(playerId, droidInfo.x, droidInfo.y, droidInfo.name, template2.body,
 				__camChangePropulsionOnDiff(template2.prop), "", "", template2.weap);
+			camSetDroidExperience(droid);
 		}
 	}
 }

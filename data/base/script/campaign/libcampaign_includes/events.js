@@ -48,6 +48,11 @@ function cam_eventChat(from, to, message)
 	{
 		__camShowVictoryConditions();
 	}
+	if (message.lastIndexOf("rank ", 0) === 0)
+	{
+		camSetExpLevel(Number(message.substring(5)));
+		camSetOnMapEnemyUnitExp();
+	}
 	if (!camIsCheating())
 	{
 		return;
@@ -124,6 +129,7 @@ function cam_eventStartLevel()
 	__camNeverGroupDroids = [];
 	__camNumTransporterExits = 0;
 	__camAllowVictoryMsgClear = true;
+	__camExpLevel = 0;
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	__camAiPowerReset(); //grant power to the AI
 	setTimer("__camSpawnVtols", camSecondsToMilliseconds(0.5));
@@ -157,6 +163,7 @@ function cam_eventDroidBuilt(droid, structure)
 	{
 		return;
 	}
+	camSetDroidExperience(droid);
 	__camAddDroidToFactoryGroup(droid, structure);
 }
 
