@@ -160,7 +160,7 @@ function camQueueDroidProduction(playerId, template)
 //;;
 function camSetPropulsionTypeLimit(limit)
 {
-	if (!camDef(limit))
+	if (!camDef(limit) || !limit)
 	{
 		__camPropulsionTypeLimit = "NO_USE";
 	}
@@ -298,17 +298,12 @@ function __camAddDroidToFactoryGroup(droid, structure)
 
 function __camChangePropulsionOnDiff(propulsion)
 {
-	if (difficulty <= MEDIUM)
-	{
-		return propulsion;
-	}
-	if (camDef(__camPropulsionTypeLimit) && __camPropulsionTypeLimit === "NO_USE")
+	if (__camPropulsionTypeLimit === "NO_USE")
 	{
 		return propulsion; //this mission don't want this feature then
 	}
 
 	var name = propulsion;
-	var typeModifier = difficulty === HARD ? "02" : "03";
 	const VALID_PROPS = [
 		"CyborgLegs", "HalfTrack", "V-Tol", "hover", "tracked", "wheeled",
 	];
@@ -324,18 +319,16 @@ function __camChangePropulsionOnDiff(propulsion)
 		var currentProp = VALID_PROPS[i];
 		if (name === currentProp)
 		{
-			//if hard difficulty and a future template has a type III then this will
-			//ensure it stays type III.
-			if (difficulty === HARD && lastTwo === "02")
+			var typeModifier;
+			//if a future template has a type III and the limit is type II then this will ensure it stays type III.
+			if (__camPropulsionTypeLimit === "02" && lastTwo === "03")
 			{
 				typeModifier = "03";
 			}
-			//maybe a mission wants to set a limit on the highest propulsion type
-			if (camDef(__camPropulsionTypeLimit))
+			else
 			{
 				typeModifier = __camPropulsionTypeLimit;
 			}
-			//return a stronger propulsion based on difficulty
 			return currentProp.concat(typeModifier);
 		}
 	}
