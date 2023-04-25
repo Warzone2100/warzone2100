@@ -47,7 +47,9 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 			{
 				var template = templates[i];
 				var prop = __camChangePropulsionOnDiff(template.prop);
-				droids.push(addDroid(playerId, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap));
+				var droid = addDroid(playerId, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap);
+				camSetDroidExperience(droid);
+				droids.push(droid);
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;

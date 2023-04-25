@@ -158,6 +158,13 @@ function __camLandTransporter(player, pos)
 	camTrace("Landing transport for player", player);
 	playSound("pcv395.ogg", pos.x, pos.y, 0); //Incoming enemy transport.
 	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
+	if (player !== CAM_HUMAN_PLAYER)
+	{
+		for (var i = 0, len = ti.droids.length; i < len; ++i)
+		{
+			camSetDroidExperience(ti.droids[i]);
+		}
+	}
 }
 
 function __camRemoveIncomingTransporter(player)

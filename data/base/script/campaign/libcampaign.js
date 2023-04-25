@@ -140,6 +140,7 @@ var __camOriginalEvents = {};
 
 //misc
 var __camCalledOnce = {};
+var __camExpLevel;
 
 //nexus
 const DEFENSE_ABSORBED = "defabsrd.ogg";

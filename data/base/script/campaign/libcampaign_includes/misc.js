@@ -546,6 +546,29 @@ function camDiscoverCampaign()
 	return UNKNOWN_CAMPAIGN_NUMBER;
 }
 
+function camSetExpLevel(number)
+{
+	__camExpLevel = number;
+}
+
+function camSetOnMapEnemyUnitExp()
+{
+	enumDroid(NEW_PARADIGM)
+	.concat(enumDroid(THE_COLLECTIVE))
+	.concat(enumDroid(NEXUS))
+	.concat(enumDroid(SCAV_6))
+	.concat(enumDroid(SCAV_7))
+	.forEach(function(obj) {
+		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, obj.player) && //may have friendly units as other player
+			!camIsTransporter(obj) &&
+			obj.droidType !== DROID_CONSTRUCT &&
+			obj.droidType !== DROID_REPAIR)
+		{
+			camSetDroidExperience(obj);
+		}
+	});
+}
+
 //////////// privates
 
 function __camGlobalContext()
@@ -613,4 +636,79 @@ function __camAiPowerReset()
 	{
 		setPower(AI_POWER, i);
 	}
+}
+
+function __camGetExpRangeLevel()
+{
+	let ranks = {
+		rookie: 0,
+		green: 4,
+		trained: 8,
+		regular: 16,
+		professional: 32,
+		veteran: 64,
+		elite: 128,
+		special: 256,
+		hero: 512,
+	}; //see brain.json
+	let exp = [];
+
+	switch (__camExpLevel)
+	{
+		case 0: // fall-through
+		case 1:
+			exp = [ranks.rookie, ranks.rookie];
+			break;
+		case 2:
+			exp = [ranks.green, ranks.trained, ranks.regular];
+			break;
+		case 3:
+			exp = [ranks.trained, ranks.regular, ranks.professional];
+			break;
+		case 4:
+			exp = [ranks.regular, ranks.professional, ranks.veteran];
+			break;
+		case 5:
+			exp = [ranks.professional, ranks.veteran, ranks.elite];
+			break;
+		case 6:
+			exp = [ranks.veteran, ranks.elite, ranks.special];
+			break;
+		case 7:
+			exp = [ranks.elite, ranks.special, ranks.hero];
+			break;
+		case 8:
+			exp = [ranks.special, ranks.hero];
+			break;
+		case 9:
+			exp = [ranks.hero, ranks.hero];
+			break;
+		default:
+			__camExpLevel = 0;
+			exp = [ranks.rookie, ranks.rookie];
+	}
+
+	return exp;
+}
+
+function camSetDroidExperience(droid)
+{
+	if (droid.droidType === DROID_REPAIR || droid.droidType === DROID_CONSTRUCT || camIsTransporter(droid))
+	{
+		return;
+	}
+	if (droid.player === CAM_HUMAN_PLAYER)
+	{
+		return;
+	}
+
+	let expRange = __camGetExpRangeLevel();
+	let exp = expRange[camRand(expRange.length)];
+
+	if (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR)
+	{
+		exp = exp * 2;
+	}
+
+	setDroidExperience(droid, exp);
 }
