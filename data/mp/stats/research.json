@@ -5916,7 +5916,7 @@
 		"msgName": "RES_W_PLASLAUNCH",
 		"name": "Heavy Plasma Launcher",
 		"requiredResearch": [
-			"R-Wpn-Flamer-Damage08",
+			"R-Wpn-Flamer-Damage09",
 			"R-Wpn-PlasmaCannon"
 		],
 		"researchPoints": 28800,
