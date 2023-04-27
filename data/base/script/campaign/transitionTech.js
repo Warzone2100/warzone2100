@@ -22,7 +22,7 @@ const ALPHA_RESEARCH_NEW = [
 	"R-Wpn-Mortar-ROF01","R-Wpn-Cannon-Damage01", "R-Wpn-Cannon-Damage02",
 
 	// 5
-	"R-Struc-Factory-Module", "R-Wpn-Flamer-Damage03",
+	"R-Struc-Factory-Module", "R-Wpn-Flamer-Damage03", "R-Sys-Sensor-Tower02",
 	"R-Struc-Factory-Upgrade01", "R-Struc-Factory-Upgrade02", "R-Defense-HardcreteWall",
 	"R-Struc-CommandRelay", "R-Comp-CommandTurret01", "R-Struc-RepairFacility",
 	"R-Struc-RprFac-Upgrade01", "R-Struc-RprFac-Upgrade02", "R-Defense-MortarPit",
@@ -76,7 +76,6 @@ const STRUCTS_ALPHA = [
 const PLAYER_RES_BETA = [
 	"R-Wpn-AAGun03",
 	"R-Defense-AASite-QuadMg1",
-	"R-Sys-Sensor-Tower02",
 ];
 
 //This array should give a player all the research from Beta.
