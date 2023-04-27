@@ -6,7 +6,7 @@ const NEW_PARADIGM_RES = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 	"R-Sys-Engineering01", "R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Cannon-Damage02",
 	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
-	"R-Defense-WallUpgrade03","R-Struc-Materials03", "R-Vehicle-Engine02",
+	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Vehicle-Engine02",
 	"R-Struc-RprFac-Upgrade02", "R-Wpn-Rocket-Damage01", "R-Wpn-Rocket-ROF03",
 	"R-Vehicle-Metals01", "R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01",
 	"R-Wpn-RocketSlow-Damage01", "R-Wpn-Mortar-ROF01",

@@ -4380,7 +4380,6 @@
 	"R-Sys-Sensor-Tower02": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Tower02",
-		"keyTopic": 1,
 		"msgName": "RES_SY_STW2",
 		"name": "Hardened Sensor Tower",
 		"redStructures": [
