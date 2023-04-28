@@ -7265,6 +7265,7 @@ void WzMultiplayerOptionsTitleUI::start()
 
 	loadMapPreview(false);
 
+	const bool hostOrSingle = ingame.side == InGameSide::HOST_OR_SINGLEPLAYER;
 	/* Re-entering or entering without a challenge */
 	if (bReenter || !challengeActive)
 	{
@@ -7272,10 +7273,14 @@ void WzMultiplayerOptionsTitleUI::start()
 		addGameOptions();
 		addChatBox(bReenter);
 
-		if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
+		if (hostOrSingle)
 		{
 			printHostHelpMessagesToConsole();
 		}
+	}
+	if (!bReenter && challengeActive && hostOrSingle)
+	{
+		printHostHelpMessagesToConsole(); // Print the challenge text the first time
 	}
 
 	/* Reset structure limits if we are entering the first time or if we have a challenge */
