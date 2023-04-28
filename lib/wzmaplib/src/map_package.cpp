@@ -1164,12 +1164,13 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 	}
 
 	// 2.) Look for a level.json file in the root (i.e. a "flattened" plain map package)
-	auto loadedFlatLevelDetails = loadLevelDetails_JSON("level.json", mapIO, pCustomLogger);
+	auto loadedFlatLevelDetails = loadLevelDetails_JSON(mapIO.pathJoin(pathToMapPackage, "level.json"), mapIO, pCustomLogger);
 	if (loadedFlatLevelDetails.has_value())
 	{
 		// Successfully found a level.json file inside the root folder
 		std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
 		result->m_levelDetails = loadedFlatLevelDetails.value();
+		result->m_levelDetails.mapFolderPath.clear();
 		result->m_loadedLevelFormat = LevelFormat::JSON;
 		result->m_mapType = result->m_levelDetails.type;
 		result->m_pathToMapPackage = pathToMapPackage;
