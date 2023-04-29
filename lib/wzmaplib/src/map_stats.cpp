@@ -208,6 +208,17 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 	{
 		results.playerBalance.structures = true;
 	}
+	optional<uint32_t> minStructuresCount;
+	for (const auto& structCounts : playerStructCounts)
+	{
+		uint32_t playerStructCount = 0;
+		for (const auto& structCount : structCounts)
+		{
+			playerStructCount += structCount.second;
+		}
+		minStructuresCount = std::min(minStructuresCount.value_or(playerStructCount), playerStructCount);
+	}
+	results.structuresPerPlayer = minStructuresCount.value_or(0);
 
 	// Check individual types of structures
 	if (!playerStructCounts.empty())
