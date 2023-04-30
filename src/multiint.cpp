@@ -7138,6 +7138,16 @@ void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, uns
 static void printHostHelpMessagesToConsole()
 {
 	char buf[512] = { '\0' };
+	if (challengeActive)
+	{
+		ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
+		displayRoomNotifyMessage(buf);
+	}
+	else if (!NetPlay.isHost)
+	{
+		ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
+		displayRoomNotifyMessage(buf);
+	}
 	if (NetPlay.bComms)
 	{
 		if (NetPlay.isUPNP)
@@ -7165,15 +7175,6 @@ static void printHostHelpMessagesToConsole()
 			displayRoomNotifyMessage(buf);
 		}
 	}
-	if (challengeActive)
-	{
-		ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
-	}
-	else if (!NetPlay.isHost)
-	{
-		ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
-	}
-	displayRoomNotifyMessage(buf);
 }
 
 void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget)
