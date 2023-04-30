@@ -8370,9 +8370,9 @@ size_t WZGameReplayOptionsHandler::desiredBufferSize() const
 			// should not happen
 			break;
 		case ActivitySink::GameMode::CAMPAIGN:
-		case ActivitySink::GameMode::CHALLENGE:
 			// replays not currently supported
 			break;
+		case ActivitySink::GameMode::CHALLENGE:
 		case ActivitySink::GameMode::SKIRMISH:
 			return 0; // use default
 		case ActivitySink::GameMode::MULTIPLAYER:
