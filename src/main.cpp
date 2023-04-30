@@ -994,9 +994,9 @@ static void startGameLoop()
 			// should not happen
 			break;
 		case ActivitySink::GameMode::CAMPAIGN:
-		case ActivitySink::GameMode::CHALLENGE:
 			// replays not currently supported
 			break;
+		case ActivitySink::GameMode::CHALLENGE:
 		case ActivitySink::GameMode::SKIRMISH:
 		case ActivitySink::GameMode::MULTIPLAYER:
 		{
