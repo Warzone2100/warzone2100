@@ -123,6 +123,7 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 		results.playerBalance.units = true;
 	}
 	optional<uint32_t> minUnitsCount;
+	optional<uint32_t> maxUnitsCount;
 	for (const auto& unitCounts : playerUnitCounts)
 	{
 		uint32_t playerUnitCount = 0;
@@ -131,8 +132,10 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			playerUnitCount += unitCount.second;
 		}
 		minUnitsCount = std::min(minUnitsCount.value_or(playerUnitCount), playerUnitCount);
+		maxUnitsCount = std::min(maxUnitsCount.value_or(playerUnitCount), playerUnitCount);
 	}
-	results.unitsPerPlayer = minUnitsCount.value_or(0);
+	results.perPlayerCounts.unitsPerPlayer.min = minUnitsCount.value_or(0);
+	results.perPlayerCounts.unitsPerPlayer.max = maxUnitsCount.value_or(0);
 
 	std::string factoryModuleName = (!statsConfig.factoryModules.empty()) ? *(statsConfig.factoryModules.begin()) : "<unknown factory module>";
 	std::string researchModuleName = (!statsConfig.researchModules.empty()) ? *(statsConfig.researchModules.begin()) : "<unknown research module>";
@@ -209,6 +212,7 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 		results.playerBalance.structures = true;
 	}
 	optional<uint32_t> minStructuresCount;
+	optional<uint32_t> maxStructuresCount;
 	for (const auto& structCounts : playerStructCounts)
 	{
 		uint32_t playerStructCount = 0;
@@ -217,8 +221,10 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			playerStructCount += structCount.second;
 		}
 		minStructuresCount = std::min(minStructuresCount.value_or(playerStructCount), playerStructCount);
+		maxStructuresCount = std::max(maxStructuresCount.value_or(playerStructCount), playerStructCount);
 	}
-	results.structuresPerPlayer = minStructuresCount.value_or(0);
+	results.perPlayerCounts.structuresPerPlayer.min = minStructuresCount.value_or(0);
+	results.perPlayerCounts.structuresPerPlayer.max = maxStructuresCount.value_or(0);
 
 	// Check individual types of structures
 	if (!playerStructCounts.empty())
@@ -226,24 +232,24 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 		struct StructTypeMapping
 		{
 			bool* pBalance;
-			uint32_t* pPerPlayerCount;
+			MapStats::PerPlayerCounts::MinMax* pPerPlayerCount;
 		};
 		std::vector<std::pair<std::unordered_set<std::string>*, StructTypeMapping>> structureTypeChecks = {
 			// resource extractors (oil derricks)
-			{&statsConfig.resourceExtractors, {&results.playerBalance.resourceExtractors, &results.resourceExtractorsPerPlayer}},
+			{&statsConfig.resourceExtractors, {&results.playerBalance.resourceExtractors, &results.perPlayerCounts.resourceExtractorsPerPlayer}},
 			// power generators
-			{&statsConfig.powerGenerators, {&results.playerBalance.powerGenerators, &results.powerGeneratorsPerPlayer}},
-			{&statsConfig.powerModules, {&results.playerBalance.powerGenerators, nullptr}},
+			{&statsConfig.powerGenerators, {&results.playerBalance.powerGenerators, &results.perPlayerCounts.powerGeneratorsPerPlayer}},
+			{&statsConfig.powerModules, {&results.playerBalance.powerGenerators, &results.perPlayerCounts.powerGeneratorModulesPerPlayer}},
 			// factories
-			{&statsConfig.factories, {&results.playerBalance.regFactories, &results.regFactoriesPerPlayer}},
-			{&statsConfig.factoryModules, {&results.playerBalance.regFactories, nullptr}},
+			{&statsConfig.factories, {&results.playerBalance.regFactories, &results.perPlayerCounts.regFactoriesPerPlayer}},
+			{&statsConfig.factoryModules, {&results.playerBalance.regFactories, &results.perPlayerCounts.regFactoryModulesPerPlayer}},
 			// vtol factories
-			{&statsConfig.vtolFactories, {&results.playerBalance.vtolFactories, &results.vtolFactoriesPerPlayer}},
+			{&statsConfig.vtolFactories, {&results.playerBalance.vtolFactories, &results.perPlayerCounts.vtolFactoriesPerPlayer}},
 			// cyborg factories
-			{&statsConfig.cyborgFactories, {&results.playerBalance.cyborgFactories, &results.cyborgFactoriesPerPlayer}},
+			{&statsConfig.cyborgFactories, {&results.playerBalance.cyborgFactories, &results.perPlayerCounts.cyborgFactoriesPerPlayer}},
 			// research centers
-			{&statsConfig.researchCenters, {&results.playerBalance.researchCenters, &results.researchCentersPerPlayer}},
-			{&statsConfig.researchModules, {&results.playerBalance.researchCenters, nullptr}}
+			{&statsConfig.researchCenters, {&results.playerBalance.researchCenters, &results.perPlayerCounts.researchCentersPerPlayer}},
+			{&statsConfig.researchModules, {&results.playerBalance.researchCenters,  &results.perPlayerCounts.researchCenterModulesPerPlayer}}
 		};
 		for (const auto& structureTypeCheck : structureTypeChecks)
 		{
@@ -252,6 +258,7 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			{
 				// For the purposes of getting a count of the entity type, determine the count across all entityNames for each player
 				optional<uint32_t> minStructTypeCount;
+				optional<uint32_t> maxStructTypeCount;
 				for (const auto& structCounts : playerStructCounts)
 				{
 					uint32_t playerEntityTypeCount = 0;
@@ -264,8 +271,10 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 						}
 					}
 					minStructTypeCount = std::min(minStructTypeCount.value_or(playerEntityTypeCount), playerEntityTypeCount);
+					maxStructTypeCount = std::max(maxStructTypeCount.value_or(playerEntityTypeCount), playerEntityTypeCount);
 				}
-				*resultMapping.pPerPlayerCount += minStructTypeCount.value_or(0);
+				resultMapping.pPerPlayerCount->min += minStructTypeCount.value_or(0);
+				resultMapping.pPerPlayerCount->max += maxStructTypeCount.value_or(0);
 			}
 
 			// For the purposes of determining balance / start equality, compare the count of each different entityName separately

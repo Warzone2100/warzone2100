@@ -54,6 +54,26 @@ namespace WzMap {
 			bool researchCenters = true;
 		};
 
+		struct PerPlayerCounts
+		{
+			struct MinMax
+			{
+				uint32_t min = 0;
+				uint32_t max = 0;
+			};
+			MinMax unitsPerPlayer;
+			MinMax structuresPerPlayer;
+			MinMax resourceExtractorsPerPlayer;
+			MinMax powerGeneratorsPerPlayer;
+			MinMax powerGeneratorModulesPerPlayer;
+			MinMax regFactoriesPerPlayer;
+			MinMax regFactoryModulesPerPlayer;
+			MinMax vtolFactoriesPerPlayer;
+			MinMax cyborgFactoriesPerPlayer;
+			MinMax researchCentersPerPlayer;
+			MinMax researchCenterModulesPerPlayer;
+		};
+
 	public:
 		// Basic map properties
 		uint32_t mapWidth = 0;
@@ -66,15 +86,8 @@ namespace WzMap {
 		// The total number of oil resources (oil well features) on the map
 		uint32_t oilWellsTotal = 0;
 		// Per-player counts of various starting droids and structs
-		// NOTE: If the corresponding playerBalance value is false, these are equivalent to the "minimum" of that entity type per player
-		uint32_t unitsPerPlayer = 0;
-		uint32_t structuresPerPlayer = 0;
-		uint32_t resourceExtractorsPerPlayer = 0;
-		uint32_t powerGeneratorsPerPlayer = 0;
-		uint32_t regFactoriesPerPlayer = 0;
-		uint32_t vtolFactoriesPerPlayer = 0;
-		uint32_t cyborgFactoriesPerPlayer = 0;
-		uint32_t researchCentersPerPlayer = 0;
+		// NOTE: In certain cases (like with unitsPerPlayer) min == max does not necessarily imply playerBalance.units will be true (as the *type* of units may differ)
+		PerPlayerCounts perPlayerCounts;
 		// An analysis of the starting balance for all players
 		StartEquality playerBalance;
 	public:
