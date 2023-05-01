@@ -509,7 +509,7 @@
 		},
 		"size": "HEAVY",
 		"weaponSlots": 1,
-		"weight": 5000
+		"weight": 3500
 	},
 	"Body14SUP": {
 		"armourHeat": 30,
@@ -551,7 +551,7 @@
 		},
 		"size": "HEAVY",
 		"weaponSlots": 2,
-		"weight": 6000
+		"weight": 4500
 	},
 	"Body1REC": {
 		"armourHeat": 4,
