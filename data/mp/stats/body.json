@@ -644,7 +644,7 @@
 		"buildPower": 45,
 		"class": "Droids",
 		"designable": 1,
-		"hitpoints": 140,
+		"hitpoints": 150,
 		"id": "Body3MBT",
 		"model": "drlbod03.pie",
 		"name": "Retaliation",
