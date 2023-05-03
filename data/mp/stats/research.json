@@ -4207,7 +4207,6 @@
 		"msgName": "RES_V_P_H1",
 		"name": "Hover Propulsion",
 		"requiredResearch": [
-			"R-Vehicle-Engine02",
 			"R-Struc-Factory-Module"
 		],
 		"researchPoints": 3600,
