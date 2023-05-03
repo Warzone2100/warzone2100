@@ -2817,8 +2817,7 @@
 		"name": "VTOL Factory",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade01",
-			"R-Vehicle-Prop-Hover",
-			"R-Vehicle-Engine03"
+			"R-Vehicle-Prop-Hover"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -3830,7 +3829,7 @@
 		"msgName": "RES_V_B13",
 		"name": "Heavy Body - Wyvern",
 		"requiredResearch": [
-			"R-Vehicle-Engine09",
+			"R-Vehicle-Body10",
 			"R-Vehicle-Armor-Heat06"
 		],
 		"researchPoints": 28800,
@@ -3872,54 +3871,10 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
-	},
-	"R-Vehicle-Engine02": {
-		"iconID": "IMAGE_RES_DROIDTECH",
-		"id": "R-Vehicle-Engine02",
-		"imdName": "iceng.pie",
-		"name": "Fuel Injection Engine Mk2",
-		"requiredResearch": [
-			"R-Vehicle-Engine01"
-		],
-		"researchPoints": 2400,
-		"researchPower": 75,
-		"results": [
-			{
-				"class": "Body",
-				"filterParameter": "BodyClass",
-				"filterValue": "Droids",
-				"parameter": "Power",
-				"value": 5
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
-	},
-	"R-Vehicle-Engine03": {
-		"iconID": "IMAGE_RES_DROIDTECH",
-		"id": "R-Vehicle-Engine03",
-		"imdName": "iceng.pie",
-		"name": "Fuel Injection Engine Mk3",
-		"requiredResearch": [
-			"R-Vehicle-Engine02"
-		],
-		"researchPoints": 4800,
-		"researchPower": 150,
-		"results": [
-			{
-				"class": "Body",
-				"filterParameter": "BodyClass",
-				"filterValue": "Droids",
-				"parameter": "Power",
-				"value": 5
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
 	},
 	"R-Vehicle-Engine04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -3928,65 +3883,21 @@
 		"msgName": "RES_V_EN4",
 		"name": "Turbo-Charged Engine",
 		"requiredResearch": [
-			"R-Vehicle-Engine03",
+			"R-Vehicle-Engine01",
 			"R-Struc-Research-Upgrade04"
 		],
-		"researchPoints": 7000,
-		"researchPower": 218,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"results": [
 			{
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
-	},
-	"R-Vehicle-Engine05": {
-		"iconID": "IMAGE_RES_DROIDTECH",
-		"id": "R-Vehicle-Engine05",
-		"imdName": "iceng.pie",
-		"name": "Turbo-Charged Engine Mk2",
-		"requiredResearch": [
-			"R-Vehicle-Engine04"
-		],
-		"researchPoints": 9000,
-		"researchPower": 281,
-		"results": [
-			{
-				"class": "Body",
-				"filterParameter": "BodyClass",
-				"filterValue": "Droids",
-				"parameter": "Power",
-				"value": 5
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
-	},
-	"R-Vehicle-Engine06": {
-		"iconID": "IMAGE_RES_DROIDTECH",
-		"id": "R-Vehicle-Engine06",
-		"imdName": "iceng.pie",
-		"name": "Turbo-Charged Engine Mk3",
-		"requiredResearch": [
-			"R-Vehicle-Engine05"
-		],
-		"researchPoints": 11000,
-		"researchPower": 343,
-		"results": [
-			{
-				"class": "Body",
-				"filterParameter": "BodyClass",
-				"filterValue": "Droids",
-				"parameter": "Power",
-				"value": 5
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
 	},
 	"R-Vehicle-Engine07": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -3995,68 +3906,21 @@
 		"msgName": "RES_V_EN7",
 		"name": "Gas Turbine Engine",
 		"requiredResearch": [
-			"R-Vehicle-Engine06",
-			"R-Vehicle-Prop-VTOL",
-			"R-Vehicle-Metals07"
+			"R-Vehicle-Engine04",
+			"R-Struc-Research-Upgrade07"
 		],
-		"researchPoints": 13000,
-		"researchPower": 406,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"results": [
 			{
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 20
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
-	},
-	"R-Vehicle-Engine08": {
-		"iconID": "IMAGE_RES_DROIDTECH",
-		"id": "R-Vehicle-Engine08",
-		"imdName": "iceng.pie",
-		"name": "Gas Turbine Engine Mk2",
-		"requiredResearch": [
-			"R-Vehicle-Body07",
-			"R-Vehicle-Engine07"
-		],
-		"researchPoints": 15000,
-		"researchPower": 450,
-		"results": [
-			{
-				"class": "Body",
-				"filterParameter": "BodyClass",
-				"filterValue": "Droids",
-				"parameter": "Power",
-				"value": 7
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
-	},
-	"R-Vehicle-Engine09": {
-		"iconID": "IMAGE_RES_DROIDTECH",
-		"id": "R-Vehicle-Engine09",
-		"imdName": "iceng.pie",
-		"name": "Gas Turbine Engine Mk3",
-		"requiredResearch": [
-			"R-Vehicle-Engine08",
-			"R-Vehicle-Body10"
-		],
-		"researchPoints": 17000,
-		"researchPower": 450,
-		"results": [
-			{
-				"class": "Body",
-				"filterParameter": "BodyClass",
-				"filterValue": "Droids",
-				"parameter": "Power",
-				"value": 8
-			}
-		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
 	},
 	"R-Vehicle-Metals01": {
 		"iconID": "IMAGE_RES_DROIDTECH",
