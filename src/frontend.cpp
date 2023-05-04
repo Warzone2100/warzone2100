@@ -3017,6 +3017,47 @@ static std::shared_ptr<WIDGET> makeOpenSpectatorSlotsMPDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makePlayerLeaveModeMPDropdown()
+{
+	std::vector<std::tuple<WzString, PLAYER_LEAVE_MODE>> dropDownChoices = {
+		{_("Distribute to Team"), PLAYER_LEAVE_MODE::SPLIT_WITH_TEAM},
+		{_("Destroy (Classic)"), PLAYER_LEAVE_MODE::DESTROY_RESOURCES}
+	};
+
+	size_t currentSettingIdx = 0;
+	auto currValue = war_getMPPlayerLeaveMode();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, PLAYER_LEAVE_MODE>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_PLAYER_LEAVE_MODE_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setOnChange([dropDownChoices](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			ASSERT_OR_RETURN(, selectedIndex.value() < dropDownChoices.size(), "Invalid index");
+			war_setMPPlayerLeaveMode(std::get<1>(dropDownChoices.at(selectedIndex.value())));
+		}
+	});
+
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
 char const *multiplayOptionsUPnPString()
 {
 	return NetPlay.isUPNP ? _("On") : _("Off");
@@ -3062,6 +3103,11 @@ void startMultiplayOptionsMenu()
 	// Spectator Slots
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SPECTATOR_SLOTS, _("Spectator Slots"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeOpenSpectatorSlotsMPDropdown()));
+	row.start++;
+
+	// On Player Leave
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_PLAYER_LEAVE_MODE, _("On Player Leave"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makePlayerLeaveModeMPDropdown()));
 	row.start++;
 
 	// Game Time Limit

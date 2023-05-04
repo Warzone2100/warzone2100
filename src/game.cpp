@@ -4618,6 +4618,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		game.gameTimeLimitMinutes = save.value("gameTimeLimitMinutes").toUInt();
 	}
+	if (save.contains("playerLeaveMode"))
+	{
+		game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(save.value("playerLeaveMode").toInt());
+	}
 
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
@@ -4843,6 +4847,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("builtInMap", builtInMap);
 	save.setValue("inactivityMinutes", game.inactivityMinutes);
 	save.setValue("gameTimeLimitMinutes", game.gameTimeLimitMinutes);
+	save.setValue("playerLeaveMode", game.playerLeaveMode);
 
 	save.beginArray("scriptSetPlayerDataStrings");
 	for (size_t i = 0; i < NetPlay.scriptSetPlayerDataStrings.size(); ++i)
