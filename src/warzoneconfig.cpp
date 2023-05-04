@@ -74,6 +74,7 @@ struct WARZONE_GLOBALS
 	uint32_t MPinactivityMinutes = 5;
 	uint32_t MPgameTimeLimitMinutes = 0; // default to unlimited
 	uint8_t MPopenSpectatorSlots = 0;
+	PLAYER_LEAVE_MODE MPplayerLeaveMode = PLAYER_LEAVE_MODE_DEFAULT;
 	int fogStart = 4000;
 	int fogEnd = 8000;
 	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
@@ -536,6 +537,16 @@ void war_setMPopenSpectatorSlots(uint16_t spectatorSlots)
 {
 	spectatorSlots = std::min<uint16_t>(spectatorSlots, MAX_SPECTATOR_SLOTS);
 	warGlobs.MPopenSpectatorSlots = spectatorSlots;
+}
+
+PLAYER_LEAVE_MODE war_getMPPlayerLeaveMode()
+{
+	return warGlobs.MPplayerLeaveMode;
+}
+
+void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE mode)
+{
+	warGlobs.MPplayerLeaveMode = mode;
 }
 
 int war_getFogEnd()

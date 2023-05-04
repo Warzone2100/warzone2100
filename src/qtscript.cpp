@@ -609,6 +609,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["idleTime"] = game.inactivityMinutes * 60 * 1000;
 	//== * ```gameTimeLimit``` The game time limit (match will automatically end if it reaches this duration). (0 = disable limit) (4.4.0+ only)
 	globalVars["gameTimeLimit"] = game.gameTimeLimitMinutes * 60 * 1000;
+	//== * ```playerLeaveMode``` The mode used to handle human players leaving a multiplayer game in progress. (0 = destroy resources, 1 = split resources with team) (4.4.0+ only)
+	globalVars["playerLeaveMode"] = static_cast<uint8_t>(game.playerLeaveMode);
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 

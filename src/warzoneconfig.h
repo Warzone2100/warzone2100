@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/sequence/sequence.h"
 #include "lib/sound/sounddefs.h"
+#include "multiplaydefs.h"
 #include <string>
 
 #define	CAMERASPEED_MAX		(5000)
@@ -143,6 +144,8 @@ uint32_t war_getMPGameTimeLimitMinutes();
 void war_setMPGameTimeLimitMinutes(uint32_t minutes);
 uint16_t war_getMPopenSpectatorSlots();
 void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
+PLAYER_LEAVE_MODE war_getMPPlayerLeaveMode();
+void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE);
 int war_getFogEnd();
 int war_getFogStart();
 void war_setFogEnd(int end);
