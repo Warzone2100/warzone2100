@@ -547,12 +547,12 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		addConsolePlayerLeftMessage(playerIndex);
 		clearPlayer(playerIndex, false);
 		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 	}
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
 	{
 		sendPlayerLeft(playerIndex);
 	}
-	NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 
 	if (NetPlay.players[playerIndex].wzFiles && NetPlay.players[playerIndex].fileSendInProgress())
 	{
