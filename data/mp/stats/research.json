@@ -3670,7 +3670,8 @@
 		"msgName": "RES_V_B03",
 		"name": "Light Body - Retaliation",
 		"requiredResearch": [
-			"R-Vehicle-Metals07"
+			"R-Vehicle-Metals07",
+			"R-Vehicle-Engine05"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -3733,6 +3734,7 @@
 		"name": "Medium Body - Retribution",
 		"requiredResearch": [
 			"R-Vehicle-Body03",
+			"R-Vehicle-Engine06",
 			"R-Vehicle-Metals08"
 		],
 		"researchPoints": 14400,
@@ -3768,8 +3770,8 @@
 			"R-Vehicle-Body06",
 			"R-Vehicle-Metals05"
 		],
-		"researchPoints": 9600,
-		"researchPower": 300,
+		"researchPoints": 10800,
+		"researchPower": 337,
 		"resultComponents": [
 			"Body9REC"
 		],
@@ -3782,7 +3784,8 @@
 		"name": "Heavy Body - Vengeance",
 		"requiredResearch": [
 			"R-Vehicle-Body07",
-			"R-Vehicle-Metals09"
+			"R-Vehicle-Metals09",
+			"R-Vehicle-Engine07"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -3813,7 +3816,8 @@
 		"msgName": "RES_V_B12",
 		"name": "Heavy Body - Mantis",
 		"requiredResearch": [
-			"R-Vehicle-Body08"
+			"R-Vehicle-Body08",
+			"R-Vehicle-Engine03"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
