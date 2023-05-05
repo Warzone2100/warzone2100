@@ -3872,7 +3872,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3893,7 +3893,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 0
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -3915,7 +3915,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -3939,7 +3939,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 20
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3960,7 +3960,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 0
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -3982,7 +3982,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 0
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4007,7 +4007,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 5
+				"value": 0
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4029,7 +4029,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 7
+				"value": 0
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4052,7 +4052,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 8
+				"value": 0
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
