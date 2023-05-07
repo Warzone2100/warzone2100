@@ -3872,7 +3872,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 15
+				"value": 5
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3893,7 +3893,7 @@
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
 				"parameter": "Power",
-				"value": 0
+				"value": 10
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
