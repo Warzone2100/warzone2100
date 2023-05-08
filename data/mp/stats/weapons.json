@@ -3468,7 +3468,7 @@
 		"effectSize": 100,
 		"facePlayer": 1,
 		"fireOnMove": 0,
-		"firePause": 130,
+		"firePause": 90,
 		"flightGfx": "FXSFlms.PIE",
 		"flightSpeed": 1500,
 		"hitGfx": "FXSFlms.PIE",
