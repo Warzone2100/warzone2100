@@ -1897,7 +1897,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "EMP",
 		"weaponWav": "emp.ogg",
-		"weight": 10000
+		"weight": 8000
 	},
 	"Flame1Mk1": {
 		"buildPoints": 200,
