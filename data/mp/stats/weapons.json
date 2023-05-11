@@ -2063,7 +2063,7 @@
 	"Howitzer-Incendiary": {
 		"buildPoints": 1600,
 		"buildPower": 450,
-		"damage": 200,
+		"damage": 100,
 		"designable": 1,
 		"effectSize": 150,
 		"explosionWav": "lrgexpl.ogg",
