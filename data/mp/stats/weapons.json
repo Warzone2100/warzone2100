@@ -907,7 +907,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "lrgcan.ogg",
-		"weight": 10000
+		"weight": 8000
 	},
 	"Cannon4AUTO-VTOL": {
 		"buildPoints": 700,
