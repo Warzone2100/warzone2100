@@ -5055,7 +5055,6 @@
 		"id": "R-Wpn-Cannon-ROF02",
 		"name": "Cannon Autoloader Mk2",
 		"requiredResearch": [
-			"R-Struc-Factory-Upgrade04",
 			"R-Wpn-Cannon-ROF01"
 		],
 		"researchPoints": 6000,
