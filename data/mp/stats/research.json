@@ -7322,7 +7322,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer",
 			"R-Wpn-RocketSlow-Accuracy02",
-			"R-Struc-Research-Upgrade07"
+			"R-Struc-Research-Upgrade07",
+			"R-Wpn-Rocket-Damage06"
 		],
 		"researchPoints": 16600,
 		"researchPower": 450,
