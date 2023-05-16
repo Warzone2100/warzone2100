@@ -2095,7 +2095,7 @@
 		"periodicalDamageWeaponEffect": "FLAMER",
 		"periodicalDamageWeaponSubClass": "HOWITZERS",
 		"radius": 192,
-		"radiusDamage": 200,
+		"radiusDamage": 100,
 		"radiusLife": 10,
 		"recoilValue": 250,
 		"shortHit": 40,
