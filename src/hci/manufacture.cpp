@@ -324,7 +324,7 @@ protected:
 			// not showing icon when nothing is being built
 			return;
 		}
-		if (factory->pFunctionality->factory.psSubject->droidType == DROID_COMMAND)
+		if (factory->pFunctionality->factory.psSubject->droidType == DROID_COMMAND || factory->pFunctionality->factory.psSubject->droidType == DROID_SENSOR)
 		{
 			lvl = getDroidLevel(exp, player, commandBrainComponent);
 		}

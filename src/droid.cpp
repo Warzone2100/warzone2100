@@ -2146,7 +2146,8 @@ unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brai
 
 unsigned int getDroidLevel(const DROID *psDroid)
 {
-	return getDroidLevel(psDroid->experience, psDroid->player, psDroid->asBits[COMP_BRAIN]);
+	// Sensors will use the first non-null brain component for ranks
+	return getDroidLevel(psDroid->experience, psDroid->player, (psDroid->droidType != DROID_SENSOR) ? psDroid->asBits[COMP_BRAIN] : 1);
 }
 
 UDWORD getDroidEffectiveLevel(const DROID *psDroid)
