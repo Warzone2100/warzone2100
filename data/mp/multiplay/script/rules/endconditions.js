@@ -14,9 +14,8 @@ const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which 
 // - construction of base structures (factories, power plants, laboratories, modules and oil rigs)
 // - dealing damage
 const BASESTRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR, POWER_GEN, RESEARCH_LAB];
-const ENABLE_activity = (challenge != true && isMultiplayer === true && idleTime > 0); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
-//const ENABLE_activity = true; //debug
 
+var ENABLE_activity;
 var teams; // array class instance Team
 var playersTeam; // array class instancePlayer
 
@@ -336,6 +335,7 @@ function createTeams()
 
 function conditions_eventGameInit()
 {
+	ENABLE_activity = (challenge != true && isMultiplayer === true && idleTime > 0); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
 	createTeams();
 	//find old type spectators
 	if  (ENABLE_activity && !isSpectator(-1))
