@@ -2270,7 +2270,7 @@
 		"id": "P0-AASite-Laser",
 		"name": "Stormbringer Emplacement",
 		"resistance": 150,
-		"sensorID": "NavGunSensor",
+		"sensorID": "DefaultSensor1Mk1",
 		"strength": "HARD",
 		"structureModel": [
 			"Blaamnt2.PIE"
@@ -2292,7 +2292,7 @@
 		"id": "P0-AASite-SAM1",
 		"name": "Avenger SAM Site",
 		"resistance": 150,
-		"sensorID": "NavGunSensor",
+		"sensorID": "DefaultSensor1Mk1",
 		"strength": "HARD",
 		"structureModel": [
 			"Blaamnt1.PIE"
@@ -2314,7 +2314,7 @@
 		"id": "P0-AASite-SAM2",
 		"name": "Vindicator SAM Site",
 		"resistance": 150,
-		"sensorID": "NavGunSensor",
+		"sensorID": "DefaultSensor1Mk1",
 		"strength": "HARD",
 		"structureModel": [
 			"Blaamnt2.PIE"
@@ -2336,7 +2336,7 @@
 		"id": "P0-AASite-Sunburst",
 		"name": "Sunburst AA Site",
 		"resistance": 150,
-		"sensorID": "NavGunSensor",
+		"sensorID": "DefaultSensor1Mk1",
 		"strength": "MEDIUM",
 		"structureModel": [
 			"Blaamnt1.PIE"
