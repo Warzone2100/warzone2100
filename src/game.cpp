@@ -5819,7 +5819,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 				//always save transporter droids that are in the mission list with an invalid value
 				if (ppsCurrentDroidLists[player] == mission.apsDroidLists[player])
 				{
-					mRoot[droidKey.toStdString()]["position"] = Vector3i(-1, -1, -1); // was INVALID_XY
+					mRoot[droidKey.toStdString()]["position"] = Vector3i(INVALID_XY, INVALID_XY, -1); // Must be INVALID_XY or else unit placement could get messed up in missionResetDroids().
 				}
 			}
 		}
