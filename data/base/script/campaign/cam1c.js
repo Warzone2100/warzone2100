@@ -207,7 +207,6 @@ function eventStartLevel()
 		setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	}
 
-	setReinforcementTime(-1);
 	setAlliance(NEW_PARADIGM, SCAV_7, true);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);

@@ -214,6 +214,11 @@ function cam_eventTransporterExit(transport)
 		{
 			const REINFORCEMENTS_AVAILABLE_SOUND = "pcv440.ogg";
 			playSound(REINFORCEMENTS_AVAILABLE_SOUND);
+			//Show the transporter reinforcement timer when it leaves for the first time.
+			if (__camWinLossCallback === CAM_VICTORY_OFFWORLD)
+			{
+				setReinforcementTime(__camVictoryData.reinforcements);
+			}
 		}
 	}
 
