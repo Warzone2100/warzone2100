@@ -8133,7 +8133,7 @@
 			"RailGun2Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Rail-Damage03"
+			"R-Wpn-RailGun02"
 		],
 		"researchPoints": 43200,
 		"researchPower": 450,
