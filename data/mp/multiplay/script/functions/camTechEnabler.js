@@ -385,15 +385,15 @@ var allRes = {
 	"R-Wpn-Energy-ROF03": 3233,
 	"R-Wpn-Rail-ROF03": 3243,
 	"R-Wpn-Rail-Damage03": 3251,
+	"R-Wpn-RailGun03": 3251,
 	"R-Defense-HvyArtMissile": 3266,
+	"R-Defense-Rail3": 3327,
+	"R-Defense-WallTower-Rail3": 3360,
 	"R-Wpn-Missile-HvSAM": 3484,
 	"R-Defense-Super-Missile": 3597,
 	"R-Defense-SamSite2": 3703,
 	"R-Defense-WallTower-SamHvy": 3757,
 	"R-Vehicle-Body14": 3846,
 	"R-Wpn-Howitzer-ROF04": 3861,
-	"R-Wpn-RailGun03": 3906,
-	"R-Defense-Rail3": 3982,
-	"R-Defense-WallTower-Rail3": 4015,
-	"R-Defense-MassDriver": 4664
+	"R-Defense-MassDriver": 4009
 };
