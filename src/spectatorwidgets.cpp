@@ -725,6 +725,24 @@ if ((!NetPlay.players[playerIdx].allocated && NetPlay.players[playerIdx].ai < 0)
 			label.setString(WzString::number(getMultiStats(playerIdx).recentPowerLost));
 			ADJUST_LABEL_COLOR_FOR_PLAYERS();
 		}, INFO_UPDATE_INTERVAL_TICKS));
+		// PowerWon
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			label.setString(WzString::number(getMultiStats(playerIdx).recentPowerWon));
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
+		// Lab Use
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			PLAYERSTATS sts = getMultiStats(playerIdx);
+			if (sts.recentResearchPotential == 0)
+			{
+				label.setString(" - ");
+			}
+			else
+			{
+				label.setString(WzString::fromUtf8(astringf("%.2f%%", ((float)sts.recentResearchPerformance/(float)sts.recentResearchPotential)*100)));
+			}
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
 		// Kills
 		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
 			label.setString(WzString::number(getMultiStats(playerIdx).recentKills));
@@ -814,7 +832,9 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	auto playerLabel = createColHeaderLabel(_("Player"));
 	auto powerRateLabel = createColHeaderLabel(_("Power/Rate"));
 	powerRateLabel->setTip(_("Current Power / Power Per Second"));
-	auto powerLostLabel = createColHeaderLabel(_("PowerLost"));
+	auto powerLostLabel = createColHeaderLabel(_("PwrLost"));
+	auto powerWonLabel = createColHeaderLabel(_("PwrWon"));
+	auto labActivityLabel = createColHeaderLabel(_("Lab Use"));
 	auto killsLabel = createColHeaderLabel(_("Kills"));
 	auto unitsLabel = createColHeaderLabel(_("Units"));
 	auto armorLabel = createArmorColWidget(false);
@@ -827,6 +847,8 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 		{playerLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{powerRateLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{powerLostLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{powerWonLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{labActivityLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{killsLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{unitsLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{armorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
