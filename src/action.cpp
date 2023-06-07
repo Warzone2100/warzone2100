@@ -2023,6 +2023,12 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			int xdiff, ydiff;
 
+			if (!psDroid->psActionTarget[0])
+			{
+				psDroid->action = DACTION_NONE;
+				break;
+			}
+			
 			// If not doing self-repair (psActionTarget[0] is repair target)
 			if (psDroid->psActionTarget[0] != psDroid)
 			{
