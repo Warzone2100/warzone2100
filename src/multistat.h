@@ -51,6 +51,9 @@ struct PLAYERSTATS
 	uint32_t recentKills = 0;  // score/kills in last game.
 	uint32_t recentScore = 0;
 	uint64_t recentPowerLost = 0;  // power lost in last game (i.e. from droids / structures being killed by other players)
+	uint64_t recentPowerWon = 0;  // power that was destroyed in last game (i.e. from droids / structures being killed)
+	uint64_t recentResearchPotential = 0;  // how many labs were ticking
+	uint64_t recentResearchPerformance = 0;  // how many labs were ticking with objective (researching)
 
 	struct Autorating
 	{
@@ -80,6 +83,8 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames();
 void updateMultiStatsWins();
 void updateMultiStatsLoses();
+void incrementMultiStatsResearchPerformance(UDWORD player);
+void incrementMultiStatsResearchPotential(UDWORD player);
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);

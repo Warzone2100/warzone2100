@@ -427,6 +427,9 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	st->recentKills = 0;
 	st->recentScore = 0;
 	st->recentPowerLost = 0;
+	st->recentPowerWon = 0;
+	st->recentResearchPerformance = 0;
+	st->recentResearchPotential = 0;
 
 	return true;
 }
@@ -531,6 +534,26 @@ static inline uint32_t calcObjectCost(const BASE_OBJECT *psObj)
 	return 0;
 }
 
+void incrementMultiStatsResearchPerformance(UDWORD player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+	// printf("Increment performance, player %d was %ld\n", player, playerStats[player].recentResearchPerformance);
+	playerStats[player].recentResearchPerformance += 1;
+}
+
+void incrementMultiStatsResearchPotential(UDWORD player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+	// printf("Increment potential, player %d was %ld\n", player, playerStats[player].recentResearchPotential);
+	playerStats[player].recentResearchPotential += 1;
+}
+
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 {
@@ -548,7 +571,9 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 			}
 			if (psKilled->player < MAX_PLAYERS)
 			{
-				playerStats[psKilled->player].recentPowerLost += static_cast<uint64_t>(calcObjectCost(psKilled));
+				uint64_t pwrCost = static_cast<uint64_t>(calcObjectCost(psKilled));
+				playerStats[psKilled->player].recentPowerLost += pwrCost;
+				playerStats[player].recentPowerWon += pwrCost;
 			}
 			++playerStats[player].totalKills;
 			++playerStats[player].recentKills;
@@ -935,6 +960,9 @@ void resetRecentScoreData()
 		playerStats[i].recentKills = 0;
 		playerStats[i].recentScore = 0;
 		playerStats[i].recentPowerLost = 0;
+		playerStats[i].recentPowerWon = 0;
+		playerStats[i].recentResearchPerformance = 0;
+		playerStats[i].recentResearchPotential = 0;
 		playerStats[i].identity.clear();
 		playerStats[i].autorating = PLAYERSTATS::Autorating();
 	}
@@ -974,7 +1002,21 @@ inline void to_json(nlohmann::json& j, const PLAYERSTATS& p) {
 	j["recentKills"] = p.recentKills;
 	j["recentScore"] = p.recentScore;
 	j["recentPowerLost"] = p.recentPowerLost;
+	j["recentPowerWon"] = p.recentPowerWon;
+	j["recentResearchPotential"] = p.recentResearchPotential;
+	j["recentResearchPerformance"] = p.recentResearchPerformance;
 	j["identity"] = p.identity;
+}
+
+template <typename T>
+optional<T> optGetJSONValue(const nlohmann::json& j, const std::string& key)
+{
+	auto it = j.find(key);
+	if (it == j.end())
+	{
+		return nullopt;
+	}
+	return it->get<T>();
 }
 
 inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
@@ -987,6 +1029,10 @@ inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
 	k.recentScore = j.at("recentScore").get<uint32_t>();
 	k.recentPowerLost = j.at("recentPowerLost").get<uint64_t>();
 	k.identity = j.at("identity").get<EcKey>();
+	// WZ 4.4.0+:
+	k.recentPowerWon = optGetJSONValue<uint64_t>(j, "recentPowerWon").value_or(0);
+	k.recentResearchPotential = optGetJSONValue<uint64_t>(j, "recentResearchPotential").value_or(0);
+	k.recentResearchPerformance = optGetJSONValue<uint64_t>(j, "recentResearchPerformance").value_or(0);
 }
 
 bool saveMultiStatsToJSON(nlohmann::json& json)

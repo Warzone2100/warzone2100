@@ -78,6 +78,7 @@
 #include "template.h"
 #include "scores.h"
 #include "gateway.h"
+#include "multistat.h"
 
 #include "random.h"
 #include <functional>
@@ -3091,6 +3092,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		}
 	default:
 		break;
+	}
+
+	if (structureMode == REF_RESEARCH)
+	{
+		if (pSubject != nullptr)
+		{
+			incrementMultiStatsResearchPerformance(psStructure->player);
+		}
+		incrementMultiStatsResearchPotential(psStructure->player);
 	}
 
 	/* check subject stats (for research or manufacture) */
