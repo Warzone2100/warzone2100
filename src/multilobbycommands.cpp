@@ -198,6 +198,32 @@ if (!senderHasLobbyCommandAdminPrivs(message.sender)) \
 
 HostLobbyOperationsInterface::~HostLobbyOperationsInterface() { }
 
+void cmdInterfaceLogChatMsg(const NetworkTextMessage& message, const char* log_prefix, optional<std::string> _senderhash /*= nullopt*/, optional<std::string> _senderPublicKeyB64 /*= nullopt*/)
+{
+	if (!wz_command_interface_enabled())
+	{
+		return;
+	}
+
+	if (message.sender < 0)
+	{
+		// for now, skip system messages
+		return;
+	}
+
+	ASSERT_OR_RETURN(, message.sender < MAX_CONNECTED_PLAYERS, "Invalid message.sender (%d)", message.sender);
+
+	const auto& identity = getMultiStats(message.sender).identity;
+	std::string senderhash = _senderhash.value_or(identity.publicHashString(64));
+	std::string senderPublicKeyB64 = _senderPublicKeyB64.value_or(base64Encode(identity.toBytes(EcKey::Public)));
+	std::string senderVerifiedStatus = (ingame.VerifiedIdentity[message.sender]) ? "V" : "?";
+	std::string sendername = NetPlay.players[message.sender].name;
+	std::string sendername64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
+	std::string messagetext = message.text;
+	std::string messagetext64 = base64Encode(std::vector<unsigned char>(messagetext.begin(), messagetext.end()));
+	wz_command_interface_output("%s: %i %s %s %s %s %s %s\n", log_prefix, message.sender, NetPlay.players[message.sender].IPtextAddress, senderhash.c_str(), senderPublicKeyB64.c_str(), sendername64.c_str(), messagetext64.c_str(), senderVerifiedStatus.c_str());
+}
+
 bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyOperationsInterface& cmdInterface)
 {
 	if (message.sender == SYSTEM_MESSAGE || message.sender == NOTIFY_MESSAGE || message.sender < 0)
@@ -230,13 +256,8 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	const auto& identity = getMultiStats(message.sender).identity;
 	std::string senderhash = identity.publicHashString(64);
 	std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-	std::string senderVerifiedStatus = (ingame.VerifiedIdentity[message.sender]) ? "V" : "?";
-	std::string sendername = NetPlay.players[message.sender].name;
-	std::string sendername64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
-	std::string messagetext = message.text;
-	std::string messagetext64 = base64Encode(std::vector<unsigned char>(messagetext.begin(), messagetext.end()));
 	debug(LOG_INFO, "message [%s] [%s]", senderhash.c_str(), message.text);
-	wz_command_interface_output("WZCHATCMD: %i %s %s %s %s %s %s\n", message.sender, NetPlay.players[message.sender].IPtextAddress, senderhash.c_str(), senderPublicKeyB64.c_str(), sendername64.c_str(), messagetext64.c_str(), senderVerifiedStatus.c_str());
+	cmdInterfaceLogChatMsg(message, "WZCHATCMD", senderhash, senderPublicKeyB64);
 	if (strcmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "help") == 0)
 	{
 		lobbyCommand_PrintHelp(static_cast<uint32_t>(message.sender));

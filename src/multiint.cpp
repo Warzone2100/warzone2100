@@ -6804,9 +6804,15 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 						audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 					}
 
+					bool isLobbySlashCommand = false;
 					if (lobby_slashcommands_enabled())
 					{
-						processChatLobbySlashCommands(message, cmdInterface);
+						isLobbySlashCommand = processChatLobbySlashCommands(message, cmdInterface);
+					}
+
+					if (!isLobbySlashCommand)
+					{
+						cmdInterfaceLogChatMsg(message, "WZCHATLOB");
 					}
 				}
 			}
