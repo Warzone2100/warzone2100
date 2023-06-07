@@ -1500,6 +1500,14 @@ void shutdown3DView()
 	// show Droid visible/draw counts text
 	droidText = WzText();
 
+	batchedObjectStatusRenderer.clear(); // NOTE: *NOT* reset() - see shutdown3DView_FullReset below for why
+}
+
+void shutdown3DView_FullReset()
+{
+	// Because of when levReleaseMissionData can be called (especially when using certain cheats in campaign like "ascend" or "let me win")
+	// Only call "reset" (which also resets BatchedMultiRectRenderer and actually frees GPU buffers)
+	// in this function, which is called from stageTwoShutdown (as opposed to stageThreeShutdown, which is called from levReleaseMissionData)...
 	batchedObjectStatusRenderer.reset();
 }
 

@@ -320,6 +320,8 @@ BatchedMultiRectRenderer::UploadedRectsInstanceBufferInfo BatchedMultiRectRender
 
 	if (result.totalInstances != 0)
 	{
+		ASSERT_OR_RETURN(UploadedRectsInstanceBufferInfo(), !instanceDataBuffers.empty(), "No buffers available - unexpectedly called before init");
+
 		// Upload buffer
 		++currInstanceBufferIdx;
 		if (currInstanceBufferIdx >= instanceDataBuffers.size())

@@ -1552,6 +1552,8 @@ bool stageTwoShutDown()
 {
 	debug(LOG_WZ, "== stageTwoShutDown ==");
 
+	shutdown3DView_FullReset();
+
 	fpathShutdown();
 
 	cdAudio_Stop();
