@@ -108,6 +108,12 @@ void setMultiPlayUnitsKilled(uint32_t player, uint32_t kills);
 uint32_t getMultiPlayRecentScore(uint32_t player);
 void setMultiPlayRecentScore(uint32_t player, uint32_t score);
 uint32_t getSelectedPlayerUnitsKilled();
+
+void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost);
+void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon);
+void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value);
+void setMultiPlayRecentResearchPerformance(uint32_t player, uint64_t value);
+
 void resetRecentScoreData();
 
 bool saveMultiStatsToJSON(nlohmann::json& json);

@@ -636,6 +636,46 @@ unsigned int json_variant::toUInt(bool *ok /*= nullptr*/) const
 	}
 }
 
+uint64_t json_variant::toUint64(bool *ok /*= nullptr*/) const
+{
+	if (mObj.is_number())
+	{
+		return json_variant_toType<uint64_t>(*this, ok, 0);
+	}
+	else if (mObj.is_boolean())
+	{
+		bool result = json_variant_toType<bool>(*this, ok, false);
+		return (uint64_t)result;
+	}
+	else if (mObj.is_string())
+	{
+		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
+		try {
+			unsigned long long ulonglongValue = std::stoull(result);
+#if ULLONG_MAX > UINT64_MAX
+			if (ulonglongValue > std::numeric_limits<uint64_t>::max())
+			{
+				debug(LOG_WARNING, "Failed to convert string '%s' to uint64_t because of error: value is > std::numeric_limits<uint64_t>::max()", result.c_str());
+				return 0;
+			}
+#endif
+			return (uint64_t)ulonglongValue;
+		}
+		catch (const std::exception &e) {
+			debug(LOG_WARNING, "Failed to convert string '%s' to uint64_t because of error: %s", result.c_str(), e.what());
+			return 0;
+		}
+	}
+	else if (mObj.is_null())
+	{
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 #include <algorithm>
 
 bool json_variant::toBool() const
