@@ -636,6 +636,11 @@ void stdInThreadShutdown()
 
 #endif
 
+bool wz_command_interface_enabled()
+{
+	return wz_command_interface() != WZ_Command_Interface::None;
+}
+
 void wz_command_interface_output(const char *str, ...)
 {
 	if (wz_command_interface() == WZ_Command_Interface::None)

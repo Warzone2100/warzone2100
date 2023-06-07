@@ -22,6 +22,10 @@
 #include <cstdint>
 #include "multiplay.h"
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 #define LOBBY_COMMAND_PREFIX "/"
 #define LOBBY_COMMAND_PREFIX_LENGTH 1
 
@@ -41,6 +45,8 @@ public:
 	virtual bool requestMoveSpectatorToPlayers(uint32_t player_id) = 0;
 	virtual void quitGame(int exitCode) = 0;
 };
+
+void cmdInterfaceLogChatMsg(const NetworkTextMessage& message, const char* log_prefix, optional<std::string> _senderhash = nullopt, optional<std::string> _senderPublicKeyB64 = nullopt);
 
 bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyOperationsInterface& cmdInterface);
 

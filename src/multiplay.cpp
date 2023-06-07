@@ -84,6 +84,7 @@
 #include "stdinreader.h"
 #include "spectatorwidgets.h"
 #include "challenge.h"
+#include "multilobbycommands.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1802,6 +1803,7 @@ bool receiveInGameTextMessage(NETQUEUE queue)
 	}
 
 	printInGameTextMessage(message);
+	cmdInterfaceLogChatMsg(message, "WZCHATGAM");
 
 	// make some noise!
 	if (GetGameMode() != GS_NORMAL)
@@ -1873,6 +1875,7 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 	}
 
 	printInGameTextMessage(message);
+	cmdInterfaceLogChatMsg(message, "WZCHATSPC");
 
 	// make some noise!
 	if (GetGameMode() != GS_NORMAL)
