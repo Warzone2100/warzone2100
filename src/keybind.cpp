@@ -1921,7 +1921,7 @@ void	kf_KillEnemy()
 
 	for (int playerId = 0; playerId < MAX_PLAYERS; playerId++)
 	{
-		if (playerId != selectedPlayer)
+		if (playerId != selectedPlayer && !aiCheckAlliances(selectedPlayer, playerId))
 		{
 			// wipe out all the droids
 			for (psCDroid = apsDroidLists[playerId]; psCDroid; psCDroid = psNDroid)
