@@ -953,6 +953,26 @@ uint32_t getSelectedPlayerUnitsKilled()
 	}
 }
 
+void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost)
+{
+	playerStats[player].recentPowerLost = powerLost;
+}
+
+void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon)
+{
+	playerStats[player].recentPowerWon = powerWon;
+}
+
+void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value)
+{
+	playerStats[player].recentResearchPotential = value;
+}
+
+void setMultiPlayRecentResearchPerformance(uint32_t player, uint64_t value)
+{
+	playerStats[player].recentResearchPerformance = value;
+}
+
 void resetRecentScoreData()
 {
 	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
