@@ -96,6 +96,7 @@ bool clipStructureOnScreen(STRUCTURE *psStructure);
 
 bool init3DView();
 void shutdown3DView();
+void shutdown3DView_FullReset();
 extern iView playerPos;
 extern bool selectAttempt;
 

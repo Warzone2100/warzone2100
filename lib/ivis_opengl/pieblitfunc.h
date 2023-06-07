@@ -193,7 +193,7 @@ public:
 private:
 	struct UploadedRectsInstanceBufferInfo
 	{
-		gfx_api::buffer* buffer;
+		gfx_api::buffer* buffer = nullptr;
 		size_t totalInstances = 0;
 		struct GroupBufferInfo
 		{
