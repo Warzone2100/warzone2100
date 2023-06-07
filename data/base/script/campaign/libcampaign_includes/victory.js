@@ -103,7 +103,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
-			setReinforcementTime((__camVictoryData.reinforcements > -1) ? __camVictoryData.reinforcements : -1);
+			setReinforcementTime((__camNumTransporterExits > 0) ? __camVictoryData.reinforcements : -1);
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_TIMEOUT:
