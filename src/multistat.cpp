@@ -209,7 +209,6 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
-		NETuint64_t(&playerStats[playerIndex].recentPowerLost);
 
 		EcKey::Key identity;
 		if (!playerStats[playerIndex].identity.empty())
@@ -261,7 +260,6 @@ void recvMultiStats(NETQUEUE queue)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
-		NETuint64_t(&playerStats[playerIndex].recentPowerLost);
 
 		EcKey::Key identity;
 		NETbytes(&identity);
@@ -561,7 +559,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 	{
 		return;
 	}
-	if (NetPlay.bComms)
+	if (bMultiPlayer)
 	{
 		if (psKilled != nullptr)
 		{
@@ -575,7 +573,10 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 				playerStats[psKilled->player].recentPowerLost += pwrCost;
 				playerStats[player].recentPowerWon += pwrCost;
 			}
-			++playerStats[player].totalKills;
+			if (NetPlay.bComms)
+			{
+				++playerStats[player].totalKills;
+			}
 			++playerStats[player].recentKills;
 		}
 		return;
