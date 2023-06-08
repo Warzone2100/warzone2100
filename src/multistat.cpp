@@ -430,6 +430,7 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	st->recentStructuresLost = 0;
 	st->recentStructuresBuilt = 0;
 	st->recentScore = 0;
+	st->recentResearchComplete = 0;
 	st->recentPowerLost = 0;
 	st->recentPowerWon = 0;
 	st->recentResearchPerformance = 0;
@@ -616,6 +617,16 @@ void updateMultiStatsBuilt(BASE_OBJECT *psBuilt)
 	{
 		playerStats[psBuilt->player].recentStructuresBuilt++;
 	}
+}
+
+void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
+	playerStats[player].recentResearchComplete++;
 }
 
 class KnownPlayersDB {
@@ -1028,6 +1039,11 @@ void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon)
 	playerStats[player].recentPowerWon = powerWon;
 }
 
+void setMultiPlayRecentResearchComplete(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentResearchComplete = value;
+}
+
 void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value)
 {
 	playerStats[player].recentResearchPotential = value;
@@ -1050,6 +1066,7 @@ void resetRecentScoreData()
 		playerStats[i].recentStructuresLost = 0;
 		playerStats[i].recentStructuresBuilt = 0;
 		playerStats[i].recentScore = 0;
+		playerStats[i].recentResearchComplete = 0;
 		playerStats[i].recentPowerLost = 0;
 		playerStats[i].recentPowerWon = 0;
 		playerStats[i].recentResearchPerformance = 0;
@@ -1098,6 +1115,7 @@ inline void to_json(nlohmann::json& j, const PLAYERSTATS& p) {
 	j["recentStructuresLost"] = p.recentStructuresLost;
 	j["recentStructuresBuilt"] = p.recentStructuresBuilt;
 	j["recentScore"] = p.recentScore;
+	j["recentResearchComplete"] = p.recentResearchComplete;
 	j["recentPowerLost"] = p.recentPowerLost;
 	j["recentPowerWon"] = p.recentPowerWon;
 	j["recentResearchPotential"] = p.recentResearchPotential;
@@ -1133,6 +1151,7 @@ inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
 	k.recentStructuresKilled = optGetJSONValue<uint32_t>(j, "recentStructuresKilled").value_or(0);
 	k.recentStructuresLost = optGetJSONValue<uint32_t>(j, "recentStructuresLost").value_or(0);
 	k.recentStructuresBuilt = optGetJSONValue<uint32_t>(j, "recentStructuresBuilt").value_or(0);
+	k.recentResearchComplete = optGetJSONValue<uint32_t>(j, "recentResearchComplete").value_or(0);
 	k.recentPowerWon = optGetJSONValue<uint64_t>(j, "recentPowerWon").value_or(0);
 	k.recentResearchPotential = optGetJSONValue<uint64_t>(j, "recentResearchPotential").value_or(0);
 	k.recentResearchPerformance = optGetJSONValue<uint64_t>(j, "recentResearchPerformance").value_or(0);
