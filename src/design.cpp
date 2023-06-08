@@ -2796,6 +2796,14 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 {
 	ASSERT_PLAYER_OR_RETURN(false, player);
 
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BODY] < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", psTempl->asParts[COMP_BODY], numBodyStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BRAIN] < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", psTempl->asParts[COMP_BRAIN], numBrainStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_PROPULSION] < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", psTempl->asParts[COMP_PROPULSION], numPropulsionStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_REPAIRUNIT] < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", psTempl->asParts[COMP_REPAIRUNIT], numRepairStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_ECM] < numECMStats, "Invalid range referenced for numECMStats, %d > %d", psTempl->asParts[COMP_ECM], numECMStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_SENSOR] < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", psTempl->asParts[COMP_SENSOR], numSensorStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_CONSTRUCT] < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", psTempl->asParts[COMP_CONSTRUCT], numConstructStats);
+
 	code_part level = complain ? LOG_ERROR : LOG_NEVER;
 	int bodysize = asBodyStats[psTempl->asParts[COMP_BODY]].size;
 
@@ -2834,6 +2842,8 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	// Check the weapons
 	for (int i = 0; i < psTempl->numWeaps; i++)
 	{
+		ASSERT_OR_RETURN(false, psTempl->asWeaps[i] < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psTempl->asWeaps[i], numWeaponStats);
+
 		int weaponSize = asWeaponStats[psTempl->asWeaps[i]].weaponSize;
 
 		if ((weaponSize == WEAPON_SIZE_LIGHT && bodysize != SIZE_LIGHT)
