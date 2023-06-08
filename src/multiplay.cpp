@@ -1302,6 +1302,13 @@ bool recvMessage()
 					debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
 					break;
 				}
+
+				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
+				{
+					HandleBadParam("NET_PLAYERRESPONDING given incorrect params.", player_id, queue.index);
+					break;
+				}
+
 				// This player is now with us!
 				if (ingame.JoiningInProgress[player_id])
 				{
@@ -2260,6 +2267,13 @@ static bool recvBeacon(NETQUEUE queue)
 	NETint32_t(&locY);
 	NETstring(msg, sizeof(msg));    // Receive the actual message
 	NETend();
+
+	if (!canGiveOrdersFor(queue.index, sender))
+	{
+		debug(LOG_WARNING, "Beacon (by %d) for wrong player (%d).", queue.index, sender);
+		syncDebug("Wrong player.");
+		return false;
+	}
 
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d", receiver, sender);
 
