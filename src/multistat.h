@@ -56,6 +56,7 @@ struct PLAYERSTATS
 	uint32_t recentStructuresLost = 0;
 	uint32_t recentStructuresBuilt = 0;
 	uint32_t recentScore = 0;
+	uint32_t recentResearchComplete = 0;
 	uint64_t recentPowerLost = 0;  // power lost in last game (i.e. from droids / structures being killed by other players)
 	uint64_t recentPowerWon = 0;  // power that was destroyed in last game (i.e. from droids / structures being killed)
 	uint64_t recentResearchPotential = 0;  // how many labs were ticking
@@ -81,6 +82,8 @@ struct PLAYERSTATS
 	EcKey identity;
 };
 
+struct RESEARCH;
+
 bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net
@@ -93,6 +96,7 @@ void incrementMultiStatsResearchPerformance(UDWORD player);
 void incrementMultiStatsResearchPotential(UDWORD player);
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void updateMultiStatsBuilt(BASE_OBJECT *psBuilt);
+void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);
 
@@ -124,6 +128,7 @@ void setMultiPlayRecentStructuresLost(uint32_t player, uint32_t value);
 void setMultiPlayRecentStructuresBuilt(uint32_t player, uint32_t value);
 void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost);
 void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon);
+void setMultiPlayRecentResearchComplete(uint32_t player, uint32_t value);
 void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value);
 void setMultiPlayRecentResearchPerformance(uint32_t player, uint64_t value);
 

@@ -4667,6 +4667,7 @@ static bool loadMainFileFinal(const std::string &fileName)
 		setMultiPlayRecentStructuresBuilt(index, save.value("recentStructuresBuilt", 0).toUInt());
 		setMultiPlayRecentPowerLost(index, save.value("recentPowerLost", 0).toUint64());
 		setMultiPlayRecentPowerWon(index, save.value("recentPowerWon", 0).toUint64());
+		setMultiPlayRecentResearchComplete(index, save.value("recentResearchComplete", 0).toUInt());
 		setMultiPlayRecentResearchPotential(index, save.value("recentResearchPotential", 0).toUint64());
 		setMultiPlayRecentResearchPerformance(index, save.value("recentResearchPerformance", 0).toUint64());
 		save.nextArrayItem();
@@ -4772,6 +4773,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("recentStructuresBuilt", getMultiStats(i).recentStructuresBuilt);
 		save.setValue("recentPowerLost", getMultiStats(i).recentPowerLost);
 		save.setValue("recentPowerWon", getMultiStats(i).recentPowerWon);
+		save.setValue("recentResearchComplete", getMultiStats(i).recentResearchComplete);
 		save.setValue("recentResearchPotential", getMultiStats(i).recentResearchPotential);
 		save.setValue("recentResearchPerformance", getMultiStats(i).recentResearchPerformance);
 

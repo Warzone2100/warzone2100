@@ -1347,6 +1347,9 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 		eventQueue.emplace(psResearch, psStruct, player);
 		return true;
 	}
+
+	updateMultiStatsResearchComplete(psResearch, player);
+
 	for (auto *instance : scripts)
 	{
 		int me = instance->player();
