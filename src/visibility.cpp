@@ -714,7 +714,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 		setSeenByInstantly(psStruct->psTarget[0], psObj->player, UBYTE_MAX);
 	}
 	DROID *psDroid = castDroid(psObj);
-	if (psDroid != nullptr && psDroid->action == DACTION_OBSERVE && cbSensorDroid(psDroid))
+	if (psDroid != nullptr && psDroid->action == DACTION_OBSERVE && cbSensorDroid(psDroid) && psDroid->psActionTarget[0] != nullptr)
 	{
 		// Anyone commenting this out will get a knee capping from John.
 		// You have been warned!!
