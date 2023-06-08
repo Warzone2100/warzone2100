@@ -423,6 +423,12 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 
 	// reset recent scores
 	st->recentKills = 0;
+	st->recentDroidsKilled = 0;
+	st->recentDroidsLost = 0;
+	st->recentDroidsBuilt = 0;
+	st->recentStructuresKilled = 0;
+	st->recentStructuresLost = 0;
+	st->recentStructuresBuilt = 0;
 	st->recentScore = 0;
 	st->recentPowerLost = 0;
 	st->recentPowerWon = 0;
@@ -572,6 +578,17 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 				uint64_t pwrCost = static_cast<uint64_t>(calcObjectCost(psKilled));
 				playerStats[psKilled->player].recentPowerLost += pwrCost;
 				playerStats[player].recentPowerWon += pwrCost;
+
+				if (isDroid(psKilled))
+				{
+					playerStats[psKilled->player].recentDroidsLost++;
+					playerStats[player].recentDroidsKilled++;
+				}
+				else if (isStructure(psKilled))
+				{
+					playerStats[psKilled->player].recentStructuresLost++;
+					playerStats[player].recentStructuresKilled++;
+				}
 			}
 			if (NetPlay.bComms)
 			{
@@ -582,6 +599,23 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 		return;
 	}
 	++playerStats[player].recentKills;
+}
+
+void updateMultiStatsBuilt(BASE_OBJECT *psBuilt)
+{
+	if (psBuilt->player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
+	if (isDroid(psBuilt))
+	{
+		playerStats[psBuilt->player].recentDroidsBuilt++;
+	}
+	else if (isStructure(psBuilt))
+	{
+		playerStats[psBuilt->player].recentStructuresBuilt++;
+	}
 }
 
 class KnownPlayersDB {
@@ -954,6 +988,36 @@ uint32_t getSelectedPlayerUnitsKilled()
 	}
 }
 
+void setMultiPlayRecentDroidsKilled(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentDroidsKilled = value;
+}
+
+void setMultiPlayRecentDroidsLost(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentDroidsLost = value;
+}
+
+void setMultiPlayRecentDroidsBuilt(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentDroidsBuilt = value;
+}
+
+void setMultiPlayRecentStructuresKilled(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentStructuresKilled = value;
+}
+
+void setMultiPlayRecentStructuresLost(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentStructuresLost = value;
+}
+
+void setMultiPlayRecentStructuresBuilt(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentStructuresBuilt = value;
+}
+
 void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost)
 {
 	playerStats[player].recentPowerLost = powerLost;
@@ -979,6 +1043,12 @@ void resetRecentScoreData()
 	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		playerStats[i].recentKills = 0;
+		playerStats[i].recentDroidsKilled = 0;
+		playerStats[i].recentDroidsLost = 0;
+		playerStats[i].recentDroidsBuilt = 0;
+		playerStats[i].recentStructuresKilled = 0;
+		playerStats[i].recentStructuresLost = 0;
+		playerStats[i].recentStructuresBuilt = 0;
 		playerStats[i].recentScore = 0;
 		playerStats[i].recentPowerLost = 0;
 		playerStats[i].recentPowerWon = 0;
@@ -1021,6 +1091,12 @@ inline void to_json(nlohmann::json& j, const PLAYERSTATS& p) {
 	j["totalKills"] = p.totalKills;
 	j["totalScore"] = p.totalScore;
 	j["recentKills"] = p.recentKills;
+	j["recentDroidsKilled"] = p.recentDroidsKilled;
+	j["recentDroidsLost"] = p.recentDroidsLost;
+	j["recentDroidsBuilt"] = p.recentDroidsBuilt;
+	j["recentStructuresKilled"] = p.recentStructuresKilled;
+	j["recentStructuresLost"] = p.recentStructuresLost;
+	j["recentStructuresBuilt"] = p.recentStructuresBuilt;
 	j["recentScore"] = p.recentScore;
 	j["recentPowerLost"] = p.recentPowerLost;
 	j["recentPowerWon"] = p.recentPowerWon;
@@ -1051,6 +1127,12 @@ inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
 	k.recentPowerLost = j.at("recentPowerLost").get<uint64_t>();
 	k.identity = j.at("identity").get<EcKey>();
 	// WZ 4.4.0+:
+	k.recentDroidsKilled = optGetJSONValue<uint32_t>(j, "recentDroidsKilled").value_or(0);
+	k.recentDroidsLost = optGetJSONValue<uint32_t>(j, "recentDroidsLost").value_or(0);
+	k.recentDroidsBuilt = optGetJSONValue<uint32_t>(j, "recentDroidsBuilt").value_or(0);
+	k.recentStructuresKilled = optGetJSONValue<uint32_t>(j, "recentStructuresKilled").value_or(0);
+	k.recentStructuresLost = optGetJSONValue<uint32_t>(j, "recentStructuresLost").value_or(0);
+	k.recentStructuresBuilt = optGetJSONValue<uint32_t>(j, "recentStructuresBuilt").value_or(0);
 	k.recentPowerWon = optGetJSONValue<uint64_t>(j, "recentPowerWon").value_or(0);
 	k.recentResearchPotential = optGetJSONValue<uint64_t>(j, "recentResearchPotential").value_or(0);
 	k.recentResearchPerformance = optGetJSONValue<uint64_t>(j, "recentResearchPerformance").value_or(0);

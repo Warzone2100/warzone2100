@@ -60,6 +60,7 @@
 #include "game.h"
 #include "warzoneconfig.h"
 #include "challenge.h"
+#include "multistat.h"
 
 #include <set>
 #include <memory>
@@ -1189,6 +1190,13 @@ bool triggerEventDroidIdle(DROID *psDroid)
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+
+	if (psFactory != nullptr) // Ignore droids that were gifted or cheated (debug add)
+	{
+		// Increment built count for droids built in a factory
+		updateMultiStatsBuilt(psDroid);
+	}
+
 	optional<const STRUCTURE *> opt_factory = (psFactory) ? optional<const STRUCTURE *>(psFactory) : nullopt;
 	for (auto *instance : scripts)
 	{
@@ -1211,6 +1219,13 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+
+	if (psDroid != nullptr) // Ignore structures that were gifted or cheated (debug add)
+	{
+		// Increment structure count for structures built by a droid
+		updateMultiStatsBuilt(psStruct);
+	}
+
 	optional<const DROID *> opt_droid = (psDroid) ? optional<const DROID *>(psDroid) : nullopt;
 	for (auto *instance : scripts)
 	{
