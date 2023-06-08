@@ -48,7 +48,13 @@ struct PLAYERSTATS
 	uint32_t totalKills = 0;
 	uint32_t totalScore = 0;
 
-	uint32_t recentKills = 0;  // score/kills in last game.
+	uint32_t recentKills = 0;  // score/kills in last game. (total kills - both droids and structures)
+	uint32_t recentDroidsKilled = 0;
+	uint32_t recentDroidsLost = 0;
+	uint32_t recentDroidsBuilt = 0;
+	uint32_t recentStructuresKilled = 0;
+	uint32_t recentStructuresLost = 0;
+	uint32_t recentStructuresBuilt = 0;
 	uint32_t recentScore = 0;
 	uint64_t recentPowerLost = 0;  // power lost in last game (i.e. from droids / structures being killed by other players)
 	uint64_t recentPowerWon = 0;  // power that was destroyed in last game (i.e. from droids / structures being killed)
@@ -86,6 +92,7 @@ void updateMultiStatsLoses();
 void incrementMultiStatsResearchPerformance(UDWORD player);
 void incrementMultiStatsResearchPotential(UDWORD player);
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
+void updateMultiStatsBuilt(BASE_OBJECT *psBuilt);
 void recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);
 
@@ -109,6 +116,12 @@ uint32_t getMultiPlayRecentScore(uint32_t player);
 void setMultiPlayRecentScore(uint32_t player, uint32_t score);
 uint32_t getSelectedPlayerUnitsKilled();
 
+void setMultiPlayRecentDroidsKilled(uint32_t player, uint32_t value);
+void setMultiPlayRecentDroidsLost(uint32_t player, uint32_t value);
+void setMultiPlayRecentDroidsBuilt(uint32_t player, uint32_t value);
+void setMultiPlayRecentStructuresKilled(uint32_t player, uint32_t value);
+void setMultiPlayRecentStructuresLost(uint32_t player, uint32_t value);
+void setMultiPlayRecentStructuresBuilt(uint32_t player, uint32_t value);
 void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost);
 void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon);
 void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value);
