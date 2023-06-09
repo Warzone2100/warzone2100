@@ -1169,6 +1169,9 @@ bool startMissionCampaignChange(char *pGame)
 	// Clear out all intelligence screen messages
 	freeMessages();
 
+	// Cancel any research active in a lab
+	CancelAllResearch(selectedPlayer);
+
 	// Check no units left with any settings that are invalid
 	clearCampaignUnits();
 
