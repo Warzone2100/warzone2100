@@ -102,6 +102,12 @@ void sendOptions()
 		game.inactivityMinutes = MIN_MPINACTIVITY_MINUTES;
 	}
 	NETuint32_t(&game.inactivityMinutes);
+	if (game.gameTimeLimitMinutes > 0 && game.gameTimeLimitMinutes < MIN_MPGAMETIMELIMIT_MINUTES)
+	{
+		debug(LOG_ERROR, "Invalid gameTimeLimitMinutes value specified: %" PRIu32 "; resetting to: %" PRIu32, game.gameTimeLimitMinutes, static_cast<uint32_t>(MIN_MPGAMETIMELIMIT_MINUTES));
+		game.gameTimeLimitMinutes = MIN_MPGAMETIMELIMIT_MINUTES;
+	}
+	NETuint32_t(&game.gameTimeLimitMinutes);
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -188,6 +194,12 @@ bool recvOptions(NETQUEUE queue)
 	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32, game.inactivityMinutes);
+		return false;
+	}
+	NETuint32_t(&game.gameTimeLimitMinutes);
+	if (game.gameTimeLimitMinutes > 0 && game.gameTimeLimitMinutes < MIN_MPGAMETIMELIMIT_MINUTES)
+	{
+		debug(LOG_ERROR, "Invalid gameTimeLimitMinutes value specified: %" PRIu32, game.gameTimeLimitMinutes);
 		return false;
 	}
 

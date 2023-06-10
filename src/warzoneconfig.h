@@ -35,6 +35,7 @@
 #define	CAMERASPEED_STEP	(100)
 
 #define MIN_MPINACTIVITY_MINUTES 4
+#define MIN_MPGAMETIMELIMIT_MINUTES 30
 
 #define WZ_LODDISTANCEPERCENTAGE_HIGH -50
 
@@ -138,6 +139,8 @@ int war_getOldLogsLimit();
 void war_setOldLogsLimit(int oldLogsLimit);
 uint32_t war_getMPInactivityMinutes();
 void war_setMPInactivityMinutes(uint32_t minutes);
+uint32_t war_getMPGameTimeLimitMinutes();
+void war_setMPGameTimeLimitMinutes(uint32_t minutes);
 uint16_t war_getMPopenSpectatorSlots();
 void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
 int war_getFogEnd();

@@ -72,6 +72,7 @@ struct WARZONE_GLOBALS
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
 	uint32_t MPinactivityMinutes = 5;
+	uint32_t MPgameTimeLimitMinutes = 0; // default to unlimited
 	uint8_t MPopenSpectatorSlots = 0;
 	int fogStart = 4000;
 	int fogEnd = 8000;
@@ -510,6 +511,20 @@ void war_setMPInactivityMinutes(uint32_t minutes)
 		minutes = MIN_MPINACTIVITY_MINUTES;
 	}
 	warGlobs.MPinactivityMinutes = minutes;
+}
+
+uint32_t war_getMPGameTimeLimitMinutes()
+{
+	return warGlobs.MPgameTimeLimitMinutes;
+}
+
+void war_setMPGameTimeLimitMinutes(uint32_t minutes)
+{
+	if (minutes > 0 && minutes < MIN_MPGAMETIMELIMIT_MINUTES)
+	{
+		minutes = MIN_MPGAMETIMELIMIT_MINUTES;
+	}
+	warGlobs.MPgameTimeLimitMinutes = minutes;
 }
 
 uint16_t war_getMPopenSpectatorSlots()

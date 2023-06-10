@@ -8105,6 +8105,7 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERGAME& p) {
 	j["isRandom"] = p.isRandom;
 	j["techLevel"] = p.techLevel;
 	j["inactivityMinutes"] = p.inactivityMinutes;
+	j["gameTimeLimitMinutes"] = p.gameTimeLimitMinutes;
 }
 
 inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
@@ -8132,6 +8133,15 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
 	{
 		// default to the old (4.2.0 beta-era) value of 4 minutes
 		p.inactivityMinutes = 4;
+	}
+	if (j.contains("gameTimeLimitMinutes"))
+	{
+		p.gameTimeLimitMinutes = j.at("gameTimeLimitMinutes").get<uint32_t>();
+	}
+	else
+	{
+		// default to the old (pre-4.4.0) default value of 0 minutes (disabled)
+		p.gameTimeLimitMinutes = 0;
 	}
 }
 
