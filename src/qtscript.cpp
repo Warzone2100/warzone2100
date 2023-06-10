@@ -606,6 +606,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["challenge"] = challengeActive;
 	//== * ```idleTime``` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
 	globalVars["idleTime"] = game.inactivityMinutes * 60 * 1000;
+	//== * ```gameTimeLimit``` The game time limit (match will automatically end if it reaches this duration). (0 = disable limit) (4.4.0+ only)
+	globalVars["gameTimeLimit"] = game.gameTimeLimitMinutes * 60 * 1000;
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
