@@ -4634,6 +4634,17 @@ static bool loadMainFile(const std::string &fileName)
 	}
 	save.endArray();
 
+	const auto& rootObj = save.currentJsonValue();
+	auto it = rootObj.find("scriptSetPlayerDataStrings");
+	if (it != rootObj.end() && it.value().is_array())
+	{
+		const auto& arr = it.value();
+		for (size_t idx = 0; idx < std::min<size_t>(arr.size(), NetPlay.scriptSetPlayerDataStrings.size()); idx++)
+		{
+			NetPlay.scriptSetPlayerDataStrings[idx] = arr[idx].get<std::unordered_map<std::string, std::string>>();
+		}
+	}
+
 	return true;
 }
 
@@ -4827,6 +4838,17 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("builtInMap", builtInMap);
 	save.setValue("inactivityMinutes", game.inactivityMinutes);
 	save.setValue("gameTimeLimitMinutes", game.gameTimeLimitMinutes);
+
+	save.beginArray("scriptSetPlayerDataStrings");
+	for (size_t i = 0; i < NetPlay.scriptSetPlayerDataStrings.size(); ++i)
+	{
+		for (const auto& kv : NetPlay.scriptSetPlayerDataStrings[i])
+		{
+			save.setValue(WzString::fromUtf8(kv.first), kv.second);
+		}
+		save.nextArrayItem();
+	}
+	save.endArray();
 
 	return true;
 }

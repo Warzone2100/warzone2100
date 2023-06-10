@@ -1056,6 +1056,10 @@ static void stopGameLoop()
 				player.resetAll();
 			}
 			NetPlay.players.resize(MAX_CONNECTED_PLAYERS);
+			for (size_t i = 0; i < NetPlay.scriptSetPlayerDataStrings.size(); i++)
+			{
+				NetPlay.scriptSetPlayerDataStrings[i].clear();
+			}
 		}
 		closeLoadingScreen();
 		reloadMPConfig();

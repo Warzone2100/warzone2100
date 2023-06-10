@@ -339,6 +339,7 @@ struct NETPLAY
 	char MOTDbuffer[255];				// buffer for MOTD
 	char *MOTD = nullptr;
 
+	std::vector<std::unordered_map<std::string, std::string>> scriptSetPlayerDataStrings;
 	std::vector<std::shared_ptr<PlayerReference>> playerReferences;
 
 	NETPLAY();

@@ -3190,7 +3190,7 @@ IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
 IMPL_JS_FUNC(getMissionType, wzapi::getMissionType)
 IMPL_JS_FUNC(getRevealStatus, wzapi::getRevealStatus)
 IMPL_JS_FUNC(setRevealStatus, wzapi::setRevealStatus)
-
+IMPL_JS_FUNC(setGameStoryLogPlayerDataValue, wzapi::setGameStoryLogPlayerDataValue)
 
 static JSValue js_stats_get(JSContext *ctx, JSValueConst this_val)
 {
@@ -3486,6 +3486,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC2(fireWeaponAtObj, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(transformPlayerToSpectator, 1); // WZAPI
 	JS_REGISTER_FUNC(isSpectator, 1); // WZAPI
+	JS_REGISTER_FUNC(setGameStoryLogPlayerDataValue, 3); // WZAPI
 
 	return true;
 }

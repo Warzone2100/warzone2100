@@ -5282,6 +5282,10 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		player.resetAll();
 	}
 	NetPlay.players.resize(MAX_CONNECTED_PLAYERS);
+	for (size_t i = 0; i < NetPlay.scriptSetPlayerDataStrings.size(); i++)
+	{
+		NetPlay.scriptSetPlayerDataStrings[i].clear();
+	}
 }
 
 static void resetPlayerPositions()
