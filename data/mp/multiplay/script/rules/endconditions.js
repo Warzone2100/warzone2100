@@ -193,6 +193,12 @@ class Team
 	setState(state)
 	{
 		this.state = state;
+		this.players.forEach(
+			(player) =>
+			{
+				setGameStoryLogPlayerDataValue(player.playNum, "usertype", this.state);
+			}
+		);
 		if (state ===  STATE_winner || state === STATE_loser ||  state === STATE_spectator)
 		{
 			this.players.forEach(

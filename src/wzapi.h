@@ -1100,6 +1100,7 @@ namespace wzapi
 	no_return_value fireWeaponAtObj(WZAPI_PARAMS(std::string weaponName, BASE_OBJECT *psObj, optional<int> _player));
 	bool setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue));
 	nlohmann::json getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index));
+	bool setGameStoryLogPlayerDataValue(WZAPI_PARAMS(int player, std::string key_str, std::string value_str));
 	bool transformPlayerToSpectator(WZAPI_PARAMS(int player));
 
 	// MARK: - Used for retrieving information to set up script instance environments

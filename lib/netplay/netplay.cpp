@@ -353,6 +353,7 @@ void NET_clearDownloadingWZFiles()
 NETPLAY::NETPLAY()
 {
 	players.resize(MAX_CONNECTED_PLAYERS);
+	scriptSetPlayerDataStrings.resize(MAX_PLAYERS);
 	playerReferences.resize(MAX_CONNECTED_PLAYERS);
 	for (auto i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{

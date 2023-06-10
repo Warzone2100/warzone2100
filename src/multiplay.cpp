@@ -2360,6 +2360,23 @@ int32_t findPlayerIndexByPosition(uint32_t position)
 	return -1;
 }
 
+bool setGameStoryLogPlayerDataValue(uint32_t playerIndex, const std::string& key_str, const std::string& value_str)
+{
+	if (playerIndex > MAX_PLAYERS)
+	{
+		return false;
+	}
+
+	if (key_str != "usertype")
+	{
+		// For now, only "usertype" is expected
+		return false;
+	}
+
+	NetPlay.scriptSetPlayerDataStrings[playerIndex][key_str] = value_str;
+	return true;
+}
+
 bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quietly)
 {
 	// Remove objects quietly if the player is starting off as a spectator
