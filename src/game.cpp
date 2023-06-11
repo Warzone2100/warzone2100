@@ -93,6 +93,7 @@
 #include "console.h"
 #include "multigifts.h"
 #include "wzscriptdebug.h"
+#include "gamehistorylogger.h"
 #include "build_tools/autorevision.h"
 
 #if defined(__clang__)

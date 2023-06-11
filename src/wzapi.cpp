@@ -77,6 +77,7 @@
 #include "chat.h"
 #include "scores.h"
 #include "data.h"
+#include "gamehistorylogger.h"
 
 #include <list>
 
@@ -2393,6 +2394,7 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 	{
 		updateChallenge(gameWon);
 	}
+	GameStoryLogger::instance().logGameOver();
 	if (autogame_enabled())
 	{
 		debug(LOG_WARNING, "Autogame completed successfully!");
