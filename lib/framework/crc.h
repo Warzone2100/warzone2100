@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <nlohmann/json_fwd.hpp>
 
 uint32_t crcSum(uint32_t crc, const void *data, size_t dataLen);
 uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen);
@@ -53,6 +54,7 @@ struct std::hash<Sha256>
 		return std::hash<std::string>{}(k.toString());
 	}
 };
+void to_json(nlohmann::json& j, const Sha256& k);
 
 class EcKey
 {

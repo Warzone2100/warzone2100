@@ -25,6 +25,7 @@
 #include "mission.h"
 #include "challenge.h"
 #include "modding.h"
+#include "gamehistorylogger.h"
 #include <algorithm>
 #include <mutex>
 

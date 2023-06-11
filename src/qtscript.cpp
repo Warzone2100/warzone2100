@@ -61,6 +61,7 @@
 #include "warzoneconfig.h"
 #include "challenge.h"
 #include "multistat.h"
+#include "gamehistorylogger.h"
 
 #include <set>
 #include <memory>
@@ -1158,6 +1159,7 @@ bool triggerEventPlayerLeft(int player)
 bool triggerEventCheatMode(bool entered)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+	GameStoryLogger::instance().logDebugModeChange(entered);
 	for (auto *instance : scripts)
 	{
 		instance->handle_eventCheatMode(entered);
@@ -1351,6 +1353,7 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 	}
 
 	updateMultiStatsResearchComplete(psResearch, player);
+	GameStoryLogger::instance().logResearchCompleted(psResearch, psStruct, player);
 
 	for (auto *instance : scripts)
 	{

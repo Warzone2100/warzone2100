@@ -43,6 +43,7 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 #include "multilobbycommands.h"
+#include "gamehistorylogger.h"
 
 #include <cwchar>
 
@@ -350,6 +351,10 @@ typedef enum
 	CLI_ADD_LOBBY_ADMINPUBLICKEY,
 	CLI_COMMAND_INTERFACE,
 	CLI_STARTPLAYERS,
+	CLI_GAMELOG_OUTPUTMODES,
+	CLI_GAMELOG_OUTPUTKEY,
+	CLI_GAMELOG_OUTPUTNAMING,
+	CLI_GAMELOG_FRAMEINTERVAL
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -429,6 +434,10 @@ static const struct poptOption *getOptionsTable()
 		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
 		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin)")},
 		{ "startplayers", POPT_ARG_STRING, CLI_STARTPLAYERS, N_("Minimum required players to auto-start game"), N_("startplayers")},
+		{ "gamelog-output", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTMODES, N_("Game history log output mode(s)"), "(log,cmdinterface)"},
+		{ "gamelog-outputkey", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTKEY, N_("Game history log output key"), "[playerindex, playerposition]"},
+		{ "gamelog-outputnaming", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTNAMING, N_("Game history log output naming"), "[default, autohosterclassic]"},
+		{ "gamelog-frameinterval", POPT_ARG_STRING, CLI_GAMELOG_FRAMEINTERVAL, N_("Game history log frame interval"), N_("interval in seconds")},
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -1033,8 +1042,99 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			debug(LOG_INFO, "Games will automatically start with [%d] players (when ready)", wz_min_autostart_players);
 			break;
 
-		};
-	}
+
+		case CLI_GAMELOG_OUTPUTMODES:
+		{
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				// use default, which is currently "log,cmdinterface"
+				token = "log,cmdinterface";
+			}
+			GameStoryLogger::OutputModes modes;
+			WzString inputVal(token);
+			auto params = inputVal.split(",");
+			for (const auto& a : params)
+			{
+				if (a.compare("log") == 0)
+				{
+					modes.logFile = true;
+				}
+				else if (a.compare("cmdinterface") == 0)
+				{
+					modes.cmdInterface = true;
+				}
+				else
+				{
+					qFatal("Unsupported / invalid gamelog-output value");
+				}
+			}
+			GameStoryLogger::instance().setOutputModes(modes);
+			break;
+		}
+
+		case CLI_GAMELOG_OUTPUTKEY:
+		{
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Missing gamelog-outputkey value");
+			}
+			if (strcmp(token, "playerindex") == 0)
+			{
+				GameStoryLogger::instance().setOutputKey(GameStoryLogger::OutputKey::PlayerIndex);
+			}
+			else if (strcmp(token, "playerposition") == 0)
+			{
+				GameStoryLogger::instance().setOutputKey(GameStoryLogger::OutputKey::PlayerPosition);
+			}
+			else
+			{
+				qFatal("Unsupported / invalid gamelog-outputkey value");
+			}
+			break;
+		}
+
+		case CLI_GAMELOG_OUTPUTNAMING:
+		{
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Missing gamelog-outputnaming value");
+			}
+			if (strcmp(token, "default") == 0)
+			{
+				GameStoryLogger::instance().setOutputNaming(GameStoryLogger::OutputNaming::Default);
+			}
+			else if (strcmp(token, "autohosterclassic") == 0)
+			{
+				GameStoryLogger::instance().setOutputNaming(GameStoryLogger::OutputNaming::AutohosterClassic);
+			}
+			else
+			{
+				qFatal("Unsupported / invalid gamelog-outputnaming value");
+			}
+			break;
+		}
+
+		case CLI_GAMELOG_FRAMEINTERVAL:
+		{
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad gamelog-frameinterval count");
+			}
+			int token_intval = atoi(token);
+			if (token_intval < 0)
+			{
+				qFatal("Invalid gamelog-frameinterval count");
+			}
+			GameStoryLogger::instance().setFrameLoggingInterval(static_cast<uint32_t>(token_intval));
+			break;
+		}
+
+		} // switch (option)
+	} // while
 
 	return true;
 }

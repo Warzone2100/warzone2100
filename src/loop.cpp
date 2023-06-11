@@ -84,6 +84,7 @@
 #include "notifications.h"
 #include "scores.h"
 #include "clparse.h"
+#include "gamehistorylogger.h"
 
 #include "warzoneconfig.h"
 
@@ -588,6 +589,12 @@ static void gameStateUpdate()
 
 	// Free dead droid memory.
 	objmemUpdate();
+
+	// accumulate occasional stats / snapshots
+	if (!paused && !scriptPaused())
+	{
+		GameStoryLogger::instance().logGameFrame();
+	}
 
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
