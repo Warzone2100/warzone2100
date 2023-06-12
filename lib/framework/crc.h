@@ -24,6 +24,7 @@
 #include "vector.h"
 #include <vector>
 #include <string>
+#include <functional>
 
 uint32_t crcSum(uint32_t crc, const void *data, size_t dataLen);
 uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen);
@@ -44,6 +45,14 @@ struct Sha256
 	uint8_t bytes[Bytes];
 };
 Sha256 sha256Sum(void const *data, size_t dataLen);
+template <>
+struct std::hash<Sha256>
+{
+	std::size_t operator()(const Sha256& k) const
+	{
+		return std::hash<std::string>{}(k.toString());
+	}
+};
 
 class EcKey
 {
