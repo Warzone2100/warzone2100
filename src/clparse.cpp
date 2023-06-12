@@ -354,7 +354,8 @@ typedef enum
 	CLI_GAMELOG_OUTPUTMODES,
 	CLI_GAMELOG_OUTPUTKEY,
 	CLI_GAMELOG_OUTPUTNAMING,
-	CLI_GAMELOG_FRAMEINTERVAL
+	CLI_GAMELOG_FRAMEINTERVAL,
+	CLI_GAMETIMELIMITMINUTES
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -438,6 +439,8 @@ static const struct poptOption *getOptionsTable()
 		{ "gamelog-outputkey", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTKEY, N_("Game history log output key"), "[playerindex, playerposition]"},
 		{ "gamelog-outputnaming", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTNAMING, N_("Game history log output naming"), "[default, autohosterclassic]"},
 		{ "gamelog-frameinterval", POPT_ARG_STRING, CLI_GAMELOG_FRAMEINTERVAL, N_("Game history log frame interval"), N_("interval in seconds")},
+		{ "gametimelimit", POPT_ARG_STRING, CLI_GAMETIMELIMITMINUTES, N_("Multiplayer game time limit (in minutes)"), N_("number of minutes")},
+
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -1130,6 +1133,23 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Invalid gamelog-frameinterval count");
 			}
 			GameStoryLogger::instance().setFrameLoggingInterval(static_cast<uint32_t>(token_intval));
+			break;
+		}
+
+		case CLI_GAMETIMELIMITMINUTES:
+		{
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad game time limit minutes count");
+			}
+			int token_intval = atoi(token);
+			if (token_intval < 0)
+			{
+				qFatal("Invalid game time limit minutes count");
+			}
+			war_setMPGameTimeLimitMinutes(static_cast<uint32_t>(token_intval));
+			game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 			break;
 		}
 
