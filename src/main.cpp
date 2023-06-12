@@ -1046,6 +1046,7 @@ static void stopGameLoop()
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
+			game.modHashes.clear(); // must clear this before calling levReleaseAll so that when search paths are reloaded we don't reload mods downloaded for the last game (or loaded for the last replay)
 			if (!levReleaseAll())
 			{
 				debug(LOG_ERROR, "levReleaseAll failed!");
