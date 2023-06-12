@@ -385,6 +385,11 @@ struct NearestSearchPredicate {
 	unsigned estimateCost(const PathCoord& pos) const {
 		return fpathGoodEstimate(pos, goal);
 	}
+
+	void clear() {
+		nearestCoord = {0, 0};
+		nearestDist = 0xFFFFFFFF;
+	}
 };
 
 /// Runs A* wave propagation for 8 neighbors pattern.
@@ -522,6 +527,8 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	const bool isDroidSelected = (psDroid && psDroid->selected);
 #endif
 
+	NearestSearchPredicate pred(tileDest);
+
 	PathCoord endCoord;  // Either nearest coord (mustReverse = true) or orig (mustReverse = false).
 
 	std::list<PathfindContext>::iterator contextIterator = fpathContexts.begin();
@@ -549,7 +556,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		{
 			// Need to find the path from orig to dest, continue previous exploration.
 			fpathAStarReestimate(pfContext, tileOrig);
-			NearestSearchPredicate pred(tileDest);
+			pred.clear();
 			if (!fpathAStarExplore(pfContext, pred)) {
 				syncDebug("fpathAStarRoute (%d,%d) to (%d,%d) - wave collapsed. Nearest=%d", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y, pred.nearestDist);
 			}
@@ -580,7 +587,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
 		fpathInitContext(pfContext, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
 
-		NearestSearchPredicate pred(tileDest);
+		pred.clear();
 		if (!fpathAStarExplore(pfContext, pred)) {
 #if DEBUG
 			if (isDroidSelected) {
