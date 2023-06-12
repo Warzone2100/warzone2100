@@ -27,7 +27,7 @@
 #include <vector>
 
 
-void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, std::vector<std::string> const *checkList, bool addToModList);
+size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, std::vector<std::string> const *checkList, bool addToModList);
 void removeSubdirs(const char *basedir, const char *subdir);
 void printSearchPath();
 
@@ -39,6 +39,12 @@ struct LoadedMod
 {
 	std::string name;
 	std::string filename;
+
+	LoadedMod(const std::string& name, const std::string& filename);
+	Sha256& getHash();
+
+private:
+	Sha256 fileHash;
 };
 } // namespace WzMods
 
