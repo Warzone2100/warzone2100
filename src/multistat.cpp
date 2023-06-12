@@ -297,7 +297,9 @@ void recvMultiStats(NETQUEUE queue)
 			{
 				std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
 				std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
-				wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
+				std::string sendername = NetPlay.players[playerIndex].name;
+				std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
+				wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
 			}
 			else
 			{
