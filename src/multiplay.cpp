@@ -343,6 +343,7 @@ bool multiPlayerLoop()
 				sendDataCheck();
 			}
 			ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::now();
+			wz_command_interface_output("WZEVENT: allPlayersJoined\n");
 		}
 		if (NetPlay.bComms)
 		{
