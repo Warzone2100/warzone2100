@@ -498,7 +498,7 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 
 	frame.currGameTime = gameTime;
 	return frame;
-};
+}
 
 nlohmann::json GameStoryLogger::genFrameReport(const GameFrame& frame, OutputKey key, OutputNaming naming)
 {
