@@ -248,6 +248,8 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j[mapPlayerDataOutputName("summExp", naming)] = p.summExp;
 		j[mapPlayerDataOutputName("oilRigs", naming)] = p.oilRigs;
 		j[mapPlayerDataOutputName("recentPowerLost", naming)] = p.recentPowerLost;
+		j[mapPlayerDataOutputName("recentDroidPowerLost", naming)] = p.recentDroidPowerLost;
+		j[mapPlayerDataOutputName("recentStructurePowerLost", naming)] = p.recentStructurePowerLost;
 		j[mapPlayerDataOutputName("recentPowerWon", naming)] = p.recentPowerWon;
 		j[mapPlayerDataOutputName("recentResearchPotential", naming)] = p.recentResearchPotential;
 		j[mapPlayerDataOutputName("recentResearchPerformance", naming)] = p.recentResearchPerformance;
@@ -474,8 +476,10 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 		playerStats.hp = std::get<0>(hpAndSummExp);
 		playerStats.summExp = std::get<1>(hpAndSummExp);
 		playerStats.oilRigs = getNumOilRigs(i);
-		playerStats.recentPowerLost = mStats.recentPowerLost;	// **
-		playerStats.recentPowerWon = mStats.recentPowerWon;	// **
+		playerStats.recentPowerLost = mStats.recentPowerLost;
+		playerStats.recentDroidPowerLost = mStats.recentDroidPowerLost;
+		playerStats.recentStructurePowerLost = mStats.recentStructurePowerLost;
+		playerStats.recentPowerWon = mStats.recentPowerWon;
 		playerStats.recentResearchPotential = mStats.recentResearchPotential;
 		playerStats.recentResearchPerformance = mStats.recentResearchPerformance;
 
@@ -568,6 +572,8 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerS
 	j["summExp"] = p.summExp;
 	j["oilRigs"] = p.oilRigs;
 	j["recentPowerLost"] = p.recentPowerLost;
+	j["recentDroidPowerLost"] = p.recentDroidPowerLost;
+	j["recentStructurePowerLost"] = p.recentStructurePowerLost;
 	j["recentPowerWon"] = p.recentPowerWon;
 	j["recentResearchPotential"] = p.recentResearchPotential;
 	j["recentResearchPerformance"] = p.recentResearchPerformance;
@@ -590,6 +596,8 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::Playe
 	p.summExp = j.at("summExp").get<uint32_t>();
 	p.oilRigs = j.at("oilRigs").get<uint32_t>();
 	p.recentPowerLost = j.at("recentPowerLost").get<uint64_t>();
+	p.recentDroidPowerLost = j.at("recentDroidPowerLost").get<uint64_t>();
+	p.recentStructurePowerLost = j.at("recentStructurePowerLost").get<uint64_t>();
 	p.recentPowerWon = j.at("recentPowerWon").get<uint64_t>();
 	p.recentResearchPotential = j.at("recentResearchPotential").get<uint64_t>();
 	p.recentResearchPerformance = j.at("recentResearchPerformance").get<uint64_t>();
