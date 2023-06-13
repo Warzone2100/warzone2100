@@ -326,7 +326,10 @@ void recvPlayerLeft(NETQUEUE queue)
 	turnOffMultiMsg(true);
 	clearPlayer(playerIndex, false);  // don't do it quietly
 	turnOffMultiMsg(false);
-	setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+	if (!ingame.TimeEveryoneIsInGame.has_value()) // If game hasn't actually started
+	{
+		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+	}
 	NetPlay.players[playerIndex].allocated = false;
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
