@@ -881,7 +881,9 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	std::vector<uint32_t> playerIndexes;
 	for (uint32_t player = 0; player < std::min<uint32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
-		if (isHumanPlayer(player) || NetPlay.players[player].ai >= 0)
+		if (isHumanPlayer(player) // is an active (connected) human player
+			|| NetPlay.players[player].difficulty == AIDifficulty::HUMAN // was a human player (probably disconnected)
+			|| NetPlay.players[player].ai >= 0) // is an AI bot
 		{
 			playerIndexes.push_back(player);
 		}
