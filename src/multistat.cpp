@@ -434,6 +434,8 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	st->recentScore = 0;
 	st->recentResearchComplete = 0;
 	st->recentPowerLost = 0;
+	st->recentDroidPowerLost = 0;
+	st->recentStructurePowerLost = 0;
 	st->recentPowerWon = 0;
 	st->recentResearchPerformance = 0;
 	st->recentResearchPotential = 0;
@@ -584,11 +586,13 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 
 				if (isDroid(psKilled))
 				{
+					playerStats[psKilled->player].recentDroidPowerLost += pwrCost;
 					playerStats[psKilled->player].recentDroidsLost++;
 					playerStats[player].recentDroidsKilled++;
 				}
 				else if (isStructure(psKilled))
 				{
+					playerStats[psKilled->player].recentStructurePowerLost += pwrCost;
 					playerStats[psKilled->player].recentStructuresLost++;
 					playerStats[player].recentStructuresKilled++;
 				}
@@ -1036,6 +1040,16 @@ void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost)
 	playerStats[player].recentPowerLost = powerLost;
 }
 
+void setMultiPlayRecentDroidPowerLost(uint32_t player, uint64_t powerLost)
+{
+	playerStats[player].recentDroidPowerLost = powerLost;
+}
+
+void setMultiPlayRecentStructurePowerLost(uint32_t player, uint64_t powerLost)
+{
+	playerStats[player].recentStructurePowerLost = powerLost;
+}
+
 void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon)
 {
 	playerStats[player].recentPowerWon = powerWon;
@@ -1070,6 +1084,8 @@ void resetRecentScoreData()
 		playerStats[i].recentScore = 0;
 		playerStats[i].recentResearchComplete = 0;
 		playerStats[i].recentPowerLost = 0;
+		playerStats[i].recentDroidPowerLost = 0;
+		playerStats[i].recentStructurePowerLost = 0;
 		playerStats[i].recentPowerWon = 0;
 		playerStats[i].recentResearchPerformance = 0;
 		playerStats[i].recentResearchPotential = 0;
@@ -1119,6 +1135,8 @@ inline void to_json(nlohmann::json& j, const PLAYERSTATS& p) {
 	j["recentScore"] = p.recentScore;
 	j["recentResearchComplete"] = p.recentResearchComplete;
 	j["recentPowerLost"] = p.recentPowerLost;
+	j["recentDroidPowerLost"] = p.recentDroidPowerLost;
+	j["recentStructurePowerLost"] = p.recentStructurePowerLost;
 	j["recentPowerWon"] = p.recentPowerWon;
 	j["recentResearchPotential"] = p.recentResearchPotential;
 	j["recentResearchPerformance"] = p.recentResearchPerformance;
@@ -1154,6 +1172,8 @@ inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
 	k.recentStructuresLost = optGetJSONValue<uint32_t>(j, "recentStructuresLost").value_or(0);
 	k.recentStructuresBuilt = optGetJSONValue<uint32_t>(j, "recentStructuresBuilt").value_or(0);
 	k.recentResearchComplete = optGetJSONValue<uint32_t>(j, "recentResearchComplete").value_or(0);
+	k.recentDroidPowerLost = optGetJSONValue<uint64_t>(j, "recentDroidPowerLost").value_or(0);
+	k.recentStructurePowerLost = optGetJSONValue<uint64_t>(j, "recentStructurePowerLost").value_or(0);
 	k.recentPowerWon = optGetJSONValue<uint64_t>(j, "recentPowerWon").value_or(0);
 	k.recentResearchPotential = optGetJSONValue<uint64_t>(j, "recentResearchPotential").value_or(0);
 	k.recentResearchPerformance = optGetJSONValue<uint64_t>(j, "recentResearchPerformance").value_or(0);

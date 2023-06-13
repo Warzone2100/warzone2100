@@ -4682,6 +4682,8 @@ static bool loadMainFileFinal(const std::string &fileName)
 		setMultiPlayRecentStructuresLost(index, save.value("recentStructuresLost", 0).toUInt());
 		setMultiPlayRecentStructuresBuilt(index, save.value("recentStructuresBuilt", 0).toUInt());
 		setMultiPlayRecentPowerLost(index, save.value("recentPowerLost", 0).toUint64());
+		setMultiPlayRecentDroidPowerLost(index, save.value("recentDroidPowerLost", 0).toUint64());
+		setMultiPlayRecentStructurePowerLost(index, save.value("recentStructurePowerLost", 0).toUint64());
 		setMultiPlayRecentPowerWon(index, save.value("recentPowerWon", 0).toUint64());
 		setMultiPlayRecentResearchComplete(index, save.value("recentResearchComplete", 0).toUInt());
 		setMultiPlayRecentResearchPotential(index, save.value("recentResearchPotential", 0).toUint64());
@@ -4788,6 +4790,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("recentStructuresLost", getMultiStats(i).recentStructuresLost);
 		save.setValue("recentStructuresBuilt", getMultiStats(i).recentStructuresBuilt);
 		save.setValue("recentPowerLost", getMultiStats(i).recentPowerLost);
+		save.setValue("recentDroidPowerLost", getMultiStats(i).recentDroidPowerLost);
+		save.setValue("recentStructurePowerLost", getMultiStats(i).recentStructurePowerLost);
 		save.setValue("recentPowerWon", getMultiStats(i).recentPowerWon);
 		save.setValue("recentResearchComplete", getMultiStats(i).recentResearchComplete);
 		save.setValue("recentResearchPotential", getMultiStats(i).recentResearchPotential);

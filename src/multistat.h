@@ -58,6 +58,8 @@ struct PLAYERSTATS
 	uint32_t recentScore = 0;
 	uint32_t recentResearchComplete = 0;
 	uint64_t recentPowerLost = 0;  // power lost in last game (i.e. from droids / structures being killed by other players)
+	uint64_t recentDroidPowerLost = 0;	// power lost in last game (from droids being killed by other players)
+	uint64_t recentStructurePowerLost = 0;	// power lost in last game (from structures being killed by other players)
 	uint64_t recentPowerWon = 0;  // power that was destroyed in last game (i.e. from droids / structures being killed)
 	uint64_t recentResearchPotential = 0;  // how many labs were ticking
 	uint64_t recentResearchPerformance = 0;  // how many labs were ticking with objective (researching)
@@ -127,6 +129,8 @@ void setMultiPlayRecentStructuresKilled(uint32_t player, uint32_t value);
 void setMultiPlayRecentStructuresLost(uint32_t player, uint32_t value);
 void setMultiPlayRecentStructuresBuilt(uint32_t player, uint32_t value);
 void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost);
+void setMultiPlayRecentDroidPowerLost(uint32_t player, uint64_t powerLost);
+void setMultiPlayRecentStructurePowerLost(uint32_t player, uint64_t powerLost);
 void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon);
 void setMultiPlayRecentResearchComplete(uint32_t player, uint32_t value);
 void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value);

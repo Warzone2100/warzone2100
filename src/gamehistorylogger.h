@@ -84,6 +84,8 @@ public:
 			uint32_t summExp = 0;
 			uint32_t oilRigs = 0;
 			uint64_t recentPowerLost = 0;
+			uint64_t recentDroidPowerLost = 0;
+			uint64_t recentStructurePowerLost = 0;
 			uint64_t recentPowerWon = 0;
 			uint64_t recentResearchPotential = 0;
 			uint64_t recentResearchPerformance = 0;
