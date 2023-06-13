@@ -83,6 +83,8 @@
 #include "activity.h"
 #include "clparse.h" // for autorating
 
+#include <fmt/core.h>
+
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
@@ -2867,6 +2869,65 @@ static std::shared_ptr<WIDGET> makeInactivityMinutesMPDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeGameTimeLimitMinutesMPDropdown()
+{
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_GAME_TIME_LIMIT_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
+	const auto paddingSize = 10;
+
+	std::vector<uint32_t> gameTimeLimitMinutesValues;
+	dropdown->addItem(Margin(0, paddingSize).wrap(makeTextButton(0, _("Off"), 0)));
+	gameTimeLimitMinutesValues.push_back(0);
+
+	auto addGameTimeLimitMinutesRow = [&](uint32_t gameTimeLimitMinutes) {
+		std::string buttonText;
+		if (gameTimeLimitMinutes >= 120)
+		{
+			std::string hoursFloatStr = fmt::format("{:#}", static_cast<float>(gameTimeLimitMinutes) / 60.f);
+			buttonText = astringf(_("%s hours"), hoursFloatStr.c_str());
+		}
+		else
+		{
+			buttonText = astringf(_("%u minutes"), gameTimeLimitMinutes);
+		}
+		auto item = makeTextButton(0, buttonText, 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+		gameTimeLimitMinutesValues.push_back(gameTimeLimitMinutes);
+	};
+
+	for (uint32_t gameTimeLimitMinutes = MIN_MPGAMETIMELIMIT_MINUTES; gameTimeLimitMinutes <= (MIN_MPGAMETIMELIMIT_MINUTES + (15 * 10)); gameTimeLimitMinutes += 15)
+	{
+		addGameTimeLimitMinutesRow(gameTimeLimitMinutes);
+	}
+
+	if (!std::any_of(gameTimeLimitMinutesValues.begin(), gameTimeLimitMinutesValues.end(), [](uint32_t gameTimeLimitMinutes) {
+		return gameTimeLimitMinutes == war_getMPGameTimeLimitMinutes();
+	}))
+	{
+		// add the current value, which must be a custom manual config edit
+		addGameTimeLimitMinutesRow(war_getMPGameTimeLimitMinutes());
+	}
+
+	auto it = std::find(gameTimeLimitMinutesValues.begin(), gameTimeLimitMinutesValues.end(), war_getMPGameTimeLimitMinutes());
+	if (it != gameTimeLimitMinutesValues.end())
+	{
+		dropdown->setSelectedIndex(it - gameTimeLimitMinutesValues.begin());
+	}
+
+	dropdown->setOnChange([gameTimeLimitMinutesValues](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			ASSERT_OR_RETURN(, selectedIndex.value() < gameTimeLimitMinutesValues.size(), "Invalid selected index: %zu", selectedIndex.value());
+			uint32_t newGameTimeLimitMinutes = gameTimeLimitMinutesValues[selectedIndex.value()];
+			war_setMPGameTimeLimitMinutes(newGameTimeLimitMinutes);
+			game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
+		}
+	});
+
+	return Margin(0, -paddingSize).wrap(dropdown);
+}
+
 static std::shared_ptr<WIDGET> makeLagKickDropdown()
 {
 	auto dropdown = std::make_shared<DropdownWidget>();
@@ -3001,6 +3062,11 @@ void startMultiplayOptionsMenu()
 	// Spectator Slots
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SPECTATOR_SLOTS, _("Spectator Slots"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeOpenSpectatorSlotsMPDropdown()));
+	row.start++;
+
+	// Game Time Limit
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_GAME_TIME_LIMIT, _("Game Time Limit"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeGameTimeLimitMinutesMPDropdown()));
 	row.start++;
 
 	// Enable Autorating lookup
