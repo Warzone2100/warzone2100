@@ -34,6 +34,7 @@
 #include "clparse.h"
 #include "display3d.h"
 #include "frontend.h"
+#include "flowfield.h"
 #include "keybind.h"
 #include "loadsave.h"
 #include "main.h"
@@ -337,6 +338,7 @@ typedef enum
 	CLI_CONTINUE,
 	CLI_AUTOHOST,
 	CLI_AUTORATING,
+	CLI_FLOWFIELD,
 	CLI_AUTOHEADLESS,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
@@ -416,6 +418,8 @@ static const struct poptOption *getOptionsTable()
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
+		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url (containing \"{HASH}\"), when hosting"), N_("autorating") },
+        { "flowfield", POPT_ARG_NONE, CLI_FLOWFIELD, N_("Use advanced Flow fields method for path finding (experimental)"), nullptr },
 		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url, when hosting"), N_("autorating") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
@@ -959,7 +963,9 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			wz_autoratingUrl = token;
 			debug(LOG_INFO, "Using \"%s\" for ratings.", wz_autoratingUrl.c_str());
 			break;
-
+		case CLI_FLOWFIELD:
+			flowfieldEnable();
+			break;
 		case CLI_AUTOHEADLESS:
 			wz_cli_headless = true;
 			setHeadlessGameMode(true);
@@ -1032,7 +1038,6 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			debug(LOG_INFO, "Games will automatically start with [%d] players (when ready)", wz_min_autostart_players);
 			break;
-
 		};
 	}
 

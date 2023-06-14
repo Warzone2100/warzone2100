@@ -46,6 +46,7 @@
 #include "combat.h"
 #include "multiplay.h"
 #include "qtscript.h"
+#include "flowfield.h"
 
 #include "mapgrid.h"
 #include "display3d.h"
@@ -528,7 +529,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			}
 		}
 	}
-
+	markTileAsDefaultCost(map_coord(psDel->pos.x), map_coord(psDel->pos.y), PROPULSION_TYPE_WHEELED);
 	removeFeature(psDel);
 	psDel->died = impactTime;
 	return true;

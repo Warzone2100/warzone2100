@@ -75,7 +75,7 @@
 #include "game.h"
 #include "droid.h"
 #include "spectatorwidgets.h"
-
+#include "flowfield.h"
 #include "activity.h"
 
 /*
@@ -2625,6 +2625,11 @@ void kf_ToggleSpecOverlays()
 		return;
 	}
 	specToggleOverlays();
+}
+
+void kf_ToggleFlowField()
+{
+	flowfieldToggle();
 }
 
 void keybindShutdown()

@@ -198,7 +198,7 @@ void kf_QuickLoad();
 void kf_ToggleFullscreen();
 
 void kf_ToggleSpecOverlays();
-
+void kf_ToggleFlowField();
 void enableGodMode();
 
 void keybindShutdown();
