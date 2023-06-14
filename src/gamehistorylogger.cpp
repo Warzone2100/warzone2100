@@ -123,6 +123,7 @@ static nlohmann::json convertToOutputJSON(const std::vector<GameStoryLogger::Res
 	{
 		auto j = nlohmann::json::object();
 		j["name"] = event.researchId;
+		j["struct"] = event.structureId;
 		j["time"] = event.gameTime;
 		switch (outputKey)
 		{
@@ -377,6 +378,7 @@ void GameStoryLogger::logResearchCompleted(RESEARCH *psResearch, STRUCTURE *psSt
 
 	GameStoryLogger::ResearchEvent event;
 	event.researchId = psResearch->id;
+	event.structureId = (psStruct != nullptr) ? psStruct->id : 0;
 	event.player = player;
 	event.gameTime = gameTime;
 	researchLog.push_back(event);
@@ -615,12 +617,14 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame& p) {
 inline void to_json(nlohmann::json& j, const GameStoryLogger::ResearchEvent& p) {
 	j = nlohmann::json::object();
 	j["id"] = p.researchId;
+	j["structureId"] = p.structureId;
 	j["player"] = p.player;
 	j["gameTime"] = p.gameTime;
 }
 
 inline void from_json(const nlohmann::json& j, GameStoryLogger::ResearchEvent& p) {
 	p.researchId = j.at("id").get<WzString>();
+	p.structureId = j.at("structureId").get<uint32_t>();
 	p.player = j.at("player").get<int>();
 	p.gameTime = j.at("gameTime").get<uint32_t>();
 }
