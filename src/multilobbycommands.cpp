@@ -25,6 +25,7 @@
 #include "multistat.h"
 #include "multiint.h"
 #include "stdinreader.h"
+#include "clparse.h"
 
 #include <cstring>
 #include <unordered_set>
@@ -534,6 +535,11 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	else if (strncmp(&message.text[LOBBY_COMMAND_PREFIX_LENGTH], "autobalance", 11) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("autobalance");
+		if (!getAutoratingEnable())
+		{
+			sendRoomSystemMessage("Autobalance is only supported when autorating lookup is configured.");
+			return false;
+		}
 		int maxp = std::min<int>(game.maxPlayers, MAX_PLAYERS);
 		if (maxp % 2 != 0)
 		{
