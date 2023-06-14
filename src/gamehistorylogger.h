@@ -99,6 +99,7 @@ public:
 	struct ResearchEvent
 	{
 		WzString researchId;
+		uint32_t structureId = 0;
 		int player = -1;
 		uint32_t gameTime = 0;
 	};
