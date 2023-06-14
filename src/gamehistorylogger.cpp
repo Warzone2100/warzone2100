@@ -529,10 +529,7 @@ nlohmann::json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming n
 	report["researchComplete"] = convertToOutputJSON(researchLog, startingPlayerAttributes, key);
 	report["game"] = buildGameDetailsOutputJSON(gameStartRealTime);
 	report["game"]["timeGameEnd"] = gameTime;
-	if (timeout)
-	{
-		report["game"]["timeout"] = true;
-	}
+	report["game"]["timeout"] = timeout;
 	report["endDate"] = std::chrono::duration_cast<std::chrono::milliseconds>(gameEndRealTime.time_since_epoch()).count();
 
 	return report;
