@@ -70,11 +70,14 @@ static std::tuple<uint32_t, uint32_t> getDroidHPPercentageAndExperience(uint32_t
 		{
 			continue;
 		}
-		totalHP += static_cast<uint64_t>(100.0 / (double)psDroid->originalBody * (double)psDroid->body);
+		if (psDroid->body > 0 && psDroid->originalBody > 0)
+		{
+			totalHP += static_cast<uint64_t>(100.0 / (double)psDroid->originalBody * (double)psDroid->body);
+		}
 		totalExp += static_cast<uint64_t>((double)psDroid->experience / 65536.0);
 		numDroids++;
 	}
-	return std::tuple<uint32_t, uint32_t>(static_cast<uint32_t>(totalHP / numDroids), static_cast<uint32_t>(totalExp));
+	return std::tuple<uint32_t, uint32_t>((numDroids > 0) ? static_cast<uint32_t>(totalHP / numDroids) : 0, static_cast<uint32_t>(totalExp));
 }
 
 static uint32_t getNumOilRigs(uint32_t player)
