@@ -1843,6 +1843,7 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
  * Draw the water.
  * sunPos and cameraPos in Model=WorldSpace
  */
+template<typename PSO>
 void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	if (!waterIndexVBO)
@@ -1859,15 +1860,15 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 	const auto &renderState = getCurrentRenderState();
 
 	ASSERT_OR_RETURN(, waterTextures.tex1 && waterTextures.tex2, "Failed to load water texture");
-	gfx_api::WaterPSO::get().bind();
+	PSO::get().bind();
 
-	gfx_api::WaterPSO::get().bind_textures(
+	PSO::get().bind_textures(
 		waterTextures.tex1, waterTextures.tex2,
 		waterTextures.tex1_nm, waterTextures.tex2_nm,
 		waterTextures.tex1_sm, waterTextures.tex2_sm,
 		waterTextures.tex1_hm, waterTextures.tex2_hm);
-	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
-	gfx_api::WaterPSO::get().bind_constants({
+	PSO::get().bind_vertex_buffers(waterVBO);
+	PSO::get().bind_constants({
 		ModelViewProjection, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
@@ -1883,7 +1884,7 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<gfx_api::WaterPSO>(
+				addDrawRangeElements<PSO>(
 				                     sectors[x * ySectors + y].geometryOffset,
 				                     sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
 				                     sectors[x * ySectors + y].waterIndexSize,
@@ -1891,8 +1892,8 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 			}
 		}
 	}
-	finishDrawRangeElements<gfx_api::WaterPSO>();
-	gfx_api::WaterPSO::get().unbind_vertex_buffers(waterVBO);
+	finishDrawRangeElements<PSO>();
+	PSO::get().unbind_vertex_buffers(waterVBO);
 	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
 
 	// move the water
@@ -1960,13 +1961,18 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 
 void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
-	if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+	switch (terrainShaderQuality)
 	{
-		// already drawn
-		return;
+		case TerrainShaderQuality::CLASSIC:
+			// already drawn
+			return;
+		case TerrainShaderQuality::MEDIUM:
+			drawWaterImpl<gfx_api::WaterPSO>(ModelViewProjection, cameraPos, sunPos);
+			return;
+		case TerrainShaderQuality::NORMAL_MAPPING:
+			drawWaterImpl<gfx_api::WaterHighPSO>(ModelViewProjection, cameraPos, sunPos);
+			return;
 	}
-
-	drawWaterImpl(ModelViewProjection, cameraPos, sunPos);
 }
 
 // MARK: Terrain shader type / quality
