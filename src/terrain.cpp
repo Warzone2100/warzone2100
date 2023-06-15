@@ -1871,7 +1871,7 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 		ModelViewProjection, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
 		waterOffset*10, static_cast<int>(terrainShaderQuality)
 	});
 
