@@ -951,7 +951,22 @@ namespace gfx_api
 		int quality;
 	};
 
-	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_WATER>>,
+	std::tuple<
+	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
+	>, std::tuple<
+		texture_description<0, sampler_type::anisotropic_repeat>, // tex1
+		texture_description<1, sampler_type::anisotropic_repeat>, // tex2
+		texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
+		texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
+		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
+		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
+		texture_description<6, sampler_type::anisotropic_repeat>, // height map1
+		texture_description<7, sampler_type::anisotropic_repeat>  // height map2
+	>, SHADER_WATER>;
+
+	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
 	std::tuple<constant_buffer_type<SHADER_WATER>>,
 	std::tuple<
 	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
