@@ -16,10 +16,10 @@ uniform vec4 ambientLight;
 uniform vec4 diffuseLight;
 uniform vec4 specularLight;
 
+uniform vec4 fogColor;
 uniform int fogEnabled; // whether fog is enabled
 uniform float fogEnd;
 uniform float fogStart;
-uniform vec4 fogColor;
 
 uniform int quality; // 0-classic, 1-bumpmapping
 
@@ -30,17 +30,17 @@ uniform int quality; // 0-classic, 1-bumpmapping
 #endif
 
 #ifdef NEWGL
-in vec2 uv1;
-in vec2 uv2;
+in vec4 uv1_uv2;
 in float depth;
+in float depth2;
 in float vertexDistance;
 // light in modelSpace:
 in vec3 lightDir;
 in vec3 halfVec;
 #else
-varying vec2 uv1;
-varying vec2 uv2;
+varying vec4 uv1_uv2;
 varying float depth;
+varying float depth2;
 varying float vertexDistance;
 varying vec3 lightDir;
 varying vec3 halfVec;
@@ -54,6 +54,8 @@ out vec4 FragColor;
 
 vec4 main_medium()
 {
+	vec2 uv1 = uv1_uv2.xy;
+	vec2 uv2 = uv1_uv2.zw;
 	vec4 fragColor = texture(tex1, uv1);
 	float specColor = texture(tex2, uv2).r;
 	fragColor *= vec4(specColor, specColor, specColor, 1.0);
@@ -62,10 +64,11 @@ vec4 main_medium()
 
 vec4 main_bumpMapping()
 {
-	vec4 fragColor = texture(tex1, uv1) * texture(tex2, uv2);
+	vec2 uv1 = uv1_uv2.xy;
+	vec2 uv2 = uv1_uv2.zw;
 
-	vec3 N1 = texture(tex1_nm, uv1).xzy; // y is up in modelSpace
-	vec3 N2 = texture(tex2_nm, uv2).xzy;
+	vec3 N1 = texture(tex1_nm, uv2).xzy; // y is up in modelSpace
+	vec3 N2 = texture(tex2_nm, uv1).xzy;
 	vec3 N; //use overlay blending to mix normal maps properly
 	N.x = N1.x < 0.5 ? (2 * N1.x * N2.x) : (1 - 2 * (1 - N1.x) * (1 - N2.x));
 	N.z = N1.z < 0.5 ? (2 * N1.z * N2.z) : (1 - 2 * (1 - N1.z) * (1 - N2.z));
@@ -79,13 +82,13 @@ vec4 main_bumpMapping()
 	float lambertTerm = max(dot(N, lightDir), 0.0); // diffuse lighting
 
 	// Gaussian specular term computation
+	float gloss = texture(tex1_sm, uv1).r * texture(tex2_sm, uv2).r;
 	vec3 H = normalize(halfVec);
-	float exponent = acos(dot(H, N)) / 0.95;
+	float exponent = acos(dot(H, N)) / (gloss + 0.05);
 	float gaussianTerm = exp(-(exponent * exponent));
 
-	vec4 gloss = vec4(vec3(texture(tex1_sm, uv1).r), 1) * vec4(vec3(texture(tex2_sm, uv2).r), 1);
-
-	return fragColor*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
+	vec4 fragColor = (texture(tex1, uv1)+texture(tex2, uv2)) * (gloss+vec4(0.08,0.13,0.15,1.0));
+	return fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
 }
 
 void main()
@@ -93,6 +96,8 @@ void main()
 	vec4 fragColor;
 	if (quality == 2) {
 		fragColor = main_bumpMapping();
+		fragColor = mix(fragColor, fragColor-depth*0.0007, depth*0.0009);
+		fragColor.a = mix(0.25, 1.0, depth2*0.005);
 	} else {
 		fragColor = main_medium();
 	}
@@ -104,7 +109,7 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColor = mix(fragColor, vec4(1), fogFactor);
+		fragColor = mix(fragColor, fogColor, fogFactor);
 	}
 
 	FragColor = fragColor;
