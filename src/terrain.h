@@ -24,6 +24,7 @@
 #include <glm/fwd.hpp>
 #include "lib/ivis_opengl/pietypes.h"
 #include <wzmaplib/terrain_type.h>
+#include "terrain_defs.h"
 
 void loadTerrainTextures(MAP_TILESET mapTileset);
 
@@ -37,14 +38,6 @@ PIELIGHT getTileColour(int x, int y);
 void setTileColour(int x, int y, PIELIGHT colour);
 
 void markTileDirty(int i, int j);
-
-enum TerrainShaderQuality
-{
-	CLASSIC = 0, // classic, pixel-art, tile-based textures
-	MEDIUM = 1, // the mode used by at least WZ 3.2.x - 4.3.x
-	NORMAL_MAPPING = 2	// the highest-quality mode, which adds normal / specular / height maps and advanced lighting
-};
-constexpr TerrainShaderQuality TerrainShaderQuality_MAX = TerrainShaderQuality::NORMAL_MAPPING;
 
 enum TerrainShaderType
 {
