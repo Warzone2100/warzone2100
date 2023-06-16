@@ -6,11 +6,11 @@ layout(set = 1, binding = 2) uniform sampler2D tex1_nm;
 layout(set = 1, binding = 3) uniform sampler2D tex2_nm;
 layout(set = 1, binding = 4) uniform sampler2D tex1_sm;
 layout(set = 1, binding = 5) uniform sampler2D tex2_sm;
-layout(set = 1, binding = 6) uniform sampler2D tex1_hm;
-layout(set = 1, binding = 7) uniform sampler2D tex2_hm;
+layout(set = 1, binding = 6) uniform sampler2D lightmap_tex;
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
+	mat4 ModelUVLightmapMatrix;
 	mat4 ModelUV1Matrix;
 	mat4 ModelUV2Matrix;
 	vec4 cameraPos; // in modelSpace
@@ -28,11 +28,12 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 };
 
 layout(location = 1) in vec4 uv1_uv2;
-layout(location = 2) in float vertexDistance;
-layout(location = 3) in vec3 lightDir;
-layout(location = 4) in vec3 halfVec;
-layout(location = 5) in float depth;
-layout(location = 6) in float depth2;
+layout(location = 2) in vec2 uvLightmap;
+layout(location = 3) in float vertexDistance;
+layout(location = 4) in vec3 lightDir;
+layout(location = 5) in vec3 halfVec;
+layout(location = 6) in float depth;
+layout(location = 7) in float depth2;
 
 layout(location = 0) out vec4 FragColor;
 
