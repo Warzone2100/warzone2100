@@ -801,8 +801,6 @@ struct WaterTextures
 	gfx_api::texture* tex2_nm = nullptr;
 	gfx_api::texture* tex1_sm = nullptr;
 	gfx_api::texture* tex2_sm = nullptr;
-	gfx_api::texture* tex1_hm = nullptr;
-	gfx_api::texture* tex2_hm = nullptr;
 
 public:
 	void clear()
@@ -813,8 +811,6 @@ public:
 		delete tex2_nm; tex2_nm = nullptr;
 		delete tex1_sm; tex1_sm = nullptr;
 		delete tex2_sm; tex2_sm = nullptr;
-		delete tex1_hm; tex1_hm = nullptr;
-		delete tex2_hm; tex2_hm = nullptr;
 	}
 };
 static WaterTextures waterTextures;
@@ -942,8 +938,6 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	waterTextures.tex2_nm = checkTex("page-81-water-2_nm.png", gfx_api::texture_type::normal_map);
 	waterTextures.tex1_sm = checkTex("page-80-water-1_sm.png", gfx_api::texture_type::specular_map);
 	waterTextures.tex2_sm = checkTex("page-81-water-2_sm.png", gfx_api::texture_type::specular_map);
-	waterTextures.tex1_hm = checkTex("page-80-water-1_hm.png", gfx_api::texture_type::height_map);
-	waterTextures.tex2_hm = checkTex("page-81-water-2_hm.png", gfx_api::texture_type::height_map);
 }
 
 void loadTerrainTextures(MAP_TILESET mapTileset)
@@ -1851,6 +1845,12 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 		return; // no water
 	}
 
+	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
+	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
+	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
+	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
+	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+
 	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
@@ -1866,10 +1866,10 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 		waterTextures.tex1, waterTextures.tex2,
 		waterTextures.tex1_nm, waterTextures.tex2_nm,
 		waterTextures.tex1_sm, waterTextures.tex2_sm,
-		waterTextures.tex1_hm, waterTextures.tex2_hm);
+		lightmap_texture);
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
-		ModelViewProjection, ModelUV1, ModelUV2,
+		ModelViewProjection, ModelUVLightmap, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,

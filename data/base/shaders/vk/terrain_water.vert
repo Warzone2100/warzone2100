@@ -2,6 +2,7 @@
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
+	mat4 ModelUVLightmapMatrix;
 	mat4 ModelUV1Matrix;
 	mat4 ModelUV2Matrix;
 	vec4 cameraPos; // in modelSpace
@@ -21,14 +22,16 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 layout(location = 0) in vec4 vertex; // .w is depth
 
 layout(location = 1) out vec4 uv1_uv2;
-layout(location = 2) out float vertexDistance;
-layout(location = 3) out vec3 lightDir;
-layout(location = 4) out vec3 halfVec;
-layout(location = 5) out float depth;
-layout(location = 6) out float depth2;
+layout(location = 2) out vec2 uvLightmap;
+layout(location = 3) out float vertexDistance;
+layout(location = 4) out vec3 lightDir;
+layout(location = 5) out vec3 halfVec;
+layout(location = 6) out float depth;
+layout(location = 7) out float depth2;
 
 void main()
 {
+	uvLightmap = (ModelUVLightmapMatrix * vec4(vertex.xyz, 1)).xy;
 	depth = vertex.w;
 	depth2 = length(vertex.y - vertex.w);
 

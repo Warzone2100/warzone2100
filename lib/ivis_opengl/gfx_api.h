@@ -935,6 +935,7 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_WATER>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUVLightmapMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
 		glm::vec4 cameraPos; // in modelSpace
@@ -962,8 +963,7 @@ namespace gfx_api
 		texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
 		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
 		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
-		texture_description<6, sampler_type::anisotropic_repeat>, // height map1
-		texture_description<7, sampler_type::anisotropic_repeat>  // height map2
+		texture_description<6, sampler_type::bilinear> // lightmap
 	>, SHADER_WATER>;
 
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -977,15 +977,14 @@ namespace gfx_api
 		texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
 		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
 		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
-		texture_description<6, sampler_type::anisotropic_repeat>, // height map1
-		texture_description<7, sampler_type::anisotropic_repeat>  // height map2
+		texture_description<6, sampler_type::bilinear> // lightmap
 	>, SHADER_WATER>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER_CLASSIC>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 ModelUVLightmapMatrix; // only used by "legacy" water shader
+		glm::mat4 ModelUVLightmapMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
 		glm::vec4 cameraPos; // in modelSpace

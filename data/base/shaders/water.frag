@@ -7,8 +7,7 @@ uniform sampler2D tex1_nm;
 uniform sampler2D tex2_nm;
 uniform sampler2D tex1_sm;
 uniform sampler2D tex2_sm;
-uniform sampler2D tex1_hm;
-uniform sampler2D tex2_hm;
+uniform sampler2D lightmap_tex;
 
 // light colors/intensity:
 uniform vec4 emissiveLight;
@@ -31,6 +30,7 @@ uniform int quality; // 0-classic, 1-bumpmapping
 
 #ifdef NEWGL
 in vec4 uv1_uv2;
+in vec2 uvLightmap;
 in float depth;
 in float depth2;
 in float vertexDistance;
@@ -39,6 +39,7 @@ in vec3 lightDir;
 in vec3 halfVec;
 #else
 varying vec4 uv1_uv2;
+varying vec2 uvLightmap;
 varying float depth;
 varying float depth2;
 varying float vertexDistance;

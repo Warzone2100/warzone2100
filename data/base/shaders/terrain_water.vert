@@ -2,6 +2,7 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 uniform mat4 ModelViewProjectionMatrix;
+uniform mat4 ModelUVLightmapMatrix;
 uniform mat4 ModelUV1Matrix;
 uniform mat4 ModelUV2Matrix;
 
@@ -18,6 +19,7 @@ attribute vec4 vertex;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec4 uv1_uv2;
+out vec2 uvLightmap;
 out float depth;
 out float depth2;
 out float vertexDistance;
@@ -26,6 +28,7 @@ out vec3 lightDir;
 out vec3 halfVec;
 #else
 varying vec4 uv1_uv2;
+varying vec2 uvLightmap;
 varying float depth;
 varying float depth2;
 varying float vertexDistance;
@@ -35,6 +38,7 @@ varying vec3 halfVec;
 
 void main()
 {
+	uvLightmap = (ModelUVLightmapMatrix * vec4(vertex.xyz, 1)).xy;
 	depth = vertex.w;
 	depth2 = length(vertex.y - vertex.w);
 
