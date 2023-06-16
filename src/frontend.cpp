@@ -925,7 +925,12 @@ static std::shared_ptr<WIDGET> makeTerrainQualityDropdown()
 
 	for (const auto& option : dropDownChoices)
 	{
-		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), isSupportedTerrainShaderQualityOption(std::get<1>(option)) ? 0 : WBUT_DISABLE);
+		bool supportedMode = isSupportedTerrainShaderQualityOption(std::get<1>(option));
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), supportedMode ? 0 : WBUT_DISABLE);
+		if (!supportedMode)
+		{
+			item->setTip(_("Terrain quality mode not available."));
+		}
 		dropdown->addItem(Margin(0, paddingSize).wrap(item));
 	}
 
@@ -934,6 +939,10 @@ static std::shared_ptr<WIDGET> makeTerrainQualityDropdown()
 	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
 		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
 		auto newMode = std::get<1>(dropDownChoices.at(newIndex));
+		if (!isSupportedTerrainShaderQualityOption(newMode))
+		{
+			return false;
+		}
 		if (!setTerrainShaderQuality(newMode))
 		{
 			debug(LOG_ERROR, "Failed to set terrain shader quality: %s", to_display_string(newMode).c_str());

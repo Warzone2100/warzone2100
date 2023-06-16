@@ -1035,6 +1035,10 @@ private:
 		{
 			WzString buttonLabel = std::get<0>(option);
 			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			if (!isSupportedTerrainShaderQualityOption(std::get<1>(option)))
+			{
+				button->setState(WBUT_DISABLE);
+			}
 			dropdown->addItem(button);
 		}
 
@@ -1043,6 +1047,10 @@ private:
 		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
 			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
 			auto newMode = std::get<1>(dropDownChoices.at(newIndex));
+			if (!isSupportedTerrainShaderQualityOption(newMode))
+			{
+				return false;
+			}
 			if (!setTerrainShaderQuality(newMode))
 			{
 				debug(LOG_ERROR, "Failed to set terrain shader quality: %s", to_display_string(newMode).c_str());

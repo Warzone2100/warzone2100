@@ -118,6 +118,8 @@ static std::string inMemoryMapVirtualFilenameUID;
 static std::vector<uint8_t> inMemoryMapArchiveData;
 static size_t inMemoryMapArchiveMounted = 0;
 
+static optional<std::vector<TerrainShaderQuality>> cachedAvailableTerrainShaderQualityTextures;
+
 struct WZmapInfo
 {
 public:
@@ -259,6 +261,7 @@ bool loadLevFile_JSON(const std::string& mountPoint, const std::string& filename
 static void cleanSearchPath()
 {
 	searchPathRegistry.clear();
+	cachedAvailableTerrainShaderQualityTextures.reset();
 }
 
 
@@ -284,6 +287,8 @@ void registerSearchPath(const std::string& newPath, unsigned int priority)
 		return a->priority < b->priority;
 	});
 	searchPathRegistry.insert(insert_pos, std::move(tmpSearchPath));
+
+	cachedAvailableTerrainShaderQualityTextures.reset();
 }
 
 void unregisterSearchPath(const std::string& path)
@@ -300,6 +305,8 @@ void unregisterSearchPath(const std::string& path)
 
 		++it;
 	}
+
+	cachedAvailableTerrainShaderQualityTextures.reset();
 }
 
 std::list<std::string> getPhysFSSearchPathsAsStr()
@@ -455,9 +462,9 @@ bool rebuildExistingSearchPathWithGraphicsOptionChange()
 	return result;
 }
 
-optional<std::string> getCurrentTerrainOverrideBaseSourcePath()
-{
-	switch (getTerrainShaderQuality())
+optional<std::string> getTerrainOverrideBaseSourcePath(TerrainShaderQuality quality)
+ {
+	switch (quality)
 	{
 		case TerrainShaderQuality::CLASSIC:
 			return "terrain_overrides/classic";
@@ -467,6 +474,92 @@ optional<std::string> getCurrentTerrainOverrideBaseSourcePath()
 			return "terrain_overrides/high";
 	}
 	return nullopt; // silence compiler warning
+ }
+
+optional<std::string> getCurrentTerrainOverrideBaseSourcePath()
+{
+	return getTerrainOverrideBaseSourcePath(getTerrainShaderQuality());
+}
+
+std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures()
+{
+	// Cached result, which is invalidated with any calls to: cleanSearchPath / registerSearchPath / unregisterSearchPath
+	if (cachedAvailableTerrainShaderQualityTextures.has_value())
+	{
+		return cachedAvailableTerrainShaderQualityTextures.value();
+	}
+
+	std::vector<TerrainShaderQuality> result;
+	auto allQualities = getAllTerrainShaderQualityOptions();
+
+	auto checkValidTerrainOverridesPath = [](const std::string& terrainOverridesPlatformDependentPath) -> bool {
+		if (PHYSFS_mount(terrainOverridesPlatformDependentPath.c_str(), "WZTerrainOverrideTest", PHYSFS_APPEND) == 0)
+		{
+			return false;
+		}
+
+		bool validTerrainOverridesPackage = false;
+
+		// Sanity check: For texpages and/or tileset folder(s)
+		if (WZ_PHYSFS_isDirectory("WZTerrainOverrideTest/texpages"))
+		{
+			validTerrainOverridesPackage = true;
+		}
+		if (!validTerrainOverridesPackage && WZ_PHYSFS_isDirectory("WZTerrainOverrideTest/tileset"))
+		{
+			validTerrainOverridesPackage = true;
+		}
+
+		if (!WZ_PHYSFS_unmount(terrainOverridesPlatformDependentPath.c_str()))
+		{
+			debug(LOG_WZ, "* Failed to remove path %s again", terrainOverridesPlatformDependentPath.c_str());
+		}
+
+		return validTerrainOverridesPackage;
+	};
+
+	std::string tmpstr;
+	for (const auto& quality : allQualities)
+	{
+		auto textureOverrideBaseSourcePath = getTerrainOverrideBaseSourcePath(quality);
+		bool foundTexturePack = false;
+		if (textureOverrideBaseSourcePath.has_value())
+		{
+			// Check all search paths for this folder or .wz file
+			for (const auto& curSearchPath : searchPathRegistry)
+			{
+				// Check <path> (folder)
+				tmpstr = curSearchPath->path + textureOverrideBaseSourcePath.value();
+				if (checkValidTerrainOverridesPath(tmpstr))
+				{
+					foundTexturePack = true;
+					break;
+				}
+
+				// Check <path>.wz
+				tmpstr += ".wz";
+				if (checkValidTerrainOverridesPath(tmpstr))
+				{
+					foundTexturePack = true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			// quality doesn’t need a separate texture pack - always available
+			foundTexturePack = true;
+		}
+
+		if (foundTexturePack)
+		{
+			result.push_back(quality);
+		}
+	}
+
+	cachedAvailableTerrainShaderQualityTextures = result;
+
+	return result;
 }
 
 /*!

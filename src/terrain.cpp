@@ -2031,9 +2031,35 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force, bool for
 		success = (newValue == TerrainShaderQuality::MEDIUM);
 		break;
 	case TerrainShaderType::SINGLE_PASS:
-		// all quality modes are supported
-		terrainShaderQuality = newValue;
-		success = true;
+		// all quality modes are supported by shader
+		// but check if texture pack is available
+		if (isSupportedTerrainShaderQualityOption(newValue))
+		{
+			terrainShaderQuality = newValue;
+			success = true;
+		}
+		else
+		{
+			// texture pack is not available
+			terrainShaderQuality = priorValue;
+			if (newValue != priorValue)
+			{
+				debug(LOG_INFO, "Missing texture pack for %s terrain quality - reverting to %s terrain quality", to_display_string(newValue).c_str(), to_display_string(priorValue).c_str());
+				success = false;
+			}
+			else
+			{
+				// need to pick another supported value
+				auto supportedModes = getAvailableTerrainShaderQualityTextures();
+				if (!supportedModes.empty())
+				{
+					debug(LOG_INFO, "Missing texture pack for %s terrain quality - reverting to %s terrain quality", to_display_string(newValue).c_str(), to_display_string(supportedModes.back()).c_str());
+					terrainShaderQuality = supportedModes.back();
+					success = true;
+				}
+			}
+			newValue = terrainShaderQuality;
+		}
 		break;
 	}
 
@@ -2084,6 +2110,7 @@ std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions()
 bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value)
 {
 	ASSERT_OR_RETURN(false, initializedTerrainShaderType, "Should only be called after graphics context initialization");
+	auto supportedModes = getAvailableTerrainShaderQualityTextures();
 	switch (terrainShaderType)
 	{
 	case TerrainShaderType::FALLBACK:
@@ -2091,7 +2118,7 @@ bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value)
 		return value == TerrainShaderQuality::MEDIUM;
 	case TerrainShaderType::SINGLE_PASS:
 		// all quality modes are supported
-		return true;
+		return std::any_of(supportedModes.begin(), supportedModes.end(), [value](TerrainShaderQuality supportedQuality) { return supportedQuality == value; });
 	}
 	return false; // silence compiler warning
 }
