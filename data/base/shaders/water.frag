@@ -28,28 +28,20 @@ uniform int quality; // 0-classic, 1-bumpmapping
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
+#define FRAGMENT_INPUT in
 #else
 #define texture(tex,uv,bias) texture2D(tex,uv,bias)
+#define FRAGMENT_INPUT varying
 #endif
 
-#ifdef NEWGL
-in vec4 uv1_uv2;
-in vec2 uvLightmap;
-in float depth;
-in float depth2;
-in float vertexDistance;
+FRAGMENT_INPUT vec4 uv1_uv2;
+FRAGMENT_INPUT vec2 uvLightmap;
+FRAGMENT_INPUT float depth;
+FRAGMENT_INPUT float depth2;
+FRAGMENT_INPUT float vertexDistance;
 // light in modelSpace:
-in vec3 lightDir;
-in vec3 halfVec;
-#else
-varying vec4 uv1_uv2;
-varying vec2 uvLightmap;
-varying float depth;
-varying float depth2;
-varying float vertexDistance;
-varying vec3 lightDir;
-varying vec3 halfVec;
-#endif
+FRAGMENT_INPUT vec3 lightDir;
+FRAGMENT_INPUT vec3 halfVec;
 
 #ifdef NEWGL
 out vec4 FragColor;

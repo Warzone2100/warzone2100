@@ -1,6 +1,10 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#define NEWGL
+#endif
+
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVLightmapMatrix;
 uniform mat4 ModelUV1Matrix;
@@ -11,25 +15,21 @@ uniform float timeSec;
 uniform vec4 cameraPos; // in modelSpace
 uniform vec4 sunPos; // in modelSpace, normalized
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-in vec4 vertex; // w is depth
+#ifdef NEWGL
+#define VERTEX_INPUT in
+#define VERTEX_OUTPUT out
 #else
-attribute vec4 vertex;
+#define VERTEX_INPUT attribute
+#define VERTEX_OUTPUT varying
 #endif
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-out vec2 uvLightmap;
-out vec2 uv1;
-out vec2 uv2;
-out float depth;
-out float vertexDistance;
-#else
-varying vec2 uvLightmap;
-varying vec2 uv1;
-varying vec2 uv2;
-varying float depth;
-varying float vertexDistance;
-#endif
+VERTEX_INPUT vec4 vertex; // w is depth
+
+VERTEX_OUTPUT vec2 uvLightmap;
+VERTEX_OUTPUT vec2 uv1;
+VERTEX_OUTPUT vec2 uv2;
+VERTEX_OUTPUT float depth;
+VERTEX_OUTPUT float vertexDistance;
 
 void main()
 {
