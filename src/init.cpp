@@ -498,14 +498,25 @@ std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures()
 			return false;
 		}
 
+		// Get the actual mount point for this archive
+		// (Why? Because it could have been mounted *before* this check at a different location, if it's the currently-selected terrain override pack and is present...)
+		const char* mountPoint = PHYSFS_getMountPoint(terrainOverridesPlatformDependentPath.c_str());
+		std::string actualMountPoint = (mountPoint) ? mountPoint : "WZTerrainOverrideTest";
+		if (!strEndsWith(actualMountPoint, "/"))
+		{
+			actualMountPoint += "/";
+		}
+
 		bool validTerrainOverridesPackage = false;
 
 		// Sanity check: For texpages and/or tileset folder(s)
-		if (WZ_PHYSFS_isDirectory("WZTerrainOverrideTest/texpages"))
+		std::string checkFolder = actualMountPoint + "texpages";
+		if (WZ_PHYSFS_isDirectory(checkFolder.c_str()))
 		{
 			validTerrainOverridesPackage = true;
 		}
-		if (!validTerrainOverridesPackage && WZ_PHYSFS_isDirectory("WZTerrainOverrideTest/tileset"))
+		checkFolder = actualMountPoint + "tileset";
+		if (!validTerrainOverridesPackage && WZ_PHYSFS_isDirectory(checkFolder.c_str()))
 		{
 			validTerrainOverridesPackage = true;
 		}
@@ -811,7 +822,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		{
 			if (!loadedTerrainTextureOverrides)
 			{
-				debug(LOG_ERROR, "Failed to load expected terrain quality overrides: %s", (terrainQualityOverrideBasePath.value().c_str()));
+				debug(LOG_INFO, "Failed to load expected terrain quality overrides: %s", (terrainQualityOverrideBasePath.value().c_str()));
 			}
 		}
 
