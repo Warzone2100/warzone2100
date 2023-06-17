@@ -15,23 +15,17 @@ uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
+#define FRAGMENT_INPUT in
 #else
-#define texture(tex,uv) texture2D(tex,uv)
+#define texture(tex,uv,bias) texture2D(tex,uv,bias)
+#define FRAGMENT_INPUT varying
 #endif
 
-#ifdef NEWGL
-in vec2 uvLightmap;
-in vec2 uv1;
-in vec2 uv2;
-in float depth;
-in float vertexDistance;
-#else
-varying vec2 uvLightmap;
-varying vec2 uv1;
-varying vec2 uv2;
-varying float depth;
-varying float vertexDistance;
-#endif
+FRAGMENT_INPUT vec2 uvLightmap;
+FRAGMENT_INPUT vec2 uv1;
+FRAGMENT_INPUT vec2 uv2;
+FRAGMENT_INPUT float depth;
+FRAGMENT_INPUT float vertexDistance;
 
 #ifdef NEWGL
 out vec4 FragColor;
