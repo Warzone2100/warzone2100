@@ -1,6 +1,10 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
+// constants overridden by WZ when loading shaders (do not modify here in the shader source!)
+#define WZ_MIP_LOAD_BIAS 0.f
+//
+
 uniform sampler2D tex1;
 uniform sampler2D tex2;
 uniform sampler2D tex1_nm;
@@ -25,7 +29,7 @@ uniform int quality; // 0-classic, 1-bumpmapping
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
 #else
-#define texture(tex,uv) texture2D(tex,uv)
+#define texture(tex,uv,bias) texture2D(tex,uv,bias)
 #endif
 
 #ifdef NEWGL
@@ -57,8 +61,8 @@ vec4 main_medium()
 {
 	vec2 uv1 = uv1_uv2.xy;
 	vec2 uv2 = uv1_uv2.zw;
-	vec4 fragColor = texture(tex1, uv1);
-	float specColor = texture(tex2, uv2).r;
+	vec4 fragColor = texture(tex1, uv1, WZ_MIP_LOAD_BIAS);
+	float specColor = texture(tex2, uv2, WZ_MIP_LOAD_BIAS).r;
 	fragColor *= vec4(specColor, specColor, specColor, 1.0);
 	return fragColor;
 }
@@ -68,8 +72,8 @@ vec4 main_bumpMapping()
 	vec2 uv1 = uv1_uv2.xy;
 	vec2 uv2 = uv1_uv2.zw;
 
-	vec3 N1 = texture(tex1_nm, uv2).xzy; // y is up in modelSpace
-	vec3 N2 = texture(tex2_nm, uv1).xzy;
+	vec3 N1 = texture(tex1_nm, uv2, WZ_MIP_LOAD_BIAS).xzy; // y is up in modelSpace
+	vec3 N2 = texture(tex2_nm, uv1, WZ_MIP_LOAD_BIAS).xzy;
 	vec3 N; //use overlay blending to mix normal maps properly
 	N.x = N1.x < 0.5 ? (2 * N1.x * N2.x) : (1 - 2 * (1 - N1.x) * (1 - N2.x));
 	N.z = N1.z < 0.5 ? (2 * N1.z * N2.z) : (1 - 2 * (1 - N1.z) * (1 - N2.z));
@@ -83,14 +87,14 @@ vec4 main_bumpMapping()
 	float lambertTerm = max(dot(N, lightDir), 0.0); // diffuse lighting
 
 	// Gaussian specular term computation
-	float gloss = texture(tex1_sm, uv1).r * texture(tex2_sm, uv2).r;
+	float gloss = texture(tex1_sm, uv1, WZ_MIP_LOAD_BIAS).r * texture(tex2_sm, uv2, WZ_MIP_LOAD_BIAS).r;
 	vec3 H = normalize(halfVec);
 	float exponent = acos(dot(H, N)) / (gloss + 0.05);
 	float gaussianTerm = exp(-(exponent * exponent));
 
-	vec4 fragColor = (texture(tex1, uv1)+texture(tex2, uv2)) * (gloss+vec4(0.08,0.13,0.15,1.0));
+	vec4 fragColor = (texture(tex1, uv1, WZ_MIP_LOAD_BIAS)+texture(tex2, uv2, WZ_MIP_LOAD_BIAS)) * (gloss+vec4(0.08,0.13,0.15,1.0));
 	fragColor = fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
-	vec4 light = texture(lightmap_tex, uvLightmap);
+	vec4 light = texture(lightmap_tex, uvLightmap, 0.f);
 	return light * fragColor;
 }
 
