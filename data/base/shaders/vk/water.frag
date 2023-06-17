@@ -72,7 +72,9 @@ vec4 main_bumpMapping()
 	float gaussianTerm = exp(-(exponent * exponent));
 
 	vec4 fragColor = (texture(tex1, uv1)+texture(tex2, uv2)) * (gloss+vec4(0.08,0.13,0.15,1.0));
-	return fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
+	fragColor = fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
+	vec4 light = texture(lightmap_tex, uvLightmap, 0.f);
+	return light * fragColor;
 }
 
 void main()
