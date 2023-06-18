@@ -952,7 +952,18 @@ public:
 		}, prevButton);
 		prevButton = panel->createButton(1, "Recompile water", [](){
 			debug(LOG_INFO, "Recompiling water");
-			gfx_api::WaterPSO::get().recompile();
+			switch (getTerrainShaderQuality())
+			{
+				case TerrainShaderQuality::CLASSIC:
+					gfx_api::WaterClassicPSO::get().recompile();
+					break;
+				case TerrainShaderQuality::MEDIUM:
+					gfx_api::WaterPSO::get().recompile();
+					break;
+				case TerrainShaderQuality::NORMAL_MAPPING:
+					gfx_api::WaterHighPSO::get().recompile();
+					break;
+			}
 			debug(LOG_INFO, "Done");
 		}, prevButton);
 
