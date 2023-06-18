@@ -176,4 +176,11 @@
 #cmakedefine WZ_LOCALEDIR "@WZ_LOCALEDIR@"
 #cmakedefine WZ_LOCALEDIR_ISABSOLUTE
 
+/* Enables profiling instrumentation. */
+#cmakedefine WZ_PROFILING_INSTRUMENTATION
+/* Enables usage of NVTX-based instrumentation backend. */
+#cmakedefine WZ_PROFILING_NVTX
+/* Enables usage of VTune-based instrumentation backend. */
+#cmakedefine WZ_PROFILING_VTUNE
+
 #endif // __INCLUDED_WZ_GENERATED_CONFIG_H__

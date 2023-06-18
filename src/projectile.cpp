@@ -57,6 +57,7 @@
 #include "mapgrid.h"
 #include "random.h"
 #include "display3d.h"
+#include "profiling.h"
 
 #include <algorithm>
 #include <functional>
@@ -1370,6 +1371,7 @@ void PROJECTILE::update()
 // iterate through all projectiles and update their status
 void proj_UpdateAll()
 {
+	WZ_PROFILE_SCOPE(proj_UpdateAll);
 	std::vector<PROJECTILE *> psProjectileListOld = psProjectileList;
 
 	// Update all projectiles. Penetrating projectiles may add to psProjectileList.

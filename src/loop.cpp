@@ -85,6 +85,7 @@
 #include "scores.h"
 #include "clparse.h"
 #include "gamehistorylogger.h"
+#include "profiling.h"
 
 #include "warzoneconfig.h"
 
@@ -136,6 +137,7 @@ LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 
 static GAMECODE renderLoop()
 {
+	WZ_PROFILE_SCOPE(renderLoop);
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
 		intAddInGamePopup();
@@ -322,6 +324,7 @@ static GAMECODE renderLoop()
 			displayWorld();
 		}
 		wzPerfBegin(PERF_GUI, "User interface");
+		WZ_PROFILE_SCOPE(DrawUI);
 		/* Display the in game interface */
 		pie_SetFogStatus(false);
 
@@ -493,6 +496,7 @@ void countUpdate(bool synch)
 
 static void gameStateUpdate()
 {
+	WZ_PROFILE_SCOPE(gameStateUpdate);
 	syncDebug("map = \"%s\", pseudorandom 32-bit integer = 0x%08X, allocated = %d %d %d %d %d %d %d %d %d %d, position = %d %d %d %d %d %d %d %d %d %d", game.map, gameRandU32(),
 	          NetPlay.players[0].allocated, NetPlay.players[1].allocated, NetPlay.players[2].allocated, NetPlay.players[3].allocated, NetPlay.players[4].allocated, NetPlay.players[5].allocated, NetPlay.players[6].allocated, NetPlay.players[7].allocated, NetPlay.players[8].allocated, NetPlay.players[9].allocated,
 	          NetPlay.players[0].position, NetPlay.players[1].position, NetPlay.players[2].position, NetPlay.players[3].position, NetPlay.players[4].position, NetPlay.players[5].position, NetPlay.players[6].position, NetPlay.players[7].position, NetPlay.players[8].position, NetPlay.players[9].position
@@ -617,6 +621,7 @@ void setMaxFastForwardTicks(optional<size_t> value, bool fixedToNormalTickRate)
 /* The main game loop */
 GAMECODE gameLoop()
 {
+	WZ_PROFILE_SCOPE(gameLoop);
 	static uint32_t lastFlushTime = 0;
 
 	static size_t numForcedUpdatesLastCall = 0;
