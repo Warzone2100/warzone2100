@@ -51,7 +51,7 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColor = mix(fragColor, vec4(1), fogFactor);
+		fragColor = mix(fragColor, fogColor, fogFactor);
 	}
 
 	FragColor = fragColor;
