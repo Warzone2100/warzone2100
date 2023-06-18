@@ -48,6 +48,7 @@
 #include "multiplay.h"
 #include "qtscript.h"
 #include "wavecast.h"
+#include "profiling.h"
 
 // accuracy for the height gradient
 #define GRAD_MUL 10000
@@ -833,6 +834,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj, bool& addedMessage)
 
 void processVisibility()
 {
+	WZ_PROFILE_SCOPE(processVisibility);
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{

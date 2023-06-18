@@ -39,6 +39,7 @@
 #include "astar.h"
 
 #include "fpath.h"
+#include "profiling.h"
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
@@ -86,6 +87,7 @@ static int fpathThreadFunc(void *)
 			continue;
 		}
 
+		WZ_PROFILE_SCOPE(fpathJob);
 		// Copy the first job from the queue.
 		packagedPathJob job = std::move(pathJobs.front());
 		pathJobs.pop_front();

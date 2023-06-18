@@ -123,6 +123,10 @@ find_package(SQLite3 3.14 REQUIRED)
 target_link_libraries(warzone2100 SQLite::SQLite3)
 target_link_libraries(warzone2100 SQLiteCpp)
 
+if (WZ_PROFILING_NVTX)
+	target_include_directories(warzone2100 PRIVATE ${PROFILING_NVTX_INCLUDE})
+endif()
+
 set(_curl_gnutls_thread_safe_fix FALSE)
 if (DEFINED CURL_GNUTLS_REQUIRES_CALLBACKS)
 	if (CURL_GNUTLS_REQUIRES_CALLBACKS STREQUAL "YES")
