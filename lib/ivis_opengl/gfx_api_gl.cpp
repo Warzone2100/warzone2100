@@ -3557,6 +3557,23 @@ size_t gl_context::maxFramesInFlight() const
 	return 2;
 }
 
+static const char *cbframebuffererror(GLenum err)
+{
+	switch (err)
+	{
+		case GL_FRAMEBUFFER_COMPLETE: return "GL_FRAMEBUFFER_COMPLETE";
+		case GL_FRAMEBUFFER_UNDEFINED: return "GL_FRAMEBUFFER_UNDEFINED";
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: return "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: return "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
+		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER: return "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER";
+		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER: return "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER";
+		case GL_FRAMEBUFFER_UNSUPPORTED: return "GL_FRAMEBUFFER_UNSUPPORTED";
+		case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: return "GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE";
+		case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS: return "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS";
+		default: return "Other";
+	}
+}
+
 size_t gl_context::initDepthPasses(size_t resolution)
 {
 	if (depthPassCount > 1)
@@ -3615,6 +3632,13 @@ size_t gl_context::initDepthPasses(size_t resolution)
 		}
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE);
+
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (status != GL_FRAMEBUFFER_COMPLETE)
+		{
+			debug(LOG_ERROR, "Failed to create framebuffer with error: %s", cbframebuffererror(status));
+		}
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
