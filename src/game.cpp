@@ -4610,6 +4610,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		builtInMap = save.value("builtInMap").toBool();
 	}
+	if (save.contains("useTerrainOverrides"))
+	{
+		useTerrainOverrides = save.value("useTerrainOverrides").toBool();
+	}
 	if (save.contains("inactivityMinutes"))
 	{
 		game.inactivityMinutes = save.value("inactivityMinutes").toUInt();
@@ -4845,6 +4849,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("challengeFileName", challengeFileName.toUtf8().c_str());
 	save.setValue("challengeActive", challengeActive);
 	save.setValue("builtInMap", builtInMap);
+	save.setValue("useTerrainOverrides", useTerrainOverrides);
 	save.setValue("inactivityMinutes", game.inactivityMinutes);
 	save.setValue("gameTimeLimitMinutes", game.gameTimeLimitMinutes);
 	save.setValue("playerLeaveMode", game.playerLeaveMode);
@@ -7092,6 +7097,14 @@ bool loadTerrainTypeMap(const char *pFilePath)
 	}
 
 	return true;
+}
+
+// Maps built into the game with custom tile types need to be excluded for overrides.
+bool shouldLoadTerrainTypeOverrides(const char* name)
+{
+	std::vector<std::string> excludedMaps = {"Monocot"};
+
+	return std::find(excludedMaps.begin(), excludedMaps.end(), name) == excludedMaps.end();
 }
 
 bool loadTerrainTypeMapOverride(MAP_TILESET tileSet)

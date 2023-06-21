@@ -73,6 +73,7 @@ SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
 //For saves to determine if loading the terrain type override should occur
 bool builtInMap;
+bool useTerrainOverrides;
 
 /* Structure definitions for loading and saving map data */
 struct MAP_SAVEHEADER  // : public GAME_SAVEHEADER
@@ -299,7 +300,7 @@ static void mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* terti
 	int		cnt = 0, i = 0;
 	uint32_t	fileSize = 0;
 	// load the override terrain types
-	if (!preview && builtInMap && !loadTerrainTypeMapOverride(tileSet))
+	if (!preview && useTerrainOverrides && !loadTerrainTypeMapOverride(tileSet))
 	{
 		debug(LOG_POPUP, "Failed to load terrain type override");
 	}
