@@ -2877,10 +2877,6 @@ bool gl_context::initGLContext()
 	if (!gles)
 	{
 		debug(LOG_3D, "Notable OpenGL features:");
-		debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLAD_GL_VERSION_1_2 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLAD_GL_VERSION_1_3 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLAD_GL_VERSION_1_4 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLAD_GL_VERSION_1_5 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
