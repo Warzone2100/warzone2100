@@ -119,12 +119,6 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, b
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			return true;
-		case OpenGL21Compat:
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-			return true;
 #  if !defined(WZ_OS_MAC)
 		case OpenGLES30:
 			setOpenGLESDriver(useOpenGLESLibrary);
@@ -133,17 +127,8 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, b
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			return true;
-		case OpenGLES20:
-			setOpenGLESDriver(useOpenGLESLibrary);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-			return true;
 #  else
 		case OpenGLES30:
-			return false;
-		case OpenGLES20:
 			return false;
 #  endif
 		case MAX_CONTEXT_REQUESTS:
@@ -164,12 +149,8 @@ std::string sdl_OpenGL_Impl::to_string(const GLContextRequests& request) const\
 			return "OpenGL 3.1";
 		case OpenGLCore_3_0:
 			return "OpenGL 3.0";
-		case OpenGL21Compat:
-			return "OpenGL 2.1 Compatibility";
 		case OpenGLES30:
 			return "OpenGL ES 3.0";
-		case OpenGLES20:
-			return "OpenGL ES 2.0";
 		case MAX_CONTEXT_REQUESTS:
 			return "";
 	}
