@@ -78,7 +78,7 @@
 #include "titleui/titleui.h"
 #include "urlhelpers.h"
 #include "game.h"
-#include "map.h" //for builtInMap
+#include "map.h" //for builtInMap and useTerrainOverrides
 #include "notifications.h"
 #include "activity.h"
 #include "clparse.h" // for autorating
@@ -480,6 +480,7 @@ void SPinit(LEVEL_TYPE gameType)
 	setPlayerColour(0, playercolor);
 	game.hash.setZero();	// must reset this to zero
 	builtInMap = true;
+	useTerrainOverrides = true;
 }
 
 bool runCampaignSelector()
