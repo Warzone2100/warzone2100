@@ -49,10 +49,8 @@ public:
 		OpenGLCore_3_2,
 		OpenGLCore_3_1,
 		OpenGLCore_3_0,
-		OpenGL21Compat,
 		// OpenGL ES Context Requests
 		OpenGLES30,
-		OpenGLES20,
 		//
 		MAX_CONTEXT_REQUESTS
 	};
