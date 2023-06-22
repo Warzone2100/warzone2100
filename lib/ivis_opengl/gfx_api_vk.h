@@ -484,6 +484,7 @@ struct VkTexture final : public gfx_api::texture
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
+	virtual size_t backend_internal_value() const override;
 
 	VkTexture( const VkTexture& other ) = delete; // non construction-copyable
 	VkTexture& operator=( const VkTexture& ) = delete; // non copyable
@@ -518,6 +519,7 @@ struct VkTextureArray final : public gfx_api::texture_array
 
 	virtual void bind() override {};
 	virtual unsigned id() override { return 0; }
+	virtual size_t backend_internal_value() const override;
 
 	virtual bool upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image) override;
 
@@ -551,6 +553,7 @@ struct VkDepthMapImage final : public gfx_api::abstract_texture
 
 	virtual void bind() override;
 	virtual bool isArray() const override;
+	virtual size_t backend_internal_value() const override;
 
 	void destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader);
 

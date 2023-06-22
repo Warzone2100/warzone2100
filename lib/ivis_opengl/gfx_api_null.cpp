@@ -65,6 +65,11 @@ unsigned null_texture::id()
 	return 0;
 }
 
+size_t null_texture::backend_internal_value() const
+{
+	return 0;
+}
+
 // MARK: null_texture_array
 
 null_texture_array::null_texture_array()
@@ -94,6 +99,11 @@ bool null_texture_array::upload_layer(const size_t& layer, const size_t& mip_lev
 }
 
 unsigned null_texture_array::id()
+{
+	return 0;
+}
+
+size_t null_texture_array::backend_internal_value() const
 {
 	return 0;
 }

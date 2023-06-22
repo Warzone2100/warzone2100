@@ -71,6 +71,7 @@ private:
 	virtual ~gl_texture();
 public:
 	virtual void bind() override;
+	virtual size_t backend_internal_value() const override;
 	void unbind();
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
@@ -99,6 +100,7 @@ private:
 	virtual ~gl_texture_array();
 public:
 	virtual void bind() override;
+	virtual size_t backend_internal_value() const override;
 	void unbind();
 	virtual void flush() override;
 	virtual bool upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image) override;

@@ -88,6 +88,7 @@ namespace gfx_api
 		virtual void bind() = 0;
 		virtual bool isArray() const = 0;
 		virtual void flush() {};
+		virtual size_t backend_internal_value() const = 0; // used for backend-specific internal purposes
 		virtual ~abstract_texture() {};
 	};
 

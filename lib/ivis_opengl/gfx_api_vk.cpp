@@ -148,6 +148,13 @@ const std::vector<std::pair<_vkl_env_text_type, _vkl_env_text_type>> vulkan_impl
 static std::unordered_set<const VkTexture*> debugLiveTextures;
 #endif
 
+enum class VulkanBackendInternalTextureType : size_t
+{
+	Invalid = 0,
+	Texture,
+	TextureArray,
+	DepthMap,
+};
 
 // MARK: General helper functions
 
@@ -1996,6 +2003,11 @@ bool VkDepthMapImage::isArray() const
 	return layer_count > 1;
 }
 
+size_t VkDepthMapImage::backend_internal_value() const
+{
+	return static_cast<size_t>(VulkanBackendInternalTextureType::DepthMap);
+}
+
 VkTexture::~VkTexture()
 {
 	// All textures must be properly released before gfx_api::context::shutdown()
@@ -2096,6 +2108,11 @@ bool VkTexture::upload_sub(const size_t& mip_level, const size_t& offset_x, cons
 }
 
 unsigned VkTexture::id() { return 0; }
+
+size_t VkTexture::backend_internal_value() const
+{
+	return static_cast<size_t>(VulkanBackendInternalTextureType::Texture);
+}
 
 // MARK: VkTextureArray
 
@@ -2243,6 +2260,11 @@ void VkTextureArray::flush()
 	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
 	transitionedToTransferDstFormat = false;
+}
+
+size_t VkTextureArray::backend_internal_value() const
+{
+	return static_cast<size_t>(VulkanBackendInternalTextureType::TextureArray);
 }
 
 // MARK: VkRoot
@@ -4646,25 +4668,29 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 		vk::ImageView imageView;
 		if (texture != nullptr)
 		{
-			switch (attribute_descriptions.at(i).target)
+			auto texture_type = static_cast<VulkanBackendInternalTextureType>(texture->backend_internal_value());
+			auto target_type = attribute_descriptions.at(i).target;
+			switch (texture_type)
 			{
-				case gfx_api::pixel_format_target::texture_2d:
-				case gfx_api::pixel_format_target::texture_2d_array:
-					if (texture->isArray())
-					{
-						imageView = static_cast<VkTextureArray*>(texture)->view.get();
-					}
-					else
-					{
-						imageView = static_cast<VkTexture*>(texture)->view.get();
-					}
+				case VulkanBackendInternalTextureType::Texture:
+					ASSERT(target_type == gfx_api::pixel_format_target::texture_2d, "Unexpected target type: (%d)", static_cast<int>(target_type));
+					imageView = static_cast<VkTexture*>(texture)->view.get();
 					break;
-				case gfx_api::pixel_format_target::depth_map:
+				case VulkanBackendInternalTextureType::TextureArray:
+					ASSERT(target_type == gfx_api::pixel_format_target::texture_2d_array, "Unexpected target type: (%d)", static_cast<int>(target_type));
+					imageView = static_cast<VkTextureArray*>(texture)->view.get();
+					break;
+				case VulkanBackendInternalTextureType::DepthMap:
+					ASSERT(target_type == gfx_api::pixel_format_target::depth_map, "Unexpected target type: (%d)", static_cast<int>(target_type));
 					imageView = static_cast<VkDepthMapImage*>(texture)->view.get();
+					break;
+				case VulkanBackendInternalTextureType::Invalid:
+					debug(LOG_FATAL, "Invalid internal texture type??");
 					break;
 			}
 		}
-		else
+
+		if (!imageView)
 		{
 			switch (attribute_descriptions.at(i).target)
 			{
