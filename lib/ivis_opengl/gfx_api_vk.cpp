@@ -154,6 +154,7 @@ enum class VulkanBackendInternalTextureType : size_t
 	Texture,
 	TextureArray,
 	DepthMap,
+	RenderedImage
 };
 
 // MARK: General helper functions
@@ -716,16 +717,18 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 	const auto buffer = dev.allocateCommandBuffers(
 		vk::CommandBufferAllocateInfo()
 		.setCommandPool(pool)
-		.setCommandBufferCount(3)
+		.setCommandBufferCount(4)
 		.setLevel(vk::CommandBufferLevel::ePrimary)
 		, *pVkDynLoader
 	);
 	cmdDraw = buffer[0];
 	cmdCopy = buffer[1];
 	cmdDrawDepth = buffer[2];
+	cmdDrawScene = buffer[3];
 	pCurrentDrawCmdBuffer = &cmdDraw;
 	cmdCopy.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 	cmdDrawDepth.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
+	cmdDrawScene.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 	previousSubmission = dev.createFence(
 		vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled),
 		nullptr, *pVkDynLoader
@@ -754,6 +757,16 @@ void perFrameResources_t::endCurrentDepthPass()
 	pCurrentDrawCmdBuffer = &cmdDraw;
 }
 
+void perFrameResources_t::beginScenePass()
+{
+	pCurrentDrawCmdBuffer = &cmdDrawScene;
+}
+
+void perFrameResources_t::endScenePass()
+{
+	pCurrentDrawCmdBuffer = &cmdDraw;
+}
+
 vk::CommandBuffer* perFrameResources_t::currentCopyCmdBuffer()
 {
 	return &cmdCopy;
@@ -772,6 +785,11 @@ vk::CommandBuffer perFrameResources_t::copyCmdBuffer()
 vk::CommandBuffer perFrameResources_t::depthPassDrawCmdBuffer()
 {
 	return cmdDrawDepth;
+}
+
+vk::CommandBuffer perFrameResources_t::scenePassDrawCmdBuffer()
+{
+	return cmdDrawScene;
 }
 
 vk::CommandBuffer perFrameResources_t::renderPassDrawCmdBuffer()
@@ -926,6 +944,16 @@ void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, si
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
 	dev.resetFences(fences, vkDynLoader);
+}
+
+size_t buffering_mechanism::get_current_frame_num()
+{
+	return currentFrame;
+}
+
+size_t buffering_mechanism::numFrames()
+{
+	return perFrameResources.size();
 }
 
 void buffering_mechanism::destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
@@ -1095,6 +1123,7 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_GENERIC_COLOR, shader_infos{ "shaders/vk/generic.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_LINE, shader_infos{ "shaders/vk/line.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_TEXT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/text.frag.spv" }),
+	std::make_pair(SHADER_WORLD_TO_SCREEN, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/world_to_screen.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" })
 };
@@ -2114,6 +2143,120 @@ size_t VkTexture::backend_internal_value() const
 	return static_cast<size_t>(VulkanBackendInternalTextureType::Texture);
 }
 
+// MARK: VkRenderedImage
+
+VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height, vk::Format imageFormat, const std::string& filename)
+	: dev(root.dev)
+{
+	ASSERT(width > 0 && height > 0, "0 width/height textures are unsupported");
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	debugName = filename;
+#endif
+
+	auto imageCreateInfo = vk::ImageCreateInfo()
+	.setArrayLayers(1)
+	.setExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
+	.setImageType(vk::ImageType::e2D)
+	.setMipLevels(1)
+	.setTiling(vk::ImageTiling::eOptimal)
+	.setFormat(imageFormat)
+	.setUsage(vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eColorAttachment)
+	.setInitialLayout(vk::ImageLayout::eUndefined)
+	.setSamples(vk::SampleCountFlagBits::e1)
+	.setSharingMode(vk::SharingMode::eExclusive);
+
+	VmaAllocationCreateInfo allocInfo = {};
+	allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+
+	vk::Result result = static_cast<vk::Result>(vmaCreateImage(root.allocator, reinterpret_cast<const VkImageCreateInfo*>( &imageCreateInfo ), &allocInfo, reinterpret_cast<VkImage*>( &object ), &allocation, nullptr));
+	if (result != vk::Result::eSuccess)
+	{
+		// Failed to allocate memory!
+		vk::throwResultException( result, "vmaCreateImage" );
+	}
+
+	if (root.debugUtilsExtEnabled)
+	{
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eImage);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImage>(object)));
+		objectNameInfo.setPObjectName(filename.c_str());
+		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
+	}
+
+	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
+		.setImage(object)
+		.setViewType(vk::ImageViewType::e2D)
+		.setFormat(imageFormat)
+		.setComponents(vk::ComponentMapping())
+		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
+
+	view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, root.vkDynLoader);
+
+}
+
+VkRenderedImage::~VkRenderedImage()
+{
+	// All textures must be properly released before gfx_api::context::shutdown()
+	if (buffering_mechanism::isInitialized())
+	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		if (view)
+		{
+			frameResources.image_view_to_delete.emplace_back(std::move(view));
+		}
+		if (object != vk::Image())
+		{
+			frameResources.image_to_delete.emplace_back(std::move(object));
+		}
+		if (allocation != VK_NULL_HANDLE)
+		{
+			frameResources.vmamemory_to_free.push_back(allocation);
+		}
+	}
+	else
+	{
+		// ~VkTexture called too late! - probably after gfx_api::context::shutdown()
+		view.release(); // Can't properly destroy this VK object now, but call release() to ensure that vk::Device::destroy isn't called after the device is no longer available
+	}
+}
+
+void VkRenderedImage::destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	if (buffering_mechanism::isInitialized())
+	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		frameResources.image_view_to_delete.emplace_back(std::move(view));
+		frameResources.image_to_delete.emplace_back(std::move(object));
+		object = vk::Image();
+		frameResources.vmamemory_to_free.push_back(allocation);
+		allocation = VK_NULL_HANDLE;
+	}
+	else
+	{
+		view.reset();
+		dev.destroyImage(object, nullptr, vkDynLoader);
+		object = vk::Image();
+		vmaFreeMemory(allocator, allocation);
+		allocation = VK_NULL_HANDLE;
+	}
+}
+
+void VkRenderedImage::bind() { }
+
+bool VkRenderedImage::isArray() const
+{
+	return false;
+}
+
+size_t VkRenderedImage::backend_internal_value() const
+{
+	return static_cast<size_t>(VulkanBackendInternalTextureType::RenderedImage);
+}
+
 // MARK: VkTextureArray
 
 VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t layer_count, size_t width, size_t height, gfx_api::pixel_format internal_pixel_format, const std::string& filename)
@@ -2720,6 +2863,234 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 	}
 }
 
+void VkRoot::destroySceneRenderpass()
+{
+	// destroy scene pass objects
+	for (auto f : renderPasses[SCENE_RENDER_PASS_ID].fbo)
+	{
+		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
+	}
+	renderPasses[SCENE_RENDER_PASS_ID].fbo.clear();
+
+	if (sceneDepthStencilView)
+	{
+		dev.destroyImageView(sceneDepthStencilView, nullptr, vkDynLoader);
+		sceneDepthStencilView = vk::ImageView();
+	}
+	if (sceneDepthStencilMemory)
+	{
+		dev.freeMemory(sceneDepthStencilMemory, nullptr, vkDynLoader);
+		sceneDepthStencilMemory = vk::DeviceMemory();
+	}
+	if (sceneDepthStencilImage)
+	{
+		dev.destroyImage(sceneDepthStencilImage, nullptr, vkDynLoader);
+		sceneDepthStencilImage = vk::Image();
+	}
+
+	if (sceneMSAAView)
+	{
+		dev.destroyImageView(sceneMSAAView, nullptr, vkDynLoader);
+		sceneMSAAView = vk::ImageView();
+	}
+	if (sceneMSAAMemory)
+	{
+		dev.freeMemory(sceneMSAAMemory, nullptr, vkDynLoader);
+		sceneMSAAMemory = vk::DeviceMemory();
+	}
+	if (sceneMSAAImage)
+	{
+		dev.destroyImage(sceneMSAAImage, nullptr, vkDynLoader);
+		sceneMSAAImage = vk::Image();
+	}
+
+	if (pSceneImage)
+	{
+		pSceneImage->destroy(dev, allocator, vkDynLoader); // because the buffering_mechanism may be gone by the time this is called...
+		delete pSceneImage;
+	}
+	if (renderPasses[SCENE_RENDER_PASS_ID].rp)
+	{
+		dev.destroyRenderPass(renderPasses[SCENE_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
+		renderPasses[SCENE_RENDER_PASS_ID].rp = vk::RenderPass();
+	}
+}
+
+void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthFormat)
+{
+	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
+
+	auto attachments = std::vector<vk::AttachmentDescription>();
+
+	auto appendDepthAttachment = [&]() {
+		attachments.push_back(
+			  vk::AttachmentDescription() // depthStencilAttachment
+			  .setFormat(depthFormat)
+			  .setSamples(msaaSamples)
+			  .setInitialLayout(vk::ImageLayout::eUndefined)
+			  .setFinalLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
+			  .setLoadOp(vk::AttachmentLoadOp::eClear)
+			  .setStoreOp(vk::AttachmentStoreOp::eDontCare)
+			  .setStencilLoadOp(vk::AttachmentLoadOp::eClear)
+			  .setStencilStoreOp(vk::AttachmentStoreOp::eDontCare)
+		);
+	};
+
+	if (msaaEnabled)
+	{
+		// first attachment is the msaa render buffer as the color attachment
+		attachments.push_back(
+			  vk::AttachmentDescription() // msaa color buffer
+			  .setFormat(sceneFormat)
+			  .setSamples(msaaSamples)
+			  .setInitialLayout(vk::ImageLayout::eUndefined)
+			  .setFinalLayout(vk::ImageLayout::eColorAttachmentOptimal)
+			  .setLoadOp(vk::AttachmentLoadOp::eClear)
+			  .setStoreOp(vk::AttachmentStoreOp::eStore)
+			  .setStencilLoadOp(vk::AttachmentLoadOp::eDontCare)
+			  .setStencilStoreOp(vk::AttachmentStoreOp::eDontCare)
+		);
+
+		appendDepthAttachment(); // should always be second
+	}
+
+	attachments.push_back(
+		  vk::AttachmentDescription() // color (resolved) texture
+		  .setFormat(sceneFormat)
+		  .setSamples(vk::SampleCountFlagBits::e1)
+		  .setInitialLayout(vk::ImageLayout::eUndefined)
+		  .setFinalLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
+		  .setLoadOp((msaaEnabled) ? vk::AttachmentLoadOp::eDontCare : vk::AttachmentLoadOp::eClear)
+		  .setStoreOp(vk::AttachmentStoreOp::eStore)
+		  .setStencilLoadOp(vk::AttachmentLoadOp::eDontCare)
+		  .setStencilStoreOp(vk::AttachmentStoreOp::eDontCare)
+	);
+
+	if (!msaaEnabled)
+	{
+		appendDepthAttachment(); // should always be second
+	}
+
+	const size_t numColorAttachmentRef = 1;
+	const auto colorAttachmentRef =
+		std::array<vk::AttachmentReference, numColorAttachmentRef>{
+		vk::AttachmentReference()
+			.setAttachment(0)
+			.setLayout(vk::ImageLayout::eColorAttachmentOptimal)
+	};
+	static_assert(minRequired_ColorAttachments >= numColorAttachmentRef, "minRequired_ColorAttachments must be >= colorAttachmentRef.size()");
+	const auto depthStencilAttachmentRef =
+		vk::AttachmentReference()
+		.setAttachment(1)
+		.setLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal);
+	const auto colorAttachmentResolveRef =
+		vk::AttachmentReference()
+		.setAttachment(2)
+		.setLayout(vk::ImageLayout::eColorAttachmentOptimal);
+
+	const auto subpasses =
+		std::array<vk::SubpassDescription, 1> {
+		vk::SubpassDescription()
+			.setPipelineBindPoint(vk::PipelineBindPoint::eGraphics)
+			.setColorAttachmentCount(static_cast<uint32_t>(colorAttachmentRef.size()))
+			.setPColorAttachments(colorAttachmentRef.data())
+			.setPDepthStencilAttachment(&depthStencilAttachmentRef)
+			.setPResolveAttachments((msaaEnabled) ? &colorAttachmentResolveRef : nullptr)
+	};
+
+	std::array<vk::SubpassDependency, 2> dependencies {
+		vk::SubpassDependency()
+			.setSrcSubpass(VK_SUBPASS_EXTERNAL)
+			.setDstSubpass(0)
+			.setSrcStageMask(vk::PipelineStageFlagBits::eFragmentShader)
+			.setDstStageMask(vk::PipelineStageFlagBits::eColorAttachmentOutput)
+			.setSrcAccessMask(vk::AccessFlagBits::eShaderRead)
+			.setDstAccessMask(vk::AccessFlagBits::eColorAttachmentWrite)
+			.setDependencyFlags(vk::DependencyFlagBits::eByRegion)
+		, vk::SubpassDependency()
+			.setSrcSubpass(0)
+			.setDstSubpass(VK_SUBPASS_EXTERNAL)
+			.setSrcStageMask(vk::PipelineStageFlagBits::eColorAttachmentOutput)
+			.setDstStageMask(vk::PipelineStageFlagBits::eFragmentShader)
+			.setSrcAccessMask(vk::AccessFlagBits::eColorAttachmentWrite)
+			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
+			.setDependencyFlags(vk::DependencyFlagBits::eByRegion)
+	};
+
+	auto createInfo = vk::RenderPassCreateInfo()
+		.setAttachmentCount(static_cast<uint32_t>(attachments.size()))
+		.setPAttachments(attachments.data())
+		.setSubpassCount(static_cast<uint32_t>(subpasses.size()))
+		.setPSubpasses(subpasses.data())
+		.setDependencyCount(static_cast<uint32_t>(dependencies.size()))
+		.setPDependencies(dependencies.data());
+
+	renderPasses[SCENE_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
+	renderPasses[SCENE_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+
+	if (debugUtilsExtEnabled)
+	{
+		std::string renderpassName = "<scene render pass>";
+		vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+		objectNameInfo.setObjectType(vk::ObjectType::eRenderPass);
+		objectNameInfo.setObjectHandle(uint64_t(static_cast<VkRenderPass>(renderPasses[SCENE_RENDER_PASS_ID].rp)));
+		objectNameInfo.setPObjectName(renderpassName.c_str());
+		dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+	}
+
+	// Create scene image + view
+	pSceneImage = new VkRenderedImage(*this, swapchainSize.width, swapchainSize.height, sceneFormat, "<scene image>");
+
+	if (msaaEnabled)
+	{
+		// create sceneMSAAImage / sceneMSAAView / etc
+		if (!createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, sceneFormat,
+										sceneMSAAImage, sceneMSAAMemory, sceneMSAAView, vkDynLoader, "sceneMSAAColorImage"))
+		{
+			debug(LOG_ERROR, "Failed to create scene MSAA color image");
+			handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		}
+	}
+
+	// create depth/stencil image
+	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, depthFormat,
+							sceneDepthStencilImage, sceneDepthStencilMemory, sceneDepthStencilView, vkDynLoader, "sceneDepthStencilImage"))
+	{
+		debug(LOG_ERROR, "Failed to create scene depth stencil image");
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+
+	// Create an FBO for each frame in flight
+	size_t numSceneFBOs = buffering_mechanism::numFrames();
+	const auto fboAttachments = (msaaEnabled) ? std::vector<vk::ImageView>{sceneMSAAView, sceneDepthStencilView, pSceneImage->view.get()}
+											 : std::vector<vk::ImageView>{pSceneImage->view.get(), sceneDepthStencilView};
+	for (size_t i = 0; i < numSceneFBOs; ++i)
+	{
+		// FBO for this frame in flight
+		auto frame_fbo = dev.createFramebuffer(
+			vk::FramebufferCreateInfo()
+			.setAttachmentCount(static_cast<uint32_t>(fboAttachments.size()))
+			.setPAttachments(fboAttachments.data())
+			.setLayers(1)
+			.setWidth(swapchainSize.width)
+			.setHeight(swapchainSize.height)
+			.setRenderPass(renderPasses[SCENE_RENDER_PASS_ID].rp)
+			, nullptr, vkDynLoader);
+
+		if (debugUtilsExtEnabled)
+		{
+			std::string framebufferName = "<scene frame buffer: " + std::to_string(i) + ">";
+			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+			objectNameInfo.setObjectType(vk::ObjectType::eFramebuffer);
+			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkFramebuffer>(frame_fbo)));
+			objectNameInfo.setPObjectName(framebufferName.c_str());
+			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+		}
+
+		renderPasses[SCENE_RENDER_PASS_ID].fbo.push_back(frame_fbo);
+	}
+}
+
 bool VkRoot::setupDebugUtilsCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	// Verify that the requested extensions included VK_EXT_DEBUG_UTILS_EXTENSION_NAME
@@ -3202,6 +3573,9 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 		delete pDefaultArrayTexture;
 		pDefaultArrayTexture = nullptr;
 	}
+
+	destroySceneRenderpass();
+
 	buffering_mechanism::destroy(dev, vkDynLoader);
 
 	for (auto f : renderPasses[DEFAULT_RENDER_PASS_ID].fbo)
@@ -3718,6 +4092,20 @@ bool VkRoot::createSwapchain()
 		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
 	}
 
+	// Create scene FBOs + renderpass
+	vk::Format sceneFormat = vk::Format::eR8G8B8A8Unorm; // TODO: Choose an appropriate format
+	try {
+		createSceneRenderpass(sceneFormat, depthFormat);
+	}
+	catch (const vk::OutOfHostMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateRenderPass (scene): OutOfHostMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	}
+	catch (const vk::OutOfDeviceMemoryError& e) {
+		debug(LOG_ERROR, "vkCreateRenderPass (scene): OutOfDeviceMemoryError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+
 	auto acquireNextResult = acquireNextSwapchainImage();
 	switch (acquireNextResult)
 	{
@@ -4064,7 +4452,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	getQueues();
 
 	ASSERT(renderPasses.empty(), "Non-empty renderPasses vector?");
-	renderPasses = { RenderPassDetails(DEFAULT_RENDER_PASS_ID), RenderPassDetails(DEPTH_RENDER_PASS_ID) };
+	renderPasses = { RenderPassDetails(DEFAULT_RENDER_PASS_ID), RenderPassDetails(DEPTH_RENDER_PASS_ID), RenderPassDetails(SCENE_RENDER_PASS_ID) };
 
 	if (!createSwapchain())
 	{
@@ -4684,6 +5072,10 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 					ASSERT(target_type == gfx_api::pixel_format_target::depth_map, "Unexpected target type: (%d)", static_cast<int>(target_type));
 					imageView = static_cast<VkDepthMapImage*>(texture)->view.get();
 					break;
+				case VulkanBackendInternalTextureType::RenderedImage:
+					ASSERT(target_type == gfx_api::pixel_format_target::texture_2d, "Unexpected target type: (%d)", static_cast<int>(target_type));
+					imageView = static_cast<VkRenderedImage*>(texture)->view.get();
+					break;
 				case VulkanBackendInternalTextureType::Invalid:
 					debug(LOG_FATAL, "Invalid internal texture type??");
 					break;
@@ -4865,6 +5257,57 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 	return AcquireNextSwapchainImageResult::eSuccess;
 }
 
+void VkRoot::beginSceneRenderPass()
+{
+	// There only needs to be a single scene RenderPass object
+	// What actually swaps out is the FBO used in the call to beginRenderPass
+	auto& sceneRenderPass = renderPasses[SCENE_RENDER_PASS_ID];
+
+	const auto clearValue = std::array<vk::ClearValue, 2> {
+		vk::ClearValue(), vk::ClearValue(vk::ClearDepthStencilValue(1.f, 0u))
+	};
+	buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer().beginRenderPass(
+		vk::RenderPassBeginInfo()
+		.setFramebuffer(sceneRenderPass.fbo[buffering_mechanism::get_current_frame_num()])
+		.setClearValueCount(static_cast<uint32_t>(clearValue.size()))
+		.setPClearValues(clearValue.data())
+		.setRenderPass(sceneRenderPass.rp)
+		.setRenderArea(vk::Rect2D(vk::Offset2D(), swapchainSize)),
+		vk::SubpassContents::eInline,
+		vkDynLoader);
+	const auto viewports = std::array<vk::Viewport, 1> {
+		vk::Viewport().setHeight(swapchainSize.height).setWidth(swapchainSize.width).setMinDepth(0.f).setMaxDepth(1.f)
+	};
+	buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer().setViewport(0, viewports, vkDynLoader);
+	const auto scissors = std::array<vk::Rect2D, 1> {
+		vk::Rect2D().setExtent(swapchainSize)
+	};
+	buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer().setScissor(0, scissors, vkDynLoader);
+
+	// Set up the buffering_mechanism resources state, so subsequent calls to currentDrawCmdBuffer() use the one for the depth pass
+	buffering_mechanism::get_current_resources().beginScenePass();
+	currentRenderPassId = SCENE_RENDER_PASS_ID;
+	currentPSO = nullptr;
+}
+
+void VkRoot::endSceneRenderPass()
+{
+	ASSERT_OR_RETURN(, currentRenderPassId == SCENE_RENDER_PASS_ID, "Current render pass is not a scene pass! (Mismatched beginSceneRenderPass/endSceneRenderPass calls.)");
+
+	auto scenePassDrawCmdBuffer = buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer();
+	scenePassDrawCmdBuffer.endRenderPass(vkDynLoader);
+
+	// Set up the buffering_mechanism resources state, so subsequent calls to currentDrawCmdBuffer() use the one for the default render pass
+	buffering_mechanism::get_current_resources().endScenePass();
+	currentRenderPassId = DEFAULT_RENDER_PASS_ID;
+	currentPSO = nullptr;
+}
+
+gfx_api::abstract_texture* VkRoot::getSceneTexture()
+{
+	return pSceneImage;
+}
+
 void VkRoot::beginRenderPass()
 {
 	if (startedRenderPass)
@@ -4881,6 +5324,7 @@ void VkRoot::endRenderPass()
 	currentPSO = nullptr;
 
 	buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer().end(vkDynLoader);
+	buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer().end(vkDynLoader);
 
 	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().endRenderPass(vkDynLoader);
 	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().end(vkDynLoader);
@@ -4923,9 +5367,10 @@ void VkRoot::endRenderPass()
 		}
 	}
 
-	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 3>{
+	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 4>{
 		buffering_mechanism::get_current_resources().copyCmdBuffer(), // copy before render
 		buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer(),
+		buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer(),
 		buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer()};
 	const vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; //vk::PipelineStageFlagBits::eAllCommands;
 
@@ -5082,6 +5527,7 @@ void VkRoot::endRenderPass()
 
 	buffering_mechanism::get_current_resources().copyCmdBuffer().begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 	buffering_mechanism::get_current_resources().depthPassDrawCmdBuffer().begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
+	buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer().begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
 }
 
 void VkRoot::startRenderPass()

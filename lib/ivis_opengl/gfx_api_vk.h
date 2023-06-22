@@ -255,11 +255,15 @@ public:
 	void beginDepthPass();
 	void endCurrentDepthPass();
 
+	void beginScenePass();
+	void endScenePass();
+
 	vk::CommandBuffer* currentCopyCmdBuffer();
 	vk::CommandBuffer* currentDrawCmdBuffer();
 
 	vk::CommandBuffer copyCmdBuffer();
 	vk::CommandBuffer depthPassDrawCmdBuffer();
+	vk::CommandBuffer scenePassDrawCmdBuffer();
 	vk::CommandBuffer renderPassDrawCmdBuffer();
 
 protected:
@@ -270,6 +274,9 @@ protected:
 
 	// drawing command buffer for depth pass(es)
 	vk::CommandBuffer cmdDrawDepth;
+
+	// drawing command buffer for scene pass
+	vk::CommandBuffer cmdDrawScene;
 
 	// main command buffer for drawing (default render pass)
 	vk::CommandBuffer cmdDraw;
@@ -322,6 +329,8 @@ struct buffering_mechanism
 	static void destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
 	static void swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage);
 	static bool isInitialized();
+	static size_t get_current_frame_num();
+	static size_t numFrames();
 };
 
 VKAPI_ATTR VkBool32 VKAPI_CALL messageCallback(
@@ -561,6 +570,33 @@ struct VkDepthMapImage final : public gfx_api::abstract_texture
 	VkDepthMapImage& operator=( const VkDepthMapImage& ) = delete; // non copyable
 };
 
+struct VkRenderedImage final : public gfx_api::abstract_texture
+{
+	vk::Device dev;
+//	WZ_vk::UniqueImage object;
+	vk::Image object;
+	WZ_vk::UniqueImageView view;
+//	WZ_vk::UniqueDeviceMemory memory;
+	VmaAllocation allocation = VK_NULL_HANDLE;
+
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+
+	VkRenderedImage(const VkRoot& root, size_t width, size_t height, vk::Format imageFormat, const std::string& filename);
+
+	virtual ~VkRenderedImage() override;
+
+	virtual void bind() override;
+	virtual bool isArray() const override;
+	virtual size_t backend_internal_value() const override;
+
+	void destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader);
+
+	VkRenderedImage( const VkRenderedImage& other ) = delete; // non construction-copyable
+	VkRenderedImage& operator=( const VkRenderedImage& ) = delete; // non copyable
+};
+
 struct QueueFamilyIndices
 {
 	optional<uint32_t> graphicsFamily;
@@ -643,7 +679,8 @@ struct VkRoot final : gfx_api::context
 	// render passes
 	const size_t DEFAULT_RENDER_PASS_ID = 0;
 	const size_t DEPTH_RENDER_PASS_ID = 1;
-	const size_t NUM_RENDERPASS_IDS = 2;
+	const size_t SCENE_RENDER_PASS_ID = 2;
+	const size_t NUM_RENDERPASS_IDS = 3;
 
 	struct RenderPassDetails
 	{
@@ -669,6 +706,16 @@ struct VkRoot final : gfx_api::context
 	VkDepthMapImage* pDepthMapImage = nullptr;
 	std::vector<vk::ImageView> depthMapCascadeView;
 //	std::vector<RenderPassDetails> depthRenderPasses;
+
+	// scene render pass
+	vk::Format sceneImageFormat = vk::Format::eUndefined;
+	VkRenderedImage* pSceneImage = nullptr;
+	vk::Image sceneMSAAImage;
+	vk::DeviceMemory sceneMSAAMemory;
+	vk::ImageView sceneMSAAView;
+	vk::Image sceneDepthStencilImage;
+	vk::DeviceMemory sceneDepthStencilMemory;
+	vk::ImageView sceneDepthStencilView;
 
 	// default textures
 	VkTexture* pDefaultTexture = nullptr;
@@ -759,6 +806,8 @@ private:
 
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
 	void createDepthPasses(vk::Format depthFormat);
+	void createSceneRenderpass(vk::Format sceneFormat, vk::Format depthFormat);
+	void destroySceneRenderpass();
 	void setupSwapchainImages();
 
 public:
@@ -784,7 +833,11 @@ public:
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
 	virtual gfx_api::abstract_texture* getDepthTexture() override;
-	
+
+	virtual void beginSceneRenderPass() override;
+	virtual void endSceneRenderPass() override;
+	virtual gfx_api::abstract_texture* getSceneTexture() override;
+
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
 	virtual void set_polygon_offset(const float& offset, const float& slope) override;
