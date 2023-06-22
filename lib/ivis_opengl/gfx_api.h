@@ -353,6 +353,9 @@ namespace gfx_api
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
 		virtual void endCurrentDepthPass() { }
 		virtual gfx_api::abstract_texture* getDepthTexture() { return nullptr; }
+		virtual void beginSceneRenderPass() { }
+		virtual void endSceneRenderPass() { }
+		virtual gfx_api::abstract_texture* getSceneTexture() { return nullptr; }
 		virtual void beginRenderPass() = 0;
 		virtual void endRenderPass() = 0;
 		virtual void debugStringMarker(const char *str) = 0;
@@ -1237,6 +1240,22 @@ namespace gfx_api
 		vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
 	>,
 	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d_array>>, SHADER_DEBUG_TEXTURE2DARRAY_QUAD>;
+
+	template<>
+	struct constant_buffer_type<SHADER_WORLD_TO_SCREEN>
+	{
+		float gamma;
+	};
+
+	using WorldToScreenPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_WORLD_TO_SCREEN>>,
+	std::tuple<
+		vertex_buffer_description<4 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>,
+			vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(gfxFloat)*2>
+		>
+	>,
+	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_WORLD_TO_SCREEN>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)

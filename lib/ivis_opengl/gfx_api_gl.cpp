@@ -695,7 +695,9 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ "Debug texture quad program", "shaders/quad_texture2d.vert", "shaders/quad_texture2d.frag",
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "texture" } }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
-		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } })
+		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } }),
+	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
+		{ "gamma" } })
 };
 
 enum SHADER_VERSION
@@ -969,7 +971,8 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_LINE>(),
 		uniform_binding_entry<SHADER_TEXT>(),
 		uniform_binding_entry<SHADER_DEBUG_TEXTURE2D_QUAD>(),
-		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>()
+		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>(),
+		uniform_binding_entry<SHADER_WORLD_TO_SCREEN>()
 	};
 
 	for (auto& uniform_block : uniform_blocks)
@@ -1868,6 +1871,11 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(5, cbuf.texture);
 }
 
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf)
+{
+	setUniforms(0, cbuf.gamma);
+}
+
 GLint get_size(const gfx_api::vertex_attribute_type& type)
 {
 	switch (type)
@@ -2338,39 +2346,43 @@ void gl_context::set_depth_range(const float& min, const float& max)
 int32_t gl_context::get_context_value(const context_value property)
 {
 	GLint value = 0;
-	if (property != gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS)
+	switch (property)
 	{
-		glGetIntegerv(to_gl(property), &value);
-	}
-	else
-	{
-		// special-handling for MAX_VERTEX_OUTPUT_COMPONENTS
-		if (!gles)
-		{
-			if (GLAD_GL_VERSION_3_0)
+		case gfx_api::context::context_value::MAX_SAMPLES:
+			return maxMultiSampleBufferFormatSamples;
+		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
+			// special-handling for MAX_VERTEX_OUTPUT_COMPONENTS
+			if (!gles)
 			{
-				glGetIntegerv(GL_MAX_VERTEX_OUTPUT_COMPONENTS, &value);
+				if (GLAD_GL_VERSION_3_0)
+				{
+					glGetIntegerv(GL_MAX_VERTEX_OUTPUT_COMPONENTS, &value);
+				}
+				else
+				{
+					// for earlier OpenGL, just default to MAX_VARYING_FLOATS
+					glGetIntegerv(GL_MAX_VARYING_FLOATS, &value);
+				}
 			}
 			else
 			{
-				// for earlier OpenGL, just default to MAX_VARYING_FLOATS
-				glGetIntegerv(GL_MAX_VARYING_FLOATS, &value);
+				if (GLAD_GL_ES_VERSION_3_0)
+				{
+					glGetIntegerv(GL_MAX_VERTEX_OUTPUT_COMPONENTS, &value);
+				}
+				else
+				{
+					// for OpenGL ES 2.0, use GL_MAX_VARYING_VECTORS * 4 ...
+					glGetIntegerv(GL_MAX_VARYING_VECTORS, &value);
+					value *= 4;
+				}
 			}
-		}
-		else
-		{
-			if (GLAD_GL_ES_VERSION_3_0)
-			{
-				glGetIntegerv(GL_MAX_VERTEX_OUTPUT_COMPONENTS, &value);
-			}
-			else
-			{
-				// for OepnGL ES 2.0, use GL_MAX_VARYING_VECTORS * 4 ...
-				glGetIntegerv(GL_MAX_VARYING_VECTORS, &value);
-				value *= 4;
-			}
-		}
+			break;
+		default:
+			glGetIntegerv(to_gl(property), &value);
+			break;
 	}
+
 	return value;
 }
 
@@ -2693,6 +2705,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		return false;
 	}
 
+	multisamples = (antialiasing > 0) ? static_cast<uint32_t>(antialiasing) : 0;
+
 	initPixelFormatsSupport();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
@@ -2734,6 +2748,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 
 	mipLodBias = _mipLodBias;
 
+	createSceneRenderpass();
 	initDepthPasses(depthBufferResolution);
 
 #if !defined(__EMSCRIPTEN__)
@@ -3063,8 +3078,8 @@ size_t gl_context::getDepthPassDimensions(size_t idx)
 void gl_context::endCurrentDepthPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, viewportWidth, viewportHeight);
-	glDepthMask(GL_TRUE);
+//	glViewport(0, 0, viewportWidth, viewportHeight);
+//	glDepthMask(GL_TRUE);
 }
 
 gfx_api::abstract_texture* gl_context::getDepthTexture()
@@ -3344,6 +3359,30 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 	}
+
+	// Determine multiSampledBufferFormat
+	if (!gles)
+	{
+		// OpenGL
+		// - Required formats for render buffer include: GL_RGB10_A2, GL_RGBA8
+		// - Notably: GL_RGB8 is *not* a required format, so support may vary
+		multiSampledBufferFormat = GL_RGBA8;
+		maxMultiSampleBufferFormatSamples = 0;
+		glGetIntegerv(GL_MAX_SAMPLES, &maxMultiSampleBufferFormatSamples);
+		if (GLAD_GL_ARB_internalformat_query2 && glGetInternalformativ)
+		{
+			glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
+		}
+	}
+	else
+	{
+		// OpenGL ES (3.0+)
+		// - Required formats for render buffer include: GL_RGB10_A2, GL_RGBA8
+		// - Notably: GL_RGB8 is *not* a required format, so support may vary
+		multiSampledBufferFormat = GL_RGBA8;
+		maxMultiSampleBufferFormatSamples = 0;
+		glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
+	}
 }
 
 bool gl_context::initInstancedFunctions()
@@ -3420,6 +3459,9 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 	viewportHeight = static_cast<uint32_t>(drawableHeight);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
+
+	// Re-create scene FBOs using new size
+	createSceneRenderpass();
 }
 
 std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
@@ -3435,6 +3477,8 @@ bool gl_context::shouldDraw()
 void gl_context::shutdown()
 {
 	if(glClear) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	deleteSceneRenderpass();
 
 	if (glDeleteFramebuffers && depthFBO.size() > 0)
 	{
@@ -3651,4 +3695,231 @@ size_t gl_context::initDepthPasses(size_t resolution)
 	}
 
 	return depthPassCount;
+}
+
+void gl_context::deleteSceneRenderpass()
+{
+	// delete prior scene texture & FBOs (if present)
+	if (glDeleteFramebuffers && sceneFBO.size() > 0)
+	{
+		glDeleteFramebuffers(static_cast<GLsizei>(sceneFBO.size()), sceneFBO.data());
+		sceneFBO.clear();
+	}
+	if (glDeleteFramebuffers && sceneResolveFBO.size() > 0)
+	{
+		glDeleteFramebuffers(static_cast<GLsizei>(sceneResolveFBO.size()), sceneResolveFBO.data());
+		sceneResolveFBO.clear();
+	}
+	if (sceneMsaaRBO)
+	{
+		glDeleteRenderbuffers(1, &sceneMsaaRBO);
+		sceneMsaaRBO = 0;
+	}
+	if (sceneTexture)
+	{
+		delete sceneTexture;
+		sceneTexture = nullptr;
+	}
+	if (sceneDepthStencilRBO)
+	{
+		glDeleteRenderbuffers(1, &sceneDepthStencilRBO);
+		sceneDepthStencilRBO = 0;
+	}
+}
+
+bool gl_context::createSceneRenderpass()
+{
+	deleteSceneRenderpass();
+
+	if ( ! ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0)) )
+	{
+		// The following requires OpenGL 3.0+ or OpenGL ES 3.0+
+		debug(LOG_ERROR, "Unsupported version of OpenGL / OpenGL ES.");
+		return false;
+	}
+
+	GLsizei samples = std::min<GLsizei>(multisamples, maxMultiSampleBufferFormatSamples);
+
+	if (samples > 0)
+	{
+		// If MSAA is enabled, use glRenderbufferStorageMultisample to create an intermediate buffer with MSAA enabled
+		glGenRenderbuffers(1, &sceneMsaaRBO);
+		glBindRenderbuffer(GL_RENDERBUFFER, sceneMsaaRBO);
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferFormat, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	}
+
+	// Always create a standard color texture (for the resolved color values)
+	auto pNewSceneTexture = dynamic_cast<gl_texture*>(create_texture(1, viewportWidth, viewportHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, "<scene texture>"));
+	if (!pNewSceneTexture)
+	{
+		debug(LOG_ERROR, "Failed to create scene texture");
+		return 0;
+	}
+	sceneTexture = pNewSceneTexture;
+	sceneTexture->bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	sceneTexture->unbind();
+
+	// Create a matching depth/stencil texture
+	sceneDepthStencilRBO = 0;
+	glGenRenderbuffers(1, &sceneDepthStencilRBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, sceneDepthStencilRBO);
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	const size_t numSceneFBOs = 2;
+	for (auto i = 0; i < numSceneFBOs; ++i)
+	{
+		GLuint newFBO = 0;
+		glGenFramebuffers(1, &newFBO);
+		sceneFBO.push_back(newFBO);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
+		if (samples > 0)
+		{
+			// use the MSAA renderbuffer as the color attachment
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sceneMsaaRBO);
+		}
+		else
+		{
+			// just directly use the sceneTexture as the color attachment (since no MSAA resolving needs to occur)
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
+		}
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
+
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (status != GL_FRAMEBUFFER_COMPLETE)
+		{
+			debug(LOG_ERROR, "Failed to create scene framebuffer with error: %s", cbframebuffererror(status));
+		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		if (samples > 0)
+		{
+			// Must also create a sceneResolveFBO for resolving MSAA
+			GLuint newResolveRBO = 0;
+			glGenFramebuffers(1, &newResolveRBO);
+			sceneResolveFBO.push_back(newResolveRBO);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, newResolveRBO);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
+			// shouldn't need a depth/stencil buffer
+
+			status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			if (status != GL_FRAMEBUFFER_COMPLETE)
+			{
+				debug(LOG_ERROR, "Failed to create scene resolve framebuffer with error: %s", cbframebuffererror(status));
+			}
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
+	}
+
+	return true;
+}
+
+void gl_context::beginSceneRenderPass()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
+	glViewport(0, 0, viewportWidth, viewportHeight);
+	GLbitfield clearFlags = 0;
+	glDepthMask(GL_TRUE);
+	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
+	glClear(clearFlags);
+}
+
+void gl_context::endSceneRenderPass()
+{
+	// Performance optimization:
+	//
+	// Before switching the draw framebuffer, call glInvalidateFramebuffer on any parts of the scene framebuffer(s) that we can
+	// NOTE: The only one we need to keep around by the end is sceneTexture, which is bound as GL_COLOR_ATTACHMENT0 on one of the FBOs
+	// However: If using the sceneMsaaRBO, we have to keep that around initially, and only invalidate it after resolving with glBlitFramebuffer
+	//
+	// Support:
+	// - OpenGL:
+	//		- ARB_invalidate_subdata extension provides glInvalidateFramebuffer
+	//			- NOTE: ARB_invalidate_subdata's API does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
+	//		- core in OpenGL 4.3+
+	// - OpenGL ES:
+	//		- EXT_discard_framebuffer provides glDiscardFramebufferEXT
+	//			- NOTE: glDiscardFramebufferEXT does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
+	//			- NOTE: glDiscardFramebufferEXT *only* supports GL_FRAMEBUFFER as a target
+	//		- core in OpenGL ES 3.0+
+
+	// invalidate depth_stencil on sceneFBO[sceneFBOIdx]
+	GLenum invalid_ap[2];
+	if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
+	{
+		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
+		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
+	}
+	else
+	{
+		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
+		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
+		if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
+		{
+			glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
+		}
+		else if (gles && GLAD_GL_EXT_discard_framebuffer && glDiscardFramebufferEXT)
+		{
+			glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
+		}
+	}
+
+	// If MSAA is enabled, use glBiltFramebuffer from the intermediate MSAA-enabled renderbuffer storage to a standard texture (resolving MSAA)
+	bool usingMSAAIntermediate = (sceneMsaaRBO != 0);
+	if (usingMSAAIntermediate)
+	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sceneResolveFBO[sceneFBOIdx]);
+		glBlitFramebuffer(0,0, viewportWidth, viewportHeight,
+						  0,0, viewportWidth, viewportHeight,
+						  GL_COLOR_BUFFER_BIT,
+						  GL_LINEAR);
+	}
+
+	// after this, sceneTexture should be the (msaa-resolved) color texture of the scene
+
+	if (usingMSAAIntermediate)
+	{
+		// invalidate color0 (sceneMsaaRBO) in sceneFBO[sceneFBOIdx] (which is GL_READ_FRAMEBUFFER at this point)
+		GLenum invalid_msaarbo_ap[1];
+		invalid_msaarbo_ap[0] = GL_COLOR_ATTACHMENT0;
+		if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
+		{
+			glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
+		}
+		else
+		{
+			if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
+			{
+				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
+			}
+//			else if (gles && GLAD_GL_EXT_discard_framebuffer && glDiscardFramebufferEXT)
+//			{
+//				// NOTE: glDiscardFramebufferEXT only supports GL_FRAMEBUFFER... but that doesn't work here
+//				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, invalid_msaarbo_ap);
+//			}
+		}
+	}
+
+	sceneFBOIdx++;
+	if (sceneFBOIdx >= sceneFBO.size())
+	{
+		sceneFBOIdx = 0;
+	}
+
+	// switch back to default framebuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// Because the scene uses the same viewport, a call to glViewport should not be needed (NOTE: viewport is *not* part of the framebuffer state)
+}
+
+gfx_api::abstract_texture* gl_context::getSceneTexture()
+{
+	return sceneTexture;
 }

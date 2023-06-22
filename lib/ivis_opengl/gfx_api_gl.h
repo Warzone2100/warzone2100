@@ -222,6 +222,7 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context
@@ -273,6 +274,9 @@ struct gl_context final : public gfx_api::context
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
 	virtual gfx_api::abstract_texture* getDepthTexture() override;
+	virtual void beginSceneRenderPass() override;
+	virtual void endSceneRenderPass() override;
+	virtual gfx_api::abstract_texture* getSceneTexture() override;
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
 	virtual void debugStringMarker(const char *str) override;
@@ -308,6 +312,8 @@ private:
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
 	size_t initDepthPasses(size_t resolution);
+	bool createSceneRenderpass();
+	void deleteSceneRenderpass();
 	void _beginRenderPassImpl();
 private:
 	bool initGLContext();
@@ -335,4 +341,14 @@ private:
 	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = 1;
+
+	GLenum multiSampledBufferFormat = GL_INVALID_ENUM;
+	GLint maxMultiSampleBufferFormatSamples = 0;
+	uint32_t multisamples = 0;
+	gl_texture* sceneTexture = nullptr;
+	std::vector<GLuint> sceneFBO;
+	std::vector<GLuint> sceneResolveFBO;
+	GLuint sceneMsaaRBO = 0;
+	GLuint sceneDepthStencilRBO = 0;
+	size_t sceneFBOIdx = 0;
 };

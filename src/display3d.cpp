@@ -144,6 +144,8 @@ static WzText txtShowOrders;
 // show Droid visible/draw counts text
 static WzText droidText;
 
+static gfx_api::buffer* pScreenQuadVBO = nullptr;
+
 
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
@@ -1418,6 +1420,8 @@ static void drawTiles(iView *player)
 
 	pie_FinalizeMeshes(currentGameFrame);
 
+	gfx_api::context::get().beginSceneRenderPass();
+
 	// draw skybox
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
 	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
@@ -1445,6 +1449,16 @@ static void drawTiles(iView *player)
 		doConstructionLines(viewMatrix);
 	}
 	locateMouse();
+
+	gfx_api::context::get().endSceneRenderPass();
+
+	// Draw the scene to the default framebuffer
+	gfx_api::WorldToScreenPSO::get().bind();
+	gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
+	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenQuadVBO);
+	gfx_api::WorldToScreenPSO::get().bind_textures(gfx_api::context::get().getSceneTexture());
+	gfx_api::WorldToScreenPSO::get().draw(6, 0);
+	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenQuadVBO);
 }
 
 /// Initialise the fog, skybox and some other stuff
@@ -1492,6 +1506,21 @@ bool init3DView()
 
 	batchedObjectStatusRenderer.initialize();
 
+
+	// vertex attributes for screen-filling quad in NDC
+	gfx_api::gfxFloat screenQuadVertices[] = {
+		// position   // texCoord
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		-1.0f, -1.0f,  0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+		//
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+		 1.0f,  1.0f,  1.0f, 1.0f
+	};
+	pScreenQuadVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "screenQuadVertices");
+	pScreenQuadVBO->upload(sizeof(screenQuadVertices), screenQuadVertices);
+
 	return true;
 }
 
@@ -1520,6 +1549,9 @@ void shutdown3DView_FullReset()
 	// Only call "reset" (which also resets BatchedMultiRectRenderer and actually frees GPU buffers)
 	// in this function, which is called from stageTwoShutdown (as opposed to stageThreeShutdown, which is called from levReleaseMissionData)...
 	batchedObjectStatusRenderer.reset();
+
+	delete pScreenQuadVBO;
+	pScreenQuadVBO = nullptr;
 }
 
 /// set the view position from save game
