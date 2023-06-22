@@ -999,6 +999,8 @@ void draw3DScene()
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
+	pie_BeginInterface();
+
 	/* Show the drag Box if necessary */
 	drawDragBox();
 
@@ -1007,8 +1009,6 @@ void draw3DScene()
 	{
 		dragBox3D.status = DRAG_INACTIVE;
 	}
-
-	pie_BeginInterface();
 
 	drawDroidAndStructureSelections();
 
