@@ -282,6 +282,12 @@ void gl_texture::bind()
 	glBindTexture(GL_TEXTURE_2D, _id);
 }
 
+size_t gl_texture::backend_internal_value() const
+{
+	// not currently used in GL backend
+	return 0;
+}
+
 void gl_texture::unbind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -447,6 +453,12 @@ void gl_texture_array::bind()
 void gl_texture_array::unbind()
 {
 	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+}
+
+size_t gl_texture_array::backend_internal_value() const
+{
+	// not currently used in GL backend
+	return 0;
 }
 
 bool gl_texture_array::upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
