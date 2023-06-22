@@ -187,15 +187,23 @@ std::vector<VKType> GetVectorFromVKFunc(F &&func, Args &&... args)
 	return GetVectorFromVKFuncWithExplicitInit(func, VKType(), args...);
 }
 
-static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprops, const uint32_t& memoryTypeBits, const vk::MemoryPropertyFlagBits& properties)
+static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprops, const uint32_t& memoryTypeBits, const vk::MemoryPropertyFlagBits& properties, bool *memTypeFound = nullptr)
 {
 	for (uint32_t i = 0; i < memprops.memoryTypeCount; ++i)
 	{
 		if ((memoryTypeBits & (1 << i)) &&
 			((memprops.memoryTypes[i].propertyFlags & properties) == properties))
 		{
+			if (memTypeFound)
+			{
+				*memTypeFound = true;
+			}
 			return i;
 		}
+	}
+	if (memTypeFound)
+	{
+		*memTypeFound = false;
 	}
 	return -1;
 }
