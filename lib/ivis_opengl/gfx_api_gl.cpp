@@ -3751,7 +3751,8 @@ size_t gl_context::initDepthPasses(size_t resolution)
 		{
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->id(), 0);
 		}
-		glDrawBuffer(GL_NONE);
+		GLenum buf = GL_NONE;
+		glDrawBuffers(1, &buf);
 		glReadBuffer(GL_NONE);
 
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
