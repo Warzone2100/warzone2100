@@ -56,9 +56,6 @@ namespace gfx_api
 
 		// ASTC (LDR) - requires an extension
 		FORMAT_ASTC_4x4_UNORM,
-
-		// [DEPTH FORMATS]
-		FORMAT_DEPTH_BUFFER,	// maps to the best available format for the depth buffer, based on what the current system supports
 	};
 	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_ASTC_4x4_UNORM;
 
@@ -72,9 +69,6 @@ namespace gfx_api
 			case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 			case gfx_api::pixel_format::FORMAT_R8_UNORM:
-				return true;
-			// DEPTH FORMATS
-			case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
 				return true;
 			default:
 				return false;

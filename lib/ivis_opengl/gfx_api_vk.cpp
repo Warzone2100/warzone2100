@@ -4953,8 +4953,6 @@ vk::Format VkRoot::get_format(const gfx_api::pixel_format& format) const
 		return vk::Format::eEacR11G11UnormBlock;
 	case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 		return vk::Format::eAstc4x4UnormBlock;
-	case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
-		return depthBufferFormat;
 	case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
 		// Not supported!
 	default:
