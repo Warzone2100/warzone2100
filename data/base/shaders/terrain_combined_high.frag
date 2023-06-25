@@ -89,10 +89,10 @@ void getGroundBM(int i, inout BumpData res) {
 	float w = fgroundWeights[i];
 	res.color += texture2DArray(groundTex, uv, WZ_MIP_LOAD_BIAS) * w;
 	vec3 N = texture2DArray(groundNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-	if (N == vec3(0)) {
-		N = vec3(0,0,1);
+	if (N == vec3(0.f)) {
+		N = vec3(0.f,0.f,1.f);
 	} else {
-		N = normalize(N * 2 - 1);
+		N = normalize(N * 2.f - 1.f);
 	}
 	res.N += N * w;
 	res.gloss += texture2DArray(groundSpecular, uv, WZ_MIP_LOAD_BIAS).r * w;
@@ -113,9 +113,9 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 
 vec4 main_bumpMapping() {
 	BumpData bump;
-	bump.color = vec4(0);
-	bump.N = vec3(0);
-	bump.gloss = 0;
+	bump.color = vec4(0.f);
+	bump.N = vec3(0.f);
+	bump.gloss = 0.f;
 	getGroundBM(0, bump);
 	getGroundBM(1, bump);
 	getGroundBM(2, bump);
@@ -126,16 +126,16 @@ vec4 main_bumpMapping() {
 		vec4 decalColor = texture2DArray(decalTex, uv, WZ_MIP_LOAD_BIAS);
 		float a = decalColor.a;
 		// blend color, normal and gloss with ground ones based on alpha
-		bump.color = (1-a)*bump.color + a*vec4(decalColor.rgb, 1);
+		bump.color = (1.f - a)*bump.color + a*vec4(decalColor.rgb, 1.f);
 		vec3 n = texture2DArray(decalNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-		if (n == vec3(0)) {
-			n = vec3(0,0,1);
+		if (n == vec3(0.f)) {
+			n = vec3(0.f,0.f,1.f);
 		} else {
-			n = normalize(n * 2 - 1);
+			n = normalize(n * 2.f - 1.f);
 			n = vec3(n.xy * decal2groundMat2, n.z);
 		}
-		bump.N = (1-a)*bump.N + a*n;
-		bump.gloss = (1-a)*bump.gloss + a*texture2DArray(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
+		bump.N = (1.f - a)*bump.N + a*n;
+		bump.gloss = (1.f - a)*bump.gloss + a*texture2DArray(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
 	}
 	vec4 lightMask = texture(lightmap_tex, uvLightmap, 0.f);
 	return lightMask * doBumpMapping(bump, groundLightDir, groundHalfVec);

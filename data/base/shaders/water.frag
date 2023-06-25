@@ -67,11 +67,11 @@ vec4 main_bumpMapping()
 	vec3 N1 = texture(tex1_nm, uv2, WZ_MIP_LOAD_BIAS).xzy; // y is up in modelSpace
 	vec3 N2 = texture(tex2_nm, uv1, WZ_MIP_LOAD_BIAS).xzy;
 	vec3 N; //use overlay blending to mix normal maps properly
-	N.x = N1.x < 0.5 ? (2 * N1.x * N2.x) : (1 - 2 * (1 - N1.x) * (1 - N2.x));
-	N.z = N1.z < 0.5 ? (2 * N1.z * N2.z) : (1 - 2 * (1 - N1.z) * (1 - N2.z));
-	N.y = N1.y < 0.5 ? (2 * N1.y * N2.y) : (1 - 2 * (1 - N1.y) * (1 - N2.y));
-	if (N == vec3(0,0,0)) {
-		N = vec3(0,1,0);
+	N.x = N1.x < 0.5 ? (2.0 * N1.x * N2.x) : (1.0 - 2.0 * (1.0 - N1.x) * (1.0 - N2.x));
+	N.z = N1.z < 0.5 ? (2.0 * N1.z * N2.z) : (1.0 - 2.0 * (1.0 - N1.z) * (1.0 - N2.z));
+	N.y = N1.y < 0.5 ? (2.0 * N1.y * N2.y) : (1.0 - 2.0 * (1.0 - N1.y) * (1.0 - N2.y));
+	if (N == vec3(0.0,0.0,0.0)) {
+		N = vec3(0.0,1.0,0.0);
 	} else {
 		N = normalize(N * 2.0 - 1.0);
 	}
@@ -85,7 +85,7 @@ vec4 main_bumpMapping()
 	float gaussianTerm = exp(-(exponent * exponent));
 
 	vec4 fragColor = (texture(tex1, uv1, WZ_MIP_LOAD_BIAS)+texture(tex2, uv2, WZ_MIP_LOAD_BIAS)) * (gloss+vec4(0.08,0.13,0.15,1.0));
-	fragColor = fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
+	fragColor = fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1.0-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
 	vec4 light = texture(lightmap_tex, uvLightmap, 0.f);
 	return light * fragColor;
 }

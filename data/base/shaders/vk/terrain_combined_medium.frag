@@ -34,15 +34,15 @@ vec3 getGround(int i) {
 
 vec4 main_medium() {
 	vec3 ground = getGround(0) + getGround(1) + getGround(2) + getGround(3);
-	vec4 decal = fragf.tileNo >= 0 ? texture(decalTex, vec3(frag.uvDecal, fragf.tileNo), WZ_MIP_LOAD_BIAS) : vec4(0);
+	vec4 decal = fragf.tileNo >= 0 ? texture(decalTex, vec3(frag.uvDecal, fragf.tileNo), WZ_MIP_LOAD_BIAS) : vec4(0.f);
 
 	vec3 L = normalize(frag.groundLightDir);
-	vec3 N = vec3(0,0,1);
+	vec3 N = vec3(0.f,0.f,1.f);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
 	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * texture(lightmap_tex, frag.uvLightmap);
 	light.a = 1.f;
 
-	return light * vec4((1-decal.a) * ground + decal.a * decal.rgb, 1);
+	return light * vec4((1.f - decal.a) * ground + decal.a * decal.rgb, 1.f);
 }
 
 void main()
