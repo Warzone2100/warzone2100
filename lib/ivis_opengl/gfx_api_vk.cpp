@@ -2004,7 +2004,7 @@ VkDepthMapImage::~VkDepthMapImage()
 	}
 }
 
-void VkDepthMapImage::destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
+void VkDepthMapImage::destroy(vk::Device _dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	if (buffering_mechanism::isInitialized())
 	{
@@ -2018,7 +2018,7 @@ void VkDepthMapImage::destroy(vk::Device dev, const VmaAllocator& allocator, con
 	else
 	{
 		view.reset();
-		dev.destroyImage(object, nullptr, vkDynLoader);
+		_dev.destroyImage(object, nullptr, vkDynLoader);
 		object = vk::Image();
 		vmaFreeMemory(allocator, allocation);
 		allocation = VK_NULL_HANDLE;
@@ -2224,7 +2224,7 @@ VkRenderedImage::~VkRenderedImage()
 	}
 }
 
-void VkRenderedImage::destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
+void VkRenderedImage::destroy(vk::Device _dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	if (buffering_mechanism::isInitialized())
 	{
@@ -2238,7 +2238,7 @@ void VkRenderedImage::destroy(vk::Device dev, const VmaAllocator& allocator, con
 	else
 	{
 		view.reset();
-		dev.destroyImage(object, nullptr, vkDynLoader);
+		_dev.destroyImage(object, nullptr, vkDynLoader);
 		object = vk::Image();
 		vmaFreeMemory(allocator, allocation);
 		allocation = VK_NULL_HANDLE;
