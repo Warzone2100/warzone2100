@@ -109,6 +109,28 @@ private:
 	virtual bool upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
+struct gl_depthmap_texture final : public gfx_api::abstract_texture
+{
+private:
+	friend struct gl_context;
+	GLuint _id;
+	bool gles = false;
+	bool _isArray = false;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+
+	gl_depthmap_texture();
+	virtual ~gl_depthmap_texture();
+public:
+	virtual void bind() override;
+	virtual bool isArray() const override { return _isArray; }
+	virtual size_t backend_internal_value() const override;
+	GLenum target() const;
+	unsigned id() const;
+	void unbind();
+};
+
 struct gl_buffer final : public gfx_api::buffer
 {
 	gfx_api::buffer::usage usage;
@@ -312,6 +334,7 @@ private:
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
 	size_t initDepthPasses(size_t resolution);
+	gl_depthmap_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
 	bool createSceneRenderpass();
 	void deleteSceneRenderpass();
 	void _beginRenderPassImpl();
@@ -337,7 +360,7 @@ private:
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;
 
-	gl_texture* depthTexture;
+	gl_depthmap_texture* depthTexture = nullptr;
 	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = 1;

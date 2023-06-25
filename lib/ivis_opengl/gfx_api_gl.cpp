@@ -121,8 +121,6 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 			return GL_COMPRESSED_RG11_EAC;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 			return GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
-		case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
-			return GL_DEPTH_COMPONENT32F; // TODO: Need to check which one to give
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}
@@ -165,9 +163,6 @@ static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
 				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
 				return GL_LUMINANCE;
 			}
-		// DEPTH FORMAT
-		case gfx_api::pixel_format::FORMAT_DEPTH_BUFFER:
-			return GL_DEPTH_COMPONENT;
 		// COMPRESSED FORMAT
 		default:
 			return to_gl_internalformat(format, gles);
@@ -257,6 +252,44 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 			debug(LOG_FATAL, "Unrecognised property type");
 	}
 	return GL_INVALID_ENUM;
+}
+
+// MARK: gl_depthmap_texture
+
+gl_depthmap_texture::gl_depthmap_texture()
+{
+	glGenTextures(1, &_id);
+}
+
+gl_depthmap_texture::~gl_depthmap_texture()
+{
+	glDeleteTextures(1, &_id);
+}
+
+void gl_depthmap_texture::bind()
+{
+	glBindTexture((_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, _id);
+}
+
+GLenum gl_depthmap_texture::target() const
+{
+	return (_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
+}
+
+unsigned gl_depthmap_texture::id() const
+{
+	return _id;
+}
+
+size_t gl_depthmap_texture::backend_internal_value() const
+{
+	// not currently used in GL backend
+	return 0;
+}
+
+void gl_depthmap_texture::unbind()
+{
+	glBindTexture((_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, 0);
 }
 
 // MARK: gl_texture
@@ -2002,6 +2035,38 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	return new_texture;
 }
 
+gl_depthmap_texture* gl_context::create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename)
+{
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
+	auto* new_texture = new gl_depthmap_texture();
+	new_texture->gles = gles;
+	new_texture->_isArray = (layer_count > 1);
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	new_texture->debugName = filename;
+#endif
+	new_texture->bind();
+	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
+	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	{
+		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+	}
+
+	GLenum depthInternalFormat = GL_DEPTH_COMPONENT32F;
+	if (!new_texture->isArray())
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, depthInternalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	}
+	else
+	{
+		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, depthInternalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), static_cast<GLsizei>(layer_count), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	}
+
+	new_texture->unbind();
+	return new_texture;
+}
+
 gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
 {
 	return new gl_buffer(usage, hint);
@@ -3656,8 +3721,7 @@ size_t gl_context::initDepthPasses(size_t resolution)
 		depthTexture = nullptr;
 	}
 
-	// for now, create a single 2d depth texture
-	auto pNewDepthTexture = dynamic_cast<gl_texture*>(create_texture(1, resolution, resolution, gfx_api::pixel_format::FORMAT_DEPTH_BUFFER, "<depth map>"));
+	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<depth map>");
 	if (!pNewDepthTexture)
 	{
 		debug(LOG_ERROR, "Failed to create depth texture");
@@ -3665,7 +3729,7 @@ size_t gl_context::initDepthPasses(size_t resolution)
 	}
 	depthTexture = pNewDepthTexture;
 
-	GLenum target = (depthTexture->isArray()) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
+	GLenum target = depthTexture->target();
 	depthTexture->bind();
 	glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
