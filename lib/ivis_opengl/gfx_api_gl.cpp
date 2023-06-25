@@ -3383,6 +3383,10 @@ void gl_context::initPixelFormatsSupport()
 		maxMultiSampleBufferFormatSamples = 0;
 		glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
 	}
+
+	// Cap maxMultiSampleBufferFormatSamples at 16 (some drivers report supporting 32 but then crash)
+	maxMultiSampleBufferFormatSamples = std::min<GLint>(maxMultiSampleBufferFormatSamples, 16);
+	maxMultiSampleBufferFormatSamples = std::max<GLint>(maxMultiSampleBufferFormatSamples, 0);
 }
 
 bool gl_context::initInstancedFunctions()
