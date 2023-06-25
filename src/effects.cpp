@@ -2257,7 +2257,7 @@ bool writeFXData(const char *fileName)
 
 		if (it->imd)
 		{
-			effectObj["imd_name"] = modelName(it->imd);
+			effectObj["imd_name"] = modelName(it->imd).toUtf8();
 		}
 
 		auto effectKey = "effect_" + WzString::number(i);
