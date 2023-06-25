@@ -3066,7 +3066,7 @@ void gl_context::beginDepthPass(size_t idx)
 {
 	ASSERT_OR_RETURN(, idx < depthFBO.size(), "Invalid depth pass #: %zu", idx);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO[idx]);
-	glViewport(0, 0, depthBufferResolution, depthBufferResolution);
+	glViewport(0, 0, static_cast<GLsizei>(depthBufferResolution), static_cast<GLsizei>(depthBufferResolution));
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
