@@ -60,7 +60,7 @@ void enumerateLoadedModels(const std::function<void (const std::string& modelNam
 
 /// Get filename of model pointer. This is really slow, so do not abuse for logging
 /// purposes, for example.
-const std::string &modelName(iIMDShape *model);
+const WzString &modelName(iIMDShape *model);
 
 iIMDShape *modelGet(const WzString &filename);
 

@@ -994,7 +994,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 							continue;
 						}
 						// Must add mapping to faction IMD lookup table for all additional level modelNames (these have _<level> appended)
-						addFactionModelNameMapping(faction, WzString::fromUtf8(pNormalIMD->modelName), WzString::fromUtf8(pIMD->modelName));
+						addFactionModelNameMapping(faction, pNormalIMD->modelName, pIMD->modelName);
 					}
 				}
 			}
