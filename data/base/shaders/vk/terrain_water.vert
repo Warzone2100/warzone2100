@@ -31,19 +31,19 @@ layout(location = 7) out float depth2;
 
 void main()
 {
-	uvLightmap = (ModelUVLightmapMatrix * vec4(vertex.xyz, 1)).xy;
+	uvLightmap = (ModelUVLightmapMatrix * vec4(vertex.xyz, 1.f)).xy;
 	depth = vertex.w;
 	depth2 = length(vertex.y - vertex.w);
 
-	vec2 uv1 = vec2(vertex.x/4/128 + timeSec/80, -vertex.z/4/128 + timeSec/40); // (ModelUV1Matrix * vertex).xy;
-	vec2 uv2 = vec2(vertex.x/4/128, -vertex.z/4/128 - timeSec/40); // (ModelUV2Matrix * vertex).xy;
+	vec2 uv1 = vec2(vertex.x/4.f/128.f + timeSec/80.f, -vertex.z/4.f/128.f + timeSec/40.f); // (ModelUV1Matrix * vertex).xy;
+	vec2 uv2 = vec2(vertex.x/4.f/128.f, -vertex.z/4.f/128.f - timeSec/40.f); // (ModelUV2Matrix * vertex).xy;
 	uv1_uv2 = vec4(uv1.x, uv1.y, uv2.x, uv2.y);
 
 	vec3 eyeVec = normalize(cameraPos.xyz - vertex.xyz);
 	lightDir = sunPos.xyz;
 	halfVec = lightDir + eyeVec;
 
-	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1.0);
+	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1.f);
 	vertexDistance = position.z;
 	gl_Position = position;
 	gl_Position.y *= -1.;
