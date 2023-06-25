@@ -938,6 +938,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		// > declaration must include a precision qualifier or the default float precision must
 		// > have been previously declared.
 		fragmentShaderHeader = std::string(shaderVersionStr) + "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\nprecision highp int;\n#else\nprecision mediump float;\n#endif\n";
+		fragmentShaderHeader += "precision mediump sampler2DArray;\n";
 	}
 
 	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
