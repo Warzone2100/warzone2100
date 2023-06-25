@@ -59,6 +59,12 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
 #endif
 
+#if VK_HEADER_VERSION >= 260
+# define WZ_THROW_VK_RESULT_EXCEPTION(result, message) vk::detail::throwResultException(result, message)
+#else
+# define WZ_THROW_VK_RESULT_EXCEPTION(result, message) vk::throwResultException(result, message)
+#endif
+
 const uint32_t minSupportedVulkanVersion = VK_API_VERSION_1_0;
 #if defined(DEBUG)
 // For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
@@ -549,7 +555,7 @@ void BlockBufferAllocator::allocateNewBlock(uint32_t minimumSize)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateBuffer" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateBuffer" );
 	}
 
 	if (autoMap)
@@ -1760,7 +1766,7 @@ VkPSO::VkPSO(vk::Device _dev,
 			object = std::move(result.value);
 			break;
 		default:
-			vk::throwResultException(result.result, "createGraphicsPipeline");
+			WZ_THROW_VK_RESULT_EXCEPTION(result.result, "createGraphicsPipeline");
 	}
 }
 
@@ -1824,7 +1830,7 @@ void VkBuf::allocateBufferObject(const std::size_t& size)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateBuffer" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateBuffer" );
 	}
 
 	if (root->debugUtilsExtEnabled)
@@ -1966,7 +1972,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
@@ -2020,7 +2026,7 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
@@ -2239,7 +2245,7 @@ VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
@@ -2356,7 +2362,7 @@ VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t l
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
