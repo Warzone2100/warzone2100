@@ -3210,7 +3210,26 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 
 	if (gles || !GLAD_GL_ARB_internalformat_query2 || !glGetInternalformativ)
 	{
-		// the query function is not available, so just assume that the format is available
+		// Special cases:
+		switch (format)
+		{
+			// ASTC:
+			case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+				//   - While WZ currently only supports ASTC on GLES, some desktop platforms support GLES *and* advertise ASTC support, but may encounter performance issues (in practice)
+				//   - In OpenGL mode, glGetInternalformativ could be used to query "full support", but that functionality isn't currently available (and isn't even possible in OpenGL ES?)
+				//   - So restrict this to specific platforms for now:
+				//     - Android, Apple platforms (which should only advertise this if actually supported)
+			#if defined(__ANDROID__) || defined(__APPLE__)
+				break; // assume the format is available
+			#else
+				return gfx_api::pixel_format_usage::none; // immediately return - not available
+			#endif
+			// All other formats:
+			default:
+				// the query function is not available, so just assume that the format is available
+				break;
+		}
+
 		// for now, mark it as available for sampled_image - TODO: investigate whether we can safely assume it's available for other usages
 		retVal |= gfx_api::pixel_format_usage::sampled_image;
 		return retVal;
