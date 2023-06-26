@@ -3,10 +3,8 @@
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec2 vertexPos;
-in vec2 vertexTexCoords;
 #else
 attribute vec2 vertexPos;
-attribute vec2 vertexTexCoords;
 #endif
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
@@ -17,6 +15,6 @@ varying vec2 texCoords;
 
 void main()
 {
-	texCoords = vertexTexCoords;
-	gl_Position = vec4(vertexPos.x, vertexPos.y, 0.f, 1.f);
+	gl_Position = vec4(vertexPos.x, vertexPos.y, 0.0, 1.0);
+	texCoords = 0.5 * gl_Position.xy + vec2(0.5);
 }

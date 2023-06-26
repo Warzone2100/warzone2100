@@ -144,7 +144,7 @@ static WzText txtShowOrders;
 // show Droid visible/draw counts text
 static WzText droidText;
 
-static gfx_api::buffer* pScreenQuadVBO = nullptr;
+static gfx_api::buffer* pScreenTriangleVBO = nullptr;
 
 
 /********************  Variables  ********************/
@@ -1455,10 +1455,10 @@ static void drawTiles(iView *player)
 	// Draw the scene to the default framebuffer
 	gfx_api::WorldToScreenPSO::get().bind();
 	gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
-	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenQuadVBO);
+	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
 	gfx_api::WorldToScreenPSO::get().bind_textures(gfx_api::context::get().getSceneTexture());
 	gfx_api::WorldToScreenPSO::get().draw(6, 0);
-	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenQuadVBO);
+	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
 }
 
 /// Initialise the fog, skybox and some other stuff
@@ -1507,19 +1507,14 @@ bool init3DView()
 	batchedObjectStatusRenderer.initialize();
 
 
-	// vertex attributes for screen-filling quad in NDC
-	gfx_api::gfxFloat screenQuadVertices[] = {
-		// position   // texCoord
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		//
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f, 1.0f
+	// vertex attributes for a single triangle that covers the screen
+	gfx_api::gfxFloat screenTriangleVertices[] = {
+		-1.f, -1.f,
+		3.f, -1.f,
+		-1.f, 3.f
 	};
-	pScreenQuadVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "screenQuadVertices");
-	pScreenQuadVBO->upload(sizeof(screenQuadVertices), screenQuadVertices);
+	pScreenTriangleVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "screenTriangleVertices");
+	pScreenTriangleVBO->upload(sizeof(screenTriangleVertices), screenTriangleVertices);
 
 	return true;
 }
@@ -1550,8 +1545,8 @@ void shutdown3DView_FullReset()
 	// in this function, which is called from stageTwoShutdown (as opposed to stageThreeShutdown, which is called from levReleaseMissionData)...
 	batchedObjectStatusRenderer.reset();
 
-	delete pScreenQuadVBO;
-	pScreenQuadVBO = nullptr;
+	delete pScreenTriangleVBO;
+	pScreenTriangleVBO = nullptr;
 }
 
 /// set the view position from save game

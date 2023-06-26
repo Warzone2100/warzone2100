@@ -1250,9 +1250,8 @@ namespace gfx_api
 	using WorldToScreenPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
 	std::tuple<constant_buffer_type<SHADER_WORLD_TO_SCREEN>>,
 	std::tuple<
-		vertex_buffer_description<4 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
-			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>,
-			vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(gfxFloat)*2>
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
 		>
 	>,
 	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_WORLD_TO_SCREEN>;

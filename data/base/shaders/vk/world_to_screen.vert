@@ -5,14 +5,13 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 };
 
 layout(location = 0) in vec2 vertexPos;
-layout(location = 1) in vec2 vertexTexCoords;
 
 layout(location = 0) out vec2 texCoords;
 
 void main()
 {
-	texCoords = vertexTexCoords;
-	gl_Position = vec4(vertexPos.x, vertexPos.y, 0.f, 1.f);
+	gl_Position = vec4(vertexPos.x, vertexPos.y, 0.0, 1.0);
+	texCoords = 0.5 * gl_Position.xy + vec2(0.5);
 //	gl_Position.y *= -1.;
 //	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
 }
