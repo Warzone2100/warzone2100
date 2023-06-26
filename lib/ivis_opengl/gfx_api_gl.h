@@ -109,7 +109,7 @@ private:
 	virtual bool upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
-struct gl_depthmap_texture final : public gfx_api::abstract_texture
+struct gl_gpurendered_texture final : public gfx_api::abstract_texture
 {
 private:
 	friend struct gl_context;
@@ -120,8 +120,8 @@ private:
 	std::string debugName;
 #endif
 
-	gl_depthmap_texture();
-	virtual ~gl_depthmap_texture();
+	gl_gpurendered_texture();
+	virtual ~gl_gpurendered_texture();
 public:
 	virtual void bind() override;
 	virtual bool isArray() const override { return _isArray; }
@@ -334,7 +334,9 @@ private:
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
 	size_t initDepthPasses(size_t resolution);
-	gl_depthmap_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
+	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename);
+	gl_gpurendered_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
+	gl_gpurendered_texture* create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
 	bool createSceneRenderpass();
 	void deleteSceneRenderpass();
 	void _beginRenderPassImpl();
@@ -360,15 +362,16 @@ private:
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;
 
-	gl_depthmap_texture* depthTexture = nullptr;
+	gl_gpurendered_texture* depthTexture = nullptr;
 	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = 1;
 
-	GLenum multiSampledBufferFormat = GL_INVALID_ENUM;
+	GLenum multiSampledBufferInternalFormat = GL_INVALID_ENUM;
+	GLenum multiSampledBufferBaseFormat = GL_INVALID_ENUM;
 	GLint maxMultiSampleBufferFormatSamples = 0;
 	uint32_t multisamples = 0;
-	gl_texture* sceneTexture = nullptr;
+	gl_gpurendered_texture* sceneTexture = nullptr;
 	std::vector<GLuint> sceneFBO;
 	std::vector<GLuint> sceneResolveFBO;
 	GLuint sceneMsaaRBO = 0;

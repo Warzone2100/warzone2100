@@ -254,40 +254,40 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 	return GL_INVALID_ENUM;
 }
 
-// MARK: gl_depthmap_texture
+// MARK: gl_gpurendered_texture
 
-gl_depthmap_texture::gl_depthmap_texture()
+gl_gpurendered_texture::gl_gpurendered_texture()
 {
 	glGenTextures(1, &_id);
 }
 
-gl_depthmap_texture::~gl_depthmap_texture()
+gl_gpurendered_texture::~gl_gpurendered_texture()
 {
 	glDeleteTextures(1, &_id);
 }
 
-void gl_depthmap_texture::bind()
+void gl_gpurendered_texture::bind()
 {
 	glBindTexture((_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, _id);
 }
 
-GLenum gl_depthmap_texture::target() const
+GLenum gl_gpurendered_texture::target() const
 {
 	return (_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
 }
 
-unsigned gl_depthmap_texture::id() const
+unsigned gl_gpurendered_texture::id() const
 {
 	return _id;
 }
 
-size_t gl_depthmap_texture::backend_internal_value() const
+size_t gl_gpurendered_texture::backend_internal_value() const
 {
 	// not currently used in GL backend
 	return 0;
 }
 
-void gl_depthmap_texture::unbind()
+void gl_gpurendered_texture::unbind()
 {
 	glBindTexture((_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, 0);
 }
@@ -2035,11 +2035,17 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	return new_texture;
 }
 
-gl_depthmap_texture* gl_context::create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename)
+gl_gpurendered_texture* gl_context::create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename)
+{
+	GLenum depthInternalFormat = GL_DEPTH_COMPONENT32F;
+	return create_gpurendered_texture(depthInternalFormat, GL_DEPTH_COMPONENT, GL_FLOAT, width, height, layer_count, filename);
+}
+
+gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename)
 {
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
-	auto* new_texture = new gl_depthmap_texture();
+	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = (layer_count > 1);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -2053,18 +2059,22 @@ gl_depthmap_texture* gl_context::create_depthmap_texture(const size_t& layer_cou
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 
-	GLenum depthInternalFormat = GL_DEPTH_COMPONENT32F;
 	if (!new_texture->isArray())
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, depthInternalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, format, type, nullptr);
 	}
 	else
 	{
-		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, depthInternalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), static_cast<GLsizei>(layer_count), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), static_cast<GLsizei>(layer_count), 0, format, type, nullptr);
 	}
 
 	new_texture->unbind();
 	return new_texture;
+}
+
+gl_gpurendered_texture* gl_context::create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename)
+{
+	return create_gpurendered_texture(internalFormat, format, type, width, height, 1, filename);
 }
 
 gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
@@ -3426,18 +3436,19 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 	}
 
-	// Determine multiSampledBufferFormat
+	// Determine multiSampledBufferInternalFormat
 	if (!gles)
 	{
 		// OpenGL
 		// - Required formats for render buffer include: GL_RGB10_A2, GL_RGBA8
 		// - Notably: GL_RGB8 is *not* a required format, so support may vary
-		multiSampledBufferFormat = GL_RGBA8;
+		multiSampledBufferInternalFormat = GL_RGBA8;
+		multiSampledBufferBaseFormat = GL_RGBA;
 		maxMultiSampleBufferFormatSamples = 0;
 		glGetIntegerv(GL_MAX_SAMPLES, &maxMultiSampleBufferFormatSamples);
 		if (GLAD_GL_ARB_internalformat_query2 && glGetInternalformativ)
 		{
-			glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
+			glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferInternalFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
 		}
 	}
 	else
@@ -3445,9 +3456,10 @@ void gl_context::initPixelFormatsSupport()
 		// OpenGL ES (3.0+)
 		// - Required formats for render buffer include: GL_RGB10_A2, GL_RGBA8
 		// - Notably: GL_RGB8 is *not* a required format, so support may vary
-		multiSampledBufferFormat = GL_RGBA8;
+		multiSampledBufferInternalFormat = GL_RGBA8;
+		multiSampledBufferBaseFormat = GL_RGBA;
 		maxMultiSampleBufferFormatSamples = 0;
-		glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
+		glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferInternalFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
 	}
 
 	// Cap maxMultiSampleBufferFormatSamples at 16 (some drivers report supporting 32 but then crash)
@@ -3815,12 +3827,16 @@ bool gl_context::createSceneRenderpass()
 		// If MSAA is enabled, use glRenderbufferStorageMultisample to create an intermediate buffer with MSAA enabled
 		glGenRenderbuffers(1, &sceneMsaaRBO);
 		glBindRenderbuffer(GL_RENDERBUFFER, sceneMsaaRBO);
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferFormat, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferInternalFormat, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	}
 
 	// Always create a standard color texture (for the resolved color values)
-	auto pNewSceneTexture = dynamic_cast<gl_texture*>(create_texture(1, viewportWidth, viewportHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, "<scene texture>"));
+	// NOTE:
+	// - OpenGL ES: color texture format must *MATCH* the format used for the multisampled color render buffer
+	GLenum colorInternalFormat = (samples > 0 && gles) ? multiSampledBufferInternalFormat : GL_RGB8;
+	GLenum colorBaseFormat = (samples > 0 && gles) ? multiSampledBufferBaseFormat : GL_RGB;
+	auto pNewSceneTexture = create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE, viewportWidth, viewportHeight, "<scene texture>");
 	if (!pNewSceneTexture)
 	{
 		debug(LOG_ERROR, "Failed to create scene texture");
