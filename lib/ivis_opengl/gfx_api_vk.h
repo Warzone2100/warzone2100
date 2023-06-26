@@ -697,15 +697,11 @@ struct VkRoot final : gfx_api::context
 	// render passes
 	std::vector<RenderPassDetails> renderPasses;
 
-	// default renderpass
-//	RenderPassDetails defaultRenderpass = RenderPassDetails(DEFAULT_RENDER_PASS_ID);
-
 	// depth render passes
 	vk::Format depthBufferFormat = vk::Format::eUndefined;
 	uint32_t depthMapSize = 4096;
 	VkDepthMapImage* pDepthMapImage = nullptr;
 	std::vector<vk::ImageView> depthMapCascadeView;
-//	std::vector<RenderPassDetails> depthRenderPasses;
 
 	// scene render pass
 	vk::Format sceneImageFormat = vk::Format::eUndefined;

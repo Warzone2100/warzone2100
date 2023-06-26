@@ -12,6 +12,4 @@ void main()
 {
 	gl_Position = vec4(vertexPos.x, vertexPos.y, 0.0, 1.0);
 	texCoords = 0.5 * gl_Position.xy + vec2(0.5);
-//	gl_Position.y *= -1.;
-//	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
 }
