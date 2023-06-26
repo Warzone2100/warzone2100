@@ -307,6 +307,21 @@ void atmosUpdateSystem()
 	}
 }
 
+static inline void renderParticleInternal(ATPART *psPart, const glm::mat4 &viewMatrix, const glm::mat4& rotateScaleMatrix)
+{
+	glm::vec3 dv;
+
+	/* Transform it */
+	dv.x = psPart->position.x;
+	dv.y = psPart->position.y;
+	dv.z = -(psPart->position.z);
+	/* Make it face camera */
+	/* Scale it... */
+	const glm::mat4 modelMatrix = glm::translate(dv) * rotateScaleMatrix;
+	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
+	/* Draw it... */
+}
+
 void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	UDWORD	i;
@@ -315,6 +330,11 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiv
 	{
 		return;
 	}
+
+	const glm::mat4 rotateMatrix = glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(0.f, 1.f, 0.f));
+	glm::mat4 rotateScaleMatrix = rotateMatrix;
+	UDWORD last_particle_size = 0;
 
 	/* Traverse the list */
 	for (i = 0; i < MAX_ATMOS_PARTICLES; i++)
@@ -325,7 +345,12 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiv
 			/* Is it visible on the screen? */
 			if (clipXYZ(static_cast<int>(asAtmosParts[i].position.x), static_cast<int>(asAtmosParts[i].position.z), static_cast<int>(asAtmosParts[i].position.y), perspectiveViewMatrix))
 			{
-				renderParticle(&asAtmosParts[i], viewMatrix);
+				if (last_particle_size != asAtmosParts[i].size)
+				{
+					rotateScaleMatrix = rotateMatrix * glm::scale(glm::vec3(asAtmosParts[i].size / 100.f));
+					last_particle_size = asAtmosParts[i].size;
+				}
+				renderParticleInternal(&asAtmosParts[i], viewMatrix, rotateScaleMatrix);
 			}
 		}
 	}
@@ -333,20 +358,10 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiv
 
 void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 {
-	glm::vec3 dv;
-
-	/* Transform it */
-	dv.x = psPart->position.x;
-	dv.y = psPart->position.y;
-	dv.z = -(psPart->position.z);
-	/* Make it face camera */
-	/* Scale it... */
-	const glm::mat4 modelMatrix = glm::translate(dv) *
-		glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+	const glm::mat4 rotateScaleMatrix = glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::scale(glm::vec3(psPart->size / 100.f));
-	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
-	/* Draw it... */
+	renderParticleInternal(psPart, viewMatrix, rotateScaleMatrix);
 }
 
 void atmosSetWeatherType(WT_CLASS type)
