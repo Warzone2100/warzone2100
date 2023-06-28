@@ -770,6 +770,8 @@ void markTileDirty(int i, int j)
 	}
 }
 
+void loadWaterTextures(int maxTerrainTextureSize);
+
 void loadTerrainTextures_Fallback(MAP_TILESET mapTileset)
 {
 	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
@@ -785,6 +787,9 @@ void loadTerrainTextures_Fallback(MAP_TILESET mapTileset)
 		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", groundType.textureName.c_str());
 	}
+
+	// load water textures
+	loadWaterTextures(maxTerrainTextureSize);
 }
 
 static gfx_api::texture_array* groundTexArr = nullptr;
@@ -831,6 +836,29 @@ gfx_api::texture* getWaterClassicTexture()
 	return waterClassicTexture;
 }
 
+void loadWaterTextures(int maxTerrainTextureSize)
+{
+	waterTextures.clear();
+
+	// load water textures
+	auto checkTex = [maxTerrainTextureSize](const WzString &fileName, gfx_api::texture_type type) -> gfx_api::texture* {
+		WzString fullName = "texpages/" + fileName;
+		auto imageLoadFilename = gfx_api::imageLoadFilenameFromInputFilename(fullName);
+		if (!PHYSFS_exists(imageLoadFilename))
+		{
+			return nullptr;
+		}
+		return gfx_api::context::get().loadTextureFromFile(imageLoadFilename.toUtf8().c_str(), type, maxTerrainTextureSize, maxTerrainTextureSize);
+	};
+	waterTextures.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
+	waterTextures.tex2 = checkTex("page-81-water-2.png", (terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture);
+	// check water optional textures
+	waterTextures.tex1_nm = checkTex("page-80-water-1_nm.png", gfx_api::texture_type::normal_map);
+	waterTextures.tex2_nm = checkTex("page-81-water-2_nm.png", gfx_api::texture_type::normal_map);
+	waterTextures.tex1_sm = checkTex("page-80-water-1_sm.png", gfx_api::texture_type::specular_map);
+	waterTextures.tex2_sm = checkTex("page-81-water-2_sm.png", gfx_api::texture_type::specular_map);
+}
+
 void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 {
 	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
@@ -843,7 +871,6 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	delete groundSpecularArr; groundSpecularArr = nullptr;
 	delete groundHeightArr; groundHeightArr = nullptr;
 	delete waterClassicTexture; waterClassicTexture = nullptr;
-	waterTextures.clear();
 
 	std::vector<WzString> groundTextureFilenames;
 	std::vector<WzString> groundTextureFilenames_nm;
@@ -922,22 +949,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	}
 
 	// load water textures
-	auto checkTex = [maxTerrainTextureSize](const WzString &fileName, gfx_api::texture_type type) -> gfx_api::texture* {
-		WzString fullName = "texpages/" + fileName;
-		auto imageLoadFilename = gfx_api::imageLoadFilenameFromInputFilename(fullName);
-		if (!PHYSFS_exists(imageLoadFilename))
-		{
-			return nullptr;
-		}
-		return gfx_api::context::get().loadTextureFromFile(imageLoadFilename.toUtf8().c_str(), type, maxTerrainTextureSize, maxTerrainTextureSize);
-	};
-	waterTextures.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
-	waterTextures.tex2 = checkTex("page-81-water-2.png", (terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture);
-	// check water optional textures
-	waterTextures.tex1_nm = checkTex("page-80-water-1_nm.png", gfx_api::texture_type::normal_map);
-	waterTextures.tex2_nm = checkTex("page-81-water-2_nm.png", gfx_api::texture_type::normal_map);
-	waterTextures.tex1_sm = checkTex("page-80-water-1_sm.png", gfx_api::texture_type::specular_map);
-	waterTextures.tex2_sm = checkTex("page-81-water-2_sm.png", gfx_api::texture_type::specular_map);
+	loadWaterTextures(maxTerrainTextureSize);
 }
 
 void loadTerrainTextures(MAP_TILESET mapTileset)
