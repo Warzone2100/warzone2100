@@ -54,7 +54,7 @@ class ScrollBarWidget;
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 /* The optional user callback function */
-typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, W_CONTEXT *psContext);
+typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, const W_CONTEXT *psContext);
 typedef void (*WIDGET_AUDIOCALLBACK)(int AudioID);
 
 /* The optional "calc layout" callback function, to support runtime layout recalculation */

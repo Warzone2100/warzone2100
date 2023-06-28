@@ -693,7 +693,7 @@ static void intSetTransCapacityLabel(W_LABEL &Label)
 }
 
 /*updates the capacity of the current Transporter*/
-void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateTransCapacity(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
 

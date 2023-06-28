@@ -295,7 +295,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 /*Displays the proximity messages blips over the world*/
 void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateQuantitySlider(WIDGET *psWidget, const W_CONTEXT *psContext);
 
 void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
