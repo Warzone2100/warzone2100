@@ -65,6 +65,10 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	return vec4(res.rgb, b.color.a);
 }
 
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
+
 vec4 main_bumpMapping() {
 	BumpData bump;
 	bump.color = vec4(0);
@@ -91,8 +95,10 @@ vec4 main_bumpMapping() {
 		bump.N = (1-a)*bump.N + a*n;
 		bump.gloss = (1-a)*bump.gloss + a*texture(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
 	}
-	vec4 lightMask = texture(lightmap_tex, frag.uvLightmap);
-	return lightMask * doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec);
+	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap);
+	vec4 color = doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec) * vec4(vec3(lightmap_vec4.a), 1.f); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
+	color.rgb = blendAddEffectLighting(color.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
+	return color;
 }
 
 void main()

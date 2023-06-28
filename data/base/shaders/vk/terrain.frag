@@ -28,7 +28,7 @@ layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	vec4 fragColor = color * texture(tex, uv1, WZ_MIP_LOAD_BIAS) * texture(lightmap_tex, uv2, 0.f);
+	vec4 fragColor = color * texture(tex, uv1, WZ_MIP_LOAD_BIAS) * vec4(texture(lightmap_tex, uv2, 0.f).rgb, 1.f);
 	
 	if (fogEnabled > 0)
 	{

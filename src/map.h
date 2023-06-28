@@ -74,7 +74,7 @@ struct MAPTILE
 	// DISPLAY ONLY (NOT for use in game calculations)
 	uint8_t         ground;                 ///< The ground type used for the terrain renderer
 	uint8_t         illumination;           // How bright is this tile? = diffuseSunLight * ambientOcclusion
-	float			ambientOcclusion;		// ambient occlusion. from 1 (max occlusion) to 254 (no occlusion), similar to illumination.
+	uint8_t			ambientOcclusion;		// ambient occlusion. from 1 (max occlusion) to 254 (no occlusion), similar to illumination.
 	float           level;                  ///< The visibility level of the top left of the tile, for this client. for terrain lightmap
 	PIELIGHT        colour;					// color in terrain lightmap, based on tile.level and near light sources
 };
