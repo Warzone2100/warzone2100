@@ -1328,6 +1328,7 @@ static void drawTiles(iView *player)
 
 	// update the fog of war... FIXME: Remove this
 	const glm::mat4 tileCalcPerspectiveViewMatrix = perspectiveMatrix * baseViewMatrix;
+	auto currTerrainShaderType = getTerrainShaderType();
 	for (int i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
 	{
 		/* Go through the x's */
@@ -1345,7 +1346,7 @@ static void drawTiles(iView *player)
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
 				pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness(static_cast<UBYTE>(psTile->level)));
+				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level)));
 			}
 			tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, tileCalcPerspectiveViewMatrix, &screen);
 			tileScreenInfo[idx][jdx].x = screen.x;

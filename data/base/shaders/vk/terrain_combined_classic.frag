@@ -23,13 +23,19 @@ layout(location = 9) flat in FragFlatData fragf;
 
 layout(location = 0) out vec4 FragColor;
 
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
+
 vec4 main_classic() {
 	vec4 decal = fragf.tileNo >= 0 ? texture(decalTex, vec3(frag.uvDecal, fragf.tileNo), WZ_MIP_LOAD_BIAS) : vec4(0);
 
 	vec3 L = normalize(frag.groundLightDir);
 	vec3 N = vec3(0,0,1);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
-	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * texture(lightmap_tex, frag.uvLightmap);
+	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap);
+	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a);
+	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 
 	return light * decal;

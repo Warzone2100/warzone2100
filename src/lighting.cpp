@@ -234,7 +234,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 
 	MAPTILE *tile = mapTile(tileX, tileY);
 	tile->illumination = static_cast<uint8_t>(clip<int>(static_cast<int>(abs(dotProduct*ao)), 24, 254));
-	tile->ambientOcclusion = clip<float>(254.f*ao, 60.f, 254.f);
+	tile->ambientOcclusion = static_cast<uint8_t>(clip<float>(254.f*ao, 60.f, 254.f));
 }
 
 static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)

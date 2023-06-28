@@ -69,13 +69,19 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
+
 vec4 main_classic() {
 	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0.f);
 
 	vec3 L = normalize(groundLightDir);
 	vec3 N = vec3(0.f,0.f,1.f);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
-	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * texture(lightmap_tex, uvLightmap, 0.f);
+	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
+	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a);
+	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 
 	return light * decal;
