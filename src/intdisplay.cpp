@@ -1884,7 +1884,7 @@ static UWORD sliderMouseUnit(W_SLIDER *Slider)
 	return posStops;
 }
 
-void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateQuantitySlider(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_SLIDER *Slider = (W_SLIDER *)psWidget;
 

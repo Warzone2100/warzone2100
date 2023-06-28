@@ -167,9 +167,9 @@ static void saveMissionLimboData();
 static void restoreMissionLimboData();
 static void processMissionLimbo();
 
-static void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext);
+static void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext);
 static bool intAddMissionTimer();
-static void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext);
+static void intUpdateTransporterTimer(WIDGET *psWidget, const W_CONTEXT *psContext);
 static void adjustMissionPower();
 static void saveMissionPower();
 static UDWORD getHomeLandingX();
@@ -1991,7 +1991,7 @@ static void fillTimeDisplay(W_LABEL &Label, UDWORD time, bool bHours)
 
 
 //update function for the mission timer
-void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
 	UDWORD		timeElapsed;
@@ -2078,7 +2078,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 #define	TRANSPORTER_REINFORCE_LEADIN	10*GAME_TICKS_PER_SEC
 
 //update function for the transporter timer
-void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateTransporterTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
 	DROID		*psTransporter;
