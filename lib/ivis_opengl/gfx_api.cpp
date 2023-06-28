@@ -908,9 +908,10 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 	{
 		for (auto& imageLoadFilename : imageLoadFilenames)
 		{
-			if (strEndsWith(imageLoadFilename, ".ktx2"))
+			const std::string& filename = imageLoadFilename.toUtf8();
+			if (strEndsWith(filename, ".ktx2"))
 			{
-				debug(LOG_ERROR, "Unable to load image file: %s", imageLoadFilename.c_str());
+				debug(LOG_ERROR, "Unable to load image file: %s", filename.c_str());
 			}
 		}
 		return nullptr;
