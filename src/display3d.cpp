@@ -1422,16 +1422,17 @@ static void drawTiles(iView *player)
 
 	gfx_api::context::get().beginSceneRenderPass();
 
-	// draw skybox
-	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
-	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
-	wzPerfEnd(PERF_SKYBOX);
-
 	// now we are about to draw the terrain
 	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
 	pie_SetFogStatus(true);
 	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun());
 	wzPerfEnd(PERF_TERRAIN);
+
+	// draw skybox
+	// NOTE: Must come *after* drawTerrain *if* using the fallback (old) terrain shaders
+	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
+	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
+	wzPerfEnd(PERF_SKYBOX);
 
 	wzPerfBegin(PERF_WATER, "3D scene - water");
 	// prepare for the water and the lightmap
