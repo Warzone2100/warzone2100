@@ -9,6 +9,7 @@
 
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVLightmapMatrix;
+uniform mat4 ShadowMapMVPMatrix;
 
 uniform vec4 cameraPos; // in modelSpace
 uniform vec4 sunPos; // in modelSpace, normalized
