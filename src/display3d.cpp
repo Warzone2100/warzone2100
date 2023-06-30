@@ -4011,12 +4011,15 @@ static void structureEffects()
 /// Show the sensor ranges of selected droids and buildings
 static void	showDroidSensorRanges()
 {
+	static uint32_t lastRangeUpdateTime = 0;
+
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
-	if (rangeOnScreen)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
+	if (rangeOnScreen
+		&& (graphicsTime - lastRangeUpdateTime) >= 50)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
 	{
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
@@ -4033,6 +4036,8 @@ static void	showDroidSensorRanges()
 				showSensorRange2((BASE_OBJECT *)psStruct);
 			}
 		}
+
+		lastRangeUpdateTime = graphicsTime;
 	}//end if we want to display...
 }
 
