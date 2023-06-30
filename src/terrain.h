@@ -32,6 +32,7 @@ bool initTerrain();
 void shutdownTerrain();
 
 void perFrameTerrainUpdates();
+void drawTerrainDepthOnly(const glm::mat4 &mvp);
 void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP);
 void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos);
 
