@@ -3,6 +3,7 @@
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
 	mat4 ModelUVLightmapMatrix;
+	mat4 ShadowMapMVPMatrix;
 	mat4 groundScale; // array of scales for ground textures, encoded in mat4. scale_i = groundScale[i/4][i%4]
 	vec4 cameraPos; // in modelSpace
 	vec4 sunPos; // in modelSpace, normalized

@@ -1559,7 +1559,7 @@ static void cullTerrain()
 	}
 }
 
-static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight)
+static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
 {
 	const auto &renderState = getCurrentRenderState();
 	
@@ -1571,9 +1571,12 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 0 });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
-	// draw slightly higher distance than it actually is so it will not
-	// by accident obscure the actual terrain
-	gfx_api::context::get().set_polygon_offset(0.1f, 1.f);
+	if (withOffset)
+	{
+		// draw slightly higher distance than it actually is so it will not
+		// by accident obscure the actual terrain
+		gfx_api::context::get().set_polygon_offset(0.1f, 1.f);
+	}
 
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -1590,7 +1593,10 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 		}
 	}
 	finishDrawRangeElements<gfx_api::TerrainDepth>();
-	gfx_api::context::get().set_polygon_offset(0.f, 0.f);
+	if (withOffset)
+	{
+		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
+	}
 	gfx_api::TerrainDepth::get().unbind_vertex_buffers(geometryVBO);
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
@@ -1712,7 +1718,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 }
 
 template<typename PSO>
-static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
+static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP)
 {
 	const auto &renderState = getCurrentRenderState();
 	PSO::get().bind();
@@ -1726,7 +1732,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 	gfx_api::TerrainCombinedUniforms uniforms = {
-		ModelViewProjection, ModelUVLightmap, groundScale,
+		ModelViewProjection, ModelUVLightmap, shadowMapMVP, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality
@@ -1762,33 +1768,25 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 	PSO::get().unbind_vertex_buffers(terrainDecalVBO);
 }
 
-static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
+static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP)
 {
 	switch (terrainShaderQuality)
 	{
 		case TerrainShaderQuality::CLASSIC:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
 			break;
 		case TerrainShaderQuality::MEDIUM:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
 			break;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
 			break;
 	}
 
 }
 
-/**
- * Update the lightmap and draw the terrain and decals.
- * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
- * on it one by one. Finally the decals are drawn.
- */
-void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos)
+void perFrameTerrainUpdates()
 {
-	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
-	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
-
 	///////////////////////////////////
 	// set up the lightmap texture
 
@@ -1804,14 +1802,28 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
 	///////////////////////////////////
 	// terrain culling
 	cullTerrain();
+}
+
+/**
+ * Update the lightmap and draw the terrain and decals.
+ * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
+ * on it one by one. Finally the decals are drawn.
+ */
+void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP)
+{
+	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
+	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
 	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
-	//////////////////////////////////////
-	// canvas to draw on
-	drawDepthOnly(mvp, paramsXLight, paramsYLight);
+	if (true)
+	{
+		//////////////////////////////////////
+		// canvas to draw on
+		drawDepthOnly(mvp, paramsXLight, paramsYLight, true);
+	}
 
 	if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
 	{
@@ -1833,7 +1845,7 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
 	case TerrainShaderType::SINGLE_PASS:
 		///////////////////////////////////
 		// terrain + decals
-		drawTerrainCombined(mvp, ModelUVLightmap, cameraPos, sunPos);
+		drawTerrainCombined(mvp, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
 		break;
 	}
 }
@@ -1931,7 +1943,7 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 	gfx_api::WaterClassicPSO::get().bind_textures(lightmap_texture, pWaterTexture);
 	gfx_api::WaterClassicPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterClassicPSO::get().set_uniforms(gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>{
-		ModelViewProjection, ModelUVLightmap, ModelUV1, ModelUV2,
+		ModelViewProjection, ModelUVLightmap, glm::mat4(1.f) /* TODO */, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
 		waterOffset*10
@@ -1963,6 +1975,8 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
 	}
 }
+
+#include <lib/ivis_opengl/pieblitfunc.h>
 
 void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {

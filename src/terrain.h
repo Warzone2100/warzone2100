@@ -31,7 +31,8 @@ void loadTerrainTextures(MAP_TILESET mapTileset);
 bool initTerrain();
 void shutdownTerrain();
 
-void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos);
+void perFrameTerrainUpdates();
+void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP);
 void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos);
 
 PIELIGHT getTileColour(int x, int y);

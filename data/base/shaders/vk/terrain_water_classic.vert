@@ -3,6 +3,7 @@
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
 	mat4 ModelUVLightmapMatrix;
+	mat4 ShadowMapMVPMatrix;
 	mat4 ModelUV1Matrix;
 	mat4 ModelUV2Matrix;
 	vec4 cameraPos; // in modelSpace

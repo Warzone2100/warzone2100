@@ -1389,6 +1389,9 @@ static void drawTiles(iView *player)
 	avUpdateTiles();
 	wzPerfEnd(PERF_EFFECTS);
 
+	// prepare terrain for drawing
+	perFrameTerrainUpdates();
+
 	// and prepare for rendering the models
 	wzPerfBegin(PERF_MODEL_INIT, "Draw 3D scene - model init");
 
@@ -1421,12 +1424,14 @@ static void drawTiles(iView *player)
 
 	pie_FinalizeMeshes(currentGameFrame);
 
+	const glm::mat4 shadowMVPMatrix = glm::mat4(1.f);
+
 	gfx_api::context::get().beginSceneRenderPass();
 
 	// now we are about to draw the terrain
 	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
 	pie_SetFogStatus(true);
-	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun());
+	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun(), shadowMVPMatrix);
 	wzPerfEnd(PERF_TERRAIN);
 
 	// draw skybox
