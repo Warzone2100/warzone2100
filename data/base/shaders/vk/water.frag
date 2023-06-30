@@ -49,6 +49,10 @@ vec4 main_medium()
 	return fragColor;
 }
 
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
+
 vec4 main_bumpMapping()
 {
 	vec2 uv1 = uv1_uv2.xy;
@@ -75,8 +79,10 @@ vec4 main_bumpMapping()
 
 	vec4 fragColor = (texture(tex1, uv1, WZ_MIP_LOAD_BIAS)+texture(tex2, uv2, WZ_MIP_LOAD_BIAS)) * (gloss+vec4(0.08,0.13,0.15,1.0));
 	fragColor = fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1.0-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
-	vec4 light = texture(lightmap_tex, uvLightmap, 0.f);
-	return light * fragColor;
+	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
+	vec4 color = fragColor * vec4(vec3(lightmap_vec4.a), 1.f); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
+	color.rgb = blendAddEffectLighting(color.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
+	return color;
 }
 
 void main()
