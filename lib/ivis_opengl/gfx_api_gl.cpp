@@ -672,21 +672,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
-			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "groundScale",
+			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
-			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "groundScale",
+			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
-			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "groundScale",
+			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
 				"lightmap_tex",
@@ -705,7 +705,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec", "quality",
 			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
 			"lightmap_tex", "tex2"} }),
@@ -1752,6 +1752,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
 	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
+	setUniforms(i++, cbuf.ShadowMapMVPMatrix);
 	setUniforms(i++, cbuf.groundScale);
 	setUniforms(i++, cbuf.cameraPos);
 	setUniforms(i++, cbuf.sunPos);
@@ -1809,6 +1810,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
 	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
+	setUniforms(i++, cbuf.ShadowMapMVPMatrix);
 	setUniforms(i++, cbuf.ModelUV1Matrix);
 	setUniforms(i++, cbuf.ModelUV2Matrix);
 	setUniforms(i++, cbuf.cameraPos);

@@ -910,6 +910,7 @@ namespace gfx_api
 	{
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
+		glm::mat4 ShadowMapMVPMatrix;
 		glm::mat4 groundScale; // array of scales for ground textures, encoded in mat4. scale_i = groundScale[i/4][i%4]
 		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos; // in modelSpace
@@ -1007,6 +1008,7 @@ namespace gfx_api
 	{
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
+		glm::mat4 ShadowMapMVPMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
 		glm::vec4 cameraPos; // in modelSpace
