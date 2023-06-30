@@ -1601,6 +1601,48 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
+static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
+{
+	const auto &renderState = getCurrentRenderState();
+
+	// bind the vertex buffer
+	gfx_api::TerrainDepthOnlyForDepthMap::get().bind();
+	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_textures(lightmap_texture);
+	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_vertex_buffers(geometryVBO);
+	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_constants({ ModelViewProjection, /*paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
+	glm::vec4(0.f), */ renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, /*0, 0*/ });
+	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
+
+//	if (withOffset)
+//	{
+//		// draw slightly higher distance than it actually is so it will not
+//		// by accident obscure the actual terrain
+//		gfx_api::context::get().set_polygon_offset(0.1f, 1.f);
+//	}
+
+	for (int x = 0; x < xSectors; x++)
+	{
+		for (int y = 0; y < ySectors; y++)
+		{
+			if (sectors[x * ySectors + y].draw)
+			{
+				addDrawRangeElements<gfx_api::TerrainDepthOnlyForDepthMap>(
+					sectors[x * ySectors + y].geometryOffset,
+					sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+					sectors[x * ySectors + y].geometryIndexSize,
+					sectors[x * ySectors + y].geometryIndexOffset);
+			}
+		}
+	}
+	finishDrawRangeElements<gfx_api::TerrainDepthOnlyForDepthMap>();
+//	if (withOffset)
+//	{
+//		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
+//	}
+	gfx_api::TerrainDepthOnlyForDepthMap::get().unbind_vertex_buffers(geometryVBO);
+	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
+}
+
 glm::vec4 getFogColorVec4()
 {
 	const auto &renderState = getCurrentRenderState();
@@ -1802,6 +1844,13 @@ void perFrameTerrainUpdates()
 	///////////////////////////////////
 	// terrain culling
 	cullTerrain();
+}
+
+void drawTerrainDepthOnly(const glm::mat4 &mvp)
+{
+	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
+	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
+	drawDepthOnlyForDepthMap(mvp, paramsXLight, paramsYLight, false);
 }
 
 /**

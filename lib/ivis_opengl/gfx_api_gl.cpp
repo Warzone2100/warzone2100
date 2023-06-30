@@ -668,6 +668,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
+		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
@@ -991,6 +993,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_setting_func<gfx_api::Draw3DShapePerInstanceUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
+		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
 		uniform_binding_entry<SHADER_DECALS>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
@@ -1731,6 +1734,19 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(6, cbuf.fog_enabled);
 	setUniforms(7, cbuf.fog_begin);
 	setUniforms(8, cbuf.fog_end);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
+{
+	setUniforms(0, cbuf.transform_matrix);
+//	setUniforms(1, cbuf.paramX);
+//	setUniforms(2, cbuf.paramY);
+//	setUniforms(3, cbuf.texture0);
+//	setUniforms(4, cbuf.paramXLight);
+//	setUniforms(5, cbuf.paramYLight);
+	setUniforms(1, cbuf.fog_enabled);
+	setUniforms(2, cbuf.fog_begin);
+	setUniforms(3, cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf)
