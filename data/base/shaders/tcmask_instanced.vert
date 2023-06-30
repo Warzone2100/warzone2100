@@ -13,6 +13,7 @@
 
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
+uniform mat4 ShadowMapMVPMatrix;
 uniform int hasTangents; // whether tangents were calculated for model
 uniform vec4 lightPosition;
 

@@ -1448,7 +1448,7 @@ static void drawTiles(iView *player)
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
-	pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix);
+	pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowMVPMatrix, false);
 	wzPerfEnd(PERF_MODELS);
 
 	if (!gamePaused())
