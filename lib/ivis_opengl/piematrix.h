@@ -27,7 +27,8 @@
 int32_t pie_RotateProjectWithPerspective(const Vector3i *v3d, const glm::mat4 &perspectiveViewMatrix, Vector2i *v2d);
 const glm::mat4& pie_PerspectiveGet();
 const glm::mat4& pie_SkyboxPerspectiveGet();
-glm::mat4 pie_PerspectiveGetConstrained(float zFar);
+const glm::mat4& pie_UIPerspectiveGet();
+glm::mat4 pie_PerspectiveGetConstrained(float zNear, float zFar);
 void pie_SetGeometricOffset(int x, int y);
 void pie_Begin3DScene();
 void pie_BeginInterface();

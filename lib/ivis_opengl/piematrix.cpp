@@ -48,9 +48,10 @@ static float perspectiveZFar = 20000.f;
 enum class PerspectiveModes
 {
 	Camera,
-	Skybox
+	Skybox,
+	ScreenUI
 };
-constexpr size_t Num_Perspective_Modes = static_cast<size_t>(PerspectiveModes::Skybox) + 1;
+constexpr size_t Num_Perspective_Modes = static_cast<size_t>(PerspectiveModes::ScreenUI) + 1;
 
 struct PerspectiveCache {
 	glm::mat4 currentPerspectiveMatrix = glm::mat4();
@@ -97,7 +98,7 @@ int32_t pie_RotateProjectWithPerspective(const Vector3i *v3d, const glm::mat4 &p
 	return static_cast<int32_t>(v.w);
 }
 
-glm::mat4 pie_PerspectiveGetConstrained(float zFar)
+glm::mat4 pie_PerspectiveGetConstrained(float zNear, float zFar)
 {
 	const float width = std::max(pie_GetVideoBufferWidth(), 1);  // Require width > 0 && height > 0, to avoid glScalef(1, 1, -1) crashing in some graphics drivers.
 	const float height = std::max(pie_GetVideoBufferHeight(), 1);
@@ -106,11 +107,11 @@ glm::mat4 pie_PerspectiveGetConstrained(float zFar)
 	const float xangle = width / 6.0f;
 	const float yangle = height / 6.0f;
 	return
-	glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)) *
-	glm::frustum(-xangle, xangle, -yangle, yangle, perspectiveZClose, zFar) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
+//	glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)) *
+	glm::frustum(-xangle, xangle, -yangle, yangle, zNear, zFar) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
 }
 
-static const glm::mat4& pie_PerspectiveGetCache(PerspectiveModes mode, float zFar)
+static const glm::mat4& pie_PerspectiveGetCache(PerspectiveModes mode, float zNear, float zFar, const std::function<void (glm::mat4&, float width, float height)>& modifyGeneratedMatrix = nullptr)
 {
 	const float width = std::max(pie_GetVideoBufferWidth(), 1);  // Require width > 0 && height > 0, to avoid glScalef(1, 1, -1) crashing in some graphics drivers.
 	const float height = std::max(pie_GetVideoBufferHeight(), 1);
@@ -120,7 +121,11 @@ static const glm::mat4& pie_PerspectiveGetCache(PerspectiveModes mode, float zFa
 	if (width != perspectiveCache._width || height != perspectiveCache._height || rendSurface.xcentre != perspectiveCache._rendSurface_xcentre || rendSurface.ycentre != perspectiveCache._rendSurface_ycentre || zFar != perspectiveCache._zfar)
 	{
 		// update the current perspective matrix (can be a semi-costly operation)
-		perspectiveCache.currentPerspectiveMatrix = pie_PerspectiveGetConstrained(zFar);
+		perspectiveCache.currentPerspectiveMatrix = pie_PerspectiveGetConstrained(zNear, zFar);
+		if (modifyGeneratedMatrix)
+		{
+			modifyGeneratedMatrix(perspectiveCache.currentPerspectiveMatrix, width, height);
+		}
 		perspectiveCache._width = width;
 		perspectiveCache._height = height;
 		perspectiveCache._rendSurface_xcentre = rendSurface.xcentre;
@@ -133,12 +138,23 @@ static const glm::mat4& pie_PerspectiveGetCache(PerspectiveModes mode, float zFa
 
 const glm::mat4& pie_SkyboxPerspectiveGet()
 {
-	return pie_PerspectiveGetCache(PerspectiveModes::Skybox, 100000.f);
+	return pie_PerspectiveGetCache(PerspectiveModes::Skybox, 330.f, 100000.f, [](glm::mat4& matrix, float width, float height) {
+		matrix = glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)) * matrix;
+	});
 }
 
 const glm::mat4& pie_PerspectiveGet()
 {
-	return pie_PerspectiveGetCache(PerspectiveModes::Camera, perspectiveZFar);
+	return pie_PerspectiveGetCache(PerspectiveModes::Camera, perspectiveZClose, perspectiveZFar, [](glm::mat4& matrix, float width, float height) {
+		matrix = glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)) * matrix;
+	});
+}
+
+const glm::mat4& pie_UIPerspectiveGet()
+{
+	return pie_PerspectiveGetCache(PerspectiveModes::ScreenUI, 330.f, 100000.f, [](glm::mat4& matrix, float width, float height) {
+		matrix = glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)) * matrix;
+	});
 }
 
 
