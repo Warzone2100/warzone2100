@@ -199,7 +199,7 @@ bool deliveryReposFinished(FLAG_POSITION *psFlag = nullptr);
 bool	getRotActive();
 
 #define MAX_PLAYER_X_ANGLE	(-1)
-#define MIN_PLAYER_X_ANGLE	(-89) // -90 breaks some things on Vulkan...
+#define MIN_PLAYER_X_ANGLE	(-88) // -90 breaks some things on Vulkan...
 
 #define MAXDISTANCE_REPLAY	(7000)
 #define MAXDISTANCE	(5000)
