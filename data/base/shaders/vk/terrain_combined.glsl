@@ -18,7 +18,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int quality;
 };
 
-// interpolated data. location count = 9
+// interpolated data. location count = 12
 struct FragData {
 	vec2 uvLightmap;
 	vec2 uvGround;
@@ -29,6 +29,10 @@ struct FragData {
 	vec3 groundLightDir;
 	vec3 groundHalfVec;
 	mat2 decal2groundMat2;
+	// for Shadows
+	vec4 shadowPos;
+	vec3 fragPos;
+	vec3 fragNormal;
 };
 
 // non-interpolated data

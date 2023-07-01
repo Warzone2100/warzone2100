@@ -179,7 +179,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc, optional<float> mipLodBias);
+	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc, optional<float> mipLodBias, uint32_t extraShadowTaps);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -204,7 +204,7 @@ private:
 					   const char * fragment_header, const std::string& fragmentPath,
 					   const std::vector<std::string> &uniformNames,
 					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-					   optional<float> mipLodBias);
+					   optional<float> mipLodBias, uint32_t extraShadowTaps);
 
 	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms, const std::string& programName);
 
@@ -257,6 +257,7 @@ struct gl_context final : public gfx_api::context
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
 	optional<float> mipLodBias;
+	uint32_t extraShadowTaps = 4;
 
 	bool gles = false;
 	bool fragmentHighpFloatAvailable = true;

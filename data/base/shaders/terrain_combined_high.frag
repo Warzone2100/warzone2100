@@ -39,6 +39,9 @@ uniform sampler2DArray decalNormal;
 uniform sampler2DArray decalSpecular;
 uniform sampler2DArray decalHeight;
 
+// shadow map
+uniform sampler2D shadowMap;
+
 // sun light colors/intensity:
 uniform vec4 emissiveLight;
 uniform vec4 ambientLight;
@@ -62,12 +65,19 @@ in vec4 fgroundWeights;
 in vec3 groundLightDir;
 in vec3 groundHalfVec;
 in mat2 decal2groundMat2;
+// For Shadows
+in vec4 shadowPos;
 
 #ifdef NEWGL
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
 #endif
+
+float getShadowVisibility() {
+	float visibility = 1.0;
+	return visibility;
+}
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
@@ -105,8 +115,9 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	vec3 H = normalize(halfVec);
 	float exponent = acos(dot(H, b.N)) / 0.33;
 	float gaussianTerm = exp(-(exponent * exponent));
+	float visibility = getShadowVisibility();
 
-	vec4 res = b.color*(ambientLight + diffuseLight*lambertTerm) + b.gloss*b.gloss*specularLight*gaussianTerm*lambertTerm;
+	vec4 res = b.color*(ambientLight + visibility*diffuseLight*lambertTerm) + visibility*b.gloss*b.gloss*specularLight*gaussianTerm*lambertTerm;
 
 	return vec4(res.rgb, b.color.a);
 }

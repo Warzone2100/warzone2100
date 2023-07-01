@@ -33,6 +33,10 @@ out vec4 fgroundWeights;
 out vec3 groundLightDir;
 out vec3 groundHalfVec;
 out mat2 decal2groundMat2;
+// for Shadows
+out vec4 shadowPos;
+out vec3 fragPos;
+out vec3 fragNormal;
 
 void main()
 {
@@ -66,6 +70,10 @@ void main()
 			dot(vertexTangent.xyz, bitangent), dot(bitangentDecal, bitangent)
 		);
 	}
+
+	shadowPos = ShadowMapMVPMatrix * vec4(vertex.xyz, 1.f);
+	fragPos = vertex.xyz;
+	fragNormal = vertexNormal;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;
 	gl_Position = position;

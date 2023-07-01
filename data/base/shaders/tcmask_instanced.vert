@@ -47,6 +47,11 @@ VERTEX_OUTPUT vec4 colour;
 VERTEX_OUTPUT vec4 teamcolour;
 VERTEX_OUTPUT vec4 packed_ecmState_alphaTest;
 
+// for Shadows
+VERTEX_OUTPUT vec4 shadowPos;
+VERTEX_OUTPUT vec3 fragPos;
+VERTEX_OUTPUT vec3 fragNormal;
+
 void main()
 {
 	// unpack inputs
@@ -92,6 +97,11 @@ void main()
 	{
 		position.y -= stretch;
 	}
+
+	vec4 positionModelSpace = instanceModelMatrix * position;
+	shadowPos = ShadowMapMVPMatrix * vec4(positionModelSpace.xyz, 1.f);
+	fragPos = positionModelSpace.xyz;
+	fragNormal = vertexNormal;
 
 	// Translate every vertex according to the Model View and Projection Matrix
 	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;

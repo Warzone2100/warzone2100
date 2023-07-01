@@ -1272,6 +1272,19 @@ inline bool quadIntersectsWithScreen(const QUAD & quad)
 	return false;
 }
 
+glm::mat4 getBiasedShadowMapMVPMatrix(glm::mat4 lightOrthoMatrix, const glm::mat4& lightViewMatrix)
+{
+	glm::mat4 biasMatrix(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	);
+
+	glm::mat4 shadowMatrix = lightOrthoMatrix * lightViewMatrix;
+	return biasMatrix * shadowMatrix;
+}
+
 /// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player)
 {
@@ -1440,7 +1453,7 @@ static void drawTiles(iView *player)
 	}
 	// start main render pass
 
-	const glm::mat4 shadowMVPMatrix = glm::mat4(1.f);
+	const glm::mat4 shadowMVPMatrix = getBiasedShadowMapMVPMatrix(shadowCascades[0].projectionMatrix, shadowCascades[0].viewMatrix); // NOTE: Currently only works with a single depth pass
 
 	gfx_api::context::get().beginSceneRenderPass();
 

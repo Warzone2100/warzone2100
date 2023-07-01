@@ -13,6 +13,7 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #define WZ_MIP_LOAD_BIAS 0.f
+#define WZ_EXTRA_SHADOW_TAPS 4
 //
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
@@ -39,11 +40,16 @@ uniform sampler2DArray decalNormal;
 uniform sampler2DArray decalSpecular;
 uniform sampler2DArray decalHeight;
 
+// shadow map
+uniform sampler2DShadow shadowMap;
+
 // sun light colors/intensity:
 uniform vec4 emissiveLight;
 uniform vec4 ambientLight;
 uniform vec4 diffuseLight;
 uniform vec4 specularLight;
+
+uniform vec4 sunPos; // in modelSpace, normalized
 
 // fog
 uniform int fogEnabled; // whether fog is enabled
@@ -62,12 +68,50 @@ in vec4 fgroundWeights;
 in vec3 groundLightDir;
 in vec3 groundHalfVec;
 in mat2 decal2groundMat2;
+// For Shadows
+in vec4 shadowPos;
+in vec3 fragPos;
+in vec3 fragNormal;
 
 #ifdef NEWGL
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
 #endif
+
+float getShadowVisibility()
+{
+	vec4 pos = shadowPos / shadowPos.w;
+	if (pos.z > 1.0f)
+	{
+		return 1.0;
+	}
+
+	vec3 normal = normalize(fragNormal);
+	vec3 lightDir = normalize(normalize(sunPos.xyz) - normalize(fragPos));
+//	float bias = max(0.0002 * (1.0 - dot(normal, lightDir)), 0.0002);
+	float bias = 0.0001f;
+
+	float visibility = texture( shadowMap, vec3(pos.xy, (pos.z+bias)) );
+
+	// PCF
+	const float edgeVal = 0.5+float((WZ_EXTRA_SHADOW_TAPS-1)/2);
+	const float startVal = -edgeVal;
+	const float endVal = edgeVal + 0.5;
+	const float texelIncrement = 1.0/float(4096);
+	const float visibilityIncrement = 0.1; //0.5 / WZ_EXTRA_SHADOW_TAPS;
+	for (float y=startVal; y<endVal; y+=1.0)
+	{
+		for (float x=startVal; x<endVal; x+=1.0)
+		{
+			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec3(pos.xy + vec2(x*texelIncrement, y*texelIncrement), (pos.z+bias)) ));
+		}
+	}
+
+	visibility = clamp(visibility, 0.3, 1.0);
+
+	return visibility;
+}
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
@@ -85,12 +129,13 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 vec4 main_medium() {
 	vec3 ground = getGround(0) + getGround(1) + getGround(2) + getGround(3);
 	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0.f);
+	float visibility = getShadowVisibility();
 
 	vec3 L = normalize(groundLightDir);
 	vec3 N = vec3(0.f,0.f,1.f);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
-	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	vec4 light = (visibility*diffuseLight*0.75*lambertTerm + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 

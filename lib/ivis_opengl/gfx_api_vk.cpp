@@ -1097,12 +1097,13 @@ struct shader_infos
 	std::string vertexSpv;
 	std::string fragmentSpv;
 	bool specializationConstant_0_mipLoadBias = false;
+	bool specializationConstant_1_extraShadowTaps = false;
 };
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
 {
 	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true }),
+	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true }),
 	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv", true }),
@@ -1110,9 +1111,9 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
 	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true }),
 	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
 	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
 	std::make_pair(SHADER_WATER_CLASSIC, shader_infos{ "shaders/vk/terrain_water_classic.vert.spv", "shaders/vk/terrain_water_classic.frag.spv", true }),
@@ -1662,17 +1663,39 @@ VkPSO::VkPSO(vk::Device _dev,
 	fragmentShader = get_module(shaderInfo.fragmentSpv, *pVkDynLoader);
 	auto pipelineStages = get_stages(vertexShader, fragmentShader);
 
-	float cpyMipLodBias = root->mipLodBias.value_or(0.f);
-	vk::SpecializationMapEntry entry ( 0, 0, sizeof(float) );
-	vk::SpecializationInfo spec_info = vk::SpecializationInfo()
-		.setMapEntryCount(1)
-		.setPMapEntries(&entry)
-		.setDataSize(sizeof(float))
-		.setPData(&cpyMipLodBias)
-	;
+	std::vector<char> specializationConstantsDataBuffer;
+	std::vector<vk::SpecializationMapEntry> specializationEntries;
+	vk::SpecializationInfo spec_info = vk::SpecializationInfo();
 	if (root->lodBiasMethod == VkRoot::LodBiasMethod::SpecializationConstant && shaderInfo.specializationConstant_0_mipLoadBias)
 	{
+		size_t copyIdx = specializationConstantsDataBuffer.size();
+		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + (sizeof(char) * sizeof(float)));
+		float cpyMipLodBias = root->mipLodBias.value_or(0.f);
+		memcpy(&specializationConstantsDataBuffer[copyIdx], &cpyMipLodBias, sizeof(float));
+		specializationEntries.emplace_back(0, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(float));
+	}
+	if (shaderInfo.specializationConstant_1_extraShadowTaps)
+	{
+		uint32_t extraShadowTaps = root->extraShadowTaps;
+		if (extraShadowTaps == 0)
+		{
+			// This may cause a crash! - use 1 instead for now
+			extraShadowTaps = 1;
+		}
+		size_t copyIdx = specializationConstantsDataBuffer.size();
+		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + sizeof(uint32_t));
+		memcpy(&specializationConstantsDataBuffer[copyIdx], &extraShadowTaps, sizeof(uint32_t));
+		specializationEntries.emplace_back(1, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(uint32_t));
+	}
+	if (!specializationEntries.empty())
+	{
 		ASSERT(pipelineStages[1].pSpecializationInfo == nullptr, "get_stages unexpectedly set pSpecializationInfo - this will overwrite!");
+		spec_info
+			.setMapEntryCount(static_cast<uint32_t>(specializationEntries.size()))
+			.setPMapEntries(specializationEntries.data())
+			.setDataSize(static_cast<uint32_t>(specializationConstantsDataBuffer.size()))
+			.setPData(specializationConstantsDataBuffer.data())
+		;
 		pipelineStages[1].setPSpecializationInfo(&spec_info);
 	}
 
