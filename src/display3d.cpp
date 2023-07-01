@@ -86,6 +86,7 @@
 #include "animation.h"
 #include "faction.h"
 #include "wzcrashhandlingproviders.h"
+#include "shadowcascades.h"
 
 /********************  Prototypes  ********************/
 
@@ -1298,6 +1299,12 @@ static void drawTiles(iView *player)
 		glm::rotate(UNDEG(player->r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::translate(glm::vec3(0, -player->p.y, 0));
 
+	// Calculate shadow mapping cascades
+	glm::vec3 lightInvDir = getTheSun();
+	size_t numShadowCascades = gfx_api::context::get().numDepthPasses();
+	std::vector<Cascade> shadowCascades;
+	calculateShadowCascades(player, distance, baseViewMatrix, lightInvDir, numShadowCascades, shadowCascades);
+
 	// Incorporate all the view transforms into viewMatrix
 	const glm::mat4 viewMatrix = baseViewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z));
 
@@ -1423,6 +1430,15 @@ static void drawTiles(iView *player)
 	/* ---------------------------------------------------------------- */
 
 	pie_FinalizeMeshes(currentGameFrame);
+
+	// shadow/depth-mapping passes
+	for (size_t i = 0; i < numShadowCascades; ++i)
+	{
+		gfx_api::context::get().beginDepthPass(i);
+		pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, glm::mat4(1.f), true);
+		gfx_api::context::get().endCurrentDepthPass();
+	}
+	// start main render pass
 
 	const glm::mat4 shadowMVPMatrix = glm::mat4(1.f);
 
